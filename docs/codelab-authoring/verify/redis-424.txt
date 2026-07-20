@@ -1,0 +1,208 @@
+ECHO "========== EX 1: Attach and Remove a Deadline with EXPIRE, TTL, PTTL, and PERSIST =========="
+FLUSHALL
+SET session:abc "u42"
+TTL session:abc
+EXPIRE session:abc 100
+TTL session:abc
+PTTL session:abc
+PERSIST session:abc
+TTL session:abc
+PERSIST session:abc
+EXPIRE session:abc 60
+TTL session:abc
+DEL session:abc
+TTL session:abc
+EXISTS session:abc
+EXPIRE session:abc 60
+ECHO "========== EX 2: Create Self-Expiring Keys in One Command with SET EX and SET PX =========="
+FLUSHALL
+SET cache:home "home-page-html" EX 60
+TTL cache:home
+SETEX cache:about 30 "about-page-html"
+TTL cache:about
+GET cache:about
+SET otp:u42 "913055" PX 1500
+PTTL otp:u42
+EXISTS otp:u42
+BLPOP wait:otp 3
+GET otp:u42
+TTL otp:u42
+EXISTS otp:u42
+DBSIZE
+ECHO "========== EX 3: The Silent TTL Reset: Why a Plain SET Wipes Your Expiry =========="
+FLUSHALL
+SET cache:user:7 "profile-v1" EX 300
+TTL cache:user:7
+SET cache:user:7 "profile-v2"
+TTL cache:user:7
+GET cache:user:7
+DEL cache:user:7
+SET cache:user:7 "profile-v1" EX 300
+TTL cache:user:7
+SET cache:user:7 "profile-v2" KEEPTTL
+TTL cache:user:7
+GET cache:user:7
+SET cache:user:7 "profile-v3" EX 300
+TTL cache:user:7
+INCR counter:views
+EXPIRE counter:views 120
+INCR counter:views
+TTL counter:views
+GETEX cache:user:7 PERSIST
+TTL cache:user:7
+GETEX cache:user:7 EX 90
+TTL cache:user:7
+ECHO "========== EX 4: Conditional Writes with NX and XX, and a Lock That Cannot Leak =========="
+FLUSHALL
+SET lock:invoice:9 "worker-1" NX EX 30
+TTL lock:invoice:9
+SET lock:invoice:9 "worker-2" NX EX 30
+GET lock:invoice:9
+DEL lock:invoice:9
+SET lock:invoice:9 "worker-2" NX EX 30
+GET lock:invoice:9
+SET feature:beta "on" XX
+EXISTS feature:beta
+SET feature:beta "off"
+SET feature:beta "on" XX
+GET feature:beta
+TTL feature:beta
+SETNX lock:report:1 "worker-1"
+SETNX lock:report:1 "worker-2"
+TTL lock:report:1
+EXPIRE lock:report:1 30
+TTL lock:report:1
+ECHO "========== EX 5: Absolute Deadlines: EXPIREAT, EXPIRETIME, and the NX XX GT LT Flags =========="
+FLUSHALL
+SET promo:flash "20-off"
+EXPIREAT promo:flash 1900000000
+EXPIRETIME promo:flash
+PEXPIRETIME promo:flash
+TTL promo:flash
+EXPIRE promo:flash 100 NX
+EXPIRE promo:flash 100 XX
+TTL promo:flash
+EXPIRE promo:flash 50 GT
+TTL promo:flash
+EXPIRE promo:flash 300 GT
+TTL promo:flash
+EXPIRE promo:flash 60 LT
+TTL promo:flash
+PEXPIRE promo:flash 45000
+PTTL promo:flash
+SET promo:new "10-off"
+EXPIRE promo:new 120 NX
+TTL promo:new
+EXPIRE promo:new 240 NX
+TTL promo:new
+ECHO "========== EX 6: Moving Keys Without Losing the Clock: RENAME, RENAMENX, and COPY =========="
+FLUSHALL
+SET draft:99 "text-a" EX 120
+RENAME draft:99 post:99
+TTL post:99
+EXISTS draft:99
+SET post:100 "old-body"
+SET draft:100 "new-body" EX 200
+RENAME draft:100 post:100
+GET post:100
+TTL post:100
+SET draft:101 "text-c" EX 90
+RENAMENX draft:101 post:100
+EXISTS draft:101
+RENAMENX draft:101 post:101
+TTL post:101
+EXISTS draft:101
+COPY post:101 post:101:backup
+TTL post:101:backup
+COPY post:101 post:100
+COPY post:101 post:100 REPLACE
+TTL post:100
+RENAME missing:draft post:102
+ECHO "========== EX 7: Explore a Live Keyspace with SCAN Instead of KEYS =========="
+FLUSHALL
+MSET session:a1 "u1" session:a2 "u2" session:a3 "u3" cache:v1:home "h" cache:v1:about "a"
+LPUSH queue:emails "job-1"
+HSET user:1 name "Ann"
+SADD tags:post:1 "redis"
+DBSIZE
+SCAN 0 MATCH session:* COUNT 100
+SCAN 0 MATCH cache:v1:* COUNT 100
+SCAN 0 COUNT 2
+TYPE session:a1
+TYPE queue:emails
+TYPE user:1
+TYPE tags:post:1
+TYPE nothing:here
+KEYS session:*
+RANDOMKEY
+ECHO "========== EX 8: Bulk Key Inspection and Deletion: EXISTS, DEL, UNLINK, and FLUSHDB ASYNC =========="
+FLUSHALL
+MSET session:a1 "u1" session:a2 "u2" cache:v1:home "h" cache:v1:about "a" cache:v1:faq "f"
+LPUSH queue:emails "job-1" "job-2"
+DBSIZE
+EXISTS session:a1
+EXISTS session:a1 session:a2 queue:emails
+EXISTS session:a1 session:a1 session:a1
+EXISTS session:a1 session:missing
+TYPE queue:emails
+DEL session:a1 session:a2 session:missing
+DBSIZE
+UNLINK cache:v1:home cache:v1:about cache:v1:faq
+DBSIZE
+DEL session:a1
+SET keep:me "v"
+DBSIZE
+FLUSHDB ASYNC
+DBSIZE
+EXISTS keep:me
+ECHO "========== EX 9: Read the Eviction Policy: maxmemory, the Eight Policies, and CONFIG GET =========="
+FLUSHALL
+CONFIG GET maxmemory
+CONFIG GET maxmemory-policy
+CONFIG GET maxmemory-samples
+CONFIG SET maxmemory 100mb
+CONFIG GET maxmemory
+CONFIG SET maxmemory-policy allkeys-lru
+CONFIG GET maxmemory-policy
+SET cache:v1:a "a" EX 600
+SET cache:v1:b "b" EX 60
+SET config:app "cfg"
+TTL cache:v1:a
+TTL config:app
+CONFIG SET maxmemory-policy volatile-ttl
+CONFIG GET maxmemory-policy
+CONFIG SET maxmemory-policy volatile-lru
+CONFIG GET maxmemory-policy
+CONFIG SET maxmemory-policy allkeys-random
+CONFIG GET maxmemory-policy
+CONFIG SET maxmemory-policy noeviction
+CONFIG SET maxmemory 0
+CONFIG GET maxmemory
+CONFIG GET maxmemory-policy
+ECHO "========== EX 10: Build a Versioned Cache Layer with Jittered TTLs and a Stampede Lock =========="
+FLUSHALL
+SET cache:v1:product:1 "p1-json" EX 3600
+SET cache:v1:product:2 "p2-json" EX 3547
+SET cache:v1:product:3 "p3-json" EX 3672
+TTL cache:v1:product:1
+TTL cache:v1:product:2
+TTL cache:v1:product:3
+GET cache:v1:product:4
+SET lock:regen:product:4 "worker-1" NX EX 10
+SET lock:regen:product:4 "worker-2" NX EX 10
+SET cache:v1:product:4 "p4-json" EX 3618
+DEL lock:regen:product:4
+TTL cache:v1:product:4
+SET cache:v1:product:1 "p1-json-v2" KEEPTTL
+TTL cache:v1:product:1
+GET cache:v1:product:1
+SET cache:v1:product:2 "p2-json-v2" EX 3590
+TTL cache:v1:product:2
+DBSIZE
+SCAN 0 MATCH cache:v1:product:* COUNT 100
+UNLINK cache:v1:product:1 cache:v1:product:2 cache:v1:product:3 cache:v1:product:4
+DBSIZE
+SET cache:v2:product:1 "p1-json-v2" EX 3609
+TTL cache:v2:product:1
+FLUSHDB ASYNC
+DBSIZE

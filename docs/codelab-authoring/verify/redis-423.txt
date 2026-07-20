@@ -1,0 +1,165 @@
+ECHO "========== EX 1: Build an Ordered Task List with RPUSH, LPUSH, and LRANGE =========="
+FLUSHALL
+RPUSH tasks "write-spec"
+RPUSH tasks "review-code"
+RPUSH tasks "deploy"
+LRANGE tasks 0 -1
+LLEN tasks
+LPUSH tasks "urgent-hotfix"
+LRANGE tasks 0 -1
+LLEN tasks
+LRANGE tasks 0 1
+LRANGE tasks -2 -1
+LRANGE tasks 5 9
+LLEN missing:list
+LRANGE missing:list 0 -1
+ECHO "========== EX 2: Represent a User Object as a Hash Instead of Four String Keys =========="
+FLUSHALL
+HSET user:42 name "Ann" email "ann@example.com" city "Hanoi" role "member"
+HGET user:42 name
+HGET user:42 phone
+HGETALL user:42
+HEXISTS user:42 email
+HEXISTS user:42 phone
+HLEN user:42
+HSET user:42 city "Da Nang"
+HGET user:42 city
+HDEL user:42 role
+HEXISTS user:42 role
+HLEN user:42
+HGETALL user:42
+ECHO "========== EX 3: Drive a FIFO Queue and a LIFO Stack from the Same List Type =========="
+FLUSHALL
+RPUSH jobs:queue "job-1"
+RPUSH jobs:queue "job-2"
+RPUSH jobs:queue "job-3"
+LPOP jobs:queue
+LRANGE jobs:queue 0 -1
+LPUSH undo:stack "edit-1"
+LPUSH undo:stack "edit-2"
+LPUSH undo:stack "edit-3"
+LPOP undo:stack
+LRANGE undo:stack 0 -1
+RPOP jobs:queue
+LRANGE jobs:queue 0 -1
+LPOP jobs:queue
+LPOP jobs:queue
+LLEN jobs:queue
+ECHO "========== EX 4: Cap an Activity Log with LTRIM and Prune Entries with LREM =========="
+FLUSHALL
+RPUSH log:user:7 "login"
+RPUSH log:user:7 "view-post"
+RPUSH log:user:7 "like-post"
+RPUSH log:user:7 "view-post"
+RPUSH log:user:7 "logout"
+LLEN log:user:7
+LREM log:user:7 1 "view-post"
+LRANGE log:user:7 0 -1
+RPUSH log:user:7 "login" "view-post" "comment"
+LLEN log:user:7
+LTRIM log:user:7 -3 -1
+LRANGE log:user:7 0 -1
+LLEN log:user:7
+RPUSH log:user:7 "comment"
+LREM log:user:7 -1 "comment"
+LRANGE log:user:7 0 -1
+ECHO "========== EX 5: Count Per-Field Metrics with HINCRBY and a Global INCR =========="
+FLUSHALL
+HSET stats:post:9 views 0 likes 0 shares 0
+HINCRBY stats:post:9 views 1
+HINCRBY stats:post:9 views 9
+HINCRBY stats:post:9 likes 3
+HINCRBY stats:post:9 shares 1
+HGET stats:post:9 views
+HGETALL stats:post:9
+HINCRBY stats:post:9 comments 5
+HLEN stats:post:9
+INCR stats:global:views
+INCRBY stats:global:views 99
+GET stats:global:views
+HDEL stats:post:9 shares
+HGETALL stats:post:9
+ECHO "========== EX 6: Enforce Uniqueness with a Set of Tags =========="
+FLUSHALL
+SADD post:1:tags "redis" "database" "cache"
+SADD post:1:tags "redis"
+SCARD post:1:tags
+SISMEMBER post:1:tags "cache"
+SISMEMBER post:1:tags "mongodb"
+SMEMBERS post:1:tags
+SREM post:1:tags "cache"
+SCARD post:1:tags
+SMEMBERS post:1:tags
+SREM post:1:tags "mongodb"
+SADD post:1:tags "nosql" "redis"
+SCARD post:1:tags
+SMEMBERS post:1:tags
+ECHO "========== EX 7: Find Mutual and Exclusive Followers with SINTER, SUNION, and SDIFF =========="
+FLUSHALL
+SADD followers:ann "u1" "u2" "u3" "u4"
+SADD followers:bob "u3" "u4" "u5"
+SINTER followers:ann followers:bob
+SUNION followers:ann followers:bob
+SDIFF followers:ann followers:bob
+SDIFF followers:bob followers:ann
+SCARD followers:ann
+SINTERCARD 2 followers:ann followers:bob
+SINTERSTORE mutual:ann:bob followers:ann followers:bob
+SMEMBERS mutual:ann:bob
+SISMEMBER mutual:ann:bob "u3"
+SCARD mutual:ann:bob
+ECHO "========== EX 8: Rank Players on a Live Leaderboard with a Sorted Set =========="
+FLUSHALL
+ZADD leaderboard 1500 "ann" 1200 "bob" 1800 "cy" 900 "di"
+ZCARD leaderboard
+ZSCORE leaderboard "ann"
+ZSCORE leaderboard "zoe"
+ZINCRBY leaderboard 400 "bob"
+ZSCORE leaderboard "bob"
+ZREVRANGE leaderboard 0 2 WITHSCORES
+ZRANGE leaderboard 0 -1
+ZRANK leaderboard "ann"
+ZREVRANK leaderboard "ann"
+ZREVRANGE leaderboard 0 0
+ZADD leaderboard 2000 "ann"
+ZREVRANGE leaderboard 0 -1 WITHSCORES
+ECHO "========== EX 9: Query a Time-Ordered Event Index with ZRANGEBYSCORE =========="
+FLUSHALL
+ZADD events:user:7 1700000100 "login"
+ZADD events:user:7 1700000200 "view:post:9"
+ZADD events:user:7 1700000350 "comment:post:9"
+ZADD events:user:7 1700000500 "logout"
+ZADD events:user:7 1700000900 "login"
+ZCARD events:user:7
+ZRANGEBYSCORE events:user:7 1700000150 1700000500
+ZRANGEBYSCORE events:user:7 1700000150 1700000500 WITHSCORES
+ZRANGEBYSCORE events:user:7 -inf +inf
+ZRANGEBYSCORE events:user:7 (1700000200 +inf
+ZCOUNT events:user:7 1700000000 1700000400
+ZRANGEBYSCORE events:user:7 -inf +inf LIMIT 0 2
+ZREMRANGEBYSCORE events:user:7 -inf 1700000200
+ZRANGE events:user:7 0 -1 WITHSCORES
+ZCARD events:user:7
+ECHO "========== EX 10: Assemble a Post Feed Backend from Four Data Structures =========="
+FLUSHALL
+INCR stats:posts:total
+HSET post:1001 author "ann" title "Redis data types" likes 0
+LPUSH feed:user:7 "1001"
+LPUSH feed:user:7 "1002"
+LPUSH feed:user:7 "1003"
+LPUSH feed:user:7 "1004"
+LTRIM feed:user:7 0 2
+LRANGE feed:user:7 0 -1
+SADD post:1001:likers "u2" "u5" "u9"
+SADD post:1001:likers "u5"
+SADD post:1002:likers "u5" "u7"
+SCARD post:1001:likers
+SISMEMBER post:1001:likers "u9"
+SINTER post:1001:likers post:1002:likers
+HINCRBY post:1001 likes 3
+ZADD trending 3 "1001"
+ZINCRBY trending 5 "1002"
+ZINCRBY trending 1 "1001"
+ZREVRANGE trending 0 -1 WITHSCORES
+HGETALL post:1001
+GET stats:posts:total

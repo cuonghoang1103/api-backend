@@ -1,0 +1,958 @@
+// Generator for Redis module 425 (advanced-data-types-and-commands) — 10 exercises.
+// Track language is "text"; solutions are pure redis-cli command sequences (NO comment lines,
+// because redis-cli pipe mode executes every line and `#` is not a comment there).
+// Documented outputs use the decorated --no-raw format a learner actually sees:
+//   (integer) N, "string", (nil), 1) "elem", (error) ERR ...
+// The verify script is derived from solutionCodeJson so what runs IS what ships.
+// Run:  docker exec -i cl_redis redis-cli --no-raw < docs/codelab-authoring/verify/redis-425.txt
+// Every output quoted below was captured from a real run against redis 7.4.9 (cl_redis),
+// including the HyperLogLog estimate: 200 distinct members really report PFCOUNT 201.
+import fs from 'node:fs';
+import path from 'node:path';
+
+const trackSlug = 'redis';
+const moduleSlug = 'advanced-data-types-and-commands';
+const L = 'text';
+
+const bulkIds = Array.from({ length: 200 }, (_, i) => `s${i + 1}`).join(' ');
+const longBio = 'a'.repeat(72);
+
+const exercises = [
+  {
+    title: 'Patch Strings in Place with APPEND, GETRANGE, and SETRANGE',
+    difficulty: 'EASY',
+    estimatedMinutes: 15,
+    points: 10,
+    concepts: ['APPEND', 'GETRANGE', 'SETRANGE', 'STRLEN', 'zero padding of sparse strings'],
+    prerequisites: ['SET', 'GET', 'redis-cli basics'],
+    tags: ['strings', 'append', 'setrange', 'getrange', 'redis'],
+    problemHtml: `<p>Module 422 treated a Redis string as one opaque blob you overwrite with <code>SET</code>. It is really a mutable byte array, and three commands let you work on <strong>part</strong> of it without shipping the whole value across the network: <code>APPEND</code> adds to the end, <code>GETRANGE</code> reads a byte window, and <code>SETRANGE</code> overwrites bytes at an offset. That matters for anything you accumulate — a growing log line, a fixed-width record, a version string you patch — because rewriting a 1&nbsp;MB value to change three bytes costs a full 1&nbsp;MB round trip in each direction.</p>
+<p>Using <code>redis-cli</code>, exercise all three:</p>
+<ul>
+<li><code>SET page:home "Hello"</code>, then <code>APPEND page:home " World"</code>. <code>APPEND</code> returns the <strong>new total length</strong>, <code>11</code>, not the number of bytes added. Read it back and confirm <code>STRLEN</code> agrees.</li>
+<li><code>APPEND page:visits "start"</code> on a key that does not exist: a missing key behaves as an empty string, so this creates the key and returns <code>5</code>.</li>
+<li>Read windows of <code>page:home</code> with <code>GETRANGE</code>: <code>0 4</code> gives <code>"Hello"</code>, <code>-5 -1</code> gives <code>"World"</code>, and <code>0 -1</code> gives the whole value. Both bounds are <strong>inclusive</strong> and negative offsets count back from the end. Then ask for <code>20 30</code>, past the end, and observe an empty string rather than an error.</li>
+<li>Overwrite in place: <code>SETRANGE page:home 6 "Redis"</code> replaces the five bytes starting at offset 6 and returns the resulting length <code>11</code>. Confirm the value is now <code>"Hello Redis"</code>.</li>
+<li>Patch one byte of a version string: <code>SET code:version "1.0.0"</code> then <code>SETRANGE code:version 2 "9"</code>, which returns <code>5</code> and leaves <code>"1.9.0"</code>.</li>
+<li>Write past the end of a missing key: <code>SETRANGE pad:key 5 "end"</code>. Redis <strong>zero-pads</strong> the gap, so the key becomes 8 bytes long and <code>GET</code> shows five NUL bytes before <code>end</code>.</li>
+</ul>
+<p>The scaffold lists the commands with the offsets and replacement text left blank.</p>`,
+    inputSpec: 'A clean Redis database. Three string keys — page:home, page:visits, code:version, pad:key — are created and patched by the command sequence itself.',
+    outputSpec: 'APPEND page:home returns (integer) 11 and GET returns "Hello World" with STRLEN 11; APPEND page:visits returns (integer) 5 and GET returns "start"; GETRANGE 0 4 returns "Hello", -5 -1 returns "World", 0 -1 returns "Hello World", and 20 30 returns ""; SETRANGE page:home 6 "Redis" returns (integer) 11 and GET returns "Hello Redis"; SETRANGE code:version 2 "9" returns (integer) 5 and GET returns "1.9.0"; SETRANGE pad:key 5 "end" returns (integer) 8, GET returns "\\x00\\x00\\x00\\x00\\x00end" and STRLEN returns 8.',
+    constraints: 'Do not read a value into the client, modify it there, and SET it back — every edit must be done by APPEND or SETRANGE on the server. Do not pre-create page:visits or pad:key. Offsets are byte offsets, not character offsets, and GETRANGE bounds are inclusive.',
+    examplesJson: [
+      {
+        input: 'SET page:home "Hello" then APPEND page:home " World" then GET page:home then STRLEN page:home',
+        output: 'OK\n(integer) 11\n"Hello World"\n(integer) 11',
+        explanation: 'APPEND returns the length of the value AFTER the append, so 11 rather than the 6 bytes that were added; STRLEN confirms it.',
+      },
+      {
+        input: 'GETRANGE page:home -5 -1 then GETRANGE page:home 20 30',
+        output: '"World"\n""',
+        explanation: 'Negative offsets count back from the last byte and both bounds are inclusive, so -5 -1 is the final five bytes. A window entirely past the end yields an empty string, not an error.',
+      },
+      {
+        input: 'SETRANGE pad:key 5 "end" then GET pad:key then STRLEN pad:key',
+        output: '(integer) 8\n"\\x00\\x00\\x00\\x00\\x00end"\n(integer) 8',
+        explanation: 'Writing at offset 5 of a missing key grows the string to 8 bytes and fills the untouched gap with NUL bytes, which redis-cli prints escaped as \\x00.',
+      },
+    ],
+    hintsJson: [
+      'You never need to fetch the value to change part of it — pick the command that matches "add at the end" versus "overwrite at an offset".',
+      'APPEND key value concatenates and returns the new total length; STRLEN reports the same number.',
+      'GETRANGE key start end reads an inclusive byte window and accepts negative offsets, where -1 is the last byte.',
+      'SETRANGE key offset value overwrites bytes starting at offset and returns the resulting length; if the key is missing or shorter than the offset, Redis zero-pads the gap with \\x00 bytes.',
+    ],
+    starter: `SET page:home "Hello"
+APPEND page:home ____
+GET page:home
+STRLEN page:home
+APPEND page:visits ____
+GET page:visits
+GETRANGE page:home 0 ____
+GETRANGE page:home ____ -1
+GETRANGE page:home 0 -1
+GETRANGE page:home 20 30
+SETRANGE page:home ____ "Redis"
+GET page:home
+SET code:version "1.0.0"
+SETRANGE code:version ____ "9"
+GET code:version
+SETRANGE pad:key ____ "end"
+GET pad:key
+STRLEN pad:key`,
+    solution: `SET page:home "Hello"
+APPEND page:home " World"
+GET page:home
+STRLEN page:home
+APPEND page:visits "start"
+GET page:visits
+GETRANGE page:home 0 4
+GETRANGE page:home -5 -1
+GETRANGE page:home 0 -1
+GETRANGE page:home 20 30
+SETRANGE page:home 6 "Redis"
+GET page:home
+SET code:version "1.0.0"
+SETRANGE code:version 2 "9"
+GET code:version
+SETRANGE pad:key 5 "end"
+GET pad:key
+STRLEN pad:key`,
+    solutionExplanationHtml: `<p>All three commands share one mental model: a Redis string is a byte array with a length, and a missing key is indistinguishable from a zero-length one. That is why <code>APPEND page:visits "start"</code> succeeds on a key nobody created and returns <code>5</code> — it concatenated onto an implicit empty string. The return value of <code>APPEND</code> is the <strong>new total length</strong>, which is the single most common misreading; it is not "bytes appended", so treating it as a delta will make any accumulator you build drift immediately. Because appends are amortised O(1) — Redis over-allocates the underlying buffer so repeated growth does not recopy every time — building a value with many small <code>APPEND</code> calls is genuinely cheap, unlike the read-modify-<code>SET</code> loop it replaces.</p>
+<p><code>GETRANGE</code> is the read counterpart and follows the same inclusive, negative-index convention as <code>LRANGE</code>: <code>0 4</code> is five bytes, <code>-5 -1</code> is the last five, and <code>0 -1</code> is the idiomatic "everything". Requesting a window past the end returns an empty string rather than erroring, which keeps parsing code free of bounds checks. <code>SETRANGE</code> is the write counterpart and has the one genuinely surprising behaviour in this exercise: writing at an offset beyond the current length does not fail — Redis grows the string and <strong>zero-pads the gap</strong>, so <code>SETRANGE pad:key 5 "end"</code> produces an 8-byte value whose first five bytes are <code>\\x00</code>. On a fixed-width record layout that padding is exactly what you want; on a key you assumed was text it silently corrupts the value, and since the padding is invisible in most log output the bug surfaces much later. The other trap is that every offset is a <strong>byte</strong> offset, not a character offset, so slicing UTF-8 text with <code>GETRANGE</code> can cut a multi-byte character in half. Reserve these commands for ASCII or for binary layouts you control — which is precisely what a bitmap is, and that is the next exercise.</p>`,
+  },
+
+  {
+    title: 'Track Daily Active Users in a Bitmap with SETBIT, BITCOUNT, and BITPOS',
+    difficulty: 'EASY',
+    estimatedMinutes: 20,
+    points: 10,
+    concepts: ['SETBIT', 'GETBIT', 'BITCOUNT', 'BITPOS', 'bit offset as user id'],
+    prerequisites: ['SET', 'STRLEN', 'string keys'],
+    tags: ['bitmaps', 'setbit', 'bitcount', 'analytics', 'redis'],
+    problemHtml: `<p>"How many distinct users were active today" is a question a set answers correctly and expensively: one set member per user id, tens of bytes each, times millions of users, times one key per day. A <strong>bitmap</strong> answers the same question in one bit per user. There is no bitmap type in Redis — a bitmap <em>is</em> a string, addressed one bit at a time — so a key covering user ids 0 through 999&nbsp;999 costs 125&nbsp;KB regardless of how many of those users showed up.</p>
+<p>The convention is simple: <strong>bit offset = user id</strong>, key name = the day. Using <code>redis-cli</code>, build one day's bitmap:</p>
+<ul>
+<li>Mark users 5, 17, and 42 active on <code>dau:2026-07-01</code> with three <code>SETBIT</code> calls. <code>SETBIT</code> returns the bit's <strong>previous</strong> value, so each of these fresh writes returns <code>0</code>.</li>
+<li>Read individual bits with <code>GETBIT</code>: user 17 is <code>1</code>, user 18 is <code>0</code>, and user 500 — far past any byte you ever wrote — is also <code>0</code> rather than an error.</li>
+<li>Count the active users with <code>BITCOUNT dau:2026-07-01</code> (<code>3</code>) and check the storage cost with <code>STRLEN</code> (<code>6</code> bytes, because bit 42 lives in the sixth byte). <code>TYPE</code> confirms the key really is a <code>string</code>.</li>
+<li>Undo user 17 with <code>SETBIT dau:2026-07-01 17 0</code>. This time the return value is <code>1</code> — the bit's old value — and <code>BITCOUNT</code> drops to <code>2</code>.</li>
+<li>Find the first set and first clear bit with <code>BITPOS dau:2026-07-01 1</code> (<code>5</code>, the lowest still-active user id) and <code>BITPOS dau:2026-07-01 0</code> (<code>0</code>).</li>
+<li>Count a sub-range two ways: <code>BITCOUNT dau:2026-07-01 0 0</code> counts <strong>byte</strong> 0, and <code>BITCOUNT dau:2026-07-01 0 7 BIT</code> counts <strong>bits</strong> 0–7. Both return <code>1</code>, but only the <code>BIT</code> form lets you name an exact user-id window.</li>
+</ul>
+<p>The scaffold lists the commands with the bit offsets and values left blank.</p>`,
+    inputSpec: 'A clean Redis database. One key, dau:2026-07-01, is a bitmap in which bit offset N means "user N was active that day".',
+    outputSpec: 'The three SETBIT calls each return (integer) 0; GETBIT returns 1 for offset 17 and 0 for offsets 18 and 500; BITCOUNT returns 3, STRLEN returns 6 and TYPE returns string; clearing bit 17 returns (integer) 1, GETBIT 17 then returns 0 and BITCOUNT returns 2; BITPOS with 1 returns 5 and BITPOS with 0 returns 0; BITCOUNT 0 0 returns 1 and BITCOUNT 0 7 BIT returns 1.',
+    constraints: 'Use one key per day and one bit per user id — do not store user ids as set members or list elements. Do not create the key with SET; let SETBIT create and grow it. Do not count bits in the client; BITCOUNT must do it. Bit offsets are zero-based.',
+    examplesJson: [
+      {
+        input: 'SETBIT dau:2026-07-01 5 1 then SETBIT dau:2026-07-01 17 1 then BITCOUNT dau:2026-07-01 then STRLEN dau:2026-07-01',
+        output: '(integer) 0\n(integer) 0\n(integer) 2\n(integer) 3',
+        explanation: 'SETBIT returns the bit that was there before, so a first write returns 0. Two users are active, and reaching bit 17 grew the string to 3 bytes — a bitmap is just a string.',
+      },
+      {
+        input: 'SETBIT dau:2026-07-01 17 0 then GETBIT dau:2026-07-01 17 then BITCOUNT dau:2026-07-01',
+        output: '(integer) 1\n(integer) 0\n(integer) 2',
+        explanation: 'Clearing a set bit returns its previous value 1, which is how you can tell "this user was already counted" from "this is the first sighting" in a single command.',
+      },
+      {
+        input: 'GETBIT dau:2026-07-01 500 then BITPOS dau:2026-07-01 1 then BITCOUNT dau:2026-07-01 0 7 BIT',
+        output: '(integer) 0\n(integer) 5\n(integer) 1',
+        explanation: 'Reading far past the stored bytes yields 0 instead of an error; BITPOS finds the lowest set bit, and the BIT suffix makes the range a bit range rather than the default byte range.',
+      },
+    ],
+    hintsJson: [
+      'One bit per user means the user id is not stored anywhere — it IS the address you write to.',
+      'SETBIT key offset value sets a single bit and returns the value that bit held before the write; GETBIT reads one bit.',
+      'BITCOUNT key counts the set bits in the whole key; STRLEN shows how many bytes the highest offset forced Redis to allocate.',
+      'BITPOS key bit returns the offset of the first bit with that value. BITCOUNT takes an optional start and end, interpreted as BYTE offsets unless you add the BIT keyword.',
+    ],
+    starter: `SETBIT dau:2026-07-01 ____ 1
+SETBIT dau:2026-07-01 ____ 1
+SETBIT dau:2026-07-01 ____ 1
+GETBIT dau:2026-07-01 17
+GETBIT dau:2026-07-01 18
+GETBIT dau:2026-07-01 500
+BITCOUNT dau:2026-07-01
+STRLEN dau:2026-07-01
+TYPE dau:2026-07-01
+SETBIT dau:2026-07-01 17 ____
+GETBIT dau:2026-07-01 17
+BITCOUNT dau:2026-07-01
+BITPOS dau:2026-07-01 ____
+BITPOS dau:2026-07-01 ____
+BITCOUNT dau:2026-07-01 0 0
+BITCOUNT dau:2026-07-01 0 7 ____`,
+    solution: `SETBIT dau:2026-07-01 5 1
+SETBIT dau:2026-07-01 17 1
+SETBIT dau:2026-07-01 42 1
+GETBIT dau:2026-07-01 17
+GETBIT dau:2026-07-01 18
+GETBIT dau:2026-07-01 500
+BITCOUNT dau:2026-07-01
+STRLEN dau:2026-07-01
+TYPE dau:2026-07-01
+SETBIT dau:2026-07-01 17 0
+GETBIT dau:2026-07-01 17
+BITCOUNT dau:2026-07-01
+BITPOS dau:2026-07-01 1
+BITPOS dau:2026-07-01 0
+BITCOUNT dau:2026-07-01 0 0
+BITCOUNT dau:2026-07-01 0 7 BIT`,
+    solutionExplanationHtml: `<p>The whole technique rests on one modelling decision: the user id is not <em>stored</em>, it is the <strong>address</strong>. Because <code>TYPE</code> reports <code>string</code>, everything you already know about strings still applies — a bitmap can expire, be dumped, be replicated — but the bit commands let you address it 1/8th of a byte at a time. The memory argument is decisive at scale: one million user ids in a set costs on the order of tens of megabytes, while <code>dau:2026-07-01</code> as a bitmap costs exactly <code>ceil(max_id / 8)</code> bytes — 125&nbsp;KB — no matter whether one user or all of them were active. <code>STRLEN</code> returning <code>6</code> after writing bit 42 makes the allocation rule visible: Redis grows the string only as far as the highest offset touched, and every bit in between is implicitly <code>0</code>, which is also why <code>GETBIT</code> at offset 500 answers <code>0</code> instead of failing.</p>
+<p>The return value of <code>SETBIT</code> is the detail worth memorising: it is the bit's <strong>previous</strong> value, not a success flag. That single fact turns "mark this user active" into a first-sighting detector — if <code>SETBIT</code> returns <code>0</code> the user had not been seen today, so you can increment a separate counter or fire a welcome event exactly once, atomically, with no read-then-write race. Reading it as an error code is the classic mistake.</p>
+<p>For the read side, <code>BITCOUNT</code> is O(N) in the length of the string but N is tiny — counting 125&nbsp;KB of bits is a memory-bandwidth operation measured in microseconds, and Redis uses a population-count algorithm rather than a loop over bits. Its optional range arguments default to <strong>byte</strong> offsets, which is a real trap when you are thinking in user ids: <code>BITCOUNT key 0 0</code> asks about byte 0, meaning users 0–7, whereas <code>BITCOUNT key 0 7 BIT</code> asks about bit offsets 0–7. Same answer here, different questions in general. <code>BITPOS</code> completes the toolkit by finding the first bit with a given value, and it takes the same optional range with the same <code>BYTE</code>/<code>BIT</code> choice. The limitation to keep in view: this works only when ids are dense small integers. A UUID or an email address has no bit offset, so you would need a separate id-mapping counter — or, if an approximate answer suffices, the HyperLogLog covered two exercises from here.</p>`,
+    diagramMermaid: `flowchart TD
+  A[User 5 is active] --> B[SETBIT dau key offset 5 value 1]
+  C[User 42 is active] --> D[SETBIT dau key offset 42 value 1]
+  B --> E[String of 6 bytes with bits 5 and 42 set]
+  D --> E
+  E --> F[BITCOUNT returns number of active users]
+  E --> G[BITPOS returns lowest active user id]`,
+  },
+
+  {
+    title: 'Compute Day-over-Day Retention with BITOP AND, OR, XOR, and NOT',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 30,
+    points: 15,
+    concepts: ['BITOP AND', 'BITOP OR', 'BITOP XOR', 'BITOP NOT', 'zero-padding of unequal bitmaps'],
+    prerequisites: ['SETBIT', 'BITCOUNT', 'GETBIT', 'STRLEN'],
+    tags: ['bitmaps', 'bitop', 'retention', 'analytics', 'redis'],
+    problemHtml: `<p>Daily bitmaps become an analytics engine once you combine them. "Who came back today after being here yesterday" is a bitwise <strong>AND</strong>; "how many distinct users did we reach over two days" is an <strong>OR</strong>; "whose status changed" is an <strong>XOR</strong>. <code>BITOP</code> runs these across whole keys inside Redis, so a two-day retention number over a million users is one command over 125&nbsp;KB of memory instead of two large transfers and a client-side loop.</p>
+<p>Using <code>redis-cli</code>, build two days and combine them. Monday's actives are users 1, 4, 7; Tuesday's are 4, 7, 9:</p>
+<ul>
+<li>Set the six bits with <code>SETBIT</code> on <code>dau:mon</code> and <code>dau:tue</code>, then confirm <code>BITCOUNT</code> is <code>3</code> for each. Check <code>STRLEN</code>: <code>dau:mon</code> is <strong>1</strong> byte but <code>dau:tue</code> is <strong>2</strong>, because bit 9 falls in the second byte.</li>
+<li><strong>Retention.</strong> <code>BITOP AND dau:retained dau:mon dau:tue</code> writes the intersection into a new key and returns the destination's <strong>length in bytes</strong> (<code>2</code>, the longer input). <code>BITCOUNT dau:retained</code> is <code>2</code> — users 4 and 7. Verify with <code>GETBIT</code>: offset 4 is <code>1</code>, offset 1 is <code>0</code>.</li>
+<li><strong>Reach.</strong> <code>BITOP OR dau:reach dau:mon dau:tue</code>, then <code>BITCOUNT</code> — <code>4</code> distinct users across both days.</li>
+<li><strong>Churn plus new.</strong> <code>BITOP XOR dau:changed dau:mon dau:tue</code>, then <code>BITCOUNT</code> — <code>2</code>, namely user 1 who did not return and user 9 who arrived.</li>
+<li><strong>The dangerous one.</strong> <code>BITOP NOT dau:notmon dau:mon</code> takes exactly one source key and flips every bit <em>in the stored bytes</em>. <code>BITCOUNT dau:notmon</code> is <code>5</code>, not "everyone who was inactive" — it only knows about the 8 bits Monday happened to occupy.</li>
+</ul>
+<p>The scaffold lists the commands with the operation names and destination keys left blank.</p>`,
+    inputSpec: 'A clean Redis database. Two source bitmaps, dau:mon (users 1, 4, 7) and dau:tue (users 4, 7, 9), plus four destination keys produced by BITOP.',
+    outputSpec: 'The six SETBIT calls each return (integer) 0; BITCOUNT is 3 for both days; STRLEN dau:mon is 1 and STRLEN dau:tue is 2; BITOP AND returns (integer) 2 and BITCOUNT dau:retained is 2, with GETBIT offset 4 returning 1 and offset 1 returning 0; BITOP OR returns 2 and BITCOUNT dau:reach is 4; BITOP XOR returns 2 and BITCOUNT dau:changed is 2; BITOP NOT returns 1 and BITCOUNT dau:notmon is 5.',
+    constraints: 'All bitwise work happens server-side — never fetch two bitmaps and combine them in the client. BITOP NOT accepts exactly one source key; every other operation accepts one or more. Destination keys must be new keys, not one of the sources. Do not use SET to preallocate any key.',
+    examplesJson: [
+      {
+        input: 'dau:mon has bits 1,4,7 and dau:tue has bits 4,7,9; BITOP AND dau:retained dau:mon dau:tue then BITCOUNT dau:retained',
+        output: '(integer) 2\n(integer) 2',
+        explanation: 'The first 2 is the destination length in BYTES (as long as the longest input), the second is the retention count — users 4 and 7 were active on both days.',
+      },
+      {
+        input: 'BITOP OR dau:reach dau:mon dau:tue then BITCOUNT dau:reach then BITOP XOR dau:changed dau:mon dau:tue then BITCOUNT dau:changed',
+        output: '(integer) 2\n(integer) 4\n(integer) 2\n(integer) 2',
+        explanation: 'OR gives distinct reach across both days: users 1, 4, 7, 9. XOR keeps only bits that differ: user 1 churned and user 9 is new.',
+      },
+      {
+        input: 'STRLEN dau:mon then BITOP NOT dau:notmon dau:mon then BITCOUNT dau:notmon',
+        output: '(integer) 1\n(integer) 1\n(integer) 5',
+        explanation: 'Monday occupies a single byte, so NOT flips only those 8 bits: 3 were set, so 5 come back set. It is not the count of all inactive users in the system.',
+      },
+    ],
+    hintsJson: [
+      'Each analytics question maps to one boolean operator over the two day-keys — decide which before typing anything.',
+      'BITOP operation destkey srckey [srckey ...] writes the result into destkey and returns that key length in bytes.',
+      'Both days plus AND gives retention; either day plus OR gives reach; exactly one day plus XOR gives churn plus new arrivals.',
+      'A shorter source is treated as zero-padded to the length of the longest, which is why AND with a 1-byte and a 2-byte key produces a 2-byte result. NOT takes exactly one source and only flips the bits that are actually stored.',
+    ],
+    starter: `SETBIT dau:mon 1 1
+SETBIT dau:mon 4 1
+SETBIT dau:mon 7 1
+SETBIT dau:tue 4 1
+SETBIT dau:tue 7 1
+SETBIT dau:tue 9 1
+BITCOUNT dau:mon
+BITCOUNT dau:tue
+STRLEN dau:mon
+STRLEN dau:tue
+BITOP ____ dau:retained dau:mon dau:tue
+BITCOUNT dau:retained
+GETBIT dau:retained 4
+GETBIT dau:retained 1
+BITOP ____ dau:reach dau:mon dau:tue
+BITCOUNT dau:reach
+BITOP ____ dau:changed dau:mon dau:tue
+BITCOUNT dau:changed
+BITOP ____ dau:notmon dau:mon
+BITCOUNT dau:notmon`,
+    solution: `SETBIT dau:mon 1 1
+SETBIT dau:mon 4 1
+SETBIT dau:mon 7 1
+SETBIT dau:tue 4 1
+SETBIT dau:tue 7 1
+SETBIT dau:tue 9 1
+BITCOUNT dau:mon
+BITCOUNT dau:tue
+STRLEN dau:mon
+STRLEN dau:tue
+BITOP AND dau:retained dau:mon dau:tue
+BITCOUNT dau:retained
+GETBIT dau:retained 4
+GETBIT dau:retained 1
+BITOP OR dau:reach dau:mon dau:tue
+BITCOUNT dau:reach
+BITOP XOR dau:changed dau:mon dau:tue
+BITCOUNT dau:changed
+BITOP NOT dau:notmon dau:mon
+BITCOUNT dau:notmon`,
+    solutionExplanationHtml: `<p>Because every daily key uses the same bit-offset-equals-user-id convention, the keys are directly comparable and set algebra collapses into boolean algebra. <code>AND</code> keeps a bit only where <em>both</em> days had it, which is the definition of retention; <code>OR</code> keeps it where <em>either</em> did, which is distinct reach; <code>XOR</code> keeps it where the two <em>differ</em>, which merges churn and new arrivals into one number. The pattern generalises: <code>BITOP AND weekly:retained dau:mon dau:tue dau:wed ...</code> takes as many source keys as you like, so a seven-day "active every day" cohort is still a single command. The result lands in a real key, so it can be counted, expired with <code>EXPIRE</code>, or fed into the next <code>BITOP</code>.</p>
+<p>Two return values must not be confused. <code>BITOP</code> returns the <strong>size of the destination in bytes</strong> — here <code>2</code>, matching the longest input — while <code>BITCOUNT</code> returns the number of set bits, which is the answer you actually wanted. Reading the <code>BITOP</code> result as a user count is the single most common bug in this pattern, and it is silent because both are plausible small integers.</p>
+<p>The zero-padding rule explains the byte sizes: sources of unequal length are conceptually padded with zero bytes up to the longest, so <code>dau:mon</code> (1 byte) AND <code>dau:tue</code> (2 bytes) yields a 2-byte key whose second byte is all zeros. That is exactly right for <code>AND</code>, <code>OR</code>, and <code>XOR</code>, because an absent bit genuinely means "not active". It is exactly <em>wrong</em> for <code>NOT</code>, and this exercise makes that visible: <code>BITOP NOT dau:notmon dau:mon</code> returns a 1-byte key with <code>BITCOUNT</code> <code>5</code>, which is "the inactive users among ids 0–7", not "all inactive users". Nothing in the bitmap records how many users exist, so a meaningful complement requires you to supply that bound yourself — typically by ANDing the NOT result against a bitmap of all registered ids. Performance-wise <code>BITOP</code> is O(N) over the longest input and runs on the single-threaded server, so a multi-megabyte operation does block other clients; run large rollups off-peak, store the result, and read the cheap <code>BITCOUNT</code> afterwards.</p>`,
+  },
+
+  {
+    title: 'Estimate Unique Visitors with HyperLogLog and Measure Its Error',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 30,
+    points: 20,
+    concepts: ['PFADD', 'PFCOUNT', 'PFMERGE', 'probabilistic cardinality', 'fixed 12 KB footprint'],
+    prerequisites: ['SADD', 'SCARD', 'BITCOUNT', 'string keys'],
+    tags: ['hyperloglog', 'pfadd', 'pfcount', 'cardinality', 'redis'],
+    problemHtml: `<p>Bitmaps need dense integer ids. When the thing you are counting is a session token, an email, or an IP address, there is no bit offset to use — and a set of ten million such values costs hundreds of megabytes per day. A <strong>HyperLogLog</strong> answers "how many distinct values" from a fixed <strong>12&nbsp;KB</strong> sketch, whatever the values look like and however many there are, at the price of an approximate answer with a standard error around <strong>0.81%</strong>. It cannot list its members, and that is the deal: you trade enumeration and exactness for constant memory.</p>
+<p>Using <code>redis-cli</code>, count sessions and then measure the error yourself:</p>
+<ul>
+<li><code>PFADD dau:hll:mon "u1" "u2" "u3" "u4"</code> returns <code>1</code>, meaning "the sketch changed", not "4 items added". <code>PFCOUNT dau:hll:mon</code> returns <code>4</code>.</li>
+<li>Re-add <code>"u1" "u2"</code>. Nothing new is observed, so <code>PFADD</code> returns <code>0</code> and <code>PFCOUNT</code> is still <code>4</code>.</li>
+<li>Build <code>dau:hll:tue</code> from <code>"u3" "u4" "u5"</code>, count it (<code>3</code>), then run <code>PFCOUNT dau:hll:mon dau:hll:tue</code> — passing several keys gives the cardinality of their <strong>union</strong>, <code>5</code>, without creating anything.</li>
+<li>Persist that union with <code>PFMERGE dau:hll:week dau:hll:mon dau:hll:tue</code> (replies <code>OK</code>) and confirm <code>PFCOUNT dau:hll:week</code> is <code>5</code>.</li>
+<li>Prove it is a string: <code>TYPE dau:hll:mon</code> returns <code>string</code> and <code>STRLEN</code> is only <code>28</code> bytes, because Redis uses a compact sparse encoding while the cardinality is small.</li>
+<li><strong>Measure the error.</strong> The scaffold already contains a <code>PFADD dau:hll:big</code> line with 200 distinct members, <code>s1</code> through <code>s200</code>. Run it, then <code>PFCOUNT dau:hll:big</code> — the answer is <code>201</code>, not 200. Check <code>STRLEN dau:hll:big</code>: <code>507</code> bytes, still sparse.</li>
+</ul>
+<p>Report the number you actually get. An estimator that is off by one at 200 is behaving exactly as designed.</p>`,
+    inputSpec: 'A clean Redis database. Three small HyperLogLog keys (dau:hll:mon, dau:hll:tue, dau:hll:week) plus dau:hll:big, which receives 200 distinct members s1..s200 supplied by the scaffold.',
+    outputSpec: 'The first PFADD returns (integer) 1 and PFCOUNT returns 4; re-adding existing members returns (integer) 0 and PFCOUNT stays 4; dau:hll:tue counts 3; PFCOUNT over both keys returns 5; PFMERGE replies OK and PFCOUNT dau:hll:week returns 5; TYPE returns string and STRLEN dau:hll:mon returns 28; after adding 200 distinct members PFCOUNT dau:hll:big returns 201 and STRLEN dau:hll:big returns 507.',
+    constraints: 'Do not use a set to cross-check the counts — the point is the sketch. Do not expect PFCOUNT to be exact: quote the value you observe. PFADD returns 0 or 1 only, never a member count. A HyperLogLog cannot be enumerated, so there is no PF equivalent of SMEMBERS. Do not use DEL between steps.',
+    examplesJson: [
+      {
+        input: 'PFADD dau:hll:mon "u1" "u2" "u3" "u4" then PFCOUNT dau:hll:mon then PFADD dau:hll:mon "u1" "u2" then PFCOUNT dau:hll:mon',
+        output: '(integer) 1\n(integer) 4\n(integer) 0\n(integer) 4',
+        explanation: 'PFADD is a change flag: 1 means the internal registers were updated, 0 means every value was already represented. The estimate is unchanged by duplicates.',
+      },
+      {
+        input: 'PFCOUNT dau:hll:mon dau:hll:tue then PFMERGE dau:hll:week dau:hll:mon dau:hll:tue then PFCOUNT dau:hll:week',
+        output: '(integer) 5\nOK\n(integer) 5',
+        explanation: 'Multi-key PFCOUNT computes the union on the fly (u1..u5 across the two days, with u3 and u4 shared); PFMERGE stores that same union in a new key for reuse.',
+      },
+      {
+        input: 'PFADD dau:hll:big with 200 distinct members s1 through s200, then PFCOUNT dau:hll:big then STRLEN dau:hll:big',
+        output: '(integer) 1\n(integer) 201\n(integer) 507',
+        explanation: 'The true cardinality is 200 but the sketch reports 201 — a real, reproducible 0.5% overestimate. The whole structure is still only 507 bytes.',
+      },
+    ],
+    hintsJson: [
+      'The requirement is a count of distinct values, not the values themselves — that permission is what buys constant memory.',
+      'PFADD key element [element ...] observes values; PFCOUNT key returns the estimated cardinality.',
+      'PFADD returns 1 if the estimate may have changed and 0 otherwise, so it is never a count of how many elements you passed.',
+      'PFCOUNT with several keys returns the cardinality of their union without writing anything; PFMERGE dest src [src ...] stores that union in dest and replies OK.',
+    ],
+    starter: `PFADD dau:hll:mon ____ ____ ____ ____
+PFCOUNT dau:hll:mon
+PFADD dau:hll:mon "u1" "u2"
+PFCOUNT dau:hll:mon
+PFADD dau:hll:tue ____ ____ ____
+PFCOUNT dau:hll:tue
+PFCOUNT dau:hll:mon ____
+PFMERGE dau:hll:week ____ ____
+PFCOUNT dau:hll:week
+TYPE dau:hll:mon
+STRLEN dau:hll:mon
+PFADD dau:hll:big ${bulkIds}
+PFCOUNT dau:hll:big
+STRLEN dau:hll:big`,
+    solution: `PFADD dau:hll:mon "u1" "u2" "u3" "u4"
+PFCOUNT dau:hll:mon
+PFADD dau:hll:mon "u1" "u2"
+PFCOUNT dau:hll:mon
+PFADD dau:hll:tue "u3" "u4" "u5"
+PFCOUNT dau:hll:tue
+PFCOUNT dau:hll:mon dau:hll:tue
+PFMERGE dau:hll:week dau:hll:mon dau:hll:tue
+PFCOUNT dau:hll:week
+TYPE dau:hll:mon
+STRLEN dau:hll:mon
+PFADD dau:hll:big ${bulkIds}
+PFCOUNT dau:hll:big
+STRLEN dau:hll:big`,
+    solutionExplanationHtml: `<p>A HyperLogLog does not store what you add. <code>PFADD</code> hashes each element and keeps only the position of the longest run of leading zero bits seen in each of 16384 registers; the count is then derived from those registers. That is why the structure is bounded at roughly <strong>12&nbsp;KB</strong> in its dense form no matter whether you observe a thousand values or a billion, and why <code>PFCOUNT</code> can never be turned back into a member list. The keys are ordinary strings — <code>TYPE</code> proves it — so they expire, replicate, and dump like anything else, and <code>STRLEN</code> of <code>28</code> bytes for four members shows that Redis starts in a <em>sparse</em> encoding and only promotes to the full 12&nbsp;KB dense layout once the cardinality justifies it. Even at 200 members the sketch here is still only 507 bytes.</p>
+<p>The honest number is the point of the last step. With exactly 200 distinct members, <code>PFCOUNT</code> reports <code>201</code> on this Redis 7.4 build — reproducibly, because the hash is deterministic. That is a 0.5% overestimate, comfortably inside the documented ~0.81% standard error, and it is not a bug to be worked around. The practical rule: use a HyperLogLog when the consumer is a dashboard, a trend line, or a threshold check, and never when the number drives billing, quota enforcement, or anything a user will dispute. Small cardinalities are usually exact, which makes the failure mode nasty — testing with ten items proves nothing about production.</p>
+<p>Two return values deserve care. <code>PFADD</code> is a <strong>change flag</strong>, returning <code>1</code> when the registers were modified and <code>0</code> when nothing new was observed, so it can never tell you how many elements you passed and must not be summed. And multi-key <code>PFCOUNT</code> is the sketch's best trick: because merging registers is just a per-register maximum, the union of several sketches is computed exactly as though every element had been added to one — no double counting, unlike summing separate daily counts. That gives you seven daily keys and an accurate weekly unique number for free, with <code>PFMERGE</code> persisting the result when the same union is read repeatedly. Note the asymmetry: unions are cheap and exact, but there is no <code>PFINTERSECT</code>, because intersection cardinality cannot be recovered from these registers. If you need retention — "active both days" — go back to bitmaps and <code>BITOP AND</code>, or keep real sets.</p>`,
+  },
+
+  {
+    title: 'Build a Nearby-Places Lookup with GEOADD, GEOSEARCH, and GEODIST',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 35,
+    points: 20,
+    concepts: ['GEOADD', 'GEOSEARCH BYRADIUS', 'GEOSEARCH BYBOX', 'GEODIST', 'GEOPOS', 'geohash on a sorted set'],
+    prerequisites: ['ZADD', 'ZCARD', 'sorted sets', 'key namespacing'],
+    tags: ['geospatial', 'geoadd', 'geosearch', 'proximity', 'redis'],
+    problemHtml: `<p>"Show me the places within 5&nbsp;km, nearest first" is a query most databases answer with a spatial index and a slow scan. Redis encodes each point's latitude and longitude into a single 52-bit geohash integer and stores it as the <strong>score of a sorted set member</strong>, which turns proximity search into a handful of range scans. There is no separate geo type — <code>TYPE</code> on a geo key says <code>zset</code> — so everything you know about sorted sets still applies.</p>
+<p>Using <code>redis-cli</code>, build a places index for Hanoi and query it:</p>
+<ul>
+<li>Add four points in one <code>GEOADD places:hanoi</code> call, each as <strong>longitude latitude member</strong> — note the order, longitude first: <code>105.8542 21.0285 "hoan-kiem-lake"</code>, <code>105.8350 21.0378 "west-lake"</code>, <code>105.8412 21.0245 "temple-of-literature"</code>, and <code>106.6822 20.9500 "ha-long-bay"</code>. It returns <code>4</code>, the number of new members. Confirm <code>ZCARD</code> is <code>4</code> and <code>TYPE</code> is <code>zset</code>.</li>
+<li>Measure with <code>GEODIST places:hanoi "hoan-kiem-lake" "west-lake"</code>, which returns metres as a string, then repeat with the <code>km</code> unit. Ask for a member that does not exist and observe <code>(nil)</code>.</li>
+<li>Read stored coordinates with <code>GEOPOS places:hanoi "hoan-kiem-lake"</code>. The values come back with more decimal places than you supplied — geohash encoding is <strong>lossy</strong>. <code>GEOPOS</code> for a missing member returns a nil entry inside the array, not an error.</li>
+<li>Search around a member: <code>GEOSEARCH places:hanoi FROMMEMBER "hoan-kiem-lake" BYRADIUS 5 km ASC</code>. Three places are within 5&nbsp;km, nearest first, and the origin member is included in its own result.</li>
+<li>Search around an arbitrary point with distances shown: <code>GEOSEARCH places:hanoi FROMLONLAT 105.8542 21.0285 BYRADIUS 5 km WITHDIST ASC</code>. Then cap the result with <code>COUNT 2</code>.</li>
+<li>Switch the shape: <code>GEOSEARCH places:hanoi FROMMEMBER "hoan-kiem-lake" BYBOX 200 200 km ASC</code> uses a width-by-height rectangle instead of a circle and is wide enough to pull in Ha Long Bay.</li>
+</ul>
+<p>The scaffold lists the commands with the coordinates, units, and search options left blank.</p>`,
+    inputSpec: 'A clean Redis database. One geo key, places:hanoi, holding four named points given as longitude, latitude pairs.',
+    outputSpec: 'GEOADD returns (integer) 4, ZCARD returns 4 and TYPE returns zset; GEODIST returns "2246.0997" in metres and "2.2461" in km, and (nil) for a member that does not exist; GEOPOS returns the stored longitude 105.85420221090316772 and latitude 21.02849918560288245, and a nil entry for a missing member; GEOSEARCH FROMMEMBER BYRADIUS 5 km ASC lists hoan-kiem-lake, temple-of-literature, west-lake; the WITHDIST variant adds distances 0.0002, 1.4212 and 2.2459; COUNT 2 truncates to the first two; BYBOX 200 200 km additionally returns ha-long-bay last.',
+    constraints: 'Coordinates are longitude first, then latitude — the reverse of the usual "lat,long" spoken order. Use GEOSEARCH, not the deprecated GEORADIUS. Do not compute distances in the client. Do not assume GEOPOS returns exactly what you stored; the geohash encoding is lossy. Valid latitudes are -85.05112878 to 85.05112878.',
+    examplesJson: [
+      {
+        input: 'GEOADD places:hanoi with four points, then GEODIST places:hanoi "hoan-kiem-lake" "west-lake" then GEODIST places:hanoi "hoan-kiem-lake" "west-lake" km',
+        output: '(integer) 4\n"2246.0997"\n"2.2461"',
+        explanation: 'GEOADD returns the count of newly added members. GEODIST defaults to metres and returns a bulk string; adding the unit km converts server-side.',
+      },
+      {
+        input: 'GEOSEARCH places:hanoi FROMLONLAT 105.8542 21.0285 BYRADIUS 5 km WITHDIST ASC',
+        output: '1) 1) "hoan-kiem-lake"\n   2) "0.0002"\n2) 1) "temple-of-literature"\n   2) "1.4212"\n3) 1) "west-lake"\n   2) "2.2459"',
+        explanation: 'WITHDIST turns each row into a member plus distance pair, ASC sorts nearest first, and ha-long-bay is excluded because it is far outside 5 km.',
+      },
+      {
+        input: 'GEOPOS places:hanoi "hoan-kiem-lake" then GEOPOS places:hanoi "nowhere"',
+        output: '1) 1) "105.85420221090316772"\n   2) "21.02849918560288245"\n1) (nil)',
+        explanation: 'The returned coordinates differ from the input in the far decimals because the point was encoded into a 52-bit geohash. A missing member yields a nil element rather than an error.',
+      },
+    ],
+    hintsJson: [
+      'A geo key is a sorted set whose scores are geohashes, so adding a point is one command and searching is a score range scan Redis does for you.',
+      'GEOADD key longitude latitude member [longitude latitude member ...] — longitude comes first.',
+      'GEOSEARCH key FROMMEMBER member or FROMLONLAT long lat, then BYRADIUS radius unit or BYBOX width height unit, then ASC or DESC.',
+      'Add WITHDIST to get the distance beside each member, WITHCOORD for its coordinates, and COUNT n to cap the result. GEODIST key member1 member2 unit measures two stored members directly.',
+    ],
+    starter: `GEOADD places:hanoi ____ ____ "hoan-kiem-lake" ____ ____ "west-lake" ____ ____ "temple-of-literature" ____ ____ "ha-long-bay"
+ZCARD places:hanoi
+TYPE places:hanoi
+GEODIST places:hanoi "hoan-kiem-lake" "west-lake"
+GEODIST places:hanoi "hoan-kiem-lake" "west-lake" ____
+GEODIST places:hanoi "hoan-kiem-lake" "nowhere"
+GEOPOS places:hanoi "hoan-kiem-lake"
+GEOPOS places:hanoi "nowhere"
+GEOSEARCH places:hanoi FROMMEMBER "hoan-kiem-lake" ____ 5 km ASC
+GEOSEARCH places:hanoi FROMLONLAT ____ ____ BYRADIUS 5 km ____ ASC
+GEOSEARCH places:hanoi FROMLONLAT 105.8542 21.0285 BYRADIUS 5 km ASC ____ 2
+GEOSEARCH places:hanoi FROMMEMBER "hoan-kiem-lake" ____ 200 200 km ASC`,
+    solution: `GEOADD places:hanoi 105.8542 21.0285 "hoan-kiem-lake" 105.8350 21.0378 "west-lake" 105.8412 21.0245 "temple-of-literature" 106.6822 20.9500 "ha-long-bay"
+ZCARD places:hanoi
+TYPE places:hanoi
+GEODIST places:hanoi "hoan-kiem-lake" "west-lake"
+GEODIST places:hanoi "hoan-kiem-lake" "west-lake" km
+GEODIST places:hanoi "hoan-kiem-lake" "nowhere"
+GEOPOS places:hanoi "hoan-kiem-lake"
+GEOPOS places:hanoi "nowhere"
+GEOSEARCH places:hanoi FROMMEMBER "hoan-kiem-lake" BYRADIUS 5 km ASC
+GEOSEARCH places:hanoi FROMLONLAT 105.8542 21.0285 BYRADIUS 5 km WITHDIST ASC
+GEOSEARCH places:hanoi FROMLONLAT 105.8542 21.0285 BYRADIUS 5 km ASC COUNT 2
+GEOSEARCH places:hanoi FROMMEMBER "hoan-kiem-lake" BYBOX 200 200 km ASC`,
+    solutionExplanationHtml: `<p>The geo commands are a thin, well-chosen layer over the sorted set. <code>GEOADD</code> interleaves the bits of the longitude and latitude into a single 52-bit integer — a geohash — and calls <code>ZADD</code> with that integer as the score. Nearby points get numerically nearby scores, so <code>GEOSEARCH</code> can answer a proximity query with a small number of <code>ZRANGEBYSCORE</code> scans over the boxes that cover the search area, then filter the candidates by exact distance. That is why <code>TYPE</code> reports <code>zset</code>, why <code>ZCARD</code> counts your places, and why <code>ZREM</code> is how you delete a point — there is no <code>GEOREM</code>.</p>
+<p>Three details cause most real bugs. First, <strong>argument order is longitude then latitude</strong>, the opposite of how coordinates are spoken and of what most map UIs hand you; swapping them does not error, it silently files your Hanoi café somewhere in the ocean. Second, the encoding is <strong>lossy</strong>: <code>GEOPOS</code> returns <code>105.85420221090316772</code> for a point stored as <code>105.8542</code>, an error under a metre that is irrelevant for "restaurants near me" and unacceptable as a system of record. Keep the authoritative coordinates in your primary database and treat the Redis key as an index. Third, <code>GEODIST</code> and <code>GEOSEARCH</code> return <strong>bulk strings</strong>, not numbers, so a client that compares them without parsing will sort <code>"10.5"</code> before <code>"9.1"</code>.</p>
+<p>On the query side, <code>BYRADIUS</code> takes a circle and <code>BYBOX</code> a width-by-height rectangle centred on the origin — the box is the right shape for a map viewport, which is also rectangular, and here 200 by 200&nbsp;km is what pulls Ha Long Bay into the result that the 5&nbsp;km circle excluded. <code>FROMMEMBER</code> searches around a stored place and always includes that member itself at distance ~0, which you usually have to filter out. <code>FROMLONLAT</code> searches around an arbitrary point such as the user's GPS fix. Always pair a search with <code>ASC</code> and <code>COUNT n</code> when rendering a "nearest N" list: without <code>COUNT</code> a dense city key can return thousands of members over the wire, and without <code>ASC</code> the order is not the one your UI implies. Note the cost — roughly O(N + log M) where N is the number of candidates inside the covered boxes — so a very large radius on a dense key is expensive on a single-threaded server. Finally, prefer <code>GEOSEARCH</code> over <code>GEORADIUS</code> and <code>GEORADIUSBYMEMBER</code>: those have been deprecated since Redis 6.2 and <code>GEOSEARCH</code> subsumes both.</p>`,
+  },
+
+  {
+    title: 'Append and Read an Order Event Log with XADD, XRANGE, and XREAD',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 35,
+    points: 20,
+    concepts: ['XADD', 'XLEN', 'XRANGE', 'XREVRANGE', 'XREAD', 'stream entry ids'],
+    prerequisites: ['RPUSH', 'LRANGE', 'HSET', 'list semantics'],
+    tags: ['streams', 'xadd', 'xrange', 'xread', 'event-log', 'redis'],
+    problemHtml: `<p>A list can hold an event log, but it forces a choice you should not have to make: <code>LPOP</code> consumes the event so only one reader ever sees it, and <code>LRANGE</code> leaves you tracking positions by index, which shift the moment anything is trimmed. A <strong>stream</strong> is Redis's append-only log built for this: every entry gets a monotonically increasing <strong>id</strong> and a set of field-value pairs, entries are never consumed by being read, and any number of readers can resume from the last id they processed.</p>
+<p>Using <code>redis-cli</code>, build an order event log with explicit ids so the output is reproducible:</p>
+<ul>
+<li>Append three entries to <code>orders:stream</code> with <code>XADD</code>, giving each an explicit id instead of <code>*</code>: <code>1700000000000-1</code> with fields <code>event created</code>, <code>order 1001</code>, <code>amount 250</code>; then <code>1700000000000-2</code> with <code>event paid</code> for the same order; then <code>1700000005000-1</code> with <code>event created</code>, <code>order 1002</code>, <code>amount 80</code>. <code>XADD</code> returns the id it stored.</li>
+<li>Confirm <code>XLEN orders:stream</code> is <code>3</code> and <code>TYPE</code> is <code>stream</code>.</li>
+<li>Read the whole log with <code>XRANGE orders:stream - +</code>, where <code>-</code> and <code>+</code> are the minimum and maximum possible ids. Each entry prints as its id followed by a flat field-value array.</li>
+<li>Page it: <code>XRANGE orders:stream - + COUNT 1</code> returns only the first entry. Then start from a given id: <code>XRANGE orders:stream 1700000000000-2 +</code> returns two entries, because <code>XRANGE</code> bounds are <strong>inclusive</strong>.</li>
+<li>Read the newest entry with <code>XREVRANGE orders:stream + - COUNT 1</code> — note the reversed bound order.</li>
+<li>Consume like a follower: <code>XREAD COUNT 5 STREAMS orders:stream 1700000000000-2</code> returns everything <strong>strictly after</strong> that id — one entry — because <code>XREAD</code> takes a last-seen id, not a range. Repeat it with the id of the newest entry and observe <code>(nil)</code>, meaning "nothing new yet".</li>
+</ul>
+<p>Do not use <code>BLOCK</code> here; a blocking <code>XREAD</code> would hang a scripted session. Consumer groups are a later module. The scaffold lists the commands with the ids and range bounds blank.</p>`,
+    inputSpec: 'A clean Redis database. One stream key, orders:stream, receives three entries with explicit ids 1700000000000-1, 1700000000000-2 and 1700000005000-1.',
+    outputSpec: 'Each XADD echoes the id it stored as a quoted string; XLEN returns (integer) 3 and TYPE returns stream; XRANGE - + prints all three entries as id plus a nested field-value array; COUNT 1 prints only the first; XRANGE starting at 1700000000000-2 prints two entries because the bound is inclusive; XREVRANGE + - COUNT 1 prints the newest entry 1700000005000-1; XREAD after 1700000000000-2 returns the stream name wrapping the single entry 1700000005000-1; XREAD after 1700000005000-1 returns (nil).',
+    constraints: 'Use explicit entry ids, not *, so the run is reproducible. Never use BLOCK in this exercise. Do not use consumer-group commands (XGROUP, XREADGROUP, XACK) — they belong to the later streams module. Do not delete entries. Entry ids must increase strictly; re-adding an id that is not greater than the last one is an error.',
+    examplesJson: [
+      {
+        input: 'XADD orders:stream 1700000000000-1 event "created" order "1001" amount "250" then XLEN orders:stream then TYPE orders:stream',
+        output: '"1700000000000-1"\n(integer) 1\nstream',
+        explanation: 'XADD returns the id under which the entry was stored, which is the explicit id here; the key is created on first append and has its own stream type.',
+      },
+      {
+        input: 'XRANGE orders:stream 1700000000000-2 +',
+        output: '1) 1) "1700000000000-2"\n   2) 1) "event"\n      2) "paid"\n      3) "order"\n      4) "1001"\n      5) "amount"\n      6) "250"\n2) 1) "1700000005000-1"\n   2) 1) "event"\n      2) "created"\n      3) "order"\n      4) "1002"\n      5) "amount"\n      6) "80"',
+        explanation: 'XRANGE bounds are inclusive, so the entry whose id you named is returned along with everything after it, and + stands for the highest possible id.',
+      },
+      {
+        input: 'XREAD COUNT 5 STREAMS orders:stream 1700000005000-1',
+        output: '(nil)',
+        explanation: 'XREAD returns entries strictly greater than the id you pass, so passing the newest id means there is nothing new and the reply is nil rather than an empty array.',
+      },
+    ],
+    hintsJson: [
+      'Reading must not destroy the event, and readers must be able to resume — that rules out LPOP and index-based paging.',
+      'XADD key id field value [field value ...] appends one entry; pass * to let Redis generate the id, or an explicit id for reproducibility.',
+      'XRANGE key start end reads an inclusive range where - is the smallest id and + the largest; COUNT limits it and XREVRANGE reads backwards with the bounds swapped.',
+      'XREAD COUNT n STREAMS key last-id returns only entries strictly after last-id, which is how a follower resumes; when there is nothing newer it returns nil.',
+    ],
+    starter: `XADD orders:stream ____ event "created" order "1001" amount "250"
+XADD orders:stream ____ event "paid" order "1001" amount "250"
+XADD orders:stream ____ event "created" order "1002" amount "80"
+XLEN orders:stream
+TYPE orders:stream
+XRANGE orders:stream ____ ____
+XRANGE orders:stream - + ____ 1
+XRANGE orders:stream ____ +
+XREVRANGE orders:stream ____ ____ COUNT 1
+XREAD COUNT 5 STREAMS orders:stream ____
+XREAD COUNT 5 STREAMS orders:stream ____`,
+    solution: `XADD orders:stream 1700000000000-1 event "created" order "1001" amount "250"
+XADD orders:stream 1700000000000-2 event "paid" order "1001" amount "250"
+XADD orders:stream 1700000005000-1 event "created" order "1002" amount "80"
+XLEN orders:stream
+TYPE orders:stream
+XRANGE orders:stream - +
+XRANGE orders:stream - + COUNT 1
+XRANGE orders:stream 1700000000000-2 +
+XREVRANGE orders:stream + - COUNT 1
+XREAD COUNT 5 STREAMS orders:stream 1700000000000-2
+XREAD COUNT 5 STREAMS orders:stream 1700000005000-1`,
+    solutionExplanationHtml: `<p>The entry id is what makes a stream different from a list. It has the form <code>milliseconds-sequence</code>, so <code>1700000000000-1</code> and <code>1700000000000-2</code> are two events in the same millisecond distinguished by the sequence part, and <code>1700000005000-1</code> is five seconds later. Ids increase strictly and are never reused, which gives every reader a stable cursor: you record the last id you handled and ask for what came after. Compare that with a list, where <code>LRANGE</code> positions shift under you as soon as anything is pushed or trimmed. In production you pass <code>*</code> and let Redis generate the id from the server clock — explicit ids are used here only so the output is reproducible, and note that an id must be strictly greater than the stream's current last id or <code>XADD</code> fails.</p>
+<p>The two read commands answer different questions and are constantly confused. <code>XRANGE key start end</code> is a <strong>range query with inclusive bounds</strong>, using <code>-</code> and <code>+</code> as the minimum and maximum ids — that is why starting at <code>1700000000000-2</code> returns that very entry plus everything after it. It is the right tool for auditing, backfilling, or paging through history with <code>COUNT</code>, taking the last id of one page as the start of the next. <code>XREVRANGE</code> is the same query walking backwards, which is why its bounds are written <code>+ -</code>; reversing them by habit returns an empty result rather than an error. <code>XREAD</code>, by contrast, takes a <strong>last-seen id and returns only entries strictly greater</strong> than it, which is exactly the semantics a follower needs to resume without re-processing the entry it just handled. When nothing newer exists it replies <code>(nil)</code>, distinguishable from an empty range, and its reply is nested one level deeper because a single <code>XREAD</code> can watch several streams at once and therefore labels each block with its key name.</p>
+<p>Crucially, reading never removes anything: <code>XLEN</code> stays <code>3</code> after every query, so ten independent consumers can each replay the log from their own position — the fan-out that a list simply cannot do. The cost is that a stream grows forever unless you bound it, with <code>XADD key MAXLEN ~ 10000 * ...</code> being the usual idiom. The piece still missing is coordination: with plain <code>XREAD</code>, every consumer sees every entry and there is no record of what was acknowledged, so work cannot be divided across a pool of workers or recovered after a crash. That is what consumer groups solve, and they are the subject of the dedicated streams module.</p>`,
+  },
+
+  {
+    title: 'Group Commands with MULTI and EXEC — and Watch a Runtime Error Not Roll Back',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 35,
+    points: 20,
+    concepts: ['MULTI', 'EXEC', 'DISCARD', 'QUEUED replies', 'EXECABORT', 'no rollback semantics'],
+    prerequisites: ['SET', 'GET', 'INCRBY', 'redis-cli basics'],
+    tags: ['transactions', 'multi', 'exec', 'discard', 'redis'],
+    problemHtml: `<p>Redis calls <code>MULTI</code>/<code>EXEC</code> a transaction, and the word imports expectations from SQL that are <strong>wrong here</strong>. What Redis actually guarantees is <em>isolation</em>: the queued commands run one after another with no other client's command interleaved. What it does <strong>not</strong> provide is atomicity in the rollback sense — if one queued command fails at execution time, the ones before it stay applied and the ones after it still run. Believing otherwise produces corrupted state that no error handler catches, because the failure is buried inside a reply array most clients never inspect.</p>
+<p>Using <code>redis-cli</code>, walk through all four behaviours:</p>
+<ul>
+<li>Seed <code>account:balance</code> with <code>100</code> and <code>account:owner</code> with <code>"ann"</code>.</li>
+<li><strong>Happy path.</strong> <code>MULTI</code> replies <code>OK</code>; then <code>INCRBY account:balance 50</code> and <code>GET account:balance</code> each reply <code>QUEUED</code> instead of their real answer. <code>EXEC</code> runs both and returns an <strong>array of the queued replies</strong>: <code>(integer) 150</code> then <code>"150"</code>. Confirm with a plain <code>GET</code>.</li>
+<li><strong>Abandon.</strong> Open another <code>MULTI</code>, queue <code>INCRBY account:balance 10</code>, then <code>DISCARD</code>. It replies <code>OK</code>, the queue is thrown away, and the balance is still <code>"150"</code>.</li>
+<li><strong>Runtime error, no rollback.</strong> Queue three commands: <code>SET account:log "started"</code>, then <code>INCR account:owner</code> (which will fail — <code>"ann"</code> is not a number), then <code>SET account:log "finished"</code>. All three queue fine, because the error is only detectable at run time. <code>EXEC</code> returns an array whose second element is an error while elements one and three succeeded. Prove it: <code>GET account:log</code> is <code>"finished"</code> and <code>GET account:owner</code> is still <code>"ann"</code>. Nothing was undone.</li>
+<li><strong>Queue-time error, whole transaction aborted.</strong> Open <code>MULTI</code>, queue <code>SET account:tmp 1</code>, then send <code>NOSUCHCOMMAND arg</code>. Redis rejects it immediately and remembers the transaction is poisoned, so <code>EXEC</code> returns <code>EXECABORT</code> and runs nothing. <code>EXISTS account:tmp</code> is <code>0</code>.</li>
+</ul>
+<p>The scaffold gives the command skeleton with the transaction keywords left blank.</p>`,
+    inputSpec: 'A clean Redis database. Keys account:balance (numeric), account:owner (the non-numeric string "ann"), account:log and account:tmp are touched by four separate MULTI blocks.',
+    outputSpec: 'MULTI replies OK and each queued command replies QUEUED; the first EXEC returns an array of (integer) 150 and "150", and GET account:balance returns "150"; DISCARD replies OK and GET account:balance is still "150"; the third EXEC returns a three-element array of OK, (error) ERR value is not an integer or out of range, and OK, after which GET account:log returns "finished" and GET account:owner returns "ann"; the bad command reports (error) ERR unknown command, EXEC then returns (error) EXECABORT Transaction discarded because of previous errors, and EXISTS account:tmp returns (integer) 0.',
+    constraints: 'Use MULTI, EXEC and DISCARD only — no Lua, no WATCH in this exercise. Do not try to undo the failed command manually; the point is to observe that Redis does not. Do not put a blocking command inside MULTI. Every command between MULTI and EXEC must reply QUEUED for the transaction to be valid.',
+    examplesJson: [
+      {
+        input: 'MULTI then INCRBY account:balance 50 then GET account:balance then EXEC',
+        output: 'OK\nQUEUED\nQUEUED\n1) (integer) 150\n2) "150"',
+        explanation: 'Queued commands return QUEUED, not their result. EXEC executes them in order and returns one array element per command, so results arrive together at the end.',
+      },
+      {
+        input: 'MULTI then SET account:log "started" then INCR account:owner then SET account:log "finished" then EXEC then GET account:log',
+        output: 'OK\nQUEUED\nQUEUED\nQUEUED\n1) OK\n2) (error) ERR value is not an integer or out of range\n3) OK\n"finished"',
+        explanation: 'INCR on the string "ann" fails at execution time, but the SET before it stays applied and the SET after it still runs — Redis has no rollback.',
+      },
+      {
+        input: 'MULTI then SET account:tmp 1 then NOSUCHCOMMAND arg then EXEC then EXISTS account:tmp',
+        output: "OK\nQUEUED\n(error) ERR unknown command 'NOSUCHCOMMAND', with args beginning with: 'arg' \n(error) EXECABORT Transaction discarded because of previous errors.\n(integer) 0",
+        explanation: 'An error Redis can detect while queueing poisons the transaction, so EXEC refuses to run anything at all and account:tmp is never created.',
+      },
+    ],
+    hintsJson: [
+      'Opening the block changes what every following command replies — look at the reply, not at the value you expected.',
+      'MULTI starts queuing, EXEC runs the queue and returns one reply per command, DISCARD throws the queue away.',
+      'Errors come in two kinds: rejected while queueing (wrong command name or wrong arity) and raised while executing (right command, wrong data type).',
+      'A queue-time error makes EXEC return EXECABORT and run nothing; a runtime error is reported as one element of the EXEC array while every other command still takes effect.',
+    ],
+    starter: `SET account:balance 100
+SET account:owner "ann"
+____
+INCRBY account:balance 50
+GET account:balance
+____
+GET account:balance
+____
+INCRBY account:balance 10
+____
+GET account:balance
+____
+SET account:log "started"
+INCR account:owner
+SET account:log "finished"
+____
+GET account:log
+GET account:owner
+____
+SET account:tmp 1
+NOSUCHCOMMAND arg
+____
+EXISTS account:tmp`,
+    solution: `SET account:balance 100
+SET account:owner "ann"
+MULTI
+INCRBY account:balance 50
+GET account:balance
+EXEC
+GET account:balance
+MULTI
+INCRBY account:balance 10
+DISCARD
+GET account:balance
+MULTI
+SET account:log "started"
+INCR account:owner
+SET account:log "finished"
+EXEC
+GET account:log
+GET account:owner
+MULTI
+SET account:tmp 1
+NOSUCHCOMMAND arg
+EXEC
+EXISTS account:tmp`,
+    solutionExplanationHtml: `<p><code>MULTI</code> switches the connection into a queuing mode: from that point every command is parsed, checked for a valid name and arity, and stored, replying <code>QUEUED</code> rather than executing. <code>EXEC</code> then runs the whole queue as a single unit against the single-threaded server, so no other client's command can interleave, and returns an array with one element per queued command in order. That is the real guarantee, and it is genuinely useful — a "read the balance and write the derived total" pair cannot see a value that changed halfway through. <code>DISCARD</code> exits queuing mode and drops the queue, which is what you call when your application logic decides mid-way that the write should not happen.</p>
+<p>The essential lesson is the third block. Redis distinguishes two error classes. A <strong>queue-time</strong> error — an unknown command, or the wrong number of arguments — is detected while the command is being queued; Redis flags the transaction and <code>EXEC</code> answers <code>EXECABORT</code>, running nothing, which is why <code>account:tmp</code> never exists. A <strong>runtime</strong> error such as <code>INCR</code> against the string <code>"ann"</code> cannot be detected without looking at the data, so the command queues happily and fails only during <code>EXEC</code>. At that moment Redis does exactly what its docs say: it records the error as one element of the reply array and <strong>carries on with the remaining commands</strong>. The proof is that <code>account:log</code> ends at <code>"finished"</code>, written by the command <em>after</em> the failure, while the <code>"started"</code> written before it was never undone. There is no rollback, no savepoint, and no way to ask for one.</p>
+<p>Two practical consequences follow. First, <strong>inspect every element of the EXEC reply</strong>. Many clients surface only "the transaction executed" and hide per-command errors inside the array, so a partially applied transaction can run in production for months unnoticed. Second, prevent runtime errors rather than handling them, since they are almost always type mistakes — incrementing a key that holds text, pushing to a key that holds a hash — which means disciplined key naming and type conventions do more for correctness here than any error handler. When you genuinely need conditional logic ("only decrement if the value is above zero"), <code>MULTI</code> cannot express it because the queued commands cannot see each other's results; the answer is either the optimistic-locking <code>WATCH</code> pattern in the next exercise or a Lua script, which is a later module. Note finally that <code>EXEC</code> and <code>DISCARD</code> both end the transaction, so the connection returns to normal mode either way.</p>`,
+    diagramMermaid: `flowchart TD
+  A[MULTI] --> B[Commands reply QUEUED]
+  B --> C{Error while queueing}
+  C -->|Yes such as unknown command| D[EXEC returns EXECABORT and nothing runs]
+  C -->|No| E[EXEC runs every queued command in order]
+  E --> F{Runtime error such as INCR on text}
+  F -->|Yes| G[Error appears as one array element and all other commands still apply]
+  F -->|No| H[Array of successful replies]`,
+  },
+
+  {
+    title: 'Watch Encodings Change with OBJECT ENCODING as Collections Grow',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 35,
+    points: 20,
+    concepts: ['OBJECT ENCODING', 'listpack to hashtable promotion', 'int and embstr and raw strings', 'intset', 'CONFIG GET thresholds'],
+    prerequisites: ['HSET', 'SADD', 'ZADD', 'RPUSH', 'APPEND'],
+    tags: ['internals', 'object-encoding', 'listpack', 'memory', 'redis'],
+    problemHtml: `<p>Every Redis type has more than one internal representation, and the one in use decides both memory cost and command complexity. Small collections are stored as a <strong>listpack</strong> — a single flat, contiguous blob with no per-element pointers, which is compact and cache-friendly but has O(N) lookup. Once a collection outgrows a configured threshold, Redis <strong>promotes</strong> it to a real hash table or skip list: more memory per element, but O(1) or O(log N) access. <code>OBJECT ENCODING</code> shows which one a key is using right now, and knowing this explains most "why is Redis using so much memory" investigations.</p>
+<p>Using <code>redis-cli</code>, make each transition visible:</p>
+<ul>
+<li><strong>Strings.</strong> <code>SET n:counter 42</code> is stored as <code>int</code>, an actual integer rather than text. <code>SET s:short "hello"</code> is <code>embstr</code>, a short immutable string allocated together with its object header. Then <code>APPEND s:short " world"</code> and check again: the encoding is now <code>raw</code>, because appending needs a separately allocated, resizable buffer.</li>
+<li><strong>Hash promotion.</strong> <code>HSET profile:1 name "Ann" city "Hanoi"</code> gives <code>listpack</code>. Add a single field whose <em>value</em> is 72 characters long — the scaffold provides it — and the encoding flips to <code>hashtable</code>, because the default <code>hash-max-listpack-value</code> is 64 bytes.</li>
+<li><strong>Promotion is one-way.</strong> <code>HDEL profile:1 bio</code> puts the hash back to two small fields, yet <code>OBJECT ENCODING</code> still reports <code>hashtable</code>. Redis never demotes.</li>
+<li><strong>Sets have three encodings.</strong> <code>SADD ids:num 1 2 3</code> gives <code>intset</code>, a sorted array of integers — the most compact form there is. Add the non-numeric member <code>"four"</code> and it becomes <code>listpack</code>, because an intset can hold integers only.</li>
+<li><strong>The others.</strong> <code>ZADD board 1 "alice" 2 "bob"</code> and <code>RPUSH queue:jobs "a" "b"</code> are both <code>listpack</code> while small; a sorted set promotes to <code>skiplist</code> and a list to <code>quicklist</code>.</li>
+<li><strong>Read the thresholds.</strong> <code>CONFIG GET hash-max-listpack-entries</code> returns <code>512</code> and <code>CONFIG GET hash-max-listpack-value</code> returns <code>64</code> — the two limits that triggered the promotion above.</li>
+</ul>
+<p>The scaffold contains the long value and leaves the commands and inspected keys blank.</p>`,
+    inputSpec: 'A clean Redis database. Keys of five different types — n:counter, s:short, profile:1, ids:num, board, queue:jobs — are created small and then pushed past an encoding threshold.',
+    outputSpec: 'OBJECT ENCODING returns "int" for n:counter, "embstr" for s:short and "raw" after APPEND (which returns (integer) 11); profile:1 is "listpack" with two fields and "hashtable" after the 72-character bio is added, and still "hashtable" after HDEL removes it with HLEN back to 2; ids:num is "intset" and becomes "listpack" once "four" is added; board and queue:jobs are both "listpack"; CONFIG GET returns hash-max-listpack-entries 512 and hash-max-listpack-value 64.',
+    constraints: 'Do not change any CONFIG value — only read them. Do not use DEBUG commands; they are disabled on this server. The bio value must be longer than 64 bytes to force the promotion. Never write code that depends on a particular encoding; treat OBJECT ENCODING as a diagnostic, not an API.',
+    examplesJson: [
+      {
+        input: 'SET s:short "hello" then OBJECT ENCODING s:short then APPEND s:short " world" then OBJECT ENCODING s:short',
+        output: 'OK\n"embstr"\n(integer) 11\n"raw"',
+        explanation: 'A short string is embedded in the same allocation as its object header; APPEND needs a growable buffer, so Redis converts it to the raw representation.',
+      },
+      {
+        input: 'HSET profile:1 name "Ann" city "Hanoi" then OBJECT ENCODING profile:1 then HSET profile:1 bio with a 72-character value then OBJECT ENCODING profile:1',
+        output: '(integer) 2\n"listpack"\n(integer) 1\n"hashtable"',
+        explanation: 'Two short fields fit the compact listpack. One value longer than hash-max-listpack-value of 64 bytes promotes the whole hash to a real hash table.',
+      },
+      {
+        input: 'SADD ids:num 1 2 3 then OBJECT ENCODING ids:num then SADD ids:num "four" then OBJECT ENCODING ids:num',
+        output: '(integer) 3\n"intset"\n(integer) 1\n"listpack"',
+        explanation: 'A set of only integers uses the specialised intset encoding; a single non-integer member makes that impossible, so the set converts to a listpack.',
+      },
+    ],
+    hintsJson: [
+      'One command reports the internal representation of any key — run it before and after every mutation to see what changed.',
+      'OBJECT ENCODING key returns a name such as int, embstr, raw, listpack, intset, hashtable, skiplist or quicklist.',
+      'A collection stays in its compact listpack form until it exceeds a configured limit on either the number of entries or the size of a single element.',
+      'CONFIG GET hash-max-listpack-entries and CONFIG GET hash-max-listpack-value show the two thresholds, defaulting to 512 and 64; crossing either one promotes the hash permanently, and removing the offending field does not demote it.',
+    ],
+    starter: `SET n:counter 42
+____ ENCODING n:counter
+SET s:short "hello"
+OBJECT ENCODING ____
+APPEND s:short " world"
+OBJECT ENCODING s:short
+HSET profile:1 name "Ann" city "Hanoi"
+OBJECT ENCODING profile:1
+HSET profile:1 bio "${longBio}"
+OBJECT ENCODING profile:1
+HDEL profile:1 bio
+HLEN profile:1
+OBJECT ENCODING profile:1
+SADD ids:num 1 2 3
+OBJECT ENCODING ids:num
+SADD ids:num ____
+OBJECT ENCODING ids:num
+ZADD board 1 "alice" 2 "bob"
+OBJECT ENCODING board
+RPUSH queue:jobs "a" "b"
+OBJECT ENCODING queue:jobs
+CONFIG GET ____
+CONFIG GET ____`,
+    solution: `SET n:counter 42
+OBJECT ENCODING n:counter
+SET s:short "hello"
+OBJECT ENCODING s:short
+APPEND s:short " world"
+OBJECT ENCODING s:short
+HSET profile:1 name "Ann" city "Hanoi"
+OBJECT ENCODING profile:1
+HSET profile:1 bio "${longBio}"
+OBJECT ENCODING profile:1
+HDEL profile:1 bio
+HLEN profile:1
+OBJECT ENCODING profile:1
+SADD ids:num 1 2 3
+OBJECT ENCODING ids:num
+SADD ids:num "four"
+OBJECT ENCODING ids:num
+ZADD board 1 "alice" 2 "bob"
+OBJECT ENCODING board
+RPUSH queue:jobs "a" "b"
+OBJECT ENCODING queue:jobs
+CONFIG GET hash-max-listpack-entries
+CONFIG GET hash-max-listpack-value`,
+    solutionExplanationHtml: `<p>Redis separates the <em>type</em> a key exposes from the <em>encoding</em> it uses underneath. <code>TYPE profile:1</code> says <code>hash</code> both before and after the promotion in this exercise; only <code>OBJECT ENCODING</code> reveals that the storage changed from a listpack to a hash table. A listpack is one contiguous allocation holding every element back to back with no pointers and no per-element overhead, which is why a small hash can cost a tenth of what the equivalent hash table costs; the trade is that finding a field means scanning the blob, so it is only used while the collection is small enough that O(N) over a handful of entries beats a pointer chase. Cross a threshold and Redis rebuilds the object into a real hash table (or a skip list for sorted sets, a quicklist for lists), paying pointers and allocator overhead per element in exchange for O(1) or O(log N) access.</p>
+<p>The promotion rules for hashes are the two configs read at the end: more than <code>512</code> entries, or any single element longer than <code>64</code> bytes, and the hash is converted. Sets and sorted sets have the analogous <code>set-max-listpack-*</code> and <code>zset-max-listpack-*</code> settings, and sets get a third, even tighter option — <code>intset</code>, a plain sorted array of integers with no per-member overhead at all, which is why <code>SADD ids:num 1 2 3</code> reports <code>intset</code> and why adding the single member <code>"four"</code> forces a conversion. On the string side, <code>int</code> means the value is held as a native long rather than as text, and <code>embstr</code> means a short string allocated in the same block as its object header, saving one allocation. <code>APPEND</code> destroys that optimisation because an embedded string cannot grow, so the key becomes <code>raw</code>.</p>
+<p>The behaviour to remember above all is that <strong>conversion is one-way</strong>. After <code>HDEL profile:1 bio</code> the hash is back to two tiny fields, yet the encoding is still <code>hashtable</code> — Redis never scans for demotion opportunities, because doing so on every delete would be expensive and would thrash on workloads that hover at the boundary. The practical consequence is real: one oversized field written once, perhaps by a debug script, permanently inflates the memory of that key, and repeated across millions of keys that is a multi-gigabyte regression with no visible cause. If you must recover the compact form, rewrite the key from scratch. Two closing cautions: never branch application logic on an encoding name, since these are implementation details that have already changed once — ziplist became listpack in Redis 7 — and resist raising the thresholds to "save memory", because doing so also lengthens the O(N) scans and can quietly turn a fast command into a slow one on the single-threaded server. Pair this command with <code>OBJECT FREQ</code>, <code>MEMORY USAGE key</code>, and <code>INFO memory</code> when you are actually chasing a memory problem.</p>`,
+  },
+
+  {
+    title: 'Implement Optimistic Locking with WATCH and Compare It to Pipelining',
+    difficulty: 'HARD',
+    estimatedMinutes: 50,
+    points: 25,
+    concepts: ['WATCH', 'UNWATCH', 'check-and-set', 'aborted EXEC returns nil', 'pipelining versus transactions'],
+    prerequisites: ['MULTI', 'EXEC', 'DISCARD', 'DECRBY', 'no rollback semantics'],
+    tags: ['transactions', 'watch', 'optimistic-locking', 'pipelining', 'redis'],
+    problemHtml: `<p><code>MULTI</code> alone cannot express "decrement the stock only if it is still what I read", because queued commands cannot see each other's replies. <code>WATCH</code> supplies the missing piece: it marks keys, and if any watched key is modified between the <code>WATCH</code> and the <code>EXEC</code>, the <code>EXEC</code> does nothing and returns <code>(nil)</code>. That is <strong>optimistic locking</strong> — no lock is taken, the conflict is merely detected, and the caller retries. It is the correct pattern for the read-decide-write cycle behind stock reservation, wallet debits, and seat booking.</p>
+<p>Using <code>redis-cli</code> on a single connection, produce all three outcomes. A watched key modified by <em>your own</em> connection aborts the transaction just as another client's write would, which is what makes this reproducible in one session:</p>
+<ul>
+<li>Seed <code>SET stock:sku1 5</code>.</li>
+<li><strong>Success.</strong> <code>WATCH stock:sku1</code>, <code>GET stock:sku1</code> (the read your decision is based on — <code>"5"</code>), then <code>MULTI</code>, <code>DECRBY stock:sku1 2</code>, <code>EXEC</code>. Nothing touched the key, so <code>EXEC</code> returns the array <code>1) (integer) 3</code>. Confirm with <code>GET</code>.</li>
+<li><strong>Conflict.</strong> <code>WATCH stock:sku1</code>, then <code>SET stock:sku1 99</code> to simulate a competing writer, then <code>MULTI</code>, <code>DECRBY stock:sku1 2</code>, <code>EXEC</code>. This time <code>EXEC</code> returns <code>(nil)</code> and the decrement never happened — <code>GET</code> is <code>"99"</code>, not <code>97</code>.</li>
+<li><strong>Abandon.</strong> <code>WATCH stock:sku1</code>, <code>MULTI</code>, <code>DECRBY stock:sku1 9</code>, then <code>DISCARD</code>. The queue is dropped and the watch is cleared too; <code>GET</code> is still <code>"99"</code>.</li>
+<li><strong>Retry.</strong> Watch again, queue the same <code>DECRBY stock:sku1 9</code>, and <code>EXEC</code> — it now succeeds, returning <code>1) (integer) 90</code>. This is the retry step a real client loops on.</li>
+<li>Finish with <code>UNWATCH</code>, which clears any remaining watches without running anything.</li>
+</ul>
+<p>The scaffold gives the four blocks with the transaction keywords blank.</p>`,
+    inputSpec: 'A clean Redis database and a single client connection. One key, stock:sku1, is seeded with 5 and then modified by four WATCH/MULTI blocks.',
+    outputSpec: 'WATCH replies OK; the first GET returns "5"; the first EXEC returns an array with (integer) 3 and GET then returns "3"; in the conflict block the interfering SET replies OK, EXEC returns (nil) and GET returns "99"; in the DISCARD block DISCARD replies OK and GET still returns "99"; the retry EXEC returns an array with (integer) 90 and GET returns "90"; UNWATCH replies OK.',
+    constraints: 'Everything must run on one connection. Do not use SETNX-style locks, Lua, or a client-side sleep-and-retry — the mechanism under test is WATCH. Do not read the value inside MULTI; the decision read must happen after WATCH and before MULTI. A nil EXEC means "retry", never "error".',
+    examplesJson: [
+      {
+        input: 'SET stock:sku1 5 then WATCH stock:sku1 then GET stock:sku1 then MULTI then DECRBY stock:sku1 2 then EXEC then GET stock:sku1',
+        output: 'OK\nOK\n"5"\nOK\nQUEUED\n1) (integer) 3\n"3"',
+        explanation: 'No one modified the watched key between WATCH and EXEC, so the transaction executes normally and returns the reply array.',
+      },
+      {
+        input: 'WATCH stock:sku1 then SET stock:sku1 99 then MULTI then DECRBY stock:sku1 2 then EXEC then GET stock:sku1',
+        output: 'OK\nOK\nOK\nQUEUED\n(nil)\n"99"',
+        explanation: 'The watched key changed after WATCH, so EXEC aborts and returns nil. The DECRBY never ran, which is why the value is 99 rather than 97.',
+      },
+      {
+        input: 'WATCH stock:sku1 then MULTI then DECRBY stock:sku1 9 then EXEC then GET stock:sku1',
+        output: 'OK\nOK\nQUEUED\n1) (integer) 90\n"90"',
+        explanation: 'The retry after a conflict: watch again, re-queue the write, and this time nothing intervened so EXEC applies the decrement.',
+      },
+    ],
+    hintsJson: [
+      'You cannot branch inside a transaction, so instead of preventing a conflict you detect one and start over.',
+      'WATCH key [key ...] marks keys as of that moment; the following EXEC runs only if none of them changed.',
+      'Do the decision read after WATCH but before MULTI, so the value you based the decision on is the value being guarded.',
+      'An aborted EXEC returns (nil) rather than an error — the client must treat nil as "retry the whole block from WATCH". EXEC, DISCARD and UNWATCH all clear the watch list.',
+    ],
+    starter: `SET stock:sku1 5
+____ stock:sku1
+GET stock:sku1
+MULTI
+DECRBY stock:sku1 2
+____
+GET stock:sku1
+____ stock:sku1
+SET stock:sku1 99
+MULTI
+DECRBY stock:sku1 2
+____
+GET stock:sku1
+____ stock:sku1
+MULTI
+DECRBY stock:sku1 9
+____
+GET stock:sku1
+____ stock:sku1
+MULTI
+DECRBY stock:sku1 9
+____
+GET stock:sku1
+____`,
+    solution: `SET stock:sku1 5
+WATCH stock:sku1
+GET stock:sku1
+MULTI
+DECRBY stock:sku1 2
+EXEC
+GET stock:sku1
+WATCH stock:sku1
+SET stock:sku1 99
+MULTI
+DECRBY stock:sku1 2
+EXEC
+GET stock:sku1
+WATCH stock:sku1
+MULTI
+DECRBY stock:sku1 9
+DISCARD
+GET stock:sku1
+WATCH stock:sku1
+MULTI
+DECRBY stock:sku1 9
+EXEC
+GET stock:sku1
+UNWATCH`,
+    solutionExplanationHtml: `<p><code>WATCH</code> attaches a dirty flag to each named key on the current connection. Any write to a watched key — by another client, or as this exercise shows by the same connection — sets that flag, and <code>EXEC</code> checks it before executing anything. If the flag is set, nothing runs and the reply is the RESP null, printed as <code>(nil)</code>. That single return value is the entire contract, and it is where implementations go wrong: <code>(nil)</code> is <strong>not an error</strong> and must not be logged and swallowed. It means "the world moved under you", and the only correct response is to loop back to the <code>WATCH</code>, re-read, re-decide, and try again. The conflict block here proves the guard works: the value ends at <code>99</code>, not <code>97</code>, because the queued <code>DECRBY</code> was discarded rather than applied to data it was never computed against.</p>
+<p>The ordering matters as much as the commands. The decision read has to sit <strong>after <code>WATCH</code> and before <code>MULTI</code></strong>: after, so the value you read is the one being guarded, and before, because a read inside <code>MULTI</code> only returns <code>QUEUED</code> and its result arrives too late to branch on. That gives the canonical loop — watch, read, decide in the client, queue the writes, exec, and retry on nil. Because nothing is locked, there is no lock to leak if a client crashes and no possibility of deadlock, which is why this is preferable to a <code>SET NX</code> mutex whenever the conflict rate is low. Under heavy contention on one hot key the retries themselves become the bottleneck, and a Lua script — which runs the read and the decision server-side in one pass — is the better tool. Note that <code>EXEC</code>, <code>DISCARD</code> and <code>UNWATCH</code> all clear the watch list, so the <code>DISCARD</code> block above ends fully unwatched, and forgetting that a plain <code>EXEC</code> resets watches is a classic source of "my retry loop watched nothing".</p>
+<p>Finally, the distinction the module title implies: <strong>pipelining is not a transaction</strong>. Pipelining means writing several commands to the socket without waiting for each reply, so ten commands cost one round trip instead of ten — a pure latency optimisation, with no isolation whatsoever, since other clients' commands may interleave freely with yours. <code>MULTI</code>/<code>EXEC</code> gives isolation, since the queued block runs with nothing interleaved, but by itself gives no round-trip saving unless the client also pipelines the queuing. The two compose: most client libraries send <code>MULTI</code>, the queued commands, and <code>EXEC</code> in one pipelined write, getting both benefits. Choose by intent — pipeline when you have many independent commands and only want fewer round trips, use <code>MULTI</code>/<code>EXEC</code> when the commands must not be interleaved, and add <code>WATCH</code> only when the writes depend on a value you read first.</p>`,
+    diagramMermaid: `sequenceDiagram
+    participant C as Client
+    participant R as Redis
+    C->>R: WATCH stock sku1
+    R-->>C: OK
+    C->>R: GET stock sku1
+    R-->>C: value five
+    Note over C: Decide in the client
+    C->>R: MULTI then DECRBY then EXEC
+    alt Watched key unchanged
+        R-->>C: Array of replies and the write is applied
+    else Watched key modified by anyone
+        R-->>C: nil so retry from WATCH
+    end`,
+  },
+
+  {
+    title: 'Design a Store Analytics Keyspace by Matching Each Requirement to a Type',
+    difficulty: 'HARD',
+    estimatedMinutes: 70,
+    points: 30,
+    concepts: ['type selection by requirement', 'bitmaps versus HyperLogLog', 'geospatial index', 'stream as audit log', 'MULTI for a consistent rollup', 'OBJECT ENCODING'],
+    prerequisites: ['SETBIT', 'PFADD', 'GEOADD', 'XADD', 'MULTI', 'HSET'],
+    tags: ['capstone', 'data-modelling', 'bitmaps', 'hyperloglog', 'streams', 'redis'],
+    problemHtml: `<p>Every structure in this module exists because a different requirement makes it the cheapest correct answer. This capstone gives you five requirements at once for a retail analytics dashboard, and the work is choosing the type <strong>before</strong> typing the command. Build the whole keyspace for 2026-07-20 in one session.</p>
+<p>The requirements, and what each one forces:</p>
+<ul>
+<li><strong>"How many of our registered members visited today, and was member 8 one of them?"</strong> Members have dense numeric ids and the answer must be exact and per-member queryable — that is a <strong>bitmap</strong>. Mark members 3, 8 and 15 on <code>dau:2026-07-20</code>, then report <code>BITCOUNT</code>, which is <code>3</code>.</li>
+<li><strong>"Roughly how many distinct anonymous sessions did we see?"</strong> Session tokens are opaque strings, the volume is huge, and an estimate is acceptable — that is a <strong>HyperLogLog</strong>. <code>PFADD visitors:2026-07-20</code> with <code>"sess-a" "sess-b" "sess-c" "sess-a"</code> and report <code>PFCOUNT</code>, which is <code>3</code>.</li>
+<li><strong>"Which stores are within 3&nbsp;km of the customer?"</strong> Proximity ranking over coordinates — that is a <strong>geo key</strong>. <code>GEOADD stores</code> with <code>105.8542 21.0285 "store-central"</code>, <code>105.8350 21.0378 "store-west"</code>, and <code>106.6822 20.9500 "store-coast"</code>, then <code>GEOSEARCH stores FROMLONLAT 105.8500 21.0300 BYRADIUS 3 km WITHDIST ASC</code>. Two stores qualify. Also measure <code>GEODIST stores "store-central" "store-coast" km</code>.</li>
+<li><strong>"Keep an immutable, replayable record of every checkout."</strong> Append-only, multiple independent readers, no destructive reads — that is a <strong>stream</strong>. <code>XADD events:2026-07-20</code> twice with explicit ids <code>1700000000000-1</code> (<code>kind checkout</code>, <code>store store-central</code>, <code>total 42</code>) and <code>1700000000000-2</code> (<code>kind checkout</code>, <code>store store-west</code>, <code>total 17</code>). Check <code>XLEN</code>, then read the first entry with <code>XRANGE events:2026-07-20 - + COUNT 1</code>.</li>
+<li><strong>"Publish revenue and the daily report together, with no reader ever seeing one updated without the other."</strong> That is isolation, not durability — <strong><code>MULTI</code>/<code>EXEC</code></strong>. In one transaction, <code>INCRBY revenue:2026-07-20 59</code> (the two checkout totals) and <code>HSET report:2026-07-20 dau 3 stores 3 events 2</code>. Then read both back.</li>
+<li>Finish by inspecting what you built: <code>OBJECT ENCODING report:2026-07-20</code> is <code>listpack</code>, <code>OBJECT ENCODING dau:2026-07-20</code> is <code>raw</code> — a bitmap really is a string — and <code>TYPE events:2026-07-20</code> is <code>stream</code>.</li>
+</ul>
+<p>The scaffold gives every requirement as a blank command line. Choose the command, then fill it in.</p>`,
+    inputSpec: 'A clean Redis database. Six keys are built for the day 2026-07-20: the bitmap dau:2026-07-20, the HyperLogLog visitors:2026-07-20, the geo key stores, the stream events:2026-07-20, the counter revenue:2026-07-20 and the hash report:2026-07-20.',
+    outputSpec: 'The three SETBIT calls each return (integer) 0 and BITCOUNT returns 3; PFADD returns (integer) 1 and PFCOUNT returns 3; GEOADD returns (integer) 3 and GEOSEARCH returns store-central at "0.4671" km then store-west at "1.7828" km, with GEODIST central to coast "86.4265"; the two XADD calls echo their ids, XLEN returns 2 and XRANGE COUNT 1 returns the 1700000000000-1 entry; inside the transaction both commands reply QUEUED and EXEC returns (integer) 59 then (integer) 3; GET revenue:2026-07-20 returns "59" and HGETALL report:2026-07-20 returns dau 3, stores 3, events 2; OBJECT ENCODING returns "listpack" for the report hash and "raw" for the bitmap, and TYPE returns stream.',
+    constraints: 'Each requirement must be met by the structure named for it — do not model members as a set, sessions as a set, or the event log as a list. GEOADD takes longitude before latitude. Stream ids must be the explicit ones given so the run is reproducible. The revenue and report writes must be in one MULTI/EXEC block. Do not use Lua or consumer groups.',
+    examplesJson: [
+      {
+        input: 'SETBIT dau:2026-07-20 3 1, SETBIT dau:2026-07-20 8 1, SETBIT dau:2026-07-20 15 1, BITCOUNT dau:2026-07-20, then PFADD visitors:2026-07-20 "sess-a" "sess-b" "sess-c" "sess-a" and PFCOUNT visitors:2026-07-20',
+        output: '(integer) 0\n(integer) 0\n(integer) 0\n(integer) 3\n(integer) 1\n(integer) 3',
+        explanation: 'Dense member ids go in a bitmap where BITCOUNT is exact; opaque session tokens go in a HyperLogLog where PFADD reports only that the sketch changed and the duplicate "sess-a" is absorbed.',
+      },
+      {
+        input: 'GEOSEARCH stores FROMLONLAT 105.8500 21.0300 BYRADIUS 3 km WITHDIST ASC then GEODIST stores "store-central" "store-coast" km',
+        output: '1) 1) "store-central"\n   2) "0.4671"\n2) 1) "store-west"\n   2) "1.7828"\n"86.4265"',
+        explanation: 'Only two stores fall inside the 3 km circle, returned nearest first with their distances; store-coast is 86 km away, which the explicit GEODIST confirms.',
+      },
+      {
+        input: 'MULTI then INCRBY revenue:2026-07-20 59 then HSET report:2026-07-20 dau 3 stores 3 events 2 then EXEC then GET revenue:2026-07-20',
+        output: 'OK\nQUEUED\nQUEUED\n1) (integer) 59\n2) (integer) 3\n"59"',
+        explanation: 'Both writes are queued and applied with nothing interleaved, so no reader can observe the revenue updated while the report still shows yesterday numbers.',
+      },
+    ],
+    hintsJson: [
+      'Read each requirement for three signals: are the identifiers dense integers, must the answer be exact, and does anyone need to enumerate the members afterwards.',
+      'Dense integer ids plus an exact per-id answer means a bitmap; opaque ids plus an acceptable estimate means a HyperLogLog; coordinates plus ranking means a geo key; an append-only record with several independent readers means a stream.',
+      'Bitmap commands are SETBIT and BITCOUNT; the sketch is PFADD and PFCOUNT; proximity is GEOADD then GEOSEARCH FROMLONLAT with BYRADIUS, WITHDIST and ASC; the log is XADD then XLEN and XRANGE.',
+      'Wrap the two summary writes in MULTI and EXEC so they land together, then verify the internals with OBJECT ENCODING and TYPE — the report hash is a listpack, the bitmap is a raw string, and the event log has its own stream type.',
+    ],
+    starter: `____ dau:2026-07-20 3 1
+____ dau:2026-07-20 8 1
+____ dau:2026-07-20 15 1
+____ dau:2026-07-20
+____ visitors:2026-07-20 "sess-a" "sess-b" "sess-c" "sess-a"
+____ visitors:2026-07-20
+____ stores 105.8542 21.0285 "store-central" 105.8350 21.0378 "store-west" 106.6822 20.9500 "store-coast"
+GEOSEARCH stores FROMLONLAT 105.8500 21.0300 ____ 3 km ____ ASC
+GEODIST stores "store-central" "store-coast" ____
+____ events:2026-07-20 1700000000000-1 kind "checkout" store "store-central" total "42"
+____ events:2026-07-20 1700000000000-2 kind "checkout" store "store-west" total "17"
+____ events:2026-07-20
+XRANGE events:2026-07-20 ____ ____ COUNT 1
+____
+INCRBY revenue:2026-07-20 ____
+HSET report:2026-07-20 dau 3 stores 3 events 2
+____
+GET revenue:2026-07-20
+HGETALL report:2026-07-20
+OBJECT ENCODING report:2026-07-20
+OBJECT ENCODING dau:2026-07-20
+TYPE events:2026-07-20`,
+    solution: `SETBIT dau:2026-07-20 3 1
+SETBIT dau:2026-07-20 8 1
+SETBIT dau:2026-07-20 15 1
+BITCOUNT dau:2026-07-20
+PFADD visitors:2026-07-20 "sess-a" "sess-b" "sess-c" "sess-a"
+PFCOUNT visitors:2026-07-20
+GEOADD stores 105.8542 21.0285 "store-central" 105.8350 21.0378 "store-west" 106.6822 20.9500 "store-coast"
+GEOSEARCH stores FROMLONLAT 105.8500 21.0300 BYRADIUS 3 km WITHDIST ASC
+GEODIST stores "store-central" "store-coast" km
+XADD events:2026-07-20 1700000000000-1 kind "checkout" store "store-central" total "42"
+XADD events:2026-07-20 1700000000000-2 kind "checkout" store "store-west" total "17"
+XLEN events:2026-07-20
+XRANGE events:2026-07-20 - + COUNT 1
+MULTI
+INCRBY revenue:2026-07-20 59
+HSET report:2026-07-20 dau 3 stores 3 events 2
+EXEC
+GET revenue:2026-07-20
+HGETALL report:2026-07-20
+OBJECT ENCODING report:2026-07-20
+OBJECT ENCODING dau:2026-07-20
+TYPE events:2026-07-20`,
+    solutionExplanationHtml: `<p>The skill being trained is reading a requirement and hearing the structure it demands. Three questions decide it every time. <em>Are the identifiers dense small integers?</em> If yes, a bitmap addresses them directly, costs one bit each, and answers both "how many" with <code>BITCOUNT</code> and "was member 8 there" with <code>GETBIT</code> exactly. <em>Must the answer be exact, and will anyone need the members back?</em> If not, a HyperLogLog counts unbounded opaque session tokens in a fixed sketch — the right call precisely because nobody will ever ask it to list the sessions. <em>Is the data coordinates ranked by proximity?</em> Then a geo key, which is a sorted set of geohash scores, turns "within 3&nbsp;km, nearest first" into one <code>GEOSEARCH</code>. And an immutable record that several independent consumers must replay is a stream, because reading it is non-destructive and every entry keeps a stable id — a list would force one reader to consume events the others still need.</p>
+<p>Choosing wrongly is not a style error, it is a cost or correctness error. Modelling the member DAU as a set would work but cost tens of bytes per member instead of one bit, times one key per day. Modelling anonymous sessions as a set would be exact and would exhaust memory. Modelling the checkout log as a list would make <code>LPOP</code> destroy events the analytics job still needs, and index-based paging would break the moment the list is trimmed. Note the deliberate asymmetry between the two counting structures in the same dashboard: exactness is demanded where a human can dispute the number, and traded away where only a trend matters.</p>
+<p>The <code>MULTI</code>/<code>EXEC</code> block does one specific job here — <strong>isolation</strong>, so no dashboard read can catch <code>revenue:2026-07-20</code> already updated while <code>report:2026-07-20</code> still holds the previous values. It is worth being precise about what it does not do, per the earlier exercise: there is no rollback, so if <code>revenue:2026-07-20</code> had held a non-numeric value the <code>INCRBY</code> would have failed inside the reply array while the <code>HSET</code> still applied. Since these writes derive from values read beforehand, a production version would wrap them in <code>WATCH</code> on the source keys and retry when <code>EXEC</code> returns nil.</p>
+<p>The closing inspection ties the module together. <code>OBJECT ENCODING dau:2026-07-20</code> answering <code>raw</code> confirms that a bitmap is genuinely a string with bit-addressing commands layered on top — no separate type exists — just as a geo key reports <code>zset</code> and a HyperLogLog reports <code>string</code>. Only the stream has a type of its own. The report hash sits in the compact <code>listpack</code> encoding because it is small, and would flip permanently to <code>hashtable</code> if any field value exceeded 64 bytes. One thing this keyspace still lacks is lifetime management: every key here is dated, so a real deployment would attach a TTL at creation and let old days expire rather than accumulate — the key-management discipline from module 424 applied to the structures from this one.</p>`,
+    diagramMermaid: `flowchart TD
+  R[Requirement] --> A[Dense integer ids and an exact answer uses a bitmap with SETBIT and BITCOUNT]
+  R --> B[Opaque ids at huge volume and an estimate is fine uses HyperLogLog with PFADD and PFCOUNT]
+  R --> C[Coordinates ranked by proximity uses a geo key with GEOADD and GEOSEARCH]
+  R --> D[Append only replayable record for many readers uses a stream with XADD and XRANGE]
+  R --> E[Two writes that must land together uses MULTI and EXEC]`,
+  },
+];
+
+// ---- emit payload + verify (verify built from solutionCodeJson, FLUSHALL between) ----
+const OUT = path.resolve(process.argv[2] || 'docs/codelab-authoring/authored');
+const VERIFY = path.resolve(process.argv[3] || 'docs/codelab-authoring/verify');
+fs.mkdirSync(OUT, { recursive: true });
+fs.mkdirSync(VERIFY, { recursive: true });
+
+const clean = exercises.map((ex) => ({
+  title: ex.title, difficulty: ex.difficulty, estimatedMinutes: ex.estimatedMinutes, points: ex.points,
+  concepts: ex.concepts, prerequisites: ex.prerequisites, tags: ex.tags,
+  problemHtml: ex.problemHtml, inputSpec: ex.inputSpec, outputSpec: ex.outputSpec, constraints: ex.constraints,
+  examplesJson: ex.examplesJson, hintsJson: ex.hintsJson,
+  starterCodeJson: [{ name: 'commands.redis', language: L, code: ex.starter }],
+  solutionCodeJson: [{ name: 'commands.redis', language: L, code: ex.solution }],
+  solutionExplanationHtml: ex.solutionExplanationHtml,
+  ...(ex.diagramMermaid ? { diagramMermaid: ex.diagramMermaid } : {}),
+}));
+fs.writeFileSync(path.join(OUT, `${trackSlug}__${moduleSlug}.json`), JSON.stringify({ trackSlug, moduleSlug, exercises: clean }, null, 2));
+
+let cmds = '';
+exercises.forEach((ex, i) => {
+  cmds += `ECHO "========== EX ${i + 1}: ${ex.title.replace(/"/g, '')} =========="\n`;
+  cmds += 'FLUSHALL\n' + ex.solution + '\n';
+});
+fs.writeFileSync(path.join(VERIFY, `redis-425.txt`), cmds);
+
+const parsed = JSON.parse(fs.readFileSync(path.join(OUT, `${trackSlug}__${moduleSlug}.json`), 'utf8'));
+const diffs = ['EASY', 'EASY', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'HARD', 'HARD'];
+parsed.exercises.forEach((ex, i) => {
+  if (ex.difficulty !== diffs[i]) throw new Error(`slot ${i + 1} diff ${ex.difficulty} != ${diffs[i]}`);
+  if (ex.problemHtml.length < 900) throw new Error(`problemHtml<900 ${ex.title} (${ex.problemHtml.length})`);
+  if (ex.solutionExplanationHtml.length < 500) throw new Error(`expl<500 ${ex.title}`);
+  if (ex.hintsJson.length < 4) throw new Error(`<4 hints ${ex.title}`);
+  if (ex.examplesJson.length < 2) throw new Error(`<2 examples ${ex.title}`);
+  if (/^\s*[#/]/m.test(ex.solutionCodeJson.map((f) => f.code).join('\n'))) throw new Error(`comment line in solution ${ex.title}`);
+  const solLen = ex.solutionCodeJson.map((f) => f.code).join('').length;
+  if (solLen < 205) throw new Error(`solution<205 (seeder floor 200) ${ex.title} (${solLen})`);
+});
+console.log(`OK ${parsed.exercises.length} exercises -> ${trackSlug}__${moduleSlug}.json`);

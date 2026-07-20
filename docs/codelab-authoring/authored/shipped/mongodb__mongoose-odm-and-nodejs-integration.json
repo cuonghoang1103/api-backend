@@ -1,0 +1,688 @@
+{
+  "trackSlug": "mongodb",
+  "moduleSlug": "mongoose-odm-and-nodejs-integration",
+  "exercises": [
+    {
+      "title": "Connect Mongoose to MongoDB and Wire Connection Events",
+      "difficulty": "EASY",
+      "estimatedMinutes": 20,
+      "points": 10,
+      "concepts": [
+        "mongoose.connect",
+        "connection events",
+        "readyState",
+        "serverSelectionTimeoutMS",
+        "graceful disconnect"
+      ],
+      "prerequisites": [
+        "async/await in Node",
+        "MongoDB connection strings"
+      ],
+      "tags": [
+        "mongoose",
+        "connection",
+        "nodejs",
+        "events",
+        "mongodb"
+      ],
+      "problemHtml": "<p>Mongoose keeps <strong>one</strong> shared connection pool per process, exposed as <code>mongoose.connection</code>. A production service must not only open it but also observe it: the initial connect can fail, and a healthy connection can drop later when the server restarts or the network blips. Those two failure modes surface through <em>different</em> channels — the first rejects the <code>connect()</code> promise, the second emits an <code>error</code> / <code>disconnected</code> event on the connection object.</p>\n<p>Write a script that demonstrates the full lifecycle:</p>\n<ul>\n<li>Print <code>mongoose.connection.readyState</code> before connecting (it is <code>0</code>, disconnected).</li>\n<li>Register listeners for the <code>connected</code>, <code>error</code> and <code>disconnected</code> events <em>before</em> calling <code>connect</code>, printing <code>event: connected</code>, <code>event: error -&gt; &lt;err.name&gt;</code> and <code>event: disconnected</code>.</li>\n<li>Connect with <code>await mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 })</code>, then print the <code>readyState</code> (now <code>1</code>) and the database name from <code>mongoose.connection.name</code>.</li>\n<li>Show the other failure channel: open a <em>separate</em> connection to a dead port with <code>mongoose.createConnection(...)</code> and <code>serverSelectionTimeoutMS: 300</code>, <code>await</code> its <code>.asPromise()</code> inside a <code>try/catch</code>, print <code>bad connect rejected: &lt;err.name&gt;</code>, and close it so the process can exit.</li>\n<li>Finish with <code>await mongoose.disconnect()</code> and print the final <code>readyState</code>.</li>\n</ul>\n<p>The scaffold gives you the URI (read from <code>MONGO_URL</code>) and the <code>main()</code> wrapper; you add the listeners and the connect/disconnect calls.</p>",
+      "inputSpec": "No stdin. The connection string comes from process.env.MONGO_URL, defaulting to mongodb://127.0.0.1:27017/mg419_connect. A mongod must be reachable at that address.",
+      "outputSpec": "Seven lines in order: \"readyState before: 0\", \"event: connected\", \"readyState after: 1\", \"database: <db name>\", \"bad connect rejected: MongooseServerSelectionError\", \"event: disconnected\", \"readyState final: 0\".",
+      "constraints": "Use mongoose.connect for the default connection and mongoose.createConnection for the second one. Do not call connect inside a setTimeout or an event callback. Do not use the deprecated useNewUrlParser / useUnifiedTopology options — Mongoose 6+ ignores them.",
+      "examplesJson": [
+        {
+          "input": "await mongoose.connect(process.env.MONGO_URL, { serverSelectionTimeoutMS: 5000 })",
+          "output": "event: connected\nreadyState after: 1",
+          "explanation": "The connected event fires while connect() is still awaiting, so it prints first; readyState 1 means the pool is usable."
+        },
+        {
+          "input": "mongoose.createConnection('mongodb://127.0.0.1:1/nope', { serverSelectionTimeoutMS: 300 }).asPromise()",
+          "output": "bad connect rejected: MongooseServerSelectionError",
+          "explanation": "An unreachable server makes server selection time out after 300 ms and the promise rejects — this failure never reaches the error event listener."
+        },
+        {
+          "input": "await mongoose.disconnect()",
+          "output": "event: disconnected\nreadyState final: 0",
+          "explanation": "Closing the pool emits disconnected and returns readyState to 0."
+        }
+      ],
+      "hintsJson": [
+        "There is exactly one default connection object; everything about its health hangs off it.",
+        "Attach the listeners before connect() runs, otherwise the connected event has already fired by the time you subscribe.",
+        "mongoose.connection.readyState is a number: 0 disconnected, 1 connected, 2 connecting, 3 disconnecting.",
+        "const bad = mongoose.createConnection(uri, { serverSelectionTimeoutMS: 300 }); try { await bad.asPromise(); } catch (err) { console.log(\"bad connect rejected:\", err.name); } await bad.close();"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\n\nconst uri = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/mg419_connect';\n\nasync function main() {\n  // TODO: print the readyState before connecting\n\n  // TODO: listen for 'connected', 'error' and 'disconnected' on mongoose.connection\n\n  // TODO: await mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 })\n  // TODO: print the readyState and mongoose.connection.name\n\n  // TODO: createConnection to 'mongodb://127.0.0.1:1/nope' with serverSelectionTimeoutMS 300,\n  //       await asPromise() in a try/catch, print the error name, then close it\n\n  // TODO: await mongoose.disconnect() and print the final readyState\n}\n\nmain().catch((err) => {\n  console.error(err);\n  process.exit(1);\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\n\nconst uri = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/mg419_connect';\n\nasync function main() {\n  console.log('readyState before:', mongoose.connection.readyState);\n\n  mongoose.connection.on('connected', () => console.log('event: connected'));\n  mongoose.connection.on('error', (err) => console.log('event: error ->', err.name));\n  mongoose.connection.on('disconnected', () => console.log('event: disconnected'));\n\n  await mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 });\n  console.log('readyState after:', mongoose.connection.readyState);\n  console.log('database:', mongoose.connection.name);\n\n  const bad = mongoose.createConnection('mongodb://127.0.0.1:1/nope', { serverSelectionTimeoutMS: 300 });\n  try {\n    await bad.asPromise();\n    console.log('bad connect unexpectedly succeeded');\n  } catch (err) {\n    console.log('bad connect rejected:', err.name);\n  }\n  await bad.close();\n\n  await mongoose.disconnect();\n  console.log('readyState final:', mongoose.connection.readyState);\n}\n\nmain().catch((err) => {\n  console.error(err);\n  process.exit(1);\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The whole exercise turns on one fact: <code>mongoose.connection</code> is a long-lived object that exists <em>before</em> any connection is opened, which is why you can read <code>readyState</code> (0) and subscribe to its events on line one. <code>mongoose.connect()</code> returns a promise that resolves once server selection succeeds and the pool is ready, so the <code>connected</code> listener necessarily fires before the line after the <code>await</code> — that ordering is what the expected output checks.</p>\n<p>The key distinction is <strong>where each kind of failure appears</strong>. A failure to establish the connection in the first place rejects the promise: the driver spends up to <code>serverSelectionTimeoutMS</code> looking for a suitable server and then throws <code>MongooseServerSelectionError</code>. That rejection does <em>not</em> arrive as an <code>error</code> event, which is why a service that only registers <code>connection.on('error')</code> and forgets to <code>await</code> or <code>.catch()</code> the connect call silently starts up with a dead database. Conversely, a connection that drops <em>after</em> a successful start emits <code>disconnected</code> (and <code>error</code>), and the driver reconnects on its own — you should log these, not exit.</p>\n<p>Two practical notes. <code>createConnection</code> gives you an independent pool, which is the right tool for a second database or for a probe like the one here; it returns the connection synchronously, and <code>.asPromise()</code> is how you await readiness. Always close such a connection, otherwise its retry timers keep the Node event loop alive and the process hangs. Finally, do not pass <code>useNewUrlParser</code> or <code>useUnifiedTopology</code>: they were removed as no-ops in Mongoose 6, and copying them from old tutorials is the most common source of noisy deprecation confusion.</p>"
+    },
+    {
+      "title": "Define a Schema and Model and Persist a Document",
+      "difficulty": "EASY",
+      "estimatedMinutes": 25,
+      "points": 10,
+      "concepts": [
+        "Schema",
+        "model",
+        "save",
+        "Model.create",
+        "timestamps",
+        "collection naming"
+      ],
+      "prerequisites": [
+        "mongoose.connect",
+        "JavaScript objects"
+      ],
+      "tags": [
+        "mongoose",
+        "schema",
+        "model",
+        "crud",
+        "mongodb"
+      ],
+      "problemHtml": "<p>MongoDB itself is schemaless; Mongoose adds the schema in your application layer. A <code>Schema</code> declares the shape, types and defaults of a document, a <strong>model</strong> is the class compiled from that schema, and an instance of the model is a <em>document</em> that knows how to save itself. Getting the three levels straight is the foundation of everything else in this module.</p>\n<p>Build a <code>Book</code> model and write documents through it:</p>\n<ul>\n<li>Declare <code>bookSchema</code> with <code>title</code> (String, <code>required</code>), <code>author</code> (String), <code>pages</code> (Number) and <code>published</code> (Boolean, <code>default: false</code>), plus the schema option <code>{ timestamps: true }</code>.</li>\n<li>Compile it with <code>mongoose.model('Book', bookSchema)</code> and print the collection Mongoose derived from the model name via <code>Book.collection.name</code>.</li>\n<li>Create one document with <code>new Book({...})</code> followed by <code>await doc.save()</code>, and a second with <code>await Book.create({...})</code> — the two idioms that every codebase mixes.</li>\n<li>Print, for the saved document: its <code>title</code>, the applied default for <code>published</code>, its <code>__v</code> version key, whether <code>createdAt</code> is a <code>Date</code>, and whether <code>_id</code> is a <code>mongoose.Types.ObjectId</code>.</li>\n<li>Finish with <code>Book.countDocuments()</code> and a <code>find()</code> sorted by title, projecting only the titles, printed comma-separated.</li>\n</ul>\n<p>Seed data is fixed by the scaffold: <em>The Pragmatic Programmer</em> (352 pages) and <em>Refactoring</em> (448 pages, published). The scaffold also drops the database first so re-runs are reproducible.</p>",
+      "inputSpec": "No stdin. The script connects to process.env.MONGO_URL, drops the database, then inserts the two books given in the scaffold.",
+      "outputSpec": "Eight lines: \"collection: books\", \"title: The Pragmatic Programmer\", \"published default: false\", \"__v: 0\", \"createdAt is Date: true\", \"id is ObjectId: true\", \"count: 2\", \"titles: Refactoring, The Pragmatic Programmer\".",
+      "constraints": "Use exactly one model named Book. Do not set _id yourself. Do not add createdAt/updatedAt fields by hand — use the timestamps schema option.",
+      "examplesJson": [
+        {
+          "input": "mongoose.model('Book', bookSchema).collection.name",
+          "output": "books",
+          "explanation": "Mongoose lowercases and pluralises the model name to pick the collection, so Book maps to books."
+        },
+        {
+          "input": "const b = new Book({ title: 'The Pragmatic Programmer', author: 'Hunt and Thomas', pages: 352 }); await b.save();",
+          "output": "published default: false\n__v: 0",
+          "explanation": "published was not supplied so the schema default fills it in, and every freshly saved document starts at version 0."
+        },
+        {
+          "input": "await Book.find().sort({ title: 1 }).select(\"title -_id\")",
+          "output": "titles: Refactoring, The Pragmatic Programmer",
+          "explanation": "Ascending sort on title puts Refactoring first; select limits the projection to the title field."
+        }
+      ],
+      "hintsJson": [
+        "Schema describes, model compiles, document instance saves — three separate things.",
+        "Defaults and timestamps are declared on the schema, not applied by your code.",
+        "new Model(obj) then await doc.save() is equivalent to await Model.create(obj); create is a shortcut that does both.",
+        "const bookSchema = new mongoose.Schema({ title: { type: String, required: true }, published: { type: Boolean, default: false } }, { timestamps: true });"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\n\nconst uri = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/mg419_models';\n\n// TODO: declare bookSchema (title required, author, pages, published default false) with timestamps\n// TODO: compile the Book model\n\nasync function main() {\n  await mongoose.connect(uri);\n  await mongoose.connection.dropDatabase();\n\n  // TODO: print Book.collection.name\n  // TODO: new Book({ title: 'The Pragmatic Programmer', author: 'Hunt and Thomas', pages: 352 }) then save()\n  // TODO: Book.create({ title: 'Refactoring', author: 'Fowler', pages: 448, published: true })\n  // TODO: print title, published default, __v, createdAt is Date, id is ObjectId\n  // TODO: print count and the sorted titles\n\n  await mongoose.disconnect();\n}\n\nmain().catch((err) => {\n  console.error(err);\n  process.exit(1);\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\n\nconst uri = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/mg419_models';\n\nconst bookSchema = new mongoose.Schema(\n  {\n    title: { type: String, required: true },\n    author: String,\n    pages: Number,\n    published: { type: Boolean, default: false },\n  },\n  { timestamps: true }\n);\n\nconst Book = mongoose.model('Book', bookSchema);\n\nasync function main() {\n  await mongoose.connect(uri);\n  await mongoose.connection.dropDatabase();\n\n  console.log('collection:', Book.collection.name);\n\n  const book = new Book({ title: 'The Pragmatic Programmer', author: 'Hunt and Thomas', pages: 352 });\n  await book.save();\n\n  await Book.create({ title: 'Refactoring', author: 'Fowler', pages: 448, published: true });\n\n  console.log('title:', book.title);\n  console.log('published default:', book.published);\n  console.log('__v:', book.__v);\n  console.log('createdAt is Date:', book.createdAt instanceof Date);\n  console.log('id is ObjectId:', book._id instanceof mongoose.Types.ObjectId);\n\n  console.log('count:', await Book.countDocuments());\n  const titles = await Book.find().sort({ title: 1 }).select('title -_id');\n  console.log('titles:', titles.map((doc) => doc.title).join(', '));\n\n  await mongoose.disconnect();\n}\n\nmain().catch((err) => {\n  console.error(err);\n  process.exit(1);\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The three levels are visible in the code. <code>new mongoose.Schema({...})</code> is pure declaration — it stores paths, their casters and their options, and touches no database. <code>mongoose.model('Book', bookSchema)</code> compiles that schema into a class bound to the default connection; the model name is also how the collection is chosen, by lowercasing and pluralising it, which is why <code>Book.collection.name</code> prints <code>books</code>. An instance of that class is a document with its own change tracking, so <code>book.save()</code> knows whether to issue an insert or an update.</p>\n<p><code>new Book(...) + save()</code> and <code>Book.create(...)</code> are interchangeable; <code>create</code> simply does both steps and returns the saved document (or an array of them when given an array). Prefer the two-step form when you need to mutate or inspect the document between construction and persistence.</p>\n<p>Three details are worth internalising. <strong>Defaults are applied at construction time</strong>, not at save time, so <code>book.published</code> is already <code>false</code> before the write hits the server. <strong><code>timestamps: true</code></strong> makes Mongoose maintain <code>createdAt</code> and <code>updatedAt</code> for you on saves and on updates — hand-rolled date fields drift the moment someone updates through a query. And <strong><code>__v</code></strong> is the version key Mongoose uses for optimistic concurrency on array updates; it starts at 0 and is not something your application code should set. The classic beginner error is calling <code>mongoose.model('Book', ...)</code> twice for the same name, which throws <code>OverwriteModelError</code>; models are singletons per connection, so define each one exactly once in its own module and require it everywhere else.</p>"
+    },
+    {
+      "title": "Schema Validation with enum, min, and a Custom Validator",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 30,
+      "points": 15,
+      "concepts": [
+        "required",
+        "enum",
+        "min and max",
+        "custom validator",
+        "ValidationError",
+        "error.errors paths"
+      ],
+      "prerequisites": [
+        "Schema and model",
+        "try/catch with async/await"
+      ],
+      "tags": [
+        "mongoose",
+        "validation",
+        "schema",
+        "errors",
+        "mongodb"
+      ],
+      "problemHtml": "<p>Validation is the main reason teams adopt an ODM over the raw driver. Mongoose runs validators automatically before every <code>save()</code>, and when one fails it throws a single <code>ValidationError</code> whose <code>errors</code> object is keyed by <em>path</em> — exactly the shape an HTTP layer needs to build a field-by-field 422 response.</p>\n<p>Model a product catalogue entry and then deliberately break it:</p>\n<ul>\n<li>Declare <code>productSchema</code> with: <code>sku</code> (String, required, plus a custom validator accepting only the pattern three uppercase letters, a hyphen and four digits, with the message <code>SKU must look like ABC-1234</code>); <code>price</code> (Number, required, <code>min: 0</code>); <code>category</code> (String, <code>enum</code> of <code>book</code>, <code>tool</code>, <code>toy</code>); <code>stock</code> (Number, <code>default: 0</code>); and <code>discount</code> (Number, default 0) with a custom validator that rejects a discount greater than the document's own <code>price</code>, message <code>discount cannot exceed price</code>.</li>\n<li>Save a valid product <code>{ sku: 'ABC-1234', price: 20, category: 'tool' }</code> and print its defaulted <code>stock</code>.</li>\n<li>Try to save <code>{ sku: 'abc1', price: -5, category: 'gadget' }</code> inside <code>try/catch</code>. Print <code>name:</code> the error's <code>name</code>, then <code>paths:</code> the sorted keys of <code>err.errors</code> comma-separated, then the <code>message</code> of the <code>sku</code> error and the <code>kind</code> of the <code>price</code> error. Four paths fail, not three — work out why before you run it.</li>\n<li>Try to save <code>{ sku: 'XYZ-0001', price: 10, category: 'toy', discount: 15 }</code> and print the cross-field validator's message.</li>\n<li>Finally print <code>saved count:</code> the number of documents actually in the collection.</li>\n</ul>\n<p>The custom validator on <code>discount</code> must be a regular <code>function</code>, not an arrow function, because it needs <code>this</code> to reach the sibling <code>price</code> path. The scaffold connects, drops the database and provides the three save attempts.</p>",
+      "inputSpec": "No stdin. Three documents are attempted in order: a valid one, one violating sku/price/category, and one violating the cross-field discount rule.",
+      "outputSpec": "Lines: \"stock default: 0\"; \"name: ValidationError\"; \"paths: category, discount, price, sku\"; \"sku message: SKU must look like ABC-1234\"; \"price kind: min\"; \"discount message: discount cannot exceed price\"; \"saved count: 1\".",
+      "constraints": "Validation must come from the schema — no manual if-checks before save. The discount validator must be a normal function so this refers to the document. Do not catch and swallow errors silently.",
+      "examplesJson": [
+        {
+          "input": "await new Product({ sku: 'abc1', price: -5, category: 'gadget' }).save()",
+          "output": "name: ValidationError\npaths: category, discount, price, sku",
+          "explanation": "One ValidationError carries every failing path at once. discount fails too: its default of 0 is greater than the invalid price of -5, so the cross-field validator rejects it as well."
+        },
+        {
+          "input": "err.errors.price.kind",
+          "output": "min",
+          "explanation": "Each entry is a ValidatorError whose kind names the rule that failed — useful for machine-readable API errors."
+        },
+        {
+          "input": "await new Product({ sku: 'XYZ-0001', price: 10, category: 'toy', discount: 15 }).save()",
+          "output": "discount message: discount cannot exceed price",
+          "explanation": "The custom validator reads this.price, so it can compare two paths of the same document."
+        }
+      ],
+      "hintsJson": [
+        "Every failing path ends up in one error object, not one error per field.",
+        "A field definition accepts validate: { validator, message } alongside type and required.",
+        "err.errors is an object keyed by path; Object.keys(err.errors).sort() gives you a stable list.",
+        "sku: { type: String, required: true, validate: { validator: (v) => /^[A-Z]{3}-\\d{4}$/.test(v), message: 'SKU must look like ABC-1234' } }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\n\nconst uri = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/mg419_validation';\n\n// TODO: declare productSchema with required sku + regex validator, required price with min 0,\n//       category enum, stock default 0, and a discount validator that compares against this.price\n// TODO: compile the Product model\n\nasync function main() {\n  await mongoose.connect(uri);\n  await mongoose.connection.dropDatabase();\n\n  // TODO: save a valid product and print its defaulted stock\n\n  try {\n    await new Product({ sku: 'abc1', price: -5, category: 'gadget' }).save();\n  } catch (err) {\n    // TODO: print name, sorted paths, the sku message and the price kind\n  }\n\n  try {\n    await new Product({ sku: 'XYZ-0001', price: 10, category: 'toy', discount: 15 }).save();\n  } catch (err) {\n    // TODO: print the discount message\n  }\n\n  // TODO: print how many documents were actually saved\n\n  await mongoose.disconnect();\n}\n\nmain().catch((err) => {\n  console.error(err);\n  process.exit(1);\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\n\nconst uri = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/mg419_validation';\n\nconst productSchema = new mongoose.Schema({\n  sku: {\n    type: String,\n    required: true,\n    validate: {\n      validator: (value) => /^[A-Z]{3}-\\d{4}$/.test(value),\n      message: 'SKU must look like ABC-1234',\n    },\n  },\n  price: { type: Number, required: true, min: 0 },\n  category: { type: String, enum: ['book', 'tool', 'toy'] },\n  stock: { type: Number, default: 0 },\n  discount: {\n    type: Number,\n    default: 0,\n    validate: {\n      validator: function (value) {\n        return value <= this.price;\n      },\n      message: 'discount cannot exceed price',\n    },\n  },\n});\n\nconst Product = mongoose.model('Product', productSchema);\n\nasync function main() {\n  await mongoose.connect(uri);\n  await mongoose.connection.dropDatabase();\n\n  const valid = await Product.create({ sku: 'ABC-1234', price: 20, category: 'tool' });\n  console.log('stock default:', valid.stock);\n\n  try {\n    await new Product({ sku: 'abc1', price: -5, category: 'gadget' }).save();\n  } catch (err) {\n    console.log('name:', err.name);\n    console.log('paths:', Object.keys(err.errors).sort().join(', '));\n    console.log('sku message:', err.errors.sku.message);\n    console.log('price kind:', err.errors.price.kind);\n  }\n\n  try {\n    await new Product({ sku: 'XYZ-0001', price: 10, category: 'toy', discount: 15 }).save();\n  } catch (err) {\n    console.log('discount message:', err.errors.discount.message);\n  }\n\n  console.log('saved count:', await Product.countDocuments());\n\n  await mongoose.disconnect();\n}\n\nmain().catch((err) => {\n  console.error(err);\n  process.exit(1);\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mongoose validates the whole document before it writes anything, collecting <em>all</em> failures rather than aborting on the first one. That is why the second attempt yields a single <code>ValidationError</code> whose <code>errors</code> map contains three entries — <code>sku</code> (custom validator), <code>price</code> (<code>min</code>) and <code>category</code> (<code>enum</code>). Each entry is a <code>ValidatorError</code> exposing <code>message</code>, <code>path</code>, <code>value</code> and <code>kind</code>; <code>kind</code> is the machine-readable rule name (<code>required</code>, <code>min</code>, <code>enum</code>, <code>user defined</code>), which is what you should branch on in an error-mapping middleware rather than string-matching messages.</p>\n<p>The cross-field rule is the part that trips people up. A validator declared as an arrow function inherits <code>this</code> from the enclosing module scope, so <code>this.price</code> is <code>undefined</code> and the comparison silently misbehaves. Written as a normal <code>function</code>, <code>this</code> is the document being validated on a <code>save()</code>, and the rule works. The same caveat has a second edge: on an <em>update</em> path, <code>this</code> is not a document, so validators that depend on siblings only fire correctly when you save a document — a strong argument for routing writes through <code>save()</code> rather than <code>findOneAndUpdate</code> when business rules span fields.</p>\n<p>The four-path result is worth pausing on. You supplied three bad values, but <code>discount</code> also fails: its default of <code>0</code> is applied at construction time and then validated like any other path, and <code>0 &lt;= -5</code> is false. Defaults are not exempt from validation, and a cross-field validator can therefore fail because of a <em>different</em> field's bad value — a cascade you will see often in real forms.</p>\n<p>Note also what did <em>not</em> happen: nothing was written for the two failed attempts, so <code>countDocuments()</code> is 1. Validation runs client-side, inside your Node process, before any network call. That is fast and gives rich errors, but it also means the database is not enforcing these rules — a write from mongosh or another service bypasses them entirely. Constraints you truly cannot violate (uniqueness above all) belong in an index, which the later exercises cover.</p>"
+    },
+    {
+      "title": "Nested Schemas and Arrays of Subdocuments",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 35,
+      "points": 20,
+      "concepts": [
+        "nested schema",
+        "subdocument arrays",
+        "DocumentArray.id",
+        "nested validation paths",
+        "push and save"
+      ],
+      "prerequisites": [
+        "Schema and model",
+        "schema validation"
+      ],
+      "tags": [
+        "mongoose",
+        "subdocuments",
+        "nested-schema",
+        "validation",
+        "mongodb"
+      ],
+      "problemHtml": "<p>MongoDB's superpower is storing a whole aggregate in one document, and Mongoose models that with <strong>subdocuments</strong>: a schema embedded in another schema, either as a single nested object or as an array. Subdocuments are full documents — they get their own <code>_id</code>, run their own validators, and their errors are reported under a dotted path such as <code>items.1.qty</code>.</p>\n<p>Model an order that carries its shipping address and its line items inline:</p>\n<ul>\n<li>Declare <code>addressSchema</code> with <code>street</code>, <code>city</code> and <code>zip</code>, all required, and the option <code>{ _id: false }</code> — an address is a value, not an entity.</li>\n<li>Declare <code>itemSchema</code> with <code>name</code> (required), <code>qty</code> (Number, required, <code>min: 1</code>) and <code>price</code> (Number, required).</li>\n<li>Declare <code>orderSchema</code> with <code>customer</code> (String, required), <code>shipping: addressSchema</code> and <code>items: [itemSchema]</code>.</li>\n<li>Create an order for <code>ada</code> shipping to <code>12 Ly Thai To, Hanoi, 10000</code> with one item <code>{ name: 'Keyboard', qty: 1, price: 30 }</code>, then <code>push</code> a second item <code>{ name: 'Cable', qty: 3, price: 5 }</code> onto <code>order.items</code> and save again.</li>\n<li>Print: the number of items; whether the first item has its own <code>_id</code>; whether <code>shipping</code> has an <code>_id</code>; the result of looking the second item up by its id with <code>order.items.id(...)</code> — print its <code>qty</code>; and the order total computed from the line items.</li>\n<li>Then push an invalid item <code>{ name: 'Mat', qty: 0, price: 9 }</code>, attempt to save inside <code>try/catch</code>, and print the single failing path from <code>err.errors</code>.</li>\n</ul>\n<p>The scaffold connects, drops the database and supplies the literal order data.</p>",
+      "inputSpec": "No stdin. One order document is built in memory from the literals in the scaffold, saved, extended, then given a deliberately invalid third line item.",
+      "outputSpec": "Lines: \"items: 2\"; \"item has _id: true\"; \"shipping has _id: false\"; \"second item qty: 3\"; \"total: 45\"; \"shipping city: Hanoi\"; \"invalid path: items.2.qty\".",
+      "constraints": "Embed the line items — do not create a separate Item collection. Use the DocumentArray helper id() to find a subdocument, not a manual find over the array. Compute the total in JavaScript with reduce.",
+      "examplesJson": [
+        {
+          "input": "order.items.push({ name: 'Cable', qty: 3, price: 5 }); await order.save();",
+          "output": "items: 2\nitem has _id: true",
+          "explanation": "Pushing a plain object casts it to a subdocument, which is given its own ObjectId automatically."
+        },
+        {
+          "input": "order.items.id(secondId).qty",
+          "output": "second item qty: 3",
+          "explanation": "A subdocument array exposes id() for O(n) lookup by subdocument _id — the standard way to address one line of an order."
+        },
+        {
+          "input": "order.items.push({ name: 'Mat', qty: 0, price: 9 }); await order.save();",
+          "output": "invalid path: items.2.qty",
+          "explanation": "The min: 1 validator on the subdocument fails and is reported under the dotted path of its index in the array."
+        }
+      ],
+      "hintsJson": [
+        "A schema can be used as the type of a field, or as the element type of an array field.",
+        "Options belong on the embedded schema: { _id: false } suppresses the generated id for a value object.",
+        "order.items is a DocumentArray, so it has extra methods beyond a plain array — id() among them.",
+        "const orderSchema = new mongoose.Schema({ customer: { type: String, required: true }, shipping: addressSchema, items: [itemSchema] });"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\n\nconst uri = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/mg419_nested';\n\n// TODO: addressSchema (street, city, zip all required) with { _id: false }\n// TODO: itemSchema (name required, qty required min 1, price required)\n// TODO: orderSchema (customer required, shipping: addressSchema, items: [itemSchema])\n// TODO: compile the Order model\n\nasync function main() {\n  await mongoose.connect(uri);\n  await mongoose.connection.dropDatabase();\n\n  const order = new Order({\n    customer: 'ada',\n    shipping: { street: '12 Ly Thai To', city: 'Hanoi', zip: '10000' },\n    items: [{ name: 'Keyboard', qty: 1, price: 30 }],\n  });\n  await order.save();\n\n  // TODO: push { name: 'Cable', qty: 3, price: 5 } and save\n  // TODO: print items count, whether items[0] and shipping have _id, the second item's qty via id(),\n  //       the reduce-based total and the shipping city\n\n  // TODO: push { name: 'Mat', qty: 0, price: 9 }, save in try/catch, print the failing path\n\n  await mongoose.disconnect();\n}\n\nmain().catch((err) => {\n  console.error(err);\n  process.exit(1);\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\n\nconst uri = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/mg419_nested';\n\nconst addressSchema = new mongoose.Schema(\n  {\n    street: { type: String, required: true },\n    city: { type: String, required: true },\n    zip: { type: String, required: true },\n  },\n  { _id: false }\n);\n\nconst itemSchema = new mongoose.Schema({\n  name: { type: String, required: true },\n  qty: { type: Number, required: true, min: 1 },\n  price: { type: Number, required: true },\n});\n\nconst orderSchema = new mongoose.Schema({\n  customer: { type: String, required: true },\n  shipping: addressSchema,\n  items: [itemSchema],\n});\n\nconst Order = mongoose.model('Order', orderSchema);\n\nasync function main() {\n  await mongoose.connect(uri);\n  await mongoose.connection.dropDatabase();\n\n  const order = new Order({\n    customer: 'ada',\n    shipping: { street: '12 Ly Thai To', city: 'Hanoi', zip: '10000' },\n    items: [{ name: 'Keyboard', qty: 1, price: 30 }],\n  });\n  await order.save();\n\n  order.items.push({ name: 'Cable', qty: 3, price: 5 });\n  await order.save();\n\n  console.log('items:', order.items.length);\n  console.log('item has _id:', Boolean(order.items[0]._id));\n  console.log('shipping has _id:', Boolean(order.shipping._id));\n\n  const secondId = order.items[1]._id;\n  console.log('second item qty:', order.items.id(secondId).qty);\n\n  const total = order.items.reduce((sum, item) => sum + item.qty * item.price, 0);\n  console.log('total:', total);\n  console.log('shipping city:', order.shipping.city);\n\n  order.items.push({ name: 'Mat', qty: 0, price: 9 });\n  try {\n    await order.save();\n  } catch (err) {\n    console.log('invalid path:', Object.keys(err.errors).join(', '));\n  }\n\n  await mongoose.disconnect();\n}\n\nmain().catch((err) => {\n  console.error(err);\n  process.exit(1);\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Using a schema as a field type is what turns a plain nested object into a real subdocument. <code>items: [itemSchema]</code> produces a <code>DocumentArray</code>: pushing a plain object casts and validates it, gives it an <code>_id</code>, and lets you address it later with <code>order.items.id(subId)</code>. That id-based addressing is what makes \"update line 2 of this order\" expressible, both in memory and in a positional query such as <code>{ 'items._id': subId }</code> with <code>$set: { 'items.$.qty': 5 }</code>.</p>\n<p>The <code>{ _id: false }</code> on <code>addressSchema</code> encodes a design decision, not a micro-optimisation: a shipping address is a <em>value object</em> that only exists as part of its order, so it needs no identity. Line items, by contrast, keep their ids because the application refers to them individually.</p>\n<p>The validation behaviour is the real lesson. Subdocument validators run as part of the parent's <code>save()</code>, and failures are reported under the dotted path including the array index — <code>items.2.qty</code>. An HTTP layer can therefore return field-level errors for deeply nested form data without any custom mapping. Two traps follow from this. First, because the whole document is validated on every save, an invalid item added late blocks the <em>entire</em> order from saving, including changes you made to other fields — the document in memory is now dirty and out of sync with the database. Second, embedding is bounded by the 16 MB document limit and by write contention on the parent: embed when the children are read and written with the parent and their number stays small, and use references (the next exercise) when they grow without bound or are queried independently.</p>",
+      "diagramMermaid": "flowchart TD\n  Order[Order document] --> Customer[customer string]\n  Order --> Shipping[shipping nested addressSchema no id]\n  Order --> Items[items DocumentArray]\n  Items --> I0[item 0 with own ObjectId]\n  Items --> I1[item 1 with own ObjectId]\n  I1 --> Validate[qty min 1 validator runs on parent save]"
+    },
+    {
+      "title": "References and populate: select, Nested Paths, and the Query Count",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 40,
+      "points": 20,
+      "concepts": [
+        "ObjectId ref",
+        "populate",
+        "populate select",
+        "nested populate",
+        "query counting"
+      ],
+      "prerequisites": [
+        "Schema and model",
+        "find and sort"
+      ],
+      "tags": [
+        "mongoose",
+        "populate",
+        "refs",
+        "performance",
+        "mongodb"
+      ],
+      "problemHtml": "<p>When data should not be embedded you store an <code>ObjectId</code> and declare what it points at with <code>ref</code>. <code>populate()</code> then swaps those ids for the referenced documents. It looks like a SQL join, but it is not one: Mongoose issues <strong>extra queries</strong> — one per populated path — and stitches the results together in Node. Knowing that is the difference between a fast endpoint and an accidental fan-out.</p>\n<p>Build a three-level catalogue and measure it:</p>\n<ul>\n<li>Models: <code>Publisher</code> (<code>name</code>), <code>Author</code> (<code>name</code>, <code>publisher</code> as <code>ObjectId</code> with <code>ref: 'Publisher'</code>), <code>Book</code> (<code>title</code>, <code>author</code> as <code>ObjectId</code> with <code>ref: 'Author'</code>).</li>\n<li>Seed one publisher <code>Chilton</code>, two authors <code>Frank Herbert</code> and <code>Ursula Le Guin</code> both pointing at it, and three books: <code>Dune</code> and <code>Children of Dune</code> by Herbert, <code>A Wizard of Earthsea</code> by Le Guin.</li>\n<li>Read one book <em>without</em> populate and print whether <code>book.author</code> is an <code>ObjectId</code>.</li>\n<li>Install a query counter with <code>mongoose.set('debug', () =&gt; { queries++; })</code>, reset the counter, then fetch all three books sorted by title with a nested populate: path <code>author</code>, <code>select</code> <code>'name -_id'</code>, and an inner <code>populate</code> of <code>publisher</code> with <code>select</code> <code>'name -_id'</code>.</li>\n<li>Print the counter, then one line per book: <code>&lt;title&gt; / &lt;author name&gt; / &lt;publisher name&gt;</code>.</li>\n<li>Print whether the populated author object still exposes <code>_id</code> (it must not, because of the <code>-_id</code> in the select).</li>\n</ul>\n<p>The scaffold connects, drops the database, seeds the documents and declares the counter variable.</p>",
+      "inputSpec": "No stdin. Seed data: 1 publisher (Chilton), 2 authors referencing it, 3 books referencing the authors — created by the scaffold.",
+      "outputSpec": "Lines: \"unpopulated author is ObjectId: true\"; \"queries: 3\"; then \"A Wizard of Earthsea / Ursula Le Guin / Chilton\", \"Children of Dune / Frank Herbert / Chilton\", \"Dune / Frank Herbert / Chilton\"; then \"author has _id: false\".",
+      "constraints": "Use a single find() plus populate — no manual loop issuing one query per book. The select strings must suppress _id. Do not use $lookup here.",
+      "examplesJson": [
+        {
+          "input": "await Book.findOne({ title: 'Dune' })",
+          "output": "unpopulated author is ObjectId: true",
+          "explanation": "Without populate the ref field holds only the raw ObjectId that was stored."
+        },
+        {
+          "input": "Book.find().sort({ title: 1 }).populate({ path: 'author', select: 'name -_id', populate: { path: 'publisher', select: 'name -_id' } })",
+          "output": "queries: 3",
+          "explanation": "One query for the books, one for the authors (batched with $in), one for the publishers — three round trips, not one join and not one query per book."
+        },
+        {
+          "input": "books.map((b) => `${b.title} / ${b.author.name} / ${b.author.publisher.name}`)",
+          "output": "Dune / Frank Herbert / Chilton",
+          "explanation": "After populate the ref fields are hydrated documents, so nested property access works."
+        }
+      ],
+      "hintsJson": [
+        "A ref field stores only an id; something has to go and fetch the other document.",
+        "populate accepts an options object, and that object can itself contain a populate for the next level.",
+        "select: 'name -_id' keeps name and drops the always-included _id.",
+        "mongoose.set('debug', () => { queries++; }) fires once per collection operation, so reset the counter immediately before the read you want to measure."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\n\nconst uri = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/mg419_populate';\n\nconst Publisher = mongoose.model('Publisher', new mongoose.Schema({ name: String }));\nconst Author = mongoose.model(\n  'Author',\n  new mongoose.Schema({ name: String, publisher: { type: mongoose.Schema.Types.ObjectId, ref: 'Publisher' } })\n);\nconst Book = mongoose.model(\n  'Book',\n  new mongoose.Schema({ title: String, author: { type: mongoose.Schema.Types.ObjectId, ref: 'Author' } })\n);\n\nlet queries = 0;\n\nasync function main() {\n  await mongoose.connect(uri);\n  await mongoose.connection.dropDatabase();\n\n  const chilton = await Publisher.create({ name: 'Chilton' });\n  const herbert = await Author.create({ name: 'Frank Herbert', publisher: chilton._id });\n  const leguin = await Author.create({ name: 'Ursula Le Guin', publisher: chilton._id });\n  await Book.create([\n    { title: 'Dune', author: herbert._id },\n    { title: 'Children of Dune', author: herbert._id },\n    { title: 'A Wizard of Earthsea', author: leguin._id },\n  ]);\n\n  // TODO: read one book without populate and report whether author is an ObjectId\n\n  // TODO: install the debug counter, reset queries, then find all books sorted by title with a\n  //       nested populate of author (select name -_id) and its publisher (select name -_id)\n\n  // TODO: print the query count, one line per book, and whether the populated author kept _id\n\n  await mongoose.disconnect();\n}\n\nmain().catch((err) => {\n  console.error(err);\n  process.exit(1);\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\n\nconst uri = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/mg419_populate';\n\nconst Publisher = mongoose.model('Publisher', new mongoose.Schema({ name: String }));\nconst Author = mongoose.model(\n  'Author',\n  new mongoose.Schema({ name: String, publisher: { type: mongoose.Schema.Types.ObjectId, ref: 'Publisher' } })\n);\nconst Book = mongoose.model(\n  'Book',\n  new mongoose.Schema({ title: String, author: { type: mongoose.Schema.Types.ObjectId, ref: 'Author' } })\n);\n\nlet queries = 0;\n\nasync function main() {\n  await mongoose.connect(uri);\n  await mongoose.connection.dropDatabase();\n\n  const chilton = await Publisher.create({ name: 'Chilton' });\n  const herbert = await Author.create({ name: 'Frank Herbert', publisher: chilton._id });\n  const leguin = await Author.create({ name: 'Ursula Le Guin', publisher: chilton._id });\n  await Book.create([\n    { title: 'Dune', author: herbert._id },\n    { title: 'Children of Dune', author: herbert._id },\n    { title: 'A Wizard of Earthsea', author: leguin._id },\n  ]);\n\n  const raw = await Book.findOne({ title: 'Dune' });\n  console.log('unpopulated author is ObjectId:', raw.author instanceof mongoose.Types.ObjectId);\n\n  mongoose.set('debug', () => {\n    queries += 1;\n  });\n  queries = 0;\n\n  const books = await Book.find()\n    .sort({ title: 1 })\n    .populate({\n      path: 'author',\n      select: 'name -_id',\n      populate: { path: 'publisher', select: 'name -_id' },\n    });\n\n  mongoose.set('debug', false);\n\n  console.log('queries:', queries);\n  for (const book of books) {\n    console.log(book.title + ' / ' + book.author.name + ' / ' + book.author.publisher.name);\n  }\n  console.log('author has _id:', Boolean(books[0].author._id));\n\n  await mongoose.disconnect();\n}\n\nmain().catch((err) => {\n  console.error(err);\n  process.exit(1);\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>ref</code> is metadata only: the stored value is a bare <code>ObjectId</code>, which is why the unpopulated read prints <code>true</code> for the <code>instanceof</code> check. <code>populate()</code> is a client-side join executed by Mongoose after the primary query returns. It collects the ids it saw, issues <strong>one</strong> query per populated path using <code>$in</code>, and assigns the results back onto the documents. Hence three queries here — books, authors, publishers — regardless of the fact that three books point at two authors that share one publisher. The counter makes this measurable rather than a claim.</p>\n<p>The practical consequence is that populate cost scales with the <em>number of populated paths and levels</em>, not with the number of parent documents — but it is still additional round trips, and it happens outside the database, so the server cannot use them to filter or sort. You cannot sort books by <code>author.name</code> with populate, and filtering on a populated field only discards results after they have been fetched (a populated path that fails a <code>match</code> becomes <code>null</code>, leaving the parent in the array). When you need a true server-side join with filtering and sorting on the joined side, use an aggregation <code>$lookup</code>; when you need one document with its label fields, populate is simpler and often faster.</p>\n<p><code>select: 'name -_id'</code> narrows the payload of the populated documents — always do this on hot paths, because populating a full user document to render a display name is a classic source of oversized responses. Note the asymmetry: <code>-_id</code> is required because <code>_id</code> is included by default. Finally, remember <code>mongoose.set('debug', ...)</code> is a global switch that prints or, as here, counts every collection operation — invaluable for spotting an N+1 caused by populating inside a loop instead of populating one batched query.</p>",
+      "diagramMermaid": "sequenceDiagram\n  participant App as Node app\n  participant DB as MongoDB\n  App->>DB: find books sorted by title\n  DB-->>App: 3 books with author ids\n  App->>DB: find authors where _id in list\n  DB-->>App: 2 authors with publisher ids\n  App->>DB: find publishers where _id in list\n  DB-->>App: 1 publisher\n  App->>App: stitch documents together in memory"
+    },
+    {
+      "title": "Virtuals: Computed Fields, Setters, and Virtual Populate",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 35,
+      "points": 20,
+      "concepts": [
+        "virtual getter",
+        "virtual setter",
+        "toJSON virtuals option",
+        "virtual populate",
+        "localField and foreignField"
+      ],
+      "prerequisites": [
+        "Schema and model",
+        "refs and populate"
+      ],
+      "tags": [
+        "mongoose",
+        "virtuals",
+        "schema",
+        "json",
+        "mongodb"
+      ],
+      "problemHtml": "<p>A <strong>virtual</strong> is a schema path that is computed in Node and never stored. Two uses dominate real projects: presenting derived data such as a full name or a signed URL, and declaring a reverse relationship — \"a user's posts\" — without duplicating ids on the parent. Virtuals cost nothing on disk, but they are invisible to the database, and that has consequences you must know.</p>\n<p>Build a <code>User</code> model that exercises both kinds:</p>\n<ul>\n<li><code>userSchema</code> has <code>firstName</code> and <code>lastName</code> (Strings). Add a virtual <code>fullName</code> with a getter returning the two joined by a space, and a setter that splits an assigned string on the first space into the two real paths. Use regular functions, not arrows.</li>\n<li>Declare a virtual <code>posts</code> using <code>{ ref: 'Post', localField: '_id', foreignField: 'author' }</code>, where <code>postSchema</code> is <code>{ title: String, author: ObjectId ref 'User' }</code>.</li>\n<li>Create user <code>Ada Lovelace</code> and print <code>fullName</code>. Then assign <code>user.fullName = 'Grace Hopper'</code> and print the resulting <code>firstName</code> and <code>lastName</code>.</li>\n<li>Print whether <code>JSON.stringify(user)</code> contains <code>fullName</code> with the default schema options, then enable <code>toJSON: { virtuals: true }</code> on a second model built from the same fields and print the same check again.</li>\n<li>Show the database cannot see virtuals: run <code>User.countDocuments({ fullName: 'Grace Hopper' })</code> and print the result.</li>\n<li>Create two posts by that user and one by another, then load the user with <code>.populate('posts')</code> and print how many posts came back and their titles sorted and comma-separated.</li>\n</ul>\n<p>The scaffold connects, drops the database and declares both schemas without the virtuals.</p>",
+      "inputSpec": "No stdin. Two users and three posts are created by the script; posts reference their author by ObjectId.",
+      "outputSpec": "Lines: \"fullName: Ada Lovelace\"; \"after set: Grace / Hopper\"; \"json has fullName: false\"; \"json with virtuals has fullName: true\"; \"query by virtual matched: 0\"; \"posts: 2\"; \"titles: Notes on the Engine, Sketch of the Analytical Engine\".",
+      "constraints": "Do not store fullName as a real path. Do not store an array of post ids on the user — the reverse relation must come from the virtual. Getters and setters must be normal functions so this is the document.",
+      "examplesJson": [
+        {
+          "input": "user.fullName = 'Grace Hopper'",
+          "output": "after set: Grace / Hopper",
+          "explanation": "The virtual setter writes through to the two real paths, so the document saves normally."
+        },
+        {
+          "input": "await User.countDocuments({ fullName: 'Grace Hopper' })",
+          "output": "query by virtual matched: 0",
+          "explanation": "Virtuals exist only in Node — MongoDB has no such field, so the filter matches nothing."
+        },
+        {
+          "input": "await User.findById(id).populate('posts')",
+          "output": "posts: 2",
+          "explanation": "Virtual populate runs a query on Post where author equals this user _id, without any array of ids stored on the user."
+        }
+      ],
+      "hintsJson": [
+        "A schema path you never want written to disk is not a field at all.",
+        "schema.virtual(name).get(fn) and .set(fn) define the computed path; the setter assigns to this.firstName / this.lastName.",
+        "Virtuals are omitted from toJSON and toObject unless you pass { virtuals: true } in those schema options.",
+        "schema.virtual('posts', { ref: 'Post', localField: '_id', foreignField: 'author' }) — then populate('posts') like any ref."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\n\nconst uri = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/mg419_virtuals';\n\nconst fields = { firstName: String, lastName: String };\n\nconst userSchema = new mongoose.Schema(fields);\n// TODO: add the fullName virtual (getter + setter)\n// TODO: add the posts virtual (ref Post, localField _id, foreignField author)\n\nconst jsonUserSchema = new mongoose.Schema(fields, { toJSON: { virtuals: true } });\n// TODO: add the same fullName getter to jsonUserSchema\n\nconst User = mongoose.model('User', userSchema);\nconst JsonUser = mongoose.model('JsonUser', jsonUserSchema);\nconst Post = mongoose.model(\n  'Post',\n  new mongoose.Schema({ title: String, author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' } })\n);\n\nasync function main() {\n  await mongoose.connect(uri);\n  await mongoose.connection.dropDatabase();\n\n  // TODO: create Ada Lovelace, print fullName, set fullName to 'Grace Hopper', print the parts, save\n  // TODO: compare JSON.stringify of a User and a JsonUser\n  // TODO: countDocuments filtering on the virtual\n  // TODO: create the posts, populate the virtual and print the count and sorted titles\n\n  await mongoose.disconnect();\n}\n\nmain().catch((err) => {\n  console.error(err);\n  process.exit(1);\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\n\nconst uri = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/mg419_virtuals';\n\nconst fields = { firstName: String, lastName: String };\n\nconst userSchema = new mongoose.Schema(fields);\n\nuserSchema\n  .virtual('fullName')\n  .get(function () {\n    return this.firstName + ' ' + this.lastName;\n  })\n  .set(function (value) {\n    const index = value.indexOf(' ');\n    this.firstName = value.slice(0, index);\n    this.lastName = value.slice(index + 1);\n  });\n\nuserSchema.virtual('posts', {\n  ref: 'Post',\n  localField: '_id',\n  foreignField: 'author',\n});\n\nconst jsonUserSchema = new mongoose.Schema(fields, { toJSON: { virtuals: true } });\njsonUserSchema.virtual('fullName').get(function () {\n  return this.firstName + ' ' + this.lastName;\n});\n\nconst User = mongoose.model('User', userSchema);\nconst JsonUser = mongoose.model('JsonUser', jsonUserSchema);\nconst Post = mongoose.model(\n  'Post',\n  new mongoose.Schema({ title: String, author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' } })\n);\n\nasync function main() {\n  await mongoose.connect(uri);\n  await mongoose.connection.dropDatabase();\n\n  const user = new User({ firstName: 'Ada', lastName: 'Lovelace' });\n  console.log('fullName:', user.fullName);\n\n  user.fullName = 'Grace Hopper';\n  console.log('after set:', user.firstName + ' / ' + user.lastName);\n  await user.save();\n\n  const plain = new JsonUser({ firstName: 'Grace', lastName: 'Hopper' });\n  console.log('json has fullName:', JSON.stringify(user).includes('fullName'));\n  console.log('json with virtuals has fullName:', JSON.stringify(plain).includes('fullName'));\n\n  console.log('query by virtual matched:', await User.countDocuments({ fullName: 'Grace Hopper' }));\n\n  const other = await User.create({ firstName: 'Alan', lastName: 'Turing' });\n  await Post.create([\n    { title: 'Sketch of the Analytical Engine', author: user._id },\n    { title: 'Notes on the Engine', author: user._id },\n    { title: 'Computing Machinery', author: other._id },\n  ]);\n\n  const withPosts = await User.findById(user._id).populate('posts');\n  console.log('posts:', withPosts.posts.length);\n  console.log(\n    'titles:',\n    withPosts.posts\n      .map((post) => post.title)\n      .sort()\n      .join(', ')\n  );\n\n  await mongoose.disconnect();\n}\n\nmain().catch((err) => {\n  console.error(err);\n  process.exit(1);\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A virtual is a property descriptor installed on the document class, so <code>user.fullName</code> runs your getter every time it is read and <code>user.fullName = '...'</code> runs your setter, which writes through to the real paths. Because the setter mutates <code>firstName</code> and <code>lastName</code>, the document saves exactly as if you had assigned them directly — a clean way to accept a legacy input shape without polluting storage. As with custom validators, the functions must be normal <code>function</code>s: an arrow function captures the module's <code>this</code> and the getter returns <code>undefined undefined</code>.</p>\n<p>The two consequences of \"never stored\" are both demonstrated. First, virtuals are dropped by <code>toJSON</code> and <code>toObject</code> unless the schema opts in with <code>{ toJSON: { virtuals: true } }</code> — the single most common surprise, because <code>res.json(doc)</code> in Express calls <code>toJSON</code> and your carefully computed field vanishes from the API response. Second, MongoDB has no idea the field exists, so <code>countDocuments({ fullName: ... })</code> matches nothing: you cannot filter, sort, or index on a virtual. If you must query it, store a real (possibly denormalised) field and maintain it in a hook.</p>\n<p><strong>Virtual populate</strong> inverts a relationship without denormalising ids. Storing <code>author</code> on each post is the correct model — the many side owns the reference — but the parent still wants to read its children, and <code>{ ref, localField, foreignField }</code> expresses precisely that: find <code>Post</code> documents whose <code>author</code> equals this user's <code>_id</code>. It is unbounded by document size, unlike an embedded array of ids, and it supports <code>match</code>, <code>options</code> such as <code>sort</code> and <code>limit</code>, and <code>count: true</code> when you only need a number. Like all populate, it costs an extra query and is not visible to the database, so it is unavailable inside aggregations — use <code>$lookup</code> there.</p>"
+    },
+    {
+      "title": "Instance Methods, Statics, and Reusable Query Helpers",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 35,
+      "points": 20,
+      "concepts": [
+        "schema.methods",
+        "schema.statics",
+        "query helpers",
+        "this binding",
+        "chainable queries"
+      ],
+      "prerequisites": [
+        "Schema and model",
+        "find with filters"
+      ],
+      "tags": [
+        "mongoose",
+        "methods",
+        "statics",
+        "query-helpers",
+        "mongodb"
+      ],
+      "problemHtml": "<p>Mongoose gives you three distinct extension points, and choosing the right one keeps business logic out of route handlers. An <strong>instance method</strong> acts on one document (<code>this</code> is the document). A <strong>static</strong> acts on the collection (<code>this</code> is the model). A <strong>query helper</strong> extends the chainable query builder (<code>this</code> is the query), so it composes with <code>sort</code>, <code>limit</code> and further helpers.</p>\n<p>Model a task list and add all three:</p>\n<ul>\n<li><code>taskSchema</code>: <code>title</code> (String, required), <code>status</code> (String, enum <code>open</code>/<code>done</code>, default <code>open</code>), <code>dueAt</code> (Date), <code>owner</code> (String).</li>\n<li>Instance method <code>markDone()</code> that sets <code>status</code> to <code>done</code> and returns <code>this.save()</code>.</li>\n<li>Static <code>findOverdue(now)</code> returning every task whose <code>status</code> is <code>open</code> and whose <code>dueAt</code> is before <code>now</code>, sorted by <code>dueAt</code> ascending.</li>\n<li>Query helper <code>byOwner(owner)</code> that adds <code>{ owner }</code> to the current query with <code>this.where</code>.</li>\n<li>Seed the five tasks given in the scaffold, then: call <code>markDone()</code> on <em>renew domain</em> and print its status after saving; print the titles returned by <code>Task.findOverdue(new Date('2026-03-01'))</code>; print the titles of <code>Task.find().byOwner('ada').sort({ title: 1 })</code>; and print the count of <code>Task.find({ status: 'open' }).byOwner('ada')</code>.</li>\n</ul>\n<p>All three must be declared <em>before</em> <code>mongoose.model()</code> is called — the model is compiled from the schema at that moment. Every function must be a normal <code>function</code>, never an arrow.</p>",
+      "inputSpec": "No stdin. Five seed tasks created by the scaffold: pay rent (ada, due 2026-01-10), renew domain (ada, due 2026-02-01), write report (bob, due 2026-02-20), buy milk (ada, due 2026-06-01), archive logs (bob, already done, due 2026-01-05).",
+      "outputSpec": "Lines: \"after markDone: done\"; \"overdue: pay rent, write report\"; \"ada tasks: buy milk, pay rent, renew domain\"; \"ada open: 2\".",
+      "constraints": "No business logic in main() — the filters must live in the static and the query helper. Query helpers go on schema.query, statics on schema.statics, instance methods on schema.methods. Do not use arrow functions for any of them.",
+      "examplesJson": [
+        {
+          "input": "const task = await Task.findOne({ title: 'renew domain' }); await task.markDone();",
+          "output": "after markDone: done",
+          "explanation": "An instance method mutates and saves the single document it was called on; this is that document."
+        },
+        {
+          "input": "await Task.findOverdue(new Date('2026-03-01'))",
+          "output": "overdue: pay rent, write report",
+          "explanation": "renew domain was just marked done and buy milk is due in June, so only two open tasks are past the cutoff; the static sorts them by dueAt."
+        },
+        {
+          "input": "await Task.find({ status: 'open' }).byOwner('ada')",
+          "output": "ada open: 2",
+          "explanation": "The helper appends a condition to a query already in progress, so filters compose instead of being duplicated."
+        }
+      ],
+      "hintsJson": [
+        "Ask what each piece of logic operates on: one document, the whole collection, or a query being built.",
+        "schema.methods.x, schema.statics.x and schema.query.x are three different objects on the schema.",
+        "A query helper must return this so the chain continues; this.where({ owner }) does both.",
+        "taskSchema.statics.findOverdue = function (now) { return this.find({ status: 'open', dueAt: { $lt: now } }).sort({ dueAt: 1 }); };"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\n\nconst uri = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/mg419_methods';\n\nconst taskSchema = new mongoose.Schema({\n  title: { type: String, required: true },\n  status: { type: String, enum: ['open', 'done'], default: 'open' },\n  dueAt: Date,\n  owner: String,\n});\n\n// TODO: taskSchema.methods.markDone\n// TODO: taskSchema.statics.findOverdue\n// TODO: taskSchema.query.byOwner\n\nconst Task = mongoose.model('Task', taskSchema);\n\nconst seed = [\n  { title: 'pay rent', owner: 'ada', dueAt: new Date('2026-01-10') },\n  { title: 'renew domain', owner: 'ada', dueAt: new Date('2026-02-01') },\n  { title: 'write report', owner: 'bob', dueAt: new Date('2026-02-20') },\n  { title: 'buy milk', owner: 'ada', dueAt: new Date('2026-06-01') },\n  { title: 'archive logs', owner: 'bob', dueAt: new Date('2026-01-05'), status: 'done' },\n];\n\nasync function main() {\n  await mongoose.connect(uri);\n  await mongoose.connection.dropDatabase();\n  await Task.create(seed);\n\n  // TODO: markDone on 'renew domain' and print its status\n  // TODO: print the overdue titles for 2026-03-01\n  // TODO: print ada's task titles sorted by title\n  // TODO: print how many open tasks ada has\n\n  await mongoose.disconnect();\n}\n\nmain().catch((err) => {\n  console.error(err);\n  process.exit(1);\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\n\nconst uri = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/mg419_methods';\n\nconst taskSchema = new mongoose.Schema({\n  title: { type: String, required: true },\n  status: { type: String, enum: ['open', 'done'], default: 'open' },\n  dueAt: Date,\n  owner: String,\n});\n\ntaskSchema.methods.markDone = function () {\n  this.status = 'done';\n  return this.save();\n};\n\ntaskSchema.statics.findOverdue = function (now) {\n  return this.find({ status: 'open', dueAt: { $lt: now } }).sort({ dueAt: 1 });\n};\n\ntaskSchema.query.byOwner = function (owner) {\n  return this.where({ owner: owner });\n};\n\nconst Task = mongoose.model('Task', taskSchema);\n\nconst seed = [\n  { title: 'pay rent', owner: 'ada', dueAt: new Date('2026-01-10') },\n  { title: 'renew domain', owner: 'ada', dueAt: new Date('2026-02-01') },\n  { title: 'write report', owner: 'bob', dueAt: new Date('2026-02-20') },\n  { title: 'buy milk', owner: 'ada', dueAt: new Date('2026-06-01') },\n  { title: 'archive logs', owner: 'bob', dueAt: new Date('2026-01-05'), status: 'done' },\n];\n\nasync function main() {\n  await mongoose.connect(uri);\n  await mongoose.connection.dropDatabase();\n  await Task.create(seed);\n\n  const task = await Task.findOne({ title: 'renew domain' });\n  await task.markDone();\n  console.log('after markDone:', task.status);\n\n  const overdue = await Task.findOverdue(new Date('2026-03-01'));\n  console.log('overdue:', overdue.map((doc) => doc.title).join(', '));\n\n  const adaTasks = await Task.find().byOwner('ada').sort({ title: 1 });\n  console.log('ada tasks:', adaTasks.map((doc) => doc.title).join(', '));\n\n  const adaOpen = await Task.find({ status: 'open' }).byOwner('ada');\n  console.log('ada open:', adaOpen.length);\n\n  await mongoose.disconnect();\n}\n\nmain().catch((err) => {\n  console.error(err);\n  process.exit(1);\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The three extension points differ only in what <code>this</code> is bound to, and that determines what each is good for. In <code>markDone</code>, <code>this</code> is the loaded document, so the method can mutate paths and call <code>save()</code> — returning the save promise lets the caller <code>await</code> it. In <code>findOverdue</code>, <code>this</code> is the model, so <code>this.find(...)</code> starts a fresh query; returning the query (not awaiting it) keeps the static composable, so a caller can still tack on <code>.limit(10)</code> or <code>.lean()</code>. In <code>byOwner</code>, <code>this</code> is the <em>query being built</em>, and <code>this.where({ owner })</code> merges another condition into it and returns the query, which is what makes <code>Task.find({ status: 'open' }).byOwner('ada')</code> read like a sentence.</p>\n<p>Trace the expected results. <code>renew domain</code> is marked done first, so by the time <code>findOverdue(2026-03-01)</code> runs only <code>pay rent</code> (10 Jan) and <code>write report</code> (20 Feb) are still <code>open</code> and past the cutoff; <code>archive logs</code> is excluded because it is already done, and <code>buy milk</code> because June is after the cutoff. The sort on <code>dueAt</code> puts January before February. Ada's tasks sorted by title give <code>buy milk, pay rent, renew domain</code>, and of those only two remain open after the mark-done.</p>\n<p>Two traps deserve highlighting. <strong>Arrow functions break all three</strong>, because they capture the enclosing <code>this</code> instead of receiving Mongoose's binding — the symptom is a cryptic \"cannot read properties of undefined\" rather than a clear error. And <strong>everything must be attached before <code>mongoose.model()</code> is called</strong>: the model is compiled from the schema at that instant, so a static added afterwards will not exist on the model. Both mistakes are avoided by the standard file layout in which one module owns a schema, decorates it, compiles it and exports the model.</p>"
+    },
+    {
+      "title": "Middleware: pre-save Hashing versus Query Middleware",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 40,
+      "points": 25,
+      "concepts": [
+        "pre save hook",
+        "post save hook",
+        "isModified",
+        "query middleware",
+        "this in document vs query hooks",
+        "runValidators"
+      ],
+      "prerequisites": [
+        "Schema and model",
+        "instance methods",
+        "validation"
+      ],
+      "tags": [
+        "mongoose",
+        "middleware",
+        "hooks",
+        "security",
+        "mongodb"
+      ],
+      "problemHtml": "<p>Hooks are how cross-cutting rules — hashing a password, stamping an audit field, cascading a delete — stay in one place. The trap that catches nearly everyone is that Mongoose has <strong>two families</strong> of middleware. In document middleware (<code>save</code>, <code>validate</code>) <code>this</code> is the document. In query middleware (<code>findOneAndUpdate</code>, <code>updateOne</code>, <code>find</code>) <code>this</code> is the <em>query</em>: there is no document, <code>save</code> hooks do not run, and validators are off unless you ask for them.</p>\n<p>Prove both behaviours on a <code>User</code> model. Use <code>crypto.createHash('sha256')</code> truncated to 16 hex characters as a stand-in for a real password hash so the output is deterministic.</p>\n<ul>\n<li><code>userSchema</code>: <code>username</code> (String, required), <code>password</code> (String, required, <code>minlength: 8</code>), <code>role</code> (String, <code>enum</code> <code>user</code>/<code>admin</code>, default <code>user</code>), <code>lastHashedBy</code> (String).</li>\n<li><code>pre('save')</code>: if <code>this.isModified('password')</code>, replace it with the hash and set <code>lastHashedBy</code> to <code>'save-hook'</code>. Guarding on <code>isModified</code> is mandatory.</li>\n<li><code>post('save')</code>: print <code>post save: &lt;username&gt;</code>.</li>\n<li><code>pre('findOneAndUpdate')</code>: read the update with <code>this.getUpdate()</code>; if it sets a <code>password</code>, hash that value in place and also set <code>lastHashedBy</code> to <code>'query-hook'</code> via <code>this.setUpdate</code> or by mutating the update object.</li>\n<li>Create <code>ada</code> with password <code>secret12</code>; print the stored hash and confirm it equals <code>hash('secret12')</code>. Save again after changing only <code>username</code> and print whether the stored password changed (it must not).</li>\n<li>Update through the query API with <code>User.findOneAndUpdate({ username: 'ada2' }, { $set: { password: 'newsecret' } }, { new: true })</code>; print the new hash, and print <code>lastHashedBy</code> to show which hook ran.</li>\n<li>Finally show validators are off by default on queries. Update <code>role</code> to the invalid value <code>root</code> with no options, print <code>role now:</code> the stored value to prove the garbage landed in the database, then repeat the same update with <code>{ runValidators: true }</code> in a <code>try/catch</code> and print the caught error name.</li>\n</ul>\n<p>The scaffold provides the <code>hash</code> helper and the sequence of calls.</p>",
+      "inputSpec": "No stdin. One user (ada / secret12) is created, renamed, then updated twice through findOneAndUpdate. The hash helper is sha256 truncated to 16 hex characters.",
+      "outputSpec": "Lines: \"post save: ada\"; \"stored hash matches: true\"; \"post save: ada2\"; \"password unchanged on rename: true\"; \"after query update matches: true\"; \"lastHashedBy: query-hook\"; \"role now: root\"; \"with runValidators: ValidationError\".",
+      "constraints": "Hash only when the password path is modified — an unguarded hook double-hashes on every save and locks users out. Do not call save() inside a query hook. Do not use arrow functions for hooks.",
+      "examplesJson": [
+        {
+          "input": "userSchema.pre('save', function (next) { if (!this.isModified('password')) return next(); ... })",
+          "output": "password unchanged on rename: true",
+          "explanation": "The isModified guard makes a second save that only touched username leave the already-hashed password alone."
+        },
+        {
+          "input": "userSchema.pre('findOneAndUpdate', function (next) { const update = this.getUpdate(); ... })",
+          "output": "lastHashedBy: query-hook",
+          "explanation": "In query middleware this is the Query, so you rewrite the update object rather than a document — the save hook never fires for this path."
+        },
+        {
+          "input": "await User.findOneAndUpdate(filter, { $set: { role: 'root' } }, { runValidators: true })",
+          "output": "with runValidators: ValidationError",
+          "explanation": "Query updates skip validators unless runValidators is passed; with it, the enum on role rejects the value that the previous call had happily written."
+        }
+      ],
+      "hintsJson": [
+        "Two hooks look similar but receive completely different things in this.",
+        "In a save hook you mutate this.password; in a findOneAndUpdate hook there is no document to mutate.",
+        "this.getUpdate() returns the update object, e.g. { $set: { password: 'newsecret' } } — hash update.$set.password in place.",
+        "userSchema.pre('save', function (next) { if (!this.isModified('password')) return next(); this.password = hash(this.password); this.lastHashedBy = 'save-hook'; next(); });"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\nconst crypto = require('crypto');\n\nconst uri = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/mg419_hooks';\n\nconst hash = (value) => crypto.createHash('sha256').update(value).digest('hex').slice(0, 16);\n\nconst userSchema = new mongoose.Schema({\n  username: { type: String, required: true },\n  password: { type: String, required: true, minlength: 8 },\n  role: { type: String, enum: ['user', 'admin'], default: 'user' },\n  lastHashedBy: String,\n});\n\n// TODO: pre('save') hashing guarded by isModified('password')\n// TODO: post('save') printing the username\n// TODO: pre('findOneAndUpdate') hashing the password inside this.getUpdate()\n\nconst User = mongoose.model('User', userSchema);\n\nasync function main() {\n  await mongoose.connect(uri);\n  await mongoose.connection.dropDatabase();\n\n  const user = await User.create({ username: 'ada', password: 'secret12' });\n  // TODO: print whether the stored value equals hash('secret12')\n\n  user.username = 'ada2';\n  await user.save();\n  // TODO: print whether the password is still the same hash\n\n  // TODO: findOneAndUpdate the password to 'newsecret' with { new: true }; print the hash check\n  //       and lastHashedBy\n\n  // TODO: findOneAndUpdate role to 'root' with no options and print the stored value,\n  //       then repeat with { runValidators: true } and print the caught error name\n\n  await mongoose.disconnect();\n}\n\nmain().catch((err) => {\n  console.error(err);\n  process.exit(1);\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\nconst crypto = require('crypto');\n\nconst uri = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/mg419_hooks';\n\nconst hash = (value) => crypto.createHash('sha256').update(value).digest('hex').slice(0, 16);\n\nconst userSchema = new mongoose.Schema({\n  username: { type: String, required: true },\n  password: { type: String, required: true, minlength: 8 },\n  role: { type: String, enum: ['user', 'admin'], default: 'user' },\n  lastHashedBy: String,\n});\n\nuserSchema.pre('save', function (next) {\n  if (!this.isModified('password')) return next();\n  this.password = hash(this.password);\n  this.lastHashedBy = 'save-hook';\n  next();\n});\n\nuserSchema.post('save', function (doc) {\n  console.log('post save:', doc.username);\n});\n\nuserSchema.pre('findOneAndUpdate', function (next) {\n  const update = this.getUpdate();\n  const set = update.$set || update;\n  if (set.password) {\n    set.password = hash(set.password);\n    set.lastHashedBy = 'query-hook';\n    this.setUpdate(update);\n  }\n  next();\n});\n\nconst User = mongoose.model('User', userSchema);\n\nasync function main() {\n  await mongoose.connect(uri);\n  await mongoose.connection.dropDatabase();\n\n  const user = await User.create({ username: 'ada', password: 'secret12' });\n  console.log('stored hash matches:', user.password === hash('secret12'));\n\n  user.username = 'ada2';\n  await user.save();\n  console.log('password unchanged on rename:', user.password === hash('secret12'));\n\n  const updated = await User.findOneAndUpdate(\n    { username: 'ada2' },\n    { $set: { password: 'newsecret' } },\n    { new: true }\n  );\n  console.log('after query update matches:', updated.password === hash('newsecret'));\n  console.log('lastHashedBy:', updated.lastHashedBy);\n\n  const loose = await User.findOneAndUpdate({ username: 'ada2' }, { $set: { role: 'root' } }, { new: true });\n  console.log('role now:', loose.role);\n\n  try {\n    await User.findOneAndUpdate({ username: 'ada2' }, { $set: { role: 'root' } }, { runValidators: true });\n  } catch (err) {\n    console.log('with runValidators:', err.name);\n  }\n\n  await mongoose.disconnect();\n}\n\nmain().catch((err) => {\n  console.error(err);\n  process.exit(1);\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The <code>pre('save')</code> hook is document middleware: <code>this</code> is the document about to be written, so hashing means assigning to <code>this.password</code>. The <code>isModified('password')</code> guard is not an optimisation, it is a correctness requirement — without it the second <code>save()</code> (which only changed <code>username</code>) would hash the <em>already hashed</em> value, and every affected user would be permanently unable to log in. Mongoose tracks modified paths per document, which is exactly the information the guard needs. The <code>post('save')</code> hook receives the saved document and runs after the write succeeds, making it the right place for cache invalidation or event publishing; it fires twice here, once per save.</p>\n<p>The <code>findOneAndUpdate</code> hook is query middleware and behaves differently in every respect. There is no document — <code>this</code> is the <code>Query</code>, and the payload lives in <code>this.getUpdate()</code>, typically shaped as <code>{ $set: { ... } }</code>, which is why the hook reads <code>update.$set</code> (falling back to the bare object for a replacement-style update) and rewrites the value in place. Crucially, <strong><code>save</code> hooks do not run for query updates</strong>: had you only written the save hook, a password changed through <code>findOneAndUpdate</code> would land in the database in plaintext. That single asymmetry is behind a large share of real-world Mongoose security bugs.</p>\n<p>The last two calls demonstrate the second asymmetry: <strong>validators are document-level and are skipped by query updates</strong> unless you pass <code>runValidators: true</code>, which is why <code>role: 'root'</code> — a value the <code>enum</code> forbids — is written to the database by the first call and throws <code>ValidationError</code> on the second. An unvalidated update can therefore leave a document that its own schema considers invalid. Even then only the paths present in the update are validated, and <code>this</code> inside a validator is the query rather than a document, so cross-field rules cannot see siblings. The defensive strategy is consistent: for models with real invariants, funnel writes through <code>save()</code>, and if you must use query updates, register the equivalent query hooks and always pass <code>runValidators: true</code>.</p>",
+      "diagramMermaid": "flowchart TD\n  A[doc.save called] --> B[pre save hook, this is the document]\n  B --> C[validators run automatically]\n  C --> D[write to MongoDB]\n  D --> E[post save hook receives the document]\n  F[Model.findOneAndUpdate called] --> G[pre findOneAndUpdate hook, this is the query]\n  G --> H[validators skipped unless runValidators true]\n  H --> I[write to MongoDB]\n  I --> J[save hooks never fire on this path]"
+    },
+    {
+      "title": "Unique Indexes, Duplicate Key 11000, autoIndex, and lean()",
+      "difficulty": "HARD",
+      "estimatedMinutes": 55,
+      "points": 30,
+      "concepts": [
+        "schema.index",
+        "unique index",
+        "MongoServerError 11000",
+        "syncIndexes",
+        "autoIndex in production",
+        "lean queries"
+      ],
+      "prerequisites": [
+        "Schema and model",
+        "validation",
+        "MongoDB indexes"
+      ],
+      "tags": [
+        "mongoose",
+        "indexes",
+        "errors",
+        "performance",
+        "mongodb"
+      ],
+      "problemHtml": "<p>Two production realities meet in this exercise. First, <code>unique: true</code> in a Mongoose schema is <strong>not a validator</strong> — it is a request to build a unique index, and the enforcement happens in the database, which reports failure as a driver error with code <code>11000</code> rather than a <code>ValidationError</code>. Second, hydrating documents is not free: <code>lean()</code> skips it and returns plain objects, which is the standard optimisation for read-only endpoints.</p>\n<p>Build an <code>Account</code> model and exercise both:</p>\n<ul>\n<li><code>accountSchema</code>: <code>email</code> (String, required), <code>tenant</code> (String, required), <code>status</code> (String, default <code>active</code>), <code>displayName</code> (String). Declare a unique index on <code>email</code> and a compound index on <code>{ tenant: 1, status: 1 }</code> with <code>schema.index(...)</code>, and set the schema option <code>autoIndex: true</code> explicitly.</li>\n<li>Wait for index builds with <code>await Account.init()</code> before writing anything, then print the index names from <code>Account.collection.indexes()</code>, sorted and comma-separated.</li>\n<li>Insert <code>ada@example.com</code> for tenant <code>t1</code>. Then attempt the same email again inside <code>try/catch</code> and print: the error <code>name</code>, its <code>code</code>, the offending field from <code>err.keyValue</code>, and a mapped user-facing message of the form <code>email already registered: ada@example.com</code>.</li>\n<li>Show that the duplicate is <em>not</em> a ValidationError by printing <code>is ValidationError: false</code>.</li>\n<li>Insert two more accounts, then compare read shapes: run one query normally and one with <code>.lean()</code>, printing whether each result is an instance of the model, whether it exposes <code>save</code>, and its constructor name.</li>\n<li>Finally print the result of <code>Account.syncIndexes()</code> as its length — the list of dropped indexes, which is empty here.</li>\n</ul>\n<p>The scaffold connects, drops the database and provides the seed literals.</p>",
+      "inputSpec": "No stdin. Three accounts on tenant t1: ada@example.com, grace@example.com, alan@example.com. A duplicate insert of ada@example.com is attempted deliberately.",
+      "outputSpec": "Lines: \"indexes: _id_, email_1, tenant_1_status_1\"; \"error name: MongoServerError\"; \"code: 11000\"; \"duplicate field: email\"; \"mapped: email already registered: ada@example.com\"; \"is ValidationError: false\"; \"hydrated is model: true\"; \"hydrated has save: true\"; \"lean is model: false\"; \"lean has save: false\"; \"lean constructor: Object\"; \"dropped indexes: 0\".",
+      "constraints": "Do not pre-check for an existing email with a findOne before inserting — that is a race condition; let the index reject the write and handle 11000. Await Model.init() before the first write so the index exists. Do not use unique as if it validated.",
+      "examplesJson": [
+        {
+          "input": "accountSchema.index({ email: 1 }, { unique: true }); await Account.init();",
+          "output": "indexes: _id_, email_1, tenant_1_status_1",
+          "explanation": "init() waits for autoIndex to finish building; every collection also has the implicit _id_ index."
+        },
+        {
+          "input": "await Account.create({ email: 'ada@example.com', tenant: 't1' }) // second time",
+          "output": "code: 11000\nduplicate field: email",
+          "explanation": "The server rejects the write; err.keyValue names the field and value that collided, which is what you map to a 409 response."
+        },
+        {
+          "input": "await Account.findOne({ email: 'ada@example.com' }).lean()",
+          "output": "lean has save: false\nlean constructor: Object",
+          "explanation": "lean() returns the raw BSON-decoded object with no getters, virtuals, or document methods."
+        }
+      ],
+      "hintsJson": [
+        "A rule the database enforces cannot be reported by the schema validator that runs in Node.",
+        "Duplicate key failures arrive as a MongoServerError with a numeric code, not as err.errors.",
+        "err.keyValue is an object like { email: \"ada@example.com\" }; Object.keys and Object.values give you the field and value.",
+        "try { await Account.create(doc); } catch (err) { if (err.code === 11000) { const [field, value] = Object.entries(err.keyValue)[0]; ... } }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\n\nconst uri = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/mg419_indexes';\n\nconst accountSchema = new mongoose.Schema(\n  {\n    email: { type: String, required: true },\n    tenant: { type: String, required: true },\n    status: { type: String, default: 'active' },\n    displayName: String,\n  },\n  { autoIndex: true }\n);\n\n// TODO: unique index on email, compound index on tenant + status\n\nconst Account = mongoose.model('Account', accountSchema);\n\nasync function main() {\n  await mongoose.connect(uri);\n  await mongoose.connection.dropDatabase();\n\n  // TODO: await Account.init() then print the sorted index names\n\n  await Account.create({ email: 'ada@example.com', tenant: 't1', displayName: 'Ada' });\n\n  try {\n    await Account.create({ email: 'ada@example.com', tenant: 't1', displayName: 'Ada again' });\n  } catch (err) {\n    // TODO: print name, code, duplicate field, the mapped message, and the ValidationError check\n  }\n\n  await Account.create([\n    { email: 'grace@example.com', tenant: 't1', displayName: 'Grace' },\n    { email: 'alan@example.com', tenant: 't1', displayName: 'Alan' },\n  ]);\n\n  // TODO: compare a hydrated read with a .lean() read\n  // TODO: print the number of indexes syncIndexes dropped\n\n  await mongoose.disconnect();\n}\n\nmain().catch((err) => {\n  console.error(err);\n  process.exit(1);\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\n\nconst uri = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/mg419_indexes';\n\nconst accountSchema = new mongoose.Schema(\n  {\n    email: { type: String, required: true },\n    tenant: { type: String, required: true },\n    status: { type: String, default: 'active' },\n    displayName: String,\n  },\n  { autoIndex: true }\n);\n\naccountSchema.index({ email: 1 }, { unique: true });\naccountSchema.index({ tenant: 1, status: 1 });\n\nconst Account = mongoose.model('Account', accountSchema);\n\nasync function main() {\n  await mongoose.connect(uri);\n  await mongoose.connection.dropDatabase();\n\n  await Account.init();\n  const indexes = await Account.collection.indexes();\n  console.log('indexes:', indexes.map((index) => index.name).sort().join(', '));\n\n  await Account.create({ email: 'ada@example.com', tenant: 't1', displayName: 'Ada' });\n\n  try {\n    await Account.create({ email: 'ada@example.com', tenant: 't1', displayName: 'Ada again' });\n  } catch (err) {\n    console.log('error name:', err.name);\n    console.log('code:', err.code);\n    const [field, value] = Object.entries(err.keyValue)[0];\n    console.log('duplicate field:', field);\n    console.log('mapped:', field + ' already registered: ' + value);\n    console.log('is ValidationError:', err instanceof mongoose.Error.ValidationError);\n  }\n\n  await Account.create([\n    { email: 'grace@example.com', tenant: 't1', displayName: 'Grace' },\n    { email: 'alan@example.com', tenant: 't1', displayName: 'Alan' },\n  ]);\n\n  const hydrated = await Account.findOne({ email: 'grace@example.com' });\n  const lean = await Account.findOne({ email: 'grace@example.com' }).lean();\n\n  console.log('hydrated is model:', hydrated instanceof Account);\n  console.log('hydrated has save:', typeof hydrated.save === 'function');\n  console.log('lean is model:', lean instanceof Account);\n  console.log('lean has save:', typeof lean.save === 'function');\n  console.log('lean constructor:', lean.constructor.name);\n\n  const dropped = await Account.syncIndexes();\n  console.log('dropped indexes:', dropped.length);\n\n  await mongoose.disconnect();\n}\n\nmain().catch((err) => {\n  console.error(err);\n  process.exit(1);\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The first half is about where a rule is enforced. <code>required</code>, <code>min</code> and custom validators run in your Node process and throw <code>mongoose.Error.ValidationError</code>. Uniqueness cannot work that way — two processes could both check and both insert — so it is delegated to a unique index, and a violation comes back from the server as a <code>MongoServerError</code> with <code>code: 11000</code>, carrying <code>keyPattern</code> and <code>keyValue</code>. That is why <code>err instanceof mongoose.Error.ValidationError</code> is <code>false</code>, and why every serious Express error handler needs a dedicated 11000 branch that maps <code>Object.entries(err.keyValue)[0]</code> to a 409 with a field-specific message. Pre-checking with <code>findOne</code> and then inserting is not a substitute: the gap between the two calls is a race, and under concurrency you get the 11000 anyway — with the pre-check merely hiding it most of the time.</p>\n<p><code>Account.init()</code> matters because index creation is asynchronous. With <code>autoIndex</code> on (the default), Mongoose fires off <code>createIndex</code> for every declared index when the model is first used, and <code>init()</code> returns the promise that settles when those builds finish. Insert before that resolves and the duplicate may slip through. In production the usual guidance is <code>autoIndex: false</code>: on a large collection an unexpected index build at boot can stall the server, and every replica running the same code races to build the same indexes. Instead you ship index changes deliberately — a migration step calling <code>syncIndexes()</code>, which creates what the schema declares and drops indexes the schema no longer has (returning their names; empty here, hence <code>0</code>).</p>\n<p>The second half is about hydration cost. A normal query decodes BSON and then builds a full Mongoose document per result: getters, virtuals, change tracking, validation machinery, <code>save()</code>. <code>lean()</code> skips all of it and hands you the plain object, which is measurably faster and much lighter in memory on large result sets — the reason it is the default choice for list endpoints that serialise straight to JSON. The trade-off is total: a lean result has no <code>save()</code>, no virtuals, no custom getters, no <code>toJSON</code> transforms, and its <code>_id</code> is a raw <code>ObjectId</code>. Reach for it when you are reading to render, and stay hydrated when you intend to modify.</p>"
+    },
+    {
+      "title": "Capstone: Transactional Order Service with Models in Separate Modules",
+      "difficulty": "HARD",
+      "estimatedMinutes": 80,
+      "points": 30,
+      "concepts": [
+        "startSession and withTransaction",
+        "session-scoped writes",
+        "conditional stock decrement",
+        "duplicate key handling",
+        "model modules for Express",
+        "populate with lean"
+      ],
+      "prerequisites": [
+        "refs and populate",
+        "unique indexes and 11000",
+        "schema hooks"
+      ],
+      "tags": [
+        "mongoose",
+        "transactions",
+        "express",
+        "error-handling",
+        "mongodb"
+      ],
+      "problemHtml": "<p>An order service is where every part of this module comes together: models live in their own module so routes stay thin, a placement must decrement stock and create the order <em>atomically</em>, a repeated order number must be rejected by the database, and the read-back must be cheap. Multi-document transactions require a replica set — a single-node replica set is the normal local setup and is what the connection string assumes.</p>\n<p>Write two files.</p>\n<p><code>models.js</code> exports <code>Product</code> and <code>Order</code>:</p>\n<ul>\n<li><code>Product</code>: <code>sku</code> (String, required, unique index), <code>name</code>, <code>price</code> (Number, required, <code>min: 0</code>), <code>stock</code> (Number, required, <code>min: 0</code>).</li>\n<li><code>Order</code>: <code>orderNumber</code> (String, required, unique index), <code>customer</code> (String, required), <code>lines</code> — an array of subdocuments <code>{ product: ObjectId ref Product, qty: Number min 1, unitPrice: Number }</code>, <code>total</code> (Number) and <code>status</code> (enum <code>placed</code>/<code>cancelled</code>, default <code>placed</code>), with <code>timestamps</code>. A <code>pre('validate')</code> hook computes <code>total</code> from the lines so no caller can get it wrong.</li>\n</ul>\n<p><code>solution.js</code> implements <code>placeOrder({ orderNumber, customer, items })</code> and a demo <code>main()</code>:</p>\n<ul>\n<li>Open a session, run the work inside <code>session.withTransaction</code>, and always <code>endSession()</code> in a <code>finally</code>.</li>\n<li>For each requested item: look the product up by <code>sku</code> with <code>.session(session)</code>; if missing, throw <code>unknown sku &lt;sku&gt;</code>. Decrement with a <strong>conditional</strong> <code>updateOne</code> filtered on <code>{ _id, stock: { $gte: qty } }</code> using <code>$inc</code>, and if <code>modifiedCount</code> is not 1 throw <code>insufficient stock for &lt;sku&gt;</code>.</li>\n<li>Create the order with <code>Order.create([doc], { session })</code> — the array form is required when passing a session.</li>\n<li>Return <code>{ ok: true }</code> on success. Catch errors: code <code>11000</code> becomes <code>{ ok: false, error: 'duplicate order number &lt;value&gt;' }</code>, anything else <code>{ ok: false, error: err.message }</code>.</li>\n<li><code>main()</code> seeds <code>SKU-A</code> (price 10, stock 5) and <code>SKU-B</code> (price 4, stock 2), awaits both models' <code>init()</code>, then: places <code>ORD-1001</code> for 2 x SKU-A and 1 x SKU-B and prints the stock afterwards; retries the same order number and prints the mapped error; attempts <code>ORD-1003</code> for 1 x SKU-A and 9 x SKU-B and prints the error <em>and</em> the stock again to prove the rollback; and finally reads <code>ORD-1001</code> back with <code>populate</code> of <code>lines.product</code> selecting <code>sku -_id</code>, using <code>lean()</code>, printing the order number, total and one line per item.</li>\n</ul>\n<p>Stock printing must use the helper the scaffold provides so the format is fixed.</p>",
+      "inputSpec": "No stdin. MONGO_URL must point at a replica set (a single-node replica set is fine) because transactions are used. Seed: SKU-A price 10 stock 5, SKU-B price 4 stock 2.",
+      "outputSpec": "Lines: \"stock: A=5 B=2\"; \"order1: ok\"; \"stock: A=3 B=1\"; \"duplicate: duplicate order number ORD-1001\"; \"oversell: insufficient stock for SKU-B\"; \"stock: A=3 B=1\"; \"read back: ORD-1001 total=24\"; \"line: SKU-A x2 @10\"; \"line: SKU-B x1 @4\"; \"lean has save: false\".",
+      "constraints": "The stock decrement must be conditional inside the update filter — never read-then-write, which is a lost-update race. Every read and write inside the transaction must carry the session. Do not roll back by hand; throwing inside withTransaction aborts. Keep model definitions out of solution.js.",
+      "examplesJson": [
+        {
+          "input": "await placeOrder({ orderNumber: 'ORD-1001', customer: 'ada', items: [{ sku: 'SKU-A', qty: 2 }, { sku: 'SKU-B', qty: 1 }] })",
+          "output": "order1: ok\nstock: A=3 B=1",
+          "explanation": "Both decrements and the order insert commit together; total is computed by the pre-validate hook as 2*10 + 1*4 = 24."
+        },
+        {
+          "input": "await placeOrder({ orderNumber: 'ORD-1001', customer: 'bob', items: [{ sku: 'SKU-A', qty: 1 }] })",
+          "output": "duplicate: duplicate order number ORD-1001",
+          "explanation": "The unique index on orderNumber raises 11000 inside the transaction, which aborts it, so the SKU-A decrement is rolled back too."
+        },
+        {
+          "input": "await placeOrder({ orderNumber: 'ORD-1003', customer: 'ada', items: [{ sku: 'SKU-A', qty: 1 }, { sku: 'SKU-B', qty: 9 }] })",
+          "output": "oversell: insufficient stock for SKU-B\nstock: A=3 B=1",
+          "explanation": "SKU-A was already decremented when SKU-B failed; because the throw aborts the transaction, the stock is unchanged afterwards — this is the whole point of the session."
+        }
+      ],
+      "hintsJson": [
+        "Two writes that must both happen or neither need one unit of work around them.",
+        "session.withTransaction(fn) commits when fn resolves and aborts when it throws — you never call abortTransaction yourself.",
+        "Reads use .session(session); writes take { session } in their options; Order.create needs the array form to accept it.",
+        "const res = await Product.updateOne({ _id: product._id, stock: { $gte: item.qty } }, { $inc: { stock: -item.qty } }, { session }); if (res.modifiedCount !== 1) throw new Error('insufficient stock for ' + item.sku);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "models.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\n\nconst productSchema = new mongoose.Schema({\n  sku: { type: String, required: true },\n  name: String,\n  price: { type: Number, required: true, min: 0 },\n  stock: { type: Number, required: true, min: 0 },\n});\n// TODO: unique index on sku\n\nconst lineSchema = new mongoose.Schema(\n  {\n    product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },\n    qty: { type: Number, required: true, min: 1 },\n    unitPrice: { type: Number, required: true },\n  },\n  { _id: false }\n);\n\nconst orderSchema = new mongoose.Schema(\n  {\n    orderNumber: { type: String, required: true },\n    customer: { type: String, required: true },\n    lines: [lineSchema],\n    total: { type: Number, required: true },\n    status: { type: String, enum: ['placed', 'cancelled'], default: 'placed' },\n  },\n  { timestamps: true }\n);\n// TODO: unique index on orderNumber\n// TODO: pre('validate') hook computing total from the lines\n\nmodule.exports = {\n  Product: mongoose.model('Product', productSchema),\n  Order: mongoose.model('Order', orderSchema),\n};\n"
+        },
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\nconst { Product, Order } = require('./models');\n\nconst uri = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/mg419_tx?replicaSet=rs0';\n\nasync function printStock(label) {\n  const a = await Product.findOne({ sku: 'SKU-A' }).lean();\n  const b = await Product.findOne({ sku: 'SKU-B' }).lean();\n  console.log(label + 'A=' + a.stock + ' B=' + b.stock);\n}\n\nasync function placeOrder({ orderNumber, customer, items }) {\n  // TODO: start a session, run withTransaction, end the session in finally\n  // TODO: per item — findOne by sku with the session, conditional updateOne with $inc,\n  //       throw on unknown sku or insufficient stock, collect the order lines\n  // TODO: Order.create([doc], { session })\n  // TODO: return { ok: true } or map 11000 / other errors to { ok: false, error }\n}\n\nasync function main() {\n  await mongoose.connect(uri);\n  await mongoose.connection.dropDatabase();\n  await Promise.all([Product.init(), Order.init()]);\n  await Product.create([\n    { sku: 'SKU-A', name: 'Widget', price: 10, stock: 5 },\n    { sku: 'SKU-B', name: 'Gadget', price: 4, stock: 2 },\n  ]);\n  await printStock('stock: ');\n\n  // TODO: place ORD-1001 for 2 x SKU-A and 1 x SKU-B, print the outcome and the stock\n  // TODO: retry ORD-1001 and print the mapped duplicate error\n  // TODO: attempt ORD-1003 with 9 x SKU-B, print the error and the unchanged stock\n  // TODO: read ORD-1001 back with populate of lines.product (select sku -_id) and lean\n\n  await mongoose.disconnect();\n}\n\nmain().catch((err) => {\n  console.error(err);\n  process.exit(1);\n});\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "models.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\n\nconst productSchema = new mongoose.Schema({\n  sku: { type: String, required: true },\n  name: String,\n  price: { type: Number, required: true, min: 0 },\n  stock: { type: Number, required: true, min: 0 },\n});\nproductSchema.index({ sku: 1 }, { unique: true });\n\nconst lineSchema = new mongoose.Schema(\n  {\n    product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },\n    qty: { type: Number, required: true, min: 1 },\n    unitPrice: { type: Number, required: true },\n  },\n  { _id: false }\n);\n\nconst orderSchema = new mongoose.Schema(\n  {\n    orderNumber: { type: String, required: true },\n    customer: { type: String, required: true },\n    lines: [lineSchema],\n    total: { type: Number, required: true },\n    status: { type: String, enum: ['placed', 'cancelled'], default: 'placed' },\n  },\n  { timestamps: true }\n);\norderSchema.index({ orderNumber: 1 }, { unique: true });\n\norderSchema.pre('validate', function (next) {\n  this.total = this.lines.reduce((sum, line) => sum + line.qty * line.unitPrice, 0);\n  next();\n});\n\nmodule.exports = {\n  Product: mongoose.model('Product', productSchema),\n  Order: mongoose.model('Order', orderSchema),\n};\n"
+        },
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "const mongoose = require('mongoose');\nconst { Product, Order } = require('./models');\n\nconst uri = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/mg419_tx?replicaSet=rs0';\n\nasync function printStock(label) {\n  const a = await Product.findOne({ sku: 'SKU-A' }).lean();\n  const b = await Product.findOne({ sku: 'SKU-B' }).lean();\n  console.log(label + 'A=' + a.stock + ' B=' + b.stock);\n}\n\nasync function placeOrder({ orderNumber, customer, items }) {\n  const session = await mongoose.startSession();\n  try {\n    await session.withTransaction(async () => {\n      const lines = [];\n      for (const item of items) {\n        const product = await Product.findOne({ sku: item.sku }).session(session);\n        if (!product) throw new Error('unknown sku ' + item.sku);\n\n        const res = await Product.updateOne(\n          { _id: product._id, stock: { $gte: item.qty } },\n          { $inc: { stock: -item.qty } },\n          { session }\n        );\n        if (res.modifiedCount !== 1) throw new Error('insufficient stock for ' + item.sku);\n\n        lines.push({ product: product._id, qty: item.qty, unitPrice: product.price });\n      }\n      await Order.create([{ orderNumber, customer, lines }], { session });\n    });\n    return { ok: true };\n  } catch (err) {\n    if (err.code === 11000) {\n      return { ok: false, error: 'duplicate order number ' + orderNumber };\n    }\n    return { ok: false, error: err.message };\n  } finally {\n    await session.endSession();\n  }\n}\n\nasync function main() {\n  await mongoose.connect(uri);\n  await mongoose.connection.dropDatabase();\n  await Promise.all([Product.init(), Order.init()]);\n  await Product.create([\n    { sku: 'SKU-A', name: 'Widget', price: 10, stock: 5 },\n    { sku: 'SKU-B', name: 'Gadget', price: 4, stock: 2 },\n  ]);\n  await printStock('stock: ');\n\n  const first = await placeOrder({\n    orderNumber: 'ORD-1001',\n    customer: 'ada',\n    items: [{ sku: 'SKU-A', qty: 2 }, { sku: 'SKU-B', qty: 1 }],\n  });\n  console.log('order1:', first.ok ? 'ok' : first.error);\n  await printStock('stock: ');\n\n  const dup = await placeOrder({\n    orderNumber: 'ORD-1001',\n    customer: 'bob',\n    items: [{ sku: 'SKU-A', qty: 1 }],\n  });\n  console.log('duplicate:', dup.error);\n\n  const oversell = await placeOrder({\n    orderNumber: 'ORD-1003',\n    customer: 'ada',\n    items: [{ sku: 'SKU-A', qty: 1 }, { sku: 'SKU-B', qty: 9 }],\n  });\n  console.log('oversell:', oversell.error);\n  await printStock('stock: ');\n\n  const order = await Order.findOne({ orderNumber: 'ORD-1001' })\n    .populate({ path: 'lines.product', select: 'sku -_id' })\n    .lean();\n  console.log('read back:', order.orderNumber, 'total=' + order.total);\n  for (const line of order.lines) {\n    console.log('line:', line.product.sku + ' x' + line.qty + ' @' + line.unitPrice);\n  }\n  console.log('lean has save:', typeof order.save === 'function');\n\n  await mongoose.disconnect();\n}\n\nmain().catch((err) => {\n  console.error(err);\n  process.exit(1);\n});\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The transaction is the spine of the design. <code>session.withTransaction(fn)</code> starts a transaction, runs <code>fn</code>, commits if it resolves and aborts if it throws — and it retries the whole callback on transient errors such as a write conflict, which is why you must never do non-idempotent work outside the database inside that callback. Because the callback throws on the oversell, both the SKU-A decrement and any partial state vanish, and the stock printed afterwards is still <code>A=3 B=1</code>. Every operation must be told about the session (<code>.session(session)</code> for the query builder, <code>{ session }</code> in write options), and this is the single most common bug in transactional Mongoose code: an operation that forgets the session runs <em>outside</em> the transaction, is not rolled back, and silently breaks atomicity. <code>Model.create</code> only accepts options when given an array, hence <code>create([doc], { session })</code>.</p>\n<p>The stock decrement deserves its own attention. Reading <code>product.stock</code>, comparing it in Node and then writing the new value is a lost-update race: two concurrent orders both read 5 and both write 3. Putting the condition in the <em>filter</em> — <code>{ _id, stock: { $gte: qty } }</code> with <code>$inc</code> — makes the check and the write one atomic server-side operation, so a failed condition simply matches nothing and <code>modifiedCount</code> is 0. That pattern is correct even without a transaction, and it is what lets the code detect insufficient stock without a separate read.</p>\n<p>The error mapping shows the two failure classes staying distinct. The duplicate order number is enforced by the unique index (built via <code>Order.init()</code> before any write) and arrives as code <code>11000</code>, mapped to a domain message; business-rule failures arrive as ordinary <code>Error</code>s carrying their message. An Express handler on top of this needs no knowledge of Mongo internals — it maps <code>ok: false</code> to a 409 or 422. Splitting <code>models.js</code> from the service is what makes that possible, and it also avoids <code>OverwriteModelError</code> by ensuring each model is compiled exactly once no matter how many routers import it.</p>\n<p>Finally, the read-back combines <code>populate</code> on the nested path <code>lines.product</code> — populate follows dotted paths into subdocument arrays, still one extra query for the whole array — with <code>lean()</code>, since the response is serialised and never modified. Note the interaction the output makes explicit: a lean result has no <code>save()</code>, so a lean read is a deliberate one-way door. And remember the operational precondition: transactions need a replica set, so a standalone <code>mongod</code> will reject <code>startTransaction</code> outright, which is why local development mirrors production with a single-node replica set.</p>",
+      "diagramMermaid": "sequenceDiagram\n  participant Svc as placeOrder\n  participant S as Session\n  participant DB as MongoDB\n  Svc->>S: startSession then withTransaction\n  Svc->>DB: findOne product by sku with session\n  Svc->>DB: updateOne with filter stock gte qty and inc\n  DB-->>Svc: modifiedCount 1 means reserved\n  Svc->>DB: create order with session\n  Note over Svc,DB: any throw aborts and rolls back every write\n  Svc->>S: commit then endSession"
+    }
+  ]
+}

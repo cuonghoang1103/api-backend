@@ -1,0 +1,203 @@
+ECHO "========== EX 1: Patch Strings in Place with APPEND, GETRANGE, and SETRANGE =========="
+FLUSHALL
+SET page:home "Hello"
+APPEND page:home " World"
+GET page:home
+STRLEN page:home
+APPEND page:visits "start"
+GET page:visits
+GETRANGE page:home 0 4
+GETRANGE page:home -5 -1
+GETRANGE page:home 0 -1
+GETRANGE page:home 20 30
+SETRANGE page:home 6 "Redis"
+GET page:home
+SET code:version "1.0.0"
+SETRANGE code:version 2 "9"
+GET code:version
+SETRANGE pad:key 5 "end"
+GET pad:key
+STRLEN pad:key
+ECHO "========== EX 2: Track Daily Active Users in a Bitmap with SETBIT, BITCOUNT, and BITPOS =========="
+FLUSHALL
+SETBIT dau:2026-07-01 5 1
+SETBIT dau:2026-07-01 17 1
+SETBIT dau:2026-07-01 42 1
+GETBIT dau:2026-07-01 17
+GETBIT dau:2026-07-01 18
+GETBIT dau:2026-07-01 500
+BITCOUNT dau:2026-07-01
+STRLEN dau:2026-07-01
+TYPE dau:2026-07-01
+SETBIT dau:2026-07-01 17 0
+GETBIT dau:2026-07-01 17
+BITCOUNT dau:2026-07-01
+BITPOS dau:2026-07-01 1
+BITPOS dau:2026-07-01 0
+BITCOUNT dau:2026-07-01 0 0
+BITCOUNT dau:2026-07-01 0 7 BIT
+ECHO "========== EX 3: Compute Day-over-Day Retention with BITOP AND, OR, XOR, and NOT =========="
+FLUSHALL
+SETBIT dau:mon 1 1
+SETBIT dau:mon 4 1
+SETBIT dau:mon 7 1
+SETBIT dau:tue 4 1
+SETBIT dau:tue 7 1
+SETBIT dau:tue 9 1
+BITCOUNT dau:mon
+BITCOUNT dau:tue
+STRLEN dau:mon
+STRLEN dau:tue
+BITOP AND dau:retained dau:mon dau:tue
+BITCOUNT dau:retained
+GETBIT dau:retained 4
+GETBIT dau:retained 1
+BITOP OR dau:reach dau:mon dau:tue
+BITCOUNT dau:reach
+BITOP XOR dau:changed dau:mon dau:tue
+BITCOUNT dau:changed
+BITOP NOT dau:notmon dau:mon
+BITCOUNT dau:notmon
+ECHO "========== EX 4: Estimate Unique Visitors with HyperLogLog and Measure Its Error =========="
+FLUSHALL
+PFADD dau:hll:mon "u1" "u2" "u3" "u4"
+PFCOUNT dau:hll:mon
+PFADD dau:hll:mon "u1" "u2"
+PFCOUNT dau:hll:mon
+PFADD dau:hll:tue "u3" "u4" "u5"
+PFCOUNT dau:hll:tue
+PFCOUNT dau:hll:mon dau:hll:tue
+PFMERGE dau:hll:week dau:hll:mon dau:hll:tue
+PFCOUNT dau:hll:week
+TYPE dau:hll:mon
+STRLEN dau:hll:mon
+PFADD dau:hll:big s1 s2 s3 s4 s5 s6 s7 s8 s9 s10 s11 s12 s13 s14 s15 s16 s17 s18 s19 s20 s21 s22 s23 s24 s25 s26 s27 s28 s29 s30 s31 s32 s33 s34 s35 s36 s37 s38 s39 s40 s41 s42 s43 s44 s45 s46 s47 s48 s49 s50 s51 s52 s53 s54 s55 s56 s57 s58 s59 s60 s61 s62 s63 s64 s65 s66 s67 s68 s69 s70 s71 s72 s73 s74 s75 s76 s77 s78 s79 s80 s81 s82 s83 s84 s85 s86 s87 s88 s89 s90 s91 s92 s93 s94 s95 s96 s97 s98 s99 s100 s101 s102 s103 s104 s105 s106 s107 s108 s109 s110 s111 s112 s113 s114 s115 s116 s117 s118 s119 s120 s121 s122 s123 s124 s125 s126 s127 s128 s129 s130 s131 s132 s133 s134 s135 s136 s137 s138 s139 s140 s141 s142 s143 s144 s145 s146 s147 s148 s149 s150 s151 s152 s153 s154 s155 s156 s157 s158 s159 s160 s161 s162 s163 s164 s165 s166 s167 s168 s169 s170 s171 s172 s173 s174 s175 s176 s177 s178 s179 s180 s181 s182 s183 s184 s185 s186 s187 s188 s189 s190 s191 s192 s193 s194 s195 s196 s197 s198 s199 s200
+PFCOUNT dau:hll:big
+STRLEN dau:hll:big
+ECHO "========== EX 5: Build a Nearby-Places Lookup with GEOADD, GEOSEARCH, and GEODIST =========="
+FLUSHALL
+GEOADD places:hanoi 105.8542 21.0285 "hoan-kiem-lake" 105.8350 21.0378 "west-lake" 105.8412 21.0245 "temple-of-literature" 106.6822 20.9500 "ha-long-bay"
+ZCARD places:hanoi
+TYPE places:hanoi
+GEODIST places:hanoi "hoan-kiem-lake" "west-lake"
+GEODIST places:hanoi "hoan-kiem-lake" "west-lake" km
+GEODIST places:hanoi "hoan-kiem-lake" "nowhere"
+GEOPOS places:hanoi "hoan-kiem-lake"
+GEOPOS places:hanoi "nowhere"
+GEOSEARCH places:hanoi FROMMEMBER "hoan-kiem-lake" BYRADIUS 5 km ASC
+GEOSEARCH places:hanoi FROMLONLAT 105.8542 21.0285 BYRADIUS 5 km WITHDIST ASC
+GEOSEARCH places:hanoi FROMLONLAT 105.8542 21.0285 BYRADIUS 5 km ASC COUNT 2
+GEOSEARCH places:hanoi FROMMEMBER "hoan-kiem-lake" BYBOX 200 200 km ASC
+ECHO "========== EX 6: Append and Read an Order Event Log with XADD, XRANGE, and XREAD =========="
+FLUSHALL
+XADD orders:stream 1700000000000-1 event "created" order "1001" amount "250"
+XADD orders:stream 1700000000000-2 event "paid" order "1001" amount "250"
+XADD orders:stream 1700000005000-1 event "created" order "1002" amount "80"
+XLEN orders:stream
+TYPE orders:stream
+XRANGE orders:stream - +
+XRANGE orders:stream - + COUNT 1
+XRANGE orders:stream 1700000000000-2 +
+XREVRANGE orders:stream + - COUNT 1
+XREAD COUNT 5 STREAMS orders:stream 1700000000000-2
+XREAD COUNT 5 STREAMS orders:stream 1700000005000-1
+ECHO "========== EX 7: Group Commands with MULTI and EXEC — and Watch a Runtime Error Not Roll Back =========="
+FLUSHALL
+SET account:balance 100
+SET account:owner "ann"
+MULTI
+INCRBY account:balance 50
+GET account:balance
+EXEC
+GET account:balance
+MULTI
+INCRBY account:balance 10
+DISCARD
+GET account:balance
+MULTI
+SET account:log "started"
+INCR account:owner
+SET account:log "finished"
+EXEC
+GET account:log
+GET account:owner
+MULTI
+SET account:tmp 1
+NOSUCHCOMMAND arg
+EXEC
+EXISTS account:tmp
+ECHO "========== EX 8: Watch Encodings Change with OBJECT ENCODING as Collections Grow =========="
+FLUSHALL
+SET n:counter 42
+OBJECT ENCODING n:counter
+SET s:short "hello"
+OBJECT ENCODING s:short
+APPEND s:short " world"
+OBJECT ENCODING s:short
+HSET profile:1 name "Ann" city "Hanoi"
+OBJECT ENCODING profile:1
+HSET profile:1 bio "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+OBJECT ENCODING profile:1
+HDEL profile:1 bio
+HLEN profile:1
+OBJECT ENCODING profile:1
+SADD ids:num 1 2 3
+OBJECT ENCODING ids:num
+SADD ids:num "four"
+OBJECT ENCODING ids:num
+ZADD board 1 "alice" 2 "bob"
+OBJECT ENCODING board
+RPUSH queue:jobs "a" "b"
+OBJECT ENCODING queue:jobs
+CONFIG GET hash-max-listpack-entries
+CONFIG GET hash-max-listpack-value
+ECHO "========== EX 9: Implement Optimistic Locking with WATCH and Compare It to Pipelining =========="
+FLUSHALL
+SET stock:sku1 5
+WATCH stock:sku1
+GET stock:sku1
+MULTI
+DECRBY stock:sku1 2
+EXEC
+GET stock:sku1
+WATCH stock:sku1
+SET stock:sku1 99
+MULTI
+DECRBY stock:sku1 2
+EXEC
+GET stock:sku1
+WATCH stock:sku1
+MULTI
+DECRBY stock:sku1 9
+DISCARD
+GET stock:sku1
+WATCH stock:sku1
+MULTI
+DECRBY stock:sku1 9
+EXEC
+GET stock:sku1
+UNWATCH
+ECHO "========== EX 10: Design a Store Analytics Keyspace by Matching Each Requirement to a Type =========="
+FLUSHALL
+SETBIT dau:2026-07-20 3 1
+SETBIT dau:2026-07-20 8 1
+SETBIT dau:2026-07-20 15 1
+BITCOUNT dau:2026-07-20
+PFADD visitors:2026-07-20 "sess-a" "sess-b" "sess-c" "sess-a"
+PFCOUNT visitors:2026-07-20
+GEOADD stores 105.8542 21.0285 "store-central" 105.8350 21.0378 "store-west" 106.6822 20.9500 "store-coast"
+GEOSEARCH stores FROMLONLAT 105.8500 21.0300 BYRADIUS 3 km WITHDIST ASC
+GEODIST stores "store-central" "store-coast" km
+XADD events:2026-07-20 1700000000000-1 kind "checkout" store "store-central" total "42"
+XADD events:2026-07-20 1700000000000-2 kind "checkout" store "store-west" total "17"
+XLEN events:2026-07-20
+XRANGE events:2026-07-20 - + COUNT 1
+MULTI
+INCRBY revenue:2026-07-20 59
+HSET report:2026-07-20 dau 3 stores 3 events 2
+EXEC
+GET revenue:2026-07-20
+HGETALL report:2026-07-20
+OBJECT ENCODING report:2026-07-20
+OBJECT ENCODING dau:2026-07-20
+TYPE events:2026-07-20

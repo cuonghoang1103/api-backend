@@ -1,0 +1,688 @@
+{
+  "trackSlug": "mongodb",
+  "moduleSlug": "data-modeling-and-schema-design",
+  "exercises": [
+    {
+      "title": "Embed a One-to-Few Relationship: Customer Addresses",
+      "difficulty": "EASY",
+      "estimatedMinutes": 20,
+      "points": 10,
+      "concepts": [
+        "embedding",
+        "one-to-few cardinality",
+        "dot notation on embedded fields",
+        "single-document atomicity",
+        "$push on an embedded array"
+      ],
+      "prerequisites": [
+        "insertOne",
+        "updateOne with $set",
+        "find with a projection"
+      ],
+      "tags": [
+        "modeling",
+        "embedding",
+        "one-to-few",
+        "schema",
+        "mongodb"
+      ],
+      "problemHtml": "<p>The first decision in every MongoDB schema is <strong>embed or reference</strong>, and the cheapest case to get right is <em>one-to-few</em>: a parent owns a small, bounded number of children that are only ever read together with the parent. A customer's postal addresses are the textbook example — a handful at most, never queried on their own, and always displayed next to the customer. Embedding them as an array of sub-documents means one read serves the whole screen, and any change to the customer plus their addresses is a single-document write, which MongoDB guarantees is atomic without a transaction.</p>\n<p>Model this in the <code>customers</code> collection and prove the model works:</p>\n<ul>\n<li>Insert customer <code>_id: 1</code>, <code>name: \"Mai Tran\"</code>, with an <code>addresses</code> array holding two sub-documents: <code>{ label: \"home\", city: \"Hanoi\", zip: \"10000\" }</code> and <code>{ label: \"work\", city: \"Da Nang\", zip: \"55000\" }</code>.</li>\n<li>Read the whole customer back with <code>findOne</code> — one round trip returns the customer <em>and</em> every address.</li>\n<li>Query <em>into</em> the array with dot notation: find customers having an address in <code>\"Da Nang\"</code> using the path <code>\"addresses.city\"</code>, projecting only <code>name</code>.</li>\n<li>Append a third address <code>{ label: \"billing\", city: \"Hue\", zip: \"53000\" }</code> with <code>$push</code> — no read-modify-write in application code.</li>\n<li>Project only the labels of the addresses with the path <code>\"addresses.label\"</code>, suppressing <code>_id</code>.</li>\n<li>Count how many customers now have an address labelled <code>\"billing\"</code>.</li>\n</ul>\n<p>Note that the dot-notation filter matches the document if <strong>any</strong> element of the array satisfies it. The scaffold gives you the collection name and the shape to fill in.</p>",
+      "inputSpec": "An empty customers collection. You issue mongosh statements (identical in shape to the Node driver collection methods).",
+      "outputSpec": "findOne returns the customer with both addresses nested inside it; the dot-notation find returns [ { name: 'Mai Tran' } ]; after $push the label projection returns { addresses: [ { label: 'home' }, { label: 'work' }, { label: 'billing' } ] }; countDocuments returns 1.",
+      "constraints": "Addresses must live inside the customer document — do not create a separate addresses collection. Use $push to append, never a read-modify-write. Query the array with dot notation, not by pulling the array into the client.",
+      "examplesJson": [
+        {
+          "input": "db.customers.find({ \"addresses.city\": \"Da Nang\" }, { name: 1, _id: 0 }).toArray()",
+          "output": "[ { name: 'Mai Tran' } ]",
+          "explanation": "Dot notation reaches into the array: the document matches because at least one element has city \"Da Nang\"."
+        },
+        {
+          "input": "db.customers.updateOne({ _id: 1 }, { $push: { addresses: { label: \"billing\", city: \"Hue\", zip: \"53000\" } } })",
+          "output": "{ acknowledged: true, insertedId: null, matchedCount: 1, modifiedCount: 1, upsertedCount: 0 }",
+          "explanation": "$push appends the sub-document server-side; the customer and its addresses change in one atomic single-document write."
+        },
+        {
+          "input": "db.customers.findOne({ _id: 1 }, { _id: 0, \"addresses.label\": 1 })",
+          "output": "{ addresses: [ { label: 'home' }, { label: 'work' }, { label: 'billing' } ] }",
+          "explanation": "A projection on an embedded path keeps the array structure but returns only the requested field from each element."
+        }
+      ],
+      "hintsJson": [
+        "A few children that are always read with the parent belong inside the parent document.",
+        "Give the customer an addresses field whose value is an array of objects.",
+        "Reach into the array from a filter or projection with the dotted path \"addresses.city\" / \"addresses.label\".",
+        "db.customers.updateOne({ _id: 1 }, { $push: { addresses: { label: \"billing\", city: \"Hue\", zip: \"53000\" } } }) appends without reading first."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// TODO: insert customer 1 with an embedded addresses array (home Hanoi, work Da Nang)\n// TODO: findOne the customer — one read returns customer + addresses\n// TODO: find customers with an address in Da Nang using dot notation, project name only\n// TODO: $push a third address (billing, Hue, 53000)\n// TODO: project only addresses.label, no _id\n// TODO: count customers having an address labelled \"billing\""
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "db.customers.insertOne({\n  _id: 1,\n  name: \"Mai Tran\",\n  addresses: [\n    { label: \"home\", city: \"Hanoi\", zip: \"10000\" },\n    { label: \"work\", city: \"Da Nang\", zip: \"55000\" }\n  ]\n})\ndb.customers.findOne({ _id: 1 })\ndb.customers.find({ \"addresses.city\": \"Da Nang\" }, { name: 1, _id: 0 }).toArray()\ndb.customers.updateOne({ _id: 1 }, { $push: { addresses: { label: \"billing\", city: \"Hue\", zip: \"53000\" } } })\ndb.customers.findOne({ _id: 1 }, { _id: 0, \"addresses.label\": 1 })\ndb.customers.countDocuments({ \"addresses.label\": \"billing\" })"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One-to-few is the case where embedding is almost always right, and the reasoning is mechanical rather than aesthetic. Ask three questions: <em>how many children can there be</em> (a handful — bounded), <em>are they ever queried independently of the parent</em> (no — nobody lists addresses without a customer), and <em>do parent and child change together</em> (yes). Three yeses mean embed. The payoff is that <code>findOne({ _id: 1 })</code> returns the entire customer screen in one round trip with no join, and <code>$push</code> adds an address in a single-document write, which MongoDB applies atomically — no transaction, no partial state where the customer exists but the address does not.</p>\n<p>The mechanism that makes an embedded array queryable is <strong>dot notation</strong>. The filter <code>{ \"addresses.city\": \"Da Nang\" }</code> matches a document when <em>any</em> element of the array satisfies the condition, so you never have to fetch the array and scan it client-side. The same path works in a projection: <code>{ \"addresses.label\": 1 }</code> returns the array with only <code>label</code> kept in each element. Two traps follow. First, a filter with two separate dotted conditions such as <code>{ \"addresses.city\": \"Hue\", \"addresses.label\": \"work\" }</code> matches when <em>different</em> elements satisfy each condition — use <code>$elemMatch</code> when both must hold for the <em>same</em> element. Second, embedding stops being right the moment the array is unbounded; addresses are safe because a customer has three of them, not three million. That failure mode, and the bucket pattern that fixes it, is the subject of a later exercise in this module.</p>"
+    },
+    {
+      "title": "Reference a One-to-Many Relationship: Authors and Books",
+      "difficulty": "EASY",
+      "estimatedMinutes": 25,
+      "points": 10,
+      "concepts": [
+        "referencing",
+        "one-to-many cardinality",
+        "foreign key field",
+        "child-side reference",
+        "application-side join"
+      ],
+      "prerequisites": [
+        "insertMany",
+        "find with a filter",
+        "countDocuments"
+      ],
+      "tags": [
+        "modeling",
+        "referencing",
+        "one-to-many",
+        "schema",
+        "mongodb"
+      ],
+      "problemHtml": "<p>Embedding fails as soon as the \"many\" side is large, independently useful, or independently written. An author can have hundreds of books; books are searched, listed and updated on their own; and adding a book should not rewrite the author document. That is <em>one-to-many</em>, and the correct model is a <strong>reference</strong> — and specifically a reference stored on the <em>child</em>, because putting an ever-growing <code>bookIds</code> array on the author would recreate the unbounded-array problem you were trying to avoid.</p>\n<p>Model an author/book catalogue and query it from both directions:</p>\n<ul>\n<li>Insert two authors into <code>authors</code>: <code>{ _id: 1, name: \"Ursula Le Guin\" }</code> and <code>{ _id: 2, name: \"Ted Chiang\" }</code>.</li>\n<li>Insert three books into <code>books</code>, each carrying an <code>authorId</code> that points at an author: <code>_id 11 \"A Wizard of Earthsea\"</code> (author 1, 1968), <code>_id 12 \"The Dispossessed\"</code> (author 1, 1974), <code>_id 13 \"Exhalation\"</code> (author 2, 2019).</li>\n<li>List the titles of author 1, sorted by title ascending, projecting <code>title</code> only.</li>\n<li>Perform the two-step application-side join for \"Ted Chiang\": <code>findOne</code> the author by name, then <code>find</code> the books whose <code>authorId</code> equals that author's <code>_id</code>.</li>\n<li>Count author 1's books, insert a fourth book for author 1 (<code>_id 14 \"The Left Hand of Darkness\"</code>, 1969), and count again to show that adding a book does not touch the author document.</li>\n</ul>\n<p>Nothing about the author document changes across the whole exercise — that is the property you are demonstrating. The scaffold provides the two collection names.</p>",
+      "inputSpec": "Empty authors and books collections. Author documents hold only _id and name; each book carries an authorId referring to an author _id.",
+      "outputSpec": "Author 1's titles sorted return [ { title: 'A Wizard of Earthsea' }, { title: 'The Dispossessed' } ]; the two-step join for Ted Chiang returns [ { title: 'Exhalation' } ]; countDocuments({ authorId: 1 }) returns 2, then 3 after the fourth book is inserted.",
+      "constraints": "Store the reference on the book (authorId), not an array of book ids on the author. Resolve the relationship with two queries — do not embed book documents inside the author. Sort explicitly so the output order is stable.",
+      "examplesJson": [
+        {
+          "input": "db.books.find({ authorId: 1 }, { title: 1, _id: 0 }).sort({ title: 1 }).toArray()",
+          "output": "[ { title: 'A Wizard of Earthsea' }, { title: 'The Dispossessed' } ]",
+          "explanation": "The child-side reference makes \"all books of an author\" a plain equality filter on authorId."
+        },
+        {
+          "input": "const author = db.authors.findOne({ name: \"Ted Chiang\" }); db.books.find({ authorId: author._id }, { title: 1, _id: 0 }).toArray()",
+          "output": "[ { title: 'Exhalation' } ]",
+          "explanation": "The application-side join is two round trips: resolve the author to an _id, then filter the children by that _id."
+        },
+        {
+          "input": "db.books.countDocuments({ authorId: 1 })  // after inserting book 14",
+          "output": "3",
+          "explanation": "A new book is a single insert into books; the author document is never rewritten, which is exactly why the reference lives on the child."
+        }
+      ],
+      "hintsJson": [
+        "The \"many\" side is large and independently queried, so the two entities need to stay in separate collections.",
+        "Put a scalar authorId field on each book that holds the _id of its author.",
+        "Then \"books of author X\" is db.books.find({ authorId: X }) — no array, no join syntax.",
+        "For a lookup by author name, first findOne the author to get its _id, then use that _id in the books filter."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// TODO: insert the two authors (_id 1 Ursula Le Guin, _id 2 Ted Chiang)\n// TODO: insert the three books, each with an authorId reference\n// TODO: list author 1's titles sorted by title ascending, title only\n// TODO: two-step join — findOne the author \"Ted Chiang\", then find their books\n// TODO: count author 1's books, insert book 14 for author 1, count again"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "db.authors.insertMany([{ _id: 1, name: \"Ursula Le Guin\" }, { _id: 2, name: \"Ted Chiang\" }])\ndb.books.insertMany([\n  { _id: 11, title: \"A Wizard of Earthsea\", authorId: 1, year: 1968 },\n  { _id: 12, title: \"The Dispossessed\", authorId: 1, year: 1974 },\n  { _id: 13, title: \"Exhalation\", authorId: 2, year: 2019 }\n])\ndb.books.find({ authorId: 1 }, { title: 1, _id: 0 }).sort({ title: 1 }).toArray()\nconst author = db.authors.findOne({ name: \"Ted Chiang\" })\ndb.books.find({ authorId: author._id }, { title: 1, _id: 0 }).toArray()\ndb.books.countDocuments({ authorId: 1 })\ndb.books.insertOne({ _id: 14, title: \"The Left Hand of Darkness\", authorId: 1, year: 1969 })\ndb.books.countDocuments({ authorId: 1 })\ndb.authors.findOne({ _id: 1 })"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The cardinality decides the model. One-to-<em>few</em> embeds; one-to-<em>many</em> references; and the side the reference lives on matters as much as the decision to reference at all. Storing <code>authorId</code> on each book means \"all books by author 1\" is the equality filter <code>{ authorId: 1 }</code>, which an index on <code>authorId</code> answers efficiently, and adding a book is a single insert that never rewrites the author. The alternative — an array of <code>bookIds</code> on the author — makes every new book an update to a document that grows without bound, reintroducing exactly the problem referencing was meant to solve. The rule of thumb: for one-to-many, put the reference on the many side.</p>\n<p>The cost you accept is that MongoDB does not join for you here: resolving \"Ted Chiang's books\" takes two round trips, one to turn the name into an <code>_id</code> and one to filter the children. That is normal and usually cheap, because the second query is indexed and the first is a point lookup. Server-side alternatives exist — <code>$lookup</code> in the aggregation pipeline, or a populate helper in an ODM — but both still perform the same work, and neither changes the schema decision. The trap this exercise inoculates against is treating MongoDB like a relational database and normalising everything, or the opposite mistake of embedding a growing child collection because \"documents are supposed to be denormalised\". Both cardinality and access pattern must point the same way before you embed; here they point firmly at a reference.</p>",
+      "diagramMermaid": "erDiagram\n  AUTHORS ||--o{ BOOKS : writes\n  AUTHORS {\n    int _id\n    string name\n  }\n  BOOKS {\n    int _id\n    string title\n    int authorId\n    int year\n  }"
+    },
+    {
+      "title": "Model Many-to-Many Enrolments with an Array of References",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 30,
+      "points": 15,
+      "concepts": [
+        "many-to-many cardinality",
+        "array of references",
+        "two-way traversal",
+        "$in",
+        "$all",
+        "$addToSet"
+      ],
+      "prerequisites": [
+        "referencing",
+        "array query operators",
+        "find with a projection"
+      ],
+      "tags": [
+        "modeling",
+        "many-to-many",
+        "references",
+        "arrays",
+        "mongodb"
+      ],
+      "problemHtml": "<p>Many-to-many has no relational join table in MongoDB. Instead you store an <strong>array of references on one side</strong> and traverse it in both directions. Students and courses are the classic case: a student takes several courses, a course has many students, and neither side is bounded by the other. The array goes on the side whose list stays small and is read most often — a student's timetable is a dozen entries and appears on every profile page, whereas a course roster can be thousands of names and is read rarely.</p>\n<p>Model the enrolment graph and traverse it both ways:</p>\n<ul>\n<li>Insert three courses into <code>courses</code> with string ids: <code>cs101 \"Intro to Programming\" (4 credits)</code>, <code>ma102 \"Linear Algebra\" (3)</code>, <code>ph103 \"Mechanics\" (3)</code>.</li>\n<li>Insert three students into <code>students</code>, each with a <code>courseIds</code> array: <code>1 \"An\" [cs101, ma102]</code>, <code>2 \"Binh\" [cs101]</code>, <code>3 \"Chi\" [ph103, cs101]</code>.</li>\n<li><strong>Reverse traversal</strong> (roster): list the names of students enrolled in <code>cs101</code>, sorted by name. An equality filter against an array field matches when any element equals the value — no <code>$elemMatch</code> needed for a scalar.</li>\n<li><strong>Forward traversal</strong> (timetable): read student 3's <code>courseIds</code>, then fetch those course documents with <code>$in</code>, sorted by <code>_id</code>.</li>\n<li>Enrol student 2 in <code>ph103</code> with <code>$addToSet</code> so a repeated enrolment cannot create a duplicate, then count the students in <code>ph103</code>.</li>\n<li>Find students taking <strong>both</strong> <code>cs101</code> and <code>ph103</code> using <code>$all</code>, sorted by name.</li>\n</ul>\n<p>The scaffold provides the collection names and the traversal order. Sort every result so the output is deterministic.</p>",
+      "inputSpec": "Empty students and courses collections. Course _id values are the strings cs101, ma102, ph103; each student document carries a courseIds array of those strings.",
+      "outputSpec": "The cs101 roster returns [ { name: 'An' }, { name: 'Binh' }, { name: 'Chi' } ]; student 3's timetable returns the cs101 and ph103 course documents; after $addToSet, countDocuments({ courseIds: 'ph103' }) returns 2; the $all query returns [ { name: 'Binh' }, { name: 'Chi' } ].",
+      "constraints": "Store the array of references on the student side only — do not maintain a studentIds array on courses as well, and do not create a join collection. Use $addToSet (not $push) for enrolment. Use $in for the forward lookup and $all for the both-courses query.",
+      "examplesJson": [
+        {
+          "input": "db.students.find({ courseIds: \"cs101\" }, { name: 1, _id: 0 }).sort({ name: 1 }).toArray()",
+          "output": "[ { name: 'An' }, { name: 'Binh' }, { name: 'Chi' } ]",
+          "explanation": "A scalar equality filter on an array field matches if any element equals the value, giving the reverse traversal (the roster) for free."
+        },
+        {
+          "input": "db.courses.find({ _id: { $in: db.students.findOne({ _id: 3 }).courseIds } }, { title: 1 }).sort({ _id: 1 }).toArray()",
+          "output": "[ { _id: 'cs101', title: 'Intro to Programming' }, { _id: 'ph103', title: 'Mechanics' } ]",
+          "explanation": "The forward traversal is two steps: read the id array off the student, then resolve them all in one $in query."
+        },
+        {
+          "input": "db.students.find({ courseIds: { $all: [\"cs101\", \"ph103\"] } }, { name: 1, _id: 0 }).sort({ name: 1 }).toArray()",
+          "output": "[ { name: 'Binh' }, { name: 'Chi' } ]",
+          "explanation": "$all requires every listed value to be present in the array; Binh qualifies only after the $addToSet enrolment in ph103."
+        }
+      ],
+      "hintsJson": [
+        "Neither side fits inside the other, so one side keeps a list of the other side's ids.",
+        "Put courseIds on the student because a timetable is short and read constantly, while a roster is long and read rarely.",
+        "db.students.find({ courseIds: \"cs101\" }) already gives the roster — an equality filter matches any array element.",
+        "For the timetable use $in over the id array; for \"enrolled in both\" use $all; for enrolling use $addToSet so repeats are idempotent."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// TODO: insert the three courses with string _id values\n// TODO: insert the three students, each with a courseIds array\n// TODO: reverse traversal — students enrolled in cs101, names only, sorted\n// TODO: forward traversal — student 3's courses via $in over their courseIds\n// TODO: $addToSet ph103 onto student 2, then count students in ph103\n// TODO: $all — students taking both cs101 and ph103"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "db.courses.insertMany([\n  { _id: \"cs101\", title: \"Intro to Programming\", credits: 4 },\n  { _id: \"ma102\", title: \"Linear Algebra\", credits: 3 },\n  { _id: \"ph103\", title: \"Mechanics\", credits: 3 }\n])\ndb.students.insertMany([\n  { _id: 1, name: \"An\", courseIds: [\"cs101\", \"ma102\"] },\n  { _id: 2, name: \"Binh\", courseIds: [\"cs101\"] },\n  { _id: 3, name: \"Chi\", courseIds: [\"ph103\", \"cs101\"] }\n])\ndb.students.find({ courseIds: \"cs101\" }, { name: 1, _id: 0 }).sort({ name: 1 }).toArray()\ndb.courses.find({ _id: { $in: db.students.findOne({ _id: 3 }).courseIds } }, { title: 1 }).sort({ _id: 1 }).toArray()\ndb.students.updateOne({ _id: 2 }, { $addToSet: { courseIds: \"ph103\" } })\ndb.students.updateOne({ _id: 2 }, { $addToSet: { courseIds: \"ph103\" } })\ndb.students.countDocuments({ courseIds: \"ph103\" })\ndb.students.find({ courseIds: { $all: [\"cs101\", \"ph103\"] } }, { name: 1, _id: 0 }).sort({ name: 1 }).toArray()"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Many-to-many in MongoDB is an array of foreign keys, and the whole design question is <em>which side carries the array</em>. Put it on the student and the timetable is already in hand whenever you load the profile, while the roster costs one indexed query (<code>{ courseIds: \"cs101\" }</code> is served by a multikey index on <code>courseIds</code>). Put it on the course instead and every popular course becomes a document with thousands of ids — an unbounded array that grows toward the 16MB ceiling and is rewritten on every enrolment. The heuristic: the array belongs to the side with the bounded, frequently-read list.</p>\n<p>Three array-query behaviours carry the traversals. A scalar equality filter on an array field matches when <em>any</em> element equals the value, which is why the roster needs no special operator. <code>$in</code> resolves a whole list of ids in one round trip, so the forward traversal is two queries rather than one per course. <code>$all</code> is the conjunctive form — every listed value must be present — and it is what distinguishes \"takes cs101 or ph103\" from \"takes both\". Finally, <code>$addToSet</code> rather than <code>$push</code> makes enrolment idempotent: running it twice, as the solution deliberately does, leaves a single <code>ph103</code> entry, so a retried request cannot corrupt the roster count. The trap to avoid is maintaining the reference on both sides \"for speed\": two arrays mean two writes per enrolment with no transaction spanning them by default, and the pair drifts apart the first time one write fails.</p>"
+    },
+    {
+      "title": "Fix an Unbounded Array with the Bucket Pattern",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 40,
+      "points": 20,
+      "concepts": [
+        "16MB document limit",
+        "unbounded array anti-pattern",
+        "bucket pattern",
+        "upsert with a bounded filter",
+        "bsonsize"
+      ],
+      "prerequisites": [
+        "$push with $each",
+        "upsert",
+        "embedding"
+      ],
+      "tags": [
+        "modeling",
+        "bucket-pattern",
+        "anti-pattern",
+        "time-series",
+        "mongodb"
+      ],
+      "problemHtml": "<p>Every MongoDB document has a hard <strong>16MB BSON limit</strong>, and an embedded array with no natural ceiling walks straight into it. An IoT device pushing a reading every few seconds into one document per device is the canonical unbounded-array anti-pattern: the document grows forever, every <code>$push</code> rewrites a larger and larger document, indexes on the array bloat, and eventually writes fail outright with <code>BSONObjectTooLarge</code>. The <strong>bucket pattern</strong> is the fix — group a bounded number of readings into each document, and start a new bucket when the current one is full.</p>\n<p>Demonstrate both halves:</p>\n<ul>\n<li>In <code>device_log</code>, insert <code>{ _id: \"d1\", readings: [] }</code> and <code>$push</code> four readings in one call with <code>$each</code>: <code>{ t: 1, v: 20.1 }</code>, <code>{ t: 2, v: 20.4 }</code>, <code>{ t: 3, v: 20.9 }</code>, <code>{ t: 4, v: 21.2 }</code>. Print <code>bsonsize</code> of the resulting document to see the growth per reading.</li>\n<li>In <code>readings</code>, write the same four measurements using a bucket of at most <strong>3</strong> per document. Each write is one <code>updateOne</code> with <code>{ upsert: true }</code>, filter <code>{ deviceId: \"d1\", count: { $lt: 3 } }</code>, update <code>{ $push: { measurements: ... }, $inc: { count: 1 } }</code>.</li>\n<li>Explain to yourself why this works: when the open bucket is full the filter matches nothing, so the upsert creates a fresh bucket — and because <code>deviceId</code> is an <em>equality</em> condition it is carried into the new document, while the <code>$lt</code> range on <code>count</code> is not.</li>\n<li>List the buckets projecting <code>deviceId</code> and <code>count</code> (no <code>_id</code>, which is a generated ObjectId), sorted by <code>count</code> descending, and print <code>countDocuments()</code>.</li>\n</ul>\n<p>The scaffold provides the four measurements and the bucket size. Do not pre-create the buckets by hand — the upsert must do it.</p>",
+      "inputSpec": "Empty device_log and readings collections. Four measurements { t: 1..4, v: 20.1, 20.4, 20.9, 21.2 } for deviceId \"d1\", with a bucket capacity of 3.",
+      "outputSpec": "device_log document holds all four readings in one array (bsonsize returns 136 bytes). The bucket writes leave 2 documents in readings: one with count 3 and one with count 1; the projection sorted by count descending returns [ { deviceId: 'd1', count: 3 }, { deviceId: 'd1', count: 1 } ] and countDocuments() returns 2.",
+      "constraints": "Bucket capacity is 3 measurements per document. Each bucketed write must be a single upserting updateOne — no pre-created buckets, no read-then-decide in application code. Do not project _id in the bucket listing (it is a generated ObjectId and would not be deterministic).",
+      "examplesJson": [
+        {
+          "input": "db.device_log.updateOne({ _id: \"d1\" }, { $push: { readings: { $each: [ { t: 1, v: 20.1 }, { t: 2, v: 20.4 }, { t: 3, v: 20.9 }, { t: 4, v: 21.2 } ] } } }); bsonsize(db.device_log.findOne({ _id: \"d1\" }))",
+          "output": "136",
+          "explanation": "Four tiny readings already cost 136 bytes of BSON, roughly 28 bytes per reading; at that rate the single-document model hits the 16MB ceiling after about 600,000 readings, and long before that every $push is rewriting a huge document."
+        },
+        {
+          "input": "db.readings.updateOne({ deviceId: \"d1\", count: { $lt: 3 } }, { $push: { measurements: { t: 4, v: 21.2 } }, $inc: { count: 1 } }, { upsert: true })",
+          "output": "{ acknowledged: true, insertedId: ObjectId('6a5d7805d5b28531e51cf6e5'), matchedCount: 0, modifiedCount: 0, upsertedCount: 1 }",
+          "explanation": "The fourth write finds the open bucket already at count 3, so the filter matches nothing and the upsert opens a new bucket carrying deviceId from the equality part of the filter. matchedCount 0 with upsertedCount 1 is the signature of a bucket rollover; the ObjectId differs on every run."
+        },
+        {
+          "input": "db.readings.find({}, { deviceId: 1, count: 1, _id: 0 }).sort({ count: -1 }).toArray()",
+          "output": "[ { deviceId: 'd1', count: 3 }, { deviceId: 'd1', count: 1 } ]",
+          "explanation": "Four measurements at a capacity of three produce exactly two buckets — one full, one holding the overflow."
+        }
+      ],
+      "hintsJson": [
+        "A document that grows on every event has no ceiling; the fix is to cap how much any one document holds.",
+        "Make the capacity part of the update filter so a full bucket simply stops matching.",
+        "Filter on { deviceId: \"d1\", count: { $lt: 3 } } with { upsert: true }: a miss means \"no open bucket\", so create one.",
+        "Keep a count field maintained by $inc alongside the $push — the equality field deviceId is carried into the upserted document, the $lt range on count is not, so $inc starts it at 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// --- anti-pattern: one unbounded array per device ---\n// TODO: insert { _id: \"d1\", readings: [] } into device_log\n// TODO: $push all four readings at once with $each\n// TODO: print bsonsize of the document\n\n// --- fix: bucket pattern, capacity 3 ---\n// TODO: four upserting updateOne calls on readings with\n//       filter { deviceId: \"d1\", count: { $lt: 3 } }\n//       update { $push: { measurements: ... }, $inc: { count: 1 } }\n// TODO: list buckets (deviceId + count, no _id) sorted by count desc\n// TODO: countDocuments()"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "db.device_log.insertOne({ _id: \"d1\", readings: [] })\ndb.device_log.updateOne({ _id: \"d1\" }, { $push: { readings: { $each: [ { t: 1, v: 20.1 }, { t: 2, v: 20.4 }, { t: 3, v: 20.9 }, { t: 4, v: 21.2 } ] } } })\nbsonsize(db.device_log.findOne({ _id: \"d1\" }))\ndb.readings.updateOne({ deviceId: \"d1\", count: { $lt: 3 } }, { $push: { measurements: { t: 1, v: 20.1 } }, $inc: { count: 1 } }, { upsert: true })\ndb.readings.updateOne({ deviceId: \"d1\", count: { $lt: 3 } }, { $push: { measurements: { t: 2, v: 20.4 } }, $inc: { count: 1 } }, { upsert: true })\ndb.readings.updateOne({ deviceId: \"d1\", count: { $lt: 3 } }, { $push: { measurements: { t: 3, v: 20.9 } }, $inc: { count: 1 } }, { upsert: true })\ndb.readings.updateOne({ deviceId: \"d1\", count: { $lt: 3 } }, { $push: { measurements: { t: 4, v: 21.2 } }, $inc: { count: 1 } }, { upsert: true })\ndb.readings.find({}, { deviceId: 1, count: 1, _id: 0 }).sort({ count: -1 }).toArray()\ndb.readings.countDocuments()"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The 16MB limit is not a soft guideline — it is enforced per document, and an array that grows once per event will reach it. Worse, the cost arrives long before the limit does: every <code>$push</code> rewrites the document, so as the array grows each write moves more bytes, the working set inflates, and a multikey index over the array grows one entry per element. <code>bsonsize</code> makes this concrete: the document holding four two-field readings already occupies 136 bytes, about 28 bytes per reading, so a sensor emitting one reading per second fills a 16MB document in roughly a week — and spends the days before that rewriting an ever-larger document on every single push.</p>\n<p>The bucket pattern caps the blast radius by making capacity part of the query. The filter <code>{ deviceId: \"d1\", count: { $lt: 3 } }</code> means \"the open bucket for d1\", and the elegance is what happens when there is none: with <code>upsert: true</code> a non-match becomes an insert, so the bucket rolls over automatically with no read, no application-side branch, and no race between checking and creating. The upsert rule doing the work here is that only <strong>equality</strong> conditions in the filter are copied into the inserted document — <code>deviceId: \"d1\"</code> is, the <code>$lt</code> range on <code>count</code> is not — so the new bucket starts with <code>deviceId</code> set and <code>$inc</code> initialises <code>count</code> to 1. Four measurements at capacity three therefore land as one bucket of 3 and one of 1.</p>\n<p>In production the capacity is usually time-based as well (one bucket per device per hour, with <code>startTime</code> in the filter), and buckets often carry pre-computed <code>min</code>, <code>max</code> and <code>sum</code> so range queries never touch the raw array. The trade-off to state plainly: reads get faster and documents stay small, but a single measurement is no longer a document, so deleting or updating one individual reading requires positional or <code>arrayFilters</code> updates rather than a simple <code>deleteOne</code>. For append-mostly telemetry that is a good trade — which is exactly why MongoDB's native time-series collections implement this same bucketing internally.</p>",
+      "diagramMermaid": "flowchart TD\n  A[New measurement arrives] --> B{Open bucket with count less than 3}\n  B -- yes --> C[push measurement and inc count]\n  B -- no --> D[upsert creates a new bucket with deviceId and count 1]\n  C --> E[Bucket stays small and bounded]\n  D --> E"
+    },
+    {
+      "title": "Extended Reference: Denormalise a Product into Order Line Items",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 40,
+      "points": 20,
+      "concepts": [
+        "extended reference pattern",
+        "denormalisation",
+        "duplicate-update cost",
+        "arrayFilters",
+        "point-in-time snapshot"
+      ],
+      "prerequisites": [
+        "referencing",
+        "updateMany",
+        "embedded arrays"
+      ],
+      "tags": [
+        "modeling",
+        "denormalisation",
+        "extended-reference",
+        "arrayfilters",
+        "mongodb"
+      ],
+      "problemHtml": "<p>A pure reference forces a second query on every read. The <strong>extended reference</strong> pattern copies the two or three fields the reading screen actually needs — here a product's <code>name</code> and <code>unitPrice</code> — next to the id, so an order renders from a single document. The cost is real and must be paid consciously: duplicated data can go stale, and the update that keeps it fresh has to reach into every copy.</p>\n<p>There is a second, sharper lesson hiding in the same schema. Not every duplicated field <em>should</em> be refreshed. A line item's price is a <strong>point-in-time snapshot</strong> — what the customer actually agreed to pay — so propagating a price change backwards would silently rewrite financial history. The display name is different: it is cosmetic, and keeping it current is usually desirable.</p>\n<ul>\n<li>Seed <code>products</code> with <code>{ _id: 1, name: \"Keyboard\", price: 49.9 }</code> and <code>{ _id: 2, name: \"Mouse\", price: 19 }</code>.</li>\n<li>Seed <code>orders</code> with order <code>100</code> (line items: product 1 qty 1, product 2 qty 2) and order <code>101</code> (product 1 qty 3). Each line item stores <code>productId</code>, <code>name</code>, <code>unitPrice</code> and <code>qty</code> — the extended reference.</li>\n<li>Show the payoff: render order 100 with one <code>findOne</code>, no lookup into <code>products</code>.</li>\n<li>Rename product 1 to <code>\"Keyboard Pro\"</code> and raise its price to <code>59.9</code> in <code>products</code>.</li>\n<li>Pay the duplicate-update cost for the name only: one <code>updateMany</code> over <code>{ \"items.productId\": 1 }</code> using the filtered positional operator <code>items.$[e].name</code> with <code>arrayFilters: [{ \"e.productId\": 1 }]</code>. Report how many orders it touched.</li>\n<li>Prove <code>unitPrice</code> was <strong>not</strong> rewritten: read order 100's items back and confirm the keyboard still shows <code>49.9</code>.</li>\n</ul>\n<p>The scaffold provides both seed sets and the update skeleton.</p>",
+      "inputSpec": "A products collection with two products, and an orders collection whose documents hold an items array of extended references { productId, name, unitPrice, qty }.",
+      "outputSpec": "The rename updateMany reports matchedCount: 2 and modifiedCount: 2 (both orders reference product 1). Afterwards every line item for product 1 shows name \"Keyboard Pro\" while unitPrice remains the historical 49.9, and db.products.findOne({_id:1}) shows the new price 59.9.",
+      "constraints": "Use one updateMany with arrayFilters — do not loop over orders in application code and do not use a bare positional $ (it updates only the first matching element). Do not propagate the price change into existing orders.",
+      "examplesJson": [
+        {
+          "input": "db.orders.updateMany({ \"items.productId\": 1 }, { $set: { \"items.$[e].name\": \"Keyboard Pro\" } }, { arrayFilters: [{ \"e.productId\": 1 }] })",
+          "output": "{ acknowledged: true, insertedId: null, matchedCount: 2, modifiedCount: 2, upsertedCount: 0 }",
+          "explanation": "Both orders contain a line item for product 1, so both are rewritten — that is the duplicate-update cost the extended reference buys."
+        },
+        {
+          "input": "db.orders.findOne({ _id: 100 }, { _id: 0, \"items.name\": 1, \"items.unitPrice\": 1 })",
+          "output": "{ items: [ { name: 'Keyboard Pro', unitPrice: 49.9 }, { name: 'Mouse', unitPrice: 19 } ] }",
+          "explanation": "The cosmetic name was refreshed while unitPrice keeps the historical 49.9 — the order still records what the customer agreed to pay."
+        },
+        {
+          "input": "db.products.findOne({ _id: 1 })",
+          "output": "{ _id: 1, name: 'Keyboard Pro', price: 59.9 }",
+          "explanation": "The catalogue holds the current price; the order holds the price at the time of sale. The two are deliberately allowed to diverge."
+        }
+      ],
+      "hintsJson": [
+        "Copy only the fields the order screen displays, and keep productId so the full record is still reachable.",
+        "Updating a field inside array elements of many documents needs a filtered positional operator, not $set on a plain path.",
+        "The syntax is $set: { \"items.$[e].name\": ... } paired with arrayFilters: [{ \"e.productId\": 1 }]; the identifier e is yours to name.",
+        "Update only name. Leaving unitPrice alone is the whole point — the order is a financial record of the agreed price."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "db.products.insertMany([{ _id: 1, name: \"Keyboard\", price: 49.9 }, { _id: 2, name: \"Mouse\", price: 19 }])\ndb.orders.insertMany([\n  { _id: 100, items: [ { productId: 1, name: \"Keyboard\", unitPrice: 49.9, qty: 1 }, { productId: 2, name: \"Mouse\", unitPrice: 19, qty: 2 } ] },\n  { _id: 101, items: [ { productId: 1, name: \"Keyboard\", unitPrice: 49.9, qty: 3 } ] }\n])\n// TODO: render order 100 with a single findOne (no join into products)\n// TODO: rename product 1 to \"Keyboard Pro\" and set its price to 59.9\n// TODO: one updateMany with arrayFilters to refresh the denormalised name only\n// TODO: read order 100's items back and confirm unitPrice is still 49.9"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "db.products.insertMany([{ _id: 1, name: \"Keyboard\", price: 49.9 }, { _id: 2, name: \"Mouse\", price: 19 }])\ndb.orders.insertMany([\n  { _id: 100, items: [ { productId: 1, name: \"Keyboard\", unitPrice: 49.9, qty: 1 }, { productId: 2, name: \"Mouse\", unitPrice: 19, qty: 2 } ] },\n  { _id: 101, items: [ { productId: 1, name: \"Keyboard\", unitPrice: 49.9, qty: 3 } ] }\n])\ndb.orders.findOne({ _id: 100 })\ndb.products.updateOne({ _id: 1 }, { $set: { name: \"Keyboard Pro\", price: 59.9 } })\ndb.orders.updateMany({ \"items.productId\": 1 }, { $set: { \"items.$[e].name\": \"Keyboard Pro\" } }, { arrayFilters: [{ \"e.productId\": 1 }] })\ndb.orders.findOne({ _id: 100 }, { _id: 0, \"items.name\": 1, \"items.unitPrice\": 1 })\ndb.orders.find({}, { \"items.name\": 1, \"items.unitPrice\": 1 }).sort({ _id: 1 }).toArray()\ndb.products.findOne({ _id: 1 })"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The extended reference is a deliberate trade: you duplicate a few hot fields to remove a query from the read path. Order rendering is read-heavy and product records change rarely, so copying <code>name</code> and <code>unitPrice</code> beside <code>productId</code> turns a two-query screen into one <code>findOne</code>. Keeping <code>productId</code> is what makes it an <em>extended reference</em> rather than plain duplication — the authoritative record is still one point lookup away when you need stock, description or images.</p>\n<p>The bill arrives on write. Refreshing the copies means touching every document that holds one, and inside an array that requires the <strong>filtered positional operator</strong>: <code>\"items.$[e].name\"</code> with <code>arrayFilters: [{ \"e.productId\": 1 }]</code>, where <code>e</code> is an identifier you choose and the filter decides which elements it stands for. The near-miss most learners hit is the bare positional <code>$</code>: <code>\"items.$.name\"</code> updates only the <em>first</em> matching element per document, which silently under-updates an order containing the same product twice. <code>$[]</code> is the opposite error — it updates <em>every</em> element regardless of product.</p>\n<p>The judgement call matters more than the syntax. <code>unitPrice</code> is intentionally left stale because an order is a financial record: it must keep the price the customer agreed to, and a \"helpful\" refresh would rewrite history and break every reconciliation report. <code>name</code> is cosmetic, so refreshing it is safe. Before denormalising any field, ask how often the source changes, how many copies a change must reach, and whether the copy is a cache or a snapshot. If the source changes constantly and fans out to millions of documents, the extended reference is the wrong pattern and a plain reference (or a cached lookup layer) is better.</p>"
+    },
+    {
+      "title": "Version and Migrate a Schema In Place with schemaVersion",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 40,
+      "points": 20,
+      "concepts": [
+        "schema versioning pattern",
+        "lazy vs bulk migration",
+        "$unset",
+        "mixed-version reads",
+        "backward-compatible queries"
+      ],
+      "prerequisites": [
+        "updateOne with $set",
+        "cursor iteration with forEach",
+        "countDocuments"
+      ],
+      "tags": [
+        "modeling",
+        "schema-versioning",
+        "migration",
+        "evolution",
+        "mongodb"
+      ],
+      "problemHtml": "<p>A flexible schema does not mean no schema — it means the schema lives in your application, and it changes. Because MongoDB will happily store two different document shapes side by side, the danger is not the migration itself but <em>not knowing which shape you are holding</em>. The <strong>schema versioning pattern</strong> puts an explicit <code>schemaVersion</code> field in every document so reads can branch, migrations can be resumed, and old and new shapes can coexist while a rolling deploy is in flight.</p>\n<p>Evolve a <code>users</code> collection from v1 (<code>name</code> as one string, a single <code>email</code>) to v2 (split <code>firstName</code>/<code>lastName</code>, and a <code>contacts</code> array that can hold more than one channel):</p>\n<ul>\n<li>Insert two v1 users: <code>{ _id: 1, schemaVersion: 1, name: \"An Nguyen\", email: \"an@example.com\" }</code> and <code>{ _id: 2, schemaVersion: 1, name: \"Binh Le\", email: \"binh@example.com\" }</code>.</li>\n<li>Insert one v2 user directly: <code>_id: 3</code>, <code>firstName: \"Chi\"</code>, <code>lastName: \"Tran\"</code>, <code>contacts: [{ type: \"email\", value: \"chi@example.com\" }]</code>, <code>schemaVersion: 2</code>. Both shapes now coexist.</li>\n<li>Show the mixed state: count documents with <code>schemaVersion: 1</code> — it is <code>2</code>.</li>\n<li>Migrate every v1 document: iterate the <code>{ schemaVersion: 1 }</code> cursor with <code>forEach</code>, split <code>name</code> on the first space, <code>$set</code> the new fields plus <code>schemaVersion: 2</code>, and <code>$unset</code> the retired <code>name</code> and <code>email</code> fields in the same update.</li>\n<li>Verify: <code>countDocuments({ schemaVersion: 1 })</code> is now <code>0</code>, and listing all three users sorted by <code>_id</code> shows one uniform shape.</li>\n</ul>\n<p>Filtering the migration on <code>{ schemaVersion: 1 }</code> is what makes it restartable — re-running it after a crash processes only what is left. The scaffold provides the seed data and the migration skeleton.</p>",
+      "inputSpec": "A users collection holding two v1 documents (name + email) and one v2 document (firstName/lastName + contacts array), each tagged with schemaVersion.",
+      "outputSpec": "countDocuments({ schemaVersion: 1 }) returns 2 before the migration and 0 after. The final listing sorted by _id returns three v2 documents: An Nguyen, Binh Le and Chi Tran, each with firstName, lastName, a contacts array and schemaVersion 2, and with no name or email field left.",
+      "constraints": "Every document must carry schemaVersion. The migration must be driven by the { schemaVersion: 1 } filter so it is restartable and idempotent. Remove the retired fields with $unset in the same update that sets the new ones — do not leave both shapes in one document.",
+      "examplesJson": [
+        {
+          "input": "db.users.countDocuments({ schemaVersion: 1 })  // before the migration",
+          "output": "2",
+          "explanation": "Two v1 documents and one v2 document coexist in the same collection — normal during a rolling deploy."
+        },
+        {
+          "input": "db.users.find({ schemaVersion: 1 }).forEach(d => { const parts = d.name.split(\" \"); db.users.updateOne({ _id: d._id }, { $set: { schemaVersion: 2, firstName: parts[0], lastName: parts.slice(1).join(\" \"), contacts: [{ type: \"email\", value: d.email }] }, $unset: { name: \"\", email: \"\" } }) })",
+          "output": "(no printed result; two documents are rewritten)",
+          "explanation": "One update per document sets the v2 fields, bumps schemaVersion and drops the retired fields atomically — a document is never half-migrated."
+        },
+        {
+          "input": "db.users.findOne({ _id: 1 })",
+          "output": "{ _id: 1, schemaVersion: 2, contacts: [ { type: 'email', value: 'an@example.com' } ], firstName: 'An', lastName: 'Nguyen' }",
+          "explanation": "name and email are gone, the split fields and contacts array are present, and schemaVersion now reads 2."
+        }
+      ],
+      "hintsJson": [
+        "The problem is not converting a document, it is knowing which documents still need converting.",
+        "Stamp every document with a schemaVersion field and drive the migration from a filter on it.",
+        "Iterate the v1 cursor with forEach and issue one updateOne per document; split the name with name.split(\" \").",
+        "Combine $set (firstName, lastName, contacts, schemaVersion: 2) and $unset ({ name: \"\", email: \"\" }) in a single update so no document is ever half-migrated."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "db.users.insertMany([\n  { _id: 1, schemaVersion: 1, name: \"An Nguyen\", email: \"an@example.com\" },\n  { _id: 2, schemaVersion: 1, name: \"Binh Le\", email: \"binh@example.com\" }\n])\n// TODO: insert the v2 user _id 3 (Chi Tran) with firstName/lastName + contacts array\n// TODO: count the remaining v1 documents\n// TODO: migrate every v1 document — forEach over the { schemaVersion: 1 } cursor,\n//       $set the v2 fields and schemaVersion: 2, $unset name and email\n// TODO: count v1 documents again (must be 0) and list all users sorted by _id"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "db.users.insertMany([\n  { _id: 1, schemaVersion: 1, name: \"An Nguyen\", email: \"an@example.com\" },\n  { _id: 2, schemaVersion: 1, name: \"Binh Le\", email: \"binh@example.com\" }\n])\ndb.users.insertOne({ _id: 3, schemaVersion: 2, firstName: \"Chi\", lastName: \"Tran\", contacts: [{ type: \"email\", value: \"chi@example.com\" }] })\ndb.users.countDocuments({ schemaVersion: 1 })\ndb.users.find({ schemaVersion: 1 }).forEach(d => {\n  const parts = d.name.split(\" \");\n  db.users.updateOne(\n    { _id: d._id },\n    {\n      $set: {\n        schemaVersion: 2,\n        firstName: parts[0],\n        lastName: parts.slice(1).join(\" \"),\n        contacts: [{ type: \"email\", value: d.email }]\n      },\n      $unset: { name: \"\", email: \"\" }\n    }\n  );\n})\ndb.users.countDocuments({ schemaVersion: 1 })\ndb.users.find({}, { firstName: 1, lastName: 1, contacts: 1, schemaVersion: 1 }).sort({ _id: 1 }).toArray()"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The schema versioning pattern turns an untyped collection into something you can reason about. Every document declares its shape in <code>schemaVersion</code>, which buys three things at once. Reads can branch safely (<code>if (doc.schemaVersion &lt; 2) …</code>) instead of guessing from which fields happen to be present. The migration becomes <strong>restartable and idempotent</strong>, because it is driven by <code>{ schemaVersion: 1 }</code> — a crashed run leaves the processed documents at version 2 and re-running picks up exactly the remainder. And old and new application code can run simultaneously during a rolling deploy, which is what makes zero-downtime releases possible on a live collection.</p>\n<p>The detail that keeps a document from ever being half-migrated is combining <code>$set</code> and <code>$unset</code> in <strong>one</strong> update. A single-document write is atomic, so a reader either sees the complete v1 shape or the complete v2 shape, never a document with <code>firstName</code> set but <code>name</code> still lingering. The syntax trap is <code>$unset</code>: its values are ignored, so <code>{ $unset: { name: \"\", email: \"\" } }</code> is the idiom — the empty strings are placeholders, not new values, and writing <code>{ $unset: { name: null } }</code> works identically but confuses readers into thinking the field is set to null.</p>\n<p>Two production notes. This bulk loop is fine for thousands of documents; for millions you either batch it with <code>bulkWrite</code> and a progress marker, or migrate <strong>lazily</strong> — leave old documents alone and upgrade each one the first time it is read, which spreads the cost and never blocks a deploy, at the price of carrying the compatibility branch in code much longer. Either way, the version field is the thing that makes it tractable; adding it retroactively to a collection that never had one is far more painful than including it from the first insert.</p>"
+    },
+    {
+      "title": "Maintain a Pre-Aggregated Rating with the Computed Pattern",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 40,
+      "points": 20,
+      "concepts": [
+        "computed pattern",
+        "pre-aggregation",
+        "update with an aggregation pipeline",
+        "atomic derived fields",
+        "read-heavy optimisation"
+      ],
+      "prerequisites": [
+        "$inc",
+        "updateOne",
+        "referencing"
+      ],
+      "tags": [
+        "modeling",
+        "computed-pattern",
+        "pre-aggregation",
+        "derived-data",
+        "mongodb"
+      ],
+      "problemHtml": "<p>A movie page shows an average rating on every visit, but ratings arrive rarely. Recomputing the average from the raw ratings on each read is work repeated thousands of times for a value that changed once. The <strong>computed pattern</strong> moves that work to write time: keep the raw ratings as the source of truth, and maintain <code>ratingCount</code>, <code>ratingSum</code> and <code>ratingAvg</code> on the movie document so the read is a single point lookup.</p>\n<p>The subtlety is keeping the three derived fields consistent. Reading the counters, computing the average in application code and writing it back leaves a race window where two concurrent ratings clobber each other. An <strong>update with an aggregation pipeline</strong> — the array form of the second argument to <code>updateOne</code>, available since MongoDB 4.2 — closes it, because the pipeline is evaluated on the server against the document's current values in one atomic write.</p>\n<ul>\n<li>Insert the source-of-truth movie: <code>{ _id: 1, title: \"Dune\", ratingCount: 0, ratingSum: 0, ratingAvg: 0 }</code>.</li>\n<li>For each incoming score <code>5</code>, <code>4</code>, then <code>3</code>: insert the raw rating into a <code>ratings</code> collection (<code>{ movieId: 1, score }</code>) and apply <strong>one</strong> pipeline update to the movie that increments <code>ratingCount</code> by 1, adds the score to <code>ratingSum</code>, and recomputes <code>ratingAvg</code> from the <em>new</em> count and sum, rounded to 2 decimals.</li>\n<li>The pipeline needs two stages: the first <code>$set</code> updates <code>ratingCount</code> and <code>ratingSum</code>, and the second <code>$set</code> divides them — a later stage sees the values written by the earlier one, which is why the average is never computed from stale inputs.</li>\n<li>Read the movie back and confirm <code>ratingCount: 3</code>, <code>ratingSum: 12</code>, <code>ratingAvg: 4</code>.</li>\n<li>Confirm the raw ratings survived: <code>db.ratings.countDocuments({ movieId: 1 })</code> is <code>3</code>. The derived fields are a cache, not a replacement.</li>\n</ul>\n<p>The scaffold provides the seed document and the pipeline skeleton.</p>",
+      "inputSpec": "A movies collection with one document carrying zeroed counters, and a ratings collection receiving one raw document per score. Three scores arrive in order: 5, 4, 3.",
+      "outputSpec": "After the three writes db.movies.findOne({ _id: 1 }) returns { _id: 1, title: 'Dune', ratingCount: 3, ratingSum: 12, ratingAvg: 4 } and db.ratings.countDocuments({ movieId: 1 }) returns 3.",
+      "constraints": "Each rating must be one atomic pipeline update on the movie — no findOne-then-updateOne, no computing the average in application code. Round ratingAvg to 2 decimals with $round. Keep the raw ratings; the computed fields must not be the only copy of the data.",
+      "examplesJson": [
+        {
+          "input": "db.movies.updateOne({ _id: 1 }, [ { $set: { ratingCount: { $add: [\"$ratingCount\", 1] }, ratingSum: { $add: [\"$ratingSum\", 5] } } }, { $set: { ratingAvg: { $round: [{ $divide: [\"$ratingSum\", \"$ratingCount\"] }, 2] } } } ])",
+          "output": "{ acknowledged: true, insertedId: null, matchedCount: 1, modifiedCount: 1, upsertedCount: 0 }",
+          "explanation": "The second $set divides the values written by the first, so ratingAvg is derived from the post-increment count and sum inside one atomic write."
+        },
+        {
+          "input": "db.movies.findOne({ _id: 1 })  // after scores 5, 4, 3",
+          "output": "{ _id: 1, title: 'Dune', ratingCount: 3, ratingSum: 12, ratingAvg: 4 }",
+          "explanation": "5 + 4 + 3 = 12 over 3 ratings gives exactly 4; a page render now needs one point lookup instead of an aggregation over the ratings."
+        },
+        {
+          "input": "db.ratings.countDocuments({ movieId: 1 })",
+          "output": "3",
+          "explanation": "The raw ratings remain the source of truth, so the computed fields can always be rebuilt if they drift."
+        }
+      ],
+      "hintsJson": [
+        "The average is read far more often than it changes, so compute it when it changes rather than when it is read.",
+        "Store ratingCount and ratingSum, not just the average — an average alone cannot be updated incrementally.",
+        "Pass an array as the second argument to updateOne to run an aggregation pipeline update on the server.",
+        "Stage one: $set ratingCount to { $add: [\"$ratingCount\", 1] } and ratingSum to { $add: [\"$ratingSum\", score] }. Stage two: $set ratingAvg to { $round: [{ $divide: [\"$ratingSum\", \"$ratingCount\"] }, 2] }."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "db.movies.insertOne({ _id: 1, title: \"Dune\", ratingCount: 0, ratingSum: 0, ratingAvg: 0 })\n// TODO: for each score 5, 4, 3:\n//   insert the raw rating into db.ratings ({ movieId: 1, score })\n//   apply ONE pipeline update to the movie:\n//     stage 1 -> $set ratingCount / ratingSum with $add\n//     stage 2 -> $set ratingAvg with $round of $divide\n// TODO: findOne the movie and countDocuments the raw ratings"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "db.movies.insertOne({ _id: 1, title: \"Dune\", ratingCount: 0, ratingSum: 0, ratingAvg: 0 })\ndb.ratings.insertOne({ movieId: 1, score: 5 })\ndb.movies.updateOne({ _id: 1 }, [\n  { $set: { ratingCount: { $add: [\"$ratingCount\", 1] }, ratingSum: { $add: [\"$ratingSum\", 5] } } },\n  { $set: { ratingAvg: { $round: [{ $divide: [\"$ratingSum\", \"$ratingCount\"] }, 2] } } }\n])\ndb.ratings.insertOne({ movieId: 1, score: 4 })\ndb.movies.updateOne({ _id: 1 }, [\n  { $set: { ratingCount: { $add: [\"$ratingCount\", 1] }, ratingSum: { $add: [\"$ratingSum\", 4] } } },\n  { $set: { ratingAvg: { $round: [{ $divide: [\"$ratingSum\", \"$ratingCount\"] }, 2] } } }\n])\ndb.ratings.insertOne({ movieId: 1, score: 3 })\ndb.movies.updateOne({ _id: 1 }, [\n  { $set: { ratingCount: { $add: [\"$ratingCount\", 1] }, ratingSum: { $add: [\"$ratingSum\", 3] } } },\n  { $set: { ratingAvg: { $round: [{ $divide: [\"$ratingSum\", \"$ratingCount\"] }, 2] } } }\n])\ndb.movies.findOne({ _id: 1 })\ndb.ratings.countDocuments({ movieId: 1 })"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The computed pattern is a read/write trade in the opposite direction from normalisation: you accept slightly more work on the rare write to remove a lot of work from the frequent read. Storing <code>ratingCount</code> and <code>ratingSum</code> rather than the average alone is the enabling decision, because both are <em>incrementally maintainable</em> — a new score adjusts each by a constant amount — while an average is not; from an average alone you cannot fold in a new value without knowing how many it already covers.</p>\n<p>Atomicity is what makes it correct under concurrency. The array form of the update argument runs an aggregation pipeline server-side against the document's current state, so <code>{ $add: [\"$ratingCount\", 1] }</code> reads the value as it exists at write time, not a value your process read a moment earlier. Stages are sequential: the second <code>$set</code> sees the <code>ratingSum</code> and <code>ratingCount</code> written by the first, which is precisely why <code>ratingAvg</code> reflects the post-increment numbers. Two concurrent ratings therefore serialise on the document and both land — the outcome you cannot get from <code>findOne</code>, arithmetic in application code, and <code>updateOne</code>, where each process computes from the same stale snapshot and one write silently overwrites the other.</p>\n<p><code>$round</code> deserves a note: floating-point sums produce values like 4.333333333333333, and rounding at write time keeps the stored field presentable and stable across reads. Finally, keeping the raw ratings is not optional. Derived fields drift — a bug, a bulk import, a partial restore — and the only cheap remedy is recomputing them from the source with an aggregation. Treat the computed fields as a materialised cache with a documented rebuild path, never as the sole record of what happened.</p>"
+    },
+    {
+      "title": "Handle a Viral Document with the Outlier Pattern",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 45,
+      "points": 20,
+      "concepts": [
+        "outlier pattern",
+        "hasExtras flag",
+        "overflow collection",
+        "skewed cardinality",
+        "conditional read path"
+      ],
+      "prerequisites": [
+        "embedding",
+        "referencing",
+        "bucket pattern"
+      ],
+      "tags": [
+        "modeling",
+        "outlier-pattern",
+        "skew",
+        "comments",
+        "mongodb"
+      ],
+      "problemHtml": "<p>Cardinality is rarely uniform. Almost every blog post collects a handful of comments — perfect for embedding — but one post goes viral and collects tens of thousands. Designing the whole collection around the viral post punishes the 99% with an unnecessary join; designing it around the typical post breaks the moment the outlier appears. The <strong>outlier pattern</strong> refuses the false choice: embed by default, and when a document exceeds a threshold, flag it and spill the excess into an overflow collection.</p>\n<p>Model a <code>posts</code> collection with an embed threshold of <strong>3</strong> comments:</p>\n<ul>\n<li>Insert a typical post <code>_id: 1</code> titled <code>\"Indexing basics\"</code> with two embedded comments (<code>{ user, text }</code>) and no flag — the common case reads in one query.</li>\n<li>Insert the viral post <code>_id: 2</code> titled <code>\"Why we left the cloud\"</code> with the first three comments embedded and <code>hasExtras: true</code>.</li>\n<li>Put the four overflow comments for post 2 into a <code>post_comments</code> collection, each carrying <code>postId: 2</code>.</li>\n<li>Write a read path that respects the flag: a function <code>loadComments(id)</code> that fetches the post, returns the embedded comments when <code>hasExtras</code> is falsy, and otherwise concatenates the embedded comments with those fetched from <code>post_comments</code>. Print the resulting comment count for post 1 and post 2.</li>\n<li>Show the selectivity of the flag: <code>countDocuments({ hasExtras: true })</code> is <code>1</code>, and <code>countDocuments({ hasExtras: { $ne: true } })</code> is <code>1</code> — only the outlier pays for the second query.</li>\n</ul>\n<p>The <code>$ne: true</code> filter is deliberate: it matches documents where the field is <code>false</code> <em>or absent</em>, so typical posts need not carry the flag at all. The scaffold provides the seed data and the function skeleton.</p>",
+      "inputSpec": "A posts collection with one typical post (2 embedded comments, no flag) and one outlier post (3 embedded comments plus hasExtras: true), and a post_comments overflow collection holding 4 further comments for post 2.",
+      "outputSpec": "loadComments(1) returns 2 comments; loadComments(2) returns 7 (3 embedded plus 4 from the overflow collection). countDocuments({ hasExtras: true }) returns 1 and countDocuments({ hasExtras: { $ne: true } }) returns 1.",
+      "constraints": "Typical posts must not carry the hasExtras field at all, and must be served by a single query. Only fetch from post_comments when hasExtras is true. Do not move the embedded comments out of the outlier post — the first three stay embedded.",
+      "examplesJson": [
+        {
+          "input": "loadComments(1).length",
+          "output": "2",
+          "explanation": "Post 1 has no hasExtras flag, so the read path stops after one query and returns the embedded comments."
+        },
+        {
+          "input": "loadComments(2).length",
+          "output": "7",
+          "explanation": "The flag is set, so the three embedded comments are concatenated with the four overflow documents from post_comments."
+        },
+        {
+          "input": "db.posts.countDocuments({ hasExtras: { $ne: true } })",
+          "output": "1",
+          "explanation": "$ne: true also matches documents where the field is absent, so untagged typical posts are counted without ever needing the flag written."
+        }
+      ],
+      "hintsJson": [
+        "Most documents fit the embedded model; only a rare few break it, so branch on the rare few instead of redesigning for them.",
+        "Add a boolean flag to the outlier document only, and leave it off every typical document.",
+        "Spill the comments past the threshold into a separate collection whose documents carry postId.",
+        "loadComments should findOne the post, return post.comments when !post.hasExtras, and otherwise concat db.post_comments.find({ postId: id }).toArray()."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "db.posts.insertOne({\n  _id: 1,\n  title: \"Indexing basics\",\n  comments: [ { user: \"an\", text: \"clear\" }, { user: \"binh\", text: \"thanks\" } ]\n})\n// TODO: insert post 2 with 3 embedded comments and hasExtras: true\n// TODO: insert the 4 overflow comments into post_comments with postId: 2\n// TODO: write loadComments(id) — one query when the flag is absent, two when it is set\n// TODO: print loadComments(1).length and loadComments(2).length\n// TODO: count posts with hasExtras true, and posts where it is absent or false"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "db.posts.insertOne({\n  _id: 1,\n  title: \"Indexing basics\",\n  comments: [ { user: \"an\", text: \"clear\" }, { user: \"binh\", text: \"thanks\" } ]\n})\ndb.posts.insertOne({\n  _id: 2,\n  title: \"Why we left the cloud\",\n  hasExtras: true,\n  comments: [ { user: \"chi\", text: \"brave\" }, { user: \"dung\", text: \"numbers please\" }, { user: \"em\", text: \"same here\" } ]\n})\ndb.post_comments.insertMany([\n  { postId: 2, user: \"f1\", text: \"what about egress\" },\n  { postId: 2, user: \"f2\", text: \"we did the same\" },\n  { postId: 2, user: \"f3\", text: \"any downtime\" },\n  { postId: 2, user: \"f4\", text: \"great write up\" }\n])\nfunction loadComments(id) {\n  const post = db.posts.findOne({ _id: id });\n  if (!post) return [];\n  if (!post.hasExtras) return post.comments;\n  return post.comments.concat(db.post_comments.find({ postId: id }).toArray());\n}\nprint(\"post 1 comments: \" + loadComments(1).length)\nprint(\"post 2 comments: \" + loadComments(2).length)\ndb.posts.countDocuments({ hasExtras: true })\ndb.posts.countDocuments({ hasExtras: { $ne: true } })"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The outlier pattern exists because averages lie. Comment counts, follower counts and order sizes follow a long tail: the median document is tiny and a handful are enormous. Sizing the schema for the median breaks on the tail; sizing it for the tail taxes every ordinary read with a join it does not need. Flagging the exceptions gives you the best of both — <code>loadComments(1)</code> is a single point lookup, while only the flagged document pays for a second query.</p>\n<p>The flag's semantics are the part worth copying. Typical posts do not carry <code>hasExtras</code> at all, and the read path tests <code>!post.hasExtras</code>, which is falsy for both <code>false</code> and <code>undefined</code>. On the query side, the matching idiom is <code>{ hasExtras: { $ne: true } }</code>, because <code>$ne</code> in MongoDB also matches documents where the field is <strong>absent</strong> — an unusual behaviour that is a trap in most contexts but is exactly what you want here. Writing <code>{ hasExtras: false }</code> instead would return zero typical posts, since none of them has the field.</p>\n<p>Compare it with the bucket pattern from earlier in this module. Bucketing applies uniformly: <em>every</em> device gets capped buckets because every device streams forever. The outlier pattern is conditional: the shape stays embedded and only diverges for the documents that need it. Choose bucketing when growth is unbounded for all entities, and the outlier pattern when growth is bounded for nearly all of them and extreme for a few. The costs to accept are that the read path now has a branch to test and keep correct, and that the threshold crossing must be handled on write — typically by detecting the size in the same update that appends the comment, setting <code>hasExtras</code>, and routing subsequent comments to the overflow collection.</p>",
+      "diagramMermaid": "flowchart TD\n  A[loadComments id] --> B[findOne the post]\n  B --> C{hasExtras is set}\n  C -- no --> D[return embedded comments only - one query]\n  C -- yes --> E[find overflow docs in post_comments]\n  E --> F[concat embedded and overflow]"
+    },
+    {
+      "title": "Enforce a Contract with $jsonSchema and validationAction",
+      "difficulty": "HARD",
+      "estimatedMinutes": 50,
+      "points": 25,
+      "concepts": [
+        "$jsonSchema validation",
+        "validationAction error vs warn",
+        "required and enum keywords",
+        "bsonType and BSON numeric types",
+        "collMod"
+      ],
+      "prerequisites": [
+        "createCollection",
+        "insertOne",
+        "schema versioning"
+      ],
+      "tags": [
+        "modeling",
+        "validation",
+        "jsonschema",
+        "collmod",
+        "mongodb"
+      ],
+      "problemHtml": "<p>A flexible schema still needs a contract at the boundary. MongoDB enforces one with <code>$jsonSchema</code> validators attached to a collection: required fields, BSON types, enumerated values and numeric bounds are checked on every insert and update. <code>validationAction</code> decides what a violation means — <code>\"error\"</code> rejects the write, <code>\"warn\"</code> lets it through and only logs — which is how you roll a validator onto an existing collection without breaking production writers on day one.</p>\n<p>Build and exercise a validator on a <code>payments</code> collection:</p>\n<ul>\n<li>Create the collection with <code>createCollection</code> and a <code>$jsonSchema</code> requiring <code>orderId</code>, <code>amount</code>, <code>currency</code> and <code>status</code>; both <code>orderId</code> and <code>amount</code> of <code>bsonType: \"number\"</code>, with <code>minimum: 0.01</code> on <code>amount</code>; <code>currency</code> restricted by <code>enum</code> to <code>[\"USD\", \"EUR\", \"VND\"]</code>; <code>status</code> restricted to <code>[\"pending\", \"paid\", \"refunded\"]</code>. Set <code>validationAction: \"error\"</code> and <code>validationLevel: \"strict\"</code>.</li>\n<li>Insert a valid payment and confirm it is accepted.</li>\n<li>Trigger three distinct rejections, each wrapped in <code>try/catch</code>, printing <code>e.message</code>, <code>e.code</code> and the <code>schemaRulesNotSatisfied</code> details from <code>e.errInfo</code>: a bad <code>currency</code> (<code>\"GBP\"</code>), a missing <code>status</code>, and an <code>amount</code> of <code>0</code> that breaks <code>minimum</code>.</li>\n<li>Switch the collection to <code>validationAction: \"warn\"</code> with <code>db.runCommand({ collMod: \"payments\", validationAction: \"warn\" })</code>, re-run the <code>amount: 0</code> insert, and observe that it now <strong>succeeds</strong>.</li>\n<li>Finish with <code>countDocuments()</code> to show exactly which writes landed.</li>\n</ul>\n<p>Note the type choice. <code>mongosh</code> maps an integral JavaScript literal to BSON <strong>int32</strong> and a fractional one to <strong>double</strong>, so <code>orderId: 100</code> is an <code>int</code> while <code>amount: 25.5</code> is a <code>double</code> — a validator demanding <code>bsonType: \"double\"</code> would reject a whole-number amount such as <code>25</code>. <code>\"number\"</code> accepts any numeric BSON type and is the safe choice here. The scaffold provides the validator skeleton and the three failing inserts.</p>",
+      "inputSpec": "An empty database. You create the payments collection with a $jsonSchema validator, then attempt one valid and three invalid inserts, then relax validationAction with collMod and retry one of them.",
+      "outputSpec": "Each rejected insert throws with message \"Document failed validation\" and code 121; errInfo.details.schemaRulesNotSatisfied names the failing rule — operatorName \"enum\" with reason \"value was not found in enum\" and consideredValue \"GBP\"; operatorName \"required\" with missingProperties [ 'status' ]; and operatorName \"minimum\" with reason \"comparison failed\" and consideredValue 0. After collMod sets validationAction to \"warn\" the amount: 0 insert succeeds, so countDocuments() returns 2.",
+      "constraints": "Attach the validator at createCollection time; do not validate in application code. Every failing insert must be wrapped in try/catch and must print the real error. Use db.runCommand({ collMod: ... }) to change validationAction — do not drop and recreate the collection.",
+      "examplesJson": [
+        {
+          "input": "try { db.payments.insertOne({ _id: 2, orderId: 101, amount: 25.5, currency: \"GBP\", status: \"paid\" }) } catch (e) { print(e.message + \" | code \" + e.code) }",
+          "output": "Document failed validation | code 121",
+          "explanation": "GBP is not in the enum, so the write is rejected with error code 121 (DocumentValidationFailure) and nothing is inserted."
+        },
+        {
+          "input": "catch (e) { printjson(e.errInfo.details.schemaRulesNotSatisfied) }  // for the missing status insert",
+          "output": "[ { operatorName: 'required', specifiedAs: { required: [ 'orderId', 'amount', 'currency', 'status' ] }, missingProperties: [ 'status' ] } ]",
+          "explanation": "errInfo pinpoints the exact failing keyword and the missing field, which is what makes these errors debuggable rather than opaque."
+        },
+        {
+          "input": "catch (e) { printjson(e.errInfo.details.schemaRulesNotSatisfied) }  // for the amount: 0 insert",
+          "output": "[ { operatorName: 'properties', propertiesNotSatisfied: [ { propertyName: 'amount', details: [ { operatorName: 'minimum', specifiedAs: { minimum: 0.01 }, reason: 'comparison failed', consideredValue: 0 } ] } ] } ]",
+          "explanation": "The minimum keyword reports reason \"comparison failed\" together with the value it saw, so the log tells you both which rule and which value."
+        },
+        {
+          "input": "db.runCommand({ collMod: \"payments\", validationAction: \"warn\" }); db.payments.insertOne({ _id: 4, orderId: 103, amount: 0, currency: \"USD\", status: \"pending\" })",
+          "output": "{ acknowledged: true, insertedId: 4 }",
+          "explanation": "Under \"warn\" the same document that was rejected a moment earlier is written and the violation is only logged — the migration-friendly mode."
+        }
+      ],
+      "hintsJson": [
+        "The contract belongs on the collection, so it holds for every writer regardless of which service or script performs the write.",
+        "db.createCollection(name, { validator: { $jsonSchema: {...} }, validationAction: \"error\" }) attaches it at creation time.",
+        "Inside $jsonSchema use required for presence, bsonType for type, enum for a closed value set, and minimum for a numeric floor.",
+        "Catch the MongoServerError and read e.errInfo.details.schemaRulesNotSatisfied; then relax the collection with db.runCommand({ collMod: \"payments\", validationAction: \"warn\" })."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "db.createCollection(\"payments\", {\n  validator: {\n    $jsonSchema: {\n      bsonType: \"object\",\n      // TODO: required: orderId, amount, currency, status\n      properties: {\n        // TODO: orderId number, amount number with minimum 0.01,\n        //       currency enum USD/EUR/VND, status enum pending/paid/refunded\n      }\n    }\n  },\n  // TODO: validationAction \"error\", validationLevel \"strict\"\n})\n// TODO: insert one valid payment\n// TODO: three try/catch inserts — bad currency, missing status, amount 0 —\n//       printing e.message, e.code and e.errInfo.details.schemaRulesNotSatisfied\n// TODO: collMod the collection to validationAction \"warn\", retry the amount 0 insert\n// TODO: countDocuments()"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "db.createCollection(\"payments\", {\n  validator: {\n    $jsonSchema: {\n      bsonType: \"object\",\n      required: [\"orderId\", \"amount\", \"currency\", \"status\"],\n      properties: {\n        orderId: { bsonType: \"number\" },\n        amount: { bsonType: \"number\", minimum: 0.01 },\n        currency: { enum: [\"USD\", \"EUR\", \"VND\"] },\n        status: { enum: [\"pending\", \"paid\", \"refunded\"] }\n      }\n    }\n  },\n  validationAction: \"error\",\n  validationLevel: \"strict\"\n})\ndb.payments.insertOne({ _id: 1, orderId: 100, amount: 25.5, currency: \"USD\", status: \"paid\" })\ntry {\n  db.payments.insertOne({ _id: 2, orderId: 101, amount: 25.5, currency: \"GBP\", status: \"paid\" })\n} catch (e) {\n  print(\"REJECTED: \" + e.message + \" | code \" + e.code);\n  printjson(e.errInfo.details.schemaRulesNotSatisfied);\n}\ntry {\n  db.payments.insertOne({ _id: 3, orderId: 102, amount: 25.5, currency: \"USD\" })\n} catch (e) {\n  print(\"REJECTED: \" + e.message + \" | code \" + e.code);\n  printjson(e.errInfo.details.schemaRulesNotSatisfied);\n}\ntry {\n  db.payments.insertOne({ _id: 4, orderId: 103, amount: 0, currency: \"USD\", status: \"pending\" })\n} catch (e) {\n  print(\"REJECTED: \" + e.message + \" | code \" + e.code);\n  printjson(e.errInfo.details.schemaRulesNotSatisfied);\n}\ndb.runCommand({ collMod: \"payments\", validationAction: \"warn\" })\ndb.payments.insertOne({ _id: 4, orderId: 103, amount: 0, currency: \"USD\", status: \"pending\" })\ndb.payments.countDocuments()"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Validation on the collection is qualitatively different from validation in application code: it holds for <em>every</em> writer — the API, a migration script, an engineer in a shell at 2am — so it is the only place a data contract can actually be guaranteed. Inside <code>$jsonSchema</code> the four keywords here cover most real contracts: <code>required</code> for presence, <code>bsonType</code> for shape, <code>enum</code> for a closed value set, and <code>minimum</code> for a numeric floor. A rejected write throws a <code>MongoServerError</code> with the terse message <code>Document failed validation</code> and code <strong>121</strong>, and the useful detail lives in <code>e.errInfo.details.schemaRulesNotSatisfied</code>, which names the failing operator, what was specified, and what was actually seen. Logging <code>errInfo</code> rather than just the message is the difference between a debuggable rejection and a mystery.</p>\n<p><code>validationAction</code> is what makes validators deployable on a live system. Under <code>\"error\"</code> a violation aborts the write; under <code>\"warn\"</code> the identical document is accepted and the violation is written to the server log only — visible in the <code>amount: 0</code> insert, which is rejected before the <code>collMod</code> and accepted after it. The standard rollout is therefore: attach the validator in <code>\"warn\"</code> mode, watch the logs until the violation rate reaches zero, backfill or fix the offenders, then flip to <code>\"error\"</code> with a second <code>collMod</code>. Its companion <code>validationLevel</code> controls <em>which</em> documents are checked — <code>\"strict\"</code> validates every insert and update, while <code>\"moderate\"</code> validates inserts and updates to already-valid documents but leaves existing invalid ones alone, which is the other half of the migration story.</p>\n<p>The type trap is worth internalising. <code>mongosh</code> encodes an integral JavaScript literal as BSON <strong>int32</strong> and a fractional one as <strong>double</strong>: <code>orderId: 100</code> arrives as an <code>int</code>, <code>amount: 25.5</code> as a <code>double</code>, and <code>amount: 0</code> as an <code>int</code>. A validator specifying <code>bsonType: \"double\"</code> would therefore reject a whole-number amount for the wrong reason — you can see this in the errInfo, which reports a <code>bsonType</code> failure alongside the <code>minimum</code> one when the schema over-specifies the type. <code>\"number\"</code> accepts any numeric BSON type and is why the solution specifies it; pin <code>\"int\"</code> or <code>\"double\"</code> only when you genuinely care, and construct the values with <code>Int32()</code> or <code>Double()</code> so writers can satisfy it. Two further notes: validators are checked on updates as well as inserts, so a <code>$set</code> that violates the schema fails too; and validation is not a substitute for the schema versioning pattern — the validator describes the <em>current</em> contract, so a collection carrying multiple versions needs its schema expressed conditionally, or the validator will reject the very documents the migration has not reached yet.</p>"
+    },
+    {
+      "title": "Design an E-Commerce Order End to End and Defend the Choices",
+      "difficulty": "HARD",
+      "estimatedMinutes": 75,
+      "points": 30,
+      "concepts": [
+        "end-to-end schema design",
+        "embed vs reference justification",
+        "point-in-time snapshot",
+        "computed totals",
+        "$jsonSchema on nested arrays",
+        "polymorphic documents"
+      ],
+      "prerequisites": [
+        "extended reference pattern",
+        "computed pattern",
+        "$jsonSchema validation",
+        "schema versioning"
+      ],
+      "tags": [
+        "modeling",
+        "capstone",
+        "ecommerce",
+        "validation",
+        "mongodb"
+      ],
+      "problemHtml": "<p>Every pattern in this module exists to answer one question per relationship: embed or reference, and why. Model a real e-commerce order and make each decision explicitly. <strong>Customer</strong> is referenced — a customer outlives any order, is queried on their own, and their address changes must not rewrite order history. <strong>Line items</strong> are embedded as extended references — bounded in count, meaningless outside the order, and they must freeze <code>name</code> and <code>unitPrice</code> as a point-in-time snapshot of the sale. <strong>Totals</strong> are computed at write time so an order list never re-adds line items. <strong>Payment</strong> is polymorphic: a card payment and a bank-transfer payment carry different fields in one collection, discriminated by a <code>method</code> field.</p>\n<ul>\n<li>Create <code>orders</code> with a <code>$jsonSchema</code> validator (<code>validationAction: \"error\"</code>) requiring <code>schemaVersion</code>, <code>customerId</code>, <code>status</code>, <code>items</code> and <code>totals</code>; <code>status</code> restricted by <code>enum</code> to <code>[\"cart\", \"placed\", \"shipped\", \"cancelled\"]</code>; <code>items</code> an array with <code>minItems: 1</code> whose elements require <code>productId</code>, <code>name</code>, <code>unitPrice</code> and <code>qty</code>.</li>\n<li>Seed one customer (<code>_id: 7</code>) and two products (<code>_id: 1</code> Keyboard 49.9, <code>_id: 2</code> Mouse 19).</li>\n<li>Insert order <code>5001</code>: <code>schemaVersion: 2</code>, <code>customerId: 7</code>, <code>status: \"placed\"</code>, two line items (product 1 qty 1, product 2 qty 2) each snapshotting <code>name</code> and <code>unitPrice</code>, and zeroed <code>totals</code>.</li>\n<li>Compute the totals in one atomic pipeline update: <code>totals.subtotal</code> as the rounded <code>$sum</code> of a <code>$map</code> multiplying <code>unitPrice</code> by <code>qty</code>, and <code>totals.itemCount</code> as <code>{ $sum: \"$items.qty\" }</code>.</li>\n<li>Prove the validator bites: <code>try/catch</code> an order with <code>items: []</code> (breaks <code>minItems</code>) and one with <code>status: \"paid\"</code> (breaks the <code>enum</code>), printing the real error each time.</li>\n<li>Prove the snapshot holds: raise product 1's catalogue price to <code>59.9</code> and show order 5001 still records <code>49.9</code>.</li>\n<li>Insert two polymorphic payments for order 5001 into <code>payments_log</code> — <code>{ method: \"card\", last4, brand }</code> and <code>{ method: \"transfer\", bankCode, reference }</code> — and read them back to show one collection holding two shapes.</li>\n<li>Finish with the customer's order list projecting <code>totals</code> only, the read a real order-history page performs.</li>\n</ul>\n<p>The scaffold provides the collection names, the validator skeleton and the seed data.</p>",
+      "inputSpec": "Empty customers, products, orders and payments_log collections. One customer (_id 7), two products (Keyboard 49.9, Mouse 19), and one order (_id 5001) with two line items: product 1 qty 1 and product 2 qty 2.",
+      "outputSpec": "After the pipeline update, order 5001 has totals { subtotal: 87.9, itemCount: 3 }. The items: [] insert and the status: \"paid\" insert both throw \"Document failed validation\" with code 121 and errInfo naming minItems and enum respectively. After the catalogue price rises to 59.9 the order still shows unitPrice 49.9 for product 1. payments_log holds two documents of different shapes for order 5001, and the customer order list returns [ { _id: 5001, totals: { subtotal: 87.9, itemCount: 3 } } ].",
+      "constraints": "The validator must be attached to the orders collection, not enforced in application code. Line items must store a name/unitPrice snapshot and keep productId. Totals must be computed by one server-side pipeline update — no arithmetic in application code. Do not back-propagate the catalogue price change into placed orders.",
+      "examplesJson": [
+        {
+          "input": "db.orders.updateOne({ _id: 5001 }, [ { $set: { \"totals.subtotal\": { $round: [ { $sum: { $map: { input: \"$items\", as: \"i\", in: { $multiply: [\"$$i.unitPrice\", \"$$i.qty\"] } } } }, 2 ] }, \"totals.itemCount\": { $sum: \"$items.qty\" } } } ]); db.orders.findOne({ _id: 5001 }, { totals: 1 })",
+          "output": "{ _id: 5001, totals: { subtotal: 87.9, itemCount: 3 } }",
+          "explanation": "49.9 x 1 + 19 x 2 = 87.9 over 3 units, computed server-side from the embedded items in one atomic write."
+        },
+        {
+          "input": "try { db.orders.insertOne({ _id: 5002, schemaVersion: 2, customerId: 7, status: \"placed\", items: [], totals: { subtotal: 0, itemCount: 0 } }) } catch (e) { print(e.message + \" | code \" + e.code) }",
+          "output": "Document failed validation | code 121",
+          "explanation": "minItems: 1 makes an order without line items structurally impossible, so the invalid state can never reach the database."
+        },
+        {
+          "input": "db.products.updateOne({ _id: 1 }, { $set: { price: 59.9 } }); db.orders.findOne({ _id: 5001 }, { _id: 0, \"items.name\": 1, \"items.unitPrice\": 1 })",
+          "output": "{ items: [ { name: 'Keyboard', unitPrice: 49.9 }, { name: 'Mouse', unitPrice: 19 } ] }",
+          "explanation": "The catalogue moves to 59.9 while the order keeps the agreed 49.9 — the line item is a snapshot, not a cache."
+        }
+      ],
+      "hintsJson": [
+        "Decide each relationship separately: customer, line items, totals and payments have different cardinalities and different access patterns.",
+        "Reference the customer by id; embed the line items with a frozen name and unitPrice plus productId; compute the totals; give payments their own collection with a method discriminator.",
+        "For the validator, items needs bsonType \"array\" with minItems: 1 and an items sub-schema whose required list covers productId, name, unitPrice and qty.",
+        "Totals in one pipeline stage: $set \"totals.subtotal\" to $round of $sum over $map multiplying $$i.unitPrice by $$i.qty, and \"totals.itemCount\" to { $sum: \"$items.qty\" }."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "db.customers.insertOne({ _id: 7, name: \"Mai Tran\", email: \"mai@example.com\" })\ndb.products.insertMany([{ _id: 1, name: \"Keyboard\", price: 49.9 }, { _id: 2, name: \"Mouse\", price: 19 }])\ndb.createCollection(\"orders\", {\n  validator: {\n    $jsonSchema: {\n      bsonType: \"object\",\n      // TODO: required schemaVersion, customerId, status, items, totals\n      properties: {\n        // TODO: status enum cart/placed/shipped/cancelled\n        // TODO: items array, minItems 1, elements requiring productId/name/unitPrice/qty\n      }\n    }\n  },\n  validationAction: \"error\"\n})\n// TODO: insert order 5001 with two snapshotting line items and zeroed totals\n// TODO: one pipeline update computing totals.subtotal and totals.itemCount\n// TODO: try/catch an empty-items order and a status \"paid\" order, printing the real errors\n// TODO: raise product 1 to 59.9 and show the order still records 49.9\n// TODO: insert the card and transfer payments into payments_log and read them back\n// TODO: list customer 7's orders projecting totals only"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "db.customers.insertOne({ _id: 7, name: \"Mai Tran\", email: \"mai@example.com\" })\ndb.products.insertMany([{ _id: 1, name: \"Keyboard\", price: 49.9 }, { _id: 2, name: \"Mouse\", price: 19 }])\ndb.createCollection(\"orders\", {\n  validator: {\n    $jsonSchema: {\n      bsonType: \"object\",\n      required: [\"schemaVersion\", \"customerId\", \"status\", \"items\", \"totals\"],\n      properties: {\n        schemaVersion: { enum: [2] },\n        customerId: { bsonType: \"number\" },\n        status: { enum: [\"cart\", \"placed\", \"shipped\", \"cancelled\"] },\n        items: {\n          bsonType: \"array\",\n          minItems: 1,\n          items: {\n            bsonType: \"object\",\n            required: [\"productId\", \"name\", \"unitPrice\", \"qty\"],\n            properties: {\n              productId: { bsonType: \"number\" },\n              name: { bsonType: \"string\" },\n              unitPrice: { bsonType: \"number\", minimum: 0 },\n              qty: { bsonType: \"number\", minimum: 1 }\n            }\n          }\n        },\n        totals: { bsonType: \"object\", required: [\"subtotal\", \"itemCount\"] }\n      }\n    }\n  },\n  validationAction: \"error\"\n})\ndb.orders.insertOne({\n  _id: 5001,\n  schemaVersion: 2,\n  customerId: 7,\n  status: \"placed\",\n  items: [\n    { productId: 1, name: \"Keyboard\", unitPrice: 49.9, qty: 1 },\n    { productId: 2, name: \"Mouse\", unitPrice: 19, qty: 2 }\n  ],\n  totals: { subtotal: 0, itemCount: 0 }\n})\ndb.orders.updateOne({ _id: 5001 }, [\n  {\n    $set: {\n      \"totals.subtotal\": { $round: [{ $sum: { $map: { input: \"$items\", as: \"i\", in: { $multiply: [\"$$i.unitPrice\", \"$$i.qty\"] } } } }, 2] },\n      \"totals.itemCount\": { $sum: \"$items.qty\" }\n    }\n  }\n])\ndb.orders.findOne({ _id: 5001 }, { totals: 1 })\ntry {\n  db.orders.insertOne({ _id: 5002, schemaVersion: 2, customerId: 7, status: \"placed\", items: [], totals: { subtotal: 0, itemCount: 0 } })\n} catch (e) {\n  print(\"REJECTED empty items: \" + e.message + \" | code \" + e.code);\n  printjson(e.errInfo.details.schemaRulesNotSatisfied);\n}\ntry {\n  db.orders.insertOne({ _id: 5003, schemaVersion: 2, customerId: 7, status: \"paid\", items: [{ productId: 1, name: \"Keyboard\", unitPrice: 49.9, qty: 1 }], totals: { subtotal: 49.9, itemCount: 1 } })\n} catch (e) {\n  print(\"REJECTED bad status: \" + e.message + \" | code \" + e.code);\n  printjson(e.errInfo.details.schemaRulesNotSatisfied);\n}\ndb.products.updateOne({ _id: 1 }, { $set: { price: 59.9 } })\ndb.orders.findOne({ _id: 5001 }, { _id: 0, \"items.name\": 1, \"items.unitPrice\": 1 })\ndb.payments_log.insertMany([\n  { _id: 900, orderId: 5001, method: \"card\", amount: 87.9, last4: \"4242\", brand: \"visa\" },\n  { _id: 901, orderId: 5001, method: \"transfer\", amount: 87.9, bankCode: \"VCB\", reference: \"TX-5001\" }\n])\ndb.payments_log.find({ orderId: 5001 }).sort({ _id: 1 }).toArray()\ndb.orders.find({ customerId: 7, status: \"placed\" }, { totals: 1 }).sort({ _id: 1 }).toArray()"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The capstone is a set of independent decisions, each defensible on cardinality and access pattern rather than taste. <strong>Customer is referenced</strong> because it is one-to-many with an unbounded many side, is queried on its own, and has a lifetime longer than any order; embedding the customer into orders would duplicate an address across every purchase and force a fan-out update whenever it changed. <strong>Line items are embedded</strong> because they are one-to-few, bounded, atomically written with the order, and never queried without it — one <code>findOne</code> renders the whole order. Storing them as extended references (<code>productId</code> plus a frozen <code>name</code> and <code>unitPrice</code>) removes the join from the read path, and freezing the price is a correctness requirement rather than an optimisation: an order is a financial record of what was agreed, which is why raising the catalogue price to 59.9 leaves 49.9 untouched inside order 5001.</p>\n<p><strong>Totals are computed</strong> with a pipeline update so the arithmetic runs once at write time on the server. <code>$map</code> multiplies each line item's <code>unitPrice</code> by its <code>qty</code>, <code>$sum</code> folds the resulting array, and <code>$round</code> keeps the stored value presentable against floating-point noise; <code>{ $sum: \"$items.qty\" }</code> works because a dotted path across an array yields the array of values. An order-history page then projects <code>totals</code> and never touches the items. <strong>Payments are polymorphic</strong>: card and transfer records share <code>orderId</code>, <code>amount</code> and a <code>method</code> discriminator but diverge in their remaining fields, which one collection holds without strain — MongoDB's flexible documents make the union type free, provided the discriminator is explicit so readers can branch on it rather than probing for field existence.</p>\n<p>The <code>$jsonSchema</code> validator turns those decisions into enforced invariants. <code>minItems: 1</code> makes an order with no line items structurally impossible; the <code>status</code> <code>enum</code> makes a typo like <code>\"paid\"</code> a hard failure instead of a value that silently escapes every dashboard filter; and the nested <code>items</code> sub-schema guarantees every line item keeps the four fields the snapshot depends on. Both rejections come back as <code>Document failed validation</code> with code 121, with <code>errInfo.details.schemaRulesNotSatisfied</code> naming <code>minItems</code> and <code>enum</code> respectively.</p>\n<p>Two forward-looking notes. <code>schemaVersion: 2</code> is pinned by the validator, so introducing a v3 shape means widening the <code>enum</code> to <code>[2, 3]</code> before deploying writers of the new shape and narrowing it again once the migration completes — the versioning and validation patterns must be sequenced together or the validator will reject the migration's own output. And the model deliberately keeps the catalogue price and the line-item price separate: the day someone \"fixes\" that by syncing them is the day every historical invoice becomes wrong.</p>",
+      "diagramMermaid": "erDiagram\n  CUSTOMERS ||--o{ ORDERS : places\n  ORDERS ||--o{ PAYMENTS_LOG : settled_by\n  PRODUCTS ||--o{ ORDERS : snapshotted_into\n  ORDERS {\n    int _id\n    int schemaVersion\n    int customerId\n    string status\n    array items\n    object totals\n  }\n  PAYMENTS_LOG {\n    int _id\n    int orderId\n    string method\n    double amount\n  }"
+    }
+  ]
+}

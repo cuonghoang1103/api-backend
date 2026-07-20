@@ -1,0 +1,189 @@
+ECHO "========== PROLOGUE: reset to stock defaults =========="
+CONFIG SET appendonly no
+CONFIG SET appendfsync everysec
+CONFIG SET save "3600 1 300 100 60 10000"
+FLUSHALL
+BLPOP __verify_wait__ 1
+ECHO "========== EX 1: Discover What a Fresh Redis Server Persists by Default =========="
+FLUSHALL
+DBSIZE
+CONFIG GET dir
+CONFIG GET dbfilename
+CONFIG GET save
+CONFIG GET appendonly
+CONFIG GET appendfsync
+CONFIG GET stop-writes-on-bgsave-error
+LASTSAVE
+SET cache:homepage "rendered-html"
+SET session:1001 "user=ann"
+DBSIZE
+GET cache:homepage
+LASTSAVE
+BLPOP __verify_wait__ 1
+ECHO "========== EX 2: Force a Synchronous Snapshot with SAVE and Age It with LASTSAVE and TIME =========="
+FLUSHALL
+DBSIZE
+MSET order:1 "pending" order:2 "paid" order:3 "shipped"
+DBSIZE
+LASTSAVE
+TIME
+SAVE
+LASTSAVE
+TIME
+SET order:4 "cancelled"
+DBSIZE
+LASTSAVE
+SAVE
+LASTSAVE
+TIME
+MGET order:1 order:2 order:3 order:4
+DBSIZE
+BLPOP __verify_wait__ 1
+ECHO "========== EX 3: Fork a Non-Blocking Snapshot with BGSAVE and Confirm It Succeeded =========="
+FLUSHALL
+DBSIZE
+MSET user:1 "ann" user:2 "bob" user:3 "cara"
+DBSIZE
+LASTSAVE
+CONFIG GET rdbcompression
+CONFIG GET rdbchecksum
+BGSAVE
+INFO persistence
+BLPOP rdb:wait 1
+INFO persistence
+LASTSAVE
+DBSIZE
+GET user:2
+MGET user:1 user:3
+BLPOP __verify_wait__ 1
+ECHO "========== EX 4: Quantify Crash Exposure with rdb_changes_since_last_save =========="
+FLUSHALL
+SAVE
+INFO persistence
+CONFIG SET save ""
+CONFIG GET save
+MSET cart:1 "2 items" cart:2 "5 items" cart:3 "1 item"
+SET cart:4 "3 items"
+INCR visits:today
+DEL cart:1
+INFO persistence
+LASTSAVE
+SAVE
+INFO persistence
+CONFIG SET save "3600 1 300 100 60 10000"
+CONFIG GET save
+BLPOP __verify_wait__ 1
+ECHO "========== EX 5: Enable the Append-Only File at Runtime and Read Its Multi-Part Layout =========="
+FLUSHALL
+CONFIG GET appendonly
+MSET ledger:1 "open" ledger:2 "open"
+CONFIG SET appendonly yes
+CONFIG GET appendonly
+CONFIG GET appendfsync
+CONFIG GET appenddirname
+CONFIG GET appendfilename
+SET ledger:3 "open"
+INFO persistence
+BLPOP __verify_wait__ 1
+ECHO "========== EX 6: Trade Durability for Throughput with appendfsync everysec, always, and no =========="
+FLUSHALL
+CONFIG SET appendonly yes
+CONFIG GET appendfsync
+CONFIG SET appendfsync always
+CONFIG GET appendfsync
+SET tx:1 "committed"
+CONFIG SET appendfsync no
+CONFIG GET appendfsync
+SET tx:2 "committed"
+CONFIG SET appendfsync everysec
+CONFIG GET appendfsync
+INFO persistence
+BLPOP __verify_wait__ 1
+ECHO "========== EX 7: Compact a Churning Log with BGREWRITEAOF =========="
+FLUSHALL
+CONFIG SET appendonly yes
+BLPOP aof:wait 1
+CONFIG GET auto-aof-rewrite-percentage
+CONFIG GET auto-aof-rewrite-min-size
+SET churn 0
+INCR churn
+INCR churn
+INCR churn
+SET tmp:1 "x"
+DEL tmp:1
+INFO persistence
+BGREWRITEAOF
+BLPOP aof:wait 1
+INFO persistence
+GET churn
+BLPOP __verify_wait__ 1
+ECHO "========== EX 8: Run RDB and AOF Together and Prove Durability with DEBUG RELOAD =========="
+FLUSHALL
+CONFIG SET appendonly yes
+CONFIG SET save "3600 1 300 100 60 10000"
+MSET cfg:site "cuongthai" cfg:env "prod"
+RPUSH jobs "j1" "j2" "j3"
+HSET session:9 user "ann" role "admin"
+SET otp:9 "483920" EX 600
+DBSIZE
+SAVE
+INFO persistence
+DEBUG RELOAD
+DBSIZE
+MGET cfg:site cfg:env
+LRANGE jobs 0 -1
+HGETALL session:9
+TYPE jobs
+TTL otp:9
+BLPOP __verify_wait__ 1
+ECHO "========== EX 9: Write a Backup and Restore Runbook for a Live Instance =========="
+FLUSHALL
+CONFIG GET dir
+CONFIG GET dbfilename
+CONFIG GET appenddirname
+MSET acct:1 "100" acct:2 "250"
+HSET acct:meta owner "ann" region "sg"
+DBSIZE
+SAVE
+LASTSAVE
+INFO persistence
+INFO replication
+REPLICAOF NO ONE
+MGET acct:1 acct:2
+HGETALL acct:meta
+BLPOP __verify_wait__ 1
+ECHO "========== EX 10: Choose and Apply a Persistence Profile for Cache, Session Store, and Queue =========="
+FLUSHALL
+CONFIG SET save ""
+CONFIG SET appendonly no
+CONFIG GET save
+CONFIG GET appendonly
+SET frag:home "cached-html"
+INFO persistence
+CONFIG SET save "300 100"
+CONFIG SET appendonly yes
+CONFIG SET appendfsync everysec
+CONFIG GET save
+CONFIG GET appendonly
+CONFIG GET appendfsync
+SET sess:abc "user=ann"
+INFO persistence
+CONFIG SET appendfsync always
+CONFIG SET save "900 1"
+CONFIG GET appendfsync
+CONFIG GET save
+RPUSH payments "pay-1" "pay-2"
+LRANGE payments 0 -1
+CONFIG REWRITE
+CONFIG SET appendfsync everysec
+CONFIG SET appendonly no
+CONFIG SET save "3600 1 300 100 60 10000"
+CONFIG GET appendfsync
+CONFIG GET appendonly
+CONFIG GET save
+DBSIZE
+BLPOP __verify_wait__ 1
+ECHO "========== EPILOGUE: confirm stock defaults restored =========="
+CONFIG GET save
+CONFIG GET appendonly
+CONFIG GET appendfsync

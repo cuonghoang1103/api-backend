@@ -1,0 +1,690 @@
+{
+  "trackSlug": "redis",
+  "moduleSlug": "expiration-ttl-and-key-management",
+  "exercises": [
+    {
+      "title": "Attach and Remove a Deadline with EXPIRE, TTL, PTTL, and PERSIST",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "EXPIRE",
+        "TTL",
+        "PTTL",
+        "PERSIST",
+        "minus one versus minus two"
+      ],
+      "prerequisites": [
+        "SET",
+        "GET",
+        "DEL",
+        "redis-cli basics"
+      ],
+      "tags": [
+        "expire",
+        "ttl",
+        "persist",
+        "keyspace",
+        "redis"
+      ],
+      "problemHtml": "<p>Everything stored so far lives forever. That is wrong for most cache and session data: a login session should die on its own, a rendered page should go stale, a one-time code should stop working. Redis makes lifetime a property of the key itself — you attach a deadline with <code>EXPIRE</code> and the server deletes the key when it passes, with no cron job and no cleanup code in your application.</p>\n<p>The reporting command <code>TTL</code> returns three <em>kinds</em> of answer and confusing them is the classic beginner bug: a positive number is the seconds remaining, <strong><code>-1</code> means the key exists but has no expiry</strong>, and <strong><code>-2</code> means the key does not exist at all</strong>. Neither negative value is an error.</p>\n<p>Using <code>redis-cli</code>, manage the lifetime of one session key:</p>\n<ul>\n<li>Create <code>session:abc</code> with the value <code>\"u42\"</code> and immediately run <code>TTL session:abc</code>. It returns <code>-1</code>: a plain <code>SET</code> creates an <strong>immortal</strong> key.</li>\n<li>Attach a 100 second deadline with <code>EXPIRE session:abc 100</code>. It returns <code>1</code>, meaning the timeout was set. Read it back with <code>TTL</code> (seconds) and <code>PTTL</code> (milliseconds).</li>\n<li>Cancel the deadline with <code>PERSIST session:abc</code>. It returns <code>1</code> because a timeout was actually removed, and <code>TTL</code> goes back to <code>-1</code>. Run <code>PERSIST</code> a second time and observe <code>0</code> — there was nothing left to remove.</li>\n<li>Re-apply a shorter deadline of <code>60</code> seconds and confirm with <code>TTL</code>. <code>EXPIRE</code> on a key that already has a TTL simply replaces it.</li>\n<li><code>DEL session:abc</code>, then run <code>TTL</code> again: now you get <code>-2</code>, the \"no such key\" answer, and <code>EXISTS</code> agrees with <code>0</code>.</li>\n<li>Finally run <code>EXPIRE session:abc 60</code> on the deleted key. It returns <code>0</code>: you cannot schedule the death of something that is not there.</li>\n</ul>\n<p>The scaffold lists the commands with the value and the timeout numbers left blank.</p>",
+      "inputSpec": "A clean Redis database. You issue redis-cli commands; the \"input\" is the command sequence itself. One string key, session:abc, is created, timed, untimed, and deleted.",
+      "outputSpec": "SET returns OK; the first TTL returns -1; EXPIRE 100 returns 1, TTL returns 100 and PTTL returns 100000; the first PERSIST returns 1 and TTL returns -1; the second PERSIST returns 0; EXPIRE 60 returns 1 and TTL returns 60; DEL returns 1; TTL then returns -2 and EXISTS returns 0; the final EXPIRE on the missing key returns 0.",
+      "constraints": "Use only SET, TTL, PTTL, EXPIRE, PERSIST, DEL, and EXISTS. Do not delete the key by letting it expire — this exercise never waits. Do not treat -1 or -2 as an error code; both are ordinary integer replies.",
+      "examplesJson": [
+        {
+          "input": "SET session:abc \"u42\" then TTL session:abc then EXPIRE session:abc 100 then TTL session:abc",
+          "output": "OK\n(integer) -1\n(integer) 1\n(integer) 100",
+          "explanation": "A plain SET produces a key with no expiry, so TTL answers -1. EXPIRE returns 1 to say the timeout was applied, after which TTL reports the seconds remaining."
+        },
+        {
+          "input": "PERSIST session:abc then TTL session:abc then PERSIST session:abc",
+          "output": "(integer) 1\n(integer) -1\n(integer) 0",
+          "explanation": "PERSIST returns 1 when it actually strips a timeout and 0 when there was none to strip; either way the key survives and TTL reports -1."
+        },
+        {
+          "input": "DEL session:abc then TTL session:abc then EXISTS session:abc then EXPIRE session:abc 60",
+          "output": "(integer) 1\n(integer) -2\n(integer) 0\n(integer) 0",
+          "explanation": "-2 is the reply for a key that does not exist, which EXISTS confirms with 0, and EXPIRE returns 0 because there is no key to schedule."
+        }
+      ],
+      "hintsJson": [
+        "A key created by SET has no deadline at all — first prove that with the reporting command before you attach one.",
+        "EXPIRE key seconds attaches a timeout and returns 1 when it succeeds; TTL key reads it back in seconds and PTTL in milliseconds.",
+        "PERSIST key removes the timeout and makes the key immortal again, returning 1 if a timeout was removed and 0 if there was none.",
+        "TTL has three answers: a positive number of seconds, -1 for a key with no expiry, and -2 for a key that does not exist. After DEL you get -2, and EXPIRE on a missing key returns 0."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "commands.redis",
+          "language": "text",
+          "code": "SET session:abc ____\nTTL session:abc\nEXPIRE session:abc ____\nTTL session:abc\nPTTL session:abc\nPERSIST session:abc\nTTL session:abc\nPERSIST session:abc\nEXPIRE session:abc ____\nTTL session:abc\nDEL session:abc\nTTL session:abc\nEXISTS session:abc\nEXPIRE session:abc 60"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "commands.redis",
+          "language": "text",
+          "code": "SET session:abc \"u42\"\nTTL session:abc\nEXPIRE session:abc 100\nTTL session:abc\nPTTL session:abc\nPERSIST session:abc\nTTL session:abc\nPERSIST session:abc\nEXPIRE session:abc 60\nTTL session:abc\nDEL session:abc\nTTL session:abc\nEXISTS session:abc\nEXPIRE session:abc 60"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A timeout in Redis is metadata attached to a key, not a property of the value, which is why <code>EXPIRE</code> is a separate command that works on any type — a string, a list, a hash, a sorted set. The server keeps a second dictionary of keys that have a deadline, and deletion happens two ways: <strong>lazily</strong>, when a client touches an already-expired key and Redis removes it before answering, and <strong>actively</strong>, through a background cycle that samples the expires dictionary twenty times a second and evicts what it finds. The practical consequence is that a key is guaranteed to be <em>unreadable</em> the instant its deadline passes even if the memory has not been reclaimed yet, so you never need to defend against reading stale data.</p>\n<p>The three-valued <code>TTL</code> reply is the part to memorise, because the two negatives mean completely different things and both look like failure to an untrained eye. <code>-1</code> is \"this key is here and will live forever\" — a real answer, and usually a bug in cache code that meant to set an expiry. <code>-2</code> is \"there is no such key\", the same answer you would get for a name you never used, which is why <code>TTL</code> doubles as a cheap existence probe. Neither is an error reply, so a client library returns them as ordinary integers and a naive <code>if (ttl &lt; 0) throw</code> will fire on perfectly healthy keys.</p>\n<p>The return values of the mutating commands follow Redis's usual convention of counting work actually done rather than reporting success. <code>EXPIRE</code> returns <code>1</code> when it attached a timeout and <code>0</code> when the key did not exist, so a <code>0</code> after a write you believed had happened is a signal that the key is already gone. <code>PERSIST</code> returns <code>1</code> only when it stripped an existing timeout, which is why calling it twice yields <code>1</code> then <code>0</code>. Applying <code>EXPIRE</code> to a key that already has a deadline is not an error and does not extend it — it <strong>replaces</strong> it outright, which is exactly the behaviour a sliding session window relies on. All of these commands are O(1), so refreshing a session TTL on every request is free.</p>"
+    },
+    {
+      "title": "Create Self-Expiring Keys in One Command with SET EX and SET PX",
+      "difficulty": "EASY",
+      "estimatedMinutes": 20,
+      "points": 10,
+      "concepts": [
+        "SET with EX",
+        "SET with PX",
+        "SETEX",
+        "atomic write plus expiry",
+        "observing a real expiry"
+      ],
+      "prerequisites": [
+        "SET",
+        "GET",
+        "EXPIRE",
+        "TTL"
+      ],
+      "tags": [
+        "set-ex",
+        "ttl",
+        "atomicity",
+        "cache",
+        "redis"
+      ],
+      "problemHtml": "<p>Writing a cache entry as <code>SET key value</code> followed by <code>EXPIRE key 60</code> is two commands, and between them the key is <strong>immortal</strong>. If the client crashes, the network drops, or the server restarts in that gap, the entry never expires and you have leaked a key that nothing will ever clean up. Multiply that by a busy service and the leak is how a Redis instance quietly fills with garbage that has no TTL.</p>\n<p>The fix is to make the write and the deadline a single atomic operation. <code>SET key value EX seconds</code> and <code>SET key value PX milliseconds</code> do exactly that, and they are the form you should reach for by default whenever the data is a cache entry, a session, or a token.</p>\n<p>Using <code>redis-cli</code>, create three self-expiring keys and watch one of them die:</p>\n<ul>\n<li>Write <code>cache:home</code> with the value <code>\"home-page-html\"</code> and a 60 second lifetime in one <code>SET ... EX</code> call, then confirm with <code>TTL</code>.</li>\n<li>Write <code>cache:about</code> with the value <code>\"about-page-html\"</code> using the older dedicated command <code>SETEX cache:about 30 \"about-page-html\"</code>, confirm the TTL is <code>30</code>, and read the value back. <code>SETEX</code> still works but <code>SET ... EX</code> supersedes it.</li>\n<li>Write a one-time code <code>otp:u42</code> with the value <code>\"913055\"</code> and a sub-second lifetime using <code>SET ... PX 1500</code>. Confirm <code>PTTL</code> reports milliseconds and <code>EXISTS</code> reports <code>1</code>.</li>\n<li>Now <strong>wait</strong> for it. Because <code>DEBUG SLEEP</code> is disabled on a default server, block the client for three seconds with <code>BLPOP wait:otp 3</code> — a blocking pop on a list that does not exist, which simply times out and replies <code>(nil)</code>.</li>\n<li>After the wait, prove the key is gone three ways: <code>GET otp:u42</code> is <code>(nil)</code>, <code>TTL otp:u42</code> is <code>-2</code>, and <code>EXISTS otp:u42</code> is <code>0</code>. Nothing deleted it — the deadline did.</li>\n<li>Finish with <code>DBSIZE</code>, which counts <code>2</code>: the two page-cache keys are still alive.</li>\n</ul>\n<p>The scaffold lists the commands with the values and the timeout numbers blank.</p>",
+      "inputSpec": "A clean Redis database. Three string keys are created with expiries: cache:home (60s), cache:about (30s), and otp:u42 (1500ms). No key is deleted by hand.",
+      "outputSpec": "The SET with EX returns OK and TTL cache:home returns 60; SETEX returns OK, TTL cache:about returns 30 and GET returns \"about-page-html\"; the SET with PX returns OK, PTTL otp:u42 returns 1500 and EXISTS returns 1; BLPOP returns (nil) after roughly three seconds (redis-cli also prints the elapsed time for the blocking call); GET otp:u42 then returns (nil), TTL returns -2 and EXISTS returns 0; DBSIZE returns 2.",
+      "constraints": "Never write a cache entry as SET followed by a separate EXPIRE. Use SET with EX or PX (and SETEX once, to see the legacy form). Do not DEL otp:u42 — it must disappear on its own. BLPOP is used only as a portable wait; do not create the key wait:otp.",
+      "examplesJson": [
+        {
+          "input": "SET cache:home \"home-page-html\" EX 60 then TTL cache:home",
+          "output": "OK\n(integer) 60",
+          "explanation": "One command writes the value and attaches the deadline, so there is no instant at which the key exists without a TTL."
+        },
+        {
+          "input": "SET otp:u42 \"913055\" PX 1500 then PTTL otp:u42 then EXISTS otp:u42",
+          "output": "OK\n(integer) 1500\n(integer) 1",
+          "explanation": "PX takes milliseconds, letting you express lifetimes shorter than a second; PTTL reads the remaining time in the same unit."
+        },
+        {
+          "input": "BLPOP wait:otp 3 then GET otp:u42 then TTL otp:u42 then EXISTS otp:u42",
+          "output": "(nil)\n(nil)\n(integer) -2\n(integer) 0",
+          "explanation": "BLPOP on a list that never appears times out and returns (nil); by then the 1500 ms key has expired, so it reads as absent and TTL gives the -2 no-such-key answer."
+        }
+      ],
+      "hintsJson": [
+        "The problem with SET then EXPIRE is the gap between them — so remove the gap rather than shortening it.",
+        "SET accepts an expiry option directly: SET key value EX seconds, or PX for milliseconds.",
+        "SETEX key seconds value is the older single-purpose command that does the same thing; it survives for compatibility but SET with EX is the modern form.",
+        "To observe an expiry you must actually let time pass. BLPOP key timeout blocks the client until the timeout and returns (nil) if nothing arrives, which is a portable wait when DEBUG SLEEP is unavailable."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "commands.redis",
+          "language": "text",
+          "code": "SET cache:home ____ EX ____\nTTL cache:home\nSETEX cache:about ____ ____\nTTL cache:about\nGET cache:about\nSET otp:u42 ____ PX ____\nPTTL otp:u42\nEXISTS otp:u42\nBLPOP wait:otp 3\nGET otp:u42\nTTL otp:u42\nEXISTS otp:u42\nDBSIZE"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "commands.redis",
+          "language": "text",
+          "code": "SET cache:home \"home-page-html\" EX 60\nTTL cache:home\nSETEX cache:about 30 \"about-page-html\"\nTTL cache:about\nGET cache:about\nSET otp:u42 \"913055\" PX 1500\nPTTL otp:u42\nEXISTS otp:u42\nBLPOP wait:otp 3\nGET otp:u42\nTTL otp:u42\nEXISTS otp:u42\nDBSIZE"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The whole point of the <code>EX</code> and <code>PX</code> options is <strong>atomicity</strong>. Redis executes one command to completion before starting the next, so <code>SET cache:home \"home-page-html\" EX 60</code> has no observable intermediate state: there is never a moment, from any client's point of view or across a crash, at which <code>cache:home</code> exists without a deadline. The two-command version has exactly that window, and every immortal key you find in a production instance that was supposed to be a cache entry was born in it. The habit worth building is simple: if a value is derived, cached, or session-scoped, its <code>SET</code> carries an expiry option in the same call.</p>\n<p><code>EX</code> takes seconds and <code>PX</code> takes milliseconds; they are the same mechanism at different resolutions, and <code>TTL</code>/<code>PTTL</code> read them back in the matching unit. Sub-second lifetimes matter more than they look: they are what makes short debounce windows, one-time codes, and idempotency keys practical. <code>SETEX key seconds value</code> predates the options and still works, but note its argument order puts the timeout <em>before</em> the value, which is a small trap when you switch between the two forms — and there is no <code>SETEX</code> equivalent for the <code>NX</code>, <code>XX</code>, or <code>KEEPTTL</code> behaviour you will need next, so standardising on <code>SET</code> with options avoids ever having to think about it.</p>\n<p>The wait is the honest part of this exercise. Asserting that a key <em>would</em> expire is not the same as watching it happen, and the three probes afterwards each say something slightly different: <code>GET</code> returns <code>(nil)</code> because the value is unreadable, <code>TTL</code> returns <code>-2</code> because the key no longer exists rather than merely having no timeout, and <code>EXISTS</code> returns <code>0</code>. Note what did <em>not</em> happen — no application code ran, no cleanup job fired, and <code>DBSIZE</code> dropped without anyone calling <code>DEL</code>. That is the value of pushing lifetime management into the database: expiry is guaranteed even if every one of your processes is down. The <code>BLPOP wait:otp 3</code> trick works because a blocking pop on a non-existent list parks the connection until its timeout and then replies <code>(nil)</code>; it costs nothing and needs no special server configuration, unlike <code>DEBUG SLEEP</code>, which most builds disable.</p>"
+    },
+    {
+      "title": "The Silent TTL Reset: Why a Plain SET Wipes Your Expiry",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 30,
+      "points": 15,
+      "concepts": [
+        "KEEPTTL",
+        "TTL loss on overwrite",
+        "GETEX",
+        "in-place updates preserve TTL",
+        "cache refresh strategy"
+      ],
+      "prerequisites": [
+        "SET with EX",
+        "TTL",
+        "PERSIST",
+        "INCR"
+      ],
+      "tags": [
+        "keepttl",
+        "cache-bug",
+        "getex",
+        "ttl",
+        "redis"
+      ],
+      "problemHtml": "<p>This is the single most common Redis cache bug, and it produces no error, no warning, and no failing test. A service writes a cache entry with a one hour TTL. Later, some other code path refreshes the value with a plain <code>SET key newValue</code>. That write does not update the value inside the existing key — it <strong>replaces the key</strong>, and a brand new key has no timeout. The entry is now immortal. The cache still returns correct-looking data, so nobody notices until memory usage climbs for weeks or until a stale value is served forever.</p>\n<p>The rule underneath it is worth stating precisely: <strong>commands that replace a key discard its TTL; commands that modify a value in place keep it.</strong> <code>SET</code> and <code>GETSET</code> replace. <code>INCR</code>, <code>APPEND</code>, <code>HSET</code>, <code>LPUSH</code>, and <code>SADD</code> modify in place.</p>\n<p>Using <code>redis-cli</code>, reproduce the bug and then fix it three ways:</p>\n<ul>\n<li>Write <code>cache:user:7</code> as <code>\"profile-v1\"</code> with <code>EX 300</code> and confirm <code>TTL</code> is <code>300</code>.</li>\n<li>Overwrite it with a plain <code>SET cache:user:7 \"profile-v2\"</code> and read <code>TTL</code> again. It is <code>-1</code>. The key is now immortal — that is the bug, reproduced in two commands.</li>\n<li><code>DEL</code> the key and start again with <code>EX 300</code>. This time refresh the value with <code>SET cache:user:7 \"profile-v2\" KEEPTTL</code>. <code>TTL</code> stays <code>300</code> and <code>GET</code> proves the new value landed. That is fix one: keep the original deadline.</li>\n<li>Fix two is to <strong>restate</strong> the deadline: <code>SET cache:user:7 \"profile-v3\" EX 300</code> resets the window to a full 300 seconds. Choose deliberately — <code>KEEPTTL</code> means \"the entry still dies at the originally planned time\", <code>EX</code> again means \"the clock starts over\".</li>\n<li>Show the in-place case: <code>INCR counter:views</code>, give it <code>EXPIRE counter:views 120</code>, then <code>INCR</code> it again and confirm <code>TTL</code> is still <code>120</code>. Incrementing does not reset the window, which is exactly what a fixed-window rate limiter depends on.</li>\n<li>Fix three, for the read path: <code>GETEX cache:user:7 PERSIST</code> reads the value and strips the TTL in one call (<code>TTL</code> becomes <code>-1</code>), and <code>GETEX cache:user:7 EX 90</code> reads it while setting a new one. <code>GETEX</code> is how you implement a sliding expiry without a second round trip.</li>\n</ul>\n<p>The scaffold lists the commands with the SET options and timeout values blank.</p>",
+      "inputSpec": "A clean Redis database. One cache key, cache:user:7, is written and rewritten several ways; a second key, counter:views, demonstrates in-place modification.",
+      "outputSpec": "The first SET returns OK and TTL is 300; after the plain overwrite TTL is -1 and GET returns \"profile-v2\"; DEL returns 1; after re-creating with EX 300, the KEEPTTL write returns OK, TTL is still 300 and GET returns \"profile-v2\"; the SET with EX 300 resets TTL to 300; INCR returns 1, EXPIRE returns 1, the second INCR returns 2 and TTL counter:views is 120; GETEX with PERSIST returns \"profile-v3\" and TTL becomes -1; GETEX with EX 90 returns \"profile-v3\" and TTL becomes 90.",
+      "constraints": "Do not use EXPIRE to repair the TTL after a plain SET — that is the two-command race this module warns about. Use KEEPTTL when the deadline must survive a refresh and an explicit EX when it must restart. Do not DEL counter:views.",
+      "examplesJson": [
+        {
+          "input": "SET cache:user:7 \"profile-v1\" EX 300 then TTL cache:user:7 then SET cache:user:7 \"profile-v2\" then TTL cache:user:7",
+          "output": "OK\n(integer) 300\nOK\n(integer) -1",
+          "explanation": "The plain SET replaced the whole key, so the timeout went with the old one and the entry is now immortal — the bug, with no error to warn you."
+        },
+        {
+          "input": "SET cache:user:7 \"profile-v2\" KEEPTTL then TTL cache:user:7 then GET cache:user:7",
+          "output": "OK\n(integer) 300\n\"profile-v2\"",
+          "explanation": "KEEPTTL tells SET to retain the existing timeout, so the value is refreshed while the entry still dies at its originally planned moment."
+        },
+        {
+          "input": "INCR counter:views then EXPIRE counter:views 120 then INCR counter:views then TTL counter:views",
+          "output": "(integer) 1\n(integer) 1\n(integer) 2\n(integer) 120",
+          "explanation": "INCR modifies the value in place instead of replacing the key, so the deadline is untouched — which is what makes a fixed-window rate limiter work."
+        }
+      ],
+      "hintsJson": [
+        "Ask what SET actually does to an existing key: does it edit the value, or does it install a new key over the top of the old one?",
+        "Because SET replaces the key, every piece of metadata attached to the old key — including its timeout — is discarded with it.",
+        "SET key value KEEPTTL keeps whatever expiry the key already had; SET key value EX n installs a fresh one. Repairing it afterwards with a separate EXPIRE reintroduces the non-atomic gap.",
+        "Commands that mutate in place (INCR, APPEND, HSET, LPUSH, SADD) never touch the TTL. On the read side, GETEX key PERSIST strips a TTL and GETEX key EX n sets one, both while returning the value."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "commands.redis",
+          "language": "text",
+          "code": "SET cache:user:7 \"profile-v1\" EX ____\nTTL cache:user:7\nSET cache:user:7 \"profile-v2\"\nTTL cache:user:7\nGET cache:user:7\nDEL cache:user:7\nSET cache:user:7 \"profile-v1\" EX ____\nTTL cache:user:7\nSET cache:user:7 \"profile-v2\" ____\nTTL cache:user:7\nGET cache:user:7\nSET cache:user:7 \"profile-v3\" EX ____\nTTL cache:user:7\nINCR counter:views\nEXPIRE counter:views ____\nINCR counter:views\nTTL counter:views\nGETEX cache:user:7 ____\nTTL cache:user:7\nGETEX cache:user:7 EX ____\nTTL cache:user:7"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "commands.redis",
+          "language": "text",
+          "code": "SET cache:user:7 \"profile-v1\" EX 300\nTTL cache:user:7\nSET cache:user:7 \"profile-v2\"\nTTL cache:user:7\nGET cache:user:7\nDEL cache:user:7\nSET cache:user:7 \"profile-v1\" EX 300\nTTL cache:user:7\nSET cache:user:7 \"profile-v2\" KEEPTTL\nTTL cache:user:7\nGET cache:user:7\nSET cache:user:7 \"profile-v3\" EX 300\nTTL cache:user:7\nINCR counter:views\nEXPIRE counter:views 120\nINCR counter:views\nTTL counter:views\nGETEX cache:user:7 PERSIST\nTTL cache:user:7\nGETEX cache:user:7 EX 90\nTTL cache:user:7"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The mental model that prevents this bug is that <code>SET</code> is not an assignment to a variable — it is a <strong>key replacement</strong>. Redis discards the old key object entirely and installs a new one, and the timeout was a property of the old object. Nothing about the reply tells you this happened: <code>SET</code> answers <code>OK</code> whether the key existed or not, so the only visible symptom is a <code>TTL</code> of <code>-1</code> on a key you were certain had a deadline. In a running system it shows up as memory that grows and never plateaus, or as a cache entry that serves the same value for months because the code that was supposed to let it expire refreshed it into immortality instead.</p>\n<p>The three repairs are not interchangeable and choosing between them is a design decision. <code>KEEPTTL</code> preserves the <em>absolute</em> death time, which is right when the deadline expresses a business fact — a promotion that ends at a fixed moment, a token whose validity was fixed at issue. Passing <code>EX</code> again resets the window, which is right when the deadline expresses freshness relative to the last write, as for a page cache. <code>GETEX key EX n</code> refreshes on <em>read</em>, which is how a sliding session works: every request extends the session by touching it, and a user who goes away for the full window is logged out. What you should not do is <code>SET</code> then <code>EXPIRE</code> to patch it up, because that reintroduces exactly the window this module opened with — a crash between the two leaves an immortal key.</p>\n<p>The in-place rule is the other half. <code>INCR</code>, <code>APPEND</code>, <code>HSET</code>, <code>HINCRBY</code>, <code>LPUSH</code>, <code>SADD</code>, and <code>ZADD</code> all modify the value inside an existing key, so the timeout is untouched — <code>counter:views</code> keeps its 120 seconds across increments. That behaviour is what makes the fixed-window rate limiter correct: you <code>INCR</code> on every request and only set the expiry when the counter comes back as <code>1</code>, and the window then closes a fixed time after the first request rather than sliding forward forever. The exception to watch for is <code>GETSET</code>, which despite the <code>GET</code> in its name performs a replacing write and therefore <em>does</em> clear the TTL; it is deprecated in favour of <code>SET ... GET</code> precisely because of surprises like that.</p>",
+      "diagramMermaid": "flowchart TD\n  A[Key cache user 7 with TTL 300] --> B{Which write}\n  B -->|SET value| C[New key installed TTL discarded returns minus one]\n  B -->|SET value KEEPTTL| D[Value replaced original deadline kept]\n  B -->|SET value EX 300| E[Value replaced clock restarted at 300]\n  B -->|INCR or APPEND or HSET| F[Value edited in place TTL untouched]\n  B -->|GETEX EX 90| G[Value read and deadline slid to 90]"
+    },
+    {
+      "title": "Conditional Writes with NX and XX, and a Lock That Cannot Leak",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 30,
+      "points": 20,
+      "concepts": [
+        "SET NX",
+        "SET XX",
+        "atomic lock acquisition",
+        "SETNX legacy form",
+        "nil reply as a failed condition"
+      ],
+      "prerequisites": [
+        "SET with EX",
+        "TTL",
+        "GET",
+        "DEL"
+      ],
+      "tags": [
+        "set-nx",
+        "set-xx",
+        "lock",
+        "atomicity",
+        "redis"
+      ],
+      "problemHtml": "<p>Two workers pick up the same invoice at the same instant and both start charging the customer. The standard defence is a lock, and the standard way to get it wrong is to check first and write second: <code>GET lock</code>, see it is empty, then <code>SET lock</code>. Between those two commands the other worker does exactly the same thing and both believe they hold the lock.</p>\n<p><code>SET</code> solves this with two mutually exclusive conditions evaluated <strong>inside</strong> the command. <code>NX</code> means \"only if the key does not exist\"; <code>XX</code> means \"only if it already does\". When the condition fails, the write does not happen and the reply is <code>(nil)</code> instead of <code>OK</code> — that nil is the whole signal, and it is what tells a worker it lost the race.</p>\n<p>Combining <code>NX</code> with <code>EX</code> in one call is what makes the lock safe: acquisition and the safety timeout are atomic, so a worker that crashes while holding the lock cannot block the queue forever.</p>\n<p>Using <code>redis-cli</code>, build both patterns:</p>\n<ul>\n<li>Worker one acquires: <code>SET lock:invoice:9 \"worker-1\" NX EX 30</code> returns <code>OK</code>, and <code>TTL</code> confirms the safety timeout is <code>30</code> — set in the same command, not after it.</li>\n<li>Worker two tries the identical command with the value <code>\"worker-2\"</code> and gets <code>(nil)</code>. <code>GET</code> proves the stored value is still <code>\"worker-1\"</code>: the losing write left nothing behind.</li>\n<li>Worker one finishes and releases with <code>DEL</code>. Worker two retries, now succeeds, and <code>GET</code> returns <code>\"worker-2\"</code>.</li>\n<li>Switch to <code>XX</code>, the \"update only\" condition. <code>SET feature:beta \"on\" XX</code> on a key that does not exist returns <code>(nil)</code> and <code>EXISTS</code> confirms nothing was created. Create it with a plain <code>SET feature:beta \"off\"</code>, then repeat the <code>XX</code> write — it now returns <code>OK</code> and <code>GET</code> shows <code>\"on\"</code>. Check <code>TTL feature:beta</code> is <code>-1</code>: <code>XX</code> without <code>KEEPTTL</code> still replaced the key.</li>\n<li>Finally see the legacy form and its flaw: <code>SETNX lock:report:1 \"worker-1\"</code> returns <code>1</code>, a second <code>SETNX</code> with <code>\"worker-2\"</code> returns <code>0</code>, but <code>TTL</code> is <code>-1</code>. Adding <code>EXPIRE lock:report:1 30</code> afterwards works, yet a crash in that gap leaves a lock nobody can release.</li>\n</ul>\n<p>The scaffold lists the commands with the condition flags and timeouts blank.</p>",
+      "inputSpec": "A clean Redis database. Keys lock:invoice:9, feature:beta, and lock:report:1 model a job lock, a feature flag, and a legacy lock respectively.",
+      "outputSpec": "The first NX acquisition returns OK and TTL is 30; the second returns (nil) and GET returns \"worker-1\"; DEL returns 1; the retry returns OK and GET returns \"worker-2\"; SET feature:beta \"on\" XX returns (nil) and EXISTS returns 0; the plain SET returns OK, the repeated XX write returns OK, GET returns \"on\" and TTL is -1; SETNX returns 1 then 0, TTL lock:report:1 is -1, EXPIRE returns 1 and TTL becomes 30.",
+      "constraints": "Acquire the lock with a single SET carrying both NX and EX — never GET-then-SET, and never SET followed by EXPIRE. Do not use WATCH/MULTI here. Treat a (nil) reply as \"condition not met\", not as an error. Release the lock only with DEL.",
+      "examplesJson": [
+        {
+          "input": "SET lock:invoice:9 \"worker-1\" NX EX 30 then SET lock:invoice:9 \"worker-2\" NX EX 30 then GET lock:invoice:9",
+          "output": "OK\n(nil)\n\"worker-1\"",
+          "explanation": "Only the first caller can create the key, so the second gets (nil) and its value is discarded — the lock holder is unambiguous and the 30 second timeout was applied atomically."
+        },
+        {
+          "input": "SET feature:beta \"on\" XX then EXISTS feature:beta then SET feature:beta \"off\" then SET feature:beta \"on\" XX then GET feature:beta",
+          "output": "(nil)\n(integer) 0\nOK\nOK\n\"on\"",
+          "explanation": "XX refuses to create a key, so the first write is a no-op; once the key exists the same command succeeds, which is how you update a value without ever accidentally creating it."
+        },
+        {
+          "input": "SETNX lock:report:1 \"worker-1\" then SETNX lock:report:1 \"worker-2\" then TTL lock:report:1",
+          "output": "(integer) 1\n(integer) 0\n(integer) -1",
+          "explanation": "SETNX gives the same exclusivity but returns 1/0 instead of OK/nil and cannot attach a timeout, so the lock it creates has no expiry and leaks if the holder dies."
+        }
+      ],
+      "hintsJson": [
+        "The race exists because the check and the write are two commands — so make the check part of the write.",
+        "SET key value NX writes only when the key is absent and replies (nil) when it is present; SET key value XX is the mirror image.",
+        "Put NX and EX in the same SET so the lock and its safety timeout are installed together: SET lock value NX EX 30.",
+        "A (nil) reply means the condition failed and nothing was written — that is how the losing worker learns it did not get the lock. SETNX is the older NX-only form and cannot carry an expiry, which is why it leaks locks."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "commands.redis",
+          "language": "text",
+          "code": "SET lock:invoice:9 \"worker-1\" ____ EX ____\nTTL lock:invoice:9\nSET lock:invoice:9 \"worker-2\" ____ EX ____\nGET lock:invoice:9\nDEL lock:invoice:9\nSET lock:invoice:9 \"worker-2\" ____ EX ____\nGET lock:invoice:9\nSET feature:beta \"on\" ____\nEXISTS feature:beta\nSET feature:beta \"off\"\nSET feature:beta \"on\" ____\nGET feature:beta\nTTL feature:beta\nSETNX lock:report:1 \"worker-1\"\nSETNX lock:report:1 \"worker-2\"\nTTL lock:report:1\nEXPIRE lock:report:1 ____\nTTL lock:report:1"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "commands.redis",
+          "language": "text",
+          "code": "SET lock:invoice:9 \"worker-1\" NX EX 30\nTTL lock:invoice:9\nSET lock:invoice:9 \"worker-2\" NX EX 30\nGET lock:invoice:9\nDEL lock:invoice:9\nSET lock:invoice:9 \"worker-2\" NX EX 30\nGET lock:invoice:9\nSET feature:beta \"on\" XX\nEXISTS feature:beta\nSET feature:beta \"off\"\nSET feature:beta \"on\" XX\nGET feature:beta\nTTL feature:beta\nSETNX lock:report:1 \"worker-1\"\nSETNX lock:report:1 \"worker-2\"\nTTL lock:report:1\nEXPIRE lock:report:1 30\nTTL lock:report:1"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>NX</code> and <code>XX</code> move the condition inside the command, and because Redis executes commands one at a time there is no instant at which two clients can both observe \"the key is absent\" and both write. That is the entire correctness argument for the lock, and it is why <code>SET lock:invoice:9 \"worker-1\" NX EX 30</code> is a genuine mutual exclusion primitive while <code>GET</code>-then-<code>SET</code> is merely a race with a small window. Reading the reply correctly matters: <code>OK</code> means you hold the lock and <code>(nil)</code> means someone else does. A <code>(nil)</code> is not an error and must not be retried blindly in a tight loop.</p>\n<p>The <code>EX</code> in the same call is not decoration — it is the difference between a lock and a deadlock. A worker can crash, be OOM-killed, or lose its network between acquiring and releasing, and without a timeout the key stays forever and the queue stops. With <code>EX 30</code> the lock self-heals. Choosing that number is a real trade-off: too short and a slow worker loses its lock while still working, so two workers run concurrently anyway; too long and a crash stalls the queue for that duration. Production implementations therefore store a <strong>unique token</strong> as the value (here <code>\"worker-1\"</code> stands in for one) and release with a small Lua script that deletes the key only if the value still matches, because a plain <code>DEL</code> can otherwise delete a lock that has already expired and been re-acquired by someone else. They also refresh the TTL periodically while the work is in progress.</p>\n<p><code>XX</code> answers the opposite need: update if present, never create. That is what a feature-flag or profile-patch write wants, so a typo in a key name fails loudly with <code>(nil)</code> instead of silently creating a key nobody reads. Note the TTL detail the exercise makes visible — an <code>XX</code> write still <em>replaces</em> the key, so it clears any existing timeout unless you add <code>KEEPTTL</code>; the conditions control whether the write happens, not how it happens. Finally, <code>SETNX</code> is worth recognising in old code but not worth writing: it returns <code>1</code>/<code>0</code> rather than <code>OK</code>/<code>(nil)</code>, and since it cannot carry an expiry it forces the <code>SETNX</code> + <code>EXPIRE</code> pair whose crash window is precisely the bug the modern form eliminates.</p>"
+    },
+    {
+      "title": "Absolute Deadlines: EXPIREAT, EXPIRETIME, and the NX XX GT LT Flags",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 35,
+      "points": 20,
+      "concepts": [
+        "EXPIREAT",
+        "EXPIRETIME",
+        "PEXPIRETIME",
+        "EXPIRE with NX XX GT LT",
+        "relative versus absolute expiry"
+      ],
+      "prerequisites": [
+        "EXPIRE",
+        "TTL",
+        "PTTL",
+        "SET with EX"
+      ],
+      "tags": [
+        "expireat",
+        "expiretime",
+        "ttl-flags",
+        "deadlines",
+        "redis"
+      ],
+      "problemHtml": "<p><code>EXPIRE</code> expresses a lifetime <em>relative to now</em>, which is the wrong shape whenever the deadline is a fixed moment: a flash sale that ends at midnight, a token that must die exactly when the signed JWT does, a daily counter that resets at 00:00 UTC. Computing <code>secondsUntilMidnight</code> in the application and passing it to <code>EXPIRE</code> works until the request is slow, retried, or replayed, at which point the key outlives the event it was meant to track.</p>\n<p><code>EXPIREAT key unixTimestamp</code> takes the absolute deadline directly, and <code>PEXPIREAT</code> takes it in milliseconds. The reverse readers are <code>EXPIRETIME</code> and <code>PEXPIRETIME</code>, which return the stored deadline as an absolute timestamp rather than a countdown — invaluable when debugging, because a timestamp is comparable across machines while a TTL is not.</p>\n<p>Redis 7 also added four option flags to <code>EXPIRE</code> so you can change a deadline <strong>conditionally</strong>: <code>NX</code> only if the key has no expiry, <code>XX</code> only if it already has one, <code>GT</code> only if the new deadline is greater than the current one, and <code>LT</code> only if it is less. They return <code>1</code> when the timeout was changed and <code>0</code> when the condition rejected it.</p>\n<p>Using <code>redis-cli</code>, drive one promotion key through all of them:</p>\n<ul>\n<li>Create <code>promo:flash</code> with the value <code>\"20-off\"</code>, then set an absolute deadline with <code>EXPIREAT promo:flash 1900000000</code> (a fixed Unix second far in the future). It returns <code>1</code>.</li>\n<li>Read the deadline back with <code>EXPIRETIME</code> (returns exactly <code>1900000000</code>) and <code>PEXPIRETIME</code> (the same instant in milliseconds). Then run <code>TTL</code> and note it reports a large positive countdown that depends on when you run it — that is the difference between an absolute deadline and a relative one.</li>\n<li>Try <code>EXPIRE promo:flash 100 NX</code>. It returns <code>0</code>: the key already has an expiry, so <code>NX</code> refuses. Then <code>EXPIRE promo:flash 100 XX</code> returns <code>1</code> and <code>TTL</code> becomes <code>100</code>.</li>\n<li><code>EXPIRE promo:flash 50 GT</code> returns <code>0</code> — 50 is not greater than the remaining 100, so nothing changes. <code>EXPIRE promo:flash 300 GT</code> returns <code>1</code> and <code>TTL</code> becomes <code>300</code>. <code>GT</code> is the \"extend but never shorten\" primitive.</li>\n<li><code>EXPIRE promo:flash 60 LT</code> returns <code>1</code> and shortens the deadline to <code>60</code>. Then set a millisecond deadline with <code>PEXPIRE promo:flash 45000</code> and read <code>PTTL</code>.</li>\n<li>On a fresh key <code>promo:new</code> with value <code>\"10-off\"</code> and no expiry, <code>EXPIRE promo:new 120 NX</code> returns <code>1</code> (there was no timeout to protect) while a second <code>EXPIRE promo:new 240 NX</code> returns <code>0</code> and leaves <code>TTL</code> at <code>120</code>.</li>\n</ul>\n<p>The scaffold lists the commands with the timestamps, timeouts, and flags blank.</p>",
+      "inputSpec": "A clean Redis database. Two string keys, promo:flash and promo:new, receive absolute and conditional deadlines. 1900000000 is a fixed Unix timestamp in seconds.",
+      "outputSpec": "SET returns OK and EXPIREAT returns 1; EXPIRETIME returns 1900000000 and PEXPIRETIME returns 1900000000000; TTL returns a large positive countdown whose exact value depends on the current clock; EXPIRE 100 NX returns 0, EXPIRE 100 XX returns 1 and TTL is 100; EXPIRE 50 GT returns 0 with TTL still 100, EXPIRE 300 GT returns 1 with TTL 300; EXPIRE 60 LT returns 1 with TTL 60; PEXPIRE 45000 returns 1 and PTTL is 45000; on promo:new the first EXPIRE 120 NX returns 1 with TTL 120 and the second EXPIRE 240 NX returns 0 with TTL still 120.",
+      "constraints": "Use EXPIREAT with the literal timestamp 1900000000 — do not compute a relative offset. Do not assert an exact value for TTL after EXPIREAT; it is clock-dependent, which is the point. Use the conditional flags rather than reading the current TTL and branching in the client.",
+      "examplesJson": [
+        {
+          "input": "SET promo:flash \"20-off\" then EXPIREAT promo:flash 1900000000 then EXPIRETIME promo:flash then PEXPIRETIME promo:flash",
+          "output": "OK\n(integer) 1\n(integer) 1900000000\n(integer) 1900000000000",
+          "explanation": "The deadline is stored as an absolute instant, so reading it back gives the exact timestamp you set rather than a countdown that changes every second."
+        },
+        {
+          "input": "EXPIRE promo:flash 100 NX then EXPIRE promo:flash 100 XX then TTL promo:flash",
+          "output": "(integer) 0\n(integer) 1\n(integer) 100",
+          "explanation": "NX refuses because the key already had an expiry; XX accepts for the same reason. The 0 is a rejected condition, not a failure."
+        },
+        {
+          "input": "EXPIRE promo:flash 50 GT then TTL promo:flash then EXPIRE promo:flash 300 GT then TTL promo:flash",
+          "output": "(integer) 0\n(integer) 100\n(integer) 1\n(integer) 300",
+          "explanation": "GT applies the new deadline only when it is later than the current one, so a shorter value is silently ignored — an atomic \"extend, never shorten\"."
+        }
+      ],
+      "hintsJson": [
+        "If the deadline is a moment in the calendar rather than a duration, stop converting it to a duration.",
+        "EXPIREAT key unixSeconds and PEXPIREAT key unixMilliseconds take the absolute instant; EXPIRETIME and PEXPIRETIME read it back the same way.",
+        "EXPIRE accepts a trailing flag: NX sets a timeout only on a key that has none, XX only on a key that already has one.",
+        "GT applies the new deadline only if it is later than the current one and LT only if it is earlier; both return 1 when the change was made and 0 when the condition rejected it. A key with no expiry is treated as infinite, so GT never applies to it while LT always does."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "commands.redis",
+          "language": "text",
+          "code": "SET promo:flash ____\nEXPIREAT promo:flash ____\nEXPIRETIME promo:flash\nPEXPIRETIME promo:flash\nTTL promo:flash\nEXPIRE promo:flash 100 ____\nEXPIRE promo:flash 100 ____\nTTL promo:flash\nEXPIRE promo:flash 50 ____\nTTL promo:flash\nEXPIRE promo:flash 300 ____\nTTL promo:flash\nEXPIRE promo:flash 60 ____\nTTL promo:flash\nPEXPIRE promo:flash ____\nPTTL promo:flash\nSET promo:new ____\nEXPIRE promo:new 120 ____\nTTL promo:new\nEXPIRE promo:new 240 ____\nTTL promo:new"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "commands.redis",
+          "language": "text",
+          "code": "SET promo:flash \"20-off\"\nEXPIREAT promo:flash 1900000000\nEXPIRETIME promo:flash\nPEXPIRETIME promo:flash\nTTL promo:flash\nEXPIRE promo:flash 100 NX\nEXPIRE promo:flash 100 XX\nTTL promo:flash\nEXPIRE promo:flash 50 GT\nTTL promo:flash\nEXPIRE promo:flash 300 GT\nTTL promo:flash\nEXPIRE promo:flash 60 LT\nTTL promo:flash\nPEXPIRE promo:flash 45000\nPTTL promo:flash\nSET promo:new \"10-off\"\nEXPIRE promo:new 120 NX\nTTL promo:new\nEXPIRE promo:new 240 NX\nTTL promo:new"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Internally every expiry is stored the same way — as an absolute millisecond timestamp — and <code>EXPIRE</code> is simply the convenience form that adds your duration to the server's clock at the moment the command runs. Once you know that, the choice becomes obvious: use <code>EXPIREAT</code> whenever the deadline is a fact about the world rather than a duration since now. It is idempotent, which is its underrated property. Replaying <code>EXPIREAT promo:flash 1900000000</code> ten times leaves the same deadline, whereas replaying <code>EXPIRE promo:flash 3600</code> ten times pushes the deadline an hour further each time — a retry loop or an at-least-once message consumer can therefore keep a key alive indefinitely without anyone writing a bug.</p>\n<p><code>EXPIRETIME</code> and <code>PEXPIRETIME</code> exist because a countdown is useless for correlating systems. \"TTL 3412\" tells you nothing you can compare against a log line, a JWT <code>exp</code> claim, or another server's key; an absolute timestamp does. When a cache entry expires \"too early\", the fastest diagnosis is to read <code>EXPIRETIME</code> on a live key and compare it against what the application intended.</p>\n<p>The four conditional flags remove a read-modify-write from your application. Without them, \"extend this session but never shorten it\" requires <code>TTL</code>, a comparison in the client, and then <code>EXPIRE</code> — three steps with a race in the middle, where a concurrent client can change the deadline between your read and your write. <code>EXPIRE key seconds GT</code> does it in one atomic command. The semantics to remember: a key <strong>with no expiry counts as infinite</strong>, so <code>GT</code> can never apply to an immortal key (nothing is greater than infinity) while <code>LT</code> always will, and <code>NX</code> is the flag that means \"only if there is no deadline yet\". The return value is <code>1</code> for changed and <code>0</code> for rejected — and crucially <code>0</code> is also what you get when the key does not exist, so a <code>0</code> alone does not tell you which of the two happened; pair it with <code>EXISTS</code> when that distinction matters. All of these commands are O(1), and passing a timestamp already in the past is legal: the key is deleted immediately.</p>"
+    },
+    {
+      "title": "Moving Keys Without Losing the Clock: RENAME, RENAMENX, and COPY",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 35,
+      "points": 20,
+      "concepts": [
+        "RENAME",
+        "RENAMENX",
+        "COPY with REPLACE",
+        "TTL follows the key",
+        "destructive destination overwrite"
+      ],
+      "prerequisites": [
+        "SET with EX",
+        "TTL",
+        "EXISTS",
+        "DEL"
+      ],
+      "tags": [
+        "rename",
+        "copy",
+        "ttl",
+        "atomic-swap",
+        "redis"
+      ],
+      "problemHtml": "<p>Renaming a key is how you publish an atomically-built value. The pattern is everywhere: build the new version of a leaderboard, a rendered page, or a materialised index under a temporary name, and when it is complete <code>RENAME</code> it over the live name in one indivisible step. Readers see either the whole old value or the whole new one, never a half-built one.</p>\n<p>Two behaviours make or break that pattern, and both are about lifetime. First, <strong>the TTL travels with the key</strong>: a renamed key keeps its remaining time, so you can set the deadline while building under the temporary name. Second, <code>RENAME</code> onto an existing destination <strong>destroys the destination completely</strong> — value and TTL both — replacing it with the source. That is usually what you want and occasionally a data-loss bug, which is why <code>RENAMENX</code> exists.</p>\n<p>Using <code>redis-cli</code>, work through all four cases:</p>\n<ul>\n<li>Create <code>draft:99</code> with value <code>\"text-a\"</code> and <code>EX 120</code>, then <code>RENAME draft:99 post:99</code>. Confirm <code>TTL post:99</code> is still <code>120</code> and <code>EXISTS draft:99</code> is <code>0</code> — the key moved, it was not copied.</li>\n<li>Set up a collision: create <code>post:100</code> as <code>\"old-body\"</code> with <strong>no</strong> expiry, create <code>draft:100</code> as <code>\"new-body\"</code> with <code>EX 200</code>, then <code>RENAME draft:100 post:100</code>. <code>GET post:100</code> is <code>\"new-body\"</code> and <code>TTL post:100</code> is <code>200</code>: the destination's immortality did not survive, because the destination key itself did not survive.</li>\n<li>Guard against that with <code>RENAMENX</code>. Create <code>draft:101</code> as <code>\"text-c\"</code> with <code>EX 90</code>; <code>RENAMENX draft:101 post:100</code> returns <code>0</code> and changes nothing (<code>EXISTS draft:101</code> is still <code>1</code>). Then <code>RENAMENX draft:101 post:101</code> returns <code>1</code>, <code>TTL post:101</code> is <code>90</code>, and the source is gone.</li>\n<li>Duplicate instead of move: <code>COPY post:101 post:101:backup</code> returns <code>1</code> and the copy carries the TTL (<code>90</code>). A second <code>COPY post:101 post:100</code> returns <code>0</code> because the destination exists; <code>COPY post:101 post:100 REPLACE</code> returns <code>1</code> and overwrites it, so <code>TTL post:100</code> becomes <code>90</code>.</li>\n<li>Finally run <code>RENAME missing:draft post:102</code> on a key that does not exist. Unlike almost every other command in this module, <code>RENAME</code> raises <code>(error) ERR no such key</code> rather than returning <code>0</code>.</li>\n</ul>\n<p>The scaffold lists the commands with the values, timeouts, and destination names blank.</p>",
+      "inputSpec": "A clean Redis database. Draft keys draft:99, draft:100, and draft:101 carry TTLs and are moved onto post:99, post:100, and post:101; post:101:backup is produced by COPY.",
+      "outputSpec": "The first RENAME returns OK, TTL post:99 is 120 and EXISTS draft:99 is 0; after the colliding RENAME, GET post:100 is \"new-body\" and TTL post:100 is 200; RENAMENX onto the existing post:100 returns 0 with EXISTS draft:101 still 1, then RENAMENX onto post:101 returns 1 with TTL 90 and EXISTS draft:101 becoming 0; COPY to post:101:backup returns 1 with TTL 90; COPY onto post:100 returns 0 and with REPLACE returns 1, after which TTL post:100 is 90; RENAME on a missing key returns the error ERR no such key.",
+      "constraints": "Do not DEL the destination before renaming — rely on RENAME replacing it, or on RENAMENX refusing. Do not re-apply a TTL after moving a key; prove that it travels. Use COPY with REPLACE rather than deleting the destination first.",
+      "examplesJson": [
+        {
+          "input": "SET draft:99 \"text-a\" EX 120 then RENAME draft:99 post:99 then TTL post:99 then EXISTS draft:99",
+          "output": "OK\nOK\n(integer) 120\n(integer) 0",
+          "explanation": "The remaining lifetime is metadata on the key object, which is moved wholesale, so the deadline survives the rename and the old name disappears."
+        },
+        {
+          "input": "post:100 exists with no TTL; SET draft:100 \"new-body\" EX 200 then RENAME draft:100 post:100 then GET post:100 then TTL post:100",
+          "output": "OK\nOK\n\"new-body\"\n(integer) 200",
+          "explanation": "RENAME deletes the destination outright and installs the source under that name, so the destination value and its lack of expiry are both replaced."
+        },
+        {
+          "input": "RENAMENX draft:101 post:100 then EXISTS draft:101 then RENAMENX draft:101 post:101 then TTL post:101",
+          "output": "(integer) 0\n(integer) 1\n(integer) 1\n(integer) 90",
+          "explanation": "RENAMENX refuses when the destination exists, returning 0 and leaving the source untouched; onto a free name it behaves exactly like RENAME and carries the TTL."
+        }
+      ],
+      "hintsJson": [
+        "A TTL is stored on the key object, not inside the value — so ask what happens to that object when the key is renamed.",
+        "RENAME source destination moves the key, TTL and all, and returns OK; the source name stops existing.",
+        "If the destination already exists, RENAME deletes it first. RENAMENX returns 0 and does nothing instead, which is the safe form when a collision would be a bug.",
+        "COPY source destination duplicates the key including its TTL and returns 0 if the destination exists; add REPLACE to overwrite. RENAME on a missing source is one of the few commands here that raises an error rather than returning 0."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "commands.redis",
+          "language": "text",
+          "code": "SET draft:99 ____ EX ____\nRENAME draft:99 ____\nTTL post:99\nEXISTS draft:99\nSET post:100 \"old-body\"\nSET draft:100 ____ EX ____\nRENAME draft:100 ____\nGET post:100\nTTL post:100\nSET draft:101 ____ EX ____\nRENAMENX draft:101 ____\nEXISTS draft:101\nRENAMENX draft:101 ____\nTTL post:101\nEXISTS draft:101\nCOPY post:101 ____\nTTL post:101:backup\nCOPY post:101 post:100\nCOPY post:101 post:100 ____\nTTL post:100\nRENAME missing:draft post:102"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "commands.redis",
+          "language": "text",
+          "code": "SET draft:99 \"text-a\" EX 120\nRENAME draft:99 post:99\nTTL post:99\nEXISTS draft:99\nSET post:100 \"old-body\"\nSET draft:100 \"new-body\" EX 200\nRENAME draft:100 post:100\nGET post:100\nTTL post:100\nSET draft:101 \"text-c\" EX 90\nRENAMENX draft:101 post:100\nEXISTS draft:101\nRENAMENX draft:101 post:101\nTTL post:101\nEXISTS draft:101\nCOPY post:101 post:101:backup\nTTL post:101:backup\nCOPY post:101 post:100\nCOPY post:101 post:100 REPLACE\nTTL post:100\nRENAME missing:draft post:102"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The unifying idea is that a Redis key is an <em>object</em> — a name bound to a value plus metadata such as its expiry — and <code>RENAME</code> rebinds that whole object to a new name. Nothing is serialised, copied, or re-created, so the operation is O(1) regardless of whether the value is a three-byte string or a million-element sorted set, and the remaining lifetime comes along untouched. This is what makes the build-then-publish pattern practical: create <code>leaderboard:building</code>, populate it over several seconds, give it the TTL you want the live key to have, then <code>RENAME leaderboard:building leaderboard:live</code>. Readers of the live name are never exposed to a partially populated structure, because the swap is a single command and Redis runs commands one at a time.</p>\n<p>The destructive part deserves respect. <code>RENAME source destination</code> implicitly deletes the destination, and it deletes it <em>entirely</em> — which is why <code>post:100</code>, an immortal key before the rename, ends up with a 200 second TTL afterwards. It did not inherit anything; it ceased to exist and the source took its name. When a collision would mean losing data, <code>RENAMENX</code> is the guard: it returns <code>0</code>, leaves both keys exactly as they were, and lets you decide. Note the asymmetry with the <code>NX</code> option on <code>SET</code> — <code>RENAMENX</code> reports with <code>1</code>/<code>0</code>, not <code>OK</code>/<code>(nil)</code>. One further caveat for later: in Redis Cluster both names must hash to the same slot, which is what hash tags in braces are for, so cluster-safe code names its temporary key so that it shares a slot with the live one.</p>\n<p><code>COPY</code> is the non-destructive sibling, added in Redis 6.2. It duplicates the value <em>and</em> the remaining TTL into a new key, refuses by default when the destination exists (returning <code>0</code>), and takes <code>REPLACE</code> to overwrite anyway — which, like <code>RENAME</code>, replaces the destination's TTL with the source's. It also accepts a <code>DB</code> option to copy into another database. Unlike <code>RENAME</code> it is O(N) in the size of the value, since it genuinely duplicates the data. The last line of this exercise is a deliberate reminder about error handling: most commands in this module answer a missing key with <code>0</code> or <code>(nil)</code>, but <code>RENAME</code> and <code>RENAMENX</code> both raise <code>ERR no such key</code>, so code that renames a key it merely assumes is there will throw rather than silently no-op.</p>"
+    },
+    {
+      "title": "Explore a Live Keyspace with SCAN Instead of KEYS",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 35,
+      "points": 20,
+      "concepts": [
+        "SCAN cursor iteration",
+        "MATCH and COUNT",
+        "KEYS is O(N) and blocking",
+        "TYPE",
+        "key namespacing with colons"
+      ],
+      "prerequisites": [
+        "MSET",
+        "DBSIZE",
+        "key naming",
+        "Redis is single threaded"
+      ],
+      "tags": [
+        "scan",
+        "keys",
+        "namespaces",
+        "introspection",
+        "redis"
+      ],
+      "problemHtml": "<p>Redis executes commands on a <strong>single thread</strong>. Any command that touches every key therefore stops the entire server for the duration — no other client is served, health checks time out, and the incident looks like a total outage. <code>KEYS *</code> is exactly such a command: it is O(N) over the whole keyspace, and running it on a production instance with a few million keys is one of the classic ways to take a service down. It is fine in a local shell on a toy dataset and nowhere else.</p>\n<p><code>SCAN</code> is the safe replacement. It is a <strong>cursor</strong>: you call <code>SCAN 0</code>, get back a new cursor plus a batch of keys, and keep calling with the returned cursor until it comes back as <code>0</code>, which means the iteration finished. Each call does a bounded amount of work, so the server stays responsive between batches. The guarantee is weaker than a snapshot — a key present for the whole iteration is returned at least once, a key added or removed during it may or may not appear, and the same key may be returned twice — so client code must tolerate duplicates.</p>\n<p>Naming discipline is what makes this useful. Colon-separated namespaces such as <code>session:a1</code> and <code>cache:v1:home</code> turn the flat keyspace into something you can filter with <code>MATCH</code>.</p>\n<p>Using <code>redis-cli</code>, seed a small mixed keyspace and explore it:</p>\n<ul>\n<li>Create five string keys in one <code>MSET</code>: <code>session:a1</code>=<code>\"u1\"</code>, <code>session:a2</code>=<code>\"u2\"</code>, <code>session:a3</code>=<code>\"u3\"</code>, <code>cache:v1:home</code>=<code>\"h\"</code>, <code>cache:v1:about</code>=<code>\"a\"</code>. Then add three non-string keys: <code>LPUSH queue:emails \"job-1\"</code>, <code>HSET user:1 name \"Ann\"</code>, and <code>SADD tags:post:1 \"redis\"</code>. Confirm <code>DBSIZE</code> is <code>8</code>.</li>\n<li>Filter by namespace: <code>SCAN 0 MATCH session:* COUNT 100</code> returns cursor <code>\"0\"</code> (iteration complete) and the three session keys. Repeat with <code>MATCH cache:v1:*</code> for the two cache keys.</li>\n<li>Force a partial pass with <code>SCAN 0 COUNT 2</code>. You get back a <strong>non-zero</strong> cursor and only some of the keys. That cursor is an opaque implementation detail — never store it, never assume its value, just feed it back.</li>\n<li>Identify what you found without reading it: <code>TYPE</code> on <code>session:a1</code>, <code>queue:emails</code>, <code>user:1</code>, and <code>tags:post:1</code> returns <code>string</code>, <code>list</code>, <code>hash</code>, and <code>set</code>. <code>TYPE nothing:here</code> returns <code>none</code>.</li>\n<li>Run <code>KEYS session:*</code> once, on this eight-key database, to see it produce the same three keys in one shot — and state to yourself why you will not run it in production.</li>\n<li>Finish with <code>RANDOMKEY</code>, which returns one arbitrary existing key name and is handy for sampling a keyspace you know nothing about.</li>\n</ul>\n<p>The scaffold lists the commands with the MATCH patterns and COUNT values blank.</p>",
+      "inputSpec": "A clean Redis database seeded with eight keys across four namespaces and four types: three session strings, two cache strings, one list, one hash, and one set.",
+      "outputSpec": "MSET returns OK, LPUSH returns 1, HSET returns 1, SADD returns 1 and DBSIZE returns 8. SCAN 0 MATCH session:* COUNT 100 returns cursor \"0\" plus session:a1, session:a2 and session:a3 in unspecified order; SCAN 0 MATCH cache:v1:* COUNT 100 returns cursor \"0\" plus the two cache keys. SCAN 0 COUNT 2 returns a non-zero opaque cursor and a partial batch of keys whose exact contents depend on the internal hash layout. TYPE returns string, list, hash, set, and none. KEYS session:* returns the three session keys, and RANDOMKEY returns one arbitrary existing key name.",
+      "constraints": "Use SCAN with MATCH for every namespace query; KEYS appears exactly once, as a demonstration. Do not assume any particular ordering of scan results, do not assume the cursor value, and do not rely on a single SCAN call returning everything — only a cursor of 0 means the iteration is complete. Do not use TYPE-specific reads to discover a key type.",
+      "examplesJson": [
+        {
+          "input": "SCAN 0 MATCH session:* COUNT 100 on the eight-key database",
+          "output": "1) \"0\"\n2) 1) \"session:a2\"\n   2) \"session:a3\"\n   3) \"session:a1\"",
+          "explanation": "The reply is a two-element array: the next cursor and the batch. A cursor of \"0\" means the iteration is complete, and MATCH filters the returned batch by glob pattern. The keys come back in internal hash-table order, not insertion order, so never rely on the sequence shown here."
+        },
+        {
+          "input": "TYPE session:a1 then TYPE queue:emails then TYPE user:1 then TYPE tags:post:1 then TYPE nothing:here",
+          "output": "string\nlist\nhash\nset\nnone",
+          "explanation": "TYPE reports the data type of a key without transferring its contents, and answers none for a key that does not exist rather than raising."
+        },
+        {
+          "input": "DBSIZE then KEYS session:*",
+          "output": "(integer) 8\n1) \"session:a2\"\n2) \"session:a3\"\n3) \"session:a1\"",
+          "explanation": "KEYS returns everything matching in a single blocking pass, again in unspecified order; on eight keys that is instant, on eight million it freezes the server for the whole scan."
+        }
+      ],
+      "hintsJson": [
+        "The problem with listing every key at once is not the result — it is that the single-threaded server can do nothing else while it builds that result.",
+        "SCAN cursor is an iterator: start at 0, and keep calling with the cursor it returns until it returns 0 again.",
+        "Add MATCH pattern to filter and COUNT n to hint at the batch size; COUNT is a hint, not a guarantee, and MATCH filters after the batch is gathered so a batch can legitimately come back empty.",
+        "TYPE key names the data type without reading the value, and returns none for a missing key. Note that SCAN can return the same key more than once, so a client must deduplicate."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "commands.redis",
+          "language": "text",
+          "code": "MSET session:a1 \"u1\" session:a2 \"u2\" session:a3 \"u3\" cache:v1:home \"h\" cache:v1:about \"a\"\nLPUSH queue:emails \"job-1\"\nHSET user:1 name \"Ann\"\nSADD tags:post:1 \"redis\"\nDBSIZE\nSCAN 0 MATCH ____ COUNT ____\nSCAN 0 MATCH ____ COUNT ____\nSCAN 0 COUNT ____\nTYPE session:a1\nTYPE queue:emails\nTYPE user:1\nTYPE tags:post:1\nTYPE nothing:here\nKEYS ____\nRANDOMKEY"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "commands.redis",
+          "language": "text",
+          "code": "MSET session:a1 \"u1\" session:a2 \"u2\" session:a3 \"u3\" cache:v1:home \"h\" cache:v1:about \"a\"\nLPUSH queue:emails \"job-1\"\nHSET user:1 name \"Ann\"\nSADD tags:post:1 \"redis\"\nDBSIZE\nSCAN 0 MATCH session:* COUNT 100\nSCAN 0 MATCH cache:v1:* COUNT 100\nSCAN 0 COUNT 2\nTYPE session:a1\nTYPE queue:emails\nTYPE user:1\nTYPE tags:post:1\nTYPE nothing:here\nKEYS session:*\nRANDOMKEY"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The argument against <code>KEYS</code> is not about elegance, it is about the event loop. Redis serves every client from one thread, so the latency of any command is added to the latency of every other command queued behind it. <code>KEYS *</code> walks the entire top-level dictionary and materialises the whole reply before sending a byte, which on a multi-million-key instance means hundreds of milliseconds to several seconds of total unavailability — long enough for connection pools to time out and for an orchestrator to decide the node is dead. The same reasoning bans <code>SMEMBERS</code> on a huge set, <code>HGETALL</code> on a huge hash, and <code>LRANGE key 0 -1</code> on a huge list; the family cure is the <code>SCAN</code> family, which includes <code>SSCAN</code>, <code>HSCAN</code>, and <code>ZSCAN</code>.</p>\n<p><code>SCAN</code> works by walking the hash table's buckets in a reverse-binary-increment order that keeps its guarantees stable even while the table is being resized underneath it. That design buys the property that matters — every key present for the full duration of the iteration is returned <strong>at least</strong> once — at the price of two you must code around: a key may be returned <em>more than</em> once, so deduplicate on the client, and keys created or deleted mid-iteration have no guarantee either way. The cursor itself is an opaque token encoding a bucket position; it is meaningless outside the iteration and must never be persisted or compared.</p>\n<p>Two argument subtleties trip people up. <code>COUNT</code> is a <em>hint</em> about how much work to do per call, not a page size: a batch can come back larger or smaller, and with <code>MATCH</code> it can legitimately come back <strong>empty</strong> while still returning a non-zero cursor. Code that stops when it receives an empty batch will silently miss most of the keyspace — the only correct termination condition is a returned cursor of <code>0</code>. And <code>MATCH</code> filters <em>after</em> the batch has been gathered, so it reduces network traffic but not server work; scanning a million keys to find ten still costs a million-key walk, spread across many calls. That is why namespacing with colons is a design decision rather than a cosmetic one, and why a keyspace you need to query by attribute should carry an explicit index — a set of ids per attribute — rather than being scanned. <code>TYPE</code> and <code>RANDOMKEY</code> round out the introspection toolkit: both are O(1), and <code>TYPE</code> returning <code>none</code> for a missing key follows the same \"absence is not an error\" convention as <code>GET</code> and <code>TTL</code>.</p>",
+      "diagramMermaid": "flowchart TD\n  A[Start with cursor 0] --> B[Call SCAN cursor MATCH pattern COUNT n]\n  B --> C[Server returns next cursor plus a batch]\n  C --> D[Process the batch and deduplicate]\n  D --> E{Next cursor equals 0}\n  E -->|No| B\n  E -->|Yes| F[Iteration complete]\n  C --> G[Batch may be empty yet cursor is non zero so never stop on an empty batch]"
+    },
+    {
+      "title": "Bulk Key Inspection and Deletion: EXISTS, DEL, UNLINK, and FLUSHDB ASYNC",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 35,
+      "points": 20,
+      "concepts": [
+        "variadic EXISTS counts duplicates",
+        "variadic DEL",
+        "UNLINK non-blocking delete",
+        "DBSIZE",
+        "FLUSHDB with ASYNC"
+      ],
+      "prerequisites": [
+        "DEL",
+        "EXISTS",
+        "DBSIZE",
+        "key namespacing"
+      ],
+      "tags": [
+        "exists",
+        "unlink",
+        "del",
+        "flushdb",
+        "redis"
+      ],
+      "problemHtml": "<p>Cleanup is where a single-threaded database bites again. <code>DEL</code> frees the key's memory <strong>synchronously</strong>, on the same thread that serves every other client. For a string that is nothing, but deleting one hash with ten million fields means freeing ten million allocations before any other client is served — a multi-second stall caused by what looks like a trivial command. <code>UNLINK</code> fixes this: it unlinks the key from the keyspace immediately, so it is instantly invisible to every client, and hands the actual memory reclamation to a background thread.</p>\n<p>The batch forms matter too. <code>EXISTS</code> and <code>DEL</code> both accept many keys in one call, which turns N round trips into one — and <code>EXISTS</code> has a quirk worth knowing: it counts <strong>occurrences</strong>, not distinct keys, so passing the same existing key three times returns <code>3</code>.</p>\n<p>Using <code>redis-cli</code>, seed a small keyspace and clean it up:</p>\n<ul>\n<li>Create five strings with one <code>MSET</code>: <code>session:a1</code>=<code>\"u1\"</code>, <code>session:a2</code>=<code>\"u2\"</code>, <code>cache:v1:home</code>=<code>\"h\"</code>, <code>cache:v1:about</code>=<code>\"a\"</code>, <code>cache:v1:faq</code>=<code>\"f\"</code>. Add a list with <code>LPUSH queue:emails \"job-1\" \"job-2\"</code> (it returns <code>2</code>). <code>DBSIZE</code> is <code>6</code>.</li>\n<li>Probe with <code>EXISTS session:a1</code> (<code>1</code>), then the variadic form <code>EXISTS session:a1 session:a2 queue:emails</code> (<code>3</code>).</li>\n<li>Now the quirk: <code>EXISTS session:a1 session:a1 session:a1</code> returns <code>3</code>, because each argument that resolves to an existing key adds one. Contrast with <code>EXISTS session:a1 session:missing</code>, which returns <code>1</code>.</li>\n<li>Confirm the list type with <code>TYPE queue:emails</code>, then delete two sessions and one non-existent key in a single call: <code>DEL session:a1 session:a2 session:missing</code> returns <code>2</code> — the count of keys actually removed, not the count of arguments. <code>DBSIZE</code> drops to <code>4</code>.</li>\n<li>Remove the three cache entries with <code>UNLINK cache:v1:home cache:v1:about cache:v1:faq</code>, which returns <code>3</code> with the same semantics but without blocking. <code>DBSIZE</code> is now <code>1</code>.</li>\n<li>Show idempotence: <code>DEL session:a1</code> again returns <code>0</code> rather than erroring. Add <code>SET keep:me \"v\"</code> so <code>DBSIZE</code> is <code>2</code>.</li>\n<li>Wipe the database with <code>FLUSHDB ASYNC</code>. It returns <code>OK</code>, <code>DBSIZE</code> is <code>0</code>, and <code>EXISTS keep:me</code> is <code>0</code> — <code>FLUSHDB</code> respects nothing, which is why it must never be scripted against a production connection.</li>\n</ul>\n<p>The scaffold lists the commands with the key lists blank.</p>",
+      "inputSpec": "A clean Redis database seeded with five string keys across two namespaces plus one list key, then progressively emptied.",
+      "outputSpec": "MSET returns OK, LPUSH returns 2 and DBSIZE returns 6; EXISTS on one key returns 1, on three distinct existing keys returns 3, on the same key repeated three times returns 3, and on one present plus one missing returns 1; TYPE queue:emails returns list; DEL of two existing keys plus one missing returns 2 and DBSIZE becomes 4; UNLINK of the three cache keys returns 3 and DBSIZE becomes 1; the repeat DEL returns 0; SET returns OK and DBSIZE becomes 2; FLUSHDB ASYNC returns OK, DBSIZE becomes 0 and EXISTS keep:me returns 0.",
+      "constraints": "Delete in batches — one DEL and one UNLINK call, not one per key. Use UNLINK for the bulk cache removal and DEL only where the synchronous form is demonstrated. Do not delete keys individually in a loop, and do not use KEYS to build the delete list.",
+      "examplesJson": [
+        {
+          "input": "EXISTS session:a1 session:a2 queue:emails then EXISTS session:a1 session:a1 session:a1 then EXISTS session:a1 session:missing",
+          "output": "(integer) 3\n(integer) 3\n(integer) 1",
+          "explanation": "EXISTS counts occurrences rather than distinct keys, so a repeated existing key is counted every time; only arguments that resolve to nothing contribute zero."
+        },
+        {
+          "input": "DEL session:a1 session:a2 session:missing then DBSIZE",
+          "output": "(integer) 2\n(integer) 4",
+          "explanation": "DEL returns how many keys it actually removed, so naming a key that is not there is harmless and makes cleanup safe to re-run."
+        },
+        {
+          "input": "UNLINK cache:v1:home cache:v1:about cache:v1:faq then DBSIZE then DEL session:a1",
+          "output": "(integer) 3\n(integer) 1\n(integer) 0",
+          "explanation": "UNLINK reports the same count as DEL and removes the keys from the keyspace immediately, while the memory is freed on a background thread; deleting an already-deleted key returns 0."
+        }
+      ],
+      "hintsJson": [
+        "Both the existence check and the delete accept more than one key per call — start by collapsing your round trips.",
+        "EXISTS key [key ...] returns a count, and the count is of arguments that resolve to an existing key, so duplicates are counted more than once.",
+        "DEL key [key ...] returns the number of keys actually removed, which is why deleting something that is not there returns 0 instead of raising.",
+        "UNLINK has identical semantics to DEL but reclaims memory on a background thread, so it is the right default for large collections. FLUSHDB ASYNC empties the whole database the same non-blocking way."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "commands.redis",
+          "language": "text",
+          "code": "MSET session:a1 \"u1\" session:a2 \"u2\" cache:v1:home \"h\" cache:v1:about \"a\" cache:v1:faq \"f\"\nLPUSH queue:emails \"job-1\" \"job-2\"\nDBSIZE\nEXISTS session:a1\nEXISTS ____ ____ ____\nEXISTS ____ ____ ____\nEXISTS ____ ____\nTYPE queue:emails\nDEL ____ ____ ____\nDBSIZE\nUNLINK ____ ____ ____\nDBSIZE\nDEL session:a1\nSET keep:me \"v\"\nDBSIZE\nFLUSHDB ____\nDBSIZE\nEXISTS keep:me"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "commands.redis",
+          "language": "text",
+          "code": "MSET session:a1 \"u1\" session:a2 \"u2\" cache:v1:home \"h\" cache:v1:about \"a\" cache:v1:faq \"f\"\nLPUSH queue:emails \"job-1\" \"job-2\"\nDBSIZE\nEXISTS session:a1\nEXISTS session:a1 session:a2 queue:emails\nEXISTS session:a1 session:a1 session:a1\nEXISTS session:a1 session:missing\nTYPE queue:emails\nDEL session:a1 session:a2 session:missing\nDBSIZE\nUNLINK cache:v1:home cache:v1:about cache:v1:faq\nDBSIZE\nDEL session:a1\nSET keep:me \"v\"\nDBSIZE\nFLUSHDB ASYNC\nDBSIZE\nEXISTS keep:me"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every command in this exercise reports <strong>work done</strong> rather than success, which is the convention that makes Redis cleanup code simple. <code>DEL</code> and <code>UNLINK</code> return the number of keys actually removed, so naming a key that has already expired or been deleted contributes <code>0</code> and nothing goes wrong; a cleanup routine is therefore idempotent by construction and safe to retry after a partial failure. The trap is reading that number as a boolean — a <code>0</code> from <code>DEL</code> is not an error, it is the statement that there was nothing to remove, which in a lock-release path is a meaningful signal that your lock already expired.</p>\n<p><code>EXISTS</code> counting occurrences rather than distinct keys surprises almost everyone the first time. <code>EXISTS k k k</code> returning <code>3</code> is documented behaviour, and the practical consequence is that you cannot use the reply as \"how many of my keys are present\" unless you deduplicate the argument list first. The variadic form is still worth using: one round trip instead of N is the difference between one network latency and N of them, and on a remote Redis that dominates everything else.</p>\n<p>The <code>DEL</code>-versus-<code>UNLINK</code> choice is a latency decision. Both remove the key from the keyspace atomically and immediately — after either command no client can see the key. They differ in <em>when the memory is freed</em>: <code>DEL</code> does it inline on the main thread, so the cost is proportional to the number of allocated objects inside the value and is paid by every waiting client, while <code>UNLINK</code> queues the value for a background thread when it is large enough to be worth it. For a string or a small collection the two are effectively identical; for a hash, set, or sorted set with millions of elements, <code>DEL</code> is a stall and <code>UNLINK</code> is not. The sane default is <code>UNLINK</code> unless you specifically need the memory accounted for before your next command. The same reasoning gives <code>FLUSHDB ASYNC</code> and <code>FLUSHALL ASYNC</code>, which detach the entire keyspace and free it in the background instead of blocking for as long as it takes to walk every key. And the obvious warning: <code>FLUSHDB</code> ignores TTLs, ignores namespaces, and cannot be undone, so in production it should be disabled through <code>rename-command</code> or blocked by ACLs rather than trusted to discipline.</p>"
+    },
+    {
+      "title": "Read the Eviction Policy: maxmemory, the Eight Policies, and CONFIG GET",
+      "difficulty": "HARD",
+      "estimatedMinutes": 45,
+      "points": 25,
+      "concepts": [
+        "maxmemory",
+        "maxmemory-policy",
+        "noeviction versus allkeys-lru versus volatile-ttl",
+        "CONFIG GET and CONFIG SET",
+        "maxmemory-samples"
+      ],
+      "prerequisites": [
+        "TTL",
+        "SET with EX",
+        "DBSIZE",
+        "Redis is single threaded"
+      ],
+      "tags": [
+        "maxmemory",
+        "eviction",
+        "config",
+        "lru",
+        "redis"
+      ],
+      "problemHtml": "<p>Expiry is how <em>you</em> decide a key should die. Eviction is what Redis does when it runs out of room and you have not decided. The two are independent, and confusing them produces the most expensive Redis outages: a team assumes \"it is a cache, old stuff gets thrown away\" while the server is actually running the default policy, <code>noeviction</code>, under which a full instance stops accepting writes and every write command starts returning <code>OOM command not allowed when used memory &gt; maxmemory</code>. The cache does not degrade; it fails.</p>\n<p>Two parameters decide everything. <code>maxmemory</code> is the byte budget, where <code>0</code> means unlimited — the default, and the reason an unconfigured Redis will happily grow until the kernel OOM-killer takes it. <code>maxmemory-policy</code> chooses what to sacrifice when the budget is reached. The eight policies split on two axes: which keys are candidates (<code>allkeys-</code> = any key, <code>volatile-</code> = only keys that have a TTL) and how a victim is picked (<code>lru</code>, <code>lfu</code>, <code>random</code>, and <code>ttl</code> which evicts the key closest to expiring). <code>noeviction</code> is the ninth option: evict nothing, reject writes.</p>\n<p>Using <code>redis-cli</code>, inspect and change this configuration at runtime:</p>\n<ul>\n<li>Read the defaults of a stock server: <code>CONFIG GET maxmemory</code> returns <code>\"0\"</code>, <code>CONFIG GET maxmemory-policy</code> returns <code>\"noeviction\"</code>, and <code>CONFIG GET maxmemory-samples</code> returns <code>\"5\"</code>. Note every value comes back as a <strong>string</strong>, in a flat name-then-value array.</li>\n<li>Set a budget with <code>CONFIG SET maxmemory 100mb</code>, then read it back: it reports <code>\"104857600\"</code>, the value normalised to bytes. Human-readable units are accepted on input only.</li>\n<li>Switch to <code>CONFIG SET maxmemory-policy allkeys-lru</code> and confirm it. This is the correct policy for a pure cache, where every key is disposable.</li>\n<li>Seed three keys with different lifetimes — <code>cache:v1:a</code> with <code>EX 600</code>, <code>cache:v1:b</code> with <code>EX 60</code>, and <code>config:app</code> with <strong>no</strong> expiry — and check <code>TTL</code> on the first and last (<code>600</code> and <code>-1</code>).</li>\n<li>Switch to <code>volatile-ttl</code> and confirm. Under this policy only <code>cache:v1:a</code> and <code>cache:v1:b</code> are candidates and <code>cache:v1:b</code> dies first because it is closest to expiring; <code>config:app</code> is protected because it has no TTL. That protection is the entire point of the <code>volatile-</code> family — and its danger, since a server whose keys all lack TTLs behaves exactly like <code>noeviction</code>.</li>\n<li>Try <code>volatile-lru</code> and <code>allkeys-random</code> too, confirming each with a <code>CONFIG GET</code>, then restore the server: <code>maxmemory-policy</code> back to <code>noeviction</code> and <code>maxmemory</code> back to <code>0</code>, verifying both.</li>\n</ul>\n<p>Every change here is runtime-only and is lost on restart unless written to the config file. The scaffold lists the commands with the parameter names and values blank.</p>",
+      "inputSpec": "A stock redis:7 server with default memory settings, plus three seeded keys with differing TTLs. All changes are made at runtime through CONFIG SET.",
+      "outputSpec": "CONFIG GET returns a two-element array of name then value: maxmemory \"0\", maxmemory-policy \"noeviction\", maxmemory-samples \"5\". CONFIG SET returns OK each time. After setting 100mb, CONFIG GET maxmemory returns \"104857600\". After each policy change CONFIG GET maxmemory-policy returns allkeys-lru, then volatile-ttl, then volatile-lru, then allkeys-random, and finally noeviction. The three SET commands return OK, TTL cache:v1:a returns 600 and TTL config:app returns -1. The final CONFIG GET maxmemory returns \"0\".",
+      "constraints": "Change the configuration only through CONFIG SET — do not restart the server or edit redis.conf. Restore maxmemory to 0 and maxmemory-policy to noeviction before finishing. Do not attempt to trigger a real eviction by filling memory. Remember CONFIG SET changes are runtime-only and do not survive a restart unless CONFIG REWRITE is used.",
+      "examplesJson": [
+        {
+          "input": "CONFIG GET maxmemory then CONFIG GET maxmemory-policy on a stock server",
+          "output": "1) \"maxmemory\"\n2) \"0\"\n1) \"maxmemory-policy\"\n2) \"noeviction\"",
+          "explanation": "The defaults are an unlimited budget and no eviction, which means an unconfigured Redis grows until the operating system kills it, and a Redis with maxmemory set but the default policy rejects writes when full."
+        },
+        {
+          "input": "CONFIG SET maxmemory 100mb then CONFIG GET maxmemory",
+          "output": "OK\n1) \"maxmemory\"\n2) \"104857600\"",
+          "explanation": "Unit suffixes are accepted on input but the stored value is normalised to bytes and, like every CONFIG value, returned as a string."
+        },
+        {
+          "input": "CONFIG SET maxmemory-policy volatile-ttl then CONFIG GET maxmemory-policy then TTL config:app",
+          "output": "OK\n1) \"maxmemory-policy\"\n2) \"volatile-ttl\"\n(integer) -1",
+          "explanation": "Under a volatile- policy only keys with a TTL can be evicted, so config:app with its TTL of -1 is protected — and would be untouchable even if the instance were completely full."
+        }
+      ],
+      "hintsJson": [
+        "Start by asking what the server is configured to do today, before changing anything — the answer for a stock server is the surprising part.",
+        "CONFIG GET parameter reads a runtime setting and CONFIG SET parameter value changes it without a restart; both accept glob patterns for the parameter name.",
+        "maxmemory 0 means unlimited. The policy name splits into a candidate set and a victim-choosing rule: allkeys- considers every key, volatile- only keys carrying a TTL.",
+        "volatile-ttl evicts whichever candidate is closest to its own expiry. Under any volatile- policy, keys without a TTL can never be evicted, so an instance whose keys all lack TTLs behaves exactly like noeviction and starts returning OOM errors on writes."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "commands.redis",
+          "language": "text",
+          "code": "CONFIG GET ____\nCONFIG GET ____\nCONFIG GET maxmemory-samples\nCONFIG SET maxmemory ____\nCONFIG GET maxmemory\nCONFIG SET maxmemory-policy ____\nCONFIG GET maxmemory-policy\nSET cache:v1:a \"a\" EX ____\nSET cache:v1:b \"b\" EX ____\nSET config:app \"cfg\"\nTTL cache:v1:a\nTTL config:app\nCONFIG SET maxmemory-policy ____\nCONFIG GET maxmemory-policy\nCONFIG SET maxmemory-policy ____\nCONFIG GET maxmemory-policy\nCONFIG SET maxmemory-policy ____\nCONFIG GET maxmemory-policy\nCONFIG SET maxmemory-policy ____\nCONFIG SET maxmemory ____\nCONFIG GET maxmemory\nCONFIG GET maxmemory-policy"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "commands.redis",
+          "language": "text",
+          "code": "CONFIG GET maxmemory\nCONFIG GET maxmemory-policy\nCONFIG GET maxmemory-samples\nCONFIG SET maxmemory 100mb\nCONFIG GET maxmemory\nCONFIG SET maxmemory-policy allkeys-lru\nCONFIG GET maxmemory-policy\nSET cache:v1:a \"a\" EX 600\nSET cache:v1:b \"b\" EX 60\nSET config:app \"cfg\"\nTTL cache:v1:a\nTTL config:app\nCONFIG SET maxmemory-policy volatile-ttl\nCONFIG GET maxmemory-policy\nCONFIG SET maxmemory-policy volatile-lru\nCONFIG GET maxmemory-policy\nCONFIG SET maxmemory-policy allkeys-random\nCONFIG GET maxmemory-policy\nCONFIG SET maxmemory-policy noeviction\nCONFIG SET maxmemory 0\nCONFIG GET maxmemory\nCONFIG GET maxmemory-policy"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The decision this exercise trains is choosing a policy from the <em>role</em> of the instance, and there are only three honest answers. If the instance is a pure cache where every key is recomputable, use <code>allkeys-lru</code> (or <code>allkeys-lfu</code>) and give it a <code>maxmemory</code> comfortably below the machine's RAM — then a full instance quietly discards cold data and keeps serving. If the instance holds a mixture of disposable cache and data you cannot lose, use a <code>volatile-</code> policy and make sure the disposable keys are the ones carrying TTLs, so eviction can only ever reach the expendable half. If the instance is a primary datastore, queue, or lock server, keep <code>noeviction</code> and treat a full instance as a page-worthy incident, because the alternative — silently discarding a job or a lock — is worse than an error.</p>\n<p>The failure mode to internalise is the mismatch between belief and configuration. The default is <code>noeviction</code> with <code>maxmemory 0</code>, so an unconfigured server does not evict; it grows until the kernel kills the process, losing everything not yet persisted. Set <code>maxmemory</code> without changing the policy and you convert that into a different failure: writes start returning <code>OOM command not allowed when used memory &gt; maxmemory</code> while reads keep working, which presents as a partially-broken application rather than an obvious outage. And the subtlest of all is a <code>volatile-</code> policy on a keyspace where nothing has a TTL — there are no eviction candidates, so Redis evicts nothing and returns the same OOM errors, having been configured by someone who believed the opposite.</p>\n<p>Two implementation details are worth carrying. Redis's LRU and LFU are <strong>approximate</strong>: rather than maintaining a true global ordering, it samples <code>maxmemory-samples</code> keys (default <code>5</code>) and evicts the best candidate from that sample, trading exactness for O(1) memory overhead. Raising the sample count improves accuracy at a small CPU cost. LFU differs from LRU in what it measures — frequency of access rather than recency — which makes it the better choice when a burst of one-off scans would otherwise flush a genuinely hot working set out of an LRU cache. Finally, <code>CONFIG SET</code> takes effect immediately but lives only in memory; the change is lost on restart unless you run <code>CONFIG REWRITE</code> or update <code>redis.conf</code>, so a fix applied during an incident must also be written down or the next restart silently reverts it. Eviction is also visible in monitoring: <code>INFO stats</code> exposes <code>evicted_keys</code>, and a non-zero and rising value on an instance you believed was durable is the alarm that this configuration is wrong.</p>"
+    },
+    {
+      "title": "Build a Versioned Cache Layer with Jittered TTLs and a Stampede Lock",
+      "difficulty": "HARD",
+      "estimatedMinutes": 60,
+      "points": 30,
+      "concepts": [
+        "cache-aside pattern",
+        "thundering herd and TTL jitter",
+        "regeneration lock with SET NX EX",
+        "namespace versioning",
+        "UNLINK and FLUSHDB ASYNC cleanup"
+      ],
+      "prerequisites": [
+        "SET with EX and NX and KEEPTTL",
+        "TTL",
+        "SCAN with MATCH",
+        "UNLINK",
+        "DBSIZE"
+      ],
+      "tags": [
+        "cache-aside",
+        "thundering-herd",
+        "jitter",
+        "stampede-lock",
+        "redis"
+      ],
+      "problemHtml": "<p>A product page is cached for an hour. At deploy time a warm-up script populates four thousand product entries in a loop, all with <code>EX 3600</code>. One hour later, within the same second, all four thousand expire together — and every request that arrives in the next few hundred milliseconds finds a miss, so every one of them queries the database. That is the <strong>thundering herd</strong> (or cache stampede), and it takes down the database, not Redis. The failure is caused by the <em>uniform</em> TTL, not by the expiry itself.</p>\n<p>Two fixes compose. <strong>Jitter</strong> spreads the deadlines: instead of a fixed 3600, each entry gets <code>base + random(0, spread)</code>, so expiries scatter across a window instead of landing on one instant. A <strong>regeneration lock</strong> handles the remaining case where many requests still miss the same key at once: the first to acquire <code>SET lock:regen:... NX EX</code> rebuilds the value while the others back off, so the origin is hit once rather than N times. Together they turn a cliff into a trickle.</p>\n<p>Two more habits complete the design. Every cache key carries a <strong>version segment</strong> — <code>cache:v1:product:1</code> — so a schema change is deployed by writing to <code>v2</code> and letting <code>v1</code> expire, rather than by flushing anything. And refreshes distinguish deliberately between <code>KEEPTTL</code> (correct the value, keep the original deadline) and a fresh <code>EX</code> (restart the freshness window).</p>\n<p>Using <code>redis-cli</code>, build the whole layer. The jittered numbers below stand in for what the application would compute at runtime:</p>\n<ul>\n<li>Populate three entries with jittered lifetimes: <code>cache:v1:product:1</code>=<code>\"p1-json\"</code> with <code>EX 3600</code>, <code>cache:v1:product:2</code>=<code>\"p2-json\"</code> with <code>EX 3547</code>, <code>cache:v1:product:3</code>=<code>\"p3-json\"</code> with <code>EX 3672</code>. Read all three TTLs back and confirm they differ.</li>\n<li>Simulate a miss on product 4: <code>GET cache:v1:product:4</code> returns <code>(nil)</code>. Take the regeneration lock with <code>SET lock:regen:product:4 \"worker-1\" NX EX 10</code> (returns <code>OK</code>); a second worker running the identical command with <code>\"worker-2\"</code> gets <code>(nil)</code> and must serve stale or wait instead of querying the origin.</li>\n<li>The lock holder writes the rebuilt value <code>\"p4-json\"</code> with <code>EX 3618</code>, releases with <code>DEL</code>, and you confirm <code>TTL cache:v1:product:4</code>.</li>\n<li>Correct product 1's value without extending its life: <code>SET cache:v1:product:1 \"p1-json-v2\" KEEPTTL</code>, then verify the TTL is still <code>3600</code> and <code>GET</code> shows the new value.</li>\n<li>Refresh product 2 as genuinely re-fetched data, restarting its window with a newly jittered <code>EX 3590</code>, and confirm.</li>\n<li>Audit the namespace: <code>DBSIZE</code> is <code>4</code> and <code>SCAN 0 MATCH cache:v1:product:* COUNT 100</code> lists the four entries with a completed cursor of <code>\"0\"</code>.</li>\n<li>Deploy a schema change: <code>UNLINK</code> all four <code>v1</code> entries in one non-blocking call (returns <code>4</code>), confirm <code>DBSIZE</code> is <code>0</code>, then write <code>cache:v2:product:1</code>=<code>\"p1-json-v2\"</code> with <code>EX 3609</code> and check its TTL.</li>\n<li>Tear down the whole database with <code>FLUSHDB ASYNC</code> and confirm <code>DBSIZE</code> is <code>0</code>.</li>\n</ul>\n<p>The scaffold lists the commands with values, options, and TTL numbers blank.</p>",
+      "inputSpec": "A clean Redis database. Cache entries live under cache:v1:product:N and later cache:v2:product:N; one regeneration lock uses lock:regen:product:4. The TTL numbers 3600, 3547, 3672, 3618, 3590 and 3609 stand for a base of 3600 seconds plus or minus application-computed jitter.",
+      "outputSpec": "The three seeding SETs return OK and their TTLs read back as 3600, 3547 and 3672; GET cache:v1:product:4 returns (nil); the first lock acquisition returns OK and the second returns (nil); the rebuild SET returns OK, DEL of the lock returns 1 and TTL cache:v1:product:4 is 3618; the KEEPTTL write returns OK with TTL still 3600 and GET returning \"p1-json-v2\"; the EX 3590 refresh returns OK with TTL 3590; DBSIZE is 4 and SCAN 0 MATCH cache:v1:product:* COUNT 100 returns cursor \"0\" plus the four keys in unspecified order; UNLINK returns 4 and DBSIZE becomes 0; the v2 write returns OK with TTL 3609; FLUSHDB ASYNC returns OK and DBSIZE returns 0.",
+      "constraints": "Every cache key must be written with its TTL in the same SET — no separate EXPIRE anywhere. No two seeded entries may share a TTL. The regeneration lock must be acquired with a single SET carrying both NX and EX, and must never be created without a timeout. Use KEEPTTL for the value correction and an explicit EX for the genuine refresh. Remove the v1 namespace with one UNLINK call, not a loop of DELs, and never with KEYS.",
+      "examplesJson": [
+        {
+          "input": "SET cache:v1:product:1 \"p1-json\" EX 3600 then SET cache:v1:product:2 \"p2-json\" EX 3547 then TTL cache:v1:product:1 then TTL cache:v1:product:2",
+          "output": "OK\nOK\n(integer) 3600\n(integer) 3547",
+          "explanation": "Jitter means the two entries created in the same instant expire almost a minute apart, so their misses cannot arrive together."
+        },
+        {
+          "input": "GET cache:v1:product:4 then SET lock:regen:product:4 \"worker-1\" NX EX 10 then SET lock:regen:product:4 \"worker-2\" NX EX 10",
+          "output": "(nil)\nOK\n(nil)",
+          "explanation": "On a miss only the first worker takes the lock and rebuilds; the second sees (nil) and must back off, so the origin database is queried once instead of once per concurrent request."
+        },
+        {
+          "input": "SET cache:v1:product:1 \"p1-json-v2\" KEEPTTL then TTL cache:v1:product:1 then GET cache:v1:product:1",
+          "output": "OK\n(integer) 3600\n\"p1-json-v2\"",
+          "explanation": "Correcting a value with KEEPTTL keeps the entry on its original expiry schedule, so a stream of corrections cannot accidentally make the entry immortal."
+        }
+      ],
+      "hintsJson": [
+        "The stampede is caused by many keys sharing one deadline, so the first fix is to stop them sharing it.",
+        "Write each entry with base plus a small random offset in the EX argument — the numbers here stand in for what the application would compute per key.",
+        "For the remaining concurrent-miss case, let exactly one caller rebuild: SET lock:regen:key worker NX EX 10 succeeds for one worker and returns (nil) for the rest, and the EX guarantees the lock cannot leak if that worker dies.",
+        "Version the namespace as cache:v1:... so a schema change is a write to v2 rather than a flush, and retire the old namespace with a single UNLINK so the memory is reclaimed on a background thread."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "commands.redis",
+          "language": "text",
+          "code": "SET cache:v1:product:1 \"p1-json\" EX ____\nSET cache:v1:product:2 \"p2-json\" EX ____\nSET cache:v1:product:3 \"p3-json\" EX ____\nTTL cache:v1:product:1\nTTL cache:v1:product:2\nTTL cache:v1:product:3\nGET cache:v1:product:4\nSET lock:regen:product:4 \"worker-1\" ____ EX ____\nSET lock:regen:product:4 \"worker-2\" ____ EX ____\nSET cache:v1:product:4 \"p4-json\" EX ____\nDEL lock:regen:product:4\nTTL cache:v1:product:4\nSET cache:v1:product:1 \"p1-json-v2\" ____\nTTL cache:v1:product:1\nGET cache:v1:product:1\nSET cache:v1:product:2 \"p2-json-v2\" EX ____\nTTL cache:v1:product:2\nDBSIZE\nSCAN 0 MATCH ____ COUNT 100\nUNLINK ____ ____ ____ ____\nDBSIZE\nSET cache:v2:product:1 \"p1-json-v2\" EX ____\nTTL cache:v2:product:1\nFLUSHDB ____\nDBSIZE"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "commands.redis",
+          "language": "text",
+          "code": "SET cache:v1:product:1 \"p1-json\" EX 3600\nSET cache:v1:product:2 \"p2-json\" EX 3547\nSET cache:v1:product:3 \"p3-json\" EX 3672\nTTL cache:v1:product:1\nTTL cache:v1:product:2\nTTL cache:v1:product:3\nGET cache:v1:product:4\nSET lock:regen:product:4 \"worker-1\" NX EX 10\nSET lock:regen:product:4 \"worker-2\" NX EX 10\nSET cache:v1:product:4 \"p4-json\" EX 3618\nDEL lock:regen:product:4\nTTL cache:v1:product:4\nSET cache:v1:product:1 \"p1-json-v2\" KEEPTTL\nTTL cache:v1:product:1\nGET cache:v1:product:1\nSET cache:v1:product:2 \"p2-json-v2\" EX 3590\nTTL cache:v1:product:2\nDBSIZE\nSCAN 0 MATCH cache:v1:product:* COUNT 100\nUNLINK cache:v1:product:1 cache:v1:product:2 cache:v1:product:3 cache:v1:product:4\nDBSIZE\nSET cache:v2:product:1 \"p1-json-v2\" EX 3609\nTTL cache:v2:product:1\nFLUSHDB ASYNC\nDBSIZE"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The capstone assembles every idea in the module into one defensible cache design, and each decision is forced by a specific failure. <strong>Jitter</strong> exists because expiry time is the only thing synchronising thousands of independent keys: entries written in one warm-up loop with an identical <code>EX</code> will expire in one instant, and the resulting simultaneous misses arrive at the origin database as a spike proportional to your traffic. Adding a small random offset — in practice something like <code>3600 + rand(0, 300)</code> — costs nothing and converts that spike into a smear. The literal values here differ deliberately so that the property is visible in the <code>TTL</code> replies; the application computes them per key at write time.</p>\n<p>The <strong>regeneration lock</strong> covers what jitter cannot. Even with perfectly scattered deadlines, a single hot key expiring under heavy load produces many concurrent misses for that one key, and without coordination every one of them rebuilds it. <code>SET lock:regen:product:4 \"worker-1\" NX EX 10</code> lets exactly one caller through; the losers receive <code>(nil)</code> and should either serve the stale value, wait briefly and re-read, or degrade gracefully — what they must not do is query the origin. The <code>EX 10</code> is not optional: a rebuilder that crashes while holding a lock with no timeout blocks that key's regeneration permanently. Choose the lock TTL slightly longer than the worst-case rebuild, and in production store a unique token as the value and release with a compare-and-delete Lua script, so a slow worker cannot delete a lock that has already expired and been re-acquired by someone else.</p>\n<p>The two refresh paths are a correctness distinction, not a style one. <code>KEEPTTL</code> corrects the stored value while leaving the entry on its original schedule, which is what you want for a repair or a partial invalidation — and it is what prevents a busy correction loop from continually restarting the window and making an entry effectively immortal, the exact bug from earlier in this module seen from the other side. A fresh <code>EX</code> is right only when the data was genuinely re-read from the source of truth and the freshness clock should legitimately restart.</p>\n<p><strong>Namespace versioning</strong> is what makes deployment safe. Because every key is written under <code>cache:v1:</code>, changing the shape of the cached value is a matter of writing new entries under <code>cache:v2:</code>; old and new coexist, a rollback is instantaneous, and no reader ever deserialises a value in a format it does not understand. The alternative — flushing the cache on deploy — creates a guaranteed stampede at the worst possible moment, when the new code is also unproven. Retiring the old namespace afterwards is done with <code>SCAN</code> plus a batched <code>UNLINK</code>, never with <code>KEYS</code> (which blocks the server) and never with <code>FLUSHDB</code> (which also destroys everything else in the database). <code>UNLINK</code> specifically, because reclaiming thousands of cache values on the main thread is a latency spike for every other client. The <code>FLUSHDB ASYNC</code> at the end is teardown for this isolated exercise only; on a shared production instance it is the most destructive command in the module and should be unreachable through ACLs.</p>",
+      "diagramMermaid": "sequenceDiagram\n  participant R1 as Request one\n  participant R2 as Request two\n  participant C as Redis cache\n  participant DB as Origin database\n  R1->>C: GET cache v1 product 4\n  C-->>R1: nil so it is a miss\n  R2->>C: GET cache v1 product 4\n  C-->>R2: nil so it is a miss\n  R1->>C: SET lock regen product 4 NX EX 10\n  C-->>R1: OK so this request rebuilds\n  R2->>C: SET lock regen product 4 NX EX 10\n  C-->>R2: nil so this request backs off\n  R1->>DB: Fetch product 4\n  DB-->>R1: Fresh row\n  R1->>C: SET cache v1 product 4 with jittered EX 3618\n  R1->>C: DEL lock regen product 4\n  R2->>C: GET cache v1 product 4\n  C-->>R2: Fresh value served without touching the database"
+    }
+  ]
+}

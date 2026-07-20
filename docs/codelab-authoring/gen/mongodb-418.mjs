@@ -1,0 +1,977 @@
+// Generator for MongoDB module 418 (indexing-strategies-and-query-optimization) — 10 exercises.
+// Track language is "javascript"; solutions are mongosh commands (valid JS, modern driver API).
+// Every explain figure quoted below was produced by piping the exact solution strings to a real
+// mongo:7 server against a deterministic 60,000-document seed (see SEED at the bottom).
+import fs from 'node:fs';
+import path from 'node:path';
+
+const trackSlug = 'mongodb';
+const moduleSlug = 'indexing-strategies-and-query-optimization';
+const L = 'javascript';
+
+const HELPER = `function plan(e) {
+  const s = e.executionStats, stages = [];
+  for (let p = e.queryPlanner.winningPlan; p; p = p.inputStage) stages.push(p.stage);
+  return { stages: stages.join(" <- "), nReturned: s.nReturned, keys: s.totalKeysExamined, docs: s.totalDocsExamined };
+}`;
+
+const SEED_DESC =
+  'A pre-seeded orders collection of 60,000 documents: _id 1..60000, sku "SKU-<i>", customerId 1000 + (i % 5000), ' +
+  'status cycling pending/shipped/delivered/cancelled (15,000 each), region north/south/east/west in blocks of five ' +
+  '(15,000 each, independent of status), amount ((i * 7) % 499) + 1, createdAt one minute apart starting 2024-01-01, ' +
+  'tags holding two of fragile/gift/bulk/express/cold, and couponCode set on every 100th document (600 in total). ' +
+  'Only the automatic _id index exists at the start of each task.';
+
+const exercises = [
+  // ------------------------------------------------------------------ 1
+  {
+    title: 'Measure a Collection Scan and Kill It with a Single-Field Index',
+    difficulty: 'EASY',
+    estimatedMinutes: 15,
+    points: 10,
+    concepts: ['createIndex', 'explain executionStats', 'COLLSCAN', 'IXSCAN', 'totalDocsExamined'],
+    prerequisites: ['find with a query filter', 'mongosh basics'],
+    tags: ['index', 'explain', 'collscan', 'ixscan', 'mongodb'],
+    problemHtml: `<p>An index is the difference between reading one document and reading every document. Without one, MongoDB has no choice but to open every record in the collection and test your filter against it — a <code>COLLSCAN</code>. That is invisible on 50 rows of test data and fatal on 50 million rows of production data, which is why you never judge a query by how fast it feels in a shell and always judge it by what <code>explain</code> reports.</p>
+<p>The <code>orders</code> collection holds 60,000 documents and currently has only the automatic <code>_id</code> index. Do the following in order:</p>
+<ul>
+<li>Run <code>db.orders.find({ sku: "SKU-42137" }).explain("executionStats")</code> and read <code>executionStats</code>. Note <code>nReturned</code>, <code>totalKeysExamined</code> and <code>totalDocsExamined</code>.</li>
+<li>Create an ascending single-field index on <code>sku</code> with <code>createIndex</code>, and note the index name the server returns.</li>
+<li>Re-run the same explain and compare the three numbers with the first run.</li>
+<li>Print <code>queryPlanner.winningPlan</code> for the indexed query and confirm the stage tree is a <code>FETCH</code> on top of an <code>IXSCAN</code>.</li>
+</ul>
+<p>The scaffold provides a small <code>plan</code> helper that flattens the winning plan into a one-line summary of the stage chain plus the three counters, so you can compare the two runs at a glance. The healthy target you are aiming for is <code>totalDocsExamined</code> equal to <code>nReturned</code>: the query reads exactly the documents it returns and not one more.</p>`,
+    inputSpec: SEED_DESC,
+    outputSpec:
+      'Before the index: stages "COLLSCAN", nReturned 1, keys 0, docs 60000. createIndex returns the name "sku_1". ' +
+      'After the index: stages "FETCH <- IXSCAN", nReturned 1, keys 1, docs 1. The winning plan is a FETCH whose inputStage is an IXSCAN on keyPattern { sku: 1 }.',
+    constraints:
+      'Use explain("executionStats") — plain explain() has no counters. Index only the sku field; do not add any other index. Do not change the documents.',
+    examplesJson: [
+      {
+        input: 'plan(db.orders.find({ sku: "SKU-42137" }).explain("executionStats"))  // no index yet',
+        output: "{ stages: 'COLLSCAN', nReturned: 1, keys: 0, docs: 60000 }",
+        explanation: 'One document matches, but the server had to read all 60,000 to find it, and examined 0 index keys because there is no usable index.',
+      },
+      {
+        input: 'db.orders.createIndex({ sku: 1 }); plan(db.orders.find({ sku: "SKU-42137" }).explain("executionStats"))',
+        output: "{ stages: 'FETCH <- IXSCAN', nReturned: 1, keys: 1, docs: 1 }",
+        explanation: 'The IXSCAN seeks one key in the B-tree, the FETCH loads the one matching document. docs equals nReturned — a perfect 1:1 ratio.',
+      },
+    ],
+    hintsJson: [
+      'Do not guess whether an index is used — ask the server with an explain modifier that also runs the query.',
+      'explain("executionStats") returns executionStats with nReturned, totalKeysExamined and totalDocsExamined; the queryPlanner section names the chosen stage.',
+      'db.collection.createIndex({ field: 1 }) builds an ascending B-tree index and returns its generated name, field_1.',
+      'db.orders.createIndex({ sku: 1 }), then re-run the same explain and compare totalDocsExamined: 60000 becomes 1.',
+    ],
+    starter: `${HELPER}
+
+// 1. baseline: how much work does this query do with no index?
+// plan(db.orders.find({ sku: "SKU-42137" }).explain("executionStats"))
+
+// 2. TODO: create an ascending index on sku
+
+// 3. TODO: re-run the same explain and compare the counters
+
+// 4. TODO: print queryPlanner.winningPlan for the indexed query`,
+    solution: `${HELPER}
+
+plan(db.orders.find({ sku: "SKU-42137" }).explain("executionStats"))
+
+db.orders.createIndex({ sku: 1 })
+
+plan(db.orders.find({ sku: "SKU-42137" }).explain("executionStats"))
+
+db.orders.find({ sku: "SKU-42137" }).explain("executionStats").queryPlanner.winningPlan`,
+    solutionExplanationHtml: `<p>The baseline explain reports <code>stage: "COLLSCAN"</code>, <code>totalKeysExamined: 0</code> and <code>totalDocsExamined: 60000</code> for a query that returns a single document. That ratio — 60,000 documents read per document returned — is the definition of an unindexed query, and it grows linearly with the collection: double the data, double the work. After <code>createIndex({ sku: 1 })</code> the same explain reports <code>stages: "FETCH &lt;- IXSCAN"</code> with <code>totalKeysExamined: 1</code> and <code>totalDocsExamined: 1</code>. The <code>IXSCAN</code> walks the B-tree to the single matching key in logarithmic time and hands its record id to the <code>FETCH</code> stage, which loads exactly one document.</p>
+<p>The three counters are the whole vocabulary of query tuning. <code>nReturned</code> is what the client wanted; <code>totalKeysExamined</code> is how many index entries were inspected; <code>totalDocsExamined</code> is how many full documents were pulled from storage. A healthy query has all three roughly equal. If <code>totalDocsExamined</code> greatly exceeds <code>nReturned</code>, the server is reading and discarding documents — either there is no index, or the index is not selective enough for the filter. If <code>totalKeysExamined</code> greatly exceeds <code>nReturned</code> but <code>totalDocsExamined</code> stays low, the index is being scanned over a wide range rather than seeked into a narrow one.</p>
+<p>The trap: plain <code>explain()</code> defaults to <code>queryPlanner</code> verbosity, which shows the chosen plan but <em>never executes it</em>, so there are no counters at all. Only <code>explain("executionStats")</code> (or <code>"allPlansExecution"</code>) actually runs the query and reports real work done. Do not read <code>executionTimeMillis</code> as your primary signal either — it swings with cache warmth and machine load, while the examined counters are stable and comparable between runs.</p>`,
+    reset: 'db.orders.dropIndexes()',
+  },
+
+  // ------------------------------------------------------------------ 2
+  {
+    title: 'Inventory Indexes and Retire One Safely with hideIndex',
+    difficulty: 'EASY',
+    estimatedMinutes: 20,
+    points: 10,
+    concepts: ['getIndexes', 'named indexes', 'hideIndex', 'unhideIndex', 'dropIndex'],
+    prerequisites: ['createIndex', 'explain executionStats'],
+    tags: ['index', 'hidden-index', 'getindexes', 'maintenance', 'mongodb'],
+    problemHtml: `<p>Dropping an index on a live system is a one-way door: rebuilding it on a large collection takes minutes to hours, during which every query that depended on it is back to a collection scan. MongoDB 4.4 added a reversible alternative — a <strong>hidden index</strong>. A hidden index is still maintained on every write and still enforces uniqueness, but the query planner refuses to consider it, so you can observe exactly what the system looks like without it and undo the change instantly if things degrade.</p>
+<p>Working on the <code>orders</code> collection:</p>
+<ul>
+<li>Create <code>{ customerId: 1 }</code>, and create <code>{ status: 1, createdAt: -1 }</code> with the explicit name <code>status_recent</code> via the <code>name</code> option.</li>
+<li>List every index with <code>getIndexes()</code> and confirm three entries, including the automatic <code>_id_</code>.</li>
+<li>Hide <code>status_recent</code>, then explain <code>db.orders.find({ status: "shipped" }).sort({ createdAt: -1 }).limit(5)</code> and record the plan.</li>
+<li>Unhide it and explain the identical query again. Compare the stage chains and the counters.</li>
+<li>Drop <code>status_recent</code> by name and print the remaining index names.</li>
+</ul>
+<p>Name your indexes deliberately: the generated default (<code>status_1_createdAt_-1</code>) is unreadable in logs and breaks the moment you reorder a key. The scaffold provides the <code>plan</code> helper from the previous task.</p>`,
+    inputSpec: SEED_DESC,
+    outputSpec:
+      'getIndexes() returns three entries: _id_, customerId_1, status_recent (key { status: 1, createdAt: -1 }). ' +
+      'hideIndex returns { hidden_old: false, hidden_new: true, ok: 1 }; with the index hidden the plan is "SORT <- COLLSCAN", nReturned 5, keys 0, docs 60000. ' +
+      'unhideIndex returns { hidden_old: true, hidden_new: false, ok: 1 }; the plan becomes "LIMIT <- FETCH <- IXSCAN", nReturned 5, keys 5, docs 5. ' +
+      'dropIndex("status_recent") returns { nIndexesWas: 3, ok: 1 } and the remaining names are [ "_id_", "customerId_1" ].',
+    constraints:
+      'Name the compound index status_recent explicitly with the name option. Use hideIndex/unhideIndex to test removal — do not drop and rebuild to compare. Drop by name, not by key pattern.',
+    examplesJson: [
+      {
+        input: 'db.orders.hideIndex("status_recent"); plan(db.orders.find({ status: "shipped" }).sort({ createdAt: -1 }).limit(5).explain("executionStats"))',
+        output: "{ stages: 'SORT <- COLLSCAN', nReturned: 5, keys: 0, docs: 60000 }",
+        explanation: 'The planner ignores hidden indexes, so it scans all 60,000 documents and then performs a blocking in-memory SORT to find the five newest.',
+      },
+      {
+        input: 'db.orders.unhideIndex("status_recent"); plan(db.orders.find({ status: "shipped" }).sort({ createdAt: -1 }).limit(5).explain("executionStats"))',
+        output: "{ stages: 'LIMIT <- FETCH <- IXSCAN', nReturned: 5, keys: 5, docs: 5 }",
+        explanation: 'The index already stores status equal to shipped in descending createdAt order, so the first five keys are the answer — no SORT stage and only five documents touched.',
+      },
+      {
+        input: 'db.orders.dropIndex("status_recent"); db.orders.getIndexes().map(i => i.name)',
+        output: "[ '_id_', 'customerId_1' ]",
+        explanation: 'dropIndex reports nIndexesWas: 3 (the count before the drop) and leaves the _id index plus the customerId index.',
+      },
+    ],
+    hintsJson: [
+      'Before deleting an index on a running system, ask what the workload would look like without it — without actually deleting it.',
+      'createIndex takes an options document as its second argument; { name: "status_recent" } overrides the generated name.',
+      'hideIndex(name) makes the planner ignore the index while the server keeps maintaining it; unhideIndex(name) reverses it.',
+      'db.orders.createIndex({ status: 1, createdAt: -1 }, { name: "status_recent" }), then hideIndex("status_recent"), explain, unhideIndex("status_recent"), explain, dropIndex("status_recent").',
+    ],
+    starter: `${HELPER}
+
+db.orders.createIndex({ customerId: 1 })
+// TODO: create { status: 1, createdAt: -1 } named "status_recent"
+
+// TODO: list all indexes
+
+// TODO: hide status_recent, then explain the query below
+// db.orders.find({ status: "shipped" }).sort({ createdAt: -1 }).limit(5)
+
+// TODO: unhide it and explain the same query again
+
+// TODO: drop status_recent by name and print the remaining names`,
+    solution: `${HELPER}
+
+db.orders.createIndex({ customerId: 1 })
+db.orders.createIndex({ status: 1, createdAt: -1 }, { name: "status_recent" })
+
+db.orders.getIndexes()
+
+db.orders.hideIndex("status_recent")
+plan(db.orders.find({ status: "shipped" }).sort({ createdAt: -1 }).limit(5).explain("executionStats"))
+
+db.orders.unhideIndex("status_recent")
+plan(db.orders.find({ status: "shipped" }).sort({ createdAt: -1 }).limit(5).explain("executionStats"))
+
+db.orders.dropIndex("status_recent")
+db.orders.getIndexes().map(i => i.name)`,
+    solutionExplanationHtml: `<p><code>getIndexes()</code> is the inventory: every entry carries a <code>key</code> pattern, a <code>name</code>, and any options such as <code>unique</code>, <code>sparse</code>, <code>partialFilterExpression</code>, <code>expireAfterSeconds</code> or <code>hidden</code>. The <code>_id_</code> index is created automatically with the collection and cannot be dropped or hidden. Passing <code>{ name: "status_recent" }</code> replaces the machine-generated <code>status_1_createdAt_-1</code>, which matters because every operational reference — <code>dropIndex</code>, <code>hint</code>, <code>$indexStats</code>, slow-query logs — uses the name.</p>
+<p>The hidden/unhidden pair is the real lesson. Hidden, the query has no usable index and the plan degenerates to <code>SORT &lt;- COLLSCAN</code>: 60,000 documents examined, then a <strong>blocking sort</strong> that must buffer the 15,000 matching documents before it can emit the top five. Unhidden, the plan is <code>LIMIT &lt;- FETCH &lt;- IXSCAN</code> with five keys and five documents examined — the index is already ordered by <code>createdAt</code> descending inside each <code>status</code> value, so the first five keys under <code>status: "shipped"</code> <em>are</em> the answer and the <code>LIMIT</code> stops the scan immediately.</p>
+<p>Two practical points. First, a blocking sort is capped at 100 MB of memory by default; exceed it without an index and the query fails outright with <code>QueryExceededMemoryLimitNoDiskUseAllowed</code> rather than merely running slowly — so a missing sort index is a correctness cliff, not just a performance one. Second, hiding is the correct decommissioning procedure: hide, watch the workload for a full traffic cycle, and only then drop. If latency spikes, one <code>unhideIndex</code> restores the old behaviour instantly, whereas an accidental <code>dropIndex</code> on a large collection means a long, expensive rebuild.</p>`,
+    reset: 'db.orders.dropIndexes()',
+  },
+
+  // ------------------------------------------------------------------ 3
+  {
+    title: 'Compound Index Prefixes: Why Key Order Decides Which Queries Are Fast',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 25,
+    points: 15,
+    concepts: ['compound index', 'index prefix', 'selectivity', 'index bounds', 'COLLSCAN fallback'],
+    prerequisites: ['createIndex', 'explain executionStats', 'IXSCAN'],
+    tags: ['index', 'compound', 'prefix', 'query-planner', 'mongodb'],
+    problemHtml: `<p>A compound index is not a bag of independently usable fields. It is a single B-tree sorted by the first key, then by the second within equal firsts, and so on — like a phone book sorted by surname then forename. You can look someone up by surname, or by surname and forename together, but you cannot use a surname-ordered book to find everyone named "Mai". MongoDB calls the usable leading subsets <strong>index prefixes</strong>, and understanding them is what stops teams from building six indexes where one would do.</p>
+<p>Create the single index <code>{ region: 1, status: 1, amount: 1 }</code> on <code>orders</code>, then explain each of these four queries and record the stage chain, <code>totalKeysExamined</code> and <code>totalDocsExamined</code>:</p>
+<ul>
+<li><code>{ region: "north" }</code> — uses the one-field prefix.</li>
+<li><code>{ region: "north", status: "shipped" }</code> — uses the two-field prefix.</li>
+<li><code>{ status: "shipped" }</code> — skips the leading key.</li>
+<li><code>{ region: "north", status: "shipped", amount: { $gt: 490 } }</code> — uses all three keys.</li>
+</ul>
+<p>For the last query, also print <code>queryPlanner.winningPlan.inputStage.indexBounds</code> to see the exact range the scan was narrowed to. Explain in your own words why the third query cannot use the index at all even though <code>status</code> is indexed. The scaffold provides the <code>plan</code> helper.</p>`,
+    inputSpec: SEED_DESC + ' One compound index { region: 1, status: 1, amount: 1 } is created by the solution.',
+    outputSpec:
+      '{ region: "north" }: "FETCH <- IXSCAN", nReturned 15000, keys 15000, docs 15000. ' +
+      '{ region: "north", status: "shipped" }: "FETCH <- IXSCAN", nReturned 3000, keys 3000, docs 3000. ' +
+      '{ status: "shipped" }: "COLLSCAN", nReturned 15000, keys 0, docs 60000 — the index is unusable. ' +
+      '{ region: "north", status: "shipped", amount: { $gt: 490 } }: "FETCH <- IXSCAN", nReturned 54, keys 54, docs 54, with indexBounds region [ \'["north", "north"]\' ], status [ \'["shipped", "shipped"]\' ], amount [ \'(490, inf.0]\' ].',
+    constraints:
+      'Build exactly ONE index — { region: 1, status: 1, amount: 1 }. Do not add a separate index on status to make the third query fast; the point is to observe the failure.',
+    examplesJson: [
+      {
+        input: 'plan(db.orders.find({ region: "north", status: "shipped" }).explain("executionStats"))',
+        output: "{ stages: 'FETCH <- IXSCAN', nReturned: 3000, keys: 3000, docs: 3000 }",
+        explanation: 'region and status are the leading two keys, so the scan seeks straight to that contiguous block: 3,000 keys examined for 3,000 results.',
+      },
+      {
+        input: 'plan(db.orders.find({ status: "shipped" }).explain("executionStats"))',
+        output: "{ stages: 'COLLSCAN', nReturned: 15000, keys: 0, docs: 60000 }",
+        explanation: 'status is the second key. Without a region value there is no contiguous range to seek, so the planner discards the index and scans all 60,000 documents.',
+      },
+      {
+        input: 'plan(db.orders.find({ region: "north", status: "shipped", amount: { $gt: 490 } }).explain("executionStats"))',
+        output: "{ stages: 'FETCH <- IXSCAN', nReturned: 54, keys: 54, docs: 54 }",
+        explanation: 'All three keys are used: two equality bounds plus a range on the trailing key narrows the scan to exactly the 54 matching entries.',
+      },
+    ],
+    hintsJson: [
+      'Think of the index as one sorted list of concatenated keys, not three separate lookups.',
+      'A compound index serves a query only if the query constrains a leading subset of its keys: { region }, { region, status }, or all three.',
+      'Print queryPlanner.winningPlan.inputStage.indexBounds — a key with no bound in the filter cannot be seeked, only scanned.',
+      'db.orders.createIndex({ region: 1, status: 1, amount: 1 }), then explain the four filters; the one starting at status falls back to COLLSCAN.',
+    ],
+    starter: `${HELPER}
+
+// TODO: create the single compound index { region: 1, status: 1, amount: 1 }
+
+// TODO: explain each of these and record stages / keys / docs
+// db.orders.find({ region: "north" })
+// db.orders.find({ region: "north", status: "shipped" })
+// db.orders.find({ status: "shipped" })
+// db.orders.find({ region: "north", status: "shipped", amount: { $gt: 490 } })
+
+// TODO: print the indexBounds of the last query's winning plan`,
+    solution: `${HELPER}
+
+db.orders.createIndex({ region: 1, status: 1, amount: 1 })
+
+plan(db.orders.find({ region: "north" }).explain("executionStats"))
+plan(db.orders.find({ region: "north", status: "shipped" }).explain("executionStats"))
+plan(db.orders.find({ status: "shipped" }).explain("executionStats"))
+plan(db.orders.find({ region: "north", status: "shipped", amount: { $gt: 490 } }).explain("executionStats"))
+
+db.orders.find({ region: "north", status: "shipped", amount: { $gt: 490 } }).explain("executionStats").queryPlanner.winningPlan.inputStage.indexBounds`,
+    solutionExplanationHtml: `<p>The index <code>{ region: 1, status: 1, amount: 1 }</code> is one B-tree whose keys are ordered by region first. Its usable prefixes are <code>{region}</code>, <code>{region, status}</code> and <code>{region, status, amount}</code> — and that is exactly which of the four queries got an <code>IXSCAN</code>. The filter on <code>region</code> alone examined 15,000 keys for 15,000 results; adding <code>status</code> narrowed it to 3,000 for 3,000; adding the <code>amount</code> range narrowed it to 54 for 54. In all three cases <code>totalKeysExamined</code> equals <code>nReturned</code>, which is the signature of a scan seeked to a genuinely contiguous range.</p>
+<p>The query filtering on <code>status</code> alone got <code>COLLSCAN</code> with 60,000 documents examined. This is the part beginners find counter-intuitive: <code>status</code> <em>is</em> in the index, so why can it not be used? Because the entries for <code>status: "shipped"</code> are scattered across four separate region blocks. Using the index would mean walking the entire tree and filtering — no cheaper than reading the collection, and with worse locality — so the planner correctly rejects it. Equality on the leading key is what turns a tree walk into a seek.</p>
+<p>The <code>indexBounds</code> output makes the mechanism concrete: <code>region: ["north", "north"]</code> and <code>status: ["shipped", "shipped"]</code> are point bounds, and <code>amount: (490.0, inf.0]</code> is the open range that terminates the scan. This is also why a range predicate belongs on the <em>last</em> key you use: once a key is bounded by a range rather than a point, every key after it in the index is no longer contiguous. The practical rule that follows is that one well-ordered compound index replaces several single-field ones — put the fields your queries always filter by exactly at the front.</p>`,
+    diagramMermaid: `flowchart TD
+  A[Compound index region then status then amount] --> B[Filter on region only]
+  A --> C[Filter on region and status]
+  A --> D[Filter on status only]
+  A --> E[Filter on region and status and amount range]
+  B --> B1[IXSCAN usable one field prefix]
+  C --> C1[IXSCAN usable two field prefix]
+  D --> D1[COLLSCAN leading key missing]
+  E --> E1[IXSCAN two equality bounds plus one range]`,
+    reset: 'db.orders.dropIndexes()',
+  },
+
+  // ------------------------------------------------------------------ 4
+  {
+    title: 'Order a Compound Index by the ESR Rule to Remove a Blocking Sort',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 30,
+    points: 20,
+    concepts: ['ESR rule', 'blocking SORT stage', 'hint', 'index key order', 'limit pushdown'],
+    prerequisites: ['compound index', 'index prefix', 'explain executionStats'],
+    tags: ['index', 'esr', 'sort', 'hint', 'mongodb'],
+    problemHtml: `<p>Two compound indexes can contain the same three fields and differ by a factor of thirty in the work they cause. The deciding factor is key order, and the rule that gets it right is <strong>ESR</strong>: <em>Equality</em> fields first, then the <em>Sort</em> fields, then the <em>Range</em> fields. The reason is mechanical — equality keys collapse the scan to one contiguous block, that block is then already stored in sort order so no sort stage is needed, and a range predicate is the only thing that can be applied while streaming without destroying that order.</p>
+<p>The target query is <code>db.orders.find({ status: "shipped", amount: { $gt: 400 } }).sort({ createdAt: -1 }).limit(20)</code> — equality on <code>status</code>, sort on <code>createdAt</code>, range on <code>amount</code>. Do this:</p>
+<ul>
+<li>Create <code>{ status: 1, amount: 1, createdAt: -1 }</code> named <code>esr_bad</code> (E, R, S — the wrong order).</li>
+<li>Create <code>{ status: 1, createdAt: -1, amount: 1 }</code> named <code>esr_good</code> (E, S, R — the ESR order).</li>
+<li>Explain the target query forced onto <code>esr_bad</code> with <code>hint("esr_bad")</code>, and record the stage chain and counters.</li>
+<li>Explain it forced onto <code>esr_good</code> and record the same.</li>
+<li>Explain it with no hint at all and confirm which index the planner picks on its own.</li>
+</ul>
+<p>Pay attention to whether a <code>SORT</code> stage appears in the chain: a <code>SORT</code> means MongoDB had to buffer and order results in memory before it could return the first one, which also defeats the <code>limit(20)</code>. The scaffold provides the <code>plan</code> helper.</p>`,
+    inputSpec: SEED_DESC + ' The solution creates two three-key indexes over the same fields in different orders.',
+    outputSpec:
+      'hint("esr_bad"): stages "FETCH <- SORT <- IXSCAN", nReturned 20, keys 2973, docs 20 — all 2,973 matching keys are scanned and sorted in memory before the top 20 emerge. ' +
+      'hint("esr_good"): stages "LIMIT <- FETCH <- IXSCAN", nReturned 20, keys 104, docs 20 — no SORT stage; the scan stops after 104 keys. ' +
+      'With no hint the planner independently chooses esr_good and reproduces the 104-key plan.',
+    constraints:
+      'Both indexes must contain exactly the fields status, amount and createdAt — only the order differs. Force each plan with hint(indexName); do not drop one index to test the other. Keep the sort direction createdAt: -1 in both the query and the index key.',
+    examplesJson: [
+      {
+        input: 'plan(db.orders.find({ status: "shipped", amount: { $gt: 400 } }).sort({ createdAt: -1 }).limit(20).hint("esr_bad").explain("executionStats"))',
+        output: "{ stages: 'FETCH <- SORT <- IXSCAN', nReturned: 20, keys: 2973, docs: 20 }",
+        explanation: 'With the range key ahead of the sort key, index order no longer matches sort order, so all 2,973 matching keys must be read and sorted before the first row can be returned.',
+      },
+      {
+        input: 'plan(db.orders.find({ status: "shipped", amount: { $gt: 400 } }).sort({ createdAt: -1 }).limit(20).hint("esr_good").explain("executionStats"))',
+        output: "{ stages: 'LIMIT <- FETCH <- IXSCAN', nReturned: 20, keys: 104, docs: 20 }",
+        explanation: 'Equality then sort key means the index already yields shipped orders newest-first; the scan skips non-matching amounts and stops as soon as 20 rows are found — 104 keys total.',
+      },
+      {
+        input: 'plan(db.orders.find({ status: "shipped", amount: { $gt: 400 } }).sort({ createdAt: -1 }).limit(20).explain("executionStats"))',
+        output: "{ stages: 'LIMIT <- FETCH <- IXSCAN', nReturned: 20, keys: 104, docs: 20 }",
+        explanation: 'Left to itself the planner races both candidate plans and keeps the ESR-ordered one, confirming the rule rather than contradicting it.',
+      },
+    ],
+    hintsJson: [
+      'Classify each predicate in the query first: which field is an equality match, which is a sort, which is a range?',
+      'ESR means the index key order should be equality fields, then sort fields, then range fields.',
+      'hint("indexName") forces a specific index so you can compare two plans on the same query; look for a SORT stage in the chain.',
+      'esr_bad is { status: 1, amount: 1, createdAt: -1 } and produces a SORT; esr_good is { status: 1, createdAt: -1, amount: 1 } and does not.',
+    ],
+    starter: `${HELPER}
+
+// TODO: create index "esr_bad"  as { status: 1, amount: 1, createdAt: -1 }
+// TODO: create index "esr_good" as { status: 1, createdAt: -1, amount: 1 }
+
+const q = () => db.orders.find({ status: "shipped", amount: { $gt: 400 } }).sort({ createdAt: -1 }).limit(20)
+
+// TODO: plan(q().hint("esr_bad").explain("executionStats"))
+// TODO: plan(q().hint("esr_good").explain("executionStats"))
+// TODO: plan(q().explain("executionStats"))   // planner's own choice`,
+    solution: `${HELPER}
+
+db.orders.createIndex({ status: 1, amount: 1, createdAt: -1 }, { name: "esr_bad" })
+db.orders.createIndex({ status: 1, createdAt: -1, amount: 1 }, { name: "esr_good" })
+
+const q = () => db.orders.find({ status: "shipped", amount: { $gt: 400 } }).sort({ createdAt: -1 }).limit(20)
+
+plan(q().hint("esr_bad").explain("executionStats"))
+plan(q().hint("esr_good").explain("executionStats"))
+plan(q().explain("executionStats"))`,
+    solutionExplanationHtml: `<p>Both indexes cover the same three fields, and both can answer the query correctly — but <code>esr_bad</code> examines 2,973 index keys and runs a blocking <code>SORT</code>, while <code>esr_good</code> examines 104 keys and has no sort stage at all. The difference is entirely key order.</p>
+<p>In <code>esr_bad</code> (<code>status</code>, <code>amount</code>, <code>createdAt</code>) the scan seeks to <code>status: "shipped"</code> and then walks the whole <code>amount &gt; 400</code> range. Within that range the entries are ordered by <code>amount</code> first, so <code>createdAt</code> values are interleaved and useless as an ordering. MongoDB must therefore materialise every one of the 2,973 matching keys, sort them in memory, and only then apply the limit — which is why <code>keys</code> is 2,973 while <code>docs</code> is only 20. In <code>esr_good</code> (<code>status</code>, <code>createdAt</code>, <code>amount</code>) the entries under <code>status: "shipped"</code> are already in descending <code>createdAt</code> order, so the scan streams newest-first, tests <code>amount &gt; 400</code> on each key as it goes, and the <code>LIMIT</code> stops it after 20 hits — 104 keys read in total, of which 84 failed the amount test.</p>
+<p>Two consequences are worth internalising. First, a <code>SORT</code> stage cannot stream: it must consume its entire input before emitting anything, so <code>limit()</code> saves nothing, latency scales with the whole result set, and a large sort can blow the 100 MB in-memory limit and fail the query. Second, the range field goes last precisely because a range makes everything after it non-contiguous — putting <code>amount</code> before <code>createdAt</code> is what destroyed the sort order. The final check is reassuring: with both indexes present and no hint, the planner races them and picks <code>esr_good</code> itself. <code>hint()</code> is a diagnostic and a last resort, not a deployment strategy — a hint that outlives the index it names makes the query fail outright.</p>`,
+    diagramMermaid: `flowchart LR
+  Q[Query equality on status range on amount sort by createdAt] --> B[esr_bad status amount createdAt]
+  Q --> G[esr_good status createdAt amount]
+  B --> B1[IXSCAN 2973 keys] --> B2[blocking SORT in memory] --> B3[FETCH 20 docs]
+  G --> G1[IXSCAN 104 keys already ordered] --> G2[FETCH 20 docs] --> G3[LIMIT stops the scan]`,
+    reset: 'db.orders.dropIndexes()',
+  },
+
+  // ------------------------------------------------------------------ 5
+  {
+    title: 'Build a Covered Query That Never Touches a Document',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 30,
+    points: 20,
+    concepts: ['covered query', 'PROJECTION_COVERED', 'projection', 'totalDocsExamined zero', 'index-only scan'],
+    prerequisites: ['compound index', 'projection with _id 0', 'explain executionStats'],
+    tags: ['index', 'covered-query', 'projection', 'performance', 'mongodb'],
+    problemHtml: `<p>An <code>IXSCAN</code> followed by a <code>FETCH</code> still performs one random read per result to pull the document out of storage. If every field the query needs — both the filtered ones and the returned ones — already lives in the index, MongoDB can skip the fetch entirely and answer from the index alone. That is a <strong>covered query</strong>, and it shows up in explain as the stage <code>PROJECTION_COVERED</code> with the unmistakable signature <code>totalDocsExamined: 0</code>.</p>
+<p>With the index <code>{ status: 1, amount: 1 }</code> on <code>orders</code>:</p>
+<ul>
+<li>Explain <code>find({ status: "shipped", amount: { $gt: 490 } }, { _id: 0, status: 1, amount: 1 })</code> and confirm <code>PROJECTION_COVERED</code> and zero documents examined.</li>
+<li>Add <code>sku: 1</code> to the same projection, explain again, and observe the plan change.</li>
+<li>Remove <code>_id: 0</code> from the original projection, explain again, and observe what happens.</li>
+<li>Show that coverage survives sorting: explain the covered query with <code>.sort({ amount: 1 })</code> added and confirm it is still covered.</li>
+</ul>
+<p>Work out for yourself, before running each variant, whether it can be covered. The rule has exactly two halves: every field in the filter must be in the index, and every field in the projection must be in the index. The scaffold provides the <code>plan</code> helper.</p>`,
+    inputSpec: SEED_DESC + ' The solution creates one index { status: 1, amount: 1 }.',
+    outputSpec:
+      'Projection { _id: 0, status: 1, amount: 1 }: stages "PROJECTION_COVERED <- IXSCAN", nReturned 270, keys 270, docs 0. ' +
+      'Adding sku to the projection: stages "PROJECTION_SIMPLE <- FETCH <- IXSCAN", nReturned 270, keys 270, docs 270. ' +
+      'Keeping _id in the projection: stages "PROJECTION_SIMPLE <- FETCH <- IXSCAN", nReturned 270, keys 270, docs 270 — a FETCH reappears because _id is not part of the index. ' +
+      'The covered query with .sort({ amount: 1 }) stays "PROJECTION_COVERED <- IXSCAN", nReturned 270, keys 270, docs 0.',
+    constraints:
+      'Only one index is allowed: { status: 1, amount: 1 }. Do not add _id or sku to the index to force coverage. The projection must suppress _id explicitly to be covered.',
+    examplesJson: [
+      {
+        input: 'plan(db.orders.find({ status: "shipped", amount: { $gt: 490 } }, { _id: 0, status: 1, amount: 1 }).explain("executionStats"))',
+        output: "{ stages: 'PROJECTION_COVERED <- IXSCAN', nReturned: 270, keys: 270, docs: 0 }",
+        explanation: 'Both filtered fields and both projected fields are index keys, so 270 index entries are read and zero documents are fetched from storage.',
+      },
+      {
+        input: 'plan(db.orders.find({ status: "shipped", amount: { $gt: 490 } }, { _id: 0, status: 1, amount: 1, sku: 1 }).explain("executionStats"))',
+        output: "{ stages: 'PROJECTION_SIMPLE <- FETCH <- IXSCAN', nReturned: 270, keys: 270, docs: 270 }",
+        explanation: 'sku is not in the index, so a FETCH stage is inserted and 270 documents must be loaded — one random read per result.',
+      },
+      {
+        input: 'plan(db.orders.find({ status: "shipped", amount: { $gt: 490 } }, { _id: 0, amount: 1 }).sort({ amount: 1 }).explain("executionStats"))',
+        output: "{ stages: 'PROJECTION_COVERED <- IXSCAN', nReturned: 270, keys: 270, docs: 0 }",
+        explanation: 'The sort key is the trailing index key, so the scan is already ordered; the query remains covered and needs no SORT stage.',
+      },
+    ],
+    hintsJson: [
+      'If the answer is already written in the index, the server has no reason to open the document.',
+      'A query is covered when every field it filters on and every field it returns is present in one index.',
+      '_id is returned by default and is not part of your index, so it must be suppressed with _id: 0.',
+      'Look for stage PROJECTION_COVERED and totalDocsExamined: 0; adding any non-indexed field such as sku reinstates the FETCH.',
+    ],
+    starter: `${HELPER}
+
+// TODO: create the index { status: 1, amount: 1 }
+
+const f = { status: "shipped", amount: { $gt: 490 } }
+
+// TODO: explain with projection { _id: 0, status: 1, amount: 1 }        -> expect covered
+// TODO: explain with projection { _id: 0, status: 1, amount: 1, sku: 1 } -> expect a FETCH
+// TODO: explain with projection { status: 1, amount: 1 }                 -> _id not suppressed
+// TODO: explain the covered projection plus .sort({ amount: 1 })`,
+    solution: `${HELPER}
+
+db.orders.createIndex({ status: 1, amount: 1 })
+
+const f = { status: "shipped", amount: { $gt: 490 } }
+
+plan(db.orders.find(f, { _id: 0, status: 1, amount: 1 }).explain("executionStats"))
+plan(db.orders.find(f, { _id: 0, status: 1, amount: 1, sku: 1 }).explain("executionStats"))
+plan(db.orders.find(f, { status: 1, amount: 1 }).explain("executionStats"))
+plan(db.orders.find(f, { _id: 0, amount: 1 }).sort({ amount: 1 }).explain("executionStats"))`,
+    solutionExplanationHtml: `<p>The first variant is covered: <code>PROJECTION_COVERED &lt;- IXSCAN</code>, 270 keys examined, <strong>0 documents examined</strong>. The filter fields (<code>status</code>, <code>amount</code>) and the projected fields (<code>status</code>, <code>amount</code>) are all index keys, so the values are read straight out of the B-tree entries. No <code>FETCH</code> stage exists in the plan at all, which means no random I/O and no working-set pressure from documents that are only being read to throw most of their fields away.</p>
+<p>Adding <code>sku: 1</code> breaks it instantly: the plan becomes <code>PROJECTION_SIMPLE &lt;- FETCH &lt;- IXSCAN</code> with 270 documents examined. One extra projected field converted a pure index scan into 270 random document reads. The <code>_id</code> variant is the classic trap — <code>_id</code> is included in every projection unless you explicitly write <code>_id: 0</code>, and because <code>_id</code> is not a key of this index, leaving it in forces the fetch. Beginners routinely believe their query is covered, forget <code>_id: 0</code>, and never see the benefit.</p>
+<p>The fourth variant shows what coverage tolerates: sorting on <code>amount</code>, the trailing key of the index, keeps the query covered and adds no <code>SORT</code> stage, because the scan already emits entries in that order. Other limits are worth remembering: a query cannot be covered if the field is an array (a multikey index does not store the whole array in a recoverable form), if the field is in an embedded document accessed through a multikey path, or when running against a sharded collection where the shard key must be fetched. Coverage is the highest-value optimisation available for read-heavy endpoints — list views, autocomplete, counters — precisely because it removes the <code>FETCH</code> that all other index tuning leaves in place.</p>`,
+    reset: 'db.orders.dropIndexes()',
+  },
+
+  // ------------------------------------------------------------------ 6
+  {
+    title: 'Multikey Indexes on Arrays and the Three Limits They Impose',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 30,
+    points: 20,
+    concepts: ['multikey index', 'isMultiKey', '$all scan cost', 'parallel arrays error', 'coverage limitation'],
+    prerequisites: ['createIndex', 'array query semantics', 'explain executionStats'],
+    tags: ['index', 'multikey', 'arrays', 'limits', 'mongodb'],
+    problemHtml: `<p>When you index a field that holds an array, MongoDB does not store the array as one key. It stores <em>one index entry per element</em>, all pointing back at the same document. That is a <strong>multikey index</strong>, and it is what makes <code>find({ tags: "gift" })</code> work without any special syntax. It also means the index is larger than the collection's document count suggests, and it carries three restrictions that surprise people in production.</p>
+<p>Each <code>orders</code> document has a two-element <code>tags</code> array. Do the following:</p>
+<ul>
+<li>Create <code>{ tags: 1 }</code>, explain <code>find({ tags: "gift" })</code>, and print <code>queryPlanner.winningPlan.inputStage.isMultiKey</code> to confirm the server flagged it.</li>
+<li>Explain <code>find({ tags: { $all: ["gift", "cold"] } })</code> and compare <code>totalKeysExamined</code> with <code>nReturned</code> — this is where multikey scans get expensive.</li>
+<li>Create <code>{ tags: 1, status: 1 }</code> named <code>tags_status</code>, then explain <code>find({ tags: "gift", status: "shipped" }, { _id: 0, tags: 1, status: 1 })</code> forced onto it with <code>hint</code>. Check whether it is covered.</li>
+<li>On a scratch collection <code>parallel</code>, create <code>{ a: 1, b: 1 }</code> and attempt to insert <code>{ a: [1, 2], b: [3, 4] }</code> inside a try/catch. Print the error message.</li>
+</ul>
+<p>Predict each result before you run it. The scaffold provides the <code>plan</code> helper and the try/catch skeleton.</p>`,
+    inputSpec: SEED_DESC + ' Every order has tags with two of the five tag values; 24,000 documents contain "gift". A scratch collection named parallel is used for the last step.',
+    outputSpec:
+      'find({ tags: "gift" }): "FETCH <- IXSCAN", nReturned 24000, keys 24000, docs 24000, and isMultiKey is true. ' +
+      '$all ["gift","cold"]: "FETCH <- IXSCAN", nReturned 12000, keys 24000, docs 24000 — twice as many keys examined as rows returned. ' +
+      'The hinted tags_status query returns "PROJECTION_SIMPLE <- FETCH <- IXSCAN", nReturned 6000, keys 6000, docs 6000 — a FETCH is present, so a multikey index cannot cover the query. ' +
+      'The parallel insert throws with the message "cannot index parallel arrays [b] [a]".',
+    constraints:
+      'Do the parallel-array test on a separate scratch collection, not on orders. Wrap the failing insert in try/catch and print the message rather than letting the script abort. Use hint to force the tags_status plan.',
+    examplesJson: [
+      {
+        input: 'const e = db.orders.find({ tags: "gift" }).explain("executionStats"); plan(e); e.queryPlanner.winningPlan.inputStage.isMultiKey',
+        output: "{ stages: 'FETCH <- IXSCAN', nReturned: 24000, keys: 24000, docs: 24000 }  and  true",
+        explanation: 'The index holds one entry per array element, so equality on tags is a normal seek; isMultiKey true tells you the server detected array values.',
+      },
+      {
+        input: 'plan(db.orders.find({ tags: { $all: ["gift", "cold"] } }).explain("executionStats"))',
+        output: "{ stages: 'FETCH <- IXSCAN', nReturned: 12000, keys: 24000, docs: 24000 }",
+        explanation: '$all can seek on only one of the two values; the other is verified after fetching, so 24,000 keys and documents are examined to return 12,000 rows.',
+      },
+      {
+        input: 'try { db.parallel.insertOne({ a: [1, 2], b: [3, 4] }) } catch (err) { print(err.message) }',
+        output: 'cannot index parallel arrays [b] [a]',
+        explanation: 'A compound index cannot have two array-valued keys — the cross product of entries would explode, so the write is rejected outright.',
+      },
+    ],
+    hintsJson: [
+      'Ask how many index entries one document with a two-element array produces.',
+      'A multikey index stores one entry per array element; explain reports isMultiKey: true on the IXSCAN stage.',
+      'For $all and for multi-condition array filters, only one element can drive the seek — compare totalKeysExamined against nReturned to see the cost.',
+      'A multikey index can never cover a query (the FETCH stays), and a compound index may contain at most one array field, which is what the parallel-array insert proves.',
+    ],
+    starter: `${HELPER}
+
+// TODO: create { tags: 1 } and explain find({ tags: "gift" }); print isMultiKey
+
+// TODO: explain find({ tags: { $all: ["gift", "cold"] } }) and compare keys vs nReturned
+
+// TODO: create { tags: 1, status: 1 } named "tags_status" and explain the hinted projection
+// db.orders.find({ tags: "gift", status: "shipped" }, { _id: 0, tags: 1, status: 1 }).hint("tags_status")
+
+db.parallel.drop()
+db.parallel.createIndex({ a: 1, b: 1 })
+// TODO: try to insert { a: [1, 2], b: [3, 4] } inside try/catch and print err.message`,
+    solution: `${HELPER}
+
+db.orders.createIndex({ tags: 1 })
+const e1 = db.orders.find({ tags: "gift" }).explain("executionStats")
+plan(e1)
+e1.queryPlanner.winningPlan.inputStage.isMultiKey
+
+plan(db.orders.find({ tags: { $all: ["gift", "cold"] } }).explain("executionStats"))
+
+db.orders.createIndex({ tags: 1, status: 1 }, { name: "tags_status" })
+plan(db.orders.find({ tags: "gift", status: "shipped" }, { _id: 0, tags: 1, status: 1 }).hint("tags_status").explain("executionStats"))
+
+db.parallel.drop()
+db.parallel.createIndex({ a: 1, b: 1 })
+try { db.parallel.insertOne({ a: [1, 2], b: [3, 4] }) } catch (err) { print(err.message) }`,
+    solutionExplanationHtml: `<p>A multikey index is created implicitly — you index <code>tags</code> exactly like a scalar field and MongoDB notices the array values and sets <code>isMultiKey: true</code> on the scan stage. Each of the 60,000 documents contributes two entries, so the index holds 120,000 keys; equality on <code>tags</code> then behaves like any other seek and returns 24,000 documents for 24,000 keys examined.</p>
+<p>The <code>$all</code> query exposes the first limit. MongoDB can use the index to seek on only <em>one</em> of the requested values; the second condition is re-checked after the document is fetched. The result is 24,000 keys and 24,000 documents examined to return 12,000 rows — a 2:1 waste ratio that would be far worse with rarer combinations. The same applies to <code>$elemMatch</code> with several conditions: only one bound drives the scan.</p>
+<p>The hinted <code>tags_status</code> query shows the second limit: the plan is <code>PROJECTION_SIMPLE &lt;- FETCH &lt;- IXSCAN</code> even though every projected field is in the index. <strong>A multikey index can never cover a query.</strong> The index entry for an element holds only that element, not the whole array, so the server cannot reconstruct the original <code>tags</code> value without opening the document — the <code>FETCH</code> is mandatory.</p>
+<p>The third limit is enforced at write time: inserting <code>{ a: [1, 2], b: [3, 4] }</code> under a compound index on both fields fails with <code>cannot index parallel arrays [b] [a]</code>. A compound index may contain at most one array-valued key, because indexing two would require the cross product of their elements — four entries here, and thousands for realistic arrays. Note that the failure appears on the <em>insert</em>, not on the index build, so this can lie dormant until the first document with two populated arrays arrives in production. The design conclusion: index the array field, keep arrays small and bounded, and if you need to query several array attributes together, model them as an array of subdocuments queried with <code>$elemMatch</code> rather than as several parallel arrays.</p>`,
+    reset: 'db.orders.dropIndexes(); db.parallel.drop()',
+  },
+
+  // ------------------------------------------------------------------ 7
+  {
+    title: 'Shrink an Index with partialFilterExpression and sparse',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 35,
+    points: 20,
+    concepts: ['partial index', 'partialFilterExpression', 'sparse index', 'index size', 'planner eligibility'],
+    prerequisites: ['compound index', 'explain executionStats', 'query operators'],
+    tags: ['index', 'partial', 'sparse', 'selectivity', 'mongodb'],
+    problemHtml: `<p>Most indexes are bigger than they need to be. A dashboard that only ever lists <em>pending</em> orders does not need index entries for the other 45,000 rows, and a lookup on a coupon code that only 1% of documents carry does not need 59,400 null entries. MongoDB offers two ways to index a subset: <strong>partial</strong> indexes, which take an arbitrary filter expression, and <strong>sparse</strong> indexes, which skip documents where the field is absent. Partial indexes are the modern, more general tool; sparse is the older special case.</p>
+<p>On <code>orders</code>:</p>
+<ul>
+<li>Create <code>{ createdAt: -1 }</code> named <code>pending_recent</code> with <code>partialFilterExpression: { status: "pending" }</code>.</li>
+<li>Explain <code>find({ status: "pending" }).sort({ createdAt: -1 }).limit(10)</code> — it should use the partial index.</li>
+<li>Explain the same query with <code>status: "shipped"</code> and observe that the partial index is refused.</li>
+<li>Create <code>{ couponCode: 1 }</code> named <code>coupon_sparse</code> with <code>sparse: true</code>, then explain <code>find({ couponCode: "SAVE7" })</code>.</li>
+<li>Explain <code>find({ couponCode: { $exists: false } }).limit(3)</code> and observe that the sparse index cannot serve it.</li>
+</ul>
+<p>Only 600 of the 60,000 documents have a <code>couponCode</code>. Reason about why the planner accepts the partial index for one status and refuses it for another — the rule is stricter than "the query looks similar". The scaffold provides the <code>plan</code> helper.</p>`,
+    inputSpec: SEED_DESC + ' 15,000 orders have status "pending"; 600 documents have a couponCode field and 59,400 do not.',
+    outputSpec:
+      'status "pending" sorted by createdAt desc limit 10: "LIMIT <- FETCH <- IXSCAN", nReturned 10, keys 10, docs 10. ' +
+      'The same query for status "shipped": "SORT <- COLLSCAN", nReturned 10, keys 0, docs 60000 — the partial index is not eligible. ' +
+      'find({ couponCode: "SAVE7" }): "FETCH <- IXSCAN", nReturned 1, keys 1, docs 1 against an index holding only 600 keys. ' +
+      'find({ couponCode: { $exists: false } }).limit(3): "LIMIT <- COLLSCAN", nReturned 3, keys 0, docs 3 — a sparse index cannot answer a query about absent fields.',
+    constraints:
+      'The partial index key must be { createdAt: -1 } only — do not add status to the key pattern. Use partialFilterExpression for the status subset and sparse: true for the coupon index. Do not create any full index on status or couponCode.',
+    examplesJson: [
+      {
+        input: 'db.orders.createIndex({ createdAt: -1 }, { name: "pending_recent", partialFilterExpression: { status: "pending" } }); plan(db.orders.find({ status: "pending" }).sort({ createdAt: -1 }).limit(10).explain("executionStats"))',
+        output: "{ stages: 'LIMIT <- FETCH <- IXSCAN', nReturned: 10, keys: 10, docs: 10 }",
+        explanation: 'The query filter guarantees the results are inside the indexed subset, so the planner may use the index and stops after ten keys.',
+      },
+      {
+        input: 'plan(db.orders.find({ status: "shipped" }).sort({ createdAt: -1 }).limit(10).explain("executionStats"))',
+        output: "{ stages: 'SORT <- COLLSCAN', nReturned: 10, keys: 0, docs: 60000 }",
+        explanation: 'Shipped orders are not in the partial index at all, so the planner falls back to a collection scan plus a blocking sort.',
+      },
+      {
+        input: 'plan(db.orders.find({ couponCode: { $exists: false } }).limit(3).explain("executionStats"))',
+        output: "{ stages: 'LIMIT <- COLLSCAN', nReturned: 3, keys: 0, docs: 3 }",
+        explanation: 'The 59,400 documents without a couponCode have no entry in the sparse index, so the index cannot enumerate them and the planner scans instead.',
+      },
+    ],
+    hintsJson: [
+      'Index entries you never search are pure cost: bytes on disk, cache pressure, and work on every write.',
+      'partialFilterExpression restricts which documents get an index entry; sparse: true is the narrower rule of skipping documents missing the key.',
+      'The planner will only use a partial index when the query filter provably selects a subset of the index filter — an exact matching predicate is the safe case.',
+      'db.orders.createIndex({ createdAt: -1 }, { name: "pending_recent", partialFilterExpression: { status: "pending" } }); a query on status "shipped" cannot use it.',
+    ],
+    starter: `${HELPER}
+
+// TODO: create "pending_recent" on { createdAt: -1 } with partialFilterExpression { status: "pending" }
+
+// TODO: explain find({ status: "pending" }).sort({ createdAt: -1 }).limit(10)
+// TODO: explain the same query with status "shipped"
+
+// TODO: create "coupon_sparse" on { couponCode: 1 } with sparse: true
+
+// TODO: explain find({ couponCode: "SAVE7" })
+// TODO: explain find({ couponCode: { $exists: false } }).limit(3)`,
+    solution: `${HELPER}
+
+db.orders.createIndex({ createdAt: -1 }, { name: "pending_recent", partialFilterExpression: { status: "pending" } })
+
+plan(db.orders.find({ status: "pending" }).sort({ createdAt: -1 }).limit(10).explain("executionStats"))
+plan(db.orders.find({ status: "shipped" }).sort({ createdAt: -1 }).limit(10).explain("executionStats"))
+
+db.orders.createIndex({ couponCode: 1 }, { name: "coupon_sparse", sparse: true })
+
+plan(db.orders.find({ couponCode: "SAVE7" }).explain("executionStats"))
+plan(db.orders.find({ couponCode: { $exists: false } }).limit(3).explain("executionStats"))`,
+    solutionExplanationHtml: `<p>The partial index contains entries for only the 15,000 pending orders — a quarter of the size of the equivalent full index, and a quarter of the write work whenever <code>createdAt</code> changes. For <code>find({ status: "pending" }).sort({ createdAt: -1 }).limit(10)</code> the plan is <code>LIMIT &lt;- FETCH &lt;- IXSCAN</code> with ten keys and ten documents examined: the index is already ordered by <code>createdAt</code> descending, and because <em>every</em> entry in it is pending, no re-check is needed.</p>
+<p>The same query for <code>status: "shipped"</code> collapses to <code>SORT &lt;- COLLSCAN</code> over all 60,000 documents. That is the eligibility rule doing its job: the planner uses a partial index only when it can <em>prove</em> the query's results are a subset of the indexed documents. It proves this syntactically, from the filter — which is also why <code>find({ status: { $in: ["pending"] } })</code> or a filter that merely happens to match pending rows at runtime may still be refused. If you build a partial index, the queries meant to use it must carry the matching predicate literally.</p>
+<p>The sparse index on <code>couponCode</code> holds 600 keys instead of 60,000, and an equality lookup on it examines one key and one document. Its limitation is the mirror image of its benefit: documents missing the field have no entry, so <code>{ couponCode: { $exists: false } }</code> cannot be answered from the index and falls back to a scan. The same caveat applies to sorting — a sort served by a sparse index would silently omit every document lacking the field, so the planner refuses that too unless the query also filters on the field's existence.</p>
+<p>Between the two, prefer partial: <code>partialFilterExpression: { couponCode: { $exists: true } }</code> reproduces sparse behaviour and can express far more (status subsets, date windows, <code>{ deleted: false }</code>). Sparse remains in the API mainly for compatibility, and the two options cannot be combined on one index.</p>`,
+    reset: 'db.orders.dropIndexes()',
+  },
+
+  // ------------------------------------------------------------------ 8
+  {
+    title: 'Enforce Uniqueness and Read the E11000 Duplicate Key Error',
+    difficulty: 'MEDIUM',
+    estimatedMinutes: 35,
+    points: 25,
+    concepts: ['unique index', 'E11000 duplicate key', 'failed index build', 'unique partial index', 'constraint as index'],
+    prerequisites: ['createIndex', 'partial index', 'error handling in mongosh'],
+    tags: ['index', 'unique', 'constraints', 'e11000', 'mongodb'],
+    problemHtml: `<p>MongoDB has no separate constraint system: a uniqueness rule <em>is</em> an index with <code>unique: true</code>. That has two consequences people learn the hard way. Creating one on data that already contains duplicates fails the whole index build, and once it exists every offending write is rejected with error code <strong>11000</strong> — which application code must catch and translate into something a user can act on, not leak as a 500.</p>
+<p>On <code>orders</code>:</p>
+<ul>
+<li>Create a unique index on <code>sku</code>. Every sku is distinct, so the build succeeds.</li>
+<li>Inside try/catch, insert <code>{ _id: 999999, sku: "SKU-42137" }</code> — a sku that already exists. Print <code>err.code</code> and the message.</li>
+<li>Inside try/catch, attempt a unique index on <code>customerId</code> (each value repeats about twelve times). Print the error code and the first part of the message.</li>
+<li>Create a <strong>unique partial</strong> index on <code>couponCode</code> named <code>coupon_unique</code> with <code>partialFilterExpression: { couponCode: { $type: "string" } }</code>, so the 59,400 documents without the field are exempt.</li>
+<li>Inside try/catch, set <code>couponCode: "SAVE1"</code> on document <code>_id: 200</code> — a code already used by <code>_id: 100</code> — and print the error.</li>
+<li>Print the final index names.</li>
+</ul>
+<p>Note what a plain unique index would do to the 59,400 documents with no <code>couponCode</code>: they all index as <code>null</code>, which is a single repeated value, so the second such document would be rejected. The scaffold provides the try/catch skeletons.</p>`,
+    inputSpec: SEED_DESC + ' All 60,000 skus are distinct; each customerId value repeats about twelve times; 600 documents have a distinct couponCode and 59,400 have none.',
+    outputSpec:
+      'createIndex({ sku: 1 }, { unique: true }) returns "sku_1". The duplicate insert throws err.code 11000 with the message "E11000 duplicate key error collection: <db>.orders index: sku_1 dup key: { sku: \\"SKU-42137\\" }". ' +
+      'The unique index on customerId throws code 11000 / codeName DuplicateKey with a message beginning "Index build failed: ... caused by :: E11000 duplicate key error". ' +
+      'coupon_unique is created successfully. Setting couponCode "SAVE1" on _id 200 throws code 11000 naming index coupon_unique and dup key { couponCode: "SAVE1" }. ' +
+      'The final index names are [ "_id_", "sku_1", "coupon_unique" ].',
+    constraints:
+      'Wrap every operation expected to fail in try/catch and print err.code and err.message — the script must run to completion. Do not delete documents to make the customerId index build succeed. The coupon index must be unique AND partial, not sparse.',
+    examplesJson: [
+      {
+        input: 'db.orders.createIndex({ sku: 1 }, { unique: true }); try { db.orders.insertOne({ _id: 999999, sku: "SKU-42137" }) } catch (err) { print(err.code); print(err.message) }',
+        output: '11000\nE11000 duplicate key error collection: cl418.orders index: sku_1 dup key: { sku: "SKU-42137" }',
+        explanation: 'The write is rejected before it is applied; the message names the violated index and the exact key value, which is what an application should surface to the user.',
+      },
+      {
+        input: 'try { db.orders.createIndex({ customerId: 1 }, { unique: true }) } catch (err) { print(err.code + " " + err.codeName) }',
+        output: '11000 DuplicateKey',
+        explanation: 'The index build scans the existing data, hits the first repeated customerId, and aborts — no partial index is left behind.',
+      },
+      {
+        input: 'try { db.orders.updateOne({ _id: 200 }, { $set: { couponCode: "SAVE1" } }) } catch (err) { print(err.message) }',
+        output: 'E11000 duplicate key error collection: cl418.orders index: coupon_unique dup key: { couponCode: "SAVE1" }',
+        explanation: 'Unique indexes police updates as well as inserts; SAVE1 already belongs to _id 100, so the update is rejected and the document is unchanged.',
+      },
+    ],
+    hintsJson: [
+      'In MongoDB a uniqueness rule is not a table constraint — it is an index option.',
+      'createIndex({ field: 1 }, { unique: true }) both builds the index and enforces the rule; on existing duplicates the build itself fails.',
+      'Duplicate violations arrive as an exception with code 11000; the message names the index and the offending key.',
+      'For an optional unique field, combine unique with partialFilterExpression { field: { $type: "string" } } so documents missing the field are not all indexed as null.',
+    ],
+    starter: `${HELPER}
+
+// TODO: create a unique index on sku
+
+try {
+  // TODO: insert { _id: 999999, sku: "SKU-42137" } — a duplicate sku
+} catch (err) { print(err.code); print(err.message) }
+
+try {
+  // TODO: attempt a unique index on customerId (values repeat)
+} catch (err) { print(err.code + " " + err.codeName) }
+
+// TODO: create "coupon_unique" — unique AND partial on { couponCode: { $type: "string" } }
+
+try {
+  // TODO: set couponCode "SAVE1" on _id 200 (already used by _id 100)
+} catch (err) { print(err.message) }
+
+// TODO: print the final index names`,
+    solution: `${HELPER}
+
+db.orders.createIndex({ sku: 1 }, { unique: true })
+
+try {
+  db.orders.insertOne({ _id: 999999, sku: "SKU-42137" })
+} catch (err) { print(err.code); print(err.message) }
+
+try {
+  db.orders.createIndex({ customerId: 1 }, { unique: true })
+} catch (err) { print(err.code + " " + err.codeName) }
+
+db.orders.createIndex({ couponCode: 1 }, { unique: true, partialFilterExpression: { couponCode: { $type: "string" } }, name: "coupon_unique" })
+
+try {
+  db.orders.updateOne({ _id: 200 }, { $set: { couponCode: "SAVE1" } })
+} catch (err) { print(err.message) }
+
+db.orders.getIndexes().map(i => i.name)`,
+    solutionExplanationHtml: `<p>The unique index on <code>sku</code> builds cleanly because all 60,000 values are distinct, and from that moment it is both a lookup structure and a constraint. The duplicate insert raises an exception carrying <code>code: 11000</code> and a message naming the index (<code>sku_1</code>) and the exact conflicting key. Application code should catch <code>11000</code> specifically and map it to a domain error such as "that SKU is already registered" — swallowing all write errors identically, or letting this one escape as a server error, is one of the most common API defects in MongoDB backends.</p>
+<p>The attempt on <code>customerId</code> fails at <em>build</em> time with the same 11000 code wrapped in an <code>Index build failed</code> message, because roughly twelve documents share each value. Nothing partial is left behind — the build is transactional in that respect — but on a large collection you have still paid for a full scan before the failure. The correct order of operations in production is to find the duplicates first (a <code>$group</code> by the field with <code>$match</code> on <code>count &gt; 1</code>), resolve them, and only then build the index.</p>
+<p>The unique partial index is the important idiom. A plain <code>{ unique: true }</code> index on <code>couponCode</code> would index the 59,400 documents that lack the field as the single value <code>null</code>, so the second one would violate uniqueness and the build would fail. Restricting the index with <code>partialFilterExpression: { couponCode: { $type: "string" } }</code> means only the 600 documents that actually carry a code are indexed and constrained; the rest are invisible to it. The update proves enforcement extends to modifications, not just inserts: assigning an existing code to <code>_id: 200</code> is rejected and the document is left untouched. The final inventory — <code>_id_</code>, <code>sku_1</code>, <code>coupon_unique</code> — confirms the failed <code>customerId</code> build left no residue.</p>`,
+    reset: 'db.orders.dropIndexes(); db.orders.deleteOne({ _id: 999999 }); db.orders.updateOne({ _id: 200 }, { $unset: { couponCode: "" } })',
+  },
+
+  // ------------------------------------------------------------------ 9
+  {
+    title: 'Special-Purpose Indexes: Full-Text Search and TTL Expiry',
+    difficulty: 'HARD',
+    estimatedMinutes: 50,
+    points: 25,
+    concepts: ['text index', '$text and $meta textScore', 'field weights', 'TTL index', 'expireAfterSeconds'],
+    prerequisites: ['createIndex with options', 'projection', 'sort'],
+    tags: ['index', 'text-search', 'ttl', 'expiry', 'mongodb'],
+    problemHtml: `<p>Two index types do not merely speed up queries — they add capabilities. A <strong>text index</strong> tokenises string fields, applies language-aware stemming and stop-word removal, and lets you rank results by relevance; a <strong>TTL index</strong> makes MongoDB delete documents on its own once a date field ages past a threshold. Each has a rule that catches people out: a collection may have at most one text index, and a TTL index must be single-field over a date.</p>
+<p>Part one, on a <code>tickets</code> collection seeded with four support tickets (each with <code>subject</code> and <code>body</code>):</p>
+<ul>
+<li>Create one text index over both fields, named <code>ticket_text</code>, with <code>weights: { subject: 5, body: 1 }</code>.</li>
+<li>Search for <code>checkout</code>, projecting <code>subject</code> plus <code>{ score: { $meta: "textScore" } }</code>, sorted by that score descending.</li>
+<li>Run a phrase search for <code>"declined payment"</code> using escaped quotes inside the search string.</li>
+<li>Run a negated search: <code>checkout -blank</code>.</li>
+<li>Inside try/catch, attempt a <em>second</em> text index on <code>body</code> alone and print the error code and message.</li>
+</ul>
+<p>Part two, on a <code>sessions</code> collection: create a TTL index on <code>lastSeen</code> with <code>expireAfterSeconds: 1800</code>, insert three sessions last seen 1 hour ago, 2 hours ago, and now, count them, then wait 75 seconds and count again. The background TTL monitor runs about once a minute, so expiry is not instantaneous — the wait is deliberate. The scaffold provides both collections' seed data and the <code>sleep</code> call.</p>`,
+    inputSpec:
+      'A tickets collection with four documents: _id 1 subject "Payment failed at checkout" body "The card was declined during checkout"; _id 2 subject "Refund request" body "I want a refund for my declined payment"; _id 3 subject "Shipping delay" body "My parcel is late and tracking is stuck"; _id 4 subject "Checkout page blank" body "The checkout page renders blank on mobile". A sessions collection seeded with three documents whose lastSeen values are 1 hour ago, 2 hours ago, and the current time.',
+    outputSpec:
+      'The scored search for "checkout" returns _id 1 first then _id 4, each with a numeric score field, and _id 1 scores higher because the weighted subject match counts five times. ' +
+      'The phrase search for "declined payment" returns only _id 2. The negated search "checkout -blank" returns only _id 1. ' +
+      'The second text index throws code 85 (IndexOptionsConflict) with a message beginning "An equivalent index already exists with a different name and options". ' +
+      'sessions counts 3 before the wait and 1 after it, with only _id 3 (lastSeen now) surviving.',
+    constraints:
+      'Exactly one text index on tickets — the second attempt must be caught, not avoided. The TTL index must be single-field on lastSeen. Do not delete session documents manually; the TTL monitor must do it. Allow at least 75 seconds for expiry before counting again.',
+    examplesJson: [
+      {
+        input: 'db.tickets.find({ $text: { $search: "checkout" } }, { subject: 1, score: { $meta: "textScore" } }).sort({ score: { $meta: "textScore" } }).toArray()',
+        output: "[ { _id: 1, subject: 'Payment failed at checkout', score: 3.9999999999999996 }, { _id: 4, subject: 'Checkout page blank', score: 3.933333333333333 } ]",
+        explanation: 'Both tickets mention checkout; _id 1 ranks first because its match in the weighted subject field contributes five times as much as a body match. Matching is case-insensitive and stemmed.',
+      },
+      {
+        input: 'db.tickets.find({ $text: { $search: "checkout -blank" } }, { subject: 1 }).toArray()',
+        output: "[ { _id: 1, subject: 'Payment failed at checkout' } ]",
+        explanation: 'A leading minus excludes documents containing that term, so _id 4 (which contains "blank") is filtered out of the checkout results.',
+      },
+      {
+        input: 'db.sessions.countDocuments()  // before the wait, then again after sleep(75000)',
+        output: '3, then 1 — only _id 3 remains',
+        explanation: 'The two sessions older than the 1800-second threshold are removed by the background TTL monitor, which sweeps roughly every 60 seconds.',
+      },
+    ],
+    hintsJson: [
+      'Neither of these tasks is about making an existing query faster — each index gives you an operation you could not otherwise perform.',
+      'A text index is declared with the pseudo-type "text" on each field, and weights scale each field contribution to the relevance score.',
+      'Relevance is available only through $meta textScore, both in the projection and in the sort; wrap a phrase in escaped double quotes and prefix a term with minus to exclude it.',
+      'createIndex({ lastSeen: 1 }, { expireAfterSeconds: 1800 }) makes a TTL index; deletion happens in a background sweep that runs about every 60 seconds, so wait before re-counting.',
+    ],
+    starter: `db.tickets.drop()
+db.tickets.insertMany([
+  { _id: 1, subject: "Payment failed at checkout", body: "The card was declined during checkout" },
+  { _id: 2, subject: "Refund request", body: "I want a refund for my declined payment" },
+  { _id: 3, subject: "Shipping delay", body: "My parcel is late and tracking is stuck" },
+  { _id: 4, subject: "Checkout page blank", body: "The checkout page renders blank on mobile" }
+])
+
+// TODO: create "ticket_text" over subject and body with weights subject 5, body 1
+
+// TODO: search "checkout" with a textScore projection, sorted by score descending
+// TODO: phrase search for "declined payment"
+// TODO: negated search: checkout -blank
+// TODO: try a second text index on body alone; print err.code and err.message
+
+db.sessions.drop()
+// TODO: create the TTL index on lastSeen with expireAfterSeconds 1800
+db.sessions.insertMany([
+  { _id: 1, user: "a", lastSeen: new Date(Date.now() - 3600 * 1000) },
+  { _id: 2, user: "b", lastSeen: new Date(Date.now() - 7200 * 1000) },
+  { _id: 3, user: "c", lastSeen: new Date() }
+])
+// TODO: count, sleep(75000), count again, list the survivors`,
+    solution: `db.tickets.drop()
+db.tickets.insertMany([
+  { _id: 1, subject: "Payment failed at checkout", body: "The card was declined during checkout" },
+  { _id: 2, subject: "Refund request", body: "I want a refund for my declined payment" },
+  { _id: 3, subject: "Shipping delay", body: "My parcel is late and tracking is stuck" },
+  { _id: 4, subject: "Checkout page blank", body: "The checkout page renders blank on mobile" }
+])
+
+db.tickets.createIndex({ subject: "text", body: "text" }, { name: "ticket_text", weights: { subject: 5, body: 1 } })
+
+db.tickets.find({ $text: { $search: "checkout" } }, { subject: 1, score: { $meta: "textScore" } }).sort({ score: { $meta: "textScore" } }).toArray()
+db.tickets.find({ $text: { $search: "\\"declined payment\\"" } }, { subject: 1 }).toArray()
+db.tickets.find({ $text: { $search: "checkout -blank" } }, { subject: 1 }).toArray()
+
+try {
+  db.tickets.createIndex({ body: "text" }, { name: "second_text" })
+} catch (err) { print(err.code + " " + err.message.slice(0, 90)) }
+
+db.sessions.drop()
+db.sessions.createIndex({ lastSeen: 1 }, { name: "session_ttl", expireAfterSeconds: 1800 })
+db.sessions.insertMany([
+  { _id: 1, user: "a", lastSeen: new Date(Date.now() - 3600 * 1000) },
+  { _id: 2, user: "b", lastSeen: new Date(Date.now() - 7200 * 1000) },
+  { _id: 3, user: "c", lastSeen: new Date() }
+])
+print("before=" + db.sessions.countDocuments())
+sleep(75000)
+print("after=" + db.sessions.countDocuments())
+db.sessions.find({}, { user: 1 }).toArray()`,
+    solutionExplanationHtml: `<p>The text index is declared by giving each field the pseudo-type <code>"text"</code>. Internally MongoDB builds a single multikey index over every token of every listed field, after lower-casing, removing stop words, and stemming to a root form — which is why the search term <code>checkout</code> matches <code>Checkout</code>. <code>weights</code> scales each field's contribution: a hit in <code>subject</code> counts five times a hit in <code>body</code>, so ticket 1 outranks ticket 4. Relevance is not a stored field — it is only reachable through <code>$meta: "textScore"</code>, and it must appear in both the projection and the sort, otherwise results come back in an arbitrary order.</p>
+<p>The query syntax carries real capability: whitespace-separated terms are an OR, an escaped-quoted <code>"declined payment"</code> is an exact phrase (only ticket 2 has those two words adjacent), and a leading minus excludes documents containing a term, which is how <code>checkout -blank</code> drops ticket 4. The second index attempt fails with code <strong>85</strong>, <code>IndexOptionsConflict</code> — a collection may hold at most one text index, and the server reports it as an equivalent index existing with different options, because all text indexes share the same internal <code>_fts</code> key. If you need to change which fields are searchable, you drop the existing text index and rebuild it. For anything serious — multi-language ranking, fuzzy matching, faceting — a text index is the floor, not the ceiling; Atlas Search or a dedicated engine is the next step.</p>
+<p>The TTL index looks like an ordinary ascending single-field index plus <code>expireAfterSeconds</code>. A background task on the primary sweeps roughly every 60 seconds and deletes documents whose date field is older than the threshold, which is why the count only drops after the 75-second wait: expiry is <em>eventual</em>, never immediate, and a document may outlive its deadline by up to a minute (longer on a busy server). Sessions 1 and 2, last seen an hour and two hours ago, are removed; session 3 survives. The rules to remember: the key must be a single field holding a <code>Date</code> (or an array of dates, in which case the earliest wins), documents whose field is missing or non-date are never expired, the deletes are real deletes that replicate to secondaries as such, and setting <code>expireAfterSeconds: 0</code> turns the field into an explicit "delete at this exact timestamp" marker — the standard pattern for sessions, one-time tokens, and rate-limit buckets.</p>`,
+    reset: 'db.orders.dropIndexes(); db.tickets.drop(); db.sessions.drop()',
+  },
+
+  // ------------------------------------------------------------------ 10
+  {
+    title: 'Audit an Over-Indexed Collection with $indexStats and Measure the Write Cost',
+    difficulty: 'HARD',
+    estimatedMinutes: 70,
+    points: 30,
+    concepts: ['index intersection', 'rejectedPlans', '$indexStats', 'dropping unused indexes', 'write amplification'],
+    prerequisites: ['compound index', 'ESR rule', 'explain executionStats', 'hint'],
+    tags: ['index', 'audit', 'indexstats', 'write-amplification', 'mongodb'],
+    problemHtml: `<p>Index sprawl is the normal end state of an unmanaged collection: every incident adds an index, nothing ever removes one, and the write path slowly rots. Every index is a second B-tree that must be updated on every insert, on every delete, and on every update that touches one of its keys — so a collection with eight indexes does roughly nine writes per logical write, and holds nine structures in the cache competing for the same memory. This capstone runs the full audit loop: find out whether many narrow indexes can substitute for one good one, discover which indexes the workload actually uses, drop the rest, and measure what indexes cost on write.</p>
+<p>Complete all six steps:</p>
+<ul>
+<li>On <code>orders</code>, create four single-field indexes: <code>status</code>, <code>region</code>, <code>customerId</code>, <code>amount</code>.</li>
+<li>Explain <code>find({ status: "shipped", region: "north" })</code> and record the counters. Then print the <em>stage of each rejected plan's input stage</em> to see whether the planner even considered intersecting two indexes.</li>
+<li>Create the compound index <code>{ status: 1, region: 1 }</code> named <code>status_region</code> and explain the same query again. Compare <code>totalKeysExamined</code> and <code>totalDocsExamined</code> with step 2.</li>
+<li>Run a realistic workload: the two-field query with <code>limit(5)</code>, and <code>find({ customerId: 1234 })</code>.</li>
+<li>Run <code>$indexStats</code>, list the non-<code>_id</code> indexes whose <code>accesses.ops</code> is 0 (sorted by name; note <code>ops</code> is a BSON <code>Long</code>, so compare it via <code>Number(...)</code>), drop each of them, and print the remaining index names.</li>
+<li>Measure write amplification: build 20,000 identical documents, insert them into <code>wa_plain</code> (no extra indexes) and into <code>wa_indexed</code> (five extra indexes), timing each <code>insertMany</code>, and print both durations.</li>
+</ul>
+<p>Note that <code>explain</code> does not register as index usage in <code>$indexStats</code> — only real query execution does, so run the workload before you sample. Keep each chained expression on a single line: the shell evaluates line by line, and a continuation line beginning with a dot is not parsed as part of the previous statement. The scaffold provides the timing skeleton.</p>`,
+    inputSpec:
+      SEED_DESC +
+      ' Two scratch collections wa_plain and wa_indexed are created for the write-cost measurement, each receiving the same 20,000 generated documents { _id, a, b, c, d }.',
+    outputSpec:
+      'Step 2 with only single-field indexes: "FETCH <- IXSCAN", nReturned 3000, keys 15000, docs 15000 — the planner picks status_1 alone and re-checks region on each fetched document. The rejected plans report input stages [ "IXSCAN", "AND_SORTED" ]: an index-intersection plan was generated and then rejected. ' +
+      'Step 3 with the compound index: "FETCH <- IXSCAN", nReturned 3000, keys 3000, docs 3000 — a 5x reduction in both counters. ' +
+      'Step 5: the unused non-_id indexes are [ "amount_1", "region_1", "status_1" ]; after dropping them getIndexes() reports [ "_id_", "customerId_1", "status_region" ]. ' +
+      'Step 6 prints two lines of the form plainMs=<n> (indexes: 1) and indexedMs=<n> (indexes: 6); the wa_indexed insert is consistently slower — two reference runs gave 115 ms versus 182 ms and 114 ms versus 174 ms. The absolute milliseconds depend on hardware and cache state; the ordering does not.',
+    constraints:
+      'Do not use hint() in steps 2 and 3 — the point is what the planner chooses unaided. Determine unused indexes from $indexStats output rather than by inspection, and never drop _id_. The two timed insertMany calls must insert the identical document array.',
+    examplesJson: [
+      {
+        input: 'const e = db.orders.find({ status: "shipped", region: "north" }).explain("executionStats"); plan(e); e.queryPlanner.rejectedPlans.map(p => p.inputStage.stage)',
+        output: "{ stages: 'FETCH <- IXSCAN', nReturned: 3000, keys: 15000, docs: 15000 }  and  [ 'IXSCAN', 'AND_SORTED' ]",
+        explanation: 'With two separate indexes the winner scans all 15,000 shipped keys and filters region after fetching. An AND_SORTED intersection plan was built and rejected as more expensive.',
+      },
+      {
+        input: 'db.orders.createIndex({ status: 1, region: 1 }, { name: "status_region" }); plan(db.orders.find({ status: "shipped", region: "north" }).explain("executionStats"))',
+        output: "{ stages: 'FETCH <- IXSCAN', nReturned: 3000, keys: 3000, docs: 3000 }",
+        explanation: 'One compound index gives an exact seek: keys, docs and nReturned all equal 3,000, versus 15,000 keys and documents for the two-index alternative.',
+      },
+      {
+        input: 'db.orders.aggregate([{ $indexStats: {} }]).toArray().filter(s => s.name !== "_id_" && Number(s.accesses.ops) === 0).map(s => s.name).sort()',
+        output: "[ 'amount_1', 'region_1', 'status_1' ]",
+        explanation: 'After the workload, only status_region and customerId_1 were used. The other three cost writes and memory and return nothing, so they are the drop candidates.',
+      },
+    ],
+    hintsJson: [
+      'Ask two separate questions: is each index earning its place on reads, and what is it costing on writes?',
+      'explain().queryPlanner.rejectedPlans shows the alternatives the planner built and discarded — an AND_SORTED stage there is an index-intersection plan it decided against.',
+      '$indexStats is an aggregation stage returning one document per index with name and accesses.ops, counted since the index was created or the server restarted; explain does not increment it. ops is a BSON Long, so compare it with Number(s.accesses.ops) === 0.',
+      'Filter $indexStats to Number(s.accesses.ops) === 0 excluding _id_, call dropIndex on each name, then compare two timed insertMany calls to see the write cost of the remaining indexes.',
+    ],
+    starter: `${HELPER}
+
+// 1. TODO: create single-field indexes on status, region, customerId, amount
+
+// 2. TODO: explain find({ status: "shipped", region: "north" }); print plan() and the
+//    stage of each rejected plan's inputStage
+
+// 3. TODO: create { status: 1, region: 1 } named "status_region" and explain again
+
+// 4. TODO: run the real workload (two-field query with limit 5, and customerId 1234)
+
+// 5. TODO: from $indexStats, list non-_id indexes with accesses.ops === 0, drop them,
+//    and print the remaining names
+
+// 6. write cost
+const docs = []
+for (let i = 1; i <= 20000; i++) docs.push({ _id: i, a: i, b: i % 97, c: "x" + i, d: new Date(1700000000000 + i) })
+db.wa_plain.drop(); db.wa_indexed.drop()
+// TODO: create five indexes on wa_indexed, then time both insertMany calls and print the durations`,
+    solution: `${HELPER}
+
+db.orders.createIndex({ status: 1 })
+db.orders.createIndex({ region: 1 })
+db.orders.createIndex({ customerId: 1 })
+db.orders.createIndex({ amount: 1 })
+
+const before = db.orders.find({ status: "shipped", region: "north" }).explain("executionStats")
+plan(before)
+before.queryPlanner.rejectedPlans.map(p => p.inputStage.stage)
+
+db.orders.createIndex({ status: 1, region: 1 }, { name: "status_region" })
+plan(db.orders.find({ status: "shipped", region: "north" }).explain("executionStats"))
+
+db.orders.find({ status: "shipped", region: "north" }).limit(5).toArray().length
+db.orders.find({ customerId: 1234 }).toArray().length
+
+const unused = db.orders.aggregate([{ $indexStats: {} }]).toArray().filter(s => s.name !== "_id_" && Number(s.accesses.ops) === 0).map(s => s.name).sort()
+unused
+unused.forEach(n => db.orders.dropIndex(n))
+db.orders.getIndexes().map(i => i.name)
+
+const docs = []
+for (let i = 1; i <= 20000; i++) docs.push({ _id: i, a: i, b: i % 97, c: "x" + i, d: new Date(1700000000000 + i) })
+db.wa_plain.drop(); db.wa_indexed.drop()
+db.wa_indexed.createIndex({ a: 1 })
+db.wa_indexed.createIndex({ b: 1 })
+db.wa_indexed.createIndex({ c: 1 })
+db.wa_indexed.createIndex({ d: 1 })
+db.wa_indexed.createIndex({ b: 1, d: -1 })
+const t0 = Date.now()
+const r1 = db.wa_plain.insertMany(docs, { ordered: false })
+const plainMs = Date.now() - t0
+const t1 = Date.now()
+const r2 = db.wa_indexed.insertMany(docs, { ordered: false })
+const indexedMs = Date.now() - t1
+print("plainMs=" + plainMs + " (indexes: " + db.wa_plain.getIndexes().length + ")")
+print("indexedMs=" + indexedMs + " (indexes: " + db.wa_indexed.getIndexes().length + ")")`,
+    solutionExplanationHtml: `<p><strong>Index intersection.</strong> With separate indexes on <code>status</code> and <code>region</code>, the winning plan scans all 15,000 <code>status: "shipped"</code> keys, fetches all 15,000 documents, and applies <code>region</code> as a post-fetch filter to return 3,000 — a 5:1 waste ratio. The rejected plans list contains an <code>AND_SORTED</code> stage, proving the planner <em>did</em> construct an intersection of the two index scans and then costed it as worse. That is the general lesson: MongoDB supports index intersection but almost never prefers it, because intersecting two scans requires reading both key ranges in full and de-duplicating record ids. Adding <code>{ status: 1, region: 1 }</code> collapses the same query to 3,000 keys and 3,000 documents. <strong>Two single-field indexes are not a substitute for one correctly ordered compound index.</strong></p>
+<p><strong>Finding dead indexes.</strong> <code>$indexStats</code> returns one document per index with <code>accesses.ops</code>, the number of operations that have used it since the index was created or the server last restarted. After the workload, <code>status_1</code>, <code>region_1</code> and <code>amount_1</code> sit at zero while <code>status_region</code> and <code>customerId_1</code> have been used — so the first three are pure cost. Two cautions before acting on this in production: the counter resets on restart, so sample it after a full traffic cycle (and on every replica-set member, since secondaries serve different reads), and an index at zero ops may still be enforcing uniqueness or backing a TTL. The safe procedure remains hide first, watch, then drop.</p>
+<p><strong>Write amplification.</strong> The two timed inserts put identical documents into two collections that differ only in index count, and the collection with five extra indexes is consistently and substantially slower — every document must be encoded into six B-trees instead of one, each with its own page splits and cache footprint. Reads pay too: those trees compete for the same WiredTiger cache as the documents themselves. This is why an index is a deliberate trade, justified by a query you can name, and why the audit loop in this exercise — measure with <code>explain</code>, verify usage with <code>$indexStats</code>, hide, then drop — belongs in routine maintenance rather than in incident response.</p>`,
+    diagramMermaid: `flowchart TD
+  A[Collection with many indexes] --> B[Explain the slow query and read the counters]
+  B --> C{keys and docs close to nReturned}
+  C -->|no| D[Build one compound index in ESR order]
+  C -->|yes| E[Read path is healthy]
+  D --> F[Run indexStats over a full traffic cycle]
+  E --> F
+  F --> G[Indexes with zero ops]
+  G --> H[Hide them and watch]
+  H --> I[Drop them and reclaim write throughput]`,
+    reset: 'db.orders.dropIndexes(); db.wa_plain.drop(); db.wa_indexed.drop()',
+  },
+];
+
+// ---- emit payload + verify (mongosh, deterministic 60k seed, reset before each) ----
+const OUT = path.resolve(process.argv[2] || 'docs/codelab-authoring/authored');
+const VERIFY = path.resolve(process.argv[3] || 'docs/codelab-authoring/verify');
+fs.mkdirSync(OUT, { recursive: true });
+fs.mkdirSync(VERIFY, { recursive: true });
+
+const clean = exercises.map((ex) => ({
+  title: ex.title, difficulty: ex.difficulty, estimatedMinutes: ex.estimatedMinutes, points: ex.points,
+  concepts: ex.concepts, prerequisites: ex.prerequisites, tags: ex.tags,
+  problemHtml: ex.problemHtml, inputSpec: ex.inputSpec, outputSpec: ex.outputSpec, constraints: ex.constraints,
+  examplesJson: ex.examplesJson, hintsJson: ex.hintsJson,
+  starterCodeJson: [{ name: 'solution.js', language: L, code: ex.starter }],
+  solutionCodeJson: [{ name: 'solution.js', language: L, code: ex.solution }],
+  solutionExplanationHtml: ex.solutionExplanationHtml,
+  ...(ex.diagramMermaid ? { diagramMermaid: ex.diagramMermaid } : {}),
+}));
+fs.writeFileSync(path.join(OUT, `${trackSlug}__${moduleSlug}.json`), JSON.stringify({ trackSlug, moduleSlug, exercises: clean }, null, 2));
+
+const SEED = `db = db.getSiblingDB("cl418")
+db.dropDatabase()
+const statuses = ["pending", "shipped", "delivered", "cancelled"]
+const regions = ["north", "south", "east", "west"]
+const tagPool = ["fragile", "gift", "bulk", "express", "cold"]
+let batch = []
+for (let i = 1; i <= 60000; i++) {
+  const doc = {
+    _id: i,
+    sku: "SKU-" + i,
+    customerId: 1000 + (i % 5000),
+    status: statuses[i % 4],
+    region: regions[Math.floor(i / 5) % 4],
+    amount: ((i * 7) % 499) + 1,
+    createdAt: new Date(Date.UTC(2024, 0, 1) + i * 60000),
+    tags: [tagPool[i % 5], tagPool[(i + 2) % 5]]
+  }
+  if (i % 100 === 0) doc.couponCode = "SAVE" + (i / 100)
+  batch.push(doc)
+  if (batch.length === 5000) { const r = db.orders.insertMany(batch, { ordered: false }); batch = [] }
+}
+if (batch.length) { const r = db.orders.insertMany(batch, { ordered: false }) }
+print("SEED orders=" + db.orders.countDocuments() + " coupons=" + db.orders.countDocuments({ couponCode: { $exists: true } }))
+`;
+
+let js = SEED;
+exercises.forEach((ex, i) => {
+  js += `print("========== EX ${i + 1}: ${ex.title.replace(/"/g, '')} ==========")\n`;
+  js += (ex.reset || '') + '\n';
+  js += ex.solution + '\n';
+});
+fs.writeFileSync(path.join(VERIFY, `mongodb-418.js`), js);
+
+const parsed = JSON.parse(fs.readFileSync(path.join(OUT, `${trackSlug}__${moduleSlug}.json`), 'utf8'));
+const diffs = ['EASY', 'EASY', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'HARD', 'HARD'];
+if (parsed.exercises.length !== 10) throw new Error('need exactly 10 exercises');
+const titles = new Set();
+parsed.exercises.forEach((ex, i) => {
+  if (ex.difficulty !== diffs[i]) throw new Error(`slot ${i + 1} diff ${ex.difficulty} != ${diffs[i]}`);
+  if (titles.has(ex.title)) throw new Error(`duplicate title ${ex.title}`);
+  titles.add(ex.title);
+  if (ex.problemHtml.length < 900) throw new Error(`problemHtml<900 ${ex.title} (${ex.problemHtml.length})`);
+  if (ex.solutionExplanationHtml.length < 500) throw new Error(`expl<500 ${ex.title}`);
+  if (ex.hintsJson.length < 4) throw new Error(`<4 hints ${ex.title}`);
+  if (ex.examplesJson.length < 2) throw new Error(`<2 examples ${ex.title}`);
+  const solLen = ex.solutionCodeJson.map((f) => f.code).join('').length;
+  if (solLen < 205) throw new Error(`solution<205 ${ex.title} (${solLen})`);
+  if (/TODO|\.\.\./.test(ex.solutionCodeJson.map((f) => f.code).join(''))) throw new Error(`incomplete solution ${ex.title}`);
+});
+console.log(`OK ${parsed.exercises.length} exercises -> ${trackSlug}__${moduleSlug}.json`);

@@ -5,7 +5,7 @@
 // in the admin editor's live preview, so what an admin previews is exactly what
 // visitors see. Reuses CodeViewer (code + mermaid) and the shared sanitizeHtml.
 
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Dumbbell, ArrowRight } from 'lucide-react';
 import type { DocBlock, DocLang } from '@/types/exp-hub';
 import { sanitizeHtml } from '@/lib/sanitizeHtml';
 import { CodeViewer } from './CodeViewer';
@@ -43,6 +43,74 @@ export function DocBlockView({ block, index, lang = 'en' }: { block: DocBlock; i
   // untranslated fields staying English rather than disappearing.
   const vi = lang === 'vi';
   switch (block.type) {
+    case 'part':
+      // A full-width banner. The point is that you cannot scroll past it without
+      // noticing you have entered a new part of the lesson.
+      return (
+        <section
+          id={index != null ? `doc-part-${index}` : undefined}
+          className="mt-10 scroll-mt-24 overflow-hidden rounded-xl border first:mt-0"
+          style={{ borderColor: 'var(--accent-color, #8b5cf6)', background: 'color-mix(in srgb, var(--accent-color, #8b5cf6) 10%, transparent)' }}
+        >
+          <div className="flex items-center gap-3 px-4 py-3">
+            {block.number && (
+              <span
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-sm font-bold"
+                style={{ background: 'var(--accent-color, #8b5cf6)', color: '#fff' }}
+              >
+                {block.number}
+              </span>
+            )}
+            <div className="min-w-0">
+              <h2 className="text-base font-bold leading-tight text-[var(--text-primary)]">
+                {(vi && block.textVi) || block.text}
+              </h2>
+              {((vi && block.subtitleVi) || block.subtitle) && (
+                <p className="mt-0.5 text-xs text-[var(--text-secondary)]">
+                  {(vi && block.subtitleVi) || block.subtitle}
+                </p>
+              )}
+            </div>
+          </div>
+        </section>
+      );
+    case 'practice':
+      // "Go and drill this" — deliberately louder than a plain link list.
+      return (
+        <div
+          className="rounded-xl border p-3"
+          style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)' }}
+        >
+          <div className="mb-2 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-[var(--text-secondary)]">
+            <Dumbbell size={13} />
+            {vi ? 'Luyện thêm ở Java Core' : 'Practise this in Java Core'}
+          </div>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {block.items.map((it, j) => (
+              <a
+                key={j}
+                href={it.url}
+                target={it.url.startsWith('http') ? '_blank' : undefined}
+                rel={it.url.startsWith('http') ? 'noopener noreferrer' : undefined}
+                className="group flex items-center gap-2 rounded-lg border px-3 py-2 transition-colors"
+                style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}
+              >
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-sm font-semibold text-[var(--text-primary)]">
+                    {(vi && it.labelVi) || it.label}
+                  </span>
+                  {((vi && it.noteVi) || it.note) && (
+                    <span className="block truncate text-[11px] text-[var(--text-secondary)]">
+                      {(vi && it.noteVi) || it.note}
+                    </span>
+                  )}
+                </span>
+                <ArrowRight size={15} className="shrink-0 text-[var(--accent-color)] transition-transform group-hover:translate-x-0.5" />
+              </a>
+            ))}
+          </div>
+        </div>
+      );
     case 'heading':
       return (
         <h3

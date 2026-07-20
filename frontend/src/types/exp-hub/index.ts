@@ -11,6 +11,8 @@ export interface DocLinkItem { label: string; url: string; note?: string; labelV
 // English per field, so a partly-translated doc still reads correctly.
 export type DocBlock =
   | { type: 'heading'; text: string; textVi?: string }
+  | { type: 'part'; number?: string; text: string; textVi?: string; subtitle?: string; subtitleVi?: string }
+  | { type: 'practice'; items: DocLinkItem[] }
   | { type: 'prose'; html: string; htmlVi?: string }
   | { type: 'code'; title?: string; language: string; code: string; titleVi?: string; codeVi?: string }
   | { type: 'mermaid'; code: string; codeVi?: string }
@@ -19,6 +21,16 @@ export type DocBlock =
 
 export type DocLang = 'en' | 'vi';
 
+/** The part banners, in order — used to build the lesson's table of contents. */
+export function docParts(blocks: DocBlock[], lang: DocLang = 'en'): Array<{ id: string; number?: string; text: string }> {
+  const out: Array<{ id: string; number?: string; text: string }> = [];
+  blocks.forEach((b, i) => {
+    if (b.type !== 'part') return;
+    out.push({ id: `doc-part-${i}`, number: b.number, text: (lang === 'vi' && b.textVi) || b.text });
+  });
+  return out;
+}
+
 /** True when any block carries a Vietnamese companion — drives the EN/VI switch. */
 export function hasVietnamese(blocks: DocBlock[]): boolean {
   return blocks.some((b) =>
@@ -26,7 +38,8 @@ export function hasVietnamese(blocks: DocBlock[]): boolean {
     (b.type === 'prose' && !!b.htmlVi) ||
     (b.type === 'code' && (!!b.codeVi || !!b.titleVi)) ||
     (b.type === 'image' && !!b.captionVi) ||
-    (b.type === 'links' && b.items.some((i) => !!i.labelVi || !!i.noteVi)));
+    (b.type === 'part' && (!!b.textVi || !!b.subtitleVi)) ||
+    ((b.type === 'links' || b.type === 'practice') && b.items.some((i) => !!i.labelVi || !!i.noteVi)));
 }
 
 // Full doc payload returned by GET /snippets/categories/:id/doc.

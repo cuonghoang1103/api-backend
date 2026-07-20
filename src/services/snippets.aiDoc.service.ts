@@ -31,6 +31,13 @@ export interface DocLinkItem { label: string; url: string; note?: string; labelV
 // partially-translated doc still reads correctly in either mode.
 export type DocBlock =
   | { type: 'heading'; text: string; textVi?: string }
+  // A part banner — a hard visual break between the major sections of a long
+  // lesson. Without one a 200-block chapter reads as a single scroll.
+  | { type: 'part'; number?: string; text: string; textVi?: string; subtitle?: string; subtitleVi?: string }
+  // Prominent "go practise this" buttons. Unlike `links` these may point at an
+  // internal route, because their whole purpose is to send the reader to the
+  // matching module of another track.
+  | { type: 'practice'; items: DocLinkItem[] }
   | { type: 'prose'; html: string; htmlVi?: string }
   | { type: 'code'; title?: string; language: string; code: string; titleVi?: string; codeVi?: string }
   | { type: 'mermaid'; code: string; codeVi?: string }
@@ -64,6 +71,37 @@ function normalizeBlock(raw: unknown): DocBlock | null {
     const vi = str(o.textVi).slice(0, 200);
     if (vi) (block as { textVi?: string }).textVi = vi;
     return block;
+  }
+  if (type === 'part') {
+    const text = str(o.text).slice(0, 200);
+    if (!text) return null;
+    const block: DocBlock = { type: 'part', text };
+    const num = str(o.number).slice(0, 12);
+    if (num) (block as { number?: string }).number = num;
+    for (const [key, cap] of [['textVi', 200], ['subtitle', 300], ['subtitleVi', 300]] as const) {
+      const v = str(o[key]).slice(0, cap);
+      if (v) (block as Record<string, unknown>)[key] = v;
+    }
+    return block;
+  }
+  if (type === 'practice') {
+    const rawItems = Array.isArray(o.items) ? o.items : [];
+    const items: DocLinkItem[] = [];
+    for (const it of rawItems.slice(0, 12)) {
+      const io = (it ?? {}) as Record<string, unknown>;
+      const url = str(io.url);
+      // absolute http(s) OR a root-relative internal route
+      if (!/^(https?:\/\/|\/)/i.test(url)) continue;
+      const item: DocLinkItem = { label: (str(io.label) || url).slice(0, 120), url: url.slice(0, 2000) };
+      const note = str(io.note).slice(0, 200);
+      if (note) item.note = note;
+      const labelVi = str(io.labelVi).slice(0, 120);
+      if (labelVi) item.labelVi = labelVi;
+      const noteVi = str(io.noteVi).slice(0, 200);
+      if (noteVi) item.noteVi = noteVi;
+      items.push(item);
+    }
+    return items.length ? { type: 'practice', items } : null;
   }
   if (type === 'prose') {
     // Accept either an `html` field or a plain `text` field (wrap the latter).
@@ -135,11 +173,12 @@ function normalizeBlock(raw: unknown): DocBlock | null {
   return null;
 }
 
-// A hand-authored Code Lab module lesson is a full textbook chapter — the OOP
-// one runs to 130 blocks. The old cap of 60 silently truncated such a lesson to
-// less than half and reported success, so the loss was invisible. 250 still
-// bounds a runaway AI response while leaving real courseware intact.
-const MAX_BLOCKS = 250;
+// A hand-authored Code Lab module lesson is a full textbook chapter. The LAB211
+// one runs past 250 blocks once it carries part banners, cross-track practice
+// links and a Vietnamese translation of every block, so the cap sits well above
+// anything an AI pass produces (those land around 30-45) and exists only as a
+// runaway guard.
+const MAX_BLOCKS = 400;
 
 export function normalizeBlocks(raw: unknown): DocBlock[] {
   const arr = Array.isArray(raw) ? raw : [];
@@ -172,6 +211,7 @@ export function docDepth(blocks: DocBlock[]): DocDepth {
     else if (b.type === 'mermaid') { mermaid++; chars += b.code.length; }
     else if (b.type === 'prose') chars += b.html.length;
     else if (b.type === 'heading') chars += b.text.length;
+    else if (b.type === 'part') chars += b.text.length + (b.subtitle?.length || 0);
   }
   return { blocks: blocks.length, chars, code, mermaid };
 }

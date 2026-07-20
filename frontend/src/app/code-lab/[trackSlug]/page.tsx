@@ -103,7 +103,12 @@ export default function TrackRoadmapPage() {
       )}
       <div className="space-y-5">
         {(track.modules || []).map((m, mi) => (
-          <section key={m.id} className="rounded-xl border" style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)' }}>
+          <section
+            key={m.id}
+            id={`module-${m.id}`}
+            className="scroll-mt-24 rounded-xl border"
+            style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)' }}
+          >
             <header className="flex items-center gap-2 border-b px-4 py-3" style={{ borderColor: 'var(--border-color)' }}>
               <span className="flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold" style={{ background: `${accent}22`, color: accent }}>{mi + 1}</span>
               <div className="flex-1">

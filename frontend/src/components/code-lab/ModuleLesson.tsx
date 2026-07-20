@@ -9,7 +9,7 @@
 import { useEffect, useState } from 'react';
 import { BookOpenText, ChevronDown, Loader2 } from 'lucide-react';
 import type { DocBlock, DocLang } from '@/types/exp-hub';
-import { hasVietnamese } from '@/types/exp-hub';
+import { hasVietnamese, docParts } from '@/types/exp-hub';
 import { codeLabApi } from '@/lib/code-lab-api';
 import { DocBlocksView } from '@/components/exp-hub/DocBlocksView';
 
@@ -25,6 +25,8 @@ export function ModuleLesson({ moduleId, hasLesson }: { moduleId: number; hasLes
     const saved = window.localStorage.getItem('codelab.lessonLang');
     if (saved === 'vi' || saved === 'en') setLang(saved);
   }, []);
+
+  const parts = blocks ? docParts(blocks, lang) : [];
 
   const pickLang = (next: DocLang) => {
     setLang(next);
@@ -85,6 +87,41 @@ export function ModuleLesson({ moduleId, hasLesson }: { moduleId: number; hasLes
                     </button>
                   ))}
                 </div>
+              )}
+              {parts.length > 1 && (
+                <nav
+                  className="mb-4 rounded-xl border p-3"
+                  style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)' }}
+                >
+                  <div className="mb-2 text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--text-secondary)' }}>
+                    {lang === 'vi' ? `Nội dung — ${parts.length} phần` : `Contents — ${parts.length} parts`}
+                  </div>
+                  <ol className="grid gap-1 sm:grid-cols-2">
+                    {parts.map((pt) => (
+                      <li key={pt.id}>
+                        <a
+                          href={`#${pt.id}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            document.getElementById(pt.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          }}
+                          className="flex items-start gap-2 rounded-lg px-2 py-1 text-sm transition-colors hover:bg-[var(--bg-surface-hover)]"
+                          style={{ color: 'var(--text-primary)' }}
+                        >
+                          {pt.number && (
+                            <span
+                              className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded text-[11px] font-bold"
+                              style={{ background: 'var(--accent-color, #8b5cf6)', color: '#fff' }}
+                            >
+                              {pt.number}
+                            </span>
+                          )}
+                          <span className="min-w-0">{pt.text}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ol>
+                </nav>
               )}
               <DocBlocksView blocks={blocks} lang={lang} />
             </div>

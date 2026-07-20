@@ -34,12 +34,15 @@ function defaultBlock(type: DocBlock['type']): DocBlock {
     case 'mermaid': return { type: 'mermaid', code: '' };
     case 'image': return { type: 'image', url: '', caption: '' };
     case 'links': return { type: 'links', items: [{ label: '', url: '', note: '' }] };
+    case 'part': return { type: 'part', number: '', text: '', subtitle: '' };
+    case 'practice': return { type: 'practice', items: [{ label: '', url: '', note: '' }] };
   }
 }
 
 const BLOCK_LABELS: Record<DocBlock['type'], string> = {
   heading: 'Tiêu đề', prose: 'Đoạn văn (HTML)', code: 'Code / Lệnh',
   mermaid: 'Sơ đồ Mermaid', image: 'Ảnh', links: 'Links tài nguyên',
+  part: 'Dải phân cách phần', practice: 'Nút luyện tập',
 };
 
 export function CategoryDocEditor({ categoryId, onSaved }: { categoryId: number; onSaved?: () => void }) {
@@ -203,6 +206,8 @@ function isNonEmpty(b: DocBlock): boolean {
     case 'mermaid': return !!b.code.trim();
     case 'image': return !!b.url.trim();
     case 'links': return b.items.some((it) => it.url.trim());
+    case 'part': return !!b.text.trim();
+    case 'practice': return b.items.some((it) => it.url.trim());
   }
 }
 
@@ -253,7 +258,16 @@ function BlockFields({ block, onChange }: { block: DocBlock; onChange: (b: DocBl
   if (block.type === 'image') {
     return <ImageFields block={block} onChange={onChange} />;
   }
-  // links
+  if (block.type === 'part') {
+    return (
+      <div className="space-y-1.5">
+        <input value={block.number || ''} onChange={(e) => onChange({ ...block, number: e.target.value })} placeholder="Số phần, ví dụ 3" className={inp} />
+        <input value={block.text} onChange={(e) => onChange({ ...block, text: e.target.value })} placeholder="Tên phần" className={inp} />
+        <input value={block.subtitle || ''} onChange={(e) => onChange({ ...block, subtitle: e.target.value })} placeholder="Mô tả ngắn (tuỳ chọn)" className={inp} />
+      </div>
+    );
+  }
+  // links and practice share the same item shape
   return <LinksFields block={block} onChange={onChange} />;
 }
 
@@ -289,7 +303,7 @@ function ImageFields({ block, onChange }: { block: Extract<DocBlock, { type: 'im
   );
 }
 
-function LinksFields({ block, onChange }: { block: Extract<DocBlock, { type: 'links' }>; onChange: (b: DocBlock) => void }) {
+function LinksFields({ block, onChange }: { block: Extract<DocBlock, { type: 'links' | 'practice' }>; onChange: (b: DocBlock) => void }) {
   const setItem = (i: number, next: DocLinkItem) => onChange({ ...block, items: block.items.map((it, j) => (j === i ? next : it)) });
   const removeItem = (i: number) => onChange({ ...block, items: block.items.filter((_, j) => j !== i) });
   const addItem = () => onChange({ ...block, items: [...block.items, { label: '', url: '', note: '' }] });

@@ -1094,14 +1094,16 @@ solution(
          '3\n'
          '2\n'
          '4\nexport.csv\n'
-         '5\n', None),
+         '5\n',
+         'Demo data file created: import.csv\n======= Format CSV Program =======\n1. Import CSV\n2. Format Address\n3. Format Name\n4. Export CSV\n5. Exit\nPlease choice one option:--------- Import CSV -------\nEnter Path:Import: Done\nID, Name, Email, Phone, Address\n1, Nguyen   van a, anv@gmail.com, 098889999, Cau Giay     -   Ha    Noi    - Viet Nam\n2, tran  thi   b, ttb@gmail.com, 0912345678, Thanh   Xuan   - Ha Noi - Viet Nam\n3,le  van   c ,lvc@gmail.com,0987654321,Hai   Chau  - Da  Nang - Viet Nam\n4, pham van d, pvd@gmail.com, 0900000000,\n======= Format CSV Program =======\n1. Import CSV\n2. Format Address\n3. Format Name\n4. Export CSV\n5. Exit\nPlease choice one option:--------- Format Name -------\nFormat: Done\nID, Name, Email, Phone, Address\n1, Nguyen Van A, anv@gmail.com, 098889999, Cau Giay     -   Ha    Noi    - Viet Nam\n2, Tran Thi B, ttb@gmail.com, 0912345678, Thanh   Xuan   - Ha Noi - Viet Nam\n3, Le Van C, lvc@gmail.com, 0987654321, Hai   Chau  - Da  Nang - Viet Nam\n4, Pham Van D, pvd@gmail.com, 0900000000, \n======= Format CSV Program =======\n1. Import CSV\n2. Format Address\n3. Format Name\n4. Export CSV\n5. Exit\nPlease choice one option:--------- Format Address -------\nFormat: Done\nID, Name, Email, Phone, Address\n1, Nguyen Van A, anv@gmail.com, 098889999, Cau Giay - Ha Noi - Viet Nam\n2, Tran Thi B, ttb@gmail.com, 0912345678, Thanh Xuan - Ha Noi - Viet Nam\n3, Le Van C, lvc@gmail.com, 0987654321, Hai Chau - Da Nang - Viet Nam\n4, Pham Van D, pvd@gmail.com, 0900000000, \n======= Format CSV Program =======\n1. Import CSV\n2. Format Address\n3. Format Name\n4. Export CSV\n5. Exit\nPlease choice one option:--------- Export CSV ------\nEnter Path:Export: Done\n======= Format CSV Program =======\n1. Import CSV\n2. Format Address\n3. Format Name\n4. Export CSV\n5. Exit\nPlease choice one option:'),
         # Run 1 — a NEW process in the same directory. Formatting before
         # importing must not crash; then export.csv is imported and printed
         # back, which is the only real proof that run 0 wrote what it claimed.
         ('2\n'
          '1\nnosuch.csv\n'
          '1\nexport.csv\n'
-         '5\n', None),
+         '5\n',
+         "======= Format CSV Program =======\n1. Import CSV\n2. Format Address\n3. Format Name\n4. Export CSV\n5. Exit\nPlease choice one option:--------- Format Address -------\nNo CSV file has been imported\n======= Format CSV Program =======\n1. Import CSV\n2. Format Address\n3. Format Name\n4. Export CSV\n5. Exit\nPlease choice one option:--------- Import CSV -------\nEnter Path:Path doesn't exist\n======= Format CSV Program =======\n1. Import CSV\n2. Format Address\n3. Format Name\n4. Export CSV\n5. Exit\nPlease choice one option:--------- Import CSV -------\nEnter Path:Import: Done\nID, Name, Email, Phone, Address\n1, Nguyen Van A, anv@gmail.com, 098889999, Cau Giay - Ha Noi - Viet Nam\n2, Tran Thi B, ttb@gmail.com, 0912345678, Thanh Xuan - Ha Noi - Viet Nam\n3, Le Van C, lvc@gmail.com, 0987654321, Hai Chau - Da Nang - Viet Nam\n4, Pham Van D, pvd@gmail.com, 0900000000, \n======= Format CSV Program =======\n1. Import CSV\n2. Format Address\n3. Format Name\n4. Export CSV\n5. Exit\nPlease choice one option:"),
     ],
     explain_en='''<p><strong>The design is not yours to choose here.</strong> The Guidelines give four
 signatures — <code>importCSV(String path)</code>, <code>formatAddress(String dataCSV)</code>,

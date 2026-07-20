@@ -83,9 +83,18 @@ def verify_all(only=None):
     work = tempfile.mkdtemp(prefix='lab211-sol-')
     ok = bad = 0
     problems = []
+    unchecked = []
     for sol in SOLUTIONS:
         if only and sol['lab'] not in only:
             continue
+        # A run whose expectation is still None compiles and runs and proves
+        # NOTHING about the output. That is not a failure, so it used to pass
+        # silently - and a batch was once committed and shipped with two of
+        # them still in place. Count them and say so, loudly.
+        blank = sum(1 for _stdin, expected in sol['runs'] if expected is None)
+        if blank:
+            unchecked.append((sol['lab'], blank, len(sol['runs'])))
+
         good, report = compile_and_run(sol, work)
         if good:
             ok += 1
@@ -95,8 +104,12 @@ def verify_all(only=None):
     print(f'lời giải: OK={ok}  LỖI={bad}')
     for lab, rep in problems:
         print(f'\n──────── {lab}\n{rep[:2500]}')
+    if unchecked:
+        print('\n⚠️  CHƯA KIỂM OUTPUT (expected=None — chạy được nhưng không chứng minh gì):')
+        for lab, blank, total in unchecked:
+            print(f'    {lab}: {blank}/{total} lần chạy')
     shutil.rmtree(work, ignore_errors=True)
-    return bad == 0
+    return bad == 0 and not unchecked
 
 
 def capture(lab):

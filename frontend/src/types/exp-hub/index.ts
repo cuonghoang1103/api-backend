@@ -5,14 +5,29 @@
 // One block of a category's AI reference doc (full-English tech doc).
 // `image` is renderer-supported for manual additions; the AI never emits it.
 // `links` = a card row of external resources (homepage / download / docs / repo).
-export interface DocLinkItem { label: string; url: string; note?: string }
+export interface DocLinkItem { label: string; url: string; note?: string; labelVi?: string; noteVi?: string }
+// English lives in the primary fields; the optional `*Vi` companions carry a
+// Vietnamese translation where one was authored. Rendering falls back to
+// English per field, so a partly-translated doc still reads correctly.
 export type DocBlock =
-  | { type: 'heading'; text: string }
-  | { type: 'prose'; html: string }
-  | { type: 'code'; title?: string; language: string; code: string }
-  | { type: 'mermaid'; code: string }
-  | { type: 'image'; url: string; caption?: string }
+  | { type: 'heading'; text: string; textVi?: string }
+  | { type: 'prose'; html: string; htmlVi?: string }
+  | { type: 'code'; title?: string; language: string; code: string; titleVi?: string; codeVi?: string }
+  | { type: 'mermaid'; code: string; codeVi?: string }
+  | { type: 'image'; url: string; caption?: string; captionVi?: string }
   | { type: 'links'; items: DocLinkItem[] };
+
+export type DocLang = 'en' | 'vi';
+
+/** True when any block carries a Vietnamese companion — drives the EN/VI switch. */
+export function hasVietnamese(blocks: DocBlock[]): boolean {
+  return blocks.some((b) =>
+    (b.type === 'heading' && !!b.textVi) ||
+    (b.type === 'prose' && !!b.htmlVi) ||
+    (b.type === 'code' && (!!b.codeVi || !!b.titleVi)) ||
+    (b.type === 'image' && !!b.captionVi) ||
+    (b.type === 'links' && b.items.some((i) => !!i.labelVi || !!i.noteVi)));
+}
 
 // Full doc payload returned by GET /snippets/categories/:id/doc.
 export interface CategoryDoc {

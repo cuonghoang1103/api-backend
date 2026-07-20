@@ -6,7 +6,7 @@
 // visitors see. Reuses CodeViewer (code + mermaid) and the shared sanitizeHtml.
 
 import { ExternalLink } from 'lucide-react';
-import type { DocBlock } from '@/types/exp-hub';
+import type { DocBlock, DocLang } from '@/types/exp-hub';
 import { sanitizeHtml } from '@/lib/sanitizeHtml';
 import { CodeViewer } from './CodeViewer';
 
@@ -18,25 +18,30 @@ export function docHeadingId(index: number): string {
 
 // The doc's section headings (with their block index) — used to build the
 // sub-section navigation ("mục con") in the middle column.
-export function docHeadings(blocks: DocBlock[]): Array<{ id: string; text: string }> {
+export function docHeadings(blocks: DocBlock[], lang: DocLang = 'en'): Array<{ id: string; text: string }> {
   const out: Array<{ id: string; text: string }> = [];
   blocks.forEach((b, i) => {
-    if (b.type === 'heading' && b.text.trim()) out.push({ id: docHeadingId(i), text: b.text });
+    if (b.type !== 'heading') return;
+    const text = (lang === 'vi' && b.textVi) || b.text;
+    if (text.trim()) out.push({ id: docHeadingId(i), text });
   });
   return out;
 }
 
-export function DocBlocksView({ blocks }: { blocks: DocBlock[] }) {
+export function DocBlocksView({ blocks, lang = 'en' }: { blocks: DocBlock[]; lang?: DocLang }) {
   return (
     <div className="space-y-4">
       {blocks.map((b, i) => (
-        <DocBlockView key={i} block={b} index={i} />
+        <DocBlockView key={i} block={b} index={i} lang={lang} />
       ))}
     </div>
   );
 }
 
-export function DocBlockView({ block, index }: { block: DocBlock; index?: number }) {
+export function DocBlockView({ block, index, lang = 'en' }: { block: DocBlock; index?: number; lang?: DocLang }) {
+  // Per-field fallback: a block translated only in part still renders, with the
+  // untranslated fields staying English rather than disappearing.
+  const vi = lang === 'vi';
   switch (block.type) {
     case 'heading':
       return (
@@ -44,7 +49,7 @@ export function DocBlockView({ block, index }: { block: DocBlock; index?: number
           id={index != null ? docHeadingId(index) : undefined}
           className="mt-1 scroll-mt-24 text-base font-bold text-[var(--text-primary)]"
         >
-          {block.text}
+          {(vi && block.textVi) || block.text}
         </h3>
       );
     case 'prose':
@@ -57,19 +62,31 @@ export function DocBlockView({ block, index }: { block: DocBlock; index?: number
           // column, and neither was handled before (long javac/stack-trace lines ran
           // straight off the page).
           className="exp-doc-prose min-w-0 text-sm leading-relaxed text-[var(--text-secondary)] [&_a]:text-[var(--accent-color)] [&_a]:underline [&_code]:rounded [&_code]:bg-[var(--bg-surface-active)] [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[0.85em] [&_li]:my-1 [&_li]:ml-1 [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:my-2 [&_pre]:my-3 [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_pre]:rounded-lg [&_pre]:bg-[var(--bg-surface-active)] [&_pre]:p-3 [&_pre]:text-[0.85em] [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_strong]:text-[var(--text-primary)] [&_table]:my-3 [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_td]:border [&_td]:border-white/10 [&_td]:px-2 [&_td]:py-1 [&_th]:border [&_th]:border-white/10 [&_th]:px-2 [&_th]:py-1 [&_th]:text-left [&_ul]:list-disc [&_ul]:pl-5"
-          dangerouslySetInnerHTML={{ __html: sanitizeHtml(block.html) }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml((vi && block.htmlVi) || block.html) }}
         />
       );
     case 'code':
-      return <CodeViewer code={block.code} language={block.language} filename={block.title} showLineNumbers={false} maxHeight="440px" />;
+      return (
+        <CodeViewer
+          code={(vi && block.codeVi) || block.code}
+          language={block.language}
+          filename={(vi && block.titleVi) || block.title}
+          showLineNumbers={false}
+          maxHeight="440px"
+        />
+      );
     case 'mermaid':
-      return <CodeViewer code={block.code} language="mermaid" />;
+      return <CodeViewer code={(vi && block.codeVi) || block.code} language="mermaid" />;
     case 'image':
       return (
         <figure className="my-2">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={block.url} alt={block.caption || ''} className="max-w-full rounded-lg border border-[var(--border-color)]" />
-          {block.caption && <figcaption className="mt-1 text-center text-xs text-[var(--text-secondary)]">{block.caption}</figcaption>}
+          {((vi && block.captionVi) || block.caption) && (
+            <figcaption className="mt-1 text-center text-xs text-[var(--text-secondary)]">
+              {(vi && block.captionVi) || block.caption}
+            </figcaption>
+          )}
         </figure>
       );
     case 'links':
@@ -85,8 +102,10 @@ export function DocBlockView({ block, index }: { block: DocBlock; index?: number
             >
               <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-[var(--accent-color)]" />
               <span className="min-w-0">
-                <span className="block truncate text-sm font-medium text-[var(--text-primary)] group-hover:text-[var(--accent-color)]">{it.label}</span>
-                {it.note && <span className="block text-xs text-[var(--text-secondary)]">{it.note}</span>}
+                <span className="block truncate text-sm font-medium text-[var(--text-primary)] group-hover:text-[var(--accent-color)]">{(vi && it.labelVi) || it.label}</span>
+                {((vi && it.noteVi) || it.note) && (
+                  <span className="block text-xs text-[var(--text-secondary)]">{(vi && it.noteVi) || it.note}</span>
+                )}
                 <span className="block truncate text-[11px] text-[var(--text-secondary)] opacity-70">{it.url}</span>
               </span>
             </a>

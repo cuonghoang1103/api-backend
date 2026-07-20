@@ -6,9 +6,10 @@
 // rendered with the SAME DocBlocksView used by Exp Hub docs (heading / prose /
 // annotated code / mermaid / links).
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BookOpenText, ChevronDown, Loader2 } from 'lucide-react';
-import type { DocBlock } from '@/types/exp-hub';
+import type { DocBlock, DocLang } from '@/types/exp-hub';
+import { hasVietnamese } from '@/types/exp-hub';
 import { codeLabApi } from '@/lib/code-lab-api';
 import { DocBlocksView } from '@/components/exp-hub/DocBlocksView';
 
@@ -16,6 +17,19 @@ export function ModuleLesson({ moduleId, hasLesson }: { moduleId: number; hasLes
   const [open, setOpen] = useState(false);
   const [blocks, setBlocks] = useState<DocBlock[] | null>(null);
   const [loading, setLoading] = useState(false);
+  // Reading language for a bilingual lesson. Persisted so the choice survives
+  // moving between modules — a learner picks a language once, not per page.
+  const [lang, setLang] = useState<DocLang>('en');
+
+  useEffect(() => {
+    const saved = window.localStorage.getItem('codelab.lessonLang');
+    if (saved === 'vi' || saved === 'en') setLang(saved);
+  }, []);
+
+  const pickLang = (next: DocLang) => {
+    setLang(next);
+    window.localStorage.setItem('codelab.lessonLang', next);
+  };
 
   if (!hasLesson) return null;
 
@@ -54,7 +68,25 @@ export function ModuleLesson({ moduleId, hasLesson }: { moduleId: number; hasLes
             </div>
           ) : blocks && blocks.length ? (
             <div className="mx-auto min-w-0 max-w-3xl">
-              <DocBlocksView blocks={blocks} />
+              {hasVietnamese(blocks) && (
+                <div className="mb-3 flex items-center gap-1.5">
+                  <span className="mr-1 text-xs" style={{ color: 'var(--text-muted)' }}>Language</span>
+                  {(['en', 'vi'] as const).map((code) => (
+                    <button
+                      key={code}
+                      onClick={() => pickLang(code)}
+                      aria-pressed={lang === code}
+                      className="rounded-full px-3 py-1 text-xs font-semibold transition-colors"
+                      style={lang === code
+                        ? { background: 'var(--accent-color, #8b5cf6)', color: '#fff' }
+                        : { background: 'var(--bg-surface)', color: 'var(--text-secondary)', border: '1px solid var(--border-color)' }}
+                    >
+                      {code === 'en' ? 'EN' : 'VN'}
+                    </button>
+                  ))}
+                </div>
+              )}
+              <DocBlocksView blocks={blocks} lang={lang} />
             </div>
           ) : (
             <p className="py-3 text-sm" style={{ color: 'var(--text-muted)' }}>No lesson content yet.</p>

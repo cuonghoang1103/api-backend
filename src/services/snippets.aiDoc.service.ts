@@ -23,13 +23,18 @@ import { sanitizeMermaid } from '../utils/mermaid.js';
 // One doc = an ordered list of these blocks. `image` is supported by the
 // renderer for manual additions; the AI never invents image URLs (they'd 404).
 // `links` = a card row of resources (homepage / download / docs / repo).
-export interface DocLinkItem { label: string; url: string; note?: string }
+export interface DocLinkItem { label: string; url: string; note?: string; labelVi?: string; noteVi?: string }
+// A doc may be bilingual. English stays in the primary fields so every existing
+// doc and every consumer keeps working untouched; the `*Vi` companions are
+// optional and only present where a Vietnamese translation was authored. The
+// renderer falls back to English whenever a companion is missing, so a
+// partially-translated doc still reads correctly in either mode.
 export type DocBlock =
-  | { type: 'heading'; text: string }
-  | { type: 'prose'; html: string }
-  | { type: 'code'; title?: string; language: string; code: string }
-  | { type: 'mermaid'; code: string }
-  | { type: 'image'; url: string; caption?: string }
+  | { type: 'heading'; text: string; textVi?: string }
+  | { type: 'prose'; html: string; htmlVi?: string }
+  | { type: 'code'; title?: string; language: string; code: string; titleVi?: string; codeVi?: string }
+  | { type: 'mermaid'; code: string; codeVi?: string }
+  | { type: 'image'; url: string; caption?: string; captionVi?: string }
   | { type: 'links'; items: DocLinkItem[] };
 
 function str(v: unknown): string {
@@ -54,14 +59,24 @@ function normalizeBlock(raw: unknown): DocBlock | null {
   const type = str(o.type).toLowerCase();
   if (type === 'heading') {
     const text = str(o.text).slice(0, 200);
-    return text ? { type: 'heading', text } : null;
+    if (!text) return null;
+    const block: DocBlock = { type: 'heading', text };
+    const vi = str(o.textVi).slice(0, 200);
+    if (vi) (block as { textVi?: string }).textVi = vi;
+    return block;
   }
   if (type === 'prose') {
     // Accept either an `html` field or a plain `text` field (wrap the latter).
     let html = str(o.html);
     if (!html && str(o.text)) html = `<p>${str(o.text)}</p>`;
     html = scrubHtml(html);
-    return html ? { type: 'prose', html } : null;
+    if (!html) return null;
+    const block: DocBlock = { type: 'prose', html };
+    let vi = str(o.htmlVi);
+    if (!vi && str(o.textVi)) vi = `<p>${str(o.textVi)}</p>`;
+    vi = scrubHtml(vi);
+    if (vi) (block as { htmlVi?: string }).htmlVi = vi;
+    return block;
   }
   if (type === 'code') {
     const code = typeof o.code === 'string' ? o.code : '';
@@ -70,13 +85,21 @@ function normalizeBlock(raw: unknown): DocBlock | null {
     const title = str(o.title).slice(0, 120);
     const block: DocBlock = { type: 'code', language, code: code.slice(0, 12_000) };
     if (title) (block as { title?: string }).title = title;
+    const titleVi = str(o.titleVi).slice(0, 120);
+    if (titleVi) (block as { titleVi?: string }).titleVi = titleVi;
+    const codeVi = typeof o.codeVi === 'string' ? o.codeVi : '';
+    if (codeVi.trim()) (block as { codeVi?: string }).codeVi = codeVi.slice(0, 12_000);
     return block;
   }
   if (type === 'mermaid') {
     // Repair common AI mistakes (fences, glued diagrams, unquoted labels) so the
     // diagram renders instead of throwing a parse error in the viewer.
     const code = sanitizeMermaid(typeof o.code === 'string' ? o.code : '');
-    return code.trim() ? { type: 'mermaid', code: code.slice(0, 8_000) } : null;
+    if (!code.trim()) return null;
+    const block: DocBlock = { type: 'mermaid', code: code.slice(0, 8_000) };
+    const codeVi = sanitizeMermaid(typeof o.codeVi === 'string' ? o.codeVi : '');
+    if (codeVi.trim()) (block as { codeVi?: string }).codeVi = codeVi.slice(0, 8_000);
+    return block;
   }
   if (type === 'image') {
     const url = str(o.url);
@@ -85,6 +108,8 @@ function normalizeBlock(raw: unknown): DocBlock | null {
     const caption = str(o.caption).slice(0, 300);
     const block: DocBlock = { type: 'image', url: url.slice(0, 2000) };
     if (caption) (block as { caption?: string }).caption = caption;
+    const captionVi = str(o.captionVi).slice(0, 300);
+    if (captionVi) (block as { captionVi?: string }).captionVi = captionVi;
     return block;
   }
   if (type === 'links') {
@@ -99,6 +124,10 @@ function normalizeBlock(raw: unknown): DocBlock | null {
       const item: DocLinkItem = { label, url: url.slice(0, 2000) };
       const note = str(io.note).slice(0, 200);
       if (note) item.note = note;
+      const labelVi = str(io.labelVi).slice(0, 120);
+      if (labelVi) item.labelVi = labelVi;
+      const noteVi = str(io.noteVi).slice(0, 200);
+      if (noteVi) item.noteVi = noteVi;
       items.push(item);
     }
     return items.length ? { type: 'links', items } : null;

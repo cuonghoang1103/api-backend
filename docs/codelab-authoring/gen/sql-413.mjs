@@ -31,6 +31,11 @@ const exercises = [
         output: '| category    | revenue |\n| Electronics | 600     |',
         explanation: 'Only Electronics (600) exceeds the average of 350. Toys (300) and Books (150) are below it.',
       },
+      {
+        input: 'The category_totals CTE holds Electronics=600, Books=150, Toys=300',
+        output: 'Books and Toys are omitted from the final result',
+        explanation: 'The outer WHERE compares each revenue to AVG(revenue) over the CTE (350); Books (150) and Toys (300) are both below it, so only Electronics remains.',
+      },
     ],
     hintsJson: [
       'Name the per-category totals once so you can reuse them. Which clause defines a named subquery?',
@@ -95,6 +100,11 @@ SELECT category, revenue FROM category_totals WHERE revenue > (SELECT AVG(revenu
         output: '1500 -> Gold, 750 -> Silver, 500 -> Silver, 200 -> Bronze',
         explanation: '500 hits the >= 500 branch (Silver); 200 falls through to the ELSE (Bronze). The >= 500 boundary is inclusive.',
       },
+      {
+        input: 'total_spent values 1000 and 999',
+        output: '1000 -> Gold, 999 -> Silver',
+        explanation: 'The >= 1000 branch is inclusive, so exactly 1000 is Gold; 999 misses it and falls to the >= 500 branch, becoming Silver.',
+      },
     ],
     hintsJson: [
       'You need an inline if/else that returns a label per row. Which SQL expression does that?',
@@ -153,6 +163,11 @@ INSERT INTO customers VALUES (1,'Ann',1500),(2,'Bob',750),(3,'Cy',500),(4,'Di',2
         input: 'product 1 has prices 10 (Jan), 12 (Mar), 11 (Feb); product 2 has 50 (Jan), 55 (Feb)',
         output: '| product_id | price | changed_at |\n| 1          | 12    | Mar        |\n| 2          | 55    | Feb        |',
         explanation: "Within product 1, March is newest so it is numbered 1; within product 2, February is newest. Only the number-1 rows survive.",
+      },
+      {
+        input: 'product 2 has price 50 (Jan) and 55 (Feb)',
+        output: '| product_id | price | changed_at |\n| 2          | 55    | Feb        |',
+        explanation: 'Ordering by changed_at DESC gives February row number 1 for product 2, so its current price 55 is the row kept.',
       },
     ],
     hintsJson: [
@@ -218,6 +233,11 @@ SELECT product_id, price, changed_at FROM ranked WHERE rn = 1 ORDER BY product_i
         output: '| player | points | rnk | dense |\n| Ann    | 90     | 1   | 1     |\n| Bob    | 90     | 1   | 1     |\n| Cy     | 80     | 3   | 2     |\n| Di     | 70     | 4   | 3     |',
         explanation: 'Ann and Bob tie at rank 1. RANK() then jumps to 3 for Cy (a gap), while DENSE_RANK() continues at 2 (no gap).',
       },
+      {
+        input: 'Cy scores 80, the next distinct score below the tied 90s',
+        output: 'Cy: rnk 3, dense 2',
+        explanation: 'RANK counts the two tied players ahead of Cy (giving 3), while DENSE_RANK counts only distinct scores ahead (giving 2).',
+      },
     ],
     hintsJson: [
       'Both functions rank by the same order; they only differ in how they treat the row after a tie.',
@@ -274,6 +294,11 @@ INSERT INTO scores VALUES ('Ann',90),('Bob',90),('Cy',80),('Di',70);`,
         output: '| txn_date | amount | running_balance |\n| d1       | 100    | 100             |\n| d2       | -30    | 70              |\n| d3       | 50     | 120             |',
         explanation: 'Each running_balance adds the current amount to the previous balance: 100, then 100-30=70, then 70+50=120.',
       },
+      {
+        input: 'the third transaction (+50) arrives when the running balance is 70',
+        output: 'running_balance 120 on that row',
+        explanation: 'The windowed SUM covers every row from the start through the current one, so it adds 50 to the prior 70 to give 120.',
+      },
     ],
     hintsJson: [
       'You want a sum that grows as you move down the ordered rows, not one grand total.',
@@ -328,6 +353,11 @@ INSERT INTO transactions VALUES ('2026-01-01',100),('2026-01-02',-30),('2026-01-
         input: "North: Q1=100, Q2=200; South: Q1=50, Q3=80",
         output: '| region | q1  | q2  | q3 | q4 |\n| North  | 100 | 200 | 0  | 0  |\n| South  | 50  | 0   | 80 | 0  |',
         explanation: "Each quarter column sums only that quarter's rows for the region; quarters with no rows become 0 via COALESCE.",
+      },
+      {
+        input: 'North has sales only in Q1 and Q2',
+        output: 'North: q3 = 0 and q4 = 0',
+        explanation: 'With no Q3 or Q4 rows for North, each filtered SUM returns NULL and COALESCE presents it as 0 instead of leaving a hole.',
       },
     ],
     hintsJson: [
@@ -393,6 +423,11 @@ FROM sales GROUP BY region ORDER BY region;`,
         output: 'North/A=100, North/B=50, North subtotal=150, South/A=80, South subtotal=80, grand total=230',
         explanation: 'ROLLUP adds a subtotal per region (product NULL) and one grand total (both NULL), on top of the detail rows.',
       },
+      {
+        input: 'the single most-aggregated row ROLLUP produces',
+        output: '| (all regions) | (all products) | 230 |',
+        explanation: 'Rolling away both columns gives the grand total of every sale (100 + 50 + 80 = 230); COALESCE labels the two NULLs.',
+      },
     ],
     hintsJson: [
       'You want detail + per-region subtotal + grand total from one query. Which GROUP BY extension adds those higher levels?',
@@ -450,6 +485,11 @@ ORDER BY GROUPING(region), region, GROUPING(product), product;`,
         output: '| customer_id | order_id | ordered_at | total |\n| 1           | (Mar row)| Mar        | 40    |\n| 2           | (Feb row)| Feb        | 20    |',
         explanation: 'DISTINCT ON keeps the first row per customer after ordering by ordered_at DESC, so each customer\'s newest order survives.',
       },
+      {
+        input: 'customer 1 has order 101 (Jan, 10) and order 102 (Mar, 40)',
+        output: '| customer_id | order_id | ordered_at | total |\n| 1           | 102      | Mar        | 40    |',
+        explanation: 'ORDER BY customer_id, ordered_at DESC puts the March order first for customer 1, so DISTINCT ON keeps order 102.',
+      },
     ],
     hintsJson: [
       'You want the whole newest row per customer, not just the max date. DISTINCT ON keeps one full row per key.',
@@ -505,6 +545,11 @@ INSERT INTO orders VALUES
         input: 'CEO(1, mgr NULL); VP(2, mgr 1), VP(3, mgr 1); Eng(4, mgr 2)',
         output: '| employee_id | name | depth |\n| 1           | CEO  | 1     |\n| 2           | VP   | 2     |\n| 3           | VP   | 2     |\n| 4           | Eng  | 3     |',
         explanation: 'The anchor is the CEO at depth 1; the VPs report to the CEO so they are depth 2; the engineer reports to a VP so is depth 3.',
+      },
+      {
+        input: 'Engineer (id 4) reports to VP-Eng (id 2), who reports to CEO (id 1)',
+        output: '| employee_id | name     | depth |\n| 4           | Engineer | 3     |',
+        explanation: 'Each recursive pass adds one level, so the two-hop chain from CEO down to the engineer lands the engineer at depth 3.',
       },
     ],
     hintsJson: [
@@ -582,6 +627,11 @@ SELECT employee_id, name, depth FROM tree ORDER BY depth, employee_id;`,
         input: 'user 1 logs in Jan 1, 2, 3, then 5, 6 (gap on Jan 4)',
         output: '| user_id | streak_start | streak_end | streak_length |\n| 1       | Jan 1        | Jan 3      | 3             |\n| 1       | Jan 5        | Jan 6      | 2             |',
         explanation: 'Jan 1-3 form one island (length 3); the gap on Jan 4 breaks the streak; Jan 5-6 form a second island (length 2).',
+      },
+      {
+        input: 'user 2 logs in on Jan 10 and Jan 11 only',
+        output: '| user_id | streak_start | streak_end | streak_length |\n| 2       | Jan 10       | Jan 11     | 2             |',
+        explanation: 'Two consecutive days produce the same island key (date minus row-number), so they collapse into one streak of length 2.',
       },
     ],
     hintsJson: [

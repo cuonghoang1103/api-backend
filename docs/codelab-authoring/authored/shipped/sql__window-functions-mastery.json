@@ -1,0 +1,621 @@
+{
+  "trackSlug": "sql",
+  "moduleSlug": "window-functions-mastery",
+  "exercises": [
+    {
+      "title": "Attach Partition Aggregates and Share of Total",
+      "difficulty": "EASY",
+      "estimatedMinutes": 20,
+      "points": 10,
+      "concepts": [
+        "PARTITION BY",
+        "windowed SUM",
+        "share of total",
+        "aggregate without collapsing",
+        "ratio to report"
+      ],
+      "prerequisites": [
+        "GROUP BY",
+        "aggregate functions"
+      ],
+      "tags": [
+        "window-functions",
+        "partition-by",
+        "share",
+        "aggregate",
+        "postgres"
+      ],
+      "problemHtml": "<p>The defining feature of a window function is that it computes an aggregate <em>without collapsing</em> the rows the way <code>GROUP BY</code> does — every detail row survives and gains a computed column. That makes the \"share of total\" report trivial: divide each row's value by the windowed sum over its partition, something a plain <code>GROUP BY</code> cannot do in one pass because it has already thrown away the detail rows.</p>\n<p>Given a <code>sales</code> table (<code>region</code>, <code>rep</code>, <code>month</code>, <code>amount</code>):</p>\n<ul>\n<li>For every sale, add a <code>region_total</code> column = <code>SUM(amount) OVER (PARTITION BY region)</code>.</li>\n<li>Add a <code>pct</code> column = that sale's amount as a percentage of its region total, rounded to one decimal (<code>ROUND(100.0 * amount / SUM(amount) OVER (PARTITION BY region), 1)</code>).</li>\n<li>Return <code>region</code>, <code>rep</code>, <code>month</code>, <code>amount</code>, <code>region_total</code>, <code>pct</code>, ordered by <code>region</code>, <code>rep</code>, <code>month</code>.</li>\n</ul>\n<p>Notice all North rows share the same <code>region_total</code> while keeping their own amounts. The scaffold shows the windowed sum to complete.</p>",
+      "inputSpec": "A sales table with 9 rows across regions North (6 rows) and South (3 rows).",
+      "outputSpec": "Every row keeps its detail plus region_total (North=740, South=660) and pct = amount/region_total*100 rounded to 1 decimal.",
+      "constraints": "Use SUM(amount) OVER (PARTITION BY region) — do not GROUP BY (that would collapse the rows). Compute pct against the same windowed sum.",
+      "examplesJson": [
+        {
+          "input": "North rep Ann, month 1, amount 100",
+          "output": "region_total 740, pct 13.5",
+          "explanation": "North sums to 740; 100/740*100 = 13.51..., rounded to 13.5."
+        },
+        {
+          "input": "South rep Cy, month 1, amount 300",
+          "output": "region_total 660, pct 45.5",
+          "explanation": "South sums to 660; 300/660*100 = 45.45..., rounded to 45.5."
+        }
+      ],
+      "hintsJson": [
+        "You want the aggregate alongside each row, not instead of the rows — that is what OVER does.",
+        "SUM(amount) OVER (PARTITION BY region) restarts the sum for each region and shows it on every row.",
+        "The share is amount divided by that same windowed sum.",
+        "Use 100.0 (not 100) so the division is decimal, then ROUND(..., 1)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Fill in the window specifications (PARTITION BY / ORDER BY / frame) per the requirements above.\nSELECT region, rep, month, amount,\n       SUM(amount) OVER ( /* ... */ ) AS region_total,\n       ROUND(100.0 * amount / SUM(amount) OVER ( /* ... */ ), 1) AS pct\nFROM   sales\nORDER BY region, rep, month;"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "SELECT region, rep, month, amount,\n       SUM(amount) OVER (PARTITION BY region) AS region_total,\n       ROUND(100.0 * amount / SUM(amount) OVER (PARTITION BY region), 1) AS pct\nFROM   sales\nORDER BY region, rep, month;"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>SUM(amount) OVER (PARTITION BY region)</code> turns an ordinary aggregate into a window function: <code>PARTITION BY region</code> defines a window of rows sharing a region, the sum is computed over that window, and — crucially — the result is attached to <em>every</em> row rather than collapsing them. So all six North rows show <code>region_total = 740</code> and all three South rows show <code>660</code>, while each row keeps its own <code>amount</code>. That coexistence of detail and aggregate is the entire reason window functions exist.</p>\n<p>The share-of-total pattern falls right out: divide each amount by the windowed sum over its partition. The two details that trip people up are both here. First, integer division — writing <code>100 * amount / SUM(...)</code> with integer literals would truncate; using <code>100.0</code> forces decimal arithmetic before <code>ROUND</code>. Second, the temptation to reach for <code>GROUP BY region</code>: that produces one row per region and discards the per-sale detail, so you could never compute a per-sale share from it without joining the aggregate back. The window function does both jobs in a single scan. A window <code>SUM</code> with no <code>ORDER BY</code> (as here) covers the whole partition; add an <code>ORDER BY</code> inside <code>OVER</code> and the same <code>SUM</code> becomes a running total instead, which the next exercises use.</p>"
+    },
+    {
+      "title": "Number Rows within Each Partition with ROW_NUMBER",
+      "difficulty": "EASY",
+      "estimatedMinutes": 20,
+      "points": 10,
+      "concepts": [
+        "ROW_NUMBER",
+        "PARTITION BY",
+        "window ORDER BY",
+        "per-group sequence",
+        "recency ranking"
+      ],
+      "prerequisites": [
+        "window functions",
+        "ORDER BY"
+      ],
+      "tags": [
+        "window-functions",
+        "row-number",
+        "partition",
+        "sequence",
+        "postgres"
+      ],
+      "problemHtml": "<p><code>ROW_NUMBER()</code> assigns a unique sequential number to each row <em>within</em> its partition, in the order given by the window's own <code>ORDER BY</code>, and it restarts at 1 for each partition. Unlike <code>RANK</code> and <code>DENSE_RANK</code>, it never produces a duplicate or a gap — even two rows with the same ordering value get distinct numbers. This is the tool behind \"the Nth most recent record per group\", per-group deduplication, and paginating within a group, because you can number the rows and then keep only the ones you want.</p>\n<p>Given the <code>sales</code> table, number each rep's sales from most recent month to oldest:</p>\n<ul>\n<li>Add a <code>recency</code> column = <code>ROW_NUMBER() OVER (PARTITION BY rep ORDER BY month DESC)</code>, so the newest month is 1.</li>\n<li>Return <code>rep</code>, <code>month</code>, <code>amount</code>, <code>recency</code>, ordered by <code>rep</code>, then <code>month</code> descending.</li>\n</ul>\n<p>Each rep independently gets 1, 2, 3 for their three months. The scaffold shows where the window goes.</p>",
+      "inputSpec": "The sales table; each rep (Ann, Bob, Cy) has exactly three monthly rows.",
+      "outputSpec": "Per rep, ROW_NUMBER over month descending gives recency 1 to the latest month (3), 2 to month 2, 3 to month 1.",
+      "constraints": "Use ROW_NUMBER with PARTITION BY rep and ORDER BY month DESC inside OVER. The final ORDER BY is for display.",
+      "examplesJson": [
+        {
+          "input": "rep Ann, months 1(100), 2(150), 3(120)",
+          "output": "month 3 -> recency 1, month 2 -> recency 2, month 1 -> recency 3",
+          "explanation": "ORDER BY month DESC makes the newest month number 1 within Ann."
+        },
+        {
+          "input": "rep Bob, month 3 (amount 200)",
+          "output": "recency 1",
+          "explanation": "Bob's partition is numbered independently; his newest month is also recency 1."
+        }
+      ],
+      "hintsJson": [
+        "You need a per-rep sequence, restarting for each rep.",
+        "PARTITION BY rep restarts the numbering; ORDER BY inside OVER decides the sequence.",
+        "ORDER BY month DESC makes the newest month number 1.",
+        "ROW_NUMBER() OVER (PARTITION BY rep ORDER BY month DESC) AS recency."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Fill in the window specifications (PARTITION BY / ORDER BY / frame) per the requirements above.\n-- ROW_NUMBER restarts at 1 for each rep (PARTITION BY) and numbers by the window's own ORDER BY;\n-- month DESC makes the newest month recency 1. The outer ORDER BY only affects display, not the numbering.\nSELECT rep, month, amount,\n       ROW_NUMBER() OVER ( /* ... */ ) AS recency\nFROM   sales\nORDER BY rep, month DESC;"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- ROW_NUMBER restarts at 1 for each rep (PARTITION BY) and numbers by the window's own ORDER BY;\n-- month DESC makes the newest month recency 1. The outer ORDER BY only affects display, not the numbering.\nSELECT rep, month, amount,\n       ROW_NUMBER() OVER (PARTITION BY rep ORDER BY month DESC) AS recency\nFROM   sales\nORDER BY rep, month DESC;"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>ROW_NUMBER()</code> numbers rows 1, 2, 3, … in the sequence set by the window's <code>ORDER BY</code>, and <code>PARTITION BY rep</code> makes that numbering restart for each rep. Because the window orders by <code>month DESC</code>, each rep's most recent month receives <code>recency = 1</code>. The number is entirely a function of the window definition, not of the outer query's <code>ORDER BY</code> — the final <code>ORDER BY rep, month DESC</code> only controls how the finished rows are displayed.</p>\n<p>The distinction to internalise is between the <em>window's</em> <code>ORDER BY</code> (inside the parentheses, which determines the numbering) and the <em>statement's</em> <code>ORDER BY</code> (which determines display order); they are independent and can differ. <code>ROW_NUMBER</code> always yields a strict, gap-free sequence with no duplicates even when the ordering column ties — for tied values it picks an order, so add a unique tiebreaker to the window's <code>ORDER BY</code> (e.g. <code>ORDER BY month DESC, id</code>) when you need the assignment to be deterministic across runs. This \"number then filter number = 1\" shape is the canonical way to keep the newest (or top) row per group, which you will use whenever <code>DISTINCT ON</code> is unavailable or you need a specific rank rather than just the first.</p>"
+    },
+    {
+      "title": "Compute Running Totals per Partition",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 15,
+      "concepts": [
+        "running total",
+        "SUM OVER ORDER BY",
+        "default frame",
+        "cumulative per group",
+        "window ordering"
+      ],
+      "prerequisites": [
+        "windowed SUM",
+        "PARTITION BY"
+      ],
+      "tags": [
+        "window-functions",
+        "running-total",
+        "cumulative",
+        "frame",
+        "postgres"
+      ],
+      "problemHtml": "<p>Adding an <code>ORDER BY</code> inside <code>OVER</code> changes a windowed aggregate from \"whole-partition total\" to \"running total\": for each row it sums from the start of the partition through the current row. Combined with <code>PARTITION BY</code>, this gives a cumulative total that restarts per group — a per-rep sales-to-date. It computes in a single ordered pass, which is dramatically cheaper than the self-join or correlated subquery you would otherwise write to accumulate prior rows.</p>\n<p>Given the <code>sales</code> table:</p>\n<ul>\n<li>Add a <code>rep_cumulative</code> column = <code>SUM(amount) OVER (PARTITION BY rep ORDER BY month)</code>.</li>\n<li>Return <code>rep</code>, <code>month</code>, <code>amount</code>, <code>rep_cumulative</code>, ordered by <code>rep</code>, <code>month</code>.</li>\n</ul>\n<p>For each rep the cumulative should grow month by month and reset when the next rep begins. The scaffold shows the windowed sum to complete.</p>",
+      "inputSpec": "The sales table; each rep has three months in order.",
+      "outputSpec": "Per rep, SUM over month gives a running total: Ann 100,250,370; Bob 80,170,370; Cy 300,410,660.",
+      "constraints": "Use SUM(amount) OVER (PARTITION BY rep ORDER BY month). The ORDER BY inside OVER is what makes it cumulative; do not use a self-join.",
+      "examplesJson": [
+        {
+          "input": "rep Ann amounts by month: 100, 150, 120",
+          "output": "rep_cumulative: 100, 250, 370",
+          "explanation": "Each month adds to the sum of earlier months within Ann: 100, then 250, then 370."
+        },
+        {
+          "input": "rep Cy amounts by month: 300, 110, 250",
+          "output": "rep_cumulative: 300, 410, 660",
+          "explanation": "Cy accumulates independently: 300, then 410, then 660."
+        }
+      ],
+      "hintsJson": [
+        "A whole-partition SUM has no ORDER BY; a running total adds one.",
+        "SUM(amount) OVER (PARTITION BY rep ORDER BY month) accumulates within each rep.",
+        "With an ORDER BY and no explicit frame, the default is start-of-partition through the current row.",
+        "The cumulative resets automatically at each new rep because of PARTITION BY."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Fill in the window specifications (PARTITION BY / ORDER BY / frame) per the requirements above.\n-- ORDER BY month inside OVER turns the partition SUM into a running total (default frame: start of\n-- partition through the current row). PARTITION BY rep resets the accumulation for each rep.\nSELECT rep, month, amount,\n       SUM(amount) OVER ( /* ... */ ) AS rep_cumulative\nFROM   sales\nORDER BY rep, month;"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- ORDER BY month inside OVER turns the partition SUM into a running total (default frame: start of\n-- partition through the current row). PARTITION BY rep resets the accumulation for each rep.\nSELECT rep, month, amount,\n       SUM(amount) OVER (PARTITION BY rep ORDER BY month) AS rep_cumulative\nFROM   sales\nORDER BY rep, month;"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The single addition of <code>ORDER BY month</code> inside the <code>OVER</code> clause is what makes the sum cumulative. With an <code>ORDER BY</code> present and no explicit frame, PostgreSQL applies the default frame <code>RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code> — every row from the start of the partition up to and including the current one — which is exactly the definition of a running total. <code>PARTITION BY rep</code> confines the accumulation to each rep and resets it at the next, so Ann's total (100, 250, 370) is independent of Bob's (80, 170, 370).</p>\n<p>Two things reward attention. First, this is a single ordered pass — far cheaper than the classic self-join or correlated subquery that re-sums all prior rows for every row (O(n²)). Second, the default frame is <code>RANGE</code>-based, which treats rows with an equal <code>ORDER BY</code> value as peers and gives them the <em>same</em> cumulative value; here months are unique per rep so it does not bite, but on data with ties you would switch to <code>ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code> for strict row-by-row accumulation. The outer <code>ORDER BY</code> makes the displayed order match the accumulation order; without it the result order is not guaranteed even though the values are correct.</p>"
+    },
+    {
+      "title": "Compare Rows to Their Neighbours with LAG and LEAD",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 30,
+      "points": 20,
+      "concepts": [
+        "LAG",
+        "LEAD",
+        "offset and default",
+        "period-over-period change",
+        "neighbour access"
+      ],
+      "prerequisites": [
+        "window functions",
+        "window ORDER BY"
+      ],
+      "tags": [
+        "window-functions",
+        "lag",
+        "lead",
+        "change",
+        "postgres"
+      ],
+      "problemHtml": "<p><code>LAG</code> and <code>LEAD</code> read a value from a row <em>before</em> or <em>after</em> the current one within the window, which is how you compute month-over-month change without a self-join. <code>LAG(x)</code> returns <code>x</code> from the previous row (NULL for the first), and the three-argument <code>LAG(x, 1, default)</code> supplies a fallback instead of NULL.</p>\n<p>Given the <code>sales</code> table, for each rep ordered by month:</p>\n<ul>\n<li>Add <code>prev</code> = <code>LAG(amount) OVER (PARTITION BY rep ORDER BY month)</code> (NULL on the first month).</li>\n<li>Add <code>change</code> = <code>amount - LAG(amount, 1, 0) OVER (...)</code>, using a default of 0 so the first month's change equals its own amount.</li>\n<li>Add <code>next</code> = <code>LEAD(amount) OVER (...)</code>.</li>\n<li>Return <code>rep</code>, <code>month</code>, <code>amount</code>, <code>prev</code>, <code>change</code>, <code>next</code>, ordered by <code>rep</code>, <code>month</code>.</li>\n</ul>\n<p>The scaffold shows the three window calls to complete.</p>",
+      "inputSpec": "The sales table; each rep has three months in order.",
+      "outputSpec": "Per rep: prev is the previous month's amount (NULL first); change uses default 0 so month 1 change equals its amount; next is the following month's amount (NULL last).",
+      "constraints": "Use LAG and LEAD with PARTITION BY rep ORDER BY month. Use the three-argument LAG(amount, 1, 0) for the change so the first row does not produce NULL.",
+      "examplesJson": [
+        {
+          "input": "rep Ann months 1(100), 2(150), 3(120)",
+          "output": "month1: prev NULL, change 100, next 150; month2: prev 100, change 50, next 120; month3: prev 150, change -30, next NULL",
+          "explanation": "LAG default 0 makes month 1 change = 100 - 0; the last month has no LEAD so next is NULL."
+        },
+        {
+          "input": "rep Cy months 1(300), 2(110), 3(250)",
+          "output": "month2: prev 300, change -190, next 250",
+          "explanation": "Cy dropped from 300 to 110, a change of -190, with 250 coming next."
+        }
+      ],
+      "hintsJson": [
+        "Reaching into a neighbouring row is LAG (previous) or LEAD (next), within the ordered window.",
+        "LAG(amount) OVER (PARTITION BY rep ORDER BY month) gives the previous month, NULL on the first.",
+        "For the change, use the 3-argument form LAG(amount, 1, 0) so the first row subtracts 0 instead of NULL.",
+        "LEAD(amount) OVER (...) gives the following month, NULL on the last."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Fill in the window specifications (PARTITION BY / ORDER BY / frame) per the requirements above.\nSELECT rep, month, amount,\n       LAG(amount) OVER ( /* ... */ )          AS prev,\n       amount - LAG(amount, 1, 0) OVER ( /* ... */ ) AS change,\n       LEAD(amount) OVER ( /* ... */ )         AS next\nFROM   sales\nORDER BY rep, month;"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "SELECT rep, month, amount,\n       LAG(amount) OVER (PARTITION BY rep ORDER BY month)          AS prev,\n       amount - LAG(amount, 1, 0) OVER (PARTITION BY rep ORDER BY month) AS change,\n       LEAD(amount) OVER (PARTITION BY rep ORDER BY month)         AS next\nFROM   sales\nORDER BY rep, month;"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>LAG</code> and <code>LEAD</code> access other rows relative to the current one inside the ordered window, so month-over-month analysis needs no self-join. <code>LAG(amount)</code> returns the prior month's amount and <code>NULL</code> at the partition's first row (there is nothing before it); <code>LEAD(amount)</code> returns the next month's and <code>NULL</code> at the last. The three-argument <code>LAG(amount, 1, 0)</code> replaces that first-row <code>NULL</code> with a default of <code>0</code>, which is why the <code>change</code> for month 1 equals the amount itself (<code>100 - 0</code>) instead of becoming <code>NULL</code>.</p>\n<p>That NULL handling is the crux. The naive <code>amount - LAG(amount) OVER (...)</code> yields <code>NULL</code> for every partition's first row, because subtracting <code>NULL</code> is <code>NULL</code>, and that <code>NULL</code> then silently propagates into any later sum or average. Supplying an explicit default (or wrapping in <code>COALESCE</code>) is the deliberate choice about what \"no previous value\" should mean for your metric. The second argument to <code>LAG</code>/<code>LEAD</code> is the offset — <code>LAG(amount, 3)</code> looks three rows back, useful for year-over-year on monthly data. Both functions run in the same single ordered pass as the other window functions, so a whole panel of period-over-period columns costs one scan, not one self-join per column.</p>"
+    },
+    {
+      "title": "Anchor to First and Last with FIRST_VALUE and LAST_VALUE",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 35,
+      "points": 20,
+      "concepts": [
+        "FIRST_VALUE",
+        "LAST_VALUE",
+        "window frame",
+        "UNBOUNDED FOLLOWING",
+        "frame default trap"
+      ],
+      "prerequisites": [
+        "window ORDER BY",
+        "running total"
+      ],
+      "tags": [
+        "window-functions",
+        "first-value",
+        "last-value",
+        "frame",
+        "postgres"
+      ],
+      "problemHtml": "<p><code>FIRST_VALUE</code> and <code>LAST_VALUE</code> return a column's value from the first or last row of the window frame. They are perfect for \"compare each month to the rep's opening and closing month\" — but <code>LAST_VALUE</code> hides SQL's most notorious window trap: with the default frame it returns the <em>current</em> row, not the partition's last.</p>\n<p>Given the <code>sales</code> table, for each rep ordered by month, add both the rep's first-month and last-month amount to every row:</p>\n<ul>\n<li>Define a named window <code>w</code> as <code>PARTITION BY rep ORDER BY month ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING</code> — the full partition.</li>\n<li>Add <code>first_month = FIRST_VALUE(amount) OVER w</code> and <code>last_month = LAST_VALUE(amount) OVER w</code>.</li>\n<li>Return <code>rep</code>, <code>month</code>, <code>amount</code>, <code>first_month</code>, <code>last_month</code>, ordered by <code>rep</code>, <code>month</code>.</li>\n</ul>\n<p>The explicit frame is the whole point: without it, <code>last_month</code> would wrongly equal each row's own amount. The scaffold shows the named window to complete.</p>",
+      "inputSpec": "The sales table; each rep has three months in order.",
+      "outputSpec": "With the full-partition frame, every row of a rep shows the rep's first-month amount (Ann 100, Bob 80, Cy 300) and last-month amount (Ann 120, Bob 200, Cy 250).",
+      "constraints": "Give LAST_VALUE the explicit frame ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING (via a named WINDOW), or it returns the current row. Do not use a subquery to find the last value.",
+      "examplesJson": [
+        {
+          "input": "rep Ann months 1(100), 2(150), 3(120) with the full-partition frame",
+          "output": "every Ann row: first_month 100, last_month 120",
+          "explanation": "The frame spans the whole partition, so FIRST_VALUE is month 1 (100) and LAST_VALUE is month 3 (120)."
+        },
+        {
+          "input": "LAST_VALUE with the DEFAULT frame instead",
+          "output": "last_month would equal the current row (100, then 150, then 120)",
+          "explanation": "The default frame ends at the current row, so LAST_VALUE sees only up to \"now\" — the classic trap."
+        }
+      ],
+      "hintsJson": [
+        "FIRST_VALUE is safe with the default frame, but LAST_VALUE is not.",
+        "The default frame ends at the current row, so LAST_VALUE returns the current row, not the partition end.",
+        "Widen the frame to the whole partition: ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING.",
+        "Define it once as a named WINDOW w and use OVER w for both functions."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Fill in the window specifications (PARTITION BY / ORDER BY / frame) per the requirements above.\nSELECT rep, month, amount,\n       FIRST_VALUE(amount) OVER w AS first_month,\n       LAST_VALUE(amount)  OVER w AS last_month\nFROM   sales\nWINDOW w AS ( /* ... */ )\nORDER BY rep, month;"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "SELECT rep, month, amount,\n       FIRST_VALUE(amount) OVER w AS first_month,\n       LAST_VALUE(amount)  OVER w AS last_month\nFROM   sales\nWINDOW w AS (PARTITION BY rep ORDER BY month\n             ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)\nORDER BY rep, month;"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Both functions return a value from the ends of the <em>frame</em>, and the frame — not the partition — is what they see. <code>FIRST_VALUE</code> happens to work with the default frame because the frame always starts at <code>UNBOUNDED PRECEDING</code>, so \"first of the frame\" is \"first of the partition\". <code>LAST_VALUE</code> is the trap: the default frame is <code>RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code>, so its last row is the <em>current</em> row, and <code>LAST_VALUE</code> returns each row's own value — a result that looks plausible and is silently wrong.</p>\n<p>The fix is to state the frame explicitly: <code>ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING</code> extends the frame to the entire partition, so <code>LAST_VALUE</code> genuinely returns the last month (Ann 120, Bob 200, Cy 250) on every row. Defining it once as a named <code>WINDOW w</code> keeps the two functions consistent and avoids repeating the long frame clause. This trap is the single most common window-function bug, and the lesson generalises: whenever a window function's answer depends on where the frame <em>ends</em> (<code>LAST_VALUE</code>, <code>NTH_VALUE</code>, a lead-looking sum), specify the frame rather than trusting the default. An alternative to remember: <code>MAX(amount) OVER w</code> over the full partition gives the largest, and <code>FIRST_VALUE(amount) OVER (PARTITION BY rep ORDER BY month DESC)</code> gives the last by flipping the order — sometimes clearer than fighting <code>LAST_VALUE</code>'s frame.</p>"
+    },
+    {
+      "title": "Split Rows into Buckets with NTILE",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 30,
+      "points": 20,
+      "concepts": [
+        "NTILE",
+        "quantile buckets",
+        "even distribution",
+        "ranking into groups",
+        "ordered window"
+      ],
+      "prerequisites": [
+        "window ORDER BY",
+        "ROW_NUMBER"
+      ],
+      "tags": [
+        "window-functions",
+        "ntile",
+        "buckets",
+        "quantiles",
+        "postgres"
+      ],
+      "problemHtml": "<p><code>NTILE(n)</code> distributes the rows of a window into <code>n</code> numbered buckets as evenly as possible, following the window's <code>ORDER BY</code>. It answers \"which third / quartile / decile does this row fall in\", which is how you build tiers, quantile reports, and even-sized batches. Crucially it balances the row <em>counts</em> per bucket, not the value ranges — so each bucket holds roughly the same number of rows regardless of how their values are spread, which is exactly what percentile and load-balancing work needs.</p>\n<p>Given the <code>sales</code> table (9 rows), split all sales into three tiers by amount, highest first:</p>\n<ul>\n<li>Add a <code>tercile</code> column = <code>NTILE(3) OVER (ORDER BY amount DESC)</code>.</li>\n<li>Return <code>rep</code>, <code>month</code>, <code>amount</code>, <code>tercile</code>, ordered by <code>amount</code> descending.</li>\n</ul>\n<p>With 9 rows and 3 buckets, each tier holds exactly 3 sales. The scaffold shows the window to complete.</p>",
+      "inputSpec": "The sales table with 9 rows and all-distinct amounts (80, 90, 100, 110, 120, 150, 200, 250, 300).",
+      "outputSpec": "NTILE(3) over amount desc puts the top 3 amounts (300,250,200) in tier 1, the middle 3 (150,120,110) in tier 2, and the bottom 3 (100,90,80) in tier 3.",
+      "constraints": "Use NTILE(3) with an ORDER BY inside OVER. Do not compute tiers with CASE thresholds — NTILE balances the bucket sizes for you.",
+      "examplesJson": [
+        {
+          "input": "the three highest amounts 300, 250, 200",
+          "output": "tercile 1",
+          "explanation": "NTILE fills the first bucket with the first 3 rows in the ordering (amount desc)."
+        },
+        {
+          "input": "amount 110 (the 6th highest)",
+          "output": "tercile 2",
+          "explanation": "Rows 4-6 (150, 120, 110) form the middle bucket."
+        }
+      ],
+      "hintsJson": [
+        "You want evenly-sized groups by rank, not by fixed value thresholds.",
+        "NTILE(3) OVER (ORDER BY amount DESC) assigns each row a bucket 1..3.",
+        "With 9 rows the buckets are exactly 3 each; uneven counts put the extra rows in the earlier buckets.",
+        "The ORDER BY inside OVER decides which rows land in which bucket."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Fill in the window specifications (PARTITION BY / ORDER BY / frame) per the requirements above.\n-- NTILE(3) walks the rows in the window's order (amount DESC) and drops them into 3 balanced buckets;\n-- with 9 rows that is exactly 3 per tercile. When the count is uneven, the earlier buckets get the extra row.\nSELECT rep, month, amount,\n       NTILE(3) OVER ( /* ... */ ) AS tercile\nFROM   sales\nORDER BY amount DESC;"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- NTILE(3) walks the rows in the window's order (amount DESC) and drops them into 3 balanced buckets;\n-- with 9 rows that is exactly 3 per tercile. When the count is uneven, the earlier buckets get the extra row.\nSELECT rep, month, amount,\n       NTILE(3) OVER (ORDER BY amount DESC) AS tercile\nFROM   sales\nORDER BY amount DESC;"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>NTILE(3)</code> walks the rows in the window's order and drops them into three numbered buckets of as-equal-as-possible size. With 9 rows ordered by amount descending, that is a clean 3-3-3 split: the top three amounts (300, 250, 200) become tier 1, the middle three (150, 120, 110) tier 2, and the bottom three (100, 90, 80) tier 3. Unlike a <code>CASE</code> expression with hand-picked thresholds, <code>NTILE</code> balances the <em>counts</em> rather than the value ranges, which is what you want for percentiles, load-balanced batches, and \"top third of customers by spend\".</p>\n<p>The behaviour to know for real data is uneven division. When the row count is not divisible by <code>n</code>, <code>NTILE</code> makes the earlier buckets one row larger — 10 rows into 3 buckets gives sizes 4, 3, 3. That means bucket membership depends on position, so ties in the ordering can send equal values into different buckets; add a deterministic tiebreaker to the <code>ORDER BY</code> (here amounts are distinct, so it is stable) when reproducibility matters. Also note <code>NTILE</code> partitions by <em>count</em>, not by value, so it is not the same as bucketing by fixed ranges — for value-based bins use <code>width_bucket</code> or a <code>CASE</code>. For true statistical quantiles on the value itself, PostgreSQL also offers <code>percentile_cont</code>/<code>percentile_disc</code> as ordered-set aggregates.</p>"
+    },
+    {
+      "title": "Rank Relatively with PERCENT_RANK and CUME_DIST",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 30,
+      "points": 20,
+      "concepts": [
+        "PERCENT_RANK",
+        "CUME_DIST",
+        "relative standing",
+        "distribution",
+        "normalized rank"
+      ],
+      "prerequisites": [
+        "RANK",
+        "window ORDER BY"
+      ],
+      "tags": [
+        "window-functions",
+        "percent-rank",
+        "cume-dist",
+        "distribution",
+        "postgres"
+      ],
+      "problemHtml": "<p>Sometimes you need a row's <em>relative</em> standing rather than its absolute rank — \"this sale is in the 75th percentile\". <code>PERCENT_RANK()</code> returns a value from 0 to 1 giving relative rank as <code>(rank - 1) / (total_rows - 1)</code>, and <code>CUME_DIST()</code> returns the cumulative distribution: the fraction of rows at or below the current one.</p>\n<p>Given the <code>sales</code> table, rank all sales by amount ascending:</p>\n<ul>\n<li>Add <code>pct_rank</code> = <code>ROUND(PERCENT_RANK() OVER (ORDER BY amount)::numeric, 3)</code>.</li>\n<li>Add <code>cume_dist</code> = <code>ROUND(CUME_DIST() OVER (ORDER BY amount)::numeric, 3)</code>.</li>\n<li>Return <code>rep</code>, <code>month</code>, <code>amount</code>, <code>pct_rank</code>, <code>cume_dist</code>, ordered by <code>amount</code>.</li>\n</ul>\n<p>The smallest amount gets <code>pct_rank</code> 0; the largest gets 1. The scaffold shows the windows to complete.</p>",
+      "inputSpec": "The sales table with 9 rows and distinct amounts.",
+      "outputSpec": "Ordered by amount ascending (ranks 1..9): PERCENT_RANK = (rank-1)/8 gives 0, 0.125, 0.25, ... 1.0; CUME_DIST = rank/9 gives 0.111, 0.222, ... 1.0.",
+      "constraints": "Use PERCENT_RANK and CUME_DIST over ORDER BY amount. Cast to numeric before ROUND. Do not compute percentiles manually.",
+      "examplesJson": [
+        {
+          "input": "the smallest amount (80) and the largest (300)",
+          "output": "smallest: pct_rank 0.000; largest: pct_rank 1.000",
+          "explanation": "PERCENT_RANK is (rank-1)/(n-1), so rank 1 gives 0 and rank 9 gives 8/8 = 1."
+        },
+        {
+          "input": "the smallest amount (80)",
+          "output": "cume_dist 0.111",
+          "explanation": "CUME_DIST is (rows at or below) / total = 1/9 = 0.111."
+        }
+      ],
+      "hintsJson": [
+        "These give a normalized position in [0,1], not an integer rank.",
+        "PERCENT_RANK() OVER (ORDER BY amount) is (rank - 1) / (n - 1).",
+        "CUME_DIST() OVER (ORDER BY amount) is the fraction of rows at or below this one.",
+        "Cast the double result to numeric before ROUND(..., 3)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Fill in the window specifications (PARTITION BY / ORDER BY / frame) per the requirements above.\nSELECT rep, month, amount,\n       ROUND(PERCENT_RANK() OVER ( /* ... */ )::numeric, 3) AS pct_rank,\n       ROUND(CUME_DIST()   OVER ( /* ... */ )::numeric, 3) AS cume_dist\nFROM   sales\nORDER BY amount;"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "SELECT rep, month, amount,\n       ROUND(PERCENT_RANK() OVER (ORDER BY amount)::numeric, 3) AS pct_rank,\n       ROUND(CUME_DIST()   OVER (ORDER BY amount)::numeric, 3) AS cume_dist\nFROM   sales\nORDER BY amount;"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Both functions express relative standing as a fraction, but they answer subtly different questions. <code>PERCENT_RANK</code> is <code>(rank - 1) / (n - 1)</code>: it anchors the smallest value at exactly 0 and the largest at exactly 1, spreading the rest evenly by rank — so it measures \"how far along the ranking is this row\". <code>CUME_DIST</code> is <code>(number of rows with a value ≤ this) / n</code>: it never reaches 0 (the smallest row already counts itself, giving 1/9) and hits 1 at the top — so it measures \"what fraction of the data is at or below this value\". With nine distinct amounts, <code>PERCENT_RANK</code> steps 0, 0.125, 0.25, …, 1.0 while <code>CUME_DIST</code> steps 0.111, 0.222, …, 1.0.</p>\n<p>The cast is a small but necessary detail: these functions return <code>double precision</code>, and <code>ROUND(value, digits)</code> in PostgreSQL requires a <code>numeric</code> argument for the two-argument form, so <code>::numeric</code> avoids a \"function does not exist\" error. On tied values both functions treat equal rows as sharing a rank, which is what makes them meaningful for real distributions — <code>PERCENT_RANK</code> gives tied rows the same fraction, and <code>CUME_DIST</code> jumps by the size of the tie group. Use <code>PERCENT_RANK</code> when you want a rank normalized to [0, 1] (leaderboards, \"top X%\"), and <code>CUME_DIST</code> when you want an actual cumulative proportion of the population (percentile thresholds, \"what share earns less than this\"). For the inverse — the value at a given percentile — reach for the ordered-set aggregate <code>percentile_cont</code>.</p>"
+    },
+    {
+      "title": "Smooth a Series with a Moving Average Frame",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 35,
+      "points": 20,
+      "concepts": [
+        "moving average",
+        "ROWS frame",
+        "sliding window",
+        "preceding rows",
+        "aggregate over frame"
+      ],
+      "prerequisites": [
+        "running total",
+        "window frame",
+        "CTE"
+      ],
+      "tags": [
+        "window-functions",
+        "moving-average",
+        "frame",
+        "rows-between",
+        "postgres"
+      ],
+      "problemHtml": "<p>A moving average smooths a noisy series by averaging each point with its neighbours, using an explicit <em>sliding frame</em>. Where a running total's frame reaches back to the start, a moving average's frame is a fixed window of recent rows, expressed with <code>ROWS BETWEEN n PRECEDING AND CURRENT ROW</code>.</p>\n<p>First roll the sales up to a company monthly total, then smooth it. Using a CTE:</p>\n<ul>\n<li>Build <code>monthly</code> = <code>SELECT month, SUM(amount) AS total FROM sales GROUP BY month</code>.</li>\n<li>Over <code>monthly</code> ordered by month, add <code>moving_avg = ROUND(AVG(total) OVER (ORDER BY month ROWS BETWEEN 1 PRECEDING AND CURRENT ROW), 2)</code> — a two-month trailing average.</li>\n<li>Return <code>month</code>, <code>total</code>, <code>moving_avg</code>, ordered by <code>month</code>.</li>\n</ul>\n<p>Monthly totals are 480, 350, 570. Work out the two-month averages. The scaffold shows the framed average to complete.</p>",
+      "inputSpec": "The sales table; summed per month it gives month 1 = 480, month 2 = 350, month 3 = 570.",
+      "outputSpec": "moving_avg with a 2-row trailing frame: month1 = 480.00 (only itself), month2 = (480+350)/2 = 415.00, month3 = (350+570)/2 = 460.00.",
+      "constraints": "Aggregate to monthly totals in a CTE first, then use AVG(total) OVER (ORDER BY month ROWS BETWEEN 1 PRECEDING AND CURRENT ROW). Use ROWS, not RANGE.",
+      "examplesJson": [
+        {
+          "input": "monthly totals 480, 350, 570 with a 2-row trailing frame",
+          "output": "moving_avg: 480.00, 415.00, 460.00",
+          "explanation": "Month 1 averages just itself; month 2 averages 480 and 350; month 3 averages 350 and 570."
+        },
+        {
+          "input": "the frame ROWS BETWEEN 1 PRECEDING AND CURRENT ROW at month 2",
+          "output": "covers months 1 and 2",
+          "explanation": "The frame is the current row plus the one before it — a two-row sliding window."
+        }
+      ],
+      "hintsJson": [
+        "A moving average needs a fixed-size sliding frame, not the whole history.",
+        "Roll the data up to one row per month first with a GROUP BY in a CTE.",
+        "AVG(total) OVER (ORDER BY month ROWS BETWEEN 1 PRECEDING AND CURRENT ROW) averages this month and the previous one.",
+        "Use ROWS (physical rows) for a moving average, not the default RANGE."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Fill in the window specifications (PARTITION BY / ORDER BY / frame) per the requirements above.\n-- Roll up to one row per month first, then a sliding ROWS frame averages each month with the previous one.\nWITH monthly AS (\n    SELECT month, SUM(amount) AS total\n    FROM   sales\n    GROUP BY month\n)\nSELECT month, total,\n       ROUND(AVG(total) OVER ( /* ... */ ), 2) AS moving_avg\nFROM   monthly\nORDER BY month;"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Roll up to one row per month first, then a sliding ROWS frame averages each month with the previous one.\nWITH monthly AS (\n    SELECT month, SUM(amount) AS total\n    FROM   sales\n    GROUP BY month\n)\nSELECT month, total,\n       ROUND(AVG(total) OVER (ORDER BY month\n                              ROWS BETWEEN 1 PRECEDING AND CURRENT ROW), 2) AS moving_avg\nFROM   monthly\nORDER BY month;"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A moving average is a windowed <code>AVG</code> with an explicit <em>sliding</em> frame. <code>ROWS BETWEEN 1 PRECEDING AND CURRENT ROW</code> makes the frame the current row plus the one immediately before it — a two-row window that slides forward one row at a time. So month 1 averages only itself (480, since nothing precedes it), month 2 averages months 1 and 2 (415), and month 3 averages months 2 and 3 (460). Widen the frame to <code>2 PRECEDING</code> for a three-month average, and so on; the frame size is the smoothing amount.</p>\n<p>Two design points matter. First, aggregate to the grain you want to smooth <em>before</em> applying the window — here a CTE rolls the per-rep sales up to one company total per month, so the moving average is over monthly totals, not individual sales. Applying the frame to the raw rows would average arbitrary neighbouring sales, which is meaningless. Second, use <code>ROWS</code>, not <code>RANGE</code>: <code>ROWS</code> counts physical rows (exactly two), whereas <code>RANGE</code> counts rows within a <em>value</em> distance of the ordering column and would behave differently around ties or gaps in the month sequence. For a leading or centered average you shift the frame bounds (<code>BETWEEN 1 PRECEDING AND 1 FOLLOWING</code> centers it). This framed-aggregate pattern — a fixed window that slides — is the foundation of moving sums, rolling counts, and running min/max as well.</p>"
+    },
+    {
+      "title": "Reuse One Named Window Across Several Functions",
+      "difficulty": "HARD",
+      "estimatedMinutes": 40,
+      "points": 25,
+      "concepts": [
+        "WINDOW clause",
+        "named window",
+        "reuse across functions",
+        "consistency",
+        "readability"
+      ],
+      "prerequisites": [
+        "window functions",
+        "RANK",
+        "running total"
+      ],
+      "tags": [
+        "window-functions",
+        "named-window",
+        "window-clause",
+        "reuse",
+        "postgres"
+      ],
+      "problemHtml": "<p>When several window functions share the same partitioning and ordering, repeating the <code>OVER (PARTITION BY ... ORDER BY ...)</code> on each is verbose and error-prone — change one copy and the columns silently disagree. The <code>WINDOW</code> clause defines a window once, names it, and lets every function reference it by name.</p>\n<p>Given the <code>sales</code> table, for each rep ordered by month, produce a small dashboard using a single named window <code>w</code>:</p>\n<ul>\n<li>Define <code>w AS (PARTITION BY rep ORDER BY month)</code>.</li>\n<li>Add <code>seq = RANK() OVER w</code>, <code>cumulative = SUM(amount) OVER w</code>, and <code>avg_to_date = ROUND(AVG(amount) OVER w, 2)</code>.</li>\n<li>Return <code>rep</code>, <code>month</code>, <code>amount</code>, <code>seq</code>, <code>cumulative</code>, <code>avg_to_date</code>, ordered by <code>rep</code>, <code>month</code>.</li>\n</ul>\n<p>All three functions must reference the same <code>w</code>. The scaffold shows the <code>WINDOW</code> clause to complete.</p>",
+      "inputSpec": "The sales table; each rep has three months in order.",
+      "outputSpec": "Per rep, over w = (PARTITION BY rep ORDER BY month): seq is 1,2,3; cumulative is the running total; avg_to_date is the running average. Ann: seq 1/2/3, cum 100/250/370, avg 100.00/125.00/123.33.",
+      "constraints": "Define the window once in a WINDOW clause and reference it as OVER w in all three functions. Do not repeat the PARTITION BY/ORDER BY on each function.",
+      "examplesJson": [
+        {
+          "input": "rep Ann amounts by month 100, 150, 120",
+          "output": "seq 1/2/3, cumulative 100/250/370, avg_to_date 100.00/125.00/123.33",
+          "explanation": "All three share window w; RANK numbers the months, SUM accumulates, AVG is the running average (370/3 = 123.33)."
+        },
+        {
+          "input": "rep Bob month 3 (amount 200)",
+          "output": "seq 3, cumulative 370, avg_to_date 123.33",
+          "explanation": "Bob totals 370 over three months too, so his month-3 running average is also 123.33."
+        }
+      ],
+      "hintsJson": [
+        "Repeating the same OVER (...) on every function invites drift; define it once.",
+        "A WINDOW clause after FROM names a window: WINDOW w AS (PARTITION BY rep ORDER BY month).",
+        "Then each function uses OVER w instead of the full spec.",
+        "RANK() OVER w, SUM(amount) OVER w, AVG(amount) OVER w all read the same window."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Fill in the window specifications (PARTITION BY / ORDER BY / frame) per the requirements above.\nSELECT rep, month, amount,\n       RANK()               OVER w AS seq,\n       SUM(amount)          OVER w AS cumulative,\n       ROUND(AVG(amount)    OVER w, 2) AS avg_to_date\nFROM   sales\nWINDOW w AS ( /* ... */ )\nORDER BY rep, month;"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "SELECT rep, month, amount,\n       RANK()               OVER w AS seq,\n       SUM(amount)          OVER w AS cumulative,\n       ROUND(AVG(amount)    OVER w, 2) AS avg_to_date\nFROM   sales\nWINDOW w AS (PARTITION BY rep ORDER BY month)\nORDER BY rep, month;"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The <code>WINDOW</code> clause factors a window definition out of the individual function calls: <code>WINDOW w AS (PARTITION BY rep ORDER BY month)</code> declares it once, and <code>RANK() OVER w</code>, <code>SUM(amount) OVER w</code>, and <code>AVG(amount) OVER w</code> all reference the same <code>w</code>. Functionally it is identical to writing the full <code>OVER (...)</code> three times, but it is shorter and, more importantly, guarantees the three columns share exactly the same partitioning and ordering — you cannot accidentally give one function a different <code>ORDER BY</code> and produce silently inconsistent results.</p>\n<p>Because <code>w</code> carries an <code>ORDER BY</code>, the functions using it get the running interpretation: <code>SUM</code> is a cumulative total and <code>AVG</code> is a running average (Ann's average climbs 100 → 125 → 123.33 as the third month pulls it down). <code>RANK</code> over month gives the sequence 1, 2, 3 since months are distinct per rep. The clause is especially valuable when a query needs several windows — you can define <code>w</code> and <code>w2</code> and even base one on another. A subtle placement rule: the <code>WINDOW</code> clause sits after <code>FROM</code>/<code>WHERE</code>/<code>GROUP BY</code> and before <code>ORDER BY</code>, and the names it defines are visible only within the same query level. Reaching for named windows the moment you have two functions with the same frame is a small habit that removes a whole class of copy-paste bugs.</p>"
+    },
+    {
+      "title": "Build a Ranked Regional Leaderboard Dashboard",
+      "difficulty": "HARD",
+      "estimatedMinutes": 50,
+      "points": 30,
+      "concepts": [
+        "combining window functions",
+        "GROUP BY then window",
+        "RANK with ties",
+        "share of total",
+        "flag with CASE"
+      ],
+      "prerequisites": [
+        "PARTITION BY",
+        "RANK",
+        "windowed SUM",
+        "CASE"
+      ],
+      "tags": [
+        "window-functions",
+        "leaderboard",
+        "capstone",
+        "rank",
+        "postgres"
+      ],
+      "problemHtml": "<p>This capstone combines several techniques: aggregate the raw sales to a total per rep, then use window functions over those totals to rank reps within their region, show each rep's share of the region, and flag the leader. It is the shape of nearly every \"leaderboard\" report.</p>\n<p>Given the <code>sales</code> table, produce one row per (region, rep):</p>\n<ul>\n<li>First aggregate: <code>SELECT region, rep, SUM(amount) AS total ... GROUP BY region, rep</code> in a CTE <code>rep_totals</code>.</li>\n<li>Add <code>rank_in_region = RANK() OVER (PARTITION BY region ORDER BY total DESC)</code>.</li>\n<li>Add <code>region_total = SUM(total) OVER (PARTITION BY region)</code> and <code>pct = ROUND(100.0 * total / SUM(total) OVER (PARTITION BY region), 1)</code>.</li>\n<li>Add a <code>flag</code> = <code>'TOP'</code> when <code>rank_in_region = 1</code>, else empty (use <code>CASE</code>).</li>\n<li>Return <code>region</code>, <code>rep</code>, <code>total</code>, <code>rank_in_region</code>, <code>region_total</code>, <code>pct</code>, <code>flag</code>, ordered by <code>region</code>, <code>rank_in_region</code>, <code>rep</code>.</li>\n</ul>\n<p>North's two reps happen to tie on total — observe how <code>RANK</code> handles it. The scaffold shows the CTE and windows to complete.</p>",
+      "inputSpec": "The sales table; per-rep totals are North Ann=370, North Bob=370, South Cy=660.",
+      "outputSpec": "North Ann and Bob both total 370, so both get rank 1 (a tie) and 50.0% of North (740); both flagged TOP. South Cy totals 660, rank 1, 100.0%, TOP.",
+      "constraints": "Aggregate to rep totals in a CTE, then apply the window functions over those totals. Use RANK (not ROW_NUMBER) so the tied reps share rank 1. Flag with CASE on rank_in_region.",
+      "examplesJson": [
+        {
+          "input": "North reps Ann and Bob, each total 370, region total 740",
+          "output": "both rank_in_region 1, pct 50.0, flag TOP",
+          "explanation": "Equal totals tie under RANK (both 1); each is 370/740 = 50.0% and both are flagged TOP."
+        },
+        {
+          "input": "South rep Cy, total 660",
+          "output": "rank_in_region 1, region_total 660, pct 100.0, flag TOP",
+          "explanation": "Cy is the only South rep, so 100% of the region and rank 1."
+        }
+      ],
+      "hintsJson": [
+        "Reduce to one row per rep first (GROUP BY region, rep), then window over those totals.",
+        "RANK() OVER (PARTITION BY region ORDER BY total DESC) ranks reps within a region; ties share a rank.",
+        "region_total and pct use SUM(total) OVER (PARTITION BY region) — the windowed sum of the rep totals.",
+        "CASE WHEN rank_in_region = 1 THEN 'TOP' ELSE '' END flags the leader(s)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Fill in the window specifications (PARTITION BY / ORDER BY / frame) per the requirements above.\nWITH rep_totals AS (\n    SELECT region, rep, SUM(amount) AS total\n    FROM   sales\n    GROUP BY region, rep\n)\nSELECT region, rep, total,\n       RANK() OVER ( /* ... */ )                 AS rank_in_region,\n       SUM(total) OVER ( /* ... */ )                                 AS region_total,\n       ROUND(100.0 * total / SUM(total) OVER ( /* ... */ ), 1)       AS pct,\n       CASE WHEN RANK() OVER ( /* ... */ ) = 1\n            THEN 'TOP' ELSE '' END                                          AS flag\nFROM   rep_totals\nORDER BY region, rank_in_region, rep;"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "WITH rep_totals AS (\n    SELECT region, rep, SUM(amount) AS total\n    FROM   sales\n    GROUP BY region, rep\n)\nSELECT region, rep, total,\n       RANK() OVER (PARTITION BY region ORDER BY total DESC)                 AS rank_in_region,\n       SUM(total) OVER (PARTITION BY region)                                 AS region_total,\n       ROUND(100.0 * total / SUM(total) OVER (PARTITION BY region), 1)       AS pct,\n       CASE WHEN RANK() OVER (PARTITION BY region ORDER BY total DESC) = 1\n            THEN 'TOP' ELSE '' END                                          AS flag\nFROM   rep_totals\nORDER BY region, rank_in_region, rep;"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The capstone layers two stages. The <code>rep_totals</code> CTE first collapses the raw sales into one total per (region, rep) with <code>GROUP BY</code> — you cannot rank reps until you have a single number per rep. The outer query then applies window functions <em>over those totals</em>: <code>RANK() OVER (PARTITION BY region ORDER BY total DESC)</code> ranks reps within each region, <code>SUM(total) OVER (PARTITION BY region)</code> gives the region's total on every rep row for the share calculation, and a <code>CASE</code> on the rank flags the leader. This \"aggregate, then window over the aggregate\" pattern is the backbone of ranked reports.</p>\n<p>The tie is the teaching moment. Ann and Bob each total 370 in North, and <code>RANK</code> gives tied rows the <em>same</em> rank, so both are <code>rank_in_region = 1</code> and both are flagged <code>TOP</code> — which is usually the correct business meaning of \"who is the top rep\" when there is a genuine tie. Had you used <code>ROW_NUMBER</code>, one of them would arbitrarily get 2 and lose the flag, a subtle bug that only surfaces on tied data. Note the <code>RANK()</code> expression is written twice (once as a column, once inside the <code>CASE</code>); SQL does not let you reference a <code>SELECT</code> alias inside another <code>SELECT</code> expression, so either repeat it or wrap the whole thing in an outer query that references the alias. The final <code>ORDER BY region, rank_in_region, rep</code> adds <code>rep</code> as a stable tiebreaker so the two rank-1 rows display in a fixed order. Everything — the grouping, three window functions, and the flag — resolves in a single query with no procedural code.</p>",
+      "diagramMermaid": "flowchart TD\n  A[sales rows] --> B[GROUP BY region rep to rep_totals]\n  B --> C[RANK over region by total]\n  B --> D[SUM total over region]\n  C --> E[dashboard rows with rank share flag]\n  D --> E"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 // Small presentational helpers shared across the Code Lab pages.
 import Link from 'next/link';
-import { Code2, Database, Server, Layout, Smartphone, Cloud, Cpu, Boxes, Terminal, Braces, Globe, Gamepad2, Shield, Binary, type LucideIcon } from 'lucide-react';
+import { Code2, Database, Server, Layout, Smartphone, Cloud, Cpu, Boxes, Terminal, Braces, Globe, Gamepad2, Shield, Binary, GraduationCap, type LucideIcon } from 'lucide-react';
 import { DIFFICULTY_META } from '@/lib/code-lab-api';
 import type { CodeDifficulty, CodeLevel } from '@/types/code-lab';
 import { CategoryIcon } from '@/components/exp-hub/CategoryIcon';
@@ -13,6 +13,7 @@ const ICONS: Record<string, LucideIcon> = {
   mobile: Smartphone, devops: Cloud, algorithms: Binary, 'algorithms-ds': Binary,
   web: Globe, game: Gamepad2, security: Shield, systems: Cpu, cloud: Cloud,
   boxes: Boxes, terminal: Terminal, code: Code2,
+  fptu: GraduationCap, school: GraduationCap,
 };
 
 export function GroupGlyph({ slug, icon, size = 18, className }: { slug?: string; icon?: string | null; size?: number; className?: string }) {

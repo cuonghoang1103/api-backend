@@ -425,6 +425,16 @@ export default function ExerciseDetailPage() {
         .prose-cl pre { background: var(--bg-surface); padding: 10px 12px; border-radius: 8px; overflow-x: auto; margin: 0.5rem 0; }
         .prose-cl a { color: #6366f1; text-decoration: underline; }
         .prose-cl strong { font-weight: 700; }
+        /* Section headings, figures and spec tables — used by briefs that are
+           reproduced from an original lab sheet (LAB211). */
+        .prose-cl h3 { font-size: 0.95rem; font-weight: 700; margin: 1.25rem 0 0.4rem; letter-spacing: 0.01em; }
+        .prose-cl h3:first-child { margin-top: 0; }
+        .prose-cl pre { white-space: pre; font-family: var(--font-mono, ui-monospace, monospace); font-size: 0.8rem; line-height: 1.5; tab-size: 4; }
+        .prose-cl figure { margin: 0.9rem 0; }
+        .prose-cl img { max-width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto; }
+        .prose-cl table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.82rem; display: block; overflow-x: auto; }
+        .prose-cl th, .prose-cl td { border: 1px solid var(--border-color); padding: 6px 9px; text-align: left; vertical-align: top; }
+        .prose-cl th { background: var(--bg-surface); font-weight: 700; }
       `}</style>
     </div>
   );

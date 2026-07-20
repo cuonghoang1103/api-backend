@@ -50,7 +50,13 @@ export function DocBlockView({ block, index }: { block: DocBlock; index?: number
     case 'prose':
       return (
         <div
-          className="exp-doc-prose text-sm leading-relaxed text-[var(--text-secondary)] [&_a]:text-[var(--accent-color)] [&_a]:underline [&_code]:rounded [&_code]:bg-[var(--bg-surface-active)] [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[0.85em] [&_li]:my-1 [&_li]:ml-1 [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:my-2 [&_strong]:text-[var(--text-primary)] [&_ul]:list-disc [&_ul]:pl-5"
+          // `min-w-0` is load-bearing: without it a flex/grid child sizes to its
+          // widest content, so a long line escapes the card instead of scrolling.
+          // `pre` and `table` then need their own scroll container — prose HTML can
+          // contain a terminal transcript or a comparison table far wider than the
+          // column, and neither was handled before (long javac/stack-trace lines ran
+          // straight off the page).
+          className="exp-doc-prose min-w-0 text-sm leading-relaxed text-[var(--text-secondary)] [&_a]:text-[var(--accent-color)] [&_a]:underline [&_code]:rounded [&_code]:bg-[var(--bg-surface-active)] [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[0.85em] [&_li]:my-1 [&_li]:ml-1 [&_ol]:list-decimal [&_ol]:pl-5 [&_p]:my-2 [&_pre]:my-3 [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_pre]:rounded-lg [&_pre]:bg-[var(--bg-surface-active)] [&_pre]:p-3 [&_pre]:text-[0.85em] [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_strong]:text-[var(--text-primary)] [&_table]:my-3 [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_td]:border [&_td]:border-white/10 [&_td]:px-2 [&_td]:py-1 [&_th]:border [&_th]:border-white/10 [&_th]:px-2 [&_th]:py-1 [&_th]:text-left [&_ul]:list-disc [&_ul]:pl-5"
           dangerouslySetInnerHTML={{ __html: sanitizeHtml(block.html) }}
         />
       );

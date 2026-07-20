@@ -53,7 +53,7 @@ export function ModuleLesson({ moduleId, hasLesson }: { moduleId: number; hasLes
               <Loader2 size={16} className="animate-spin" /> Loading lesson…
             </div>
           ) : blocks && blocks.length ? (
-            <div className="mx-auto max-w-3xl">
+            <div className="mx-auto min-w-0 max-w-3xl">
               <DocBlocksView blocks={blocks} />
             </div>
           ) : (

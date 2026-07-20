@@ -88,8 +88,38 @@ async function waitBudget() {
   }
 }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const isQuotaErr = (m) => /hạn mức|AI đang tắt|disabled|Daily AI limit|quota/i.test(String(m));
+// "The AI is off" and "you are out of budget" are NOT the same thing, and
+// treating them the same is what killed long-running shards. The breaker opens
+// for SIXTY SECONDS after five failures anywhere; the old isQuotaErr matched
+// its message ("disabled") and stopped a job with hours of work left. Same for
+// a 429: the gateway is asking us to slow down, not to go home.
+//
+// Only a real budget exhaustion is worth quitting over. Everything else waits.
+const isHardStop = (m) => /Daily AI limit|hạn mức|usage limit|not configured|FORCE_STATIC|nokey/i.test(String(m));
+const isAiPaused = (m) => /AI đang tắt|currently disabled|not available right now|resting|reopens|circuit/i.test(String(m));
+const isRateLimit = (m) => /\b429\b|rate.?limit|too many requests|overloaded/i.test(String(m));
 const isTransientErr = (m) => /busy|đang bận|returned nothing|chưa ra kết quả|524|529|timeout|ETIMEDOUT|ECONNRESET|fetch failed|overloaded/i.test(String(m));
+
+// How long we are willing to sit out an outage before admitting it is real.
+const MAX_PAUSE_MS = 60 * 60_000;
+const PAUSE_STEP_MS = 60_000;
+
+/** Wait out a temporary outage. Returns false only if it never came back. */
+async function waitForAi(reason) {
+  const started = Date.now();
+  let waited = 0;
+  console.log(`  [pause] AI unavailable (${String(reason).slice(0, 80)}) — waiting instead of quitting`);
+  while (Date.now() - started < MAX_PAUSE_MS) {
+    await sleep(PAUSE_STEP_MS);
+    waited += PAUSE_STEP_MS;
+    if (waited % (5 * PAUSE_STEP_MS) === 0) {
+      console.log(`  [pause] still waiting, ${Math.round(waited / 60_000)} min so far`);
+    }
+    return true;   // one step is enough; the caller retries and re-learns the state
+  }
+  console.log('  [stop] AI stayed unavailable for an hour — stopping');
+  return false;
+}
 
 let stop = false, modulesTouched = 0, exWrote = 0, modWrote = 0, fails = 0;
 
@@ -141,7 +171,8 @@ async function roadmapPhase(tracks) {
       fails++;
       const msg = String(e?.message ?? e);
       console.error(`  [!] roadmap ${t.slug}: ${msg.slice(0, 120)}`);
-      if (isQuotaErr(msg)) { stop = true; console.log('  [stop] quota/AI off — stopping'); }
+      if (isHardStop(msg)) { stop = true; console.log('  [stop] out of AI budget — stopping'); }
+      else if (isAiPaused(msg) || isRateLimit(msg)) { if (!(await waitForAi(msg))) stop = true; }
       else if (isTransientErr(msg)) await sleep(15_000);
     }
     await sleep(SLEEP);
@@ -187,7 +218,13 @@ async function exercisePhase(tracks) {
           fails++;
           const msg = String(e?.message ?? e);
           console.error(`    [!] ${mod.slug} slot ${pos}: ${msg.slice(0, 120)}`);
-          if (isQuotaErr(msg)) { stop = true; console.log('  [stop] quota/AI off — stopping'); break; }
+          if (isHardStop(msg)) { stop = true; console.log('  [stop] out of AI budget — stopping'); break; }
+          // Paused or rate-limited: wait, then RETRY THE SAME SLOT. Skipping it
+          // would leave a hole in the module that nothing ever fills.
+          if (isAiPaused(msg) || isRateLimit(msg)) {
+            if (!(await waitForAi(msg))) { stop = true; break; }
+            k--; continue;
+          }
           if (isTransientErr(msg)) { await sleep(15_000); k--; continue; }   // retry same slot
           // non-transient: skip this slot, continue to next
         }

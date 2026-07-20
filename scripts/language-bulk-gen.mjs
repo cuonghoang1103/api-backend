@@ -74,7 +74,13 @@ async function waitBudget() {
 }
 
 let stop = false, totalCreated = 0, fails = 0;
-const isQuotaErr = (m) => /hạn mức|AI đang tắt|quota/i.test(String(m));
+// A paused AI is not an exhausted budget. The circuit breaker opens for SIXTY
+// SECONDS after five failures anywhere, and its message used to match this
+// predicate — so a one-minute wobble ended a job with hours of work left.
+// Only a real budget exhaustion is worth quitting over.
+const isHardStop = (m) => /Daily AI limit|hạn mức|usage limit|not configured|FORCE_STATIC/i.test(String(m));
+const isAiPaused = (m) => /AI đang tắt|currently disabled|not available right now|resting|reopens|circuit|\b429\b|rate.?limit|too many requests/i.test(String(m));
+const isQuotaErr = (m) => isHardStop(m);
 // adminGenerate collapses EVERY llmComplete failure (timeout, 524, overload)
 // into one "đang bận" message, so that string is a transient error, not a dry
 // well. Telling the two apart is what stops a blip from ending a category.
@@ -96,7 +102,10 @@ async function round(langCode, section, opts) {
     fails++;
     const msg = e?.message ?? e;
     console.error(`    [!] ${langCode}/${section}/${opts.label}: ${String(msg).slice(0, 120)}`);
-    if (isQuotaErr(msg)) { stop = true; return { created: 0, kind: 'quota' }; }
+    if (isHardStop(msg)) { stop = true; return { created: 0, kind: 'quota' }; }
+    // Paused/rate-limited: wait a minute and report it as transient, so the
+    // caller retries this unit instead of the shard giving up entirely.
+    if (isAiPaused(msg)) { await new Promise((r) => setTimeout(r, 60_000)); return { created: 0, kind: 'transient' }; }
     if (isTransientErr(msg)) { await new Promise((r) => setTimeout(r, 60_000)); return { created: 0, kind: 'transient' }; }
     return { created: 0, kind: 'dry' };
   }
@@ -197,7 +206,8 @@ for (const code of LANGS) {
           fails++;
           const msg = e?.message ?? e;
           console.error(`    [!] ${code}/reading/${level}: ${String(msg).slice(0, 120)}`);
-          if (isQuotaErr(msg)) { stop = true; break; }
+          if (isHardStop(msg)) { stop = true; break; }
+          if (isAiPaused(msg) && ++softFails < 30) { await new Promise((r) => setTimeout(r, 60_000)); continue; }
           if (isTransientErr(msg) && ++softFails < 3) { await new Promise((r) => setTimeout(r, 60_000)); continue; }
           break;
         }

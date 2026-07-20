@@ -16,7 +16,7 @@
  */
 import { prisma } from '../config/database.js';
 import { BadRequestError, NotFoundError } from '../middleware/errorHandler.js';
-import { llmComplete, checkTokenQuota, isAiAvailable } from './interview/llm/index.js';
+import { llmComplete, checkTokenQuota, isAiAvailable, aiOffReason, circuitReopensInMs } from './interview/llm/index.js';
 import { looseJson } from './myLanguage.ai.service.js';
 import * as codeLab from './codeLab.service.js';
 import { sanitizeMermaid } from '../utils/mermaid.js';
@@ -31,7 +31,18 @@ function s(v: unknown): string {
 }
 
 async function ensureAi(userId: number) {
-  if (!isAiAvailable('bulk_gen')) throw new BadRequestError('AI is currently disabled. Please try again later.');
+  if (!isAiAvailable('bulk_gen')) {
+    // Say WHICH reason. A long-running generator has to tell a 60-second
+    // breaker from a missing key, or it treats every wobble as the end.
+    const reason = aiOffReason('bulk_gen');
+    throw new BadRequestError(
+      reason === 'circuit'
+        ? `AI is resting after repeated gateway errors; it reopens in about ${Math.ceil(circuitReopensInMs('bulk_gen') / 1000)}s.`
+        : reason === 'static'
+          ? 'AI is switched off on this server (FORCE_STATIC_MODE).'
+          : 'AI is not configured on this server.',
+    );
+  }
   if (!(await checkTokenQuota(userId))) throw new BadRequestError('Daily AI limit reached. Please try again tomorrow.');
 }
 

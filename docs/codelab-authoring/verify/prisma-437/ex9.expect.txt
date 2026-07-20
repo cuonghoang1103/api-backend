@@ -1,0 +1,5 @@
+completed 2
+retried true
+accounts 3
+duplicate P2002
+attemptsUsed 1

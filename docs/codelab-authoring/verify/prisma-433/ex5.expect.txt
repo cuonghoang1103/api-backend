@@ -1,0 +1,5 @@
+some: Ann, Bob
+every: Bob, Cy
+none: Cy
+is: Ann
+noProfile 1

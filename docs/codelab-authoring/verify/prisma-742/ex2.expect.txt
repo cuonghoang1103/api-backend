@@ -1,0 +1,5 @@
+a***@x.io Ann (t1)
+b***@x.io Bob (t1)
+c***@x.io Cy (t2)
+selected a***@x.io, b***@x.io, c***@x.io
+rawGone true

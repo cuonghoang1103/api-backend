@@ -481,6 +481,16 @@
       ],
       "starterCodeJson": [
         {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nenum Role {\n  USER\n  ADMIN\n}\n\nmodel User {\n  id        Int      @id @default(autoincrement())\n  email     String   @unique\n  name      String?\n  role      Role     @default(USER)\n  createdAt DateTime @default(now())\n  posts     Post[]\n}\n\nmodel Post {\n  id        Int       @id @default(autoincrement())\n  title     String\n  content   String?\n  published Boolean   @default(false)\n  authorId  Int\n  author    User      @relation(fields: [authorId], references: [id])\n  comments  Comment[]\n  createdAt DateTime  @default(now())\n  updatedAt DateTime  @updatedAt\n}\n\nmodel Comment {\n  id     Int    @id @default(autoincrement())\n  text   String\n  postId Int\n  post   Post   @relation(fields: [postId], references: [id])\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\nasync function main(){\nawait prisma.comment.deleteMany(); await prisma.post.deleteMany(); await prisma.user.deleteMany();\nconst u = await prisma.user.create({ data: { email: \"seed@x.io\" } });\nawait prisma.post.createMany({ data: [\n  { title: \"Intro to SQL\", published: true, authorId: u.id },\n  { title: \"Prisma Basics\", published: true, authorId: u.id },\n  { title: \"Draft on Prisma\", published: false, authorId: u.id },\n  { title: \"Redis Notes\", published: true, authorId: u.id },\n]});\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
+        {
           "name": "solution.ts",
           "language": "typescript",
           "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
@@ -606,6 +616,16 @@
         "Read it all back with findUnique + include: { posts: { include: { comments: true } } }."
       ],
       "starterCodeJson": [
+        {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nenum Role {\n  USER\n  ADMIN\n}\n\nmodel User {\n  id        Int      @id @default(autoincrement())\n  email     String   @unique\n  name      String?\n  role      Role     @default(USER)\n  createdAt DateTime @default(now())\n  posts     Post[]\n}\n\nmodel Post {\n  id        Int       @id @default(autoincrement())\n  title     String\n  content   String?\n  published Boolean   @default(false)\n  authorId  Int\n  author    User      @relation(fields: [authorId], references: [id])\n  comments  Comment[]\n  createdAt DateTime  @default(now())\n  updatedAt DateTime  @updatedAt\n}\n\nmodel Comment {\n  id     Int    @id @default(autoincrement())\n  text   String\n  postId Int\n  post   Post   @relation(fields: [postId], references: [id])\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\nasync function main(){\nawait prisma.comment.deleteMany(); await prisma.post.deleteMany(); await prisma.user.deleteMany();\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
         {
           "name": "solution.ts",
           "language": "typescript",

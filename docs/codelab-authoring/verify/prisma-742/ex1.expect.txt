@@ -1,0 +1,5 @@
+defaultKeys email, id, name, passwordHash, tenantId
+leaksHash true
+safeKeys email, id, name
+count 3
+hashOnSafe false

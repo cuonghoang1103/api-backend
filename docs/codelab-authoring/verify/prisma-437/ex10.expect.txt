@@ -1,0 +1,7 @@
+visible 3
+afterDelete 2
+stillStored 1
+label P2 (20)
+created ok
+budgetOk true
+health true

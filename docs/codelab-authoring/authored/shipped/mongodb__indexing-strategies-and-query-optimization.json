@@ -49,6 +49,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb = db.getSiblingDB(\"cl418\")\ndb.dropDatabase()\nconst statuses = [\"pending\", \"shipped\", \"delivered\", \"cancelled\"]\nconst regions = [\"north\", \"south\", \"east\", \"west\"]\nconst tagPool = [\"fragile\", \"gift\", \"bulk\", \"express\", \"cold\"]\nlet batch = []\nfor (let i = 1; i <= 60000; i++) {\n  const doc = {\n    _id: i,\n    sku: \"SKU-\" + i,\n    customerId: 1000 + (i % 5000),\n    status: statuses[i % 4],\n    region: regions[Math.floor(i / 5) % 4],\n    amount: ((i * 7) % 499) + 1,\n    createdAt: new Date(Date.UTC(2024, 0, 1) + i * 60000),\n    tags: [tagPool[i % 5], tagPool[(i + 2) % 5]]\n  }\n  if (i % 100 === 0) doc.couponCode = \"SAVE\" + (i / 100)\n  batch.push(doc)\n  if (batch.length === 5000) { const r = db.orders.insertMany(batch, { ordered: false }); batch = [] }\n}\nif (batch.length) { const r = db.orders.insertMany(batch, { ordered: false }) }\nprint(\"SEED orders=\" + db.orders.countDocuments() + \" coupons=\" + db.orders.countDocuments({ couponCode: { $exists: true } }))"
+        },
+        {
           "name": "solution.js",
           "language": "javascript",
           "code": "function plan(e) {\n  const s = e.executionStats, stages = [];\n  for (let p = e.queryPlanner.winningPlan; p; p = p.inputStage) stages.push(p.stage);\n  return { stages: stages.join(\" <- \"), nReturned: s.nReturned, keys: s.totalKeysExamined, docs: s.totalDocsExamined };\n}\n\n// 1. baseline: how much work does this query do with no index?\n// plan(db.orders.find({ sku: \"SKU-42137\" }).explain(\"executionStats\"))\n\n// 2. TODO: create an ascending index on sku\n\n// 3. TODO: re-run the same explain and compare the counters\n\n// 4. TODO: print queryPlanner.winningPlan for the indexed query"
@@ -114,6 +119,11 @@
         "db.orders.createIndex({ status: 1, createdAt: -1 }, { name: \"status_recent\" }), then hideIndex(\"status_recent\"), explain, unhideIndex(\"status_recent\"), explain, dropIndex(\"status_recent\")."
       ],
       "starterCodeJson": [
+        {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb = db.getSiblingDB(\"cl418\")\ndb.dropDatabase()\nconst statuses = [\"pending\", \"shipped\", \"delivered\", \"cancelled\"]\nconst regions = [\"north\", \"south\", \"east\", \"west\"]\nconst tagPool = [\"fragile\", \"gift\", \"bulk\", \"express\", \"cold\"]\nlet batch = []\nfor (let i = 1; i <= 60000; i++) {\n  const doc = {\n    _id: i,\n    sku: \"SKU-\" + i,\n    customerId: 1000 + (i % 5000),\n    status: statuses[i % 4],\n    region: regions[Math.floor(i / 5) % 4],\n    amount: ((i * 7) % 499) + 1,\n    createdAt: new Date(Date.UTC(2024, 0, 1) + i * 60000),\n    tags: [tagPool[i % 5], tagPool[(i + 2) % 5]]\n  }\n  if (i % 100 === 0) doc.couponCode = \"SAVE\" + (i / 100)\n  batch.push(doc)\n  if (batch.length === 5000) { const r = db.orders.insertMany(batch, { ordered: false }); batch = [] }\n}\nif (batch.length) { const r = db.orders.insertMany(batch, { ordered: false }) }\nprint(\"SEED orders=\" + db.orders.countDocuments() + \" coupons=\" + db.orders.countDocuments({ couponCode: { $exists: true } }))"
+        },
         {
           "name": "solution.js",
           "language": "javascript",
@@ -181,6 +191,11 @@
         "db.orders.createIndex({ region: 1, status: 1, amount: 1 }), then explain the four filters; the one starting at status falls back to COLLSCAN."
       ],
       "starterCodeJson": [
+        {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb = db.getSiblingDB(\"cl418\")\ndb.dropDatabase()\nconst statuses = [\"pending\", \"shipped\", \"delivered\", \"cancelled\"]\nconst regions = [\"north\", \"south\", \"east\", \"west\"]\nconst tagPool = [\"fragile\", \"gift\", \"bulk\", \"express\", \"cold\"]\nlet batch = []\nfor (let i = 1; i <= 60000; i++) {\n  const doc = {\n    _id: i,\n    sku: \"SKU-\" + i,\n    customerId: 1000 + (i % 5000),\n    status: statuses[i % 4],\n    region: regions[Math.floor(i / 5) % 4],\n    amount: ((i * 7) % 499) + 1,\n    createdAt: new Date(Date.UTC(2024, 0, 1) + i * 60000),\n    tags: [tagPool[i % 5], tagPool[(i + 2) % 5]]\n  }\n  if (i % 100 === 0) doc.couponCode = \"SAVE\" + (i / 100)\n  batch.push(doc)\n  if (batch.length === 5000) { const r = db.orders.insertMany(batch, { ordered: false }); batch = [] }\n}\nif (batch.length) { const r = db.orders.insertMany(batch, { ordered: false }) }\nprint(\"SEED orders=\" + db.orders.countDocuments() + \" coupons=\" + db.orders.countDocuments({ couponCode: { $exists: true } }))"
+        },
         {
           "name": "solution.js",
           "language": "javascript",
@@ -250,6 +265,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb = db.getSiblingDB(\"cl418\")\ndb.dropDatabase()\nconst statuses = [\"pending\", \"shipped\", \"delivered\", \"cancelled\"]\nconst regions = [\"north\", \"south\", \"east\", \"west\"]\nconst tagPool = [\"fragile\", \"gift\", \"bulk\", \"express\", \"cold\"]\nlet batch = []\nfor (let i = 1; i <= 60000; i++) {\n  const doc = {\n    _id: i,\n    sku: \"SKU-\" + i,\n    customerId: 1000 + (i % 5000),\n    status: statuses[i % 4],\n    region: regions[Math.floor(i / 5) % 4],\n    amount: ((i * 7) % 499) + 1,\n    createdAt: new Date(Date.UTC(2024, 0, 1) + i * 60000),\n    tags: [tagPool[i % 5], tagPool[(i + 2) % 5]]\n  }\n  if (i % 100 === 0) doc.couponCode = \"SAVE\" + (i / 100)\n  batch.push(doc)\n  if (batch.length === 5000) { const r = db.orders.insertMany(batch, { ordered: false }); batch = [] }\n}\nif (batch.length) { const r = db.orders.insertMany(batch, { ordered: false }) }\nprint(\"SEED orders=\" + db.orders.countDocuments() + \" coupons=\" + db.orders.countDocuments({ couponCode: { $exists: true } }))"
+        },
+        {
           "name": "solution.js",
           "language": "javascript",
           "code": "function plan(e) {\n  const s = e.executionStats, stages = [];\n  for (let p = e.queryPlanner.winningPlan; p; p = p.inputStage) stages.push(p.stage);\n  return { stages: stages.join(\" <- \"), nReturned: s.nReturned, keys: s.totalKeysExamined, docs: s.totalDocsExamined };\n}\n\n// TODO: create index \"esr_bad\"  as { status: 1, amount: 1, createdAt: -1 }\n// TODO: create index \"esr_good\" as { status: 1, createdAt: -1, amount: 1 }\n\nconst q = () => db.orders.find({ status: \"shipped\", amount: { $gt: 400 } }).sort({ createdAt: -1 }).limit(20)\n\n// TODO: plan(q().hint(\"esr_bad\").explain(\"executionStats\"))\n// TODO: plan(q().hint(\"esr_good\").explain(\"executionStats\"))\n// TODO: plan(q().explain(\"executionStats\"))   // planner's own choice"
@@ -318,6 +338,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb = db.getSiblingDB(\"cl418\")\ndb.dropDatabase()\nconst statuses = [\"pending\", \"shipped\", \"delivered\", \"cancelled\"]\nconst regions = [\"north\", \"south\", \"east\", \"west\"]\nconst tagPool = [\"fragile\", \"gift\", \"bulk\", \"express\", \"cold\"]\nlet batch = []\nfor (let i = 1; i <= 60000; i++) {\n  const doc = {\n    _id: i,\n    sku: \"SKU-\" + i,\n    customerId: 1000 + (i % 5000),\n    status: statuses[i % 4],\n    region: regions[Math.floor(i / 5) % 4],\n    amount: ((i * 7) % 499) + 1,\n    createdAt: new Date(Date.UTC(2024, 0, 1) + i * 60000),\n    tags: [tagPool[i % 5], tagPool[(i + 2) % 5]]\n  }\n  if (i % 100 === 0) doc.couponCode = \"SAVE\" + (i / 100)\n  batch.push(doc)\n  if (batch.length === 5000) { const r = db.orders.insertMany(batch, { ordered: false }); batch = [] }\n}\nif (batch.length) { const r = db.orders.insertMany(batch, { ordered: false }) }\nprint(\"SEED orders=\" + db.orders.countDocuments() + \" coupons=\" + db.orders.countDocuments({ couponCode: { $exists: true } }))"
+        },
+        {
           "name": "solution.js",
           "language": "javascript",
           "code": "function plan(e) {\n  const s = e.executionStats, stages = [];\n  for (let p = e.queryPlanner.winningPlan; p; p = p.inputStage) stages.push(p.stage);\n  return { stages: stages.join(\" <- \"), nReturned: s.nReturned, keys: s.totalKeysExamined, docs: s.totalDocsExamined };\n}\n\n// TODO: create the index { status: 1, amount: 1 }\n\nconst f = { status: \"shipped\", amount: { $gt: 490 } }\n\n// TODO: explain with projection { _id: 0, status: 1, amount: 1 }        -> expect covered\n// TODO: explain with projection { _id: 0, status: 1, amount: 1, sku: 1 } -> expect a FETCH\n// TODO: explain with projection { status: 1, amount: 1 }                 -> _id not suppressed\n// TODO: explain the covered projection plus .sort({ amount: 1 })"
@@ -384,6 +409,11 @@
         "A multikey index can never cover a query (the FETCH stays), and a compound index may contain at most one array field, which is what the parallel-array insert proves."
       ],
       "starterCodeJson": [
+        {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb = db.getSiblingDB(\"cl418\")\ndb.dropDatabase()\nconst statuses = [\"pending\", \"shipped\", \"delivered\", \"cancelled\"]\nconst regions = [\"north\", \"south\", \"east\", \"west\"]\nconst tagPool = [\"fragile\", \"gift\", \"bulk\", \"express\", \"cold\"]\nlet batch = []\nfor (let i = 1; i <= 60000; i++) {\n  const doc = {\n    _id: i,\n    sku: \"SKU-\" + i,\n    customerId: 1000 + (i % 5000),\n    status: statuses[i % 4],\n    region: regions[Math.floor(i / 5) % 4],\n    amount: ((i * 7) % 499) + 1,\n    createdAt: new Date(Date.UTC(2024, 0, 1) + i * 60000),\n    tags: [tagPool[i % 5], tagPool[(i + 2) % 5]]\n  }\n  if (i % 100 === 0) doc.couponCode = \"SAVE\" + (i / 100)\n  batch.push(doc)\n  if (batch.length === 5000) { const r = db.orders.insertMany(batch, { ordered: false }); batch = [] }\n}\nif (batch.length) { const r = db.orders.insertMany(batch, { ordered: false }) }\nprint(\"SEED orders=\" + db.orders.countDocuments() + \" coupons=\" + db.orders.countDocuments({ couponCode: { $exists: true } }))"
+        },
         {
           "name": "solution.js",
           "language": "javascript",
@@ -452,6 +482,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb = db.getSiblingDB(\"cl418\")\ndb.dropDatabase()\nconst statuses = [\"pending\", \"shipped\", \"delivered\", \"cancelled\"]\nconst regions = [\"north\", \"south\", \"east\", \"west\"]\nconst tagPool = [\"fragile\", \"gift\", \"bulk\", \"express\", \"cold\"]\nlet batch = []\nfor (let i = 1; i <= 60000; i++) {\n  const doc = {\n    _id: i,\n    sku: \"SKU-\" + i,\n    customerId: 1000 + (i % 5000),\n    status: statuses[i % 4],\n    region: regions[Math.floor(i / 5) % 4],\n    amount: ((i * 7) % 499) + 1,\n    createdAt: new Date(Date.UTC(2024, 0, 1) + i * 60000),\n    tags: [tagPool[i % 5], tagPool[(i + 2) % 5]]\n  }\n  if (i % 100 === 0) doc.couponCode = \"SAVE\" + (i / 100)\n  batch.push(doc)\n  if (batch.length === 5000) { const r = db.orders.insertMany(batch, { ordered: false }); batch = [] }\n}\nif (batch.length) { const r = db.orders.insertMany(batch, { ordered: false }) }\nprint(\"SEED orders=\" + db.orders.countDocuments() + \" coupons=\" + db.orders.countDocuments({ couponCode: { $exists: true } }))"
+        },
+        {
           "name": "solution.js",
           "language": "javascript",
           "code": "function plan(e) {\n  const s = e.executionStats, stages = [];\n  for (let p = e.queryPlanner.winningPlan; p; p = p.inputStage) stages.push(p.stage);\n  return { stages: stages.join(\" <- \"), nReturned: s.nReturned, keys: s.totalKeysExamined, docs: s.totalDocsExamined };\n}\n\n// TODO: create \"pending_recent\" on { createdAt: -1 } with partialFilterExpression { status: \"pending\" }\n\n// TODO: explain find({ status: \"pending\" }).sort({ createdAt: -1 }).limit(10)\n// TODO: explain the same query with status \"shipped\"\n\n// TODO: create \"coupon_sparse\" on { couponCode: 1 } with sparse: true\n\n// TODO: explain find({ couponCode: \"SAVE7\" })\n// TODO: explain find({ couponCode: { $exists: false } }).limit(3)"
@@ -518,6 +553,11 @@
         "For an optional unique field, combine unique with partialFilterExpression { field: { $type: \"string\" } } so documents missing the field are not all indexed as null."
       ],
       "starterCodeJson": [
+        {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb = db.getSiblingDB(\"cl418\")\ndb.dropDatabase()\nconst statuses = [\"pending\", \"shipped\", \"delivered\", \"cancelled\"]\nconst regions = [\"north\", \"south\", \"east\", \"west\"]\nconst tagPool = [\"fragile\", \"gift\", \"bulk\", \"express\", \"cold\"]\nlet batch = []\nfor (let i = 1; i <= 60000; i++) {\n  const doc = {\n    _id: i,\n    sku: \"SKU-\" + i,\n    customerId: 1000 + (i % 5000),\n    status: statuses[i % 4],\n    region: regions[Math.floor(i / 5) % 4],\n    amount: ((i * 7) % 499) + 1,\n    createdAt: new Date(Date.UTC(2024, 0, 1) + i * 60000),\n    tags: [tagPool[i % 5], tagPool[(i + 2) % 5]]\n  }\n  if (i % 100 === 0) doc.couponCode = \"SAVE\" + (i / 100)\n  batch.push(doc)\n  if (batch.length === 5000) { const r = db.orders.insertMany(batch, { ordered: false }); batch = [] }\n}\nif (batch.length) { const r = db.orders.insertMany(batch, { ordered: false }) }\nprint(\"SEED orders=\" + db.orders.countDocuments() + \" coupons=\" + db.orders.countDocuments({ couponCode: { $exists: true } }))"
+        },
         {
           "name": "solution.js",
           "language": "javascript",
@@ -586,6 +626,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb = db.getSiblingDB(\"cl418\")\ndb.dropDatabase()\nconst statuses = [\"pending\", \"shipped\", \"delivered\", \"cancelled\"]\nconst regions = [\"north\", \"south\", \"east\", \"west\"]\nconst tagPool = [\"fragile\", \"gift\", \"bulk\", \"express\", \"cold\"]\nlet batch = []\nfor (let i = 1; i <= 60000; i++) {\n  const doc = {\n    _id: i,\n    sku: \"SKU-\" + i,\n    customerId: 1000 + (i % 5000),\n    status: statuses[i % 4],\n    region: regions[Math.floor(i / 5) % 4],\n    amount: ((i * 7) % 499) + 1,\n    createdAt: new Date(Date.UTC(2024, 0, 1) + i * 60000),\n    tags: [tagPool[i % 5], tagPool[(i + 2) % 5]]\n  }\n  if (i % 100 === 0) doc.couponCode = \"SAVE\" + (i / 100)\n  batch.push(doc)\n  if (batch.length === 5000) { const r = db.orders.insertMany(batch, { ordered: false }); batch = [] }\n}\nif (batch.length) { const r = db.orders.insertMany(batch, { ordered: false }) }\nprint(\"SEED orders=\" + db.orders.countDocuments() + \" coupons=\" + db.orders.countDocuments({ couponCode: { $exists: true } }))"
+        },
+        {
           "name": "solution.js",
           "language": "javascript",
           "code": "db.tickets.drop()\ndb.tickets.insertMany([\n  { _id: 1, subject: \"Payment failed at checkout\", body: \"The card was declined during checkout\" },\n  { _id: 2, subject: \"Refund request\", body: \"I want a refund for my declined payment\" },\n  { _id: 3, subject: \"Shipping delay\", body: \"My parcel is late and tracking is stuck\" },\n  { _id: 4, subject: \"Checkout page blank\", body: \"The checkout page renders blank on mobile\" }\n])\n\n// TODO: create \"ticket_text\" over subject and body with weights subject 5, body 1\n\n// TODO: search \"checkout\" with a textScore projection, sorted by score descending\n// TODO: phrase search for \"declined payment\"\n// TODO: negated search: checkout -blank\n// TODO: try a second text index on body alone; print err.code and err.message\n\ndb.sessions.drop()\n// TODO: create the TTL index on lastSeen with expireAfterSeconds 1800\ndb.sessions.insertMany([\n  { _id: 1, user: \"a\", lastSeen: new Date(Date.now() - 3600 * 1000) },\n  { _id: 2, user: \"b\", lastSeen: new Date(Date.now() - 7200 * 1000) },\n  { _id: 3, user: \"c\", lastSeen: new Date() }\n])\n// TODO: count, sleep(75000), count again, list the survivors"
@@ -653,6 +698,11 @@
         "Filter $indexStats to Number(s.accesses.ops) === 0 excluding _id_, call dropIndex on each name, then compare two timed insertMany calls to see the write cost of the remaining indexes."
       ],
       "starterCodeJson": [
+        {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb = db.getSiblingDB(\"cl418\")\ndb.dropDatabase()\nconst statuses = [\"pending\", \"shipped\", \"delivered\", \"cancelled\"]\nconst regions = [\"north\", \"south\", \"east\", \"west\"]\nconst tagPool = [\"fragile\", \"gift\", \"bulk\", \"express\", \"cold\"]\nlet batch = []\nfor (let i = 1; i <= 60000; i++) {\n  const doc = {\n    _id: i,\n    sku: \"SKU-\" + i,\n    customerId: 1000 + (i % 5000),\n    status: statuses[i % 4],\n    region: regions[Math.floor(i / 5) % 4],\n    amount: ((i * 7) % 499) + 1,\n    createdAt: new Date(Date.UTC(2024, 0, 1) + i * 60000),\n    tags: [tagPool[i % 5], tagPool[(i + 2) % 5]]\n  }\n  if (i % 100 === 0) doc.couponCode = \"SAVE\" + (i / 100)\n  batch.push(doc)\n  if (batch.length === 5000) { const r = db.orders.insertMany(batch, { ordered: false }); batch = [] }\n}\nif (batch.length) { const r = db.orders.insertMany(batch, { ordered: false }) }\nprint(\"SEED orders=\" + db.orders.countDocuments() + \" coupons=\" + db.orders.countDocuments({ couponCode: { $exists: true } }))"
+        },
         {
           "name": "solution.js",
           "language": "javascript",

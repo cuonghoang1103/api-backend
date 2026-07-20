@@ -1,0 +1,4 @@
+failed 1
+applied 2
+unique 1
+rows 3

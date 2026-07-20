@@ -1,0 +1,136 @@
+ECHO "===== EX 1: Append Events to a Stream with XADD and Count with XLEN ====="
+FLUSHALL
+XADD orders 1-1 item book qty 2
+XADD orders 2-1 item pen qty 5
+XADD orders 3-1 item lamp qty 1
+XLEN orders
+XRANGE orders - +
+XADD orders 4-1 item mug qty 3
+XLEN orders
+XRANGE orders - + COUNT 1
+XRANGE orders 4-1 4-1
+ECHO "===== EX 2: Read Entries by Range with XRANGE and XREVRANGE ====="
+FLUSHALL
+XADD log 1-1 msg a
+XADD log 2-1 msg b
+XADD log 3-1 msg c
+XADD log 4-1 msg d
+XADD log 5-1 msg e
+XRANGE log - +
+XRANGE log - + COUNT 2
+XRANGE log 2-1 4-1
+XREVRANGE log + - COUNT 1
+XREVRANGE log + -
+XRANGE log (2-1 + COUNT 2
+ECHO "===== EX 3: Consume New Entries with XREAD ====="
+FLUSHALL
+XADD stream 1-1 v one
+XADD stream 2-1 v two
+XADD stream 3-1 v three
+XREAD COUNT 2 STREAMS stream 0
+XREAD STREAMS stream 2-1
+XREAD COUNT 5 STREAMS stream 0
+XLEN stream
+XREAD COUNT 1 STREAMS stream 1-1
+XREAD STREAMS stream 3-1
+ECHO "===== EX 4: Cap Stream Length with MAXLEN and XTRIM ====="
+FLUSHALL
+XADD cap 1-1 n 1
+XADD cap 2-1 n 2
+XADD cap 3-1 n 3
+XADD cap MAXLEN 3 4-1 n 4
+XLEN cap
+XRANGE cap - +
+XADD cap MAXLEN 3 5-1 n 5
+XLEN cap
+XRANGE cap - +
+XTRIM cap MAXLEN 2
+XLEN cap
+XRANGE cap - +
+XTRIM cap MINID 5
+XLEN cap
+XRANGE cap - +
+ECHO "===== EX 5: Remove Entries with XDEL and Understand the ID Space ====="
+FLUSHALL
+XADD s 1-1 a x
+XADD s 2-1 a y
+XADD s 3-1 a z
+XLEN s
+XDEL s 2-1
+XLEN s
+XRANGE s - +
+XDEL s 1-1 3-1
+XLEN s
+XADD s 4-1 a w
+XRANGE s - +
+XDEL s 9-9
+XADD s 5-1 a v
+XADD s 6-1 a u
+XDEL s 5-1
+XLEN s
+XRANGE s - +
+XREVRANGE s + -
+ECHO "===== EX 6: Create a Consumer Group and Read with XREADGROUP ====="
+FLUSHALL
+XADD tasks 1-1 job a
+XADD tasks 2-1 job b
+XADD tasks 3-1 job c
+XGROUP CREATE tasks g1 0
+XREADGROUP GROUP g1 worker1 COUNT 2 STREAMS tasks >
+XREADGROUP GROUP g1 worker1 STREAMS tasks >
+XACK tasks g1 1-1
+XPENDING tasks g1
+ECHO "===== EX 7: Distribute and Track Work with XPENDING Across Consumers ====="
+FLUSHALL
+XADD q 1-1 t a
+XADD q 2-1 t b
+XADD q 3-1 t c
+XADD q 4-1 t d
+XGROUP CREATE q g 0
+XREADGROUP GROUP g wA COUNT 2 STREAMS q >
+XREADGROUP GROUP g wB COUNT 2 STREAMS q >
+XPENDING q g
+XACK q g 1-1 2-1
+XPENDING q g
+ECHO "===== EX 8: Reassign Stuck Entries with XAUTOCLAIM ====="
+FLUSHALL
+XADD j 1-1 t a
+XADD j 2-1 t b
+XADD j 3-1 t c
+XGROUP CREATE j g 0
+XREADGROUP GROUP g wA COUNT 3 STREAMS j >
+XPENDING j g
+XAUTOCLAIM j g wB 0 0
+XPENDING j g
+XACK j g 1-1 2-1 3-1
+XPENDING j g
+XLEN j
+XINFO GROUPS j
+ECHO "===== EX 9: Build a Reliable At-Least-Once Consumer with Crash Recovery ====="
+FLUSHALL
+XADD orders 1-1 sku A
+XADD orders 2-1 sku B
+XADD orders 3-1 sku C
+XADD orders 4-1 sku D
+XADD orders 5-1 sku E
+XGROUP CREATE orders fulfil 0
+XREADGROUP GROUP fulfil wA COUNT 5 STREAMS orders >
+XACK orders fulfil 1-1 2-1
+XPENDING orders fulfil
+XAUTOCLAIM orders fulfil wB 0 0
+XACK orders fulfil 3-1 4-1 5-1
+XPENDING orders fulfil
+XINFO GROUPS orders
+ECHO "===== EX 10: Fan Out One Stream to Independent Consumer Groups ====="
+FLUSHALL
+XADD events 1-1 kind created
+XADD events 2-1 kind updated
+XADD events 3-1 kind deleted
+XGROUP CREATE events billing 0
+XGROUP CREATE events search 0
+XREADGROUP GROUP billing b1 COUNT 3 STREAMS events >
+XREADGROUP GROUP search s1 COUNT 1 STREAMS events >
+XACK events billing 1-1 2-1 3-1
+XINFO GROUPS events
+XREADGROUP GROUP search s1 STREAMS events >
+XINFO GROUPS events

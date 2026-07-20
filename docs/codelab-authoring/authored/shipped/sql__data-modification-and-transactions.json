@@ -51,6 +51,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS journal_lines, journal_entries, accounts CASCADE;\nCREATE TABLE accounts (\n  account_id INT PRIMARY KEY,\n  name       TEXT NOT NULL,\n  balance    NUMERIC(12,2) NOT NULL CHECK (balance >= 0)\n);\nCREATE TABLE journal_entries (\n  entry_id   SERIAL PRIMARY KEY,\n  memo       TEXT NOT NULL,\n  entry_date DATE NOT NULL\n);\nCREATE TABLE journal_lines (\n  line_id    SERIAL PRIMARY KEY,\n  entry_id   INT NOT NULL REFERENCES journal_entries(entry_id),\n  account_id INT NOT NULL REFERENCES accounts(account_id),\n  debit      NUMERIC(12,2) NOT NULL DEFAULT 0,\n  credit     NUMERIC(12,2) NOT NULL DEFAULT 0\n);\nINSERT INTO accounts VALUES (1,'Cash',800.00),(2,'Rent Expense',0.00),(3,'Office Supplies',0.00);"
+        },
+        {
           "name": "solution.sql",
           "language": "sql",
           "code": "-- Post the rent payment as ONE atomic transaction.\n-- Tables: accounts(account_id, name, balance CHECK >= 0),\n--         journal_entries(entry_id SERIAL, memo, entry_date),\n--         journal_lines(line_id SERIAL, entry_id, account_id, debit, credit)\n\nBEGIN;\n\n-- 1) Insert the journal entry and capture its generated entry_id,\n--    then insert the two balanced lines for it.\n-- WITH new_entry AS (\n--     INSERT INTO journal_entries (memo, entry_date) VALUES (..., ...) RETURNING entry_id\n-- )\n-- INSERT INTO journal_lines (entry_id, account_id, debit, credit)\n-- SELECT ...\n\n-- 2) Move the money: Cash down 500, Rent Expense up 500.\n-- UPDATE accounts SET ... WHERE account_id = 1;\n-- UPDATE accounts SET ... WHERE account_id = 2;\n\nCOMMIT;"
@@ -114,6 +119,11 @@
         "Then INSERT INTO reservations (product_id, order_id, qty) SELECT product_id, 900, 5 FROM reserved; — when the guard fails, reserved is empty and zero rows are inserted."
       ],
       "starterCodeJson": [
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS reservations, products CASCADE;\nCREATE TABLE products (\n  product_id INT PRIMARY KEY,\n  name       TEXT NOT NULL,\n  available  INT NOT NULL CHECK (available >= 0)\n);\nCREATE TABLE reservations (\n  reservation_id SERIAL PRIMARY KEY,\n  product_id     INT NOT NULL REFERENCES products(product_id),\n  order_id       INT NOT NULL,\n  qty            INT NOT NULL,\n  created_at     TIMESTAMPTZ NOT NULL DEFAULT now()\n);\nINSERT INTO products VALUES (100,'Mechanical Keyboard',8),(200,'USB-C Cable',2);"
+        },
         {
           "name": "solution.sql",
           "language": "sql",

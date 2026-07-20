@@ -1,0 +1,8 @@
+Ann 3
+Bob 2
+Cy 0
+Prisma Basics
+React Hooks
+Intro to SQL
+staff ann@x.io, bob@x.io
+injected 0 3

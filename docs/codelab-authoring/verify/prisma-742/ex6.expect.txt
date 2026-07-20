@@ -1,0 +1,5 @@
+audits 3
+trail Note:create, Note:update, Note:delete
+hasIds true
+failedAudits 3
+notes 3

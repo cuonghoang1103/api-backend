@@ -50,6 +50,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS sales CASCADE;\nCREATE TABLE sales (sale_id INT PRIMARY KEY, category TEXT NOT NULL, amount NUMERIC(10,2) NOT NULL);\nINSERT INTO sales VALUES\n (1,'Electronics',400),(2,'Electronics',200),\n (3,'Books',100),(4,'Books',50),\n (5,'Toys',300);"
+        },
+        {
           "name": "solution.sql",
           "language": "sql",
           "code": "-- Return categories whose revenue is above the average category revenue.\n-- sales(sale_id, category, amount)\n\nWITH category_totals AS (\n    -- SUM(amount) per category AS revenue\n)\nSELECT category, revenue\nFROM category_totals\n-- WHERE revenue > average revenue\nORDER BY revenue DESC;"
@@ -110,6 +115,11 @@
         "SELECT name, total_spent, CASE WHEN total_spent >= 1000 THEN 'Gold' WHEN total_spent >= 500 THEN 'Silver' ELSE 'Bronze' END AS tier FROM customers ORDER BY total_spent DESC."
       ],
       "starterCodeJson": [
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS customers CASCADE;\nCREATE TABLE customers (customer_id INT PRIMARY KEY, name TEXT NOT NULL, total_spent NUMERIC(10,2) NOT NULL);\nINSERT INTO customers VALUES (1,'Ann',1500),(2,'Bob',750),(3,'Cy',500),(4,'Di',200);"
+        },
         {
           "name": "solution.sql",
           "language": "sql",
@@ -173,6 +183,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS price_history CASCADE;\nCREATE TABLE price_history (id INT PRIMARY KEY, product_id INT, price NUMERIC(10,2), changed_at DATE);\nINSERT INTO price_history VALUES\n (1,1,10,'2026-01-10'),(2,1,12,'2026-03-05'),(3,1,11,'2026-02-01'),\n (4,2,50,'2026-01-15'),(5,2,55,'2026-02-20');"
+        },
+        {
           "name": "solution.sql",
           "language": "sql",
           "code": "-- Current price per product = newest changed_at.\n-- price_history(id, product_id, price, changed_at)\n\nWITH ranked AS (\n    SELECT product_id, price, changed_at,\n           -- ROW_NUMBER() OVER (PARTITION BY ... ORDER BY ... DESC) AS rn\n           NULL AS rn\n    FROM price_history\n)\nSELECT product_id, price, changed_at\nFROM ranked\n-- WHERE rn = 1\nORDER BY product_id;"
@@ -233,6 +248,11 @@
         "SELECT player, points, RANK() OVER (ORDER BY points DESC) AS rnk, DENSE_RANK() OVER (ORDER BY points DESC) AS dense FROM scores ORDER BY points DESC, player."
       ],
       "starterCodeJson": [
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS scores CASCADE;\nCREATE TABLE scores (player TEXT PRIMARY KEY, points INT NOT NULL);\nINSERT INTO scores VALUES ('Ann',90),('Bob',90),('Cy',80),('Di',70);"
+        },
         {
           "name": "solution.sql",
           "language": "sql",
@@ -296,6 +316,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS transactions CASCADE;\nCREATE TABLE transactions (txn_date DATE PRIMARY KEY, amount NUMERIC(10,2) NOT NULL);\nINSERT INTO transactions VALUES ('2026-01-01',100),('2026-01-02',-30),('2026-01-03',50);"
+        },
+        {
           "name": "solution.sql",
           "language": "sql",
           "code": "-- Running balance per transaction, in date order.\n-- transactions(txn_date, amount)\n\nSELECT txn_date, amount,\n       -- SUM(amount) OVER (ORDER BY txn_date) AS running_balance\n       NULL AS running_balance\nFROM transactions\nORDER BY txn_date;"
@@ -357,6 +382,11 @@
         "SELECT region, COALESCE(SUM(amount) FILTER (WHERE quarter='Q1'),0) AS q1, ... GROUP BY region ORDER BY region."
       ],
       "starterCodeJson": [
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS sales CASCADE;\nCREATE TABLE sales (id INT PRIMARY KEY, region TEXT, quarter TEXT, amount NUMERIC(10,2));\nINSERT INTO sales VALUES\n (1,'North','Q1',100),(2,'North','Q2',200),\n (3,'South','Q1',50),(4,'South','Q3',80);"
+        },
         {
           "name": "solution.sql",
           "language": "sql",
@@ -420,6 +450,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS sales CASCADE;\nCREATE TABLE sales (id INT PRIMARY KEY, region TEXT, product TEXT, amount NUMERIC(10,2));\nINSERT INTO sales VALUES (1,'North','A',100),(2,'North','B',50),(3,'South','A',80);"
+        },
+        {
           "name": "solution.sql",
           "language": "sql",
           "code": "-- Detail + region subtotals + grand total in one query.\n-- sales(region, product, amount)\n\nSELECT COALESCE(region, '(all regions)')  AS region,\n       COALESCE(product, '(all products)') AS product,\n       SUM(amount) AS revenue\nFROM sales\n-- GROUP BY ROLLUP (...)\nORDER BY region, product;"
@@ -482,6 +517,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS orders CASCADE;\nCREATE TABLE orders (customer_id INT, order_id INT PRIMARY KEY, ordered_at DATE, total NUMERIC(10,2));\nINSERT INTO orders VALUES\n (1,101,'2026-01-05',10),(1,102,'2026-03-09',40),\n (2,201,'2026-02-02',20);"
+        },
+        {
           "name": "solution.sql",
           "language": "sql",
           "code": "-- Newest order per customer using DISTINCT ON.\n-- orders(customer_id, order_id, ordered_at, total)\n\nSELECT DISTINCT ON (customer_id)\n       customer_id, order_id, ordered_at, total\nFROM orders\n-- ORDER BY customer_id, ordered_at ???\n;"
@@ -543,6 +583,11 @@
         "Recursive term: SELECT e.employee_id, e.name, t.depth + 1 FROM employees e JOIN tree t ON e.manager_id = t.employee_id."
       ],
       "starterCodeJson": [
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS employees CASCADE;\nCREATE TABLE employees (employee_id INT PRIMARY KEY, name TEXT NOT NULL, manager_id INT REFERENCES employees(employee_id));\nINSERT INTO employees VALUES (1,'CEO',NULL),(2,'VP-Eng',1),(3,'VP-Sales',1),(4,'Engineer',2);"
+        },
         {
           "name": "solution.sql",
           "language": "sql",
@@ -607,6 +652,11 @@
         "GROUP BY user_id, grp and select MIN(login_date), MAX(login_date), COUNT(*) as the streak bounds and length."
       ],
       "starterCodeJson": [
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS logins CASCADE;\nCREATE TABLE logins (user_id INT, login_date DATE, PRIMARY KEY (user_id, login_date));\nINSERT INTO logins VALUES\n (1,'2026-01-01'),(1,'2026-01-02'),(1,'2026-01-03'),(1,'2026-01-05'),(1,'2026-01-06'),\n (2,'2026-01-10'),(2,'2026-01-11');"
+        },
         {
           "name": "solution.sql",
           "language": "sql",

@@ -1,0 +1,6 @@
+dup 409 Already exists [req-1]
+leaksEmail false
+rawLeaks true
+missing 404 Not found [req-2]
+other 500 Internal error [req-3]
+logged 3

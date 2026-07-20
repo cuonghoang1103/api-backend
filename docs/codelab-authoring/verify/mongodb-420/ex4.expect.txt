@@ -1,0 +1,5 @@
+primaryRead 2
+secondaryRead 2
+preferred 2
+servedBy false
+writeToSecondary NotWritablePrimary

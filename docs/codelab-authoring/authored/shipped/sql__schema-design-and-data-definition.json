@@ -307,6 +307,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS employees CASCADE;\nCREATE TABLE employees (employee_id INT PRIMARY KEY, name TEXT NOT NULL);\nINSERT INTO employees VALUES (1,'Ann');"
+        },
+        {
           "name": "solution.sql",
           "language": "sql",
           "code": "-- employees already exists: (employee_id INT PK, name TEXT NOT NULL)\n-- Evolve it with ALTER TABLE (do not drop it).\n\n-- 1) add email + named unique constraint\n-- ALTER TABLE employees ADD COLUMN ...\n-- ALTER TABLE employees ADD CONSTRAINT ...\n\n-- 2) add salary NUMERIC(10,2) NOT NULL DEFAULT 0, CHECK >= 0\n\n-- 3) add hired_on DATE NOT NULL DEFAULT current date\n\n-- 4) rename name -> full_name"
@@ -572,6 +577,11 @@
         "For order_items, join orders_flat to orders (on order_ref) and products (on name) to translate natural keys into the surrogate ids, then insert (order_id, product_id, qty)."
       ],
       "starterCodeJson": [
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS order_items, orders, products, customers, orders_flat CASCADE;\nCREATE TABLE orders_flat (\n  line_id INT PRIMARY KEY, order_ref TEXT, customer_name TEXT, customer_email TEXT,\n  product_name TEXT, unit_price NUMERIC(10,2), qty INT\n);\nINSERT INTO orders_flat VALUES\n (1,'ORD-1','Ann','ann@x.io','Keyboard',49.90,1),\n (2,'ORD-1','Ann','ann@x.io','Mouse',19.00,2),\n (3,'ORD-2','Ann','ann@x.io','Monitor',150.00,1),\n (4,'ORD-3','Bob','bob@x.io','Keyboard',49.90,3);"
+        },
         {
           "name": "solution.sql",
           "language": "sql",

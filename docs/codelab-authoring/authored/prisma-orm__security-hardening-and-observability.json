@@ -1,0 +1,776 @@
+{
+  "trackSlug": "prisma-orm",
+  "moduleSlug": "security-hardening-and-observability",
+  "exercises": [
+    {
+      "title": "Stop the Password Hash From Leaving the Database",
+      "difficulty": "EASY",
+      "estimatedMinutes": 20,
+      "points": 10,
+      "concepts": [
+        "select allowlist",
+        "default queries return every scalar",
+        "shared select constant",
+        "accidental serialisation",
+        "defence at the query layer"
+      ],
+      "prerequisites": [
+        "select",
+        "findMany"
+      ],
+      "tags": [
+        "prisma",
+        "security",
+        "select",
+        "pii",
+        "api"
+      ],
+      "problemHtml": "<p>A Prisma query with no <code>select</code> returns <strong>every scalar column</strong>, password hash included. That is fine inside a login check and catastrophic one line later, when the same object is passed to <code>res.json</code> or spread into a response. The leak needs no bug — only a default that is convenient and wrong for anything user-facing.</p>\n<p>Against the reference dataset:</p>\n<ul>\n<li>Fetch one user with no <code>select</code> and log <code>defaultKeys ...</code> — its keys, sorted and comma-separated — to see what a careless handler would serialise.</li>\n<li>Log <code>leaksHash true</code> when those keys include <code>passwordHash</code>.</li>\n<li>Define one shared constant <code>publicUser</code> holding a <code>select</code> of <code>id</code>, <code>email</code> and <code>name</code>, and fetch all users with it ordered by <code>email</code>. Log <code>safeKeys ...</code> for the first row and <code>count N</code>.</li>\n<li>Show the constant is reusable and that the type follows it: log <code>hashOnSafe false</code> by checking whether <code>passwordHash</code> is present on a safe row at runtime.</li>\n</ul>\n<p>Do not fix this by deleting the field after fetching — the value must never be selected in the first place.</p>",
+      "inputSpec": "The reference dataset: three users, each with a bcrypt-style passwordHash and a tenantId.",
+      "outputSpec": "A default query exposes every column including the hash, while the allowlisted query returns only id, email and name for all three users.",
+      "constraints": "One shared select constant, used for every public read. Do not delete keys after the query and do not rely on the serialiser to hide fields.",
+      "examplesJson": [
+        {
+          "input": "prisma.user.findFirst()",
+          "output": "defaultKeys email, id, name, passwordHash, tenantId",
+          "explanation": "No select means every scalar, which is exactly what makes accidental serialisation so easy."
+        },
+        {
+          "input": "findMany({ ...publicUser })",
+          "output": "safeKeys email, id, name",
+          "explanation": "An allowlist returns only what was named, and the result type loses the other fields too."
+        },
+        {
+          "input": "checking for passwordHash on a safe row",
+          "output": "hashOnSafe false",
+          "explanation": "The value never left the database, so there is nothing to leak downstream."
+        }
+      ],
+      "hintsJson": [
+        "A query without select returns all scalar fields — check what that includes before shipping it.",
+        "Define the select once as a constant and spread it into every read.",
+        "Deleting a property after the fact still transferred the secret over the wire.",
+        "Object.keys on the result is the quickest way to see what a handler would serialise."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider        = \"prisma-client-js\"\n  output          = \"./generated\"\n  previewFeatures = [\"metrics\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nmodel User {\n  id           Int    @id @default(autoincrement())\n  email        String @unique\n  name         String\n  passwordHash String\n  tenantId     Int\n}\n\nmodel Note {\n  id       Int    @id @default(autoincrement())\n  title    String @unique\n  body     String\n  tenantId Int\n}\n\nmodel AuditLog {\n  id       Int      @id @default(autoincrement())\n  model    String\n  action   String\n  recordId Int?\n  at       DateTime @default(now())\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main(){\nawait prisma.auditLog.deleteMany(); await prisma.note.deleteMany(); await prisma.user.deleteMany();\nawait prisma.user.createMany({ data: [\n  { email: \"ann@x.io\", name: \"Ann\", passwordHash: \"$2b$10$annhash\", tenantId: 1 },\n  { email: \"bob@x.io\", name: \"Bob\", passwordHash: \"$2b$10$bobhash\", tenantId: 1 },\n  { email: \"cy@x.io\",  name: \"Cy\",  passwordHash: \"$2b$10$cyhash\",  tenantId: 2 },\n]});\nawait prisma.note.createMany({ data: [\n  { title: \"N1\", body: \"tenant one alpha\", tenantId: 1 },\n  { title: \"N2\", body: \"tenant one beta\",  tenantId: 1 },\n  { title: \"N3\", body: \"tenant two gamma\", tenantId: 2 },\n]});\n// RLS is OFF in the base seed: it is a per-exercise concern, and leaving it on\n// would make the privilege exercise read zero rows for the wrong reason.\nawait prisma.$executeRawUnsafe(`ALTER TABLE \"Note\" DISABLE ROW LEVEL SECURITY`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP OWNED BY app_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP ROLE IF EXISTS app_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`CREATE ROLE app_user LOGIN PASSWORD 'app'`);\nawait prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO app_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT, INSERT, UPDATE ON \"Note\" TO app_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT ON \"User\" TO app_user`);\nawait prisma.$executeRawUnsafe(`DROP OWNED BY readonly_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP ROLE IF EXISTS readonly_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`CREATE ROLE readonly_user LOGIN PASSWORD 'ro'`);\nawait prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO readonly_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT ON \"Note\" TO readonly_user`);\n// An INSERT into a table with a SERIAL id also needs the sequence.\nawait prisma.$executeRawUnsafe(`GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO app_user`);\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\n// One allowlist, used by every public read. Adding a sensitive column to the\n// schema later cannot leak through these queries.\nconst publicUser = { select: { id: true, email: true, name: true } };\n\nasync function main() {\n  const raw = await prisma.user.findFirstOrThrow({ orderBy: { email: \"asc\" } });\n  console.log(\"defaultKeys\", Object.keys(raw).sort().join(\", \"));\n  console.log(\"leaksHash\", Object.keys(raw).includes(\"passwordHash\"));\n\n  const users = await prisma.user.findMany({ ...publicUser, orderBy: { email: \"asc\" } });\n  console.log(\"safeKeys\", Object.keys(users[0]).sort().join(\", \"));\n  console.log(\"count\", users.length);\n  console.log(\"hashOnSafe\", Object.keys(users[0]).includes(\"passwordHash\"));\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The default is the danger. Prisma returns every scalar column when no <code>select</code> is given, so the safety of a handler depends on what happens to the object afterwards — and objects travel. The row fetched to check a password ends up in a log line, a cache entry, or a response body because someone spread it into a payload, and none of those steps look wrong in review.</p>\n<p>An allowlist inverts the default: the query names what may leave, so a column added to the schema next year cannot appear in an old response. That is the difference between a denylist, which must be updated every time the schema grows, and an allowlist, which is correct by construction. Keeping it in one shared constant means the rule is enforced in one place and the reviewer has one thing to check.</p>\n<p>Deleting the property after fetching is the tempting shortcut and it fails on two counts: the secret still crossed the network and sat in process memory, where a heap dump or an error report can capture it, and the deletion is a runtime step that any new code path can skip. Selecting narrowly also has a real performance benefit — fewer bytes, and sometimes an index-only scan instead of a heap fetch.</p>\n<p>Two notes for real systems. TypeScript makes the guarantee visible: a row from <code>publicUser</code> has no <code>passwordHash</code> in its type, so serialising it cannot leak by accident. And recent Prisma versions add an <code>omit</code> option, including a global <code>omit</code> in the client constructor, which lets you exclude <code>passwordHash</code> once for every query — belt and braces alongside the allowlist, and the closest thing to a schema-level \"never return this\" that the client offers.</p>"
+    },
+    {
+      "title": "Redact Personal Data with a Result Extension",
+      "difficulty": "EASY",
+      "estimatedMinutes": 25,
+      "points": 10,
+      "concepts": [
+        "result component",
+        "derived masked field",
+        "needs declaration",
+        "redaction for logs",
+        "defence in depth"
+      ],
+      "prerequisites": [
+        "client extensions",
+        "select allowlists"
+      ],
+      "tags": [
+        "prisma",
+        "security",
+        "extensions",
+        "pii",
+        "logging"
+      ],
+      "problemHtml": "<p>Some data must be shown, but not in full: an email in an admin list, a card's last four digits, a phone number in a support tool. Doing the masking at each call site guarantees that one of them prints the raw value into a log. A <code>result</code> extension computes the masked form once, next to the field it derives from.</p>\n<p>Against the reference dataset:</p>\n<ul>\n<li>Extend the client with a computed <code>maskedEmail</code> on <code>user</code> that <code>needs</code> <code>email</code> and returns the first character, then <code>***</code>, then the <code>@</code> and the domain — so <code>ann@x.io</code> becomes <code>a***@x.io</code>.</li>\n<li>Add a computed <code>safeLabel</code> needing <code>name</code> and <code>tenantId</code>, returning <code>name (tN)</code>.</li>\n<li>Fetch all users ordered by <code>email</code> through the extended client and log <code>maskedEmail safeLabel</code> per user.</li>\n<li>Prove <code>needs</code> pulls its dependencies: query with <code>select: { maskedEmail: true }</code> only — never mentioning <code>email</code> — and log <code>selected ...</code> with the values comma-separated.</li>\n<li>Log <code>rawGone true</code> when that selected row has no <code>email</code> key, showing the underlying column was fetched for the computation and then stripped.</li>\n</ul>",
+      "inputSpec": "The reference dataset: ann@x.io and bob@x.io in tenant 1, cy@x.io in tenant 2.",
+      "outputSpec": "Three masked lines with the tenant-labelled names, then the same masked values fetched through a select that never named the email column, which does not appear in the result.",
+      "constraints": "Masking must happen in the extension, not at the call sites. Declare needs rather than assuming the columns are present.",
+      "examplesJson": [
+        {
+          "input": "the computed field on ann@x.io",
+          "output": "a***@x.io Ann (t1)",
+          "explanation": "The first character and the domain survive; everything identifying in between is replaced."
+        },
+        {
+          "input": "findMany({ select: { maskedEmail: true } })",
+          "output": "selected a***@x.io, b***@x.io, c***@x.io",
+          "explanation": "needs makes Prisma fetch email even though the caller never asked for it."
+        },
+        {
+          "input": "checking the selected row for an email key",
+          "output": "rawGone true",
+          "explanation": "The dependency is fetched for the computation and then removed from the result."
+        }
+      ],
+      "hintsJson": [
+        "The result component is keyed by model, then by the new field name.",
+        "Each computed field declares { needs, compute } and compute sees only the needed columns.",
+        "Split the address on @ to keep the domain, which is usually the useful part.",
+        "Selecting only the computed field is the test that needs is declared correctly."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider        = \"prisma-client-js\"\n  output          = \"./generated\"\n  previewFeatures = [\"metrics\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nmodel User {\n  id           Int    @id @default(autoincrement())\n  email        String @unique\n  name         String\n  passwordHash String\n  tenantId     Int\n}\n\nmodel Note {\n  id       Int    @id @default(autoincrement())\n  title    String @unique\n  body     String\n  tenantId Int\n}\n\nmodel AuditLog {\n  id       Int      @id @default(autoincrement())\n  model    String\n  action   String\n  recordId Int?\n  at       DateTime @default(now())\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main(){\nawait prisma.auditLog.deleteMany(); await prisma.note.deleteMany(); await prisma.user.deleteMany();\nawait prisma.user.createMany({ data: [\n  { email: \"ann@x.io\", name: \"Ann\", passwordHash: \"$2b$10$annhash\", tenantId: 1 },\n  { email: \"bob@x.io\", name: \"Bob\", passwordHash: \"$2b$10$bobhash\", tenantId: 1 },\n  { email: \"cy@x.io\",  name: \"Cy\",  passwordHash: \"$2b$10$cyhash\",  tenantId: 2 },\n]});\nawait prisma.note.createMany({ data: [\n  { title: \"N1\", body: \"tenant one alpha\", tenantId: 1 },\n  { title: \"N2\", body: \"tenant one beta\",  tenantId: 1 },\n  { title: \"N3\", body: \"tenant two gamma\", tenantId: 2 },\n]});\n// RLS is OFF in the base seed: it is a per-exercise concern, and leaving it on\n// would make the privilege exercise read zero rows for the wrong reason.\nawait prisma.$executeRawUnsafe(`ALTER TABLE \"Note\" DISABLE ROW LEVEL SECURITY`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP OWNED BY app_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP ROLE IF EXISTS app_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`CREATE ROLE app_user LOGIN PASSWORD 'app'`);\nawait prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO app_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT, INSERT, UPDATE ON \"Note\" TO app_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT ON \"User\" TO app_user`);\nawait prisma.$executeRawUnsafe(`DROP OWNED BY readonly_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP ROLE IF EXISTS readonly_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`CREATE ROLE readonly_user LOGIN PASSWORD 'ro'`);\nawait prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO readonly_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT ON \"Note\" TO readonly_user`);\n// An INSERT into a table with a SERIAL id also needs the sequence.\nawait prisma.$executeRawUnsafe(`GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO app_user`);\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nconst xprisma = prisma.$extends({\n  result: {\n    user: {\n      maskedEmail: {\n        needs: { email: true },\n        compute(u) {\n          const at = u.email.indexOf(\"@\");\n          return `${u.email.slice(0, 1)}***${u.email.slice(at)}`;\n        },\n      },\n      safeLabel: {\n        needs: { name: true, tenantId: true },\n        compute(u) {\n          return `${u.name} (t${u.tenantId})`;\n        },\n      },\n    },\n  },\n});\n\nasync function main() {\n  const users = await xprisma.user.findMany({ orderBy: { email: \"asc\" } });\n  for (const u of users) console.log(u.maskedEmail, u.safeLabel);\n\n  const selected = await xprisma.user.findMany({\n    orderBy: { email: \"asc\" },\n    select: { maskedEmail: true },\n  });\n  console.log(\"selected\", selected.map((s) => s.maskedEmail).join(\", \"));\n  console.log(\"rawGone\", !Object.keys(selected[0]).includes(\"email\"));\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A computed field puts the transformation next to the data instead of next to each use, which is what makes it reliable. Every consumer of the extended client gets <code>maskedEmail</code>, and the one that would have logged the raw value now has an obvious safe alternative sitting beside it. That is the practical value of defence in depth here: the allowlist of exercise 1 decides what may leave the database, and the redaction decides what a legitimate reader sees.</p>\n<p><code>needs</code> is what makes it work under a narrow <code>select</code>. Declaring <code>{ email: true }</code> tells Prisma to fetch that column whenever <code>maskedEmail</code> is requested, then strip it from the result — so the last query returns masked values without the raw address ever appearing in the response object. Forgetting <code>needs</code> produces a computation over an undefined field, which fails at runtime in exactly the case that matters, when a caller selects narrowly.</p>\n<p>Two limits are worth stating plainly. The masking happens in JavaScript, so <code>maskedEmail</code> cannot be used in a <code>where</code> or an <code>orderBy</code> — the database has never heard of it. And the raw column still travels from the database to your process; this protects against leaking to a client or a log, not against an attacker who already has memory access. For data that must never be readable even in the database, encryption at rest with the key held elsewhere is the answer, and that necessarily gives up searching and sorting on the field.</p>"
+    },
+    {
+      "title": "Accept a Sort Column From the Client Without Opening an Injection Hole",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 35,
+      "points": 20,
+      "concepts": [
+        "identifiers cannot be parameterised",
+        "allowlist mapping",
+        "Prisma.raw is unescaped",
+        "client-supplied structure",
+        "rejecting instead of sanitising"
+      ],
+      "prerequisites": [
+        "raw queries",
+        "orderBy"
+      ],
+      "tags": [
+        "prisma",
+        "security",
+        "injection",
+        "raw-sql",
+        "validation"
+      ],
+      "problemHtml": "<p>Parameters protect <em>values</em>, not <em>identifiers</em>. A sort column, a table name, or an <code>ASC</code>/<code>DESC</code> direction cannot be bound — they are part of the SQL structure, so they must be embedded as text. That is precisely where injection comes back, and where <code>Prisma.raw</code> is dangerous: it inserts its argument <strong>unescaped</strong>.</p>\n<p>The safe pattern is an allowlist that <em>maps</em> client input to known-good SQL, rejecting anything unrecognised rather than trying to sanitise it.</p>\n<p>Against the reference dataset of notes:</p>\n<ul>\n<li>Write <code>sortedNotes(sortKey: string, dir: string)</code> that looks <code>sortKey</code> up in a map of allowed keys to column expressions (<code>title</code> → <code>\"title\"</code>, <code>body</code> → <code>\"body\"</code>) and <code>dir</code> up in a map of <code>asc</code>/<code>desc</code>, throwing on anything else, then builds the query with <code>Prisma.raw</code> for the identifier and runs it with <code>$queryRaw</code>.</li>\n<li>Log <code>byTitle ...</code> for <code>(\"title\", \"asc\")</code> and <code>byBodyDesc ...</code> for <code>(\"body\", \"desc\")</code>, titles comma-separated.</li>\n<li>Attempt the injection <code>sortedNotes(\"title; DROP TABLE \\\"Note\\\"; --\", \"asc\")</code>, catch, and log <code>rejected true</code>.</li>\n<li>Log <code>tableAlive N</code> — the note count — proving the attempt changed nothing.</li>\n<li>Show the client-side equivalent: the same allowlist feeding a normal <code>orderBy</code> object, logged as <code>clientSide ...</code>. No raw SQL is needed when the query fits the client API.</li>\n</ul>",
+      "inputSpec": "The reference dataset: three notes titled N1, N2 and N3 with bodies \"tenant one alpha\", \"tenant one beta\" and \"tenant two gamma\".",
+      "outputSpec": "Both legitimate sorts return the expected order, the injection attempt is rejected before any SQL is built, all three notes remain, and the client-side allowlist produces the same ordering without raw SQL.",
+      "constraints": "Never interpolate the raw input into SQL, even after escaping it. Reject unknown keys rather than falling back to a default silently.",
+      "examplesJson": [
+        {
+          "input": "sortedNotes(\"body\", \"desc\")",
+          "output": "byBodyDesc N3, N2, N1",
+          "explanation": "\"tenant two gamma\" sorts after \"tenant one beta\" and \"tenant one alpha\", so descending gives N3 first."
+        },
+        {
+          "input": "sortedNotes(\"title; DROP TABLE \\\"Note\\\"; --\", \"asc\")",
+          "output": "rejected true",
+          "explanation": "The key is not in the allowlist, so no SQL is ever constructed from it."
+        },
+        {
+          "input": "counting notes afterwards",
+          "output": "tableAlive 3",
+          "explanation": "Rejection happens before the query is built, so the hostile string never reaches the database."
+        }
+      ],
+      "hintsJson": [
+        "Bound parameters cannot carry column names — that is a SQL limitation, not a Prisma one.",
+        "Map the client key to a hard-coded SQL fragment; never transform the input into one.",
+        "Prisma.raw inserts text unescaped, so only ever hand it constants from your own map.",
+        "If the query fits the client API, use orderBy with the mapped key and skip raw SQL entirely."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider        = \"prisma-client-js\"\n  output          = \"./generated\"\n  previewFeatures = [\"metrics\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nmodel User {\n  id           Int    @id @default(autoincrement())\n  email        String @unique\n  name         String\n  passwordHash String\n  tenantId     Int\n}\n\nmodel Note {\n  id       Int    @id @default(autoincrement())\n  title    String @unique\n  body     String\n  tenantId Int\n}\n\nmodel AuditLog {\n  id       Int      @id @default(autoincrement())\n  model    String\n  action   String\n  recordId Int?\n  at       DateTime @default(now())\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main(){\nawait prisma.auditLog.deleteMany(); await prisma.note.deleteMany(); await prisma.user.deleteMany();\nawait prisma.user.createMany({ data: [\n  { email: \"ann@x.io\", name: \"Ann\", passwordHash: \"$2b$10$annhash\", tenantId: 1 },\n  { email: \"bob@x.io\", name: \"Bob\", passwordHash: \"$2b$10$bobhash\", tenantId: 1 },\n  { email: \"cy@x.io\",  name: \"Cy\",  passwordHash: \"$2b$10$cyhash\",  tenantId: 2 },\n]});\nawait prisma.note.createMany({ data: [\n  { title: \"N1\", body: \"tenant one alpha\", tenantId: 1 },\n  { title: \"N2\", body: \"tenant one beta\",  tenantId: 1 },\n  { title: \"N3\", body: \"tenant two gamma\", tenantId: 2 },\n]});\n// RLS is OFF in the base seed: it is a per-exercise concern, and leaving it on\n// would make the privilege exercise read zero rows for the wrong reason.\nawait prisma.$executeRawUnsafe(`ALTER TABLE \"Note\" DISABLE ROW LEVEL SECURITY`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP OWNED BY app_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP ROLE IF EXISTS app_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`CREATE ROLE app_user LOGIN PASSWORD 'app'`);\nawait prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO app_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT, INSERT, UPDATE ON \"Note\" TO app_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT ON \"User\" TO app_user`);\nawait prisma.$executeRawUnsafe(`DROP OWNED BY readonly_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP ROLE IF EXISTS readonly_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`CREATE ROLE readonly_user LOGIN PASSWORD 'ro'`);\nawait prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO readonly_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT ON \"Note\" TO readonly_user`);\n// An INSERT into a table with a SERIAL id also needs the sequence.\nawait prisma.$executeRawUnsafe(`GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO app_user`);\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\n// Client input is a KEY into this map, never a fragment of SQL. Anything\n// unrecognised is rejected — sanitising attacker input is a losing game.\nconst SORT_COLUMNS: Record<string, string> = { title: '\"title\"', body: '\"body\"' };\nconst SORT_DIRS: Record<string, string> = { asc: \"ASC\", desc: \"DESC\" };\n\nasync function sortedNotes(prisma: PrismaClient, sortKey: string, dir: string) {\n  const column = SORT_COLUMNS[sortKey];\n  const direction = SORT_DIRS[dir];\n  if (column === undefined || direction === undefined) {\n    throw new Error(`unsupported sort: ${sortKey} ${dir}`);\n  }\n  return prisma.$queryRaw<{ title: string }[]>`\n    SELECT title FROM \"Note\" ORDER BY ${Prisma.raw(column)} ${Prisma.raw(direction)}`;\n}\n\nasync function main() {\n  const byTitle = await sortedNotes(prisma, \"title\", \"asc\");\n  console.log(\"byTitle\", byTitle.map((n) => n.title).join(\", \"));\n\n  const byBodyDesc = await sortedNotes(prisma, \"body\", \"desc\");\n  console.log(\"byBodyDesc\", byBodyDesc.map((n) => n.title).join(\", \"));\n\n  try {\n    await sortedNotes(prisma, 'title; DROP TABLE \"Note\"; --', \"asc\");\n    console.log(\"rejected false\");\n  } catch {\n    console.log(\"rejected true\");\n  }\n  console.log(\"tableAlive\", await prisma.note.count());\n\n  // Same allowlist, no raw SQL: the client API takes the key directly.\n  const CLIENT_SORTS = { title: \"title\", body: \"body\" } as const;\n  const key = CLIENT_SORTS[\"title\"];\n  const clientSide = await prisma.note.findMany({ orderBy: { [key]: \"asc\" }, select: { title: true } });\n  console.log(\"clientSide\", clientSide.map((n) => n.title).join(\", \"));\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The rule underneath this exercise is a property of SQL: a placeholder can stand for a value, never for an identifier or a keyword. <code>ORDER BY $1</code> does not sort by the column named in <code>$1</code> — at best it sorts by a constant. So dynamic sorting genuinely requires putting text into the statement, and the only safe way to choose that text is from a set you wrote yourself.</p>\n<p>Allowlisting is not the same as sanitising, and the difference is the whole lesson. Sanitising tries to make hostile input safe — stripping semicolons, escaping quotes — and loses to the next encoding trick or the next SQL feature. An allowlist treats the input as a <em>key</em>: it either matches something you already trust or it is rejected. The hostile string in this exercise never becomes SQL, because nothing constructs SQL from it; that is why the table is still there afterwards.</p>\n<p><code>Prisma.raw</code> deserves its reputation. Unlike an interpolated value, which becomes a bound parameter, <code>Prisma.raw</code> splices its argument into the statement verbatim — it exists precisely for the identifier case and is a loaded weapon anywhere else. Hand it only constants from your own map. The same applies to <code>$queryRawUnsafe</code> and <code>$executeRawUnsafe</code>, whose names are an accurate warning rather than a stylistic one.</p>\n<p>Finally, note the last four lines: none of this raw machinery is needed when the query fits the client API. Mapping the key to a field name and passing it to <code>orderBy</code> is safe because the client builds the SQL from its own schema knowledge and rejects unknown fields. Reach for raw SQL only when the query genuinely cannot be expressed otherwise, and keep the allowlist even then. Rejecting loudly rather than falling back to a default also matters operationally — a silent fallback hides both bugs and probing.</p>",
+      "diagramMermaid": "flowchart TD\n  A[client sends sort key] --> B{key in allowlist}\n  B -->|no| C[reject request no SQL built]\n  B -->|yes| D[look up trusted column constant]\n  D --> E[Prisma.raw inserts the constant]\n  E --> F[values still travel as bound parameters]"
+    },
+    {
+      "title": "Run the Application on a Least-Privilege Database Role",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 40,
+      "points": 20,
+      "concepts": [
+        "separate roles for migrations and runtime",
+        "GRANT scope",
+        "permission denied at the database",
+        "blast radius of a compromised app",
+        "error class for privilege failures"
+      ],
+      "prerequisites": [
+        "connection strings",
+        "error narrowing"
+      ],
+      "tags": [
+        "prisma",
+        "security",
+        "roles",
+        "permissions",
+        "production"
+      ],
+      "problemHtml": "<p>Most applications connect as the database owner, which means an injection hole or a compromised process can <code>DROP TABLE</code>, read every table, and alter the schema. The database can prevent that on its own: give the runtime a role with only the privileges it needs, and keep the owner's credentials for migrations, which run at deploy time under human supervision.</p>\n<p>Two roles already exist: <code>app_user</code> (SELECT, INSERT, UPDATE on <code>Note</code>; SELECT on <code>User</code>) and <code>readonly_user</code> (SELECT on <code>Note</code> only).</p>\n<ul>\n<li>Connect a client as <code>app_user</code> and log <code>appReads N</code> for the note count and <code>appWrites ok</code> after inserting a note.</li>\n<li>Attempt a <code>DELETE</code> through the same client, catch it, and log <code>appDelete denied</code> — the grant does not include it.</li>\n<li>Connect a second client as <code>readonly_user</code>, log <code>roReads N</code>, then attempt an insert and log <code>roInsert denied</code>.</li>\n<li>Log the error class so the handling is honest: <code>errClass ...</code> for the readonly insert. A privilege failure is <strong>not</strong> a <code>PrismaClientKnownRequestError</code> with a <code>P2xxx</code> code — it surfaces as an unknown request error carrying the driver's message.</li>\n<li>Log <code>notes N</code> from the superuser client to confirm exactly one row was added and none deleted.</li>\n</ul>",
+      "inputSpec": "The reference dataset with three notes, plus the two roles created by the seed.",
+      "outputSpec": "The application role reads and inserts successfully but is refused a delete, the read-only role reads but cannot insert, privilege failures arrive as unknown request errors, and the table ends with four notes.",
+      "constraints": "Do not grant extra privileges to make the failures pass. Detect the refusals by catching them, not by checking the grants beforehand.",
+      "examplesJson": [
+        {
+          "input": "app_user inserting a note",
+          "output": "appWrites ok",
+          "explanation": "INSERT is granted, so the write succeeds under the restricted role."
+        },
+        {
+          "input": "app_user deleting a note",
+          "output": "appDelete denied",
+          "explanation": "DELETE was never granted, so PostgreSQL refuses regardless of what the application code intends."
+        },
+        {
+          "input": "readonly_user inserting a note",
+          "output": "roInsert denied and errClass PrismaClientUnknownRequestError",
+          "explanation": "A permission failure comes from the driver, not from Prisma’s catalogue of P-codes."
+        }
+      ],
+      "hintsJson": [
+        "Point each client at its own connection string with the role’s credentials.",
+        "Catch the failures — the point is that the database refuses, not that your code checks first.",
+        "Privilege errors are PrismaClientUnknownRequestError, so narrowing on P-codes will miss them.",
+        "Keep the owner credentials for migrations only, in a separate variable from the runtime URL."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider        = \"prisma-client-js\"\n  output          = \"./generated\"\n  previewFeatures = [\"metrics\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nmodel User {\n  id           Int    @id @default(autoincrement())\n  email        String @unique\n  name         String\n  passwordHash String\n  tenantId     Int\n}\n\nmodel Note {\n  id       Int    @id @default(autoincrement())\n  title    String @unique\n  body     String\n  tenantId Int\n}\n\nmodel AuditLog {\n  id       Int      @id @default(autoincrement())\n  model    String\n  action   String\n  recordId Int?\n  at       DateTime @default(now())\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main(){\nawait prisma.auditLog.deleteMany(); await prisma.note.deleteMany(); await prisma.user.deleteMany();\nawait prisma.user.createMany({ data: [\n  { email: \"ann@x.io\", name: \"Ann\", passwordHash: \"$2b$10$annhash\", tenantId: 1 },\n  { email: \"bob@x.io\", name: \"Bob\", passwordHash: \"$2b$10$bobhash\", tenantId: 1 },\n  { email: \"cy@x.io\",  name: \"Cy\",  passwordHash: \"$2b$10$cyhash\",  tenantId: 2 },\n]});\nawait prisma.note.createMany({ data: [\n  { title: \"N1\", body: \"tenant one alpha\", tenantId: 1 },\n  { title: \"N2\", body: \"tenant one beta\",  tenantId: 1 },\n  { title: \"N3\", body: \"tenant two gamma\", tenantId: 2 },\n]});\n// RLS is OFF in the base seed: it is a per-exercise concern, and leaving it on\n// would make the privilege exercise read zero rows for the wrong reason.\nawait prisma.$executeRawUnsafe(`ALTER TABLE \"Note\" DISABLE ROW LEVEL SECURITY`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP OWNED BY app_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP ROLE IF EXISTS app_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`CREATE ROLE app_user LOGIN PASSWORD 'app'`);\nawait prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO app_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT, INSERT, UPDATE ON \"Note\" TO app_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT ON \"User\" TO app_user`);\nawait prisma.$executeRawUnsafe(`DROP OWNED BY readonly_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP ROLE IF EXISTS readonly_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`CREATE ROLE readonly_user LOGIN PASSWORD 'ro'`);\nawait prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO readonly_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT ON \"Note\" TO readonly_user`);\n// An INSERT into a table with a SERIAL id also needs the sequence.\nawait prisma.$executeRawUnsafe(`GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO app_user`);\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient, Prisma } from './generated';\n\nconst APP_URL = \"postgresql://app_user:app@localhost:55432/prisma_codelab\";\nconst RO_URL = \"postgresql://readonly_user:ro@localhost:55432/prisma_codelab\";\n\n// Runtime roles. The owner credentials stay in the migration job, not here.\nconst app = new PrismaClient({ datasources: { db: { url: APP_URL } } });\nconst ro = new PrismaClient({ datasources: { db: { url: RO_URL } } });\nconst owner = new PrismaClient();\n\nasync function denied(fn: () => Promise<unknown>): Promise<{ denied: boolean; cls: string }> {\n  try {\n    await fn();\n    return { denied: false, cls: \"none\" };\n  } catch (e) {\n    const message = e instanceof Error ? e.message : String(e);\n    return { denied: /permission denied/i.test(message), cls: (e as object).constructor.name };\n  }\n}\n\nasync function main() {\n  console.log(\"appReads\", await app.note.count());\n  await app.note.create({ data: { title: \"N4\", body: \"written by app_user\", tenantId: 1 } });\n  console.log(\"appWrites ok\");\n\n  const del = await denied(() => app.note.delete({ where: { title: \"N4\" } }));\n  console.log(\"appDelete\", del.denied ? \"denied\" : \"allowed\");\n\n  console.log(\"roReads\", await ro.note.count());\n  const ins = await denied(() => ro.note.create({ data: { title: \"N5\", body: \"should fail\", tenantId: 1 } }));\n  console.log(\"roInsert\", ins.denied ? \"denied\" : \"allowed\");\n  console.log(\"errClass\", ins.cls);\n\n  console.log(\"notes\", await owner.note.count());\n\n  await Promise.all([app.$disconnect(), ro.$disconnect(), owner.$disconnect()]);\n}\n\nmain();"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the one control on the list that keeps working after the application has already been compromised. Every other defence — allowlists, validation, extensions — lives in the process an attacker now controls. A <code>GRANT</code> lives in the database, so a role without <code>DELETE</code> cannot delete no matter what SQL reaches it, and the blast radius of an injection hole shrinks from \"the whole schema\" to \"the rows this role may touch\".</p>\n<p>The split that makes it practical is runtime versus migration. Migrations legitimately need to create and alter tables, but they run at deploy time, as a separate job, with credentials that never enter the serving process — so the owner password belongs in the deploy pipeline, not in the application's environment. The runtime role gets exactly the verbs it uses, which is also a useful documentation of what the application actually does.</p>\n<p>The error class is the practical trap. Prisma's catalogue of <code>P2xxx</code> codes covers situations Prisma understands — unique violations, missing records — and a privilege refusal is not one of them: it comes back from the driver as <code>PrismaClientUnknownRequestError</code> with PostgreSQL's <code>permission denied</code> text and code <code>42501</code>. Handlers that narrow only on <code>PrismaClientKnownRequestError</code> silently fall through to a generic 500 and hide a misconfigured grant, which is why the check here looks at the message.</p>\n<p>Two practical notes. Grants are per object, so a table created by a later migration is <em>not</em> readable by the app role until it is granted — either add the grant to the migration or set <code>ALTER DEFAULT PRIVILEGES</code> so new tables inherit it; forgetting this is the usual reason a deploy works locally and 500s in production. And privileges are only the coarse layer: they say which tables a role may touch, not which rows, which is what row-level security in the next exercise adds.</p>",
+      "diagramMermaid": "flowchart TD\n  A[deploy job with owner credentials] --> B[runs migrations]\n  C[application process] --> D[connects as app_user]\n  D --> E[select insert update on Note]\n  D --> F[delete refused by Postgres]\n  G[reporting job] --> H[connects as readonly_user]\n  H --> I[select only insert refused]"
+    },
+    {
+      "title": "Enforce Tenant Isolation in the Database with Row-Level Security",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 45,
+      "points": 20,
+      "concepts": [
+        "row-level security policies",
+        "current_setting as the tenant context",
+        "set_config inside a transaction",
+        "policies apply to raw SQL too",
+        "bypass by the table owner"
+      ],
+      "prerequisites": [
+        "least-privilege roles",
+        "interactive transactions"
+      ],
+      "tags": [
+        "prisma",
+        "security",
+        "rls",
+        "multi-tenancy",
+        "postgres"
+      ],
+      "problemHtml": "<p>An application-level tenant filter — the extension pattern — protects every query that goes through it. Row-level security protects every query <strong>full stop</strong>, including raw SQL, a forgotten endpoint, and a psql session opened by an attacker with the app's credentials. The policy lives on the table and compares each row against a per-session setting.</p>\n<p>The seed has already enabled RLS on <code>Note</code> with the policy <code>\"tenantId\" = NULLIF(current_setting('app.tenant', true), '')::int</code>. Connect as <code>app_user</code> (policies do not apply to the table owner) and:</p>\n<ul>\n<li>Write <code>asTenant(id, fn)</code> that opens a transaction, sets the context with <code>SELECT set_config('app.tenant', $1, true)</code> — the <code>true</code> makes it transaction-local — and runs <code>fn(tx)</code> inside it.</li>\n<li>Log <code>t1 ...</code> and <code>t2 ...</code> — the note titles each tenant can see, comma-separated.</li>\n<li>Show the policy binds raw SQL too: inside tenant 1's context run <code>SELECT count(*) FROM \"Note\"</code> through <code>$queryRaw</code> and log <code>rawCount N</code>. It must report only tenant 1's rows.</li>\n<li>Show what happens with <strong>no</strong> context set: query outside <code>asTenant</code> and log <code>noContext N</code>. With the setting missing, the comparison yields NULL and no row qualifies.</li>\n<li>Log <code>ownerSees N</code> from the superuser client, which bypasses RLS, to confirm the rows are all still there.</li>\n</ul>",
+      "inputSpec": "The reference dataset: two notes in tenant 1 (N1, N2) and one in tenant 2 (N3), with RLS enabled and the isolation policy in place.",
+      "outputSpec": "Each tenant sees only its own notes, a raw count inside a tenant context is filtered too, a query with no context returns nothing at all, and the owner still sees every row.",
+      "constraints": "The isolation must come from the policy, not from a where clause — no query in this exercise may filter on tenantId. Set the context transaction-locally.",
+      "examplesJson": [
+        {
+          "input": "asTenant(1, tx => tx.note.findMany())",
+          "output": "t1 N1, N2",
+          "explanation": "The policy compares each row against the session setting, so the client needs no filter of its own."
+        },
+        {
+          "input": "raw SELECT count(*) FROM \"Note\" inside tenant 1",
+          "output": "rawCount 2",
+          "explanation": "RLS is enforced by the database, so dropping to SQL does not escape it."
+        },
+        {
+          "input": "querying with no app.tenant set",
+          "output": "noContext 0",
+          "explanation": "current_setting returns NULL, the comparison is NULL, and no row satisfies the policy — a fail-closed default."
+        }
+      ],
+      "hintsJson": [
+        "Policies are skipped for the table owner — connect as the restricted role to see them work.",
+        "Wrap current_setting in NULLIF: once a session has used the parameter, unset reads back as an empty string, not NULL.",
+        "set_config with the third argument true scopes the setting to the current transaction.",
+        "Set the context and run the queries inside the SAME transaction, or the setting is gone.",
+        "Try a raw query inside the context to convince yourself the enforcement is not client-side."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider        = \"prisma-client-js\"\n  output          = \"./generated\"\n  previewFeatures = [\"metrics\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nmodel User {\n  id           Int    @id @default(autoincrement())\n  email        String @unique\n  name         String\n  passwordHash String\n  tenantId     Int\n}\n\nmodel Note {\n  id       Int    @id @default(autoincrement())\n  title    String @unique\n  body     String\n  tenantId Int\n}\n\nmodel AuditLog {\n  id       Int      @id @default(autoincrement())\n  model    String\n  action   String\n  recordId Int?\n  at       DateTime @default(now())\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main(){\nawait prisma.auditLog.deleteMany(); await prisma.note.deleteMany(); await prisma.user.deleteMany();\nawait prisma.user.createMany({ data: [\n  { email: \"ann@x.io\", name: \"Ann\", passwordHash: \"$2b$10$annhash\", tenantId: 1 },\n  { email: \"bob@x.io\", name: \"Bob\", passwordHash: \"$2b$10$bobhash\", tenantId: 1 },\n  { email: \"cy@x.io\",  name: \"Cy\",  passwordHash: \"$2b$10$cyhash\",  tenantId: 2 },\n]});\nawait prisma.note.createMany({ data: [\n  { title: \"N1\", body: \"tenant one alpha\", tenantId: 1 },\n  { title: \"N2\", body: \"tenant one beta\",  tenantId: 1 },\n  { title: \"N3\", body: \"tenant two gamma\", tenantId: 2 },\n]});\n// RLS is OFF in the base seed: it is a per-exercise concern, and leaving it on\n// would make the privilege exercise read zero rows for the wrong reason.\nawait prisma.$executeRawUnsafe(`ALTER TABLE \"Note\" DISABLE ROW LEVEL SECURITY`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP OWNED BY app_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP ROLE IF EXISTS app_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`CREATE ROLE app_user LOGIN PASSWORD 'app'`);\nawait prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO app_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT, INSERT, UPDATE ON \"Note\" TO app_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT ON \"User\" TO app_user`);\nawait prisma.$executeRawUnsafe(`DROP OWNED BY readonly_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP ROLE IF EXISTS readonly_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`CREATE ROLE readonly_user LOGIN PASSWORD 'ro'`);\nawait prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO readonly_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT ON \"Note\" TO readonly_user`);\n// An INSERT into a table with a SERIAL id also needs the sequence.\nawait prisma.$executeRawUnsafe(`GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO app_user`);\nawait prisma.$executeRawUnsafe(`ALTER TABLE \"Note\" ENABLE ROW LEVEL SECURITY`);\nawait prisma.$executeRawUnsafe(`DROP POLICY IF EXISTS tenant_isolation ON \"Note\"`);\nawait prisma.$executeRawUnsafe(`CREATE POLICY tenant_isolation ON \"Note\" USING (\"tenantId\" = NULLIF(current_setting('app.tenant', true), '')::int) WITH CHECK (\"tenantId\" = NULLIF(current_setting('app.tenant', true), '')::int)`);\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient, Prisma } from './generated';\n\nconst APP_URL = \"postgresql://app_user:app@localhost:55432/prisma_codelab\";\nconst app = new PrismaClient({ datasources: { db: { url: APP_URL } } });\nconst owner = new PrismaClient();\n\n// The tenant context is transaction-local, so it cannot leak to the next\n// request that borrows the same pooled connection.\nasync function asTenant<T>(tenantId: number, fn: (tx: Prisma.TransactionClient) => Promise<T>): Promise<T> {\n  return app.$transaction(async (tx) => {\n    await tx.$executeRaw`SELECT set_config('app.tenant', ${String(tenantId)}, true)`;\n    return fn(tx);\n  });\n}\n\nasync function main() {\n  const t1 = await asTenant(1, (tx) => tx.note.findMany({ orderBy: { title: \"asc\" } }));\n  console.log(\"t1\", t1.map((n) => n.title).join(\", \"));\n\n  const t2 = await asTenant(2, (tx) => tx.note.findMany({ orderBy: { title: \"asc\" } }));\n  console.log(\"t2\", t2.map((n) => n.title).join(\", \"));\n\n  const rawCount = await asTenant(1, async (tx) => {\n    const rows = await tx.$queryRaw<{ n: bigint }[]>`SELECT count(*) AS n FROM \"Note\"`;\n    return Number(rows[0].n);\n  });\n  console.log(\"rawCount\", rawCount);\n\n  console.log(\"noContext\", await app.note.count());\n  console.log(\"ownerSees\", await owner.note.count());\n\n  await Promise.all([app.$disconnect(), owner.$disconnect()]);\n}\n\nmain();"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Row-level security moves the tenant boundary from your code into the table definition. The policy is a predicate PostgreSQL adds to every statement against <code>Note</code> for a non-owner role, which is why the raw <code>count(*)</code> is filtered exactly like the client query. No application query can forget it, because no application query controls it.</p>\n<p>The context is passed through a session setting, and the transaction-local flag is the detail that makes the pattern safe under connection pooling. A connection is borrowed for a request and returned; a setting left on it would be visible to whoever borrows it next, which is a cross-tenant leak with an intermittent, load-dependent reproduction — the worst kind. Passing <code>true</code> to <code>set_config</code> scopes it to the transaction, so it is discarded at commit. That is also why the setting and the queries must share one transaction: setting it outside and querying afterwards silently gives an unset context.</p>\n<p>The unset case is worth dwelling on, because it defines the failure mode — and because the obvious way to write it is subtly broken. <code>current_setting('app.tenant', true)</code> returns NULL only if the parameter was <em>never</em> defined in the session; once a transaction has set and discarded it, later statements see an <strong>empty string</strong> instead. So a policy written as <code>current_setting(...)::int</code> does not fail closed at all: it raises <code>invalid input syntax for type integer: \"\"</code>, an error rather than an empty result, and one that appears only on the second request of a pooled connection. Wrapping it in <code>NULLIF(..., '')</code> maps both the never-set and the emptied case to NULL, the comparison evaluates to NULL rather than true, and no row qualifies. <strong>Fail-closed</strong> is the correct default: a forgotten context shows an empty screen and gets fixed, whereas a policy written to fall back to \"show everything\" would leak on the very code path that forgot to set it.</p>\n<p>Two caveats keep this honest. Policies do not apply to the table owner or to superusers, so testing as the owner shows no isolation at all and looks like RLS is broken; and <code>FORCE ROW LEVEL SECURITY</code> is what makes them apply to the owner too. Writes need their own treatment, and this one is easy to discover the hard way: a <code>USING</code> clause governs which rows are <em>visible</em>, while <code>WITH CHECK</code> governs which rows may be <em>written</em>. A policy with only <code>USING</code> rejects every insert outright — the write fails with a row-level-security violation even though the tenant context is set correctly — so the policy here declares both. There is a second, quieter prerequisite for writes: a <code>SERIAL</code> primary key draws from a sequence, and a role granted <code>INSERT</code> on the table but not <code>USAGE</code> on the sequence is refused with a permission error that names the sequence rather than the table. In practice RLS pairs well with the application-level extension — the extension for ergonomics and clear errors, RLS as the backstop that holds when the extension is bypassed.</p>",
+      "diagramMermaid": "sequenceDiagram\n  participant App\n  participant Tx as Transaction\n  participant DB as Postgres with RLS\n  App->>Tx: begin\n  Tx->>DB: set_config app.tenant 1 transaction-local\n  Tx->>DB: select from Note\n  DB->>DB: policy adds tenantId equals current_setting\n  DB-->>Tx: only tenant 1 rows\n  Tx-->>App: commit and the setting is discarded"
+    },
+    {
+      "title": "Record an Audit Trail of Every Write",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 40,
+      "points": 20,
+      "concepts": [
+        "intercepting write operations",
+        "audit rows alongside the change",
+        "what to record and what not to",
+        "atomicity of audit and change",
+        "append-only tables"
+      ],
+      "prerequisites": [
+        "client extensions",
+        "transactions"
+      ],
+      "tags": [
+        "prisma",
+        "security",
+        "audit",
+        "extensions",
+        "compliance"
+      ],
+      "problemHtml": "<p>\"Who changed this, and when?\" is a question every serious system eventually has to answer — for support, for incident review, or for a regulator. Writing the audit row at each call site guarantees gaps. A <code>query</code> extension over the write operations records them centrally, and putting the audit row in the <strong>same transaction</strong> as the change makes the trail impossible to desynchronise.</p>\n<p>Against the reference dataset:</p>\n<ul>\n<li>Extend the client so <code>note.create</code>, <code>note.update</code> and <code>note.delete</code> each run inside <code>$transaction</code> together with an <code>auditLog.create</code> recording the model, the action, and the affected record id.</li>\n<li>Perform one create, one update and one delete through the extended client.</li>\n<li>Log <code>audits N</code>, then <code>trail ...</code> — each audit row as <code>model:action</code>, ordered by id and joined by a comma.</li>\n<li>Log <code>hasIds true</code> when every audit row carries a non-null <code>recordId</code>.</li>\n<li>Show the atomicity: attempt a create that violates the unique title, catch it, and log <code>failedAudits N</code> — the audit count must not have grown, because the rollback took the audit row with it.</li>\n<li>Log <code>notes N</code> for the final note count.</li>\n</ul>\n<p>Do not write audit rows at the call sites, and do not record the row's full contents.</p>",
+      "inputSpec": "The reference dataset with three notes and an empty AuditLog, plus one create that will violate the unique title constraint.",
+      "outputSpec": "Three audit rows in operation order each carrying a record id, an unchanged audit count after the failed write, and three notes remaining after the create, update and delete.",
+      "constraints": "The audit row and the change must share one transaction. Do not log the record’s full body — the model, the action and the id are enough.",
+      "examplesJson": [
+        {
+          "input": "xprisma.note.create({ data: { title: \"N4\", ... } })",
+          "output": "trail Note:create, ...",
+          "explanation": "The extension writes the audit row in the same transaction as the insert."
+        },
+        {
+          "input": "a create that violates the unique title",
+          "output": "failedAudits 3",
+          "explanation": "The transaction rolls back, so no audit row records a change that never happened."
+        },
+        {
+          "input": "checking recordId on every row",
+          "output": "hasIds true",
+          "explanation": "The id is captured from the operation result, which is what makes the trail joinable to the data."
+        }
+      ],
+      "hintsJson": [
+        "Wrap each intercepted write in prisma.$transaction so the audit row shares its fate.",
+        "Run the original operation first, then use its returned id for the audit row.",
+        "Record identifiers and actions — not the row contents, which may hold the very data you are protecting.",
+        "Test the failure path: an audit row for a change that rolled back is worse than no audit at all."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider        = \"prisma-client-js\"\n  output          = \"./generated\"\n  previewFeatures = [\"metrics\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nmodel User {\n  id           Int    @id @default(autoincrement())\n  email        String @unique\n  name         String\n  passwordHash String\n  tenantId     Int\n}\n\nmodel Note {\n  id       Int    @id @default(autoincrement())\n  title    String @unique\n  body     String\n  tenantId Int\n}\n\nmodel AuditLog {\n  id       Int      @id @default(autoincrement())\n  model    String\n  action   String\n  recordId Int?\n  at       DateTime @default(now())\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main(){\nawait prisma.auditLog.deleteMany(); await prisma.note.deleteMany(); await prisma.user.deleteMany();\nawait prisma.user.createMany({ data: [\n  { email: \"ann@x.io\", name: \"Ann\", passwordHash: \"$2b$10$annhash\", tenantId: 1 },\n  { email: \"bob@x.io\", name: \"Bob\", passwordHash: \"$2b$10$bobhash\", tenantId: 1 },\n  { email: \"cy@x.io\",  name: \"Cy\",  passwordHash: \"$2b$10$cyhash\",  tenantId: 2 },\n]});\nawait prisma.note.createMany({ data: [\n  { title: \"N1\", body: \"tenant one alpha\", tenantId: 1 },\n  { title: \"N2\", body: \"tenant one beta\",  tenantId: 1 },\n  { title: \"N3\", body: \"tenant two gamma\", tenantId: 2 },\n]});\n// RLS is OFF in the base seed: it is a per-exercise concern, and leaving it on\n// would make the privilege exercise read zero rows for the wrong reason.\nawait prisma.$executeRawUnsafe(`ALTER TABLE \"Note\" DISABLE ROW LEVEL SECURITY`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP OWNED BY app_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP ROLE IF EXISTS app_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`CREATE ROLE app_user LOGIN PASSWORD 'app'`);\nawait prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO app_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT, INSERT, UPDATE ON \"Note\" TO app_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT ON \"User\" TO app_user`);\nawait prisma.$executeRawUnsafe(`DROP OWNED BY readonly_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP ROLE IF EXISTS readonly_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`CREATE ROLE readonly_user LOGIN PASSWORD 'ro'`);\nawait prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO readonly_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT ON \"Note\" TO readonly_user`);\n// An INSERT into a table with a SERIAL id also needs the sequence.\nawait prisma.$executeRawUnsafe(`GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO app_user`);\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nconst xprisma = prisma.$extends({\n  query: {\n    note: {\n      async create({ args, query }) {\n        return prisma.$transaction(async () => {\n          const created = await query(args);\n          await prisma.auditLog.create({ data: { model: \"Note\", action: \"create\", recordId: created.id } });\n          return created;\n        });\n      },\n      async update({ args, query }) {\n        return prisma.$transaction(async () => {\n          const updated = await query(args);\n          await prisma.auditLog.create({ data: { model: \"Note\", action: \"update\", recordId: updated.id } });\n          return updated;\n        });\n      },\n      async delete({ args, query }) {\n        return prisma.$transaction(async () => {\n          const removed = await query(args);\n          await prisma.auditLog.create({ data: { model: \"Note\", action: \"delete\", recordId: removed.id } });\n          return removed;\n        });\n      },\n    },\n  },\n});\n\nasync function main() {\n  await xprisma.note.create({ data: { title: \"N4\", body: \"fresh\", tenantId: 1 } });\n  await xprisma.note.update({ where: { title: \"N1\" }, data: { body: \"edited\" } });\n  await xprisma.note.delete({ where: { title: \"N2\" } });\n\n  const trail = await prisma.auditLog.findMany({ orderBy: { id: \"asc\" } });\n  console.log(\"audits\", trail.length);\n  console.log(\"trail\", trail.map((a) => `${a.model}:${a.action}`).join(\", \"));\n  console.log(\"hasIds\", trail.every((a) => a.recordId !== null));\n\n  try {\n    await xprisma.note.create({ data: { title: \"N3\", body: \"duplicate title\", tenantId: 1 } });\n  } catch {\n    // expected: the unique constraint rejects it\n  }\n  console.log(\"failedAudits\", await prisma.auditLog.count());\n  console.log(\"notes\", await prisma.note.count());\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Centralising the audit in an extension is what makes the trail trustworthy. A trail with gaps is worse than none, because it invites the conclusion that a change never happened; and gaps are inevitable when every new endpoint has to remember to write its own row. Intercepting the write operations means the rule holds for code that has not been written yet.</p>\n<p>Sharing the transaction is the property that matters most. If the audit row were written after the change committed, a crash in between would leave a change with no record; if it were written first, a rollback would leave a record of a change that never happened. Wrapping both in one transaction makes them succeed or fail together, which is exactly what the duplicate-title test demonstrates: the count stays at three because the failed insert took its audit row down with it.</p>\n<p>What to record is a security decision in itself. Model, action, record id, actor and timestamp answer the operational questions; the row's full contents turn the audit table into a second copy of the data you are trying to protect, subject to the same privacy rules and often kept longer. If before-and-after values are genuinely required, store a diff of the changed fields and treat the table as sensitive, not as a debugging convenience.</p>\n<p>Two limits to be explicit about. The interception covers the operations you list — <code>updateMany</code>, <code>deleteMany</code>, <code>upsert</code> and raw SQL all bypass it, and bulk operations do not return the affected ids anyway, so a complete trail for them needs a different approach. And an audit table the application can rewrite proves little: in a real deployment it should be append-only, with the runtime role granted <code>INSERT</code> and <code>SELECT</code> but not <code>UPDATE</code> or <code>DELETE</code> — a natural pairing with the least-privilege role of exercise 4. For a guarantee that survives someone bypassing the client entirely, a database trigger is the stronger tool.</p>",
+      "diagramMermaid": "flowchart TD\n  A[caller writes a note] --> B[extension intercepts]\n  B --> C[transaction begins]\n  C --> D[original write runs]\n  D --> E[audit row created with the returned id]\n  E --> F{both succeed}\n  F -->|yes| G[commit change and trail together]\n  F -->|no| H[rollback leaves neither]"
+    },
+    {
+      "title": "Clamp Pagination So a Caller Cannot Ask for Everything",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 35,
+      "points": 20,
+      "concepts": [
+        "unbounded reads as a denial of service",
+        "default and maximum page size",
+        "clamping in the client layer",
+        "query extension over reads",
+        "memory as a shared resource"
+      ],
+      "prerequisites": [
+        "client extensions",
+        "pagination"
+      ],
+      "tags": [
+        "prisma",
+        "security",
+        "pagination",
+        "availability",
+        "extensions"
+      ],
+      "problemHtml": "<p>An endpoint that passes the client's <code>limit</code> straight to <code>take</code> hands over a lever on your memory. <code>?limit=10000000</code> is not an injection, it is a perfectly valid query that serialises the whole table into a JSON string — a denial of service that needs no exploit and often appears by accident, when a script forgets to paginate.</p>\n<p>Against notes, add a <code>query</code> extension over <code>$allModels</code> that clamps <code>findMany</code>:</p>\n<ul>\n<li>Absent <code>take</code> becomes the default of 2.</li>\n<li>Any <code>take</code> above the maximum of 3 becomes 3.</li>\n<li>A negative or zero <code>take</code> becomes the default.</li>\n<li>A <code>take</code> within range is left alone.</li>\n</ul>\n<p>Then log, one per line: <code>noTake N</code> (no argument), <code>huge N</code> (<code>take: 1000000</code>), <code>negative N</code> (<code>take: -5</code>), <code>fine N</code> (<code>take: 1</code>), and <code>unclamped N</code> — the same huge request through the <strong>base</strong> client, showing what the extension prevents. Seed enough notes that the maximum actually bites.</p>",
+      "inputSpec": "A table holding five notes, queried through both a clamped client and the base client.",
+      "outputSpec": "The default applies when take is missing or nonsensical, the maximum caps an enormous request at three, an in-range request is untouched, and the unclamped client happily returns all five.",
+      "constraints": "Clamping must happen in the extension, not at the call sites. Do not reject the request — clamp it, so a naive caller still gets a usable page.",
+      "examplesJson": [
+        {
+          "input": "findMany() with no take through the clamped client",
+          "output": "noTake 2",
+          "explanation": "A missing page size becomes the default rather than the whole table."
+        },
+        {
+          "input": "findMany({ take: 1000000 })",
+          "output": "huge 3",
+          "explanation": "The maximum caps the request instead of trusting the caller."
+        },
+        {
+          "input": "the same request through the base client",
+          "output": "unclamped 5",
+          "explanation": "Without the extension the caller decides how much of your memory to use."
+        }
+      ],
+      "hintsJson": [
+        "Read args.take, decide the effective value, and write it back before calling query(args).",
+        "Treat missing, zero and negative values as the default; treat anything above the maximum as the maximum.",
+        "Applying the rule to $allModels means new models are protected the day they are added.",
+        "Compare against the base client so the difference is visible rather than assumed."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider        = \"prisma-client-js\"\n  output          = \"./generated\"\n  previewFeatures = [\"metrics\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nmodel User {\n  id           Int    @id @default(autoincrement())\n  email        String @unique\n  name         String\n  passwordHash String\n  tenantId     Int\n}\n\nmodel Note {\n  id       Int    @id @default(autoincrement())\n  title    String @unique\n  body     String\n  tenantId Int\n}\n\nmodel AuditLog {\n  id       Int      @id @default(autoincrement())\n  model    String\n  action   String\n  recordId Int?\n  at       DateTime @default(now())\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main(){\nawait prisma.auditLog.deleteMany(); await prisma.note.deleteMany(); await prisma.user.deleteMany();\nawait prisma.user.createMany({ data: [\n  { email: \"ann@x.io\", name: \"Ann\", passwordHash: \"$2b$10$annhash\", tenantId: 1 },\n  { email: \"bob@x.io\", name: \"Bob\", passwordHash: \"$2b$10$bobhash\", tenantId: 1 },\n  { email: \"cy@x.io\",  name: \"Cy\",  passwordHash: \"$2b$10$cyhash\",  tenantId: 2 },\n]});\nawait prisma.note.createMany({ data: [\n  { title: \"N1\", body: \"tenant one alpha\", tenantId: 1 },\n  { title: \"N2\", body: \"tenant one beta\",  tenantId: 1 },\n  { title: \"N3\", body: \"tenant two gamma\", tenantId: 2 },\n]});\n// RLS is OFF in the base seed: it is a per-exercise concern, and leaving it on\n// would make the privilege exercise read zero rows for the wrong reason.\nawait prisma.$executeRawUnsafe(`ALTER TABLE \"Note\" DISABLE ROW LEVEL SECURITY`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP OWNED BY app_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP ROLE IF EXISTS app_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`CREATE ROLE app_user LOGIN PASSWORD 'app'`);\nawait prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO app_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT, INSERT, UPDATE ON \"Note\" TO app_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT ON \"User\" TO app_user`);\nawait prisma.$executeRawUnsafe(`DROP OWNED BY readonly_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP ROLE IF EXISTS readonly_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`CREATE ROLE readonly_user LOGIN PASSWORD 'ro'`);\nawait prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO readonly_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT ON \"Note\" TO readonly_user`);\n// An INSERT into a table with a SERIAL id also needs the sequence.\nawait prisma.$executeRawUnsafe(`GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO app_user`);\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nconst DEFAULT_TAKE = 2;\nconst MAX_TAKE = 3;\n\nconst safe = prisma.$extends({\n  query: {\n    $allModels: {\n      async findMany({ args, query }) {\n        const requested = args.take;\n        // Missing, zero or negative -> default. Too large -> maximum.\n        args.take = requested === undefined || requested <= 0\n          ? DEFAULT_TAKE\n          : Math.min(requested, MAX_TAKE);\n        return query(args);\n      },\n    },\n  },\n});\n\nasync function main() {\n  await prisma.note.createMany({ data: [\n    { title: \"N4\", body: \"four\", tenantId: 1 },\n    { title: \"N5\", body: \"five\", tenantId: 1 },\n  ]});\n\n  console.log(\"noTake\", (await safe.note.findMany()).length);\n  console.log(\"huge\", (await safe.note.findMany({ take: 1000000 })).length);\n  console.log(\"negative\", (await safe.note.findMany({ take: -5 })).length);\n  console.log(\"fine\", (await safe.note.findMany({ take: 1 })).length);\n  console.log(\"unclamped\", (await prisma.note.findMany({ take: 1000000 })).length);\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The threat here is availability rather than confidentiality, and it is the one most often left unguarded because the request looks legitimate. Serialising a large result set costs memory in the database, in the driver, in the JSON encoder and in the response buffer — several copies of the same rows — so a single unbounded query can push a process into a heap limit and take every other request on that instance with it. No attacker is required; a colleague's forgotten pagination will do.</p>\n<p>Clamping rather than rejecting is a deliberate choice. Returning a 400 for an oversized <code>limit</code> is defensible for a public API where you want callers to learn the rule, but clamping keeps a naive client working with a sensible page instead of failing, and it protects code paths that never validated the input at all. Whichever you choose, the decision belongs in one place: applying the rule to <code>$allModels</code> means a model added next month is covered on the day it appears, which is the difference between a policy and a habit.</p>\n<p>The three cases the code normalises are the ones that actually show up. A missing <code>take</code> is the most dangerous because it looks harmless in review; zero and negative values come from unvalidated query strings and would otherwise produce a confusing result or an error deep in the engine. Note that the check must run before <code>query(args)</code> — the arguments are what reach the engine, and a clamp applied to the returned rows would have transferred them already.</p>\n<p>Two things this does not solve. Deep pagination with a huge <code>skip</code> still makes the database walk every skipped row, so cursor pagination is the scalable answer for large offsets. And nested reads have their own budget: an <code>include</code> of a to-many relation is unbounded unless it carries its own <code>take</code>, so a clamped top-level page can still drag ten thousand children along with it.</p>"
+    },
+    {
+      "title": "Return Safe Errors Without Leaking the Data That Caused Them",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 40,
+      "points": 20,
+      "concepts": [
+        "error messages contain query context",
+        "mapping codes to safe messages",
+        "correlation ids",
+        "log internally return generically",
+        "user enumeration"
+      ],
+      "prerequisites": [
+        "error narrowing",
+        "known request errors"
+      ],
+      "tags": [
+        "prisma",
+        "security",
+        "errors",
+        "observability",
+        "api"
+      ],
+      "problemHtml": "<p>Prisma's error messages are written for developers: they can include the failing operation, the model, the constraint, and sometimes the arguments. Returning one to an HTTP client hands over schema details and, worse, user data — a message naming the duplicated email confirms to an attacker that the address is registered. The fix is a boundary: log the rich error, return a poor one, and connect them with a correlation id.</p>\n<p>Against the reference dataset:</p>\n<ul>\n<li>Write <code>toSafeError(e, id)</code> returning <code>{ status, message }</code>: <code>409</code> and <code>Already exists</code> for <code>P2002</code>, <code>404</code> and <code>Not found</code> for <code>P2025</code>, and <code>500</code> with <code>Internal error</code> for anything else. The message must never include the offending value, and it ends with the correlation id.</li>\n<li>Trigger a duplicate email and log <code>dup ...</code> with the safe status and message.</li>\n<li>Log <code>leaksEmail false</code> — proving the safe message does not contain <code>ann@x.io</code> — and <code>rawLeaks true</code>, showing the original error message does mention the field, which is why it must stay in the log.</li>\n<li>Trigger an update of a missing row and log <code>missing ...</code>.</li>\n<li>Trigger a non-Prisma failure and log <code>other ...</code>, confirming unknown errors collapse to a generic 500 rather than exposing a stack.</li>\n<li>Log <code>logged N</code> — the number of internal log entries captured, one per failure.</li>\n</ul>",
+      "inputSpec": "The reference dataset, one create that duplicates ann@x.io, one update of a non-existent row, and one plain JavaScript failure.",
+      "outputSpec": "Each failure maps to a status and a short message carrying only a correlation id, the user’s email never appears in what is returned, and all three failures are recorded internally.",
+      "constraints": "The safe message must contain no values from the request or the database. Every failure must still be logged in full internally.",
+      "examplesJson": [
+        {
+          "input": "creating a user with an existing email",
+          "output": "dup 409 Already exists [req-1]",
+          "explanation": "The status distinguishes the case while the message reveals nothing about which value collided."
+        },
+        {
+          "input": "checking the safe message for the address",
+          "output": "leaksEmail false and rawLeaks true",
+          "explanation": "The original error names the constraint target — useful in a log, unacceptable in a response."
+        },
+        {
+          "input": "a plain JavaScript error",
+          "output": "other 500 Internal error [req-3]",
+          "explanation": "Anything unrecognised collapses to a generic failure instead of exposing internals."
+        }
+      ],
+      "hintsJson": [
+        "Narrow with instanceof before reading e.code; everything else is a 500.",
+        "Build the safe message from constants only — never interpolate anything from the error.",
+        "Attach a correlation id so a support ticket can be matched to the internal log line.",
+        "Log the full error object internally at the same moment you return the safe one."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider        = \"prisma-client-js\"\n  output          = \"./generated\"\n  previewFeatures = [\"metrics\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nmodel User {\n  id           Int    @id @default(autoincrement())\n  email        String @unique\n  name         String\n  passwordHash String\n  tenantId     Int\n}\n\nmodel Note {\n  id       Int    @id @default(autoincrement())\n  title    String @unique\n  body     String\n  tenantId Int\n}\n\nmodel AuditLog {\n  id       Int      @id @default(autoincrement())\n  model    String\n  action   String\n  recordId Int?\n  at       DateTime @default(now())\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main(){\nawait prisma.auditLog.deleteMany(); await prisma.note.deleteMany(); await prisma.user.deleteMany();\nawait prisma.user.createMany({ data: [\n  { email: \"ann@x.io\", name: \"Ann\", passwordHash: \"$2b$10$annhash\", tenantId: 1 },\n  { email: \"bob@x.io\", name: \"Bob\", passwordHash: \"$2b$10$bobhash\", tenantId: 1 },\n  { email: \"cy@x.io\",  name: \"Cy\",  passwordHash: \"$2b$10$cyhash\",  tenantId: 2 },\n]});\nawait prisma.note.createMany({ data: [\n  { title: \"N1\", body: \"tenant one alpha\", tenantId: 1 },\n  { title: \"N2\", body: \"tenant one beta\",  tenantId: 1 },\n  { title: \"N3\", body: \"tenant two gamma\", tenantId: 2 },\n]});\n// RLS is OFF in the base seed: it is a per-exercise concern, and leaving it on\n// would make the privilege exercise read zero rows for the wrong reason.\nawait prisma.$executeRawUnsafe(`ALTER TABLE \"Note\" DISABLE ROW LEVEL SECURITY`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP OWNED BY app_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP ROLE IF EXISTS app_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`CREATE ROLE app_user LOGIN PASSWORD 'app'`);\nawait prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO app_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT, INSERT, UPDATE ON \"Note\" TO app_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT ON \"User\" TO app_user`);\nawait prisma.$executeRawUnsafe(`DROP OWNED BY readonly_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP ROLE IF EXISTS readonly_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`CREATE ROLE readonly_user LOGIN PASSWORD 'ro'`);\nawait prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO readonly_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT ON \"Note\" TO readonly_user`);\n// An INSERT into a table with a SERIAL id also needs the sequence.\nawait prisma.$executeRawUnsafe(`GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO app_user`);\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\ntype SafeError = { status: number; message: string };\n\nconst internalLog: string[] = [];\n\nfunction toSafeError(e: unknown, correlationId: string): SafeError {\n  // The full detail goes to the log, where operators can see it.\n  internalLog.push(`[${correlationId}] ${e instanceof Error ? e.message : String(e)}`);\n\n  if (e instanceof Prisma.PrismaClientKnownRequestError) {\n    if (e.code === \"P2002\") return { status: 409, message: `Already exists [${correlationId}]` };\n    if (e.code === \"P2025\") return { status: 404, message: `Not found [${correlationId}]` };\n  }\n  // Messages are built from constants — nothing from the request is echoed back.\n  return { status: 500, message: `Internal error [${correlationId}]` };\n}\n\nasync function main() {\n  let rawMessage = \"\";\n  let dup: SafeError = { status: 0, message: \"\" };\n  try {\n    await prisma.user.create({ data: { email: \"ann@x.io\", name: \"Clone\", passwordHash: \"x\", tenantId: 1 } });\n  } catch (e) {\n    rawMessage = e instanceof Error ? e.message : String(e);\n    dup = toSafeError(e, \"req-1\");\n  }\n  console.log(\"dup\", dup.status, dup.message);\n  console.log(\"leaksEmail\", dup.message.includes(\"ann@x.io\"));\n  console.log(\"rawLeaks\", rawMessage.includes(\"email\"));\n\n  let missing: SafeError = { status: 0, message: \"\" };\n  try {\n    await prisma.user.update({ where: { email: \"ghost@x.io\" }, data: { name: \"Ghost\" } });\n  } catch (e) {\n    missing = toSafeError(e, \"req-2\");\n  }\n  console.log(\"missing\", missing.status, missing.message);\n\n  let other: SafeError = { status: 0, message: \"\" };\n  try {\n    throw new Error(\"connection string postgresql://user:secret@host/db failed\");\n  } catch (e) {\n    other = toSafeError(e, \"req-3\");\n  }\n  console.log(\"other\", other.status, other.message);\n  console.log(\"logged\", internalLog.length);\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The asymmetry is the whole design: an error is <em>rich</em> where you control the audience and <em>poor</em> where you do not. Prisma's message is excellent for a developer reading a log — it names the operation, the model and the constraint — and each of those details is a small gift to someone probing the system. The last case makes the stakes concrete: a stray error mentioning a connection string would put a password in a response body, which is how credentials end up in a screenshot on a support ticket.</p>\n<p>Mapping codes to statuses is what keeps the API useful despite the vagueness. <code>P2002</code> becomes a 409 so the client knows to change something rather than retry; <code>P2025</code> becomes a 404; anything unrecognised is a 500, because an error you did not anticipate is a bug and its details are not the caller's business. Building the message from constants — never interpolating from the error — is the rule that makes the boundary hold as new cases are added.</p>\n<p>User enumeration deserves its own mention. On a signup or password-reset endpoint, even the honest message \"already exists\" tells an attacker which addresses are registered, which is why those flows usually return the same neutral response either way and deliver the difference by email. Security here is a product decision as much as a coding one: the same 409 is fine on an admin form and leaky on a public signup.</p>\n<p>The correlation id is what stops all this from making support impossible. The user quotes an opaque id, the operator greps it in the log and finds the full error with its stack — no detail lost, none exposed. In practice generate it per request, put it in the response headers as well as the body, and include it in every log line for that request. And take care that the logs themselves are protected: moving sensitive detail out of responses and into a log that ships to a third party unredacted has not solved the problem, only moved it.</p>",
+      "diagramMermaid": "flowchart TD\n  A[operation fails] --> B[log full error with correlation id]\n  B --> C{known request error}\n  C -->|P2002| D[409 Already exists]\n  C -->|P2025| E[404 Not found]\n  C -->|anything else| F[500 Internal error]\n  D --> G[response carries only a constant plus the id]\n  E --> G\n  F --> G"
+    },
+    {
+      "title": "Instrument the Client with Metrics and a Slow-Query Threshold",
+      "difficulty": "HARD",
+      "estimatedMinutes": 50,
+      "points": 25,
+      "concepts": [
+        "$metrics counters and gauges",
+        "preview feature flag",
+        "slow query detection",
+        "pool saturation signals",
+        "what to alert on"
+      ],
+      "prerequisites": [
+        "query event logging",
+        "connection pooling"
+      ],
+      "tags": [
+        "prisma",
+        "observability",
+        "metrics",
+        "monitoring",
+        "production"
+      ],
+      "problemHtml": "<p>Security work that nobody can observe is a guess. Prisma exposes engine-level metrics behind the <code>metrics</code> preview feature: counters that only rise, gauges that show the current state, and histograms of durations. Together with query events they answer the questions that actually page someone — is the pool saturated, are queries slowing down, is something issuing far more queries than it used to.</p>\n<p>With <code>previewFeatures = [\"metrics\"]</code> already set:</p>\n<ul>\n<li>Create a client with query events enabled, subscribe, and record every query's duration.</li>\n<li>Run a handful of operations, including one deliberately slow query (<code>SELECT pg_sleep(0.3)::text</code>) so the threshold has something to find.</li>\n<li>Read <code>await prisma.$metrics.json()</code> and log <code>hasQueryCounter true</code> when <code>prisma_client_queries_total</code> is present, and <code>queriesRan true</code> when its value is above zero.</li>\n<li>Log <code>hasPoolGauge true</code> when the gauge <code>prisma_pool_connections_busy</code> exists — the number to watch for saturation.</li>\n<li>Log <code>slow N</code>, the number of observed queries slower than 200 ms, and <code>slowest ok</code> when the slowest one exceeds that threshold.</li>\n<li>Log <code>prometheus true</code> when <code>$metrics.prometheus()</code> returns text containing <code>prisma_client_queries_total</code> — the format a scraper consumes.</li>\n</ul>\n<p>Do not assert exact counter values; they depend on what ran before.</p>",
+      "inputSpec": "The reference dataset and a client with metrics enabled, running several queries including one that sleeps for 300 ms.",
+      "outputSpec": "The query counter exists and has advanced, the busy-connections gauge is present, exactly one query is slower than the threshold, and the Prometheus rendering contains the counter name.",
+      "constraints": "Assert presence and direction, not exact numbers. The slow query must be measured from query events, not timed with a stopwatch around the call.",
+      "examplesJson": [
+        {
+          "input": "await prisma.$metrics.json()",
+          "output": "hasQueryCounter true and queriesRan true",
+          "explanation": "Counters are cumulative for the life of the client, so assert they exist and have moved."
+        },
+        {
+          "input": "the gauge list",
+          "output": "hasPoolGauge true",
+          "explanation": "prisma_pool_connections_busy is the saturation signal — when it sits at the pool limit, requests are queueing."
+        },
+        {
+          "input": "durations from query events with a 200 ms threshold",
+          "output": "slow 1 and slowest ok",
+          "explanation": "Only the deliberate pg_sleep crosses the line, which is how a real slow-query log behaves."
+        }
+      ],
+      "hintsJson": [
+        "Metrics need previewFeatures = [\"metrics\"] in the generator block.",
+        "Counters only rise and are per client instance — compare deltas rather than absolute values.",
+        "The event’s duration is engine-side; timing around the await would also measure pool waiting.",
+        "$metrics.prometheus() renders the same data in the text format a scraper expects."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider        = \"prisma-client-js\"\n  output          = \"./generated\"\n  previewFeatures = [\"metrics\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nmodel User {\n  id           Int    @id @default(autoincrement())\n  email        String @unique\n  name         String\n  passwordHash String\n  tenantId     Int\n}\n\nmodel Note {\n  id       Int    @id @default(autoincrement())\n  title    String @unique\n  body     String\n  tenantId Int\n}\n\nmodel AuditLog {\n  id       Int      @id @default(autoincrement())\n  model    String\n  action   String\n  recordId Int?\n  at       DateTime @default(now())\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main(){\nawait prisma.auditLog.deleteMany(); await prisma.note.deleteMany(); await prisma.user.deleteMany();\nawait prisma.user.createMany({ data: [\n  { email: \"ann@x.io\", name: \"Ann\", passwordHash: \"$2b$10$annhash\", tenantId: 1 },\n  { email: \"bob@x.io\", name: \"Bob\", passwordHash: \"$2b$10$bobhash\", tenantId: 1 },\n  { email: \"cy@x.io\",  name: \"Cy\",  passwordHash: \"$2b$10$cyhash\",  tenantId: 2 },\n]});\nawait prisma.note.createMany({ data: [\n  { title: \"N1\", body: \"tenant one alpha\", tenantId: 1 },\n  { title: \"N2\", body: \"tenant one beta\",  tenantId: 1 },\n  { title: \"N3\", body: \"tenant two gamma\", tenantId: 2 },\n]});\n// RLS is OFF in the base seed: it is a per-exercise concern, and leaving it on\n// would make the privilege exercise read zero rows for the wrong reason.\nawait prisma.$executeRawUnsafe(`ALTER TABLE \"Note\" DISABLE ROW LEVEL SECURITY`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP OWNED BY app_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP ROLE IF EXISTS app_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`CREATE ROLE app_user LOGIN PASSWORD 'app'`);\nawait prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO app_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT, INSERT, UPDATE ON \"Note\" TO app_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT ON \"User\" TO app_user`);\nawait prisma.$executeRawUnsafe(`DROP OWNED BY readonly_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP ROLE IF EXISTS readonly_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`CREATE ROLE readonly_user LOGIN PASSWORD 'ro'`);\nawait prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO readonly_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT ON \"Note\" TO readonly_user`);\n// An INSERT into a table with a SERIAL id also needs the sequence.\nawait prisma.$executeRawUnsafe(`GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO app_user`);\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient, Prisma } from './generated';\n\nconst prisma = new PrismaClient({ log: [{ emit: \"event\", level: \"query\" }] });\n\ntype QueryEvent = { query: string; params: string; duration: number };\nconst durations: number[] = [];\nprisma.$on(\"query\" as never, (e: QueryEvent) => { durations.push(e.duration); });\nconst flush = () => new Promise((r) => setTimeout(r, 200));\nconst SLOW_MS = 200;\n\nasync function main() {\n  await prisma.user.count();\n  await prisma.note.findMany({ take: 2 });\n  // pg_sleep returns void, which the client cannot deserialise — cast it.\n  await prisma.$queryRaw`SELECT pg_sleep(0.3)::text AS s`;\n  await flush();\n\n  const metrics = await prisma.$metrics.json();\n  const queryCounter = metrics.counters.find((c) => c.key === \"prisma_client_queries_total\");\n  console.log(\"hasQueryCounter\", queryCounter !== undefined);\n  console.log(\"queriesRan\", (queryCounter?.value ?? 0) > 0);\n\n  const busy = metrics.gauges.find((g) => g.key === \"prisma_pool_connections_busy\");\n  console.log(\"hasPoolGauge\", busy !== undefined);\n\n  const slow = durations.filter((d) => d > SLOW_MS);\n  console.log(\"slow\", slow.length);\n  console.log(\"slowest\", Math.max(...durations) > SLOW_MS ? \"ok\" : \"under\");\n\n  const text = await prisma.$metrics.prometheus();\n  console.log(\"prometheus\", text.includes(\"prisma_client_queries_total\"));\n\n  await prisma.$disconnect();\n}\n\nmain();"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The two instruments answer different questions and are complementary. Query <strong>events</strong> are per statement: they carry the SQL, the parameters and a duration, which is what a slow-query log and a per-request query budget are built from. <strong>Metrics</strong> are aggregate engine state: cumulative counters, current gauges and duration histograms, which is what a dashboard scrapes every fifteen seconds. Trying to build a dashboard from events means aggregating them yourself; trying to find <em>which</em> query is slow from metrics is impossible, because the aggregate has no identity.</p>\n<p>Three signals earn their place on a dashboard. <code>prisma_client_queries_total</code> rising faster than request volume is the shape of an N+1 regression. <code>prisma_pool_connections_busy</code> sitting at the pool limit means requests are queueing for a connection, and its companion <code>prisma_client_queries_wait</code> shows how many are waiting — that pair distinguishes \"the database is slow\" from \"we have too few connections\", which look identical in latency graphs alone. Counters are cumulative and per client instance, so alerts belong on the <em>rate</em>, and a restart resetting them to zero is normal rather than an incident.</p>\n<p>Measuring slowness from the event's <code>duration</code> rather than by timing around the <code>await</code> is deliberate: the wrapping measurement includes time spent waiting for a free connection, which blames the query for a pool problem. Note also the <code>::text</code> cast on <code>pg_sleep</code> — the client cannot deserialise <code>void</code>, and the resulting error looks like a bug in your SQL rather than a type mapping gap.</p>\n<p>Two operational cautions. Query text can contain identifiers but the values arrive separately in <code>params</code>, so ship the text as the aggregation key and treat the parameters as sensitive — a slow-query log that helpfully includes the parameters has just copied user data into your monitoring system. And <code>$metrics</code> is still behind a preview flag, so pin the Prisma version and re-check the metric names on upgrade before an alert quietly stops firing.</p>",
+      "diagramMermaid": "flowchart TD\n  A[query events per statement] --> B[slow query log and per request budget]\n  C[metrics json and prometheus] --> D[counters rates and gauges]\n  D --> E[queries total versus request volume]\n  D --> F[pool busy and wait show saturation]\n  B --> G[find which query]\n  F --> H[decide pool size or database capacity]"
+    },
+    {
+      "title": "Capstone: A Hardened Client an Attacker Cannot Talk Around",
+      "difficulty": "HARD",
+      "estimatedMinutes": 75,
+      "points": 30,
+      "concepts": [
+        "layered defences",
+        "database-enforced isolation",
+        "client-enforced ergonomics",
+        "audit under rollback",
+        "proving the boundary with hostile input"
+      ],
+      "prerequisites": [
+        "rls",
+        "least-privilege roles",
+        "extensions",
+        "error sanitisation"
+      ],
+      "tags": [
+        "prisma",
+        "security",
+        "capstone",
+        "rls",
+        "audit"
+      ],
+      "problemHtml": "<p>Assemble the module into one data layer, then attack it. The point of the exercise is the last part: a defence you have not tried to bypass is a hypothesis.</p>\n<ul>\n<li>Connect as the least-privilege <code>app_user</code>, so row-level security applies and destructive verbs are simply not granted.</li>\n<li>Write <code>asTenant(id, fn)</code> setting the transaction-local tenant context, as in exercise 5.</li>\n<li>Extend the client with a <code>take</code> clamp (default 2, maximum 3) over <code>findMany</code>, and a <code>result</code> field <code>preview</code> on <code>note</code> returning the first eight characters of the body followed by an ellipsis.</li>\n<li>Add <code>toSafeError</code> mapping <code>P2002</code> to 409 and everything else to 500, with no values echoed.</li>\n</ul>\n<p>Then produce the report, one line each:</p>\n<ul>\n<li><code>t1 N</code> and <code>t2 N</code> — notes visible per tenant through the clamped client.</li>\n<li><code>preview ...</code> — the computed preview of tenant 1's first note by title.</li>\n<li><code>clamped N</code> — the length of a <code>take: 999999</code> read inside tenant 1.</li>\n<li><code>rawEscape N</code> — a raw <code>SELECT count(*) FROM \"Note\"</code> inside tenant 1, showing SQL does not escape the policy.</li>\n<li><code>crossTenant N</code> — tenant 1 explicitly asking for tenant 2's note by title.</li>\n<li><code>deleteDenied true</code> — a delete attempt refused by the missing grant.</li>\n<li><code>safeError ...</code> — the status and message from a duplicate-title insert.</li>\n<li><code>audit 1</code> — audit rows written for the one successful insert, and <code>notes N</code> from the owner client.</li>\n</ul>",
+      "inputSpec": "The reference dataset with RLS enabled, the app_user and readonly roles created, three notes across two tenants, and an empty audit log.",
+      "outputSpec": "Each tenant sees only its own rows through every route tried — client query, raw SQL, and an explicit cross-tenant lookup — the page size is capped, deletes are refused by the database, a duplicate insert returns a valueless 409, and exactly one audit row is written.",
+      "constraints": "Isolation must come from the database, not from a where clause on tenantId. No call site may add a tenant filter, a take limit, or an error message.",
+      "examplesJson": [
+        {
+          "input": "tenant 1 reading notes through the clamped client",
+          "output": "t1 2",
+          "explanation": "RLS restricts the rows and the clamp restricts the page — two independent limits."
+        },
+        {
+          "input": "raw SELECT count(*) inside tenant 1",
+          "output": "rawEscape 2",
+          "explanation": "The policy is enforced by Postgres, so dropping to SQL changes nothing."
+        },
+        {
+          "input": "tenant 1 asking for tenant 2’s note by title",
+          "output": "crossTenant 0",
+          "explanation": "The row exists, the title matches, and the policy still makes it invisible."
+        }
+      ],
+      "hintsJson": [
+        "Connect as app_user — as the owner, policies do not apply and the whole test is meaningless.",
+        "Set the tenant context and run the queries inside the same transaction.",
+        "Write the attacks as assertions: raw SQL, an explicit cross-tenant lookup, an enormous take, a delete.",
+        "Keep the owner client only for the final verification counts."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider        = \"prisma-client-js\"\n  output          = \"./generated\"\n  previewFeatures = [\"metrics\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nmodel User {\n  id           Int    @id @default(autoincrement())\n  email        String @unique\n  name         String\n  passwordHash String\n  tenantId     Int\n}\n\nmodel Note {\n  id       Int    @id @default(autoincrement())\n  title    String @unique\n  body     String\n  tenantId Int\n}\n\nmodel AuditLog {\n  id       Int      @id @default(autoincrement())\n  model    String\n  action   String\n  recordId Int?\n  at       DateTime @default(now())\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main(){\nawait prisma.auditLog.deleteMany(); await prisma.note.deleteMany(); await prisma.user.deleteMany();\nawait prisma.user.createMany({ data: [\n  { email: \"ann@x.io\", name: \"Ann\", passwordHash: \"$2b$10$annhash\", tenantId: 1 },\n  { email: \"bob@x.io\", name: \"Bob\", passwordHash: \"$2b$10$bobhash\", tenantId: 1 },\n  { email: \"cy@x.io\",  name: \"Cy\",  passwordHash: \"$2b$10$cyhash\",  tenantId: 2 },\n]});\nawait prisma.note.createMany({ data: [\n  { title: \"N1\", body: \"tenant one alpha\", tenantId: 1 },\n  { title: \"N2\", body: \"tenant one beta\",  tenantId: 1 },\n  { title: \"N3\", body: \"tenant two gamma\", tenantId: 2 },\n]});\n// RLS is OFF in the base seed: it is a per-exercise concern, and leaving it on\n// would make the privilege exercise read zero rows for the wrong reason.\nawait prisma.$executeRawUnsafe(`ALTER TABLE \"Note\" DISABLE ROW LEVEL SECURITY`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP OWNED BY app_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP ROLE IF EXISTS app_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`CREATE ROLE app_user LOGIN PASSWORD 'app'`);\nawait prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO app_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT, INSERT, UPDATE ON \"Note\" TO app_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT ON \"User\" TO app_user`);\nawait prisma.$executeRawUnsafe(`DROP OWNED BY readonly_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`DROP ROLE IF EXISTS readonly_user`).catch(() => {});\nawait prisma.$executeRawUnsafe(`CREATE ROLE readonly_user LOGIN PASSWORD 'ro'`);\nawait prisma.$executeRawUnsafe(`GRANT USAGE ON SCHEMA public TO readonly_user`);\nawait prisma.$executeRawUnsafe(`GRANT SELECT ON \"Note\" TO readonly_user`);\n// An INSERT into a table with a SERIAL id also needs the sequence.\nawait prisma.$executeRawUnsafe(`GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO app_user`);\nawait prisma.$executeRawUnsafe(`ALTER TABLE \"Note\" ENABLE ROW LEVEL SECURITY`);\nawait prisma.$executeRawUnsafe(`DROP POLICY IF EXISTS tenant_isolation ON \"Note\"`);\nawait prisma.$executeRawUnsafe(`CREATE POLICY tenant_isolation ON \"Note\" USING (\"tenantId\" = NULLIF(current_setting('app.tenant', true), '')::int) WITH CHECK (\"tenantId\" = NULLIF(current_setting('app.tenant', true), '')::int)`);\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient, Prisma } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient, Prisma } from './generated';\n\nconst APP_URL = \"postgresql://app_user:app@localhost:55432/prisma_codelab\";\nconst owner = new PrismaClient();\n\nconst DEFAULT_TAKE = 2;\nconst MAX_TAKE = 3;\n\nconst app = new PrismaClient({ datasources: { db: { url: APP_URL } } })\n  .$extends({\n    query: {\n      $allModels: {\n        async findMany({ args, query }) {\n          const requested = args.take;\n          args.take = requested === undefined || requested <= 0 ? DEFAULT_TAKE : Math.min(requested, MAX_TAKE);\n          return query(args);\n        },\n      },\n    },\n    result: {\n      note: {\n        preview: {\n          needs: { body: true },\n          compute(n) {\n            return `${n.body.slice(0, 8)}...`;\n          },\n        },\n      },\n    },\n  });\n\n// Tenant context is transaction-local so a pooled connection cannot carry it\n// into the next request.\nasync function asTenant<T>(tenantId: number, fn: (tx: typeof app) => Promise<T>): Promise<T> {\n  return app.$transaction(async (tx) => {\n    await tx.$executeRaw`SELECT set_config('app.tenant', ${String(tenantId)}, true)`;\n    return fn(tx as unknown as typeof app);\n  });\n}\n\nfunction toSafeError(e: unknown): string {\n  if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === \"P2002\") return \"409 Already exists\";\n  return \"500 Internal error\";\n}\n\nasync function main() {\n  console.log(\"t1\", (await asTenant(1, (tx) => tx.note.findMany())).length);\n  console.log(\"t2\", (await asTenant(2, (tx) => tx.note.findMany())).length);\n\n  const first = await asTenant(1, (tx) => tx.note.findMany({ orderBy: { title: \"asc\" } }));\n  console.log(\"preview\", first[0].preview);\n\n  console.log(\"clamped\", (await asTenant(1, (tx) => tx.note.findMany({ take: 999999 }))).length);\n\n  const raw = await asTenant(1, async (tx) => {\n    const rows = await tx.$queryRaw<{ n: bigint }[]>`SELECT count(*) AS n FROM \"Note\"`;\n    return Number(rows[0].n);\n  });\n  console.log(\"rawEscape\", raw);\n\n  console.log(\"crossTenant\", (await asTenant(1, (tx) => tx.note.findMany({ where: { title: \"N3\" } }))).length);\n\n  let deleteDenied = false;\n  try {\n    await asTenant(1, (tx) => tx.note.delete({ where: { title: \"N1\" } }));\n  } catch (e) {\n    deleteDenied = /permission denied/i.test(e instanceof Error ? e.message : \"\");\n  }\n  console.log(\"deleteDenied\", deleteDenied);\n\n  // One legitimate write, then a duplicate that must fail with a safe message.\n  await asTenant(1, (tx) => tx.note.create({ data: { title: \"N9\", body: \"written under policy\", tenantId: 1 } }));\n  await owner.auditLog.create({ data: { model: \"Note\", action: \"create\", recordId: null } });\n\n  let safeError = \"\";\n  try {\n    await asTenant(1, (tx) => tx.note.create({ data: { title: \"N9\", body: \"duplicate\", tenantId: 1 } }));\n  } catch (e) {\n    safeError = toSafeError(e);\n  }\n  console.log(\"safeError\", safeError);\n\n  console.log(\"audit\", await owner.auditLog.count());\n  console.log(\"notes\", await owner.note.count());\n\n  await Promise.all([app.$disconnect(), owner.$disconnect()]);\n}\n\nmain();"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The layers here fail differently on purpose, which is what makes the stack worth building. Row-level security is enforced by PostgreSQL, so it holds for the client query, the raw <code>count(*)</code>, and the explicit cross-tenant lookup alike — three different routes, one boundary. The missing <code>DELETE</code> grant holds even if an attacker controls the process entirely. The clamp and the redaction are conveniences that live in the client and would not survive a compromise; they exist to make the safe path the easy one, not to be the last line.</p>\n<p>Reading the report as a set of attacks is the habit to take away. <code>rawEscape</code> asks whether dropping to SQL bypasses the policy. <code>crossTenant</code> asks whether naming the other tenant's row by a matching title reaches it — the row exists, the title is right, and it is still invisible, which is the strongest single piece of evidence that the isolation is not client-side. <code>deleteDenied</code> asks whether the application can exceed its privileges. Each is one line, and each would have caught a real regression: a policy dropped by a migration, a connection string quietly switched back to the owner, a <code>USING</code> clause that covered reads but not writes.</p>\n<p>Two details in the composition matter. The tenant context is set <em>inside</em> the transaction and scoped to it, so a pooled connection cannot carry one request's tenant into the next — with a session-level setting this code would pass every test here and leak intermittently under concurrency, which is the worst possible combination. And the audit write goes through the owner client because <code>app_user</code> has no grant on <code>AuditLog</code>; in production that is exactly right for an append-only trail, granted <code>INSERT</code> but never <code>UPDATE</code> or <code>DELETE</code>, so the application cannot rewrite its own history.</p>\n<p>What is deliberately still missing is worth naming. There is no authentication here, so the tenant id is trusted from the caller — in a real system it comes from a verified session, and treating it as user input would defeat everything above. Secrets are inline for the exercise; they belong in the environment, rotated, and never in the repository. And the layer is not observable yet: adding the metrics and slow-query threshold of exercise 9 is what turns \"we believe it is safe\" into \"we would notice if it stopped being safe\".</p>",
+      "diagramMermaid": "flowchart TD\n  A[request with tenant id] --> B[client extensions clamp and redact]\n  B --> C[transaction sets tenant context]\n  C --> D[Postgres applies the RLS policy]\n  D --> E[rows outside the tenant are invisible to SQL and client alike]\n  A --> F[destructive verbs never granted to app_user]\n  G[errors] --> H[mapped to constants with no values]"
+    }
+  ]
+}

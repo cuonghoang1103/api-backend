@@ -49,6 +49,16 @@
       ],
       "starterCodeJson": [
         {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nenum Role {\n  USER\n  ADMIN\n}\n\nmodel User {\n  id      Int     @id @default(autoincrement())\n  email   String  @unique\n  name    String?\n  role    Role    @default(USER)\n  credits Int     @default(0)\n  posts   Post[]\n}\n\nmodel Post {\n  id        Int     @id @default(autoincrement())\n  title     String\n  published Boolean @default(false)\n  views     Int     @default(0)\n  authorId  Int\n  author    User    @relation(fields: [authorId], references: [id])\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main(){\nawait prisma.post.deleteMany(); await prisma.user.deleteMany();\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
+        {
           "name": "solution.ts",
           "language": "typescript",
           "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
@@ -109,6 +119,16 @@
         "Use prisma.user.count() for the total — it asks the DB for a number rather than transferring rows."
       ],
       "starterCodeJson": [
+        {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nenum Role {\n  USER\n  ADMIN\n}\n\nmodel User {\n  id      Int     @id @default(autoincrement())\n  email   String  @unique\n  name    String?\n  role    Role    @default(USER)\n  credits Int     @default(0)\n  posts   Post[]\n}\n\nmodel Post {\n  id        Int     @id @default(autoincrement())\n  title     String\n  published Boolean @default(false)\n  views     Int     @default(0)\n  authorId  Int\n  author    User    @relation(fields: [authorId], references: [id])\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main(){\nawait prisma.post.deleteMany(); await prisma.user.deleteMany();\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
         {
           "name": "solution.ts",
           "language": "typescript",
@@ -171,6 +191,16 @@
       ],
       "starterCodeJson": [
         {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nenum Role {\n  USER\n  ADMIN\n}\n\nmodel User {\n  id      Int     @id @default(autoincrement())\n  email   String  @unique\n  name    String?\n  role    Role    @default(USER)\n  credits Int     @default(0)\n  posts   Post[]\n}\n\nmodel Post {\n  id        Int     @id @default(autoincrement())\n  title     String\n  published Boolean @default(false)\n  views     Int     @default(0)\n  authorId  Int\n  author    User    @relation(fields: [authorId], references: [id])\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main(){\nawait prisma.post.deleteMany(); await prisma.user.deleteMany(); await prisma.user.create({ data: { email: \"ann@x.io\", name: \"Ann\" } });\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
+        {
           "name": "solution.ts",
           "language": "typescript",
           "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
@@ -231,6 +261,16 @@
         "It returns { count } and never throws on zero matches, so a no-op just returns count 0."
       ],
       "starterCodeJson": [
+        {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nenum Role {\n  USER\n  ADMIN\n}\n\nmodel User {\n  id      Int     @id @default(autoincrement())\n  email   String  @unique\n  name    String?\n  role    Role    @default(USER)\n  credits Int     @default(0)\n  posts   Post[]\n}\n\nmodel Post {\n  id        Int     @id @default(autoincrement())\n  title     String\n  published Boolean @default(false)\n  views     Int     @default(0)\n  authorId  Int\n  author    User    @relation(fields: [authorId], references: [id])\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main(){\nawait prisma.post.deleteMany(); await prisma.user.deleteMany();\nconst u = await prisma.user.create({ data: { email: \"seed@x.io\" } });\nawait prisma.post.createMany({ data: [ { title: \"A\", published: false, authorId: u.id }, { title: \"B\", published: false, authorId: u.id }, { title: \"C\", published: true, authorId: u.id } ] });\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
         {
           "name": "solution.ts",
           "language": "typescript",
@@ -294,6 +334,16 @@
       ],
       "starterCodeJson": [
         {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nenum Role {\n  USER\n  ADMIN\n}\n\nmodel User {\n  id      Int     @id @default(autoincrement())\n  email   String  @unique\n  name    String?\n  role    Role    @default(USER)\n  credits Int     @default(0)\n  posts   Post[]\n}\n\nmodel Post {\n  id        Int     @id @default(autoincrement())\n  title     String\n  published Boolean @default(false)\n  views     Int     @default(0)\n  authorId  Int\n  author    User    @relation(fields: [authorId], references: [id])\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main(){\nawait prisma.post.deleteMany(); await prisma.user.deleteMany();\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
+        {
           "name": "solution.ts",
           "language": "typescript",
           "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
@@ -354,6 +404,16 @@
         "A repeat deleteMany on the same filter returns count 0 without throwing."
       ],
       "starterCodeJson": [
+        {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nenum Role {\n  USER\n  ADMIN\n}\n\nmodel User {\n  id      Int     @id @default(autoincrement())\n  email   String  @unique\n  name    String?\n  role    Role    @default(USER)\n  credits Int     @default(0)\n  posts   Post[]\n}\n\nmodel Post {\n  id        Int     @id @default(autoincrement())\n  title     String\n  published Boolean @default(false)\n  views     Int     @default(0)\n  authorId  Int\n  author    User    @relation(fields: [authorId], references: [id])\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main(){\nawait prisma.post.deleteMany(); await prisma.user.deleteMany();\nconst u = await prisma.user.create({ data: { email: \"seed@x.io\" } });\nawait prisma.post.createMany({ data: [ { title: \"A\", published: false, authorId: u.id }, { title: \"B\", published: false, authorId: u.id }, { title: \"C\", published: true, authorId: u.id } ] });\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
         {
           "name": "solution.ts",
           "language": "typescript",
@@ -417,6 +477,16 @@
       ],
       "starterCodeJson": [
         {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nenum Role {\n  USER\n  ADMIN\n}\n\nmodel User {\n  id      Int     @id @default(autoincrement())\n  email   String  @unique\n  name    String?\n  role    Role    @default(USER)\n  credits Int     @default(0)\n  posts   Post[]\n}\n\nmodel Post {\n  id        Int     @id @default(autoincrement())\n  title     String\n  published Boolean @default(false)\n  views     Int     @default(0)\n  authorId  Int\n  author    User    @relation(fields: [authorId], references: [id])\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main(){\nawait prisma.post.deleteMany(); await prisma.user.deleteMany();\nconst u = await prisma.user.create({ data: { email: \"seed@x.io\" } });\nawait prisma.post.createMany({ data: [ { title: \"A\", published: true, authorId: u.id }, { title: \"B\", published: false, authorId: u.id }, { title: \"C\", published: true, authorId: u.id } ] });\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
+        {
           "name": "solution.ts",
           "language": "typescript",
           "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
@@ -477,6 +547,16 @@
         "update returns the updated record, so read the new value from its return."
       ],
       "starterCodeJson": [
+        {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nenum Role {\n  USER\n  ADMIN\n}\n\nmodel User {\n  id      Int     @id @default(autoincrement())\n  email   String  @unique\n  name    String?\n  role    Role    @default(USER)\n  credits Int     @default(0)\n  posts   Post[]\n}\n\nmodel Post {\n  id        Int     @id @default(autoincrement())\n  title     String\n  published Boolean @default(false)\n  views     Int     @default(0)\n  authorId  Int\n  author    User    @relation(fields: [authorId], references: [id])\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main(){\nawait prisma.post.deleteMany(); await prisma.user.deleteMany();\nconst u = await prisma.user.create({ data: { email: \"seed@x.io\", credits: 100 } });\nawait prisma.post.create({ data: { title: \"P\", authorId: u.id, views: 0 } });\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
         {
           "name": "solution.ts",
           "language": "typescript",
@@ -540,6 +620,16 @@
       ],
       "starterCodeJson": [
         {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nenum Role {\n  USER\n  ADMIN\n}\n\nmodel User {\n  id      Int     @id @default(autoincrement())\n  email   String  @unique\n  name    String?\n  role    Role    @default(USER)\n  credits Int     @default(0)\n  posts   Post[]\n}\n\nmodel Post {\n  id        Int     @id @default(autoincrement())\n  title     String\n  published Boolean @default(false)\n  views     Int     @default(0)\n  authorId  Int\n  author    User    @relation(fields: [authorId], references: [id])\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main(){\nawait prisma.post.deleteMany(); await prisma.user.deleteMany(); await prisma.user.create({ data: { email: \"seed@x.io\", credits: 0 } });\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
+        {
           "name": "solution.ts",
           "language": "typescript",
           "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
@@ -602,6 +692,16 @@
         "If that updateMany returns count 0, throw (insufficient funds) so the whole transfer rolls back; otherwise increment Bob."
       ],
       "starterCodeJson": [
+        {
+          "name": "schema.prisma",
+          "language": "prisma",
+          "code": "// The schema this exercise runs against.\n// npx prisma db push && npx prisma generate\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = \"postgresql://postgres:x@localhost:55432/prisma_codelab\"\n}\n\nenum Role {\n  USER\n  ADMIN\n}\n\nmodel User {\n  id      Int     @id @default(autoincrement())\n  email   String  @unique\n  name    String?\n  role    Role    @default(USER)\n  credits Int     @default(0)\n  posts   Post[]\n}\n\nmodel Post {\n  id        Int     @id @default(autoincrement())\n  title     String\n  published Boolean @default(false)\n  views     Int     @default(0)\n  authorId  Int\n  author    User    @relation(fields: [authorId], references: [id])\n}"
+        },
+        {
+          "name": "seed.ts",
+          "language": "typescript",
+          "code": "// Run once before the exercise: npx tsx seed.ts\nimport { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main(){\nawait prisma.post.deleteMany(); await prisma.user.deleteMany();\nawait prisma.user.createMany({ data: [ { email: \"ann@x.io\", credits: 100 }, { email: \"bob@x.io\", credits: 20 } ] });\n}\nmain().finally(()=>prisma.$disconnect());"
+        },
         {
           "name": "solution.ts",
           "language": "typescript",

@@ -1,0 +1,5 @@
+ops i,u,d
+insertedDoc 3:30
+capped true
+sizeMB \d+
+idempotent true

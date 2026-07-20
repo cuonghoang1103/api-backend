@@ -1,0 +1,4 @@
+migrations 1
+tables Post, User
+fk 1
+applied 1

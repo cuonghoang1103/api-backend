@@ -1,0 +1,6 @@
+Ann 3 350
+Bob 2 230
+Cy 0 0
+ann@x.io ADMIN
+bob@x.io EDITOR
+cy@x.io USER

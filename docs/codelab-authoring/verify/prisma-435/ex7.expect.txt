@@ -1,0 +1,10 @@
+Ann 1 Prisma Basics 250
+Ann 2 Indexing Tips 130
+Ann 3 Intro to SQL 100
+Ann 4 Draft on Prisma 0
+Bob 1 React Hooks 150
+Bob 2 Redis Notes 80
+Bob 3 CSS Grid 70
+Cy 1 Cy Draft 20
+top2: Ann Prisma Basics | Ann Indexing Tips | Bob React Hooks | Bob Redis Notes | Cy Cy Draft
+running: 100, 350, 350, 480, 560, 710, 780, 800

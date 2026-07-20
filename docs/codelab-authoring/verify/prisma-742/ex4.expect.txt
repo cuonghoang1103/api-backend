@@ -1,0 +1,7 @@
+appReads 3
+appWrites ok
+appDelete denied
+roReads 4
+roInsert denied
+errClass PrismaClientUnknownRequestError
+notes 4

@@ -1,0 +1,6 @@
+hasQueryCounter true
+queriesRan true
+hasPoolGauge true
+slow 1
+slowest ok
+prometheus true

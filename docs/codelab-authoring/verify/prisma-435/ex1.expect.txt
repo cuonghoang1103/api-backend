@@ -1,0 +1,6 @@
+count 6
+sum 780
+avg 130.00
+min 70
+max 250
+allSum 800

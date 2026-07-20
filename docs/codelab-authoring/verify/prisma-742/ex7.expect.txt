@@ -1,0 +1,5 @@
+noTake 2
+huge 3
+negative 2
+fine 1
+unclamped 5

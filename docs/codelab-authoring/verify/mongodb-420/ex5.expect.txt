@@ -1,0 +1,5 @@
+local 3
+majority 3
+localAfterFast 4
+majorityAfterFast 4
+snapshotOk true

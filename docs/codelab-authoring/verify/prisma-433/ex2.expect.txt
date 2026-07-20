@@ -1,0 +1,3 @@
+dee@x.io Data engineer 2
+Airflow Notes true 40
+DBT Models false 0

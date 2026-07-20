@@ -1,0 +1,5 @@
+filled 2
+bumped 6
+sum 878
+incremented 2
+drafts 25, 5

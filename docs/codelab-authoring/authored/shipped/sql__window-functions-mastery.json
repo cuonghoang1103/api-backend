@@ -49,6 +49,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS sales CASCADE;\nCREATE TABLE sales (\n  id     INT PRIMARY KEY,\n  region TEXT NOT NULL,\n  rep    TEXT NOT NULL,\n  month  INT  NOT NULL,\n  amount NUMERIC(10,2) NOT NULL\n);\nINSERT INTO sales VALUES\n (1,'North','Ann',1,100),(2,'North','Ann',2,150),(3,'North','Ann',3,120),\n (4,'North','Bob',1, 80),(5,'North','Bob',2, 90),(6,'North','Bob',3,200),\n (7,'South','Cy', 1,300),(8,'South','Cy', 2,110),(9,'South','Cy', 3,250);"
+        },
+        {
           "name": "solution.sql",
           "language": "sql",
           "code": "-- Fill in the window specifications (PARTITION BY / ORDER BY / frame) per the requirements above.\nSELECT region, rep, month, amount,\n       SUM(amount) OVER ( /* ... */ ) AS region_total,\n       ROUND(100.0 * amount / SUM(amount) OVER ( /* ... */ ), 1) AS pct\nFROM   sales\nORDER BY region, rep, month;"
@@ -109,6 +114,11 @@
         "ROW_NUMBER() OVER (PARTITION BY rep ORDER BY month DESC) AS recency."
       ],
       "starterCodeJson": [
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS sales CASCADE;\nCREATE TABLE sales (\n  id     INT PRIMARY KEY,\n  region TEXT NOT NULL,\n  rep    TEXT NOT NULL,\n  month  INT  NOT NULL,\n  amount NUMERIC(10,2) NOT NULL\n);\nINSERT INTO sales VALUES\n (1,'North','Ann',1,100),(2,'North','Ann',2,150),(3,'North','Ann',3,120),\n (4,'North','Bob',1, 80),(5,'North','Bob',2, 90),(6,'North','Bob',3,200),\n (7,'South','Cy', 1,300),(8,'South','Cy', 2,110),(9,'South','Cy', 3,250);"
+        },
         {
           "name": "solution.sql",
           "language": "sql",
@@ -171,6 +181,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS sales CASCADE;\nCREATE TABLE sales (\n  id     INT PRIMARY KEY,\n  region TEXT NOT NULL,\n  rep    TEXT NOT NULL,\n  month  INT  NOT NULL,\n  amount NUMERIC(10,2) NOT NULL\n);\nINSERT INTO sales VALUES\n (1,'North','Ann',1,100),(2,'North','Ann',2,150),(3,'North','Ann',3,120),\n (4,'North','Bob',1, 80),(5,'North','Bob',2, 90),(6,'North','Bob',3,200),\n (7,'South','Cy', 1,300),(8,'South','Cy', 2,110),(9,'South','Cy', 3,250);"
+        },
+        {
           "name": "solution.sql",
           "language": "sql",
           "code": "-- Fill in the window specifications (PARTITION BY / ORDER BY / frame) per the requirements above.\n-- ORDER BY month inside OVER turns the partition SUM into a running total (default frame: start of\n-- partition through the current row). PARTITION BY rep resets the accumulation for each rep.\nSELECT rep, month, amount,\n       SUM(amount) OVER ( /* ... */ ) AS rep_cumulative\nFROM   sales\nORDER BY rep, month;"
@@ -231,6 +246,11 @@
         "LEAD(amount) OVER (...) gives the following month, NULL on the last."
       ],
       "starterCodeJson": [
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS sales CASCADE;\nCREATE TABLE sales (\n  id     INT PRIMARY KEY,\n  region TEXT NOT NULL,\n  rep    TEXT NOT NULL,\n  month  INT  NOT NULL,\n  amount NUMERIC(10,2) NOT NULL\n);\nINSERT INTO sales VALUES\n (1,'North','Ann',1,100),(2,'North','Ann',2,150),(3,'North','Ann',3,120),\n (4,'North','Bob',1, 80),(5,'North','Bob',2, 90),(6,'North','Bob',3,200),\n (7,'South','Cy', 1,300),(8,'South','Cy', 2,110),(9,'South','Cy', 3,250);"
+        },
         {
           "name": "solution.sql",
           "language": "sql",
@@ -293,6 +313,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS sales CASCADE;\nCREATE TABLE sales (\n  id     INT PRIMARY KEY,\n  region TEXT NOT NULL,\n  rep    TEXT NOT NULL,\n  month  INT  NOT NULL,\n  amount NUMERIC(10,2) NOT NULL\n);\nINSERT INTO sales VALUES\n (1,'North','Ann',1,100),(2,'North','Ann',2,150),(3,'North','Ann',3,120),\n (4,'North','Bob',1, 80),(5,'North','Bob',2, 90),(6,'North','Bob',3,200),\n (7,'South','Cy', 1,300),(8,'South','Cy', 2,110),(9,'South','Cy', 3,250);"
+        },
+        {
           "name": "solution.sql",
           "language": "sql",
           "code": "-- Fill in the window specifications (PARTITION BY / ORDER BY / frame) per the requirements above.\nSELECT rep, month, amount,\n       FIRST_VALUE(amount) OVER w AS first_month,\n       LAST_VALUE(amount)  OVER w AS last_month\nFROM   sales\nWINDOW w AS ( /* ... */ )\nORDER BY rep, month;"
@@ -354,6 +379,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS sales CASCADE;\nCREATE TABLE sales (\n  id     INT PRIMARY KEY,\n  region TEXT NOT NULL,\n  rep    TEXT NOT NULL,\n  month  INT  NOT NULL,\n  amount NUMERIC(10,2) NOT NULL\n);\nINSERT INTO sales VALUES\n (1,'North','Ann',1,100),(2,'North','Ann',2,150),(3,'North','Ann',3,120),\n (4,'North','Bob',1, 80),(5,'North','Bob',2, 90),(6,'North','Bob',3,200),\n (7,'South','Cy', 1,300),(8,'South','Cy', 2,110),(9,'South','Cy', 3,250);"
+        },
+        {
           "name": "solution.sql",
           "language": "sql",
           "code": "-- Fill in the window specifications (PARTITION BY / ORDER BY / frame) per the requirements above.\n-- NTILE(3) walks the rows in the window's order (amount DESC) and drops them into 3 balanced buckets;\n-- with 9 rows that is exactly 3 per tercile. When the count is uneven, the earlier buckets get the extra row.\nSELECT rep, month, amount,\n       NTILE(3) OVER ( /* ... */ ) AS tercile\nFROM   sales\nORDER BY amount DESC;"
@@ -414,6 +444,11 @@
         "Cast the double result to numeric before ROUND(..., 3)."
       ],
       "starterCodeJson": [
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS sales CASCADE;\nCREATE TABLE sales (\n  id     INT PRIMARY KEY,\n  region TEXT NOT NULL,\n  rep    TEXT NOT NULL,\n  month  INT  NOT NULL,\n  amount NUMERIC(10,2) NOT NULL\n);\nINSERT INTO sales VALUES\n (1,'North','Ann',1,100),(2,'North','Ann',2,150),(3,'North','Ann',3,120),\n (4,'North','Bob',1, 80),(5,'North','Bob',2, 90),(6,'North','Bob',3,200),\n (7,'South','Cy', 1,300),(8,'South','Cy', 2,110),(9,'South','Cy', 3,250);"
+        },
         {
           "name": "solution.sql",
           "language": "sql",
@@ -477,6 +512,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS sales CASCADE;\nCREATE TABLE sales (\n  id     INT PRIMARY KEY,\n  region TEXT NOT NULL,\n  rep    TEXT NOT NULL,\n  month  INT  NOT NULL,\n  amount NUMERIC(10,2) NOT NULL\n);\nINSERT INTO sales VALUES\n (1,'North','Ann',1,100),(2,'North','Ann',2,150),(3,'North','Ann',3,120),\n (4,'North','Bob',1, 80),(5,'North','Bob',2, 90),(6,'North','Bob',3,200),\n (7,'South','Cy', 1,300),(8,'South','Cy', 2,110),(9,'South','Cy', 3,250);"
+        },
+        {
           "name": "solution.sql",
           "language": "sql",
           "code": "-- Fill in the window specifications (PARTITION BY / ORDER BY / frame) per the requirements above.\n-- Roll up to one row per month first, then a sliding ROWS frame averages each month with the previous one.\nWITH monthly AS (\n    SELECT month, SUM(amount) AS total\n    FROM   sales\n    GROUP BY month\n)\nSELECT month, total,\n       ROUND(AVG(total) OVER ( /* ... */ ), 2) AS moving_avg\nFROM   monthly\nORDER BY month;"
@@ -538,6 +578,11 @@
         "RANK() OVER w, SUM(amount) OVER w, AVG(amount) OVER w all read the same window."
       ],
       "starterCodeJson": [
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS sales CASCADE;\nCREATE TABLE sales (\n  id     INT PRIMARY KEY,\n  region TEXT NOT NULL,\n  rep    TEXT NOT NULL,\n  month  INT  NOT NULL,\n  amount NUMERIC(10,2) NOT NULL\n);\nINSERT INTO sales VALUES\n (1,'North','Ann',1,100),(2,'North','Ann',2,150),(3,'North','Ann',3,120),\n (4,'North','Bob',1, 80),(5,'North','Bob',2, 90),(6,'North','Bob',3,200),\n (7,'South','Cy', 1,300),(8,'South','Cy', 2,110),(9,'South','Cy', 3,250);"
+        },
         {
           "name": "solution.sql",
           "language": "sql",
@@ -601,6 +646,11 @@
         "CASE WHEN rank_in_region = 1 THEN 'TOP' ELSE '' END flags the leader(s)."
       ],
       "starterCodeJson": [
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS sales CASCADE;\nCREATE TABLE sales (\n  id     INT PRIMARY KEY,\n  region TEXT NOT NULL,\n  rep    TEXT NOT NULL,\n  month  INT  NOT NULL,\n  amount NUMERIC(10,2) NOT NULL\n);\nINSERT INTO sales VALUES\n (1,'North','Ann',1,100),(2,'North','Ann',2,150),(3,'North','Ann',3,120),\n (4,'North','Bob',1, 80),(5,'North','Bob',2, 90),(6,'North','Bob',3,200),\n (7,'South','Cy', 1,300),(8,'South','Cy', 2,110),(9,'South','Cy', 3,250);"
+        },
         {
           "name": "solution.sql",
           "language": "sql",

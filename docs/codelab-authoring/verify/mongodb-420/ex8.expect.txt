@@ -1,0 +1,6 @@
+hiddenOrder 0
+hiddenQty 5
+committedOrder 1
+committedQty 4
+abortedOrder 0
+abortedQty 4

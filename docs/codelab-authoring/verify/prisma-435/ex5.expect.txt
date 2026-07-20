@@ -1,0 +1,7 @@
+false 1 0 -
+true 3 3 4.00
+true 3 2 3.00
+false 1 1 1.00
+groups 4
+naive 2.38
+correct 3.17

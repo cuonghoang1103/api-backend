@@ -1,0 +1,5 @@
+values ADMIN, EDITOR, USER
+rows 3
+editors 1
+afterValues ADMIN, EDITOR
+usersLeft 0

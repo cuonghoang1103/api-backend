@@ -1,0 +1,4 @@
+clean yes
+drift legacyFlag
+after clean
+migrations 2

@@ -1,0 +1,6 @@
+Ann 2 1 Prisma Basics
+Bob 2 2 React Hooks
+Cy 0 1 none
+Intro to SQL 2
+Prisma Basics 1
+React Hooks 1

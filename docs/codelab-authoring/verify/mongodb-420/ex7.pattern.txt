@@ -1,0 +1,5 @@
+lags \S+=\d+s \| \S+=\d+s
+maxLag \d+
+healthy true
+heartbeats true
+afterWrites true

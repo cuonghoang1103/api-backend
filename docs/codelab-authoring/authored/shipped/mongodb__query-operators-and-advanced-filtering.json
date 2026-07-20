@@ -54,6 +54,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb.products.drop(); db.products.insertMany([\n  { _id: 1, name: \"Keyboard\", price: 49.9, stock: 12, category: \"input\" },\n  { _id: 2, name: \"Mouse\", price: 19, stock: 40, category: \"input\" },\n  { _id: 3, name: \"Monitor\", price: 150, stock: 5, category: \"display\" },\n  { _id: 4, name: \"Cable\", price: 12, stock: 0, category: \"cable\" },\n  { _id: 5, name: \"Desk Pad\", price: 30, stock: 7, category: \"desk\" },\n  { _id: 6, name: \"Lamp\", price: 25, stock: 3 }\n])\nprint(\"---- solution output ----\")"
+        },
+        {
           "name": "solution.js",
           "language": "javascript",
           "code": "// 1. price >= 30, names only, sorted by name\n// 2. price < 20, names only, sorted by name\n// 3. price > 12 AND <= 49.9 in one sub-document\n// 4. category != \"input\" (watch what happens to Lamp)\n// 5. price exactly 150, written with $eq"
@@ -120,6 +125,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb.products.drop(); db.products.insertMany([\n  { _id: 1, name: \"Keyboard\", price: 49.9, stock: 12, category: \"input\" },\n  { _id: 2, name: \"Mouse\", price: 19, stock: 40, category: \"input\" },\n  { _id: 3, name: \"Monitor\", price: 150, stock: 5, category: \"display\" },\n  { _id: 4, name: \"Cable\", price: 12, stock: 0, category: \"cable\" },\n  { _id: 5, name: \"Desk Pad\", price: 30, stock: 7, category: \"desk\" },\n  { _id: 6, name: \"Lamp\", price: 25, stock: 3 }\n])\nprint(\"---- solution output ----\")"
+        },
+        {
           "name": "solution.js",
           "language": "javascript",
           "code": "// 1. category in [input, display]\n// 2. category not in [input, cable] — does Lamp appear?\n// 3. same as 2 but only for documents that HAVE a category\n// 4. price in [12, 19, 150]\n// 5. countDocuments for filter 1"
@@ -185,6 +195,11 @@
         "$not lives inside a field and inverts an operator expression: { stock: { $not: { $gte: 10 } } }. It also matches documents where the field is missing."
       ],
       "starterCodeJson": [
+        {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb.products.drop(); db.products.insertMany([\n  { _id: 1, name: \"Keyboard\", price: 49.9, stock: 12, category: \"input\" },\n  { _id: 2, name: \"Mouse\", price: 19, stock: 40, category: \"input\" },\n  { _id: 3, name: \"Monitor\", price: 150, stock: 5, category: \"display\" },\n  { _id: 4, name: \"Cable\", price: 12, stock: 0, category: \"cable\" },\n  { _id: 5, name: \"Desk Pad\", price: 30, stock: 7, category: \"desk\" },\n  { _id: 6, name: \"Lamp\", price: 25, stock: 3 }\n])\nprint(\"---- solution output ----\")"
+        },
         {
           "name": "solution.js",
           "language": "javascript",
@@ -253,6 +268,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb.users.drop(); db.users.insertMany([\n  { _id: 1, name: \"ana\", age: 30, email: \"ana@example.com\" },\n  { _id: 2, name: \"bo\", age: \"31\" },\n  { _id: 3, name: \"cy\", age: null, email: \"cy@example.com\" },\n  { _id: 4, name: \"di\", email: null },\n  { _id: 5, name: \"ed\", age: 28.5, email: \"ed@example.com\" }\n])\nprint(\"---- solution output ----\")"
+        },
+        {
           "name": "solution.js",
           "language": "javascript",
           "code": "// 1. documents that HAVE an email field\n// 2. documents with NO email field\n// 3. age stored as a string (schema drift)\n// 4. age of any numeric type, then only int, then only double\n// 5. { age: null } vs { age: { $type: \"null\" } } — run both"
@@ -318,6 +338,11 @@
         "$mod takes a two-element array, [divisor, remainder]: { stock: { $mod: [5, 0] } } keeps values evenly divisible by 5."
       ],
       "starterCodeJson": [
+        {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb.products.drop(); db.products.insertMany([\n  { _id: 1, name: \"Keyboard\", price: 49.9, stock: 12, category: \"input\" },\n  { _id: 2, name: \"Mouse\", price: 19, stock: 40, category: \"input\" },\n  { _id: 3, name: \"Monitor\", price: 150, stock: 5, category: \"display\" },\n  { _id: 4, name: \"Cable\", price: 12, stock: 0, category: \"cable\" },\n  { _id: 5, name: \"Desk Pad\", price: 30, stock: 7, category: \"desk\" },\n  { _id: 6, name: \"Lamp\", price: 25, stock: 3 }\n])\nprint(\"---- solution output ----\")"
+        },
         {
           "name": "solution.js",
           "language": "javascript",
@@ -385,6 +410,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb.articles.drop(); db.articles.insertMany([\n  { _id: 1, title: \"Alpha\", tags: [\"mongodb\", \"database\"] },\n  { _id: 2, title: \"Beta\", tags: [\"database\", \"sql\", \"mongodb\"] },\n  { _id: 3, title: \"Gamma\", tags: [\"mongodb\"] },\n  { _id: 4, title: \"Delta\", tags: [\"nosql\", \"database\"] },\n  { _id: 5, title: \"Epsilon\", tags: [] }\n])\nprint(\"---- solution output ----\")"
+        },
+        {
           "name": "solution.js",
           "language": "javascript",
           "code": "// 1. articles tagged \"mongodb\" (element match)\n// 2. tags exactly [\"mongodb\", \"database\"]\n// 3. tags exactly [\"database\", \"mongodb\"] — expect []\n// 4. tags containing BOTH values, any order ($all)\n// 5. tags of length exactly 1, then length 0 ($size)\n// 6. countDocuments for tag \"database\""
@@ -451,6 +481,11 @@
         "For a single condition, dot notation and $elemMatch are equivalent; reach for $elemMatch only when two or more conditions must land on the same element."
       ],
       "starterCodeJson": [
+        {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb.orders.drop(); db.orders.insertMany([\n  { _id: 1, customer: \"ana\", items: [{ sku: \"A\", qty: 2, price: 10 }, { sku: \"B\", qty: 5, price: 3 }] },\n  { _id: 2, customer: \"bo\", items: [{ sku: \"A\", qty: 9, price: 20 }, { sku: \"C\", qty: 1, price: 50 }] },\n  { _id: 3, customer: \"cy\", items: [{ sku: \"D\", qty: 6, price: 45 }] },\n  { _id: 4, customer: \"di\", items: [{ sku: \"B\", qty: 1, price: 3 }] }\n])\nprint(\"---- solution output ----\")"
+        },
         {
           "name": "solution.js",
           "language": "javascript",
@@ -520,6 +555,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb.students.drop(); db.students.insertMany([\n  { _id: 1, name: \"Ana\", address: { city: \"Hanoi\", zip: \"10000\" }, scores: [{ subject: \"math\", score: 90 }, { subject: \"cs\", score: 75 }, { subject: \"eng\", score: 60 }] },\n  { _id: 2, name: \"Bo\", address: { city: \"Hue\", zip: \"53000\" }, scores: [{ subject: \"math\", score: 55 }, { subject: \"cs\", score: 95 }] },\n  { _id: 3, name: \"Cy\", address: { city: \"Hanoi\", zip: \"10001\" }, scores: [{ subject: \"eng\", score: 88 }] }\n])\nprint(\"---- solution output ----\")"
+        },
+        {
           "name": "solution.js",
           "language": "javascript",
           "code": "// 1. address.city == \"Hanoi\", project name + address.city\n// 2. exact subdocument equality { city: \"Hanoi\", zip: \"10000\" }\n// 3. same but keys swapped — expect []\n// 4. project name + first two scores entries ($slice)\n// 5. students with a cs score, project only that entry ($elemMatch projection)\n// 6. $elemMatch FILTER: math score above 80"
@@ -586,6 +626,11 @@
         "countDocuments takes a filter and counts accurately; estimatedDocumentCount takes no filter and reads collection metadata, so it is fast but only approximate after an unclean shutdown."
       ],
       "starterCodeJson": [
+        {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb.ledger.drop(); db.ledger.insertMany([\n  { _id: 1, code: \"OD-01\", amount: 10 },\n  { _id: 2, code: \"OD-02\", amount: 20 },\n  { _id: 3, code: \"OD-03\", amount: 30 },\n  { _id: 4, code: \"OD-04\", amount: 40 },\n  { _id: 5, code: \"OD-05\", amount: 50 },\n  { _id: 6, code: \"OD-06\", amount: 60 },\n  { _id: 7, code: \"OD-07\", amount: 70 },\n  { _id: 8, code: \"OD-08\", amount: 80 },\n  { _id: 9, code: \"OD-09\", amount: 90 }\n])\nprint(\"---- solution output ----\")"
+        },
         {
           "name": "solution.js",
           "language": "javascript",
@@ -656,6 +701,11 @@
         "For the summary, distinct(\"specs.brand\") returns a sorted array of unique values, countDocuments({ tags: { $size: 0 } }) counts empty arrays, and { reviews: { $slice: 1 } } inside the projection trims the array without touching the filter."
       ],
       "starterCodeJson": [
+        {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb.catalog.drop(); db.catalog.insertMany([\n  { _id: 1, name: \"Alpha Laptop\", price: 1200, cost: 900, stock: 4, category: \"computer\", specs: { brand: \"Acme\", warrantyMonths: 24 }, tags: [\"portable\", \"work\"], reviews: [{ user: \"ana\", rating: 5 }, { user: \"bo\", rating: 3 }] },\n  { _id: 2, name: \"Beta Phone\", price: 700, cost: 720, stock: 0, category: \"phone\", specs: { brand: \"Acme\", warrantyMonths: 12 }, tags: [\"portable\"], reviews: [{ user: \"cy\", rating: 4 }] },\n  { _id: 3, name: \"Gamma Monitor\", price: 300, cost: 200, stock: 11, category: \"display\", specs: { brand: \"Vista\", warrantyMonths: 36 }, tags: [\"desk\", \"work\"], reviews: [{ user: \"ana\", rating: 2 }, { user: \"di\", rating: 5 }] },\n  { _id: 4, name: \"Delta Mouse\", price: 25, cost: 30, stock: 60, category: \"input\", specs: { brand: \"Vista\", warrantyMonths: 12 }, tags: [\"desk\"], reviews: [] },\n  { _id: 5, name: \"Epsilon Keyboard\", price: 80, cost: 45, stock: 7, category: \"input\", specs: { brand: \"Acme\", warrantyMonths: 24 }, tags: [\"desk\", \"work\", \"portable\"], reviews: [{ user: \"bo\", rating: 4 }] },\n  { _id: 6, name: \"Zeta Dock\", price: 150, cost: 150, stock: 2, category: \"accessory\", specs: { brand: \"Nova\" }, tags: [], reviews: [{ user: \"ed\", rating: 1 }] }\n])\nprint(\"---- solution output ----\")"
+        },
         {
           "name": "solution.js",
           "language": "javascript",

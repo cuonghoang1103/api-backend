@@ -49,6 +49,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS products CASCADE;\nCREATE TABLE products (id INT PRIMARY KEY, name TEXT, attrs JSONB);\nINSERT INTO products VALUES\n (1,'Laptop',   '{\"brand\":\"Acme\",\"price\":1200,\"specs\":{\"ram\":16,\"cpu\":\"i7\"},\"tags\":[\"computer\",\"portable\"]}'),\n (2,'Mouse',    '{\"brand\":\"Acme\",\"price\":25,\"specs\":{\"dpi\":1600},\"tags\":[\"accessory\"]}'),\n (3,'Keyboard', '{\"brand\":\"KeyCo\",\"price\":80,\"specs\":{\"switches\":\"blue\"},\"tags\":[\"accessory\",\"mechanical\"]}');"
+        },
+        {
           "name": "solution.sql",
           "language": "sql",
           "code": "-- Use JSONB operators/functions per the requirements above.\n-- ->  (json)   ->> (text)   #>> (path text)   @> (containment)\n-- ?  (key exists)   jsonb_array_elements_text   jsonb_build_object   jsonb_agg\nSELECT /* ... */;"
@@ -109,6 +114,11 @@
         "A missing key along the path yields NULL rather than an error."
       ],
       "starterCodeJson": [
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS products CASCADE;\nCREATE TABLE products (id INT PRIMARY KEY, name TEXT, attrs JSONB);\nINSERT INTO products VALUES\n (1,'Laptop',   '{\"brand\":\"Acme\",\"price\":1200,\"specs\":{\"ram\":16,\"cpu\":\"i7\"},\"tags\":[\"computer\",\"portable\"]}'),\n (2,'Mouse',    '{\"brand\":\"Acme\",\"price\":25,\"specs\":{\"dpi\":1600},\"tags\":[\"accessory\"]}'),\n (3,'Keyboard', '{\"brand\":\"KeyCo\",\"price\":80,\"specs\":{\"switches\":\"blue\"},\"tags\":[\"accessory\",\"mechanical\"]}');"
+        },
         {
           "name": "solution.sql",
           "language": "sql",
@@ -171,6 +181,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS products CASCADE;\nCREATE TABLE products (id INT PRIMARY KEY, name TEXT, attrs JSONB);\nINSERT INTO products VALUES\n (1,'Laptop',   '{\"brand\":\"Acme\",\"price\":1200,\"specs\":{\"ram\":16,\"cpu\":\"i7\"},\"tags\":[\"computer\",\"portable\"]}'),\n (2,'Mouse',    '{\"brand\":\"Acme\",\"price\":25,\"specs\":{\"dpi\":1600},\"tags\":[\"accessory\"]}'),\n (3,'Keyboard', '{\"brand\":\"KeyCo\",\"price\":80,\"specs\":{\"switches\":\"blue\"},\"tags\":[\"accessory\",\"mechanical\"]}');"
+        },
+        {
           "name": "solution.sql",
           "language": "sql",
           "code": "-- Use JSONB operators/functions per the requirements above.\n-- ->  (json)   ->> (text)   #>> (path text)   @> (containment)\n-- ?  (key exists)   jsonb_array_elements_text   jsonb_build_object   jsonb_agg\nSELECT /* ... */;"
@@ -231,6 +246,11 @@
         "Element existence: attrs -> 'tags' ? 'mechanical'."
       ],
       "starterCodeJson": [
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS products CASCADE;\nCREATE TABLE products (id INT PRIMARY KEY, name TEXT, attrs JSONB);\nINSERT INTO products VALUES\n (1,'Laptop',   '{\"brand\":\"Acme\",\"price\":1200,\"specs\":{\"ram\":16,\"cpu\":\"i7\"},\"tags\":[\"computer\",\"portable\"]}'),\n (2,'Mouse',    '{\"brand\":\"Acme\",\"price\":25,\"specs\":{\"dpi\":1600},\"tags\":[\"accessory\"]}'),\n (3,'Keyboard', '{\"brand\":\"KeyCo\",\"price\":80,\"specs\":{\"switches\":\"blue\"},\"tags\":[\"accessory\",\"mechanical\"]}');"
+        },
         {
           "name": "solution.sql",
           "language": "sql",
@@ -293,6 +313,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS products CASCADE;\nCREATE TABLE products (id INT PRIMARY KEY, name TEXT, attrs JSONB);\nINSERT INTO products VALUES\n (1,'Laptop',   '{\"brand\":\"Acme\",\"price\":1200,\"specs\":{\"ram\":16,\"cpu\":\"i7\"},\"tags\":[\"computer\",\"portable\"]}'),\n (2,'Mouse',    '{\"brand\":\"Acme\",\"price\":25,\"specs\":{\"dpi\":1600},\"tags\":[\"accessory\"]}'),\n (3,'Keyboard', '{\"brand\":\"KeyCo\",\"price\":80,\"specs\":{\"switches\":\"blue\"},\"tags\":[\"accessory\",\"mechanical\"]}');"
+        },
+        {
           "name": "solution.sql",
           "language": "sql",
           "code": "-- Use JSONB operators/functions per the requirements above.\n-- ->  (json)   ->> (text)   #>> (path text)   @> (containment)\n-- ?  (key exists)   jsonb_array_elements_text   jsonb_build_object   jsonb_agg\nSELECT /* ... */;"
@@ -353,6 +378,11 @@
         "attrs ?| array['weight','brand'] is true if any listed key exists; ?& requires all."
       ],
       "starterCodeJson": [
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS products CASCADE;\nCREATE TABLE products (id INT PRIMARY KEY, name TEXT, attrs JSONB);\nINSERT INTO products VALUES\n (1,'Laptop',   '{\"brand\":\"Acme\",\"price\":1200,\"specs\":{\"ram\":16,\"cpu\":\"i7\"},\"tags\":[\"computer\",\"portable\"]}'),\n (2,'Mouse',    '{\"brand\":\"Acme\",\"price\":25,\"specs\":{\"dpi\":1600},\"tags\":[\"accessory\"]}'),\n (3,'Keyboard', '{\"brand\":\"KeyCo\",\"price\":80,\"specs\":{\"switches\":\"blue\"},\"tags\":[\"accessory\",\"mechanical\"]}');"
+        },
         {
           "name": "solution.sql",
           "language": "sql",
@@ -415,6 +445,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS products CASCADE;\nCREATE TABLE products (id INT PRIMARY KEY, name TEXT, attrs JSONB);\nINSERT INTO products VALUES\n (1,'Laptop',   '{\"brand\":\"Acme\",\"price\":1200,\"specs\":{\"ram\":16,\"cpu\":\"i7\"},\"tags\":[\"computer\",\"portable\"]}'),\n (2,'Mouse',    '{\"brand\":\"Acme\",\"price\":25,\"specs\":{\"dpi\":1600},\"tags\":[\"accessory\"]}'),\n (3,'Keyboard', '{\"brand\":\"KeyCo\",\"price\":80,\"specs\":{\"switches\":\"blue\"},\"tags\":[\"accessory\",\"mechanical\"]}');"
+        },
+        {
           "name": "solution.sql",
           "language": "sql",
           "code": "-- Use JSONB operators/functions per the requirements above.\n-- ->  (json)   ->> (text)   #>> (path text)   @> (containment)\n-- ?  (key exists)   jsonb_array_elements_text   jsonb_build_object   jsonb_agg\nSELECT /* ... */;"
@@ -476,6 +511,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS products CASCADE;\nCREATE TABLE products (id INT PRIMARY KEY, name TEXT, attrs JSONB);\nINSERT INTO products VALUES\n (1,'Laptop',   '{\"brand\":\"Acme\",\"price\":1200,\"specs\":{\"ram\":16,\"cpu\":\"i7\"},\"tags\":[\"computer\",\"portable\"]}'),\n (2,'Mouse',    '{\"brand\":\"Acme\",\"price\":25,\"specs\":{\"dpi\":1600},\"tags\":[\"accessory\"]}'),\n (3,'Keyboard', '{\"brand\":\"KeyCo\",\"price\":80,\"specs\":{\"switches\":\"blue\"},\"tags\":[\"accessory\",\"mechanical\"]}');"
+        },
+        {
           "name": "solution.sql",
           "language": "sql",
           "code": "-- Use JSONB operators/functions per the requirements above.\n-- ->  (json)   ->> (text)   #>> (path text)   @> (containment)\n-- ?  (key exists)   jsonb_array_elements_text   jsonb_build_object   jsonb_agg\nSELECT /* ... */;"
@@ -536,6 +576,11 @@
         "The @> and ? operators are the ones a default GIN jsonb index accelerates."
       ],
       "starterCodeJson": [
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS products CASCADE;\nCREATE TABLE products (id INT PRIMARY KEY, name TEXT, attrs JSONB);\nINSERT INTO products VALUES\n (1,'Laptop',   '{\"brand\":\"Acme\",\"price\":1200,\"specs\":{\"ram\":16,\"cpu\":\"i7\"},\"tags\":[\"computer\",\"portable\"]}'),\n (2,'Mouse',    '{\"brand\":\"Acme\",\"price\":25,\"specs\":{\"dpi\":1600},\"tags\":[\"accessory\"]}'),\n (3,'Keyboard', '{\"brand\":\"KeyCo\",\"price\":80,\"specs\":{\"switches\":\"blue\"},\"tags\":[\"accessory\",\"mechanical\"]}');"
+        },
         {
           "name": "solution.sql",
           "language": "sql",
@@ -599,6 +644,11 @@
         "jsonb_agg(elem ORDER BY (attrs->>'price')::int DESC) builds the ordered array; jsonb_array_length counts it."
       ],
       "starterCodeJson": [
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- Run this once to create the data this exercise works with.\nDROP TABLE IF EXISTS products CASCADE;\nCREATE TABLE products (id INT PRIMARY KEY, name TEXT, attrs JSONB);\nINSERT INTO products VALUES\n (1,'Laptop',   '{\"brand\":\"Acme\",\"price\":1200,\"specs\":{\"ram\":16,\"cpu\":\"i7\"},\"tags\":[\"computer\",\"portable\"]}'),\n (2,'Mouse',    '{\"brand\":\"Acme\",\"price\":25,\"specs\":{\"dpi\":1600},\"tags\":[\"accessory\"]}'),\n (3,'Keyboard', '{\"brand\":\"KeyCo\",\"price\":80,\"specs\":{\"switches\":\"blue\"},\"tags\":[\"accessory\",\"mechanical\"]}');"
+        },
         {
           "name": "solution.sql",
           "language": "sql",

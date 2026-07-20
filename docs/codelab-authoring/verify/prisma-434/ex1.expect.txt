@@ -1,0 +1,5 @@
+Ann ADMIN 30
+Bob EDITOR 25
+Cy USER ?
+admins 1
+privileged 2

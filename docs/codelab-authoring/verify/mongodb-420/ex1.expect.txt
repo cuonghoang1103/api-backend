@@ -1,0 +1,6 @@
+members 3
+states cl_rs1:27017=PRIMARY | cl_rs2:27017=SECONDARY | cl_rs3:27017=SECONDARY
+primaries 1
+hosts 3
+writable true
+setName rs0

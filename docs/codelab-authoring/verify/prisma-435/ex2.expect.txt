@@ -1,0 +1,7 @@
+rows 8
+all 8
+rated 6
+unrated 2
+published 6
+authors 3
+nullRating 2

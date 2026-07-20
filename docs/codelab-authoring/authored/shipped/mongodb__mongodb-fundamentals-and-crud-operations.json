@@ -110,6 +110,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb.products.drop(); db.products.insertMany([{ _id: 1, name: \"Keyboard\", price: 49.9 }, { _id: 2, name: \"Mouse\", price: 19 }, { _id: 3, name: \"Monitor\", price: 150 }])"
+        },
+        {
           "name": "solution.js",
           "language": "javascript",
           "code": "// find price > 20, project only name (no _id), as an array\n// findOne the document with _id 2\n// findOne Monitor by name, project only price (no _id)\n// find all, project name+price, sort by price ascending\n// count products with price > 20"
@@ -170,6 +175,11 @@
         "db.products.updateOne({ _id: 2 }, { $set: { price: 21.5, onSale: true } })."
       ],
       "starterCodeJson": [
+        {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb.products.drop(); db.products.insertMany([{ _id: 1, name: \"Keyboard\", price: 49.9 }, { _id: 2, name: \"Mouse\", price: 19 }, { _id: 3, name: \"Monitor\", price: 150 }])"
+        },
         {
           "name": "solution.js",
           "language": "javascript",
@@ -232,6 +242,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb.products.drop(); db.products.insertMany([{ _id: 1, name: \"Keyboard\", price: 49.9 }, { _id: 2, name: \"Mouse\", price: 19 }, { _id: 3, name: \"Monitor\", price: 150 }])"
+        },
+        {
           "name": "solution.js",
           "language": "javascript",
           "code": "// updateMany all docs: $set category \"electronics\"\n// updateOne _id 99 with upsert:true to create it\n// findOne _id 99 to see the upserted document\n// countDocuments to confirm 4"
@@ -292,6 +307,11 @@
         "After removing _id 3 and everything under 25 (ids 2 and 4), the survivors are ids 1 (49.9) and 5 (30)."
       ],
       "starterCodeJson": [
+        {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb.products.drop(); db.products.insertMany([{ _id: 1, name: \"Keyboard\", price: 49.9 }, { _id: 2, name: \"Mouse\", price: 19 }, { _id: 3, name: \"Monitor\", price: 150 }, { _id: 4, name: \"Cable\", price: 12 }, { _id: 5, name: \"Pad\", price: 30 }])"
+        },
         {
           "name": "solution.js",
           "language": "javascript",
@@ -354,6 +374,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb.products.drop(); db.products.insertMany([{ _id: 1, name: \"Keyboard\", price: 49.9, category: \"input\" }, { _id: 2, name: \"Mouse\", price: 19, category: \"input\" }, { _id: 3, name: \"Monitor\", price: 150, category: \"display\" }, { _id: 4, name: \"Cable\", price: 12, category: \"cable\" }, { _id: 5, name: \"Pad\", price: 30, category: \"desk\" }])"
+        },
+        {
           "name": "solution.js",
           "language": "javascript",
           "code": "// price > 20 AND <= 100, names only, sorted\n// category in [input, display], names only, sorted\n// category != cable, names only, sorted"
@@ -415,6 +440,11 @@
       ],
       "starterCodeJson": [
         {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb.posts.drop(); db.posts.insertOne({ _id: 1, title: \"Intro\", likes: 0, tags: [\"draft\"] })"
+        },
+        {
           "name": "solution.js",
           "language": "javascript",
           "code": "// $inc likes by 3\n// $push \"mongodb\" onto tags\n// $addToSet \"draft\" onto tags (already present -> no change)\n// $pull \"draft\" from tags\n// findOne _id 1"
@@ -475,6 +505,11 @@
         "distinct(\"category\") returns an array of the unique values of that field."
       ],
       "starterCodeJson": [
+        {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb.products.drop(); db.products.insertMany([{ _id: 1, name: \"Keyboard\", price: 49.9, category: \"input\" }, { _id: 2, name: \"Mouse\", price: 19, category: \"input\" }, { _id: 3, name: \"Monitor\", price: 150, category: \"display\" }, { _id: 4, name: \"Cable\", price: 12, category: \"cable\" }, { _id: 5, name: \"Pad\", price: 30, category: \"desk\" }])"
+        },
         {
           "name": "solution.js",
           "language": "javascript",
@@ -601,6 +636,11 @@
         "The result carries separate insertedCount, modifiedCount, deletedCount, and upsertedCount fields."
       ],
       "starterCodeJson": [
+        {
+          "name": "seed.js",
+          "language": "javascript",
+          "code": "// Run once in mongosh to create the data this exercise works with.\ndb.inventory.drop(); db.inventory.insertMany([{ _id: 1, sku: \"A\", qty: 5 }, { _id: 2, sku: \"B\", qty: 0 }])"
+        },
         {
           "name": "solution.js",
           "language": "javascript",

@@ -1,0 +1,5 @@
+rowsInTable 3
+visible 2
+marked 1
+tenant1 1
+admin 3

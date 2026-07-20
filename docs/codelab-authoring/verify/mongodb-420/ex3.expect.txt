@@ -1,0 +1,6 @@
+fast true
+durable true
+all true
+tooMany UnsatisfiableWriteConcern
+failedButStored 1
+docs 6

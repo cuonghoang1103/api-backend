@@ -1,0 +1,33 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "./generated"
+  previewFeatures = ["metrics"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:x@localhost:55432/prisma_codelab"
+}
+
+model User {
+  id           Int    @id @default(autoincrement())
+  email        String @unique
+  name         String
+  passwordHash String
+  tenantId     Int
+}
+
+model Note {
+  id       Int    @id @default(autoincrement())
+  title    String @unique
+  body     String
+  tenantId Int
+}
+
+model AuditLog {
+  id       Int      @id @default(autoincrement())
+  model    String
+  action   String
+  recordId Int?
+  at       DateTime @default(now())
+}

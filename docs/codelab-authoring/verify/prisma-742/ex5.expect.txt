@@ -1,0 +1,5 @@
+t1 N1, N2
+t2 N3
+rawCount 2
+noContext 0
+ownerSees 3

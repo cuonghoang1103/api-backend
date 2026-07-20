@@ -1,0 +1,5 @@
+loop 4
+include 2
+batched 2
+sameData true
+budget ok

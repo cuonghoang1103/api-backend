@@ -1,0 +1,4 @@
+Ann ADMIN Backend engineer true
+Bob EDITOR Frontend developer true
+Cy USER - false
+keys id, name, role, bio, adult

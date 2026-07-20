@@ -1,0 +1,5 @@
+naiveMisses \d+
+causalMisses 0
+hasClusterTime true
+monotonic 2
+total 43

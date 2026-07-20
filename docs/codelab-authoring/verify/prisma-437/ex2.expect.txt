@@ -1,0 +1,5 @@
+plain 1
+include 2
+hasDuration true
+hasParams true
+slow 0

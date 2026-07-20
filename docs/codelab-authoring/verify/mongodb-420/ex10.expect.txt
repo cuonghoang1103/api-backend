@@ -1,0 +1,5 @@
+attempted 20
+written 20
+lost 0
+interrupted true
+majorityVisible 20

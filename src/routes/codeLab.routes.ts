@@ -25,6 +25,7 @@ import { Router, type Request, type Response } from 'express';
 import { authenticate, optionalAuth, requireRole } from '../middleware/auth.js';
 import type { ApiResponse } from '../types/index.js';
 import * as codeLab from '../services/codeLab.service.js';
+import * as explainService from '../services/codeLab.explain.service.js';
 import { generateRoadmap, generateExercises, commitExercises } from '../services/codeLab.ai.service.js';
 import { generateLesson, commitLesson, getModuleLesson, clearLesson } from '../services/codeLab.lesson.service.js';
 
@@ -127,6 +128,37 @@ router.post('/exercises/:id(\\d+)/progress', authenticate, async (req, res: Resp
 });
 
 // GET /progress/mine?trackId=
+// ─── AI explanation of one exercise (Pro only) ──────────────────
+// The cached explanation is readable by any signed-in user; GENERATING one and
+// asking follow-ups costs tokens and is Pro-gated inside the service.
+router.get('/exercises/:id(\\d+)/ai/explain', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const out = await explainService.readExplanation(Number(req.params.id));
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
+router.post('/exercises/:id(\\d+)/ai/explain', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const out = await explainService.explainExercise(Number(req.params.id), {
+      userId: req.user!.userId,
+      force: !!req.body?.force,
+    });
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
+router.post('/exercises/:id(\\d+)/ai/ask', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const out = await explainService.askFollowUp(Number(req.params.id), {
+      userId: req.user!.userId,
+      question: String(req.body?.question || ''),
+      history: Array.isArray(req.body?.history) ? req.body.history : [],
+    });
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
 router.get('/progress/mine', authenticate, async (req, res: Response<ApiResponse>, next) => {
   try {
     const userId = req.user!.userId;

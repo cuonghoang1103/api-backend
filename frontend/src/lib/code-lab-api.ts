@@ -34,6 +34,18 @@ export const codeLabApi = {
   getLesson: (moduleId: number) => api.get<Ok<CodeLesson>>(`${BASE}/modules/${moduleId}/lesson`),
   getStats: () => api.get<Ok<CodeStats>>(`${BASE}/stats`),
 
+  // AI explanation of one exercise. Reading a cached one is free; generating it
+  // and asking follow-ups is Pro-gated on the server.
+  readAiExplanation: (exerciseId: number) =>
+    api.get<Ok<{ blocks: DocBlock[]; cached: boolean; generatedAt: string | null }>>(
+      `${BASE}/exercises/${exerciseId}/ai/explain`),
+  generateAiExplanation: (exerciseId: number, force = false) =>
+    api.post<Ok<{ blocks: DocBlock[]; cached: boolean; generatedAt: string | null }>>(
+      `${BASE}/exercises/${exerciseId}/ai/explain`, { force }),
+  askAiFollowUp: (exerciseId: number, question: string,
+                  history: Array<{ role: 'user' | 'assistant'; content: string }>) =>
+    api.post<Ok<{ answer: string }>>(`${BASE}/exercises/${exerciseId}/ai/ask`, { question, history }),
+
   listExercises: (params: {
     trackId?: number; moduleId?: number; groupId?: number; language?: string;
     difficulty?: CodeDifficulty; q?: string; sort?: string; page?: number; limit?: number;

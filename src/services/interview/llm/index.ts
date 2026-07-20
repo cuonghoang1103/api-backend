@@ -187,7 +187,7 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 /** Which product spent the tokens. `step` only picks a model tier, so without
  *  this the Interview grader and the My Language tutor were the same row. */
-export type LLMFeature = 'interview' | 'language' | 'cv' | 'chat' | 'bulk_gen' | 'exphub';
+export type LLMFeature = 'interview' | 'language' | 'cv' | 'chat' | 'bulk_gen' | 'exphub' | 'codelab';
 
 async function logLlmCall(d: {
   userId?: number | null;

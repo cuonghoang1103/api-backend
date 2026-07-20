@@ -1,0 +1,619 @@
+{
+  "trackSlug": "sql",
+  "moduleSlug": "advanced-data-types-json-and-semi-structured-data",
+  "exercises": [
+    {
+      "title": "Extract Fields with the Arrow Operators",
+      "difficulty": "EASY",
+      "estimatedMinutes": 20,
+      "points": 10,
+      "concepts": [
+        "JSONB",
+        "arrow operator",
+        "double-arrow operator",
+        "json vs text",
+        "field access"
+      ],
+      "prerequisites": [
+        "SELECT",
+        "data types"
+      ],
+      "tags": [
+        "jsonb",
+        "json",
+        "arrow-operator",
+        "semi-structured",
+        "postgres"
+      ],
+      "problemHtml": "<p>PostgreSQL's <code>JSONB</code> type stores semi-structured documents inside a column, and the two arrow operators pull fields out. <code>-&gt;</code> returns the value <em>as JSON</em> (so <code>attrs -&gt; 'price'</code> is the JSON number <code>1200</code>), while <code>-&gt;&gt;</code> returns it <em>as text</em> (so <code>attrs -&gt;&gt; 'price'</code> is the string <code>'1200'</code>). Choosing the right one matters: text for display and comparison to strings, JSON for further navigation or numeric casts.</p>\n<p>The <code>products</code> table has an <code>attrs</code> JSONB column. For each product:</p>\n<ul>\n<li>Return <code>name</code>, the brand as text (<code>attrs -&gt;&gt; 'brand'</code> AS brand), and the price cast to an integer (<code>(attrs -&gt;&gt; 'price')::int</code> AS price).</li>\n<li>Order by <code>id</code>.</li>\n</ul>\n<p>Note the cast: <code>-&gt;&gt;</code> gives text, so you cast to <code>int</code> to do arithmetic or numeric sorting later. The scaffold shows the extraction to complete.</p>",
+      "inputSpec": "products with JSONB attrs holding brand, price, specs, tags for Laptop, Mouse, Keyboard.",
+      "outputSpec": "Laptop -> Acme, 1200; Mouse -> Acme, 25; Keyboard -> KeyCo, 80.",
+      "constraints": "Use ->> for text extraction. Cast the price text to int with (attrs->>'price')::int.",
+      "examplesJson": [
+        {
+          "input": "attrs ->> 'brand' for the Laptop",
+          "output": "Acme",
+          "explanation": "The double arrow returns the field value as text."
+        },
+        {
+          "input": "(attrs ->> 'price')::int for the Laptop",
+          "output": "1200",
+          "explanation": "->> gives the text \"1200\", then ::int casts it to an integer."
+        }
+      ],
+      "hintsJson": [
+        "Two operators: one returns JSON, one returns text.",
+        "attrs ->> 'brand' returns the brand as text.",
+        "attrs -> 'price' returns the JSON number; attrs ->> 'price' returns the text '1200'.",
+        "Cast text to a number with (attrs ->> 'price')::int."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Use JSONB operators/functions per the requirements above.\n-- ->  (json)   ->> (text)   #>> (path text)   @> (containment)\n-- ?  (key exists)   jsonb_array_elements_text   jsonb_build_object   jsonb_agg\nSELECT /* ... */;"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- ->> returns the field as text (brand); cast the text price to int for numeric use.\n-- Use -> when you need the value as JSON (to navigate further), ->> when you need text.\nSELECT name,\n       attrs ->> 'brand'          AS brand,\n       (attrs ->> 'price')::int   AS price\nFROM   products\nORDER BY id;"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The two arrow operators differ only in the type they return, and that difference drives everything you do next. <code>attrs -&gt; 'price'</code> returns the value as <code>JSONB</code> (the number <code>1200</code>, still a JSON value you could navigate into or index), while <code>attrs -&gt;&gt; 'price'</code> returns it as <code>text</code> (the string <code>'1200'</code>). Because arithmetic and numeric comparisons need a real number, you take the text form and cast it: <code>(attrs -&gt;&gt; 'price')::int</code>. Reaching for <code>-&gt;</code> and then trying to compare it to an integer fails, because a JSON value is not directly comparable to <code>int</code>.</p>\n<p>The practical rule: use <code>-&gt;&gt;</code> at the point you leave JSON for the SQL world (display, string comparison, casting), and use <code>-&gt;</code> while you are still navigating deeper into the document (the next exercise chains it). A subtlety worth knowing: extracting a key that does not exist returns <code>NULL</code> rather than erroring, so missing fields flow through as nulls — convenient, but it means a typo in a key name fails silently rather than loudly. <code>JSONB</code> (binary JSON) is almost always the right choice over the older <code>JSON</code> type: it is stored decomposed, so access is fast and it supports indexing, at the cost of not preserving insignificant whitespace or duplicate keys. This flexibility — structured columns alongside a schemaless document — is why JSONB is the standard way to hold variable attributes, event payloads, and settings in PostgreSQL.</p>"
+    },
+    {
+      "title": "Reach into Nested Objects",
+      "difficulty": "EASY",
+      "estimatedMinutes": 20,
+      "points": 10,
+      "concepts": [
+        "nested access",
+        "chained arrows",
+        "path operator",
+        "#>> operator",
+        "deep extraction"
+      ],
+      "prerequisites": [
+        "arrow operators",
+        "JSONB"
+      ],
+      "tags": [
+        "jsonb",
+        "nested",
+        "path",
+        "json",
+        "postgres"
+      ],
+      "problemHtml": "<p>JSON documents nest, and JSONB gives you two ways to reach a deep value: chain the arrow operators (<code>attrs -&gt; 'specs' -&gt;&gt; 'ram'</code>) or use the path operators <code>#&gt;</code> (returns JSON) and <code>#&gt;&gt;</code> (returns text) with an array of keys (<code>attrs #&gt;&gt; '{specs,ram}'</code>). Both navigate an object-within-an-object; the path form is tidier for deep paths.</p>\n<p>The <code>attrs</code> column has a nested <code>specs</code> object. For each product:</p>\n<ul>\n<li>Return <code>name</code> and the value of <code>specs.ram</code> as text, using chained arrows (<code>attrs -&gt; 'specs' -&gt;&gt; 'ram'</code> AS ram).</li>\n<li>Also return <code>specs.cpu</code> using the path operator (<code>attrs #&gt;&gt; '{specs,cpu}'</code> AS cpu).</li>\n<li>Order by <code>id</code>. Products lacking a field return <code>NULL</code> for it.</li>\n</ul>\n<p>Only the Laptop has both ram and cpu; the others return NULL where the key is absent. The scaffold shows both access styles.</p>",
+      "inputSpec": "products.attrs each contain a nested specs object with different keys per product.",
+      "outputSpec": "Laptop -> ram 16, cpu i7; Mouse -> ram NULL, cpu NULL (its specs has dpi); Keyboard -> ram NULL, cpu NULL (its specs has switches).",
+      "constraints": "Use chained arrows for specs.ram and the #>> path operator for specs.cpu. Absent keys yield NULL, not an error.",
+      "examplesJson": [
+        {
+          "input": "attrs -> 'specs' ->> 'ram' for the Laptop",
+          "output": "16",
+          "explanation": "The first arrow gets the specs object as JSON, the second gets ram as text."
+        },
+        {
+          "input": "attrs #>> '{specs,cpu}' for the Mouse",
+          "output": "NULL",
+          "explanation": "The Mouse's specs has no cpu key, so the path returns NULL."
+        }
+      ],
+      "hintsJson": [
+        "Nested values need either chained arrows or a path array.",
+        "Chain: attrs -> 'specs' ->> 'ram' (first arrow keeps JSON, last returns text).",
+        "Path: attrs #>> '{specs,cpu}' navigates specs then cpu as text.",
+        "A missing key along the path yields NULL rather than an error."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Use JSONB operators/functions per the requirements above.\n-- ->  (json)   ->> (text)   #>> (path text)   @> (containment)\n-- ?  (key exists)   jsonb_array_elements_text   jsonb_build_object   jsonb_agg\nSELECT /* ... */;"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Chained arrows: -> keeps the intermediate specs object as JSON, the final ->> returns text.\n-- The #>> path form takes the whole path as an array. A missing key anywhere yields NULL.\nSELECT name,\n       attrs -> 'specs' ->> 'ram'    AS ram,\n       attrs #>> '{specs,cpu}'       AS cpu\nFROM   products\nORDER BY id;"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Both expressions reach a value two levels deep, and they are interchangeable. The chained form <code>attrs -&gt; 'specs' -&gt;&gt; 'ram'</code> reads left to right: the first <code>-&gt;</code> returns the <code>specs</code> sub-object <em>as JSON</em> (so you can keep navigating), and the final <code>-&gt;&gt;</code> returns <code>ram</code> <em>as text</em>. The rule is that every step except the last should use <code>-&gt;</code> (to stay in JSON) and only the last uses <code>-&gt;&gt;</code> if you want text — a common mistake is using <code>-&gt;&gt;</code> in the middle, which turns the intermediate object into text and breaks the next step. The path form <code>attrs #&gt;&gt; '{specs,cpu}'</code> takes the whole path as a text array and is cleaner for deep or dynamic paths, with <code>#&gt;</code> returning JSON and <code>#&gt;&gt;</code> returning text just like the single arrows.</p>\n<p>The graceful NULL handling is central to working with semi-structured data: because each product's <code>specs</code> has different keys, asking for <code>specs.cpu</code> on the Mouse (which only has <code>dpi</code>) returns <code>NULL</code> rather than raising an error. That is exactly the point of JSONB — rows need not share a shape — but it also means missing data and typos both surface as <code>NULL</code>, so validating that expected keys are present (with the existence operators you will meet shortly) matters when the field is required. For frequently-queried nested values, you can even build an expression index on <code>(attrs #&gt;&gt; '{specs,ram}')</code> to make such lookups fast.</p>"
+    },
+    {
+      "title": "Filter Rows by JSON Content and Containment",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 15,
+      "concepts": [
+        "filtering by JSON",
+        "containment operator",
+        "field equality",
+        "numeric compare on JSON",
+        "WHERE on JSONB"
+      ],
+      "prerequisites": [
+        "arrow operators",
+        "WHERE filter"
+      ],
+      "tags": [
+        "jsonb",
+        "containment",
+        "filter",
+        "query",
+        "postgres"
+      ],
+      "problemHtml": "<p>You filter rows by their JSON content the same way you filter by columns — inside <code>WHERE</code>. You can compare an extracted field (<code>attrs -&gt;&gt; 'brand' = 'Acme'</code>) or, more powerfully, use the <strong>containment</strong> operator <code>@&gt;</code>, which asks \"does this JSONB contain the given JSON?\" and is the operator a GIN index accelerates.</p>\n<p>Against the <code>products</code> table, write three queries and log a count for each:</p>\n<ul>\n<li>Products whose brand is <code>'Acme'</code>, via <code>attrs -&gt;&gt; 'brand' = 'Acme'</code>.</li>\n<li>Products with <code>price</code> greater than 50, via <code>(attrs -&gt;&gt; 'price')::int &gt; 50</code>.</li>\n<li>Products that contain <code>{\"brand\":\"Acme\"}</code>, via <code>attrs @&gt; '{\"brand\":\"Acme\"}'</code> — the containment form.</li>\n</ul>\n<p>The first and third should agree here. Print <code>brand N</code>, <code>expensive N</code>, <code>contains N</code>. The scaffold shows the filters to complete.</p>",
+      "inputSpec": "products: Laptop (Acme, 1200), Mouse (Acme, 25), Keyboard (KeyCo, 80).",
+      "outputSpec": "brand = Acme -> 2 (Laptop, Mouse); price > 50 -> 2 (Laptop 1200, Keyboard 80); contains {brand:Acme} -> 2 (same as brand filter).",
+      "constraints": "Use ->> for the brand text compare, a cast for the numeric compare, and the @> containment operator for the third. Do not fetch all rows and filter in application code.",
+      "examplesJson": [
+        {
+          "input": "attrs ->> 'brand' = 'Acme'",
+          "output": "2",
+          "explanation": "Laptop and Mouse are both Acme."
+        },
+        {
+          "input": "attrs @> '{\"brand\":\"Acme\"}'",
+          "output": "2",
+          "explanation": "Containment matches the same two rows; @> tests whether the left JSONB includes the right."
+        }
+      ],
+      "hintsJson": [
+        "Filter JSON in WHERE just like a column.",
+        "Field equality: attrs ->> 'brand' = 'Acme'.",
+        "Numeric: cast first — (attrs ->> 'price')::int > 50.",
+        "Containment: attrs @> '{\"brand\":\"Acme\"}' asks if attrs includes that JSON."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Use JSONB operators/functions per the requirements above.\n-- ->  (json)   ->> (text)   #>> (path text)   @> (containment)\n-- ?  (key exists)   jsonb_array_elements_text   jsonb_build_object   jsonb_agg\nSELECT /* ... */;"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "SELECT\n  (SELECT count(*) FROM products WHERE attrs ->> 'brand' = 'Acme')            AS brand,\n  (SELECT count(*) FROM products WHERE (attrs ->> 'price')::int > 50)          AS expensive,\n  (SELECT count(*) FROM products WHERE attrs @> '{\"brand\":\"Acme\"}')            AS contains;"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Filtering on JSON content works in <code>WHERE</code> exactly like filtering on ordinary columns; the only new part is how you reach the value. Extracting a field with <code>-&gt;&gt;</code> and comparing to a string (<code>attrs -&gt;&gt; 'brand' = 'Acme'</code>) is the direct approach, and for numbers you cast first (<code>(attrs -&gt;&gt; 'price')::int &gt; 50</code>) because <code>-&gt;&gt;</code> yields text and <code>'1200' &gt; '50'</code> would compare as strings (wrongly, since \"1200\" sorts before \"50\" lexically). The cast is not optional for correct numeric comparison — it is the classic JSON-filter bug.</p>\n<p>The <code>@&gt;</code> containment operator is the more powerful and idiomatic tool. <code>attrs @&gt; '{\"brand\":\"Acme\"}'</code> asks whether the left JSONB <em>contains</em> the right one as a sub-structure, which matches the same two Acme rows. Containment shines for two reasons: it handles nested structures and arrays in one expression (<code>attrs @&gt; '{\"specs\":{\"cpu\":\"i7\"}}'</code> or <code>attrs @&gt; '{\"tags\":[\"accessory\"]}'</code>), and — crucially — it is the operator a <strong>GIN index</strong> on the JSONB column accelerates, turning a full scan into an index lookup. Field-extraction filters (<code>-&gt;&gt;</code>) generally cannot use that index unless you build a specific expression index. So for \"does this document match this partial shape\" queries at scale, prefer <code>@&gt;</code> with a GIN index; reserve <code>-&gt;&gt;</code> comparisons for casts and ranges the containment operator cannot express.</p>"
+    },
+    {
+      "title": "Work with JSON Arrays",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 30,
+      "points": 20,
+      "concepts": [
+        "JSON arrays",
+        "jsonb_array_elements_text",
+        "array containment",
+        "element existence",
+        "unnest JSON"
+      ],
+      "prerequisites": [
+        "JSONB access",
+        "containment"
+      ],
+      "tags": [
+        "jsonb",
+        "arrays",
+        "unnest",
+        "containment",
+        "postgres"
+      ],
+      "problemHtml": "<p>JSONB arrays hold lists — here each product has a <code>tags</code> array. Three operations cover most needs: expand an array into rows with <code>jsonb_array_elements_text</code>, test whether an array <em>contains</em> an element with <code>@&gt;</code>, and test whether an object/array has a key/element with the existence operator <code>?</code>.</p>\n<p>Against the <code>products</code> table:</p>\n<ul>\n<li>Expand every product's tags into (name, tag) rows with <code>jsonb_array_elements_text(attrs -&gt; 'tags')</code>, ordered by name then tag. Log each as <code>name:tag</code>.</li>\n<li>Count products whose tags array contains <code>\"accessory\"</code> using containment: <code>attrs -&gt; 'tags' @&gt; '[\"accessory\"]'</code>. Log <code>accessory N</code>.</li>\n<li>Count products whose tags array has the element <code>\"mechanical\"</code> using the existence operator <code>attrs -&gt; 'tags' ? 'mechanical'</code>. Log <code>mechanical N</code>.</li>\n</ul>\n<p>The scaffold shows the array expansion and the two membership tests.</p>",
+      "inputSpec": "products tags: Laptop [\"computer\",\"portable\"], Mouse [\"accessory\"], Keyboard [\"accessory\",\"mechanical\"].",
+      "outputSpec": "Expanded rows: Keyboard:accessory, Keyboard:mechanical, Laptop:computer, Laptop:portable, Mouse:accessory. accessory count = 2 (Mouse, Keyboard); mechanical count = 1 (Keyboard).",
+      "constraints": "Use jsonb_array_elements_text to unnest, @> for array containment, and ? for element existence. Order the expanded rows by name then tag.",
+      "examplesJson": [
+        {
+          "input": "jsonb_array_elements_text(attrs -> 'tags') for the Keyboard",
+          "output": "two rows: accessory, mechanical",
+          "explanation": "The function turns each array element into its own row of text."
+        },
+        {
+          "input": "attrs -> 'tags' ? 'mechanical'",
+          "output": "true only for the Keyboard (count 1)",
+          "explanation": "The ? operator tests whether the array contains the string element \"mechanical\"."
+        }
+      ],
+      "hintsJson": [
+        "Three tools: expand an array to rows, test containment, test element existence.",
+        "jsonb_array_elements_text(attrs -> 'tags') produces one text row per tag.",
+        "Array containment: attrs -> 'tags' @> '[\"accessory\"]'.",
+        "Element existence: attrs -> 'tags' ? 'mechanical'."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Use JSONB operators/functions per the requirements above.\n-- ->  (json)   ->> (text)   #>> (path text)   @> (containment)\n-- ?  (key exists)   jsonb_array_elements_text   jsonb_build_object   jsonb_agg\nSELECT /* ... */;"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "SELECT\n  (SELECT string_agg(name || ':' || tag, ', ' ORDER BY name, tag)\n   FROM products, jsonb_array_elements_text(attrs -> 'tags') AS tag)     AS expanded,\n  (SELECT count(*) FROM products WHERE attrs -> 'tags' @> '[\"accessory\"]') AS accessory,\n  (SELECT count(*) FROM products WHERE attrs -> 'tags' ? 'mechanical')     AS mechanical;"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Three complementary tools handle JSON arrays. <code>jsonb_array_elements_text(attrs -&gt; 'tags')</code> is a set-returning function: it takes the tags array and yields one <em>row</em> of text per element, so joining it against <code>products</code> in the <code>FROM</code> clause (a lateral cross join) produces one (product, tag) pair per tag — exactly how you flatten an embedded list into relational rows for grouping or joining. Here it is aggregated back with <code>string_agg</code> for a compact result, but the expansion is the reusable idea.</p>\n<p>The two membership tests answer different questions. <code>@&gt;</code> containment on an array (<code>attrs -&gt; 'tags' @&gt; '[\"accessory\"]'</code>) asks \"does this array include all elements of that array\", so it naturally handles checking for multiple required tags at once and, like all containment, can use a GIN index. The existence operator <code>?</code> (<code>attrs -&gt; 'tags' ? 'mechanical'</code>) asks \"does this array contain this single string element\" (and on an object, \"does it have this key\"). They overlap for a single string but differ in shape: <code>?</code> takes a bare text value, <code>@&gt;</code> takes a JSON fragment; <code>?|</code> and <code>?&amp;</code> extend <code>?</code> to \"any of\" and \"all of\" a list of keys. A subtlety: <code>?</code> checks top-level keys/elements only and its right side must be text, so it does not look inside nested objects. For tag filtering at scale, the containment approach with a GIN index is usually the best-performing choice.</p>"
+    },
+    {
+      "title": "Modify JSONB with jsonb_set, Merge, and Delete",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 30,
+      "points": 20,
+      "concepts": [
+        "jsonb_set",
+        "concatenation merge",
+        "key deletion",
+        "immutable update",
+        "in-place JSON edit"
+      ],
+      "prerequisites": [
+        "JSONB access",
+        "UPDATE"
+      ],
+      "tags": [
+        "jsonb",
+        "jsonb_set",
+        "merge",
+        "update",
+        "postgres"
+      ],
+      "problemHtml": "<p>JSONB values are edited by producing a new JSONB from the old one. <code>jsonb_set</code> replaces a value at a path, the concatenation operator <code>||</code> merges two objects (right side wins on conflicts, and adds new keys), and the minus operator <code>-</code> removes a key. These are expressions, so you use them in a <code>SELECT</code> to preview or an <code>UPDATE</code> to persist.</p>\n<p>Starting from the Laptop row (<code>id = 1</code>), produce a transformed JSONB (without modifying the table) that:</p>\n<ul>\n<li>Sets <code>price</code> to <code>999</code> using <code>jsonb_set(attrs, '{price}', '999')</code>.</li>\n<li>Merges in <code>{\"onSale\": true}</code> using <code>||</code>.</li>\n<li>Removes the <code>specs</code> key using <code>- 'specs'</code>.</li>\n</ul>\n<p>Then extract from the result: the new price as int, whether <code>onSale</code> is present, and whether <code>specs</code> is gone. Print <code>price 999</code>, <code>onsale true</code>, <code>specs_removed true</code>. The scaffold shows the chained transformation.</p>",
+      "inputSpec": "The Laptop row: attrs has brand Acme, price 1200, specs {ram,cpu}, tags [...].",
+      "outputSpec": "After jsonb_set(price=999) || {onSale:true} - specs: price becomes 999, onSale is true, and the specs key no longer exists (its ->> is NULL).",
+      "constraints": "Chain jsonb_set, ||, and the - operator on attrs. jsonb_set's third argument is a JSONB value (use '999', not 999). Do not mutate the table (SELECT only).",
+      "examplesJson": [
+        {
+          "input": "jsonb_set(attrs, '{price}', '999')",
+          "output": "the document with price now 999",
+          "explanation": "jsonb_set replaces the value at path {price}; the new value is given as JSONB text '999'."
+        },
+        {
+          "input": "attrs - 'specs'",
+          "output": "the document without the specs key",
+          "explanation": "The minus operator removes a top-level key."
+        }
+      ],
+      "hintsJson": [
+        "JSONB edits build a new value: set a path, merge an object, or drop a key.",
+        "jsonb_set(attrs, '{price}', '999') replaces price (note the value is JSONB '999').",
+        "Merge with || : attrs || '{\"onSale\": true}'.",
+        "Delete a key with the minus operator: attrs - 'specs'."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Use JSONB operators/functions per the requirements above.\n-- ->  (json)   ->> (text)   #>> (path text)   @> (containment)\n-- ?  (key exists)   jsonb_array_elements_text   jsonb_build_object   jsonb_agg\nSELECT /* ... */;"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "WITH edited AS (\n    SELECT (jsonb_set(attrs, '{price}', '999') || '{\"onSale\": true}'::jsonb) - 'specs' AS a\n    FROM   products\n    WHERE  id = 1\n)\nSELECT (a ->> 'price')::int                       AS price,\n       (a ->> 'onSale')::boolean                  AS onsale,\n       (a ->> 'specs' IS NULL)                    AS specs_removed\nFROM   edited;"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each operation returns a new JSONB, so you chain them to compose a transformation. <code>jsonb_set(attrs, '{price}', '999')</code> replaces the value at the path <code>{price}</code> — note the third argument is itself a JSONB value, so the number is written as the text <code>'999'</code> (passing a bare SQL integer would be a type error). The concatenation operator <code>||</code> merges the right object into the left: shared keys take the right side's value and brand-new keys (like <code>onSale</code>) are added, which makes <code>||</code> the idiomatic \"upsert these fields\" for a document. The minus operator <code>- 'specs'</code> removes a top-level key. The parentheses matter because <code>||</code> and <code>-</code> have their own precedence; grouping makes the intended order explicit.</p>\n<p>Because these are pure expressions, the same chain works in a <code>SELECT</code> to preview (as here) or in <code>UPDATE products SET attrs = ... WHERE id = 1</code> to persist — JSONB is immutable, so an \"edit\" always writes back a whole new value. Two things to remember: <code>jsonb_set</code> by default only updates an existing path and, with its optional fourth argument <code>create_if_missing</code>, can add a missing one; and for deep changes the path array navigates nesting (<code>jsonb_set(attrs, '{specs,ram}', '32')</code>). For removing by path rather than a top-level key, use <code>#-</code> (<code>attrs #- '{specs,cpu}'</code>). Editing large documents rewrites the entire value, so very frequent small updates to a big JSONB can be costly — a sign the field might deserve to be a real column.</p>"
+    },
+    {
+      "title": "Inspect Keys and Values with jsonb_each and Existence",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 30,
+      "points": 20,
+      "concepts": [
+        "jsonb_object_keys",
+        "key existence",
+        "any/all key operators",
+        "introspection",
+        "dynamic keys"
+      ],
+      "prerequisites": [
+        "JSONB access",
+        "set-returning functions"
+      ],
+      "tags": [
+        "jsonb",
+        "keys",
+        "introspection",
+        "existence",
+        "postgres"
+      ],
+      "problemHtml": "<p>Sometimes you do not know a document's keys in advance and must introspect. <code>jsonb_object_keys</code> lists an object's top-level keys as rows, the <code>?</code> operator tests whether a specific key exists, and <code>?|</code> / <code>?&amp;</code> test whether <em>any</em> or <em>all</em> of a list of keys exist. These power dynamic queries and validation.</p>\n<p>Against the <code>products</code> table:</p>\n<ul>\n<li>List the top-level keys of the Laptop's <code>attrs</code> (<code>id = 1</code>) with <code>jsonb_object_keys</code>, aggregated alphabetically. Log <code>keys ...</code>.</li>\n<li>Count products that have a <code>price</code> key using <code>attrs ? 'price'</code>. Log <code>haveprice N</code>.</li>\n<li>Count products that have <strong>either</strong> a <code>weight</code> or a <code>brand</code> key using <code>attrs ?| array['weight','brand']</code>. Log <code>eitherkey N</code>.</li>\n</ul>\n<p>All three products have brand and price; none have weight. Print the three lines. The scaffold shows the introspection to complete.</p>",
+      "inputSpec": "products.attrs each have keys brand, price, specs, tags (no weight key on any).",
+      "outputSpec": "Laptop keys: brand, price, specs, tags. haveprice = 3 (all have price). eitherkey = 3 (all have brand, so the ?| matches even though none have weight).",
+      "constraints": "Use jsonb_object_keys for the key list, ? for single-key existence, and ?| for any-of-list existence. Aggregate the keys alphabetically.",
+      "examplesJson": [
+        {
+          "input": "jsonb_object_keys(attrs) for the Laptop",
+          "output": "brand, price, specs, tags",
+          "explanation": "Each top-level key becomes a row; aggregated alphabetically here."
+        },
+        {
+          "input": "attrs ?| array['weight','brand']",
+          "output": "true for all 3 (count 3)",
+          "explanation": "?| is true if ANY listed key exists; every product has brand, so all match."
+        }
+      ],
+      "hintsJson": [
+        "Introspect unknown documents: list keys, or test whether keys exist.",
+        "jsonb_object_keys(attrs) returns one row per top-level key.",
+        "attrs ? 'price' tests a single key's existence.",
+        "attrs ?| array['weight','brand'] is true if any listed key exists; ?& requires all."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Use JSONB operators/functions per the requirements above.\n-- ->  (json)   ->> (text)   #>> (path text)   @> (containment)\n-- ?  (key exists)   jsonb_array_elements_text   jsonb_build_object   jsonb_agg\nSELECT /* ... */;"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "SELECT\n  (SELECT string_agg(k, ', ' ORDER BY k)\n   FROM jsonb_object_keys((SELECT attrs FROM products WHERE id = 1)) AS k)       AS keys,\n  (SELECT count(*) FROM products WHERE attrs ? 'price')                          AS haveprice,\n  (SELECT count(*) FROM products WHERE attrs ?| array['weight','brand'])         AS eitherkey;"
+        }
+      ],
+      "solutionExplanationHtml": "<p>These operators let you work with documents whose shape you do not know at query-writing time. <code>jsonb_object_keys(attrs)</code> is a set-returning function that emits one row per top-level key, so the Laptop yields <code>brand</code>, <code>price</code>, <code>specs</code>, <code>tags</code> — useful for building dynamic UIs, auditing which fields exist, or driving further logic. The existence family answers presence questions without extracting values: <code>attrs ? 'price'</code> is true when the key exists (all three products qualify), <code>?|</code> is true when <em>any</em> of a list of keys exists, and <code>?&amp;</code> when <em>all</em> do.</p>\n<p>The subtle result is <code>eitherkey = 3</code>: <code>attrs ?| array['weight','brand']</code> matches every product even though none has a <code>weight</code> key, because <code>?|</code> requires only that <em>at least one</em> listed key be present, and every product has <code>brand</code>. Reading <code>?|</code> as \"all of these\" is a common misreading; it is \"any of these\", and <code>?&amp;</code> is the \"all of these\" counterpart. A second thing to internalise: the existence operators check <strong>keys</strong> of an object (or elements of a string array), test only the <strong>top level</strong>, and require text arguments — so they do not peer into nested objects and cannot be used to test values. To check a nested key's presence, navigate first (<code>attrs -&gt; 'specs' ? 'ram'</code>). Like containment, the <code>?</code>, <code>?|</code>, and <code>?&amp;</code> operators can be accelerated by a GIN index on the JSONB column, making existence filters scalable.</p>"
+    },
+    {
+      "title": "Build JSON from Rows with jsonb_build_object and jsonb_agg",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 30,
+      "points": 20,
+      "concepts": [
+        "jsonb_build_object",
+        "jsonb_agg",
+        "row to JSON",
+        "aggregate to JSON array",
+        "API shaping"
+      ],
+      "prerequisites": [
+        "aggregate functions",
+        "JSONB access"
+      ],
+      "tags": [
+        "jsonb",
+        "build",
+        "aggregate",
+        "api",
+        "postgres"
+      ],
+      "problemHtml": "<p>The reverse of reading JSON is producing it — shaping query rows into a JSON document, which is how you return API-ready payloads straight from SQL. <code>jsonb_build_object('k', v, ...)</code> makes an object from alternating key/value arguments, and <code>jsonb_agg(...)</code> aggregates rows into a JSON array.</p>\n<p>Against the <code>products</code> table, build a single JSON array of product summaries:</p>\n<ul>\n<li>For each product make an object with keys <code>id</code>, <code>name</code>, and <code>price</code> (price as an int) using <code>jsonb_build_object</code>.</li>\n<li>Aggregate those objects into one array with <code>jsonb_agg(... ORDER BY id)</code>.</li>\n<li>Return the array. Also return its length via <code>jsonb_array_length</code>.</li>\n</ul>\n<p>The result is a three-element JSON array. Print the array length as <code>len 3</code> and the first element's name via <code>-&gt; 0 -&gt;&gt; 'name'</code> as <code>first Laptop</code>. The scaffold shows the construction to complete.</p>",
+      "inputSpec": "products: Laptop (1200), Mouse (25), Keyboard (80).",
+      "outputSpec": "A JSON array of 3 objects [{id,name,price}, ...] ordered by id; its length is 3 and element 0 name is \"Laptop\".",
+      "constraints": "Use jsonb_build_object for each row and jsonb_agg to combine, ordering by id. Use jsonb_array_length for the count.",
+      "examplesJson": [
+        {
+          "input": "jsonb_build_object('id', id, 'name', name, 'price', (attrs->>'price')::int) for the Laptop",
+          "output": "{\"id\":1,\"name\":\"Laptop\",\"price\":1200}",
+          "explanation": "Alternating key/value arguments build a JSON object from the row."
+        },
+        {
+          "input": "jsonb_agg(... ORDER BY id)",
+          "output": "a 3-element array in id order",
+          "explanation": "jsonb_agg collects the per-row objects into one JSON array."
+        }
+      ],
+      "hintsJson": [
+        "Produce JSON, do not just read it: build an object per row, then aggregate.",
+        "jsonb_build_object('id', id, 'name', name, 'price', (attrs->>'price')::int) makes one object.",
+        "jsonb_agg(obj ORDER BY id) collects them into an array.",
+        "jsonb_array_length(arr) gives the element count; arr -> 0 ->> 'name' reads the first name."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Use JSONB operators/functions per the requirements above.\n-- ->  (json)   ->> (text)   #>> (path text)   @> (containment)\n-- ?  (key exists)   jsonb_array_elements_text   jsonb_build_object   jsonb_agg\nSELECT /* ... */;"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "WITH built AS (\n    SELECT jsonb_agg(\n             jsonb_build_object('id', id, 'name', name, 'price', (attrs ->> 'price')::int)\n             ORDER BY id\n           ) AS arr\n    FROM   products\n)\nSELECT jsonb_array_length(arr) AS len,\n       arr -> 0 ->> 'name'     AS first\nFROM   built;"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Producing JSON from relational rows is what lets the database hand your application a ready-shaped payload in one round trip. <code>jsonb_build_object</code> takes alternating key/value arguments and returns a JSON object, so <code>jsonb_build_object('id', id, 'name', name, 'price', (attrs -&gt;&gt; 'price')::int)</code> turns each row into <code>{\"id\": 1, \"name\": \"Laptop\", \"price\": 1200}</code> — note you cast the price to <code>int</code> so it lands as a JSON number rather than a string. <code>jsonb_agg</code> is an aggregate function that collects those per-row objects into a single JSON array, and its <code>ORDER BY</code> controls the array element order, giving deterministic output.</p>\n<p>This \"shape it in SQL\" approach is powerful: a single query can return exactly the nested JSON an API endpoint needs, avoiding an N+1 fetch-then-assemble loop in application code. The companions round out the toolkit — <code>jsonb_object_agg(key, value)</code> builds an object keyed by a column (a lookup map), <code>to_jsonb(row)</code> converts a whole row or composite to JSON in one step, and <code>row_to_json</code> is the older JSON-typed equivalent. The counterpart you saw earlier, <code>jsonb_array_elements</code>, expands an array back into rows, so you can round-trip freely between relational and document shapes. One caution: building very large JSON documents materialises the whole thing in memory, so for huge result sets stream or paginate rather than aggregating millions of rows into one array. For typical API responses, though, constructing JSON in the query is both concise and fast.</p>"
+    },
+    {
+      "title": "Expand JSON Arrays into Relational Rows",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 30,
+      "points": 20,
+      "concepts": [
+        "jsonb_array_elements",
+        "lateral expansion",
+        "JSON to rows",
+        "aggregation over expanded",
+        "tag analytics"
+      ],
+      "prerequisites": [
+        "jsonb_array_elements_text",
+        "GROUP BY"
+      ],
+      "tags": [
+        "jsonb",
+        "expand",
+        "lateral",
+        "aggregation",
+        "postgres"
+      ],
+      "problemHtml": "<p>To analyse data locked inside JSON arrays, you expand the array into rows and then treat it like any table. <code>jsonb_array_elements_text</code> in the <code>FROM</code> clause performs a lateral expansion — one row per element per parent — after which ordinary <code>GROUP BY</code> aggregation applies. This is how you answer \"which tag is most common\" over embedded arrays, and it is the exact inverse of the <code>jsonb_agg</code> construction from the previous exercise: one explodes an array into rows, the other collapses rows into an array.</p>\n<p>Against the <code>products</code> table, compute tag frequencies:</p>\n<ul>\n<li>Expand every product's <code>tags</code> into rows with <code>jsonb_array_elements_text(attrs -&gt; 'tags')</code>.</li>\n<li><code>GROUP BY</code> the tag and <code>count</code> how many products carry each, ordered by count descending then tag ascending.</li>\n<li>Return <code>tag</code>, <code>uses</code>.</li>\n</ul>\n<p><code>accessory</code> is the most common. The scaffold shows the lateral expansion and grouping.</p>",
+      "inputSpec": "products tags: Laptop [computer, portable], Mouse [accessory], Keyboard [accessory, mechanical].",
+      "outputSpec": "Tag counts: accessory 2, computer 1, mechanical 1, portable 1 (accessory first as the most common, then alphabetical).",
+      "constraints": "Expand tags with jsonb_array_elements_text in FROM, then GROUP BY the tag. Order by count desc, tag asc. Do not parse the array in application code.",
+      "examplesJson": [
+        {
+          "input": "expanding all tags then grouping",
+          "output": "accessory 2, computer 1, mechanical 1, portable 1",
+          "explanation": "accessory appears on Mouse and Keyboard (2); each other tag on one product."
+        },
+        {
+          "input": "jsonb_array_elements_text(attrs -> 'tags')",
+          "output": "one row per tag per product",
+          "explanation": "The lateral expansion multiplies each product into as many rows as it has tags."
+        }
+      ],
+      "hintsJson": [
+        "Expand the array to rows first, then aggregate as usual.",
+        "FROM products, jsonb_array_elements_text(attrs -> 'tags') AS tag performs the lateral expansion.",
+        "GROUP BY tag, count(*) gives per-tag usage.",
+        "Order by count(*) DESC, tag ASC for the ranking."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Use JSONB operators/functions per the requirements above.\n-- ->  (json)   ->> (text)   #>> (path text)   @> (containment)\n-- ?  (key exists)   jsonb_array_elements_text   jsonb_build_object   jsonb_agg\nSELECT /* ... */;"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- The set-returning function in FROM is an implicit LATERAL join: it emits one row per tag\n-- per product, after which the tags are an ordinary text column that GROUP BY can aggregate.\nSELECT tag, count(*) AS uses\nFROM   products,\n       jsonb_array_elements_text(attrs -> 'tags') AS tag\nGROUP BY tag\nORDER BY count(*) DESC, tag;"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Expanding an array into rows is the bridge from document data back to relational analytics. Writing <code>jsonb_array_elements_text(attrs -&gt; 'tags')</code> in the <code>FROM</code> clause is an implicit <code>LATERAL</code> join: for each product row it emits one row per tag, so the Keyboard (two tags) becomes two rows and the Mouse (one tag) becomes one. After that expansion, the tags are just a normal text column, and ordinary <code>GROUP BY tag</code> with <code>count(*)</code> gives the frequency of each — <code>accessory</code> twice, the rest once. Ordering by <code>count(*) DESC, tag</code> produces a clean, deterministic ranking.</p>\n<p>The mental model is important: a set-returning function in <code>FROM</code> multiplies rows, turning \"a list inside a row\" into \"many rows\", which is exactly what lets SQL's aggregation machinery loose on embedded data. This round-trips with the construction functions from the previous exercise — <code>jsonb_agg</code> collapses rows into an array, <code>jsonb_array_elements</code> explodes an array into rows. Two practical notes: use <code>jsonb_array_elements</code> (not the <code>_text</code> variant) when the elements are objects you need to navigate further (then extract fields from each element with <code>-&gt;&gt;</code>); and if some rows have no <code>tags</code> array or an empty one, the implicit cross join drops them, so use <code>LEFT JOIN LATERAL ... ON true</code> when you must keep tagless products. This expand-then-aggregate pattern is the standard way to report over line items, tags, and any embedded collection.</p>"
+    },
+    {
+      "title": "Index JSONB for Fast Containment Queries",
+      "difficulty": "HARD",
+      "estimatedMinutes": 45,
+      "points": 25,
+      "concepts": [
+        "GIN index",
+        "jsonb_path_ops",
+        "containment acceleration",
+        "index verification",
+        "query performance"
+      ],
+      "prerequisites": [
+        "containment operator",
+        "indexes"
+      ],
+      "tags": [
+        "jsonb",
+        "gin-index",
+        "performance",
+        "containment",
+        "postgres"
+      ],
+      "problemHtml": "<p>Containment and existence queries on JSONB can scan every row — fine for three products, slow for three million. A <strong>GIN index</strong> on the JSONB column makes <code>@&gt;</code> (and the <code>?</code> family) fast by indexing the document's keys and values. This exercise builds the index and confirms the query still returns correct results through it.</p>\n<p>Against the <code>products</code> table:</p>\n<ul>\n<li>Create a GIN index on <code>attrs</code>: <code>CREATE INDEX idx_products_attrs ON products USING GIN (attrs)</code>.</li>\n<li>Confirm the index exists by selecting from <code>pg_indexes</code> where the index name matches.</li>\n<li>Run a containment query that the index supports — count products where <code>attrs @&gt; '{\"brand\":\"Acme\"}'</code> — and confirm it returns 2.</li>\n</ul>\n<p>Return the index name and the containment count. Print <code>index idx_products_attrs</code> and <code>acme 2</code>. The scaffold shows the DDL and checks to complete.</p>",
+      "inputSpec": "products with a JSONB attrs column; two products have brand Acme.",
+      "outputSpec": "After creating the GIN index idx_products_attrs, pg_indexes lists it, and the containment query attrs @> {brand:Acme} returns 2.",
+      "constraints": "Use a GIN index (USING GIN) on the attrs column. Verify via pg_indexes. The containment query must use @>, the operator GIN accelerates.",
+      "examplesJson": [
+        {
+          "input": "CREATE INDEX ... USING GIN (attrs)",
+          "output": "a GIN index named idx_products_attrs",
+          "explanation": "GIN (Generalized Inverted Index) indexes the keys and values inside the JSONB."
+        },
+        {
+          "input": "count where attrs @> '{\"brand\":\"Acme\"}'",
+          "output": "2",
+          "explanation": "The containment query returns the two Acme products, and can now use the index."
+        }
+      ],
+      "hintsJson": [
+        "Containment queries scan every row unless a GIN index supports them.",
+        "CREATE INDEX idx_products_attrs ON products USING GIN (attrs).",
+        "Check pg_indexes WHERE indexname = 'idx_products_attrs'.",
+        "The @> and ? operators are the ones a default GIN jsonb index accelerates."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Use JSONB operators/functions per the requirements above.\n-- ->  (json)   ->> (text)   #>> (path text)   @> (containment)\n-- ?  (key exists)   jsonb_array_elements_text   jsonb_build_object   jsonb_agg\nSELECT /* ... */;"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "CREATE INDEX IF NOT EXISTS idx_products_attrs ON products USING GIN (attrs);\n\nSELECT\n  (SELECT indexname FROM pg_indexes\n   WHERE tablename = 'products' AND indexname = 'idx_products_attrs')  AS index,\n  (SELECT count(*) FROM products WHERE attrs @> '{\"brand\":\"Acme\"}')    AS acme;"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A <strong>GIN</strong> (Generalized Inverted Index) index is the standard way to make JSONB queries fast. <code>CREATE INDEX ... USING GIN (attrs)</code> builds an inverted index over the keys and values inside every document, so a containment query like <code>attrs @&gt; '{\"brand\":\"Acme\"}'</code> can look up the matching rows through the index instead of deserializing and scanning every JSONB value. The default <code>jsonb_ops</code> operator class supports the containment operator <code>@&gt;</code> and the existence operators <code>?</code>, <code>?|</code>, <code>?&amp;</code> — the very operators from the earlier filtering and introspection exercises — which is why those were emphasised as the scalable ones.</p>\n<p>The result confirms correctness (the Acme count is still 2) and that the index is registered. On a small table PostgreSQL's planner may still choose a sequential scan because it is cheaper than an index for three rows — so the index existing does not guarantee it is <em>used</em> at this size, and you would confirm real usage with <code>EXPLAIN</code> on a large table. Two tuning notes worth knowing: the alternative operator class <code>jsonb_path_ops</code> (<code>USING GIN (attrs jsonb_path_ops)</code>) makes a smaller, faster index that supports <em>only</em> <code>@&gt;</code> containment — ideal when you never use the existence operators; and if you only ever query one extracted field, a plain B-tree expression index (<code>CREATE INDEX ON products ((attrs -&gt;&gt; 'brand'))</code>) is smaller still and supports range and equality on that field. Choose GIN for flexible \"does the document match this shape\" querying, and expression indexes for one hot scalar path.</p>"
+    },
+    {
+      "title": "Query and Reshape a Nested Document Catalog",
+      "difficulty": "HARD",
+      "estimatedMinutes": 55,
+      "points": 30,
+      "concepts": [
+        "combined JSONB operations",
+        "nested extraction",
+        "filtering and reshaping",
+        "building output JSON",
+        "capstone"
+      ],
+      "prerequisites": [
+        "nested access",
+        "array expansion",
+        "jsonb_build_object",
+        "filtering"
+      ],
+      "tags": [
+        "jsonb",
+        "capstone",
+        "reshape",
+        "catalog",
+        "postgres"
+      ],
+      "problemHtml": "<p>This capstone treats the <code>products</code> table as a document catalog and answers a realistic reporting request that combines nested extraction, array handling, filtering, and JSON construction. It is the shape of turning a schemaless store into a clean API response.</p>\n<p>Produce a single JSON array describing every <strong>Acme</strong> product (brand = Acme), where each element is an object with:</p>\n<ul>\n<li><code>product</code>: the product name.</li>\n<li><code>price</code>: the price as an integer.</li>\n<li><code>tag_count</code>: the number of tags (via <code>jsonb_array_length(attrs -&gt; 'tags')</code>).</li>\n<li><code>first_spec</code>: the first key of the nested <code>specs</code> object (via <code>jsonb_object_keys</code>, taking the alphabetically first).</li>\n</ul>\n<p>Aggregate the elements into one array ordered by price descending. Then return the array length and the first element's <code>product</code>. Print <code>count 2</code> and <code>top Laptop</code>. The scaffold shows the pieces to combine.</p>",
+      "inputSpec": "products: Laptop (Acme, 1200, specs {ram,cpu}, 2 tags), Mouse (Acme, 25, specs {dpi}, 1 tag), Keyboard (KeyCo, ...).",
+      "outputSpec": "A 2-element array (Acme products only) ordered by price desc: Laptop (1200, tag_count 2, first_spec cpu) then Mouse (25, tag_count 1, first_spec dpi). Array length 2, first element product = Laptop.",
+      "constraints": "Filter to brand Acme, extract nested/array data, build an object per row, aggregate ordered by price desc. Use a lateral subquery or ordered aggregation for the first spec key.",
+      "examplesJson": [
+        {
+          "input": "the Laptop as an output element",
+          "output": "{\"product\":\"Laptop\",\"price\":1200,\"tag_count\":2,\"first_spec\":\"cpu\"}",
+          "explanation": "Name, price int, tag array length 2, and the alphabetically first specs key (cpu before ram)."
+        },
+        {
+          "input": "the final array length and top product",
+          "output": "count 2, top Laptop",
+          "explanation": "Two Acme products; ordered by price desc, the Laptop (1200) is first."
+        }
+      ],
+      "hintsJson": [
+        "Combine four skills: filter by brand, read nested/array fields, build an object, aggregate to an array.",
+        "first_spec: (SELECT min(k) FROM jsonb_object_keys(attrs -> 'specs') AS k) gives the alphabetically first spec key.",
+        "Build each element with jsonb_build_object('product', name, 'price', (attrs->>'price')::int, ...).",
+        "jsonb_agg(elem ORDER BY (attrs->>'price')::int DESC) builds the ordered array; jsonb_array_length counts it."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- Use JSONB operators/functions per the requirements above.\n-- ->  (json)   ->> (text)   #>> (path text)   @> (containment)\n-- ?  (key exists)   jsonb_array_elements_text   jsonb_build_object   jsonb_agg\nSELECT /* ... */;"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "WITH elems AS (\n    SELECT jsonb_agg(\n             jsonb_build_object(\n               'product',   name,\n               'price',     (attrs ->> 'price')::int,\n               'tag_count', jsonb_array_length(attrs -> 'tags'),\n               'first_spec', (SELECT min(k) FROM jsonb_object_keys(attrs -> 'specs') AS k)\n             )\n             ORDER BY (attrs ->> 'price')::int DESC\n           ) AS arr\n    FROM   products\n    WHERE  attrs ->> 'brand' = 'Acme'\n)\nSELECT jsonb_array_length(arr) AS count,\n       arr -> 0 ->> 'product'  AS top\nFROM   elems;"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The capstone chains every technique from the module. The <code>WHERE attrs -&gt;&gt; 'brand' = 'Acme'</code> filters the catalog to Acme products. For each surviving row, <code>jsonb_build_object</code> assembles an output element from four differently-sourced pieces: a plain column (<code>name</code>), a cast scalar (<code>(attrs -&gt;&gt; 'price')::int</code>), an array length (<code>jsonb_array_length(attrs -&gt; 'tags')</code>), and a value derived by a correlated subquery over the nested object's keys (<code>min(k)</code> from <code>jsonb_object_keys(attrs -&gt; 'specs')</code>, giving the alphabetically first spec key — <code>cpu</code> before <code>ram</code> for the Laptop, <code>dpi</code> for the Mouse). <code>jsonb_agg(... ORDER BY (attrs -&gt;&gt; 'price')::int DESC)</code> then collects the elements into one price-descending array.</p>\n<p>This is exactly how a schemaless store becomes a clean, ordered API payload in a single query: navigate nested structures, expand and measure arrays, compute derived fields, and construct the output JSON — all server-side, avoiding a fetch-then-reshape loop in the application. The correlated subquery for <code>first_spec</code> illustrates a general trick: when a per-row value needs its own aggregation over nested data, a scalar subquery keyed to the current row does it cleanly. The final <code>jsonb_array_length</code> and <code>arr -&gt; 0 -&gt;&gt; 'product'</code> read back from the constructed array to confirm two Acme products with the Laptop on top. The lesson of the whole module: JSONB lets a single column hold flexible documents, and PostgreSQL's operator and function set is rich enough to query, transform, aggregate, index, and re-emit them without ever leaving SQL — reserving real columns for the fields you filter and join on most, and JSONB for the variable rest.</p>",
+      "diagramMermaid": "flowchart TD\n  A[filter brand Acme] --> B[per row build object]\n  B --> C[name and price int]\n  B --> D[tag_count array length]\n  B --> E[first_spec min of specs keys]\n  C --> F[jsonb_agg order by price desc]\n  D --> F\n  E --> F\n  F --> G[array length and top product]"
+    }
+  ]
+}

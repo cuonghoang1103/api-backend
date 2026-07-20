@@ -28,13 +28,13 @@ interface Live {
   headlineAt: string | null;
 }
 
-function timeAgoVi(iso: string | null): string | null {
+function timeAgo(iso: string | null): string | null {
   if (!iso) return null;
   const mins = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
-  if (mins < 60) return `${Math.max(1, mins)} phút trước`;
+  if (mins < 60) return `${Math.max(1, mins)}m ago`;
   const h = Math.round(mins / 60);
-  if (h < 24) return `${h} giờ trước`;
-  return `${Math.round(h / 24)} ngày trước`;
+  if (h < 24) return `${h}h ago`;
+  return `${Math.round(h / 24)}d ago`;
 }
 
 export default function NewModulesSection() {
@@ -80,35 +80,35 @@ export default function NewModulesSection() {
       href: '/code-lab',
       icon: BookOpenText,
       accent: '#8b5cf6',
-      eyebrow: 'Học lập trình',
+      eyebrow: 'Learn by building',
       title: 'Code Lab',
       body:
-        'Lộ trình từ số 0 tới nâng cao cho mọi ngôn ngữ và framework: bài giảng dài như một chương sách, rồi bài tập chấm được ngay trong trình soạn thảo — kèm lời giải chính thức.',
-      stat: live.tracks ? `${live.tracks} lộ trình · bài giảng + bài tập` : 'Java, Python, SQL, React, Docker…',
+        'Zero-to-advanced tracks for every language and framework: a chapter-length lesson, then exercises you solve in the editor — each with an official solution you can check yourself against.',
+      stat: live.tracks ? `${live.tracks} tracks · lessons + graded exercises` : 'Java · Python · SQL · React · Docker',
     },
     {
       key: 'exp-hub',
       href: '/exp-hub',
       icon: Layers,
       accent: '#06b6d4',
-      eyebrow: 'Tra cứu nhanh',
+      eyebrow: 'Look it up fast',
       title: 'Exp Hub',
       body:
-        'Kho snippet và tài liệu tham khảo theo từng công nghệ. Tìm bằng từ khoá, xem cú pháp và ví dụ chạy được, không phải mở mười tab StackOverflow.',
-      stat: 'Snippet · ghi chú · tài liệu theo chủ đề',
+        'Snippets and reference docs per technology. Search a keyword, get the syntax and a runnable example — instead of ten Stack Overflow tabs.',
+      stat: 'Snippets · notes · reference docs',
     },
     {
       key: 'news',
       href: '/tech-trends/news',
       icon: Newspaper,
       accent: '#f59e0b',
-      eyebrow: 'Mỗi ngày',
-      title: 'Bảng tin công nghệ',
+      eyebrow: 'Every morning',
+      title: 'Tech Bulletin',
       body:
-        'Tổng hợp thông báo chính thức trong ngày từ blog kỹ thuật của GitHub, Vercel, OpenAI, AWS… Mỗi tin đều dẫn thẳng tới bài gốc để bạn tự kiểm chứng.',
+        'The day\'s official announcements from the engineering blogs of GitHub, Vercel, OpenAI, AWS and 50 more. Every item links straight to the source so you can check it yourself.',
       stat: live.headline
-        ? `${timeAgoVi(live.headlineAt) ?? 'Mới'}: ${live.headline}`
-        : 'Bản tin mới lúc 07:30 mỗi sáng',
+        ? `${timeAgo(live.headlineAt) ?? 'New'} — ${live.headline}`
+        : 'A new bulletin every morning at 07:30',
     },
   ];
 
@@ -124,13 +124,13 @@ export default function NewModulesSection() {
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium tracking-wide text-slate-300">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-            Mới trên cuongthai.com
+            New here
           </span>
           <h2 className="mt-4 text-3xl font-bold text-white sm:text-4xl">
-            Ba thứ vừa được thêm vào
+            Three things just shipped
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-slate-400">
-            Học một kỹ năng, tra cứu khi cần, và theo kịp những gì đang thay đổi — cả ba đều mở, không cần đăng ký.
+            Learn a skill, look something up, keep up with what changed — all three are open, no account needed.
           </p>
         </motion.div>
 

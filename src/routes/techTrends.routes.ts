@@ -1073,7 +1073,11 @@ adminRouter.post('/news/generate', async (req, res: Response<ApiResponse>, next)
     if (!userId) throw new AppError('Không xác định được tài khoản đăng.', 401, 'UNAUTHORIZED');
     const { publishAt, ingestFirst } = req.body as Record<string, unknown>;
 
-    if (ingestFirst !== false) await ingestAllFeeds();
+    // Ingest is opt-IN, not opt-out. Pulling 56 feeds takes longer than the
+    // proxy's request timeout, so folding it into this call made the admin
+    // button fail even though the bulletin itself was fine — the cron already
+    // keeps the candidate pool warm, and the panel has its own ingest button.
+    if (ingestFirst === true) await ingestAllFeeds();
 
     let when: Date | null = null;
     if (publishAt) {

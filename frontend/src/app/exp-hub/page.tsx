@@ -523,7 +523,12 @@ export default function ExpHubPage() {
             <DocToc blocks={docBlocks} />
           )}
 
-          {/* Filters */}
+          {/* Filters — only worth showing when there is a list to act on. While a
+              reference doc or a single snippet is open the panel filters nothing,
+              which is how it ended up reading as "Filter / Newest / 0 results" with
+              no effect. Kept visible when a filter is active so the user can always
+              undo one that emptied the list. */}
+          {!selectedSnippet && (snippets.length > 0 || selectedTags.length > 0 || !!selectedLanguage) && (
           <div className="space-y-3 border-b border-[var(--border-color)] p-3">
             <FilterPanel
               tags={tags}
@@ -549,6 +554,7 @@ export default function ExpHubPage() {
               <span className="text-sm text-[var(--text-muted)]">{snippets.length} {t('expHub.results')}</span>
             </div>
           </div>
+          )}
 
           {/* Snippet List (normal browse OR saved-only view) */}
           <div className="flex-1 overflow-y-auto">

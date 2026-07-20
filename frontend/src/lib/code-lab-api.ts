@@ -17,6 +17,10 @@ import type {
   RoadmapModuleProposal,
   ExerciseProposal,
   CodeLesson,
+  VivaQuestion,
+  VivaGrade,
+  SpecCheck,
+  SkillCoverageResponse,
 } from '@/types/code-lab';
 import type { DocBlock } from '@/types/exp-hub';
 
@@ -42,6 +46,17 @@ export const codeLabApi = {
   generateAiExplanation: (exerciseId: number, force = false) =>
     api.post<Ok<{ blocks: DocBlock[]; cached: boolean; generatedAt: string | null }>>(
       `${BASE}/exercises/${exerciseId}/ai/explain`, { force }),
+  getSkillCoverage: (trackSlug: string) =>
+    api.get<Ok<SkillCoverageResponse>>(`${BASE}/tracks/${trackSlug}/skills`),
+
+  // Practice coach — oral defence and brief compliance. All Pro-gated server side.
+  askViva: (exerciseId: number, mode: 'explain' | 'change', asked: string[]) =>
+    api.post<Ok<VivaQuestion>>(`${BASE}/exercises/${exerciseId}/coach/viva`, { mode, asked }),
+  gradeViva: (exerciseId: number, question: string, answer: string, mode: 'explain' | 'change') =>
+    api.post<Ok<VivaGrade>>(`${BASE}/exercises/${exerciseId}/coach/grade`, { question, answer, mode }),
+  checkAgainstBrief: (exerciseId: number, code: string) =>
+    api.post<Ok<SpecCheck>>(`${BASE}/exercises/${exerciseId}/coach/check`, { code }),
+
   askAiFollowUp: (exerciseId: number, question: string,
                   history: Array<{ role: 'user' | 'assistant'; content: string }>) =>
     api.post<Ok<{ answer: string }>>(`${BASE}/exercises/${exerciseId}/ai/ask`, { question, history }),

@@ -14,6 +14,7 @@ import type { CodeTrack, MyProgressItem } from '@/types/code-lab';
 import { useAuthStore } from '@/store/authStore';
 import { DifficultyBadge, LevelPill, ProgressRing, TechIcon } from '@/components/code-lab/shared';
 import { ModuleLesson } from '@/components/code-lab/ModuleLesson';
+import { SkillCoverage } from '@/components/code-lab/SkillCoverage';
 
 export default function TrackRoadmapPage() {
   const params = useParams<{ trackSlug: string }>();
@@ -119,6 +120,8 @@ export default function TrackRoadmapPage() {
           No modules yet.
         </div>
       )}
+      <SkillCoverage trackSlug={slug} />
+
       <div className="space-y-5">
         {(track.modules || []).map((m, mi) => (
           <section

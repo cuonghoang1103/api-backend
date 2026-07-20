@@ -25,6 +25,7 @@ import { CodeEditor } from '@/components/exp-hub/CodeEditor';
 import { DifficultyBadge } from '@/components/code-lab/shared';
 import { ExerciseResources } from '@/components/code-lab/ExerciseResources';
 import { AiExplain } from '@/components/code-lab/AiExplain';
+import { CoachPanel } from '@/components/code-lab/CoachPanel';
 
 function Section({ icon, title, children }: { icon?: React.ReactNode; title: string; children: React.ReactNode }) {
   return (
@@ -272,6 +273,8 @@ export default function ExerciseDetailPage() {
       )}
 
       <AiExplain exerciseId={ex.id} />
+
+      <CoachPanel exerciseId={ex.id} />
 
       {/* Input / Output specs */}
       {(ex.inputSpec || ex.outputSpec) && (

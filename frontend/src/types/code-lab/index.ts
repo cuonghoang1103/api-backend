@@ -179,3 +179,37 @@ export interface ExerciseProposal {
   solutionExplanationHtml: string;
   tags: string[];
 }
+
+
+// ─── Practice coach (Pro) ───────────────────────────────────────
+export type VivaMode = 'explain' | 'change';
+
+export interface VivaQuestion {
+  question: string; questionVi: string; hint: string; hintVi: string;
+  focus: string; mode: VivaMode;
+}
+
+export interface VivaGrade {
+  score: number; verdict: string; verdictVi: string;
+  good: string[]; goodVi: string[]; missing: string[]; missingVi: string[];
+  modelAnswer: string; modelAnswerVi: string;
+}
+
+export interface SpecCheckItem {
+  requirement: string; requirementVi: string;
+  status: 'met' | 'partial' | 'missing';
+  evidence: string; evidenceVi: string; fix: string; fixVi: string;
+}
+
+export interface SpecCheck {
+  summary: string; summaryVi: string; met: number; total: number;
+  items: SpecCheckItem[]; risks: string[]; risksVi: string[];
+}
+
+export interface SkillCoverageItem { skill: string; total: number; solved: number; inProgress: number }
+export interface SkillCoverageResponse {
+  track: { id: number; name: string; slug: string };
+  skills: SkillCoverageItem[];
+  totalExercises: number;
+  solvedExercises: number;
+}

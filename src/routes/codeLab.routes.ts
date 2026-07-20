@@ -26,6 +26,7 @@ import { authenticate, optionalAuth, requireRole } from '../middleware/auth.js';
 import type { ApiResponse } from '../types/index.js';
 import * as codeLab from '../services/codeLab.service.js';
 import * as explainService from '../services/codeLab.explain.service.js';
+import * as coachService from '../services/codeLab.coach.service.js';
 import { generateRoadmap, generateExercises, commitExercises } from '../services/codeLab.ai.service.js';
 import { generateLesson, commitLesson, getModuleLesson, clearLesson } from '../services/codeLab.lesson.service.js';
 
@@ -155,6 +156,48 @@ router.post('/exercises/:id(\\d+)/ai/ask', authenticate, async (req, res: Respon
       question: String(req.body?.question || ''),
       history: Array.isArray(req.body?.history) ? req.body.history : [],
     });
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
+// ─── Practice coach: oral defence + spec compliance (Pro only) ──
+router.post('/exercises/:id(\\d+)/coach/viva', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const mode = req.body?.mode === 'change' ? 'change' : 'explain';
+    const out = await coachService.askViva(Number(req.params.id), {
+      userId: req.user!.userId,
+      mode,
+      asked: Array.isArray(req.body?.asked) ? req.body.asked.map(String) : [],
+    });
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
+router.post('/exercises/:id(\\d+)/coach/grade', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const out = await coachService.gradeViva(Number(req.params.id), {
+      userId: req.user!.userId,
+      question: String(req.body?.question || ''),
+      answer: String(req.body?.answer || ''),
+      mode: req.body?.mode === 'change' ? 'change' : 'explain',
+    });
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
+router.post('/exercises/:id(\\d+)/coach/check', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const out = await coachService.checkAgainstBrief(Number(req.params.id), {
+      userId: req.user!.userId,
+      code: String(req.body?.code || ''),
+    });
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
+router.get('/tracks/:slug/skills', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const out = await codeLab.getSkillCoverage(req.params.slug, req.user?.userId ?? null);
     res.json({ success: true, data: out });
   } catch (e) { next(e); }
 });

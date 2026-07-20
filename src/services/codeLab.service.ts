@@ -755,3 +755,80 @@ export async function bulkImportExercises(
   }
   return { total: items.length, created: results.filter((r) => r.ok).length, results };
 }
+
+
+// ─── Skill coverage ─────────────────────────────────────────────
+/**
+ * Which skills a learner has actually exercised in one track.
+ *
+ * Progress bars per exercise say "how far through the list am I"; they do not
+ * say "what am I still bad at". Grouping by the tags an exercise carries answers
+ * the second question, which is the one that decides whether you pass.
+ *
+ * Counts every PUBLISHED exercise in the track, so the denominator does not move
+ * when a draft is added.
+ */
+export interface SkillCoverage {
+  skill: string;
+  total: number;
+  solved: number;
+  inProgress: number;
+}
+
+export async function getSkillCoverage(trackSlug: string, userId?: number | null): Promise<{
+  track: { id: number; name: string; slug: string };
+  skills: SkillCoverage[];
+  totalExercises: number;
+  solvedExercises: number;
+}> {
+  const track = await prisma.codeTrack.findUnique({
+    where: { slug: trackSlug },
+    select: { id: true, name: true, slug: true },
+  });
+  if (!track) throw new NotFoundError('Track not found.');
+
+  const exercises = await prisma.codeExercise.findMany({
+    where: { trackId: track.id, status: 'PUBLISHED' },
+    select: { id: true, tags: true, concepts: true },
+  });
+
+  const progress = userId
+    ? await prisma.codeProgress.findMany({
+        where: { userId, exercise: { trackId: track.id } },
+        select: { exerciseId: true, status: true },
+      })
+    : [];
+  const byExercise = new Map(progress.map((p) => [p.exerciseId, p.status]));
+
+  // A skill label is a tag, falling back to concepts when an exercise has no
+  // tags at all. Track-wide labels ("lab211", "fptu") carry no information about
+  // what you can do, so they are dropped.
+  const IGNORE = new Set(['lab211', 'fptu', 'java', 'basic', 'beginner']);
+  const buckets = new Map<string, SkillCoverage>();
+
+  for (const ex of exercises) {
+    const tags = strArray(ex.tags).map((t) => t.toLowerCase().trim());
+    const labels = (tags.length ? tags : strArray(ex.concepts).map((c) => c.toLowerCase().trim()))
+      .filter((t) => t && !IGNORE.has(t));
+    const status = byExercise.get(ex.id);
+
+    for (const label of new Set(labels)) {
+      const b = buckets.get(label) ?? { skill: label, total: 0, solved: 0, inProgress: 0 };
+      b.total++;
+      if (status === 'SOLVED') b.solved++;
+      else if (status === 'IN_PROGRESS') b.inProgress++;
+      buckets.set(label, b);
+    }
+  }
+
+  const skills = [...buckets.values()]
+    // Weakest first: that is the list you should act on.
+    .sort((a, b) => (a.solved / a.total) - (b.solved / b.total) || b.total - a.total);
+
+  return {
+    track,
+    skills,
+    totalExercises: exercises.length,
+    solvedExercises: exercises.filter((e) => byExercise.get(e.id) === 'SOLVED').length,
+  };
+}

@@ -16,6 +16,36 @@ function str(v: unknown, max: number): string | undefined {
   return s ? s.slice(0, max) : undefined;
 }
 
+/**
+ * Claim the R2 objects a promo points at.
+ *
+ * The presigned large-file path records every upload as a PENDING row with a
+ * 24h TTL, and a cron deletes the object when that expires. Only the social
+ * feed ever marked its uploads CONFIRMED, so a promo video was uploaded, shown
+ * correctly, and then silently deleted from R2 four hours later — the card kept
+ * its poster (small files skip that path) and lost its clip, which is exactly
+ * how this surfaced. Claiming the key here is what makes the upload permanent.
+ */
+async function confirmUploads(...urls: Array<string | undefined | null>): Promise<void> {
+  const keys = urls
+    .filter((u): u is string => !!u)
+    .map((u) => {
+      try {
+        // Stored URLs are absolute (https://media.../video/u1/xxx.mp4); the
+        // PendingUpload row keys them by the path without the leading slash.
+        return new URL(u).pathname.replace(/^\/+/, '');
+      } catch {
+        return u.replace(/^\/+/, '');
+      }
+    })
+    .filter(Boolean);
+  if (!keys.length) return;
+  await prisma.pendingUpload.updateMany({
+    where: { r2Key: { in: keys }, status: 'PENDING' },
+    data: { status: 'CONFIRMED' },
+  });
+}
+
 export async function listActivePromos() {
   return prisma.landingPromo.findMany({ where: { isActive: true }, orderBy: ORDER });
 }
@@ -29,6 +59,7 @@ export async function createPromo(input: Record<string, unknown>) {
   const videoUrl = str(input.videoUrl, 500);
   if (!title) throw new BadRequestError('Tiêu đề không được trống');
   if (!videoUrl) throw new BadRequestError('Thiếu video (videoUrl)');
+  await confirmUploads(videoUrl, str(input.posterUrl, 500));
   return prisma.landingPromo.create({
     data: {
       title,
@@ -49,7 +80,8 @@ export async function updatePromo(id: number, input: Record<string, unknown>) {
   if (!existing) throw new NotFoundError('Không tìm thấy promo');
   const data: Record<string, unknown> = {};
   if (input.title !== undefined) { const t = str(input.title, 160); if (!t) throw new BadRequestError('Tiêu đề không được trống'); data.title = t; }
-  if (input.videoUrl !== undefined) { const v = str(input.videoUrl, 500); if (!v) throw new BadRequestError('Thiếu video'); data.videoUrl = v; }
+  if (input.videoUrl !== undefined) { const v = str(input.videoUrl, 500); if (!v) throw new BadRequestError('Thiếu video'); data.videoUrl = v; await confirmUploads(v); }
+  if (input.posterUrl !== undefined) await confirmUploads(str(input.posterUrl, 500));
   if (input.tagline !== undefined) data.tagline = str(input.tagline, 255) ?? null;
   if (input.posterUrl !== undefined) data.posterUrl = str(input.posterUrl, 500) ?? null;
   if (input.href !== undefined) data.href = str(input.href, 255) ?? null;

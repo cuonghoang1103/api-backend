@@ -14,6 +14,7 @@ import LandingHero from './LandingHero';
 import StatsCounter from './StatsCounter';
 import FeatureShowcase from './FeatureShowcase';
 import FeatureMarquee from './FeatureMarquee';
+import NewModulesSection from './NewModulesSection';
 
 const reveal = {
   initial: { opacity: 0, y: 18 },
@@ -52,6 +53,11 @@ export default function RiveLanding() {
         <FeatureMarquee />
         <p className="mt-8 px-4 text-center text-xs text-slate-500">Hover a card to pause · click to open the feature</p>
       </section>
+
+      {/* The newest modules get their own section rather than another marquee
+          card: the marquee needs an admin-uploaded clip, which a just-shipped
+          feature does not have yet. */}
+      <NewModulesSection />
 
       {/* Closing CTA */}
       <section className="relative z-10 px-4 pb-24">

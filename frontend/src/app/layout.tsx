@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+import PageViewTracker from '@/components/analytics/PageViewTracker';
 import '@/app/globals.css'
 import type { Metadata, Viewport } from 'next'
 // Self-hosted fonts via @fontsource (npm) instead of next/font/google.
@@ -302,6 +304,11 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body suppressHydrationWarning className="antialiased">
+        {/* Page-view reporting. Wrapped in Suspense because it reads search
+            params, which opts the whole route into client rendering otherwise. */}
+        <Suspense fallback={null}>
+          <PageViewTracker />
+        </Suspense>
         {/* Boot splash — rendered in the server HTML so it paints INSTANTLY
             on first load / PWA launch (before React hydrates). AppBootSplash
             (a client component below) fades it out once the app is ready.

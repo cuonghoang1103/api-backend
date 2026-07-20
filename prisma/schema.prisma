@@ -6673,3 +6673,35 @@ model CodeProgress {
   @@index([exerciseId], name: "idx_code_progress_exercise")
   @@map("code_progress")
 }
+
+// ─── Web analytics — page views (added 2026-07-20) ───────────────
+// One row per page view. Deliberately NOT one row per request: the
+// site is a Next.js app, so most navigation is client-side and a
+// server request log would miss it entirely — the client reports
+// each route change instead.
+//
+// `sessionId` is a random id the browser keeps for the tab session.
+// It is never linked to an identity and never leaves as-is: it
+// exists so "3 pages by one person" doesn't read as 3 visitors.
+// `isBot` rows are KEPT rather than dropped, so a traffic spike can
+// be explained ("that was Googlebot") instead of silently inflating
+// the numbers — every aggregate filters them out by default.
+model PageView {
+  id        Int      @id @default(autoincrement())
+  path      String   @db.VarChar(500)
+  // Page title as the client saw it — useful when a path is opaque.
+  title     String?  @db.VarChar(300)
+  referrer  String?  @db.VarChar(500)
+  sessionId String   @map("session_id") @db.VarChar(64)
+  userId    Int?     @map("user_id")
+  // 'mobile' | 'tablet' | 'desktop', derived server-side from the UA.
+  device    String?  @db.VarChar(16)
+  isBot     Boolean  @default(false) @map("is_bot")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([createdAt(sort: Desc)], name: "idx_pageview_created_at")
+  @@index([path, createdAt(sort: Desc)], name: "idx_pageview_path_time")
+  @@index([sessionId], name: "idx_pageview_session")
+  @@index([isBot, createdAt(sort: Desc)], name: "idx_pageview_bot_time")
+  @@map("page_views")
+}

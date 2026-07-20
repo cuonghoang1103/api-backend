@@ -113,6 +113,7 @@ const cyberRoutes = (await import(path.join(__dirname, 'routes', 'cyber.routes.j
 const quotaRoutes = (await import(path.join(__dirname, 'routes', 'quota.routes.js'))).default;
 const embedJobsRoutes = (await import(path.join(__dirname, 'routes', 'embedJobs.routes.js'))).default;
 const { publicRouter: techTrendsPublicRoutes, adminRouter: techTrendsAdminRoutes } = (await import(path.join(__dirname, 'routes', 'techTrends.routes.js')));
+const { publicRouter: analyticsPublicRoutes, adminRouter: analyticsAdminRoutes } = (await import(path.join(__dirname, 'routes', 'analytics.routes.js')));
 const { publicRouter: voiceHubPublicRoutes, adminRouter: voiceHubAdminRoutes } = (await import(path.join(__dirname, 'routes', 'voiceHub.routes.js')));
 const {
   publicRouter: gamesPublicRoutes,
@@ -495,6 +496,8 @@ app.use('/api/v1/files', failOpen(uploadLimiter), uploadRoutes);
 app.use('/api/v1/dev-posts', devPostRoutes);
 app.use('/api/v1/tech-trends', techTrendsPublicRoutes);
 app.use('/api/v1/admin/tech-trends', techTrendsAdminRoutes);
+app.use('/api/v1/analytics', analyticsPublicRoutes);
+app.use('/api/v1/admin/analytics', analyticsAdminRoutes);
 app.use('/api/v1/voice', voiceHubPublicRoutes);
 app.use('/api/v1/admin/voice', voiceHubAdminRoutes);
 app.use('/api/v1/games', gamesPublicRoutes);

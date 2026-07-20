@@ -418,6 +418,25 @@ public abstract class Bee {
      * A dead bee is frozen: the call still works, it simply records nothing.
      * The brief is explicit that Damage() must remain invokable without error,
      * so this returns quietly rather than throwing.
+     *
+     * WHY `health * (100 - percent) / 100.0` and not the brief's own
+     * `health * (1 - percent / 100.0)`:
+     *
+     * The two are equal in algebra and NOT equal in floating point. Damage a
+     * queen for exactly 80: `1 - 80/100.0` is 0.19999999999999996, because 0.8
+     * has no exact binary representation, so the health becomes
+     * 19.999999999999996. It PRINTS as "20.00 %" and it COMPARES as less than
+     * 20 - so the queen is pronounced dead at a health the brief says she
+     * survives, and the report shows a bee that is dead at 20.00% next to the
+     * rule that says dead means below 20%.
+     *
+     * Multiplying first keeps the arithmetic on whole numbers for one more
+     * step: 100 * 20 = 2000.0, and 2000.0 / 100.0 is exactly 20.0. The brief's
+     * own worked example still holds exactly (100 -> 80.0 -> 64.0).
+     *
+     * This was not spotted by reading the code. It appeared as a test that
+     * passed most runs and failed about one in six, which is what a boundary
+     * bug looks like when the input is random.
      */
     public void Damage(int percent) {
         if (isDead()) {
@@ -426,7 +445,7 @@ public abstract class Bee {
         if (percent < 0 || percent > 100) {
             throw new IllegalArgumentException("Damage percent must be between 0 and 100.");
         }
-        health = health * (1 - percent / 100.0);
+        health = health * (100 - percent) / 100.0;
     }
 }
 '''
@@ -741,6 +760,16 @@ number for every bee and <em>returns</em> the rolls instead of printing them. A 
 and displays cannot be checked by anything except a human reading the console. Rolling once and
 applying it to all thirty would also be visible in the report — every bee of a type would show
 identical health.</p>
+<p><strong>The floating-point boundary this exercise hides — and how it was found.</strong> Write the
+rule the way the brief writes it, <code>health * (1 - percent / 100.0)</code>, and damage a queen for
+exactly 80. Her health becomes <code>19.999999999999996</code>, because 0.8 has no exact binary
+representation. It <em>prints</em> as <code>20.00 %</code> and it <em>compares</em> as less than 20 — so
+the report shows a queen pronounced dead at 20.00%, sitting directly under a rule that says dead means
+<em>below</em> 20%. Multiplying before dividing, <code>health * (100 - percent) / 100.0</code>, keeps
+the arithmetic on whole numbers one step longer: 100 × 20 = 2000.0, and 2000.0 / 100.0 is exactly 20.0.
+The brief's own worked example is unaffected (100 → 80.0 → 64.0). This was not spotted by reading the
+code — it showed up as a check that passed most runs and failed about one in six, which is what a
+boundary bug looks like when the input is random.</p>
 <p><strong>How a random program was still verified hard.</strong> The report is checked by its own
 arithmetic: for each of the 30 rows, the printed health must be exactly the printed damage applied to
 100, and the printed status must be what that health means <em>for that type</em> — 55% is Dead for a
@@ -776,6 +805,15 @@ lệ và câu trả lời là "không thay đổi".</p>
 con ong và <em>trả về</em> các số đó thay vì tự in. Một phương thức vừa quyết định vừa hiển thị thì
 không thể kiểm bằng gì khác ngoài mắt người đọc màn hình. Tung một lần rồi áp cho cả ba mươi con cũng
 lộ ngay trên báo cáo — mọi con cùng loại sẽ có máu y hệt nhau.</p>
+<p><strong>Cái bẫy dấu phẩy động ở ngay biên — và cách phát hiện ra nó.</strong> Viết đúng như đề
+viết, <code>health * (1 - percent / 100.0)</code>, rồi đánh ong chúa đúng 80%. Máu của nó thành
+<code>19.999999999999996</code>, vì 0.8 không biểu diễn chính xác được trong hệ nhị phân. Nó <em>in
+ra</em> là <code>20.00 %</code> nhưng <em>so sánh</em> lại nhỏ hơn 20 — nên báo cáo hiện một con ong chúa
+bị tuyên chết ở mức 20.00%, nằm ngay dưới cái luật nói rằng chết là <em>dưới</em> 20%. Nhân trước rồi mới
+chia, <code>health * (100 - percent) / 100.0</code>, giữ phép tính ở số nguyên thêm một bước: 100 × 20 =
+2000.0, và 2000.0 / 100.0 đúng bằng 20.0. Ví dụ mẫu của đề vẫn nguyên vẹn (100 → 80.0 → 64.0). Lỗi này
+KHÔNG được tìm ra bằng cách đọc code — nó lộ ra dưới dạng một phép kiểm qua được phần lớn lần chạy và
+trượt khoảng một trên sáu lần, đúng hình dạng của một lỗi biên khi dữ liệu vào là ngẫu nhiên.</p>
 <p><strong>Chương trình ngẫu nhiên vẫn kiểm được rất chặt.</strong> Báo cáo bị kiểm bằng chính số học
 của nó: với cả 30 dòng, máu in ra phải đúng bằng mức sát thương in ra áp lên 100, và trạng thái in ra
 phải đúng với ý nghĩa của mức máu đó <em>theo từng loại</em> — 55% là Dead với thợ nhưng Alive với ong
@@ -794,6 +832,7 @@ phần Hướng dẫn là bản có hiệu lực. Nên nói thẳng điều này
         'Write isDead() once in Bee as `health < getThreshold()`; subclasses supply only the number.',
         'A dead bee freezes: Damage() must still be callable and must change nothing.',
         'Roll a fresh random 0..80 for EACH bee, not one roll shared by all thirty.',
+        'Compute health * (100 - percent) / 100.0 — the brief\'s 1 - percent/100.0 makes 80%% damage land on 19.999999999999996, which prints as 20.00 and compares as dead.',
     ],
     hints_vi=[
         'Sát thương tính trên máu HIỆN TẠI: hai đòn 20% còn 64, không phải 60.',
@@ -801,6 +840,7 @@ phần Hướng dẫn là bản có hiệu lực. Nên nói thẳng điều này
         'Viết isDead() một lần trong Bee là `health < getThreshold()`; lớp con chỉ đưa con số.',
         'Ong chết thì đóng băng: vẫn gọi Damage() được và không được đổi gì.',
         'Tung số ngẫu nhiên 0..80 MỚI cho TỪNG con ong, không dùng chung một số cho cả 30 con.',
+        'Tính health * (100 - percent) / 100.0 — công thức 1 - percent/100.0 của đề làm đòn 80%% ra 19.999999999999996, in ra 20.00 mà so sánh thì đã chết.',
     ],
 )
 

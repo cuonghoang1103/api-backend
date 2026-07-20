@@ -73,11 +73,27 @@ const anthropicProvider: LLMProvider = {
     if (!key) throw new LLMError('ANTHROPIC_API_KEY missing', false);
     const timeoutMs = opts.timeoutMs ?? (Number(process.env.LLM_TIMEOUT_MS) || 60_000);
     const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+    let timer = setTimeout(() => ctrl.abort(), timeoutMs);
     // Base URL is configurable → works with the official Anthropic API OR any
     // Anthropic-compatible gateway (e.g. a self-hosted proxy). Endpoint is
     // always `<base>/v1/messages`, auth is `x-api-key`.
     const base = (process.env.LLM_BASE_URL || 'https://api.anthropic.com').replace(/\/+$/, '');
+
+    // A big answer has to STREAM, or it never arrives.
+    //
+    // A non-streaming request sends nothing until the whole reply is finished.
+    // Ask for 16k tokens of Opus and that silence lasts minutes — long enough
+    // for the gateway's own proxy to give up and answer `HTTP 524` on a request
+    // the model was still happily working on. Measured on production 21/07: a
+    // 500-LOC exercise explanation failed with 524 after 251 seconds, every
+    // time, while short ones on the same endpoint were fine.
+    //
+    // Streaming fixes it at the cause: tokens arrive continuously, so no proxy
+    // in the chain ever sees an idle connection. Small calls stay non-streaming
+    // — there is nothing to gain and one more thing to parse.
+    const maxTokens = opts.maxTokens ?? 1500;
+    const useStream = maxTokens > 4000;
+
     try {
       const res = await fetch(`${base}/v1/messages`, {
         method: 'POST',
@@ -86,13 +102,27 @@ const anthropicProvider: LLMProvider = {
           'anthropic-version': '2023-06-01',
           'content-type': 'application/json',
         },
-        body: JSON.stringify({ model, max_tokens: opts.maxTokens ?? 1500, system, messages }),
+        body: JSON.stringify({
+          model, max_tokens: maxTokens, system, messages,
+          ...(useStream ? { stream: true } : {}),
+        }),
         signal: ctrl.signal,
       });
       if (!res.ok) {
         const retryable = res.status === 429 || res.status === 529 || res.status >= 500;
         throw new LLMError(`anthropic HTTP ${res.status}`, retryable);
       }
+
+      if (useStream) {
+        // The timeout becomes an IDLE timeout: as long as tokens keep coming we
+        // are not stuck, however long the whole answer takes. A total deadline
+        // here would just reintroduce the bug one level down.
+        return await readStream(res, model, () => {
+          clearTimeout(timer);
+          timer = setTimeout(() => ctrl.abort(), timeoutMs);
+        });
+      }
+
       const json = (await res.json()) as {
         content?: Array<{ type: string; text?: string }>;
         usage?: { input_tokens?: number; output_tokens?: number; cache_creation_input_tokens?: number; cache_read_input_tokens?: number };
@@ -110,6 +140,79 @@ const anthropicProvider: LLMProvider = {
     }
   },
 };
+
+
+/**
+ * Collect an Anthropic SSE stream into one result.
+ *
+ * Only `text_delta` counts. The gateway also emits `thinking` blocks and their
+ * `signature_delta`s; folding those into the answer would paste the model's
+ * scratch work into the middle of a lesson.
+ *
+ * `onChunk` resets the caller's idle timer — that is what makes a long answer
+ * safe without giving a stuck connection forever.
+ */
+async function readStream(
+  res: Response,
+  model: string,
+  onChunk: () => void,
+): Promise<LLMResult> {
+  const body = res.body;
+  if (!body) throw new LLMError('anthropic stream had no body', true);
+
+  const reader = body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  let text = '';
+  let inputTokens = 0;
+  let outputTokens = 0;
+
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    onChunk();
+    buffer += decoder.decode(value, { stream: true });
+
+    // SSE frames are separated by a blank line; keep the tail, it may be a
+    // half-received frame.
+    const frames = buffer.split('\n\n');
+    buffer = frames.pop() ?? '';
+
+    for (const frame of frames) {
+      for (const line of frame.split('\n')) {
+        if (!line.startsWith('data:')) continue;
+        const payload = line.slice(5).trim();
+        if (!payload || payload === '[DONE]') continue;
+        let evt: {
+          type?: string;
+          delta?: { type?: string; text?: string };
+          message?: { usage?: { input_tokens?: number; cache_creation_input_tokens?: number; cache_read_input_tokens?: number } };
+          usage?: { output_tokens?: number };
+          error?: { message?: string };
+        };
+        try {
+          evt = JSON.parse(payload);
+        } catch {
+          continue;                       // a frame we cannot read is not fatal
+        }
+        if (evt.type === 'error') {
+          throw new LLMError(`anthropic stream error: ${evt.error?.message ?? 'unknown'}`, true);
+        }
+        if (evt.type === 'content_block_delta' && evt.delta?.type === 'text_delta') {
+          text += evt.delta.text ?? '';
+        } else if (evt.type === 'message_start') {
+          const u = evt.message?.usage ?? {};
+          inputTokens = (u.input_tokens ?? 0) + (u.cache_creation_input_tokens ?? 0) + (u.cache_read_input_tokens ?? 0);
+        } else if (evt.type === 'message_delta') {
+          outputTokens = evt.usage?.output_tokens ?? outputTokens;
+        }
+      }
+    }
+  }
+
+  if (!text.trim()) throw new LLMError('anthropic stream produced no text', true);
+  return { text, inputTokens, outputTokens, model };
+}
 
 function getProvider(): LLMProvider {
   // Only Anthropic implemented in Phase 4. Add adapters here keyed by LLM_PROVIDER.

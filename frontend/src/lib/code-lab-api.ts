@@ -43,23 +43,31 @@ export const codeLabApi = {
   readAiExplanation: (exerciseId: number) =>
     api.get<Ok<{ blocks: DocBlock[]; cached: boolean; generatedAt: string | null }>>(
       `${BASE}/exercises/${exerciseId}/ai/explain`),
+  // A full bilingual walkthrough of a whole assignment takes MINUTES on the
+  // strongest model, not seconds. The shared client aborts at 30s, so this call
+  // carried its own deadline or the browser gave up on work the server went on
+  // to finish and cache — an error message on top of a perfectly good answer.
   generateAiExplanation: (exerciseId: number, force = false) =>
     api.post<Ok<{ blocks: DocBlock[]; cached: boolean; generatedAt: string | null }>>(
-      `${BASE}/exercises/${exerciseId}/ai/explain`, { force }),
+      `${BASE}/exercises/${exerciseId}/ai/explain`, { force }, { timeout: 420_000 }),
   getSkillCoverage: (trackSlug: string) =>
     api.get<Ok<SkillCoverageResponse>>(`${BASE}/tracks/${trackSlug}/skills`),
 
   // Practice coach — oral defence and brief compliance. All Pro-gated server side.
   askViva: (exerciseId: number, mode: 'explain' | 'change', asked: string[]) =>
-    api.post<Ok<VivaQuestion>>(`${BASE}/exercises/${exerciseId}/coach/viva`, { mode, asked }),
+    api.post<Ok<VivaQuestion>>(`${BASE}/exercises/${exerciseId}/coach/viva`,
+      { mode, asked }, { timeout: 240_000 }),
   gradeViva: (exerciseId: number, question: string, answer: string, mode: 'explain' | 'change') =>
-    api.post<Ok<VivaGrade>>(`${BASE}/exercises/${exerciseId}/coach/grade`, { question, answer, mode }),
+    api.post<Ok<VivaGrade>>(`${BASE}/exercises/${exerciseId}/coach/grade`,
+      { question, answer, mode }, { timeout: 240_000 }),
   checkAgainstBrief: (exerciseId: number, code: string) =>
-    api.post<Ok<SpecCheck>>(`${BASE}/exercises/${exerciseId}/coach/check`, { code }),
+    api.post<Ok<SpecCheck>>(`${BASE}/exercises/${exerciseId}/coach/check`,
+      { code }, { timeout: 300_000 }),
 
   askAiFollowUp: (exerciseId: number, question: string,
                   history: Array<{ role: 'user' | 'assistant'; content: string }>) =>
-    api.post<Ok<{ answer: string }>>(`${BASE}/exercises/${exerciseId}/ai/ask`, { question, history }),
+    api.post<Ok<{ answer: string }>>(`${BASE}/exercises/${exerciseId}/ai/ask`,
+      { question, history }, { timeout: 240_000 }),
 
   listExercises: (params: {
     trackId?: number; moduleId?: number; groupId?: number; language?: string;

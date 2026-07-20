@@ -29,6 +29,11 @@ export function AiExplain({ exerciseId }: { exerciseId: number }) {
   const [busy, setBusy] = useState(false);
   const [lang, setLang] = useState<DocLang>('en');
 
+  // When the poll below is waiting for a REGENERATED explanation, the old one
+  // is still cached — so "is it ready?" has to mean "is it newer than the one I
+  // already had?", not merely "does one exist?".
+  const generatedAtRef = useRef<string | null>(null);
+
   const [turns, setTurns] = useState<Turn[]>([]);
   const [question, setQuestion] = useState('');
   const [asking, setAsking] = useState(false);
@@ -38,7 +43,11 @@ export function AiExplain({ exerciseId }: { exerciseId: number }) {
   useEffect(() => {
     let alive = true;
     codeLabApi.readAiExplanation(exerciseId)
-      .then((r) => { if (alive) setBlocks(r.data.data.blocks || []); })
+      .then((r) => {
+        if (!alive) return;
+        setBlocks(r.data.data.blocks || []);
+        generatedAtRef.current = r.data.data.generatedAt ?? null;
+      })
       .catch(() => { if (alive) setBlocks([]); });
     return () => { alive = false; };
   }, [exerciseId]);
@@ -52,12 +61,36 @@ export function AiExplain({ exerciseId }: { exerciseId: number }) {
     try {
       const r = await codeLabApi.generateAiExplanation(exerciseId, force);
       setBlocks(r.data.data.blocks || []);
+      generatedAtRef.current = r.data.data.generatedAt ?? generatedAtRef.current;
       toast.success(force ? 'Explanation regenerated' : 'Explanation ready');
     } catch (e: unknown) {
-      const status = (e as { response?: { status?: number; data?: { message?: string } } })?.response;
-      toast.error(status?.status === 403
+      const err = e as { code?: string; response?: { status?: number; data?: { message?: string } } };
+      const status = err?.response?.status;
+
+      // The server does NOT stop working when the browser gives up: it finishes
+      // the walkthrough and caches it on the exercise. So a dropped connection
+      // is a reason to go and look for the result, not to report a failure —
+      // otherwise the reader sees an error sitting on top of a finished answer.
+      if (!status) {
+        for (let i = 0; i < 40; i++) {
+          await new Promise((r2) => setTimeout(r2, 15_000));
+          try {
+            const got = await codeLabApi.readAiExplanation(exerciseId);
+            const ready = got.data.data.blocks || [];
+            const at = got.data.data.generatedAt ?? null;
+            if (ready.length && at !== generatedAtRef.current) {
+              generatedAtRef.current = at;
+              setBlocks(ready);
+              toast.success('Explanation ready');
+              return;
+            }
+          } catch { /* keep waiting — the generation is still running */ }
+        }
+      }
+
+      toast.error(status === 403
         ? 'AI explanation is a Pro feature.'
-        : status?.data?.message || 'Could not generate the explanation.');
+        : err?.response?.data?.message || 'Could not generate the explanation.');
     } finally { setBusy(false); }
   }, [exerciseId]);
 
@@ -123,8 +156,17 @@ export function AiExplain({ exerciseId }: { exerciseId: number }) {
                 className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold"
                 style={{ background: 'var(--accent-color, #8b5cf6)', color: '#fff' }}>
                 {busy ? <Loader2 size={15} className="animate-spin" /> : <Sparkles size={15} />}
-                {busy ? 'Thinking…' : 'Explain this exercise'}
+                {busy ? 'Writing the walkthrough…' : 'Explain this exercise'}
               </button>
+            )}
+            {busy && (
+              // A full walkthrough takes MINUTES on the strongest model. Without
+              // saying so, a spinner that long reads as a hang and gets reloaded
+              // away seconds before the answer lands.
+              <p className="mt-2 text-xs" style={{ color: 'var(--text-muted)' }}>
+                This is a full lesson, not a summary — it takes a few minutes.
+                You can leave the page; it is saved when it is done.
+              </p>
             )}
           </div>
         )}

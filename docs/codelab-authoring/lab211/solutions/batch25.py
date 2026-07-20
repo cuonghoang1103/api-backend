@@ -526,7 +526,7 @@ public class Validator {
     }
 
     /**
-     * Email: "with format &lt;account name&gt;@&lt;domain&gt;".
+     * Email: "with format <account name>@<domain>".
      *
      * Written by hand rather than with a regular expression. Not because a
      * regex would be wrong, but because the reason each clause exists is
@@ -673,7 +673,7 @@ import java.util.List;
  * twice, once of them under "Create Intern Candidate" - the sheet was
  * copy-pasted). Three lists would mean writing the duplicate-id check three
  * times and then a fourth time across the three, because an id has to be unique
- * across the WHOLE company, not within one kind. One List&lt;Candidate&gt; makes
+ * across the WHOLE company, not within one kind. One List<Candidate> makes
  * that rule a single loop, and getByType() gives back the per-kind view the
  * listing screen wants without storing anything twice.
  */

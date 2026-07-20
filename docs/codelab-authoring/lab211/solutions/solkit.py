@@ -34,8 +34,32 @@ def solution(lab, *, title_vi, files, main_class, runs,
 
 # ─── verification ────────────────────────────────────────────────
 
+HTML_ENTITY = re.compile(r'&(lt|gt|amp|quot|#39);')
+
+
+def check_source_text(sol):
+    """Defects javac cannot see, because they live in comments.
+
+    An HTML entity in a Java file compiles perfectly when it sits in a comment —
+    and then the learner reads `List&lt;Task&gt;` where the code says
+    `List<Task>`. Eight LAB211 solutions shipped that way: green under javac,
+    wrong on the page. The compiler is not the only reader.
+    """
+    problems = []
+    for rel, code in sol['files']:
+        for m in HTML_ENTITY.finditer(code):
+            line = code[:m.start()].count('\n') + 1
+            problems.append(f'{rel}:{line} thực thể HTML {m.group(0)!r} trong mã Java')
+        if 'To change this license header' in code:
+            problems.append(f'{rel}: còn header mẫu của NetBeans')
+    return problems
+
+
 def compile_and_run(sol, workdir):
     """Returns (ok, report). Compiles every file, then plays each scripted run."""
+    text_problems = check_source_text(sol)
+    if text_problems:
+        return False, 'NGUỒN:\n' + '\n'.join(text_problems[:10])
     root = os.path.join(workdir, sol['lab'].replace('.', '_'))
     src = os.path.join(root, 'src')
     os.makedirs(src, exist_ok=True)

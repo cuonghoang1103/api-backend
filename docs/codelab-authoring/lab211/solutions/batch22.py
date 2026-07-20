@@ -308,7 +308,7 @@ public class TaskManager {
     }
 
     /**
-     * Required signature: public List&lt;Task&gt; getDataTasks()
+     * Required signature: public List<Task> getDataTasks()
      *
      * A sorted COPY, never the field. Handing out the live list would let the
      * screen layer reorder or clear the program's data by accident, and the

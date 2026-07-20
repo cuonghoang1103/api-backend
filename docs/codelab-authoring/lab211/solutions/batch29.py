@@ -306,8 +306,8 @@ import java.time.format.DateTimeFormatter;
  * which turns one into the other, has to copy five fields across by hand.
  *
  * Made one abstract class instead, approval is a constructor call and the
- * request/borrow tables are ONE printing method taking List&lt;? extends
- * Transaction&gt;. The subclasses exist to say which file they belong to and
+ * request/borrow tables are ONE printing method taking List<? extends
+ * Transaction>. The subclasses exist to say which file they belong to and
  * what to call themselves on screen, and that is genuinely all the difference
  * there is between them.
  */

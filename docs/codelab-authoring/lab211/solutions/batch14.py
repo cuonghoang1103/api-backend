@@ -302,7 +302,7 @@ public class Management {
     }
 
     /**
-     * Required: public List&lt;SalaryHistory&gt; getInfomationSalary()
+     * Required: public List<SalaryHistory> getInfomationSalary()
      *
      * The brief says "sort by id", and the sample shows W1's two adjustments in
      * the order they happened. Both are satisfied by ONE sort, because
@@ -934,7 +934,7 @@ public class MarkCalculation {
     }
 
     /**
-     * Required: List&lt;Student&gt; averageStudent(List&lt;Student&gt; students)
+     * Required: List<Student> averageStudent(List<Student> students)
      *
      * The average is ROUNDED to one decimal place before the rank is decided,
      * not after. That is deliberate and it changes answers: marks of 7.4, 7.6
@@ -954,7 +954,7 @@ public class MarkCalculation {
     }
 
     /**
-     * Required: HashMap&lt;String, Double&gt; getPercentTypeStudent(List&lt;Student&gt;)
+     * Required: HashMap<String, Double> getPercentTypeStudent(List<Student>)
      *
      * All four keys are always present, even when nobody scored a D. A map that
      * only contains the ranks somebody achieved forces every caller to handle a

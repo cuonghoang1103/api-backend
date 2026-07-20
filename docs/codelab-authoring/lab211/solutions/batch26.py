@@ -162,11 +162,11 @@ import java.util.ArrayList;
  * What one customer is buying: an ArrayList of Item, plus the two rules that
  * only make sense when you own that list.
  *
- * WHY THIS IS A CLASS AND NOT JUST AN ArrayList&lt;Item&gt;.
+ * WHY THIS IS A CLASS AND NOT JUST AN ArrayList<Item>.
  *
- * The brief's own guideline says "hashTable.set(&lt;customer name&gt;, &lt;list of
- * items bought&gt;)", and it would compile perfectly well to pass a bare
- * ArrayList&lt;Item&gt; around. The problem is that a bare list has no opinion
+ * The brief's own guideline says "hashTable.set(<customer name>, <list of
+ * items bought>)", and it would compile perfectly well to pass a bare
+ * ArrayList<Item> around. The problem is that a bare list has no opinion
  * about its contents. Order the same fruit twice and you get two lines for
  * Coconut; the total is still right, but the receipt is wrong and the stock
  * check ("how many Coconut has this customer already reserved?") has to be
@@ -574,7 +574,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 /**
- * The order book: Hashtable&lt;customer name, Cart&gt;, exactly as the brief's
+ * The order book: Hashtable<customer name, Cart>, exactly as the brief's
  * guideline spells it out.
  *
  * AND an ArrayList of the names beside it, which is the part the brief does not

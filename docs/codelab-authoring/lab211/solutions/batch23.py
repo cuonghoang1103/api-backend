@@ -1324,7 +1324,7 @@ import java.time.format.DateTimeFormatter;
  *
  * That is what makes the Cancel and Return screens the same code: both are
  * "show my Transactions, pick an id, confirm, delete" - written once, over
- * List&lt;? extends Transaction&gt;. Two independent classes with identical
+ * List<? extends Transaction>. Two independent classes with identical
  * fields would have needed that screen twice.
  */
 public abstract class Transaction implements Persistable {

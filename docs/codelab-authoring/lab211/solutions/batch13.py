@@ -112,7 +112,7 @@ public class BinarySearchManager {
      * five values that ARE in the array are reported absent.
      *
      * INVARIANT: if key is in the array at all, its index lies in [low, high].
-     * Every branch below preserves it - array[mid] &lt; key rules out every index
+     * Every branch below preserves it - array[mid] < key rules out every index
      * up to and including mid, so low may jump past it - and the loop ends only
      * when the window is empty, which then means the key was nowhere.
      *

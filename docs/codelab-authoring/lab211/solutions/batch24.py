@@ -161,7 +161,7 @@ P0021_COURSE_COUNT = '''package entity;
  * This is a type rather than a Map.Entry or an encoded "name|course" String
  * because the report is a different SHAPE from a Student - three fields, one of
  * which does not exist on a Student at all. Returning
- * Map&lt;String, Integer&gt; from the bo layer would force the screen to split
+ * Map<String, Integer> from the bo layer would force the screen to split
  * the key back apart on a separator, and the day a student is called
  * "Nguyen | Van A" that code stops working.
  *

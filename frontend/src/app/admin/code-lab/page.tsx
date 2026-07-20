@@ -18,7 +18,7 @@ import { codeLabApi, codeLabAdminApi, DIFFICULTY_META } from '@/lib/code-lab-api
 import { fileApi } from '@/lib/api';
 import type {
   CodeGroup, CodeTrack, CodeModule, CodeExercise, CodeExerciseListItem,
-  CodeDifficulty, CodeLevel, CodeStatus, ExampleIO, CodeBlock, ExerciseProposal,
+  CodeDifficulty, CodeLevel, CodeStatus, ExampleIO, CodeBlock, ExerciseProposal, ImageItem,
 } from '@/types/code-lab';
 import { CodeEditor } from '@/components/exp-hub/CodeEditor';
 
@@ -53,6 +53,7 @@ interface Draft {
   solutionCode: CodeBlock[];
   solutionExplanationHtml: string;
   diagramImageUrl: string;
+  images: ImageItem[];
   youtubeUrl: string;
   referenceUrl: string;
   tags: string;
@@ -64,7 +65,7 @@ function emptyDraft(moduleId: number, language: string): Draft {
     problemHtml: '', concepts: '', prerequisites: '', inputSpec: '', outputSpec: '', constraints: '',
     examples: [{ input: '', output: '', explanation: '' }], hints: [], starterCode: [{ name: 'Starter', language, code: '' }],
     solutionCode: [{ name: 'Solution', language, code: '' }], solutionExplanationHtml: '', diagramImageUrl: '',
-    youtubeUrl: '', referenceUrl: '', tags: '',
+    images: [], youtubeUrl: '', referenceUrl: '', tags: '',
   };
 }
 
@@ -76,6 +77,7 @@ function draftToPayload(d: Draft) {
     inputSpec: d.inputSpec, outputSpec: d.outputSpec, constraints: d.constraints,
     examplesJson: d.examples, hintsJson: d.hints, starterCodeJson: d.starterCode, solutionCodeJson: d.solutionCode,
     solutionExplanationHtml: d.solutionExplanationHtml, diagramImageUrl: d.diagramImageUrl || null,
+    imagesJson: d.images.filter((im) => im.url.trim()),
     youtubeUrl: d.youtubeUrl || null, referenceUrl: d.referenceUrl || null, tags: fromCsv(d.tags),
   };
 }
@@ -90,6 +92,7 @@ function exerciseToDraft(ex: CodeExercise): Draft {
     hints: ex.hintsJson || [], starterCode: ex.starterCodeJson?.length ? ex.starterCodeJson : [{ name: 'Starter', language: ex.language, code: '' }],
     solutionCode: ex.solutionCodeJson?.length ? ex.solutionCodeJson : [{ name: 'Solution', language: ex.language, code: '' }],
     solutionExplanationHtml: ex.solutionExplanationHtml || '', diagramImageUrl: ex.diagramImageUrl || '',
+    images: ex.imagesJson || [],
     youtubeUrl: ex.youtubeUrl || '', referenceUrl: ex.referenceUrl || '', tags: csv(ex.tags),
   };
 }
@@ -103,7 +106,8 @@ function proposalToDraft(p: ExerciseProposal, moduleId: number, language: string
     examples: p.examples.length ? p.examples : [{ input: '', output: '', explanation: '' }], hints: p.hints,
     starterCode: p.starterCode.length ? p.starterCode : [{ name: 'Starter', language, code: '' }],
     solutionCode: p.solutionCode.length ? p.solutionCode : [{ name: 'Solution', language, code: '' }],
-    solutionExplanationHtml: p.solutionExplanationHtml, diagramImageUrl: '', youtubeUrl: '', referenceUrl: '', tags: p.tags.join(', '),
+    solutionExplanationHtml: p.solutionExplanationHtml, diagramImageUrl: '', images: [],
+    youtubeUrl: '', referenceUrl: '', tags: p.tags.join(', '),
   };
 }
 
@@ -458,15 +462,54 @@ function ExerciseEditor({ draft, setDraft, onClose, onSave, saving }: {
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
 
+  const figRef = useRef<HTMLInputElement>(null);
+  const [figBusy, setFigBusy] = useState(false);
+
+  const uploadOne = async (f: File) => {
+    const res = await fileApi.upload(f, 'image');
+    const url = (res.data as any)?.data?.url;
+    if (!url) throw new Error('no url');
+    return url as string;
+  };
+
   const uploadDiagram = async (f: File | null) => {
     if (!f) return;
     setUploading(true);
     try {
-      const res = await fileApi.upload(f, 'image');
-      const url = (res.data as any)?.data?.url;
-      if (url) { set('diagramImageUrl', url); toast.success('Image uploaded'); }
-      else toast.error('Upload failed');
+      set('diagramImageUrl', await uploadOne(f));
+      toast.success('Image uploaded');
     } catch { toast.error('Upload failed'); } finally { setUploading(false); if (fileRef.current) fileRef.current.value = ''; }
+  };
+
+  // Figures — screenshots of the original brief. Accepts a multi-file pick,
+  // a drag-and-drop, or a straight paste from the clipboard (⌘V after a
+  // screenshot), because that is how these actually get captured.
+  const addFigures = async (files: File[]) => {
+    const imgs = files.filter((f) => f.type.startsWith('image/'));
+    if (!imgs.length) return;
+    setFigBusy(true);
+    const added: ImageItem[] = [];
+    for (const f of imgs) {
+      try { added.push({ url: await uploadOne(f), caption: '' }); }
+      catch { toast.error(`Upload failed: ${f.name || 'pasted image'}`); }
+    }
+    if (added.length) {
+      setDraft({ ...draft, images: [...draft.images, ...added] });
+      toast.success(`${added.length} figure${added.length > 1 ? 's' : ''} added`);
+    }
+    setFigBusy(false);
+    if (figRef.current) figRef.current.value = '';
+  };
+
+  const setFigure = (i: number, patch: Partial<ImageItem>) =>
+    set('images', draft.images.map((im, idx) => (idx === i ? { ...im, ...patch } : im)));
+  const delFigure = (i: number) => set('images', draft.images.filter((_, idx) => idx !== i));
+  const moveFigure = (i: number, dir: -1 | 1) => {
+    const j = i + dir;
+    if (j < 0 || j >= draft.images.length) return;
+    const arr = [...draft.images];
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+    set('images', arr);
   };
 
   const setBlock = (field: 'starterCode' | 'solutionCode', i: number, patch: Partial<CodeBlock>) => {
@@ -579,6 +622,56 @@ function ExerciseEditor({ draft, setDraft, onClose, onSave, saving }: {
               </button>
             </div>
             {draft.diagramImageUrl && <img src={draft.diagramImageUrl} alt="" className="mt-2 max-h-40 rounded border" style={{ borderColor: 'var(--border-color)' }} />}
+          </div>
+
+          {/* Figures — screenshots of the original brief (Word/PDF). */}
+          <div
+            onPaste={(e) => {
+              const files = Array.from(e.clipboardData.files);
+              if (files.length) { e.preventDefault(); void addFigures(files); }
+            }}
+            onDrop={(e) => { e.preventDefault(); void addFigures(Array.from(e.dataTransfer.files)); }}
+            onDragOver={(e) => e.preventDefault()}
+          >
+            <label className="text-xs font-medium">Figures — screenshots of the brief ({draft.images.length})</label>
+            <div
+              className="mt-1 rounded-lg border border-dashed p-3 text-center"
+              style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)' }}
+            >
+              <input ref={figRef} type="file" accept="image/*" multiple className="hidden"
+                onChange={(e) => void addFigures(Array.from(e.target.files || []))} />
+              <button onClick={() => figRef.current?.click()} disabled={figBusy} className={btn}
+                style={{ background: 'var(--bg-card)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}>
+                {figBusy ? <Loader2 size={14} className="animate-spin" /> : <ImageIcon size={14} />} Choose images
+              </button>
+              <div className="mt-1.5 text-[11px]" style={{ color: 'var(--text-muted)' }}>
+                …or drop files here, or take a screenshot and press ⌘V / Ctrl+V inside this box.
+              </div>
+            </div>
+
+            {draft.images.length > 0 && (
+              <div className="mt-2 space-y-2">
+                {draft.images.map((im, i) => (
+                  <div key={i} className="flex items-start gap-2 rounded-lg border p-2" style={{ borderColor: 'var(--border-color)' }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={im.url} alt="" className="h-16 w-24 shrink-0 rounded object-cover" style={{ border: '1px solid var(--border-color)' }} />
+                    <div className="min-w-0 flex-1">
+                      <input value={im.caption || ''} onChange={(e) => setFigure(i, { caption: e.target.value })}
+                        placeholder={`Caption for figure ${i + 1} (optional)`} className={inp} style={inpStyle} />
+                      <div className="mt-1 truncate text-[10px]" style={{ color: 'var(--text-muted)' }}>{im.url}</div>
+                    </div>
+                    <div className="flex shrink-0 flex-col gap-1">
+                      <button onClick={() => moveFigure(i, -1)} disabled={i === 0} title="Move up"
+                        className="rounded px-1.5 text-xs disabled:opacity-30" style={{ border: '1px solid var(--border-color)' }}>↑</button>
+                      <button onClick={() => moveFigure(i, 1)} disabled={i === draft.images.length - 1} title="Move down"
+                        className="rounded px-1.5 text-xs disabled:opacity-30" style={{ border: '1px solid var(--border-color)' }}>↓</button>
+                      <button onClick={() => delFigure(i)} title="Remove"
+                        className="rounded px-1.5 text-xs" style={{ border: '1px solid var(--border-color)', color: '#ef4444' }}>✕</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">

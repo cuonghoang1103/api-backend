@@ -12,6 +12,7 @@ import { useParams } from 'next/navigation';
 import {
   ArrowLeft, Loader2, CheckCircle2, Lightbulb, Save, Eye, EyeOff, Play,
   BookOpen, Youtube, ExternalLink, ListChecks, Layers, ChevronLeft, ChevronRight,
+  Image as ImageIcon,
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { codeLabApi, DIFFICULTY_META } from '@/lib/code-lab-api';
@@ -203,13 +204,33 @@ export default function ExerciseDetailPage() {
           <img src={ex.diagramImageUrl} alt="Diagram" className="mx-auto max-h-[420px] rounded-lg border" style={{ borderColor: 'var(--border-color)' }} />
         </figure>
       )}
-      {(ex.imagesJson || []).map((im, i) => (
-        <figure key={i} className="mb-5">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={im.url} alt={im.caption || `Figure ${i + 1}`} className="mx-auto max-h-[420px] rounded-lg border" style={{ borderColor: 'var(--border-color)' }} />
-          {im.caption && <figcaption className="mt-1 text-center text-xs" style={{ color: 'var(--text-muted)' }}>{im.caption}</figcaption>}
-        </figure>
-      ))}
+      {/* Figures — screenshots of the original lab sheet. Its own section so a
+          scanned brief reads as reference material, not as loose images. Click
+          opens the full-resolution file, since screenshots of a spec are often
+          too dense to read at column width. */}
+      {(ex.imagesJson || []).length > 0 && (
+        <Section icon={<ImageIcon size={14} />} title={`Figures from the brief (${ex.imagesJson!.length})`}>
+          <div className="space-y-4">
+            {ex.imagesJson!.map((im, i) => (
+              <figure key={i}>
+                <a href={im.url} target="_blank" rel="noopener noreferrer" title="Open full size">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={im.url}
+                    alt={im.caption || `Figure ${i + 1}`}
+                    loading="lazy"
+                    className="mx-auto max-h-[520px] w-auto max-w-full rounded-lg border"
+                    style={{ borderColor: 'var(--border-color)' }}
+                  />
+                </a>
+                <figcaption className="mt-1.5 text-center text-xs" style={{ color: 'var(--text-muted)' }}>
+                  {im.caption ? `Figure ${i + 1} — ${im.caption}` : `Figure ${i + 1}`}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </Section>
+      )}
 
       {/* Input / Output specs */}
       {(ex.inputSpec || ex.outputSpec) && (
@@ -429,6 +450,7 @@ export default function ExerciseDetailPage() {
            reproduced from an original lab sheet (LAB211). */
         .prose-cl h3 { font-size: 0.95rem; font-weight: 700; margin: 1.25rem 0 0.4rem; letter-spacing: 0.01em; }
         .prose-cl h3:first-child { margin-top: 0; }
+        .prose-cl h4 { font-size: 0.87rem; font-weight: 700; margin: 0.9rem 0 0.3rem; color: var(--text-secondary); }
         .prose-cl pre { white-space: pre; font-family: var(--font-mono, ui-monospace, monospace); font-size: 0.8rem; line-height: 1.5; tab-size: 4; }
         .prose-cl figure { margin: 0.9rem 0; }
         .prose-cl img { max-width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--border-color); display: block; margin: 0 auto; }

@@ -1,0 +1,149 @@
+ECHO "===== EX 1: Group Commands Atomically with MULTI and EXEC ====="
+FLUSHALL
+SCRIPT FLUSH
+MULTI
+SET counter 10
+INCR counter
+INCRBY counter 5
+EXEC
+GET counter
+MULTI
+INCR counter
+EXEC
+GET counter
+MULTI
+INCRBY counter 3
+DECR counter
+EXEC
+GET counter
+SET tally 0
+MULTI
+INCR tally
+INCR tally
+INCR tally
+EXEC
+GET tally
+ECHO "===== EX 2: Abandon a Queued Transaction with DISCARD ====="
+FLUSHALL
+SCRIPT FLUSH
+SET balance 100
+MULTI
+INCRBY balance 50
+SET note "changed"
+DISCARD
+GET balance
+EXISTS note
+MULTI
+INCRBY balance 50
+EXEC
+GET balance
+MULTI
+DECRBY balance 30
+SET flag "x"
+DISCARD
+GET balance
+EXISTS flag
+MULTI
+DECRBY balance 50
+EXEC
+GET balance
+ECHO "===== EX 3: Run Server-Side Logic with EVAL ====="
+FLUSHALL
+SCRIPT FLUSH
+EVAL "return 42" 0
+EVAL "return 'hello'" 0
+EVAL "return {1, 2, 'three'}" 0
+EVAL "return redis.status_reply('DONE')" 0
+EVAL "return true" 0
+EVAL "return false" 0
+EVAL "return 3.99" 0
+EVAL "return #KEYS" 0
+EVAL "return tostring(10)" 0
+EVAL "return {ok='FINE'}" 0
+ECHO "===== EX 4: Pass Keys and Arguments to a Script ====="
+FLUSHALL
+SCRIPT FLUSH
+EVAL "redis.call('set', KEYS[1], ARGV[1]); redis.call('set', KEYS[2], ARGV[2]); return 'OK'" 2 user:name user:role Ann admin
+GET user:name
+GET user:role
+EVAL "return redis.call('get', KEYS[1]) .. '/' .. redis.call('get', KEYS[2])" 2 user:name user:role
+EVAL "return redis.call('incrby', KEYS[1], ARGV[1])" 1 score 5
+ECHO "===== EX 5: Implement Atomic Compare-and-Set in Lua ====="
+FLUSHALL
+SCRIPT FLUSH
+SET config "v1"
+EVAL "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('set', KEYS[1], ARGV[2]) and 1 else return 0 end" 1 config v1 v2
+GET config
+EVAL "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('set', KEYS[1], ARGV[2]) and 1 else return 0 end" 1 config v1 v3
+GET config
+ECHO "===== EX 6: Cap a Counter Atomically in a Script ====="
+FLUSHALL
+SCRIPT FLUSH
+EVAL "local v = redis.call('incr', KEYS[1]); if v > tonumber(ARGV[1]) then redis.call('decr', KEYS[1]); return -1 end; return v" 1 slots 3
+EVAL "local v = redis.call('incr', KEYS[1]); if v > tonumber(ARGV[1]) then redis.call('decr', KEYS[1]); return -1 end; return v" 1 slots 3
+EVAL "local v = redis.call('incr', KEYS[1]); if v > tonumber(ARGV[1]) then redis.call('decr', KEYS[1]); return -1 end; return v" 1 slots 3
+EVAL "local v = redis.call('incr', KEYS[1]); if v > tonumber(ARGV[1]) then redis.call('decr', KEYS[1]); return -1 end; return v" 1 slots 3
+GET slots
+ECHO "===== EX 7: Cache Scripts with SCRIPT LOAD and EVALSHA ====="
+FLUSHALL
+SCRIPT FLUSH
+SET score 5
+SCRIPT LOAD "return redis.call('incr', KEYS[1])"
+SCRIPT EXISTS 2bab3b661081db58bd2341920e0ba7cf5dc77b25
+EVALSHA 2bab3b661081db58bd2341920e0ba7cf5dc77b25 1 score
+EVALSHA 2bab3b661081db58bd2341920e0ba7cf5dc77b25 1 score
+GET score
+ECHO "===== EX 8: Guard a Transaction with WATCH ====="
+FLUSHALL
+SCRIPT FLUSH
+SET stock 10
+WATCH stock
+GET stock
+MULTI
+DECRBY stock 3
+EXEC
+GET stock
+UNWATCH
+WATCH stock
+GET stock
+MULTI
+DECRBY stock 2
+EXEC
+GET stock
+WATCH stock
+UNWATCH
+INCR stock
+GET stock
+WATCH stock
+MULTI
+INCRBY stock 10
+DECR stock
+EXEC
+GET stock
+UNWATCH
+ECHO "===== EX 9: Build an Atomic Rate Limiter in One Script ====="
+FLUSHALL
+SCRIPT FLUSH
+EVAL "local c = redis.call('incr', KEYS[1]); if c == 1 then redis.call('expire', KEYS[1], ARGV[1]) end; return c" 1 rl:user:1 60
+EVAL "local c = redis.call('incr', KEYS[1]); if c == 1 then redis.call('expire', KEYS[1], ARGV[1]) end; return c" 1 rl:user:1 60
+EVAL "local c = redis.call('incr', KEYS[1]); if c == 1 then redis.call('expire', KEYS[1], ARGV[1]) end; return c" 1 rl:user:1 60
+EVAL "local c = redis.call('incr', KEYS[1]); if c == 1 then redis.call('expire', KEYS[1], ARGV[1]) end; return c" 1 rl:user:1 60
+EVAL "local c = redis.call('incr', KEYS[1]); if c == 1 then redis.call('expire', KEYS[1], ARGV[1]) end; return c" 1 rl:user:1 60
+EVAL "local c = redis.call('incr', KEYS[1]); if c == 1 then redis.call('expire', KEYS[1], ARGV[1]) end; return c" 1 rl:user:1 60
+TTL rl:user:1
+ECHO "===== EX 10: Build a Reliable Work Queue with LMOVE ====="
+FLUSHALL
+SCRIPT FLUSH
+RPUSH queue task1 task2 task3
+LMOVE queue processing LEFT RIGHT
+LRANGE processing 0 -1
+LREM processing 1 task1
+LMOVE queue processing LEFT RIGHT
+LRANGE processing 0 -1
+LRANGE queue 0 -1
+LLEN queue
+LLEN processing
+LREM processing 1 task2
+LMOVE queue processing LEFT RIGHT
+LRANGE processing 0 -1
+LRANGE queue 0 -1

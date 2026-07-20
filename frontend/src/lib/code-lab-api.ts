@@ -49,7 +49,7 @@ export const codeLabApi = {
   // to finish and cache — an error message on top of a perfectly good answer.
   generateAiExplanation: (exerciseId: number, force = false) =>
     api.post<Ok<{ blocks: DocBlock[]; cached: boolean; generatedAt: string | null }>>(
-      `${BASE}/exercises/${exerciseId}/ai/explain`, { force }, { timeout: 420_000 }),
+      `${BASE}/exercises/${exerciseId}/ai/explain`, { force }, { timeout: 900_000 }),
   getSkillCoverage: (trackSlug: string) =>
     api.get<Ok<SkillCoverageResponse>>(`${BASE}/tracks/${trackSlug}/skills`),
 

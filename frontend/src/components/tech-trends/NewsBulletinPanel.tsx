@@ -122,7 +122,8 @@ export default function NewsBulletinPanel({ onPublished }: Props) {
       await loadFeeds();
     } catch (err) {
       const res = (err as { response?: { status?: number; data?: { message?: string } } })?.response;
-      if (!res) {
+      const dropped = !res || [502, 504, 408, 524].includes(res.status ?? 0);
+      if (dropped) {
         // No response at all means the BROWSER gave up, not the server. The
         // server keeps writing and will publish the bulletin — saying "thất
         // bại" here is how five bulletins got posted in four minutes.

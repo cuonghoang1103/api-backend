@@ -196,8 +196,12 @@ export async function explainExercise(
     // 3500 truncated the JSON mid-array and parseBlocks then returned
     // nothing, which surfaced as "the AI returned nothing usable".
     maxTokens: 16000,
-    maxRetries: 2,
-    timeoutMs: 300_000,
+    // One measured run took 343 seconds. A 300s per-attempt ceiling aborted the
+    // FIRST attempt just before it finished and then paid for a second one.
+    // 420s clears the measurement with room to spare, and one retry keeps the
+    // worst case (840s) under the proxy's 900s.
+    maxRetries: 1,
+    timeoutMs: 420_000,
     userId: opts.userId,
   });
 
@@ -220,13 +224,54 @@ function parseBlocks(raw: string): unknown {
   const fenced = /```(?:json)?\s*([\s\S]*?)```/i.exec(text);
   const body = fenced ? fenced[1] : text;
   const start = body.indexOf('[');
+  if (start < 0) return [];
+
   const end = body.lastIndexOf(']');
-  if (start < 0 || end <= start) return [];
-  try {
-    return JSON.parse(body.slice(start, end + 1));
-  } catch {
-    return [];
+  if (end > start) {
+    try {
+      return JSON.parse(body.slice(start, end + 1));
+    } catch {
+      /* fall through to the salvage below */
+    }
   }
+
+  // The reply was cut off mid-array — the model hit its output ceiling partway
+  // through block 19 of 26. Everything BEFORE the break is still perfectly good
+  // teaching material, and throwing it away is how the longest exercises ended
+  // as "the AI returned nothing usable" after a five-minute wait.
+  //
+  // So walk the text and keep every top-level object that closed properly.
+  return salvageObjects(body.slice(start + 1));
+}
+
+/** Every complete top-level {...} in a possibly truncated array body. */
+function salvageObjects(text: string): unknown[] {
+  const out: unknown[] = [];
+  let depth = 0, objStart = -1, inString = false, escaped = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (ch === '\\') escaped = true;
+      else if (ch === '"') inString = false;
+      continue;
+    }
+    if (ch === '"') { inString = true; continue; }
+    if (ch === '{') { if (depth === 0) objStart = i; depth++; continue; }
+    if (ch === '}') {
+      depth--;
+      if (depth === 0 && objStart >= 0) {
+        try {
+          out.push(JSON.parse(text.slice(objStart, i + 1)));
+        } catch {
+          /* a block we cannot read is one block lost, not the whole lesson */
+        }
+        objStart = -1;
+      }
+    }
+  }
+  return out;
 }
 
 const CHAT_SYSTEM = `You are the same lab tutor, now answering a follow-up question about an

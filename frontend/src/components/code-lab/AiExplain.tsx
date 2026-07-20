@@ -67,11 +67,17 @@ export function AiExplain({ exerciseId }: { exerciseId: number }) {
       const err = e as { code?: string; response?: { status?: number; data?: { message?: string } } };
       const status = err?.response?.status;
 
-      // The server does NOT stop working when the browser gives up: it finishes
+      // The server does NOT stop working when the connection dies: it finishes
       // the walkthrough and caches it on the exercise. So a dropped connection
       // is a reason to go and look for the result, not to report a failure —
       // otherwise the reader sees an error sitting on top of a finished answer.
-      if (!status) {
+      //
+      // 504/502 count as dropped. Those come from NGINX giving up on the
+      // upstream, not from the backend answering — which is exactly what the
+      // longest exercises produced, since they are the ones that run past the
+      // proxy's ceiling. Treating them as real errors is why "wait forever,
+      // still nothing" happened on the big assignments and nowhere else.
+      if (!status || status === 502 || status === 504 || status === 408 || status === 524) {
         for (let i = 0; i < 40; i++) {
           await new Promise((r2) => setTimeout(r2, 15_000));
           try {

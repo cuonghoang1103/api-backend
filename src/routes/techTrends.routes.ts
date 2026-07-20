@@ -1085,6 +1085,31 @@ adminRouter.post('/news/generate', async (req, res: Response<ApiResponse>, next)
       if (Number.isNaN(d.getTime())) throw new AppError('publishAt không hợp lệ', 400, 'VALIDATION_ERROR');
       when = d;
     }
+
+    // Writing a bulletin takes MINUTES, and the admin panel used to abort at 30
+    // seconds — so a press that looked like it failed had really published, and
+    // pressing again published another one. Five bulletins went out inside four
+    // minutes on 20/07 that way (03:02:24, 03:02:43, 03:03:36, 03:04:31,
+    // 03:05:37). The browser timeout is fixed, but the guard belongs here too:
+    // the client is not the only thing that can retry.
+    if (req.body?.force !== true) {
+      const recent = await prisma.techTrendArticle.findFirst({
+        where: { kind: 'NEWS', createdAt: { gte: new Date(Date.now() - 15 * 60_000) } },
+        select: { id: true, slug: true, createdAt: true },
+        orderBy: { createdAt: 'desc' },
+      });
+      if (recent) {
+        const minutes = Math.max(1, Math.round((Date.now() - recent.createdAt.getTime()) / 60_000));
+        throw new AppError(
+          `Vừa có một bản tin được tạo ${minutes} phút trước (/tech-trends/${recent.slug}). `
+          + 'Nếu lần bấm trước báo lỗi thì rất có thể nó vẫn đăng thành công — hãy kiểm tra danh sách. '
+          + 'Muốn tạo thêm một bản nữa, gửi lại với force = true.',
+          409,
+          'NEWS_BULLETIN_RECENT',
+        );
+      }
+    }
+
     const data = await runDailyBulletin({ authorId: userId, publishAt: when });
     res.status(201).json({ success: true, data });
   } catch (error) {

@@ -3216,18 +3216,18 @@ export const adminTechTrendsApi = {
     return api.get<{ data: { available: boolean } }>('/admin/tech-trends/ai/status');
   },
   aiDraft(payload: { topic: string; category: 'TechNews' | 'FixBug' | 'Experience' | 'Interviews'; notes?: string }) {
-    return api.post<{ data: AiGeneratedArticle }>('/admin/tech-trends/ai/draft', payload);
+    return api.post<{ data: AiGeneratedArticle }>('/admin/tech-trends/ai/draft', payload, { timeout: 300_000 });
   },
   aiFixBug(payload: { errorText: string; context?: string }) {
-    return api.post<{ data: AiGeneratedArticle }>('/admin/tech-trends/ai/fixbug', payload);
+    return api.post<{ data: AiGeneratedArticle }>('/admin/tech-trends/ai/fixbug', payload, { timeout: 300_000 });
   },
   aiEnrich(payload: { title: string; bodyMdx: string; category?: string }) {
     return api.post<{
       data: { summary: string; tags: string[]; metaDescription: string; readTimeMin: number; coverEmoji: string };
-    }>('/admin/tech-trends/ai/enrich', payload);
+    }>('/admin/tech-trends/ai/enrich', payload, { timeout: 180_000 });
   },
   aiRewrite(payload: { bodyMdx: string; instruction: string }) {
-    return api.post<{ data: { bodyMdx: string } }>('/admin/tech-trends/ai/rewrite', payload);
+    return api.post<{ data: { bodyMdx: string } }>('/admin/tech-trends/ai/rewrite', payload, { timeout: 300_000 });
   },
 
   // ─── News bulletin ────────────────────────────────────────────────
@@ -3249,19 +3249,26 @@ export const adminTechTrendsApi = {
     return api.delete<{ success: boolean }>(`/admin/tech-trends/news/feeds/${id}`);
   },
   newsIngest() {
-    return api.post<{ data: NewsIngestResult }>('/admin/tech-trends/news/ingest');
+    // Fetching ~19 RSS feeds over the network, sequentially.
+    return api.post<{ data: NewsIngestResult }>('/admin/tech-trends/news/ingest', undefined, { timeout: 300_000 });
   },
   newsCandidates(limit = 12) {
     return api.get<{ data: NewsCandidateDto[] }>('/admin/tech-trends/news/candidates', { params: { limit } });
   },
   newsDraft() {
-    return api.post<{ data: NewsBulletinDraft }>('/admin/tech-trends/news/draft');
+    return api.post<{ data: NewsBulletinDraft }>('/admin/tech-trends/news/draft', undefined, { timeout: 420_000 });
   },
   /** publishAt omitted = publish immediately; ISO string = schedule it. */
   newsGenerate(payload: { publishAt?: string; ingestFirst?: boolean } = {}) {
     return api.post<{ data: { id: number; slug: string; status: string; sources: number } }>(
       '/admin/tech-trends/news/generate',
       payload,
+      // Writing a whole bulletin from ~10 sources on the strongest model takes
+      // MINUTES. On the 30s default the browser aborted while the server went
+      // on to finish and PUBLISH the article — so a press that looked like a
+      // failure really posted, and pressing again posted another one. That is
+      // how 03:02:24, 03:02:43, 03:03:36, 03:04:31 and 03:05:37 happened.
+      { timeout: 600_000 },
     );
   },
 };

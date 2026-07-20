@@ -121,8 +121,20 @@ export default function NewsBulletinPanel({ onPublished }: Props) {
       onPublished?.();
       await loadFeeds();
     } catch (err) {
-      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
-      toast(msg || 'Tạo bản tin thất bại', 'error');
+      const res = (err as { response?: { status?: number; data?: { message?: string } } })?.response;
+      if (!res) {
+        // No response at all means the BROWSER gave up, not the server. The
+        // server keeps writing and will publish the bulletin — saying "thất
+        // bại" here is how five bulletins got posted in four minutes.
+        toast(
+          'Trình duyệt hết giờ chờ, nhưng máy chủ vẫn đang soạn bản tin. '
+          + 'ĐỪNG bấm lại — kiểm tra danh sách bài sau vài phút.',
+          'error',
+        );
+        onPublished?.();
+      } else {
+        toast(res.data?.message || 'Tạo bản tin thất bại', 'error');
+      }
     } finally {
       setGenerating(false);
     }
@@ -267,7 +279,7 @@ export default function NewsBulletinPanel({ onPublished }: Props) {
               className="w-full px-4 py-2.5 rounded-lg font-semibold text-white bg-gradient-to-r from-sky-600 to-indigo-600 hover:opacity-90 disabled:opacity-50"
             >
               {generating
-                ? 'AI đang viết bản tin…'
+                ? 'AI đang viết bản tin… (vài phút, đừng bấm lại)'
                 : useSchedule
                   ? '📰 Tạo & hẹn giờ đăng'
                   : '📰 Tạo & đăng ngay'}
@@ -275,6 +287,10 @@ export default function NewsBulletinPanel({ onPublished }: Props) {
             <p className="text-xs text-text-secondary">
               Bài đăng dưới tên tài khoản admin của bạn, gắn nhãn “AI tổng hợp”, và luôn kèm mục
               “Nguồn chính thức” dẫn thẳng tới bài gốc.
+            </p>
+            <p className="text-xs text-text-muted">
+              Soạn một bản tin mất <strong>vài phút</strong>. Nếu có báo lỗi, hãy xem danh sách bài
+              trước khi bấm lại — máy chủ thường vẫn đăng xong.
             </p>
           </div>
 

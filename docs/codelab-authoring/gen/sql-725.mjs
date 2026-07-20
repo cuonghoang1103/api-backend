@@ -1,0 +1,884 @@
+// SQL module 725 (database-administration-monitoring-and-production-patterns) — 10 exercises.
+// PostgreSQL. Every figure below was produced by running the exercise against a real
+// postgres:16 server: dead-tuple counts, bloat percentages, the 55P03 lock timeout raised
+// by a second session opened through dblink, and the sizes before and after VACUUM.
+import fs from 'node:fs';
+import path from 'node:path';
+
+const trackSlug = 'sql';
+const moduleSlug = 'database-administration-monitoring-and-production-patterns';
+
+const SETUP = `CREATE EXTENSION IF NOT EXISTS dblink;
+CREATE EXTENSION IF NOT EXISTS pgstattuple;
+
+DROP TABLE IF EXISTS events, archive CASCADE;
+CREATE TABLE events (
+  id      INT PRIMARY KEY,
+  user_id INT NOT NULL,
+  body    TEXT NOT NULL,
+  seen    BOOLEAN NOT NULL DEFAULT false
+);
+INSERT INTO events
+SELECT g, g % 1000, repeat('x', 50), false
+FROM generate_series(1, 50000) g;
+CREATE INDEX ix_events_user ON events(user_id);
+ANALYZE events;`;
+
+const ex = [
+  {
+    title: 'Account for Where the Disk Actually Went',
+    difficulty: 'EASY', estimatedMinutes: 20, points: 10,
+    concepts: ['table versus index versus total size', 'pg_total_relation_size', 'TOAST storage', 'finding the largest objects', 'size as an operational signal'],
+    prerequisites: ['catalog queries'],
+    tags: ['administration', 'storage', 'monitoring', 'postgres', 'capacity'],
+    problemHtml: `<p>"The database is large" is not a diagnosis. Before adding disk, find out what is using it — and the answer is often indexes rather than rows, or one table nobody remembered. PostgreSQL exposes three different sizes per relation and they answer different questions: the heap alone, the indexes, and everything including out-of-line storage.</p>
+<ul>
+<li>Print <code>heap ...</code> — <code>pg_size_pretty(pg_relation_size('events'))</code>, the table's own pages.</li>
+<li>Print <code>indexes ...</code> — <code>pg_indexes_size('events')</code>.</li>
+<li>Print <code>total ...</code> — <code>pg_total_relation_size('events')</code>, and satisfy yourself that it accounts for the other two.</li>
+<li>Print <code>ratio ...</code> — indexes as a percentage of the heap, rounded to a whole number. On many production tables this exceeds 100.</li>
+<li>Print <code>biggest ...</code> — the largest object in the database as <code>name=size</code>, from <code>pg_class</code> joined to <code>pg_namespace</code>, restricted to ordinary tables in the <code>public</code> schema.</li>
+<li>Print <code>db_size ...</code> — the whole database, with <code>pg_database_size(current_database())</code>.</li>
+</ul>`,
+    inputSpec: 'The events table: 50,000 rows of about 50 bytes of text each, with a primary key and one index on user_id.',
+    outputSpec:
+      'The heap is about 4.5 MB, the indexes together about 1.5 MB, and the total is their sum at about 6 MB; indexes come to a third of the heap; events is the largest table; and the database is about 13 MB.',
+    constraints: 'Report sizes through the pg_size_* functions rather than counting rows. Restrict the largest-object query to ordinary tables so indexes and system relations do not dominate it.',
+    examplesJson: [
+      { input: "pg_size_pretty(pg_relation_size('events'))", output: '4552 kB', explanation: 'The heap: the pages holding the rows themselves.' },
+      { input: "pg_size_pretty(pg_indexes_size('events'))", output: '1480 kB', explanation: 'Every index on the table added together — here a primary key and one secondary index.' },
+      { input: 'indexes as a percentage of the heap', output: '33', explanation: 'Two modest indexes already cost half of what the data costs; six indexes on a wide table routinely cost more than the rows.' },
+    ],
+    hintsJson: [
+      'pg_relation_size is the heap; pg_indexes_size is all indexes; pg_total_relation_size includes both plus TOAST.',
+      'pg_size_pretty turns bytes into human-readable units — keep the raw bytes for arithmetic.',
+      'relkind = \'r\' restricts pg_class to ordinary tables.',
+      'Large text or bytea columns live in a separate TOAST relation that only the total size accounts for.',
+    ],
+    solution: `SELECT pg_size_pretty(pg_relation_size('events'))       AS heap;
+SELECT pg_size_pretty(pg_indexes_size('events'))        AS indexes;
+SELECT pg_size_pretty(pg_total_relation_size('events')) AS total;
+
+SELECT round(100.0 * pg_indexes_size('events') / pg_relation_size('events')) AS ratio;
+
+SELECT c.relname || '=' || pg_size_pretty(pg_total_relation_size(c.oid)) AS biggest
+FROM pg_class c
+JOIN pg_namespace n ON n.oid = c.relnamespace
+WHERE n.nspname = 'public' AND c.relkind = 'r'
+ORDER BY pg_total_relation_size(c.oid) DESC
+LIMIT 1;
+
+SELECT pg_size_pretty(pg_database_size(current_database())) AS db_size;`,
+    solutionExplanationHtml: `<p>The three functions answer three questions and conflating them is the usual reason a capacity estimate is wrong. <code>pg_relation_size</code> is the heap — the pages holding rows. <code>pg_indexes_size</code> is every index on the table summed. <code>pg_total_relation_size</code> is both plus the <strong>TOAST</strong> relation, where PostgreSQL stores values too large for a page, typically long text, JSON documents and bytea. A table whose rows look small but whose total size is enormous is almost always a TOAST story, and only the total reveals it.</p>
+<p>The index ratio is the number worth watching over time. Two ordinary indexes already cost a third of what the data costs here; a table carrying six indexes frequently spends more space on indexes than on rows, and every one of them is also a write cost on each insert. Rising storage that turns out to be indexes points at exercise 8 of the indexing module — unused and redundant indexes — rather than at buying disk.</p>
+<p>The largest-object query is the one to keep. Sorted by total size and restricted to <code>relkind = 'r'</code>, it answers "where did the space go" in a single statement; without that restriction the result is dominated by individual indexes and system catalogues, which is technically true and operationally useless.</p>
+<p>One caveat worth knowing before acting on these numbers: they measure <em>allocated</em> space, not useful space. A table can be mostly empty and still large, because deleted rows leave reusable but unreturned space behind. Distinguishing "big because of data" from "big because of bloat" is exercise 4, and doing it before a maintenance window is what prevents a pointless <code>VACUUM FULL</code>.</p>`,
+    check: `SELECT pg_size_pretty(pg_relation_size('events')) AS heap;
+SELECT pg_size_pretty(pg_indexes_size('events')) AS indexes;
+SELECT pg_size_pretty(pg_total_relation_size('events')) AS total;
+SELECT round(100.0 * pg_indexes_size('events') / pg_relation_size('events')) AS ratio;
+SELECT c.relname || '=' || pg_size_pretty(pg_total_relation_size(c.oid)) AS biggest FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = 'public' AND c.relkind = 'r' ORDER BY pg_total_relation_size(c.oid) DESC LIMIT 1;
+SELECT pg_size_pretty(pg_database_size(current_database())) AS db_size;`,
+  },
+  {
+    title: 'See Who Is Connected and What They Are Doing',
+    difficulty: 'EASY', estimatedMinutes: 25, points: 10,
+    concepts: ['pg_stat_activity', 'connection states', 'idle in transaction', 'query duration', 'terminating a session'],
+    prerequisites: ['catalog queries', 'transactions'],
+    tags: ['monitoring', 'administration', 'postgres', 'operations', 'incidents'],
+    problemHtml: `<p>When a database is in trouble the first question is always the same: what is running right now. <code>pg_stat_activity</code> has one row per server process, with its state, its current query and the timestamps needed to work out how long it has been that way.</p>
+<p>The state to understand is <code>idle in transaction</code>: a session that opened a transaction, did some work and then stopped talking. It holds its locks and its snapshot indefinitely, blocking other writers and preventing <code>VACUUM</code> from cleaning up — a leaked transaction from an application that forgot to commit is one of the most common production incidents.</p>
+<ul>
+<li>Print <code>mine ...</code> — your own backend's state and database, from the row where <code>pid = pg_backend_pid()</code>.</li>
+<li>Open a second session with <code>dblink</code>, start a transaction in it that touches <code>events</code> — take an <code>ACCESS SHARE</code> lock, since <code>dblink_exec</code> refuses statements that return rows — and leave it open.</li>
+<li>Print <code>idle_in_txn N</code> — the number of sessions in state <code>idle in transaction</code>.</li>
+<li>Print <code>oldest ...</code> — for that session, whether it has been open for less than a minute, as a boolean, using <code>xact_start</code>.</li>
+<li>Close the second transaction, then print <code>idle_after N</code> to confirm it is gone.</li>
+<li>Print <code>connections N</code> and <code>max_conn ...</code> — the current connection count and the <code>max_connections</code> setting, the ratio an alert should watch.</li>
+</ul>`,
+    inputSpec: 'The events table, plus a second session opened through dblink during the exercise.',
+    outputSpec:
+      'Your own session reports state active on this database; one session is idle in transaction while the dblink transaction is open and none afterwards; that session is under a minute old; and the connection count is well below max_connections.',
+    constraints: 'Do not terminate any backend in this exercise. Identify the idle transaction from pg_stat_activity rather than from knowing you opened it.',
+    examplesJson: [
+      { input: 'SELECT state FROM pg_stat_activity WHERE pid = pg_backend_pid()', output: 'active', explanation: 'Your own session is running the query that asks the question, so it is always active.' },
+      { input: "counting state = 'idle in transaction' while the dblink transaction is open", output: '1', explanation: 'A transaction left open shows up here — with its locks and its snapshot still held.' },
+      { input: 'the same count after the transaction is rolled back', output: '0', explanation: 'Ending the transaction releases everything; the row returns to idle.' },
+    ],
+    hintsJson: [
+      'pg_backend_pid() identifies your own row in pg_stat_activity.',
+      'state values include active, idle, idle in transaction and idle in transaction (aborted).',
+      'dblink_exec refuses statements that return rows — use LOCK TABLE or an UPDATE to keep the other transaction busy.',
+      'xact_start is when the transaction began; query_start is when the current statement began.',
+      'now() - xact_start is the age of a transaction — the number an alert should threshold on.',
+    ],
+    solution: `SELECT state || ' on ' || datname AS mine
+FROM pg_stat_activity WHERE pid = pg_backend_pid();
+
+SELECT dblink_connect('leaker', 'dbname=' || current_database());
+SELECT dblink_exec('leaker', 'BEGIN');
+SELECT dblink_exec('leaker', 'LOCK TABLE events IN ACCESS SHARE MODE');
+
+SELECT count(*) AS idle_in_txn
+FROM pg_stat_activity WHERE state = 'idle in transaction';
+
+SELECT bool_and(now() - xact_start < interval '1 minute') AS oldest
+FROM pg_stat_activity WHERE state = 'idle in transaction';
+
+SELECT dblink_exec('leaker', 'ROLLBACK');
+SELECT dblink_disconnect('leaker');
+
+SELECT count(*) AS idle_after
+FROM pg_stat_activity WHERE state = 'idle in transaction';
+
+SELECT count(*) AS connections FROM pg_stat_activity;
+SELECT setting AS max_conn FROM pg_settings WHERE name = 'max_connections';`,
+    solutionExplanationHtml: `<p><code>pg_stat_activity</code> is the first place to look during an incident, and the <code>state</code> column carries most of the meaning. <code>active</code> means a statement is executing right now. <code>idle</code> means a connection is open with no transaction — harmless, though it still consumes a connection slot. <code>idle in transaction</code> is the dangerous one: no work is happening, yet the session holds every lock it has taken and keeps its snapshot alive, which prevents <code>VACUUM</code> from removing rows newer than that snapshot anywhere in the database.</p>
+<p>That last consequence is the one that surprises people. A single forgotten transaction in an application connection pool can stop cleanup across unrelated tables, so bloat grows, plans degrade, and the eventual symptom looks nothing like the cause. The diagnosis is exactly the query written here, and the alert is on <code>now() - xact_start</code> exceeding a threshold — minutes, not hours.</p>
+<p>Two timestamps are easy to confuse. <code>xact_start</code> is when the transaction began; <code>query_start</code> is when the current statement began. A long-running <em>query</em> and a long-running <em>transaction</em> are different problems: the first is usually a missing index, the second is usually application code holding a transaction open across a network call.</p>
+<p>The connection count against <code>max_connections</code> is the other number an alert should carry. PostgreSQL reserves slots for superusers, so an application hitting the limit fails to connect while an administrator can still get in to look — which is deliberate, and the reason a pooler such as PgBouncer belongs in front of any application that opens connections per request. When a session genuinely must be stopped, <code>pg_cancel_backend(pid)</code> cancels its current query and <code>pg_terminate_backend(pid)</code> disconnects it; prefer the first, since it does not discard the connection.</p>`,
+    diagramMermaid: `flowchart TD
+  A[pg_stat_activity] --> B[state active means a statement is running]
+  A --> C[state idle means a connection with no transaction]
+  A --> D[state idle in transaction]
+  D --> E[holds locks and a snapshot]
+  E --> F[blocks writers and stops VACUUM cleaning up]
+  F --> G[alert on now minus xact_start]`,
+    check: `SELECT state || ' on ' || datname AS mine FROM pg_stat_activity WHERE pid = pg_backend_pid();
+SELECT dblink_connect('leaker', 'dbname=' || current_database());
+SELECT dblink_exec('leaker', 'BEGIN');
+SELECT dblink_exec('leaker', 'LOCK TABLE events IN ACCESS SHARE MODE');
+SELECT count(*) AS idle_in_txn FROM pg_stat_activity WHERE state = 'idle in transaction';
+SELECT bool_and(now() - xact_start < interval '1 minute') AS oldest FROM pg_stat_activity WHERE state = 'idle in transaction';
+SELECT dblink_exec('leaker', 'ROLLBACK');
+SELECT dblink_disconnect('leaker');
+SELECT count(*) AS idle_after FROM pg_stat_activity WHERE state = 'idle in transaction';
+SELECT count(*) AS connections FROM pg_stat_activity;
+SELECT setting AS max_conn FROM pg_settings WHERE name = 'max_connections';`,
+  },
+  {
+    title: 'Watch Dead Rows Accumulate and VACUUM Clean Them',
+    difficulty: 'MEDIUM', estimatedMinutes: 35, points: 20,
+    concepts: ['MVCC leaves dead tuples', 'n_dead_tup', 'VACUUM reclaims for reuse', 'statistics are flushed asynchronously', 'autovacuum thresholds'],
+    prerequisites: ['UPDATE and DELETE', 'catalog queries'],
+    tags: ['vacuum', 'mvcc', 'maintenance', 'postgres', 'monitoring'],
+    problemHtml: `<p>PostgreSQL never updates a row in place. An <code>UPDATE</code> writes a new version and marks the old one dead; a <code>DELETE</code> only marks. Those dead versions stay until <code>VACUUM</code> reclaims them, which is why a table that receives updates grows even when its row count does not.</p>
+<ul>
+<li>Print <code>before ...</code> — live and dead tuple counts for <code>events</code> from <code>pg_stat_user_tables</code>, as <code>live/dead</code>.</li>
+<li>Update half the table: <code>UPDATE events SET seen = true WHERE id % 2 = 0</code>.</li>
+<li>Print <code>immediately ...</code> — the same counts read straight away.</li>
+<li>Call <code>pg_stat_force_next_flush()</code>, then print <code>after_flush ...</code>. Compare it with the previous line and note what the first reading would have led you to conclude.</li>
+<li>Run <code>VACUUM events</code> and print <code>after_vacuum ...</code>.</li>
+<li>Print <code>autovac ...</code> — the value of <code>autovacuum_vacuum_scale_factor</code> and <code>autovacuum_vacuum_threshold</code>, joined by a comma, the two settings that decide when this happens by itself.</li>
+</ul>`,
+    inputSpec: 'The events table with 50,000 live rows and no dead ones at the start.',
+    outputSpec:
+      'The table starts with 50,000 live and 0 dead; immediately after updating half the rows the counters still read 0 dead because statistics have not been flushed; after the flush 25,000 dead rows appear (with the live estimate inflated to 100,000); VACUUM returns the dead count to 0; and autovacuum triggers at 20 percent of the table plus 50 rows by default.',
+    constraints: 'Read the counts from pg_stat_user_tables. Do not use VACUUM FULL — that is the next exercise.',
+    examplesJson: [
+      { input: 'the counters read immediately after the UPDATE', output: '50000/0', explanation: 'Statistics are accumulated per backend and flushed asynchronously, so an immediate read reports the old numbers.' },
+      { input: 'the same read after pg_stat_force_next_flush()', output: '100000/25000', explanation: 'Half the rows now have a dead previous version each. The live count reads 100,000 rather than 50,000 because the counter is an estimate maintained from insert and update activity, not a COUNT — another reason to treat these as signals rather than facts.' },
+      { input: 'after VACUUM events', output: '50000/0', explanation: 'The dead versions are gone and their space is reusable — though the file has not shrunk.' },
+    ],
+    hintsJson: [
+      'n_live_tup and n_dead_tup live in pg_stat_user_tables.',
+      'Statistics are flushed asynchronously — force it before reading, or the numbers lag.',
+      'VACUUM marks space reusable; it does not return it to the operating system.',
+      'Autovacuum fires at scale_factor times the table size plus threshold dead rows.',
+    ],
+    solution: `SELECT n_live_tup || '/' || n_dead_tup AS before
+FROM pg_stat_user_tables WHERE relname = 'events';
+
+UPDATE events SET seen = true WHERE id % 2 = 0;
+
+SELECT n_live_tup || '/' || n_dead_tup AS immediately
+FROM pg_stat_user_tables WHERE relname = 'events';
+
+SELECT pg_stat_force_next_flush();
+SELECT n_live_tup || '/' || n_dead_tup AS after_flush
+FROM pg_stat_user_tables WHERE relname = 'events';
+
+VACUUM events;
+SELECT pg_stat_force_next_flush();
+SELECT n_live_tup || '/' || n_dead_tup AS after_vacuum
+FROM pg_stat_user_tables WHERE relname = 'events';
+
+SELECT (SELECT setting FROM pg_settings WHERE name = 'autovacuum_vacuum_scale_factor')
+       || ',' ||
+       (SELECT setting FROM pg_settings WHERE name = 'autovacuum_vacuum_threshold') AS autovac;`,
+    solutionExplanationHtml: `<p>Dead tuples are the price of MVCC and the reason PostgreSQL needs <code>VACUUM</code> at all. Because an update writes a new row version rather than overwriting, concurrent readers keep seeing the version valid for their snapshot — no read ever blocks a write. The cost is that the old versions accumulate, and 25,000 of them appear here from a single statement that changed no row count.</p>
+<p>The asynchronous statistics are worth meeting deliberately. Read immediately after the update, the counters still say zero dead rows, and an operator trusting that reading would conclude the table is healthy. Counters are accumulated in each backend and flushed on a timer, so monitoring must either force a flush or accept a small lag — the same trap as reading <code>idx_scan</code> in the indexing module, and worth remembering as a general property rather than a quirk of one view.</p>
+<p><code>VACUUM</code> returns the dead count to zero, and the important detail is what it does <em>not</em> do: the file stays the same size. The space is marked reusable so future inserts fill it, which is exactly right for a table with steady churn — repeatedly shrinking and regrowing a file would be pure waste. Space is only returned to the operating system when the free space happens to be at the end of the file, or by the rewrite that the next exercise covers.</p>
+<p>In production this is normally automatic. Autovacuum wakes periodically and vacuums a table once its dead rows exceed <code>autovacuum_vacuum_threshold + autovacuum_vacuum_scale_factor × live rows</code> — by default 50 plus 20 percent. That default is reasonable for small tables and far too lazy for large ones: 20 percent of a hundred-million-row table is twenty million dead rows before cleanup begins. Lowering the scale factor per table with <code>ALTER TABLE … SET (autovacuum_vacuum_scale_factor = 0.02)</code> is one of the most common and most valuable pieces of PostgreSQL tuning.</p>`,
+    diagramMermaid: `flowchart TD
+  A[UPDATE a row] --> B[new version written]
+  A --> C[old version marked dead]
+  C --> D[still visible to older snapshots]
+  D --> E[VACUUM reclaims once no snapshot needs it]
+  E --> F[space reusable but the file does not shrink]
+  G[autovacuum threshold plus scale factor] --> E`,
+    check: `SELECT n_live_tup || '/' || n_dead_tup AS before FROM pg_stat_user_tables WHERE relname = 'events';
+UPDATE events SET seen = true WHERE id % 2 = 0;
+SELECT n_live_tup || '/' || n_dead_tup AS immediately FROM pg_stat_user_tables WHERE relname = 'events';
+SELECT pg_stat_force_next_flush();
+SELECT n_live_tup || '/' || n_dead_tup AS after_flush FROM pg_stat_user_tables WHERE relname = 'events';
+VACUUM events;
+SELECT pg_stat_force_next_flush();
+SELECT n_live_tup || '/' || n_dead_tup AS after_vacuum FROM pg_stat_user_tables WHERE relname = 'events';
+SELECT (SELECT setting FROM pg_settings WHERE name = 'autovacuum_vacuum_scale_factor') || ',' || (SELECT setting FROM pg_settings WHERE name = 'autovacuum_vacuum_threshold') AS autovac;`,
+  },
+  {
+    title: 'Measure Bloat, Then Decide Whether a Rewrite Is Worth It',
+    difficulty: 'MEDIUM', estimatedMinutes: 35, points: 20,
+    concepts: ['pgstattuple', 'dead tuple percent', 'VACUUM versus VACUUM FULL', 'ACCESS EXCLUSIVE lock', 'measuring before maintenance'],
+    prerequisites: ['VACUUM', 'table sizes'],
+    tags: ['bloat', 'vacuum', 'maintenance', 'postgres', 'operations'],
+    problemHtml: `<p>A table can be twice the size its data needs and report a perfectly normal row count. <code>pgstattuple</code> opens the file and measures what is actually inside: live bytes, dead bytes and free space. That measurement is what tells you whether an expensive rewrite is justified — guessing from the size alone leads to maintenance windows that achieve nothing.</p>
+<ul>
+<li>Print <code>clean ...</code> — the dead-tuple percentage and table size from <code>pgstattuple('events')</code>, as <code>pct/size</code>, rounding the percentage.</li>
+<li>Delete a third of the rows (<code>WHERE id % 3 = 0</code>) and print <code>after_delete ...</code> in the same format.</li>
+<li>Run plain <code>VACUUM events</code>, print <code>after_vacuum ...</code>, and note which of the two numbers changed.</li>
+<li>Run <code>VACUUM FULL events</code>, print <code>after_full ...</code>, and note which changed this time.</li>
+<li>Print <code>lock_needed ...</code> — the lock mode <code>VACUUM FULL</code> requires, taken from <code>pg_locks</code> while holding it is impractical here, so report the constant string <code>AccessExclusiveLock</code> and be sure you know why it matters.</li>
+<li>Print <code>rows N</code> to confirm the surviving row count is unchanged by either operation.</li>
+</ul>`,
+    inputSpec: 'The events table as the previous exercise left it — 50,000 rows and about 6.8 MB after the update churn.',
+    outputSpec:
+      'The table starts at 0 percent dead and 6824 kB; deleting a third pushes the dead percentage to 20 with the size unchanged; a plain VACUUM returns it to 0 percent with the size still 6824 kB; VACUUM FULL rewrites the file down to 3032 kB; and 33,334 rows survive throughout.',
+    constraints: 'Measure with pgstattuple rather than inferring bloat from pg_relation_size. Do not use VACUUM FULL before measuring.',
+    examplesJson: [
+      { input: "pgstattuple('events') after deleting a third of the rows", output: '20 percent dead, size still 6824 kB', explanation: 'The rows are gone logically; their bytes are still in the file.' },
+      { input: 'after a plain VACUUM', output: '0 percent dead, size still unchanged', explanation: 'VACUUM marks the space reusable — the dead percentage falls, the file does not shrink.' },
+      { input: 'after VACUUM FULL', output: '3032 kB, down from 6824 kB', explanation: 'The table is rewritten without the free space, which is the only way the file gets smaller — at the cost of an exclusive lock.' },
+    ],
+    hintsJson: [
+      'pgstattuple reads the whole relation, so it is a diagnostic tool rather than something to run constantly.',
+      'Compare table_len before and after: plain VACUUM does not change it.',
+      'VACUUM FULL rewrites the table and needs an ACCESS EXCLUSIVE lock for the whole rewrite.',
+      'pg_repack achieves the same result without the long exclusive lock, at the cost of extra disk.',
+    ],
+    solution: `SELECT round(dead_tuple_percent) || '/' || pg_size_pretty(table_len::bigint) AS clean
+FROM pgstattuple('events');
+
+DELETE FROM events WHERE id % 3 = 0;
+
+SELECT round(dead_tuple_percent) || '/' || pg_size_pretty(table_len::bigint) AS after_delete
+FROM pgstattuple('events');
+
+VACUUM events;
+SELECT round(dead_tuple_percent) || '/' || pg_size_pretty(table_len::bigint) AS after_vacuum
+FROM pgstattuple('events');
+
+VACUUM FULL events;
+SELECT round(dead_tuple_percent) || '/' || pg_size_pretty(table_len::bigint) AS after_full
+FROM pgstattuple('events');
+
+SELECT 'AccessExclusiveLock' AS lock_needed;
+SELECT count(*) AS rows FROM events;`,
+    solutionExplanationHtml: `<p>The two <code>VACUUM</code> forms do genuinely different things and the measurements separate them cleanly. Plain <code>VACUUM</code> drives the dead percentage to zero while leaving <code>table_len</code> untouched: the space is marked free and will be reused by future inserts, but it still belongs to the file. <code>VACUUM FULL</code> rewrites the table into a new file without the free space, so the size finally drops.</p>
+<p>The reason to prefer the first is in the lock. <code>VACUUM FULL</code> takes an <strong>ACCESS EXCLUSIVE</strong> lock for the entire rewrite, which blocks every reader and writer — on a large table that is minutes to hours of total unavailability, and it needs enough free disk to hold a second copy while it runs. Plain <code>VACUUM</code> runs concurrently with normal traffic and is what should be happening automatically all the time.</p>
+<p>So the operational rule is: measure first, and rewrite only when the free space will not be reused. A table with steady insert traffic reclaims its own free space and needs nothing; a table that shrank permanently — a purge of old data, a one-off cleanup — is holding space it will never use, and that is the case a rewrite is for. Running <code>VACUUM FULL</code> on a busy table with normal churn is the classic well-intentioned mistake: an outage that buys back space the table promptly re-allocates.</p>
+<p>Two practical notes. <code>pgstattuple</code> reads the entire relation, so it is a diagnostic run deliberately, not a monitoring query on a timer; the approximate variant <code>pgstattuple_approx</code> exists for large tables. And when a rewrite genuinely is needed on a production table, <code>pg_repack</code> does the same job while holding the exclusive lock only briefly at the end — the standard answer when downtime is not acceptable.</p>`,
+    diagramMermaid: `flowchart TD
+  A[DELETE a third of the rows] --> B[dead space in the file]
+  B --> C[plain VACUUM]
+  C --> D[dead percent zero and file size unchanged]
+  D --> E{will the space be reused}
+  E -->|yes steady inserts| F[do nothing more]
+  E -->|no one-off purge| G[VACUUM FULL rewrites the file]
+  G --> H[smaller file but ACCESS EXCLUSIVE for the whole rewrite]`,
+    check: `SELECT round(dead_tuple_percent) || '/' || pg_size_pretty(table_len::bigint) AS clean FROM pgstattuple('events');
+DELETE FROM events WHERE id % 3 = 0;
+SELECT round(dead_tuple_percent) || '/' || pg_size_pretty(table_len::bigint) AS after_delete FROM pgstattuple('events');
+VACUUM events;
+SELECT round(dead_tuple_percent) || '/' || pg_size_pretty(table_len::bigint) AS after_vacuum FROM pgstattuple('events');
+VACUUM FULL events;
+SELECT round(dead_tuple_percent) || '/' || pg_size_pretty(table_len::bigint) AS after_full FROM pgstattuple('events');
+SELECT 'AccessExclusiveLock' AS lock_needed;
+SELECT count(*) AS rows FROM events;`,
+  },
+  {
+    title: 'Find the Session That Is Blocking Everyone Else',
+    difficulty: 'MEDIUM', estimatedMinutes: 40, points: 20,
+    concepts: ['lock modes and conflicts', 'pg_locks', 'pg_blocking_pids', 'lock_timeout', 'SQLSTATE 55P03'],
+    prerequisites: ['transactions', 'pg_stat_activity'],
+    tags: ['locks', 'monitoring', 'incidents', 'postgres', 'concurrency'],
+    problemHtml: `<p>"The site is frozen" usually means one session holds a lock and everything else is queued behind it. Diagnosing that takes two questions: which locks exist, and who is waiting for whom. PostgreSQL answers the first with <code>pg_locks</code> and the second with <code>pg_blocking_pids()</code>, which walks the wait chain for you.</p>
+<ul>
+<li>Open a second session with <code>dblink</code> and have it take an <code>ACCESS EXCLUSIVE</code> lock on <code>events</code> inside an open transaction.</li>
+<li>Print <code>locks_held ...</code> — the number of <code>AccessExclusiveLock</code> entries on <code>events</code> in <code>pg_locks</code>.</li>
+<li>Set <code>lock_timeout</code> to 300 ms, then try to take a conflicting <code>SHARE</code> lock yourself. Catch the failure and print <code>blocked ...</code> with the <code>SQLSTATE</code>.</li>
+<li>Print <code>waiting ...</code> — whether any row in <code>pg_locks</code> for <code>events</code> is ungranted, at the moment of checking. Predict the answer before running it, remembering that your own attempt has already given up by then.</li>
+<li>Release the second session's transaction, then print <code>after_release ...</code> — the result of taking the same <code>SHARE</code> lock now, reported as <code>ok</code>.</li>
+<li>Print <code>timeout_setting ...</code> — the current value of <code>lock_timeout</code>, then reset it.</li>
+</ul>`,
+    inputSpec: 'The events table and a second session opened through dblink that holds an ACCESS EXCLUSIVE lock during part of the exercise.',
+    outputSpec:
+      'One AccessExclusiveLock is held on the table; the conflicting lock attempt fails with SQLSTATE 55P03 after 300 ms rather than waiting indefinitely; the ungranted-lock check reads false, because the only waiter had already timed out before it ran; once the holding transaction ends the same lock is granted immediately; and lock_timeout reports 300.',
+    constraints: 'Do not terminate the blocking backend. Recover by letting lock_timeout fire and by ending the other transaction normally.',
+    examplesJson: [
+      { input: 'a second session holding ACCESS EXCLUSIVE on events', output: 'locks_held 1', explanation: 'pg_locks shows the mode and the relation, which is how you identify what is actually held.' },
+      { input: 'attempting a SHARE lock with lock_timeout = 300ms', output: 'blocked 55P03', explanation: 'lock_not_available — the statement gave up rather than queueing behind the holder indefinitely.' },
+      { input: 'the same attempt after the holder rolls back', output: 'after_release ok', explanation: 'Locks are released at end of transaction, not at end of statement.' },
+    ],
+    hintsJson: [
+      'pg_locks has relation, mode and granted; join to pg_class to get the table name.',
+      'pg_blocking_pids(pid) returns the sessions a given backend is waiting for.',
+      'lock_timeout aborts a statement that waits too long for a lock; statement_timeout limits total run time.',
+      'A lock is held until the transaction ends, which is why an idle transaction is so damaging.',
+    ],
+    solution: `SELECT dblink_connect('blocker', 'dbname=' || current_database());
+SELECT dblink_exec('blocker', 'BEGIN');
+SELECT dblink_exec('blocker', 'LOCK TABLE events IN ACCESS EXCLUSIVE MODE');
+
+SELECT count(*) AS locks_held
+FROM pg_locks l JOIN pg_class c ON c.oid = l.relation
+WHERE c.relname = 'events' AND l.mode = 'AccessExclusiveLock';
+
+SET lock_timeout = '300ms';
+DO $$
+BEGIN
+  LOCK TABLE events IN SHARE MODE;
+  RAISE NOTICE 'lock unexpectedly granted';
+EXCEPTION WHEN OTHERS THEN
+  RAISE NOTICE 'blocked %', SQLSTATE;
+END;
+$$;
+
+SELECT EXISTS (
+  SELECT 1 FROM pg_locks l JOIN pg_class c ON c.oid = l.relation
+  WHERE c.relname = 'events' AND NOT l.granted
+) AS waiting;
+
+SELECT dblink_exec('blocker', 'ROLLBACK');
+SELECT dblink_disconnect('blocker');
+
+DO $$
+BEGIN
+  LOCK TABLE events IN SHARE MODE;
+  RAISE NOTICE 'after_release ok';
+END;
+$$;
+
+SELECT setting AS timeout_setting FROM pg_settings WHERE name = 'lock_timeout';
+RESET lock_timeout;`,
+    solutionExplanationHtml: `<p>Locks in PostgreSQL are held until the end of the <strong>transaction</strong>, not the end of the statement. That single rule explains most blocking incidents: a session that took a lock and then went idle keeps it, and every conflicting statement queues behind it — which is why exercise 2's <code>idle in transaction</code> and this exercise are really the same problem seen from two angles.</p>
+<p><code>pg_locks</code> shows what is held and what is waiting; the <code>granted</code> column is the difference. Joining it to <code>pg_class</code> turns object ids into table names, and joining to <code>pg_stat_activity</code> turns pids into queries — the combination is the standard "what is blocking what" query worth keeping in a runbook. <code>pg_blocking_pids(pid)</code> is the shortcut for the same question and follows chains, which matters because the session you can see waiting is often blocked by another waiter rather than by the original holder.</p>
+<p>The ungranted-lock check reading <code>false</code> is worth pausing on: a waiting lock is only visible in <code>pg_locks</code> <em>while</em> something is waiting, and the timeout had already fired. Catching a blocking incident therefore means sampling continuously or, better, alerting on <code>pg_blocking_pids</code> from a monitoring job — a one-off query run after the fact shows nothing, which is why blocking incidents are so often described as having "disappeared on their own".</p>
+<p><code>lock_timeout</code> is the guardrail that turns an outage into an error. Without it, a statement waits indefinitely for a lock, and one blocked statement holding its own locks can grow a queue that consumes every connection. With it, the statement fails after the limit with SQLSTATE <code>55P03</code> — <code>lock_not_available</code> — and the application can retry or report. Note the distinction from <code>statement_timeout</code>, which limits how long a statement may <em>run</em>: they cover different failures and both belong in production settings.</p>
+<p>The practical guidance for schema changes follows directly. An <code>ALTER TABLE</code> that needs <code>ACCESS EXCLUSIVE</code> will queue behind any open transaction on that table — and, worse, every subsequent query queues behind <em>it</em>, so a migration waiting on a lock can take an application down while doing nothing. The standard defence is to set a short <code>lock_timeout</code> before the migration and retry: fail fast and try again, rather than blocking the world while waiting.</p>`,
+    diagramMermaid: `flowchart TD
+  A[session 1 BEGIN then LOCK TABLE] --> B[holds AccessExclusiveLock until commit or rollback]
+  C[session 2 wants a conflicting lock] --> D{lock_timeout set}
+  D -->|no| E[waits indefinitely and queues others behind it]
+  D -->|yes| F[fails with 55P03 after the limit]
+  B --> G[transaction ends and the lock is released]
+  G --> H[waiting session proceeds]`,
+    check: `SELECT dblink_connect('blocker', 'dbname=' || current_database());
+SELECT dblink_exec('blocker', 'BEGIN');
+SELECT dblink_exec('blocker', 'LOCK TABLE events IN ACCESS EXCLUSIVE MODE');
+SELECT count(*) AS locks_held FROM pg_locks l JOIN pg_class c ON c.oid = l.relation WHERE c.relname = 'events' AND l.mode = 'AccessExclusiveLock';
+SET lock_timeout = '300ms';
+DO $$ BEGIN LOCK TABLE events IN SHARE MODE; RAISE NOTICE 'lock unexpectedly granted'; EXCEPTION WHEN OTHERS THEN RAISE NOTICE 'blocked %', SQLSTATE; END; $$;
+SELECT EXISTS (SELECT 1 FROM pg_locks l JOIN pg_class c ON c.oid = l.relation WHERE c.relname = 'events' AND NOT l.granted) AS waiting;
+SELECT dblink_exec('blocker', 'ROLLBACK');
+SELECT dblink_disconnect('blocker');
+DO $$ BEGIN LOCK TABLE events IN SHARE MODE; RAISE NOTICE 'after_release ok'; END; $$;
+SELECT setting AS timeout_setting FROM pg_settings WHERE name = 'lock_timeout';
+RESET lock_timeout;`,
+  },
+  {
+    title: 'Put Guardrails on Runaway Statements and Transactions',
+    difficulty: 'MEDIUM', estimatedMinutes: 35, points: 20,
+    concepts: ['statement_timeout', 'idle_in_transaction_session_timeout', 'lock_timeout', 'per-role and per-session settings', 'failing fast beats hanging'],
+    prerequisites: ['locks', 'pg_stat_activity'],
+    tags: ['timeouts', 'reliability', 'administration', 'postgres', 'production'],
+    problemHtml: `<p>A database with no timeouts has no upper bound on how badly a single mistake can go. Three settings put that bound in place, and each covers a different failure: <code>statement_timeout</code> for a query that runs too long, <code>lock_timeout</code> for one that waits too long for a lock, and <code>idle_in_transaction_session_timeout</code> for a transaction that is opened and forgotten.</p>
+<ul>
+<li>Set <code>statement_timeout</code> to 200 ms in a <em>second</em> session opened through <code>dblink</code>, run a one-second sleep there, and catch the error it propagates back. Print <code>slow_query ...</code> with the <code>SQLSTATE</code>. It has to be done remotely: a statement timeout cancels the whole statement, including any <code>DO</code> block around it, so <code>EXCEPTION WHEN OTHERS</code> in your own session cannot catch it.</li>
+<li>Print <code>fast_query ...</code> — <code>ok</code> — after running a query that finishes well inside the same limit, to show the guardrail does not affect normal work.</li>
+<li>Set <code>idle_in_transaction_session_timeout</code> to 500 ms in a second session opened through <code>dblink</code>, have it open a transaction, wait 1 second, and then print <code>leaked ...</code>: whether that session is still in state <code>idle in transaction</code>.</li>
+<li>Print <code>defaults ...</code> — the shipped defaults of all three settings joined by commas, from <code>pg_settings</code> using <code>boot_val</code>. All three are zero, meaning unlimited.</li>
+<li>Print <code>recommendation ...</code> — the constant string <code>set per role not globally</code>, and make sure you can say why a nightly report and a web request need different limits.</li>
+</ul>`,
+    inputSpec: 'The events table and a second session opened through dblink for the idle-transaction demonstration.',
+    outputSpec:
+      'The slow query is cancelled with SQLSTATE 57014; a fast query under the same limit succeeds; the idle transaction in the second session is terminated by its timeout so it no longer appears; and all three settings ship as 0, meaning no limit at all.',
+    constraints: 'Demonstrate each timeout by triggering it, not by describing it. Reset every setting you change in your own session.',
+    examplesJson: [
+      { input: "a one-second sleep in a session whose statement_timeout is 200ms", output: 'slow_query 57014', explanation: 'query_canceled — the statement was stopped at the limit. It must be triggered in another session, because a cancellation cannot be caught by an exception handler wrapping it.' },
+      { input: 'a query finishing in a few milliseconds under the same limit', output: 'fast_query ok', explanation: 'A timeout is a ceiling, not a cost — normal work is unaffected.' },
+      { input: 'the shipped defaults of the three timeouts', output: '0,0,0', explanation: 'PostgreSQL ships with no limits at all, so every one of these is something you must decide to set.' },
+    ],
+    hintsJson: [
+      'statement_timeout counts execution time; lock_timeout counts time spent waiting for a lock.',
+      'WHEN OTHERS does not catch query_canceled — name the condition explicitly if you must handle it.',
+      'idle_in_transaction_session_timeout terminates the session, not just the transaction.',
+      'boot_val in pg_settings is the value the server ships with, before any configuration.',
+      'ALTER ROLE ... SET statement_timeout applies a limit to one login role only.',
+    ],
+    solution: `-- A statement timeout cancels the statement it fires in, so it cannot be caught
+-- locally. Trigger it in another session and catch the error dblink relays.
+SELECT dblink_connect('slow', 'dbname=' || current_database());
+SELECT dblink_exec('slow', 'SET statement_timeout = ''200ms''');
+DO $$
+BEGIN
+  PERFORM dblink_exec('slow', 'DO $inner$ BEGIN PERFORM pg_sleep(1); END $inner$');
+  RAISE NOTICE 'slow_query completed unexpectedly';
+EXCEPTION WHEN query_canceled THEN
+  -- WHEN OTHERS deliberately does NOT catch a cancellation; it has to be named.
+  RAISE NOTICE 'slow_query %', SQLSTATE;
+END;
+$$;
+SELECT dblink_disconnect('slow');
+
+SET statement_timeout = '200ms';
+DO $$
+DECLARE n INT;
+BEGIN
+  SELECT count(*) INTO n FROM events;
+  RAISE NOTICE 'fast_query ok';
+END;
+$$;
+RESET statement_timeout;
+
+SELECT dblink_connect('leaker', 'dbname=' || current_database());
+SELECT dblink_exec('leaker', 'SET idle_in_transaction_session_timeout = ''500ms''');
+SELECT dblink_exec('leaker', 'BEGIN');
+SELECT dblink_exec('leaker', 'LOCK TABLE events IN ACCESS SHARE MODE');
+SELECT pg_sleep(1);
+
+SELECT count(*) = 0 AS leaked
+FROM pg_stat_activity
+WHERE state = 'idle in transaction'
+  AND application_name = 'dblink';
+
+SELECT (SELECT boot_val FROM pg_settings WHERE name = 'statement_timeout') || ',' ||
+       (SELECT boot_val FROM pg_settings WHERE name = 'lock_timeout') || ',' ||
+       (SELECT boot_val FROM pg_settings WHERE name = 'idle_in_transaction_session_timeout') AS defaults;
+
+SELECT dblink_disconnect('leaker');
+SELECT 'set per role not globally' AS recommendation;`,
+    solutionExplanationHtml: `<p>The three timeouts are not variations on one idea; they bound three separate ways a session can consume resources forever. <code>statement_timeout</code> stops a query that is <em>running</em> too long — a missing index, an accidental cross join, a report someone ran against production. <code>lock_timeout</code> stops one that is <em>waiting</em> too long for a lock, which is what keeps a migration from freezing an application while it queues. <code>idle_in_transaction_session_timeout</code> terminates a session that opened a transaction and stopped working, releasing its locks and its snapshot so <code>VACUUM</code> can proceed.</p>
+<p>That all three ship as <code>0</code> — unlimited — is the fact to take away. A default PostgreSQL installation will happily let one query run for a week. Setting them is a decision every production database needs, and the values differ by workload, which is why they belong per role rather than in <code>postgresql.conf</code>: a web request that should never exceed a few seconds and a nightly ETL that legitimately runs for an hour cannot share a limit. <code>ALTER ROLE web_app SET statement_timeout = '5s'</code> expresses that precisely, and an application can still raise its own limit per session when it knows better.</p>
+<p>One implementation detail is worth meeting directly, because it shapes how these can be tested: a statement timeout <strong>cannot be caught</strong> by a <code>BEGIN … EXCEPTION WHEN OTHERS</code> block wrapping the slow statement. The cancellation applies to the whole statement, including the <code>DO</code> block itself, so the handler never runs. Even relayed from another session through <code>dblink</code> it still escapes a <code>WHEN OTHERS</code> handler, because PL/pgSQL <strong>deliberately excludes</strong> <code>query_canceled</code> from <code>OTHERS</code> — otherwise a stray handler could swallow an operator's cancel request and make a runaway query unkillable. Catching it requires naming the condition: <code>EXCEPTION WHEN query_canceled THEN</code>. The same property is what makes <code>statement_timeout</code> a reliable guardrail: application code cannot accidentally swallow it.</p>
+<p>SQLSTATE <code>57014</code> is <code>query_canceled</code>, the same code a manual <code>pg_cancel_backend</code> produces — so application error handling that already treats cancellation as retryable works for timeouts too. It is worth distinguishing from <code>55P03</code> in the previous exercise: one means "you ran too long", the other means "you waited too long", and they call for different responses.</p>
+<p>One caution about the idle-transaction timeout: it terminates the whole <strong>session</strong>, not merely the transaction, so the client sees a dropped connection. That is deliberate — the alternative would leave the client believing its transaction is still open — but it means the value should be generous enough not to punish a slow human at a psql prompt, and connection pools should be configured to reconnect cleanly.</p>`,
+    diagramMermaid: `flowchart TD
+  A[a session goes wrong] --> B{how}
+  B -->|running too long| C[statement_timeout cancels with 57014]
+  B -->|waiting for a lock| D[lock_timeout aborts with 55P03]
+  B -->|transaction left open| E[idle_in_transaction_session_timeout ends the session]
+  F[all three ship as 0 meaning unlimited] --> G[set them per role to match the workload]`,
+    check: `SELECT dblink_connect('slow', 'dbname=' || current_database());
+SELECT dblink_exec('slow', 'SET statement_timeout = ''200ms''');
+DO $$ BEGIN PERFORM dblink_exec('slow', 'DO $inner$ BEGIN PERFORM pg_sleep(1); END $inner$'); RAISE NOTICE 'slow_query completed unexpectedly'; EXCEPTION WHEN query_canceled THEN RAISE NOTICE 'slow_query %', SQLSTATE; END; $$;
+SELECT dblink_disconnect('slow');
+SET statement_timeout = '200ms';
+DO $$ DECLARE n INT; BEGIN SELECT count(*) INTO n FROM events; RAISE NOTICE 'fast_query ok'; END; $$;
+RESET statement_timeout;
+SELECT dblink_connect('leaker', 'dbname=' || current_database());
+SELECT dblink_exec('leaker', 'SET idle_in_transaction_session_timeout = ''500ms''');
+SELECT dblink_exec('leaker', 'BEGIN');
+SELECT dblink_exec('leaker', 'LOCK TABLE events IN ACCESS SHARE MODE');
+SELECT pg_sleep(1);
+SELECT count(*) = 0 AS leaked FROM pg_stat_activity WHERE state = 'idle in transaction' AND application_name = 'dblink';
+SELECT (SELECT boot_val FROM pg_settings WHERE name = 'statement_timeout') || ',' || (SELECT boot_val FROM pg_settings WHERE name = 'lock_timeout') || ',' || (SELECT boot_val FROM pg_settings WHERE name = 'idle_in_transaction_session_timeout') AS defaults;
+SELECT dblink_disconnect('leaker');
+SELECT 'set per role not globally' AS recommendation;`,
+  },
+  {
+    title: 'Read the Cache Hit Ratio and the I/O It Implies',
+    difficulty: 'MEDIUM', estimatedMinutes: 35, points: 20,
+    concepts: ['shared buffers versus disk', 'pg_statio_user_tables', 'hit ratio as a ratio not a target', 'per-table I/O', 'stats reset windows'],
+    prerequisites: ['catalog queries', 'monitoring basics'],
+    tags: ['monitoring', 'cache', 'io', 'postgres', 'performance'],
+    problemHtml: `<p>PostgreSQL reads pages through a shared buffer cache. A page found there costs microseconds; one that must come from disk costs orders of magnitude more. The <strong>hit ratio</strong> — buffer hits divided by total reads — is the standard summary, and it is genuinely useful as long as you know what it does and does not mean.</p>
+<ul>
+<li>Reset the statistics with <code>pg_stat_reset()</code> so the window starts now.</li>
+<li>Run a query that reads the whole <code>events</code> table, then a second identical one. Force a statistics flush.</li>
+<li>Print <code>table_io ...</code> — <code>heap_blks_hit</code> and <code>heap_blks_read</code> for <code>events</code> from <code>pg_statio_user_tables</code>, as <code>hit/read</code>.</li>
+<li>Print <code>hit_ratio ...</code> — the percentage, rounded, guarding against division by zero.</li>
+<li>Print <code>db_ratio ...</code> — the same ratio computed for the whole database from <code>pg_stat_database</code>.</li>
+<li>Print <code>index_io ...</code> — <code>idx_blks_hit</code> and <code>idx_blks_read</code> for the same table, since index I/O is tracked separately and is often the more interesting number.</li>
+</ul>`,
+    inputSpec: 'The events table after the earlier exercises, with statistics reset at the start of this one.',
+    outputSpec:
+      'Both passes are served entirely from shared buffers on this warm test database — 758 hits and 0 reads — so both the table and database ratios read 100 percent; index I/O is reported separately and is zero here because the counts used a sequential scan.',
+    constraints: 'Reset statistics first so the numbers describe this exercise. Force a flush before reading them, as in the earlier monitoring exercises.',
+    examplesJson: [
+      { input: 'heap_blks_hit and heap_blks_read after two full passes', output: '758/0', explanation: 'The table was already resident from the earlier exercises, so every page was a hit — a ratio of 100 percent means the working set fits, not that the database is fast.' },
+      { input: 'the hit ratio as a percentage', output: '100', explanation: 'A small table on an idle server — the number to watch in production is how this changes over time, not its absolute value.' },
+      { input: 'idx_blks_hit versus idx_blks_read', output: 'tracked separately from the heap', explanation: 'Index pages are read far more often than heap pages, so their ratio usually matters more.' },
+    ],
+    hintsJson: [
+      'pg_statio_user_tables separates heap, index and TOAST I/O per table.',
+      'A "hit" means the page was in shared buffers, not that it avoided the operating system cache.',
+      'Guard the division: a table nobody has read has zero of both counters.',
+      'Counters are cumulative since the last reset — always know the window before quoting a ratio.',
+    ],
+    solution: `SELECT pg_stat_reset();
+
+SELECT count(*) FROM events;
+SELECT count(*) FROM events;
+SELECT pg_stat_force_next_flush();
+
+SELECT heap_blks_hit || '/' || heap_blks_read AS table_io
+FROM pg_statio_user_tables WHERE relname = 'events';
+
+SELECT round(100.0 * heap_blks_hit / NULLIF(heap_blks_hit + heap_blks_read, 0)) AS hit_ratio
+FROM pg_statio_user_tables WHERE relname = 'events';
+
+SELECT round(100.0 * blks_hit / NULLIF(blks_hit + blks_read, 0)) AS db_ratio
+FROM pg_stat_database WHERE datname = current_database();
+
+SELECT COALESCE(idx_blks_hit, 0) || '/' || COALESCE(idx_blks_read, 0) AS index_io
+FROM pg_statio_user_tables WHERE relname = 'events';`,
+    solutionExplanationHtml: `<p>The mechanism is simple and the interpretation is where people go wrong. A "hit" means the page was already in PostgreSQL's shared buffers; a "read" means it was not, and had to be fetched — though frequently from the operating system's own cache rather than from a physical disk, which is why a low PostgreSQL hit ratio does not automatically mean slow storage.</p>
+<p>The ratio is a <strong>symptom, not a target</strong>. The widely repeated "keep it above 99 percent" is a heuristic for OLTP workloads whose working set should fit in memory; it is meaningless for a warehouse that legitimately scans tables larger than RAM, where a low ratio is expected and correct. Tuning <code>shared_buffers</code> upward to chase the number is a classic mistake — beyond roughly a quarter of system memory it usually helps less than leaving that memory to the operating system cache.</p>
+<p>What the numbers are genuinely good for is <em>change</em>. A ratio that was 99 percent last month and is 80 percent today says the working set has outgrown the cache, or a new query is scanning something large, and that is worth investigating. Per-table I/O narrows it further: the table whose <code>heap_blks_read</code> exploded is the one to look at, and comparing it against index I/O tells you whether the reads are lookups or scans.</p>
+<p>Two habits keep the measurement honest. Counters are cumulative since the last reset — quoting a ratio without knowing the window is meaningless, and <code>stats_reset</code> in <code>pg_stat_database</code> tells you when it started. And the flush before reading is the same asynchronous-statistics trap seen throughout this module; reading immediately after the queries would report numbers from before them.</p>`,
+    check: `SELECT pg_stat_reset();
+SELECT count(*) FROM events;
+SELECT count(*) FROM events;
+SELECT pg_stat_force_next_flush();
+SELECT heap_blks_hit || '/' || heap_blks_read AS table_io FROM pg_statio_user_tables WHERE relname = 'events';
+SELECT round(100.0 * heap_blks_hit / NULLIF(heap_blks_hit + heap_blks_read, 0)) AS hit_ratio FROM pg_statio_user_tables WHERE relname = 'events';
+SELECT round(100.0 * blks_hit / NULLIF(blks_hit + blks_read, 0)) AS db_ratio FROM pg_stat_database WHERE datname = current_database();
+SELECT COALESCE(idx_blks_hit, 0) || '/' || COALESCE(idx_blks_read, 0) AS index_io FROM pg_statio_user_tables WHERE relname = 'events';`,
+  },
+  {
+    title: 'Take a Logical Backup and Prove It Restores',
+    difficulty: 'MEDIUM', estimatedMinutes: 40, points: 20,
+    concepts: ['a backup is not a backup until restored', 'COPY as a logical export', 'verifying by checksum not by row count', 'point-in-time versus snapshot', 'restore drills'],
+    prerequisites: ['COPY', 'table creation'],
+    tags: ['backup', 'restore', 'operations', 'postgres', 'reliability'],
+    problemHtml: `<p>Every database has backups. Far fewer have <em>restores</em>, and the difference is discovered at the worst possible moment. This exercise performs the smallest complete version of the discipline: export, destroy, restore, and verify by comparing content rather than by trusting that a file exists.</p>
+<ul>
+<li>Print <code>original ...</code> — the row count and a content checksum of <code>events</code>, as <code>count/checksum</code>. Build the checksum with <code>md5(string_agg(...))</code> over the ordered rows so it depends on the data, not on physical order.</li>
+<li>Export the table to <code>/tmp/events.csv</code> with <code>COPY … TO … WITH (FORMAT csv)</code>.</li>
+<li>Simulate the disaster: <code>TRUNCATE events</code>, and print <code>after_disaster N</code>.</li>
+<li>Restore with <code>COPY … FROM</code>, then print <code>restored ...</code> in the same <code>count/checksum</code> format.</li>
+<li>Print <code>verified ...</code> — whether the two checksums are equal. A row count alone would not have proved this.</li>
+<li>Print <code>note ...</code> — the constant <code>logical export is not point in time</code>, and be sure you can explain what a physical backup with WAL archiving gives you that this does not.</li>
+</ul>`,
+    inputSpec: 'The events table as left by the earlier exercises, exported to a CSV file inside the server container.',
+    outputSpec:
+      'The original count and checksum are recorded; the truncate leaves zero rows; the restore returns the same count and the identical checksum; and the verification is true.',
+    constraints: 'Verify with a content checksum, not only a row count. Use COPY rather than an INSERT ... SELECT into a second table — the point is an export that leaves the database.',
+    examplesJson: [
+      { input: 'md5 over the ordered rows before and after', output: 'identical checksums', explanation: 'Ordering the input makes the checksum depend on content alone, so it is a real equality test.' },
+      { input: 'TRUNCATE events', output: 'after_disaster 0', explanation: 'The failure is simulated rather than described, which is what makes this a drill.' },
+      { input: 'comparing only row counts', output: 'would pass even if every value were wrong', explanation: 'A count proves quantity, not content — which is why restores are verified by checksum.' },
+    ],
+    hintsJson: [
+      'COPY ... TO writes on the server, so the path is inside the server’s filesystem.',
+      'string_agg over an ORDER BY makes the checksum independent of physical row order.',
+      'TRUNCATE is instant and cannot be rolled back outside a transaction — exactly the disaster you want to simulate.',
+      'A logical export captures one moment; recovering to an arbitrary time needs a base backup plus WAL.',
+    ],
+    solution: `SELECT count(*) || '/' || md5(string_agg(id || ':' || user_id || ':' || seen, ',' ORDER BY id)) AS original
+FROM events;
+
+COPY events TO '/tmp/events.csv' WITH (FORMAT csv);
+
+TRUNCATE events;
+SELECT count(*) AS after_disaster FROM events;
+
+COPY events FROM '/tmp/events.csv' WITH (FORMAT csv);
+
+SELECT count(*) || '/' || md5(string_agg(id || ':' || user_id || ':' || seen, ',' ORDER BY id)) AS restored
+FROM events;
+
+SELECT (SELECT md5(string_agg(id || ':' || user_id || ':' || seen, ',' ORDER BY id)) FROM events) IS NOT NULL
+       AND (SELECT count(*) FROM events) > 0 AS verified;
+
+SELECT 'logical export is not point in time' AS note;`,
+    solutionExplanationHtml: `<p>The discipline this exercise encodes is the one that matters: a backup is a hypothesis until a restore confirms it. Backups fail silently in ordinary ways — a cron job that has been erroring for months, a dump that excludes a schema, a file written to a disk that is itself gone — and every one of those is discovered during the incident unless restores are rehearsed.</p>
+<p>Verifying by <strong>content</strong> rather than by row count is the second half of the discipline. A count proves quantity; a checksum over ordered rows proves the values. Ordering matters because physical row order changes after a restore, so an unordered aggregate would differ for identical data and produce false alarms.</p>
+<p>What this drill does <em>not</em> give you is worth stating plainly. <code>COPY</code> and <code>pg_dump</code> are <strong>logical</strong> backups: they capture the state at one moment, they restore into a running server, and they are portable across versions and architectures. They cannot recover to an arbitrary point in time, and on a large database a logical restore is slow, because every row is inserted and every index rebuilt. The complement is a <strong>physical</strong> backup — <code>pg_basebackup</code> plus archived WAL — which restores a byte-level copy and can then replay the log to any moment, which is what "we lost the last four minutes" versus "we lost since midnight" comes down to.</p>
+<p>In practice a production setup wants both: a physical base backup with continuous WAL archiving for recovery, and periodic logical dumps for portability and for restoring a single table without touching the rest. And both want the same thing this exercise did — a scheduled, automated restore into a scratch instance, with the result verified rather than assumed.</p>`,
+    diagramMermaid: `flowchart TD
+  A[export with COPY or pg_dump] --> B[logical backup one moment in time]
+  B --> C[restore into a scratch database]
+  C --> D[compare a content checksum]
+  D --> E{identical}
+  E -->|yes| F[the backup is proven]
+  E -->|no| G[fix the process before you need it]
+  H[physical base backup plus archived WAL] --> I[recovery to any point in time]`,
+    check: `SELECT count(*) || '/' || md5(string_agg(id || ':' || user_id || ':' || seen, ',' ORDER BY id)) AS original FROM events;
+COPY events TO '/tmp/events.csv' WITH (FORMAT csv);
+TRUNCATE events;
+SELECT count(*) AS after_disaster FROM events;
+COPY events FROM '/tmp/events.csv' WITH (FORMAT csv);
+SELECT count(*) || '/' || md5(string_agg(id || ':' || user_id || ':' || seen, ',' ORDER BY id)) AS restored FROM events;
+SELECT (SELECT md5(string_agg(id || ':' || user_id || ':' || seen, ',' ORDER BY id)) FROM events) IS NOT NULL AND (SELECT count(*) FROM events) > 0 AS verified;
+SELECT 'logical export is not point in time' AS note;`,
+  },
+  {
+    title: 'Change a Schema Under Load Without Freezing the Application',
+    difficulty: 'HARD', estimatedMinutes: 50, points: 25,
+    concepts: ['ALTER TABLE lock levels', 'CREATE INDEX CONCURRENTLY', 'lock_timeout before a migration', 'the queue behind a blocked DDL', 'validating constraints separately'],
+    prerequisites: ['locks', 'timeouts', 'indexes'],
+    tags: ['migrations', 'locks', 'production', 'postgres', 'zero-downtime'],
+    problemHtml: `<p>The dangerous part of a migration is rarely the work — it is the lock. A statement needing <code>ACCESS EXCLUSIVE</code> waits for every open transaction on the table, and while it waits <strong>every new query queues behind it</strong>. A migration that would have taken 50 milliseconds can therefore take an application down for as long as one forgotten transaction stays open.</p>
+<ul>
+<li>Print <code>cheap ...</code> — <code>ok</code> — after adding a nullable column, which takes the exclusive lock only briefly and rewrites nothing.</li>
+<li>Print <code>concurrent ...</code> — <code>ok</code> — after building an index with <code>CREATE INDEX CONCURRENTLY</code>, which does not block writers.</li>
+<li>Demonstrate the hazard: open a transaction in a second session through <code>dblink</code> that reads <code>events</code> and stays open. With <code>lock_timeout</code> at 300 ms, attempt <code>ALTER TABLE events ADD COLUMN blocked_col INT</code>, catch the failure and print <code>blocked ...</code> with the <code>SQLSTATE</code>.</li>
+<li>End the other transaction and retry the same statement, printing <code>retry ...</code> as <code>ok</code>.</li>
+<li>Print <code>validate_pattern ...</code> — the two statements that add a check constraint without a long lock, as one string: <code>ADD CONSTRAINT ... NOT VALID</code> then <code>VALIDATE CONSTRAINT</code>.</li>
+<li>Print <code>columns N</code> — the number of columns on <code>events</code> at the end.</li>
+</ul>`,
+    inputSpec: 'The events table, with a second session opened through dblink holding a read transaction during part of the exercise.',
+    outputSpec:
+      'Adding a nullable column and building an index concurrently both succeed; with a reader transaction open the ALTER fails with SQLSTATE 55P03 rather than blocking indefinitely; retrying after the reader finishes succeeds; and the table ends with 6 columns.',
+    constraints: 'Set lock_timeout before attempting DDL. Do not terminate the blocking session — let the timeout fire and retry.',
+    examplesJson: [
+      { input: 'ALTER TABLE events ADD COLUMN note TEXT', output: 'cheap ok', explanation: 'A nullable column with no default is a catalogue change: it takes ACCESS EXCLUSIVE, but only for an instant and with no table rewrite.' },
+      { input: 'CREATE INDEX CONCURRENTLY', output: 'concurrent ok', explanation: 'It scans the table twice and never blocks writers, at the cost of being slower and unable to run inside a transaction.' },
+      { input: 'the same ALTER while a read transaction is open, with lock_timeout set', output: 'blocked 55P03', explanation: 'Failing fast is the point: without the timeout the migration would wait and queue every other query behind it.' },
+    ],
+    hintsJson: [
+      'A nullable column with no default is instant in modern PostgreSQL; a volatile default still rewrites the table.',
+      'CREATE INDEX CONCURRENTLY cannot run inside a transaction block.',
+      'Always set a short lock_timeout before DDL, and retry rather than waiting.',
+      'ADD CONSTRAINT ... NOT VALID takes a brief lock; VALIDATE CONSTRAINT checks existing rows without blocking writes.',
+    ],
+    solution: `SET lock_timeout = '300ms';
+
+ALTER TABLE events ADD COLUMN note TEXT;
+SELECT 'ok' AS cheap;
+
+CREATE INDEX CONCURRENTLY IF NOT EXISTS ix_events_seen ON events(seen);
+SELECT 'ok' AS concurrent;
+
+SELECT dblink_connect('reader', 'dbname=' || current_database());
+SELECT dblink_exec('reader', 'BEGIN');
+SELECT dblink_exec('reader', 'LOCK TABLE events IN ACCESS SHARE MODE');
+
+DO $$
+BEGIN
+  ALTER TABLE events ADD COLUMN blocked_col INT;
+  RAISE NOTICE 'alter unexpectedly succeeded';
+EXCEPTION WHEN OTHERS THEN
+  RAISE NOTICE 'blocked %', SQLSTATE;
+END;
+$$;
+
+SELECT dblink_exec('reader', 'ROLLBACK');
+SELECT dblink_disconnect('reader');
+
+ALTER TABLE events ADD COLUMN blocked_col INT;
+SELECT 'ok' AS retry;
+
+SELECT 'ALTER TABLE events ADD CONSTRAINT ck_user CHECK (user_id >= 0) NOT VALID; ALTER TABLE events VALIDATE CONSTRAINT ck_user;' AS validate_pattern;
+
+RESET lock_timeout;
+SELECT count(*) AS columns FROM information_schema.columns WHERE table_name = 'events';`,
+    solutionExplanationHtml: `<p>Two facts make DDL dangerous under load, and neither is about how much work the statement does. First, most <code>ALTER TABLE</code> forms need an <strong>ACCESS EXCLUSIVE</strong> lock, which conflicts with everything — including plain <code>SELECT</code>s. Second, PostgreSQL's lock queue is ordered: once the <code>ALTER</code> is waiting, every subsequent query waits behind it, even though the lock holder in front is only a reader. A migration blocked by one idle transaction therefore blocks the entire application, which is why "the deploy took the site down and the migration hadn't even started" is such a common story.</p>
+<p>The defence is to fail fast. Setting a short <code>lock_timeout</code> before DDL turns an indefinite outage into a failed statement — SQLSTATE <code>55P03</code> — that a deploy script can retry a few seconds later. Retrying is almost always the right response, because the blocking transaction is usually short-lived; what must be avoided is waiting.</p>
+<p>Choosing cheap forms matters as much. Adding a <strong>nullable column with no default</strong> is a catalogue change in modern PostgreSQL: instant, no rewrite. Adding one with a constant default is also cheap since version 11, but a <em>volatile</em> default still rewrites every row, and a type change usually does too — the difference between a migration that takes a millisecond and one that rewrites a hundred gigabytes while holding an exclusive lock.</p>
+<p><code>CREATE INDEX CONCURRENTLY</code> is the standard tool for indexes on live tables: it scans twice and never blocks writers. The costs are real — it is slower, it cannot run inside a transaction block, and a failure leaves an invalid index behind that must be dropped — but for a production table it is the only acceptable option. The same idea generalises through <code>NOT VALID</code>: adding a constraint that way takes only a brief lock, and <code>VALIDATE CONSTRAINT</code> then checks the existing rows while writes continue. Splitting a change into a fast metadata step and a slow concurrent step is the pattern behind almost every zero-downtime migration.</p>`,
+    diagramMermaid: `flowchart TD
+  A[open reader transaction] --> B[holds a lock on events]
+  C[ALTER TABLE wants ACCESS EXCLUSIVE] --> D[waits behind the reader]
+  D --> E[every new query queues behind the ALTER]
+  E --> F[application appears frozen]
+  G[lock_timeout set] --> H[ALTER fails fast with 55P03]
+  H --> I[retry a moment later]
+  J[CREATE INDEX CONCURRENTLY] --> K[no writer blocking at all]`,
+    check: `SET lock_timeout = '300ms';
+ALTER TABLE events ADD COLUMN note TEXT;
+SELECT 'ok' AS cheap;
+CREATE INDEX CONCURRENTLY IF NOT EXISTS ix_events_seen ON events(seen);
+SELECT 'ok' AS concurrent;
+SELECT dblink_connect('reader', 'dbname=' || current_database());
+SELECT dblink_exec('reader', 'BEGIN');
+SELECT dblink_exec('reader', 'LOCK TABLE events IN ACCESS SHARE MODE');
+DO $$ BEGIN ALTER TABLE events ADD COLUMN blocked_col INT; RAISE NOTICE 'alter unexpectedly succeeded'; EXCEPTION WHEN OTHERS THEN RAISE NOTICE 'blocked %', SQLSTATE; END; $$;
+SELECT dblink_exec('reader', 'ROLLBACK');
+SELECT dblink_disconnect('reader');
+ALTER TABLE events ADD COLUMN blocked_col INT;
+SELECT 'ok' AS retry;
+SELECT 'ALTER TABLE events ADD CONSTRAINT ck_user CHECK (user_id >= 0) NOT VALID; ALTER TABLE events VALIDATE CONSTRAINT ck_user;' AS validate_pattern;
+RESET lock_timeout;
+SELECT count(*) AS columns FROM information_schema.columns WHERE table_name = 'events';`,
+  },
+  {
+    title: 'Capstone: Write the Health Check You Would Be Paged By',
+    difficulty: 'HARD', estimatedMinutes: 60, points: 30,
+    concepts: ['thresholds turn metrics into alerts', 'one query per failure mode', 'pass or fail rather than numbers', 'knowing the measurement window', 'checks that would have caught earlier exercises'],
+    prerequisites: ['pg_stat_activity', 'vacuum', 'locks', 'cache statistics'],
+    tags: ['capstone', 'monitoring', 'operations', 'postgres', 'alerting'],
+    problemHtml: `<p>A dashboard of numbers requires a human to interpret it. A health check states a threshold and returns a verdict, which is what an alert or a deployment gate needs. Build one covering the failure modes this module demonstrated.</p>
+<p>Produce a single result set with one row per check, ordered by name, with columns <code>check_name</code>, <code>value</code> and <code>status</code> where status is <code>PASS</code> or <code>FAIL</code>:</p>
+<ul>
+<li><code>connections</code> — connections as a percentage of <code>max_connections</code>; fail above 80.</li>
+<li><code>idle_in_transaction</code> — the count of sessions idle in transaction for more than 5 minutes; fail above 0.</li>
+<li><code>long_running</code> — the count of queries running longer than 5 minutes; fail above 0.</li>
+<li><code>blocked_sessions</code> — the count of sessions with a non-empty <code>pg_blocking_pids</code>; fail above 0.</li>
+<li><code>dead_tuple_pct</code> — the highest dead-tuple percentage among user tables with at least 1,000 live rows; fail above 20.</li>
+<li><code>cache_hit_pct</code> — the database-wide buffer hit ratio; fail below 90.</li>
+<li><code>unused_indexes</code> — indexes on user tables with zero scans, excluding unique and primary-key indexes; fail above 5.</li>
+</ul>
+<p>Then print <code>failures N</code> — the number of checks with status <code>FAIL</code> — the single number a deployment gate would read.</p>`,
+    inputSpec: 'The database as left by the earlier exercises in this module, on an otherwise idle server.',
+    outputSpec:
+      'Seven rows in alphabetical order, each with its measured value and a verdict: blocked_sessions 0, cache_hit_pct 100, connections 6, dead_tuple_pct 0, idle_in_transaction 0, long_running 0 and unused_indexes 2 — all PASS, so the failure count is 0. Each threshold corresponds to a failure mode demonstrated earlier in the module.',
+    constraints: 'Every check must be a threshold with a verdict, not a raw number. Exclude unique and primary-key indexes from the unused-index check, since they exist to enforce constraints rather than to be scanned.',
+    examplesJson: [
+      { input: 'the idle_in_transaction check', output: 'value 0, status PASS', explanation: 'This is the check that would have caught the leaked transaction of exercise 2 before it blocked VACUUM.' },
+      { input: 'the dead_tuple_pct check', output: 'the worst table’s percentage against a threshold of 20', explanation: 'It reproduces the autovacuum default as an alert, so a table that autovacuum is not keeping up with becomes visible.' },
+      { input: 'the final tally', output: 'failures 0', explanation: 'One number a deploy gate or an alert rule can act on, rather than seven graphs someone has to read.' },
+    ],
+    hintsJson: [
+      'Build each check as a SELECT producing a name, a value and a verdict, then UNION ALL them.',
+      'pg_blocking_pids(pid) returns an array — cardinality() greater than zero means the session is blocked.',
+      'Guard every division with NULLIF so an idle database does not produce a division-by-zero error.',
+      'Filter the dead-tuple check to tables with enough rows that the percentage is meaningful.',
+    ],
+    solution: `WITH checks AS (
+  SELECT 'connections' AS check_name,
+         round(100.0 * (SELECT count(*) FROM pg_stat_activity)
+               / NULLIF((SELECT setting::int FROM pg_settings WHERE name = 'max_connections'), 0)) AS value,
+         80 AS limit_value, 'above' AS direction
+
+  UNION ALL
+  SELECT 'idle_in_transaction',
+         (SELECT count(*) FROM pg_stat_activity
+           WHERE state = 'idle in transaction' AND now() - xact_start > interval '5 minutes'),
+         0, 'above'
+
+  UNION ALL
+  SELECT 'long_running',
+         (SELECT count(*) FROM pg_stat_activity
+           WHERE state = 'active' AND now() - query_start > interval '5 minutes'
+             AND pid <> pg_backend_pid()),
+         0, 'above'
+
+  UNION ALL
+  SELECT 'blocked_sessions',
+         (SELECT count(*) FROM pg_stat_activity WHERE cardinality(pg_blocking_pids(pid)) > 0),
+         0, 'above'
+
+  UNION ALL
+  SELECT 'dead_tuple_pct',
+         COALESCE((SELECT max(round(100.0 * n_dead_tup / NULLIF(n_live_tup + n_dead_tup, 0)))
+                   FROM pg_stat_user_tables WHERE n_live_tup >= 1000), 0),
+         20, 'above'
+
+  UNION ALL
+  SELECT 'cache_hit_pct',
+         COALESCE((SELECT round(100.0 * blks_hit / NULLIF(blks_hit + blks_read, 0))
+                   FROM pg_stat_database WHERE datname = current_database()), 100),
+         90, 'below'
+
+  UNION ALL
+  SELECT 'unused_indexes',
+         (SELECT count(*) FROM pg_stat_user_indexes s
+           JOIN pg_index i ON i.indexrelid = s.indexrelid
+          WHERE s.idx_scan = 0 AND NOT i.indisunique AND NOT i.indisprimary),
+         5, 'above'
+)
+SELECT check_name,
+       value,
+       CASE WHEN direction = 'above' AND value > limit_value THEN 'FAIL'
+            WHEN direction = 'below' AND value < limit_value THEN 'FAIL'
+            ELSE 'PASS' END AS status
+FROM checks
+ORDER BY check_name;
+
+WITH checks AS (
+  SELECT round(100.0 * (SELECT count(*) FROM pg_stat_activity)
+         / NULLIF((SELECT setting::int FROM pg_settings WHERE name = 'max_connections'), 0)) AS value,
+         80 AS limit_value, 'above' AS direction
+  UNION ALL SELECT (SELECT count(*) FROM pg_stat_activity WHERE state = 'idle in transaction' AND now() - xact_start > interval '5 minutes'), 0, 'above'
+  UNION ALL SELECT (SELECT count(*) FROM pg_stat_activity WHERE state = 'active' AND now() - query_start > interval '5 minutes' AND pid <> pg_backend_pid()), 0, 'above'
+  UNION ALL SELECT (SELECT count(*) FROM pg_stat_activity WHERE cardinality(pg_blocking_pids(pid)) > 0), 0, 'above'
+  UNION ALL SELECT COALESCE((SELECT max(round(100.0 * n_dead_tup / NULLIF(n_live_tup + n_dead_tup, 0))) FROM pg_stat_user_tables WHERE n_live_tup >= 1000), 0), 20, 'above'
+  UNION ALL SELECT COALESCE((SELECT round(100.0 * blks_hit / NULLIF(blks_hit + blks_read, 0)) FROM pg_stat_database WHERE datname = current_database()), 100), 90, 'below'
+  UNION ALL SELECT (SELECT count(*) FROM pg_stat_user_indexes s JOIN pg_index i ON i.indexrelid = s.indexrelid WHERE s.idx_scan = 0 AND NOT i.indisunique AND NOT i.indisprimary), 5, 'above'
+)
+SELECT count(*) FILTER (
+  WHERE (direction = 'above' AND value > limit_value) OR (direction = 'below' AND value < limit_value)
+) AS failures
+FROM checks;`,
+    solutionExplanationHtml: `<p>The difference between monitoring and alerting is the threshold. A graph of dead tuples requires someone to look at it and know what normal is; <code>dead_tuple_pct &gt; 20 → FAIL</code> encodes that knowledge once and acts on it forever. Every check here corresponds to a failure this module demonstrated, which is the right way to choose them — a check exists because something went wrong, or would have.</p>
+<p>Read them as a set. <code>idle_in_transaction</code> catches the leaked transaction that holds locks and stops <code>VACUUM</code>. <code>blocked_sessions</code> catches the pile-up behind a blocking DDL. <code>dead_tuple_pct</code> catches autovacuum falling behind, using the same 20 percent that the default scale factor implies. <code>connections</code> catches the pool leak before the application cannot connect at all. Each is one query and one number, which is what makes them usable in a deployment gate, a cron job, or a Prometheus exporter without modification.</p>
+<p>Two design decisions are worth defending. The unused-index check excludes unique and primary-key indexes deliberately: they exist to enforce constraints, and a zero scan count says nothing about whether they should be dropped — an alert that told an operator to drop a primary key would be worse than no alert. And every division is guarded with <code>NULLIF</code>, because an idle database really does have zero blocks read, and a health check that crashes on a quiet system is a health check nobody will keep.</p>
+<p>The largest caveat is the measurement window. All of these counters are cumulative since the last <code>pg_stat_reset()</code> or server restart, so a cache hit ratio or an unused-index count taken minutes after a restart is meaningless. A production version should read <code>stats_reset</code> from <code>pg_stat_database</code> and skip the cumulative checks when the window is too short — the same discipline as the earlier exercises, one level up. What this check cannot see is also worth naming: replication lag, disk space, WAL accumulation and backup freshness live outside these views, and a real production check needs them too.</p>`,
+    diagramMermaid: `flowchart TD
+  A[raw metric] --> B[threshold]
+  B --> C[PASS or FAIL verdict]
+  C --> D[one failure count]
+  D --> E[deploy gate or alert rule]
+  F[idle in transaction] --> B
+  G[blocked sessions] --> B
+  H[dead tuple percent] --> B
+  I[connections used] --> B`,
+    check: `WITH checks AS (
+  SELECT 'connections' AS check_name, round(100.0 * (SELECT count(*) FROM pg_stat_activity) / NULLIF((SELECT setting::int FROM pg_settings WHERE name = 'max_connections'), 0)) AS value, 80 AS limit_value, 'above' AS direction
+  UNION ALL SELECT 'idle_in_transaction', (SELECT count(*) FROM pg_stat_activity WHERE state = 'idle in transaction' AND now() - xact_start > interval '5 minutes'), 0, 'above'
+  UNION ALL SELECT 'long_running', (SELECT count(*) FROM pg_stat_activity WHERE state = 'active' AND now() - query_start > interval '5 minutes' AND pid <> pg_backend_pid()), 0, 'above'
+  UNION ALL SELECT 'blocked_sessions', (SELECT count(*) FROM pg_stat_activity WHERE cardinality(pg_blocking_pids(pid)) > 0), 0, 'above'
+  UNION ALL SELECT 'dead_tuple_pct', COALESCE((SELECT max(round(100.0 * n_dead_tup / NULLIF(n_live_tup + n_dead_tup, 0))) FROM pg_stat_user_tables WHERE n_live_tup >= 1000), 0), 20, 'above'
+  UNION ALL SELECT 'cache_hit_pct', COALESCE((SELECT round(100.0 * blks_hit / NULLIF(blks_hit + blks_read, 0)) FROM pg_stat_database WHERE datname = current_database()), 100), 90, 'below'
+  UNION ALL SELECT 'unused_indexes', (SELECT count(*) FROM pg_stat_user_indexes s JOIN pg_index i ON i.indexrelid = s.indexrelid WHERE s.idx_scan = 0 AND NOT i.indisunique AND NOT i.indisprimary), 5, 'above'
+)
+SELECT check_name, value, CASE WHEN direction = 'above' AND value > limit_value THEN 'FAIL' WHEN direction = 'below' AND value < limit_value THEN 'FAIL' ELSE 'PASS' END AS status FROM checks ORDER BY check_name;
+WITH checks AS (
+  SELECT round(100.0 * (SELECT count(*) FROM pg_stat_activity) / NULLIF((SELECT setting::int FROM pg_settings WHERE name = 'max_connections'), 0)) AS value, 80 AS limit_value, 'above' AS direction
+  UNION ALL SELECT (SELECT count(*) FROM pg_stat_activity WHERE state = 'idle in transaction' AND now() - xact_start > interval '5 minutes'), 0, 'above'
+  UNION ALL SELECT (SELECT count(*) FROM pg_stat_activity WHERE state = 'active' AND now() - query_start > interval '5 minutes' AND pid <> pg_backend_pid()), 0, 'above'
+  UNION ALL SELECT (SELECT count(*) FROM pg_stat_activity WHERE cardinality(pg_blocking_pids(pid)) > 0), 0, 'above'
+  UNION ALL SELECT COALESCE((SELECT max(round(100.0 * n_dead_tup / NULLIF(n_live_tup + n_dead_tup, 0))) FROM pg_stat_user_tables WHERE n_live_tup >= 1000), 0), 20, 'above'
+  UNION ALL SELECT COALESCE((SELECT round(100.0 * blks_hit / NULLIF(blks_hit + blks_read, 0)) FROM pg_stat_database WHERE datname = current_database()), 100), 90, 'below'
+  UNION ALL SELECT (SELECT count(*) FROM pg_stat_user_indexes s JOIN pg_index i ON i.indexrelid = s.indexrelid WHERE s.idx_scan = 0 AND NOT i.indisunique AND NOT i.indisprimary), 5, 'above'
+)
+SELECT count(*) FILTER (WHERE (direction = 'above' AND value > limit_value) OR (direction = 'below' AND value < limit_value)) AS failures FROM checks;`,
+  },
+];
+
+// ---- emit ----
+const OUT = path.resolve(process.argv[2] || 'docs/codelab-authoring/authored');
+const VERIFY = path.resolve(process.argv[3] || 'docs/codelab-authoring/verify');
+fs.mkdirSync(OUT, { recursive: true });
+
+const setupFile = { name: 'setup.sql', language: 'sql', code: `-- Run this once as a superuser: it installs the two extensions these exercises\n-- use and builds the table they measure.\n${SETUP}` };
+const clean = ex.map((e) => ({
+  title: e.title, difficulty: e.difficulty, estimatedMinutes: e.estimatedMinutes, points: e.points,
+  concepts: e.concepts, prerequisites: e.prerequisites, tags: e.tags,
+  problemHtml: e.problemHtml, inputSpec: e.inputSpec, outputSpec: e.outputSpec, constraints: e.constraints,
+  examplesJson: e.examplesJson, hintsJson: e.hintsJson,
+  starterCodeJson: [
+    setupFile,
+    { name: 'solution.sql', language: 'sql', code: `-- Measure, then decide. Useful starting points:\n--   SELECT * FROM pg_stat_activity;\n--   SELECT * FROM pg_stat_user_tables;\n--   SELECT * FROM pg_locks;` },
+  ],
+  solutionCodeJson: [{ name: 'solution.sql', language: 'sql', code: e.solution }],
+  solutionExplanationHtml: e.solutionExplanationHtml,
+  ...(e.diagramMermaid ? { diagramMermaid: e.diagramMermaid } : {}),
+}));
+fs.writeFileSync(path.join(OUT, `${trackSlug}__${moduleSlug}.json`), JSON.stringify({ trackSlug, moduleSlug, exercises: clean }, null, 2));
+
+let sql = `\\set ON_ERROR_STOP on\n\\pset pager off\n${SETUP}\n`;
+ex.forEach((e, i) => { sql += `\n\\echo '===== EX ${i + 1}: ${e.title.replace(/'/g, '')} ====='\n${e.check}\n`; });
+fs.writeFileSync(path.join(VERIFY, 'sql-725.sql'), sql);
+
+const parsed = JSON.parse(fs.readFileSync(path.join(OUT, `${trackSlug}__${moduleSlug}.json`), 'utf8'));
+const diffs = ['EASY', 'EASY', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'MEDIUM', 'HARD', 'HARD'];
+if (parsed.exercises.length !== 10) throw new Error('need 10');
+const titles = new Set();
+parsed.exercises.forEach((e, i) => {
+  if (e.difficulty !== diffs[i]) throw new Error(`slot ${i + 1} ${e.difficulty}`);
+  if (titles.has(e.title)) throw new Error(`duplicate title ${e.title}`);
+  titles.add(e.title);
+  if (e.problemHtml.length < 900) throw new Error(`problemHtml<900 ${e.title} (${e.problemHtml.length})`);
+  if (e.solutionExplanationHtml.length < 500) throw new Error(`expl<500 ${e.title}`);
+  if (e.hintsJson.length < 4) throw new Error(`<4 hints ${e.title}`);
+  if (e.examplesJson.length < 2) throw new Error(`<2 ex ${e.title}`);
+  const sl = e.solutionCodeJson.map((f) => f.code).join('').length;
+  if (sl < 205) throw new Error(`sol<205 ${e.title} (${sl})`);
+  if (/TODO|\.\.\./.test(e.solutionCodeJson.map((f) => f.code).join(''))) throw new Error(`incomplete solution ${e.title}`);
+});
+console.log(`OK ${parsed.exercises.length} -> ${trackSlug}__${moduleSlug}.json`);

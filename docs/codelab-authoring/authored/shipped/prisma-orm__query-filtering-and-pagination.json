@@ -1,0 +1,621 @@
+{
+  "trackSlug": "prisma-orm",
+  "moduleSlug": "query-filtering-and-pagination",
+  "exercises": [
+    {
+      "title": "Filter with Equality and Numeric Operators",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "where equality",
+        "gt and lte",
+        "combining conditions",
+        "orderBy",
+        "select"
+      ],
+      "prerequisites": [
+        "findMany",
+        "where filter"
+      ],
+      "tags": [
+        "prisma",
+        "filter",
+        "where",
+        "operators",
+        "query"
+      ],
+      "problemHtml": "<p>The <code>where</code> object is Prisma's filter language, and it is fully typed against your schema so the editor autocompletes field names and rejects impossible comparisons. A bare value means equality (<code>published: true</code>); nesting an operator object like <code>{ gt: 100 }</code> expresses a comparison. Listing several fields in the same <code>where</code> ANDs them together. The numeric and generic operators — <code>equals</code>, <code>not</code>, <code>lt</code>, <code>lte</code>, <code>gt</code>, <code>gte</code>, <code>in</code>, <code>notIn</code> — all nest the same way, and this filter shape is the foundation every other query in this module builds on.</p>\n<p>Against the reference dataset (posts with <code>title</code>, <code>published</code>, <code>views</code>):</p>\n<ul>\n<li>Find posts where <code>published</code> equals <code>true</code> <strong>and</strong> <code>views</code> is greater than <code>100</code>, selecting only <code>title</code>, ordered by <code>views</code> ascending. Log each title.</li>\n<li>Count posts with <code>views</code> less than or equal to <code>80</code> and log the count.</li>\n</ul>\n<p>Print the qualifying titles (one per line), then <code>lowviews N</code>. The scaffold gives the async skeleton.</p>",
+      "inputSpec": "The reference dataset is seeded (6 posts across 2 authors).",
+      "outputSpec": "published=true and views>100 ordered ascending returns \"Mongo Guide\" (150) then \"Prisma Basics\" (250); posts with views<=80 are \"Draft on Prisma\"(0), \"Redis Notes\"(80), \"SQL Advanced\"(20) => count 3.",
+      "constraints": "Use where with an equality (published) and an operator ({ gt: 100 }). Order by views ascending. Use count with { lte: 80 } for the second part.",
+      "examplesJson": [
+        {
+          "input": "findMany({ where: { published: true, views: { gt: 100 } }, orderBy: { views: \"asc\" } })",
+          "output": "Mongo Guide (150), then Prisma Basics (250)",
+          "explanation": "Both are published with views above 100; ascending order lists 150 before 250."
+        },
+        {
+          "input": "count({ where: { views: { lte: 80 } } })",
+          "output": "3",
+          "explanation": "Draft on Prisma (0), SQL Advanced (20), and Redis Notes (80) all have views <= 80."
+        }
+      ],
+      "hintsJson": [
+        "A plain value is equality; an operator object like { gt: 100 } is a comparison.",
+        "Several fields in one where are ANDed together.",
+        "Order the results with orderBy: { views: \"asc\" }.",
+        "Use prisma.post.count({ where: { views: { lte: 80 } } }) for the second part."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  const hot = await prisma.post.findMany({ where: { published: true, views: { gt: 100 } }, orderBy: { views: \"asc\" }, select: { title: true } });\n  for (const p of hot) console.log(p.title);\n  const low = await prisma.post.count({ where: { views: { lte: 80 } } });\n  console.log(\"lowviews\", low);\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Inside <code>where</code>, a field set to a plain value tests equality (<code>published: true</code>), while a field set to an operator object tests a comparison (<code>views: { gt: 100 }</code>). Multiple fields in the same <code>where</code> are combined with AND, so this selects posts that are both published and above 100 views. The full comparison set is <code>equals</code>, <code>not</code>, <code>lt</code>, <code>lte</code>, <code>gt</code>, <code>gte</code>, <code>in</code>, and <code>notIn</code>, each nested the same way.</p>\n<p>The boundary operators are where bugs hide: <code>gt</code>/<code>lt</code> are exclusive and <code>gte</code>/<code>lte</code> inclusive, so <code>views: { lte: 80 }</code> includes the post with exactly 80 views (Redis Notes) — three posts in total — whereas <code>{ lt: 80 }</code> would exclude it and return two. Counting with <code>count({ where })</code> rather than <code>findMany().length</code> keeps the work in the database. And <code>select</code> narrows both the payload and the TypeScript type, so <code>p.title</code> is available and <code>p.views</code> would be a compile error — a small guardrail that keeps queries honest about what they fetch.</p>"
+    },
+    {
+      "title": "Match Sets and Negate with in, notIn, and not",
+      "difficulty": "EASY",
+      "estimatedMinutes": 20,
+      "points": 10,
+      "concepts": [
+        "in",
+        "notIn",
+        "not",
+        "set membership",
+        "negation"
+      ],
+      "prerequisites": [
+        "where filter",
+        "equality"
+      ],
+      "tags": [
+        "prisma",
+        "filter",
+        "in",
+        "not",
+        "query"
+      ],
+      "problemHtml": "<p>Filtering by a set of allowed values is <code>{ in: [...] }</code>; excluding a set is <code>{ notIn: [...] }</code>; negating a single value is <code>{ not: value }</code>. These keep filters concise instead of a pile of ORed equalities, and <code>in</code> maps to a SQL <code>IN (...)</code> that the database can serve efficiently from an index.</p>\n<p>Against the reference dataset:</p>\n<ul>\n<li>Find posts whose <code>title</code> is <code>in</code> the set <code>[\"Intro to SQL\", \"Redis Notes\", \"Nonexistent\"]</code>, ordered by <code>title</code>, and log each title.</li>\n<li>Count posts whose <code>views</code> is <strong>not</strong> <code>0</code> (using <code>{ not: 0 }</code>) and log the count.</li>\n<li>Count posts whose <code>title</code> is <code>notIn</code> the drafts <code>[\"Draft on Prisma\", \"SQL Advanced\"]</code> and log the count.</li>\n</ul>\n<p>Print the matched titles, then <code>nonzero N</code>, then <code>keep N</code>. The scaffold gives the async skeleton.</p>",
+      "inputSpec": "The reference dataset is seeded (6 posts).",
+      "outputSpec": "in the title set matches \"Intro to SQL\" and \"Redis Notes\" (2, \"Nonexistent\" absent); views not 0 is 5 (all but the draft with 0); title notIn the two drafts is 4.",
+      "constraints": "Use { in }, { not }, and { notIn }. Do not replace in with a chain of OR equalities.",
+      "examplesJson": [
+        {
+          "input": "findMany({ where: { title: { in: [\"Intro to SQL\",\"Redis Notes\",\"Nonexistent\"] } } })",
+          "output": "Intro to SQL, Redis Notes",
+          "explanation": "in matches any listed value that exists; \"Nonexistent\" simply matches nothing."
+        },
+        {
+          "input": "count({ where: { views: { not: 0 } } })",
+          "output": "5",
+          "explanation": "Only \"Draft on Prisma\" has 0 views, so five posts have non-zero views."
+        }
+      ],
+      "hintsJson": [
+        "A set of allowed values is { in: [...] }; excluding a set is { notIn: [...] }.",
+        "Negating one value is { not: 0 }.",
+        "A listed value that does not exist in the data just matches nothing — no error.",
+        "Use count for the two counting parts."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  const matched = await prisma.post.findMany({ where: { title: { in: [\"Intro to SQL\", \"Redis Notes\", \"Nonexistent\"] } }, orderBy: { title: \"asc\" } });\n  for (const p of matched) console.log(p.title);\n  console.log(\"nonzero\", await prisma.post.count({ where: { views: { not: 0 } } }));\n  console.log(\"keep\", await prisma.post.count({ where: { title: { notIn: [\"Draft on Prisma\", \"SQL Advanced\"] } } }));\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>{ in: [...] }</code> matches a row when the field equals any value in the array, replacing a verbose chain of <code>OR</code>ed equalities with one concise filter; a listed value with no matching row (here \"Nonexistent\") simply contributes nothing rather than erroring. <code>{ notIn: [...] }</code> is its complement, excluding every listed value — here dropping the two drafts to leave four posts. <code>{ not: value }</code> negates a single value, so <code>views: { not: 0 }</code> returns the five posts with non-zero views.</p>\n<p>The subtlety worth flagging is how negation interacts with <code>NULL</code>. In SQL three-valued logic, a row where the field is <code>NULL</code> is neither equal nor unequal to a value, so <code>not</code> and <code>notIn</code> filters do <em>not</em> return rows where the field is null unless you also allow null explicitly. In this dataset <code>views</code> is never null, so the counts are clean, but on a nullable column you would combine the negation with <code>{ OR: [{ field: { not: v } }, { field: null }] }</code> if you intend null rows to count as \"not v\". Reaching for <code>in</code>/<code>notIn</code> over hand-rolled OR chains is both clearer and lets the database use an index efficiently.</p>"
+    },
+    {
+      "title": "Search Text with contains, startsWith, and endsWith",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 15,
+      "concepts": [
+        "contains",
+        "startsWith",
+        "endsWith",
+        "case sensitivity",
+        "mode insensitive"
+      ],
+      "prerequisites": [
+        "where filter",
+        "string fields"
+      ],
+      "tags": [
+        "prisma",
+        "filter",
+        "search",
+        "string",
+        "query"
+      ],
+      "problemHtml": "<p>Text search on a column uses the string filters <code>contains</code> (substring), <code>startsWith</code>, and <code>endsWith</code>, which translate to SQL <code>LIKE</code>. On PostgreSQL these are case-sensitive by default; add <code>mode: \"insensitive\"</code> to ignore case.</p>\n<p>Against the reference dataset:</p>\n<ul>\n<li>Count posts whose <code>title</code> <code>contains</code> <code>\"SQL\"</code> (case-sensitive) and log it.</li>\n<li>Count posts whose <code>title</code> <code>contains</code> <code>\"sql\"</code> with <code>mode: \"insensitive\"</code> and log it — this should match the same rows regardless of case.</li>\n<li>Find posts whose <code>title</code> <code>startsWith</code> <code>\"Prisma\"</code> or <code>endsWith</code> <code>\"Notes\"</code> (use an <code>OR</code>), ordered by title, and log each title.</li>\n</ul>\n<p>Print <code>sql-sensitive 2</code>, <code>sql-insensitive 2</code>, then the OR-matched titles. The scaffold gives the async skeleton.</p>",
+      "inputSpec": "The reference dataset is seeded. Titles include \"Intro to SQL\", \"SQL Advanced\", \"Prisma Basics\", \"Redis Notes\".",
+      "outputSpec": "contains \"SQL\" matches \"Intro to SQL\" and \"SQL Advanced\" (2); insensitive \"sql\" matches the same 2; startsWith \"Prisma\" OR endsWith \"Notes\" matches \"Prisma Basics\" and \"Redis Notes\".",
+      "constraints": "Use contains for substring, mode: \"insensitive\" for the case-insensitive count, and an OR of startsWith/endsWith for the last query.",
+      "examplesJson": [
+        {
+          "input": "count({ where: { title: { contains: \"SQL\" } } })",
+          "output": "2",
+          "explanation": "\"Intro to SQL\" and \"SQL Advanced\" contain the uppercase substring \"SQL\"."
+        },
+        {
+          "input": "count({ where: { title: { contains: \"sql\", mode: \"insensitive\" } } })",
+          "output": "2",
+          "explanation": "Ignoring case, \"sql\" matches the same two SQL titles."
+        }
+      ],
+      "hintsJson": [
+        "Substring search is contains; anchored searches are startsWith and endsWith.",
+        "PostgreSQL contains is case-sensitive by default — add mode: \"insensitive\" to ignore case.",
+        "Combine two alternatives with OR: { OR: [ { title: { startsWith: \"Prisma\" } }, { title: { endsWith: \"Notes\" } } ] }.",
+        "Order the OR results by title for a stable listing."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  console.log(\"sql-sensitive\", await prisma.post.count({ where: { title: { contains: \"SQL\" } } }));\n  console.log(\"sql-insensitive\", await prisma.post.count({ where: { title: { contains: \"sql\", mode: \"insensitive\" } } }));\n  const either = await prisma.post.findMany({ where: { OR: [ { title: { startsWith: \"Prisma\" } }, { title: { endsWith: \"Notes\" } } ] }, orderBy: { title: \"asc\" } });\n  for (const p of either) console.log(p.title);\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The three string filters map to <code>LIKE</code> patterns: <code>contains: \"SQL\"</code> becomes <code>%SQL%</code>, <code>startsWith: \"Prisma\"</code> becomes <code>Prisma%</code>, and <code>endsWith: \"Notes\"</code> becomes <code>%Notes</code>. On PostgreSQL these are case-sensitive by default, so <code>contains: \"sql\"</code> (lowercase) would match nothing until you add <code>mode: \"insensitive\"</code>, which switches to <code>ILIKE</code> and matches the two SQL titles regardless of case. That is why the sensitive count of <code>\"SQL\"</code> and the insensitive count of <code>\"sql\"</code> both return 2 here — the case-insensitive query finds the uppercase titles a case-sensitive lowercase search would miss.</p>\n<p>The <code>OR</code> key takes an array of sub-filters and matches a row satisfying any of them, which is how \"starts with Prisma <em>or</em> ends with Notes\" is expressed — matching \"Prisma Basics\" and \"Redis Notes\". Its siblings are <code>AND</code> (all must hold, though listing fields already ANDs) and <code>NOT</code> (none must hold). Two practical notes: substring searches with a leading wildcard (<code>%SQL%</code>) cannot use a normal B-tree index, so on large tables full-text search or a trigram index is the scalable path; and <code>mode: \"insensitive\"</code> is a PostgreSQL/MongoDB feature, not universal across every Prisma connector. For prefix search (<code>startsWith</code>), an index <em>can</em> help, which is one reason anchored searches are cheaper than arbitrary <code>contains</code>.</p>"
+    },
+    {
+      "title": "Combine Conditions with AND, OR, and NOT",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 15,
+      "concepts": [
+        "AND",
+        "OR",
+        "NOT",
+        "nested boolean logic",
+        "filter composition"
+      ],
+      "prerequisites": [
+        "where filter",
+        "operators"
+      ],
+      "tags": [
+        "prisma",
+        "filter",
+        "boolean",
+        "and-or-not",
+        "query"
+      ],
+      "problemHtml": "<p>Real filters mix \"all of these\" and \"any of these\". Prisma composes them with the <code>AND</code>, <code>OR</code>, and <code>NOT</code> keys, each taking a filter or array of filters, and they nest arbitrarily. Listing plain fields already ANDs them; the explicit keys are for OR groups and nested logic.</p>\n<p>Against the reference dataset, write these queries and log a count for each:</p>\n<ul>\n<li>Published posts that also have (<code>views &gt;= 150</code> <strong>OR</strong> <code>title contains \"Redis\"</code>). Expect the published high-view or Redis posts.</li>\n<li>Posts that are <strong>NOT</strong> published <strong>AND</strong> have <code>views &lt; 25</code>.</li>\n<li>Posts where <code>published = true</code> AND <code>NOT</code> (<code>title contains \"Prisma\"</code>).</li>\n</ul>\n<p>Print <code>q1 N</code>, <code>q2 N</code>, <code>q3 N</code>. Work out each count from the data before running. The scaffold gives the async skeleton.</p>",
+      "inputSpec": "The reference dataset is seeded (6 posts, 4 published, 2 drafts).",
+      "outputSpec": "q1 (published AND (views>=150 OR title~Redis)) = Prisma Basics(250), Redis Notes(80), Mongo Guide(150) => 3; q2 (NOT published AND views<25) = Draft(0), SQL Advanced(20) => 2; q3 (published AND NOT title~Prisma) = Intro, Redis, Mongo => 3.",
+      "constraints": "Use AND/OR/NOT keys to compose. Rely on plain fields ANDing implicitly where natural.",
+      "examplesJson": [
+        {
+          "input": "{ published: true, OR: [ { views: { gte: 150 } }, { title: { contains: \"Redis\" } } ] }",
+          "output": "3",
+          "explanation": "Published posts with views>=150 (Prisma Basics 250, Mongo Guide 150) plus the published Redis Notes = 3."
+        },
+        {
+          "input": "{ NOT: { published: true }, views: { lt: 25 } }",
+          "output": "2",
+          "explanation": "The two drafts have views 0 and 20, both under 25."
+        }
+      ],
+      "hintsJson": [
+        "Plain fields in one where are ANDed; use OR for alternatives and NOT to negate a whole sub-filter.",
+        "q1: published: true alongside an OR array combines \"published AND (A or B)\".",
+        "q2: NOT: { published: true } plus views: { lt: 25 }.",
+        "q3: published: true with NOT: { title: { contains: \"Prisma\" } }."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  const q1 = await prisma.post.count({ where: { published: true, OR: [ { views: { gte: 150 } }, { title: { contains: \"Redis\" } } ] } });\n  console.log(\"q1\", q1);\n  const q2 = await prisma.post.count({ where: { NOT: { published: true }, views: { lt: 25 } } });\n  console.log(\"q2\", q2);\n  const q3 = await prisma.post.count({ where: { published: true, NOT: { title: { contains: \"Prisma\" } } } });\n  console.log(\"q3\", q3);\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The three boolean keys let a filter express any propositional logic. Fields listed side by side are implicitly ANDed, so <code>{ published: true, OR: [...] }</code> reads as \"published AND (any of the OR array)\" — the <code>OR</code> group is nested inside the implicit AND. That gives q1: the published posts that are either high-view (Prisma Basics 250, Mongo Guide 150) or the Redis one, three in total. <code>NOT</code> negates an entire sub-filter, so q2's <code>NOT: { published: true }</code> selects the drafts, further narrowed to views under 25 (both drafts qualify). q3 combines an equality with a negated substring: published posts whose title does not contain \"Prisma\", excluding \"Prisma Basics\" from the four published posts to leave three.</p>\n<p>The mental model that prevents mistakes: <code>AND</code>, <code>OR</code>, and <code>NOT</code> each take a filter (or array of filters) and can be nested to any depth, so a complex condition becomes a small tree. The common error is trying to put two conditions on the <em>same field</em> as sibling keys — <code>{ views: { gt: 10 }, views: { lt: 100 } }</code> is invalid object syntax (the second key wins); instead nest both operators in one object (<code>{ views: { gt: 10, lt: 100 } }</code>) or use an <code>AND</code> array. Reach for the explicit <code>AND</code> array precisely when you need two constraints on one field, or to group OR clauses unambiguously.</p>"
+    },
+    {
+      "title": "Filter on NULL and Present Values",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 15,
+      "concepts": [
+        "null filter",
+        "not null",
+        "optional fields",
+        "three-valued logic",
+        "presence"
+      ],
+      "prerequisites": [
+        "where filter",
+        "nullable columns"
+      ],
+      "tags": [
+        "prisma",
+        "filter",
+        "null",
+        "optional",
+        "query"
+      ],
+      "problemHtml": "<p>Optional columns can be <code>NULL</code>, and filtering on presence is its own case. In Prisma, <code>{ field: null }</code> matches rows where the field is null, and <code>{ field: { not: null } }</code> matches rows where it has a value. This is distinct from any value comparison, because SQL treats <code>NULL</code> as \"unknown\".</p>\n<p>The reference dataset has three users: Ann (age 30), Bob (age 25), and Cy (no age — <code>null</code>).</p>\n<ul>\n<li>Count users whose <code>age</code> is <code>null</code> and log it.</li>\n<li>Find users whose <code>age</code> is <strong>not</strong> null, ordered by <code>age</code> ascending, and log each name.</li>\n<li>Count users whose <code>age</code> is <code>{ gte: 18 }</code> and log it — note whether the null-age user is included.</li>\n</ul>\n<p>Print <code>noage 1</code>, then the names with ages, then <code>adults N</code>. The scaffold gives the async skeleton.</p>",
+      "inputSpec": "The reference dataset is seeded: users Ann (30), Bob (25), Cy (null age).",
+      "outputSpec": "age null count is 1 (Cy); age not null ordered asc is Bob (25) then Ann (30); age gte 18 is 2 (Cy excluded because null is not >= 18).",
+      "constraints": "Use { age: null } and { age: { not: null } }. Observe that a numeric comparison does not match null rows.",
+      "examplesJson": [
+        {
+          "input": "user.count({ where: { age: null } })",
+          "output": "1",
+          "explanation": "Only Cy has a null age."
+        },
+        {
+          "input": "user.count({ where: { age: { gte: 18 } } })",
+          "output": "2",
+          "explanation": "Ann (30) and Bob (25) qualify; Cy is excluded because a comparison against a null age is unknown, not true."
+        }
+      ],
+      "hintsJson": [
+        "Presence is its own filter: { age: null } for missing, { age: { not: null } } for present.",
+        "A numeric comparison like { gte: 18 } never matches a null row — null is unknown, not a number.",
+        "Order the present-age users by age ascending.",
+        "Count the adults and notice the null-age user is not among them."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  console.log(\"noage\", await prisma.user.count({ where: { age: null } }));\n  const withAge = await prisma.user.findMany({ where: { age: { not: null } }, orderBy: { age: \"asc\" } });\n  for (const u of withAge) console.log(u.name);\n  console.log(\"adults\", await prisma.user.count({ where: { age: { gte: 18 } } }));\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Presence filtering is separate from value filtering because <code>NULL</code> means \"unknown\" in SQL, not \"zero\" or \"empty\". <code>{ age: null }</code> matches exactly the rows where the column is null (Cy), and <code>{ age: { not: null } }</code> matches the rows where it holds a value (Ann and Bob). Prisma only allows <code>null</code> as a filter on fields the schema marks optional (<code>age Int?</code>), so the type system stops you from null-filtering a required column.</p>\n<p>The result that surprises people is the last one: <code>{ age: { gte: 18 } }</code> returns 2, not 3 — the null-age user is <em>excluded</em>. That is three-valued logic at work: comparing an unknown age to 18 yields \"unknown\", which is not \"true\", so the row does not match. The same applies to <code>lt</code>, <code>gt</code>, equality, and even <code>not</code>: none of them return null rows unless you explicitly ask for them. So \"everyone who is not under 18\" is not the same as \"everyone 18 or older\" once nulls exist — the former via <code>{ NOT: { age: { lt: 18 } } }</code> would need care about nulls too. Whenever a column is nullable, decide deliberately whether null rows should count, and add <code>{ OR: [ ..., { age: null } ] }</code> when they should.</p>"
+    },
+    {
+      "title": "Filter by Related Records with some, every, and none",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 30,
+      "points": 20,
+      "concepts": [
+        "relation filter",
+        "some",
+        "every",
+        "none",
+        "to-many filtering"
+      ],
+      "prerequisites": [
+        "relations",
+        "where filter"
+      ],
+      "tags": [
+        "prisma",
+        "filter",
+        "relations",
+        "some-every-none",
+        "query"
+      ],
+      "problemHtml": "<p>You often filter a record by its related records: users who have <em>any</em> published post, or <em>no</em> posts at all. For a to-many relation, Prisma provides <code>some</code> (at least one related row matches), <code>every</code> (all related rows match, vacuously true when there are none), and <code>none</code> (no related row matches).</p>\n<p>The dataset has Ann (2 published + 1 draft), Bob (2 published + 1 draft), and Cy (no posts).</p>\n<ul>\n<li>Count users who have <code>some</code> post with <code>published: true</code> and log it.</li>\n<li>Count users who have <code>none</code> posts at all (empty relation filter <code>{ posts: { none: {} } }</code>) and log it.</li>\n<li>Count users where <code>every</code> post is <code>published: true</code> and log it — remember <code>every</code> is true for a user with zero posts.</li>\n</ul>\n<p>Print <code>haspub N</code>, <code>noposts N</code>, <code>allpub N</code>. The scaffold gives the async skeleton.</p>",
+      "inputSpec": "The reference dataset is seeded: Ann and Bob each have 2 published + 1 draft; Cy has no posts.",
+      "outputSpec": "some published = Ann + Bob = 2; none posts = Cy = 1; every post published = only Cy (vacuously true, since Ann and Bob each have a draft) = 1.",
+      "constraints": "Use the relation filters some / none / every under the posts relation. Do not fetch posts and filter in JS.",
+      "examplesJson": [
+        {
+          "input": "user.count({ where: { posts: { some: { published: true } } } })",
+          "output": "2",
+          "explanation": "Ann and Bob each have at least one published post."
+        },
+        {
+          "input": "user.count({ where: { posts: { every: { published: true } } } })",
+          "output": "1",
+          "explanation": "Only Cy qualifies: she has no posts, so \"every post is published\" is vacuously true; Ann and Bob each have a draft."
+        }
+      ],
+      "hintsJson": [
+        "Filter a user by its posts using the relation name with some / every / none.",
+        "some: { published: true } means \"has at least one published post\".",
+        "none: {} means \"has no posts at all\".",
+        "every: { published: true } is true even for a user with zero posts — a classic gotcha."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  console.log(\"haspub\", await prisma.user.count({ where: { posts: { some: { published: true } } } }));\n  console.log(\"noposts\", await prisma.user.count({ where: { posts: { none: {} } } }));\n  console.log(\"allpub\", await prisma.user.count({ where: { posts: { every: { published: true } } } }));\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Relation filters let the database do the join-and-test so you never fetch children into memory to filter parents. Under the <code>posts</code> relation, <code>some</code> matches a user with at least one post satisfying the inner filter — both Ann and Bob have a published post, so <code>haspub</code> is 2. <code>none: {}</code> matches users whose posts do not satisfy the (empty, always-true) inner filter — i.e. users with no posts — so only Cy counts. These translate to correlated <code>EXISTS</code> / <code>NOT EXISTS</code> subqueries under the hood.</p>\n<p>The one that trips everyone is <code>every</code>. \"Every post is published\" is <strong>vacuously true</strong> for a user with zero posts, because there is no post that violates the condition. So <code>allpub</code> returns 1 (Cy), not 0 — Ann and Bob are excluded because each has a draft, and Cy qualifies precisely because she has nothing to disqualify her. If you meant \"has posts AND all are published\", combine <code>every</code> with <code>some: {}</code> to require at least one post. This vacuous-truth behaviour matches SQL and formal logic, but it routinely produces \"why is this empty-relation row matching?\" bugs; whenever you use <code>every</code>, decide explicitly whether the no-children case should be included.</p>"
+    },
+    {
+      "title": "Page Through Results with take, skip, and orderBy",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 30,
+      "points": 20,
+      "concepts": [
+        "offset pagination",
+        "take",
+        "skip",
+        "orderBy",
+        "stable ordering"
+      ],
+      "prerequisites": [
+        "findMany",
+        "orderBy"
+      ],
+      "tags": [
+        "prisma",
+        "pagination",
+        "take",
+        "skip",
+        "query"
+      ],
+      "problemHtml": "<p>Offset pagination shows results one page at a time with <code>take</code> (the page size) and <code>skip</code> (how many rows to jump past), on top of a stable <code>orderBy</code>. The database applies the order first, then skips, then takes, so a page is a well-defined slice of the ordered result. Without a deterministic order the slice is meaningless — the same <code>skip</code>/<code>take</code> can overlap or drop rows between two requests, so a row appears twice or vanishes as data shifts underneath.</p>\n<p>Against the reference dataset (6 posts), page by <code>views</code> descending, 2 per page:</p>\n<ul>\n<li>Page 1: <code>orderBy views desc</code>, <code>take 2</code>. Log the titles.</li>\n<li>Page 2: the same order, <code>skip 2, take 2</code>. Log the titles.</li>\n<li>Page 3: <code>skip 4, take 2</code>. Log the titles.</li>\n</ul>\n<p>Print each page's titles under a <code>page N</code> header. Views are 250, 150, 100, 80, 20, 0, so work out which titles land on each page. The scaffold gives the async skeleton.</p>",
+      "inputSpec": "The reference dataset is seeded (6 posts with views 250,150,100,80,20,0).",
+      "outputSpec": "Ordered by views desc: page1 = Prisma Basics(250), Mongo Guide(150); page2 = Intro to SQL(100), Redis Notes(80); page3 = SQL Advanced(20), Draft on Prisma(0).",
+      "constraints": "Use take and skip with a stable orderBy (views desc, tie-broken if needed). Do not fetch all rows and slice in JS.",
+      "examplesJson": [
+        {
+          "input": "findMany({ orderBy: { views: \"desc\" }, take: 2 })",
+          "output": "Prisma Basics (250), Mongo Guide (150)",
+          "explanation": "The two highest-view posts form page 1."
+        },
+        {
+          "input": "findMany({ orderBy: { views: \"desc\" }, skip: 2, take: 2 })",
+          "output": "Intro to SQL (100), Redis Notes (80)",
+          "explanation": "Skipping the first two, the next two form page 2."
+        }
+      ],
+      "hintsJson": [
+        "take is the page size; skip is (pageIndex * pageSize).",
+        "Always pair pagination with a stable orderBy so pages do not shift.",
+        "Page N (0-based) is skip: N*2, take: 2.",
+        "Loop pages 0,1,2 or write three findMany calls with skip 0, 2, 4."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  for (let page = 0; page < 3; page++) {\n    const rows = await prisma.post.findMany({ orderBy: { views: \"desc\" }, skip: page * 2, take: 2 });\n    console.log(\"page\", page + 1);\n    for (const r of rows) console.log(r.title);\n  }\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Offset pagination is <code>orderBy</code> + <code>skip</code> + <code>take</code>: the order defines the sequence, <code>skip</code> jumps past earlier pages, and <code>take</code> limits the page size. With views descending (250, 150, 100, 80, 20, 0), page 1 (<code>skip 0</code>) is the top two, page 2 (<code>skip 2</code>) the next two, and so on. The database applies order, then skip, then take, so the slice is well-defined — provided the order is deterministic.</p>\n<p>The non-negotiable rule is a <strong>stable</strong> <code>orderBy</code>. If two rows share the sort value and there is no tiebreaker, their relative order is undefined and can change between requests, causing a row to appear on two pages or none. Add a unique tiebreaker (<code>orderBy: [{ views: \"desc\" }, { id: \"asc\" }]</code>) whenever the primary sort key is not unique; here views happen to be distinct, so the pages are stable, but relying on that is fragile. The known scaling weakness of offset pagination is that the database still walks past all <code>skip</code> rows internally, so deep pages (<code>skip: 100000</code>) get linearly slower — which is exactly the problem cursor pagination, the next exercise, solves. And note fetching everything and slicing in JavaScript is never pagination; it transfers the whole table every request.</p>"
+    },
+    {
+      "title": "Scale Deep Pages with Cursor Pagination",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 35,
+      "points": 20,
+      "concepts": [
+        "cursor pagination",
+        "cursor",
+        "skip 1",
+        "stable key",
+        "seek method"
+      ],
+      "prerequisites": [
+        "offset pagination",
+        "orderBy"
+      ],
+      "tags": [
+        "prisma",
+        "pagination",
+        "cursor",
+        "scaling",
+        "query"
+      ],
+      "problemHtml": "<p>Cursor pagination fixes offset pagination's deep-page slowness by remembering <em>where you left off</em> instead of counting from the start. You order by a unique key, take a page, then request the next page starting after the last row's key with <code>cursor</code> and <code>skip: 1</code> (to exclude the cursor row itself). Because the database seeks straight to the cursor through the index rather than walking past every earlier row, the thousandth page costs the same as the first.</p>\n<p>Against the reference dataset, page by <code>id</code> ascending, 2 per page:</p>\n<ul>\n<li>Fetch the first page: <code>orderBy id asc</code>, <code>take 2</code>. Log the titles and remember the last row's <code>id</code>.</li>\n<li>Fetch the next page using <code>cursor: { id: lastId }</code>, <code>skip: 1</code>, <code>take: 2</code>. Log the titles.</li>\n<li>Fetch the third page the same way from the new last id. Log the titles.</li>\n</ul>\n<p>Print each page's titles under a <code>page N</code> header. The scaffold gives the async skeleton.</p>",
+      "inputSpec": "The reference dataset is seeded (6 posts; ids are sequential in insert order: Intro, Prisma Basics, Draft on Prisma, Redis Notes, Mongo Guide, SQL Advanced).",
+      "outputSpec": "By id asc: page1 = Intro to SQL, Prisma Basics; page2 = Draft on Prisma, Redis Notes; page3 = Mongo Guide, SQL Advanced.",
+      "constraints": "Use cursor + skip:1 + take for pages 2 and 3, keyed on the unique id. Do not use skip as an offset. Order by the same unique key throughout.",
+      "examplesJson": [
+        {
+          "input": "page 1: findMany({ orderBy: { id: \"asc\" }, take: 2 })",
+          "output": "Intro to SQL, Prisma Basics",
+          "explanation": "The first two by id form page 1; remember the last id as the cursor."
+        },
+        {
+          "input": "page 2: findMany({ orderBy: { id: \"asc\" }, cursor: { id: lastId }, skip: 1, take: 2 })",
+          "output": "Draft on Prisma, Redis Notes",
+          "explanation": "Start at the cursor row and skip it (skip:1), then take the next two."
+        }
+      ],
+      "hintsJson": [
+        "Instead of counting from the start, resume from the last row you saw.",
+        "Order by a unique key (id); take the page and keep the last row.",
+        "Next page: cursor: { id: lastId }, skip: 1 (to exclude the cursor row), take: 2.",
+        "Repeat, updating the cursor to the new last id each time."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // Page 1: no cursor yet.\n  let rows = await prisma.post.findMany({ orderBy: { id: \"asc\" }, take: 2 });\n  console.log(\"page 1\");\n  for (const r of rows) console.log(r.title);\n  let cursor = rows[rows.length - 1].id;\n\n  // Pages 2 and 3: resume after the last id we saw.\n  for (let page = 2; page <= 3; page++) {\n    rows = await prisma.post.findMany({ orderBy: { id: \"asc\" }, take: 2, cursor: { id: cursor }, skip: 1 });\n    console.log(\"page\", page);\n    for (const r of rows) console.log(r.title);\n    cursor = rows[rows.length - 1].id;\n  }\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Cursor pagination replaces \"skip N rows\" with \"start after this key\". You order by a <em>unique, stable</em> key (here <code>id</code> ascending), take a page, and remember the last row's key. For the next page you pass <code>cursor: { id: lastId }</code> to position at that row, then <code>skip: 1</code> to exclude the cursor row itself, and <code>take: 2</code> for the page. Because the database seeks directly to the cursor via the index instead of walking past every skipped row, page 1000 is as fast as page 1 — the fix for offset pagination's linear slowdown.</p>\n<p>The two rules that make it correct: the cursor field must be <strong>unique</strong> (or you order by a unique tiebreaker), because the database needs an unambiguous \"row to start after\"; and you must order by that same key consistently, or \"after this row\" is meaningless. The <code>skip: 1</code> is essential — without it the cursor row would repeat as the first row of the next page. The trade-offs versus offset pagination: cursor pagination cannot jump to an arbitrary page number (there is no \"page 5\" without having seen page 4's last key), and it naturally supports infinite-scroll and \"load more\" UIs rather than numbered page links. For feeds and large tables it is the scalable default; for small, page-numbered admin tables, offset pagination is simpler and fine.</p>"
+    },
+    {
+      "title": "Sort by Multiple Keys and Deduplicate with distinct",
+      "difficulty": "HARD",
+      "estimatedMinutes": 40,
+      "points": 25,
+      "concepts": [
+        "multi-key orderBy",
+        "distinct",
+        "tiebreak ordering",
+        "nulls ordering",
+        "projection"
+      ],
+      "prerequisites": [
+        "orderBy",
+        "select",
+        "pagination"
+      ],
+      "tags": [
+        "prisma",
+        "orderby",
+        "distinct",
+        "sorting",
+        "query"
+      ],
+      "problemHtml": "<p>Sorting often needs more than one key: order by published state, then by views within each state. Prisma takes an <em>array</em> for <code>orderBy</code> to apply keys in priority order. Separately, <code>distinct</code> collapses rows that share the listed field values, keeping the first per group under the current ordering.</p>\n<p>Against the reference dataset:</p>\n<ul>\n<li>List all posts ordered by <code>published</code> descending (true first), then <code>views</code> descending within each group. Log each as <code>&lt;published&gt; &lt;title&gt;</code>.</li>\n<li>Then, using <code>distinct: [\"authorId\"]</code> with <code>orderBy: [{ authorId: \"asc\" }, { views: \"desc\" }]</code> and <code>include: { author: true }</code>, get one post per author (their highest-view post) and log <code>&lt;authorName&gt; &lt;title&gt;</code>.</li>\n</ul>\n<p>Print the fully sorted list, then the one-per-author rows. The scaffold gives the async skeleton.</p>",
+      "inputSpec": "The reference dataset is seeded. Ann: Intro(100,pub), Prisma Basics(250,pub), Draft(0,unpub). Bob: Redis(80,pub), Mongo(150,pub), SQL Advanced(20,unpub). Ann is created before Bob (smaller authorId).",
+      "outputSpec": "Sorted by published desc then views desc: Prisma Basics, Mongo Guide, Intro to SQL, Redis Notes (all published), then SQL Advanced(20), Draft on Prisma(0). distinct authorId with views desc gives Ann -> Prisma Basics (250) and Bob -> Mongo Guide (150).",
+      "constraints": "Use an orderBy array for multi-key sort. Use distinct: [\"authorId\"] with a compatible orderBy so the kept row per author is the highest-view one. include the author to log a stable name (raw ids depend on the sequence).",
+      "examplesJson": [
+        {
+          "input": "orderBy: [{ published: \"desc\" }, { views: \"desc\" }]",
+          "output": "the 4 published posts by views desc, then the 2 drafts by views desc",
+          "explanation": "The first key groups by published; the second orders within each group."
+        },
+        {
+          "input": "distinct: [\"authorId\"], orderBy: [{ authorId: \"asc\" }, { views: \"desc\" }], include: { author: true }",
+          "output": "Ann Prisma Basics (250), Bob Mongo Guide (150)",
+          "explanation": "distinct keeps the first row per authorId under the ordering, so each author's highest-view post survives; Ann sorts first as she was created earlier."
+        }
+      ],
+      "hintsJson": [
+        "Multiple sort keys go in an array, applied in order of priority.",
+        "orderBy: [{ published: \"desc\" }, { views: \"desc\" }] sorts published-first, then by views.",
+        "distinct: [\"authorId\"] keeps one row per author.",
+        "For distinct to keep the highest-view post, order by authorId then views desc so that row comes first in each group."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  const sorted = await prisma.post.findMany({ orderBy: [{ published: \"desc\" }, { views: \"desc\" }] });\n  for (const p of sorted) console.log(p.published, p.title);\n\n  const perAuthor = await prisma.post.findMany({ distinct: [\"authorId\"], orderBy: [{ authorId: \"asc\" }, { views: \"desc\" }], include: { author: true } });\n  for (const p of perAuthor) console.log(p.author.name, p.title);\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An <code>orderBy</code> array applies its keys in priority order: <code>[{ published: \"desc\" }, { views: \"desc\" }]</code> first groups rows by <code>published</code> (true before false), then within each group sorts by <code>views</code> descending. So all four published posts come first, ordered by views (Prisma Basics 250, Mongo Guide 150, Intro 100, Redis 80), followed by the two drafts by views (SQL Advanced 20, Draft 0). The second key only breaks ties left by the first — the mental model is \"sort by A, and where A is equal, sort by B\".</p>\n<p><code>distinct</code> collapses rows sharing the listed field values, keeping the <em>first</em> row per group as determined by the current <code>orderBy</code>. That coupling is the key insight: to get each author's highest-view post, you order by <code>authorId</code> (so grouping is stable) and then <code>views</code> descending (so the top-view post is first within each author), and <code>distinct: [\"authorId\"]</code> keeps that first row. Change the secondary order and you change which post survives — <code>distinct</code> is only meaningful alongside a deliberate <code>orderBy</code>. This is Prisma's equivalent of PostgreSQL's <code>DISTINCT ON</code>. A caveat: the leading <code>orderBy</code> keys should align with the <code>distinct</code> fields, or the \"first per group\" is ambiguous; and unlike a <code>GROUP BY</code> aggregate, <code>distinct</code> returns whole rows, which is exactly why it is the right tool for \"one representative record per group\".</p>",
+      "diagramMermaid": "flowchart TD\n  A[findMany] --> B[orderBy authorId asc then views desc]\n  B --> C[distinct authorId keeps first per author]\n  C --> D[highest-view post per author]"
+    },
+    {
+      "title": "Build a Search Endpoint: Filter, Sort, and Paginate Together",
+      "difficulty": "HARD",
+      "estimatedMinutes": 50,
+      "points": 30,
+      "concepts": [
+        "composed query",
+        "filter plus paginate",
+        "total count",
+        "page metadata",
+        "real endpoint shape"
+      ],
+      "prerequisites": [
+        "filtering",
+        "pagination",
+        "count",
+        "orderBy"
+      ],
+      "tags": [
+        "prisma",
+        "search",
+        "pagination",
+        "endpoint",
+        "capstone"
+      ],
+      "problemHtml": "<p>A real \"search posts\" endpoint combines everything: a filter from the query, a sort, a page, and a <em>total count</em> so the client can render page controls. The idiom is to run the filtered <code>findMany</code> (with <code>take</code>/<code>skip</code>) and a matching <code>count</code> — ideally in one <code>$transaction</code> so they see the same snapshot.</p>\n<p>Implement a search that, for the filter \"published posts whose title contains a term\", returns page results and metadata:</p>\n<ul>\n<li>Build a reusable <code>where</code>: <code>{ published: true, title: { contains: term, mode: \"insensitive\" } }</code>.</li>\n<li>Run <code>findMany</code> (that <code>where</code>, <code>orderBy views desc</code>, <code>take 2</code>, <code>skip 0</code>) and <code>count</code> (the same <code>where</code>) inside a single <code>$transaction([...])</code>.</li>\n<li>For <code>term = \"s\"</code>, log the page titles, then <code>total N</code>, then <code>pages M</code> where <code>M = ceil(total / 2)</code>.</li>\n</ul>\n<p>Print the page-1 titles, then <code>total 3</code>, then <code>pages 2</code>. The scaffold gives the async skeleton.</p>",
+      "inputSpec": "The reference dataset is seeded. Published posts containing \"s\" (insensitive): Intro to SQL(100), Prisma Basics(250), Redis Notes(80), Mongo Guide? (no \"s\") — actually Intro to SQL, Prisma Basics, Redis Notes.",
+      "outputSpec": "Published titles containing \"s\": Prisma Basics(250), Intro to SQL(100), Redis Notes(80) => total 3, pages 2. Page 1 (take 2, views desc) = Prisma Basics, Intro to SQL.",
+      "constraints": "Reuse one where object for both findMany and count. Run them in a single $transaction. Compute pages as Math.ceil(total / pageSize).",
+      "examplesJson": [
+        {
+          "input": "where { published: true, title contains \"s\" insensitive }, orderBy views desc, take 2",
+          "output": "Prisma Basics (250), Intro to SQL (100)",
+          "explanation": "The two highest-view matching posts form page 1."
+        },
+        {
+          "input": "count(where) => total; pages = ceil(total/2)",
+          "output": "total 3, pages 2",
+          "explanation": "Three published posts contain \"s\"; at 2 per page that is 2 pages."
+        }
+      ],
+      "hintsJson": [
+        "Define the where once and pass the same object to findMany and count.",
+        "Run findMany and count in one prisma.$transaction([...]) so they agree on the data.",
+        "Page size 2: take 2, skip 0 for page 1.",
+        "pages = Math.ceil(total / pageSize)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  const term = \"s\";\n  const pageSize = 2;\n  const where = { published: true, title: { contains: term, mode: \"insensitive\" as const } };\n  const [rows, total] = await prisma.$transaction([\n    prisma.post.findMany({ where, orderBy: { views: \"desc\" }, take: pageSize, skip: 0 }),\n    prisma.post.count({ where }),\n  ]);\n  for (const r of rows) console.log(r.title);\n  console.log(\"total\", total);\n  console.log(\"pages\", Math.ceil(total / pageSize));\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A search endpoint is the composition of the whole module: a <code>where</code> built from the request, an <code>orderBy</code>, a page window (<code>take</code>/<code>skip</code>), and a <code>count</code> of the full match set for page metadata. The key discipline is defining the <code>where</code> object <strong>once</strong> and passing the identical reference to both <code>findMany</code> and <code>count</code> — if the two drift apart, your page results and your page count describe different queries, and the UI shows wrong page numbers. Running both in one <code>prisma.$transaction([...])</code> makes them read the same consistent snapshot, so a concurrent insert cannot land between the count and the fetch and produce an off-by-one.</p>\n<p>The filter here — <code>published: true</code> with <code>title contains \"s\"</code> case-insensitive — matches three posts (Prisma Basics, Intro to SQL, Redis Notes); page 1 at size 2, ordered by views descending, returns the top two, and <code>Math.ceil(3 / 2)</code> gives 2 pages. Note the small TypeScript detail: <code>mode: \"insensitive\" as const</code> narrows the string to the literal type Prisma's generated <code>where</code> expects, which is the kind of thing <code>tsc</code> catches that a plain string would fail on. In a real handler you would validate and clamp <code>page</code> and <code>pageSize</code> (a caller asking for <code>take: 100000</code> is a denial-of-service vector), and for very large offsets you would switch to cursor pagination — but the filter-plus-count-in-a-transaction shape is the backbone of nearly every list endpoint.</p>",
+      "diagramMermaid": "flowchart TD\n  A[Request term and page] --> B[Build one where object]\n  B --> C[transaction]\n  C --> D[findMany where orderBy take skip]\n  C --> E[count where]\n  D --> F[page rows]\n  E --> G[total then pages ceil]"
+    }
+  ]
+}

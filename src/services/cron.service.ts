@@ -249,6 +249,55 @@ export function startCronJobs(): void {
     }
   }, { timezone: 'UTC' });
 
+  // ─── Tech Trends news bulletin ───
+  //
+  // Two jobs, deliberately split. Ingestion is cheap and idempotent, so it runs
+  // often and keeps the candidate pool warm. Generation costs tokens and writes
+  // a public article, so it runs once, at a fixed hour, and only if ingestion
+  // has actually produced something new.
+  //
+  // Times are Vietnam-local expressed in UTC (VN = UTC+7):
+  //   ingest   every 2 hours
+  //   bulletin 07:30 VN  = 00:30 UTC
+  //   sweep    every 5 min, publishes anything whose scheduled time has passed
+  const newsEnabled = String(process.env.TECH_NEWS_AUTOPOST ?? 'true').toLowerCase() !== 'false';
+
+  cron.schedule('15 */2 * * *', async () => {
+    if (!newsEnabled) return;
+    try {
+      const { ingestAllFeeds } = await import('./techTrends/newsIngest.service.js');
+      const r = await ingestAllFeeds();
+      logger.info('cron news ingest done', { new: r.itemsNew, ok: r.ok, failed: r.failed });
+    } catch (err) {
+      logger.error('cron news ingest failed', { error: (err as Error).message });
+    }
+  }, { timezone: 'UTC' });
+
+  cron.schedule('30 0 * * *', async () => {
+    if (!newsEnabled) return;
+    try {
+      const authorId = Number(process.env.TECH_NEWS_AUTHOR_ID ?? 1);
+      const { ingestAllFeeds } = await import('./techTrends/newsIngest.service.js');
+      const { runDailyBulletin } = await import('./techTrends/news.service.js');
+      await ingestAllFeeds();
+      const article = await runDailyBulletin({ authorId });
+      logger.info('cron news bulletin published', article);
+    } catch (err) {
+      // NOT_ENOUGH_NEWS on a quiet day is expected, not a failure worth alerting on.
+      const msg = (err as Error).message;
+      logger.warn('cron news bulletin skipped', { reason: msg.slice(0, 200) });
+    }
+  }, { timezone: 'UTC' });
+
+  cron.schedule('*/5 * * * *', async () => {
+    try {
+      const { publishDueScheduled } = await import('./techTrends/news.service.js');
+      await publishDueScheduled();
+    } catch (err) {
+      logger.error('cron scheduled-publish sweep failed', { error: (err as Error).message });
+    }
+  }, { timezone: 'UTC' });
+
   // ─── Startup recovery ───
   void recoverPendingJobs();
 
@@ -260,6 +309,7 @@ export function startCronJobs(): void {
   `Stale PENDING order cleanup every 15 min (TTL ${ttlMinutes}m)`,
   `Dashboard archive daily @ 04:00 Vietnam (archive ${archiveDays}d, purge ${purgeDays}d, completed-expiry ${COMPLETED_TASK_RETENTION_DAYS}d)`,
   'Orphaned upload cleanup every 4 hours (24h TTL, 50/batch)',
+  'Tech news ingest every 2h; bulletin 07:30 VN; scheduled-publish sweep every 5 min',
   ],
   });
 }

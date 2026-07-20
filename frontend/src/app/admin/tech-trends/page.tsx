@@ -26,6 +26,7 @@ import { adminTechTrendsApi, type AdminTechTrendArticle, type AiGeneratedArticle
 import type { Category, ArticleCodeBlock } from '@/app/tech-trends/types';
 import TechArticleEditor from '@/components/tech-trends/TechArticleEditor';
 import AiAssistPanel from '@/components/tech-trends/AiAssistPanel';
+import NewsBulletinPanel from '@/components/tech-trends/NewsBulletinPanel';
 
 const CATEGORIES: Category[] = ['TechNews', 'FixBug', 'Experience', 'Interviews'];
 
@@ -335,6 +336,10 @@ export default function AdminTechTrendsPage() {
           New Article
         </button>
       </div>
+
+      {/* AI news bulletin — ingest official feeds, preview the candidate
+          headlines, then publish (now or scheduled) under this admin account. */}
+      <NewsBulletinPanel onPublished={() => void fetchArticles()} />
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">

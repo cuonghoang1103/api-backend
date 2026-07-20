@@ -20,6 +20,12 @@ import {
 } from '../services/techTrends/ai.service.js';
 import { isProEffective } from '../services/pro.service.js';
 import {
+  ingestAllFeeds,
+  seedDefaultFeeds,
+  selectCandidates,
+} from '../services/techTrends/newsIngest.service.js';
+import { draftBulletin, runDailyBulletin } from '../services/techTrends/news.service.js';
+import {
   listComments,
   createComment,
   editComment,
@@ -181,6 +187,12 @@ function serializeForPublic(article: Record<string, unknown>) {
     status: article.status,
     readTimeMin: article.readTimeMin,
     author: article.author ?? null,
+    // Bulletin fields. `kind` lets the reader UI split the news feed from
+    // long-form articles; `sources` powers the "Nguồn chính thức" list and is
+    // what makes an AI-written bulletin checkable rather than just plausible.
+    kind: article.kind ?? 'ARTICLE',
+    sources: Array.isArray(article.sources) ? article.sources : [],
+    aiGenerated: article.aiGenerated ?? false,
     viewCount: article.viewCount ?? 0,
     publishedAt: article.publishedAt,
     createdAt: article.createdAt,
@@ -236,6 +248,15 @@ publicRouter.get('/articles', async (req, res: Response<ApiResponse>, next) => {
     if (req.query.featured === 'true') {
       where.isFeatured = true;
     }
+    // `kind=NEWS` gives the bulletin feed, `kind=ARTICLE` the long-form ones.
+    // Omitted means "everything", so existing callers are unaffected.
+    const kind = String(req.query.kind ?? '').toUpperCase();
+    if (kind === 'NEWS' || kind === 'ARTICLE') {
+      where.kind = kind;
+    }
+    // Bulletins are chronological — a week-old "featured" bulletin floating
+    // above today's would read as stale, so news ignores the featured pin.
+    const newsOrder = kind === 'NEWS';
     if (req.query.q) {
       const kw = String(req.query.q);
       where.OR = [
@@ -250,7 +271,9 @@ publicRouter.get('/articles', async (req, res: Response<ApiResponse>, next) => {
         where,
         skip,
         take: size,
-        orderBy: [{ isFeatured: 'desc' }, { publishedAt: 'desc' }, { createdAt: 'desc' }],
+        orderBy: newsOrder
+          ? [{ publishedAt: 'desc' }, { createdAt: 'desc' }]
+          : [{ isFeatured: 'desc' }, { publishedAt: 'desc' }, { createdAt: 'desc' }],
         include: authorInclude,
       }),
       prisma.techTrendArticle.count({ where }),
@@ -927,6 +950,139 @@ adminRouter.post('/ai/rewrite', async (req, res: Response<ApiResponse>, next) =>
       userId: adminUserId(req),
     });
     res.json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ─── News bulletin (admin) ─────────────────────────────────────────────────
+// Ingestion and generation are separate calls on purpose: ingesting is cheap
+// and safe to repeat, generating costs tokens and writes a public article.
+
+// GET /api/v1/admin/tech-trends/news/feeds — the source registry + health.
+adminRouter.get('/news/feeds', async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    const feeds = await prisma.newsFeed.findMany({
+      orderBy: [{ isActive: 'desc' }, { weight: 'desc' }],
+      include: { _count: { select: { items: true } } },
+    });
+    res.json({ success: true, data: feeds });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/v1/admin/tech-trends/news/feeds/seed — install the default sources.
+adminRouter.post('/news/feeds/seed', async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await seedDefaultFeeds() });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/v1/admin/tech-trends/news/feeds — add one source.
+adminRouter.post('/news/feeds', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { name, url, publisher, homepage, topic, weight } = req.body as Record<string, unknown>;
+    if (!String(name ?? '').trim() || !String(url ?? '').trim() || !String(publisher ?? '').trim()) {
+      throw new AppError('Cần name, url và publisher.', 400, 'VALIDATION_ERROR');
+    }
+    const feed = await prisma.newsFeed.create({
+      data: {
+        name: String(name).trim().slice(0, 120),
+        url: String(url).trim().slice(0, 500),
+        publisher: String(publisher).trim().slice(0, 120),
+        homepage: homepage ? String(homepage).trim().slice(0, 500) : null,
+        topic: topic ? String(topic).trim().slice(0, 40) : null,
+        weight: Math.max(0, Math.min(100, Number(weight) || 50)),
+      },
+    });
+    res.status(201).json({ success: true, data: feed });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// PATCH /api/v1/admin/tech-trends/news/feeds/:id — toggle / retune a source.
+adminRouter.patch('/news/feeds/:id', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id)) throw new AppError('id không hợp lệ', 400, 'VALIDATION_ERROR');
+    const { isActive, weight, topic } = req.body as Record<string, unknown>;
+    const feed = await prisma.newsFeed.update({
+      where: { id },
+      data: {
+        ...(isActive !== undefined ? { isActive: Boolean(isActive) } : {}),
+        ...(weight !== undefined ? { weight: Math.max(0, Math.min(100, Number(weight) || 50)) } : {}),
+        ...(topic !== undefined ? { topic: topic ? String(topic).slice(0, 40) : null } : {}),
+      },
+    });
+    res.json({ success: true, data: feed });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// DELETE /api/v1/admin/tech-trends/news/feeds/:id
+adminRouter.delete('/news/feeds/:id', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id)) throw new AppError('id không hợp lệ', 400, 'VALIDATION_ERROR');
+    await prisma.newsFeed.delete({ where: { id } });
+    res.json({ success: true, message: 'Đã xoá nguồn tin.' });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/v1/admin/tech-trends/news/ingest — pull every active feed now.
+adminRouter.post('/news/ingest', async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await ingestAllFeeds() });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// GET /api/v1/admin/tech-trends/news/candidates — what a bulletin would use.
+adminRouter.get('/news/candidates', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const limit = Math.max(1, Math.min(40, Number(req.query.limit) || 12));
+    res.json({ success: true, data: await selectCandidates({ limit }) });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/v1/admin/tech-trends/news/draft — preview only, writes nothing.
+adminRouter.post('/news/draft', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await draftBulletin({ userId: adminUserId(req) });
+    res.json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/v1/admin/tech-trends/news/generate — ingest? → draft → publish.
+// `publishAt` (ISO) schedules it; omitted means publish immediately.
+adminRouter.post('/news/generate', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = adminUserId(req);
+    if (!userId) throw new AppError('Không xác định được tài khoản đăng.', 401, 'UNAUTHORIZED');
+    const { publishAt, ingestFirst } = req.body as Record<string, unknown>;
+
+    if (ingestFirst !== false) await ingestAllFeeds();
+
+    let when: Date | null = null;
+    if (publishAt) {
+      const d = new Date(String(publishAt));
+      if (Number.isNaN(d.getTime())) throw new AppError('publishAt không hợp lệ', 400, 'VALIDATION_ERROR');
+      when = d;
+    }
+    const data = await runDailyBulletin({ authorId: userId, publishAt: when });
+    res.status(201).json({ success: true, data });
   } catch (error) {
     next(error);
   }

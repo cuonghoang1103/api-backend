@@ -215,6 +215,20 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
             </div>
             <ArticleActions articleId={article.id} title={article.title} summary={article.summary} url={url} />
           </div>
+
+          {/* Provenance. A bulletin is assembled by a model from feed entries;
+              saying so plainly — next to the count of sources it is built on —
+              is the difference between a useful digest and something a reader
+              could mistake for original reporting. */}
+          {article.kind === 'NEWS' && (
+            <div className="mt-5 flex flex-wrap items-center gap-2 rounded-xl border border-neon-violet/20 bg-neon-violet/5 px-4 py-3">
+              <span className="text-sm font-semibold text-neon-violet">📰 Bản tin AI tổng hợp</span>
+              <span className="text-xs text-text-secondary">
+                Viết tự động từ {article.sources?.length ?? 0} thông báo chính thức. Mỗi mục đều dẫn
+                link tới bài gốc — hãy đọc nguồn khi cần chính xác tuyệt đối.
+              </span>
+            </div>
+          )}
         </header>
 
         {/* Body + TOC */}

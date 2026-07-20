@@ -31,8 +31,27 @@ export type ArticleAuthor = {
 // bodyMdx so the public page doesn't re-parse HTML on every read.
 export type TocItem = { id: string; text: string; level: 1 | 2 | 3 };
 
+
+// ─── News bulletin ──────────────────────────────────────────────
+// `kind` splits the AI-assembled daily bulletin from hand-written
+// long-form articles. `sources` is the grounding set every claim in
+// a bulletin links back to — it is what makes the page checkable,
+// so it is part of the public read surface, not an internal detail.
+export type ArticleKind = 'ARTICLE' | 'NEWS';
+
+export type NewsSource = {
+  title: string;
+  url: string;
+  publisher: string;
+  publishedAt: string | null;
+  imageUrl: string | null;
+};
+
 export type Article = {
   id: number;
+  kind?: ArticleKind;
+  sources?: NewsSource[];
+  aiGenerated?: boolean;
   title: string;
   slug: string;
   summary: string;

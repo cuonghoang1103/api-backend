@@ -2829,6 +2829,18 @@ export interface PublicTechTrendArticle {
   title: string;
   slug: string;
   summary: string;
+  // News bulletin fields. `kind` separates the daily AI bulletin from
+  // hand-written articles; `sources` is the grounding set it was built from and
+  // is public on purpose — it is what lets a reader check the claims.
+  kind?: 'ARTICLE' | 'NEWS';
+  sources?: Array<{
+    title: string;
+    url: string;
+    publisher: string;
+    publishedAt: string | null;
+    imageUrl: string | null;
+  }>;
+  aiGenerated?: boolean;
   // Tier 1A — rich body. Server-side rendered from bodyMdx
   // and sanitised at write time, so the public page can
   // dangerouslySetInnerHTML without an extra sanitiser. Legacy
@@ -3054,6 +3066,63 @@ export const techTrendsApi = {
   },
 };
 
+
+// ─── Tech Trends: news bulletin ─────────────────────────────────────
+export interface NewsFeedDto {
+  id: number;
+  name: string;
+  url: string;
+  publisher: string;
+  homepage: string | null;
+  topic: string | null;
+  weight: number;
+  isActive: boolean;
+  lastFetchAt: string | null;
+  lastError: string | null;
+  _count?: { items: number };
+}
+
+export interface NewsIngestResult {
+  feeds: number;
+  ok: number;
+  failed: number;
+  itemsNew: number;
+  itemsSeen: number;
+  errors: Array<{ feed: string; error: string }>;
+}
+
+export interface NewsCandidateDto {
+  id: number;
+  title: string;
+  url: string;
+  summary: string | null;
+  imageUrl: string | null;
+  publishedAt: string | null;
+  publisher: string;
+  topic: string | null;
+  score: number;
+}
+
+export interface NewsBulletinSource {
+  title: string;
+  url: string;
+  publisher: string;
+  publishedAt: string | null;
+  imageUrl: string | null;
+}
+
+export interface NewsBulletinDraft {
+  title: string;
+  summary: string;
+  bodyMdx: string;
+  tags: string[];
+  coverEmoji: string;
+  readTimeMin: number;
+  sources: NewsBulletinSource[];
+  itemIds: number[];
+  topic: string | null;
+}
+
 export const adminTechTrendsApi = {
   // Admin: list ALL articles (including DRAFT). Same shape
   // as public but no status filter.
@@ -3159,6 +3228,41 @@ export const adminTechTrendsApi = {
   },
   aiRewrite(payload: { bodyMdx: string; instruction: string }) {
     return api.post<{ data: { bodyMdx: string } }>('/admin/tech-trends/ai/rewrite', payload);
+  },
+
+  // ─── News bulletin ────────────────────────────────────────────────
+  // Ingest and generate are separate calls: ingesting is cheap and safe to
+  // repeat, generating spends tokens and publishes a public article.
+  newsFeeds() {
+    return api.get<{ data: NewsFeedDto[] }>('/admin/tech-trends/news/feeds');
+  },
+  newsSeedFeeds() {
+    return api.post<{ data: { created: number; existing: number } }>('/admin/tech-trends/news/feeds/seed');
+  },
+  newsAddFeed(payload: { name: string; url: string; publisher: string; homepage?: string; topic?: string; weight?: number }) {
+    return api.post<{ data: NewsFeedDto }>('/admin/tech-trends/news/feeds', payload);
+  },
+  newsUpdateFeed(id: number, payload: Partial<{ isActive: boolean; weight: number; topic: string }>) {
+    return api.patch<{ data: NewsFeedDto }>(`/admin/tech-trends/news/feeds/${id}`, payload);
+  },
+  newsRemoveFeed(id: number) {
+    return api.delete<{ success: boolean }>(`/admin/tech-trends/news/feeds/${id}`);
+  },
+  newsIngest() {
+    return api.post<{ data: NewsIngestResult }>('/admin/tech-trends/news/ingest');
+  },
+  newsCandidates(limit = 12) {
+    return api.get<{ data: NewsCandidateDto[] }>('/admin/tech-trends/news/candidates', { params: { limit } });
+  },
+  newsDraft() {
+    return api.post<{ data: NewsBulletinDraft }>('/admin/tech-trends/news/draft');
+  },
+  /** publishAt omitted = publish immediately; ISO string = schedule it. */
+  newsGenerate(payload: { publishAt?: string; ingestFirst?: boolean } = {}) {
+    return api.post<{ data: { id: number; slug: string; status: string; sources: number } }>(
+      '/admin/tech-trends/news/generate',
+      payload,
+    );
   },
 };
 

@@ -2863,6 +2863,24 @@ model TechTrendArticle {
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
+  // ─── News bulletins (added 2026-07-20) ───────────────────────
+  // The same table serves hand-written articles and the AI news
+  // bulletin. `kind` splits them: 'ARTICLE' (default, everything
+  // that existed before) vs 'NEWS'. A bulletin is written ONLY
+  // from real items ingested into news_items — `sources` records
+  // which ones, so every claim on the page can link out to the
+  // official announcement it came from.
+  kind        String    @default("ARTICLE") @db.VarChar(16)
+  // [{ title, url, publisher, publishedAt }] — the grounding set.
+  sources     Json?     @db.JsonB
+  // True when the body was produced by the model rather than a
+  // human. Surfaced in the UI: readers deserve to know.
+  aiGenerated Boolean   @default(false) @map("ai_generated")
+  aiModel     String?   @map("ai_model") @db.VarChar(80)
+  // Future publish time. The scheduler flips DRAFT -> PUBLISHED
+  // once now() passes it, which is how "đăng lúc 8h sáng" works.
+  scheduledAt DateTime? @map("scheduled_at")
+
   author   User?              @relation("TechTrendAuthor", fields: [authorId], references: [id], onDelete: SetNull)
   comments TechTrendComment[]
 
@@ -2871,7 +2889,65 @@ model TechTrendArticle {
   @@index([isFeatured], name: "idx_tech_trend_featured")
   @@index([publishedAt(sort: Desc)], name: "idx_tech_trend_published_at")
   @@index([authorId], name: "idx_tech_trend_author_id")
+  @@index([kind, status, publishedAt(sort: Desc)], name: "idx_tech_trend_kind_feed")
+  @@index([scheduledAt], name: "idx_tech_trend_scheduled_at")
   @@map("tech_trend_articles")
+}
+
+// ─── Tech Trends — news ingestion (added 2026-07-20) ──────────
+// A registry of official RSS/Atom feeds. Only first-party
+// sources belong here (a vendor's own engineering blog, a
+// project's release feed) — the whole point is that a bulletin
+// can cite the announcement itself rather than someone's
+// second-hand summary. `weight` biases selection when the day
+// produces more candidates than one bulletin can carry.
+model NewsFeed {
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(120)
+  url         String    @unique(map: "uk_news_feed_url") @db.VarChar(500)
+  // Shown as the publisher on the bulletin, e.g. "GitHub".
+  publisher   String    @db.VarChar(120)
+  homepage    String?   @db.VarChar(500)
+  // Topic hint used when grouping a bulletin, e.g. "ai", "web".
+  topic       String?   @db.VarChar(40)
+  weight      Int       @default(50)
+  isActive    Boolean   @default(true) @map("is_active")
+  lastFetchAt DateTime? @map("last_fetch_at")
+  lastError   String?   @map("last_error") @db.Text
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  items NewsItem[]
+
+  @@index([isActive], name: "idx_news_feed_active")
+  @@map("news_feeds")
+}
+
+// One entry pulled from a feed. `urlHash` (sha256 of the
+// normalised link) is the dedupe key — the same release note
+// shows up in several feeds and must not become two bulletins.
+// `usedInArticleId` records which bulletin consumed it so the
+// next run never re-reports yesterday's news.
+model NewsItem {
+  id              Int       @id @default(autoincrement())
+  feedId          Int       @map("feed_id")
+  title           String    @db.VarChar(500)
+  url             String    @db.VarChar(1000)
+  urlHash         String    @unique(map: "uk_news_item_url_hash") @map("url_hash") @db.VarChar(64)
+  summary         String?   @db.Text
+  author          String?   @db.VarChar(200)
+  imageUrl        String?   @map("image_url") @db.VarChar(1000)
+  publishedAt     DateTime? @map("published_at")
+  fetchedAt       DateTime  @default(now()) @map("fetched_at")
+  usedInArticleId Int?      @map("used_in_article_id")
+  usedAt          DateTime? @map("used_at")
+
+  feed NewsFeed @relation(fields: [feedId], references: [id], onDelete: Cascade)
+
+  @@index([publishedAt(sort: Desc)], name: "idx_news_item_published_at")
+  @@index([usedInArticleId], name: "idx_news_item_used_in")
+  @@index([feedId], name: "idx_news_item_feed")
+  @@map("news_items")
 }
 
 // ─── Tech Trends — reader comments (added 2026-07-16) ─────────

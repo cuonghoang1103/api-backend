@@ -12,7 +12,7 @@ import { useParams } from 'next/navigation';
 import {
   ArrowLeft, Loader2, CheckCircle2, Lightbulb, Save, Eye, EyeOff, Play,
   BookOpen, Youtube, ExternalLink, ListChecks, Layers, ChevronLeft, ChevronRight,
-  Image as ImageIcon,
+  Image as ImageIcon, FileText, Download,
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { codeLabApi, DIFFICULTY_META } from '@/lib/code-lab-api';
@@ -204,6 +204,37 @@ export default function ExerciseDetailPage() {
           <img src={ex.diagramImageUrl} alt="Diagram" className="mx-auto max-h-[420px] rounded-lg border" style={{ borderColor: 'var(--border-color)' }} />
         </figure>
       )}
+      {/* The original assignment sheet, embedded. Always a PDF — a .docx cannot
+          be rendered by a browser, so Word sources are converted and the
+          untouched file stays available as a download beside it. */}
+      {ex.briefPdfUrl && (
+        <Section icon={<FileText size={14} />} title="Original assignment sheet">
+          <div className="overflow-hidden rounded-lg border" style={{ borderColor: 'var(--border-color)' }}>
+            <object data={`${ex.briefPdfUrl}#view=FitH`} type="application/pdf" className="h-[600px] w-full">
+              {/* Fallback: mobile browsers routinely refuse to embed PDFs. */}
+              <div className="p-6 text-center text-sm" style={{ color: 'var(--text-muted)' }}>
+                Your browser cannot display the PDF inline.
+                <a href={ex.briefPdfUrl} target="_blank" rel="noopener noreferrer" className="ml-1 underline" style={{ color: '#6366f1' }}>
+                  Open it in a new tab
+                </a>
+              </div>
+            </object>
+          </div>
+          <div className="mt-2 flex flex-wrap gap-3 text-xs">
+            <a href={ex.briefPdfUrl} target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 underline" style={{ color: '#6366f1' }}>
+              <ExternalLink size={12} /> Open PDF full screen
+            </a>
+            {ex.briefFileUrl && ex.briefFileUrl !== ex.briefPdfUrl && (
+              <a href={ex.briefFileUrl} download
+                className="inline-flex items-center gap-1 underline" style={{ color: '#6366f1' }}>
+                <Download size={12} /> Download the original Word file
+              </a>
+            )}
+          </div>
+        </Section>
+      )}
+
       {/* Figures — screenshots of the original lab sheet. Its own section so a
           scanned brief reads as reference material, not as loose images. Click
           opens the full-resolution file, since screenshots of a spec are often

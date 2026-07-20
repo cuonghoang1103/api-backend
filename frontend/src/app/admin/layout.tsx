@@ -8,7 +8,7 @@ import {
   LogOut, Menu, X, ChevronRight, Shield,
   MessageSquare, BarChart3, BookOpen, ShoppingBag, Tag, Receipt, Music, GraduationCap, Database, Zap,
  CreditCard, Github, Search, TrendingUp, AlertTriangle, Gamepad2,
- KeyRound, UsersRound, Clapperboard, Sticker, Languages, Star, Ticket, Briefcase, Crown, MonitorPlay, Radio, Activity } from 'lucide-react';
+ FlaskConical, KeyRound, UsersRound, Clapperboard, Sticker, Languages, Star, Ticket, Briefcase, Crown, MonitorPlay, Radio, Activity } from 'lucide-react';
 
 const adminNav = [
  { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
@@ -37,6 +37,7 @@ const adminNav = [
  { label: 'Danh mục Video', href: '/admin/video-categories', icon: Clapperboard },
  { label: 'GitHub Repo Hub', href: '/admin/repos', icon: Github },
  { label: 'EXP Hub — Snippets', href: '/admin/exp-hub', icon: Code2 },
+ { label: 'Code Lab — Bài tập & Lộ trình', href: '/admin/code-lab', icon: FlaskConical },
  { label: 'My Language', href: '/admin/language', icon: Languages },
  { label: 'Thống kê Ngôn ngữ', href: '/admin/language-analytics', icon: BarChart3 },
  { label: 'Interview Simulator', href: '/admin/interview', icon: Briefcase },

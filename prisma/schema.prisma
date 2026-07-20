@@ -6611,6 +6611,13 @@ model CodeExercise {
   solutionCodeJson        Json?   @map("solution_code_json")
   // Walkthrough of the solution (sanitized HTML).
   solutionExplanationHtml String? @map("solution_explanation_html") @db.Text
+  // The original assignment sheet this exercise reproduces, when there is one
+  // (LAB211 ships Word/PDF lab sheets). `briefPdfUrl` is what the page embeds —
+  // always a PDF, converted from the .docx where needed, because browsers
+  // cannot render .docx. `briefFileUrl` is the untouched source file, offered
+  // as a download next to it.
+  briefPdfUrl             String? @map("brief_pdf_url") @db.VarChar(2000)
+  briefFileUrl            String? @map("brief_file_url") @db.VarChar(2000)
   // Optional UML/diagram image (R2) + extra images [{ url, caption }].
   diagramImageUrl         String? @map("diagram_image_url") @db.VarChar(2000)
   // Optional Mermaid diagram illustrating the problem (a class diagram for OOP

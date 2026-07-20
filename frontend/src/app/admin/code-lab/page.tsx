@@ -54,6 +54,8 @@ interface Draft {
   solutionExplanationHtml: string;
   diagramImageUrl: string;
   images: ImageItem[];
+  briefPdfUrl: string;
+  briefFileUrl: string;
   youtubeUrl: string;
   referenceUrl: string;
   tags: string;
@@ -65,7 +67,7 @@ function emptyDraft(moduleId: number, language: string): Draft {
     problemHtml: '', concepts: '', prerequisites: '', inputSpec: '', outputSpec: '', constraints: '',
     examples: [{ input: '', output: '', explanation: '' }], hints: [], starterCode: [{ name: 'Starter', language, code: '' }],
     solutionCode: [{ name: 'Solution', language, code: '' }], solutionExplanationHtml: '', diagramImageUrl: '',
-    images: [], youtubeUrl: '', referenceUrl: '', tags: '',
+    images: [], briefPdfUrl: '', briefFileUrl: '', youtubeUrl: '', referenceUrl: '', tags: '',
   };
 }
 
@@ -78,6 +80,7 @@ function draftToPayload(d: Draft) {
     examplesJson: d.examples, hintsJson: d.hints, starterCodeJson: d.starterCode, solutionCodeJson: d.solutionCode,
     solutionExplanationHtml: d.solutionExplanationHtml, diagramImageUrl: d.diagramImageUrl || null,
     imagesJson: d.images.filter((im) => im.url.trim()),
+    briefPdfUrl: d.briefPdfUrl || null, briefFileUrl: d.briefFileUrl || null,
     youtubeUrl: d.youtubeUrl || null, referenceUrl: d.referenceUrl || null, tags: fromCsv(d.tags),
   };
 }
@@ -93,6 +96,7 @@ function exerciseToDraft(ex: CodeExercise): Draft {
     solutionCode: ex.solutionCodeJson?.length ? ex.solutionCodeJson : [{ name: 'Solution', language: ex.language, code: '' }],
     solutionExplanationHtml: ex.solutionExplanationHtml || '', diagramImageUrl: ex.diagramImageUrl || '',
     images: ex.imagesJson || [],
+    briefPdfUrl: ex.briefPdfUrl || '', briefFileUrl: ex.briefFileUrl || '',
     youtubeUrl: ex.youtubeUrl || '', referenceUrl: ex.referenceUrl || '', tags: csv(ex.tags),
   };
 }
@@ -107,6 +111,7 @@ function proposalToDraft(p: ExerciseProposal, moduleId: number, language: string
     starterCode: p.starterCode.length ? p.starterCode : [{ name: 'Starter', language, code: '' }],
     solutionCode: p.solutionCode.length ? p.solutionCode : [{ name: 'Solution', language, code: '' }],
     solutionExplanationHtml: p.solutionExplanationHtml, diagramImageUrl: '', images: [],
+    briefPdfUrl: '', briefFileUrl: '',
     youtubeUrl: '', referenceUrl: '', tags: p.tags.join(', '),
   };
 }
@@ -672,6 +677,11 @@ function ExerciseEditor({ draft, setDraft, onClose, onSave, saving }: {
                 ))}
               </div>
             )}
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div><label className="text-xs">Brief PDF URL (embedded on the page)</label><input value={draft.briefPdfUrl} onChange={(e) => set('briefPdfUrl', e.target.value)} placeholder="https://… .pdf" className={inp} style={inpStyle} /></div>
+            <div><label className="text-xs">Original source file URL (download)</label><input value={draft.briefFileUrl} onChange={(e) => set('briefFileUrl', e.target.value)} placeholder="https://… .docx" className={inp} style={inpStyle} /></div>
           </div>
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">

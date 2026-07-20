@@ -393,6 +393,8 @@ export interface ExerciseInput {
   solutionCodeJson?: unknown;
   solutionExplanationHtml?: string | null;
   diagramImageUrl?: string | null;
+  briefPdfUrl?: string | null;
+  briefFileUrl?: string | null;
   diagramMermaid?: string | null;
   imagesJson?: unknown;
   youtubeUrl?: string | null;
@@ -420,6 +422,8 @@ function buildExerciseData(data: ExerciseInput, lang: string) {
     solutionCodeJson: normalizeCodeBlocks(data.solutionCodeJson, lang),
     solutionExplanationHtml: data.solutionExplanationHtml ?? null,
     diagramImageUrl: data.diagramImageUrl ?? null,
+    briefPdfUrl: data.briefPdfUrl ?? null,
+    briefFileUrl: data.briefFileUrl ?? null,
     diagramMermaid: data.diagramMermaid ? sanitizeMermaid(data.diagramMermaid) : null,
     imagesJson: normalizeImages(data.imagesJson),
     youtubeUrl: data.youtubeUrl ?? null,
@@ -487,6 +491,8 @@ export async function updateExercise(id: number, data: Partial<ExerciseInput>) {
   if (data.solutionCodeJson !== undefined) patch.solutionCodeJson = normalizeCodeBlocks(data.solutionCodeJson, lang);
   if (data.solutionExplanationHtml !== undefined) patch.solutionExplanationHtml = data.solutionExplanationHtml;
   if (data.diagramImageUrl !== undefined) patch.diagramImageUrl = data.diagramImageUrl;
+  if (data.briefPdfUrl !== undefined) patch.briefPdfUrl = data.briefPdfUrl;
+  if (data.briefFileUrl !== undefined) patch.briefFileUrl = data.briefFileUrl;
   if (data.diagramMermaid !== undefined) patch.diagramMermaid = data.diagramMermaid ? sanitizeMermaid(data.diagramMermaid) : data.diagramMermaid;
   if (data.imagesJson !== undefined) patch.imagesJson = normalizeImages(data.imagesJson);
   if (data.youtubeUrl !== undefined) patch.youtubeUrl = data.youtubeUrl;

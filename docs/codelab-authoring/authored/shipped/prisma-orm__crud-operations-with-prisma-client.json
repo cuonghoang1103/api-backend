@@ -1,0 +1,622 @@
+{
+  "trackSlug": "prisma-orm",
+  "moduleSlug": "crud-operations-with-prisma-client",
+  "exercises": [
+    {
+      "title": "Create a Record and Read It Back",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "create",
+        "findUnique",
+        "data argument",
+        "typed return",
+        "async/await"
+      ],
+      "prerequisites": [
+        "PrismaClient",
+        "async functions"
+      ],
+      "tags": [
+        "prisma",
+        "crud",
+        "create",
+        "findunique",
+        "client"
+      ],
+      "problemHtml": "<p>Creating and reading a single record is the smallest complete CRUD cycle. <code>prisma.user.create</code> inserts one row from a <code>data</code> object and returns the created record — including database-assigned fields like the auto-increment <code>id</code> and any schema defaults. <code>findUnique</code> then fetches a row by a unique field.</p>\n<p>Against the reference schema (<code>User</code> with <code>id</code>, <code>email</code>, <code>name?</code>, <code>role</code> defaulting to <code>USER</code>, <code>credits</code> defaulting to <code>0</code>):</p>\n<ul>\n<li>Create a user with <code>data: { email: \"ann@x.io\", name: \"Ann\" }</code> and capture the returned record.</li>\n<li>Log the created user's <code>id</code> and <code>role</code> (the default) and <code>credits</code> (the default).</li>\n<li>Re-fetch the same user with <code>findUnique({ where: { email: \"ann@x.io\" } })</code> and log its <code>email</code>.</li>\n</ul>\n<p>Print exactly three lines: <code>id 1</code>, <code>role USER credits 0</code>, and <code>found ann@x.io</code>. The scaffold gives the client import and the async skeleton.</p>",
+      "inputSpec": "The reference schema is pushed; the Users table starts empty (harness clears it).",
+      "outputSpec": "Logs \"id 1\" (first auto-increment), \"role USER credits 0\" (schema defaults), and \"found ann@x.io\".",
+      "constraints": "Use create then findUnique. Do not set id, role, or credits — rely on the schema defaults. findUnique must query by the unique email.",
+      "examplesJson": [
+        {
+          "input": "await prisma.user.create({ data: { email: \"ann@x.io\", name: \"Ann\" } })",
+          "output": "returns { id: 1, email: \"ann@x.io\", name: \"Ann\", role: \"USER\", credits: 0 }",
+          "explanation": "id auto-increments to 1; role and credits take their schema defaults."
+        },
+        {
+          "input": "await prisma.user.findUnique({ where: { email: \"ann@x.io\" } })",
+          "output": "returns the same user record",
+          "explanation": "findUnique can query by any @unique field, here email."
+        }
+      ],
+      "hintsJson": [
+        "Two calls: one inserts and returns the row, one reads it back by a unique field.",
+        "create({ data: { ... } }) returns the created record with its generated id and defaults filled in.",
+        "findUnique({ where: { email } }) works because email is @unique in the schema.",
+        "Log user.id, then `role ${user.role} credits ${user.credits}`, then the found email."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  const user = await prisma.user.create({ data: { email: \"ann@x.io\", name: \"Ann\" } });\n  console.log(\"id\", user.id);\n  console.log(\"role\", user.role, \"credits\", user.credits);\n\n  const found = await prisma.user.findUnique({ where: { email: \"ann@x.io\" } });\n  console.log(\"found\", found!.email);\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>create</code> takes a <code>data</code> object with the fields you are setting and returns the full created record, so you rarely need a follow-up read just to learn the generated <code>id</code>. Because the schema declares <code>role Role @default(USER)</code> and <code>credits Int @default(0)</code>, omitting them yields <code>USER</code> and <code>0</code> — the defaults are applied by the database/Prisma, not by you. The return value is fully typed: <code>user.id</code> is a <code>number</code> and <code>user.role</code> is the <code>Role</code> enum.</p>\n<p><code>findUnique</code> fetches at most one row and requires the <code>where</code> to be a unique field — <code>id</code> or, here, <code>email</code> (which is <code>@unique</code>). It returns the record or <code>null</code> if nothing matches, which is why the code uses <code>found!</code> after a create it knows succeeded; in real code you branch on the null. The common beginner mistake is forgetting <code>await</code> — every Prisma method returns a promise, and without <code>await</code> you log a pending promise instead of the record. Always disconnect (<code>prisma.$disconnect()</code>) in a script so the process exits; a long-running server keeps one client instance instead.</p>"
+    },
+    {
+      "title": "Insert Many Records with createMany and Count Them",
+      "difficulty": "EASY",
+      "estimatedMinutes": 20,
+      "points": 10,
+      "concepts": [
+        "createMany",
+        "count",
+        "batch insert",
+        "skipDuplicates",
+        "batch payload"
+      ],
+      "prerequisites": [
+        "create",
+        "unique constraints"
+      ],
+      "tags": [
+        "prisma",
+        "crud",
+        "createmany",
+        "count",
+        "batch"
+      ],
+      "problemHtml": "<p>Inserting rows one call at a time is a round trip each; <code>createMany</code> sends a whole batch in one statement, which is the right tool for seeding or importing. It returns a <code>count</code> of rows inserted rather than the records themselves, and its <code>skipDuplicates</code> option lets a batch tolerate rows that collide with a unique constraint.</p>\n<p>Against the reference schema:</p>\n<ul>\n<li>Use <code>createMany</code> to insert three users: <code>ann@x.io</code>, <code>bob@x.io</code>, and <code>cy@x.io</code> (names optional). Log the returned <code>count</code>.</li>\n<li>Call <code>createMany</code> again with <code>data: [{ email: \"ann@x.io\" }, { email: \"di@x.io\" }]</code> and <code>skipDuplicates: true</code>. Because <code>ann@x.io</code> already exists it is skipped, so only <code>di@x.io</code> is inserted — log the <code>count</code>.</li>\n<li>Log <code>prisma.user.count()</code> — the total.</li>\n</ul>\n<p>Print <code>created 3</code>, then <code>created 1</code>, then <code>total 4</code>. The scaffold gives the async skeleton.</p>",
+      "inputSpec": "The reference schema is pushed; Users starts empty.",
+      "outputSpec": "createMany returns count 3, then count 1 (ann skipped via skipDuplicates), and count() returns 4.",
+      "constraints": "Use createMany for both inserts and skipDuplicates on the second. Use prisma.user.count() for the total, not findMany().length.",
+      "examplesJson": [
+        {
+          "input": "createMany({ data: [3 users] })",
+          "output": "{ count: 3 }",
+          "explanation": "createMany returns how many rows it inserted, not the rows."
+        },
+        {
+          "input": "createMany({ data: [ann (dup), di], skipDuplicates: true })",
+          "output": "{ count: 1 }",
+          "explanation": "ann@x.io collides with the unique email and is skipped; only di is inserted."
+        }
+      ],
+      "hintsJson": [
+        "A batch insert is one call returning a count, not an array of records.",
+        "createMany({ data: [ ... ] }) inserts the whole array in one statement.",
+        "Add skipDuplicates: true so a row colliding with a unique constraint is skipped instead of throwing.",
+        "Use prisma.user.count() for the total — it asks the DB for a number rather than transferring rows."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  const a = await prisma.user.createMany({ data: [{ email: \"ann@x.io\" }, { email: \"bob@x.io\" }, { email: \"cy@x.io\" }] });\n  console.log(\"created\", a.count);\n\n  const b = await prisma.user.createMany({ data: [{ email: \"ann@x.io\" }, { email: \"di@x.io\" }], skipDuplicates: true });\n  console.log(\"created\", b.count);\n\n  console.log(\"total\", await prisma.user.count());\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>createMany</code> trades the returned records for speed: it inserts the entire array in a single SQL statement and returns only <code>{ count }</code>, the number of rows written. For bulk seeding and imports this is far faster than a loop of <code>create</code> calls, each of which is its own round trip. If you need the created records back (with their generated ids), you either loop <code>create</code> or, on recent Postgres, use <code>createManyAndReturn</code>.</p>\n<p>The <code>skipDuplicates: true</code> option is what makes the second batch return <code>1</code> instead of throwing: <code>ann@x.io</code> collides with the unique email constraint, so that one row is silently skipped and only <code>di@x.io</code> is inserted. Without the option, the whole batch would fail with a unique-constraint error (P2002). This is handy for idempotent seeding where some rows may already exist. Two things to remember: <code>skipDuplicates</code> only works against unique constraints (it cannot dedupe arbitrary data), and it is not supported on databases without the underlying capability, though PostgreSQL supports it. Counting with <code>count()</code> rather than <code>findMany().length</code> keeps the total a cheap database-side operation.</p>"
+    },
+    {
+      "title": "Update a Record and Read the Update Result",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 15,
+      "concepts": [
+        "update",
+        "where + data",
+        "returned record",
+        "partial update",
+        "not-found error"
+      ],
+      "prerequisites": [
+        "create",
+        "findUnique"
+      ],
+      "tags": [
+        "prisma",
+        "crud",
+        "update",
+        "client",
+        "partial-update"
+      ],
+      "problemHtml": "<p><code>update</code> changes one record identified by a unique <code>where</code> and returns the <em>updated</em> record. Only the fields in <code>data</code> change; the rest are untouched — Prisma updates are partial by default. If the <code>where</code> matches no row, <code>update</code> throws (P2025), which is different from the bulk <code>updateMany</code>.</p>\n<p>Against the reference schema, with a user <code>ann@x.io</code> (name \"Ann\", role USER) pre-seeded:</p>\n<ul>\n<li>Update that user by email, setting <code>name</code> to <code>\"Annabelle\"</code> and <code>role</code> to <code>\"ADMIN\"</code>, and capture the returned record.</li>\n<li>Log the returned record's <code>name</code> and <code>role</code>.</li>\n<li>Update again setting only <code>credits</code> to <code>50</code>, and log that the <code>name</code> is <strong>still</strong> <code>\"Annabelle\"</code> — proving the partial update left it alone.</li>\n</ul>\n<p>Print <code>Annabelle ADMIN</code> then <code>name kept Annabelle credits 50</code>. The scaffold gives the async skeleton.</p>",
+      "inputSpec": "The reference schema is pushed; a user ann@x.io (name Ann, role USER, credits 0) is seeded.",
+      "outputSpec": "The first update returns name Annabelle, role ADMIN; the second sets credits 50 and leaves name as Annabelle.",
+      "constraints": "Use update (single) with a unique where (email). Do not re-send unchanged fields — updates are partial. The second update changes only credits.",
+      "examplesJson": [
+        {
+          "input": "update({ where: { email }, data: { name: \"Annabelle\", role: \"ADMIN\" } })",
+          "output": "returns the record with name \"Annabelle\", role \"ADMIN\"",
+          "explanation": "update returns the updated record; only the named fields changed."
+        },
+        {
+          "input": "update({ where: { email }, data: { credits: 50 } })",
+          "output": "credits become 50, name stays \"Annabelle\"",
+          "explanation": "A partial update touches only the fields in data, leaving name intact."
+        }
+      ],
+      "hintsJson": [
+        "update identifies one row by a unique where and returns the changed record.",
+        "Put the changes in data; anything you omit is left unchanged (partial update).",
+        "The where must be unique (email), like findUnique.",
+        "The second update sends only { credits: 50 } — name and role are not resent, so they persist."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  const u1 = await prisma.user.update({ where: { email: \"ann@x.io\" }, data: { name: \"Annabelle\", role: \"ADMIN\" } });\n  console.log(u1.name, u1.role);\n\n  const u2 = await prisma.user.update({ where: { email: \"ann@x.io\" }, data: { credits: 50 } });\n  console.log(\"name kept\", u2.name, \"credits\", u2.credits);\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>update</code> targets exactly one record via a unique <code>where</code> and returns the record after the change, so you can read the new state without a second query. Prisma updates are <strong>partial</strong>: only the keys present in <code>data</code> are written, and everything else is preserved. That is why the second call, sending just <code>{ credits: 50 }</code>, leaves <code>name</code> as <code>\"Annabelle\"</code> — you never have to re-send the whole object to change one field, which also avoids clobbering concurrent changes to fields you did not intend to touch.</p>\n<p>The important difference from raw SQL and from <code>updateMany</code> is the not-found behaviour: single <code>update</code> throws <code>PrismaClientKnownRequestError</code> with code <code>P2025</code> (\"record to update not found\") if the <code>where</code> matches nothing, rather than silently doing nothing. That makes it safe to assume the record existed after a successful call, but means you should wrap it in try/catch (or check existence first) when the target might be absent. When you want \"update if present, ignore if not\", use <code>updateMany</code> (which returns a count and never throws on zero matches) or <code>upsert</code>. Because the <code>where</code> must be unique, <code>update</code> cannot change multiple rows — that is <code>updateMany</code>'s job.</p>"
+    },
+    {
+      "title": "Change Many Rows at Once with updateMany",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 15,
+      "concepts": [
+        "updateMany",
+        "filtered bulk update",
+        "count result",
+        "no-throw on zero",
+        "where filter"
+      ],
+      "prerequisites": [
+        "update",
+        "where filter"
+      ],
+      "tags": [
+        "prisma",
+        "crud",
+        "updatemany",
+        "bulk",
+        "client"
+      ],
+      "problemHtml": "<p><code>updateMany</code> applies the same change to every row matching a filter and returns <code>{ count }</code> — how many it changed. Unlike single <code>update</code>, its <code>where</code> is a general filter (not just unique fields), and it never throws when nothing matches; it just returns <code>count: 0</code>.</p>\n<p>Against the reference schema, with several posts seeded (some <code>published: false</code>):</p>\n<ul>\n<li>Use <code>updateMany</code> to set <code>published: true</code> on every post whose <code>published</code> is currently <code>false</code>. Log the <code>count</code>.</li>\n<li>Run the same <code>updateMany</code> again and log the <code>count</code> — now <code>0</code>, because none remain unpublished.</li>\n<li>Use <code>updateMany</code> with a filter that matches nothing (<code>title: \"does-not-exist\"</code>) and log its <code>count</code> (also <code>0</code>, no error).</li>\n</ul>\n<p>Print <code>published 2</code>, then <code>published 0</code>, then <code>none 0</code>. The scaffold gives the async skeleton.</p>",
+      "inputSpec": "The reference schema is pushed; a user and 3 posts are seeded, 2 with published:false and 1 with published:true.",
+      "outputSpec": "First updateMany returns count 2 (the two unpublished), second returns 0 (none left), and the no-match filter returns 0 without throwing.",
+      "constraints": "Use updateMany with a where filter. Rely on it returning a count and never throwing on zero matches.",
+      "examplesJson": [
+        {
+          "input": "updateMany({ where: { published: false }, data: { published: true } })",
+          "output": "{ count: 2 }",
+          "explanation": "Both unpublished posts are flipped; count reports 2."
+        },
+        {
+          "input": "the same call again",
+          "output": "{ count: 0 }",
+          "explanation": "No posts are unpublished anymore, so nothing matches — count 0, no error."
+        }
+      ],
+      "hintsJson": [
+        "A bulk change uses a general filter and returns how many rows changed.",
+        "updateMany({ where: { published: false }, data: { published: true } }) flips all unpublished posts.",
+        "Its where can be any filter, not just unique fields — unlike single update.",
+        "It returns { count } and never throws on zero matches, so a no-op just returns count 0."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  const a = await prisma.post.updateMany({ where: { published: false }, data: { published: true } });\n  console.log(\"published\", a.count);\n\n  const b = await prisma.post.updateMany({ where: { published: false }, data: { published: true } });\n  console.log(\"published\", b.count);\n\n  const c = await prisma.post.updateMany({ where: { title: \"does-not-exist\" }, data: { published: true } });\n  console.log(\"none\", c.count);\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>updateMany</code> is the bulk sibling of <code>update</code>: it changes every row its <code>where</code> filter selects and returns a <code>{ count }</code> of affected rows instead of the records themselves. Its filter is a full query filter — ranges, <code>in</code>, boolean fields, relations — not the unique-only <code>where</code> of single <code>update</code>. That is what lets \"publish all drafts\" be one statement: <code>{ where: { published: false } }</code> matches the two unpublished posts and flips them, returning <code>count: 2</code>.</p>\n<p>The defining behaviour is that it <strong>never throws on zero matches</strong>. Running it again returns <code>count: 0</code> because no drafts remain, and a filter that matches nothing (<code>title: \"does-not-exist\"</code>) also returns <code>0</code> quietly. This makes <code>updateMany</code> the right choice for idempotent bulk operations where \"change whatever matches, and it is fine if that is nothing\" — contrast single <code>update</code>, which throws <code>P2025</code> on a missing target. The trade-off is that <code>updateMany</code> cannot return the changed rows and does not support nested writes to relations; when you need the updated record or relational changes, use single <code>update</code> per row. The <code>count</code> is also useful as a concurrency check — \"did I actually change the row I expected?\" — which underlies optimistic-locking patterns.</p>"
+    },
+    {
+      "title": "Create-or-Update in One Call with upsert",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "upsert",
+        "create branch",
+        "update branch",
+        "idempotent write",
+        "atomic"
+      ],
+      "prerequisites": [
+        "create",
+        "update",
+        "unique where"
+      ],
+      "tags": [
+        "prisma",
+        "crud",
+        "upsert",
+        "idempotent",
+        "client"
+      ],
+      "problemHtml": "<p><code>upsert</code> collapses \"check if it exists, then insert or update\" into one atomic call. You give it a unique <code>where</code>, a <code>create</code> payload for the miss case, and an <code>update</code> payload for the hit case. It always returns the resulting record, and it removes the race between a separate existence check and a write.</p>\n<p>Against the reference schema, starting empty:</p>\n<ul>\n<li>Call <code>upsert</code> on <code>{ email: \"ann@x.io\" }</code> with <code>create: { email: \"ann@x.io\", credits: 10 }</code> and <code>update: { credits: { increment: 5 } }</code>. The user does not exist, so it is <strong>created</strong> with <code>credits: 10</code>. Log the credits.</li>\n<li>Call the exact same <code>upsert</code> again. Now the user exists, so the <strong>update</strong> branch runs, incrementing credits by 5 to <code>15</code>. Log the credits.</li>\n<li>Call it a third time and log the credits (<code>20</code>).</li>\n</ul>\n<p>Print <code>credits 10</code>, <code>credits 15</code>, <code>credits 20</code>. The scaffold gives the async skeleton.</p>",
+      "inputSpec": "The reference schema is pushed; Users starts empty.",
+      "outputSpec": "First upsert creates the user with credits 10; the next two run the update branch, incrementing to 15 then 20.",
+      "constraints": "Use a single upsert with where/create/update. The update branch must use an atomic { increment: 5 }, not a re-read. Do not check existence yourself first.",
+      "examplesJson": [
+        {
+          "input": "upsert (user absent) with create credits 10 / update increment 5",
+          "output": "credits 10 (create branch)",
+          "explanation": "No matching user, so the create payload runs and sets credits to 10."
+        },
+        {
+          "input": "the same upsert again (user now present)",
+          "output": "credits 15 (update branch)",
+          "explanation": "The user exists, so the update branch runs and increments credits by 5."
+        }
+      ],
+      "hintsJson": [
+        "One call handles both \"insert if new\" and \"update if exists\".",
+        "upsert({ where, create, update }) picks the branch based on whether the where matched.",
+        "The update branch uses an atomic { credits: { increment: 5 } } so concurrent upserts do not lose increments.",
+        "Run the same upsert repeatedly: first the create branch (10), then the update branch (15, 20, ...)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  for (let i = 0; i < 3; i++) {\n    const u = await prisma.user.upsert({\n      where: { email: \"ann@x.io\" },\n      create: { email: \"ann@x.io\", credits: 10 },\n      update: { credits: { increment: 5 } },\n    });\n    console.log(\"credits\", u.credits);\n  }\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>upsert</code> is \"update or insert\" as one atomic operation. It evaluates the unique <code>where</code>; on a miss it runs the <code>create</code> payload, and on a hit it runs the <code>update</code> payload — either way returning the resulting record. The first call finds no <code>ann@x.io</code>, so it creates the user with <code>credits: 10</code>. The second and third calls find the existing user, so the <code>update</code> branch runs, and because it uses the atomic <code>{ credits: { increment: 5 } }</code> the value climbs 10 → 15 → 20 without ever reading the current value into application code.</p>\n<p>The reason to prefer <code>upsert</code> over \"find, then create or update\" is the same reason SETNX or <code>INSERT ... ON CONFLICT</code> exist: the check and the write are one atomic step, so two concurrent callers cannot both see \"not found\" and both insert, which would violate the unique constraint or duplicate work. The subtlety to internalise is that the atomic <code>increment</code> in the update branch matters for correctness under concurrency — writing <code>update: { credits: user.credits + 5 }</code> after a read would lose increments when calls overlap. One caveat: <code>upsert</code> relies on the unique constraint in the <code>where</code>; without a unique field to match on, there is nothing to make the decision atomic, so upsert requires a unique <code>where</code> just like <code>update</code> and <code>findUnique</code>.</p>"
+    },
+    {
+      "title": "Delete Records with delete and deleteMany",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 15,
+      "concepts": [
+        "delete",
+        "deleteMany",
+        "count result",
+        "not-found throw",
+        "filtered delete"
+      ],
+      "prerequisites": [
+        "create",
+        "where filter"
+      ],
+      "tags": [
+        "prisma",
+        "crud",
+        "delete",
+        "deletemany",
+        "client"
+      ],
+      "problemHtml": "<p>Deletion mirrors update. Single <code>delete</code> removes one record by a unique <code>where</code>, returns the deleted record, and throws <code>P2025</code> if it does not exist. Bulk <code>deleteMany</code> removes every row matching a filter and returns <code>{ count }</code>, never throwing on zero matches.</p>\n<p>Against the reference schema, with a user and several posts seeded:</p>\n<ul>\n<li>Delete the single post titled <code>\"A\"</code> with <code>delete</code>, and log the deleted post's title.</li>\n<li>Delete all posts with <code>published: false</code> using <code>deleteMany</code>, and log the <code>count</code>.</li>\n<li>Call <code>deleteMany</code> again on <code>published: false</code> (none remain) and log the <code>count</code> (<code>0</code>).</li>\n<li>Log the remaining post count with <code>prisma.post.count()</code>.</li>\n</ul>\n<p>Print <code>deleted A</code>, then <code>removed 1</code>, then <code>removed 0</code>, then <code>remaining 1</code>. The scaffold gives the async skeleton.</p>",
+      "inputSpec": "The reference schema is pushed; a user and 3 posts are seeded: \"A\" (published false), \"B\" (published false), \"C\" (published true).",
+      "outputSpec": "delete returns the \"A\" post; deleteMany on published:false removes 1 (B, since A already gone) returning count 1; a repeat returns 0; count() returns 1 (only C remains).",
+      "constraints": "Use single delete (unique where) for post A and deleteMany (filter) for the drafts. Expect deleteMany to return a count and not throw on zero.",
+      "examplesJson": [
+        {
+          "input": "delete({ where: { id: <A> } })",
+          "output": "returns the deleted post { title: \"A\", ... }",
+          "explanation": "Single delete returns the record it removed."
+        },
+        {
+          "input": "deleteMany({ where: { published: false } })",
+          "output": "{ count: 1 }",
+          "explanation": "After A is gone, only B is still an unpublished post, so one row is removed."
+        }
+      ],
+      "hintsJson": [
+        "Single delete removes one row by unique where and returns it; bulk deleteMany removes all matches and returns a count.",
+        "Delete post A by its unique id (capture the seeded ids or query first).",
+        "deleteMany({ where: { published: false } }) removes the remaining drafts.",
+        "A repeat deleteMany on the same filter returns count 0 without throwing."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  const a = await prisma.post.findFirstOrThrow({ where: { title: \"A\" } });\n  const del = await prisma.post.delete({ where: { id: a.id } });\n  console.log(\"deleted\", del.title);\n\n  const m = await prisma.post.deleteMany({ where: { published: false } });\n  console.log(\"removed\", m.count);\n\n  const m2 = await prisma.post.deleteMany({ where: { published: false } });\n  console.log(\"removed\", m2.count);\n\n  console.log(\"remaining\", await prisma.post.count());\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The two delete methods parallel the two update methods exactly. Single <code>delete</code> removes one record identified by a unique <code>where</code> and returns the row it deleted, which is useful when you need the removed data (to log it, to return it to a caller). Like single <code>update</code>, it throws <code>P2025</code> if the target does not exist — so the code finds post \"A\" first to get its unique <code>id</code>. Bulk <code>deleteMany</code> takes a general filter, removes every match, and returns <code>{ count }</code>; after \"A\" is already gone, only \"B\" remains unpublished, so it removes one row.</p>\n<p>The idempotence of <code>deleteMany</code> — returning <code>count: 0</code> rather than throwing when nothing matches — makes it the safe choice for cleanup that may run more than once. The dangerous mistake is an over-broad or empty filter: <code>deleteMany({})</code> deletes every row in the table, so always double-check the <code>where</code> before running a delete against real data. A second gotcha specific to relations: deleting a row that other rows reference by foreign key fails unless the relation is set to cascade (or you delete the children first) — the database's referential integrity protects you from orphaning data, and Prisma surfaces that as a constraint error. For removing an entire table's contents plus resetting it, the schema-level truncate is faster, but <code>deleteMany</code> is the row-level tool.</p>"
+    },
+    {
+      "title": "Read Variants: findFirst, findUnique, and the OrThrow Forms",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "findFirst",
+        "findUnique",
+        "findUniqueOrThrow",
+        "null vs throw",
+        "ordering in findFirst"
+      ],
+      "prerequisites": [
+        "findUnique",
+        "where filter",
+        "orderBy"
+      ],
+      "tags": [
+        "prisma",
+        "crud",
+        "read",
+        "findfirst",
+        "error-handling"
+      ],
+      "problemHtml": "<p>Prisma has several single-record reads, and choosing the right one prevents subtle bugs. <code>findUnique</code> requires a unique <code>where</code> and returns the row or <code>null</code>. <code>findFirst</code> takes any filter plus <code>orderBy</code> and returns the first match or <code>null</code>. The <code>...OrThrow</code> variants return the row or throw when absent, which is cleaner when the record must exist.</p>\n<p>Against the reference schema, with several posts seeded:</p>\n<ul>\n<li>Use <code>findFirst</code> to get the first <code>published: true</code> post ordered by <code>id</code> descending, and log its title.</li>\n<li>Use <code>findUnique</code> on an <code>id</code> that does not exist and log whether the result is <code>null</code>.</li>\n<li>Call <code>findUniqueOrThrow</code> on that same missing id inside a try/catch and log <code>\"threw\"</code> when it throws.</li>\n</ul>\n<p>Print <code>first C</code>, then <code>missing is null</code>, then <code>threw</code>. The scaffold gives the async skeleton.</p>",
+      "inputSpec": "The reference schema is pushed; a user and 3 posts are seeded: \"A\"(pub true,id1), \"B\"(pub false,id2), \"C\"(pub true,id3).",
+      "outputSpec": "findFirst published ordered by id desc returns \"C\"; findUnique on a missing id returns null; findUniqueOrThrow on it throws (caught and logged).",
+      "constraints": "Use findFirst with orderBy for the first-match query, findUnique for the null case, and findUniqueOrThrow inside try/catch for the throw case.",
+      "examplesJson": [
+        {
+          "input": "findFirst({ where: { published: true }, orderBy: { id: \"desc\" } })",
+          "output": "returns post \"C\"",
+          "explanation": "Among published posts (A id1, C id3), id descending puts C first."
+        },
+        {
+          "input": "findUnique({ where: { id: 9999 } })",
+          "output": "null",
+          "explanation": "findUnique returns null for a missing row rather than throwing."
+        }
+      ],
+      "hintsJson": [
+        "findUnique needs a unique field and returns null; findFirst takes any filter + orderBy.",
+        "findFirst({ where: { published: true }, orderBy: { id: \"desc\" } }) returns the newest published post.",
+        "findUnique on a missing id returns null — check it with a comparison.",
+        "findUniqueOrThrow throws on a miss; wrap it in try/catch and log in the catch block."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  const first = await prisma.post.findFirst({ where: { published: true }, orderBy: { id: \"desc\" } });\n  console.log(\"first\", first!.title);\n\n  const missing = await prisma.post.findUnique({ where: { id: 9999 } });\n  console.log(\"missing is\", missing === null ? \"null\" : \"found\");\n\n  try {\n    await prisma.post.findUniqueOrThrow({ where: { id: 9999 } });\n    console.log(\"no throw\");\n  } catch {\n    console.log(\"threw\");\n  }\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The read methods differ along two axes: which <code>where</code> they accept, and what they do when nothing matches. <code>findUnique</code> only accepts a unique field (id, or a <code>@unique</code> column) and returns the row or <code>null</code> — it is the fastest single-row read because the database can use the unique index. <code>findFirst</code> accepts <em>any</em> filter and an <code>orderBy</code>, returning the first row in that order or <code>null</code>; it is what you use when the selection is not by a unique key, as here where \"the newest published post\" needs both a filter and an ordering. Ordering by <code>id</code> descending among the published posts (A and C) yields C.</p>\n<p>The <code>...OrThrow</code> variants (<code>findUniqueOrThrow</code>, <code>findFirstOrThrow</code>) return the row or throw <code>P2025</code> when absent, instead of returning <code>null</code>. This is a real ergonomic and safety win: when a record must exist, the OrThrow form lets you skip the <code>if (x === null)</code> guard and the non-null assertion, and TypeScript then knows the result is non-null. Choose deliberately — use the nullable forms when \"not found\" is an expected, handled case (a lookup that may miss), and the OrThrow forms when a miss is a genuine error (loading the current user by a validated id). The common bug is using <code>findUnique</code>, ignoring the possible <code>null</code>, and hitting \"cannot read property of null\" at runtime; the OrThrow form or an explicit null check prevents it.</p>"
+    },
+    {
+      "title": "Adjust Numbers Atomically with increment and decrement",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "atomic number operations",
+        "increment",
+        "decrement",
+        "multiply",
+        "concurrency-safe update"
+      ],
+      "prerequisites": [
+        "update",
+        "updateMany"
+      ],
+      "tags": [
+        "prisma",
+        "crud",
+        "atomic",
+        "increment",
+        "concurrency"
+      ],
+      "problemHtml": "<p>Adjusting a numeric column by reading it, adding in application code, and writing it back loses updates when two requests overlap. Prisma's atomic number operations — <code>{ increment }</code>, <code>{ decrement }</code>, <code>{ multiply }</code>, <code>{ divide }</code>, <code>{ set }</code> — push the arithmetic into the database so the read-modify-write is one indivisible step.</p>\n<p>Against the reference schema, with a user (<code>credits: 100</code>) and a post (<code>views: 0</code>) seeded:</p>\n<ul>\n<li>Increment the post's <code>views</code> by <code>1</code> three times (simulating three page views), then log the final <code>views</code>.</li>\n<li>Decrement the user's <code>credits</code> by <code>30</code> and log the result.</li>\n<li>Use <code>updateMany</code> with <code>{ views: { increment: 10 } }</code> on all posts and log the post's <code>views</code> afterward.</li>\n</ul>\n<p>Print <code>views 3</code>, then <code>credits 70</code>, then <code>views 13</code>. The scaffold gives the async skeleton.</p>",
+      "inputSpec": "The reference schema is pushed; a user (credits 100) and one post (views 0) are seeded.",
+      "outputSpec": "Three increments take views 0->3; a decrement of 30 takes credits 100->70; a bulk increment of 10 takes views 3->13.",
+      "constraints": "Use the atomic { increment } / { decrement } operators inside update/updateMany data. Do not read the value into JS and write it back.",
+      "examplesJson": [
+        {
+          "input": "update({ where: { id }, data: { views: { increment: 1 } } }) three times",
+          "output": "views 3",
+          "explanation": "Each atomic increment adds 1 without reading the current value client-side."
+        },
+        {
+          "input": "update({ where: { id }, data: { credits: { decrement: 30 } } })",
+          "output": "credits 70",
+          "explanation": "decrement subtracts atomically: 100 - 30 = 70."
+        }
+      ],
+      "hintsJson": [
+        "Never read a number into JS, add, and write it back — that loses concurrent updates.",
+        "Use data: { views: { increment: 1 } } to add atomically; { decrement: 30 } to subtract.",
+        "The same operators work inside updateMany to adjust many rows at once.",
+        "update returns the updated record, so read the new value from its return."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  const p = await prisma.post.findFirstOrThrow();\n  for (let i = 0; i < 3; i++) {\n    await prisma.post.update({ where: { id: p.id }, data: { views: { increment: 1 } } });\n  }\n  const afterViews = await prisma.post.findUniqueOrThrow({ where: { id: p.id } });\n  console.log(\"views\", afterViews.views);\n\n  const u = await prisma.user.update({ where: { email: \"seed@x.io\" }, data: { credits: { decrement: 30 } } });\n  console.log(\"credits\", u.credits);\n\n  await prisma.post.updateMany({ data: { views: { increment: 10 } } });\n  const finalPost = await prisma.post.findUniqueOrThrow({ where: { id: p.id } });\n  console.log(\"views\", finalPost.views);\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The atomic operators tell the database to do the arithmetic, so <code>{ views: { increment: 1 } }</code> compiles to <code>SET views = views + 1</code> rather than \"read views, add 1 in Node, write it back\". That distinction is the whole point: the read and write happen as one indivisible statement under the row's lock, so two simultaneous page-view increments never both read the same value and lose one. Three increments take <code>views</code> from 0 to 3, and <code>{ decrement: 30 }</code> takes <code>credits</code> from 100 to 70. The operators also work in <code>updateMany</code>, so a bulk <code>{ increment: 10 }</code> bumps every post's views in one statement.</p>\n<p>Reaching for <code>data: { views: post.views + 1 }</code> instead is the classic lost-update bug: between your read and your write another request can slip in, and one increment vanishes — invisible in single-user testing and corrupting under load. The atomic operators remove the window entirely, which is why they exist for every numeric adjustment (<code>increment</code>, <code>decrement</code>, <code>multiply</code>, <code>divide</code>) plus <code>set</code> for a plain assignment. One limitation: these operators adjust a column by a constant or by another column is not supported here — for \"add column A to column B\" or conditional math you drop to a raw query or an interactive transaction. For the overwhelmingly common case of counters and balances, the atomic operators are the correct, safe default.</p>"
+    },
+    {
+      "title": "Group Writes Atomically with a Sequential $transaction",
+      "difficulty": "HARD",
+      "estimatedMinutes": 40,
+      "points": 25,
+      "concepts": [
+        "$transaction array",
+        "atomic batch",
+        "all-or-nothing",
+        "rollback on error",
+        "ordered writes"
+      ],
+      "prerequisites": [
+        "create",
+        "update",
+        "atomic operators"
+      ],
+      "tags": [
+        "prisma",
+        "transaction",
+        "atomic",
+        "batch",
+        "client"
+      ],
+      "problemHtml": "<p>When several writes must all succeed or all fail, wrap them in a transaction. The simplest form, <code>prisma.$transaction([...])</code>, takes an array of Prisma operations and runs them as one atomic unit: if any fails, the whole batch rolls back. It returns an array of each operation's result, in order.</p>\n<p>Against the reference schema, with a user (<code>credits: 0</code>) seeded:</p>\n<ul>\n<li>In a single <code>$transaction([...])</code>, run three operations: create a post for the user, increment the user's <code>credits</code> by <code>5</code>, and increment <code>credits</code> by <code>5</code> again.</li>\n<li>Capture the returned array and log the created post's title (from the first result) and the user's final credits (from the last result).</li>\n<li>Then confirm atomicity: attempt a <code>$transaction</code> that first increments credits by <code>100</code> and then performs an <strong>invalid</strong> create (duplicate email) — catch the error and log that credits are <strong>still 10</strong>, proving the increment rolled back.</li>\n</ul>\n<p>Print <code>post P credits 10</code>, then <code>rolled back credits 10</code>. The scaffold gives the async skeleton.</p>",
+      "inputSpec": "The reference schema is pushed; a user seed@x.io (credits 0) is seeded.",
+      "outputSpec": "The batch creates a post and brings credits to 10; the failing batch (duplicate email) rolls back so credits stay 10.",
+      "constraints": "Use prisma.$transaction([...]) with an array of operations for the batch. For the rollback demo, include an operation that violates the unique email so the whole transaction aborts.",
+      "examplesJson": [
+        {
+          "input": "prisma.$transaction([ create post, increment 5, increment 5 ])",
+          "output": "post created, credits 10; returns an array of the three results",
+          "explanation": "All three run atomically and $transaction returns each result in order."
+        },
+        {
+          "input": "a $transaction that increments then creates a duplicate-email user",
+          "output": "throws; credits remain 10 (the increment rolled back)",
+          "explanation": "Because one operation fails, the whole transaction is rolled back — the increment is undone."
+        }
+      ],
+      "hintsJson": [
+        "Pass an array of operations to prisma.$transaction to run them all-or-nothing.",
+        "The call returns an array of results in the same order as the operations.",
+        "For the rollback demo, make the last operation violate the unique email so the batch aborts.",
+        "After catching the error, re-read credits and show they are unchanged by the failed batch."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  const u = await prisma.user.findUniqueOrThrow({ where: { email: \"seed@x.io\" } });\n  const results = await prisma.$transaction([\n    prisma.post.create({ data: { title: \"P\", authorId: u.id } }),\n    prisma.user.update({ where: { id: u.id }, data: { credits: { increment: 5 } } }),\n    prisma.user.update({ where: { id: u.id }, data: { credits: { increment: 5 } } }),\n  ]);\n  console.log(\"post\", results[0].title, \"credits\", results[2].credits);\n\n  try {\n    await prisma.$transaction([\n      prisma.user.update({ where: { id: u.id }, data: { credits: { increment: 100 } } }),\n      prisma.user.create({ data: { email: \"seed@x.io\" } }),\n    ]);\n  } catch {\n    const after = await prisma.user.findUniqueOrThrow({ where: { id: u.id } });\n    console.log(\"rolled back credits\", after.credits);\n  }\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The array form <code>prisma.$transaction([op1, op2, op3])</code> runs a fixed list of operations in one database transaction: they all commit together or, if any one throws, they all roll back. It returns an array of results positionally, so <code>results[0]</code> is the created post and <code>results[2]</code> is the final user update — which is why the code reads the title and the credits from those indices rather than issuing extra reads. The three operations bring credits from 0 to 10 atomically.</p>\n<p>The rollback demonstration is the important half. The second transaction first increments credits by 100, then tries to create a user with an email that already exists, which violates the unique constraint and throws. Because both operations are in one transaction, the failure undoes the increment too — re-reading afterward shows credits are still 10, not 110. This all-or-nothing guarantee is exactly what you need for money transfers, inventory moves, and any multi-row invariant. Two things to know: the array form is for independent operations whose inputs you already have (you cannot use the result of one to build the next, since they are constructed before the transaction runs); when later operations depend on earlier reads, use the interactive callback form <code>$transaction(async (tx) => { ... })</code>. Also, keep transactions short — they hold locks for their duration, so long-running work inside a transaction hurts concurrency.</p>",
+      "diagramMermaid": "flowchart TD\n  A[Start transaction] --> B[create post]\n  B --> C[increment credits 5]\n  C --> D[increment credits 5]\n  D --> E{All succeeded}\n  E -- yes --> F[COMMIT all]\n  E -- no --> G[ROLLBACK all]"
+    },
+    {
+      "title": "Transfer Credits Safely with an Interactive $transaction",
+      "difficulty": "HARD",
+      "estimatedMinutes": 50,
+      "points": 30,
+      "concepts": [
+        "interactive transaction",
+        "$transaction callback",
+        "read-then-write",
+        "guarded update",
+        "atomic transfer"
+      ],
+      "prerequisites": [
+        "$transaction array",
+        "atomic operators",
+        "updateMany count"
+      ],
+      "tags": [
+        "prisma",
+        "transaction",
+        "interactive",
+        "transfer",
+        "concurrency"
+      ],
+      "problemHtml": "<p>When a write depends on a value you must read first — transfer money only if the sender has enough — the array transaction is not enough, because you need to branch on a read inside the atomic unit. The <strong>interactive</strong> form, <code>prisma.$transaction(async (tx) =&gt; { ... })</code>, gives you a transactional client <code>tx</code>; everything you do with it commits together or rolls back if you throw.</p>\n<p>Against the reference schema, with two users seeded — Ann (<code>credits: 100</code>) and Bob (<code>credits: 20</code>):</p>\n<ul>\n<li>Write a transfer that moves <code>30</code> credits from Ann to Bob inside an interactive transaction: guard the debit with a filtered <code>updateMany</code> (<code>where: { id: ann, credits: { gte: 30 } }</code>, <code>data: { credits: { decrement: 30 } }</code>); if its <code>count</code> is <code>0</code> the sender lacked funds, so <strong>throw</strong> to roll back; otherwise credit Bob by <code>30</code>.</li>\n<li>Run the transfer once (succeeds) and log Ann's and Bob's credits (<code>70</code> and <code>50</code>).</li>\n<li>Attempt a second transfer of <code>1000</code> (Ann only has 70) inside try/catch; it must throw and leave both balances unchanged. Log <code>blocked</code> and the balances.</li>\n</ul>\n<p>Print <code>ann 70 bob 50</code>, then <code>blocked ann 70 bob 50</code>. The scaffold gives the async skeleton.</p>",
+      "inputSpec": "The reference schema is pushed; users Ann (credits 100) and Bob (credits 20) are seeded.",
+      "outputSpec": "A transfer of 30 leaves Ann 70 and Bob 50; a transfer of 1000 is blocked (throws) and leaves Ann 70, Bob 50 unchanged.",
+      "constraints": "Use the interactive $transaction(async (tx) => {...}). Guard the debit with a filtered updateMany and throw when its count is 0 so the transaction rolls back. Do not read-then-write in plain JS.",
+      "examplesJson": [
+        {
+          "input": "transfer 30 from Ann(100) to Bob(20)",
+          "output": "ann 70 bob 50",
+          "explanation": "The guarded debit succeeds (100 >= 30), so Ann drops to 70 and Bob rises to 50."
+        },
+        {
+          "input": "transfer 1000 from Ann(70)",
+          "output": "blocked; ann 70 bob 50 unchanged",
+          "explanation": "The guard where credits >= 1000 matches 0 rows, so the code throws and the transaction rolls back."
+        }
+      ],
+      "hintsJson": [
+        "You need to branch on a read inside the atomic unit — that is the interactive transaction form.",
+        "prisma.$transaction(async (tx) => { ... }) commits everything done via tx, or rolls back if you throw.",
+        "Guard the debit: tx.user.updateMany({ where: { id: ann, credits: { gte: amount } }, data: { credits: { decrement: amount } } }).",
+        "If that updateMany returns count 0, throw (insufficient funds) so the whole transfer rolls back; otherwise increment Bob."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  // TODO: implement the steps described above\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.ts",
+          "language": "typescript",
+          "code": "import { PrismaClient } from './generated';\nconst prisma = new PrismaClient();\n\nasync function main() {\n  const ann = await prisma.user.findUniqueOrThrow({ where: { email: \"ann@x.io\" } });\n  const bob = await prisma.user.findUniqueOrThrow({ where: { email: \"bob@x.io\" } });\n\n  async function transfer(amount: number) {\n    return prisma.$transaction(async (tx) => {\n      const debit = await tx.user.updateMany({\n        where: { id: ann.id, credits: { gte: amount } },\n        data: { credits: { decrement: amount } },\n      });\n      if (debit.count === 0) throw new Error(\"insufficient funds\");\n      await tx.user.update({ where: { id: bob.id }, data: { credits: { increment: amount } } });\n    });\n  }\n\n  await transfer(30);\n  let a = await prisma.user.findUniqueOrThrow({ where: { id: ann.id } });\n  let b = await prisma.user.findUniqueOrThrow({ where: { id: bob.id } });\n  console.log(\"ann\", a.credits, \"bob\", b.credits);\n\n  try {\n    await transfer(1000);\n  } catch {\n    a = await prisma.user.findUniqueOrThrow({ where: { id: ann.id } });\n    b = await prisma.user.findUniqueOrThrow({ where: { id: bob.id } });\n    console.log(\"blocked ann\", a.credits, \"bob\", b.credits);\n  }\n}\n\nmain().finally(() => prisma.$disconnect());"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The interactive transaction gives you a scoped client, <code>tx</code>, and the guarantee that everything done through it is atomic: if the callback returns normally the transaction commits, and if it throws the transaction rolls back. That is what lets you read, branch, and write inside one indivisible unit — impossible with the array form, which fixes its operations before running. The transfer debits the sender and credits the receiver, and both changes commit together or not at all.</p>\n<p>The clever part is how the balance check is made race-safe. Instead of reading Ann's credits into JavaScript and comparing, the debit is a single filtered <code>updateMany</code>: <code>where: { id: ann, credits: { gte: amount } }</code>. The check and the decrement are the same statement, so no concurrent transfer can slip between them. If Ann has enough, one row is updated (<code>count: 1</code>); if not, zero rows match and <code>count</code> is <code>0</code>, at which point the code throws and the whole transaction — including any earlier writes — rolls back. That is why the 1000-credit transfer leaves both balances untouched. This \"guard in the WHERE, throw to roll back\" pattern is the correct way to enforce an invariant like \"balance never goes negative\" under concurrency; reading then writing in plain JS reintroduces the lost-update and oversell bugs. Keep interactive transactions fast and avoid slow external calls inside them, since they hold locks until the callback resolves; Prisma also enforces a timeout that a long callback would trip.</p>",
+      "diagramMermaid": "sequenceDiagram\n  participant App\n  participant Tx as Transaction\n  App->>Tx: updateMany debit where credits gte amount\n  Tx-->>App: count 1 or 0\n  App->>Tx: if count 0 throw rollback\n  App->>Tx: else increment receiver\n  Tx-->>App: commit"
+    }
+  ]
+}

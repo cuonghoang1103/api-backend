@@ -32,7 +32,7 @@ const MAX_ANSWER = 6_000;
 
 async function assertPro(userId: number) {
   if (!(await isProEffective(userId))) throw new ForbiddenError('This is a Pro feature.');
-  if (!isAiAvailable()) throw new BadRequestError('The AI service is not configured.');
+  if (!isAiAvailable('codelab')) throw new BadRequestError('The AI service is not available right now. Please try again shortly.');
   if (!(await checkTokenQuota(userId))) throw new BadRequestError('You have reached today’s AI usage limit.');
 }
 

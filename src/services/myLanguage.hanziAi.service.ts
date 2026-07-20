@@ -113,7 +113,7 @@ function parse(raw: string, want: CharFacts[]): Map<string, HanziEnrichment> {
 /** Generate entries for a batch of characters. Throws on AI unavailable/quota. */
 export async function enrichChars(userId: number, items: CharFacts[]): Promise<Map<string, HanziEnrichment>> {
   if (!items.length) return new Map();
-  if (!isAiAvailable()) throw new BadRequestError('AI đang tắt — không sinh được lúc này.');
+  if (!isAiAvailable('bulk_gen')) throw new BadRequestError('AI đang tắt — không sinh được lúc này.');
   if (!(await checkTokenQuota(userId))) throw new BadRequestError('Đã hết hạn mức token hôm nay.');
 
   const { system, user } = buildPrompt(items);

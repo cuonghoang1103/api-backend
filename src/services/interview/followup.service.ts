@@ -30,7 +30,7 @@ async function loadOwnedTurn(userId: number, sessionId: number, order: number) {
 }
 
 async function ensureAllowed(userId: number): Promise<void> {
-  if (!isAiAvailable()) throw new BadRequestError('Tính năng hỏi vặn cần AI (hiện đang tắt).');
+  if (!isAiAvailable('interview')) throw new BadRequestError('Tính năng hỏi vặn cần AI (hiện đang tắt).');
   if (!(await isProEffective(userId))) throw new ForbiddenError('Hỏi vặn dành cho tài khoản Pro/Max.');
 }
 

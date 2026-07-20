@@ -317,7 +317,7 @@ export async function adminGenerate(
   if (section === 'vocab' && !categoryId) throw new BadRequestError('Cần chọn danh mục từ vựng.');
   if (section === 'reading' && !articleId) throw new BadRequestError('Cần chọn bài đọc.');
 
-  if (!isAiAvailable()) throw new BadRequestError('AI hiện đang tắt. Vui lòng thử lại sau.');
+  if (!isAiAvailable('bulk_gen')) throw new BadRequestError('AI hiện đang tắt. Vui lòng thử lại sau.');
   if (!(await checkTokenQuota(userId))) throw new BadRequestError('Đã hết hạn mức AI hôm nay. Thử lại vào ngày mai.');
 
   const lang = await loadLanguage(String(body?.languageCode ?? ''));

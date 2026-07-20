@@ -222,7 +222,7 @@ export async function explainConcept(
   if (!Number.isInteger(itemId) || itemId <= 0) throw new BadRequestError('itemId không hợp lệ.');
 
   // Gate: AI on + Pro + under daily quota.
-  if (!isAiAvailable()) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
+  if (!isAiAvailable('language')) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
   if (!(await isProEffective(userId))) throw new ForbiddenError('Gia sư AI dành cho tài khoản Pro/Max.');
   if (!(await checkTokenQuota(userId))) throw new BadRequestError('Bạn đã dùng hết hạn mức AI hôm nay. Thử lại vào ngày mai nhé.');
 
@@ -324,7 +324,7 @@ export async function scorePronunciation(
   if (!input.audio?.length) throw new BadRequestError('Thiếu audio.');
 
   // Gate: AI on + Pro + under daily quota.
-  if (!isAiAvailable()) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
+  if (!isAiAvailable('language')) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
   if (!(await isProEffective(userId))) throw new ForbiddenError('Chấm phát âm dành cho tài khoản Pro/Max.');
   if (!(await checkTokenQuota(userId))) throw new BadRequestError('Bạn đã dùng hết hạn mức AI hôm nay. Thử lại vào ngày mai nhé.');
   if (!serverSttEnabled()) throw new BadRequestError('Chấm phát âm cần bật STT (Groq) — hiện chưa khả dụng.');
@@ -408,7 +408,7 @@ export async function generateQuiz(
   const count = Math.max(3, Math.min(10, Number(body?.count) || 6));
   const categoryId = Number(body?.categoryId);
 
-  if (!isAiAvailable()) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
+  if (!isAiAvailable('language')) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
   if (!(await isProEffective(userId))) throw new ForbiddenError('Quiz AI dành cho tài khoản Pro/Max.');
   if (!(await checkTokenQuota(userId))) throw new BadRequestError('Bạn đã dùng hết hạn mức AI hôm nay. Thử lại vào ngày mai nhé.');
 
@@ -499,7 +499,7 @@ export async function gradeAnswer(
   if (!answer) throw new BadRequestError('Bạn chưa viết câu trả lời.');
   if (!prompt) throw new BadRequestError('Thiếu câu hỏi.');
 
-  if (!isAiAvailable()) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
+  if (!isAiAvailable('language')) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
   if (!(await isProEffective(userId))) throw new ForbiddenError('Chấm bài AI dành cho tài khoản Pro/Max.');
   if (!(await checkTokenQuota(userId))) throw new BadRequestError('Bạn đã dùng hết hạn mức AI hôm nay. Thử lại vào ngày mai nhé.');
 
@@ -565,7 +565,7 @@ export async function gradeWriting(
   if (!text) throw new BadRequestError('Bạn chưa viết gì.');
   if (text.length > 4000) throw new BadRequestError('Bài viết quá dài (tối đa ~4000 ký tự).');
 
-  if (!isAiAvailable()) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
+  if (!isAiAvailable('language')) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
   if (!(await isProEffective(userId))) throw new ForbiddenError('Chấm bài viết dành cho tài khoản Pro/Max.');
   if (!(await checkTokenQuota(userId))) throw new BadRequestError('Bạn đã dùng hết hạn mức AI hôm nay. Thử lại vào ngày mai nhé.');
 
@@ -646,7 +646,7 @@ export async function rolePlayTurn(
   const message = (body?.message || '').trim();
   if (!scenario) throw new BadRequestError('Thiếu tình huống.');
 
-  if (!isAiAvailable()) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
+  if (!isAiAvailable('language')) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
   if (!(await isProEffective(userId))) throw new ForbiddenError('Hội thoại AI dành cho tài khoản Pro/Max.');
   if (!(await checkTokenQuota(userId))) throw new BadRequestError('Bạn đã dùng hết hạn mức AI hôm nay. Thử lại vào ngày mai nhé.');
 
@@ -738,7 +738,7 @@ export async function translateText(
   if (!text) throw new BadRequestError('Bạn chưa nhập nội dung cần dịch.');
   if (text.length > 4000) throw new BadRequestError('Nội dung quá dài (tối đa ~4000 ký tự).');
 
-  if (!isAiAvailable()) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
+  if (!isAiAvailable('language')) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
   if (!(await isProEffective(userId))) throw new ForbiddenError('Dịch văn bản dành cho tài khoản Pro/Max.');
   if (!(await checkTokenQuota(userId))) throw new BadRequestError('Bạn đã dùng hết hạn mức AI hôm nay. Thử lại vào ngày mai nhé.');
 
@@ -836,7 +836,7 @@ export async function grammarCheck(
   if (!text) throw new BadRequestError('Bạn chưa nhập nội dung cần kiểm tra.');
   if (text.length > 4000) throw new BadRequestError('Nội dung quá dài (tối đa ~4000 ký tự).');
 
-  if (!isAiAvailable()) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
+  if (!isAiAvailable('language')) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
   if (!(await isProEffective(userId))) throw new ForbiddenError('Kiểm tra ngữ pháp dành cho tài khoản Pro/Max.');
   if (!(await checkTokenQuota(userId))) throw new BadRequestError('Bạn đã dùng hết hạn mức AI hôm nay. Thử lại vào ngày mai nhé.');
 
@@ -918,7 +918,7 @@ export async function transcribe(
   input: { audio: Buffer; filename: string; mimetype: string; languageCode?: string },
 ): Promise<{ text: string }> {
   if (!input.audio?.length) throw new BadRequestError('Thiếu audio.');
-  if (!isAiAvailable()) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
+  if (!isAiAvailable('language')) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
   if (!(await isProEffective(userId))) throw new ForbiddenError('Nhập bằng giọng nói dành cho tài khoản Pro/Max.');
   if (!(await checkTokenQuota(userId))) throw new BadRequestError('Bạn đã dùng hết hạn mức AI hôm nay. Thử lại vào ngày mai nhé.');
   if (!serverSttEnabled()) throw new BadRequestError('Nhập bằng giọng nói cần bật STT (Groq) — hiện chưa khả dụng.');

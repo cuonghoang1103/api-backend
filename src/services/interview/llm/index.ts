@@ -137,28 +137,60 @@ export function hasKey(): boolean {
   return !!process.env.ANTHROPIC_API_KEY;
 }
 
-// ── Circuit breaker (in-memory; per backend instance) ─────────────
-let cbFailures = 0;
-let cbOpenUntil = 0;
+// ── Circuit breaker (in-memory; per backend instance, PER FEATURE) ─
+//
+// This used to be ONE global counter, and that made a background job able to
+// switch the product off for everyone. The bulk generators fail in bursts
+// (gateway 502s); five failures opened the breaker; and for the next 60
+// seconds every interactive click — the Code Lab explainer, the language
+// tutor — was told "the AI service is not configured" without ever reaching
+// the gateway.
+//
+// That is not hypothetical. Production, 21/07: 1,840 failed background calls
+// in one day (exphub 865 + bulk_gen 975) and ZERO failed `codelab` calls —
+// because the codelab calls never happened. The user pressed the button and
+// got an error the logs could not explain.
+//
+// One bucket per feature. A feature that is really broken still stops
+// hammering the gateway, but it can only take itself down.
+type CbKey = LLMFeature | 'unknown';
+interface CbState { failures: number; openUntil: number }
 const CB_THRESHOLD = 5;
 const CB_COOLDOWN_MS = 60_000;
-function circuitOpen(): boolean {
-  return Date.now() < cbOpenUntil;
+const cbBuckets = new Map<CbKey, CbState>();
+
+function cbState(feature?: LLMFeature | null): CbState {
+  const key: CbKey = feature ?? 'unknown';
+  let state = cbBuckets.get(key);
+  if (!state) {
+    state = { failures: 0, openUntil: 0 };
+    cbBuckets.set(key, state);
+  }
+  return state;
 }
-function recordFailure(): void {
-  cbFailures += 1;
-  if (cbFailures >= CB_THRESHOLD) {
-    cbOpenUntil = Date.now() + CB_COOLDOWN_MS;
-    cbFailures = 0;
+function circuitOpen(feature?: LLMFeature | null): boolean {
+  return Date.now() < cbState(feature).openUntil;
+}
+function recordFailure(feature?: LLMFeature | null): void {
+  const state = cbState(feature);
+  state.failures += 1;
+  if (state.failures >= CB_THRESHOLD) {
+    state.openUntil = Date.now() + CB_COOLDOWN_MS;
+    state.failures = 0;
   }
 }
-function recordSuccess(): void {
-  cbFailures = 0;
+function recordSuccess(feature?: LLMFeature | null): void {
+  cbState(feature).failures = 0;
 }
 
-/** Whether AI can be used right now. Everything downstream falls back to STATIC when false. */
-export function isAiAvailable(): boolean {
-  return hasKey() && !isForceStatic() && !circuitOpen();
+/**
+ * Whether AI can be used right now, for THIS feature.
+ *
+ * Pass the same feature you will pass to llmComplete — otherwise you are
+ * asking about a different bucket than the one your call will trip.
+ */
+export function isAiAvailable(feature?: LLMFeature | null): boolean {
+  return hasKey() && !isForceStatic() && !circuitOpen(feature);
 }
 
 /**
@@ -171,16 +203,16 @@ export function isAiAvailable(): boolean {
  * the breaker for one minute and killed four bulk-generation shards that had
  * hours of work left.
  */
-export function aiOffReason(): 'none' | 'nokey' | 'static' | 'circuit' {
+export function aiOffReason(feature?: LLMFeature | null): 'none' | 'nokey' | 'static' | 'circuit' {
   if (!hasKey()) return 'nokey';
   if (isForceStatic()) return 'static';
-  if (circuitOpen()) return 'circuit';
+  if (circuitOpen(feature)) return 'circuit';
   return 'none';
 }
 
-/** ms until the breaker closes; 0 when it is already closed. */
-export function circuitReopensInMs(): number {
-  return Math.max(0, cbOpenUntil - Date.now());
+/** ms until this feature's breaker closes; 0 when it is already closed. */
+export function circuitReopensInMs(feature?: LLMFeature | null): number {
+  return Math.max(0, cbState(feature).openUntil - Date.now());
 }
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -241,7 +273,7 @@ export async function llmComplete(opts: {
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
       const result = await provider.complete(model, opts.system, opts.messages, { maxTokens: opts.maxTokens, timeoutMs: opts.timeoutMs });
-      recordSuccess();
+      recordSuccess(opts.feature);
       await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, feature: opts.feature, step: opts.step, model, inputTokens: result.inputTokens, outputTokens: result.outputTokens, success: true }).catch(() => {});
       return result;
     } catch (e) {
@@ -250,7 +282,7 @@ export async function llmComplete(opts: {
       if (attempt < maxRetries) await sleep(Math.min(8000, 500 * 2 ** attempt)); // exp backoff
     }
   }
-  recordFailure();
+  recordFailure(opts.feature);
   // Never charge quota for a failed call → log with zero tokens.
   await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, feature: opts.feature, step: opts.step, model, inputTokens: 0, outputTokens: 0, success: false }).catch(() => {});
   throw lastErr;

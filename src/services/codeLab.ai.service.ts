@@ -31,7 +31,7 @@ function s(v: unknown): string {
 }
 
 async function ensureAi(userId: number) {
-  if (!isAiAvailable()) throw new BadRequestError('AI is currently disabled. Please try again later.');
+  if (!isAiAvailable('codelab')) throw new BadRequestError('AI is currently disabled. Please try again later.');
   if (!(await checkTokenQuota(userId))) throw new BadRequestError('Daily AI limit reached. Please try again tomorrow.');
 }
 
@@ -89,7 +89,7 @@ export async function generateRoadmap(
   try {
     const res = await llmComplete({
       step: 'generation',
-      feature: 'exphub',
+      feature: 'codelab',
       system,
       messages: [{ role: 'user', content: user }],
       maxTokens: 6000,
@@ -191,7 +191,7 @@ export async function generateExerciseBlueprint(
 
   let raw = '';
   try {
-    const res = await llmComplete({ step: 'generation', feature: 'exphub', system, messages: [{ role: 'user', content: user }], maxTokens: 1500, maxRetries: 1, timeoutMs: 90_000, userId });
+    const res = await llmComplete({ step: 'generation', feature: 'codelab', system, messages: [{ role: 'user', content: user }], maxTokens: 1500, maxRetries: 1, timeoutMs: 90_000, userId });
     raw = res.text;
   } catch { return []; }
   const parsed = looseJson(raw) as { subTopics?: unknown };
@@ -288,7 +288,7 @@ export async function generateExercises(
   try {
     const res = await llmComplete({
       step: 'generation',
-      feature: 'exphub',
+      feature: 'codelab',
       system,
       messages: [{ role: 'user', content: user }],
       maxTokens: 12000,

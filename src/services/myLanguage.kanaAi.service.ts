@@ -92,7 +92,7 @@ export async function kanaTip(userId: number, body: { char?: string; romaji?: st
   const char = str(body?.char);
   if (!KANA_RE.test(char)) throw new BadRequestError('Chỉ nhận đúng 1 ký tự kana.');
 
-  if (!isAiAvailable()) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
+  if (!isAiAvailable('language')) throw new BadRequestError('Gia sư AI hiện đang tắt. Vui lòng thử lại sau.');
   if (!(await isProEffective(userId))) throw new ForbiddenError('Mẹo nhớ AI dành cho tài khoản Pro/Max.');
   if (!(await checkTokenQuota(userId))) throw new BadRequestError('Bạn đã dùng hết hạn mức AI hôm nay. Thử lại vào ngày mai nhé.');
 

@@ -283,7 +283,7 @@ export async function generateCategoryDoc(
 ): Promise<{ categoryId: number; name: string; blocks: DocBlock[]; model: string }> {
   const categoryId = Number(body?.categoryId) || 0;
   if (!categoryId) throw new BadRequestError('Cần chọn danh mục (công nghệ).');
-  if (!isAiAvailable()) throw new BadRequestError('AI hiện đang tắt. Vui lòng thử lại sau.');
+  if (!isAiAvailable('exphub')) throw new BadRequestError('AI hiện đang tắt. Vui lòng thử lại sau.');
   if (!(await checkTokenQuota(userId))) throw new BadRequestError('Đã hết hạn mức AI hôm nay. Thử lại vào ngày mai.');
 
   const cat = await loadCategory(categoryId);

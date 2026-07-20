@@ -67,7 +67,7 @@ export async function generateLesson(
 ): Promise<{ moduleId: number; moduleName: string; blocks: DocBlock[]; model: string }> {
   const moduleId = Number(body?.moduleId) || 0;
   if (!moduleId) throw new BadRequestError('A module is required.');
-  if (!isAiAvailable()) throw new BadRequestError('AI is currently disabled. Please try again later.');
+  if (!isAiAvailable('codelab')) throw new BadRequestError('AI is currently disabled. Please try again later.');
   if (!(await checkTokenQuota(userId))) throw new BadRequestError('Daily AI limit reached. Please try again tomorrow.');
 
   const mod = await loadModule(moduleId);
@@ -124,7 +124,7 @@ export async function generateLesson(
   const runGen = async (nudge: string): Promise<DocBlock[]> => {
     let raw = '';
     const res = await llmComplete({
-      step: 'generation', feature: 'exphub', system,
+      step: 'generation', feature: 'codelab', system,
       messages: [{ role: 'user', content: user + nudge }],
       maxTokens: 12000, maxRetries: 1, timeoutMs: 200_000, userId,
     });

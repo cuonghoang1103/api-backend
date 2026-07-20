@@ -21,7 +21,7 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../config/database.js';
 import { BadRequestError, ForbiddenError, NotFoundError } from '../middleware/errorHandler.js';
-import { llmComplete, checkTokenQuota, isAiAvailable } from './interview/llm/index.js';
+import { llmComplete, checkTokenQuota, isAiAvailable, aiOffReason, circuitReopensInMs } from './interview/llm/index.js';
 import { isProEffective } from './pro.service.js';
 import { normalizeBlocks, type DocBlock } from './snippets.aiDoc.service.js';
 
@@ -32,8 +32,19 @@ async function assertPro(userId: number | null | undefined) {
   if (!(await isProEffective(userId))) {
     throw new ForbiddenError('AI explanation is a Pro feature.');
   }
-  if (!isAiAvailable()) {
-    throw new BadRequestError('The AI service is not configured.');
+  // Ask about THIS feature's breaker. Asking the global one used to mean a
+  // background bulk-generation job could answer for us: its failures opened
+  // the shared breaker and this button then reported "not configured" without
+  // ever calling the gateway.
+  if (!isAiAvailable('codelab')) {
+    const reason = aiOffReason('codelab');
+    throw new BadRequestError(
+      reason === 'circuit'
+        ? `The AI is resting after repeated gateway errors — it reopens in about ${Math.ceil(circuitReopensInMs('codelab') / 1000)}s. Please try again then.`
+        : reason === 'static'
+          ? 'The AI is switched off on this server (FORCE_STATIC_MODE).'
+          : 'The AI service is not configured on this server.',
+    );
   }
   if (userId && !(await checkTokenQuota(userId))) {
     throw new BadRequestError('You have reached today’s AI usage limit.');
@@ -57,7 +68,7 @@ async function loadExercise(id: number) {
 }
 
 /** Strip tags so the model reads the brief as prose, not as markup. */
-function plain(html: string | null | undefined, cap = 6000): string {
+function plain(html: string | null | undefined, cap = 16000): string {
   if (!html) return '';
   return html
     .replace(/<br\s*\/?>/gi, '\n')
@@ -105,16 +116,52 @@ Return ONLY a JSON array of blocks, no prose around it. Each block is one of:
 Rules:
 - Every heading and prose block MUST carry both the English field and its Vietnamese
   companion. Code is written once; its comments stay in English.
-- 8 to 16 blocks. Cover, in this order: what the brief is really asking in one
-  paragraph; the data you must model; the steps to build it; the specific Java
-  APIs needed and why; the two or three mistakes that lose marks here; and how an
-  examiner would test it.
-- DO NOT give the finished solution. Give the shape, the decisions and the traps.
-  A short illustrative snippet of one technique is fine; a complete working
-  program is not.
+- 16 to 26 blocks. Depth is the point: this student is preparing to be questioned
+  on the work face to face, so a thin summary is a failure. Cover, IN THIS ORDER:
+
+  1. What the brief is really asking, in one paragraph, in plain words.
+  2. THE PROJECT STRUCTURE — a "code" block with language "text" drawing the
+     NetBeans project as a directory tree: the project folder, src/, every
+     package, every class inside it, and the data files at the project root.
+     Put a short "<- what it does" comment beside each entry. This block is
+     MANDATORY and must come early. Model it on this shape, adapted to THIS
+     assignment (do not copy the names):
+       ProjectName/
+       ├── build.xml            <- Ant build script, NetBeans needs it
+       ├── src/                 <- your code, and only here
+       │   ├── entity/
+       │   │   └── Thing.java   <- the data: private fields, getters, toString
+       │   ├── bo/
+       │   │   └── ThingManager.java <- the collection + the rules; never prints
+       │   ├── utils/
+       │   │   └── Validator.java    <- every keyboard read, in one place
+       │   └── ui/
+       │       └── Main.java    <- the menu and the screen, nothing else
+       ├── data.txt             <- data files sit at the PROJECT ROOT, not in src/
+       └── build/               <- compiled .class files (safe to delete)
+  3. A prose block right after it justifying that layout for THIS brief: what
+     each layer is responsible for, and WHY a layer is present or absent. The
+     rule is "add a layer only where this program needs one" — a 40-line
+     assignment gets no controller, a program with no stored data gets no bo.
+     Say which class each method named in the brief's Guidelines belongs in.
+  4. The data you must model — the fields, their types, and why those types.
+  5. The steps to build it, in the order you would actually write them.
+  6. The specific Java APIs needed and why each one (name the exact methods).
+  7. Every validation rule and the EXACT message the brief prints for it.
+  8. The three or four mistakes that lose marks on THIS assignment.
+  9. How an examiner would test it, and the questions they are likely to ask
+     at the oral defence, with the short answer to each.
+- If the brief contradicts itself (the expected-screen picture disagrees with the
+  Guidelines section, or a sample output is mathematically wrong), SAY SO in its
+  own block: state which one to follow — the Guidelines are the contract — and
+  note that pointing this out earns credit.
+- DO NOT give the finished solution. Give the structure, the decisions and the
+  traps. Short illustrative snippets of one technique are fine; a complete
+  working program is not.
 - prose html may use only <p> <ul> <ol> <li> <code> <strong> <em>.
-- Be concrete about THIS assignment. Generic advice that would fit any exercise
-  is worthless here.`;
+- Be concrete about THIS assignment. Quote the brief's own wording, its own
+  message strings and its own numbers. Generic advice that would fit any
+  exercise is worthless here.`;
 
 /** The cached explanation, if one exists. Free to read — generating cost the
  *  tokens, and hiding the result from non-Pro readers would waste them. */
@@ -145,9 +192,12 @@ export async function explainExercise(
     feature: 'codelab',
     system: EXPLAIN_SYSTEM,
     messages: [{ role: 'user', content: briefFor(ex) }],
-    maxTokens: 3500,
-    maxRetries: 1,
-    timeoutMs: 120_000,
+    // 16-26 blocks, every one of them bilingual, plus a structure tree:
+    // 3500 truncated the JSON mid-array and parseBlocks then returned
+    // nothing, which surfaced as "the AI returned nothing usable".
+    maxTokens: 16000,
+    maxRetries: 2,
+    timeoutMs: 300_000,
     userId: opts.userId,
   });
 
@@ -228,9 +278,9 @@ export async function askFollowUp(
     feature: 'codelab',
     system: CHAT_SYSTEM,
     messages,
-    maxTokens: 1200,
-    maxRetries: 1,
-    timeoutMs: 90_000,
+    maxTokens: 4000,
+    maxRetries: 2,
+    timeoutMs: 180_000,
     userId: opts.userId,
   });
 

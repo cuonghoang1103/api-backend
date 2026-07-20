@@ -126,10 +126,153 @@ def capture(lab):
     shutil.rmtree(work, ignore_errors=True)
 
 
+# ─── project structure tree ──────────────────────────────────────
+#
+# Every solution ships with a picture of the NetBeans project it belongs to:
+# which package holds which class, and where the data files live. Reading a
+# list of files named "src/bo/UserManager.java" is not the same as seeing the
+# shape of the project you are supposed to hand in, and the shape is what a
+# marker opens first.
+#
+# It is GENERATED from the files themselves rather than written by hand, so it
+# can never drift out of date with the code beside it.
+
+PACKAGE_ROLE = {
+    'entity': ('the data: private fields, constructor, getters, toString',
+               'dữ liệu: trường private, constructor, getter, toString'),
+    'bo': ('the collection and the rules; throws, never prints',
+           'tập dữ liệu và luật nghiệp vụ; ném ngoại lệ, không in ra màn hình'),
+    'controller': ('reads input, calls bo, reports the outcome',
+                   'nhận dữ liệu vào, gọi bo, báo kết quả'),
+    'ui': ('the menu and the screen, nothing else',
+           'thực đơn và màn hình, không làm gì khác'),
+    'main': ('the menu and the screen, nothing else',
+             'thực đơn và màn hình, không làm gì khác'),
+    'utils': ('every keyboard read and every check, in one place',
+              'mọi thao tác đọc bàn phím và kiểm tra, gom về một chỗ'),
+    'validate': ('every keyboard read and every check, in one place',
+                 'mọi thao tác đọc bàn phím và kiểm tra, gom về một chỗ'),
+}
+
+# Order the packages the way the program flows, not alphabetically.
+PACKAGE_ORDER = ['entity', 'bo', 'controller', 'utils', 'validate', 'ui', 'main']
+
+DATA_FILE = re.compile(r'"([A-Za-z0-9_\-]+\.(?:txt|dat|csv|properties|bin|dbo))"')
+
+_TITLES = None
+
+
+def _project_name(lab):
+    """`J1.S.P0057` + its title -> `J1S_P0057_UserManagementSystem`."""
+    global _TITLES
+    if _TITLES is None:
+        _TITLES = {}
+        try:
+            payload = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'payload.json')
+            for e in json.load(open(payload)):
+                _TITLES[e['lab']] = e.get('exTitle', '')
+        except Exception:
+            pass
+    code = lab.replace('.', '')
+    title = _TITLES.get(lab, '')
+    after = title.split('_', 1)[1] if '_' in title else ''
+    after = re.sub(r'\(\d+\s*LOC\)', '', after)
+    words = re.findall(r'[A-Za-z]+', after)[:4]
+    camel = ''.join(w.capitalize() for w in words)
+    return f'{code}_{camel}' if camel else code
+
+
+def _tree(sol, vi=False):
+    """The directory tree, drawn from the solution's own file list."""
+    by_package = {}
+    for rel, _code in sol['files']:
+        parts = rel.replace('src/', '', 1).split('/')
+        package = parts[0] if len(parts) > 1 else ''
+        by_package.setdefault(package, []).append(parts[-1])
+
+    data_files = []
+    for _rel, code in sol['files']:
+        for name in DATA_FILE.findall(code):
+            if name not in data_files:
+                data_files.append(name)
+
+    def role(pkg):
+        pair = PACKAGE_ROLE.get(pkg)
+        if not pair:
+            return ''
+        return pair[1] if vi else pair[0]
+
+    L = {
+        'build': ('Ant build script. NetBeans needs it — never delete it.',
+                  'tệp build của Ant. NetBeans cần nó — đừng bao giờ xoá.'),
+        'nb': ('project metadata: main class, source level, libraries',
+               'thông tin project: lớp main, phiên bản nguồn, thư viện'),
+        'src': ('YOUR CODE LIVES HERE, and only here',
+                'MÃ NGUỒN CỦA BẠN NẰM Ở ĐÂY, và chỉ ở đây'),
+        'data': ('data file — it sits at the PROJECT ROOT, not inside src/',
+                 'tệp dữ liệu — nằm ở GỐC PROJECT, không nằm trong src/'),
+        'build_dir': ('compiled .class files (safe to delete)',
+                      'tệp .class đã biên dịch (xoá thoải mái)'),
+        'dist': ('the packaged .jar (safe to delete)',
+                 'tệp .jar đóng gói (xoá thoải mái)'),
+    }
+    say = (lambda k: L[k][1] if vi else L[k][0])
+
+    lines = [f'{_project_name(sol["lab"])}/',
+             f'├── build.xml            <- {say("build")}',
+             '├── manifest.mf',
+             f'├── nbproject/           <- {say("nb")}',
+             '│   ├── build-impl.xml',
+             '│   └── project.properties',
+             f'├── src/                 <- {say("src")}']
+
+    packages = [p for p in PACKAGE_ORDER if p in by_package]
+    packages += [p for p in by_package if p not in packages]
+    for i, pkg in enumerate(packages):
+        last_pkg = i == len(packages) - 1
+        branch = '└──' if last_pkg else '├──'
+        note = role(pkg)
+        lines.append(f'│   {branch} {pkg}/' + (f'{" " * max(1, 16 - len(pkg))}<- {note}' if note else ''))
+        classes = by_package[pkg]
+        for j, cls in enumerate(classes):
+            inner = '└──' if j == len(classes) - 1 else '├──'
+            spine = '    ' if last_pkg else '│   '
+            lines.append(f'│   {spine}{inner} {cls}')
+
+    for name in data_files:
+        lines.append(f'├── {name}' + ' ' * max(1, 21 - len(name)) + f'<- {say("data")}')
+    lines.append(f'├── build/               <- {say("build_dir")}')
+    lines.append(f'└── dist/                <- {say("dist")}')
+    return '\n'.join(lines)
+
+
+def structure_html(sol, vi=False):
+    heading = ('Cấu trúc project' if vi else 'Project structure')
+    lead = ('Đây là hình dạng project NetBeans bạn nộp: lớp nào nằm trong gói nào, '
+            'và tệp dữ liệu nằm ở đâu. Chạy <code>{main}</code> để khởi động chương trình.'
+            if vi else
+            'This is the shape of the NetBeans project you hand in: which class lives in '
+            'which package, and where the data files sit. Run <code>{main}</code> to start it.')
+    tree = _tree(sol, vi).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+    return (f'<h3>{heading}</h3>\n<p>{lead.format(main=sol["mainClass"])}</p>\n'
+            f'<pre>{tree}</pre>\n')
+
+
 def dump(path):
-    """Payload for the shipper: solution files + explanation + hints + Vietnamese."""
+    """Payload for the shipper: solution files + explanation + hints + Vietnamese.
+
+    The structure tree is prepended to both walkthroughs here rather than being
+    written into each batch by hand — one generator, and it cannot fall out of
+    step with the file list it is drawn from.
+    """
     out = []
     for s in SOLUTIONS:
+        # Idempotent: dump() may be called more than once in a session, and a
+        # tree prepended twice is worse than no tree at all.
+        if '<h3>Project structure</h3>' not in s['explainEn']:
+            s['explainEn'] = structure_html(s, False) + s['explainEn']
+        if '<h3>Cấu trúc project</h3>' not in s['explainVi']:
+            s['explainVi'] = structure_html(s, True) + s['explainVi']
         out.append({
             'lab': s['lab'],
             'solutionCodeJson': [{'name': rel, 'language': 'java', 'code': code}

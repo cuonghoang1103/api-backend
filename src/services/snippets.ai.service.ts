@@ -42,7 +42,7 @@ export async function assistCode(opts: {
 }): Promise<{ text: string }> {
   const { mode, userId } = opts;
   if (!SYSTEM[mode]) throw new BadRequestError('Chế độ AI không hợp lệ');
-  if (!isAiAvailable()) throw new BadRequestError('Tính năng AI hiện chưa sẵn sàng.');
+  if (!isAiAvailable('exphub')) throw new BadRequestError('Tính năng AI hiện chưa sẵn sàng.');
 
   const code = (opts.code ?? '').slice(0, MAX_CODE);
   const language = (opts.language ?? '').trim();

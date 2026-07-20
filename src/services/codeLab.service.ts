@@ -201,10 +201,13 @@ export async function createGroup(data: GroupInput) {
 }
 
 export async function updateGroup(id: number, data: Partial<GroupInput> & { slug?: string }) {
+  const current = await prisma.codeGroup.findUnique({ where: { id }, select: { name: true } });
   const patch: Prisma.CodeGroupUpdateInput = {};
   if (data.name != null) {
-    patch.name = data.name.trim();
-    patch.slug = await uniqueGroupSlug(data.name, id);
+    const name = data.name.trim();
+    patch.name = name;
+    // Only re-slug on a real rename — see updateExercise for why.
+    if (name !== current?.name) patch.slug = await uniqueGroupSlug(name, id);
   }
   if (data.description !== undefined) patch.description = data.description;
   if (data.icon !== undefined) patch.icon = data.icon;
@@ -256,10 +259,12 @@ export async function createTrack(data: TrackInput) {
 }
 
 export async function updateTrack(id: number, data: Partial<TrackInput>) {
+  const current = await prisma.codeTrack.findUnique({ where: { id }, select: { name: true } });
   const patch: Prisma.CodeTrackUpdateInput = {};
   if (data.name != null) {
-    patch.name = data.name.trim();
-    patch.slug = await uniqueTrackSlug(data.name, id);
+    const name = data.name.trim();
+    patch.name = name;
+    if (name !== current?.name) patch.slug = await uniqueTrackSlug(name, id);
   }
   if (data.groupId != null) patch.group = { connect: { id: data.groupId } };
   if (data.language !== undefined) patch.language = (data.language || 'text').toLowerCase();
@@ -354,12 +359,13 @@ export async function createModule(data: ModuleInput) {
 }
 
 export async function updateModule(id: number, data: Partial<ModuleInput>) {
-  const existing = await prisma.codeModule.findUnique({ where: { id }, select: { trackId: true } });
+  const existing = await prisma.codeModule.findUnique({ where: { id }, select: { trackId: true, name: true } });
   if (!existing) throw new NotFoundError('Module not found.');
   const patch: Prisma.CodeModuleUpdateInput = {};
   if (data.name != null) {
-    patch.name = data.name.trim();
-    patch.slug = await uniqueModuleSlug(existing.trackId, data.name, id);
+    const name = data.name.trim();
+    patch.name = name;
+    if (name !== existing.name) patch.slug = await uniqueModuleSlug(existing.trackId, name, id);
   }
   if (data.description !== undefined) patch.description = data.description;
   if (data.level !== undefined) patch.level = data.level;
@@ -458,14 +464,20 @@ export async function createExercise(data: ExerciseInput, authorId?: number | nu
 export async function updateExercise(id: number, data: Partial<ExerciseInput>) {
   const existing = await prisma.codeExercise.findUnique({
     where: { id },
-    select: { language: true, moduleId: true, trackId: true },
+    select: { language: true, moduleId: true, trackId: true, title: true },
   });
   if (!existing) throw new NotFoundError('Exercise not found.');
 
   const patch: Prisma.CodeExerciseUpdateInput = {};
   if (data.title != null) {
-    patch.title = data.title.trim();
-    patch.slug = await uniqueExerciseSlug(data.title, id);
+    const title = data.title.trim();
+    patch.title = title;
+    // Re-slug ONLY when the title actually changed. The admin editor submits
+    // every field on save, so recomputing unconditionally rewrote the slug —
+    // and therefore the public URL — on edits that never touched the title.
+    if (title !== existing.title) {
+      patch.slug = await uniqueExerciseSlug(title, id);
+    }
   }
   // Allow moving to another module (re-denormalise trackId).
   if (data.moduleId != null && data.moduleId !== existing.moduleId) {

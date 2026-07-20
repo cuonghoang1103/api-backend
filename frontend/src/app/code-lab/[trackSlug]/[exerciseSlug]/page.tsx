@@ -209,17 +209,21 @@ export default function ExerciseDetailPage() {
           untouched file stays available as a download beside it. */}
       {ex.briefPdfUrl && (
         <Section icon={<FileText size={14} />} title="Original assignment sheet">
+          {/* An <iframe>, NOT an <object>: the site's CSP sets object-src 'none',
+              which blocks <object>/<embed> outright and leaves an empty box.
+              frame-src already allows the media host, so the iframe renders. */}
           <div className="overflow-hidden rounded-lg border" style={{ borderColor: 'var(--border-color)' }}>
-            <object data={`${ex.briefPdfUrl}#view=FitH`} type="application/pdf" className="h-[600px] w-full">
-              {/* Fallback: mobile browsers routinely refuse to embed PDFs. */}
-              <div className="p-6 text-center text-sm" style={{ color: 'var(--text-muted)' }}>
-                Your browser cannot display the PDF inline.
-                <a href={ex.briefPdfUrl} target="_blank" rel="noopener noreferrer" className="ml-1 underline" style={{ color: '#6366f1' }}>
-                  Open it in a new tab
-                </a>
-              </div>
-            </object>
+            <iframe
+              src={`${ex.briefPdfUrl}#view=FitH`}
+              title="Original assignment sheet"
+              loading="lazy"
+              className="block h-[720px] w-full"
+              style={{ border: 0, background: '#fff' }}
+            />
           </div>
+          <p className="mt-1 text-[11px]" style={{ color: 'var(--text-muted)' }}>
+            On phones the viewer may stay blank — use “Open PDF full screen” below.
+          </p>
           <div className="mt-2 flex flex-wrap gap-3 text-xs">
             <a href={ex.briefPdfUrl} target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-1 underline" style={{ color: '#6366f1' }}>

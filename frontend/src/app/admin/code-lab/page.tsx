@@ -56,6 +56,8 @@ interface Draft {
   images: ImageItem[];
   briefPdfUrl: string;
   briefFileUrl: string;
+  githubUrl: string;
+  sourceUrl: string;
   youtubeUrl: string;
   referenceUrl: string;
   tags: string;
@@ -67,7 +69,8 @@ function emptyDraft(moduleId: number, language: string): Draft {
     problemHtml: '', concepts: '', prerequisites: '', inputSpec: '', outputSpec: '', constraints: '',
     examples: [{ input: '', output: '', explanation: '' }], hints: [], starterCode: [{ name: 'Starter', language, code: '' }],
     solutionCode: [{ name: 'Solution', language, code: '' }], solutionExplanationHtml: '', diagramImageUrl: '',
-    images: [], briefPdfUrl: '', briefFileUrl: '', youtubeUrl: '', referenceUrl: '', tags: '',
+    images: [], briefPdfUrl: '', briefFileUrl: '', githubUrl: '', sourceUrl: '',
+    youtubeUrl: '', referenceUrl: '', tags: '',
   };
 }
 
@@ -81,6 +84,7 @@ function draftToPayload(d: Draft) {
     solutionExplanationHtml: d.solutionExplanationHtml, diagramImageUrl: d.diagramImageUrl || null,
     imagesJson: d.images.filter((im) => im.url.trim()),
     briefPdfUrl: d.briefPdfUrl || null, briefFileUrl: d.briefFileUrl || null,
+    githubUrl: d.githubUrl || null, sourceUrl: d.sourceUrl || null,
     youtubeUrl: d.youtubeUrl || null, referenceUrl: d.referenceUrl || null, tags: fromCsv(d.tags),
   };
 }
@@ -97,6 +101,7 @@ function exerciseToDraft(ex: CodeExercise): Draft {
     solutionExplanationHtml: ex.solutionExplanationHtml || '', diagramImageUrl: ex.diagramImageUrl || '',
     images: ex.imagesJson || [],
     briefPdfUrl: ex.briefPdfUrl || '', briefFileUrl: ex.briefFileUrl || '',
+    githubUrl: ex.githubUrl || '', sourceUrl: ex.sourceUrl || '',
     youtubeUrl: ex.youtubeUrl || '', referenceUrl: ex.referenceUrl || '', tags: csv(ex.tags),
   };
 }
@@ -111,7 +116,7 @@ function proposalToDraft(p: ExerciseProposal, moduleId: number, language: string
     starterCode: p.starterCode.length ? p.starterCode : [{ name: 'Starter', language, code: '' }],
     solutionCode: p.solutionCode.length ? p.solutionCode : [{ name: 'Solution', language, code: '' }],
     solutionExplanationHtml: p.solutionExplanationHtml, diagramImageUrl: '', images: [],
-    briefPdfUrl: '', briefFileUrl: '',
+    briefPdfUrl: '', briefFileUrl: '', githubUrl: '', sourceUrl: '',
     youtubeUrl: '', referenceUrl: '', tags: p.tags.join(', '),
   };
 }
@@ -469,6 +474,19 @@ function ExerciseEditor({ draft, setDraft, onClose, onSave, saving }: {
 
   const figRef = useRef<HTMLInputElement>(null);
   const [figBusy, setFigBusy] = useState(false);
+  const srcRef = useRef<HTMLInputElement>(null);
+  const [srcBusy, setSrcBusy] = useState(false);
+
+  const uploadSource = async (f: File | null) => {
+    if (!f) return;
+    setSrcBusy(true);
+    try {
+      const res = await fileApi.upload(f, 'document');
+      const url = (res.data as any)?.data?.url;
+      if (url) { set('sourceUrl', url); toast.success('Source uploaded'); }
+      else toast.error('Upload failed');
+    } catch { toast.error('Upload failed'); } finally { setSrcBusy(false); if (srcRef.current) srcRef.current.value = ''; }
+  };
 
   const uploadOne = async (f: File) => {
     const res = await fileApi.upload(f, 'image');
@@ -682,6 +700,38 @@ function ExerciseEditor({ draft, setDraft, onClose, onSave, saving }: {
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div><label className="text-xs">Brief PDF URL (embedded on the page)</label><input value={draft.briefPdfUrl} onChange={(e) => set('briefPdfUrl', e.target.value)} placeholder="https://… .pdf" className={inp} style={inpStyle} /></div>
             <div><label className="text-xs">Original source file URL (download)</label><input value={draft.briefFileUrl} onChange={(e) => set('briefFileUrl', e.target.value)} placeholder="https://… .docx" className={inp} style={inpStyle} /></div>
+          </div>
+
+          {/* Learner-facing resources — rendered as branded buttons on the exercise page */}
+          <div className="rounded-lg border p-3" style={{ borderColor: 'var(--border-color)' }}>
+            <div className="mb-2 text-xs font-bold uppercase" style={{ color: 'var(--text-secondary)' }}>
+              Resources shown to the learner
+            </div>
+            <div className="space-y-2">
+              <div>
+                <label className="text-xs">YouTube — walkthrough video (watch inline or on YouTube)</label>
+                <input value={draft.youtubeUrl} onChange={(e) => set('youtubeUrl', e.target.value)}
+                  placeholder="https://www.youtube.com/watch?v=… or the 11-char id" className={inp} style={inpStyle} />
+              </div>
+              <div>
+                <label className="text-xs">GitHub repository</label>
+                <input value={draft.githubUrl} onChange={(e) => set('githubUrl', e.target.value)}
+                  placeholder="https://github.com/…" className={inp} style={inpStyle} />
+              </div>
+              <div>
+                <label className="text-xs">Source archive to download</label>
+                <div className="flex items-center gap-2">
+                  <input value={draft.sourceUrl} onChange={(e) => set('sourceUrl', e.target.value)}
+                    placeholder="https://… .zip — or upload" className={`${inp} flex-1`} style={inpStyle} />
+                  <input ref={srcRef} type="file" accept=".zip,.rar,.7z,application/zip" className="hidden"
+                    onChange={(e) => void uploadSource(e.target.files?.[0] || null)} />
+                  <button onClick={() => srcRef.current?.click()} disabled={srcBusy} className={btn}
+                    style={{ background: 'var(--bg-surface)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}>
+                    {srcBusy ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />} Upload
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">

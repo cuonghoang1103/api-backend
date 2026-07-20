@@ -23,6 +23,11 @@ export default function TrackRoadmapPage() {
   const [track, setTrack] = useState<CodeTrack | null>(null);
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState<Record<number, MyProgressItem>>({});
+  // A deep link like /code-lab/java-core#module-249 arrives BEFORE the modules
+  // exist, so the browser's own anchor jump finds nothing and stays at the top.
+  // Resolve it ourselves once the data is in, and open that module's lesson —
+  // the whole point of such a link is "take me to this topic".
+  const [focusModuleId, setFocusModuleId] = useState<number | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -41,6 +46,19 @@ export default function TrackRoadmapPage() {
       } catch { setTrack(null); } finally { setLoading(false); }
     })();
   }, [slug, isAuthed]);
+
+  useEffect(() => {
+    if (!track) return;
+    const m = /#module-(\d+)/.exec(window.location.hash);
+    if (!m) return;
+    const id = Number(m[1]);
+    setFocusModuleId(id);
+    // one frame after paint, so the section is mounted
+    const t = window.setTimeout(() => {
+      document.getElementById(`module-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 80);
+    return () => window.clearTimeout(t);
+  }, [track]);
 
   const { total, solved } = useMemo(() => {
     const all = (track?.modules || []).flatMap((m) => m.exercises || []);
@@ -106,8 +124,12 @@ export default function TrackRoadmapPage() {
           <section
             key={m.id}
             id={`module-${m.id}`}
-            className="scroll-mt-24 rounded-xl border"
-            style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)' }}
+            className="scroll-mt-24 rounded-xl border transition-shadow"
+            style={{
+              background: 'var(--bg-card)',
+              borderColor: focusModuleId === m.id ? 'var(--accent-color, #8b5cf6)' : 'var(--border-color)',
+              boxShadow: focusModuleId === m.id ? '0 0 0 2px color-mix(in srgb, var(--accent-color, #8b5cf6) 35%, transparent)' : undefined,
+            }}
           >
             <header className="flex items-center gap-2 border-b px-4 py-3" style={{ borderColor: 'var(--border-color)' }}>
               <span className="flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold" style={{ background: `${accent}22`, color: accent }}>{mi + 1}</span>
@@ -120,7 +142,7 @@ export default function TrackRoadmapPage() {
               </div>
               <BookOpen size={16} style={{ color: 'var(--text-muted)' }} />
             </header>
-            <ModuleLesson moduleId={m.id} hasLesson={m.hasLesson} />
+            <ModuleLesson moduleId={m.id} hasLesson={m.hasLesson} autoOpen={focusModuleId === m.id} />
             <ul>
               {(m.exercises || []).length === 0 && (
                 <li className="px-4 py-3 text-xs" style={{ color: 'var(--text-muted)' }}>No exercises in this module yet.</li>

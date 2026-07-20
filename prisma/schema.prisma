@@ -6618,6 +6618,10 @@ model CodeExercise {
   // as a download next to it.
   briefPdfUrl             String? @map("brief_pdf_url") @db.VarChar(2000)
   briefFileUrl            String? @map("brief_file_url") @db.VarChar(2000)
+  // Per-exercise teaching resources an admin attaches: a walkthrough video, the
+  // repository the solution lives in, and a downloadable starter/source archive.
+  githubUrl               String? @map("github_url") @db.VarChar(2000)
+  sourceUrl               String? @map("source_url") @db.VarChar(2000)
   // Optional UML/diagram image (R2) + extra images [{ url, caption }].
   diagramImageUrl         String? @map("diagram_image_url") @db.VarChar(2000)
   // Optional Mermaid diagram illustrating the problem (a class diagram for OOP

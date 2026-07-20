@@ -13,13 +13,27 @@ import { hasVietnamese, docParts } from '@/types/exp-hub';
 import { codeLabApi } from '@/lib/code-lab-api';
 import { DocBlocksView } from '@/components/exp-hub/DocBlocksView';
 
-export function ModuleLesson({ moduleId, hasLesson }: { moduleId: number; hasLesson?: boolean }) {
+export function ModuleLesson({ moduleId, hasLesson, autoOpen }: { moduleId: number; hasLesson?: boolean; autoOpen?: boolean }) {
   const [open, setOpen] = useState(false);
   const [blocks, setBlocks] = useState<DocBlock[] | null>(null);
   const [loading, setLoading] = useState(false);
   // Reading language for a bilingual lesson. Persisted so the choice survives
   // moving between modules — a learner picks a language once, not per page.
   const [lang, setLang] = useState<DocLang>('en');
+
+  // Arriving from a "practise this" deep link opens the lesson straight away.
+  useEffect(() => {
+    if (!autoOpen || open || !hasLesson) return;
+    setOpen(true);
+    if (blocks === null && !loading) {
+      setLoading(true);
+      codeLabApi.getLesson(moduleId)
+        .then((res) => setBlocks((res.data.data.blocks as DocBlock[]) || []))
+        .catch(() => setBlocks([]))
+        .finally(() => setLoading(false));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoOpen, hasLesson]);
 
   useEffect(() => {
     const saved = window.localStorage.getItem('codelab.lessonLang');

@@ -23,6 +23,7 @@ import { CodeViewer } from '@/components/exp-hub/CodeViewer';
 import { MiniCode } from '@/components/code-lab/MiniCode';
 import { CodeEditor } from '@/components/exp-hub/CodeEditor';
 import { DifficultyBadge } from '@/components/code-lab/shared';
+import { ExerciseResources } from '@/components/code-lab/ExerciseResources';
 
 function Section({ icon, title, children }: { icon?: React.ReactNode; title: string; children: React.ReactNode }) {
   return (
@@ -184,6 +185,8 @@ export default function ExerciseDetailPage() {
           <span>{ex.points} pts</span>
         </div>
       </div>
+
+      <ExerciseResources youtubeUrl={ex.youtubeUrl} githubUrl={ex.githubUrl} sourceUrl={ex.sourceUrl} />
 
       {/* Problem statement */}
       {ex.problemHtml && (

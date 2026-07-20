@@ -114,6 +114,8 @@ export interface CodeExercise extends CodeExerciseListItem {
   diagramImageUrl?: string | null;
   briefPdfUrl?: string | null;
   briefFileUrl?: string | null;
+  githubUrl?: string | null;
+  sourceUrl?: string | null;
   diagramMermaid?: string | null;
   imagesJson?: ImageItem[] | null;
   youtubeUrl?: string | null;

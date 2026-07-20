@@ -388,6 +388,7 @@ export interface ExerciseInput {
   status?: CodeStatus;
   sortOrder?: number;
   problemHtml?: string | null;
+  problemHtmlVi?: string | null;
   concepts?: unknown;
   prerequisites?: unknown;
   inputSpec?: string | null;
@@ -398,6 +399,7 @@ export interface ExerciseInput {
   starterCodeJson?: unknown;
   solutionCodeJson?: unknown;
   solutionExplanationHtml?: string | null;
+  solutionExplanationHtmlVi?: string | null;
   diagramImageUrl?: string | null;
   briefPdfUrl?: string | null;
   briefFileUrl?: string | null;
@@ -419,6 +421,7 @@ function buildExerciseData(data: ExerciseInput, lang: string) {
     status: data.status ?? 'PUBLISHED',
     sortOrder: data.sortOrder ?? 0,
     problemHtml: data.problemHtml ?? null,
+    problemHtmlVi: data.problemHtmlVi ?? null,
     concepts: strArray(data.concepts),
     prerequisites: strArray(data.prerequisites),
     inputSpec: data.inputSpec ?? null,
@@ -429,6 +432,7 @@ function buildExerciseData(data: ExerciseInput, lang: string) {
     starterCodeJson: normalizeCodeBlocks(data.starterCodeJson, lang),
     solutionCodeJson: normalizeCodeBlocks(data.solutionCodeJson, lang),
     solutionExplanationHtml: data.solutionExplanationHtml ?? null,
+    solutionExplanationHtmlVi: data.solutionExplanationHtmlVi ?? null,
     diagramImageUrl: data.diagramImageUrl ?? null,
     briefPdfUrl: data.briefPdfUrl ?? null,
     briefFileUrl: data.briefFileUrl ?? null,
@@ -496,6 +500,7 @@ export async function updateExercise(id: number, data: Partial<ExerciseInput>) {
   if (data.status !== undefined) patch.status = data.status;
   if (data.sortOrder !== undefined) patch.sortOrder = data.sortOrder;
   if (data.problemHtml !== undefined) patch.problemHtml = data.problemHtml;
+  if (data.problemHtmlVi !== undefined) patch.problemHtmlVi = data.problemHtmlVi;
   if (data.concepts !== undefined) patch.concepts = strArray(data.concepts);
   if (data.prerequisites !== undefined) patch.prerequisites = strArray(data.prerequisites);
   if (data.inputSpec !== undefined) patch.inputSpec = data.inputSpec;
@@ -506,6 +511,7 @@ export async function updateExercise(id: number, data: Partial<ExerciseInput>) {
   if (data.starterCodeJson !== undefined) patch.starterCodeJson = normalizeCodeBlocks(data.starterCodeJson, lang);
   if (data.solutionCodeJson !== undefined) patch.solutionCodeJson = normalizeCodeBlocks(data.solutionCodeJson, lang);
   if (data.solutionExplanationHtml !== undefined) patch.solutionExplanationHtml = data.solutionExplanationHtml;
+  if (data.solutionExplanationHtmlVi !== undefined) patch.solutionExplanationHtmlVi = data.solutionExplanationHtmlVi;
   if (data.diagramImageUrl !== undefined) patch.diagramImageUrl = data.diagramImageUrl;
   if (data.briefPdfUrl !== undefined) patch.briefPdfUrl = data.briefPdfUrl;
   if (data.briefFileUrl !== undefined) patch.briefFileUrl = data.briefFileUrl;

@@ -27,14 +27,34 @@ import { ExerciseResources } from '@/components/code-lab/ExerciseResources';
 import { AiExplain } from '@/components/code-lab/AiExplain';
 import { CoachPanel } from '@/components/code-lab/CoachPanel';
 
-function Section({ icon, title, children }: { icon?: React.ReactNode; title: string; children: React.ReactNode }) {
+function Section({ icon, title, children, right }: {
+  icon?: React.ReactNode; title: string; children: React.ReactNode; right?: React.ReactNode;
+}) {
   return (
     <section className="mb-5">
       <h2 className="mb-2 flex items-center gap-2 text-sm font-bold uppercase tracking-wide" style={{ color: 'var(--text-secondary)' }}>
         {icon}{title}
+        {right && <span className="ml-auto">{right}</span>}
       </h2>
       {children}
     </section>
+  );
+}
+
+/** EN / VN switch, shown only when a translation exists. */
+function LangSwitch({ lang, onPick }: { lang: 'en' | 'vi'; onPick: (l: 'en' | 'vi') => void }) {
+  return (
+    <span className="flex gap-1">
+      {(['en', 'vi'] as const).map((c) => (
+        <button key={c} onClick={() => onPick(c)} aria-pressed={lang === c}
+          className="rounded-full px-2.5 py-0.5 text-[11px] font-semibold"
+          style={lang === c
+            ? { background: 'var(--accent-color, #8b5cf6)', color: '#fff' }
+            : { background: 'var(--bg-surface)', color: 'var(--text-secondary)', border: '1px solid var(--border-color)' }}>
+          {c === 'en' ? 'EN' : 'VN'}
+        </button>
+      ))}
+    </span>
   );
 }
 
@@ -58,6 +78,19 @@ export default function ExerciseDetailPage() {
   const [myCode, setMyCode] = useState('');
   const [status, setStatus] = useState<'IN_PROGRESS' | 'SOLVED' | null>(null);
   const [saving, setSaving] = useState(false);
+  // Reading language for the brief and the walkthrough. Shares the key the
+  // lesson panel uses, so a learner picks a language once for the whole track.
+  const [lang, setLang] = useState<'en' | 'vi'>('en');
+
+  useEffect(() => {
+    const saved = window.localStorage.getItem('codelab.lessonLang');
+    if (saved === 'vi' || saved === 'en') setLang(saved);
+  }, []);
+
+  const pickLang = (next: 'en' | 'vi') => {
+    setLang(next);
+    window.localStorage.setItem('codelab.lessonLang', next);
+  };
 
   useEffect(() => {
     (async () => {
@@ -192,8 +225,12 @@ export default function ExerciseDetailPage() {
 
       {/* Problem statement */}
       {ex.problemHtml && (
-        <Section icon={<BookOpen size={14} />} title="Problem">
-          <div className="prose-cl text-sm leading-relaxed" style={{ color: 'var(--text-primary)' }} dangerouslySetInnerHTML={{ __html: sanitizeHtml(ex.problemHtml) }} />
+        <Section
+          icon={<BookOpen size={14} />}
+          title={lang === 'vi' && ex.problemHtmlVi ? 'Đề bài' : 'Problem'}
+          right={ex.problemHtmlVi ? <LangSwitch lang={lang} onPick={pickLang} /> : undefined}
+        >
+          <div className="prose-cl text-sm leading-relaxed" style={{ color: 'var(--text-primary)' }} dangerouslySetInnerHTML={{ __html: sanitizeHtml((lang === 'vi' && ex.problemHtmlVi) || ex.problemHtml) }} />
         </Section>
       )}
 
@@ -417,7 +454,7 @@ export default function ExerciseDetailPage() {
                 <CodeViewer code={solution[activeSolution].code} language={solution[activeSolution].language} filename={solution[activeSolution].name} maxHeight="520px" />
               )}
               {ex.solutionExplanationHtml && (
-                <div className="prose-cl mt-3 text-sm leading-relaxed" style={{ color: 'var(--text-primary)' }} dangerouslySetInnerHTML={{ __html: sanitizeHtml(ex.solutionExplanationHtml) }} />
+                <div className="prose-cl mt-3 text-sm leading-relaxed" style={{ color: 'var(--text-primary)' }} dangerouslySetInnerHTML={{ __html: sanitizeHtml((lang === 'vi' && ex.solutionExplanationHtmlVi) || ex.solutionExplanationHtml || '') }} />
               )}
             </>
           )}

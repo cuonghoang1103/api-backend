@@ -6592,57 +6592,61 @@ model CodeExercise {
 
   // ─── Problem body (all English, NTU-style) ─────────────────────
   // The problem statement, rendered as sanitized HTML on the client.
-  problemHtml             String?   @map("problem_html") @db.Text
+  problemHtml               String?   @map("problem_html") @db.Text
+  // Vietnamese twin of the statement. Optional: the page falls back to English
+  // per field, so a partly-translated exercise still reads correctly.
+  problemHtmlVi             String?   @map("problem_html_vi") @db.Text
   // "Knowledge to learn & apply" — JSON array of strings.
-  concepts                Json?     @map("concepts")
+  concepts                  Json?     @map("concepts")
   // Prerequisite concepts / links — JSON array of strings.
-  prerequisites           Json?     @map("prerequisites")
+  prerequisites             Json?     @map("prerequisites")
   // Free-text specs shown as their own sections.
-  inputSpec               String?   @map("input_spec") @db.Text
-  outputSpec              String?   @map("output_spec") @db.Text
-  constraints             String?   @db.Text
+  inputSpec                 String?   @map("input_spec") @db.Text
+  outputSpec                String?   @map("output_spec") @db.Text
+  constraints               String?   @db.Text
   // Worked examples: JSON array of { input, output, explanation }.
-  examplesJson            Json?     @map("examples_json")
+  examplesJson              Json?     @map("examples_json")
   // Progressive hints: JSON array of strings (revealed one by one).
-  hintsJson               Json?     @map("hints_json")
+  hintsJson                 Json?     @map("hints_json")
   // Starter code: JSON array of { name, language, code } (like Snippet.codeBlocks).
-  starterCodeJson         Json?     @map("starter_code_json")
+  starterCodeJson           Json?     @map("starter_code_json")
   // Official solution: JSON array of { name, language, code }.
-  solutionCodeJson        Json?     @map("solution_code_json")
+  solutionCodeJson          Json?     @map("solution_code_json")
   // Walkthrough of the solution (sanitized HTML).
-  solutionExplanationHtml String?   @map("solution_explanation_html") @db.Text
+  solutionExplanationHtml   String?   @map("solution_explanation_html") @db.Text
+  solutionExplanationHtmlVi String?   @map("solution_explanation_html_vi") @db.Text
   // The original assignment sheet this exercise reproduces, when there is one
   // (LAB211 ships Word/PDF lab sheets). `briefPdfUrl` is what the page embeds —
   // always a PDF, converted from the .docx where needed, because browsers
   // cannot render .docx. `briefFileUrl` is the untouched source file, offered
   // as a download next to it.
-  briefPdfUrl             String?   @map("brief_pdf_url") @db.VarChar(2000)
-  briefFileUrl            String?   @map("brief_file_url") @db.VarChar(2000)
+  briefPdfUrl               String?   @map("brief_pdf_url") @db.VarChar(2000)
+  briefFileUrl              String?   @map("brief_file_url") @db.VarChar(2000)
   // Per-exercise teaching resources an admin attaches: a walkthrough video, the
   // repository the solution lives in, and a downloadable starter/source archive.
-  githubUrl               String?   @map("github_url") @db.VarChar(2000)
-  sourceUrl               String?   @map("source_url") @db.VarChar(2000)
+  githubUrl                 String?   @map("github_url") @db.VarChar(2000)
+  sourceUrl                 String?   @map("source_url") @db.VarChar(2000)
   // Cached AI walkthrough of THIS exercise (DocBlock[]), shared by every reader
   // because it describes the assignment, not the person reading it.
-  aiExplanationJson       Json?     @map("ai_explanation_json")
-  aiExplainedAt           DateTime? @map("ai_explained_at")
+  aiExplanationJson         Json?     @map("ai_explanation_json")
+  aiExplainedAt             DateTime? @map("ai_explained_at")
   // Optional UML/diagram image (R2) + extra images [{ url, caption }].
-  diagramImageUrl         String?   @map("diagram_image_url") @db.VarChar(2000)
+  diagramImageUrl           String?   @map("diagram_image_url") @db.VarChar(2000)
   // Optional Mermaid diagram illustrating the problem (a class diagram for OOP
   // tasks, a flowchart for algorithm tasks) — rendered above the problem so the
   // learner can picture the structure, NTU-style. Additive/nullable.
-  diagramMermaid          String?   @map("diagram_mermaid") @db.Text
-  imagesJson              Json?     @map("images_json")
+  diagramMermaid            String?   @map("diagram_mermaid") @db.Text
+  imagesJson                Json?     @map("images_json")
   // Extra references.
-  youtubeUrl              String?   @map("youtube_url") @db.VarChar(500)
-  referenceUrl            String?   @map("reference_url") @db.VarChar(500)
+  youtubeUrl                String?   @map("youtube_url") @db.VarChar(500)
+  referenceUrl              String?   @map("reference_url") @db.VarChar(500)
   // Freeform tags: JSON array of strings.
-  tags                    Json?
+  tags                      Json?
   // Meta.
-  estimatedMinutes        Int?      @map("estimated_minutes")
-  points                  Int       @default(10)
-  viewCount               Int       @default(0) @map("view_count")
-  solveCount              Int       @default(0) @map("solve_count")
+  estimatedMinutes          Int?      @map("estimated_minutes")
+  points                    Int       @default(10)
+  viewCount                 Int       @default(0) @map("view_count")
+  solveCount                Int       @default(0) @map("solve_count")
 
   authorId Int? @map("author_id")
 

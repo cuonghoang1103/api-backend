@@ -101,6 +101,7 @@ export interface CodeExerciseListItem {
 
 export interface CodeExercise extends CodeExerciseListItem {
   problemHtml?: string | null;
+  problemHtmlVi?: string | null;
   concepts?: string[] | null;
   prerequisites?: string[] | null;
   inputSpec?: string | null;
@@ -111,6 +112,7 @@ export interface CodeExercise extends CodeExerciseListItem {
   starterCodeJson?: CodeBlock[] | null;
   solutionCodeJson?: CodeBlock[] | null;
   solutionExplanationHtml?: string | null;
+  solutionExplanationHtmlVi?: string | null;
   diagramImageUrl?: string | null;
   briefPdfUrl?: string | null;
   briefFileUrl?: string | null;

@@ -38,10 +38,36 @@ const LIMIT = Number(val('--limit', '0')) || 0;
 /** Authored by hand and verified by running. Never overwrite with model output. */
 const HANDMADE = new Set(['lab211', 'java-core', 'sql', 'redis', 'mongodb', 'prisma-orm']);
 /** Command-shaped languages: a three-word answer is complete, not "too short". */
+/** Exercises whose SUBJECT is escaping: entities there are the lesson, not a bug. */
+const TEACHES_ESCAPING = /sanitiz|escap|\bxss\b|html entit|encode|injection/i;
 const COMMAND_TRACKS = new Set(['sql', 'redis', 'git', 'docker', 'kubernetes', 'linux-bash', 'mongodb']);
 
 const ENTITY = /&(lt|gt|amp|quot|#39);/;
-const TODO = /\bTODO\b|FIXME|your code here/i;
+/**
+ * A TODO marker only counts when it is IN A COMMENT.
+ *
+ * The obvious /\bTODO\b/i is wrong several ways over, and it cost a whole
+ * regeneration run to find out: it flags "Build an Interactive Todo List"
+ * (the app's subject), TODO = 'TODO' (an enum value), TODO.md (a filename),
+ * echo "TODO: ..." (a shell exercise writing that text into a file) and
+ * XXX-XXX-XXXX (a phone format). Twenty-six exercises looked broken; six
+ * actually were, and the model kept "failing" this check by writing correct
+ * code. Verify the checker before trusting what it reports.
+ */
+function hasTodoMarker(code) {
+  for (const line of String(code).split('\n')) {
+    const c = /(\/\/|#|\/\*|^\s*\*|--|<!--)/.exec(line);
+    if (!c) continue;                                   // not a comment line
+    const after = line.slice(c.index);
+    const t = /\b(TODO|FIXME)\b(?!\.[a-zA-Z])/.exec(after);    // not TODO.md
+    if (!t) continue;
+    const before = after.slice(0, t.index);
+    const quotes = (before.match(/"/g) || []).length + (before.match(/'/g) || []).length;
+    if (quotes % 2 === 1) continue;                      // inside a string
+    return true;
+  }
+  return /your code here|implement this here/i.test(code);
+}
 const txt = (j) => (Array.isArray(j) ? j.map((b) => String(b?.code ?? '')).join('\n') : '');
 const norm = (s) => s.replace(/\s+/g, ' ').trim();
 
@@ -51,8 +77,8 @@ function defectsOf(ex) {
   const out = [];
   if (!sol.trim()) out.push('thiếu lời giải');
   else {
-    if (TODO.test(sol)) out.push('lời giải còn TODO');
-    if (ENTITY.test(sol)) out.push('mã bị HTML-escape');
+    if (hasTodoMarker(sol)) out.push('lời giải còn TODO');
+    if (ENTITY.test(sol) && !TEACHES_ESCAPING.test(ex.title)) out.push('mã bị HTML-escape');
     if (sol.trim().length < 120 && !COMMAND_TRACKS.has(ex.track.slug)) out.push('lời giải quá ngắn');
     if (st.trim() && norm(st) === norm(sol)) out.push('starter lộ đáp án');
   }
@@ -88,12 +114,12 @@ function parseObject(raw) {
 }
 
 /** Reject output that reproduces the fault we are here to fix. */
-function checkRegen(obj, track) {
+function checkRegen(obj, track, teachesEscaping = false) {
   const errs = [];
   const sol = txt(obj?.solution), st = txt(obj?.starter);
   if (!Array.isArray(obj?.solution) || !obj.solution.length || !sol.trim()) errs.push('không có lời giải');
-  if (TODO.test(sol)) errs.push('lời giải vẫn còn TODO');
-  if (ENTITY.test(sol) || ENTITY.test(st)) errs.push('vẫn còn HTML entity');
+  if (hasTodoMarker(sol)) errs.push('lời giải vẫn còn TODO');
+  if ((ENTITY.test(sol) || ENTITY.test(st)) && !teachesEscaping) errs.push('vẫn còn HTML entity');
   if (sol.trim().length < 120 && !COMMAND_TRACKS.has(track)) errs.push('lời giải quá ngắn');
   if (st.trim() && norm(st) === norm(sol)) errs.push('starter vẫn lộ đáp án');
   for (const b of [...(obj?.solution ?? []), ...(obj?.starter ?? [])]) {
@@ -145,10 +171,11 @@ for (const ex of todo) {
       const res = await llmComplete({
         step: 'generation', feature: 'bulk_gen', system: SYSTEM,
         messages: [{ role: 'user', content: user }],
-        maxTokens: 8000, maxRetries: 2, timeoutMs: 300_000, userId: 1,
+        maxTokens: 16000, maxRetries: 2, timeoutMs: 420_000, userId: 1,
       });
       const obj = parseObject(res.text);
-      const errs = obj ? checkRegen(obj, ex.track.slug) : ['không đọc được JSON'];
+      if (!obj) console.log(`      (kết quả dài ${res.text.length} ký tự, ${res.outputTokens} token — nhiều khả năng bị cắt)`);
+      const errs = obj ? checkRegen(obj, ex.track.slug, TEACHES_ESCAPING.test(ex.title)) : ['không đọc được JSON'];
       if (errs.length) {
         console.log(`   ↻ ${ex.id} lần ${attempt + 1} bị loại: ${errs.join(', ')}`);
         continue;

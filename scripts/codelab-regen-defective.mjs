@@ -47,6 +47,19 @@ const TEACHES_ESCAPING = /sanitiz|escap|\bxss\b|html entit|encode|injection/i;
  *     Confirmed by the user on 2026-07-21 for the 20 hand-written Redis exercises.
  */
 const COMMAND_TRACKS = new Set(['sql', 'redis', 'git', 'docker', 'kubernetes', 'linux-bash', 'mongodb']);
+/**
+ * Declarative languages, judged per BLOCK rather than per track.
+ *
+ * The graphql track is mostly JavaScript resolvers — but a few exercises are
+ * "write this query", and the whole answer is four lines of GraphQL. Exempting
+ * the track would blind the length check for its JavaScript too, so the test is
+ * the language each block declares: exempt only when EVERY block is declarative.
+ */
+const QUERY_LANGS = new Set(['sql', 'graphql', 'cypher', 'yaml', 'hcl', 'json',
+  'bash', 'sh', 'shell', 'dockerfile', 'redis']);
+const allDeclarative = (j) =>
+  Array.isArray(j) && j.length > 0 &&
+  j.every((b) => QUERY_LANGS.has(String(b?.language ?? '').toLowerCase()));
 
 const ENTITY = /&(lt|gt|amp|quot|#39);/;
 /**
@@ -85,7 +98,8 @@ function defectsOf(ex) {
   else {
     if (hasTodoMarker(sol)) out.push('lời giải còn TODO');
     if (ENTITY.test(sol) && !TEACHES_ESCAPING.test(ex.title)) out.push('mã bị HTML-escape');
-    if (sol.trim().length < 120 && !COMMAND_TRACKS.has(ex.track.slug)) out.push('lời giải quá ngắn');
+    if (sol.trim().length < 120 && !COMMAND_TRACKS.has(ex.track.slug)
+        && !allDeclarative(ex.solutionCodeJson)) out.push('lời giải quá ngắn');
     if (st.trim() && norm(st) === norm(sol) && !COMMAND_TRACKS.has(ex.track.slug)) out.push('starter lộ đáp án');
   }
   return out;
@@ -157,6 +171,10 @@ if (LIMIT) todo = todo.slice(0, LIMIT);
 
 console.log(`[regen] ${broken.length} bài lỗi — ${todo.length} sẽ sinh lại, ${handmade.length} SOẠN TAY nên bỏ qua`);
 for (const h of handmade) console.log(`   ⊘ ${h.id} [${h.track.slug}] ${h.defects.join(', ')} — ${h.title.slice(0, 46)}`);
+// List what is about to be overwritten, not just what is skipped. A dry run
+// that prints a count and no names cannot be checked — and this script exists
+// because a checker was trusted without anyone reading what it caught.
+for (const t of todo) console.log(`   → ${t.id} [${t.track.slug}] ${t.defects.join(', ')} — ${t.title.slice(0, 46)}`);
 if (!APPLY) console.log('[regen] CHẠY KHÔ — thêm --apply để ghi thật');
 
 let ok = 0, failed = 0;

@@ -9,6 +9,7 @@ import type {
   CodeExercise,
   CodeExerciseListItem,
   CodeProgress,
+  CodeBlock,
   MyProgressItem,
   CodeStats,
   CodeLevel,
@@ -20,6 +21,7 @@ import type {
   VivaQuestion,
   VivaGrade,
   SpecCheck,
+  ProjectCheck,
   SkillCoverageResponse,
 } from '@/types/code-lab';
 import type { DocBlock } from '@/types/exp-hub';
@@ -63,6 +65,22 @@ export const codeLabApi = {
   checkAgainstBrief: (exerciseId: number, code: string) =>
     api.post<Ok<SpecCheck>>(`${BASE}/exercises/${exerciseId}/coach/check`,
       { code }, { timeout: 300_000 }),
+  /** Whole-project review — the zip never lands on disk, server-side or here. */
+  checkProjectZip: (exerciseId: number, file: File) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    return api.post<Ok<ProjectCheck>>(`${BASE}/exercises/${exerciseId}/coach/check-zip`, fd, { timeout: 420_000 });
+  },
+
+  // ─── Workspace ↔ IDE ──────────────────────────────────────────
+  exportWorkspace: (exerciseId: number, files: CodeBlock[], name: string) =>
+    api.post(`${BASE}/exercises/${exerciseId}/workspace/export`, { files, name }, { responseType: 'blob' }),
+  importWorkspace: (exerciseId: number, file: File) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    return api.post<Ok<{ files: CodeBlock[]; skipped: number }>>(
+      `${BASE}/exercises/${exerciseId}/workspace/import`, fd, { timeout: 120_000 });
+  },
 
   askAiFollowUp: (exerciseId: number, question: string,
                   history: Array<{ role: 'user' | 'assistant'; content: string }>) =>

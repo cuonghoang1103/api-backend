@@ -208,6 +208,19 @@ export interface SpecCheck {
   items: SpecCheckItem[]; risks: string[]; risksVi: string[];
 }
 
+/** One required class/package from the brief's project tree, located (or not). */
+export interface ProjectStructureItem {
+  expected: string; expectedVi: string;
+  status: 'ok' | 'misplaced' | 'missing';
+  actual: string; actualVi: string;
+}
+/** A whole-project review: the checklist, plus what only a project can show. */
+export interface ProjectCheck extends SpecCheck {
+  structure: ProjectStructureItem[];
+  vivaQuestions: string[]; vivaQuestionsVi: string[];
+  files: { included: number; skipped: number; truncated: boolean; tree: string[] };
+}
+
 export interface SkillCoverageItem { skill: string; total: number; solved: number; inProgress: number }
 export interface SkillCoverageResponse {
   track: { id: number; name: string; slug: string };

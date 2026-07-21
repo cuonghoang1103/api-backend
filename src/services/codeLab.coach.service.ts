@@ -23,6 +23,7 @@
 import { prisma } from '../config/database.js';
 import { BadRequestError, ForbiddenError, NotFoundError } from '../middleware/errorHandler.js';
 import { llmComplete, checkTokenQuota, isAiAvailable } from './interview/llm/index.js';
+import { buildProjectDigest } from './interview/projectZip.service.js';
 import { isProEffective } from './pro.service.js';
 
 export type VivaMode = 'explain' | 'change';
@@ -286,5 +287,139 @@ export async function checkAgainstBrief(
     total: items.length,
     items,
     risks: arr(r.risks), risksVi: arr(r.risksVi).length ? arr(r.risksVi) : arr(r.risks),
+  };
+}
+
+// ─── 4. Check a whole PROJECT (.zip) against the brief ──────────
+//
+// The paste box above assumes one file. A LAB211 submission is a folder of
+// packages — model/, service/, util/, a Main — and pasting it class by class
+// into one textarea loses exactly what the marker looks at first: whether the
+// structure matches the brief, and whether the pieces actually call each other.
+//
+// So the zip is digested into a tree + the source (buildProjectDigest, shared
+// with the interview module: zip-slip and zip-bomb guards, build output and
+// binaries dropped), and the review gains three things the paste box cannot do:
+// structure against the required tree, demo risks read across files, and the
+// viva questions this specific code invites.
+
+/** Well under the model's window, and a LAB211 project is a fraction of it. */
+const MAX_DIGEST = 60_000;
+
+export interface ProjectStructureItem {
+  expected: string; expectedVi: string;
+  status: 'ok' | 'misplaced' | 'missing';
+  actual: string; actualVi: string;
+}
+export interface ProjectCheck extends SpecCheck {
+  structure: ProjectStructureItem[];
+  vivaQuestions: string[]; vivaQuestionsVi: string[];
+  files: { included: number; skipped: number; truncated: boolean; tree: string[] };
+}
+
+const PROJECT_CHECK_SYSTEM = `You are marking a student's Java PROJECT against its assignment brief,
+the way a lab examiner does at a defence.
+
+You are given the brief (which usually includes the required project tree) and a
+digest of the student's uploaded project: a file tree, then each source file.
+
+Return ONLY JSON:
+{"summary":"…","summaryVi":"…","met":0,"total":0,
+ "items":[{"requirement":"…","requirementVi":"…","status":"met|partial|missing",
+           "evidence":"…","evidenceVi":"…","fix":"…","fixVi":"…"}],
+ "structure":[{"expected":"…","expectedVi":"…","status":"ok|misplaced|missing",
+               "actual":"…","actualVi":"…"}],
+ "risks":["…"],"risksVi":["…"],
+ "vivaQuestions":["…"],"vivaQuestionsVi":["…"]}
+
+- "items": one per DISTINCT requirement in the brief — each menu option, each
+  validation rule, each output format, each named method, each stated constraint.
+  Expect 6-20.
+- "evidence": for met/partial, quote the method or line that satisfies it AND name
+  the file it is in, as "path/File.java: <the line>". The project has many files;
+  a quote with no path is useless to someone trying to find it. Quote what is
+  really there — never invent a line the student did not write.
+- "fix": for partial/missing, one concrete sentence naming the file to change.
+- "structure": compare the required project tree in the brief against the tree you
+  were given. One entry per required class/package. "ok" = present where the brief
+  says; "misplaced" = present but in another package, and "actual" says where it
+  really is; "missing" = not in the project at all. If the brief states no tree,
+  return an empty array rather than inventing requirements.
+- "risks": what will crash or embarrass the student in a live demo — unhandled bad
+  input, a data file missing on first run, a duplicate id accepted, an infinite
+  loop on a wrong menu choice. Read ACROSS files: a check in Main that the service
+  does not enforce is a risk. Empty array if none.
+- "vivaQuestions": 3-6 questions THIS code invites, grounded in what the student
+  actually wrote — the data structure they chose, a loop that could be a stream,
+  a place where validation could be bypassed. Not generic Java trivia.
+- "met" counts status == "met". "total" is items.length.
+- Every field has its Vietnamese twin.
+
+Be exact. Marking something met when it is absent is the worst thing you can do here,
+because the student will stop looking for it.`;
+
+export async function checkProjectAgainstBrief(
+  exerciseId: number,
+  opts: { userId: number; zip: Buffer; zipName?: string },
+): Promise<ProjectCheck> {
+  await assertPro(opts.userId);
+  const ex = await loadExercise(exerciseId);
+
+  // Throws BadRequestError with a readable message for an empty/corrupt/huge zip.
+  const { digest, stats } = buildProjectDigest(opts.zip, opts.zipName);
+  const body = digest.length > MAX_DIGEST
+    ? digest.slice(0, MAX_DIGEST) + '\n… (digest truncated)\n'
+    : digest;
+
+  const res = await llmComplete({
+    step: 'generation',
+    feature: 'codelab',
+    system: PROJECT_CHECK_SYSTEM,
+    messages: [{ role: 'user', content: `${briefOf(ex)}\n\nSTUDENT PROJECT:\n${body}` }],
+    // Four sections instead of one, over a whole project — 4000 truncated the
+    // JSON and the whole review was lost to a parse error.
+    maxTokens: 8000,
+    maxRetries: 1,
+    timeoutMs: 300_000,
+    userId: opts.userId,
+  });
+
+  const r = parseJson<ProjectCheck>(res.text);
+  if (!r || !Array.isArray(r.items)) throw new BadRequestError('Could not review that project. Try again.');
+
+  const items: SpecCheckItem[] = (r.items ?? []).slice(0, 30).map((it) => ({
+    requirement: String(it.requirement ?? ''),
+    requirementVi: String(it.requirementVi ?? it.requirement ?? ''),
+    status: (it.status === 'met' || it.status === 'partial' ? it.status : 'missing') as SpecCheckItem['status'],
+    evidence: String(it.evidence ?? ''), evidenceVi: String(it.evidenceVi ?? it.evidence ?? ''),
+    fix: String(it.fix ?? ''), fixVi: String(it.fixVi ?? it.fix ?? ''),
+  })).filter((it) => it.requirement);
+
+  const structure: ProjectStructureItem[] = (Array.isArray(r.structure) ? r.structure : [])
+    .slice(0, 40).map((s) => ({
+      expected: String(s.expected ?? ''),
+      expectedVi: String(s.expectedVi ?? s.expected ?? ''),
+      status: (s.status === 'ok' || s.status === 'misplaced' ? s.status : 'missing') as ProjectStructureItem['status'],
+      actual: String(s.actual ?? ''), actualVi: String(s.actualVi ?? s.actual ?? ''),
+    })).filter((s) => s.expected);
+
+  const arr = (v: unknown, n = 8) => (Array.isArray(v) ? v.map(String).slice(0, n) : []);
+  const risks = arr(r.risks);
+  const viva = arr(r.vivaQuestions, 6);
+  return {
+    summary: r.summary || '', summaryVi: r.summaryVi || r.summary || '',
+    met: items.filter((i) => i.status === 'met').length,
+    total: items.length,
+    items,
+    structure,
+    risks, risksVi: arr(r.risksVi).length ? arr(r.risksVi) : risks,
+    vivaQuestions: viva,
+    vivaQuestionsVi: arr(r.vivaQuestionsVi, 6).length ? arr(r.vivaQuestionsVi, 6) : viva,
+    files: {
+      included: stats.filesIncluded,
+      skipped: stats.filesSkipped,
+      truncated: stats.truncated || digest.length > MAX_DIGEST,
+      tree: stats.tree.slice(0, 200),
+    },
   };
 }

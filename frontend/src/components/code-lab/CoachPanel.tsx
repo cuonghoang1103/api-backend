@@ -13,15 +13,15 @@
 // Nothing is stored: a question you have seen already is worthless, and a code
 // review is about code that changes on every run.
 
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import {
   GraduationCap, Loader2, Send, RefreshCw, ClipboardCheck, Crown,
-  CheckCircle2, AlertTriangle, XCircle, Lightbulb, Wand2,
+  CheckCircle2, AlertTriangle, XCircle, Lightbulb, Wand2, FolderUp, FolderTree, HelpCircle,
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import Link from 'next/link';
 import { codeLabApi } from '@/lib/code-lab-api';
-import type { VivaQuestion, VivaGrade, SpecCheck } from '@/types/code-lab';
+import type { VivaQuestion, VivaGrade, SpecCheck, ProjectCheck } from '@/types/code-lab';
 import { useAuthStore } from '@/store/authStore';
 import { usePro } from '@/hooks/usePro';
 
@@ -40,6 +40,10 @@ const T = {
     met: 'met', signIn: 'Sign in to use this', upgrade: 'Upgrade to Pro',
     emptyViva: 'The examiner will ask one question about this assignment, then mark your answer out of 10.',
     emptyCheck: 'Every requirement in the brief is checked off against your code, one by one.',
+    or: 'or', uploadZip: 'Upload the whole project (.zip)',
+    zipHint: 'A NetBeans project zip — packages, every class. Structure is checked against the brief too.',
+    structure: 'Project structure vs the brief', vivaLikely: 'Questions this code invites',
+    filesRead: 'files read', filesSkipped: 'skipped',
   },
   vi: {
     title: 'Luyện tập cùng AI', viva: 'Vấn đáp', check: 'Đối chiếu code với đề',
@@ -52,6 +56,10 @@ const T = {
     met: 'đạt', signIn: 'Đăng nhập để dùng', upgrade: 'Nâng cấp Pro',
     emptyViva: 'Giám khảo sẽ hỏi một câu về bài này, rồi chấm câu trả lời của bạn trên thang 10.',
     emptyCheck: 'Từng yêu cầu trong đề sẽ được đối chiếu với code của bạn, lần lượt từng cái.',
+    or: 'hoặc', uploadZip: 'Nộp cả project (.zip)',
+    zipHint: 'Zip project NetBeans — đủ package, đủ class. Cấu trúc cũng được đối chiếu với đề.',
+    structure: 'Cấu trúc project so với đề', vivaLikely: 'Câu thầy có thể hỏi từ chính code này',
+    filesRead: 'file đã đọc', filesSkipped: 'bỏ qua',
   },
 } as const;
 
@@ -80,7 +88,10 @@ export function CoachPanel({ exerciseId }: { exerciseId: number }) {
 
   // ── brief check
   const [codeText, setCodeText] = useState('');
-  const [check, setCheck] = useState<SpecCheck | null>(null);
+  // A project review is a SpecCheck plus structure/viva/files — one state, and
+  // the extra sections render only when they are actually there.
+  const [check, setCheck] = useState<SpecCheck | ProjectCheck | null>(null);
+  const zipRef = useRef<HTMLInputElement>(null);
   const [checking, setChecking] = useState(false);
 
   const fail = (e: unknown, fallback: string) => {
@@ -114,6 +125,20 @@ export function CoachPanel({ exerciseId }: { exerciseId: number }) {
       setCheck(r.data.data);
     } catch (e) { fail(e, 'Could not review the code.'); } finally { setChecking(false); }
   }, [exerciseId, codeText]);
+
+  /**
+   * Whole-project review. One class pasted into a box cannot show whether the
+   * packages match the brief or whether Main and the service agree — a LAB211
+   * submission is a folder, so it is reviewed as one.
+   */
+  const runZipCheck = useCallback(async (file: File) => {
+    setChecking(true);
+    setCheck(null);
+    try {
+      const r = await codeLabApi.checkProjectZip(exerciseId, file);
+      setCheck(r.data.data);
+    } catch (e) { fail(e, 'Could not review that project.'); } finally { setChecking(false); }
+  }, [exerciseId]);
 
   const box = { borderColor: 'var(--border-color)', background: 'var(--bg-surface)' } as const;
   const pill = (on: boolean) => (on
@@ -263,12 +288,23 @@ export function CoachPanel({ exerciseId }: { exerciseId: number }) {
                 placeholder={t.paste} spellCheck={false}
                 className="w-full resize-y rounded-lg border px-3 py-2 font-mono text-[12px] leading-relaxed outline-none"
                 style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)', color: 'var(--text-primary)' }} />
-              <button onClick={() => void runCheck()} disabled={checking || !codeText.trim()}
-                className="mt-2 inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold disabled:opacity-40"
-                style={{ background: 'var(--accent-color, #8b5cf6)', color: '#fff' }}>
-                {checking ? <Loader2 size={15} className="animate-spin" /> : <ClipboardCheck size={15} />}
-                {checking ? t.reviewing : t.review}
-              </button>
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                <button onClick={() => void runCheck()} disabled={checking || !codeText.trim()}
+                  className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold disabled:opacity-40"
+                  style={{ background: 'var(--accent-color, #8b5cf6)', color: '#fff' }}>
+                  {checking ? <Loader2 size={15} className="animate-spin" /> : <ClipboardCheck size={15} />}
+                  {checking ? t.reviewing : t.review}
+                </button>
+                <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{t.or}</span>
+                <button onClick={() => zipRef.current?.click()} disabled={checking}
+                  className="inline-flex items-center gap-1.5 rounded-lg border px-4 py-2 text-sm font-semibold disabled:opacity-40"
+                  style={{ borderColor: 'var(--border-color)', color: 'var(--text-primary)' }}>
+                  <FolderUp size={15} /> {t.uploadZip}
+                </button>
+                <input ref={zipRef} type="file" accept=".zip" className="hidden"
+                  onChange={(e) => { const f = e.target.files?.[0]; if (f) void runZipCheck(f); e.target.value = ''; }} />
+              </div>
+              <p className="mt-1 text-[11px]" style={{ color: 'var(--text-muted)' }}>{t.zipHint}</p>
 
               {check && (
                 <div className="mt-4">
@@ -308,10 +344,62 @@ export function CoachPanel({ exerciseId }: { exerciseId: number }) {
                     })}
                   </div>
 
+                  {/* Project-only sections. A pasted class has no structure to
+                      compare and no package to misplace, so they simply are not
+                      in the response and nothing renders. */}
+                  {'structure' in check && check.structure.length > 0 && (
+                    <div className="mt-3 rounded-lg border p-3" style={box}>
+                      <div className="mb-1.5 flex items-center gap-1.5 text-[11px] font-bold uppercase" style={{ color: 'var(--text-secondary)' }}>
+                        <FolderTree size={13} /> {t.structure}
+                      </div>
+                      <ul className="space-y-1">
+                        {check.structure.map((s, i) => {
+                          const S = STATUS[s.status === 'ok' ? 'met' : s.status === 'misplaced' ? 'partial' : 'missing'];
+                          const Icon = S.icon;
+                          const where = lang === 'vi' ? s.actualVi : s.actual;
+                          return (
+                            <li key={i} className="flex gap-1.5 text-sm">
+                              <Icon size={14} className="mt-0.5 shrink-0" style={{ color: S.colour }} />
+                              <span className="min-w-0" style={{ color: 'var(--text-primary)' }}>
+                                <code className="font-mono text-[12px]">{lang === 'vi' ? s.expectedVi : s.expected}</code>
+                                {s.status !== 'ok' && where && (
+                                  <span style={{ color: 'var(--text-muted)' }}> — {where}</span>
+                                )}
+                              </span>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  )}
+
                   {(lang === 'vi' ? check.risksVi : check.risks).length > 0 && (
                     <div className="mt-3 rounded-lg border p-3" style={{ borderColor: '#ef4444', background: '#ef444411' }}>
                       <Bullets title={t.risks} colour="#ef4444" items={lang === 'vi' ? check.risksVi : check.risks} />
                     </div>
+                  )}
+
+                  {'vivaQuestions' in check && (lang === 'vi' ? check.vivaQuestionsVi : check.vivaQuestions).length > 0 && (
+                    <div className="mt-3 rounded-lg border p-3" style={box}>
+                      <div className="mb-1 flex items-center gap-1.5 text-[11px] font-bold uppercase" style={{ color: '#8b5cf6' }}>
+                        <HelpCircle size={13} /> {t.vivaLikely}
+                      </div>
+                      <ul className="space-y-0.5">
+                        {(lang === 'vi' ? check.vivaQuestionsVi : check.vivaQuestions).map((x, i) => (
+                          <li key={i} className="flex gap-1.5 text-sm" style={{ color: 'var(--text-primary)' }}>
+                            <span style={{ color: '#8b5cf6' }}>•</span><span className="min-w-0">{x}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {'files' in check && (
+                    <p className="mt-2 text-[11px]" style={{ color: 'var(--text-muted)' }}>
+                      {check.files.included} {t.filesRead}
+                      {check.files.skipped ? `, ${check.files.skipped} ${t.filesSkipped}` : ''}
+                      {check.files.truncated ? ' ⚠︎' : ''}
+                    </p>
                   )}
                 </div>
               )}

@@ -22,11 +22,14 @@
  *  - POST /bulk-import                  — import an array of exercises
  */
 import { Router, type Request, type Response } from 'express';
+import multer from 'multer';
 import { authenticate, optionalAuth, requireRole } from '../middleware/auth.js';
+import { BadRequestError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
 import * as codeLab from '../services/codeLab.service.js';
 import * as explainService from '../services/codeLab.explain.service.js';
 import * as coachService from '../services/codeLab.coach.service.js';
+import * as workspace from '../services/codeLab.workspace.service.js';
 import { generateRoadmap, generateExercises, commitExercises } from '../services/codeLab.ai.service.js';
 import { generateLesson, commitLesson, getModuleLesson, clearLesson } from '../services/codeLab.lesson.service.js';
 
@@ -194,6 +197,57 @@ router.post('/exercises/:id(\\d+)/coach/check', authenticate, async (req, res: R
     res.json({ success: true, data: out });
   } catch (e) { next(e); }
 });
+
+// Whole-project review. The zip is read in memory and thrown away — nothing is
+// stored, same as the paste box; 30MB matches the interview upload, and a LAB211
+// submission is three orders of magnitude smaller than that.
+const projectZipUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 30 * 1024 * 1024, files: 1 },
+});
+
+router.post(
+  '/exercises/:id(\\d+)/coach/check-zip',
+  authenticate,
+  projectZipUpload.single('file'),
+  async (req, res: Response<ApiResponse>, next) => {
+    try {
+      if (!req.file?.buffer?.length) throw new BadRequestError('Hãy chọn file .zip của project.');
+      const out = await coachService.checkProjectAgainstBrief(Number(req.params.id), {
+        userId: req.user!.userId,
+        zip: req.file.buffer,
+        zipName: req.file.originalname,
+      });
+      res.json({ success: true, data: out });
+    } catch (e) { next(e); }
+  },
+);
+
+// ─── Workspace ↔ NetBeans ───────────────────────────────────────
+// Export what the learner wrote as a project folder they can open in the IDE;
+// import a project they built in the IDE back into the editor. Neither stores
+// anything: the page saves through the normal progress endpoint.
+
+router.post('/exercises/:id(\\d+)/workspace/export', authenticate, async (req, res, next) => {
+  try {
+    const buf = workspace.exportWorkspaceZip(req.body?.files, String(req.body?.name || 'project'));
+    res.setHeader('Content-Type', 'application/zip');
+    res.setHeader('Content-Disposition', `attachment; filename="${String(req.body?.name || 'project').replace(/[^a-zA-Z0-9._-]+/g, '-')}.zip"`);
+    res.send(buf);
+  } catch (e) { next(e); }
+});
+
+router.post(
+  '/exercises/:id(\\d+)/workspace/import',
+  authenticate,
+  projectZipUpload.single('file'),
+  async (req, res: Response<ApiResponse>, next) => {
+    try {
+      if (!req.file?.buffer?.length) throw new BadRequestError('Hãy chọn file .zip của project.');
+      res.json({ success: true, data: workspace.importWorkspaceZip(req.file.buffer) });
+    } catch (e) { next(e); }
+  },
+);
 
 router.get('/tracks/:slug/skills', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {

@@ -21,11 +21,20 @@ import { useAuthStore } from '@/store/authStore';
 import { sanitizeHtml } from '@/lib/sanitizeHtml';
 import { CodeViewer } from '@/components/exp-hub/CodeViewer';
 import { MiniCode } from '@/components/code-lab/MiniCode';
-import { CodeEditor } from '@/components/exp-hub/CodeEditor';
+import { Workspace, flavorFor } from '@/components/code-lab/Workspace';
 import { DifficultyBadge } from '@/components/code-lab/shared';
 import { ExerciseResources } from '@/components/code-lab/ExerciseResources';
 import { AiExplain } from '@/components/code-lab/AiExplain';
 import { CoachPanel } from '@/components/code-lab/CoachPanel';
+
+/**
+ * A name for the learner's first file when the exercise ships no starter.
+ * LAB211 is done in NetBeans, so a Java exercise opens on Main.java, not on an
+ * untitled buffer — the flavour knows what each track calls its entry point.
+ */
+function defaultFileName(ex: { language: string; track?: { slug?: string } | null }): string {
+  return flavorFor(ex.track?.slug ?? '', ex.language).defaultFile;
+}
 
 function Section({ icon, title, children, right }: {
   icon?: React.ReactNode; title: string; children: React.ReactNode; right?: React.ReactNode;
@@ -71,11 +80,10 @@ export default function ExerciseDetailPage() {
 
   const [revealHints, setRevealHints] = useState(0);
   const [showSolution, setShowSolution] = useState(false);
-  const [activeStarter, setActiveStarter] = useState(0);
   const [activeSolution, setActiveSolution] = useState(0);
 
-  // Editor state (per-exercise; seeded from starter code or saved attempt).
-  const [myCode, setMyCode] = useState('');
+  // Workspace state: EVERY file the learner has, not one. `name` is the path.
+  const [files, setFiles] = useState<CodeBlock[]>([]);
   const [status, setStatus] = useState<'IN_PROGRESS' | 'SOLVED' | null>(null);
   const [saving, setSaving] = useState(false);
   // Reading language for the brief and the walkthrough. Shares the key the
@@ -99,23 +107,36 @@ export default function ExerciseDetailPage() {
         const res = await codeLabApi.getExercise(params.exerciseSlug);
         const data = res.data.data;
         setEx(data);
-        // seed editor
-        let seed = data.starterCodeJson?.[0]?.code || '';
+        // Seed the workspace with EVERY starter file, not just the first. A
+        // multi-file assignment that opens showing one file teaches the learner
+        // the assignment is one file.
+        const starterFiles: CodeBlock[] = (data.starterCodeJson ?? []).length
+          ? data.starterCodeJson!.map((b) => ({ ...b }))
+          : [{ name: defaultFileName(data), language: data.language, code: '' }];
+        let seed: CodeBlock[] = starterFiles;
         if (isAuthed) {
           try {
             const p = await codeLabApi.myProgress(data.trackId);
             const mine = (p.data.data || []).find((it) => it.exerciseId === data.id);
             if (mine) {
               setStatus(mine.status);
-              if (mine.savedCode?.[0]?.code) seed = mine.savedCode[0].code;
+              // Work saved before the workspace existed is a single block named
+              // "Solution" — keep it, but give it a real filename to live under.
+              if (mine.savedCode?.length) {
+                seed = mine.savedCode.map((b, i) => ({
+                  ...b,
+                  name: b.name && b.name !== 'Solution' ? b.name
+                    : (starterFiles[i]?.name ?? defaultFileName(data)),
+                }));
+              }
             }
           } catch { /* ignore */ }
         }
-        setMyCode(seed);
+        setFiles(seed);
       } catch { setEx(null); } finally { setLoading(false); }
     })();
     // reset transient UI when the slug changes
-    setRevealHints(0); setShowSolution(false); setActiveStarter(0); setActiveSolution(0);
+    setRevealHints(0); setShowSolution(false); setActiveSolution(0);
   }, [params.exerciseSlug, isAuthed]);
 
   // Build the ordered exercise list for this track (for Prev/Next). Fetched
@@ -150,15 +171,16 @@ export default function ExerciseDetailPage() {
     };
   }, [siblings, params.exerciseSlug]);
 
-  const editorLang = useMemo(() => ex?.starterCodeJson?.[activeStarter]?.language || ex?.language || 'text', [ex, activeStarter]);
+  const editorLang = useMemo(() => ex?.language || 'text', [ex]);
 
   const save = async (markSolved = false) => {
     if (!ex) return;
     if (!isAuthed) { toast.error('Please sign in to save your work.'); return; }
     setSaving(true);
     try {
-      const savedCode: CodeBlock[] = [{ name: 'Solution', language: editorLang, code: myCode }];
-      const res = await codeLabApi.saveProgress(ex.id, { status: markSolved ? 'SOLVED' : 'IN_PROGRESS', savedCode });
+      // Save the whole workspace. Saving only the open file is how the previous
+      // version lost four classes out of five.
+      const res = await codeLabApi.saveProgress(ex.id, { status: markSolved ? 'SOLVED' : 'IN_PROGRESS', savedCode: files });
       setStatus(res.data.data.status);
       toast.success(markSolved ? 'Marked as solved 🎉' : 'Saved');
     } catch { toast.error('Could not save.'); } finally { setSaving(false); }
@@ -166,14 +188,18 @@ export default function ExerciseDetailPage() {
 
   // Run in-browser (JS/TS only) — a convenience console for JavaScript exercises.
   const [runOut, setRunOut] = useState<string | null>(null);
-  const canRun = ['javascript', 'js', 'typescript', 'ts'].includes(editorLang.toLowerCase());
+  const jsFile = useMemo(
+    () => files.find((f) => /\.(m?js|ts)$/i.test(f.name) || ['javascript', 'js', 'typescript', 'ts'].includes((f.language || '').toLowerCase())),
+    [files],
+  );
+  const canRun = !!jsFile;
   const runJs = () => {
     const logs: string[] = [];
     const orig = console.log;
     try {
       (console as any).log = (...a: unknown[]) => logs.push(a.map((x) => typeof x === 'object' ? JSON.stringify(x) : String(x)).join(' '));
       // eslint-disable-next-line no-new-func
-      const fn = new Function(myCode.replace(/\bexport\b/g, ''));
+      const fn = new Function((jsFile?.code ?? '').replace(/\bexport\b/g, ''));
       const ret = fn();
       if (ret !== undefined) logs.push(String(ret));
       setRunOut(logs.join('\n') || '(no output)');
@@ -193,7 +219,6 @@ export default function ExerciseDetailPage() {
   const prereqs = ex.prerequisites || [];
   const examples = ex.examplesJson || [];
   const hints = ex.hintsJson || [];
-  const starter = ex.starterCodeJson || [];
   const solution = ex.solutionCodeJson || [];
 
   return (
@@ -311,7 +336,10 @@ export default function ExerciseDetailPage() {
 
       <AiExplain exerciseId={ex.id} />
 
-      <CoachPanel exerciseId={ex.id} />
+      {/* The coach speaks NetBeans and marks Java: it belongs to LAB211, the
+          university lab it was built for. On a Node.js or SQL exercise it would
+          ask the learner to "paste your Java code". */}
+      {params.trackSlug === 'lab211' && <CoachPanel exerciseId={ex.id} />}
 
       {/* Input / Output specs */}
       {(ex.inputSpec || ex.outputSpec) && (
@@ -404,14 +432,14 @@ export default function ExerciseDetailPage() {
 
       {/* Your code */}
       <Section icon={<Play size={14} />} title="Your solution">
-        {starter.length > 1 && (
-          <div className="mb-2 flex flex-wrap gap-1">
-            {starter.map((b, i) => (
-              <button key={i} onClick={() => { setActiveStarter(i); setMyCode(b.code); }} className="rounded-md px-2 py-1 text-xs font-medium" style={i === activeStarter ? { background: '#6366f1', color: '#fff' } : { background: 'var(--bg-surface)', color: 'var(--text-secondary)' }}>{b.name}</button>
-            ))}
-          </div>
-        )}
-        <CodeEditor value={myCode} language={editorLang} onChange={setMyCode} height={280} placeholder="Write your solution here…" />
+        <Workspace
+          files={files}
+          onChange={setFiles}
+          exerciseId={ex.id}
+          trackSlug={params.trackSlug as string}
+          language={editorLang}
+          projectName={ex.slug}
+        />
         <div className="mt-2 flex flex-wrap items-center gap-2">
           <button onClick={() => save(false)} disabled={saving} className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium" style={{ background: 'var(--bg-surface)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}>
             {saving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />} Save

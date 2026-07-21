@@ -190,15 +190,31 @@ for (const ex of todo) {
   ].filter(Boolean).join('\n');
 
   let done = false;
-  for (let attempt = 0; attempt < 2 && !done; attempt++) {
+  /**
+   * Retrying a truncated answer with the SAME ceiling just truncates again.
+   *
+   * Exercise 5490 burned both attempts producing exactly 16000 tokens of
+   * perfectly good JSON with the closing brace cut off, and reported itself as
+   * "không đọc được JSON" — which reads like the model failed when the budget
+   * did. When the answer stops exactly at the ceiling, raise the ceiling.
+   */
+  let maxTokens = 16000;
+  for (let attempt = 0; attempt < 3 && !done; attempt++) {
     try {
       const res = await llmComplete({
         step: 'generation', feature: 'bulk_gen', system: SYSTEM,
         messages: [{ role: 'user', content: user }],
-        maxTokens: 16000, maxRetries: 2, timeoutMs: 420_000, userId: 1,
+        maxTokens, maxRetries: 2, timeoutMs: 420_000, userId: 1,
       });
       const obj = parseObject(res.text);
-      if (!obj) console.log(`      (kết quả dài ${res.text.length} ký tự, ${res.outputTokens} token — nhiều khả năng bị cắt)`);
+      if (!obj) {
+        const truncated = res.outputTokens >= maxTokens - 8;
+        console.log(`      (kết quả dài ${res.text.length} ký tự, ${res.outputTokens}/${maxTokens} token${truncated ? ' — BỊ CẮT' : ''})`);
+        if (truncated && maxTokens < 48000) {
+          maxTokens *= 2;
+          console.log(`      → nâng trần lên ${maxTokens} token rồi thử lại`);
+        }
+      }
       const errs = obj ? checkRegen(obj, ex.track.slug, TEACHES_ESCAPING.test(ex.title)) : ['không đọc được JSON'];
       if (errs.length) {
         console.log(`   ↻ ${ex.id} lần ${attempt + 1} bị loại: ${errs.join(', ')}`);

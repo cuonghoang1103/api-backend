@@ -30,8 +30,24 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 const APPLY = process.argv.includes('--apply');
 
-/** An exercise whose SUBJECT is escaping — its entities are the lesson. */
-const TEACHES_ESCAPING = /sanitiz|escap|\bxss\b|html entit|encode|injection/i;
+/**
+ * Which entities are the lesson, decided per LINE and from the code itself.
+ *
+ * The title was the wrong thing to ask. /injection/ matched "Dependency
+ * Injection Container" and "Generate Dependency Injection Module with KSP" —
+ * two exercises with nothing to do with escaping, whose `Map&lt;Token&gt;`
+ * stayed broken because the regex liked their names. It also skipped a Room
+ * database exercise for saying "SQL Injection Prevention" in the title while
+ * the only entities in it were `List&lt;Note&gt;` generics.
+ *
+ * What actually marks a demonstration is the line showing BOTH forms at once:
+ *
+ *   assert sanitize_html('<script>alert(1)</script>') == '&lt;script&gt;...'
+ *
+ * A raw angle bracket on the same line as an entity means the contrast is the
+ * point. Generics never look like that — `List&lt;Note&gt;` has no raw `<`.
+ */
+const DEMONSTRATES_ESCAPING = (line) => /[<>]/.test(line);
 
 const ENTITY = /&(lt|gt|amp|quot|apos|#39|#x27);/g;
 const CHAR = { lt: '<', gt: '>', amp: '&', quot: '"', apos: "'", '#39': "'", '#x27': "'" };
@@ -47,24 +63,37 @@ function unescapeAll(text) {
   return out;
 }
 
+/** Un-escape line by line, leaving the demonstration lines exactly as they are. */
+function unescapeCode(code) {
+  let kept = 0;
+  const out = code.split('\n').map((line) => {
+    ENTITY.lastIndex = 0;
+    if (!ENTITY.test(line)) return line;
+    ENTITY.lastIndex = 0;
+    if (DEMONSTRATES_ESCAPING(line)) { kept++; return line; }
+    return unescapeAll(line);
+  }).join('\n');
+  return { code: out, kept };
+}
+
 function fixBlocks(json) {
-  if (!Array.isArray(json)) return { changed: 0, blocks: json };
-  let changed = 0;
+  if (!Array.isArray(json)) return { changed: 0, kept: 0, blocks: json };
+  let changed = 0, kept = 0;
   const blocks = json.map((b) => {
     if (!b || typeof b !== 'object' || typeof b.code !== 'string') return b;
-    const fixed = unescapeAll(b.code);
-    if (fixed === b.code) return b;
+    const r = unescapeCode(b.code);
+    kept += r.kept;
+    if (r.code === b.code) return b;
     changed++;
-    return { ...b, code: fixed };
+    return { ...b, code: r.code };
   });
-  return { changed, blocks };
+  return { changed, kept, blocks };
 }
 
 const rows = await prisma.codeExercise.findMany({
   select: { id: true, title: true, solutionCodeJson: true, starterCodeJson: true, track: { select: { slug: true } } },
 });
 
-const skipped = [];
 const targets = [];
 
 for (const r of rows) {
@@ -73,21 +102,18 @@ for (const r of rows) {
   const text = [...sol, ...st].map((b) => String(b?.code ?? '')).join('\n');
   if (!ENTITY.test(text)) { ENTITY.lastIndex = 0; continue; }
   ENTITY.lastIndex = 0;
-
-  if (TEACHES_ESCAPING.test(r.title)) { skipped.push(r); continue; }
   targets.push(r);
 }
 
-console.log(`Bỏ qua ${skipped.length} bài DẠY về escaping (thực thể ở đó là nội dung bài):`);
-for (const s of skipped) console.log(`   ~ ${s.id} [${s.track.slug}] ${s.title.slice(0, 60)}`);
-
-console.log(`\nSẽ sửa ${targets.length} bài:`);
-let blocksChanged = 0;
+console.log(`Sẽ sửa ${targets.length} bài (dòng minh hoạ escaping được giữ nguyên):`);
+let blocksChanged = 0, linesKept = 0;
 for (const r of targets) {
   const sol = fixBlocks(r.solutionCodeJson);
   const st = fixBlocks(r.starterCodeJson);
   blocksChanged += sol.changed + st.changed;
-  console.log(`   ${APPLY ? '✓' : '~'} ${r.id} [${r.track.slug}] ${sol.changed}+${st.changed} khối — ${r.title.slice(0, 52)}`);
+  linesKept += sol.kept + st.kept;
+  const keep = sol.kept + st.kept ? `, giữ ${sol.kept + st.kept} dòng` : '';
+  console.log(`   ${APPLY ? '✓' : '~'} ${r.id} [${r.track.slug}] ${sol.changed}+${st.changed} khối${keep} — ${r.title.slice(0, 46)}`);
   if (APPLY) {
     await prisma.codeExercise.update({
       where: { id: r.id },
@@ -99,6 +125,6 @@ for (const r of targets) {
   }
 }
 
-console.log(`\n${APPLY ? 'ĐÃ SỬA' : 'CHẠY KHÔ'}: ${targets.length} bài, ${blocksChanged} khối mã.`);
+console.log(`\n${APPLY ? 'ĐÃ SỬA' : 'CHẠY KHÔ'}: ${targets.length} bài, ${blocksChanged} khối mã, giữ nguyên ${linesKept} dòng minh hoạ escaping.`);
 if (!APPLY) console.log('Thêm --apply để ghi thật.');
 await prisma.$disconnect();

@@ -37,9 +37,15 @@ const LIMIT = Number(val('--limit', '0')) || 0;
 
 /** Authored by hand and verified by running. Never overwrite with model output. */
 const HANDMADE = new Set(['lab211', 'java-core', 'sql', 'redis', 'mongodb', 'prisma-orm']);
-/** Command-shaped languages: a three-word answer is complete, not "too short". */
 /** Exercises whose SUBJECT is escaping: entities there are the lesson, not a bug. */
 const TEACHES_ESCAPING = /sanitiz|escap|\bxss\b|html entit|encode|injection/i;
+/**
+ * Command-shaped languages. Two checks do not apply to these:
+ *   - "too short": `SELECT * FROM customers;` is 24 characters and a whole answer.
+ *   - "starter gives the answer away": the exercise IS typing the commands in
+ *     order, so a starter that matches the solution is the format, not a leak.
+ *     Confirmed by the user on 2026-07-21 for the 20 hand-written Redis exercises.
+ */
 const COMMAND_TRACKS = new Set(['sql', 'redis', 'git', 'docker', 'kubernetes', 'linux-bash', 'mongodb']);
 
 const ENTITY = /&(lt|gt|amp|quot|#39);/;
@@ -80,7 +86,7 @@ function defectsOf(ex) {
     if (hasTodoMarker(sol)) out.push('lời giải còn TODO');
     if (ENTITY.test(sol) && !TEACHES_ESCAPING.test(ex.title)) out.push('mã bị HTML-escape');
     if (sol.trim().length < 120 && !COMMAND_TRACKS.has(ex.track.slug)) out.push('lời giải quá ngắn');
-    if (st.trim() && norm(st) === norm(sol)) out.push('starter lộ đáp án');
+    if (st.trim() && norm(st) === norm(sol) && !COMMAND_TRACKS.has(ex.track.slug)) out.push('starter lộ đáp án');
   }
   return out;
 }

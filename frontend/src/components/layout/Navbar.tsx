@@ -22,7 +22,7 @@ import {
  User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
  Globe, ShoppingBag, Bell, NotebookPen, Newspaper,
 Sun, Moon, Wallet, ArrowLeft, Megaphone,
-PlayCircle, Receipt, Ticket, Award, Briefcase, Crown, FileText,
+PlayCircle, Receipt, Ticket, Award, Briefcase, Crown, FileText, Binary,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { usePro } from '@/hooks/usePro';
@@ -50,6 +50,7 @@ const TOP_NAV_LINKS: TopNavLink[] = [
  { href: '/music', label: 'Music', icon: Music },
  { href: '/messages', label: 'Messages', icon: MessageCircle, authOnly: true },
  { href: '/chat', label: 'AI Chat', icon: Sparkles },
+ { href: '/algorithms', label: 'Algorithms', icon: Binary },
  ...(INTERVIEW_ENABLED ? [{ href: '/interview', label: 'Interview', icon: Briefcase, authOnly: true }] : []),
  ...(CV_BUILDER_ENABLED ? [{ href: '/cv', label: 'CV Builder', icon: FileText, authOnly: true }] : []),
 ];

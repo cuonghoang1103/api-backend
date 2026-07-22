@@ -483,6 +483,34 @@ export default function ExpHubPage() {
         </div>
       </header>
 
+      {/* Mobile pane switcher — at the TOP so it's the first thing users see.
+          One column at a time on phones/tablets (<lg); hidden on desktop. */}
+      <nav className="relative z-30 flex shrink-0 items-stretch gap-1 border-b border-[var(--border-color)] bg-[var(--bg-card)]/90 p-1.5 backdrop-blur lg:hidden">
+        {([
+          { k: 'tree', icon: FolderOpen, label: t('expHub.categories') },
+          { k: 'list', icon: List, label: t('expHub.results') },
+          { k: 'detail', icon: Info, label: t('expHub.details') },
+        ] as const).map(({ k, icon: Icon, label }) => {
+          const active = mobileTab === k;
+          return (
+            <button
+              key={k}
+              type="button"
+              onClick={() => setMobileTab(k)}
+              className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2 text-[13px] font-semibold transition-colors ${
+                active
+                  ? 'bg-violet-500/15 text-violet-500 dark:text-violet-300'
+                  : 'text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)]'
+              }`}
+              aria-pressed={active}
+            >
+              <Icon className="h-4 w-4" />
+              <span className="truncate">{label}</span>
+            </button>
+          );
+        })}
+      </nav>
+
       {/* Main Content — ONE pane at a time on mobile (tab-switched), all three
           side-by-side on ≥lg. */}
       <div className="relative z-10 flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
@@ -1026,31 +1054,6 @@ export default function ExpHubPage() {
           })()}
         </div>
       </div>
-
-      {/* Mobile pane switcher — one column at a time on phones/tablets (<lg). */}
-      <nav className="z-30 flex shrink-0 items-stretch border-t border-[var(--border-color)] bg-[var(--bg-card)]/95 backdrop-blur lg:hidden">
-        {([
-          { k: 'tree', icon: FolderOpen, label: t('expHub.categories') },
-          { k: 'list', icon: List, label: t('expHub.results') },
-          { k: 'detail', icon: Info, label: t('expHub.details') },
-        ] as const).map(({ k, icon: Icon, label }) => {
-          const active = mobileTab === k;
-          return (
-            <button
-              key={k}
-              type="button"
-              onClick={() => setMobileTab(k)}
-              className={`flex flex-1 flex-col items-center gap-0.5 py-2 text-[11px] font-medium transition-colors ${
-                active ? 'text-violet-500 dark:text-violet-300' : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
-              }`}
-              aria-pressed={active}
-            >
-              <Icon className={`h-5 w-5 ${active ? 'scale-110' : ''} transition-transform`} />
-              <span className="max-w-full truncate">{label}</span>
-            </button>
-          );
-        })}
-      </nav>
     </div>
   );
 }

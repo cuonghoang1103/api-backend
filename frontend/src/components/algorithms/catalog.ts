@@ -915,6 +915,470 @@ search('car');
 search('cow');
 Tracer.delay();`;
 
+// ─── Wave 1 additions ───────────────────────────────────────────────────────
+const shellSort = `// Shell Sort — gapped insertion sort; shrink the gap toward 1.
+const array = new Array1DTracer('Array');
+const log = new LogTracer('Console');
+const D = [23, 12, 1, 8, 34, 54, 2, 3, 45];
+array.set(D);
+Tracer.delay();
+for (let gap = D.length >> 1; gap > 0; gap = gap >> 1) {
+  log.println('gap = ' + gap);
+  for (let i = gap; i < D.length; i++) {
+    const temp = D[i]; let j = i;
+    array.select(i); Tracer.delay();
+    while (j >= gap && D[j - gap] > temp) { D[j] = D[j - gap]; array.set(D); array.patch(j); Tracer.delay(); array.depatch(j); j -= gap; }
+    D[j] = temp; array.set(D); array.patch(j); Tracer.delay(); array.depatch(j); array.deselect(i);
+  }
+}
+log.println('Sorted!');
+Tracer.delay();`;
+
+const radixSort = `// Radix Sort (LSD, base 10) — stable-sort by each digit from least significant.
+const array = new Array1DTracer('Array');
+const log = new LogTracer('Console');
+let D = [170, 45, 75, 90, 2, 802, 24, 66];
+array.set(D);
+Tracer.delay();
+const max = Math.max.apply(null, D);
+for (let exp = 1; Math.floor(max / exp) > 0; exp *= 10) {
+  log.println('Bucket by digit (exp = ' + exp + ')');
+  const output = new Array(D.length); const count = new Array(10).fill(0);
+  for (let i = 0; i < D.length; i++) { array.select(i); count[Math.floor(D[i] / exp) % 10]++; }
+  Tracer.delay();
+  for (let i = 0; i < D.length; i++) array.deselect(i);
+  for (let i = 1; i < 10; i++) count[i] += count[i - 1];
+  for (let i = D.length - 1; i >= 0; i--) { const d = Math.floor(D[i] / exp) % 10; output[--count[d]] = D[i]; }
+  D = output; array.set(D);
+  for (let i = 0; i < D.length; i++) array.patch(i);
+  Tracer.delay();
+  for (let i = 0; i < D.length; i++) array.depatch(i);
+}
+log.println('Sorted!');
+Tracer.delay();`;
+
+const bucketSort = `// Bucket Sort — scatter values into buckets, sort each, then concatenate.
+const array = new Array1DTracer('Array');
+const log = new LogTracer('Console');
+const D = [29, 25, 3, 49, 9, 37, 21, 43];
+array.set(D);
+Tracer.delay();
+const n = D.length; const buckets = Array.from({ length: n }, () => []);
+const max = Math.max.apply(null, D) + 1;
+for (let i = 0; i < n; i++) { array.select(i); buckets[Math.floor(n * D[i] / max)].push(D[i]); Tracer.delay(); array.deselect(i); }
+let idx = 0;
+for (let b = 0; b < n; b++) {
+  buckets[b].sort((x, y) => x - y);
+  for (const v of buckets[b]) { D[idx] = v; array.set(D); array.patch(idx); Tracer.delay(); array.depatch(idx); idx++; }
+}
+log.println('Sorted!');
+Tracer.delay();`;
+
+const linearSearch = `// Linear Search — scan left to right until the target is found.
+const array = new Array1DTracer('Array');
+const log = new LogTracer('Console');
+const D = [10, 3, 7, 1, 9, 4, 8, 6, 2, 5];
+const target = 9;
+array.set(D); log.println('Search ' + target);
+Tracer.delay();
+let found = -1;
+for (let i = 0; i < D.length; i++) {
+  array.select(i); Tracer.delay();
+  if (D[i] === target) { array.patch(i); found = i; break; }
+  array.deselect(i);
+}
+log.println(found >= 0 ? 'Found at index ' + found : 'Not found');
+Tracer.delay();`;
+
+const jumpSearch = `// Jump Search — leap by √n blocks on a sorted array, then scan the block.
+const array = new Array1DTracer('Array (sorted)');
+const log = new LogTracer('Console');
+const D = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25];
+const target = 17;
+array.set(D);
+Tracer.delay();
+const n = D.length; const step = Math.max(1, Math.floor(Math.sqrt(n)));
+let prev = 0, jump = step;
+while (Math.min(jump, n) - 1 < n && D[Math.min(jump, n) - 1] < target) {
+  array.select(Math.min(jump, n) - 1); Tracer.delay(); array.deselect(Math.min(jump, n) - 1);
+  prev = jump; jump += step; if (prev >= n) break;
+}
+let found = -1;
+for (let i = prev; i < Math.min(jump, n); i++) { array.select(i); Tracer.delay(); if (D[i] === target) { array.patch(i); found = i; break; } array.deselect(i); }
+log.println(found >= 0 ? 'Found at ' + found : 'Not found');
+Tracer.delay();`;
+
+const interpolationSearch = `// Interpolation Search — probe where the value likely is (uniform data).
+const array = new Array1DTracer('Array (sorted, uniform)');
+const log = new LogTracer('Console');
+const D = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+const target = 70;
+array.set(D);
+Tracer.delay();
+let lo = 0, hi = D.length - 1, found = -1;
+while (lo <= hi && target >= D[lo] && target <= D[hi]) {
+  const pos = lo + Math.floor((target - D[lo]) * (hi - lo) / (D[hi] - D[lo]));
+  array.select(pos); Tracer.delay();
+  if (D[pos] === target) { array.patch(pos); found = pos; break; }
+  array.deselect(pos);
+  if (D[pos] < target) lo = pos + 1; else hi = pos - 1;
+}
+log.println(found >= 0 ? 'Found at ' + found : 'Not found');
+Tracer.delay();`;
+
+const exponentialSearch = `// Exponential Search — double the range until it overshoots, then binary search.
+const array = new Array1DTracer('Array (sorted)');
+const log = new LogTracer('Console');
+const D = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24];
+const target = 18;
+array.set(D);
+Tracer.delay();
+const n = D.length; let bound = 1;
+while (bound < n && D[bound] < target) { array.select(bound); Tracer.delay(); array.deselect(bound); bound *= 2; }
+let lo = Math.floor(bound / 2), hi = Math.min(bound, n - 1), found = -1;
+while (lo <= hi) { const mid = (lo + hi) >> 1; array.select(mid); Tracer.delay(); if (D[mid] === target) { array.patch(mid); found = mid; break; } array.deselect(mid); if (D[mid] < target) lo = mid + 1; else hi = mid - 1; }
+log.println(found >= 0 ? 'Found at ' + found : 'Not found');
+Tracer.delay();`;
+
+const sieve = `// Sieve of Eratosthenes — cross out multiples of each prime up to √N.
+const array = new Array1DTracer('is-prime (1 = candidate)');
+const log = new LogTracer('Console');
+const N = 30;
+const prime = new Array(N + 1).fill(1); prime[0] = 0; prime[1] = 0;
+array.set(prime);
+Tracer.delay();
+for (let p = 2; p * p <= N; p++) {
+  if (prime[p]) {
+    array.select(p); Tracer.delay();
+    for (let m = p * p; m <= N; m += p) if (prime[m]) { prime[m] = 0; array.set(prime); array.patch(m); Tracer.delay(); array.depatch(m); }
+    array.deselect(p);
+  }
+}
+const primes = []; for (let i = 2; i <= N; i++) if (prime[i]) primes.push(i);
+log.println('Primes ≤ ' + N + ': ' + primes.join(', '));
+Tracer.delay();`;
+
+const gcdEuclid = `// Euclidean Algorithm — gcd(a,b) = gcd(b, a mod b) until the remainder is 0.
+const log = new LogTracer('Euclidean GCD');
+let a = 1071, b = 462;
+log.println('gcd(' + a + ', ' + b + ')');
+Tracer.delay();
+while (b !== 0) { const r = a % b; log.println(a + ' = ' + Math.floor(a / b) + '·' + b + ' + ' + r); Tracer.delay(); a = b; b = r; }
+log.println('GCD = ' + a);
+Tracer.delay();`;
+
+const fastPow = `// Fast Exponentiation — a^b mod m by squaring, using b's binary digits.
+const log = new LogTracer('Fast Exponentiation (a^b mod m)');
+const a = 3, b = 13, m = 1000000007;
+log.println(a + '^' + b + ' mod ' + m);
+let result = 1, base = a % m, e = b;
+Tracer.delay();
+while (e > 0) {
+  if (e & 1) { result = (result * base) % m; log.println('bit set → result = ' + result); Tracer.delay(); }
+  base = (base * base) % m; e = e >> 1;
+  log.println('square: base = ' + base + ', e = ' + e); Tracer.delay();
+}
+log.println('Answer = ' + result);
+Tracer.delay();`;
+
+const countBits = `// Count Set Bits (Brian Kernighan) — n & (n-1) clears the lowest set bit.
+const log = new LogTracer('Count set bits');
+let n = 156;
+log.println(n + ' = 0b' + n.toString(2));
+let count = 0;
+Tracer.delay();
+while (n) { const before = n; n = n & (n - 1); count++; log.println('0b' + before.toString(2) + ' → 0b' + n.toString(2) + '  (count = ' + count + ')'); Tracer.delay(); }
+log.println('Set bits = ' + count);
+Tracer.delay();`;
+
+const xorUnique = `// Find the Unique Number — XOR cancels every value that appears twice.
+const array = new Array1DTracer('Array (each value twice, except one)');
+const log = new LogTracer('Console');
+const D = [4, 1, 2, 1, 2, 4, 7];
+array.set(D);
+Tracer.delay();
+let x = 0;
+for (let i = 0; i < D.length; i++) { array.select(i); x ^= D[i]; log.println('xor so far = ' + x); Tracer.delay(); array.deselect(i); }
+log.println('Unique element = ' + x);
+Tracer.delay();`;
+
+const subsetBitmask = `// Subset Enumeration via Bitmask — bit i set ⇒ element i is in the subset.
+const log = new LogTracer('Subsets via bitmask');
+const S = ['a', 'b', 'c'];
+const n = S.length;
+log.println('Set = {' + S.join(', ') + '} → ' + (1 << n) + ' subsets');
+Tracer.delay();
+for (let mask = 0; mask < (1 << n); mask++) {
+  const sub = [];
+  for (let i = 0; i < n; i++) if (mask & (1 << i)) sub.push(S[i]);
+  log.println('0b' + mask.toString(2).padStart(n, '0') + ' → {' + sub.join(', ') + '}');
+  Tracer.delay();
+}
+Tracer.delay();`;
+
+const twoSumSorted = `// Two Sum (two pointers) — shrink from both ends of a sorted array.
+const array = new Array1DTracer('Array (sorted)');
+const log = new LogTracer('Console');
+const D = [1, 3, 4, 5, 7, 10, 11];
+const target = 9;
+array.set(D); log.println('Find two numbers summing to ' + target);
+Tracer.delay();
+let lo = 0, hi = D.length - 1, found = false;
+while (lo < hi) {
+  array.select(lo); array.select(hi); Tracer.delay();
+  const s = D[lo] + D[hi];
+  log.println(D[lo] + ' + ' + D[hi] + ' = ' + s);
+  if (s === target) { array.patch(lo); array.patch(hi); found = true; break; }
+  array.deselect(lo); array.deselect(hi);
+  if (s < target) lo++; else hi--;
+}
+log.println(found ? 'Found the pair!' : 'No pair');
+Tracer.delay();`;
+
+const slidingWindowMax = `// Sliding Window Maximum — a monotonic deque keeps the window's max at front.
+const array = new Array1DTracer('Array');
+const log = new LogTracer('Console');
+const D = [1, 3, -1, -3, 5, 3, 6, 7];
+const k = 3;
+array.set(D); log.println('Max of each window of size ' + k);
+Tracer.delay();
+const dq = []; const res = [];
+for (let i = 0; i < D.length; i++) {
+  while (dq.length && dq[0] <= i - k) dq.shift();
+  while (dq.length && D[dq[dq.length - 1]] <= D[i]) dq.pop();
+  dq.push(i);
+  for (let j = 0; j < D.length; j++) array.deselect(j);
+  for (let j = Math.max(0, i - k + 1); j <= i; j++) array.select(j);
+  array.patch(dq[0]); Tracer.delay(); array.depatch(dq[0]);
+  if (i >= k - 1) { res.push(D[dq[0]]); log.println('window [' + (i - k + 1) + '..' + i + '] max = ' + D[dq[0]]); }
+}
+log.println('Maxima: ' + res.join(', '));
+Tracer.delay();`;
+
+const activitySelection = `// Activity Selection — greedily pick the activity that finishes earliest.
+const log = new LogTracer('Activity Selection (max non-overlapping)');
+const acts = [[1,3],[2,5],[4,7],[1,8],[5,9],[8,10],[9,11],[11,14],[13,16]];
+acts.sort((a, b) => a[1] - b[1]);
+Tracer.delay();
+let lastEnd = -1, taken = 0;
+for (const [s, f] of acts) {
+  if (s >= lastEnd) { taken++; lastEnd = f; log.println('take (' + s + ', ' + f + ')'); }
+  else log.println('skip (' + s + ', ' + f + ') — overlaps');
+  Tracer.delay();
+}
+log.println('Selected ' + taken + ' activities');
+Tracer.delay();`;
+
+const fractionalKnapsack = `// Fractional Knapsack — greedily take highest value/weight, splitting the last.
+const log = new LogTracer('Fractional Knapsack');
+const items = [[60, 10], [100, 20], [120, 30]];
+const cap = 50;
+items.sort((a, b) => b[0] / b[1] - a[0] / a[1]);
+Tracer.delay();
+let total = 0, w = cap;
+for (const [v, wt] of items) {
+  if (w <= 0) break;
+  if (wt <= w) { total += v; w -= wt; log.println('take all (' + v + ', ' + wt + ') → value ' + total); }
+  else { total += v * w / wt; log.println('take ' + w + '/' + wt + ' of (' + v + ', ' + wt + ') → value ' + total.toFixed(1)); w = 0; }
+  Tracer.delay();
+}
+log.println('Max value = ' + total.toFixed(1));
+Tracer.delay();`;
+
+const jobSequencing = `// Job Sequencing with Deadlines — take jobs by profit into the latest free slot.
+const log = new LogTracer('Job Sequencing');
+const jobs = [['a', 2, 100], ['b', 1, 19], ['c', 2, 27], ['d', 1, 25], ['e', 3, 15]];
+jobs.sort((x, y) => y[2] - x[2]);
+const maxD = Math.max.apply(null, jobs.map((j) => j[1]));
+const slot = new Array(maxD + 1).fill(null);
+Tracer.delay();
+let profit = 0;
+for (const [id, d, p] of jobs) {
+  for (let t = d; t > 0; t--) { if (!slot[t]) { slot[t] = id; profit += p; log.println('schedule ' + id + ' at slot ' + t + ' (+' + p + ')'); break; } }
+  Tracer.delay();
+}
+log.println('Sequence: ' + slot.filter(Boolean).join(' → ') + '  | profit ' + profit);
+Tracer.delay();`;
+
+const kmp = `// KMP — precompute the longest prefix-suffix table to skip re-comparisons.
+const log = new LogTracer('KMP string matching');
+const text = 'ababcabcabababd';
+const pat = 'ababd';
+log.println('text: ' + text);
+log.println('pat:  ' + pat);
+const lps = new Array(pat.length).fill(0);
+{ let len = 0, i = 1; while (i < pat.length) { if (pat[i] === pat[len]) { len++; lps[i] = len; i++; } else if (len > 0) { len = lps[len - 1]; } else { lps[i] = 0; i++; } } }
+log.println('LPS = [' + lps.join(',') + ']');
+Tracer.delay();
+let i = 0, j = 0;
+while (i < text.length) {
+  log.println(' '.repeat(Math.max(0, i - j)) + pat + '   (i=' + i + ', j=' + j + ')');
+  Tracer.delay();
+  if (text[i] === pat[j]) { i++; j++; if (j === pat.length) { log.println('MATCH at index ' + (i - j)); j = lps[j - 1]; } }
+  else if (j > 0) j = lps[j - 1];
+  else i++;
+}
+Tracer.delay();`;
+
+const rabinKarp = `// Rabin-Karp — compare a rolling hash of each window to the pattern's hash.
+const log = new LogTracer('Rabin-Karp (rolling hash)');
+const text = 'abcdeabcabc';
+const pat = 'abc';
+const B = 256, M = 101, m = pat.length;
+let ph = 0, th = 0, h = 1;
+for (let i = 0; i < m - 1; i++) h = (h * B) % M;
+for (let i = 0; i < m; i++) { ph = (B * ph + pat.charCodeAt(i)) % M; th = (B * th + text.charCodeAt(i)) % M; }
+log.println('pattern hash = ' + ph);
+Tracer.delay();
+for (let i = 0; i + m <= text.length; i++) {
+  log.println('window "' + text.substr(i, m) + '"  hash = ' + th);
+  if (th === ph && text.substr(i, m) === pat) log.println('  → MATCH at index ' + i);
+  Tracer.delay();
+  if (i + m < text.length) { th = (B * (th - text.charCodeAt(i) * h) + text.charCodeAt(i + m)) % M; if (th < 0) th += M; }
+}
+Tracer.delay();`;
+
+const zAlgorithm = `// Z-Algorithm — z[i] = length of the longest prefix starting at i.
+const array = new Array1DTracer('Z-array');
+const log = new LogTracer('Console');
+const s = 'aabxaabxcaabxaabxay';
+log.println('s = ' + s);
+const n = s.length; const z = new Array(n).fill(0);
+array.set(z);
+Tracer.delay();
+let l = 0, r = 0;
+for (let i = 1; i < n; i++) {
+  if (i < r) z[i] = Math.min(r - i, z[i - l]);
+  while (i + z[i] < n && s[z[i]] === s[i + z[i]]) z[i]++;
+  if (i + z[i] > r) { l = i; r = i + z[i]; }
+  array.set(z); array.patch(i); Tracer.delay(); array.depatch(i);
+}
+log.println('Z = [' + z.join(',') + ']');
+Tracer.delay();`;
+
+const lis = `// Longest Increasing Subsequence (O(n²) DP) — dp[i] = best LIS ending at i.
+const arr = new Array1DTracer('Array');
+const array = new Array1DTracer('dp[i] = LIS ending at i');
+const log = new LogTracer('Console');
+const A = [10, 9, 2, 5, 3, 7, 101, 18];
+arr.set(A);
+const dp = new Array(A.length).fill(1);
+array.set(dp);
+Tracer.delay();
+for (let i = 1; i < A.length; i++) {
+  arr.select(i);
+  for (let j = 0; j < i; j++) if (A[j] < A[i] && dp[j] + 1 > dp[i]) dp[i] = dp[j] + 1;
+  array.set(dp); array.patch(i); Tracer.delay(); array.depatch(i); arr.deselect(i);
+}
+log.println('LIS length = ' + Math.max.apply(null, dp));
+Tracer.delay();`;
+
+const subsetSum = `// Subset Sum (DP) — dp[i][s] = can the first i items reach sum s?
+const mat = new Array2DTracer('dp[i][s]  (1 = reachable)');
+const log = new LogTracer('Console');
+const items = [3, 34, 4, 12, 5, 2];
+const target = 9;
+const n = items.length;
+const dp = Array.from({ length: n + 1 }, () => new Array(target + 1).fill(0));
+for (let i = 0; i <= n; i++) dp[i][0] = 1;
+mat.set(dp);
+Tracer.delay();
+for (let i = 1; i <= n; i++) for (let s = 1; s <= target; s++) {
+  dp[i][s] = dp[i - 1][s];
+  if (s >= items[i - 1] && dp[i - 1][s - items[i - 1]]) dp[i][s] = 1;
+  if (dp[i][s]) { mat.set(dp); mat.patch(i, s); Tracer.delay(); mat.depatch(i, s); }
+}
+log.println('Subset summing to ' + target + '? ' + (dp[n][target] ? 'YES' : 'NO'));
+Tracer.delay();`;
+
+const ratInMaze = `// Rat in a Maze — backtracking: try Down/Right/Up/Left, undo at dead ends.
+const grid = new GridTracer('Rat in a Maze');
+const log = new LogTracer('Console');
+const MAZE = [
+  [0,0,1,0,0],
+  [0,1,0,0,1],
+  [0,0,0,1,0],
+  [1,0,1,0,0],
+  [0,0,0,0,0],
+];
+const R = MAZE.length, C = MAZE[0].length;
+grid.set(MAZE); grid.start(0, 0); grid.goal(R - 1, C - 1);
+Tracer.delay();
+const vis = Array.from({ length: R }, () => new Array(C).fill(false));
+let solved = false;
+function solve(r, c) {
+  if (r < 0 || c < 0 || r >= R || c >= C || MAZE[r][c] === 1 || vis[r][c]) return false;
+  vis[r][c] = true;
+  const end = r === R - 1 && c === C - 1;
+  if (!(r === 0 && c === 0) && !end) grid.visit(r, c);
+  Tracer.delay();
+  if (end) { grid.path(r, c); solved = true; return true; }
+  const dirs = [[1,0],[0,1],[-1,0],[0,-1]];
+  for (const [dr, dc] of dirs) if (solve(r + dr, c + dc)) { if (!(r === 0 && c === 0)) grid.path(r, c); return true; }
+  return false;
+}
+solve(0, 0);
+log.println(solved ? 'Path found!' : 'No path');
+Tracer.delay();`;
+
+const permutations = `// Permutations — backtracking: pick an unused element at each position.
+const log = new LogTracer('Generate permutations');
+const items = ['A', 'B', 'C'];
+const used = new Array(items.length).fill(false);
+const cur = [];
+let n = 0;
+function backtrack() {
+  if (cur.length === items.length) { n++; log.println(n + ': [' + cur.join(', ') + ']'); Tracer.delay(); return; }
+  for (let i = 0; i < items.length; i++) {
+    if (used[i]) continue;
+    used[i] = true; cur.push(items[i]);
+    backtrack();
+    cur.pop(); used[i] = false;
+  }
+}
+backtrack();
+log.println('Total ' + n + ' permutations');
+Tracer.delay();`;
+
+const bstAlgo = `// Binary Search Tree — build by inserts, then search a value down the tree.
+const graph = new GraphTracer('Binary Search Tree', true);
+const log = new LogTracer('Console');
+const values = [50, 30, 70, 20, 40, 60, 80];
+let root = null;
+function insert(node, v) { if (!node) return { v: v, l: null, r: null }; if (v < node.v) node.l = insert(node.l, v); else node.r = insert(node.r, v); return node; }
+for (const v of values) root = insert(root, v);
+let col = 0, maxDepth = 0;
+function layout(node, depth) { if (!node) return; if (depth > maxDepth) maxDepth = depth; layout(node.l, depth + 1); node.col = col++; node.depth = depth; layout(node.r, depth + 1); }
+layout(root, 0);
+const maxCol = Math.max(1, col - 1); maxDepth = Math.max(1, maxDepth);
+function place(node, parent) { if (!node) return; graph.addNode(String(node.v), null, 0.06 + 0.88 * (node.col / maxCol), 0.12 + 0.78 * (node.depth / maxDepth)); if (parent) graph.addEdge(String(parent.v), String(node.v)); place(node.l, node); place(node.r, node); }
+place(root, null);
+Tracer.delay();
+function search(v) { let node = root; while (node) { graph.visit(String(node.v)); log.println('visit ' + node.v); Tracer.delay(); if (v === node.v) { log.println('Found ' + v + '!'); return; } node = v < node.v ? node.l : node.r; } log.println(v + ' not found'); }
+log.println('Searching for 40...');
+search(40);
+Tracer.delay();`;
+
+const treeTraversal = `// Tree Traversals — pre / in / post (DFS) and level order (BFS).
+const graph = new GraphTracer('Tree Traversals', true);
+const log = new LogTracer('Console');
+const kids = { A:['B','C'], B:['D','E'], C:['F','G'], D:[null,null], E:[null,null], F:[null,null], G:[null,null] };
+const pos = { A:[0.5,0.1], B:[0.25,0.42], C:[0.75,0.42], D:[0.12,0.78], E:[0.38,0.78], F:[0.62,0.78], G:[0.88,0.78] };
+for (const k in pos) graph.addNode(k, null, pos[k][0], pos[k][1]);
+for (const k in kids) for (const c of kids[k]) if (c) graph.addEdge(k, c);
+Tracer.delay();
+const pre = [], ino = [], post = [];
+function dfs(n) { if (!n) return; pre.push(n); dfs(kids[n][0]); ino.push(n); dfs(kids[n][1]); post.push(n); }
+dfs('A');
+log.println('Pre-order:  ' + pre.join(' '));
+for (const n of pre) { graph.visit(n); Tracer.delay(); }
+log.println('In-order:   ' + ino.join(' '));
+log.println('Post-order: ' + post.join(' '));
+const q = ['A'], lvl = [];
+while (q.length) { const n = q.shift(); lvl.push(n); for (const c of kids[n]) if (c) q.push(c); }
+log.println('Level-order: ' + lvl.join(' '));
+Tracer.delay();`;
+
 export const CATALOG: AlgoDef[] = [
   { id: 'bubble-sort', name: 'Bubble Sort', category: 'Sorting', description: 'Swap adjacent out-of-order pairs until sorted.', code: bubble },
   { id: 'selection-sort', name: 'Selection Sort', category: 'Sorting', description: 'Repeatedly select the minimum of the remainder.', code: selection },
@@ -947,6 +1411,33 @@ export const CATALOG: AlgoDef[] = [
   { id: 'floyd-warshall', name: 'Floyd-Warshall', category: 'Graph', description: 'All-pairs shortest paths over a distance matrix.', code: floydWarshall },
   { id: 'dijkstra-grid', name: 'Dijkstra (Weighted Grid)', category: 'Pathfinding', description: 'Cheapest path when cells have different entry costs.', code: dijkstraGrid },
   { id: 'trie', name: 'Trie (Prefix Tree)', category: 'Trees', description: 'Insert and search words in a character-by-character tree.', code: trie },
+  { id: 'bst', name: 'Binary Search Tree', category: 'Trees', description: 'Build by insertion, then search down the ordered tree.', code: bstAlgo },
+  { id: 'tree-traversal', name: 'Tree Traversals', category: 'Trees', description: 'Pre-, in-, post-order (DFS) and level order (BFS).', code: treeTraversal },
+  { id: 'shell-sort', name: 'Shell Sort', category: 'Sorting', description: 'Gapped insertion sort; the gap shrinks toward 1.', code: shellSort },
+  { id: 'radix-sort', name: 'Radix Sort', category: 'Sorting', description: 'Stable-sort by each digit, least significant first.', code: radixSort },
+  { id: 'bucket-sort', name: 'Bucket Sort', category: 'Sorting', description: 'Scatter into buckets, sort each, then concatenate.', code: bucketSort },
+  { id: 'linear-search', name: 'Linear Search', category: 'Searching', description: 'Scan every element until the target is found.', code: linearSearch },
+  { id: 'jump-search', name: 'Jump Search', category: 'Searching', description: 'Leap by √n blocks on a sorted array, then scan.', code: jumpSearch },
+  { id: 'interpolation-search', name: 'Interpolation Search', category: 'Searching', description: 'Probe where the value likely is in uniform data.', code: interpolationSearch },
+  { id: 'exponential-search', name: 'Exponential Search', category: 'Searching', description: 'Double the range, then binary search inside it.', code: exponentialSearch },
+  { id: 'lis', name: 'Longest Increasing Subsequence', category: 'Dynamic Programming', description: 'O(n²) DP for the longest increasing subsequence.', code: lis },
+  { id: 'subset-sum', name: 'Subset Sum', category: 'Dynamic Programming', description: 'Can a subset reach a target sum? Boolean DP table.', code: subsetSum },
+  { id: 'rat-in-maze', name: 'Rat in a Maze', category: 'Backtracking', description: 'Find a path through a grid by backtracking.', code: ratInMaze },
+  { id: 'permutations', name: 'Permutations', category: 'Backtracking', description: 'Generate all orderings by backtracking.', code: permutations },
+  { id: 'kmp', name: 'KMP', category: 'String', description: 'Knuth-Morris-Pratt matching with a prefix table.', code: kmp },
+  { id: 'rabin-karp', name: 'Rabin-Karp', category: 'String', description: 'Rolling-hash substring search.', code: rabinKarp },
+  { id: 'z-algorithm', name: 'Z-Algorithm', category: 'String', description: 'Prefix-match lengths for pattern matching.', code: zAlgorithm },
+  { id: 'sieve', name: 'Sieve of Eratosthenes', category: 'Math', description: 'Find all primes up to N by crossing out multiples.', code: sieve },
+  { id: 'gcd-euclid', name: 'Euclidean GCD', category: 'Math', description: 'Greatest common divisor via repeated remainders.', code: gcdEuclid },
+  { id: 'fast-pow', name: 'Fast Exponentiation', category: 'Math', description: 'Modular a^b in O(log b) by squaring.', code: fastPow },
+  { id: 'count-bits', name: 'Count Set Bits', category: 'Bit Manipulation', description: "Brian Kernighan's n & (n-1) trick.", code: countBits },
+  { id: 'xor-unique', name: 'Find Unique (XOR)', category: 'Bit Manipulation', description: 'XOR cancels paired values, leaving the unique one.', code: xorUnique },
+  { id: 'subset-bitmask', name: 'Subsets via Bitmask', category: 'Bit Manipulation', description: 'Enumerate every subset with binary masks.', code: subsetBitmask },
+  { id: 'two-sum', name: 'Two Sum (Two Pointers)', category: 'Two Pointers', description: 'Find a pair summing to a target on a sorted array.', code: twoSumSorted },
+  { id: 'sliding-window-max', name: 'Sliding Window Maximum', category: 'Two Pointers', description: 'Monotonic deque tracks each window maximum.', code: slidingWindowMax },
+  { id: 'activity-selection', name: 'Activity Selection', category: 'Greedy', description: 'Pick the most non-overlapping intervals.', code: activitySelection },
+  { id: 'fractional-knapsack', name: 'Fractional Knapsack', category: 'Greedy', description: 'Maximize value by taking highest value/weight first.', code: fractionalKnapsack },
+  { id: 'job-sequencing', name: 'Job Sequencing', category: 'Greedy', description: 'Schedule jobs by profit into deadline slots.', code: jobSequencing },
 ];
 
 export const CATEGORIES = Array.from(new Set(CATALOG.map((a) => a.category)));

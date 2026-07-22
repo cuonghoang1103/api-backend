@@ -163,7 +163,7 @@ export default function AlgorithmVisualizer() {
   };
 
   return (
-    <div className="mx-auto max-w-[1440px] px-3 py-4 xl:pr-16 2xl:pr-20">
+    <div className="mx-auto max-w-[1440px] px-3 pb-6 pt-20 xl:pr-16 2xl:pr-20">
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[220px_1fr_minmax(320px,0.9fr)]">
         {/* ── Left: algorithm tree ─────────────────────────────── */}
         <aside className="rounded-xl border p-3" style={{ borderColor: 'var(--border-color, rgba(127,127,127,0.2))' }}>

@@ -27,13 +27,17 @@ function parseMaze(src: string): number[][] | null {
   return null;
 }
 
+// Slow → fast. Higher speed = shorter delay per step.
 const SPEEDS = [
-  { label: '0.5×', ms: 700 },
-  { label: '1×', ms: 350 },
-  { label: '2×', ms: 160 },
-  { label: '4×', ms: 70 },
-  { label: '8×', ms: 25 },
+  { label: '0.1×', ms: 2400 },
+  { label: '0.25×', ms: 1100 },
+  { label: '0.5×', ms: 650 },
+  { label: '1×', ms: 320 },
+  { label: '2×', ms: 150 },
+  { label: '4×', ms: 65 },
+  { label: '8×', ms: 22 },
 ];
+const ARRAY_INPUT_CATEGORIES = ['Sorting', 'Searching', 'Two Pointers'];
 
 export default function AlgorithmVisualizer() {
   const [algoId, setAlgoId] = useState<string>(CATALOG[0].id);
@@ -42,7 +46,7 @@ export default function AlgorithmVisualizer() {
   const [frames, setFrames] = useState<Frame[]>([]);
   const [step, setStep] = useState(0);
   const [playing, setPlaying] = useState(false);
-  const [speedIdx, setSpeedIdx] = useState(1);
+  const [speedIdx, setSpeedIdx] = useState(2);
   const [running, setRunning] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -54,6 +58,9 @@ export default function AlgorithmVisualizer() {
 
   const algo = useMemo<AlgoDef | undefined>(() => CATALOG.find((a) => a.id === algoId), [algoId]);
   const lastStep = Math.max(0, frames.length - 1);
+  const showCustomInput = !!algo && ARRAY_INPUT_CATEGORIES.includes(algo.category);
+  // Searching / two-pointer algorithms assume a sorted array — keep it sorted.
+  const needsSorted = !!algo && (algo.category === 'Searching' || algo.category === 'Two Pointers');
 
   const build = useCallback(async (src: string) => {
     setRunning(true);
@@ -110,10 +117,11 @@ export default function AlgorithmVisualizer() {
   const applyInput = useCallback((nums: number[]) => {
     const re = /\[\s*-?\d+(?:\s*,\s*-?\d+)*\s*\]/;
     if (!nums.length || !re.test(code)) return;
-    const next = code.replace(re, '[' + nums.join(', ') + ']');
+    const arr = needsSorted ? [...nums].sort((a, b) => a - b) : nums;
+    const next = code.replace(re, '[' + arr.join(', ') + ']');
     setCode(next);
     void build(next);
-  }, [code, build]);
+  }, [code, build, needsSorted]);
 
   const randomize = useCallback(() => {
     const n = 8 + Math.floor(Math.random() * 4); // 8–11 values
@@ -163,10 +171,10 @@ export default function AlgorithmVisualizer() {
   };
 
   return (
-    <div className="mx-auto max-w-[1440px] px-3 pb-6 pt-20 xl:pr-16 2xl:pr-20">
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[220px_1fr_minmax(320px,0.9fr)]">
-        {/* ── Left: algorithm tree ─────────────────────────────── */}
-        <aside className="rounded-xl border p-3" style={{ borderColor: 'var(--border-color, rgba(127,127,127,0.2))' }}>
+    <div className="mx-auto max-w-[1440px] px-3 pt-20 pb-6 xl:pr-16 2xl:pr-20 lg:mt-16 lg:flex lg:h-[calc(100vh-4rem)] lg:flex-col lg:overflow-hidden lg:pb-2 lg:pt-3">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[220px_1fr_minmax(320px,0.9fr)] lg:min-h-0 lg:flex-1 lg:overflow-hidden">
+        {/* ── Left: algorithm tree (scrolls on its own) ────────── */}
+        <aside className="rounded-xl border p-3 lg:min-h-0 lg:overflow-y-auto" style={{ borderColor: 'var(--border-color, rgba(127,127,127,0.2))' }}>
           <h2 className="mb-3 text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Algorithms</h2>
           <div className="space-y-4">
             {CATEGORIES.map((cat) => (
@@ -198,7 +206,7 @@ export default function AlgorithmVisualizer() {
         </aside>
 
         {/* ── Center: visualization + controls ─────────────────── */}
-        <main className="rounded-xl border p-4" style={{ borderColor: 'var(--border-color, rgba(127,127,127,0.2))' }}>
+        <main className="rounded-xl border p-4 lg:min-h-0 lg:overflow-y-auto" style={{ borderColor: 'var(--border-color, rgba(127,127,127,0.2))' }}>
           <div className="mb-3 flex items-start justify-between gap-3">
             <div>
               <h1 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>{algo?.name}</h1>
@@ -214,7 +222,7 @@ export default function AlgorithmVisualizer() {
             </div>
           ) : null}
 
-          {algo?.category === 'Sorting' ? (
+          {showCustomInput ? (
             <div className="mb-3 flex flex-wrap items-center gap-2 rounded-lg border p-2 text-sm" style={{ borderColor: 'var(--border-color, rgba(127,127,127,0.2))' }}>
               <span className="text-xs font-medium" style={{ color: 'var(--text-secondary, #888)' }}>Custom input</span>
               <input
@@ -296,11 +304,19 @@ export default function AlgorithmVisualizer() {
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-xs tabular-nums" style={{ color: 'var(--text-secondary, #888)' }}>Step {Math.min(step, lastStep)} / {lastStep}</span>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2" title="Playback speed — drag to slow down / speed up">
                   <Zap size={13} style={{ color: 'var(--text-secondary, #888)' }} />
-                  {SPEEDS.map((sp, i) => (
-                    <button key={sp.label} onClick={() => setSpeedIdx(i)} className="rounded px-1.5 py-0.5 text-xs" style={{ background: i === speedIdx ? 'var(--accent-color,#6366f1)' : 'transparent', color: i === speedIdx ? '#fff' : 'var(--text-secondary,#888)' }}>{sp.label}</button>
-                  ))}
+                  <input
+                    type="range"
+                    min={0}
+                    max={SPEEDS.length - 1}
+                    step={1}
+                    value={speedIdx}
+                    onChange={(e) => setSpeedIdx(Number(e.target.value))}
+                    className="w-24 accent-[var(--accent-color,#6366f1)] sm:w-32"
+                    aria-label="Playback speed"
+                  />
+                  <span className="w-10 text-right text-xs font-semibold tabular-nums" style={{ color: 'var(--accent-color, #6366f1)' }}>{SPEEDS[speedIdx].label}</span>
                 </div>
               </div>
             </div>
@@ -308,7 +324,7 @@ export default function AlgorithmVisualizer() {
         </main>
 
         {/* ── Right: code editor ───────────────────────────────── */}
-        <aside className="flex flex-col rounded-xl border" style={{ borderColor: 'var(--border-color, rgba(127,127,127,0.2))', minHeight: 420 }}>
+        <aside className="flex flex-col rounded-xl border lg:min-h-0 lg:overflow-hidden" style={{ borderColor: 'var(--border-color, rgba(127,127,127,0.2))', minHeight: 420 }}>
           <div className="flex items-center justify-between border-b px-3 py-2" style={{ borderColor: 'var(--border-color, rgba(127,127,127,0.2))' }}>
             <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Code (JavaScript)</span>
             <div className="flex items-center gap-1.5">
@@ -332,7 +348,7 @@ export default function AlgorithmVisualizer() {
         </aside>
       </div>
 
-      <p className="mx-auto mt-4 max-w-3xl text-center text-xs" style={{ color: 'var(--text-secondary, #888)' }}>
+      <p className="mx-auto mt-4 max-w-3xl text-center text-xs lg:mt-2 lg:shrink-0" style={{ color: 'var(--text-secondary, #888)' }}>
         Edit the code and press <strong>Run</strong>. Tracers: <code>Array1DTracer</code>, <code>ChartTracer</code>,{' '}
         <code>GraphTracer</code>, <code>Array2DTracer</code>, <code>GridTracer</code>, <code>LogTracer</code> — call{' '}
         <code>Tracer.delay()</code> to add an animation step, then <strong>Share</strong> to copy a link with your code.

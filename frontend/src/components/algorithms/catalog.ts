@@ -25,6 +25,7 @@ for (let i = 0; i < D.length - 1; i++) {
     Tracer.delay();
     if (D[j] > D[j + 1]) {
       const t = D[j]; D[j] = D[j + 1]; D[j + 1] = t;
+      log.println('swap D[' + j + '] ↔ D[' + (j + 1) + ']');
       array.set(D);
       array.patch(j); array.patch(j + 1);
       Tracer.delay();
@@ -56,6 +57,7 @@ for (let i = 0; i < D.length - 1; i++) {
   }
   if (min !== i) {
     const t = D[i]; D[i] = D[min]; D[min] = t;
+    log.println('place ' + D[i] + ' at index ' + i);
     array.set(D); array.patch(i); array.patch(min);
     Tracer.delay();
     array.depatch(i); array.depatch(min);
@@ -85,6 +87,7 @@ for (let i = 1; i < D.length; i++) {
     j--;
   }
   D[j + 1] = key;
+  log.println('insert ' + key + ' at index ' + (j + 1));
   array.set(D); array.patch(j + 1);
   Tracer.delay();
   array.depatch(j + 1); array.deselect(i);

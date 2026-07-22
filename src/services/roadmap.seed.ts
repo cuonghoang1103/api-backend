@@ -631,4 +631,634 @@ export const ROADMAP_SEED: SeedRoadmap[] = [
       ]},
     ],
   },
+
+  // ─────────────────────────────── TYPESCRIPT ───────────────────────────────
+  {
+    slug: 'typescript', title: 'TypeScript', type: 'skill', icon: 'Braces', color: '#3178c6',
+    description: 'JavaScript có kiểu tĩnh — từ kiểu cơ bản đến generic, utility type và tích hợp React/Node trong dự án lớn.',
+    stages: [
+      { label: 'Chuẩn bị', nodes: [
+        { title: 'JavaScript nền tảng', icon: 'Braces', description: 'ES6+, module, async — TypeScript là JS + kiểu.', link: cl('javascript'),
+          resources: [ off('MDN — Học JavaScript', 'https://developer.mozilla.org/en-US/docs/Learn/JavaScript'), art('javascript.info', 'https://javascript.info/') ] },
+        { title: 'Cài đặt & tsconfig', kind: 'info', side: 'right', description: 'tsc, tsconfig.json, strict mode, target/module.',
+          resources: [ off('TypeScript — tsconfig Reference', 'https://www.typescriptlang.org/tsconfig/') ] },
+      ]},
+      { label: 'Hệ thống kiểu', nodes: [
+        { title: 'Kiểu cơ bản', icon: 'FileCode', description: 'string/number/boolean, array, tuple, any/unknown, void.', link: cl('typescript'),
+          resources: [ off('TypeScript — Everyday Types', 'https://www.typescriptlang.org/docs/handbook/2/everyday-types.html') ] },
+        { title: 'Interface & Type alias', kind: 'info', side: 'right', description: 'Định hình object, kế thừa, optional/readonly.',
+          resources: [ off('TypeScript — Object Types', 'https://www.typescriptlang.org/docs/handbook/2/objects.html') ] },
+        { title: 'Union & Narrowing', kind: 'info', side: 'left', description: 'Kiểu hợp, type guard, discriminated union.',
+          resources: [ off('TypeScript — Narrowing', 'https://www.typescriptlang.org/docs/handbook/2/narrowing.html') ] },
+        { title: 'Generics', icon: 'Boxes', side: 'right', description: 'Kiểu tham số hoá — hàm, class, ràng buộc.',
+          resources: [ off('TypeScript — Generics', 'https://www.typescriptlang.org/docs/handbook/2/generics.html') ] },
+      ]},
+      { label: 'Nâng cao', nodes: [
+        { title: 'Utility Types', kind: 'info', description: 'Partial, Pick, Omit, Record, ReturnType...',
+          resources: [ off('TypeScript — Utility Types', 'https://www.typescriptlang.org/docs/handbook/utility-types.html') ] },
+        { title: 'Mapped & Conditional types', kind: 'alternative', side: 'right', description: 'Kiểu suy diễn động, infer, template literal type.',
+          resources: [ off('TypeScript — Mapped Types', 'https://www.typescriptlang.org/docs/handbook/2/mapped-types.html'), off('TypeScript — Conditional Types', 'https://www.typescriptlang.org/docs/handbook/2/conditional-types.html') ] },
+        { title: 'Decorators', kind: 'alternative', side: 'left', description: 'Metadata cho class/method — dùng nhiều trong NestJS/Angular.',
+          resources: [ off('TypeScript — Decorators', 'https://www.typescriptlang.org/docs/handbook/decorators.html') ] },
+        { title: 'Modules & khai báo kiểu', kind: 'info', side: 'right', description: 'import/export, .d.ts, DefinitelyTyped.',
+          resources: [ off('TypeScript — Modules', 'https://www.typescriptlang.org/docs/handbook/2/modules.html') ] },
+      ]},
+      { label: 'Thực chiến', nodes: [
+        { title: 'TypeScript với React', icon: 'Atom', side: 'left', description: 'Kiểu cho props, state, event, hook.', link: cl('react'),
+          resources: [ off('React — Using TypeScript', 'https://react.dev/learn/typescript') ] },
+        { title: 'TypeScript với Node', icon: 'Hexagon', kind: 'alternative', side: 'right', description: 'Backend type-safe với Express/NestJS.', link: cl('nestjs'),
+          resources: [ off('Node.js — Learn', 'https://nodejs.org/en/learn'), off('NestJS — Docs', 'https://docs.nestjs.com/') ] },
+        { title: 'Linting & tooling', kind: 'info', side: 'left', description: 'ESLint + typescript-eslint, Prettier, CI.',
+          resources: [ off('typescript-eslint', 'https://typescript-eslint.io/') ] },
+        { title: 'Migrate JS → TS', kind: 'alternative', side: 'right', description: 'Chuyển dự án JS sang TS từng bước.',
+          resources: [ off('TypeScript — Migrating from JavaScript', 'https://www.typescriptlang.org/docs/handbook/migrating-from-javascript.html') ] },
+      ]},
+    ],
+  },
+
+  // ─────────────────────────────── GO ───────────────────────────────
+  {
+    slug: 'go', title: 'Go', type: 'skill', icon: 'Rabbit', color: '#00add8',
+    description: 'Ngôn ngữ Go — cú pháp gọn, concurrency mạnh (goroutine/channel), lý tưởng cho microservice & hạ tầng.',
+    stages: [
+      { label: 'Nền tảng', nodes: [
+        { title: 'Cài đặt & Tour of Go', icon: 'Rabbit', description: 'go toolchain, chạy chương trình đầu tiên, workspace.', link: cl('go'),
+          resources: [ off('A Tour of Go', 'https://go.dev/tour/'), off('Go — Learn', 'https://go.dev/learn/') ] },
+        { title: 'Cú pháp & kiểu', kind: 'info', side: 'right', description: 'Biến, slice, map, struct, interface, con trỏ.',
+          resources: [ off('Effective Go', 'https://go.dev/doc/effective_go'), art('Go by Example', 'https://gobyexample.com/') ] },
+        { title: 'Hàm, method & interface', kind: 'info', side: 'left', description: 'Nhiều giá trị trả về, receiver, interface ngầm định.',
+          resources: [ off('Go — Language Specification', 'https://go.dev/ref/spec') ] },
+      ]},
+      { label: 'Concurrency', nodes: [
+        { title: 'Goroutine & Channel', icon: 'Share2', description: 'Đồng thời nhẹ, giao tiếp qua channel.', link: cl('go'),
+          resources: [ art('Go by Example — Goroutines', 'https://gobyexample.com/goroutines'), off('Effective Go — Concurrency', 'https://go.dev/doc/effective_go#concurrency') ] },
+        { title: 'select & sync', kind: 'info', side: 'right', description: 'select, WaitGroup, Mutex, race detector.',
+          resources: [ art('Go by Example — Select', 'https://gobyexample.com/select') ] },
+        { title: 'Context', kind: 'alternative', side: 'left', description: 'Huỷ tác vụ, deadline, truyền giá trị request-scoped.',
+          resources: [ off('Go Blog — Context', 'https://go.dev/blog/context') ] },
+      ]},
+      { label: 'Chuẩn nghề', nodes: [
+        { title: 'Modules & package', kind: 'info', description: 'go mod, versioning, tổ chức mã.',
+          resources: [ off('Go — Modules Reference', 'https://go.dev/ref/mod') ] },
+        { title: 'Error handling', kind: 'info', side: 'right', description: 'error là giá trị, wrap/unwrap, errors.Is/As.',
+          resources: [ off('Go Blog — Error handling', 'https://go.dev/blog/error-handling-and-go') ] },
+        { title: 'Testing', kind: 'info', side: 'left', description: 'testing package, table-driven test, benchmark.',
+          resources: [ off('Go — testing package', 'https://pkg.go.dev/testing') ] },
+      ]},
+      { label: 'Web & Backend', nodes: [
+        { title: 'net/http & routing', icon: 'Webhook', description: 'HTTP server, handler, middleware.', link: cl('go'),
+          resources: [ off('Go — Writing Web Applications', 'https://go.dev/doc/articles/wiki/'), off('Gin — Docs', 'https://gin-gonic.com/docs/') ] },
+        { title: 'Database (database/sql)', icon: 'Database', side: 'right', description: 'Kết nối, query, transaction, pool.',
+          resources: [ off('Go — Accessing a database', 'https://go.dev/doc/tutorial/database-access') ] },
+        { title: 'Đóng gói & Docker', icon: 'Container', side: 'left', description: 'Binary tĩnh, image nhỏ, triển khai.', link: cl('docker'),
+          resources: [ off('Docker — Go Guide', 'https://docs.docker.com/language/golang/') ] },
+      ]},
+    ],
+  },
+
+  // ─────────────────────────────── RUST ───────────────────────────────
+  {
+    slug: 'rust', title: 'Rust', type: 'skill', icon: 'Cog', color: '#f74c00',
+    description: 'Rust — an toàn bộ nhớ không cần GC, hiệu năng như C++. Từ ownership đến async và WebAssembly.',
+    stages: [
+      { label: 'Nền tảng', nodes: [
+        { title: 'The Book & Cargo', icon: 'BookOpen', description: 'rustup, cargo, chương trình đầu tiên.', link: cl('rust'),
+          resources: [ off('The Rust Programming Language (Book)', 'https://doc.rust-lang.org/book/'), art('Rust by Example', 'https://doc.rust-lang.org/rust-by-example/') ] },
+        { title: 'Ownership & Borrowing', kind: 'info', side: 'right', description: 'Trái tim của Rust: sở hữu, mượn, tham chiếu.',
+          resources: [ off('Rust Book — Ch.4 Ownership', 'https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html') ] },
+        { title: 'Struct, Enum & Pattern matching', kind: 'info', side: 'left', description: 'Kiểu dữ liệu, match, Option.',
+          resources: [ off('Rust Book — Ch.6 Enums & Pattern Matching', 'https://doc.rust-lang.org/book/ch06-00-enums.html') ] },
+      ]},
+      { label: 'An toàn & trừu tượng', nodes: [
+        { title: 'Lifetimes', kind: 'info', description: 'Chu kỳ sống tham chiếu — chống dangling.',
+          resources: [ off('Rust Book — Ch.10.3 Lifetimes', 'https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html') ] },
+        { title: 'Traits & Generics', icon: 'Boxes', side: 'right', description: 'Đa hình tĩnh, trait bound, trait object.',
+          resources: [ off('Rust Book — Ch.10 Generic Types & Traits', 'https://doc.rust-lang.org/book/ch10-00-generics.html') ] },
+        { title: 'Error handling', kind: 'info', side: 'left', description: 'Result, ?, panic vs recoverable error.',
+          resources: [ off('Rust Book — Ch.9 Error Handling', 'https://doc.rust-lang.org/book/ch09-00-error-handling.html') ] },
+      ]},
+      { label: 'Nâng cao', nodes: [
+        { title: 'Collections & Iterators', kind: 'info', description: 'Vec, HashMap, iterator, closure.',
+          resources: [ off('Rust Book — Ch.13 Iterators & Closures', 'https://doc.rust-lang.org/book/ch13-00-functional-features.html') ] },
+        { title: 'Concurrency', icon: 'Share2', side: 'right', description: 'Fearless concurrency: thread, channel, Arc/Mutex.',
+          resources: [ off('Rust Book — Ch.16 Concurrency', 'https://doc.rust-lang.org/book/ch16-00-concurrency.html') ] },
+        { title: 'Smart pointers', kind: 'alternative', side: 'left', description: 'Box, Rc, RefCell — sở hữu linh hoạt.',
+          resources: [ off('Rust Book — Ch.15 Smart Pointers', 'https://doc.rust-lang.org/book/ch15-00-smart-pointers.html') ] },
+        { title: 'Macros', kind: 'alternative', side: 'right', description: 'macro_rules! và derive macro.',
+          resources: [ off('Rust Book — Ch.19 Macros', 'https://doc.rust-lang.org/book/ch19-06-macros.html') ] },
+      ]},
+      { label: 'Thực chiến', nodes: [
+        { title: 'Cargo & crates.io', kind: 'info', description: 'Dependency, workspace, publish crate.',
+          resources: [ off('The Cargo Book', 'https://doc.rust-lang.org/cargo/'), off('crates.io', 'https://crates.io/') ] },
+        { title: 'Async (Tokio)', icon: 'Zap', kind: 'alternative', side: 'right', description: 'async/await, runtime, future.',
+          resources: [ off('Tokio — Tutorial', 'https://tokio.rs/tokio/tutorial') ] },
+        { title: 'Web (Axum/Actix)', icon: 'Webhook', kind: 'alternative', side: 'left', description: 'API hiệu năng cao bằng Rust.',
+          resources: [ off('Axum — Docs', 'https://docs.rs/axum/latest/axum/') ] },
+        { title: 'WebAssembly', kind: 'alternative', side: 'right', description: 'Biên dịch Rust sang WASM chạy trên trình duyệt.',
+          resources: [ off('Rust and WebAssembly (Book)', 'https://rustwasm.github.io/docs/book/') ] },
+      ]},
+    ],
+  },
+
+  // ─────────────────────────────── JAVA ───────────────────────────────
+  {
+    slug: 'java', title: 'Java', type: 'skill', icon: 'Coffee', color: '#ea580c',
+    description: 'Java — nền tảng doanh nghiệp: cú pháp, OOP, collection, stream, concurrency và Spring Boot.',
+    stages: [
+      { label: 'Nền tảng', nodes: [
+        { title: 'Cú pháp & JVM', icon: 'Coffee', description: 'Biến, kiểu, điều khiển luồng, JVM/JRE/JDK.', link: cl('java-core'),
+          resources: [ off('dev.java — Learn', 'https://dev.java/learn/'), off('Java SE — Documentation', 'https://docs.oracle.com/en/java/javase/') ] },
+        { title: 'OOP', subtitle: 'Hướng đối tượng', icon: 'Boxes', side: 'right', description: 'Class, kế thừa, interface, abstract, đa hình.', link: cl('java-core'),
+          resources: [ off('dev.java — Objects & Classes', 'https://dev.java/learn/language-basics/') ] },
+        { title: 'Collections & Generics', kind: 'info', side: 'left', description: 'List/Set/Map, generic, comparator.',
+          resources: [ off('dev.java — Collections Framework', 'https://dev.java/learn/api/collections-framework/') ] },
+      ]},
+      { label: 'Nâng cao', nodes: [
+        { title: 'Exception & I/O', kind: 'info', description: 'try/catch/finally, checked/unchecked, file & stream.',
+          resources: [ off('Java Tutorial — Exceptions', 'https://docs.oracle.com/javase/tutorial/essential/exceptions/') ] },
+        { title: 'Streams & Lambda', kind: 'info', side: 'right', description: 'Functional style: map/filter/collect, Optional.',
+          resources: [ off('dev.java — The Streams API', 'https://dev.java/learn/api/streams/') ] },
+        { title: 'Concurrency & Threads', kind: 'alternative', side: 'left', description: 'Thread, ExecutorService, synchronized.',
+          resources: [ off('Java Tutorial — Concurrency', 'https://docs.oracle.com/javase/tutorial/essential/concurrency/') ] },
+        { title: 'Java hiện đại (records, sealed)', kind: 'info', side: 'right', description: 'var, record, sealed class, switch expression.',
+          resources: [ off('dev.java — Records', 'https://dev.java/learn/records/') ] },
+      ]},
+      { label: 'Công cụ & Test', nodes: [
+        { title: 'Build (Maven/Gradle)', icon: 'Wrench', description: 'Quản lý dependency, vòng đời build.',
+          resources: [ off('Maven — Guides', 'https://maven.apache.org/guides/'), off('Gradle — User Manual', 'https://docs.gradle.org/current/userguide/userguide.html') ] },
+        { title: 'Testing (JUnit)', kind: 'info', side: 'right', description: 'JUnit 5, assertion, mock (Mockito).',
+          resources: [ off('JUnit 5 — User Guide', 'https://junit.org/junit5/docs/current/user-guide/') ] },
+      ]},
+      { label: 'Spring', nodes: [
+        { title: 'Spring Boot', icon: 'Server', description: 'Auto-config, DI, REST controller, starter.', link: cl('spring-boot'),
+          resources: [ off('Spring Boot', 'https://spring.io/projects/spring-boot'), crs('Spring — Guides', 'https://spring.io/guides') ] },
+        { title: 'Spring Data JPA', icon: 'Database', side: 'right', description: 'Repository, entity, quan hệ, query.',
+          resources: [ off('Spring Data JPA', 'https://spring.io/projects/spring-data-jpa') ] },
+        { title: 'REST API', icon: 'Webhook', side: 'left', description: 'Controller, DTO, validation, xử lý lỗi.', link: cl('rest-apis'),
+          resources: [ crs('Spring — Building a RESTful Web Service', 'https://spring.io/guides/gs/rest-service') ] },
+      ]},
+    ],
+  },
+
+  // ─────────────────────────────── C / C++ ───────────────────────────────
+  {
+    slug: 'cpp', title: 'C / C++', type: 'skill', icon: 'Cpu', color: '#3949ab',
+    description: 'Lập trình hệ thống với C và C++ — con trỏ, quản lý bộ nhớ, OOP, template, STL và C++ hiện đại.',
+    stages: [
+      { label: 'Nền tảng', nodes: [
+        { title: 'Trình biên dịch & toolchain', kind: 'info', description: 'gcc/clang, biên dịch, liên kết, chạy.',
+          resources: [ off('isocpp — Get Started', 'https://isocpp.org/get-started'), crs('LearnCpp', 'https://www.learncpp.com/') ] },
+        { title: 'Cú pháp cơ bản', icon: 'FileCode', side: 'right', description: 'Biến, kiểu, hàm, điều khiển luồng, mảng.', link: cl('c'),
+          resources: [ crs('LearnCpp — C++ Basics', 'https://www.learncpp.com/'), off('cppreference', 'https://en.cppreference.com/w/') ] },
+        { title: 'Con trỏ & bộ nhớ', kind: 'info', side: 'left', description: 'Pointer, reference, stack vs heap, new/delete.',
+          resources: [ crs('LearnCpp — Dynamic Memory', 'https://www.learncpp.com/') ] },
+      ]},
+      { label: 'OOP & RAII', nodes: [
+        { title: 'Class & RAII', icon: 'Boxes', description: 'Đóng gói, constructor/destructor, quy tắc 3/5.',
+          resources: [ off('cppreference — Classes', 'https://en.cppreference.com/w/cpp/language/classes') ] },
+        { title: 'Templates', kind: 'info', side: 'right', description: 'Lập trình tổng quát, function/class template.',
+          resources: [ off('cppreference — Templates', 'https://en.cppreference.com/w/cpp/language/templates') ] },
+        { title: 'STL: container & algorithm', kind: 'info', side: 'left', description: 'vector, map, set, iterator, <algorithm>.',
+          resources: [ off('cppreference — Containers Library', 'https://en.cppreference.com/w/cpp/container') ] },
+      ]},
+      { label: 'Nâng cao', nodes: [
+        { title: 'Smart pointers & move', kind: 'info', description: 'unique_ptr/shared_ptr, move semantics, rvalue.',
+          resources: [ off('cppreference — Smart Pointers', 'https://en.cppreference.com/w/cpp/memory') ] },
+        { title: 'Concurrency', kind: 'alternative', side: 'right', description: 'std::thread, mutex, atomic, async.',
+          resources: [ off('cppreference — Thread Support Library', 'https://en.cppreference.com/w/cpp/thread') ] },
+        { title: 'C++ hiện đại (11/14/17/20)', kind: 'info', side: 'left', description: 'auto, lambda, ranges, concepts.',
+          resources: [ off('cppreference — C++ Language', 'https://en.cppreference.com/w/cpp/language') ] },
+      ]},
+      { label: 'Thực chiến', nodes: [
+        { title: 'CMake & build', icon: 'Wrench', description: 'Dựng dự án đa file, thư viện, cross-platform.',
+          resources: [ off('CMake — Tutorial', 'https://cmake.org/cmake/help/latest/guide/tutorial/index.html') ] },
+        { title: 'Debug (gdb/valgrind)', kind: 'info', side: 'right', description: 'Gỡ lỗi, phát hiện rò bộ nhớ.',
+          resources: [ off('GDB — Documentation', 'https://sourceware.org/gdb/documentation/') ] },
+        { title: 'Competitive programming', icon: 'Binary', kind: 'alternative', side: 'left', description: 'C++ nhanh cho luyện thuật toán.', link: algos,
+          resources: [ art('cp-algorithms', 'https://cp-algorithms.com/') ] },
+      ]},
+    ],
+  },
+
+  // ─────────────────────────────── DOCKER ───────────────────────────────
+  {
+    slug: 'docker', title: 'Docker', type: 'skill', icon: 'Container', color: '#2496ed',
+    description: 'Đóng gói ứng dụng bằng container — image, Dockerfile, volume, network, Compose và tối ưu production.',
+    stages: [
+      { label: 'Nền tảng', nodes: [
+        { title: 'Container vs VM', kind: 'info', description: 'Vì sao container nhẹ & nhất quán môi trường.',
+          resources: [ off('Docker — Overview', 'https://docs.docker.com/get-started/docker-overview/') ] },
+        { title: 'Cài đặt & CLI', icon: 'Terminal', side: 'right', description: 'docker run/ps/exec/logs, Docker Desktop.', link: cl('docker'),
+          resources: [ off('Docker — Get Started', 'https://docs.docker.com/get-started/') ] },
+        { title: 'Image & Dockerfile', icon: 'Layers', side: 'left', description: 'Layer, build, FROM/RUN/COPY/CMD, .dockerignore.',
+          resources: [ off('Dockerfile — Reference', 'https://docs.docker.com/reference/dockerfile/') ] },
+      ]},
+      { label: 'Vận hành', nodes: [
+        { title: 'Volume & bind mount', kind: 'info', description: 'Lưu trữ bền vững, chia sẻ dữ liệu.',
+          resources: [ off('Docker — Volumes', 'https://docs.docker.com/engine/storage/volumes/') ] },
+        { title: 'Network', kind: 'info', side: 'right', description: 'bridge/host, port mapping, DNS nội bộ.',
+          resources: [ off('Docker — Networking', 'https://docs.docker.com/engine/network/') ] },
+        { title: 'Docker Compose', icon: 'Boxes', side: 'left', description: 'Nhiều service bằng 1 file YAML.',
+          resources: [ off('Docker Compose', 'https://docs.docker.com/compose/') ] },
+      ]},
+      { label: 'Production', nodes: [
+        { title: 'Multi-stage build', kind: 'info', description: 'Image nhỏ gọn, tách build & runtime.',
+          resources: [ off('Docker — Multi-stage builds', 'https://docs.docker.com/build/building/multi-stage/') ] },
+        { title: 'Tối ưu & bảo mật image', kind: 'info', side: 'right', description: 'Layer caching, non-root, scan lỗ hổng.',
+          resources: [ off('Docker — Building best practices', 'https://docs.docker.com/build/building/best-practices/') ] },
+        { title: 'Registry (Hub/GHCR)', kind: 'info', side: 'left', description: 'push/pull, tag, private registry.',
+          resources: [ off('Docker — Push to registry', 'https://docs.docker.com/get-started/introduction/build-and-push-first-image/') ] },
+        { title: 'Sang Kubernetes', icon: 'Ship', kind: 'alternative', side: 'right', description: 'Điều phối container quy mô lớn.', link: cl('kubernetes'),
+          resources: [ off('Lộ trình Kubernetes', '/roadmap/kubernetes') ] },
+      ]},
+    ],
+  },
+
+  // ─────────────────────────────── KUBERNETES ───────────────────────────────
+  {
+    slug: 'kubernetes', title: 'Kubernetes', type: 'skill', icon: 'Ship', color: '#326ce5',
+    description: 'Điều phối container ở quy mô lớn — pod, deployment, service, ingress, config, autoscaling và Helm.',
+    stages: [
+      { label: 'Nền tảng', nodes: [
+        { title: 'Kiến trúc K8s', kind: 'info', description: 'Control plane, node, kubelet, etcd, scheduler.',
+          resources: [ off('Kubernetes — Concepts Overview', 'https://kubernetes.io/docs/concepts/overview/') ] },
+        { title: 'kubectl & cluster', icon: 'Terminal', side: 'right', description: 'minikube/kind, kubectl cơ bản, context.', link: cl('kubernetes'),
+          resources: [ off('Kubernetes — Basics Tutorial', 'https://kubernetes.io/docs/tutorials/kubernetes-basics/'), off('kubectl — Reference', 'https://kubernetes.io/docs/reference/kubectl/') ] },
+        { title: 'Pod & container', icon: 'Boxes', side: 'left', description: 'Đơn vị nhỏ nhất, manifest YAML, probe.',
+          resources: [ off('Kubernetes — Pods', 'https://kubernetes.io/docs/concepts/workloads/pods/') ] },
+      ]},
+      { label: 'Workload', nodes: [
+        { title: 'Deployment & ReplicaSet', kind: 'info', description: 'Rolling update, rollback, số bản sao.',
+          resources: [ off('Kubernetes — Deployments', 'https://kubernetes.io/docs/concepts/workloads/controllers/deployment/') ] },
+        { title: 'Service & Ingress', icon: 'Network', side: 'right', description: 'ClusterIP/NodePort/LoadBalancer, định tuyến HTTP.',
+          resources: [ off('Kubernetes — Service', 'https://kubernetes.io/docs/concepts/services-networking/service/'), off('Kubernetes — Ingress', 'https://kubernetes.io/docs/concepts/services-networking/ingress/') ] },
+        { title: 'ConfigMap & Secret', kind: 'info', side: 'left', description: 'Cấu hình & bí mật tách khỏi image.',
+          resources: [ off('Kubernetes — ConfigMap', 'https://kubernetes.io/docs/concepts/configuration/configmap/') ] },
+      ]},
+      { label: 'Lưu trữ & mở rộng', nodes: [
+        { title: 'Volume & PVC', kind: 'info', description: 'PersistentVolume, StorageClass, claim.',
+          resources: [ off('Kubernetes — Persistent Volumes', 'https://kubernetes.io/docs/concepts/storage/persistent-volumes/') ] },
+        { title: 'Autoscaling (HPA)', icon: 'Gauge', side: 'right', description: 'Tự co giãn theo CPU/metric.',
+          resources: [ off('Kubernetes — Horizontal Pod Autoscaling', 'https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/') ] },
+        { title: 'Namespace & RBAC', icon: 'Lock', kind: 'info', side: 'left', description: 'Phân vùng & phân quyền truy cập.',
+          resources: [ off('Kubernetes — RBAC', 'https://kubernetes.io/docs/reference/access-authn-authz/rbac/') ] },
+      ]},
+      { label: 'Ecosystem', nodes: [
+        { title: 'Helm', kind: 'alternative', description: 'Đóng gói ứng dụng K8s theo chart.',
+          resources: [ off('Helm — Docs', 'https://helm.sh/docs/') ] },
+        { title: 'Monitoring', icon: 'LineChart', side: 'right', description: 'Prometheus + Grafana giám sát cluster.',
+          resources: [ off('Prometheus — Docs', 'https://prometheus.io/docs/introduction/overview/'), off('Grafana — Docs', 'https://grafana.com/docs/') ] },
+        { title: 'GitOps (Argo CD)', kind: 'alternative', side: 'left', description: 'Triển khai khai báo bằng Git.',
+          resources: [ off('Argo CD — Docs', 'https://argo-cd.readthedocs.io/en/stable/') ] },
+      ]},
+    ],
+  },
+
+  // ─────────────────────────────── GIT & GITHUB ───────────────────────────────
+  {
+    slug: 'git', title: 'Git & GitHub', type: 'skill', icon: 'GitBranch', color: '#f05033',
+    description: 'Quản lý phiên bản với Git — commit, branch, merge, rebase, resolve conflict và cộng tác qua GitHub.',
+    stages: [
+      { label: 'Nền tảng', nodes: [
+        { title: 'Cài đặt & cấu hình', icon: 'Terminal', description: 'git config, SSH key, .gitignore.', link: cl('git'),
+          resources: [ off('Pro Git — Getting Started', 'https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup') ] },
+        { title: 'Commit & staging', kind: 'info', side: 'right', description: 'add/commit, working tree vs index, amend.',
+          resources: [ off('Pro Git — Recording Changes', 'https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository') ] },
+        { title: 'Branch & merge', icon: 'GitMerge', side: 'left', description: 'Tạo/chuyển nhánh, fast-forward, three-way merge.',
+          resources: [ off('Pro Git — Branches in a Nutshell', 'https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell'), art('Learn Git Branching (tương tác)', 'https://learngitbranching.js.org/') ] },
+      ]},
+      { label: 'Cộng tác', nodes: [
+        { title: 'Remote & push/pull', kind: 'info', description: 'origin, fetch/pull/push, upstream, fork.',
+          resources: [ off('Pro Git — Working with Remotes', 'https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes') ] },
+        { title: 'Pull Request & review', icon: 'GitFork', side: 'right', description: 'PR, code review, protected branch.',
+          resources: [ off('GitHub — Pull Requests', 'https://docs.github.com/en/pull-requests') ] },
+        { title: 'Merge vs Rebase', kind: 'info', side: 'left', description: 'Lịch sử tuyến tính, khi nào rebase.',
+          resources: [ off('Pro Git — Rebasing', 'https://git-scm.com/book/en/v2/Git-Branching-Rebasing') ] },
+      ]},
+      { label: 'Nâng cao', nodes: [
+        { title: 'Giải quyết conflict', kind: 'info', description: 'Đọc marker, chọn thay đổi, mergetool.',
+          resources: [ off('GitHub — Resolving merge conflicts', 'https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/about-merge-conflicts') ] },
+        { title: 'Stash, cherry-pick, reflog', kind: 'alternative', side: 'right', description: 'Cứu commit, chọn commit lẻ, phục hồi.',
+          resources: [ off('Pro Git — Stashing', 'https://git-scm.com/book/en/v2/Git-Tools-Stashing-and-Cleaning') ] },
+        { title: 'Tag & release', kind: 'info', side: 'left', description: 'Gắn thẻ phiên bản, semver, GitHub Releases.',
+          resources: [ off('Pro Git — Tagging', 'https://git-scm.com/book/en/v2/Git-Basics-Tagging') ] },
+      ]},
+      { label: 'Quy trình', nodes: [
+        { title: 'Git workflow', icon: 'Workflow', description: 'GitFlow, trunk-based, feature branch.',
+          resources: [ art('Atlassian — Gitflow Workflow', 'https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow'), off('GitHub — GitHub flow', 'https://docs.github.com/en/get-started/using-github/github-flow') ] },
+        { title: 'GitHub Actions CI', icon: 'Infinity', kind: 'alternative', side: 'right', description: 'Tự động test/build/deploy khi push.',
+          resources: [ off('GitHub Actions — Docs', 'https://docs.github.com/en/actions') ] },
+      ]},
+    ],
+  },
+
+  // ─────────────────────────────── MONGODB ───────────────────────────────
+  {
+    slug: 'mongodb', title: 'MongoDB', type: 'skill', icon: 'Database', color: '#13aa52',
+    description: 'Cơ sở dữ liệu document — CRUD, index, aggregation pipeline, thiết kế schema, replication và Mongoose.',
+    stages: [
+      { label: 'Nền tảng', nodes: [
+        { title: 'Mô hình document', kind: 'info', description: 'BSON, collection, document, khác biệt với SQL.',
+          resources: [ off('MongoDB — Databases & Collections', 'https://www.mongodb.com/docs/manual/core/databases-and-collections/') ] },
+        { title: 'CRUD', icon: 'Database', side: 'right', description: 'insert/find/update/delete, toán tử truy vấn.', link: cl('mongodb'),
+          resources: [ off('MongoDB — CRUD Operations', 'https://www.mongodb.com/docs/manual/crud/'), crs('MongoDB University', 'https://learn.mongodb.com/') ] },
+        { title: 'Query & projection', kind: 'info', side: 'left', description: 'Lọc, projection, sort, limit, skip.',
+          resources: [ off('MongoDB — Query Documents', 'https://www.mongodb.com/docs/manual/tutorial/query-documents/') ] },
+      ]},
+      { label: 'Nâng cao', nodes: [
+        { title: 'Index', icon: 'Zap', description: 'Single/compound/text index, EXPLAIN, hiệu năng.',
+          resources: [ off('MongoDB — Indexes', 'https://www.mongodb.com/docs/manual/indexes/') ] },
+        { title: 'Aggregation pipeline', kind: 'info', side: 'right', description: 'match/group/project/lookup — tổng hợp mạnh.',
+          resources: [ off('MongoDB — Aggregation', 'https://www.mongodb.com/docs/manual/aggregation/') ] },
+        { title: 'Thiết kế schema', kind: 'info', side: 'left', description: 'Embed vs reference, mẫu dữ liệu, mối quan hệ.',
+          resources: [ off('MongoDB — Data Modeling', 'https://www.mongodb.com/docs/manual/data-modeling/') ] },
+      ]},
+      { label: 'Vận hành', nodes: [
+        { title: 'Replication & Sharding', kind: 'info', description: 'Replica set, sharding, tính sẵn sàng.',
+          resources: [ off('MongoDB — Replication', 'https://www.mongodb.com/docs/manual/replication/'), off('MongoDB — Sharding', 'https://www.mongodb.com/docs/manual/sharding/') ] },
+        { title: 'Transactions', kind: 'info', side: 'right', description: 'Giao dịch đa document, ACID.',
+          resources: [ off('MongoDB — Transactions', 'https://www.mongodb.com/docs/manual/core/transactions/') ] },
+      ]},
+      { label: 'Ecosystem', nodes: [
+        { title: 'Mongoose (Node.js)', icon: 'Hexagon', kind: 'alternative', description: 'ODM: schema, model, validation, middleware.', link: cl('nodejs-express'),
+          resources: [ off('Mongoose — Docs', 'https://mongoosejs.com/docs/') ] },
+        { title: 'Atlas (cloud)', icon: 'Cloud', kind: 'alternative', side: 'right', description: 'MongoDB managed, backup, monitoring.',
+          resources: [ off('MongoDB Atlas — Docs', 'https://www.mongodb.com/docs/atlas/') ] },
+      ]},
+    ],
+  },
+
+  // ─────────────────────────────── ANDROID ───────────────────────────────
+  {
+    slug: 'android', title: 'Android', type: 'role', icon: 'Smartphone', color: '#3ddc84',
+    description: 'Lộ trình phát triển Android — Kotlin, Jetpack Compose, ViewModel, Room, Retrofit, Coroutines và phát hành.',
+    stages: [
+      { label: 'Nền tảng', nodes: [
+        { title: 'Kotlin', icon: 'Braces', description: 'Ngôn ngữ chính thức của Android — null-safety, coroutine.', link: cl('kotlin'),
+          resources: [ off('Kotlin — Docs', 'https://kotlinlang.org/docs/home.html') ] },
+        { title: 'Android Studio & project', kind: 'info', side: 'right', description: 'Gradle, cấu trúc app, emulator.', link: cl('android-kotlin'),
+          resources: [ off('Android — Developer Guides', 'https://developer.android.com/guide'), crs('Android — Courses', 'https://developer.android.com/courses') ] },
+        { title: 'Activity & Lifecycle', kind: 'info', side: 'left', description: 'Vòng đời màn hình, Intent, back stack.',
+          resources: [ off('Android — Activity lifecycle', 'https://developer.android.com/guide/components/activities/activity-lifecycle') ] },
+      ]},
+      { label: 'Giao diện', nodes: [
+        { title: 'Jetpack Compose', icon: 'Palette', description: 'UI khai báo hiện đại thay XML.',
+          resources: [ off('Android — Jetpack Compose', 'https://developer.android.com/develop/ui/compose/documentation') ] },
+        { title: 'Navigation', icon: 'Route', side: 'right', description: 'Điều hướng nhiều màn hình, truyền tham số.',
+          resources: [ off('Android — Navigation', 'https://developer.android.com/guide/navigation') ] },
+        { title: 'Material Design', kind: 'info', side: 'left', description: 'Component chuẩn, theme, màu sắc.',
+          resources: [ off('Material Design 3', 'https://m3.material.io/') ] },
+      ]},
+      { label: 'Dữ liệu & logic', nodes: [
+        { title: 'ViewModel & State', kind: 'info', description: 'Tách UI khỏi logic, StateFlow, lifecycle-aware.',
+          resources: [ off('Android — ViewModel', 'https://developer.android.com/topic/libraries/architecture/viewmodel') ] },
+        { title: 'Room (Database)', icon: 'Database', side: 'right', description: 'SQLite ORM, DAO, migration.',
+          resources: [ off('Android — Room', 'https://developer.android.com/training/data-storage/room') ] },
+        { title: 'Coroutines & Flow', icon: 'Zap', side: 'left', description: 'Bất đồng bộ, luồng dữ liệu phản ứng.',
+          resources: [ off('Android — Coroutines', 'https://developer.android.com/kotlin/coroutines') ] },
+        { title: 'Retrofit (network)', icon: 'Webhook', kind: 'alternative', side: 'right', description: 'Gọi REST API, JSON, interceptor.',
+          resources: [ off('Retrofit', 'https://square.github.io/retrofit/') ] },
+      ]},
+      { label: 'Production', nodes: [
+        { title: 'Dependency Injection (Hilt)', kind: 'alternative', description: 'Quản lý phụ thuộc gọn, dễ test.',
+          resources: [ off('Android — Hilt', 'https://developer.android.com/training/dependency-injection/hilt-android') ] },
+        { title: 'Testing', kind: 'info', side: 'right', description: 'Unit, UI (Espresso), Compose test.',
+          resources: [ off('Android — Testing', 'https://developer.android.com/training/testing') ] },
+        { title: 'Phát hành Play Store', kind: 'info', side: 'left', description: 'Ký app, App Bundle, release.',
+          resources: [ off('Android — Publish', 'https://developer.android.com/studio/publish') ] },
+      ]},
+    ],
+  },
+
+  // ─────────────────────────────── IOS ───────────────────────────────
+  {
+    slug: 'ios', title: 'iOS', type: 'role', icon: 'Smartphone', color: '#0071e3',
+    description: 'Lộ trình phát triển iOS — Swift, SwiftUI, state, networking, persistence, concurrency và App Store.',
+    stages: [
+      { label: 'Nền tảng', nodes: [
+        { title: 'Swift', icon: 'Braces', description: 'Ngôn ngữ của Apple — optional, struct, protocol.',
+          resources: [ off('The Swift Programming Language (Book)', 'https://docs.swift.org/swift-book/'), off('Swift.org — Getting Started', 'https://www.swift.org/getting-started/') ] },
+        { title: 'Xcode & project', kind: 'info', side: 'right', description: 'IDE, simulator, target, Swift Package Manager.',
+          resources: [ off('Apple — Developer Documentation', 'https://developer.apple.com/documentation/') ] },
+        { title: 'SwiftUI cơ bản', icon: 'Palette', side: 'left', description: 'UI khai báo: View, modifier, layout.', link: cl('swiftui-ios'),
+          resources: [ crs('Apple — SwiftUI Tutorials', 'https://developer.apple.com/tutorials/swiftui'), off('Apple — SwiftUI', 'https://developer.apple.com/documentation/swiftui') ] },
+      ]},
+      { label: 'Giao diện', nodes: [
+        { title: 'State & Binding', kind: 'info', description: '@State, @Binding, @ObservedObject, @Environment.',
+          resources: [ off('Apple — Managing model data', 'https://developer.apple.com/documentation/swiftui/managing-model-data-in-your-app') ] },
+        { title: 'Navigation & List', icon: 'Route', side: 'right', description: 'NavigationStack, List, sheet, tab.',
+          resources: [ off('Apple — Navigation', 'https://developer.apple.com/documentation/swiftui/navigation') ] },
+        { title: 'UIKit (nền cũ)', kind: 'alternative', side: 'left', description: 'Nhiều dự án vẫn dùng UIKit + interop.',
+          resources: [ off('Apple — UIKit', 'https://developer.apple.com/documentation/uikit') ] },
+      ]},
+      { label: 'Dữ liệu & logic', nodes: [
+        { title: 'Networking (URLSession)', icon: 'Webhook', description: 'Gọi API, JSON Codable, async request.',
+          resources: [ off('Apple — URLSession', 'https://developer.apple.com/documentation/foundation/urlsession') ] },
+        { title: 'Persistence (SwiftData)', icon: 'Database', side: 'right', description: 'Lưu trữ cục bộ: SwiftData / Core Data.',
+          resources: [ off('Apple — SwiftData', 'https://developer.apple.com/documentation/swiftdata') ] },
+        { title: 'Concurrency (async/await)', icon: 'Zap', side: 'left', description: 'Task, actor, structured concurrency.',
+          resources: [ off('Swift — Concurrency', 'https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency/') ] },
+      ]},
+      { label: 'Production', nodes: [
+        { title: 'Testing (XCTest)', kind: 'info', description: 'Unit & UI test, XCTest, preview.',
+          resources: [ off('Apple — XCTest', 'https://developer.apple.com/documentation/xctest') ] },
+        { title: 'Phát hành App Store', kind: 'info', side: 'right', description: 'Provisioning, TestFlight, review.',
+          resources: [ off('Apple — Distribution', 'https://developer.apple.com/distribute/') ] },
+      ]},
+    ],
+  },
+
+  // ─────────────────────────────── GAME DEVELOPER ───────────────────────────────
+  {
+    slug: 'game-dev', title: 'Game Developer', type: 'role', icon: 'Gamepad2', color: '#9333ea',
+    description: 'Lộ trình làm game — toán cho game, engine (Unity/Unreal/Godot), đồ hoạ 2D/3D, gameplay và xuất bản.',
+    stages: [
+      { label: 'Nền tảng', nodes: [
+        { title: 'Toán cho game', kind: 'info', description: 'Vector, ma trận, biến đổi, va chạm, lượng giác.',
+          resources: [ crs('Khan Academy — Linear Algebra', 'https://www.khanacademy.org/math/linear-algebra') ] },
+        { title: 'Một ngôn ngữ (C#/C++)', icon: 'Cpu', side: 'right', description: 'C# cho Unity, C++ cho Unreal.', link: cl('c'),
+          resources: [ off('Lộ trình C / C++', '/roadmap/cpp') ] },
+        { title: 'Game loop & vòng lặp', kind: 'info', side: 'left', description: 'Update/render, delta time, mẫu thiết kế game.',
+          resources: [ art('Game Programming Patterns', 'https://gameprogrammingpatterns.com/game-loop.html') ] },
+      ]},
+      { label: 'Engine', nodes: [
+        { title: 'Unity', icon: 'Gamepad2', description: 'Engine phổ biến nhất — C#, GameObject, scene.', link: cl('unity-c'),
+          resources: [ crs('Unity — Learn', 'https://learn.unity.com/'), off('Unity — Manual', 'https://docs.unity3d.com/Manual/index.html') ] },
+        { title: 'Unreal Engine', kind: 'alternative', side: 'right', description: 'Đồ hoạ AAA, Blueprint & C++.',
+          resources: [ off('Unreal Engine — Documentation', 'https://dev.epicgames.com/documentation/en-us/unreal-engine') ] },
+        { title: 'Godot', kind: 'alternative', side: 'left', description: 'Engine mã nguồn mở nhẹ, GDScript.',
+          resources: [ off('Godot — Docs', 'https://docs.godotengine.org/en/stable/') ] },
+      ]},
+      { label: 'Đồ hoạ', nodes: [
+        { title: '2D: sprite & tilemap', kind: 'info', description: 'Sprite, animation, tilemap, camera 2D.',
+          resources: [ crs('Unity Learn — 2D', 'https://learn.unity.com/') ] },
+        { title: '3D: mesh & lighting', kind: 'info', side: 'right', description: 'Mesh, material, ánh sáng, camera 3D.',
+          resources: [ off('Unity — Graphics', 'https://docs.unity3d.com/Manual/Graphics.html') ] },
+        { title: 'Shader & OpenGL', icon: 'Palette', kind: 'alternative', side: 'left', description: 'Pipeline đồ hoạ, GLSL, hiệu ứng.', link: cl('opengl'),
+          resources: [ crs('LearnOpenGL', 'https://learnopengl.com/') ] },
+      ]},
+      { label: 'Gameplay & xuất bản', nodes: [
+        { title: 'Physics & Input', kind: 'info', description: 'Va chạm, rigidbody, xử lý điều khiển.',
+          resources: [ off('Unity — Physics', 'https://docs.unity3d.com/Manual/PhysicsSection.html') ] },
+        { title: 'Audio & Animation', kind: 'info', side: 'right', description: 'Âm thanh, animator, state machine.',
+          resources: [ off('Unity — Animation', 'https://docs.unity3d.com/Manual/AnimationSection.html') ] },
+        { title: 'Tối ưu & build đa nền tảng', icon: 'Gauge', side: 'left', description: 'Profiling, giảm draw call, build PC/mobile/console.',
+          resources: [ off('Unity — Profiler', 'https://docs.unity3d.com/Manual/Profiler.html') ] },
+      ]},
+    ],
+  },
+
+  // ─────────────────────────────── CYBER SECURITY ───────────────────────────────
+  {
+    slug: 'cyber-security', title: 'Cyber Security', type: 'role', icon: 'Shield', color: '#e11d48',
+    description: 'Lộ trình an ninh mạng — nền tảng mạng/OS, mật mã, bảo mật web (OWASP), pentest, phòng thủ và chứng chỉ.',
+    stages: [
+      { label: 'Nền tảng', nodes: [
+        { title: 'Mạng & giao thức', kind: 'info', description: 'TCP/IP, DNS, HTTP/S, TLS, port, firewall.',
+          resources: [ art('Cloudflare — Learning Center', 'https://www.cloudflare.com/learning/') ] },
+        { title: 'Hệ điều hành & Linux', icon: 'Terminal', side: 'right', description: 'Quyền, tiến trình, log, dòng lệnh Linux.', link: cl('linux-bash'),
+          resources: [ off('The Linux Command Line', 'https://linuxcommand.org/tlcl.php') ] },
+        { title: 'Một ngôn ngữ script', icon: 'Braces', side: 'left', description: 'Python để tự động hoá & viết tool.', link: cl('python'),
+          resources: [ off('Python — Official Tutorial', 'https://docs.python.org/3/tutorial/') ] },
+      ]},
+      { label: 'Nền an ninh', nodes: [
+        { title: 'Mật mã học cơ bản', icon: 'Lock', description: 'Hash, mã hoá đối xứng/bất đối xứng, chữ ký số.',
+          resources: [ crs('Khan Academy — Cryptography', 'https://www.khanacademy.org/computing/computer-science/cryptography') ] },
+        { title: 'Xác thực & phân quyền', kind: 'info', side: 'right', description: 'Session, JWT, OAuth, MFA, least privilege.',
+          resources: [ art('OWASP — Cheat Sheet Series', 'https://cheatsheetseries.owasp.org/') ] },
+        { title: 'Bảo mật web (OWASP Top 10)', icon: 'Bug', side: 'left', description: 'Injection, XSS, CSRF, SSRF, cấu hình sai.',
+          resources: [ art('OWASP Top 10', 'https://owasp.org/www-project-top-ten/'), crs('PortSwigger — Web Security Academy', 'https://portswigger.net/web-security') ] },
+      ]},
+      { label: 'Tấn công & phòng thủ', nodes: [
+        { title: 'Pentest & công cụ', kind: 'info', description: 'Recon, scan, exploit; Nmap, Burp, Metasploit.',
+          resources: [ off('Nmap — Reference Guide', 'https://nmap.org/book/'), crs('TryHackMe', 'https://tryhackme.com/') ] },
+        { title: 'Network & endpoint security', kind: 'info', side: 'right', description: 'Firewall, VPN, IDS/IPS, hardening.',
+          resources: [ off('Kali Linux — Docs', 'https://www.kali.org/docs/') ] },
+        { title: 'Thực hành có kiểm soát', icon: 'Shield', side: 'left', description: 'Lab hợp pháp: HackTheBox, TryHackMe.',
+          resources: [ crs('Hack The Box', 'https://www.hackthebox.com/'), crs('TryHackMe', 'https://tryhackme.com/') ] },
+      ]},
+      { label: 'Nâng cao', nodes: [
+        { title: 'Blue team & SIEM', kind: 'alternative', description: 'Giám sát, phát hiện, phân tích log.',
+          resources: [ off('Elastic Security — Docs', 'https://www.elastic.co/guide/en/security/current/index.html') ] },
+        { title: 'Incident response', kind: 'info', side: 'right', description: 'Quy trình ứng phó sự cố, forensics.',
+          resources: [ off('NIST — Computer Security Resource Center', 'https://csrc.nist.gov/') ] },
+        { title: 'Chứng chỉ', kind: 'alternative', side: 'left', description: 'CompTIA Security+, CEH, OSCP.',
+          resources: [ off('CompTIA — Security+', 'https://www.comptia.org/certifications/security') ] },
+      ]},
+    ],
+  },
+
+  // ─────────────────────────────── DATA SCIENTIST ───────────────────────────────
+  {
+    slug: 'data-scientist', title: 'Data Scientist', type: 'role', icon: 'Brain', color: '#0891b2',
+    description: 'Lộ trình Data Scientist — Python, toán/thống kê, xử lý dữ liệu, trực quan hoá, machine learning và MLOps.',
+    stages: [
+      { label: 'Nền tảng', nodes: [
+        { title: 'Python cho Data Science', icon: 'Braces', description: 'Cú pháp, cấu trúc dữ liệu, môi trường ảo.', link: cl('python'),
+          resources: [ off('Lộ trình Python', '/roadmap/python') ] },
+        { title: 'Toán & thống kê', kind: 'info', side: 'right', description: 'Xác suất, phân phối, hồi quy, đại số tuyến tính.',
+          resources: [ crs('Khan Academy — Statistics', 'https://www.khanacademy.org/math/statistics-probability'), crs('Khan Academy — Linear Algebra', 'https://www.khanacademy.org/math/linear-algebra') ] },
+        { title: 'SQL', icon: 'Database', side: 'left', description: 'Truy vấn & tổng hợp dữ liệu từ DB.', link: cl('sql'),
+          resources: [ off('Lộ trình SQL', '/roadmap/sql') ] },
+      ]},
+      { label: 'Xử lý dữ liệu', nodes: [
+        { title: 'Pandas & NumPy', kind: 'info', description: 'DataFrame, lọc/nhóm/ghép, xử lý số.',
+          resources: [ off('Pandas — Getting Started', 'https://pandas.pydata.org/docs/getting_started/index.html'), off('NumPy — Beginner Guide', 'https://numpy.org/doc/stable/user/absolute_beginners.html') ] },
+        { title: 'Làm sạch & EDA', kind: 'info', side: 'right', description: 'Xử lý thiếu/ngoại lai, khám phá dữ liệu.',
+          resources: [ off('Pandas — Working with Missing Data', 'https://pandas.pydata.org/docs/user_guide/missing_data.html') ] },
+        { title: 'Trực quan hoá', icon: 'LineChart', side: 'left', description: 'Matplotlib, Seaborn — biểu đồ, storytelling.',
+          resources: [ off('Matplotlib — Users Guide', 'https://matplotlib.org/stable/users/index.html'), off('Seaborn — Tutorial', 'https://seaborn.pydata.org/tutorial.html') ] },
+      ]},
+      { label: 'Machine Learning', nodes: [
+        { title: 'scikit-learn', icon: 'Brain', description: 'Hồi quy, phân loại, clustering, pipeline.',
+          resources: [ off('scikit-learn — User Guide', 'https://scikit-learn.org/stable/user_guide.html') ] },
+        { title: 'Feature engineering & đánh giá', kind: 'info', side: 'right', description: 'Chuẩn hoá, encoding, cross-validation, metric.',
+          resources: [ crs('Kaggle — Feature Engineering', 'https://www.kaggle.com/learn/feature-engineering') ] },
+        { title: 'Deep Learning', kind: 'alternative', side: 'left', description: 'Mạng nơ-ron, PyTorch/TensorFlow.',
+          resources: [ crs('Google — Machine Learning Crash Course', 'https://developers.google.com/machine-learning/crash-course') ] },
+      ]},
+      { label: 'Chuyên nghiệp', nodes: [
+        { title: 'Jupyter & thực hành Kaggle', kind: 'info', description: 'Notebook, thi đấu, dataset thật.',
+          resources: [ off('Jupyter — Docs', 'https://docs.jupyter.org/en/latest/'), crs('Kaggle — Learn', 'https://www.kaggle.com/learn') ] },
+        { title: 'MLOps', kind: 'alternative', side: 'right', description: 'Triển khai, theo dõi, tái huấn luyện mô hình.', link: rm('ai-engineer'),
+          resources: [ crs('ml-ops.org — Principles', 'https://ml-ops.org/') ] },
+      ]},
+    ],
+  },
+
+  // ─────────────────────────────── BLOCKCHAIN ───────────────────────────────
+  {
+    slug: 'blockchain', title: 'Blockchain', type: 'role', icon: 'Blocks', color: '#f7931a',
+    description: 'Lộ trình lập trình blockchain — nguyên lý, smart contract Solidity, dev tools, DApp và token standard.',
+    stages: [
+      { label: 'Nền tảng', nodes: [
+        { title: 'Blockchain hoạt động thế nào', kind: 'info', description: 'Block, hash, consensus, phi tập trung.',
+          resources: [ crs('ethereum.org — Learn', 'https://ethereum.org/en/learn/') ] },
+        { title: 'Mật mã & ví', icon: 'Lock', side: 'right', description: 'Hash, cặp khoá, chữ ký số, địa chỉ ví.',
+          resources: [ off('ethereum.org — Accounts', 'https://ethereum.org/en/developers/docs/accounts/') ] },
+        { title: 'Giao dịch & EVM', kind: 'info', side: 'left', description: 'Transaction, gas, Ethereum Virtual Machine.',
+          resources: [ off('ethereum.org — EVM', 'https://ethereum.org/en/developers/docs/evm/') ] },
+      ]},
+      { label: 'Smart Contract', nodes: [
+        { title: 'Solidity', icon: 'Braces', description: 'Ngôn ngữ hợp đồng thông minh: type, function, event.',
+          resources: [ off('Solidity — Docs', 'https://docs.soliditylang.org/'), crs('CryptoZombies', 'https://cryptozombies.io/') ] },
+        { title: 'Dev tools (Hardhat/Foundry)', icon: 'Wrench', side: 'right', description: 'Compile, test, deploy contract cục bộ.',
+          resources: [ off('Hardhat — Docs', 'https://hardhat.org/docs'), off('Foundry — Book', 'https://book.getfoundry.sh/') ] },
+        { title: 'Bảo mật hợp đồng', icon: 'Shield', side: 'left', description: 'Reentrancy, overflow, kiểm toán, best practice.',
+          resources: [ off('ethereum.org — Smart Contract Security', 'https://ethereum.org/en/developers/docs/smart-contracts/security/') ] },
+      ]},
+      { label: 'DApp', nodes: [
+        { title: 'Web3 frontend', icon: 'Atom', description: 'Kết nối ví, gọi contract (ethers.js/viem).',
+          resources: [ off('ethers.js — Docs', 'https://docs.ethers.org/') ] },
+        { title: 'Deploy testnet/mainnet', kind: 'info', side: 'right', description: 'Faucet, RPC, verify contract.',
+          resources: [ off('ethereum.org — Development Networks', 'https://ethereum.org/en/developers/docs/networks/') ] },
+      ]},
+      { label: 'Nâng cao', nodes: [
+        { title: 'Token standards', icon: 'Coins', kind: 'alternative', description: 'ERC-20, ERC-721 (NFT), ERC-1155.',
+          resources: [ off('EIPs — Ethereum Improvement Proposals', 'https://eips.ethereum.org/'), off('OpenZeppelin — Contracts', 'https://docs.openzeppelin.com/contracts/') ] },
+        { title: 'Layer 2 & scaling', kind: 'info', side: 'right', description: 'Rollup, sidechain, phí thấp.',
+          resources: [ off('ethereum.org — Layer 2', 'https://ethereum.org/en/layer-2/') ] },
+        { title: 'DeFi & NFT', kind: 'alternative', side: 'left', description: 'AMM, lending, marketplace.',
+          resources: [ crs('ethereum.org — DeFi', 'https://ethereum.org/en/defi/') ] },
+      ]},
+    ],
+  },
+
+  // ─────────────────────────────── SOFTWARE ARCHITECT ───────────────────────────────
+  {
+    slug: 'software-architect', title: 'Software Architect', type: 'role', icon: 'Compass', color: '#475569',
+    description: 'Lộ trình kiến trúc sư phần mềm — design pattern, phong cách kiến trúc, DDD, khả năng mở rộng và tài liệu ADR.',
+    stages: [
+      { label: 'Nền tảng', nodes: [
+        { title: 'Vững một domain kỹ thuật', kind: 'info', description: 'Làm chủ backend/frontend trước khi thiết kế hệ thống.', link: rm('backend'),
+          resources: [ off('Lộ trình Backend', '/roadmap/backend') ] },
+        { title: 'Design Patterns', icon: 'Puzzle', side: 'right', description: 'GoF: creational, structural, behavioral.',
+          resources: [ crs('Refactoring.Guru — Design Patterns', 'https://refactoring.guru/design-patterns') ] },
+        { title: 'SOLID & clean code', kind: 'info', side: 'left', description: 'Nguyên tắc thiết kế, dễ bảo trì & mở rộng.',
+          resources: [ art('SOLID (Wikipedia)', 'https://en.wikipedia.org/wiki/SOLID'), art('Martin Fowler — Software Architecture Guide', 'https://martinfowler.com/architecture/') ] },
+      ]},
+      { label: 'Kiến trúc', nodes: [
+        { title: 'Phong cách kiến trúc', kind: 'info', description: 'Monolith, microservice, event-driven, serverless.',
+          resources: [ art('Martin Fowler — Microservices', 'https://martinfowler.com/articles/microservices.html') ] },
+        { title: 'System Design', icon: 'Boxes', side: 'right', description: 'Mở rộng, cân bằng tải, caching, hàng đợi.', link: rm('system-design'),
+          resources: [ off('Lộ trình System Design', '/roadmap/system-design'), art('System Design Primer', 'https://github.com/donnemartin/system-design-primer') ] },
+        { title: 'Domain-Driven Design', kind: 'alternative', side: 'left', description: 'Bounded context, ubiquitous language, aggregate.',
+          resources: [ art('Martin Fowler — Domain Driven Design', 'https://martinfowler.com/bliki/DomainDrivenDesign.html') ] },
+      ]},
+      { label: 'Chất lượng', nodes: [
+        { title: 'Scalability & performance', icon: 'Gauge', description: 'Bottleneck, cache, async, đo lường.',
+          resources: [ art('System Design Primer — Scalability', 'https://github.com/donnemartin/system-design-primer') ] },
+        { title: 'Security & compliance', icon: 'Shield', side: 'right', description: 'Threat modeling, OWASP, dữ liệu nhạy cảm.',
+          resources: [ art('OWASP Top 10', 'https://owasp.org/www-project-top-ten/') ] },
+        { title: 'Observability', icon: 'LineChart', side: 'left', description: 'Log, metric, trace — quan sát hệ thống.',
+          resources: [ off('OpenTelemetry — Docs', 'https://opentelemetry.io/docs/') ] },
+      ]},
+      { label: 'Kỹ năng & tài liệu', nodes: [
+        { title: 'Tài liệu & ADR', icon: 'BookOpen', description: 'Architecture Decision Record, sơ đồ C4.',
+          resources: [ off('ADR — Architectural Decision Records', 'https://adr.github.io/'), art('The Twelve-Factor App', 'https://12factor.net/') ] },
+        { title: 'Trade-off & giao tiếp', kind: 'info', side: 'right', description: 'Cân nhắc đánh đổi, thuyết phục stakeholder.',
+          resources: [ art('Martin Fowler — Architecture', 'https://martinfowler.com/architecture/') ] },
+      ]},
+    ],
+  },
 ];

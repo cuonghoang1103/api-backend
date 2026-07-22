@@ -13,7 +13,7 @@ export type TracerKind = 'array1d' | 'log' | 'graph' | 'array2d' | 'chart' | 'gr
 
 export type Cmd =
   | { op: 'new'; id: number; kind: TracerKind; title: string; directed?: boolean }
-  | { op: 'delay' }
+  | { op: 'delay'; line?: number }
   // array1d
   | { op: 'set'; id: number; data: number[] }
   | { op: 'patch'; id: number; index: number }
@@ -60,7 +60,18 @@ self.onmessage = function (e) {
   var idc = 0;
   var CAP = 300000;
   function push(c) { if (commands.length >= CAP) throw new Error('Too many steps (> ' + CAP + '). Reduce input size or loops.'); commands.push(c); }
-  function delay() { push({ op: 'delay' }); }
+  // Capture the user-code line that triggered this step. User code runs inside
+  // new Function(...), so V8 reports it as "<anonymous>:LINE:COL"; subtract the
+  // 2-line wrapper (function header + "){") to map back to the editor's lines.
+  function currentLine() {
+    try {
+      var st = (new Error()).stack || '';
+      var m = st.match(/<anonymous>:(\\d+):\\d+/);
+      if (m) { var ln = parseInt(m[1], 10) - 2; return ln > 0 ? ln : -1; }
+    } catch (e) {}
+    return -1;
+  }
+  function delay() { push({ op: 'delay', line: currentLine() }); }
 
   function Tracer(title) { this.id = idc++; this.title = title || ''; this._newExtra(); }
   Tracer.prototype._kind = 'log';
@@ -204,10 +215,11 @@ function cloneState(s: TracerState): TracerState {
   }
 }
 
-export function buildFrames(commands: Cmd[]): { metas: TracerMeta[]; frames: Frame[] } {
+export function buildFrames(commands: Cmd[]): { metas: TracerMeta[]; frames: Frame[]; lines: number[] } {
   const metas: TracerMeta[] = [];
   const live: Record<number, TracerState> = {};
   const frames: Frame[] = [];
+  const lines: number[] = [];
   const snapshot = (): Frame => { const f: Frame = {}; for (const k of Object.keys(live)) f[Number(k)] = cloneState(live[Number(k)]); return f; };
 
   const addSel = (arr: number[], from: number, to: number) => { const lo = Math.min(from, to), hi = Math.max(from, to); for (let i = lo; i <= hi; i++) if (!arr.includes(i)) arr.push(i); };
@@ -246,9 +258,10 @@ export function buildFrames(commands: Cmd[]): { metas: TracerMeta[]; frames: Fra
       case 'gr-cell': { const s = live[c.id]; if (s && s.kind === 'grid' && c.r >= 0 && c.r < s.rows && c.c >= 0 && c.c < s.cols) s.states[c.r * s.cols + c.c] = c.state; break; }
       case 'gr-mark': { const s = live[c.id]; if (s && s.kind === 'grid') { if (c.role === 'start') s.start = c.r + ',' + c.c; else s.goal = c.r + ',' + c.c; } break; }
       case 'gr-weight': { const s = live[c.id]; if (s && s.kind === 'grid' && c.r >= 0 && c.r < s.rows && c.c >= 0 && c.c < s.cols) s.weights[c.r * s.cols + c.c] = c.w; break; }
-      case 'delay': frames.push(snapshot()); break;
+      case 'delay': frames.push(snapshot()); lines.push(typeof c.line === 'number' ? c.line : -1); break;
     }
   }
   frames.push(snapshot());
-  return { metas, frames };
+  lines.push(-1);
+  return { metas, frames, lines };
 }

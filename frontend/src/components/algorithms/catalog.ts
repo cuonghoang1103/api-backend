@@ -1382,6 +1382,463 @@ while (q.length) { const n = q.shift(); lvl.push(n); for (const c of kids[n]) if
 log.println('Level-order: ' + lvl.join(' '));
 Tracer.delay();`;
 
+// ─── Wave 2 additions ───────────────────────────────────────────────────────
+const cocktailSort = `// Cocktail Shaker Sort — bubble sort that alternates direction each pass.
+const array = new Array1DTracer('Array');
+const log = new LogTracer('Console');
+const D = [5, 2, 9, 1, 7, 3, 8, 4, 6];
+array.set(D);
+Tracer.delay();
+let lo = 0, hi = D.length - 1, swapped = true;
+while (swapped) {
+  swapped = false;
+  for (let i = lo; i < hi; i++) {
+    array.select(i, i + 1); Tracer.delay();
+    if (D[i] > D[i + 1]) { const t = D[i]; D[i] = D[i + 1]; D[i + 1] = t; array.set(D); array.patch(i); array.patch(i + 1); log.println('swap ' + i + ',' + (i + 1)); Tracer.delay(); array.depatch(i); array.depatch(i + 1); swapped = true; }
+    array.deselect(i, i + 1);
+  }
+  hi--;
+  for (let i = hi; i > lo; i--) {
+    array.select(i - 1, i); Tracer.delay();
+    if (D[i - 1] > D[i]) { const t = D[i]; D[i] = D[i - 1]; D[i - 1] = t; array.set(D); array.patch(i - 1); array.patch(i); log.println('swap ' + (i - 1) + ',' + i); Tracer.delay(); array.depatch(i - 1); array.depatch(i); swapped = true; }
+    array.deselect(i - 1, i);
+  }
+  lo++;
+}
+log.println('Sorted!');
+Tracer.delay();`;
+
+const cycleSort = `// Cycle Sort — minimizes writes; place each element into its final slot.
+const array = new Array1DTracer('Array');
+const log = new LogTracer('Console');
+const D = [5, 2, 9, 1, 7, 3, 8, 4, 6];
+array.set(D);
+Tracer.delay();
+const n = D.length;
+for (let start = 0; start < n - 1; start++) {
+  let item = D[start], pos = start;
+  array.select(start); Tracer.delay();
+  for (let i = start + 1; i < n; i++) if (D[i] < item) pos++;
+  if (pos === start) { array.deselect(start); continue; }
+  while (item === D[pos]) pos++;
+  { const t = D[pos]; D[pos] = item; item = t; }
+  array.set(D); array.patch(pos); log.println('write at ' + pos); Tracer.delay(); array.depatch(pos);
+  while (pos !== start) {
+    pos = start;
+    for (let i = start + 1; i < n; i++) if (D[i] < item) pos++;
+    while (item === D[pos]) pos++;
+    { const t = D[pos]; D[pos] = item; item = t; }
+    array.set(D); array.patch(pos); Tracer.delay(); array.depatch(pos);
+  }
+  array.deselect(start);
+}
+log.println('Sorted!');
+Tracer.delay();`;
+
+const pancakeSort = `// Pancake Sort — sort using only prefix reversals (flips).
+const array = new Array1DTracer('Array');
+const log = new LogTracer('Console');
+const D = [3, 6, 1, 9, 2, 7, 5];
+array.set(D);
+Tracer.delay();
+function flip(k) { let i = 0; while (i < k) { const t = D[i]; D[i] = D[k]; D[k] = t; i++; k--; } }
+for (let sz = D.length; sz > 1; sz--) {
+  let mi = 0;
+  for (let i = 1; i < sz; i++) if (D[i] > D[mi]) mi = i;
+  array.select(mi); Tracer.delay(); array.deselect(mi);
+  if (mi !== sz - 1) {
+    if (mi !== 0) { flip(mi); log.println('flip 0..' + mi); array.set(D); Tracer.delay(); }
+    flip(sz - 1); log.println('flip 0..' + (sz - 1)); array.set(D);
+    for (let i = 0; i < sz; i++) array.patch(i);
+    Tracer.delay();
+    for (let i = 0; i < sz; i++) array.depatch(i);
+  }
+}
+log.println('Sorted!');
+Tracer.delay();`;
+
+const ternarySearch = `// Ternary Search — split a sorted range into three parts each step.
+const array = new Array1DTracer('Array (sorted)');
+const log = new LogTracer('Console');
+const D = [1, 4, 7, 10, 13, 16, 19, 22, 25, 28];
+const target = 19;
+array.set(D); log.println('Search ' + target);
+Tracer.delay();
+let lo = 0, hi = D.length - 1, found = -1;
+while (lo <= hi) {
+  const m1 = lo + Math.floor((hi - lo) / 3);
+  const m2 = hi - Math.floor((hi - lo) / 3);
+  array.select(m1); array.select(m2); Tracer.delay();
+  if (D[m1] === target) { array.patch(m1); found = m1; break; }
+  if (D[m2] === target) { array.patch(m2); found = m2; break; }
+  array.deselect(m1); array.deselect(m2);
+  if (target < D[m1]) hi = m1 - 1; else if (target > D[m2]) lo = m2 + 1; else { lo = m1 + 1; hi = m2 - 1; }
+}
+log.println(found >= 0 ? 'Found at ' + found : 'Not found');
+Tracer.delay();`;
+
+const unionFind = `// Union-Find (Disjoint Set) — union pairs; detect when they already connect.
+const graph = new GraphTracer('Union-Find', false);
+const log = new LogTracer('Console');
+const P = { A:[0.15,0.25], B:[0.4,0.15], C:[0.65,0.25], D:[0.2,0.7], E:[0.5,0.8], F:[0.8,0.65] };
+for (const k in P) graph.addNode(k, null, P[k][0], P[k][1]);
+Tracer.delay();
+const parent = {}; for (const k in P) parent[k] = k;
+function find(x) { while (parent[x] !== x) { parent[x] = parent[parent[x]]; x = parent[x]; } return x; }
+const ops = [['A','B'],['B','C'],['D','E'],['A','C'],['E','F'],['C','F']];
+for (const [a, b] of ops) {
+  graph.select(a); graph.select(b); Tracer.delay();
+  const ra = find(a), rb = find(b);
+  if (ra === rb) log.println(a + '~' + b + ' already connected');
+  else { parent[ra] = rb; graph.addEdge(a, b); graph.visit(b, a); log.println('union ' + a + ',' + b); }
+  Tracer.delay(); graph.deselect(a); graph.deselect(b);
+}
+log.println('connected(A,F)? ' + (find('A') === find('F')));
+Tracer.delay();`;
+
+const bipartite = `// Bipartite Check — BFS 2-coloring; a same-color edge means not bipartite.
+const graph = new GraphTracer('Bipartite Check', false);
+const log = new LogTracer('Console');
+const P = { A:[0.2,0.2], B:[0.2,0.7], C:[0.5,0.45], D:[0.8,0.2], E:[0.8,0.7] };
+for (const k in P) graph.addNode(k, null, P[k][0], P[k][1]);
+const E = [['A','C'],['B','C'],['C','D'],['C','E']];
+const adj = {}; for (const k in P) adj[k] = [];
+for (const [u,v] of E) { graph.addEdge(u, v); adj[u].push(v); adj[v].push(u); }
+Tracer.delay();
+const color = {}; let ok = true;
+for (const s in P) {
+  if (color[s] !== undefined) continue;
+  color[s] = 0; graph.updateNode(s, 0); const q = [s];
+  while (q.length) {
+    const u = q.shift(); graph.select(u); Tracer.delay(); graph.deselect(u);
+    for (const v of adj[u]) {
+      if (color[v] === undefined) { color[v] = color[u] ^ 1; graph.updateNode(v, color[v]); log.println(v + ' → side ' + color[v]); q.push(v); }
+      else if (color[v] === color[u]) { ok = false; log.println('conflict ' + u + '-' + v); }
+    }
+  }
+}
+log.println(ok ? 'IS bipartite' : 'NOT bipartite');
+Tracer.delay();`;
+
+const matrixChain = `// Matrix Chain Multiplication — DP over interval length for min scalar mults.
+const mat = new Array2DTracer('dp[i][j] = min multiplications');
+const log = new LogTracer('Console');
+const dims = [40, 20, 30, 10, 30];
+const n = dims.length - 1;
+const dp = Array.from({ length: n }, () => new Array(n).fill(0));
+mat.set(dp);
+Tracer.delay();
+for (let len = 2; len <= n; len++) {
+  for (let i = 0; i + len - 1 < n; i++) {
+    const j = i + len - 1; dp[i][j] = Infinity;
+    for (let k = i; k < j; k++) { const cost = dp[i][k] + dp[k + 1][j] + dims[i] * dims[k + 1] * dims[j + 1]; if (cost < dp[i][j]) dp[i][j] = cost; }
+    mat.set(dp.map((row) => row.map((x) => (x === Infinity ? 0 : x)))); mat.patch(i, j);
+    Tracer.delay(); mat.depatch(i, j);
+  }
+}
+log.println('Min multiplications = ' + dp[0][n - 1]);
+Tracer.delay();`;
+
+const rodCutting = `// Rod Cutting — DP: best value obtainable from a rod of each length.
+const array = new Array1DTracer('dp[len] = max value');
+const log = new LogTracer('Console');
+const price = [0, 1, 5, 8, 9, 10, 17, 17, 20];
+const N = 8;
+const dp = new Array(N + 1).fill(0);
+array.set(dp); log.println('Rod length ' + N);
+Tracer.delay();
+for (let len = 1; len <= N; len++) {
+  array.select(len);
+  for (let cut = 1; cut <= len; cut++) if (price[cut] + dp[len - cut] > dp[len]) dp[len] = price[cut] + dp[len - cut];
+  array.set(dp); array.patch(len); Tracer.delay(); array.deselect(len); array.depatch(len);
+}
+log.println('Max value = ' + dp[N]);
+Tracer.delay();`;
+
+const wordBreak = `// Word Break — dp[i] = can s[0..i) be segmented into dictionary words?
+const array = new Array1DTracer('dp[i] (1 = breakable prefix)');
+const log = new LogTracer('Console');
+const s = 'leetcode';
+const dict = new Set(['leet', 'code', 'lee', 't']);
+const n = s.length;
+const dp = new Array(n + 1).fill(0); dp[0] = 1;
+array.set(dp); log.println('s = ' + s);
+Tracer.delay();
+for (let i = 1; i <= n; i++) {
+  array.select(i);
+  for (let j = 0; j < i; j++) if (dp[j] && dict.has(s.slice(j, i))) { dp[i] = 1; log.println('"' + s.slice(j, i) + '" in dict → dp[' + i + ']=1'); break; }
+  array.set(dp); array.patch(i); Tracer.delay(); array.deselect(i); array.depatch(i);
+}
+log.println('Can break "' + s + '"? ' + (dp[n] ? 'YES' : 'NO'));
+Tracer.delay();`;
+
+const unboundedKnapsack = `// Unbounded Knapsack — items reusable; dp over capacity.
+const array = new Array1DTracer('dp[cap] = max value');
+const log = new LogTracer('Console');
+const wt = [1, 3, 4, 5], val = [10, 40, 50, 70];
+const W = 8;
+const dp = new Array(W + 1).fill(0);
+array.set(dp);
+Tracer.delay();
+for (let c = 1; c <= W; c++) {
+  array.select(c);
+  for (let i = 0; i < wt.length; i++) if (wt[i] <= c && dp[c - wt[i]] + val[i] > dp[c]) dp[c] = dp[c - wt[i]] + val[i];
+  array.set(dp); array.patch(c); Tracer.delay(); array.deselect(c); array.depatch(c);
+}
+log.println('Max value (unbounded) = ' + dp[W]);
+Tracer.delay();`;
+
+const graphColoring = `// Graph Coloring — backtracking m-coloring (color number shown above node).
+const graph = new GraphTracer('Graph Coloring (m = 3)', false);
+const log = new LogTracer('Console');
+const P = { A:[0.2,0.2], B:[0.6,0.15], C:[0.85,0.5], D:[0.55,0.8], E:[0.2,0.65] };
+for (const k in P) graph.addNode(k, null, P[k][0], P[k][1]);
+const E = [['A','B'],['B','C'],['C','D'],['D','E'],['E','A'],['A','C']];
+const adj = {}; for (const k in P) adj[k] = [];
+for (const [u,v] of E) { graph.addEdge(u, v); adj[u].push(v); adj[v].push(u); }
+Tracer.delay();
+const keys = Object.keys(P); const color = {}; const M = 3;
+function ok(u, c) { for (const v of adj[u]) if (color[v] === c) return false; return true; }
+function solve(i) {
+  if (i === keys.length) return true;
+  const u = keys[i];
+  for (let c = 1; c <= M; c++) {
+    graph.select(u); Tracer.delay();
+    if (ok(u, c)) {
+      color[u] = c; graph.updateNode(u, c); graph.deselect(u); log.println(u + ' = color ' + c); Tracer.delay();
+      if (solve(i + 1)) return true;
+      color[u] = undefined; graph.updateNode(u, null); log.println('backtrack ' + u); Tracer.delay();
+    }
+    graph.deselect(u);
+  }
+  return false;
+}
+solve(0);
+log.println('Colored with ' + M + ' colors');
+Tracer.delay();`;
+
+const subsetGeneration = `// Subset Generation — backtracking: at each element, include it or not.
+const log = new LogTracer('Subset Generation');
+const nums = [1, 2, 3];
+const cur = []; let cnt = 0;
+function bt(start) {
+  cnt++; log.println('{' + cur.join(', ') + '}'); Tracer.delay();
+  for (let i = start; i < nums.length; i++) { cur.push(nums[i]); bt(i + 1); cur.pop(); }
+}
+bt(0);
+log.println('Total ' + cnt + ' subsets');
+Tracer.delay();`;
+
+const floodFill = `// Flood Fill — spread from a seed cell to all 4-connected same-region cells.
+const grid = new GridTracer('Flood Fill (4-connected)');
+const log = new LogTracer('Console');
+const MAZE = [
+  [0,0,0,1,0],
+  [0,0,0,1,0],
+  [1,1,0,1,0],
+  [0,0,0,0,0],
+  [0,1,1,1,0],
+];
+const R = MAZE.length, C = MAZE[0].length;
+grid.set(MAZE); grid.start(0, 0);
+Tracer.delay();
+const seen = Array.from({ length: R }, () => new Array(C).fill(false));
+const q = [[0, 0]]; seen[0][0] = true; let n = 0;
+while (q.length) {
+  const [r, c] = q.shift();
+  if (!(r === 0 && c === 0)) grid.visit(r, c);
+  n++; Tracer.delay();
+  for (const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1]]) { const nr = r + dr, nc = c + dc; if (nr >= 0 && nc >= 0 && nr < R && nc < C && MAZE[nr][nc] === 0 && !seen[nr][nc]) { seen[nr][nc] = true; q.push([nr, nc]); grid.frontier(nr, nc); } }
+}
+log.println('Filled ' + n + ' cells');
+Tracer.delay();`;
+
+const bidirectional = `// Bidirectional Search — grow BFS frontiers from start and goal until they meet.
+${MAZE_SETUP}
+const grid = new GridTracer('Bidirectional Search');
+const log = new LogTracer('Console');
+grid.set(MAZE); grid.start(S[0], S[1]); grid.goal(G[0], G[1]);
+Tracer.delay();
+const seenS = {}, seenG = {}, cameS = {}, cameG = {};
+seenS[key(S[0], S[1])] = true; seenG[key(G[0], G[1])] = true;
+let qs = [[S[0], S[1]]], qg = [[G[0], G[1]]]; let meet = null;
+while (qs.length && qg.length && !meet) {
+  const ns = [];
+  for (const [r, c] of qs) {
+    if (seenG[key(r, c)]) { meet = [r, c]; break; }
+    if (!(r === S[0] && c === S[1])) grid.visit(r, c);
+    for (const [nr, nc] of neighbors(r, c)) if (!seenS[key(nr, nc)]) { seenS[key(nr, nc)] = true; cameS[key(nr, nc)] = [r, c]; ns.push([nr, nc]); grid.frontier(nr, nc); }
+  }
+  Tracer.delay(); if (meet) break; qs = ns;
+  const ng = [];
+  for (const [r, c] of qg) {
+    if (seenS[key(r, c)]) { meet = [r, c]; break; }
+    if (!(r === G[0] && c === G[1])) grid.visit(r, c);
+    for (const [nr, nc] of neighbors(r, c)) if (!seenG[key(nr, nc)]) { seenG[key(nr, nc)] = true; cameG[key(nr, nc)] = [r, c]; ng.push([nr, nc]); grid.frontier(nr, nc); }
+  }
+  Tracer.delay(); qg = ng;
+}
+if (meet) { let cur = meet; while (cur) { grid.path(cur[0], cur[1]); cur = cameS[key(cur[0], cur[1])]; } cur = cameG[key(meet[0], meet[1])]; while (cur) { grid.path(cur[0], cur[1]); cur = cameG[key(cur[0], cur[1])]; } Tracer.delay(); }
+log.println(meet ? 'Frontiers met at ' + key(meet[0], meet[1]) : 'No path');
+Tracer.delay();`;
+
+const minHeap = `// Min-Heap — insert values one by one, sifting each up to keep the heap order.
+const array = new Array1DTracer('Min-Heap (array form)');
+const log = new LogTracer('Console');
+const heap = [];
+function up(i) {
+  while (i > 0) {
+    const p = (i - 1) >> 1;
+    array.select(i); array.select(p); Tracer.delay();
+    if (heap[p] <= heap[i]) { array.deselect(i); array.deselect(p); break; }
+    const t = heap[i]; heap[i] = heap[p]; heap[p] = t;
+    array.set(heap); array.patch(i); array.patch(p); log.println('sift-up swap'); Tracer.delay();
+    array.depatch(i); array.depatch(p); array.deselect(i); array.deselect(p); i = p;
+  }
+}
+for (const v of [5, 3, 8, 1, 9, 2, 7]) { heap.push(v); array.set(heap); log.println('insert ' + v); Tracer.delay(); up(heap.length - 1); }
+log.println('Heap: [' + heap.join(', ') + '] · min = ' + heap[0]);
+Tracer.delay();`;
+
+const fenwick = `// Fenwick Tree (BIT) — build, then a prefix sum jumps by lowbit(i) each step.
+const array = new Array1DTracer('BIT (index 1..n)');
+const log = new LogTracer('Console');
+const A = [3, 2, -1, 6, 5, 4, -3, 3];
+const n = A.length; const bit = new Array(n + 1).fill(0);
+function update(i, v) { for (; i <= n; i += i & (-i)) bit[i] += v; }
+for (let i = 0; i < n; i++) update(i + 1, A[i]);
+array.set(bit); log.println('Built BIT from ' + JSON.stringify(A));
+Tracer.delay();
+function query(i) { let s = 0; for (; i > 0; i -= i & (-i)) { array.select(i); s += bit[i]; log.println('+ bit[' + i + '] = ' + bit[i] + '  → ' + s); Tracer.delay(); array.deselect(i); } return s; }
+log.println('prefix sum [1..6] = ' + query(6));
+Tracer.delay();`;
+
+const segmentTree = `// Segment Tree (sum) — array form; a range query visits O(log n) nodes.
+const array = new Array1DTracer('Segment tree (array form)');
+const log = new LogTracer('Console');
+const A = [2, 5, 1, 4, 9, 3];
+const n = A.length; const tree = new Array(2 * n).fill(0);
+for (let i = 0; i < n; i++) tree[n + i] = A[i];
+for (let i = n - 1; i > 0; i--) tree[i] = tree[2 * i] + tree[2 * i + 1];
+array.set(tree); log.println('Built from ' + JSON.stringify(A));
+Tracer.delay();
+function query(l, r) {
+  let res = 0; l += n; r += n + 1;
+  while (l < r) {
+    if (l & 1) { array.select(l); res += tree[l]; log.println('+ node ' + l + ' = ' + tree[l]); Tracer.delay(); array.deselect(l); l++; }
+    if (r & 1) { r--; array.select(r); res += tree[r]; log.println('+ node ' + r + ' = ' + tree[r]); Tracer.delay(); array.deselect(r); }
+    l >>= 1; r >>= 1;
+  }
+  return res;
+}
+log.println('sum [1..4] = ' + query(1, 4));
+Tracer.delay();`;
+
+const boyerMoore = `// Boyer-Moore — bad-character rule shifts the pattern past mismatches.
+const log = new LogTracer('Boyer-Moore matching');
+const text = 'ABAAABCDABC';
+const pat = 'ABC';
+const m = pat.length, n = text.length;
+const bad = {}; for (let i = 0; i < m; i++) bad[pat[i]] = i;
+log.println('text: ' + text); log.println('pat:  ' + pat);
+Tracer.delay();
+let s = 0;
+while (s <= n - m) {
+  log.println(' '.repeat(s) + pat + '  (shift ' + s + ')'); Tracer.delay();
+  let j = m - 1;
+  while (j >= 0 && pat[j] === text[s + j]) j--;
+  if (j < 0) { log.println('  MATCH at ' + s); s += 1; }
+  else { const bc = bad[text[s + j]] === undefined ? -1 : bad[text[s + j]]; s += Math.max(1, j - bc); }
+}
+Tracer.delay();`;
+
+const manacher = `// Manacher's Algorithm — longest palindromic substring in linear time.
+const array = new Array1DTracer('P[i] (palindrome radius)');
+const log = new LogTracer('Console');
+const s = 'abacabad';
+const t = '^#' + s.split('').join('#') + '#$';
+const n = t.length; const P = new Array(n).fill(0);
+array.set(P.slice(1, n - 1)); log.println('s = ' + s);
+Tracer.delay();
+let C = 0, Rr = 0;
+for (let i = 1; i < n - 1; i++) {
+  if (i < Rr) P[i] = Math.min(Rr - i, P[2 * C - i]);
+  while (t[i + P[i] + 1] === t[i - P[i] - 1]) P[i]++;
+  if (i + P[i] > Rr) { C = i; Rr = i + P[i]; }
+  array.set(P.slice(1, n - 1)); array.patch(i - 1); Tracer.delay(); array.depatch(i - 1);
+}
+let best = 0, ci = 0;
+for (let i = 1; i < n - 1; i++) if (P[i] > best) { best = P[i]; ci = i; }
+const start = (ci - best) >> 1;
+log.println('Longest palindrome: "' + s.substr(start, best) + '"');
+Tracer.delay();`;
+
+const extendedEuclid = `// Extended Euclidean — find x, y such that a·x + b·y = gcd(a, b).
+const log = new LogTracer('Extended Euclidean');
+const A = 240, B = 46;
+log.println('solve ' + A + '·x + ' + B + '·y = gcd');
+function ext(a, b) {
+  if (b === 0) { log.println('base: gcd = ' + a); Tracer.delay(); return [a, 1, 0]; }
+  const r = ext(b, a % b);
+  const g = r[0], x1 = r[1], y1 = r[2];
+  const x = y1, y = x1 - Math.floor(a / b) * y1;
+  log.println(a + '·' + x + ' + ' + b + '·' + y + ' = ' + g);
+  Tracer.delay();
+  return [g, x, y];
+}
+Tracer.delay();
+const res = ext(A, B);
+log.println('Result: gcd = ' + res[0] + ', x = ' + res[1] + ', y = ' + res[2]);
+Tracer.delay();`;
+
+const huffman = `// Huffman Coding — merge the two lowest-frequency nodes until one tree remains.
+const graph = new GraphTracer('Huffman tree', true);
+const log = new LogTracer('Console');
+const freq = { a: 5, b: 9, c: 12, d: 13, e: 16, f: 45 };
+let nodes = []; let idc = 0;
+for (const ch in freq) nodes.push({ id: ch, f: freq[ch], l: null, r: null });
+while (nodes.length > 1) {
+  nodes.sort((a, b) => a.f - b.f);
+  const x = nodes.shift(), y = nodes.shift();
+  const p = { id: 'n' + (idc++), f: x.f + y.f, l: x, r: y };
+  nodes.push(p);
+  log.println('merge ' + x.f + ' + ' + y.f + ' = ' + p.f);
+}
+const root = nodes[0];
+let col = 0, maxDepth = 0;
+function layout(nd, d) { if (!nd) return; if (d > maxDepth) maxDepth = d; layout(nd.l, d + 1); nd.col = col++; nd.depth = d; layout(nd.r, d + 1); }
+layout(root, 0);
+const maxCol = Math.max(1, col - 1); maxDepth = Math.max(1, maxDepth);
+function place(nd, parent) { if (!nd) return; graph.addNode(nd.id, nd.f, 0.06 + 0.88 * (nd.col / maxCol), 0.12 + 0.78 * (nd.depth / maxDepth)); if (parent) graph.addEdge(parent.id, nd.id); place(nd.l, nd); place(nd.r, nd); }
+place(root, null);
+Tracer.delay();
+const codes = {};
+function walk(nd, code) { if (!nd) return; if (!nd.l && !nd.r) { codes[nd.id] = code || '0'; graph.visit(nd.id); log.println("'" + nd.id + "' = " + codes[nd.id]); Tracer.delay(); return; } walk(nd.l, code + '0'); walk(nd.r, code + '1'); }
+walk(root, '');
+Tracer.delay();`;
+
+const convexHull = `// Convex Hull (gift wrapping) — wrap the outermost points into a polygon.
+const graph = new GraphTracer('Convex Hull', false);
+const log = new LogTracer('Console');
+const pts = [[0.2,0.3],[0.5,0.15],[0.8,0.25],[0.9,0.6],[0.65,0.85],[0.35,0.75],[0.15,0.6],[0.5,0.5],[0.4,0.4],[0.7,0.45]];
+for (let i = 0; i < pts.length; i++) graph.addNode('P' + i, null, pts[i][0], pts[i][1]);
+Tracer.delay();
+function cross(o, a, b) { return (pts[a][0] - pts[o][0]) * (pts[b][1] - pts[o][1]) - (pts[a][1] - pts[o][1]) * (pts[b][0] - pts[o][0]); }
+let leftmost = 0;
+for (let i = 1; i < pts.length; i++) if (pts[i][0] < pts[leftmost][0]) leftmost = i;
+let p = leftmost; const hull = [];
+do {
+  hull.push(p); graph.visit('P' + p); Tracer.delay();
+  let q = (p + 1) % pts.length;
+  for (let i = 0; i < pts.length; i++) if (cross(p, q, i) < 0) q = i;
+  if (hull.length > 1) graph.addEdge('P' + hull[hull.length - 2], 'P' + p);
+  p = q;
+} while (p !== leftmost && hull.length <= pts.length);
+graph.addEdge('P' + hull[hull.length - 1], 'P' + hull[0]);
+Tracer.delay();
+log.println('Hull: ' + hull.map((i) => 'P' + i).join(' → '));
+Tracer.delay();`;
+
 export const CATALOG: AlgoDef[] = [
   { id: 'bubble-sort', name: 'Bubble Sort', category: 'Sorting', description: 'Swap adjacent out-of-order pairs until sorted.', code: bubble },
   { id: 'selection-sort', name: 'Selection Sort', category: 'Sorting', description: 'Repeatedly select the minimum of the remainder.', code: selection },
@@ -1441,6 +1898,28 @@ export const CATALOG: AlgoDef[] = [
   { id: 'activity-selection', name: 'Activity Selection', category: 'Greedy', description: 'Pick the most non-overlapping intervals.', code: activitySelection },
   { id: 'fractional-knapsack', name: 'Fractional Knapsack', category: 'Greedy', description: 'Maximize value by taking highest value/weight first.', code: fractionalKnapsack },
   { id: 'job-sequencing', name: 'Job Sequencing', category: 'Greedy', description: 'Schedule jobs by profit into deadline slots.', code: jobSequencing },
+  { id: 'huffman', name: 'Huffman Coding', category: 'Greedy', description: 'Build an optimal prefix code by merging rarest nodes.', code: huffman },
+  { id: 'cocktail-sort', name: 'Cocktail Shaker Sort', category: 'Sorting', description: 'Bidirectional bubble sort.', code: cocktailSort },
+  { id: 'cycle-sort', name: 'Cycle Sort', category: 'Sorting', description: 'Write-minimal sort placing each element in its cycle.', code: cycleSort },
+  { id: 'pancake-sort', name: 'Pancake Sort', category: 'Sorting', description: 'Sort using only prefix reversals (flips).', code: pancakeSort },
+  { id: 'ternary-search', name: 'Ternary Search', category: 'Searching', description: 'Split a sorted range into thirds each step.', code: ternarySearch },
+  { id: 'union-find', name: 'Union-Find (DSU)', category: 'Graph', description: 'Disjoint-set union with path compression.', code: unionFind },
+  { id: 'bipartite', name: 'Bipartite Check', category: 'Graph', description: 'Two-color a graph via BFS to test bipartiteness.', code: bipartite },
+  { id: 'matrix-chain', name: 'Matrix Chain Multiplication', category: 'Dynamic Programming', description: 'Interval DP for the cheapest multiplication order.', code: matrixChain },
+  { id: 'rod-cutting', name: 'Rod Cutting', category: 'Dynamic Programming', description: 'Maximize value by cutting a rod into pieces.', code: rodCutting },
+  { id: 'word-break', name: 'Word Break', category: 'Dynamic Programming', description: 'Can a string be segmented into dictionary words?', code: wordBreak },
+  { id: 'unbounded-knapsack', name: 'Unbounded Knapsack', category: 'Dynamic Programming', description: 'Knapsack where items can be reused.', code: unboundedKnapsack },
+  { id: 'graph-coloring', name: 'Graph Coloring', category: 'Backtracking', description: 'Color a graph with m colors via backtracking.', code: graphColoring },
+  { id: 'subset-generation', name: 'Subset Generation', category: 'Backtracking', description: 'Enumerate every subset by include/exclude.', code: subsetGeneration },
+  { id: 'flood-fill', name: 'Flood Fill', category: 'Pathfinding', description: 'Spread from a seed cell across a region.', code: floodFill },
+  { id: 'bidirectional', name: 'Bidirectional Search', category: 'Pathfinding', description: 'Two BFS frontiers meeting in the middle.', code: bidirectional },
+  { id: 'min-heap', name: 'Min-Heap Operations', category: 'Trees', description: 'Insert with sift-up to maintain the heap property.', code: minHeap },
+  { id: 'fenwick', name: 'Fenwick Tree (BIT)', category: 'Trees', description: 'Prefix sums via binary-indexed jumps.', code: fenwick },
+  { id: 'segment-tree', name: 'Segment Tree', category: 'Trees', description: 'Range-sum query over an iterative segment tree.', code: segmentTree },
+  { id: 'boyer-moore', name: 'Boyer-Moore', category: 'String', description: 'Bad-character rule skips big chunks of text.', code: boyerMoore },
+  { id: 'manacher', name: "Manacher's Algorithm", category: 'String', description: 'Longest palindromic substring in O(n).', code: manacher },
+  { id: 'extended-euclid', name: 'Extended Euclidean', category: 'Math', description: 'Bézout coefficients for a·x + b·y = gcd.', code: extendedEuclid },
+  { id: 'convex-hull', name: 'Convex Hull', category: 'Geometry', description: 'Gift-wrap the outer boundary of a point set.', code: convexHull },
 ];
 
 export const CATEGORIES = Array.from(new Set(CATALOG.map((a) => a.category)));

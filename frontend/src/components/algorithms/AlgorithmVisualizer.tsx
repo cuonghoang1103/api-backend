@@ -44,6 +44,7 @@ export default function AlgorithmVisualizer() {
   const [code, setCode] = useState<string>(CATALOG[0].code);
   const [metas, setMetas] = useState<TracerMeta[]>([]);
   const [frames, setFrames] = useState<Frame[]>([]);
+  const [lines, setLines] = useState<number[]>([]);
   const [step, setStep] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [speedIdx, setSpeedIdx] = useState(2);
@@ -69,12 +70,13 @@ export default function AlgorithmVisualizer() {
     const res = await runCode(src);
     if (!res.ok) {
       setError(res.error || 'Unknown error');
-      setMetas([]); setFrames([]); setStep(0); setRunning(false);
+      setMetas([]); setFrames([]); setLines([]); setStep(0); setRunning(false);
       return;
     }
-    const { metas: m, frames: f } = buildFrames(res.commands);
+    const { metas: m, frames: f, lines: l } = buildFrames(res.commands);
     setMetas(m);
     setFrames(f);
+    setLines(l);
     setStep(0);
     setRunning(false);
     // Auto-play from the start so the user immediately sees the animation.
@@ -164,6 +166,7 @@ export default function AlgorithmVisualizer() {
   }, [playing, step, lastStep, speedIdx]);
 
   const frame = frames[Math.min(step, lastStep)] || {};
+  const currentLine = lines[Math.min(step, lastStep)] ?? null;
 
   const togglePlay = () => {
     if (step >= lastStep) { setStep(0); setPlaying(true); }
@@ -343,7 +346,7 @@ export default function AlgorithmVisualizer() {
             </div>
           </div>
           <div className="flex-1 overflow-hidden rounded-b-xl">
-            <CodeEditor value={code} onChange={setCode} />
+            <CodeEditor value={code} onChange={setCode} highlightLine={currentLine} />
           </div>
         </aside>
       </div>

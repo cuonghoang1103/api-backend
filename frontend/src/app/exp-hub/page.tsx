@@ -101,6 +101,10 @@ export default function ExpHubPage() {
   const [folderTreeOpen, setFolderTreeOpen] = useState(true);
   // Middle snippet-list column collapse (like the category tree).
   const [listOpen, setListOpen] = useState(true);
+  // Mobile single-pane navigation (<lg): show ONE of tree / list / detail at a
+  // time via a bottom tab bar. On desktop all three columns show together and
+  // this is ignored. Auto-switches: pick a group → list; open a snippet → detail.
+  const [mobileTab, setMobileTab] = useState<'tree' | 'list' | 'detail'>('detail');
   // The selected technology's reference doc — OWNED here so the middle-column
   // sub-section nav (DocToc) and the right-panel CategoryDoc share ONE fetch.
   const [docBlocks, setDocBlocks] = useState<DocBlock[] | null>(null);
@@ -323,6 +327,8 @@ export default function ExpHubPage() {
     setSelectedCategoryId(category ? category.id : undefined);
     setSelectedSnippet(null);
     setPage(1);
+    // Mobile: after picking a group/technology, reveal its list (or its doc).
+    setMobileTab(category ? 'list' : 'tree');
   };
 
   const handleClearFilters = () => {
@@ -333,6 +339,7 @@ export default function ExpHubPage() {
 
   const handleSnippetClick = (snippet: Snippet) => {
     setSelectedSnippet(snippet);
+    setMobileTab('detail'); // mobile: jump to the detail pane
     // Open as a tab (dedupe, keep order) — like a browser/editor.
     setOpenTabs((tabs) => (tabs.some((t) => t.id === snippet.id) ? tabs : [...tabs, snippet]));
   };
@@ -459,7 +466,7 @@ export default function ExpHubPage() {
             categories={categories}
             onSelectCategory={handleCategorySelect}
             onSelectSnippet={handleSnippetClick}
-            onSearch={(q) => { setSearchQuery(q); setPage(1); setSelectedSnippet(null); }}
+            onSearch={(q) => { setSearchQuery(q); setPage(1); setSelectedSnippet(null); setMobileTab('list'); }}
           />
           <button
             onClick={() => setShowSaved((v) => !v)}
@@ -476,13 +483,14 @@ export default function ExpHubPage() {
         </div>
       </header>
 
-      {/* Main Content — stacks vertically on mobile, side-by-side on ≥lg. */}
-      <div className="relative z-10 flex flex-1 flex-col overflow-y-auto lg:flex-row lg:overflow-hidden">
+      {/* Main Content — ONE pane at a time on mobile (tab-switched), all three
+          side-by-side on ≥lg. */}
+      <div className="relative z-10 flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
         {/* Left Sidebar - Folder Tree (collapsible) */}
         <aside
-          className={`relative shrink-0 border-b border-[var(--border-color)] bg-[var(--bg-card)]/50 lg:flex lg:min-h-0 lg:flex-col lg:border-b-0 lg:border-r ${
-            folderTreeOpen ? 'lg:w-72' : 'lg:w-11'
-          }`}
+          className={`relative shrink-0 flex-col border-b border-[var(--border-color)] bg-[var(--bg-card)]/50 lg:flex lg:min-h-0 lg:flex-none lg:flex-col lg:border-b-0 lg:border-r ${
+            mobileTab === 'tree' ? 'flex min-h-0 w-full flex-1' : 'hidden'
+          } ${folderTreeOpen ? 'lg:w-72' : 'lg:w-11'}`}
         >
           <div className={`flex shrink-0 items-center border-b border-[var(--border-color)] ${folderTreeOpen ? 'justify-between px-3 py-2' : 'justify-center py-2'}`}>
             <span className={`flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] transition-opacity ${folderTreeOpen ? 'opacity-100' : 'w-0 overflow-hidden opacity-0 pointer-events-none'}`}>
@@ -492,14 +500,14 @@ export default function ExpHubPage() {
             <button
               type="button"
               onClick={() => setFolderTreeOpen((v) => !v)}
-              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)]"
+              className="hidden h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)] lg:flex"
               title={folderTreeOpen ? t('expHub.hideCategories') : t('expHub.showCategories')}
               aria-label={folderTreeOpen ? t('expHub.hideCategories') : t('expHub.showCategories')}
             >
               {folderTreeOpen ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
             </button>
           </div>
-          <div className={`overflow-y-auto max-h-[40vh] lg:max-h-none lg:min-h-0 lg:flex-1 ${folderTreeOpen ? '' : 'hidden'}`}>
+          <div className={`min-h-0 flex-1 overflow-y-auto lg:max-h-none lg:min-h-0 lg:flex-1 ${folderTreeOpen ? '' : 'hidden'}`}>
             <FolderTree
               categories={visibleCategories}
               selectedCategoryId={selectedCategoryId}
@@ -510,7 +518,7 @@ export default function ExpHubPage() {
         </aside>
 
         {/* Middle Column - Snippet List (collapsible, like the tree) */}
-        <div className={`flex w-full shrink-0 flex-col border-b border-[var(--border-color)] bg-[var(--bg-card)]/40 lg:min-h-0 lg:border-b-0 lg:border-r ${listOpen ? 'lg:w-96' : 'lg:w-12'}`}>
+        <div className={`w-full shrink-0 flex-col border-b border-[var(--border-color)] bg-[var(--bg-card)]/40 lg:flex lg:min-h-0 lg:flex-none lg:border-b-0 lg:border-r ${mobileTab === 'list' ? 'flex min-h-0 flex-1' : 'hidden'} ${listOpen ? 'lg:w-96' : 'lg:w-12'}`}>
           <div className={`flex shrink-0 items-center border-b border-[var(--border-color)] ${listOpen ? 'justify-between px-3 py-2' : 'justify-center py-2'}`}>
             <span className={`flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] ${listOpen ? '' : 'w-0 overflow-hidden opacity-0 pointer-events-none'}`}>
               <List className="h-4 w-4 text-violet-500" /> {snippets.length} {t('expHub.results')}
@@ -518,7 +526,7 @@ export default function ExpHubPage() {
             <button
               type="button"
               onClick={() => setListOpen((v) => !v)}
-              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)]"
+              className="hidden h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-[var(--text-primary)] lg:flex"
               title={listOpen ? 'Ẩn danh sách' : 'Hiện danh sách'}
               aria-label={listOpen ? 'Ẩn danh sách' : 'Hiện danh sách'}
             >
@@ -611,7 +619,7 @@ export default function ExpHubPage() {
         </div>
 
         {/* Right Column - Snippet Detail */}
-        <div className="w-full overflow-y-auto lg:flex-1">
+        <div className={`${mobileTab === 'detail' ? 'block min-h-0 flex-1' : 'hidden'} w-full overflow-y-auto lg:block lg:flex-1`}>
           {/* Open tabs (browser/editor style) — sticky above the detail. */}
           {openTabs.length > 0 && (
             <div className="sticky top-0 z-10 flex items-center gap-0.5 overflow-x-auto border-b border-[var(--border-color)] bg-[var(--bg-card)]/90 px-1 backdrop-blur [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -1018,6 +1026,31 @@ export default function ExpHubPage() {
           })()}
         </div>
       </div>
+
+      {/* Mobile pane switcher — one column at a time on phones/tablets (<lg). */}
+      <nav className="z-30 flex shrink-0 items-stretch border-t border-[var(--border-color)] bg-[var(--bg-card)]/95 backdrop-blur lg:hidden">
+        {([
+          { k: 'tree', icon: FolderOpen, label: t('expHub.categories') },
+          { k: 'list', icon: List, label: t('expHub.results') },
+          { k: 'detail', icon: Info, label: t('expHub.details') },
+        ] as const).map(({ k, icon: Icon, label }) => {
+          const active = mobileTab === k;
+          return (
+            <button
+              key={k}
+              type="button"
+              onClick={() => setMobileTab(k)}
+              className={`flex flex-1 flex-col items-center gap-0.5 py-2 text-[11px] font-medium transition-colors ${
+                active ? 'text-violet-500 dark:text-violet-300' : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'
+              }`}
+              aria-pressed={active}
+            >
+              <Icon className={`h-5 w-5 ${active ? 'scale-110' : ''} transition-transform`} />
+              <span className="max-w-full truncate">{label}</span>
+            </button>
+          );
+        })}
+      </nav>
     </div>
   );
 }

@@ -23,8 +23,215 @@ const algos: SeedLink = { type: 'external', ref: '/algorithms' };
 const off = (title: string, url: string): SeedResource => ({ type: 'official', title, url });
 const art = (title: string, url: string): SeedResource => ({ type: 'article', title, url });
 const crs = (title: string, url: string, premium = false): SeedResource => ({ type: 'course', title, url, premium });
+const vid = (title: string, url: string): SeedResource => ({ type: 'video', title, url });
 
 export const ROADMAP_SEED: SeedRoadmap[] = [
+  // ─────────────────────────────── CLAUDE CODE ───────────────────────────────
+  {
+    slug: 'claude-code', title: 'Claude Code', type: 'skill', icon: 'Terminal', color: '#d97757',
+    description: 'Làm chủ Claude Code — CLI lập trình agentic của Anthropic: cài đặt, phiên làm việc, CLAUDE.md, slash command, MCP, hooks, subagent, skills, plugins, quyền hạn và best practices trong thời đại AI code.',
+    stages: [
+      { label: 'Nền tảng', nodes: [
+        { title: 'Claude Code là gì', kind: 'info', icon: 'Sparkles', description: 'CLI agentic đọc/sửa code, chạy lệnh, dùng công cụ ngay trong terminal — không chỉ là chatbot.',
+          resources: [ off('Claude Code — Overview', 'https://docs.claude.com/en/docs/claude-code/overview'), off('Anthropic — Claude Code', 'https://www.anthropic.com/claude-code'), vid('The future of agentic coding with Claude Code', 'https://www.youtube.com/watch?v=iF9iV4xponk') ] },
+        { title: 'Cài đặt & Quickstart', icon: 'Terminal', description: 'Cài qua npm, đăng nhập, chạy phiên đầu tiên trong repo của bạn.',
+          resources: [ off('Claude Code — Quickstart', 'https://docs.claude.com/en/docs/claude-code/quickstart'), vid('Intro to Claude Code — Webinar (Anthropic)', 'https://www.youtube.com/watch?v=ARWJZVn400I') ] },
+        { title: 'Vòng lặp agentic (agentic loop)', kind: 'info', description: 'Claude tự lập kế hoạch → đọc file → sửa → chạy test → lặp lại tới khi xong.',
+          resources: [ art('Anthropic — Claude Code Best Practices', 'https://www.anthropic.com/engineering/claude-code-best-practices'), vid('Claude Code: Best Practices for Agentic Coding', 'https://www.youtube.com/watch?v=gv0WHhKelSE') ] },
+      ]},
+      { label: 'Dùng hằng ngày', nodes: [
+        { title: 'CLI & cờ dòng lệnh', icon: 'Terminal', description: 'claude, claude -c (continue), claude -p (print/headless), claude -r (resume), --add-dir.',
+          resources: [ off('Claude Code — CLI Reference', 'https://docs.claude.com/en/docs/claude-code/cli-reference') ] },
+        { title: 'Slash command', kind: 'info', side: 'right', description: '/clear, /compact, /init, /help, /model, /review... và lệnh tuỳ biến.',
+          resources: [ off('Claude Code — Slash Commands', 'https://docs.claude.com/en/docs/claude-code/slash-commands') ] },
+        { title: 'Quản lý ngữ cảnh & phiên', kind: 'info', side: 'left', description: 'Cửa sổ ngữ cảnh, /compact, /clear, resume phiên, giảm token.',
+          resources: [ off('Claude Code — Common Workflows', 'https://docs.claude.com/en/docs/claude-code/common-workflows'), off('Claude Code — CLI Reference', 'https://docs.claude.com/en/docs/claude-code/cli-reference') ] },
+        { title: 'Model & chế độ', kind: 'info', side: 'right', description: 'Chọn model (Opus/Sonnet/Haiku), Plan mode, permission mode, output style.',
+          resources: [ off('Claude Code — Settings', 'https://docs.claude.com/en/docs/claude-code/settings') ] },
+      ]},
+      { label: 'Cá nhân hoá dự án', nodes: [
+        { title: 'CLAUDE.md — bộ nhớ dự án', icon: 'BookOpen', description: 'File hướng dẫn Claude về codebase, quy ước, lệnh build/test — nạp mỗi phiên.',
+          resources: [ off('Claude Code — Memory (CLAUDE.md)', 'https://docs.claude.com/en/docs/claude-code/memory'), art('Anthropic — Best Practices', 'https://www.anthropic.com/engineering/claude-code-best-practices') ] },
+        { title: 'Cấu hình & Permissions', icon: 'Lock', side: 'right', description: 'settings.json, allow/deny tool, permission mode, biến môi trường.',
+          resources: [ off('Claude Code — Settings', 'https://docs.claude.com/en/docs/claude-code/settings') ] },
+      ]},
+      { label: 'Mở rộng năng lực', nodes: [
+        { title: 'MCP — kết nối công cụ ngoài', icon: 'Plug', description: 'Model Context Protocol: cắm database, API, browser, Slack... vào Claude.',
+          resources: [ off('Claude Code — MCP', 'https://docs.claude.com/en/docs/claude-code/mcp'), off('Model Context Protocol', 'https://modelcontextprotocol.io/') ] },
+        { title: 'Hooks', icon: 'Webhook', side: 'right', description: 'Chạy lệnh tự động ở sự kiện (PreToolUse/PostToolUse...) — lint, format, chặn.',
+          resources: [ off('Claude Code — Hooks', 'https://docs.claude.com/en/docs/claude-code/hooks') ] },
+        { title: 'Subagents', icon: 'Bot', side: 'left', description: 'Agent con chuyên biệt (review, test, research) chạy song song, ngữ cảnh riêng.',
+          resources: [ off('Claude Code — Subagents', 'https://docs.claude.com/en/docs/claude-code/sub-agents') ] },
+        { title: 'Agent Skills', icon: 'Sparkles', side: 'right', description: 'Đóng gói hướng dẫn + script cho tác vụ lặp lại, tự kích hoạt theo ngữ cảnh.',
+          resources: [ off('Claude Code — Skills', 'https://docs.claude.com/en/docs/claude-code/skills') ] },
+        { title: 'Plugins', icon: 'Puzzle', kind: 'alternative', side: 'left', description: 'Gói command + agent + hook + MCP chia sẻ qua marketplace.',
+          resources: [ off('Claude Code — Plugins', 'https://docs.claude.com/en/docs/claude-code/plugins') ] },
+      ]},
+      { label: 'Nâng cao & Production', nodes: [
+        { title: 'Headless / SDK', kind: 'alternative', icon: 'Cog', description: 'claude -p trong script/CI, tự động hoá không tương tác, Agent SDK.',
+          resources: [ off('Claude Code — Headless', 'https://docs.claude.com/en/docs/claude-code/headless'), vid('Claude Agents — Masterclass (Anthropic)', 'https://www.youtube.com/watch?v=OZ9NhFwVCtQ') ] },
+        { title: 'IDE & editor', kind: 'info', side: 'right', description: 'Tích hợp VS Code / JetBrains, xem diff, chạy ngay trong editor.',
+          resources: [ off('Claude Code — IDE Integrations', 'https://docs.claude.com/en/docs/claude-code/ide-integrations') ] },
+        { title: 'Bảo mật & quyền hạn', icon: 'Shield', side: 'left', description: 'Sandbox, duyệt lệnh nguy hiểm, tránh prompt injection, bảo vệ secrets.',
+          resources: [ off('Claude Code — Security', 'https://docs.claude.com/en/docs/claude-code/security') ] },
+        { title: 'Best practices', kind: 'info', side: 'right', description: 'Plan trước, CLAUDE.md tốt, chia nhỏ, verify — làm việc hiệu quả với agent.',
+          resources: [ art('Anthropic — Claude Code Best Practices', 'https://www.anthropic.com/engineering/claude-code-best-practices'), vid('Claude Code Best Practices', 'https://www.youtube.com/watch?v=gv0WHhKelSE') ] },
+        { title: 'Tiếp: Vibe Coding & OpenClaw', kind: 'alternative', side: 'left', description: 'Dùng AI agent để dựng sản phẩm nhanh, và tự-host agent 24/7.', link: rm('vibe-coding') },
+      ]},
+    ],
+  },
+
+  // ─────────────────────────────── VIBE CODING ───────────────────────────────
+  {
+    slug: 'vibe-coding', title: 'Vibe Coding', type: 'skill', icon: 'Sparkles', color: '#c026d3',
+    description: 'Vibe coding — dựng phần mềm bằng cách "ra lệnh" cho AI (thuật ngữ của Karpathy, 2/2025). Lộ trình dùng AI coding agent để đi từ ý tưởng đến sản phẩm nhanh, kèm kỷ luật review, kiểm thử & bảo mật để không tạo "rác".',
+    stages: [
+      { label: 'Nền tảng', nodes: [
+        { title: 'Vibe coding là gì', kind: 'info', icon: 'Sparkles', description: 'Mô tả bằng ngôn ngữ tự nhiên, để LLM sinh code, tập trung vào kết quả thay vì gõ từng dòng.',
+          resources: [ art('Wikipedia — Vibe coding', 'https://en.wikipedia.org/wiki/Vibe_coding'), art('CodeRabbit — Lịch sử thuật ngữ vibe coding', 'https://www.coderabbit.ai/blog/a-semantic-history-how-the-term-vibe-coding-went-from-a-tweet-to-prod'), vid('The vibe coding mind virus explained (Fireship)', 'https://www.youtube.com/watch?v=Tw18-4U7mts') ] },
+        { title: 'Tư duy: mô tả → sinh → kiểm', kind: 'info', side: 'right', description: 'Vòng lặp: nói rõ mong muốn, để AI sinh, rồi chạy/kiểm và tinh chỉnh.',
+          resources: [ vid('How to make vibe coding not suck (Fireship)', 'https://www.youtube.com/watch?v=PLKrSVuT-Dg') ] },
+        { title: 'Vẫn cần nền tảng lập trình', kind: 'info', side: 'left', description: 'Phải đủ hiểu để đọc/kiểm code AI sinh — nếu không sẽ tạo bug & nợ kỹ thuật.',
+          resources: [ off('Lộ trình Frontend', '/roadmap/frontend'), off('Lộ trình Backend', '/roadmap/backend') ] },
+      ]},
+      { label: 'Công cụ (chọn theo việc)', nodes: [
+        { title: 'AI coding agent (terminal)', icon: 'Terminal', description: 'Claude Code / OpenAI Codex — agent tự đọc/sửa codebase, chạy lệnh.',
+          resources: [ off('Anthropic — Claude Code', 'https://www.anthropic.com/claude-code'), off('OpenAI — Codex', 'https://developers.openai.com/codex/'), off('Lộ trình Claude Code', '/roadmap/claude-code') ] },
+        { title: 'AI trong IDE', kind: 'info', side: 'right', description: 'Cursor, GitHub Copilot, Windsurf — gợi ý & sửa code ngay khi gõ.',
+          resources: [ off('Cursor — Docs', 'https://docs.cursor.com/'), off('GitHub Copilot', 'https://github.com/features/copilot'), off('Windsurf', 'https://windsurf.com/') ] },
+        { title: 'AI app builder', icon: 'Rocket', side: 'left', description: 'Lovable, Bolt, v0, Replit — mô tả là ra app/UI chạy được.',
+          resources: [ off('Lovable', 'https://lovable.dev/'), off('Bolt', 'https://bolt.new/'), off('v0 by Vercel', 'https://v0.dev/'), off('Replit', 'https://replit.com/') ] },
+      ]},
+      { label: 'Quy trình hiệu quả', nodes: [
+        { title: 'Viết prompt & spec tốt', kind: 'info', icon: 'BookOpen', description: 'Nêu rõ mục tiêu, ràng buộc, ví dụ input/output — AI sinh đúng hơn.',
+          resources: [ off('Anthropic — Prompt Engineering', 'https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview') ] },
+        { title: 'Chia nhỏ & lặp từng bước', kind: 'info', side: 'right', description: 'Làm từng tính năng nhỏ, chạy được rồi mới đi tiếp — dễ kiểm soát.',
+          resources: [ art('Anthropic — Best Practices', 'https://www.anthropic.com/engineering/claude-code-best-practices') ] },
+        { title: 'MCP & tool cho agent', icon: 'Plug', kind: 'alternative', side: 'left', description: 'Cấp cho agent quyền truy cập DB/API/browser để làm việc thật.',
+          resources: [ off('Model Context Protocol', 'https://modelcontextprotocol.io/'), off('Lộ trình Claude Code', '/roadmap/claude-code') ] },
+      ]},
+      { label: 'Kỷ luật (đừng tạo rác)', nodes: [
+        { title: 'Review & hiểu code AI sinh', icon: 'Bug', description: 'Đừng "Accept All" mù quáng — đọc diff, hiểu logic trước khi merge.',
+          resources: [ art('Wikipedia — Vibe coding (rủi ro)', 'https://en.wikipedia.org/wiki/Vibe_coding') ] },
+        { title: 'Kiểm thử & CI', kind: 'info', side: 'right', description: 'Bắt AI viết test, chạy tự động — chốt chặn để code AI không phá vỡ hệ thống.',
+          resources: [ off('GitHub Actions — Docs', 'https://docs.github.com/en/actions') ] },
+        { title: 'Bảo mật khi vibe', icon: 'Shield', side: 'left', description: 'Không lộ API key, kiểm SQL injection/XSS, đừng deploy code chưa hiểu.',
+          resources: [ art('OWASP Top 10', 'https://owasp.org/www-project-top-ten/') ] },
+        { title: 'Giới hạn & khi nào tự viết', kind: 'info', side: 'right', description: 'Vibe coding hợp prototype/MVP; hệ thống lớn cần kiến trúc & con người.',
+          resources: [ art('CodeRabbit — Semantic history', 'https://www.coderabbit.ai/blog/a-semantic-history-how-the-term-vibe-coding-went-from-a-tweet-to-prod') ] },
+      ]},
+    ],
+  },
+
+  // ─────────────────────────────── OPENCLAW ───────────────────────────────
+  {
+    slug: 'openclaw', title: 'OpenClaw', type: 'skill', icon: 'Bot', color: '#0284c7',
+    description: 'OpenClaw — nền tảng AI assistant tự-host (mã nguồn mở, MIT) chạy agent (như Claude Code) 24/7, nối WhatsApp/Telegram/Discord, có plugin & workflow. Lộ trình cài đặt, cấu hình Gateway, kênh, công cụ và bảo mật.',
+    stages: [
+      { label: 'Nền tảng', nodes: [
+        { title: 'OpenClaw là gì', kind: 'info', icon: 'Bot', description: 'AI assistant cá nhân tự-host: chạy agent trên hạ tầng của bạn, toàn quyền kiểm soát.',
+          resources: [ off('OpenClaw — Docs', 'https://docs.openclaw.ai/'), off('OpenClaw — GitHub', 'https://github.com/openclaw/openclaw') ] },
+        { title: 'Kiến trúc: Gateway & Agent', kind: 'info', side: 'right', description: 'Gateway luôn chạy nhận tin nhắn → chạy lượt agent → gọi tool → trả lời.',
+          resources: [ off('OpenClaw — Architecture', 'https://docs.openclaw.ai/concepts/architecture') ] },
+        { title: 'Nền tảng & yêu cầu tự-host', kind: 'info', side: 'left', description: 'Chạy trên máy/VPS/container bạn kiểm soát; OS & thiết bị hỗ trợ.',
+          resources: [ off('OpenClaw — Platforms', 'https://docs.openclaw.ai/platforms') ] },
+      ]},
+      { label: 'Cài đặt', nodes: [
+        { title: 'Getting Started & cài đặt', icon: 'Terminal', description: 'Cài Gateway, cấu hình lần đầu, chạy agent đầu tiên.',
+          resources: [ off('OpenClaw — Getting Started', 'https://docs.openclaw.ai/start/getting-started'), off('OpenClaw — Install', 'https://docs.openclaw.ai/install'), vid('Deploy Your Own AI Agent — OpenClaw Tutorial', 'https://www.youtube.com/watch?v=sO6NSSOWDO0') ] },
+        { title: 'Cấu hình Gateway', kind: 'info', side: 'right', description: 'File cấu hình, biến môi trường, tuỳ chỉnh hành vi agent.',
+          resources: [ off('OpenClaw — Gateway Configuration', 'https://docs.openclaw.ai/gateway/configuration') ] },
+        { title: 'Kết nối Model provider', icon: 'Cpu', side: 'left', description: 'Cắm Anthropic/OpenAI... , cấu hình failover giữa các model.',
+          resources: [ off('OpenClaw — Providers', 'https://docs.openclaw.ai/providers') ] },
+      ]},
+      { label: 'Kênh & tương tác', nodes: [
+        { title: 'Channels (Telegram/WhatsApp/Discord)', icon: 'MessageSquare', description: 'Nối agent vào app nhắn tin — điều khiển & nhận trả lời qua chat.',
+          resources: [ off('OpenClaw — Channels', 'https://docs.openclaw.ai/channels') ] },
+        { title: 'Web Control UI', kind: 'info', side: 'right', description: 'Bảng điều khiển web để quản lý & trò chuyện với agent.',
+          resources: [ off('OpenClaw — Control UI', 'https://docs.openclaw.ai/web/control-ui') ] },
+        { title: 'Mobile nodes', icon: 'Smartphone', kind: 'alternative', side: 'left', description: 'Kết nối thiết bị iOS/Android như node của hệ thống.',
+          resources: [ off('OpenClaw — Nodes', 'https://docs.openclaw.ai/nodes') ] },
+      ]},
+      { label: 'Năng lực agent', nodes: [
+        { title: 'Tools & Skills', icon: 'Wrench', description: 'Cấp công cụ, kỹ năng, tự động hoá cho agent thực thi tác vụ.',
+          resources: [ off('OpenClaw — Tools', 'https://docs.openclaw.ai/tools') ] },
+        { title: 'ClawHub (marketplace plugin)', icon: 'Puzzle', side: 'right', description: 'Cài plugin dựng sẵn để mở rộng năng lực nhanh.',
+          resources: [ off('OpenClaw — ClawHub', 'https://docs.openclaw.ai/clawhub') ] },
+        { title: 'Multi-agent & workflow', icon: 'Workflow', kind: 'alternative', side: 'left', description: 'Nhiều agent phối hợp, workflow bằng TypeScript/YAML.',
+          resources: [ off('OpenClaw — Multi-agent', 'https://docs.openclaw.ai/concepts/multi-agent') ] },
+      ]},
+      { label: 'Vận hành', nodes: [
+        { title: 'Bảo mật', icon: 'Shield', description: 'Giới hạn quyền agent, bảo vệ secrets, kiểm soát truy cập.',
+          resources: [ off('OpenClaw — Security', 'https://docs.openclaw.ai/gateway/security') ] },
+        { title: 'Remote access (Tailscale)', icon: 'Network', kind: 'alternative', side: 'right', description: 'Truy cập Gateway từ xa an toàn qua mạng riêng.',
+          resources: [ off('OpenClaw — Remote', 'https://docs.openclaw.ai/gateway/remote') ] },
+        { title: 'Troubleshooting & CLI', kind: 'info', side: 'left', description: 'Gỡ lỗi vận hành, lệnh CLI, log & release notes.',
+          resources: [ off('OpenClaw — Troubleshooting', 'https://docs.openclaw.ai/gateway/troubleshooting') ] },
+      ]},
+    ],
+  },
+
+  // ─────────────────────────────── LEETCODE / CODING INTERVIEW ───────────────────────────────
+  {
+    slug: 'leetcode', title: 'LeetCode & Phỏng vấn Coding', type: 'skill', icon: 'Trophy', color: '#ffa116',
+    description: 'Lộ trình luyện phỏng vấn coding (LeetCode/NeetCode) — độ phức tạp, cấu trúc dữ liệu và ~15 pattern cốt lõi (two pointers, sliding window, BFS/DFS, DP...) để pass phỏng vấn Big Tech. Luyện trực quan tại trang Algorithms.',
+    stages: [
+      { label: 'Nền tảng', nodes: [
+        { title: 'Độ phức tạp Big-O', kind: 'info', icon: 'Gauge', description: 'Thời gian & bộ nhớ; O(1)/O(log n)/O(n)/O(n²) — cách chấm điểm lời giải.', link: algos,
+          resources: [ art('Big-O Cheat Sheet', 'https://www.bigocheatsheet.com/'), off('Lộ trình DSA', '/roadmap/dsa') ] },
+        { title: 'Cấu trúc dữ liệu cốt lõi', icon: 'Binary', description: 'Mảng, hash, linked list, stack/queue, cây, heap, đồ thị.', link: algos,
+          resources: [ art('VisuAlgo — trực quan hoá', 'https://visualgo.net/en'), off('Lộ trình DSA', '/roadmap/dsa') ] },
+        { title: 'Chiến lược & cách bắt đầu', kind: 'info', side: 'right', description: 'Học theo pattern thay vì cày ngẫu nhiên; ôn có hệ thống.',
+          resources: [ crs('NeetCode — Roadmap', 'https://neetcode.io/roadmap'), vid('How I Would Master LeetCode (NeetCode)', 'https://www.youtube.com/watch?v=jIj0rfU_hYc'), vid('How I ACTUALLY got good at Leetcode', 'https://www.youtube.com/watch?v=RJr7ofDgE24') ] },
+      ]},
+      { label: 'Pattern mảng & chuỗi', nodes: [
+        { title: 'Two Pointers', kind: 'info', description: 'Hai con trỏ quét mảng đã sắp — tổng cặp, đảo, loại trùng.', link: algos,
+          resources: [ art('GeeksforGeeks — Two Pointers', 'https://www.geeksforgeeks.org/two-pointers-technique/'), crs('NeetCode — Practice', 'https://neetcode.io/practice') ] },
+        { title: 'Sliding Window', kind: 'info', side: 'right', description: 'Cửa sổ trượt cho chuỗi con/đoạn con tối ưu.',
+          resources: [ crs('NeetCode — Practice', 'https://neetcode.io/practice'), art('Tech Interview Handbook — Patterns', 'https://www.techinterviewhandbook.org/coding-interview-study-plan/') ] },
+        { title: 'Prefix Sum & Hashing', kind: 'info', side: 'left', description: 'Tổng tiền tố, HashMap đếm/tra O(1) — bài tổng đoạn, đếm tần suất.',
+          resources: [ crs('NeetCode — Practice', 'https://neetcode.io/practice') ] },
+      ]},
+      { label: 'Tuyến tính & tìm kiếm', nodes: [
+        { title: 'Stack & Monotonic Stack', icon: 'Layers', description: 'Ngoặc hợp lệ, next greater element, biểu thức.', link: algos,
+          resources: [ crs('NeetCode — Practice', 'https://neetcode.io/practice') ] },
+        { title: 'Linked List', kind: 'info', side: 'right', description: 'Đảo, phát hiện chu trình (Floyd), gộp danh sách.',
+          resources: [ art('VisuAlgo — Linked List', 'https://visualgo.net/en/list'), crs('NeetCode — Practice', 'https://neetcode.io/practice') ] },
+        { title: 'Binary Search', icon: 'Search', side: 'left', description: 'Tìm nhị phân trên mảng sắp & trên đáp án (binary search on answer).', link: algos,
+          resources: [ art('cp-algorithms — Binary Search', 'https://cp-algorithms.com/num_methods/binary_search.html'), crs('NeetCode — Practice', 'https://neetcode.io/practice') ] },
+      ]},
+      { label: 'Cây & Đồ thị', nodes: [
+        { title: 'Trees & Traversal', icon: 'GitFork', description: 'DFS/BFS cây, BST, độ sâu, đường đi, LCA.', link: algos,
+          resources: [ art('VisuAlgo — Binary Search Tree', 'https://visualgo.net/en/bst'), crs('NeetCode — Practice', 'https://neetcode.io/practice') ] },
+        { title: 'BFS / DFS đồ thị', icon: 'Share2', side: 'right', description: 'Duyệt đồ thị, số đảo, ma trận, topological sort.', link: algos,
+          resources: [ art('VisuAlgo — Graph Traversal', 'https://visualgo.net/en/dfsbfs'), crs('NeetCode — Practice', 'https://neetcode.io/practice') ] },
+        { title: 'Backtracking', kind: 'info', side: 'left', description: 'Sinh hoán vị/tổ hợp/tập con, N-Queens, Sudoku.', link: algos,
+          resources: [ art('VisuAlgo — Recursion', 'https://visualgo.net/en/recursion'), crs('NeetCode — Practice', 'https://neetcode.io/practice') ] },
+        { title: 'Graphs nâng cao & Union-Find', kind: 'alternative', side: 'right', description: 'Dijkstra, MST, disjoint set — bài đồ thị khó.', link: algos,
+          resources: [ art('VisuAlgo — Union-Find', 'https://visualgo.net/en/ufds'), art('cp-algorithms — Graphs', 'https://cp-algorithms.com/graph/dijkstra.html') ] },
+      ]},
+      { label: 'Nâng cao', nodes: [
+        { title: 'Heap / Priority Queue', icon: 'Zap', description: 'Top-K, merge k lists, median dòng chảy.', link: algos,
+          resources: [ art('VisuAlgo — Binary Heap', 'https://visualgo.net/en/heap'), crs('NeetCode — Practice', 'https://neetcode.io/practice') ] },
+        { title: 'Quy hoạch động (DP)', icon: 'Grid3x3', description: 'Knapsack, LCS, LIS, coin change — pattern khó nhất & hay gặp.', link: algos,
+          resources: [ art('cp-algorithms — Dynamic Programming', 'https://cp-algorithms.com/dynamic_programming/intro-to-dp.html'), crs('NeetCode — Practice', 'https://neetcode.io/practice') ] },
+        { title: 'Greedy & Intervals', kind: 'info', side: 'right', description: 'Tham lam, gộp/xếp lịch khoảng, activity selection.',
+          resources: [ crs('NeetCode — Practice', 'https://neetcode.io/practice') ] },
+        { title: 'Bit Manipulation', kind: 'alternative', side: 'left', description: 'XOR, mask, đếm bit — mẹo tối ưu.',
+          resources: [ art('cp-algorithms — Bit Manipulation', 'https://cp-algorithms.com/algebra/bit-manipulation.html') ] },
+      ]},
+      { label: 'Luyện tập & phỏng vấn', nodes: [
+        { title: 'NeetCode 150 / Blind 75', icon: 'Trophy', description: 'Bộ đề tuyển chọn phủ mọi pattern — lộ trình luyện chuẩn.',
+          resources: [ crs('NeetCode — Practice (150)', 'https://neetcode.io/practice'), off('LeetCode — Top Interview 150', 'https://leetcode.com/studyplan/top-interview-150/'), vid('NeetCode 150 — All Solutions', 'https://www.youtube.com/watch?v=T0u5nwSA0w0') ] },
+        { title: 'Luyện trực quan (Algorithms)', kind: 'info', icon: 'Binary', side: 'right', description: 'Xem thuật toán chạy từng bước tại trang Algorithms.', link: algos,
+          resources: [ off('Lộ trình DSA', '/roadmap/dsa') ] },
+        { title: 'DSA track (Code Lab)', icon: 'Code2', kind: 'alternative', side: 'left', description: 'Bài tập DSA có chấm tự động.', link: cl('data-structures-algorithms') },
+        { title: 'Mock interview & giao tiếp', kind: 'info', side: 'right', description: 'Nói to suy nghĩ, làm rõ đề, phân tích độ phức tạp; luyện phỏng vấn thử.',
+          resources: [ off('Tech Interview Handbook', 'https://www.techinterviewhandbook.org/'), art('Tech Interview Handbook — Behavioral', 'https://www.techinterviewhandbook.org/behavioral-interview/') ] },
+      ]},
+    ],
+  },
+
   // ─────────────────────────────── FRONTEND ───────────────────────────────
   {
     slug: 'frontend', title: 'Frontend', type: 'role', icon: 'Monitor', color: '#6366f1',

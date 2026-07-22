@@ -588,7 +588,7 @@ export const ROADMAP_SEED: SeedRoadmap[] = [
         { title: 'Mảng & chuỗi', icon: 'Rows3', side: 'right', description: 'Truy cập, duyệt, đảo, xoay.', link: algos,
           resources: [ crs('NeetCode — Arrays & Hashing', 'https://neetcode.io/roadmap') ] },
         { title: 'Two-pointer & Sliding window', kind: 'alternative', side: 'left', description: 'Kỹ thuật quét mảng hiệu quả.', link: algos,
-          resources: [ art('cp-algorithms — Two Pointers', 'https://cp-algorithms.com/others/two_pointers.html') ] },
+          resources: [ art('GeeksforGeeks — Two Pointers Technique', 'https://www.geeksforgeeks.org/two-pointers-technique/') ] },
       ]},
       { label: 'Cấu trúc tuyến tính', nodes: [
         { title: 'Stack & Queue', icon: 'Layers', side: 'left', description: 'LIFO/FIFO — duyệt, hoàn tác, BFS.', link: algos,
@@ -707,7 +707,7 @@ export const ROADMAP_SEED: SeedRoadmap[] = [
       ]},
       { label: 'Web & Backend', nodes: [
         { title: 'net/http & routing', icon: 'Webhook', description: 'HTTP server, handler, middleware.', link: cl('go'),
-          resources: [ off('Go — Writing Web Applications', 'https://go.dev/doc/articles/wiki/'), off('Gin — Docs', 'https://gin-gonic.com/docs/') ] },
+          resources: [ off('Go — Writing Web Applications', 'https://go.dev/doc/articles/wiki/'), off('Gin — Docs', 'https://gin-gonic.com/en/docs/') ] },
         { title: 'Database (database/sql)', icon: 'Database', side: 'right', description: 'Kết nối, query, transaction, pool.',
           resources: [ off('Go — Accessing a database', 'https://go.dev/doc/tutorial/database-access') ] },
         { title: 'Đóng gói & Docker', icon: 'Container', side: 'left', description: 'Binary tĩnh, image nhỏ, triển khai.', link: cl('docker'),
@@ -749,7 +749,7 @@ export const ROADMAP_SEED: SeedRoadmap[] = [
       ]},
       { label: 'Thực chiến', nodes: [
         { title: 'Cargo & crates.io', kind: 'info', description: 'Dependency, workspace, publish crate.',
-          resources: [ off('The Cargo Book', 'https://doc.rust-lang.org/cargo/'), off('crates.io', 'https://crates.io/') ] },
+          resources: [ off('The Cargo Book', 'https://doc.rust-lang.org/cargo/'), off('Cargo — Publishing on crates.io', 'https://doc.rust-lang.org/cargo/reference/publishing.html') ] },
         { title: 'Async (Tokio)', icon: 'Zap', kind: 'alternative', side: 'right', description: 'async/await, runtime, future.',
           resources: [ off('Tokio — Tutorial', 'https://tokio.rs/tokio/tutorial') ] },
         { title: 'Web (Axum/Actix)', icon: 'Webhook', kind: 'alternative', side: 'left', description: 'API hiệu năng cao bằng Rust.',
@@ -833,7 +833,7 @@ export const ROADMAP_SEED: SeedRoadmap[] = [
         { title: 'CMake & build', icon: 'Wrench', description: 'Dựng dự án đa file, thư viện, cross-platform.',
           resources: [ off('CMake — Tutorial', 'https://cmake.org/cmake/help/latest/guide/tutorial/index.html') ] },
         { title: 'Debug (gdb/valgrind)', kind: 'info', side: 'right', description: 'Gỡ lỗi, phát hiện rò bộ nhớ.',
-          resources: [ off('GDB — Documentation', 'https://sourceware.org/gdb/documentation/') ] },
+          resources: [ off('GDB — Documentation', 'https://www.gnu.org/software/gdb/documentation/') ] },
         { title: 'Competitive programming', icon: 'Binary', kind: 'alternative', side: 'left', description: 'C++ nhanh cho luyện thuật toán.', link: algos,
           resources: [ art('cp-algorithms', 'https://cp-algorithms.com/') ] },
       ]},
@@ -1017,7 +1017,7 @@ export const ROADMAP_SEED: SeedRoadmap[] = [
         { title: 'Coroutines & Flow', icon: 'Zap', side: 'left', description: 'Bất đồng bộ, luồng dữ liệu phản ứng.',
           resources: [ off('Android — Coroutines', 'https://developer.android.com/kotlin/coroutines') ] },
         { title: 'Retrofit (network)', icon: 'Webhook', kind: 'alternative', side: 'right', description: 'Gọi REST API, JSON, interceptor.',
-          resources: [ off('Retrofit', 'https://square.github.io/retrofit/') ] },
+          resources: [ off('Retrofit (GitHub)', 'https://github.com/square/retrofit') ] },
       ]},
       { label: 'Production', nodes: [
         { title: 'Dependency Injection (Hilt)', kind: 'alternative', description: 'Quản lý phụ thuộc gọn, dễ test.',
@@ -1093,7 +1093,7 @@ export const ROADMAP_SEED: SeedRoadmap[] = [
         { title: '2D: sprite & tilemap', kind: 'info', description: 'Sprite, animation, tilemap, camera 2D.',
           resources: [ crs('Unity Learn — 2D', 'https://learn.unity.com/') ] },
         { title: '3D: mesh & lighting', kind: 'info', side: 'right', description: 'Mesh, material, ánh sáng, camera 3D.',
-          resources: [ off('Unity — Graphics', 'https://docs.unity3d.com/Manual/Graphics.html') ] },
+          resources: [ off('Unity — Manual', 'https://docs.unity3d.com/Manual/index.html') ] },
         { title: 'Shader & OpenGL', icon: 'Palette', kind: 'alternative', side: 'left', description: 'Pipeline đồ hoạ, GLSL, hiệu ứng.', link: cl('opengl'),
           resources: [ crs('LearnOpenGL', 'https://learnopengl.com/') ] },
       ]},

@@ -43,12 +43,13 @@ FROM node:22-slim AS builder
 
 WORKDIR /app
 
-# Heap 3072: enough for the single-process webpack compile + type-check
-# (2048 caused a JS-heap OOM, exit 134, on a --no-cache build). The
-# static-generation OOM (exit 137) is instead controlled by limiting the
-# worker COUNT to 1 via `experimental.cpus` in next.config.js, so we no
-# longer need to starve the heap to stay within the 6GB VPS's RAM.
-ENV NODE_OPTIONS="--max-old-space-size=3072"
+# Heap 4096: the single-process webpack compile + type-check grew past the
+# old 3072 ceiling and hit a JS-heap OOM (exit 134) on a cold --no-cache build
+# (2026-07-23, after the Code Lab + roadmap expansion). The VPS is now 8GB
+# (≈6GB free during a build — jobs are I/O-light), so 4096 is safe headroom.
+# The static-generation OOM (exit 137) is separately controlled by limiting the
+# worker COUNT to 1 via `experimental.cpus` in next.config.js.
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Copy cached node_modules from deps stage

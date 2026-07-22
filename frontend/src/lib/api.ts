@@ -295,10 +295,11 @@ export const fileApi = {
 // Mirrors the envelope convention: every call resolves to
 // `{ data: <payload> }`; callers read `res.data.data`.
 // ─── RoadMap (Role/Skill learning paths) ────────────────────────────
+export interface ResourceItemT { type: string; title: string; url: string; premium?: boolean }
 export interface RoadmapNodeT {
   id: number; stage: number; stageLabel: string; order: number; side: string; kind: string;
   title: string; subtitle: string | null; icon: string | null; description: string | null;
-  linkType: string | null; linkRef: string | null;
+  linkType: string | null; linkRef: string | null; resources: ResourceItemT[] | null;
 }
 export interface RoadmapStageT { stage: number; stageLabel: string; nodes: RoadmapNodeT[]; }
 export interface RoadmapListItemT {

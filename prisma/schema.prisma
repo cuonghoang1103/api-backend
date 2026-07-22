@@ -6784,6 +6784,8 @@ model RoadmapNode {
   description String?  @db.Text // shown when the node is opened
   linkType    String?  @map("link_type") @db.VarChar(32) // code-lab | roadmap | external
   linkRef     String?  @map("link_ref") @db.VarChar(500) // track slug / roadmap slug / URL
+  // Curated learning resources (roadmap.sh-style): [{ type, title, url, premium? }]
+  resources   Json?
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 

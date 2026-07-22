@@ -4,14 +4,16 @@
  * Public read (list + detail) + per-user manual "done" toggle + an idempotent
  * seeder for the 8 flagship roadmaps. Fully additive.
  */
+import { Prisma } from '@prisma/client';
 import { prisma } from '../config/database.js';
 import { NotFoundError } from '../middleware/errorHandler.js';
 import { ROADMAP_SEED } from './roadmap.seed.js';
 
+export interface ResourceItem { type: string; title: string; url: string; premium?: boolean; }
 export interface RoadmapNodeDto {
   id: number; stage: number; stageLabel: string; order: number; side: string; kind: string;
   title: string; subtitle: string | null; icon: string | null; description: string | null;
-  linkType: string | null; linkRef: string | null;
+  linkType: string | null; linkRef: string | null; resources: ResourceItem[] | null;
 }
 export interface RoadmapStageDto { stage: number; stageLabel: string; nodes: RoadmapNodeDto[]; }
 export interface RoadmapListItem {
@@ -26,10 +28,11 @@ export interface RoadmapDetailDto {
 function nodeDto(n: {
   id: number; stage: number; stageLabel: string; order: number; side: string; kind: string;
   title: string; subtitle: string | null; icon: string | null; description: string | null;
-  linkType: string | null; linkRef: string | null;
+  linkType: string | null; linkRef: string | null; resources: unknown;
 }): RoadmapNodeDto {
   return { id: n.id, stage: n.stage, stageLabel: n.stageLabel, order: n.order, side: n.side, kind: n.kind,
-    title: n.title, subtitle: n.subtitle, icon: n.icon, description: n.description, linkType: n.linkType, linkRef: n.linkRef };
+    title: n.title, subtitle: n.subtitle, icon: n.icon, description: n.description, linkType: n.linkType, linkRef: n.linkRef,
+    resources: Array.isArray(n.resources) ? (n.resources as ResourceItem[]) : null };
 }
 
 /** Public: all published roadmaps grouped by type (role / skill), with node counts. */
@@ -128,6 +131,7 @@ export async function seedRoadmaps(opts: { force?: boolean } = {}): Promise<Arra
             side: n.side ?? 'center', kind: n.kind ?? 'primary', title: n.title, subtitle: n.subtitle ?? null,
             icon: n.icon ?? null, description: n.description ?? null,
             linkType: n.link?.type ?? null, linkRef: n.link?.ref ?? null,
+            resources: n.resources && n.resources.length ? (n.resources as unknown as Prisma.InputJsonValue) : undefined,
           },
         });
         created++;

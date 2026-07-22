@@ -4,13 +4,34 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { Loader2, ArrowLeft, ArrowRight, Check, Circle, Play, X, Sparkles, ExternalLink, GitBranch } from 'lucide-react';
+import { Loader2, ArrowLeft, ArrowRight, Check, Circle, Play, X, ExternalLink, GitBranch, Star, BookOpen, Heart } from 'lucide-react';
 import { toast } from 'sonner';
-import { roadmapApi, type RoadmapDetailT, type RoadmapNodeT } from '@/lib/api';
+import { roadmapApi, type RoadmapDetailT, type RoadmapNodeT, type ResourceItemT } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { roadmapIcon } from './icons';
 
 const EASE = [0.16, 1, 0.3, 1] as const;
+
+// Resource type → badge label + color (roadmap.sh style).
+const RES_META: Record<string, { label: string; color: string }> = {
+  article: { label: 'Bài viết', color: '#eab308' },
+  video: { label: 'Video', color: '#ef4444' },
+  course: { label: 'Khoá học', color: '#a855f7' },
+  official: { label: 'Chính thức', color: '#3b82f6' },
+  feed: { label: 'Feed', color: '#14b8a6' },
+};
+
+function ResourceRow({ r }: { r: ResourceItemT }) {
+  const m = RES_META[r.type] || RES_META.article;
+  return (
+    <a href={r.url} target="_blank" rel="noopener noreferrer"
+      className="group flex items-start gap-2.5 rounded-lg px-2 py-2 transition hover:bg-black/5 dark:hover:bg-white/5">
+      <span className="mt-0.5 shrink-0 rounded px-1.5 py-0.5 text-[10px] font-semibold" style={{ background: `${m.color}22`, color: m.color }}>{m.label}</span>
+      <span className="flex-1 text-sm underline decoration-transparent underline-offset-2 transition group-hover:decoration-current" style={{ color: 'var(--text-primary)' }}>{r.title}</span>
+      <ExternalLink size={13} className="mt-1 shrink-0 opacity-40 transition group-hover:opacity-80" style={{ color: 'var(--text-secondary)' }} />
+    </a>
+  );
+}
 type NodeStatus = 'done' | 'current' | 'todo';
 
 function nodeHref(n: RoadmapNodeT): { href: string; external: boolean } | null {
@@ -240,14 +261,22 @@ function NodeDrawer({
   const isDone = status === 'done';
   if (!mounted) return null;
 
-  const learnBtn = link ? (
+  const resources = node.resources ?? [];
+  const freeRes = resources.filter((r) => !r.premium);
+  const premiumRes = resources.filter((r) => r.premium);
+  const trackName = (node.linkRef || '').replace(/-/g, ' ');
+  const recTitle = node.linkType === 'code-lab' ? trackName
+    : node.linkType === 'roadmap' ? `Lộ trình ${trackName}`
+    : link?.href === '/algorithms' ? 'Trang Algorithms (trực quan)'
+    : 'Tài liệu chính thức';
+  const recCTA = link ? (
     link.external ? (
-      <a href={link.href} target="_blank" rel="noopener noreferrer" className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-md transition hover:opacity-90" style={{ background: `linear-gradient(135deg, ${color}, ${color}cc)` }}>
-        <ExternalLink size={16} /> Xem tài liệu
+      <a href={link.href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:opacity-90" style={{ background: color }}>
+        Bắt đầu <ExternalLink size={12} />
       </a>
     ) : (
-      <Link href={link.href} onClick={onClose} className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full px-4 py-2.5 text-sm font-semibold text-white shadow-md transition hover:opacity-90" style={{ background: `linear-gradient(135deg, ${color}, ${color}cc)` }}>
-        <Sparkles size={16} /> Học ngay <ArrowRight size={15} />
+      <Link href={link.href} onClick={onClose} className="inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:opacity-90" style={{ background: color }}>
+        Bắt đầu <ArrowRight size={12} />
       </Link>
     )
   ) : null;
@@ -277,26 +306,63 @@ function NodeDrawer({
           </button>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
-          {node.subtitle && <p className="mb-2 text-sm font-medium" style={{ color: 'var(--text-secondary, #aaa)' }}>{node.subtitle}</p>}
-          {node.description ? (
-            <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: 'var(--text-secondary, #aaa)' }}>{node.description}</p>
-          ) : (
-            <p className="text-sm" style={{ color: 'var(--text-secondary, #888)' }}>Chưa có phần giới thiệu.</p>
+        <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4">
+          <div>
+            {node.subtitle && <p className="mb-1.5 text-sm font-medium" style={{ color: 'var(--text-secondary, #aaa)' }}>{node.subtitle}</p>}
+            {node.description ? (
+              <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: 'var(--text-secondary, #aaa)' }}>{node.description}</p>
+            ) : (
+              <p className="text-sm" style={{ color: 'var(--text-secondary, #888)' }}>Chưa có phần giới thiệu.</p>
+            )}
+          </div>
+
+          {/* Recommended (Code Lab / official) */}
+          {link && (
+            <div className="rounded-xl border p-3" style={{ borderColor: `${color}55`, background: `${color}10` }}>
+              <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold" style={{ color }}>
+                <Star size={13} className="fill-current" /> Đề xuất{node.linkType === 'code-lab' ? ' · Bài học Code Lab' : ''}
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold capitalize" style={{ color: 'var(--text-primary)' }}>{recTitle}</p>
+                  {node.linkType === 'code-lab' && <p className="mt-0.5 flex items-center gap-1 text-xs" style={{ color: 'var(--text-secondary, #888)' }}><BookOpen size={11} /> Bài học & luyện tập có chấm</p>}
+                </div>
+                {recCTA && <div className="shrink-0">{recCTA}</div>}
+              </div>
+            </div>
+          )}
+
+          {/* Free resources */}
+          {freeRes.length > 0 && (
+            <div>
+              <div className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold" style={{ color: '#22c55e' }}><Heart size={13} className="fill-current" /> Tài nguyên miễn phí</div>
+              <div className="rounded-xl border p-1" style={{ borderColor: 'var(--border-color, rgba(127,127,127,0.18))' }}>
+                {freeRes.map((r, i) => <ResourceRow key={i} r={r} />)}
+              </div>
+            </div>
+          )}
+
+          {/* Premium resources */}
+          {premiumRes.length > 0 && (
+            <div>
+              <div className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold" style={{ color: '#a855f7' }}><Star size={13} className="fill-current" /> Tài nguyên nâng cao</div>
+              <div className="rounded-xl border p-1" style={{ borderColor: 'var(--border-color, rgba(127,127,127,0.18))' }}>
+                {premiumRes.map((r, i) => <ResourceRow key={i} r={r} />)}
+              </div>
+            </div>
           )}
         </div>
 
-        <div className="flex flex-col gap-2 border-t px-4 py-3 sm:flex-row" style={{ borderColor: 'var(--border-color, rgba(127,127,127,0.2))' }}>
-          {learnBtn}
+        <div className="border-t px-4 py-3" style={{ borderColor: 'var(--border-color, rgba(127,127,127,0.2))' }}>
           <button type="button" onClick={onToggleDone} disabled={toggling}
-            className="inline-flex items-center justify-center gap-1.5 rounded-full border px-4 py-2.5 text-sm font-medium transition disabled:opacity-60"
+            className="inline-flex w-full items-center justify-center gap-1.5 rounded-full border px-4 py-2.5 text-sm font-medium transition disabled:opacity-60"
             style={{
               borderColor: isDone ? '#22c55e50' : 'var(--border-color, rgba(127,127,127,0.3))',
               background: isDone ? '#22c55e18' : 'transparent',
               color: isDone ? '#22c55e' : 'var(--text-secondary, #aaa)',
             }}>
             {toggling ? <Loader2 size={15} className="animate-spin" /> : isDone ? <Check size={15} /> : <Circle size={15} />}
-            {isDone ? 'Đã xong' : 'Đánh dấu xong'}
+            {isDone ? 'Đã đánh dấu xong' : 'Đánh dấu đã xong'}
           </button>
         </div>
         {!isAuthenticated && <p className="px-4 pb-3 text-center text-[11px]" style={{ color: 'var(--text-secondary, #888)' }}>Đăng nhập để lưu tiến độ.</p>}

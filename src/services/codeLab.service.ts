@@ -174,16 +174,43 @@ export async function getGroupsTree(opts: { admin?: boolean } = {}) {
         orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
         include: { _count: { select: { exercises: true, modules: true } } },
       },
+      // Tracks featured in this group besides their primary group (many-to-many).
+      extraTracks: {
+        orderBy: [{ sortOrder: 'asc' }],
+        include: {
+          track: { include: { _count: { select: { exercises: true, modules: true } } } },
+        },
+      },
     },
   });
-  return groups.map((g) => ({
-    ...g,
-    tracks: g.tracks.map((t) => ({
+  return groups.map((g) => {
+    // Primary tracks (this is their home group).
+    const primary = g.tracks.map((t) => ({
       ...t,
       exerciseCount: t._count.exercises,
       moduleCount: t._count.modules,
-    })),
-  }));
+    }));
+    // Extra tracks (their home is another group; shown here too).
+    const extra = g.extraTracks
+      .map((l) => l.track)
+      .filter((t) => opts.admin || t.status === 'PUBLISHED')
+      .map((t) => ({
+        ...t,
+        exerciseCount: t._count.exercises,
+        moduleCount: t._count.modules,
+      }));
+    // Merge and de-duplicate by id (primary first), keep a stable order.
+    const seen = new Set<number>();
+    const tracks = [...primary, ...extra].filter((t) => {
+      if (seen.has(t.id)) return false;
+      seen.add(t.id);
+      return true;
+    });
+    // Strip the join-only helper field off the group object.
+    const { extraTracks: _drop, ...groupRest } = g;
+    void _drop;
+    return { ...groupRest, tracks };
+  });
 }
 
 export async function createGroup(data: GroupInput) {

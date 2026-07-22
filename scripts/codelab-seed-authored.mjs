@@ -53,6 +53,18 @@ const FILE = val('--file', null);
 
 const REQUIRED = ['title', 'problemHtml', 'starterCodeJson', 'solutionCodeJson', 'solutionExplanationHtml'];
 
+// Query / command languages where a whole correct answer is legitimately short:
+// `SELECT * FROM customers;` is 24 characters and a complete solution. Judging
+// these by the 200-char "too thin" rule (written for imperative code) rejects
+// correct beginner SQL — so exempt a solution whose blocks are all declarative.
+const QUERY_LANGS = new Set(['sql', 'postgresql', 'plpgsql', 'tsql', 'mysql', 'graphql', 'cypher',
+  'yaml', 'hcl', 'json', 'bash', 'sh', 'shell', 'dockerfile', 'nginx', 'redis', 'text']);
+const allDeclarative = (blocks, exLang) => {
+  const arr = Array.isArray(blocks) ? blocks : [];
+  if (arr.length && arr.every((b) => QUERY_LANGS.has(String(b?.language ?? '').toLowerCase()))) return true;
+  return QUERY_LANGS.has(String(exLang ?? '').toLowerCase());
+};
+
 function validate(ex, i) {
   const errs = [];
   for (const k of REQUIRED) if (!ex[k] || (Array.isArray(ex[k]) && !ex[k].length)) errs.push(`missing ${k}`);
@@ -61,7 +73,7 @@ function validate(ex, i) {
   if (!Array.isArray(ex.examplesJson) || ex.examplesJson.length < 1) errs.push('needs >= 1 example');
   if (String(ex.problemHtml || '').length < 300) errs.push('problemHtml too thin (<300 chars)');
   const sol = (ex.solutionCodeJson || []).map((b) => b.code || '').join('');
-  if (sol.length < 200) errs.push('solution code too thin (<200 chars)');
+  if (sol.length < 200 && !allDeclarative(ex.solutionCodeJson, ex.language)) errs.push('solution code too thin (<200 chars)');
   // Only flag genuine "unfinished work" markers. Two traps to avoid: a bare "..." is legal
   // JS/TS (spread/rest) and legal Python (Ellipsis), and the word "todo" is ordinary DATA in
   // a to-do app — so require an uppercase marker sitting inside a COMMENT.

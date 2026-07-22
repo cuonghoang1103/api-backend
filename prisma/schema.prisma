@@ -6511,7 +6511,9 @@ model CodeGroup {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  tracks CodeTrack[]
+  tracks      CodeTrack[]
+  // Tracks shown in this group in ADDITION to their primary group (many-to-many).
+  extraTracks CodeGroupTrackLink[] @relation("GroupExtraTracks")
 
   @@index([sortOrder], name: "idx_code_group_order")
   @@map("code_groups")
@@ -6537,13 +6539,31 @@ model CodeTrack {
   createdAt     DateTime   @default(now()) @map("created_at")
   updatedAt     DateTime   @updatedAt @map("updated_at")
 
-  group     CodeGroup      @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  modules   CodeModule[]
-  exercises CodeExercise[]
+  group       CodeGroup            @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  modules     CodeModule[]
+  exercises   CodeExercise[]
+  // Additional groups this track is featured in (besides its primary group).
+  extraGroups CodeGroupTrackLink[] @relation("TrackExtraGroups")
 
   @@index([groupId, sortOrder], name: "idx_code_track_group_order")
   @@index([slug], name: "idx_code_track_slug")
   @@map("code_tracks")
+}
+
+// ─── Track ↔ Group extra memberships (many-to-many) ──────────────
+// A track has ONE primary group (CodeTrack.groupId) plus zero or more extra
+// groups here, so e.g. PostgreSQL can appear in both "CuongThai" and "Database".
+model CodeGroupTrackLink {
+  groupId   Int @map("group_id")
+  trackId   Int @map("track_id")
+  sortOrder Int @default(0) @map("sort_order")
+
+  group CodeGroup @relation("GroupExtraTracks", fields: [groupId], references: [id], onDelete: Cascade)
+  track CodeTrack @relation("TrackExtraGroups", fields: [trackId], references: [id], onDelete: Cascade)
+
+  @@id([groupId, trackId])
+  @@index([trackId], name: "idx_cgtl_track")
+  @@map("code_group_track_links")
 }
 
 // ─── Modules (ordered chapters/stages inside a track) ────────────

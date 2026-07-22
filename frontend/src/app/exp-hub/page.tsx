@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { sanitizeHtml } from '@/lib/sanitizeHtml';
-import { Loader2, ChevronRight, ChevronLeft, ExternalLink, Bookmark, Heart, History, BookmarkCheck, X, Info, Play, FolderOpen, Github, Download, Copy, Sparkles, Wand2, Terminal, List } from 'lucide-react';
+import { Loader2, ChevronRight, ChevronLeft, ExternalLink, Bookmark, Heart, History, BookmarkCheck, X, Info, Play, FolderOpen, Github, Download, Copy, Sparkles, Wand2, Terminal, List, ArrowRight } from 'lucide-react';
+import { CategoryIcon } from '@/components/exp-hub/CategoryIcon';
 import { toast } from 'sonner';
 import { useTheme } from '@/context/ThemeContext';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -106,6 +107,14 @@ export default function ExpHubPage() {
   const [docLoading, setDocLoading] = useState(false);
 
   const languages = [...new Set(snippets.filter((s) => s.language).map((s) => s.language))].slice(0, 10);
+
+  // Hide legacy empty top-level stubs (Node.JS / Next.Js / Game / Lab211 —
+  // 0 children, superseded by the real grouped categories) from the tree so it
+  // doesn't read as "empty/duplicate". Search still finds everything.
+  const visibleCategories = useMemo(
+    () => categories.filter((c) => (c.children?.length ?? 0) > 0),
+    [categories],
+  );
 
   // The active group object + the categories shown in the left tree:
   // when a group is active the tree lists that group's technologies;
@@ -422,6 +431,13 @@ export default function ExpHubPage() {
           <div className="exphub-blob-b absolute -bottom-40 -right-28 h-[46rem] w-[46rem] rounded-full opacity-[0.14]" style={{ background: 'radial-gradient(circle, #22d3ee 0%, transparent 62%)' }} />
         </div>
       )}
+      {/* Light-theme ambient — soft brand blobs so the page isn't flat white. */}
+      {!isDark && (
+        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+          <div className="exphub-blob-a absolute -top-40 -left-28 h-[40rem] w-[40rem] rounded-full opacity-[0.10]" style={{ background: 'radial-gradient(circle, #8b5cf6 0%, transparent 60%)' }} />
+          <div className="exphub-blob-b absolute -bottom-44 -right-28 h-[44rem] w-[44rem] rounded-full opacity-[0.08]" style={{ background: 'radial-gradient(circle, #06b6d4 0%, transparent 60%)' }} />
+        </div>
+      )}
 
       {/* Header — z-30 keeps the search autocomplete dropdown ABOVE the content
           columns below (which are z-10); otherwise later-painted columns cover
@@ -485,7 +501,7 @@ export default function ExpHubPage() {
           </div>
           <div className={`overflow-y-auto max-h-[40vh] lg:max-h-none lg:min-h-0 lg:flex-1 ${folderTreeOpen ? '' : 'hidden'}`}>
             <FolderTree
-              categories={categories}
+              categories={visibleCategories}
               selectedCategoryId={selectedCategoryId}
               onSelectCategory={handleCategorySelect}
               allLabel={t('expHub.allItems')}
@@ -643,9 +659,50 @@ export default function ExpHubPage() {
                   </div>
                 );
               }
+              // Welcome / landing state — a proper hub cover with the real
+              // top-level groups as cards (legacy empty stubs filtered out).
+              const groups = categories.filter((c) => (c.children?.length ?? 0) > 0);
               return (
-                <div className="flex h-full items-center justify-center text-[var(--text-muted)]">
-                  {t('expHub.selectHint')}
+                <div className="mx-auto max-w-5xl px-6 py-10 sm:px-10 sm:py-14">
+                  <div className="mb-3 inline-flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--text-muted)]">
+                    <span className="h-1.5 w-1.5 rounded-full bg-violet-500 shadow-[0_0_0_4px_rgba(139,92,246,0.22)]" />
+                    EXP_Hub · Kho kinh nghiệm
+                  </div>
+                  <h2 className="max-w-2xl text-3xl font-bold leading-tight tracking-tight sm:text-[2.6rem]">
+                    <span className="bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-500 bg-clip-text text-transparent">Mọi công nghệ</span>, một nơi tra cứu.
+                  </h2>
+                  <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-[var(--text-secondary)]">
+                    Snippet, lệnh, cấu hình và tài liệu thực chiến cho từng công nghệ — chọn một nhóm để bắt đầu, hoặc tìm nhanh ở ô tìm kiếm phía trên.
+                  </p>
+                  {stats && (
+                    <div className="mt-4 text-xs text-[var(--text-muted)]">
+                      <b className="text-[var(--text-primary)]">{stats.totalSnippets}</b> mục · <b className="text-[var(--text-primary)]">{groups.length}</b> nhóm công nghệ
+                    </div>
+                  )}
+                  <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {groups.map((g) => {
+                      const accent = g.color || '#8b5cf6';
+                      return (
+                        <button
+                          key={g.id}
+                          onClick={() => handleCategorySelect(g)}
+                          className="group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] p-4 text-left transition-all hover:-translate-y-1 hover:border-violet-400/50 hover:shadow-[0_18px_40px_-24px_rgba(139,92,246,0.5)]"
+                        >
+                          <span
+                            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-transform group-hover:scale-105"
+                            style={{ background: `${accent}1f`, color: accent, border: `1px solid ${accent}33` }}
+                          >
+                            <CategoryIcon name={g.name} slug={g.slug} icon={g.icon} color={g.color} size={22} />
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="block truncate font-semibold text-[var(--text-primary)]">{g.name}</span>
+                            <span className="text-xs text-[var(--text-muted)]">{g.children?.length ?? 0} công nghệ</span>
+                          </span>
+                          <ArrowRight className="h-4 w-4 shrink-0 translate-x-[-4px] text-violet-500 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               );
             }

@@ -74,7 +74,6 @@ html.theme-dark .cl-root {
 /* ————— Hero ————— */
 .cl-hero {
   position: relative;
-  overflow: hidden;
   border-radius: 24px;
   border: 1px solid var(--border-color);
   background:
@@ -83,10 +82,14 @@ html.theme-dark .cl-root {
     var(--bg-card);
   isolation: isolate;
 }
+/* Grid texture. border-radius:inherit keeps the corners rounded WITHOUT
+   overflow:hidden on the hero — the hero must not clip, or the search
+   autocomplete panel gets cut off where it extends past the hero. */
 .cl-hero::before {
   content: "";
   position: absolute;
   inset: 0;
+  border-radius: inherit;
   background-image:
     linear-gradient(var(--cl-grid) 1px, transparent 1px),
     linear-gradient(90deg, var(--cl-grid) 1px, transparent 1px);
@@ -95,6 +98,13 @@ html.theme-dark .cl-root {
   mask-image: radial-gradient(110% 90% at 50% -10%, #000 35%, transparent 78%);
   pointer-events: none;
   z-index: -1;
+}
+/* Search wrapper sits ABOVE the stat tiles (which create their own stacking
+   context via backdrop-filter and come later in the DOM), so the open
+   autocomplete panel is never painted over. */
+.cl-searchbox {
+  position: relative;
+  z-index: 50;
 }
 
 /* ————— Search field ————— */

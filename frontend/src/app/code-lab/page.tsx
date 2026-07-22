@@ -109,19 +109,19 @@ export default function CodeLabHubPage() {
   return (
     <div className="cl-root mx-auto max-w-6xl px-4 pb-16 pt-20" style={{ color: 'var(--text-primary)' }}>
       {/* ————— Hero ————— */}
-      <section className="cl-hero cl-in mb-8 px-6 py-9 sm:px-10 sm:py-12">
+      <section className="cl-hero cl-in mb-8 px-6 py-10 text-center sm:px-10 sm:py-14">
         <div className="cl-eyebrow cl-in cl-in-1 mb-4">cuongthai · Code Lab</div>
-        <h1 className="cl-display cl-in cl-in-1 max-w-2xl text-[2rem] sm:text-[2.9rem]">
+        <h1 className="cl-display cl-in cl-in-1 mx-auto max-w-2xl text-[2rem] sm:text-[2.9rem]">
           Learn a stack by <span className="cl-gradient-text">building</span> it —
           <br className="hidden sm:block" /> one graded exercise at a time.
         </h1>
-        <p className="cl-in cl-in-2 mt-4 max-w-xl text-[15px] leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+        <p className="cl-in cl-in-2 mx-auto mt-4 max-w-xl text-[15px] leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
           Structured roadmaps and hands-on exercises across every language and framework —
           from your first line of code to advanced, production-grade patterns.
         </p>
 
         {/* Search */}
-        <div ref={boxRef} className="cl-in cl-in-2 relative mt-6 max-w-xl">
+        <div ref={boxRef} className="cl-searchbox cl-in cl-in-2 mx-auto mt-7 max-w-2xl text-left">
           <div className="cl-search">
             <Search size={19} style={{ color: 'var(--text-muted)' }} />
             <input
@@ -170,7 +170,7 @@ export default function CodeLabHubPage() {
 
         {/* Stats */}
         {stats && (
-          <div className="mt-7 grid max-w-xl grid-cols-3 gap-3">
+          <div className="mx-auto mt-7 grid max-w-2xl grid-cols-3 gap-3 text-left">
             <StatTile icon={<Layers size={12} />} value={stats.tracks} label="Tracks" run={statsReady} delay="cl-in-2" />
             <StatTile icon={<BookOpen size={12} />} value={stats.modules} label="Modules" run={statsReady} delay="cl-in-3" />
             <StatTile icon={<Target size={12} />} value={stats.exercises} label="Exercises" run={statsReady} delay="cl-in-4" />

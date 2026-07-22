@@ -40,9 +40,12 @@ function Section({ icon, title, children, right }: {
   icon?: React.ReactNode; title: string; children: React.ReactNode; right?: React.ReactNode;
 }) {
   return (
-    <section className="mb-5">
-      <h2 className="mb-2 flex items-center gap-2 text-sm font-bold uppercase tracking-wide" style={{ color: 'var(--text-secondary)' }}>
-        {icon}{title}
+    <section className="mb-6">
+      <h2 className="mb-2.5 flex items-center gap-2 text-[13px] font-bold uppercase tracking-wide" style={{ color: 'var(--text-secondary)' }}>
+        <span className="grid h-6 w-6 place-items-center rounded-lg" style={{ background: 'color-mix(in srgb, var(--cl-accent) 13%, transparent)', color: 'var(--cl-accent)' }}>
+          {icon || <span className="h-1.5 w-1.5 rounded-full" style={{ background: 'var(--cl-accent)' }} />}
+        </span>
+        {title}
         {right && <span className="ml-auto">{right}</span>}
       </h2>
       {children}
@@ -221,28 +224,34 @@ export default function ExerciseDetailPage() {
   const hints = ex.hintsJson || [];
   const solution = ex.solutionCodeJson || [];
 
+  const trackAccent = ex.track?.color || 'var(--accent-color)';
+
   return (
-    <div className="mx-auto max-w-3xl px-4 pb-10 pt-20" style={{ color: 'var(--text-primary)' }}>
-      <Link href={`/code-lab/${params.trackSlug}`} className="mb-4 inline-flex items-center gap-1 text-sm" style={{ color: 'var(--text-muted)' }}>
+    <div className="cl-root mx-auto max-w-3xl px-4 pb-10 pt-20" style={{ color: 'var(--text-primary)', ['--cl-accent' as string]: trackAccent } as React.CSSProperties}>
+      <Link href={`/code-lab/${params.trackSlug}`} className="mb-4 inline-flex items-center gap-1.5 text-sm transition-colors hover:opacity-80" style={{ color: 'var(--text-muted)' }}>
         <ArrowLeft size={15} /> {ex.track?.name || 'Roadmap'}
       </Link>
 
-      {/* Title bar */}
-      <div className="mb-5">
-        <div className="mb-1 flex flex-wrap items-center gap-2">
-          <h1 className="text-2xl font-bold">{ex.title}</h1>
+      {/* Title bar — hero */}
+      <div className="cl-hero cl-in mb-6 p-5 sm:p-6">
+        <div className="mb-2 flex flex-wrap items-center gap-2">
+          <h1 className="cl-display text-2xl sm:text-[1.7rem]">{ex.title}</h1>
           <DifficultyBadge difficulty={ex.difficulty} />
           {status === 'SOLVED' && (
-            <span className="inline-flex items-center gap-1 text-xs font-semibold" style={{ color: '#22c55e' }}>
+            <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold text-white" style={{ background: '#22c55e' }}>
               <CheckCircle2 size={14} /> Solved
             </span>
           )}
         </div>
-        <div className="flex flex-wrap items-center gap-3 text-xs" style={{ color: 'var(--text-muted)' }}>
-          {ex.module?.name && <span className="inline-flex items-center gap-1"><Layers size={12} />{ex.module.name}</span>}
-          <span>{ex.language}</span>
-          {ex.estimatedMinutes ? <span>≈ {ex.estimatedMinutes} min</span> : null}
-          <span>{ex.points} pts</span>
+        <div className="flex flex-wrap items-center gap-2 text-xs" style={{ color: 'var(--text-secondary)' }}>
+          {ex.module?.name && (
+            <span className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-medium" style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}>
+              <Layers size={12} />{ex.module.name}
+            </span>
+          )}
+          <span className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-medium" style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}>{ex.language}</span>
+          {ex.estimatedMinutes ? <span className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-medium" style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}>≈ {ex.estimatedMinutes} min</span> : null}
+          <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-semibold text-white" style={{ background: 'var(--cl-accent)' }}>{ex.points} pts</span>
         </div>
       </div>
 
@@ -440,16 +449,16 @@ export default function ExerciseDetailPage() {
           language={editorLang}
           projectName={ex.slug}
         />
-        <div className="mt-2 flex flex-wrap items-center gap-2">
-          <button onClick={() => save(false)} disabled={saving} className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium" style={{ background: 'var(--bg-surface)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}>
-            {saving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />} Save
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <button onClick={() => save(false)} disabled={saving} className="inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-medium transition-transform hover:-translate-y-0.5 disabled:opacity-60" style={{ background: 'var(--bg-surface)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}>
+            {saving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />} Save
           </button>
-          <button onClick={() => save(true)} disabled={saving} className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-semibold text-white" style={{ background: '#22c55e' }}>
-            <CheckCircle2 size={14} /> Mark solved
+          <button onClick={() => save(true)} disabled={saving} className="inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold text-white shadow-sm transition-transform hover:-translate-y-0.5 disabled:opacity-60" style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)' }}>
+            <CheckCircle2 size={15} /> Mark solved
           </button>
           {canRun && (
-            <button onClick={runJs} className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium" style={{ background: 'var(--bg-surface)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}>
-              <Play size={14} /> Run (JS)
+            <button onClick={runJs} className="inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-medium transition-transform hover:-translate-y-0.5" style={{ background: 'color-mix(in srgb, var(--cl-accent) 13%, transparent)', color: 'var(--cl-accent)', border: '1px solid color-mix(in srgb, var(--cl-accent) 30%, transparent)' }}>
+              <Play size={15} /> Run (JS)
             </button>
           )}
         </div>

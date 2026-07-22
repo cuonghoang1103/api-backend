@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import './code-lab.css';
 
 // Metadata-only server layout (the page is a client component). Gives the
 // route its own <title>/description for SEO without touching rendering.

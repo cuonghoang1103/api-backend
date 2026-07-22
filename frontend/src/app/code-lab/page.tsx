@@ -2,18 +2,50 @@
 
 /**
  * Code Lab — hub landing.
- * Top: title + full-text search with autocomplete.
- * Group tabs → filter the track grid. Click a track → its roadmap.
+ * Hero with animated stats + prominent search, group filter pills, track grid.
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Search, X, Loader2, Code2 } from 'lucide-react';
+import { Search, X, Loader2, Sparkles, ArrowRight, Layers, BookOpen, Target } from 'lucide-react';
 import { codeLabApi } from '@/lib/code-lab-api';
 import type { CodeGroup, CodeStats } from '@/types/code-lab';
 import { GroupGlyph, TrackCard, DifficultyBadge } from '@/components/code-lab/shared';
 
 type Suggest = Awaited<ReturnType<typeof codeLabApi.autocomplete>>['data']['data'];
+
+/** Count up to `value` once, respecting reduced-motion. */
+function useCountUp(value: number, run: boolean, ms = 900) {
+  const [n, setN] = useState(0);
+  useEffect(() => {
+    if (!run) return;
+    if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+      setN(value); return;
+    }
+    let raf = 0; const start = performance.now();
+    const tick = (t: number) => {
+      const p = Math.min(1, (t - start) / ms);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setN(Math.round(value * eased));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [value, run, ms]);
+  return n;
+}
+
+function StatTile({ icon, value, label, run, delay }: { icon: React.ReactNode; value: number; label: string; run: boolean; delay: string }) {
+  const n = useCountUp(value, run);
+  return (
+    <div className={`cl-stat cl-in ${delay}`}>
+      <div className="mb-1.5 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
+        {icon}{label}
+      </div>
+      <div className="cl-stat-num text-3xl" style={{ color: 'var(--text-primary)' }}>{n.toLocaleString()}</div>
+    </div>
+  );
+}
 
 export default function CodeLabHubPage() {
   const router = useRouter();
@@ -72,111 +104,118 @@ export default function CodeLabHubPage() {
     if (term) router.push(`/code-lab/search?q=${encodeURIComponent(term)}`);
   };
 
+  const statsReady = !!stats;
+
   return (
-    <div className="mx-auto max-w-6xl px-4 pb-10 pt-20" style={{ color: 'var(--text-primary)' }}>
-      {/* Hero */}
-      <div className="mb-6">
-        <div className="mb-1 flex items-center gap-2">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg" style={{ background: 'rgba(99,102,241,0.14)', color: '#6366f1' }}>
-            <Code2 size={20} />
-          </span>
-          <h1 className="text-2xl font-bold">Code Lab</h1>
-        </div>
-        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-          Learning roadmaps + graded exercises across every language and framework — from zero to advanced.
+    <div className="cl-root mx-auto max-w-6xl px-4 pb-16 pt-20" style={{ color: 'var(--text-primary)' }}>
+      {/* ————— Hero ————— */}
+      <section className="cl-hero cl-in mb-8 px-6 py-9 sm:px-10 sm:py-12">
+        <div className="cl-eyebrow cl-in cl-in-1 mb-4">cuongthai · Code Lab</div>
+        <h1 className="cl-display cl-in cl-in-1 max-w-2xl text-[2rem] sm:text-[2.9rem]">
+          Learn a stack by <span className="cl-gradient-text">building</span> it —
+          <br className="hidden sm:block" /> one graded exercise at a time.
+        </h1>
+        <p className="cl-in cl-in-2 mt-4 max-w-xl text-[15px] leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+          Structured roadmaps and hands-on exercises across every language and framework —
+          from your first line of code to advanced, production-grade patterns.
         </p>
-        {stats && (
-          <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-xs" style={{ color: 'var(--text-muted)' }}>
-            <span><b style={{ color: 'var(--text-primary)' }}>{stats.tracks}</b> tracks</span>
-            <span><b style={{ color: 'var(--text-primary)' }}>{stats.modules}</b> modules</span>
-            <span><b style={{ color: 'var(--text-primary)' }}>{stats.exercises}</b> exercises</span>
-          </div>
-        )}
-      </div>
 
-      {/* Search */}
-      <div ref={boxRef} className="relative mb-6">
-        <div className="flex items-center gap-2 rounded-xl border px-3 py-2" style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }}>
-          <Search size={18} style={{ color: 'var(--text-muted)' }} />
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter') submitSearch(); }}
-            onFocus={() => suggest && setOpen(true)}
-            placeholder="Search exercises, tracks, concepts…"
-            className="flex-1 bg-transparent text-sm outline-none"
-            style={{ color: 'var(--text-primary)' }}
-          />
-          {searching && <Loader2 size={16} className="animate-spin" style={{ color: 'var(--text-muted)' }} />}
-          {q && !searching && <button onClick={() => { setQ(''); setSuggest(null); }} aria-label="Clear"><X size={16} style={{ color: 'var(--text-muted)' }} /></button>}
+        {/* Search */}
+        <div ref={boxRef} className="cl-in cl-in-2 relative mt-6 max-w-xl">
+          <div className="cl-search">
+            <Search size={19} style={{ color: 'var(--text-muted)' }} />
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') submitSearch(); }}
+              onFocus={() => suggest && setOpen(true)}
+              placeholder="Search exercises, tracks, concepts…"
+              className="flex-1 bg-transparent text-[15px] outline-none"
+              style={{ color: 'var(--text-primary)' }}
+            />
+            {searching && <Loader2 size={17} className="animate-spin" style={{ color: 'var(--text-muted)' }} />}
+            {q && !searching && (
+              <button onClick={() => { setQ(''); setSuggest(null); }} aria-label="Clear" className="grid place-items-center rounded-md p-0.5 hover:bg-[var(--bg-surface-hover)]">
+                <X size={16} style={{ color: 'var(--text-muted)' }} />
+              </button>
+            )}
+            <kbd className="hidden shrink-0 items-center gap-1 rounded-md border px-1.5 py-0.5 text-[10px] font-medium sm:inline-flex" style={{ borderColor: 'var(--border-color)', color: 'var(--text-muted)', fontFamily: 'var(--font-jetbrains-mono, monospace)' }}>
+              ⏎
+            </kbd>
+          </div>
+          {open && suggest && (suggest.tracks.length > 0 || suggest.exercises.length > 0) && (
+            <div className="cl-suggest">
+              {suggest.tracks.length > 0 && (
+                <div className="px-3.5 pb-1 pt-2.5 text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Tracks</div>
+              )}
+              {suggest.tracks.map((t) => (
+                <Link key={`t${t.id}`} href={`/code-lab/${t.slug}`} className="cl-suggest-row" onClick={() => setOpen(false)}>
+                  <span style={{ color: t.color || 'var(--accent-color)' }}><GroupGlyph icon={t.language} size={16} /></span>
+                  <span style={{ color: 'var(--text-primary)' }}>{t.name}</span>
+                  <span className="ml-auto text-xs" style={{ color: 'var(--text-muted)' }}>{t.language}</span>
+                </Link>
+              ))}
+              {suggest.exercises.length > 0 && (
+                <div className="px-3.5 pb-1 pt-2.5 text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Exercises</div>
+              )}
+              {suggest.exercises.map((ex) => (
+                <Link key={`e${ex.id}`} href={`/code-lab/${ex.track?.slug || ''}/${ex.slug}`} className="cl-suggest-row" onClick={() => setOpen(false)}>
+                  <span className="truncate" style={{ color: 'var(--text-primary)' }}>{ex.title}</span>
+                  <span className="ml-auto"><DifficultyBadge difficulty={ex.difficulty} small /></span>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
-        {open && suggest && (suggest.tracks.length > 0 || suggest.exercises.length > 0) && (
-          <div className="absolute z-30 mt-1 w-full overflow-hidden rounded-xl border shadow-lg" style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)' }}>
-            {suggest.tracks.length > 0 && (
-              <div className="px-3 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Tracks</div>
-            )}
-            {suggest.tracks.map((t) => (
-              <Link key={`t${t.id}`} href={`/code-lab/${t.slug}`} className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-[var(--bg-surface-hover)]" onClick={() => setOpen(false)}>
-                <span style={{ color: t.color || '#6366f1' }}><GroupGlyph icon={t.language} size={15} /></span>
-                <span style={{ color: 'var(--text-primary)' }}>{t.name}</span>
-                <span className="ml-auto text-xs" style={{ color: 'var(--text-muted)' }}>{t.language}</span>
-              </Link>
-            ))}
-            {suggest.exercises.length > 0 && (
-              <div className="px-3 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Exercises</div>
-            )}
-            {suggest.exercises.map((ex) => (
-              <Link key={`e${ex.id}`} href={`/code-lab/${ex.track?.slug || ''}/${ex.slug}`} className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-[var(--bg-surface-hover)]" onClick={() => setOpen(false)}>
-                <span className="truncate" style={{ color: 'var(--text-primary)' }}>{ex.title}</span>
-                <span className="ml-auto"><DifficultyBadge difficulty={ex.difficulty} small /></span>
-              </Link>
-            ))}
+
+        {/* Stats */}
+        {stats && (
+          <div className="mt-7 grid max-w-xl grid-cols-3 gap-3">
+            <StatTile icon={<Layers size={12} />} value={stats.tracks} label="Tracks" run={statsReady} delay="cl-in-2" />
+            <StatTile icon={<BookOpen size={12} />} value={stats.modules} label="Modules" run={statsReady} delay="cl-in-3" />
+            <StatTile icon={<Target size={12} />} value={stats.exercises} label="Exercises" run={statsReady} delay="cl-in-4" />
           </div>
         )}
-      </div>
+      </section>
 
-      {/* Group tabs */}
-      <div className="mb-5 flex flex-wrap gap-2">
-        <button
-          onClick={() => setActiveGroup('all')}
-          className="rounded-full px-3 py-1.5 text-sm font-medium transition-colors"
-          style={activeGroup === 'all'
-            ? { background: '#6366f1', color: '#fff' }
-            : { background: 'var(--bg-surface)', color: 'var(--text-secondary)', border: '1px solid var(--border-color)' }}
-        >
-          All
+      {/* ————— Group filter ————— */}
+      <div className="mb-6 flex items-center gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
+        <button onClick={() => setActiveGroup('all')} className="cl-pill" data-active={activeGroup === 'all'}
+          style={activeGroup === 'all' ? { background: 'var(--accent-color)' } : undefined}>
+          <Sparkles size={14} /> All
         </button>
         {visibleGroups.map((g) => {
           const active = activeGroup === g.id;
-          const accent = g.color || '#6366f1';
+          const accent = g.color || 'var(--accent-color)';
           return (
-            <button
-              key={g.id}
-              onClick={() => setActiveGroup(g.id)}
-              className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-colors"
-              style={active
-                ? { background: accent, color: '#fff' }
-                : { background: 'var(--bg-surface)', color: 'var(--text-secondary)', border: '1px solid var(--border-color)' }}
-            >
+            <button key={g.id} onClick={() => setActiveGroup(g.id)} className="cl-pill" data-active={active}
+              style={active ? { background: accent } : undefined}>
               <GroupGlyph slug={g.slug} icon={g.icon} size={14} />
               {g.name}
+              <span className="text-[11px] font-semibold opacity-70">{g.tracks?.length ?? 0}</span>
             </button>
           );
         })}
       </div>
 
-      {/* Track grid */}
+      {/* ————— Track grid ————— */}
       {loading ? (
-        <div className="flex justify-center py-16"><Loader2 className="animate-spin" style={{ color: 'var(--text-muted)' }} /></div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, i) => <div key={i} className="cl-skel" />)}
+        </div>
       ) : tracks.length === 0 ? (
-        <div className="rounded-xl border py-16 text-center text-sm" style={{ borderColor: 'var(--border-color)', color: 'var(--text-muted)' }}>
+        <div className="rounded-2xl border py-16 text-center text-sm" style={{ borderColor: 'var(--border-color)', color: 'var(--text-muted)' }}>
           No tracks yet. An admin can add them under <Link href="/admin/code-lab" className="underline">/admin/code-lab</Link>.
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {tracks.map((t) => <TrackCard key={t.id} track={t} />)}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {tracks.map((t, i) => <TrackCard key={t.id} track={t} index={i} />)}
         </div>
       )}
+
+      <div className="mt-6 flex items-center gap-1.5 text-xs" style={{ color: 'var(--text-muted)' }}>
+        <ArrowRight size={13} /> Pick a track to open its roadmap, then work through the modules in order.
+      </div>
     </div>
   );
 }

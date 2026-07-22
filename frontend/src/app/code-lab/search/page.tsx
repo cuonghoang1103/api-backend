@@ -26,27 +26,32 @@ function Results() {
   }, [q]);
 
   return (
-    <div className="mx-auto max-w-3xl px-4 pb-10 pt-20" style={{ color: 'var(--text-primary)' }}>
-      <Link href="/code-lab" className="mb-4 inline-flex items-center gap-1 text-sm" style={{ color: 'var(--text-muted)' }}>
+    <div className="cl-root mx-auto max-w-3xl px-4 pb-10 pt-20" style={{ color: 'var(--text-primary)' }}>
+      <Link href="/code-lab" className="mb-4 inline-flex items-center gap-1.5 text-sm transition-colors hover:opacity-80" style={{ color: 'var(--text-muted)' }}>
         <ArrowLeft size={15} /> Code Lab
       </Link>
-      <h1 className="mb-1 flex items-center gap-2 text-xl font-bold"><Search size={18} /> Search</h1>
-      <p className="mb-5 text-sm" style={{ color: 'var(--text-muted)' }}>
-        {loading ? 'Searching…' : `${total} result${total === 1 ? '' : 's'} for "${q}"`}
-      </p>
+      <div className="cl-hero cl-in mb-6 p-5 sm:p-6">
+        <div className="cl-eyebrow mb-2">Search results</div>
+        <h1 className="cl-display flex items-center gap-2.5 text-2xl">
+          <Search size={22} style={{ color: 'var(--cl-accent)' }} /> “{q}”
+        </h1>
+        <p className="mt-1.5 text-sm" style={{ color: 'var(--text-secondary)' }}>
+          {loading ? 'Searching…' : `${total} result${total === 1 ? '' : 's'} found`}
+        </p>
+      </div>
 
       {loading ? (
-        <div className="flex justify-center py-16"><Loader2 className="animate-spin" style={{ color: 'var(--text-muted)' }} /></div>
+        <div className="space-y-2">{Array.from({ length: 5 }).map((_, i) => <div key={i} className="cl-skel" style={{ height: 62 }} />)}</div>
       ) : items.length === 0 ? (
-        <div className="rounded-xl border py-16 text-center text-sm" style={{ borderColor: 'var(--border-color)', color: 'var(--text-muted)' }}>No exercises matched.</div>
+        <div className="rounded-2xl border py-16 text-center text-sm" style={{ borderColor: 'var(--border-color)', color: 'var(--text-muted)' }}>No exercises matched.</div>
       ) : (
-        <ul className="space-y-2">
-          {items.map((ex) => (
-            <li key={ex.id}>
-              <Link href={`/code-lab/${ex.track?.slug || ''}/${ex.slug}`} className="flex items-center gap-3 rounded-lg border p-3 transition-colors hover:bg-[var(--bg-surface-hover)]" style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}>
+        <ul className="space-y-2.5">
+          {items.map((ex, i) => (
+            <li key={ex.id} className="cl-in" style={{ animationDelay: `${Math.min(i, 10) * 0.04}s` }}>
+              <Link href={`/code-lab/${ex.track?.slug || ''}/${ex.slug}`} className="group flex items-center gap-3 rounded-xl border p-3.5 transition-all hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--cl-accent)_45%,var(--border-color))]" style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}>
                 <div className="min-w-0 flex-1">
-                  <div className="truncate font-medium" style={{ color: 'var(--text-primary)' }}>{ex.title}</div>
-                  <div className="text-xs" style={{ color: 'var(--text-muted)' }}>{ex.track?.name} · {ex.language}</div>
+                  <div className="truncate font-semibold transition-colors group-hover:text-[var(--cl-accent)]" style={{ color: 'var(--text-primary)' }}>{ex.title}</div>
+                  <div className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>{ex.track?.name} · {ex.language}</div>
                 </div>
                 <DifficultyBadge difficulty={ex.difficulty} small />
               </Link>

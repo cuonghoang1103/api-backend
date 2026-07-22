@@ -2,7 +2,7 @@
 
 // Small presentational helpers shared across the Code Lab pages.
 import Link from 'next/link';
-import { Code2, Database, Server, Layout, Smartphone, Cloud, Cpu, Boxes, Terminal, Braces, Globe, Gamepad2, Shield, Binary, GraduationCap, type LucideIcon } from 'lucide-react';
+import { Code2, Database, Server, Layout, Smartphone, Cloud, Cpu, Boxes, Terminal, Braces, Globe, Gamepad2, Shield, Binary, GraduationCap, ArrowUpRight, Target, type LucideIcon } from 'lucide-react';
 import { DIFFICULTY_META } from '@/lib/code-lab-api';
 import type { CodeDifficulty, CodeLevel } from '@/types/code-lab';
 import { CategoryIcon } from '@/components/exp-hub/CategoryIcon';
@@ -97,33 +97,31 @@ export function ProgressRing({ value, size = 40 }: { value: number; size?: numbe
   );
 }
 
-export function TrackCard({ track }: { track: { slug: string; name: string; language: string; color?: string | null; icon?: string | null; description?: string | null; exerciseCount?: number; level: CodeLevel; groupSlug?: string } }) {
-  const accent = track.color || '#6366f1';
+export function TrackCard({ track, index = 0 }: { track: { slug: string; name: string; language: string; color?: string | null; icon?: string | null; description?: string | null; exerciseCount?: number; level: CodeLevel; groupSlug?: string }; index?: number }) {
+  const accent = track.color || 'var(--accent-color)';
   return (
     <Link
       href={`/code-lab/${track.slug}`}
-      className="group flex flex-col rounded-xl border p-4 transition-all hover:-translate-y-0.5"
-      style={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)' }}
+      className="cl-track cl-root cl-in group"
+      style={{ '--cl-accent': accent, animationDelay: `${Math.min(index, 8) * 0.05}s` } as React.CSSProperties}
     >
-      <div className="mb-2 flex items-center gap-3">
-        <span
-          className="flex h-10 w-10 items-center justify-center rounded-lg"
-          style={{ background: `${accent}1a`, color: accent }}
-        >
-          <TechIcon slug={track.slug} name={track.name} icon={track.icon} color={track.color} size={22} />
+      <div className="mb-3 flex items-center gap-3">
+        <span className="cl-track-icon shrink-0">
+          <TechIcon slug={track.slug} name={track.name} icon={track.icon} color={track.color} size={24} />
         </span>
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <div className="truncate font-semibold" style={{ color: 'var(--text-primary)' }}>{track.name}</div>
           <div className="text-xs" style={{ color: 'var(--text-muted)' }}>{track.language}</div>
         </div>
+        <ArrowUpRight size={18} className="cl-arrow shrink-0" />
       </div>
       {track.description && (
-        <p className="mb-3 line-clamp-2 text-xs" style={{ color: 'var(--text-secondary)' }}>{track.description}</p>
+        <p className="mb-3.5 line-clamp-2 text-[13px] leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{track.description}</p>
       )}
-      <div className="mt-auto flex items-center justify-between pt-1">
+      <div className="mt-auto flex items-center justify-between border-t pt-3" style={{ borderColor: 'var(--border-color)' }}>
         <LevelPill level={track.level} />
-        <span className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
-          {track.exerciseCount ?? 0} exercises
+        <span className="inline-flex items-center gap-1.5 text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
+          <Target size={12} />{track.exerciseCount ?? 0} exercises
         </span>
       </div>
     </Link>

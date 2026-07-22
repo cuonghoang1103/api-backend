@@ -131,6 +131,8 @@ const { initSocketServer } = await import(path.join(__dirname, 'socket', 'messag
 const snippetRoutes = (await import(path.join(__dirname, 'routes', 'snippets.routes.js'))).default;
 // Code Lab — coding-practice + learning-roadmap module
 const codeLabRoutes = (await import(path.join(__dirname, 'routes', 'codeLab.routes.js'))).default;
+// RoadMap — standalone roadmap.sh-style learning paths
+const roadmapRoutes = (await import(path.join(__dirname, 'routes', 'roadmap.routes.js'))).default;
 // Video categories (home-feed video classification)
 const videoCategoryRoutes = (await import(path.join(__dirname, 'routes', 'videoCategories.routes.js'))).default;
 // Announcements — site-wide broadcast notices (public reads + admin CRUD)
@@ -542,6 +544,8 @@ app.use('/api/v1/quota', quotaRoutes);
 app.use('/api/v1/snippets', snippetRoutes);
 // Code Lab — coding-practice + learning-roadmap module
 app.use('/api/v1/code-lab', codeLabRoutes);
+// RoadMap — Role/Skill learning paths
+app.use('/api/v1/roadmaps', roadmapRoutes);
 app.use('/api/v1/video-categories', videoCategoryRoutes);
 app.use('/api/v1/announcements', announcementRoutes);
 // My Language — public reads + authed SRS at /my-language, admin CRUD at /admin/my-language

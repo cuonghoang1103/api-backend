@@ -294,6 +294,28 @@ export const fileApi = {
 // Notes API — personal study notebooks (per-user, authenticated).
 // Mirrors the envelope convention: every call resolves to
 // `{ data: <payload> }`; callers read `res.data.data`.
+// ─── RoadMap (Role/Skill learning paths) ────────────────────────────
+export interface RoadmapNodeT {
+  id: number; stage: number; stageLabel: string; order: number; side: string; kind: string;
+  title: string; subtitle: string | null; icon: string | null; description: string | null;
+  linkType: string | null; linkRef: string | null;
+}
+export interface RoadmapStageT { stage: number; stageLabel: string; nodes: RoadmapNodeT[]; }
+export interface RoadmapListItemT {
+  slug: string; title: string; type: string; description: string | null;
+  icon: string | null; color: string | null; nodeCount: number;
+}
+export interface RoadmapDetailT {
+  slug: string; title: string; type: string; description: string | null; icon: string | null; color: string | null;
+  stages: RoadmapStageT[]; doneNodeIds: number[]; total: number;
+}
+
+export const roadmapApi = {
+  list: () => api.get<{ data: { role: RoadmapListItemT[]; skill: RoadmapListItemT[] } }>('/roadmaps'),
+  get: (slug: string) => api.get<{ data: RoadmapDetailT }>(`/roadmaps/${slug}`),
+  toggleDone: (nodeId: number) => api.post<{ data: { nodeId: number; done: boolean } }>(`/roadmaps/nodes/${nodeId}/done`),
+};
+
 export const notesApi = {
   // Tree (sidebar) + recent rail
   getTree: () =>

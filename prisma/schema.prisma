@@ -309,6 +309,7 @@ model User {
   langRoadmapDone      LangRoadmapDone[]
   langGameStates       LangGameState[]
   langLessonProgress   LangLessonProgress[]
+  roadmapDone          RoadmapDone[]
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -6743,4 +6744,66 @@ model PageView {
   @@index([sessionId], name: "idx_pageview_session")
   @@index([isBot, createdAt(sort: Desc)], name: "idx_pageview_bot_time")
   @@map("page_views")
+}
+
+// ─── RoadMap (roadmap.sh-style learning paths) ───────────────────────
+// Standalone visual roadmaps, Role-based or Skill-based. Each roadmap is a set
+// of ordered stages, each with nodes placed on a central spine (left/right
+// branches). A node can deep-link into a Code Lab track, another roadmap, or an
+// external URL. Node completion is per-user (RoadmapDone). Fully additive.
+model Roadmap {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique(map: "uk_roadmap_slug") @db.VarChar(150)
+  title       String   @db.VarChar(150)
+  type        String   @default("role") @db.VarChar(10) // role | skill
+  description String?  @db.Text
+  icon        String?  @db.VarChar(48) // lucide icon name
+  color       String?  @db.VarChar(20)
+  sortOrder   Int      @default(0) @map("sort_order")
+  status      String   @default("PUBLISHED") @db.VarChar(16) // PUBLISHED | DRAFT
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  nodes RoadmapNode[]
+
+  @@index([type, sortOrder], name: "idx_roadmap_type_order")
+  @@map("roadmaps")
+}
+
+model RoadmapNode {
+  id          Int      @id @default(autoincrement())
+  roadmapId   Int      @map("roadmap_id")
+  stage       Int      @default(0) // group index
+  stageLabel  String   @map("stage_label") @db.VarChar(120)
+  order       Int      @default(0) // order within the stage
+  side        String   @default("center") @db.VarChar(10) // center | left | right
+  kind        String   @default("primary") @db.VarChar(16) // primary | alternative | info
+  title       String   @db.VarChar(255)
+  subtitle    String?  @db.VarChar(255)
+  icon        String?  @db.VarChar(48)
+  description String?  @db.Text // shown when the node is opened
+  linkType    String?  @map("link_type") @db.VarChar(32) // code-lab | roadmap | external
+  linkRef     String?  @map("link_ref") @db.VarChar(500) // track slug / roadmap slug / URL
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  roadmap Roadmap       @relation(fields: [roadmapId], references: [id], onDelete: Cascade)
+  doneBy  RoadmapDone[]
+
+  @@index([roadmapId, stage, order], name: "idx_roadmap_node_order")
+  @@map("roadmap_nodes")
+}
+
+model RoadmapDone {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  nodeId    Int      @map("node_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  node RoadmapNode @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, nodeId], map: "uk_roadmap_done")
+  @@index([userId], name: "idx_roadmap_done_user")
+  @@map("roadmap_done")
 }

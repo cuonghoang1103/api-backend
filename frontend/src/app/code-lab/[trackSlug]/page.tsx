@@ -12,7 +12,7 @@ import { ArrowLeft, CheckCircle2, Circle, Loader2, BookOpen, Clock, ExternalLink
 import { codeLabApi } from '@/lib/code-lab-api';
 import type { CodeTrack, MyProgressItem } from '@/types/code-lab';
 import { useAuthStore } from '@/store/authStore';
-import { DifficultyBadge, LevelPill, ProgressRing, TechIcon } from '@/components/code-lab/shared';
+import { DifficultyBadge, LevelPill, ProgressRing, TechIcon, VerifiedBadge, parseVerified } from '@/components/code-lab/shared';
 import { ModuleLesson } from '@/components/code-lab/ModuleLesson';
 import { SkillCoverage } from '@/components/code-lab/SkillCoverage';
 
@@ -96,8 +96,9 @@ export default function TrackRoadmapPage() {
             <div className="flex flex-wrap items-center gap-2">
               <h1 className="cl-display text-2xl">{track.name}</h1>
               <LevelPill level={track.level} />
+              {parseVerified(track.description).verified && <VerifiedBadge />}
             </div>
-            {track.description && <p className="mt-1.5 max-w-xl text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{track.description}</p>}
+            {parseVerified(track.description).text && <p className="mt-1.5 max-w-xl text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{parseVerified(track.description).text}</p>}
             <div className="mt-3 flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium" style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)', background: 'var(--bg-card)' }}>
                 <TechIcon slug={track.slug} name={track.name} icon={track.icon} color={track.color} size={13} />{track.language}

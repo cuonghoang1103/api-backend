@@ -2,7 +2,7 @@
 
 // Small presentational helpers shared across the Code Lab pages.
 import Link from 'next/link';
-import { Code2, Database, Server, Layout, Smartphone, Cloud, Cpu, Boxes, Terminal, Braces, Globe, Gamepad2, Shield, Binary, GraduationCap, ArrowUpRight, Target, type LucideIcon } from 'lucide-react';
+import { Code2, Database, Server, Layout, Smartphone, Cloud, Cpu, Boxes, Terminal, Braces, Globe, Gamepad2, Shield, Binary, GraduationCap, ArrowUpRight, Target, BadgeCheck, type LucideIcon } from 'lucide-react';
 import { DIFFICULTY_META } from '@/lib/code-lab-api';
 import type { CodeDifficulty, CodeLevel } from '@/types/code-lab';
 import { CategoryIcon } from '@/components/exp-hub/CategoryIcon';
@@ -80,6 +80,38 @@ export function LevelPill({ level }: { level: CodeLevel }) {
   );
 }
 
+// Marker prepended to a track's description in the DB to flag it as fully
+// quality-verified (bilingual lessons + exercises checked by running). The UI
+// detects it, renders the seal, and strips it from the shown description.
+const VERIFIED_MARK = '⟦ctv⟧';
+export function parseVerified(description?: string | null): { verified: boolean; text: string } {
+  const d = (description || '').trimStart();
+  if (d.startsWith(VERIFIED_MARK)) return { verified: true, text: d.slice(VERIFIED_MARK.length).trim() };
+  return { verified: false, text: description || '' };
+}
+
+// Compact "Verified by CuongThai" seal with its own standout frame.
+export function VerifiedBadge({ small }: { small?: boolean }) {
+  return (
+    <span
+      className="inline-flex items-center gap-1 rounded-full font-semibold uppercase"
+      style={{
+        color: '#059669',
+        background: 'rgba(16,185,129,0.10)',
+        border: '1px solid rgba(16,185,129,0.55)',
+        boxShadow: '0 1px 0 rgba(16,185,129,0.15), inset 0 0 0 1px rgba(16,185,129,0.08)',
+        fontSize: small ? 9.5 : 10.5,
+        letterSpacing: 0.4,
+        padding: small ? '2px 8px' : '3px 10px',
+        lineHeight: 1.1,
+      }}
+    >
+      <BadgeCheck size={small ? 12 : 13} strokeWidth={2.4} />
+      Verified by CuongThai
+    </span>
+  );
+}
+
 export function ProgressRing({ value, size = 40 }: { value: number; size?: number }) {
   const r = (size - 6) / 2;
   const circ = 2 * Math.PI * r;
@@ -99,6 +131,7 @@ export function ProgressRing({ value, size = 40 }: { value: number; size?: numbe
 
 export function TrackCard({ track, index = 0 }: { track: { slug: string; name: string; language: string; color?: string | null; icon?: string | null; description?: string | null; exerciseCount?: number; level: CodeLevel; groupSlug?: string }; index?: number }) {
   const accent = track.color || 'var(--accent-color)';
+  const { verified, text: description } = parseVerified(track.description);
   return (
     <Link
       href={`/code-lab/${track.slug}`}
@@ -115,8 +148,13 @@ export function TrackCard({ track, index = 0 }: { track: { slug: string; name: s
         </div>
         <ArrowUpRight size={18} className="cl-arrow shrink-0" />
       </div>
-      {track.description && (
-        <p className="mb-3.5 line-clamp-2 text-[13px] leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{track.description}</p>
+      {verified && (
+        <div className="mb-2.5">
+          <VerifiedBadge />
+        </div>
+      )}
+      {description && (
+        <p className="mb-3.5 line-clamp-2 text-[13px] leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{description}</p>
       )}
       <div className="mt-auto flex items-center justify-between border-t pt-3" style={{ borderColor: 'var(--border-color)' }}>
         <LevelPill level={track.level} />

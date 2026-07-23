@@ -32,7 +32,8 @@ export async function generateMetadata(
       const track = json?.data ?? json;
       if (track?.name) {
         title = `${track.name} — Code Lab`;
-        if (track.description) description = track.description;
+        // Strip the internal verified marker (⟦ctv⟧) from public SEO copy.
+        if (track.description) description = String(track.description).replace(/^\s*⟦ctv⟧\s*/, '').trim() || description;
       }
     }
   } catch {

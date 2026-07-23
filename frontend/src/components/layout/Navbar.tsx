@@ -12,26 +12,27 @@ import { useMessagingStore } from '@/store/messagingStore';
 import { useNotificationStore } from '@/store/notificationStore';
 import { useNotificationSocket } from '@/hooks/useNotificationSocket';
 import { useMusicAccess } from '@/hooks/useMusicAccess';
-import { CART_ENABLED, INTERVIEW_ENABLED, CV_BUILDER_ENABLED } from '@/lib/featureFlags';
+import { CART_ENABLED } from '@/lib/featureFlags';
 import NotificationDropdown from '@/components/social/NotificationDropdown';
 import UserSearchBox from '@/components/social/UserSearchBox';
 import { UserAvatar } from '@/components/common/UserAvatar';
 import { useTheme } from '@/context/ThemeContext';
 import {
- Home, FolderOpen, Music, MessageCircle, Sparkles,
+ Home, Music, MessageCircle, Sparkles,
  User, UserCircle, LogOut, Settings, ChevronDown, KeyRound,
  Globe, ShoppingBag, Bell, NotebookPen, Newspaper,
-Sun, Moon, Wallet, ArrowLeft, Megaphone,
-PlayCircle, Receipt, Ticket, Award, Briefcase, Crown, FileText, Binary, Map as MapIcon,
+Sun, Moon, ArrowLeft, Megaphone,
+PlayCircle, Receipt, Ticket, Award, Crown,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { usePro } from '@/hooks/usePro';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { ChangePasswordModal } from '@/components/auth/ChangePasswordModal';
 
-// Compact top bar (2026-07-03): only the 7 everyday destinations, in
-// this exact order. Everything else (Academy, Shop, Blog, Repos,
-// Studio, Tech Trends, …) lives in the full vertical NavigationDock.
+// Compact top bar (2026-07-25): only the 7 everyday destinations, in
+// this exact order — Home · About · Feed · Notes · Messenger · Music · AI Chat.
+// Everything else (Code Lab, Roadmap, Tech Trends, Academy, Shop, …) lives in
+// the full vertical NavigationDock (the ☰ sidebar), grouped by theme.
 interface TopNavLink {
  href: string;
  label: string;
@@ -42,23 +43,17 @@ interface TopNavLink {
 
 const TOP_NAV_LINKS: TopNavLink[] = [
  { href: '/', label: 'Home', icon: Home },
- { href: '/feed', label: 'Feed', icon: Newspaper },
  { href: '/about', label: 'About', icon: User },
- { href: '/projects', label: 'Projects', icon: FolderOpen },
+ { href: '/feed', label: 'Feed', icon: Newspaper },
  { href: '/notes', label: 'Notes', icon: NotebookPen, authOnly: true },
- { href: '/finance', label: 'MoneyFlow', icon: Wallet, authOnly: true },
+ { href: '/messages', label: 'Messenger', icon: MessageCircle, authOnly: true },
  { href: '/music', label: 'Music', icon: Music },
- { href: '/messages', label: 'Messages', icon: MessageCircle, authOnly: true },
  { href: '/chat', label: 'AI Chat', icon: Sparkles },
- { href: '/algorithms', label: 'Algorithms', icon: Binary },
- { href: '/roadmap', label: 'RoadMap', icon: MapIcon },
- ...(INTERVIEW_ENABLED ? [{ href: '/interview', label: 'Interview', icon: Briefcase, authOnly: true }] : []),
- ...(CV_BUILDER_ENABLED ? [{ href: '/cv', label: 'CV Builder', icon: FileText, authOnly: true }] : []),
 ];
 
 // Mobile bottom tab bar — Facebook-style, kept to 4 essential tabs.
-// The rest (Notes, Music, Messages, …) live in the top ☰ menu.
-const MOBILE_TAB_HREFS = ['/', '/about', '/projects', '/chat'];
+// The rest live in the top ☰ sidebar menu.
+const MOBILE_TAB_HREFS = ['/', '/feed', '/messages', '/chat'];
 
 // Facebook Messenger bubble — official-style lightning chat icon.
 function MessengerIcon({ className }: { className?: string }) {

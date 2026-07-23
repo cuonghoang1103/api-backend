@@ -50,46 +50,58 @@ interface DockItem {
   href: string;
   label: string;
   icon: React.ElementType;
-  section: 'main' | 'user' | 'admin';
+  section: 'navigate' | 'social' | 'code' | 'learn' | 'tools' | 'shop' | 'account';
   showUnread?: boolean;
 }
 
-// Full vertical nav (2026-07-03) — ordered per spec:
-//   main:  Home, Academy, Shop, Messages, Courses, Orders
-//   user:  Blog, Projects, Exp Hub, Hub, GitHub Repos, AI Chat, Music, Dashboard
-//   admin: Admin (admin-only entry point, kept in its own section)
+// Full vertical nav (2026-07-25) — grouped by theme for a professional,
+// scannable sidebar. Each group has a clear job:
+//   navigate: the core destinations (Home, About, Dashboard)
+//   social:   the community pages (Feed, Tech Trends, Forum, Voice, Friends, Blog, Messenger)
+//   code:     the build/learn-to-code pages (Code Lab, Exp Hub, Hub, Roadmap, Algorithms, Projects, Repos)
+//   learn:    structured learning (Academy, Courses, My Language, Interview, CV)
+//   tools:    everyday utilities (Notes, AI Chat, Music, MoneyFlow, Games)
+//   shop:     commerce (feature-flagged)
+//   account:  admin + profile + settings (custom-rendered below)
 const ALL_DOCK_ITEMS: DockItem[] = [
-  { href: '/', label: 'Home', icon: Home, section: 'main' },
-  { href: '/feed', label: 'Feed', icon: Newspaper, section: 'main' },
-  { href: '/academy', label: 'Academy', icon: GraduationCap, section: 'main' },
-  { href: '/shop', label: 'Shop', icon: ShoppingBag, section: 'main' },
-  { href: '/messages', label: 'Messages', icon: MessagesSquare, section: 'main', showUnread: true },
-  { href: '/courses', label: 'Courses', icon: BookMarked, section: 'main' },
-  { href: '/interview', label: 'Interview', icon: Briefcase, section: 'main' },
-  { href: '/cv', label: 'CV Builder', icon: FileText, section: 'main' },
-  { href: '/my-courses', label: 'My Courses', icon: PlayCircle, section: 'main' },
-  { href: '/my-orders', label: 'Orders', icon: Receipt, section: 'main' },
-  { href: '/blog', label: 'Blog', icon: BookOpen, section: 'user' },
-  { href: '/forum', label: 'Diễn đàn', icon: Megaphone, section: 'user' },
-  { href: '/tech-trends', label: 'Tech Trends', icon: TrendingUp, section: 'user' },
-  { href: '/voice', label: 'Voice', icon: Radio, section: 'user' },
-  { href: '/games', label: 'Games', icon: Gamepad2, section: 'user' },
-  { href: '/notes', label: 'Notes', icon: NotebookPen, section: 'user' },
-  { href: '/language', label: 'My Language', icon: Languages, section: 'user' },
-  { href: '/projects', label: 'Projects', icon: FolderOpen, section: 'user' },
-  { href: '/exp-hub', label: 'Exp Hub', icon: FileCode2, section: 'user' },
-  { href: '/code-lab', label: 'Code Lab', icon: Code2, section: 'user' },
-  { href: '/algorithms', label: 'Algorithms', icon: Binary, section: 'user' },
-  { href: '/roadmap', label: 'RoadMap', icon: MapIcon, section: 'user' },
-  { href: '/hub', label: 'Hub', icon: Layers, section: 'user' },
-  { href: '/repos', label: 'GitHub Repos', icon: Github, section: 'user' },
-  { href: '/friends', label: 'Friends', icon: Users, section: 'user' },
-  { href: '/pro', label: 'Update Pro', icon: Crown, section: 'user' },
-  { href: '/chat', label: 'AI Chat', icon: Sparkles, section: 'user' },
-  { href: '/music', label: 'Music', icon: Music, section: 'user' },
-  { href: '/finance', label: 'MoneyFlow', icon: Wallet, section: 'user' },
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, section: 'user' },
-  { href: '/admin', label: 'Admin', icon: Shield, section: 'admin' },
+  // Navigate
+  { href: '/', label: 'Home', icon: Home, section: 'navigate' },
+  { href: '/about', label: 'About', icon: User, section: 'navigate' },
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, section: 'navigate' },
+  // Social
+  { href: '/feed', label: 'Feed', icon: Newspaper, section: 'social' },
+  { href: '/tech-trends', label: 'Tech Trends', icon: TrendingUp, section: 'social' },
+  { href: '/forum', label: 'Diễn đàn', icon: Megaphone, section: 'social' },
+  { href: '/voice', label: 'Voice', icon: Radio, section: 'social' },
+  { href: '/friends', label: 'Friends', icon: Users, section: 'social' },
+  { href: '/blog', label: 'Blog', icon: BookOpen, section: 'social' },
+  { href: '/messages', label: 'Messenger', icon: MessagesSquare, section: 'social', showUnread: true },
+  // Code & Build
+  { href: '/code-lab', label: 'Code Lab', icon: Code2, section: 'code' },
+  { href: '/exp-hub', label: 'Exp Hub', icon: FileCode2, section: 'code' },
+  { href: '/hub', label: 'Hub', icon: Layers, section: 'code' },
+  { href: '/roadmap', label: 'RoadMap', icon: MapIcon, section: 'code' },
+  { href: '/algorithms', label: 'Algorithms', icon: Binary, section: 'code' },
+  { href: '/projects', label: 'Projects', icon: FolderOpen, section: 'code' },
+  { href: '/repos', label: 'GitHub Repos', icon: Github, section: 'code' },
+  // Learn
+  { href: '/academy', label: 'Academy', icon: GraduationCap, section: 'learn' },
+  { href: '/courses', label: 'Courses', icon: BookMarked, section: 'learn' },
+  { href: '/my-courses', label: 'My Courses', icon: PlayCircle, section: 'learn' },
+  { href: '/language', label: 'My Language', icon: Languages, section: 'learn' },
+  { href: '/interview', label: 'Interview', icon: Briefcase, section: 'learn' },
+  { href: '/cv', label: 'CV Builder', icon: FileText, section: 'learn' },
+  // Tools
+  { href: '/notes', label: 'Notes', icon: NotebookPen, section: 'tools' },
+  { href: '/chat', label: 'AI Chat', icon: Sparkles, section: 'tools' },
+  { href: '/music', label: 'Music', icon: Music, section: 'tools' },
+  { href: '/finance', label: 'MoneyFlow', icon: Wallet, section: 'tools' },
+  { href: '/games', label: 'Games', icon: Gamepad2, section: 'tools' },
+  // Shop (feature-flagged)
+  { href: '/shop', label: 'Shop', icon: ShoppingBag, section: 'shop' },
+  { href: '/my-orders', label: 'Orders', icon: Receipt, section: 'shop' },
+  // Account (custom-rendered block below adds Admin / Profile / Settings / Logout)
+  { href: '/pro', label: 'Update Pro', icon: Crown, section: 'account' },
 ];
 
 // Commerce entry points are hidden while the shop/checkout is disabled
@@ -104,9 +116,13 @@ const DOCK_ITEMS: DockItem[] = ALL_DOCK_ITEMS.filter((it) => {
 });
 
 const SECTIONS = {
-  main: { label: 'Navigate' },
-  user: { label: 'Personal' },
-  admin: { label: 'Account' },
+  navigate: { label: 'Navigate' },
+  social: { label: 'Social' },
+  code: { label: 'Code & Build' },
+  learn: { label: 'Learn' },
+  tools: { label: 'Tools' },
+  shop: { label: 'Shop' },
+  account: { label: 'Account' },
 } as const;
 
 // Magnify weights — iOS dock feel: hovered icon is the
@@ -226,14 +242,18 @@ export default function NavigationDock() {
 
   const sections = useMemo(
     () =>
-      (['main', 'user', 'admin'] as const).map((key, i) => ({
-        key,
-        index: i,
-        ...SECTIONS[key],
-        items: DOCK_ITEMS.filter(
-          (item) => item.section === key && (item.href !== '/music' || hasMusicAccess),
-        ),
-      })),
+      (['navigate', 'social', 'code', 'learn', 'tools', 'shop', 'account'] as const)
+        .map((key, i) => ({
+          key,
+          index: i,
+          ...SECTIONS[key],
+          items: DOCK_ITEMS.filter(
+            (item) => item.section === key && (item.href !== '/music' || hasMusicAccess),
+          ),
+        }))
+        // Drop groups that ended up empty (e.g. Shop while commerce is disabled),
+        // but always keep 'account' — it is custom-rendered below.
+        .filter((s) => s.key === 'account' || s.items.length > 0),
     [hasMusicAccess],
   );
 
@@ -550,11 +570,22 @@ export default function NavigationDock() {
                   className="space-y-0.5 mb-3"
                 >
                   {/* For 'admin' section, show Account section with user actions */}
-                  {key === 'admin' ? (
+                  {key === 'account' ? (
                     <>
                       <p className="px-3 pt-2 pb-1 text-[10px] font-mono uppercase tracking-[0.16em] text-text-muted/70">
                         {SECTIONS[key].label}
                       </p>
+                      {/* Update Pro — upgrade entry point */}
+                      <DockRowLink
+                        href="/pro"
+                        Icon={Crown}
+                        label="Update Pro"
+                        isActive={pathname === '/pro'}
+                        isHovered={hoveredHref === '/pro'}
+                        scale={1}
+                        onHover={() => setHoveredHref('/pro')}
+                        onLeave={() => setHoveredHref(null)}
+                      />
                       {/* Admin Dashboard - only for admins */}
                       {isAdmin && (
                         <DockRowLink

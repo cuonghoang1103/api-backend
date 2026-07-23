@@ -9,7 +9,49 @@ import { roadmapIcon } from './icons';
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-function RoadmapCard({ r, index }: { r: RoadmapListItemT; index: number }) {
+// Roadmap is English-first with a per-visitor EN/VI toggle (persisted in
+// localStorage). Only the static UI chrome is translated here; the roadmap
+// titles/descriptions come from the API as data.
+type Lang = 'en' | 'vi';
+const T = {
+  en: {
+    badge: 'Learning paths',
+    heroLead:
+      'Step-by-step learning paths by ',
+    heroRole: 'role',
+    heroAnd: ' and ',
+    heroSkill: 'skill',
+    heroTail: ' — click any stage to see details, track your progress, and learn right inside Code Lab.',
+    roleBadge: 'Role-based',
+    roleTitle: 'By role',
+    roleSubtitle: 'What do you want to become?',
+    skillBadge: 'Skill-based',
+    skillTitle: 'By skill',
+    skillSubtitle: 'Go deep on one technology',
+    steps: 'steps',
+    view: 'View roadmap',
+    empty: 'No roadmaps yet.',
+  },
+  vi: {
+    badge: 'Lộ trình học',
+    heroLead: 'Lộ trình học từng bước theo ',
+    heroRole: 'vai trò',
+    heroAnd: ' và ',
+    heroSkill: 'kỹ năng',
+    heroTail: ' — bấm từng chặng để xem chi tiết, đánh dấu tiến độ và học ngay trong Code Lab.',
+    roleBadge: 'Theo vai trò',
+    roleTitle: 'Theo vai trò',
+    roleSubtitle: 'Bạn muốn trở thành gì?',
+    skillBadge: 'Theo kỹ năng',
+    skillTitle: 'Theo kỹ năng',
+    skillSubtitle: 'Học sâu một công nghệ',
+    steps: 'bước',
+    view: 'Xem lộ trình',
+    empty: 'Chưa có lộ trình nào.',
+  },
+} as const;
+
+function RoadmapCard({ r, index, t }: { r: RoadmapListItemT; index: number; t: (typeof T)[Lang] }) {
   const reduce = useReducedMotion();
   const Icon = roadmapIcon(r.icon);
   const color = r.color || 'var(--accent-color, #6366f1)';
@@ -34,7 +76,7 @@ function RoadmapCard({ r, index }: { r: RoadmapListItemT; index: number }) {
           <div className="min-w-0">
             <h3 className="truncate text-base font-bold" style={{ color: 'var(--text-primary)' }}>{r.title}</h3>
             <span className="inline-flex items-center gap-1 text-xs" style={{ color: 'var(--text-secondary, #888)' }}>
-              <Layers size={11} /> {r.nodeCount} bước
+              <Layers size={11} /> {r.nodeCount} {t.steps}
             </span>
           </div>
         </div>
@@ -42,7 +84,7 @@ function RoadmapCard({ r, index }: { r: RoadmapListItemT; index: number }) {
           <p className="relative line-clamp-2 flex-1 text-sm leading-relaxed" style={{ color: 'var(--text-secondary, #888)' }}>{r.description}</p>
         )}
         <span className="relative mt-4 inline-flex items-center gap-1 text-sm font-semibold transition-all group-hover:gap-2" style={{ color }}>
-          Xem lộ trình <ArrowRight size={15} />
+          {t.view} <ArrowRight size={15} />
         </span>
         {/* bottom accent bar */}
         <div aria-hidden className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100" style={{ background: `linear-gradient(90deg, ${color}, transparent)` }} />
@@ -51,7 +93,7 @@ function RoadmapCard({ r, index }: { r: RoadmapListItemT; index: number }) {
   );
 }
 
-function Section({ title, subtitle, badge, items }: { title: string; subtitle: string; badge: string; items: RoadmapListItemT[] }) {
+function Section({ title, subtitle, badge, items, t }: { title: string; subtitle: string; badge: string; items: RoadmapListItemT[]; t: (typeof T)[Lang] }) {
   if (!items.length) return null;
   return (
     <section className="mb-12">
@@ -63,9 +105,41 @@ function Section({ title, subtitle, badge, items }: { title: string; subtitle: s
         </div>
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {items.map((r, i) => <RoadmapCard key={r.slug} r={r} index={i} />)}
+        {items.map((r, i) => <RoadmapCard key={r.slug} r={r} index={i} t={t} />)}
       </div>
     </section>
+  );
+}
+
+// EN | VI segmented toggle
+function LangToggle({ lang, onChange }: { lang: Lang; onChange: (l: Lang) => void }) {
+  return (
+    <div
+      className="inline-flex items-center gap-0.5 rounded-full border p-0.5 text-xs font-semibold"
+      style={{ borderColor: 'var(--border-color, rgba(127,127,127,0.18))', background: 'var(--bg-secondary, rgba(127,127,127,0.05))' }}
+      role="group"
+      aria-label="Language"
+    >
+      {(['en', 'vi'] as const).map((l) => {
+        const active = lang === l;
+        return (
+          <button
+            key={l}
+            type="button"
+            onClick={() => onChange(l)}
+            aria-pressed={active}
+            className="rounded-full px-3 py-1 transition-colors"
+            style={
+              active
+                ? { background: 'var(--accent-color, #6366f1)', color: '#fff' }
+                : { color: 'var(--text-secondary, #888)' }
+            }
+          >
+            {l === 'en' ? 'EN' : 'VI'}
+          </button>
+        );
+      })}
+    </div>
   );
 }
 
@@ -74,6 +148,20 @@ export default function RoadmapLanding() {
   const [role, setRole] = useState<RoadmapListItemT[]>([]);
   const [skill, setSkill] = useState<RoadmapListItemT[]>([]);
   const [loading, setLoading] = useState(true);
+  const [lang, setLang] = useState<Lang>('en'); // English-first default
+
+  // Restore the visitor's last choice (default stays English).
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('roadmap-lang');
+      if (saved === 'en' || saved === 'vi') setLang(saved);
+    } catch { /* ignore */ }
+  }, []);
+
+  const changeLang = (l: Lang) => {
+    setLang(l);
+    try { localStorage.setItem('roadmap-lang', l); } catch { /* ignore */ }
+  };
 
   useEffect(() => {
     let alive = true;
@@ -84,6 +172,7 @@ export default function RoadmapLanding() {
     return () => { alive = false; };
   }, []);
 
+  const t = T[lang];
   const totalCount = role.length + skill.length;
 
   return (
@@ -92,26 +181,29 @@ export default function RoadmapLanding() {
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 -z-10 mx-auto h-80 max-w-3xl rounded-full opacity-[0.16] blur-[100px]" style={{ background: 'var(--accent-color, #6366f1)' }} />
 
       <motion.header initial={reduce ? false : { opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ ease: EASE, duration: 0.5 }} className="mb-12 text-center">
-        <span className="mb-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium" style={{ background: 'var(--accent-color, #6366f1)1f', color: 'var(--accent-color, #6366f1)' }}>
-          <Sparkles size={13} /> Lộ trình học
-        </span>
+        <div className="mb-3 flex items-center justify-center gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium" style={{ background: 'var(--accent-color, #6366f1)1f', color: 'var(--accent-color, #6366f1)' }}>
+            <Sparkles size={13} /> {t.badge}
+          </span>
+          <LangToggle lang={lang} onChange={changeLang} />
+        </div>
         <h1 className="flex items-center justify-center gap-2.5 text-4xl font-extrabold tracking-tight sm:text-5xl">
           <MapIcon className="hidden sm:block" size={38} style={{ color: 'var(--accent-color)' }} />
           <span style={{ backgroundImage: 'linear-gradient(120deg, var(--text-primary), var(--accent-color, #6366f1))', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>RoadMap</span>
         </h1>
         <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed sm:text-base" style={{ color: 'var(--text-secondary, #888)' }}>
-          Lộ trình học từng bước theo <strong>vai trò</strong> và <strong>kỹ năng</strong> — bấm từng chặng để xem chi tiết, đánh dấu tiến độ và học ngay trong Code Lab.
+          {t.heroLead}<strong>{t.heroRole}</strong>{t.heroAnd}<strong>{t.heroSkill}</strong>{t.heroTail}
         </p>
       </motion.header>
 
       {loading ? (
         <div className="flex justify-center py-24"><Loader2 className="animate-spin" style={{ color: 'var(--accent-color)' }} /></div>
       ) : totalCount === 0 ? (
-        <p className="py-24 text-center text-sm" style={{ color: 'var(--text-secondary, #888)' }}>Chưa có lộ trình nào.</p>
+        <p className="py-24 text-center text-sm" style={{ color: 'var(--text-secondary, #888)' }}>{t.empty}</p>
       ) : (
         <>
-          <Section badge="Role-based" title="Theo vai trò" subtitle="Bạn muốn trở thành gì?" items={role} />
-          <Section badge="Skill-based" title="Theo kỹ năng" subtitle="Học sâu một công nghệ" items={skill} />
+          <Section badge={t.roleBadge} title={t.roleTitle} subtitle={t.roleSubtitle} items={role} t={t} />
+          <Section badge={t.skillBadge} title={t.skillTitle} subtitle={t.skillSubtitle} items={skill} t={t} />
         </>
       )}
     </div>

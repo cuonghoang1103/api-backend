@@ -64,11 +64,27 @@ export default function CodeLabHubPage() {
     (async () => {
       try {
         const [g, s] = await Promise.all([codeLabApi.getGroups(), codeLabApi.getStats()]);
-        setGroups(g.data.data || []);
+        const gl = g.data.data || [];
+        setGroups(gl);
         setStats(s.data.data || null);
+        // Pre-select a group from ?group=<slug> so "back" from a track lands on
+        // that section's tracks (not "All").
+        const slug = new URLSearchParams(window.location.search).get('group');
+        if (slug) {
+          const found = gl.find((x) => x.slug === slug);
+          if (found) setActiveGroup(found.id);
+        }
       } catch { /* ignore */ } finally { setLoading(false); }
     })();
   }, []);
+
+  // Switch the active group filter AND reflect it in the URL, so a track's
+  // "back" link can deep-link straight to its section.
+  const selectGroup = (id: number | 'all') => {
+    setActiveGroup(id);
+    const slug = id === 'all' ? null : groups.find((x) => x.id === id)?.slug;
+    window.history.replaceState(null, '', slug ? `/code-lab?group=${slug}` : '/code-lab');
+  };
 
   // debounced autocomplete
   useEffect(() => {
@@ -95,8 +111,16 @@ export default function CodeLabHubPage() {
 
   const visibleGroups = useMemo(() => groups.filter((g) => (g.tracks?.length ?? 0) > 0), [groups]);
   const tracks = useMemo(() => {
-    const all = groups.flatMap((g) => (g.tracks || []).map((t) => ({ ...t, groupSlug: g.slug })));
-    return activeGroup === 'all' ? all : all.filter((t) => t.groupId === activeGroup);
+    // A track can be cross-listed into several groups (home group + "featured"
+    // links), but it keeps its home groupId. So filtering a flattened list by
+    // groupId shows every cross-listing of a home track twice. Instead: for a
+    // specific group use THAT group's own (backend-deduped) track list; for
+    // "All", flatten and dedupe by id.
+    if (activeGroup === 'all') {
+      const seen = new Set<number>();
+      return groups.flatMap((g) => g.tracks || []).filter((t) => (seen.has(t.id) ? false : (seen.add(t.id), true)));
+    }
+    return groups.find((g) => g.id === activeGroup)?.tracks || [];
   }, [groups, activeGroup]);
 
   const submitSearch = () => {
@@ -180,7 +204,7 @@ export default function CodeLabHubPage() {
 
       {/* ————— Group filter ————— */}
       <div className="mb-6 flex items-center gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
-        <button onClick={() => setActiveGroup('all')} className="cl-pill" data-active={activeGroup === 'all'}
+        <button onClick={() => selectGroup('all')} className="cl-pill" data-active={activeGroup === 'all'}
           style={activeGroup === 'all' ? { background: 'var(--accent-color)' } : undefined}>
           <Sparkles size={14} /> All
         </button>
@@ -188,7 +212,7 @@ export default function CodeLabHubPage() {
           const active = activeGroup === g.id;
           const accent = g.color || 'var(--accent-color)';
           return (
-            <button key={g.id} onClick={() => setActiveGroup(g.id)} className="cl-pill" data-active={active}
+            <button key={g.id} onClick={() => selectGroup(g.id)} className="cl-pill" data-active={active}
               style={active ? { background: accent } : undefined}>
               <GroupGlyph slug={g.slug} icon={g.icon} size={14} />
               {g.name}

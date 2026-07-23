@@ -76,11 +76,14 @@ export default function TrackRoadmapPage() {
 
   const accent = track.color || 'var(--accent-color)';
   const pct = total ? Math.round((solved / total) * 100) : 0;
+  // Back to the track's own section (e.g. CuongThai), not the whole hub.
+  const backHref = track.group?.slug ? `/code-lab?group=${track.group.slug}` : '/code-lab';
+  const backLabel = track.group?.name || 'Code Lab';
 
   return (
     <div className="cl-root mx-auto max-w-4xl px-4 pb-14 pt-20" style={{ color: 'var(--text-primary)', ['--cl-accent' as string]: accent } as React.CSSProperties}>
-      <Link href="/code-lab" className="mb-4 inline-flex items-center gap-1.5 text-sm transition-colors hover:opacity-80" style={{ color: 'var(--text-muted)' }}>
-        <ArrowLeft size={15} /> Code Lab
+      <Link href={backHref} className="mb-4 inline-flex items-center gap-1.5 text-sm transition-colors hover:opacity-80" style={{ color: 'var(--text-muted)' }}>
+        <ArrowLeft size={15} /> {backLabel}
       </Link>
 
       {/* Track header — hero */}

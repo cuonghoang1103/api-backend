@@ -163,7 +163,12 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'vi_VN',
     alternateLocale: 'en_US',
-    url: 'https://cuongthai.com',
+    // No hardcoded `url` here. og:url is INHERITED by every page, and Facebook
+    // Messenger uses og:url as a shared link's click destination — a fixed
+    // homepage value made every deep link (e.g. /code-lab/lab211) preview AND
+    // open as "/". With og:url absent, Facebook uses the actual URL it scraped,
+    // so each page shares correctly. Pages that want an explicit og:url/canonical
+    // set it in their own metadata (e.g. code-lab/[trackSlug]/layout.tsx).
     siteName: 'CuongThai',
     title: 'CuongThai — Portfolio, Academy & E-commerce with AI',
     description:
@@ -202,12 +207,10 @@ export const metadata: Metadata = {
       'max-video-preview': -1,
     },
   },
-  // Canonical URL — prevents duplicate-content penalties from
-  // /, /index.html, and any future aliases. Sitemap's own
-  // <loc> values match this.
-  alternates: {
-    canonical: 'https://cuongthai.com',
-  },
+  // No site-wide canonical. A hardcoded homepage canonical was INHERITED by
+  // every page, telling search engines each deep page was a duplicate of "/".
+  // Per-page canonicals live in each route's own metadata (blog, courses,
+  // code-lab/[trackSlug]/layout.tsx, …); the homepage is self-canonical.
   // Google Search Console verification. Set the meta token from
   // Search Console via NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION (baked
   // at build time). When unset, no tag is emitted. Registering the

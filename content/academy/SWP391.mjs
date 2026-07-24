@@ -235,6 +235,11 @@ export default {
   <span class="lc-body"><span class="lc-title">Warm up your stack on Code Lab</span><span class="lc-sub">Spring Boot, SQL and React tracks — build the muscle memory before the project starts.</span></span>
   <span class="lc-cta">CODE LAB →</span>
 </a>
+<a class="link-card exphub" href="/exp-hub/swp391-cong-cu-du-an?ref=%2Fcourses%2Fsoftware-development-project%2Flearn&reflabel=SWP391" target="_blank" rel="noopener">
+  <span class="lc-ico">🛠️</span>
+  <span class="lc-body"><span class="lc-title">Tools guide — Git/GitHub, Jira, Figma &amp; Docker</span><span class="lc-sub">Exp Hub · the project team toolchain.</span></span>
+  <span class="lc-cta">EXP HUB →</span>
+</a>
 <div class="callout">📎 Attached to this lesson: <strong>the original SWP391.pdf syllabus</strong> — the university's official version, for reference.</div>
 </div>
 <div class="ml-vi">
@@ -270,6 +275,11 @@ export default {
   <span class="lc-ico">🌱</span>
   <span class="lc-body"><span class="lc-title">Khởi động stack trên Code Lab</span><span class="lc-sub">Track Spring Boot, SQL và React — luyện phản xạ trước khi đồ án bắt đầu.</span></span>
   <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card exphub" href="/exp-hub/swp391-cong-cu-du-an?ref=%2Fcourses%2Fsoftware-development-project%2Flearn&reflabel=SWP391" target="_blank" rel="noopener">
+  <span class="lc-ico">🛠️</span>
+  <span class="lc-body"><span class="lc-title">Bộ công cụ — Git/GitHub, Jira, Figma &amp; Docker</span><span class="lc-sub">Exp Hub · bộ công cụ chạy dự án nhóm.</span></span>
+  <span class="lc-cta">EXP HUB →</span>
 </a>
 <div class="callout">📎 File đính kèm mục này: <strong>syllabus gốc SWP391.pdf</strong> — bản chính thức của trường, dùng để đối chiếu.</div>
 </div>

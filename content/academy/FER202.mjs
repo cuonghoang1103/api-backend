@@ -276,6 +276,11 @@ npm run dev</pre>
   <span class="lc-body"><span class="lc-title">Practice React right in the browser</span><span class="lc-sub">Run components without installing anything — on Code Lab.</span></span>
   <span class="lc-cta">CODE LAB →</span>
 </a>
+<a class="link-card exphub" href="/exp-hub/fer202-cai-dat-react?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
+  <span class="lc-ico">🛠️</span>
+  <span class="lc-body"><span class="lc-title">Setup guide — install Node.js, Vite &amp; VS Code</span><span class="lc-sub">Exp Hub · step-by-step with official download links.</span></span>
+  <span class="lc-cta">EXP HUB →</span>
+</a>
 <div class="callout">📎 Attached to this lesson: <strong>the original FER202.pdf syllabus</strong> — the university's official version, for reference.</div>
 </div>
 <div class="ml-vi">
@@ -316,6 +321,11 @@ npm run dev</pre>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện React thẳng trên trình duyệt</span><span class="lc-sub">Chạy component không cần cài gì — trên Code Lab.</span></span>
   <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card exphub" href="/exp-hub/fer202-cai-dat-react?ref=%2Fcourses%2Ffront-end-web-development-with-react%2Flearn&reflabel=FER202" target="_blank" rel="noopener">
+  <span class="lc-ico">🛠️</span>
+  <span class="lc-body"><span class="lc-title">Hướng dẫn cài đặt — Node.js, Vite &amp; VS Code</span><span class="lc-sub">Exp Hub · từng bước, link tải chính chủ.</span></span>
+  <span class="lc-cta">EXP HUB →</span>
 </a>
 <div class="callout">📎 File đính kèm mục này: <strong>syllabus gốc FER202.pdf</strong> — bản chính thức của trường, dùng để đối chiếu.</div>
 </div>

@@ -248,6 +248,11 @@ export default {
   <span class="lc-body"><span class="lc-title">Ethics of Artificial Intelligence</span><span class="lc-sub">The additional required AI-ethics MOOC.</span></span>
   <span class="lc-cta">COURSERA →</span>
 </a>
+<a class="link-card exphub" href="/exp-hub/ite302c-cong-cu-hoc?ref=%2Fcourses%2Fit-and-data-ethics%2Flearn&reflabel=ITE302c" target="_blank" rel="noopener">
+  <span class="lc-ico">🛠️</span>
+  <span class="lc-body"><span class="lc-title">Tools guide — Zotero, Notion &amp; ethics references</span><span class="lc-sub">Exp Hub · study &amp; citation tools.</span></span>
+  <span class="lc-cta">EXP HUB →</span>
+</a>
 <div class="callout">📎 Attached to this lesson: <strong>the original ITE302c.pdf syllabus</strong> — the university's official version, for reference.</div>
 </div>
 <div class="ml-vi">
@@ -276,6 +281,11 @@ export default {
   <span class="lc-ico">🤖</span>
   <span class="lc-body"><span class="lc-title">Ethics of Artificial Intelligence</span><span class="lc-sub">MOOC đạo đức AI bắt buộc bổ sung.</span></span>
   <span class="lc-cta">COURSERA →</span>
+</a>
+<a class="link-card exphub" href="/exp-hub/ite302c-cong-cu-hoc?ref=%2Fcourses%2Fit-and-data-ethics%2Flearn&reflabel=ITE302c" target="_blank" rel="noopener">
+  <span class="lc-ico">🛠️</span>
+  <span class="lc-body"><span class="lc-title">Bộ công cụ — Zotero, Notion &amp; khung đạo đức</span><span class="lc-sub">Exp Hub · công cụ học &amp; trích dẫn.</span></span>
+  <span class="lc-cta">EXP HUB →</span>
 </a>
 <div class="callout">📎 File đính kèm mục này: <strong>syllabus gốc ITE302c.pdf</strong> — bản chính thức của trường, dùng để đối chiếu.</div>
 </div>

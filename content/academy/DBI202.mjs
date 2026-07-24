@@ -187,6 +187,7 @@ export default {
   <div class="lz-layer"><b>Recovery</b> — logs and backups survive crashes without losing committed data.</div>
   <div class="lz-layer"><b>Querying</b> — ask questions declaratively in SQL; the DBMS figures out how.</div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The three-level architecture &amp; data independence.</b> ANSI-SPARC splits a DBMS into three layers: the <em>physical</em> level (how bytes sit on disk), the <em>logical</em> level (tables and relationships), and the <em>external</em> level (per-user views). This separation gives <b>data independence</b> — you can add an index or reorganise storage without rewriting a single query. That decoupling is the quiet reason applications survive decades of schema evolution. <em>Textbooks list DBMS benefits but rarely name the architecture that delivers them.</em></div>
 <div class="note-ct">SQL Server, MySQL, PostgreSQL and Oracle are all relational DBMSs. This course uses SQL Server, but the concepts transfer to all of them.</div>
 </div>
 <div class="ml-vi">
@@ -200,6 +201,7 @@ export default {
   <div class="lz-layer"><b>Phục hồi</b> — log và backup sống sót sự cố mà không mất dữ liệu đã commit.</div>
   <div class="lz-layer"><b>Truy vấn</b> — hỏi một cách khai báo bằng SQL; DBMS tự tính cách làm.</div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Kiến trúc ba mức &amp; độc lập dữ liệu.</b> ANSI-SPARC chia DBMS thành ba tầng: mức <em>vật lý</em> (byte nằm trên đĩa thế nào), mức <em>logic</em> (bảng và liên kết), và mức <em>ngoài</em> (view riêng từng người dùng). Sự tách biệt này cho <b>độc lập dữ liệu</b> — bạn có thể thêm chỉ mục hay tổ chức lại lưu trữ mà không phải viết lại một truy vấn nào. Đó là lý do thầm lặng khiến ứng dụng sống sót qua hàng chục năm tiến hóa lược đồ. <em>Giáo trình liệt kê lợi ích DBMS nhưng hiếm khi gọi tên kiến trúc tạo ra chúng.</em></div>
 <div class="note-ct">SQL Server, MySQL, PostgreSQL và Oracle đều là DBMS quan hệ. Môn này dùng SQL Server, nhưng khái niệm chuyển được sang tất cả.</div>
 </div>
 `,
@@ -228,6 +230,7 @@ export default {
   <div class="lz-layer"><b>Referential integrity</b> — a foreign key must point to a row that exists; the DBMS enforces it.</div>
 </div>
 <div class="diagram">Student(<b>id</b>, name, classId) ── classId → ── Class(<b>id</b>, name)</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Super keys, candidate keys &amp; surrogate vs natural.</b> A <em>super key</em> is any column set that is unique; a <em>candidate key</em> is a minimal super key (remove any column and it stops being unique). A table can have several candidate keys — you pick one as the primary key. Real teams then debate <b>natural keys</b> (a meaningful column like email) versus <b>surrogate keys</b> (a meaningless auto-increment / IDENTITY id). Surrogates usually win because natural values change and break every foreign key that copied them. <em>The syllabus teaches PK/FK; the key hierarchy and this design choice are what interviews probe.</em></div>
 <div class="note-ct">Here <span class="badge">Student.classId</span> is a foreign key to <span class="badge">Class.id</span>. You cannot enrol a student in a class that does not exist — that is referential integrity at work.</div>
 </div>
 <div class="ml-vi">
@@ -240,6 +243,7 @@ export default {
   <div class="lz-layer"><b>Toàn vẹn tham chiếu</b> — khóa ngoại phải trỏ tới một hàng tồn tại; DBMS đảm bảo điều này.</div>
 </div>
 <div class="diagram">Student(<b>id</b>, name, classId) ── classId → ── Class(<b>id</b>, name)</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Siêu khóa, khóa dự tuyển &amp; khóa nhân tạo vs tự nhiên.</b> <em>Siêu khóa</em> là bất kỳ tập cột nào có tính duy nhất; <em>khóa dự tuyển</em> là siêu khóa tối tiểu (bỏ cột nào cũng mất tính duy nhất). Một bảng có thể có nhiều khóa dự tuyển — bạn chọn một làm khóa chính. Rồi các đội thật tranh luận giữa <b>khóa tự nhiên</b> (cột có ý nghĩa như email) và <b>khóa nhân tạo</b> (id tự tăng / IDENTITY vô nghĩa). Khóa nhân tạo thường thắng vì giá trị tự nhiên hay đổi và làm hỏng mọi khóa ngoại đã sao chép nó. <em>Giáo trình dạy PK/FK; còn phân cấp khóa và lựa chọn thiết kế này là thứ phỏng vấn hay hỏi.</em></div>
 <div class="note-ct">Ở đây <span class="badge">Student.classId</span> là khóa ngoại tới <span class="badge">Class.id</span>. Bạn không thể ghi danh sinh viên vào lớp không tồn tại — đó là toàn vẹn tham chiếu vào việc.</div>
 </div>
 `,
@@ -265,6 +269,7 @@ export default {
   </tbody>
 </table>
 <div class="out">σ<sub>age&gt;20</sub>(Student) = all students older than 20 · π<sub>name</sub>(Student) = just the names.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Sets vs bags — why SQL keeps duplicates.</b> Pure relational algebra works on <em>sets</em>: no duplicate rows exist. But real SQL works on <em>bags</em> (multisets) — <span class="badge">SELECT age FROM Student</span> can return 20 three times. That is why <b>SELECT DISTINCT</b> exists and why <b>UNION</b> removes duplicates while <b>UNION ALL</b> does not. Keeping duplicates is a deliberate performance choice: de-duplicating every result would force a costly sort or hash. <em>The algebra you learn is set-based; the SQL you run is bag-based, and knowing the gap explains a whole class of surprising results.</em></div>
 <div class="note-ct">The exam often asks you to write a query in relational algebra AND in SQL. They map almost one-to-one — σ is WHERE, π is the SELECT list, ⋈ is JOIN.</div>
 </div>
 <div class="ml-vi">
@@ -282,6 +287,7 @@ export default {
   </tbody>
 </table>
 <div class="out">σ<sub>age&gt;20</sub>(Student) = mọi sinh viên trên 20 tuổi · π<sub>name</sub>(Student) = chỉ các tên.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Tập hợp vs túi — vì sao SQL giữ dòng trùng.</b> Đại số quan hệ thuần túy làm việc trên <em>tập hợp</em>: không có dòng trùng. Nhưng SQL thật làm việc trên <em>túi</em> (đa tập) — <span class="badge">SELECT age FROM Student</span> có thể trả về 20 ba lần. Đó là lý do có <b>SELECT DISTINCT</b> và vì sao <b>UNION</b> khử trùng còn <b>UNION ALL</b> thì không. Giữ dòng trùng là lựa chọn hiệu năng có chủ ý: khử trùng mọi kết quả sẽ buộc phải sắp xếp hoặc băm tốn kém. <em>Đại số bạn học dựa trên tập hợp; SQL bạn chạy dựa trên túi, và hiểu khoảng cách này giải thích cả một loạt kết quả gây bất ngờ.</em></div>
 <div class="note-ct">Đề thi hay yêu cầu viết một truy vấn bằng đại số quan hệ VÀ bằng SQL. Chúng ánh xạ gần như một-một — σ là WHERE, π là danh sách SELECT, ⋈ là JOIN.</div>
 </div>
 `,
@@ -327,6 +333,7 @@ export default {
 </div>
 <div class="diagram">[Student] ──&lt;enrols&gt;── [Course]   (N:M → needs a junction table Enrollment)</div>
 <div class="pitfall"><b>Key rule:</b> a many-to-many relationship cannot be stored directly. You resolve it into a <strong>junction table</strong> holding the two foreign keys — e.g. Enrollment(studentId, courseId).</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Weak entities &amp; the extended ER (ISA).</b> Some entities cannot be identified on their own — an <em>OrderLine</em> only makes sense inside an <em>Order</em>. That is a <b>weak entity</b>: it borrows part of its key from a stronger identifying owner (drawn with a double rectangle). The Enhanced ER model adds <b>specialization/generalization</b> — an <em>ISA</em> hierarchy where Employee splits into Manager and Engineer, much like a subclass. <em>Basic ER covers entities and relationships; weak entities and ISA are what you need to model real, layered domains.</em></div>
 <a class="link-card exphub" href="/exp-hub/dbi202-cai-dat-sql-server?ref=%2Fcourses%2Fintroduction-to-databases%2Flearn&reflabel=DBI202%20%E2%80%94%20Database%20Systems" target="_blank" rel="noopener">
   <span class="lc-ico">✏️</span>
   <span class="lc-body"><span class="lc-title">Draw ER diagrams (tools in the setup guide)</span><span class="lc-sub">draw.io / SSMS database diagrams.</span></span>
@@ -345,6 +352,7 @@ export default {
 </div>
 <div class="diagram">[Student] ──&lt;ghi danh&gt;── [Course]   (N:M → cần bảng trung gian Enrollment)</div>
 <div class="pitfall"><b>Luật then chốt:</b> liên kết nhiều-nhiều không thể lưu trực tiếp. Bạn giải nó thành một <strong>bảng trung gian</strong> giữ hai khóa ngoại — vd Enrollment(studentId, courseId).</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Thực thể yếu &amp; ER mở rộng (ISA).</b> Vài thực thể không thể tự định danh — một <em>OrderLine</em> (dòng đơn hàng) chỉ có nghĩa bên trong một <em>Order</em>. Đó là <b>thực thể yếu</b>: nó mượn một phần khóa từ một chủ định danh mạnh hơn (vẽ bằng hình chữ nhật kép). Mô hình ER nâng cao thêm <b>chuyên biệt hóa/tổng quát hóa</b> — một phân cấp <em>ISA</em> nơi Employee tách thành Manager và Engineer, giống như lớp con. <em>ER cơ bản dạy thực thể và liên kết; thực thể yếu và ISA mới là thứ cần để mô hình các miền thực có phân tầng.</em></div>
 <a class="link-card exphub" href="/exp-hub/dbi202-cai-dat-sql-server?ref=%2Fcourses%2Fintroduction-to-databases%2Flearn&reflabel=DBI202%20%E2%80%94%20Database%20Systems" target="_blank" rel="noopener">
   <span class="lc-ico">✏️</span>
   <span class="lc-body"><span class="lc-title">Vẽ sơ đồ ER (công cụ trong guide cài đặt)</span><span class="lc-sub">draw.io / SSMS database diagrams.</span></span>
@@ -382,6 +390,7 @@ export default {
   </tbody>
 </table>
 <div class="pitfall"><b>The three anomalies</b> a bad design causes: <b>update</b> (change a fact in one row, others go stale), <b>insert</b> (cannot add a course with no student), <b>delete</b> (removing the last student deletes the course too). Normalization removes all three.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why we sometimes stop at 3NF, not BCNF.</b> BCNF is stricter, yet designers often stop at 3NF on purpose. The reason is <b>dependency preservation</b>: 3NF can always be reached with a lossless <em>and</em> dependency-preserving decomposition, but forcing BCNF sometimes means a functional dependency can no longer be checked within a single table. Beyond BCNF lie <b>4NF</b> (multivalued dependencies) and <b>5NF</b> (join dependencies) for even subtler redundancy. <em>Exams ask "what does 3NF remove"; engineering asks "is going further worth losing a constraint" — a trade-off, not a ladder.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.1</span>
@@ -398,6 +407,7 @@ export default {
   </tbody>
 </table>
 <div class="pitfall"><b>Ba bất thường</b> mà thiết kế tệ gây ra: <b>cập nhật</b> (đổi một sự thật ở một hàng, hàng khác lỗi thời), <b>chèn</b> (không thể thêm khóa học chưa có sinh viên), <b>xóa</b> (xóa sinh viên cuối cùng xóa luôn khóa học). Chuẩn hóa loại bỏ cả ba.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao đôi khi dừng ở 3NF, không lên BCNF.</b> BCNF chặt hơn, nhưng người thiết kế thường cố ý dừng ở 3NF. Lý do là <b>bảo toàn phụ thuộc</b>: luôn đạt được 3NF bằng một phân rã không mất mát <em>và</em> bảo toàn phụ thuộc, nhưng ép BCNF đôi khi khiến một phụ thuộc hàm không còn kiểm được trong một bảng duy nhất. Trên BCNF còn có <b>4NF</b> (phụ thuộc đa trị) và <b>5NF</b> (phụ thuộc nối) cho dư thừa tinh vi hơn. <em>Đề thi hỏi "3NF loại bỏ gì"; kỹ thuật thật hỏi "đi xa hơn có đáng mất một ràng buộc không" — một đánh đổi, không phải cái thang.</em></div>
 </div>
 `,
         },
@@ -450,6 +460,7 @@ export default {
     <tr><td><span class="badge">CHECK</span></td><td>a custom rule (age ≥ 16)</td></tr>
   </tbody>
 </table>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Referential actions — what happens when a parent is deleted.</b> A foreign key does more than reject bad data; you can tell it how to react. <span class="badge">ON DELETE CASCADE</span> deletes the child rows too; <span class="badge">ON DELETE SET NULL</span> orphans them safely; the default <span class="badge">NO ACTION</span> blocks the delete. The same applies to <span class="badge">ON UPDATE</span>. Choosing wrong is dangerous — an unintended CASCADE can wipe a chain of tables in one statement. <em>The syllabus declares foreign keys; production databases live or die by which referential action you attach to them.</em></div>
 <a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fintroduction-to-databases%2Flearn&reflabel=DBI202%20%E2%80%94%20Database%20Systems#module-412" target="_blank" rel="noopener">
   <span class="lc-ico">🏗️</span>
   <span class="lc-body"><span class="lc-title">Practise: Schema Design & DDL</span><span class="lc-sub">CREATE tables with keys and constraints.</span></span>
@@ -477,6 +488,7 @@ export default {
     <tr><td><span class="badge">CHECK</span></td><td>một luật tùy chỉnh (age ≥ 16)</td></tr>
   </tbody>
 </table>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hành động tham chiếu — chuyện gì xảy ra khi xóa hàng cha.</b> Khóa ngoại không chỉ từ chối dữ liệu sai; bạn có thể bảo nó phản ứng thế nào. <span class="badge">ON DELETE CASCADE</span> xóa luôn các hàng con; <span class="badge">ON DELETE SET NULL</span> để chúng mồ côi an toàn; mặc định <span class="badge">NO ACTION</span> chặn việc xóa. Tương tự với <span class="badge">ON UPDATE</span>. Chọn sai thì nguy hiểm — một CASCADE ngoài ý muốn có thể xóa sạch một chuỗi bảng trong một câu lệnh. <em>Giáo trình khai báo khóa ngoại; CSDL thật sống chết bởi hành động tham chiếu bạn gắn vào chúng.</em></div>
 <a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fintroduction-to-databases%2Flearn&reflabel=DBI202%20%E2%80%94%20Database%20Systems#module-412" target="_blank" rel="noopener">
   <span class="lc-ico">🏗️</span>
   <span class="lc-body"><span class="lc-title">Luyện: Schema Design & DDL</span><span class="lc-sub">CREATE bảng với khóa và ràng buộc.</span></span>
@@ -517,6 +529,7 @@ export default {
     <tr><td>RIGHT JOIN</td><td>all right rows + matches</td></tr>
   </tbody>
 </table>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>How the engine actually joins.</b> &#96;JOIN&#96; is what you ask for; the optimizer decides <em>how</em>. It picks among three physical algorithms: <b>nested-loop</b> (great when one side is tiny or indexed), <b>hash join</b> (best for large unsorted tables — build a hash on one side, probe with the other), and <b>merge join</b> (unbeatable when both inputs arrive sorted on the key). Run <span class="badge">SET SHOWPLAN_ALL ON</span> or read the execution plan to see which one fired. <em>The syllabus teaches JOIN syntax; the plan behind it is why the same query is instant on one schema and a minute on another.</em></div>
 <a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fintroduction-to-databases%2Flearn&reflabel=DBI202%20%E2%80%94%20Database%20Systems#module-409" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Practise: Joins & multi-table queries</span><span class="lc-sub">The single most-tested SQL skill.</span></span>
@@ -541,6 +554,7 @@ export default {
     <tr><td>RIGHT JOIN</td><td>mọi hàng phải + khớp</td></tr>
   </tbody>
 </table>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Máy thực sự nối bảng thế nào.</b> &#96;JOIN&#96; là điều bạn yêu cầu; bộ tối ưu quyết định <em>cách làm</em>. Nó chọn giữa ba thuật toán vật lý: <b>nested-loop</b> (tuyệt khi một bên rất nhỏ hoặc có chỉ mục), <b>hash join</b> (tốt cho bảng lớn chưa sắp — dựng bảng băm một bên, dò bằng bên kia), và <b>merge join</b> (vô địch khi cả hai đầu vào tới đã sắp theo khóa). Chạy <span class="badge">SET SHOWPLAN_ALL ON</span> hoặc đọc execution plan để xem cái nào chạy. <em>Giáo trình dạy cú pháp JOIN; kế hoạch phía sau mới giải thích vì sao cùng một truy vấn tức thì trên lược đồ này mà mất một phút trên lược đồ khác.</em></div>
 <a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fintroduction-to-databases%2Flearn&reflabel=DBI202%20%E2%80%94%20Database%20Systems#module-409" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Luyện: Joins & truy vấn nhiều bảng</span><span class="lc-sub">Kỹ năng SQL được kiểm nhiều nhất.</span></span>
@@ -567,6 +581,7 @@ export default {
 <pre><span class="tok-comment">-- subquery: students older than the average</span>
 <span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> Student
 <span class="tok-keyword">WHERE</span> age &gt; (<span class="tok-keyword">SELECT</span> <span class="tok-function">AVG</span>(age) <span class="tok-keyword">FROM</span> Student);</pre>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Window functions — aggregate without collapsing rows.</b> &#96;GROUP BY&#96; folds many rows into one; a <b>window function</b> computes an aggregate <em>alongside</em> each row, keeping them all. <span class="badge">AVG(age) OVER (PARTITION BY classId)</span> shows every student next to their class average, and <span class="badge">ROW_NUMBER() OVER (ORDER BY score DESC)</span> ranks them — things a plain GROUP BY cannot do. It replaces many awkward self-joins and correlated subqueries with one clean clause. <em>The syllabus stops at GROUP BY/HAVING; window functions are the tool professionals reach for daily and rarely appear in intro courses.</em></div>
 <a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fintroduction-to-databases%2Flearn&reflabel=DBI202%20%E2%80%94%20Database%20Systems#module-408" target="_blank" rel="noopener">
   <span class="lc-ico">📊</span>
   <span class="lc-body"><span class="lc-title">Practise: Aggregation & subqueries</span><span class="lc-sub">GROUP BY, HAVING and nested queries.</span></span>
@@ -585,6 +600,7 @@ export default {
 <pre><span class="tok-comment">-- truy vấn con: sinh viên lớn hơn tuổi trung bình</span>
 <span class="tok-keyword">SELECT</span> name <span class="tok-keyword">FROM</span> Student
 <span class="tok-keyword">WHERE</span> age &gt; (<span class="tok-keyword">SELECT</span> <span class="tok-function">AVG</span>(age) <span class="tok-keyword">FROM</span> Student);</pre>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hàm cửa sổ — tổng hợp mà không gộp mất dòng.</b> &#96;GROUP BY&#96; gộp nhiều dòng thành một; một <b>hàm cửa sổ (window function)</b> tính tổng hợp <em>bên cạnh</em> mỗi dòng, giữ lại tất cả. <span class="badge">AVG(age) OVER (PARTITION BY classId)</span> hiện mỗi sinh viên cạnh trung bình lớp của họ, và <span class="badge">ROW_NUMBER() OVER (ORDER BY score DESC)</span> xếp hạng họ — điều GROUP BY thường không làm được. Nó thay nhiều self-join và truy vấn con tương quan vụng về bằng một mệnh đề gọn. <em>Giáo trình dừng ở GROUP BY/HAVING; hàm cửa sổ là công cụ dân chuyên dùng hằng ngày và hiếm xuất hiện ở khóa nhập môn.</em></div>
 <a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fintroduction-to-databases%2Flearn&reflabel=DBI202%20%E2%80%94%20Database%20Systems#module-408" target="_blank" rel="noopener">
   <span class="lc-ico">📊</span>
   <span class="lc-body"><span class="lc-title">Luyện: Tổng hợp & truy vấn con</span><span class="lc-sub">GROUP BY, HAVING và truy vấn lồng.</span></span>
@@ -635,6 +651,7 @@ export default {
 </div>
 <pre><span class="tok-keyword">CREATE VIEW</span> AdultStudents <span class="tok-keyword">AS</span>
   <span class="tok-keyword">SELECT</span> id, name <span class="tok-keyword">FROM</span> Student <span class="tok-keyword">WHERE</span> age &gt;= 18;</pre>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The &#96;inserted&#96; / &#96;deleted&#96; magic tables.</b> Inside a trigger, SQL Server exposes two virtual tables: <span class="badge">inserted</span> (the new rows) and <span class="badge">deleted</span> (the old rows) — an UPDATE shows up in both. A trigger must be written <em>set-based</em> over these, not row-by-row, or it breaks on a multi-row statement. <b>INSTEAD OF</b> triggers go further: they replace the operation entirely, which is how you make an otherwise read-only <em>view</em> updatable. <em>The syllabus lists trigger as a concept; these pseudo-tables and INSTEAD OF are what make triggers actually work in practice.</em></div>
 <a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fintroduction-to-databases%2Flearn&reflabel=DBI202%20%E2%80%94%20Database%20Systems#module-721" target="_blank" rel="noopener">
   <span class="lc-ico">⚙️</span>
   <span class="lc-body"><span class="lc-title">Practise: Stored procedures & programmable objects</span><span class="lc-sub">Procedures, functions and triggers.</span></span>
@@ -654,6 +671,7 @@ export default {
 </div>
 <pre><span class="tok-keyword">CREATE VIEW</span> AdultStudents <span class="tok-keyword">AS</span>
   <span class="tok-keyword">SELECT</span> id, name <span class="tok-keyword">FROM</span> Student <span class="tok-keyword">WHERE</span> age &gt;= 18;</pre>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hai bảng ảo &#96;inserted&#96; / &#96;deleted&#96;.</b> Bên trong một trigger, SQL Server cấp hai bảng ảo: <span class="badge">inserted</span> (các hàng mới) và <span class="badge">deleted</span> (các hàng cũ) — một UPDATE hiện ở cả hai. Trigger phải viết <em>theo tập</em> trên chúng, không phải từng hàng, nếu không sẽ hỏng với câu lệnh nhiều hàng. Trigger <b>INSTEAD OF</b> đi xa hơn: nó thay thế hẳn thao tác, đó là cách làm cho một <em>view</em> vốn chỉ đọc trở nên cập nhật được. <em>Giáo trình liệt kê trigger như một khái niệm; hai bảng ảo này và INSTEAD OF mới là thứ khiến trigger thật sự chạy được.</em></div>
 <a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fintroduction-to-databases%2Flearn&reflabel=DBI202%20%E2%80%94%20Database%20Systems#module-721" target="_blank" rel="noopener">
   <span class="lc-ico">⚙️</span>
   <span class="lc-body"><span class="lc-title">Luyện: Stored procedures & đối tượng lập trình</span><span class="lc-sub">Procedure, function và trigger.</span></span>
@@ -684,6 +702,7 @@ export default {
 <div class="pitfall"><b>The trade-off:</b> indexes speed up reads but slow down writes (every INSERT/UPDATE must also update the index) and use disk. Index the columns you filter/join on often — not every column.</div>
 <h3>Transactions & ACID</h3>
 <p>A <strong>transaction</strong> groups statements so they all succeed or all roll back — the foundation of reliable databases. It guarantees <span class="badge">ACID</span>: Atomicity, Consistency, Isolation, Durability.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Isolation levels &amp; the read phenomena.</b> The "I" in ACID is a dial, not a switch. Loosen it and three anomalies appear: a <b>dirty read</b> (seeing another transaction's uncommitted change), a <b>non-repeatable read</b> (the same row changes value mid-transaction), and a <b>phantom</b> (new rows appear matching your WHERE). The four SQL levels — READ UNCOMMITTED, READ COMMITTED, REPEATABLE READ, SERIALIZABLE — each forbid more of these at the cost of concurrency, and <b>snapshot / MVCC</b> avoids most locking by versioning rows. <em>The syllabus names ACID; choosing an isolation level is the real-world decision that trades correctness against throughput.</em></div>
 <a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fintroduction-to-databases%2Flearn&reflabel=DBI202%20%E2%80%94%20Database%20Systems#module-720" target="_blank" rel="noopener">
   <span class="lc-ico">⚡</span>
   <span class="lc-body"><span class="lc-title">Practise: Indexing strategies</span><span class="lc-sub">Indexing & advanced schema design.</span></span>
@@ -698,6 +717,7 @@ export default {
 <div class="pitfall"><b>Đánh đổi:</b> chỉ mục tăng tốc đọc nhưng làm chậm ghi (mỗi INSERT/UPDATE phải cập nhật cả chỉ mục) và tốn đĩa. Đánh chỉ mục các cột bạn lọc/join thường xuyên — không phải mọi cột.</div>
 <h3>Giao dịch &amp; ACID</h3>
 <p>Một <strong>giao dịch (transaction)</strong> gom các câu lệnh để tất cả thành công hoặc tất cả hoàn tác — nền tảng của CSDL đáng tin. Nó đảm bảo <span class="badge">ACID</span>: Nguyên tử, Nhất quán, Cô lập, Bền vững.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Mức cô lập &amp; các hiện tượng đọc.</b> Chữ "I" trong ACID là một núm xoay, không phải công tắc. Nới lỏng nó và ba bất thường xuất hiện: <b>đọc bẩn</b> (thấy thay đổi chưa commit của giao dịch khác), <b>đọc không lặp lại</b> (cùng một hàng đổi giá trị giữa giao dịch), và <b>bóng ma (phantom)</b> (hàng mới xuất hiện khớp mệnh đề WHERE của bạn). Bốn mức SQL — READ UNCOMMITTED, READ COMMITTED, REPEATABLE READ, SERIALIZABLE — mỗi mức cấm thêm các hiện tượng này với cái giá là tính đồng thời, và <b>snapshot / MVCC</b> tránh phần lớn khóa bằng cách tạo phiên bản cho hàng. <em>Giáo trình gọi tên ACID; chọn mức cô lập mới là quyết định thực tế đánh đổi tính đúng lấy thông lượng.</em></div>
 <a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fintroduction-to-databases%2Flearn&reflabel=DBI202%20%E2%80%94%20Database%20Systems#module-720" target="_blank" rel="noopener">
   <span class="lc-ico">⚡</span>
   <span class="lc-body"><span class="lc-title">Luyện: Chiến lược đánh chỉ mục</span><span class="lc-sub">Chỉ mục & thiết kế lược đồ nâng cao.</span></span>

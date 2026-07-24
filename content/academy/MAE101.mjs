@@ -296,6 +296,14 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Infinite</div><div class="lz-ld">f(x) grows without bound, like 1/x² as x→0.</div></div>
   <div class="lz-layer"><div class="lz-lt">Oscillation</div><div class="lz-ld">f(x) wiggles forever without settling, like sin(1/x) as x→0.</div></div>
 </div>
+<h3>Formulas · Limit laws</h3>
+<div class="formula"><span class="lbl">Limit laws (if lim f and lim g exist)</span>lim (f ± g) = lim f ± lim g    lim (f·g) = lim f · lim g<br>lim (f/g) = lim f / lim g  (lim g ≠ 0)    lim (c·f) = c · lim f<br>lim [f(x)]ⁿ = [lim f(x)]ⁿ</div>
+<div class="formula"><span class="lbl">Two special limits worth memorising</span>lim<sub>x→0</sub> (sin x)/x = 1    lim<sub>x→∞</sub> (1 + 1/x)ˣ = e</div>
+<h3>Ví dụ có lời giải · Worked examples</h3>
+<div class="out"><b>Example 1 — one-sided disagreement.</b> Let f(x) = x/|x|. As x→0⁺, f = +1; as x→0⁻, f = −1. Left ≠ right → lim<sub>x→0</sub> f(x) <b>does not exist</b>.</div>
+<div class="out"><b>Example 2 — a removable hole.</b> g(x) = (x²−1)/(x−1) is undefined at x=1, yet lim<sub>x→1</sub> g(x) = lim (x+1) = <b>2</b>. The limit ignores the hole — that is the whole point.</div>
+<div class="pitfall"><b>Trap:</b> a limit is about the trend <em>near</em> a, NOT the value <em>at</em> a. f(a) may be undefined, or defined but different from the limit — the limit still exists as long as both sides approach the same value.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The precise ε–δ definition.</b> "f(x) approaches L" is made rigorous like this: for every tolerance ε &gt; 0 there is a δ &gt; 0 such that 0 &lt; |x − a| &lt; δ guarantees |f(x) − L| &lt; ε. Every intuitive limit rule is a theorem proved from this single definition — the foundation the slides gloss over but that makes calculus airtight.</div>
 <div class="note-ct">Continuity is defined by limits: a function is continuous at a if lim<sub>x→a</sub> f(x) = f(a) — no jumps, holes or blow-ups. You can "draw it without lifting your pen." Continuity matters because the nice theorems of calculus assume it.</div>
 </div>
 <div class="ml-vi">
@@ -317,6 +325,14 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Vô hạn</div><div class="lz-ld">f(x) tăng không bị chặn, như 1/x² khi x→0.</div></div>
   <div class="lz-layer"><div class="lz-lt">Dao động</div><div class="lz-ld">f(x) lắc mãi không ổn định, như sin(1/x) khi x→0.</div></div>
 </div>
+<h3>Công thức · Luật giới hạn</h3>
+<div class="formula"><span class="lbl">Luật giới hạn (nếu lim f và lim g tồn tại)</span>lim (f ± g) = lim f ± lim g    lim (f·g) = lim f · lim g<br>lim (f/g) = lim f / lim g  (lim g ≠ 0)    lim (c·f) = c · lim f<br>lim [f(x)]ⁿ = [lim f(x)]ⁿ</div>
+<div class="formula"><span class="lbl">Hai giới hạn đặc biệt cần nhớ</span>lim<sub>x→0</sub> (sin x)/x = 1    lim<sub>x→∞</sub> (1 + 1/x)ˣ = e</div>
+<h3>Ví dụ có lời giải · Giải từng bước</h3>
+<div class="out"><b>Ví dụ 1 — hai phía không khớp.</b> Cho f(x) = x/|x|. Khi x→0⁺, f = +1; khi x→0⁻, f = −1. Trái ≠ phải → lim<sub>x→0</sub> f(x) <b>không tồn tại</b>.</div>
+<div class="out"><b>Ví dụ 2 — lỗ khử được.</b> g(x) = (x²−1)/(x−1) không xác định tại x=1, nhưng lim<sub>x→1</sub> g(x) = lim (x+1) = <b>2</b>. Giới hạn bỏ qua cái lỗ — đó chính là ý nghĩa của nó.</div>
+<div class="pitfall"><b>Bẫy:</b> giới hạn nói về xu hướng <em>gần</em> a, KHÔNG phải giá trị <em>tại</em> a. f(a) có thể không xác định, hoặc xác định nhưng khác giới hạn — giới hạn vẫn tồn tại miễn hai phía tiến về cùng một giá trị.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Định nghĩa ε–δ chính xác.</b> "f(x) tiến tới L" được làm chặt chẽ thế này: với mọi sai số ε &gt; 0 tồn tại δ &gt; 0 sao cho 0 &lt; |x − a| &lt; δ bảo đảm |f(x) − L| &lt; ε. Mọi quy tắc giới hạn trực giác đều là một định lý chứng minh từ định nghĩa duy nhất này — nền tảng mà slide bỏ qua nhưng làm cho giải tích trở nên chặt chẽ.</div>
 <div class="note-ct">Tính liên tục được định nghĩa bằng giới hạn: một hàm liên tục tại a nếu lim<sub>x→a</sub> f(x) = f(a) — không nhảy, thủng hay bùng nổ. Bạn "vẽ được nó mà không nhấc bút." Liên tục quan trọng vì các định lý đẹp của giải tích đều giả định nó.</div>
 </div>
 `,
@@ -339,6 +355,13 @@ export default {
 <h3>Step 3 — limits at infinity</h3>
 <p>As x → ∞, keep only the dominant term. For rational functions, compare the highest powers:</p>
 <div class="out"><b>lim<sub>x→∞</sub></b> (3x² + 1)/(x² − 5) = 3  <small>(divide top &amp; bottom by x²; the leading coefficients decide)</small></div>
+<h3>Formulas · Indeterminate forms &amp; the degree rule</h3>
+<div class="formula"><span class="lbl">Indeterminate forms (must simplify first)</span>0/0    ∞/∞    ∞ − ∞    0·∞    1<sup>∞</sup>    0⁰    ∞⁰</div>
+<div class="formula"><span class="lbl">Rational function as x→∞ — compare degrees</span>deg(top) &lt; deg(bottom) → 0    deg(top) = deg(bottom) → ratio of leading coefficients<br>deg(top) &gt; deg(bottom) → ±∞</div>
+<h3>Ví dụ có lời giải · Worked examples</h3>
+<div class="out"><b>Example — rationalise a root.</b> lim<sub>x→0</sub> (√(x+1) − 1)/x gives 0/0. Multiply by the conjugate (√(x+1)+1):<br>= lim<sub>x→0</sub> (x+1−1)/[x(√(x+1)+1)] = lim<sub>x→0</sub> 1/(√(x+1)+1) = <b>1/2</b>.</div>
+<div class="out"><b>Example — degree comparison.</b> lim<sub>x→∞</sub> (2x + 5)/(x² − 1): top degree 1 &lt; bottom degree 2 → <b>0</b>. And lim<sub>x→∞</sub> x³/(x² + 1) → <b>∞</b> (top wins).</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>L'Hôpital's rule.</b> For a 0/0 or ∞/∞ form, the limit equals the limit of the derivatives: lim f/g = lim f′/g′. E.g. lim<sub>x→0</sub> (sin x)/x = lim (cos x)/1 = 1 instantly. It is a powerful shortcut built from Part I's derivatives — only valid on those indeterminate forms.</div>
 <div class="callout ok">Golden rule: if direct substitution gives a real number, that IS the limit. If it gives 0/0, don&#39;t panic — factor, cancel, or rationalize, then substitute again. Limits at infinity are governed by the highest-power terms.</div>
 <a class="link-card exphub" href="/exp-hub/mae101-cong-cu-hoc-tap?ref=%2Fcourses%2Fmathematics-for-engineering%2Flearn&reflabel=MAE101%20%E2%80%94%20Mathematics%20for%20Engineering" target="_blank" rel="noopener">
   <span class="lc-ico">🧮</span>
@@ -358,6 +381,13 @@ export default {
 <h3>Bước 3 — giới hạn ở vô cực</h3>
 <p>Khi x → ∞, chỉ giữ số hạng bậc cao nhất. Với hàm hữu tỉ, so sánh các bậc cao nhất:</p>
 <div class="out"><b>lim<sub>x→∞</sub></b> (3x² + 1)/(x² − 5) = 3  <small>(chia tử &amp; mẫu cho x²; hệ số dẫn đầu quyết định)</small></div>
+<h3>Công thức · Dạng vô định &amp; quy tắc bậc</h3>
+<div class="formula"><span class="lbl">Các dạng vô định (phải rút gọn trước)</span>0/0    ∞/∞    ∞ − ∞    0·∞    1<sup>∞</sup>    0⁰    ∞⁰</div>
+<div class="formula"><span class="lbl">Hàm hữu tỉ khi x→∞ — so sánh bậc</span>bậc(tử) &lt; bậc(mẫu) → 0    bậc(tử) = bậc(mẫu) → tỉ số hệ số dẫn đầu<br>bậc(tử) &gt; bậc(mẫu) → ±∞</div>
+<h3>Ví dụ có lời giải · Giải từng bước</h3>
+<div class="out"><b>Ví dụ — nhân liên hợp.</b> lim<sub>x→0</sub> (√(x+1) − 1)/x ra 0/0. Nhân với liên hợp (√(x+1)+1):<br>= lim<sub>x→0</sub> (x+1−1)/[x(√(x+1)+1)] = lim<sub>x→0</sub> 1/(√(x+1)+1) = <b>1/2</b>.</div>
+<div class="out"><b>Ví dụ — so sánh bậc.</b> lim<sub>x→∞</sub> (2x + 5)/(x² − 1): bậc tử 1 &lt; bậc mẫu 2 → <b>0</b>. Và lim<sub>x→∞</sub> x³/(x² + 1) → <b>∞</b> (tử thắng).</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Quy tắc L'Hôpital.</b> Với dạng 0/0 hoặc ∞/∞, giới hạn bằng giới hạn của các đạo hàm: lim f/g = lim f′/g′. Vd lim<sub>x→0</sub> (sin x)/x = lim (cos x)/1 = 1 ngay lập tức. Đây là lối tắt mạnh dựng từ đạo hàm ở Phần I — chỉ hợp lệ trên các dạng vô định đó.</div>
 <div class="callout ok">Quy tắc vàng: nếu thay số trực tiếp ra một số thực, đó CHÍNH LÀ giới hạn. Nếu ra 0/0, đừng hoảng — phân tích, rút gọn, hoặc nhân liên hợp, rồi thay số lại. Giới hạn ở vô cực do các số hạng bậc cao nhất chi phối.</div>
 <a class="link-card exphub" href="/exp-hub/mae101-cong-cu-hoc-tap?ref=%2Fcourses%2Fmathematics-for-engineering%2Flearn&reflabel=MAE101%20%E2%80%94%20Mathematics%20for%20Engineering" target="_blank" rel="noopener">
   <span class="lc-ico">🧮</span>
@@ -410,6 +440,14 @@ export default {
 <h3>Real meaning</h3>
 <p>If f(t) is position, f′(t) is velocity. If f(x) is cost, f′(x) is marginal cost. The derivative turns "how much" into "how fast it changes" — the core question of engineering and science.</p>
 <div class="out"><b>From the definition:</b>  for f(x) = x²,<br>f′(x) = lim<sub>h→0</sub> [(x+h)² − x²]/h = lim<sub>h→0</sub> (2x + h) = <b>2x</b></div>
+<h3>Formulas · Notation &amp; the definition</h3>
+<div class="formula"><span class="lbl">Three notations for the same thing</span>f′(x) = y′ = dy/dx = df/dx    <span class="lbl">Definition</span>f′(x) = lim<sub>h→0</sub> [f(x+h) − f(x)] / h</div>
+<div class="formula"><span class="lbl">Alternative form (limit at a point a)</span>f′(a) = lim<sub>x→a</sub> [f(x) − f(a)] / (x − a)</div>
+<h3>Ví dụ có lời giải · Worked examples (from the definition)</h3>
+<div class="out"><b>Example 1 — f(x) = x³.</b> f′(x) = lim<sub>h→0</sub> [(x+h)³ − x³]/h = lim<sub>h→0</sub> [3x²h + 3xh² + h³]/h = lim<sub>h→0</sub> (3x² + 3xh + h²) = <b>3x²</b>.</div>
+<div class="out"><b>Example 2 — f(x) = √x.</b> f′(x) = lim<sub>h→0</sub> [√(x+h) − √x]/h. Multiply by the conjugate → lim<sub>h→0</sub> 1/(√(x+h)+√x) = <b>1/(2√x)</b>.</div>
+<div class="pitfall"><b>Trap:</b> the average rate of change (a slope between two points) is not the same as the derivative (the instantaneous rate at one point). The derivative is the <em>limit</em> of the average rate as the two points merge.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Differentiable ⟹ continuous, but not the reverse.</b> If f′(a) exists, f must be continuous at a. The converse fails: f(x) = |x| is continuous at 0 but has a sharp corner there, so f′(0) does not exist (left slope −1 ≠ right slope +1). Smoothness is strictly stronger than continuity — a distinction the intro slides rarely make explicit.</div>
 <div class="note-ct">A function is <em>differentiable</em> at a point if this limit exists. It fails at sharp corners, jumps, and vertical tangents — where there is no single well-defined slope.</div>
 </div>
 <div class="ml-vi">
@@ -426,6 +464,14 @@ export default {
 <h3>Ý nghĩa thực</h3>
 <p>Nếu f(t) là vị trí, f′(t) là vận tốc. Nếu f(x) là chi phí, f′(x) là chi phí biên. Đạo hàm biến "bao nhiêu" thành "thay đổi nhanh ra sao" — câu hỏi cốt lõi của kỹ thuật và khoa học.</p>
 <div class="out"><b>Từ định nghĩa:</b>  với f(x) = x²,<br>f′(x) = lim<sub>h→0</sub> [(x+h)² − x²]/h = lim<sub>h→0</sub> (2x + h) = <b>2x</b></div>
+<h3>Công thức · Ký hiệu &amp; định nghĩa</h3>
+<div class="formula"><span class="lbl">Ba ký hiệu cho cùng một thứ</span>f′(x) = y′ = dy/dx = df/dx    <span class="lbl">Định nghĩa</span>f′(x) = lim<sub>h→0</sub> [f(x+h) − f(x)] / h</div>
+<div class="formula"><span class="lbl">Dạng khác (giới hạn tại điểm a)</span>f′(a) = lim<sub>x→a</sub> [f(x) − f(a)] / (x − a)</div>
+<h3>Ví dụ có lời giải · Giải từng bước (từ định nghĩa)</h3>
+<div class="out"><b>Ví dụ 1 — f(x) = x³.</b> f′(x) = lim<sub>h→0</sub> [(x+h)³ − x³]/h = lim<sub>h→0</sub> [3x²h + 3xh² + h³]/h = lim<sub>h→0</sub> (3x² + 3xh + h²) = <b>3x²</b>.</div>
+<div class="out"><b>Ví dụ 2 — f(x) = √x.</b> f′(x) = lim<sub>h→0</sub> [√(x+h) − √x]/h. Nhân với liên hợp → lim<sub>h→0</sub> 1/(√(x+h)+√x) = <b>1/(2√x)</b>.</div>
+<div class="pitfall"><b>Bẫy:</b> tốc độ thay đổi trung bình (độ dốc giữa hai điểm) khác với đạo hàm (tốc độ tức thời tại một điểm). Đạo hàm là <em>giới hạn</em> của tốc độ trung bình khi hai điểm nhập lại.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Khả vi ⟹ liên tục, nhưng không ngược lại.</b> Nếu f′(a) tồn tại thì f phải liên tục tại a. Chiều ngược sai: f(x) = |x| liên tục tại 0 nhưng có góc nhọn ở đó, nên f′(0) không tồn tại (độ dốc trái −1 ≠ độ dốc phải +1). Tính trơn mạnh hơn hẳn tính liên tục — điều mà slide nhập môn ít khi nói rõ.</div>
 <div class="note-ct">Một hàm <em>khả vi</em> tại một điểm nếu giới hạn này tồn tại. Nó thất bại tại góc nhọn, chỗ nhảy, và tiếp tuyến thẳng đứng — nơi không có một độ dốc xác định duy nhất.</div>
 </div>
 `,
@@ -565,6 +611,15 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
 <h3>Concavity — the second derivative</h3>
 <p>f″(x) &gt; 0 means the curve is <strong>concave up</strong> (like a cup ∪); f″(x) &lt; 0 means <strong>concave down</strong> (like a cap ∩). Where concavity switches is an <strong>inflection point</strong>.</p>
 <div class="out"><b>Example:</b>  f(x) = x² has f′(x) = 2x = 0 at x = 0, and f″(x) = 2 &gt; 0 → x = 0 is a <b>minimum</b>. The parabola&#39;s vertex, confirmed by calculus.</div>
+<h3>Formulas · The two tests</h3>
+<div class="formula"><span class="lbl">First-derivative test (at a critical point c where f′(c)=0)</span>f′ changes + → − at c ⟹ local MAX    f′ changes − → + at c ⟹ local MIN    no sign change ⟹ neither</div>
+<div class="formula"><span class="lbl">Second-derivative test</span>f′(c)=0 and f″(c) &gt; 0 ⟹ MIN    f′(c)=0 and f″(c) &lt; 0 ⟹ MAX    f″(c)=0 ⟹ inconclusive</div>
+<h3>Ví dụ có lời giải · Worked example (full analysis)</h3>
+<div class="out"><b>Analyse f(x) = x³ − 3x.</b><br>
+1) f′(x) = 3x² − 3 = 0 → x = −1, x = +1 (critical points).<br>
+2) f″(x) = 6x. f″(−1) = −6 &lt; 0 → x=−1 is a <b>local MAX</b>, f(−1)=2. f″(1)=6 &gt; 0 → x=1 is a <b>local MIN</b>, f(1)=−2.<br>
+3) f″=0 at x=0 → <b>inflection point</b> (0,0); concave down for x&lt;0, concave up for x&gt;0.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>When the second-derivative test fails.</b> If f″(c)=0 the test says nothing — fall back to the first-derivative (sign) test. Example: f(x)=x⁴ has f′(0)=f″(0)=0, yet x=0 is clearly a minimum (confirmed by the sign of f′). Knowing which test to trust is part of the craft.</div>
 <div class="note-ct">This is the calculus toolkit for sketching any curve: find where it rises/falls (f′), where it peaks/dips (f′ = 0), and how it bends (f″). No memorized graph shapes needed.</div>
 </div>
 <div class="ml-vi">
@@ -585,6 +640,15 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
 <h3>Độ lồi/lõm — đạo hàm cấp hai</h3>
 <p>f″(x) &gt; 0 nghĩa là đường cong <strong>lõm lên (concave up)</strong> (như cái cốc ∪); f″(x) &lt; 0 nghĩa là <strong>lồi lên / lõm xuống (concave down)</strong> (như cái nắp ∩). Chỗ độ lồi/lõm đổi chiều là <strong>điểm uốn (inflection point)</strong>.</p>
 <div class="out"><b>Ví dụ:</b>  f(x) = x² có f′(x) = 2x = 0 tại x = 0, và f″(x) = 2 &gt; 0 → x = 0 là <b>cực tiểu</b>. Đỉnh của parabol, được giải tích xác nhận.</div>
+<h3>Công thức · Hai bài kiểm tra</h3>
+<div class="formula"><span class="lbl">Kiểm tra đạo hàm cấp 1 (tại điểm tới hạn c với f′(c)=0)</span>f′ đổi + → − tại c ⟹ CỰC ĐẠI địa phương    f′ đổi − → + tại c ⟹ CỰC TIỂU    không đổi dấu ⟹ không phải cực trị</div>
+<div class="formula"><span class="lbl">Kiểm tra đạo hàm cấp 2</span>f′(c)=0 và f″(c) &gt; 0 ⟹ CỰC TIỂU    f′(c)=0 và f″(c) &lt; 0 ⟹ CỰC ĐẠI    f″(c)=0 ⟹ không kết luận được</div>
+<h3>Ví dụ có lời giải · Giải từng bước (phân tích đầy đủ)</h3>
+<div class="out"><b>Phân tích f(x) = x³ − 3x.</b><br>
+1) f′(x) = 3x² − 3 = 0 → x = −1, x = +1 (điểm tới hạn).<br>
+2) f″(x) = 6x. f″(−1) = −6 &lt; 0 → x=−1 là <b>CỰC ĐẠI</b>, f(−1)=2. f″(1)=6 &gt; 0 → x=1 là <b>CỰC TIỂU</b>, f(1)=−2.<br>
+3) f″=0 tại x=0 → <b>điểm uốn</b> (0,0); lõm xuống khi x&lt;0, lõm lên khi x&gt;0.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Khi kiểm tra đạo hàm cấp 2 thất bại.</b> Nếu f″(c)=0 thì bài kiểm tra không nói gì — quay về kiểm tra dấu của đạo hàm cấp 1. Ví dụ: f(x)=x⁴ có f′(0)=f″(0)=0, nhưng x=0 rõ ràng là cực tiểu (xác nhận bằng dấu của f′). Biết tin bài kiểm tra nào là một phần của tay nghề.</div>
 <div class="note-ct">Đây là bộ công cụ giải tích để phác thảo mọi đường cong: tìm chỗ tăng/giảm (f′), chỗ đỉnh/đáy (f′ = 0), và cách nó uốn (f″). Không cần học thuộc hình dạng đồ thị nào.</div>
 </div>
 `,
@@ -607,6 +671,12 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
 <div class="out"><b>Classic:</b> Of all rectangles with perimeter 20, which has the largest area?<br>Area A = x(10 − x) = 10x − x².  A′ = 10 − 2x = 0 → x = 5.<br>A″ = −2 &lt; 0 → maximum. The best rectangle is a <b>5 × 5 square</b>, area 25.</div>
 <h3>Limits at infinity → asymptotes</h3>
 <p>As covered in Chapter 1, lim<sub>x→∞</sub> f(x) describes the function&#39;s long-run behavior. If it approaches a constant L, the line y = L is a <strong>horizontal asymptote</strong> — the graph flattens toward it. This shapes the far ends of your curve sketch.</p>
+<h3>Formulas · Optimization recipe</h3>
+<div class="formula"><span class="lbl">Closed-interval method — max/min of f on [a, b]</span>1) find critical points (f′=0) inside (a,b)    2) evaluate f at those points AND at a, b    3) largest value = max, smallest = min</div>
+<h3>Ví dụ có lời giải · Worked examples</h3>
+<div class="out"><b>Example 1 — pen against a wall.</b> 100 m of fence makes three sides of a rectangle (a wall is the fourth). Let width x, length 100 − 2x. Area A = x(100 − 2x) = 100x − 2x².<br>A′ = 100 − 4x = 0 → x = 25. A″ = −4 &lt; 0 → maximum. Best pen: 25 × 50, area <b>1250 m²</b>.</div>
+<div class="out"><b>Example 2 — closed interval.</b> Max/min of f(x) = x³ − 3x on [0, 2]. Critical point in (0,2): x=1. Evaluate f(0)=0, f(1)=−2, f(2)=2 → <b>max = 2 at x=2</b> (an endpoint), <b>min = −2 at x=1</b>.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The Extreme Value Theorem.</b> A function continuous on a closed interval [a,b] is guaranteed to attain both a maximum and a minimum on it. That is why the closed-interval method always works — and why you must check the endpoints, not just where f′=0 (Example 2's maximum was at an endpoint, not a critical point).</div>
 <div class="callout ok">Optimization is where calculus earns its keep in engineering and economics: minimize cost, maximize strength, optimize a design. The recipe is always the same — model it, differentiate, set to zero, and verify it is the extremum you want.</div>
 </div>
 <div class="ml-vi">
@@ -621,6 +691,12 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
 <div class="out"><b>Kinh điển:</b> Trong mọi hình chữ nhật chu vi 20, cái nào có diện tích lớn nhất?<br>Diện tích A = x(10 − x) = 10x − x².  A′ = 10 − 2x = 0 → x = 5.<br>A″ = −2 &lt; 0 → cực đại. Hình chữ nhật tốt nhất là <b>hình vuông 5 × 5</b>, diện tích 25.</div>
 <h3>Giới hạn ở vô cực → tiệm cận</h3>
 <p>Như đã học ở Chương 1, lim<sub>x→∞</sub> f(x) mô tả hành vi dài hạn của hàm. Nếu nó tiến tới một hằng số L, đường y = L là một <strong>tiệm cận ngang (horizontal asymptote)</strong> — đồ thị dẹt dần về phía nó. Điều này định hình hai đầu xa của phác thảo đường cong.</p>
+<h3>Công thức · Quy trình tối ưu</h3>
+<div class="formula"><span class="lbl">Phương pháp khoảng đóng — tìm max/min của f trên [a, b]</span>1) tìm điểm tới hạn (f′=0) trong (a,b)    2) tính f tại các điểm đó VÀ tại a, b    3) giá trị lớn nhất = max, nhỏ nhất = min</div>
+<h3>Ví dụ có lời giải · Giải từng bước</h3>
+<div class="out"><b>Ví dụ 1 — chuồng dựa vào tường.</b> 100 m hàng rào làm ba cạnh của hình chữ nhật (tường là cạnh thứ tư). Gọi chiều rộng x, chiều dài 100 − 2x. Diện tích A = x(100 − 2x) = 100x − 2x².<br>A′ = 100 − 4x = 0 → x = 25. A″ = −4 &lt; 0 → cực đại. Chuồng tốt nhất: 25 × 50, diện tích <b>1250 m²</b>.</div>
+<div class="out"><b>Ví dụ 2 — khoảng đóng.</b> Tìm max/min của f(x) = x³ − 3x trên [0, 2]. Điểm tới hạn trong (0,2): x=1. Tính f(0)=0, f(1)=−2, f(2)=2 → <b>max = 2 tại x=2</b> (điểm đầu mút), <b>min = −2 tại x=1</b>.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Định lý giá trị cực trị (Extreme Value Theorem).</b> Một hàm liên tục trên khoảng đóng [a,b] chắc chắn đạt cả giá trị lớn nhất lẫn nhỏ nhất trên nó. Đó là lý do phương pháp khoảng đóng luôn đúng — và vì sao bạn phải kiểm điểm đầu mút, không chỉ chỗ f′=0 (cực đại ở Ví dụ 2 nằm ở đầu mút, không phải điểm tới hạn).</div>
 <div class="callout ok">Tối ưu là nơi giải tích chứng tỏ giá trị trong kỹ thuật và kinh tế: tối thiểu chi phí, tối đa độ bền, tối ưu thiết kế. Công thức luôn như nhau — mô hình hoá, lấy đạo hàm, đặt bằng 0, và xác nhận đó là cực trị bạn muốn.</div>
 </div>
 `,
@@ -733,6 +809,13 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
 <div class="out"><b>Formula:</b>  ∫ u dv = uv − ∫ v du</div>
 <p>Use it for products like x·eˣ or x·ln x, where one factor gets simpler when differentiated.</p>
 <div class="out"><b>Compute</b>  ∫ x·eˣ dx<br>Let u = x (→ du = dx), dv = eˣ dx (→ v = eˣ).<br>= x·eˣ − ∫ eˣ dx = <b>x·eˣ − eˣ + C</b></div>
+<h3>Formulas · The two techniques</h3>
+<div class="formula"><span class="lbl">Substitution</span>∫ f(g(x))·g′(x) dx = ∫ f(u) du,  u = g(x)    <span class="lbl">By parts</span>∫ u dv = uv − ∫ v du</div>
+<div class="formula"><span class="lbl">LIATE — pick u by this priority</span>L (log) → I (inverse trig) → A (algebraic / polynomial) → T (trig) → E (exponential)</div>
+<h3>Ví dụ có lời giải · More worked examples</h3>
+<div class="out"><b>Example 3 — a by-parts trick.</b> ∫ ln x dx. Take u = ln x (du = 1/x dx), dv = dx (v = x).<br>= x ln x − ∫ x·(1/x) dx = x ln x − ∫ 1 dx = <b>x ln x − x + C</b>.</div>
+<div class="out"><b>Example 4 — definite substitution (change the limits).</b> ∫<sub>0</sub><sup>1</sup> 2x(x²+1)³ dx. Let u = x²+1: when x=0, u=1; when x=1, u=2.<br>= ∫<sub>1</sub><sup>2</sup> u³ du = [u⁴/4]<sub>1</sub><sup>2</sup> = 16/4 − 1/4 = <b>15/4</b>.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Change the limits, don't back-substitute.</b> For a definite integral by substitution, convert the bounds to u (as in Example 4) rather than solving back in x — it is faster and avoids sign mistakes. This bookkeeping habit is what separates a clean exam solution from a messy one.</div>
 <div class="callout ok">Choosing well is the skill: for substitution, look for "an inner function whose derivative is also present"; for by parts, pick u to be the factor that <em>simplifies</em> when differentiated (often the polynomial or logarithm). Practice builds the instinct.</div>
 <div class="note-ct">This completes Part I. You can now find limits, differentiate to analyse change, and integrate to accumulate — the three pillars of single-variable calculus, and the exact tools Progress Test 1 checks.</div>
 </div>
@@ -747,6 +830,13 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
 <div class="out"><b>Công thức:</b>  ∫ u dv = uv − ∫ v du</div>
 <p>Dùng nó cho các tích như x·eˣ hoặc x·ln x, khi một thừa số trở nên đơn giản hơn lúc lấy đạo hàm.</p>
 <div class="out"><b>Tính</b>  ∫ x·eˣ dx<br>Đặt u = x (→ du = dx), dv = eˣ dx (→ v = eˣ).<br>= x·eˣ − ∫ eˣ dx = <b>x·eˣ − eˣ + C</b></div>
+<h3>Công thức · Hai kỹ thuật</h3>
+<div class="formula"><span class="lbl">Đổi biến</span>∫ f(g(x))·g′(x) dx = ∫ f(u) du,  u = g(x)    <span class="lbl">Từng phần</span>∫ u dv = uv − ∫ v du</div>
+<div class="formula"><span class="lbl">LIATE — chọn u theo thứ tự ưu tiên</span>L (log) → I (lượng giác ngược) → A (đại số / đa thức) → T (lượng giác) → E (mũ)</div>
+<h3>Ví dụ có lời giải · Thêm ví dụ giải</h3>
+<div class="out"><b>Ví dụ 3 — mẹo từng phần.</b> ∫ ln x dx. Đặt u = ln x (du = 1/x dx), dv = dx (v = x).<br>= x ln x − ∫ x·(1/x) dx = x ln x − ∫ 1 dx = <b>x ln x − x + C</b>.</div>
+<div class="out"><b>Ví dụ 4 — đổi biến tích phân xác định (đổi cận).</b> ∫<sub>0</sub><sup>1</sup> 2x(x²+1)³ dx. Đặt u = x²+1: khi x=0, u=1; khi x=1, u=2.<br>= ∫<sub>1</sub><sup>2</sup> u³ du = [u⁴/4]<sub>1</sub><sup>2</sup> = 16/4 − 1/4 = <b>15/4</b>.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đổi cận, đừng thay ngược.</b> Với tích phân xác định bằng đổi biến, hãy đổi luôn cận sang u (như Ví dụ 4) thay vì giải ngược lại theo x — nhanh hơn và tránh sai dấu. Thói quen "ghi sổ" này phân biệt một lời giải sạch với một lời giải rối trong phòng thi.</div>
 <div class="callout ok">Chọn khéo là kỹ năng: với đổi biến, tìm "một hàm trong mà đạo hàm của nó cũng có mặt"; với từng phần, chọn u là thừa số <em>đơn giản đi</em> khi lấy đạo hàm (thường là đa thức hoặc logarit). Luyện tập tạo bản năng.</div>
 <div class="note-ct">Đây là hết Phần I. Giờ bạn có thể tìm giới hạn, lấy đạo hàm để phân tích sự thay đổi, và tích phân để tích luỹ — ba trụ cột của giải tích một biến, và đúng các công cụ mà Progress Test 1 kiểm.</div>
 </div>
@@ -827,6 +917,14 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
   <div class="lz-step"><div class="lz-k">Eliminate</div><div class="lz-t">row operations</div><div class="lz-d">make zeros below the diagonal</div></div>
   <div class="lz-step"><div class="lz-k">Read off</div><div class="lz-t">back-substitute</div><div class="lz-d">the solution appears</div></div>
 </div>
+<h3>Formulas · Row operations &amp; solution count</h3>
+<div class="formula"><span class="lbl">The three elementary row operations</span>Rᵢ ↔ Rⱼ (swap)    Rᵢ → k·Rᵢ, k ≠ 0 (scale)    Rᵢ → Rᵢ + k·Rⱼ (combine)</div>
+<div class="formula"><span class="lbl">How many solutions? (read from echelon form)</span>every variable has a pivot → 1 unique solution    a free (pivot-less) variable → ∞ solutions    a row [0 … 0 | c], c ≠ 0 → NO solution</div>
+<h3>Ví dụ có lời giải · Worked example (solve it fully)</h3>
+<div class="out"><b>Solve</b> x + 2y = 5,  3x − y = 1.<br>
+Augmented [1 2 | 5 ; 3 −1 | 1]. Do R2 → R2 − 3R1: [0 −7 | −14].<br>
+−7y = −14 → y = 2. Back-substitute: x + 2(2) = 5 → x = 1. Solution: <b>(x, y) = (1, 2)</b>.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Rank decides everything (Rouché–Capelli).</b> The <em>rank</em> is the number of pivots. A system Ax = b is consistent iff rank(A) = rank([A|b]); it has a unique solution iff that rank also equals the number of unknowns, otherwise infinitely many. In numerical software, elimination is packaged as <b>LU decomposition</b> (A = L·U) so a factored matrix solves many right-hand sides fast — the industrial version of what you just did by hand.</div>
 <div class="note-ct">A system can have one solution, infinitely many (a free variable), or none (a contradiction row like [0 0 | 5]). Echelon form makes which case you are in obvious. This one algorithm underlies almost everything in linear algebra.</div>
 </div>
 <div class="ml-vi">
@@ -851,6 +949,14 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
   <div class="lz-step"><div class="lz-k">Khử</div><div class="lz-t">biến đổi hàng</div><div class="lz-d">tạo số 0 dưới đường chéo</div></div>
   <div class="lz-step"><div class="lz-k">Đọc</div><div class="lz-t">thế ngược</div><div class="lz-d">nghiệm hiện ra</div></div>
 </div>
+<h3>Công thức · Phép biến đổi hàng &amp; số nghiệm</h3>
+<div class="formula"><span class="lbl">Ba phép biến đổi hàng sơ cấp</span>Rᵢ ↔ Rⱼ (đổi chỗ)    Rᵢ → k·Rᵢ, k ≠ 0 (co giãn)    Rᵢ → Rᵢ + k·Rⱼ (cộng bội)</div>
+<div class="formula"><span class="lbl">Bao nhiêu nghiệm? (đọc từ dạng bậc thang)</span>mọi biến đều có trụ (pivot) → 1 nghiệm duy nhất    có biến tự do (không trụ) → ∞ nghiệm    một hàng [0 … 0 | c], c ≠ 0 → VÔ nghiệm</div>
+<h3>Ví dụ có lời giải · Giải trọn vẹn</h3>
+<div class="out"><b>Giải</b> x + 2y = 5,  3x − y = 1.<br>
+Ma trận bổ sung [1 2 | 5 ; 3 −1 | 1]. Làm R2 → R2 − 3R1: [0 −7 | −14].<br>
+−7y = −14 → y = 2. Thế ngược: x + 2(2) = 5 → x = 1. Nghiệm: <b>(x, y) = (1, 2)</b>.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hạng (rank) quyết định tất cả (Rouché–Capelli).</b> <em>Hạng</em> là số trụ (pivot). Hệ Ax = b có nghiệm khi và chỉ khi rank(A) = rank([A|b]); có nghiệm duy nhất khi hạng đó cũng bằng số ẩn, ngược lại vô số nghiệm. Trong phần mềm số, phép khử được đóng gói thành <b>phân rã LU</b> (A = L·U) để một ma trận đã phân rã giải nhanh nhiều vế phải — phiên bản công nghiệp của điều bạn vừa làm bằng tay.</div>
 <div class="note-ct">Một hệ có thể có một nghiệm, vô số nghiệm (một biến tự do), hoặc vô nghiệm (một hàng mâu thuẫn như [0 0 | 5]). Dạng bậc thang làm rõ bạn đang ở trường hợp nào. Một thuật toán này là nền cho gần như mọi thứ trong đại số tuyến tính.</div>
 </div>
 `,
@@ -900,6 +1006,16 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
 <div class="pitfall">Matrix multiplication is NOT commutative: A·B ≠ B·A in general. Order matters. And you can only multiply when the "inner" dimensions agree — an m×n can multiply an n×p, giving m×p.</div>
 <h3>Transpose</h3>
 <p>The <strong>transpose</strong> Aᵀ flips a matrix over its diagonal — rows become columns. [1 2; 3 4]ᵀ = [1 3; 2 4].</p>
+<h3>Formulas · Properties you can rely on</h3>
+<div class="formula"><span class="lbl">Matrix algebra rules</span>A + B = B + A    (AB)C = A(BC)    A(B + C) = AB + AC<br>AI = IA = A    (AB)ᵀ = BᵀAᵀ    <b>AB ≠ BA in general</b></div>
+<h3>Ví dụ có lời giải · Worked examples</h3>
+<div class="out"><b>Example 1 — non-square product (2×3 times 3×2 → 2×2).</b>
+<pre>[1 0 2]   [1 0]   [1·1+0·0+2·1   1·0+0·1+2·1]   [3 2]
+[0 1 3] · [0 1] = [0·1+1·0+3·1   0·0+1·1+3·1] = [3 4]
+          [1 1]</pre></div>
+<div class="out"><b>Example 2 — order matters (AB ≠ BA).</b> A = [1 1; 0 1], B = [1 0; 1 1].<br>
+AB = [2 1; 1 1], but BA = [1 1; 1 2]. Different — matrix multiplication is not commutative.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Multiplication is expensive.</b> Multiplying two n×n matrices the schoolbook way costs O(n³) scalar multiplications. Strassen's algorithm (1969) does it in about O(n^2.807) by cleverly reusing partial products — the first hint that "obvious" is not "optimal." This is why GPU/BLAS libraries exist: they make the O(n³) work fast enough to train neural networks.</div>
 <div class="note-ct">Matrix multiplication looks strange until you learn what it represents: <em>composing transformations</em> (next idea). Applying transformation B then A is the single matrix A·B — which is exactly why the order and the row-times-column rule are what they are.</div>
 </div>
 <div class="ml-vi">
@@ -919,6 +1035,16 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
 <div class="pitfall">Nhân ma trận KHÔNG giao hoán: A·B ≠ B·A nói chung. Thứ tự quan trọng. Và bạn chỉ nhân được khi các chiều "trong" khớp — một m×n nhân được n×p, cho m×p.</div>
 <h3>Chuyển vị (transpose)</h3>
 <p><strong>Chuyển vị</strong> Aᵀ lật ma trận qua đường chéo — hàng thành cột. [1 2; 3 4]ᵀ = [1 3; 2 4].</p>
+<h3>Công thức · Các tính chất tin dùng được</h3>
+<div class="formula"><span class="lbl">Quy tắc đại số ma trận</span>A + B = B + A    (AB)C = A(BC)    A(B + C) = AB + AC<br>AI = IA = A    (AB)ᵀ = BᵀAᵀ    <b>AB ≠ BA nói chung</b></div>
+<h3>Ví dụ có lời giải · Giải từng bước</h3>
+<div class="out"><b>Ví dụ 1 — tích không vuông (2×3 nhân 3×2 → 2×2).</b>
+<pre>[1 0 2]   [1 0]   [1·1+0·0+2·1   1·0+0·1+2·1]   [3 2]
+[0 1 3] · [0 1] = [0·1+1·0+3·1   0·0+1·1+3·1] = [3 4]
+          [1 1]</pre></div>
+<div class="out"><b>Ví dụ 2 — thứ tự quan trọng (AB ≠ BA).</b> A = [1 1; 0 1], B = [1 0; 1 1].<br>
+AB = [2 1; 1 1], nhưng BA = [1 1; 1 2]. Khác nhau — nhân ma trận không giao hoán.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Phép nhân rất tốn kém.</b> Nhân hai ma trận n×n theo cách sách giáo khoa tốn O(n³) phép nhân vô hướng. Thuật toán Strassen (1969) làm trong khoảng O(n^2.807) bằng cách tái sử dụng khéo các tích con — gợi ý đầu tiên rằng "hiển nhiên" chưa chắc "tối ưu." Đây là lý do các thư viện GPU/BLAS tồn tại: chúng làm khối lượng O(n³) đủ nhanh để huấn luyện mạng nơ-ron.</div>
 <div class="note-ct">Nhân ma trận trông lạ tới khi bạn học nó biểu diễn gì: <em>hợp thành các biến đổi</em> (ý kế tiếp). Áp biến đổi B rồi A là ma trận duy nhất A·B — đó chính là lý do thứ tự và quy tắc hàng-nhân-cột là như vậy.</div>
 </div>
 `,
@@ -967,6 +1093,14 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
 <p>The <strong>inverse</strong> A⁻¹ satisfies A·A⁻¹ = I (the identity matrix). For a 2×2:</p>
 <div class="out">A⁻¹ = (1/det A) · [d −b; −c a]  <small>(only if det A ≠ 0)</small></div>
 <p><strong>Cramer&#39;s rule</strong> solves a system using ratios of determinants — elegant for small systems, and a direct payoff of the determinant.</p>
+<h3>Formulas · Determinant &amp; inverse</h3>
+<div class="formula"><span class="lbl">Determinants</span>det[a b; c d] = ad − bc    <span class="lbl">3×3 cofactor expansion</span>det = a(ei − fh) − b(di − fg) + c(dh − eg)  for [a b c; d e f; g h i]</div>
+<div class="formula"><span class="lbl">2×2 inverse (if det ≠ 0)</span>[a b; c d]⁻¹ = (1/(ad − bc)) · [d −b; −c a]    <span class="lbl">Cramer (2×2)</span>x = det(Aₓ)/det(A),  y = det(Aᵧ)/det(A)</div>
+<h3>Ví dụ có lời giải · Worked examples</h3>
+<div class="out"><b>Example 1 — a 3×3 determinant.</b> det[2 0 1; 1 3 2; 1 0 1] = 2(3·1 − 2·0) − 0(…) + 1(1·0 − 3·1) = 2·3 + 1·(−3) = <b>3</b>.</div>
+<div class="out"><b>Example 2 — Cramer's rule.</b> Solve x + 2y = 5, 3x − y = 1. A = [1 2; 3 −1], det A = −7.<br>
+x = det[5 2; 1 −1]/(−7) = (−5−2)/(−7) = <b>1</b>.  y = det[1 5; 3 1]/(−7) = (1−15)/(−7) = <b>2</b>. (Matches Lesson 5.1.)</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Determinant identities that save work.</b> det(AB) = det(A)·det(B); det(Aᵀ) = det(A); swapping two rows flips the sign; adding a multiple of one row to another leaves det unchanged. These let you compute a big determinant by reducing to triangular form (then det = product of the diagonal) — far faster than cofactor expansion for large matrices.</div>
 <div class="note-ct">The determinant ties the whole chapter together: it decides invertibility, powers Cramer&#39;s rule, and measures how a transformation scales space. A zero determinant means the transformation squashes space into a lower dimension — information is lost, so it cannot be undone (no inverse).</div>
 </div>
 <div class="ml-vi">
@@ -984,6 +1118,14 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
 <p><strong>Nghịch đảo</strong> A⁻¹ thoả A·A⁻¹ = I (ma trận đơn vị). Với 2×2:</p>
 <div class="out">A⁻¹ = (1/det A) · [d −b; −c a]  <small>(chỉ khi det A ≠ 0)</small></div>
 <p><strong>Quy tắc Cramer</strong> giải một hệ bằng tỉ số các định thức — thanh lịch cho hệ nhỏ, và là ứng dụng trực tiếp của định thức.</p>
+<h3>Công thức · Định thức &amp; nghịch đảo</h3>
+<div class="formula"><span class="lbl">Định thức</span>det[a b; c d] = ad − bc    <span class="lbl">Khai triển cofactor 3×3</span>det = a(ei − fh) − b(di − fg) + c(dh − eg)  với [a b c; d e f; g h i]</div>
+<div class="formula"><span class="lbl">Nghịch đảo 2×2 (nếu det ≠ 0)</span>[a b; c d]⁻¹ = (1/(ad − bc)) · [d −b; −c a]    <span class="lbl">Cramer (2×2)</span>x = det(Aₓ)/det(A),  y = det(Aᵧ)/det(A)</div>
+<h3>Ví dụ có lời giải · Giải từng bước</h3>
+<div class="out"><b>Ví dụ 1 — định thức 3×3.</b> det[2 0 1; 1 3 2; 1 0 1] = 2(3·1 − 2·0) − 0(…) + 1(1·0 − 3·1) = 2·3 + 1·(−3) = <b>3</b>.</div>
+<div class="out"><b>Ví dụ 2 — quy tắc Cramer.</b> Giải x + 2y = 5, 3x − y = 1. A = [1 2; 3 −1], det A = −7.<br>
+x = det[5 2; 1 −1]/(−7) = (−5−2)/(−7) = <b>1</b>.  y = det[1 5; 3 1]/(−7) = (1−15)/(−7) = <b>2</b>. (Khớp Bài 5.1.)</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Các đẳng thức định thức giúp đỡ tay.</b> det(AB) = det(A)·det(B); det(Aᵀ) = det(A); đổi chỗ hai hàng làm đổi dấu; cộng bội một hàng vào hàng khác giữ nguyên det. Nhờ đó bạn tính một định thức lớn bằng cách đưa về dạng tam giác (khi đó det = tích đường chéo) — nhanh hơn nhiều so với khai triển cofactor cho ma trận lớn.</div>
 <div class="note-ct">Định thức buộc cả chương lại: nó quyết định tính khả nghịch, vận hành quy tắc Cramer, và đo cách một biến đổi co giãn không gian. Định thức bằng 0 nghĩa là biến đổi ép không gian xuống chiều thấp hơn — thông tin bị mất, nên không hoàn tác được (không có nghịch đảo).</div>
 </div>
 `,
@@ -1007,6 +1149,16 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
   <div class="lz-step"><div class="lz-k">Find v</div><div class="lz-t">(A − λI)v = 0</div><div class="lz-d">the eigenvectors</div></div>
   <div class="lz-step"><div class="lz-k">Assemble</div><div class="lz-t">A = P·D·P⁻¹</div><div class="lz-d">diagonalized</div></div>
 </div>
+<h3>Formulas · Eigen-toolkit</h3>
+<div class="formula"><span class="lbl">Characteristic equation</span>det(A − λI) = 0    <span class="lbl">Eigenvector for each λ</span>(A − λI)v = 0</div>
+<div class="formula"><span class="lbl">Fast checks (2×2)</span>λ₁ + λ₂ = trace(A) = a + d    λ₁ · λ₂ = det(A)</div>
+<h3>Ví dụ có lời giải · Worked example</h3>
+<div class="out"><b>Find the eigenvalues and eigenvectors of A = [2 1; 1 2].</b><br>
+det(A − λI) = det[2−λ 1; 1 2−λ] = (2−λ)² − 1 = 0 → 2−λ = ±1 → <b>λ = 3 or λ = 1</b>.<br>
+λ=3: (A−3I)v = [−1 1; 1 −1]v = 0 → v = (1, 1). λ=1: [1 1; 1 1]v = 0 → v = (1, −1).<br>
+Check: trace = 4 = 3+1 ✓, det = 3 = 3·1 ✓.</div>
+<div class="pitfall"><b>Trap:</b> an eigenvector is never the zero vector (v = 0 solves A·v = λ·v trivially for any λ and tells you nothing). And a real matrix can have complex eigenvalues — a pure rotation, for instance, has no real eigenvectors.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The Spectral Theorem.</b> If A is symmetric (A = Aᵀ), its eigenvalues are all real and its eigenvectors can be chosen orthogonal — so A = Q·D·Qᵀ with Q orthogonal. This is exactly what powers Principal Component Analysis (PCA): the covariance matrix is symmetric, and its orthogonal eigenvectors are the "principal directions" of the data.</div>
 <div class="callout ok">Eigenvalues are everywhere: Google&#39;s PageRank, principal component analysis in machine learning, vibration analysis in engineering, and quantum mechanics all rest on them. They reveal the "natural axes" along which a transformation acts simply.</div>
 </div>
 <div class="ml-vi">
@@ -1022,6 +1174,16 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
   <div class="lz-step"><div class="lz-k">Tìm v</div><div class="lz-t">(A − λI)v = 0</div><div class="lz-d">các vector riêng</div></div>
   <div class="lz-step"><div class="lz-k">Ghép</div><div class="lz-t">A = P·D·P⁻¹</div><div class="lz-d">đã chéo hoá</div></div>
 </div>
+<h3>Công thức · Bộ công cụ giá trị riêng</h3>
+<div class="formula"><span class="lbl">Phương trình đặc trưng</span>det(A − λI) = 0    <span class="lbl">Vector riêng cho mỗi λ</span>(A − λI)v = 0</div>
+<div class="formula"><span class="lbl">Kiểm nhanh (2×2)</span>λ₁ + λ₂ = trace(A) = a + d    λ₁ · λ₂ = det(A)</div>
+<h3>Ví dụ có lời giải · Giải từng bước</h3>
+<div class="out"><b>Tìm giá trị riêng và vector riêng của A = [2 1; 1 2].</b><br>
+det(A − λI) = det[2−λ 1; 1 2−λ] = (2−λ)² − 1 = 0 → 2−λ = ±1 → <b>λ = 3 hoặc λ = 1</b>.<br>
+λ=3: (A−3I)v = [−1 1; 1 −1]v = 0 → v = (1, 1). λ=1: [1 1; 1 1]v = 0 → v = (1, −1).<br>
+Kiểm: trace = 4 = 3+1 ✓, det = 3 = 3·1 ✓.</div>
+<div class="pitfall"><b>Bẫy:</b> vector riêng không bao giờ là vector không (v = 0 thoả A·v = λ·v tầm thường với mọi λ và không cho biết gì). Và một ma trận thực có thể có giá trị riêng phức — ví dụ một phép xoay thuần không có vector riêng thực.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Định lý phổ (Spectral Theorem).</b> Nếu A đối xứng (A = Aᵀ), mọi giá trị riêng của nó đều thực và các vector riêng chọn được trực giao — nên A = Q·D·Qᵀ với Q trực giao. Đây chính là thứ vận hành Phân tích thành phần chính (PCA): ma trận hiệp phương sai đối xứng, và các vector riêng trực giao của nó là các "hướng chính" của dữ liệu.</div>
 <div class="callout ok">Giá trị riêng ở khắp nơi: PageRank của Google, phân tích thành phần chính (PCA) trong machine learning, phân tích dao động trong kỹ thuật, và cơ học lượng tử đều dựa vào chúng. Chúng tiết lộ các "trục tự nhiên" mà dọc theo đó một biến đổi tác động một cách đơn giản.</div>
 </div>
 `,
@@ -1092,6 +1254,13 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
 <h3>Magnitude &amp; the dot product&#39;s meaning</h3>
 <div class="out"><b>Magnitude (length):</b>  |v| = √(v₁² + v₂² + …)  — e.g. |(3, 4)| = √(9+16) = 5</div>
 <p>The dot product connects to the <strong>angle</strong> between vectors: a·b = |a||b|cos θ. So a dot product of 0 means the vectors are <strong>perpendicular (orthogonal)</strong> — a fact used constantly in graphics and physics.</p>
+<h3>Formulas · Vector operations</h3>
+<div class="formula"><span class="lbl">Dot product &amp; length</span>a·b = a₁b₁ + a₂b₂ + a₃b₃    |a| = √(a·a)    <span class="lbl">Angle</span>cos θ = (a·b)/(|a||b|)</div>
+<div class="formula"><span class="lbl">Unit vector</span>â = a / |a|    <span class="lbl">Cross product (R³)</span>a × b = (a₂b₃ − a₃b₂,  a₃b₁ − a₁b₃,  a₁b₂ − a₂b₁)</div>
+<h3>Ví dụ có lời giải · Worked examples</h3>
+<div class="out"><b>Example 1 — angle between vectors.</b> a = (1, 0), b = (1, 1). cos θ = (1·1+0·1)/(1·√2) = 1/√2 → <b>θ = 45°</b>.</div>
+<div class="out"><b>Example 2 — cross product (a normal vector).</b> (1,0,0) × (0,1,0) = (0·0−0·1, 0·0−1·0, 1·1−0·0) = <b>(0, 0, 1)</b> — perpendicular to both, as expected.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Projection — the workhorse of graphics &amp; ML.</b> The projection of a onto b is proj_b(a) = ((a·b)/(b·b))·b — the "shadow" of a along b's direction. It underlies least-squares fitting, lighting in 3D engines, and Gram–Schmidt orthogonalization. The dot product you just learned is the one operation all of these are built on.</div>
 <div class="note-ct">Vectors are the bridge from numbers to geometry. A point on screen, the direction a character faces, an RGB color, or a data sample are all vectors — which is why linear algebra runs computer graphics, games and machine learning.</div>
 </div>
 <div class="ml-vi">
@@ -1107,6 +1276,13 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
 <h3>Độ lớn &amp; ý nghĩa tích vô hướng</h3>
 <div class="out"><b>Độ lớn (độ dài):</b>  |v| = √(v₁² + v₂² + …)  — vd |(3, 4)| = √(9+16) = 5</div>
 <p>Tích vô hướng liên hệ với <strong>góc</strong> giữa hai vector: a·b = |a||b|cos θ. Nên tích vô hướng bằng 0 nghĩa là hai vector <strong>vuông góc (trực giao)</strong> — một sự thật dùng liên tục trong đồ hoạ và vật lý.</p>
+<h3>Công thức · Các phép vector</h3>
+<div class="formula"><span class="lbl">Tích vô hướng &amp; độ dài</span>a·b = a₁b₁ + a₂b₂ + a₃b₃    |a| = √(a·a)    <span class="lbl">Góc</span>cos θ = (a·b)/(|a||b|)</div>
+<div class="formula"><span class="lbl">Vector đơn vị</span>â = a / |a|    <span class="lbl">Tích có hướng (R³)</span>a × b = (a₂b₃ − a₃b₂,  a₃b₁ − a₁b₃,  a₁b₂ − a₂b₁)</div>
+<h3>Ví dụ có lời giải · Giải từng bước</h3>
+<div class="out"><b>Ví dụ 1 — góc giữa hai vector.</b> a = (1, 0), b = (1, 1). cos θ = (1·1+0·1)/(1·√2) = 1/√2 → <b>θ = 45°</b>.</div>
+<div class="out"><b>Ví dụ 2 — tích có hướng (vector pháp tuyến).</b> (1,0,0) × (0,1,0) = (0·0−0·1, 0·0−1·0, 1·1−0·0) = <b>(0, 0, 1)</b> — vuông góc với cả hai, đúng như mong đợi.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Phép chiếu — con ngựa thồ của đồ hoạ &amp; ML.</b> Chiếu của a lên b là proj_b(a) = ((a·b)/(b·b))·b — "cái bóng" của a dọc theo hướng b. Nó là nền của khớp bình phương tối thiểu, chiếu sáng trong engine 3D, và trực giao hoá Gram–Schmidt. Tích vô hướng bạn vừa học là phép duy nhất mà tất cả những thứ này dựng trên.</div>
 <div class="note-ct">Vector là cầu nối từ số tới hình học. Một điểm trên màn hình, hướng nhân vật quay mặt, một màu RGB, hay một mẫu dữ liệu đều là vector — đó là lý do đại số tuyến tính vận hành đồ hoạ máy tính, game và machine learning.</div>
 </div>
 `,
@@ -1132,6 +1308,12 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
   </tbody>
 </table>
 <p>"Linear" means the transformation preserves straight lines and the origin: T(a + b) = T(a) + T(b) and T(k·v) = k·T(v). Composing transformations is just multiplying their matrices — which is <em>why</em> matrix multiplication is defined the way it is (Chapter 6).</p>
+<h3>Formulas · Building &amp; combining transformations</h3>
+<div class="formula"><span class="lbl">Columns are images of the basis</span>A = [ T(e₁) | T(e₂) ]  — column j is where the unit vector eⱼ lands<br><span class="lbl">Composition</span>"do B, then A" = the single matrix A·B  (right-to-left)</div>
+<h3>Ví dụ có lời giải · Worked examples</h3>
+<div class="out"><b>Example 1 — apply a rotation.</b> Rotate (2, 0) by 90° with R = [0 −1; 1 0]: R·(2,0) = (0·2 + (−1)·0, 1·2 + 0·0) = <b>(0, 2)</b>. The point swings up onto the y-axis.</div>
+<div class="out"><b>Example 2 — compose scale then rotate.</b> Scale by 2 (S = [2 0; 0 2]) then rotate 90° (R above). Combined = R·S = [0 −2; 2 0]. Apply to (1, 0): <b>(0, 2)</b> — scaled to length 2 and turned 90°.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Homogeneous coordinates — how translation sneaks in.</b> A pure matrix can rotate and scale but cannot <em>translate</em> (move the origin), because T(0) = 0 always. Graphics engines fix this by adding a dimension: a 2D point (x, y) becomes (x, y, 1), and a 3×3 matrix can then encode translation too. Every game and GPU pipeline uses this trick — the reason "model-view-projection" matrices are 4×4.</div>
 <div class="callout ok">Every time a game rotates a model, a photo app scales an image, or a neural network layer transforms data, it multiplies vectors by a matrix. This chapter is the mathematical heart of computer graphics and deep learning.</div>
 <a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fmathematics-for-engineering%2Flearn&reflabel=MAE101%20%E2%80%94%20Mathematics%20for%20Engineering#module-256" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -1154,6 +1336,12 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
   </tbody>
 </table>
 <p>"Tuyến tính" nghĩa là biến đổi giữ nguyên đường thẳng và gốc toạ độ: T(a + b) = T(a) + T(b) và T(k·v) = k·T(v). Hợp thành các biến đổi chính là nhân các ma trận của chúng — đó là <em>lý do</em> nhân ma trận được định nghĩa như vậy (Chương 6).</p>
+<h3>Công thức · Dựng &amp; kết hợp biến đổi</h3>
+<div class="formula"><span class="lbl">Các cột là ảnh của cơ sở</span>A = [ T(e₁) | T(e₂) ]  — cột j là nơi vector đơn vị eⱼ rơi tới<br><span class="lbl">Hợp thành</span>"làm B, rồi A" = ma trận duy nhất A·B  (phải sang trái)</div>
+<h3>Ví dụ có lời giải · Giải từng bước</h3>
+<div class="out"><b>Ví dụ 1 — áp một phép xoay.</b> Xoay (2, 0) đi 90° với R = [0 −1; 1 0]: R·(2,0) = (0·2 + (−1)·0, 1·2 + 0·0) = <b>(0, 2)</b>. Điểm đu lên trục y.</div>
+<div class="out"><b>Ví dụ 2 — hợp co giãn rồi xoay.</b> Co giãn 2 lần (S = [2 0; 0 2]) rồi xoay 90° (R ở trên). Kết hợp = R·S = [0 −2; 2 0]. Áp lên (1, 0): <b>(0, 2)</b> — được kéo dài tới độ dài 2 và xoay 90°.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Toạ độ thuần nhất (homogeneous) — cách phép tịnh tiến len vào.</b> Một ma trận thuần có thể xoay và co giãn nhưng không thể <em>tịnh tiến</em> (dời gốc), vì T(0) = 0 luôn đúng. Engine đồ hoạ khắc phục bằng cách thêm một chiều: điểm 2D (x, y) thành (x, y, 1), và một ma trận 3×3 khi đó mã hoá được cả tịnh tiến. Mọi game và pipeline GPU dùng mẹo này — lý do các ma trận "model-view-projection" là 4×4.</div>
 <div class="callout ok">Mỗi khi một game xoay một mô hình, một app ảnh co giãn tấm hình, hay một tầng mạng nơ-ron biến đổi dữ liệu, nó nhân vector với một ma trận. Chương này là trái tim toán học của đồ hoạ máy tính và deep learning.</div>
 <a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fmathematics-for-engineering%2Flearn&reflabel=MAE101%20%E2%80%94%20Mathematics%20for%20Engineering#module-256" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -1209,6 +1397,13 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
   <div class="lz-step"><div class="lz-k">Basis</div><div class="lz-t">just right</div><div class="lz-d">count = dimension</div></div>
 </div>
 <div class="out"><b>Example:</b>  (1, 0) and (0, 1) form a basis of R² — independent and spanning. So dim(R²) = 2. Any plane through the origin has dimension 2; a line has dimension 1.</div>
+<h3>Formulas · Independence &amp; dimension</h3>
+<div class="formula"><span class="lbl">Independence test (n vectors in Rⁿ)</span>put them as columns of a matrix A → independent ⟺ det(A) ≠ 0 ⟺ rank = n</div>
+<div class="formula"><span class="lbl">Dimension facts</span>dim(Rⁿ) = n    a basis of an n-dim space has exactly n vectors    any n independent vectors in Rⁿ form a basis</div>
+<h3>Ví dụ có lời giải · Worked examples</h3>
+<div class="out"><b>Example 1 — dependent.</b> (1, 2) and (2, 4): det[1 2; 2 4] = 4 − 4 = 0 → <b>dependent</b> (the second is 2× the first; they span only a line).</div>
+<div class="out"><b>Example 2 — independent basis.</b> (1, 0) and (1, 1): det[1 1; 0 1] = 1 ≠ 0 → <b>independent</b>, and being 2 independent vectors in R² they form a <b>basis</b>.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The Rank–Nullity Theorem.</b> For a matrix A with n columns: rank(A) + nullity(A) = n, where rank = dim of the column space (independent output directions) and nullity = dim of the null space (solutions of Ax = 0). It is the accounting identity behind every "how many free variables?" question in Chapter 5 — the deep link between solving systems and the structure of vector spaces.</div>
 <div class="note-ct">Dimension is the count of "independent directions" in a space. This is why R² is a plane (2 directions) and R³ is space (3 directions). Course complete: you now command both calculus (change) and linear algebra (structure) — the two mathematical languages of engineering.</div>
 </div>
 <div class="ml-vi">
@@ -1228,6 +1423,13 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
   <div class="lz-step"><div class="lz-k">Cơ sở</div><div class="lz-t">vừa đủ</div><div class="lz-d">số lượng = số chiều</div></div>
 </div>
 <div class="out"><b>Ví dụ:</b>  (1, 0) và (0, 1) tạo thành một cơ sở của R² — độc lập và span. Nên dim(R²) = 2. Mọi mặt phẳng qua gốc có số chiều 2; một đường thẳng có số chiều 1.</div>
+<h3>Công thức · Độc lập &amp; số chiều</h3>
+<div class="formula"><span class="lbl">Kiểm độc lập (n vector trong Rⁿ)</span>xếp chúng làm các cột của ma trận A → độc lập ⟺ det(A) ≠ 0 ⟺ hạng = n</div>
+<div class="formula"><span class="lbl">Sự thật về số chiều</span>dim(Rⁿ) = n    một cơ sở của không gian n chiều có đúng n vector    n vector độc lập bất kỳ trong Rⁿ tạo thành một cơ sở</div>
+<h3>Ví dụ có lời giải · Giải từng bước</h3>
+<div class="out"><b>Ví dụ 1 — phụ thuộc.</b> (1, 2) và (2, 4): det[1 2; 2 4] = 4 − 4 = 0 → <b>phụ thuộc</b> (cái thứ hai bằng 2× cái đầu; chúng chỉ span một đường thẳng).</div>
+<div class="out"><b>Ví dụ 2 — cơ sở độc lập.</b> (1, 0) và (1, 1): det[1 1; 0 1] = 1 ≠ 0 → <b>độc lập</b>, và là 2 vector độc lập trong R² nên chúng tạo thành một <b>cơ sở</b>.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Định lý Hạng–Số khuyết (Rank–Nullity).</b> Với ma trận A có n cột: rank(A) + nullity(A) = n, trong đó rank = số chiều không gian cột (số hướng đầu ra độc lập) và nullity = số chiều không gian nghiệm (nghiệm của Ax = 0). Đây là đẳng thức "kế toán" đứng sau mọi câu hỏi "bao nhiêu biến tự do?" ở Chương 5 — mối liên hệ sâu giữa giải hệ và cấu trúc của không gian vector.</div>
 <div class="note-ct">Số chiều là số "hướng độc lập" trong một không gian. Đó là lý do R² là mặt phẳng (2 hướng) và R³ là không gian (3 hướng). Hoàn thành môn: giờ bạn nắm cả giải tích (sự thay đổi) lẫn đại số tuyến tính (cấu trúc) — hai ngôn ngữ toán học của kỹ thuật.</div>
 </div>
 `,

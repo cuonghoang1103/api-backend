@@ -184,6 +184,14 @@ export default {
 → <b>きのう わたしは コーヒーを のみませんでした。</b><br>
 Notice the verb (holding tense &amp; negation) sits at the very end.</div>
 
+<h3>Formulas · The polite conjugation &amp; asking questions</h3>
+<div class="formula"><span class="lbl">One stem, four endings</span>[stem] + ます / ません / ました / ませんでした    たべ → たべます / たべません / たべました / たべませんでした</div>
+<div class="formula"><span class="lbl">Turn any statement into a question</span>add か to the end    たべますか。= "Do you eat?"    答え: はい、たべます。/ いいえ、たべません。</div>
+<h3>Ví dụ có lời giải · Q&amp;A worked example</h3>
+<div class="out"><b>Q:</b> まいにち にほんごを べんきょうしますか。 ("Do you study Japanese every day?")<br>
+<b>A (yes):</b> はい、べんきょうします。   <b>A (no):</b> いいえ、べんきょうしません。<br>
+Note: the answer simply reuses the verb in the matching form — there is no "do/does" helper like in English.</div>
+
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The three verb groups &amp; the dictionary form.</b> The ます-form is polite, but every verb also has a plain "dictionary form" (たべる, のむ) — the form you look up and the base for all advanced grammar. Verbs fall into three groups (る-verbs, う-verbs, and two irregulars する/くる) that determine how they conjugate. A1.2 focuses on ます, but knowing the dictionary form and the groups exists is what makes the て-form (Chapter 6) and all of A2 grammar click instead of feeling random.</div>
 <a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a12%2Flearn&reflabel=JPD123%20%E2%80%94%20Elementary%20Japanese%20A1.2" target="_blank" rel="noopener">
   <span class="lc-ico">📖</span>
@@ -210,6 +218,14 @@ Notice the verb (holding tense &amp; negation) sits at the very end.</div>
 1) Thời gian: きのう (hôm qua) · 2) Chủ đề: わたしは · 3) Tân ngữ: コーヒーを · 4) Động từ "uống" quá-khứ-phủ-định: のみませんでした<br>
 → <b>きのう わたしは コーヒーを のみませんでした。</b><br>
 Để ý động từ (mang thì &amp; phủ định) nằm ở tận cuối.</div>
+
+<h3>Công thức · Cách chia lịch sự &amp; đặt câu hỏi</h3>
+<div class="formula"><span class="lbl">Một gốc, bốn đuôi</span>[gốc] + ます / ません / ました / ませんでした    たべ → たべます / たべません / たべました / たべませんでした</div>
+<div class="formula"><span class="lbl">Biến mọi câu kể thành câu hỏi</span>thêm か vào cuối    たべますか。= "Bạn có ăn không?"    答え (trả lời): はい、たべます。/ いいえ、たべません。</div>
+<h3>Ví dụ có lời giải · Hỏi đáp</h3>
+<div class="out"><b>Hỏi:</b> まいにち にほんごを べんきょうしますか。 ("Bạn học tiếng Nhật mỗi ngày không?")<br>
+<b>Đáp (có):</b> はい、べんきょうします。   <b>Đáp (không):</b> いいえ、べんきょうしません。<br>
+Chú ý: câu trả lời chỉ dùng lại động từ ở thể tương ứng — không có trợ động từ "do/does" như tiếng Anh.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Ba nhóm động từ &amp; thể từ điển.</b> Thể ます là lịch sự, nhưng mọi động từ còn có một "thể từ điển" thể ngắn (たべる, のむ) — thể bạn tra từ điển và là gốc cho mọi ngữ pháp nâng cao. Động từ chia thành ba nhóm (động từ る, động từ う, và hai bất quy tắc する/くる) quyết định cách chia. A1.2 tập trung vào ます, nhưng biết thể từ điển và các nhóm tồn tại là điều làm thể て (Chương 6) và toàn bộ ngữ pháp A2 "thấm" thay vì thấy ngẫu nhiên.</div>
 <a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a12%2Flearn&reflabel=JPD123%20%E2%80%94%20Elementary%20Japanese%20A1.2" target="_blank" rel="noopener">
@@ -373,8 +389,8 @@ Notice the verb (holding tense &amp; negation) sits at the very end.</div>
 
     /* ══════════════════ CHƯƠNG 4 — MỜI RỦ & THỜI GIAN ══════════════════ */
     {
-      title: 'Chapter 4 — Invitations, suggestions & time|||Chương 4 — Mời rủ, đề xuất & thời gian',
-      description: 'Rủ bạn làm gì đó (～ませんか), đề xuất cùng làm (～ましょう), và nói giờ/ngày.',
+      title: 'Chapter 4 — Invitations, time & counting|||Chương 4 — Mời rủ, thời gian & đếm đồ vật',
+      description: 'Rủ bạn làm gì đó (～ませんか), đề xuất cùng làm (～ましょう), nói giờ/ngày đầy đủ, và trợ số đếm đồ vật (助数詞).',
       lessons: [
         {
           title: '4.1 — ～ませんか, ～ましょう & telling time|||4.1 — ～ませんか, ～ましょう & nói giờ',
@@ -415,6 +431,102 @@ B: いいですね。見<b>ましょう</b>。(Hay đấy. Cùng xem nào!)</div
 <p>Thời gian dùng に (Chương 2): số + じ (giờ), số + ふん/ぷん (phút). なんじ = mấy giờ. Thứ trong tuần kết thúc bằng ようび (げつようび = Thứ Hai). Ghép với động từ: 9<b>時に</b> はじまります (bắt đầu lúc 9 giờ).</p>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Thang lịch sự — vì sao ～ませんか nghe tử tế.</b> Tiếng Nhật mã hóa sự tôn trọng vào ngữ pháp. Một mệnh lệnh cộc lốc (食べろ! "Ăn đi!") là thô lỗ; một lời mời diễn đạt dưới dạng <em>câu hỏi phủ định</em> (食べませんか, nghĩa đen "bạn không ăn à?") thì mềm hơn vì cho người kia không gian từ chối mà không mất mặt. Sự gián tiếp này là trung tâm của phép lịch sự Nhật (keigo), bạn sẽ học đầy đủ sau — nhưng để ý bây giờ <em>vì sao</em> một câu hỏi phủ định nghe lịch sự làm cả ngôn ngữ có ý nghĩa "con người" hơn.</div>
+</div>
+`,
+        },
+        {
+          title: '4.2 — Counting things & telling the time in full|||4.2 — Đếm đồ vật & nói giờ đầy đủ',
+          slug: 'jpd123-dem-thoi-gian',
+          type: 'VIDEO',
+          description: 'Trợ số đếm (助数詞): つ chung, người 人, vật dẹt 枚, vật dài 本, sách 冊, cốc 杯; bảng giờ/phút đầy đủ (bất quy tắc よじ/しちじ/くじ + rendaku); mẫu hỏi đáp なんじ/なんぼん.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 4 · Lesson 4.2</span>
+<h2>Counting things — and the full clock</h2>
+<p class="lead">Japanese does not simply say "three books." It picks a <strong>counter word</strong> (助数詞) that matches the <em>shape or category</em> of the thing, and the sounds shift with rendaku. Together with the complete clock, this is the everyday numeracy A1.2 expects — and it is the single topic beginners most often skip and later regret.</p>
+
+<h3>The generic counter — つ (1–10)</h3>
+<p>When you do not know the specific counter, the native <b>つ</b> series works for most physical objects up to ten — a reliable fallback.</p>
+<div class="formula"><span class="lbl">ひとつ・ふたつ… (generic things)</span>1 ひとつ  2 ふたつ  3 みっつ  4 よっつ  5 いつつ<br>6 むっつ  7 ななつ  8 やっつ  9 ここのつ  10 とお</div>
+
+<h3>Specific counters (助数詞)</h3>
+<table>
+  <thead><tr><th>Counter</th><th>Used for</th><th>Irregular readings to memorise</th></tr></thead>
+  <tbody>
+    <tr><td><b>～人 (にん)</b></td><td>people</td><td>1 <b>ひとり</b>, 2 <b>ふたり</b>, then 3 さんにん, 4 よにん…</td></tr>
+    <tr><td><b>～枚 (まい)</b></td><td>flat things — paper, tickets, shirts</td><td>fully regular: いちまい, にまい, さんまい…</td></tr>
+    <tr><td><b>～本 (ほん)</b></td><td>long things — pens, bottles, umbrellas</td><td>1 <b>いっぽん</b>, 3 <b>さんぼん</b>, 6 <b>ろっぽん</b>, 8 <b>はっぽん</b></td></tr>
+    <tr><td><b>～冊 (さつ)</b></td><td>bound things — books, notebooks</td><td>1 <b>いっさつ</b>, 8 <b>はっさつ</b>, 10 じゅっさつ</td></tr>
+    <tr><td><b>～杯 (はい)</b></td><td>cupfuls — coffee, tea, bowls of rice</td><td>1 <b>いっぱい</b>, 3 <b>さんばい</b>, 6 <b>ろっぱい</b></td></tr>
+  </tbody>
+</table>
+<div class="formula"><span class="lbl">Counting-sentence pattern</span>[thing]を [number+counter] [verb]    りんごを みっつ ください = "please give me 3 apples"</div>
+
+<h3>Telling the time — every reading</h3>
+<p>Hours take ～じ, minutes take ～ふん/～ぷん. A few readings are irregular and must be memorised — they are the ones learners get wrong most.</p>
+<div class="formula"><span class="lbl">Irregular hours (時)</span>4時 <b>よじ</b>    7時 <b>しちじ</b>    9時 <b>くじ</b>    (all others regular: 1 いちじ, 2 にじ, 3 さんじ…)</div>
+<div class="formula"><span class="lbl">Minutes (分) — small-tsu &amp; rendaku</span>1 いっぷん  3 さんぷん  4 よんぷん  6 ろっぷん  8 はっぷん  10 じゅっぷん<br>(2 にふん, 5 ごふん, 7 ななふん stay plain · はん = "half past")</div>
+
+<h3>Ví dụ có lời giải · Worked examples (with Q&amp;A)</h3>
+<div class="out"><b>Q&amp;A — how many?</b><br>
+Q: ペンが なん<b>ぼん</b> ありますか。 ("How many pens are there?")<br>
+A: さん<b>ぼん</b> あります。 ("There are three.")  — 3 + 本 = さんぼん (rendaku).</div>
+<div class="out"><b>Q&amp;A — what time?</b><br>
+Q: いま なんじですか。 ("What time is it now?")  A: <b>よじ</b>はんです。 ("It is half past four.")<br>
+Q: なんじに はじまりますか。 ("What time does it start?")  A: <b>くじ じゅっぷん</b>に はじまります。 ("It starts at 9:10.")</div>
+
+<div class="pitfall"><b>Trap — the counter reshapes the number.</b> The number is not read the same before every counter: 3 alone is さん, but "3 bottles" is さん<b>ぼん</b> and "3 cups" is さん<b>ばい</b>. The 1 / 6 / 8 / 10 group especially triggers a small tsu (っ) and rendaku. No rule removes the memorising — only repetition does.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why does Japanese need so many counters?</b> Counters classify nouns by shape and category — a feature Japanese shares with Chinese and other Asian languages but not English. There are hundreds (～台 for machines, ～匹 for small animals, ～階 for floors), yet daily life runs on about a dozen. When stuck, the generic つ series (up to 9) is an accepted fallback for most objects — the one safety net worth memorising first.</div>
+<a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a12%2Flearn&reflabel=JPD123%20%E2%80%94%20Elementary%20Japanese%20A1.2" target="_blank" rel="noopener">
+  <span class="lc-ico">🔢</span>
+  <span class="lc-body"><span class="lc-title">Drill counters &amp; time</span><span class="lc-sub">Number &amp; counter vocabulary SRS on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 4 · Bài 4.2</span>
+<h2>Đếm đồ vật — và đồng hồ đầy đủ</h2>
+<p class="lead">Tiếng Nhật không chỉ nói "ba quyển sách." Nó chọn một <strong>trợ số đếm (助数詞)</strong> khớp với <em>hình dạng hoặc loại</em> của vật, và âm đọc đổi theo rendaku (biến âm). Cùng với đồng hồ đầy đủ, đây là kỹ năng số học đời thường mà A1.2 mong đợi — và là chủ đề người mới hay bỏ qua nhất rồi sau tiếc.</p>
+
+<h3>Trợ số chung — つ (1–10)</h3>
+<p>Khi chưa biết trợ số cụ thể, chuỗi bản ngữ <b>つ</b> dùng được cho hầu hết đồ vật tới mười — một cách dự phòng đáng tin.</p>
+<div class="formula"><span class="lbl">ひとつ・ふたつ… (vật chung)</span>1 ひとつ  2 ふたつ  3 みっつ  4 よっつ  5 いつつ<br>6 むっつ  7 ななつ  8 やっつ  9 ここのつ  10 とお</div>
+
+<h3>Trợ số cụ thể (助数詞)</h3>
+<table>
+  <thead><tr><th>Trợ số</th><th>Dùng cho</th><th>Âm bất quy tắc phải thuộc</th></tr></thead>
+  <tbody>
+    <tr><td><b>～人 (にん)</b></td><td>người</td><td>1 <b>ひとり</b>, 2 <b>ふたり</b>, rồi 3 さんにん, 4 よにん…</td></tr>
+    <tr><td><b>～枚 (まい)</b></td><td>vật dẹt — giấy, vé, áo</td><td>hoàn toàn đều: いちまい, にまい, さんまい…</td></tr>
+    <tr><td><b>～本 (ほん)</b></td><td>vật dài — bút, chai, ô</td><td>1 <b>いっぽん</b>, 3 <b>さんぼん</b>, 6 <b>ろっぽん</b>, 8 <b>はっぽん</b></td></tr>
+    <tr><td><b>～冊 (さつ)</b></td><td>vật đóng gáy — sách, vở</td><td>1 <b>いっさつ</b>, 8 <b>はっさつ</b>, 10 じゅっさつ</td></tr>
+    <tr><td><b>～杯 (はい)</b></td><td>cốc/chén — cà phê, trà, bát cơm</td><td>1 <b>いっぱい</b>, 3 <b>さんばい</b>, 6 <b>ろっぱい</b></td></tr>
+  </tbody>
+</table>
+<div class="formula"><span class="lbl">Mẫu câu đếm</span>[vật]を [số+trợ số] [động từ]    りんごを みっつ ください = "cho tôi 3 quả táo"</div>
+
+<h3>Nói giờ — mọi cách đọc</h3>
+<p>Giờ dùng ～じ, phút dùng ～ふん/～ぷん. Vài cách đọc bất quy tắc phải học thuộc — chúng là những chỗ người học sai nhiều nhất.</p>
+<div class="formula"><span class="lbl">Giờ bất quy tắc (時)</span>4時 <b>よじ</b>    7時 <b>しちじ</b>    9時 <b>くじ</b>    (còn lại đều: 1 いちじ, 2 にじ, 3 さんじ…)</div>
+<div class="formula"><span class="lbl">Phút (分) — tsu nhỏ &amp; rendaku</span>1 いっぷん  3 さんぷん  4 よんぷん  6 ろっぷん  8 はっぷん  10 じゅっぷん<br>(2 にふん, 5 ごふん, 7 ななふん giữ nguyên · はん = "rưỡi")</div>
+
+<h3>Ví dụ có lời giải · Giải từng bước (kèm hỏi đáp)</h3>
+<div class="out"><b>Hỏi đáp — bao nhiêu cái?</b><br>
+Hỏi: ペンが なん<b>ぼん</b> ありますか。 ("Có bao nhiêu cây bút?")<br>
+Đáp: さん<b>ぼん</b> あります。 ("Có ba cây.")  — 3 + 本 = さんぼん (biến âm).</div>
+<div class="out"><b>Hỏi đáp — mấy giờ?</b><br>
+Hỏi: いま なんじですか。 ("Bây giờ mấy giờ?")  Đáp: <b>よじ</b>はんです。 ("Bốn giờ rưỡi.")<br>
+Hỏi: なんじに はじまりますか。 ("Mấy giờ bắt đầu?")  Đáp: <b>くじ じゅっぷん</b>に はじまります。 ("Bắt đầu lúc 9 giờ 10.")</div>
+
+<div class="pitfall"><b>Bẫy — trợ số làm đổi âm của số.</b> Số không đọc giống nhau trước mọi trợ số: 3 đứng một mình là さん, nhưng "3 chai" là さん<b>ぼん</b> và "3 cốc" là さん<b>ばい</b>. Nhóm 1 / 6 / 8 / 10 đặc biệt gây tsu nhỏ (っ) và biến âm. Không luật nào bỏ được việc học thuộc — chỉ luyện lặp mới xong.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao tiếng Nhật cần nhiều trợ số đến vậy?</b> Trợ số phân loại danh từ theo hình dạng và loại — đặc điểm tiếng Nhật chia sẻ với tiếng Trung và nhiều ngôn ngữ châu Á nhưng tiếng Anh thì không. Có hàng trăm cái (～台 cho máy móc, ～匹 cho động vật nhỏ, ～階 cho tầng lầu), nhưng đời thường chạy bằng khoảng một tá. Khi bí, chuỗi つ chung (tới 9) là cách dự phòng được chấp nhận cho hầu hết đồ vật — cái lưới an toàn đầu tiên đáng thuộc.</div>
+<a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a12%2Flearn&reflabel=JPD123%20%E2%80%94%20Elementary%20Japanese%20A1.2" target="_blank" rel="noopener">
+  <span class="lc-ico">🔢</span>
+  <span class="lc-body"><span class="lc-title">Luyện trợ số &amp; giờ</span><span class="lc-sub">Từ vựng số &amp; trợ số SRS trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
 </div>
 `,
         },
@@ -608,6 +720,9 @@ B: いいですね。見<b>ましょう</b>。(Hay đấy. Cùng xem nào!)</div
               { question: '～ましょう means…|||～ましょう nghĩa là…', options: ['please do it|||hãy làm đi', "let's do it (together)|||cùng làm nào", 'do not do it|||đừng làm', 'did it|||đã làm'], correctIndex: 1, points: 1 },
               { question: 'To make a polite request ("please wait"), you use the て-form plus…|||Để nhờ vả lịch sự ("hãy đợi"), bạn dùng thể て cộng…', options: ['ます', 'ください', 'ません', 'でした'], correctIndex: 1, points: 1 },
               { question: 'The kanji 日 is read differently in 日本 vs alone because… (beyond-syllabus)|||Kanji 日 đọc khác trong 日本 so với đứng một mình vì… (ngoài giáo trình)', options: ['it is a typo|||đó là lỗi gõ', "kanji have on'yomi (compound) &amp; kun'yomi (alone) readings|||kanji có âm on (từ ghép) &amp; âm kun (đứng một mình)", 'it changes meaning entirely|||nó đổi nghĩa hoàn toàn', 'Japanese has no rules|||tiếng Nhật không có luật'], correctIndex: 1, points: 1 },
+              { question: 'The counter for long thin objects (pens, bottles) is…|||Trợ số cho vật dài mảnh (bút, chai) là…', options: ['～枚 (まい)', '～本 (ほん)', '～冊 (さつ)', '～杯 (はい)'], correctIndex: 1, points: 1 },
+              { question: 'Counting people, 2人 (two people) is read…|||Đếm người, 2人 (hai người) đọc là…', options: ['にじん', 'ふたり', 'ににん', 'ふたつ'], correctIndex: 1, points: 1 },
+              { question: '4時 (4:00) is read…|||4時 (4 giờ) đọc là…', options: ['よじ', 'よんじ', 'しじ', 'よっじ'], correctIndex: 0, points: 1 },
             ],
           },
         },

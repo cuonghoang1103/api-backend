@@ -754,7 +754,7 @@ export default function CourseDetailPage() {
                       className="w-full flex items-center justify-between p-4 bg-darkbg/50 hover:bg-darkbg transition-colors text-left"
                     >
                       <div>
-                        <h3 className="font-semibold text-text-primary">{section.title}</h3>
+                        <h3 className="font-semibold text-text-primary">{pickLang(section.title, locale)}</h3>
                         <p className="text-text-muted text-xs mt-1">
                           {section.lessonCount} lessons • {formatDuration(section.totalDurationSeconds)}
                         </p>
@@ -775,7 +775,7 @@ export default function CourseDetailPage() {
                                 {locked ? <Lock className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm text-text-primary truncate">{lesson.title}</p>
+                                <p className="text-sm text-text-primary truncate">{pickLang(lesson.title, locale)}</p>
                                 <div className="flex items-center gap-3 mt-0.5">
                                   <span className="text-text-muted text-xs">
                                     {formatDuration(lesson.videoDurationSeconds)}

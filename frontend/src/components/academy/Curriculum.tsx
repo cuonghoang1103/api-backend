@@ -81,7 +81,7 @@ function LessonItem({
           {index + 1}. {pickLang(lesson.title, locale)}
         </p>
         {lesson.description && (
-          <p className="text-xs text-text-muted mt-0.5 line-clamp-1">{lesson.description}</p>
+          <p className="text-xs text-text-muted mt-0.5 line-clamp-1">{pickLang(lesson.description, locale)}</p>
         )}
       </div>
       <div className="flex items-center gap-3 shrink-0">

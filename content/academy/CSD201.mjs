@@ -254,6 +254,7 @@ a[2] = 7;              <span class="tok-comment">// O(1) access</span>
     <tr><td>search (unsorted)</td><td>O(n)</td></tr>
   </tbody>
 </table>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Amortized analysis of array doubling.</b> The single O(n) resize when a dynamic array grows is paid off by the many O(1) appends around it, so the average cost per append stays O(1) — this is amortized, not worst-case, time. Doubling the capacity (rather than adding a fixed amount) is precisely what makes the total work for n appends a geometric series that sums to O(n). <em>Textbooks state "amortised O(1)" but rarely prove why doubling, not fixed growth, is what guarantees it.</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-503" target="_blank" rel="noopener">
   <span class="lc-ico">🧱</span>
   <span class="lc-body"><span class="lc-title">Practise: Linear Data Structures</span><span class="lc-sub">Arrays, dynamic arrays and their trade-offs.</span></span>
@@ -277,6 +278,7 @@ a[2] = 7;              <span class="tok-comment">// truy cập O(1)</span>
     <tr><td>tìm (chưa sắp)</td><td>O(n)</td></tr>
   </tbody>
 </table>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Phân tích khấu hao khi mảng nhân đôi.</b> Một lần resize O(n) khi mảng động lớn lên được "trả góp" bởi rất nhiều lần append O(1) xung quanh, nên chi phí trung bình mỗi append vẫn là O(1) — đây là thời gian khấu hao, không phải xấu nhất. Nhân đôi dung lượng (thay vì cộng thêm một lượng cố định) chính là điều khiến tổng công việc cho n lần append là một chuỗi hình học cộng lại thành O(n). <em>Giáo trình nói "khấu hao O(1)" nhưng hiếm khi chứng minh vì sao phải nhân đôi chứ không phải tăng cố định.</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-503" target="_blank" rel="noopener">
   <span class="lc-ico">🧱</span>
   <span class="lc-body"><span class="lc-title">Luyện: Linear Data Structures</span><span class="lc-sub">Mảng, mảng động và các đánh đổi.</span></span>
@@ -315,6 +317,7 @@ newNode.next = p.next;  p.next = newNode;   <span class="tok-comment">// O(1)</s
   </tbody>
 </table>
 <div class="pitfall"><b>Trap:</b> when deleting, fix the neighbour pointers <em>before</em> losing the reference, and handle the head/tail edge cases. A dropped pointer means a lost list.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Skip lists — a linked list that searches in O(log n).</b> By stacking several linked lists with express lanes that skip over many nodes, a skip list reaches any element in expected O(log n) instead of O(n), using randomised levels rather than tree rotations. It delivers balanced-tree performance with far simpler code, which is why databases like Redis use it for sorted sets. <em>The chapter stops at O(n) list traversal; the probabilistic O(log n) upgrade is a graduate-level idea.</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-505" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Practise: Linked Lists</span><span class="lc-sub">Build singly/doubly lists and their operations.</span></span>
@@ -345,6 +348,7 @@ newNode.next = p.next;  p.next = newNode;   <span class="tok-comment">// O(1)</s
   </tbody>
 </table>
 <div class="pitfall"><b>Bẫy:</b> khi xóa, sửa con trỏ hàng xóm <em>trước khi</em> mất tham chiếu, và xử lý ca biên head/tail. Rớt một con trỏ là mất cả danh sách.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Skip list — danh sách liên kết tìm kiếm trong O(log n).</b> Bằng cách xếp chồng nhiều danh sách liên kết với các "làn tốc hành" nhảy qua nhiều nút, skip list tới được phần tử bất kỳ trong kỳ vọng O(log n) thay vì O(n), dùng tầng ngẫu nhiên chứ không phải phép xoay cây. Nó cho hiệu năng như cây cân bằng nhưng code đơn giản hơn nhiều, nên các CSDL như Redis dùng nó cho sorted set. <em>Chương này dừng ở duyệt danh sách O(n); bản nâng cấp xác suất O(log n) là ý tưởng nâng cao.</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-505" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Luyện: Linked Lists</span><span class="lc-sub">Xây danh sách đơn/đôi và các thao tác.</span></span>
@@ -394,6 +398,7 @@ newNode.next = p.next;  p.next = newNode;   <span class="tok-comment">// O(1)</s
 <pre><span class="tok-type">Deque</span>&lt;<span class="tok-type">Integer</span>&gt; stack = <span class="tok-keyword">new</span> <span class="tok-function">ArrayDeque</span>&lt;&gt;();
 stack.<span class="tok-function">push</span>(1); stack.<span class="tok-function">push</span>(2);
 stack.<span class="tok-function">pop</span>();     <span class="tok-comment">// → 2 (last in, first out)</span></pre>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Ring buffers — why a queue must not shift.</b> Implementing a queue on a plain array by shifting every element on dequeue is O(n); real systems use a circular (ring) buffer with head and tail indices that wrap around with modulo, keeping enqueue and dequeue at true O(1). This is how OS I/O buffers and bounded producer–consumer queues are built. <em>The syllabus states queue ops are O(1) but leaves out the wrap-around trick that actually delivers it on an array.</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-503" target="_blank" rel="noopener">
   <span class="lc-ico">📚</span>
   <span class="lc-body"><span class="lc-title">Practise: stacks, queues & deques</span><span class="lc-sub">Linear Data Structures module.</span></span>
@@ -412,6 +417,7 @@ stack.<span class="tok-function">pop</span>();     <span class="tok-comment">// 
 <pre><span class="tok-type">Deque</span>&lt;<span class="tok-type">Integer</span>&gt; stack = <span class="tok-keyword">new</span> <span class="tok-function">ArrayDeque</span>&lt;&gt;();
 stack.<span class="tok-function">push</span>(1); stack.<span class="tok-function">push</span>(2);
 stack.<span class="tok-function">pop</span>();     <span class="tok-comment">// → 2 (vào sau, ra trước)</span></pre>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Bộ đệm vòng (ring buffer) — vì sao hàng đợi không được dời.</b> Cài hàng đợi trên mảng thường bằng cách dời mọi phần tử khi dequeue là O(n); hệ thống thực dùng bộ đệm vòng với chỉ số head và tail quay vòng bằng phép chia lấy dư, giữ enqueue và dequeue thật sự O(1). Đây là cách xây bộ đệm I/O của hệ điều hành và hàng đợi sản xuất–tiêu thụ có giới hạn. <em>Giáo trình nói thao tác hàng đợi là O(1) nhưng bỏ qua mẹo quay vòng thực sự tạo ra điều đó trên mảng.</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-503" target="_blank" rel="noopener">
   <span class="lc-ico">📚</span>
   <span class="lc-body"><span class="lc-title">Luyện: ngăn xếp, hàng đợi & deque</span><span class="lc-sub">Module Linear Data Structures.</span></span>
@@ -435,6 +441,7 @@ stack.<span class="tok-function">pop</span>();     <span class="tok-comment">// 
 pq.<span class="tok-function">add</span>(5); pq.<span class="tok-function">add</span>(1); pq.<span class="tok-function">add</span>(3);
 pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 1 (smallest first)</span></pre>
 <p>Heaps power heap sort, Dijkstra's shortest path, and Huffman coding — you will meet all three later in this course.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Building a heap is O(n), not O(n log n).</b> Inserting n elements one by one costs O(n log n), but Floyd's bottom-up heapify — sift down from the last internal node up to the root — builds the whole heap in O(n). The proof relies on most nodes sitting near the leaves where sift-down is cheap, so the sum telescopes to linear. <em>Courses teach insert as O(log n) and stop; the surprising O(n) bulk-build is a favourite exam trick.</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-507" target="_blank" rel="noopener">
   <span class="lc-ico">⛰️</span>
   <span class="lc-body"><span class="lc-title">Practise: Heaps (with sorting & hashing)</span><span class="lc-sub">Advanced Sorting, Hashing &amp; Heaps module.</span></span>
@@ -450,6 +457,7 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
 pq.<span class="tok-function">add</span>(5); pq.<span class="tok-function">add</span>(1); pq.<span class="tok-function">add</span>(3);
 pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 1 (nhỏ nhất trước)</span></pre>
 <p>Heap là động cơ của heap sort, tìm đường ngắn nhất Dijkstra, và mã hóa Huffman — bạn sẽ gặp cả ba sau trong môn này.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Dựng một heap là O(n), không phải O(n log n).</b> Chèn từng phần tử một tốn O(n log n), nhưng heapify từ dưới lên của Floyd — sift-down từ nút trong cuối cùng lên tới gốc — dựng cả heap trong O(n). Chứng minh dựa vào việc hầu hết nút nằm gần lá nơi sift-down rẻ, nên tổng co lại thành tuyến tính. <em>Giáo trình dạy chèn là O(log n) rồi dừng; cách dựng hàng loạt O(n) bất ngờ là mẹo thi ưa thích.</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-507" target="_blank" rel="noopener">
   <span class="lc-ico">⛰️</span>
   <span class="lc-body"><span class="lc-title">Luyện: Heap (kèm sắp xếp & băm)</span><span class="lc-sub">Module Advanced Sorting, Hashing &amp; Heaps.</span></span>
@@ -482,6 +490,7 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
 }</pre>
 <div class="out">factorial(4) = 4·3·2·1 = 24. Each call waits on the stack until the one below returns.</div>
 <div class="pitfall"><b>Trap:</b> naive recursion can explode. Fibonacci as <span class="badge">fib(n-1)+fib(n-2)</span> recomputes the same values billions of times — O(2ⁿ). Add memoisation (cache results) to make it O(n). Also: a missing base case → <span class="badge">StackOverflowError</span>.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Tail-call optimisation — and why Java lacks it.</b> When a recursive call is the very last action, some compilers reuse the current stack frame instead of adding a new one, turning the recursion into a loop that never overflows the stack. Scheme, Scala and many functional languages guarantee this, but the JVM deliberately does not — so deep tail recursion in Java still throws StackOverflowError and must be rewritten as iteration. <em>The syllabus warns about stack overflow but not that the usual fix is a language-level optimisation Java chose to omit.</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-504" target="_blank" rel="noopener">
   <span class="lc-ico">🌀</span>
   <span class="lc-body"><span class="lc-title">Practise: Recursion fundamentals</span><span class="lc-sub">Searching, Sorting &amp; Recursion module.</span></span>
@@ -498,6 +507,7 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
 }</pre>
 <div class="out">factorial(4) = 4·3·2·1 = 24. Mỗi lời gọi chờ trên call stack tới khi lời gọi dưới trả về.</div>
 <div class="pitfall"><b>Bẫy:</b> đệ quy ngây thơ có thể bùng nổ. Fibonacci dạng <span class="badge">fib(n-1)+fib(n-2)</span> tính lại cùng giá trị hàng tỷ lần — O(2ⁿ). Thêm ghi nhớ (cache kết quả) để thành O(n). Ngoài ra: thiếu ca cơ sở → <span class="badge">StackOverflowError</span>.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Tối ưu đệ quy đuôi — và vì sao Java không có.</b> Khi lời gọi đệ quy là hành động cuối cùng, một số trình biên dịch tái dùng khung ngăn xếp hiện tại thay vì thêm khung mới, biến đệ quy thành vòng lặp không bao giờ tràn stack. Scheme, Scala và nhiều ngôn ngữ hàm đảm bảo điều này, nhưng JVM cố ý không — nên đệ quy đuôi sâu trong Java vẫn ném StackOverflowError và phải viết lại thành vòng lặp. <em>Giáo trình cảnh báo tràn stack nhưng không nói cách sửa thường là một tối ưu cấp ngôn ngữ mà Java chọn bỏ.</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-504" target="_blank" rel="noopener">
   <span class="lc-ico">🌀</span>
   <span class="lc-body"><span class="lc-title">Luyện: Đệ quy nền tảng</span><span class="lc-sub">Module Searching, Sorting &amp; Recursion.</span></span>
@@ -552,6 +562,7 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
     <span class="tok-function">visit</span>(n.data);
     <span class="tok-function">inorder</span>(n.right);
 }</pre>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Morris traversal — in-order with O(1) extra space.</b> Recursive or stack-based in-order traversal uses O(h) memory for the call stack; Morris traversal instead threads temporary links from each node to its in-order predecessor, walking the whole tree with no stack and no recursion, in O(1) auxiliary space. The links are created and undone during the walk, so the tree is left unchanged. <em>The three standard traversals are taught with recursion; achieving the same visit order in constant space is an advanced pointer technique.</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-506" target="_blank" rel="noopener">
   <span class="lc-ico">🌳</span>
   <span class="lc-body"><span class="lc-title">Practise: Trees & BST</span><span class="lc-sub">Traversals and tree operations.</span></span>
@@ -574,6 +585,7 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
     <span class="tok-function">visit</span>(n.data);
     <span class="tok-function">inorder</span>(n.right);
 }</pre>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Duyệt Morris — in-order với O(1) bộ nhớ phụ.</b> Duyệt in-order bằng đệ quy hay ngăn xếp tốn O(h) bộ nhớ cho call stack; duyệt Morris thay vào đó luồn các liên kết tạm từ mỗi nút tới nút liền trước theo in-order, đi khắp cây mà không cần stack lẫn đệ quy, chỉ O(1) bộ nhớ phụ. Các liên kết được tạo rồi gỡ trong lúc đi nên cây giữ nguyên. <em>Ba phép duyệt chuẩn được dạy bằng đệ quy; đạt cùng thứ tự thăm với bộ nhớ hằng số là kỹ thuật con trỏ nâng cao.</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-506" target="_blank" rel="noopener">
   <span class="lc-ico">🌳</span>
   <span class="lc-body"><span class="lc-title">Luyện: Cây & BST</span><span class="lc-sub">Phép duyệt và thao tác trên cây.</span></span>
@@ -594,6 +606,7 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
 <p class="lead">A <strong>BST</strong> keeps an invariant at every node: all values on the left are smaller, all on the right are larger. That lets search, insert and delete each halve the problem — O(log n) when the tree is balanced.</p>
 <div class="out"><b>Search 7:</b> start at the root; go left if 7 is smaller, right if larger; stop when found or you hit null. Like binary search, but on a tree.</div>
 <div class="pitfall"><b>Trap:</b> if you insert already-sorted data into a plain BST, it degenerates into a linked list — every operation becomes O(n). That is exactly why <strong>balanced</strong> trees (AVL, Red-Black) exist — covered in the advanced section.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Deleting a node with two children.</b> Removing a BST node that has both children can't simply unlink it; the standard fix replaces its value with its in-order successor (the smallest node in the right subtree), then deletes that successor, which by construction has at most one child. This preserves the BST invariant in O(h) time and is the trickiest of the three delete cases. <em>Insert and search are shown in class, but the two-child delete via successor is where most implementations get subtly wrong.</em></div>
 <a class="link-card codelab" href="/algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms" target="_blank" rel="noopener">
   <span class="lc-ico">📊</span>
   <span class="lc-body"><span class="lc-title">Visualize a BST</span><span class="lc-sub">Watch insert/search animate on the Algorithm Visualizer.</span></span>
@@ -606,6 +619,7 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
 <p class="lead"><strong>BST</strong> giữ một bất biến tại mọi nút: mọi giá trị bên trái nhỏ hơn, mọi giá trị bên phải lớn hơn. Điều đó cho phép tìm, chèn, xóa mỗi lần chia đôi bài toán — O(log n) khi cây cân bằng.</p>
 <div class="out"><b>Tìm 7:</b> bắt đầu từ gốc; đi trái nếu 7 nhỏ hơn, phải nếu lớn hơn; dừng khi thấy hoặc chạm null. Giống tìm nhị phân, nhưng trên cây.</div>
 <div class="pitfall"><b>Bẫy:</b> nếu chèn dữ liệu đã sắp vào BST thường, nó suy biến thành danh sách liên kết — mọi thao tác thành O(n). Đó chính là lý do cây <strong>cân bằng</strong> (AVL, Red-Black) tồn tại — có ở phần nâng cao.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Xóa một nút có hai con.</b> Xóa một nút BST có cả hai con thì không thể chỉ gỡ liên kết; cách chuẩn là thay giá trị của nó bằng nút liền sau theo in-order (nút nhỏ nhất trong cây con phải), rồi xóa nút liền sau đó — nút này theo cách xây dựng có tối đa một con. Điều này giữ bất biến BST trong O(h) và là ca khó nhất trong ba ca xóa. <em>Chèn và tìm được minh họa trên lớp, nhưng xóa nút hai con qua nút liền sau là chỗ hầu hết cài đặt sai tinh vi.</em></div>
 <a class="link-card codelab" href="/algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms" target="_blank" rel="noopener">
   <span class="lc-ico">📊</span>
   <span class="lc-body"><span class="lc-title">Trực quan hóa BST</span><span class="lc-sub">Xem chèn/tìm chạy trên Algorithm Visualizer.</span></span>
@@ -657,6 +671,7 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
   <div class="lz-layer"><b>BFS (breadth-first)</b> — a <span class="badge">queue</span>; explores level by level. Finds the shortest path in an unweighted graph.</div>
   <div class="lz-layer"><b>DFS (depth-first)</b> — a <span class="badge">stack</span> or recursion; goes deep first. Used for cycle detection, topological sort, connectivity.</div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Topological sort — ordering a DAG.</b> On a directed acyclic graph, a topological sort lists vertices so that every edge points forward — the basis of build systems, task schedulers and course prerequisites. Kahn's algorithm repeatedly removes vertices of in-degree zero using a queue in O(V+E); if any vertices remain, the graph had a cycle, giving a free cycle-detection test. <em>The syllabus teaches BFS/DFS as traversals; using DFS finish-order or in-degrees to produce a valid ordering is the next step.</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-508" target="_blank" rel="noopener">
   <span class="lc-ico">🕸️</span>
   <span class="lc-body"><span class="lc-title">Practise: Graph Algorithms</span><span class="lc-sub">Representation, BFS, DFS and more.</span></span>
@@ -678,6 +693,7 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
   <div class="lz-layer"><b>BFS (chiều rộng)</b> — một <span class="badge">hàng đợi</span>; khám phá theo từng tầng. Tìm đường ngắn nhất trong đồ thị không trọng số.</div>
   <div class="lz-layer"><b>DFS (chiều sâu)</b> — một <span class="badge">ngăn xếp</span> hoặc đệ quy; đi sâu trước. Dùng phát hiện chu trình, sắp xếp tô-pô, kiểm liên thông.</div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Sắp xếp tô-pô — thứ tự cho DAG.</b> Trên đồ thị có hướng không chu trình, sắp xếp tô-pô liệt kê các đỉnh sao cho mọi cạnh đều chỉ về phía trước — nền của hệ thống build, bộ lập lịch tác vụ và môn tiên quyết. Thuật toán Kahn liên tục loại các đỉnh có bậc vào bằng 0 bằng một hàng đợi trong O(V+E); nếu còn đỉnh sót thì đồ thị có chu trình, cho luôn một phép kiểm chu trình miễn phí. <em>Giáo trình dạy BFS/DFS như phép duyệt; dùng thứ tự kết thúc DFS hoặc bậc vào để tạo một thứ tự hợp lệ là bước tiếp theo.</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-508" target="_blank" rel="noopener">
   <span class="lc-ico">🕸️</span>
   <span class="lc-body"><span class="lc-title">Luyện: Graph Algorithms</span><span class="lc-sub">Biểu diễn, BFS, DFS và hơn nữa.</span></span>
@@ -712,6 +728,7 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
     <tr><td>Insertion</td><td>insert each item into the sorted left</td><td>fast on nearly-sorted data</td></tr>
   </tbody>
 </table>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Counting &amp; radix sort — beating O(n log n).</b> The O(n log n) barrier applies only to comparison sorts; when keys are small integers you can sort in O(n) without ever comparing two elements. Counting sort tallies how many of each value occur, and radix sort applies it digit by digit — this is how many databases sort integer keys and how bucketed sorts work. <em>Basic sorts are all comparison-based; the idea that you can sidestep comparisons entirely reframes what "fast" means.</em></div>
 <a class="link-card codelab" href="/algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms" target="_blank" rel="noopener">
   <span class="lc-ico">📊</span>
   <span class="lc-body"><span class="lc-title">Watch sorts animate</span><span class="lc-sub">Compare bubble/selection/insertion on the visualizer.</span></span>
@@ -730,6 +747,7 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
     <tr><td>Insertion</td><td>chèn mỗi phần tử vào phần trái đã sắp</td><td>nhanh với dữ liệu gần sắp</td></tr>
   </tbody>
 </table>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Counting &amp; radix sort — vượt O(n log n).</b> Rào cản O(n log n) chỉ áp dụng cho sắp xếp bằng so sánh; khi khóa là số nguyên nhỏ, bạn có thể sắp trong O(n) mà không hề so sánh hai phần tử. Counting sort đếm mỗi giá trị xuất hiện bao nhiêu lần, còn radix sort áp dụng nó theo từng chữ số — đây là cách nhiều CSDL sắp khóa số nguyên và cách các sort theo bucket hoạt động. <em>Các sort cơ bản đều dựa trên so sánh; ý tưởng có thể né hoàn toàn việc so sánh định nghĩa lại "nhanh" nghĩa là gì.</em></div>
 <a class="link-card codelab" href="/algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms" target="_blank" rel="noopener">
   <span class="lc-ico">📊</span>
   <span class="lc-body"><span class="lc-title">Xem sắp xếp chạy</span><span class="lc-sub">So sánh bubble/selection/insertion trên visualizer.</span></span>
@@ -753,6 +771,7 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
   <div class="lz-layer"><b>Merge sort</b> — split in half, sort each, merge. Guaranteed O(n log n), stable; needs O(n) extra memory.</div>
   <div class="lz-layer"><b>Heap sort</b> — build a heap, repeatedly extract the max. O(n log n), in-place; not stable.</div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Timsort — the sort Java and Python actually ship.</b> Real-world data is often partly ordered, so production libraries don't use textbook quicksort or mergesort: Timsort finds already-sorted "runs", extends them with insertion sort, then merges them with a stable, adaptive mergesort that approaches O(n) on nearly-sorted input. Java uses it for Arrays.sort on objects, and Python's sorted() is Timsort. <em>The course compares the three classic sorts, but the industrial answer is a clever hybrid of two of them.</em></div>
 <div class="note-ct">Rule of thumb: merge sort when you need stability or guaranteed time; quick sort when average speed and low memory matter; heap sort when you need O(1) extra space with a guaranteed bound.</div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-507" target="_blank" rel="noopener">
   <span class="lc-ico">⚡</span>
@@ -769,6 +788,7 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
   <div class="lz-layer"><b>Merge sort</b> — chia đôi, sắp mỗi nửa, trộn. Đảm bảo O(n log n), ổn định; cần O(n) bộ nhớ phụ.</div>
   <div class="lz-layer"><b>Heap sort</b> — dựng heap, liên tục lấy max. O(n log n), tại chỗ; không ổn định.</div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Timsort — thuật toán sort mà Java và Python thực sự dùng.</b> Dữ liệu thực thường đã sắp một phần, nên thư viện sản xuất không dùng quicksort hay mergesort sách giáo khoa: Timsort tìm các "run" đã sắp sẵn, mở rộng bằng insertion sort, rồi trộn chúng bằng mergesort ổn định và thích nghi, đạt gần O(n) với đầu vào gần sắp. Java dùng nó cho Arrays.sort trên đối tượng, và sorted() của Python là Timsort. <em>Môn học so sánh ba thuật toán sort kinh điển, nhưng lời giải công nghiệp là một bản lai khéo léo của hai trong số đó.</em></div>
 <div class="note-ct">Nguyên tắc: merge sort khi cần ổn định hoặc thời gian đảm bảo; quick sort khi cần tốc độ trung bình và ít bộ nhớ; heap sort khi cần O(1) bộ nhớ phụ với cận đảm bảo.</div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-507" target="_blank" rel="noopener">
   <span class="lc-ico">⚡</span>
@@ -817,6 +837,7 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
   <div class="lz-layer"><b>Open addressing</b> — on collision, probe for the next free slot (linear/quadratic/double hashing).</div>
 </div>
 <div class="pitfall"><b>Trap:</b> a good hash spreads keys evenly. A bad one (or a full table) piles everything into a few buckets, and O(1) collapses to O(n). Keep the load factor low and resize when needed.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Java 8 HashMaps treeify long buckets.</b> Since Java 8, a HashMap bucket that grows past 8 colliding entries converts its linked list into a red-black tree, so worst-case lookup degrades to O(log n) instead of O(n). This was a direct defence against hash-collision denial-of-service attacks, where an attacker crafts keys that all land in one bucket. <em>The syllabus says collisions degrade chaining to O(n); the standard library quietly caps that at O(log n).</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-507" target="_blank" rel="noopener">
   <span class="lc-ico">🔑</span>
   <span class="lc-body"><span class="lc-title">Practise: Hashing</span><span class="lc-sub">Hash functions and collision handling.</span></span>
@@ -833,6 +854,7 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
   <div class="lz-layer"><b>Open addressing (địa chỉ mở)</b> — khi va chạm, dò tới ô trống kế (linear/quadratic/double hashing).</div>
 </div>
 <div class="pitfall"><b>Bẫy:</b> hàm băm tốt rải khóa đều. Hàm tệ (hoặc bảng đầy) dồn mọi thứ vào vài bucket, và O(1) sụp về O(n). Giữ hệ số tải thấp và resize khi cần.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>HashMap của Java 8 "cây hóa" bucket dài.</b> Từ Java 8, một bucket của HashMap khi vượt quá 8 mục va chạm sẽ chuyển danh sách liên kết của nó thành cây đỏ-đen, nên tra cứu xấu nhất suy giảm về O(log n) thay vì O(n). Đây là phòng thủ trực tiếp trước tấn công từ chối dịch vụ bằng va chạm băm, khi kẻ tấn công tạo các khóa đều rơi vào một bucket. <em>Giáo trình nói va chạm làm chaining suy giảm về O(n); thư viện chuẩn lặng lẽ chặn ở O(log n).</em></div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-507" target="_blank" rel="noopener">
   <span class="lc-ico">🔑</span>
   <span class="lc-body"><span class="lc-title">Luyện: Hashing</span><span class="lc-sub">Hàm băm và xử lý va chạm.</span></span>
@@ -864,6 +886,7 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
   <div class="lz-layer"><b>LZW</b> — build a <span class="badge">dictionary</span> of repeated substrings on the fly; used in GIF and old ZIP.</div>
   <div class="lz-layer"><b>Run-length encoding (RLE)</b> — replace runs of the same symbol with a count: <span class="badge">AAAB → 3A1B</span>. Great for images with flat regions.</div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Huffman is optimal — but only among prefix codes.</b> Huffman coding provably produces the best possible per-symbol prefix code, yet it must spend a whole number of bits per symbol, so it can't beat Shannon's entropy limit when the ideal code length is a fraction of a bit. Arithmetic (and modern range/ANS) coding encodes an entire message as one number and gets arbitrarily close to the entropy bound, which is why it underlies formats like JPEG and modern compressors. <em>The course presents Huffman as "optimal" without the caveat that a different model beats it in practice.</em></div>
 <div class="note-ct">Notice how these reuse everything you learned: Huffman needs a heap and a tree; LZW needs a hash map. Data structures are the building blocks, not the destination.</div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-807" target="_blank" rel="noopener">
   <span class="lc-ico">🗜️</span>
@@ -880,6 +903,7 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
   <div class="lz-layer"><b>LZW</b> — dựng <span class="badge">từ điển</span> các chuỗi con lặp lại ngay khi chạy; dùng trong GIF và ZIP cũ.</div>
   <div class="lz-layer"><b>Run-length encoding (RLE)</b> — thay chuỗi ký tự lặp bằng số đếm: <span class="badge">AAAB → 3A1B</span>. Tốt cho ảnh có vùng phẳng.</div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Huffman là tối ưu — nhưng chỉ trong lớp mã tiền tố.</b> Mã Huffman chứng minh được là cho mã tiền tố tốt nhất trên mỗi ký hiệu, nhưng nó phải dùng số bit nguyên cho mỗi ký hiệu, nên không thể vượt giới hạn entropy của Shannon khi độ dài mã lý tưởng là một phần lẻ của bit. Mã số học (và range/ANS hiện đại) mã hóa cả một thông điệp thành một con số duy nhất và tiến sát tùy ý tới cận entropy, nên nó là nền của các định dạng như JPEG và các bộ nén hiện đại. <em>Môn học trình bày Huffman là "tối ưu" mà không kèm lưu ý rằng một mô hình khác thắng nó trong thực tế.</em></div>
 <div class="note-ct">Để ý các thuật toán này tái dùng mọi thứ bạn đã học: Huffman cần heap và cây; LZW cần hash map. Cấu trúc dữ liệu là viên gạch, không phải đích đến.</div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdata-structures-and-algorithms%2Flearn&reflabel=CSD201%20%E2%80%94%20Data%20Structures%20and%20Algorithms#module-807" target="_blank" rel="noopener">
   <span class="lc-ico">🗜️</span>

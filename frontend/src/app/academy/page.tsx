@@ -8,8 +8,11 @@ import { toast } from 'sonner';
 import AcademyBackground from '@/components/academy/AcademyBackground';
 import { SafeImage } from '@/components/ui/SafeImage';
 import { useSemesters, useCoursesBySemesters } from '@/hooks/useAcademyQueries';
+import { useTranslation } from '@/context/LocaleContext';
+import { pickLang } from '@/lib/utils';
 
 export default function AcademyPage() {
+  const { locale } = useTranslation();
   const { data: semesters = [], isLoading: loadingSemesters, error: semestersError } = useSemesters();
   const coursesQueries = useCoursesBySemesters(semesters);
 
@@ -148,14 +151,14 @@ export default function AcademyPage() {
                   >
                     <div className="w-16 h-10 rounded-lg overflow-hidden bg-darkbg shrink-0 flex items-center justify-center">
                       {course.thumbnailUrl ? (
-                        <SafeImage src={course.thumbnailUrl} alt={course.title} label={course.title} className="w-full h-full object-cover" />
+                        <SafeImage src={course.thumbnailUrl} alt={pickLang(course.title, locale)} label={pickLang(course.title, locale)} className="w-full h-full object-cover" />
                       ) : (
                         <PlayCircle className="w-5 h-5 text-white/60" />
                       )}
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold text-neon-violet truncate">{course.courseCode || 'COURSE'}</p>
-                      <p className="text-sm text-text-secondary truncate">{course.title}</p>
+                      <p className="text-sm text-text-secondary truncate">{pickLang(course.title, locale)}</p>
                     </div>
                     <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />
                   </Link>
@@ -192,7 +195,7 @@ export default function AcademyPage() {
                         {courses.map((course) => (
                           <Link key={course.id} href={`/courses/${course.slug}`} className="block px-4 py-3 hover:bg-neon-violet/10 transition">
                             <p className="text-sm font-medium text-text-primary">{course.courseCode || 'COURSE'}</p>
-                            <p className="text-sm text-text-secondary line-clamp-2">{course.title}</p>
+                            <p className="text-sm text-text-secondary line-clamp-2">{pickLang(course.title, locale)}</p>
                           </Link>
                         ))}
                       </div>
@@ -234,8 +237,8 @@ export default function AcademyPage() {
                             {course.thumbnailUrl ? (
                               <SafeImage
                                 src={course.thumbnailUrl}
-                                alt={course.title}
-                                label={course.title}
+                                alt={pickLang(course.title, locale)}
+                                label={pickLang(course.title, locale)}
                                 className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
                               />
                             ) : (
@@ -249,8 +252,8 @@ export default function AcademyPage() {
                               </span>
                               <span className="text-xs text-text-muted">{course.totalLessons || 0} lessons</span>
                             </div>
-                            <h4 className="text-lg font-semibold text-text-primary line-clamp-2">{course.title}</h4>
-                            <p className="text-sm text-text-secondary line-clamp-3">{course.shortDescription || course.description || 'Khóa học theo cấu trúc chương và bài giảng.'}</p>
+                            <h4 className="text-lg font-semibold text-text-primary line-clamp-2">{pickLang(course.title, locale)}</h4>
+                            <p className="text-sm text-text-secondary line-clamp-3">{pickLang(course.shortDescription || course.description, locale) || 'Khóa học theo cấu trúc chương và bài giảng.'}</p>
                             <div className="flex items-center justify-between text-sm text-text-muted pt-1">
                               <span className="flex items-center gap-1"><BookOpen className="w-4 h-4" /> {course.totalLessons || 0} bài</span>
                               <span className="text-neon-violet group-hover:text-neon-indigo">Vào học</span>

@@ -1128,6 +1128,14 @@ aside ::-webkit-scrollbar-thumb:hover {
  * so authored-lesson links rendered colourless. Defined once here. */
 :root { --neon-indigo: #6366f1; --neon-violet: #8b5cf6; }
 
+/* Thin, subtle scrollbar — for the learn-page sidebar & content panes so each
+ * scrolls independently without a bold/heavy bar. */
+.thin-scroll { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--text-muted) 45%, transparent) transparent; }
+.thin-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+.thin-scroll::-webkit-scrollbar-track { background: transparent; }
+.thin-scroll::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--text-muted) 38%, transparent); border-radius: 999px; }
+.thin-scroll::-webkit-scrollbar-thumb:hover { background: color-mix(in srgb, var(--text-muted) 60%, transparent); }
+
 /* --- section eyebrow + lead paragraph --- */
 .rich-content .eyebrow {
   display: inline-block;

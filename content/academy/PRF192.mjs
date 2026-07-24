@@ -8,7 +8,7 @@ export default {
   semester: { code: 'KY1', name: 'Kỳ 1', ordinal: 1 },
   course: {
     courseCode: 'PRF192',
-    title: 'PRF192 — Programming Fundamentals|||PRF192 — Cơ sở lập trình',
+    title: 'Programming Fundamentals',
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',

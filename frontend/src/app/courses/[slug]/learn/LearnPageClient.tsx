@@ -462,7 +462,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
     : 0;
 
   return (
-    <div className="min-h-screen bg-darkbg flex flex-col pt-16">
+    <div className="h-screen bg-darkbg flex flex-col pt-16 overflow-hidden">
       {/* Top bar */}
       <header className="h-14 bg-darkcard border-b border-darkborder/50 flex items-center justify-between px-4 shrink-0 z-20">
         <div className="flex items-center gap-3">
@@ -505,9 +505,9 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
         </div>
       </header>
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 min-h-0 overflow-hidden">
         {/* Sidebar */}
-        <aside className={`${sidebarOpen ? 'w-80' : 'w-0'} bg-darkcard border-r border-darkborder/50 overflow-y-auto transition-all shrink-0 flex-shrink-0`}>
+        <aside className={`${sidebarOpen ? 'w-80' : 'w-0'} bg-darkcard border-r border-darkborder/50 overflow-y-auto thin-scroll transition-all shrink-0 flex-shrink-0`}>
           <div className="p-4">
             <h2 className="font-semibold text-text-primary text-sm mb-4">Course Content</h2>
             <div className="space-y-1">
@@ -618,7 +618,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
         </aside>
 
         {/* Main content */}
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto thin-scroll">
           {currentLesson ? (
             <div className="max-w-4xl mx-auto px-4 py-8">
               {/* Course-completion banner — appears once every lesson is

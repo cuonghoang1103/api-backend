@@ -333,66 +333,354 @@ export default {
       ],
     },
 
-    /* ══════════════════ CHƯƠNG 3 — CHÀO HỎI & SỐ ĐẾM ══════════════════ */
+    /* ══════════════════ CHƯƠNG 3 — CHÀO HỎI, SỐ, TIỀN, NGÀY GIỜ ══════════════════ */
     {
-      title: 'Chapter 3 — Greetings, classroom & numbers|||Chương 3 — Chào hỏi, câu trong lớp & số đếm',
-      description: 'Câu chào hằng ngày, câu dùng trong lớp học, và cách đếm số.',
+      title: 'Chapter 3 — Greetings, numbers, money & dates|||Chương 3 — Chào hỏi, số, tiền & ngày giờ',
+      description: 'Câu chào & câu lớp học, hệ số đếm đầy đủ, tiền/giá cả, và ngày–giờ–tuổi kèm cách hỏi đáp.',
       lessons: [
         {
-          title: '3.1 — Everyday greetings & numbers|||3.1 — Chào hỏi hằng ngày & số đếm',
+          title: '3.1 — Greetings & classroom phrases|||3.1 — Chào hỏi & câu trong lớp',
           slug: 'jpd113-chao-hoi-so',
           type: 'VIDEO',
-          description: 'あいさつ (chào hỏi) theo thời điểm trong ngày, câu lớp học, và số 1–10.',
+          description: 'あいさつ theo thời điểm trong ngày và các câu dùng trong lớp học.',
           content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.1</span>
-<h2>Greetings, classroom phrases &amp; numbers</h2>
-<p class="lead">Your first usable Japanese. Greetings (あいさつ) change with the time of day and the situation — learn them as fixed phrases and use them from day one.</p>
+<h2>Greetings &amp; classroom phrases</h2>
+<p class="lead">Your first usable Japanese. Greetings (あいさつ) change with the time of day — learn them as fixed phrases and use them from day one.</p>
 <table>
   <thead><tr><th>Japanese</th><th>Reading</th><th>Meaning</th></tr></thead>
   <tbody>
     <tr><td>おはようございます</td><td>ohayō gozaimasu</td><td>Good morning</td></tr>
     <tr><td>こんにちは</td><td>konnichiwa</td><td>Hello / Good afternoon</td></tr>
     <tr><td>こんばんは</td><td>konbanwa</td><td>Good evening</td></tr>
+    <tr><td>さようなら</td><td>sayōnara</td><td>Goodbye</td></tr>
     <tr><td>ありがとうございます</td><td>arigatō gozaimasu</td><td>Thank you</td></tr>
     <tr><td>すみません</td><td>sumimasen</td><td>Excuse me / Sorry</td></tr>
     <tr><td>はじめまして</td><td>hajimemashite</td><td>Nice to meet you</td></tr>
+    <tr><td>どうぞよろしく</td><td>dōzo yoroshiku</td><td>Pleased to meet you</td></tr>
   </tbody>
 </table>
-<h3>Numbers 1–10</h3>
-<div class="diagram">1 いち · 2 に · 3 さん · 4 し/よん · 5 ご · 6 ろく · 7 しち/なな · 8 はち · 9 きゅう · 10 じゅう</div>
-<div class="note-ct">Numbers 4, 7 and 9 have two readings — pick the right one by context (yon and nana are common in counting). Numbers combine simply: 11 = じゅういち (10+1), 20 = にじゅう (2×10).</div>
+<h3>Classroom phrases (教室のことば)</h3>
+<table>
+  <thead><tr><th>Japanese</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td>わかりました / わかりません</td><td>I understand / I don't understand</td></tr>
+    <tr><td>もう一度おねがいします</td><td>Once more, please</td></tr>
+    <tr><td>ちょっとまってください</td><td>Please wait a moment</td></tr>
+    <tr><td>しつもんがあります</td><td>I have a question</td></tr>
+  </tbody>
+</table>
 <a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
   <span class="lc-ico">📚</span>
-  <span class="lc-body"><span class="lc-title">Drill greetings &amp; numbers</span><span class="lc-sub">Vocabulary SRS on My Language.</span></span>
+  <span class="lc-body"><span class="lc-title">Drill greetings</span><span class="lc-sub">Vocabulary SRS on My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.1</span>
-<h2>Chào hỏi, câu trong lớp &amp; số đếm</h2>
-<p class="lead">Tiếng Nhật dùng được đầu tiên của bạn. Chào hỏi (あいさつ) đổi theo thời điểm trong ngày và tình huống — học như câu cố định và dùng ngay từ ngày đầu.</p>
+<h2>Chào hỏi &amp; câu trong lớp</h2>
+<p class="lead">Tiếng Nhật dùng được đầu tiên. Chào hỏi (あいさつ) đổi theo thời điểm trong ngày — học như câu cố định và dùng ngay từ ngày đầu.</p>
 <table>
   <thead><tr><th>Tiếng Nhật</th><th>Cách đọc</th><th>Nghĩa</th></tr></thead>
   <tbody>
     <tr><td>おはようございます</td><td>ohayō gozaimasu</td><td>Chào buổi sáng</td></tr>
     <tr><td>こんにちは</td><td>konnichiwa</td><td>Xin chào / Chào buổi trưa</td></tr>
     <tr><td>こんばんは</td><td>konbanwa</td><td>Chào buổi tối</td></tr>
+    <tr><td>さようなら</td><td>sayōnara</td><td>Tạm biệt</td></tr>
     <tr><td>ありがとうございます</td><td>arigatō gozaimasu</td><td>Cảm ơn</td></tr>
     <tr><td>すみません</td><td>sumimasen</td><td>Xin lỗi / Làm ơn</td></tr>
     <tr><td>はじめまして</td><td>hajimemashite</td><td>Rất vui được gặp</td></tr>
+    <tr><td>どうぞよろしく</td><td>dōzo yoroshiku</td><td>Mong được giúp đỡ</td></tr>
   </tbody>
 </table>
-<h3>Số 1–10</h3>
-<div class="diagram">1 いち · 2 に · 3 さん · 4 し/よん · 5 ご · 6 ろく · 7 しち/なな · 8 はち · 9 きゅう · 10 じゅう</div>
-<div class="note-ct">Số 4, 7 và 9 có hai cách đọc — chọn đúng theo ngữ cảnh (yon và nana hay dùng khi đếm). Số ghép đơn giản: 11 = じゅういち (10+1), 20 = にじゅう (2×10).</div>
+<h3>Câu trong lớp học (教室のことば)</h3>
+<table>
+  <thead><tr><th>Tiếng Nhật</th><th>Nghĩa</th></tr></thead>
+  <tbody>
+    <tr><td>わかりました / わかりません</td><td>Em hiểu rồi / Em không hiểu</td></tr>
+    <tr><td>もう一度おねがいします</td><td>Xin nhắc lại một lần nữa</td></tr>
+    <tr><td>ちょっとまってください</td><td>Xin đợi một chút</td></tr>
+    <tr><td>しつもんがあります</td><td>Em có một câu hỏi</td></tr>
+  </tbody>
+</table>
 <a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
   <span class="lc-ico">📚</span>
-  <span class="lc-body"><span class="lc-title">Luyện chào hỏi &amp; số đếm</span><span class="lc-sub">Từ vựng SRS trên My Language.</span></span>
+  <span class="lc-body"><span class="lc-title">Luyện chào hỏi</span><span class="lc-sub">Từ vựng SRS trên My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
 </div>
 `,
+        },
+        {
+          title: '3.2 — The full number system (1 → 100,000,000)|||3.2 — Hệ số đếm đầy đủ (1 → 100 triệu)',
+          slug: 'jpd113-so-dem-day-du',
+          type: 'VIDEO',
+          description: 'Số 1-10, hàng chục/trăm/nghìn/vạn, các biến âm quan trọng, và cách đọc một số lớn bất kỳ.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 3 · Lesson 3.2</span>
+<h2>Counting in Japanese — the whole system</h2>
+<p class="lead">Japanese numbers are wonderfully regular: learn 1–10 and the "place words" (ten, hundred, thousand…) and you can build <em>any</em> number. But a few sound-changes (rendaku) trip up beginners, so learn them explicitly.</p>
+
+<h3>1 – 10 (the base)</h3>
+<table>
+  <thead><tr><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr></thead>
+  <tbody>
+    <tr><td>いち</td><td>に</td><td>さん</td><td>し/よん</td><td>ご</td><td>ろく</td><td>しち/なな</td><td>はち</td><td>きゅう/く</td><td>じゅう</td></tr>
+  </tbody>
+</table>
+
+<h3>Tens (10s), then teens &amp; beyond — just combine</h3>
+<div class="out"><b>Rule:</b> [digit] + じゅう(10). 20 = に+じゅう = にじゅう. 34 = さんじゅう + よん = さんじゅうよん. 99 = きゅうじゅうきゅう.<br>
+Teens: 11 = じゅういち (10+1), 15 = じゅうご, 18 = じゅうはち.</div>
+
+<h3>Place words — 100, 1,000, 10,000</h3>
+<table>
+  <thead><tr><th>Place</th><th>Word</th><th>Note</th></tr></thead>
+  <tbody>
+    <tr><td>100 (hundred)</td><td>ひゃく (hyaku)</td><td>百</td></tr>
+    <tr><td>1,000 (thousand)</td><td>せん (sen)</td><td>千</td></tr>
+    <tr><td>10,000 (ten-thousand)</td><td>まん (man)</td><td>万 — Japanese groups by 10,000!</td></tr>
+    <tr><td>100,000,000</td><td>おく (oku)</td><td>億 (hundred million)</td></tr>
+  </tbody>
+</table>
+
+<h3>The sound-changes you MUST memorise (rendaku)</h3>
+<div class="out"><b>Hundreds:</b> 300 = さん<b>び</b>ゃく (not さんひゃく) · 600 = ろ<b>っぴ</b>ゃく · 800 = は<b>っぴ</b>ゃく.<br>
+<b>Thousands:</b> 3,000 = さん<b>ぜ</b>ん (not さんせん) · 8,000 = は<b>っせ</b>ん.<br>
+Others are regular: 400 = よんひゃく, 500 = ごひゃく, 2,000 = にせん, 5,000 = ごせん.</div>
+
+<h3>Ví dụ có lời giải · Read a big number step by step</h3>
+<div class="out"><b>Read 25,300.</b> Japanese groups by 万 (10,000): 25,300 = 2万 + 5,300.<br>
+2万 = にまん · 5,300 = ごせん さんびゃく (5,000 + 300, with 300 = さんびゃく).<br>
+→ <b>にまん ごせん さんびゃく</b> (ni-man go-sen san-byaku).<br><br>
+<b>Read 1,000,000 (one million).</b> In Japanese that is 100 万 → <b>ひゃくまん</b> (hyaku-man). A million is "hundred ten-thousands" — this 万-grouping is the #1 thing Vietnamese learners must rewire.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why Japanese "breaks" every 4 digits, not 3.</b> Western numbers group by thousands (1,000 / 1,000,000). Japanese groups by <b>万 (10,000)</b>: 一万 (10⁴), 一億 (10⁸), 一兆 (10¹²). So 100万 = 1 million and 1億 = 100 million. When converting prices or populations, mentally re-comma the number every 4 digits from the right — do this and large numbers stop being scary.</div>
+<a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">🔢</span>
+  <span class="lc-body"><span class="lc-title">Drill numbers</span><span class="lc-sub">Vocabulary SRS on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 3 · Bài 3.2</span>
+<h2>Đếm số trong tiếng Nhật — cả hệ thống</h2>
+<p class="lead">Số tiếng Nhật đều đặn tuyệt vời: học 1–10 và các "từ hàng" (chục, trăm, nghìn…) là bạn dựng được <em>bất kỳ</em> số nào. Nhưng vài biến âm (rendaku) hay làm người mới vấp, nên học thẳng chúng.</p>
+
+<h3>1 – 10 (nền tảng)</h3>
+<table>
+  <thead><tr><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr></thead>
+  <tbody>
+    <tr><td>いち</td><td>に</td><td>さん</td><td>し/よん</td><td>ご</td><td>ろく</td><td>しち/なな</td><td>はち</td><td>きゅう/く</td><td>じゅう</td></tr>
+  </tbody>
+</table>
+
+<h3>Hàng chục, rồi 11-19 và hơn — chỉ việc ghép</h3>
+<div class="out"><b>Quy tắc:</b> [chữ số] + じゅう(10). 20 = に+じゅう = にじゅう. 34 = さんじゅう + よん = さんじゅうよん. 99 = きゅうじゅうきゅう.<br>
+Số 11-19: 11 = じゅういち (10+1), 15 = じゅうご, 18 = じゅうはち.</div>
+
+<h3>Từ hàng — 100, 1.000, 10.000</h3>
+<table>
+  <thead><tr><th>Hàng</th><th>Từ</th><th>Ghi chú</th></tr></thead>
+  <tbody>
+    <tr><td>100 (trăm)</td><td>ひゃく (hyaku)</td><td>百</td></tr>
+    <tr><td>1.000 (nghìn)</td><td>せん (sen)</td><td>千</td></tr>
+    <tr><td>10.000 (vạn)</td><td>まん (man)</td><td>万 — tiếng Nhật nhóm theo 10.000!</td></tr>
+    <tr><td>100.000.000</td><td>おく (oku)</td><td>億 (trăm triệu)</td></tr>
+  </tbody>
+</table>
+
+<h3>Các biến âm PHẢI thuộc (rendaku)</h3>
+<div class="out"><b>Hàng trăm:</b> 300 = さん<b>び</b>ゃく (không phải さんひゃく) · 600 = ろ<b>っぴ</b>ゃく · 800 = は<b>っぴ</b>ゃく.<br>
+<b>Hàng nghìn:</b> 3.000 = さん<b>ぜ</b>ん (không phải さんせん) · 8.000 = は<b>っせ</b>ん.<br>
+Còn lại đều: 400 = よんひゃく, 500 = ごひゃく, 2.000 = にせん, 5.000 = ごせん.</div>
+
+<h3>Ví dụ có lời giải · Đọc một số lớn từng bước</h3>
+<div class="out"><b>Đọc 25.300.</b> Tiếng Nhật nhóm theo 万 (10.000): 25.300 = 2万 + 5.300.<br>
+2万 = にまん · 5.300 = ごせん さんびゃく (5.000 + 300, với 300 = さんびゃく).<br>
+→ <b>にまん ごせん さんびゃく</b> (ni-man go-sen san-byaku).<br><br>
+<b>Đọc 1.000.000 (một triệu).</b> Trong tiếng Nhật đó là 100 万 → <b>ひゃくまん</b> (hyaku-man). Một triệu là "trăm vạn" — cách nhóm theo 万 này là điều số 1 người Việt phải "lập trình lại" trong đầu.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao tiếng Nhật "ngắt" mỗi 4 chữ số, không phải 3.</b> Số phương Tây nhóm theo nghìn (1,000 / 1,000,000). Tiếng Nhật nhóm theo <b>万 (10.000)</b>: 一万 (10⁴), 一億 (10⁸), 一兆 (10¹²). Nên 100万 = 1 triệu và 1億 = 100 triệu. Khi đổi giá tiền hay dân số, hãy nhẩm đặt lại dấu phẩy mỗi 4 chữ số từ phải sang — làm vậy thì số lớn thôi đáng sợ.</div>
+<a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">🔢</span>
+  <span class="lc-body"><span class="lc-title">Luyện số đếm</span><span class="lc-sub">Từ vựng SRS trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '3.3 — Money & prices (いくらですか)|||3.3 — Tiền & giá cả (いくらですか)',
+          slug: 'jpd113-tien-gia-ca',
+          type: 'VIDEO',
+          description: 'Đồng yên 円, đọc giá tiền, hỏi giá bằng いくらですか và trả lời — hội thoại mua sắm.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 3 · Lesson 3.3</span>
+<h2>Money — asking and saying prices</h2>
+<p class="lead">Now put those numbers to work. Japanese currency is the <strong>yen</strong>, written 円 and read <strong>えん (en)</strong>. Prices are just a number + 円.</p>
+
+<h3>Reading prices</h3>
+<div class="out">50円 = ごじゅうえん · 100円 = ひゃくえん · 500円 = ごひゃくえん · 1,000円 = せんえん · 3,800円 = さんぜんはっぴゃくえん · 10,000円 = いちまんえん.<br>
+(Note the rendaku from Lesson 3.2 carries over: 3,800 → さんぜん はっぴゃく.)</div>
+
+<h3>The shopping question &amp; answer</h3>
+<div class="out"><b>Q:</b> これは いくらですか。 = How much is this?  (いくら = how much)<br>
+<b>A:</b> 350円です。 = It's 350 yen.  (さんびゃく ごじゅう えん です)<br><br>
+<b>Q:</b> ぜんぶで いくらですか。 = How much altogether?<br>
+<b>A:</b> ぜんぶで 1,200円です。 = 1,200 yen in total.</div>
+
+<h3>Ví dụ có lời giải · A mini shopping dialogue</h3>
+<div class="out">Customer: すみません、この本は いくらですか。 (Excuse me, how much is this book?)<br>
+Clerk: 1,500円です。 (せんごひゃくえん です — 1,500 yen.)<br>
+Customer: じゃあ、これを ください。 (Then, this one please.)<br>
+Clerk: ありがとうございます。 (Thank you.)</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Yen ↔ đồng: a quick mental conversion.</b> 1 円 ≈ 170–180 đồng (rate varies). So a 500円 lunch ≈ 90,000 đồng; a 1万円 note ≈ 1.8 triệu đồng. Because Japanese counts in 万, a "1万円" (ichi-man-en) bill is the everyday large note — like the 500,000đ note. Getting a feel for these lets you actually shop, not just recite numbers.</div>
+<a class="link-card codelab" href="/language/ja/roleplay?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">🛒</span>
+  <span class="lc-body"><span class="lc-title">Practise a shopping roleplay</span><span class="lc-sub">Ask prices &amp; buy things on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 3 · Bài 3.3</span>
+<h2>Tiền — hỏi và nói giá</h2>
+<p class="lead">Giờ cho các con số đó vào việc. Tiền Nhật là <strong>yên</strong>, viết 円 và đọc <strong>えん (en)</strong>. Giá tiền chỉ là một số + 円.</p>
+
+<h3>Đọc giá tiền</h3>
+<div class="out">50円 = ごじゅうえん · 100円 = ひゃくえん · 500円 = ごひゃくえん · 1.000円 = せんえん · 3.800円 = さんぜんはっぴゃくえん · 10.000円 = いちまんえん.<br>
+(Biến âm ở Bài 3.2 áp dụng luôn: 3.800 → さんぜん はっぴゃく.)</div>
+
+<h3>Câu hỏi &amp; trả lời khi mua sắm</h3>
+<div class="out"><b>Hỏi:</b> これは いくらですか。 = Cái này bao nhiêu tiền?  (いくら = bao nhiêu)<br>
+<b>Đáp:</b> 350円です。 = 350 yên.  (さんびゃく ごじゅう えん です)<br><br>
+<b>Hỏi:</b> ぜんぶで いくらですか。 = Tất cả bao nhiêu?<br>
+<b>Đáp:</b> ぜんぶで 1.200円です。 = Tổng cộng 1.200 yên.</div>
+
+<h3>Ví dụ có lời giải · Hội thoại mua sắm nhỏ</h3>
+<div class="out">Khách: すみません、この本は いくらですか。 (Xin lỗi, quyển sách này bao nhiêu tiền?)<br>
+Nhân viên: 1.500円です。 (せんごひゃくえん です — 1.500 yên.)<br>
+Khách: じゃあ、これを ください。 (Vậy, cho tôi cái này.)<br>
+Nhân viên: ありがとうございます。 (Cảm ơn.)</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Yên ↔ đồng: quy đổi nhanh trong đầu.</b> 1 円 ≈ 170–180 đồng (tỷ giá thay đổi). Nên bữa trưa 500円 ≈ 90.000 đồng; tờ 1万円 ≈ 1,8 triệu đồng. Vì tiếng Nhật đếm theo 万, tờ "1万円" (ichi-man-en) là tờ tiền lớn hằng ngày — như tờ 500.000đ. Có cảm giác về các mức này giúp bạn thực sự mua sắm được, không chỉ đọc số.</div>
+<a class="link-card codelab" href="/language/ja/roleplay?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">🛒</span>
+  <span class="lc-body"><span class="lc-title">Luyện roleplay mua sắm</span><span class="lc-sub">Hỏi giá &amp; mua đồ trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '3.4 — Dates, time & age (with questions)|||3.4 — Ngày, giờ & tuổi (kèm cách hỏi)',
+          slug: 'jpd113-ngay-gio-tuoi',
+          type: 'VIDEO',
+          description: 'Năm/tháng/ngày (kèm các cách đọc bất quy tắc), giờ, tuổi, năm sinh — và toàn bộ mẫu câu hỏi–đáp.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 3 · Lesson 3.4</span>
+<h2>Telling dates, time &amp; age</h2>
+<p class="lead">This is where numbers become truly useful: saying <em>when</em>. Japanese dates read big-to-small: <b>year → month → day</b>. Watch out — several readings are irregular and must be memorised.</p>
+
+<h3>Year (年 = ねん) &amp; birth year</h3>
+<div class="out">Just a number + 年: 2024年 = にせんにじゅうよ<b>ねん</b>. (Note: 4年 = よ<b>ね</b>ん, an irregular reading.)<br>
+<b>Q:</b> 何年生まれですか。(なんねん うまれ ですか) = What year were you born?<br>
+<b>A:</b> 2005年生まれです。= I was born in 2005.</div>
+
+<h3>Months (月 = がつ) — 4, 7, 9 are irregular!</h3>
+<table>
+  <thead><tr><th>1月</th><th>2月</th><th>3月</th><th>4月</th><th>5月</th><th>6月</th><th>7月</th><th>8月</th><th>9月</th><th>10月</th><th>11月</th><th>12月</th></tr></thead>
+  <tbody>
+    <tr><td>いちがつ</td><td>にがつ</td><td>さんがつ</td><td><b>し</b>がつ</td><td>ごがつ</td><td>ろくがつ</td><td><b>しち</b>がつ</td><td>はちがつ</td><td><b>く</b>がつ</td><td>じゅうがつ</td><td>じゅういちがつ</td><td>じゅうにがつ</td></tr>
+  </tbody>
+</table>
+<div class="note-ct"><b>Memorise:</b> 4月 = しがつ (not よんがつ), 7月 = しちがつ (not なながつ), 9月 = くがつ (not きゅうがつ). These three are always irregular.</div>
+
+<h3>Days of the month (日 = にち) — days 1–10 are special</h3>
+<div class="out">1日 = <b>ついたち</b> · 2日 = <b>ふつか</b> · 3日 = <b>みっか</b> · 4日 = <b>よっか</b> · 5日 = <b>いつか</b> · 6日 = <b>むいか</b> · 7日 = <b>なのか</b> · 8日 = <b>ようか</b> · 9日 = <b>ここのか</b> · 10日 = <b>とおか</b>.<br>
+From 11 on it is mostly regular + にち: 11日 = じゅういち<b>にち</b>. Exception: 14日 = じゅうよっか, 20日 = <b>はつか</b>, 24日 = にじゅうよっか.</div>
+
+<h3>Time (時 = じ, 分 = ふん/ぷん) &amp; age (歳 = さい)</h3>
+<div class="out"><b>Time:</b> 3時 = さんじ (3 o'clock), 3時30分 = さんじ さんじゅっぷん. Q: いま何時ですか。(What time is it now?)<br>
+<b>Age:</b> 20歳 = はたち (irregular!), 18歳 = じゅうはっさい. Q: 何歳ですか / おいくつですか。(How old are you?)</div>
+
+<h3>Ví dụ có lời giải · Full self-introduction with dates</h3>
+<div class="out"><b>Q:</b> お誕生日は いつですか。(When is your birthday?)<br>
+<b>A:</b> 8月4日です。(はちがつ よっか です — August 4th.)<br><br>
+<b>Q:</b> 何歳ですか。(How old are you?)<br>
+<b>A:</b> 19歳です。(じゅうきゅうさい です — 19 years old.) 2005年生まれです。(Born in 2005.)</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The pattern behind the "special" day readings.</b> The odd day-of-month readings (ついたち, ふつか, みっか…) are ancient native-Japanese (kun) number words, the same roots as ひとつ・ふたつ・みっつ (one thing, two things…). They survive only in dates. Rather than memorise 31 random words, notice they echo the native counting 1–10 you meet again in Chapter counters — a hint that Japanese has two number systems living side by side.</div>
+<a class="link-card codelab" href="/language/ja/practice?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📅</span>
+  <span class="lc-body"><span class="lc-title">Practise dates &amp; asking questions</span><span class="lc-sub">Interactive drills on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 3 · Bài 3.4</span>
+<h2>Nói ngày, giờ &amp; tuổi</h2>
+<p class="lead">Đây là lúc số trở nên thật sự hữu ích: nói <em>khi nào</em>. Ngày tháng tiếng Nhật đọc từ lớn tới nhỏ: <b>năm → tháng → ngày</b>. Chú ý — vài cách đọc bất quy tắc, phải học thuộc.</p>
+
+<h3>Năm (年 = ねん) &amp; năm sinh</h3>
+<div class="out">Chỉ một số + 年: 2024年 = にせんにじゅうよ<b>ねん</b>. (Lưu ý: 4年 = よ<b>ね</b>ん, đọc bất quy tắc.)<br>
+<b>Hỏi:</b> 何年生まれですか。(なんねん うまれ ですか) = Bạn sinh năm nào?<br>
+<b>Đáp:</b> 2005年生まれです。= Tôi sinh năm 2005.</div>
+
+<h3>Tháng (月 = がつ) — tháng 4, 7, 9 bất quy tắc!</h3>
+<table>
+  <thead><tr><th>1月</th><th>2月</th><th>3月</th><th>4月</th><th>5月</th><th>6月</th><th>7月</th><th>8月</th><th>9月</th><th>10月</th><th>11月</th><th>12月</th></tr></thead>
+  <tbody>
+    <tr><td>いちがつ</td><td>にがつ</td><td>さんがつ</td><td><b>し</b>がつ</td><td>ごがつ</td><td>ろくがつ</td><td><b>しち</b>がつ</td><td>はちがつ</td><td><b>く</b>がつ</td><td>じゅうがつ</td><td>じゅういちがつ</td><td>じゅうにがつ</td></tr>
+  </tbody>
+</table>
+<div class="note-ct"><b>Học thuộc:</b> 4月 = しがつ (không phải よんがつ), 7月 = しちがつ (không phải なながつ), 9月 = くがつ (không phải きゅうがつ). Ba tháng này luôn bất quy tắc.</div>
+
+<h3>Ngày trong tháng (日 = にち) — ngày 1–10 đặc biệt</h3>
+<div class="out">1日 = <b>ついたち</b> · 2日 = <b>ふつか</b> · 3日 = <b>みっか</b> · 4日 = <b>よっか</b> · 5日 = <b>いつか</b> · 6日 = <b>むいか</b> · 7日 = <b>なのか</b> · 8日 = <b>ようか</b> · 9日 = <b>ここのか</b> · 10日 = <b>とおか</b>.<br>
+Từ 11 trở đi phần lớn đều + にち: 11日 = じゅういち<b>にち</b>. Ngoại lệ: 14日 = じゅうよっか, 20日 = <b>はつか</b>, 24日 = にじゅうよっか.</div>
+
+<h3>Giờ (時 = じ, 分 = ふん/ぷん) &amp; tuổi (歳 = さい)</h3>
+<div class="out"><b>Giờ:</b> 3時 = さんじ (3 giờ), 3時30分 = さんじ さんじゅっぷん. Hỏi: いま何時ですか。(Bây giờ mấy giờ?)<br>
+<b>Tuổi:</b> 20歳 = はたち (bất quy tắc!), 18歳 = じゅうはっさい. Hỏi: 何歳ですか / おいくつですか。(Bạn bao nhiêu tuổi?)</div>
+
+<h3>Ví dụ có lời giải · Tự giới thiệu đầy đủ kèm ngày tháng</h3>
+<div class="out"><b>Hỏi:</b> お誕生日は いつですか。(Sinh nhật bạn khi nào?)<br>
+<b>Đáp:</b> 8月4日です。(はちがつ よっか です — Ngày 4 tháng 8.)<br><br>
+<b>Hỏi:</b> 何歳ですか。(Bạn bao nhiêu tuổi?)<br>
+<b>Đáp:</b> 19歳です。(じゅうきゅうさい です — 19 tuổi.) 2005年生まれです。(Sinh năm 2005.)</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Mẫu hình đằng sau các cách đọc ngày "đặc biệt".</b> Các cách đọc ngày lạ (ついたち, ふつか, みっか…) là từ số thuần Nhật (kun) cổ, cùng gốc với ひとつ・ふたつ・みっつ (một cái, hai cái…). Chúng chỉ còn sót trong ngày tháng. Thay vì học thuộc 31 từ ngẫu nhiên, hãy để ý chúng vọng lại cách đếm thuần Nhật 1–10 mà bạn gặp lại ở các "trợ số từ" — dấu hiệu tiếng Nhật có hai hệ số sống song song.</div>
+<a class="link-card codelab" href="/language/ja/practice?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📅</span>
+  <span class="lc-body"><span class="lc-title">Luyện ngày tháng &amp; cách hỏi</span><span class="lc-sub">Bài tập tương tác trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: 'Quiz 2 — Numbers, money & dates|||Quiz 2 — Số, tiền & ngày tháng',
+          slug: 'jpd113-quiz-so',
+          type: 'QUIZ',
+          description: 'Kiểm tra hệ số đếm, tiền, ngày tháng và cách hỏi đáp.',
+          quiz: {
+            timeLimitSeconds: 360,
+            questions: [
+              { question: 'Japanese groups large numbers every… digits.|||Tiếng Nhật nhóm số lớn mỗi… chữ số.', options: ['3 (thousands)|||3 (nghìn)', '4 (万 / ten-thousand)|||4 (万 / vạn)', '2', '5'], correctIndex: 1, points: 1 },
+              { question: '300 is read…|||300 đọc là…', options: ['さんひゃく', 'さんびゃく', 'さんぴゃく', 'みっぴゃく'], correctIndex: 1, points: 1 },
+              { question: 'One million (1,000,000) in Japanese is…|||Một triệu (1.000.000) trong tiếng Nhật là…', options: ['いちまん (1万)', 'ひゃくまん (100万)', 'せんまん (1000万)', 'いちおく (1億)'], correctIndex: 1, points: 1 },
+              { question: 'To ask "How much is this?" you say…|||Để hỏi "Cái này bao nhiêu tiền?" bạn nói…', options: ['なんですか', 'これは いくらですか', 'なんじですか', 'だれですか'], correctIndex: 1, points: 1 },
+              { question: 'The month 4月 (April) is read…|||Tháng 4月 (tháng Tư) đọc là…', options: ['よんがつ', 'しがつ', 'よがつ', 'しちがつ'], correctIndex: 1, points: 1 },
+              { question: 'The 1st of the month (1日) is read…|||Ngày mùng 1 (1日) đọc là…', options: ['いちにち', 'ついたち', 'ひとつ', 'いっか'], correctIndex: 1, points: 1 },
+              { question: 'To ask someone their age you can say…|||Để hỏi tuổi ai đó bạn có thể nói…', options: ['何歳ですか / おいくつですか', 'いくらですか', 'なんじですか', 'いつですか'], correctIndex: 0, points: 1 },
+            ],
+          },
         },
       ],
     },

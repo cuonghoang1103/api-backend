@@ -1286,14 +1286,52 @@ aside ::-webkit-scrollbar-thumb:hover {
 .rich-content .out {
   background: rgba(127, 127, 127, 0.10);
   border: 1px dashed var(--border-color);
-  border-radius: 0 0 10px 10px;
-  margin-top: -0.6rem;
-  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  /* Standalone worked-examples/formula boxes get breathing room from the text
+     above. Only when the box is the OUTPUT directly under a <pre> code block do
+     we pull it up flush to read as one code+output unit (rule below). */
+  margin-top: 1.15rem;
+  margin-bottom: 1.15rem;
+  padding: 0.85rem 1.1rem;
   font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
+  line-height: 1.85;
   color: var(--text-secondary);
 }
+/* Output attached under a code block: flush, square top corners. */
+.rich-content pre + .out {
+  margin-top: -0.6rem;
+  border-radius: 0 0 10px 10px;
+}
 .rich-content .out b { color: #3fb27f; font-weight: 700; }
+
+/* Standalone mathematical formula — centered, spaced, professional.
+   Use for a single key formula that should stand out from the prose. */
+.rich-content .formula {
+  margin: 1.5rem 0;
+  padding: 1rem 1.2rem;
+  text-align: center;
+  font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  font-size: 1.02rem;
+  line-height: 2;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  background: rgba(99, 102, 241, 0.06);
+  border: 1px solid rgba(99, 102, 241, 0.22);
+  border-left: 3px solid var(--neon-indigo);
+  border-radius: 10px;
+  overflow-x: auto;
+}
+.rich-content .formula .lbl {
+  display: block;
+  font-family: var(--font-poppins), sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--neon-indigo);
+  margin-bottom: 0.35rem;
+}
+.rich-content .formula b { color: var(--text-primary); font-weight: 700; }
 
 /* --- bilingual: English mirror under Vietnamese --- */
 .rich-content .en {

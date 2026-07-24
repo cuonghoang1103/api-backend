@@ -347,6 +347,7 @@ export default {
   <li><strong>Sequential execution:</strong> instructions run one after another, unless a jump changes the order.</li>
   <li><strong>Data &amp; instructions share memory:</strong> both are just numbers — that is why a bug can accidentally overwrite code.</li>
 </ul>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The von Neumann bottleneck.</b> Because instructions and data share one memory bus, the CPU often stalls waiting on that single channel — the throughput limit John Backus named the "von Neumann bottleneck" in 1977. Real chips dodge it with a Harvard-style split: separate L1 instruction and data caches, so code and data can be read at the same time. <em>Intro presents the pure model; the bottleneck and Harvard variant are computer-architecture (CEA201) topics.</em></div>
 <div class="callout ok">Every phone, laptop and server you touch is a Von Neumann machine. When you "install an app", you are literally copying a program into memory/disk so the same hardware can now do a new thing.</div>
 <div class="pitfall">A common mix-up: the Von Neumann model is <em>logical</em>, not physical. The ALU and Control Unit together are what we package as the CPU chip; memory is the RAM. The model describes <em>roles</em>, not which plastic box each part sits in.</div>
 </div>
@@ -374,6 +375,7 @@ export default {
   <li><strong>Thực thi tuần tự:</strong> lệnh chạy lần lượt, trừ khi một lệnh nhảy đổi thứ tự.</li>
   <li><strong>Dữ liệu &amp; lệnh chung bộ nhớ:</strong> cả hai đều chỉ là số — vì thế một lỗi có thể vô tình ghi đè lên code.</li>
 </ul>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Nút thắt cổ chai Von Neumann.</b> Vì lệnh và dữ liệu dùng chung một bus bộ nhớ, CPU thường phải chờ trên kênh duy nhất đó — giới hạn thông lượng mà John Backus gọi là "von Neumann bottleneck" năm 1977. Chip thật né nó bằng kiểu Harvard: tách cache lệnh (L1i) và cache dữ liệu (L1d) để đọc cả hai cùng lúc. <em>Nhập môn chỉ dạy mô hình thuần; nút thắt và biến thể Harvard là chủ đề kiến trúc máy tính (CEA201).</em></div>
 <div class="callout ok">Mọi điện thoại, laptop và máy chủ bạn chạm vào đều là máy Von Neumann. Khi bạn "cài một app", bạn thực chất đang chép một chương trình vào bộ nhớ/đĩa để cùng phần cứng đó giờ làm được việc mới.</div>
 <div class="pitfall">Một nhầm lẫn phổ biến: mô hình Von Neumann là <em>logic</em>, không phải vật lý. ALU và Control Unit gộp lại là thứ ta đóng gói thành con chip CPU; bộ nhớ là RAM. Mô hình mô tả <em>vai trò</em>, không phải mỗi phần nằm trong hộp nhựa nào.</div>
 </div>
@@ -409,6 +411,7 @@ export default {
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Output devices</div><div class="lz-nsub">Screen, speaker, printer</div></div></div>
 </div>
 <p>Everything is wired together by a <strong>bus</strong> — a set of shared electrical lines carrying data, addresses and control signals between subsystems.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Moore’s Law and its end.</b> Gordon Moore observed in 1965 that the transistor count on a chip roughly doubles every ~2 years — the engine behind every generation jump. Around 2005 clock speeds hit a "power wall" and stopped rising, so gains shifted from faster cores to more cores: a 2004 CPU ran ~3 GHz on one core, while a 2024 chip is similar per-core but packs 8–16 cores. <em>The syllabus lists generations by technology, not the physics-and-economics law that actually drove them.</em></div>
 <div class="note-ct">Notice the two-layer memory story: RAM is fast but forgets when power is off; the disk is slow but remembers. Chapter 1.4 explains why we need both, and Chapter 5 (the OS) explains who juggles them.</div>
 </div>
 <div class="ml-vi">
@@ -435,6 +438,7 @@ export default {
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Thiết bị ra</div><div class="lz-nsub">Màn hình, loa, máy in</div></div></div>
 </div>
 <p>Tất cả được nối với nhau bằng <strong>bus</strong> — một bộ đường điện dùng chung mang dữ liệu, địa chỉ và tín hiệu điều khiển giữa các phân hệ.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Định luật Moore và điểm dừng của nó.</b> Năm 1965 Gordon Moore nhận xét số transistor trên chip xấp xỉ gấp đôi mỗi ~2 năm — động cơ đằng sau mỗi bước nhảy thế hệ. Khoảng 2005 xung nhịp chạm "bức tường công suất" và ngừng tăng, nên cải thiện chuyển từ nhân nhanh hơn sang nhiều nhân hơn: CPU 2004 chạy ~3 GHz một nhân, chip 2024 mỗi nhân tương đương nhưng có 8–16 nhân. <em>Giáo trình liệt kê các thế hệ theo công nghệ, không nói tới định luật vật lý–kinh tế đã thực sự thúc đẩy chúng.</em></div>
 <div class="note-ct">Để ý câu chuyện hai tầng bộ nhớ: RAM nhanh nhưng quên khi tắt điện; đĩa chậm nhưng nhớ. Bài 1.4 giải thích vì sao cần cả hai, và Chương 5 (hệ điều hành) giải thích ai là người điều phối chúng.</div>
 </div>
 `,
@@ -465,6 +469,7 @@ export default {
 <p>A special register, the <strong>Program Counter (PC)</strong>, always holds the address of the next instruction. After each fetch it steps forward — that is what makes execution "sequential". A jump instruction simply changes the PC.</p>
 <h3>What "3 GHz" really means</h3>
 <p>The CPU is driven by a <strong>clock</strong> that ticks billions of times a second. 3 GHz = 3 billion ticks per second, and simple instructions take one or a few ticks. More cores means several of these cycles running in parallel.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Pipelining overlaps the cycle.</b> Real CPUs do not wait for one instruction to finish before starting the next: they overlap fetch, decode and execute like an assembly line, so a new instruction can begin almost every clock tick. A 5-stage pipeline can approach ~5× the throughput, though a branch may force a costly "flush" that branch prediction tries to avoid. <em>The basic cycle is taught as strictly sequential; pipelining is a CEA201 optimization.</em></div>
 <div class="note-ct">Want to <em>see</em> fetch–decode–execute happen step by step? A "Little Man Computer" simulator lets you watch the PC advance and the ALU add — linked in the CSI104 tools guide on Exp Hub.</div>
 <a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-282" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -492,6 +497,7 @@ export default {
 <p>Một thanh ghi đặc biệt, <strong>Program Counter (PC)</strong>, luôn giữ địa chỉ của lệnh kế tiếp. Sau mỗi lần nạp nó tiến lên — đó là lý do thực thi "tuần tự". Một lệnh nhảy đơn giản là đổi giá trị PC.</p>
 <h3>"3 GHz" thật sự nghĩa là gì</h3>
 <p>CPU được dẫn nhịp bởi một <strong>đồng hồ (clock)</strong> đập hàng tỷ lần mỗi giây. 3 GHz = 3 tỷ nhịp/giây, và lệnh đơn giản mất một hoặc vài nhịp. Nhiều nhân (core) nghĩa là nhiều chu trình như vậy chạy song song.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Pipelining chồng lấn chu trình.</b> CPU thật không chờ một lệnh xong mới bắt đầu lệnh sau: nó chồng lấn nạp, giải mã và thực thi như dây chuyền, nên gần như mỗi nhịp lại có một lệnh mới khởi động. Pipeline 5 tầng có thể đạt gần ~5× thông lượng, dù lệnh nhảy buộc phải "xả" (flush) tốn kém mà dự đoán nhánh cố tránh. <em>Chu trình cơ bản được dạy là tuần tự nghiêm ngặt; pipelining là tối ưu hoá của CEA201.</em></div>
 <div class="note-ct">Muốn <em>thấy</em> nạp–giải mã–thực thi diễn ra từng bước? Một mô phỏng "Little Man Computer" cho bạn xem PC tiến lên và ALU cộng — có liên kết trong guide công cụ CSI104 trên Exp Hub.</div>
 <a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-282" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -525,6 +531,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Hit</div><div class="lz-t">Found in cache</div><div class="lz-d">Answer in ~1 ns</div></div>
   <div class="lz-step"><div class="lz-k">Miss</div><div class="lz-t">Not in cache</div><div class="lz-d">Fetch from RAM &amp; copy up</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why caching pays off: locality.</b> Caches help only because programs obey the principle of locality: they reuse recent data (temporal) and touch neighbours (spatial). Hardware exploits this by loading a whole cache line (~64 bytes) at once, so summing a 2D array row-by-row can be several times faster than column-by-column purely from cache behaviour. <em>Intro describes the hierarchy but not the locality principle that makes it worth building.</em></div>
 <div class="callout ok">Everyday proof: the second time you open a big app it launches faster. Parts of it are still cached in RAM (and RAM is cached toward the CPU), so less has to be fetched from the slow disk.</div>
 <div class="pitfall">RAM is <strong>volatile</strong> — cut the power and it forgets everything. That is why unsaved work vanishes in a crash: it was only in RAM, never written to the permanent disk.</div>
 </div>
@@ -546,6 +553,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Trúng</div><div class="lz-t">Có trong cache</div><div class="lz-d">Trả lời trong ~1 ns</div></div>
   <div class="lz-step"><div class="lz-k">Trượt</div><div class="lz-t">Không có trong cache</div><div class="lz-d">Lấy từ RAM &amp; chép lên</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao cache hiệu quả: tính cục bộ.</b> Cache chỉ hữu ích vì chương trình tuân theo nguyên lý cục bộ: hay dùng lại dữ liệu vừa dùng (thời gian) và truy cập ô lân cận (không gian). Phần cứng khai thác bằng cách nạp cả một dòng cache (~64 byte) một lần, nên cộng mảng 2 chiều theo hàng có thể nhanh gấp mấy lần theo cột chỉ nhờ cách cache hoạt động. <em>Nhập môn mô tả phân cấp bộ nhớ nhưng không nói nguyên lý cục bộ khiến nó đáng xây.</em></div>
 <div class="callout ok">Bằng chứng đời thường: lần thứ hai mở một app lớn, nó khởi động nhanh hơn. Một phần của nó vẫn còn cache trong RAM (và RAM được cache về phía CPU), nên phải lấy ít hơn từ đĩa chậm.</div>
 <div class="pitfall">RAM là <strong>bay hơi (volatile)</strong> — mất điện là quên sạch. Vì thế công việc chưa lưu biến mất khi treo máy: nó chỉ ở RAM, chưa bao giờ được ghi xuống đĩa lưu vĩnh viễn.</div>
 </div>
@@ -577,6 +585,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">CISC vs RISC</div><div class="lz-ld">CISC (e.g. x86) has many complex instructions; RISC (e.g. ARM) has few simple ones done very fast — the chip in your phone is RISC.</div></div>
   <div class="lz-layer"><div class="lz-lt">Single-core vs multi-core</div><div class="lz-ld">Modern CPUs pack several cores so multiple instruction cycles run truly in parallel.</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Interrupts and DMA handle slow devices.</b> Rather than wasting cycles constantly asking a device "are you ready?" (polling), modern systems let the device raise an interrupt when done, freeing the CPU to work meanwhile. Big transfers use DMA (Direct Memory Access) so data moves between device and RAM without the CPU copying each byte. <em>The syllabus covers I/O devices, not the interrupt/DMA mechanisms an OS relies on.</em></div>
 <div class="note-ct">Chapter recap: a computer = CPU (control + ALU + registers) + memory hierarchy + I/O, all tied by a bus, all following the stored-program Von Neumann idea. Everything else in CSI104 runs <em>on top of</em> this machine — hold this picture as you read on.</div>
 </div>
 <div class="ml-vi">
@@ -599,6 +608,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">CISC vs RISC</div><div class="lz-ld">CISC (vd x86) có nhiều lệnh phức tạp; RISC (vd ARM) có ít lệnh đơn giản làm rất nhanh — con chip trong điện thoại bạn là RISC.</div></div>
   <div class="lz-layer"><div class="lz-lt">Một nhân vs đa nhân</div><div class="lz-ld">CPU hiện đại gói nhiều nhân để nhiều chu trình lệnh chạy thật sự song song.</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Ngắt (interrupt) và DMA xử lý thiết bị chậm.</b> Thay vì phí nhịp liên tục hỏi thiết bị "sẵn sàng chưa?" (polling), hệ thống hiện đại để thiết bị phát tín hiệu ngắt khi xong, giải phóng CPU làm việc khác. Truyền dữ liệu lớn dùng DMA (truy cập bộ nhớ trực tiếp) để dữ liệu chạy giữa thiết bị và RAM mà CPU không phải chép từng byte. <em>Giáo trình nói về thiết bị I/O, không nói cơ chế ngắt/DMA mà hệ điều hành dựa vào.</em></div>
 <div class="note-ct">Tóm tắt chương: máy tính = CPU (điều khiển + ALU + thanh ghi) + phân cấp bộ nhớ + I/O, nối bằng bus, tuân theo ý tưởng chương-trình-lưu-trong-bộ-nhớ của Von Neumann. Mọi thứ khác trong CSI104 chạy <em>bên trên</em> cỗ máy này — hãy giữ bức tranh này khi đọc tiếp.</div>
 </div>
 `,
@@ -655,6 +665,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Logical</div><div class="lz-t">1 / 0</div><div class="lz-d">one binary digit = a bit</div></div>
   <div class="lz-step"><div class="lz-k">Grouped</div><div class="lz-t">8 bits = 1 byte</div><div class="lz-d">the basic unit of storage</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Binary is a physics choice, not just math.</b> Computers use base-2 because a transistor reliably distinguishes two voltage states (on/off) far more cheaply than ten — more states means more errors. This ties to 1854 Boolean algebra, which gave a mathematics for manipulating just true/false, the theory that made digital logic possible a century before the transistor existed. <em>Intro shows binary as a convention; the reliability-and-Boolean reasoning behind it is deeper.</em></div>
 <div class="note-ct">A <strong>bit</strong> is one 0/1. Eight bits make a <strong>byte</strong>, which can hold 256 different patterns (2⁸). Bigger units: KB, MB, GB, TB — each roughly 1000× the last. Hex exists mainly because it is a compact shorthand for binary: one hex digit = exactly four bits.</div>
 </div>
 <div class="ml-vi">
@@ -679,6 +690,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Logic</div><div class="lz-t">1 / 0</div><div class="lz-d">một chữ số nhị phân = một bit</div></div>
   <div class="lz-step"><div class="lz-k">Gom nhóm</div><div class="lz-t">8 bit = 1 byte</div><div class="lz-d">đơn vị lưu trữ cơ bản</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Nhị phân là lựa chọn vật lý, không chỉ toán.</b> Máy dùng cơ số 2 vì transistor phân biệt hai mức điện áp (bật/tắt) rẻ và tin cậy hơn nhiều so với mười mức — càng nhiều mức càng dễ lỗi. Điều này nối với đại số Boole năm 1854, thứ cho một nền toán để thao tác chỉ đúng/sai — lý thuyết làm nên logic số cả trăm năm trước khi có transistor. <em>Nhập môn coi nhị phân là quy ước; lý do tin cậy và gốc Boole sâu hơn thế.</em></div>
 <div class="note-ct">Một <strong>bit</strong> là một số 0/1. Tám bit thành một <strong>byte</strong>, chứa được 256 mẫu khác nhau (2⁸). Đơn vị lớn hơn: KB, MB, GB, TB — mỗi bậc khoảng 1000× bậc trước. Hex tồn tại chủ yếu vì nó là cách viết tắt gọn của nhị phân: một chữ số hex = đúng bốn bit.</div>
 </div>
 `,
@@ -707,6 +719,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Group</div><div class="lz-t">1101 = D · 1110 = E</div><div class="lz-d">each nibble → 1 hex digit</div></div>
   <div class="lz-step"><div class="lz-k">Hex</div><div class="lz-t">DE</div><div class="lz-d">done — no arithmetic needed</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Fractions convert too — by repeated multiplication.</b> Whole numbers use divide-by-base; the fractional part uses the mirror method: multiply by the base and read the integer parts top-down. Example: 0.625 → ×2 = 1.25 (1), ×2 = 0.5 (0), ×2 = 1.0 (1) → 0.101 in binary. Many decimals never terminate in binary (0.1 loops forever), the seed of floating-point error. <em>The syllabus focuses on integer conversion; fractional conversion explains the rounding bugs in 3.1.</em></div>
 <div class="pitfall">When grouping bits, pad from the <strong>left</strong> so the group count is complete. 11010 for hex becomes 0001 1010 → 1A, not 1 1010. Forgetting to pad is the #1 conversion mistake.</div>
 <div class="note-ct">Always sanity-check with a converter after doing it by hand — but do it by hand first. The exam has no converter, and understanding the method is the point.</div>
 <a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-279" target="_blank" rel="noopener">
@@ -733,6 +746,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Gom</div><div class="lz-t">1101 = D · 1110 = E</div><div class="lz-d">mỗi nhóm 4 bit → 1 chữ số hex</div></div>
   <div class="lz-step"><div class="lz-k">Hex</div><div class="lz-t">DE</div><div class="lz-d">xong — không cần tính toán</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Phần thập phân cũng chuyển được — bằng nhân liên tiếp.</b> Số nguyên chia cho cơ số; phần lẻ dùng cách ngược lại: nhân với cơ số rồi đọc phần nguyên từ trên xuống. Ví dụ: 0.625 → ×2 = 1.25 (1), ×2 = 0.5 (0), ×2 = 1.0 (1) → 0.101 nhị phân. Nhiều số thập phân không bao giờ dừng trong nhị phân (0.1 lặp mãi), đó là mầm của sai số dấu phẩy động. <em>Giáo trình tập trung chuyển số nguyên; chuyển phần lẻ giải thích lỗi làm tròn ở bài 3.1.</em></div>
 <div class="pitfall">Khi gom bit, đệm thêm 0 từ <strong>bên trái</strong> cho đủ nhóm. 11010 sang hex thành 0001 1010 → 1A, không phải 1 1010. Quên đệm là lỗi chuyển đổi số một.</div>
 <div class="note-ct">Luôn kiểm lại bằng công cụ chuyển sau khi làm tay — nhưng làm tay trước đã. Bài thi không có công cụ, và hiểu phương pháp mới là mục tiêu.</div>
 <a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-279" target="_blank" rel="noopener">
@@ -762,6 +776,7 @@ export default {
 <h3>Overflow — when the answer will not fit</h3>
 <p>A computer stores numbers in a fixed number of bits (say 8). If a result needs a 9th bit, that bit is lost — the value <strong>wraps around</strong>. This is <em>overflow</em>, and it is a real source of bugs.</p>
 <div class="callout warn">In 8-bit unsigned storage, 255 + 1 does not give 256 — it wraps to 0. The famous "Gandhi becomes hyper-aggressive" video-game bug and many security holes come from exactly this kind of overflow.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Two’s complement makes subtraction free.</b> Instead of a separate subtract circuit, computers store negatives in two’s complement (invert the bits, add 1), so a − b becomes a + (−b) using the very same adder. Example in 8-bit: −5 is 11111011; adding 7 (00000111) gives 00000010 = 2, correct with no special case. Overflow is detected when the sign bit flips the wrong way. <em>Intro teaches unsigned addition; signed representation is the key exam-and-real-world subtlety.</em></div>
 <div class="note-ct">This is why Chapter 3 matters: the <em>meaning</em> of a bit pattern (how many bits, signed or unsigned, integer or float) decides what arithmetic is correct. The bits alone do not tell you.</div>
 </div>
 <div class="ml-vi">
@@ -777,6 +792,7 @@ export default {
 <h3>Tràn số (overflow) — khi kết quả không vừa</h3>
 <p>Máy tính lưu số trong một số bit cố định (ví dụ 8). Nếu kết quả cần bit thứ 9, bit đó bị mất — giá trị <strong>quay vòng</strong>. Đó là <em>tràn số</em>, và là nguồn lỗi thật sự.</p>
 <div class="callout warn">Trong lưu trữ 8-bit không dấu, 255 + 1 không cho 256 — nó quay về 0. Lỗi game "Gandhi bỗng hung hãn" nổi tiếng và nhiều lỗ hổng bảo mật đến từ đúng kiểu tràn số này.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Bù hai (two’s complement) khiến phép trừ thành miễn phí.</b> Thay vì mạch trừ riêng, máy lưu số âm ở dạng bù hai (đảo bit rồi cộng 1), nên a − b thành a + (−b) dùng đúng bộ cộng đó. Ví dụ 8-bit: −5 là 11111011; cộng 7 (00000111) ra 00000010 = 2, đúng mà không cần trường hợp đặc biệt. Tràn số được phát hiện khi bit dấu lật sai. <em>Nhập môn dạy cộng số không dấu; biểu diễn có dấu mới là điểm tinh tế của bài thi lẫn thực tế.</em></div>
 <div class="note-ct">Đây là lý do Chương 3 quan trọng: <em>ý nghĩa</em> của một mẫu bit (bao nhiêu bit, có dấu hay không, số nguyên hay thực) quyết định phép toán nào đúng. Riêng các bit không nói cho bạn điều đó.</div>
 </div>
 `,
@@ -827,6 +843,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Exponent</div><div class="lz-ld">how far to shift the binary point (the scale)</div></div>
   <div class="lz-layer"><div class="lz-lt">Mantissa / fraction</div><div class="lz-ld">the significant digits</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>IEEE 754 is the standard behind every float.</b> Floating point is not ad-hoc: the IEEE 754 standard fixes the layout (sign, exponent, mantissa) so a 32-bit float carries ~7 decimal digits and a 64-bit double ~15–16. It even reserves bit patterns for +/- infinity and NaN ("not a number", produced by 0/0), which lets hardware signal errors without crashing. <em>The syllabus explains the sign-exponent-mantissa idea; the named standard and its special values are more advanced.</em></div>
 <div class="pitfall">Floating point is <strong>approximate</strong>. Many decimals (like 0.1) have no exact binary form, so 0.1 + 0.2 can print 0.30000000000000004. Never compare floats with == in code — this surprises every new programmer.</div>
 <div class="note-ct">Same bits, different meaning: 11111011 is 251 as unsigned but −5 as signed two&#39;s complement. The type declared in your program tells the computer which reading to use.</div>
 </div>
@@ -846,6 +863,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Số mũ (exponent)</div><div class="lz-ld">dịch dấu phẩy nhị phân bao xa (tỷ lệ)</div></div>
   <div class="lz-layer"><div class="lz-lt">Phần định trị (mantissa)</div><div class="lz-ld">các chữ số có nghĩa</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>IEEE 754 là chuẩn đằng sau mọi số thực.</b> Dấu phẩy động không tuỳ tiện: chuẩn IEEE 754 cố định bố cục (dấu, số mũ, phần định trị) nên float 32-bit giữ ~7 chữ số thập phân và double 64-bit ~15–16. Nó còn dành riêng mẫu bit cho +/- vô cực và NaN ("không phải số", sinh từ 0/0), cho phần cứng báo lỗi mà không sập. <em>Giáo trình giải thích ý dấu–mũ–định trị; chuẩn có tên và các giá trị đặc biệt thì nâng cao hơn.</em></div>
 <div class="pitfall">Dấu phẩy động là <strong>gần đúng</strong>. Nhiều số thập phân (như 0.1) không có dạng nhị phân chính xác, nên 0.1 + 0.2 có thể in ra 0.30000000000000004. Đừng bao giờ so sánh số thực bằng == trong code — điều này làm mọi lập trình viên mới bất ngờ.</div>
 <div class="note-ct">Cùng bit, khác nghĩa: 11111011 là 251 nếu không dấu nhưng là −5 nếu có dấu bù hai. Kiểu dữ liệu khai báo trong chương trình cho máy biết đọc theo cách nào.</div>
 </div>
@@ -875,6 +893,7 @@ export default {
 <p>Sound is a continuous wave. The computer measures its height thousands of times a second (<strong>sampling</strong>, e.g. 44,100 times/sec for CD quality) and stores each measurement as a number.</p>
 <h3>Video — many images per second</h3>
 <p>Video is just a rapid sequence of images (<strong>frames</strong>, e.g. 30 fps) plus a synced audio track. That is enormous data, so video compression (H.264) is essential.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>From ASCII to UTF-8, and lossy vs lossless.</b> ASCII covers only 128 characters — useless for Vietnamese or emoji. Unicode assigns a number (code point) to every character worldwide, and UTF-8 encodes it in 1–4 bytes while staying backward-compatible with ASCII. Media adds another split: lossless (PNG, FLAC) rebuilds the original exactly, while lossy (JPEG, MP3) discards detail the eye/ear barely notices to shrink files. <em>Intro mentions character codes; UTF-8 and the lossy/lossless distinction are the practical depth.</em></div>
 <div class="note-ct">One unifying idea: to digitize the real (analog) world, we <strong>sample</strong> it and turn each sample into a number. More samples = higher fidelity but bigger files. That trade-off is at the heart of all media formats.</div>
 </div>
 <div class="ml-vi">
@@ -895,6 +914,7 @@ export default {
 <p>Âm thanh là một sóng liên tục. Máy đo độ cao của nó hàng nghìn lần mỗi giây (<strong>lấy mẫu — sampling</strong>, ví dụ 44.100 lần/giây cho chất lượng CD) và lưu mỗi lần đo thành một con số.</p>
 <h3>Video — nhiều ảnh mỗi giây</h3>
 <p>Video chỉ là một chuỗi ảnh nối nhanh (<strong>khung hình — frame</strong>, ví dụ 30 fps) cộng với âm thanh đồng bộ. Đó là lượng dữ liệu khổng lồ, nên nén video (H.264) là bắt buộc.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Từ ASCII tới UTF-8, và nén mất mát vs không mất mát.</b> ASCII chỉ có 128 ký tự — vô dụng với tiếng Việt hay emoji. Unicode gán một số (code point) cho mọi ký tự trên thế giới, còn UTF-8 mã hoá nó bằng 1–4 byte mà vẫn tương thích ngược với ASCII. Media có thêm một tách đôi: không mất mát (PNG, FLAC) dựng lại y hệt bản gốc, còn mất mát (JPEG, MP3) bỏ bớt chi tiết mắt/tai khó nhận ra để thu nhỏ tệp. <em>Nhập môn nhắc mã ký tự; UTF-8 và phân biệt mất/không mất mát mới là chiều sâu thực dụng.</em></div>
 <div class="note-ct">Một ý tưởng chung: để số hoá thế giới thực (analog), ta <strong>lấy mẫu</strong> nó và biến mỗi mẫu thành một con số. Nhiều mẫu hơn = trung thực hơn nhưng tệp lớn hơn. Đánh đổi đó nằm ở trung tâm mọi định dạng media.</div>
 </div>
 `,
@@ -922,6 +942,7 @@ export default {
 <div class="out"><b>1100 AND 1010</b> = 1000<br><b>1100 OR&nbsp; 1010</b> = 1110<br><b>1100 XOR 1010</b> = 0110</div>
 <h3>Masking — the practical use</h3>
 <p>A <strong>mask</strong> is a chosen bit pattern used with AND/OR to inspect or change specific bits. AND with a mask <em>clears</em> the bits that are 0 in the mask; OR <em>sets</em> the bits that are 1. This is how programs pack many yes/no flags into a single number (e.g. file permissions, hardware settings).</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Bit masks: one integer holds many flags.</b> Using AND/OR/XOR with a chosen pattern (a mask) lets a single integer store many yes/no settings compactly. Example: permission &amp; 0100 tests the "write" bit; flags |= 0010 turns one flag on; x XOR mask flips selected bits. This is exactly how file permissions and hardware registers are read and set. <em>The syllabus teaches the operations; using them as masks is the applied technique programmers rely on.</em></div>
 <div class="note-ct">Important distinction the exam asks (CQ5.3): a <strong>logic operation at bit level</strong> works on individual bits (each column separately). A logic operation at <strong>pattern level</strong> treats the whole pattern as one true/false value. Bit-level = per-bit; pattern-level = whole-value.</div>
 </div>
 <div class="ml-vi">
@@ -941,6 +962,7 @@ export default {
 <div class="out"><b>1100 AND 1010</b> = 1000<br><b>1100 OR&nbsp; 1010</b> = 1110<br><b>1100 XOR 1010</b> = 0110</div>
 <h3>Mặt nạ (masking) — công dụng thực tế</h3>
 <p>Một <strong>mặt nạ (mask)</strong> là mẫu bit được chọn, dùng cùng AND/OR để kiểm tra hoặc thay đổi các bit cụ thể. AND với mask <em>xoá</em> các bit là 0 trong mask; OR <em>bật</em> các bit là 1. Đây là cách chương trình gói nhiều cờ có/không vào một con số (ví dụ quyền tệp, cấu hình phần cứng).</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Mặt nạ bit (bit mask): một số nguyên chứa nhiều cờ.</b> Dùng AND/OR/XOR với một mẫu chọn sẵn (mặt nạ) cho phép một số nguyên lưu gọn nhiều thiết lập bật/tắt. Ví dụ: permission &amp; 0100 kiểm bit "ghi"; flags |= 0010 bật một cờ; x XOR mask lật các bit đã chọn. Đây đúng là cách quyền tệp và thanh ghi phần cứng được đọc và đặt. <em>Giáo trình dạy các phép toán; dùng chúng làm mặt nạ mới là kỹ thuật ứng dụng lập trình viên hay dùng.</em></div>
 <div class="note-ct">Phân biệt quan trọng bài thi hỏi (CQ5.3): phép logic ở <strong>mức bit</strong> làm việc trên từng bit (mỗi cột riêng). Phép logic ở <strong>mức mẫu (pattern level)</strong> coi cả mẫu là một giá trị đúng/sai. Mức bit = từng-bit; mức mẫu = cả-giá-trị.</div>
 </div>
 `,
@@ -965,6 +987,7 @@ export default {
 <div class="out"><b>Left shift:</b> 0011 (3) &lt;&lt; 1 = 0110 (6)<br><b>Right shift:</b> 1000 (8) &gt;&gt; 1 = 0100 (4)</div>
 <h3>Arithmetic operations recap</h3>
 <p>Chapter 3 together shows the ALU\'s full toolkit: <strong>arithmetic</strong> (add, subtract via two&#39;s complement, and shift-based multiply/divide) and <strong>logic</strong> (AND, OR, NOT, XOR). Every high-level operation you write eventually reduces to these primitive bit operations.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Logical vs arithmetic right-shift.</b> Shifting left by n multiplies by 2^n; shifting right divides by 2^n — but for signed numbers a logical shift fills zeros (wrong for negatives) while an arithmetic shift copies the sign bit to keep the value negative. Example: −8 &gt;&gt; 1 must give −4, which only an arithmetic shift produces. <em>Intro treats shift as one operation; the signed/unsigned split is the subtlety compilers must respect.</em></div>
 <div class="note-ct">Exam contrast (CQ5.4): an <strong>arithmetic</strong> operation changes the numeric value following math rules (add, multiply). A <strong>shift</strong> just relocates bits — though a shift <em>happens to</em> multiply or divide by a power of two, which is why compilers replace slow multiplications by fast shifts.</div>
 </div>
 <div class="ml-vi">
@@ -981,6 +1004,7 @@ export default {
 <div class="out"><b>Dịch trái:</b> 0011 (3) &lt;&lt; 1 = 0110 (6)<br><b>Dịch phải:</b> 1000 (8) &gt;&gt; 1 = 0100 (4)</div>
 <h3>Tóm tắt phép số học</h3>
 <p>Chương 3 gộp lại cho thấy đầy đủ bộ công cụ của ALU: <strong>số học</strong> (cộng, trừ qua bù hai, và nhân/chia dựa trên dịch) và <strong>logic</strong> (AND, OR, NOT, XOR). Mọi phép bậc cao bạn viết rốt cuộc rút về các phép bit nguyên thủy này.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Dịch phải logic vs dịch phải số học.</b> Dịch trái n bit là nhân 2^n; dịch phải n bit là chia 2^n — nhưng với số có dấu, dịch logic điền số 0 (sai với số âm) còn dịch số học chép lại bit dấu để giữ giá trị âm. Ví dụ: −8 &gt;&gt; 1 phải ra −4, điều chỉ dịch số học làm được. <em>Nhập môn coi dịch là một phép; phân biệt có dấu/không dấu mới là điểm tinh tế trình biên dịch phải tôn trọng.</em></div>
 <div class="note-ct">So sánh bài thi (CQ5.4): phép <strong>số học</strong> đổi giá trị số theo quy tắc toán (cộng, nhân). Phép <strong>dịch</strong> chỉ dời bit — dù dịch <em>tình cờ</em> nhân hoặc chia cho lũy thừa của hai, đó là lý do trình biên dịch thay phép nhân chậm bằng phép dịch nhanh.</div>
 </div>
 `,
@@ -1035,6 +1059,7 @@ export default {
   <div class="lz-node"><div class="lz-badge">○</div><div class="lz-nbody"><div class="lz-ntitle">Ring</div><div class="lz-nsub">Each node links to two neighbors in a loop</div></div></div>
   <div class="lz-node"><div class="lz-badge">✳</div><div class="lz-nbody"><div class="lz-ntitle">Mesh</div><div class="lz-nsub">Many redundant links — very reliable but expensive</div></div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>How a switch beats a hub.</b> An old hub repeats every incoming signal to all ports, so devices compete and their signals collide; a switch learns which MAC address sits behind each port and forwards a frame only to the port that needs it, giving each link its own bandwidth. This is why every modern LAN is switched, not shared. <em>Topologies are in the syllabus; the switch and collision-domain mechanism is networking (NWC203c) depth.</em></div>
 <div class="note-ct">Exam point (CQ6.1): a <strong>LAN</strong> is small, privately owned, and fast/cheap to run; a <strong>WAN</strong> spans large distances, is usually leased from carriers, and is slower per link. The Internet is a WAN made by connecting millions of LANs.</div>
 </div>
 <div class="ml-vi">
@@ -1057,6 +1082,7 @@ export default {
   <div class="lz-node"><div class="lz-badge">○</div><div class="lz-nbody"><div class="lz-ntitle">Vòng (Ring)</div><div class="lz-nsub">Mỗi nút nối hai hàng xóm thành một vòng</div></div></div>
   <div class="lz-node"><div class="lz-badge">✳</div><div class="lz-nbody"><div class="lz-ntitle">Lưới (Mesh)</div><div class="lz-nsub">Nhiều liên kết dự phòng — rất tin cậy nhưng tốn kém</div></div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao switch hơn hub.</b> Hub cũ lặp mọi tín hiệu tới tất cả cổng, nên các thiết bị tranh nhau và tín hiệu va chạm; switch học địa chỉ MAC nào nằm sau mỗi cổng và chỉ chuyển khung tới đúng cổng cần, cho mỗi liên kết băng thông riêng. Vì thế mọi LAN hiện đại đều là mạng chuyển mạch (switched), không dùng chung. <em>Hình trạng mạng có trong giáo trình; cơ chế switch và miền va chạm là chiều sâu của môn mạng (NWC203c).</em></div>
 <div class="note-ct">Điểm thi (CQ6.1): <strong>LAN</strong> nhỏ, sở hữu tư nhân, chạy nhanh/rẻ; <strong>WAN</strong> trải khoảng cách lớn, thường thuê của nhà mạng, và chậm hơn trên mỗi liên kết. Internet là một WAN tạo bằng cách nối hàng triệu LAN.</div>
 </div>
 `,
@@ -1080,6 +1106,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">1 · Network Access / Link</div><div class="lz-ld">The actual wire/Wi-Fi and hardware (MAC) addresses — moves bits between neighboring devices.</div></div>
 </div>
 <p>As data goes <strong>down</strong> the stack at the sender, each layer wraps it in its own header (<em>encapsulation</em>). At the receiver it travels <strong>up</strong>, each layer peeling its header off.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The TCP three-way handshake.</b> Before any data flows, TCP sets up a reliable connection with three messages: SYN, SYN-ACK, ACK — roughly "can you hear me? / yes, can you? / yes". Only then does it number the bytes so lost ones can be re-sent in order. The academic OSI model splits the same job into 7 layers, versus TCP/IP’s 4. <em>Intro names the layers; the handshake and the OSI mapping are deeper protocol detail.</em></div>
 <div class="note-ct">Exam point (CQ6.2): <strong>TCP</strong> guarantees your data arrives complete and in order (used for web, email); <strong>IP</strong> handles addressing and routing each packet. TCP/IP is a <em>suite</em> — many protocols working as a team, one per layer.</div>
 </div>
 <div class="ml-vi">
@@ -1095,6 +1122,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">1 · Truy cập mạng / Liên kết</div><div class="lz-ld">Dây/Wi-Fi thực tế và địa chỉ phần cứng (MAC) — chuyển bit giữa các thiết bị kề nhau.</div></div>
 </div>
 <p>Khi dữ liệu đi <strong>xuống</strong> ngăn xếp ở bên gửi, mỗi tầng bọc nó bằng phần đầu (header) riêng (<em>đóng gói — encapsulation</em>). Ở bên nhận nó đi <strong>lên</strong>, mỗi tầng bóc header của mình ra.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Bắt tay ba bước của TCP.</b> Trước khi truyền dữ liệu, TCP thiết lập kết nối tin cậy bằng ba thông điệp: SYN, SYN-ACK, ACK — đại khái "nghe thấy tôi không? / có, còn bạn? / có". Chỉ khi đó nó mới đánh số các byte để byte mất được gửi lại đúng thứ tự. Mô hình học thuật OSI chia cùng công việc thành 7 tầng, so với 4 tầng của TCP/IP. <em>Nhập môn kể tên các tầng; bắt tay và ánh xạ sang OSI là chi tiết giao thức sâu hơn.</em></div>
 <div class="note-ct">Điểm thi (CQ6.2): <strong>TCP</strong> đảm bảo dữ liệu tới đủ và đúng thứ tự (dùng cho web, email); <strong>IP</strong> lo đánh địa chỉ và định tuyến từng gói. TCP/IP là một <em>bộ giao thức</em> — nhiều giao thức làm việc như một đội, mỗi tầng một giao thức.</div>
 </div>
 `,
@@ -1119,6 +1147,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Arrive</div><div class="lz-t">server responds</div><div class="lz-d">page comes back the same way</div></div>
 </div>
 <p>An <strong>IP address</strong> uniquely identifies a device on the network. <strong>DNS</strong> (Domain Name System) translates human names into IP addresses. <strong>Routers</strong> are the traffic officers that forward each packet one hop closer to its destination.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Packets can each take a different road.</b> The Internet is packet-switched: one file is split into packets that may travel different routes and arrive out of order, to be reassembled at the destination — far more resilient than a fixed circuit. Each packet carries a TTL (time-to-live) counter decremented at every router, so an undeliverable packet dies instead of looping forever. <em>The syllabus shows the DNS-TCP-IP dance; packet switching and TTL are the routing internals underneath.</em></div>
 <div class="callout ok">Every web page load is this dance happening in milliseconds: DNS resolves the name, TCP opens a reliable channel, IP routes the packets, and the application layer (HTTP) carries the actual page. You will build on exactly this in later web and API courses.</div>
 <a class="link-card codelab" href="/code-lab/rest-apis?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-526" target="_blank" rel="noopener">
   <span class="lc-ico">🌐</span>
@@ -1140,6 +1169,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Tới nơi</div><div class="lz-t">máy chủ trả lời</div><div class="lz-d">trang trở về theo đường cũ</div></div>
 </div>
 <p>Một <strong>địa chỉ IP</strong> định danh duy nhất một thiết bị trên mạng. <strong>DNS</strong> (Hệ thống tên miền) dịch tên của con người thành địa chỉ IP. <strong>Router</strong> là cảnh sát giao thông chuyển mỗi gói tiến một chặng gần đích hơn.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Mỗi gói có thể đi một con đường khác.</b> Internet là mạng chuyển mạch gói: một tệp bị chia thành các gói có thể đi khác đường và tới không đúng thứ tự, rồi được ghép lại ở đích — bền bỉ hơn nhiều so với mạch cố định. Mỗi gói mang một bộ đếm TTL (thời gian sống) bị giảm ở mỗi router, nên gói không giao được sẽ chết thay vì lặp mãi. <em>Giáo trình cho điệu nhảy DNS-TCP-IP; chuyển mạch gói và TTL là phần ruột của định tuyến bên dưới.</em></div>
 <div class="callout ok">Mỗi lần tải trang web là điệu nhảy này diễn ra trong vài phần nghìn giây: DNS phân giải tên, TCP mở kênh tin cậy, IP định tuyến các gói, và tầng ứng dụng (HTTP) mang trang thật. Bạn sẽ xây tiếp trên đúng điều này ở các môn web và API sau.</div>
 <a class="link-card codelab" href="/code-lab/rest-apis?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-526" target="_blank" rel="noopener">
   <span class="lc-ico">🌐</span>
@@ -1195,6 +1225,7 @@ export default {
   <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Personal / real-time</div><div class="lz-nsub">One user, many programs at once (multitasking)</div></div></div>
   <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Distributed / mobile / cloud</div><div class="lz-nsub">Many machines cooperating; phones; data centers</div></div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Kernel mode vs user mode.</b> The CPU runs in two privilege levels: the kernel (OS) runs in privileged mode with full hardware access, while your apps run in restricted user mode. A program crosses the boundary only through a system call — a controlled request like "open this file" — which is why one buggy app usually cannot crash the whole machine. <em>Intro defines the OS’s role; kernel/user separation and system calls are OSG202 depth.</em></div>
 <div class="note-ct">Windows, macOS, Linux, Android and iOS are all operating systems. They differ in look and philosophy but do the same core job: manage resources and give programs a safe, shared platform.</div>
 </div>
 <div class="ml-vi">
@@ -1214,6 +1245,7 @@ export default {
   <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Cá nhân / thời gian thực</div><div class="lz-nsub">Một người dùng, nhiều chương trình cùng lúc (đa nhiệm)</div></div></div>
   <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Phân tán / di động / đám mây</div><div class="lz-nsub">Nhiều máy hợp tác; điện thoại; trung tâm dữ liệu</div></div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Chế độ nhân (kernel) vs chế độ người dùng.</b> CPU chạy ở hai mức đặc quyền: nhân (hệ điều hành) chạy ở chế độ đặc quyền, toàn quyền với phần cứng, còn ứng dụng chạy ở chế độ người dùng bị hạn chế. Chương trình chỉ vượt ranh giới qua một lời gọi hệ thống (system call) — một yêu cầu có kiểm soát như "mở tệp này" — nhờ vậy một app lỗi thường không làm sập cả máy. <em>Nhập môn định nghĩa vai trò OS; tách nhân/người dùng và system call là chiều sâu của OSG202.</em></div>
 <div class="note-ct">Windows, macOS, Linux, Android và iOS đều là hệ điều hành. Chúng khác nhau về giao diện và triết lý nhưng làm cùng công việc lõi: quản lý tài nguyên và cho chương trình một nền tảng chung, an toàn.</div>
 </div>
 `,
@@ -1237,6 +1269,7 @@ export default {
 <p>On top sits the <strong>user interface</strong> — either a command line (type commands) or a graphical desktop (windows, icons, mouse). The UI is how <em>you</em> ask the managers to do things.</p>
 <h3>A process vs a program</h3>
 <p>A <strong>program</strong> is the file on disk (passive). A <strong>process</strong> is that program actually running in memory (active), with its own state and resources. Opening the same app twice creates two processes from one program.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Virtual memory: RAM that isn’t really there.</b> The memory manager gives each process its own private address space and can pretend there is more RAM than exists by paging idle data out to disk — which is why you can open more apps than your RAM "should" allow, until heavy paging causes slow "thrashing". The process manager must also avoid deadlock, where processes wait on each other forever. <em>The syllabus lists the four managers; virtual memory and deadlock are their advanced mechanisms.</em></div>
 <div class="callout ok">Multitasking illusion: your laptop feels like it runs 20 apps at once, but a single core runs just one instruction stream at a time. The process manager switches between them thousands of times a second — too fast for you to notice.</div>
 <a class="link-card codelab" href="/code-lab/linux-bash?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-483" target="_blank" rel="noopener">
   <span class="lc-ico">🐧</span>
@@ -1257,6 +1290,7 @@ export default {
 <p>Trên cùng là <strong>giao diện người dùng</strong> — hoặc dòng lệnh (gõ lệnh) hoặc màn hình đồ hoạ (cửa sổ, biểu tượng, chuột). UI là cách <em>bạn</em> nhờ các quản lý làm việc.</p>
 <h3>Tiến trình vs chương trình</h3>
 <p>Một <strong>chương trình</strong> là tệp trên đĩa (bị động). Một <strong>tiến trình (process)</strong> là chương trình đó đang thực sự chạy trong bộ nhớ (chủ động), có trạng thái và tài nguyên riêng. Mở cùng một app hai lần tạo hai tiến trình từ một chương trình.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Bộ nhớ ảo: RAM không thật sự tồn tại.</b> Quản lý bộ nhớ cho mỗi tiến trình một không gian địa chỉ riêng và có thể giả vờ có nhiều RAM hơn thực tế bằng cách đẩy dữ liệu nhàn rỗi ra đĩa (paging) — vì thế bạn mở được nhiều app hơn mức RAM "cho phép", cho tới khi paging quá nhiều gây "thrashing" ì ạch. Quản lý tiến trình còn phải tránh deadlock, khi các tiến trình chờ nhau mãi mãi. <em>Giáo trình liệt kê bốn người quản lý; bộ nhớ ảo và deadlock là cơ chế nâng cao của chúng.</em></div>
 <div class="callout ok">Ảo giác đa nhiệm: laptop của bạn có vẻ chạy 20 app cùng lúc, nhưng một nhân chỉ chạy một luồng lệnh tại một thời điểm. Quản lý tiến trình chuyển giữa chúng hàng nghìn lần mỗi giây — nhanh đến mức bạn không nhận ra.</div>
 <a class="link-card codelab" href="/code-lab/linux-bash?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-483" target="_blank" rel="noopener">
   <span class="lc-ico">🐧</span>
@@ -1308,6 +1342,7 @@ export default {
   <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Repetition (loop)</div><div class="lz-nsub">Repeat steps while a condition holds — WHILE/FOR</div></div></div>
 </div>
 <div class="out"><b>Algorithm: is a number even or odd?</b><br>1. Input n<br>2. IF n mod 2 = 0 → output "even"  <span class="tok-comment">(decision)</span><br>3. ELSE → output "odd"<br>4. Stop</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>A good algorithm needs more than "it works".</b> Formally an algorithm must be finite (it terminates), definite (each step is unambiguous) and effective (each step is actually doable). Proving it always halts and always gives the right answer — not just on the cases you tried — is a real discipline; some problems, like the Halting Problem, are even provably impossible to decide in general. <em>Intro presents the three constructs; formal correctness and undecidability are theory-of-computation topics.</em></div>
 <div class="note-ct">These are exactly the constructs you meet as code in PRF192 (if/switch, for/while). CSI104 teaches the <em>idea</em>; PRF192 teaches the <em>syntax</em>. Same concept, two courses.</div>
 </div>
 <div class="ml-vi">
@@ -1323,6 +1358,7 @@ export default {
   <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Lặp (repetition)</div><div class="lz-nsub">Lặp lại các bước khi điều kiện còn đúng — WHILE/FOR</div></div></div>
 </div>
 <div class="out"><b>Thuật toán: một số là chẵn hay lẻ?</b><br>1. Nhập n<br>2. NẾU n mod 2 = 0 → xuất "chẵn"  <span class="tok-comment">(rẽ nhánh)</span><br>3. NGƯỢC LẠI → xuất "lẻ"<br>4. Dừng</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Thuật toán tốt cần hơn là "chạy được".</b> Về hình thức, một thuật toán phải hữu hạn (dừng được), xác định (mỗi bước rõ nghĩa) và khả thi (mỗi bước thực sự làm được). Chứng minh nó luôn dừng và luôn cho kết quả đúng — không chỉ trên vài ví dụ bạn thử — là cả một bộ môn; có bài toán như Bài toán Dừng còn được chứng minh là bất khả quyết định nói chung. <em>Nhập môn cho ba cấu trúc; tính đúng đắn hình thức và bất khả quyết định là chủ đề lý thuyết tính toán.</em></div>
 <div class="note-ct">Đây đúng là những cấu trúc bạn gặp dưới dạng code ở PRF192 (if/switch, for/while). CSI104 dạy <em>ý tưởng</em>; PRF192 dạy <em>cú pháp</em>. Cùng khái niệm, hai môn học.</div>
 </div>
 `,
@@ -1345,6 +1381,7 @@ export default {
 <h3>Pseudocode example — find the largest of three numbers</h3>
 <div class="out">INPUT a, b, c<br>SET max = a<br>IF b &gt; max THEN max = b<br>IF c &gt; max THEN max = c<br>OUTPUT max</div>
 <p>Notice pseudocode uses the three constructs from 6.1 (sequence + decision) but no semicolons or type declarations — you can hand it to a C, Java or Python programmer and they can all implement it.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Loop invariants prove a loop is right.</b> Beyond drawing the logic, engineers reason about a loop invariant: a condition true before and after every iteration (e.g. "sum holds the total of the items seen so far"). If it holds at entry and each pass preserves it, the result is guaranteed correct when the loop ends — a rigorous alternative to just testing on examples. <em>The syllabus covers notation; invariant reasoning is a proof technique from later algorithms courses.</em></div>
 <div class="note-ct">Exam essence: a <strong>UML diagram</strong> is a standardized visual model of an algorithm/process; <strong>pseudocode</strong> is a text description of the same logic. Both sit between the idea in your head and the final code — they let you think and check the logic before typing a single line.</div>
 </div>
 <div class="ml-vi">
@@ -1359,6 +1396,7 @@ export default {
 <h3>Ví dụ mã giả — tìm số lớn nhất trong ba số</h3>
 <div class="out">NHẬP a, b, c<br>ĐẶT max = a<br>NẾU b &gt; max THÌ max = b<br>NẾU c &gt; max THÌ max = c<br>XUẤT max</div>
 <p>Để ý mã giả dùng ba cấu trúc từ bài 6.1 (tuần tự + rẽ nhánh) nhưng không có dấu chấm phẩy hay khai báo kiểu — bạn có thể đưa nó cho lập trình viên C, Java hay Python và ai cũng cài đặt được.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Bất biến vòng lặp chứng minh vòng lặp đúng.</b> Ngoài việc vẽ logic, kỹ sư còn lập luận về bất biến vòng lặp (loop invariant): một điều kiện đúng trước và sau mỗi lần lặp (ví dụ "sum giữ tổng của các phần tử đã duyệt"). Nếu nó đúng lúc vào và mỗi lần lặp giữ nguyên nó, kết quả chắc chắn đúng khi vòng lặp kết thúc — cách chặt chẽ thay cho việc chỉ thử vài ví dụ. <em>Giáo trình dạy ký hiệu; lập luận bất biến là kỹ thuật chứng minh của các môn giải thuật về sau.</em></div>
 <div class="note-ct">Cốt lõi bài thi: <strong>sơ đồ UML</strong> là mô hình trực quan chuẩn hoá của một thuật toán/quy trình; <strong>mã giả</strong> là mô tả bằng chữ của cùng logic đó. Cả hai nằm giữa ý tưởng trong đầu và code cuối cùng — chúng cho bạn suy nghĩ và kiểm tra logic trước khi gõ một dòng nào.</div>
 </div>
 `,
@@ -1382,6 +1420,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Discard</div><div class="lz-t">half the list</div><div class="lz-d">too big? drop upper half</div></div>
   <div class="lz-step"><div class="lz-k">Repeat</div><div class="lz-t">on what remains</div><div class="lz-d">until found</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Even faster than binary search: hashing.</b> Binary search’s ~log2(n) steps are great, but a hash table can find an item in roughly constant time O(1) by computing its storage slot directly from the key — no comparisons at all. The trade-off is that a hash table loses the sorted order binary search depends on, so each structure wins for different tasks. <em>Intro contrasts linear vs binary; hashing and the Big-O notation for these come in CSD201.</em></div>
 <div class="callout ok">The power of halving: searching 1,000,000 sorted items takes at most ~20 steps with binary search, versus up to 1,000,000 with linear. That is the difference between instant and slow — and why sorting data first is often worth it.</div>
 <div class="pitfall">Binary search has one strict requirement: the data must already be <strong>sorted</strong>. On an unsorted list it gives wrong answers. This is a recurring theme — many fast algorithms trade a setup cost (sorting) for huge speed later.</div>
 <a class="link-card codelab" href="/algorithms?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science" target="_blank" rel="noopener">
@@ -1403,6 +1442,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Loại</div><div class="lz-t">một nửa danh sách</div><div class="lz-d">quá lớn? bỏ nửa trên</div></div>
   <div class="lz-step"><div class="lz-k">Lặp</div><div class="lz-t">trên phần còn lại</div><div class="lz-d">tới khi tìm thấy</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Còn nhanh hơn tìm nhị phân: băm (hashing).</b> ~log2(n) bước của tìm nhị phân đã tốt, nhưng bảng băm (hash table) tìm một phần tử trong thời gian gần như hằng số O(1) bằng cách tính thẳng ô lưu từ khoá — không so sánh gì cả. Đánh đổi là bảng băm mất thứ tự đã sắp mà tìm nhị phân dựa vào, nên mỗi cấu trúc thắng ở việc khác nhau. <em>Nhập môn so tuyến tính vs nhị phân; băm và ký hiệu Big-O cho chúng nằm ở CSD201.</em></div>
 <div class="callout ok">Sức mạnh của việc cắt đôi: tìm trong 1.000.000 phần tử đã sắp xếp chỉ mất tối đa ~20 bước với tìm nhị phân, so với tối đa 1.000.000 với tuyến tính. Đó là khác biệt giữa tức thì và chậm — và là lý do sắp xếp dữ liệu trước thường đáng công.</div>
 <div class="pitfall">Tìm nhị phân có một yêu cầu nghiêm ngặt: dữ liệu phải <strong>đã sắp xếp</strong>. Trên danh sách chưa sắp xếp nó cho kết quả sai. Đây là chủ đề lặp lại — nhiều thuật toán nhanh đánh đổi một chi phí chuẩn bị (sắp xếp) để lấy tốc độ lớn về sau.</div>
 <a class="link-card codelab" href="/algorithms?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science" target="_blank" rel="noopener">
@@ -1432,6 +1472,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Swap</div><div class="lz-t">if out of order</div><div class="lz-d">put the bigger on the right</div></div>
   <div class="lz-step"><div class="lz-k">Repeat</div><div class="lz-t">many passes</div><div class="lz-d">until no swaps needed</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why n·log n is the speed limit for comparison sorts.</b> Any sort that works only by comparing pairs cannot beat O(n log n) in the worst case — a proven mathematical bound, which is why merge sort and quicksort are considered optimal in that class. Non-comparison sorts (counting, radix) can reach O(n), but only for restricted data like small integers. Sorts are also judged on stability: whether equal items keep their original order. <em>Intro shows the simple n² sorts; the lower bound and stability are the deeper properties.</em></div>
 <div class="note-ct">These simple sorts are easy to understand but slow on big lists (they do roughly n² comparisons). Real software uses smarter sorts (merge sort, quicksort) that CSD201 will teach. Advanced lesson N2 in this course previews <em>why</em> n² vs n·log n matters — the idea of Big-O.</div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-504" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -1452,6 +1493,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Đổi chỗ</div><div class="lz-t">nếu sai thứ tự</div><div class="lz-d">đặt số lớn hơn về bên phải</div></div>
   <div class="lz-step"><div class="lz-k">Lặp</div><div class="lz-t">nhiều lượt</div><div class="lz-d">tới khi không cần đổi nữa</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao n·log n là giới hạn tốc độ của sắp xếp so sánh.</b> Mọi thuật toán sắp xếp chỉ dựa trên so sánh từng cặp không thể vượt O(n log n) ở trường hợp xấu nhất — một cận đã được chứng minh, nên merge sort và quicksort được coi là tối ưu trong lớp đó. Sắp xếp không so sánh (counting, radix) có thể đạt O(n), nhưng chỉ cho dữ liệu hạn chế như số nguyên nhỏ. Sắp xếp còn được đánh giá theo tính ổn định: phần tử bằng nhau có giữ thứ tự ban đầu không. <em>Nhập môn cho các sort n² đơn giản; cận dưới và tính ổn định là những tính chất sâu hơn.</em></div>
 <div class="note-ct">Các thuật toán sắp xếp đơn giản này dễ hiểu nhưng chậm trên danh sách lớn (chúng làm khoảng n² lần so sánh). Phần mềm thật dùng thuật toán khôn hơn (merge sort, quicksort) mà CSD201 sẽ dạy. Bài nâng cao N2 trong môn này xem trước <em>vì sao</em> n² vs n·log n quan trọng — ý tưởng Big-O.</div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-504" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -1542,6 +1584,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Translate</div><div class="lz-t">compiler/interpreter</div><div class="lz-d">to machine code</div></div>
   <div class="lz-step"><div class="lz-k">Run</div><div class="lz-t">CPU executes</div><div class="lz-d">the actual work happens</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Compiler vs interpreter — and the hybrids.</b> A compiler translates the whole program to machine code once (fast to run, slow to build); an interpreter executes the source line by line (flexible, slower). Modern systems blend both: Java and C# compile to portable bytecode that a virtual machine JIT-compiles to native code at runtime, chasing portability and speed together. <em>Intro presents translation as one step; the compiler/interpreter/JIT spectrum is language-implementation depth.</em></div>
 <div class="note-ct">This is exactly what PRF192 lesson 1.1 showed from the coding side. Some languages (Java) do both: compile to an intermediate "bytecode", then interpret/JIT it on a virtual machine — getting portability plus decent speed.</div>
 <a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-254" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -1574,6 +1617,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Dịch</div><div class="lz-t">compiler/interpreter</div><div class="lz-d">sang mã máy</div></div>
   <div class="lz-step"><div class="lz-k">Chạy</div><div class="lz-t">CPU thực thi</div><div class="lz-d">công việc thật diễn ra</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Trình biên dịch vs trình thông dịch — và các dạng lai.</b> Trình biên dịch (compiler) dịch cả chương trình ra mã máy một lần (chạy nhanh, build chậm); trình thông dịch (interpreter) chạy mã nguồn từng dòng (linh hoạt, chậm hơn). Hệ thống hiện đại trộn cả hai: Java và C# biên dịch ra bytecode di động rồi máy ảo JIT-biên dịch sang mã máy lúc chạy, đuổi theo cả tính di động lẫn tốc độ. <em>Nhập môn coi dịch là một bước; phổ compiler/interpreter/JIT là chiều sâu của cài đặt ngôn ngữ.</em></div>
 <div class="note-ct">Đây đúng là điều PRF192 bài 1.1 cho thấy từ phía lập trình. Vài ngôn ngữ (Java) làm cả hai: biên dịch ra "bytecode" trung gian, rồi thông dịch/JIT trên một máy ảo — vừa mang đi được vừa đủ nhanh.</div>
 <a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-254" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -1601,6 +1645,7 @@ export default {
 </div>
 <h3>Procedural vs object-oriented (CQ11.4)</h3>
 <p>The exam contrasts these two directly. <strong>Procedural</strong> thinks in <em>verbs</em>: "do this, then this" — functions operate on separate data. <strong>OOP</strong> thinks in <em>nouns</em>: a "Student" object carries both its data (name, grades) and its actions (calculateGPA). OOP shines for large programs because it groups related data and behavior together, making code easier to reuse and maintain.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Declarative code says what, not how.</b> Beyond procedural/OOP/functional, the deeper axis is imperative (you spell out each step) versus declarative (you state the goal and let the system work out the steps) — SQL and HTML are declarative. Functional programming leans declarative through pure functions with no side effects, which make code far easier to test and to run in parallel. <em>The syllabus lists paradigms; the imperative/declarative axis and purity are the unifying idea behind them.</em></div>
 <div class="note-ct">Most modern languages are <strong>multi-paradigm</strong> — Python and JavaScript let you write procedural, object-oriented and functional code in the same file. Knowing the paradigms helps you pick the right style for each part of a problem. Your journey: PRF192 (procedural) → PRO192 (OOP) → later, functional ideas everywhere.</div>
 </div>
 <div class="ml-vi">
@@ -1615,6 +1660,7 @@ export default {
 </div>
 <h3>Thủ tục vs hướng đối tượng (CQ11.4)</h3>
 <p>Bài thi so sánh hai cái này trực tiếp. <strong>Thủ tục</strong> nghĩ theo <em>động từ</em>: "làm cái này, rồi cái này" — hàm thao tác trên dữ liệu tách rời. <strong>OOP</strong> nghĩ theo <em>danh từ</em>: một đối tượng "Student" mang cả dữ liệu (tên, điểm) lẫn hành động (calculateGPA). OOP toả sáng với chương trình lớn vì nó gom dữ liệu và hành vi liên quan lại với nhau, giúp code dễ tái dùng và bảo trì.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Code khai báo nói cái gì, không nói làm sao.</b> Ngoài thủ tục/OOP/hàm, trục sâu hơn là mệnh lệnh (imperative — bạn viết ra từng bước) so với khai báo (declarative — bạn nêu mục tiêu, để hệ thống tự tìm các bước) — SQL và HTML là khai báo. Lập trình hàm nghiêng về khai báo qua các hàm thuần không có tác dụng phụ, khiến code dễ kiểm thử và chạy song song hơn nhiều. <em>Giáo trình liệt kê các paradigm; trục mệnh lệnh/khai báo và tính thuần là ý tưởng thống nhất đằng sau chúng.</em></div>
 <div class="note-ct">Hầu hết ngôn ngữ hiện đại là <strong>đa paradigm</strong> — Python và JavaScript cho bạn viết thủ tục, hướng đối tượng và hàm trong cùng một tệp. Biết các paradigm giúp bạn chọn phong cách đúng cho từng phần bài toán. Hành trình của bạn: PRF192 (thủ tục) → PRO192 (OOP) → sau này, ý tưởng hàm ở khắp nơi.</div>
 </div>
 `,
@@ -1669,6 +1715,7 @@ export default {
     <tr><td>Good when requirements are fixed</td><td>Dominant in modern industry (Scrum)</td></tr>
   </tbody>
 </table>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Waterfall vs Agile — two shapes of the same lifecycle.</b> The classic model runs the phases once in strict order (Waterfall); if the requirements were wrong, you find out too late. Agile instead repeats the whole cycle in short iterations (sprints of 1–4 weeks), delivering a small working slice each time and adapting — which is how most modern teams, including real startups, actually build software. <em>Intro lists the phases; how they are arranged (Waterfall vs Agile) is software-engineering (SWE201c) depth.</em></div>
 <div class="note-ct">Notice the parallel to algorithms: analysis = understand the problem, design = plan the solution, implementation = write it, testing = check it. It is the same problem-solving mindset scaled up to whole teams and products.</div>
 </div>
 <div class="ml-vi">
@@ -1692,6 +1739,7 @@ export default {
     <tr><td>Tốt khi yêu cầu cố định</td><td>Chiếm ưu thế trong công nghiệp hiện đại (Scrum)</td></tr>
   </tbody>
 </table>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Thác nước vs Agile — hai hình dạng của cùng một vòng đời.</b> Mô hình cổ điển chạy các giai đoạn một lần theo thứ tự chặt (Waterfall); nếu yêu cầu sai, bạn phát hiện quá muộn. Agile thì lặp lại cả vòng trong các chu kỳ ngắn (sprint 1–4 tuần), mỗi lần giao một lát chạy được nhỏ rồi thích nghi — đó là cách hầu hết đội hiện đại, kể cả startup thật, thực sự làm phần mềm. <em>Nhập môn liệt kê các giai đoạn; cách sắp xếp chúng (Waterfall vs Agile) là chiều sâu của công nghệ phần mềm (SWE201c).</em></div>
 <div class="note-ct">Để ý sự song song với thuật toán: phân tích = hiểu bài toán, thiết kế = lập kế hoạch lời giải, cài đặt = viết ra, kiểm thử = kiểm lại. Vẫn là tư duy giải quyết vấn đề đó, nhưng nâng lên quy mô cả đội ngũ và sản phẩm.</div>
 </div>
 `,
@@ -1721,6 +1769,7 @@ export default {
     <tr><td>Done by developers</td><td>Done by QA / users</td></tr>
   </tbody>
 </table>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The test pyramid and TDD.</b> Real teams do not test only at the end: they write many fast unit tests, fewer integration tests, and a handful of slow end-to-end tests (the test pyramid). Test-Driven Development even writes the test before the code, so the test defines "done", and coverage tools measure what fraction of lines the tests actually exercise. <em>The syllabus names black-box/glass-box; the pyramid, coverage and TDD are the practical engineering discipline.</em></div>
 <div class="callout ok">A memorable analogy: black-box testing is judging a vending machine by pressing buttons and seeing what drops out; glass-box testing is opening it up and checking every wire and gear. Good teams do both.</div>
 <a class="link-card codelab" href="/code-lab/git?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-470" target="_blank" rel="noopener">
   <span class="lc-ico">🌿</span>
@@ -1747,6 +1796,7 @@ export default {
     <tr><td>Do lập trình viên làm</td><td>Do QA / người dùng làm</td></tr>
   </tbody>
 </table>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Tháp kiểm thử và TDD.</b> Đội thật không chỉ kiểm ở cuối: họ viết nhiều unit test nhanh, ít integration test hơn, và một nhúm end-to-end test chậm (tháp kiểm thử). Phát triển hướng kiểm thử (TDD) còn viết test trước cả code, nên test định nghĩa "xong", và công cụ coverage đo tỉ lệ dòng code mà test thực sự chạy qua. <em>Giáo trình kể tên hộp đen/hộp trắng; tháp kiểm thử, coverage và TDD là kỷ luật kỹ thuật thực tế.</em></div>
 <div class="callout ok">Một phép ví dễ nhớ: kiểm hộp đen là đánh giá máy bán nước bằng cách bấm nút và xem thứ rơi ra; kiểm hộp trắng là mở nó ra và kiểm từng dây, từng bánh răng. Đội tốt làm cả hai.</div>
 <a class="link-card codelab" href="/code-lab/git?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-470" target="_blank" rel="noopener">
   <span class="lc-ico">🌿</span>
@@ -1796,6 +1846,7 @@ export default {
 <h3>Record — many attributes of ONE thing</h3>
 <p>A <strong>record</strong> (a struct in C) groups related fields of <em>different</em> types describing one entity (CQ13.4).</p>
 <div class="out"><b>Student record</b><br>{ id: 1024, name: "An", gpa: 3.6 }</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why array access is instant.</b> An array stores its elements in one contiguous block, so the address of element i is simply base + i × size — a single arithmetic step, O(1), whatever the length. That contiguity also makes arrays cache-friendly (see 1.4), so they often beat "faster on paper" structures in practice. The cost: inserting in the middle means shifting everything after it. <em>Intro contrasts array vs record; the address arithmetic and cache angle explain their real performance.</em></div>
 <div class="note-ct">Array vs record in one line: an array is a <em>list of the same thing</em> (all students); a record is <em>one thing with many parts</em> (one student). Combine them — an array of records — and you have a table, the basis of databases in Chapter 11.</div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-503" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -1814,6 +1865,7 @@ export default {
 <h3>Bản ghi — nhiều thuộc tính của MỘT thứ</h3>
 <p>Một <strong>bản ghi (record)</strong> (struct trong C) gom các trường liên quan có kiểu <em>khác nhau</em> mô tả một thực thể (CQ13.4).</p>
 <div class="out"><b>Bản ghi sinh viên</b><br>{ id: 1024, name: "An", gpa: 3.6 }</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao truy cập mảng là tức thì.</b> Mảng lưu các phần tử trong một khối liền nhau, nên địa chỉ phần tử i chỉ là base + i × size — một phép tính duy nhất, O(1), bất kể độ dài. Sự liền mạch đó cũng khiến mảng thân thiện với cache (xem 1.4), nên nó thường thắng các cấu trúc "nhanh trên giấy" trong thực tế. Cái giá: chèn vào giữa phải dời mọi thứ phía sau. <em>Nhập môn so mảng vs bản ghi; phép tính địa chỉ và góc cache giải thích hiệu năng thật của chúng.</em></div>
 <div class="note-ct">Mảng vs bản ghi trong một câu: mảng là <em>danh sách nhiều cái cùng loại</em> (tất cả sinh viên); bản ghi là <em>một thứ có nhiều phần</em> (một sinh viên). Kết hợp lại — một mảng các bản ghi — bạn có một bảng, nền tảng của cơ sở dữ liệu ở Chương 11.</div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-503" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -1848,6 +1900,7 @@ export default {
     <tr><td>Memory</td><td>One tight block</td><td>Scattered nodes + links</td></tr>
   </tbody>
 </table>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The pointer trade-off, and list variants.</b> A linked list inserts or deletes in O(1) by just re-wiring pointers — no shifting — but to reach the i-th node you must walk from the head, O(n), and each node costs extra memory for its pointer. Variants add power: a doubly-linked list walks both directions, and a circular list loops back to the start. <em>Intro shows the array-vs-list contrast; the pointer cost and list variants are data-structures (CSD201) detail.</em></div>
 <div class="note-ct">This is your first taste of the deepest theme in computer science: there is rarely one "best" structure. Arrays win at reading; linked lists win at inserting. The engineer picks based on what the program does most often. CSD201 explores this in depth.</div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-505" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -1874,6 +1927,7 @@ export default {
     <tr><td>Bộ nhớ</td><td>Một khối liền</td><td>Nút rải rác + liên kết</td></tr>
   </tbody>
 </table>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đánh đổi con trỏ, và các biến thể danh sách.</b> Danh sách liên kết chèn hoặc xoá trong O(1) chỉ bằng cách nối lại con trỏ — không phải dời — nhưng để tới nút thứ i bạn phải đi từ đầu, O(n), và mỗi nút tốn thêm bộ nhớ cho con trỏ. Các biến thể thêm sức mạnh: danh sách liên kết đôi đi được cả hai chiều, danh sách vòng nối lại về đầu. <em>Nhập môn cho tương phản mảng–danh sách; chi phí con trỏ và các biến thể là chi tiết của CSD201.</em></div>
 <div class="note-ct">Đây là lần đầu bạn nếm chủ đề sâu nhất của khoa học máy tính: hiếm khi có một cấu trúc "tốt nhất". Mảng thắng ở đọc; danh sách liên kết thắng ở chèn. Kỹ sư chọn dựa trên việc chương trình làm gì nhiều nhất. CSD201 sẽ đào sâu điều này.</div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-505" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -1904,6 +1958,7 @@ export default {
 <h3>Queue — First In, First Out (FIFO)</h3>
 <p>Like a line at a shop: you join at the back (<strong>enqueue</strong>) and are served from the front (<strong>dequeue</strong>). The first item in is the first out.</p>
 <p>Used for: printer jobs, task scheduling, message buffers.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The call stack is a real stack.</b> Every function call pushes a frame — its local variables and return address — onto a stack, and returning pops it, which is why runaway recursion causes a literal "stack overflow". Queues specialize too: a priority queue always serves the most urgent item first, powering task schedulers and Dijkstra’s shortest-path algorithm. <em>Intro defines LIFO/FIFO; the call stack and priority queue show where these run the whole system.</em></div>
 <div class="note-ct">One clean contrast: a stack is a pile (top-only, LIFO); a queue is a line (ends differ, FIFO). Same idea of "controlled access", opposite ordering — and both appear constantly in real systems.</div>
 </div>
 <div class="ml-vi">
@@ -1921,6 +1976,7 @@ export default {
 <h3>Hàng đợi (queue) — Vào Trước, Ra Trước (FIFO)</h3>
 <p>Như xếp hàng ở cửa hàng: bạn vào ở cuối (<strong>enqueue</strong>) và được phục vụ từ đầu (<strong>dequeue</strong>). Phần tử vào đầu tiên là ra đầu tiên.</p>
 <p>Dùng cho: hàng đợi in, lập lịch tác vụ, bộ đệm tin nhắn.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Ngăn xếp lời gọi là một stack thật.</b> Mỗi lời gọi hàm đẩy một khung — biến cục bộ và địa chỉ trả về — lên một ngăn xếp, và khi trả về thì lấy ra, nên đệ quy chạy loạn gây đúng nghĩa "tràn ngăn xếp" (stack overflow). Hàng đợi cũng có bản chuyên biệt: hàng đợi ưu tiên luôn phục vụ phần tử khẩn nhất trước, vận hành bộ lập lịch tác vụ và thuật toán đường đi ngắn nhất Dijkstra. <em>Nhập môn định nghĩa LIFO/FIFO; ngăn xếp lời gọi và hàng đợi ưu tiên cho thấy chúng vận hành cả hệ thống.</em></div>
 <div class="note-ct">Một tương phản gọn: ngăn xếp là một chồng (chỉ ở đỉnh, LIFO); hàng đợi là một hàng (hai đầu khác nhau, FIFO). Cùng ý "truy cập có kiểm soát", thứ tự ngược nhau — và cả hai xuất hiện liên tục trong hệ thống thật.</div>
 </div>
 `,
@@ -1945,6 +2001,7 @@ export default {
 <p>A <strong>binary tree</strong> lets each node have at most two children. A <strong>binary search tree (BST)</strong> keeps them ordered (smaller left, larger right) so searching is fast — like binary search built into the structure.</p>
 <h3>Graph — a network</h3>
 <p>A <strong>graph</strong> is nodes connected by edges, with <em>no</em> hierarchy — any node can link to any other. Perfect for maps (cities + roads), social networks (people + friendships), and the web (pages + links).</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>A balanced tree keeps search at O(log n).</b> A binary search tree finds items in O(log n) — but only while it stays balanced; feed it already-sorted data naively and it degenerates into a slow O(n) chain, which is why self-balancing trees (AVL, red-black) exist and power databases. Graphs are explored with BFS (level by level) or DFS (deep first), and weighted edges let algorithms find the cheapest route. <em>Intro introduces the shapes; balancing and traversal algorithms are core CSD201 material.</em></div>
 <div class="note-ct">Tree vs graph: a tree is a special graph with a strict parent-child hierarchy and no cycles; a general graph allows any connections, including loops. Trees model "contains/belongs to"; graphs model "connected to". These power everything from file systems to Google Maps.</div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-506" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -1966,6 +2023,7 @@ export default {
 <p>Một <strong>cây nhị phân</strong> cho mỗi nút tối đa hai con. Một <strong>cây tìm kiếm nhị phân (BST)</strong> giữ chúng có thứ tự (nhỏ bên trái, lớn bên phải) nên tìm rất nhanh — như tìm nhị phân được xây thẳng vào cấu trúc.</p>
 <h3>Đồ thị (graph) — một mạng lưới</h3>
 <p>Một <strong>đồ thị</strong> là các nút nối bằng cạnh, <em>không</em> phân cấp — nút nào cũng có thể nối tới nút khác. Hoàn hảo cho bản đồ (thành phố + đường), mạng xã hội (người + tình bạn), và web (trang + liên kết).</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Cây cân bằng giữ tìm kiếm ở O(log n).</b> Cây tìm kiếm nhị phân tìm phần tử trong O(log n) — nhưng chỉ khi nó còn cân bằng; nạp dữ liệu đã sắp một cách ngây thơ thì nó thoái hoá thành một chuỗi O(n) chậm, nên mới có cây tự cân bằng (AVL, đỏ-đen) và chúng vận hành cơ sở dữ liệu. Đồ thị được duyệt bằng BFS (theo tầng) hoặc DFS (đi sâu trước), và cạnh có trọng số cho thuật toán tìm đường rẻ nhất. <em>Nhập môn giới thiệu các hình dạng; cân bằng và thuật toán duyệt là nội dung lõi của CSD201.</em></div>
 <div class="note-ct">Cây vs đồ thị: cây là một đồ thị đặc biệt có phân cấp cha-con chặt và không có chu trình; đồ thị tổng quát cho phép mọi kết nối, kể cả vòng lặp. Cây mô hình "chứa/thuộc về"; đồ thị mô hình "nối với". Chúng vận hành mọi thứ từ hệ thống tệp tới Google Maps.</div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-506" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -2043,6 +2101,7 @@ export default {
   </tbody>
 </table>
 <p>The number 1000 in a text file takes four characters ("1", "0", "0", "0"). In a binary file it can be stored in the exact bytes the CPU uses for an integer — smaller and instantly usable, but only the right program can read it.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Magic numbers and endianness.</b> A program often knows a file’s true type not from its extension but from a magic number — signature bytes at the very start (a PNG begins with the bytes 89 50 4E 47). Binary formats also must agree on byte order (endianness): whether the most- or least-significant byte comes first, or the same integer is read wrongly on another machine. <em>Intro contrasts text vs binary; magic numbers and endianness are the file-format internals.</em></div>
 <div class="pitfall">Opening a JPEG in a text editor shows random symbols — not because the file is corrupt, but because you are reading binary bytes as if they were characters. The <em>same bytes</em>, wrong interpretation. This mirrors Chapter 3&#39;s lesson exactly.</div>
 <a class="link-card codelab" href="/code-lab/linux-bash?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-479" target="_blank" rel="noopener">
   <span class="lc-ico">🐧</span>
@@ -2064,6 +2123,7 @@ export default {
   </tbody>
 </table>
 <p>Số 1000 trong tệp text tốn bốn ký tự ("1", "0", "0", "0"). Trong tệp binary nó có thể lưu đúng các byte CPU dùng cho một số nguyên — nhỏ hơn và dùng được ngay, nhưng chỉ đúng chương trình mới đọc được.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Số nhận dạng (magic number) và thứ tự byte (endianness).</b> Một chương trình thường biết kiểu thật của tệp không nhờ phần mở rộng mà nhờ một magic number — các byte chữ ký ngay đầu tệp (PNG bắt đầu bằng byte 89 50 4E 47). Định dạng nhị phân còn phải thống nhất thứ tự byte (endianness): byte có trọng số cao hay thấp đứng trước, kẻo cùng một số nguyên bị đọc sai trên máy khác. <em>Nhập môn so text vs binary; magic number và endianness là phần ruột của định dạng tệp.</em></div>
 <div class="pitfall">Mở một tệp JPEG trong trình soạn thảo văn bản thấy các ký hiệu lộn xộn — không phải vì tệp hỏng, mà vì bạn đang đọc byte binary như thể chúng là ký tự. <em>Cùng byte</em>, sai cách diễn giải. Điều này lặp lại đúng bài học ở Chương 3.</div>
 <a class="link-card codelab" href="/code-lab/linux-bash?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-479" target="_blank" rel="noopener">
   <span class="lc-ico">🐧</span>
@@ -2093,6 +2153,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Indexed</div><div class="lz-t">look up + jump</div><div class="lz-d">fast, needs index</div></div>
   <div class="lz-step"><div class="lz-k">Hashed</div><div class="lz-t">compute address</div><div class="lz-d">fastest for exact keys</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>How databases find a row without scanning.</b> Beyond sequential and direct access, indexed files keep a separate sorted index — usually a B-tree — that points to record locations, so a lookup takes O(log n) instead of reading every record. This is exactly the structure a database index uses, the same idea that makes a query over millions of rows return instantly. <em>The syllabus lists access methods; B-tree indexing is the mechanism behind fast databases (DBI202).</em></div>
 <div class="note-ct">These same ideas power databases (Chapter 11). An <strong>index</strong> in a database is exactly this: a shortcut structure so the system does not have to scan every row. Choosing good indexes is a real-world skill you will use in DBI202 and beyond.</div>
 </div>
 <div class="ml-vi">
@@ -2109,6 +2170,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Chỉ mục</div><div class="lz-t">tra + nhảy</div><div class="lz-d">nhanh, cần chỉ mục</div></div>
   <div class="lz-step"><div class="lz-k">Băm</div><div class="lz-t">tính địa chỉ</div><div class="lz-d">nhanh nhất cho khoá chính xác</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>CSDL tìm một hàng mà không quét toàn bộ ra sao.</b> Ngoài truy cập tuần tự và trực tiếp, tệp có chỉ mục giữ một chỉ mục sắp xếp riêng — thường là B-tree — trỏ tới vị trí bản ghi, nên tra cứu mất O(log n) thay vì đọc mọi bản ghi. Đây đúng là cấu trúc mà chỉ mục CSDL dùng, chính ý tưởng khiến truy vấn trên hàng triệu dòng trả về tức thì. <em>Giáo trình liệt kê các phương thức truy cập; chỉ mục B-tree là cơ chế đằng sau CSDL nhanh (DBI202).</em></div>
 <div class="note-ct">Những ý tưởng này vận hành cả cơ sở dữ liệu (Chương 11). Một <strong>chỉ mục (index)</strong> trong CSDL chính là điều này: một cấu trúc lối tắt để hệ thống không phải quét mọi hàng. Chọn chỉ mục tốt là kỹ năng thực tế bạn sẽ dùng ở DBI202 và về sau.</div>
 </div>
 `,
@@ -2160,6 +2222,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Internal level (physical)</div><div class="lz-ld">How data is actually stored on disk (files, indexes).</div></div>
 </div>
 <p>This layering gives <strong>data independence</strong>: you can reorganize physical storage (internal) without changing how apps see the data (external). Same idea as networking layers — separate concerns so each can change alone.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>ACID — why a bank transfer never loses money.</b> A DBMS wraps changes in transactions that guarantee ACID: Atomicity (all-or-nothing), Consistency, Isolation (concurrent users cannot corrupt each other) and Durability (committed data survives a crash). Example: moving money debits one account and credits another as one atomic unit — a power cut mid-way rolls both back, so money is never left vanished. <em>Intro defines a database and its architecture; ACID transactions are the guarantee that makes it trustworthy.</em></div>
 <div class="note-ct">You are literally using a database right now — this Academy stores courses, lessons and your progress in PostgreSQL. DBI202 teaches you to build and query one; this chapter gives you the map.</div>
 </div>
 <div class="ml-vi">
@@ -2180,6 +2243,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Mức trong (vật lý)</div><div class="lz-ld">Cách dữ liệu thực sự lưu trên đĩa (tệp, chỉ mục).</div></div>
 </div>
 <p>Phân tầng này cho <strong>độc lập dữ liệu</strong>: bạn có thể tổ chức lại lưu trữ vật lý (mức trong) mà không đổi cách app thấy dữ liệu (mức ngoài). Cùng ý tưởng với các tầng mạng — tách mối quan tâm để mỗi phần đổi riêng được.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>ACID — vì sao chuyển khoản ngân hàng không bao giờ mất tiền.</b> DBMS bọc các thay đổi trong giao dịch (transaction) bảo đảm ACID: Atomicity (toàn phần hoặc không), Consistency (nhất quán), Isolation (nhiều người dùng đồng thời không làm hỏng nhau) và Durability (dữ liệu đã commit sống sót qua sự cố). Ví dụ: chuyển tiền trừ một tài khoản và cộng tài khoản kia như một đơn vị nguyên tử — mất điện giữa chừng thì cả hai cùng quay lui, tiền không bao giờ bốc hơi. <em>Nhập môn định nghĩa CSDL và kiến trúc; giao dịch ACID là bảo đảm khiến nó đáng tin.</em></div>
 <div class="note-ct">Bạn đang dùng một CSDL ngay lúc này — Academy này lưu khóa học, bài học và tiến độ của bạn trong PostgreSQL. DBI202 dạy bạn xây và truy vấn một cái; chương này cho bạn tấm bản đồ.</div>
 </div>
 `,
@@ -2203,6 +2267,7 @@ export default {
 <h3>What makes a good design? (CQ17.3)</h3>
 <p>Good relational design avoids storing the same fact in many places (a process called <strong>normalization</strong>). If a student changes their name, you should update it in exactly one row — not hunt through the whole database. Redundancy causes update anomalies and inconsistency.</p>
 <p>The relational model also provides <strong>data independence</strong> (CQ17.2): apps ask for data by table/column names using SQL, without knowing how it is physically stored.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Normalization has named levels.</b> Good design is formalized into normal forms: 1NF (atomic values, no repeating groups), then 2NF and 3NF (every non-key column depends on the whole key and nothing but the key). Foreign keys link tables so a JOIN can recombine them, and the whole relational model rests on set theory and relational algebra. <em>Intro mentions avoiding redundancy; the numbered normal forms and their theory are DBI202 depth.</em></div>
 <div class="note-ct">One relational query can join tables to answer rich questions ("list all students enrolled in CSI104"). This power — describing <em>what</em> you want, not <em>how</em> to fetch it — is why SQL has lasted 50 years and is worth learning well in DBI202.</div>
 <a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-406" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
@@ -2223,6 +2288,7 @@ export default {
 <h3>Thiết kế tốt là gì? (CQ17.3)</h3>
 <p>Thiết kế quan hệ tốt tránh lưu cùng một sự kiện ở nhiều nơi (một quá trình gọi là <strong>chuẩn hoá — normalization</strong>). Nếu một sinh viên đổi tên, bạn nên cập nhật ở đúng một hàng — không phải lùng khắp CSDL. Dư thừa gây bất thường khi cập nhật và mâu thuẫn.</p>
 <p>Mô hình quan hệ cũng cho <strong>độc lập dữ liệu</strong> (CQ17.2): app hỏi dữ liệu theo tên bảng/cột bằng SQL, mà không cần biết nó lưu vật lý ra sao.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Chuẩn hoá có các mức được đặt tên.</b> Thiết kế tốt được hình thức hoá thành các dạng chuẩn (normal form): 1NF (giá trị nguyên tử, không nhóm lặp), rồi 2NF và 3NF (mọi cột không khoá phụ thuộc vào toàn bộ khoá và chỉ khoá). Khoá ngoại nối các bảng để phép JOIN ghép lại, và toàn bộ mô hình quan hệ dựa trên lý thuyết tập hợp và đại số quan hệ. <em>Nhập môn nhắc tránh dư thừa; các dạng chuẩn đánh số và lý thuyết của chúng là chiều sâu của DBI202.</em></div>
 <div class="note-ct">Một truy vấn quan hệ có thể nối (join) các bảng để trả lời câu hỏi phong phú ("liệt kê mọi sinh viên đăng ký CSI104"). Sức mạnh này — mô tả <em>cái gì</em> bạn muốn, không phải <em>làm sao</em> lấy — là lý do SQL trụ vững 50 năm và đáng học kỹ ở DBI202.</div>
 <a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-406" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
@@ -2271,6 +2337,7 @@ export default {
   <div class="lz-node"><div class="lz-badge">A</div><div class="lz-nbody"><div class="lz-ntitle">Availability</div><div class="lz-nsub">The system is up when needed. Threatened by denial-of-service; defended by backups &amp; redundancy.</div></div></div>
 </div>
 <p>Real examples: a leaked password database breaks <em>confidentiality</em>; a changed bank balance breaks <em>integrity</em>; a website knocked offline by a flood of traffic breaks <em>availability</em>.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Beyond CIA: authentication, authorization and hashing.</b> Confidentiality-Integrity-Availability is the goal; the tools include authentication (proving who you are) versus authorization (what you are allowed to do), which are often confused. Passwords are never stored raw but as a salted hash, so a stolen database still does not reveal them, and integrity is often checked with a hash or checksum. <em>Intro presents the triad; the auth-vs-authz distinction and hashing are how it is actually enforced.</em></div>
 <div class="callout warn">Security is only as strong as its weakest link — and that link is very often a human, not the technology. A perfect encryption system fails if someone writes the password on a sticky note. This is why security is also about behavior and process, not just code.</div>
 </div>
 <div class="ml-vi">
@@ -2283,6 +2350,7 @@ export default {
   <div class="lz-node"><div class="lz-badge">A</div><div class="lz-nbody"><div class="lz-ntitle">Sẵn sàng (Availability)</div><div class="lz-nsub">Hệ thống hoạt động khi cần. Bị đe doạ bởi từ chối dịch vụ; phòng thủ bằng sao lưu &amp; dự phòng.</div></div></div>
 </div>
 <p>Ví dụ thật: một CSDL mật khẩu bị rò phá <em>bảo mật</em>; một số dư ngân hàng bị đổi phá <em>toàn vẹn</em>; một website bị đánh sập bởi lượng truy cập lũ phá <em>sẵn sàng</em>.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Ngoài CIA: xác thực, phân quyền và băm.</b> Bí mật–Toàn vẹn–Sẵn sàng là mục tiêu; công cụ gồm xác thực (authentication — chứng minh bạn là ai) so với phân quyền (authorization — bạn được làm gì), hai thứ hay bị nhầm. Mật khẩu không bao giờ lưu thô mà lưu dạng băm có muối (salted hash), nên CSDL bị trộm vẫn không lộ, và tính toàn vẹn thường được kiểm bằng một mã băm hay checksum. <em>Nhập môn cho bộ ba CIA; phân biệt xác thực–phân quyền và băm mới là cách thực thi nó.</em></div>
 <div class="callout warn">Bảo mật chỉ mạnh bằng mắt xích yếu nhất — và mắt xích đó rất thường là con người, không phải công nghệ. Một hệ mã hoá hoàn hảo vẫn thất bại nếu ai đó ghi mật khẩu lên tờ giấy dán. Vì thế bảo mật cũng là về hành vi và quy trình, không chỉ code.</div>
 </div>
 `,
@@ -2310,6 +2378,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Encrypt</div><div class="lz-t">your PUBLIC key</div><div class="lz-d">anyone can lock a message to you</div></div>
   <div class="lz-step"><div class="lz-k">Decrypt</div><div class="lz-t">your PRIVATE key</div><div class="lz-d">only you can open it</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Real HTTPS is hybrid, and signatures run crypto backwards.</b> Asymmetric crypto is slow, so HTTPS uses it only to exchange a fast symmetric key, then encrypts the actual traffic symmetrically — a hybrid scheme. Reversing the keys gives a digital signature: you encrypt a hash with your private key, and anyone can verify it with your public key, proving both authorship and integrity. <em>Intro contrasts symmetric vs asymmetric; hybrid schemes and signatures are how they combine in practice.</em></div>
 <div class="callout ok">This is what the padlock in your browser (HTTPS) uses. Asymmetric crypto solves the key-sharing problem and makes secure online shopping and banking possible — arguably the invention that made the modern web trustworthy.</div>
 <a class="link-card codelab" href="/code-lab/authentication?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-948" target="_blank" rel="noopener">
   <span class="lc-ico">🔐</span>
@@ -2334,6 +2403,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Mã hoá</div><div class="lz-t">khoá CÔNG KHAI của bạn</div><div class="lz-d">ai cũng khoá được tin gửi bạn</div></div>
   <div class="lz-step"><div class="lz-k">Giải mã</div><div class="lz-t">khoá RIÊNG của bạn</div><div class="lz-d">chỉ bạn mở được</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>HTTPS thật là lai, và chữ ký chạy ngược mã hoá.</b> Mã hoá bất đối xứng chậm, nên HTTPS chỉ dùng nó để trao đổi một khoá đối xứng nhanh, rồi mã hoá lưu lượng thật bằng đối xứng — một sơ đồ lai. Đảo ngược vai trò khoá cho ra chữ ký số: bạn mã hoá một mã băm bằng khoá riêng, và ai cũng kiểm được bằng khoá công khai của bạn, chứng minh cả tác giả lẫn tính toàn vẹn. <em>Nhập môn so đối xứng vs bất đối xứng; sơ đồ lai và chữ ký số là cách chúng kết hợp trong thực tế.</em></div>
 <div class="callout ok">Đây là thứ mà ổ khoá trong trình duyệt (HTTPS) dùng. Mã hoá bất đối xứng giải bài toán chia sẻ khoá và làm cho mua sắm, ngân hàng trực tuyến an toàn khả thi — có thể nói là phát minh khiến web hiện đại đáng tin cậy.</div>
 <a class="link-card codelab" href="/code-lab/authentication?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-948" target="_blank" rel="noopener">
   <span class="lc-ico">🔐</span>
@@ -2368,6 +2438,7 @@ export default {
   <li>Give credit; do not plagiarize code or ideas.</li>
   <li>Be honest about what your software can and cannot do.</li>
 </ul>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Responsible disclosure and defense in depth.</b> Ethical (white-hat) hackers follow responsible disclosure: they privately tell the vendor and give time to patch before going public, often through paid bug-bounty programs. Defenders assume no single wall is enough and layer their protections (defense in depth) — firewalls, encryption, least-privilege access — so one breach does not hand over everything. <em>The syllabus names hacker types; the disclosure process and layered-defense strategy are professional security practice.</em></div>
 <div class="note-ct">Course wrap-up: from bits (Ch1–3) through systems (Ch4–5), software thinking (Ch6–8), data (Ch9–11), and finally responsibility (Ch12), you now hold the full map of computer science. Every future course zooms into one region — but you will never be lost, because you have seen the whole territory.</div>
 </div>
 <div class="ml-vi">
@@ -2389,6 +2460,7 @@ export default {
   <li>Ghi công; không đạo code hay ý tưởng.</li>
   <li>Trung thực về việc phần mềm của bạn làm được và không làm được gì.</li>
 </ul>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Công bố có trách nhiệm và phòng thủ nhiều lớp.</b> Hacker có đạo đức (mũ trắng) theo quy trình công bố có trách nhiệm: họ báo riêng cho nhà cung cấp và cho thời gian vá trước khi công khai, thường qua chương trình thưởng lỗi (bug bounty) có trả tiền. Bên phòng thủ giả định không bức tường nào là đủ và xếp nhiều lớp bảo vệ (defense in depth) — tường lửa, mã hoá, quyền tối thiểu — để một lần bị xâm nhập không trao hết mọi thứ. <em>Giáo trình kể tên các loại hacker; quy trình công bố và chiến lược phòng thủ nhiều lớp là thực hành bảo mật chuyên nghiệp.</em></div>
 <div class="note-ct">Tổng kết môn: từ bit (Ch1–3) qua hệ thống (Ch4–5), tư duy phần mềm (Ch6–8), dữ liệu (Ch9–11), và cuối cùng là trách nhiệm (Ch12), giờ bạn nắm trọn bản đồ khoa học máy tính. Mọi môn sau này phóng to vào một vùng — nhưng bạn sẽ không bao giờ lạc, vì đã thấy toàn bộ lãnh thổ.</div>
 </div>
 `,

@@ -290,6 +290,16 @@ export default {
 <p>A <strong>truth table</strong> lists every combination of inputs and the result — the definitive way to evaluate a compound proposition.</p>
 <div class="out"><b>p → q</b> (implication)<br>p=T, q=T → T<br>p=T, q=F → <b>F</b>  ← the only false case<br>p=F, q=T → T<br>p=F, q=F → T</div>
 <div class="pitfall">The implication p → q trips everyone up: it is <strong>only false when p is true but q is false</strong>. "If it rains, I bring an umbrella" is not broken on a sunny day (p false) — the promise only fails if it rains and you have no umbrella.</div>
+<h3>Formulas · Truth values &amp; precedence</h3>
+<div class="formula"><span class="lbl">The five connectives at a glance</span>¬p true ⟺ p false    p∧q true ⟺ both true    p∨q false ⟺ both false<br>p→q false ⟺ (p true, q false)    p↔q true ⟺ p and q match</div>
+<div class="formula"><span class="lbl">Precedence (binds tightest → loosest)</span>¬   then   ∧   then   ∨   then   →   then   ↔</div>
+<h3>Ví dụ có lời giải · Worked example (build a truth table)</h3>
+<div class="out"><b>Evaluate (p ∧ ¬q) → q for all inputs.</b><br>
+p=T, q=T: (T ∧ F)=F, F→T = <b>T</b><br>
+p=T, q=F: (T ∧ T)=T, T→F = <b>F</b>  ← only false row<br>
+p=F, q=T: (F ∧ F)=F, F→T = <b>T</b><br>
+p=F, q=F: (F ∧ T)=F, F→F = <b>T</b></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>One gate to rule them all.</b> Every connective can be built from just NAND (¬(p ∧ q)) — it is "functionally complete." That is why real CPUs are manufactured almost entirely from NAND gates: with one cheap building block you can synthesize AND, OR, NOT and therefore any logic circuit. The bridge straight into CEA201's digital logic.</div>
 <div class="note-ct">This is the exact logic behind if-statements and boolean expressions in every programming language — and behind the digital logic gates of CEA201. Propositional logic is where hardware and software meet.</div>
 </div>
 <div class="ml-vi">
@@ -310,6 +320,16 @@ export default {
 <p>Một <strong>bảng chân trị (truth table)</strong> liệt kê mọi tổ hợp đầu vào và kết quả — cách dứt khoát để tính một mệnh đề phức hợp.</p>
 <div class="out"><b>p → q</b> (kéo theo)<br>p=T, q=T → T<br>p=T, q=F → <b>F</b>  ← trường hợp sai duy nhất<br>p=F, q=T → T<br>p=F, q=F → T</div>
 <div class="pitfall">Phép kéo theo p → q làm ai cũng vấp: nó <strong>chỉ sai khi p đúng nhưng q sai</strong>. "Nếu trời mưa, tôi mang ô" không bị vi phạm vào ngày nắng (p sai) — lời hứa chỉ hỏng nếu trời mưa mà bạn không có ô.</div>
+<h3>Công thức · Giá trị chân trị &amp; độ ưu tiên</h3>
+<div class="formula"><span class="lbl">Năm phép nối nhìn nhanh</span>¬p đúng ⟺ p sai    p∧q đúng ⟺ cả hai đúng    p∨q sai ⟺ cả hai sai<br>p→q sai ⟺ (p đúng, q sai)    p↔q đúng ⟺ p và q trùng nhau</div>
+<div class="formula"><span class="lbl">Độ ưu tiên (chặt nhất → lỏng nhất)</span>¬   rồi   ∧   rồi   ∨   rồi   →   rồi   ↔</div>
+<h3>Ví dụ có lời giải · Giải từng bước (lập bảng chân trị)</h3>
+<div class="out"><b>Tính (p ∧ ¬q) → q với mọi đầu vào.</b><br>
+p=T, q=T: (T ∧ F)=F, F→T = <b>T</b><br>
+p=T, q=F: (T ∧ T)=T, T→F = <b>F</b>  ← hàng sai duy nhất<br>
+p=F, q=T: (F ∧ F)=F, F→T = <b>T</b><br>
+p=F, q=F: (F ∧ T)=F, F→F = <b>T</b></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Một cổng cai trị tất cả.</b> Mọi phép nối đều dựng được chỉ từ NAND (¬(p ∧ q)) — nó "đầy đủ hàm." Đó là lý do CPU thật được chế tạo gần như hoàn toàn từ cổng NAND: chỉ với một viên gạch rẻ bạn tổng hợp được AND, OR, NOT và do đó bất kỳ mạch logic nào. Cầu nối thẳng vào logic số của CEA201.</div>
 <div class="note-ct">Đây đúng là logic đằng sau câu if và biểu thức boolean trong mọi ngôn ngữ lập trình — và đằng sau các cổng logic số của CEA201. Logic mệnh đề là nơi phần cứng và phần mềm gặp nhau.</div>
 </div>
 `,
@@ -333,6 +353,14 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Existential ∃x P(x)</div><div class="lz-ld">"there EXISTS an x with P(x)." True if at least one x works.</div></div>
 </div>
 <div class="out"><b>Negating quantifiers (De Morgan for quantifiers):</b><br>¬∀x P(x) ≡ ∃x ¬P(x)  <small>("not all pass" = "someone fails")</small><br>¬∃x P(x) ≡ ∀x ¬P(x)</div>
+<h3>Formulas · The equivalence toolkit</h3>
+<div class="formula"><span class="lbl">Key logical equivalences</span>Identity: p∧T ≡ p, p∨F ≡ p    Domination: p∨T ≡ T, p∧F ≡ F<br>Idempotent: p∧p ≡ p    Double negation: ¬(¬p) ≡ p    Implication: p→q ≡ ¬p∨q<br>De Morgan: ¬(p∧q) ≡ ¬p∨¬q    Distributive: p∧(q∨r) ≡ (p∧q)∨(p∧r)</div>
+<h3>Ví dụ có lời giải · Worked example (simplify)</h3>
+<div class="out"><b>Simplify ¬(p ∨ q) ∨ (¬p ∧ q).</b><br>
+De Morgan on the left: (¬p ∧ ¬q) ∨ (¬p ∧ q)<br>
+Factor out ¬p (distributive): ¬p ∧ (¬q ∨ q)<br>
+¬q ∨ q ≡ T, and ¬p ∧ T ≡ ¬p  ⟹  <b>¬p</b>.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Quantifier order is not free.</b> ∀x ∃y Loves(x,y) ("everyone loves someone") is very different from ∃y ∀x Loves(x,y) ("someone is loved by everyone"). Swapping ∀ and ∃ changes the meaning — a classic bug in program specs and math proofs. The order in which quantifiers appear is part of the statement, not decoration.</div>
 <div class="callout ok">Quantifiers are everywhere in computer science: database queries ("find all users where…"), loop conditions ("for every element…"), and program specifications ("there exists an index such that…"). Predicate logic is how we state precisely what a program must do.</div>
 </div>
 <div class="ml-vi">
@@ -348,6 +376,14 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Tồn tại ∃x P(x)</div><div class="lz-ld">"TỒN TẠI một x với P(x)." Đúng nếu ít nhất một x thoả.</div></div>
 </div>
 <div class="out"><b>Phủ định lượng từ (De Morgan cho lượng từ):</b><br>¬∀x P(x) ≡ ∃x ¬P(x)  <small>("không phải ai cũng đậu" = "có người rớt")</small><br>¬∃x P(x) ≡ ∀x ¬P(x)</div>
+<h3>Công thức · Bộ công cụ tương đương</h3>
+<div class="formula"><span class="lbl">Các tương đương logic then chốt</span>Đồng nhất: p∧T ≡ p, p∨F ≡ p    Nuốt: p∨T ≡ T, p∧F ≡ F<br>Luỹ đẳng: p∧p ≡ p    Phủ định kép: ¬(¬p) ≡ p    Kéo theo: p→q ≡ ¬p∨q<br>De Morgan: ¬(p∧q) ≡ ¬p∨¬q    Phân phối: p∧(q∨r) ≡ (p∧q)∨(p∧r)</div>
+<h3>Ví dụ có lời giải · Giải từng bước (rút gọn)</h3>
+<div class="out"><b>Rút gọn ¬(p ∨ q) ∨ (¬p ∧ q).</b><br>
+De Morgan vế trái: (¬p ∧ ¬q) ∨ (¬p ∧ q)<br>
+Đặt ¬p làm nhân tử chung (phân phối): ¬p ∧ (¬q ∨ q)<br>
+¬q ∨ q ≡ T, và ¬p ∧ T ≡ ¬p  ⟹  <b>¬p</b>.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Thứ tự lượng từ không tuỳ tiện.</b> ∀x ∃y Yêu(x,y) ("ai cũng yêu một người nào đó") rất khác ∃y ∀x Yêu(x,y) ("có một người được mọi người yêu"). Đổi chỗ ∀ và ∃ làm đổi nghĩa — một lỗi kinh điển trong đặc tả chương trình và chứng minh toán. Thứ tự các lượng từ là một phần của mệnh đề, không phải trang trí.</div>
 <div class="callout ok">Lượng từ có ở khắp khoa học máy tính: truy vấn CSDL ("tìm mọi user mà…"), điều kiện vòng lặp ("với mọi phần tử…"), và đặc tả chương trình ("tồn tại một chỉ số sao cho…"). Logic vị từ là cách ta phát biểu chính xác chương trình phải làm gì.</div>
 </div>
 `,
@@ -397,6 +433,13 @@ export default {
 </table>
 <div class="out"><b>Example:</b>  A = {1, 2, 3},  B = {2, 3, 4}<br>A ∪ B = {1, 2, 3, 4}   ·   A ∩ B = {2, 3}   ·   A − B = {1}</div>
 <p>The <strong>cardinality</strong> |A| is the number of elements. The <strong>empty set</strong> ∅ has none. The <strong>power set</strong> P(A) is the set of all subsets — and |P(A)| = 2<sup>|A|</sup>.</p>
+<h3>Formulas · Set identities &amp; sizes</h3>
+<div class="formula"><span class="lbl">Set identities</span>De Morgan: (A∪B)ᶜ = Aᶜ∩Bᶜ, (A∩B)ᶜ = Aᶜ∪Bᶜ    Distributive: A∩(B∪C) = (A∩B)∪(A∩C)</div>
+<div class="formula"><span class="lbl">Counting sizes</span>|A∪B| = |A| + |B| − |A∩B|  (inclusion–exclusion)    |P(A)| = 2^|A|    |A×B| = |A|·|B|</div>
+<h3>Ví dụ có lời giải · Worked example</h3>
+<div class="out"><b>Inclusion–exclusion.</b> In a class, 18 study Java, 15 study Python, 7 study both. How many study at least one?<br>
+|J ∪ P| = 18 + 15 − 7 = <b>26</b>. (Adding 18+15 double-counts the 7 who do both, so subtract them once.)</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The Cartesian product builds tables.</b> A×B is the set of all ordered pairs (a, b) with a∈A, b∈B, and |A×B| = |A|·|B|. A <em>relation</em> is just a subset of A×B — which is exactly what a database table is (rows drawn from a product of column domains). Set theory is the formal ground under DBI202's relational model.</div>
 <div class="note-ct">Notice set operations mirror the logic connectives: union ≈ OR, intersection ≈ AND, complement ≈ NOT. That is no accident — a set is defined by a predicate ("the set of x where P(x)"), so set algebra and logic algebra are two views of the same thing. SQL queries are set operations in disguise.</div>
 </div>
 <div class="ml-vi">
@@ -415,6 +458,13 @@ export default {
 </table>
 <div class="out"><b>Ví dụ:</b>  A = {1, 2, 3},  B = {2, 3, 4}<br>A ∪ B = {1, 2, 3, 4}   ·   A ∩ B = {2, 3}   ·   A − B = {1}</div>
 <p><strong>Lực lượng (cardinality)</strong> |A| là số phần tử. <strong>Tập rỗng</strong> ∅ không có phần tử. <strong>Tập luỹ thừa</strong> P(A) là tập mọi tập con — và |P(A)| = 2<sup>|A|</sup>.</p>
+<h3>Công thức · Đẳng thức tập hợp &amp; kích thước</h3>
+<div class="formula"><span class="lbl">Đẳng thức tập hợp</span>De Morgan: (A∪B)ᶜ = Aᶜ∩Bᶜ, (A∩B)ᶜ = Aᶜ∪Bᶜ    Phân phối: A∩(B∪C) = (A∩B)∪(A∩C)</div>
+<div class="formula"><span class="lbl">Đếm kích thước</span>|A∪B| = |A| + |B| − |A∩B|  (bao hàm–loại trừ)    |P(A)| = 2^|A|    |A×B| = |A|·|B|</div>
+<h3>Ví dụ có lời giải · Giải từng bước</h3>
+<div class="out"><b>Bao hàm–loại trừ.</b> Trong một lớp, 18 người học Java, 15 học Python, 7 học cả hai. Bao nhiêu người học ít nhất một môn?<br>
+|J ∪ P| = 18 + 15 − 7 = <b>26</b>. (Cộng 18+15 đếm trùng 7 người học cả hai, nên trừ đi một lần.)</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Tích Descartes dựng nên bảng.</b> A×B là tập mọi cặp có thứ tự (a, b) với a∈A, b∈B, và |A×B| = |A|·|B|. Một <em>quan hệ (relation)</em> chỉ là một tập con của A×B — đúng là một bảng CSDL (các hàng lấy từ tích của các miền cột). Lý thuyết tập hợp là nền hình thức dưới mô hình quan hệ của DBI202.</div>
 <div class="note-ct">Để ý các phép tập hợp phản chiếu các phép nối logic: hợp ≈ OR, giao ≈ AND, phần bù ≈ NOT. Không phải ngẫu nhiên — một tập được định nghĩa bởi một vị từ ("tập các x mà P(x)"), nên đại số tập hợp và đại số logic là hai góc nhìn của cùng một thứ. Truy vấn SQL là phép tập hợp trá hình.</div>
 </div>
 `,
@@ -438,6 +488,12 @@ export default {
 <p>A <strong>sequence</strong> is an ordered list indexed by integers, like a<sub>n</sub> = 2n giving 2, 4, 6, 8, … A <strong>summation</strong> adds terms:</p>
 <div class="out">Σ<sub>i=1</sub><sup>n</sup> i  =  1 + 2 + … + n  =  n(n+1)/2<br><small>Example: Σ<sub>i=1</sub><sup>100</sup> i = 100·101/2 = 5050</small></div>
 <p>Geometric sequences (each term times a ratio r) and their sums appear constantly in algorithm analysis — e.g. the total work in a divide-and-conquer algorithm.</p>
+<h3>Formulas · Summations you must know</h3>
+<div class="formula"><span class="lbl">Closed-form sums</span>Σ<sub>i=1</sub><sup>n</sup> i = n(n+1)/2    Σ<sub>i=1</sub><sup>n</sup> i² = n(n+1)(2n+1)/6    Σ<sub>i=0</sub><sup>n</sup> arⁱ = a(rⁿ⁺¹−1)/(r−1)  (r≠1)</div>
+<h3>Ví dụ có lời giải · Worked examples</h3>
+<div class="out"><b>Example 1 — geometric sum.</b> 1 + 2 + 4 + … + 2¹⁰ (a=1, r=2, up to 2¹⁰) = (2¹¹ − 1)/(2 − 1) = <b>2047</b>.</div>
+<div class="out"><b>Example 2 — sum of squares.</b> 1² + 2² + … + 10² = 10·11·21/6 = 2310/6 = <b>385</b>.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Some infinities are bigger than others.</b> A bijection means two sets have the same size — even infinite ones. The integers and the rationals are "countable" (they biject with ℕ), but Cantor proved the real numbers are <em>not</em>: no function ℕ → ℝ can be onto. That single result draws the line between what a computer can enumerate and what it fundamentally cannot.</div>
 <div class="note-ct">Functions model everything in CS: a hash function maps keys to slots, an encryption function must be bijective (so it can be reversed), and a program itself is a function from input to output. Summations quantify how much work a loop does — the bridge to Chapter 3&#39;s complexity.</div>
 </div>
 <div class="ml-vi">
@@ -453,6 +509,12 @@ export default {
 <p>Một <strong>dãy (sequence)</strong> là một danh sách có thứ tự đánh chỉ số bằng số nguyên, như a<sub>n</sub> = 2n cho 2, 4, 6, 8, … Một <strong>tổng (summation)</strong> cộng các số hạng:</p>
 <div class="out">Σ<sub>i=1</sub><sup>n</sup> i  =  1 + 2 + … + n  =  n(n+1)/2<br><small>Ví dụ: Σ<sub>i=1</sub><sup>100</sup> i = 100·101/2 = 5050</small></div>
 <p>Dãy hình học (mỗi số hạng nhân một tỉ số r) và tổng của chúng xuất hiện liên tục trong phân tích thuật toán — ví dụ tổng công việc trong một thuật toán chia để trị.</p>
+<h3>Công thức · Các tổng phải nhớ</h3>
+<div class="formula"><span class="lbl">Tổng dạng đóng</span>Σ<sub>i=1</sub><sup>n</sup> i = n(n+1)/2    Σ<sub>i=1</sub><sup>n</sup> i² = n(n+1)(2n+1)/6    Σ<sub>i=0</sub><sup>n</sup> arⁱ = a(rⁿ⁺¹−1)/(r−1)  (r≠1)</div>
+<h3>Ví dụ có lời giải · Giải từng bước</h3>
+<div class="out"><b>Ví dụ 1 — tổng hình học.</b> 1 + 2 + 4 + … + 2¹⁰ (a=1, r=2, tới 2¹⁰) = (2¹¹ − 1)/(2 − 1) = <b>2047</b>.</div>
+<div class="out"><b>Ví dụ 2 — tổng bình phương.</b> 1² + 2² + … + 10² = 10·11·21/6 = 2310/6 = <b>385</b>.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Có những vô hạn lớn hơn vô hạn khác.</b> Một song ánh nghĩa là hai tập cùng lực lượng — kể cả tập vô hạn. Số nguyên và số hữu tỉ là "đếm được" (song ánh với ℕ), nhưng Cantor chứng minh số thực thì <em>không</em>: không hàm ℕ → ℝ nào toàn ánh. Kết quả duy nhất đó vạch ranh giới giữa cái máy tính liệt kê được và cái về căn bản là không thể.</div>
 <div class="note-ct">Hàm mô hình mọi thứ trong CS: một hàm băm ánh xạ khoá tới ô, một hàm mã hoá phải song ánh (để đảo ngược được), và bản thân một chương trình là một hàm từ đầu vào tới đầu ra. Tổng lượng hoá vòng lặp làm bao nhiêu việc — cầu nối tới độ phức tạp ở Chương 3.</div>
 </div>
 `,
@@ -531,6 +593,16 @@ export default {
   <div class="lz-step"><div class="lz-k">Nest</div><div class="lz-t">loop in loop</div><div class="lz-d">→ multiply: O(n²)</div></div>
   <div class="lz-step"><div class="lz-k">Halve</div><div class="lz-t">divide problem</div><div class="lz-d">→ O(log n)</div></div>
 </div>
+<h3>Formulas · Formal definitions &amp; rules</h3>
+<div class="formula"><span class="lbl">The three bounds</span>f = O(g): f ≤ c·g for large n (upper)    f = Ω(g): f ≥ c·g (lower)    f = Θ(g): both (tight)</div>
+<div class="formula"><span class="lbl">Simplification rules</span>drop constants: O(3n) = O(n)    keep the dominant term: O(n² + n) = O(n²)    O(f)·O(g) = O(f·g)</div>
+<h3>Ví dụ có lời giải · Worked example (analyse code)</h3>
+<div class="out"><b>Find the Big-O.</b><br>
+for i in 1..n:          ← runs n times<br>
+&nbsp;&nbsp;for j in 1..n:      ← n times each<br>
+&nbsp;&nbsp;&nbsp;&nbsp;sum += A[i][j]   ← O(1) work<br>
+Total = n · n · O(1) = <b>O(n²)</b>. A single loop before it (O(n)) is dominated and dropped.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>O is only half the story.</b> Big-O is an <em>upper</em> bound, so technically O(n²) is a correct (loose) bound for a linear algorithm. Ω gives a lower bound and Θ a tight one — saying "this is Θ(n log n)" means it is both no better and no worse. The deepest open question in CS, <b>P vs NP</b>, is exactly about whether some problems whose answers are fast to <em>check</em> are also fast to <em>solve</em>.</div>
 <div class="callout ok">Big-O is why algorithm choice matters more than hardware. An O(n log n) sort finishes a million items in moments; an O(n²) sort on the same data does a trillion operations. This is the exact idea you met in CSI104&#39;s advanced lesson — here you learn to derive it formally.</div>
 <a class="link-card codelab" href="/algorithms?ref=%2Fcourses%2Fdiscrete-mathematics%2Flearn&reflabel=MAD101%20%E2%80%94%20Discrete%20Mathematics" target="_blank" rel="noopener">
   <span class="lc-ico">🧭</span>
@@ -560,6 +632,16 @@ export default {
   <div class="lz-step"><div class="lz-k">Lồng</div><div class="lz-t">vòng trong vòng</div><div class="lz-d">→ nhân: O(n²)</div></div>
   <div class="lz-step"><div class="lz-k">Cắt đôi</div><div class="lz-t">chia bài toán</div><div class="lz-d">→ O(log n)</div></div>
 </div>
+<h3>Công thức · Định nghĩa hình thức &amp; quy tắc</h3>
+<div class="formula"><span class="lbl">Ba chặn</span>f = O(g): f ≤ c·g với n lớn (chặn trên)    f = Ω(g): f ≥ c·g (chặn dưới)    f = Θ(g): cả hai (chặt)</div>
+<div class="formula"><span class="lbl">Quy tắc rút gọn</span>bỏ hằng số: O(3n) = O(n)    giữ số hạng trội: O(n² + n) = O(n²)    O(f)·O(g) = O(f·g)</div>
+<h3>Ví dụ có lời giải · Giải từng bước (phân tích code)</h3>
+<div class="out"><b>Tìm Big-O.</b><br>
+for i in 1..n:          ← chạy n lần<br>
+&nbsp;&nbsp;for j in 1..n:      ← mỗi lần n lần<br>
+&nbsp;&nbsp;&nbsp;&nbsp;sum += A[i][j]   ← việc O(1)<br>
+Tổng = n · n · O(1) = <b>O(n²)</b>. Một vòng lặp đơn trước đó (O(n)) bị trội hơn và bị bỏ.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>O chỉ là một nửa câu chuyện.</b> Big-O là chặn <em>trên</em>, nên về kỹ thuật O(n²) là một chặn đúng (lỏng) cho thuật toán tuyến tính. Ω cho chặn dưới và Θ cho chặn chặt — nói "cái này Θ(n log n)" nghĩa là nó không tốt hơn cũng không tệ hơn. Câu hỏi mở sâu nhất của CS, <b>P vs NP</b>, đúng là về việc liệu vài bài toán có đáp án <em>kiểm</em> nhanh thì có <em>giải</em> nhanh không.</div>
 <div class="callout ok">Big-O là lý do chọn thuật toán quan trọng hơn phần cứng. Một sort O(n log n) xong một triệu phần tử trong khoảnh khắc; một sort O(n²) trên cùng dữ liệu làm một nghìn tỷ phép. Đây đúng ý tưởng bạn gặp ở bài nâng cao CSI104 — ở đây bạn học suy ra nó một cách hình thức.</div>
 <a class="link-card codelab" href="/algorithms?ref=%2Fcourses%2Fdiscrete-mathematics%2Flearn&reflabel=MAD101%20%E2%80%94%20Discrete%20Mathematics" target="_blank" rel="noopener">
   <span class="lc-ico">🧭</span>
@@ -610,6 +692,13 @@ export default {
 <div class="out"><b>gcd(48, 18):</b>  48 mod 18 = 12 → gcd(18, 12); 18 mod 12 = 6 → gcd(12, 6); 12 mod 6 = 0 → <b>gcd = 6</b></div>
 <h3>Why cryptography needs this</h3>
 <p>Modular arithmetic is the backbone of <strong>encryption</strong>. RSA (the padlock in your browser, CEA201/CSI104) works because certain modular operations are easy one way but practically impossible to reverse without a secret key. Prime numbers and mod are the whole game.</p>
+<h3>Formulas · Modular toolkit</h3>
+<div class="formula"><span class="lbl">Core facts</span>Division: a = qd + r, 0 ≤ r &lt; d    Congruence adds &amp; multiplies: if a≡b, c≡d (mod m) then a+c≡b+d and ac≡bd</div>
+<div class="formula"><span class="lbl">GCD &amp; LCM</span>gcd(a,b)·lcm(a,b) = a·b    Euclid: gcd(a,b) = gcd(b, a mod b), base gcd(a,0)=a</div>
+<h3>Ví dụ có lời giải · Worked examples</h3>
+<div class="out"><b>Example 1 — lcm via gcd.</b> lcm(48, 18) = 48·18 / gcd(48,18) = 864 / 6 = <b>144</b>.</div>
+<div class="out"><b>Example 2 — modular multiply.</b> Compute (7 · 8) mod 5. Reduce first: 7≡2, 8≡3 (mod 5) → 2·3 = 6 ≡ <b>1</b> (mod 5). (Same as 56 mod 5 = 1.)</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Fast modular exponentiation powers RSA.</b> Computing aᵏ mod m by multiplying a k times is hopeless when k has hundreds of digits. Square-and-multiply does it in O(log k) steps by squaring repeatedly and reducing mod m each time. Together with Fermat's little theorem (aᵖ⁻¹ ≡ 1 mod p for prime p), this is the arithmetic that makes public-key cryptography actually run.</div>
 <div class="note-ct">The mod operator is everywhere in code: hash tables use <code>key mod tableSize</code> to pick a slot; a checksum uses mod to detect errors; a circular buffer wraps with mod. This "small" chapter quietly powers security and data structures alike.</div>
 </div>
 <div class="ml-vi">
@@ -624,6 +713,13 @@ export default {
 <div class="out"><b>gcd(48, 18):</b>  48 mod 18 = 12 → gcd(18, 12); 18 mod 12 = 6 → gcd(12, 6); 12 mod 6 = 0 → <b>gcd = 6</b></div>
 <h3>Vì sao mã hoá cần điều này</h3>
 <p>Số học mô-đun là xương sống của <strong>mã hoá</strong>. RSA (ổ khoá trong trình duyệt bạn, CEA201/CSI104) chạy được vì vài phép mô-đun dễ theo một chiều nhưng gần như bất khả đảo ngược nếu không có khoá bí mật. Số nguyên tố và mod là toàn bộ trò chơi.</p>
+<h3>Công thức · Bộ công cụ mô-đun</h3>
+<div class="formula"><span class="lbl">Sự thật cốt lõi</span>Chia: a = qd + r, 0 ≤ r &lt; d    Đồng dư cộng &amp; nhân được: nếu a≡b, c≡d (mod m) thì a+c≡b+d và ac≡bd</div>
+<div class="formula"><span class="lbl">GCD &amp; LCM</span>gcd(a,b)·lcm(a,b) = a·b    Euclid: gcd(a,b) = gcd(b, a mod b), cơ sở gcd(a,0)=a</div>
+<h3>Ví dụ có lời giải · Giải từng bước</h3>
+<div class="out"><b>Ví dụ 1 — lcm qua gcd.</b> lcm(48, 18) = 48·18 / gcd(48,18) = 864 / 6 = <b>144</b>.</div>
+<div class="out"><b>Ví dụ 2 — nhân mô-đun.</b> Tính (7 · 8) mod 5. Rút gọn trước: 7≡2, 8≡3 (mod 5) → 2·3 = 6 ≡ <b>1</b> (mod 5). (Bằng 56 mod 5 = 1.)</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Luỹ thừa mô-đun nhanh vận hành RSA.</b> Tính aᵏ mod m bằng cách nhân a k lần là vô vọng khi k có hàng trăm chữ số. Bình-phương-rồi-nhân làm trong O(log k) bước bằng cách bình phương liên tục và rút gọn mod m mỗi lần. Cùng với định lý nhỏ Fermat (aᵖ⁻¹ ≡ 1 mod p với p nguyên tố), đây là số học làm mã hoá khoá công khai thực sự chạy được.</div>
 <div class="note-ct">Phép mod có khắp nơi trong code: bảng băm dùng <code>key mod tableSize</code> để chọn ô; một checksum dùng mod để phát hiện lỗi; một circular buffer quay vòng bằng mod. Chương "nhỏ" này âm thầm vận hành cả bảo mật lẫn cấu trúc dữ liệu.</div>
 </div>
 `,
@@ -671,6 +767,15 @@ export default {
 <p>A <strong>recursive definition</strong> defines something in terms of smaller versions of itself, with a base case to stop. The factorial:</p>
 <div class="out">n! = 1 if n = 0  (base case)<br>n! = n · (n−1)! if n &gt; 0  (recursive case)</div>
 <p>Induction and recursion are two sides of one coin: recursion <em>builds</em> objects from smaller ones; induction <em>proves</em> things about them. This is the mathematical foundation of every recursive function you write.</p>
+<h3>Formulas · Induction template &amp; recurrences</h3>
+<div class="formula"><span class="lbl">The proof template</span>1) Base: show P(1)    2) Hypothesis: assume P(k)    3) Step: prove P(k) → P(k+1)    ⟹ P(n) for all n ≥ 1</div>
+<div class="formula"><span class="lbl">Common recurrences</span>factorial: n! = n·(n−1)!, 0!=1    Fibonacci: F(n) = F(n−1) + F(n−2), F(0)=0, F(1)=1</div>
+<h3>Ví dụ có lời giải · Worked example (a full proof)</h3>
+<div class="out"><b>Prove: 1 + 3 + 5 + … + (2n−1) = n²</b> (sum of the first n odd numbers).<br>
+<b>Base (n=1):</b> 1 = 1² ✓.<br>
+<b>Step:</b> assume 1+3+…+(2k−1) = k². Then adding the next odd number (2k+1):<br>
+k² + (2k+1) = (k+1)²  ✓ — exactly P(k+1). Done.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Strong &amp; structural induction.</b> Ordinary induction assumes only P(k); <em>strong</em> induction assumes P(1)…P(k) all at once — needed to prove things like "every integer &gt; 1 has a prime factorization." <em>Structural</em> induction proves properties of recursively-built objects (trees, lists, grammars) by induction on their structure — the tool you will use to reason about data structures in CSD201.</div>
 <div class="callout ok">Recursion in code (a function calling itself) will feel natural once you see it as a recursive definition. And to prove a recursive function is correct, you use induction. MAD101 gives you the theory that makes recursion trustworthy — vital for CSD201.</div>
 </div>
 <div class="ml-vi">
@@ -687,6 +792,15 @@ export default {
 <p>Một <strong>định nghĩa đệ quy</strong> định nghĩa một thứ qua các phiên bản nhỏ hơn của chính nó, với một trường hợp cơ sở để dừng. Giai thừa:</p>
 <div class="out">n! = 1 nếu n = 0  (trường hợp cơ sở)<br>n! = n · (n−1)! nếu n &gt; 0  (trường hợp đệ quy)</div>
 <p>Quy nạp và đệ quy là hai mặt của một đồng xu: đệ quy <em>xây</em> đối tượng từ cái nhỏ hơn; quy nạp <em>chứng minh</em> điều về chúng. Đây là nền toán học của mọi hàm đệ quy bạn viết.</p>
+<h3>Công thức · Khuôn quy nạp &amp; hệ thức truy hồi</h3>
+<div class="formula"><span class="lbl">Khuôn chứng minh</span>1) Cơ sở: chứng minh P(1)    2) Giả thiết: giả sử P(k)    3) Bước: chứng minh P(k) → P(k+1)    ⟹ P(n) với mọi n ≥ 1</div>
+<div class="formula"><span class="lbl">Hệ thức truy hồi thường gặp</span>giai thừa: n! = n·(n−1)!, 0!=1    Fibonacci: F(n) = F(n−1) + F(n−2), F(0)=0, F(1)=1</div>
+<h3>Ví dụ có lời giải · Giải từng bước (chứng minh đầy đủ)</h3>
+<div class="out"><b>Chứng minh: 1 + 3 + 5 + … + (2n−1) = n²</b> (tổng n số lẻ đầu tiên).<br>
+<b>Cơ sở (n=1):</b> 1 = 1² ✓.<br>
+<b>Bước:</b> giả sử 1+3+…+(2k−1) = k². Khi đó cộng số lẻ kế tiếp (2k+1):<br>
+k² + (2k+1) = (k+1)²  ✓ — đúng là P(k+1). Xong.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Quy nạp mạnh &amp; quy nạp cấu trúc.</b> Quy nạp thường chỉ giả sử P(k); quy nạp <em>mạnh</em> giả sử P(1)…P(k) cùng lúc — cần để chứng minh những điều như "mọi số nguyên &gt; 1 đều có phân tích thừa số nguyên tố." Quy nạp <em>cấu trúc</em> chứng minh tính chất của các đối tượng dựng đệ quy (cây, danh sách, văn phạm) bằng quy nạp trên cấu trúc của chúng — công cụ bạn sẽ dùng để lập luận về cấu trúc dữ liệu ở CSD201.</div>
 <div class="callout ok">Đệ quy trong code (một hàm gọi chính nó) sẽ thấy tự nhiên khi bạn nhìn nó như một định nghĩa đệ quy. Và để chứng minh một hàm đệ quy đúng, bạn dùng quy nạp. MAD101 cho bạn lý thuyết làm đệ quy đáng tin — thiết yếu cho CSD201.</div>
 </div>
 `,
@@ -762,6 +876,13 @@ export default {
 </table>
 <div class="out"><b>Example:</b> From 5 people, choose a committee of 3.<br>C(5,3) = 5! / (3!·2!) = 120 / (6·2) = <b>10 ways</b></div>
 <p>Combinations count subsets (order irrelevant); permutations count ordered arrangements. Getting this distinction right is the heart of every counting problem.</p>
+<h3>Formulas · Counting toolkit</h3>
+<div class="formula"><span class="lbl">Core counting formulas</span>Product: m·n    Sum: m+n    Permutation P(n,k) = n!/(n−k)!    Combination C(n,k) = n!/(k!(n−k)!)</div>
+<div class="formula"><span class="lbl">Useful identities</span>C(n,k) = C(n,n−k)    Pascal: C(n,k) = C(n−1,k−1) + C(n−1,k)    Σ<sub>k</sub> C(n,k) = 2ⁿ</div>
+<h3>Ví dụ có lời giải · Worked examples</h3>
+<div class="out"><b>Example 1 — permutation.</b> Rank 3 of 5 runners (order matters): P(5,3) = 5!/2! = 120/2 = <b>60</b>.</div>
+<div class="out"><b>Example 2 — combination.</b> Choose 2 toppings from 5: C(5,2) = 5!/(2!·3!) = 120/12 = <b>10</b>.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The Pigeonhole Principle.</b> If n+1 items go into n boxes, some box holds at least two. Trivial to state, startling in use: among any 13 people two share a birth month; in any group two people know the same number of others. It also proves lossless compression cannot shrink <em>every</em> file — a deep limit hiding in a one-line idea.</div>
 <div class="note-ct">Counting appears throughout CS: the number of possible passwords (security), the number of comparisons an algorithm makes (complexity), the number of states a system can be in (testing). Some counting problems also lead to <strong>recurrence relations</strong> — like the Fibonacci sequence, which links back to recursion in Chapter 5.</div>
 </div>
 <div class="ml-vi">
@@ -783,6 +904,13 @@ export default {
 </table>
 <div class="out"><b>Ví dụ:</b> Từ 5 người, chọn một ban 3 người.<br>C(5,3) = 5! / (3!·2!) = 120 / (6·2) = <b>10 cách</b></div>
 <p>Tổ hợp đếm tập con (không quan tâm thứ tự); chỉnh hợp đếm sắp xếp có thứ tự. Phân biệt đúng điều này là trái tim của mọi bài toán đếm.</p>
+<h3>Công thức · Bộ công cụ đếm</h3>
+<div class="formula"><span class="lbl">Công thức đếm cốt lõi</span>Nhân: m·n    Cộng: m+n    Chỉnh hợp P(n,k) = n!/(n−k)!    Tổ hợp C(n,k) = n!/(k!(n−k)!)</div>
+<div class="formula"><span class="lbl">Đẳng thức hữu dụng</span>C(n,k) = C(n,n−k)    Pascal: C(n,k) = C(n−1,k−1) + C(n−1,k)    Σ<sub>k</sub> C(n,k) = 2ⁿ</div>
+<h3>Ví dụ có lời giải · Giải từng bước</h3>
+<div class="out"><b>Ví dụ 1 — chỉnh hợp.</b> Xếp hạng 3 trong 5 người chạy (thứ tự quan trọng): P(5,3) = 5!/2! = 120/2 = <b>60</b>.</div>
+<div class="out"><b>Ví dụ 2 — tổ hợp.</b> Chọn 2 topping từ 5: C(5,2) = 5!/(2!·3!) = 120/12 = <b>10</b>.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Nguyên lý chuồng bồ câu (Pigeonhole).</b> Nếu n+1 vật vào n hộp, có hộp chứa ít nhất hai. Phát biểu tầm thường, dùng thì bất ngờ: trong 13 người bất kỳ có hai người cùng tháng sinh; trong nhóm bất kỳ có hai người quen cùng số người khác. Nó còn chứng minh nén không mất mát không thể thu nhỏ <em>mọi</em> tệp — một giới hạn sâu ẩn trong một ý một dòng.</div>
 <div class="note-ct">Đếm xuất hiện khắp CS: số mật khẩu khả dĩ (bảo mật), số lần so sánh một thuật toán làm (độ phức tạp), số trạng thái một hệ thống có thể ở (kiểm thử). Vài bài toán đếm còn dẫn tới <strong>hệ thức truy hồi (recurrence relation)</strong> — như dãy Fibonacci, nối lại với đệ quy ở Chương 5.</div>
 </div>
 `,
@@ -832,6 +960,13 @@ export default {
   <div class="lz-step"><div class="lz-k">Expand</div><div class="lz-t">nearest unvisited</div><div class="lz-d">relax its neighbors</div></div>
   <div class="lz-step"><div class="lz-k">Repeat</div><div class="lz-t">until target reached</div><div class="lz-d">shortest path found</div></div>
 </div>
+<h3>Formulas · Graph facts</h3>
+<div class="formula"><span class="lbl">Handshaking lemma</span>Σ deg(v) = 2·(number of edges)    ⟹ the number of odd-degree vertices is always even</div>
+<div class="formula"><span class="lbl">Edge bounds (simple graph, n vertices)</span>max edges = C(n,2) = n(n−1)/2    a connected graph needs ≥ n−1 edges</div>
+<h3>Ví dụ có lời giải · Worked example</h3>
+<div class="out"><b>Handshaking.</b> A graph has 5 vertices each of degree 4. How many edges?<br>
+Σ deg = 5·4 = 20 = 2E → <b>E = 10</b> edges. (This is exactly K₅, the complete graph on 5 vertices: C(5,2)=10.)</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>How you store a graph decides the speed.</b> An <em>adjacency matrix</em> (n×n of 0/1) checks "is there an edge?" in O(1) but wastes O(n²) memory; an <em>adjacency list</em> uses O(n+E) memory and iterates neighbors faster — which is why Dijkstra on sparse road maps uses lists. Also famous: an <b>Euler path</b> (walk every edge once) exists iff at most two vertices have odd degree, while the <b>Hamiltonian path</b> (visit every vertex once) is NP-hard — two questions that sound alike but differ enormously in difficulty.</div>
 <div class="callout ok">Every time Google Maps finds your route, a Dijkstra-style algorithm runs on a weighted graph of roads. Learning it here means you understand the math behind navigation, network routing and even social-network analysis.</div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdiscrete-mathematics%2Flearn&reflabel=MAD101%20%E2%80%94%20Discrete%20Mathematics#module-508" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -855,6 +990,13 @@ export default {
   <div class="lz-step"><div class="lz-k">Mở rộng</div><div class="lz-t">đỉnh chưa thăm gần nhất</div><div class="lz-d">nới lỏng (relax) hàng xóm</div></div>
   <div class="lz-step"><div class="lz-k">Lặp</div><div class="lz-t">tới khi đạt đích</div><div class="lz-d">tìm được đường ngắn nhất</div></div>
 </div>
+<h3>Công thức · Sự thật về đồ thị</h3>
+<div class="formula"><span class="lbl">Bổ đề bắt tay</span>Σ deg(v) = 2·(số cạnh)    ⟹ số đỉnh bậc lẻ luôn chẵn</div>
+<div class="formula"><span class="lbl">Chặn số cạnh (đồ thị đơn, n đỉnh)</span>tối đa = C(n,2) = n(n−1)/2    đồ thị liên thông cần ≥ n−1 cạnh</div>
+<h3>Ví dụ có lời giải · Giải từng bước</h3>
+<div class="out"><b>Bắt tay.</b> Một đồ thị có 5 đỉnh, mỗi đỉnh bậc 4. Có bao nhiêu cạnh?<br>
+Σ deg = 5·4 = 20 = 2E → <b>E = 10</b> cạnh. (Đúng là K₅, đồ thị đầy đủ trên 5 đỉnh: C(5,2)=10.)</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Cách lưu đồ thị quyết định tốc độ.</b> <em>Ma trận kề</em> (n×n gồm 0/1) kiểm "có cạnh không?" trong O(1) nhưng tốn O(n²) bộ nhớ; <em>danh sách kề</em> dùng O(n+E) bộ nhớ và duyệt hàng xóm nhanh hơn — đó là lý do Dijkstra trên bản đồ đường thưa dùng danh sách. Nổi tiếng nữa: <b>đường Euler</b> (đi mọi cạnh đúng một lần) tồn tại khi và chỉ khi tối đa hai đỉnh bậc lẻ, còn <b>đường Hamilton</b> (thăm mọi đỉnh đúng một lần) là NP-khó — hai câu hỏi nghe giống nhau nhưng khác nhau khổng lồ về độ khó.</div>
 <div class="callout ok">Mỗi khi Google Maps tìm tuyến của bạn, một thuật toán kiểu Dijkstra chạy trên đồ thị có trọng số của các con đường. Học nó ở đây nghĩa là bạn hiểu toán học đằng sau định vị, định tuyến mạng và cả phân tích mạng xã hội.</div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdiscrete-mathematics%2Flearn&reflabel=MAD101%20%E2%80%94%20Discrete%20Mathematics#module-508" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -909,6 +1051,12 @@ export default {
   <div class="lz-step"><div class="lz-k">Solve</div><div class="lz-t">Kruskal / Prim</div><div class="lz-d">greedy MST algorithms</div></div>
   <div class="lz-step"><div class="lz-k">Result</div><div class="lz-t">cheapest network</div><div class="lz-d">no redundant links</div></div>
 </div>
+<h3>Formulas · Tree facts</h3>
+<div class="formula"><span class="lbl">Defining properties (n vertices)</span>a tree has exactly n − 1 edges    exactly one path between any two vertices    adding any edge creates exactly one cycle</div>
+<div class="formula"><span class="lbl">Binary trees</span>height h holds ≤ 2^(h+1) − 1 nodes    ⟹ n nodes need height ≥ log₂(n+1) − 1</div>
+<h3>Ví dụ có lời giải · Worked example</h3>
+<div class="out"><b>Edge count &amp; height.</b> A tree connects 8 computers → it uses exactly 8 − 1 = <b>7 cables</b> (any more would make a cycle). A <em>balanced</em> binary tree of 7 nodes has height 2 (levels of 1, 2, 4 nodes) — so search visits only ~3 nodes, not 7.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why balance is everything.</b> Cayley's formula says there are nⁿ⁻² different labeled trees on n vertices — an astronomical number, so structure matters. A binary search tree gives O(log n) lookups only while it stays <em>balanced</em>; let it degrade into a chain and it becomes O(n) — a plain linked list. That is exactly why CSD201 spends so long on self-balancing trees (AVL, red-black): keeping height ≈ log n is what makes the data structure fast.</div>
 <div class="callout ok">MSTs solve real design problems: laying the least cable to connect a city, the least pipe for a water network, clustering data. Kruskal&#39;s and Prim&#39;s algorithms are elegant greedy solutions you will implement in CSD201.</div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdiscrete-mathematics%2Flearn&reflabel=MAD101%20%E2%80%94%20Discrete%20Mathematics#module-506" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -932,6 +1080,12 @@ export default {
   <div class="lz-step"><div class="lz-k">Giải</div><div class="lz-t">Kruskal / Prim</div><div class="lz-d">thuật toán MST tham lam</div></div>
   <div class="lz-step"><div class="lz-k">Kết quả</div><div class="lz-t">mạng rẻ nhất</div><div class="lz-d">không liên kết dư thừa</div></div>
 </div>
+<h3>Công thức · Sự thật về cây</h3>
+<div class="formula"><span class="lbl">Tính chất định nghĩa (n đỉnh)</span>một cây có đúng n − 1 cạnh    đúng một đường đi giữa hai đỉnh bất kỳ    thêm bất kỳ cạnh nào tạo đúng một chu trình</div>
+<div class="formula"><span class="lbl">Cây nhị phân</span>chiều cao h chứa ≤ 2^(h+1) − 1 nút    ⟹ n nút cần chiều cao ≥ log₂(n+1) − 1</div>
+<h3>Ví dụ có lời giải · Giải từng bước</h3>
+<div class="out"><b>Đếm cạnh &amp; chiều cao.</b> Một cây nối 8 máy tính → dùng đúng 8 − 1 = <b>7 dây cáp</b> (thêm nữa sẽ tạo chu trình). Một cây nhị phân <em>cân bằng</em> 7 nút có chiều cao 2 (các mức 1, 2, 4 nút) — nên tìm kiếm chỉ thăm ~3 nút, không phải 7.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao cân bằng là tất cả.</b> Công thức Cayley nói có nⁿ⁻² cây có nhãn khác nhau trên n đỉnh — một con số thiên văn, nên cấu trúc rất quan trọng. Một cây tìm kiếm nhị phân cho tra cứu O(log n) chỉ khi nó còn <em>cân bằng</em>; để nó thoái hoá thành một chuỗi thì nó thành O(n) — một danh sách liên kết thường. Đó đúng là lý do CSD201 dành nhiều thời gian cho cây tự cân bằng (AVL, đỏ-đen): giữ chiều cao ≈ log n là điều làm cấu trúc dữ liệu nhanh.</div>
 <div class="callout ok">MST giải các bài toán thiết kế thật: đặt ít cáp nhất để nối một thành phố, ít ống nhất cho mạng nước, gom cụm dữ liệu. Thuật toán Kruskal và Prim là các lời giải tham lam thanh lịch bạn sẽ cài đặt ở CSD201.</div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdiscrete-mathematics%2Flearn&reflabel=MAD101%20%E2%80%94%20Discrete%20Mathematics#module-506" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>

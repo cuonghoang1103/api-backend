@@ -285,6 +285,246 @@ export default {
 </div>
 `,
         },
+        {
+          title: '0.5 — Project topic bank & how to choose (mentor guide)|||0.5 — Ngân hàng đề tài đồ án & cách chọn (mentor)',
+          slug: 'swp391-0-5-ngan-hang-de-tai',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Lesson 0.5</span>
+<h2>Project topic bank &amp; how to choose — your mentor's shortlist</h2>
+<p class="lead">Half of your final grade is decided the week you pick the topic. Choose something <strong>small enough to finish</strong> yet <strong>rich enough to show off</strong> — one real transactional workflow beats ten shallow CRUD screens. Here is the exact rubric I use to green-light a team, then a bank of vetted ideas you can adopt.</p>
+
+<h3>The 6 tests a good SWP391 topic must pass</h3>
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">At least 2 distinct roles</div><div class="lz-nsub">e.g. customer + staff/admin. Different permissions give you real access control to demo.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">One real transactional workflow</div><div class="lz-nsub">a booking, an order, an approval — state that changes and can conflict. Not just "list / add / edit / delete".</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Seedable demo data</div><div class="lz-nsub">you can pre-load users and records so the final demo runs on a full staging site, not an empty database.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">A thin vertical slice by Milestone 2</div><div class="lz-nsub">one workflow working end-to-end (login &#8594; do the thing &#8594; see the result) fits your timeline.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Matches your stack</div><div class="lz-nsub">Java web (from PRJ301) + a SQL database. Avoid a topic that forces tech nobody on the team has touched.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Approved by your lecturer FIRST</div><div class="lz-nsub">the syllabus makes this a hard gate. Building on an un-approved topic gambles the whole project.</div></div></div>
+</div>
+
+<div class="pitfall"><strong>Scope killers — say no to these.</strong> Real payment gateways, real SMS/OTP, real map routing, an "AI recommendation engine" as a core feature, or a design so broad you cannot name the ONE workflow you will demo. Simulate money and messaging with a mock service. Depth over breadth wins marks; breadth with nothing finished loses them.</div>
+
+<h3>The topic bank — scoped for a team of 4–5 over ~10 weeks</h3>
+<p>Every idea has a clear transactional core (the slice you ship by Milestone 2), at least two roles, and an easy angle to score high. Pick one, make it your own, get it approved.</p>
+<table>
+<thead><tr><th>Domain</th><th>Core workflow (your vertical slice)</th><th>Roles</th><th>Score-high edge</th></tr></thead>
+<tbody>
+<tr><td><b>1. Clinic appointment booking</b></td><td>Patient books a free slot &#8594; clinic confirms &#8594; double-booking is blocked</td><td>Patient, Receptionist</td><td>Slot-conflict handling + a daily schedule report</td></tr>
+<tr><td><b>2. Library management</b></td><td>Member reserves a book &#8594; librarian issues it &#8594; due-date &amp; overdue flag</td><td>Member, Librarian</td><td>Overdue fines + a reservation queue</td></tr>
+<tr><td><b>3. Gym membership &amp; classes</b></td><td>Member books a class &#8594; capacity fills &#8594; waitlist when full</td><td>Member, Trainer/Admin</td><td>Class capacity + attendance tracking</td></tr>
+<tr><td><b>4. Homestay / small-hotel booking</b></td><td>Guest books a room for dates &#8594; availability locked &#8594; conflict blocked</td><td>Guest, Host/Manager</td><td>Date-range availability + occupancy report</td></tr>
+<tr><td><b>5. Restaurant reservation &amp; pre-order</b></td><td>Diner reserves a table + pre-orders &#8594; kitchen sees the list</td><td>Diner, Staff</td><td>Time-slot tables + pre-order summary</td></tr>
+<tr><td><b>6. E-learning mini</b></td><td>Student enrols &#8594; takes a quiz &#8594; sees the graded result</td><td>Student, Instructor</td><td>Auto-graded quiz + progress dashboard</td></tr>
+<tr><td><b>7. Job recruitment portal</b></td><td>Candidate applies &#8594; recruiter shortlists &#8594; status updates</td><td>Candidate, Recruiter</td><td>Application pipeline + CV upload</td></tr>
+<tr><td><b>8. Event ticketing</b></td><td>Buyer picks a seat/ticket &#8594; mock payment &#8594; gets a check-in code</td><td>Buyer, Organizer</td><td>Seat/quantity locking + check-in</td></tr>
+<tr><td><b>9. Car / motorbike rental</b></td><td>Customer rents for a period &#8594; stock reserved &#8594; return &amp; fee calc</td><td>Customer, Manager</td><td>Availability by date + late-return fee</td></tr>
+<tr><td><b>10. Helpdesk / IT ticketing</b></td><td>User opens a ticket &#8594; agent is assigned &amp; resolves &#8594; SLA timer</td><td>User, Agent</td><td>Assignment + priority/SLA + report</td></tr>
+<tr><td><b>11. Freelance task marketplace</b></td><td>Client posts a task &#8594; freelancer bids &#8594; client accepts (mock escrow)</td><td>Client, Freelancer</td><td>Bidding + simulated escrow states</td></tr>
+<tr><td><b>12. Multi-vendor mini e-commerce</b></td><td>Buyer orders from a vendor &#8594; mock payment &#8594; order status</td><td>Buyer, Vendor, Admin</td><td>Cart + mock payment + per-vendor dashboard</td></tr>
+</tbody>
+</table>
+<p><small>Difficulty tiers: rows 1–5 are safe first projects, 6–10 are standard, 11–12 are ambitious — pick these only with a strong, reliable team.</small></p>
+
+<h3>Turn an idea into an approved proposal (week 1)</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Name 3 workflows</div><div class="lz-d">1 core + 2 supporting</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Name the roles</div><div class="lz-d">who does what</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">One-paragraph pitch</div><div class="lz-d">problem + users + value</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Get sign-off</div><div class="lz-d">lecturer approves scope</div></div>
+</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Pick a pain you have actually felt.</b> Teams that finish strong almost always chose a domain a member knows — a club they run, a family shop, a problem from a part-time job. Motivation is what carries a team through the week-8 slump when the fun wiring is done and only hard integration remains. <em>Why beyond syllabus: the rubric grades the artifact, but personal stake is the hidden variable that decides whether the artifact ever gets finished.</em></div>
+
+<div class="note-ct">Next: Lesson <b>1.1</b> turns your chosen topic into a team + roles; <b>2.1</b> turns it into an SRS. The three <b>Milestone checklists</b> tell you exactly what to hand in, and when.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bài 0.5</span>
+<h2>Ngân hàng đề tài đồ án &amp; cách chọn — danh sách tuyển của mentor</h2>
+<p class="lead">Một nửa điểm cuối kỳ được định đoạt ngay tuần bạn chọn đề tài. Hãy chọn thứ <strong>đủ nhỏ để làm xong</strong> nhưng <strong>đủ hay để khoe</strong> — một luồng nghiệp vụ có giao dịch thật ăn đứt mười màn hình CRUD hời hợt. Dưới đây là đúng bộ tiêu chí tôi dùng để "duyệt" một nhóm, rồi tới ngân hàng đề tài đã được kiểm để bạn chọn.</p>
+
+<h3>6 phép thử một đề tài SWP391 tốt phải qua</h3>
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Ít nhất 2 vai trò khác nhau</div><div class="lz-nsub">vd khách + nhân viên/admin. Quyền khác nhau = có phân quyền thật để demo.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Một luồng giao dịch thật</div><div class="lz-nsub">một lượt đặt, một đơn hàng, một lượt duyệt — trạng thái có thay đổi và có thể xung đột. Không chỉ "liệt kê / thêm / sửa / xoá".</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Có thể seed dữ liệu demo</div><div class="lz-nsub">nạp sẵn người dùng và bản ghi để buổi demo cuối chạy trên site staging đầy đủ, không phải CSDL trống.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Một lát cắt dọc mỏng vào Milestone 2</div><div class="lz-nsub">một luồng chạy từ đầu đến cuối (đăng nhập &#8594; làm việc đó &#8594; thấy kết quả) vừa với thời gian của bạn.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Khớp tech stack của nhóm</div><div class="lz-nsub">Java web (từ PRJ301) + CSDL SQL. Tránh đề tài bắt dùng công nghệ chưa ai trong nhóm đụng tới.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Được giảng viên duyệt TRƯỚC</div><div class="lz-nsub">syllabus quy định đây là cửa chặn cứng. Làm trên đề tài chưa duyệt là đánh cược cả đồ án.</div></div></div>
+</div>
+
+<div class="pitfall"><strong>Những thứ giết scope — nói không.</strong> Cổng thanh toán thật, SMS/OTP thật, định tuyến bản đồ thật, "engine gợi ý AI" làm tính năng lõi, hay thiết kế rộng đến mức không gọi tên nổi MỘT luồng sẽ demo. Hãy giả lập tiền và tin nhắn bằng service mock. Sâu hơn rộng: làm xong một lát cắt sâu ăn điểm; ôm rộng mà chẳng xong cái gì thì mất điểm.</div>
+
+<h3>Ngân hàng đề tài — vừa sức nhóm 4–5 người trong ~10 tuần</h3>
+<p>Mỗi ý dưới đây có lõi giao dịch rõ (lát cắt bạn phải ship vào Milestone 2), tối thiểu hai vai trò, và một góc dễ ăn điểm cao. Chọn một, biến thành của bạn, rồi xin duyệt.</p>
+<table>
+<thead><tr><th>Lĩnh vực</th><th>Luồng lõi (lát cắt dọc của bạn)</th><th>Vai trò</th><th>Góc ăn điểm cao</th></tr></thead>
+<tbody>
+<tr><td><b>1. Đặt lịch khám phòng khám</b></td><td>Bệnh nhân đặt khung trống &#8594; phòng khám xác nhận &#8594; chặn đặt trùng</td><td>Bệnh nhân, Lễ tân</td><td>Xử lý xung đột khung giờ + báo cáo lịch ngày</td></tr>
+<tr><td><b>2. Quản lý thư viện</b></td><td>Thành viên đặt mượn sách &#8594; thủ thư cho mượn &#8594; hạn trả &amp; cờ quá hạn</td><td>Thành viên, Thủ thư</td><td>Phí quá hạn + hàng đợi đặt trước</td></tr>
+<tr><td><b>3. Thành viên &amp; lớp phòng gym</b></td><td>Hội viên đặt lớp &#8594; đủ chỗ &#8594; vào danh sách chờ khi hết chỗ</td><td>Hội viên, HLV/Admin</td><td>Giới hạn sức chứa lớp + điểm danh</td></tr>
+<tr><td><b>4. Đặt phòng homestay/khách sạn nhỏ</b></td><td>Khách đặt phòng theo ngày &#8594; khoá phòng &#8594; chặn trùng</td><td>Khách, Chủ/Quản lý</td><td>Còn phòng theo khoảng ngày + báo cáo lấp đầy</td></tr>
+<tr><td><b>5. Đặt bàn &amp; đặt món trước nhà hàng</b></td><td>Khách đặt bàn + đặt món trước &#8594; bếp thấy danh sách</td><td>Khách, Nhân viên</td><td>Bàn theo khung giờ + tổng hợp món đặt trước</td></tr>
+<tr><td><b>6. E-learning mini</b></td><td>Học viên ghi danh &#8594; làm quiz &#8594; xem điểm chấm tự động</td><td>Học viên, Giảng viên</td><td>Quiz chấm tự động + bảng tiến độ</td></tr>
+<tr><td><b>7. Cổng tuyển dụng</b></td><td>Ứng viên nộp đơn &#8594; nhà tuyển dụng lọc &#8594; cập nhật trạng thái</td><td>Ứng viên, Tuyển dụng</td><td>Pipeline hồ sơ + tải CV</td></tr>
+<tr><td><b>8. Bán vé sự kiện</b></td><td>Người mua chọn ghế/vé &#8594; thanh toán mock &#8594; nhận mã check-in</td><td>Người mua, Ban tổ chức</td><td>Khoá ghế/số lượng + check-in</td></tr>
+<tr><td><b>9. Thuê ô tô / xe máy</b></td><td>Khách thuê theo kỳ &#8594; giữ xe &#8594; trả xe &amp; tính phí</td><td>Khách, Quản lý</td><td>Còn xe theo ngày + phí trả trễ</td></tr>
+<tr><td><b>10. Helpdesk / ticket IT</b></td><td>User mở ticket &#8594; agent được phân công &amp; xử lý &#8594; đồng hồ SLA</td><td>User, Agent</td><td>Phân công + ưu tiên/SLA + báo cáo</td></tr>
+<tr><td><b>11. Sàn việc freelance</b></td><td>Khách đăng việc &#8594; freelancer đặt giá &#8594; khách chọn (escrow mock)</td><td>Khách, Freelancer</td><td>Đấu giá + trạng thái escrow giả lập</td></tr>
+<tr><td><b>12. TMĐT nhiều nhà bán mini</b></td><td>Người mua đặt hàng của một shop &#8594; thanh toán mock &#8594; trạng thái đơn</td><td>Người mua, Nhà bán, Admin</td><td>Giỏ hàng + thanh toán mock + dashboard từng shop</td></tr>
+</tbody>
+</table>
+<p><small>Phân bậc độ khó: dòng 1–5 là đề an toàn cho lần đầu, 6–10 tiêu chuẩn, 11–12 tham vọng — chỉ chọn khi nhóm mạnh và đáng tin.</small></p>
+
+<h3>Biến ý tưởng thành đề xuất được duyệt (làm trong tuần 1)</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Gọi tên 3 luồng</div><div class="lz-d">1 lõi + 2 phụ trợ</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Gọi tên vai trò</div><div class="lz-d">ai làm gì</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Pitch một đoạn</div><div class="lz-d">vấn đề + người dùng + giá trị</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Xin chốt</div><div class="lz-d">giảng viên duyệt scope</div></div>
+</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Chọn một nỗi đau bạn từng trải.</b> Nhóm về đích mạnh gần như luôn chọn lĩnh vực một thành viên hiểu — một câu lạc bộ họ điều hành, cửa hàng của gia đình, một vấn đề từ việc làm thêm. Động lực chính là thứ kéo cả nhóm qua "vực tuần 8" khi phần nối vui đã xong và chỉ còn tích hợp khó nhằn. <em>Vì sao ngoài syllabus: rubric chấm sản phẩm, nhưng "gắn bó cá nhân" là biến ẩn quyết định sản phẩm có bao giờ hoàn thành hay không.</em></div>
+
+<div class="note-ct">Tiếp theo: Bài <b>1.1</b> biến đề tài đã chọn thành nhóm + vai trò; Bài <b>2.1</b> biến nó thành SRS. Ba <b>Milestone checklist</b> nói chính xác bạn phải nộp gì, khi nào.</div>
+</div>
+`,
+        },
+        {
+          title: '0.6 — Why teams score low, and the formula for a high grade|||0.6 — Vì sao nhóm bị điểm thấp & công thức điểm cao',
+          slug: 'swp391-0-6-chong-truot-diem-cao',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Lesson 0.6</span>
+<h2>Why teams score low — and the formula for a high grade</h2>
+<p class="lead">Honest mentor talk: SWP391 rarely fails for one big reason. It <strong>bleeds points</strong> from a handful of predictable, avoidable mistakes. Know them now and you turn a stressful semester into a strong grade. Because the weighting climbs every milestone (15 &#8594; 20 &#8594; 25 &#8594; 40), a team with momentum almost always finishes well; a team still "designing" at week 8 rarely recovers.</p>
+
+<h3>The 7 classic ways teams lose points</h3>
+<table>
+<thead><tr><th>Failure mode</th><th>What it looks like</th><th>The fix</th></tr></thead>
+<tbody>
+<tr><td><b>Big-bang integration</b></td><td>everyone codes alone for weeks, tries to merge near Milestone 2, nothing fits</td><td>integrate a thin slice in week 3–4; merge to <code>main</code> weekly via Pull Requests</td></tr>
+<tr><td><b>One person carries</b></td><td>the strong member does 70%; the rest get low individual marks</td><td>split by workflow, not "you do frontend"; every member owns a demoable feature</td></tr>
+<tr><td><b>Scope creep</b></td><td>chasing extra features, no single workflow finished end-to-end</td><td>freeze scope after approval; finish the vertical slice before adding anything</td></tr>
+<tr><td><b>Un-approved topic</b></td><td>coding before the lecturer signs off; scope rejected in week 3</td><td>get written approval in week 1 (Lesson 0.5)</td></tr>
+<tr><td><b>Messy Git</b></td><td>commits under one laptop/account, huge "final update" commits, no history</td><td>everyone commits under their own account, small and often — the examiner reads your graph</td></tr>
+<tr><td><b>Docs do not match code</b></td><td>the SRS says one thing, the app does another; FRs are untraceable</td><td>keep the SRS living; trace each FR &#8594; a screen &#8594; a test</td></tr>
+<tr><td><b>Weak demo</b></td><td>runs on localhost, one person talks, no exception path shown</td><td>demo on staging, split the talking, show a conflict/error handled — see Lesson 7.2</td></tr>
+</tbody>
+</table>
+
+<h3>Green vs red flags, week by week</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><b>Week 1</b> — 🟢 topic approved &amp; scoped · 🔴 still arguing about ideas</div>
+  <div class="lz-layer"><b>Week 2–3</b> — 🟢 SRS + ERD done, repo + board set up · 🔴 "we are still designing"</div>
+  <div class="lz-layer"><b>Week 4–7</b> — 🟢 a thin slice already deploys to staging · 🔴 everyone coding alone, no merges</div>
+  <div class="lz-layer"><b>Week 8 (M2)</b> — 🟢 core workflow works end-to-end · 🔴 login still broken, first integration now</div>
+  <div class="lz-layer"><b>Week 9–10</b> — 🟢 tests + bug-fix + rehearsed demo · 🔴 first time running the whole thing is at the defense</div>
+</div>
+
+<h3>The high-mark formula — what separates a 9–10 from a 6–7</h3>
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">A</div><div class="lz-nbody"><div class="lz-ntitle">A working, deployed thin slice — early</div><div class="lz-nsub">"it runs on staging" from week 4 signals a team that ships, not just plans.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">B</div><div class="lz-nbody"><div class="lz-ntitle">Visible individual contribution</div><div class="lz-nsub">your own git graph + a workflow you can defend alone.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">C</div><div class="lz-nbody"><div class="lz-ntitle">Exception paths, not just the happy path</div><div class="lz-nsub">show a double-booking blocked, an out-of-stock handled — graders reward robustness.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">D</div><div class="lz-nbody"><div class="lz-ntitle">Design rationale, offered before asked</div><div class="lz-nsub">"we chose 3NF here to avoid this anomaly" — the CLOs reward reasoning, not just output.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">E</div><div class="lz-nbody"><div class="lz-ntitle">Honest, evidenced AI use</div><div class="lz-nsub">"AI drafted the tests; we fixed two wrong assertions" beats pretending you used none.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">F</div><div class="lz-nbody"><div class="lz-ntitle">Traceability &amp; a mature retrospective</div><div class="lz-nsub">FR &#8594; code &#8594; test, plus one honest "what we would do differently".</div></div></div>
+</div>
+
+<h3>Defense question bank — rehearse these before the final panel</h3>
+<table>
+<thead><tr><th>They ask</th><th>You answer with</th></tr></thead>
+<tbody>
+<tr><td>"How did you verify the requirements?" (CLO1)</td><td>interviews + AI role-play, traced back to numbered FRs</td></tr>
+<tr><td>"Why this database schema?" (CLO3)</td><td>3NF, FK constraints, one anomaly you avoided</td></tr>
+<tr><td>"Show me an exception path."</td><td>a double-booking / out-of-stock handled gracefully, live</td></tr>
+<tr><td>"What exactly was YOUR contribution?"</td><td>point to your own commits + the workflow you owned</td></tr>
+<tr><td>"How are passwords stored?"</td><td>hashed (never plaintext), and why</td></tr>
+<tr><td>"How did you prevent SQL injection?"</td><td>parameterized queries / prepared statements — show the code</td></tr>
+<tr><td>"Where did AI help, and how did you check it?" (CLO4/5)</td><td>a concrete example + how you validated the output</td></tr>
+<tr><td>"Walk me through one test and why."</td><td>a boundary or negative case, and the risk it covers</td></tr>
+<tr><td>"What breaks under 100 concurrent users?"</td><td>honest limits: connection pool, missing index, known trade-off</td></tr>
+<tr><td>"How did you split work fairly?"</td><td>roles + the board + your git graph as evidence</td></tr>
+<tr><td>"What would you do differently?"</td><td>tracked tech debt + a v2 backlog</td></tr>
+<tr><td>"Why MVC / this architecture?"</td><td>separation of concerns + testability, with an example</td></tr>
+</tbody>
+</table>
+
+<div class="pitfall"><strong>The deadliest trap: "we will integrate at the end".</strong> Code that never met other code is not a project — it is a pile of parts. Every extra week you delay the first real merge multiplies the pain. Merge something small and real by week 4, even if it is ugly.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Your individual grade is read from your git graph.</b> The panel grades each member, not just the team. A silent member with three commits scores low even when the product is excellent — and a member who wrote less code but reviewed PRs, wrote tests, and can defend the design scores high. Contribution is measured, and it is visible. <em>Why beyond syllabus: students assume a good team product means a good personal grade; in a capstone the two are scored separately, and the evidence is your commit history.</em></div>
+
+<div class="note-ct">Pair this with the three <b>Milestone checklists</b> (what to hand in) and Lesson <b>7.2</b> (the 40% demo &amp; defense). Practise the question bank out loud with your team the night before.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bài 0.6</span>
+<h2>Vì sao nhóm bị điểm thấp — và công thức để điểm cao</h2>
+<p class="lead">Nói thật kiểu mentor: SWP391 hiếm khi trượt vì một lý do lớn. Nó <strong>rỉ điểm</strong> qua một nhúm lỗi có thể đoán trước và né được. Biết chúng từ bây giờ là bạn biến một học kỳ căng thẳng thành điểm cao. Vì trọng số tăng dần mỗi milestone (15 &#8594; 20 &#8594; 25 &#8594; 40), nhóm có đà gần như luôn về đích tốt; nhóm tới tuần 8 vẫn "đang thiết kế" hiếm khi cứu kịp.</p>
+
+<h3>7 kiểu mất điểm kinh điển</h3>
+<table>
+<thead><tr><th>Kiểu lỗi</th><th>Trông như thế nào</th><th>Cách sửa</th></tr></thead>
+<tbody>
+<tr><td><b>Tích hợp "big-bang"</b></td><td>ai cũng code riêng nhiều tuần, đến gần Milestone 2 mới ghép, chẳng khớp</td><td>tích hợp một lát cắt mỏng từ tuần 3–4; merge vào <code>main</code> hằng tuần qua Pull Request</td></tr>
+<tr><td><b>Một người gánh</b></td><td>bạn giỏi làm 70%; số còn lại bị điểm cá nhân thấp</td><td>chia theo luồng, không phải "cậu làm frontend"; mỗi người sở hữu một tính năng demo được</td></tr>
+<tr><td><b>Phình scope</b></td><td>đuổi theo tính năng thêm, không luồng nào chạy trọn vẹn</td><td>đóng băng scope sau khi duyệt; làm xong lát cắt dọc rồi mới thêm</td></tr>
+<tr><td><b>Đề tài chưa duyệt</b></td><td>code trước khi giảng viên chốt; bị bác scope ở tuần 3</td><td>xin duyệt bằng văn bản ngay tuần 1 (Bài 0.5)</td></tr>
+<tr><td><b>Git lộn xộn</b></td><td>commit chung một máy/tài khoản, commit "final update" khổng lồ, không lịch sử</td><td>ai cũng commit bằng tài khoản của mình, nhỏ và đều — hội đồng đọc biểu đồ của bạn</td></tr>
+<tr><td><b>Tài liệu lệch code</b></td><td>SRS nói một đằng, app làm một nẻo; FR không truy vết được</td><td>giữ SRS "sống"; truy vết mỗi FR &#8594; một màn hình &#8594; một test</td></tr>
+<tr><td><b>Demo yếu</b></td><td>chạy localhost, một người nói, không cho thấy đường ngoại lệ</td><td>demo trên staging, chia phần nói, cho thấy một xung đột/lỗi được xử lý — xem Bài 7.2</td></tr>
+</tbody>
+</table>
+
+<h3>Cờ xanh vs cờ đỏ, theo từng tuần</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><b>Tuần 1</b> — 🟢 đề tài đã duyệt &amp; định scope · 🔴 còn cãi nhau chọn ý tưởng</div>
+  <div class="lz-layer"><b>Tuần 2–3</b> — 🟢 xong SRS + ERD, dựng repo + board · 🔴 "tụi em vẫn đang thiết kế"</div>
+  <div class="lz-layer"><b>Tuần 4–7</b> — 🟢 một lát cắt đã deploy lên staging · 🔴 ai cũng code riêng, chưa merge</div>
+  <div class="lz-layer"><b>Tuần 8 (M2)</b> — 🟢 luồng lõi chạy đầu-đến-cuối · 🔴 đăng nhập còn hỏng, giờ mới tích hợp lần đầu</div>
+  <div class="lz-layer"><b>Tuần 9–10</b> — 🟢 test + sửa bug + tập demo · 🔴 lần đầu chạy cả hệ thống là ngay buổi bảo vệ</div>
+</div>
+
+<h3>Công thức điểm cao — điều tách 9–10 khỏi 6–7</h3>
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">A</div><div class="lz-nbody"><div class="lz-ntitle">Một lát cắt mỏng chạy được, đã deploy — sớm</div><div class="lz-nsub">"chạy trên staging" từ tuần 4 báo hiệu nhóm biết ship, không chỉ lập kế hoạch.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">B</div><div class="lz-nbody"><div class="lz-ntitle">Đóng góp cá nhân nhìn thấy được</div><div class="lz-nsub">biểu đồ git của chính bạn + một luồng bạn tự bảo vệ được.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">C</div><div class="lz-nbody"><div class="lz-ntitle">Đường ngoại lệ, không chỉ đường êm</div><div class="lz-nsub">cho thấy chặn đặt trùng, xử lý hết hàng — hội đồng thưởng tính bền.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">D</div><div class="lz-nbody"><div class="lz-ntitle">Lý do thiết kế, nói trước khi bị hỏi</div><div class="lz-nsub">"tụi em chuẩn hoá 3NF ở đây để tránh dị thường này" — CLO thưởng lập luận, không chỉ sản phẩm.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">E</div><div class="lz-nbody"><div class="lz-ntitle">Dùng AI trung thực, có bằng chứng</div><div class="lz-nsub">"AI phác test; tụi em sửa hai khẳng định sai" hơn hẳn giả vờ không dùng.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">F</div><div class="lz-nbody"><div class="lz-ntitle">Truy vết &amp; retrospective trưởng thành</div><div class="lz-nsub">FR &#8594; code &#8594; test, kèm một câu thật "sẽ làm khác đi điều gì".</div></div></div>
+</div>
+
+<h3>Ngân hàng câu hỏi vấn đáp — tập trước buổi hội đồng</h3>
+<table>
+<thead><tr><th>Họ hỏi</th><th>Bạn trả lời bằng</th></tr></thead>
+<tbody>
+<tr><td>"Nhóm kiểm chứng yêu cầu thế nào?" (CLO1)</td><td>phỏng vấn + AI role-play, truy về các FR đánh số</td></tr>
+<tr><td>"Vì sao schema CSDL này?" (CLO3)</td><td>3NF, ràng buộc FK, một dị thường đã tránh</td></tr>
+<tr><td>"Cho xem một đường ngoại lệ."</td><td>chặn đặt trùng / hết hàng, xử lý mượt, chạy trực tiếp</td></tr>
+<tr><td>"Đóng góp của RIÊNG bạn là gì?"</td><td>chỉ vào commit của bạn + luồng bạn phụ trách</td></tr>
+<tr><td>"Mật khẩu lưu thế nào?"</td><td>băm (không bao giờ plaintext), và vì sao</td></tr>
+<tr><td>"Chống SQL injection ra sao?"</td><td>truy vấn tham số hoá / prepared statement — chỉ code ra</td></tr>
+<tr><td>"AI giúp ở đâu, kiểm thế nào?" (CLO4/5)</td><td>một ví dụ cụ thể + cách kiểm chứng đầu ra</td></tr>
+<tr><td>"Dẫn tôi qua một test và vì sao."</td><td>một ca biên hoặc ca âm, và rủi ro nó phủ</td></tr>
+<tr><td>"100 người dùng đồng thời thì hỏng gì?"</td><td>giới hạn thật: connection pool, thiếu index, đánh đổi đã biết</td></tr>
+<tr><td>"Chia việc công bằng thế nào?"</td><td>vai trò + board + biểu đồ git làm bằng chứng</td></tr>
+<tr><td>"Sẽ làm khác gì?"</td><td>nợ kỹ thuật đã theo dõi + backlog v2</td></tr>
+<tr><td>"Vì sao MVC / kiến trúc này?"</td><td>tách mối quan tâm + dễ test, kèm ví dụ</td></tr>
+</tbody>
+</table>
+
+<div class="pitfall"><strong>Cái bẫy chết người nhất: "để cuối rồi tích hợp".</strong> Code chưa bao giờ gặp code khác thì không phải một dự án — nó là một đống linh kiện. Mỗi tuần bạn trì hoãn lần merge thật đầu tiên là nhân đôi nỗi đau. Hãy merge một thứ nhỏ và thật vào tuần 4, dù nó còn xấu.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Điểm cá nhân của bạn được đọc từ biểu đồ git.</b> Hội đồng chấm từng thành viên, không chỉ nhóm. Một người im lặng với ba commit bị điểm thấp dù sản phẩm xuất sắc — còn người viết ít code hơn nhưng review PR, viết test, và bảo vệ được thiết kế thì điểm cao. Đóng góp được đo, và nó hiện rõ. <em>Vì sao ngoài syllabus: sinh viên hay tưởng sản phẩm nhóm tốt là điểm cá nhân tốt; ở đồ án capstone, hai thứ được chấm riêng, và bằng chứng chính là lịch sử commit của bạn.</em></div>
+
+<div class="note-ct">Ghép bài này với ba <b>Milestone checklist</b> (nộp gì) và Bài <b>7.2</b> (demo &amp; bảo vệ 40%). Tập đọc to ngân hàng câu hỏi cùng nhóm tối trước hôm bảo vệ.</div>
+</div>
+`,
+        },
       ],
     },
 

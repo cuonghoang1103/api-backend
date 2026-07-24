@@ -71,6 +71,46 @@ export default {
   <span class="lc-cta">EXP HUB →</span>
 </a>
 </div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bài 0.1</span>
+<h2>Giới thiệu môn PRF192 — Cơ sở lập trình</h2>
+<p class="lead">PRF192 là môn lập trình <strong>đầu tiên</strong> của lộ trình Kỹ thuật phần mềm. Mục tiêu không phải học thuộc cú pháp, mà là <strong>tập tư duy như một lập trình viên</strong>: nhìn một bài toán thực tế và biết cách chia nhỏ, mô tả từng bước để máy tính làm giúp.</p>
+<p>Ngôn ngữ dùng để học là <strong>C</strong> — một ngôn ngữ nhỏ, gần với cách máy tính thật sự hoạt động. Học C xong, bạn hiểu được "bên dưới" của mọi ngôn ngữ hiện đại (Java, C#, Python…): bộ nhớ, con trỏ, kiểu dữ liệu. Đó là lý do trường đặt C ở môn mở đầu.</p>
+<h3>Học xong môn này bạn sẽ làm được</h3>
+<ul>
+  <li>Đọc và hiểu một chương trình C cỡ vừa (vài trăm dòng).</li>
+  <li>Tự viết chương trình giải bài toán thực tế: tính toán, xử lý danh sách, đọc/ghi tệp.</li>
+  <li>Chia một bài toán lớn thành các <strong>hàm</strong> nhỏ, rõ ràng.</li>
+  <li>Hiểu <strong>con trỏ</strong> và cách máy quản lý bộ nhớ — kiến thức "khó nhằn" nhưng là chìa khoá.</li>
+</ul>
+<h3>Bản đồ môn học — 10 chương chính</h3>
+<p>Toàn bộ 60 buổi của trường được gom thành lộ trình bên dưới. Mỗi chương xây trên chương trước, nên hãy học tuần tự:</p>
+<div class="lz-map">
+  <div class="lz-stage">Nền tảng</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Nhập môn: chương trình &amp; máy tính</div><div class="lz-nsub">Chương trình chạy thế nào, cấu trúc một file C</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Biến &amp; kiểu dữ liệu</div><div class="lz-nsub">Lưu và nhận dữ liệu · nhập/xuất</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Biểu thức &amp; toán tử</div><div class="lz-nsub">Tính toán, so sánh, logic</div></div></div>
+  <div class="lz-stage">Điều khiển luồng</div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Cấu trúc điều khiển</div><div class="lz-nsub">if / switch · vòng lặp for/while/do-while</div></div></div>
+  <div class="lz-stage">Cấu trúc chương trình</div>
+  <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Hàm &amp; Module</div><div class="lz-nsub">Chia bài toán thành hàm nhỏ</div></div></div>
+  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Con trỏ</div><div class="lz-nsub">Địa chỉ &amp; bộ nhớ — chìa khoá của C</div></div></div>
+  <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Thư viện chuẩn C</div><div class="lz-nsub">stdlib, math, string, time…</div></div></div>
+  <div class="lz-stage">Dữ liệu</div>
+  <div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Mảng &amp; Struct</div><div class="lz-nsub">Danh sách &amp; dữ liệu phức hợp</div></div></div>
+  <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Chuỗi (String)</div><div class="lz-nsub">Xử lý văn bản</div></div></div>
+  <div class="lz-node"><div class="lz-badge">10</div><div class="lz-nbody"><div class="lz-ntitle">Tệp tin (File)</div><div class="lz-nsub">Đọc/ghi dữ liệu ra ổ đĩa</div></div></div>
+  <div class="lz-stage">Nâng cao · ngoài giáo trình</div>
+  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Debug · Stack/Heap · Con trỏ sâu · Dự án C</div><div class="lz-nsub">Hiểu sâu &amp; nắm chắc hơn ở trường</div></div></div>
+</div>
+<p>Sau PRF192, bạn đi tiếp <span class="badge">PRO192</span> Lập trình hướng đối tượng và <span class="badge">LAB211</span> — cả hai đều giả định bạn đã vững phần hàm, mảng và con trỏ ở đây.</p>
+<div class="callout ok">Cách học hiệu quả nhất môn này: <strong>gõ lại mọi ví dụ và chạy thử</strong>, đừng chỉ đọc. Lập trình là kỹ năng — như tập bơi, xem người khác bơi không làm bạn biết bơi.</div>
+<a class="link-card exphub" href="/exp-hub/prf192-cai-dat-moi-truong-c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh" target="_blank" rel="noopener">
+  <span class="lc-ico">🛠️</span>
+  <span class="lc-body"><span class="lc-title">Cài đặt môi trường C — hướng dẫn &amp; tải về</span><span class="lc-sub">Guide chi tiết DevC++ / VS Code + GCC, link tải chính thức và cách dùng — trên Exp Hub.</span></span>
+  <span class="lc-cta">EXP HUB →</span>
+</a>
+</div>
 `,
         },
         {

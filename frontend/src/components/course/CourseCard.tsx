@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Star, Users, BookOpen, Clock, Play, ShoppingCart, Check } from 'lucide-react';
 import type { Course } from '@/types';
+import { useTranslation } from '@/context/LocaleContext';
+import { pickLang } from '@/lib/utils';
 import { useCartStore } from '@/store/cartStore';
 import { COURSE_PAYMENT_ENABLED } from '@/lib/featureFlags';
 import { toast } from 'sonner';
@@ -23,6 +25,7 @@ function formatPrice(price: number, isFree: boolean): string {
 }
 
 export default function CourseCard({ course }: { course: Course }) {
+  const { locale } = useTranslation();
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
 
@@ -88,12 +91,12 @@ export default function CourseCard({ course }: { course: Course }) {
           </div>
 
           <h3 className="text-text-primary font-semibold text-base leading-snug mb-2 line-clamp-2 group-hover:text-neon-violet transition-colors">
-            {course.title}
+            {pickLang(course.title, locale)}
           </h3>
 
           {course.shortDescription && (
             <p className="text-text-muted text-sm line-clamp-2 mb-3">
-              {course.shortDescription}
+              {pickLang(course.shortDescription, locale)}
             </p>
           )}
 

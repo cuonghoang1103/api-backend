@@ -12,6 +12,8 @@ import { coursesApi, paymentApi } from '@/lib/api';
 import { COURSE_PAYMENT_ENABLED } from '@/lib/featureFlags';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
+import { useTranslation } from '@/context/LocaleContext';
+import { pickLang } from '@/lib/utils';
 import { toast } from 'sonner';
 import { sanitizeHtml } from '@/lib/utils';
 import { SafeImage } from '@/components/ui/SafeImage';
@@ -313,6 +315,7 @@ export default function CourseDetailPage() {
   const isLoading = isBackendLoading || status === 'loading';
   const isAuthenticated = mounted && (isBackendAuth || status === 'authenticated');
 
+  const { locale } = useTranslation();
   const [course, setCourse] = useState<Course | null>(null);
   const [reviews, setReviews] = useState<CourseReview[]>([]);
   const [loading, setLoading] = useState(true);
@@ -544,10 +547,18 @@ export default function CourseDetailPage() {
           <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-neon-violet/10 rounded-full blur-[150px]" />
         </div>
         <div className="relative max-w-6xl mx-auto px-4">
-          <Link href="/courses" className="inline-flex items-center gap-2 text-text-muted hover:text-text-primary mb-6 text-sm transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Courses
-          </Link>
+          {(() => {
+            // Academy (FPTU) courses go back to the Academy overview; general
+            // marketplace courses go back to the Courses list.
+            const isAcademy = (course as { academyType?: string; semesterId?: number }).academyType === 'FPT'
+              || (course as { semesterId?: number }).semesterId != null;
+            return (
+              <Link href={isAcademy ? '/academy' : '/courses'} className="inline-flex items-center gap-2 text-text-muted hover:text-text-primary mb-6 text-sm transition-colors">
+                <ArrowLeft className="w-4 h-4" />
+                {isAcademy ? 'Back to Academy' : 'Back to Courses'}
+              </Link>
+            );
+          })()}
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             {/* Left: Info */}
@@ -574,12 +585,12 @@ export default function CourseDetailPage() {
               </div>
 
               <h1 className="text-3xl md:text-4xl font-heading font-bold text-text-primary mb-4 leading-tight">
-                {course.title}
+                {pickLang(course.title, locale)}
               </h1>
 
               {course.shortDescription && (
                 <p className="text-text-secondary text-lg mb-6 leading-relaxed">
-                  {course.shortDescription}
+                  {pickLang(course.shortDescription, locale)}
                 </p>
               )}
 

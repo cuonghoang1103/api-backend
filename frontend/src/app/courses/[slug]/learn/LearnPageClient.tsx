@@ -142,9 +142,21 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
       }
 
       // CODE enrollment gate: requires re-entry of the activation code each browser
-      // session. PAID enrollments bypass this gate entirely — persistent access.
+      // session. Bypassed entirely for: PAID enrollments; admins (full access via
+      // role); users with paid/Pro access; and FREE courses — which must never ask
+      // for a code even when a legacy CODE enrollment row lingers on the account.
       const isPaidEnrollment = data.enrollmentSource === 'PAID';
-      if (!isPaidEnrollment && data.enrollmentSource === 'CODE' && !sessionStorage.getItem(`code_session_${data.id}`)) {
+      const bypassCodeGate =
+        Boolean(data.isAdmin) ||
+        Boolean(data.hasPaidAccess) ||
+        data.accessType === 'FREE' ||
+        Boolean(data.isFree);
+      if (
+        !bypassCodeGate &&
+        !isPaidEnrollment &&
+        data.enrollmentSource === 'CODE' &&
+        !sessionStorage.getItem(`code_session_${data.id}`)
+      ) {
         toast.info('Vui lòng nhập mã kích hoạt để tiếp tục phiên học');
         router.push(`/courses/${slug}`);
         return;

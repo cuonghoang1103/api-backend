@@ -564,6 +564,7 @@ export interface Course {
   sections?: CourseSection[];
   tags?: string[];
   isEnrolled?: boolean;
+  isAdmin?: boolean;
   hasPaidAccess?: boolean;
   enrollmentProgress?: number;
   enrollmentSource?: string;

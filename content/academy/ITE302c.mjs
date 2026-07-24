@@ -574,6 +574,15 @@ export default {
 </table>
 <div class="note-ct">Mitigation is a pipeline, not one fix: audit the <strong>data</strong> (is a group under-represented?), audit the <strong>model</strong> (compute the metrics above per group), and audit the <strong>outcome</strong> (monitor live decisions, not just test-set numbers). Add a human review for high-stakes decisions.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Differential privacy — a mathematical privacy guarantee.</b> Instead of hoping anonymisation holds, differential privacy adds carefully calibrated random noise so that any single person's presence or absence barely changes the result — you can query the dataset for useful statistics while provably limiting what can be learned about any individual. Apple, Google and the US Census use it. It reframes privacy from "did we remove the names?" to "what is the mathematical bound on the harm?"</div>
+<h3>Ví dụ có lời giải · Worked case analysis</h3>
+<p><b>Situation.</b> A bank's ML loan model rejects most applicants from a few postal codes; the approval rate for one district is far higher than a neighbouring one. Management insists: "We never used race or ethnicity as a feature."</p>
+<ol>
+<li><b>Facts.</b> The model uses postal code, income and employment. Postal code correlates strongly with ethnicity in this city; outcomes differ sharply by area.</li>
+<li><b>Stakeholders.</b> Rejected applicants, approved applicants, the bank, regulators, and the wider community.</li>
+<li><b>Ethical issues.</b> <em>Proxy discrimination</em> — an innocent-looking feature reproduces a protected-attribute bias — and the privacy of an <em>inferred</em> sensitive attribute.</li>
+<li><b>Through the lenses.</b> Utilitarian: a small short-term gain against broad social harm and legal exposure. Deontology: it violates applicants' right to equal, non-arbitrary treatment. Professional (ACM 1.4 — be fair and take action not to discriminate): engineers must actively test for and remove such harm.</li>
+<li><b>Recommendation.</b> "No race feature" is not a defence — proxies count. Measure disparate impact across groups, drop or neutralise the postal-code proxy, add human review for edge cases, and document the fairness audit. Fairness is a property of <em>outcomes</em>, not of the feature list.</li>
+</ol>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.1</span>
@@ -599,6 +608,15 @@ export default {
 </table>
 <div class="note-ct">Giảm thiểu là một quy trình, không phải một cú sửa: kiểm <strong>dữ liệu</strong> (có nhóm nào thiếu đại diện?), kiểm <strong>mô hình</strong> (tính các thước đo trên theo từng nhóm), và kiểm <strong>kết quả</strong> (giám sát quyết định sống, không chỉ số trên tập kiểm). Thêm người xét duyệt cho quyết định hệ trọng.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Riêng tư vi phân (differential privacy) — một bảo đảm riêng tư bằng toán.</b> Thay vì hy vọng ẩn danh giữ vững, riêng tư vi phân thêm nhiễu ngẫu nhiên hiệu chỉnh cẩn thận sao cho sự có mặt hay vắng mặt của một cá nhân bất kỳ gần như không đổi kết quả — bạn truy vấn được thống kê hữu ích trong khi chứng minh được giới hạn điều học được về mỗi cá nhân. Apple, Google và Điều tra dân số Mỹ đều dùng. Nó đóng khung lại riêng tư từ "ta đã bỏ tên chưa?" thành "giới hạn toán học của tổn hại là bao nhiêu?"</div>
+<h3>Ví dụ có lời giải · Phân tích tình huống từng bước</h3>
+<p><b>Tình huống.</b> Mô hình ML duyệt vay của một ngân hàng từ chối phần lớn hồ sơ ở vài mã bưu chính; tỷ lệ duyệt ở một quận cao hơn hẳn quận kế bên. Ban quản lý khẳng định: "Chúng tôi không hề dùng chủng tộc hay sắc tộc làm biến."</p>
+<ol>
+<li><b>Sự thật.</b> Mô hình dùng mã bưu chính, thu nhập, việc làm. Mã bưu chính tương quan mạnh với sắc tộc ở thành phố này; kết quả khác nhau rõ theo khu vực.</li>
+<li><b>Các bên liên quan.</b> Người bị từ chối, người được duyệt, ngân hàng, cơ quan quản lý, và cộng đồng.</li>
+<li><b>Vấn đề đạo đức.</b> <em>Phân biệt qua biến thay thế (proxy)</em> — một biến trông vô hại tái tạo thiên kiến theo thuộc tính được bảo vệ — và quyền riêng tư của một thuộc tính nhạy cảm <em>bị suy ra</em>.</li>
+<li><b>Soi qua lăng kính.</b> Vị lợi: cái lợi ngắn hạn nhỏ đổi lấy tổn hại xã hội rộng và rủi ro pháp lý. Bổn phận: vi phạm quyền được đối xử bình đẳng, không tuỳ tiện. Nghề nghiệp (ACM 1.4 — công bằng và hành động để không phân biệt đối xử): kỹ sư phải chủ động kiểm và loại bỏ tổn hại này.</li>
+<li><b>Khuyến nghị.</b> "Không có biến chủng tộc" không phải lý lẽ bào chữa — proxy vẫn tính. Đo tác động chênh lệch giữa các nhóm, bỏ hoặc trung hoà biến mã bưu chính, thêm rà soát của con người cho ca biên, và ghi lại bản kiểm công bằng. Công bằng là thuộc tính của <em>kết quả</em>, không phải của danh sách biến.</li>
+</ol>
 </div>
 `,
         },
@@ -626,6 +644,15 @@ export default {
 </ul>
 <div class="pitfall"><strong>Misconception:</strong> "A more accurate model is always the more ethical choice." Not when it can't be explained and the decision affects someone's rights. An unexplainable denial you can't contest violates due process, even if the model is technically excellent. Accuracy is one value among several — contestability and transparency can outweigh it.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>GDPR Article 22 &amp; the "right to explanation."</b> Europe's GDPR gives people the right not to be subject to a solely automated decision with legal or significant effects, and to obtain "meaningful information about the logic involved". This turns explainability from a nice-to-have into a <em>legal requirement</em> for anyone serving EU users — and it is a major reason black-box models are risky in lending, hiring and insurance. Ethics and regulation converging into one design constraint.</div>
+<h3>Ví dụ có lời giải · Worked case analysis</h3>
+<p><b>Situation.</b> A hospital deploys a vendor "black-box" model that flags a patient as low priority for an expensive treatment. Neither the doctor nor the patient can obtain a reason, and hospital policy discourages overriding the model.</p>
+<ol>
+<li><b>Facts.</b> The model is a proprietary black box; it gives a score with no explanation; the treating doctor's override is administratively blocked.</li>
+<li><b>Stakeholders.</b> The patient, the doctor, the hospital, and the vendor.</li>
+<li><b>Ethical issues.</b> Lack of <em>explainability</em> destroys informed consent and accountability — if no one can explain the decision, no one can be held responsible for it.</li>
+<li><b>Through the lenses.</b> Utilitarian: efficiency gains against eroded trust and possible patient harm. Deontology: the patient has a right to an explanation of a decision that affects them. Professional (ACM 2.5 — give comprehensive evaluations of risks; IEEE honesty): do not deploy unaccountable systems in high-stakes settings.</li>
+<li><b>Recommendation.</b> Require explainable outputs or a guaranteed right to human review; restore the doctor's override; disclose to the patient that a model was used; and contract the vendor for transparency. In medicine, an unexplainable "no" is not acceptable.</li>
+</ol>
 <a class="link-card dl" href="https://www.coursera.org/learn/detect-mitigate-ethical-risks" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
   <span class="lc-body"><span class="lc-title">MOOC 3 — Detect &amp; Mitigate Ethical Risks</span><span class="lc-sub">Transparency, fairness, safety &amp; security modules, on Coursera.</span></span>
@@ -650,6 +677,15 @@ export default {
 </ul>
 <div class="pitfall"><strong>Ngộ nhận:</strong> "Mô hình chính xác hơn luôn là lựa chọn đạo đức hơn." Không, khi nó không giải thích được và quyết định ảnh hưởng đến quyền của ai đó. Một sự từ chối không giải thích được mà bạn không phản đối được là vi phạm quy trình công bằng, kể cả khi mô hình rất giỏi về kỹ thuật. Chính xác chỉ là một giá trị trong nhiều giá trị — khả năng phản bác và minh bạch có thể nặng hơn.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Điều 22 GDPR &amp; "quyền được giải thích."</b> GDPR của châu Âu cho người ta quyền không bị lệ thuộc vào một quyết định hoàn toàn tự động có hệ quả pháp lý hoặc đáng kể, và quyền nhận "thông tin có ý nghĩa về logic liên quan". Điều này biến khả năng giải thích từ "có thì tốt" thành <em>yêu cầu pháp lý</em> cho bất kỳ ai phục vụ người dùng EU — và là lý do lớn khiến mô hình hộp đen rủi ro trong cho vay, tuyển dụng và bảo hiểm. Đạo đức và quy định hội tụ thành một ràng buộc thiết kế.</div>
+<h3>Ví dụ có lời giải · Phân tích tình huống từng bước</h3>
+<p><b>Tình huống.</b> Một bệnh viện triển khai mô hình "hộp đen" của nhà cung cấp; nó gắn nhãn một bệnh nhân là "ưu tiên thấp" cho một liệu pháp đắt tiền. Cả bác sĩ lẫn bệnh nhân đều không lấy được lý do, và quy định bệnh viện không khuyến khích ghi đè mô hình.</p>
+<ol>
+<li><b>Sự thật.</b> Mô hình là hộp đen độc quyền; chỉ đưa điểm số, không giải thích; quyền ghi đè của bác sĩ điều trị bị chặn về mặt hành chính.</li>
+<li><b>Các bên liên quan.</b> Bệnh nhân, bác sĩ, bệnh viện, nhà cung cấp.</li>
+<li><b>Vấn đề đạo đức.</b> Thiếu <em>khả năng giải thích</em> phá vỡ đồng thuận có hiểu biết và trách nhiệm giải trình — nếu không ai giải thích được quyết định, không ai chịu trách nhiệm về nó.</li>
+<li><b>Soi qua lăng kính.</b> Vị lợi: cái lợi về hiệu suất đổi lấy niềm tin bị xói mòn và nguy cơ hại bệnh nhân. Bổn phận: bệnh nhân có quyền được giải thích quyết định ảnh hưởng đến mình. Nghề nghiệp (ACM 2.5 — đánh giá đầy đủ rủi ro; IEEE trung thực): không triển khai hệ thống không giải trình được trong bối cảnh hệ trọng.</li>
+<li><b>Khuyến nghị.</b> Yêu cầu đầu ra giải thích được hoặc quyền được con người xem lại; khôi phục quyền ghi đè của bác sĩ; công khai với bệnh nhân rằng có dùng mô hình; và ràng buộc nhà cung cấp về tính minh bạch. Trong y khoa, một câu "không" không giải thích được là không chấp nhận được.</li>
+</ol>
 <a class="link-card dl" href="https://www.coursera.org/learn/detect-mitigate-ethical-risks" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
   <span class="lc-body"><span class="lc-title">MOOC 3 — Detect &amp; Mitigate Ethical Risks</span><span class="lc-sub">Mô-đun minh bạch, công bằng, an toàn &amp; bảo mật, trên Coursera.</span></span>
@@ -713,6 +749,15 @@ export default {
 </div>
 <div class="pitfall"><strong>Misconception:</strong> "The engineering fix is the real work; communication is just PR spin." In a data-ethics crisis, how you communicate <em>is</em> an ethical act. Downplaying harm, blaming users, or hiding scope compounds the original wrong and destroys the trust you need to recover. Good crisis communication is honesty operationalised — not spin.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Two crises, two outcomes.</b> Compare Johnson &amp; Johnson's 1982 Tylenol recall — fast, transparent, "public safety over profit," now taught as the gold standard — with data scandals where firms denied, delayed and blamed users, and lost trust for years. The technical facts were fixed in days; the <em>reputational</em> outcome was decided entirely by the honesty and speed of communication. For your career: the moment you find the risk, how you raise it often matters as much as the finding itself.</div>
+<h3>Ví dụ có lời giải · Worked example (raising an ethics concern)</h3>
+<p><b>Situation.</b> You are a junior engineer. You notice the recommender you help maintain pushes self-harm content to teenage users because it maximises watch-time. You have the logs. How do you <em>communicate</em> this so it actually gets fixed — without torpedoing your standing?</p>
+<ol>
+<li><b>Know your audience.</b> Your lead cares about risk and metrics; legal/trust-and-safety care about harm and liability. Tailor the same facts to each.</li>
+<li><b>Lead with evidence, not accusation.</b> "Here are 40 sessions where minors were served self-harm videos" beats "the algorithm is evil." Data is harder to dismiss.</li>
+<li><b>Frame harm AND business risk.</b> Name the human harm first, then the concrete risk (regulatory, PR, legal) — this makes it a priority, not a philosophy debate.</li>
+<li><b>Bring a fix, not just a problem.</b> Propose a concrete mitigation (age-aware filtering, a safety classifier, a hard block on the category) so the conversation moves to "how", not "whether".</li>
+<li><b>Use the right channel, and document.</b> Send a short factual memo to your lead + trust-and-safety, keep a dated record. If it is serious and ignored, escalate through the whistleblower/ethics policy. Communicating an ethical concern well is itself a professional skill.</li>
+</ol>
 <a class="link-card dl" href="https://www.coursera.org/learn/ethical-communication-data-driven-technologies" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
   <span class="lc-body"><span class="lc-title">MOOC 4 — Communicate Effectively about Ethical Challenges</span><span class="lc-sub">Stakeholders, DEI communication &amp; crisis management, on Coursera.</span></span>
@@ -744,6 +789,15 @@ export default {
 </div>
 <div class="pitfall"><strong>Ngộ nhận:</strong> "Sửa kỹ thuật mới là việc thật; truyền đạt chỉ là PR đánh bóng." Trong khủng hoảng đạo đức dữ liệu, cách bạn truyền đạt <em>chính là</em> một hành vi đạo đức. Giảm nhẹ tổn hại, đổ lỗi người dùng, hay giấu quy mô làm trầm trọng thêm cái sai ban đầu và phá huỷ niềm tin bạn cần để phục hồi. Truyền thông khủng hoảng tốt là trung thực được vận hành — không phải đánh bóng.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hai khủng hoảng, hai kết cục.</b> So sánh vụ thu hồi Tylenol năm 1982 của Johnson &amp; Johnson — nhanh, minh bạch, "an toàn công chúng trên lợi nhuận", nay được dạy như chuẩn vàng — với các bê bối dữ liệu nơi công ty chối, trì hoãn và đổ lỗi người dùng, mất niềm tin nhiều năm. Sự thật kỹ thuật được sửa trong vài ngày; kết cục <em>uy tín</em> hoàn toàn do sự trung thực và tốc độ truyền đạt định đoạt. Cho sự nghiệp của bạn: khoảnh khắc bạn tìm ra rủi ro, cách bạn nêu nó thường quan trọng ngang phát hiện.</div>
+<h3>Ví dụ có lời giải · Ví dụ (cách nêu một mối lo đạo đức)</h3>
+<p><b>Tình huống.</b> Bạn là kỹ sư mới. Bạn phát hiện hệ gợi ý bạn đang bảo trì đẩy nội dung tự hại tới người dùng tuổi teen vì nó tối đa hoá thời lượng xem. Bạn có log. Làm sao <em>truyền đạt</em> việc này để nó thực sự được sửa — mà không tự huỷ vị thế của mình?</p>
+<ol>
+<li><b>Hiểu người nghe.</b> Sếp bạn quan tâm rủi ro và chỉ số; bộ phận pháp lý/an toàn quan tâm tổn hại và trách nhiệm. Cùng một sự thật, trình bày hợp từng bên.</li>
+<li><b>Mở đầu bằng bằng chứng, không phải cáo buộc.</b> "Đây là 40 phiên trẻ vị thành niên bị phục vụ video tự hại" hơn hẳn "thuật toán này độc ác." Dữ liệu khó gạt bỏ hơn.</li>
+<li><b>Khung cả tổn hại LẪN rủi ro kinh doanh.</b> Nêu tổn hại con người trước, rồi rủi ro cụ thể (pháp lý, truyền thông) — biến nó thành việc ưu tiên, không phải cuộc tranh luận triết học.</li>
+<li><b>Mang giải pháp, không chỉ vấn đề.</b> Đề xuất biện pháp cụ thể (lọc theo tuổi, một bộ phân loại an toàn, chặn cứng danh mục) để cuộc bàn chuyển sang "làm thế nào", không phải "có nên hay không".</li>
+<li><b>Dùng đúng kênh, và lưu vết.</b> Gửi một bản ghi nhớ ngắn, thực tế tới sếp + bộ phận an toàn, giữ bản ghi có ngày. Nếu nghiêm trọng mà bị phớt lờ, leo thang theo quy định tố giác/đạo đức. Truyền đạt tốt một mối lo đạo đức tự nó là một kỹ năng nghề.</li>
+</ol>
 <a class="link-card dl" href="https://www.coursera.org/learn/ethical-communication-data-driven-technologies" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
   <span class="lc-body"><span class="lc-title">MOOC 4 — Communicate Effectively about Ethical Challenges</span><span class="lc-sub">Bên liên quan, truyền thông DEI &amp; xử lý khủng hoảng, trên Coursera.</span></span>
@@ -802,6 +856,15 @@ export default {
 </div>
 <div class="pitfall"><strong>Misconception:</strong> "We have a code of ethics on the wall, so we're covered." A code that isn't enforced, reviewed, or backed by process is <em>ethics theatre</em>. What makes a code real: leadership that follows it under pressure, review gates that can actually stop a launch, and protection for people who report problems. Culture eats the poster for breakfast.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Psychological safety is the load-bearing wall.</b> Google's Project Aristotle found the top predictor of effective teams wasn't talent — it was <em>psychological safety</em>: people felt safe to speak up. Every major ethics failure has the same post-mortem line: "someone knew, but didn't feel safe raising it." A code of ethics only works if the org rewards the person who says "stop, this is wrong" instead of punishing them. Governance is 20% documents and 80% whether people dare to use them.</div>
+<h3>Ví dụ có lời giải · Worked case analysis</h3>
+<p><b>Situation.</b> Your product manager asks you to log users' precise GPS location in the background "for analytics", with no consent prompt and no retention limit. It is technically easy and "everyone does it".</p>
+<ol>
+<li><b>Facts.</b> An SDK would collect precise location silently; there is no opt-in; the data would be kept indefinitely and shared internally.</li>
+<li><b>Stakeholders.</b> Users, the company, you as the engineer, and regulators.</li>
+<li><b>Ethical issues.</b> Collection without consent violates privacy and autonomy; "everyone does it" is not a justification.</li>
+<li><b>Through the ACM Code.</b> 1.6 respect privacy; 1.2 avoid harm; 2.3 respect existing rules only when they are ethically sound; 3.1 act for the public good. A manager's request does not outrank the professional code.</li>
+<li><b>Recommendation.</b> Refuse silent collection. Propose a consented, minimised, purpose-limited alternative (ask only when needed, retain briefly, let users opt out). Cite ACM 1.6 in writing; if pressed, escalate to legal/ethics. A code of ethics exists precisely for the moment it is inconvenient.</li>
+</ol>
 <a class="link-card dl" href="https://www.coursera.org/learn/ethical-data-driven-technology-leader" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
   <span class="lc-body"><span class="lc-title">MOOC 5 — Create &amp; Lead an Ethical Data-Driven Organization</span><span class="lc-sub">Ethical culture, governance &amp; code of ethics, on Coursera.</span></span>
@@ -828,6 +891,15 @@ export default {
 </div>
 <div class="pitfall"><strong>Ngộ nhận:</strong> "Bọn tôi có bộ quy tắc đạo đức treo tường rồi, thế là ổn." Một bộ quy tắc không được thực thi, không được review, không có quy trình chống lưng là <em>diễn kịch đạo đức</em>. Điều làm một bộ quy tắc thành thật: lãnh đạo tuân thủ nó dưới áp lực, các cổng review thật sự chặn được một lần ra mắt, và bảo vệ người báo cáo vấn đề. Văn hoá "ăn" tấm áp phích vào bữa sáng.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>An toàn tâm lý là bức tường chịu lực.</b> Dự án Aristotle của Google phát hiện yếu tố dự báo mạnh nhất cho nhóm hiệu quả không phải tài năng — mà là <em>an toàn tâm lý</em>: người ta thấy an toàn để lên tiếng. Mọi thất bại đạo đức lớn đều có cùng một dòng trong biên bản mổ xẻ: "có người biết, nhưng không thấy an toàn để nêu ra." Bộ quy tắc đạo đức chỉ hiệu quả nếu tổ chức thưởng cho người nói "dừng lại, việc này sai" thay vì trừng phạt họ. Quản trị là 20% tài liệu và 80% việc người ta có dám dùng chúng không.</div>
+<h3>Ví dụ có lời giải · Phân tích tình huống từng bước</h3>
+<p><b>Tình huống.</b> Quản lý sản phẩm yêu cầu bạn ghi vị trí GPS chính xác của người dùng ở chế độ nền "để phân tích", không hỏi đồng thuận và không giới hạn thời gian lưu. Về kỹ thuật thì dễ, và "ai cũng làm vậy".</p>
+<ol>
+<li><b>Sự thật.</b> Một SDK sẽ thu vị trí chính xác một cách âm thầm; không có opt-in; dữ liệu bị giữ vô thời hạn và chia sẻ nội bộ.</li>
+<li><b>Các bên liên quan.</b> Người dùng, công ty, bạn với tư cách kỹ sư, và cơ quan quản lý.</li>
+<li><b>Vấn đề đạo đức.</b> Thu thập không đồng thuận vi phạm quyền riêng tư và quyền tự chủ; "ai cũng làm" không phải lý do biện minh.</li>
+<li><b>Soi qua Bộ quy tắc ACM.</b> 1.6 tôn trọng riêng tư; 1.2 tránh gây hại; 2.3 chỉ tuân quy tắc hiện hành khi chúng đúng về đạo đức; 3.1 hành động vì lợi ích công. Yêu cầu của một quản lý không đứng trên bộ quy tắc nghề.</li>
+<li><b>Khuyến nghị.</b> Từ chối thu thập âm thầm. Đề xuất phương án có đồng thuận, tối giản, giới hạn mục đích (chỉ hỏi khi cần, giữ ngắn, cho người dùng tắt). Viện dẫn ACM 1.6 bằng văn bản; nếu bị ép, leo thang lên pháp lý/đạo đức. Một bộ quy tắc đạo đức tồn tại chính cho khoảnh khắc nó gây bất tiện.</li>
+</ol>
 <a class="link-card dl" href="https://www.coursera.org/learn/ethical-data-driven-technology-leader" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
   <span class="lc-body"><span class="lc-title">MOOC 5 — Create &amp; Lead an Ethical Data-Driven Organization</span><span class="lc-sub">Văn hoá đạo đức, quản trị &amp; bộ quy tắc, trên Coursera.</span></span>
@@ -866,6 +938,15 @@ export default {
 <div class="note-ct">This ties the whole course together: the <em>frameworks</em> (Ch1) tell you what's right, the <em>bias &amp; risk</em> work (Ch2–3) finds concrete harms, <em>communication</em> (Ch4) moves people, and <em>governance + regulation</em> (Ch5) makes it durable and enforceable. Ethics without governance fades; governance without ethics is empty compliance.</div>
 <div class="pitfall"><strong>Misconception:</strong> "If we're compliant with the law, we're ethical." Compliance is necessary but not sufficient — the law lags behind technology, so plenty of harmful things are still legal. Regulation is the floor; ethics asks what you should do in the large space the law hasn't reached yet. The best organisations aim above the line, not just at it.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Dual-use &amp; the responsibility that doesn't end at deployment.</b> Almost any powerful technology is <em>dual-use</em>: face recognition finds missing children <em>and</em> enables mass surveillance; a generative model writes tutorials <em>and</em> phishing emails. Governance therefore can't stop at "does it work?" — it must ask "how could this be misused, and what do we owe the people it could harm?" Responsible release, usage policies, and monitoring after launch are part of the ethical duty, not optional extras. The engineer who builds it shares responsibility for how it can be used.</div>
+<h3>Ví dụ có lời giải · Worked case analysis</h3>
+<p><b>Situation.</b> An EU-based startup wants to deploy live facial recognition in public squares to "improve security", selling it to city councils.</p>
+<ol>
+<li><b>Facts.</b> Real-time biometric identification of the public, in EU jurisdiction, at scale, without individual consent.</li>
+<li><b>Stakeholders.</b> The surveilled public, the startup, city clients, and regulators.</li>
+<li><b>Ethical &amp; legal issues.</b> Real-time remote biometric ID in public is treated as unacceptable/high-risk under the EU AI Act; GDPR Article 9 makes biometric data a special category needing a strong legal basis.</li>
+<li><b>Through governance.</b> Map to the AI Act risk tiers (this lands at the prohibited/high-risk end); GDPR requires a Data Protection Impact Assessment; accountability and human oversight are mandatory, not optional.</li>
+<li><b>Recommendation.</b> Do not deploy real-time public biometric identification in the EU. If any narrow, lawful use exists, run a DPIA first, establish an explicit legal basis, minimise scope, add human oversight, and register the system per the AI Act. Governance is a design constraint, not paperwork after the fact.</li>
+</ol>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.2</span>
@@ -891,6 +972,15 @@ export default {
 <div class="note-ct">Đây là chỗ buộc cả môn học lại: các <em>khung</em> (Ch1) cho biết điều gì đúng, phần <em>thiên kiến &amp; rủi ro</em> (Ch2–3) tìm tổn hại cụ thể, <em>truyền đạt</em> (Ch4) khiến người ta chuyển động, và <em>quản trị + quy định</em> (Ch5) làm nó bền và cưỡng chế được. Đạo đức không có quản trị sẽ phai; quản trị không có đạo đức là tuân thủ rỗng.</div>
 <div class="pitfall"><strong>Ngộ nhận:</strong> "Tuân thủ luật là có đạo đức." Tuân thủ là cần nhưng chưa đủ — luật đi sau công nghệ, nên rất nhiều thứ gây hại vẫn hợp pháp. Quy định là sàn; đạo đức hỏi bạn nên làm gì trong khoảng không rộng mà luật chưa với tới. Tổ chức tốt nhất nhắm cao hơn vạch, không chỉ chạm vạch.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Lưỡng dụng (dual-use) &amp; trách nhiệm không dừng ở lúc triển khai.</b> Gần như mọi công nghệ mạnh đều <em>lưỡng dụng</em>: nhận diện khuôn mặt tìm trẻ lạc <em>và</em> cho phép giám sát hàng loạt; một mô hình tạo sinh viết hướng dẫn <em>và</em> email lừa đảo. Vì thế quản trị không thể dừng ở "nó có chạy không?" — phải hỏi "nó có thể bị lạm dụng thế nào, và ta nợ gì những người nó có thể gây hại?" Phát hành có trách nhiệm, chính sách sử dụng, và giám sát sau khi ra mắt là một phần của bổn phận đạo đức, không phải phần thêm tuỳ chọn. Kỹ sư xây nó chia sẻ trách nhiệm về cách nó bị dùng.</div>
+<h3>Ví dụ có lời giải · Phân tích tình huống từng bước</h3>
+<p><b>Tình huống.</b> Một startup đặt tại EU muốn triển khai nhận diện khuôn mặt trực tiếp ở quảng trường công cộng để "tăng cường an ninh", bán cho chính quyền thành phố.</p>
+<ol>
+<li><b>Sự thật.</b> Nhận dạng sinh trắc thời gian thực với công chúng, trong phạm vi tài phán EU, ở quy mô lớn, không có đồng thuận cá nhân.</li>
+<li><b>Các bên liên quan.</b> Công chúng bị giám sát, startup, khách hàng là thành phố, và cơ quan quản lý.</li>
+<li><b>Vấn đề đạo đức &amp; pháp lý.</b> Nhận dạng sinh trắc từ xa thời gian thực nơi công cộng bị xem là không chấp nhận được/rủi ro cao theo Đạo luật AI của EU; GDPR Điều 9 xếp dữ liệu sinh trắc vào loại đặc biệt cần cơ sở pháp lý mạnh.</li>
+<li><b>Soi qua quản trị.</b> Ánh xạ vào các bậc rủi ro của Đạo luật AI (ca này rơi vào nhóm bị cấm/rủi ro cao); GDPR yêu cầu Đánh giá tác động bảo vệ dữ liệu (DPIA); trách nhiệm giải trình và giám sát của con người là bắt buộc, không tuỳ chọn.</li>
+<li><b>Khuyến nghị.</b> Không triển khai nhận dạng sinh trắc công cộng thời gian thực ở EU. Nếu có một mục đích hẹp và hợp pháp, làm DPIA trước, thiết lập cơ sở pháp lý rõ ràng, tối giản phạm vi, thêm giám sát của con người, và đăng ký hệ thống theo Đạo luật AI. Quản trị là ràng buộc thiết kế, không phải giấy tờ làm sau.</li>
+</ol>
 </div>
 `,
         },
@@ -1000,6 +1090,15 @@ export default {
 <p><strong>Alignment</strong> asks: how do we make an AI system reliably do what we actually intend — including our unstated values — rather than optimising a literal proxy in harmful ways? A system told to "maximise engagement" may learn that outrage works best; one told to "be helpful" may become sycophantic or help with harmful requests. The gap between <em>what we asked for</em> and <em>what we meant</em> is where much AI harm lives.</p>
 <div class="pitfall"><strong>Misconception:</strong> "If the AI is very capable, it will naturally do the right thing." Capability and values are independent. A more powerful system pursuing a slightly wrong objective causes <em>more</em> harm, not less — competence without alignment amplifies mistakes. This is why safety and ethics work must scale <em>with</em> capability, not lag behind it.</p></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The "right to explanation" meets the black box, hard.</b> Generative models are the ultimate black box — even their creators can't fully explain a specific output. That collides directly with GDPR Article 22 and with accountability: if you deploy an LLM to make or shape decisions about people, "we can't explain why it said that" is not a defence, it's a liability. The ethical use of generative AI in high-stakes settings requires guardrails, human oversight, and honest disclosure of limits — the whole toolkit of this course applied to the hardest case.</div>
+<h3>Ví dụ có lời giải · Worked case analysis</h3>
+<p><b>Situation.</b> A health startup ships a generative-AI chatbot that answers medical questions. It sometimes states dangerous advice with full confidence, carries no disclaimer, and was trained partly on scraped copyrighted forum posts.</p>
+<ol>
+<li><b>Facts.</b> The LLM is confidently wrong on some queries; there is no warning about limits; the provenance and licensing of the training data are unclear.</li>
+<li><b>Stakeholders.</b> Users/patients, the startup, the content owners whose data was scraped, and regulators.</li>
+<li><b>Ethical issues.</b> Safety (hallucination in a high-stakes domain), transparency (no disclosure of limits), and consent/IP over the training data — three course themes at once.</li>
+<li><b>Through the lenses.</b> Utilitarian: wider access to health info against real harm from bad advice. Deontology: a duty not to endanger users. Professional + emerging AI norms (ACM avoid harm and be honest about capabilities): high-stakes GenAI needs guardrails and human oversight.</li>
+<li><b>Recommendation.</b> Add guardrails that refuse or defer high-risk medical questions, keep a human in the loop, show a clear "not medical advice, may be wrong" disclosure, and audit and license the training data. This is the whole toolkit of the course applied to the hardest case.</li>
+</ol>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.1 · Ngoài giáo trình</span>
@@ -1016,6 +1115,15 @@ export default {
 <p><strong>Alignment</strong> hỏi: làm sao khiến một hệ thống AI làm đúng điều ta thật sự chủ ý — kể cả các giá trị không nói ra — thay vì tối ưu một đại diện theo nghĩa đen theo cách gây hại? Một hệ thống được bảo "tối đa tương tác" có thể học rằng phẫn nộ hiệu quả nhất; một hệ thống được bảo "hãy hữu ích" có thể thành nịnh bợ hoặc giúp cả yêu cầu gây hại. Khoảng cách giữa <em>điều ta yêu cầu</em> và <em>điều ta muốn</em> là nơi phần nhiều tổn hại AI trú.</p>
 <div class="pitfall"><strong>Ngộ nhận:</strong> "Nếu AI rất giỏi, nó tự nhiên sẽ làm điều đúng." Năng lực và giá trị độc lập với nhau. Một hệ thống mạnh hơn theo đuổi một mục tiêu hơi sai gây <em>nhiều</em> tổn hại hơn, không phải ít — giỏi mà không căn chỉnh sẽ khuếch đại sai lầm. Đó là lý do công tác an toàn và đạo đức phải mở rộng <em>cùng</em> năng lực, không đi sau nó.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>"Quyền được giải thích" đụng chiếc hộp đen, rất mạnh.</b> Mô hình tạo sinh là hộp đen tột cùng — ngay cả người tạo ra cũng không giải thích đầy đủ một đầu ra cụ thể. Điều đó va thẳng với Điều 22 GDPR và với trách nhiệm giải trình: nếu bạn triển khai một LLM để ra hay định hình quyết định về con người, "bọn tôi không giải thích được vì sao nó nói thế" không phải biện hộ, mà là trách nhiệm pháp lý. Dùng AI tạo sinh có đạo đức trong bối cảnh hệ trọng đòi hỏi rào chắn, giám sát của con người, và công khai trung thực về giới hạn — cả bộ công cụ của môn này áp vào ca khó nhất.</div>
+<h3>Ví dụ có lời giải · Phân tích tình huống từng bước</h3>
+<p><b>Tình huống.</b> Một startup y tế ra mắt chatbot AI tạo sinh trả lời câu hỏi y khoa. Đôi khi nó nói lời khuyên nguy hiểm với vẻ đầy tự tin, không kèm cảnh báo, và được huấn luyện một phần trên bài diễn đàn có bản quyền bị cào về.</p>
+<ol>
+<li><b>Sự thật.</b> LLM sai một cách tự tin ở một số câu hỏi; không có cảnh báo về giới hạn; nguồn gốc và giấy phép của dữ liệu huấn luyện không rõ.</li>
+<li><b>Các bên liên quan.</b> Người dùng/bệnh nhân, startup, chủ nội dung bị cào dữ liệu, và cơ quan quản lý.</li>
+<li><b>Vấn đề đạo đức.</b> An toàn (ảo giác trong lĩnh vực hệ trọng), minh bạch (không công khai giới hạn), và đồng thuận/sở hữu trí tuệ với dữ liệu huấn luyện — ba chủ đề của môn cùng lúc.</li>
+<li><b>Soi qua lăng kính.</b> Vị lợi: mở rộng tiếp cận thông tin y tế đổi lấy nguy cơ hại thật từ lời khuyên sai. Bổn phận: nghĩa vụ không gây nguy hiểm cho người dùng. Nghề nghiệp + chuẩn mực AI mới nổi (ACM tránh gây hại và trung thực về năng lực): GenAI hệ trọng cần rào chắn và giám sát của con người.</li>
+<li><b>Khuyến nghị.</b> Thêm rào chắn để từ chối hoặc trì hoãn câu hỏi y khoa rủi ro cao, giữ con người trong vòng lặp, hiển thị rõ "không phải lời khuyên y tế, có thể sai", và kiểm toán + cấp phép dữ liệu huấn luyện. Đây là cả bộ công cụ của môn áp vào ca khó nhất.</li>
+</ol>
 </div>
 `,
         },

@@ -8,7 +8,7 @@
  */
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import {
   ArrowLeft, Loader2, CheckCircle2, Lightbulb, Save, Eye, EyeOff, Play,
   BookOpen, Youtube, ExternalLink, ListChecks, Layers, ChevronLeft, ChevronRight,
@@ -21,6 +21,7 @@ import { useAuthStore } from '@/store/authStore';
 import { sanitizeHtml } from '@/lib/sanitizeHtml';
 import { CodeViewer } from '@/components/exp-hub/CodeViewer';
 import { MiniCode } from '@/components/code-lab/MiniCode';
+import { CourseBackLink } from '@/components/code-lab/CourseBackLink';
 import { Workspace, flavorFor } from '@/components/code-lab/Workspace';
 import { DifficultyBadge } from '@/components/code-lab/shared';
 import { ExerciseResources } from '@/components/code-lab/ExerciseResources';
@@ -72,6 +73,9 @@ function LangSwitch({ lang, onPick }: { lang: 'en' | 'vi'; onPick: (l: 'en' | 'v
 
 export default function ExerciseDetailPage() {
   const params = useParams<{ trackSlug: string; exerciseSlug: string }>();
+  const searchParams = useSearchParams();
+  // Preserve ?ref=&reflabel= (from an Academy/Courses lesson) when going back to the roadmap.
+  const refQS = searchParams.get('ref') ? `?${searchParams.toString()}` : '';
   const isAuthed = useAuthStore((s) => s.isAuthenticated);
 
   const [ex, setEx] = useState<CodeExercise | null>(null);
@@ -228,7 +232,8 @@ export default function ExerciseDetailPage() {
 
   return (
     <div className="cl-root mx-auto max-w-3xl px-4 pb-10 pt-20" style={{ color: 'var(--text-primary)', ['--cl-accent' as string]: trackAccent } as React.CSSProperties}>
-      <Link href={`/code-lab/${params.trackSlug}`} className="mb-4 inline-flex items-center gap-1.5 text-sm transition-colors hover:opacity-80" style={{ color: 'var(--text-muted)' }}>
+      <CourseBackLink />
+      <Link href={`/code-lab/${params.trackSlug}${refQS}`} className="mb-4 ml-2 inline-flex items-center gap-1.5 text-sm transition-colors hover:opacity-80" style={{ color: 'var(--text-muted)' }}>
         <ArrowLeft size={15} /> {ex.track?.name || 'Roadmap'}
       </Link>
 

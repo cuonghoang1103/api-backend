@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { Star, Users, Clock, BookOpen, Play } from 'lucide-react';
 import type { Course } from '@/types';
 import { SafeImage } from '@/components/ui/SafeImage';
+import { useTranslation } from '@/context/LocaleContext';
+import { pickLang } from '@/lib/utils';
 
 interface CourseCardProps {
   course: Course;
@@ -24,6 +26,7 @@ function formatDuration(seconds: number) {
 }
 
 export default function CourseCard({ course, index = 0 }: CourseCardProps) {
+  const { locale } = useTranslation();
   const priceInfo = formatPrice(course.price, course.isFree);
   const duration = formatDuration(course.totalDurationSeconds || 0);
   const levelColor = course.level === 'BEGINNER' ? 'text-green-400' :
@@ -91,13 +94,13 @@ export default function CourseCard({ course, index = 0 }: CourseCardProps) {
           {/* Title */}
           <Link href={`/academy/courses/${course.slug}`}>
             <h3 className="text-base font-heading font-bold text-text-primary group-hover:text-neon-violet transition-colors line-clamp-2 mb-2">
-              {course.title}
+              {pickLang(course.title, locale)}
             </h3>
           </Link>
 
           {/* Short desc */}
           {course.shortDescription && (
-            <p className="text-xs text-text-muted line-clamp-2 mb-4 flex-1">{course.shortDescription}</p>
+            <p className="text-xs text-text-muted line-clamp-2 mb-4 flex-1">{pickLang(course.shortDescription, locale)}</p>
           )}
 
           {/* Schedule — show start/end dates for FPT academy courses

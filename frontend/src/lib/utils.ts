@@ -5,6 +5,23 @@ import { twMerge } from 'tailwind-merge';
 export const cn = (...inputs: ClassValue[]): string => twMerge(clsx(inputs));
 
 /**
+ * Bilingual plain-text field. Academy/Courses store titles & short strings as
+ * `English|||Tiếng Việt`; pick the half for the active locale. Falls back to
+ * the other half if one side is empty, and returns the whole string unchanged
+ * when there is no `|||` delimiter (so non-bilingual courses render as-is).
+ * Content HTML uses `.ml-en`/`.ml-vi` blocks + a `data-ml` wrapper instead —
+ * this helper is for plain strings (titles, descriptions, quiz options).
+ */
+export function pickLang(text: string | null | undefined, locale: 'en' | 'vi'): string {
+  if (!text) return '';
+  const i = text.indexOf('|||');
+  if (i === -1) return text;
+  const en = text.slice(0, i).trim();
+  const vi = text.slice(i + 3).trim();
+  return locale === 'vi' ? (vi || en) : (en || vi);
+}
+
+/**
  * Strip inline `color` / `background-color` declarations from an HTML string.
  *
  * Rich text pasted from Word / Docs / a website carries the SOURCE text

@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslation } from '@/context/LocaleContext';
+import { pickLang } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
@@ -54,6 +56,7 @@ function isDirectVideoUrl(url?: string): boolean {
 }
 
 export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
+  const { locale } = useTranslation();
   const [course, setCourse] = useState<Course | null>(null);
   const [reviews, setReviews] = useState<CourseReview[]>([]);
   const [relatedCourses, setRelatedCourses] = useState<Course[]>([]);
@@ -198,7 +201,7 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
             <div className="flex items-center gap-2 text-sm text-text-muted">
               <Link href="/academy" className="hover:text-neon-violet transition-colors">Academy</Link>
               <span>/</span>
-              <span className="text-text-primary">{course.title}</span>
+              <span className="text-text-primary">{pickLang(course.title, locale)}</span>
             </div>
           </div>
         </div>
@@ -217,9 +220,9 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
                 {accessType === 'PAID' && <span className="px-3 py-1 rounded-lg text-xs font-medium bg-neon-indigo/20 text-neon-indigo">Trả phí</span>}
                 {course.categoryName && <span className="px-3 py-1 rounded-lg text-xs font-medium bg-neon-indigo/20 text-neon-indigo">{course.categoryName}</span>}
               </div>
-              <h1 className="text-3xl md:text-4xl font-heading font-bold text-text-primary mb-4">{course.title}</h1>
+              <h1 className="text-3xl md:text-4xl font-heading font-bold text-text-primary mb-4">{pickLang(course.title, locale)}</h1>
               {course.shortDescription && (
-                <p className="text-lg text-text-secondary leading-relaxed">{course.shortDescription}</p>
+                <p className="text-lg text-text-secondary leading-relaxed">{pickLang(course.shortDescription, locale)}</p>
               )}
 
               {/* Meta row */}

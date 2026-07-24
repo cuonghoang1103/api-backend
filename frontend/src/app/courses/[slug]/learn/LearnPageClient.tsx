@@ -13,7 +13,8 @@ import { coursesApi, certificatesApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
-import { sanitizeHtml, stripInlineColors } from '@/lib/utils';
+import { sanitizeHtml, stripInlineColors, pickLang } from '@/lib/utils';
+import { useTranslation } from '@/context/LocaleContext';
 import { loadYouTubeAPI, isYouTubeUrl } from '@/lib/youtube-player';
 import LessonQuizPlayer, { type QuizData } from './LessonQuizPlayer';
 import LessonPdfViewer from './LessonPdfViewer';
@@ -81,6 +82,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
   // only delay `isEnrolled` derivation by one extra render at
   // most.
   const router = useRouter();
+  const { locale, setLocale } = useTranslation();
   const [course, setCourse] = useState<Course | null>(null);
   const [currentLesson, setCurrentLesson] = useState<LessonDto | null>(null);
   const [progress, setProgress] = useState<LessonProgress[]>([]);
@@ -356,7 +358,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
     return course.sections.flatMap(section =>
       (section.lessons || []).map(lesson => ({
         sectionId: section.id,
-        sectionTitle: section.title,
+        sectionTitle: pickLang(section.title, locale),
         sectionLocked: section.isLocked || false,
         lesson,
       }))
@@ -474,7 +476,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="text-sm font-semibold text-text-primary line-clamp-1">{course.title}</h1>
+            <h1 className="text-sm font-semibold text-text-primary line-clamp-1">{pickLang(course.title, locale)}</h1>
             <div className="flex items-center gap-2 mt-0.5">
               <div className="w-24 h-1.5 bg-darkbg rounded-full overflow-hidden">
                 <div className="h-full bg-gradient-to-r from-neon-indigo to-neon-violet transition-all" style={{ width: `${overallProgress}%` }} />
@@ -484,6 +486,19 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          {/* Realtime EN/VN toggle — shares the global app locale. */}
+          <div className="flex items-center rounded-full border border-darkborder/60 p-0.5 text-xs font-semibold">
+            <button
+              onClick={() => setLocale('en')}
+              className={`px-2 py-0.5 rounded-full transition-colors ${locale === 'en' ? 'bg-neon-violet text-white' : 'text-text-muted hover:text-text-primary'}`}
+              aria-pressed={locale === 'en'}
+            >EN</button>
+            <button
+              onClick={() => setLocale('vi')}
+              className={`px-2 py-0.5 rounded-full transition-colors ${locale === 'vi' ? 'bg-neon-violet text-white' : 'text-text-muted hover:text-text-primary'}`}
+              aria-pressed={locale === 'vi'}
+            >VN</button>
+          </div>
           <Link href="/my-courses" className="text-sm text-neon-violet hover:text-neon-indigo transition-colors">
             My Courses
           </Link>
@@ -543,7 +558,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                     className="w-full flex items-center justify-between p-3 bg-darkbg/50 hover:bg-darkbg transition-colors text-left"
                   >
                     <div className="flex-1 min-w-0 pr-2">
-                      <p className="text-sm font-medium text-text-primary line-clamp-2">{section.title}</p>
+                      <p className="text-sm font-medium text-text-primary line-clamp-2">{pickLang(section.title, locale)}</p>
                       <p className="text-xs text-text-muted mt-0.5">
                         {section.lessonCount} lessons{sectionDuration(section) > 0 ? ` • ${formatDuration(sectionDuration(section))}` : ''} • {section.lessons?.filter(l => isCompleted(l.id)).length || 0}/{section.lessonCount} completed
                       </p>
@@ -578,7 +593,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                             <p className={`text-xs font-medium line-clamp-2 ${
                               currentLesson?.id === lesson.id ? 'text-neon-violet' : 'text-text-secondary'
                             }`}>
-                              {lesson.title}
+                              {pickLang(lesson.title, locale)}
                             </p>
                             <div className="flex items-center gap-2 mt-1">
                               {lesson.isFreePreview && (
@@ -668,6 +683,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                   <LessonQuizPlayer
                     key={currentLesson.id}
                     quiz={(currentLesson as { quizData?: QuizData }).quizData as QuizData}
+                    locale={locale}
                     onSubmitted={() => { if (!isCompleted(currentLesson.id)) markComplete(); }}
                   />
                 </div>
@@ -765,10 +781,10 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
               <div className="flex items-start justify-between gap-4 mb-8">
                 <div>
                   <h2 className="text-2xl font-heading font-bold text-text-primary mb-2">
-                    {currentLesson.title}
+                    {pickLang(currentLesson.title, locale)}
                   </h2>
                   {currentLesson.description && (
-                    <p className="text-text-secondary leading-relaxed">{currentLesson.description}</p>
+                    <p className="text-text-secondary leading-relaxed">{pickLang(currentLesson.description, locale)}</p>
                   )}
                 </div>
                 <button
@@ -798,7 +814,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                     <BookOpen className="w-5 h-5 text-neon-violet" />
                     <h3 className="font-semibold text-text-primary">Lesson Content</h3>
                   </div>
-                  <div className="rich-content text-text-secondary leading-relaxed prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(currentLesson.content || "")) }} />
+                  <div data-ml={locale} className="rich-content text-text-secondary leading-relaxed prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(currentLesson.content || "")) }} />
                 </div>
               )}
 
@@ -812,6 +828,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                     <h3 className="font-semibold text-text-primary">Ghi chú giảng dạy</h3>
                   </div>
                   <div
+                    data-ml={locale}
                     className="rich-content text-text-secondary leading-relaxed prose prose-invert max-w-none"
                     dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(lessonDetail.teachingNotes || "")) }}
                   />

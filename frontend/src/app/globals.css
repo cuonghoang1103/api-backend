@@ -1113,6 +1113,305 @@ aside ::-webkit-scrollbar-thumb:hover {
 .rich-content pre .tok-type,
 .rich-content pre .hljs-type { color: #ffa657; }
 
+/* ══════════════════════════════════════════════════════════════════════
+ * ACADEMY LESSON DESIGN SYSTEM
+ * Authored-content component classes so every FPTU course lesson renders
+ * like the approved PRF192 sample: callouts, pitfalls, notes, ascii
+ * diagrams, code-output boxes, bilingual blocks, info grids and
+ * "practice on CodeLab / setup on Exp Hub" link cards.
+ * Inline color is stripped at render (stripInlineColors) → colour lives
+ * in these classes, never inline. Namespaced under .rich-content so they
+ * never leak into the rest of the app.
+ * ════════════════════════════════════════════════════════════════════ */
+
+/* rich-content accent vars — previously referenced but never defined,
+ * so authored-lesson links rendered colourless. Defined once here. */
+:root { --neon-indigo: #6366f1; --neon-violet: #8b5cf6; }
+
+/* --- section eyebrow + lead paragraph --- */
+.rich-content .eyebrow {
+  display: inline-block;
+  font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #e0a44a;
+}
+.rich-content .lead {
+  font-size: 1.08rem;
+  color: var(--text-primary);
+}
+
+/* --- callout boxes (info / ok / warn / danger) --- */
+.rich-content .callout {
+  border-left: 3px solid var(--neon-indigo, #6366f1);
+  background: rgba(99, 102, 241, 0.08);
+  padding: 0.75rem 1rem;
+  border-radius: 0 10px 10px 0;
+  color: var(--text-secondary);
+}
+.rich-content .callout > :first-child { margin-top: 0; }
+.rich-content .callout.ok { border-left-color: #2f9e6b; background: rgba(47, 158, 107, 0.10); }
+.rich-content .callout.warn { border-left-color: #d69220; background: rgba(214, 146, 32, 0.12); }
+.rich-content .callout.danger { border-left-color: #e0554b; background: rgba(224, 85, 75, 0.10); }
+
+/* --- pitfall (bẫy thường gặp) --- */
+.rich-content .pitfall {
+  border-left: 3px solid #e0554b;
+  background: rgba(224, 85, 75, 0.08);
+  padding: 0.7rem 1rem;
+  border-radius: 0 10px 10px 0;
+  font-size: 0.94rem;
+  color: var(--text-secondary);
+}
+.rich-content .pitfall::before {
+  content: "⚠️ Bẫy thường gặp";
+  display: block;
+  font-weight: 700;
+  color: #e0554b;
+  margin-bottom: 0.25rem;
+  font-size: 0.86rem;
+}
+
+/* --- CuongThai note (áp dụng thực tế) --- */
+.rich-content .note-ct {
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  background: rgba(99, 102, 241, 0.06);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  font-size: 0.94rem;
+  color: var(--text-secondary);
+}
+.rich-content .note-ct::before {
+  content: "💡 Ghi chú của CuongThai";
+  display: block;
+  font-weight: 700;
+  color: var(--neon-violet, #8b5cf6);
+  margin-bottom: 0.3rem;
+  font-size: 0.86rem;
+}
+
+/* --- ascii / structure diagram (fallback, rarely used) --- */
+.rich-content .diagram {
+  background: rgba(127, 127, 127, 0.08);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 1rem 1.15rem;
+  font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  white-space: pre;
+  overflow-x: auto;
+  color: var(--text-secondary);
+}
+
+/* ═══ VISUAL ROADMAP / FLOW DIAGRAMS ═══
+ * Match the /code-lab & /roadmap language (Hallmark modern-minimal): rounded
+ * cards, accent-tinted numbered badges, a gradient spine, arrow-linked steps.
+ * Per-subject accent via --lz-accent (custom props survive stripInlineColors). */
+.rich-content .lz-map,
+.rich-content .lz-flow,
+.rich-content .lz-stack { --lz-accent: var(--neon-indigo); }
+
+/* vertical roadmap spine of stages */
+.rich-content .lz-map { display: flex; flex-direction: column; gap: 14px; margin: 1.3rem 0; }
+.rich-content .lz-stage {
+  font-family: var(--font-jetbrains-mono), monospace; font-size: 0.68rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text-muted); margin: 0.5rem 0 -0.2rem 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.rich-content .lz-stage::before {
+  content: ""; width: 6px; height: 6px; border-radius: 999px; background: var(--lz-accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--lz-accent) 22%, transparent);
+}
+.rich-content .lz-node { position: relative; display: flex; gap: 14px; align-items: flex-start; }
+.rich-content .lz-node:not(:last-child)::before {
+  content: ""; position: absolute; left: 19px; top: 42px; bottom: -16px; width: 2px;
+  background: linear-gradient(var(--lz-accent), color-mix(in srgb, var(--lz-accent) 20%, transparent));
+}
+.rich-content .lz-node .lz-badge {
+  flex-shrink: 0; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center;
+  font-family: var(--font-poppins), system-ui, sans-serif; font-weight: 700; font-size: 0.9rem;
+  background: color-mix(in srgb, var(--lz-accent) 14%, transparent); color: var(--lz-accent);
+  border: 1px solid color-mix(in srgb, var(--lz-accent) 26%, transparent); position: relative; z-index: 1;
+}
+.rich-content .lz-node .lz-nbody {
+  flex: 1; border: 1px solid var(--border-color); background: var(--bg-card); border-radius: 12px;
+  padding: 9px 14px; transition: border-color 0.18s, transform 0.18s;
+}
+.rich-content .lz-node .lz-nbody:hover { border-color: color-mix(in srgb, var(--lz-accent) 40%, var(--border-color)); transform: translateY(-1px); }
+.rich-content .lz-node .lz-ntitle { font-weight: 700; color: var(--text-primary); font-family: var(--font-poppins), system-ui, sans-serif; }
+.rich-content .lz-node .lz-nsub { font-size: 0.86rem; color: var(--text-muted); margin-top: 1px; }
+
+/* horizontal arrow-linked flow (process: A ▸ B ▸ C) */
+.rich-content .lz-flow { display: flex; flex-wrap: wrap; gap: 10px; margin: 1.2rem 0; }
+.rich-content .lz-flow .lz-step {
+  flex: 1; min-width: 150px; border: 1px solid var(--border-color); background: var(--bg-card);
+  border-radius: 14px; padding: 12px 15px; position: relative;
+}
+.rich-content .lz-flow .lz-step .lz-k {
+  font-family: var(--font-jetbrains-mono), monospace; font-size: 0.64rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--lz-accent); font-weight: 700;
+}
+.rich-content .lz-flow .lz-step .lz-t { font-weight: 700; color: var(--text-primary); margin-top: 2px; font-family: var(--font-poppins), system-ui, sans-serif; }
+.rich-content .lz-flow .lz-step .lz-d { font-size: 0.84rem; color: var(--text-muted); margin-top: 3px; }
+.rich-content .lz-flow .lz-step:not(:last-child)::after {
+  content: "▸"; position: absolute; right: -12.5px; top: 50%; transform: translateY(-50%);
+  color: var(--lz-accent); font-size: 0.95rem; z-index: 2;
+}
+@media (max-width: 560px) {
+  .rich-content .lz-flow { flex-direction: column; }
+  .rich-content .lz-flow .lz-step:not(:last-child)::after { content: "▾"; right: auto; left: 22px; top: auto; bottom: -12.5px; transform: none; }
+}
+
+/* layered stack (memory / architecture) */
+.rich-content .lz-stack { display: flex; flex-direction: column; gap: 6px; margin: 1.2rem 0; }
+.rich-content .lz-stack .lz-layer {
+  border: 1px solid var(--border-color); border-left: 3px solid var(--lz-accent); background: var(--bg-card);
+  border-radius: 9px; padding: 9px 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+}
+.rich-content .lz-stack .lz-layer .lz-lname { font-weight: 700; color: var(--text-primary); font-family: var(--font-jetbrains-mono), monospace; font-size: 0.9rem; }
+.rich-content .lz-stack .lz-layer .lz-lnote { font-size: 0.82rem; color: var(--text-muted); text-align: right; }
+
+/* --- code output box (pairs under a <pre>) --- */
+.rich-content .out {
+  background: rgba(127, 127, 127, 0.10);
+  border: 1px dashed var(--border-color);
+  border-radius: 0 0 10px 10px;
+  margin-top: -0.6rem;
+  padding: 0.6rem 0.9rem;
+  font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+.rich-content .out b { color: #3fb27f; font-weight: 700; }
+
+/* --- bilingual: English mirror under Vietnamese --- */
+.rich-content .en {
+  display: block;
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.92em;
+  margin-top: 0.15rem;
+}
+
+/* --- REALTIME bilingual toggle ---
+ * Author paired blocks: <div class="ml-en">…EN…</div><div class="ml-vi">…VI…</div>
+ * (or inline <span class="ml-en/ml-vi">). The learn page sets data-ml={locale}
+ * on .rich-content from the global language switch → one language shows, the
+ * other hides, instantly, no reload. Lessons without ml-* blocks are single-
+ * language and always visible (backward compatible). */
+.rich-content[data-ml="en"] .ml-vi,
+.rich-content[data-ml="vi"] .ml-en { display: none; }
+
+/* --- info key/value grid (mục 0) --- */
+.rich-content .kv-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0.6rem;
+  margin: 0.9rem 0;
+}
+.rich-content .kv {
+  background: var(--bg-surface, rgba(127,127,127,0.06));
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+}
+.rich-content .kv .k {
+  display: block;
+  font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.15rem;
+}
+.rich-content .kv .v { font-weight: 700; color: var(--text-primary); }
+.rich-content .kv .v small { font-weight: 400; color: var(--text-secondary); }
+
+/* --- link cards: practice on CodeLab / setup on Exp Hub --- */
+.rich-content .link-card {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  margin: 0.9rem 0;
+  background: var(--bg-card, rgba(127,127,127,0.04));
+  text-decoration: none !important;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.rich-content .link-card:hover { border-color: var(--neon-violet, #8b5cf6); transform: translateY(-1px); }
+.rich-content .link-card .lc-ico { font-size: 1.4rem; line-height: 1; }
+.rich-content .link-card .lc-body { flex: 1; }
+.rich-content .link-card .lc-title { font-weight: 700; color: var(--text-primary); }
+.rich-content .link-card .lc-sub { font-size: 0.85rem; color: var(--text-muted); }
+.rich-content .link-card .lc-cta {
+  font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.rich-content .link-card.codelab .lc-cta { background: rgba(99,102,241,0.15); color: var(--neon-indigo, #818cf8); }
+.rich-content .link-card.exphub .lc-cta { background: rgba(214,146,32,0.15); color: #e0a44a; }
+.rich-content .link-card.dl .lc-cta { background: rgba(47,158,107,0.16); color: #3fb27f; }
+.rich-content .link-card.dl:hover { border-color: #3fb27f; }
+
+/* --- small mono badge (CLO tags, session refs) --- */
+.rich-content .badge {
+  display: inline-block;
+  font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 0.1rem 0.45rem;
+  border-radius: 5px;
+  background: var(--bg-surface, rgba(127,127,127,0.1));
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+/* --- richer tables / blockquote / hr / kbd for authored content --- */
+.rich-content table th {
+  background: var(--bg-surface, rgba(127,127,127,0.08));
+  color: var(--text-primary);
+  font-weight: 700;
+  text-align: left;
+}
+.rich-content table th,
+.rich-content table td {
+  border: 1px solid var(--border-color);
+  padding: 0.45rem 0.7rem;
+  font-size: 0.92rem;
+}
+.rich-content blockquote {
+  border-left: 3px solid var(--border-color);
+  padding-left: 1rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.rich-content hr {
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  margin: 1.4em 0;
+}
+.rich-content kbd {
+  font-family: var(--font-jetbrains-mono), "JetBrains Mono", monospace;
+  font-size: 0.8em;
+  background: var(--bg-surface, rgba(127,127,127,0.12));
+  border: 1px solid var(--border-color);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  padding: 0.05rem 0.4rem;
+}
+.rich-content ul, .rich-content ol { padding-left: 1.4rem; }
+.rich-content li { margin: 0.3rem 0; color: var(--text-secondary); }
+.rich-content li::marker { color: var(--neon-violet, #8b5cf6); }
+
 .rich-content ul,
 .rich-content ol {
   padding-left: 1.5rem;

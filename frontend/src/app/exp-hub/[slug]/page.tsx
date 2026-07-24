@@ -21,7 +21,7 @@ export const dynamic = 'force-dynamic';
 
 const SITE_URL = 'https://cuongthai.com';
 
-interface PageProps { params: { slug: string } }
+interface PageProps { params: { slug: string }; searchParams?: { ref?: string; reflabel?: string } }
 
 const HLJS_ALIASES: Record<string, string> = {
   js: 'javascript', ts: 'typescript', py: 'python', sh: 'bash', shell: 'bash',
@@ -73,7 +73,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function ExpHubSnippetPage({ params }: PageProps) {
+export default async function ExpHubSnippetPage({ params, searchParams }: PageProps) {
+  // "Back to course" — set when an Academy/Courses lesson links here with
+  // ?ref=<internal path>&reflabel=<name>. Only internal paths are honoured.
+  const backRef = searchParams?.ref || '';
+  const backLabel = searchParams?.reflabel || 'khóa học';
+  const showCourseBack = /^\/(?!\/)/.test(backRef);
   const s = await getSnippet(params.slug);
   if (!s) notFound();
 
@@ -99,6 +104,20 @@ export default async function ExpHubSnippetPage({ params }: PageProps) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <div className="mx-auto w-full max-w-3xl px-4 py-6">
+        {/* Back to course (when arrived from an Academy/Courses lesson) */}
+        {showCourseBack && (
+          <Link
+            href={backRef}
+            className="mb-3 mr-2 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-all hover:-translate-y-0.5"
+            style={{
+              borderColor: 'color-mix(in srgb, var(--accent-color) 45%, var(--border-color))',
+              background: 'color-mix(in srgb, var(--accent-color) 10%, var(--bg-card))',
+              color: 'var(--accent-color)',
+            }}
+          >
+            <ArrowLeft className="h-4 w-4" /> Quay lại: <span style={{ color: 'var(--text-primary)' }}>{backLabel}</span>
+          </Link>
+        )}
         {/* Back to hub */}
         <Link href="/exp-hub" className="mb-5 inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
           <ArrowLeft className="h-4 w-4" /> EXP_Hub
@@ -172,13 +191,13 @@ export default async function ExpHubSnippetPage({ params }: PageProps) {
 
         {/* Note */}
         {s.noteContent?.trim() && (
-          <div className="prose mb-5 max-w-none dark:prose-invert prose-img:rounded-lg"
+          <div className="rich-content prose mb-5 max-w-none dark:prose-invert prose-img:rounded-lg"
             dangerouslySetInnerHTML={{ __html: sanitizeHtml(s.noteContent) }} />
         )}
 
         {/* Explanation */}
         {s.explanation?.trim() && (
-          <div className="prose mb-5 max-w-none dark:prose-invert"
+          <div className="rich-content prose mb-5 max-w-none dark:prose-invert"
             dangerouslySetInnerHTML={{ __html: sanitizeHtml(s.explanation) }} />
         )}
 

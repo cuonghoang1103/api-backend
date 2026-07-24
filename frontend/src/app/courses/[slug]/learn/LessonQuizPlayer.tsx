@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CheckCircle, XCircle, Clock, RotateCcw, Trophy, Lightbulb } from 'lucide-react';
 import { CodeBlock } from '@/components/social/CodeBlock';
+import { pickLang } from '@/lib/utils';
 
 export type QuizQuestionType = 'MC' | 'ESSAY';
 export interface QuizQuestion {
@@ -56,9 +57,11 @@ function TimeBox({ label, value }: { label: string; value: number }) {
 export default function LessonQuizPlayer({
   quiz,
   onSubmitted,
+  locale = 'en',
 }: {
   quiz: QuizData;
   onSubmitted?: () => void;
+  locale?: 'en' | 'vi';
 }) {
   const questions = useMemo(() => (Array.isArray(quiz?.questions) ? quiz.questions : []), [quiz]);
   const mcQuestions = useMemo(() => questions.filter((q) => q.type !== 'ESSAY'), [questions]);
@@ -188,7 +191,7 @@ export default function LessonQuizPlayer({
                     </span>
                     {correct.size > 1 && !isEssay && <span className="text-[10px] text-text-muted">(chọn nhiều đáp án)</span>}
                   </div>
-                  <p className="text-text-primary font-medium mb-3 whitespace-pre-wrap">{unescapeText(q.question)}</p>
+                  <p className="text-text-primary font-medium mb-3 whitespace-pre-wrap">{unescapeText(pickLang(q.question, locale))}</p>
 
                   {q.code?.trim() && (
                     <div className="mb-3">
@@ -235,7 +238,7 @@ export default function LessonQuizPlayer({
                               onChange={() => toggleMc(q.id, oi)}
                               className="accent-neon-violet shrink-0 w-4 h-4"
                             />
-                            <span className="text-sm text-text-secondary flex-1">{opt}</span>
+                            <span className="text-sm text-text-secondary flex-1">{pickLang(opt, locale)}</span>
                             {submitted && isCorrect && <CheckCircle className="w-4 h-4 text-green-400 shrink-0" />}
                             {submitted && picked && !isCorrect && <XCircle className="w-4 h-4 text-red-400 shrink-0" />}
                           </label>

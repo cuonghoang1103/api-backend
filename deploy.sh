@@ -357,6 +357,49 @@ else
  echo "$INTERVIEW_SEED_OUT" | tail -3 | sed 's/^/ /'
 fi
 
+# ── Step 3.12: Academy FPTU course content seed (idempotent) ────
+# One .mjs spec per subject under content/academy/. The seeder is
+# idempotent (semester by code, course by courseCode, section by
+# title, lesson by slug — update-in-place, preserves lesson ids so
+# per-user LessonProgress survives). Safe to re-run every deploy.
+info "Running Academy FPTU course seed..."
+ACADEMY_SEED_OUT=$($DC exec -T backend sh -c '
+  for f in content/academy/*.mjs; do
+    [ -e "$f" ] || { echo "no academy content files"; break; }
+    echo "── $f"
+    node scripts/academy-seed-course.mjs --file "$f" --apply 2>&1
+  done
+') || true
+if echo "$ACADEMY_SEED_OUT" | grep -qiE "error|cannot find|exception|invalid"; then
+ warn "Academy seed reported errors — see /tmp/seed-academy.log"
+ echo "$ACADEMY_SEED_OUT" > /tmp/seed-academy.log
+ echo "$ACADEMY_SEED_OUT" | tail -6 | sed 's/^/ /'
+else
+ ok "Academy seed complete"
+ echo "$ACADEMY_SEED_OUT" | tail -6 | sed 's/^/ /'
+fi
+
+# ── Step 3.13: Exp Hub setup guides (per-subject, idempotent) ───
+# One .mjs per subject under content/exphub/ → upsert SnippetCategory +
+# Snippet (guide) by slug. Academy courses link "Cài đặt" cards to
+# /exp-hub/<slug>. Safe to re-run every deploy.
+info "Running Exp Hub guide seed..."
+EXPHUB_SEED_OUT=$($DC exec -T backend sh -c '
+  for f in content/exphub/*.mjs; do
+    [ -e "$f" ] || { echo "no exphub content files"; break; }
+    echo "-- $f"
+    node scripts/exphub-seed-guide.mjs --file "$f" --apply 2>&1
+  done
+') || true
+if echo "$EXPHUB_SEED_OUT" | grep -qiE "error|cannot find|exception|invalid"; then
+ warn "Exp Hub seed reported errors — see /tmp/seed-exphub.log"
+ echo "$EXPHUB_SEED_OUT" > /tmp/seed-exphub.log
+ echo "$EXPHUB_SEED_OUT" | tail -5 | sed 's/^/ /'
+else
+ ok "Exp Hub seed complete"
+ echo "$EXPHUB_SEED_OUT" | tail -5 | sed 's/^/ /'
+fi
+
 # ── Step 4: Health checks ─────────────────────────────────────────
 info "Waiting for backend to be healthy..."
 backend_ok=false

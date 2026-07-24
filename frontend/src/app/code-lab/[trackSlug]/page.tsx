@@ -7,18 +7,23 @@
  */
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { ArrowLeft, CheckCircle2, Circle, Loader2, BookOpen, Clock, ExternalLink, Target } from 'lucide-react';
 import { codeLabApi } from '@/lib/code-lab-api';
 import type { CodeTrack, MyProgressItem } from '@/types/code-lab';
 import { useAuthStore } from '@/store/authStore';
 import { DifficultyBadge, LevelPill, ProgressRing, TechIcon, VerifiedBadge, parseVerified } from '@/components/code-lab/shared';
 import { ModuleLesson } from '@/components/code-lab/ModuleLesson';
+import { CourseBackLink } from '@/components/code-lab/CourseBackLink';
 import { SkillCoverage } from '@/components/code-lab/SkillCoverage';
 
 export default function TrackRoadmapPage() {
   const params = useParams<{ trackSlug: string }>();
   const slug = params.trackSlug;
+  const searchParams = useSearchParams();
+  // Carry ?ref=&reflabel= (set by an Academy/Courses lesson link) onto the
+  // exercise links too, so the "back to course" button survives one more hop.
+  const refQS = searchParams.get('ref') ? `?${searchParams.toString()}` : '';
   const isAuthed = useAuthStore((s) => s.isAuthenticated);
 
   const [track, setTrack] = useState<CodeTrack | null>(null);
@@ -82,7 +87,8 @@ export default function TrackRoadmapPage() {
 
   return (
     <div className="cl-root mx-auto max-w-4xl px-4 pb-14 pt-20" style={{ color: 'var(--text-primary)', ['--cl-accent' as string]: accent } as React.CSSProperties}>
-      <Link href={backHref} className="mb-4 inline-flex items-center gap-1.5 text-sm transition-colors hover:opacity-80" style={{ color: 'var(--text-muted)' }}>
+      <CourseBackLink />
+      <Link href={backHref} className="mb-4 ml-2 inline-flex items-center gap-1.5 text-sm transition-colors hover:opacity-80" style={{ color: 'var(--text-muted)' }}>
         <ArrowLeft size={15} /> {backLabel}
       </Link>
 
@@ -186,7 +192,7 @@ export default function TrackRoadmapPage() {
                 const inProgress = progress[ex.id]?.status === 'IN_PROGRESS';
                 return (
                   <li key={ex.id} className="group border-t first:border-t-0" style={{ borderColor: 'var(--border-color)' }}>
-                    <Link href={`/code-lab/${track.slug}/${ex.slug}`} className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-[var(--bg-surface-hover)]">
+                    <Link href={`/code-lab/${track.slug}/${ex.slug}${refQS}`} className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-[var(--bg-surface-hover)]">
                       {isSolved
                         ? <CheckCircle2 size={19} className="shrink-0" style={{ color: '#22c55e' }} />
                         : <Circle size={19} className="shrink-0" style={{ color: inProgress ? '#d97706' : 'var(--border-color)' }} />}

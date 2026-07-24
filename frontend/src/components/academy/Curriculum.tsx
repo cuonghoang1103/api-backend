@@ -5,6 +5,8 @@ import { Play, CheckCircle, Lock, FileText, Clock } from 'lucide-react';
 import Link from 'next/link';
 import type { CourseSection } from '@/types';
 import { useState } from 'react';
+import { useTranslation } from '@/context/LocaleContext';
+import { pickLang } from '@/lib/utils';
 
 interface LessonItemData {
   id: number;
@@ -53,6 +55,7 @@ function LessonItem({
   index: number;
   href?: string;
 }) {
+  const { locale } = useTranslation();
   const isFreePreview = lesson.isFreePreview;
   const isLocked = !enrolled && !isFreePreview;
 
@@ -75,7 +78,7 @@ function LessonItem({
       </div>
       <div className="flex-1 min-w-0">
         <p className={`text-sm truncate ${isLocked ? 'text-text-muted' : 'text-text-primary'}`}>
-          {index + 1}. {lesson.title}
+          {index + 1}. {pickLang(lesson.title, locale)}
         </p>
         {lesson.description && (
           <p className="text-xs text-text-muted mt-0.5 line-clamp-1">{lesson.description}</p>
@@ -118,6 +121,7 @@ function LessonItem({
 }
 
 export default function Curriculum({ sections, enrolled, completedLessonIds, courseSlug }: CurriculumProps) {
+  const { locale } = useTranslation();
   const [openSections, setOpenSections] = useState<Set<number>>(new Set(sections.map(s => s.id)));
 
   const toggleSection = (id: number) => {
@@ -148,7 +152,7 @@ export default function Curriculum({ sections, enrolled, completedLessonIds, cou
                 <div className="flex items-center gap-3 text-left">
                   <span className="text-neon-violet font-semibold text-sm">{si + 1}</span>
                   <div>
-                    <p className="text-sm font-medium text-text-primary">{section.title}</p>
+                    <p className="text-sm font-medium text-text-primary">{pickLang(section.title, locale)}</p>
                     <p className="text-xs text-text-muted mt-0.5">
                       {section.lessonCount} lessons &bull; {formatLessonDuration(section.totalDurationSeconds || 0)}
                     </p>

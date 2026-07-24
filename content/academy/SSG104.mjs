@@ -285,6 +285,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Norming</div><div class="lz-t">agree on norms</div><div class="lz-d">roles settle, trust grows</div></div>
   <div class="lz-step"><div class="lz-k">Performing</div><div class="lz-t">high productivity</div><div class="lz-d">the team clicks</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Psychological safety beats talent.</b> Google&#39;s Project Aristotle studied 180+ teams and found the top predictor of a high-performing team was not who was on it, but <em>psychological safety</em> — members feeling safe to speak up, ask questions and admit mistakes without being punished. A team of average people who feel safe will outperform a team of stars who do not. <em>The syllabus lists Tuckman&#39;s stages but not what actually makes the &quot;performing&quot; stage possible.</em></div>
 <div class="callout ok">Knowing these stages is powerful: when your group project hits the "storming" phase and everyone disagrees, that is normal — not failure. Push through it (with the conflict skills of Chapter 4) and you reach "performing." Every strong team went through storming first.</div>
 </div>
 <div class="ml-vi">
@@ -303,6 +304,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Chuẩn hoá</div><div class="lz-t">thống nhất quy tắc</div><div class="lz-d">vai trò ổn định, tin tưởng lớn lên</div></div>
   <div class="lz-step"><div class="lz-k">Hoạt động</div><div class="lz-t">năng suất cao</div><div class="lz-d">đội ăn ý</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>An toàn tâm lý thắng tài năng.</b> Dự án Aristotle của Google nghiên cứu hơn 180 đội và phát hiện yếu tố dự báo hàng đầu của một đội hiệu suất cao không phải là ai trong đội, mà là <em>an toàn tâm lý</em> — thành viên cảm thấy an toàn để lên tiếng, đặt câu hỏi và thừa nhận sai lầm mà không bị trừng phạt. Một đội người bình thường thấy an toàn sẽ thắng một đội ngôi sao không dám nói. <em>Syllabus liệt kê các giai đoạn Tuckman nhưng không nói điều gì thực sự làm cho giai đoạn &quot;hoạt động&quot; khả thi.</em></div>
 <div class="callout ok">Biết các giai đoạn này rất hữu ích: khi dự án nhóm của bạn tới pha "bão tố" và ai cũng bất đồng, đó là bình thường — không phải thất bại. Vượt qua nó (với kỹ năng xung đột ở Chương 4) và bạn tới "hoạt động". Mọi đội mạnh đều đi qua bão tố trước.</div>
 </div>
 `,
@@ -351,6 +353,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Clarify</div><div class="lz-t">ask questions</div><div class="lz-d">confirm understanding</div></div>
 </div>
 <div class="pitfall">Communication barriers derail teams: assuming instead of asking, distractions, jargon the other person does not know, or letting emotions hijack the message. Naming a barrier is the first step to removing it.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The &quot;7-38-55 rule&quot; is real — but misused.</b> Albert Mehrabian&#39;s famous figures (7% words, 38% tone, 55% body language) apply <em>only</em> to communicating feelings and attitudes when the words contradict the tone — not to messages in general. Concluding &quot;words barely matter&quot; is wrong. The real lesson: when your verbal and nonverbal signals clash, people believe the nonverbal one. <em>Textbooks quote the numbers as a universal law; knowing their narrow scope stops you misapplying them.</em></div>
 <div class="note-ct">In a team, most problems are really <em>communication</em> problems. Saying clearly what you mean, and truly listening to teammates, prevents the misunderstandings that cause missed deadlines and conflict (Chapter 4).</div>
 </div>
 <div class="ml-vi">
@@ -369,6 +372,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Làm rõ</div><div class="lz-t">đặt câu hỏi</div><div class="lz-d">xác nhận đã hiểu</div></div>
 </div>
 <div class="pitfall">Rào cản giao tiếp làm hỏng đội: giả định thay vì hỏi, xao nhãng, thuật ngữ người kia không biết, hoặc để cảm xúc chiếm lấy thông điệp. Gọi tên một rào cản là bước đầu để gỡ nó.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>&quot;Quy tắc 7-38-55&quot; có thật — nhưng bị dùng sai.</b> Các con số nổi tiếng của Albert Mehrabian (7% từ ngữ, 38% giọng điệu, 55% ngôn ngữ cơ thể) chỉ áp dụng khi truyền đạt cảm xúc và thái độ mà lời nói mâu thuẫn với giọng điệu — không phải cho mọi thông điệp. Kết luận &quot;từ ngữ gần như vô nghĩa&quot; là sai. Bài học thật: khi tín hiệu lời và phi lời của bạn xung khắc, người ta tin cái phi lời. <em>Giáo trình trích các con số như một định luật phổ quát; hiểu phạm vi hẹp của chúng giúp bạn không áp dụng sai.</em></div>
 <div class="note-ct">Trong một đội, phần lớn vấn đề thực ra là vấn đề <em>giao tiếp</em>. Nói rõ điều bạn muốn, và thực sự lắng nghe đồng đội, ngăn các hiểu lầm gây trễ hạn và xung đột (Chương 4).</div>
 </div>
 `,
@@ -421,6 +425,7 @@ export default {
     <tr><td>Reward / Coercive</td><td>Ability to give rewards or penalties</td></tr>
   </tbody>
 </table>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Match your style to the person, not your preference.</b> Hersey and Blanchard&#39;s <em>Situational Leadership</em> model says the best style depends on a follower&#39;s competence and commitment for a given task: direct a nervous beginner, coach a learner, support a capable-but-unsure member, and delegate to an expert. Great leaders switch styles within one team, sometimes within one hour. <em>The syllabus lists fixed styles (autocratic/democratic/laissez-faire) as if you pick one; real leadership is fluid and person-specific.</em></div>
 <div class="callout ok">The most respected leaders rely on <strong>expert</strong> and <strong>referent</strong> power — earned through competence and trust — rather than just position or coercion. In a student group project, the real leader is often whoever the team trusts, not whoever was assigned the role.</div>
 </div>
 <div class="ml-vi">
@@ -443,6 +448,7 @@ export default {
     <tr><td>Thưởng / Cưỡng chế</td><td>Khả năng cho thưởng hoặc phạt</td></tr>
   </tbody>
 </table>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Chọn phong cách theo người, không theo sở thích của bạn.</b> Mô hình <em>Lãnh đạo tình huống</em> của Hersey và Blanchard nói phong cách tốt nhất tuỳ vào năng lực và cam kết của người theo với một nhiệm vụ cụ thể: chỉ dẫn người mới đang lo lắng, kèm cặp người đang học, hỗ trợ người có khả năng nhưng chưa chắc, và uỷ quyền cho chuyên gia. Lãnh đạo giỏi đổi phong cách trong cùng một đội, đôi khi trong cùng một giờ. <em>Syllabus liệt kê các phong cách cố định (độc đoán/dân chủ/thả lỏng) như thể bạn chọn một; lãnh đạo thật thì linh hoạt và tuỳ từng người.</em></div>
 <div class="callout ok">Các lãnh đạo được tôn trọng nhất dựa vào quyền lực <strong>chuyên môn</strong> và <strong>tham chiếu</strong> — giành được qua năng lực và tin tưởng — hơn là chỉ vị trí hay cưỡng chế. Trong một dự án nhóm sinh viên, lãnh đạo thật thường là người đội tin tưởng, không phải người được giao vai trò.</div>
 </div>
 `,
@@ -494,6 +500,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Compromising</div><div class="lz-ld">Both sides give a little. A quick, fair-enough middle ground.</div></div>
   <div class="lz-layer"><div class="lz-lt">Collaborating</div><div class="lz-ld">Work together for a win-win that satisfies everyone. The ideal — but takes time &amp; trust.</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Even &quot;good&quot; conflict has a ceiling.</b> A large meta-analysis by De Dreu and Weingart found that <em>both</em> relationship and task conflict tend to hurt team performance and satisfaction — the hoped-for benefit of task conflict is smaller and more fragile than people assume. A little debate about ideas helps; too much of any conflict, or conflict that turns personal, drags a team down. <em>The syllabus says task conflict &quot;can produce better decisions&quot;; the research adds the crucial caveat that the effect is weak and easily tips negative.</em></div>
 <div class="callout ok">There is no single right style — but <strong>collaborating</strong> (win-win) is usually best for a team you will keep working with. When your group project hits a disagreement, focus on the shared goal, listen actively (Chapter 2), and look for a solution everyone can support.</div>
 </div>
 <div class="ml-vi">
@@ -515,6 +522,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Thoả hiệp (compromising)</div><div class="lz-ld">Cả hai bên nhường một chút. Một điểm giữa nhanh, đủ công bằng.</div></div>
   <div class="lz-layer"><div class="lz-lt">Hợp tác (collaborating)</div><div class="lz-ld">Làm việc cùng nhau cho một win-win thoả mãn tất cả. Lý tưởng — nhưng cần thời gian &amp; tin tưởng.</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Ngay cả xung đột &quot;tốt&quot; cũng có trần.</b> Một phân tích tổng hợp lớn của De Dreu và Weingart phát hiện <em>cả</em> xung đột quan hệ lẫn xung đột công việc đều có xu hướng làm hại hiệu suất và sự hài lòng của đội — lợi ích kỳ vọng của xung đột công việc nhỏ và mong manh hơn ta tưởng. Một chút tranh luận về ý tưởng thì tốt; quá nhiều xung đột bất kỳ loại nào, hay xung đột hoá cá nhân, đều kéo đội xuống. <em>Syllabus nói xung đột công việc &quot;có thể tạo quyết định tốt hơn&quot;; nghiên cứu bổ sung cảnh báo quan trọng rằng hiệu ứng đó yếu và dễ trượt sang tiêu cực.</em></div>
 <div class="callout ok">Không có phong cách đúng duy nhất — nhưng <strong>hợp tác</strong> (win-win) thường tốt nhất cho một đội bạn sẽ tiếp tục làm cùng. Khi dự án nhóm gặp bất đồng, tập trung vào mục tiêu chung, lắng nghe chủ động (Chương 2), và tìm một giải pháp mọi người ủng hộ được.</div>
 </div>
 `,
@@ -564,6 +572,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Voice</div><div class="lz-ld">Speak clearly, vary your pace, pause for emphasis. Avoid a monotone.</div></div>
   <div class="lz-layer"><div class="lz-lt">Slides</div><div class="lz-ld">Visual aids, not a script. Few words, clear images — you are the presentation, not the slides.</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Reading your slides aloud makes people understand less.</b> Cognitive-load research (Richard Mayer&#39;s <em>redundancy principle</em>) shows that when a slide is full of text and you read the same words, the audience&#39;s brain must process the same message twice through competing channels — comprehension drops. Put a few words or one image on the slide, then <em>speak</em> the detail. <em>The syllabus says &quot;few words, clear images&quot; as a style tip; the science explains why text-heavy slides actively sabotage your message.</em></div>
 <div class="callout ok">Handling nerves: everyone feels them. The cure is <strong>preparation and practice</strong> — rehearse out loud, know your opening cold, and remember the audience wants you to succeed. Persuasion comes from clarity and genuine belief, not tricks.</div>
 </div>
 <div class="ml-vi">
@@ -583,6 +592,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Giọng nói</div><div class="lz-ld">Nói rõ, thay đổi nhịp độ, ngừng để nhấn mạnh. Tránh giọng đều đều.</div></div>
   <div class="lz-layer"><div class="lz-lt">Slide</div><div class="lz-ld">Hỗ trợ hình ảnh, không phải kịch bản. Ít chữ, hình rõ — bạn là bài thuyết trình, không phải slide.</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đọc slide thành tiếng khiến người ta hiểu ít hơn.</b> Nghiên cứu tải nhận thức (<em>nguyên tắc dư thừa</em> của Richard Mayer) cho thấy khi một slide đầy chữ và bạn đọc đúng những chữ đó, não người nghe phải xử lý cùng một thông điệp hai lần qua các kênh cạnh tranh — khả năng hiểu giảm. Hãy đặt vài chữ hoặc một hình lên slide, rồi <em>nói</em> phần chi tiết. <em>Syllabus nói &quot;ít chữ, hình rõ&quot; như một mẹo phong cách; khoa học giải thích vì sao slide dày chữ chủ động phá hoại thông điệp của bạn.</em></div>
 <div class="callout ok">Làm chủ nỗi lo: ai cũng có. Cách chữa là <strong>chuẩn bị và luyện tập</strong> — tập nói thành tiếng, thuộc lòng phần mở, và nhớ người nghe muốn bạn thành công. Thuyết phục đến từ sự rõ ràng và niềm tin thật, không phải mánh khoé.</div>
 </div>
 `,
@@ -631,6 +641,7 @@ export default {
   <div class="lz-step"><div class="lz-k">During</div><div class="lz-t">stay on agenda</div><div class="lz-d">everyone contributes, on time</div></div>
   <div class="lz-step"><div class="lz-k">After</div><div class="lz-t">minutes + actions</div><div class="lz-d">who does what by when</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Amazon banned slides in favour of six-page memos.</b> At Amazon, meetings begin with everyone silently reading a narrative memo — no bullet-point decks — because prose forces clearer thinking than fragmented slides. Many organisations pair this with <em>BLUF</em> (Bottom Line Up Front): state your conclusion and the decision you need in the first line, then the detail. <em>The syllabus teaches email and report structure; these real corporate practices show how the highest-performing companies actually write and meet.</em></div>
 <div class="note-ct">The golden rule of meetings: every meeting should end with clear <strong>action items</strong> — who does what, by when. A meeting with no decisions and no next steps was probably an email. Writing clear minutes is a skill you will use constantly.</div>
 </div>
 <div class="ml-vi">
@@ -649,6 +660,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Trong</div><div class="lz-t">bám chương trình</div><div class="lz-d">mọi người đóng góp, đúng giờ</div></div>
   <div class="lz-step"><div class="lz-k">Sau</div><div class="lz-t">biên bản + hành động</div><div class="lz-d">ai làm gì tới khi nào</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Amazon cấm slide, thay bằng bản ghi nhớ sáu trang.</b> Ở Amazon, cuộc họp bắt đầu bằng việc mọi người im lặng đọc một bản ghi nhớ dạng văn xuôi — không có bộ slide gạch đầu dòng — vì văn xuôi buộc tư duy rõ ràng hơn slide rời rạc. Nhiều tổ chức kết hợp điều này với <em>BLUF</em> (Bottom Line Up Front — Kết luận lên đầu): nêu kết luận và quyết định bạn cần ngay dòng đầu, rồi mới tới chi tiết. <em>Syllabus dạy cấu trúc email và báo cáo; các thực hành doanh nghiệp thật này cho thấy các công ty hiệu suất cao nhất thực sự viết và họp thế nào.</em></div>
 <div class="note-ct">Quy tắc vàng của họp: mọi cuộc họp nên kết thúc với các <strong>hạng mục hành động (action item)</strong> rõ — ai làm gì, tới khi nào. Một cuộc họp không quyết định và không bước tiếp theo có lẽ chỉ nên là một email. Viết biên bản rõ ràng là kỹ năng bạn dùng liên tục.</div>
 </div>
 `,

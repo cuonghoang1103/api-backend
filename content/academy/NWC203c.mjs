@@ -278,6 +278,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Wire</div><div class="lz-t">bits travel</div><div class="lz-d">across the physical medium</div></div>
   <div class="lz-step"><div class="lz-k">Receive</div><div class="lz-t">data goes UP</div><div class="lz-d">each layer removes its header</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The hourglass model.</b> The Internet stack is shaped like an hourglass: many applications on top, many physical technologies at the bottom, but a single narrow waist in the middle — <em>IP</em>. Everything runs over IP and IP runs over everything, which is exactly why any app works over Wi-Fi, fibre or 5G without being rewritten. <em>Courses teach the 5 layers as equals; in practice the IP waist is what lets the whole thing scale.</em></div>
 <div class="note-ct">This is the master framework of the whole course. Every later topic — error control, MAC, routing, IP, TCP — is "which layer solves which problem." Keep the stack in your head and each chapter has a home.</div>
 <a class="link-card dl" href="https://www.coursera.org/learn/fundamentals-network-communications" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -305,6 +306,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Dây</div><div class="lz-t">bit truyền đi</div><div class="lz-d">qua môi trường vật lý</div></div>
   <div class="lz-step"><div class="lz-k">Nhận</div><div class="lz-t">dữ liệu đi LÊN</div><div class="lz-d">mỗi tầng bóc header của mình</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Mô hình đồng hồ cát.</b> Ngăn xếp Internet có hình đồng hồ cát: rất nhiều ứng dụng ở trên, rất nhiều công nghệ vật lý ở dưới, nhưng chỉ một "eo" hẹp duy nhất ở giữa — <em>IP</em>. Mọi thứ chạy trên IP và IP chạy trên mọi thứ, đúng là lý do mọi app chạy được qua Wi-Fi, cáp quang hay 5G mà không phải viết lại. <em>Giáo trình dạy 5 tầng ngang nhau; thực tế chính eo IP mới là thứ giúp cả hệ mở rộng.</em></div>
 <div class="note-ct">Đây là khung sườn chủ của cả môn. Mọi chủ đề sau — kiểm soát lỗi, MAC, định tuyến, IP, TCP — là "tầng nào giải vấn đề nào." Giữ ngăn xếp trong đầu và mỗi chương có chỗ đứng.</div>
 <a class="link-card dl" href="https://www.coursera.org/learn/fundamentals-network-communications" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -359,6 +361,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Correct in place</div><div class="lz-t">FEC / Hamming</div><div class="lz-d">enough redundancy to fix it</div></div>
 </div>
 <p><strong>ARQ (Automatic Repeat reQuest)</strong> detects an error and asks for a resend — simple, used when a return channel exists. <strong>Forward Error Correction</strong> adds enough redundant bits to fix errors without resending — used when resending is costly (e.g. satellite).</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Hamming distance decides detect vs correct.</b> A code whose valid codewords differ by a minimum Hamming distance d can <em>detect</em> up to d−1 flipped bits, but only <em>correct</em> up to ⌊(d−1)/2⌋. Example: a plain parity bit gives d=2, so it detects one bad bit and corrects none; a code with d=3 corrects one bit or detects two. <em>The syllabus lists parity/CRC/FEC as separate tricks; this one formula tells you what any of them can actually do.</em></div>
 <div class="note-ct">Error control is the reason a file downloads perfectly even over a flaky Wi-Fi connection: the network detects corrupted pieces and re-sends them. This same redundancy idea appears in memory (ECC), storage (RAID) and QR codes — trade a few extra bits for reliability.</div>
 </div>
 <div class="ml-vi">
@@ -377,6 +380,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Sửa tại chỗ</div><div class="lz-t">FEC / Hamming</div><div class="lz-d">đủ dư để sửa</div></div>
 </div>
 <p><strong>ARQ (Yêu cầu lặp tự động)</strong> phát hiện lỗi và yêu cầu gửi lại — đơn giản, dùng khi có kênh phản hồi. <strong>Sửa lỗi tiến (FEC)</strong> thêm đủ bit dư để sửa lỗi mà không gửi lại — dùng khi gửi lại tốn kém (vd vệ tinh).</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Khoảng cách Hamming quyết định phát hiện hay sửa.</b> Một mã mà các từ mã hợp lệ cách nhau khoảng cách Hamming tối thiểu d thì <em>phát hiện</em> được tới d−1 bit lật, nhưng chỉ <em>sửa</em> được tới ⌊(d−1)/2⌋. Ví dụ: một bit parity thường cho d=2, nên phát hiện một bit hỏng và sửa được 0; mã có d=3 sửa một bit hoặc phát hiện hai bit. <em>Giáo trình liệt kê parity/CRC/FEC như các mẹo riêng lẻ; một công thức này mới cho biết mỗi cái thực sự làm được gì.</em></div>
 <div class="note-ct">Kiểm soát lỗi là lý do một tệp tải hoàn hảo kể cả qua Wi-Fi chập chờn: mạng phát hiện mảnh hỏng và gửi lại. Cùng ý tưởng dư này xuất hiện ở bộ nhớ (ECC), lưu trữ (RAID) và mã QR — đổi vài bit thêm lấy độ tin cậy.</div>
 </div>
 `,
@@ -425,6 +429,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">CSMA/CD (classic Ethernet)</div><div class="lz-ld">"Listen before you talk"; if two collide, back off and retry after a random time.</div></div>
   <div class="lz-layer"><div class="lz-lt">MAC address</div><div class="lz-ld">A unique 48-bit hardware address burned into each network card — how devices are identified on a LAN.</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why Wi-Fi uses CSMA/CA, not CSMA/CD.</b> Wired Ethernet detects collisions (CD) because a card can listen while it transmits. On radio a sender cannot hear a distant collision (the "hidden terminal" problem), so Wi-Fi instead <em>avoids</em> collisions (CA): it waits a random backoff and can reserve the channel with RTS/CTS before sending. <em>The syllabus teaches CSMA/CD on classic Ethernet; the wireless world you actually use flipped it to collision avoidance.</em></div>
 <div class="note-ct">A LAN <strong>switch</strong> learns which MAC address is on which port and forwards frames only where needed — smarter than the old shared-cable hubs. This is the local-network foundation beneath the IP routing of the next chapter.</div>
 <a class="link-card dl" href="https://www.coursera.org/learn/peer-to-peer-protocols-local-area-networks" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -448,6 +453,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">CSMA/CD (Ethernet cổ điển)</div><div class="lz-ld">"Nghe trước khi nói"; nếu hai cái va chạm, lùi lại và thử lại sau một khoảng thời gian ngẫu nhiên.</div></div>
   <div class="lz-layer"><div class="lz-lt">Địa chỉ MAC</div><div class="lz-ld">Một địa chỉ phần cứng 48-bit duy nhất khắc vào mỗi card mạng — cách thiết bị được định danh trên LAN.</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao Wi-Fi dùng CSMA/CA chứ không CSMA/CD.</b> Ethernet có dây phát hiện va chạm (CD) vì card vừa truyền vừa nghe được. Trên sóng radio bên gửi không nghe được va chạm ở xa (vấn đề "trạm ẩn"), nên Wi-Fi <em>tránh</em> va chạm (CA): chờ một khoảng lùi ngẫu nhiên và có thể đặt trước kênh bằng RTS/CTS trước khi gửi. <em>Giáo trình dạy CSMA/CD trên Ethernet cổ điển; thế giới không dây bạn đang dùng đã lật sang tránh va chạm.</em></div>
 <div class="note-ct">Một <strong>switch</strong> LAN học địa chỉ MAC nào ở cổng nào và chỉ chuyển khung tới nơi cần — thông minh hơn hub dùng chung cáp cũ. Đây là nền mạng cục bộ bên dưới định tuyến IP ở chương kế.</div>
 <a class="link-card dl" href="https://www.coursera.org/learn/peer-to-peer-protocols-local-area-networks" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -522,6 +528,7 @@ export default {
 </div>
 <h3>Congestion control</h3>
 <p>When too many packets flood a router, its queues overflow and packets are dropped — <strong>congestion</strong> (CLO6), the network&#39;s version of a traffic jam. Congestion control (largely done by TCP, Chapter 6) senses this and slows senders down so the network recovers.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The real Internet routes by policy, not shortest path.</b> Inside one network routers do run shortest-path algorithms (OSPF, Dijkstra). But between the ~75,000 independent networks (Autonomous Systems) that make up the Internet, routing is done by <em>BGP</em>, which chooses paths by business policy and contracts — the "shortest" route is often not the cheapest one an operator will accept. <em>The syllabus stops at shortest-path; BGP is why a packet from Hanoi to a nearby site can detour through Singapore.</em></div>
 <div class="note-ct">Packet switching is why the Internet is so resilient: there is no single fixed path, so if one link fails, routers simply route around it. This design — devised for surviving failures — is a direct application of graph theory (MAD101) at global scale.</div>
 <a class="link-card dl" href="https://www.coursera.org/learn/packet-switching-networks-algorithms" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -542,6 +549,7 @@ export default {
 </div>
 <h3>Điều khiển tắc nghẽn</h3>
 <p>Khi quá nhiều gói tràn vào một router, hàng đợi của nó tràn và gói bị bỏ — <strong>tắc nghẽn (congestion)</strong> (CLO6), phiên bản kẹt xe của mạng. Điều khiển tắc nghẽn (chủ yếu do TCP làm, Chương 6) cảm nhận điều này và làm chậm bên gửi để mạng phục hồi.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Internet thật định tuyến theo chính sách, không phải đường ngắn nhất.</b> Bên trong một mạng, router có chạy thuật toán đường ngắn nhất (OSPF, Dijkstra). Nhưng giữa ~75.000 mạng độc lập (Hệ tự trị — Autonomous System) tạo nên Internet, việc định tuyến do <em>BGP</em> làm, chọn đường theo chính sách kinh doanh và hợp đồng — đường "ngắn nhất" thường không phải đường rẻ nhất mà nhà mạng chịu nhận. <em>Giáo trình dừng ở đường ngắn nhất; BGP là lý do một gói từ Hà Nội tới một site gần đó có thể vòng qua Singapore.</em></div>
 <div class="note-ct">Chuyển mạch gói là lý do Internet rất bền bỉ: không có tuyến cố định duy nhất, nên nếu một liên kết hỏng, router chỉ việc định tuyến vòng qua. Thiết kế này — nghĩ ra để sống sót khi hỏng hóc — là ứng dụng trực tiếp của lý thuyết đồ thị (MAD101) ở quy mô toàn cầu.</div>
 <a class="link-card dl" href="https://www.coursera.org/learn/packet-switching-networks-algorithms" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -594,6 +602,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Mask</div><div class="lz-t">splits network/host</div><div class="lz-d">e.g. /24</div></div>
   <div class="lz-step"><div class="lz-k">Route</div><div class="lz-t">to the network first</div><div class="lz-d">then to the host</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Worked example — splitting a /24 into four subnets.</b> Take 192.168.1.0/24 (256 addresses) and borrow 2 host bits to make four /26 subnets. Each block holds 2⁶ = 64 addresses, of which 62 are usable (minus the network and broadcast address): 192.168.1.0/26 (hosts .1–.62), .64/26 (.65–.126), .128/26 (.129–.190), .192/26 (.193–.254). <em>The syllabus explains the mask concept; the practical exam makes you compute exactly these boundaries by hand.</em></div>
 <div class="note-ct">The IP hierarchy mirrors a postal system: the network prefix is the city/postcode (routers use it to get close), and the host part is the street address (the final local network delivers it). Practice subnetting by hand — it is heavily tested in the practical exam.</div>
 <a class="link-card codelab" href="/code-lab/linux-bash?ref=%2Fcourses%2Fcomputer-networking%2Flearn&reflabel=NWC203c%20%E2%80%94%20Computer%20Networking#module-484" target="_blank" rel="noopener">
   <span class="lc-ico">🐧</span>
@@ -615,6 +624,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Mask</div><div class="lz-t">chia mạng/host</div><div class="lz-d">vd /24</div></div>
   <div class="lz-step"><div class="lz-k">Định tuyến</div><div class="lz-t">tới mạng trước</div><div class="lz-d">rồi tới host</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Ví dụ có số — chia một /24 thành bốn mạng con.</b> Lấy 192.168.1.0/24 (256 địa chỉ) và mượn 2 bit host để tạo bốn mạng /26. Mỗi khối chứa 2⁶ = 64 địa chỉ, trong đó 62 dùng được (trừ địa chỉ mạng và địa chỉ broadcast): 192.168.1.0/26 (host .1–.62), .64/26 (.65–.126), .128/26 (.129–.190), .192/26 (.193–.254). <em>Giáo trình giải thích khái niệm mask; thi thực hành bắt bạn tính đúng các ranh giới này bằng tay.</em></div>
 <div class="note-ct">Phân cấp IP phản chiếu hệ thống bưu chính: tiền tố mạng là thành phố/mã bưu chính (router dùng để tới gần), và phần host là địa chỉ đường phố (mạng cục bộ cuối giao tới nơi). Luyện subnetting bằng tay — nó bị kiểm nhiều ở thi thực hành.</div>
 <a class="link-card codelab" href="/code-lab/linux-bash?ref=%2Fcourses%2Fcomputer-networking%2Flearn&reflabel=NWC203c%20%E2%80%94%20Computer%20Networking#module-484" target="_blank" rel="noopener">
   <span class="lc-ico">🐧</span>
@@ -675,6 +685,7 @@ export default {
     <tr><td>More overhead</td><td>Less overhead, may lose packets</td></tr>
   </tbody>
 </table>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>How TCP actually finds the right speed — slow-start &amp; AIMD.</b> TCP does not know the network&#39;s capacity, so it probes: it starts with a tiny window and <em>doubles</em> it each round-trip (slow-start), then switches to adding one segment per round-trip. On packet loss it halves the window — the famous "AIMD sawtooth" (Additive Increase, Multiplicative Decrease). This gentle back-off is what lets millions of flows share a link fairly. <em>The syllabus just says TCP "slows down on loss"; AIMD is the exact rule, and the reason your download speed visibly ramps up then dips.</em></div>
 <div class="note-ct">The handshake and reliability you see here are exactly what happens (invisibly) every time you load a web page. Ports (like 80 for HTTP, 443 for HTTPS) let one machine run many services at once — the transport layer&#39;s addressing on top of IP&#39;s.</div>
 <a class="link-card dl" href="https://www.coursera.org/learn/tcp-ip-advanced" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -704,6 +715,7 @@ export default {
     <tr><td>Chi phí cao hơn</td><td>Chi phí thấp hơn, có thể mất gói</td></tr>
   </tbody>
 </table>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>TCP thực sự tìm đúng tốc độ ra sao — slow-start &amp; AIMD.</b> TCP không biết dung lượng mạng, nên nó dò: bắt đầu với cửa sổ rất nhỏ và <em>nhân đôi</em> mỗi vòng khứ hồi (slow-start), rồi chuyển sang cộng thêm một segment mỗi vòng. Khi mất gói nó giảm nửa cửa sổ — "răng cưa AIMD" nổi tiếng (Additive Increase, Multiplicative Decrease). Kiểu lùi nhẹ nhàng này giúp hàng triệu luồng chia sẻ một liên kết công bằng. <em>Giáo trình chỉ nói TCP "chậm lại khi mất gói"; AIMD là quy tắc chính xác, và là lý do tốc độ tải của bạn tăng dần rồi tụt xuống thấy rõ.</em></div>
 <div class="note-ct">Bắt tay và độ tin cậy bạn thấy ở đây đúng là điều xảy ra (vô hình) mỗi khi bạn tải một trang web. Cổng (port, như 80 cho HTTP, 443 cho HTTPS) cho một máy chạy nhiều dịch vụ cùng lúc — đánh địa chỉ của tầng giao vận trên nền IP.</div>
 <a class="link-card dl" href="https://www.coursera.org/learn/tcp-ip-advanced" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>

@@ -191,6 +191,7 @@ export default {
   <span class="tok-keyword">&lt;/body&gt;</span>
 <span class="tok-keyword">&lt;/html&gt;</span></pre>
 <div class="out">Semantic tags — <span class="badge">&lt;header&gt;</span>, <span class="badge">&lt;nav&gt;</span>, <span class="badge">&lt;main&gt;</span>, <span class="badge">&lt;article&gt;</span>, <span class="badge">&lt;footer&gt;</span> — tell browsers and screen readers what each part means. Use them instead of generic <span class="badge">&lt;div&gt;</span> where you can.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Semantic HTML is SEO and accessibility.</b> Search engines weight a single <span class="badge">&lt;h1&gt;</span> and a logical heading order, while screen readers let users jump between <span class="badge">&lt;nav&gt;</span>, <span class="badge">&lt;main&gt;</span> and <span class="badge">&lt;article&gt;</span> landmarks. A wall of <span class="badge">&lt;div&gt;</span> looks identical on screen but is invisible to both. <em>The syllabus shows the tags; it rarely explains that choosing them well is what makes a page findable and usable.</em></div>
 <div class="note-ct">The browser turns your HTML into the <b>DOM</b> (Document Object Model) — a tree of nodes that CSS styles and JavaScript manipulates. Everything later builds on this tree.</div>
 <a class="link-card codelab" href="https://www.coursera.org/learn/html" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -211,6 +212,7 @@ export default {
   <span class="tok-keyword">&lt;/body&gt;</span>
 <span class="tok-keyword">&lt;/html&gt;</span></pre>
 <div class="out">Thẻ ngữ nghĩa — <span class="badge">&lt;header&gt;</span>, <span class="badge">&lt;nav&gt;</span>, <span class="badge">&lt;main&gt;</span>, <span class="badge">&lt;article&gt;</span>, <span class="badge">&lt;footer&gt;</span> — cho trình duyệt và trình đọc màn hình biết mỗi phần nghĩa là gì. Dùng chúng thay cho <span class="badge">&lt;div&gt;</span> chung chung khi có thể.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>HTML ngữ nghĩa chính là SEO và khả năng tiếp cận.</b> Công cụ tìm kiếm coi trọng một thẻ <span class="badge">&lt;h1&gt;</span> duy nhất và thứ tự heading hợp lý, còn trình đọc màn hình cho người dùng nhảy giữa các mốc <span class="badge">&lt;nav&gt;</span>, <span class="badge">&lt;main&gt;</span> và <span class="badge">&lt;article&gt;</span>. Một mớ <span class="badge">&lt;div&gt;</span> trông y hệt trên màn hình nhưng vô hình với cả hai. <em>Giáo trình chỉ các thẻ; hiếm khi giải thích rằng chọn thẻ đúng mới làm trang dễ tìm và dễ dùng.</em></div>
 <div class="note-ct">Trình duyệt biến HTML của bạn thành <b>DOM</b> (Document Object Model) — một cây các nút mà CSS tạo kiểu và JavaScript thao tác. Mọi thứ sau này dựng trên cây này.</div>
 <a class="link-card codelab" href="https://www.coursera.org/learn/html" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -250,6 +252,7 @@ export default {
   <div class="lz-step">+ margin (outside)</div>
 </div>
 <div class="pitfall"><b>Trap:</b> by default width does not include padding/border, which surprises beginners. Add <span class="badge">box-sizing: border-box</span> so width means the visible box — almost everyone sets this globally.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Specificity decides which rule wins.</b> When two rules target the same element, the browser scores each selector — inline style, then id (<span class="badge">#logo</span>), then class (<span class="badge">.card</span>), then tag (<span class="badge">h1</span>) — and the higher score wins, regardless of order in the file. That is why a stubborn colour won't change: something more specific is beating you, not a typo. <em>Beginners are taught "last rule wins", but the cascade is really specificity first, order only as a tie-breaker.</em></div>
 <a class="link-card codelab" href="https://www.coursera.org/learn/introcss" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
   <span class="lc-body"><span class="lc-title">MOOC: Introduction to CSS3</span><span class="lc-sub">University of Michigan on Coursera.</span></span>
@@ -272,6 +275,7 @@ export default {
   <div class="lz-step">+ margin (lề ngoài)</div>
 </div>
 <div class="pitfall"><b>Bẫy:</b> mặc định width không tính padding/border, khiến người mới bất ngờ. Thêm <span class="badge">box-sizing: border-box</span> để width nghĩa là hộp nhìn thấy — hầu như ai cũng đặt cái này toàn cục.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Specificity quyết định luật nào thắng.</b> Khi hai luật cùng nhắm một phần tử, trình duyệt chấm điểm mỗi bộ chọn — inline style, rồi id (<span class="badge">#logo</span>), rồi class (<span class="badge">.card</span>), rồi thẻ (<span class="badge">h1</span>) — điểm cao hơn thắng, bất kể thứ tự trong file. Đó là lý do một màu cứng đầu không đổi: có thứ specificity cao hơn đang thắng bạn, không phải lỗi gõ. <em>Người mới được dạy "luật cuối thắng", nhưng cascade thật ra là specificity trước, thứ tự chỉ để phá hòa.</em></div>
 <a class="link-card codelab" href="https://www.coursera.org/learn/introcss" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
   <span class="lc-body"><span class="lc-title">MOOC: Introduction to CSS3</span><span class="lc-sub">Đại học Michigan trên Coursera.</span></span>
@@ -299,6 +303,7 @@ export default {
   <div class="lz-layer"><b>Flexbox</b> — line items up in a row/column, distribute space, align them. Perfect for navbars, card rows, toolbars.</div>
   <div class="lz-layer"><b>Grid</b> — define rows AND columns; place items into cells. Perfect for page layouts and galleries.</div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Grid can be responsive with zero media queries.</b> <span class="badge">grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))</span> tells the browser to fit as many 220px-plus columns as the width allows and wrap the rest — a card gallery that reflows from four columns to one entirely on its own. Add <span class="badge">gap</span> for spacing instead of margins. <em>The course teaches media queries for responsiveness; intrinsic sizing like this often replaces them and is what modern layouts actually use.</em></div>
 <div class="note-ct">Rule of thumb: Flexbox for one axis (a menu), Grid for two axes (a whole page layout). Together they replace the old float/table hacks entirely.</div>
 <a class="link-card codelab" href="https://www.coursera.org/learn/introcss" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -319,6 +324,7 @@ export default {
   <div class="lz-layer"><b>Flexbox</b> — xếp các mục thành hàng/cột, phân bổ khoảng trống, căn chúng. Hoàn hảo cho navbar, hàng thẻ, thanh công cụ.</div>
   <div class="lz-layer"><b>Grid</b> — định nghĩa hàng VÀ cột; đặt các mục vào ô. Hoàn hảo cho bố cục trang và thư viện ảnh.</div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Grid có thể responsive mà không cần media query nào.</b> <span class="badge">grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))</span> bảo trình duyệt nhét vừa nhiều cột từ 220px trở lên theo bề rộng cho phép rồi xuống dòng phần còn lại — một thư viện thẻ tự co từ bốn cột về một cột hoàn toàn tự động. Dùng <span class="badge">gap</span> cho khoảng cách thay cho margin. <em>Môn dạy media query để responsive; cách định cỡ nội tại như thế này thường thay thế chúng và là thứ bố cục hiện đại thật sự dùng.</em></div>
 <div class="note-ct">Nguyên tắc: Flexbox cho một trục (một menu), Grid cho hai trục (bố cục cả trang). Cùng nhau chúng thay hẳn các mẹo float/table cũ.</div>
 <a class="link-card codelab" href="https://www.coursera.org/learn/introcss" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -356,6 +362,7 @@ btn.<span class="tok-function">addEventListener</span>(<span class="tok-string">
   <div class="lz-layer"><b>Listen</b> — <span class="badge">addEventListener</span> runs code on click, input, submit…</div>
   <div class="lz-layer"><b>Change</b> — set <span class="badge">textContent</span>, <span class="badge">.style</span>, add/remove classes.</div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>One listener can handle a whole list — event delegation.</b> Because a click <em>bubbles</em> up from the clicked element through its ancestors, you can attach a single <span class="badge">addEventListener</span> on a parent and read <span class="badge">event.target</span> to know which child was hit. This keeps working for items added later, and beats attaching hundreds of listeners. <em>The syllabus shows one button, one listener; real apps lean on bubbling and delegation, which the intro rarely names.</em></div>
 <a class="link-card codelab" href="/code-lab/javascript?ref=%2Fcourses%2Fweb-design%2Flearn&reflabel=WED201c%20%E2%80%94%20Web%20Design#module-265" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Practise: DOM manipulation & events</span><span class="lc-sub">JavaScript track — run code in the browser.</span></span>
@@ -381,6 +388,7 @@ btn.<span class="tok-function">addEventListener</span>(<span class="tok-string">
   <div class="lz-layer"><b>Lắng nghe</b> — <span class="badge">addEventListener</span> chạy code khi click, input, submit…</div>
   <div class="lz-layer"><b>Thay đổi</b> — đặt <span class="badge">textContent</span>, <span class="badge">.style</span>, thêm/xóa class.</div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Một listener xử lý cả danh sách — event delegation.</b> Vì cú click <em>nổi bọt (bubble)</em> từ phần tử được bấm lên qua các tổ tiên, bạn có thể gắn một <span class="badge">addEventListener</span> duy nhất trên phần tử cha rồi đọc <span class="badge">event.target</span> để biết con nào bị bấm. Cách này vẫn chạy cho các mục thêm sau, và hơn hẳn việc gắn hàng trăm listener. <em>Giáo trình chỉ một nút, một listener; ứng dụng thật dựa vào bubbling và delegation, điều bài nhập môn hiếm khi gọi tên.</em></div>
 <a class="link-card codelab" href="/code-lab/javascript?ref=%2Fcourses%2Fweb-design%2Flearn&reflabel=WED201c%20%E2%80%94%20Web%20Design#module-265" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
   <span class="lc-body"><span class="lc-title">Luyện: thao tác DOM & sự kiện</span><span class="lc-sub">Track JavaScript — chạy code trong trình duyệt.</span></span>
@@ -439,6 +447,7 @@ btn.<span class="tok-function">addEventListener</span>(<span class="tok-string">
   <div class="lz-layer"><b>The viewport tag</b> — <span class="badge">&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</span> is required, or mobiles pretend to be desktop.</div>
   <div class="lz-layer"><b>Relative units</b> — use %, rem, vw over fixed px so things scale.</div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>clamp() gives fluid sizing without breakpoints.</b> <span class="badge">font-size: clamp(1rem, 2.5vw, 1.5rem)</span> scales smoothly between a minimum and a maximum as the viewport changes — no media query, no sudden jumps. Newer <span class="badge">@container</span> queries go further, letting a component respond to its own width instead of the screen's, so the same card adapts inside a sidebar or a wide main area. <em>The course stops at media queries; clamp() and container queries are how modern responsive design avoids the "breakpoint jungle".</em></div>
 <a class="link-card codelab" href="https://www.coursera.org/learn/responsivedesign" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
   <span class="lc-body"><span class="lc-title">MOOC: Responsive Design</span><span class="lc-sub">University of Michigan on Coursera.</span></span>
@@ -461,6 +470,7 @@ btn.<span class="tok-function">addEventListener</span>(<span class="tok-string">
   <div class="lz-layer"><b>Thẻ viewport</b> — <span class="badge">&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</span> là bắt buộc, nếu không điện thoại giả vờ là desktop.</div>
   <div class="lz-layer"><b>Đơn vị tương đối</b> — dùng %, rem, vw thay px cố định để mọi thứ co giãn.</div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>clamp() cho cỡ co giãn mượt mà không cần breakpoint.</b> <span class="badge">font-size: clamp(1rem, 2.5vw, 1.5rem)</span> co giãn mượt giữa một cực tiểu và một cực đại khi viewport đổi — không media query, không nhảy đột ngột. <span class="badge">@container</span> query mới hơn còn đi xa hơn, cho một component phản hồi theo bề rộng của chính nó thay vì của màn hình, nên cùng một thẻ tự thích ứng trong sidebar hay vùng main rộng. <em>Môn dừng ở media query; clamp() và container query là cách thiết kế responsive hiện đại tránh "rừng breakpoint".</em></div>
 <a class="link-card codelab" href="https://www.coursera.org/learn/responsivedesign" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
   <span class="lc-body"><span class="lc-title">MOOC: Responsive Design</span><span class="lc-sub">Đại học Michigan trên Coursera.</span></span>
@@ -495,6 +505,7 @@ btn.<span class="tok-function">addEventListener</span>(<span class="tok-string">
   <div class="lz-step">JavaScript for interactivity</div>
   <div class="lz-step">Test on real screen sizes (DevTools)</div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Ship it, then measure it with Lighthouse.</b> Chrome DevTools has a built-in <b>Lighthouse</b> audit that scores your finished site on performance, accessibility, best practices and SEO, with concrete fixes: compress images, add <span class="badge">alt</span> text, defer scripts, set a viewport. Running it turns "it looks done" into a checklist of what actually needs work. <em>The capstone grades that the page works; professionals also grade how fast and how accessible it is — a habit the syllabus leaves out.</em></div>
 <div class="callout ok">Build incrementally and check in the browser after every change — exactly like the practical exam. A working single page beats an ambitious broken one.</div>
 <a class="link-card codelab" href="https://www.coursera.org/learn/web-design-project" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -514,6 +525,7 @@ btn.<span class="tok-function">addEventListener</span>(<span class="tok-string">
   <div class="lz-step">JavaScript cho tương tác</div>
   <div class="lz-step">Kiểm trên kích thước màn hình thật (DevTools)</div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đưa lên rồi đo bằng Lighthouse.</b> Chrome DevTools có sẵn công cụ kiểm <b>Lighthouse</b> chấm điểm site hoàn chỉnh về hiệu năng, khả năng tiếp cận, best practice và SEO, kèm cách sửa cụ thể: nén ảnh, thêm chữ <span class="badge">alt</span>, hoãn tải script, đặt viewport. Chạy nó biến "trông có vẻ xong" thành một danh sách những gì thật sự cần làm. <em>Capstone chấm trang chạy được; dân chuyên nghiệp còn chấm nó nhanh và tiếp cận tốt tới đâu — thói quen giáo trình bỏ qua.</em></div>
 <div class="callout ok">Xây từng bước và kiểm trong trình duyệt sau mỗi thay đổi — đúng như thi thực hành. Một trang đơn chạy được hơn một trang tham vọng bị hỏng.</div>
 <a class="link-card codelab" href="https://www.coursera.org/learn/web-design-project" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>

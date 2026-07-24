@@ -66,6 +66,24 @@ function getLessonDetail(lesson: LessonDto): LessonDetail | undefined {
   return anyLesson.details || lesson.detail;
 }
 
+// Append the currently-viewed lesson id to any internal "back to course" ref
+// embedded in a lesson's HTML. The /code-lab and /exp-hub practice cards carry
+// href="…?ref=%2Fcourses%2F<slug>%2Flearn&reflabel=…". Without a lessonId the
+// "Quay lại" button on Code Lab / Exp Hub returns to the course's FIRST lesson;
+// injecting %3FlessonId%3D<id> makes the ref decode to
+// /courses/<slug>/learn?lessonId=<id> so the learner lands back on the exact
+// lesson they left from. Runs on the rendered HTML each time, keyed to the
+// current lesson — so it stays correct even as they move between lessons.
+// Applied per-render on the raw stored content, so it works for EVERY course
+// with no re-seed.
+function withLessonRef(html: string, lessonId?: number | null): string {
+  if (!html || !lessonId) return html || '';
+  return html.replace(
+    /(ref=%2Fcourses%2F[A-Za-z0-9-]+%2Flearn)(?!%3FlessonId)/g,
+    `$1%3FlessonId%3D${lessonId}`,
+  );
+}
+
 interface LearnPageClientProps {
   slug: string;
 }
@@ -826,7 +844,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                     <BookOpen className="w-5 h-5 text-neon-violet" />
                     <h3 className="font-semibold text-text-primary">Lesson Content</h3>
                   </div>
-                  <div data-ml={locale} className="rich-content text-text-secondary leading-relaxed prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(currentLesson.content || "")) }} />
+                  <div data-ml={locale} className="rich-content text-text-secondary leading-relaxed prose prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: withLessonRef(sanitizeHtml(stripInlineColors(currentLesson.content || "")), currentLesson.id) }} />
                 </div>
               )}
 
@@ -842,7 +860,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                   <div
                     data-ml={locale}
                     className="rich-content text-text-secondary leading-relaxed prose prose-invert max-w-none"
-                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(lessonDetail.teachingNotes || "")) }}
+                    dangerouslySetInnerHTML={{ __html: withLessonRef(sanitizeHtml(stripInlineColors(lessonDetail.teachingNotes || "")), currentLesson.id) }}
                   />
                 </div>
               )}

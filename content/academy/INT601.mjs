@@ -73,7 +73,7 @@ export default {
 
 <div class="callout ok">The one habit that decides your grade: <strong>ship a thin vertical slice first</strong> — login → see slots → book one → it appears — then grow it. A tiny end-to-end flow that runs beats a huge design that never compiles.</div>
 
-<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601#module-310" target="_blank" rel="noopener">
   <span class="lc-ico">🌱</span>
   <span class="lc-body"><span class="lc-title">Practice Spring Boot on Code Lab</span><span class="lc-sub">Warm up REST controllers, JPA and services before you start the project.</span></span>
   <span class="lc-cta">CODE LAB →</span>
@@ -114,7 +114,7 @@ export default {
 
 <div class="callout ok">Thói quen quyết định điểm số: <strong>ship một lát cắt dọc mỏng trước</strong> — đăng nhập → thấy khung giờ → đặt một cái → nó hiện ra — rồi mới mở rộng. Một luồng nhỏ chạy được từ đầu đến cuối hơn hẳn một bản thiết kế đồ sộ không bao giờ biên dịch.</div>
 
-<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601#module-310" target="_blank" rel="noopener">
   <span class="lc-ico">🌱</span>
   <span class="lc-body"><span class="lc-title">Luyện Spring Boot trên Code Lab</span><span class="lc-sub">Khởi động REST controller, JPA và service trước khi bắt đầu đồ án.</span></span>
   <span class="lc-cta">CODE LAB →</span>
@@ -239,7 +239,7 @@ LỄ TÂN xác nhận ──▶ trạng thái lịch: PENDING ──▶ CONFIRME
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>A stack is a set of trade-offs, not a fashion.</b> You could swap Spring Boot for Node/Express, or Postgres for MySQL, and the architecture would be identical — the same three layers, the same UNIQUE constraint. Reviewers respect a student who can say "I chose X over Y because…". <em>Why beyond syllabus: the syllabus teaches one stack; real engineering is choosing among many for reasons.</em></div>
 
-<a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601#module-367" target="_blank" rel="noopener">
   <span class="lc-ico">⚛️</span>
   <span class="lc-body"><span class="lc-title">Brush up React on Code Lab</span><span class="lc-sub">Components, hooks and data fetching — the frontend half of this project.</span></span>
   <span class="lc-cta">CODE LAB →</span>
@@ -271,7 +271,7 @@ LỄ TÂN xác nhận ──▶ trạng thái lịch: PENDING ──▶ CONFIRME
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Một stack là tập hợp các đánh đổi, không phải mốt thời trang.</b> Bạn có thể thay Spring Boot bằng Node/Express, hay Postgres bằng MySQL, và kiến trúc vẫn y hệt — cùng ba lớp, cùng ràng buộc UNIQUE. Hội đồng nể một sinh viên biết nói "tôi chọn X thay vì Y vì…". <em>Vì sao ngoài syllabus: giáo trình dạy một stack; kỹ nghệ thật là chọn giữa nhiều lựa chọn có lý do.</em></div>
 
-<a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601#module-367" target="_blank" rel="noopener">
   <span class="lc-ico">⚛️</span>
   <span class="lc-body"><span class="lc-title">Ôn React trên Code Lab</span><span class="lc-sub">Component, hook và fetch dữ liệu — nửa frontend của đồ án này.</span></span>
   <span class="lc-cta">CODE LAB →</span>
@@ -446,7 +446,7 @@ User   1—* Appointment : a patient has many appointments</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>"At most one ACTIVE appointment per slot" is a state constraint, not just a foreign key.</b> A slot can have many appointment rows over time (one booked, cancelled, then rebooked) — the invariant is only one <em>non-cancelled</em> at a time. In 1.2 we enforce the simple version with a UNIQUE on <code>slot_id</code> + a status flip; the richer version uses a partial unique index. <em>Why beyond syllabus: distinguishing "unique row" from "unique active state" is a modelling skill most juniors miss.</em></div>
 
-<a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601#module-412" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice schema &amp; JOINs on Code Lab</span><span class="lc-sub">DDL, foreign keys and queries — the SQL under your JPA entities.</span></span>
   <span class="lc-cta">CODE LAB →</span>
@@ -492,7 +492,7 @@ User   1—* Appointment : một bệnh nhân có nhiều lịch</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>"Tối đa một lịch ĐANG HOẠT ĐỘNG mỗi khung" là ràng buộc trạng thái, không chỉ là khoá ngoại.</b> Một khung có thể có nhiều dòng appointment theo thời gian (một cái đặt, huỷ, rồi đặt lại) — bất biến là chỉ một cái <em>chưa huỷ</em> tại một thời điểm. Ở 1.2 ta thực thi phiên bản đơn giản bằng UNIQUE trên <code>slot_id</code> + đổi status; phiên bản đầy đủ dùng partial unique index. <em>Vì sao ngoài syllabus: phân biệt "dòng duy nhất" với "trạng thái hoạt động duy nhất" là kỹ năng mô hình hoá đa số junior bỏ sót.</em></div>
 
-<a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601#module-412" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Luyện schema &amp; JOIN trên Code Lab</span><span class="lc-sub">DDL, khoá ngoại và truy vấn — phần SQL nằm dưới các JPA entity của bạn.</span></span>
   <span class="lc-cta">CODE LAB →</span>
@@ -731,7 +731,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Never leak entities to the outside.</b> A Controller should return a <em>DTO</em> (Data Transfer Object), not the JPA entity. Returning the entity exposes the password hash, triggers lazy-loading exceptions, and couples your API shape to your table shape. In 2.3 you'll see the DTO mapping. <em>Why beyond syllabus: the entity↔DTO boundary is a professional habit the syllabus rarely enforces, but every real codebase does.</em></div>
 
-<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601#module-312" target="_blank" rel="noopener">
   <span class="lc-ico">🌱</span>
   <span class="lc-body"><span class="lc-title">Spring Boot layers on Code Lab</span><span class="lc-sub">Controllers, services and repositories, hands-on.</span></span>
   <span class="lc-cta">CODE LAB →</span>
@@ -778,7 +778,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đừng bao giờ để lộ entity ra ngoài.</b> Controller nên trả về một <em>DTO</em> (Data Transfer Object), không phải JPA entity. Trả về entity làm lộ hash mật khẩu, gây lỗi lazy-loading, và cột chặt hình dạng API vào hình dạng bảng. Ở 2.3 bạn sẽ thấy cách map DTO. <em>Vì sao ngoài syllabus: ranh giới entity↔DTO là thói quen chuyên nghiệp mà giáo trình ít ép, nhưng mọi codebase thật đều làm.</em></div>
 
-<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601#module-312" target="_blank" rel="noopener">
   <span class="lc-ico">🌱</span>
   <span class="lc-body"><span class="lc-title">Các lớp Spring Boot trên Code Lab</span><span class="lc-sub">Controller, service và repository, thực hành.</span></span>
   <span class="lc-cta">CODE LAB →</span>
@@ -1093,7 +1093,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>BCrypt is deliberately slow, and that is a feature.</b> Unlike a plain SHA-256, BCrypt has a tunable work factor so hashing takes ~100 ms — trivial for one login, but it makes brute-forcing a stolen hash database astronomically expensive. Never hash passwords with a fast general-purpose hash. <em>Why beyond syllabus: the "why slow is good" reasoning is security engineering the syllabus assumes but rarely explains.</em></div>
 
-<a class="link-card codelab" href="/code-lab/authentication?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/authentication?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601#module-951" target="_blank" rel="noopener">
   <span class="lc-ico">🔐</span>
   <span class="lc-body"><span class="lc-title">Auth &amp; JWT on Code Lab</span><span class="lc-sub">Hashing, tokens and protected routes, hands-on.</span></span>
   <span class="lc-cta">CODE LAB →</span>
@@ -1151,7 +1151,7 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>BCrypt cố tình chậm, và đó là một tính năng.</b> Khác SHA-256 thuần, BCrypt có work factor điều chỉnh được nên băm mất ~100 ms — không đáng kể cho một lần đăng nhập, nhưng khiến việc brute-force một CSDL hash bị đánh cắp đắt đỏ khủng khiếp. Đừng bao giờ băm mật khẩu bằng hash nhanh đa dụng. <em>Vì sao ngoài syllabus: lý lẽ "vì sao chậm lại tốt" là kỹ nghệ bảo mật mà giáo trình giả định nhưng ít giải thích.</em></div>
 
-<a class="link-card codelab" href="/code-lab/authentication?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/authentication?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601#module-951" target="_blank" rel="noopener">
   <span class="lc-ico">🔐</span>
   <span class="lc-body"><span class="lc-title">Auth &amp; JWT trên Code Lab</span><span class="lc-sub">Băm, token và route được bảo vệ, thực hành.</span></span>
   <span class="lc-cta">CODE LAB →</span>
@@ -1335,7 +1335,7 @@ Final state: exactly ONE appointment for slot 42.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Optimistic vs pessimistic locking.</b> Optimistic (<code>@Version</code>) assumes conflicts are rare: let everyone proceed, detect the clash at write time, retry the loser. Pessimistic (<code>SELECT ... FOR UPDATE</code>) locks the row up front so others wait. For booking — where a real double-click clash is rare — optimistic is faster and scales better. Pessimistic fits high-contention counters. Section 8 shows the pessimistic variant. <em>Why beyond syllabus: choosing a concurrency strategy by contention level is senior-level reasoning the syllabus never poses.</em></div>
 
-<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601#module-314" target="_blank" rel="noopener">
   <span class="lc-ico">🌱</span>
   <span class="lc-body"><span class="lc-title">Transactions &amp; JPA on Code Lab</span><span class="lc-sub">Practice @Transactional and locking behaviour.</span></span>
   <span class="lc-cta">CODE LAB →</span>
@@ -1406,7 +1406,7 @@ Trạng thái cuối: đúng MỘT lịch cho khung 42.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Optimistic vs pessimistic locking.</b> Optimistic (<code>@Version</code>) giả định xung đột hiếm: cho ai cũng chạy, phát hiện đụng lúc ghi, thử lại kẻ thua. Pessimistic (<code>SELECT ... FOR UPDATE</code>) khoá dòng ngay từ đầu nên người khác phải đợi. Với đặt lịch — nơi đụng độ double-click thật hiếm — optimistic nhanh hơn và mở rộng tốt hơn. Pessimistic hợp bộ đếm tranh chấp cao. Mục 8 chỉ biến thể pessimistic. <em>Vì sao ngoài syllabus: chọn chiến lược tương tranh theo mức tranh chấp là lối suy luận cấp senior mà giáo trình không đặt ra.</em></div>
 
-<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601#module-314" target="_blank" rel="noopener">
   <span class="lc-ico">🌱</span>
   <span class="lc-body"><span class="lc-title">Transaction &amp; JPA trên Code Lab</span><span class="lc-sub">Luyện @Transactional và hành vi khoá.</span></span>
   <span class="lc-cta">CODE LAB →</span>
@@ -1674,7 +1674,7 @@ api.interceptors.response.use(
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>localStorage vs httpOnly cookie.</b> Storing a JWT in <code>localStorage</code> is simple and fine for a student project, but it is readable by any injected script — an XSS bug leaks the token. Production auth often uses an <code>httpOnly</code> cookie the browser sends automatically and JavaScript cannot read. Know the trade-off so you can answer "is this secure?" honestly. <em>Why beyond syllabus: token-storage security is a real decision the syllabus glosses over.</em></div>
 
-<a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601#module-371" target="_blank" rel="noopener">
   <span class="lc-ico">⚛️</span>
   <span class="lc-body"><span class="lc-title">React context &amp; data fetching on Code Lab</span><span class="lc-sub">Hooks, context and axios patterns.</span></span>
   <span class="lc-cta">CODE LAB →</span>
@@ -1742,7 +1742,7 @@ api.interceptors.response.use(
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>localStorage vs cookie httpOnly.</b> Lưu JWT trong <code>localStorage</code> đơn giản và ổn cho đồ án sinh viên, nhưng nó đọc được bởi bất kỳ script bị chèn nào — một lỗi XSS làm lộ token. Auth production thường dùng cookie <code>httpOnly</code> mà trình duyệt tự gửi và JavaScript không đọc được. Biết đánh đổi để trả lời "cái này có an toàn không?" một cách trung thực. <em>Vì sao ngoài syllabus: bảo mật lưu token là một quyết định thật mà giáo trình lướt qua.</em></div>
 
-<a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Fclinic-appointment-booking-system%2Flearn&reflabel=INT601#module-371" target="_blank" rel="noopener">
   <span class="lc-ico">⚛️</span>
   <span class="lc-body"><span class="lc-title">React context &amp; fetch dữ liệu trên Code Lab</span><span class="lc-sub">Hook, context và các mẫu axios.</span></span>
   <span class="lc-cta">CODE LAB →</span>

@@ -451,11 +451,29 @@ export default {
     <tr><td>Chain</td><td>d/dx f(g(x)) = f′(g(x))·g′(x)</td></tr>
   </tbody>
 </table>
-<h3>Common derivatives to know</h3>
-<div class="out">d/dx sin x = cos x  ·  d/dx cos x = −sin x  ·  d/dx eˣ = eˣ  ·  d/dx ln x = 1/x</div>
-<h3>Worked example — the chain rule</h3>
-<div class="out"><b>Differentiate</b>  f(x) = (3x² + 1)⁵<br>Outer: ( )⁵ → 5( )⁴ · inner derivative<br>f′(x) = 5(3x² + 1)⁴ · (6x) = <b>30x(3x² + 1)⁴</b></div>
-<div class="callout ok">The chain rule is the one students trip on most: differentiate the outside, keep the inside, then multiply by the derivative of the inside. Whenever you see a "function inside a function", the chain rule is coming.</div>
+<h3>Common derivatives — memorise these</h3>
+<div class="formula"><span class="lbl">Elementary derivatives</span>d/dx (xⁿ) = n·xⁿ⁻¹    d/dx (sin x) = cos x    d/dx (cos x) = −sin x<br>d/dx (tan x) = 1/cos²x = sec²x    d/dx (eˣ) = eˣ    d/dx (aˣ) = aˣ·ln a<br>d/dx (ln x) = 1/x    d/dx (√x) = 1/(2√x)</div>
+
+<h3>How to choose the right rule</h3>
+<div class="lz-stack">
+  <div class="lz-layer">A single power/term → <b>power rule</b>. A sum → differentiate term by term.</div>
+  <div class="lz-layer">Two things <b>multiplied</b> → <b>product rule</b>. One thing <b>divided</b> by another → <b>quotient rule</b>.</div>
+  <div class="lz-layer">A <b>function inside a function</b> (composite) → <b>chain rule</b> — the most common and most-missed.</div>
+</div>
+
+<h3>Ví dụ có lời giải · Worked examples (step by step)</h3>
+<div class="out"><b>Example 1 — power + sum.</b> f(x) = 3x⁴ − 5x² + 7.<br>
+f′(x) = 3·4x³ − 5·2x + 0 = <b>12x³ − 10x</b>. (Constant 7 → 0.)</div>
+<div class="out"><b>Example 2 — product rule.</b> f(x) = x²·sin x. Let u = x² (u′ = 2x), v = sin x (v′ = cos x).<br>
+f′ = u′v + uv′ = 2x·sin x + x²·cos x = <b>2x sin x + x² cos x</b>.</div>
+<div class="out"><b>Example 3 — quotient rule.</b> f(x) = (x + 1)/(x − 1). u = x+1 (u′=1), v = x−1 (v′=1).<br>
+f′ = (u′v − uv′)/v² = [1·(x−1) − (x+1)·1]/(x−1)² = (x−1−x−1)/(x−1)² = <b>−2/(x−1)²</b>.</div>
+<div class="out"><b>Example 4 — chain rule.</b> f(x) = (3x² + 1)⁵. Outer ( )⁵ → 5( )⁴; inner derivative 6x.<br>
+f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
+
+<div class="pitfall"><b>Trap:</b> the product rule is NOT (f·g)′ = f′·g′ — that is wrong. You must keep both cross-terms: f′g + fg′. Same for the quotient: mind the minus sign and the g² denominator.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Logarithmic differentiation — for nasty products/powers.</b> To differentiate something like y = xˣ or a big product, take ln of both sides first: ln y = x·ln x, then differentiate implicitly: y′/y = ln x + 1, so y′ = xˣ(ln x + 1). This trick turns products into sums and powers into products (via log laws), making otherwise-impossible derivatives routine — a tool the basic slides skip but every engineer uses.</div>
 <div class="note-ct">Higher derivatives just repeat the process: f″(x) is the derivative of f′(x). The second derivative measures how the rate itself is changing (acceleration, concavity) — you will use it in Chapter 3.</div>
 </div>
 <div class="ml-vi">
@@ -473,11 +491,29 @@ export default {
     <tr><td>Dây chuyền (chain)</td><td>d/dx f(g(x)) = f′(g(x))·g′(x)</td></tr>
   </tbody>
 </table>
-<h3>Các đạo hàm cần nhớ</h3>
-<div class="out">d/dx sin x = cos x  ·  d/dx cos x = −sin x  ·  d/dx eˣ = eˣ  ·  d/dx ln x = 1/x</div>
-<h3>Ví dụ — quy tắc dây chuyền</h3>
-<div class="out"><b>Tính đạo hàm</b>  f(x) = (3x² + 1)⁵<br>Ngoài: ( )⁵ → 5( )⁴ · đạo hàm phần trong<br>f′(x) = 5(3x² + 1)⁴ · (6x) = <b>30x(3x² + 1)⁴</b></div>
-<div class="callout ok">Quy tắc dây chuyền là chỗ sinh viên vấp nhiều nhất: lấy đạo hàm phần ngoài, giữ nguyên phần trong, rồi nhân với đạo hàm phần trong. Hễ thấy "hàm trong hàm", quy tắc dây chuyền sắp tới.</div>
+<h3>Các đạo hàm cần nhớ — học thuộc</h3>
+<div class="formula"><span class="lbl">Đạo hàm cơ bản</span>d/dx (xⁿ) = n·xⁿ⁻¹    d/dx (sin x) = cos x    d/dx (cos x) = −sin x<br>d/dx (tan x) = 1/cos²x = sec²x    d/dx (eˣ) = eˣ    d/dx (aˣ) = aˣ·ln a<br>d/dx (ln x) = 1/x    d/dx (√x) = 1/(2√x)</div>
+
+<h3>Cách chọn đúng quy tắc</h3>
+<div class="lz-stack">
+  <div class="lz-layer">Một luỹ thừa/hạng tử đơn → <b>quy tắc luỹ thừa</b>. Một tổng → lấy đạo hàm từng hạng tử.</div>
+  <div class="lz-layer">Hai thứ <b>nhân</b> nhau → <b>quy tắc tích</b>. Một thứ <b>chia</b> cho thứ khác → <b>quy tắc thương</b>.</div>
+  <div class="lz-layer">Một <b>hàm trong hàm</b> (hợp) → <b>quy tắc dây chuyền</b> — phổ biến nhất và hay bị bỏ sót nhất.</div>
+</div>
+
+<h3>Ví dụ có lời giải · Giải từng bước</h3>
+<div class="out"><b>Ví dụ 1 — luỹ thừa + tổng.</b> f(x) = 3x⁴ − 5x² + 7.<br>
+f′(x) = 3·4x³ − 5·2x + 0 = <b>12x³ − 10x</b>. (Hằng số 7 → 0.)</div>
+<div class="out"><b>Ví dụ 2 — quy tắc tích.</b> f(x) = x²·sin x. Đặt u = x² (u′ = 2x), v = sin x (v′ = cos x).<br>
+f′ = u′v + uv′ = 2x·sin x + x²·cos x = <b>2x sin x + x² cos x</b>.</div>
+<div class="out"><b>Ví dụ 3 — quy tắc thương.</b> f(x) = (x + 1)/(x − 1). u = x+1 (u′=1), v = x−1 (v′=1).<br>
+f′ = (u′v − uv′)/v² = [1·(x−1) − (x+1)·1]/(x−1)² = (x−1−x−1)/(x−1)² = <b>−2/(x−1)²</b>.</div>
+<div class="out"><b>Ví dụ 4 — quy tắc dây chuyền.</b> f(x) = (3x² + 1)⁵. Ngoài ( )⁵ → 5( )⁴; đạo hàm phần trong 6x.<br>
+f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
+
+<div class="pitfall"><b>Bẫy:</b> quy tắc tích KHÔNG phải (f·g)′ = f′·g′ — đó là sai. Phải giữ cả hai số hạng chéo: f′g + fg′. Tương tự với thương: chú ý dấu trừ và mẫu g².</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đạo hàm logarit — cho tích/luỹ thừa hóc búa.</b> Để lấy đạo hàm thứ như y = xˣ hay một tích lớn, lấy ln hai vế trước: ln y = x·ln x, rồi lấy đạo hàm ẩn: y′/y = ln x + 1, nên y′ = xˣ(ln x + 1). Mẹo này biến tích thành tổng và luỹ thừa thành tích (qua luật log), làm những đạo hàm tưởng bất khả thi thành thường ngày — công cụ slide cơ bản bỏ qua nhưng mọi kỹ sư đều dùng.</div>
 <div class="note-ct">Đạo hàm cấp cao chỉ lặp lại quá trình: f″(x) là đạo hàm của f′(x). Đạo hàm cấp hai đo chính tốc độ đang thay đổi ra sao (gia tốc, độ lồi/lõm) — bạn sẽ dùng nó ở Chương 3.</div>
 </div>
 `,
@@ -632,8 +668,20 @@ export default {
 </div>
 <h3>The Fundamental Theorem of Calculus</h3>
 <p>The great surprise: integration and differentiation are <strong>inverse operations</strong>. To compute a definite integral, find an <em>antiderivative</em> F (a function whose derivative is f), then:</p>
-<div class="out"><b>FTC:</b>  ∫<sub>a</sub><sup>b</sup> f(x) dx = F(b) − F(a),  where F′ = f</div>
-<div class="out"><b>Example:</b>  ∫<sub>0</sub><sup>2</sup> x² dx = [x³/3]<sub>0</sub><sup>2</sup> = 8/3 − 0 = <b>8/3</b></div>
+<div class="formula"><span class="lbl">Fundamental Theorem of Calculus</span>∫<sub>a</sub><sup>b</sup> f(x) dx = F(b) − F(a),  where F′(x) = f(x)</div>
+
+<h3>Basic antiderivatives — the integral table</h3>
+<p>Each is a derivative rule run backwards. The <b>+ C</b> appears on indefinite integrals because any constant vanishes when differentiated.</p>
+<div class="formula"><span class="lbl">Standard integrals</span>∫ xⁿ dx = xⁿ⁺¹/(n+1) + C  (n ≠ −1)    ∫ (1/x) dx = ln|x| + C<br>∫ eˣ dx = eˣ + C    ∫ sin x dx = −cos x + C    ∫ cos x dx = sin x + C<br>∫ sec²x dx = tan x + C    ∫ k dx = kx + C</div>
+
+<h3>Ví dụ có lời giải · Worked examples</h3>
+<div class="out"><b>Example 1.</b> ∫<sub>0</sub><sup>2</sup> x² dx = [x³/3]<sub>0</sub><sup>2</sup> = 8/3 − 0 = <b>8/3</b>.</div>
+<div class="out"><b>Example 2 — a polynomial.</b> ∫<sub>1</sub><sup>3</sup> (2x + 3) dx = [x² + 3x]<sub>1</sub><sup>3</sup> = (9+9) − (1+3) = 18 − 4 = <b>14</b>.</div>
+<div class="out"><b>Example 3 — trig.</b> ∫<sub>0</sub><sup>π</sup> sin x dx = [−cos x]<sub>0</sub><sup>π</sup> = −cos π − (−cos 0) = 1 + 1 = <b>2</b>.</div>
+
+<div class="pitfall"><b>Trap:</b> the power rule ∫xⁿ = xⁿ⁺¹/(n+1) fails at n = −1 (division by zero). For ∫(1/x) the answer is ln|x|, not x⁰/0. And never forget <b>+ C</b> on an indefinite integral.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Integration by substitution (reverse chain rule).</b> When an integrand contains a function and its derivative, substitute u = inner function. E.g. ∫ 2x·(x²+1)⁵ dx: let u = x²+1, du = 2x dx → ∫ u⁵ du = u⁶/6 + C = (x²+1)⁶/6 + C. Substitution is the single most useful integration technique — it undoes the chain rule, just as the chain rule was the most-used derivative rule.</div>
 <div class="callout ok">The Fundamental Theorem is one of the deepest results in mathematics: it links the two halves of calculus. Finding area (integration) becomes running differentiation backwards. That is why knowing your derivative rules makes integration possible.</div>
 </div>
 <div class="ml-vi">
@@ -650,8 +698,20 @@ export default {
 </div>
 <h3>Định lý cơ bản của giải tích</h3>
 <p>Bất ngờ lớn: tích phân và đạo hàm là <strong>hai phép ngược nhau</strong>. Để tính một tích phân xác định, tìm một <em>nguyên hàm</em> F (một hàm mà đạo hàm là f), rồi:</p>
-<div class="out"><b>FTC:</b>  ∫<sub>a</sub><sup>b</sup> f(x) dx = F(b) − F(a),  với F′ = f</div>
-<div class="out"><b>Ví dụ:</b>  ∫<sub>0</sub><sup>2</sup> x² dx = [x³/3]<sub>0</sub><sup>2</sup> = 8/3 − 0 = <b>8/3</b></div>
+<div class="formula"><span class="lbl">Định lý cơ bản của giải tích</span>∫<sub>a</sub><sup>b</sup> f(x) dx = F(b) − F(a),  với F′(x) = f(x)</div>
+
+<h3>Nguyên hàm cơ bản — bảng tích phân</h3>
+<p>Mỗi cái là một quy tắc đạo hàm chạy ngược. <b>+ C</b> xuất hiện ở tích phân bất định vì mọi hằng số biến mất khi lấy đạo hàm.</p>
+<div class="formula"><span class="lbl">Tích phân chuẩn</span>∫ xⁿ dx = xⁿ⁺¹/(n+1) + C  (n ≠ −1)    ∫ (1/x) dx = ln|x| + C<br>∫ eˣ dx = eˣ + C    ∫ sin x dx = −cos x + C    ∫ cos x dx = sin x + C<br>∫ sec²x dx = tan x + C    ∫ k dx = kx + C</div>
+
+<h3>Ví dụ có lời giải · Giải từng bước</h3>
+<div class="out"><b>Ví dụ 1.</b> ∫<sub>0</sub><sup>2</sup> x² dx = [x³/3]<sub>0</sub><sup>2</sup> = 8/3 − 0 = <b>8/3</b>.</div>
+<div class="out"><b>Ví dụ 2 — đa thức.</b> ∫<sub>1</sub><sup>3</sup> (2x + 3) dx = [x² + 3x]<sub>1</sub><sup>3</sup> = (9+9) − (1+3) = 18 − 4 = <b>14</b>.</div>
+<div class="out"><b>Ví dụ 3 — lượng giác.</b> ∫<sub>0</sub><sup>π</sup> sin x dx = [−cos x]<sub>0</sub><sup>π</sup> = −cos π − (−cos 0) = 1 + 1 = <b>2</b>.</div>
+
+<div class="pitfall"><b>Bẫy:</b> quy tắc luỹ thừa ∫xⁿ = xⁿ⁺¹/(n+1) thất bại tại n = −1 (chia cho 0). Với ∫(1/x) đáp án là ln|x|, không phải x⁰/0. Và đừng bao giờ quên <b>+ C</b> ở tích phân bất định.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Tích phân đổi biến (chain rule ngược).</b> Khi biểu thức dưới dấu tích phân chứa một hàm và đạo hàm của nó, đặt u = hàm bên trong. Vd ∫ 2x·(x²+1)⁵ dx: đặt u = x²+1, du = 2x dx → ∫ u⁵ du = u⁶/6 + C = (x²+1)⁶/6 + C. Đổi biến là kỹ thuật tích phân hữu dụng nhất — nó "gỡ" quy tắc dây chuyền, đúng như dây chuyền là quy tắc đạo hàm dùng nhiều nhất.</div>
 <div class="callout ok">Định lý cơ bản là một trong những kết quả sâu nhất của toán học: nó nối hai nửa của giải tích. Tìm diện tích (tích phân) trở thành chạy ngược phép đạo hàm. Đó là lý do nắm vững quy tắc đạo hàm làm cho tích phân khả thi.</div>
 </div>
 `,

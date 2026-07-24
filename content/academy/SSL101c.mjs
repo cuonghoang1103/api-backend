@@ -270,6 +270,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Accuracy</div><div class="lz-ld">Is it supported by evidence and references? Can you verify it elsewhere?</div></div>
   <div class="lz-layer"><div class="lz-lt">Purpose</div><div class="lz-ld">Why was it made — to inform, sell, or persuade? Is there bias?</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Lateral reading beats CRAAP.</b> Stanford researchers found professional fact-checkers barely read a suspicious page before leaving it — they open new tabs to ask "who is behind this?" That is <em>lateral</em> reading (the SIFT method: Stop, Investigate the source, Find better coverage, Trace claims to the original), and it catches slick fakes that pass a checklist-style CRAAP read. <em>CRAAP judges a page from the inside; the research shows judging it from the outside web is faster and more reliable.</em></div>
 <div class="callout ok">A peer-reviewed journal article and a random blog post can say the same thing — but one has been checked by experts and the other has not. Digital literacy is knowing the difference and choosing accordingly, especially now that AI can generate confident-sounding but wrong text.</div>
 <a class="link-card dl" href="https://www.coursera.org/learn/digital-literacy" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -296,6 +297,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Accuracy (Chính xác)</div><div class="lz-ld">Có bằng chứng và trích dẫn hỗ trợ không? Kiểm chứng được ở nơi khác không?</div></div>
   <div class="lz-layer"><div class="lz-lt">Purpose (Mục đích)</div><div class="lz-ld">Vì sao nó được tạo — để thông tin, bán hàng, hay thuyết phục? Có thiên kiến không?</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đọc ngang (lateral reading) thắng CRAAP.</b> Nghiên cứu ở Stanford thấy các nhà kiểm chứng chuyên nghiệp gần như không đọc trang đáng ngờ trước khi rời đi — họ mở tab mới để hỏi "ai đứng sau nguồn này?" Đó là đọc <em>ngang</em> (phương pháp SIFT: Dừng, Điều tra nguồn, Tìm nguồn tốt hơn, Truy vết khẳng định về gốc), bắt được các trang giả bóng bẩy vượt qua kiểu đọc CRAAP theo checklist. <em>CRAAP đánh giá trang từ bên trong; nghiên cứu cho thấy đánh giá từ bên ngoài web thì nhanh và đáng tin hơn.</em></div>
 <div class="callout ok">Một bài báo khoa học bình duyệt và một bài blog bất kỳ có thể nói cùng một điều — nhưng một cái đã được chuyên gia kiểm, cái kia thì chưa. Kỹ năng số là biết khác biệt đó và chọn cho đúng, nhất là bây giờ khi AI có thể sinh văn bản nghe rất tự tin nhưng sai.</div>
 <a class="link-card dl" href="https://www.coursera.org/learn/digital-literacy" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -323,6 +325,7 @@ export default {
 </div>
 <h3>Use a reference manager</h3>
 <p>Tools like <strong>Zotero</strong> or <strong>Mendeley</strong> save every source as you find it and generate perfectly formatted citations automatically. This turns hours of tedious formatting into one click and prevents lost sources.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Snowball your way to better sources.</b> Instead of hoping one search returns everything, use citation chaining: read a good paper's reference list to go <em>backward</em> to its foundations, and use Google Scholar's "Cited by" to go <em>forward</em> to newer work that built on it. Zotero makes each hop one click, and it surfaces the key papers a keyword search misses. <em>The CRAAP lesson evaluates sources one at a time; snowballing is a research-librarian technique for mapping a whole field fast.</em></div>
 <div class="note-ct">Golden rule: record the source the moment you take a note from it. A note without its source is a future plagiarism risk. Chapter 5 goes deeper into avoiding plagiarism — referencing is your first line of defense.</div>
 <a class="link-card exphub" href="/exp-hub/ssl101c-cong-cu-hoc-tap?ref=%2Fcourses%2Facademic-skills-for-university-success%2Flearn&reflabel=SSL101c%20%E2%80%94%20Academic%20Skills%20for%20University%20Success" target="_blank" rel="noopener">
   <span class="lc-ico">📚</span>
@@ -342,6 +345,7 @@ export default {
 </div>
 <h3>Dùng trình quản lý trích dẫn</h3>
 <p>Công cụ như <strong>Zotero</strong> hoặc <strong>Mendeley</strong> lưu mọi nguồn khi bạn tìm thấy và tự tạo trích dẫn định dạng chuẩn. Điều này biến hàng giờ định dạng tẻ nhạt thành một cú nhấp và ngăn mất nguồn.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Lăn cầu tuyết tới nguồn tốt hơn.</b> Thay vì hy vọng một lần tìm ra hết, hãy dùng citation chaining: đọc danh mục tài liệu của một bài tốt để đi <em>ngược</em> về nền tảng của nó, và dùng nút "Cited by" của Google Scholar để đi <em>xuôi</em> tới các bài mới hơn kế thừa nó. Zotero biến mỗi bước nhảy thành một cú nhấp, phát lộ những bài then chốt mà tìm từ khoá bỏ sót. <em>Bài học CRAAP đánh giá từng nguồn một; snowballing là kỹ thuật của thủ thư nghiên cứu để lập bản đồ cả một lĩnh vực nhanh chóng.</em></div>
 <div class="note-ct">Quy tắc vàng: ghi lại nguồn ngay khi bạn ghi chép từ nó. Một ghi chú không có nguồn là rủi ro đạo văn tương lai. Chương 5 đi sâu hơn về tránh đạo văn — trích dẫn là tuyến phòng thủ đầu tiên của bạn.</div>
 <a class="link-card exphub" href="/exp-hub/ssl101c-cong-cu-hoc-tap?ref=%2Fcourses%2Facademic-skills-for-university-success%2Flearn&reflabel=SSL101c%20%E2%80%94%20Academic%20Skills%20for%20University%20Success" target="_blank" rel="noopener">
   <span class="lc-ico">📚</span>
@@ -396,6 +400,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Find the constraints</div><div class="lz-ld">Time, budget, skills, rules — what limits the solution?</div></div>
   <div class="lz-layer"><div class="lz-lt">State it clearly</div><div class="lz-ld">A well-framed problem is half solved.</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Run a pre-mortem before you commit.</b> Psychologist Gary Klein's pre-mortem flips risk analysis: imagine it is months later and your project has failed spectacularly, then write down every reason why. This "prospective hindsight" makes people markedly better at naming real risks than asking "what could go wrong?", because a concrete failure is easier to explain than an abstract one. <em>The lesson teaches defining the problem; the pre-mortem stress-tests your definition before you sink time into the wrong solution.</em></div>
 <div class="callout ok">Students often rush to solutions before understanding the problem — and solve the wrong thing. Spending a few minutes to define the real problem and its goal is the highest-leverage move in problem solving.</div>
 <a class="link-card dl" href="https://www.coursera.org/learn/problem-solving-skills" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -419,6 +424,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Tìm ràng buộc</div><div class="lz-ld">Thời gian, ngân sách, kỹ năng, luật lệ — cái gì giới hạn giải pháp?</div></div>
   <div class="lz-layer"><div class="lz-lt">Phát biểu rõ ràng</div><div class="lz-ld">Một vấn đề được đặt khung tốt đã giải được một nửa.</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Chạy pre-mortem trước khi lao vào.</b> Pre-mortem của nhà tâm lý Gary Klein lật ngược phân tích rủi ro: hãy tưởng tượng vài tháng sau, dự án của bạn đã thất bại thảm hại, rồi viết ra mọi lý do vì sao. "Hồi tưởng trước" (prospective hindsight) này giúp người ta nêu rủi ro thật tốt hơn hẳn so với hỏi "có gì có thể sai?", vì một thất bại cụ thể dễ giải thích hơn một cái trừu tượng. <em>Bài học dạy định nghĩa vấn đề; pre-mortem kiểm áp lực định nghĩa đó trước khi bạn đổ thời gian vào giải pháp sai.</em></div>
 <div class="callout ok">Sinh viên thường lao vào giải pháp trước khi hiểu vấn đề — và giải nhầm thứ. Bỏ vài phút định nghĩa đúng vấn đề và mục tiêu của nó là nước đi đòn bẩy cao nhất trong giải quyết vấn đề.</div>
 <a class="link-card dl" href="https://www.coursera.org/learn/problem-solving-skills" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -450,6 +456,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Ask "what if?" / reverse it</div><div class="lz-ld">Challenge assumptions: what if the constraint didn&#39;t exist? What if we did the opposite?</div></div>
   <div class="lz-layer"><div class="lz-lt">SCAMPER</div><div class="lz-ld">Substitute, Combine, Adapt, Modify, Put to other use, Eliminate, Reverse — prompts to transform an idea.</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Brainwriting beats brainstorming out loud.</b> Decades of research (Diehl &amp; Stroebe) show a group brainstorming aloud produces fewer and worse ideas than the same people thinking alone — blocked by having to wait their turn, fear of judgement, and free-riding. The fix is brainwriting: everyone writes ideas silently first, then the group pools and builds on them. <em>The lesson praises brainstorming; the research adds the crucial caveat that idea generation should start solo, not as a noisy group.</em></div>
 <div class="note-ct">Creativity and critical thinking are partners: you <em>diverge</em> creatively to find options, then <em>converge</em> critically (Chapter 3) to judge them. Good problem solving needs both — generate widely, then choose wisely.</div>
 </div>
 <div class="ml-vi">
@@ -468,6 +475,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Hỏi "nếu như?" / đảo ngược</div><div class="lz-ld">Thách thức giả định: nếu ràng buộc không tồn tại thì sao? Nếu làm ngược lại thì sao?</div></div>
   <div class="lz-layer"><div class="lz-lt">SCAMPER</div><div class="lz-ld">Thay thế, Kết hợp, Thích nghi, Sửa đổi, Dùng cho việc khác, Loại bỏ, Đảo ngược — gợi ý để biến đổi một ý tưởng.</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Brainwriting thắng brainstorm nói to.</b> Hàng chục năm nghiên cứu (Diehl &amp; Stroebe) cho thấy một nhóm động não nói to tạo ra ít ý và ý tệ hơn so với cùng những người đó nghĩ một mình — bị chặn bởi phải chờ tới lượt, sợ bị phán xét, và ăn theo. Cách chữa là brainwriting: mọi người viết ý trong im lặng trước, rồi nhóm mới gộp và phát triển tiếp. <em>Bài học khen brainstorming; nghiên cứu bổ sung lưu ý then chốt rằng việc tạo ý nên bắt đầu một mình, không phải một nhóm ồn ào.</em></div>
 <div class="note-ct">Sáng tạo và tư duy phản biện là đối tác: bạn <em>phân kỳ</em> sáng tạo để tìm lựa chọn, rồi <em>hội tụ</em> phản biện (Chương 3) để đánh giá chúng. Giải quyết vấn đề tốt cần cả hai — tạo rộng, rồi chọn khôn.</div>
 </div>
 `,
@@ -516,6 +524,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Inductive</div><div class="lz-t">specific → general</div><div class="lz-d">premises make conclusion LIKELY, not certain</div></div>
 </div>
 <p>A <strong>strong</strong> argument has true premises AND a valid logical link. Both matter: true facts with a broken inference, or perfect logic built on false facts, both fail.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Steelman before you argue.</b> The opposite of a straw man is a steelman: restate the other side's argument in its strongest, most charitable form — often stronger than they put it — and only then respond. If you can pass their "ideological Turing test" (state their view so well they would nod along), your critique is honest and far more persuasive. <em>The lesson defines argument structure; steelmanning is an intellectual-honesty discipline that also makes your own essays much harder to dismiss.</em></div>
 <div class="callout ok">Critical thinking starts by asking of any claim: "What is the conclusion, what are the reasons, and do the reasons really support it?" This simple habit protects you from persuasive-but-empty arguments — in essays, ads, news, and AI output alike.</div>
 <a class="link-card dl" href="https://www.coursera.org/learn/critical-thinking-skills" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -538,6 +547,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Quy nạp</div><div class="lz-t">cụ thể → tổng quát</div><div class="lz-d">tiền đề làm kết luận CÓ KHẢ NĂNG, không chắc chắn</div></div>
 </div>
 <p>Một lập luận <strong>mạnh</strong> có tiền đề đúng VÀ liên kết logic hợp lệ. Cả hai đều quan trọng: dữ kiện đúng với suy luận hỏng, hoặc logic hoàn hảo dựng trên dữ kiện sai — cả hai đều thất bại.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Dựng steelman trước khi phản biện.</b> Đối lập của người rơm (straw man) là steelman: phát biểu lại lập luận của phía kia ở dạng mạnh nhất, thiện chí nhất — thường mạnh hơn cả cách họ nói — rồi mới phản hồi. Nếu bạn qua được "bài kiểm Turing tư tưởng" của họ (trình bày quan điểm họ hay tới mức họ phải gật đầu), phê phán của bạn trung thực và thuyết phục hơn nhiều. <em>Bài học định nghĩa cấu trúc lập luận; steelmanning là kỷ luật trung thực trí tuệ, đồng thời làm bài luận của bạn khó bị bác bỏ hơn nhiều.</em></div>
 <div class="callout ok">Tư duy phản biện bắt đầu bằng việc hỏi mọi khẳng định: "Kết luận là gì, lý do là gì, và các lý do có thực sự hỗ trợ nó không?" Thói quen đơn giản này bảo vệ bạn khỏi các lập luận nghe thuyết phục nhưng rỗng — trong bài luận, quảng cáo, tin tức, và cả đầu ra của AI.</div>
 <a class="link-card dl" href="https://www.coursera.org/learn/critical-thinking-skills" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -574,6 +584,7 @@ export default {
     <tr><td>Correlation ≠ causation</td><td>Assumes because two things occur together, one caused the other</td></tr>
   </tbody>
 </table>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The Dunning-Kruger trap.</b> Psychologists Dunning and Kruger found that the less competent people are at something, the more they tend to overrate their skill — because the very knowledge needed to do it well is what is needed to see how badly you are doing. Experts, paradoxically, often underrate themselves. <em>It complements the bias list with a bias about your own competence — the reason to seek feedback and stay humble about what you "obviously" already know.</em></div>
 <div class="note-ct">Critical thinking is not being negative — it is being fair and evidence-based. Turn it on your <em>own</em> work too: what am I assuming? What evidence would change my mind? That honesty is the mark of a real thinker, and it directly improves your essays and the capstone.</div>
 </div>
 <div class="ml-vi">
@@ -597,6 +608,7 @@ export default {
     <tr><td>Tương quan ≠ nhân quả</td><td>Cho rằng vì hai thứ xảy ra cùng nhau, cái này gây cái kia</td></tr>
   </tbody>
 </table>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Cái bẫy Dunning-Kruger.</b> Các nhà tâm lý Dunning và Kruger phát hiện rằng người càng kém ở một việc lại càng có xu hướng tự đánh giá kỹ năng mình cao — vì chính kiến thức cần để làm tốt cũng là thứ cần để thấy mình đang làm tệ đến đâu. Ngược đời thay, chuyên gia thường tự đánh giá thấp bản thân. <em>Nó bổ sung vào danh sách thiên kiến một thiên kiến về năng lực của chính bạn — lý do để tìm phản hồi và khiêm tốn với những gì bạn nghĩ mình "hiển nhiên" đã biết.</em></div>
 <div class="note-ct">Tư duy phản biện không phải là tiêu cực — mà là công bằng và dựa trên bằng chứng. Hãy bật nó lên cả với công việc <em>của chính bạn</em>: mình đang giả định gì? Bằng chứng nào sẽ làm mình đổi ý? Sự trung thực đó là dấu hiệu của một người tư duy thật, và nó trực tiếp cải thiện bài luận và capstone của bạn.</div>
 </div>
 `,
@@ -646,6 +658,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Why</div><div class="lz-t">purpose</div><div class="lz-d">inform, persuade, or discuss?</div></div>
   <div class="lz-step"><div class="lz-k">How</div><div class="lz-t">form &amp; tone</div><div class="lz-d">match the setting</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Beware the curse of knowledge.</b> Once you understand something it becomes almost impossible to imagine not knowing it — so experts skip the very steps a beginner needs. In a famous Stanford study people tapped out well-known songs; the tappers guessed listeners would recognize 50% of tunes, but only 2.5% did. The cure is to spell out your assumptions and test your explanation on a real novice. <em>The lesson says "know your audience"; the curse of knowledge names the cognitive reason we misjudge them, and how to counter it.</em></div>
 <div class="callout ok">Participation counts — engaging in tutorials, online forums and group work is part of both learning and, often, your grade. Asking a thoughtful question is itself a communication skill worth practicing.</div>
 <a class="link-card dl" href="https://www.coursera.org/learn/communication-skills" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -669,6 +682,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Vì sao</div><div class="lz-t">mục đích</div><div class="lz-d">thông tin, thuyết phục, hay thảo luận?</div></div>
   <div class="lz-step"><div class="lz-k">Thế nào</div><div class="lz-t">hình thức &amp; giọng điệu</div><div class="lz-d">khớp bối cảnh</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Coi chừng lời nguyền tri thức.</b> Một khi đã hiểu điều gì, gần như không thể tưởng tượng cảnh chưa biết nó — nên chuyên gia bỏ qua đúng những bước người mới cần. Trong một nghiên cứu nổi tiếng ở Stanford, người ta gõ nhịp các bài hát quen; người gõ đoán người nghe sẽ nhận ra 50% giai điệu, nhưng chỉ 2,5% nhận ra. Cách chữa là nói rõ giả định của bạn và thử lời giải thích trên một người thật sự chưa biết. <em>Bài học nói "hiểu người nghe"; lời nguyền tri thức đặt tên cho lý do nhận thức khiến ta đánh giá sai họ, và cách khắc phục.</em></div>
 <div class="callout ok">Tham gia được tính điểm — tham gia tutorial, forum online và làm việc nhóm là một phần của việc học và, thường, của điểm bạn. Đặt một câu hỏi sâu sắc bản thân nó là một kỹ năng giao tiếp đáng luyện.</div>
 <a class="link-card dl" href="https://www.coursera.org/learn/communication-skills" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -700,6 +714,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Evidence</div><div class="lz-t">cited sources</div><div class="lz-d">from your research</div></div>
   <div class="lz-step"><div class="lz-k">Reasoning</div><div class="lz-t">why it supports the claim</div><div class="lz-d">the logical link</div></div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The Toulmin model: add the warrant.</b> Philosopher Stephen Toulmin showed a real argument needs more than claim + evidence: it needs a <em>warrant</em> — the often-unstated principle that links the two — plus a qualifier ("usually", "probably") and a rebuttal that names the exceptions. Making the warrant explicit is exactly where weak essays are exposed and strong ones convince. <em>The lesson gives claim-evidence-reasoning; Toulmin's warrant/qualifier/rebuttal is the graduate-level upgrade examiners reward.</em></div>
 <div class="note-ct">A well-structured argument is easier to write, easier to read, and easier to grade well. When stuck, outline first: one line per paragraph. If the outline flows logically, the full piece will too. This is exactly the process the capstone (Chapter 6) asks you to run end-to-end.</div>
 </div>
 <div class="ml-vi">
@@ -718,6 +733,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Bằng chứng</div><div class="lz-t">nguồn đã trích dẫn</div><div class="lz-d">từ nghiên cứu của bạn</div></div>
   <div class="lz-step"><div class="lz-k">Suy luận</div><div class="lz-t">vì sao nó hỗ trợ khẳng định</div><div class="lz-d">liên kết logic</div></div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Mô hình Toulmin: thêm cơ sở lập luận (warrant).</b> Nhà triết học Stephen Toulmin chỉ ra một lập luận thật cần hơn là khẳng định + bằng chứng: nó cần một <em>warrant</em> — nguyên tắc thường ngầm ẩn nối hai thứ đó — cộng một bộ hạn định ("thường", "có lẽ") và một phản bác nêu các ngoại lệ. Làm warrant hiện rõ đúng là nơi bài luận yếu bị lộ và bài mạnh thuyết phục. <em>Bài học cho khẳng định-bằng chứng-suy luận; warrant/hạn định/phản bác của Toulmin là bản nâng cấp trình độ cao mà giám khảo tưởng thưởng.</em></div>
 <div class="note-ct">Một lập luận có cấu trúc tốt dễ viết hơn, dễ đọc hơn, và dễ được chấm điểm cao hơn. Khi bí, hãy lập dàn ý trước: một dòng mỗi đoạn. Nếu dàn ý trôi chảy logic, cả bài cũng vậy. Đây đúng là quy trình mà capstone (Chương 6) yêu cầu bạn chạy từ đầu đến cuối.</div>
 </div>
 `,
@@ -766,6 +782,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Cite</div><div class="lz-t">reference every source</div><div class="lz-d">in-text + reference list</div></div>
 </div>
 <p><strong>Paraphrasing well</strong> means genuinely re-expressing an idea in your own words and structure — not swapping a few synonyms. And even a perfect paraphrase still needs a citation, because the idea is not yours.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>How similarity detectors really work.</b> Turnitin does not "understand" your essay — it breaks the text into overlapping word-string fingerprints and matches them against a huge index of papers and web pages, returning a similarity percentage. So correctly quoted-and-cited passages and common phrases can inflate the score, while a clever paraphrase may slip past. That means the score is a flag for a human to read, not a verdict — and honest citation, not evasion, is the real defence. <em>The lesson warns that tools detect copying; knowing they match fingerprints (not meaning) explains both their false alarms and their blind spots.</em></div>
 <div class="callout warn">Digital tools like <strong>Turnitin</strong> detect copied text automatically, and universities take breaches seriously — penalties range from zero marks to expulsion. But integrity is not about fear of getting caught; it is about learning honestly and earning trust. Cite generously and you are always safe.</div>
 <a class="link-card exphub" href="/exp-hub/ssl101c-cong-cu-hoc-tap?ref=%2Fcourses%2Facademic-skills-for-university-success%2Flearn&reflabel=SSL101c%20%E2%80%94%20Academic%20Skills%20for%20University%20Success" target="_blank" rel="noopener">
   <span class="lc-ico">📚</span>
@@ -789,6 +806,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Ghi nguồn</div><div class="lz-t">trích dẫn mọi nguồn</div><div class="lz-d">trong bài + danh mục</div></div>
 </div>
 <p><strong>Diễn giải tốt</strong> nghĩa là thực sự tái diễn đạt một ý bằng lời và cấu trúc của bạn — không phải đổi vài từ đồng nghĩa. Và ngay cả một bản diễn giải hoàn hảo vẫn cần trích dẫn, vì ý tưởng không phải của bạn.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Công cụ dò trùng lặp thật ra hoạt động thế nào.</b> Turnitin không "hiểu" bài của bạn — nó cắt văn bản thành các dấu vân chuỗi-từ chồng lấp và đối chiếu với một kho khổng lồ các bài và trang web, trả về phần trăm trùng lặp. Vậy nên đoạn trích dẫn đúng và các cụm từ thông dụng có thể đẩy điểm lên, trong khi một bản diễn giải khéo có thể lọt qua. Nghĩa là điểm số là dấu hiệu để con người đọc, không phải phán quyết — và trích dẫn trung thực, chứ không phải né tránh, mới là phòng thủ thật. <em>Bài học cảnh báo công cụ phát hiện sao chép; biết chúng khớp dấu vân (không phải nghĩa) giải thích cả báo động giả lẫn điểm mù của chúng.</em></div>
 <div class="callout warn">Công cụ số như <strong>Turnitin</strong> phát hiện văn bản sao chép tự động, và các trường xử lý vi phạm nghiêm túc — hình phạt từ 0 điểm tới đuổi học. Nhưng liêm chính không phải là sợ bị bắt; mà là học trung thực và giành được sự tin cậy. Trích dẫn hào phóng và bạn luôn an toàn.</div>
 <a class="link-card exphub" href="/exp-hub/ssl101c-cong-cu-hoc-tap?ref=%2Fcourses%2Facademic-skills-for-university-success%2Flearn&reflabel=SSL101c%20%E2%80%94%20Academic%20Skills%20for%20University%20Success" target="_blank" rel="noopener">
   <span class="lc-ico">📚</span>
@@ -842,6 +860,7 @@ export default {
 <div class="callout ok">Notice the loop is not strictly linear — as you research you refine the question, and as you write you spot gaps to research. That back-and-forth is normal and healthy. The skills reinforce each other.</div>
 <h3>Course wrap-up</h3>
 <p>You now have the four university survival skills plus integrity: you can <strong>find and judge information</strong>, <strong>define and solve problems</strong>, <strong>think critically</strong>, and <strong>communicate clearly and honestly</strong>. Every essay, lab report, presentation and group project from here on is these skills in action.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Aim for far transfer.</b> Learning scientists distinguish <em>near transfer</em> (using a skill in a nearly identical task) from <em>far transfer</em> (using it in a very different context) — and far transfer is notoriously hard and rarely automatic. Skills stay locked to the class you learned them in unless you deliberately practise them elsewhere and name the principle each time you reuse it. <em>The lesson urges you to reuse these skills; transfer research explains why that reuse must be deliberate, not assumed to just happen.</em></div>
 <div class="note-ct">Do not file these away after the exam. Use them deliberately in your very next assignment — that is how a "study skill" becomes second nature and quietly raises every grade you earn.</div>
 <a class="link-card dl" href="https://www.coursera.org/learn/academic-skills-project" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -864,6 +883,7 @@ export default {
 <div class="callout ok">Để ý vòng lặp không hoàn toàn tuyến tính — khi nghiên cứu bạn tinh chỉnh câu hỏi, và khi viết bạn phát hiện lỗ hổng cần nghiên cứu. Sự qua lại đó là bình thường và lành mạnh. Các kỹ năng củng cố lẫn nhau.</div>
 <h3>Tổng kết môn</h3>
 <p>Giờ bạn có bốn kỹ năng sống còn ở đại học cộng liêm chính: bạn có thể <strong>tìm và đánh giá thông tin</strong>, <strong>định nghĩa và giải vấn đề</strong>, <strong>tư duy phản biện</strong>, và <strong>giao tiếp rõ ràng và trung thực</strong>. Mọi bài luận, báo cáo lab, thuyết trình và dự án nhóm từ đây là các kỹ năng này trong hành động.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Nhắm tới "chuyển giao xa" (far transfer).</b> Các nhà khoa học học tập phân biệt <em>chuyển giao gần</em> (dùng kỹ năng ở một việc gần như y hệt) với <em>chuyển giao xa</em> (dùng nó ở bối cảnh rất khác) — và chuyển giao xa nổi tiếng là khó và hiếm khi tự động. Kỹ năng bị khoá cứng vào chính lớp bạn học nó, trừ khi bạn cố ý luyện ở nơi khác và gọi tên nguyên tắc mỗi lần tái dùng. <em>Bài học thúc bạn tái dùng các kỹ năng này; nghiên cứu về chuyển giao giải thích vì sao việc tái dùng đó phải có chủ đích, không mặc định tự xảy ra.</em></div>
 <div class="note-ct">Đừng cất chúng đi sau kỳ thi. Hãy dùng chúng có chủ đích ngay trong bài tập kế tiếp — đó là cách một "kỹ năng học tập" trở thành bản năng và âm thầm nâng mọi điểm bạn giành được.</div>
 <a class="link-card dl" href="https://www.coursera.org/learn/academic-skills-project" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>

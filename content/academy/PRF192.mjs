@@ -1206,7 +1206,9 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
 <span class="eyebrow">Chapter 5 · Lesson 5.2</span>
 <h2>Defining &amp; calling functions</h2>
 <p class="lead">A function has: a <strong>return type</strong>, a <strong>name</strong>, <strong>parameters</strong> (inputs) and a <strong>body</strong>.</p>
-<pre><span class="tok-comment">// return type · name · parameters</span>
+<pre><span class="tok-keyword">#include</span> <span class="tok-string">&lt;stdio.h&gt;</span>
+
+<span class="tok-comment">// return type · name · parameters</span>
 <span class="tok-type">int</span> <span class="tok-function">tong</span>(<span class="tok-type">int</span> a, <span class="tok-type">int</span> b) {
     <span class="tok-keyword">return</span> a + b;      <span class="tok-comment">// return the result to the caller</span>
 }
@@ -1234,7 +1236,9 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
 <span class="eyebrow">Chương 5 · Bài 5.2</span>
 <h2>Định nghĩa &amp; gọi hàm</h2>
 <p class="lead">Một hàm gồm: <strong>kiểu trả về</strong>, <strong>tên</strong>, <strong>tham số</strong> (đầu vào) và <strong>thân hàm</strong>.</p>
-<pre><span class="tok-comment">// kiểu trả về · tên · tham số</span>
+<pre><span class="tok-keyword">#include</span> <span class="tok-string">&lt;stdio.h&gt;</span>
+
+<span class="tok-comment">// kiểu trả về · tên · tham số</span>
 <span class="tok-type">int</span> <span class="tok-function">tong</span>(<span class="tok-type">int</span> a, <span class="tok-type">int</span> b) {
     <span class="tok-keyword">return</span> a + b;      <span class="tok-comment">// trả kết quả về nơi gọi</span>
 }

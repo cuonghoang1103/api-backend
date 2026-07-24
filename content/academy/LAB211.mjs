@@ -401,6 +401,7 @@ export default {
   <div class="lz-step">controller prints the outcome</div>
 </div>
 <div class="pitfall"><b>Trap:</b> the NetBeans "To change this license header…" comment is a sign of auto-generated code. Delete it and replace with a short Javadoc that explains <em>why</em> the class exists — mentors notice.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Never close the System.in Scanner.</b> Calling sc.close() on a Scanner that wraps System.in shuts stdin for the whole program, and the next read throws NoSuchElementException. Keep one shared static Scanner in your Validator and never close it. <em>Why beyond the syllabus: it is a resource-management subtlety PRO192 rarely drills, yet it silently zeroes exam runs.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0055-doctor-management-program?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🧩</span>
   <span class="lc-body"><span class="lc-title">See the full pattern: Doctor Management</span><span class="lc-sub">A ≥7-file project with entity/bo/controller/Validator — the reference layout.</span></span>
@@ -439,6 +440,7 @@ export default {
   <div class="lz-step">controller in kết quả</div>
 </div>
 <div class="pitfall"><b>Bẫy:</b> comment "To change this license header…" của NetBeans là dấu hiệu code sinh sẵn. Xóa nó và thay bằng một Javadoc ngắn giải thích <em>vì sao</em> lớp tồn tại — mentor để ý đấy.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đừng bao giờ đóng Scanner của System.in.</b> Gọi sc.close() trên Scanner bọc System.in sẽ đóng luôn stdin của cả chương trình, và lần đọc sau ném NoSuchElementException. Giữ một Scanner static dùng chung trong Validator và không bao giờ đóng nó. <em>Vì sao ngoài syllabus: đây là điểm tinh tế về quản lý tài nguyên PRO192 ít luyện, nhưng lại âm thầm làm 0 điểm lần chạy thi.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0055-doctor-management-program?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🧩</span>
   <span class="lc-body"><span class="lc-title">Xem trọn mẫu: Doctor Management</span><span class="lc-sub">Project ≥7 file với entity/bo/controller/Validator — bố cục chuẩn.</span></span>
@@ -485,6 +487,7 @@ export default {
 }</pre>
 <div class="out"><b>Behaviour:</b> type <span class="badge">abc</span> → prints errNum, asks again. Type <span class="badge">99</span> when max is 10 → prints errRange, asks again. The program never crashes.</div>
 <div class="callout warn">Read with <span class="badge">nextLine()</span> and parse with <span class="badge">Integer.parseInt</span> — never <span class="badge">nextInt()</span> directly. This one habit removes the most common exam crash.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Scanner.nextDouble() is locale-sensitive.</b> On a machine set to a comma-decimal locale, sc.nextDouble() rejects &#96;3.5&#96; and wants &#96;3,5&#96;. Reading the whole line and calling Double.parseDouble(line.trim()) always uses a dot, so your program behaves the same on every lab machine. <em>Why beyond the syllabus: locale is invisible until the grader's machine differs from yours.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0063-input-and-display-person-info?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Practise input: Input &amp; display Person Info</span><span class="lc-sub">A tiny brief that is all about reading &amp; re-prompting cleanly.</span></span>
@@ -523,6 +526,7 @@ export default {
 }</pre>
 <div class="out"><b>Hành vi:</b> gõ <span class="badge">abc</span> → in errNum, hỏi lại. Gõ <span class="badge">99</span> khi max là 10 → in errRange, hỏi lại. Chương trình không bao giờ sập.</div>
 <div class="callout warn">Đọc bằng <span class="badge">nextLine()</span> và parse bằng <span class="badge">Integer.parseInt</span> — đừng bao giờ dùng <span class="badge">nextInt()</span> trực tiếp. Một thói quen này loại bỏ lỗi sập phổ biến nhất trong thi.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Scanner.nextDouble() phụ thuộc locale.</b> Trên máy đặt locale dùng dấu phẩy thập phân, sc.nextDouble() từ chối &#96;3.5&#96; và đòi &#96;3,5&#96;. Đọc trọn dòng rồi gọi Double.parseDouble(line.trim()) luôn dùng dấu chấm, nên chương trình chạy giống nhau trên mọi máy lab. <em>Vì sao ngoài syllabus: locale vô hình cho tới khi máy người chấm khác máy bạn.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0063-input-and-display-person-info?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện nhập liệu: Input &amp; display Person Info</span><span class="lc-sub">Một đề nhỏ chỉ xoay quanh đọc &amp; hỏi lại gọn gàng.</span></span>
@@ -559,6 +563,7 @@ System.out.<span class="tok-function">printf</span>(<span class="tok-string">"%-
 <p>The name is padded to 15 characters, then the GPA prints with exactly two decimals. Table headers use the <em>same</em> widths so columns line up.</p>
 <div class="pitfall"><b>Trap:</b> briefs are sometimes inconsistent — <span class="badge">"Area: "</span> (with a space) for a rectangle but <span class="badge">"Area:"</span> (no space) for a circle. Copy each one <em>exactly as printed</em>; do not "tidy up". The marker compares literally.</div>
 <div class="note-ct">When in doubt about a label, follow the <b>Guidelines</b> section of the brief over the screenshot — they occasionally disagree, and Guidelines is the authoritative version. Note the discrepancy aloud in a viva for bonus.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>printf uses the default locale too.</b> System.out.printf("%.2f", 3.5) can print &#96;3,50&#96; on a comma-locale machine and fail the exact-match check. Force a dot with String.format(Locale.US, "%.2f", x) or printf(Locale.US, ...). <em>Why beyond the syllabus: the locale of %f formatting is a detail the brief never mentions but the marker's screen assumes.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0061-create-a-program-to-calculate-perimeter-and-area?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">📐</span>
   <span class="lc-body"><span class="lc-title">Practise output: Perimeter &amp; Area</span><span class="lc-sub">A brief that hinges on matching labels and %.2f exactly.</span></span>
@@ -587,6 +592,7 @@ System.out.<span class="tok-function">printf</span>(<span class="tok-string">"%-
 <p>Tên được đệm tới 15 ký tự, rồi GPA in đúng hai chữ số thập phân. Tiêu đề bảng dùng <em>cùng</em> bề rộng để các cột thẳng hàng.</p>
 <div class="pitfall"><b>Bẫy:</b> đề đôi khi không nhất quán — <span class="badge">"Area: "</span> (có dấu cách) cho hình chữ nhật nhưng <span class="badge">"Area:"</span> (không dấu cách) cho hình tròn. Chép từng cái <em>đúng như in</em>; đừng "dọn cho đẹp". Người chấm so nguyên văn.</div>
 <div class="note-ct">Khi phân vân về một nhãn, theo mục <b>Guidelines</b> của đề hơn là ảnh chụp màn hình — chúng thỉnh thoảng vênh nhau, và Guidelines là bản có hiệu lực. Nêu điểm vênh này khi vấn đáp để được điểm cộng.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>printf cũng dùng locale mặc định.</b> System.out.printf("%.2f", 3.5) có thể in &#96;3,50&#96; trên máy locale dấu phẩy và trượt phần so khớp chính xác. Ép dấu chấm bằng String.format(Locale.US, "%.2f", x) hoặc printf(Locale.US, ...). <em>Vì sao ngoài syllabus: locale của định dạng %f là chi tiết đề không nhắc nhưng màn hình người chấm mặc định có.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0061-create-a-program-to-calculate-perimeter-and-area?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">📐</span>
   <span class="lc-body"><span class="lc-title">Luyện xuất: Perimeter &amp; Area</span><span class="lc-sub">Đề xoay quanh việc khớp nhãn và %.2f chính xác.</span></span>
@@ -639,6 +645,7 @@ System.out.<span class="tok-function">printf</span>(<span class="tok-string">"%-
 <h3>Why "one feature at a time"</h3>
 <p>Students lose exams by writing the whole program then compiling once — and drowning in 30 errors. Build the smallest runnable slice, confirm it prints the right line, then add the next. You are never more than one small change from a compiling program.</p>
 <div class="callout ok">Start on the two smallest briefs — 21 and 25 LOC. They are trivial on purpose: the point is to rehearse the <em>procedure</em>, not the logic.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>NetBeans live templates save real minutes.</b> Type &#96;sout&#96;+Tab for System.out.println, &#96;psvm&#96;+Tab for the main signature, &#96;fori&#96;+Tab for a counted loop. In a typing-under-pressure exam these shortcuts pay back every practice hour you spent learning them. <em>Why beyond the syllabus: the syllabus grades output, not speed — but running out of time is what actually fails people.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0060-calculate-the-total-amount-spent-by-a-user-through-the-bills?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🐣</span>
   <span class="lc-body"><span class="lc-title">First brief: total amount from bills (21 LOC)</span><span class="lc-sub">The smallest one — run the 5-step loop on it.</span></span>
@@ -659,6 +666,7 @@ System.out.<span class="tok-function">printf</span>(<span class="tok-string">"%-
 <h3>Vì sao "mỗi lần một chức năng"</h3>
 <p>Sinh viên trượt vì viết cả chương trình rồi mới biên dịch một lần — và chết đuối trong 30 lỗi. Hãy dựng lát cắt chạy được nhỏ nhất, xác nhận nó in đúng dòng, rồi thêm cái tiếp theo. Bạn không bao giờ cách một chương trình biên dịch được quá một thay đổi nhỏ.</p>
 <div class="callout ok">Bắt đầu với hai đề nhỏ nhất — 21 và 25 LOC. Chúng đơn giản có chủ đích: mục tiêu là diễn tập <em>quy trình</em>, không phải logic.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Live template của NetBeans tiết kiệm phút thật.</b> Gõ &#96;sout&#96;+Tab ra System.out.println, &#96;psvm&#96;+Tab ra chữ ký main, &#96;fori&#96;+Tab ra vòng lặp đếm. Trong kỳ thi gõ-dưới-áp-lực, các phím tắt này trả lại mọi giờ luyện bạn bỏ ra để học chúng. <em>Vì sao ngoài syllabus: syllabus chấm output, không chấm tốc độ — nhưng hết giờ mới là thứ thật sự làm trượt.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0060-calculate-the-total-amount-spent-by-a-user-through-the-bills?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🐣</span>
   <span class="lc-body"><span class="lc-title">Đề đầu: tổng tiền từ hóa đơn (21 LOC)</span><span class="lc-sub">Đề nhỏ nhất — chạy vòng lặp 5 bước lên nó.</span></span>
@@ -695,6 +703,7 @@ System.out.<span class="tok-function">printf</span>(<span class="tok-string">"%-
   </tbody>
 </table>
 <div class="pitfall"><b>Binary search trap:</b> it only works on a <strong>sorted</strong> array. On an unsorted array it may accidentally return a wrong index (or -1). Sort first, or use linear search when the data is unsorted.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Add an early-exit flag to bubble sort.</b> Track a boolean &#96;swapped&#96; each outer pass and break when a pass makes no swaps, so an already-sorted array costs O(n) instead of O(n²). It is one extra line and a favourite viva follow-up. <em>Why beyond the syllabus: the syllabus teaches the naive double loop; the optimisation is what a mentor probes to see if you truly understand it.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0001-bubble-sort-algorithm?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🔢</span>
   <span class="lc-body"><span class="lc-title">Practise: Bubble → Selection → Insertion → Quick → Merge</span><span class="lc-sub">Briefs P0001–P0005; then linear (P0010) &amp; binary (P0006) search.</span></span>
@@ -728,6 +737,7 @@ System.out.<span class="tok-function">printf</span>(<span class="tok-string">"%-
   </tbody>
 </table>
 <div class="pitfall"><b>Bẫy tìm nhị phân:</b> nó chỉ chạy đúng trên mảng <strong>đã sắp</strong>. Trên mảng chưa sắp nó có thể trả nhầm chỉ số (hoặc -1). Sắp trước, hoặc dùng tìm tuyến tính khi dữ liệu chưa sắp.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Thêm cờ thoát sớm cho bubble sort.</b> Theo dõi một boolean &#96;swapped&#96; mỗi lượt ngoài và dừng khi một lượt không đổi chỗ nào, để mảng đã sắp chỉ tốn O(n) thay vì O(n²). Chỉ thêm một dòng và là câu hỏi vấn đáp ưa thích. <em>Vì sao ngoài syllabus: syllabus dạy vòng lặp đôi ngây thơ; tối ưu này là thứ mentor soi để xem bạn có thật hiểu không.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0001-bubble-sort-algorithm?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🔢</span>
   <span class="lc-body"><span class="lc-title">Luyện: Bubble → Selection → Insertion → Quick → Merge</span><span class="lc-sub">Đề P0001–P0005; rồi tìm tuyến tính (P0010) &amp; nhị phân (P0006).</span></span>
@@ -760,6 +770,7 @@ System.out.<span class="tok-function">printf</span>(<span class="tok-string">"%-
 • <span class="badge">""</span>.split("\\\\s+") has length <strong>1</strong> (one empty token), but <span class="badge">"   "</span>.split("\\\\s+") has length <strong>0</strong>.<br>
 • <span class="badge">"a    b".split(" ")</span> keeps empty strings between the spaces; <span class="badge">split("\\\\s+")</span> or StringTokenizer collapses them.<br>
 • <span class="badge">Character.isWhitespace('\\u00A0')</span> is <strong>false</strong> — a non-breaking space is not "whitespace".</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Build strings with StringBuilder inside loops.</b> Each &#96;s = s + x&#96; in a loop allocates a brand-new String, turning an O(n) join into O(n²); use a StringBuilder and one toString() at the end. On a big-input brief this is the difference between instant and visibly slow. <em>Why beyond the syllabus: String immutability's cost is assumed knowledge the brief never states.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0067-analyze-the-user-input-string?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🔤</span>
   <span class="lc-body"><span class="lc-title">Practise: analyze the user input string</span><span class="lc-sub">Also P0062 (file path) &amp; P0008 (letter/character count).</span></span>
@@ -779,6 +790,7 @@ System.out.<span class="tok-function">printf</span>(<span class="tok-string">"%-
 • <span class="badge">""</span>.split("\\\\s+") có độ dài <strong>1</strong> (một token rỗng), nhưng <span class="badge">"   "</span>.split("\\\\s+") có độ dài <strong>0</strong>.<br>
 • <span class="badge">"a    b".split(" ")</span> giữ các chuỗi rỗng giữa các dấu cách; <span class="badge">split("\\\\s+")</span> hoặc StringTokenizer gộp chúng.<br>
 • <span class="badge">Character.isWhitespace('\\u00A0')</span> là <strong>false</strong> — dấu cách không ngắt không phải "whitespace".</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Nối chuỗi trong vòng lặp bằng StringBuilder.</b> Mỗi &#96;s = s + x&#96; trong vòng lặp cấp phát một String mới toanh, biến phép nối O(n) thành O(n²); dùng StringBuilder và một toString() ở cuối. Với đề input lớn, đây là ranh giới giữa tức thì và chậm thấy rõ. <em>Vì sao ngoài syllabus: cái giá của tính bất biến của String là kiến thức đề mặc định mà không nói.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0067-analyze-the-user-input-string?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🔤</span>
   <span class="lc-body"><span class="lc-title">Luyện: analyze the user input string</span><span class="lc-sub">Kèm P0062 (đường dẫn file) &amp; P0008 (đếm chữ/ký tự).</span></span>
@@ -833,6 +845,7 @@ System.out.<span class="tok-function">printf</span>(<span class="tok-string">"%-
     <span class="tok-keyword">throw new</span> <span class="tok-function">Exception</span>(<span class="tok-string">"Phone number must be number"</span>);</pre>
 <div class="pitfall"><b>Spec conflict trap:</b> the on-screen wording and the Guidelines wording sometimes differ, e.g. screen "You must input digidt." vs Guidelines "You must input digit." <strong>Always follow Guidelines</strong> (the effective version) and mention the discrepancy in a viva.</div>
 <div class="callout danger">A program that throws an uncaught exception on bad input scores zero for that run. Wrap every risky call; validation is not optional polish, it is the difference between a mark and a zero.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Precompile regex you use repeatedly.</b> s.matches(regex) recompiles the pattern on every call; when validating a whole file of rows, compile once with Pattern.compile(...) and reuse the Matcher. It also lets you name the pattern, which reads better in a viva. <em>Why beyond the syllabus: the hidden per-call compile cost is never mentioned in the brief.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0064-check-data-format?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">✅</span>
   <span class="lc-body"><span class="lc-title">Practise: Check data format</span><span class="lc-sub">Validate phone/email/date with exact messages.</span></span>
@@ -855,6 +868,7 @@ System.out.<span class="tok-function">printf</span>(<span class="tok-string">"%-
     <span class="tok-keyword">throw new</span> <span class="tok-function">Exception</span>(<span class="tok-string">"Phone number must be number"</span>);</pre>
 <div class="pitfall"><b>Bẫy đề tự vênh:</b> câu chữ trên màn hình và trong Guidelines đôi khi khác nhau, vd màn hình "You must input digidt." vs Guidelines "You must input digit." <strong>Luôn theo Guidelines</strong> (bản có hiệu lực) và nêu điểm vênh khi vấn đáp.</div>
 <div class="callout danger">Chương trình ném ngoại lệ không bắt khi nhập sai sẽ 0 điểm lần chạy đó. Bọc mọi lời gọi rủi ro; validate không phải "đánh bóng" tùy chọn, nó là ranh giới giữa có điểm và 0 điểm.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Biên dịch trước regex dùng lặp lại.</b> s.matches(regex) biên dịch lại mẫu mỗi lần gọi; khi validate cả một tệp nhiều dòng, hãy compile một lần bằng Pattern.compile(...) rồi dùng lại Matcher. Nó còn cho phép đặt tên mẫu, đọc gọn hơn khi vấn đáp. <em>Vì sao ngoài syllabus: chi phí biên dịch mỗi lần gọi ẩn đi, đề không bao giờ nhắc.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0064-check-data-format?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">✅</span>
   <span class="lc-body"><span class="lc-title">Luyện: Check data format</span><span class="lc-sub">Validate phone/email/ngày với thông báo chính xác.</span></span>
@@ -880,6 +894,7 @@ f.<span class="tok-function">setLenient</span>(<span class="tok-keyword">false</
 <div class="pitfall"><b>Measured facts (do not trust memory):</b><br>
 • With <span class="badge">LocalDate.parse("31/02/2003", …)</span> in SMART mode, Java nudges it to <span class="badge">2003-02-28</span>. To reject you need <span class="badge">ResolverStyle.STRICT</span> <em>and</em> pattern <span class="badge">uuuu</span> (not <span class="badge">yyyy</span>).<br>
 • Even <span class="badge">setLenient(false)</span> can accept <span class="badge">"26-06-2015rubbish"</span> — parsing stops early and drops the tail. Format the result back and compare to the input to be safe.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Pattern letters are case-sensitive — MM is not mm.</b> In SimpleDateFormat, &#96;MM&#96; is month but &#96;mm&#96; is minutes, and &#96;dd&#96; is day-of-month while &#96;DD&#96; is day-of-year. A single wrong-case letter parses a plausible-but-wrong date and never throws. <em>Why beyond the syllabus: the case rule lives in the Javadoc, not the lab brief.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab#module-855" target="_blank" rel="noopener">
   <span class="lc-ico">📅</span>
   <span class="lc-body"><span class="lc-title">API Reference — dates section</span><span class="lc-sub">LocalDate/SimpleDateFormat with the strict-parsing recipe.</span></span>
@@ -897,6 +912,7 @@ f.<span class="tok-function">setLenient</span>(<span class="tok-keyword">false</
 <div class="pitfall"><b>Sự thật đo được (đừng tin trí nhớ):</b><br>
 • Với <span class="badge">LocalDate.parse("31/02/2003", …)</span> ở chế độ SMART, Java nắn thành <span class="badge">2003-02-28</span>. Muốn từ chối cần <span class="badge">ResolverStyle.STRICT</span> <em>và</em> mẫu <span class="badge">uuuu</span> (không phải <span class="badge">yyyy</span>).<br>
 • Ngay cả <span class="badge">setLenient(false)</span> vẫn chấp nhận <span class="badge">"26-06-2015rubbish"</span> — parse dừng sớm và bỏ phần đuôi. Format kết quả ngược lại rồi so với input để chắc.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Chữ mẫu phân biệt hoa thường — MM khác mm.</b> Trong SimpleDateFormat, &#96;MM&#96; là tháng nhưng &#96;mm&#96; là phút, và &#96;dd&#96; là ngày-trong-tháng còn &#96;DD&#96; là ngày-trong-năm. Một chữ sai hoa/thường sẽ parse ra ngày hợp lý-nhưng-sai và không bao giờ ném lỗi. <em>Vì sao ngoài syllabus: quy tắc hoa thường nằm trong Javadoc, không nằm trong đề lab.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab#module-855" target="_blank" rel="noopener">
   <span class="lc-ico">📅</span>
   <span class="lc-body"><span class="lc-title">API Reference — mục ngày tháng</span><span class="lc-sub">LocalDate/SimpleDateFormat kèm công thức parse nghiêm ngặt.</span></span>
@@ -922,6 +938,7 @@ f.<span class="tok-function">setLenient</span>(<span class="tok-keyword">false</
 <div class="pitfall"><b>Two real traps caught by running the code:</b><br>
 • <b>Perfect square by definition, not by eye.</b> Some briefs' screenshots list wrong "squares" (e.g. 321, 22). Follow the Guidelines ("use Math.sqrt") and check <span class="badge">Math.sqrt(x)</span> is a whole number.<br>
 • <b>Floating point.</b> <span class="badge">health*(1 - 80/100.0)</span> gives 19.999999999999996 — it prints "20.00" but compares as &lt; 20. Rearrange to <span class="badge">health*(100-80)/100.0</span> for an exact 20.0. Triangle inequality first, or Heron's formula returns NaN on 1-2-10.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Integer division truncates before you notice.</b> &#96;7 / 2&#96; is 3, not 3.5, and &#96;avg = sum / count&#96; on int types silently drops the fraction; cast one operand first with &#96;(double) sum / count&#96;. Averages and percentages are where this quietly costs marks. <em>Why beyond the syllabus: it is a language rule the brief assumes you already avoid.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0011-change-base-number-system-16-10-2-program?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🔟</span>
   <span class="lc-body"><span class="lc-title">Practise: change base number system</span><span class="lc-sub">Also P0061 (perimeter/area) &amp; P0050 (squares/even/odd).</span></span>
@@ -939,6 +956,7 @@ f.<span class="tok-function">setLenient</span>(<span class="tok-keyword">false</
 <div class="pitfall"><b>Hai bẫy thật bắt được nhờ chạy code:</b><br>
 • <b>Số chính phương theo định nghĩa, không theo mắt.</b> Ảnh màn hình vài đề liệt kê "số chính phương" sai (vd 321, 22). Theo Guidelines ("dùng Math.sqrt") và kiểm <span class="badge">Math.sqrt(x)</span> có phải số nguyên.<br>
 • <b>Số thực.</b> <span class="badge">health*(1 - 80/100.0)</span> ra 19.999999999999996 — in "20.00" nhưng so sánh lại &lt; 20. Sắp lại thành <span class="badge">health*(100-80)/100.0</span> cho đúng 20.0. Kiểm bất đẳng thức tam giác trước, nếu không công thức Heron trả NaN với 1-2-10.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Chia số nguyên cắt phần lẻ trước khi bạn kịp nhận ra.</b> &#96;7 / 2&#96; ra 3 chứ không phải 3.5, và &#96;avg = sum / count&#96; trên kiểu int âm thầm bỏ phần thập phân; ép một toán hạng trước bằng &#96;(double) sum / count&#96;. Trung bình và phần trăm là chỗ lỗi này âm thầm mất điểm. <em>Vì sao ngoài syllabus: đây là quy tắc ngôn ngữ đề mặc định bạn đã tránh.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0011-change-base-number-system-16-10-2-program?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🔟</span>
   <span class="lc-body"><span class="lc-title">Luyện: change base number system</span><span class="lc-sub">Kèm P0061 (chu vi/diện tích) &amp; P0050 (chính phương/chẵn/lẻ).</span></span>
@@ -1000,6 +1018,7 @@ f.<span class="tok-function">setLenient</span>(<span class="tok-keyword">false</
   </tbody>
 </table>
 <div class="note-ct">Save after <em>every</em> change if the brief keeps data in a file, so a crash mid-session never loses data. Use a lowercase key when the brief says lookups are case-insensitive.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Delete safely with removeIf.</b> On JDK 8, list.removeIf(x -&gt; x.getCode().equals(code)) removes matches in one line without the ConcurrentModificationException you get from removing inside a for-each. It is shorter and safer than a manual index loop. <em>Why beyond the syllabus: the brief says "delete", never which idiom survives mid-iteration removal.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0058-write-program-dictionary?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🗂️</span>
   <span class="lc-body"><span class="lc-title">Practise: dictionary (CRUD + file)</span><span class="lc-sub">The first full CRUD skeleton with a LinkedHashMap.</span></span>
@@ -1030,6 +1049,7 @@ f.<span class="tok-function">setLenient</span>(<span class="tok-keyword">false</
   </tbody>
 </table>
 <div class="note-ct">Lưu sau <em>mỗi</em> thay đổi nếu đề giữ dữ liệu trong tệp, để sập giữa chừng không bao giờ mất dữ liệu. Dùng khóa chữ thường khi đề nói tra cứu không phân biệt hoa/thường.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Xóa an toàn bằng removeIf.</b> Trên JDK 8, list.removeIf(x -&gt; x.getCode().equals(code)) xóa các phần tử khớp trong một dòng mà không gặp ConcurrentModificationException như khi xóa trong for-each. Nó ngắn và an toàn hơn vòng lặp chỉ số thủ công. <em>Vì sao ngoài syllabus: đề nói "xóa", không nói cách viết nào sống sót khi xóa giữa lúc duyệt.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0058-write-program-dictionary?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🗂️</span>
   <span class="lc-body"><span class="lc-title">Luyện: dictionary (CRUD + tệp)</span><span class="lc-sub">Khung CRUD hoàn chỉnh đầu tiên với LinkedHashMap.</span></span>
@@ -1059,6 +1079,7 @@ students.<span class="tok-function">sort</span>(
     }
 });</pre>
 <div class="pitfall"><b>Trap:</b> to sort strings alphabetically use <span class="badge">compareTo</span>; do not compare with <span class="badge">&lt;</span> or <span class="badge">==</span>. For "natural order" on your entity, implement <span class="badge">Comparable</span> and its <span class="badge">compareTo</span>.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Override hashCode whenever you override equals.</b> If your entity's equals() compares by code so contains() works, a HashSet or HashMap keyed on that entity still misbehaves unless hashCode() is consistent with it. The contract is: equal objects must return equal hash codes. <em>Why beyond the syllabus: the equals/hashCode pair is a Java contract the brief never restates.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0069-input-and-display-person-info?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">↕️</span>
   <span class="lc-body"><span class="lc-title">Practise: input, sort &amp; display students</span><span class="lc-sub">P0069/P0068 are pure Comparator drills.</span></span>
@@ -1080,6 +1101,7 @@ students.<span class="tok-function">sort</span>(
     }
 });</pre>
 <div class="pitfall"><b>Bẫy:</b> để sắp chuỗi theo bảng chữ cái dùng <span class="badge">compareTo</span>; đừng so bằng <span class="badge">&lt;</span> hay <span class="badge">==</span>. Cho "thứ tự tự nhiên" trên entity, cài <span class="badge">Comparable</span> và <span class="badge">compareTo</span> của nó.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Override hashCode mỗi khi override equals.</b> Nếu equals() của entity so theo mã để contains() chạy, thì HashSet hay HashMap khóa theo entity đó vẫn hỏng trừ khi hashCode() nhất quán với nó. Hợp đồng là: hai đối tượng bằng nhau phải trả cùng mã băm. <em>Vì sao ngoài syllabus: cặp equals/hashCode là hợp đồng Java đề không bao giờ nhắc lại.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0069-input-and-display-person-info?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">↕️</span>
   <span class="lc-body"><span class="lc-title">Luyện: nhập, sắp &amp; hiển thị sinh viên</span><span class="lc-sub">P0069/P0068 là bài luyện Comparator thuần.</span></span>
@@ -1105,6 +1127,7 @@ students.<span class="tok-function">sort</span>(
   <div class="lz-layer"><b>Main</b> — the menu loop from 4.1.</div>
 </div>
 <div class="callout ok">Doctor, Worker, Contact and Geographic management are the same program with different fields. Once you have built one from scratch and matched its output, the rest are variations — this is where fluency compounds.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Write one private findByCode and reuse it.</b> add, update and delete all need "does this code exist, and where"; a single private helper in the bo removes duplicated scan loops and the bugs that come from fixing one copy but not the others. Mentors reward this DRY refactor in the viva. <em>Why beyond the syllabus: the brief lists features, not the internal structure that keeps them consistent.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0054-develop-the-contact-management-program?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">📇</span>
   <span class="lc-body"><span class="lc-title">Practise the management cluster</span><span class="lc-sub">Contact (P0054), Doctor (P0055), Worker (P0056), Geographic (P0052).</span></span>
@@ -1122,6 +1145,7 @@ students.<span class="tok-function">sort</span>(
   <div class="lz-layer"><b>Main</b> — vòng lặp menu từ bài 4.1.</div>
 </div>
 <div class="callout ok">Quản lý Bác sĩ, Công nhân, Liên hệ và Địa lý là cùng một chương trình với trường khác nhau. Khi đã dựng một cái từ đầu và khớp output của nó, phần còn lại chỉ là biến thể — đây là nơi phản xạ tích lũy.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Viết một findByCode private và dùng lại.</b> add, update và delete đều cần "mã này có tồn tại, và ở đâu"; một hàm phụ private duy nhất trong bo loại bỏ các vòng quét lặp lại và các bug đến từ việc sửa một bản mà quên bản kia. Mentor thưởng cho refactor DRY này khi vấn đáp. <em>Vì sao ngoài syllabus: đề liệt kê chức năng, không liệt kê cấu trúc bên trong giữ cho chúng nhất quán.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0054-develop-the-contact-management-program?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">📇</span>
   <span class="lc-body"><span class="lc-title">Luyện nhóm bài quản lý</span><span class="lc-sub">Contact (P0054), Doctor (P0055), Worker (P0056), Geographic (P0052).</span></span>
@@ -1173,6 +1197,7 @@ students.<span class="tok-function">sort</span>(
 }</pre>
 <div class="out">A List&lt;Shape&gt; can hold circles, rectangles and triangles; calling <span class="badge">area()</span> runs the right one — that is polymorphism.</div>
 <div class="pitfall"><b>Card/enum trap:</b> when a brief fixes a 52-line deck, compare line by line against the expected screen; when it shuffles, test the <em>relationship</em> (the sorted lines equal the unsorted set) since exact output is random.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Write @Override on every overriding method.</b> It costs nothing and turns a silent mistake — a wrong parameter list that creates a new method instead of overriding — into a compile error you catch instantly. This matters most for toString() and Comparator's compare(). <em>Why beyond the syllabus: @Override is optional to the compiler, so the brief never asks for it, yet it prevents a whole class of invisible bugs.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0080-shapes?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🔶</span>
   <span class="lc-body"><span class="lc-title">Practise OOP: Shapes, Cards, Bees</span><span class="lc-sub">P0080 (shapes), P0082 (cards), P0081 (bees) — inheritance &amp; enums.</span></span>
@@ -1192,6 +1217,7 @@ students.<span class="tok-function">sort</span>(
 }</pre>
 <div class="out">Một List&lt;Shape&gt; có thể chứa tròn, chữ nhật, tam giác; gọi <span class="badge">area()</span> chạy đúng cái tương ứng — đó là đa hình.</div>
 <div class="pitfall"><b>Bẫy Card/enum:</b> khi đề cố định bộ 52 dòng, so từng dòng với màn hình mẫu; khi nó xáo bài, kiểm <em>quan hệ</em> (các dòng đã sắp bằng tập chưa sắp) vì output chính xác là ngẫu nhiên.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Viết @Override trên mọi hàm ghi đè.</b> Nó không tốn gì và biến một lỗi âm thầm — sai danh sách tham số tạo ra hàm mới thay vì ghi đè — thành lỗi biên dịch bạn bắt ngay. Điều này quan trọng nhất với toString() và compare() của Comparator. <em>Vì sao ngoài syllabus: @Override là tùy chọn với trình biên dịch nên đề không đòi, nhưng nó chặn cả một lớp bug vô hình.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0080-shapes?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🔶</span>
   <span class="lc-body"><span class="lc-title">Luyện OOP: Shapes, Cards, Bees</span><span class="lc-sub">P0080 (hình), P0082 (bài), P0081 (ong) — kế thừa &amp; enum.</span></span>
@@ -1221,6 +1247,7 @@ students.<span class="tok-function">sort</span>(
 • <b>Object serialization append breaks reading.</b> Appending with a second <span class="badge">ObjectOutputStream</span> writes a second header that <span class="badge">ObjectInputStream</span> chokes on — prefer a text file, or rewrite the whole object list.<br>
 • A zip is corrupted by <em>not</em> calling <span class="badge">close()</span> on the ZipOutputStream — not by a missing <span class="badge">closeEntry()</span>.<br>
 • <span class="badge">Properties.load()</span> swallows backslashes: <span class="badge">D:\\Data</span> becomes <span class="badge">D:Data</span>.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Name the charset when text holds Vietnamese.</b> Files.readAllLines and new FileReader use the platform default encoding, so a file saved as UTF-8 can read back as garbled accents on a machine defaulting to Windows-1252. Pass StandardCharsets.UTF_8 explicitly on both read and write. <em>Why beyond the syllabus: encoding is invisible until the grader's machine default differs from yours.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0078-create-a-program-to-copy-file?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">📁</span>
   <span class="lc-body"><span class="lc-title">Practise files: copy, zip, CSV</span><span class="lc-sub">P0078 (copy), P0079 (zip), P0076 (CSV), P0059 (handle files).</span></span>
@@ -1242,6 +1269,7 @@ students.<span class="tok-function">sort</span>(
 • <b>Serialize kiểu nối làm hỏng việc đọc.</b> Nối bằng <span class="badge">ObjectOutputStream</span> thứ hai ghi header thứ hai mà <span class="badge">ObjectInputStream</span> nghẹn — nên dùng tệp text, hoặc ghi lại toàn bộ danh sách.<br>
 • Zip hỏng vì <em>không</em> gọi <span class="badge">close()</span> trên ZipOutputStream — không phải vì thiếu <span class="badge">closeEntry()</span>.<br>
 • <span class="badge">Properties.load()</span> nuốt dấu gạch chéo ngược: <span class="badge">D:\\Data</span> thành <span class="badge">D:Data</span>.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Nêu rõ charset khi văn bản có tiếng Việt.</b> Files.readAllLines và new FileReader dùng encoding mặc định của nền tảng, nên một tệp lưu UTF-8 có thể đọc lại thành dấu tiếng Việt lỗi loạn trên máy mặc định Windows-1252. Truyền StandardCharsets.UTF_8 tường minh cả khi đọc và ghi. <em>Vì sao ngoài syllabus: encoding vô hình cho tới khi mặc định của máy người chấm khác của bạn.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0078-create-a-program-to-copy-file?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">📁</span>
   <span class="lc-body"><span class="lc-title">Luyện tệp: copy, zip, CSV</span><span class="lc-sub">P0078 (copy), P0079 (zip), P0076 (CSV), P0059 (xử lý tệp).</span></span>
@@ -1268,6 +1296,7 @@ students.<span class="tok-function">sort</span>(
 </div>
 <div class="callout ok">If you have done Parts 1–4 honestly, a 350-LOC brief is just four medium briefs stacked. Budget your time by feature and compile after each — do not write 350 lines then hit Run.</div>
 <div class="pitfall"><b>MD5/login trap:</b> <span class="badge">new String(md5Digest)</span> turns 16 bytes into a 13-char string; its <span class="badge">getBytes()</span> gives 26 bytes and no longer matches. Store the hex hash, not a raw-byte String.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Load every data file once in an initData() at startup.</b> Reading a file lazily the first time a menu option is used means a missing or malformed file crashes you mid-exam instead of at launch; load and validate all files up front so problems surface while you still have time. <em>Why beyond the syllabus: the brief says "read from file", not when — timing the read defensively is an engineering habit it never teaches.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0085-employee-management-system?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🏢</span>
   <span class="lc-body"><span class="lc-title">Practise the finals</span><span class="lc-sub">Employee (P0085), Bank login (P0070), Vehicle (L.P0013), Fruit shop (L.P0023), Students (L.P0021), Normalize text (L.P0025).</span></span>
@@ -1286,6 +1315,7 @@ students.<span class="tok-function">sort</span>(
 </div>
 <div class="callout ok">Nếu bạn đã làm Phần 1–4 nghiêm túc, đề 350 LOC chỉ là bốn đề medium xếp chồng. Chia thời gian theo chức năng và biên dịch sau mỗi cái — đừng viết 350 dòng rồi mới bấm Run.</div>
 <div class="pitfall"><b>Bẫy MD5/login:</b> <span class="badge">new String(md5Digest)</span> biến 16 byte thành chuỗi 13 ký tự; <span class="badge">getBytes()</span> của nó ra 26 byte và không còn khớp. Lưu chuỗi hex, đừng lưu String từ byte thô.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Nạp mọi tệp dữ liệu một lần trong initData() lúc khởi động.</b> Đọc tệp kiểu lười ở lần đầu dùng một lựa chọn menu nghĩa là một tệp thiếu hoặc hỏng sẽ làm sập bạn giữa giờ thi thay vì lúc chạy; hãy nạp và kiểm mọi tệp ngay từ đầu để lỗi lộ ra khi bạn còn thời gian. <em>Vì sao ngoài syllabus: đề nói "đọc từ tệp", không nói khi nào — đọc phòng thủ là thói quen kỹ thuật đề không dạy.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0085-employee-management-system?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🏢</span>
   <span class="lc-body"><span class="lc-title">Luyện các đề cuối</span><span class="lc-sub">Employee (P0085), Bank login (P0070), Vehicle (L.P0013), Fruit shop (L.P0023), Students (L.P0021), Normalize text (L.P0025).</span></span>
@@ -1341,6 +1371,7 @@ students.<span class="tok-function">sort</span>(
   <div class="lz-layer"><b>If stuck, move on.</b> A working 80% beats a broken 100% that will not run.</div>
 </div>
 <div class="callout danger">The number one time-sink is one feature you cannot get perfect. Set a personal timer; when it rings, leave it working-but-imperfect and secure the rest. You are graded on total working output, not heroics.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Comment out a broken feature to save the build.</b> If one method refuses to compile with minutes left, wrap it in a block comment and its menu case too; the other four features then still compile, run and score. A submission that does not compile at all scores nothing. <em>Why beyond the syllabus: triage-by-commenting is an exam survival tactic, not a programming topic the syllabus lists.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Phần 6 · Bài 6.1</span>
@@ -1360,6 +1391,7 @@ students.<span class="tok-function">sort</span>(
   <div class="lz-layer"><b>Bí thì bỏ qua.</b> Một 80% chạy được hơn một 100% hỏng không chạy.</div>
 </div>
 <div class="callout danger">Kẻ ngốn thời gian số một là một chức năng bạn không thể làm hoàn hảo. Đặt hẹn giờ riêng; khi nó reo, để nó chạy-được-nhưng-chưa-hoàn-hảo và giữ chắc phần còn lại. Bạn được chấm trên tổng output chạy được, không phải sự anh hùng.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Comment tắt một chức năng hỏng để cứu bản build.</b> Nếu một hàm không chịu biên dịch khi còn vài phút, bọc nó trong một khối comment và cả case menu của nó; bốn chức năng còn lại khi đó vẫn biên dịch, chạy và ăn điểm. Bài nộp hoàn toàn không biên dịch được thì 0 điểm. <em>Vì sao ngoài syllabus: phân loại-bằng-comment là chiến thuật sống sót thi, không phải chủ đề lập trình syllabus liệt kê.</em></div>
 </div>
 `,
         },
@@ -1392,6 +1424,7 @@ students.<span class="tok-function">sort</span>(
   <div class="lz-step">Fix, recompile, repeat</div>
 </div>
 <div class="pitfall"><b>Measured surprise:</b> <span class="badge">ConcurrentModificationException</span> does NOT throw when a list has only 2 elements and you remove the second-to-last (the iterator's <span class="badge">hasNext()</span> returns false early). It appears at n=3,4 — which is why this bug survives small student tests. Remove via an <span class="badge">Iterator</span> or a reverse index loop.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Read the stack trace bottom-up to your own class.</b> A runtime exception dumps many library frames; scan up from the bottom to the first line naming your class and file — that is where your bug is, not the JDK frame at the top. In NetBeans those trace lines are clickable straight to the spot. <em>Why beyond the syllabus: reading a stack trace is assumed, never taught, yet it is the fastest debug skill in the exam.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab#module-857" target="_blank" rel="noopener">
   <span class="lc-ico">🚑</span>
   <span class="lc-body"><span class="lc-title">Error Handbook — every message &amp; its fix</span><span class="lc-sub">Real javac/java output, cause and cure, with the 60-second routine.</span></span>
@@ -1421,6 +1454,7 @@ students.<span class="tok-function">sort</span>(
   <div class="lz-step">Sửa, biên dịch lại, lặp</div>
 </div>
 <div class="pitfall"><b>Bất ngờ đo được:</b> <span class="badge">ConcurrentModificationException</span> KHÔNG ném khi list chỉ 2 phần tử và bạn xóa phần tử áp chót (iterator <span class="badge">hasNext()</span> trả false sớm). Nó xuất hiện ở n=3,4 — đó là lý do bug này sống sót qua test nhỏ của sinh viên. Xóa qua <span class="badge">Iterator</span> hoặc vòng lặp chỉ số ngược.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đọc stack trace từ dưới lên tới lớp của bạn.</b> Một ngoại lệ runtime đổ ra nhiều khung thư viện; quét từ dưới lên tới dòng đầu tiên nêu tên lớp và tệp của bạn — đó là chỗ có bug, không phải khung JDK ở trên cùng. Trong NetBeans các dòng trace đó bấm được thẳng tới nơi. <em>Vì sao ngoài syllabus: đọc stack trace bị mặc định là biết, không được dạy, nhưng là kỹ năng debug nhanh nhất trong thi.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab#module-857" target="_blank" rel="noopener">
   <span class="lc-ico">🚑</span>
   <span class="lc-body"><span class="lc-title">Error Handbook — mọi thông báo &amp; cách sửa</span><span class="lc-sub">Output javac/java thật, nguyên nhân và cách chữa, kèm quy trình 60 giây.</span></span>
@@ -1450,6 +1484,7 @@ students.<span class="tok-function">sort</span>(
   <div class="lz-layer"><b>☐ It compiles &amp; every menu option runs.</b> The final, non-negotiable gate.</div>
 </div>
 <div class="note-ct">Six review points markers love to probe are collected in the Algorithm Reference, including proof that an off-by-one bug survives on easy inputs — the exact reason it slips into an exam submission.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Test the empty and single-element cases before you submit.</b> Markers love hidden inputs: display when the list is empty (it should print a "no data" line, not crash), search for something absent, sort a one-item list. These edge runs catch the bugs your happy-path testing never will. <em>Why beyond the syllabus: the visible screen shows a populated list; the empty and singleton cases are the grader's hidden probes.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab#module-856" target="_blank" rel="noopener">
   <span class="lc-ico">🕵️</span>
   <span class="lc-body"><span class="lc-title">Algorithm Reference — what markers probe</span><span class="lc-sub">The 6 review points + a proof that off-by-one hides on easy data.</span></span>
@@ -1471,6 +1506,7 @@ students.<span class="tok-function">sort</span>(
   <div class="lz-layer"><b>☐ Biên dịch được &amp; mọi lựa chọn menu chạy.</b> Cửa ải cuối, không thương lượng.</div>
 </div>
 <div class="note-ct">Sáu điểm review mà người chấm thích soi được gom trong Algorithm Reference, kèm chứng minh rằng bug lệch-một-đơn-vị sống sót trên input dễ — đúng lý do nó lọt vào bài nộp thi.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Kiểm ca rỗng và một-phần-tử trước khi nộp.</b> Người chấm khoái input ẩn: hiển thị khi danh sách rỗng (phải in dòng "không có dữ liệu", không được sập), tìm thứ không tồn tại, sắp danh sách một phần tử. Các lần chạy biên này bắt được bug mà test đường-đẹp của bạn không bao giờ bắt. <em>Vì sao ngoài syllabus: màn hình thấy được cho danh sách đầy đủ; ca rỗng và một-phần-tử là các phép dò ẩn của người chấm.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab#module-856" target="_blank" rel="noopener">
   <span class="lc-ico">🕵️</span>
   <span class="lc-body"><span class="lc-title">Algorithm Reference — người chấm soi gì</span><span class="lc-sub">6 điểm review + chứng minh lệch-một-đơn-vị ẩn trên dữ liệu dễ.</span></span>
@@ -1497,6 +1533,7 @@ students.<span class="tok-function">sort</span>(
   <div class="lz-layer"><b>Practise out loud.</b> The AI coach on the track has a "change a requirement" mode that behaves exactly like this — rehearse until the answers are reflex.</div>
 </div>
 <div class="callout ok">If you built every program yourself using this course's loop, the viva is easy — you already know where everything lives. If you copied solutions, the viva is where that shows. This is by design.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Prepare the encapsulation answer.</b> "Why are your fields private?" is a stock viva question — answer that private fields plus getters/setters let the class validate and change its internals without breaking callers. Give a concrete example: a setter that rejects a negative price. <em>Why beyond the syllabus: the syllabus assumes encapsulation; the viva asks you to defend it in words, which is a separate skill.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab#module-847" target="_blank" rel="noopener">
   <span class="lc-ico">🎤</span>
   <span class="lc-body"><span class="lc-title">Rehearse with the AI coach (Pro)</span><span class="lc-sub">"Change a requirement" + graded viva on any brief you solved.</span></span>
@@ -1515,6 +1552,7 @@ students.<span class="tok-function">sort</span>(
   <div class="lz-layer"><b>Luyện nói thành tiếng.</b> AI coach trên track có chế độ "đổi yêu cầu" hành xử đúng như vậy — diễn tập tới khi câu trả lời thành phản xạ.</div>
 </div>
 <div class="callout ok">Nếu bạn đã tự dựng mọi chương trình bằng vòng lặp của khóa này, vấn đáp rất dễ — bạn đã biết mọi thứ nằm đâu. Nếu bạn chép lời giải, vấn đáp là nơi lộ ra. Điều này là có chủ đích.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Chuẩn bị câu trả lời về đóng gói.</b> "Sao các trường của em để private?" là câu vấn đáp kinh điển — trả lời rằng trường private cùng getter/setter cho phép lớp validate và đổi ruột bên trong mà không làm hỏng nơi gọi. Cho ví dụ cụ thể: một setter từ chối giá âm. <em>Vì sao ngoài syllabus: syllabus mặc định có đóng gói; vấn đáp bắt bạn bảo vệ nó bằng lời, là một kỹ năng riêng.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab#module-847" target="_blank" rel="noopener">
   <span class="lc-ico">🎤</span>
   <span class="lc-body"><span class="lc-title">Diễn tập với AI coach (Pro)</span><span class="lc-sub">"Đổi yêu cầu" + chấm vấn đáp trên đề bất kỳ bạn đã giải.</span></span>
@@ -1565,6 +1603,7 @@ students.<span class="tok-function">sort</span>(
   <div class="lz-layer"><b>Small methods.</b> One method, one job. A 100-line main() is a CheckStyle and a review red flag.</div>
 </div>
 <div class="note-ct">Turn CheckStyle on now and fix its warnings as you solve the practice briefs. By the exam, clean code is a habit you do not have to think about.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Auto-format before every submit.</b> NetBeans reformats the whole file with Alt+Shift+F and fixes imports with Ctrl+Shift+I in one keystroke each, clearing most CheckStyle indentation and import warnings for free. Do it as the last step, right after the final compile. <em>Why beyond the syllabus: the tool does the tidying the syllabus grades, but no lesson tells you the shortcut.</em></div>
 <a class="link-card exphub" href="/exp-hub/lab211-cai-dat-netbeans?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🧹</span>
   <span class="lc-body"><span class="lc-title">Install the CheckStyle plugin</span><span class="lc-sub">Setup steps in the LAB211 tools guide on Exp Hub.</span></span>
@@ -1582,6 +1621,7 @@ students.<span class="tok-function">sort</span>(
   <div class="lz-layer"><b>Hàm nhỏ.</b> Một hàm, một việc. Một main() 100 dòng là cờ đỏ với CheckStyle và người review.</div>
 </div>
 <div class="note-ct">Bật CheckStyle ngay và sửa cảnh báo của nó khi giải các đề luyện. Tới kỳ thi, code sạch là thói quen bạn không cần nghĩ tới.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Auto-format trước mỗi lần nộp.</b> NetBeans định dạng lại cả tệp bằng Alt+Shift+F và sửa import bằng Ctrl+Shift+I, mỗi cái một phím, dọn phần lớn cảnh báo thụt lề và import của CheckStyle miễn phí. Làm nó ở bước cuối, ngay sau lần biên dịch chót. <em>Vì sao ngoài syllabus: công cụ làm việc dọn dẹp mà syllabus chấm, nhưng không bài nào chỉ bạn phím tắt.</em></div>
 <a class="link-card exphub" href="/exp-hub/lab211-cai-dat-netbeans?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🧹</span>
   <span class="lc-body"><span class="lc-title">Cài plugin CheckStyle</span><span class="lc-sub">Các bước cài trong guide công cụ LAB211 trên Exp Hub.</span></span>
@@ -1608,6 +1648,7 @@ students.<span class="tok-function">sort</span>(
 </table>
 <p>Doubling <span class="badge">n</span> on an O(n²) algorithm roughly <strong>quadruples</strong> the work — measured at 3.99×, 3.93×, 4.07× for bubble/selection/insertion. That is why a "works on 10 items" sort can be a review target on 10,000.</p>
 <div class="note-ct">Do not hard-code timing numbers into an answer — they are not deterministic (JIT warm-up made n=500 measure slower than n=1000 once). Count operations instead; that is deterministic and defensible.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>HashMap is O(1) only with a good hashCode.</b> If every key returns the same hashCode, the map degrades to a linked list and lookups become O(n) — the "~1 step" claim quietly collapses. A correct, well-spread hashCode() is what keeps the whole table fast. <em>Why beyond the syllabus: the average-case table hides the hashCode precondition the brief never mentions.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab#module-856" target="_blank" rel="noopener">
   <span class="lc-ico">📈</span>
   <span class="lc-body"><span class="lc-title">Algorithm Reference — measured comparisons</span><span class="lc-sub">Operation counts &amp; the doubling table, ready for the viva.</span></span>
@@ -1626,6 +1667,7 @@ students.<span class="tok-function">sort</span>(
 </table>
 <p>Gấp đôi <span class="badge">n</span> trên thuật toán O(n²) khiến công việc tăng khoảng <strong>gấp bốn</strong> — đo được 3.99×, 3.93×, 4.07× cho bubble/selection/insertion. Đó là lý do một hàm sort "chạy với 10 phần tử" có thể thành mục tiêu review với 10.000.</p>
 <div class="note-ct">Đừng ghi cứng số đo thời gian vào câu trả lời — nó không tất định (JIT khởi động làm n=500 đo chậm hơn n=1000 một lần). Hãy đếm phép toán; nó tất định và bảo vệ được.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>HashMap chỉ O(1) khi có hashCode tốt.</b> Nếu mọi khóa trả về cùng một hashCode, map suy biến thành danh sách liên kết và tra cứu thành O(n) — con số "~1 bước" âm thầm sụp đổ. Một hashCode() đúng, phân tán tốt mới giữ cả bảng nhanh. <em>Vì sao ngoài syllabus: bảng trường hợp trung bình che đi điều kiện tiên quyết hashCode mà đề không nhắc.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab#module-856" target="_blank" rel="noopener">
   <span class="lc-ico">📈</span>
   <span class="lc-body"><span class="lc-title">Algorithm Reference — so sánh đo thật</span><span class="lc-sub">Số phép toán &amp; bảng gấp đôi, sẵn cho vấn đáp.</span></span>
@@ -1656,6 +1698,7 @@ students.<span class="tok-function">sort</span>(
 <div class="lz-stack">
   <div class="lz-layer"><b>Solve real briefs yourself, easy → hard · validate &amp; match output every time · rehearse the exam under a timer · defend your code in the viva.</b> That is the whole method — and it is why students who do the work pass, and students who read solutions do not.</div>
 </div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Re-solve your failures after a two-day gap.</b> Keep a short log of every brief you got wrong; re-solve it from scratch two days later, not the same day. The gap forces recall instead of recognition — the exact thing the exam measures. <em>Why beyond the syllabus: spaced practice is a learning technique, not a Java topic, yet it is what turns 54 solved briefs into exam-day fluency.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab#module-847" target="_blank" rel="noopener">
   <span class="lc-ico">🏁</span>
   <span class="lc-body"><span class="lc-title">Finish the 54 briefs &amp; write your own</span><span class="lc-sub">The last mile: from solving to examining.</span></span>
@@ -1678,6 +1721,7 @@ students.<span class="tok-function">sort</span>(
 <div class="lz-stack">
   <div class="lz-layer"><b>Tự giải đề thật, dễ → khó · validate &amp; khớp output mỗi lần · diễn tập kỳ thi dưới đồng hồ · bảo vệ code khi vấn đáp.</b> Đó là toàn bộ phương pháp — và là lý do sinh viên chịu làm thì qua, còn sinh viên đọc lời giải thì không.</div>
 </div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Giải lại các bài trượt sau hai ngày.</b> Giữ một sổ ngắn ghi mọi đề bạn làm sai; giải lại từ đầu sau hai ngày, không phải cùng ngày. Khoảng cách buộc bạn nhớ lại thay vì nhận ra — đúng thứ kỳ thi đo. <em>Vì sao ngoài syllabus: luyện có giãn cách là kỹ thuật học, không phải chủ đề Java, nhưng nó biến 54 đề đã giải thành phản xạ ngày thi.</em></div>
 <a class="link-card codelab" href="/code-lab/lab211?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab#module-847" target="_blank" rel="noopener">
   <span class="lc-ico">🏁</span>
   <span class="lc-body"><span class="lc-title">Hoàn thành 54 đề &amp; tự ra đề</span><span class="lc-sub">Chặng cuối: từ giải đề tới chấm đề.</span></span>

@@ -21,7 +21,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
-    shortDescription: 'Internship project #4 — build an IT helpdesk ticketing REST API: Spring Boot 3 + JWT + PostgreSQL, two roles, a strict ticket state machine and atomic assignment so two agents never grab one ticket. SLA timer, a GROUP BY report, tests, shipped with Docker.|||Đồ án thực tập #4 — REST API quản lý ticket helpdesk IT: Spring Boot 3 + JWT + PostgreSQL, hai vai trò, máy trạng thái ticket chặt chẽ và gán việc nguyên tử để hai agent không giành cùng ticket. Có SLA, báo cáo GROUP BY, test, đóng gói Docker.',
+    shortDescription: 'Internship project #4 — an IT helpdesk ticketing REST API: Spring Boot 3 + JWT + PostgreSQL, two roles, a strict ticket state machine and atomic assignment so two agents never grab one ticket. GROUP BY report, tests, Docker.|||Đồ án thực tập #4 — REST API quản lý ticket helpdesk IT: Spring Boot 3 + JWT + PostgreSQL, hai vai trò, máy trạng thái ticket chặt chẽ và gán việc nguyên tử để hai agent không giành cùng ticket. Báo cáo GROUP BY, test, Docker.',
     description: 'INT604 là đồ án thực tập thứ tư của Kỳ 6: bạn xây một REST API QUẢN LÝ TICKET HELPDESK IT hoàn chỉnh — không frontend, tập trung toàn lực vào thiết kế API server-side đúng chuẩn. Backend viết bằng Spring Boot 3 + Java 17, dữ liệu trong PostgreSQL qua Spring Data JPA; xác thực bằng JWT và phân quyền hai vai trò (USER mở ticket/bình luận/xem ticket của mình; AGENT nhận việc, đổi trạng thái, giải quyết). Trọng tâm kỹ thuật gồm HAI viên ngọc: (1) một MÁY TRẠNG THÁI ticket (OPEN→ASSIGNED→IN_PROGRESS→RESOLVED→CLOSED) từ chối mọi chuyển trạng thái bất hợp lệ, và (2) GÁN VIỆC NGUYÊN TỬ — hai agent không bao giờ cùng giành được một ticket chưa gán, nhờ khoá lạc quan @Version + @Transactional + UPDATE có điều kiện. Thêm một bộ đếm SLA (due-by theo độ ưu tiên) và một endpoint báo cáo dùng GROUP BY. Cuối cùng đóng gói bằng Docker Compose và viết kịch bản demo. Đây là khuôn "REST API nghiệp vụ có trạng thái" mà rất nhiều hệ thống nội bộ (helpdesk, đơn từ, phê duyệt) tái sử dụng.',
     whatYouLearn: 'Thiết kế domain & ERD cho nghiệp vụ ticket (User/Ticket/Comment) với trường trạng thái + assignee + version; dựng REST API Spring Boot 3 theo kiến trúc phân lớp Controller→Service→Repository; JPA/Hibernate + PostgreSQL, DTO & mapping, Bean Validation; xác thực JWT + phân quyền theo role (USER vs AGENT) với Spring Security; thiết kế API sạch (status code, error shape, phân trang); MÁY TRẠNG THÁI ticket với bảng chuyển hợp lệ và từ chối chuyển sai; GÁN VIỆC NGUYÊN TỬ an toàn khi tranh chấp (@Version optimistic lock + UPDATE có điều kiện WHERE assignee_id IS NULL + transaction); tính SLA due-by theo độ ưu tiên và cờ quá hạn; endpoint báo cáo bằng GROUP BY (không lặp trong Java); kiểm thử unit + integration (JUnit 5, MockMvc) và một test đồng thời chứng minh chỉ một lượt gán "dính"; đóng gói Docker Compose (api + db) + biến môi trường; và một kịch bản quay video demo chuyên nghiệp.',
     requirements: 'Nên đã học PRO192 (Java/OOP), DBI202 (CSDL/SQL) và PRJ301 (Java web/MVC). Cần: JDK 17, một IDE (IntelliJ IDEA khuyên dùng), Docker Desktop, một client test API (Postman hoặc REST Client trong VS Code) và một tài khoản GitHub cho nhóm. KHÔNG cần kiến thức frontend — đây là đồ án REST API thuần.',
@@ -699,6 +699,1153 @@ User(author)  1—* Comment   : một user viết nhiều bình luận</div>
         },
       ],
     },
-    // __MORE_SECTIONS__
+    {
+      title: 'Section 2 — Backend: Spring Boot & the Layers|||Mục 2 — Backend: Spring Boot & các tầng',
+      lessons: [
+        {
+          title: '2.1 — Project structure & layered architecture|||2.1 — Cấu trúc dự án & kiến trúc phân tầng',
+          slug: 'int604-backend-setup',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 2 · Lesson 2.1</span>
+<h2>The layers: controller → service → repository</h2>
+<p class="lead">A clean Spring Boot API separates concerns into three layers. Each has one job, and keeping the rules out of the controller is what lets the state machine (Section 4) live in exactly one place.</p>
+
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Controller (@RestController)</div><div class="lz-nsub">HTTP only: parse the request, call the service, shape the response. No business rules.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Service (@Service, @Transactional)</div><div class="lz-nsub">the rules: state transitions, assignment, authorization checks. The heart of the app.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Repository (JpaRepository)</div><div class="lz-nsub">data access only: Spring Data generates the SQL from method names.</div></div></div>
+</div>
+
+<h3>The package layout</h3>
+<pre>src/main/java/com/fpt/helpdesk/
+├─ controller/   TicketController, AuthController
+├─ service/      TicketService, AuthService
+├─ repository/   TicketRepository, UserRepository
+├─ domain/       Ticket, User, TicketStatus (enum)
+├─ dto/          CreateTicketRequest, TicketDto, AssignRequest
+└─ config/       SecurityConfig, JwtFilter, ApiExceptionHandler</pre>
+
+<div class="pitfall"><strong>Trap:</strong> putting state-transition logic in the controller. If two controllers can each flip a ticket's status, the state machine has two homes and they will drift. Rules live in the service — controllers only translate HTTP.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why the service owns the transaction, not the controller.</b> <code>@Transactional</code> belongs on the service method so the whole business operation (guarded update + audit row) commits or rolls back as one unit. Annotate the controller and you either fight proxy edge-cases or leak persistence concerns upward. <em>Why beyond syllabus: transaction boundary placement is an architecture decision the syllabus glosses over.</em></div>
+
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fhelpdesk-ticketing-api%2Flearn&reflabel=INT604#module-311" target="_blank" rel="noopener">
+  <span class="lc-ico">🌱</span>
+  <span class="lc-body"><span class="lc-title">Layers &amp; dependency injection on Code Lab</span><span class="lc-sub">Controllers, services, repositories, DI.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 2 · Bài 2.1</span>
+<h2>Các tầng: controller → service → repository</h2>
+<p class="lead">Một API Spring Boot sạch tách mối quan tâm thành ba tầng. Mỗi tầng một việc, và giữ luật ra khỏi controller là điều cho phép máy trạng thái (Mục 4) sống ở đúng một chỗ.</p>
+
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Controller (@RestController)</div><div class="lz-nsub">chỉ HTTP: đọc request, gọi service, tạo response. Không luật nghiệp vụ.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Service (@Service, @Transactional)</div><div class="lz-nsub">luật: chuyển trạng thái, gán việc, kiểm quyền. Trái tim của app.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Repository (JpaRepository)</div><div class="lz-nsub">chỉ truy cập dữ liệu: Spring Data sinh SQL từ tên method.</div></div></div>
+</div>
+
+<h3>Bố cục package</h3>
+<pre>src/main/java/com/fpt/helpdesk/
+├─ controller/   TicketController, AuthController
+├─ service/      TicketService, AuthService
+├─ repository/   TicketRepository, UserRepository
+├─ domain/       Ticket, User, TicketStatus (enum)
+├─ dto/          CreateTicketRequest, TicketDto, AssignRequest
+└─ config/       SecurityConfig, JwtFilter, ApiExceptionHandler</pre>
+
+<div class="pitfall"><strong>Bẫy:</strong> đặt logic chuyển trạng thái trong controller. Nếu hai controller đều lật được status của ticket, máy trạng thái có hai nhà và chúng sẽ lệch nhau. Luật sống trong service — controller chỉ dịch HTTP.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao service sở hữu transaction, không phải controller.</b> <code>@Transactional</code> thuộc về method service để cả thao tác nghiệp vụ (update có canh + dòng audit) commit hoặc rollback như một khối. Gắn vào controller thì bạn hoặc vật lộn với ca biên của proxy hoặc rò rỉ mối quan tâm lưu trữ lên trên. <em>Vì sao ngoài syllabus: đặt ranh giới transaction là quyết định kiến trúc mà giáo trình lướt qua.</em></div>
+
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fhelpdesk-ticketing-api%2Flearn&reflabel=INT604#module-311" target="_blank" rel="noopener">
+  <span class="lc-ico">🌱</span>
+  <span class="lc-body"><span class="lc-title">Tầng &amp; dependency injection trên Code Lab</span><span class="lc-sub">Controller, service, repository, DI.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '2.2 — Entities, the status enum & a GET slice|||2.2 — Entity, enum trạng thái & một lát cắt GET',
+          slug: 'int604-entities',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 2 · Lesson 2.2</span>
+<h2>The Ticket entity, the status enum &amp; listing tickets</h2>
+<p class="lead">Two design choices here carry the whole project: the <code>status</code> as a Java enum (a closed set, not free text) and the <code>@Version</code> field (the concurrency guard used in Section 4).</p>
+
+<h3>The status enum — a closed set</h3>
+<pre><span class="tok-keyword">public enum</span> <span class="tok-type">TicketStatus</span> { OPEN, ASSIGNED, IN_PROGRESS, RESOLVED, CLOSED }</pre>
+
+<h3>The Ticket entity</h3>
+<pre><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"tickets"</span>)
+<span class="tok-keyword">public class</span> <span class="tok-type">Ticket</span> {
+  <span class="tok-keyword">@Id</span> <span class="tok-keyword">@GeneratedValue</span>(strategy = IDENTITY) <span class="tok-type">Long</span> id;
+  <span class="tok-type">String</span> subject;
+  <span class="tok-keyword">@Column</span>(columnDefinition = <span class="tok-string">"text"</span>) <span class="tok-type">String</span> description;
+
+  <span class="tok-keyword">@Enumerated</span>(EnumType.STRING) <span class="tok-type">TicketStatus</span> status = TicketStatus.OPEN;
+  <span class="tok-keyword">@Enumerated</span>(EnumType.STRING) <span class="tok-type">Priority</span> priority = Priority.MEDIUM;
+
+  <span class="tok-keyword">@ManyToOne</span> <span class="tok-type">User</span> reporter;        <span class="tok-comment">// who opened it</span>
+  <span class="tok-keyword">@ManyToOne</span> <span class="tok-type">User</span> assignedAgent;   <span class="tok-comment">// null until claimed</span>
+
+  <span class="tok-keyword">@Version</span> <span class="tok-keyword">long</span> version;           <span class="tok-comment">// ← the optimistic-lock guard (Section 4)</span>
+  <span class="tok-type">Instant</span> createdAt = Instant.now();
+}</pre>
+<div class="pitfall"><strong>Trap:</strong> <code>@Enumerated(EnumType.ORDINAL)</code> (the default!) stores the enum as its position — 0,1,2… Insert a new status in the middle later and every existing row's meaning shifts. <strong>Always</strong> use <code>EnumType.STRING</code>.</div>
+
+<h3>A GET slice — list tickets for the caller</h3>
+<pre><span class="tok-comment">// repository — Spring Data derives the SQL from the name</span>
+<span class="tok-type">List</span>&lt;Ticket&gt; <span class="tok-function">findByReporterIdOrderByCreatedAtDesc</span>(<span class="tok-type">Long</span> reporterId);
+<span class="tok-type">List</span>&lt;Ticket&gt; <span class="tok-function">findByStatus</span>(<span class="tok-type">TicketStatus</span> status);   <span class="tok-comment">// agents see OPEN queue</span>
+
+<span class="tok-comment">// controller</span>
+<span class="tok-keyword">@GetMapping</span>(<span class="tok-string">"/api/tickets"</span>)
+<span class="tok-keyword">public</span> <span class="tok-type">List</span>&lt;TicketDto&gt; <span class="tok-function">mine</span>(<span class="tok-keyword">@AuthenticationPrincipal</span> <span class="tok-type">UserPrincipal</span> me) {
+  <span class="tok-keyword">return</span> tickets.<span class="tok-function">findByReporterIdOrderByCreatedAtDesc</span>(me.getId())
+                .stream().map(TicketDto::from).toList();
+}</pre>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Return DTOs, never entities.</b> Serialising the JPA entity straight to JSON leaks the password hash through <code>reporter</code>, triggers lazy-loading exceptions, and couples your API shape to your table shape. A thin <code>TicketDto</code> exposes exactly the fields the client needs. <em>Why beyond syllabus: the entity-vs-DTO boundary prevents real security leaks the syllabus never warns about.</em></div>
+
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fhelpdesk-ticketing-api%2Flearn&reflabel=INT604#module-313" target="_blank" rel="noopener">
+  <span class="lc-ico">🌱</span>
+  <span class="lc-body"><span class="lc-title">JPA entities &amp; Spring Data on Code Lab</span><span class="lc-sub">Mappings, derived queries, DTOs.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 2 · Bài 2.2</span>
+<h2>Entity Ticket, enum trạng thái &amp; liệt kê ticket</h2>
+<p class="lead">Hai lựa chọn thiết kế ở đây gánh cả dự án: <code>status</code> là enum Java (tập đóng, không phải chuỗi tự do) và trường <code>@Version</code> (rào tương tranh dùng ở Mục 4).</p>
+
+<h3>Enum trạng thái — một tập đóng</h3>
+<pre><span class="tok-keyword">public enum</span> <span class="tok-type">TicketStatus</span> { OPEN, ASSIGNED, IN_PROGRESS, RESOLVED, CLOSED }</pre>
+
+<h3>Entity Ticket</h3>
+<pre><span class="tok-keyword">@Entity</span> <span class="tok-keyword">@Table</span>(name = <span class="tok-string">"tickets"</span>)
+<span class="tok-keyword">public class</span> <span class="tok-type">Ticket</span> {
+  <span class="tok-keyword">@Id</span> <span class="tok-keyword">@GeneratedValue</span>(strategy = IDENTITY) <span class="tok-type">Long</span> id;
+  <span class="tok-type">String</span> subject;
+  <span class="tok-keyword">@Column</span>(columnDefinition = <span class="tok-string">"text"</span>) <span class="tok-type">String</span> description;
+
+  <span class="tok-keyword">@Enumerated</span>(EnumType.STRING) <span class="tok-type">TicketStatus</span> status = TicketStatus.OPEN;
+  <span class="tok-keyword">@Enumerated</span>(EnumType.STRING) <span class="tok-type">Priority</span> priority = Priority.MEDIUM;
+
+  <span class="tok-keyword">@ManyToOne</span> <span class="tok-type">User</span> reporter;        <span class="tok-comment">// ai mở</span>
+  <span class="tok-keyword">@ManyToOne</span> <span class="tok-type">User</span> assignedAgent;   <span class="tok-comment">// null tới khi được nhận</span>
+
+  <span class="tok-keyword">@Version</span> <span class="tok-keyword">long</span> version;           <span class="tok-comment">// ← rào optimistic-lock (Mục 4)</span>
+  <span class="tok-type">Instant</span> createdAt = Instant.now();
+}</pre>
+<div class="pitfall"><strong>Bẫy:</strong> <code>@Enumerated(EnumType.ORDINAL)</code> (mặc định!) lưu enum theo vị trí — 0,1,2… Chèn thêm một status vào giữa về sau và ý nghĩa mọi dòng cũ dịch hết. <strong>Luôn</strong> dùng <code>EnumType.STRING</code>.</div>
+
+<h3>Một lát cắt GET — liệt kê ticket của người gọi</h3>
+<pre><span class="tok-comment">// repository — Spring Data suy SQL từ tên</span>
+<span class="tok-type">List</span>&lt;Ticket&gt; <span class="tok-function">findByReporterIdOrderByCreatedAtDesc</span>(<span class="tok-type">Long</span> reporterId);
+<span class="tok-type">List</span>&lt;Ticket&gt; <span class="tok-function">findByStatus</span>(<span class="tok-type">TicketStatus</span> status);   <span class="tok-comment">// agent xem hàng đợi OPEN</span>
+
+<span class="tok-comment">// controller</span>
+<span class="tok-keyword">@GetMapping</span>(<span class="tok-string">"/api/tickets"</span>)
+<span class="tok-keyword">public</span> <span class="tok-type">List</span>&lt;TicketDto&gt; <span class="tok-function">mine</span>(<span class="tok-keyword">@AuthenticationPrincipal</span> <span class="tok-type">UserPrincipal</span> me) {
+  <span class="tok-keyword">return</span> tickets.<span class="tok-function">findByReporterIdOrderByCreatedAtDesc</span>(me.getId())
+                .stream().map(TicketDto::from).toList();
+}</pre>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Trả DTO, không bao giờ entity.</b> Serialize thẳng entity JPA ra JSON làm rò hash mật khẩu qua <code>reporter</code>, kích lỗi lazy-loading, và ràng buộc hình dạng API với hình dạng bảng. Một <code>TicketDto</code> mỏng lộ đúng các trường client cần. <em>Vì sao ngoài syllabus: ranh giới entity-vs-DTO ngăn rò rỉ bảo mật thật mà giáo trình không cảnh báo.</em></div>
+
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fhelpdesk-ticketing-api%2Flearn&reflabel=INT604#module-313" target="_blank" rel="noopener">
+  <span class="lc-ico">🌱</span>
+  <span class="lc-body"><span class="lc-title">Entity JPA &amp; Spring Data trên Code Lab</span><span class="lc-sub">Ánh xạ, derived query, DTO.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      title: 'Section 3 — Authentication & Roles (JWT)|||Mục 3 — Xác thực & phân quyền (JWT)',
+      lessons: [
+        {
+          title: '3.1 — Register, login & issuing a JWT|||3.1 — Đăng ký, đăng nhập & phát JWT',
+          slug: 'int604-auth-jwt',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 3 · Lesson 3.1</span>
+<h2>Registration, login &amp; stateless JWT auth</h2>
+<p class="lead">The API is stateless: after login the client holds a signed JWT and sends it on every request. The server never stores a session — it just verifies the signature and reads the claims.</p>
+
+<h3>Hash the password with bcrypt</h3>
+<pre><span class="tok-keyword">public</span> <span class="tok-type">User</span> <span class="tok-function">register</span>(<span class="tok-type">RegisterRequest</span> r) {
+  <span class="tok-keyword">if</span> (users.existsByEmail(r.email()))
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictException</span>(<span class="tok-string">"Email already registered"</span>);
+  <span class="tok-type">User</span> u = <span class="tok-keyword">new</span> <span class="tok-type">User</span>();
+  u.setEmail(r.email());
+  u.setPasswordHash(encoder.encode(r.password()));   <span class="tok-comment">// BCrypt, never plain text</span>
+  u.setRole(Role.USER);                               <span class="tok-comment">// agents are promoted by an admin</span>
+  <span class="tok-keyword">return</span> users.save(u);
+}</pre>
+
+<h3>Login returns a signed token</h3>
+<pre><span class="tok-keyword">public</span> <span class="tok-type">String</span> <span class="tok-function">login</span>(<span class="tok-type">String</span> email, <span class="tok-type">String</span> password) {
+  <span class="tok-type">User</span> u = users.findByEmail(email).orElseThrow(() -&gt; <span class="tok-keyword">new</span> <span class="tok-type">UnauthorizedException</span>(<span class="tok-string">"Bad credentials"</span>));
+  <span class="tok-keyword">if</span> (!encoder.matches(password, u.getPasswordHash()))
+    <span class="tok-keyword">throw new</span> <span class="tok-type">UnauthorizedException</span>(<span class="tok-string">"Bad credentials"</span>);   <span class="tok-comment">// same message → no user enumeration</span>
+  <span class="tok-keyword">return</span> jwt.<span class="tok-function">issue</span>(u.getId(), u.getRole());   <span class="tok-comment">// subject = id, claim = role</span>
+}</pre>
+
+<div class="pitfall"><strong>Trap:</strong> different error messages for "no such email" vs "wrong password". That lets an attacker enumerate which emails exist. Return one generic <code>"Bad credentials"</code> for both.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why the role goes in the token, but the DB is still the source of truth.</b> Putting <code>role</code> in the JWT saves a lookup per request — but a token stays valid until it expires, so a demotion won't take effect immediately. For high-stakes actions, re-check the role against the database. Short token lifetimes plus a refresh flow balance speed and freshness. <em>Why beyond syllabus: the "stale claim" trade-off in stateless auth is never raised in class.</em></div>
+
+<a class="link-card codelab" href="/code-lab/authentication?ref=%2Fcourses%2Fhelpdesk-ticketing-api%2Flearn&reflabel=INT604#module-951" target="_blank" rel="noopener">
+  <span class="lc-ico">🔐</span>
+  <span class="lc-body"><span class="lc-title">JWT authentication on Code Lab</span><span class="lc-sub">bcrypt, signing, verifying, claims.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 3 · Bài 3.1</span>
+<h2>Đăng ký, đăng nhập &amp; xác thực JWT không trạng thái</h2>
+<p class="lead">API không trạng thái: sau đăng nhập client giữ một JWT đã ký và gửi nó ở mọi request. Server không lưu session — chỉ xác minh chữ ký và đọc các claim.</p>
+
+<h3>Băm mật khẩu bằng bcrypt</h3>
+<pre><span class="tok-keyword">public</span> <span class="tok-type">User</span> <span class="tok-function">register</span>(<span class="tok-type">RegisterRequest</span> r) {
+  <span class="tok-keyword">if</span> (users.existsByEmail(r.email()))
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictException</span>(<span class="tok-string">"Email đã được đăng ký"</span>);
+  <span class="tok-type">User</span> u = <span class="tok-keyword">new</span> <span class="tok-type">User</span>();
+  u.setEmail(r.email());
+  u.setPasswordHash(encoder.encode(r.password()));   <span class="tok-comment">// BCrypt, không bao giờ plaintext</span>
+  u.setRole(Role.USER);                               <span class="tok-comment">// agent do admin nâng quyền</span>
+  <span class="tok-keyword">return</span> users.save(u);
+}</pre>
+
+<h3>Đăng nhập trả token đã ký</h3>
+<pre><span class="tok-keyword">public</span> <span class="tok-type">String</span> <span class="tok-function">login</span>(<span class="tok-type">String</span> email, <span class="tok-type">String</span> password) {
+  <span class="tok-type">User</span> u = users.findByEmail(email).orElseThrow(() -&gt; <span class="tok-keyword">new</span> <span class="tok-type">UnauthorizedException</span>(<span class="tok-string">"Sai thông tin đăng nhập"</span>));
+  <span class="tok-keyword">if</span> (!encoder.matches(password, u.getPasswordHash()))
+    <span class="tok-keyword">throw new</span> <span class="tok-type">UnauthorizedException</span>(<span class="tok-string">"Sai thông tin đăng nhập"</span>);   <span class="tok-comment">// cùng thông báo → không dò được user</span>
+  <span class="tok-keyword">return</span> jwt.<span class="tok-function">issue</span>(u.getId(), u.getRole());   <span class="tok-comment">// subject = id, claim = role</span>
+}</pre>
+
+<div class="pitfall"><strong>Bẫy:</strong> thông báo lỗi khác nhau cho "không có email" vs "sai mật khẩu". Điều đó cho kẻ tấn công dò xem email nào tồn tại. Trả một thông báo chung <code>"Sai thông tin đăng nhập"</code> cho cả hai.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao role nằm trong token, nhưng DB vẫn là nguồn sự thật.</b> Đặt <code>role</code> trong JWT tiết kiệm một lần tra mỗi request — nhưng token vẫn hợp lệ tới khi hết hạn, nên hạ quyền không có hiệu lực ngay. Với hành động rủi ro cao, kiểm lại role với cơ sở dữ liệu. Token đời ngắn cộng luồng refresh cân bằng tốc độ và độ mới. <em>Vì sao ngoài syllabus: đánh đổi "claim cũ" trong auth không trạng thái không bao giờ được nêu trên lớp.</em></div>
+
+<a class="link-card codelab" href="/code-lab/authentication?ref=%2Fcourses%2Fhelpdesk-ticketing-api%2Flearn&reflabel=INT604#module-951" target="_blank" rel="noopener">
+  <span class="lc-ico">🔐</span>
+  <span class="lc-body"><span class="lc-title">Xác thực JWT trên Code Lab</span><span class="lc-sub">bcrypt, ký, xác minh, claim.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '3.2 — Roles: who can do what|||3.2 — Vai trò: ai được làm gì',
+          slug: 'int604-roles',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 3 · Lesson 3.2</span>
+<h2>Two roles, enforced on every mutating endpoint</h2>
+<p class="lead">A <strong>USER</strong> opens tickets and sees their own. An <strong>AGENT</strong> sees the queue, claims tickets, and moves them through the workflow. The rules are enforced on the server — the client role only hides buttons.</p>
+
+<h3>The permission matrix</h3>
+<table>
+<thead><tr><th>Action</th><th>USER</th><th>AGENT</th></tr></thead>
+<tbody>
+<tr><td>Open a ticket</td><td>✅</td><td>✅</td></tr>
+<tr><td>See my own tickets</td><td>✅ (own)</td><td>✅ (all)</td></tr>
+<tr><td>See the OPEN queue</td><td>❌ 403</td><td>✅</td></tr>
+<tr><td>Claim / assign a ticket</td><td>❌ 403</td><td>✅</td></tr>
+<tr><td>Move status (start/resolve/close)</td><td>❌ 403</td><td>✅</td></tr>
+</tbody>
+</table>
+
+<h3>Enforce it with method security</h3>
+<pre><span class="tok-keyword">@PreAuthorize</span>(<span class="tok-string">"hasRole('AGENT')"</span>)
+<span class="tok-keyword">@PostMapping</span>(<span class="tok-string">"/api/tickets/{id}/assign"</span>)
+<span class="tok-keyword">public</span> <span class="tok-type">TicketDto</span> <span class="tok-function">claim</span>(<span class="tok-keyword">@PathVariable</span> <span class="tok-type">Long</span> id, <span class="tok-keyword">@AuthenticationPrincipal</span> <span class="tok-type">UserPrincipal</span> me) {
+  <span class="tok-keyword">return</span> TicketDto.from(ticketService.<span class="tok-function">assign</span>(id, me.getId()));
+}</pre>
+
+<div class="pitfall"><strong>Trap:</strong> checking the role but forgetting ownership. If any logged-in USER can read <em>any</em> ticket by changing the id in the URL, that is a broken-access-control hole (OWASP #1). Verify the resource belongs to the caller, not just that they are authenticated.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>401 vs 403 — say the right one.</b> <code>401 Unauthorized</code> means "I don't know who you are" (missing/expired token — log in again). <code>403 Forbidden</code> means "I know who you are, but you may not do this" (wrong role or not your resource). Returning the wrong one confuses the client's error handling. <em>Why beyond syllabus: this semantic distinction is subtle and constantly gotten wrong, even in production APIs.</em></div>
+
+<a class="link-card codelab" href="/code-lab/authentication?ref=%2Fcourses%2Fhelpdesk-ticketing-api%2Flearn&reflabel=INT604#module-955" target="_blank" rel="noopener">
+  <span class="lc-ico">🔐</span>
+  <span class="lc-body"><span class="lc-title">Role-based authorization on Code Lab</span><span class="lc-sub">Roles, authorities, protecting endpoints.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 3 · Bài 3.2</span>
+<h2>Hai vai trò, cưỡng chế ở mọi endpoint biến đổi</h2>
+<p class="lead">Một <strong>USER</strong> mở ticket và xem của mình. Một <strong>AGENT</strong> xem hàng đợi, nhận ticket, và đưa chúng qua luồng công việc. Luật cưỡng chế ở server — role của client chỉ ẩn nút.</p>
+
+<h3>Ma trận quyền</h3>
+<table>
+<thead><tr><th>Hành động</th><th>USER</th><th>AGENT</th></tr></thead>
+<tbody>
+<tr><td>Mở ticket</td><td>✅</td><td>✅</td></tr>
+<tr><td>Xem ticket của mình</td><td>✅ (của mình)</td><td>✅ (tất cả)</td></tr>
+<tr><td>Xem hàng đợi OPEN</td><td>❌ 403</td><td>✅</td></tr>
+<tr><td>Nhận / gán ticket</td><td>❌ 403</td><td>✅</td></tr>
+<tr><td>Chuyển status (start/resolve/close)</td><td>❌ 403</td><td>✅</td></tr>
+</tbody>
+</table>
+
+<h3>Cưỡng chế bằng method security</h3>
+<pre><span class="tok-keyword">@PreAuthorize</span>(<span class="tok-string">"hasRole('AGENT')"</span>)
+<span class="tok-keyword">@PostMapping</span>(<span class="tok-string">"/api/tickets/{id}/assign"</span>)
+<span class="tok-keyword">public</span> <span class="tok-type">TicketDto</span> <span class="tok-function">claim</span>(<span class="tok-keyword">@PathVariable</span> <span class="tok-type">Long</span> id, <span class="tok-keyword">@AuthenticationPrincipal</span> <span class="tok-type">UserPrincipal</span> me) {
+  <span class="tok-keyword">return</span> TicketDto.from(ticketService.<span class="tok-function">assign</span>(id, me.getId()));
+}</pre>
+
+<div class="pitfall"><strong>Bẫy:</strong> kiểm role nhưng quên quyền sở hữu. Nếu bất kỳ USER đã đăng nhập nào đọc được <em>bất kỳ</em> ticket bằng cách đổi id trên URL, đó là lỗ hổng broken-access-control (OWASP #1). Xác minh tài nguyên thuộc về người gọi, không chỉ rằng họ đã xác thực.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>401 vs 403 — nói đúng cái.</b> <code>401 Unauthorized</code> nghĩa "tôi không biết bạn là ai" (thiếu/hết hạn token — đăng nhập lại). <code>403 Forbidden</code> nghĩa "tôi biết bạn là ai, nhưng bạn không được làm việc này" (sai role hoặc không phải tài nguyên của bạn). Trả nhầm làm rối xử lý lỗi ở client. <em>Vì sao ngoài syllabus: khác biệt ngữ nghĩa này tinh tế và bị làm sai liên tục, kể cả ở API production.</em></div>
+
+<a class="link-card codelab" href="/code-lab/authentication?ref=%2Fcourses%2Fhelpdesk-ticketing-api%2Flearn&reflabel=INT604#module-955" target="_blank" rel="noopener">
+  <span class="lc-ico">🔐</span>
+  <span class="lc-body"><span class="lc-title">Phân quyền theo vai trò trên Code Lab</span><span class="lc-sub">Role, authority, bảo vệ endpoint.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      title: 'Section 4 — The Assignment Core (state machine, no double-grab)|||Mục 4 — Lõi gán việc (máy trạng thái, không giành trùng)',
+      lessons: [
+        {
+          title: '4.1 — The state machine & atomic assignment|||4.1 — Máy trạng thái & gán việc nguyên tử',
+          slug: 'int604-assign-core',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 4 · Lesson 4.1</span>
+<h2>A ticket has a lifecycle — and two agents must never grab the same one</h2>
+<p class="lead">This is the feature graders remember. A ticket moves through a fixed lifecycle, and when it is OPEN two support agents may click "Claim" at the same instant. A naive assign lets <em>both</em> succeed. Here is the state machine, the race, and the atomic fix.</p>
+
+<h3>The lifecycle — a state machine</h3>
+<div class="lz-flow">
+  <div class="lz-step">OPEN</div>
+  <div class="lz-step">ASSIGNED</div>
+  <div class="lz-step">IN_PROGRESS</div>
+  <div class="lz-step">RESOLVED</div>
+  <div class="lz-step">CLOSED</div>
+</div>
+<p>Only these moves are legal (plus RESOLVED → IN_PROGRESS to re-open). Encode them once, in the service:</p>
+<pre><span class="tok-comment">// the single source of truth for legal transitions</span>
+<span class="tok-keyword">static final</span> <span class="tok-type">Map</span>&lt;TicketStatus, Set&lt;TicketStatus&gt;&gt; NEXT = Map.<span class="tok-function">of</span>(
+  OPEN,        Set.of(ASSIGNED),
+  ASSIGNED,    Set.of(IN_PROGRESS, OPEN),        <span class="tok-comment">// can release back to the queue</span>
+  IN_PROGRESS, Set.of(RESOLVED),
+  RESOLVED,    Set.of(CLOSED, IN_PROGRESS),      <span class="tok-comment">// re-open if not really fixed</span>
+  CLOSED,      Set.of()                          <span class="tok-comment">// terminal</span>
+);
+<span class="tok-keyword">void</span> <span class="tok-function">check</span>(TicketStatus from, TicketStatus to) {
+  <span class="tok-keyword">if</span> (!NEXT.get(from).contains(to))
+    <span class="tok-keyword">throw new</span> <span class="tok-type">IllegalTransitionException</span>(from + <span class="tok-string">" → "</span> + to);
+}</pre>
+
+<h3>The naive assign — has a race</h3>
+<pre><span class="tok-keyword">@Transactional</span>
+<span class="tok-keyword">public</span> <span class="tok-type">Ticket</span> <span class="tok-function">assign</span>(<span class="tok-type">Long</span> ticketId, <span class="tok-type">Long</span> agentId) {
+  <span class="tok-type">Ticket</span> t = tickets.findById(ticketId).orElseThrow(NotFoundException::new);
+  <span class="tok-keyword">if</span> (t.getStatus() != OPEN)                     <span class="tok-comment">// (A) READ</span>
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictException</span>(<span class="tok-string">"Ticket already taken"</span>);
+  t.setAssignedAgent(users.getReference(agentId));  <span class="tok-comment">// (B) WRITE</span>
+  t.setStatus(ASSIGNED);
+  <span class="tok-keyword">return</span> t;
+}</pre>
+
+<h3>Why it breaks — two agents interleave</h3>
+<div class="out"><b>Time →</b>   Agent Lan (thread 1)          Agent Minh (thread 2)
+  t1     (A) ticket 88 = OPEN ✅
+  t2                                  (A) ticket 88 = OPEN ✅  ← still OPEN
+  t3     (B) assign to Lan
+  t4                                  (B) assign to Minh  (overwrites Lan!)
+<b>Result (no guard):</b> both agents believe they own ticket 88; one silently loses their work. ✗</div>
+
+<h3>The fix — one atomic guarded UPDATE</h3>
+<p>Instead of read-then-write, do the check and the write in a <strong>single</strong> conditional UPDATE. The database evaluates <code>WHERE status='OPEN'</code> and the assignment as one atomic step, so only the first agent's UPDATE touches a row:</p>
+<pre><span class="tok-keyword">@Modifying</span>
+<span class="tok-keyword">@Query</span>(<span class="tok-string">"update Ticket t set t.assignedAgent.id = :agentId, t.status = 'ASSIGNED' "</span> +
+       <span class="tok-string">"where t.id = :id and t.status = 'OPEN'"</span>)
+<span class="tok-keyword">int</span> <span class="tok-function">claimIfOpen</span>(<span class="tok-keyword">@Param</span>(<span class="tok-string">"id"</span>) <span class="tok-type">Long</span> id, <span class="tok-keyword">@Param</span>(<span class="tok-string">"agentId"</span>) <span class="tok-type">Long</span> agentId);
+
+<span class="tok-comment">// service</span>
+<span class="tok-keyword">@Transactional</span>
+<span class="tok-keyword">public</span> <span class="tok-type">Ticket</span> <span class="tok-function">assign</span>(<span class="tok-type">Long</span> id, <span class="tok-type">Long</span> agentId) {
+  <span class="tok-keyword">int</span> rows = tickets.<span class="tok-function">claimIfOpen</span>(id, agentId);   <span class="tok-comment">// atomic test-and-set</span>
+  <span class="tok-keyword">if</span> (rows == <span class="tok-number">0</span>)
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictException</span>(<span class="tok-string">"Ticket already taken"</span>);  <span class="tok-comment">// → 409</span>
+  <span class="tok-keyword">return</span> tickets.findById(id).orElseThrow();
+}</pre>
+
+<h3>How the atomic UPDATE wins the race — the SQL</h3>
+<div class="out">Lan commits first:
+  UPDATE tickets SET assigned_agent_id=Lan, status='ASSIGNED'
+    WHERE id=88 AND status='OPEN';   → 1 row ✅   (status is now ASSIGNED)
+
+Minh runs the same statement:
+  UPDATE tickets SET assigned_agent_id=Minh, status='ASSIGNED'
+    WHERE id=88 AND status='OPEN';   → 0 rows!    (status is no longer OPEN)
+  rows == 0 → we throw ConflictException → 409
+
+Final state: ticket 88 belongs to exactly ONE agent (Lan).</div>
+
+<div class="pitfall"><strong>Trap:</strong> the read-then-write assign, even inside <code>@Transactional</code>. Under READ_COMMITTED both agents read OPEN before either writes. The guard must be <em>inside</em> the UPDATE's WHERE clause (or use <code>@Version</code>) — the transaction alone does not serialize the check and the set.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Compare-and-set is the software version of an atomic CPU instruction.</b> <code>UPDATE ... WHERE status='OPEN'</code> is exactly a compare-and-swap: "set the value only if it still equals what I expected." The same idea powers lock-free data structures and distributed locks. Recognising a business rule as a CAS is a systems-level insight. <em>Why beyond syllabus: connecting a SQL UPDATE to atomic CAS primitives is a concept the coursework never draws.</em></div>
+
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fhelpdesk-ticketing-api%2Flearn&reflabel=INT604#module-314" target="_blank" rel="noopener">
+  <span class="lc-ico">🌱</span>
+  <span class="lc-body"><span class="lc-title">Transactions &amp; @Modifying queries</span><span class="lc-sub">Atomic updates and locking — on Code Lab.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 4 · Bài 4.1</span>
+<h2>Một ticket có vòng đời — và hai agent không bao giờ được giành cùng một cái</h2>
+<p class="lead">Đây là tính năng giám khảo nhớ nhất. Ticket đi qua một vòng đời cố định, và khi nó OPEN hai agent hỗ trợ có thể bấm "Nhận" cùng một khoảnh khắc. Gán ngây thơ cho <em>cả hai</em> thành công. Đây là máy trạng thái, cái race, và cách sửa nguyên tử.</p>
+
+<h3>Vòng đời — một máy trạng thái</h3>
+<div class="lz-flow">
+  <div class="lz-step">OPEN</div>
+  <div class="lz-step">ASSIGNED</div>
+  <div class="lz-step">IN_PROGRESS</div>
+  <div class="lz-step">RESOLVED</div>
+  <div class="lz-step">CLOSED</div>
+</div>
+<p>Chỉ những bước này hợp lệ (thêm RESOLVED → IN_PROGRESS để mở lại). Mã hoá chúng một lần, trong service:</p>
+<pre><span class="tok-comment">// nguồn sự thật duy nhất cho các chuyển hợp lệ</span>
+<span class="tok-keyword">static final</span> <span class="tok-type">Map</span>&lt;TicketStatus, Set&lt;TicketStatus&gt;&gt; NEXT = Map.<span class="tok-function">of</span>(
+  OPEN,        Set.of(ASSIGNED),
+  ASSIGNED,    Set.of(IN_PROGRESS, OPEN),        <span class="tok-comment">// trả lại hàng đợi được</span>
+  IN_PROGRESS, Set.of(RESOLVED),
+  RESOLVED,    Set.of(CLOSED, IN_PROGRESS),      <span class="tok-comment">// mở lại nếu chưa thật sự xong</span>
+  CLOSED,      Set.of()                          <span class="tok-comment">// điểm cuối</span>
+);
+<span class="tok-keyword">void</span> <span class="tok-function">check</span>(TicketStatus from, TicketStatus to) {
+  <span class="tok-keyword">if</span> (!NEXT.get(from).contains(to))
+    <span class="tok-keyword">throw new</span> <span class="tok-type">IllegalTransitionException</span>(from + <span class="tok-string">" → "</span> + to);
+}</pre>
+
+<h3>Gán ngây thơ — có race</h3>
+<pre><span class="tok-keyword">@Transactional</span>
+<span class="tok-keyword">public</span> <span class="tok-type">Ticket</span> <span class="tok-function">assign</span>(<span class="tok-type">Long</span> ticketId, <span class="tok-type">Long</span> agentId) {
+  <span class="tok-type">Ticket</span> t = tickets.findById(ticketId).orElseThrow(NotFoundException::new);
+  <span class="tok-keyword">if</span> (t.getStatus() != OPEN)                     <span class="tok-comment">// (A) ĐỌC</span>
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictException</span>(<span class="tok-string">"Ticket đã có người nhận"</span>);
+  t.setAssignedAgent(users.getReference(agentId));  <span class="tok-comment">// (B) GHI</span>
+  t.setStatus(ASSIGNED);
+  <span class="tok-keyword">return</span> t;
+}</pre>
+
+<h3>Vì sao nó hỏng — hai agent đan xen</h3>
+<div class="out"><b>Thời gian →</b>   Agent Lan (luồng 1)          Agent Minh (luồng 2)
+  t1     (A) ticket 88 = OPEN ✅
+  t2                                  (A) ticket 88 = OPEN ✅  ← vẫn OPEN
+  t3     (B) gán cho Lan
+  t4                                  (B) gán cho Minh  (đè lên Lan!)
+<b>Kết quả (không rào):</b> cả hai agent tin mình sở hữu ticket 88; một người âm thầm mất việc. ✗</div>
+
+<h3>Cách sửa — một UPDATE có điều kiện nguyên tử</h3>
+<p>Thay vì đọc-rồi-ghi, làm kiểm và ghi trong <strong>một</strong> UPDATE có điều kiện. Cơ sở dữ liệu tính <code>WHERE status='OPEN'</code> và việc gán như một bước nguyên tử, nên chỉ UPDATE của agent đầu tiên chạm được một dòng:</p>
+<pre><span class="tok-keyword">@Modifying</span>
+<span class="tok-keyword">@Query</span>(<span class="tok-string">"update Ticket t set t.assignedAgent.id = :agentId, t.status = 'ASSIGNED' "</span> +
+       <span class="tok-string">"where t.id = :id and t.status = 'OPEN'"</span>)
+<span class="tok-keyword">int</span> <span class="tok-function">claimIfOpen</span>(<span class="tok-keyword">@Param</span>(<span class="tok-string">"id"</span>) <span class="tok-type">Long</span> id, <span class="tok-keyword">@Param</span>(<span class="tok-string">"agentId"</span>) <span class="tok-type">Long</span> agentId);
+
+<span class="tok-comment">// service</span>
+<span class="tok-keyword">@Transactional</span>
+<span class="tok-keyword">public</span> <span class="tok-type">Ticket</span> <span class="tok-function">assign</span>(<span class="tok-type">Long</span> id, <span class="tok-type">Long</span> agentId) {
+  <span class="tok-keyword">int</span> rows = tickets.<span class="tok-function">claimIfOpen</span>(id, agentId);   <span class="tok-comment">// test-and-set nguyên tử</span>
+  <span class="tok-keyword">if</span> (rows == <span class="tok-number">0</span>)
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictException</span>(<span class="tok-string">"Ticket đã có người nhận"</span>);  <span class="tok-comment">// → 409</span>
+  <span class="tok-keyword">return</span> tickets.findById(id).orElseThrow();
+}</pre>
+
+<h3>Atomic UPDATE thắng cuộc đua thế nào — SQL</h3>
+<div class="out">Lan commit trước:
+  UPDATE tickets SET assigned_agent_id=Lan, status='ASSIGNED'
+    WHERE id=88 AND status='OPEN';   → 1 dòng ✅   (status giờ là ASSIGNED)
+
+Minh chạy đúng câu đó:
+  UPDATE tickets SET assigned_agent_id=Minh, status='ASSIGNED'
+    WHERE id=88 AND status='OPEN';   → 0 dòng!    (status không còn OPEN)
+  rows == 0 → ta ném ConflictException → 409
+
+Trạng thái cuối: ticket 88 thuộc về đúng MỘT agent (Lan).</div>
+
+<div class="pitfall"><strong>Bẫy:</strong> gán kiểu đọc-rồi-ghi, kể cả trong <code>@Transactional</code>. Dưới READ_COMMITTED cả hai agent đọc OPEN trước khi ai kịp ghi. Rào phải nằm <em>bên trong</em> mệnh đề WHERE của UPDATE (hoặc dùng <code>@Version</code>) — chỉ transaction không tuần tự hoá được việc kiểm và việc đặt.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Compare-and-set là phiên bản phần mềm của một lệnh CPU nguyên tử.</b> <code>UPDATE ... WHERE status='OPEN'</code> chính là một compare-and-swap: "đặt giá trị chỉ khi nó vẫn bằng cái tôi kỳ vọng." Cùng ý tưởng vận hành cấu trúc dữ liệu lock-free và khoá phân tán. Nhận ra một luật nghiệp vụ là một CAS là cái nhìn cấp hệ thống. <em>Vì sao ngoài syllabus: nối một UPDATE SQL với nguyên thuỷ CAS nguyên tử là khái niệm môn học không bao giờ vẽ ra.</em></div>
+
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fhelpdesk-ticketing-api%2Flearn&reflabel=INT604#module-314" target="_blank" rel="noopener">
+  <span class="lc-ico">🌱</span>
+  <span class="lc-body"><span class="lc-title">Transaction &amp; query @Modifying</span><span class="lc-sub">Update nguyên tử và khoá — trên Code Lab.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '4.2 — Transition endpoints & error responses|||4.2 — Endpoint chuyển trạng thái & phản hồi lỗi',
+          slug: 'int604-transition-endpoint',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 4 · Lesson 4.2</span>
+<h2>Driving the workflow through endpoints — and rejecting illegal moves</h2>
+<p class="lead">Each transition is its own endpoint. The service validates the move against the state machine and applies it atomically; the web layer maps typed errors to clean HTTP.</p>
+
+<h3>The transition service</h3>
+<pre><span class="tok-keyword">@Transactional</span>
+<span class="tok-keyword">public</span> <span class="tok-type">Ticket</span> <span class="tok-function">transition</span>(<span class="tok-type">Long</span> id, <span class="tok-type">TicketStatus</span> to, <span class="tok-type">Long</span> agentId) {
+  <span class="tok-type">Ticket</span> t = tickets.findById(id).orElseThrow(NotFoundException::new);
+  <span class="tok-keyword">if</span> (!t.getAssignedAgent().getId().equals(agentId))
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ForbiddenException</span>(<span class="tok-string">"Not your ticket"</span>);      <span class="tok-comment">// ownership</span>
+  check(t.getStatus(), to);                              <span class="tok-comment">// state-machine guard → 422</span>
+  t.setStatus(to);
+  <span class="tok-keyword">return</span> t;                                              <span class="tok-comment">// @Version guards the concurrent write</span>
+}</pre>
+
+<h3>The status-code contract</h3>
+<table>
+<thead><tr><th>Situation</th><th>Status</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>Legal move applied</td><td>200 OK</td><td>the updated ticket</td></tr>
+<tr><td>Two agents claim one OPEN ticket</td><td>409 Conflict</td><td>Ticket already taken</td></tr>
+<tr><td>Illegal move (e.g. OPEN → RESOLVED)</td><td>422 Unprocessable</td><td>Invalid transition</td></tr>
+<tr><td>Agent acts on someone else's ticket</td><td>403 Forbidden</td><td>Not your ticket</td></tr>
+<tr><td>Ticket id doesn't exist</td><td>404 Not Found</td><td>Ticket not found</td></tr>
+</tbody>
+</table>
+
+<h3>Worked example — a full ticket journey</h3>
+<div class="out">POST /tickets                  (USER)   → 201  status OPEN
+POST /tickets/88/assign        (Lan)    → 200  OPEN → ASSIGNED
+POST /tickets/88/assign        (Minh)   → 409  Ticket already taken
+POST /tickets/88/start         (Lan)    → 200  ASSIGNED → IN_PROGRESS
+POST /tickets/88/resolve       (Lan)    → 200  IN_PROGRESS → RESOLVED
+POST /tickets/88/start         (Minh)   → 403  Not your ticket
+POST /tickets/88/close         (Lan)    → 200  RESOLVED → CLOSED
+POST /tickets/88/start         (Lan)    → 422  CLOSED → IN_PROGRESS is illegal</div>
+
+<div class="pitfall"><strong>Trap:</strong> returning 400 for an illegal transition. 400 means "your request was malformed"; the request here is well-formed, it's the <em>state</em> that forbids the action. <code>422 Unprocessable Entity</code> (or 409) communicates "understood, but not allowed from the current state" — a meaningful distinction for the client.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Model the workflow as data, not as scattered ifs.</b> Because legal moves live in one <code>NEXT</code> map, adding a status (say ON_HOLD) is a one-line change and every endpoint automatically respects it. Scattering <code>if (status == ...)</code> checks across controllers guarantees an inconsistency the day someone forgets one. <em>Why beyond syllabus: data-driven state machines are a design pattern the syllabus never names, yet they eliminate a whole class of workflow bugs.</em></div>
+
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fhelpdesk-ticketing-api%2Flearn&reflabel=INT604#module-312" target="_blank" rel="noopener">
+  <span class="lc-ico">🌱</span>
+  <span class="lc-body"><span class="lc-title">REST controllers &amp; error handling</span><span class="lc-sub">Status codes, @RestControllerAdvice — on Code Lab.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 4 · Bài 4.2</span>
+<h2>Dẫn luồng công việc qua endpoint — và từ chối bước bất hợp lệ</h2>
+<p class="lead">Mỗi chuyển trạng thái là một endpoint riêng. Service kiểm bước dựa trên máy trạng thái và áp nguyên tử; tầng web ánh xạ lỗi có kiểu thành HTTP sạch.</p>
+
+<h3>Service chuyển trạng thái</h3>
+<pre><span class="tok-keyword">@Transactional</span>
+<span class="tok-keyword">public</span> <span class="tok-type">Ticket</span> <span class="tok-function">transition</span>(<span class="tok-type">Long</span> id, <span class="tok-type">TicketStatus</span> to, <span class="tok-type">Long</span> agentId) {
+  <span class="tok-type">Ticket</span> t = tickets.findById(id).orElseThrow(NotFoundException::new);
+  <span class="tok-keyword">if</span> (!t.getAssignedAgent().getId().equals(agentId))
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ForbiddenException</span>(<span class="tok-string">"Không phải ticket của bạn"</span>);   <span class="tok-comment">// sở hữu</span>
+  check(t.getStatus(), to);                              <span class="tok-comment">// rào máy trạng thái → 422</span>
+  t.setStatus(to);
+  <span class="tok-keyword">return</span> t;                                              <span class="tok-comment">// @Version canh ghi tương tranh</span>
+}</pre>
+
+<h3>Hợp đồng mã trạng thái</h3>
+<table>
+<thead><tr><th>Tình huống</th><th>Mã</th><th>Ý nghĩa</th></tr></thead>
+<tbody>
+<tr><td>Bước hợp lệ được áp</td><td>200 OK</td><td>ticket đã cập nhật</td></tr>
+<tr><td>Hai agent giành một ticket OPEN</td><td>409 Conflict</td><td>Ticket đã có người nhận</td></tr>
+<tr><td>Bước bất hợp lệ (vd OPEN → RESOLVED)</td><td>422 Unprocessable</td><td>Chuyển không hợp lệ</td></tr>
+<tr><td>Agent thao tác ticket của người khác</td><td>403 Forbidden</td><td>Không phải ticket của bạn</td></tr>
+<tr><td>Ticket id không tồn tại</td><td>404 Not Found</td><td>Không tìm thấy ticket</td></tr>
+</tbody>
+</table>
+
+<h3>Ví dụ có lời giải — hành trình đầy đủ một ticket</h3>
+<div class="out">POST /tickets                  (USER)   → 201  status OPEN
+POST /tickets/88/assign        (Lan)    → 200  OPEN → ASSIGNED
+POST /tickets/88/assign        (Minh)   → 409  Ticket đã có người nhận
+POST /tickets/88/start         (Lan)    → 200  ASSIGNED → IN_PROGRESS
+POST /tickets/88/resolve       (Lan)    → 200  IN_PROGRESS → RESOLVED
+POST /tickets/88/start         (Minh)   → 403  Không phải ticket của bạn
+POST /tickets/88/close         (Lan)    → 200  RESOLVED → CLOSED
+POST /tickets/88/start         (Lan)    → 422  CLOSED → IN_PROGRESS bất hợp lệ</div>
+
+<div class="pitfall"><strong>Bẫy:</strong> trả 400 cho một bước bất hợp lệ. 400 nghĩa "request của bạn sai định dạng"; request ở đây đúng định dạng, chính <em>trạng thái</em> mới cấm hành động. <code>422 Unprocessable Entity</code> (hoặc 409) truyền đạt "hiểu rồi, nhưng không được phép từ trạng thái hiện tại" — một khác biệt có ý nghĩa với client.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Mô hình luồng công việc bằng dữ liệu, không phải các if rải rác.</b> Vì các bước hợp lệ nằm trong một map <code>NEXT</code>, thêm một status (vd ON_HOLD) là sửa một dòng và mọi endpoint tự động tôn trọng. Rải các kiểm <code>if (status == ...)</code> khắp controller bảo đảm một mâu thuẫn vào ngày ai đó quên một chỗ. <em>Vì sao ngoài syllabus: máy trạng thái hướng dữ liệu là mẫu thiết kế giáo trình không đặt tên, nhưng loại bỏ cả một lớp bug luồng.</em></div>
+
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fhelpdesk-ticketing-api%2Flearn&reflabel=INT604#module-312" target="_blank" rel="noopener">
+  <span class="lc-ico">🌱</span>
+  <span class="lc-body"><span class="lc-title">Controller REST &amp; xử lý lỗi</span><span class="lc-sub">Mã trạng thái, @RestControllerAdvice — trên Code Lab.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '4.3 — Checkpoint quiz: the assignment core|||4.3 — Quiz kiểm tra: lõi gán việc',
+          slug: 'int604-quiz-4',
+          type: 'QUIZ',
+          quiz: {
+            timeLimitSeconds: 360,
+            questions: [
+              {
+                id: 'q1',
+                question: 'Why does UPDATE ... WHERE id=? AND status=\'OPEN\' prevent two agents grabbing one ticket?|||Vì sao UPDATE ... WHERE id=? AND status=\'OPEN\' chặn được hai agent giành một ticket?',
+                options: [
+                  'The check and the write happen atomically; only the first UPDATE matches a row, the second affects 0 rows|||Việc kiểm và việc ghi xảy ra nguyên tử; chỉ UPDATE đầu khớp một dòng, cái thứ hai trúng 0 dòng',
+                  'It locks the whole table for one minute|||Nó khoá cả bảng một phút',
+                  'It disables other agent accounts|||Nó vô hiệu tài khoản agent khác',
+                  'It runs the two requests in random order|||Nó chạy hai request theo thứ tự ngẫu nhiên',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q2',
+                question: 'What HTTP status best fits an illegal state transition like CLOSED → IN_PROGRESS?|||Mã HTTP nào hợp nhất cho một chuyển trạng thái bất hợp lệ như CLOSED → IN_PROGRESS?',
+                options: ['200 OK', '404 Not Found', '422 Unprocessable Entity (or 409)', '500 Internal Server Error'],
+                correctIndex: 2,
+                points: 1,
+              },
+              {
+                id: 'q3',
+                question: 'Why keep legal transitions in one NEXT map instead of scattered if-checks?|||Vì sao giữ các chuyển hợp lệ trong một map NEXT thay vì các if rải rác?',
+                options: [
+                  'Adding a status is a one-line change and every endpoint stays consistent automatically|||Thêm một status là sửa một dòng và mọi endpoint tự động nhất quán',
+                  'Maps are faster than the CPU|||Map nhanh hơn CPU',
+                  'It removes the need for a database|||Nó bỏ nhu cầu cơ sở dữ liệu',
+                  'if-checks are not valid Java|||if-check không phải Java hợp lệ',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q4',
+                question: 'Why is @Transactional alone not enough for the naive read-then-write assign?|||Vì sao chỉ @Transactional không đủ cho gán kiểu đọc-rồi-ghi ngây thơ?',
+                options: [
+                  'Under READ_COMMITTED both agents can read OPEN before either writes|||Dưới READ_COMMITTED cả hai agent có thể đọc OPEN trước khi ai kịp ghi',
+                  'Transactions are off by default|||Transaction tắt mặc định',
+                  'JPA forbids transactions on updates|||JPA cấm transaction khi update',
+                  'The database ignores WHERE clauses|||Cơ sở dữ liệu phớt lờ mệnh đề WHERE',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q5',
+                question: '(Beyond syllabus) The atomic UPDATE...WHERE status=\'OPEN\' is analogous to which low-level primitive?|||(Ngoài giáo trình) UPDATE...WHERE status=\'OPEN\' nguyên tử tương tự nguyên thuỷ cấp thấp nào?',
+                options: [
+                  'Compare-and-swap (CAS): set the value only if it still equals the expected one|||Compare-and-swap (CAS): đặt giá trị chỉ khi nó vẫn bằng giá trị kỳ vọng',
+                  'A busy-wait spin loop|||Vòng lặp spin bận',
+                  'A garbage collector|||Bộ thu gom rác',
+                  'A hash function|||Một hàm băm',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+            ],
+          },
+        },
+      ],
+    },
+    {
+      title: 'Section 5 — Testing (prove no double-grab)|||Mục 5 — Kiểm thử (chứng minh không giành trùng)',
+      lessons: [
+        {
+          title: '5.1 — Unit, MockMvc & a concurrency test|||5.1 — Unit, MockMvc & test đồng thời',
+          slug: 'int604-testing',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 5 · Lesson 5.1</span>
+<h2>Testing: from the state machine to proving the invariant under load</h2>
+<p class="lead">Three layers: a unit test for the transition rules, a MockMvc test for the HTTP contract, and a <strong>concurrency test</strong> that fires many agents at one OPEN ticket and asserts exactly one wins.</p>
+
+<h3>1) Unit test — the state machine in isolation</h3>
+<pre><span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">illegalTransitionRejected</span>() {
+  assertThrows(IllegalTransitionException.class,
+      () -&gt; service.check(TicketStatus.OPEN, TicketStatus.RESOLVED));  <span class="tok-comment">// can't skip stages</span>
+}
+<span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">legalTransitionAllowed</span>() {
+  assertDoesNotThrow(() -&gt; service.check(TicketStatus.ASSIGNED, TicketStatus.IN_PROGRESS));
+}</pre>
+
+<h3>2) MockMvc — the HTTP contract</h3>
+<pre><span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">secondAssignReturns409</span>() <span class="tok-keyword">throws</span> Exception {
+  mvc.<span class="tok-function">perform</span>(post(<span class="tok-string">"/api/tickets/88/assign"</span>).with(jwt(lan)))
+     .andExpect(status().isOk());
+  mvc.<span class="tok-function">perform</span>(post(<span class="tok-string">"/api/tickets/88/assign"</span>).with(jwt(minh)))
+     .andExpect(status().isConflict());   <span class="tok-comment">// 409 — already taken</span>
+}</pre>
+
+<h3>3) The concurrency test — the star of the demo</h3>
+<pre><span class="tok-keyword">@Test</span>
+<span class="tok-keyword">void</span> <span class="tok-function">tenAgentsRaceForOneTicket_onlyOneWins</span>() <span class="tok-keyword">throws</span> Exception {
+  <span class="tok-keyword">int</span> N = <span class="tok-number">10</span>;
+  <span class="tok-keyword">var</span> ready = <span class="tok-keyword">new</span> <span class="tok-type">CountDownLatch</span>(N);
+  <span class="tok-keyword">var</span> go    = <span class="tok-keyword">new</span> <span class="tok-type">CountDownLatch</span>(<span class="tok-number">1</span>);        <span class="tok-comment">// the starting gun</span>
+  <span class="tok-keyword">var</span> won   = <span class="tok-keyword">new</span> <span class="tok-type">AtomicInteger</span>();
+  <span class="tok-keyword">var</span> pool  = Executors.<span class="tok-function">newFixedThreadPool</span>(N);
+
+  <span class="tok-keyword">for</span> (<span class="tok-keyword">int</span> i = <span class="tok-number">0</span>; i &lt; N; i++) {
+    <span class="tok-keyword">long</span> agentId = agents.get(i).getId();
+    pool.<span class="tok-function">submit</span>(() -&gt; {
+      ready.<span class="tok-function">countDown</span>(); go.<span class="tok-function">await</span>();          <span class="tok-comment">// all fire together</span>
+      <span class="tok-keyword">try</span> { service.<span class="tok-function">assign</span>(<span class="tok-number">88L</span>, agentId); won.<span class="tok-function">incrementAndGet</span>(); }
+      <span class="tok-keyword">catch</span> (ConflictException ignored) {}       <span class="tok-comment">// losers get 409</span>
+      <span class="tok-keyword">return null</span>;
+    });
+  }
+  ready.<span class="tok-function">await</span>(); go.<span class="tok-function">countDown</span>();               <span class="tok-comment">// FIRE all 10 at once</span>
+  pool.<span class="tok-function">shutdown</span>(); pool.<span class="tok-function">awaitTermination</span>(<span class="tok-number">5</span>, SECONDS);
+
+  assertThat(won.<span class="tok-function">get</span>()).<span class="tok-function">isEqualTo</span>(<span class="tok-number">1</span>);            <span class="tok-comment">// exactly one claim succeeded</span>
+  <span class="tok-type">Ticket</span> t = tickets.findById(<span class="tok-number">88L</span>).orElseThrow();
+  assertThat(t.getStatus()).<span class="tok-function">isEqualTo</span>(ASSIGNED);
+  assertThat(t.getAssignedAgent()).<span class="tok-function">isNotNull</span>();     <span class="tok-comment">// owned by exactly one agent</span>
+}</pre>
+
+<div class="pitfall"><strong>Trap:</strong> a "concurrency" test with a plain for-loop and no latch. Sequential calls never collide, so the test is green even against the buggy read-then-write assign. If it can't fail on the buggy version, it proves nothing — swap the naive assign back in once and watch it go red.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Assert on the final state, not just the status codes.</b> The strongest check is "the ticket ends ASSIGNED to exactly one agent" — a state assertion survives refactors of <em>how</em> you enforce the rule and catches bugs a 200/409 check would miss. <em>Why beyond syllabus: state-based invariant testing is a property-testing mindset the syllabus never introduces.</em></div>
+
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fhelpdesk-ticketing-api%2Flearn&reflabel=INT604#module-316" target="_blank" rel="noopener">
+  <span class="lc-ico">🌱</span>
+  <span class="lc-body"><span class="lc-title">Testing Spring apps on Code Lab</span><span class="lc-sub">Unit, MockMvc, and integration tests.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 5 · Bài 5.1</span>
+<h2>Kiểm thử: từ máy trạng thái đến chứng minh bất biến dưới tải</h2>
+<p class="lead">Ba lớp: unit test cho luật chuyển trạng thái, MockMvc test cho hợp đồng HTTP, và một <strong>test đồng thời</strong> bắn nhiều agent vào một ticket OPEN và khẳng định đúng một kẻ thắng.</p>
+
+<h3>1) Unit test — máy trạng thái đứng riêng</h3>
+<pre><span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">illegalTransitionRejected</span>() {
+  assertThrows(IllegalTransitionException.class,
+      () -&gt; service.check(TicketStatus.OPEN, TicketStatus.RESOLVED));  <span class="tok-comment">// không nhảy cóc giai đoạn</span>
+}
+<span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">legalTransitionAllowed</span>() {
+  assertDoesNotThrow(() -&gt; service.check(TicketStatus.ASSIGNED, TicketStatus.IN_PROGRESS));
+}</pre>
+
+<h3>2) MockMvc — hợp đồng HTTP</h3>
+<pre><span class="tok-keyword">@Test</span> <span class="tok-keyword">void</span> <span class="tok-function">secondAssignReturns409</span>() <span class="tok-keyword">throws</span> Exception {
+  mvc.<span class="tok-function">perform</span>(post(<span class="tok-string">"/api/tickets/88/assign"</span>).with(jwt(lan)))
+     .andExpect(status().isOk());
+  mvc.<span class="tok-function">perform</span>(post(<span class="tok-string">"/api/tickets/88/assign"</span>).with(jwt(minh)))
+     .andExpect(status().isConflict());   <span class="tok-comment">// 409 — đã có người nhận</span>
+}</pre>
+
+<h3>3) Test đồng thời — ngôi sao của buổi demo</h3>
+<pre><span class="tok-keyword">@Test</span>
+<span class="tok-keyword">void</span> <span class="tok-function">tenAgentsRaceForOneTicket_onlyOneWins</span>() <span class="tok-keyword">throws</span> Exception {
+  <span class="tok-keyword">int</span> N = <span class="tok-number">10</span>;
+  <span class="tok-keyword">var</span> ready = <span class="tok-keyword">new</span> <span class="tok-type">CountDownLatch</span>(N);
+  <span class="tok-keyword">var</span> go    = <span class="tok-keyword">new</span> <span class="tok-type">CountDownLatch</span>(<span class="tok-number">1</span>);        <span class="tok-comment">// súng lệnh xuất phát</span>
+  <span class="tok-keyword">var</span> won   = <span class="tok-keyword">new</span> <span class="tok-type">AtomicInteger</span>();
+  <span class="tok-keyword">var</span> pool  = Executors.<span class="tok-function">newFixedThreadPool</span>(N);
+
+  <span class="tok-keyword">for</span> (<span class="tok-keyword">int</span> i = <span class="tok-number">0</span>; i &lt; N; i++) {
+    <span class="tok-keyword">long</span> agentId = agents.get(i).getId();
+    pool.<span class="tok-function">submit</span>(() -&gt; {
+      ready.<span class="tok-function">countDown</span>(); go.<span class="tok-function">await</span>();          <span class="tok-comment">// tất cả bắn cùng lúc</span>
+      <span class="tok-keyword">try</span> { service.<span class="tok-function">assign</span>(<span class="tok-number">88L</span>, agentId); won.<span class="tok-function">incrementAndGet</span>(); }
+      <span class="tok-keyword">catch</span> (ConflictException ignored) {}       <span class="tok-comment">// kẻ thua nhận 409</span>
+      <span class="tok-keyword">return null</span>;
+    });
+  }
+  ready.<span class="tok-function">await</span>(); go.<span class="tok-function">countDown</span>();               <span class="tok-comment">// BẮN cả 10 cùng lúc</span>
+  pool.<span class="tok-function">shutdown</span>(); pool.<span class="tok-function">awaitTermination</span>(<span class="tok-number">5</span>, SECONDS);
+
+  assertThat(won.<span class="tok-function">get</span>()).<span class="tok-function">isEqualTo</span>(<span class="tok-number">1</span>);            <span class="tok-comment">// đúng một lần nhận thành công</span>
+  <span class="tok-type">Ticket</span> t = tickets.findById(<span class="tok-number">88L</span>).orElseThrow();
+  assertThat(t.getStatus()).<span class="tok-function">isEqualTo</span>(ASSIGNED);
+  assertThat(t.getAssignedAgent()).<span class="tok-function">isNotNull</span>();     <span class="tok-comment">// thuộc đúng một agent</span>
+}</pre>
+
+<div class="pitfall"><strong>Bẫy:</strong> test "đồng thời" bằng vòng for thường không latch. Lời gọi tuần tự không bao giờ đụng nhau, nên test xanh kể cả với gán đọc-rồi-ghi đầy bug. Nếu nó không thể fail trên bản có bug, nó chẳng chứng minh gì — thay gán ngây thơ vào lại một lần và xem nó đỏ.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Khẳng định trạng thái cuối, không chỉ mã trạng thái.</b> Kiểm mạnh nhất là "ticket kết thúc ASSIGNED cho đúng một agent" — khẳng định trạng thái sống sót qua refactor <em>cách</em> bạn cưỡng chế luật và bắt bug mà kiểm 200/409 bỏ sót. <em>Vì sao ngoài syllabus: test bất biến dựa trên trạng thái là tư duy property-testing mà giáo trình không giới thiệu.</em></div>
+
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Fhelpdesk-ticketing-api%2Flearn&reflabel=INT604#module-316" target="_blank" rel="noopener">
+  <span class="lc-ico">🌱</span>
+  <span class="lc-body"><span class="lc-title">Kiểm thử ứng dụng Spring trên Code Lab</span><span class="lc-sub">Unit, MockMvc, và test tích hợp.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      title: 'Section 6 — Deployment with Docker|||Mục 6 — Triển khai với Docker',
+      lessons: [
+        {
+          title: '6.1 — API + Postgres in one Compose file|||6.1 — API + Postgres trong một file Compose',
+          slug: 'int604-docker',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 6 · Lesson 6.1</span>
+<h2>Packaging the API with Docker Compose</h2>
+<p class="lead">One command brings up Postgres and the Spring API. This is what you run in the demo and what a reviewer clones and starts.</p>
+
+<div class="lz-flow">
+  <div class="lz-step">Client / Postman</div>
+  <div class="lz-step">Spring API :8080</div>
+  <div class="lz-step">Postgres :5432</div>
+</div>
+
+<h3>docker-compose.yml</h3>
+<pre><span class="tok-keyword">services</span>:
+  db:
+    <span class="tok-keyword">image</span>: postgres:16
+    <span class="tok-keyword">environment</span>:
+      POSTGRES_DB: helpdesk
+      POSTGRES_PASSWORD: \${DB_PASSWORD}
+    <span class="tok-keyword">volumes</span>: [ "pgdata:/var/lib/postgresql/data" ]
+    <span class="tok-keyword">healthcheck</span>:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 10
+
+  api:
+    <span class="tok-keyword">build</span>: .
+    <span class="tok-keyword">environment</span>:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/helpdesk
+      SPRING_DATASOURCE_PASSWORD: \${DB_PASSWORD}
+      JWT_SECRET: \${JWT_SECRET}
+    <span class="tok-keyword">depends_on</span>:
+      db: { condition: service_healthy }   <span class="tok-comment"># wait for the DB, not just the container</span>
+    <span class="tok-keyword">ports</span>: [ "8080:8080" ]
+
+<span class="tok-keyword">volumes</span>: { pgdata: {} }</pre>
+
+<h3>The Dockerfile — multi-stage build</h3>
+<pre><span class="tok-keyword">FROM</span> maven:3.9-eclipse-temurin-17 <span class="tok-keyword">AS</span> build
+<span class="tok-keyword">WORKDIR</span> /app
+<span class="tok-keyword">COPY</span> pom.xml .
+<span class="tok-keyword">RUN</span> mvn -q dependency:go-offline
+<span class="tok-keyword">COPY</span> src ./src
+<span class="tok-keyword">RUN</span> mvn -q clean package -DskipTests
+
+<span class="tok-keyword">FROM</span> eclipse-temurin:17-jre
+<span class="tok-keyword">COPY</span> --from=build /app/target/*.jar app.jar
+<span class="tok-keyword">EXPOSE</span> 8080
+<span class="tok-keyword">ENTRYPOINT</span> ["java","-jar","/app/app.jar"]</pre>
+
+<h3>Worked example — bring it up</h3>
+<div class="out">$ printf "DB_PASSWORD=secret\\nJWT_SECRET=change-me\\n" &gt; .env
+$ docker compose up --build
+ db  | database system is ready to accept connections
+ api | Started HelpdeskApplication in 4.0 s   (waited for db healthcheck ✅)
+$ curl -X POST localhost:8080/api/tickets/88/assign -H "Authorization: Bearer $T"
+ → 200 OK   (OPEN → ASSIGNED)</div>
+
+<div class="pitfall"><strong>Trap:</strong> <code>depends_on: [db]</code> without a healthcheck. Plain depends_on only waits for the container to <em>start</em>, not for Postgres to accept connections — so the API boots, fails its first query, and crashes. Use <code>condition: service_healthy</code>.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Externalise every secret as an environment variable.</b> <code>JWT_SECRET</code> and the DB password come from <code>.env</code>, never hard-coded. The same image then runs in dev, CI and prod with different secrets injected — the 12-factor principle of config-in-environment. <em>Why beyond syllabus: config/secret separation is an ops discipline the coursework never grades but every deployment needs.</em></div>
+
+<a class="link-card codelab" href="/code-lab/docker?ref=%2Fcourses%2Fhelpdesk-ticketing-api%2Flearn&reflabel=INT604#module-489" target="_blank" rel="noopener">
+  <span class="lc-ico">🐳</span>
+  <span class="lc-body"><span class="lc-title">Docker Compose on Code Lab</span><span class="lc-sub">Multi-service apps, healthchecks, env config.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 6 · Bài 6.1</span>
+<h2>Đóng gói API bằng Docker Compose</h2>
+<p class="lead">Một lệnh dựng Postgres và API Spring. Đây là thứ bạn chạy khi demo và là thứ người chấm clone rồi khởi động.</p>
+
+<div class="lz-flow">
+  <div class="lz-step">Client / Postman</div>
+  <div class="lz-step">Spring API :8080</div>
+  <div class="lz-step">Postgres :5432</div>
+</div>
+
+<h3>docker-compose.yml</h3>
+<pre><span class="tok-keyword">services</span>:
+  db:
+    <span class="tok-keyword">image</span>: postgres:16
+    <span class="tok-keyword">environment</span>:
+      POSTGRES_DB: helpdesk
+      POSTGRES_PASSWORD: \${DB_PASSWORD}
+    <span class="tok-keyword">volumes</span>: [ "pgdata:/var/lib/postgresql/data" ]
+    <span class="tok-keyword">healthcheck</span>:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 10
+
+  api:
+    <span class="tok-keyword">build</span>: .
+    <span class="tok-keyword">environment</span>:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/helpdesk
+      SPRING_DATASOURCE_PASSWORD: \${DB_PASSWORD}
+      JWT_SECRET: \${JWT_SECRET}
+    <span class="tok-keyword">depends_on</span>:
+      db: { condition: service_healthy }   <span class="tok-comment"># chờ DB, không chỉ container</span>
+    <span class="tok-keyword">ports</span>: [ "8080:8080" ]
+
+<span class="tok-keyword">volumes</span>: { pgdata: {} }</pre>
+
+<h3>Dockerfile — build nhiều tầng</h3>
+<pre><span class="tok-keyword">FROM</span> maven:3.9-eclipse-temurin-17 <span class="tok-keyword">AS</span> build
+<span class="tok-keyword">WORKDIR</span> /app
+<span class="tok-keyword">COPY</span> pom.xml .
+<span class="tok-keyword">RUN</span> mvn -q dependency:go-offline
+<span class="tok-keyword">COPY</span> src ./src
+<span class="tok-keyword">RUN</span> mvn -q clean package -DskipTests
+
+<span class="tok-keyword">FROM</span> eclipse-temurin:17-jre
+<span class="tok-keyword">COPY</span> --from=build /app/target/*.jar app.jar
+<span class="tok-keyword">EXPOSE</span> 8080
+<span class="tok-keyword">ENTRYPOINT</span> ["java","-jar","/app/app.jar"]</pre>
+
+<h3>Ví dụ có lời giải — dựng lên</h3>
+<div class="out">$ printf "DB_PASSWORD=secret\\nJWT_SECRET=change-me\\n" &gt; .env
+$ docker compose up --build
+ db  | database system is ready to accept connections
+ api | Started HelpdeskApplication in 4.0 s   (đã chờ healthcheck db ✅)
+$ curl -X POST localhost:8080/api/tickets/88/assign -H "Authorization: Bearer $T"
+ → 200 OK   (OPEN → ASSIGNED)</div>
+
+<div class="pitfall"><strong>Bẫy:</strong> <code>depends_on: [db]</code> mà không healthcheck. depends_on thường chỉ chờ container <em>khởi động</em>, không chờ Postgres nhận kết nối — nên API khởi động, query đầu tiên fail, và crash. Dùng <code>condition: service_healthy</code>.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đưa mọi bí mật ra biến môi trường.</b> <code>JWT_SECRET</code> và mật khẩu DB đến từ <code>.env</code>, không bao giờ hard-code. Cùng một image rồi chạy ở dev, CI và prod với bí mật khác nhau được tiêm vào — nguyên tắc 12-factor config-trong-môi-trường. <em>Vì sao ngoài syllabus: tách config/bí mật là kỷ luật vận hành môn học không chấm nhưng mọi triển khai đều cần.</em></div>
+
+<a class="link-card codelab" href="/code-lab/docker?ref=%2Fcourses%2Fhelpdesk-ticketing-api%2Flearn&reflabel=INT604#module-489" target="_blank" rel="noopener">
+  <span class="lc-ico">🐳</span>
+  <span class="lc-body"><span class="lc-title">Docker Compose trên Code Lab</span><span class="lc-sub">App nhiều dịch vụ, healthcheck, cấu hình env.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      title: 'Section 7 — Advanced: ship like a pro (Beyond the syllabus)|||Mục 7 — Nâng cao: làm như dân chuyên (Ngoài giáo trình)',
+      lessons: [
+        {
+          title: '7.1 — SLA timer, reports, audit log & pessimistic locking ★|||7.1 — SLA timer, báo cáo, audit log & khoá pessimistic ★',
+          slug: 'int604-advanced',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 7 · Lesson 7.1 · <span class="badge">★ Beyond the syllabus</span></span>
+<h2>Four upgrades that turn the API into a portfolio piece</h2>
+<p class="lead">The core is correct. These four additions are what a reviewer of a helpdesk system notices — each a small, self-contained ★ beyond the syllabus.</p>
+
+<h3>1) SLA timer — a scheduled breach check</h3>
+<pre><span class="tok-keyword">@Scheduled</span>(fixedRate = <span class="tok-number">60_000</span>)   <span class="tok-comment">// every minute</span>
+<span class="tok-keyword">public void</span> <span class="tok-function">flagSlaBreaches</span>() {
+  <span class="tok-type">Instant</span> cutoff = Instant.now().minus(<span class="tok-number">4</span>, HOURS);   <span class="tok-comment">// HIGH priority SLA = 4h</span>
+  tickets.<span class="tok-function">markBreached</span>(cutoff);   <span class="tok-comment">// UPDATE ... SET sla_breached=true</span>
+  <span class="tok-comment">//   WHERE priority='HIGH' AND status IN ('OPEN','ASSIGNED') AND created_at &lt; :cutoff</span>
+}</pre>
+<p>A background job, not a per-request check — so breaches surface even for tickets nobody has opened in hours.</p>
+
+<h3>2) Reporting — agent workload &amp; average resolution time</h3>
+<pre><span class="tok-comment">-- how is each agent doing this week?</span>
+<span class="tok-keyword">SELECT</span> u.full_name,
+       <span class="tok-function">COUNT</span>(*) <span class="tok-keyword">FILTER</span> (<span class="tok-keyword">WHERE</span> t.status = <span class="tok-string">'CLOSED'</span>) <span class="tok-keyword">AS</span> closed,
+       <span class="tok-function">ROUND</span>(<span class="tok-function">AVG</span>(<span class="tok-function">EXTRACT</span>(EPOCH <span class="tok-keyword">FROM</span> t.resolved_at - t.created_at)/<span class="tok-number">3600</span>), <span class="tok-number">1</span>) <span class="tok-keyword">AS</span> avg_hours
+<span class="tok-keyword">FROM</span> tickets t
+<span class="tok-keyword">JOIN</span> users u <span class="tok-keyword">ON</span> u.id = t.assigned_agent_id
+<span class="tok-keyword">WHERE</span> t.created_at &gt;= now() - <span class="tok-keyword">INTERVAL</span> <span class="tok-string">'7 days'</span>
+<span class="tok-keyword">GROUP BY</span> u.full_name
+<span class="tok-keyword">ORDER BY</span> closed <span class="tok-keyword">DESC</span>;</pre>
+<p><code>COUNT(*) FILTER (WHERE ...)</code> and <code>AVG</code> let the database compute the whole dashboard in one pass — far faster than looping in Java.</p>
+
+<h3>3) Audit log — who changed what, when</h3>
+<pre><span class="tok-comment">// every transition writes an immutable event row IN THE SAME transaction</span>
+audit.<span class="tok-function">save</span>(<span class="tok-keyword">new</span> <span class="tok-type">TicketEvent</span>(ticketId, actorId, from, to, Instant.now()));</pre>
+<p>An append-only audit trail answers "why is this ticket CLOSED?" and is the foundation of event sourcing. Because it shares the transaction, the log can never disagree with the ticket.</p>
+
+<h3>4) Pessimistic locking — the alternative under heavy contention</h3>
+<pre><span class="tok-keyword">@Lock</span>(LockModeType.PESSIMISTIC_WRITE)
+<span class="tok-keyword">@Query</span>(<span class="tok-string">"select t from Ticket t where t.id = :id"</span>)
+<span class="tok-type">Optional</span>&lt;Ticket&gt; <span class="tok-function">findByIdForUpdate</span>(<span class="tok-keyword">@Param</span>(<span class="tok-string">"id"</span>) <span class="tok-type">Long</span> id);
+<span class="tok-comment">// SELECT ... FOR UPDATE — the second agent BLOCKS until the first commits, then sees ASSIGNED</span></pre>
+<div class="kv-grid">
+  <div class="kv"><b>Atomic UPDATE / @Version</b><span>rare clashes, no waiting, loser retries. Default for claim.</span></div>
+  <div class="kv"><b>Pessimistic FOR UPDATE</b><span>heavy contention, losers wait, no retry. Risk: reduced throughput &amp; deadlocks.</span></div>
+</div>
+
+<div class="pitfall"><strong>Trap:</strong> writing the audit row in a separate transaction from the status change. If the second commit fails, the ticket moved but the log says it didn't — they drift. Keep both writes in one <code>@Transactional</code> method.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>An audit log turns "state" into "history".</b> Storing only the current status answers "what is it now?"; storing every transition answers "how did it get here?" — which is what auditors, debugging, and analytics all need. This is the seed of event sourcing: the events are the source of truth, the current row is a cache. <em>Why beyond syllabus: event sourcing is an architecture the syllabus never mentions, yet an append-only ticket history is its most approachable form.</em></div>
+
+<a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fhelpdesk-ticketing-api%2Flearn&reflabel=INT604#module-411" target="_blank" rel="noopener">
+  <span class="lc-ico">🗄️</span>
+  <span class="lc-body"><span class="lc-title">Transactions, locking &amp; aggregation in SQL</span><span class="lc-sub">FOR UPDATE, FILTER, GROUP BY — on Code Lab.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 7 · Bài 7.1 · <span class="badge">★ Ngoài giáo trình</span></span>
+<h2>Bốn nâng cấp biến API thành tác phẩm hồ sơ</h2>
+<p class="lead">Phần lõi đã đúng. Bốn bổ sung này là thứ người chấm một hệ thống helpdesk để ý — mỗi cái một ★ nhỏ, độc lập, vượt giáo trình.</p>
+
+<h3>1) SLA timer — kiểm vi phạm định giờ</h3>
+<pre><span class="tok-keyword">@Scheduled</span>(fixedRate = <span class="tok-number">60_000</span>)   <span class="tok-comment">// mỗi phút</span>
+<span class="tok-keyword">public void</span> <span class="tok-function">flagSlaBreaches</span>() {
+  <span class="tok-type">Instant</span> cutoff = Instant.now().minus(<span class="tok-number">4</span>, HOURS);   <span class="tok-comment">// SLA ưu tiên HIGH = 4h</span>
+  tickets.<span class="tok-function">markBreached</span>(cutoff);   <span class="tok-comment">// UPDATE ... SET sla_breached=true</span>
+  <span class="tok-comment">//   WHERE priority='HIGH' AND status IN ('OPEN','ASSIGNED') AND created_at &lt; :cutoff</span>
+}</pre>
+<p>Một job nền, không phải kiểm mỗi request — nên vi phạm nổi lên kể cả với ticket không ai mở suốt mấy giờ.</p>
+
+<h3>2) Báo cáo — khối lượng của agent &amp; thời gian giải quyết trung bình</h3>
+<pre><span class="tok-comment">-- mỗi agent làm việc thế nào tuần này?</span>
+<span class="tok-keyword">SELECT</span> u.full_name,
+       <span class="tok-function">COUNT</span>(*) <span class="tok-keyword">FILTER</span> (<span class="tok-keyword">WHERE</span> t.status = <span class="tok-string">'CLOSED'</span>) <span class="tok-keyword">AS</span> closed,
+       <span class="tok-function">ROUND</span>(<span class="tok-function">AVG</span>(<span class="tok-function">EXTRACT</span>(EPOCH <span class="tok-keyword">FROM</span> t.resolved_at - t.created_at)/<span class="tok-number">3600</span>), <span class="tok-number">1</span>) <span class="tok-keyword">AS</span> avg_hours
+<span class="tok-keyword">FROM</span> tickets t
+<span class="tok-keyword">JOIN</span> users u <span class="tok-keyword">ON</span> u.id = t.assigned_agent_id
+<span class="tok-keyword">WHERE</span> t.created_at &gt;= now() - <span class="tok-keyword">INTERVAL</span> <span class="tok-string">'7 days'</span>
+<span class="tok-keyword">GROUP BY</span> u.full_name
+<span class="tok-keyword">ORDER BY</span> closed <span class="tok-keyword">DESC</span>;</pre>
+<p><code>COUNT(*) FILTER (WHERE ...)</code> và <code>AVG</code> để cơ sở dữ liệu tính cả dashboard trong một lượt — nhanh hơn nhiều so với lặp trong Java.</p>
+
+<h3>3) Audit log — ai đổi gì, khi nào</h3>
+<pre><span class="tok-comment">// mỗi chuyển trạng thái ghi một dòng sự kiện bất biến TRONG CÙNG transaction</span>
+audit.<span class="tok-function">save</span>(<span class="tok-keyword">new</span> <span class="tok-type">TicketEvent</span>(ticketId, actorId, from, to, Instant.now()));</pre>
+<p>Một vết audit chỉ-thêm trả lời "vì sao ticket này CLOSED?" và là nền tảng của event sourcing. Vì nó chia sẻ transaction, log không bao giờ mâu thuẫn với ticket.</p>
+
+<h3>4) Khoá pessimistic — phương án khi tranh chấp nặng</h3>
+<pre><span class="tok-keyword">@Lock</span>(LockModeType.PESSIMISTIC_WRITE)
+<span class="tok-keyword">@Query</span>(<span class="tok-string">"select t from Ticket t where t.id = :id"</span>)
+<span class="tok-type">Optional</span>&lt;Ticket&gt; <span class="tok-function">findByIdForUpdate</span>(<span class="tok-keyword">@Param</span>(<span class="tok-string">"id"</span>) <span class="tok-type">Long</span> id);
+<span class="tok-comment">// SELECT ... FOR UPDATE — agent thứ hai BỊ CHẶN tới khi cái đầu commit, rồi thấy ASSIGNED</span></pre>
+<div class="kv-grid">
+  <div class="kv"><b>Atomic UPDATE / @Version</b><span>đụng độ hiếm, không chờ, kẻ thua retry. Mặc định cho nhận việc.</span></div>
+  <div class="kv"><b>Pessimistic FOR UPDATE</b><span>tranh chấp nặng, kẻ thua chờ, không retry. Rủi ro: giảm thông lượng &amp; deadlock.</span></div>
+</div>
+
+<div class="pitfall"><strong>Bẫy:</strong> ghi dòng audit ở transaction riêng so với việc đổi status. Nếu commit thứ hai fail, ticket đã chuyển nhưng log nói chưa — chúng lệch nhau. Giữ cả hai lần ghi trong một method <code>@Transactional</code>.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Audit log biến "trạng thái" thành "lịch sử".</b> Lưu chỉ status hiện tại trả lời "bây giờ nó là gì?"; lưu mọi chuyển trạng thái trả lời "nó tới đây bằng cách nào?" — đó là điều auditor, gỡ lỗi, và phân tích đều cần. Đây là hạt giống của event sourcing: sự kiện là nguồn sự thật, dòng hiện tại là cache. <em>Vì sao ngoài syllabus: event sourcing là kiến trúc giáo trình không nhắc, nhưng lịch sử ticket chỉ-thêm là dạng dễ tiếp cận nhất của nó.</em></div>
+
+<a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fhelpdesk-ticketing-api%2Flearn&reflabel=INT604#module-411" target="_blank" rel="noopener">
+  <span class="lc-ico">🗄️</span>
+  <span class="lc-body"><span class="lc-title">Transaction, khoá &amp; tổng hợp trong SQL</span><span class="lc-sub">FOR UPDATE, FILTER, GROUP BY — trên Code Lab.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+`,
+        },
+        {
+          title: '7.2 — Final quiz: architecture & trade-offs|||7.2 — Quiz cuối: kiến trúc & đánh đổi',
+          slug: 'int604-quiz-7',
+          type: 'QUIZ',
+          quiz: {
+            timeLimitSeconds: 420,
+            questions: [
+              {
+                id: 'q1',
+                question: 'Why run the SLA breach check as a scheduled job rather than on each request?|||Vì sao chạy kiểm vi phạm SLA như một job định giờ thay vì mỗi request?',
+                options: [
+                  'Breaches must surface even for tickets nobody is currently touching|||Vi phạm phải nổi lên kể cả với ticket không ai đang đụng tới',
+                  'Scheduled jobs are the only way to query Postgres|||Job định giờ là cách duy nhất query Postgres',
+                  'Per-request checks are illegal in Spring|||Kiểm mỗi request là bất hợp lệ trong Spring',
+                  'It encrypts the tickets|||Nó mã hoá các ticket',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q2',
+                question: 'Why write the audit event in the SAME transaction as the status change?|||Vì sao ghi sự kiện audit trong CÙNG transaction với việc đổi status?',
+                options: [
+                  'So the log and the ticket commit or roll back together and can never disagree|||Để log và ticket commit hoặc rollback cùng nhau và không bao giờ mâu thuẫn',
+                  'To make the query faster|||Để query nhanh hơn',
+                  'Because JPA requires two transactions|||Vì JPA bắt buộc hai transaction',
+                  'It has no effect|||Không có tác dụng',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q3',
+                question: 'What does COUNT(*) FILTER (WHERE status=\'CLOSED\') compute in the report?|||COUNT(*) FILTER (WHERE status=\'CLOSED\') tính gì trong báo cáo?',
+                options: [
+                  'Only the closed tickets are counted, per group, in a single pass|||Chỉ đếm ticket đã đóng, theo từng nhóm, trong một lượt',
+                  'It deletes closed tickets|||Nó xoá ticket đã đóng',
+                  'It counts all rows regardless of status|||Nó đếm mọi dòng bất kể status',
+                  'It filters out the GROUP BY|||Nó lọc bỏ GROUP BY',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q4',
+                question: 'When would pessimistic FOR UPDATE be preferable to the atomic UPDATE for claiming?|||Khi nào FOR UPDATE pessimistic tốt hơn atomic UPDATE để nhận việc?',
+                options: [
+                  'Under heavy contention when you want callers to wait rather than retry|||Dưới tranh chấp nặng khi bạn muốn người gọi chờ hơn là retry',
+                  'Always — it is strictly better|||Luôn luôn — nó tốt hơn tuyệt đối',
+                  'Only for read-only endpoints|||Chỉ cho endpoint chỉ đọc',
+                  'When there is no primary key|||Khi không có khoá chính',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q5',
+                question: 'Why store legal transitions as a data map instead of if-checks in each controller?|||Vì sao lưu các chuyển hợp lệ như một map dữ liệu thay vì if-check trong từng controller?',
+                options: [
+                  'One source of truth: adding a status is a one-line change and every endpoint stays consistent|||Một nguồn sự thật: thêm status là sửa một dòng và mọi endpoint nhất quán',
+                  'Maps cannot be wrong|||Map không thể sai',
+                  'Controllers cannot contain if statements|||Controller không được chứa if',
+                  'It doubles performance|||Nó tăng gấp đôi hiệu năng',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q6',
+                question: 'Which single mechanism most directly guarantees two agents cannot both claim one OPEN ticket?|||Cơ chế đơn nào trực tiếp bảo đảm hai agent không thể cùng nhận một ticket OPEN?',
+                options: [
+                  'A foreign key on assigned_agent_id|||Khoá ngoại trên assigned_agent_id',
+                  'The atomic UPDATE ... WHERE id=? AND status=\'OPEN\' (compare-and-set)|||UPDATE ... WHERE id=? AND status=\'OPEN\' nguyên tử (compare-and-set)',
+                  'A GET endpoint that lists tickets|||Một endpoint GET liệt kê ticket',
+                  'The email UNIQUE constraint on users|||Ràng buộc UNIQUE email trên users',
+                ],
+                correctIndex: 1,
+                points: 1,
+              },
+            ],
+          },
+        },
+      ],
+    },
   ],
 };

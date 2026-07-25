@@ -1343,6 +1343,684 @@ classes.post(<span class="tok-string">'/'</span>, requireAuth, requireRole(<span
         },
       ],
     },
-/*__MORE__*/
+    {
+      title: 'Section 4 — The Class-Booking Core (no over-booking)|||Mục 4 — Lõi đặt lớp (không quá chỗ)',
+      lessons: [
+        {
+          title: '4.1 — Booking a class without over-booking|||4.1 — Đặt lớp mà không vượt sức chứa',
+          slug: 'int607-booking-core',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 4 · Lesson 4.1</span>
+<h2>A yoga class holds 20 — never let 21 book it</h2>
+<p class="lead">This is the feature graders remember. When a popular class opens, dozens of members tap "Book" within the same second. A naive "count bookings, if &lt; capacity insert" over-books. The fix is a single atomic counter decrement — plus a waitlist for the unlucky.</p>
+
+<h3>The naive service — has a race</h3>
+<pre><span class="tok-comment">// (A) READ how many are booked</span>
+<span class="tok-keyword">const</span> count = <span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">count</span>({ where: { classId, status: <span class="tok-string">"BOOKED"</span> } });
+<span class="tok-keyword">if</span> (count &gt;= gymClass.capacity)               <span class="tok-comment">// (A)</span>
+  <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Class is full"</span>);
+<span class="tok-comment">// (B) WRITE — but 20 requests all read count=19 before any insert!</span>
+<span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">create</span>({ data: { classId, memberId, status: <span class="tok-string">"BOOKED"</span> } });</pre>
+
+<h3>Why it breaks — everyone reads the stale count</h3>
+<div class="out"><b>Time →</b>   20 members tap Book at 06:00:00 for a class with 1 seat left
+  t1..t20   (A) each reads booked=19  (&lt; 20)  ✅ all pass the check
+  t21..t40  (B) all 20 INSERT a booking
+<b>Result (no guard):</b> 39 people booked into a 20-person class. ✗</div>
+
+<h3>The fix — an atomic guarded decrement</h3>
+<p>Keep a <code>seats_left</code> counter on the class and decrement it in one conditional UPDATE. Only requests that find a seat left can succeed:</p>
+<pre><span class="tok-comment">// raw SQL — atomic: the DB evaluates the WHERE and the decrement together</span>
+<span class="tok-keyword">const</span> updated = <span class="tok-keyword">await</span> prisma.$executeRaw&#96;
+  UPDATE "Class" SET seats_left = seats_left - 1
+  WHERE id = \${classId} AND seats_left &gt; 0&#96;;   <span class="tok-comment">// returns rows affected</span>
+
+<span class="tok-keyword">if</span> (updated === <span class="tok-number">1</span>) {
+  <span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">create</span>({ data: { classId, memberId, status: <span class="tok-string">"BOOKED"</span> } });
+  <span class="tok-keyword">return</span> { status: <span class="tok-string">"BOOKED"</span> };
+} <span class="tok-keyword">else</span> {
+  <span class="tok-comment">// seats_left was 0 → no row updated → offer the waitlist (next section)</span>
+  <span class="tok-keyword">return</span> <span class="tok-function">joinWaitlist</span>(classId, memberId);   <span class="tok-comment">// → 202 Accepted, position N</span>
+}</pre>
+
+<h3>How the atomic UPDATE stays correct — the SQL</h3>
+<div class="out">Class 7 has seats_left = 1. Twenty members race:
+  UPDATE "Class" SET seats_left = seats_left - 1 WHERE id=7 AND seats_left > 0;
+
+The DB serialises row-level writes, so exactly ONE update finds seats_left = 1 &gt; 0
+→ sets it to 0, returns 1 row. The other nineteen see seats_left = 0, WHERE fails,
+→ 0 rows updated → they go to the waitlist. No over-booking, ever. ✅</div>
+
+<div class="pitfall"><strong>Trap:</strong> the count-then-insert pattern, even inside a transaction. Under READ_COMMITTED all 20 requests read the same stale count before any insert commits. The guard must be <em>inside</em> the UPDATE's WHERE clause so the check and the decrement are one atomic step.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>A counter column beats COUNT(*) at booking time.</b> Deriving "seats left" with <code>capacity - COUNT(bookings)</code> re-scans rows on every attempt and cannot be guarded atomically. A denormalised <code>seats_left</code> column can be decremented conditionally in O(1) and is the single source of truth for availability. Trading a little denormalisation for a correct, cheap invariant is a deliberate design call. <em>Why beyond syllabus: choosing denormalisation to enable an atomic guard is a modelling decision the syllabus never frames.</em></div>
+
+<a class="link-card codelab" href="/code-lab/postgresql?ref=%2Fcourses%2Fgym-membership-app%2Flearn&reflabel=INT607#module-933" target="_blank" rel="noopener">
+  <span class="lc-ico">🐘</span>
+  <span class="lc-body"><span class="lc-title">Concurrency &amp; locking in PostgreSQL</span><span class="lc-sub">Atomic updates, row locks, isolation — on Code Lab.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 4 · Bài 4.1</span>
+<h2>Một lớp yoga chứa 20 người — đừng bao giờ để 21 người đặt</h2>
+<p class="lead">Đây là tính năng giám khảo nhớ nhất. Khi một lớp hot mở, hàng chục hội viên chạm "Đặt" trong cùng một giây. Kiểu "đếm booking, nếu &lt; sức chứa thì chèn" ngây thơ sẽ quá chỗ. Cách sửa là một lần giảm bộ đếm nguyên tử — cộng một waitlist cho người kém may.</p>
+
+<h3>Service ngây thơ — có race</h3>
+<pre><span class="tok-comment">// (A) ĐỌC đã đặt bao nhiêu</span>
+<span class="tok-keyword">const</span> count = <span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">count</span>({ where: { classId, status: <span class="tok-string">"BOOKED"</span> } });
+<span class="tok-keyword">if</span> (count &gt;= gymClass.capacity)               <span class="tok-comment">// (A)</span>
+  <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Lớp đã đầy"</span>);
+<span class="tok-comment">// (B) GHI — nhưng 20 request đều đọc count=19 trước khi ai chèn!</span>
+<span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">create</span>({ data: { classId, memberId, status: <span class="tok-string">"BOOKED"</span> } });</pre>
+
+<h3>Vì sao nó hỏng — ai cũng đọc số đếm cũ</h3>
+<div class="out"><b>Thời gian →</b>   20 hội viên chạm Đặt lúc 06:00:00 cho lớp còn 1 chỗ
+  t1..t20   (A) mỗi người đọc booked=19  (&lt; 20)  ✅ tất cả qua kiểm
+  t21..t40  (B) cả 20 INSERT một booking
+<b>Kết quả (không rào):</b> 39 người đặt vào một lớp 20 chỗ. ✗</div>
+
+<h3>Cách sửa — giảm có canh nguyên tử</h3>
+<p>Giữ một bộ đếm <code>seats_left</code> trên lớp và giảm nó trong một UPDATE có điều kiện. Chỉ request tìm thấy còn chỗ mới thành công:</p>
+<pre><span class="tok-comment">// SQL thô — nguyên tử: DB tính WHERE và phép giảm cùng nhau</span>
+<span class="tok-keyword">const</span> updated = <span class="tok-keyword">await</span> prisma.$executeRaw&#96;
+  UPDATE "Class" SET seats_left = seats_left - 1
+  WHERE id = \${classId} AND seats_left &gt; 0&#96;;   <span class="tok-comment">// trả số dòng bị ảnh hưởng</span>
+
+<span class="tok-keyword">if</span> (updated === <span class="tok-number">1</span>) {
+  <span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">create</span>({ data: { classId, memberId, status: <span class="tok-string">"BOOKED"</span> } });
+  <span class="tok-keyword">return</span> { status: <span class="tok-string">"BOOKED"</span> };
+} <span class="tok-keyword">else</span> {
+  <span class="tok-comment">// seats_left đã là 0 → không dòng nào update → mời vào waitlist (mục sau)</span>
+  <span class="tok-keyword">return</span> <span class="tok-function">joinWaitlist</span>(classId, memberId);   <span class="tok-comment">// → 202 Accepted, vị trí N</span>
+}</pre>
+
+<h3>Atomic UPDATE giữ đúng thế nào — SQL</h3>
+<div class="out">Lớp 7 có seats_left = 1. Hai mươi hội viên đua:
+  UPDATE "Class" SET seats_left = seats_left - 1 WHERE id=7 AND seats_left > 0;
+
+DB tuần tự hoá ghi ở mức dòng, nên đúng MỘT update tìm thấy seats_left = 1 &gt; 0
+→ đặt về 0, trả 1 dòng. Mười chín người kia thấy seats_left = 0, WHERE fail,
+→ 0 dòng update → họ vào waitlist. Không bao giờ quá chỗ. ✅</div>
+
+<div class="pitfall"><strong>Bẫy:</strong> kiểu đếm-rồi-chèn, kể cả trong transaction. Dưới READ_COMMITTED cả 20 request đọc cùng một số đếm cũ trước khi có insert nào commit. Rào phải nằm <em>bên trong</em> mệnh đề WHERE của UPDATE để kiểm và giảm là một bước nguyên tử.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Một cột bộ đếm hơn COUNT(*) lúc đặt.</b> Suy "còn mấy chỗ" bằng <code>capacity - COUNT(bookings)</code> quét lại dòng ở mỗi lần thử và không thể canh nguyên tử. Một cột <code>seats_left</code> phi chuẩn hoá có thể giảm có điều kiện trong O(1) và là nguồn sự thật duy nhất về chỗ trống. Đánh đổi một chút phi chuẩn hoá để có một bất biến đúng và rẻ là một quyết định thiết kế có chủ đích. <em>Vì sao ngoài syllabus: chọn phi chuẩn hoá để bật một rào nguyên tử là quyết định mô hình hoá giáo trình không đặt ra.</em></div>
+
+<a class="link-card codelab" href="/code-lab/postgresql?ref=%2Fcourses%2Fgym-membership-app%2Flearn&reflabel=INT607#module-933" target="_blank" rel="noopener">
+  <span class="lc-ico">🐘</span>
+  <span class="lc-body"><span class="lc-title">Tương tranh &amp; khoá trong PostgreSQL</span><span class="lc-sub">Update nguyên tử, khoá dòng, mức cô lập — trên Code Lab.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '4.2 — Waitlist, cancel & auto-promote|||4.2 — Waitlist, huỷ & tự đôn lên',
+          slug: 'int607-waitlist',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 4 · Lesson 4.2</span>
+<h2>When a member cancels, promote the next in line — automatically</h2>
+<p class="lead">A full class isn't the end. Members who miss out join a FIFO waitlist; when someone cancels, the first waitlisted member is promoted to a real booking in the <em>same transaction</em> that frees the seat — so a seat is never lost or double-given.</p>
+
+<h3>The cancel + promote, atomically</h3>
+<pre><span class="tok-keyword">await</span> prisma.$transaction(<span class="tok-keyword">async</span> (tx) =&gt; {
+  <span class="tok-comment">// 1) cancel this member's booking</span>
+  <span class="tok-keyword">await</span> tx.booking.<span class="tok-function">update</span>({ where: { id: bookingId }, data: { status: <span class="tok-string">"CANCELLED"</span> } });
+
+  <span class="tok-comment">// 2) is anyone waiting? take the OLDEST waitlist entry (FIFO)</span>
+  <span class="tok-keyword">const</span> next = <span class="tok-keyword">await</span> tx.waitlist.<span class="tok-function">findFirst</span>({
+    where: { classId }, orderBy: { createdAt: <span class="tok-string">"asc"</span> },
+  });
+
+  <span class="tok-keyword">if</span> (next) {
+    <span class="tok-comment">// 3a) promote them — the freed seat goes straight to the waitlist, seats_left unchanged</span>
+    <span class="tok-keyword">await</span> tx.waitlist.<span class="tok-function">delete</span>({ where: { id: next.id } });
+    <span class="tok-keyword">await</span> tx.booking.<span class="tok-function">create</span>({ data: { classId, memberId: next.memberId, status: <span class="tok-string">"BOOKED"</span> } });
+    <span class="tok-function">notify</span>(next.memberId, <span class="tok-string">"You're in! A seat opened up."</span>);   <span class="tok-comment">// push notification</span>
+  } <span class="tok-keyword">else</span> {
+    <span class="tok-comment">// 3b) nobody waiting → return the seat to the pool</span>
+    <span class="tok-keyword">await</span> tx.$executeRaw&#96;UPDATE "Class" SET seats_left = seats_left + 1 WHERE id = \${classId}&#96;;
+  }
+});</pre>
+
+<h3>Worked example — a seat's journey</h3>
+<div class="out">Class 7: capacity 20, seats_left 0, waitlist = [Mai, Nam]
+Booked member cancels →
+  · Mai (oldest) is promoted to BOOKED, removed from waitlist
+  · seats_left stays 0 (the freed seat went to Mai, not back to the pool)
+  · Mai gets a push: "You're in!"
+Later, Nam cancels his waitlist spot → waitlist = [] , seats_left still 0
+If a booked member now cancels and nobody waits → seats_left becomes 1 (open again).</div>
+
+<div class="pitfall"><strong>Trap:</strong> freeing the seat (<code>seats_left + 1</code>) AND promoting a waitlister in the same cancel. That double-frees: the seat goes to the pool <em>and</em> to the waitlisted member, so the class over-books by one. Either promote (seat stays claimed) OR return to pool — never both.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Do the promotion inside the cancel transaction.</b> If cancelling and promoting were two separate transactions, a crash between them loses the seat (freed but nobody promoted) or duplicates it. Wrapping "free a seat" and "fill it from the waitlist" in one transaction makes the whole hand-off atomic — it either fully happens or not at all. <em>Why beyond syllabus: reasoning about the crash window between two writes, and closing it with a transaction, is a reliability skill the coursework never drills.</em></div>
+
+<a class="link-card codelab" href="/code-lab/prisma-orm?ref=%2Fcourses%2Fgym-membership-app%2Flearn&reflabel=INT607#module-2368" target="_blank" rel="noopener">
+  <span class="lc-ico">🔺</span>
+  <span class="lc-body"><span class="lc-title">Prisma transactions on Code Lab</span><span class="lc-sub">$transaction, atomic multi-step writes.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 4 · Bài 4.2</span>
+<h2>Khi một hội viên huỷ, đôn người kế tiếp lên — tự động</h2>
+<p class="lead">Lớp đầy không phải là hết. Hội viên lỡ chỗ vào một waitlist FIFO; khi ai đó huỷ, hội viên đầu waitlist được đôn thành booking thật trong <em>cùng transaction</em> giải phóng chỗ — nên một chỗ không bao giờ bị mất hay trao đôi.</p>
+
+<h3>Huỷ + đôn, nguyên tử</h3>
+<pre><span class="tok-keyword">await</span> prisma.$transaction(<span class="tok-keyword">async</span> (tx) =&gt; {
+  <span class="tok-comment">// 1) huỷ booking của hội viên này</span>
+  <span class="tok-keyword">await</span> tx.booking.<span class="tok-function">update</span>({ where: { id: bookingId }, data: { status: <span class="tok-string">"CANCELLED"</span> } });
+
+  <span class="tok-comment">// 2) có ai đang đợi? lấy waitlist CŨ NHẤT (FIFO)</span>
+  <span class="tok-keyword">const</span> next = <span class="tok-keyword">await</span> tx.waitlist.<span class="tok-function">findFirst</span>({
+    where: { classId }, orderBy: { createdAt: <span class="tok-string">"asc"</span> },
+  });
+
+  <span class="tok-keyword">if</span> (next) {
+    <span class="tok-comment">// 3a) đôn họ lên — chỗ vừa trống đi thẳng cho waitlist, seats_left không đổi</span>
+    <span class="tok-keyword">await</span> tx.waitlist.<span class="tok-function">delete</span>({ where: { id: next.id } });
+    <span class="tok-keyword">await</span> tx.booking.<span class="tok-function">create</span>({ data: { classId, memberId: next.memberId, status: <span class="tok-string">"BOOKED"</span> } });
+    <span class="tok-function">notify</span>(next.memberId, <span class="tok-string">"Bạn có chỗ rồi! Một ghế vừa trống."</span>);   <span class="tok-comment">// push notification</span>
+  } <span class="tok-keyword">else</span> {
+    <span class="tok-comment">// 3b) không ai đợi → trả chỗ về bể</span>
+    <span class="tok-keyword">await</span> tx.$executeRaw&#96;UPDATE "Class" SET seats_left = seats_left + 1 WHERE id = \${classId}&#96;;
+  }
+});</pre>
+
+<h3>Ví dụ có lời giải — hành trình một chỗ</h3>
+<div class="out">Lớp 7: sức chứa 20, seats_left 0, waitlist = [Mai, Nam]
+Hội viên đã đặt huỷ →
+  · Mai (cũ nhất) được đôn thành BOOKED, gỡ khỏi waitlist
+  · seats_left vẫn 0 (chỗ trống đi cho Mai, không về bể)
+  · Mai nhận push: "Bạn có chỗ rồi!"
+Sau đó, Nam huỷ suất waitlist → waitlist = [] , seats_left vẫn 0
+Nếu giờ một hội viên đã đặt huỷ và không ai đợi → seats_left thành 1 (mở lại).</div>
+
+<div class="pitfall"><strong>Bẫy:</strong> vừa giải phóng chỗ (<code>seats_left + 1</code>) VỪA đôn một waitlister trong cùng lần huỷ. Điều đó trả đôi: chỗ đi về bể <em>và</em> đi cho hội viên waitlist, nên lớp quá chỗ một người. Hoặc đôn (chỗ giữ nguyên đã nhận) HOẶC trả về bể — không bao giờ cả hai.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Làm việc đôn bên trong transaction huỷ.</b> Nếu huỷ và đôn là hai transaction riêng, một crash giữa chúng làm mất chỗ (đã giải phóng nhưng không ai được đôn) hoặc nhân đôi nó. Bọc "giải phóng một chỗ" và "lấp nó từ waitlist" trong một transaction khiến cả cú bàn giao nguyên tử — hoặc xảy ra trọn vẹn hoặc không gì cả. <em>Vì sao ngoài syllabus: suy luận về khe crash giữa hai lần ghi, và đóng nó bằng transaction, là kỹ năng độ tin cậy môn học không luyện.</em></div>
+
+<a class="link-card codelab" href="/code-lab/prisma-orm?ref=%2Fcourses%2Fgym-membership-app%2Flearn&reflabel=INT607#module-2368" target="_blank" rel="noopener">
+  <span class="lc-ico">🔺</span>
+  <span class="lc-body"><span class="lc-title">Transaction Prisma trên Code Lab</span><span class="lc-sub">$transaction, ghi nhiều bước nguyên tử.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '4.3 — Checkpoint quiz: the booking core|||4.3 — Quiz kiểm tra: lõi đặt lớp',
+          slug: 'int607-quiz-4',
+          type: 'QUIZ',
+          quiz: {
+            timeLimitSeconds: 360,
+            questions: [
+              {
+                id: 'q1',
+                question: 'Why does UPDATE Class SET seats_left = seats_left - 1 WHERE id=? AND seats_left > 0 prevent over-booking?|||Vì sao UPDATE Class SET seats_left = seats_left - 1 WHERE id=? AND seats_left > 0 chặn quá chỗ?',
+                options: [
+                  'The check and decrement are one atomic step; only requests that find a free seat update a row|||Kiểm và giảm là một bước nguyên tử; chỉ request tìm thấy chỗ trống mới update một dòng',
+                  'It locks the whole table for a minute|||Nó khoá cả bảng một phút',
+                  'It deletes old bookings|||Nó xoá booking cũ',
+                  'It doubles the capacity|||Nó tăng gấp đôi sức chứa',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q2',
+                question: 'Why is count-then-insert unsafe even inside a transaction?|||Vì sao đếm-rồi-chèn không an toàn kể cả trong transaction?',
+                options: [
+                  'Under READ_COMMITTED many requests read the same stale count before any insert commits|||Dưới READ_COMMITTED nhiều request đọc cùng số đếm cũ trước khi có insert nào commit',
+                  'Transactions disable COUNT|||Transaction vô hiệu COUNT',
+                  'INSERT is not transactional|||INSERT không có tính giao dịch',
+                  'It is actually safe|||Thực ra nó an toàn',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q3',
+                question: 'When a booked member cancels and the waitlist is non-empty, what happens to seats_left?|||Khi một hội viên đã đặt huỷ và waitlist không rỗng, seats_left ra sao?',
+                options: [
+                  'It stays the same — the freed seat goes directly to the promoted waitlister|||Nó giữ nguyên — chỗ trống đi thẳng cho waitlister được đôn',
+                  'It increases by 1|||Nó tăng thêm 1',
+                  'It resets to capacity|||Nó về lại sức chứa',
+                  'It goes negative|||Nó thành âm',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q4',
+                question: 'Why must cancel + promote happen in one transaction?|||Vì sao huỷ + đôn phải trong một transaction?',
+                options: [
+                  'A crash between two separate writes could lose the seat or duplicate it; one transaction makes the hand-off atomic|||Crash giữa hai lần ghi riêng có thể mất chỗ hoặc nhân đôi; một transaction làm cú bàn giao nguyên tử',
+                  'Transactions are faster|||Transaction nhanh hơn',
+                  'Prisma requires it for updates|||Prisma bắt buộc cho update',
+                  'It saves memory|||Nó tiết kiệm bộ nhớ',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q5',
+                question: '(Beyond syllabus) Why prefer a seats_left counter column over capacity - COUNT(bookings)?|||(Ngoài giáo trình) Vì sao chuộng cột bộ đếm seats_left hơn capacity - COUNT(bookings)?',
+                options: [
+                  'It can be decremented conditionally in O(1) and guarded atomically; COUNT re-scans and cannot be guarded|||Nó giảm có điều kiện trong O(1) và canh nguyên tử; COUNT quét lại và không canh được',
+                  'COUNT is not valid SQL|||COUNT không phải SQL hợp lệ',
+                  'Counters use less disk|||Bộ đếm tốn ít đĩa hơn',
+                  'There is no difference|||Không có khác biệt',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+            ],
+          },
+        },
+      ],
+    },
+    {
+      title: 'Section 5 — The mobile app (React Native / Expo)|||Mục 5 — Ứng dụng di động (React Native / Expo)',
+      lessons: [
+        {
+          title: '5.1 — Screens, secure token storage & the booking flow|||5.1 — Màn hình, lưu token an toàn & luồng đặt lớp',
+          slug: 'int607-mobile-client',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 5 · Lesson 5.1</span>
+<h2>A React Native app that books classes and handles the waitlist</h2>
+<p class="lead">The mobile client talks to the same REST API. Two mobile-specific concerns matter: storing the JWT <em>securely</em> (not in plain AsyncStorage) and giving clear feedback for the three outcomes — booked, waitlisted, or full.</p>
+
+<h3>Store the token in the device keychain</h3>
+<pre><span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> SecureStore <span class="tok-keyword">from</span> <span class="tok-string">"expo-secure-store"</span>;
+
+<span class="tok-comment">// after login — encrypted, OS-backed keychain, NOT plain AsyncStorage</span>
+<span class="tok-keyword">await</span> SecureStore.<span class="tok-function">setItemAsync</span>(<span class="tok-string">"token"</span>, data.token);
+
+<span class="tok-comment">// a shared fetch wrapper attaches it</span>
+<span class="tok-keyword">async function</span> <span class="tok-function">api</span>(path, opts = {}) {
+  <span class="tok-keyword">const</span> token = <span class="tok-keyword">await</span> SecureStore.<span class="tok-function">getItemAsync</span>(<span class="tok-string">"token"</span>);
+  <span class="tok-keyword">const</span> res = <span class="tok-keyword">await</span> <span class="tok-function">fetch</span>(API_URL + path, {
+    ...opts,
+    headers: { <span class="tok-string">"Content-Type"</span>: <span class="tok-string">"application/json"</span>, Authorization: &#96;Bearer \${token}&#96;, ...opts.headers },
+  });
+  <span class="tok-keyword">if</span> (res.status === <span class="tok-number">401</span>) { <span class="tok-keyword">await</span> <span class="tok-function">signOut</span>(); <span class="tok-keyword">throw new</span> <span class="tok-type">Error</span>(<span class="tok-string">"Session expired"</span>); }
+  <span class="tok-keyword">return</span> res;
+}</pre>
+
+<h3>The Book button — three outcomes</h3>
+<pre><span class="tok-keyword">function</span> <span class="tok-function">BookButton</span>({ classId, onDone }) {
+  <span class="tok-keyword">const</span> [busy, setBusy] = <span class="tok-function">useState</span>(<span class="tok-keyword">false</span>);
+
+  <span class="tok-keyword">async function</span> <span class="tok-function">book</span>() {
+    setBusy(<span class="tok-keyword">true</span>);
+    <span class="tok-keyword">try</span> {
+      <span class="tok-keyword">const</span> res = <span class="tok-keyword">await</span> <span class="tok-function">api</span>(<span class="tok-string">"/bookings"</span>, { method: <span class="tok-string">"POST"</span>, body: JSON.<span class="tok-function">stringify</span>({ classId }) });
+      <span class="tok-keyword">const</span> data = <span class="tok-keyword">await</span> res.<span class="tok-function">json</span>();
+      <span class="tok-keyword">if</span> (res.status === <span class="tok-number">201</span>) Alert.<span class="tok-function">alert</span>(<span class="tok-string">"Booked!"</span>, <span class="tok-string">"See you in class 💪"</span>);
+      <span class="tok-keyword">else if</span> (res.status === <span class="tok-number">202</span>) Alert.<span class="tok-function">alert</span>(<span class="tok-string">"Class full"</span>, &#96;You're #\${data.position} on the waitlist.&#96;);
+      onDone();                       <span class="tok-comment">// refetch class list</span>
+    } <span class="tok-keyword">catch</span> (e) {
+      Alert.<span class="tok-function">alert</span>(<span class="tok-string">"Could not book"</span>, e.message);
+    } <span class="tok-keyword">finally</span> { setBusy(<span class="tok-keyword">false</span>); }
+  }
+
+  <span class="tok-keyword">return</span> &lt;Pressable disabled={busy} onPress={book}&gt;&lt;Text&gt;{busy ? <span class="tok-string">"…"</span> : <span class="tok-string">"Book"</span>}&lt;/Text&gt;&lt;/Pressable&gt;;
+}</pre>
+
+<div class="pitfall"><strong>Trap:</strong> keeping the JWT in <code>AsyncStorage</code>. AsyncStorage is unencrypted plain text on the device — any backup or rooted phone exposes it. Use <code>expo-secure-store</code>, which is backed by the iOS Keychain / Android Keystore.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>202 Accepted is the right code for "waitlisted".</b> The request succeeded but the booking isn't confirmed — it's pending a seat. <code>201 Created</code> would lie (nothing was booked); <code>409</code> would say "give up". <code>202 Accepted</code> precisely means "we took your request, it's in progress" — exactly the waitlist. Choosing the honest status code is what lets the app render the right screen. <em>Why beyond syllabus: the 202 semantic for async/pending outcomes is almost never taught, yet it models the waitlist perfectly.</em></div>
+
+<a class="link-card codelab" href="/code-lab/react-native?ref=%2Fcourses%2Fgym-membership-app%2Flearn&reflabel=INT607#module-765" target="_blank" rel="noopener">
+  <span class="lc-ico">📱</span>
+  <span class="lc-body"><span class="lc-title">Auth &amp; secure storage on Code Lab</span><span class="lc-sub">Tokens, secure-store, fetch wrappers.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 5 · Bài 5.1</span>
+<h2>Một app React Native đặt lớp và xử lý waitlist</h2>
+<p class="lead">Client di động nói chuyện với cùng REST API. Hai mối quan tâm riêng của mobile: lưu JWT <em>an toàn</em> (không phải AsyncStorage thường) và phản hồi rõ ràng cho ba kết cục — đã đặt, vào waitlist, hoặc đầy.</p>
+
+<h3>Lưu token trong keychain thiết bị</h3>
+<pre><span class="tok-keyword">import</span> * <span class="tok-keyword">as</span> SecureStore <span class="tok-keyword">from</span> <span class="tok-string">"expo-secure-store"</span>;
+
+<span class="tok-comment">// sau đăng nhập — keychain mã hoá, do OS bảo vệ, KHÔNG phải AsyncStorage thường</span>
+<span class="tok-keyword">await</span> SecureStore.<span class="tok-function">setItemAsync</span>(<span class="tok-string">"token"</span>, data.token);
+
+<span class="tok-comment">// một wrapper fetch dùng chung gắn nó</span>
+<span class="tok-keyword">async function</span> <span class="tok-function">api</span>(path, opts = {}) {
+  <span class="tok-keyword">const</span> token = <span class="tok-keyword">await</span> SecureStore.<span class="tok-function">getItemAsync</span>(<span class="tok-string">"token"</span>);
+  <span class="tok-keyword">const</span> res = <span class="tok-keyword">await</span> <span class="tok-function">fetch</span>(API_URL + path, {
+    ...opts,
+    headers: { <span class="tok-string">"Content-Type"</span>: <span class="tok-string">"application/json"</span>, Authorization: &#96;Bearer \${token}&#96;, ...opts.headers },
+  });
+  <span class="tok-keyword">if</span> (res.status === <span class="tok-number">401</span>) { <span class="tok-keyword">await</span> <span class="tok-function">signOut</span>(); <span class="tok-keyword">throw new</span> <span class="tok-type">Error</span>(<span class="tok-string">"Phiên hết hạn"</span>); }
+  <span class="tok-keyword">return</span> res;
+}</pre>
+
+<h3>Nút Đặt — ba kết cục</h3>
+<pre><span class="tok-keyword">function</span> <span class="tok-function">BookButton</span>({ classId, onDone }) {
+  <span class="tok-keyword">const</span> [busy, setBusy] = <span class="tok-function">useState</span>(<span class="tok-keyword">false</span>);
+
+  <span class="tok-keyword">async function</span> <span class="tok-function">book</span>() {
+    setBusy(<span class="tok-keyword">true</span>);
+    <span class="tok-keyword">try</span> {
+      <span class="tok-keyword">const</span> res = <span class="tok-keyword">await</span> <span class="tok-function">api</span>(<span class="tok-string">"/bookings"</span>, { method: <span class="tok-string">"POST"</span>, body: JSON.<span class="tok-function">stringify</span>({ classId }) });
+      <span class="tok-keyword">const</span> data = <span class="tok-keyword">await</span> res.<span class="tok-function">json</span>();
+      <span class="tok-keyword">if</span> (res.status === <span class="tok-number">201</span>) Alert.<span class="tok-function">alert</span>(<span class="tok-string">"Đã đặt!"</span>, <span class="tok-string">"Hẹn gặp ở lớp 💪"</span>);
+      <span class="tok-keyword">else if</span> (res.status === <span class="tok-number">202</span>) Alert.<span class="tok-function">alert</span>(<span class="tok-string">"Lớp đầy"</span>, &#96;Bạn là #\${data.position} trong waitlist.&#96;);
+      onDone();                       <span class="tok-comment">// tải lại danh sách lớp</span>
+    } <span class="tok-keyword">catch</span> (e) {
+      Alert.<span class="tok-function">alert</span>(<span class="tok-string">"Không đặt được"</span>, e.message);
+    } <span class="tok-keyword">finally</span> { setBusy(<span class="tok-keyword">false</span>); }
+  }
+
+  <span class="tok-keyword">return</span> &lt;Pressable disabled={busy} onPress={book}&gt;&lt;Text&gt;{busy ? <span class="tok-string">"…"</span> : <span class="tok-string">"Đặt"</span>}&lt;/Text&gt;&lt;/Pressable&gt;;
+}</pre>
+
+<div class="pitfall"><strong>Bẫy:</strong> giữ JWT trong <code>AsyncStorage</code>. AsyncStorage là văn bản thường không mã hoá trên thiết bị — bất kỳ bản sao lưu hay điện thoại đã root nào cũng lộ nó. Dùng <code>expo-secure-store</code>, được bảo vệ bởi iOS Keychain / Android Keystore.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>202 Accepted là mã đúng cho "vào waitlist".</b> Request thành công nhưng booking chưa được xác nhận — nó đang chờ một chỗ. <code>201 Created</code> sẽ nói dối (chẳng đặt được gì); <code>409</code> sẽ bảo "bỏ cuộc". <code>202 Accepted</code> nghĩa chính xác "chúng tôi đã nhận yêu cầu, đang xử lý" — đúng là waitlist. Chọn mã trạng thái trung thực là điều cho phép app render đúng màn hình. <em>Vì sao ngoài syllabus: ngữ nghĩa 202 cho kết cục bất đồng bộ/đang chờ gần như không được dạy, nhưng nó mô hình hoá waitlist hoàn hảo.</em></div>
+
+<a class="link-card codelab" href="/code-lab/react-native?ref=%2Fcourses%2Fgym-membership-app%2Flearn&reflabel=INT607#module-765" target="_blank" rel="noopener">
+  <span class="lc-ico">📱</span>
+  <span class="lc-body"><span class="lc-title">Auth &amp; lưu trữ an toàn trên Code Lab</span><span class="lc-sub">Token, secure-store, fetch wrapper.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      title: 'Section 6 — Deployment (API + mobile build)|||Mục 6 — Triển khai (API + build mobile)',
+      lessons: [
+        {
+          title: '6.1 — Docker for the API, EAS build for the app|||6.1 — Docker cho API, EAS build cho app',
+          slug: 'int607-docker',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 6 · Lesson 6.1</span>
+<h2>Two deploy targets: the API to a server, the app to the stores</h2>
+<p class="lead">A mobile project ships in two halves. The REST API + Postgres go into Docker on a server (as before). The React Native app is <em>built</em> with Expo EAS into an installable binary — it doesn't run on your server, it runs on phones.</p>
+
+<div class="lz-flow">
+  <div class="lz-step">Phone app (Expo EAS build)</div>
+  <div class="lz-step">Express API :3000 (Docker)</div>
+  <div class="lz-step">Postgres :5432 (Docker)</div>
+</div>
+
+<h3>The API side — docker-compose.yml</h3>
+<pre><span class="tok-keyword">services</span>:
+  db:
+    <span class="tok-keyword">image</span>: postgres:16
+    <span class="tok-keyword">environment</span>: { POSTGRES_DB: gym, POSTGRES_PASSWORD: \${DB_PASSWORD} }
+    <span class="tok-keyword">volumes</span>: [ "pgdata:/var/lib/postgresql/data" ]
+    <span class="tok-keyword">healthcheck</span>: { test: ["CMD-SHELL","pg_isready -U postgres"], interval: 5s, retries: 10 }
+  api:
+    <span class="tok-keyword">build</span>: .
+    <span class="tok-keyword">environment</span>:
+      DATABASE_URL: postgresql://postgres:\${DB_PASSWORD}@db:5432/gym
+      JWT_SECRET: \${JWT_SECRET}
+    <span class="tok-keyword">command</span>: sh -c "npx prisma migrate deploy &amp;&amp; node src/server.js"
+    <span class="tok-keyword">depends_on</span>: { db: { condition: service_healthy } }
+    <span class="tok-keyword">ports</span>: [ "3000:3000" ]
+<span class="tok-keyword">volumes</span>: { pgdata: {} }</pre>
+
+<h3>The app side — point it at the deployed API, then build</h3>
+<pre><span class="tok-comment"># app.json / .env — the app must call the PUBLIC url, not localhost</span>
+EXPO_PUBLIC_API_URL=https://api.yourgym.com
+
+<span class="tok-comment"># build an installable binary with EAS (Expo Application Services)</span>
+npx eas build --profile preview --platform android   <span class="tok-comment"># → an .apk to install &amp; demo</span></pre>
+
+<div class="pitfall"><strong>Trap:</strong> leaving <code>API_URL</code> as <code>http://localhost:3000</code> in the built app. On a phone, <code>localhost</code> is the <em>phone itself</em>, not your dev machine — every request fails. The app must point at the API's real LAN IP (in dev) or its public URL (in the build).</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>EXPO_PUBLIC_* is baked in at build time.</b> Just like Next's NEXT_PUBLIC_, any <code>EXPO_PUBLIC_</code> variable is compiled into the binary when you run the build — changing the API URL later means a new build, not a config edit. And never ship a secret this way: it's inside an app anyone can decompile. <em>Why beyond syllabus: the build-time env baking and its "no secrets in the client" corollary catch out real mobile deploys, and the syllabus never covers the app/server split.</em></div>
+
+<a class="link-card codelab" href="/code-lab/expo?ref=%2Fcourses%2Fgym-membership-app%2Flearn&reflabel=INT607#module-1612" target="_blank" rel="noopener">
+  <span class="lc-ico">📲</span>
+  <span class="lc-body"><span class="lc-title">Expo setup &amp; builds on Code Lab</span><span class="lc-sub">EAS build, env, installable binaries.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 6 · Bài 6.1</span>
+<h2>Hai đích triển khai: API lên server, app lên store</h2>
+<p class="lead">Một dự án mobile ship hai nửa. REST API + Postgres vào Docker trên server (như trước). App React Native được <em>build</em> bằng Expo EAS thành một binary cài được — nó không chạy trên server của bạn, nó chạy trên điện thoại.</p>
+
+<div class="lz-flow">
+  <div class="lz-step">App điện thoại (Expo EAS build)</div>
+  <div class="lz-step">Express API :3000 (Docker)</div>
+  <div class="lz-step">Postgres :5432 (Docker)</div>
+</div>
+
+<h3>Phía API — docker-compose.yml</h3>
+<pre><span class="tok-keyword">services</span>:
+  db:
+    <span class="tok-keyword">image</span>: postgres:16
+    <span class="tok-keyword">environment</span>: { POSTGRES_DB: gym, POSTGRES_PASSWORD: \${DB_PASSWORD} }
+    <span class="tok-keyword">volumes</span>: [ "pgdata:/var/lib/postgresql/data" ]
+    <span class="tok-keyword">healthcheck</span>: { test: ["CMD-SHELL","pg_isready -U postgres"], interval: 5s, retries: 10 }
+  api:
+    <span class="tok-keyword">build</span>: .
+    <span class="tok-keyword">environment</span>:
+      DATABASE_URL: postgresql://postgres:\${DB_PASSWORD}@db:5432/gym
+      JWT_SECRET: \${JWT_SECRET}
+    <span class="tok-keyword">command</span>: sh -c "npx prisma migrate deploy &amp;&amp; node src/server.js"
+    <span class="tok-keyword">depends_on</span>: { db: { condition: service_healthy } }
+    <span class="tok-keyword">ports</span>: [ "3000:3000" ]
+<span class="tok-keyword">volumes</span>: { pgdata: {} }</pre>
+
+<h3>Phía app — trỏ tới API đã deploy, rồi build</h3>
+<pre><span class="tok-comment"># app.json / .env — app phải gọi url CÔNG KHAI, không phải localhost</span>
+EXPO_PUBLIC_API_URL=https://api.yourgym.com
+
+<span class="tok-comment"># build một binary cài được bằng EAS (Expo Application Services)</span>
+npx eas build --profile preview --platform android   <span class="tok-comment"># → một .apk để cài &amp; demo</span></pre>
+
+<div class="pitfall"><strong>Bẫy:</strong> để <code>API_URL</code> là <code>http://localhost:3000</code> trong app đã build. Trên điện thoại, <code>localhost</code> là <em>chính điện thoại</em>, không phải máy dev của bạn — mọi request fail. App phải trỏ tới IP LAN thật của API (lúc dev) hoặc URL công khai của nó (lúc build).</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>EXPO_PUBLIC_* bị "nướng" vào lúc build.</b> Giống NEXT_PUBLIC_ của Next, bất kỳ biến <code>EXPO_PUBLIC_</code> nào được biên dịch vào binary khi bạn chạy build — đổi API URL về sau nghĩa là build mới, không phải sửa config. Và đừng bao giờ ship bí mật kiểu này: nó nằm trong một app ai cũng decompile được. <em>Vì sao ngoài syllabus: env nướng lúc-build và hệ quả "không bí mật trong client" làm hỏng deploy mobile thật, và giáo trình không nói về phân chia app/server.</em></div>
+
+<a class="link-card codelab" href="/code-lab/expo?ref=%2Fcourses%2Fgym-membership-app%2Flearn&reflabel=INT607#module-1612" target="_blank" rel="noopener">
+  <span class="lc-ico">📲</span>
+  <span class="lc-body"><span class="lc-title">Cài đặt &amp; build Expo trên Code Lab</span><span class="lc-sub">EAS build, env, binary cài được.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      title: 'Section 7 — Advanced: ship like a pro (Beyond the syllabus)|||Mục 7 — Nâng cao: làm như dân chuyên (Ngoài giáo trình)',
+      lessons: [
+        {
+          title: '7.1 — Push, QR check-in, membership expiry & optimistic UI ★|||7.1 — Push, check-in QR, hết hạn thẻ & UI lạc quan ★',
+          slug: 'int607-advanced',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 7 · Lesson 7.1 · <span class="badge">★ Beyond the syllabus</span></span>
+<h2>Four upgrades that turn the app into a portfolio piece</h2>
+<p class="lead">The booking core is correct. These four additions are what a reviewer of a mobile gym app notices — each a small, self-contained ★ beyond the syllabus.</p>
+
+<h3>1) Push notifications — tell the waitlister they got in</h3>
+<pre><span class="tok-comment">// backend: when auto-promoting from the waitlist, send an Expo push</span>
+<span class="tok-keyword">await</span> <span class="tok-function">fetch</span>(<span class="tok-string">"https://exp.host/--/api/v2/push/send"</span>, {
+  method: <span class="tok-string">"POST"</span>, headers: { <span class="tok-string">"Content-Type"</span>: <span class="tok-string">"application/json"</span> },
+  body: JSON.<span class="tok-function">stringify</span>({ to: member.expoPushToken, title: <span class="tok-string">"You're in!"</span>, body: <span class="tok-string">"A seat opened in Yoga 6pm"</span> }),
+});</pre>
+<p>The seat that opened is worthless if the member never learns about it — a push closes the loop from Section 4's waitlist.</p>
+
+<h3>2) QR check-in — prove attendance at the door</h3>
+<pre><span class="tok-comment">// the app shows a QR encoding a short-lived signed token</span>
+<span class="tok-keyword">const</span> qr = jwt.<span class="tok-function">sign</span>({ bookingId, exp: nowSec + <span class="tok-number">90</span> }, CHECKIN_SECRET);   <span class="tok-comment">// valid 90s</span>
+<span class="tok-comment">// the front-desk scanner POSTs it → backend verifies + marks ATTENDED (once)</span></pre>
+<p>The 90-second expiry stops a member screenshotting a QR and sharing it — the token is stale seconds later.</p>
+
+<h3>3) Membership expiry — a nightly job</h3>
+<pre><span class="tok-comment">// cron: every night, expire memberships whose end date has passed</span>
+<span class="tok-keyword">await</span> prisma.$executeRaw&#96;
+  UPDATE "Membership" SET status = 'EXPIRED'
+  WHERE status = 'ACTIVE' AND ends_at &lt; now()&#96;;
+<span class="tok-comment">// booking then checks membership.status = 'ACTIVE' before allowing a class</span></pre>
+
+<h3>4) Optimistic UI — instant feedback, then reconcile</h3>
+<pre><span class="tok-comment">// flip the button to "Booked" immediately, roll back if the server disagrees</span>
+setLocal(<span class="tok-string">"BOOKED"</span>);                       <span class="tok-comment">// optimistic</span>
+<span class="tok-keyword">try</span> { <span class="tok-keyword">await</span> <span class="tok-function">api</span>(<span class="tok-string">"/bookings"</span>, {...}); }
+<span class="tok-keyword">catch</span> { setLocal(<span class="tok-string">"AVAILABLE"</span>); Alert.<span class="tok-function">alert</span>(<span class="tok-string">"Class filled up"</span>); }   <span class="tok-comment">// reconcile on failure</span></pre>
+
+<div class="pitfall"><strong>Trap:</strong> trusting the client's <code>expoPushToken</code> forever. Push tokens rotate (reinstall, OS update) and go stale; sending to a dead token silently fails. Refresh and re-store the token on every app launch, and drop tokens Expo reports as invalid.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Short-lived signed tokens beat static QR codes.</b> A QR that never expires can be screenshotted and reused; one that carries a 90-second signed expiry is single-use in practice. The same idea — a signature plus a tight expiry — secures check-ins, magic links, and one-time actions everywhere. <em>Why beyond syllabus: designing an expiring, signed capability for a physical-world action is a security pattern the coursework never poses.</em></div>
+
+<a class="link-card codelab" href="/code-lab/react-native?ref=%2Fcourses%2Fgym-membership-app%2Flearn&reflabel=INT607#module-459" target="_blank" rel="noopener">
+  <span class="lc-ico">📱</span>
+  <span class="lc-body"><span class="lc-title">Native features on Code Lab</span><span class="lc-sub">Push, camera/QR, device APIs.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 7 · Bài 7.1 · <span class="badge">★ Ngoài giáo trình</span></span>
+<h2>Bốn nâng cấp biến app thành tác phẩm hồ sơ</h2>
+<p class="lead">Lõi đặt lớp đã đúng. Bốn bổ sung này là thứ người chấm một app gym di động để ý — mỗi cái một ★ nhỏ, độc lập, vượt giáo trình.</p>
+
+<h3>1) Push notification — báo waitlister họ có chỗ</h3>
+<pre><span class="tok-comment">// backend: khi tự đôn từ waitlist, gửi một push Expo</span>
+<span class="tok-keyword">await</span> <span class="tok-function">fetch</span>(<span class="tok-string">"https://exp.host/--/api/v2/push/send"</span>, {
+  method: <span class="tok-string">"POST"</span>, headers: { <span class="tok-string">"Content-Type"</span>: <span class="tok-string">"application/json"</span> },
+  body: JSON.<span class="tok-function">stringify</span>({ to: member.expoPushToken, title: <span class="tok-string">"Bạn có chỗ rồi!"</span>, body: <span class="tok-string">"Ghế trống ở Yoga 18h"</span> }),
+});</pre>
+<p>Chỗ vừa trống vô nghĩa nếu hội viên không bao giờ biết — một push đóng vòng lặp từ waitlist ở Mục 4.</p>
+
+<h3>2) Check-in QR — chứng minh có mặt ở cửa</h3>
+<pre><span class="tok-comment">// app hiện một QR mã hoá một token đã ký đời ngắn</span>
+<span class="tok-keyword">const</span> qr = jwt.<span class="tok-function">sign</span>({ bookingId, exp: nowSec + <span class="tok-number">90</span> }, CHECKIN_SECRET);   <span class="tok-comment">// hợp lệ 90s</span>
+<span class="tok-comment">// máy quét ở quầy POST nó → backend xác minh + đánh dấu ATTENDED (một lần)</span></pre>
+<p>Hạn 90 giây chặn hội viên chụp màn hình một QR rồi chia sẻ — token đã cũ vài giây sau.</p>
+
+<h3>3) Hết hạn thẻ — một job hằng đêm</h3>
+<pre><span class="tok-comment">// cron: mỗi đêm, cho hết hạn các thẻ đã qua ngày kết thúc</span>
+<span class="tok-keyword">await</span> prisma.$executeRaw&#96;
+  UPDATE "Membership" SET status = 'EXPIRED'
+  WHERE status = 'ACTIVE' AND ends_at &lt; now()&#96;;
+<span class="tok-comment">// đặt lớp sau đó kiểm membership.status = 'ACTIVE' trước khi cho vào lớp</span></pre>
+
+<h3>4) UI lạc quan — phản hồi tức thì, rồi đối soát</h3>
+<pre><span class="tok-comment">// lật nút thành "Đã đặt" ngay, rollback nếu server không đồng ý</span>
+setLocal(<span class="tok-string">"BOOKED"</span>);                       <span class="tok-comment">// lạc quan</span>
+<span class="tok-keyword">try</span> { <span class="tok-keyword">await</span> <span class="tok-function">api</span>(<span class="tok-string">"/bookings"</span>, {...}); }
+<span class="tok-keyword">catch</span> { setLocal(<span class="tok-string">"AVAILABLE"</span>); Alert.<span class="tok-function">alert</span>(<span class="tok-string">"Lớp vừa đầy"</span>); }   <span class="tok-comment">// đối soát khi lỗi</span></pre>
+
+<div class="pitfall"><strong>Bẫy:</strong> tin <code>expoPushToken</code> của client mãi mãi. Token push xoay vòng (cài lại, cập nhật OS) và cũ đi; gửi tới token chết âm thầm fail. Làm mới và lưu lại token ở mỗi lần mở app, và bỏ token Expo báo không hợp lệ.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Token ký đời ngắn hơn QR tĩnh.</b> Một QR không bao giờ hết hạn có thể bị chụp và tái dùng; một cái mang hạn ký 90 giây thực tế là dùng-một-lần. Cùng ý tưởng — một chữ ký cộng một hạn ngắn — bảo vệ check-in, magic link, và hành động một-lần khắp nơi. <em>Vì sao ngoài syllabus: thiết kế một "capability" ký có hạn cho một hành động thế giới thực là mẫu bảo mật môn học không đặt ra.</em></div>
+
+<a class="link-card codelab" href="/code-lab/react-native?ref=%2Fcourses%2Fgym-membership-app%2Flearn&reflabel=INT607#module-459" target="_blank" rel="noopener">
+  <span class="lc-ico">📱</span>
+  <span class="lc-body"><span class="lc-title">Tính năng native trên Code Lab</span><span class="lc-sub">Push, camera/QR, device API.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '7.2 — Final quiz: architecture & trade-offs|||7.2 — Quiz cuối: kiến trúc & đánh đổi',
+          slug: 'int607-quiz-7',
+          type: 'QUIZ',
+          quiz: {
+            timeLimitSeconds: 420,
+            questions: [
+              {
+                id: 'q1',
+                question: 'Why store the JWT with expo-secure-store instead of AsyncStorage?|||Vì sao lưu JWT bằng expo-secure-store thay vì AsyncStorage?',
+                options: [
+                  'AsyncStorage is unencrypted plain text; secure-store uses the OS keychain/keystore|||AsyncStorage là văn bản thường không mã hoá; secure-store dùng keychain/keystore của OS',
+                  'AsyncStorage cannot store strings|||AsyncStorage không lưu được chuỗi',
+                  'secure-store is faster|||secure-store nhanh hơn',
+                  'There is no difference|||Không có khác biệt',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q2',
+                question: 'Which HTTP status best represents "added to the waitlist"?|||Mã HTTP nào biểu diễn tốt nhất "đã thêm vào waitlist"?',
+                options: ['201 Created', '202 Accepted', '409 Conflict', '500 Internal Server Error'],
+                correctIndex: 1,
+                points: 1,
+              },
+              {
+                id: 'q3',
+                question: 'On the built mobile app, why does API_URL = http://localhost:3000 fail?|||Trên app mobile đã build, vì sao API_URL = http://localhost:3000 thất bại?',
+                options: [
+                  'On a phone localhost means the phone itself, not your dev server; use the LAN IP or public URL|||Trên điện thoại localhost nghĩa là chính điện thoại, không phải server dev; dùng IP LAN hoặc URL công khai',
+                  'localhost is a reserved word|||localhost là từ khoá',
+                  'Port 3000 is blocked on all phones|||Cổng 3000 bị chặn trên mọi điện thoại',
+                  'It actually works|||Thực ra nó chạy',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q4',
+                question: 'Why give the check-in QR token a 90-second expiry?|||Vì sao cho token QR check-in hạn 90 giây?',
+                options: [
+                  'A short expiry makes a screenshotted/shared QR useless seconds later — effectively single-use|||Hạn ngắn khiến một QR bị chụp/chia sẻ vô dụng vài giây sau — thực tế dùng một lần',
+                  'To save battery|||Để tiết kiệm pin',
+                  'Because JWTs must be under 90 seconds|||Vì JWT phải dưới 90 giây',
+                  'It makes the QR smaller|||Nó làm QR nhỏ hơn',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q5',
+                question: 'Why must cancel + waitlist-promote run in one transaction?|||Vì sao huỷ + đôn-waitlist phải chạy trong một transaction?',
+                options: [
+                  'A crash between two separate writes could lose the freed seat or duplicate it|||Crash giữa hai lần ghi riêng có thể mất chỗ vừa trống hoặc nhân đôi nó',
+                  'Transactions are required by Expo|||Expo bắt buộc transaction',
+                  'It makes the push faster|||Nó làm push nhanh hơn',
+                  'It saves database space|||Nó tiết kiệm dung lượng',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q6',
+                question: 'Which mechanism most directly guarantees a 20-seat class never books 21 members?|||Cơ chế nào trực tiếp bảo đảm lớp 20 chỗ không bao giờ đặt 21 người?',
+                options: [
+                  'The atomic UPDATE ... SET seats_left = seats_left - 1 WHERE seats_left > 0|||UPDATE ... SET seats_left = seats_left - 1 WHERE seats_left > 0 nguyên tử',
+                  'A foreign key on memberId|||Khoá ngoại trên memberId',
+                  'Counting bookings in JavaScript|||Đếm booking trong JavaScript',
+                  'The expo-secure-store keychain|||Keychain expo-secure-store',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+            ],
+          },
+        },
+      ],
+    },
   ],
 };

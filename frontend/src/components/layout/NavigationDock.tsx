@@ -11,7 +11,7 @@ import {
   GraduationCap, ShoppingBag, Layers, ChevronRight,
   Github, Menu, X, NotebookPen, Languages, Wallet,
   TrendingUp, Gamepad2, Users, PlayCircle, Megaphone, Briefcase, Crown,
-  FileText, Newspaper, Radio, Code2, Binary, Map as MapIcon,
+  FileText, Newspaper, Radio, Code2, Binary, Map as MapIcon, ClipboardCheck,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
@@ -86,6 +86,7 @@ const ALL_DOCK_ITEMS: DockItem[] = [
   { href: '/repos', label: 'GitHub Repos', icon: Github, section: 'code' },
   // Learn
   { href: '/academy', label: 'Academy', icon: GraduationCap, section: 'learn' },
+  { href: '/exam', label: 'Exam Room', icon: ClipboardCheck, section: 'learn' },
   { href: '/courses', label: 'Courses', icon: BookMarked, section: 'learn' },
   { href: '/my-courses', label: 'My Courses', icon: PlayCircle, section: 'learn' },
   { href: '/language', label: 'My Language', icon: Languages, section: 'learn' },

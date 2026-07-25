@@ -1,0 +1,128 @@
+/* ── Exam Room (Phòng thi) — scoped design system ──────────────────────
+   Built on the app's global tokens (var(--text-primary), --bg-card,
+   --border-color, theme-dark aware). Modern-minimal, matches code-lab.css. */
+
+.exam-root {
+  --exam-accent: #6366f1;      /* indigo */
+  --exam-accent-2: #8b5cf6;    /* violet */
+  --exam-ok: #10b981;
+  --exam-warn: #f59e0b;
+  --exam-danger: #ef4444;
+  --exam-ring-track: var(--border-color);
+  color: var(--text-primary);
+}
+
+/* Bilingual show/hide (mirrors .rich-content data-ml) */
+.exam-root[data-ml="en"] .ml-vi { display: none; }
+.exam-root[data-ml="vi"] .ml-en { display: none; }
+
+/* Cards */
+.exam-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+}
+
+/* Kind / status badges */
+.exam-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; line-height: 1;
+  padding: 5px 10px; border-radius: 999px;
+  border: 1px solid transparent;
+}
+.exam-badge-fe { background: rgba(99,102,241,.14); color: var(--exam-accent); border-color: rgba(99,102,241,.3); }
+.exam-badge-pe { background: rgba(139,92,246,.14); color: var(--exam-accent-2); border-color: rgba(139,92,246,.3); }
+.exam-badge-pass { background: rgba(16,185,129,.14); color: var(--exam-ok); border-color: rgba(16,185,129,.3); }
+.exam-badge-fail { background: rgba(239,68,68,.14); color: var(--exam-danger); border-color: rgba(239,68,68,.3); }
+.exam-badge-real { background: rgba(245,158,11,.14); color: var(--exam-warn); border-color: rgba(245,158,11,.3); }
+
+/* Countdown timer — tabular figures so width never shifts */
+.exam-timer {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  letter-spacing: .5px;
+}
+.exam-timer-normal { color: var(--text-primary); }
+.exam-timer-warn { color: var(--exam-warn); }
+.exam-timer-danger { color: var(--exam-danger); animation: exam-pulse 1s ease-in-out infinite; }
+@keyframes exam-pulse { 50% { opacity: .55; } }
+@media (prefers-reduced-motion: reduce) { .exam-timer-danger { animation: none; } }
+
+/* Question navigator grid */
+.exam-nav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(38px, 1fr)); gap: 8px; }
+.exam-nav-cell {
+  aspect-ratio: 1 / 1; min-width: 38px; min-height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 10px; font-size: 13px; font-weight: 600;
+  border: 1px solid var(--border-color); background: var(--bg-surface);
+  color: var(--text-secondary); cursor: pointer;
+  transition: transform .12s ease, background .12s ease, border-color .12s ease;
+  position: relative;
+}
+.exam-nav-cell:hover { transform: translateY(-1px); border-color: var(--exam-accent); }
+.exam-nav-cell[data-answered="true"] { background: rgba(99,102,241,.16); border-color: var(--exam-accent); color: var(--exam-accent); }
+.exam-nav-cell[data-current="true"] { outline: 2px solid var(--exam-accent); outline-offset: 1px; }
+.exam-nav-cell[data-flagged="true"]::after {
+  content: ""; position: absolute; top: 3px; right: 3px;
+  width: 7px; height: 7px; border-radius: 50%; background: var(--exam-warn);
+}
+
+/* MCQ option cards */
+.exam-opt {
+  display: flex; gap: 12px; align-items: flex-start;
+  width: 100%; text-align: left;
+  padding: 14px 16px; border-radius: 12px;
+  border: 1.5px solid var(--border-color); background: var(--bg-card);
+  cursor: pointer; transition: border-color .12s ease, background .12s ease, transform .08s ease;
+  min-height: 44px;
+}
+.exam-opt:hover { border-color: var(--exam-accent); background: var(--bg-surface-hover); }
+.exam-opt[data-selected="true"] { border-color: var(--exam-accent); background: rgba(99,102,241,.1); }
+.exam-opt:active { transform: scale(.995); }
+.exam-opt-mark {
+  flex: 0 0 auto; width: 26px; height: 26px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--border-color); font-weight: 700; font-size: 13px;
+  color: var(--text-secondary); background: var(--bg-surface);
+}
+.exam-opt[data-multi="true"] .exam-opt-mark { border-radius: 6px; }
+.exam-opt[data-selected="true"] .exam-opt-mark { background: var(--exam-accent); border-color: var(--exam-accent); color: #fff; }
+
+/* Review states (post-submit) */
+.exam-opt[data-state="correct"] { border-color: var(--exam-ok); background: rgba(16,185,129,.12); }
+.exam-opt[data-state="wrong"] { border-color: var(--exam-danger); background: rgba(239,68,68,.1); }
+.exam-opt[data-state="missed"] { border-color: var(--exam-ok); border-style: dashed; }
+.exam-opt[data-state="correct"] .exam-opt-mark { background: var(--exam-ok); border-color: var(--exam-ok); color: #fff; }
+.exam-opt[data-state="wrong"] .exam-opt-mark { background: var(--exam-danger); border-color: var(--exam-danger); color: #fff; }
+
+/* Explanation callout */
+.exam-explain {
+  border-left: 3px solid var(--exam-accent);
+  background: rgba(99,102,241,.07);
+  border-radius: 0 12px 12px 0; padding: 12px 16px;
+}
+
+/* Score ring */
+.exam-ring { --p: 0; --sz: 132px; width: var(--sz); height: var(--sz); border-radius: 50%;
+  background: conic-gradient(var(--ring-col) calc(var(--p) * 1%), var(--exam-ring-track) 0);
+  display: flex; align-items: center; justify-content: center; }
+.exam-ring-hole { width: calc(var(--sz) - 22px); height: calc(var(--sz) - 22px); border-radius: 50%;
+  background: var(--bg-card); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+/* Code / output blocks in problem statements reuse .rich-content tok-*; PE
+   console output uses a dark terminal look regardless of theme. */
+.exam-terminal {
+  background: #0d1117; color: #e6edf3; border-radius: 10px;
+  padding: 12px 14px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px; line-height: 1.5; white-space: pre; overflow-x: auto;
+}
+
+/* Sticky exam header bar */
+.exam-bar {
+  position: sticky; top: 0; z-index: 30;
+  background: var(--bg-glass); backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.exam-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.exam-scroll::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 8px; }

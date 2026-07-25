@@ -73,6 +73,7 @@ const blogRoutes = (await import(path.join(__dirname, 'routes', 'blog.routes.js'
 const courseRoutes = (await import(path.join(__dirname, 'routes', 'course.routes.js'))).default;
 const paymentRoutes = (await import(path.join(__dirname, 'routes', 'payment.routes.js'))).default;
 const academyRoutes = (await import(path.join(__dirname, 'routes', 'academy.routes.js'))).default;
+const examRoutes = (await import(path.join(__dirname, 'routes', 'exam.routes.js'))).default;
 const courseCategoryRoutes = (await import(path.join(__dirname, 'routes', 'courseCategory.routes.js'))).default;
 const shopRoutes = (await import(path.join(__dirname, 'routes', 'shop.routes.js'))).default;
 // Phase 4 add — the curated Song pool that powers the
@@ -472,6 +473,7 @@ app.use('/api/v1/blog', blogRoutes);
 app.use('/api/v1/courses', courseRoutes);
 app.use('/api/v1/payments', paymentRoutes);
 app.use('/api/v1/academy', academyRoutes);
+app.use('/api/v1/exams', examRoutes);
 app.use('/api/v1/course-categories', courseCategoryRoutes);
 app.use('/api/v1/shop', shopRoutes);
 app.use('/api/v1/songs', songRoutes);

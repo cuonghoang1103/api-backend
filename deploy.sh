@@ -400,6 +400,26 @@ else
  echo "$EXPHUB_SEED_OUT" | tail -5 | sed 's/^/ /'
 fi
 
+# ── Step 3.14: Exam Room content seed (idempotent) ─────────────
+# One .mjs per subject under content/exams/ → upsert Exam + questions
+# keyed by (course, kind, code). Real FE/PE papers. Safe to re-run.
+info "Running Exam Room seed..."
+EXAM_SEED_OUT=$($DC exec -T backend sh -c '
+  for f in content/exams/*.mjs; do
+    [ -e "$f" ] || { echo "no exam content files"; break; }
+    echo "-- $f"
+    node scripts/academy-seed-exam.mjs --file "$f" --apply 2>&1
+  done
+') || true
+if echo "$EXAM_SEED_OUT" | grep -qiE "error|cannot find|exception|not found"; then
+ warn "Exam seed reported errors — see /tmp/seed-exam.log"
+ echo "$EXAM_SEED_OUT" > /tmp/seed-exam.log
+ echo "$EXAM_SEED_OUT" | tail -5 | sed 's/^/ /'
+else
+ ok "Exam Room seed complete"
+ echo "$EXAM_SEED_OUT" | tail -6 | sed 's/^/ /'
+fi
+
 # ── Step 4: Health checks ─────────────────────────────────────────
 info "Waiting for backend to be healthy..."
 backend_ok=false
@@ -477,6 +497,7 @@ for route in \
     landing/promos \
     code-lab/groups \
     roadmaps \
+    exams \
     cyber/profile; do
     code=$(docker exec cuonghoangdev_backend \
         sh -c "curl -s -o /dev/null -w '%{http_code}' http://localhost:3001/api/v1/${route}" 2>/dev/null)

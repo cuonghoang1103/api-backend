@@ -864,6 +864,7 @@ model Course {
   tags         CourseTag[]
   orders       CourseOrder[]
   courseCodes  CourseCode[]
+  exams        Exam[]
 
   @@index([categoryId], name: "idx_courses_category")
   @@index([instructorId], name: "idx_courses_instructor")
@@ -965,6 +966,127 @@ model CourseDocument {
   @@index([lessonId], name: "idx_documents_lesson")
   @@index([courseId], name: "idx_documents_course")
   @@map("course_documents")
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// Exam Room (Phòng thi) — a real FPTU-style exam experience attached to a
+// Course. Two kinds:
+//   • FE (Final Exam)     → multiple-choice, auto-graded (single & multi-select).
+//   • PE (Practical Exam) → peType CODE | WRITE | SPEAK.
+// Attempts are persisted with full history (score, answers, AI feedback).
+// Real exam papers are imported from scanned images via a seed script; the
+// "Final Exam" lesson chapters remain as study/guide material and link here.
+// ─────────────────────────────────────────────────────────────────────
+model Exam {
+  id               Int      @id @default(autoincrement())
+  courseId         Int      @map("course_id")
+  // 'FE' = Final Exam (multiple choice) | 'PE' = Practical Exam
+  kind             String   @default("FE") @db.VarChar(10)
+  // For PE only: 'CODE' | 'WRITE' | 'SPEAK'. Null for FE.
+  peType           String?  @map("pe_type") @db.VarChar(10)
+  // Bilingual "EN|||VI".
+  title            String   @db.VarChar(255)
+  description      String?  @db.Text
+  // Distinguishes multiple papers per course, e.g. "SP26", "FA25", "Đề 1".
+  code             String?  @db.VarChar(60)
+  durationMinutes  Int      @default(60) @map("duration_minutes")
+  totalPoints      Decimal  @default(10) @map("total_points") @db.Decimal(6, 2)
+  passMark         Decimal  @default(4) @map("pass_mark") @db.Decimal(6, 2)
+  shuffleQuestions Boolean  @default(false) @map("shuffle_questions")
+  shuffleOptions   Boolean  @default(false) @map("shuffle_options")
+  // 'REAL' (đề trường thật) | 'SAMPLE' (tự soạn).
+  source           String   @default("SAMPLE") @db.VarChar(10)
+  // Bilingual exam-room instructions (HTML with .ml-en/.ml-vi).
+  instructions     String?  @db.Text
+  isPublished      Boolean  @default(false) @map("is_published")
+  sortOrder        Int      @default(0) @map("sort_order")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  course    Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  questions ExamQuestion[]
+  attempts  ExamAttempt[]
+
+  @@index([courseId], name: "idx_exams_course")
+  @@index([courseId, kind], name: "idx_exams_course_kind")
+  @@index([isPublished], name: "idx_exams_published")
+  @@map("exams")
+}
+
+model ExamQuestion {
+  id              Int      @id @default(autoincrement())
+  examId          Int      @map("exam_id")
+  // 'MCQ' (FE) | 'CODE' | 'WRITE' | 'SPEAK' (PE)
+  kind            String   @default("MCQ") @db.VarChar(10)
+  sortOrder       Int      @default(0) @map("sort_order")
+  points          Decimal  @default(1) @db.Decimal(6, 2)
+  // Bilingual prompt / problem statement (HTML; long PE uses .ml-en/.ml-vi).
+  prompt          String   @db.Text
+  // Optional scanned question image stored in R2.
+  imageUrl        String?  @map("image_url") @db.VarChar(500)
+  // ── MCQ (FE) ──
+  // options: [{ text: "EN|||VI" }, ...]
+  options         Json?    @db.JsonB
+  // Supports single- AND multi-select ("choose two correct answers").
+  correctIndexes  Int[]    @default([]) @map("correct_indexes")
+  // Bilingual "why this is the answer" (EN|||VI or ml-* HTML).
+  explanation     String?  @db.Text
+  // ── PE ──
+  language        String?  @db.VarChar(30)
+  starterCode     String?  @map("starter_code") @db.Text
+  // Reference solution the author wrote & test-ran (revealed after grading).
+  sampleSolution  String?  @map("sample_solution") @db.Text
+  // Example console I/O expected by the problem.
+  expectedOutput  String?  @map("expected_output") @db.Text
+  // rubric: [{ id, criterion: "EN|||VI", weight, maxScore }]
+  rubric          Json?    @db.JsonB
+  // SPEAK: derived sub-questions [{ text: "EN|||VI" }].
+  speakingPrompts Json?    @map("speaking_prompts") @db.JsonB
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+  @@index([examId], name: "idx_exam_questions_exam")
+  @@map("exam_questions")
+}
+
+model ExamAttempt {
+  id               Int       @id @default(autoincrement())
+  // No FK to User (interview pattern) — keeps the migration additive.
+  userId           Int       @map("user_id")
+  examId           Int       @map("exam_id")
+  // IN_PROGRESS | SUBMITTED | GRADED | EXPIRED
+  status           String    @default("IN_PROGRESS") @db.VarChar(15)
+  startedAt        DateTime  @default(now()) @map("started_at")
+  submittedAt      DateTime? @map("submitted_at")
+  // startedAt + durationMinutes — used for server-side timer enforcement.
+  expiresAt        DateTime? @map("expires_at")
+  timeSpentSeconds Int       @default(0) @map("time_spent_seconds")
+  score            Decimal?  @db.Decimal(6, 2)
+  maxScore         Decimal?  @map("max_score") @db.Decimal(6, 2)
+  passed           Boolean?
+  // Per-question answers keyed by questionId:
+  //   MCQ   → number[] (selected indexes)
+  //   CODE  → { zipR2Key, fileName }
+  //   WRITE → string (English essay)
+  //   SPEAK → { audioR2Keys: string[], transcripts: string[] }
+  answers          Json      @default("{}") @db.JsonB
+  // Per-question grading + overall AI feedback.
+  feedback         Json?     @db.JsonB
+  // Anti-cheat: { tabSwitches, blurCount, ... }.
+  integritySignals Json?     @map("integrity_signals") @db.JsonB
+  // AUTO (FE) | AI | MANUAL | SELF (PE)
+  gradingMode      String    @default("AUTO") @map("grading_mode") @db.VarChar(10)
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+  @@index([userId, examId], name: "idx_exam_attempts_user_exam")
+  @@index([examId], name: "idx_exam_attempts_exam")
+  @@index([userId, status], name: "idx_exam_attempts_user_status")
+  @@map("exam_attempts")
 }
 
 model Enrollment {

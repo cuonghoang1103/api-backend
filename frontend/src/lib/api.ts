@@ -1036,6 +1036,121 @@ export const academyCodesApi = {
   delete: (id: number) => api.delete(`/academy/codes/${id}`),
 };
 
+// ─────────────────────────────────────────────────────────────
+// Exam Room (Phòng thi) API
+// ─────────────────────────────────────────────────────────────
+export type ExamKind = 'FE' | 'PE';
+export type PeType = 'CODE' | 'WRITE' | 'SPEAK';
+export type ExamQuestionKind = 'MCQ' | 'CODE' | 'WRITE' | 'SPEAK';
+
+export interface ExamMy {
+  attempts: number;
+  bestScore: number | null;
+  lastScore: number | null;
+  passed: boolean;
+  lastAttemptId: number | null;
+  inProgressId: number | null;
+}
+export interface ExamHeader {
+  id: number;
+  courseId: number;
+  kind: ExamKind;
+  peType: PeType | null;
+  title: string;
+  description: string | null;
+  code: string | null;
+  durationMinutes: number;
+  totalPoints: number;
+  passMark: number;
+  source: string;
+  instructions: string | null;
+  isPublished: boolean;
+  sortOrder: number;
+  questionCount?: number;
+  my?: ExamMy | null;
+}
+export interface ExamOption { text: string }
+export interface ExamTakingQuestion {
+  id: number;
+  kind: ExamQuestionKind;
+  sortOrder: number;
+  points: number;
+  prompt: string;
+  imageUrl: string | null;
+  options: ExamOption[] | null;
+  selectCount: number;
+  multiSelect: boolean;
+  language: string | null;
+  starterCode: string | null;
+  expectedOutput: string | null;
+  speakingPrompts: { text: string }[] | null;
+}
+
+export interface ExamPortalItem {
+  id: number;
+  courseId: number;
+  kind: ExamKind;
+  peType: PeType | null;
+  title: string;
+  code: string | null;
+  durationMinutes: number;
+  totalPoints: number;
+  passMark: number;
+  questionCount: number;
+  course: { title: string; slug: string; courseCode: string | null } | null;
+  semester: { name: string; ordinal: number; code: string } | null;
+}
+
+export const examApi = {
+  // Public
+  listAll: () => api.get<{ data: ExamPortalItem[] }>('/exams'),
+  listForCourse: (courseIdOrSlug: string | number) =>
+    api.get<{ data: ExamHeader[] }>(`/exams/course/${courseIdOrSlug}`),
+  // Taking
+  getForTaking: (examId: number) =>
+    api.get<{ data: ExamHeader & { questions: ExamTakingQuestion[] } }>(`/exams/${examId}/take`),
+  start: (examId: number) =>
+    api.post<{ data: { attemptId: number; startedAt: string; expiresAt: string | null; resumed: boolean } }>(`/exams/${examId}/attempts`),
+  myAttempts: (examId?: number) =>
+    api.get(`/exams/attempts/mine`, { params: examId ? { examId } : {} }),
+  getAttempt: (attemptId: number) => api.get(`/exams/attempts/${attemptId}`),
+  submitFe: (attemptId: number, data: { answers: Record<string, number[]>; timeSpentSeconds?: number; integritySignals?: unknown }) =>
+    api.post(`/exams/attempts/${attemptId}/submit-fe`, data),
+  submitCode: (attemptId: number, file: File, timeSpentSeconds?: number) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    if (timeSpentSeconds != null) fd.append('timeSpentSeconds', String(timeSpentSeconds));
+    return api.post(`/exams/attempts/${attemptId}/submit-code`, fd, {
+      headers: { 'Content-Type': 'multipart/form-data' }, timeout: 120000,
+    });
+  },
+  submitWrite: (attemptId: number, data: { essays: Record<string, string>; timeSpentSeconds?: number }) =>
+    api.post(`/exams/attempts/${attemptId}/submit-write`, data, { timeout: 120000 }),
+  submitSpeak: (attemptId: number, questionId: number, audios: Blob[], timeSpentSeconds?: number) => {
+    const fd = new FormData();
+    audios.forEach((b, i) => fd.append('audio', b, `answer-${i + 1}.webm`));
+    fd.append('questionId', String(questionId));
+    if (timeSpentSeconds != null) fd.append('timeSpentSeconds', String(timeSpentSeconds));
+    return api.post(`/exams/attempts/${attemptId}/submit-speak`, fd, {
+      headers: { 'Content-Type': 'multipart/form-data' }, timeout: 120000,
+    });
+  },
+  genSpeakingQuestions: (questionId: number, count = 4) =>
+    api.post<{ data: { text: string }[] }>(`/exams/questions/${questionId}/speaking-questions`, { count }),
+  // Admin
+  adminList: (courseId?: number) => api.get(`/exams/admin/list`, { params: courseId ? { courseId } : {} }),
+  adminGet: (examId: number) => api.get(`/exams/admin/${examId}`),
+  adminCreate: (data: Partial<ExamHeader>) => api.post(`/exams/admin`, data),
+  adminUpdate: (examId: number, data: Partial<ExamHeader>) => api.put(`/exams/admin/${examId}`, data),
+  adminDelete: (examId: number) => api.delete(`/exams/admin/${examId}`),
+  adminUpsertQuestion: (examId: number, data: Record<string, unknown>, questionId?: number) =>
+    questionId
+      ? api.put(`/exams/admin/${examId}/questions/${questionId}`, data)
+      : api.post(`/exams/admin/${examId}/questions`, data),
+  adminDeleteQuestion: (examId: number, questionId: number) =>
+    api.delete(`/exams/admin/${examId}/questions/${questionId}`),
+};
+
 // Course Categories API
 export const courseCategoryApi = {
   getAll: () => api.get('/course-categories'),

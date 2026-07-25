@@ -1228,5 +1228,837 @@ lib/
         },
       ],
     },
+    {
+      title: 'Section 3 — Authentication & Roles (NextAuth)|||Mục 3 — Xác thực & phân quyền (NextAuth)',
+      lessons: [
+        {
+          title: '3.1 — Sessions, protecting routes & roles|||3.1 — Phiên, bảo vệ route & vai trò',
+          slug: 'int605-auth',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 3 · Lesson 3.1</span>
+<h2>Auth in the App Router: sessions, middleware &amp; roles</h2>
+<p class="lead">A learner enrols and takes quizzes; an instructor creates courses. NextAuth (Auth.js) issues the session; the server reads it in every Server Component, Route Handler and Server Action — the client is never trusted for authorization.</p>
+
+<h3>Read the session on the server</h3>
+<pre><span class="tok-comment">// any Server Component or Route Handler</span>
+<span class="tok-keyword">import</span> { auth } <span class="tok-keyword">from</span> <span class="tok-string">"@/auth"</span>;
+
+<span class="tok-keyword">const</span> session = <span class="tok-keyword">await</span> <span class="tok-function">auth</span>();
+<span class="tok-keyword">if</span> (!session) <span class="tok-function">redirect</span>(<span class="tok-string">"/login"</span>);       <span class="tok-comment">// not signed in</span>
+<span class="tok-keyword">const</span> { id, role } = session.user;       <span class="tok-comment">// role: LEARNER | INSTRUCTOR</span></pre>
+
+<h3>Guard whole route groups with middleware</h3>
+<pre><span class="tok-comment">// middleware.ts — runs before matched routes</span>
+<span class="tok-keyword">export</span> { auth <span class="tok-keyword">as</span> middleware } <span class="tok-keyword">from</span> <span class="tok-string">"@/auth"</span>;
+<span class="tok-keyword">export const</span> config = { matcher: [<span class="tok-string">"/dashboard/:path*"</span>, <span class="tok-string">"/api/attempts/:path*"</span>] };</pre>
+
+<h3>Role check where it matters</h3>
+<pre><span class="tok-keyword">export async function</span> <span class="tok-function">POST</span>(req: Request) {
+  <span class="tok-keyword">const</span> session = <span class="tok-keyword">await</span> <span class="tok-function">auth</span>();
+  <span class="tok-keyword">if</span> (session?.user.role !== <span class="tok-string">"INSTRUCTOR"</span>)
+    <span class="tok-keyword">return</span> Response.<span class="tok-function">json</span>({ message: <span class="tok-string">"Forbidden"</span> }, { status: <span class="tok-number">403</span> });
+  <span class="tok-comment">// ... create the course</span>
+}</pre>
+
+<div class="pitfall"><strong>Trap:</strong> checking the role only in the client component that renders the "Create course" button. Hiding a button is UX, not security — the Route Handler must re-check the role, because anyone can POST to your API directly with curl.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The server component boundary is a trust boundary.</b> In the App Router, code in a Server Component never ships to the browser — so secrets, the DB client, and authorization checks live there safely. Understanding what runs on the server vs the client is <em>the</em> mental model of the App Router. <em>Why beyond syllabus: the server/client split and its security implications go far beyond a "make a website" brief.</em></div>
+
+<a class="link-card codelab" href="/code-lab/authentication?ref=%2Fcourses%2Fe-learning-mini-platform%2Flearn&reflabel=INT605#module-954" target="_blank" rel="noopener">
+  <span class="lc-ico">🔐</span>
+  <span class="lc-body"><span class="lc-title">NextAuth &amp; sessions on Code Lab</span><span class="lc-sub">Providers, sessions, protecting routes.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 3 · Bài 3.1</span>
+<h2>Xác thực trong App Router: phiên, middleware &amp; vai trò</h2>
+<p class="lead">Học viên ghi danh và làm quiz; giảng viên tạo khoá học. NextAuth (Auth.js) phát phiên; server đọc nó ở mọi Server Component, Route Handler và Server Action — client không bao giờ được tin để phân quyền.</p>
+
+<h3>Đọc phiên ở server</h3>
+<pre><span class="tok-comment">// bất kỳ Server Component hay Route Handler nào</span>
+<span class="tok-keyword">import</span> { auth } <span class="tok-keyword">from</span> <span class="tok-string">"@/auth"</span>;
+
+<span class="tok-keyword">const</span> session = <span class="tok-keyword">await</span> <span class="tok-function">auth</span>();
+<span class="tok-keyword">if</span> (!session) <span class="tok-function">redirect</span>(<span class="tok-string">"/login"</span>);       <span class="tok-comment">// chưa đăng nhập</span>
+<span class="tok-keyword">const</span> { id, role } = session.user;       <span class="tok-comment">// role: LEARNER | INSTRUCTOR</span></pre>
+
+<h3>Bảo vệ cả nhóm route bằng middleware</h3>
+<pre><span class="tok-comment">// middleware.ts — chạy trước các route khớp</span>
+<span class="tok-keyword">export</span> { auth <span class="tok-keyword">as</span> middleware } <span class="tok-keyword">from</span> <span class="tok-string">"@/auth"</span>;
+<span class="tok-keyword">export const</span> config = { matcher: [<span class="tok-string">"/dashboard/:path*"</span>, <span class="tok-string">"/api/attempts/:path*"</span>] };</pre>
+
+<h3>Kiểm role ở nơi quan trọng</h3>
+<pre><span class="tok-keyword">export async function</span> <span class="tok-function">POST</span>(req: Request) {
+  <span class="tok-keyword">const</span> session = <span class="tok-keyword">await</span> <span class="tok-function">auth</span>();
+  <span class="tok-keyword">if</span> (session?.user.role !== <span class="tok-string">"INSTRUCTOR"</span>)
+    <span class="tok-keyword">return</span> Response.<span class="tok-function">json</span>({ message: <span class="tok-string">"Forbidden"</span> }, { status: <span class="tok-number">403</span> });
+  <span class="tok-comment">// ... tạo khoá học</span>
+}</pre>
+
+<div class="pitfall"><strong>Bẫy:</strong> chỉ kiểm role trong client component render nút "Tạo khoá học". Ẩn nút là UX, không phải bảo mật — Route Handler phải kiểm lại role, vì ai cũng có thể POST thẳng tới API bằng curl.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Ranh giới Server Component là ranh giới tin cậy.</b> Trong App Router, code trong Server Component không bao giờ gửi xuống trình duyệt — nên bí mật, DB client, và kiểm phân quyền sống ở đó an toàn. Hiểu cái gì chạy ở server vs client là mô hình tư duy <em>cốt lõi</em> của App Router. <em>Vì sao ngoài syllabus: phân chia server/client và hệ quả bảo mật vượt xa đề "làm một trang web".</em></div>
+
+<a class="link-card codelab" href="/code-lab/authentication?ref=%2Fcourses%2Fe-learning-mini-platform%2Flearn&reflabel=INT605#module-954" target="_blank" rel="noopener">
+  <span class="lc-ico">🔐</span>
+  <span class="lc-body"><span class="lc-title">NextAuth &amp; phiên trên Code Lab</span><span class="lc-sub">Provider, phiên, bảo vệ route.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      title: 'Section 4 — The Grading Core (server-side, one attempt)|||Mục 4 — Lõi chấm điểm (phía server, một lượt)',
+      lessons: [
+        {
+          title: '4.1 — Grade on the server, never in the browser|||4.1 — Chấm ở server, không bao giờ ở trình duyệt',
+          slug: 'int605-grading-core',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 4 · Lesson 4.1</span>
+<h2>The one rule that makes a quiz trustworthy: the browser must never see the answers</h2>
+<p class="lead">This is the feature graders remember. The tempting design — send the quiz <em>with</em> its correct answers and grade in JavaScript — is a security disaster: anyone opens DevTools and reads every answer. The fix is a strict boundary: questions go to the client <strong>without</strong> the key; grading happens on the server.</p>
+
+<h3>The vulnerable design — answers leak to the client</h3>
+<pre><span class="tok-comment">// ❌ NEVER: the correct index rides along to the browser</span>
+<span class="tok-keyword">const</span> quiz = <span class="tok-keyword">await</span> prisma.quiz.<span class="tok-function">findUnique</span>({
+  where: { id }, include: { questions: <span class="tok-keyword">true</span> },   <span class="tok-comment">// questions.correctIndex included!</span>
+});
+<span class="tok-keyword">return</span> Response.<span class="tok-function">json</span>(quiz);   <span class="tok-comment">// open DevTools → every answer is right there</span></pre>
+<div class="out">Network tab → /api/quiz/5 response:
+  { "questions": [ { "text": "2+2?", "options": ["3","4","5"], "correctIndex": 1 }, ... ] }
+                                                              ^^^^^^^^^^^^^^^ the answer, handed to the cheater</div>
+
+<h3>The safe design — strip the key on the way out</h3>
+<pre><span class="tok-comment">// ✅ send questions WITHOUT correctIndex</span>
+<span class="tok-keyword">const</span> quiz = <span class="tok-keyword">await</span> prisma.quiz.<span class="tok-function">findUnique</span>({
+  where: { id },
+  select: {
+    id: <span class="tok-keyword">true</span>, title: <span class="tok-keyword">true</span>,
+    questions: { select: { id: <span class="tok-keyword">true</span>, text: <span class="tok-keyword">true</span>, options: <span class="tok-keyword">true</span> } },  <span class="tok-comment">// NO correctIndex</span>
+  },
+});
+<span class="tok-keyword">return</span> Response.<span class="tok-function">json</span>(quiz);   <span class="tok-comment">// the client physically cannot know the answers</span></pre>
+
+<h3>Grading — a Server Action the client can't tamper with</h3>
+<pre><span class="tok-string">"use server"</span>;
+<span class="tok-keyword">export async function</span> <span class="tok-function">submitAttempt</span>(quizId: number, answers: Record&lt;number, number&gt;) {
+  <span class="tok-keyword">const</span> session = <span class="tok-keyword">await</span> <span class="tok-function">auth</span>();
+  <span class="tok-keyword">if</span> (!session) <span class="tok-keyword">throw new</span> <span class="tok-type">Error</span>(<span class="tok-string">"Unauthorized"</span>);
+
+  <span class="tok-comment">// load the KEY on the server only</span>
+  <span class="tok-keyword">const</span> questions = <span class="tok-keyword">await</span> prisma.question.<span class="tok-function">findMany</span>({
+    where: { quizId }, select: { id: <span class="tok-keyword">true</span>, correctIndex: <span class="tok-keyword">true</span> },
+  });
+
+  <span class="tok-keyword">let</span> score = <span class="tok-number">0</span>;
+  <span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> q <span class="tok-keyword">of</span> questions)
+    <span class="tok-keyword">if</span> (answers[q.id] === q.correctIndex) score++;   <span class="tok-comment">// grade against the DB, not client claims</span>
+
+  <span class="tok-keyword">const</span> pct = Math.<span class="tok-function">round</span>((score / questions.length) * <span class="tok-number">100</span>);
+  <span class="tok-comment">// store the attempt (next lesson: enforce one attempt)</span>
+  <span class="tok-keyword">await</span> prisma.attempt.<span class="tok-function">create</span>({ data: { quizId, userId: session.user.id, score: pct, answers } });
+  <span class="tok-keyword">return</span> { score, total: questions.length, pct };
+}</pre>
+
+<h3>Worked example — a cheater's failed attempt</h3>
+<div class="out">Attacker inspects /api/quiz/5   → sees only { text, options }, NO correctIndex ✅
+Attacker POSTs a forged body    → grading ignores it; the server compares against its own key ✅
+Attacker submits every option   → still graded honestly on the server; no partial-credit leak ✅
+The only way to score 100% is to actually know the answers.</div>
+
+<div class="pitfall"><strong>Trap:</strong> trusting a "score" value sent from the client. If the client computes and posts <code>{ score: 100 }</code>, never store it — the server must recompute the score from the stored key. The client only sends the chosen options.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Never trust the client — the golden rule of web security.</b> Grading, prices, permissions, stock counts: anything that matters must be computed and enforced on the server, because the client is fully under the user's control. The App Router makes this natural — the answer key never leaves the Server Action. <em>Why beyond syllabus: "the client is hostile" is a security mindset the coursework rarely instils, yet it underlies every real vulnerability.</em></div>
+
+<a class="link-card codelab" href="/code-lab/nextjs?ref=%2Fcourses%2Fe-learning-mini-platform%2Flearn&reflabel=INT605#module-690" target="_blank" rel="noopener">
+  <span class="lc-ico">▲</span>
+  <span class="lc-body"><span class="lc-title">Server Actions on Code Lab</span><span class="lc-sub">Server-only logic, mutations, security boundary.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 4 · Bài 4.1</span>
+<h2>Một luật khiến bài quiz đáng tin: trình duyệt không bao giờ được thấy đáp án</h2>
+<p class="lead">Đây là tính năng giám khảo nhớ nhất. Thiết kế hấp dẫn — gửi quiz <em>kèm</em> đáp án đúng rồi chấm trong JavaScript — là thảm hoạ bảo mật: ai cũng mở DevTools và đọc mọi đáp án. Cách sửa là một ranh giới chặt: câu hỏi gửi cho client <strong>không kèm</strong> đáp án; chấm điểm diễn ra ở server.</p>
+
+<h3>Thiết kế lỗ hổng — đáp án rò ra client</h3>
+<pre><span class="tok-comment">// ❌ ĐỪNG BAO GIỜ: correctIndex đi kèm xuống trình duyệt</span>
+<span class="tok-keyword">const</span> quiz = <span class="tok-keyword">await</span> prisma.quiz.<span class="tok-function">findUnique</span>({
+  where: { id }, include: { questions: <span class="tok-keyword">true</span> },   <span class="tok-comment">// gồm cả questions.correctIndex!</span>
+});
+<span class="tok-keyword">return</span> Response.<span class="tok-function">json</span>(quiz);   <span class="tok-comment">// mở DevTools → mọi đáp án ngay đó</span></pre>
+<div class="out">Tab Network → phản hồi /api/quiz/5:
+  { "questions": [ { "text": "2+2?", "options": ["3","4","5"], "correctIndex": 1 }, ... ] }
+                                                              ^^^^^^^^^^^^^^^ đáp án, trao tận tay kẻ gian</div>
+
+<h3>Thiết kế an toàn — bỏ đáp án khi gửi ra</h3>
+<pre><span class="tok-comment">// ✅ gửi câu hỏi KHÔNG kèm correctIndex</span>
+<span class="tok-keyword">const</span> quiz = <span class="tok-keyword">await</span> prisma.quiz.<span class="tok-function">findUnique</span>({
+  where: { id },
+  select: {
+    id: <span class="tok-keyword">true</span>, title: <span class="tok-keyword">true</span>,
+    questions: { select: { id: <span class="tok-keyword">true</span>, text: <span class="tok-keyword">true</span>, options: <span class="tok-keyword">true</span> } },  <span class="tok-comment">// KHÔNG correctIndex</span>
+  },
+});
+<span class="tok-keyword">return</span> Response.<span class="tok-function">json</span>(quiz);   <span class="tok-comment">// client về mặt vật lý không thể biết đáp án</span></pre>
+
+<h3>Chấm điểm — một Server Action client không can thiệp được</h3>
+<pre><span class="tok-string">"use server"</span>;
+<span class="tok-keyword">export async function</span> <span class="tok-function">submitAttempt</span>(quizId: number, answers: Record&lt;number, number&gt;) {
+  <span class="tok-keyword">const</span> session = <span class="tok-keyword">await</span> <span class="tok-function">auth</span>();
+  <span class="tok-keyword">if</span> (!session) <span class="tok-keyword">throw new</span> <span class="tok-type">Error</span>(<span class="tok-string">"Unauthorized"</span>);
+
+  <span class="tok-comment">// nạp ĐÁP ÁN chỉ ở server</span>
+  <span class="tok-keyword">const</span> questions = <span class="tok-keyword">await</span> prisma.question.<span class="tok-function">findMany</span>({
+    where: { quizId }, select: { id: <span class="tok-keyword">true</span>, correctIndex: <span class="tok-keyword">true</span> },
+  });
+
+  <span class="tok-keyword">let</span> score = <span class="tok-number">0</span>;
+  <span class="tok-keyword">for</span> (<span class="tok-keyword">const</span> q <span class="tok-keyword">of</span> questions)
+    <span class="tok-keyword">if</span> (answers[q.id] === q.correctIndex) score++;   <span class="tok-comment">// chấm dựa trên DB, không phải lời client</span>
+
+  <span class="tok-keyword">const</span> pct = Math.<span class="tok-function">round</span>((score / questions.length) * <span class="tok-number">100</span>);
+  <span class="tok-comment">// lưu lượt làm (bài sau: cưỡng chế một lượt)</span>
+  <span class="tok-keyword">await</span> prisma.attempt.<span class="tok-function">create</span>({ data: { quizId, userId: session.user.id, score: pct, answers } });
+  <span class="tok-keyword">return</span> { score, total: questions.length, pct };
+}</pre>
+
+<h3>Ví dụ có lời giải — cú gian lận thất bại</h3>
+<div class="out">Kẻ tấn công soi /api/quiz/5   → chỉ thấy { text, options }, KHÔNG correctIndex ✅
+Kẻ tấn công POST thân giả mạo  → chấm điểm phớt lờ nó; server so với đáp án của chính nó ✅
+Kẻ tấn công gửi mọi lựa chọn   → vẫn chấm trung thực ở server; không rò điểm phần ✅
+Cách duy nhất đạt 100% là thật sự biết đáp án.</div>
+
+<div class="pitfall"><strong>Bẫy:</strong> tin một giá trị "score" gửi từ client. Nếu client tính và post <code>{ score: 100 }</code>, đừng bao giờ lưu nó — server phải tính lại điểm từ đáp án đã lưu. Client chỉ gửi lựa chọn đã chọn.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đừng bao giờ tin client — quy tắc vàng của bảo mật web.</b> Chấm điểm, giá tiền, quyền, số tồn kho: bất cứ gì quan trọng phải được tính và cưỡng chế ở server, vì client hoàn toàn nằm trong tầm kiểm soát của người dùng. App Router làm điều này tự nhiên — đáp án không bao giờ rời Server Action. <em>Vì sao ngoài syllabus: "client là kẻ thù" là tư duy bảo mật môn học ít khi rèn, nhưng nó nằm dưới mọi lỗ hổng thật.</em></div>
+
+<a class="link-card codelab" href="/code-lab/nextjs?ref=%2Fcourses%2Fe-learning-mini-platform%2Flearn&reflabel=INT605#module-690" target="_blank" rel="noopener">
+  <span class="lc-ico">▲</span>
+  <span class="lc-body"><span class="lc-title">Server Actions trên Code Lab</span><span class="lc-sub">Logic chỉ-server, mutation, ranh giới bảo mật.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+`,
+        },
+        {
+          title: '4.2 — One attempt per learner (a UNIQUE constraint)|||4.2 — Một lượt mỗi học viên (ràng buộc UNIQUE)',
+          slug: 'int605-one-attempt',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 4 · Lesson 4.2</span>
+<h2>Stopping the retry-until-100% exploit</h2>
+<p class="lead">If a learner may submit a quiz unlimited times, they simply retry until they guess every answer. Enforce "one graded attempt per learner per quiz" — and enforce it in the database, not just the UI.</p>
+
+<h3>The constraint — the database is the referee</h3>
+<pre><span class="tok-comment">// schema.prisma</span>
+model Attempt {
+  id        Int    @id @default(autoincrement())
+  quizId    Int
+  userId    Int
+  score     Int
+  answers   Json
+  createdAt DateTime @default(now())
+
+  @@unique([quizId, userId])   <span class="tok-comment">// ← one attempt per learner per quiz</span>
+}</pre>
+
+<h3>The guarded submit</h3>
+<pre><span class="tok-string">"use server"</span>;
+<span class="tok-keyword">export async function</span> <span class="tok-function">submitAttempt</span>(quizId, answers) {
+  <span class="tok-keyword">const</span> session = <span class="tok-keyword">await</span> <span class="tok-function">auth</span>();
+  <span class="tok-comment">// ... grade on the server (previous lesson) → pct</span>
+  <span class="tok-keyword">try</span> {
+    <span class="tok-keyword">await</span> prisma.attempt.<span class="tok-function">create</span>({
+      data: { quizId, userId: session.user.id, score: pct, answers },
+    });
+  } <span class="tok-keyword">catch</span> (e) {
+    <span class="tok-keyword">if</span> (e.code === <span class="tok-string">"P2002"</span>)   <span class="tok-comment">// Prisma unique-violation</span>
+      <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"You have already taken this quiz"</span>);  <span class="tok-comment">// → 409</span>
+    <span class="tok-keyword">throw</span> e;
+  }
+  <span class="tok-keyword">return</span> { pct };
+}</pre>
+
+<h3>Worked example — the double-submit</h3>
+<div class="out">Learner submits attempt        → 201, score stored, @@unique now holds (quiz 5, user 12)
+Learner clicks Submit again     → INSERT violates @@unique([quizId, userId]) → P2002 → 409
+Learner opens a second tab      → same 409; the DB, not the tab, is the referee
+There is exactly ONE graded attempt per learner. ✅</div>
+
+<div class="pitfall"><strong>Trap:</strong> enforcing "one attempt" only by hiding the Submit button after the first click. A refresh, a second tab, or a direct Server-Action call bypasses UI state entirely. The <code>@@unique</code> is what actually guarantees it.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Business invariants belong in the schema.</b> "One attempt per learner" is a rule about your data, so the safest place to enforce it is the data layer — a constraint the database checks on every write. Application code can forget; a constraint cannot. (Want N attempts? Add an <code>attemptNo</code> and make it <code>@@unique([quizId, userId, attemptNo])</code>.) <em>Why beyond syllabus: pushing invariants down to the DB is a design instinct the coursework never teaches.</em></div>
+
+<a class="link-card codelab" href="/code-lab/prisma-orm?ref=%2Fcourses%2Fe-learning-mini-platform%2Flearn&reflabel=INT605#module-433" target="_blank" rel="noopener">
+  <span class="lc-ico">▲</span>
+  <span class="lc-body"><span class="lc-title">Prisma constraints &amp; relations on Code Lab</span><span class="lc-sub">@@unique, error codes, relations.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 4 · Bài 4.2</span>
+<h2>Chặn khai thác "làm lại tới khi 100%"</h2>
+<p class="lead">Nếu học viên được nộp quiz vô số lần, họ chỉ việc làm lại tới khi đoán trúng mọi đáp án. Cưỡng chế "một lượt được chấm mỗi học viên mỗi quiz" — và cưỡng chế ở cơ sở dữ liệu, không chỉ ở UI.</p>
+
+<h3>Ràng buộc — cơ sở dữ liệu là trọng tài</h3>
+<pre><span class="tok-comment">// schema.prisma</span>
+model Attempt {
+  id        Int    @id @default(autoincrement())
+  quizId    Int
+  userId    Int
+  score     Int
+  answers   Json
+  createdAt DateTime @default(now())
+
+  @@unique([quizId, userId])   <span class="tok-comment">// ← một lượt mỗi học viên mỗi quiz</span>
+}</pre>
+
+<h3>Submit có canh</h3>
+<pre><span class="tok-string">"use server"</span>;
+<span class="tok-keyword">export async function</span> <span class="tok-function">submitAttempt</span>(quizId, answers) {
+  <span class="tok-keyword">const</span> session = <span class="tok-keyword">await</span> <span class="tok-function">auth</span>();
+  <span class="tok-comment">// ... chấm ở server (bài trước) → pct</span>
+  <span class="tok-keyword">try</span> {
+    <span class="tok-keyword">await</span> prisma.attempt.<span class="tok-function">create</span>({
+      data: { quizId, userId: session.user.id, score: pct, answers },
+    });
+  } <span class="tok-keyword">catch</span> (e) {
+    <span class="tok-keyword">if</span> (e.code === <span class="tok-string">"P2002"</span>)   <span class="tok-comment">// Prisma vi phạm unique</span>
+      <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Bạn đã làm quiz này rồi"</span>);  <span class="tok-comment">// → 409</span>
+    <span class="tok-keyword">throw</span> e;
+  }
+  <span class="tok-keyword">return</span> { pct };
+}</pre>
+
+<h3>Ví dụ có lời giải — nộp hai lần</h3>
+<div class="out">Học viên nộp lượt          → 201, điểm được lưu, @@unique giờ giữ (quiz 5, user 12)
+Học viên bấm Nộp lần nữa    → INSERT vi phạm @@unique([quizId, userId]) → P2002 → 409
+Học viên mở tab thứ hai     → vẫn 409; DB, không phải tab, là trọng tài
+Có đúng MỘT lượt được chấm mỗi học viên. ✅</div>
+
+<div class="pitfall"><strong>Bẫy:</strong> cưỡng chế "một lượt" chỉ bằng cách ẩn nút Nộp sau lần bấm đầu. Refresh, tab thứ hai, hay gọi thẳng Server Action bỏ qua trạng thái UI hoàn toàn. <code>@@unique</code> mới là thứ thật sự bảo đảm.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Bất biến nghiệp vụ thuộc về schema.</b> "Một lượt mỗi học viên" là luật về dữ liệu, nên nơi an toàn nhất để cưỡng chế là tầng dữ liệu — một ràng buộc cơ sở dữ liệu kiểm ở mỗi lần ghi. Code ứng dụng có thể quên; ràng buộc thì không. (Muốn N lượt? Thêm <code>attemptNo</code> và để <code>@@unique([quizId, userId, attemptNo])</code>.) <em>Vì sao ngoài syllabus: đẩy bất biến xuống DB là bản năng thiết kế môn học không dạy.</em></div>
+
+<a class="link-card codelab" href="/code-lab/prisma-orm?ref=%2Fcourses%2Fe-learning-mini-platform%2Flearn&reflabel=INT605#module-433" target="_blank" rel="noopener">
+  <span class="lc-ico">▲</span>
+  <span class="lc-body"><span class="lc-title">Ràng buộc &amp; quan hệ Prisma trên Code Lab</span><span class="lc-sub">@@unique, mã lỗi, quan hệ.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '4.3 — Checkpoint quiz: the grading core|||4.3 — Quiz kiểm tra: lõi chấm điểm',
+          slug: 'int605-quiz-4',
+          type: 'QUIZ',
+          quiz: {
+            timeLimitSeconds: 360,
+            questions: [
+              {
+                id: 'q1',
+                question: 'Why must questions be sent to the browser WITHOUT correctIndex?|||Vì sao câu hỏi phải gửi xuống trình duyệt KHÔNG kèm correctIndex?',
+                options: [
+                  'Anything sent to the client is visible in DevTools; the answer key would be exposed|||Bất cứ gì gửi xuống client đều thấy trong DevTools; đáp án sẽ bị lộ',
+                  'It makes the response larger|||Nó làm phản hồi lớn hơn',
+                  'React cannot render correctIndex|||React không render được correctIndex',
+                  'The database forbids it|||Cơ sở dữ liệu cấm',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q2',
+                question: 'Where must the score be computed?|||Điểm phải được tính ở đâu?',
+                options: [
+                  'On the server, comparing submitted answers against the key loaded server-side|||Ở server, so đáp án đã nộp với key nạp phía server',
+                  'In the browser, then posted to the server|||Ở trình duyệt, rồi post lên server',
+                  'In the URL query string|||Trong query string của URL',
+                  'By the user, on the honour system|||Do người dùng tự khai, theo danh dự',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q3',
+                question: 'What guarantees "one graded attempt per learner per quiz"?|||Cái gì bảo đảm "một lượt được chấm mỗi học viên mỗi quiz"?',
+                options: [
+                  'A @@unique([quizId, userId]) constraint the database enforces on every insert|||Ràng buộc @@unique([quizId, userId]) mà DB cưỡng chế ở mỗi lần chèn',
+                  'Hiding the Submit button after one click|||Ẩn nút Nộp sau một lần bấm',
+                  'A comment in the code|||Một comment trong code',
+                  'Trusting the learner not to retry|||Tin học viên không làm lại',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q4',
+                question: 'A client posts { score: 100 } directly. What should the Server Action do?|||Client post thẳng { score: 100 }. Server Action nên làm gì?',
+                options: [
+                  'Ignore it and recompute the score from the stored answer key|||Phớt lờ và tính lại điểm từ đáp án đã lưu',
+                  'Store 100 as the score|||Lưu 100 làm điểm',
+                  'Return 500|||Trả 500',
+                  'Trust it if the user is logged in|||Tin nó nếu user đã đăng nhập',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q5',
+                question: '(Beyond syllabus) In the App Router, why is a Server Action a safe place for the answer key?|||(Ngoài giáo trình) Trong App Router, vì sao Server Action là nơi an toàn cho đáp án?',
+                options: [
+                  'Server Action code runs only on the server and is never shipped to the browser|||Code Server Action chỉ chạy ở server và không bao giờ gửi xuống trình duyệt',
+                  'Because it is written in TypeScript|||Vì nó viết bằng TypeScript',
+                  'Because the browser encrypts it|||Vì trình duyệt mã hoá nó',
+                  'Because it is slower|||Vì nó chậm hơn',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+            ],
+          },
+        },
+      ],
+    },
+    {
+      title: 'Section 5 — The quiz-taking client|||Mục 5 — Giao diện làm quiz',
+      lessons: [
+        {
+          title: '5.1 — Server + Client components & submitting|||5.1 — Server + Client component & nộp bài',
+          slug: 'int605-quiz-client',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 5 · Lesson 5.1</span>
+<h2>Fetch on the server, interact on the client, submit through a Server Action</h2>
+<p class="lead">The quiz page splits along the trust boundary: a Server Component fetches the questions (without answers), a Client Component handles selection and the timer, and the Server Action grades. This is the App Router at its best.</p>
+
+<h3>Server Component — fetch the safe payload</h3>
+<pre><span class="tok-comment">// app/quiz/[id]/page.tsx — runs on the server</span>
+<span class="tok-keyword">export default async function</span> <span class="tok-function">QuizPage</span>({ params }) {
+  <span class="tok-keyword">const</span> quiz = <span class="tok-keyword">await</span> <span class="tok-function">getQuizForClient</span>(params.id);   <span class="tok-comment">// NO correctIndex</span>
+  <span class="tok-keyword">return</span> &lt;QuizForm quiz={quiz} /&gt;;                        <span class="tok-comment">// hand to a client component</span>
+}</pre>
+
+<h3>Client Component — selection &amp; submit</h3>
+<pre><span class="tok-string">"use client"</span>;
+<span class="tok-keyword">export function</span> <span class="tok-function">QuizForm</span>({ quiz }) {
+  <span class="tok-keyword">const</span> [answers, setAnswers] = <span class="tok-function">useState</span>({});
+  <span class="tok-keyword">const</span> [result, setResult] = <span class="tok-function">useState</span>(<span class="tok-keyword">null</span>);
+  <span class="tok-keyword">const</span> [busy, setBusy] = <span class="tok-function">useState</span>(<span class="tok-keyword">false</span>);
+
+  <span class="tok-keyword">async function</span> <span class="tok-function">onSubmit</span>() {
+    setBusy(<span class="tok-keyword">true</span>);
+    <span class="tok-keyword">try</span> {
+      <span class="tok-keyword">const</span> r = <span class="tok-keyword">await</span> <span class="tok-function">submitAttempt</span>(quiz.id, answers);   <span class="tok-comment">// the Server Action</span>
+      setResult(r);                                     <span class="tok-comment">// { pct }</span>
+    } <span class="tok-keyword">catch</span> (e) {
+      alert(e.message.includes(<span class="tok-string">"already"</span>)
+        ? <span class="tok-string">"You have already taken this quiz."</span>            <span class="tok-comment">// the 409 from @@unique</span>
+        : <span class="tok-string">"Submit failed, try again."</span>);
+    } <span class="tok-keyword">finally</span> { setBusy(<span class="tok-keyword">false</span>); }
+  }
+
+  <span class="tok-keyword">if</span> (result) <span class="tok-keyword">return</span> &lt;p&gt;Your score: {result.pct}%&lt;/p&gt;;
+  <span class="tok-keyword">return</span> ( <span class="tok-comment">/* render questions + options; disabled={busy} submit */</span> );
+}</pre>
+
+<div class="pitfall"><strong>Trap:</strong> marking the whole page <code>"use client"</code>. Then the data fetch and any secrets run in the browser too, and you lose the server boundary that protects the answer key. Keep the page a Server Component; push only the interactive island to the client.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Server Components fetch; Client Components react.</b> The pattern — fetch data in a Server Component, pass it as props to a small <code>"use client"</code> island — minimises JavaScript shipped and keeps sensitive logic server-side. Learning where to draw that line is the core skill of the App Router. <em>Why beyond syllabus: the server/client component split is newer than most course material and rarely taught deliberately.</em></div>
+
+<a class="link-card codelab" href="/code-lab/nextjs?ref=%2Fcourses%2Fe-learning-mini-platform%2Flearn&reflabel=INT605#module-377" target="_blank" rel="noopener">
+  <span class="lc-ico">▲</span>
+  <span class="lc-body"><span class="lc-title">Client components on Code Lab</span><span class="lc-sub">"use client", state, events, islands.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 5 · Bài 5.1</span>
+<h2>Lấy dữ liệu ở server, tương tác ở client, nộp qua Server Action</h2>
+<p class="lead">Trang quiz tách theo ranh giới tin cậy: một Server Component lấy câu hỏi (không đáp án), một Client Component xử lý chọn và bộ đếm giờ, và Server Action chấm. Đây là App Router ở dạng đẹp nhất.</p>
+
+<h3>Server Component — lấy payload an toàn</h3>
+<pre><span class="tok-comment">// app/quiz/[id]/page.tsx — chạy ở server</span>
+<span class="tok-keyword">export default async function</span> <span class="tok-function">QuizPage</span>({ params }) {
+  <span class="tok-keyword">const</span> quiz = <span class="tok-keyword">await</span> <span class="tok-function">getQuizForClient</span>(params.id);   <span class="tok-comment">// KHÔNG correctIndex</span>
+  <span class="tok-keyword">return</span> &lt;QuizForm quiz={quiz} /&gt;;                        <span class="tok-comment">// chuyển cho client component</span>
+}</pre>
+
+<h3>Client Component — chọn &amp; nộp</h3>
+<pre><span class="tok-string">"use client"</span>;
+<span class="tok-keyword">export function</span> <span class="tok-function">QuizForm</span>({ quiz }) {
+  <span class="tok-keyword">const</span> [answers, setAnswers] = <span class="tok-function">useState</span>({});
+  <span class="tok-keyword">const</span> [result, setResult] = <span class="tok-function">useState</span>(<span class="tok-keyword">null</span>);
+  <span class="tok-keyword">const</span> [busy, setBusy] = <span class="tok-function">useState</span>(<span class="tok-keyword">false</span>);
+
+  <span class="tok-keyword">async function</span> <span class="tok-function">onSubmit</span>() {
+    setBusy(<span class="tok-keyword">true</span>);
+    <span class="tok-keyword">try</span> {
+      <span class="tok-keyword">const</span> r = <span class="tok-keyword">await</span> <span class="tok-function">submitAttempt</span>(quiz.id, answers);   <span class="tok-comment">// Server Action</span>
+      setResult(r);                                     <span class="tok-comment">// { pct }</span>
+    } <span class="tok-keyword">catch</span> (e) {
+      alert(e.message.includes(<span class="tok-string">"đã làm"</span>)
+        ? <span class="tok-string">"Bạn đã làm quiz này rồi."</span>                     <span class="tok-comment">// 409 từ @@unique</span>
+        : <span class="tok-string">"Nộp thất bại, thử lại."</span>);
+    } <span class="tok-keyword">finally</span> { setBusy(<span class="tok-keyword">false</span>); }
+  }
+
+  <span class="tok-keyword">if</span> (result) <span class="tok-keyword">return</span> &lt;p&gt;Điểm của bạn: {result.pct}%&lt;/p&gt;;
+  <span class="tok-keyword">return</span> ( <span class="tok-comment">/* render câu hỏi + lựa chọn; nút submit disabled={busy} */</span> );
+}</pre>
+
+<div class="pitfall"><strong>Bẫy:</strong> đánh dấu cả trang <code>"use client"</code>. Khi đó việc lấy dữ liệu và mọi bí mật cũng chạy ở trình duyệt, và bạn mất ranh giới server bảo vệ đáp án. Giữ trang là Server Component; chỉ đẩy hòn đảo tương tác xuống client.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Server Component lấy dữ liệu; Client Component phản ứng.</b> Mẫu — lấy dữ liệu trong Server Component, truyền props xuống một hòn đảo <code>"use client"</code> nhỏ — giảm JavaScript gửi đi và giữ logic nhạy cảm ở server. Học vẽ đường ranh đó ở đâu là kỹ năng cốt lõi của App Router. <em>Vì sao ngoài syllabus: phân chia server/client component mới hơn phần lớn tài liệu môn học và ít khi được dạy có chủ đích.</em></div>
+
+<a class="link-card codelab" href="/code-lab/nextjs?ref=%2Fcourses%2Fe-learning-mini-platform%2Flearn&reflabel=INT605#module-377" target="_blank" rel="noopener">
+  <span class="lc-ico">▲</span>
+  <span class="lc-body"><span class="lc-title">Client component trên Code Lab</span><span class="lc-sub">"use client", state, event, island.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      title: 'Section 6 — Deployment with Docker|||Mục 6 — Triển khai với Docker',
+      lessons: [
+        {
+          title: '6.1 — Next.js standalone + Postgres in Compose|||6.1 — Next.js standalone + Postgres trong Compose',
+          slug: 'int605-docker',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 6 · Lesson 6.1</span>
+<h2>Packaging a full-stack Next.js app with Docker Compose</h2>
+<p class="lead">One command brings up Postgres and the Next.js server (which serves both the pages and the API routes). The key trick is Next's <code>standalone</code> output — a tiny self-contained server bundle.</p>
+
+<div class="lz-flow">
+  <div class="lz-step">Browser</div>
+  <div class="lz-step">Next.js server :3000 (pages + API)</div>
+  <div class="lz-step">Postgres :5432</div>
+</div>
+
+<h3>Enable standalone output</h3>
+<pre><span class="tok-comment">// next.config.js</span>
+module.exports = { output: <span class="tok-string">"standalone"</span> };   <span class="tok-comment">// bundles only what the server needs</span></pre>
+
+<h3>docker-compose.yml</h3>
+<pre><span class="tok-keyword">services</span>:
+  db:
+    <span class="tok-keyword">image</span>: postgres:16
+    <span class="tok-keyword">environment</span>: { POSTGRES_DB: elearning, POSTGRES_PASSWORD: \${DB_PASSWORD} }
+    <span class="tok-keyword">volumes</span>: [ "pgdata:/var/lib/postgresql/data" ]
+    <span class="tok-keyword">healthcheck</span>: { test: ["CMD-SHELL","pg_isready -U postgres"], interval: 5s, retries: 10 }
+
+  web:
+    <span class="tok-keyword">build</span>: .
+    <span class="tok-keyword">environment</span>:
+      DATABASE_URL: postgresql://postgres:\${DB_PASSWORD}@db:5432/elearning
+      AUTH_SECRET: \${AUTH_SECRET}
+    <span class="tok-keyword">command</span>: sh -c "npx prisma migrate deploy &amp;&amp; node server.js"
+    <span class="tok-keyword">depends_on</span>: { db: { condition: service_healthy } }
+    <span class="tok-keyword">ports</span>: [ "3000:3000" ]
+
+<span class="tok-keyword">volumes</span>: { pgdata: {} }</pre>
+
+<h3>The Dockerfile — multi-stage, standalone</h3>
+<pre><span class="tok-keyword">FROM</span> node:20-slim <span class="tok-keyword">AS</span> build
+<span class="tok-keyword">WORKDIR</span> /app
+<span class="tok-keyword">COPY</span> package*.json ./
+<span class="tok-keyword">RUN</span> npm ci
+<span class="tok-keyword">COPY</span> . .
+<span class="tok-keyword">RUN</span> npx prisma generate &amp;&amp; npm run build   <span class="tok-comment"># produces .next/standalone</span>
+
+<span class="tok-keyword">FROM</span> node:20-slim
+<span class="tok-keyword">WORKDIR</span> /app
+<span class="tok-keyword">COPY</span> --from=build /app/.next/standalone ./
+<span class="tok-keyword">COPY</span> --from=build /app/.next/static ./.next/static
+<span class="tok-keyword">COPY</span> --from=build /app/public ./public
+<span class="tok-keyword">EXPOSE</span> 3000
+<span class="tok-keyword">CMD</span> ["node","server.js"]</pre>
+
+<div class="pitfall"><strong>Trap:</strong> forgetting to copy <code>.next/static</code> and <code>public</code> into the runtime image. The standalone server bundle does <em>not</em> include them, so your CSS and images 404 in production even though the pages render. Copy all three folders.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>NEXT_PUBLIC_* vars are baked in at build time.</b> Any env var prefixed <code>NEXT_PUBLIC_</code> is inlined into the client bundle during <code>npm run build</code> — changing it later needs a rebuild, not just a restart. And never put a secret behind that prefix: it ships to every browser. <em>Why beyond syllabus: the build-time vs run-time env distinction trips up real deploys constantly and the syllabus never mentions it.</em></div>
+
+<a class="link-card codelab" href="/code-lab/docker?ref=%2Fcourses%2Fe-learning-mini-platform%2Flearn&reflabel=INT605#module-489" target="_blank" rel="noopener">
+  <span class="lc-ico">🐳</span>
+  <span class="lc-body"><span class="lc-title">Docker Compose on Code Lab</span><span class="lc-sub">Multi-service apps, healthchecks, build args.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 6 · Bài 6.1</span>
+<h2>Đóng gói app Next.js full-stack bằng Docker Compose</h2>
+<p class="lead">Một lệnh dựng Postgres và server Next.js (phục vụ cả trang lẫn API route). Mẹo mấu chốt là output <code>standalone</code> của Next — một gói server tự chứa nhỏ gọn.</p>
+
+<div class="lz-flow">
+  <div class="lz-step">Trình duyệt</div>
+  <div class="lz-step">Server Next.js :3000 (trang + API)</div>
+  <div class="lz-step">Postgres :5432</div>
+</div>
+
+<h3>Bật output standalone</h3>
+<pre><span class="tok-comment">// next.config.js</span>
+module.exports = { output: <span class="tok-string">"standalone"</span> };   <span class="tok-comment">// chỉ đóng gói cái server cần</span></pre>
+
+<h3>docker-compose.yml</h3>
+<pre><span class="tok-keyword">services</span>:
+  db:
+    <span class="tok-keyword">image</span>: postgres:16
+    <span class="tok-keyword">environment</span>: { POSTGRES_DB: elearning, POSTGRES_PASSWORD: \${DB_PASSWORD} }
+    <span class="tok-keyword">volumes</span>: [ "pgdata:/var/lib/postgresql/data" ]
+    <span class="tok-keyword">healthcheck</span>: { test: ["CMD-SHELL","pg_isready -U postgres"], interval: 5s, retries: 10 }
+
+  web:
+    <span class="tok-keyword">build</span>: .
+    <span class="tok-keyword">environment</span>:
+      DATABASE_URL: postgresql://postgres:\${DB_PASSWORD}@db:5432/elearning
+      AUTH_SECRET: \${AUTH_SECRET}
+    <span class="tok-keyword">command</span>: sh -c "npx prisma migrate deploy &amp;&amp; node server.js"
+    <span class="tok-keyword">depends_on</span>: { db: { condition: service_healthy } }
+    <span class="tok-keyword">ports</span>: [ "3000:3000" ]
+
+<span class="tok-keyword">volumes</span>: { pgdata: {} }</pre>
+
+<h3>Dockerfile — nhiều tầng, standalone</h3>
+<pre><span class="tok-keyword">FROM</span> node:20-slim <span class="tok-keyword">AS</span> build
+<span class="tok-keyword">WORKDIR</span> /app
+<span class="tok-keyword">COPY</span> package*.json ./
+<span class="tok-keyword">RUN</span> npm ci
+<span class="tok-keyword">COPY</span> . .
+<span class="tok-keyword">RUN</span> npx prisma generate &amp;&amp; npm run build   <span class="tok-comment"># tạo .next/standalone</span>
+
+<span class="tok-keyword">FROM</span> node:20-slim
+<span class="tok-keyword">WORKDIR</span> /app
+<span class="tok-keyword">COPY</span> --from=build /app/.next/standalone ./
+<span class="tok-keyword">COPY</span> --from=build /app/.next/static ./.next/static
+<span class="tok-keyword">COPY</span> --from=build /app/public ./public
+<span class="tok-keyword">EXPOSE</span> 3000
+<span class="tok-keyword">CMD</span> ["node","server.js"]</pre>
+
+<div class="pitfall"><strong>Bẫy:</strong> quên copy <code>.next/static</code> và <code>public</code> vào image runtime. Gói server standalone <em>không</em> gồm chúng, nên CSS và ảnh của bạn 404 ở production dù trang vẫn render. Copy đủ ba thư mục.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Biến NEXT_PUBLIC_* bị "nướng" vào lúc build.</b> Bất kỳ env var tiền tố <code>NEXT_PUBLIC_</code> nào được nhúng vào bundle client lúc <code>npm run build</code> — đổi nó về sau cần build lại, không chỉ restart. Và đừng bao giờ đặt bí mật sau tiền tố đó: nó gửi tới mọi trình duyệt. <em>Vì sao ngoài syllabus: khác biệt env lúc-build vs lúc-chạy làm hỏng deploy thật liên tục và giáo trình không nhắc.</em></div>
+
+<a class="link-card codelab" href="/code-lab/docker?ref=%2Fcourses%2Fe-learning-mini-platform%2Flearn&reflabel=INT605#module-489" target="_blank" rel="noopener">
+  <span class="lc-ico">🐳</span>
+  <span class="lc-body"><span class="lc-title">Docker Compose trên Code Lab</span><span class="lc-sub">App nhiều dịch vụ, healthcheck, build args.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      title: 'Section 7 — Advanced: ship like a pro (Beyond the syllabus)|||Mục 7 — Nâng cao: làm như dân chuyên (Ngoài giáo trình)',
+      lessons: [
+        {
+          title: '7.1 — Timed quizzes, shuffling, progress & caching ★|||7.1 — Quiz có giờ, xáo trộn, tiến độ & cache ★',
+          slug: 'int605-advanced',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 7 · Lesson 7.1 · <span class="badge">★ Beyond the syllabus</span></span>
+<h2>Four upgrades that turn the platform into a portfolio piece</h2>
+<p class="lead">The grading core is secure. These four additions are what a reviewer of an e-learning app notices — each a small, self-contained ★ beyond the syllabus.</p>
+
+<h3>1) Timed quizzes — enforce the deadline on the server</h3>
+<pre><span class="tok-comment">// when the learner starts, record the server clock</span>
+<span class="tok-keyword">const</span> attempt = <span class="tok-keyword">await</span> prisma.attempt.<span class="tok-function">create</span>({
+  data: { quizId, userId, startedAt: <span class="tok-keyword">new</span> Date(), status: <span class="tok-string">"IN_PROGRESS"</span> },
+});
+<span class="tok-comment">// on submit, the SERVER checks elapsed time — the client countdown is only cosmetic</span>
+<span class="tok-keyword">const</span> elapsedSec = (Date.now() - attempt.startedAt.getTime()) / <span class="tok-number">1000</span>;
+<span class="tok-keyword">if</span> (elapsedSec &gt; quiz.timeLimitSec + <span class="tok-number">5</span>)   <span class="tok-comment">// small grace for latency</span>
+  <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Time is up"</span>);</pre>
+<p>A client-side timer can be paused in DevTools — so the authoritative deadline check lives on the server, compared against <code>startedAt</code>.</p>
+
+<h3>2) Shuffle questions &amp; options — blunt shoulder-surfing</h3>
+<pre><span class="tok-comment">// deterministic per-attempt shuffle so reload keeps the same order</span>
+<span class="tok-keyword">const</span> ordered = <span class="tok-function">seededShuffle</span>(questions, attempt.id);   <span class="tok-comment">// same seed → same order</span>
+<span class="tok-comment">// grading still matches by question.id, so order never affects correctness</span></pre>
+
+<h3>3) Progress tracking — completion at a glance</h3>
+<pre><span class="tok-comment">-- percent of a course's quizzes each learner has completed</span>
+<span class="tok-keyword">SELECT</span> u.id,
+  <span class="tok-function">ROUND</span>(<span class="tok-number">100.0</span> * <span class="tok-function">COUNT</span>(a.id) / <span class="tok-function">NULLIF</span>((<span class="tok-keyword">SELECT</span> <span class="tok-function">COUNT</span>(*) <span class="tok-keyword">FROM</span> quizzes <span class="tok-keyword">WHERE</span> course_id = :c), <span class="tok-number">0</span>)) <span class="tok-keyword">AS</span> pct
+<span class="tok-keyword">FROM</span> users u
+<span class="tok-keyword">LEFT JOIN</span> attempts a <span class="tok-keyword">ON</span> a.user_id = u.id
+  <span class="tok-keyword">AND</span> a.quiz_id <span class="tok-keyword">IN</span> (<span class="tok-keyword">SELECT</span> id <span class="tok-keyword">FROM</span> quizzes <span class="tok-keyword">WHERE</span> course_id = :c)
+<span class="tok-keyword">GROUP BY</span> u.id;</pre>
+
+<h3>4) Cache &amp; revalidation — fast pages, fresh data</h3>
+<pre><span class="tok-string">"use server"</span>;
+<span class="tok-keyword">export async function</span> <span class="tok-function">publishCourse</span>(id) {
+  <span class="tok-keyword">await</span> prisma.course.<span class="tok-function">update</span>({ where: { id }, data: { published: <span class="tok-keyword">true</span> } });
+  <span class="tok-function">revalidatePath</span>(<span class="tok-string">"/courses"</span>);   <span class="tok-comment">// drop the cached course list so it re-renders fresh</span>
+}</pre>
+<p>Static-render the course catalogue for speed, then <code>revalidatePath</code> after a mutation so the change appears without making every visitor pay for a live query.</p>
+
+<div class="pitfall"><strong>Trap:</strong> trusting the client-side countdown as the real deadline. It is display-only; a determined user pauses it. Always compare submit time to the server-recorded <code>startedAt</code>.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Anything a user could cheat must be enforced on the server.</b> The theme across all four upgrades and Section 4: time limits, answer keys, one-attempt rules, prices — the server is the only trustworthy authority, because the client is the user's territory. The App Router's server boundary is what makes enforcing this clean. <em>Why beyond syllabus: consistently locating the "authority" server-side is a security discipline the coursework never frames.</em></div>
+
+<a class="link-card codelab" href="/code-lab/nextjs?ref=%2Fcourses%2Fe-learning-mini-platform%2Flearn&reflabel=INT605#module-687" target="_blank" rel="noopener">
+  <span class="lc-ico">▲</span>
+  <span class="lc-body"><span class="lc-title">Caching &amp; revalidation on Code Lab</span><span class="lc-sub">revalidatePath, static vs dynamic, fetch cache.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 7 · Bài 7.1 · <span class="badge">★ Ngoài giáo trình</span></span>
+<h2>Bốn nâng cấp biến nền tảng thành tác phẩm hồ sơ</h2>
+<p class="lead">Lõi chấm điểm đã an toàn. Bốn bổ sung này là thứ người chấm một app e-learning để ý — mỗi cái một ★ nhỏ, độc lập, vượt giáo trình.</p>
+
+<h3>1) Quiz có giờ — cưỡng chế hạn ở server</h3>
+<pre><span class="tok-comment">// khi học viên bắt đầu, ghi đồng hồ server</span>
+<span class="tok-keyword">const</span> attempt = <span class="tok-keyword">await</span> prisma.attempt.<span class="tok-function">create</span>({
+  data: { quizId, userId, startedAt: <span class="tok-keyword">new</span> Date(), status: <span class="tok-string">"IN_PROGRESS"</span> },
+});
+<span class="tok-comment">// khi nộp, SERVER kiểm thời gian trôi — bộ đếm client chỉ để trang trí</span>
+<span class="tok-keyword">const</span> elapsedSec = (Date.now() - attempt.startedAt.getTime()) / <span class="tok-number">1000</span>;
+<span class="tok-keyword">if</span> (elapsedSec &gt; quiz.timeLimitSec + <span class="tok-number">5</span>)   <span class="tok-comment">// nới nhẹ cho độ trễ</span>
+  <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Hết giờ"</span>);</pre>
+<p>Bộ đếm phía client có thể bị tạm dừng trong DevTools — nên kiểm hạn chính thức sống ở server, so với <code>startedAt</code>.</p>
+
+<h3>2) Xáo câu hỏi &amp; lựa chọn — cản nhìn trộm bài</h3>
+<pre><span class="tok-comment">// xáo tất định theo từng lượt để reload giữ nguyên thứ tự</span>
+<span class="tok-keyword">const</span> ordered = <span class="tok-function">seededShuffle</span>(questions, attempt.id);   <span class="tok-comment">// cùng seed → cùng thứ tự</span>
+<span class="tok-comment">// chấm vẫn khớp theo question.id, nên thứ tự không bao giờ ảnh hưởng đúng/sai</span></pre>
+
+<h3>3) Theo dõi tiến độ — hoàn thành trong nháy mắt</h3>
+<pre><span class="tok-comment">-- phần trăm quiz của một khoá mỗi học viên đã hoàn thành</span>
+<span class="tok-keyword">SELECT</span> u.id,
+  <span class="tok-function">ROUND</span>(<span class="tok-number">100.0</span> * <span class="tok-function">COUNT</span>(a.id) / <span class="tok-function">NULLIF</span>((<span class="tok-keyword">SELECT</span> <span class="tok-function">COUNT</span>(*) <span class="tok-keyword">FROM</span> quizzes <span class="tok-keyword">WHERE</span> course_id = :c), <span class="tok-number">0</span>)) <span class="tok-keyword">AS</span> pct
+<span class="tok-keyword">FROM</span> users u
+<span class="tok-keyword">LEFT JOIN</span> attempts a <span class="tok-keyword">ON</span> a.user_id = u.id
+  <span class="tok-keyword">AND</span> a.quiz_id <span class="tok-keyword">IN</span> (<span class="tok-keyword">SELECT</span> id <span class="tok-keyword">FROM</span> quizzes <span class="tok-keyword">WHERE</span> course_id = :c)
+<span class="tok-keyword">GROUP BY</span> u.id;</pre>
+
+<h3>4) Cache &amp; revalidate — trang nhanh, dữ liệu mới</h3>
+<pre><span class="tok-string">"use server"</span>;
+<span class="tok-keyword">export async function</span> <span class="tok-function">publishCourse</span>(id) {
+  <span class="tok-keyword">await</span> prisma.course.<span class="tok-function">update</span>({ where: { id }, data: { published: <span class="tok-keyword">true</span> } });
+  <span class="tok-function">revalidatePath</span>(<span class="tok-string">"/courses"</span>);   <span class="tok-comment">// bỏ cache danh sách khoá để render lại mới</span>
+}</pre>
+<p>Render tĩnh danh mục khoá học cho nhanh, rồi <code>revalidatePath</code> sau một mutation để thay đổi xuất hiện mà không bắt mỗi khách trả giá cho một query trực tiếp.</p>
+
+<div class="pitfall"><strong>Bẫy:</strong> tin bộ đếm phía client là hạn thật. Nó chỉ để hiển thị; một user quyết tâm sẽ tạm dừng nó. Luôn so thời điểm nộp với <code>startedAt</code> ghi ở server.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Bất cứ gì user có thể gian lận đều phải cưỡng chế ở server.</b> Chủ đề xuyên bốn nâng cấp và Mục 4: giới hạn thời gian, đáp án, luật một-lượt, giá tiền — server là thẩm quyền đáng tin duy nhất, vì client là lãnh địa của người dùng. Ranh giới server của App Router làm việc cưỡng chế này gọn gàng. <em>Vì sao ngoài syllabus: nhất quán đặt "thẩm quyền" ở server là kỷ luật bảo mật môn học không đặt ra.</em></div>
+
+<a class="link-card codelab" href="/code-lab/nextjs?ref=%2Fcourses%2Fe-learning-mini-platform%2Flearn&reflabel=INT605#module-687" target="_blank" rel="noopener">
+  <span class="lc-ico">▲</span>
+  <span class="lc-body"><span class="lc-title">Cache &amp; revalidate trên Code Lab</span><span class="lc-sub">revalidatePath, tĩnh vs động, fetch cache.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+`,
+        },
+        {
+          title: '7.2 — Final quiz: architecture & trade-offs|||7.2 — Quiz cuối: kiến trúc & đánh đổi',
+          slug: 'int605-quiz-7',
+          type: 'QUIZ',
+          quiz: {
+            timeLimitSeconds: 420,
+            questions: [
+              {
+                id: 'q1',
+                question: 'Why must a timed quiz check the deadline on the server, not just the client countdown?|||Vì sao quiz có giờ phải kiểm hạn ở server, không chỉ bộ đếm client?',
+                options: [
+                  'A client countdown can be paused in DevTools; the server compares submit time to the recorded startedAt|||Bộ đếm client có thể bị tạm dừng trong DevTools; server so thời điểm nộp với startedAt đã ghi',
+                  'Servers keep better time|||Server giữ giờ chính xác hơn',
+                  'The client cannot measure time|||Client không đo được thời gian',
+                  'It reduces bundle size|||Nó giảm kích thước bundle',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q2',
+                question: 'When shuffling questions per attempt, why does grading stay correct?|||Khi xáo câu hỏi theo lượt, vì sao chấm vẫn đúng?',
+                options: [
+                  'Grading matches by question.id, so display order never affects correctness|||Chấm khớp theo question.id, nên thứ tự hiển thị không ảnh hưởng đúng/sai',
+                  'Because shuffling is disabled during grading|||Vì xáo bị tắt lúc chấm',
+                  'Because all answers become correct|||Vì mọi đáp án thành đúng',
+                  'It does not stay correct|||Nó không còn đúng',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q3',
+                question: 'What does revalidatePath("/courses") do after publishing a course?|||revalidatePath("/courses") làm gì sau khi xuất bản một khoá?',
+                options: [
+                  'Invalidates the cached page so it re-renders with fresh data on the next request|||Vô hiệu trang đã cache để nó render lại với dữ liệu mới ở request kế',
+                  'Deletes the course|||Xoá khoá học',
+                  'Logs the user out|||Đăng xuất người dùng',
+                  'Restarts the server|||Khởi động lại server',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q4',
+                question: 'Why is putting a secret in a NEXT_PUBLIC_ variable dangerous?|||Vì sao đặt bí mật vào biến NEXT_PUBLIC_ là nguy hiểm?',
+                options: [
+                  'NEXT_PUBLIC_ vars are inlined into the client bundle and shipped to every browser|||Biến NEXT_PUBLIC_ được nhúng vào bundle client và gửi tới mọi trình duyệt',
+                  'They are too long|||Chúng quá dài',
+                  'They break TypeScript|||Chúng làm hỏng TypeScript',
+                  'They cannot be read at runtime|||Không đọc được lúc chạy',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q5',
+                question: 'A learner pastes { pct: 100 } into the submit request. What protects the score?|||Học viên dán { pct: 100 } vào request nộp. Cái gì bảo vệ điểm số?',
+                options: [
+                  'The Server Action recomputes the score from the DB answer key and ignores client-sent scores|||Server Action tính lại điểm từ đáp án trong DB và phớt lờ điểm do client gửi',
+                  'HTTPS encryption|||Mã hoá HTTPS',
+                  'The UNIQUE constraint on email|||Ràng buộc UNIQUE trên email',
+                  'Nothing — the score is trusted|||Không gì — điểm được tin',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q6',
+                question: 'Which single design decision most directly stops answer-key leakage?|||Quyết định thiết kế đơn nào trực tiếp chặn rò rỉ đáp án nhất?',
+                options: [
+                  'Selecting only { id, text, options } (no correctIndex) when sending questions to the client|||Chỉ select { id, text, options } (không correctIndex) khi gửi câu hỏi cho client',
+                  'Using HTTPS|||Dùng HTTPS',
+                  'Adding a loading spinner|||Thêm spinner tải',
+                  'Minifying the JavaScript|||Nén JavaScript',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+            ],
+          },
+        },
+      ],
+    },
   ],
 };

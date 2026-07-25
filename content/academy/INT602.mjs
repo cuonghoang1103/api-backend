@@ -1341,5 +1341,1130 @@ Controller ──DTO──▶ Service ──entity──▶ Repository ──SQL
         },
       ],
     },
+    {
+      title: 'Section 4 — The Lending Core (No Double-Lend)|||Mục 4 — Lõi cho mượn (Không mượn trùng bản sao)',
+      lessons: [
+        {
+          title: '4.1 — Lending in a transaction & the race condition|||4.1 — Cho mượn trong transaction & race condition',
+          slug: 'int602-lending-core',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 4 · Lesson 4.1</span>
+<h2>Lending in a transaction &amp; the race condition</h2>
+<p class="lead">This is the feature graders remember. Lending looks trivial — "check the copy is available, then create the loan" — but that sentence hides a <strong>race condition</strong> that lets two members borrow the same physical copy. Here is the naive version, the bug, and the fix.</p>
+
+<h3>The naive service — has a bug</h3>
+<pre><span class="tok-keyword">@Transactional</span>
+<span class="tok-keyword">public</span> <span class="tok-type">Loan</span> <span class="tok-function">borrow</span>(<span class="tok-type">Long</span> copyId, <span class="tok-type">Long</span> memberId) {
+  <span class="tok-type">Copy</span> copy = copies.findById(copyId).orElseThrow(NotFoundException::new);
+  <span class="tok-keyword">if</span> (copy.getStatus() != CopyStatus.AVAILABLE)      <span class="tok-comment">// (A) READ</span>
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictException</span>(<span class="tok-string">"Copy already on loan"</span>);
+  copy.setStatus(CopyStatus.BORROWED);              <span class="tok-comment">// (B) WRITE</span>
+  <span class="tok-type">Loan</span> loan = <span class="tok-keyword">new</span> <span class="tok-type">Loan</span>();
+  loan.setCopy(copy); loan.setMember(users.getReference(memberId));
+  loan.setBorrowedAt(Instant.now());
+  loan.setDueAt(Instant.now().plus(14, ChronoUnit.DAYS));
+  <span class="tok-keyword">return</span> loans.save(loan);
+}</pre>
+
+<h3>Why it breaks — two threads interleave</h3>
+<div class="out"><b>Time →</b>   Member An (thread 1)         Member Binh (thread 2)
+  t1     (A) read copy 42 = AVAILABLE ✅
+  t2                                  (A) read copy 42 = AVAILABLE ✅  ← still free!
+  t3     (B) set BORROWED, save loan
+  t4                                  (B) set BORROWED, save loan
+<b>Result (no guard):</b> TWO active loans for ONE physical book. Impossible in real life. ✗
+The gap between An's read (t1) and write (t3) let Binh read the stale AVAILABLE.</div>
+
+<h3>The three-layer defence</h3>
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Fast-path check</div><div class="lz-nsub">the <code>if AVAILABLE</code> — rejects the common case cheaply, good UX. But NOT a guarantee on its own.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">@Version optimistic lock</div><div class="lz-nsub">Hibernate adds <code>WHERE version = ?</code> to the copy UPDATE. If Binh's version is stale, his UPDATE hits 0 rows → OptimisticLockException.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Partial UNIQUE on active loans</div><div class="lz-nsub">the absolute backstop — <code>UNIQUE(copy_id) WHERE returned_at IS NULL</code>. A copy can have many <em>past</em> loans, but at most ONE open loan. The second INSERT violates it → 409.</div></div></div>
+</div>
+
+<h3>Why a partial index, not a plain UNIQUE?</h3>
+<p>A copy is borrowed and returned <em>many times</em> over its life — so <code>loans.copy_id</code> is <strong>not</strong> unique across the whole table. We only need "at most one <em>open</em> loan per copy". Postgres lets us index just the rows that matter:</p>
+<pre><span class="tok-comment">-- only rows where returned_at IS NULL participate in the uniqueness</span>
+<span class="tok-keyword">CREATE UNIQUE INDEX</span> uq_active_loan
+  <span class="tok-keyword">ON</span> loans (copy_id)
+  <span class="tok-keyword">WHERE</span> returned_at <span class="tok-keyword">IS NULL</span>;</pre>
+
+<h3>How @Version wins the race — the generated SQL</h3>
+<div class="out">An commits first:
+  UPDATE copies SET status='BORROWED', version=1 WHERE id=42 AND version=0;  → 1 row ✅
+
+Binh (still holding version=0) tries:
+  UPDATE copies SET status='BORROWED', version=1 WHERE id=42 AND version=0;  → 0 rows!
+  Hibernate sees 0 rows updated → throws OptimisticLockException
+  → our @Transactional rolls back → we map it to 409 Conflict ✅
+
+Even if @Version were removed, Binh's INSERT into loans hits uq_active_loan → 409.
+Final state: exactly ONE open loan for copy 42.</div>
+
+<h3>The correct service</h3>
+<pre><span class="tok-keyword">@Transactional</span>
+<span class="tok-keyword">public</span> <span class="tok-type">Loan</span> <span class="tok-function">borrow</span>(<span class="tok-type">Long</span> copyId, <span class="tok-type">Long</span> memberId) {
+  <span class="tok-type">Copy</span> copy = copies.findById(copyId).orElseThrow(NotFoundException::new);
+  <span class="tok-keyword">if</span> (copy.getStatus() != CopyStatus.AVAILABLE)
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictException</span>(<span class="tok-string">"Copy already on loan"</span>);
+  copy.setStatus(CopyStatus.BORROWED);   <span class="tok-comment">// @Version guards this UPDATE</span>
+  <span class="tok-type">Loan</span> loan = <span class="tok-keyword">new</span> <span class="tok-type">Loan</span>();
+  loan.setCopy(copy);
+  loan.setMember(users.getReference(memberId));
+  loan.setBorrowedAt(Instant.now());
+  loan.setDueAt(Instant.now().plus(14, ChronoUnit.DAYS));
+  <span class="tok-keyword">try</span> {
+    <span class="tok-keyword">return</span> loans.saveAndFlush(loan);       <span class="tok-comment">// uq_active_loan is the final backstop</span>
+  } <span class="tok-keyword">catch</span> (DataIntegrityViolationException | OptimisticLockException e) {
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictException</span>(<span class="tok-string">"Copy already on loan"</span>);  <span class="tok-comment">// → 409</span>
+  }
+}</pre>
+
+<div class="pitfall"><strong>Trap:</strong> thinking <code>@Transactional</code> alone stops the race. It does not — two transactions can both read AVAILABLE under the default READ_COMMITTED isolation. A transaction gives you all-or-nothing rollback; it does <em>not</em> serialize the read-then-write. You still need the version column or the partial UNIQUE index.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Partial (filtered) indexes.</b> <code>WHERE returned_at IS NULL</code> makes the constraint apply to <em>open</em> loans only, so history is unlimited but the invariant "one live loan per copy" is enforced by the database itself — not by application code you could forget. Filtered unique indexes are the idiomatic Postgres way to say "unique among the active rows". <em>Why beyond syllabus: DBI202 teaches plain UNIQUE; the partial variant that models real business rules is rarely shown but constantly needed.</em></div>
+
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Flibrary-management-system%2Flearn&reflabel=INT602#module-314" target="_blank" rel="noopener">
+  <span class="lc-ico">🌱</span>
+  <span class="lc-body"><span class="lc-title">Transactions &amp; JPA on Code Lab</span><span class="lc-sub">Practice @Transactional and locking behaviour.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 4 · Bài 4.1</span>
+<h2>Cho mượn trong transaction &amp; race condition</h2>
+<p class="lead">Đây là tính năng giám khảo nhớ nhất. Cho mượn trông tầm thường — "kiểm bản sao còn rảnh, rồi tạo lượt mượn" — nhưng câu đó giấu một <strong>race condition</strong> khiến hai thành viên mượn cùng một bản sao vật lý. Đây là phiên bản ngây thơ, cái bug, và cách sửa.</p>
+
+<h3>Service ngây thơ — có bug</h3>
+<pre><span class="tok-keyword">@Transactional</span>
+<span class="tok-keyword">public</span> <span class="tok-type">Loan</span> <span class="tok-function">borrow</span>(<span class="tok-type">Long</span> copyId, <span class="tok-type">Long</span> memberId) {
+  <span class="tok-type">Copy</span> copy = copies.findById(copyId).orElseThrow(NotFoundException::new);
+  <span class="tok-keyword">if</span> (copy.getStatus() != CopyStatus.AVAILABLE)      <span class="tok-comment">// (A) ĐỌC</span>
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictException</span>(<span class="tok-string">"Bản sao đang được mượn"</span>);
+  copy.setStatus(CopyStatus.BORROWED);              <span class="tok-comment">// (B) GHI</span>
+  <span class="tok-type">Loan</span> loan = <span class="tok-keyword">new</span> <span class="tok-type">Loan</span>();
+  loan.setCopy(copy); loan.setMember(users.getReference(memberId));
+  loan.setBorrowedAt(Instant.now());
+  loan.setDueAt(Instant.now().plus(14, ChronoUnit.DAYS));
+  <span class="tok-keyword">return</span> loans.save(loan);
+}</pre>
+
+<h3>Vì sao nó hỏng — hai luồng đan xen</h3>
+<div class="out"><b>Thời gian →</b>   Thành viên An (luồng 1)      Thành viên Bình (luồng 2)
+  t1     (A) đọc bản 42 = AVAILABLE ✅
+  t2                                  (A) đọc bản 42 = AVAILABLE ✅  ← vẫn rảnh!
+  t3     (B) đặt BORROWED, lưu loan
+  t4                                  (B) đặt BORROWED, lưu loan
+<b>Kết quả (không rào):</b> HAI lượt mượn đang mở cho MỘT cuốn sách vật lý. Vô lý ngoài đời. ✗
+Khoảng trống giữa lúc An đọc (t1) và ghi (t3) khiến Bình đọc phải AVAILABLE cũ.</div>
+
+<h3>Ba lớp phòng thủ</h3>
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Kiểm đường nhanh</div><div class="lz-nsub">câu <code>if AVAILABLE</code> — từ chối trường hợp thường một cách rẻ, UX tốt. Nhưng KHÔNG phải sự bảo đảm khi đứng một mình.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Optimistic lock @Version</div><div class="lz-nsub">Hibernate thêm <code>WHERE version = ?</code> vào UPDATE bản sao. Nếu version của Bình cũ, UPDATE trúng 0 dòng → OptimisticLockException.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">UNIQUE riêng phần trên loan đang mở</div><div class="lz-nsub">chốt chặn tuyệt đối — <code>UNIQUE(copy_id) WHERE returned_at IS NULL</code>. Một bản sao có nhiều lượt mượn <em>đã trả</em>, nhưng nhiều nhất MỘT lượt đang mở. INSERT thứ hai vi phạm → 409.</div></div></div>
+</div>
+
+<h3>Vì sao dùng index riêng phần, không phải UNIQUE thường?</h3>
+<p>Một bản sao được mượn rồi trả <em>nhiều lần</em> trong đời — nên <code>loans.copy_id</code> <strong>không</strong> duy nhất trên cả bảng. Ta chỉ cần "nhiều nhất một lượt <em>đang mở</em> mỗi bản sao". Postgres cho phép chỉ index những dòng cần:</p>
+<pre><span class="tok-comment">-- chỉ những dòng returned_at IS NULL tham gia tính duy nhất</span>
+<span class="tok-keyword">CREATE UNIQUE INDEX</span> uq_active_loan
+  <span class="tok-keyword">ON</span> loans (copy_id)
+  <span class="tok-keyword">WHERE</span> returned_at <span class="tok-keyword">IS NULL</span>;</pre>
+
+<h3>@Version thắng cuộc đua thế nào — SQL sinh ra</h3>
+<div class="out">An commit trước:
+  UPDATE copies SET status='BORROWED', version=1 WHERE id=42 AND version=0;  → 1 dòng ✅
+
+Bình (vẫn giữ version=0) thử:
+  UPDATE copies SET status='BORROWED', version=1 WHERE id=42 AND version=0;  → 0 dòng!
+  Hibernate thấy 0 dòng được cập nhật → ném OptimisticLockException
+  → @Transactional của ta rollback → ta ánh xạ thành 409 Conflict ✅
+
+Kể cả bỏ @Version, INSERT loan của Bình trúng uq_active_loan → 409.
+Trạng thái cuối: đúng MỘT lượt mượn đang mở cho bản 42.</div>
+
+<h3>Service đúng</h3>
+<pre><span class="tok-keyword">@Transactional</span>
+<span class="tok-keyword">public</span> <span class="tok-type">Loan</span> <span class="tok-function">borrow</span>(<span class="tok-type">Long</span> copyId, <span class="tok-type">Long</span> memberId) {
+  <span class="tok-type">Copy</span> copy = copies.findById(copyId).orElseThrow(NotFoundException::new);
+  <span class="tok-keyword">if</span> (copy.getStatus() != CopyStatus.AVAILABLE)
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictException</span>(<span class="tok-string">"Bản sao đang được mượn"</span>);
+  copy.setStatus(CopyStatus.BORROWED);   <span class="tok-comment">// @Version canh UPDATE này</span>
+  <span class="tok-type">Loan</span> loan = <span class="tok-keyword">new</span> <span class="tok-type">Loan</span>();
+  loan.setCopy(copy);
+  loan.setMember(users.getReference(memberId));
+  loan.setBorrowedAt(Instant.now());
+  loan.setDueAt(Instant.now().plus(14, ChronoUnit.DAYS));
+  <span class="tok-keyword">try</span> {
+    <span class="tok-keyword">return</span> loans.saveAndFlush(loan);       <span class="tok-comment">// uq_active_loan là chốt chặn cuối</span>
+  } <span class="tok-keyword">catch</span> (DataIntegrityViolationException | OptimisticLockException e) {
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictException</span>(<span class="tok-string">"Bản sao đang được mượn"</span>);  <span class="tok-comment">// → 409</span>
+  }
+}</pre>
+
+<div class="pitfall"><strong>Bẫy:</strong> nghĩ chỉ <code>@Transactional</code> là chặn được race. Không — hai transaction có thể cùng đọc AVAILABLE dưới mức cô lập mặc định READ_COMMITTED. Transaction cho bạn rollback tất-cả-hoặc-không; nó <em>không</em> tuần tự hoá việc đọc-rồi-ghi. Bạn vẫn cần cột version hoặc index UNIQUE riêng phần.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Index riêng phần (partial/filtered).</b> <code>WHERE returned_at IS NULL</code> khiến ràng buộc chỉ áp cho lượt mượn <em>đang mở</em>, nên lịch sử vô hạn nhưng bất biến "một lượt mượn sống mỗi bản sao" do chính CSDL cưỡng chế — không phải code ứng dụng bạn có thể quên. Unique index có lọc là cách Postgres nói "duy nhất trong các dòng đang hoạt động". <em>Vì sao ngoài syllabus: DBI202 dạy UNIQUE thường; biến thể riêng phần mô hình hoá luật nghiệp vụ thật ít khi được chỉ mà lại cần liên tục.</em></div>
+
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Flibrary-management-system%2Flearn&reflabel=INT602#module-314" target="_blank" rel="noopener">
+  <span class="lc-ico">🌱</span>
+  <span class="lc-body"><span class="lc-title">Transaction &amp; JPA trên Code Lab</span><span class="lc-sub">Luyện @Transactional và hành vi khoá.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '4.2 — The borrow endpoint & error responses|||4.2 — Endpoint mượn sách & phản hồi lỗi',
+          slug: 'int602-lending-endpoint',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 4 · Lesson 4.2</span>
+<h2>The borrow endpoint &amp; consistent error responses</h2>
+<p class="lead">The service throws typed exceptions; the web layer turns them into clean HTTP. A single <code>@RestControllerAdvice</code> gives every error one predictable JSON shape — so the React app can handle them uniformly.</p>
+
+<h3>The controller</h3>
+<pre><span class="tok-keyword">@PostMapping</span>(<span class="tok-string">"/api/loans"</span>)
+<span class="tok-keyword">public</span> <span class="tok-type">ResponseEntity</span>&lt;LoanDto&gt; <span class="tok-function">borrow</span>(
+    <span class="tok-keyword">@Valid</span> <span class="tok-keyword">@RequestBody</span> <span class="tok-type">BorrowRequest</span> req,
+    <span class="tok-keyword">@AuthenticationPrincipal</span> <span class="tok-type">UserPrincipal</span> me) {
+  <span class="tok-type">Loan</span> loan = lendingService.borrow(req.copyId(), me.getId());
+  <span class="tok-keyword">return</span> ResponseEntity.status(HttpStatus.CREATED).body(LoanDto.from(loan));
+}
+
+<span class="tok-comment">// validation on the request body</span>
+<span class="tok-keyword">public record</span> <span class="tok-type">BorrowRequest</span>(<span class="tok-keyword">@NotNull</span> <span class="tok-type">Long</span> copyId) {}</pre>
+
+<h3>One error shape for the whole API</h3>
+<pre><span class="tok-keyword">@RestControllerAdvice</span>
+<span class="tok-keyword">public class</span> <span class="tok-type">ApiExceptionHandler</span> {
+
+  <span class="tok-keyword">@ExceptionHandler</span>(ConflictException.class)
+  <span class="tok-keyword">public</span> <span class="tok-type">ResponseEntity</span>&lt;ApiError&gt; <span class="tok-function">conflict</span>(<span class="tok-type">ConflictException</span> e) {
+    <span class="tok-keyword">return</span> error(HttpStatus.CONFLICT, e.getMessage());        <span class="tok-comment">// 409</span>
+  }
+  <span class="tok-keyword">@ExceptionHandler</span>(NotFoundException.class)
+  <span class="tok-keyword">public</span> <span class="tok-type">ResponseEntity</span>&lt;ApiError&gt; <span class="tok-function">notFound</span>(<span class="tok-type">NotFoundException</span> e) {
+    <span class="tok-keyword">return</span> error(HttpStatus.NOT_FOUND, e.getMessage());       <span class="tok-comment">// 404</span>
+  }
+  <span class="tok-keyword">@ExceptionHandler</span>(MethodArgumentNotValidException.class)
+  <span class="tok-keyword">public</span> <span class="tok-type">ResponseEntity</span>&lt;ApiError&gt; <span class="tok-function">invalid</span>(<span class="tok-type">MethodArgumentNotValidException</span> e) {
+    <span class="tok-keyword">return</span> error(HttpStatus.BAD_REQUEST, <span class="tok-string">"Validation failed"</span>);   <span class="tok-comment">// 400</span>
+  }
+  <span class="tok-keyword">private</span> <span class="tok-type">ResponseEntity</span>&lt;ApiError&gt; <span class="tok-function">error</span>(<span class="tok-type">HttpStatus</span> s, <span class="tok-type">String</span> msg) {
+    <span class="tok-keyword">return</span> ResponseEntity.status(s).body(<span class="tok-keyword">new</span> <span class="tok-type">ApiError</span>(s.value(), msg));
+  }
+}
+<span class="tok-keyword">public record</span> <span class="tok-type">ApiError</span>(<span class="tok-keyword">int</span> status, <span class="tok-type">String</span> message) {}</pre>
+
+<h3>Worked example — the status-code contract</h3>
+<table>
+<thead><tr><th>Situation</th><th>Status</th><th>Body</th></tr></thead>
+<tbody>
+<tr><td>Borrowed successfully</td><td>201 Created</td><td>the new LoanDto</td></tr>
+<tr><td>Copy already on loan (race lost)</td><td>409 Conflict</td><td>{ "status":409, "message":"Copy already on loan" }</td></tr>
+<tr><td>Copy id does not exist</td><td>404 Not Found</td><td>{ "status":404, "message":"Copy not found" }</td></tr>
+<tr><td>Missing copyId in body</td><td>400 Bad Request</td><td>{ "status":400, "message":"Validation failed" }</td></tr>
+<tr><td>No / expired token</td><td>401 Unauthorized</td><td>(from the JWT filter)</td></tr>
+</tbody>
+</table>
+
+<h3>The return endpoint closes the loan</h3>
+<pre><span class="tok-keyword">@Transactional</span>
+<span class="tok-keyword">public</span> <span class="tok-type">Loan</span> <span class="tok-function">giveBack</span>(<span class="tok-type">Long</span> loanId) {
+  <span class="tok-type">Loan</span> loan = loans.findById(loanId).orElseThrow(NotFoundException::new);
+  <span class="tok-keyword">if</span> (loan.getReturnedAt() != <span class="tok-keyword">null</span>)
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictException</span>(<span class="tok-string">"Loan already closed"</span>);
+  loan.setReturnedAt(Instant.now());        <span class="tok-comment">// row leaves the partial index</span>
+  loan.getCopy().setStatus(CopyStatus.AVAILABLE);  <span class="tok-comment">// copy free again</span>
+  <span class="tok-keyword">return</span> loan;
+}</pre>
+<p>Setting <code>returned_at</code> removes the row from <code>uq_active_loan</code>, so the same copy can be borrowed again — cleanly, with no history lost.</p>
+
+<div class="pitfall"><strong>Trap:</strong> letting the raw <code>DataIntegrityViolationException</code> escape to the client. Spring's default would return a 500 with a stack trace leaking your table and constraint names. Always catch it in the service (Lesson 4.1) or map it in the advice, and return a clean 409.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Idempotency of "return".</b> A double-click on "Return" must not corrupt anything. Because we check <code>returnedAt != null</code> first, the second call gets a clean 409 instead of double-freeing the copy. Designing every mutating endpoint to be safe under retries is what separates a demo from a system. <em>Why beyond syllabus: idempotency is a distributed-systems idea the undergrad syllabus never raises, yet graders love to double-click.</em></div>
+
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Flibrary-management-system%2Flearn&reflabel=INT602#module-312" target="_blank" rel="noopener">
+  <span class="lc-ico">🌱</span>
+  <span class="lc-body"><span class="lc-title">REST controllers &amp; error handling</span><span class="lc-sub">@RestControllerAdvice and status codes, on Code Lab.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 4 · Bài 4.2</span>
+<h2>Endpoint mượn sách &amp; phản hồi lỗi nhất quán</h2>
+<p class="lead">Service ném exception có kiểu; tầng web biến chúng thành HTTP sạch. Một <code>@RestControllerAdvice</code> duy nhất cho mọi lỗi một dạng JSON đoán trước được — để app React xử lý đồng nhất.</p>
+
+<h3>Controller</h3>
+<pre><span class="tok-keyword">@PostMapping</span>(<span class="tok-string">"/api/loans"</span>)
+<span class="tok-keyword">public</span> <span class="tok-type">ResponseEntity</span>&lt;LoanDto&gt; <span class="tok-function">borrow</span>(
+    <span class="tok-keyword">@Valid</span> <span class="tok-keyword">@RequestBody</span> <span class="tok-type">BorrowRequest</span> req,
+    <span class="tok-keyword">@AuthenticationPrincipal</span> <span class="tok-type">UserPrincipal</span> me) {
+  <span class="tok-type">Loan</span> loan = lendingService.borrow(req.copyId(), me.getId());
+  <span class="tok-keyword">return</span> ResponseEntity.status(HttpStatus.CREATED).body(LoanDto.from(loan));
+}
+
+<span class="tok-comment">// validate thân request</span>
+<span class="tok-keyword">public record</span> <span class="tok-type">BorrowRequest</span>(<span class="tok-keyword">@NotNull</span> <span class="tok-type">Long</span> copyId) {}</pre>
+
+<h3>Một dạng lỗi cho cả API</h3>
+<pre><span class="tok-keyword">@RestControllerAdvice</span>
+<span class="tok-keyword">public class</span> <span class="tok-type">ApiExceptionHandler</span> {
+
+  <span class="tok-keyword">@ExceptionHandler</span>(ConflictException.class)
+  <span class="tok-keyword">public</span> <span class="tok-type">ResponseEntity</span>&lt;ApiError&gt; <span class="tok-function">conflict</span>(<span class="tok-type">ConflictException</span> e) {
+    <span class="tok-keyword">return</span> error(HttpStatus.CONFLICT, e.getMessage());        <span class="tok-comment">// 409</span>
+  }
+  <span class="tok-keyword">@ExceptionHandler</span>(NotFoundException.class)
+  <span class="tok-keyword">public</span> <span class="tok-type">ResponseEntity</span>&lt;ApiError&gt; <span class="tok-function">notFound</span>(<span class="tok-type">NotFoundException</span> e) {
+    <span class="tok-keyword">return</span> error(HttpStatus.NOT_FOUND, e.getMessage());       <span class="tok-comment">// 404</span>
+  }
+  <span class="tok-keyword">@ExceptionHandler</span>(MethodArgumentNotValidException.class)
+  <span class="tok-keyword">public</span> <span class="tok-type">ResponseEntity</span>&lt;ApiError&gt; <span class="tok-function">invalid</span>(<span class="tok-type">MethodArgumentNotValidException</span> e) {
+    <span class="tok-keyword">return</span> error(HttpStatus.BAD_REQUEST, <span class="tok-string">"Validation failed"</span>);   <span class="tok-comment">// 400</span>
+  }
+  <span class="tok-keyword">private</span> <span class="tok-type">ResponseEntity</span>&lt;ApiError&gt; <span class="tok-function">error</span>(<span class="tok-type">HttpStatus</span> s, <span class="tok-type">String</span> msg) {
+    <span class="tok-keyword">return</span> ResponseEntity.status(s).body(<span class="tok-keyword">new</span> <span class="tok-type">ApiError</span>(s.value(), msg));
+  }
+}
+<span class="tok-keyword">public record</span> <span class="tok-type">ApiError</span>(<span class="tok-keyword">int</span> status, <span class="tok-type">String</span> message) {}</pre>
+
+<h3>Ví dụ có lời giải — hợp đồng mã trạng thái</h3>
+<table>
+<thead><tr><th>Tình huống</th><th>Mã</th><th>Thân</th></tr></thead>
+<tbody>
+<tr><td>Mượn thành công</td><td>201 Created</td><td>LoanDto mới</td></tr>
+<tr><td>Bản sao đang được mượn (thua race)</td><td>409 Conflict</td><td>{ "status":409, "message":"Copy already on loan" }</td></tr>
+<tr><td>copyId không tồn tại</td><td>404 Not Found</td><td>{ "status":404, "message":"Copy not found" }</td></tr>
+<tr><td>Thiếu copyId trong thân</td><td>400 Bad Request</td><td>{ "status":400, "message":"Validation failed" }</td></tr>
+<tr><td>Không / hết hạn token</td><td>401 Unauthorized</td><td>(từ filter JWT)</td></tr>
+</tbody>
+</table>
+
+<h3>Endpoint trả sách đóng lượt mượn</h3>
+<pre><span class="tok-keyword">@Transactional</span>
+<span class="tok-keyword">public</span> <span class="tok-type">Loan</span> <span class="tok-function">giveBack</span>(<span class="tok-type">Long</span> loanId) {
+  <span class="tok-type">Loan</span> loan = loans.findById(loanId).orElseThrow(NotFoundException::new);
+  <span class="tok-keyword">if</span> (loan.getReturnedAt() != <span class="tok-keyword">null</span>)
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictException</span>(<span class="tok-string">"Loan already closed"</span>);
+  loan.setReturnedAt(Instant.now());        <span class="tok-comment">// dòng rời khỏi index riêng phần</span>
+  loan.getCopy().setStatus(CopyStatus.AVAILABLE);  <span class="tok-comment">// bản sao rảnh lại</span>
+  <span class="tok-keyword">return</span> loan;
+}</pre>
+<p>Gán <code>returned_at</code> gỡ dòng khỏi <code>uq_active_loan</code>, nên cùng bản sao có thể mượn lại — gọn gàng, không mất lịch sử.</p>
+
+<div class="pitfall"><strong>Bẫy:</strong> để <code>DataIntegrityViolationException</code> thô lọt ra client. Mặc định Spring trả 500 kèm stack trace lộ tên bảng và ràng buộc. Luôn bắt nó trong service (Bài 4.1) hoặc ánh xạ trong advice, và trả 409 sạch.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Tính bình phương (idempotency) của "trả".</b> Double-click nút "Trả" không được làm hỏng gì. Vì ta kiểm <code>returnedAt != null</code> trước, lần gọi thứ hai nhận 409 sạch thay vì "trả tự do" bản sao hai lần. Thiết kế mọi endpoint biến đổi an toàn khi bị thử lại là thứ phân biệt bản demo với hệ thống. <em>Vì sao ngoài syllabus: idempotency là khái niệm hệ phân tán mà giáo trình đại học không nêu, nhưng giám khảo rất hay double-click.</em></div>
+
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Flibrary-management-system%2Flearn&reflabel=INT602#module-312" target="_blank" rel="noopener">
+  <span class="lc-ico">🌱</span>
+  <span class="lc-body"><span class="lc-title">Controller REST &amp; xử lý lỗi</span><span class="lc-sub">@RestControllerAdvice và mã trạng thái, trên Code Lab.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '4.3 — Checkpoint quiz: the lending core|||4.3 — Quiz kiểm tra: lõi cho mượn',
+          slug: 'int602-quiz-4',
+          type: 'QUIZ',
+          quiz: {
+            timeLimitSeconds: 360,
+            questions: [
+              {
+                id: 'q1',
+                question: 'Why is @Transactional alone NOT enough to prevent two members borrowing the same copy?|||Vì sao chỉ @Transactional KHÔNG đủ để chặn hai thành viên mượn cùng một bản sao?',
+                options: [
+                  'Under READ_COMMITTED both transactions can read AVAILABLE before either writes|||Dưới READ_COMMITTED cả hai transaction có thể đọc AVAILABLE trước khi ai kịp ghi',
+                  'Transactions are disabled by default in Spring Boot|||Transaction bị tắt mặc định trong Spring Boot',
+                  'JPA does not support transactions|||JPA không hỗ trợ transaction',
+                  'The database is too slow to lock rows|||Cơ sở dữ liệu quá chậm để khoá dòng',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q2',
+                question: 'What does the partial index UNIQUE(copy_id) WHERE returned_at IS NULL guarantee?|||Index riêng phần UNIQUE(copy_id) WHERE returned_at IS NULL bảo đảm điều gì?',
+                options: [
+                  'A copy can never be borrowed|||Một bản sao không bao giờ được mượn',
+                  'At most one OPEN loan per copy, while allowing unlimited past loans|||Nhiều nhất một lượt mượn ĐANG MỞ mỗi bản sao, vẫn cho vô hạn lượt đã trả',
+                  'Every loan row must be unique across all columns|||Mọi dòng loan phải duy nhất trên tất cả cột',
+                  'Only one member may ever use the library|||Chỉ một thành viên được dùng thư viện',
+                ],
+                correctIndex: 1,
+                points: 1,
+              },
+              {
+                id: 'q3',
+                question: 'When the loser of the race calls saveAndFlush, what happens with @Version and the partial index?|||Khi kẻ thua race gọi saveAndFlush, chuyện gì xảy ra với @Version và index riêng phần?',
+                options: [
+                  'The row is silently overwritten|||Dòng bị ghi đè âm thầm',
+                  'The UPDATE hits 0 rows (OptimisticLock) and/or the INSERT violates the unique index → mapped to 409|||UPDATE trúng 0 dòng (OptimisticLock) và/hoặc INSERT vi phạm unique index → ánh xạ 409',
+                  'The whole database is locked for 30 seconds|||Cả CSDL bị khoá 30 giây',
+                  'The server returns 200 twice|||Server trả 200 hai lần',
+                ],
+                correctIndex: 1,
+                points: 1,
+              },
+              {
+                id: 'q4',
+                question: 'What is the correct HTTP status when a copy is already on loan?|||Mã HTTP đúng khi một bản sao đang được mượn là gì?',
+                options: ['200 OK', '404 Not Found', '409 Conflict', '500 Internal Server Error'],
+                correctIndex: 2,
+                points: 1,
+              },
+              {
+                id: 'q5',
+                question: '(Beyond syllabus) Why design the "return" endpoint to reject a second call with 409 instead of ignoring it?|||(Ngoài giáo trình) Vì sao thiết kế endpoint "trả" từ chối lần gọi thứ hai bằng 409 thay vì phớt lờ?',
+                options: [
+                  'To make the API idempotent-safe: a double-click must not double-free the copy or corrupt state|||Để API an toàn khi lặp: double-click không được "trả" bản sao hai lần hay làm hỏng trạng thái',
+                  'Because 409 is faster than 200|||Vì 409 nhanh hơn 200',
+                  'To hide errors from the grader|||Để giấu lỗi khỏi giám khảo',
+                  'Because JPA requires it|||Vì JPA bắt buộc',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+            ],
+          },
+        },
+      ],
+    },
+    {
+      title: 'Section 5 — Frontend: the React SPA|||Mục 5 — Giao diện: ứng dụng React SPA',
+      lessons: [
+        {
+          title: '5.1 — Auth state & the axios interceptor|||5.1 — Trạng thái đăng nhập & axios interceptor',
+          slug: 'int602-react-auth',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 5 · Lesson 5.1</span>
+<h2>Auth state &amp; the axios interceptor</h2>
+<p class="lead">One axios instance attaches the JWT to every request and reacts to 401 centrally. You write it once; every screen inherits authenticated calls.</p>
+
+<h3>The shared client</h3>
+<pre><span class="tok-comment">// src/api/client.js</span>
+<span class="tok-keyword">import</span> axios <span class="tok-keyword">from</span> <span class="tok-string">"axios"</span>;
+
+<span class="tok-keyword">export const</span> api = axios.<span class="tok-function">create</span>({ baseURL: <span class="tok-string">"/api"</span> });
+
+<span class="tok-comment">// attach the token on the way out</span>
+api.interceptors.request.<span class="tok-function">use</span>((config) =&gt; {
+  <span class="tok-keyword">const</span> token = localStorage.<span class="tok-function">getItem</span>(<span class="tok-string">"token"</span>);
+  <span class="tok-keyword">if</span> (token) config.headers.Authorization = <span class="tok-string">"Bearer "</span> + token;
+  <span class="tok-keyword">return</span> config;
+});
+
+<span class="tok-comment">// react to 401 on the way back</span>
+api.interceptors.response.<span class="tok-function">use</span>(
+  (r) =&gt; r,
+  (err) =&gt; {
+    <span class="tok-keyword">if</span> (err.response?.status === <span class="tok-number">401</span>) {
+      localStorage.<span class="tok-function">removeItem</span>(<span class="tok-string">"token"</span>);
+      window.location.href = <span class="tok-string">"/login"</span>;   <span class="tok-comment">// session expired → sign in again</span>
+    }
+    <span class="tok-keyword">return</span> Promise.<span class="tok-function">reject</span>(err);
+  }
+);</pre>
+
+<h3>Login stores the token</h3>
+<pre><span class="tok-keyword">async function</span> <span class="tok-function">login</span>(email, password) {
+  <span class="tok-keyword">const</span> { data } = <span class="tok-keyword">await</span> api.<span class="tok-function">post</span>(<span class="tok-string">"/auth/login"</span>, { email, password });
+  localStorage.<span class="tok-function">setItem</span>(<span class="tok-string">"token"</span>, data.token);
+  <span class="tok-keyword">return</span> data.user;   <span class="tok-comment">// { id, name, role }</span>
+}</pre>
+
+<div class="pitfall"><strong>Trap:</strong> storing the role in state and trusting it for security. The frontend role only decides what to <em>show</em>; the backend must re-check every mutating call (Section 3). A user can edit localStorage — never let the client be the gatekeeper.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why a response interceptor beats try/catch everywhere.</b> Handling 401 in one place means an expired token logs the user out no matter which of 40 screens made the call. Cross-cutting concerns (auth, logging, retry) belong in interceptors, not copied into every component. <em>Why beyond syllabus: this is the DRY/aspect-oriented mindset the syllabus never frames explicitly.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 5 · Bài 5.1</span>
+<h2>Trạng thái đăng nhập &amp; axios interceptor</h2>
+<p class="lead">Một instance axios gắn JWT vào mọi request và phản ứng 401 tập trung. Viết một lần; mọi màn hình thừa hưởng lời gọi đã xác thực.</p>
+
+<h3>Client dùng chung</h3>
+<pre><span class="tok-comment">// src/api/client.js</span>
+<span class="tok-keyword">import</span> axios <span class="tok-keyword">from</span> <span class="tok-string">"axios"</span>;
+
+<span class="tok-keyword">export const</span> api = axios.<span class="tok-function">create</span>({ baseURL: <span class="tok-string">"/api"</span> });
+
+<span class="tok-comment">// gắn token khi đi ra</span>
+api.interceptors.request.<span class="tok-function">use</span>((config) =&gt; {
+  <span class="tok-keyword">const</span> token = localStorage.<span class="tok-function">getItem</span>(<span class="tok-string">"token"</span>);
+  <span class="tok-keyword">if</span> (token) config.headers.Authorization = <span class="tok-string">"Bearer "</span> + token;
+  <span class="tok-keyword">return</span> config;
+});
+
+<span class="tok-comment">// phản ứng 401 khi đi về</span>
+api.interceptors.response.<span class="tok-function">use</span>(
+  (r) =&gt; r,
+  (err) =&gt; {
+    <span class="tok-keyword">if</span> (err.response?.status === <span class="tok-number">401</span>) {
+      localStorage.<span class="tok-function">removeItem</span>(<span class="tok-string">"token"</span>);
+      window.location.href = <span class="tok-string">"/login"</span>;   <span class="tok-comment">// hết phiên → đăng nhập lại</span>
+    }
+    <span class="tok-keyword">return</span> Promise.<span class="tok-function">reject</span>(err);
+  }
+);</pre>
+
+<h3>Đăng nhập lưu token</h3>
+<pre><span class="tok-keyword">async function</span> <span class="tok-function">login</span>(email, password) {
+  <span class="tok-keyword">const</span> { data } = <span class="tok-keyword">await</span> api.<span class="tok-function">post</span>(<span class="tok-string">"/auth/login"</span>, { email, password });
+  localStorage.<span class="tok-function">setItem</span>(<span class="tok-string">"token"</span>, data.token);
+  <span class="tok-keyword">return</span> data.user;   <span class="tok-comment">// { id, name, role }</span>
+}</pre>
+
+<div class="pitfall"><strong>Bẫy:</strong> lưu role trong state rồi tin nó để bảo mật. Role ở frontend chỉ quyết định <em>hiển thị</em> cái gì; backend phải kiểm lại mọi lời gọi biến đổi (Mục 3). Người dùng sửa được localStorage — đừng bao giờ để client làm người gác cổng.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao response interceptor hơn try/catch khắp nơi.</b> Xử lý 401 một chỗ nghĩa là token hết hạn sẽ đăng xuất người dùng bất kể màn nào trong 40 màn gọi. Mối quan tâm xuyên suốt (auth, log, retry) thuộc về interceptor, không phải chép vào từng component. <em>Vì sao ngoài syllabus: đây là tư duy DRY/hướng khía cạnh mà giáo trình không nêu rõ.</em></div>
+</div>
+`,
+        },
+        {
+          title: '5.2 — The catalog & borrow screen (handling 409)|||5.2 — Màn danh mục & mượn sách (xử lý 409)',
+          slug: 'int602-borrow-screen',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 5 · Lesson 5.2</span>
+<h2>The catalog &amp; borrow screen — handling the 409</h2>
+<p class="lead">The member browses books, sees available copies, and clicks "Borrow". The interesting part is what happens when the copy was grabbed a split second earlier: the backend returns 409, and a <em>good</em> UI recovers gracefully instead of showing a raw error.</p>
+
+<h3>The borrow button</h3>
+<pre><span class="tok-keyword">function</span> <span class="tok-function">BorrowButton</span>({ copyId, onDone }) {
+  <span class="tok-keyword">const</span> [busy, setBusy] = <span class="tok-function">useState</span>(<span class="tok-keyword">false</span>);
+
+  <span class="tok-keyword">async function</span> <span class="tok-function">borrow</span>() {
+    setBusy(<span class="tok-keyword">true</span>);
+    <span class="tok-keyword">try</span> {
+      <span class="tok-keyword">const</span> { data } = <span class="tok-keyword">await</span> api.<span class="tok-function">post</span>(<span class="tok-string">"/loans"</span>, { copyId });
+      toast.<span class="tok-function">success</span>(<span class="tok-string">"Borrowed! Due " </span>+ data.dueAt.<span class="tok-function">slice</span>(<span class="tok-number">0</span>,<span class="tok-number">10</span>));
+      onDone();                          <span class="tok-comment">// refetch → copy now shows BORROWED</span>
+    } <span class="tok-keyword">catch</span> (e) {
+      <span class="tok-keyword">if</span> (e.response?.status === <span class="tok-number">409</span>) {
+        toast.<span class="tok-function">error</span>(<span class="tok-string">"Someone just borrowed this copy — refreshing…"</span>);
+        onDone();                        <span class="tok-comment">// refetch so the UI self-heals</span>
+      } <span class="tok-keyword">else</span> {
+        toast.<span class="tok-function">error</span>(<span class="tok-string">"Could not borrow. Try again."</span>);
+      }
+    } <span class="tok-keyword">finally</span> { setBusy(<span class="tok-keyword">false</span>); }
+  }
+
+  <span class="tok-keyword">return</span> &lt;button disabled={busy} onClick={borrow}&gt;
+    {busy ? <span class="tok-string">"Borrowing…"</span> : <span class="tok-string">"Borrow"</span>}
+  &lt;/button&gt;;
+}</pre>
+
+<h3>Worked example — the 409 recovery flow</h3>
+<div class="out">1. An and Binh both see "Clean Code — 1 copy available".
+2. Both click Borrow within the same second.
+3. An's POST /loans → 201. Binh's POST /loans → 409.
+4. Binh's catch runs → toast "Someone just borrowed this copy" + onDone().
+5. onDone() refetches → the copy now shows "On loan", the Borrow button is gone.
+Nobody sees a stack trace; the list simply reflects reality. ✅</div>
+
+<div class="pitfall"><strong>Trap:</strong> disabling the button on click but never re-enabling it in <code>finally</code>. If the request fails and you only re-enable in the success path, the button stays stuck on "Borrowing…" forever. Always reset UI state in <code>finally</code>.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Optimistic UI vs authoritative refetch.</b> You could optimistically flip the copy to "On loan" before the server replies, for snappiness — but then you must roll back on 409. For a booking-style feature where conflicts are real, the safer pattern is: act, then <em>refetch the truth</em>. Snappiness matters less than never showing a state that the server would reject. <em>Why beyond syllabus: reconciling optimistic UI with server authority is a real-world React tension the syllabus never covers.</em></div>
+
+<a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Flibrary-management-system%2Flearn&reflabel=INT602#module-369" target="_blank" rel="noopener">
+  <span class="lc-ico">⚛️</span>
+  <span class="lc-body"><span class="lc-title">Data fetching &amp; effects on Code Lab</span><span class="lc-sub">useEffect, loading/error states, refetching.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 5 · Bài 5.2</span>
+<h2>Màn danh mục &amp; mượn sách — xử lý 409</h2>
+<p class="lead">Thành viên duyệt sách, thấy bản sao còn rảnh, và bấm "Mượn". Phần thú vị là khi bản sao vừa bị người khác giành trước một tích tắc: backend trả 409, và một giao diện <em>tốt</em> phục hồi mượt thay vì hiện lỗi thô.</p>
+
+<h3>Nút Mượn</h3>
+<pre><span class="tok-keyword">function</span> <span class="tok-function">BorrowButton</span>({ copyId, onDone }) {
+  <span class="tok-keyword">const</span> [busy, setBusy] = <span class="tok-function">useState</span>(<span class="tok-keyword">false</span>);
+
+  <span class="tok-keyword">async function</span> <span class="tok-function">borrow</span>() {
+    setBusy(<span class="tok-keyword">true</span>);
+    <span class="tok-keyword">try</span> {
+      <span class="tok-keyword">const</span> { data } = <span class="tok-keyword">await</span> api.<span class="tok-function">post</span>(<span class="tok-string">"/loans"</span>, { copyId });
+      toast.<span class="tok-function">success</span>(<span class="tok-string">"Đã mượn! Hạn trả " </span>+ data.dueAt.<span class="tok-function">slice</span>(<span class="tok-number">0</span>,<span class="tok-number">10</span>));
+      onDone();                          <span class="tok-comment">// tải lại → bản sao giờ hiện BORROWED</span>
+    } <span class="tok-keyword">catch</span> (e) {
+      <span class="tok-keyword">if</span> (e.response?.status === <span class="tok-number">409</span>) {
+        toast.<span class="tok-function">error</span>(<span class="tok-string">"Có người vừa mượn bản này — đang làm mới…"</span>);
+        onDone();                        <span class="tok-comment">// tải lại để UI tự lành</span>
+      } <span class="tok-keyword">else</span> {
+        toast.<span class="tok-function">error</span>(<span class="tok-string">"Không mượn được. Thử lại."</span>);
+      }
+    } <span class="tok-keyword">finally</span> { setBusy(<span class="tok-keyword">false</span>); }
+  }
+
+  <span class="tok-keyword">return</span> &lt;button disabled={busy} onClick={borrow}&gt;
+    {busy ? <span class="tok-string">"Đang mượn…"</span> : <span class="tok-string">"Mượn"</span>}
+  &lt;/button&gt;;
+}</pre>
+
+<h3>Ví dụ có lời giải — luồng phục hồi 409</h3>
+<div class="out">1. An và Bình đều thấy "Clean Code — còn 1 bản".
+2. Cả hai bấm Mượn trong cùng một giây.
+3. POST /loans của An → 201. POST /loans của Bình → 409.
+4. catch của Bình chạy → toast "Có người vừa mượn bản này" + onDone().
+5. onDone() tải lại → bản sao giờ hiện "Đang mượn", nút Mượn biến mất.
+Không ai thấy stack trace; danh sách chỉ đơn giản phản ánh sự thật. ✅</div>
+
+<div class="pitfall"><strong>Bẫy:</strong> vô hiệu nút khi bấm nhưng không bật lại trong <code>finally</code>. Nếu request lỗi mà bạn chỉ bật lại ở nhánh thành công, nút kẹt "Đang mượn…" mãi mãi. Luôn đặt lại trạng thái UI trong <code>finally</code>.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>UI lạc quan vs tải lại theo nguồn chuẩn.</b> Bạn có thể lạc quan lật bản sao sang "Đang mượn" trước khi server trả lời cho nhanh — nhưng khi đó phải rollback nếu 409. Với tính năng kiểu đặt-chỗ nơi xung đột là thật, mẫu an toàn hơn là: hành động, rồi <em>tải lại sự thật</em>. Sự nhanh nhẹn ít quan trọng hơn việc không bao giờ hiện trạng thái mà server sẽ từ chối. <em>Vì sao ngoài syllabus: dung hoà UI lạc quan với thẩm quyền server là căng thẳng React thực tế mà giáo trình không nói.</em></div>
+
+<a class="link-card codelab" href="/code-lab/react?ref=%2Fcourses%2Flibrary-management-system%2Flearn&reflabel=INT602#module-369" target="_blank" rel="noopener">
+  <span class="lc-ico">⚛️</span>
+  <span class="lc-body"><span class="lc-title">Lấy dữ liệu &amp; effect trên Code Lab</span><span class="lc-sub">useEffect, trạng thái loading/error, tải lại.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      title: 'Section 6 — Testing (prove no double-lend)|||Mục 6 — Kiểm thử (chứng minh không mượn trùng)',
+      lessons: [
+        {
+          title: '6.1 — Unit, MockMvc & a concurrency test|||6.1 — Unit, MockMvc & test đồng thời',
+          slug: 'int602-testing',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 6 · Lesson 6.1</span>
+<h2>Testing: from a unit test to proving the invariant under load</h2>
+<p class="lead">Three layers of tests. A fast unit test for business rules, a MockMvc test for the HTTP contract, and — the one that impresses graders — a <strong>concurrency test</strong> that fires many threads at the same copy and asserts exactly one wins.</p>
+
+<h3>1) Unit test — the rule in isolation</h3>
+<pre><span class="tok-keyword">@Test</span>
+<span class="tok-keyword">void</span> <span class="tok-function">borrowingAnAlreadyBorrowedCopy_throwsConflict</span>() {
+  <span class="tok-type">Copy</span> c = <span class="tok-keyword">new</span> <span class="tok-type">Copy</span>(); c.setStatus(CopyStatus.BORROWED);
+  when(copies.findById(<span class="tok-number">42L</span>)).thenReturn(Optional.of(c));
+
+  assertThrows(ConflictException.class,
+      () -&gt; lendingService.borrow(<span class="tok-number">42L</span>, <span class="tok-number">7L</span>));
+}</pre>
+
+<h3>2) MockMvc — the HTTP contract</h3>
+<pre><span class="tok-keyword">@Test</span>
+<span class="tok-keyword">void</span> <span class="tok-function">borrow_returns201_thenSameCopy_returns409</span>() <span class="tok-keyword">throws</span> Exception {
+  mvc.<span class="tok-function">perform</span>(post(<span class="tok-string">"/api/loans"</span>).with(jwt(member))
+        .contentType(APPLICATION_JSON).content(<span class="tok-string">"{\\"copyId\\":42}"</span>))
+     .andExpect(status().isCreated());
+
+  mvc.<span class="tok-function">perform</span>(post(<span class="tok-string">"/api/loans"</span>).with(jwt(other))
+        .contentType(APPLICATION_JSON).content(<span class="tok-string">"{\\"copyId\\":42}"</span>))
+     .andExpect(status().isConflict());   <span class="tok-comment">// 409 the second time</span>
+}</pre>
+
+<h3>3) The concurrency test — the star of the demo</h3>
+<pre><span class="tok-keyword">@Test</span>
+<span class="tok-keyword">void</span> <span class="tok-function">twentyThreadsRaceForOneCopy_onlyOneSucceeds</span>() <span class="tok-keyword">throws</span> Exception {
+  <span class="tok-keyword">int</span> N = <span class="tok-number">20</span>;
+  <span class="tok-keyword">var</span> ready  = <span class="tok-keyword">new</span> <span class="tok-type">CountDownLatch</span>(N);
+  <span class="tok-keyword">var</span> go     = <span class="tok-keyword">new</span> <span class="tok-type">CountDownLatch</span>(<span class="tok-number">1</span>);   <span class="tok-comment">// the starting gun</span>
+  <span class="tok-keyword">var</span> ok     = <span class="tok-keyword">new</span> <span class="tok-type">AtomicInteger</span>();
+  <span class="tok-keyword">var</span> pool   = Executors.<span class="tok-function">newFixedThreadPool</span>(N);
+
+  <span class="tok-keyword">for</span> (<span class="tok-keyword">int</span> i = <span class="tok-number">0</span>; i &lt; N; i++) pool.<span class="tok-function">submit</span>(() -&gt; {
+    ready.<span class="tok-function">countDown</span>();          <span class="tok-comment">// I'm lined up</span>
+    go.<span class="tok-function">await</span>();               <span class="tok-comment">// wait so all fire together</span>
+    <span class="tok-keyword">try</span> { lendingService.<span class="tok-function">borrow</span>(<span class="tok-number">42L</span>, memberId); ok.<span class="tok-function">incrementAndGet</span>(); }
+    <span class="tok-keyword">catch</span> (ConflictException ignored) {}   <span class="tok-comment">// losers get 409</span>
+    <span class="tok-keyword">return null</span>;
+  });
+
+  ready.<span class="tok-function">await</span>();               <span class="tok-comment">// everyone lined up</span>
+  go.<span class="tok-function">countDown</span>();             <span class="tok-comment">// FIRE all 20 at once</span>
+  pool.<span class="tok-function">shutdown</span>(); pool.<span class="tok-function">awaitTermination</span>(<span class="tok-number">5</span>, SECONDS);
+
+  assertThat(ok.<span class="tok-function">get</span>()).<span class="tok-function">isEqualTo</span>(<span class="tok-number">1</span>);        <span class="tok-comment">// exactly ONE borrow won</span>
+  assertThat(loans.<span class="tok-function">countByCopyIdAndReturnedAtIsNull</span>(<span class="tok-number">42L</span>)).<span class="tok-function">isEqualTo</span>(<span class="tok-number">1</span>);
+}</pre>
+
+<h3>Why the latch matters</h3>
+<div class="out">Without a latch, threads start staggered — thread 1 often finishes before thread 2 begins,
+so the race never actually happens and a broken service still "passes".
+
+CountDownLatch go = 1 holds ALL threads at the gate until go.countDown() fires them
+simultaneously → the real race is forced → the test genuinely proves the invariant.</div>
+
+<div class="pitfall"><strong>Trap:</strong> writing a "concurrency" test with a plain for-loop and no latch. Sequential calls never collide, so the test is green even against the buggy naive service. If your concurrency test can't fail on the buggy version, it proves nothing.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>@Transactional on tests hides the race.</b> Spring wraps @Transactional test methods in one rolled-back transaction — but that also forces all your threads into a single connection, serialising them and masking the bug. For a concurrency test, do <em>not</em> annotate it @Transactional; let each thread use its own connection and clean up manually. <em>Why beyond syllabus: this subtle interaction between the test framework and real concurrency is never taught, yet it silently invalidates naive concurrency tests.</em></div>
+
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Flibrary-management-system%2Flearn&reflabel=INT602#module-316" target="_blank" rel="noopener">
+  <span class="lc-ico">🌱</span>
+  <span class="lc-body"><span class="lc-title">Testing Spring apps on Code Lab</span><span class="lc-sub">Unit, MockMvc, and integration tests.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 6 · Bài 6.1</span>
+<h2>Kiểm thử: từ unit test đến chứng minh bất biến dưới tải</h2>
+<p class="lead">Ba lớp kiểm thử. Unit test nhanh cho luật nghiệp vụ, MockMvc test cho hợp đồng HTTP, và — cái làm giám khảo nể — một <strong>test đồng thời</strong> bắn nhiều luồng vào cùng một bản sao và khẳng định đúng một kẻ thắng.</p>
+
+<h3>1) Unit test — luật đứng riêng</h3>
+<pre><span class="tok-keyword">@Test</span>
+<span class="tok-keyword">void</span> <span class="tok-function">borrowingAnAlreadyBorrowedCopy_throwsConflict</span>() {
+  <span class="tok-type">Copy</span> c = <span class="tok-keyword">new</span> <span class="tok-type">Copy</span>(); c.setStatus(CopyStatus.BORROWED);
+  when(copies.findById(<span class="tok-number">42L</span>)).thenReturn(Optional.of(c));
+
+  assertThrows(ConflictException.class,
+      () -&gt; lendingService.borrow(<span class="tok-number">42L</span>, <span class="tok-number">7L</span>));
+}</pre>
+
+<h3>2) MockMvc — hợp đồng HTTP</h3>
+<pre><span class="tok-keyword">@Test</span>
+<span class="tok-keyword">void</span> <span class="tok-function">borrow_returns201_thenSameCopy_returns409</span>() <span class="tok-keyword">throws</span> Exception {
+  mvc.<span class="tok-function">perform</span>(post(<span class="tok-string">"/api/loans"</span>).with(jwt(member))
+        .contentType(APPLICATION_JSON).content(<span class="tok-string">"{\\"copyId\\":42}"</span>))
+     .andExpect(status().isCreated());
+
+  mvc.<span class="tok-function">perform</span>(post(<span class="tok-string">"/api/loans"</span>).with(jwt(other))
+        .contentType(APPLICATION_JSON).content(<span class="tok-string">"{\\"copyId\\":42}"</span>))
+     .andExpect(status().isConflict());   <span class="tok-comment">// 409 lần thứ hai</span>
+}</pre>
+
+<h3>3) Test đồng thời — ngôi sao của buổi demo</h3>
+<pre><span class="tok-keyword">@Test</span>
+<span class="tok-keyword">void</span> <span class="tok-function">twentyThreadsRaceForOneCopy_onlyOneSucceeds</span>() <span class="tok-keyword">throws</span> Exception {
+  <span class="tok-keyword">int</span> N = <span class="tok-number">20</span>;
+  <span class="tok-keyword">var</span> ready  = <span class="tok-keyword">new</span> <span class="tok-type">CountDownLatch</span>(N);
+  <span class="tok-keyword">var</span> go     = <span class="tok-keyword">new</span> <span class="tok-type">CountDownLatch</span>(<span class="tok-number">1</span>);   <span class="tok-comment">// súng lệnh xuất phát</span>
+  <span class="tok-keyword">var</span> ok     = <span class="tok-keyword">new</span> <span class="tok-type">AtomicInteger</span>();
+  <span class="tok-keyword">var</span> pool   = Executors.<span class="tok-function">newFixedThreadPool</span>(N);
+
+  <span class="tok-keyword">for</span> (<span class="tok-keyword">int</span> i = <span class="tok-number">0</span>; i &lt; N; i++) pool.<span class="tok-function">submit</span>(() -&gt; {
+    ready.<span class="tok-function">countDown</span>();          <span class="tok-comment">// tôi đã xếp hàng</span>
+    go.<span class="tok-function">await</span>();               <span class="tok-comment">// chờ để tất cả bắn cùng lúc</span>
+    <span class="tok-keyword">try</span> { lendingService.<span class="tok-function">borrow</span>(<span class="tok-number">42L</span>, memberId); ok.<span class="tok-function">incrementAndGet</span>(); }
+    <span class="tok-keyword">catch</span> (ConflictException ignored) {}   <span class="tok-comment">// kẻ thua nhận 409</span>
+    <span class="tok-keyword">return null</span>;
+  });
+
+  ready.<span class="tok-function">await</span>();               <span class="tok-comment">// mọi người đã xếp hàng</span>
+  go.<span class="tok-function">countDown</span>();             <span class="tok-comment">// BẮN cả 20 cùng lúc</span>
+  pool.<span class="tok-function">shutdown</span>(); pool.<span class="tok-function">awaitTermination</span>(<span class="tok-number">5</span>, SECONDS);
+
+  assertThat(ok.<span class="tok-function">get</span>()).<span class="tok-function">isEqualTo</span>(<span class="tok-number">1</span>);        <span class="tok-comment">// đúng MỘT lượt mượn thắng</span>
+  assertThat(loans.<span class="tok-function">countByCopyIdAndReturnedAtIsNull</span>(<span class="tok-number">42L</span>)).<span class="tok-function">isEqualTo</span>(<span class="tok-number">1</span>);
+}</pre>
+
+<h3>Vì sao latch quan trọng</h3>
+<div class="out">Không có latch, các luồng khởi động lệch nhau — luồng 1 thường xong trước khi luồng 2 bắt đầu,
+nên race không bao giờ thật sự xảy ra và một service hỏng vẫn "pass".
+
+CountDownLatch go = 1 giữ TẤT CẢ luồng ở vạch cho đến khi go.countDown() bắn chúng
+đồng thời → race thật bị ép xảy ra → test thực sự chứng minh bất biến.</div>
+
+<div class="pitfall"><strong>Bẫy:</strong> viết test "đồng thời" bằng vòng for thường không có latch. Lời gọi tuần tự không bao giờ đụng nhau, nên test xanh kể cả với service ngây thơ đầy bug. Nếu test đồng thời của bạn không thể fail trên bản có bug, nó chẳng chứng minh gì.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>@Transactional trên test che mất race.</b> Spring bọc method test @Transactional trong một transaction bị rollback — nhưng điều đó cũng ép mọi luồng vào một kết nối duy nhất, tuần tự hoá chúng và che bug. Với test đồng thời, <em>đừng</em> gắn @Transactional; để mỗi luồng dùng kết nối riêng và dọn thủ công. <em>Vì sao ngoài syllabus: tương tác tinh tế giữa framework test và tương tranh thật không bao giờ được dạy, nhưng nó âm thầm vô hiệu hoá các test đồng thời ngây thơ.</em></div>
+
+<a class="link-card codelab" href="/code-lab/spring-boot?ref=%2Fcourses%2Flibrary-management-system%2Flearn&reflabel=INT602#module-316" target="_blank" rel="noopener">
+  <span class="lc-ico">🌱</span>
+  <span class="lc-body"><span class="lc-title">Kiểm thử ứng dụng Spring trên Code Lab</span><span class="lc-sub">Unit, MockMvc, và test tích hợp.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      title: 'Section 7 — Deployment with Docker|||Mục 7 — Triển khai với Docker',
+      lessons: [
+        {
+          title: '7.1 — Three services in one Compose file|||7.1 — Ba dịch vụ trong một file Compose',
+          slug: 'int602-docker',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 7 · Lesson 7.1</span>
+<h2>Packaging the whole system with Docker Compose</h2>
+<p class="lead">One command should bring up the database, the Spring API, and the React app. Compose describes all three and wires them on a private network — this is what you run in the demo, and what a reviewer clones and starts.</p>
+
+<div class="lz-flow">
+  <div class="lz-step">React (nginx :80)</div>
+  <div class="lz-step">Spring API :8080</div>
+  <div class="lz-step">Postgres :5432</div>
+</div>
+
+<h3>docker-compose.yml</h3>
+<pre><span class="tok-keyword">services</span>:
+  db:
+    <span class="tok-keyword">image</span>: postgres:16
+    <span class="tok-keyword">environment</span>:
+      POSTGRES_DB: library
+      POSTGRES_PASSWORD: \${DB_PASSWORD}
+    <span class="tok-keyword">volumes</span>: [ "pgdata:/var/lib/postgresql/data" ]
+    <span class="tok-keyword">healthcheck</span>:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 10
+
+  api:
+    <span class="tok-keyword">build</span>: ./backend
+    <span class="tok-keyword">environment</span>:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/library
+      SPRING_DATASOURCE_PASSWORD: \${DB_PASSWORD}
+      JWT_SECRET: \${JWT_SECRET}
+    <span class="tok-keyword">depends_on</span>:
+      db: { condition: service_healthy }   <span class="tok-comment"># wait for the DB, not just the container</span>
+    <span class="tok-keyword">ports</span>: [ "8080:8080" ]
+
+  web:
+    <span class="tok-keyword">build</span>: ./frontend
+    <span class="tok-keyword">depends_on</span>: [ api ]
+    <span class="tok-keyword">ports</span>: [ "80:80" ]
+
+<span class="tok-keyword">volumes</span>: { pgdata: {} }</pre>
+
+<h3>The API Dockerfile — multi-stage build</h3>
+<pre><span class="tok-comment"># build stage</span>
+<span class="tok-keyword">FROM</span> maven:3.9-eclipse-temurin-17 <span class="tok-keyword">AS</span> build
+<span class="tok-keyword">WORKDIR</span> /app
+<span class="tok-keyword">COPY</span> pom.xml .
+<span class="tok-keyword">RUN</span> mvn -q dependency:go-offline      <span class="tok-comment"># cache deps in their own layer</span>
+<span class="tok-keyword">COPY</span> src ./src
+<span class="tok-keyword">RUN</span> mvn -q clean package -DskipTests
+
+<span class="tok-comment"># runtime stage — small, no Maven</span>
+<span class="tok-keyword">FROM</span> eclipse-temurin:17-jre
+<span class="tok-keyword">COPY</span> --from=build /app/target/*.jar app.jar
+<span class="tok-keyword">EXPOSE</span> 8080
+<span class="tok-keyword">ENTRYPOINT</span> ["java","-jar","/app/app.jar"]</pre>
+
+<h3>Worked example — bring it up</h3>
+<div class="out">$ echo "DB_PASSWORD=secret\\nJWT_SECRET=change-me" &gt; .env
+$ docker compose up --build
+ db   | database system is ready to accept connections
+ api  | Started LibraryApplication in 4.1 s   (waited for db healthcheck ✅)
+ web  | start worker process
+→ open http://localhost  → React app talks to the API on the compose network.</div>
+
+<div class="pitfall"><strong>Trap:</strong> <code>depends_on: [db]</code> without a healthcheck. Plain depends_on only waits for the container to <em>start</em>, not for Postgres to accept connections — so the API boots, fails its first query, and crashes. Use <code>condition: service_healthy</code> with a <code>pg_isready</code> healthcheck.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Multi-stage builds keep secrets and bloat out of the image.</b> The Maven toolchain (hundreds of MB) lives only in the <em>build</em> stage; the runtime image ships just a JRE and one jar. Smaller images pull faster, have a smaller attack surface, and never leak your build-time tooling. <em>Why beyond syllabus: image hygiene is a DevOps discipline the coursework never grades but every real deployment needs.</em></div>
+
+<a class="link-card codelab" href="/code-lab/docker?ref=%2Fcourses%2Flibrary-management-system%2Flearn&reflabel=INT602#module-489" target="_blank" rel="noopener">
+  <span class="lc-ico">🐳</span>
+  <span class="lc-body"><span class="lc-title">Docker Compose on Code Lab</span><span class="lc-sub">Multi-service apps, networks, volumes, healthchecks.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 7 · Bài 7.1</span>
+<h2>Đóng gói cả hệ thống bằng Docker Compose</h2>
+<p class="lead">Một lệnh phải dựng cơ sở dữ liệu, API Spring, và app React. Compose mô tả cả ba và nối chúng trên một mạng riêng — đây là thứ bạn chạy khi demo, và là thứ người chấm clone rồi khởi động.</p>
+
+<div class="lz-flow">
+  <div class="lz-step">React (nginx :80)</div>
+  <div class="lz-step">Spring API :8080</div>
+  <div class="lz-step">Postgres :5432</div>
+</div>
+
+<h3>docker-compose.yml</h3>
+<pre><span class="tok-keyword">services</span>:
+  db:
+    <span class="tok-keyword">image</span>: postgres:16
+    <span class="tok-keyword">environment</span>:
+      POSTGRES_DB: library
+      POSTGRES_PASSWORD: \${DB_PASSWORD}
+    <span class="tok-keyword">volumes</span>: [ "pgdata:/var/lib/postgresql/data" ]
+    <span class="tok-keyword">healthcheck</span>:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 10
+
+  api:
+    <span class="tok-keyword">build</span>: ./backend
+    <span class="tok-keyword">environment</span>:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/library
+      SPRING_DATASOURCE_PASSWORD: \${DB_PASSWORD}
+      JWT_SECRET: \${JWT_SECRET}
+    <span class="tok-keyword">depends_on</span>:
+      db: { condition: service_healthy }   <span class="tok-comment"># chờ DB, không chỉ container</span>
+    <span class="tok-keyword">ports</span>: [ "8080:8080" ]
+
+  web:
+    <span class="tok-keyword">build</span>: ./frontend
+    <span class="tok-keyword">depends_on</span>: [ api ]
+    <span class="tok-keyword">ports</span>: [ "80:80" ]
+
+<span class="tok-keyword">volumes</span>: { pgdata: {} }</pre>
+
+<h3>Dockerfile của API — build nhiều tầng</h3>
+<pre><span class="tok-comment"># tầng build</span>
+<span class="tok-keyword">FROM</span> maven:3.9-eclipse-temurin-17 <span class="tok-keyword">AS</span> build
+<span class="tok-keyword">WORKDIR</span> /app
+<span class="tok-keyword">COPY</span> pom.xml .
+<span class="tok-keyword">RUN</span> mvn -q dependency:go-offline      <span class="tok-comment"># cache deps ở tầng riêng</span>
+<span class="tok-keyword">COPY</span> src ./src
+<span class="tok-keyword">RUN</span> mvn -q clean package -DskipTests
+
+<span class="tok-comment"># tầng runtime — nhỏ, không Maven</span>
+<span class="tok-keyword">FROM</span> eclipse-temurin:17-jre
+<span class="tok-keyword">COPY</span> --from=build /app/target/*.jar app.jar
+<span class="tok-keyword">EXPOSE</span> 8080
+<span class="tok-keyword">ENTRYPOINT</span> ["java","-jar","/app/app.jar"]</pre>
+
+<h3>Ví dụ có lời giải — dựng lên</h3>
+<div class="out">$ echo "DB_PASSWORD=secret\\nJWT_SECRET=change-me" &gt; .env
+$ docker compose up --build
+ db   | database system is ready to accept connections
+ api  | Started LibraryApplication in 4.1 s   (đã chờ healthcheck db ✅)
+ web  | start worker process
+→ mở http://localhost  → app React nói chuyện với API qua mạng compose.</div>
+
+<div class="pitfall"><strong>Bẫy:</strong> <code>depends_on: [db]</code> mà không healthcheck. depends_on thường chỉ chờ container <em>khởi động</em>, không chờ Postgres nhận kết nối — nên API khởi động, query đầu tiên fail, và crash. Dùng <code>condition: service_healthy</code> với healthcheck <code>pg_isready</code>.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Build nhiều tầng giữ bí mật và cồng kềnh khỏi image.</b> Bộ công cụ Maven (hàng trăm MB) chỉ sống ở tầng <em>build</em>; image runtime chỉ chở một JRE và một jar. Image nhỏ pull nhanh hơn, bề mặt tấn công nhỏ hơn, và không lộ công cụ build. <em>Vì sao ngoài syllabus: vệ sinh image là kỷ luật DevOps mà môn học không chấm nhưng mọi triển khai thật đều cần.</em></div>
+
+<a class="link-card codelab" href="/code-lab/docker?ref=%2Fcourses%2Flibrary-management-system%2Flearn&reflabel=INT602#module-489" target="_blank" rel="noopener">
+  <span class="lc-ico">🐳</span>
+  <span class="lc-body"><span class="lc-title">Docker Compose trên Code Lab</span><span class="lc-sub">App nhiều dịch vụ, mạng, volume, healthcheck.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      title: 'Section 8 — Advanced: ship like a pro (Beyond the syllabus)|||Mục 8 — Nâng cao: làm như dân chuyên (Ngoài giáo trình)',
+      lessons: [
+        {
+          title: '8.1 — Pessimistic locking, fines, reports & CI ★|||8.1 — Khoá pessimistic, tiền phạt, báo cáo & CI ★',
+          slug: 'int602-advanced',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 8 · Lesson 8.1 · <span class="badge">★ Beyond the syllabus</span></span>
+<h2>Four upgrades that turn a project into a portfolio piece</h2>
+<p class="lead">The core works. These four additions are what a reviewer notices — each is a small, self-contained ★ that shows depth beyond the syllabus.</p>
+
+<h3>1) Pessimistic locking — the other way to win the race</h3>
+<p>Section 4 used optimistic locking. When contention is high (a popular new release, dozens of clicks a second), you can instead lock the row up front so losers <em>wait</em> rather than fail-and-retry:</p>
+<pre><span class="tok-keyword">@Lock</span>(LockModeType.PESSIMISTIC_WRITE)
+<span class="tok-keyword">@Query</span>(<span class="tok-string">"select c from Copy c where c.id = :id"</span>)
+<span class="tok-type">Optional</span>&lt;Copy&gt; <span class="tok-function">findByIdForUpdate</span>(<span class="tok-keyword">@Param</span>(<span class="tok-string">"id"</span>) <span class="tok-type">Long</span> id);
+<span class="tok-comment">// generates: SELECT ... FROM copies WHERE id = ? FOR UPDATE
+// the second transaction blocks until the first commits, then sees BORROWED → 409</span></pre>
+<div class="kv-grid">
+  <div class="kv"><b>Optimistic (@Version)</b><span>rare conflicts, no waiting, retry the loser. Default choice for booking.</span></div>
+  <div class="kv"><b>Pessimistic (FOR UPDATE)</b><span>high contention, losers wait, no retry. Risk: deadlocks &amp; reduced throughput.</span></div>
+</div>
+
+<h3>2) Overdue fines — a scheduled job</h3>
+<pre><span class="tok-keyword">@Scheduled</span>(cron = <span class="tok-string">"0 0 1 * * *"</span>)   <span class="tok-comment">// 01:00 every night</span>
+<span class="tok-keyword">public void</span> <span class="tok-function">accrueFines</span>() {
+  <span class="tok-keyword">var</span> overdue = loans.<span class="tok-function">findByReturnedAtIsNullAndDueAtBefore</span>(Instant.now());
+  <span class="tok-keyword">for</span> (<span class="tok-type">Loan</span> l : overdue) {
+    <span class="tok-keyword">long</span> days = ChronoUnit.DAYS.<span class="tok-function">between</span>(l.getDueAt(), Instant.now());
+    l.<span class="tok-function">setFine</span>(days * <span class="tok-number">2000</span>);   <span class="tok-comment">// 2,000 VND / day</span>
+  }
+}</pre>
+
+<h3>3) Reporting — let the database aggregate</h3>
+<pre><span class="tok-comment">-- top 5 most-borrowed titles this month</span>
+<span class="tok-keyword">SELECT</span> b.title, <span class="tok-function">COUNT</span>(*) <span class="tok-keyword">AS</span> times_borrowed
+<span class="tok-keyword">FROM</span> loans l
+<span class="tok-keyword">JOIN</span> copies c <span class="tok-keyword">ON</span> c.id = l.copy_id
+<span class="tok-keyword">JOIN</span> books  b <span class="tok-keyword">ON</span> b.id = c.book_id
+<span class="tok-keyword">WHERE</span> l.borrowed_at &gt;= date_trunc(<span class="tok-string">'month'</span>, now())
+<span class="tok-keyword">GROUP BY</span> b.title
+<span class="tok-keyword">ORDER BY</span> times_borrowed <span class="tok-keyword">DESC</span>
+<span class="tok-keyword">LIMIT</span> <span class="tok-number">5</span>;</pre>
+<p>Aggregating in SQL is far faster than pulling every loan into Java and counting in a loop — the database is built for this.</p>
+
+<h3>4) CI — prove it on every push</h3>
+<pre><span class="tok-comment"># .github/workflows/ci.yml</span>
+<span class="tok-keyword">on</span>: [push]
+<span class="tok-keyword">jobs</span>:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres: { image: postgres:16, env: { POSTGRES_PASSWORD: test }, ports: ["5432:5432"] }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { java-version: '17', distribution: 'temurin' }
+      - run: mvn -B test    <span class="tok-comment"># the concurrency test runs here too</span></pre>
+
+<div class="pitfall"><strong>Trap:</strong> the N+1 query. Rendering a loans list that lazily loads each copy and book fires one query per row — 200 loans = 401 queries. Use a <code>JOIN FETCH</code> or an aggregate query so the DB does the work once.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Pick locking by contention, not by habit.</b> The real lesson across all four upgrades: match the tool to the load. Optimistic for rare clashes; pessimistic for hot rows; a nightly job for fines instead of computing on every read; SQL aggregation instead of Java loops. Measuring the load and choosing accordingly is the senior mindset the syllabus never asks for. <em>Why beyond syllabus: every item here is a real production concern the coursework leaves out.</em></div>
+
+<a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Flibrary-management-system%2Flearn&reflabel=INT602#module-411" target="_blank" rel="noopener">
+  <span class="lc-ico">🗄️</span>
+  <span class="lc-body"><span class="lc-title">Transactions &amp; locking in SQL</span><span class="lc-sub">FOR UPDATE, isolation levels, aggregation — on Code Lab.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 8 · Bài 8.1 · <span class="badge">★ Ngoài giáo trình</span></span>
+<h2>Bốn nâng cấp biến đồ án thành tác phẩm hồ sơ</h2>
+<p class="lead">Phần lõi đã chạy. Bốn bổ sung này là thứ người chấm để ý — mỗi cái là một ★ nhỏ, độc lập, thể hiện chiều sâu vượt giáo trình.</p>
+
+<h3>1) Khoá pessimistic — cách khác để thắng race</h3>
+<p>Mục 4 dùng optimistic. Khi tranh chấp cao (bản mới hot, hàng chục cú bấm mỗi giây), bạn có thể khoá dòng ngay từ đầu để kẻ thua <em>chờ</em> thay vì fail-rồi-retry:</p>
+<pre><span class="tok-keyword">@Lock</span>(LockModeType.PESSIMISTIC_WRITE)
+<span class="tok-keyword">@Query</span>(<span class="tok-string">"select c from Copy c where c.id = :id"</span>)
+<span class="tok-type">Optional</span>&lt;Copy&gt; <span class="tok-function">findByIdForUpdate</span>(<span class="tok-keyword">@Param</span>(<span class="tok-string">"id"</span>) <span class="tok-type">Long</span> id);
+<span class="tok-comment">// sinh ra: SELECT ... FROM copies WHERE id = ? FOR UPDATE
+// transaction thứ hai bị chặn tới khi cái đầu commit, rồi thấy BORROWED → 409</span></pre>
+<div class="kv-grid">
+  <div class="kv"><b>Optimistic (@Version)</b><span>xung đột hiếm, không chờ, thử lại kẻ thua. Lựa chọn mặc định cho đặt chỗ.</span></div>
+  <div class="kv"><b>Pessimistic (FOR UPDATE)</b><span>tranh chấp cao, kẻ thua chờ, không retry. Rủi ro: deadlock &amp; giảm thông lượng.</span></div>
+</div>
+
+<h3>2) Tiền phạt quá hạn — một job định giờ</h3>
+<pre><span class="tok-keyword">@Scheduled</span>(cron = <span class="tok-string">"0 0 1 * * *"</span>)   <span class="tok-comment">// 01:00 mỗi đêm</span>
+<span class="tok-keyword">public void</span> <span class="tok-function">accrueFines</span>() {
+  <span class="tok-keyword">var</span> overdue = loans.<span class="tok-function">findByReturnedAtIsNullAndDueAtBefore</span>(Instant.now());
+  <span class="tok-keyword">for</span> (<span class="tok-type">Loan</span> l : overdue) {
+    <span class="tok-keyword">long</span> days = ChronoUnit.DAYS.<span class="tok-function">between</span>(l.getDueAt(), Instant.now());
+    l.<span class="tok-function">setFine</span>(days * <span class="tok-number">2000</span>);   <span class="tok-comment">// 2.000 VND / ngày</span>
+  }
+}</pre>
+
+<h3>3) Báo cáo — để cơ sở dữ liệu tổng hợp</h3>
+<pre><span class="tok-comment">-- 5 đầu sách được mượn nhiều nhất tháng này</span>
+<span class="tok-keyword">SELECT</span> b.title, <span class="tok-function">COUNT</span>(*) <span class="tok-keyword">AS</span> times_borrowed
+<span class="tok-keyword">FROM</span> loans l
+<span class="tok-keyword">JOIN</span> copies c <span class="tok-keyword">ON</span> c.id = l.copy_id
+<span class="tok-keyword">JOIN</span> books  b <span class="tok-keyword">ON</span> b.id = c.book_id
+<span class="tok-keyword">WHERE</span> l.borrowed_at &gt;= date_trunc(<span class="tok-string">'month'</span>, now())
+<span class="tok-keyword">GROUP BY</span> b.title
+<span class="tok-keyword">ORDER BY</span> times_borrowed <span class="tok-keyword">DESC</span>
+<span class="tok-keyword">LIMIT</span> <span class="tok-number">5</span>;</pre>
+<p>Tổng hợp trong SQL nhanh hơn nhiều so với kéo mọi lượt mượn vào Java rồi đếm trong vòng lặp — cơ sở dữ liệu sinh ra để làm việc này.</p>
+
+<h3>4) CI — chứng minh ở mỗi lần push</h3>
+<pre><span class="tok-comment"># .github/workflows/ci.yml</span>
+<span class="tok-keyword">on</span>: [push]
+<span class="tok-keyword">jobs</span>:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres: { image: postgres:16, env: { POSTGRES_PASSWORD: test }, ports: ["5432:5432"] }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { java-version: '17', distribution: 'temurin' }
+      - run: mvn -B test    <span class="tok-comment"># test đồng thời cũng chạy ở đây</span></pre>
+
+<div class="pitfall"><strong>Bẫy:</strong> query N+1. Render danh sách lượt mượn mà lazy-load từng copy và book sẽ bắn một query mỗi dòng — 200 lượt mượn = 401 query. Dùng <code>JOIN FETCH</code> hoặc query tổng hợp để DB làm một lần.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Chọn khoá theo mức tranh chấp, không theo thói quen.</b> Bài học thật xuyên bốn nâng cấp: khớp công cụ với tải. Optimistic cho đụng độ hiếm; pessimistic cho dòng nóng; job đêm cho tiền phạt thay vì tính ở mỗi lần đọc; tổng hợp SQL thay cho vòng lặp Java. Đo tải và chọn cho đúng là tư duy senior mà giáo trình không đòi. <em>Vì sao ngoài syllabus: mỗi mục ở đây là mối quan tâm production thật mà môn học bỏ qua.</em></div>
+
+<a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Flibrary-management-system%2Flearn&reflabel=INT602#module-411" target="_blank" rel="noopener">
+  <span class="lc-ico">🗄️</span>
+  <span class="lc-body"><span class="lc-title">Transaction &amp; khoá trong SQL</span><span class="lc-sub">FOR UPDATE, mức cô lập, tổng hợp — trên Code Lab.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+`,
+        },
+        {
+          title: '8.2 — Final quiz: architecture & trade-offs|||8.2 — Quiz cuối: kiến trúc & đánh đổi',
+          slug: 'int602-quiz-8',
+          type: 'QUIZ',
+          quiz: {
+            timeLimitSeconds: 420,
+            questions: [
+              {
+                id: 'q1',
+                question: 'When is pessimistic locking (SELECT ... FOR UPDATE) preferable to optimistic (@Version)?|||Khi nào khoá pessimistic (SELECT ... FOR UPDATE) tốt hơn optimistic (@Version)?',
+                options: [
+                  'When contention on a row is high and you would rather callers wait than fail-and-retry|||Khi tranh chấp trên một dòng cao và bạn muốn người gọi chờ hơn là fail-rồi-retry',
+                  'Always — it is strictly better|||Luôn luôn — nó tốt hơn tuyệt đối',
+                  'Only in single-user apps|||Chỉ trong app một người dùng',
+                  'When the table has no primary key|||Khi bảng không có khoá chính',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q2',
+                question: 'What is the N+1 query problem in the loans list?|||Vấn đề query N+1 trong danh sách lượt mượn là gì?',
+                options: [
+                  'The database has one extra row|||Cơ sở dữ liệu thừa một dòng',
+                  'Lazily loading each related copy/book fires one query per row instead of one JOIN|||Lazy-load copy/book liên quan của từng dòng bắn một query mỗi dòng thay vì một JOIN',
+                  'You need N+1 servers|||Bạn cần N+1 máy chủ',
+                  'JWT tokens expire after N+1 minutes|||Token JWT hết hạn sau N+1 phút',
+                ],
+                correctIndex: 1,
+                points: 1,
+              },
+              {
+                id: 'q3',
+                question: 'Why compute the "most-borrowed titles" report with GROUP BY in SQL instead of a Java loop?|||Vì sao tính báo cáo "đầu sách mượn nhiều nhất" bằng GROUP BY trong SQL thay vì vòng lặp Java?',
+                options: [
+                  'Java cannot count|||Java không đếm được',
+                  'The database aggregates far faster and avoids pulling every row over the wire|||CSDL tổng hợp nhanh hơn nhiều và tránh kéo mọi dòng qua mạng',
+                  'SQL is required by JWT|||JWT bắt buộc dùng SQL',
+                  'It makes the report less accurate|||Nó làm báo cáo kém chính xác hơn',
+                ],
+                correctIndex: 1,
+                points: 1,
+              },
+              {
+                id: 'q4',
+                question: 'Why use condition: service_healthy instead of plain depends_on for the DB in Compose?|||Vì sao dùng condition: service_healthy thay vì depends_on thường cho DB trong Compose?',
+                options: [
+                  'Plain depends_on only waits for the container to start, not for Postgres to accept connections|||depends_on thường chỉ chờ container khởi động, không chờ Postgres nhận kết nối',
+                  'It makes the image smaller|||Nó làm image nhỏ hơn',
+                  'It is required for JWT|||Nó bắt buộc cho JWT',
+                  'There is no difference|||Không có khác biệt',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q5',
+                question: '(Beyond syllabus) A concurrency test annotated @Transactional passes even against the buggy service. Why?|||(Ngoài giáo trình) Một test đồng thời gắn @Transactional lại pass kể cả với service có bug. Vì sao?',
+                options: [
+                  'Because @Transactional forces all threads onto one connection, serialising them and masking the race|||Vì @Transactional ép mọi luồng vào một kết nối, tuần tự hoá chúng và che mất race',
+                  'Because the test is too fast|||Vì test quá nhanh',
+                  'Because JUnit disables threads|||Vì JUnit tắt luồng',
+                  'Because Postgres ignores transactions|||Vì Postgres phớt lờ transaction',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q6',
+                question: 'Which single database object most directly guarantees a copy cannot have two open loans?|||Đối tượng CSDL nào trực tiếp bảo đảm một bản sao không thể có hai lượt mượn đang mở?',
+                options: [
+                  'A foreign key on member_id|||Khoá ngoại trên member_id',
+                  'The partial UNIQUE index UNIQUE(copy_id) WHERE returned_at IS NULL|||Index UNIQUE riêng phần UNIQUE(copy_id) WHERE returned_at IS NULL',
+                  'An index on borrowed_at|||Một index trên borrowed_at',
+                  'The primary key of books|||Khoá chính của bảng books',
+                ],
+                correctIndex: 1,
+                points: 1,
+              },
+            ],
+          },
+        },
+      ],
+    },
   ],
 };

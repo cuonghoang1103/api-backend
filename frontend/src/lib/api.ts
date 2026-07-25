@@ -1139,6 +1139,16 @@ export const examApi = {
   },
   genSpeakingQuestions: (questionId: number, count = 4) =>
     api.post<{ data: { text: string }[] }>(`/exams/questions/${questionId}/speaking-questions`, { count }),
+  // History & bookmarks (Sổ tay ôn tập)
+  deleteAttempt: (attemptId: number) => api.delete(`/exams/attempts/${attemptId}`),
+  toggleExamBookmark: (examId: number) =>
+    api.post<{ data: { bookmarked: boolean } }>(`/exams/${examId}/bookmark`),
+  myExamBookmarks: () => api.get(`/exams/bookmarks/exams`),
+  toggleQuestionBookmark: (questionId: number, note?: string) =>
+    api.post<{ data: { bookmarked: boolean } }>(`/exams/questions/${questionId}/bookmark`, note != null ? { note } : {}),
+  updateQuestionBookmarkNote: (questionId: number, note: string) =>
+    api.put(`/exams/questions/${questionId}/bookmark-note`, { note }),
+  myQuestionBookmarks: () => api.get(`/exams/bookmarks/questions`),
   // Admin
   adminList: (courseId?: number) => api.get(`/exams/admin/list`, { params: courseId ? { courseId } : {} }),
   adminGet: (examId: number) => api.get(`/exams/admin/${examId}`),

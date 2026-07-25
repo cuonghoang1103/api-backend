@@ -128,3 +128,72 @@
 
 .exam-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
 .exam-scroll::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 8px; }
+
+/* ── Portal (lobby) animated background ────────────────────────────────
+   Light, alive, theme-aware. A soft tint base + three slow-drifting
+   gradient blobs behind the content. Never pure-black in dark mode. */
+.exam-portal { position: relative; isolation: isolate; }
+.exam-portal-bg {
+  position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
+  background:
+    radial-gradient(1200px 600px at 15% -5%, rgba(99,102,241,.10), transparent 60%),
+    radial-gradient(1000px 700px at 100% 0%, rgba(139,92,246,.10), transparent 55%);
+}
+html.theme-dark .exam-portal-bg {
+  background:
+    radial-gradient(1200px 600px at 15% -5%, rgba(99,102,241,.20), transparent 60%),
+    radial-gradient(1000px 700px at 100% 0%, rgba(139,92,246,.18), transparent 55%),
+    linear-gradient(180deg, rgba(30,27,60,.55), transparent 40%);
+}
+.exam-blob {
+  position: absolute; border-radius: 50%; filter: blur(70px); opacity: .55;
+  will-change: transform;
+}
+.exam-blob-1 { width: 42vw; height: 42vw; max-width: 560px; max-height: 560px; left: -6vw; top: -8vw;
+  background: radial-gradient(circle at 30% 30%, #818cf8, transparent 70%); animation: exam-drift-1 22s ease-in-out infinite; }
+.exam-blob-2 { width: 38vw; height: 38vw; max-width: 520px; max-height: 520px; right: -8vw; top: -4vw;
+  background: radial-gradient(circle at 60% 40%, #c4b5fd, transparent 70%); animation: exam-drift-2 26s ease-in-out infinite; }
+.exam-blob-3 { width: 34vw; height: 34vw; max-width: 460px; max-height: 460px; left: 40%; top: 8vw;
+  background: radial-gradient(circle at 50% 50%, #a5b4fc, transparent 72%); animation: exam-drift-3 30s ease-in-out infinite; opacity: .4; }
+html.theme-dark .exam-blob { opacity: .28; }
+@keyframes exam-drift-1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(6vw,4vw) scale(1.12); } }
+@keyframes exam-drift-2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-5vw,5vw) scale(1.08); } }
+@keyframes exam-drift-3 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-3vw,-4vw) scale(1.15); } }
+@media (prefers-reduced-motion: reduce) { .exam-blob { animation: none !important; } }
+
+/* Hero card sits on frosted glass so text stays readable over the blobs. */
+.exam-hero {
+  border-radius: 22px; padding: 28px;
+  background: linear-gradient(135deg, rgba(99,102,241,.12), rgba(139,92,246,.08));
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(4px);
+}
+
+/* Segmented tabs (Đề thi / Lịch sử / Sổ tay) */
+.exam-tabs { display: inline-flex; gap: 4px; padding: 4px; border-radius: 14px;
+  background: var(--bg-surface); border: 1px solid var(--border-color); }
+.exam-tab { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 10px;
+  font-size: 14px; font-weight: 600; color: var(--text-secondary); cursor: pointer; transition: all .15s ease; white-space: nowrap; }
+.exam-tab:hover { color: var(--text-primary); }
+.exam-tab[data-active="true"] { color: #fff; background: linear-gradient(135deg, var(--exam-accent), var(--exam-accent-2)); box-shadow: 0 4px 14px rgba(99,102,241,.35); }
+
+/* Bookmark toggle button */
+.exam-bm { display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-surface);
+  color: var(--text-muted); cursor: pointer; transition: all .15s ease; }
+.exam-bm:hover { color: var(--exam-warn); border-color: var(--exam-warn); }
+.exam-bm[data-on="true"] { color: var(--exam-warn); border-color: var(--exam-warn); background: rgba(245,158,11,.12); }
+
+/* Notebook folders */
+.exam-folder { border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; background: var(--bg-card); }
+.exam-folder-head { display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px 18px;
+  cursor: pointer; background: var(--bg-surface); border: none; text-align: left; transition: background .15s ease; }
+.exam-folder-head:hover { background: var(--bg-surface-hover); }
+.exam-folder-badge { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px;
+  border-radius: 11px; font-weight: 800; font-size: 13px; color: #fff;
+  background: linear-gradient(135deg, var(--exam-accent), var(--exam-accent-2)); flex: 0 0 auto; }
+
+/* Small note editor */
+.exam-note { width: 100%; border: 1px dashed var(--border-color); border-radius: 10px; background: var(--bg-surface);
+  padding: 8px 10px; font-size: 13px; color: var(--text-primary); outline: none; resize: vertical; min-height: 38px; }
+.exam-note:focus { border-color: var(--exam-accent); border-style: solid; }

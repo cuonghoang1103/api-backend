@@ -20,7 +20,6 @@ import {
   Mic as MicrophoneIcon, Square as StopIcon, FileText as DocumentTextIcon,
 } from 'lucide-react';
 import { examApi, type ExamHeader, type ExamTakingQuestion } from '@/lib/api';
-import { useTranslation } from '@/context/LocaleContext';
 import { pickLang, sanitizeHtml, stripInlineColors } from '@/lib/utils';
 import './../exam.css';
 
@@ -38,8 +37,8 @@ function fmt(ms: number): string {
 
 export default function ExamRoomClient({ examId }: { examId: number }) {
   const router = useRouter();
-  const { locale, setLocale } = useTranslation();
-  const L = locale === 'vi' ? 'vi' : 'en';
+  // Exams default to English; local toggle only (does not change site locale).
+  const [L, setL] = useState<'en' | 'vi'>('en');
   const isVi = L === 'vi';
 
   const [phase, setPhase] = useState<Phase>('loading');
@@ -254,7 +253,7 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
               <ClockIcon className="w-5 h-5" /> {fmt(remaining)}
             </div>
           )}
-          <button onClick={() => { setLocale(isVi ? 'en' : 'vi'); }} className="text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-[var(--border-color)] hover:border-[var(--exam-accent)]">
+          <button onClick={() => { setL(isVi ? 'en' : 'vi'); }} className="text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-[var(--border-color)] hover:border-[var(--exam-accent)]">
             {isVi ? 'EN' : 'VI'}
           </button>
         </div>

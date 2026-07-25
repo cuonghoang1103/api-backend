@@ -255,6 +255,46 @@ function emptyGrade(points: number): PeGradeResult {
 }
 
 // ─────────────────────────────────────────────────────────────────────
+// Auth — history cleanup & bookmarks (Sổ tay ôn tập)
+// ─────────────────────────────────────────────────────────────────────
+
+// Delete one of my own attempts.
+router.delete('/attempts/:attemptId', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await examSvc.deleteMyAttempt(Number(req.params.attemptId), req.userId!) }); }
+  catch (e) { next(e); }
+});
+
+// Toggle a whole-exam bookmark ("Đề đã lưu").
+router.post('/:examId/bookmark', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await examSvc.toggleExamBookmark(Number(req.params.examId), req.userId!) }); }
+  catch (e) { next(e); }
+});
+
+// My saved exams.
+router.get('/bookmarks/exams', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await examSvc.listMyExamBookmarks(req.userId!) }); }
+  catch (e) { next(e); }
+});
+
+// Toggle a single-question bookmark (optional personal note on create).
+router.post('/questions/:questionId/bookmark', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await examSvc.toggleQuestionBookmark(Number(req.params.questionId), req.userId!, typeof req.body?.note === 'string' ? req.body.note : undefined) }); }
+  catch (e) { next(e); }
+});
+
+// Update just the personal note on a saved question.
+router.put('/questions/:questionId/bookmark-note', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await examSvc.updateQuestionBookmarkNote(Number(req.params.questionId), req.userId!, String(req.body?.note ?? '')) }); }
+  catch (e) { next(e); }
+});
+
+// My saved questions (notebook — grouped by semester → subject on the client).
+router.get('/bookmarks/questions', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await examSvc.listMyQuestionBookmarks(req.userId!) }); }
+  catch (e) { next(e); }
+});
+
+// ─────────────────────────────────────────────────────────────────────
 // Admin — CRUD (answer keys)
 // ─────────────────────────────────────────────────────────────────────
 const admin = [authenticate, requireAdmin('ROLE_ADMIN')];

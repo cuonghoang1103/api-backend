@@ -10,9 +10,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { ArrowLeft as ArrowLeftIcon, CheckCircle2 as CheckCircleIcon, XCircle as XCircleIcon, Clock as ClockIcon, RotateCw as ArrowPathIcon } from 'lucide-react';
+import { ArrowLeft as ArrowLeftIcon, CheckCircle2 as CheckCircleIcon, XCircle as XCircleIcon, Clock as ClockIcon, RotateCw as ArrowPathIcon, Bookmark as BookmarkIcon } from 'lucide-react';
 import { examApi } from '@/lib/api';
-import { useTranslation } from '@/context/LocaleContext';
 import { pickLang, sanitizeHtml, stripInlineColors } from '@/lib/utils';
 import './../../exam.css';
 
@@ -21,7 +20,7 @@ interface ReviewQuestion {
   options: { text: string }[] | null; correctIndexes: number[]; explanation: string | null;
   language: string | null; starterCode: string | null; sampleSolution: string | null;
   expectedOutput: string | null; rubric: unknown; speakingPrompts: { text: string }[] | null;
-  myAnswer: unknown;
+  myAnswer: unknown; bookmarked?: boolean; bookmarkNote?: string | null;
 }
 interface PeGrade {
   score: number; maxScore: number; percent: number; verdict: string; summary: string;
@@ -31,23 +30,53 @@ interface PeGrade {
 interface ReviewData {
   attempt: { id: number; examId: number; status: string; submittedAt: string | null; timeSpentSeconds: number; score: number | null; maxScore: number | null; passed: boolean | null; gradingMode: string; feedback: Record<string, unknown> };
   exam: { id: number; kind: string; peType: string | null; title: string; code: string | null; courseId: number; totalPoints: number; passMark: number };
+  examBookmarked?: boolean;
   questions: ReviewQuestion[];
 }
 
 export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
   const router = useRouter();
-  const { locale, setLocale } = useTranslation();
-  const L = locale === 'vi' ? 'vi' : 'en';
+  // Exams default to English; local toggle only.
+  const [L, setL] = useState<'en' | 'vi'>('en');
   const isVi = L === 'vi';
   const [data, setData] = useState<ReviewData | null>(null);
+  const [examBm, setExamBm] = useState(false);
+  // Per-question saved state: { on, note }.
+  const [qBm, setQBm] = useState<Record<number, { on: boolean; note: string }>>({});
 
   useEffect(() => {
     let alive = true;
     examApi.getAttempt(attemptId)
-      .then((r) => { if (alive) setData(r.data.data); })
+      .then((r) => {
+        if (!alive) return;
+        const d = r.data.data as ReviewData;
+        setData(d);
+        setExamBm(!!d.examBookmarked);
+        const init: Record<number, { on: boolean; note: string }> = {};
+        for (const q of d.questions) init[q.id] = { on: !!q.bookmarked, note: q.bookmarkNote || '' };
+        setQBm(init);
+      })
       .catch((e) => { toast.error(e?.response?.data?.message || 'Không tải được kết quả'); router.push('/exam'); });
     return () => { alive = false; };
   }, [attemptId, router]);
+
+  const toggleExamBm = async () => {
+    if (!data) return;
+    try { const r = await examApi.toggleExamBookmark(data.exam.id); setExamBm(r.data.data.bookmarked); toast.success(r.data.data.bookmarked ? (isVi ? 'Đã lưu đề' : 'Exam saved') : (isVi ? 'Đã bỏ lưu' : 'Removed')); }
+    catch { toast.error(isVi ? 'Lỗi' : 'Error'); }
+  };
+  const toggleQBm = async (qid: number) => {
+    try {
+      const cur = qBm[qid];
+      const r = await examApi.toggleQuestionBookmark(qid, cur?.note || undefined);
+      setQBm((s) => ({ ...s, [qid]: { on: r.data.data.bookmarked, note: s[qid]?.note || '' } }));
+      toast.success(r.data.data.bookmarked ? (isVi ? 'Đã lưu câu vào sổ tay' : 'Saved to notebook') : (isVi ? 'Đã bỏ lưu' : 'Removed'));
+    } catch { toast.error(isVi ? 'Lỗi' : 'Error'); }
+  };
+  const saveQNote = async (qid: number, note: string) => {
+    try { await examApi.updateQuestionBookmarkNote(qid, note); setQBm((s) => ({ ...s, [qid]: { on: true, note } })); toast.success(isVi ? 'Đã lưu ghi chú' : 'Note saved'); }
+    catch { toast.error(isVi ? 'Lỗi' : 'Error'); }
+  };
 
   if (!data) return <div className="min-h-[60vh] flex items-center justify-center text-text-muted">{isVi ? 'Đang tải…' : 'Loading…'}</div>;
 
@@ -68,7 +97,12 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
       <div className="max-w-3xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
           <button onClick={() => router.push('/exam')} className="text-sm text-text-secondary hover:text-text-primary flex items-center gap-1"><ArrowLeftIcon className="w-4 h-4" />{isVi ? 'Phòng thi' : 'Exam Room'}</button>
-          <button onClick={() => setLocale(isVi ? 'en' : 'vi')} className="text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-[var(--border-color)] hover:border-[var(--exam-accent)]">{isVi ? 'EN' : 'VI'}</button>
+          <div className="flex items-center gap-2">
+            <button onClick={toggleExamBm} className="exam-bm h-8 px-2.5 gap-1.5 text-xs font-semibold" data-on={examBm} title={isVi ? 'Lưu đề vào sổ tay' : 'Bookmark this exam'}>
+              <BookmarkIcon className="w-4 h-4" fill={examBm ? 'currentColor' : 'none'} />{examBm ? (isVi ? 'Đã lưu' : 'Saved') : (isVi ? 'Lưu đề' : 'Save exam')}
+            </button>
+            <button onClick={() => setL(isVi ? 'en' : 'vi')} className="text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-[var(--border-color)] hover:border-[var(--exam-accent)]">{isVi ? 'EN' : 'VI'}</button>
+          </div>
         </div>
 
         {/* Score card */}
@@ -103,7 +137,13 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
             const grade = pePerQ.find((p) => p.questionId === q.id)?.grade;
             return (
               <div key={q.id} className="exam-card p-5">
-                <div className="text-sm font-semibold text-text-secondary mb-3">{isVi ? 'Câu' : 'Question'} {i + 1} · {q.points}đ</div>
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <div className="text-sm font-semibold text-text-secondary">{isVi ? 'Câu' : 'Question'} {i + 1} · {q.points}đ</div>
+                  <button onClick={() => toggleQBm(q.id)} className="exam-bm h-8 px-2.5 gap-1.5 text-xs font-semibold" data-on={qBm[q.id]?.on}
+                    title={qBm[q.id]?.on ? (isVi ? 'Bỏ lưu câu' : 'Remove from notebook') : (isVi ? 'Lưu câu vào sổ tay' : 'Save to notebook')}>
+                    <BookmarkIcon className="w-4 h-4" fill={qBm[q.id]?.on ? 'currentColor' : 'none'} />{qBm[q.id]?.on ? (isVi ? 'Đã lưu' : 'Saved') : (isVi ? 'Lưu câu' : 'Save')}
+                  </button>
+                </div>
                 <div className="text-[15px] leading-relaxed mb-3"><div className="rich-content max-w-none" data-ml={L} dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(pickLang(q.prompt, L))) }} /></div>
                 {q.imageUrl && <img src={q.imageUrl} alt="" className="max-w-full rounded-lg border border-[var(--border-color)] mb-3" />}
 
@@ -172,11 +212,29 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
                 )}
 
                 {q.kind !== 'MCQ' && !grade && <p className="text-sm text-text-muted">{isVi ? 'Chưa có bài chấm cho câu này.' : 'No grade for this question.'}</p>}
+
+                {/* Personal note — appears once the question is saved */}
+                {qBm[q.id]?.on && <NoteEditor qid={q.id} initial={qBm[q.id]?.note || ''} isVi={isVi} onSave={saveQNote} />}
               </div>
             );
           })}
         </div>
       </div>
+    </div>
+  );
+}
+
+// Small inline note editor for a saved question; only offers "Save" when dirty.
+function NoteEditor({ qid, initial, isVi, onSave }: { qid: number; initial: string; isVi: boolean; onSave: (qid: number, note: string) => void }) {
+  const [note, setNote] = useState(initial);
+  useEffect(() => { setNote(initial); }, [initial]);
+  const dirty = note.trim() !== initial.trim();
+  return (
+    <div className="flex items-end gap-2 mt-3">
+      <textarea value={note} onChange={(e) => setNote(e.target.value)} rows={1}
+        placeholder={isVi ? 'Ghi chú ôn tập (vì sao khó nhớ…)' : 'Revision note (why it was tricky…)'}
+        className="exam-note flex-1" />
+      {dirty && <button onClick={() => onSave(qid, note)} className="px-3 py-1.5 rounded-lg text-white text-xs font-semibold shrink-0" style={{ background: 'linear-gradient(135deg, var(--exam-accent), var(--exam-accent-2))' }}>{isVi ? 'Lưu ghi chú' : 'Save note'}</button>}
     </div>
   );
 }

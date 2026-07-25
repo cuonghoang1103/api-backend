@@ -1007,9 +1007,11 @@ model Exam {
   createdAt        DateTime @default(now()) @map("created_at")
   updatedAt        DateTime @updatedAt @map("updated_at")
 
-  course    Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  questions ExamQuestion[]
-  attempts  ExamAttempt[]
+  course            Course                 @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  questions         ExamQuestion[]
+  attempts          ExamAttempt[]
+  bookmarks         ExamBookmark[]
+  questionBookmarks ExamQuestionBookmark[]
 
   @@index([courseId], name: "idx_exams_course")
   @@index([courseId, kind], name: "idx_exams_course_kind")
@@ -1049,7 +1051,8 @@ model ExamQuestion {
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
 
-  exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+  exam      Exam                   @relation(fields: [examId], references: [id], onDelete: Cascade)
+  bookmarks ExamQuestionBookmark[]
 
   @@index([examId], name: "idx_exam_questions_exam")
   @@map("exam_questions")
@@ -1091,6 +1094,43 @@ model ExamAttempt {
   @@index([examId], name: "idx_exam_attempts_exam")
   @@index([userId, status], name: "idx_exam_attempts_user_status")
   @@map("exam_attempts")
+}
+
+// A student saving a whole exam paper to retake later ("Đề đã lưu").
+model ExamBookmark {
+  id        Int      @id @default(autoincrement())
+  // No FK to User (matches ExamAttempt / interview pattern → additive migration).
+  userId    Int      @map("user_id")
+  examId    Int      @map("exam_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  exam Exam @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, examId], name: "uk_exam_bookmark")
+  @@index([userId], name: "idx_exam_bookmarks_user")
+  @@map("exam_bookmarks")
+}
+
+// A student saving a single question they found hard/interesting, with an
+// optional personal note. Auto-foldered by semester → subject on the client
+// via the denormalized examId → course. ("Sổ tay ôn tập" — câu đã lưu.)
+model ExamQuestionBookmark {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")
+  questionId Int      @map("question_id")
+  // Denormalized so the notebook can group by exam/course without a join hop.
+  examId     Int      @map("exam_id")
+  note       String?  @db.Text
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  question ExamQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  exam     Exam         @relation(fields: [examId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId], name: "uk_exam_question_bookmark")
+  @@index([userId], name: "idx_exam_qbookmarks_user")
+  @@index([examId], name: "idx_exam_qbookmarks_exam")
+  @@map("exam_question_bookmarks")
 }
 
 model Enrollment {

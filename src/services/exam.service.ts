@@ -232,6 +232,12 @@ export async function buildReview(attemptId: number, userId: number) {
   const answers = (attempt.answers ?? {}) as Record<string, unknown>;
   const feedback = (attempt.feedback ?? {}) as Record<string, unknown>;
 
+  // The viewer's saved-question state for this exam (bookmark toggle + note).
+  const bm = await prisma.examQuestionBookmark.findMany({
+    where: { userId, examId: attempt.examId }, select: { questionId: true, note: true },
+  });
+  const bmByQ = new Map(bm.map((b) => [b.questionId, b.note]));
+
   const questions = attempt.exam.questions.map((q) => ({
     id: q.id, kind: q.kind as QuestionKind, sortOrder: q.sortOrder,
     points: num(q.points), prompt: q.prompt, imageUrl: q.imageUrl,
@@ -244,6 +250,8 @@ export async function buildReview(attemptId: number, userId: number) {
     speakingPrompts: Array.isArray(q.speakingPrompts) ? q.speakingPrompts : null,
     // the candidate's own answer for this question
     myAnswer: answers[String(q.id)] ?? null,
+    bookmarked: bmByQ.has(q.id),
+    bookmarkNote: bmByQ.get(q.id) ?? null,
   }));
 
   return {
@@ -257,6 +265,7 @@ export async function buildReview(attemptId: number, userId: number) {
       feedback,
     },
     exam: examHeader(attempt.exam),
+    examBookmarked: !!(await prisma.examBookmark.findUnique({ where: { uk_exam_bookmark: { userId, examId: attempt.examId } }, select: { id: true } })),
     questions,
   };
 }
@@ -266,20 +275,141 @@ export async function listMyAttempts(userId: number, examId?: number) {
   const rows = await prisma.examAttempt.findMany({
     where: { userId, ...(examId ? { examId } : {}), status: { in: ['SUBMITTED', 'GRADED', 'EXPIRED'] } },
     orderBy: { id: 'desc' },
-    include: { exam: { select: { id: true, title: true, kind: true, peType: true, code: true, courseId: true, passMark: true, totalPoints: true } } },
+    include: {
+      exam: {
+        select: {
+          id: true, title: true, kind: true, peType: true, code: true, courseId: true, passMark: true, totalPoints: true,
+          course: { select: { title: true, slug: true, courseCode: true, semester: { select: { name: true, ordinal: true, code: true } } } },
+        },
+      },
+    },
     take: 200,
   });
+  // Which of these exams the user has bookmarked (single query).
+  const examIds = [...new Set(rows.map((r) => r.examId))];
+  const marks = examIds.length
+    ? await prisma.examBookmark.findMany({ where: { userId, examId: { in: examIds } }, select: { examId: true } })
+    : [];
+  const marked = new Set(marks.map((m) => m.examId));
   return rows.map((r) => ({
     id: r.id, examId: r.examId, status: r.status,
     submittedAt: r.submittedAt, timeSpentSeconds: r.timeSpentSeconds,
     score: r.score == null ? null : num(r.score),
     maxScore: r.maxScore == null ? null : num(r.maxScore),
     passed: r.passed, gradingMode: r.gradingMode,
+    bookmarked: marked.has(r.examId),
     exam: {
       id: r.exam.id, title: r.exam.title, kind: r.exam.kind, peType: r.exam.peType,
       code: r.exam.code, courseId: r.exam.courseId,
       passMark: num(r.exam.passMark), totalPoints: num(r.exam.totalPoints),
+      course: r.exam.course ? { title: r.exam.course.title, slug: r.exam.course.slug, courseCode: r.exam.course.courseCode } : null,
+      semester: r.exam.course?.semester ? { name: r.exam.course.semester.name, ordinal: r.exam.course.semester.ordinal, code: r.exam.course.semester.code } : null,
     },
+  }));
+}
+
+/** Delete one of the caller's own attempts (history cleanup). */
+export async function deleteMyAttempt(attemptId: number, userId: number) {
+  const attempt = await prisma.examAttempt.findUnique({ where: { id: attemptId }, select: { id: true, userId: true } });
+  if (!attempt || attempt.userId !== userId) throw new AppError('Không tìm thấy bài thi', 404);
+  await prisma.examAttempt.delete({ where: { id: attemptId } });
+  return { deleted: true };
+}
+
+// ── Bookmarks: whole exam ("Đề đã lưu") ───────────────────────────────
+export async function toggleExamBookmark(examId: number, userId: number) {
+  const exam = await prisma.exam.findUnique({ where: { id: examId }, select: { id: true } });
+  if (!exam) throw new AppError('Không tìm thấy đề thi', 404);
+  const existing = await prisma.examBookmark.findUnique({ where: { uk_exam_bookmark: { userId, examId } } });
+  if (existing) {
+    await prisma.examBookmark.delete({ where: { id: existing.id } });
+    return { bookmarked: false };
+  }
+  await prisma.examBookmark.create({ data: { userId, examId } });
+  return { bookmarked: true };
+}
+
+export async function listMyExamBookmarks(userId: number) {
+  const rows = await prisma.examBookmark.findMany({
+    where: { userId },
+    orderBy: { id: 'desc' },
+    include: {
+      exam: {
+        select: {
+          id: true, kind: true, peType: true, title: true, code: true, durationMinutes: true,
+          totalPoints: true, passMark: true, courseId: true,
+          _count: { select: { questions: true } },
+          course: { select: { title: true, slug: true, courseCode: true, semester: { select: { name: true, ordinal: true, code: true } } } },
+        },
+      },
+    },
+  });
+  return rows.map((b) => ({
+    id: b.id, createdAt: b.createdAt, examId: b.exam.id,
+    exam: {
+      id: b.exam.id, kind: b.exam.kind, peType: b.exam.peType, title: b.exam.title, code: b.exam.code,
+      durationMinutes: b.exam.durationMinutes, totalPoints: num(b.exam.totalPoints), passMark: num(b.exam.passMark),
+      questionCount: b.exam._count.questions, courseId: b.exam.courseId,
+    },
+    course: b.exam.course ? { title: b.exam.course.title, slug: b.exam.course.slug, courseCode: b.exam.course.courseCode } : null,
+    semester: b.exam.course?.semester ? { name: b.exam.course.semester.name, ordinal: b.exam.course.semester.ordinal, code: b.exam.course.semester.code } : null,
+  }));
+}
+
+// ── Bookmarks: single question ("Sổ tay ôn tập" — câu đã lưu) ──────────
+export async function toggleQuestionBookmark(questionId: number, userId: number, note?: string) {
+  const q = await prisma.examQuestion.findUnique({ where: { id: questionId }, select: { id: true, examId: true } });
+  if (!q) throw new AppError('Không tìm thấy câu hỏi', 404);
+  const existing = await prisma.examQuestionBookmark.findUnique({ where: { uk_exam_question_bookmark: { userId, questionId } } });
+  if (existing) {
+    await prisma.examQuestionBookmark.delete({ where: { id: existing.id } });
+    return { bookmarked: false };
+  }
+  await prisma.examQuestionBookmark.create({ data: { userId, questionId, examId: q.examId, note: note?.trim() || null } });
+  return { bookmarked: true };
+}
+
+/** Update just the personal note on an existing question bookmark. */
+export async function updateQuestionBookmarkNote(questionId: number, userId: number, note: string) {
+  const existing = await prisma.examQuestionBookmark.findUnique({ where: { uk_exam_question_bookmark: { userId, questionId } } });
+  if (!existing) throw new AppError('Câu này chưa được lưu', 404);
+  await prisma.examQuestionBookmark.update({ where: { id: existing.id }, data: { note: note?.trim() || null } });
+  return { updated: true };
+}
+
+/** All the caller's saved questions, enriched for foldering by semester → subject. */
+export async function listMyQuestionBookmarks(userId: number) {
+  const rows = await prisma.examQuestionBookmark.findMany({
+    where: { userId },
+    orderBy: { id: 'desc' },
+    include: {
+      question: {
+        select: {
+          id: true, kind: true, points: true, prompt: true, imageUrl: true, options: true,
+          correctIndexes: true, explanation: true, language: true, sampleSolution: true, expectedOutput: true,
+        },
+      },
+      exam: {
+        select: {
+          id: true, kind: true, peType: true, title: true, code: true, courseId: true,
+          course: { select: { title: true, slug: true, courseCode: true, semester: { select: { name: true, ordinal: true, code: true } } } },
+        },
+      },
+    },
+  });
+  return rows.map((b) => ({
+    id: b.id, note: b.note, createdAt: b.createdAt, questionId: b.questionId, examId: b.examId,
+    question: {
+      id: b.question.id, kind: b.question.kind, points: num(b.question.points),
+      prompt: b.question.prompt, imageUrl: b.question.imageUrl,
+      options: Array.isArray(b.question.options) ? b.question.options : null,
+      correctIndexes: Array.isArray(b.question.correctIndexes) ? b.question.correctIndexes : [],
+      explanation: b.question.explanation, language: b.question.language,
+      sampleSolution: b.question.sampleSolution, expectedOutput: b.question.expectedOutput,
+    },
+    exam: { id: b.exam.id, kind: b.exam.kind, peType: b.exam.peType, title: b.exam.title, code: b.exam.code, courseId: b.exam.courseId },
+    course: b.exam.course ? { title: b.exam.course.title, slug: b.exam.course.slug, courseCode: b.exam.course.courseCode } : null,
+    semester: b.exam.course?.semester ? { name: b.exam.course.semester.name, ordinal: b.exam.course.semester.ordinal, code: b.exam.course.semester.code } : null,
   }));
 }
 

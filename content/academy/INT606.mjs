@@ -1073,5 +1073,812 @@ r.get(<span class="tok-string">'/events/:id/seats'</span>, <span class="tok-keyw
         },
       ],
     },
+    {
+      title: 'Section 3 — Authentication & Roles (JWT)|||Mục 3 — Xác thực & phân quyền (JWT)',
+      lessons: [
+        {
+          title: '3.1 — Register, login & protecting endpoints|||3.1 — Đăng ký, đăng nhập & bảo vệ endpoint',
+          slug: 'int606-auth',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 3 · Lesson 3.1</span>
+<h2>Stateless JWT auth for buyers and organizers</h2>
+<p class="lead">A <strong>BUYER</strong> browses events and holds/buys seats; an <strong>ORGANIZER</strong> creates events. After login the client holds a signed JWT and sends it on every request; middleware verifies it and attaches the user.</p>
+
+<h3>Hash the password &amp; issue a token</h3>
+<pre><span class="tok-comment">// register</span>
+<span class="tok-keyword">const</span> hash = <span class="tok-keyword">await</span> bcrypt.<span class="tok-function">hash</span>(password, <span class="tok-number">12</span>);
+<span class="tok-keyword">const</span> user = <span class="tok-keyword">await</span> prisma.user.<span class="tok-function">create</span>({ data: { email, passwordHash: hash, role: <span class="tok-string">"BUYER"</span> } });
+
+<span class="tok-comment">// login</span>
+<span class="tok-keyword">const</span> ok = <span class="tok-keyword">await</span> bcrypt.<span class="tok-function">compare</span>(password, user.passwordHash);
+<span class="tok-keyword">if</span> (!ok) <span class="tok-keyword">throw new</span> <span class="tok-type">UnauthorizedError</span>(<span class="tok-string">"Bad credentials"</span>);   <span class="tok-comment">// one message → no enumeration</span>
+<span class="tok-keyword">const</span> token = jwt.<span class="tok-function">sign</span>({ sub: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: <span class="tok-string">"1h"</span> });</pre>
+
+<h3>The auth middleware</h3>
+<pre><span class="tok-keyword">function</span> <span class="tok-function">requireAuth</span>(req, res, next) {
+  <span class="tok-keyword">const</span> h = req.headers.authorization;
+  <span class="tok-keyword">if</span> (!h?.startsWith(<span class="tok-string">"Bearer "</span>)) <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(<span class="tok-number">401</span>).<span class="tok-function">json</span>({ message: <span class="tok-string">"No token"</span> });
+  <span class="tok-keyword">try</span> {
+    req.user = jwt.<span class="tok-function">verify</span>(h.<span class="tok-function">slice</span>(<span class="tok-number">7</span>), process.env.JWT_SECRET);   <span class="tok-comment">// { sub, role }</span>
+    next();
+  } <span class="tok-keyword">catch</span> { res.<span class="tok-function">status</span>(<span class="tok-number">401</span>).<span class="tok-function">json</span>({ message: <span class="tok-string">"Invalid or expired token"</span> }); }
+}
+<span class="tok-keyword">function</span> <span class="tok-function">requireRole</span>(role) {
+  <span class="tok-keyword">return</span> (req, res, next) =&gt;
+    req.user.role === role ? next() : res.<span class="tok-function">status</span>(<span class="tok-number">403</span>).<span class="tok-function">json</span>({ message: <span class="tok-string">"Forbidden"</span> });
+}
+app.<span class="tok-function">post</span>(<span class="tok-string">"/api/events"</span>, requireAuth, <span class="tok-function">requireRole</span>(<span class="tok-string">"ORGANIZER"</span>), createEvent);</pre>
+
+<div class="pitfall"><strong>Trap:</strong> using the same JWT secret in dev and prod, or committing it. It lives only in <code>process.env.JWT_SECRET</code>, is different per environment, and never enters git. A leaked secret lets anyone forge any user's token.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>401 vs 403 — say the right one.</b> <code>401</code> means "I don't know who you are" (missing/expired token → log in again); <code>403</code> means "I know who you are, but you may not do this" (wrong role). During a flash-sale you will see plenty of 401s from expired tokens — returning 403 there would wrongly tell the client to give up instead of refreshing. <em>Why beyond syllabus: the semantic split matters most exactly when traffic spikes, which class never simulates.</em></div>
+
+<a class="link-card codelab" href="/code-lab/authentication?ref=%2Fcourses%2Fevent-ticketing-system%2Flearn&reflabel=INT606#module-951" target="_blank" rel="noopener">
+  <span class="lc-ico">🔐</span>
+  <span class="lc-body"><span class="lc-title">JWT authentication on Code Lab</span><span class="lc-sub">bcrypt, signing, middleware, roles.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 3 · Bài 3.1</span>
+<h2>Xác thực JWT không trạng thái cho người mua và nhà tổ chức</h2>
+<p class="lead">Một <strong>BUYER</strong> duyệt sự kiện và giữ/mua ghế; một <strong>ORGANIZER</strong> tạo sự kiện. Sau đăng nhập client giữ một JWT đã ký và gửi ở mọi request; middleware xác minh và gắn user.</p>
+
+<h3>Băm mật khẩu &amp; phát token</h3>
+<pre><span class="tok-comment">// đăng ký</span>
+<span class="tok-keyword">const</span> hash = <span class="tok-keyword">await</span> bcrypt.<span class="tok-function">hash</span>(password, <span class="tok-number">12</span>);
+<span class="tok-keyword">const</span> user = <span class="tok-keyword">await</span> prisma.user.<span class="tok-function">create</span>({ data: { email, passwordHash: hash, role: <span class="tok-string">"BUYER"</span> } });
+
+<span class="tok-comment">// đăng nhập</span>
+<span class="tok-keyword">const</span> ok = <span class="tok-keyword">await</span> bcrypt.<span class="tok-function">compare</span>(password, user.passwordHash);
+<span class="tok-keyword">if</span> (!ok) <span class="tok-keyword">throw new</span> <span class="tok-type">UnauthorizedError</span>(<span class="tok-string">"Sai thông tin đăng nhập"</span>);   <span class="tok-comment">// một thông báo → không dò được</span>
+<span class="tok-keyword">const</span> token = jwt.<span class="tok-function">sign</span>({ sub: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: <span class="tok-string">"1h"</span> });</pre>
+
+<h3>Middleware xác thực</h3>
+<pre><span class="tok-keyword">function</span> <span class="tok-function">requireAuth</span>(req, res, next) {
+  <span class="tok-keyword">const</span> h = req.headers.authorization;
+  <span class="tok-keyword">if</span> (!h?.startsWith(<span class="tok-string">"Bearer "</span>)) <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(<span class="tok-number">401</span>).<span class="tok-function">json</span>({ message: <span class="tok-string">"Thiếu token"</span> });
+  <span class="tok-keyword">try</span> {
+    req.user = jwt.<span class="tok-function">verify</span>(h.<span class="tok-function">slice</span>(<span class="tok-number">7</span>), process.env.JWT_SECRET);   <span class="tok-comment">// { sub, role }</span>
+    next();
+  } <span class="tok-keyword">catch</span> { res.<span class="tok-function">status</span>(<span class="tok-number">401</span>).<span class="tok-function">json</span>({ message: <span class="tok-string">"Token sai hoặc hết hạn"</span> }); }
+}
+<span class="tok-keyword">function</span> <span class="tok-function">requireRole</span>(role) {
+  <span class="tok-keyword">return</span> (req, res, next) =&gt;
+    req.user.role === role ? next() : res.<span class="tok-function">status</span>(<span class="tok-number">403</span>).<span class="tok-function">json</span>({ message: <span class="tok-string">"Không có quyền"</span> });
+}
+app.<span class="tok-function">post</span>(<span class="tok-string">"/api/events"</span>, requireAuth, <span class="tok-function">requireRole</span>(<span class="tok-string">"ORGANIZER"</span>), createEvent);</pre>
+
+<div class="pitfall"><strong>Bẫy:</strong> dùng cùng một JWT secret ở dev và prod, hoặc commit nó. Nó chỉ sống trong <code>process.env.JWT_SECRET</code>, khác nhau mỗi môi trường, và không bao giờ vào git. Secret bị lộ cho phép bất kỳ ai giả mạo token của bất kỳ user nào.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>401 vs 403 — nói đúng cái.</b> <code>401</code> nghĩa "tôi không biết bạn là ai" (thiếu/hết hạn token → đăng nhập lại); <code>403</code> nghĩa "tôi biết bạn là ai, nhưng bạn không được làm việc này" (sai role). Trong flash-sale bạn sẽ thấy rất nhiều 401 từ token hết hạn — trả 403 ở đó sẽ sai bảo client bỏ cuộc thay vì refresh. <em>Vì sao ngoài syllabus: khác biệt ngữ nghĩa quan trọng nhất đúng lúc traffic tăng vọt, điều lớp học không mô phỏng.</em></div>
+
+<a class="link-card codelab" href="/code-lab/authentication?ref=%2Fcourses%2Fevent-ticketing-system%2Flearn&reflabel=INT606#module-951" target="_blank" rel="noopener">
+  <span class="lc-ico">🔐</span>
+  <span class="lc-body"><span class="lc-title">Xác thực JWT trên Code Lab</span><span class="lc-sub">bcrypt, ký, middleware, role.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      title: 'Section 4 — The Seat-Hold Core (no double-sell)|||Mục 4 — Lõi giữ ghế (không bán trùng)',
+      lessons: [
+        {
+          title: '4.1 — Atomic seat holds with Redis|||4.1 — Giữ ghế nguyên tử bằng Redis',
+          slug: 'int606-hold-core',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 4 · Lesson 4.1</span>
+<h2>Ten thousand fans, one seat: holding it atomically</h2>
+<p class="lead">This is the feature graders remember. When tickets drop, thousands hit "select seat A12" in the same second. A naive check-then-write sells the seat twice. The answer is a two-level defence: a fast atomic <strong>hold in Redis</strong>, with a <strong>UNIQUE constraint in Postgres</strong> as the durable backstop.</p>
+
+<h3>Why the DB alone struggles at flash-sale scale</h3>
+<p>You could rely only on <code>UNIQUE(event_id, seat_id)</code> — correct, but every one of 10,000 buyers would hammer a write transaction on the same row and most would get a constraint error <em>after</em> a round-trip. A Redis hold rejects losers in microseconds, before they ever touch the database, and gives the winner a 2-minute window to pay.</p>
+
+<h3>The atomic hold — SET NX PX</h3>
+<pre><span class="tok-comment">// try to hold seat A12 for THIS user, for 120 seconds</span>
+<span class="tok-keyword">const</span> key = <span class="tok-string">"hold:event:42:seat:A12"</span>;
+<span class="tok-keyword">const</span> ok = <span class="tok-keyword">await</span> redis.<span class="tok-function">set</span>(key, userId, { NX: <span class="tok-keyword">true</span>, PX: <span class="tok-number">120000</span> });
+<span class="tok-comment">//   NX  = only set if the key does NOT already exist  (atomic test-and-set)
+//   PX  = auto-expire after 120000 ms  (abandoned holds free themselves)</span>
+<span class="tok-keyword">if</span> (ok === <span class="tok-keyword">null</span>)
+  <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Seat is being purchased by someone else"</span>);  <span class="tok-comment">// → 409</span></pre>
+<div class="out">10,000 requests run SET key userId NX PX 120000 on the same key.
+Redis is single-threaded → it serialises them: the FIRST sets the key and returns OK,
+every other returns nil (key already exists) → 9,999 clean 409s in microseconds.
+Exactly ONE user holds seat A12. ✅  And if they never pay, PX frees it in 2 minutes.</div>
+
+<h3>Release safely — a Lua compare-and-delete</h3>
+<p>When the buyer cancels or finishes, release the hold — but only if <em>you</em> still own it (a slow request must not delete a hold that already expired and was re-taken):</p>
+<pre><span class="tok-comment">// atomic: delete the key ONLY if its value is still my userId</span>
+<span class="tok-keyword">const</span> RELEASE = <span class="tok-string">"if redis.call('get', KEYS[1]) == ARGV[1] "</span> +
+                <span class="tok-string">"then return redis.call('del', KEYS[1]) else return 0 end"</span>;
+<span class="tok-keyword">await</span> redis.<span class="tok-function">eval</span>(RELEASE, { keys: [key], arguments: [String(userId)] });</pre>
+
+<h3>Confirm the sale — the Postgres UNIQUE backstop</h3>
+<pre><span class="tok-comment">// buyer pays within the hold window → persist the ticket</span>
+<span class="tok-comment">// schema: @@unique([eventId, seatId]) on Ticket</span>
+<span class="tok-keyword">try</span> {
+  <span class="tok-keyword">await</span> prisma.ticket.<span class="tok-function">create</span>({ data: { eventId, seatId, userId, status: <span class="tok-string">"SOLD"</span> } });
+} <span class="tok-keyword">catch</span> (e) {
+  <span class="tok-keyword">if</span> (e.code === <span class="tok-string">"P2002"</span>)   <span class="tok-comment">// unique violation — the ultimate guard</span>
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Seat already sold"</span>);
+  <span class="tok-keyword">throw</span> e;
+}</pre>
+
+<div class="pitfall"><strong>Trap:</strong> a plain <code>DEL key</code> to release a hold. If your request was slow, the hold may have expired and been re-acquired by another buyer — a blind DEL then deletes <em>their</em> hold. Always compare-and-delete (the Lua script), the same way you check a lock token before releasing it.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Redis SET NX PX is a distributed lock.</b> The seat hold is exactly the Redlock pattern: a key whose existence means "locked", a unique owner value, and a TTL so a crashed client can't hold it forever. Recognising "hold a seat" and "acquire a lock" as the same problem lets you reuse a battle-tested recipe. <em>Why beyond syllabus: distributed locking is a systems topic the undergrad syllabus never reaches, yet it is the correct model for flash-sale seat holds.</em></div>
+
+<a class="link-card codelab" href="/code-lab/redis?ref=%2Fcourses%2Fevent-ticketing-system%2Flearn&reflabel=INT606#module-737" target="_blank" rel="noopener">
+  <span class="lc-ico">🧱</span>
+  <span class="lc-body"><span class="lc-title">Atomic operations &amp; Lua on Code Lab</span><span class="lc-sub">SET NX PX, EVAL, distributed locks.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 4 · Bài 4.1</span>
+<h2>Mười nghìn fan, một chiếc ghế: giữ nó nguyên tử</h2>
+<p class="lead">Đây là tính năng giám khảo nhớ nhất. Khi vé mở bán, hàng nghìn người bấm "chọn ghế A12" trong cùng một giây. Kiểm-rồi-ghi ngây thơ bán ghế hai lần. Câu trả lời là phòng thủ hai lớp: một <strong>hold nhanh nguyên tử trong Redis</strong>, với một <strong>ràng buộc UNIQUE trong Postgres</strong> làm chốt chặn bền.</p>
+
+<h3>Vì sao chỉ DB vật lộn ở quy mô flash-sale</h3>
+<p>Bạn có thể chỉ dựa vào <code>UNIQUE(event_id, seat_id)</code> — đúng, nhưng mỗi người trong 10.000 người mua sẽ dập một transaction ghi vào cùng một dòng và phần lớn nhận lỗi ràng buộc <em>sau</em> một vòng khứ hồi. Một hold Redis từ chối kẻ thua trong micro-giây, trước khi họ chạm tới cơ sở dữ liệu, và cho người thắng một cửa sổ 2 phút để thanh toán.</p>
+
+<h3>Hold nguyên tử — SET NX PX</h3>
+<pre><span class="tok-comment">// thử giữ ghế A12 cho user NÀY, trong 120 giây</span>
+<span class="tok-keyword">const</span> key = <span class="tok-string">"hold:event:42:seat:A12"</span>;
+<span class="tok-keyword">const</span> ok = <span class="tok-keyword">await</span> redis.<span class="tok-function">set</span>(key, userId, { NX: <span class="tok-keyword">true</span>, PX: <span class="tok-number">120000</span> });
+<span class="tok-comment">//   NX  = chỉ set nếu key CHƯA tồn tại  (test-and-set nguyên tử)
+//   PX  = tự hết hạn sau 120000 ms  (hold bị bỏ tự giải phóng)</span>
+<span class="tok-keyword">if</span> (ok === <span class="tok-keyword">null</span>)
+  <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Ghế đang được người khác mua"</span>);  <span class="tok-comment">// → 409</span></pre>
+<div class="out">10.000 request chạy SET key userId NX PX 120000 trên cùng một key.
+Redis đơn luồng → nó tuần tự hoá: cái ĐẦU set key và trả OK,
+mọi cái khác trả nil (key đã tồn tại) → 9.999 lần 409 sạch trong micro-giây.
+Đúng MỘT user giữ ghế A12. ✅  Và nếu họ không trả tiền, PX giải phóng nó sau 2 phút.</div>
+
+<h3>Giải phóng an toàn — Lua compare-and-delete</h3>
+<p>Khi người mua huỷ hoặc xong, giải phóng hold — nhưng chỉ khi <em>bạn</em> vẫn sở hữu nó (một request chậm không được xoá một hold đã hết hạn và bị người khác giữ lại):</p>
+<pre><span class="tok-comment">// nguyên tử: xoá key CHỈ khi giá trị của nó vẫn là userId của tôi</span>
+<span class="tok-keyword">const</span> RELEASE = <span class="tok-string">"if redis.call('get', KEYS[1]) == ARGV[1] "</span> +
+                <span class="tok-string">"then return redis.call('del', KEYS[1]) else return 0 end"</span>;
+<span class="tok-keyword">await</span> redis.<span class="tok-function">eval</span>(RELEASE, { keys: [key], arguments: [String(userId)] });</pre>
+
+<h3>Xác nhận bán — chốt chặn UNIQUE của Postgres</h3>
+<pre><span class="tok-comment">// người mua trả tiền trong cửa sổ hold → lưu vé</span>
+<span class="tok-comment">// schema: @@unique([eventId, seatId]) trên Ticket</span>
+<span class="tok-keyword">try</span> {
+  <span class="tok-keyword">await</span> prisma.ticket.<span class="tok-function">create</span>({ data: { eventId, seatId, userId, status: <span class="tok-string">"SOLD"</span> } });
+} <span class="tok-keyword">catch</span> (e) {
+  <span class="tok-keyword">if</span> (e.code === <span class="tok-string">"P2002"</span>)   <span class="tok-comment">// vi phạm unique — rào cuối cùng</span>
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Ghế đã được bán"</span>);
+  <span class="tok-keyword">throw</span> e;
+}</pre>
+
+<div class="pitfall"><strong>Bẫy:</strong> dùng <code>DEL key</code> thường để giải phóng hold. Nếu request của bạn chậm, hold có thể đã hết hạn và bị người mua khác giữ lại — một DEL mù khi đó xoá hold của <em>họ</em>. Luôn compare-and-delete (script Lua), giống như bạn kiểm token khoá trước khi nhả.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Redis SET NX PX là một khoá phân tán.</b> Việc giữ ghế chính là mẫu Redlock: một key mà sự tồn tại nghĩa là "đã khoá", một giá trị chủ sở hữu duy nhất, và một TTL để client bị crash không giữ mãi. Nhận ra "giữ ghế" và "giành khoá" là cùng một bài toán cho phép bạn tái dùng công thức đã thử lửa. <em>Vì sao ngoài syllabus: khoá phân tán là chủ đề hệ thống giáo trình đại học không chạm tới, nhưng lại là mô hình đúng cho giữ ghế flash-sale.</em></div>
+
+<a class="link-card codelab" href="/code-lab/redis?ref=%2Fcourses%2Fevent-ticketing-system%2Flearn&reflabel=INT606#module-737" target="_blank" rel="noopener">
+  <span class="lc-ico">🧱</span>
+  <span class="lc-body"><span class="lc-title">Thao tác nguyên tử &amp; Lua trên Code Lab</span><span class="lc-sub">SET NX PX, EVAL, khoá phân tán.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '4.2 — Hold → purchase endpoints & error flow|||4.2 — Endpoint giữ → mua & luồng lỗi',
+          slug: 'int606-purchase-endpoint',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 4 · Lesson 4.2</span>
+<h2>The two-step flow: hold, then buy — with clean errors</h2>
+<p class="lead">Buying a seat is two requests: <code>POST /holds</code> reserves it for two minutes, then <code>POST /purchases</code> converts the hold into a sold ticket. Each step has a precise status code so the client can react.</p>
+
+<h3>The endpoints</h3>
+<pre>router.<span class="tok-function">post</span>(<span class="tok-string">"/api/holds"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
+  <span class="tok-keyword">try</span> {
+    <span class="tok-keyword">const</span> hold = <span class="tok-keyword">await</span> holdService.<span class="tok-function">hold</span>(req.body.eventId, req.body.seatId, req.user.sub);
+    res.<span class="tok-function">status</span>(<span class="tok-number">201</span>).<span class="tok-function">json</span>({ expiresInSec: <span class="tok-number">120</span>, hold });   <span class="tok-comment">// 201 — seat held</span>
+  } <span class="tok-keyword">catch</span> (e) { next(e); }   <span class="tok-comment">// ConflictError → 409</span>
+});
+
+router.<span class="tok-function">post</span>(<span class="tok-string">"/api/purchases"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
+  <span class="tok-keyword">try</span> {
+    <span class="tok-keyword">const</span> ticket = <span class="tok-keyword">await</span> purchaseService.<span class="tok-function">buy</span>(req.body.eventId, req.body.seatId, req.user.sub);
+    res.<span class="tok-function">status</span>(<span class="tok-number">201</span>).<span class="tok-function">json</span>(ticket);       <span class="tok-comment">// 201 — ticket sold</span>
+  } <span class="tok-keyword">catch</span> (e) { next(e); }
+});</pre>
+
+<h3>The purchase service checks you still hold the seat</h3>
+<pre><span class="tok-keyword">async function</span> <span class="tok-function">buy</span>(eventId, seatId, userId) {
+  <span class="tok-keyword">const</span> holder = <span class="tok-keyword">await</span> redis.<span class="tok-function">get</span>(&#96;hold:event:\${eventId}:seat:\${seatId}&#96;);
+  <span class="tok-keyword">if</span> (String(holder) !== String(userId))
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Your hold expired — please reselect the seat"</span>);  <span class="tok-comment">// 409</span>
+  <span class="tok-keyword">const</span> ticket = <span class="tok-keyword">await</span> persistTicket(eventId, seatId, userId);   <span class="tok-comment">// UNIQUE backstop</span>
+  <span class="tok-keyword">await</span> <span class="tok-function">releaseHold</span>(eventId, seatId, userId);                 <span class="tok-comment">// Lua compare-and-delete</span>
+  <span class="tok-keyword">return</span> ticket;
+}</pre>
+
+<h3>Worked example — the status-code contract</h3>
+<table>
+<thead><tr><th>Situation</th><th>Status</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>Seat held / ticket sold</td><td>201 Created</td><td>proceed to pay / done</td></tr>
+<tr><td>Seat already held by another</td><td>409 Conflict</td><td>pick another seat</td></tr>
+<tr><td>Hold expired before purchase</td><td>409 Conflict</td><td>reselect the seat</td></tr>
+<tr><td>Seat already sold (DB UNIQUE)</td><td>409 Conflict</td><td>sold out</td></tr>
+<tr><td>No / expired token</td><td>401 Unauthorized</td><td>log in again</td></tr>
+</tbody>
+</table>
+
+<div class="pitfall"><strong>Trap:</strong> converting a hold to a sale without re-checking the holder. If you skip the <code>redis.get</code> ownership check, an expired hold (re-taken by someone else) could still let the original user buy — and now two people race the DB. The UNIQUE constraint catches it, but the ownership check gives the honest 409 first.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Design for the hold to leak — TTL makes abandonment self-healing.</b> Users close the tab mid-checkout constantly. Because the hold has a PX expiry, an abandoned seat frees itself with no cleanup job and no stuck inventory. Building in expiry from the start is what keeps a ticketing system from slowly locking up its own seats. <em>Why beyond syllabus: designing for the unhappy path (abandonment) is a production instinct the coursework never exercises.</em></div>
+
+<a class="link-card codelab" href="/code-lab/rest-apis?ref=%2Fcourses%2Fevent-ticketing-system%2Flearn&reflabel=INT606#module-530" target="_blank" rel="noopener">
+  <span class="lc-ico">🌐</span>
+  <span class="lc-body"><span class="lc-title">Error handling &amp; status codes on Code Lab</span><span class="lc-sub">Central error middleware, 409 flows.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 4 · Bài 4.2</span>
+<h2>Luồng hai bước: giữ, rồi mua — với lỗi sạch</h2>
+<p class="lead">Mua một ghế là hai request: <code>POST /holds</code> giữ nó trong hai phút, rồi <code>POST /purchases</code> biến hold thành vé đã bán. Mỗi bước có mã trạng thái chính xác để client phản ứng.</p>
+
+<h3>Các endpoint</h3>
+<pre>router.<span class="tok-function">post</span>(<span class="tok-string">"/api/holds"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
+  <span class="tok-keyword">try</span> {
+    <span class="tok-keyword">const</span> hold = <span class="tok-keyword">await</span> holdService.<span class="tok-function">hold</span>(req.body.eventId, req.body.seatId, req.user.sub);
+    res.<span class="tok-function">status</span>(<span class="tok-number">201</span>).<span class="tok-function">json</span>({ expiresInSec: <span class="tok-number">120</span>, hold });   <span class="tok-comment">// 201 — đã giữ ghế</span>
+  } <span class="tok-keyword">catch</span> (e) { next(e); }   <span class="tok-comment">// ConflictError → 409</span>
+});
+
+router.<span class="tok-function">post</span>(<span class="tok-string">"/api/purchases"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
+  <span class="tok-keyword">try</span> {
+    <span class="tok-keyword">const</span> ticket = <span class="tok-keyword">await</span> purchaseService.<span class="tok-function">buy</span>(req.body.eventId, req.body.seatId, req.user.sub);
+    res.<span class="tok-function">status</span>(<span class="tok-number">201</span>).<span class="tok-function">json</span>(ticket);       <span class="tok-comment">// 201 — đã bán vé</span>
+  } <span class="tok-keyword">catch</span> (e) { next(e); }
+});</pre>
+
+<h3>Service mua kiểm bạn vẫn giữ ghế</h3>
+<pre><span class="tok-keyword">async function</span> <span class="tok-function">buy</span>(eventId, seatId, userId) {
+  <span class="tok-keyword">const</span> holder = <span class="tok-keyword">await</span> redis.<span class="tok-function">get</span>(&#96;hold:event:\${eventId}:seat:\${seatId}&#96;);
+  <span class="tok-keyword">if</span> (String(holder) !== String(userId))
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Hold của bạn đã hết hạn — hãy chọn lại ghế"</span>);  <span class="tok-comment">// 409</span>
+  <span class="tok-keyword">const</span> ticket = <span class="tok-keyword">await</span> persistTicket(eventId, seatId, userId);   <span class="tok-comment">// chốt chặn UNIQUE</span>
+  <span class="tok-keyword">await</span> <span class="tok-function">releaseHold</span>(eventId, seatId, userId);                 <span class="tok-comment">// Lua compare-and-delete</span>
+  <span class="tok-keyword">return</span> ticket;
+}</pre>
+
+<h3>Ví dụ có lời giải — hợp đồng mã trạng thái</h3>
+<table>
+<thead><tr><th>Tình huống</th><th>Mã</th><th>Ý nghĩa</th></tr></thead>
+<tbody>
+<tr><td>Đã giữ ghế / đã bán vé</td><td>201 Created</td><td>tới bước trả tiền / xong</td></tr>
+<tr><td>Ghế đã bị người khác giữ</td><td>409 Conflict</td><td>chọn ghế khác</td></tr>
+<tr><td>Hold hết hạn trước khi mua</td><td>409 Conflict</td><td>chọn lại ghế</td></tr>
+<tr><td>Ghế đã bán (UNIQUE của DB)</td><td>409 Conflict</td><td>hết vé</td></tr>
+<tr><td>Không / hết hạn token</td><td>401 Unauthorized</td><td>đăng nhập lại</td></tr>
+</tbody>
+</table>
+
+<div class="pitfall"><strong>Bẫy:</strong> biến hold thành vé mà không kiểm lại người giữ. Nếu bạn bỏ kiểm sở hữu <code>redis.get</code>, một hold đã hết hạn (bị người khác giữ lại) vẫn có thể cho user gốc mua — và giờ hai người đua ở DB. Ràng buộc UNIQUE bắt được, nhưng kiểm sở hữu cho 409 trung thực trước.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Thiết kế để hold rò ra — TTL khiến việc bỏ dở tự lành.</b> Người dùng đóng tab giữa lúc thanh toán liên tục. Vì hold có hạn PX, một ghế bị bỏ tự giải phóng mà không cần job dọn và không kẹt hàng tồn. Xây sẵn expiry từ đầu là điều giữ một hệ thống vé khỏi từ từ tự khoá ghế của chính nó. <em>Vì sao ngoài syllabus: thiết kế cho đường-không-vui (bỏ dở) là bản năng production môn học không rèn.</em></div>
+
+<a class="link-card codelab" href="/code-lab/rest-apis?ref=%2Fcourses%2Fevent-ticketing-system%2Flearn&reflabel=INT606#module-530" target="_blank" rel="noopener">
+  <span class="lc-ico">🌐</span>
+  <span class="lc-body"><span class="lc-title">Xử lý lỗi &amp; mã trạng thái trên Code Lab</span><span class="lc-sub">Middleware lỗi trung tâm, luồng 409.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '4.3 — Checkpoint quiz: the seat-hold core|||4.3 — Quiz kiểm tra: lõi giữ ghế',
+          slug: 'int606-quiz-4',
+          type: 'QUIZ',
+          quiz: {
+            timeLimitSeconds: 360,
+            questions: [
+              {
+                id: 'q1',
+                question: 'Why does SET key userId NX PX 120000 safely hold a seat under a flash-sale?|||Vì sao SET key userId NX PX 120000 giữ ghế an toàn dưới flash-sale?',
+                options: [
+                  'Redis is single-threaded and NX is atomic: only the first request sets the key, the rest get nil → 409|||Redis đơn luồng và NX nguyên tử: chỉ request đầu set key, phần còn lại nhận nil → 409',
+                  'It locks the whole Redis server for 2 minutes|||Nó khoá cả Redis server 2 phút',
+                  'It creates 120000 copies of the seat|||Nó tạo 120000 bản sao của ghế',
+                  'It disables other users|||Nó vô hiệu các user khác',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q2',
+                question: 'What does the PX (expiry) on the hold accomplish?|||PX (hết hạn) trên hold đạt được điều gì?',
+                options: [
+                  'An abandoned hold frees itself after the timeout — no stuck seats, no cleanup job|||Một hold bị bỏ tự giải phóng sau timeout — không kẹt ghế, không cần job dọn',
+                  'It makes Redis persistent to disk|||Nó làm Redis lưu xuống đĩa',
+                  'It encrypts the seat|||Nó mã hoá ghế',
+                  'It doubles the price|||Nó tăng gấp đôi giá',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q3',
+                question: 'Why release a hold with a Lua compare-and-delete instead of a plain DEL?|||Vì sao giải phóng hold bằng Lua compare-and-delete thay vì DEL thường?',
+                options: [
+                  'A slow request must not delete a hold that already expired and was re-taken by another user|||Một request chậm không được xoá hold đã hết hạn và bị người khác giữ lại',
+                  'DEL is not a Redis command|||DEL không phải lệnh Redis',
+                  'Lua is faster than DEL|||Lua nhanh hơn DEL',
+                  'It has no difference|||Không khác gì',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q4',
+                question: 'What is the role of the Postgres UNIQUE(eventId, seatId) constraint?|||Vai trò của ràng buộc UNIQUE(eventId, seatId) trong Postgres là gì?',
+                options: [
+                  'The durable backstop: even if the Redis hold logic failed, two sold tickets for one seat are impossible|||Chốt chặn bền: kể cả logic hold Redis fail, hai vé bán cho một ghế là bất khả',
+                  'To speed up Redis|||Để tăng tốc Redis',
+                  'To store user passwords|||Để lưu mật khẩu user',
+                  'It replaces authentication|||Nó thay thế xác thực',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q5',
+                question: '(Beyond syllabus) The seat hold is an instance of which well-known pattern?|||(Ngoài giáo trình) Việc giữ ghế là một ví dụ của mẫu nổi tiếng nào?',
+                options: [
+                  'A distributed lock (Redlock): a key = locked, a unique owner value, and a TTL so a crash cannot hold forever|||Một khoá phân tán (Redlock): key = đã khoá, giá trị chủ sở hữu duy nhất, và TTL để crash không giữ mãi',
+                  'A binary search tree|||Một cây tìm kiếm nhị phân',
+                  'A hash join|||Một phép hash join',
+                  'A garbage collector|||Một bộ thu gom rác',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+            ],
+          },
+        },
+      ],
+    },
+    {
+      title: 'Section 5 — Testing (prove no double-sell)|||Mục 5 — Kiểm thử (chứng minh không bán trùng)',
+      lessons: [
+        {
+          title: '5.1 — A flash-sale concurrency test|||5.1 — Test đồng thời flash-sale',
+          slug: 'int606-testing',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 5 · Lesson 5.1</span>
+<h2>Testing: simulate the stampede, prove the seat sells once</h2>
+<p class="lead">The demo that wins marks: fire a hundred concurrent buyers at one seat and assert exactly one gets it. Then fire hundreds at a 50-seat event and assert exactly 50 tickets exist — never 51.</p>
+
+<h3>1) One seat, one hundred buyers</h3>
+<pre>test(<span class="tok-string">"100 concurrent holds on one seat — exactly one succeeds"</span>, <span class="tok-keyword">async</span> () =&gt; {
+  <span class="tok-keyword">const</span> payload = { eventId: <span class="tok-number">42</span>, seatId: <span class="tok-string">"A12"</span> };
+
+  <span class="tok-comment">// Promise.all fires all 100 together — the real stampede</span>
+  <span class="tok-keyword">const</span> results = <span class="tok-keyword">await</span> Promise.<span class="tok-function">all</span>(
+    Array.<span class="tok-function">from</span>({ length: <span class="tok-number">100</span> }, () =&gt;
+      request(app).<span class="tok-function">post</span>(<span class="tok-string">"/api/holds"</span>).<span class="tok-function">set</span>(auth(anyBuyer)).<span class="tok-function">send</span>(payload))
+  );
+
+  <span class="tok-keyword">const</span> held = results.<span class="tok-function">filter</span>(r =&gt; r.status === <span class="tok-number">201</span>).length;
+  <span class="tok-keyword">const</span> rejected = results.<span class="tok-function">filter</span>(r =&gt; r.status === <span class="tok-number">409</span>).length;
+  expect(held).<span class="tok-function">toBe</span>(<span class="tok-number">1</span>);          <span class="tok-comment">// exactly one hold won</span>
+  expect(rejected).<span class="tok-function">toBe</span>(<span class="tok-number">99</span>);      <span class="tok-comment">// the rest got clean 409s</span>
+});</pre>
+
+<h3>2) A 50-seat event, 300 buyers — never oversell</h3>
+<pre>test(<span class="tok-string">"300 buyers, 50 seats — exactly 50 tickets sold"</span>, <span class="tok-keyword">async</span> () =&gt; {
+  <span class="tok-keyword">await</span> Promise.<span class="tok-function">all</span>(
+    Array.<span class="tok-function">from</span>({ length: <span class="tok-number">300</span> }, (_, i) =&gt;
+      request(app).<span class="tok-function">post</span>(<span class="tok-string">"/api/purchases"</span>).<span class="tok-function">set</span>(auth(buyers[i]))
+        .<span class="tok-function">send</span>({ eventId: <span class="tok-number">42</span>, seatId: seatFor(i) }))   <span class="tok-comment">// spread across the 50 seats</span>
+  );
+  <span class="tok-keyword">const</span> sold = <span class="tok-keyword">await</span> prisma.ticket.<span class="tok-function">count</span>({ where: { eventId: <span class="tok-number">42</span>, status: <span class="tok-string">"SOLD"</span> } });
+  expect(sold).<span class="tok-function">toBe</span>(<span class="tok-number">50</span>);         <span class="tok-comment">// capacity respected — never 51</span>
+});</pre>
+
+<h3>Why Promise.all is the whole point</h3>
+<div class="out">A sequential loop with await runs buyer 1 to completion before buyer 2 begins —
+no two ever collide, so a BROKEN service (no NX, no UNIQUE) still "passes".
+Promise.all launches all requests concurrently, so their holds truly race →
+only the Redis NX + the DB UNIQUE can keep the count correct. Remove either guard
+and this test goes red with held &gt; 1 or sold &gt; 50 — which is exactly what proves it works.</div>
+
+<div class="pitfall"><strong>Trap:</strong> asserting only on status codes and not on the final row count. The strongest proof is <code>prisma.ticket.count() === capacity</code> — a state assertion that catches an oversell even if the status codes happened to look right, and survives refactors of how you enforce the limit.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Load-shape your test to match the threat.</b> The bug only appears under simultaneity, so the test must create simultaneity — that's why <code>Promise.all</code>, not a loop. Reproducing the exact condition that triggers a concurrency bug (a "stress" or "race" test) is a distinct skill from ordinary unit testing. <em>Why beyond syllabus: writing tests that deliberately induce races is rarely taught, yet it is the only way to trust a flash-sale system.</em></div>
+
+<a class="link-card codelab" href="/code-lab/rest-apis?ref=%2Fcourses%2Fevent-ticketing-system%2Flearn&reflabel=INT606#module-532" target="_blank" rel="noopener">
+  <span class="lc-ico">🌐</span>
+  <span class="lc-body"><span class="lc-title">Testing REST APIs on Code Lab</span><span class="lc-sub">supertest, concurrency, integration tests.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 5 · Bài 5.1</span>
+<h2>Kiểm thử: mô phỏng cơn giẫm đạp, chứng minh ghế bán đúng một lần</h2>
+<p class="lead">Bản demo ăn điểm: bắn một trăm người mua đồng thời vào một ghế và khẳng định đúng một người được. Rồi bắn hàng trăm vào một sự kiện 50 ghế và khẳng định đúng 50 vé tồn tại — không bao giờ 51.</p>
+
+<h3>1) Một ghế, một trăm người mua</h3>
+<pre>test(<span class="tok-string">"100 hold đồng thời trên một ghế — đúng một thành công"</span>, <span class="tok-keyword">async</span> () =&gt; {
+  <span class="tok-keyword">const</span> payload = { eventId: <span class="tok-number">42</span>, seatId: <span class="tok-string">"A12"</span> };
+
+  <span class="tok-comment">// Promise.all bắn cả 100 cùng lúc — cơn giẫm đạp thật</span>
+  <span class="tok-keyword">const</span> results = <span class="tok-keyword">await</span> Promise.<span class="tok-function">all</span>(
+    Array.<span class="tok-function">from</span>({ length: <span class="tok-number">100</span> }, () =&gt;
+      request(app).<span class="tok-function">post</span>(<span class="tok-string">"/api/holds"</span>).<span class="tok-function">set</span>(auth(anyBuyer)).<span class="tok-function">send</span>(payload))
+  );
+
+  <span class="tok-keyword">const</span> held = results.<span class="tok-function">filter</span>(r =&gt; r.status === <span class="tok-number">201</span>).length;
+  <span class="tok-keyword">const</span> rejected = results.<span class="tok-function">filter</span>(r =&gt; r.status === <span class="tok-number">409</span>).length;
+  expect(held).<span class="tok-function">toBe</span>(<span class="tok-number">1</span>);          <span class="tok-comment">// đúng một hold thắng</span>
+  expect(rejected).<span class="tok-function">toBe</span>(<span class="tok-number">99</span>);      <span class="tok-comment">// phần còn lại nhận 409 sạch</span>
+});</pre>
+
+<h3>2) Sự kiện 50 ghế, 300 người mua — không bao giờ bán quá</h3>
+<pre>test(<span class="tok-string">"300 người mua, 50 ghế — đúng 50 vé bán ra"</span>, <span class="tok-keyword">async</span> () =&gt; {
+  <span class="tok-keyword">await</span> Promise.<span class="tok-function">all</span>(
+    Array.<span class="tok-function">from</span>({ length: <span class="tok-number">300</span> }, (_, i) =&gt;
+      request(app).<span class="tok-function">post</span>(<span class="tok-string">"/api/purchases"</span>).<span class="tok-function">set</span>(auth(buyers[i]))
+        .<span class="tok-function">send</span>({ eventId: <span class="tok-number">42</span>, seatId: seatFor(i) }))   <span class="tok-comment">// rải khắp 50 ghế</span>
+  );
+  <span class="tok-keyword">const</span> sold = <span class="tok-keyword">await</span> prisma.ticket.<span class="tok-function">count</span>({ where: { eventId: <span class="tok-number">42</span>, status: <span class="tok-string">"SOLD"</span> } });
+  expect(sold).<span class="tok-function">toBe</span>(<span class="tok-number">50</span>);         <span class="tok-comment">// tôn trọng sức chứa — không bao giờ 51</span>
+});</pre>
+
+<h3>Vì sao Promise.all là toàn bộ vấn đề</h3>
+<div class="out">Vòng tuần tự có await chạy người mua 1 xong hẳn trước khi người 2 bắt đầu —
+không hai ai đụng nhau, nên một service HỎNG (không NX, không UNIQUE) vẫn "pass".
+Promise.all phóng mọi request đồng thời, nên các hold thật sự đua →
+chỉ Redis NX + UNIQUE của DB mới giữ số đếm đúng. Bỏ một trong hai rào
+và test này đỏ với held &gt; 1 hoặc sold &gt; 50 — đó chính là điều chứng minh nó hoạt động.</div>
+
+<div class="pitfall"><strong>Bẫy:</strong> chỉ khẳng định mã trạng thái mà không khẳng định số dòng cuối. Chứng minh mạnh nhất là <code>prisma.ticket.count() === sức chứa</code> — khẳng định trạng thái bắt được bán quá kể cả khi mã trạng thái tình cờ trông đúng, và sống sót qua refactor cách bạn cưỡng chế giới hạn.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Tạo hình tải khớp với mối đe doạ.</b> Bug chỉ xuất hiện dưới đồng thời, nên test phải tạo đồng thời — đó là lý do <code>Promise.all</code>, không phải vòng lặp. Tái tạo đúng điều kiện kích hoạt một bug tương tranh (test "stress" hay "race") là kỹ năng riêng khác với unit test thông thường. <em>Vì sao ngoài syllabus: viết test cố tình gây ra race ít khi được dạy, nhưng lại là cách duy nhất để tin một hệ thống flash-sale.</em></div>
+
+<a class="link-card codelab" href="/code-lab/rest-apis?ref=%2Fcourses%2Fevent-ticketing-system%2Flearn&reflabel=INT606#module-532" target="_blank" rel="noopener">
+  <span class="lc-ico">🌐</span>
+  <span class="lc-body"><span class="lc-title">Kiểm thử REST API trên Code Lab</span><span class="lc-sub">supertest, tương tranh, test tích hợp.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      title: 'Section 6 — Deployment with Docker|||Mục 6 — Triển khai với Docker',
+      lessons: [
+        {
+          title: '6.1 — API + Postgres + Redis in one Compose file|||6.1 — API + Postgres + Redis trong một Compose',
+          slug: 'int606-docker',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 6 · Lesson 6.1</span>
+<h2>Three services: the API, the database, and the cache</h2>
+<p class="lead">Event ticketing needs Redis (the hold layer) alongside Postgres (the durable store). Docker Compose brings up all three and wires them on a private network — one command for the whole stack.</p>
+
+<div class="lz-flow">
+  <div class="lz-step">Client / Postman</div>
+  <div class="lz-step">Express API :3000</div>
+  <div class="lz-step">Redis :6379 (holds)</div>
+  <div class="lz-step">Postgres :5432 (tickets)</div>
+</div>
+
+<h3>docker-compose.yml</h3>
+<pre><span class="tok-keyword">services</span>:
+  db:
+    <span class="tok-keyword">image</span>: postgres:16
+    <span class="tok-keyword">environment</span>: { POSTGRES_DB: ticketing, POSTGRES_PASSWORD: \${DB_PASSWORD} }
+    <span class="tok-keyword">volumes</span>: [ "pgdata:/var/lib/postgresql/data" ]
+    <span class="tok-keyword">healthcheck</span>: { test: ["CMD-SHELL","pg_isready -U postgres"], interval: 5s, retries: 10 }
+
+  redis:
+    <span class="tok-keyword">image</span>: redis:7
+    <span class="tok-keyword">healthcheck</span>: { test: ["CMD","redis-cli","ping"], interval: 5s, retries: 10 }
+
+  api:
+    <span class="tok-keyword">build</span>: .
+    <span class="tok-keyword">environment</span>:
+      DATABASE_URL: postgresql://postgres:\${DB_PASSWORD}@db:5432/ticketing
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: \${JWT_SECRET}
+    <span class="tok-keyword">command</span>: sh -c "npx prisma migrate deploy &amp;&amp; node src/server.js"
+    <span class="tok-keyword">depends_on</span>:
+      db:    { condition: service_healthy }
+      redis: { condition: service_healthy }
+    <span class="tok-keyword">ports</span>: [ "3000:3000" ]
+
+<span class="tok-keyword">volumes</span>: { pgdata: {} }</pre>
+
+<h3>Worked example — bring it up</h3>
+<div class="out">$ printf "DB_PASSWORD=secret\\nJWT_SECRET=change-me\\n" &gt; .env
+$ docker compose up --build
+ db    | database system is ready to accept connections
+ redis | Ready to accept connections tcp
+ api   | Ticketing API listening on :3000   (db + redis healthy ✅)
+$ curl -X POST localhost:3000/api/holds -H "Authorization: Bearer $T" \\
+    -d '{"eventId":42,"seatId":"A12"}'
+ → 201 { "expiresInSec": 120 }</div>
+
+<div class="pitfall"><strong>Trap:</strong> treating Redis as durable storage. Redis holds are ephemeral by design (they expire) and can be lost on a restart — which is fine, because a lost hold just frees the seat. Never store the <em>sold ticket</em> only in Redis; the sold record must live in Postgres, the durable source of truth.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Two stores, two jobs: Redis for speed, Postgres for truth.</b> The hold layer needs microsecond atomic ops and automatic expiry — Redis. The sold ticket needs durability, relations and constraints — Postgres. Choosing the right store for each responsibility (polyglot persistence) is an architecture skill, not a default. <em>Why beyond syllabus: combining a cache and a database for one feature, each doing what it is best at, is a systems-design decision the coursework never poses.</em></div>
+
+<a class="link-card codelab" href="/code-lab/docker?ref=%2Fcourses%2Fevent-ticketing-system%2Flearn&reflabel=INT606#module-489" target="_blank" rel="noopener">
+  <span class="lc-ico">🐳</span>
+  <span class="lc-body"><span class="lc-title">Docker Compose on Code Lab</span><span class="lc-sub">Multi-service apps, Redis + Postgres, healthchecks.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 6 · Bài 6.1</span>
+<h2>Ba dịch vụ: API, cơ sở dữ liệu, và cache</h2>
+<p class="lead">Bán vé sự kiện cần Redis (tầng hold) bên cạnh Postgres (kho bền). Docker Compose dựng cả ba và nối chúng trên một mạng riêng — một lệnh cho cả stack.</p>
+
+<div class="lz-flow">
+  <div class="lz-step">Client / Postman</div>
+  <div class="lz-step">Express API :3000</div>
+  <div class="lz-step">Redis :6379 (hold)</div>
+  <div class="lz-step">Postgres :5432 (vé)</div>
+</div>
+
+<h3>docker-compose.yml</h3>
+<pre><span class="tok-keyword">services</span>:
+  db:
+    <span class="tok-keyword">image</span>: postgres:16
+    <span class="tok-keyword">environment</span>: { POSTGRES_DB: ticketing, POSTGRES_PASSWORD: \${DB_PASSWORD} }
+    <span class="tok-keyword">volumes</span>: [ "pgdata:/var/lib/postgresql/data" ]
+    <span class="tok-keyword">healthcheck</span>: { test: ["CMD-SHELL","pg_isready -U postgres"], interval: 5s, retries: 10 }
+
+  redis:
+    <span class="tok-keyword">image</span>: redis:7
+    <span class="tok-keyword">healthcheck</span>: { test: ["CMD","redis-cli","ping"], interval: 5s, retries: 10 }
+
+  api:
+    <span class="tok-keyword">build</span>: .
+    <span class="tok-keyword">environment</span>:
+      DATABASE_URL: postgresql://postgres:\${DB_PASSWORD}@db:5432/ticketing
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: \${JWT_SECRET}
+    <span class="tok-keyword">command</span>: sh -c "npx prisma migrate deploy &amp;&amp; node src/server.js"
+    <span class="tok-keyword">depends_on</span>:
+      db:    { condition: service_healthy }
+      redis: { condition: service_healthy }
+    <span class="tok-keyword">ports</span>: [ "3000:3000" ]
+
+<span class="tok-keyword">volumes</span>: { pgdata: {} }</pre>
+
+<h3>Ví dụ có lời giải — dựng lên</h3>
+<div class="out">$ printf "DB_PASSWORD=secret\\nJWT_SECRET=change-me\\n" &gt; .env
+$ docker compose up --build
+ db    | database system is ready to accept connections
+ redis | Ready to accept connections tcp
+ api   | Ticketing API listening on :3000   (db + redis khoẻ ✅)
+$ curl -X POST localhost:3000/api/holds -H "Authorization: Bearer $T" \\
+    -d '{"eventId":42,"seatId":"A12"}'
+ → 201 { "expiresInSec": 120 }</div>
+
+<div class="pitfall"><strong>Bẫy:</strong> coi Redis là lưu trữ bền. Hold Redis vốn phù du (chúng hết hạn) và có thể mất khi restart — điều đó ổn, vì một hold mất chỉ giải phóng ghế. Đừng bao giờ lưu <em>vé đã bán</em> chỉ trong Redis; bản ghi đã bán phải sống trong Postgres, nguồn sự thật bền.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hai kho, hai việc: Redis cho tốc độ, Postgres cho sự thật.</b> Tầng hold cần thao tác nguyên tử micro-giây và tự hết hạn — Redis. Vé đã bán cần độ bền, quan hệ và ràng buộc — Postgres. Chọn đúng kho cho mỗi trách nhiệm (polyglot persistence) là kỹ năng kiến trúc, không phải mặc định. <em>Vì sao ngoài syllabus: kết hợp một cache và một cơ sở dữ liệu cho một tính năng, mỗi cái làm điều nó giỏi nhất, là quyết định thiết kế hệ thống môn học không đặt ra.</em></div>
+
+<a class="link-card codelab" href="/code-lab/docker?ref=%2Fcourses%2Fevent-ticketing-system%2Flearn&reflabel=INT606#module-489" target="_blank" rel="noopener">
+  <span class="lc-ico">🐳</span>
+  <span class="lc-body"><span class="lc-title">Docker Compose trên Code Lab</span><span class="lc-sub">App nhiều dịch vụ, Redis + Postgres, healthcheck.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      title: 'Section 7 — Advanced: ship like a pro (Beyond the syllabus)|||Mục 7 — Nâng cao: làm như dân chuyên (Ngoài giáo trình)',
+      lessons: [
+        {
+          title: '7.1 — Waiting room, rate limits, live seat map & GA capacity ★|||7.1 — Phòng chờ, rate limit, sơ đồ ghế trực tiếp & sức chứa GA ★',
+          slug: 'int606-advanced',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 7 · Lesson 7.1 · <span class="badge">★ Beyond the syllabus</span></span>
+<h2>Four upgrades that turn the system into a portfolio piece</h2>
+<p class="lead">The hold core is correct. These four additions are what a reviewer of a real ticketing platform notices — each a small, self-contained ★ beyond the syllabus.</p>
+
+<h3>1) General-admission capacity — an atomic counter</h3>
+<p>For events without assigned seats, you just cap total tickets. A Redis <code>DECR</code> is an atomic counter: it never lets two buyers both see "1 left".</p>
+<pre><span class="tok-comment">// seed once: SET stock:event:42 500</span>
+<span class="tok-keyword">const</span> left = <span class="tok-keyword">await</span> redis.<span class="tok-function">decr</span>(<span class="tok-string">"stock:event:42"</span>);   <span class="tok-comment">// atomic decrement, returns new value</span>
+<span class="tok-keyword">if</span> (left &lt; <span class="tok-number">0</span>) {
+  <span class="tok-keyword">await</span> redis.<span class="tok-function">incr</span>(<span class="tok-string">"stock:event:42"</span>);           <span class="tok-comment">// give it back — we oversold by trying</span>
+  <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Sold out"</span>);       <span class="tok-comment">// → 409</span>
+}
+<span class="tok-comment">// left >= 0 → this buyer got a ticket; persist it in Postgres</span></pre>
+
+<h3>2) Virtual waiting room — a fair queue</h3>
+<pre><span class="tok-comment">// on arrival, push the user onto a Redis list (FIFO) and give them a position</span>
+<span class="tok-keyword">const</span> pos = <span class="tok-keyword">await</span> redis.<span class="tok-function">rpush</span>(<span class="tok-string">"queue:event:42"</span>, userId);   <span class="tok-comment">// position = length</span>
+<span class="tok-comment">// a worker admits N users per second by LPOP-ing and flipping a "can-buy" flag</span></pre>
+<p>A waiting room turns a chaotic stampede into an orderly line — buyers see "you are #4,213" instead of a crashed page.</p>
+
+<h3>3) Rate limiting — shield the hold endpoint</h3>
+<pre><span class="tok-comment">// token-bucket per user in Redis: max 5 hold attempts / 10s</span>
+<span class="tok-keyword">const</span> n = <span class="tok-keyword">await</span> redis.<span class="tok-function">incr</span>(&#96;rl:hold:\${userId}&#96;);
+<span class="tok-keyword">if</span> (n === <span class="tok-number">1</span>) <span class="tok-keyword">await</span> redis.<span class="tok-function">expire</span>(&#96;rl:hold:\${userId}&#96;, <span class="tok-number">10</span>);
+<span class="tok-keyword">if</span> (n &gt; <span class="tok-number">5</span>) <span class="tok-keyword">throw new</span> <span class="tok-type">TooManyRequestsError</span>();   <span class="tok-comment">// → 429, blocks seat-sniping bots</span></pre>
+
+<h3>4) Live seat map — Redis pub/sub + WebSocket</h3>
+<pre><span class="tok-comment">// when a seat is held or sold, publish the change...</span>
+<span class="tok-keyword">await</span> redis.<span class="tok-function">publish</span>(<span class="tok-string">"seatmap:42"</span>, JSON.<span class="tok-function">stringify</span>({ seatId: <span class="tok-string">"A12"</span>, state: <span class="tok-string">"held"</span> }));
+<span class="tok-comment">// ...a WebSocket server subscribes and pushes it to every open seat map in real time</span></pre>
+<p>Everyone watching the map sees A12 grey out the instant someone grabs it — no polling, no stale seats.</p>
+
+<div class="pitfall"><strong>Trap:</strong> the DECR-then-check-then-INCR-back pattern has a subtle window if you forget the give-back on oversell. If <code>left &lt; 0</code> and you don't <code>INCR</code> to undo, the counter drifts permanently negative and the event looks sold out forever. Always compensate, or use a Lua script that checks-and-decrements atomically.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Absorb the spike before it reaches the database.</b> A waiting room, rate limits, and Redis counters all share one goal: keep the flood away from Postgres so the durable store only ever sees the small, ordered trickle of real purchases. Protecting your slowest, most precious resource (the DB) by fronting it with fast, cheap layers is the essence of scaling a hot endpoint. <em>Why beyond syllabus: designing back-pressure and admission control for a spike is a distributed-systems topic the coursework never approaches.</em></div>
+
+<a class="link-card codelab" href="/code-lab/redis?ref=%2Fcourses%2Fevent-ticketing-system%2Flearn&reflabel=INT606#module-740" target="_blank" rel="noopener">
+  <span class="lc-ico">🧱</span>
+  <span class="lc-body"><span class="lc-title">Redis patterns on Code Lab</span><span class="lc-sub">Counters, pub/sub, rate limiting, queues.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 7 · Bài 7.1 · <span class="badge">★ Ngoài giáo trình</span></span>
+<h2>Bốn nâng cấp biến hệ thống thành tác phẩm hồ sơ</h2>
+<p class="lead">Lõi hold đã đúng. Bốn bổ sung này là thứ người chấm một nền tảng bán vé thật để ý — mỗi cái một ★ nhỏ, độc lập, vượt giáo trình.</p>
+
+<h3>1) Sức chứa vé đứng (GA) — một bộ đếm nguyên tử</h3>
+<p>Với sự kiện không ghế cố định, bạn chỉ giới hạn tổng vé. Một <code>DECR</code> Redis là bộ đếm nguyên tử: không bao giờ để hai người mua cùng thấy "còn 1".</p>
+<pre><span class="tok-comment">// gieo một lần: SET stock:event:42 500</span>
+<span class="tok-keyword">const</span> left = <span class="tok-keyword">await</span> redis.<span class="tok-function">decr</span>(<span class="tok-string">"stock:event:42"</span>);   <span class="tok-comment">// giảm nguyên tử, trả giá trị mới</span>
+<span class="tok-keyword">if</span> (left &lt; <span class="tok-number">0</span>) {
+  <span class="tok-keyword">await</span> redis.<span class="tok-function">incr</span>(<span class="tok-string">"stock:event:42"</span>);           <span class="tok-comment">// trả lại — ta lỡ giảm quá</span>
+  <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Hết vé"</span>);          <span class="tok-comment">// → 409</span>
+}
+<span class="tok-comment">// left >= 0 → người này có vé; lưu vào Postgres</span></pre>
+
+<h3>2) Phòng chờ ảo — hàng đợi công bằng</h3>
+<pre><span class="tok-comment">// khi tới, đẩy user vào một list Redis (FIFO) và cho họ một vị trí</span>
+<span class="tok-keyword">const</span> pos = <span class="tok-keyword">await</span> redis.<span class="tok-function">rpush</span>(<span class="tok-string">"queue:event:42"</span>, userId);   <span class="tok-comment">// vị trí = độ dài</span>
+<span class="tok-comment">// một worker cho N user/giây vào bằng cách LPOP và bật cờ "được-mua"</span></pre>
+<p>Phòng chờ biến cơn giẫm đạp hỗn loạn thành hàng ngay ngắn — người mua thấy "bạn là #4.213" thay vì một trang sập.</p>
+
+<h3>3) Giới hạn tần suất — che chắn endpoint hold</h3>
+<pre><span class="tok-comment">// token-bucket mỗi user trong Redis: tối đa 5 lần hold / 10s</span>
+<span class="tok-keyword">const</span> n = <span class="tok-keyword">await</span> redis.<span class="tok-function">incr</span>(&#96;rl:hold:\${userId}&#96;);
+<span class="tok-keyword">if</span> (n === <span class="tok-number">1</span>) <span class="tok-keyword">await</span> redis.<span class="tok-function">expire</span>(&#96;rl:hold:\${userId}&#96;, <span class="tok-number">10</span>);
+<span class="tok-keyword">if</span> (n &gt; <span class="tok-number">5</span>) <span class="tok-keyword">throw new</span> <span class="tok-type">TooManyRequestsError</span>();   <span class="tok-comment">// → 429, chặn bot cướp ghế</span></pre>
+
+<h3>4) Sơ đồ ghế trực tiếp — Redis pub/sub + WebSocket</h3>
+<pre><span class="tok-comment">// khi một ghế được giữ hoặc bán, publish thay đổi...</span>
+<span class="tok-keyword">await</span> redis.<span class="tok-function">publish</span>(<span class="tok-string">"seatmap:42"</span>, JSON.<span class="tok-function">stringify</span>({ seatId: <span class="tok-string">"A12"</span>, state: <span class="tok-string">"held"</span> }));
+<span class="tok-comment">// ...một server WebSocket subscribe và đẩy nó tới mọi sơ đồ ghế đang mở theo thời gian thực</span></pre>
+<p>Mọi người đang xem sơ đồ thấy A12 xám đi ngay khoảnh khắc có người giành nó — không polling, không ghế cũ.</p>
+
+<div class="pitfall"><strong>Bẫy:</strong> mẫu DECR-rồi-kiểm-rồi-INCR-lại có một khe tinh tế nếu bạn quên trả lại khi bán quá. Nếu <code>left &lt; 0</code> mà bạn không <code>INCR</code> để hoàn tác, bộ đếm trôi âm vĩnh viễn và sự kiện trông hết vé mãi mãi. Luôn bù lại, hoặc dùng một script Lua kiểm-và-giảm nguyên tử.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hấp thụ đỉnh trước khi nó chạm cơ sở dữ liệu.</b> Phòng chờ, rate limit, và bộ đếm Redis đều chung một mục tiêu: giữ cơn lũ khỏi Postgres để kho bền chỉ thấy dòng nhỏ, có thứ tự của các lần mua thật. Bảo vệ tài nguyên chậm nhất, quý nhất (DB) bằng cách chắn nó bởi các tầng nhanh, rẻ là bản chất của mở rộng một endpoint nóng. <em>Vì sao ngoài syllabus: thiết kế back-pressure và kiểm soát nạp cho một đỉnh là chủ đề hệ phân tán môn học không tới gần.</em></div>
+
+<a class="link-card codelab" href="/code-lab/redis?ref=%2Fcourses%2Fevent-ticketing-system%2Flearn&reflabel=INT606#module-740" target="_blank" rel="noopener">
+  <span class="lc-ico">🧱</span>
+  <span class="lc-body"><span class="lc-title">Mẫu Redis trên Code Lab</span><span class="lc-sub">Bộ đếm, pub/sub, rate limit, hàng đợi.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+`,
+        },
+        {
+          title: '7.2 — Final quiz: architecture & trade-offs|||7.2 — Quiz cuối: kiến trúc & đánh đổi',
+          slug: 'int606-quiz-7',
+          type: 'QUIZ',
+          quiz: {
+            timeLimitSeconds: 420,
+            questions: [
+              {
+                id: 'q1',
+                question: 'Why use Redis DECR for general-admission stock instead of a SQL UPDATE per buyer?|||Vì sao dùng Redis DECR cho tồn vé đứng thay vì UPDATE SQL mỗi người mua?',
+                options: [
+                  'DECR is an atomic O(1) counter that never lets two buyers both see "1 left" under a spike|||DECR là bộ đếm nguyên tử O(1) không bao giờ để hai người cùng thấy "còn 1" dưới đỉnh tải',
+                  'SQL cannot subtract|||SQL không trừ được',
+                  'Redis stores data permanently|||Redis lưu dữ liệu vĩnh viễn',
+                  'It encrypts the stock|||Nó mã hoá tồn kho',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q2',
+                question: 'What is the role of the Postgres UNIQUE(eventId, seatId) alongside the Redis hold?|||Vai trò của UNIQUE(eventId, seatId) trong Postgres bên cạnh hold Redis là gì?',
+                options: [
+                  'The durable backstop: even if Redis lost its state, two sold tickets for one seat are impossible|||Chốt chặn bền: kể cả Redis mất trạng thái, hai vé bán cho một ghế là bất khả',
+                  'It speeds up Redis|||Nó tăng tốc Redis',
+                  'It stores the JWT|||Nó lưu JWT',
+                  'It is decorative|||Nó chỉ để trang trí',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q3',
+                question: 'Why must the concurrency test use Promise.all rather than an await loop?|||Vì sao test đồng thời phải dùng Promise.all thay vì vòng await?',
+                options: [
+                  'Only simultaneous requests reproduce the race; a loop runs them one-by-one and a broken service still passes|||Chỉ request đồng thời tái tạo race; vòng lặp chạy lần lượt và service hỏng vẫn pass',
+                  'Promise.all is the only way to send HTTP|||Promise.all là cách duy nhất gửi HTTP',
+                  'A loop cannot call an API|||Vòng lặp không gọi được API',
+                  'It makes the test shorter|||Nó làm test ngắn hơn',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q4',
+                question: 'Why must the sold ticket live in Postgres, not only in Redis?|||Vì sao vé đã bán phải sống trong Postgres, không chỉ trong Redis?',
+                options: [
+                  'Redis holds are ephemeral and can be lost on restart; the sold record needs durability and constraints|||Hold Redis phù du và có thể mất khi restart; bản ghi đã bán cần độ bền và ràng buộc',
+                  'Redis cannot store numbers|||Redis không lưu được số',
+                  'Postgres is faster than Redis|||Postgres nhanh hơn Redis',
+                  'They must both store it|||Cả hai đều phải lưu',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q5',
+                question: 'What is the purpose of a virtual waiting room during a ticket drop?|||Mục đích của phòng chờ ảo khi mở bán vé là gì?',
+                options: [
+                  'It turns a stampede into an ordered queue, admitting buyers at a rate the backend can handle|||Nó biến cơn giẫm đạp thành hàng đợi có thứ tự, cho người mua vào ở tốc độ backend chịu được',
+                  'It gives everyone a free ticket|||Nó cho mọi người một vé miễn phí',
+                  'It disables the database|||Nó vô hiệu cơ sở dữ liệu',
+                  'It stores passwords|||Nó lưu mật khẩu',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q6',
+                question: '(Beyond syllabus) The seat hold with SET NX PX is best understood as which pattern?|||(Ngoài giáo trình) Giữ ghế với SET NX PX được hiểu tốt nhất là mẫu nào?',
+                options: [
+                  'A distributed lock with a TTL (Redlock) — a key means locked, the value is the owner, the TTL prevents deadlock|||Một khoá phân tán có TTL (Redlock) — key nghĩa là đã khoá, giá trị là chủ, TTL chống deadlock',
+                  'A merge sort|||Một merge sort',
+                  'A foreign key|||Một khoá ngoại',
+                  'A CSS grid|||Một CSS grid',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+            ],
+          },
+        },
+      ],
+    },
   ],
 };

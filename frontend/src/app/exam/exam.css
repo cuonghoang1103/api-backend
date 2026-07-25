@@ -129,6 +129,18 @@
 .exam-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
 .exam-scroll::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 8px; }
 
+/* Answer-progress bar under the sticky exam header — fills as questions are
+   answered (X/50 → green), like the school's exam software. */
+.exam-progress { height: 5px; width: 100%; background: var(--bg-surface); position: relative; overflow: hidden; }
+.exam-progress-fill {
+  height: 100%; min-width: 0;
+  background: linear-gradient(90deg, var(--exam-ok), #34d399);
+  border-radius: 0 4px 4px 0;
+  transition: width .35s cubic-bezier(.4, 0, .2, 1);
+  box-shadow: 0 0 8px rgba(16,185,129,.5);
+}
+@media (prefers-reduced-motion: reduce) { .exam-progress-fill { transition: none; } }
+
 /* ── Portal (lobby) animated background ────────────────────────────────
    Light, alive, theme-aware. A soft tint base + three slow-drifting
    gradient blobs behind the content. Never pure-black in dark mode. */

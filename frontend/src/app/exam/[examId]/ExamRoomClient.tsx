@@ -234,30 +234,46 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
   const q = exam.questions[idx];
   const timerCls = remaining <= 60_000 ? 'exam-timer-danger' : remaining <= 300_000 ? 'exam-timer-warn' : 'exam-timer-normal';
 
+  const totalQ = exam.questions.length;
+  const doneCount = exam.kind === 'FE'
+    ? answeredCount
+    : exam.peType === 'WRITE'
+      ? exam.questions.filter((qq) => (essays[qq.id]?.trim().length ?? 0) > 0).length
+      : 0;
+  const showProgress = exam.kind === 'FE' || exam.peType === 'WRITE';
+  const progressPct = totalQ ? Math.round((doneCount / totalQ) * 100) : 0;
+
   return (
     <div className="exam-root min-h-screen" data-ml={L}>
       {/* Sticky bar */}
-      <div className="exam-bar px-4 py-3 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3 min-w-0">
-          <button onClick={() => { if (window.confirm(isVi ? 'Thoát phòng thi? Bài đang làm vẫn được lưu để làm tiếp.' : 'Leave the exam? Your progress is saved so you can resume.')) router.push('/exam'); }}
-            className="shrink-0 p-2 rounded-lg border border-[var(--border-color)] hover:border-[var(--exam-accent)]" aria-label={isVi ? 'Thoát' : 'Exit'}>
-            <ArrowLeftIcon className="w-4 h-4" />
-          </button>
-          <div className="min-w-0">
-            <div className="text-sm font-semibold truncate">{pickLang(exam.title, L)}</div>
-            <div className="text-xs text-text-muted">{exam.kind === 'FE' ? `${answeredCount}/${exam.questions.length} ${isVi ? 'đã trả lời' : 'answered'}` : (exam.peType || '')}</div>
+      <div className="exam-bar">
+        <div className="px-4 py-3 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <button onClick={() => { if (window.confirm(isVi ? 'Thoát phòng thi? Bài đang làm vẫn được lưu để làm tiếp.' : 'Leave the exam? Your progress is saved so you can resume.')) router.push('/exam'); }}
+              className="shrink-0 p-2 rounded-lg border border-[var(--border-color)] hover:border-[var(--exam-accent)]" aria-label={isVi ? 'Thoát' : 'Exit'}>
+              <ArrowLeftIcon className="w-4 h-4" />
+            </button>
+            <div className="min-w-0">
+              <div className="text-sm font-semibold truncate">{pickLang(exam.title, L)}</div>
+              <div className="text-xs text-text-muted">{showProgress ? `${doneCount}/${totalQ} ${isVi ? 'đã làm' : 'done'} · ${progressPct}%` : (exam.peType || '')}</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            {expiresAt && (
+              <div className={`exam-timer flex items-center gap-1.5 font-bold text-lg ${timerCls}`}>
+                <ClockIcon className="w-5 h-5" /> {fmt(remaining)}
+              </div>
+            )}
+            <button onClick={() => { setL(isVi ? 'en' : 'vi'); }} className="text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-[var(--border-color)] hover:border-[var(--exam-accent)]">
+              {isVi ? 'EN' : 'VI'}
+            </button>
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          {expiresAt && (
-            <div className={`exam-timer flex items-center gap-1.5 font-bold text-lg ${timerCls}`}>
-              <ClockIcon className="w-5 h-5" /> {fmt(remaining)}
-            </div>
-          )}
-          <button onClick={() => { setL(isVi ? 'en' : 'vi'); }} className="text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-[var(--border-color)] hover:border-[var(--exam-accent)]">
-            {isVi ? 'EN' : 'VI'}
-          </button>
-        </div>
+        {showProgress && (
+          <div className="exam-progress" role="progressbar" aria-valuenow={progressPct} aria-valuemin={0} aria-valuemax={100} title={`${doneCount}/${totalQ}`}>
+            <div className="exam-progress-fill" style={{ width: `${progressPct}%` }} />
+          </div>
+        )}
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-5 grid lg:grid-cols-[1fr_280px] gap-5">

@@ -1587,5 +1587,95 @@ export default {
         },
       ],
     },
+    {
+      "title": "Final Exam|||Thi cuối kỳ",
+      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "lessons": [
+        {
+          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "slug": "wdu203c-final-exam-fe",
+          "type": "article",
+          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "quiz": {
+            "timeLimitSeconds": 360,
+            "questions": [
+              {
+                "id": "q1",
+                "points": 1,
+                "question": "What best describes UX (user experience)?|||Điều gì mô tả đúng nhất UX (trải nghiệm người dùng)?",
+                "options": [
+                  "Only the visual look of a screen|||Chỉ là vẻ ngoài hình ảnh của màn hình",
+                  "Everything a person feels while discovering, learning and using a product|||Mọi thứ một người cảm nhận khi biết đến, học và dùng sản phẩm",
+                  "The database schema|||Lược đồ cơ sở dữ liệu",
+                  "The marketing plan|||Kế hoạch marketing"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q2",
+                "points": 1,
+                "question": "A signifier is:|||Signifier là:",
+                "options": [
+                  "What an object lets you do|||Thứ vật thể cho phép bạn làm",
+                  "The visible clue that reveals what you can do|||Dấu hiệu nhìn thấy được tiết lộ bạn có thể làm gì",
+                  "A type of database index|||Một loại index cơ sở dữ liệu",
+                  "A color palette|||Một bảng màu"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q3",
+                "points": 1,
+                "question": "Grouping a text label right next to its input field mainly uses which Gestalt principle?|||Nhóm một nhãn ngay cạnh ô nhập của nó chủ yếu dùng nguyên tắc Gestalt nào?",
+                "options": [
+                  "Closure|||Khép kín",
+                  "Proximity|||Gần nhau",
+                  "Figure/ground|||Hình/nền",
+                  "Continuity|||Liên tục"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q4",
+                "points": 1,
+                "question": "A heuristic evaluation is best described as:|||Đánh giá heuristic được mô tả đúng nhất là:",
+                "options": [
+                  "A test with many real users|||Một buổi test với nhiều người dùng thật",
+                  "An expert inspection against usability rules, without users|||Chuyên gia soi giao diện theo quy tắc khả dụng, không cần người dùng",
+                  "An A/B test on live traffic|||Một A/B test trên lưu lượng thật",
+                  "A survey of 500 people|||Một khảo sát 500 người"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q5",
+                "points": 1,
+                "question": "Showing a \"Saved ✓\" message after an action best satisfies which Nielsen heuristic?|||Hiện thông báo \"Đã lưu ✓\" sau một hành động thoả mãn tốt nhất heuristic Nielsen nào?",
+                "options": [
+                  "Visibility of system status|||Hiển thị trạng thái hệ thống",
+                  "Aesthetic & minimalist design|||Thẩm mỹ & tối giản",
+                  "Help & documentation|||Trợ giúp & tài liệu",
+                  "Flexibility & efficiency|||Linh hoạt & hiệu quả"
+                ],
+                "correctIndex": 0
+              },
+              {
+                "id": "q6",
+                "points": 1,
+                "question": "(Beyond syllabus) Hick's Law implies a designer should:|||(Ngoài giáo trình) Định luật Hick hàm ý nhà thiết kế nên:",
+                "options": [
+                  "Add as many menu options as possible|||Thêm càng nhiều lựa chọn menu càng tốt",
+                  "Reduce the number/complexity of choices to speed decisions|||Giảm số/độ phức tạp lựa chọn để quyết định nhanh hơn",
+                  "Make buttons smaller|||Làm nút nhỏ hơn",
+                  "Remove all help text|||Bỏ hết chữ trợ giúp"
+                ],
+                "correctIndex": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
   ],
 };

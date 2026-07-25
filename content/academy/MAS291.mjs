@@ -1156,5 +1156,95 @@ stats.<span class="tok-function">ttest_1samp</span>(data, 5)  <span class="tok-c
       ],
     },
     /* END-SECTIONS-MARKER */
+    {
+      "title": "Final Exam|||Thi cuối kỳ",
+      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "lessons": [
+        {
+          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "slug": "mas291-final-exam-fe",
+          "type": "article",
+          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "quiz": {
+            "timeLimitSeconds": 360,
+            "questions": [
+              {
+                "id": "q1",
+                "points": 1,
+                "question": "For a fair die, P(rolling an even number) is…|||Với xúc xắc cân đối, P(ra số chẵn) là…",
+                "options": [
+                  "1/6",
+                  "1/2",
+                  "1/3",
+                  "2/3"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q2",
+                "points": 1,
+                "question": "The general addition rule P(A∪B) equals…|||Quy tắc cộng tổng quát P(A∪B) bằng…",
+                "options": [
+                  "P(A)·P(B)",
+                  "P(A) + P(B) − P(A∩B)",
+                  "P(A) − P(B)",
+                  "P(A|B)"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q3",
+                "points": 1,
+                "question": "For \"at least one\" problems, the quickest tool is usually…|||Với bài \"ít nhất một\", công cụ nhanh nhất thường là…",
+                "options": [
+                  "the multiplication rule|||quy tắc nhân",
+                  "the complement, 1 − P(none)|||biến cố đối, 1 − P(không cái nào)",
+                  "Bayes",
+                  "conditional probability|||xác suất có điều kiện"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q4",
+                "points": 1,
+                "question": "P(A|B) is defined as…|||P(A|B) được định nghĩa là…",
+                "options": [
+                  "P(A)·P(B)",
+                  "P(A∩B) / P(B)",
+                  "P(A) + P(B)",
+                  "P(B) / P(A)"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q5",
+                "points": 1,
+                "question": "After a positive on a 99%-accurate test for a rare (1%) disease, the chance of being sick is only ~17% because…|||Sau dương tính trên xét nghiệm chính xác 99% cho bệnh hiếm (1%), khả năng mắc chỉ ~17% vì…",
+                "options": [
+                  "the test is broken|||xét nghiệm hỏng",
+                  "the low base rate makes most positives false alarms|||tỷ lệ nền thấp khiến hầu hết dương tính là báo động giả",
+                  "Bayes is wrong|||Bayes sai",
+                  "the sample is small|||mẫu nhỏ"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q6",
+                "points": 1,
+                "question": "Independent and mutually exclusive events are…|||Biến cố độc lập và xung khắc là…",
+                "options": [
+                  "the same thing|||cùng một thứ",
+                  "opposite ideas (independent can co-occur; exclusive cannot)|||ý đối lập (độc lập có thể cùng xảy ra; xung khắc không)",
+                  "both impossible|||đều bất khả",
+                  "only for dice|||chỉ cho xúc xắc"
+                ],
+                "correctIndex": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
   ],
 };

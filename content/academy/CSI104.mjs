@@ -2769,5 +2769,95 @@ export default {
         },
       ],
     },
+    {
+      "title": "Final Exam|||Thi cuối kỳ",
+      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "lessons": [
+        {
+          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "slug": "csi104-final-exam-fe",
+          "type": "article",
+          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "quiz": {
+            "timeLimitSeconds": 360,
+            "questions": [
+              {
+                "id": "q1",
+                "points": 1,
+                "question": "The Von Neumann model's key idea is that…|||Ý tưởng then chốt của mô hình Von Neumann là…",
+                "options": [
+                  "the CPU has many cores|||CPU có nhiều nhân",
+                  "the program is stored in memory like data|||chương trình được lưu trong bộ nhớ như dữ liệu",
+                  "input equals output|||đầu vào bằng đầu ra",
+                  "memory never forgets|||bộ nhớ không bao giờ quên"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q2",
+                "points": 1,
+                "question": "Which two parts make up the CPU's core, apart from registers?|||Ngoài thanh ghi, hai phần nào tạo nên lõi CPU?",
+                "options": [
+                  "RAM and disk|||RAM và đĩa",
+                  "Control Unit and ALU|||Control Unit và ALU",
+                  "Keyboard and screen|||Bàn phím và màn hình",
+                  "Cache and bus|||Cache và bus"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q3",
+                "points": 1,
+                "question": "The correct order of the instruction cycle is:|||Thứ tự đúng của chu trình lệnh là:",
+                "options": [
+                  "Execute → Fetch → Decode|||Thực thi → Nạp → Giải mã",
+                  "Fetch → Decode → Execute|||Nạp → Giải mã → Thực thi",
+                  "Decode → Execute → Fetch|||Giải mã → Thực thi → Nạp",
+                  "Store → Fetch → Decode|||Lưu → Nạp → Giải mã"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q4",
+                "points": 1,
+                "question": "Why is cache memory used?|||Vì sao dùng bộ nhớ cache?",
+                "options": [
+                  "To store files permanently|||Để lưu tệp vĩnh viễn",
+                  "To bridge the speed gap between CPU and RAM|||Để bắc cầu chênh lệch tốc độ giữa CPU và RAM",
+                  "To connect to the network|||Để kết nối mạng",
+                  "To replace the ALU|||Để thay thế ALU"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q5",
+                "points": 1,
+                "question": "RAM is described as \"volatile\" because…|||RAM được mô tả là \"bay hơi\" vì…",
+                "options": [
+                  "it is very fast|||nó rất nhanh",
+                  "it loses its contents when power is off|||nó mất nội dung khi tắt điện",
+                  "it can catch fire|||nó có thể bốc cháy",
+                  "it is larger than a disk|||nó lớn hơn đĩa"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q6",
+                "points": 1,
+                "question": "An interrupt lets the CPU…|||Ngắt (interrupt) cho phép CPU…",
+                "options": [
+                  "constantly poll each device|||liên tục hỏi vòng mọi thiết bị",
+                  "do other work until a device signals it is ready|||làm việc khác cho tới khi thiết bị báo sẵn sàng",
+                  "shut down safely|||tắt máy an toàn",
+                  "convert numbers to binary|||chuyển số sang nhị phân"
+                ],
+                "correctIndex": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
   ],
 };

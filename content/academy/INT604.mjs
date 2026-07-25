@@ -1847,5 +1847,102 @@ audit.<span class="tok-function">save</span>(<span class="tok-keyword">new</span
         },
       ],
     },
+    {
+      "title": "Final Exam|||Thi cuối kỳ",
+      "description": "Thi cuối kỳ gồm PE (thi thực hành) và FE (trắc nghiệm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "lessons": [
+        {
+          "title": "PE — Practical Exam|||PE — Thi thực hành",
+          "slug": "int604-final-exam-pe",
+          "type": "article",
+          "description": "Khung thi thực hành (PE) của môn — format, cách chấm và cách chuẩn bị. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · PE</span>\n<h2>PE — Practical Exam</h2>\n<p class=\"lead\">The Practical Exam (PE) is a <strong>hands-on coding exam</strong>: you are given a problem or feature and must write (and usually run) working code on the machine within a time limit. It is graded on correctness, whether it runs, and good practice.</p>\n<h3>How to prepare</h3>\n<ul>\n<li>Rebuild small features from a blank file, <em>without notes</em> &mdash; copying tutorials is not enough.</li>\n<li>Practise the core pattern of this subject end-to-end until you can do it from memory.</li>\n<li>Read the requirement twice; build the smallest working version first, then extend.</li>\n<li>Test as you go; a program that runs and does 80% beats one that does not compile.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A real practical prompt bank for this subject will be added here later, in the exam room. Use the guidance above to prepare now.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · PE</span>\n<h2>PE — Thi thực hành</h2>\n<p class=\"lead\">Thi thực hành (PE) là <strong>thi code trực tiếp</strong>: bạn được giao một bài toán/tính năng và phải viết (thường là chạy) code hoạt động trên máy trong thời gian quy định. Chấm theo tính đúng, có chạy được không, và thực hành tốt.</p>\n<h3>Cách chuẩn bị</h3>\n<ul>\n<li>Dựng lại các tính năng nhỏ từ một file trống, <em>không nhìn ghi chú</em> &mdash; chép tutorial là chưa đủ.</li>\n<li>Luyện mẫu cốt lõi của môn đầu-cuối tới khi làm được từ trí nhớ.</li>\n<li>Đọc yêu cầu hai lần; dựng bản chạy được nhỏ nhất trước, rồi mở rộng.</li>\n<li>Test dọc đường; một chương trình chạy và làm được 80% hơn một chương trình không biên dịch nổi.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Ngân hàng đề thực hành thật cho môn này sẽ được thêm vào đây sau, trong trang phòng thi. Dùng hướng dẫn trên để chuẩn bị ngay từ giờ.</div>\n</div>"
+        },
+        {
+          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "slug": "int604-final-exam-fe",
+          "type": "article",
+          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "quiz": {
+            "timeLimitSeconds": 360,
+            "questions": [
+              {
+                "id": "q1",
+                "points": 1,
+                "question": "Which column makes a second agent lose the race for a ticket, and where does the guarantee live?|||Cột nào khiến agent thứ hai thua cuộc đua giành ticket, và sự bảo đảm nằm ở đâu?",
+                "options": [
+                  "priority; guaranteed by a Java if-check|||priority; bảo đảm bằng câu if trong Java",
+                  "version; guaranteed by a guarded UPDATE in the database|||version; bảo đảm bằng một UPDATE có canh trong CSDL",
+                  "subject; guaranteed by JWT|||subject; bảo đảm bằng JWT",
+                  "created_at; guaranteed by the client|||created_at; bảo đảm bằng client"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q2",
+                "points": 1,
+                "question": "The relationship \"a user opens many tickets\" is which cardinality?|||Quan hệ \"một user mở nhiều ticket\" là lực lượng nào?",
+                "options": [
+                  "1—1",
+                  "1—* (one-to-many)|||1—* (một-nhiều)",
+                  "*—* (many-to-many)|||*—* (nhiều-nhiều)",
+                  "0—0"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q3",
+                "points": 1,
+                "question": "Why constrain status to a fixed enum / CHECK instead of free text?|||Vì sao ràng buộc status vào một enum / CHECK cố định thay vì text tự do?",
+                "options": [
+                  "It is faster to type|||Gõ nhanh hơn",
+                  "So the state machine has a closed, known set of states and queries stay reliable|||Để máy trạng thái có tập trạng thái đóng, đã biết và truy vấn vẫn đáng tin",
+                  "JPA requires it|||JPA bắt buộc",
+                  "To avoid using an index|||Để tránh dùng index"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q4",
+                "points": 1,
+                "question": "Two agents read ticket 42 (assignee NULL, version 0), then both UPDATE ... WHERE version=0. What happens?|||Hai agent đọc ticket 42 (assignee NULL, version 0), rồi cả hai UPDATE ... WHERE version=0. Điều gì xảy ra?",
+                "options": [
+                  "Both updates succeed|||Cả hai update thành công",
+                  "Both updates fail|||Cả hai update thất bại",
+                  "Exactly one matches 1 row; the other matches 0 rows and is rejected|||Đúng một cái trúng 1 dòng; cái kia trúng 0 dòng và bị từ chối",
+                  "The database crashes|||CSDL sập"
+                ],
+                "correctIndex": 2
+              },
+              {
+                "id": "q5",
+                "points": 1,
+                "question": "(Beyond syllabus) A DB-level CHECK (status IN (...)) protects you because…|||(Ngoài giáo trình) Một CHECK (status IN (...)) ở mức DB bảo vệ bạn vì…",
+                "options": [
+                  "It makes the app faster|||Nó làm app nhanh hơn",
+                  "Even a rogue script running raw SQL cannot write an invalid status|||Kể cả một script chạy SQL thô cũng không thể ghi một status không hợp lệ",
+                  "It replaces JWT|||Nó thay thế JWT",
+                  "It stores passwords|||Nó lưu mật khẩu"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q6",
+                "points": 1,
+                "question": "Why does UPDATE ... WHERE id=? AND status='OPEN' prevent two agents grabbing one ticket?|||Vì sao UPDATE ... WHERE id=? AND status='OPEN' chặn được hai agent giành một ticket?",
+                "options": [
+                  "The check and the write happen atomically; only the first UPDATE matches a row, the second affects 0 rows|||Việc kiểm và việc ghi xảy ra nguyên tử; chỉ UPDATE đầu khớp một dòng, cái thứ hai trúng 0 dòng",
+                  "It locks the whole table for one minute|||Nó khoá cả bảng một phút",
+                  "It disables other agent accounts|||Nó vô hiệu tài khoản agent khác",
+                  "It runs the two requests in random order|||Nó chạy hai request theo thứ tự ngẫu nhiên"
+                ],
+                "correctIndex": 0
+              }
+            ]
+          }
+        }
+      ]
+    },
   ],
 };

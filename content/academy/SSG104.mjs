@@ -731,5 +731,95 @@ export default {
         },
       ],
     },
+    {
+      "title": "Final Exam|||Thi cuối kỳ",
+      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "lessons": [
+        {
+          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "slug": "ssg104-final-exam-fe",
+          "type": "article",
+          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "quiz": {
+            "timeLimitSeconds": 360,
+            "questions": [
+              {
+                "id": "q1",
+                "points": 1,
+                "question": "The key difference between a group and a team is…|||Khác biệt then chốt giữa nhóm và đội là…",
+                "options": [
+                  "size|||kích thước",
+                  "a team shares a common goal with interdependent roles|||đội có mục tiêu chung với vai trò phụ thuộc lẫn nhau",
+                  "a group is bigger|||nhóm lớn hơn",
+                  "there is no difference|||không có khác biệt"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q2",
+                "points": 1,
+                "question": "The correct order of Tuckman's stages is…|||Thứ tự đúng các giai đoạn Tuckman là…",
+                "options": [
+                  "Storming → Forming → Norming → Performing",
+                  "Forming → Storming → Norming → Performing",
+                  "Norming → Forming → Storming → Performing",
+                  "Performing → Forming → Storming → Norming"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q3",
+                "points": 1,
+                "question": "In which stage does conflict typically emerge?|||Xung đột thường nổi lên ở giai đoạn nào?",
+                "options": [
+                  "Forming|||Hình thành",
+                  "Storming|||Bão tố",
+                  "Norming|||Chuẩn hoá",
+                  "Performing|||Hoạt động"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q4",
+                "points": 1,
+                "question": "When your team hits the storming stage, you should…|||Khi đội bạn tới giai đoạn bão tố, bạn nên…",
+                "options": [
+                  "give up — it failed|||bỏ cuộc — đội hỏng",
+                  "recognize it as normal and work through it|||nhận ra đó là bình thường và vượt qua",
+                  "remove all members|||loại mọi thành viên",
+                  "skip to performing|||nhảy tới hoạt động"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q5",
+                "points": 1,
+                "question": "Nonverbal communication includes…|||Giao tiếp phi lời gồm…",
+                "options": [
+                  "the exact words|||từ ngữ chính xác",
+                  "tone, body language, facial expression|||giọng điệu, ngôn ngữ cơ thể, nét mặt",
+                  "email text|||văn bản email",
+                  "a written report|||một báo cáo viết"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q6",
+                "points": 1,
+                "question": "Active listening means…|||Lắng nghe chủ động nghĩa là…",
+                "options": [
+                  "waiting for your turn to talk|||chờ tới lượt nói",
+                  "fully focusing on the speaker and reflecting back|||tập trung hoàn toàn vào người nói và phản hồi lại",
+                  "interrupting to correct them|||ngắt lời để sửa họ",
+                  "multitasking|||làm nhiều việc cùng lúc"
+                ],
+                "correctIndex": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
   ],
 };

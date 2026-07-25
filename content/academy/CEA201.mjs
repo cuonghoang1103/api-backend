@@ -1943,5 +1943,95 @@ Z, <span class="tok-function">DEC</span> 0</pre>
         },
       ],
     },
+    {
+      "title": "Final Exam|||Thi cuối kỳ",
+      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "lessons": [
+        {
+          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "slug": "cea201-final-exam-fe",
+          "type": "article",
+          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "quiz": {
+            "timeLimitSeconds": 360,
+            "questions": [
+              {
+                "id": "q1",
+                "points": 1,
+                "question": "Which is an ARCHITECTURE attribute (visible to the programmer)?|||Cái nào là thuộc tính KIẾN TRÚC (lập trình viên thấy được)?",
+                "options": [
+                  "Cache size|||Kích thước cache",
+                  "The instruction set|||Tập lệnh",
+                  "Bus width|||Độ rộng bus",
+                  "Control signals|||Tín hiệu điều khiển"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q2",
+                "points": 1,
+                "question": "Whether multiply is a hardware unit or done by repeated addition is a question of…|||Việc nhân là một mạch phần cứng hay làm bằng cộng lặp là câu hỏi về…",
+                "options": [
+                  "architecture|||kiến trúc",
+                  "organization|||tổ chức",
+                  "the operating system|||hệ điều hành",
+                  "the compiler|||trình biên dịch"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q3",
+                "points": 1,
+                "question": "Keeping architecture stable while improving organization gives us…|||Giữ kiến trúc ổn định trong khi cải tiến tổ chức cho ta…",
+                "options": [
+                  "slower computers|||máy chậm hơn",
+                  "software compatibility across generations|||tương thích phần mềm qua các thế hệ",
+                  "no benefit|||không lợi ích",
+                  "smaller instruction sets|||tập lệnh nhỏ hơn"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q4",
+                "points": 1,
+                "question": "Which is NOT one of the four basic computer functions?|||Cái nào KHÔNG phải một trong bốn chức năng cơ bản?",
+                "options": [
+                  "Data processing|||Xử lý dữ liệu",
+                  "Data storage|||Lưu trữ dữ liệu",
+                  "Data compression|||Nén dữ liệu",
+                  "Control|||Điều khiển"
+                ],
+                "correctIndex": 2
+              },
+              {
+                "id": "q5",
+                "points": 1,
+                "question": "In the structural hierarchy, the CPU contains…|||Trong phân cấp cấu trúc, CPU chứa…",
+                "options": [
+                  "the disk and printer|||đĩa và máy in",
+                  "Control Unit, ALU and registers|||Control Unit, ALU và thanh ghi",
+                  "only memory|||chỉ bộ nhớ",
+                  "the operating system|||hệ điều hành"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q6",
+                "points": 1,
+                "question": "Which technology defined the FIRST generation of computers?|||Công nghệ nào định nghĩa thế hệ máy tính ĐẦU TIÊN?",
+                "options": [
+                  "Transistors|||Transistor",
+                  "Integrated circuits|||Vi mạch tích hợp",
+                  "Vacuum tubes|||Đèn chân không",
+                  "Microprocessors|||Vi xử lý"
+                ],
+                "correctIndex": 2
+              }
+            ]
+          }
+        }
+      ]
+    },
   ],
 };

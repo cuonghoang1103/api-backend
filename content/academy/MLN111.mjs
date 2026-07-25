@@ -1291,5 +1291,95 @@ That's dialectical materialism as a decision procedure — genuinely useful, not
         },
       ],
     },
+    {
+      "title": "Final Exam|||Thi cuối kỳ",
+      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "lessons": [
+        {
+          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "slug": "mln111-final-exam-fe",
+          "type": "article",
+          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "quiz": {
+            "timeLimitSeconds": 360,
+            "questions": [
+              {
+                "id": "q1",
+                "points": 1,
+                "question": "The basic question of philosophy is about the relationship between:|||Vấn đề cơ bản của triết học là về quan hệ giữa:",
+                "options": [
+                  "Money and power|||Tiền và quyền",
+                  "Matter and consciousness (being and thinking)|||Vật chất và ý thức (tồn tại và tư duy)",
+                  "Rich and poor|||Giàu và nghèo",
+                  "Old and new|||Cũ và mới"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q2",
+                "points": 1,
+                "question": "Materialism holds that what is primary?|||Chủ nghĩa duy vật cho rằng cái gì có trước?",
+                "options": [
+                  "Consciousness/spirit|||Ý thức/tinh thần",
+                  "Matter|||Vật chất",
+                  "Neither|||Không cái nào",
+                  "God|||Thượng đế"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q3",
+                "points": 1,
+                "question": "The dialectical method sees things as:|||Phương pháp biện chứng nhìn sự vật là:",
+                "options": [
+                  "Isolated, static and unchanging|||Cô lập, tĩnh và bất biến",
+                  "Connected, in motion, with contradiction driving change|||Gắn kết, vận động, mâu thuẫn thúc đẩy thay đổi",
+                  "Purely random|||Hoàn toàn ngẫu nhiên",
+                  "Fixed forever|||Cố định mãi mãi"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q4",
+                "points": 1,
+                "question": "Marxist philosophy combines:|||Triết học Mác kết hợp:",
+                "options": [
+                  "Idealism and metaphysics|||Duy tâm và siêu hình",
+                  "Dialectical materialism and historical materialism|||Chủ nghĩa duy vật biện chứng và duy vật lịch sử",
+                  "Only metaphysics|||Chỉ siêu hình",
+                  "Agnosticism|||Thuyết bất khả tri"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q5",
+                "points": 1,
+                "question": "In Lenin's definition, the only essential property of matter is:|||Trong định nghĩa của Lênin, thuộc tính bản chất duy nhất của vật chất là:",
+                "options": [
+                  "Being hard and solid|||Cứng và rắn",
+                  "Existing as objective reality, independent of consciousness|||Tồn tại như thực tại khách quan, độc lập với ý thức",
+                  "Being visible|||Nhìn thấy được",
+                  "Being made of atoms only|||Chỉ làm bằng nguyên tử"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q6",
+                "points": 1,
+                "question": "The social origin of consciousness is:|||Nguồn gốc xã hội của ý thức là:",
+                "options": [
+                  "The atom|||Nguyên tử",
+                  "Labor and language|||Lao động và ngôn ngữ",
+                  "The weather|||Thời tiết",
+                  "Genetics only|||Chỉ di truyền"
+                ],
+                "correctIndex": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
   ],
 };

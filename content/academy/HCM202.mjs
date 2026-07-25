@@ -1272,5 +1272,95 @@ Idea: "serve the people."      →  Habit: volunteer / community work; use your 
         },
       ],
     },
+    {
+      "title": "Final Exam|||Thi cuối kỳ",
+      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "lessons": [
+        {
+          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "slug": "hcm202-final-exam-fe",
+          "type": "article",
+          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "quiz": {
+            "timeLimitSeconds": 360,
+            "questions": [
+              {
+                "id": "q1",
+                "points": 1,
+                "question": "Ho Chi Minh Ideology is officially defined as, above all:|||Tư tưởng Hồ Chí Minh được định nghĩa chính thức, trước hết là:",
+                "options": [
+                  "A collection of famous sayings|||Một tập hợp câu nói nổi tiếng",
+                  "A comprehensive, profound system of views on the fundamental issues of the Vietnamese revolution|||Một hệ thống quan điểm toàn diện, sâu sắc về những vấn đề cơ bản của cách mạng Việt Nam",
+                  "A biography|||Một tiểu sử",
+                  "A foreign policy plan|||Một kế hoạch đối ngoại"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q2",
+                "points": 1,
+                "question": "The theoretical core of Ho Chi Minh Ideology is:|||Hạt nhân lý luận của Tư tưởng Hồ Chí Minh là:",
+                "options": [
+                  "Confucianism alone|||Chỉ Nho giáo",
+                  "The creative application and development of Marxism-Leninism|||Sự vận dụng và phát triển sáng tạo chủ nghĩa Mác-Lênin",
+                  "Western liberalism|||Chủ nghĩa tự do phương Tây",
+                  "Traditional monarchy|||Chế độ quân chủ truyền thống"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q3",
+                "points": 1,
+                "question": "\"Creative application\" means Ho Chi Minh:|||\"Vận dụng sáng tạo\" nghĩa là Hồ Chí Minh:",
+                "options": [
+                  "Copied Marxism-Leninism mechanically|||Sao chép chủ nghĩa Mác-Lênin máy móc",
+                  "Adapted and developed it for Vietnam's concrete conditions|||Vận dụng và phát triển nó cho điều kiện cụ thể của Việt Nam",
+                  "Rejected Marxism-Leninism|||Bác bỏ chủ nghĩa Mác-Lênin",
+                  "Only used national tradition|||Chỉ dùng truyền thống dân tộc"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q4",
+                "points": 1,
+                "question": "The main method of studying the subject is:|||Phương pháp chính để nghiên cứu môn học là:",
+                "options": [
+                  "Guesswork|||Suy đoán",
+                  "Marxist dialectical & historical materialism, uniting theory & practice|||Duy vật biện chứng & duy vật lịch sử Mác-xít, thống nhất lý luận & thực tiễn",
+                  "Only memorizing dates|||Chỉ học thuộc ngày tháng",
+                  "Random reading|||Đọc ngẫu nhiên"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q5",
+                "points": 1,
+                "question": "For Ho Chi Minh, national independence must be tied to:|||Với Hồ Chí Minh, độc lập dân tộc phải gắn liền với:",
+                "options": [
+                  "A monarchy|||Chế độ quân chủ",
+                  "The people's freedom and happiness / socialism|||Tự do và hạnh phúc của nhân dân / chủ nghĩa xã hội",
+                  "Foreign protection|||Sự bảo hộ nước ngoài",
+                  "Isolation|||Sự biệt lập"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q6",
+                "points": 1,
+                "question": "The famous saying \"Nothing is more precious than...\" completes with:|||Câu nói nổi tiếng \"Không có gì quý hơn...\" hoàn thành bằng:",
+                "options": [
+                  "gold and silver|||vàng bạc",
+                  "independence and freedom|||độc lập, tự do",
+                  "power|||quyền lực",
+                  "territory|||lãnh thổ"
+                ],
+                "correctIndex": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
   ],
 };

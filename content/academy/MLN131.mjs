@@ -1208,5 +1208,95 @@ Phát triển lực lượng sản xuất bằng thị trường và nhiều th�
         },
       ],
     },
+    {
+      "title": "Final Exam|||Thi cuối kỳ",
+      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "lessons": [
+        {
+          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "slug": "mln131-final-exam-fe",
+          "type": "article",
+          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "quiz": {
+            "timeLimitSeconds": 360,
+            "questions": [
+              {
+                "id": "q1",
+                "points": 1,
+                "question": "What distinguishes \"scientific\" from \"utopian\" socialism?|||Điều gì phân biệt CNXH \"khoa học\" với \"không tưởng\"?",
+                "options": [
+                  "Scientific socialism is newer|||CNXH khoa học mới hơn",
+                  "It grounds the goal in historical laws and names the working class as the agent|||Nó đặt mục tiêu trên quy luật lịch sử và gọi tên giai cấp công nhân là chủ thể",
+                  "It rejects any idea of justice|||Nó bác bỏ mọi ý tưởng về công bằng",
+                  "It has no method|||Nó không có phương pháp"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q2",
+                "points": 1,
+                "question": "The working class has its historic mission mainly because of:|||Giai cấp công nhân có sứ mệnh lịch sử chủ yếu vì:",
+                "options": [
+                  "Its moral superiority|||Sự cao thượng đạo đức của nó",
+                  "Its objective position in modern large-scale production|||Địa vị khách quan của nó trong nền sản xuất đại công nghiệp hiện đại",
+                  "Its large numbers alone|||Chỉ vì số đông",
+                  "Government decree|||Sắc lệnh của chính phủ"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q3",
+                "points": 1,
+                "question": "A key SUBJECTIVE condition for fulfilling the mission is:|||Một điều kiện CHỦ QUAN then chốt để hoàn thành sứ mệnh là:",
+                "options": [
+                  "Owning factories|||Sở hữu nhà máy",
+                  "Having its own political party (armed with Marxism-Leninism) and alliances|||Có chính đảng của mình (trang bị Mác-Lênin) và liên minh",
+                  "A large territory|||Lãnh thổ rộng",
+                  "Foreign aid|||Viện trợ nước ngoài"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q4",
+                "points": 1,
+                "question": "(Beyond syllabus) The claim \"the working class is disappearing\" is best answered by:|||(Ngoài giáo trình) Luận điệu \"giai cấp công nhân đang biến mất\" được trả lời tốt nhất bằng:",
+                "options": [
+                  "Agreeing with it|||Đồng ý với nó",
+                  "Showing the class is changing form (knowledge/service work), not vanishing — wage labor without ownership still defines it|||Cho thấy giai cấp đang đổi hình thức (lao động tri thức/dịch vụ), không biến mất — lao động làm thuê không sở hữu vẫn định nghĩa nó",
+                  "Ignoring the claim|||Bỏ qua luận điệu",
+                  "Saying automation is fake|||Nói tự động hóa là giả"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q5",
+                "points": 1,
+                "question": "In Marxism, socialism is:|||Trong chủ nghĩa Mác, chủ nghĩa xã hội là:",
+                "options": [
+                  "The same as full communism|||Giống hệt chủ nghĩa cộng sản đầy đủ",
+                  "The first (lower) phase of the communist formation|||Giai đoạn đầu (thấp) của hình thái cộng sản chủ nghĩa",
+                  "A form of capitalism|||Một hình thức của chủ nghĩa tư bản",
+                  "A return to feudalism|||Sự quay lại phong kiến"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q6",
+                "points": 1,
+                "question": "Distribution in socialism is mainly:|||Phân phối trong CNXH chủ yếu là:",
+                "options": [
+                  "to each according to need|||theo nhu cầu",
+                  "to each according to labor|||theo lao động",
+                  "equal shares regardless of work|||chia đều bất kể lao động",
+                  "according to inheritance|||theo thừa kế"
+                ],
+                "correctIndex": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
   ],
 };

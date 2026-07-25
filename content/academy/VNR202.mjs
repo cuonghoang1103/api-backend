@@ -994,5 +994,95 @@ These are exactly the connections a high-scoring essay makes from history to the
         },
       ],
     },
+    {
+      "title": "Final Exam|||Thi cuối kỳ",
+      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "lessons": [
+        {
+          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "slug": "vnr202-final-exam-fe",
+          "type": "article",
+          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "quiz": {
+            "timeLimitSeconds": 360,
+            "questions": [
+              {
+                "id": "q1",
+                "points": 1,
+                "question": "The founding of the Communist Party of Vietnam in early 1930 resolved:|||Sự ra đời của Đảng Cộng sản Việt Nam đầu năm 1930 giải quyết:",
+                "options": [
+                  "a shortage of weapons|||sự thiếu vũ khí",
+                  "the crisis of a correct path and organized leadership for the revolution|||cuộc khủng hoảng về đường lối đúng và sự lãnh đạo có tổ chức cho cách mạng",
+                  "a food shortage|||nạn thiếu lương thực",
+                  "a lack of foreign aid|||sự thiếu viện trợ nước ngoài"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q2",
+                "points": 1,
+                "question": "The key personal role in founding & unifying the Party was played by:|||Vai trò cá nhân then chốt trong việc lập & hợp nhất Đảng thuộc về:",
+                "options": [
+                  "Phan Bội Châu",
+                  "Nguyễn Ái Quốc (Hồ Chí Minh)",
+                  "Phan Châu Trinh",
+                  "a foreign advisor|||một cố vấn nước ngoài"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q3",
+                "points": 1,
+                "question": "The August Revolution succeeded mainly because:|||Cách mạng Tháng Tám thành công chủ yếu vì:",
+                "options": [
+                  "Vietnam simply got lucky|||Việt Nam đơn thuần gặp may",
+                  "15 years of preparation plus seizing the golden opportunity when Japan surrendered|||15 năm chuẩn bị cộng chớp thời cơ vàng khi Nhật đầu hàng",
+                  "foreign armies took power for them|||quân đội nước ngoài giành chính quyền hộ",
+                  "the enemy voluntarily left|||kẻ thù tự nguyện rút đi"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q4",
+                "points": 1,
+                "question": "On 2 September 1945, Ho Chi Minh:|||Ngày 2/9/1945, Hồ Chí Minh:",
+                "options": [
+                  "founded the Party|||thành lập Đảng",
+                  "declared independence, founding the Democratic Republic of Vietnam|||đọc Tuyên ngôn Độc lập, khai sinh nước Việt Nam Dân chủ Cộng hòa",
+                  "signed a peace treaty with France|||ký hiệp ước hòa bình với Pháp",
+                  "launched Doi Moi|||khởi xướng đổi mới"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q5",
+                "points": 1,
+                "question": "The central leadership lesson of August 1945 is:|||Bài học lãnh đạo trung tâm của tháng Tám 1945 là:",
+                "options": [
+                  "wait passively|||chờ đợi thụ động",
+                  "prepare the force AND seize the opportunity at the right moment|||chuẩn bị lực lượng VÀ chớp thời cơ đúng thời điểm",
+                  "rely on luck|||dựa vào may mắn",
+                  "avoid all risk|||tránh mọi rủi ro"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q6",
+                "points": 1,
+                "question": "The Party's line in the resistance against France was summarized as:|||Đường lối của Đảng trong kháng chiến chống Pháp tóm tắt là:",
+                "options": [
+                  "quick victory by a small army|||thắng nhanh bằng một đội quân nhỏ",
+                  "whole-people, all-round, long-drawn-out, self-reliant|||toàn dân, toàn diện, trường kỳ, tự lực cánh sinh",
+                  "relying entirely on foreign armies|||dựa hoàn toàn vào quân đội nước ngoài",
+                  "surrender and negotiate|||đầu hàng và đàm phán"
+                ],
+                "correctIndex": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
   ],
 };

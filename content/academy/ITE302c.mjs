@@ -1213,5 +1213,102 @@ export default {
         },
       ],
     },
+    {
+      "title": "Final Exam|||Thi cuối kỳ",
+      "description": "Thi cuối kỳ gồm PE (thi thực hành) và FE (trắc nghiệm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "lessons": [
+        {
+          "title": "PE — Practical Exam|||PE — Thi thực hành",
+          "slug": "ite302c-final-exam-pe",
+          "type": "article",
+          "description": "Khung thi thực hành (PE) của môn — format, cách chấm và cách chuẩn bị. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · PE</span>\n<h2>PE — Practical Exam</h2>\n<p class=\"lead\">The Practical Exam (PE) is a <strong>writing / report exam</strong>: you are given a prompt (an essay question, a document, or a plan) and must produce a well-structured, well-argued piece within a time limit. It is graded on structure, argument, use of evidence, and clarity.</p>\n<h3>How to prepare</h3>\n<ul>\n<li>Practise the structure: thesis &rarr; evidence &rarr; analysis &rarr; conclusion.</li>\n<li>Prepare a few strong examples / sources you can cite quickly.</li>\n<li>Plan before you write: 2 minutes outlining saves ten minutes rewriting.</li>\n<li>Argue a clear position &mdash; do not just summarize.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A real practical prompt bank for this subject will be added here later, in the exam room. Use the guidance above to prepare now.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · PE</span>\n<h2>PE — Thi thực hành</h2>\n<p class=\"lead\">Thi thực hành (PE) là <strong>thi viết / báo cáo</strong>: bạn được giao một đề (câu hỏi luận, một tài liệu, hoặc một kế hoạch) và phải viết một bài có cấu trúc, lập luận tốt trong thời gian quy định. Chấm theo cấu trúc, lập luận, dùng bằng chứng, và sự rõ ràng.</p>\n<h3>Cách chuẩn bị</h3>\n<ul>\n<li>Luyện cấu trúc: luận đề &rarr; bằng chứng &rarr; phân tích &rarr; kết luận.</li>\n<li>Chuẩn bị vài ví dụ / nguồn mạnh có thể trích nhanh.</li>\n<li>Lập dàn ý trước khi viết: 2 phút dàn ý tiết kiệm mười phút viết lại.</li>\n<li>Lập luận một quan điểm rõ &mdash; đừng chỉ tóm tắt.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Ngân hàng đề thực hành thật cho môn này sẽ được thêm vào đây sau, trong trang phòng thi. Dùng hướng dẫn trên để chuẩn bị ngay từ giờ.</div>\n</div>"
+        },
+        {
+          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "slug": "ite302c-final-exam-fe",
+          "type": "article",
+          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "quiz": {
+            "timeLimitSeconds": 360,
+            "questions": [
+              {
+                "id": "q1",
+                "points": 1,
+                "question": "Which framework judges an action purely by its outcomes (greatest good for the greatest number)?|||Khung nào phán xét hành động thuần theo kết quả (điều tốt nhất cho số đông nhất)?",
+                "options": [
+                  "Deontology|||Nghĩa vụ luận",
+                  "Utilitarianism / consequentialism|||Vị lợi / hệ quả luận",
+                  "Virtue ethics|||Đạo đức đức hạnh",
+                  "Contractarianism|||Khế ước luận"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q2",
+                "points": 1,
+                "question": "\"Some actions (like violating consent) are wrong even if they produce good results.\" This is the core of…|||\"Một số hành động (như vi phạm sự đồng thuận) là sai kể cả khi cho kết quả tốt.\" Đây là cốt lõi của…",
+                "options": [
+                  "Utilitarianism|||Vị lợi",
+                  "Deontology (duty ethics)|||Nghĩa vụ luận",
+                  "Consequentialism|||Hệ quả luận",
+                  "Cost-benefit analysis|||Phân tích lợi ích–chi phí"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q3",
+                "points": 1,
+                "question": "Rawls' veil of ignorance asks you to design rules as if…|||Bức màn vô minh của Rawls yêu cầu thiết kế quy tắc như thể…",
+                "options": [
+                  "you already know you're in the majority|||bạn đã biết mình thuộc đa số",
+                  "you don't know which position in society you'll hold|||bạn không biết mình sẽ ở vị trí nào trong xã hội",
+                  "outcomes do not matter|||kết quả không quan trọng",
+                  "only profit matters|||chỉ lợi nhuận quan trọng"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q4",
+                "points": 1,
+                "question": "In ethics, the relationship between law and ethics is best described as…|||Quan hệ giữa luật và đạo đức được mô tả đúng nhất là…",
+                "options": [
+                  "identical — legal always means ethical|||đồng nhất — hợp pháp luôn là có đạo đức",
+                  "law is the floor (minimum); ethics asks for more|||luật là sàn (tối thiểu); đạo đức đòi hỏi hơn",
+                  "ethics is the minimum, law is optional|||đạo đức là tối thiểu, luật là tuỳ chọn",
+                  "they never overlap|||chúng không bao giờ chồng lấn"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q5",
+                "points": 1,
+                "question": "Why use all four frameworks instead of just one?|||Vì sao dùng cả bốn khung thay vì chỉ một?",
+                "options": [
+                  "To make decisions slower|||Để quyết định chậm hơn",
+                  "Each has a blind spot; together they triangulate the trade-off|||Mỗi khung có điểm mù; cùng nhau chúng tam giác hoá điểm đánh đổi",
+                  "The exam requires memorising four terms|||Đề thi bắt thuộc bốn thuật ngữ",
+                  "Only one is ever correct|||Chỉ một khung đúng"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q6",
+                "points": 1,
+                "question": "Training a face-recognition model mostly on light-skinned faces, so it fails on dark-skinned faces, is an example of…|||Huấn luyện mô hình nhận mặt chủ yếu trên da sáng nên thất bại với da tối là ví dụ của…",
+                "options": [
+                  "Confirmation bias|||Thiên kiến xác nhận",
+                  "Selection (sampling) bias|||Thiên kiến chọn mẫu",
+                  "Automation bias|||Thiên kiến tự động hoá",
+                  "No bias — it is just math|||Không thiên kiến — chỉ là toán"
+                ],
+                "correctIndex": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
   ],
 };

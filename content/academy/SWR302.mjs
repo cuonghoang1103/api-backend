@@ -1752,5 +1752,102 @@ Then  &lt;một kết quả quan sát được&gt;</pre>
         },
       ],
     },
+    {
+      "title": "Final Exam|||Thi cuối kỳ",
+      "description": "Thi cuối kỳ gồm PE (thi thực hành) và FE (trắc nghiệm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "lessons": [
+        {
+          "title": "PE — Practical Exam|||PE — Thi thực hành",
+          "slug": "swr302-final-exam-pe",
+          "type": "article",
+          "description": "Khung thi thực hành (PE) của môn — format, cách chấm và cách chuẩn bị. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · PE</span>\n<h2>PE — Practical Exam</h2>\n<p class=\"lead\">The Practical Exam (PE) is a <strong>writing / report exam</strong>: you are given a prompt (an essay question, a document, or a plan) and must produce a well-structured, well-argued piece within a time limit. It is graded on structure, argument, use of evidence, and clarity.</p>\n<h3>How to prepare</h3>\n<ul>\n<li>Practise the structure: thesis &rarr; evidence &rarr; analysis &rarr; conclusion.</li>\n<li>Prepare a few strong examples / sources you can cite quickly.</li>\n<li>Plan before you write: 2 minutes outlining saves ten minutes rewriting.</li>\n<li>Argue a clear position &mdash; do not just summarize.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A real practical prompt bank for this subject will be added here later, in the exam room. Use the guidance above to prepare now.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · PE</span>\n<h2>PE — Thi thực hành</h2>\n<p class=\"lead\">Thi thực hành (PE) là <strong>thi viết / báo cáo</strong>: bạn được giao một đề (câu hỏi luận, một tài liệu, hoặc một kế hoạch) và phải viết một bài có cấu trúc, lập luận tốt trong thời gian quy định. Chấm theo cấu trúc, lập luận, dùng bằng chứng, và sự rõ ràng.</p>\n<h3>Cách chuẩn bị</h3>\n<ul>\n<li>Luyện cấu trúc: luận đề &rarr; bằng chứng &rarr; phân tích &rarr; kết luận.</li>\n<li>Chuẩn bị vài ví dụ / nguồn mạnh có thể trích nhanh.</li>\n<li>Lập dàn ý trước khi viết: 2 phút dàn ý tiết kiệm mười phút viết lại.</li>\n<li>Lập luận một quan điểm rõ &mdash; đừng chỉ tóm tắt.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Ngân hàng đề thực hành thật cho môn này sẽ được thêm vào đây sau, trong trang phòng thi. Dùng hướng dẫn trên để chuẩn bị ngay từ giờ.</div>\n</div>"
+        },
+        {
+          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "slug": "swr302-final-exam-fe",
+          "type": "article",
+          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "quiz": {
+            "timeLimitSeconds": 360,
+            "questions": [
+              {
+                "id": "q1",
+                "points": 1,
+                "question": "A requirement should describe...|||Một yêu cầu nên mô tả...",
+                "options": [
+                  "The technology to use|||Công nghệ dùng để làm",
+                  "What the system must do, not how|||Cái hệ thống phải làm, không phải làm thế nào",
+                  "The database schema|||Lược đồ cơ sở dữ liệu",
+                  "The programming language|||Ngôn ngữ lập trình"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q2",
+                "points": 1,
+                "question": "\"Response time shall be under 2 seconds\" is a...|||\"Thời gian phản hồi phải dưới 2 giây\" là yêu cầu...",
+                "options": [
+                  "Functional requirement|||Chức năng",
+                  "Non-functional requirement (quality attribute)|||Phi chức năng (thuộc tính chất lượng)",
+                  "Business requirement|||Kinh doanh",
+                  "User story|||User story"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q3",
+                "points": 1,
+                "question": "Which is a BUSINESS requirement?|||Đâu là yêu cầu KINH DOANH?",
+                "options": [
+                  "The system shall hash passwords|||Hệ thống phải băm mật khẩu",
+                  "Reduce support tickets by 40%|||Giảm 40% ticket hỗ trợ",
+                  "A user can reset a password|||Người dùng đặt lại được mật khẩu",
+                  "Use PostgreSQL|||Dùng PostgreSQL"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q4",
+                "points": 1,
+                "question": "Boehm's 1:10:100 rule says the cost to fix a requirements defect...|||Quy tắc 1:10:100 của Boehm nói chi phí sửa lỗi yêu cầu...",
+                "options": [
+                  "Stays constant|||Không đổi",
+                  "Grows sharply the later it is found|||Tăng mạnh khi phát hiện càng muộn",
+                  "Decreases over time|||Giảm dần theo thời gian",
+                  "Only matters in testing|||Chỉ quan trọng khi kiểm thử"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q5",
+                "points": 1,
+                "question": "Which modal verb marks a MANDATORY requirement (RFC 2119)?|||Động từ tình thái nào đánh dấu yêu cầu BẮT BUỘC (RFC 2119)?",
+                "options": [
+                  "may",
+                  "should",
+                  "shall",
+                  "might"
+                ],
+                "correctIndex": 2
+              },
+              {
+                "id": "q6",
+                "points": 1,
+                "question": "A stakeholder is...|||Stakeholder là...",
+                "options": [
+                  "Only a paying customer|||Chỉ là khách trả tiền",
+                  "Anyone affected by or able to affect the system|||Bất kỳ ai chịu ảnh hưởng hoặc tác động được hệ thống",
+                  "Only the end user|||Chỉ là người dùng cuối",
+                  "The project manager only|||Chỉ là quản lý dự án"
+                ],
+                "correctIndex": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
   ],
 };

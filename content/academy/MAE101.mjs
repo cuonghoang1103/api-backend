@@ -1591,5 +1591,95 @@ v = np.array([1, 0])
         },
       ],
     },
+    {
+      "title": "Final Exam|||Thi cuối kỳ",
+      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "lessons": [
+        {
+          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "slug": "mae101-final-exam-fe",
+          "type": "article",
+          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "quiz": {
+            "timeLimitSeconds": 360,
+            "questions": [
+              {
+                "id": "q1",
+                "points": 1,
+                "question": "A two-sided limit at x=a exists only if…|||Giới hạn hai phía tại x=a tồn tại chỉ khi…",
+                "options": [
+                  "f(a) is defined|||f(a) xác định",
+                  "the left and right limits are equal|||giới hạn trái và phải bằng nhau",
+                  "f is a polynomial|||f là đa thức",
+                  "a = 0"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q2",
+                "points": 1,
+                "question": "lim(x→2) x² equals…|||lim(x→2) x² bằng…",
+                "options": [
+                  "2",
+                  "4",
+                  "8",
+                  "does not exist|||không tồn tại"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q3",
+                "points": 1,
+                "question": "lim(x→2) (x²−4)/(x−2) equals…|||lim(x→2) (x²−4)/(x−2) bằng…",
+                "options": [
+                  "0",
+                  "undefined|||không xác định",
+                  "4",
+                  "2"
+                ],
+                "correctIndex": 2
+              },
+              {
+                "id": "q4",
+                "points": 1,
+                "question": "When direct substitution gives 0/0, you should…|||Khi thay số trực tiếp ra 0/0, bạn nên…",
+                "options": [
+                  "conclude the limit does not exist|||kết luận giới hạn không tồn tại",
+                  "simplify (e.g. factor) then substitute again|||rút gọn (vd phân tích) rồi thay lại",
+                  "answer 1|||trả lời 1",
+                  "answer 0|||trả lời 0"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q5",
+                "points": 1,
+                "question": "lim(x→∞) (3x²+1)/(x²−5) equals…|||lim(x→∞) (3x²+1)/(x²−5) bằng…",
+                "options": [
+                  "0",
+                  "3",
+                  "∞",
+                  "1"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q6",
+                "points": 1,
+                "question": "The derivative f′(x) geometrically represents…|||Về mặt hình học, đạo hàm f′(x) biểu diễn…",
+                "options": [
+                  "the area under the curve|||diện tích dưới đường cong",
+                  "the slope of the tangent line|||độ dốc của tiếp tuyến",
+                  "the y-intercept|||giao điểm trục y",
+                  "the limit at infinity|||giới hạn ở vô cực"
+                ],
+                "correctIndex": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
   ],
 };

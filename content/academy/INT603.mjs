@@ -2381,5 +2381,102 @@ app.<span class="tok-function">post</span>(<span class="tok-string">"/api/bookin
         },
       ],
     },
+    {
+      "title": "Final Exam|||Thi cuối kỳ",
+      "description": "Thi cuối kỳ gồm PE (thi thực hành) và FE (trắc nghiệm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "lessons": [
+        {
+          "title": "PE — Practical Exam|||PE — Thi thực hành",
+          "slug": "int603-final-exam-pe",
+          "type": "article",
+          "description": "Khung thi thực hành (PE) của môn — format, cách chấm và cách chuẩn bị. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · PE</span>\n<h2>PE — Practical Exam</h2>\n<p class=\"lead\">The Practical Exam (PE) is a <strong>hands-on coding exam</strong>: you are given a problem or feature and must write (and usually run) working code on the machine within a time limit. It is graded on correctness, whether it runs, and good practice.</p>\n<h3>How to prepare</h3>\n<ul>\n<li>Rebuild small features from a blank file, <em>without notes</em> &mdash; copying tutorials is not enough.</li>\n<li>Practise the core pattern of this subject end-to-end until you can do it from memory.</li>\n<li>Read the requirement twice; build the smallest working version first, then extend.</li>\n<li>Test as you go; a program that runs and does 80% beats one that does not compile.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A real practical prompt bank for this subject will be added here later, in the exam room. Use the guidance above to prepare now.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · PE</span>\n<h2>PE — Thi thực hành</h2>\n<p class=\"lead\">Thi thực hành (PE) là <strong>thi code trực tiếp</strong>: bạn được giao một bài toán/tính năng và phải viết (thường là chạy) code hoạt động trên máy trong thời gian quy định. Chấm theo tính đúng, có chạy được không, và thực hành tốt.</p>\n<h3>Cách chuẩn bị</h3>\n<ul>\n<li>Dựng lại các tính năng nhỏ từ một file trống, <em>không nhìn ghi chú</em> &mdash; chép tutorial là chưa đủ.</li>\n<li>Luyện mẫu cốt lõi của môn đầu-cuối tới khi làm được từ trí nhớ.</li>\n<li>Đọc yêu cầu hai lần; dựng bản chạy được nhỏ nhất trước, rồi mở rộng.</li>\n<li>Test dọc đường; một chương trình chạy và làm được 80% hơn một chương trình không biên dịch nổi.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Ngân hàng đề thực hành thật cho môn này sẽ được thêm vào đây sau, trong trang phòng thi. Dùng hướng dẫn trên để chuẩn bị ngay từ giờ.</div>\n</div>"
+        },
+        {
+          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "slug": "int603-final-exam-fe",
+          "type": "article",
+          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "quiz": {
+            "timeLimitSeconds": 360,
+            "questions": [
+              {
+                "id": "q1",
+                "points": 1,
+                "question": "Two date ranges [checkIn, checkOut) on the same room overlap exactly when…|||Hai khoảng ngày [checkIn, checkOut) trên cùng một phòng chồng lấn đúng khi…",
+                "options": [
+                  "checkIn values are equal|||Các giá trị checkIn bằng nhau",
+                  "each range starts before the other ends: A.checkIn < B.checkOut AND A.checkOut > B.checkIn|||mỗi khoảng bắt đầu trước khi cái kia kết thúc: A.checkIn < B.checkOut VÀ A.checkOut > B.checkIn",
+                  "they are on different rooms|||chúng ở các phòng khác nhau",
+                  "one range is fully in the past|||một khoảng hoàn toàn trong quá khứ"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q2",
+                "points": 1,
+                "question": "Where does the absolute guarantee against overlapping bookings live?|||Sự bảo đảm tuyệt đối chống đặt chồng lấn nằm ở đâu?",
+                "options": [
+                  "In a JavaScript if-check|||Trong một câu if JavaScript",
+                  "In the PostgreSQL EXCLUDE constraint (btree_gist + daterange + &&)|||Trong ràng buộc EXCLUDE của PostgreSQL (btree_gist + daterange + &&)",
+                  "In the JWT|||Trong JWT",
+                  "In the REST client|||Trong REST client"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q3",
+                "points": 1,
+                "question": "Why model a stay as the half-open range [checkIn, checkOut) instead of a closed one?|||Vì sao mô hình kỳ lưu trú là khoảng nửa mở [checkIn, checkOut) thay vì khoảng đóng?",
+                "options": [
+                  "It is faster to query|||Truy vấn nhanh hơn",
+                  "So a guest checking out on a day does not falsely block a guest checking in the same day|||Để khách trả phòng một ngày không chặn nhầm khách nhận phòng cùng ngày",
+                  "Prisma requires it|||Prisma bắt buộc",
+                  "To avoid using an index|||Để tránh dùng index"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q4",
+                "points": 1,
+                "question": "Why is the exclusion constraint written with WHERE status IN (PENDING, CONFIRMED)?|||Vì sao ràng buộc exclusion viết kèm WHERE status IN (PENDING, CONFIRMED)?",
+                "options": [
+                  "To make it faster|||Để nó nhanh hơn",
+                  "So a CANCELLED or REJECTED range no longer blocks the room and can be re-booked|||Để một khoảng CANCELLED hoặc REJECTED không còn chặn phòng và có thể đặt lại",
+                  "To store the status column|||Để lưu cột status",
+                  "Because Prisma generated it|||Vì Prisma sinh ra nó"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q5",
+                "points": 1,
+                "question": "Why keep each reservation as a dated Booking row rather than a boolean \"booked\" on Room?|||Vì sao giữ mỗi lượt đặt là một dòng Booking có ngày thay vì một boolean \"đã đặt\" trên Room?",
+                "options": [
+                  "A boolean is more secure|||Boolean an toàn hơn",
+                  "To express partial availability — booked some nights, free others — and keep history|||Để diễn tả phòng trống một phần — đặt vài đêm, trống các đêm khác — và giữ lịch sử",
+                  "Prisma cannot store booleans|||Prisma không lưu được boolean",
+                  "To avoid foreign keys|||Để tránh khoá ngoại"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q6",
+                "points": 1,
+                "question": "(Beyond syllabus) The btree_gist extension is needed because…|||(Ngoài giáo trình) Extension btree_gist cần thiết vì…",
+                "options": [
+                  "it speeds up JWT signing|||nó tăng tốc ký JWT",
+                  "it lets one GiST index combine a scalar equality (roomId =) with a range overlap (&&) in the same EXCLUDE|||nó cho một index GiST kết hợp so-bằng scalar (roomId =) với chồng-lấn range (&&) trong cùng một EXCLUDE",
+                  "it is required by Prisma|||nó do Prisma yêu cầu",
+                  "it stores passwords|||nó lưu mật khẩu"
+                ],
+                "correctIndex": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
   ],
 };

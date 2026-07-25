@@ -1551,5 +1551,102 @@ Cohort (vào tuần 7)     100%  65%   —     —</div>
         },
       ],
     },
+    {
+      "title": "Final Exam|||Thi cuối kỳ",
+      "description": "Thi cuối kỳ gồm PE (thi thực hành) và FE (trắc nghiệm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "lessons": [
+        {
+          "title": "PE — Practical Exam|||PE — Thi thực hành",
+          "slug": "exe201-final-exam-pe",
+          "type": "article",
+          "description": "Khung thi thực hành (PE) của môn — format, cách chấm và cách chuẩn bị. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · PE</span>\n<h2>PE — Practical Exam</h2>\n<p class=\"lead\">The Practical Exam (PE) is a <strong>writing / report exam</strong>: you are given a prompt (an essay question, a document, or a plan) and must produce a well-structured, well-argued piece within a time limit. It is graded on structure, argument, use of evidence, and clarity.</p>\n<h3>How to prepare</h3>\n<ul>\n<li>Practise the structure: thesis &rarr; evidence &rarr; analysis &rarr; conclusion.</li>\n<li>Prepare a few strong examples / sources you can cite quickly.</li>\n<li>Plan before you write: 2 minutes outlining saves ten minutes rewriting.</li>\n<li>Argue a clear position &mdash; do not just summarize.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A real practical prompt bank for this subject will be added here later, in the exam room. Use the guidance above to prepare now.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · PE</span>\n<h2>PE — Thi thực hành</h2>\n<p class=\"lead\">Thi thực hành (PE) là <strong>thi viết / báo cáo</strong>: bạn được giao một đề (câu hỏi luận, một tài liệu, hoặc một kế hoạch) và phải viết một bài có cấu trúc, lập luận tốt trong thời gian quy định. Chấm theo cấu trúc, lập luận, dùng bằng chứng, và sự rõ ràng.</p>\n<h3>Cách chuẩn bị</h3>\n<ul>\n<li>Luyện cấu trúc: luận đề &rarr; bằng chứng &rarr; phân tích &rarr; kết luận.</li>\n<li>Chuẩn bị vài ví dụ / nguồn mạnh có thể trích nhanh.</li>\n<li>Lập dàn ý trước khi viết: 2 phút dàn ý tiết kiệm mười phút viết lại.</li>\n<li>Lập luận một quan điểm rõ &mdash; đừng chỉ tóm tắt.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Ngân hàng đề thực hành thật cho môn này sẽ được thêm vào đây sau, trong trang phòng thi. Dùng hướng dẫn trên để chuẩn bị ngay từ giờ.</div>\n</div>"
+        },
+        {
+          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "slug": "exe201-final-exam-fe",
+          "type": "article",
+          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "quiz": {
+            "timeLimitSeconds": 360,
+            "questions": [
+              {
+                "id": "q1",
+                "points": 1,
+                "question": "The \"core loop\" of a product is:|||\"Vòng lõi\" của một sản phẩm là:",
+                "options": [
+                  "Every feature the product could have|||Mọi tính năng sản phẩm có thể có",
+                  "The single repeated action that delivers the value|||Một hành động lặp lại tạo ra giá trị",
+                  "The login screen|||Màn hình đăng nhập",
+                  "The settings page|||Trang cài đặt"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q2",
+                "points": 1,
+                "question": "In MoSCoW, features you will NOT build for v1 are labeled:|||Trong MoSCoW, tính năng bạn KHÔNG xây cho v1 được gán nhãn:",
+                "options": [
+                  "Must|||Bắt buộc",
+                  "Should|||Nên",
+                  "Won't|||Chưa/không",
+                  "Could|||Có thể"
+                ],
+                "correctIndex": 2
+              },
+              {
+                "id": "q3",
+                "points": 1,
+                "question": "The biggest EXE201 build risk is:|||Rủi ro xây lớn nhất của EXE201 là:",
+                "options": [
+                  "Shipping too small a version|||Ship một bản quá nhỏ",
+                  "Over-building and never launching|||Xây quá nhiều và không bao giờ launch",
+                  "Adding analytics too early|||Thêm analytics quá sớm",
+                  "Talking to too many users|||Nói chuyện với quá nhiều người dùng"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q4",
+                "points": 1,
+                "question": "(Beyond syllabus) The \"riskiest assumption first\" rule means you build:|||(Ngoài giáo trình) Quy tắc \"giả định rủi ro nhất trước\" nghĩa là bạn xây:",
+                "options": [
+                  "The easiest feature first|||Tính năng dễ nhất trước",
+                  "The part that would kill you if it is wrong|||Phần mà nếu sai sẽ giết bạn",
+                  "The prettiest screen first|||Màn hình đẹp nhất trước",
+                  "The payment system first|||Hệ thanh toán trước"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q5",
+                "points": 1,
+                "question": "Before launching, you should test:|||Trước khi launch, bạn nên test:",
+                "options": [
+                  "Each feature separately only|||Chỉ từng tính năng riêng lẻ",
+                  "The whole core loop end-to-end as a real user|||Cả vòng lõi từ đầu đến cuối như một người dùng thật",
+                  "Nothing, launch and see|||Không gì cả, launch rồi xem",
+                  "Only the login|||Chỉ đăng nhập"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q6",
+                "points": 1,
+                "question": "YC's advice for getting your first users is:|||Lời khuyên của YC để có người dùng đầu tiên là:",
+                "options": [
+                  "Automate acquisition immediately|||Tự động hoá acquisition ngay",
+                  "Do things that don't scale (recruit them by hand)|||Làm những việc không mở rộng được (tuyển họ bằng tay)",
+                  "Buy ads at large scale|||Mua quảng cáo quy mô lớn",
+                  "Wait for word of mouth|||Chờ truyền miệng"
+                ],
+                "correctIndex": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
   ],
 };

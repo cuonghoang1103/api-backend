@@ -1183,5 +1183,95 @@ k² + (2k+1) = (k+1)²  ✓ — đúng là P(k+1). Xong.</div>
         },
       ],
     },
+    {
+      "title": "Final Exam|||Thi cuối kỳ",
+      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "lessons": [
+        {
+          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "slug": "mad101-final-exam-fe",
+          "type": "article",
+          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "quiz": {
+            "timeLimitSeconds": 360,
+            "questions": [
+              {
+                "id": "q1",
+                "points": 1,
+                "question": "The implication p → q is FALSE only when…|||Kéo theo p → q SAI chỉ khi…",
+                "options": [
+                  "p and q are both true|||p và q đều đúng",
+                  "p is true and q is false|||p đúng và q sai",
+                  "p is false|||p sai",
+                  "both are false|||cả hai sai"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q2",
+                "points": 1,
+                "question": "p ∧ q (conjunction) is true when…|||p ∧ q (hội) đúng khi…",
+                "options": [
+                  "at least one is true|||ít nhất một đúng",
+                  "both p and q are true|||cả p và q đều đúng",
+                  "both are false|||cả hai sai",
+                  "p implies q|||p kéo theo q"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q3",
+                "points": 1,
+                "question": "By De Morgan, ¬(p ∧ q) is equivalent to…|||Theo De Morgan, ¬(p ∧ q) tương đương với…",
+                "options": [
+                  "¬p ∧ ¬q",
+                  "¬p ∨ ¬q",
+                  "p ∨ q",
+                  "p → q"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q4",
+                "points": 1,
+                "question": "The quantifier ∀x P(x) means…|||Lượng từ ∀x P(x) nghĩa là…",
+                "options": [
+                  "there exists an x with P(x)|||tồn tại một x với P(x)",
+                  "for all x, P(x) is true|||với mọi x, P(x) đúng",
+                  "no x satisfies P|||không x nào thoả P",
+                  "exactly one x satisfies P|||đúng một x thoả P"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q5",
+                "points": 1,
+                "question": "¬∀x P(x) is equivalent to…|||¬∀x P(x) tương đương với…",
+                "options": [
+                  "∀x ¬P(x)",
+                  "∃x ¬P(x)",
+                  "∀x P(x)",
+                  "∃x P(x)"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q6",
+                "points": 1,
+                "question": "For A = {1,2,3}, B = {2,3,4}, A ∩ B is…|||Với A = {1,2,3}, B = {2,3,4}, A ∩ B là…",
+                "options": [
+                  "{1,2,3,4}",
+                  "{2,3}",
+                  "{1}",
+                  "{4}"
+                ],
+                "correctIndex": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
   ],
 };

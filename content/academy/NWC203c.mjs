@@ -802,5 +802,95 @@ export default {
         },
       ],
     },
+    {
+      "title": "Final Exam|||Thi cuối kỳ",
+      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "lessons": [
+        {
+          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "slug": "nwc203c-final-exam-fe",
+          "type": "article",
+          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "quiz": {
+            "timeLimitSeconds": 360,
+            "questions": [
+              {
+                "id": "q1",
+                "points": 1,
+                "question": "Why is networking built in layers?|||Vì sao mạng được xây theo tầng?",
+                "options": [
+                  "to make it slower|||để chậm hơn",
+                  "to split complexity so each layer solves one problem|||để chia độ phức tạp, mỗi tầng giải một vấn đề",
+                  "to use more cables|||để dùng nhiều cáp hơn",
+                  "for no reason|||không lý do"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q2",
+                "points": 1,
+                "question": "Which layer handles addressing and routing across networks?|||Tầng nào lo đánh địa chỉ và định tuyến qua các mạng?",
+                "options": [
+                  "Physical|||Vật lý",
+                  "Data Link|||Liên kết dữ liệu",
+                  "Network (IP)",
+                  "Application|||Ứng dụng"
+                ],
+                "correctIndex": 2
+              },
+              {
+                "id": "q3",
+                "points": 1,
+                "question": "The OSI model has how many layers?|||Mô hình OSI có bao nhiêu tầng?",
+                "options": [
+                  "4",
+                  "5",
+                  "7",
+                  "10"
+                ],
+                "correctIndex": 2
+              },
+              {
+                "id": "q4",
+                "points": 1,
+                "question": "Encapsulation means each layer, going down, …|||Đóng gói nghĩa là mỗi tầng, đi xuống, …",
+                "options": [
+                  "removes a header|||bóc một header",
+                  "adds its own header|||thêm header riêng",
+                  "deletes the data|||xoá dữ liệu",
+                  "skips the next layer|||bỏ tầng kế"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q5",
+                "points": 1,
+                "question": "Reliable, ordered end-to-end delivery is the job of which layer?|||Giao đầu-cuối tin cậy, đúng thứ tự là việc của tầng nào?",
+                "options": [
+                  "Physical|||Vật lý",
+                  "Transport (TCP)",
+                  "Data Link|||Liên kết dữ liệu",
+                  "Application|||Ứng dụng"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q6",
+                "points": 1,
+                "question": "Error control uses… to detect/fix errors.|||Kiểm soát lỗi dùng… để phát hiện/sửa lỗi.",
+                "options": [
+                  "faster CPUs|||CPU nhanh hơn",
+                  "redundant (extra) bits|||các bit dư (thêm)",
+                  "more cables|||nhiều cáp hơn",
+                  "encryption only|||chỉ mã hoá"
+                ],
+                "correctIndex": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
   ],
 };

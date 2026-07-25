@@ -1332,5 +1332,95 @@ export default {
         },
       ],
     },
+    {
+      "title": "Final Exam|||Thi cuối kỳ",
+      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "lessons": [
+        {
+          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "slug": "mln122-final-exam-fe",
+          "type": "article",
+          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "quiz": {
+            "timeLimitSeconds": 360,
+            "questions": [
+              {
+                "id": "q1",
+                "points": 1,
+                "question": "The object of Marxist-Leninist political economy is:|||Đối tượng của kinh tế chính trị Mác-Lênin là:",
+                "options": [
+                  "Only prices and money|||Chỉ giá cả và tiền tệ",
+                  "Relations of production (economic relations between people)|||Quan hệ sản xuất (quan hệ kinh tế giữa con người)",
+                  "Machines and technology|||Máy móc và công nghệ",
+                  "Only individual firms|||Chỉ doanh nghiệp cá biệt"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q2",
+                "points": 1,
+                "question": "The core method of political economy is:|||Phương pháp cốt lõi của kinh tế chính trị là:",
+                "options": [
+                  "Laboratory experiments|||Thí nghiệm phòng lab",
+                  "Scientific abstraction|||Trừu tượng hóa khoa học",
+                  "Random sampling|||Lấy mẫu ngẫu nhiên",
+                  "Guessing|||Đoán"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q3",
+                "points": 1,
+                "question": "Which is NOT one of the four functions?|||Cái nào KHÔNG phải một trong bốn chức năng?",
+                "options": [
+                  "Cognitive|||Nhận thức",
+                  "Practical|||Thực tiễn",
+                  "Entertainment|||Giải trí",
+                  "Ideological|||Tư tưởng"
+                ],
+                "correctIndex": 2
+              },
+              {
+                "id": "q4",
+                "points": 1,
+                "question": "(Beyond syllabus) Compared to mainstream micro/macro, political economy emphasizes:|||(Ngoài giáo trình) So với kinh tế vi/vĩ mô chính thống, kinh tế chính trị nhấn mạnh:",
+                "options": [
+                  "Only mathematical curves|||Chỉ đường cong toán học",
+                  "Who benefits and the social relations behind the numbers|||Ai được lợi và quan hệ xã hội sau các con số",
+                  "Only stock prices|||Chỉ giá cổ phiếu",
+                  "Nothing different|||Không gì khác"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q5",
+                "points": 1,
+                "question": "The two properties of a commodity are:|||Hai thuộc tính của hàng hóa là:",
+                "options": [
+                  "Price and cost|||Giá và chi phí",
+                  "Use-value and value|||Giá trị sử dụng và giá trị",
+                  "Supply and demand|||Cung và cầu",
+                  "Money and gold|||Tiền và vàng"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q6",
+                "points": 1,
+                "question": "The magnitude of a commodity's value is determined by:|||Lượng giá trị của hàng hóa được quyết định bởi:",
+                "options": [
+                  "The time you personally spent|||Thời gian cá nhân bạn bỏ ra",
+                  "Socially-necessary labor time|||Thời gian lao động xã hội cần thiết",
+                  "The seller's mood|||Tâm trạng người bán",
+                  "The buyer's income|||Thu nhập người mua"
+                ],
+                "correctIndex": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
   ],
 };

@@ -1510,5 +1510,876 @@ r.patch(<span class="tok-string">'/:id/confirm'</span>, auth, requireRole(<span 
         },
       ],
     },
+    {
+      title: 'Section 4 — The Booking Core (No Overlapping Stays)|||Mục 4 — Lõi đặt phòng (Không chồng ngày)',
+      lessons: [
+        {
+          title: '4.1 — The overlap rule & the exclusion constraint|||4.1 — Luật chồng ngày & ràng buộc loại trừ',
+          slug: 'int603-booking-core',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 4 · Lesson 4.1</span>
+<h2>Two stays must never overlap on the same room</h2>
+<p class="lead">This is the feature graders remember. "Don't let two guests book the same room on overlapping dates" sounds simple — but a naive check has a <strong>race condition</strong>, and getting the date boundaries wrong double-books or blocks legitimate back-to-back stays. Here is the correct interval logic, and a Postgres constraint that enforces it for you.</p>
+
+<h3>When do two date ranges overlap?</h3>
+<p>Range A = [in_A, out_A) and range B = [in_B, out_B) overlap if and only if:</p>
+<div class="formula"><span class="lbl">OVERLAP</span> in_A &lt; out_B  AND  out_A &gt; in_B</div>
+<div class="out">Room 7, existing booking: 10 Aug → 13 Aug  (half-open [10,13): occupies nights 10,11,12)
+
+  New: 13 Aug → 15 Aug   in=13, out=15 → 13 &lt; 13? NO  → NO overlap ✅ (checkout day = checkin day is fine)
+  New: 12 Aug → 14 Aug   12 &lt; 13 AND 14 &gt; 10 → YES → overlap ✗ reject
+  New: 09 Aug → 11 Aug   09 &lt; 13 AND 11 &gt; 10 → YES → overlap ✗ reject
+  New: 05 Aug → 10 Aug   05 &lt; 13 AND 10 &gt; 10? NO → NO overlap ✅</div>
+<p>The <strong>half-open</strong> interval <code>[check_in, check_out)</code> is the trick: the checkout morning is free for the next guest's check-in. Model nights, not days.</p>
+
+<h3>The naive service — has a race condition</h3>
+<pre><span class="tok-comment">// (A) READ: is the room free for these dates?</span>
+<span class="tok-keyword">const</span> clash = <span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">findFirst</span>({
+  where: {
+    roomId, status: <span class="tok-string">"CONFIRMED"</span>,
+    checkIn:  { lt: out },   <span class="tok-comment">// in_A &lt; out_B</span>
+    checkOut: { gt: <span class="tok-keyword">in_</span> },   <span class="tok-comment">// out_A &gt; in_B</span>
+  },
+});
+<span class="tok-keyword">if</span> (clash) <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Room not available for those dates"</span>);
+<span class="tok-comment">// (B) WRITE — but another request may have inserted between (A) and (B)!</span>
+<span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">create</span>({ data: { roomId, checkIn: <span class="tok-keyword">in_</span>, checkOut: out, guestId, status: <span class="tok-string">"CONFIRMED"</span> } });</pre>
+
+<h3>Why it breaks — two threads interleave</h3>
+<div class="out"><b>Time →</b>   Guest An                       Guest Binh
+  t1     (A) no clash for 10–13 ✅
+  t2                                  (A) no clash for 11–14 ✅  ← An not committed yet
+  t3     (B) INSERT 10–13
+  t4                                  (B) INSERT 11–14
+<b>Result (no guard):</b> room 7 double-booked for the night of the 11th–12th. ✗</div>
+
+<h3>The database enforces it — an EXCLUSION constraint</h3>
+<p>Postgres can guarantee "no two CONFIRMED bookings for the same room overlap" at the storage level — no application code can violate it. Prisma has no native syntax for this, so add it in a raw-SQL migration:</p>
+<pre><span class="tok-comment">-- migration.sql — enables range operators on scalar columns</span>
+<span class="tok-keyword">CREATE EXTENSION IF NOT EXISTS</span> btree_gist;
+
+<span class="tok-keyword">ALTER TABLE</span> "Booking"
+  <span class="tok-keyword">ADD CONSTRAINT</span> no_overlap
+  <span class="tok-keyword">EXCLUDE USING</span> gist (
+    "roomId" <span class="tok-keyword">WITH</span> =,
+    daterange("checkIn", "checkOut", <span class="tok-string">'[)'</span>) <span class="tok-keyword">WITH</span> &amp;&amp;
+  )
+  <span class="tok-keyword">WHERE</span> (status = <span class="tok-string">'CONFIRMED'</span>);</pre>
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">=</div><div class="lz-nbody"><div class="lz-ntitle">roomId WITH =</div><div class="lz-nsub">only rows for the SAME room are compared.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">&amp;&amp;</div><div class="lz-nbody"><div class="lz-ntitle">daterange(...) WITH &amp;&amp;</div><div class="lz-nsub">the range-overlap operator. If two same-room ranges overlap, the INSERT is rejected.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">▸</div><div class="lz-nbody"><div class="lz-ntitle">WHERE status='CONFIRMED'</div><div class="lz-nsub">cancelled bookings don't block the room — a partial constraint, like a partial index.</div></div></div>
+</div>
+
+<h3>The correct service — catch the constraint violation</h3>
+<pre><span class="tok-keyword">try</span> {
+  <span class="tok-keyword">return await</span> prisma.booking.<span class="tok-function">create</span>({
+    data: { roomId, checkIn: <span class="tok-keyword">in_</span>, checkOut: out, guestId, status: <span class="tok-string">"CONFIRMED"</span> },
+  });
+} <span class="tok-keyword">catch</span> (e) {
+  <span class="tok-comment">// Postgres 23P01 = exclusion_violation → Prisma P2010/known code</span>
+  <span class="tok-keyword">if</span> (e.code === <span class="tok-string">"P2010"</span> || e.meta?.code === <span class="tok-string">"23P01"</span>)
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Room not available for those dates"</span>);  <span class="tok-comment">// → 409</span>
+  <span class="tok-keyword">throw</span> e;
+}</pre>
+<p>Keep the fast-path <code>findFirst</code> check for a friendly early message, but the <strong>constraint is the source of truth</strong> — even under a perfect race, the second INSERT fails at the database.</p>
+
+<div class="pitfall"><strong>Trap:</strong> using closed ranges <code>[]</code> or comparing with <code>&lt;=</code>/<code>&gt;=</code>. That makes checkout-day == checkin-day count as an overlap, so you reject valid back-to-back stays and annoy real guests. Nights are half-open: <code>daterange(in, out, '[)')</code>.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why an exclusion constraint beats SERIALIZABLE-and-retry.</b> You could instead run the transaction at SERIALIZABLE isolation and retry on serialization failure — correct, but it pushes the burden onto every caller and hurts throughput. The exclusion constraint states the invariant <em>once, declaratively</em>, and the database enforces it for all writers forever. Declaring invariants in the schema is more robust than defending them in code. <em>Why beyond syllabus: exclusion constraints are a Postgres speciality the DB course never reaches, yet they're the canonical answer to "no overlapping reservations".</em></div>
+
+<a class="link-card codelab" href="/code-lab/postgresql?ref=%2Fcourses%2Fhomestay-booking-api%2Flearn&reflabel=INT603#module-933" target="_blank" rel="noopener">
+  <span class="lc-ico">🐘</span>
+  <span class="lc-body"><span class="lc-title">Concurrency &amp; locking in PostgreSQL</span><span class="lc-sub">Constraints, isolation, range types — on Code Lab.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 4 · Bài 4.1</span>
+<h2>Hai lượt ở không bao giờ được chồng ngày trên cùng một phòng</h2>
+<p class="lead">Đây là tính năng giám khảo nhớ nhất. "Đừng để hai khách đặt cùng một phòng vào những ngày chồng nhau" nghe đơn giản — nhưng kiểm tra ngây thơ có <strong>race condition</strong>, và làm sai biên ngày sẽ đặt trùng hoặc chặn nhầm những lượt ở nối tiếp hợp lệ. Đây là logic khoảng đúng, và một ràng buộc Postgres tự cưỡng chế nó cho bạn.</p>
+
+<h3>Khi nào hai khoảng ngày chồng nhau?</h3>
+<p>Khoảng A = [in_A, out_A) và khoảng B = [in_B, out_B) chồng nhau khi và chỉ khi:</p>
+<div class="formula"><span class="lbl">CHỒNG</span> in_A &lt; out_B  AND  out_A &gt; in_B</div>
+<div class="out">Phòng 7, booking sẵn có: 10/8 → 13/8  (nửa mở [10,13): chiếm đêm 10,11,12)
+
+  Mới: 13/8 → 15/8   in=13, out=15 → 13 &lt; 13? KHÔNG → KHÔNG chồng ✅ (ngày trả = ngày nhận thì ổn)
+  Mới: 12/8 → 14/8   12 &lt; 13 VÀ 14 &gt; 10 → CÓ → chồng ✗ từ chối
+  Mới: 09/8 → 11/8   09 &lt; 13 VÀ 11 &gt; 10 → CÓ → chồng ✗ từ chối
+  Mới: 05/8 → 10/8   05 &lt; 13 VÀ 10 &gt; 10? KHÔNG → KHÔNG chồng ✅</div>
+<p>Mẹo là khoảng <strong>nửa mở</strong> <code>[check_in, check_out)</code>: sáng ngày trả phòng vẫn rảnh cho khách sau nhận phòng. Mô hình theo đêm, không theo ngày.</p>
+
+<h3>Service ngây thơ — có race condition</h3>
+<pre><span class="tok-comment">// (A) ĐỌC: phòng có rảnh cho những ngày này không?</span>
+<span class="tok-keyword">const</span> clash = <span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">findFirst</span>({
+  where: {
+    roomId, status: <span class="tok-string">"CONFIRMED"</span>,
+    checkIn:  { lt: out },   <span class="tok-comment">// in_A &lt; out_B</span>
+    checkOut: { gt: <span class="tok-keyword">in_</span> },   <span class="tok-comment">// out_A &gt; in_B</span>
+  },
+});
+<span class="tok-keyword">if</span> (clash) <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Phòng không còn trống cho những ngày đó"</span>);
+<span class="tok-comment">// (B) GHI — nhưng request khác có thể đã chèn giữa (A) và (B)!</span>
+<span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">create</span>({ data: { roomId, checkIn: <span class="tok-keyword">in_</span>, checkOut: out, guestId, status: <span class="tok-string">"CONFIRMED"</span> } });</pre>
+
+<h3>Vì sao nó hỏng — hai luồng đan xen</h3>
+<div class="out"><b>Thời gian →</b>   Khách An                     Khách Bình
+  t1     (A) không đụng cho 10–13 ✅
+  t2                                  (A) không đụng cho 11–14 ✅  ← An chưa commit
+  t3     (B) INSERT 10–13
+  t4                                  (B) INSERT 11–14
+<b>Kết quả (không rào):</b> phòng 7 bị đặt trùng đêm 11–12. ✗</div>
+
+<h3>Để cơ sở dữ liệu cưỡng chế — ràng buộc EXCLUSION</h3>
+<p>Postgres bảo đảm được "không hai booking CONFIRMED cùng phòng chồng nhau" ngay ở tầng lưu trữ — không code ứng dụng nào vi phạm được. Prisma không có cú pháp gốc cho việc này, nên thêm bằng migration SQL thô:</p>
+<pre><span class="tok-comment">-- migration.sql — bật toán tử range trên cột vô hướng</span>
+<span class="tok-keyword">CREATE EXTENSION IF NOT EXISTS</span> btree_gist;
+
+<span class="tok-keyword">ALTER TABLE</span> "Booking"
+  <span class="tok-keyword">ADD CONSTRAINT</span> no_overlap
+  <span class="tok-keyword">EXCLUDE USING</span> gist (
+    "roomId" <span class="tok-keyword">WITH</span> =,
+    daterange("checkIn", "checkOut", <span class="tok-string">'[)'</span>) <span class="tok-keyword">WITH</span> &amp;&amp;
+  )
+  <span class="tok-keyword">WHERE</span> (status = <span class="tok-string">'CONFIRMED'</span>);</pre>
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">=</div><div class="lz-nbody"><div class="lz-ntitle">roomId WITH =</div><div class="lz-nsub">chỉ các dòng cùng phòng mới đem so.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">&amp;&amp;</div><div class="lz-nbody"><div class="lz-ntitle">daterange(...) WITH &amp;&amp;</div><div class="lz-nsub">toán tử chồng-khoảng. Nếu hai khoảng cùng phòng chồng nhau, INSERT bị từ chối.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">▸</div><div class="lz-nbody"><div class="lz-ntitle">WHERE status='CONFIRMED'</div><div class="lz-nsub">booking đã huỷ không chặn phòng — ràng buộc riêng phần, như index riêng phần.</div></div></div>
+</div>
+
+<h3>Service đúng — bắt vi phạm ràng buộc</h3>
+<pre><span class="tok-keyword">try</span> {
+  <span class="tok-keyword">return await</span> prisma.booking.<span class="tok-function">create</span>({
+    data: { roomId, checkIn: <span class="tok-keyword">in_</span>, checkOut: out, guestId, status: <span class="tok-string">"CONFIRMED"</span> },
+  });
+} <span class="tok-keyword">catch</span> (e) {
+  <span class="tok-comment">// Postgres 23P01 = exclusion_violation → Prisma P2010/mã đã biết</span>
+  <span class="tok-keyword">if</span> (e.code === <span class="tok-string">"P2010"</span> || e.meta?.code === <span class="tok-string">"23P01"</span>)
+    <span class="tok-keyword">throw new</span> <span class="tok-type">ConflictError</span>(<span class="tok-string">"Phòng không còn trống cho những ngày đó"</span>);  <span class="tok-comment">// → 409</span>
+  <span class="tok-keyword">throw</span> e;
+}</pre>
+<p>Giữ kiểm đường-nhanh <code>findFirst</code> để báo sớm thân thiện, nhưng <strong>ràng buộc là nguồn sự thật</strong> — kể cả dưới một race hoàn hảo, INSERT thứ hai vẫn fail ở cơ sở dữ liệu.</p>
+
+<div class="pitfall"><strong>Bẫy:</strong> dùng khoảng đóng <code>[]</code> hoặc so bằng <code>&lt;=</code>/<code>&gt;=</code>. Điều đó khiến ngày-trả == ngày-nhận bị tính là chồng, nên bạn từ chối những lượt ở nối tiếp hợp lệ và làm phiền khách thật. Đêm là nửa mở: <code>daterange(in, out, '[)')</code>.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao ràng buộc loại trừ hơn SERIALIZABLE-rồi-retry.</b> Bạn có thể chạy transaction ở mức cô lập SERIALIZABLE và retry khi lỗi tuần-tự-hoá — đúng, nhưng đẩy gánh nặng sang mọi người gọi và giảm thông lượng. Ràng buộc loại trừ phát biểu bất biến <em>một lần, khai báo</em>, và cơ sở dữ liệu cưỡng chế cho mọi người ghi mãi mãi. Khai báo bất biến trong schema bền hơn phòng thủ trong code. <em>Vì sao ngoài syllabus: ràng buộc loại trừ là đặc sản Postgres mà môn CSDL không chạm tới, nhưng lại là câu trả lời chuẩn cho "không đặt chỗ chồng nhau".</em></div>
+
+<a class="link-card codelab" href="/code-lab/postgresql?ref=%2Fcourses%2Fhomestay-booking-api%2Flearn&reflabel=INT603#module-933" target="_blank" rel="noopener">
+  <span class="lc-ico">🐘</span>
+  <span class="lc-body"><span class="lc-title">Tương tranh &amp; khoá trong PostgreSQL</span><span class="lc-sub">Ràng buộc, mức cô lập, kiểu range — trên Code Lab.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '4.2 — The booking endpoint & error responses|||4.2 — Endpoint đặt phòng & phản hồi lỗi',
+          slug: 'int603-booking-endpoint',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 4 · Lesson 4.2</span>
+<h2>The booking endpoint &amp; consistent error responses</h2>
+<p class="lead">In an Express REST API you validate the body, call the service, and translate its typed errors into clean HTTP through one central error middleware — so every client (mobile, web, Postman) sees the same predictable JSON.</p>
+
+<h3>Validate the body first (zod)</h3>
+<pre><span class="tok-keyword">const</span> BookingBody = z.<span class="tok-function">object</span>({
+  roomId:   z.<span class="tok-function">number</span>().<span class="tok-function">int</span>().<span class="tok-function">positive</span>(),
+  checkIn:  z.<span class="tok-function">coerce</span>.<span class="tok-function">date</span>(),
+  checkOut: z.<span class="tok-function">coerce</span>.<span class="tok-function">date</span>(),
+}).<span class="tok-function">refine</span>(b =&gt; b.checkOut &gt; b.checkIn, { message: <span class="tok-string">"checkOut must be after checkIn"</span> });</pre>
+
+<h3>The route handler</h3>
+<pre>router.<span class="tok-function">post</span>(<span class="tok-string">"/api/bookings"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
+  <span class="tok-keyword">try</span> {
+    <span class="tok-keyword">const</span> body = BookingBody.<span class="tok-function">parse</span>(req.body);          <span class="tok-comment">// 400 if invalid</span>
+    <span class="tok-keyword">const</span> booking = <span class="tok-keyword">await</span> bookingService.<span class="tok-function">create</span>(body, req.user.id);
+    res.<span class="tok-function">status</span>(<span class="tok-number">201</span>).<span class="tok-function">json</span>(booking);                    <span class="tok-comment">// 201 Created</span>
+  } <span class="tok-keyword">catch</span> (e) { next(e); }                            <span class="tok-comment">// hand to error middleware</span>
+});</pre>
+
+<h3>One error middleware for the whole API</h3>
+<pre><span class="tok-keyword">function</span> <span class="tok-function">errorHandler</span>(err, req, res, next) {
+  <span class="tok-keyword">if</span> (err <span class="tok-keyword">instanceof</span> z.ZodError)
+    <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(<span class="tok-number">400</span>).<span class="tok-function">json</span>({ status: <span class="tok-number">400</span>, message: <span class="tok-string">"Validation failed"</span>, issues: err.issues });
+  <span class="tok-keyword">if</span> (err <span class="tok-keyword">instanceof</span> ConflictError)
+    <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(<span class="tok-number">409</span>).<span class="tok-function">json</span>({ status: <span class="tok-number">409</span>, message: err.message });
+  <span class="tok-keyword">if</span> (err <span class="tok-keyword">instanceof</span> NotFoundError)
+    <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(<span class="tok-number">404</span>).<span class="tok-function">json</span>({ status: <span class="tok-number">404</span>, message: err.message });
+  console.<span class="tok-function">error</span>(err);
+  res.<span class="tok-function">status</span>(<span class="tok-number">500</span>).<span class="tok-function">json</span>({ status: <span class="tok-number">500</span>, message: <span class="tok-string">"Internal error"</span> });   <span class="tok-comment">// never leak the stack</span>
+}
+app.<span class="tok-function">use</span>(errorHandler);   <span class="tok-comment">// mounted LAST, after all routes</span></pre>
+
+<h3>Worked example — the status-code contract</h3>
+<table>
+<thead><tr><th>Situation</th><th>Status</th><th>Body</th></tr></thead>
+<tbody>
+<tr><td>Booked successfully</td><td>201 Created</td><td>the new booking</td></tr>
+<tr><td>Dates overlap an existing stay</td><td>409 Conflict</td><td>{ "status":409, "message":"Room not available for those dates" }</td></tr>
+<tr><td>checkOut ≤ checkIn / bad body</td><td>400 Bad Request</td><td>{ "status":400, "message":"Validation failed", ... }</td></tr>
+<tr><td>Room id doesn't exist</td><td>404 Not Found</td><td>{ "status":404, "message":"Room not found" }</td></tr>
+<tr><td>No / expired token</td><td>401 Unauthorized</td><td>(from requireAuth)</td></tr>
+</tbody>
+</table>
+
+<div class="pitfall"><strong>Trap:</strong> forgetting <code>next(e)</code> inside the async handler, or mounting <code>errorHandler</code> before the routes. Express only routes an error to error-middleware if you call <code>next(err)</code>, and middleware runs in order — the handler must be the <em>last</em> <code>app.use</code>.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Validate at the edge, trust inside.</b> Parsing the body with zod at the boundary means the service layer receives already-typed, already-valid data — it never re-checks. Push validation to the edge and your core logic stays clean and total. <em>Why beyond syllabus: "parse, don't validate" is a design principle the syllabus never states but every robust API follows.</em></div>
+
+<a class="link-card codelab" href="/code-lab/rest-apis?ref=%2Fcourses%2Fhomestay-booking-api%2Flearn&reflabel=INT603#module-530" target="_blank" rel="noopener">
+  <span class="lc-ico">🌐</span>
+  <span class="lc-body"><span class="lc-title">Error handling &amp; validation on Code Lab</span><span class="lc-sub">Status codes, central error middleware, zod.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 4 · Bài 4.2</span>
+<h2>Endpoint đặt phòng &amp; phản hồi lỗi nhất quán</h2>
+<p class="lead">Trong REST API Express bạn validate thân, gọi service, và dịch lỗi có kiểu của nó thành HTTP sạch qua một middleware lỗi trung tâm — để mọi client (mobile, web, Postman) thấy cùng một JSON đoán trước được.</p>
+
+<h3>Validate thân trước (zod)</h3>
+<pre><span class="tok-keyword">const</span> BookingBody = z.<span class="tok-function">object</span>({
+  roomId:   z.<span class="tok-function">number</span>().<span class="tok-function">int</span>().<span class="tok-function">positive</span>(),
+  checkIn:  z.<span class="tok-function">coerce</span>.<span class="tok-function">date</span>(),
+  checkOut: z.<span class="tok-function">coerce</span>.<span class="tok-function">date</span>(),
+}).<span class="tok-function">refine</span>(b =&gt; b.checkOut &gt; b.checkIn, { message: <span class="tok-string">"checkOut phải sau checkIn"</span> });</pre>
+
+<h3>Route handler</h3>
+<pre>router.<span class="tok-function">post</span>(<span class="tok-string">"/api/bookings"</span>, requireAuth, <span class="tok-keyword">async</span> (req, res, next) =&gt; {
+  <span class="tok-keyword">try</span> {
+    <span class="tok-keyword">const</span> body = BookingBody.<span class="tok-function">parse</span>(req.body);          <span class="tok-comment">// 400 nếu sai</span>
+    <span class="tok-keyword">const</span> booking = <span class="tok-keyword">await</span> bookingService.<span class="tok-function">create</span>(body, req.user.id);
+    res.<span class="tok-function">status</span>(<span class="tok-number">201</span>).<span class="tok-function">json</span>(booking);                    <span class="tok-comment">// 201 Created</span>
+  } <span class="tok-keyword">catch</span> (e) { next(e); }                            <span class="tok-comment">// chuyển cho middleware lỗi</span>
+});</pre>
+
+<h3>Một middleware lỗi cho cả API</h3>
+<pre><span class="tok-keyword">function</span> <span class="tok-function">errorHandler</span>(err, req, res, next) {
+  <span class="tok-keyword">if</span> (err <span class="tok-keyword">instanceof</span> z.ZodError)
+    <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(<span class="tok-number">400</span>).<span class="tok-function">json</span>({ status: <span class="tok-number">400</span>, message: <span class="tok-string">"Validation failed"</span>, issues: err.issues });
+  <span class="tok-keyword">if</span> (err <span class="tok-keyword">instanceof</span> ConflictError)
+    <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(<span class="tok-number">409</span>).<span class="tok-function">json</span>({ status: <span class="tok-number">409</span>, message: err.message });
+  <span class="tok-keyword">if</span> (err <span class="tok-keyword">instanceof</span> NotFoundError)
+    <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(<span class="tok-number">404</span>).<span class="tok-function">json</span>({ status: <span class="tok-number">404</span>, message: err.message });
+  console.<span class="tok-function">error</span>(err);
+  res.<span class="tok-function">status</span>(<span class="tok-number">500</span>).<span class="tok-function">json</span>({ status: <span class="tok-number">500</span>, message: <span class="tok-string">"Internal error"</span> });   <span class="tok-comment">// không bao giờ lộ stack</span>
+}
+app.<span class="tok-function">use</span>(errorHandler);   <span class="tok-comment">// gắn CUỐI cùng, sau mọi route</span></pre>
+
+<h3>Ví dụ có lời giải — hợp đồng mã trạng thái</h3>
+<table>
+<thead><tr><th>Tình huống</th><th>Mã</th><th>Thân</th></tr></thead>
+<tbody>
+<tr><td>Đặt thành công</td><td>201 Created</td><td>booking mới</td></tr>
+<tr><td>Ngày chồng một lượt ở sẵn có</td><td>409 Conflict</td><td>{ "status":409, "message":"Room not available for those dates" }</td></tr>
+<tr><td>checkOut ≤ checkIn / thân sai</td><td>400 Bad Request</td><td>{ "status":400, "message":"Validation failed", ... }</td></tr>
+<tr><td>roomId không tồn tại</td><td>404 Not Found</td><td>{ "status":404, "message":"Room not found" }</td></tr>
+<tr><td>Không / hết hạn token</td><td>401 Unauthorized</td><td>(từ requireAuth)</td></tr>
+</tbody>
+</table>
+
+<div class="pitfall"><strong>Bẫy:</strong> quên <code>next(e)</code> trong handler async, hoặc gắn <code>errorHandler</code> trước các route. Express chỉ định tuyến lỗi tới error-middleware nếu bạn gọi <code>next(err)</code>, và middleware chạy theo thứ tự — handler phải là <code>app.use</code> <em>cuối cùng</em>.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Validate ở biên, tin ở trong.</b> Parse thân bằng zod ở ranh giới nghĩa là tầng service nhận dữ liệu đã có kiểu, đã hợp lệ — không phải kiểm lại. Đẩy validate ra biên và logic lõi của bạn sạch và toàn phần. <em>Vì sao ngoài syllabus: "parse, đừng validate" là nguyên tắc thiết kế giáo trình không nêu nhưng mọi API vững đều theo.</em></div>
+
+<a class="link-card codelab" href="/code-lab/rest-apis?ref=%2Fcourses%2Fhomestay-booking-api%2Flearn&reflabel=INT603#module-530" target="_blank" rel="noopener">
+  <span class="lc-ico">🌐</span>
+  <span class="lc-body"><span class="lc-title">Xử lý lỗi &amp; validate trên Code Lab</span><span class="lc-sub">Mã trạng thái, middleware lỗi trung tâm, zod.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '4.3 — Checkpoint quiz: the booking core|||4.3 — Quiz kiểm tra: lõi đặt phòng',
+          slug: 'int603-quiz-4',
+          type: 'QUIZ',
+          quiz: {
+            timeLimitSeconds: 360,
+            questions: [
+              {
+                id: 'q1',
+                question: 'Two date ranges [in_A, out_A) and [in_B, out_B) overlap exactly when:|||Hai khoảng ngày [in_A, out_A) và [in_B, out_B) chồng nhau chính xác khi:',
+                options: [
+                  'in_A < out_B AND out_A > in_B',
+                  'in_A > out_B AND out_A < in_B',
+                  'in_A = in_B AND out_A = out_B',
+                  'in_A <= out_B OR out_A >= in_B',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q2',
+                question: 'Why use a half-open range daterange(checkIn, checkOut, \'[)\') instead of a closed one?|||Vì sao dùng khoảng nửa mở daterange(checkIn, checkOut, \'[)\') thay vì khoảng đóng?',
+                options: [
+                  'So a guest checking out on day X does not block another guest checking in on day X|||Để khách trả phòng ngày X không chặn khách khác nhận phòng ngày X',
+                  'Because closed ranges are not supported by Postgres|||Vì Postgres không hỗ trợ khoảng đóng',
+                  'To make bookings last one extra night|||Để mỗi booking kéo dài thêm một đêm',
+                  'It has no effect|||Không có tác dụng gì',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q3',
+                question: 'What does the EXCLUDE USING gist (roomId WITH =, daterange(...) WITH &&) constraint guarantee?|||Ràng buộc EXCLUDE USING gist (roomId WITH =, daterange(...) WITH &&) bảo đảm gì?',
+                options: [
+                  'No two rows for the same room may have overlapping date ranges|||Không hai dòng cùng phòng được có khoảng ngày chồng nhau',
+                  'Every room can be booked only once ever|||Mỗi phòng chỉ được đặt đúng một lần duy nhất',
+                  'Bookings are automatically deleted after checkout|||Booking tự xoá sau khi trả phòng',
+                  'The room table is read-only|||Bảng phòng chỉ đọc',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q4',
+                question: 'Why keep the findFirst check AND the exclusion constraint?|||Vì sao giữ CẢ kiểm findFirst LẪN ràng buộc loại trừ?',
+                options: [
+                  'findFirst gives a fast friendly message; the constraint is the true backstop even under a race|||findFirst báo sớm thân thiện; ràng buộc là chốt chặn thật kể cả khi có race',
+                  'The constraint alone is too slow|||Chỉ ràng buộc thì quá chậm',
+                  'findFirst prevents the race by itself|||findFirst tự chặn race',
+                  'They do exactly the same thing|||Chúng làm y hệt nhau',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q5',
+                question: '(Beyond syllabus) Why is declaring an exclusion constraint preferable to running every booking at SERIALIZABLE with retry?|||(Ngoài giáo trình) Vì sao khai báo ràng buộc loại trừ tốt hơn chạy mọi booking ở SERIALIZABLE có retry?',
+                options: [
+                  'The invariant is stated once in the schema and enforced for all writers, without burdening every caller|||Bất biến phát biểu một lần trong schema và cưỡng chế cho mọi người ghi, không đè gánh lên mọi caller',
+                  'SERIALIZABLE is not a real isolation level|||SERIALIZABLE không phải mức cô lập thật',
+                  'Retries are impossible in Node.js|||Không thể retry trong Node.js',
+                  'Constraints are faster to type|||Ràng buộc gõ nhanh hơn',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+            ],
+          },
+        },
+      ],
+    },
+    {
+      title: 'Section 5 — Testing (prove no overlap)|||Mục 5 — Kiểm thử (chứng minh không chồng ngày)',
+      lessons: [
+        {
+          title: '5.1 — Unit, supertest & a concurrency test|||5.1 — Unit, supertest & test đồng thời',
+          slug: 'int603-testing',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 5 · Lesson 5.1</span>
+<h2>Testing a REST API: from a unit test to proving the invariant under load</h2>
+<p class="lead">No frontend to click, so your tests <em>are</em> the demo. Three layers: a unit test for the overlap rule, a supertest for the HTTP contract, and a <strong>concurrency test</strong> that fires many bookings at the same room and dates and asserts exactly one wins.</p>
+
+<h3>1) Unit test — the overlap rule in isolation</h3>
+<pre><span class="tok-keyword">import</span> { overlaps } <span class="tok-keyword">from</span> <span class="tok-string">"../src/dates.js"</span>;
+
+test(<span class="tok-string">"back-to-back stays do not overlap"</span>, () =&gt; {
+  expect(overlaps([<span class="tok-string">"2026-08-10"</span>,<span class="tok-string">"2026-08-13"</span>], [<span class="tok-string">"2026-08-13"</span>,<span class="tok-string">"2026-08-15"</span>])).<span class="tok-function">toBe</span>(<span class="tok-keyword">false</span>);
+});
+test(<span class="tok-string">"partial overlap is detected"</span>, () =&gt; {
+  expect(overlaps([<span class="tok-string">"2026-08-10"</span>,<span class="tok-string">"2026-08-13"</span>], [<span class="tok-string">"2026-08-12"</span>,<span class="tok-string">"2026-08-14"</span>])).<span class="tok-function">toBe</span>(<span class="tok-keyword">true</span>);
+});</pre>
+
+<h3>2) supertest — the HTTP contract</h3>
+<pre><span class="tok-keyword">import</span> request <span class="tok-keyword">from</span> <span class="tok-string">"supertest"</span>;
+<span class="tok-keyword">import</span> app <span class="tok-keyword">from</span> <span class="tok-string">"../src/app.js"</span>;
+
+test(<span class="tok-string">"first booking 201, overlapping booking 409"</span>, <span class="tok-keyword">async</span> () =&gt; {
+  <span class="tok-keyword">await</span> request(app).<span class="tok-function">post</span>(<span class="tok-string">"/api/bookings"</span>).<span class="tok-function">set</span>(auth(an))
+    .<span class="tok-function">send</span>({ roomId: <span class="tok-number">7</span>, checkIn: <span class="tok-string">"2026-08-10"</span>, checkOut: <span class="tok-string">"2026-08-13"</span> })
+    .<span class="tok-function">expect</span>(<span class="tok-number">201</span>);
+
+  <span class="tok-keyword">await</span> request(app).<span class="tok-function">post</span>(<span class="tok-string">"/api/bookings"</span>).<span class="tok-function">set</span>(auth(binh))
+    .<span class="tok-function">send</span>({ roomId: <span class="tok-number">7</span>, checkIn: <span class="tok-string">"2026-08-12"</span>, checkOut: <span class="tok-string">"2026-08-14"</span> })
+    .<span class="tok-function">expect</span>(<span class="tok-number">409</span>);   <span class="tok-comment">// overlaps → rejected</span>
+});</pre>
+
+<h3>3) The concurrency test — the star of the demo</h3>
+<pre>test(<span class="tok-string">"20 requests race for the same room+dates, only one wins"</span>, <span class="tok-keyword">async</span> () =&gt; {
+  <span class="tok-keyword">const</span> payload = { roomId: <span class="tok-number">7</span>, checkIn: <span class="tok-string">"2026-09-01"</span>, checkOut: <span class="tok-string">"2026-09-05"</span> };
+
+  <span class="tok-comment">// fire all 20 at once — Promise.all starts them together, no awaiting between</span>
+  <span class="tok-keyword">const</span> results = <span class="tok-keyword">await</span> Promise.<span class="tok-function">all</span>(
+    Array.<span class="tok-function">from</span>({ length: <span class="tok-number">20</span> }, () =&gt;
+      request(app).<span class="tok-function">post</span>(<span class="tok-string">"/api/bookings"</span>).<span class="tok-function">set</span>(auth(anyUser)).<span class="tok-function">send</span>(payload)
+    )
+  );
+
+  <span class="tok-keyword">const</span> created = results.<span class="tok-function">filter</span>(r =&gt; r.status === <span class="tok-number">201</span>).length;
+  <span class="tok-keyword">const</span> conflicts = results.<span class="tok-function">filter</span>(r =&gt; r.status === <span class="tok-number">409</span>).length;
+
+  expect(created).<span class="tok-function">toBe</span>(<span class="tok-number">1</span>);          <span class="tok-comment">// exactly ONE booking won</span>
+  expect(conflicts).<span class="tok-function">toBe</span>(<span class="tok-number">19</span>);       <span class="tok-comment">// the other 19 got a clean 409</span>
+
+  <span class="tok-keyword">const</span> rows = <span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">count</span>({ where: { roomId: <span class="tok-number">7</span>, status: <span class="tok-string">"CONFIRMED"</span> } });
+  expect(rows).<span class="tok-function">toBe</span>(<span class="tok-number">1</span>);              <span class="tok-comment">// the DB really holds one</span>
+});</pre>
+
+<h3>Why Promise.all forces the real race</h3>
+<div class="out">A sequential for-loop with await would run request 1 to completion before request 2 starts —
+the second would simply see the first's booking and 409, and a BROKEN service (no constraint)
+would still "pass". Promise.all fires all 20 concurrently, so their (A) reads interleave
+BEFORE any (B) write commits → the exclusion constraint is the only thing that can save you.
+Against the naive service, this test FAILS with created &gt; 1 — which is exactly what proves it works.</div>
+
+<div class="pitfall"><strong>Trap:</strong> a "concurrency" test written with <code>await</code> inside a for-loop. Sequential requests never collide, so the test is green even without the constraint. If your concurrency test can't fail on the version without the constraint, it proves nothing — delete the constraint once and watch it go red to be sure.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Test the invariant, not the implementation.</b> The strongest assertion isn't "the service returned 409" — it's "the database ends with exactly one confirmed booking". Asserting on the final <em>state</em> (the count) catches bugs that a status-code check would miss, and survives refactors of how you enforce the rule. <em>Why beyond syllabus: state-based invariant testing is a property-testing mindset the syllabus never introduces.</em></div>
+
+<a class="link-card codelab" href="/code-lab/rest-apis?ref=%2Fcourses%2Fhomestay-booking-api%2Flearn&reflabel=INT603#module-532" target="_blank" rel="noopener">
+  <span class="lc-ico">🌐</span>
+  <span class="lc-body"><span class="lc-title">Testing &amp; docs for REST APIs</span><span class="lc-sub">supertest, integration tests, OpenAPI — on Code Lab.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 5 · Bài 5.1</span>
+<h2>Kiểm thử REST API: từ unit test đến chứng minh bất biến dưới tải</h2>
+<p class="lead">Không có frontend để bấm, nên các test <em>chính là</em> bản demo. Ba lớp: unit test cho luật chồng ngày, supertest cho hợp đồng HTTP, và <strong>test đồng thời</strong> bắn nhiều booking vào cùng phòng+ngày và khẳng định đúng một kẻ thắng.</p>
+
+<h3>1) Unit test — luật chồng ngày đứng riêng</h3>
+<pre><span class="tok-keyword">import</span> { overlaps } <span class="tok-keyword">from</span> <span class="tok-string">"../src/dates.js"</span>;
+
+test(<span class="tok-string">"lượt ở nối tiếp không chồng"</span>, () =&gt; {
+  expect(overlaps([<span class="tok-string">"2026-08-10"</span>,<span class="tok-string">"2026-08-13"</span>], [<span class="tok-string">"2026-08-13"</span>,<span class="tok-string">"2026-08-15"</span>])).<span class="tok-function">toBe</span>(<span class="tok-keyword">false</span>);
+});
+test(<span class="tok-string">"chồng một phần được phát hiện"</span>, () =&gt; {
+  expect(overlaps([<span class="tok-string">"2026-08-10"</span>,<span class="tok-string">"2026-08-13"</span>], [<span class="tok-string">"2026-08-12"</span>,<span class="tok-string">"2026-08-14"</span>])).<span class="tok-function">toBe</span>(<span class="tok-keyword">true</span>);
+});</pre>
+
+<h3>2) supertest — hợp đồng HTTP</h3>
+<pre><span class="tok-keyword">import</span> request <span class="tok-keyword">from</span> <span class="tok-string">"supertest"</span>;
+<span class="tok-keyword">import</span> app <span class="tok-keyword">from</span> <span class="tok-string">"../src/app.js"</span>;
+
+test(<span class="tok-string">"booking đầu 201, booking chồng ngày 409"</span>, <span class="tok-keyword">async</span> () =&gt; {
+  <span class="tok-keyword">await</span> request(app).<span class="tok-function">post</span>(<span class="tok-string">"/api/bookings"</span>).<span class="tok-function">set</span>(auth(an))
+    .<span class="tok-function">send</span>({ roomId: <span class="tok-number">7</span>, checkIn: <span class="tok-string">"2026-08-10"</span>, checkOut: <span class="tok-string">"2026-08-13"</span> })
+    .<span class="tok-function">expect</span>(<span class="tok-number">201</span>);
+
+  <span class="tok-keyword">await</span> request(app).<span class="tok-function">post</span>(<span class="tok-string">"/api/bookings"</span>).<span class="tok-function">set</span>(auth(binh))
+    .<span class="tok-function">send</span>({ roomId: <span class="tok-number">7</span>, checkIn: <span class="tok-string">"2026-08-12"</span>, checkOut: <span class="tok-string">"2026-08-14"</span> })
+    .<span class="tok-function">expect</span>(<span class="tok-number">409</span>);   <span class="tok-comment">// chồng → từ chối</span>
+});</pre>
+
+<h3>3) Test đồng thời — ngôi sao của buổi demo</h3>
+<pre>test(<span class="tok-string">"20 request giành cùng phòng+ngày, chỉ một thắng"</span>, <span class="tok-keyword">async</span> () =&gt; {
+  <span class="tok-keyword">const</span> payload = { roomId: <span class="tok-number">7</span>, checkIn: <span class="tok-string">"2026-09-01"</span>, checkOut: <span class="tok-string">"2026-09-05"</span> };
+
+  <span class="tok-comment">// bắn cả 20 cùng lúc — Promise.all khởi động chúng cùng nhau, không await xen giữa</span>
+  <span class="tok-keyword">const</span> results = <span class="tok-keyword">await</span> Promise.<span class="tok-function">all</span>(
+    Array.<span class="tok-function">from</span>({ length: <span class="tok-number">20</span> }, () =&gt;
+      request(app).<span class="tok-function">post</span>(<span class="tok-string">"/api/bookings"</span>).<span class="tok-function">set</span>(auth(anyUser)).<span class="tok-function">send</span>(payload)
+    )
+  );
+
+  <span class="tok-keyword">const</span> created = results.<span class="tok-function">filter</span>(r =&gt; r.status === <span class="tok-number">201</span>).length;
+  <span class="tok-keyword">const</span> conflicts = results.<span class="tok-function">filter</span>(r =&gt; r.status === <span class="tok-number">409</span>).length;
+
+  expect(created).<span class="tok-function">toBe</span>(<span class="tok-number">1</span>);          <span class="tok-comment">// đúng MỘT booking thắng</span>
+  expect(conflicts).<span class="tok-function">toBe</span>(<span class="tok-number">19</span>);       <span class="tok-comment">// 19 cái còn lại nhận 409 sạch</span>
+
+  <span class="tok-keyword">const</span> rows = <span class="tok-keyword">await</span> prisma.booking.<span class="tok-function">count</span>({ where: { roomId: <span class="tok-number">7</span>, status: <span class="tok-string">"CONFIRMED"</span> } });
+  expect(rows).<span class="tok-function">toBe</span>(<span class="tok-number">1</span>);              <span class="tok-comment">// CSDL thật sự giữ đúng một</span>
+});</pre>
+
+<h3>Vì sao Promise.all ép race thật</h3>
+<div class="out">Vòng for tuần tự có await sẽ chạy request 1 xong hẳn trước khi request 2 bắt đầu —
+cái thứ hai chỉ đơn giản thấy booking của cái đầu rồi 409, và một service HỎNG (không ràng buộc)
+vẫn "pass". Promise.all bắn cả 20 đồng thời, nên các bước (A) đọc đan xen
+TRƯỚC khi bất kỳ (B) ghi nào commit → ràng buộc loại trừ là thứ duy nhất cứu bạn.
+Với service ngây thơ, test này FAIL với created &gt; 1 — đó chính là điều chứng minh nó hoạt động.</div>
+
+<div class="pitfall"><strong>Bẫy:</strong> test "đồng thời" viết bằng <code>await</code> trong vòng for. Request tuần tự không bao giờ đụng nhau, nên test xanh kể cả khi không có ràng buộc. Nếu test đồng thời của bạn không thể fail trên bản không ràng buộc, nó chẳng chứng minh gì — thử xoá ràng buộc một lần và xem nó đỏ để chắc.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Test bất biến, không phải cài đặt.</b> Khẳng định mạnh nhất không phải "service trả 409" — mà là "cơ sở dữ liệu kết thúc với đúng một booking đã xác nhận". Khẳng định trên <em>trạng thái</em> cuối (số đếm) bắt được bug mà kiểm mã trạng thái bỏ sót, và sống sót qua các lần refactor cách bạn cưỡng chế luật. <em>Vì sao ngoài syllabus: test bất biến dựa trên trạng thái là tư duy property-testing mà giáo trình không giới thiệu.</em></div>
+
+<a class="link-card codelab" href="/code-lab/rest-apis?ref=%2Fcourses%2Fhomestay-booking-api%2Flearn&reflabel=INT603#module-532" target="_blank" rel="noopener">
+  <span class="lc-ico">🌐</span>
+  <span class="lc-body"><span class="lc-title">Kiểm thử &amp; tài liệu cho REST API</span><span class="lc-sub">supertest, test tích hợp, OpenAPI — trên Code Lab.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      title: 'Section 6 — Deployment with Docker|||Mục 6 — Triển khai với Docker',
+      lessons: [
+        {
+          title: '6.1 — API + Postgres in one Compose file|||6.1 — API + Postgres trong một file Compose',
+          slug: 'int603-docker',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 6 · Lesson 6.1</span>
+<h2>Packaging the API with Docker Compose</h2>
+<p class="lead">One command brings up Postgres and the Express API, runs the migrations (including the raw-SQL exclusion constraint), and starts serving. This is what you run in the demo and what a reviewer clones and starts.</p>
+
+<div class="lz-flow">
+  <div class="lz-step">Client / Postman</div>
+  <div class="lz-step">Express API :3000</div>
+  <div class="lz-step">Postgres :5432 (+btree_gist)</div>
+</div>
+
+<h3>docker-compose.yml</h3>
+<pre><span class="tok-keyword">services</span>:
+  db:
+    <span class="tok-keyword">image</span>: postgres:16
+    <span class="tok-keyword">environment</span>:
+      POSTGRES_DB: homestay
+      POSTGRES_PASSWORD: \${DB_PASSWORD}
+    <span class="tok-keyword">volumes</span>: [ "pgdata:/var/lib/postgresql/data" ]
+    <span class="tok-keyword">healthcheck</span>:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 10
+
+  api:
+    <span class="tok-keyword">build</span>: .
+    <span class="tok-keyword">environment</span>:
+      DATABASE_URL: postgresql://postgres:\${DB_PASSWORD}@db:5432/homestay
+      JWT_SECRET: \${JWT_SECRET}
+    <span class="tok-keyword">command</span>: sh -c "npx prisma migrate deploy &amp;&amp; node src/server.js"
+    <span class="tok-keyword">depends_on</span>:
+      db: { condition: service_healthy }   <span class="tok-comment"># wait for the DB, not just the container</span>
+    <span class="tok-keyword">ports</span>: [ "3000:3000" ]
+
+<span class="tok-keyword">volumes</span>: { pgdata: {} }</pre>
+
+<h3>The Dockerfile — multi-stage, production deps only</h3>
+<pre><span class="tok-comment"># build stage: install everything, generate the Prisma client</span>
+<span class="tok-keyword">FROM</span> node:20-slim <span class="tok-keyword">AS</span> build
+<span class="tok-keyword">WORKDIR</span> /app
+<span class="tok-keyword">COPY</span> package*.json ./
+<span class="tok-keyword">RUN</span> npm ci
+<span class="tok-keyword">COPY</span> . .
+<span class="tok-keyword">RUN</span> npx prisma generate
+
+<span class="tok-comment"># runtime stage: only what we need to run</span>
+<span class="tok-keyword">FROM</span> node:20-slim
+<span class="tok-keyword">WORKDIR</span> /app
+<span class="tok-keyword">COPY</span> --from=build /app ./
+<span class="tok-keyword">ENV</span> NODE_ENV=production
+<span class="tok-keyword">EXPOSE</span> 3000
+<span class="tok-keyword">CMD</span> ["node","src/server.js"]</pre>
+
+<h3>The exclusion constraint lives in a migration</h3>
+<pre><span class="tok-comment"># prisma/migrations/xxxx_no_overlap/migration.sql</span>
+<span class="tok-comment"># Prisma runs this automatically on &#96;prisma migrate deploy&#96;</span>
+CREATE EXTENSION IF NOT EXISTS btree_gist;
+ALTER TABLE "Booking" ADD CONSTRAINT no_overlap
+  EXCLUDE USING gist ("roomId" WITH =, daterange("checkIn","checkOut",'[)') WITH &amp;&amp;)
+  WHERE (status = 'CONFIRMED');</pre>
+
+<h3>Worked example — bring it up</h3>
+<div class="out">$ printf "DB_PASSWORD=secret\\nJWT_SECRET=change-me\\n" &gt; .env
+$ docker compose up --build
+ db   | database system is ready to accept connections
+ api  | Applying migration 20260901_no_overlap
+ api  | Homestay API listening on :3000   (migrations applied ✅)
+$ curl -X POST localhost:3000/api/bookings -H "Authorization: Bearer $T" \\
+    -d '{"roomId":7,"checkIn":"2026-09-01","checkOut":"2026-09-05"}'
+ → 201 Created</div>
+
+<div class="pitfall"><strong>Trap:</strong> running <code>prisma migrate dev</code> on the server. On a deployed database always use <code>migrate deploy</code> — <code>dev</code> can try to reset or create shadow databases and will refuse or wipe data in production. The Compose <code>command</code> above uses <code>migrate deploy</code> for exactly this reason.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Run migrations at deploy, not on every boot inside the app.</b> Putting <code>migrate deploy</code> in the container <code>command</code> (before <code>node server.js</code>) keeps schema changes explicit and ordered. If two API replicas boot at once, wrap it so only one runs migrations — otherwise concurrent <code>ADD CONSTRAINT</code> can clash. <em>Why beyond syllabus: migration orchestration under multiple replicas is an ops concern the coursework never raises.</em></div>
+
+<a class="link-card codelab" href="/code-lab/docker?ref=%2Fcourses%2Fhomestay-booking-api%2Flearn&reflabel=INT603#module-489" target="_blank" rel="noopener">
+  <span class="lc-ico">🐳</span>
+  <span class="lc-body"><span class="lc-title">Docker Compose on Code Lab</span><span class="lc-sub">Multi-service apps, healthchecks, migrations at deploy.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 6 · Bài 6.1</span>
+<h2>Đóng gói API bằng Docker Compose</h2>
+<p class="lead">Một lệnh dựng Postgres và API Express, chạy migration (kể cả ràng buộc loại trừ bằng SQL thô), và bắt đầu phục vụ. Đây là thứ bạn chạy khi demo và là thứ người chấm clone rồi khởi động.</p>
+
+<div class="lz-flow">
+  <div class="lz-step">Client / Postman</div>
+  <div class="lz-step">Express API :3000</div>
+  <div class="lz-step">Postgres :5432 (+btree_gist)</div>
+</div>
+
+<h3>docker-compose.yml</h3>
+<pre><span class="tok-keyword">services</span>:
+  db:
+    <span class="tok-keyword">image</span>: postgres:16
+    <span class="tok-keyword">environment</span>:
+      POSTGRES_DB: homestay
+      POSTGRES_PASSWORD: \${DB_PASSWORD}
+    <span class="tok-keyword">volumes</span>: [ "pgdata:/var/lib/postgresql/data" ]
+    <span class="tok-keyword">healthcheck</span>:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 10
+
+  api:
+    <span class="tok-keyword">build</span>: .
+    <span class="tok-keyword">environment</span>:
+      DATABASE_URL: postgresql://postgres:\${DB_PASSWORD}@db:5432/homestay
+      JWT_SECRET: \${JWT_SECRET}
+    <span class="tok-keyword">command</span>: sh -c "npx prisma migrate deploy &amp;&amp; node src/server.js"
+    <span class="tok-keyword">depends_on</span>:
+      db: { condition: service_healthy }   <span class="tok-comment"># chờ DB, không chỉ container</span>
+    <span class="tok-keyword">ports</span>: [ "3000:3000" ]
+
+<span class="tok-keyword">volumes</span>: { pgdata: {} }</pre>
+
+<h3>Dockerfile — nhiều tầng, chỉ deps production</h3>
+<pre><span class="tok-comment"># tầng build: cài mọi thứ, sinh Prisma client</span>
+<span class="tok-keyword">FROM</span> node:20-slim <span class="tok-keyword">AS</span> build
+<span class="tok-keyword">WORKDIR</span> /app
+<span class="tok-keyword">COPY</span> package*.json ./
+<span class="tok-keyword">RUN</span> npm ci
+<span class="tok-keyword">COPY</span> . .
+<span class="tok-keyword">RUN</span> npx prisma generate
+
+<span class="tok-comment"># tầng runtime: chỉ những gì cần để chạy</span>
+<span class="tok-keyword">FROM</span> node:20-slim
+<span class="tok-keyword">WORKDIR</span> /app
+<span class="tok-keyword">COPY</span> --from=build /app ./
+<span class="tok-keyword">ENV</span> NODE_ENV=production
+<span class="tok-keyword">EXPOSE</span> 3000
+<span class="tok-keyword">CMD</span> ["node","src/server.js"]</pre>
+
+<h3>Ràng buộc loại trừ nằm trong một migration</h3>
+<pre><span class="tok-comment"># prisma/migrations/xxxx_no_overlap/migration.sql</span>
+<span class="tok-comment"># Prisma tự chạy khi &#96;prisma migrate deploy&#96;</span>
+CREATE EXTENSION IF NOT EXISTS btree_gist;
+ALTER TABLE "Booking" ADD CONSTRAINT no_overlap
+  EXCLUDE USING gist ("roomId" WITH =, daterange("checkIn","checkOut",'[)') WITH &amp;&amp;)
+  WHERE (status = 'CONFIRMED');</pre>
+
+<h3>Ví dụ có lời giải — dựng lên</h3>
+<div class="out">$ printf "DB_PASSWORD=secret\\nJWT_SECRET=change-me\\n" &gt; .env
+$ docker compose up --build
+ db   | database system is ready to accept connections
+ api  | Applying migration 20260901_no_overlap
+ api  | Homestay API listening on :3000   (đã áp migration ✅)
+$ curl -X POST localhost:3000/api/bookings -H "Authorization: Bearer $T" \\
+    -d '{"roomId":7,"checkIn":"2026-09-01","checkOut":"2026-09-05"}'
+ → 201 Created</div>
+
+<div class="pitfall"><strong>Bẫy:</strong> chạy <code>prisma migrate dev</code> trên server. Trên cơ sở dữ liệu đã triển khai luôn dùng <code>migrate deploy</code> — <code>dev</code> có thể thử reset hoặc tạo shadow database và sẽ từ chối hoặc xoá dữ liệu ở production. <code>command</code> Compose trên dùng <code>migrate deploy</code> chính vì lý do này.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Chạy migration lúc deploy, không phải mỗi lần app khởi động.</b> Đặt <code>migrate deploy</code> trong <code>command</code> container (trước <code>node server.js</code>) giữ thay đổi schema tường minh và có thứ tự. Nếu hai bản sao API khởi động cùng lúc, bọc lại để chỉ một cái chạy migration — nếu không <code>ADD CONSTRAINT</code> đồng thời có thể đụng nhau. <em>Vì sao ngoài syllabus: điều phối migration dưới nhiều bản sao là mối lo vận hành mà môn học không nêu.</em></div>
+
+<a class="link-card codelab" href="/code-lab/docker?ref=%2Fcourses%2Fhomestay-booking-api%2Flearn&reflabel=INT603#module-489" target="_blank" rel="noopener">
+  <span class="lc-ico">🐳</span>
+  <span class="lc-body"><span class="lc-title">Docker Compose trên Code Lab</span><span class="lc-sub">App nhiều dịch vụ, healthcheck, migration lúc deploy.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      title: 'Section 7 — Advanced: ship like a pro (Beyond the syllabus)|||Mục 7 — Nâng cao: làm như dân chuyên (Ngoài giáo trình)',
+      lessons: [
+        {
+          title: '7.1 — Idempotency, availability calendar, paging & rate limits ★|||7.1 — Idempotency, lịch trống, phân trang & rate limit ★',
+          slug: 'int603-advanced',
+          type: 'VIDEO',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 7 · Lesson 7.1 · <span class="badge">★ Beyond the syllabus</span></span>
+<h2>Four upgrades that turn an API into a portfolio piece</h2>
+<p class="lead">The core is correct. These four additions are what a reviewer of a REST API notices — each a small, self-contained ★ beyond the syllabus.</p>
+
+<h3>1) Idempotency keys — the double-submit problem</h3>
+<p>A guest taps "Book" twice, or the network retries the POST. Without protection you create two bookings (or one 201 + one 409). Let the client send an <code>Idempotency-Key</code> header; store it and return the same result for repeats:</p>
+<pre><span class="tok-comment">// a table: idempotency_keys(key PK, response_json, created_at)</span>
+<span class="tok-keyword">const</span> key = req.<span class="tok-function">get</span>(<span class="tok-string">"Idempotency-Key"</span>);
+<span class="tok-keyword">const</span> seen = <span class="tok-keyword">await</span> prisma.idempotencyKey.<span class="tok-function">findUnique</span>({ where: { key } });
+<span class="tok-keyword">if</span> (seen) <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(seen.status).<span class="tok-function">json</span>(seen.body);   <span class="tok-comment">// replay the first answer</span>
+<span class="tok-comment">// ... create booking, then store {key, status, body} in the SAME transaction</span></pre>
+
+<h3>2) Availability calendar — one query, not N</h3>
+<pre><span class="tok-comment">-- which rooms are FREE for a date window? anti-join against overlaps</span>
+<span class="tok-keyword">SELECT</span> r.* <span class="tok-keyword">FROM</span> "Room" r
+<span class="tok-keyword">WHERE NOT EXISTS</span> (
+  <span class="tok-keyword">SELECT</span> <span class="tok-number">1</span> <span class="tok-keyword">FROM</span> "Booking" b
+  <span class="tok-keyword">WHERE</span> b."roomId" = r.id
+    <span class="tok-keyword">AND</span> b.status = <span class="tok-string">'CONFIRMED'</span>
+    <span class="tok-keyword">AND</span> daterange(b."checkIn", b."checkOut", <span class="tok-string">'[)'</span>) &amp;&amp; daterange(:in, :out, <span class="tok-string">'[)'</span>)
+);</pre>
+<p>The same <code>&amp;&amp;</code> operator that powers the constraint also answers "what's free?" — and a GiST index on the range makes it fast.</p>
+
+<h3>3) Keyset pagination — stable under inserts</h3>
+<pre><span class="tok-comment">// page 1: no cursor. later pages: pass the last id you saw</span>
+<span class="tok-keyword">const</span> rooms = <span class="tok-keyword">await</span> prisma.room.<span class="tok-function">findMany</span>({
+  take: <span class="tok-number">20</span>,
+  ...(cursor &amp;&amp; { skip: <span class="tok-number">1</span>, cursor: { id: cursor } }),
+  orderBy: { id: <span class="tok-string">"asc"</span> },
+});
+<span class="tok-comment">// returns items + the next cursor (last item's id)</span></pre>
+<p>Unlike <code>OFFSET</code>, keyset (cursor) paging doesn't skip or repeat rows when new bookings arrive mid-scroll, and stays fast on deep pages.</p>
+
+<h3>4) Rate limiting — protect the booking endpoint</h3>
+<pre><span class="tok-keyword">import</span> rateLimit <span class="tok-keyword">from</span> <span class="tok-string">"express-rate-limit"</span>;
+<span class="tok-keyword">const</span> bookingLimiter = <span class="tok-function">rateLimit</span>({ windowMs: <span class="tok-number">60_000</span>, max: <span class="tok-number">10</span> });  <span class="tok-comment">// 10 / min / IP</span>
+app.<span class="tok-function">post</span>(<span class="tok-string">"/api/bookings"</span>, bookingLimiter, requireAuth, handler);   <span class="tok-comment">// 429 when exceeded</span></pre>
+
+<div class="pitfall"><strong>Trap:</strong> the N+1 query in the room list. Loading each room's bookings lazily fires one query per room. Use a single anti-join (above) or Prisma <code>include</code> with a filtered relation so the DB does the work once.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Idempotency is what makes a payment/booking API safe to retry.</b> Networks fail after the server committed but before the client saw the 201; the client retries; without an idempotency key you double-book. Every serious booking/payment API (Stripe, hotels, airlines) is built on this. <em>Why beyond syllabus: idempotency keys are a distributed-systems pattern the syllabus never mentions, yet they are the industry-standard answer to "the client retried".</em></div>
+
+<a class="link-card codelab" href="/code-lab/rest-apis?ref=%2Fcourses%2Fhomestay-booking-api%2Flearn&reflabel=INT603#module-832" target="_blank" rel="noopener">
+  <span class="lc-ico">🌐</span>
+  <span class="lc-body"><span class="lc-title">Rate limiting &amp; API hardening</span><span class="lc-sub">Limits, idempotency, pagination — on Code Lab.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 7 · Bài 7.1 · <span class="badge">★ Ngoài giáo trình</span></span>
+<h2>Bốn nâng cấp biến một API thành tác phẩm hồ sơ</h2>
+<p class="lead">Phần lõi đã đúng. Bốn bổ sung này là thứ người chấm một REST API để ý — mỗi cái một ★ nhỏ, độc lập, vượt giáo trình.</p>
+
+<h3>1) Khoá idempotency — vấn đề gửi hai lần</h3>
+<p>Khách chạm "Đặt" hai lần, hoặc mạng retry POST. Không bảo vệ thì bạn tạo hai booking (hoặc một 201 + một 409). Cho client gửi header <code>Idempotency-Key</code>; lưu nó và trả cùng kết quả cho lần lặp:</p>
+<pre><span class="tok-comment">// bảng: idempotency_keys(key PK, response_json, created_at)</span>
+<span class="tok-keyword">const</span> key = req.<span class="tok-function">get</span>(<span class="tok-string">"Idempotency-Key"</span>);
+<span class="tok-keyword">const</span> seen = <span class="tok-keyword">await</span> prisma.idempotencyKey.<span class="tok-function">findUnique</span>({ where: { key } });
+<span class="tok-keyword">if</span> (seen) <span class="tok-keyword">return</span> res.<span class="tok-function">status</span>(seen.status).<span class="tok-function">json</span>(seen.body);   <span class="tok-comment">// phát lại câu trả lời đầu</span>
+<span class="tok-comment">// ... tạo booking, rồi lưu {key, status, body} trong CÙNG transaction</span></pre>
+
+<h3>2) Lịch phòng trống — một query, không phải N</h3>
+<pre><span class="tok-comment">-- phòng nào TRỐNG cho một cửa sổ ngày? anti-join với các lượt chồng</span>
+<span class="tok-keyword">SELECT</span> r.* <span class="tok-keyword">FROM</span> "Room" r
+<span class="tok-keyword">WHERE NOT EXISTS</span> (
+  <span class="tok-keyword">SELECT</span> <span class="tok-number">1</span> <span class="tok-keyword">FROM</span> "Booking" b
+  <span class="tok-keyword">WHERE</span> b."roomId" = r.id
+    <span class="tok-keyword">AND</span> b.status = <span class="tok-string">'CONFIRMED'</span>
+    <span class="tok-keyword">AND</span> daterange(b."checkIn", b."checkOut", <span class="tok-string">'[)'</span>) &amp;&amp; daterange(:in, :out, <span class="tok-string">'[)'</span>)
+);</pre>
+<p>Cùng toán tử <code>&amp;&amp;</code> làm nên ràng buộc cũng trả lời "cái gì trống?" — và một index GiST trên range làm nó nhanh.</p>
+
+<h3>3) Phân trang keyset — ổn định khi có chèn</h3>
+<pre><span class="tok-comment">// trang 1: không cursor. trang sau: truyền id cuối bạn thấy</span>
+<span class="tok-keyword">const</span> rooms = <span class="tok-keyword">await</span> prisma.room.<span class="tok-function">findMany</span>({
+  take: <span class="tok-number">20</span>,
+  ...(cursor &amp;&amp; { skip: <span class="tok-number">1</span>, cursor: { id: cursor } }),
+  orderBy: { id: <span class="tok-string">"asc"</span> },
+});
+<span class="tok-comment">// trả items + cursor kế (id của item cuối)</span></pre>
+<p>Khác <code>OFFSET</code>, phân trang keyset (cursor) không bỏ sót hay lặp dòng khi có booking mới tới giữa lúc cuộn, và vẫn nhanh ở trang sâu.</p>
+
+<h3>4) Giới hạn tần suất — bảo vệ endpoint đặt phòng</h3>
+<pre><span class="tok-keyword">import</span> rateLimit <span class="tok-keyword">from</span> <span class="tok-string">"express-rate-limit"</span>;
+<span class="tok-keyword">const</span> bookingLimiter = <span class="tok-function">rateLimit</span>({ windowMs: <span class="tok-number">60_000</span>, max: <span class="tok-number">10</span> });  <span class="tok-comment">// 10 / phút / IP</span>
+app.<span class="tok-function">post</span>(<span class="tok-string">"/api/bookings"</span>, bookingLimiter, requireAuth, handler);   <span class="tok-comment">// 429 khi vượt</span></pre>
+
+<div class="pitfall"><strong>Bẫy:</strong> query N+1 trong danh sách phòng. Nạp booking của từng phòng theo kiểu lazy bắn một query mỗi phòng. Dùng một anti-join (ở trên) hoặc Prisma <code>include</code> với quan hệ có lọc để DB làm một lần.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Idempotency là thứ khiến API thanh toán/đặt chỗ an toàn khi retry.</b> Mạng fail sau khi server đã commit nhưng trước khi client thấy 201; client retry; không có khoá idempotency thì bạn đặt trùng. Mọi API đặt chỗ/thanh toán nghiêm túc (Stripe, khách sạn, hàng không) đều dựng trên điều này. <em>Vì sao ngoài syllabus: khoá idempotency là mẫu hệ phân tán giáo trình không nhắc, nhưng là câu trả lời chuẩn ngành cho "client đã retry".</em></div>
+
+<a class="link-card codelab" href="/code-lab/rest-apis?ref=%2Fcourses%2Fhomestay-booking-api%2Flearn&reflabel=INT603#module-832" target="_blank" rel="noopener">
+  <span class="lc-ico">🌐</span>
+  <span class="lc-body"><span class="lc-title">Rate limiting &amp; làm cứng API</span><span class="lc-sub">Giới hạn, idempotency, phân trang — trên Code Lab.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+</div>
+`,
+        },
+        {
+          title: '7.2 — Final quiz: API design & trade-offs|||7.2 — Quiz cuối: thiết kế API & đánh đổi',
+          slug: 'int603-quiz-7',
+          type: 'QUIZ',
+          quiz: {
+            timeLimitSeconds: 420,
+            questions: [
+              {
+                id: 'q1',
+                question: 'What problem does an Idempotency-Key header solve?|||Header Idempotency-Key giải quyết vấn đề gì?',
+                options: [
+                  'A retried or double-submitted POST creates only one booking, replaying the first response|||POST bị retry hoặc gửi hai lần chỉ tạo một booking, phát lại phản hồi đầu',
+                  'It encrypts the request body|||Nó mã hoá thân request',
+                  'It speeds up the database|||Nó tăng tốc cơ sở dữ liệu',
+                  'It replaces JWT authentication|||Nó thay thế xác thực JWT',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q2',
+                question: 'Why prefer keyset (cursor) pagination over OFFSET for a growing list?|||Vì sao chuộng phân trang keyset (cursor) hơn OFFSET cho danh sách đang lớn?',
+                options: [
+                  'Rows are not skipped or repeated when new items arrive mid-scroll, and deep pages stay fast|||Không bỏ sót hay lặp dòng khi có item mới giữa lúc cuộn, và trang sâu vẫn nhanh',
+                  'OFFSET is not valid SQL|||OFFSET không phải SQL hợp lệ',
+                  'Cursor paging returns all rows at once|||Phân trang cursor trả mọi dòng một lần',
+                  'It avoids using an ORDER BY|||Nó tránh dùng ORDER BY',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q3',
+                question: 'The availability query uses the same && operator as the constraint. Why is that elegant?|||Query lịch trống dùng cùng toán tử && như ràng buộc. Vì sao điều đó thanh lịch?',
+                options: [
+                  'One range-overlap concept both enforces the invariant and answers "what is free", backed by one GiST index|||Một khái niệm chồng-khoảng vừa cưỡng chế bất biến vừa trả lời "cái gì trống", cùng một index GiST',
+                  'It removes the need for a database|||Nó bỏ nhu cầu cơ sở dữ liệu',
+                  '&& means logical AND in SQL|||&& nghĩa là AND logic trong SQL',
+                  'It disables the constraint|||Nó tắt ràng buộc',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q4',
+                question: 'Why use prisma migrate deploy (not migrate dev) on the server?|||Vì sao dùng prisma migrate deploy (không phải migrate dev) trên server?',
+                options: [
+                  'deploy applies pending migrations without resetting or creating shadow databases — safe for production data|||deploy áp migration đang chờ mà không reset hay tạo shadow database — an toàn cho dữ liệu production',
+                  'dev is faster|||dev nhanh hơn',
+                  'deploy skips all migrations|||deploy bỏ qua mọi migration',
+                  'There is no difference|||Không khác gì',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q5',
+                question: 'In the concurrency test, why assert on prisma.booking.count(...) and not only the HTTP status?|||Trong test đồng thời, vì sao khẳng định trên prisma.booking.count(...) chứ không chỉ mã HTTP?',
+                options: [
+                  'Asserting the final state (one confirmed booking) proves the invariant and survives refactors|||Khẳng định trạng thái cuối (một booking đã xác nhận) chứng minh bất biến và sống sót qua refactor',
+                  'count is faster than reading the status|||count nhanh hơn đọc status',
+                  'HTTP status is always wrong|||Mã HTTP luôn sai',
+                  'Prisma cannot read HTTP responses|||Prisma không đọc được phản hồi HTTP',
+                ],
+                correctIndex: 0,
+                points: 1,
+              },
+              {
+                id: 'q6',
+                question: 'Which single database object most directly guarantees no two confirmed stays overlap on a room?|||Đối tượng CSDL nào trực tiếp bảo đảm không hai lượt ở đã xác nhận chồng nhau trên một phòng?',
+                options: [
+                  'A foreign key on guestId|||Khoá ngoại trên guestId',
+                  'The EXCLUDE USING gist exclusion constraint on (roomId =, daterange &&)|||Ràng buộc loại trừ EXCLUDE USING gist trên (roomId =, daterange &&)',
+                  'A UNIQUE index on checkIn|||Index UNIQUE trên checkIn',
+                  'The primary key of Room|||Khoá chính của bảng Room',
+                ],
+                correctIndex: 1,
+                points: 1,
+              },
+            ],
+          },
+        },
+      ],
+    },
   ],
 };

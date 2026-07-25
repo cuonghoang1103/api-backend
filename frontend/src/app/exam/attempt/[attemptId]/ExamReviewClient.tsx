@@ -12,7 +12,8 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { ArrowLeft as ArrowLeftIcon, CheckCircle2 as CheckCircleIcon, XCircle as XCircleIcon, Clock as ClockIcon, RotateCw as ArrowPathIcon, Bookmark as BookmarkIcon } from 'lucide-react';
 import { examApi } from '@/lib/api';
-import { pickLang, sanitizeHtml, stripInlineColors } from '@/lib/utils';
+import { pickLang } from '@/lib/utils';
+import ExamRichContent from '../../ExamRichContent';
 import './../../exam.css';
 
 interface ReviewQuestion {
@@ -144,7 +145,7 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
                     <BookmarkIcon className="w-4 h-4" fill={qBm[q.id]?.on ? 'currentColor' : 'none'} />{qBm[q.id]?.on ? (isVi ? 'Đã lưu' : 'Saved') : (isVi ? 'Lưu câu' : 'Save')}
                   </button>
                 </div>
-                <div className="text-[15px] leading-relaxed mb-3"><div className="rich-content max-w-none" data-ml={L} dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(pickLang(q.prompt, L))) }} /></div>
+                <div className="text-[15px] leading-relaxed mb-3"><ExamRichContent html={q.prompt} L={L} /></div>
                 {q.imageUrl && <img src={q.imageUrl} alt="" className="max-w-full rounded-lg border border-[var(--border-color)] mb-3" />}
 
                 {/* FE options */}
@@ -166,7 +167,7 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
                     {q.explanation && (
                       <div className="exam-explain mt-3 text-sm">
                         <div className="font-semibold mb-1 text-[var(--exam-accent)]">{isVi ? 'Giải thích' : 'Explanation'}</div>
-                        <div className="rich-content max-w-none" data-ml={L} dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(pickLang(q.explanation, L))) }} />
+                        <ExamRichContent html={q.explanation} L={L} />
                       </div>
                     )}
                   </div>

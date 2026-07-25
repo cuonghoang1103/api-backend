@@ -193,6 +193,38 @@ html.theme-dark .exam-blob { opacity: .28; }
   border-radius: 11px; font-weight: 800; font-size: 13px; color: #fff;
   background: linear-gradient(135deg, var(--exam-accent), var(--exam-accent-2)); flex: 0 0 auto; }
 
+/* ── Faithful reproduction: tables, math, diagrams ─────────────────────
+   Exam prompts/explanations render through .rich-content; these scope a few
+   things so a scanned paper's tables/figures look like the original. */
+.exam-root .rich-content table {
+  border-collapse: collapse; margin: 12px 0; font-size: 14px;
+  display: block; max-width: 100%; overflow-x: auto;
+}
+.exam-root .rich-content th,
+.exam-root .rich-content td {
+  border: 1px solid var(--border-color); padding: 7px 12px; text-align: left; vertical-align: top;
+}
+.exam-root .rich-content th {
+  background: var(--bg-surface); font-weight: 700; white-space: nowrap;
+}
+.exam-root .rich-content tbody tr:nth-child(even) td { background: rgba(99,102,241,.04); }
+
+/* KaTeX: keep display math scrollable, never overflow the card */
+.exam-root .rich-content .katex-display { overflow-x: auto; overflow-y: hidden; padding: 4px 0; margin: 10px 0; }
+.exam-root .rich-content .katex { font-size: 1.05em; }
+
+/* Mermaid diagram wrapper (post-rendered SVG) */
+.exam-mermaid {
+  display: flex; justify-content: center; overflow-x: auto;
+  border: 1px solid var(--border-color); border-radius: 12px;
+  background: #0d1117; padding: 14px; margin: 12px 0;
+}
+.exam-mermaid svg { max-width: 100%; height: auto; }
+.exam-mermaid-fail {
+  border: 1px dashed var(--border-color); border-radius: 10px;
+  padding: 12px; text-align: center; font-size: 12px; color: var(--text-muted); margin: 12px 0;
+}
+
 /* Small note editor */
 .exam-note { width: 100%; border: 1px dashed var(--border-color); border-radius: 10px; background: var(--bg-surface);
   padding: 8px 10px; font-size: 13px; color: var(--text-primary); outline: none; resize: vertical; min-height: 38px; }

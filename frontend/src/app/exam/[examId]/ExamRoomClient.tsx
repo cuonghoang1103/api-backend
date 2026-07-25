@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { examApi, type ExamHeader, type ExamTakingQuestion } from '@/lib/api';
 import { pickLang, sanitizeHtml, stripInlineColors } from '@/lib/utils';
+import ExamRichContent from '../ExamRichContent';
 import './../exam.css';
 
 type FullExam = ExamHeader & { questions: ExamTakingQuestion[] };
@@ -352,7 +353,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 // blocks (PE). pickLang resolves the pipe form; HTML with no "|||" passes
 // through and the data-ml wrapper toggles it. Either way → one language.
 function Prompt({ html, L }: { html: string; L: 'en' | 'vi' }) {
-  return <div className="rich-content max-w-none" data-ml={L} dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(pickLang(html, L))) }} />;
+  return <ExamRichContent html={html} L={L} />;
 }
 
 function McqQuestion({ q, idx, total, L, isVi, selected, flagged, onSelect, onFlag }: {

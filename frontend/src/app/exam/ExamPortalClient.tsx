@@ -20,7 +20,8 @@ import {
   ChevronDown, Eye as EyeIcon, BookMarked, History as HistoryIcon, Layers as LayersIcon,
 } from 'lucide-react';
 import { examApi, type ExamPortalItem } from '@/lib/api';
-import { pickLang, sanitizeHtml, stripInlineColors } from '@/lib/utils';
+import { pickLang } from '@/lib/utils';
+import ExamRichContent from './ExamRichContent';
 import './exam.css';
 
 // ── Shapes (mirror the enriched backend payloads) ──────────────────────
@@ -408,7 +409,7 @@ function QuestionCard({ b, L, isVi, onRemoveQ, onSaveNote }: {
         <Link href={`/exam/${b.examId}`} className="exam-bm w-8 h-8 shrink-0" title={isVi ? 'Vào đề' : 'Open exam'}><RetakeIcon className="w-3.5 h-3.5" /></Link>
         <button className="exam-bm w-8 h-8 shrink-0 hover:!text-[var(--exam-danger)] hover:!border-[var(--exam-danger)]" onClick={() => onRemoveQ(q.id)} title={isVi ? 'Bỏ lưu' : 'Remove'}><TrashIcon className="w-3.5 h-3.5" /></button>
       </div>
-      <div className="rich-content max-w-none text-[14px] leading-relaxed mb-2" data-ml={L} dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(pickLang(q.prompt, L))) }} />
+      <ExamRichContent html={q.prompt} L={L} className="text-[14px] leading-relaxed mb-2" />
 
       {/* MCQ options + correct answer */}
       {q.kind === 'MCQ' && q.options && (
@@ -428,7 +429,7 @@ function QuestionCard({ b, L, isVi, onRemoveQ, onSaveNote }: {
       {q.explanation && (
         <div className="mb-2">
           <button onClick={() => setShowExpl((s) => !s)} className="text-xs font-semibold text-[var(--exam-accent)]">{showExpl ? (isVi ? 'Ẩn giải thích' : 'Hide explanation') : (isVi ? 'Xem giải thích' : 'Show explanation')}</button>
-          {showExpl && <div className="exam-explain mt-2 text-[13px] rich-content max-w-none" data-ml={L} dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(pickLang(q.explanation, L))) }} />}
+          {showExpl && <ExamRichContent html={q.explanation} L={L} className="exam-explain mt-2 text-[13px]" />}
         </div>
       )}
 

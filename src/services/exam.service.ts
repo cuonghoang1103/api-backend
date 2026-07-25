@@ -26,7 +26,9 @@ function examHeader(e: {
   id: number; courseId: number; kind: string; peType: string | null;
   title: string; description: string | null; code: string | null;
   durationMinutes: number; totalPoints: unknown; passMark: unknown;
-  source: string; instructions: string | null; isPublished: boolean; sortOrder: number;
+  source: string; instructions: string | null;
+  attachmentUrl?: string | null; attachmentName?: string | null;
+  isPublished: boolean; sortOrder: number;
   _count?: { questions: number };
 }) {
   return {
@@ -36,6 +38,7 @@ function examHeader(e: {
     durationMinutes: e.durationMinutes,
     totalPoints: num(e.totalPoints), passMark: num(e.passMark),
     source: e.source, instructions: e.instructions,
+    attachmentUrl: e.attachmentUrl ?? null, attachmentName: e.attachmentName ?? null,
     isPublished: e.isPublished, sortOrder: e.sortOrder,
     questionCount: e._count?.questions ?? undefined,
   };
@@ -310,6 +313,7 @@ type ExamInput = Partial<{
   description: string | null; code: string | null; durationMinutes: number;
   totalPoints: number; passMark: number; shuffleQuestions: boolean;
   shuffleOptions: boolean; source: string; instructions: string | null;
+  attachmentUrl: string | null; attachmentName: string | null;
   isPublished: boolean; sortOrder: number;
 }>;
 
@@ -331,6 +335,8 @@ export async function adminCreateExam(input: ExamInput) {
       shuffleOptions: input.shuffleOptions ?? false,
       source: input.source ?? 'SAMPLE',
       instructions: input.instructions ?? null,
+      attachmentUrl: input.attachmentUrl ?? null,
+      attachmentName: input.attachmentName ?? null,
       isPublished: input.isPublished ?? false,
       sortOrder: input.sortOrder ?? 0,
     },

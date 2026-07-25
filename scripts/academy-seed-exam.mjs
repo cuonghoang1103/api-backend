@@ -69,6 +69,8 @@ async function main() {
       shuffleOptions: e.shuffleOptions ?? false,
       source: e.source ?? 'SAMPLE',
       instructions: e.instructions ?? null,
+      attachmentUrl: e.attachmentUrl ?? null,
+      attachmentName: e.attachmentName ?? null,
       isPublished: e.isPublished ?? true,
       sortOrder: e.sortOrder ?? 0,
     };

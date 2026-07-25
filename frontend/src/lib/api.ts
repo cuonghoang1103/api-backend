@@ -1064,6 +1064,8 @@ export interface ExamHeader {
   passMark: number;
   source: string;
   instructions: string | null;
+  attachmentUrl: string | null;
+  attachmentName: string | null;
   isPublished: boolean;
   sortOrder: number;
   questionCount?: number;

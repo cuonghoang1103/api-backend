@@ -16,8 +16,8 @@ import toast from 'react-hot-toast';
 import {
   Clock as ClockIcon, Flag as FlagIcon, Check as CheckIcon,
   ArrowLeft as ArrowLeftIcon, ArrowRight as ArrowRightIcon,
-  Upload as ArrowUpTrayIcon, Mic as MicrophoneIcon, Square as StopIcon,
-  FileText as DocumentTextIcon,
+  Upload as ArrowUpTrayIcon, Download as ArrowDownTrayIcon,
+  Mic as MicrophoneIcon, Square as StopIcon, FileText as DocumentTextIcon,
 } from 'lucide-react';
 import { examApi, type ExamHeader, type ExamTakingQuestion } from '@/lib/api';
 import { useTranslation } from '@/context/LocaleContext';
@@ -190,7 +190,15 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
 
             {exam.instructions && (
               <div className="rich-content text-sm text-text-secondary mb-5" data-ml={L}
-                dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(exam.instructions)) }} />
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(pickLang(exam.instructions, L))) }} />
+            )}
+
+            {exam.attachmentUrl && (
+              <a href={exam.attachmentUrl} download
+                className="inline-flex items-center gap-2 px-4 py-2.5 mb-5 rounded-xl border border-[var(--exam-accent)] text-[var(--exam-accent)] font-semibold text-sm hover:bg-[rgba(99,102,241,.08)]">
+                <ArrowDownTrayIcon className="w-4 h-4" />
+                {pickLang(exam.attachmentName || (isVi ? 'Tải file đề (Given)|||Download exam files (Given)' : 'Download exam files (Given)'), L)}
+              </a>
             )}
 
             <div className="exam-explain text-sm mb-6">
@@ -230,9 +238,15 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
     <div className="exam-root min-h-screen" data-ml={L}>
       {/* Sticky bar */}
       <div className="exam-bar px-4 py-3 flex items-center justify-between gap-3">
-        <div className="min-w-0">
-          <div className="text-sm font-semibold truncate">{pickLang(exam.title, L)}</div>
-          <div className="text-xs text-text-muted">{exam.kind === 'FE' ? `${answeredCount}/${exam.questions.length} ${isVi ? 'đã trả lời' : 'answered'}` : (exam.peType || '')}</div>
+        <div className="flex items-center gap-3 min-w-0">
+          <button onClick={() => { if (window.confirm(isVi ? 'Thoát phòng thi? Bài đang làm vẫn được lưu để làm tiếp.' : 'Leave the exam? Your progress is saved so you can resume.')) router.push('/exam'); }}
+            className="shrink-0 p-2 rounded-lg border border-[var(--border-color)] hover:border-[var(--exam-accent)]" aria-label={isVi ? 'Thoát' : 'Exit'}>
+            <ArrowLeftIcon className="w-4 h-4" />
+          </button>
+          <div className="min-w-0">
+            <div className="text-sm font-semibold truncate">{pickLang(exam.title, L)}</div>
+            <div className="text-xs text-text-muted">{exam.kind === 'FE' ? `${answeredCount}/${exam.questions.length} ${isVi ? 'đã trả lời' : 'answered'}` : (exam.peType || '')}</div>
+          </div>
         </div>
         <div className="flex items-center gap-3">
           {expiresAt && (
@@ -335,8 +349,11 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
+// Content may be either a pipe string "EN|||VI" (FE) or HTML with .ml-en/.ml-vi
+// blocks (PE). pickLang resolves the pipe form; HTML with no "|||" passes
+// through and the data-ml wrapper toggles it. Either way → one language.
 function Prompt({ html, L }: { html: string; L: 'en' | 'vi' }) {
-  return <div className="rich-content max-w-none" data-ml={L} dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(html)) }} />;
+  return <div className="rich-content max-w-none" data-ml={L} dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(pickLang(html, L))) }} />;
 }
 
 function McqQuestion({ q, idx, total, L, isVi, selected, flagged, onSelect, onFlag }: {
@@ -376,6 +393,14 @@ function CodeRunner({ exam, L, isVi, zipFile, setZipFile }: {
 }) {
   return (
     <div className="space-y-4">
+      {exam.attachmentUrl && (
+        <a href={exam.attachmentUrl} download
+          className="flex items-center gap-2 exam-card p-4 border-dashed hover:border-[var(--exam-accent)]">
+          <ArrowDownTrayIcon className="w-5 h-5 text-[var(--exam-accent)]" />
+          <span className="text-sm font-semibold text-[var(--exam-accent)]">{pickLang(exam.attachmentName || 'Download exam files (Given)|||Tải file đề (Given)', L)}</span>
+          <span className="text-xs text-text-muted ml-auto">{isVi ? 'giải nén rồi làm' : 'extract & work on it'}</span>
+        </a>
+      )}
       {exam.questions.filter((q) => q.kind === 'CODE').map((q, i) => (
         <div key={q.id} className="exam-card p-5">
           <div className="text-sm font-semibold text-text-secondary mb-2">{isVi ? 'Câu' : 'Question'} {i + 1} · {q.points}đ{q.language ? ` · ${q.language}` : ''}</div>

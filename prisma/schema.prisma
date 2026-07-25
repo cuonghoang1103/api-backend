@@ -998,6 +998,10 @@ model Exam {
   source           String   @default("SAMPLE") @db.VarChar(10)
   // Bilingual exam-room instructions (HTML with .ml-en/.ml-vi).
   instructions     String?  @db.Text
+  // Optional downloadable starter/"Given" file (PE): students download,
+  // extract, and work on it. URL (public path or R2) + display name.
+  attachmentUrl    String?  @map("attachment_url") @db.VarChar(500)
+  attachmentName   String?  @map("attachment_name") @db.VarChar(200)
   isPublished      Boolean  @default(false) @map("is_published")
   sortOrder        Int      @default(0) @map("sort_order")
   createdAt        DateTime @default(now()) @map("created_at")

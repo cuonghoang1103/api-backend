@@ -10,6 +10,8 @@
   --exam-danger: #ef4444;
   --exam-ring-track: var(--border-color);
   color: var(--text-primary);
+  /* Clear the app's fixed top nav (var defined in globals.css). */
+  padding-top: var(--app-nav-h, 4rem);
 }
 
 /* Bilingual show/hide (mirrors .rich-content data-ml) */
@@ -117,9 +119,9 @@
   font-size: 13px; line-height: 1.5; white-space: pre; overflow-x: auto;
 }
 
-/* Sticky exam header bar */
+/* Sticky exam header bar — sits just under the app's fixed top nav */
 .exam-bar {
-  position: sticky; top: 0; z-index: 30;
+  position: sticky; top: var(--app-nav-h, 4rem); z-index: 30;
   background: var(--bg-glass); backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border-color);
 }

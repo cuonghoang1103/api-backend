@@ -23,9 +23,23 @@ export default {
       totalPoints: 10,
       passMark: 4,
       isPublished: true,
+      attachmentUrl: '/exam-assets/PRF192-given.zip',
+      attachmentName: 'Given — starter files (Q1.c … Q4.c)|||Given — file cho sẵn (Q1.c … Q4.c)',
       instructions:
-        '<div class="ml-en"><p>For each question, create the file named in the prompt (e.g. <code>Q1.c</code>). Code in your own IDE / VS Code, test against the example I/O, then zip <b>all files</b> into one <code>.zip</code> and upload it in the submit box. AI grades each question against the spec and a reference solution.</p></div>' +
-        '<div class="ml-vi"><p>Mỗi câu, tạo file đúng tên trong đề (vd <code>Q1.c</code>). Viết code ở IDE / VS Code của bạn, thử với ví dụ, rồi nén <b>tất cả file</b> thành một <code>.zip</code> và tải lên ô nộp bài. AI chấm từng câu theo đề và đáp án mẫu.</p></div>',
+        '<div class="ml-en"><p><b>How to take this exam:</b></p><ol>' +
+        '<li><b>Download</b> the "Given" file below and <b>extract</b> the .zip — it contains the starter files <code>Q1.c … Q4.c</code>.</li>' +
+        '<li>Open them in your own IDE / VS Code and write your solution in each file. <b>Keep the file names exactly</b> as given (<code>Q1.c</code>, <code>Q2.c</code>, …).</li>' +
+        '<li><b>Test</b> your program against the example input/output shown in each question.</li>' +
+        '<li>When done, select all <code>.c</code> files, compress them into <b>one <code>.zip</code></b>, and upload it in the submit box on the right.</li>' +
+        '<li>AI grades each question against the spec, the expected output, and a reference solution, then shows your score + feedback.</li>' +
+        '</ol></div>' +
+        '<div class="ml-vi"><p><b>Cách làm bài thi:</b></p><ol>' +
+        '<li><b>Tải</b> file "Given" bên dưới và <b>giải nén</b> .zip — bên trong có các file mẫu <code>Q1.c … Q4.c</code>.</li>' +
+        '<li>Mở bằng IDE / VS Code của bạn và viết lời giải vào từng file. <b>Giữ NGUYÊN tên file</b> như đề (<code>Q1.c</code>, <code>Q2.c</code>, …).</li>' +
+        '<li><b>Chạy thử</b> chương trình với ví dụ input/output trong mỗi câu.</li>' +
+        '<li>Xong xuôi, chọn tất cả file <code>.c</code>, nén thành <b>một file <code>.zip</code></b>, rồi tải lên ô nộp bài bên phải.</li>' +
+        '<li>AI chấm từng câu theo đề, kết quả mong đợi và đáp án mẫu, rồi hiện điểm + nhận xét.</li>' +
+        '</ol></div>',
       questions: [
         {
           kind: 'CODE', points: 2.5, language: 'c',

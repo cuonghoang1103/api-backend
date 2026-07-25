@@ -104,7 +104,7 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
             return (
               <div key={q.id} className="exam-card p-5">
                 <div className="text-sm font-semibold text-text-secondary mb-3">{isVi ? 'Câu' : 'Question'} {i + 1} · {q.points}đ</div>
-                <div className="text-[15px] leading-relaxed mb-3"><div className="rich-content max-w-none" data-ml={L} dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(q.prompt)) }} /></div>
+                <div className="text-[15px] leading-relaxed mb-3"><div className="rich-content max-w-none" data-ml={L} dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(pickLang(q.prompt, L))) }} /></div>
                 {q.imageUrl && <img src={q.imageUrl} alt="" className="max-w-full rounded-lg border border-[var(--border-color)] mb-3" />}
 
                 {/* FE options */}
@@ -126,7 +126,7 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
                     {q.explanation && (
                       <div className="exam-explain mt-3 text-sm">
                         <div className="font-semibold mb-1 text-[var(--exam-accent)]">{isVi ? 'Giải thích' : 'Explanation'}</div>
-                        <div className="rich-content max-w-none" data-ml={L} dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(q.explanation)) }} />
+                        <div className="rich-content max-w-none" data-ml={L} dangerouslySetInnerHTML={{ __html: sanitizeHtml(stripInlineColors(pickLang(q.explanation, L))) }} />
                       </div>
                     )}
                   </div>

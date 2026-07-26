@@ -24,12 +24,37 @@ import { pickLang, sanitizeHtml, stripInlineColors } from '@/lib/utils';
 
 const MATH_RE = /\$|\\\(|\\\[/;
 
+// Roman-numeral list markers "(i) (ii) (iii) …". FPTU papers list the choices
+// for a question inline ("(i) … (ii) … (iii) …"), which is cramped and hard to
+// read. Put each marker on its own line by inserting a <br> before it. Applied
+// to the PROMPT only (not inline option chips), so it works for every subject
+// and every question without touching the content. Longest alternatives first
+// so "(iv)"/"(vii)" aren't partial-matched by "(i)"/"(v)".
+const ROMAN_ITEM = /\s*(?:<br\s*\/?>)?\s*\((viii|vii|iii|ii|iv|ix|vi|xi|x|v|i)\)/gi;
+// Math segments must be skipped so "(x)" in $f(x)$ or "(i)" as an imaginary
+// unit is never split (which would inject a <br> INSIDE $…$ and break KaTeX).
+const MATH_SEG = /(\$\$[\s\S]*?\$\$|\$[^$]*?\$|\\\([\s\S]*?\\\)|\\\[[\s\S]*?\\\])/g;
+function breakRomanList(html: string): string {
+  // split() with a capturing group keeps the math chunks at odd indices; only
+  // the even (non-math) text is eligible for reflow.
+  const parts = html.split(MATH_SEG);
+  let count = 0;
+  for (let i = 0; i < parts.length; i += 2) {
+    const m = parts[i].match(ROMAN_ITEM);
+    if (m) count += m.length;
+  }
+  if (count < 2) return html; // a lone "(i)" in prose → leave alone
+  for (let i = 0; i < parts.length; i += 2) parts[i] = parts[i].replace(ROMAN_ITEM, '<br>($1)');
+  return parts.join('').replace(/^(?:\s*<br\s*\/?>)+/, '');
+}
+
 function ExamRichContent({ html, L, className = '', inline = false }: {
   html: string; L: 'en' | 'vi'; className?: string; inline?: boolean;
 }) {
   const ref = useRef<HTMLElement>(null);
   const idBase = useId().replace(/[^a-zA-Z0-9]/g, '');
-  const content = sanitizeHtml(stripInlineColors(pickLang(html, L)));
+  const clean = sanitizeHtml(stripInlineColors(pickLang(html, L)));
+  const content = inline ? clean : breakRomanList(clean);
 
   useEffect(() => {
     const el = ref.current;

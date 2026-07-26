@@ -3540,6 +3540,3541 @@ export default {
           "explanation": "<div class=\"ml-en\"><b>くにへ　かえります</b> = \"to return to one's home country\" — the standard idiom for going home during a break, when \"くに\" refers to the speaker's own country.</div><div class=\"ml-vi\"><b>くにへ　かえります</b> = \"về nước\" — mẫu câu chuẩn cho việc về quê dịp nghỉ, khi \"くに\" chỉ quê hương của chính người nói.</div>"
         }
       ]
+    },
+    {
+      "kind": "FE",
+      "code": "FE-D6",
+      "source": "REAL",
+      "sortOrder": 5,
+      "title": "Đề 6 — Final Exam|||Đề 6 — Thi cuối kỳ",
+      "description": "Real JPD113 FE paper, 30 questions on kana/kanji readings, particles, and basic grammar.|||Đề FE thật môn JPD113, 30 câu về cách đọc kana/Hán tự, trợ từ và ngữ pháp cơ bản.",
+      "durationMinutes": 45,
+      "totalPoints": 10,
+      "passMark": 4,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. The exam is presented bilingually — use the EN/VN toggle if you need the Vietnamese instructions. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Đề hiển thị song ngữ — dùng nút EN/VN nếu cần xem hướng dẫn tiếng Việt. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>ミンさんは　日本語【学校】の　先生です。</p><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D. Min is a teacher at the Japanese [school].</p>|||<p>ミンさんは　日本語【学校】の　先生です。</p><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D</p>",
+          "options": [
+            {
+              "text": "かっこう|||かっこう"
+            },
+            {
+              "text": "かくこう|||かくこう"
+            },
+            {
+              "text": "がくこう|||がくこう"
+            },
+            {
+              "text": "がっこう|||がっこう"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>学校</b> (school) is read <b>がっこう</b> (gakkou) — with a small っ (sokuon) before こう, and voiced が (dakuten) at the start.</div><div class=\"ml-vi\"><b>学校</b> (trường học) đọc là <b>がっこう</b> (gakkou) — có âm っ nhỏ (促音) trước こう, và âm が có dấu (濁点) ở đầu.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>きょうは　【土曜日】です。</p><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D. Today is [Saturday].</p>|||<p>きょうは　【土曜日】です。</p><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D</p>",
+          "options": [
+            {
+              "text": "もくようび|||もくようび"
+            },
+            {
+              "text": "きんようび|||きんようび"
+            },
+            {
+              "text": "どようび|||どようび"
+            },
+            {
+              "text": "かようび|||かようび"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>土曜日</b> (Saturday) is read <b>どようび</b> (doyoubi).</div><div class=\"ml-vi\"><b>土曜日</b> (thứ Bảy) đọc là <b>どようび</b> (doyoubi).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>きょうは【ここのか】ですか。</p><p>Which kanji corresponds to the word in brackets [ ]? Choose the correct answer from A, B, C, D. Is today the [9th]?</p>|||<p>きょうは【ここのか】ですか。</p><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:</p>",
+          "options": [
+            {
+              "text": "八日|||八日"
+            },
+            {
+              "text": "九日|||九日"
+            },
+            {
+              "text": "七日|||七日"
+            },
+            {
+              "text": "六日|||六日"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>ここのか</b> (kokonoka, the 9th day of the month) is written <b>九日</b>.</div><div class=\"ml-vi\"><b>ここのか</b> (ngày mùng 9) được viết là <b>九日</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>やすみは【げつようび】です。</p><p>Which kanji corresponds to the word in brackets [ ]? Choose the correct answer from A, B, C, D. The day off is [Monday].</p>|||<p>やすみは【げつようび】です。</p><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:</p>",
+          "options": [
+            {
+              "text": "金曜日|||金曜日"
+            },
+            {
+              "text": "月曜日|||月曜日"
+            },
+            {
+              "text": "土曜日|||土曜日"
+            },
+            {
+              "text": "火曜日|||火曜日"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>げつようび</b> (Monday) is written <b>月曜日</b>.</div><div class=\"ml-vi\"><b>げつようび</b> (thứ Hai) được viết là <b>月曜日</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：百円ショップは　なんかいですか。<br>B：（　　）です。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: What floor is the 100-yen shop on? B: It's on the ( ) floor.</p>|||<p>A：百円ショップは　なんかいですか。<br>B：（　　）です。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "さんさい|||さんさい"
+            },
+            {
+              "text": "さんかい|||さんかい"
+            },
+            {
+              "text": "さんにん|||さんにん"
+            },
+            {
+              "text": "みっつ|||みっつ"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">The question uses the floor counter かい (階): <b>さんかい</b> = 3rd floor. さんさい is for age, さんにん is for people, みっつ is a generic counter for objects.</div><div class=\"ml-vi\">Câu hỏi dùng lượng từ tầng かい (階): <b>さんかい</b> = tầng 3. さんさい dùng đếm tuổi, さんにん dùng đếm người, みっつ là lượng từ chung cho đồ vật.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：エレベーターは　あそこですか。<br>B：（　　）、あちらです。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: Is the elevator over there? B: ( ), it's that way.</p>|||<p>A：エレベーターは　あそこですか。<br>B：（　　）、あちらです。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "はい|||はい"
+            },
+            {
+              "text": "いいえ|||いいえ"
+            },
+            {
+              "text": "そうですね|||そうですね"
+            },
+            {
+              "text": "そうですか|||そうですか"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>はい</b> (yes) confirms the location before restating it: \"Yes, it's that way.\"</div><div class=\"ml-vi\"><b>はい</b> (vâng) xác nhận trước khi nhắc lại vị trí: \"Vâng, ở phía đó.\"</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A「けいたいでんわは　どこですか。」<br>B「けいたいでんわは　あちらです。」<br>A「（　　）、ありがとうございます。」</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Where is the mobile phone?\" B: \"The mobile phone is over there.\" A: \"( ), thank you.\"</p>|||<p>A「けいたいでんわは　どこですか。」<br>B「けいたいでんわは　あちらです。」<br>A「（　　）、ありがとうございます。」</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "あ|||あ"
+            },
+            {
+              "text": "じゃ|||じゃ"
+            },
+            {
+              "text": "そうですよ|||そうですよ"
+            },
+            {
+              "text": "そうです|||そうです"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>あ</b> is an interjection expressing sudden realization (\"Ah, I see\") — natural right before thanking someone for the information.</div><div class=\"ml-vi\"><b>あ</b> là thán từ thể hiện sự chợt hiểu ra (\"À, ra vậy\") — tự nhiên ngay trước khi cảm ơn ai đó vì thông tin.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A「日曜日　こうえんで　バーベキューを　します。」<br>B「（　　）。」</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"On Sunday we're having a barbecue at the park.\" B: \"( ).\"</p>|||<p>A「日曜日　こうえんで　バーベキューを　します。」<br>B「（　　）。」</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "いいですね|||いいですね"
+            },
+            {
+              "text": "ありがとうございます|||ありがとうございます"
+            },
+            {
+              "text": "じゃ|||じゃ"
+            },
+            {
+              "text": "おねがいします|||おねがいします"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>いいですね</b> (\"sounds nice\") is the natural reaction to hearing about someone's fun plan.</div><div class=\"ml-vi\"><b>いいですね</b> (\"nghe hay đấy\") là phản ứng tự nhiên khi nghe về kế hoạch vui vẻ của ai đó.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：やすみは（　　）ですか。<br>B：日曜日です。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"( ) is your day off?\" B: \"It's Sunday.\"</p>|||<p>A：やすみは（　　）ですか。<br>B：日曜日です。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống:</p>",
+          "options": [
+            {
+              "text": "なん|||なん"
+            },
+            {
+              "text": "なんじ|||なんじ"
+            },
+            {
+              "text": "いくら|||いくら"
+            },
+            {
+              "text": "いつ|||いつ"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">Since B answers with a day of the week (日曜日), the question word must be <b>いつ</b> (when).</div><div class=\"ml-vi\">Vì B trả lời bằng một thứ trong tuần (日曜日), từ để hỏi phải là <b>いつ</b> (khi nào).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：すみません、インフォメーションは（　　）ですか。<br>B：あちらです。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Excuse me, ( ) is the information desk?\" B: \"It's that way.\"</p>|||<p>A：すみません、インフォメーションは（　　）ですか。<br>B：あちらです。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "だれ|||だれ"
+            },
+            {
+              "text": "なに|||なに"
+            },
+            {
+              "text": "どこ|||どこ"
+            },
+            {
+              "text": "いつ|||いつ"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">B answers with a location (あちら, \"that way\"), so the question word must be <b>どこ</b> (where).</div><div class=\"ml-vi\">B trả lời bằng một vị trí (あちら, \"phía đó\"), nên từ để hỏi phải là <b>どこ</b> (ở đâu).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>レストランで（　　）を　します。</p><p>Choose the appropriate answer from A, B, C, D to fill in the blank. \"At the restaurant, I do ( ).\"</p>|||<p>レストランで（　　）を　します。</p><p>Chọn đáp án thích hợp trong A, B, C, D để điền vào ngoặc cho câu sau;</p>",
+          "options": [
+            {
+              "text": "ゴールデンウィーク|||ゴールデンウィーク"
+            },
+            {
+              "text": "スケジュール|||スケジュール"
+            },
+            {
+              "text": "スキー|||スキー"
+            },
+            {
+              "text": "アルバイト|||アルバイト"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>レストランでアルバイトをします</b> = \"I do a part-time job at the restaurant.\" ゴールデンウィーク (Golden Week), スケジュール (schedule), and スキー (ski) don't fit \"doing\" at a restaurant.</div><div class=\"ml-vi\"><b>レストランでアルバイトをします</b> = \"Tôi làm thêm ở nhà hàng.\" ゴールデンウィーク (Tuần lễ Vàng), スケジュール (lịch trình), スキー (trượt tuyết) không hợp với việc \"làm\" ở nhà hàng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>これは（　　）です。</p><p>Choose the appropriate answer from A, B, C, D to fill in the blank. \"This is ( ).\"</p>|||<p>これは（　　）です。</p><p>Chọn đáp án thích hợp trong A, B, C, D để điền vào ngoặc cho câu sau:</p>",
+          "options": [
+            {
+              "text": "トイレットペーパー|||トイレットペーパー"
+            },
+            {
+              "text": "トイレ|||トイレ"
+            },
+            {
+              "text": "スーパー|||スーパー"
+            },
+            {
+              "text": "アルバイト|||アルバイト"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>これはトイレットペーパーです</b> = \"This is toilet paper.\" (Referring to a pictured/held object.)</div><div class=\"ml-vi\"><b>これはトイレットペーパーです</b> = \"Đây là giấy vệ sinh.\" (Chỉ vào vật đang cầm/trong ảnh minh hoạ.)</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：おしごと（　　）？<br>B：きょうしです。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"(What about your) job( )?\" B: \"I'm a teacher.\"</p>|||<p>A：おしごと（　　）？<br>B：きょうしです。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "の|||の"
+            },
+            {
+              "text": "も|||も"
+            },
+            {
+              "text": "で|||で"
+            },
+            {
+              "text": "は|||は"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>おしごとは？</b> is a shortened way of asking \"(What about) your job?\" — は marks the topic being asked about.</div><div class=\"ml-vi\"><b>おしごとは？</b> là cách hỏi rút gọn \"(Còn) công việc thì sao?\" — は đánh dấu chủ đề đang được hỏi.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>これは　かんこく（　　）かばんです。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"This is a bag ( ) Korea.\"</p>|||<p>これは　かんこく（　　）かばんです。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "で|||で"
+            },
+            {
+              "text": "も|||も"
+            },
+            {
+              "text": "×|||×"
+            },
+            {
+              "text": "の|||の"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>かんこくのかばん</b> = \"a Korean bag / bag from Korea\" — の connects two nouns in a modifying relationship.</div><div class=\"ml-vi\"><b>かんこくのかばん</b> = \"túi xách của Hàn Quốc\" — の nối hai danh từ theo quan hệ bổ nghĩa.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：やすみは　何曜日ですか。<br>B：【水曜日】です。</p><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D. A: \"What day is your day off?\" B: It's [Wednesday].</p>|||<p>A：やすみは　何曜日ですか。<br>B：【水曜日】です。</p><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D</p>",
+          "options": [
+            {
+              "text": "どようび|||どようび"
+            },
+            {
+              "text": "すいようび|||すいようび"
+            },
+            {
+              "text": "げつようび|||げつようび"
+            },
+            {
+              "text": "かようび|||かようび"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>水曜日</b> (Wednesday) is read <b>すいようび</b> (suiyoubi).</div><div class=\"ml-vi\"><b>水曜日</b> (thứ Tư) đọc là <b>すいようび</b> (suiyoubi).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>やまださんは　【五十一才】です。</p><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D. Mr./Ms. Yamada is [51 years old].</p>|||<p>やまださんは　【五十一才】です。</p><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D</p>",
+          "options": [
+            {
+              "text": "さんじゅういっさい|||さんじゅういっさい"
+            },
+            {
+              "text": "じゅうごさい|||じゅうごさい"
+            },
+            {
+              "text": "ごじゅういちさい|||ごじゅういちさい"
+            },
+            {
+              "text": "ごじゅういっさい|||ごじゅういっさい"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>五十一才</b> (51 years old) is read <b>ごじゅういっさい</b> — when a number ending in いち (1) combines with the age counter さい, it becomes いっさい (gemination), so 51 = ごじゅう + いっさい.</div><div class=\"ml-vi\"><b>五十一才</b> (51 tuổi) đọc là <b>ごじゅういっさい</b> — khi số kết thúc bằng いち (1) ghép với lượng từ tuổi さい, nó biến thành いっさい (âm ghép/促音), nên 51 = ごじゅう + いっさい.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>いま、なんじ　【なんぷん】ですか。</p><p>Which kanji corresponds to the word in brackets [ ]? Choose the correct answer from A, B, C, D. \"What time, [what minute] is it now?\"</p>|||<p>いま、なんじ　【なんぷん】ですか。</p><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:</p>",
+          "options": [
+            {
+              "text": "何分|||何分"
+            },
+            {
+              "text": "何時|||何時"
+            },
+            {
+              "text": "何才|||何才"
+            },
+            {
+              "text": "何人|||何人"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>なんぷん</b> (what minute) is written <b>何分</b>.</div><div class=\"ml-vi\"><b>なんぷん</b> (mấy phút) được viết là <b>何分</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>たなかさんは　【すいようび】に　がっこうで　おんがくを　べんきょうします。</p><p>Which kanji corresponds to the word in brackets [ ]? Choose the correct answer from A, B, C, D. \"Tanaka studies music at school on [Wednesday].\"</p>|||<p>たなかさんは　【すいようび】に　がっこうで　おんがくを　べんきょうします。</p><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:</p>",
+          "options": [
+            {
+              "text": "水曜日|||水曜日"
+            },
+            {
+              "text": "木曜日|||木曜日"
+            },
+            {
+              "text": "月曜日|||月曜日"
+            },
+            {
+              "text": "土曜日|||土曜日"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>すいようび</b> (Wednesday) is written <b>水曜日</b>.</div><div class=\"ml-vi\"><b>すいようび</b> (thứ Tư) được viết là <b>水曜日</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>から／です／45分／8時／ごぜん／さくら　ゆうびんきょく</p><p>Based on the given word cues, choose the option with a grammatically complete sentence from A, B, C, D:</p>|||<p>から／です／45分／8時／ごぜん／さくら　ゆうびんきょく</p><p>Dựa vào các từ gợi ý cho sẵn hãy chọn câu có ý nghĩa hoàn chỉnh trong các phương án A,B,C,D dưới đây:</p>",
+          "options": [
+            {
+              "text": "8時45分は　ごぜん　さくら　ゆうびんきょく　から　です。|||8時45分は　ごぜん　さくら　ゆうびんきょく　から　です。"
+            },
+            {
+              "text": "さくら　ゆうびんきょくは　ごぜん　8時45分　から　です。|||さくら　ゆうびんきょくは　ごぜん　8時45分　から　です。"
+            },
+            {
+              "text": "ごぜん45分8時から　さくら　ゆうびんきょく　です。|||ごぜん45分8時から　さくら　ゆうびんきょく　です。"
+            },
+            {
+              "text": "ごぜんは　さくら　ゆうびんきょく　8時45分から　です。|||ごぜんは　さくら　ゆうびんきょく　8時45分から　です。"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>さくらゆうびんきょくは ごぜん8時45分からです</b> = \"Sakura post office is open from 8:45 AM.\" Topic (post office) + は, then the time phrase + から (\"from\") + です.</div><div class=\"ml-vi\"><b>さくらゆうびんきょくは ごぜん8時45分からです</b> = \"Bưu điện Sakura mở cửa từ 8:45 sáng.\" Chủ đề (bưu điện) + は, sau đó cụm thời gian + から (\"từ\") + です.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：すみません、スーパーは　（　　）ですか。<br>B：ごかいです。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Excuse me, ( ) floor is the supermarket on?\" B: \"It's the 5th floor.\"</p>|||<p>A：すみません、スーパーは　（　　）ですか。<br>B：ごかいです。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "なんさい|||なんさい"
+            },
+            {
+              "text": "なんかい|||なんかい"
+            },
+            {
+              "text": "なんじ|||なんじ"
+            },
+            {
+              "text": "なんぷん|||なんぷん"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">B answers with a floor number (ごかい, 5th floor), so the question word must be <b>なんかい</b> (what/which floor).</div><div class=\"ml-vi\">B trả lời bằng số tầng (ごかい, tầng 5), nên từ để hỏi phải là <b>なんかい</b> (tầng mấy).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>いきます／たなかさん／スーパー／火曜日</p><p>Based on the given word cues, choose the option with a grammatically complete sentence from A, B, C, D:</p>|||<p>いきます／たなかさん／スーパー／火曜日</p><p>Dựa vào các từ gợi ý cho sẵn hãy chọn câu có ý nghĩa hoàn chỉnh trong các phương án A,B,C,D dưới đây:</p>",
+          "options": [
+            {
+              "text": "火曜日は　たなかさん　スーパーへ　いきます|||火曜日は　たなかさん　スーパーへ　いきます"
+            },
+            {
+              "text": "たなかさんは　火曜日　スーパーへ　いきます。|||たなかさんは　火曜日　スーパーへ　いきます。"
+            },
+            {
+              "text": "スーパーは　いきます　たなかさん　火曜日|||スーパーは　いきます　たなかさん　火曜日"
+            },
+            {
+              "text": "火曜日　スーパーへ　いきます　たなかさんは|||火曜日　スーパーへ　いきます　たなかさんは"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>たなかさんは 火曜日 スーパーへ いきます</b> = \"Tanaka goes to the supermarket on Tuesday.\" Standard order: subject+は, time, destination+へ, verb.</div><div class=\"ml-vi\"><b>たなかさんは 火曜日 スーパーへ いきます</b> = \"Tanaka đi siêu thị vào thứ Ba.\" Thứ tự chuẩn: chủ ngữ+は, thời gian, điểm đến+へ, động từ.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：（　　）で　バーベキューをしますか。<br>B：こうえんで　します。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Where ( ) do you have the barbecue?\" B: \"We do it at the park.\"</p>|||<p>A：（　　）で　バーベキューをしますか。<br>B：こうえんで　します。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "なに|||なに"
+            },
+            {
+              "text": "どこ|||どこ"
+            },
+            {
+              "text": "だれ|||だれ"
+            },
+            {
+              "text": "いつ|||いつ"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">B answers with a place marked by で (こうえんで, \"at the park\"), so the question word must be <b>どこ</b> (where).</div><div class=\"ml-vi\">B trả lời bằng một địa điểm có で (こうえんで, \"ở công viên\"), nên từ để hỏi phải là <b>どこ</b> (ở đâu).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：キムさんは　かいしゃいんですか。<br>B：（　　）、かいしゃいんじゃ　ありません。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Is Kim a company employee?\" B: \"( ), (he/she) is not a company employee.\"</p>|||<p>A：キムさんは　かいしゃいんですか。<br>B：（　　）、かいしゃいんじゃ　ありません。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "じゃ|||じゃ"
+            },
+            {
+              "text": "はい|||はい"
+            },
+            {
+              "text": "いいえ|||いいえ"
+            },
+            {
+              "text": "あのう|||あのう"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">The reply is negative (じゃありません, \"is not\"), so it must start with <b>いいえ</b> (no).</div><div class=\"ml-vi\">Câu trả lời mang nghĩa phủ định (じゃありません, \"không phải\"), nên phải bắt đầu bằng <b>いいえ</b> (không).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>はじめまして。私は　パクです。<br>（　　）の　学生です。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"Nice to meet you. I am Park. I'm a student of ( ).\"</p>|||<p>はじめまして。私は　パクです。<br>（　　）の　学生です。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "二十六才|||二十六才"
+            },
+            {
+              "text": "あおぞら　学校|||あおぞら　学校"
+            },
+            {
+              "text": "きょうし|||きょうし"
+            },
+            {
+              "text": "かいしゃいん|||かいしゃいん"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>___の学生です</b> (\"a student of ___\") needs a school/institution name: <b>あおぞら学校</b> (Aozora School).</div><div class=\"ml-vi\"><b>___の学生です</b> (\"học sinh/sinh viên của ___\") cần một tên trường/tổ chức: <b>あおぞら学校</b> (trường Aozora).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>\"スケジュール\"</p><p>Find the correct Vietnamese meaning for the following word: \"スケジュール\"</p>|||<p>\"スケジュール\"</p><p>Hãy tìm nghĩa tiếng Việt tương ứng cho từ sau:</p>",
+          "options": [
+            {
+              "text": "Tiệc nướng ngoài trời|||Tiệc nướng ngoài trời"
+            },
+            {
+              "text": "Kế hoạch|||Kế hoạch"
+            },
+            {
+              "text": "Ở cùng người bản địa|||Ở cùng người bản địa"
+            },
+            {
+              "text": "Cơm hộp|||Cơm hộp"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>スケジュール</b> (sukejūru, from English \"schedule\") means \"kế hoạch / lịch trình\" (plan/schedule).</div><div class=\"ml-vi\"><b>スケジュール</b> (sukejūru, mượn từ tiếng Anh \"schedule\") nghĩa là \"kế hoạch / lịch trình\".</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>これは（　　）です。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"This is ( ).\"</p>|||<p>これは（　　）です。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "さいふ|||さいふ"
+            },
+            {
+              "text": "スーパー|||スーパー"
+            },
+            {
+              "text": "びょういん|||びょういん"
+            },
+            {
+              "text": "トイレ|||トイレ"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>これはさいふです</b> = \"This is a wallet.\" (Referring to a pictured/held object.)</div><div class=\"ml-vi\"><b>これはさいふです</b> = \"Đây là ví tiền.\" (Chỉ vào vật đang cầm/trong ảnh minh hoạ.)</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：しゅみは　なんですか。<br>B：（　　）です。</p><p>Choose the appropriate answer from A, B, C, D to fill in the blank. A: \"What's your hobby?\" B: \"It's ( ).\"</p>|||<p>A：しゅみは　なんですか。<br>B：（　　）です。</p><p>Chọn đáp án thích hợp trong A, B, C, D để điền vào ngoặc cho câu sau:</p>",
+          "options": [
+            {
+              "text": "スポーツ|||スポーツ"
+            },
+            {
+              "text": "エレベーター|||エレベーター"
+            },
+            {
+              "text": "ブラジル|||ブラジル"
+            },
+            {
+              "text": "トイレ|||トイレ"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>しゅみはスポーツです</b> = \"My hobby is sports.\" エレベーター (elevator), ブラジル (Brazil), and トイレ (toilet) aren't hobbies.</div><div class=\"ml-vi\"><b>しゅみはスポーツです</b> = \"Sở thích của tôi là thể thao.\" エレベーター (thang máy), ブラジル (Brazil), トイレ (nhà vệ sinh) không phải sở thích.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>私は　＿＿＿＿で　かばんを　かいます</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"I buy a bag at ___.\"</p>|||<p>私は　＿＿＿＿で　かばんを　かいます</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "スーパー|||スーパー"
+            },
+            {
+              "text": "おべんとう|||おべんとう"
+            },
+            {
+              "text": "まいばん|||まいばん"
+            },
+            {
+              "text": "ホームステイ|||ホームステイ"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>スーパーでかばんをかいます</b> = \"I buy a bag at the supermarket.\" で marks the location of the action; おべんとう (bento), まいばん (every night), ホームステイ (homestay) don't fit as a shopping location.</div><div class=\"ml-vi\"><b>スーパーでかばんをかいます</b> = \"Tôi mua túi xách ở siêu thị.\" で đánh dấu địa điểm diễn ra hành động; おべんとう (cơm hộp), まいばん (mỗi tối), ホームステイ (ở homestay) không hợp làm địa điểm mua sắm.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：7月15日から20日までは　スキーりょこうです。<br>B：どこへ　いきますか。<br>A：＿＿＿＿へ　いきます。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"From July 15 to 20 is a ski trip.\" B: \"Where are you going?\" A: \"I'm going to ___.\"</p>|||<p>A：7月15日から20日までは　スキーりょこうです。<br>B：どこへ　いきますか。<br>A：＿＿＿＿へ　いきます。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "ほっかいどう|||ほっかいどう"
+            },
+            {
+              "text": "はなび|||はなび"
+            },
+            {
+              "text": "さいふ|||さいふ"
+            },
+            {
+              "text": "とんかつ|||とんかつ"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Since it's a ski trip, the destination must be a place: <b>ほっかいどう</b> (Hokkaido), Japan's famous ski destination. はなび (fireworks), さいふ (wallet), とんかつ (pork cutlet) aren't places.</div><div class=\"ml-vi\">Vì là chuyến đi trượt tuyết, điểm đến phải là một địa danh: <b>ほっかいどう</b> (Hokkaido), nơi nổi tiếng trượt tuyết ở Nhật. はなび (pháo hoa), さいふ (ví), とんかつ (thịt heo chiên xù) không phải địa danh.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>①スキー<br>②チーズ<br>③サラダ<br>④バーベーキュー</p><p>Choose the word that doesn't belong with the others:</p>|||<p>①スキー<br>②チーズ<br>③サラダ<br>④バーベーキュー</p><p>Chọn từ khác loại trong các từ sau:</p>",
+          "options": [
+            {
+              "text": "スキー|||スキー"
+            },
+            {
+              "text": "チーズ|||チーズ"
+            },
+            {
+              "text": "サラダ|||サラダ"
+            },
+            {
+              "text": "バーベーキュー|||バーベーキュー"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">チーズ (cheese), サラダ (salad), and バーベキュー (barbecue) are all food-related; <b>スキー</b> (ski) is a sport, so it's the odd one out.</div><div class=\"ml-vi\">チーズ (phô mai), サラダ (salad), バーベキュー (tiệc nướng) đều liên quan tới đồ ăn; <b>スキー</b> (trượt tuyết) là một môn thể thao, nên là từ khác loại.</div>"
+        }
+      ]
+    },
+    {
+      "kind": "FE",
+      "code": "FE-D7",
+      "source": "REAL",
+      "sortOrder": 6,
+      "title": "Đề 7 — Final Exam|||Đề 7 — Thi cuối kỳ",
+      "description": "Real JPD113 FE paper, 30 questions.|||Đề FE thật môn JPD113, 30 câu.",
+      "durationMinutes": 45,
+      "totalPoints": 10,
+      "passMark": 4,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. The exam is presented bilingually — use the EN/VN toggle if you need the Vietnamese instructions. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Đề hiển thị song ngữ — dùng nút EN/VN nếu cần xem hướng dẫn tiếng Việt. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：Bさんは　学生ですか。<br>B：いいえ、（　　）。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Are you a student?\" B: \"No, ( ).\"</p>|||<p>A：Bさんは　学生ですか。<br>B：いいえ、（　　）。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "がくせいです|||がくせいです"
+            },
+            {
+              "text": "きょうしじゃありません|||きょうしじゃありません"
+            },
+            {
+              "text": "きょうしです|||きょうしです"
+            },
+            {
+              "text": "そうです|||そうです"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">After denying being a student (いいえ), B states what they actually are: <b>きょうしです</b> (\"I'm a teacher\").</div><div class=\"ml-vi\">Sau khi phủ định là học sinh (いいえ), B nói mình thực sự là gì: <b>きょうしです</b> (\"Tôi là giáo viên\").</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>①トイレットペーパー<br>②レストラン<br>③ペン<br>④けしゴム</p><p>Choose the word that doesn't belong with the others:</p>|||<p>①トイレットペーパー<br>②レストラン<br>③ペン<br>④けしゴム</p><p>Hãy chọn từ khác loại trong các từ sau:</p>",
+          "options": [
+            {
+              "text": "トイレットペーパー|||トイレットペーパー"
+            },
+            {
+              "text": "レストラン|||レストラン"
+            },
+            {
+              "text": "ペン|||ペン"
+            },
+            {
+              "text": "けしゴム|||けしゴム"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">トイレットペーパー (toilet paper), ペン (pen), and けしゴム (eraser) are all small physical objects; <b>レストラン</b> (restaurant) is a place, so it's the odd one out.</div><div class=\"ml-vi\">トイレットペーパー (giấy vệ sinh), ペン (bút), けしゴム (cục tẩy) đều là đồ vật nhỏ; <b>レストラン</b> (nhà hàng) là một địa điểm, nên là từ khác loại.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>Bさん、日曜日、どこへ　いきますか。<br>どこも　いきません。うちで、＿＿＿＿をみます。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"B, where are you going on Sunday?\" \"I'm not going anywhere. At home, I'll watch ___.\"</p>|||<p>Bさん、日曜日、どこへ　いきますか。<br>どこも　いきません。うちで、＿＿＿＿をみます。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "テレビ|||テレビ"
+            },
+            {
+              "text": "ホームステイ|||ホームステイ"
+            },
+            {
+              "text": "いちねん|||いちねん"
+            },
+            {
+              "text": "まいにち|||まいにち"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>テレビをみます</b> = \"(I) watch TV\" — the natural thing to watch (みます) at home.</div><div class=\"ml-vi\"><b>テレビをみます</b> = \"(Tôi) xem tivi\" — thứ tự nhiên để xem (みます) khi ở nhà.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：これは（　　）のスープですか。<br>B：さかなとやさいのスープです。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"What kind of soup is this?\" B: \"It's fish and vegetable soup.\"</p>|||<p>A：これは（　　）のスープですか。<br>B：さかなとやさいのスープです。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống:</p>",
+          "options": [
+            {
+              "text": "どこ|||どこ"
+            },
+            {
+              "text": "いつ|||いつ"
+            },
+            {
+              "text": "だれ|||だれ"
+            },
+            {
+              "text": "なん|||なん"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">B answers with the kind/content of the soup, so the question word must be <b>なん</b> (what).</div><div class=\"ml-vi\">B trả lời bằng loại/thành phần của súp, nên từ để hỏi phải là <b>なん</b> (gì/cái gì).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>ごぜん（　　）をたべます。</p><p>Choose the appropriate answer from A, B, C, D to fill in the blank. \"In the morning I eat ( ).\"</p>|||<p>ごぜん（　　）をたべます。</p><p>Chọn đáp án thích hợp trong A, B, C, D để điền vào ngoặc cho câu sau:</p>",
+          "options": [
+            {
+              "text": "あさごはん|||あさごはん"
+            },
+            {
+              "text": "ひるごはん|||ひるごはん"
+            },
+            {
+              "text": "あさライス|||あさライス"
+            },
+            {
+              "text": "ひるライス|||ひるライス"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">ごぜん (morning) pairs with <b>あさごはん</b> (breakfast); ひるごはん (lunch) belongs to afternoon (ごご), and あさライス/ひるライス aren't standard words.</div><div class=\"ml-vi\">ごぜん (buổi sáng) đi với <b>あさごはん</b> (bữa sáng); ひるごはん (bữa trưa) thuộc buổi chiều (ごご), còn あさライス/ひるライス không phải từ chuẩn.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：6月25日は　りゅうがくパーティーです。<br>B：えっ！りゅうがくパーティー？なにを　しますか。<br>A：ケーキを＿①＿。ビールを＿②＿。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"June 25 is the study-abroad party.\" B: \"Huh! Study-abroad party? What will you do?\" A: \"Cake, we'll ①. Beer, we'll ②.\"</p>|||<p>A：6月25日は　りゅうがくパーティーです。<br>B：えっ！りゅうがくパーティー？なにを　しますか。<br>A：ケーキを＿①＿。ビールを＿②＿。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "①たべます／②のみます|||①たべます／②のみます"
+            },
+            {
+              "text": "①のみます／②たべます|||①のみます／②たべます"
+            },
+            {
+              "text": "①みます／②かいます|||①みます／②かいます"
+            },
+            {
+              "text": "①よみます／②みます|||①よみます／②みます"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Cake is eaten (<b>たべます</b>) and beer is drunk (<b>のみます</b>).</div><div class=\"ml-vi\">Bánh thì ăn (<b>たべます</b>) còn bia thì uống (<b>のみます</b>).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>＿＿＿＿で　CDを　ききます。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"At ___, I listen to CDs.\"</p>|||<p>＿＿＿＿で　CDを　ききます。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "うち|||うち"
+            },
+            {
+              "text": "あさ|||あさ"
+            },
+            {
+              "text": "しんぶん|||しんぶん"
+            },
+            {
+              "text": "ホームステイ|||ホームステイ"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>うちでCDをききます</b> = \"I listen to CDs at home.\" で marks the location of the action.</div><div class=\"ml-vi\"><b>うちでCDをききます</b> = \"Tôi nghe CD ở nhà.\" で đánh dấu địa điểm diễn ra hành động.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：このりょうりは　何ですか。<br>B：（　　）です。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"What dish is this?\" B: \"It's ( ).\"</p>|||<p>A：このりょうりは　何ですか。<br>B：（　　）です。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "ぶたにく　りょうり|||ぶたにく　りょうり"
+            },
+            {
+              "text": "ぶたにくの　りょうり|||ぶたにくの　りょうり"
+            },
+            {
+              "text": "ぶたにくで　りょうり|||ぶたにくで　りょうり"
+            },
+            {
+              "text": "ぶたにくから　りょうり|||ぶたにくから　りょうり"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>ぶたにくのりょうり</b> = \"a pork dish\" — の connects the ingredient (ぶたにく, pork) to the dish (りょうり) in a modifying relationship.</div><div class=\"ml-vi\"><b>ぶたにくのりょうり</b> = \"món ăn từ thịt heo\" — の nối nguyên liệu (ぶたにく, thịt heo) với món ăn (りょうり) theo quan hệ bổ nghĩa.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>ミラーさんは　学生です。やまださん（　　）学生です。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"Miller is a student. Yamada ( ) a student.\"</p>|||<p>ミラーさんは　学生です。やまださん（　　）学生です。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "と|||と"
+            },
+            {
+              "text": "で|||で"
+            },
+            {
+              "text": "や|||や"
+            },
+            {
+              "text": "も|||も"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>やまださんも学生です</b> = \"Yamada is ALSO a student.\" も marks \"also/too\", matching Yamada to Miller's student status.</div><div class=\"ml-vi\"><b>やまださんも学生です</b> = \"Yamada CŨNG là học sinh.\" も đánh dấu \"cũng\", cho thấy Yamada giống Miller.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：ミラーさんは　何才ですか。<br>B：【じゅっさい】です。</p><p>Which kanji corresponds to the word in brackets [ ]? Choose the correct answer from A, B, C, D. A: \"How old is Miller?\" B: (He's) [10 years old].</p>|||<p>A：ミラーさんは　何才ですか。<br>B：【じゅっさい】です。</p><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:</p>",
+          "options": [
+            {
+              "text": "十才|||十才"
+            },
+            {
+              "text": "三才|||三才"
+            },
+            {
+              "text": "四才|||四才"
+            },
+            {
+              "text": "五才|||五才"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>じゅっさい</b> (10 years old) is written <b>十才</b>.</div><div class=\"ml-vi\"><b>じゅっさい</b> (10 tuổi) được viết là <b>十才</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：パクさんは　ここ、（　　）へいきますか。<br>B：としょかんへ　いきます。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Park, ( ) are you going from here?\" B: \"I'm going to the library.\"</p>|||<p>A：パクさんは　ここ、（　　）へいきますか。<br>B：としょかんへ　いきます。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "なん|||なん"
+            },
+            {
+              "text": "どこ|||どこ"
+            },
+            {
+              "text": "いつ|||いつ"
+            },
+            {
+              "text": "だれ|||だれ"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">B answers with a place (library), so the question word must be <b>どこ</b> (where).</div><div class=\"ml-vi\">B trả lời bằng một địa điểm (thư viện), nên từ để hỏi phải là <b>どこ</b> (ở đâu).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>田中さんは【十才】です。</p><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D. Tanaka is [10 years old].</p>|||<p>田中さんは【十才】です。</p><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D</p>",
+          "options": [
+            {
+              "text": "じゅうさい|||じゅうさい"
+            },
+            {
+              "text": "じゅさい|||じゅさい"
+            },
+            {
+              "text": "じゅっさい|||じゅっさい"
+            },
+            {
+              "text": "じゅざい|||じゅざい"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>十才</b> (10 years old) is read <b>じゅっさい</b> — an irregular reading with a small っ, not the plain じゅうさい.</div><div class=\"ml-vi\"><b>十才</b> (10 tuổi) đọc là <b>じゅっさい</b> — cách đọc bất quy tắc có âm っ nhỏ, không phải じゅうさい thông thường.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>それは　とりにくの（　　）です。</p><p>Choose the appropriate answer from A, B, C, D to fill in the blank. \"That is a chicken ( ).\"</p>|||<p>それは　とりにくの（　　）です。</p><p>Chọn đáp án thích hợp trong A, B, C, D để điền vào ngoặc cho câu sau:</p>",
+          "options": [
+            {
+              "text": "イチゴ|||イチゴ"
+            },
+            {
+              "text": "ケーキ|||ケーキ"
+            },
+            {
+              "text": "カレー|||カレー"
+            },
+            {
+              "text": "ジュース|||ジュース"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>とりにくのカレー</b> = \"chicken curry\" — の connects the ingredient (chicken) to the dish. イチゴ (strawberry), ケーキ (cake), ジュース (juice) don't pair naturally with とりにくの.</div><div class=\"ml-vi\"><b>とりにくのカレー</b> = \"cà ri gà\" — の nối nguyên liệu (thịt gà) với món ăn. イチゴ (dâu tây), ケーキ (bánh ngọt), ジュース (nước ép) không hợp tự nhiên với とりにくの.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>カレーを　2つ（　　）コーヒーを　2つ（　　）ください。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blanks. \"Please give me 2 curries ( ) 2 coffees ( ).\"</p>|||<p>カレーを　2つ（　　）コーヒーを　2つ（　　）ください。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "の／を|||の／を"
+            },
+            {
+              "text": "と／を|||と／を"
+            },
+            {
+              "text": "と／✕|||と／✕"
+            },
+            {
+              "text": "✕／と|||✕／と"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>カレーを2つと コーヒーを2つ ください</b> = \"Please give me 2 curries and 2 coffees.\" と joins the two items; no particle is needed right before ください.</div><div class=\"ml-vi\"><b>カレーを2つと コーヒーを2つ ください</b> = \"Cho tôi 2 cà ri và 2 cà phê.\" と nối hai món; không cần trợ từ ngay trước ください.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：ひるやすみは　いつですか。<br>B：（　　）です。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"When is the lunch break?\" B: \"It's ( ).\"</p>|||<p>A：ひるやすみは　いつですか。<br>B：（　　）です。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "日曜日と土曜日|||日曜日と土曜日"
+            },
+            {
+              "text": "12時から1時まで|||12時から1時まで"
+            },
+            {
+              "text": "ついたち|||ついたち"
+            },
+            {
+              "text": "しがつ|||しがつ"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">A lunch break is a time range: <b>12時から1時まで</b> (\"from 12:00 to 1:00\"). The others are days/dates, not a time-of-day range.</div><div class=\"ml-vi\">Giờ nghỉ trưa là một khoảng thời gian: <b>12時から1時まで</b> (\"từ 12 giờ đến 1 giờ\"). Các lựa chọn khác là ngày/tháng, không phải khoảng giờ trong ngày.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>まいにち、3【時間】　べんきょうします。</p><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D. \"Every day I study for 3 [hours].\"</p>|||<p>まいにち、3【時間】　べんきょうします。</p><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D</p>",
+          "options": [
+            {
+              "text": "しかん|||しかん"
+            },
+            {
+              "text": "じっかん|||じっかん"
+            },
+            {
+              "text": "しがん|||しがん"
+            },
+            {
+              "text": "じかん|||じかん"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>時間</b> (hour/time) is read <b>じかん</b> (jikan).</div><div class=\"ml-vi\"><b>時間</b> (giờ/thời gian) đọc là <b>じかん</b> (jikan).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：パクさんの（　　）は　なんですか。<br>B：どくしょと　りょうりです。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"What is Park's ( )?\" B: \"Reading and cooking.\"</p>|||<p>A：パクさんの（　　）は　なんですか。<br>B：どくしょと　りょうりです。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "しゅみ|||しゅみ"
+            },
+            {
+              "text": "なまえ|||なまえ"
+            },
+            {
+              "text": "しごと|||しごと"
+            },
+            {
+              "text": "くに|||くに"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">B answers with hobbies (reading, cooking), so the question must ask about <b>しゅみ</b> (hobby).</div><div class=\"ml-vi\">B trả lời bằng các sở thích (đọc sách, nấu ăn), nên câu hỏi phải hỏi về <b>しゅみ</b> (sở thích).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：ワンさんは　学生ですか。<br>ワン：はい、学生（　　）。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Is Wang a student?\" Wang: \"Yes, (I) am a student ( ).\"</p>|||<p>A：ワンさんは　学生ですか。<br>ワン：はい、学生（　　）。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "ありません|||ありません"
+            },
+            {
+              "text": "じゃありません|||じゃありません"
+            },
+            {
+              "text": "です|||です"
+            },
+            {
+              "text": "ます|||ます"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">Since the reply starts with はい (yes, affirmative), the ending must also be affirmative: 学生<b>です</b>.</div><div class=\"ml-vi\">Vì câu trả lời bắt đầu bằng はい (vâng, khẳng định), phần kết cũng phải ở thể khẳng định: 学生<b>です</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>このかばんは【にまんよんせんはっぴゃく】えんです。</p><p>Which kanji corresponds to the word in brackets [ ]? Choose the correct answer from A, B, C, D. \"This bag is [24,800] yen.\"</p>|||<p>このかばんは【にまんよんせんはっぴゃく】えんです。</p><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:</p>",
+          "options": [
+            {
+              "text": "四千八百二万|||四千八百二万"
+            },
+            {
+              "text": "二万四八百千|||二万四八百千"
+            },
+            {
+              "text": "二八百万四千|||二八百万四千"
+            },
+            {
+              "text": "二万四千八百|||二万四千八百"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">24,800 = 二万(20,000) + 四千(4,000) + 八百(800), written in descending place-value order: <b>二万四千八百</b>.</div><div class=\"ml-vi\">24.800 = 二万(20.000) + 四千(4.000) + 八百(800), viết theo thứ tự hàng giảm dần: <b>二万四千八百</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：はい、さくら　ゆうびんきょくです。<br>B：すみません、＿＿＿＿は　何時までですか。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Yes, this is Sakura Post Office.\" B: \"Excuse me, until what time is ___ open?\"</p>|||<p>A：はい、さくら　ゆうびんきょくです。<br>B：すみません、＿＿＿＿は　何時までですか。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "ここ|||ここ"
+            },
+            {
+              "text": "そちら|||そちら"
+            },
+            {
+              "text": "こちら|||こちら"
+            },
+            {
+              "text": "あそこ|||あそこ"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">On the phone, <b>そちら</b> politely refers to the other party's location (\"your side/there\") — natural when B is calling A's post office.</div><div class=\"ml-vi\">Khi gọi điện, <b>そちら</b> là cách lịch sự chỉ vị trí của phía bên kia (\"chỗ đó/bên đó\") — tự nhiên khi B gọi tới bưu điện của A.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>しゅみ／私／おんがく／りょうり／です</p><p>Based on the given word cues, choose the option with a grammatically complete sentence from A, B, C, D:</p>|||<p>しゅみ／私／おんがく／りょうり／です</p><p>Dựa vào các từ gợi ý cho sẵn hãy chọn câu có ý nghĩa hoàn chỉnh trong các phương án A,B,C,D dưới đây:</p>",
+          "options": [
+            {
+              "text": "しゅみの　私は　おんがくと　りょうり　です。|||しゅみの　私は　おんがくと　りょうり　です。"
+            },
+            {
+              "text": "私の　しゅみは　おんがくと　りょうり　です。|||私の　しゅみは　おんがくと　りょうり　です。"
+            },
+            {
+              "text": "おんがくは　私の　しゅみと　りょうり　です。|||おんがくは　私の　しゅみと　りょうり　です。"
+            },
+            {
+              "text": "おんがくと　しゅみは　私の　りょうり　です。|||おんがくと　しゅみは　私の　りょうり　です。"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>私のしゅみは おんがくとりょうりです</b> = \"My hobby is music and cooking.\" Standard order: possessor+の+topic, then は, then the content.</div><div class=\"ml-vi\"><b>私のしゅみは おんがくとりょうりです</b> = \"Sở thích của tôi là âm nhạc và nấu ăn.\" Thứ tự chuẩn: người sở hữu+の+chủ đề, sau đó は, rồi nội dung.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：これは　どこの　ワインですか。<br>てんいん：（　　）の　ワインです。</p><p>Choose the appropriate answer from A, B, C, D to fill in the blank. A: \"Where is this wine from?\" Shop clerk: \"It's wine from ( ).\"</p>|||<p>A：これは　どこの　ワインですか。<br>てんいん：（　　）の　ワインです。</p><p>Chọn đáp án thích hợp trong A, B, C, D để điền vào ngoặc cho câu sau:</p>",
+          "options": [
+            {
+              "text": "イタリア|||イタリア"
+            },
+            {
+              "text": "日本人|||日本人"
+            },
+            {
+              "text": "フランス語|||フランス語"
+            },
+            {
+              "text": "アーストラリア人|||アーストラリア人"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The question どこの (\"from where\") needs a place/country name: <b>イタリア</b> (Italy). 日本人 (Japanese person), フランス語 (French language), アーストラリア人 (Australian person) are nationalities/languages, not places.</div><div class=\"ml-vi\">Câu hỏi どこの (\"của nơi nào\") cần một tên quốc gia/địa danh: <b>イタリア</b> (Ý). 日本人 (người Nhật), フランス語 (tiếng Pháp), アーストラリア人 (người Úc) là quốc tịch/ngôn ngữ, không phải địa danh.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：ミラーさんは　（　　）<br>ミラー：はい、きょうしです。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Mr. Miller, ( )\" Miller: \"Yes, I'm a teacher.\"</p>|||<p>A：ミラーさんは　（　　）<br>ミラー：はい、きょうしです。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "おしごとは？|||おしごとは？"
+            },
+            {
+              "text": "いつですか。|||いつですか。"
+            },
+            {
+              "text": "きょうしですか。|||きょうしですか。"
+            },
+            {
+              "text": "なんさいですか。|||なんさいですか。"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">Miller's reply (はい、きょうしです, \"yes, I'm a teacher\") directly confirms a yes/no question: <b>きょうしですか。</b> (\"Are you a teacher?\")</div><div class=\"ml-vi\">Câu trả lời của Miller (はい、きょうしです, \"vâng, tôi là giáo viên\") xác nhận trực tiếp một câu hỏi có/không: <b>きょうしですか。</b> (\"Anh có phải giáo viên không?\")</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>マリーさんは　【二十一才】ですか。</p><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D. \"Is Mary [21 years old]?\"</p>|||<p>マリーさんは　【二十一才】ですか。</p><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D;</p>",
+          "options": [
+            {
+              "text": "にじゅういっさい|||にじゅういっさい"
+            },
+            {
+              "text": "にじゅういちさい|||にじゅういちさい"
+            },
+            {
+              "text": "じゅうにさい|||じゅうにさい"
+            },
+            {
+              "text": "にじゅうはっさい|||にじゅうはっさい"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>二十一才</b> (21 years old) is read <b>にじゅういっさい</b> — いち+さい becomes いっさい (gemination), not いちさい.</div><div class=\"ml-vi\"><b>二十一才</b> (21 tuổi) đọc là <b>にじゅういっさい</b> — いち+さい biến thành いっさい (âm ghép), không phải いちさい.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>アリさんは【がくせい】ですか。</p><p>Which kanji corresponds to the word in brackets [ ]? Choose the correct answer from A, B, C, D. \"Is Ali a [student]?\"</p>|||<p>アリさんは【がくせい】ですか。</p><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:</p>",
+          "options": [
+            {
+              "text": "学生|||学生"
+            },
+            {
+              "text": "字生|||字生"
+            },
+            {
+              "text": "学性|||学性"
+            },
+            {
+              "text": "字性|||字性"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>がくせい</b> (student) is written <b>学生</b>.</div><div class=\"ml-vi\"><b>がくせい</b> (học sinh/sinh viên) được viết là <b>学生</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>私の　たんじょうびは　【さんがつ】九日です。</p><p>Which kanji corresponds to the word in brackets [ ]? Choose the correct answer from A, B, C, D. \"My birthday is [March] 9th.\"</p>|||<p>私の　たんじょうびは　【さんがつ】九日です。</p><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:</p>",
+          "options": [
+            {
+              "text": "三月|||三月"
+            },
+            {
+              "text": "四月|||四月"
+            },
+            {
+              "text": "二月|||二月"
+            },
+            {
+              "text": "六月|||六月"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>さんがつ</b> (March) is written <b>三月</b>.</div><div class=\"ml-vi\"><b>さんがつ</b> (tháng Ba) được viết là <b>三月</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>てんいん「（　　）。」<br>アリさん「すみません。でんしじしょは　どこですか。」</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. Clerk: \"( ).\" Ali: \"Excuse me. Where is the electronic dictionary?\"</p>|||<p>てんいん「（　　）。」<br>アリさん「すみません。でんしじしょは　どこですか。」</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "あのう、すみません|||あのう、すみません"
+            },
+            {
+              "text": "いらっしゃいませ|||いらっしゃいませ"
+            },
+            {
+              "text": "どちらですか|||どちらですか"
+            },
+            {
+              "text": "だれですか|||だれですか"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>いらっしゃいませ</b> (\"Welcome!\") is the standard shop greeting said to a customer entering — prompting Ali's question.</div><div class=\"ml-vi\"><b>いらっしゃいませ</b> (\"Kính chào quý khách!\") là lời chào chuẩn của nhân viên khi khách bước vào cửa hàng — dẫn tới câu hỏi của Ali.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>これは　オーストラリア（　　）りんごです。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"This is an apple ( ) Australia.\"</p>|||<p>これは　オーストラリア（　　）りんごです。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "が|||が"
+            },
+            {
+              "text": "の|||の"
+            },
+            {
+              "text": "も|||も"
+            },
+            {
+              "text": "で|||で"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>オーストラリアのりんご</b> = \"an Australian apple / apple from Australia\" — の connects the origin to the noun.</div><div class=\"ml-vi\"><b>オーストラリアのりんご</b> = \"táo của Úc / táo từ Úc\" — の nối nguồn gốc với danh từ.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>田中さんの　おくには【日本】です。</p><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D. \"Tanaka's home country is [Japan].\"</p>|||<p>田中さんの　おくには【日本】です。</p><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D</p>",
+          "options": [
+            {
+              "text": "ちゅうごく|||ちゅうごく"
+            },
+            {
+              "text": "かんこく|||かんこく"
+            },
+            {
+              "text": "にほん|||にほん"
+            },
+            {
+              "text": "じほん|||じほん"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>日本</b> (Japan) is read <b>にほん</b> (nihon).</div><div class=\"ml-vi\"><b>日本</b> (Nhật Bản) đọc là <b>にほん</b> (nihon).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：はじめまして、パクです。よろしくおねがいします。<br>B：ナタポンです。（　　）よろしくおねがいします。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Nice to meet you, I'm Park. Please treat me well.\" B: \"I'm Nathapon. ( ), please treat me well too.\"</p>|||<p>A：はじめまして、パクです。よろしくおねがいします。<br>B：ナタポンです。（　　）よろしくおねがいします。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "そうですか|||そうですか"
+            },
+            {
+              "text": "こちらこそ|||こちらこそ"
+            },
+            {
+              "text": "どういたしまして|||どういたしまして"
+            },
+            {
+              "text": "ありがとう|||ありがとう"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>こちらこそ</b> (\"likewise / the pleasure is mine\") is the standard reciprocal reply to よろしくおねがいします.</div><div class=\"ml-vi\"><b>こちらこそ</b> (\"tôi mới phải nói vậy / rất hân hạnh\") là câu đáp lại chuẩn cho よろしくおねがいします.</div>"
+        }
+      ]
+    },
+    {
+      "kind": "FE",
+      "code": "FE-D8",
+      "source": "REAL",
+      "sortOrder": 7,
+      "title": "Đề 8 — Final Exam|||Đề 8 — Thi cuối kỳ",
+      "description": "Real JPD113 FE paper, 30 questions.|||Đề FE thật môn JPD113, 30 câu.",
+      "durationMinutes": 45,
+      "totalPoints": 10,
+      "passMark": 4,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. The exam is presented bilingually — use the EN/VN toggle if you need the Vietnamese instructions. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Đề hiển thị song ngữ — dùng nút EN/VN nếu cần xem hướng dẫn tiếng Việt. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>田中さんは【八才】です。</p><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D. \"Tanaka is [8 years old].\"</p>|||<p>田中さんは【八才】です。</p><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D</p>",
+          "options": [
+            {
+              "text": "はちさい|||はちさい"
+            },
+            {
+              "text": "はっざい|||はっざい"
+            },
+            {
+              "text": "はっさい|||はっさい"
+            },
+            {
+              "text": "はちざい|||はちざい"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>八才</b> (8 years old) is read <b>はっさい</b> — with a small っ (gemination), not the plain はちさい.</div><div class=\"ml-vi\"><b>八才</b> (8 tuổi) đọc là <b>はっさい</b> — có âm っ nhỏ (促音), không phải はちさい thông thường.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>やまださんは　【日本人】です。</p><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D. \"Yamada is [Japanese].\"</p>|||<p>やまださんは　【日本人】です。</p><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D</p>",
+          "options": [
+            {
+              "text": "にほんひと|||にほんひと"
+            },
+            {
+              "text": "にっぽんにん|||にっぽんにん"
+            },
+            {
+              "text": "にほんじん|||にほんじん"
+            },
+            {
+              "text": "にほんにん|||にほんにん"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>日本人</b> (Japanese person) is read <b>にほんじん</b>.</div><div class=\"ml-vi\"><b>日本人</b> (người Nhật) đọc là <b>にほんじん</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>いま　いちじ　【ごふん】です。</p><p>Which kanji corresponds to the word in brackets [ ]? Choose the correct answer from A, B, C, D. \"It is now 1:[05].\"</p>|||<p>いま　いちじ　【ごふん】です。</p><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:</p>",
+          "options": [
+            {
+              "text": "六公|||六公"
+            },
+            {
+              "text": "六分|||六分"
+            },
+            {
+              "text": "五公|||五公"
+            },
+            {
+              "text": "五分|||五分"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>ごふん</b> (5 minutes) is written <b>五分</b> — 五(5) + 分(minutes).</div><div class=\"ml-vi\"><b>ごふん</b> (5 phút) được viết là <b>五分</b> — 五(5) + 分(phút).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>いまは　やすみの【じかん】です。</p><p>Which kanji corresponds to the word in brackets [ ]? Choose the correct answer from A, B, C, D. \"Now is break [time].\"</p>|||<p>いまは　やすみの【じかん】です。</p><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:</p>",
+          "options": [
+            {
+              "text": "時問|||時問"
+            },
+            {
+              "text": "時間|||時間"
+            },
+            {
+              "text": "待問|||待問"
+            },
+            {
+              "text": "待間|||待間"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>じかん</b> (time) is written <b>時間</b> — using 時 (time) + 間 (interval), not the similar-looking 問 or 待.</div><div class=\"ml-vi\"><b>じかん</b> (thời gian) được viết là <b>時間</b> — dùng 時 (giờ/thời gian) + 間 (khoảng), không phải chữ gần giống 問 hay 待.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：（　　）くつは　いくらですか。<br>B：千円です。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"How much are ( ) shoes?\" B: \"1,000 yen.\"</p>|||<p>A：（　　）くつは　いくらですか。<br>B：千円です。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "これ|||これ"
+            },
+            {
+              "text": "これの|||これの"
+            },
+            {
+              "text": "この|||この"
+            },
+            {
+              "text": "こちら|||こちら"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">To modify a noun directly (くつ), the adnominal demonstrative <b>この</b> (\"this\") is needed. これ (this, standalone pronoun) cannot directly precede a noun, and これの is not idiomatic.</div><div class=\"ml-vi\">Để bổ nghĩa trực tiếp cho danh từ (くつ), cần chỉ định từ bổ nghĩa <b>この</b> (\"này\"). これ (đại từ độc lập) không thể đứng trực tiếp trước danh từ, còn これの không phải cách nói tự nhiên.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：Bさんの　しゅみは　なんですか。<br>B：サッカーです。<br>A：（　　）。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"What's B's hobby?\" B: \"Soccer.\" A: \"( ).\"</p>|||<p>A：Bさんの　しゅみは　なんですか。<br>B：サッカーです。<br>A：（　　）。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "私の　しゅみは　サッカーです。|||私の　しゅみは　サッカーです。"
+            },
+            {
+              "text": "私の　しゅみも　サッカーです。|||私の　しゅみも　サッカーです。"
+            },
+            {
+              "text": "私の　しゅみは　サッカーですか。|||私の　しゅみは　サッカーですか。"
+            },
+            {
+              "text": "私の　しゅみも　サッカーですか。|||私の　しゅみも　サッカーですか。"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">A is sharing that they have the same hobby as B: <b>私のしゅみもサッカーです</b> = \"My hobby is ALSO soccer.\" も marks this shared trait; the sentence should be a statement, not a question.</div><div class=\"ml-vi\">A đang chia sẻ rằng mình cũng có cùng sở thích với B: <b>私のしゅみもサッカーです</b> = \"Sở thích của tôi CŨNG là bóng đá.\" も đánh dấu điểm chung này; câu phải là câu khẳng định, không phải câu hỏi.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：エスカレーターは　どこです。<br>B：（　　）です。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Where is the escalator?\" B: \"It's ( ).\"</p>|||<p>A：エスカレーターは　どこです。<br>B：（　　）です。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "あれ|||あれ"
+            },
+            {
+              "text": "これ|||これ"
+            },
+            {
+              "text": "あちら|||あちら"
+            },
+            {
+              "text": "みっか|||みっか"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">Answering どこ (where) politely uses a direction word: <b>あちら</b> (\"over there\"). あれ points to an object, not a direction/location answer.</div><div class=\"ml-vi\">Trả lời cho どこ (ở đâu) một cách lịch sự dùng từ chỉ hướng: <b>あちら</b> (\"phía đó\"). あれ chỉ vào một vật, không hợp làm câu trả lời vị trí/hướng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A「にほんへ　いきます。」<br>B「へえ。（　　）。」</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"I'm going to Japan.\" B: \"Oh! ( ).\"</p>|||<p>A「にほんへ　いきます。」<br>B「へえ。（　　）。」</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "えっ|||えっ"
+            },
+            {
+              "text": "いいです|||いいです"
+            },
+            {
+              "text": "そうです|||そうです"
+            },
+            {
+              "text": "そうですか|||そうですか"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">After the surprised へえ, the natural reactive follow-up is <b>そうですか</b> (\"Is that so?\").</div><div class=\"ml-vi\">Sau tiếng ngạc nhiên へえ, câu đáp tự nhiên tiếp theo là <b>そうですか</b> (\"Vậy à?\").</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>アリさん「すみません、ちゅうもんを　おねがいします。」<br>てんいん「（　　）。」</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. Ali: \"Excuse me, I'd like to order please.\" Clerk: \"( ).\"</p>|||<p>アリさん「すみません、ちゅうもんを　おねがいします。」<br>てんいん「（　　）。」</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "あのう、すみません|||あのう、すみません"
+            },
+            {
+              "text": "いらっしゃいませ|||いらっしゃいませ"
+            },
+            {
+              "text": "どうぞ|||どうぞ"
+            },
+            {
+              "text": "ありがとうございました|||ありがとうございました"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>どうぞ</b> (\"please, go ahead\") is the clerk's natural prompt for the customer to state their order.</div><div class=\"ml-vi\"><b>どうぞ</b> (\"mời/xin mời\") là lời nhân viên mời khách nói ra món muốn gọi.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：これは（　　）の　とけいですか。<br>B：インドの　とけいです。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"( ) is this watch from?\" B: \"It's from India.\"</p>|||<p>A：これは（　　）の　とけいですか。<br>B：インドの　とけいです。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống:</p>",
+          "options": [
+            {
+              "text": "どこ|||どこ"
+            },
+            {
+              "text": "いくら|||いくら"
+            },
+            {
+              "text": "なん|||なん"
+            },
+            {
+              "text": "どちら|||どちら"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">B answers with a country (India), so the question word must be <b>どこ</b> (where) — \"どこの\" = \"from where\".</div><div class=\"ml-vi\">B trả lời bằng tên quốc gia (Ấn Độ), nên từ để hỏi phải là <b>どこ</b> (ở đâu) — \"どこの\" = \"của nơi nào\".</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>としょかんは（　　）から（　　）までですか。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"( ) to ( ) is the library (open)?\"</p>|||<p>としょかんは（　　）から（　　）までですか。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống:</p>",
+          "options": [
+            {
+              "text": "何/何|||何/何"
+            },
+            {
+              "text": "何曜/何曜|||何曜/何曜"
+            },
+            {
+              "text": "何曜日/何曜日|||何曜日/何曜日"
+            },
+            {
+              "text": "日/日|||日/日"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">\"What day of the week\" requires the complete word <b>何曜日</b> (with 日); 何曜 alone is grammatically incomplete.</div><div class=\"ml-vi\">\"Thứ mấy\" cần từ đầy đủ <b>何曜日</b> (có chữ 日); 何曜 một mình chưa hoàn chỉnh về ngữ pháp.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：Tシャツは（　　）ですか。<br>B：700円です。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"( ) is the T-shirt?\" B: \"700 yen.\"</p>|||<p>A：Tシャツは（　　）ですか。<br>B：700円です。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống:</p>",
+          "options": [
+            {
+              "text": "なん|||なん"
+            },
+            {
+              "text": "いくら|||いくら"
+            },
+            {
+              "text": "だれ|||だれ"
+            },
+            {
+              "text": "どこ|||どこ"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">B answers with a price, so the question word must be <b>いくら</b> (how much).</div><div class=\"ml-vi\">B trả lời bằng giá tiền, nên từ để hỏi phải là <b>いくら</b> (bao nhiêu tiền).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A「おしごとは？」<br>B「（　　）です。」</p><p>Choose the appropriate answer from A, B, C, D to fill in the blank. A: \"What about your job?\" B: \"( ).\"</p>|||<p>A「おしごとは？」<br>B「（　　）です。」</p><p>Chọn đáp án thích hợp trong A, B, C, D để điền vào ngoặc cho câu sau:</p>",
+          "options": [
+            {
+              "text": "しゃいん|||しゃいん"
+            },
+            {
+              "text": "なまえ|||なまえ"
+            },
+            {
+              "text": "きょうし|||きょうし"
+            },
+            {
+              "text": "おくに|||おくに"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>しゃいん</b> (company employee) directly answers a question about one's job. なまえ (name) and おくに (home country) answer different questions.</div><div class=\"ml-vi\"><b>しゃいん</b> (nhân viên công ty) trả lời trực tiếp câu hỏi về công việc. なまえ (tên) và おくに (quê quán) trả lời cho câu hỏi khác.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>しゅみは（　　）です。</p><p>Choose the appropriate answer from A, B, C, D to fill in the blank. \"My hobby is ( ).\"</p>|||<p>しゅみは（　　）です。</p><p>Chọn đáp án thích hợp trong A, B, C, D để điền vào ngoặc cho câu sau:</p>",
+          "options": [
+            {
+              "text": "本を　よみます|||本を　よみます"
+            },
+            {
+              "text": "どくしょ|||どくしょ"
+            },
+            {
+              "text": "あさ|||あさ"
+            },
+            {
+              "text": "おきます|||おきます"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">しゅみは___です needs a NOUN. <b>どくしょ</b> (reading) is a noun; 本をよみます (\"read books\") and おきます (\"wake up\") are full verb phrases that don't fit grammatically after は.</div><div class=\"ml-vi\">しゅみは___です cần một DANH TỪ. <b>どくしょ</b> (đọc sách, danh từ) hợp; 本をよみます (\"đọc sách\", cụm động từ) và おきます (\"thức dậy\") không hợp ngữ pháp sau は.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>日曜日　どこ（　　）いきません。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"On Sunday, I'm not going anywhere.\"</p>|||<p>日曜日　どこ（　　）いきません。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "と|||と"
+            },
+            {
+              "text": "で|||で"
+            },
+            {
+              "text": "や|||や"
+            },
+            {
+              "text": "も|||も"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>どこも + negative</b> = \"nowhere (at all)\" — も combined with a negative verb expresses total negation.</div><div class=\"ml-vi\"><b>どこも + phủ định</b> = \"không đi đâu cả\" — も kết hợp động từ phủ định thể hiện phủ định toàn phần.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>ミラーさんは　まいあさ、パン（　　）とりにくなどを　食べます。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"Every morning, Miller eats bread ( ) chicken, etc.\"</p>|||<p>ミラーさんは　まいあさ、パン（　　）とりにくなどを　食べます。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "と|||と"
+            },
+            {
+              "text": "で|||で"
+            },
+            {
+              "text": "や|||や"
+            },
+            {
+              "text": "も|||も"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>パンや とりにくなど</b> = \"bread, chicken, and so on\" — や lists items non-exhaustively, matching など (\"etc.\") later in the sentence.</div><div class=\"ml-vi\"><b>パンや とりにくなど</b> = \"bánh mì, thịt gà, v.v.\" — や liệt kê không đầy đủ, khớp với など (\"v.v.\") ở sau câu.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>りゅうがくせいパーティーは　十二月【二十日】です。</p><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D. \"The study-abroad party is December [20th].\"</p>|||<p>りゅうがくせいパーティーは　十二月【二十日】です。</p><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D.</p>",
+          "options": [
+            {
+              "text": "じゅうににち|||じゅうににち"
+            },
+            {
+              "text": "はつか|||はつか"
+            },
+            {
+              "text": "にじゅうにち|||にじゅうにち"
+            },
+            {
+              "text": "ここのか|||ここのか"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>二十日</b> (the 20th day of the month) has the special irregular reading <b>はつか</b>, not the regular にじゅうにち.</div><div class=\"ml-vi\"><b>二十日</b> (ngày 20) có cách đọc bất quy tắc đặc biệt là <b>はつか</b>, không phải にじゅうにち thông thường.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>ハノイは　いま　ごぜん【四時】です。</p><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D. \"In Hanoi, it's now [4:00] AM.\"</p>|||<p>ハノイは　いま　ごぜん【四時】です。</p><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D</p>",
+          "options": [
+            {
+              "text": "よんじ|||よんじ"
+            },
+            {
+              "text": "よじ|||よじ"
+            },
+            {
+              "text": "ごじ|||ごじ"
+            },
+            {
+              "text": "しじ|||しじ"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>四時</b> (4 o'clock) is read <b>よじ</b> — an irregular reading, not よんじ.</div><div class=\"ml-vi\"><b>四時</b> (4 giờ) đọc là <b>よじ</b> — cách đọc bất quy tắc, không phải よんじ.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>たいいくかんの　やすみは　【もくようび】です。</p><p>Which kanji corresponds to the word in brackets [ ]? Choose the correct answer from A, B, C, D. \"The gym's day off is [Thursday].\"</p>|||<p>たいいくかんの　やすみは　【もくようび】です。</p><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:</p>",
+          "options": [
+            {
+              "text": "土曜日|||土曜日"
+            },
+            {
+              "text": "月曜日|||月曜日"
+            },
+            {
+              "text": "水曜日|||水曜日"
+            },
+            {
+              "text": "木曜日|||木曜日"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>もくようび</b> (Thursday) is written <b>木曜日</b>.</div><div class=\"ml-vi\"><b>もくようび</b> (thứ Năm) được viết là <b>木曜日</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：これは　だれの　カメラですか。<br>B：あ、それは　（　　）の　カメラです。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Whose camera is this?\" B: \"Ah, that's ( )'s camera.\"</p>|||<p>A：これは　だれの　カメラですか。<br>B：あ、それは　（　　）の　カメラです。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "さかな|||さかな"
+            },
+            {
+              "text": "さいふ|||さいふ"
+            },
+            {
+              "text": "アメリカ|||アメリカ"
+            },
+            {
+              "text": "たなかさん|||たなかさん"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">だれの (whose) requires a person as the answer: <b>たなかさん</b> (Mr./Ms. Tanaka).</div><div class=\"ml-vi\">だれの (của ai) cần một người làm câu trả lời: <b>たなかさん</b> (anh/chị Tanaka).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>あさ、何時（　　）　大学(だいがく)へ　きますか。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"What time ( ) do you come to university in the morning?\"</p>|||<p>あさ、何時（　　）　大学(だいがく)へ　きますか。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "へ|||へ"
+            },
+            {
+              "text": "✕|||✕"
+            },
+            {
+              "text": "も|||も"
+            },
+            {
+              "text": "に|||に"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>何時に</b> (\"at what time\") — に marks the specific point in time of an action.</div><div class=\"ml-vi\"><b>何時に</b> (\"vào lúc mấy giờ\") — に đánh dấu thời điểm cụ thể diễn ra hành động.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>私は、まいあさ（　　）6時　（　　）おきます。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blanks. \"Every morning I wake up at 6.\"</p>|||<p>私は、まいあさ（　　）6時　（　　）おきます。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "に／に|||に／に"
+            },
+            {
+              "text": "✕／に|||✕／に"
+            },
+            {
+              "text": "も／に|||も／に"
+            },
+            {
+              "text": "に／✕|||に／✕"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">まいあさ (\"every morning\") takes no particle, while 6時 (\"6 o'clock\") takes <b>に</b> to mark the specific time: <b>まいあさ 6時に おきます</b>.</div><div class=\"ml-vi\">まいあさ (\"mỗi sáng\") không cần trợ từ, còn 6時 (\"6 giờ\") cần <b>に</b> để đánh dấu thời điểm cụ thể: <b>まいあさ 6時に おきます</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>やすみは　日曜日（　　）月曜日です。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"Days off are Sunday ( ) Monday.\"</p>|||<p>やすみは　日曜日（　　）月曜日です。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "と|||と"
+            },
+            {
+              "text": "は|||は"
+            },
+            {
+              "text": "も|||も"
+            },
+            {
+              "text": "✕|||✕"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>日曜日と月曜日</b> = \"Sunday and Monday\" — と joins the two nouns exhaustively.</div><div class=\"ml-vi\"><b>日曜日と月曜日</b> = \"Chủ Nhật và thứ Hai\" — と nối đầy đủ hai danh từ.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：まいあさ、なにを　たべますか。<br>B：たまご（　　）パン（　　）を　たべます。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blanks. A: \"What do you eat every morning?\" B: \"I eat egg ( ) bread ( ).\"</p>|||<p>A：まいあさ、なにを　たべますか。<br>B：たまご（　　）パン（　　）を　たべます。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "から／まで|||から／まで"
+            },
+            {
+              "text": "と／と|||と／と"
+            },
+            {
+              "text": "と／や|||と／や"
+            },
+            {
+              "text": "や／など|||や／など"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>たまごや パンなどを たべます</b> = \"I eat eggs, bread, and the like\" — や lists items non-exhaustively, paired with など (\"etc.\") at the end.</div><div class=\"ml-vi\"><b>たまごや パンなどを たべます</b> = \"Tôi ăn trứng, bánh mì, v.v.\" — や liệt kê không đầy đủ, đi cùng など (\"v.v.\") ở cuối.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：6月1日から7日までは　ホームステイです。<br>B：えっ！ホームステイ？なにを　しますか。<br>A：はなびを＿①＿。バーベキューを＿②＿。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"From June 1 to 7 is a homestay.\" B: \"Huh! Homestay? What will you do?\" A: \"Fireworks, we'll ①. Barbecue, we'll ②.\"</p>|||<p>A：6月1日から7日までは　ホームステイです。<br>B：えっ！ホームステイ？なにを　しますか。<br>A：はなびを＿①＿。バーベキューを＿②＿。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "①みます／②します|||①みます／②します"
+            },
+            {
+              "text": "①いきます／②かいます|||①いきます／②かいます"
+            },
+            {
+              "text": "①たべます／②します|||①たべます／②します"
+            },
+            {
+              "text": "①よみます／②たべます|||①よみます／②たべます"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Fireworks are watched (<b>みます</b>) and a barbecue is \"done\" (<b>します</b>) — はなびをみます, バーベキューをします.</div><div class=\"ml-vi\">Pháo hoa thì \"xem\" (<b>みます</b>) còn tiệc nướng thì \"làm\" (<b>します</b>) — はなびをみます, バーベキューをします.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>＿＿＿＿で　しんぶんを　かいます。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"At ___, I buy a newspaper.\"</p>|||<p>＿＿＿＿で　しんぶんを　かいます。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "うち|||うち"
+            },
+            {
+              "text": "じゅぎょう|||じゅぎょう"
+            },
+            {
+              "text": "コンビニ|||コンビニ"
+            },
+            {
+              "text": "うみ|||うみ"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>コンビニでしんぶんをかいます</b> = \"I buy a newspaper at the convenience store.\" うち (home), じゅぎょう (class), うみ (sea) aren't places to buy a newspaper.</div><div class=\"ml-vi\"><b>コンビニでしんぶんをかいます</b> = \"Tôi mua báo ở cửa hàng tiện lợi.\" うち (nhà), じゅぎょう (buổi học), うみ (biển) không phải nơi mua báo.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>（　　）ズボンは　私のです。</p><p>Choose the appropriate answer from A, B, C, D to fill in the blank. \"( ) pants are mine.\"</p>|||<p>（　　）ズボンは　私のです。</p><p>Chọn đáp án thích hợp trong A, B, C, D để điền vào ngoặc cho câu sau:</p>",
+          "options": [
+            {
+              "text": "これ|||これ"
+            },
+            {
+              "text": "それ|||それ"
+            },
+            {
+              "text": "この|||この"
+            },
+            {
+              "text": "そこ|||そこ"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">To modify a noun directly (ズボン), the adnominal demonstrative <b>この</b> (\"this\") is required; これ/それ/そこ are standalone pronouns that can't precede a noun directly.</div><div class=\"ml-vi\">Để bổ nghĩa trực tiếp cho danh từ (ズボン), cần chỉ định từ bổ nghĩa <b>この</b> (\"này\"); これ/それ/そこ là đại từ độc lập, không thể đứng trực tiếp trước danh từ.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>①はなや<br>②とんかつ<br>③きっさてん<br>④ほんや</p><p>Choose the word that doesn't belong with the others:</p>|||<p>①はなや<br>②とんかつ<br>③きっさてん<br>④ほんや</p><p>Hãy chọn từ khác loại trong các từ sau:</p>",
+          "options": [
+            {
+              "text": "はなや|||はなや"
+            },
+            {
+              "text": "ほんや|||ほんや"
+            },
+            {
+              "text": "きっさてん|||きっさてん"
+            },
+            {
+              "text": "とんかつ|||とんかつ"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">はなや (flower shop), きっさてん (coffee shop), and ほんや (bookstore) are all types of shops; <b>とんかつ</b> (pork cutlet) is a food item, so it's the odd one out.</div><div class=\"ml-vi\">はなや (tiệm hoa), きっさてん (quán cà phê), ほんや (tiệm sách) đều là loại cửa hàng; <b>とんかつ</b> (thịt heo chiên xù) là món ăn, nên là từ khác loại.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>私の（　　）は　ダニエルです。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"My ( ) is Daniel.\"</p>|||<p>私の（　　）は　ダニエルです。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "おくに|||おくに"
+            },
+            {
+              "text": "くに|||くに"
+            },
+            {
+              "text": "おなまえ|||おなまえ"
+            },
+            {
+              "text": "なまえ|||なまえ"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">Since this is about the speaker's OWN name (私の___), the plain <b>なまえ</b> is used, not the honorific おなまえ (reserved for someone else's name).</div><div class=\"ml-vi\">Vì đây là tên của CHÍNH người nói (私の___), dùng thể thường <b>なまえ</b>, không dùng thể kính ngữ おなまえ (dành để hỏi tên người khác).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>Bさん、土曜日、どこへ　いきますか。<br>どこも　いきません。うちで、＿＿＿＿をみます。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"B, where are you going on Saturday?\" \"I'm not going anywhere. At home, I'll watch ___.\"</p>|||<p>Bさん、土曜日、どこへ　いきますか。<br>どこも　いきません。うちで、＿＿＿＿をみます。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "サラダ|||サラダ"
+            },
+            {
+              "text": "なに|||なに"
+            },
+            {
+              "text": "チーズ|||チーズ"
+            },
+            {
+              "text": "DVD|||DVD"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>DVDをみます</b> = \"(I) watch a DVD\" — the natural thing to watch (みます) at home. サラダ (salad) and チーズ (cheese) are food, not something you watch.</div><div class=\"ml-vi\"><b>DVDをみます</b> = \"(Tôi) xem DVD\" — thứ tự nhiên để xem (みます) khi ở nhà. サラダ (salad) và チーズ (phô mai) là đồ ăn, không phải thứ để xem.</div>"
+        }
+      ]
+    },
+    {
+      "kind": "FE",
+      "code": "FE-D9",
+      "source": "REAL",
+      "sortOrder": 8,
+      "title": "Đề 9 — Final Exam|||Đề 9 — Thi cuối kỳ",
+      "description": "Real JPD113 FE paper, 30 questions.|||Đề FE thật môn JPD113, 30 câu.",
+      "durationMinutes": 45,
+      "totalPoints": 10,
+      "passMark": 4,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. The exam is presented bilingually — use the EN/VN toggle if you need the Vietnamese instructions. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Đề hiển thị song ngữ — dùng nút EN/VN nếu cần xem hướng dẫn tiếng Việt. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>【私】はイレナです。</p><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D. \"[I] am Irena.\"</p>|||<p>【私】はイレナです。</p><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D</p>",
+          "options": [
+            {
+              "text": "はたし|||はたし"
+            },
+            {
+              "text": "わたし|||わたし"
+            },
+            {
+              "text": "わだし|||わだし"
+            },
+            {
+              "text": "ばたし|||ばたし"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>私</b> (I) is read <b>わたし</b> (watashi).</div><div class=\"ml-vi\"><b>私</b> (tôi) đọc là <b>わたし</b> (watashi).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>これは【一万】円です。</p><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D. \"This is [10,000] yen.\"</p>|||<p>これは【一万】円です。</p><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D</p>",
+          "options": [
+            {
+              "text": "いちせん|||いちせん"
+            },
+            {
+              "text": "いちまん|||いちまん"
+            },
+            {
+              "text": "いちひゃく|||いちひゃく"
+            },
+            {
+              "text": "まん|||まん"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>一万</b> (10,000) is read <b>いちまん</b>.</div><div class=\"ml-vi\"><b>一万</b> (10.000) đọc là <b>いちまん</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>アリさんは【なんさい】ですか。</p><p>Which kanji corresponds to the word in brackets [ ]? Choose the correct answer from A, B, C, D. \"How old is Ali?\"</p>|||<p>アリさんは【なんさい】ですか。</p><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:</p>",
+          "options": [
+            {
+              "text": "何才|||何才"
+            },
+            {
+              "text": "可才|||可才"
+            },
+            {
+              "text": "何ナ|||何ナ"
+            },
+            {
+              "text": "可ナ|||可ナ"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>なんさい</b> (how old) is written <b>何才</b>.</div><div class=\"ml-vi\"><b>なんさい</b> (bao nhiêu tuổi) được viết là <b>何才</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>このとけいは　【にひゃくまん】えんです。</p><p>Which kanji corresponds to the word in brackets [ ]? Choose the correct answer from A, B, C, D. \"This watch is [2,000,000] yen.\"</p>|||<p>このとけいは　【にひゃくまん】えんです。</p><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:</p>",
+          "options": [
+            {
+              "text": "十百万|||十百万"
+            },
+            {
+              "text": "一百万|||一百万"
+            },
+            {
+              "text": "三百万|||三百万"
+            },
+            {
+              "text": "二百万|||二百万"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>にひゃくまん</b> (2,000,000) is written <b>二百万</b> — 二(2) + 百万(million).</div><div class=\"ml-vi\"><b>にひゃくまん</b> (2.000.000) được viết là <b>二百万</b> — 二(2) + 百万(triệu).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：（　　）くつは　いくらですか。<br>B：千円です。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"How much are ( ) shoes?\" B: \"1,000 yen.\"</p>|||<p>A：（　　）くつは　いくらですか。<br>B：千円です。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "これ|||これ"
+            },
+            {
+              "text": "これの|||これの"
+            },
+            {
+              "text": "この|||この"
+            },
+            {
+              "text": "こちら|||こちら"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">To modify a noun directly (くつ), the adnominal demonstrative <b>この</b> (\"this\") is needed; これ cannot directly precede a noun.</div><div class=\"ml-vi\">Để bổ nghĩa trực tiếp cho danh từ (くつ), cần chỉ định từ bổ nghĩa <b>この</b> (\"này\"); これ không thể đứng trực tiếp trước danh từ.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：やまださん、なつやすみ、日本へ　かえりますか。<br>B：いいえ、（　　）。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Yamada, are you going back to Japan for summer break?\" B: \"No, ( ).\"</p>|||<p>A：やまださん、なつやすみ、日本へ　かえりますか。<br>B：いいえ、（　　）。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "かえります|||かえります"
+            },
+            {
+              "text": "かえりません|||かえりません"
+            },
+            {
+              "text": "かりますです|||かりますです"
+            },
+            {
+              "text": "かえりませんです|||かえりませんです"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">After いいえ (no), the negative form <b>かえりません</b> (\"not going back\") is needed. かえりませんです is doubly negative/ungrammatical (ません already ends the polite negative).</div><div class=\"ml-vi\">Sau いいえ (không), cần thể phủ định <b>かえりません</b> (\"không về\"). かえりませんです bị phủ định kép/sai ngữ pháp (ません đã là dạng phủ định lịch sự hoàn chỉnh).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：これは　いくらですか。<br>B：（　　）は　千円です。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"How much is this?\" B: \"( ) is 1,000 yen.\"</p>|||<p>A：これは　いくらですか。<br>B：（　　）は　千円です。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "それ|||それ"
+            },
+            {
+              "text": "あれ|||あれ"
+            },
+            {
+              "text": "そこ|||そこ"
+            },
+            {
+              "text": "あそこ|||あそこ"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">A points to an item near themselves with これ; B, replying about that same item, refers back to it with <b>それ</b> (\"that, near you\").</div><div class=\"ml-vi\">A chỉ vào vật gần mình bằng これ; B, khi trả lời về chính vật đó, dùng lại <b>それ</b> (\"cái đó, gần bạn\").</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A「（　　）。おなまえは？」<br>B「あ、サントスです。」</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"( ). What's your name?\" B: \"Ah, I'm Santos.\"</p>|||<p>A「（　　）。おなまえは？」<br>B「あ、サントスです。」</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "そうですか|||そうですか"
+            },
+            {
+              "text": "こちらこそ|||こちらこそ"
+            },
+            {
+              "text": "おねがいします|||おねがいします"
+            },
+            {
+              "text": "あのう、すみません|||あのう、すみません"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>あのう、すみません</b> (\"Um, excuse me\") is a natural opener before asking a stranger their name.</div><div class=\"ml-vi\"><b>あのう、すみません</b> (\"À, xin lỗi\") là câu mở đầu tự nhiên trước khi hỏi tên người lạ.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A「（　　）いま　何時ですか。」<br>B「10時です」</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"( ), what time is it now?\" B: \"It's 10:00.\"</p>|||<p>A「（　　）いま　何時ですか。」<br>B「10時です」</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "どうも|||どうも"
+            },
+            {
+              "text": "すみません|||すみません"
+            },
+            {
+              "text": "おねがいします|||おねがいします"
+            },
+            {
+              "text": "はじめまして|||はじめまして"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>すみません</b> (\"excuse me\") is the polite opener before asking a stranger a question.</div><div class=\"ml-vi\"><b>すみません</b> (\"xin lỗi\") là câu mở đầu lịch sự trước khi hỏi người lạ một câu hỏi.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>にちようび、（　　）も　しません。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"On Sunday, I don't do ( ) at all.\"</p>|||<p>にちようび、（　　）も　しません。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "だれ|||だれ"
+            },
+            {
+              "text": "なに|||なに"
+            },
+            {
+              "text": "いつ|||いつ"
+            },
+            {
+              "text": "どこ|||どこ"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>なにも しません</b> (\"don't do anything\") pairs なに with the verb します (to do). どこも pairs with movement verbs like いきます (go), not します.</div><div class=\"ml-vi\"><b>なにも しません</b> (\"không làm gì cả\") ghép なに với động từ します (làm). どこも thường đi với động từ di chuyển như いきます (đi), không đi với します.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>おくには（　　）ですか。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"Where is your home country?\"</p>|||<p>おくには（　　）ですか。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống:</p>",
+          "options": [
+            {
+              "text": "どこ|||どこ"
+            },
+            {
+              "text": "なん|||なん"
+            },
+            {
+              "text": "どちら|||どちら"
+            },
+            {
+              "text": "だれ|||だれ"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>おくにはどちらですか</b> is the standard polite phrasing to ask someone's home country — どちら is more polite than どこ in this fixed expression.</div><div class=\"ml-vi\"><b>おくにはどちらですか</b> là cách hỏi lịch sự chuẩn về quê quán của ai đó — どちら lịch sự hơn どこ trong cụm cố định này.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：これは（　　）の　ペンですか。<br>B：せんせいのです。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Whose pen is this?\" B: \"It's the teacher's.\"</p>|||<p>A：これは（　　）の　ペンですか。<br>B：せんせいのです。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống:</p>",
+          "options": [
+            {
+              "text": "どちら|||どちら"
+            },
+            {
+              "text": "どこ|||どこ"
+            },
+            {
+              "text": "なに|||なに"
+            },
+            {
+              "text": "だれ|||だれ"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">B answers with a person (せんせい, teacher), so the question word must be <b>だれ</b> (who) — だれの = \"whose\".</div><div class=\"ml-vi\">B trả lời bằng một người (せんせい, giáo viên), nên từ để hỏi phải là <b>だれ</b> (ai) — だれの = \"của ai\".</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>ライスを（　　）ください。</p><p>Choose the appropriate answer from A, B, C, D to fill in the blank. \"Please give me ( ) rice.\"</p>|||<p>ライスを（　　）ください。</p><p>Chọn đáp án thích hợp trong A, B, C, D để điền vào ngoặc cho câu sau:</p>",
+          "options": [
+            {
+              "text": "いっつ|||いっつ"
+            },
+            {
+              "text": "ひとつ|||ひとつ"
+            },
+            {
+              "text": "ひとり|||ひとり"
+            },
+            {
+              "text": "いちつ|||いちつ"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>ひとつ</b> is the general counter for \"one\" (of an item); いっつ and いちつ aren't valid counters, and ひとり counts people, not food.</div><div class=\"ml-vi\"><b>ひとつ</b> là lượng từ chung cho \"một\" (đồ vật); いっつ và いちつ không phải lượng từ hợp lệ, còn ひとり đếm người, không đếm đồ ăn.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>えいがを（　　）。</p><p>Choose the appropriate answer from A, B, C, D to fill in the blank. \"( ) a movie.\"</p>|||<p>えいがを（　　）。</p><p>Chọn đáp án thích hợp trong A, B, C, D để điền vào ngoặc cho câu sau:</p>",
+          "options": [
+            {
+              "text": "のみます|||のみます"
+            },
+            {
+              "text": "かいます|||かいます"
+            },
+            {
+              "text": "みます|||みます"
+            },
+            {
+              "text": "ねます|||ねます"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>えいがをみます</b> = \"(I) watch a movie.\" のみます (drink), かいます (buy), ねます (sleep) don't pair with えいが (movie).</div><div class=\"ml-vi\"><b>えいがをみます</b> = \"(Tôi) xem phim.\" のみます (uống), かいます (mua), ねます (ngủ) không hợp với えいが (phim).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>あしたも　7時に　学校へ（　　）。</p><p>Choose the appropriate answer from A, B, C, D to fill in the blank. \"Tomorrow too, I'll ( ) to school at 7.\"</p>|||<p>あしたも　7時に　学校へ（　　）。</p><p>Chọn đáp án thích hợp trong A, B, C, D để điền vào ngoặc cho câu sau:</p>",
+          "options": [
+            {
+              "text": "きます|||きます"
+            },
+            {
+              "text": "ききます|||ききます"
+            },
+            {
+              "text": "はたらきます|||はたらきます"
+            },
+            {
+              "text": "おきます|||おきます"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>学校へきます</b> = \"(I) come to school.\" ききます (listen), はたらきます (work), おきます (wake up) don't fit with へ (direction) + 学校.</div><div class=\"ml-vi\"><b>学校へきます</b> = \"(Tôi) đến trường.\" ききます (nghe), はたらきます (làm việc), おきます (thức dậy) không hợp với へ (hướng đến) + 学校.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>私は　まいばん、10時に　しんぶんを（　　）。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"Every night at 10, I ( ) the newspaper.\"</p>|||<p>私は　まいばん、10時に　しんぶんを（　　）。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "のみます|||のみます"
+            },
+            {
+              "text": "かいます|||かいます"
+            },
+            {
+              "text": "ねます|||ねます"
+            },
+            {
+              "text": "よみます|||よみます"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>しんぶんをよみます</b> = \"(I) read the newspaper.\" のみます (drink), かいます (buy), ねます (sleep) don't fit with しんぶん (newspaper) as the natural daily action.</div><div class=\"ml-vi\"><b>しんぶんをよみます</b> = \"(Tôi) đọc báo.\" のみます (uống), かいます (mua), ねます (ngủ) không hợp làm hành động hàng ngày với しんぶん (báo).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>（　　）にほんごを　べんきょうします。</p><p>Choose the appropriate answer from A, B, C, D to fill in the blank. \"( ), I study Japanese.\"</p>|||<p>（　　）にほんごを　べんきょうします。</p><p>Chọn đáp án thích hợp trong A, B, C, D để điền vào ngoặc cho câu sau:</p>",
+          "options": [
+            {
+              "text": "あさごはん|||あさごはん"
+            },
+            {
+              "text": "まいにち|||まいにち"
+            },
+            {
+              "text": "うち|||うち"
+            },
+            {
+              "text": "やすみ|||やすみ"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>まいにち にほんごを べんきょうします</b> = \"I study Japanese every day.\" あさごはん (breakfast), うち (home), やすみ (day off) don't fit as a frequency adverb here.</div><div class=\"ml-vi\"><b>まいにち にほんごを べんきょうします</b> = \"Tôi học tiếng Nhật mỗi ngày.\" あさごはん (bữa sáng), うち (nhà), やすみ (ngày nghỉ) không hợp làm trạng từ tần suất ở đây.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：毎日(まいにち)、あさごはんを　食(た)べますか。<br>B：いいえ、私は　あさ、なに（　　）食(た)べません。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Do you eat breakfast every day?\" B: \"No, I don't eat ( ) in the morning.\"</p>|||<p>A：毎日(まいにち)、あさごはんを　食(た)べますか。<br>B：いいえ、私は　あさ、なに（　　）食(た)べません。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "を|||を"
+            },
+            {
+              "text": "も|||も"
+            },
+            {
+              "text": "へ|||へ"
+            },
+            {
+              "text": "で|||で"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>なにも 食べません</b> = \"(I) don't eat anything\" — も combined with a negative verb expresses total negation.</div><div class=\"ml-vi\"><b>なにも 食べません</b> = \"(Tôi) không ăn gì cả\" — も kết hợp động từ phủ định thể hiện phủ định toàn phần.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>ミラーさんは　ごはん（　　）さかななどを　たべます。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"Miller eats rice ( ) fish, etc.\"</p>|||<p>ミラーさんは　ごはん（　　）さかななどを　たべます。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "で|||で"
+            },
+            {
+              "text": "と|||と"
+            },
+            {
+              "text": "や|||や"
+            },
+            {
+              "text": "も|||も"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>ごはんや さかななど</b> = \"rice, fish, and so on\" — や lists items non-exhaustively, matching など (\"etc.\") later in the sentence.</div><div class=\"ml-vi\"><b>ごはんや さかななど</b> = \"cơm, cá, v.v.\" — や liệt kê không đầy đủ, khớp với など (\"v.v.\") ở sau câu.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：たんじょうびは　いつですか。<br>B：二月【三日】です。</p><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D. A: \"When is your birthday?\" B: \"It's February [3rd].\"</p>|||<p>A：たんじょうびは　いつですか。<br>B：二月【三日】です。</p><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D</p>",
+          "options": [
+            {
+              "text": "よっか|||よっか"
+            },
+            {
+              "text": "みっか|||みっか"
+            },
+            {
+              "text": "とお|||とお"
+            },
+            {
+              "text": "ようか|||ようか"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>三日</b> (the 3rd day of the month) is read <b>みっか</b>.</div><div class=\"ml-vi\"><b>三日</b> (ngày mùng 3) đọc là <b>みっか</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>すみません、いま　何時　【何分】ですか</p><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D. \"Excuse me, what time, [what minute] is it now?\"</p>|||<p>すみません、いま　何時　【何分】ですか</p><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D</p>",
+          "options": [
+            {
+              "text": "なんふん|||なんふん"
+            },
+            {
+              "text": "なんぷん|||なんぷん"
+            },
+            {
+              "text": "なんじ|||なんじ"
+            },
+            {
+              "text": "なんぶん|||なんぶん"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>何分</b> (what minute) is read <b>なんぷん</b> — with a half-voiced ぷ, not ふ or ぶ.</div><div class=\"ml-vi\"><b>何分</b> (mấy phút) đọc là <b>なんぷん</b> — với âm bán đục ぷ, không phải ふ hay ぶ.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>マルコさんの　たんじょうびは　5月【みっか】です。</p><p>Which kanji corresponds to the word in brackets [ ]? Choose the correct answer from A, B, C, D. \"Marco's birthday is May [3rd].\"</p>|||<p>マルコさんの　たんじょうびは　5月【みっか】です。</p><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:</p>",
+          "options": [
+            {
+              "text": "三日|||三日"
+            },
+            {
+              "text": "九日|||九日"
+            },
+            {
+              "text": "六日|||六日"
+            },
+            {
+              "text": "五日|||五日"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>みっか</b> (the 3rd day of the month) is written <b>三日</b>.</div><div class=\"ml-vi\"><b>みっか</b> (ngày mùng 3) được viết là <b>三日</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：リンさんは　おいくつですか。<br>B：【ろくじゅうはっさい】です。</p><p>Which kanji corresponds to the word in brackets [ ]? Choose the correct answer from A, B, C, D. A: \"How old is Lin?\" B: \"[68] years old.\"</p>|||<p>A：リンさんは　おいくつですか。<br>B：【ろくじゅうはっさい】です。</p><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:</p>",
+          "options": [
+            {
+              "text": "六十九才|||六十九才"
+            },
+            {
+              "text": "七十九才|||七十九才"
+            },
+            {
+              "text": "六十八才|||六十八才"
+            },
+            {
+              "text": "四十八才|||四十八才"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>ろくじゅうはっさい</b> (68 years old) is written <b>六十八才</b> — 六十(60) + 八才(8 years, with the irregular はっさい reading).</div><div class=\"ml-vi\"><b>ろくじゅうはっさい</b> (68 tuổi) được viết là <b>六十八才</b> — 六十(60) + 八才(8 tuổi, đọc bất quy tắc はっさい).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：あのう、すみません。くつやは　どこですか。<br>B：あそこです。<br>A：そうですか。（＿＿＿）</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Um, excuse me. Where's the shoe shop?\" B: \"Over there.\" A: \"I see. ( ).\"</p>|||<p>A：あのう、すみません。くつやは　どこですか。<br>B：あそこです。<br>A：そうですか。（＿＿＿）</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "よろしく　おねがいします|||よろしく　おねがいします"
+            },
+            {
+              "text": "ありがとうございます|||ありがとうございます"
+            },
+            {
+              "text": "おやすみなさい|||おやすみなさい"
+            },
+            {
+              "text": "おはようございます|||おはようございます"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>ありがとうございます</b> (\"thank you\") is the natural closing after getting directions.</div><div class=\"ml-vi\"><b>ありがとうございます</b> (\"cảm ơn\") là lời kết tự nhiên sau khi được chỉ đường.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>てんいん：いらっしゃいませ<br>A：すみません、けいたいでんわは　どこですか。<br>てんいん：けいたいでんわは　（＿＿＿）です。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. Clerk: \"Welcome.\" A: \"Excuse me, where are the mobile phones?\" Clerk: \"Mobile phones are ( ).\"</p>|||<p>てんいん：いらっしゃいませ<br>A：すみません、けいたいでんわは　どこですか。<br>てんいん：けいたいでんわは　（＿＿＿）です。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "こちら|||こちら"
+            },
+            {
+              "text": "それ|||それ"
+            },
+            {
+              "text": "その|||その"
+            },
+            {
+              "text": "これ|||これ"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>こちら</b> (\"this way\") is the polite direction word a clerk uses when pointing a customer toward something.</div><div class=\"ml-vi\"><b>こちら</b> (\"lối này\") là từ chỉ hướng lịch sự nhân viên dùng khi chỉ khách tới một chỗ nào đó.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：さかなは　えいご（＿＿＿）なんですか。<br>B：「fish」です。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"What is fish ( ) English?\" B: \"It's 'fish'.\"</p>|||<p>A：さかなは　えいご（＿＿＿）なんですか。<br>B：「fish」です。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "で|||で"
+            },
+            {
+              "text": "へ|||へ"
+            },
+            {
+              "text": "は|||は"
+            },
+            {
+              "text": "も|||も"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>えいごでなんですか</b> = \"What is it in English?\" — で marks the language/means used.</div><div class=\"ml-vi\"><b>えいごでなんですか</b> = \"Trong tiếng Anh gọi là gì?\" — で đánh dấu ngôn ngữ/phương tiện được dùng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：しゅみは　なんですか。<br>B：どくしょ（＿＿＿）えいがです。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"What's your hobby?\" B: \"Reading ( ) movies.\"</p>|||<p>A：しゅみは　なんですか。<br>B：どくしょ（＿＿＿）えいがです。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "は|||は"
+            },
+            {
+              "text": "も|||も"
+            },
+            {
+              "text": "と|||と"
+            },
+            {
+              "text": "に|||に"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>どくしょとえいが</b> = \"reading and movies\" — と exhaustively lists the two hobbies.</div><div class=\"ml-vi\"><b>どくしょとえいが</b> = \"đọc sách và xem phim\" — と liệt kê đầy đủ hai sở thích.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>パーティーで、＿＿＿＿をのみます。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"At the party, I drink ___.\"</p>|||<p>パーティーで、＿＿＿＿をのみます。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "おさけ|||おさけ"
+            },
+            {
+              "text": "チーズ|||チーズ"
+            },
+            {
+              "text": "おすし|||おすし"
+            },
+            {
+              "text": "カレー|||カレー"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>おさけをのみます</b> = \"(I) drink sake/alcohol.\" チーズ (cheese), おすし (sushi), カレー (curry) are eaten (たべます), not drunk.</div><div class=\"ml-vi\"><b>おさけをのみます</b> = \"(Tôi) uống rượu sake.\" チーズ (phô mai), おすし (sushi), カレー (cà ri) là đồ ăn (たべます), không phải đồ uống.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>①パン<br>②パソコン<br>③ケーキ<br>④たまご</p><p>Choose the word that doesn't belong with the others:</p>|||<p>①パン<br>②パソコン<br>③ケーキ<br>④たまご</p><p>Hãy chọn từ khác loại trong các từ sau:</p>",
+          "options": [
+            {
+              "text": "パン|||パン"
+            },
+            {
+              "text": "たまご|||たまご"
+            },
+            {
+              "text": "ケーキ|||ケーキ"
+            },
+            {
+              "text": "パソコン|||パソコン"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">パン (bread), たまご (egg), and ケーキ (cake) are all food; <b>パソコン</b> (computer) is electronics, so it's the odd one out.</div><div class=\"ml-vi\">パン (bánh mì), たまご (trứng), ケーキ (bánh ngọt) đều là đồ ăn; <b>パソコン</b> (máy tính) là thiết bị điện tử, nên là từ khác loại.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>\"きつえんじょ\"</p><p>Find the correct Vietnamese meaning for the following word: \"きつえんじょ\"</p>|||<p>\"きつえんじょ\"</p><p>Hãy tìm nghĩa tiếng Việt tương ứng cho từ sau:</p>",
+          "options": [
+            {
+              "text": "Nơi hút thuốc|||Nơi hút thuốc"
+            },
+            {
+              "text": "Quán giải khát|||Quán giải khát"
+            },
+            {
+              "text": "Quầy thông tin|||Quầy thông tin"
+            },
+            {
+              "text": "Nhà hàng|||Nhà hàng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>きつえんじょ</b> (喫煙所, kitsuenjo) literally means \"smoking place/area.\"</div><div class=\"ml-vi\"><b>きつえんじょ</b> (喫煙所, kitsuenjo) nghĩa đen là \"nơi hút thuốc.\"</div>"
+        }
+      ]
+    },
+    {
+      "kind": "FE",
+      "code": "FE-D10",
+      "source": "REAL",
+      "sortOrder": 9,
+      "title": "Đề 10 — Final Exam|||Đề 10 — Thi cuối kỳ",
+      "description": "Real JPD113 FE paper, 30 questions.|||Đề FE thật môn JPD113, 30 câu.",
+      "durationMinutes": 45,
+      "totalPoints": 10,
+      "passMark": 4,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. The exam is presented bilingually — use the EN/VN toggle if you need the Vietnamese instructions. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Đề hiển thị song ngữ — dùng nút EN/VN nếu cần xem hướng dẫn tiếng Việt. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>カレーを　2つ（　　）コーヒーを　2つ（　　）ください。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blanks. \"Please give me 2 curries ( ) 2 coffees ( ).\"</p>|||<p>カレーを　2つ（　　）コーヒーを　2つ（　　）ください。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "の／を|||の／を"
+            },
+            {
+              "text": "と／を|||と／を"
+            },
+            {
+              "text": "と／✕|||と／✕"
+            },
+            {
+              "text": "✕／と|||✕／と"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>カレーを2つと コーヒーを2つ ください</b> = \"Please give me 2 curries and 2 coffees.\" と joins the two items; no particle is needed right before ください.</div><div class=\"ml-vi\"><b>カレーを2つと コーヒーを2つ ください</b> = \"Cho tôi 2 cà ri và 2 cà phê.\" と nối hai món; không cần trợ từ ngay trước ください.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：これは（　　）のスープですか。<br>B：さかなとやさいのスープです。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"What kind of soup is this?\" B: \"It's fish and vegetable soup.\"</p>|||<p>A：これは（　　）のスープですか。<br>B：さかなとやさいのスープです。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống:</p>",
+          "options": [
+            {
+              "text": "どこ|||どこ"
+            },
+            {
+              "text": "いつ|||いつ"
+            },
+            {
+              "text": "だれ|||だれ"
+            },
+            {
+              "text": "なん|||なん"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">B answers with the kind/content of the soup, so the question word must be <b>なん</b> (what).</div><div class=\"ml-vi\">B trả lời bằng loại/thành phần của súp, nên từ để hỏi phải là <b>なん</b> (gì/cái gì).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>これは　かんこく（　　）かばんです。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"This is a bag ( ) Korea.\"</p>|||<p>これは　かんこく（　　）かばんです。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "で|||で"
+            },
+            {
+              "text": "も|||も"
+            },
+            {
+              "text": "×|||×"
+            },
+            {
+              "text": "の|||の"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>かんこくのかばん</b> = \"a Korean bag / bag from Korea\" — の connects two nouns in a modifying relationship.</div><div class=\"ml-vi\"><b>かんこくのかばん</b> = \"túi xách của Hàn Quốc\" — の nối hai danh từ theo quan hệ bổ nghĩa.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>えいがを（　　）。</p><p>Choose the appropriate answer from A, B, C, D to fill in the blank. \"( ) a movie.\"</p>|||<p>えいがを（　　）。</p><p>Chọn đáp án thích hợp trong A, B, C, D để điền vào ngoặc cho câu sau:</p>",
+          "options": [
+            {
+              "text": "ねます|||ねます"
+            },
+            {
+              "text": "みます|||みます"
+            },
+            {
+              "text": "のみます|||のみます"
+            },
+            {
+              "text": "かいます|||かいます"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>えいがをみます</b> = \"(I) watch a movie.\" ねます (sleep), のみます (drink), かいます (buy) don't pair with えいが (movie).</div><div class=\"ml-vi\"><b>えいがをみます</b> = \"(Tôi) xem phim.\" ねます (ngủ), のみます (uống), かいます (mua) không hợp với えいが (phim).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：毎日(まいにち)、あさごはんを　食(た)べますか。<br>B：いいえ、私は　あさ、なに（　　）食(た)べません。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Do you eat breakfast every day?\" B: \"No, I don't eat ( ) in the morning.\"</p>|||<p>A：毎日(まいにち)、あさごはんを　食(た)べますか。<br>B：いいえ、私は　あさ、なに（　　）食(た)べません。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "を|||を"
+            },
+            {
+              "text": "も|||も"
+            },
+            {
+              "text": "へ|||へ"
+            },
+            {
+              "text": "で|||で"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>なにも 食べません</b> = \"(I) don't eat anything\" — も combined with a negative verb expresses total negation.</div><div class=\"ml-vi\"><b>なにも 食べません</b> = \"(Tôi) không ăn gì cả\" — も kết hợp động từ phủ định thể hiện phủ định toàn phần.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>ごぜん（　　）をたべます。</p><p>Choose the appropriate answer from A, B, C, D to fill in the blank. \"In the morning I eat ( ).\"</p>|||<p>ごぜん（　　）をたべます。</p><p>Chọn đáp án thích hợp trong A, B, C, D để điền vào ngoặc cho câu sau:</p>",
+          "options": [
+            {
+              "text": "あさごはん|||あさごはん"
+            },
+            {
+              "text": "ひるごはん|||ひるごはん"
+            },
+            {
+              "text": "あさライス|||あさライス"
+            },
+            {
+              "text": "ひるライス|||ひるライス"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">ごぜん (morning) pairs with <b>あさごはん</b> (breakfast); ひるごはん (lunch) belongs to afternoon (ごご), and あさライス/ひるライス aren't standard words.</div><div class=\"ml-vi\">ごぜん (buổi sáng) đi với <b>あさごはん</b> (bữa sáng); ひるごはん (bữa trưa) thuộc buổi chiều (ごご), còn あさライス/ひるライス không phải từ chuẩn.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>ミラーさんは　まいあさ、パン（　　）とりにくなどを　食べます。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"Every morning, Miller eats bread ( ) chicken, etc.\"</p>|||<p>ミラーさんは　まいあさ、パン（　　）とりにくなどを　食べます。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "と|||と"
+            },
+            {
+              "text": "で|||で"
+            },
+            {
+              "text": "や|||や"
+            },
+            {
+              "text": "も|||も"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>パンや とりにくなど</b> = \"bread, chicken, and so on\" — や lists items non-exhaustively, matching など (\"etc.\") later in the sentence.</div><div class=\"ml-vi\"><b>パンや とりにくなど</b> = \"bánh mì, thịt gà, v.v.\" — や liệt kê không đầy đủ, khớp với など (\"v.v.\") ở sau câu.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>まいにち、3【時間】　べんきょうします。</p><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D. \"Every day I study for 3 [hours].\"</p>|||<p>まいにち、3【時間】　べんきょうします。</p><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D</p>",
+          "options": [
+            {
+              "text": "しがん|||しがん"
+            },
+            {
+              "text": "しかん|||しかん"
+            },
+            {
+              "text": "じかん|||じかん"
+            },
+            {
+              "text": "じっかん|||じっかん"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>時間</b> (hour/time) is read <b>じかん</b> (jikan).</div><div class=\"ml-vi\"><b>時間</b> (giờ/thời gian) đọc là <b>じかん</b> (jikan).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：はじめまして、パクです。よろしくおねがいします。<br>B：ナタポンです。（　　）よろしくおねがいします。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Nice to meet you, I'm Park. Please treat me well.\" B: \"I'm Nathapon. ( ), please treat me well too.\"</p>|||<p>A：はじめまして、パクです。よろしくおねがいします。<br>B：ナタポンです。（　　）よろしくおねがいします。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "どういたしまして|||どういたしまして"
+            },
+            {
+              "text": "こちらこそ|||こちらこそ"
+            },
+            {
+              "text": "そうですか|||そうですか"
+            },
+            {
+              "text": "ありがとう|||ありがとう"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>こちらこそ</b> (\"likewise / the pleasure is mine\") is the standard reciprocal reply to よろしくおねがいします.</div><div class=\"ml-vi\"><b>こちらこそ</b> (\"tôi mới phải nói vậy / rất hân hạnh\") là câu đáp lại chuẩn cho よろしくおねがいします.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>こうえん（　　）行きます。こうえん（　　）バーベキューをします。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blanks. \"( ) go to the park. ( ) do a barbecue at the park.\"</p>|||<p>こうえん（　　）行きます。こうえん（　　）バーベキューをします。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "を／へ|||を／へ"
+            },
+            {
+              "text": "で／へ|||で／へ"
+            },
+            {
+              "text": "へ／を|||へ／を"
+            },
+            {
+              "text": "へ／で|||へ／で"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>こうえんへ 行きます。こうえんで バーベキューをします。</b> — へ marks the destination of movement, で marks the place where the activity happens.</div><div class=\"ml-vi\"><b>こうえんへ 行きます。こうえんで バーベキューをします。</b> — へ đánh dấu điểm đến của di chuyển, で đánh dấu nơi diễn ra hoạt động.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：これは　いくらですか。<br>B：（　　）は　千円です。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"How much is this?\" B: \"( ) is 1,000 yen.\"</p>|||<p>A：これは　いくらですか。<br>B：（　　）は　千円です。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "それ|||それ"
+            },
+            {
+              "text": "あれ|||あれ"
+            },
+            {
+              "text": "そこ|||そこ"
+            },
+            {
+              "text": "あそこ|||あそこ"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">A points to an item near themselves with これ; B, replying about that same item, refers back to it with <b>それ</b> (\"that, near you\").</div><div class=\"ml-vi\">A chỉ vào vật gần mình bằng これ; B, khi trả lời về chính vật đó, dùng lại <b>それ</b> (\"cái đó, gần bạn\").</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>としょかんは（　　）から（　　）までですか。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"( ) to ( ) is the library (open)?\"</p>|||<p>としょかんは（　　）から（　　）までですか。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống:</p>",
+          "options": [
+            {
+              "text": "何/何|||何/何"
+            },
+            {
+              "text": "何曜/何曜|||何曜/何曜"
+            },
+            {
+              "text": "何曜日/何曜日|||何曜日/何曜日"
+            },
+            {
+              "text": "日/日|||日/日"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">\"What day of the week\" requires the complete word <b>何曜日</b> (with 日); 何曜 alone is grammatically incomplete.</div><div class=\"ml-vi\">\"Thứ mấy\" cần từ đầy đủ <b>何曜日</b> (có chữ 日); 何曜 một mình chưa hoàn chỉnh về ngữ pháp.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>（　　）にほんごを　べんきょうします。</p><p>Choose the appropriate answer from A, B, C, D to fill in the blank. \"( ), I study Japanese.\"</p>|||<p>（　　）にほんごを　べんきょうします。</p><p>Chọn đáp án thích hợp trong A, B, C, D để điền vào ngoặc cho câu sau:</p>",
+          "options": [
+            {
+              "text": "あさごはん|||あさごはん"
+            },
+            {
+              "text": "まいにち|||まいにち"
+            },
+            {
+              "text": "うち|||うち"
+            },
+            {
+              "text": "やすみ|||やすみ"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>まいにち にほんごを べんきょうします</b> = \"I study Japanese every day.\" あさごはん (breakfast), うち (home), やすみ (day off) don't fit as a frequency adverb here.</div><div class=\"ml-vi\"><b>まいにち にほんごを べんきょうします</b> = \"Tôi học tiếng Nhật mỗi ngày.\" あさごはん (bữa sáng), うち (nhà), やすみ (ngày nghỉ) không hợp làm trạng từ tần suất ở đây.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>ライスを（　　）ください。</p><p>Choose the appropriate answer from A, B, C, D to fill in the blank. \"Please give me ( ) rice.\"</p>|||<p>ライスを（　　）ください。</p><p>Chọn đáp án thích hợp trong A, B, C, D để điền vào ngoặc cho câu sau:</p>",
+          "options": [
+            {
+              "text": "いっつ|||いっつ"
+            },
+            {
+              "text": "ひとつ|||ひとつ"
+            },
+            {
+              "text": "ひとり|||ひとり"
+            },
+            {
+              "text": "いちつ|||いちつ"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>ひとつ</b> is the general counter for \"one\" (of an item); いっつ and いちつ aren't valid counters, and ひとり counts people, not food.</div><div class=\"ml-vi\"><b>ひとつ</b> là lượng từ chung cho \"một\" (đồ vật); いっつ và いちつ không phải lượng từ hợp lệ, còn ひとり đếm người, không đếm đồ ăn.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：Bさんは　学生ですか。<br>B：いいえ、（　　）。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Are you a student?\" B: \"No, ( ).\"</p>|||<p>A：Bさんは　学生ですか。<br>B：いいえ、（　　）。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "がくせいです|||がくせいです"
+            },
+            {
+              "text": "きょうしじゃありません|||きょうしじゃありません"
+            },
+            {
+              "text": "きょうしです|||きょうしです"
+            },
+            {
+              "text": "そうです|||そうです"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">After denying being a student (いいえ), B states what they actually are: <b>きょうしです</b> (\"I'm a teacher\").</div><div class=\"ml-vi\">Sau khi phủ định là học sinh (いいえ), B nói mình thực sự là gì: <b>きょうしです</b> (\"Tôi là giáo viên\").</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>まいあさ（　　）で　たべますか。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"( ) do you eat every morning?\"</p>|||<p>まいあさ（　　）で　たべますか。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống:</p>",
+          "options": [
+            {
+              "text": "いつ|||いつ"
+            },
+            {
+              "text": "なんようび|||なんようび"
+            },
+            {
+              "text": "だれ|||だれ"
+            },
+            {
+              "text": "どこ|||どこ"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">The location particle で needs a place question word: <b>どこ</b> (where).</div><div class=\"ml-vi\">Trợ từ chỉ nơi chốn で cần đi với từ để hỏi địa điểm: <b>どこ</b> (ở đâu).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>まいあさ、【なんじ】に　がっこうへ　いきますか。</p><p>Which kanji corresponds to the word in brackets [ ]? Choose the correct answer from A, B, C, D. \"( ) time do you go to school every morning?\"</p>|||<p>まいあさ、【なんじ】に　がっこうへ　いきますか。</p><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:</p>",
+          "options": [
+            {
+              "text": "荷寺|||荷寺"
+            },
+            {
+              "text": "荷時|||荷時"
+            },
+            {
+              "text": "何寺|||何寺"
+            },
+            {
+              "text": "何時|||何時"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>なんじ</b> (what time) is written <b>何時</b> — using 何 (what) + 時 (time/hour), not the similar-looking 荷 or 寺.</div><div class=\"ml-vi\"><b>なんじ</b> (mấy giờ) được viết là <b>何時</b> — dùng 何 (gì) + 時 (giờ), không phải chữ gần giống 荷 hay 寺.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：サントスさん、おくには　どちらですか。<br>B：（　　）です。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Santos, where is your home country?\" B: \"( ).\"</p>|||<p>A：サントスさん、おくには　どちらですか。<br>B：（　　）です。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "にじゅうごさい|||にじゅうごさい"
+            },
+            {
+              "text": "かいしゃいん|||かいしゃいん"
+            },
+            {
+              "text": "りょこう|||りょこう"
+            },
+            {
+              "text": "オーストラリア|||オーストラリア"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">おくには (home country) needs a country name as the answer: <b>オーストラリア</b> (Australia).</div><div class=\"ml-vi\">おくには (quê quán) cần một tên quốc gia làm câu trả lời: <b>オーストラリア</b> (Úc).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>やまださんは（　　）で　とけいを　かいます。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"Yamada buys a watch at ( ).\"</p>|||<p>やまださんは（　　）で　とけいを　かいます。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "たいいくかん|||たいいくかん"
+            },
+            {
+              "text": "びょういん|||びょういん"
+            },
+            {
+              "text": "スーパー|||スーパー"
+            },
+            {
+              "text": "ゆうびんきょく|||ゆうびんきょく"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>スーパーで とけいを かいます</b> = \"(He) buys a watch at the supermarket.\" たいいくかん (gym), びょういん (hospital), ゆうびんきょく (post office) don't sell watches.</div><div class=\"ml-vi\"><b>スーパーで とけいを かいます</b> = \"(Anh ấy) mua đồng hồ ở siêu thị.\" たいいくかん (nhà thi đấu), びょういん (bệnh viện), ゆうびんきょく (bưu điện) không bán đồng hồ.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>おくには（　　）ですか。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"Where is your home country?\"</p>|||<p>おくには（　　）ですか。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống:</p>",
+          "options": [
+            {
+              "text": "どこ|||どこ"
+            },
+            {
+              "text": "なん|||なん"
+            },
+            {
+              "text": "どちら|||どちら"
+            },
+            {
+              "text": "だれ|||だれ"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>おくにはどちらですか</b> is the standard polite phrasing to ask someone's home country — どちら is more polite than どこ in this fixed expression.</div><div class=\"ml-vi\"><b>おくにはどちらですか</b> là cách hỏi lịch sự chuẩn về quê quán của ai đó — どちら lịch sự hơn どこ trong cụm cố định này.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：エスカレーターは　どこです。<br>B：（　　）です。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Where is the escalator?\" B: \"It's ( ).\"</p>|||<p>A：エスカレーターは　どこです。<br>B：（　　）です。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "あちら|||あちら"
+            },
+            {
+              "text": "みっか|||みっか"
+            },
+            {
+              "text": "あれ|||あれ"
+            },
+            {
+              "text": "これ|||これ"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Answering どこ (where) politely uses a direction word: <b>あちら</b> (\"over there\"). あれ points to an object, not a direction/location answer.</div><div class=\"ml-vi\">Trả lời cho どこ (ở đâu) một cách lịch sự dùng từ chỉ hướng: <b>あちら</b> (\"phía đó\"). あれ chỉ vào một vật, không hợp làm câu trả lời vị trí/hướng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>しゅみは（　　）です。</p><p>Choose the appropriate answer from A, B, C, D to fill in the blank. \"My hobby is ( ).\"</p>|||<p>しゅみは（　　）です。</p><p>Chọn đáp án thích hợp trong A, B, C, D để điền vào ngoặc cho câu sau:</p>",
+          "options": [
+            {
+              "text": "本を　よみます|||本を　よみます"
+            },
+            {
+              "text": "どくしょ|||どくしょ"
+            },
+            {
+              "text": "あさ|||あさ"
+            },
+            {
+              "text": "おきます|||おきます"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">しゅみは___です needs a NOUN. <b>どくしょ</b> (reading) is a noun; 本をよみます (\"read books\") and おきます (\"wake up\") are full verb phrases that don't fit grammatically after は.</div><div class=\"ml-vi\">しゅみは___です cần một DANH TỪ. <b>どくしょ</b> (đọc sách, danh từ) hợp; 本をよみます (\"đọc sách\", cụm động từ) và おきます (\"thức dậy\") không hợp ngữ pháp sau は.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>お誕生日(たんじょうび)は　（　　）ですか。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. \"( ) is your birthday?\"</p>|||<p>お誕生日(たんじょうび)は　（　　）ですか。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống:</p>",
+          "options": [
+            {
+              "text": "なん|||なん"
+            },
+            {
+              "text": "どこ|||どこ"
+            },
+            {
+              "text": "いつ|||いつ"
+            },
+            {
+              "text": "どちら|||どちら"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">A birthday is answered with a date, so the question word must be <b>いつ</b> (when).</div><div class=\"ml-vi\">Sinh nhật được trả lời bằng một ngày tháng, nên từ để hỏi phải là <b>いつ</b> (khi nào).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A「けいたいでんわは　どこですか。」<br>B「けいたいでんわは　あちらです。」<br>A「（　　）、ありがとうございます。」</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Where is the mobile phone?\" B: \"The mobile phone is over there.\" A: \"( ), thank you.\"</p>|||<p>A「けいたいでんわは　どこですか。」<br>B「けいたいでんわは　あちらです。」<br>A「（　　）、ありがとうございます。」</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "じゃ|||じゃ"
+            },
+            {
+              "text": "あ|||あ"
+            },
+            {
+              "text": "そうですよ|||そうですよ"
+            },
+            {
+              "text": "そうです|||そうです"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>あ</b> is an interjection expressing sudden realization (\"Ah, I see\") — natural right before thanking someone for the information.</div><div class=\"ml-vi\"><b>あ</b> là thán từ thể hiện sự chợt hiểu ra (\"À, ra vậy\") — tự nhiên ngay trước khi cảm ơn ai đó vì thông tin.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A「にほんへ　いきます。」<br>B「へえ。（　　）。」</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"I'm going to Japan.\" B: \"Oh! ( ).\"</p>|||<p>A「にほんへ　いきます。」<br>B「へえ。（　　）。」</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "いいです|||いいです"
+            },
+            {
+              "text": "そうです|||そうです"
+            },
+            {
+              "text": "そうですか|||そうですか"
+            },
+            {
+              "text": "えっ|||えっ"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">After the surprised へえ, the natural reactive follow-up is <b>そうですか</b> (\"Is that so?\").</div><div class=\"ml-vi\">Sau tiếng ngạc nhiên へえ, câu đáp tự nhiên tiếp theo là <b>そうですか</b> (\"Vậy à?\").</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>【私】はイレナです。</p><p>How is the kanji in brackets [ ] read? Choose the correct answer from A, B, C, D. \"[I] am Irena.\"</p>|||<p>【私】はイレナです。</p><p>Các chữ Hán trong ngoặc [ ] có cách đọc tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D</p>",
+          "options": [
+            {
+              "text": "はたし|||はたし"
+            },
+            {
+              "text": "わたし|||わたし"
+            },
+            {
+              "text": "わだし|||わだし"
+            },
+            {
+              "text": "ばたし|||ばたし"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>私</b> (I) is read <b>わたし</b> (watashi).</div><div class=\"ml-vi\"><b>私</b> (tôi) đọc là <b>わたし</b> (watashi).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>いまは　やすみの【じかん】です。</p><p>Which kanji corresponds to the word in brackets [ ]? Choose the correct answer from A, B, C, D. \"Now is break [time].\"</p>|||<p>いまは　やすみの【じかん】です。</p><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:</p>",
+          "options": [
+            {
+              "text": "時問|||時問"
+            },
+            {
+              "text": "時間|||時間"
+            },
+            {
+              "text": "待問|||待問"
+            },
+            {
+              "text": "待間|||待間"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>じかん</b> (time) is written <b>時間</b> — using 時 (time) + 間 (interval), not the similar-looking 問 or 待.</div><div class=\"ml-vi\"><b>じかん</b> (thời gian) được viết là <b>時間</b> — dùng 時 (giờ/thời gian) + 間 (khoảng), không phải chữ gần giống 問 hay 待.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：このりょうりは　何ですか。<br>B：（　　）です。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"What dish is this?\" B: \"It's ( ).\"</p>|||<p>A：このりょうりは　何ですか。<br>B：（　　）です。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống</p>",
+          "options": [
+            {
+              "text": "ぶたにく　りょうり|||ぶたにく　りょうり"
+            },
+            {
+              "text": "ぶたくにの　りょうり|||ぶたくにの　りょうり"
+            },
+            {
+              "text": "ぶたにくで　りょうり|||ぶたにくで　りょうり"
+            },
+            {
+              "text": "ぶたにくから　りょうり|||ぶたにくから　りょうり"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>ぶたにくのりょうり</b> = \"a pork dish\" — の connects the ingredient (pork) to the dish, matching the grammar point tested in this unit.</div><div class=\"ml-vi\"><b>ぶたにくのりょうり</b> = \"món ăn từ thịt heo\" — の nối nguyên liệu (thịt heo) với món ăn, khớp điểm ngữ pháp được kiểm tra trong bài này.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>A：さとうさん、おしごとは？<br>B：私は（　　）です。</p><p>Choose the appropriate answer among A, B, C, D to fill in the blank. A: \"Sato, what about your job?\" B: \"I am ( ).\"</p>|||<p>A：さとうさん、おしごとは？<br>B：私は（　　）です。</p><p>Chọn trong A, B, C, D đáp án thích hợp để điền vào chỗ trống;</p>",
+          "options": [
+            {
+              "text": "日本人|||日本人"
+            },
+            {
+              "text": "だいがく|||だいがく"
+            },
+            {
+              "text": "はたち|||はたち"
+            },
+            {
+              "text": "きょうし|||きょうし"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>きょうし</b> (teacher) directly answers a question about one's job. 日本人 (nationality), だいがく (university, a place), はたち (20 years old) answer different questions.</div><div class=\"ml-vi\"><b>きょうし</b> (giáo viên) trả lời trực tiếp câu hỏi về công việc. 日本人 (quốc tịch), だいがく (trường đại học, một địa điểm), はたち (20 tuổi) trả lời cho câu hỏi khác.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "<p>このかばんは【にまんよんせんはっぴゃく】えんです。</p><p>Which kanji corresponds to the word in brackets [ ]? Choose the correct answer from A, B, C, D. \"This bag is [24,800] yen.\"</p>|||<p>このかばんは【にまんよんせんはっぴゃく】えんです。</p><p>Các từ trong ngoặc [ ] dưới đây có chữ Hán tương ứng như thế nào? Hãy chọn đáp án đúng trong A, B, C, D:</p>",
+          "options": [
+            {
+              "text": "二八百万四千|||二八百万四千"
+            },
+            {
+              "text": "四千八百二万|||四千八百二万"
+            },
+            {
+              "text": "二万四八百千|||二万四八百千"
+            },
+            {
+              "text": "二万四千八百|||二万四千八百"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">24,800 = 二万(20,000) + 四千(4,000) + 八百(800), written in descending place-value order: <b>二万四千八百</b>.</div><div class=\"ml-vi\">24.800 = 二万(20.000) + 四千(4.000) + 八百(800), viết theo thứ tự hàng giảm dần: <b>二万四千八百</b>.</div>"
+        }
+      ]
     }
   ]
 };

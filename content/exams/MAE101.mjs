@@ -12,7 +12,7 @@ export default {
       "source": "REAL",
       "sortOrder": 0,
       "title": "Đề 1 — Final Exam|||Đề 1 — Thi cuối kỳ",
-      "description": "MAE101 real FE multiple-choice paper, transcribed from the exam images; answers reasoned here. (46 questions)|||Đề trắc nghiệm FE thật môn MAE101, chép từ ảnh đề; đáp án được suy luận và biên soạn tại đây. (46 câu)",
+      "description": "MAE101 real FE multiple-choice paper, transcribed from the exam images; answers reasoned here. Four questions that the narrow scan had cropped were replaced by equivalent questions written for this bank. (50 questions)|||Đề trắc nghiệm FE thật môn MAE101, chép từ ảnh đề; đáp án được suy luận và biên soạn tại đây. Bốn câu bị ảnh quét cắt mất dữ liệu đã được thay bằng câu tương đương do chúng tôi soạn. (50 câu)",
       "durationMinutes": 90,
       "totalPoints": 10,
       "passMark": 4,
@@ -1195,6 +1195,110 @@ export default {
             3
           ],
           "explanation": "<div class=\"ml-en\">Need $x-3\\ge0\\Rightarrow x\\ge3$; $\\sin x$ is defined everywhere. Domain $[3,\\infty)$ — (ii).</div><div class=\"ml-vi\">Cần $x-3\\ge0\\Rightarrow x\\ge3$; $\\sin x$ xác định khắp nơi. Tập xác định $[3,\\infty)$ — (ii).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The table below gives the values of a function $f$ at five equally spaced points on $[0,4]$. Use Simpson's rule with $n=4$ to approximate $\\displaystyle\\int_0^4 f(x)\\,dx$.<table class=\"exam-table\"><thead><tr><th>x</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th></tr></thead><tbody><tr><td>f(x)</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr></tbody></table>|||Bảng dưới đây cho giá trị của hàm $f$ tại năm điểm cách đều trên $[0,4]$. Dùng quy tắc Simpson với $n=4$ để xấp xỉ $\\displaystyle\\int_0^4 f(x)\\,dx$.<table class=\"exam-table\"><thead><tr><th>x</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th></tr></thead><tbody><tr><td>f(x)</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr></tbody></table>",
+          "options": [
+            {
+              "text": "12|||12"
+            },
+            {
+              "text": "10|||10"
+            },
+            {
+              "text": "14|||14"
+            },
+            {
+              "text": "9|||9"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Here $h=\\dfrac{4-0}{4}=1$ and Simpson's rule uses the weights $1,4,2,4,1$: $\\dfrac{h}{3}\\big(f(0)+4f(1)+2f(2)+4f(3)+f(4)\\big)=\\dfrac13(1+8+6+16+5)=\\dfrac{36}{3}=12$. A common error is to use the trapezoidal weights $1,2,2,2,1$ instead.</div><div class=\"ml-vi\">Ở đây $h=\\dfrac{4-0}{4}=1$ và quy tắc Simpson dùng bộ trọng số $1,4,2,4,1$: $\\dfrac{h}{3}\\big(f(0)+4f(1)+2f(2)+4f(3)+f(4)\\big)=\\dfrac13(1+8+6+16+5)=\\dfrac{36}{3}=12$. Lỗi thường gặp là dùng nhầm trọng số hình thang $1,2,2,2,1$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Evaluate $\\displaystyle\\int_1^4 \\dfrac{1}{\\sqrt{x}}\\,dx$.|||Tính $\\displaystyle\\int_1^4 \\dfrac{1}{\\sqrt{x}}\\,dx$.",
+          "options": [
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "$\\dfrac12$|||$\\dfrac12$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Write the integrand as $x^{-1/2}$; an antiderivative is $2x^{1/2}=2\\sqrt{x}$. Then $\\big[2\\sqrt{x}\\big]_1^4=2(2)-2(1)=2$.</div><div class=\"ml-vi\">Viết hàm dưới dấu tích phân thành $x^{-1/2}$; một nguyên hàm là $2x^{1/2}=2\\sqrt{x}$. Khi đó $\\big[2\\sqrt{x}\\big]_1^4=2(2)-2(1)=2$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "An object cools so that its temperature after $t$ minutes is $T(t)=20+60e^{-0.05t}$ (degrees Celsius). How fast is the temperature changing at $t=0$?|||Một vật nguội đi sao cho nhiệt độ sau $t$ phút là $T(t)=20+60e^{-0.05t}$ (độ C). Nhiệt độ đang thay đổi nhanh thế nào tại $t=0$?",
+          "options": [
+            {
+              "text": "$-3$ degrees per minute|||$-3$ độ mỗi phút"
+            },
+            {
+              "text": "$-0.05$ degrees per minute|||$-0.05$ độ mỗi phút"
+            },
+            {
+              "text": "$-60$ degrees per minute|||$-60$ độ mỗi phút"
+            },
+            {
+              "text": "$3$ degrees per minute|||$3$ độ mỗi phút"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">$T'(t)=60\\cdot(-0.05)e^{-0.05t}=-3e^{-0.05t}$, so $T'(0)=-3$. The sign is negative because the object is cooling; the constant 20 is the ambient temperature and does not affect the rate.</div><div class=\"ml-vi\">$T'(t)=60\\cdot(-0.05)e^{-0.05t}=-3e^{-0.05t}$, nên $T'(0)=-3$. Dấu âm vì vật đang nguội đi; hằng số 20 là nhiệt độ môi trường và không ảnh hưởng tới tốc độ biến thiên.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following vectors belongs to $\\text{span}\\{(1,0,1),\\ (0,1,1)\\}$?|||Vectơ nào sau đây thuộc $\\text{span}\\{(1,0,1),\\ (0,1,1)\\}$?",
+          "options": [
+            {
+              "text": "$(2,3,5)$|||$(2,3,5)$"
+            },
+            {
+              "text": "$(1,1,1)$|||$(1,1,1)$"
+            },
+            {
+              "text": "$(1,2,4)$|||$(1,2,4)$"
+            },
+            {
+              "text": "$(0,0,1)$|||$(0,0,1)$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">A combination $a(1,0,1)+b(0,1,1)=(a,\\ b,\\ a+b)$, so a vector lies in the span exactly when its third component is the sum of the first two. Only $(2,3,5)$ satisfies $2+3=5$; the others fail: $1+1\\ne1$, $1+2\\ne4$ and $0+0\\ne1$.</div><div class=\"ml-vi\">Tổ hợp $a(1,0,1)+b(0,1,1)=(a,\\ b,\\ a+b)$, nên một vectơ thuộc không gian sinh đúng khi thành phần thứ ba bằng tổng hai thành phần đầu. Chỉ $(2,3,5)$ thoả $2+3=5$; các vectơ khác đều sai: $1+1\\ne1$, $1+2\\ne4$ và $0+0\\ne1$.</div>"
         }
       ]
     },
@@ -10246,7 +10350,7 @@ export default {
       "source": "REAL",
       "sortOrder": 8,
       "title": "Đề 9 — SU25 Final Exam|||Đề 9 — Thi cuối kỳ SU25",
-      "description": "MAE101 real FE multiple-choice paper (Summer 2025), transcribed from the exam images; answers reasoned here. (49 questions)|||Đề trắc nghiệm FE thật môn MAE101 (kỳ Hè 2025), chép từ ảnh đề; đáp án được suy luận và biên soạn tại đây. (49 câu)",
+      "description": "MAE101 real FE multiple-choice paper (Summer 2025), transcribed from the exam images; answers reasoned here. One question that existed only as a graph was replaced by an equivalent question written for this bank. (50 questions)|||Đề trắc nghiệm FE thật môn MAE101 (kỳ Hè 2025), chép từ ảnh đề; đáp án được suy luận và biên soạn tại đây. Một câu chỉ có đồ thị đã được thay bằng câu tương đương do chúng tôi soạn. (50 câu)",
       "durationMinutes": 90,
       "totalPoints": 10,
       "passMark": 4,
@@ -11501,6 +11605,1349 @@ export default {
             0
           ],
           "explanation": "<div class=\"ml-en\">Both sets are orthogonal, but $\\|v_2+v_3\\|=\\sqrt2\\neq1$, so (i) is not orthonormal. In (ii) the norm is $\\sqrt{\\tfrac12+\\tfrac12}=1$, so only (ii) is orthonormal.</div><div class=\"ml-vi\">Cả hai hệ đều trực giao, nhưng $\\|v_2+v_3\\|=\\sqrt2\\neq1$ nên (i) không trực chuẩn. Ở (ii) chuẩn bằng $\\sqrt{\\tfrac12+\\tfrac12}=1$, nên chỉ (ii) trực chuẩn.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "At which numbers is the function $f(x)=|x^2-4|$ NOT differentiable?|||Hàm $f(x)=|x^2-4|$ KHÔNG khả vi tại những giá trị nào?",
+          "options": [
+            {
+              "text": "$x=-2$ and $x=2$|||$x=-2$ và $x=2$"
+            },
+            {
+              "text": "$x=0$ only|||Chỉ tại $x=0$"
+            },
+            {
+              "text": "$x=2$ only|||Chỉ tại $x=2$"
+            },
+            {
+              "text": "It is differentiable everywhere|||Hàm khả vi tại mọi điểm"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The absolute value creates a corner exactly where the inside expression changes sign, i.e. where $x^2-4=0$, so at $x=\\pm2$. At $x=2$ the one-sided slopes are $-4$ (from the left) and $+4$ (from the right); the same happens at $x=-2$. Everywhere else $f$ is a polynomial and therefore differentiable.</div><div class=\"ml-vi\">Dấu giá trị tuyệt đối tạo ra điểm gãy đúng tại nơi biểu thức bên trong đổi dấu, tức nơi $x^2-4=0$, nghĩa là tại $x=\\pm2$. Tại $x=2$, hệ số góc một phía là $-4$ (bên trái) và $+4$ (bên phải); tại $x=-2$ cũng vậy. Ở mọi điểm khác $f$ là một đa thức nên khả vi.</div>"
+        }
+      ]
+    },
+    {
+      "kind": "FE",
+      "code": "MAE-D10",
+      "source": "SAMPLE",
+      "sortOrder": 9,
+      "title": "Đề 10 — Practice Exam (authored)|||Đề 10 — Đề luyện tập (tự soạn)",
+      "description": "MAE101 practice paper written in the format of the nine real FE papers, covering calculus and linear algebra. Every question is new — none repeats a question from Đề 1 to Đề 9, and every answer was verified numerically. (50 questions)|||Đề luyện tập MAE101 soạn theo đúng format của 9 đề FE thật, phủ cả giải tích và đại số tuyến tính. Toàn bộ câu hỏi đều mới — không trùng với Đề 1 đến Đề 9, và mọi đáp án đều đã được kiểm bằng máy. (50 câu)",
+      "durationMinutes": 90,
+      "totalPoints": 10,
+      "passMark": 4,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. Math is rendered with formulas — read carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Công thức toán được hiển thị — đọc kỹ. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Evaluate $\\lim_{x\\to 2}\\dfrac{x^2-4}{x^2-3x+2}$.|||Tính $\\lim_{x\\to 2}\\dfrac{x^2-4}{x^2-3x+2}$.",
+          "options": [
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "$\\infty$|||$\\infty$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Both numerator and denominator vanish at $x=2$, so factor first: $\\dfrac{(x-2)(x+2)}{(x-2)(x-1)}=\\dfrac{x+2}{x-1}$ for $x\\ne 2$. Letting $x\\to 2$ gives $\\dfrac{4}{1}=4$.</div><div class=\"ml-vi\">Cả tử và mẫu đều bằng 0 tại $x=2$ nên phải phân tích thành nhân tử trước: $\\dfrac{(x-2)(x+2)}{(x-2)(x-1)}=\\dfrac{x+2}{x-1}$ với $x\\ne 2$. Cho $x\\to 2$ được $\\dfrac{4}{1}=4$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Evaluate $\\lim_{x\\to\\infty}\\dfrac{3x^2-5x+1}{2x^2+7}$.|||Tính $\\lim_{x\\to\\infty}\\dfrac{3x^2-5x+1}{2x^2+7}$.",
+          "options": [
+            {
+              "text": "$\\dfrac32$|||$\\dfrac32$"
+            },
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "$\\infty$|||$\\infty$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Divide numerator and denominator by $x^2$: $\\dfrac{3-5/x+1/x^2}{2+7/x^2}\\to\\dfrac{3}{2}$. When the degrees are equal the limit is the ratio of the leading coefficients.</div><div class=\"ml-vi\">Chia cả tử và mẫu cho $x^2$: $\\dfrac{3-5/x+1/x^2}{2+7/x^2}\\to\\dfrac{3}{2}$. Khi bậc tử bằng bậc mẫu, giới hạn bằng tỉ số hai hệ số bậc cao nhất.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Evaluate $\\lim_{x\\to 0}\\dfrac{\\sin 5x}{3x}$.|||Tính $\\lim_{x\\to 0}\\dfrac{\\sin 5x}{3x}$.",
+          "options": [
+            {
+              "text": "$\\dfrac53$|||$\\dfrac53$"
+            },
+            {
+              "text": "$\\dfrac35$|||$\\dfrac35$"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Rewrite as $\\dfrac{5}{3}\\cdot\\dfrac{\\sin 5x}{5x}$. Since $\\lim_{u\\to0}\\dfrac{\\sin u}{u}=1$ with $u=5x$, the limit is $\\dfrac53$.</div><div class=\"ml-vi\">Viết lại thành $\\dfrac{5}{3}\\cdot\\dfrac{\\sin 5x}{5x}$. Vì $\\lim_{u\\to0}\\dfrac{\\sin u}{u}=1$ với $u=5x$ nên giới hạn bằng $\\dfrac53$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Find the value of $a$ so that $f(x)=\\begin{cases}x^2+a & \\text{if } x\\lt 1\\\\ 3x-2 & \\text{if } x\\ge 1\\end{cases}$ is continuous at $x=1$.|||Tìm giá trị của $a$ để hàm $f(x)=\\begin{cases}x^2+a & \\text{nếu } x\\lt 1\\\\ 3x-2 & \\text{nếu } x\\ge 1\\end{cases}$ liên tục tại $x=1$.",
+          "options": [
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "-1|||-1"
+            },
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Continuity at $x=1$ requires the two one-sided limits to agree with $f(1)$: $\\lim_{x\\to1^-}f(x)=1+a$ and $f(1)=3(1)-2=1$. So $1+a=1$, giving $a=0$.</div><div class=\"ml-vi\">Liên tục tại $x=1$ đòi hỏi hai giới hạn một phía bằng $f(1)$: $\\lim_{x\\to1^-}f(x)=1+a$ và $f(1)=3(1)-2=1$. Vậy $1+a=1$, suy ra $a=0$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Evaluate $\\lim_{x\\to 0}\\dfrac{\\sqrt{x+9}-3}{x}$.|||Tính $\\lim_{x\\to 0}\\dfrac{\\sqrt{x+9}-3}{x}$.",
+          "options": [
+            {
+              "text": "$\\dfrac16$|||$\\dfrac16$"
+            },
+            {
+              "text": "$\\dfrac13$|||$\\dfrac13$"
+            },
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "$\\dfrac19$|||$\\dfrac19$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Multiply by the conjugate: $\\dfrac{(\\sqrt{x+9}-3)(\\sqrt{x+9}+3)}{x(\\sqrt{x+9}+3)}=\\dfrac{x}{x(\\sqrt{x+9}+3)}=\\dfrac{1}{\\sqrt{x+9}+3}\\to\\dfrac{1}{6}$.</div><div class=\"ml-vi\">Nhân với biểu thức liên hợp: $\\dfrac{(\\sqrt{x+9}-3)(\\sqrt{x+9}+3)}{x(\\sqrt{x+9}+3)}=\\dfrac{x}{x(\\sqrt{x+9}+3)}=\\dfrac{1}{\\sqrt{x+9}+3}\\to\\dfrac{1}{6}$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Evaluate $\\lim_{x\\to 0^-}\\dfrac{|x|}{x}$.|||Tính $\\lim_{x\\to 0^-}\\dfrac{|x|}{x}$.",
+          "options": [
+            {
+              "text": "-1|||-1"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "The limit does not exist|||Giới hạn không tồn tại"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">For $x\\lt 0$ we have $|x|=-x$, so the quotient is $\\dfrac{-x}{x}=-1$ for every such $x$; the one-sided limit is $-1$. (The two-sided limit does not exist, because the right-hand limit is $+1$ — but the question asks only for the left one.)</div><div class=\"ml-vi\">Với $x\\lt 0$ thì $|x|=-x$ nên thương bằng $\\dfrac{-x}{x}=-1$ với mọi $x$ như vậy; giới hạn một phía bằng $-1$. (Giới hạn hai phía không tồn tại vì giới hạn phải bằng $+1$ — nhưng câu hỏi chỉ hỏi giới hạn trái.)</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Let $f(x)=x^3e^x$. Find $f'(1)$.|||Cho $f(x)=x^3e^x$. Tính $f'(1)$.",
+          "options": [
+            {
+              "text": "$4e$|||$4e$"
+            },
+            {
+              "text": "$3e$|||$3e$"
+            },
+            {
+              "text": "$e$|||$e$"
+            },
+            {
+              "text": "$4e^2$|||$4e^2$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Product rule: $f'(x)=3x^2e^x+x^3e^x=e^x(3x^2+x^3)$. At $x=1$: $e(3+1)=4e$.</div><div class=\"ml-vi\">Quy tắc tích: $f'(x)=3x^2e^x+x^3e^x=e^x(3x^2+x^3)$. Tại $x=1$: $e(3+1)=4e$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Let $y=\\dfrac{2x+1}{x^2+3}$. Find $y'(1)$.|||Cho $y=\\dfrac{2x+1}{x^2+3}$. Tính $y'(1)$.",
+          "options": [
+            {
+              "text": "$\\dfrac18$|||$\\dfrac18$"
+            },
+            {
+              "text": "$\\dfrac14$|||$\\dfrac14$"
+            },
+            {
+              "text": "$-\\dfrac18$|||$-\\dfrac18$"
+            },
+            {
+              "text": "$\\dfrac{1}{16}$|||$\\dfrac{1}{16}$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Quotient rule: $y'=\\dfrac{2(x^2+3)-(2x+1)(2x)}{(x^2+3)^2}$. At $x=1$: $\\dfrac{2\\cdot4-3\\cdot2}{16}=\\dfrac{2}{16}=\\dfrac18$.</div><div class=\"ml-vi\">Quy tắc thương: $y'=\\dfrac{2(x^2+3)-(2x+1)(2x)}{(x^2+3)^2}$. Tại $x=1$: $\\dfrac{2\\cdot4-3\\cdot2}{16}=\\dfrac{2}{16}=\\dfrac18$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Let $y=\\sqrt{x^2+1}$. Find $y'(2)$.|||Cho $y=\\sqrt{x^2+1}$. Tính $y'(2)$.",
+          "options": [
+            {
+              "text": "$\\dfrac{2}{\\sqrt5}$|||$\\dfrac{2}{\\sqrt5}$"
+            },
+            {
+              "text": "$\\dfrac{1}{\\sqrt5}$|||$\\dfrac{1}{\\sqrt5}$"
+            },
+            {
+              "text": "$\\dfrac{4}{\\sqrt5}$|||$\\dfrac{4}{\\sqrt5}$"
+            },
+            {
+              "text": "$\\sqrt5$|||$\\sqrt5$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Chain rule: $y'=\\dfrac{x}{\\sqrt{x^2+1}}$. At $x=2$: $\\dfrac{2}{\\sqrt5}$.</div><div class=\"ml-vi\">Quy tắc dây chuyền: $y'=\\dfrac{x}{\\sqrt{x^2+1}}$. Tại $x=2$: $\\dfrac{2}{\\sqrt5}$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The curve $x^2+xy+y^2=7$ passes through $(1,2)$. Find $\\dfrac{dy}{dx}$ at that point.|||Đường cong $x^2+xy+y^2=7$ đi qua điểm $(1,2)$. Tính $\\dfrac{dy}{dx}$ tại điểm đó.",
+          "options": [
+            {
+              "text": "$-\\dfrac45$|||$-\\dfrac45$"
+            },
+            {
+              "text": "$-\\dfrac54$|||$-\\dfrac54$"
+            },
+            {
+              "text": "$\\dfrac45$|||$\\dfrac45$"
+            },
+            {
+              "text": "$-\\dfrac13$|||$-\\dfrac13$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Differentiate implicitly: $2x+y+xy'+2yy'=0$, so $y'=-\\dfrac{2x+y}{x+2y}$. At $(1,2)$: $-\\dfrac{2+2}{1+4}=-\\dfrac45$.</div><div class=\"ml-vi\">Đạo hàm hai vế theo ẩn: $2x+y+xy'+2yy'=0$, suy ra $y'=-\\dfrac{2x+y}{x+2y}$. Tại $(1,2)$: $-\\dfrac{2+2}{1+4}=-\\dfrac45$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Let $f(x)=\\sin 2x$. Find $f''\\left(\\dfrac{\\pi}{4}\\right)$.|||Cho $f(x)=\\sin 2x$. Tính $f''\\left(\\dfrac{\\pi}{4}\\right)$.",
+          "options": [
+            {
+              "text": "-4|||-4"
+            },
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "-2|||-2"
+            },
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">$f'(x)=2\\cos 2x$ and $f''(x)=-4\\sin 2x$. At $x=\\dfrac{\\pi}{4}$: $-4\\sin\\dfrac{\\pi}{2}=-4$.</div><div class=\"ml-vi\">$f'(x)=2\\cos 2x$ và $f''(x)=-4\\sin 2x$. Tại $x=\\dfrac{\\pi}{4}$: $-4\\sin\\dfrac{\\pi}{2}=-4$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Use the linearization of $f(x)=\\sqrt{x}$ at $a=4$ to estimate $\\sqrt{4.02}$.|||Dùng xấp xỉ tuyến tính của $f(x)=\\sqrt{x}$ tại $a=4$ để ước lượng $\\sqrt{4.02}$.",
+          "options": [
+            {
+              "text": "2.005|||2.005"
+            },
+            {
+              "text": "2.05|||2.05"
+            },
+            {
+              "text": "2.0005|||2.0005"
+            },
+            {
+              "text": "2.01|||2.01"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">$L(x)=f(4)+f'(4)(x-4)=2+\\dfrac14(x-4)$. With $x=4.02$: $2+\\dfrac14(0.02)=2.005$.</div><div class=\"ml-vi\">$L(x)=f(4)+f'(4)(x-4)=2+\\dfrac14(x-4)$. Với $x=4.02$: $2+\\dfrac14(0.02)=2.005$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "A ladder 13 ft long leans against a vertical wall. The foot of the ladder slides away from the wall at 2 ft/s. How fast is the top sliding down when the foot is 5 ft from the wall?|||Một cái thang dài 13 ft dựa vào tường thẳng đứng. Chân thang trượt ra xa tường với tốc độ 2 ft/s. Đầu thang tụt xuống nhanh thế nào khi chân thang cách tường 5 ft?",
+          "options": [
+            {
+              "text": "$\\dfrac56$ ft/s|||$\\dfrac56$ ft/s"
+            },
+            {
+              "text": "$\\dfrac65$ ft/s|||$\\dfrac65$ ft/s"
+            },
+            {
+              "text": "$\\dfrac{5}{12}$ ft/s|||$\\dfrac{5}{12}$ ft/s"
+            },
+            {
+              "text": "2 ft/s|||2 ft/s"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">From $x^2+y^2=169$: $2x\\dfrac{dx}{dt}+2y\\dfrac{dy}{dt}=0$. When $x=5$, $y=\\sqrt{169-25}=12$, so $\\dfrac{dy}{dt}=-\\dfrac{x}{y}\\dfrac{dx}{dt}=-\\dfrac{5\\cdot2}{12}=-\\dfrac56$ ft/s; the top falls at $\\dfrac56$ ft/s.</div><div class=\"ml-vi\">Từ $x^2+y^2=169$: $2x\\dfrac{dx}{dt}+2y\\dfrac{dy}{dt}=0$. Khi $x=5$ thì $y=\\sqrt{169-25}=12$, nên $\\dfrac{dy}{dt}=-\\dfrac{x}{y}\\dfrac{dx}{dt}=-\\dfrac{5\\cdot2}{12}=-\\dfrac56$ ft/s; đầu thang tụt xuống với tốc độ $\\dfrac56$ ft/s.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Find all critical numbers of $f(x)=x^3-3x^2-9x+5$.|||Tìm tất cả các điểm tới hạn của $f(x)=x^3-3x^2-9x+5$.",
+          "options": [
+            {
+              "text": "$x=-1$ and $x=3$|||$x=-1$ và $x=3$"
+            },
+            {
+              "text": "$x=1$ and $x=-3$|||$x=1$ và $x=-3$"
+            },
+            {
+              "text": "$x=0$ and $x=3$|||$x=0$ và $x=3$"
+            },
+            {
+              "text": "$x=-1$ only|||Chỉ có $x=-1$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">$f'(x)=3x^2-6x-9=3(x^2-2x-3)=3(x-3)(x+1)$, which is zero exactly at $x=3$ and $x=-1$. The derivative is a polynomial, so there are no points where it fails to exist.</div><div class=\"ml-vi\">$f'(x)=3x^2-6x-9=3(x^2-2x-3)=3(x-3)(x+1)$, bằng 0 đúng tại $x=3$ và $x=-1$. Đạo hàm là đa thức nên không có điểm nào đạo hàm không tồn tại.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Find the absolute maximum and absolute minimum values of $f(x)=2x^3-3x^2-12x+1$ on $[-2,3]$.|||Tìm giá trị lớn nhất và nhỏ nhất tuyệt đối của $f(x)=2x^3-3x^2-12x+1$ trên $[-2,3]$.",
+          "options": [
+            {
+              "text": "Maximum 8, minimum -19|||Lớn nhất 8, nhỏ nhất -19"
+            },
+            {
+              "text": "Maximum 8, minimum -8|||Lớn nhất 8, nhỏ nhất -8"
+            },
+            {
+              "text": "Maximum -3, minimum -19|||Lớn nhất -3, nhỏ nhất -19"
+            },
+            {
+              "text": "Maximum 1, minimum -19|||Lớn nhất 1, nhỏ nhất -19"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">$f'(x)=6x^2-6x-12=6(x-2)(x+1)$, so the critical numbers inside $[-2,3]$ are $x=-1$ and $x=2$. Values: $f(-2)=-3$, $f(-1)=8$, $f(2)=-19$, $f(3)=-8$. Maximum $=8$, minimum $=-19$.</div><div class=\"ml-vi\">$f'(x)=6x^2-6x-12=6(x-2)(x+1)$ nên các điểm tới hạn trong $[-2,3]$ là $x=-1$ và $x=2$. Giá trị: $f(-2)=-3$, $f(-1)=8$, $f(2)=-19$, $f(3)=-8$. Lớn nhất $=8$, nhỏ nhất $=-19$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Find the inflection point of the curve $y=x^3-6x^2+9x$.|||Tìm điểm uốn của đường cong $y=x^3-6x^2+9x$.",
+          "options": [
+            {
+              "text": "$(2,2)$|||$(2,2)$"
+            },
+            {
+              "text": "$(2,0)$|||$(2,0)$"
+            },
+            {
+              "text": "$(1,4)$|||$(1,4)$"
+            },
+            {
+              "text": "$(3,0)$|||$(3,0)$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">$y''=6x-12=0$ gives $x=2$, and $y''$ changes sign there, so it really is an inflection point. The $y$-value is $8-24+18=2$, so the point is $(2,2)$.</div><div class=\"ml-vi\">$y''=6x-12=0$ cho $x=2$, và $y''$ đổi dấu tại đó nên đây thực sự là điểm uốn. Giá trị $y$ bằng $8-24+18=2$, vậy điểm uốn là $(2,2)$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "A rectangle has a perimeter of 40 m. What is the largest possible area?|||Một hình chữ nhật có chu vi 40 m. Diện tích lớn nhất có thể là bao nhiêu?",
+          "options": [
+            {
+              "text": "$100\\ \\text{m}^2$|||$100\\ \\text{m}^2$"
+            },
+            {
+              "text": "$80\\ \\text{m}^2$|||$80\\ \\text{m}^2$"
+            },
+            {
+              "text": "$400\\ \\text{m}^2$|||$400\\ \\text{m}^2$"
+            },
+            {
+              "text": "$50\\ \\text{m}^2$|||$50\\ \\text{m}^2$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">With $2(x+y)=40$ we get $y=20-x$ and $A(x)=x(20-x)=20x-x^2$. Then $A'(x)=20-2x=0$ gives $x=10$, $y=10$ and $A=100\\ \\text{m}^2$; $A''=-2\\lt 0$ confirms a maximum. Among all rectangles of a fixed perimeter the square is the largest.</div><div class=\"ml-vi\">Từ $2(x+y)=40$ được $y=20-x$ và $A(x)=x(20-x)=20x-x^2$. Khi đó $A'(x)=20-2x=0$ cho $x=10$, $y=10$ và $A=100\\ \\text{m}^2$; $A''=-2\\lt 0$ khẳng định đây là cực đại. Trong các hình chữ nhật cùng chu vi, hình vuông có diện tích lớn nhất.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Apply one step of Newton's method to $f(x)=x^2-5$ starting from $x_0=2$. What is $x_1$?|||Thực hiện một bước của phương pháp Newton cho $f(x)=x^2-5$ với $x_0=2$. Giá trị $x_1$ là bao nhiêu?",
+          "options": [
+            {
+              "text": "2.25|||2.25"
+            },
+            {
+              "text": "2.5|||2.5"
+            },
+            {
+              "text": "2.2|||2.2"
+            },
+            {
+              "text": "1.75|||1.75"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">$x_1=x_0-\\dfrac{f(x_0)}{f'(x_0)}=2-\\dfrac{4-5}{4}=2+0.25=2.25$. (For comparison $\\sqrt5\\approx2.2360$, so one step is already close.)</div><div class=\"ml-vi\">$x_1=x_0-\\dfrac{f(x_0)}{f'(x_0)}=2-\\dfrac{4-5}{4}=2+0.25=2.25$. (Để so sánh, $\\sqrt5\\approx2.2360$ nên chỉ một bước đã khá sát.)</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The function $f(x)=x^2$ satisfies the hypotheses of the Mean Value Theorem on $[1,3]$. Find the number $c$ that the theorem guarantees.|||Hàm $f(x)=x^2$ thoả các giả thiết của Định lý giá trị trung bình trên $[1,3]$. Tìm số $c$ mà định lý bảo đảm tồn tại.",
+          "options": [
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "1.5|||1.5"
+            },
+            {
+              "text": "2.5|||2.5"
+            },
+            {
+              "text": "$\\sqrt3$|||$\\sqrt3$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The theorem requires $f'(c)=\\dfrac{f(3)-f(1)}{3-1}=\\dfrac{9-1}{2}=4$. Since $f'(x)=2x$, we solve $2c=4$, so $c=2$, which does lie in $(1,3)$.</div><div class=\"ml-vi\">Định lý đòi hỏi $f'(c)=\\dfrac{f(3)-f(1)}{3-1}=\\dfrac{9-1}{2}=4$. Vì $f'(x)=2x$ nên giải $2c=4$, được $c=2$, và $c=2$ nằm trong $(1,3)$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Evaluate $\\displaystyle\\int_0^1 (3x^2+2x)\\,dx$.|||Tính $\\displaystyle\\int_0^1 (3x^2+2x)\\,dx$.",
+          "options": [
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "5|||5"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">An antiderivative is $x^3+x^2$, so the value is $(1+1)-(0+0)=2$.</div><div class=\"ml-vi\">Một nguyên hàm là $x^3+x^2$ nên giá trị bằng $(1+1)-(0+0)=2$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Evaluate $\\displaystyle\\int_0^1 xe^x\\,dx$.|||Tính $\\displaystyle\\int_0^1 xe^x\\,dx$.",
+          "options": [
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "$e-1$|||$e-1$"
+            },
+            {
+              "text": "$e$|||$e$"
+            },
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Integrate by parts with $u=x$, $dv=e^x dx$: $\\int xe^x dx = xe^x-e^x$. Evaluating from 0 to 1: $(e-e)-(0-1)=1$.</div><div class=\"ml-vi\">Tích phân từng phần với $u=x$, $dv=e^x dx$: $\\int xe^x dx = xe^x-e^x$. Thay cận từ 0 đến 1: $(e-e)-(0-1)=1$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Evaluate $\\displaystyle\\int_0^1 \\dfrac{2x}{x^2+1}\\,dx$.|||Tính $\\displaystyle\\int_0^1 \\dfrac{2x}{x^2+1}\\,dx$.",
+          "options": [
+            {
+              "text": "$\\ln 2$|||$\\ln 2$"
+            },
+            {
+              "text": "$\\dfrac12\\ln 2$|||$\\dfrac12\\ln 2$"
+            },
+            {
+              "text": "$\\ln 3$|||$\\ln 3$"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Substitute $u=x^2+1$, $du=2x\\,dx$; the limits become $u=1$ to $u=2$, so the integral is $\\int_1^2\\dfrac{du}{u}=\\ln 2$.</div><div class=\"ml-vi\">Đổi biến $u=x^2+1$, $du=2x\\,dx$; cận trở thành $u=1$ tới $u=2$, nên tích phân bằng $\\int_1^2\\dfrac{du}{u}=\\ln 2$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Evaluate $\\displaystyle\\int_1^e \\dfrac{\\ln x}{x}\\,dx$.|||Tính $\\displaystyle\\int_1^e \\dfrac{\\ln x}{x}\\,dx$.",
+          "options": [
+            {
+              "text": "$\\dfrac12$|||$\\dfrac12$"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "$e-1$|||$e-1$"
+            },
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Put $u=\\ln x$, $du=\\dfrac{dx}{x}$. The limits become $u=0$ to $u=1$, so the integral is $\\int_0^1 u\\,du=\\dfrac{u^2}{2}\\Big|_0^1=\\dfrac12$.</div><div class=\"ml-vi\">Đặt $u=\\ln x$, $du=\\dfrac{dx}{x}$. Cận trở thành $u=0$ tới $u=1$, nên tích phân bằng $\\int_0^1 u\\,du=\\dfrac{u^2}{2}\\Big|_0^1=\\dfrac12$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "A particle moves along a line with velocity $v(t)=3t^2-2t$ (m/s). Find its displacement between $t=0$ and $t=2$ seconds.|||Một chất điểm chuyển động trên đường thẳng với vận tốc $v(t)=3t^2-2t$ (m/s). Tìm độ dời của nó từ $t=0$ đến $t=2$ giây.",
+          "options": [
+            {
+              "text": "4 m|||4 m"
+            },
+            {
+              "text": "8 m|||8 m"
+            },
+            {
+              "text": "12 m|||12 m"
+            },
+            {
+              "text": "2 m|||2 m"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">By the net change theorem, displacement $=\\int_0^2 v(t)\\,dt=\\big[t^3-t^2\\big]_0^2=(8-4)-0=4$ m. Note that $v(t)\\ge0$ on $[0,2]$ only from $t=\\dfrac23$ on, but the question asks for displacement, not total distance.</div><div class=\"ml-vi\">Theo định lý biến thiên toàn phần, độ dời $=\\int_0^2 v(t)\\,dt=\\big[t^3-t^2\\big]_0^2=(8-4)-0=4$ m. Chú ý $v(t)\\ge0$ trên $[0,2]$ chỉ từ $t=\\dfrac23$ trở đi, nhưng câu hỏi hỏi độ dời chứ không phải quãng đường đi được.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Let $g(x)=\\displaystyle\\int_0^{x^2}\\sin t\\,dt$. Find $g'(x)$.|||Cho $g(x)=\\displaystyle\\int_0^{x^2}\\sin t\\,dt$. Tính $g'(x)$.",
+          "options": [
+            {
+              "text": "$2x\\sin(x^2)$|||$2x\\sin(x^2)$"
+            },
+            {
+              "text": "$\\sin(x^2)$|||$\\sin(x^2)$"
+            },
+            {
+              "text": "$2x\\cos(x^2)$|||$2x\\cos(x^2)$"
+            },
+            {
+              "text": "$-\\cos(x^2)$|||$-\\cos(x^2)$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">By the Fundamental Theorem of Calculus combined with the chain rule, if $g(x)=\\int_0^{u(x)}f(t)dt$ then $g'(x)=f(u(x))\\cdot u'(x)$. Here $f=\\sin$ and $u=x^2$, so $g'(x)=\\sin(x^2)\\cdot 2x$.</div><div class=\"ml-vi\">Theo Định lý cơ bản của giải tích kết hợp quy tắc dây chuyền, nếu $g(x)=\\int_0^{u(x)}f(t)dt$ thì $g'(x)=f(u(x))\\cdot u'(x)$. Ở đây $f=\\sin$ và $u=x^2$ nên $g'(x)=\\sin(x^2)\\cdot 2x$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Evaluate the improper integral $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^3}\\,dx$.|||Tính tích phân suy rộng $\\displaystyle\\int_1^{\\infty}\\dfrac{1}{x^3}\\,dx$.",
+          "options": [
+            {
+              "text": "$\\dfrac12$|||$\\dfrac12$"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "$\\dfrac13$|||$\\dfrac13$"
+            },
+            {
+              "text": "The integral diverges|||Tích phân phân kỳ"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">$\\int_1^{b}x^{-3}dx=\\left[-\\dfrac{1}{2x^2}\\right]_1^{b}=\\dfrac12-\\dfrac{1}{2b^2}\\to\\dfrac12$ as $b\\to\\infty$. In general $\\int_1^\\infty x^{-p}dx$ converges exactly when $p\\gt 1$, and here $p=3$.</div><div class=\"ml-vi\">$\\int_1^{b}x^{-3}dx=\\left[-\\dfrac{1}{2x^2}\\right]_1^{b}=\\dfrac12-\\dfrac{1}{2b^2}\\to\\dfrac12$ khi $b\\to\\infty$. Tổng quát, $\\int_1^\\infty x^{-p}dx$ hội tụ đúng khi $p\\gt 1$, ở đây $p=3$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Approximate $\\displaystyle\\int_0^2 x^2\\,dx$ by a Riemann sum with $n=4$ subintervals, using right endpoints.|||Xấp xỉ $\\displaystyle\\int_0^2 x^2\\,dx$ bằng tổng Riemann với $n=4$ đoạn con, dùng mút phải.",
+          "options": [
+            {
+              "text": "3.75|||3.75"
+            },
+            {
+              "text": "2.75|||2.75"
+            },
+            {
+              "text": "2.5|||2.5"
+            },
+            {
+              "text": "3.5|||3.5"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">$\\Delta x=\\dfrac{2-0}{4}=0.5$ and the right endpoints are $0.5,\\ 1,\\ 1.5,\\ 2$. The sum is $0.5(0.25+1+2.25+4)=0.5\\cdot7.5=3.75$. (The exact value is $\\dfrac83\\approx2.67$; a right sum overestimates an increasing function.)</div><div class=\"ml-vi\">$\\Delta x=\\dfrac{2-0}{4}=0.5$ và các mút phải là $0.5,\\ 1,\\ 1.5,\\ 2$. Tổng bằng $0.5(0.25+1+2.25+4)=0.5\\cdot7.5=3.75$. (Giá trị chính xác là $\\dfrac83\\approx2.67$; tổng mút phải cho kết quả lớn hơn với hàm đồng biến.)</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Use Simpson's rule with $n=2$ to approximate $\\displaystyle\\int_0^2 x^3\\,dx$.|||Dùng quy tắc Simpson với $n=2$ để xấp xỉ $\\displaystyle\\int_0^2 x^3\\,dx$.",
+          "options": [
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "6|||6"
+            },
+            {
+              "text": "4.5|||4.5"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">$h=\\dfrac{2-0}{2}=1$ and Simpson's rule gives $\\dfrac{h}{3}\\big(f(0)+4f(1)+f(2)\\big)=\\dfrac13(0+4+8)=4$. This matches the exact value $\\dfrac{x^4}{4}\\Big|_0^2=4$, because Simpson's rule is exact for polynomials of degree up to 3.</div><div class=\"ml-vi\">$h=\\dfrac{2-0}{2}=1$ và quy tắc Simpson cho $\\dfrac{h}{3}\\big(f(0)+4f(1)+f(2)\\big)=\\dfrac13(0+4+8)=4$. Kết quả trùng với giá trị chính xác $\\dfrac{x^4}{4}\\Big|_0^2=4$, vì quy tắc Simpson chính xác với đa thức bậc không quá 3.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Compute the determinant of $A=\\begin{pmatrix}1&2&3\\\\0&1&4\\\\5&6&0\\end{pmatrix}$.|||Tính định thức của $A=\\begin{pmatrix}1&2&3\\\\0&1&4\\\\5&6&0\\end{pmatrix}$.",
+          "options": [
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "-1|||-1"
+            },
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "24|||24"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Expand along the first row: $1(1\\cdot0-4\\cdot6)-2(0\\cdot0-4\\cdot5)+3(0\\cdot6-1\\cdot5)=-24+40-15=1$.</div><div class=\"ml-vi\">Khai triển theo hàng đầu: $1(1\\cdot0-4\\cdot6)-2(0\\cdot0-4\\cdot5)+3(0\\cdot6-1\\cdot5)=-24+40-15=1$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Find the inverse of $A=\\begin{pmatrix}2&1\\\\5&3\\end{pmatrix}$.|||Tìm ma trận nghịch đảo của $A=\\begin{pmatrix}2&1\\\\5&3\\end{pmatrix}$.",
+          "options": [
+            {
+              "text": "$\\begin{pmatrix}3&-1\\\\-5&2\\end{pmatrix}$|||$\\begin{pmatrix}3&-1\\\\-5&2\\end{pmatrix}$"
+            },
+            {
+              "text": "$\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}$|||$\\begin{pmatrix}3&1\\\\5&2\\end{pmatrix}$"
+            },
+            {
+              "text": "$\\begin{pmatrix}-3&1\\\\5&-2\\end{pmatrix}$|||$\\begin{pmatrix}-3&1\\\\5&-2\\end{pmatrix}$"
+            },
+            {
+              "text": "$\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}$|||$\\begin{pmatrix}2&-1\\\\-5&3\\end{pmatrix}$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">For a $2\\times2$ matrix, $A^{-1}=\\dfrac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$. Here $\\det A=6-5=1$, so $A^{-1}=\\begin{pmatrix}3&-1\\\\-5&2\\end{pmatrix}$; multiplying it by $A$ indeed gives the identity.</div><div class=\"ml-vi\">Với ma trận $2\\times2$, $A^{-1}=\\dfrac{1}{ad-bc}\\begin{pmatrix}d&-b\\\\-c&a\\end{pmatrix}$. Ở đây $\\det A=6-5=1$ nên $A^{-1}=\\begin{pmatrix}3&-1\\\\-5&2\\end{pmatrix}$; nhân với $A$ đúng bằng ma trận đơn vị.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The matrix $B$ is obtained from a $3\\times3$ matrix $A$ by interchanging two rows. If $\\det(A)=5$, what is $\\det(B)$?|||Ma trận $B$ nhận được từ ma trận $3\\times3$ $A$ bằng cách đổi chỗ hai hàng. Nếu $\\det(A)=5$ thì $\\det(B)$ bằng bao nhiêu?",
+          "options": [
+            {
+              "text": "-5|||-5"
+            },
+            {
+              "text": "5|||5"
+            },
+            {
+              "text": "10|||10"
+            },
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Interchanging two rows reverses the sign of a determinant, so $\\det(B)=-5$. For comparison: multiplying one row by $k$ multiplies the determinant by $k$, while adding a multiple of one row to another leaves it unchanged.</div><div class=\"ml-vi\">Đổi chỗ hai hàng thì định thức đổi dấu, nên $\\det(B)=-5$. Để so sánh: nhân một hàng với $k$ thì định thức nhân $k$, còn cộng một bội của hàng này vào hàng khác thì định thức không đổi.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Let $D=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$. Compute $D^4$.|||Cho $D=\\begin{pmatrix}2&0\\\\0&3\\end{pmatrix}$. Tính $D^4$.",
+          "options": [
+            {
+              "text": "$\\begin{pmatrix}16&0\\\\0&81\\end{pmatrix}$|||$\\begin{pmatrix}16&0\\\\0&81\\end{pmatrix}$"
+            },
+            {
+              "text": "$\\begin{pmatrix}8&0\\\\0&12\\end{pmatrix}$|||$\\begin{pmatrix}8&0\\\\0&12\\end{pmatrix}$"
+            },
+            {
+              "text": "$\\begin{pmatrix}16&0\\\\0&12\\end{pmatrix}$|||$\\begin{pmatrix}16&0\\\\0&12\\end{pmatrix}$"
+            },
+            {
+              "text": "$\\begin{pmatrix}8&0\\\\0&81\\end{pmatrix}$|||$\\begin{pmatrix}8&0\\\\0&81\\end{pmatrix}$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">A diagonal matrix is raised to a power entrywise on the diagonal: $D^n=\\begin{pmatrix}2^n&0\\\\0&3^n\\end{pmatrix}$. With $n=4$: $2^4=16$ and $3^4=81$, so $D^4=\\begin{pmatrix}16&0\\\\0&81\\end{pmatrix}$. Multiplying the entries by 4 instead of exponentiating is the usual mistake.</div><div class=\"ml-vi\">Ma trận đường chéo được luỹ thừa theo từng phần tử trên đường chéo: $D^n=\\begin{pmatrix}2^n&0\\\\0&3^n\\end{pmatrix}$. Với $n=4$: $2^4=16$ và $3^4=81$, nên $D^4=\\begin{pmatrix}16&0\\\\0&81\\end{pmatrix}$. Lỗi thường gặp là nhân các phần tử với 4 thay vì luỹ thừa.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Use Cramer's rule to find $x$ in the system $\\begin{cases}2x+y=5\\\\x+3y=10\\end{cases}$.|||Dùng quy tắc Cramer để tìm $x$ trong hệ $\\begin{cases}2x+y=5\\\\x+3y=10\\end{cases}$.",
+          "options": [
+            {
+              "text": "$x=1$|||$x=1$"
+            },
+            {
+              "text": "$x=3$|||$x=3$"
+            },
+            {
+              "text": "$x=5$|||$x=5$"
+            },
+            {
+              "text": "$x=-1$|||$x=-1$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">$D=\\begin{vmatrix}2&1\\\\1&3\\end{vmatrix}=6-1=5$ and $D_x=\\begin{vmatrix}5&1\\\\10&3\\end{vmatrix}=15-10=5$, so $x=\\dfrac{D_x}{D}=1$. (Similarly $D_y=20-5=15$ gives $y=3$; check: $2(1)+3=5$ and $1+3(3)=10$.)</div><div class=\"ml-vi\">$D=\\begin{vmatrix}2&1\\\\1&3\\end{vmatrix}=6-1=5$ và $D_x=\\begin{vmatrix}5&1\\\\10&3\\end{vmatrix}=15-10=5$, nên $x=\\dfrac{D_x}{D}=1$. (Tương tự $D_y=20-5=15$ cho $y=3$; kiểm tra: $2(1)+3=5$ và $1+3(3)=10$.)</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Find the rank of $\\begin{pmatrix}1&2&3&4\\\\2&4&6&8\\\\1&1&1&1\\end{pmatrix}$.|||Tìm hạng của ma trận $\\begin{pmatrix}1&2&3&4\\\\2&4&6&8\\\\1&1&1&1\\end{pmatrix}$.",
+          "options": [
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Row 2 is exactly twice row 1, so it disappears in elimination. Rows 1 and 3 are not proportional, so exactly two rows remain independent: the rank is 2.</div><div class=\"ml-vi\">Hàng 2 đúng bằng 2 lần hàng 1 nên bị triệt tiêu khi khử. Hàng 1 và hàng 3 không tỉ lệ với nhau nên còn đúng hai hàng độc lập: hạng bằng 2.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Solve the system $\\begin{cases}2x+3y=8\\\\x-y=-1\\end{cases}$.|||Giải hệ $\\begin{cases}2x+3y=8\\\\x-y=-1\\end{cases}$.",
+          "options": [
+            {
+              "text": "$x=1,\\ y=2$|||$x=1,\\ y=2$"
+            },
+            {
+              "text": "$x=2,\\ y=1$|||$x=2,\\ y=1$"
+            },
+            {
+              "text": "$x=-1,\\ y=2$|||$x=-1,\\ y=2$"
+            },
+            {
+              "text": "$x=1,\\ y=-2$|||$x=1,\\ y=-2$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">From the second equation $x=y-1$. Substituting: $2(y-1)+3y=8\\Rightarrow 5y=10\\Rightarrow y=2$ and $x=1$. Check: $2(1)+3(2)=8$ and $1-2=-1$.</div><div class=\"ml-vi\">Từ phương trình thứ hai, $x=y-1$. Thế vào: $2(y-1)+3y=8\\Rightarrow 5y=10\\Rightarrow y=2$ và $x=1$. Kiểm tra: $2(1)+3(2)=8$ và $1-2=-1$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "A homogeneous system $Ax=0$ has coefficient matrix $A$ of size $3\\times5$ with rank 2. What is the dimension of its solution space?|||Hệ thuần nhất $Ax=0$ có ma trận hệ số $A$ cỡ $3\\times5$ với hạng bằng 2. Số chiều của không gian nghiệm bằng bao nhiêu?",
+          "options": [
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "5|||5"
+            },
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The number of unknowns is 5 (the number of columns). By the rank-nullity theorem the solution space has dimension $n-\\operatorname{rank}=5-2=3$. The number of rows, 3, plays no role here.</div><div class=\"ml-vi\">Số ẩn bằng 5 (số cột). Theo định lý hạng - số khuyết, không gian nghiệm có số chiều $n-\\operatorname{rank}=5-2=3$. Số hàng (bằng 3) không đóng vai trò gì ở đây.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Let $T:\\mathbb{R}^5\\to\\mathbb{R}^3$ be a linear transformation of rank 3. Find $\\dim(\\ker T)$.|||Cho $T:\\mathbb{R}^5\\to\\mathbb{R}^3$ là ánh xạ tuyến tính có hạng bằng 3. Tính $\\dim(\\ker T)$.",
+          "options": [
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "5|||5"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Rank-nullity: $\\dim(\\ker T)+\\operatorname{rank}(T)=\\dim(\\mathbb{R}^5)=5$, so $\\dim(\\ker T)=5-3=2$. Note the dimension of the domain is used, not that of the codomain.</div><div class=\"ml-vi\">Định lý hạng - số khuyết: $\\dim(\\ker T)+\\operatorname{rank}(T)=\\dim(\\mathbb{R}^5)=5$, nên $\\dim(\\ker T)=5-3=2$. Chú ý phải dùng số chiều của không gian nguồn, không phải không gian đích.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "For which value of $m$ does the system $\\begin{cases}x+2y=3\\\\2x+my=6\\end{cases}$ have infinitely many solutions?|||Với giá trị nào của $m$ thì hệ $\\begin{cases}x+2y=3\\\\2x+my=6\\end{cases}$ có vô số nghiệm?",
+          "options": [
+            {
+              "text": "$m=4$|||$m=4$"
+            },
+            {
+              "text": "$m=2$|||$m=2$"
+            },
+            {
+              "text": "$m=-4$|||$m=-4$"
+            },
+            {
+              "text": "No value of m|||Không có giá trị $m$ nào"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The second equation must be a multiple of the first. Since the constant terms already satisfy $6=2\\cdot3$ and $2=2\\cdot1$, we need $m=2\\cdot2=4$. Then the second row reduces to all zeros: one equation, two unknowns, so infinitely many solutions. For $m\\ne4$ the system has a unique solution.</div><div class=\"ml-vi\">Phương trình thứ hai phải là bội của phương trình thứ nhất. Vì các số hạng tự do đã thoả $6=2\\cdot3$ và hệ số $2=2\\cdot1$, nên cần $m=2\\cdot2=4$. Khi đó hàng thứ hai khử về toàn 0: một phương trình, hai ẩn, do đó vô số nghiệm. Với $m\\ne4$ hệ có nghiệm duy nhất.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Are the vectors $u=(1,2,3)$, $v=(0,1,4)$ and $w=(2,5,10)$ in $\\mathbb{R}^3$ linearly independent?|||Ba vectơ $u=(1,2,3)$, $v=(0,1,4)$, $w=(2,5,10)$ trong $\\mathbb{R}^3$ có độc lập tuyến tính không?",
+          "options": [
+            {
+              "text": "They are linearly dependent, because the determinant of the matrix formed by them is 0|||Chúng phụ thuộc tuyến tính, vì định thức của ma trận tạo bởi chúng bằng 0"
+            },
+            {
+              "text": "They are linearly independent, because that determinant is nonzero|||Chúng độc lập tuyến tính, vì định thức đó khác 0"
+            },
+            {
+              "text": "They are linearly independent, because three vectors in a 3-dimensional space always are|||Chúng độc lập tuyến tính, vì ba vectơ trong không gian 3 chiều thì luôn độc lập"
+            },
+            {
+              "text": "It cannot be decided without solving a system|||Không thể kết luận nếu chưa giải hệ"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Placing the three vectors as rows gives $\\det\\begin{pmatrix}1&2&3\\\\0&1&4\\\\2&5&10\\end{pmatrix}=0$, so they are dependent. Concretely $w=2u+v$. Option C is a common misconception: the count of vectors alone never proves independence.</div><div class=\"ml-vi\">Xếp ba vectơ thành các hàng, ta có $\\det\\begin{pmatrix}1&2&3\\\\0&1&4\\\\2&5&10\\end{pmatrix}=0$ nên chúng phụ thuộc. Cụ thể $w=2u+v$. Phương án C là ngộ nhận thường gặp: chỉ dựa vào số lượng vectơ thì không bao giờ chứng minh được tính độc lập.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Find the dimension of the subspace of $\\mathbb{R}^3$ spanned by $(1,2,1)$, $(2,4,3)$ and $(3,6,4)$.|||Tìm số chiều của không gian con của $\\mathbb{R}^3$ sinh bởi $(1,2,1)$, $(2,4,3)$ và $(3,6,4)$.",
+          "options": [
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Row reduction shows the rank of the matrix with these rows is 2: the third vector is the sum of the first two, $(3,6,4)=(1,2,1)+(2,4,3)$. The dimension of a span equals the rank, so it is 2 — a plane through the origin.</div><div class=\"ml-vi\">Khử hàng cho thấy hạng của ma trận gồm các vectơ này bằng 2: vectơ thứ ba là tổng của hai vectơ đầu, $(3,6,4)=(1,2,1)+(2,4,3)$. Số chiều của không gian sinh bằng hạng, nên bằng 2 — một mặt phẳng qua gốc toạ độ.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Find the reduced row echelon form of $\\begin{pmatrix}1&2&-1&3\\\\2&4&1&9\\end{pmatrix}$.|||Tìm dạng bậc thang rút gọn theo hàng của $\\begin{pmatrix}1&2&-1&3\\\\2&4&1&9\\end{pmatrix}$.",
+          "options": [
+            {
+              "text": "$\\begin{pmatrix}1&2&0&4\\\\0&0&1&1\\end{pmatrix}$|||$\\begin{pmatrix}1&2&0&4\\\\0&0&1&1\\end{pmatrix}$"
+            },
+            {
+              "text": "$\\begin{pmatrix}1&2&-1&3\\\\0&0&3&3\\end{pmatrix}$|||$\\begin{pmatrix}1&2&-1&3\\\\0&0&3&3\\end{pmatrix}$"
+            },
+            {
+              "text": "$\\begin{pmatrix}1&0&0&4\\\\0&1&1&1\\end{pmatrix}$|||$\\begin{pmatrix}1&0&0&4\\\\0&1&1&1\\end{pmatrix}$"
+            },
+            {
+              "text": "$\\begin{pmatrix}1&2&0&3\\\\0&0&1&1\\end{pmatrix}$|||$\\begin{pmatrix}1&2&0&3\\\\0&0&1&1\\end{pmatrix}$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">$R_2\\to R_2-2R_1$ gives $(0,0,3,3)$, then dividing by 3 gives $(0,0,1,1)$ — this is only row echelon form (option B is that intermediate step). For the REDUCED form we must also clear above the leading 1: $R_1\\to R_1+R_2$ turns $(1,2,-1,3)$ into $(1,2,0,4)$.</div><div class=\"ml-vi\">$R_2\\to R_2-2R_1$ cho $(0,0,3,3)$, chia cho 3 được $(0,0,1,1)$ — đây mới là dạng bậc thang (phương án B chính là bước trung gian này). Muốn dạng RÚT GỌN thì còn phải khử phía trên số 1 dẫn đầu: $R_1\\to R_1+R_2$ biến $(1,2,-1,3)$ thành $(1,2,0,4)$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Find the dimension of the column space of $A=\\begin{pmatrix}1&0&2\\\\0&1&3\\\\1&1&5\\end{pmatrix}$.|||Tìm số chiều của không gian cột của $A=\\begin{pmatrix}1&0&2\\\\0&1&3\\\\1&1&5\\end{pmatrix}$.",
+          "options": [
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The third column is $2\\times$(first) $+\\ 3\\times$(second), and the third row is the sum of the first two, so the rank is 2. The dimension of the column space equals the rank, so it is 2.</div><div class=\"ml-vi\">Cột thứ ba bằng $2\\times$(cột 1) $+\\ 3\\times$(cột 2), và hàng thứ ba bằng tổng hai hàng đầu, nên hạng bằng 2. Số chiều của không gian cột bằng hạng, do đó bằng 2.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Find the eigenvalues of $A=\\begin{pmatrix}3&1\\\\0&2\\end{pmatrix}$.|||Tìm các giá trị riêng của $A=\\begin{pmatrix}3&1\\\\0&2\\end{pmatrix}$.",
+          "options": [
+            {
+              "text": "$\\lambda=3$ and $\\lambda=2$|||$\\lambda=3$ và $\\lambda=2$"
+            },
+            {
+              "text": "$\\lambda=3$ and $\\lambda=1$|||$\\lambda=3$ và $\\lambda=1$"
+            },
+            {
+              "text": "$\\lambda=1$ and $\\lambda=2$|||$\\lambda=1$ và $\\lambda=2$"
+            },
+            {
+              "text": "$\\lambda=5$ and $\\lambda=6$|||$\\lambda=5$ và $\\lambda=6$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">$\\det(A-\\lambda I)=(3-\\lambda)(2-\\lambda)-1\\cdot0=(3-\\lambda)(2-\\lambda)$, so $\\lambda=3$ and $\\lambda=2$. For any triangular matrix the eigenvalues are simply the diagonal entries.</div><div class=\"ml-vi\">$\\det(A-\\lambda I)=(3-\\lambda)(2-\\lambda)-1\\cdot0=(3-\\lambda)(2-\\lambda)$, nên $\\lambda=3$ và $\\lambda=2$. Với mọi ma trận tam giác, các giá trị riêng chính là các phần tử trên đường chéo.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "One eigenvalue of $A=\\begin{pmatrix}2&1\\\\1&2\\end{pmatrix}$ is $\\lambda=3$. Which vector is a corresponding eigenvector?|||Một giá trị riêng của $A=\\begin{pmatrix}2&1\\\\1&2\\end{pmatrix}$ là $\\lambda=3$. Vectơ nào là vectơ riêng tương ứng?",
+          "options": [
+            {
+              "text": "$(1,1)$|||$(1,1)$"
+            },
+            {
+              "text": "$(1,-1)$|||$(1,-1)$"
+            },
+            {
+              "text": "$(2,1)$|||$(2,1)$"
+            },
+            {
+              "text": "$(0,1)$|||$(0,1)$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">$A(1,1)^T=(2+1,\\ 1+2)^T=(3,3)^T=3(1,1)^T$, so $(1,1)$ works. The vector $(1,-1)$ is an eigenvector too, but for the other eigenvalue $\\lambda=1$, since $A(1,-1)^T=(1,-1)^T$.</div><div class=\"ml-vi\">$A(1,1)^T=(2+1,\\ 1+2)^T=(3,3)^T=3(1,1)^T$ nên $(1,1)$ thoả mãn. Vectơ $(1,-1)$ cũng là vectơ riêng nhưng ứng với giá trị riêng còn lại $\\lambda=1$, vì $A(1,-1)^T=(1,-1)^T$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Find the characteristic polynomial of $A=\\begin{pmatrix}4&1\\\\2&3\\end{pmatrix}$.|||Tìm đa thức đặc trưng của $A=\\begin{pmatrix}4&1\\\\2&3\\end{pmatrix}$.",
+          "options": [
+            {
+              "text": "$\\lambda^2-7\\lambda+10$|||$\\lambda^2-7\\lambda+10$"
+            },
+            {
+              "text": "$\\lambda^2+7\\lambda+10$|||$\\lambda^2+7\\lambda+10$"
+            },
+            {
+              "text": "$\\lambda^2-7\\lambda-10$|||$\\lambda^2-7\\lambda-10$"
+            },
+            {
+              "text": "$\\lambda^2-\\lambda+10$|||$\\lambda^2-\\lambda+10$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">For a $2\\times2$ matrix the characteristic polynomial is $\\lambda^2-(\\operatorname{tr}A)\\lambda+\\det A$. Here the trace is $4+3=7$ and the determinant is $12-2=10$, giving $\\lambda^2-7\\lambda+10$, whose roots are $\\lambda=5$ and $\\lambda=2$.</div><div class=\"ml-vi\">Với ma trận $2\\times2$, đa thức đặc trưng là $\\lambda^2-(\\operatorname{tr}A)\\lambda+\\det A$. Ở đây vết bằng $4+3=7$ và định thức bằng $12-2=10$, cho $\\lambda^2-7\\lambda+10$, có nghiệm $\\lambda=5$ và $\\lambda=2$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Find the cosine of the angle between $u=(1,2,2)$ and $v=(2,0,1)$.|||Tìm côsin của góc giữa $u=(1,2,2)$ và $v=(2,0,1)$.",
+          "options": [
+            {
+              "text": "$\\dfrac{4}{3\\sqrt5}$|||$\\dfrac{4}{3\\sqrt5}$"
+            },
+            {
+              "text": "$\\dfrac{4}{5}$|||$\\dfrac{4}{5}$"
+            },
+            {
+              "text": "$\\dfrac{2}{3\\sqrt5}$|||$\\dfrac{2}{3\\sqrt5}$"
+            },
+            {
+              "text": "$\\dfrac{4}{15}$|||$\\dfrac{4}{15}$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">$u\\cdot v=2+0+2=4$, $|u|=\\sqrt{1+4+4}=3$ and $|v|=\\sqrt{4+0+1}=\\sqrt5$. Hence $\\cos\\theta=\\dfrac{4}{3\\sqrt5}=\\dfrac{4\\sqrt5}{15}\\approx0.596$.</div><div class=\"ml-vi\">$u\\cdot v=2+0+2=4$, $|u|=\\sqrt{1+4+4}=3$ và $|v|=\\sqrt{4+0+1}=\\sqrt5$. Do đó $\\cos\\theta=\\dfrac{4}{3\\sqrt5}=\\dfrac{4\\sqrt5}{15}\\approx0.596$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Find the area of the parallelogram determined by $u=(1,2,0)$ and $v=(0,3,4)$.|||Tính diện tích hình bình hành xác định bởi $u=(1,2,0)$ và $v=(0,3,4)$.",
+          "options": [
+            {
+              "text": "$\\sqrt{89}$|||$\\sqrt{89}$"
+            },
+            {
+              "text": "$\\sqrt{74}$|||$\\sqrt{74}$"
+            },
+            {
+              "text": "12|||12"
+            },
+            {
+              "text": "$\\dfrac{\\sqrt{89}}{2}$|||$\\dfrac{\\sqrt{89}}{2}$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">$u\\times v=(2\\cdot4-0\\cdot3,\\ 0\\cdot0-1\\cdot4,\\ 1\\cdot3-2\\cdot0)=(8,-4,3)$, so the area is $|u\\times v|=\\sqrt{64+16+9}=\\sqrt{89}$. Halving it would give the area of the triangle, not the parallelogram.</div><div class=\"ml-vi\">$u\\times v=(2\\cdot4-0\\cdot3,\\ 0\\cdot0-1\\cdot4,\\ 1\\cdot3-2\\cdot0)=(8,-4,3)$, nên diện tích bằng $|u\\times v|=\\sqrt{64+16+9}=\\sqrt{89}$. Nếu chia đôi thì ra diện tích tam giác chứ không phải hình bình hành.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Find an equation of the plane through the point $(1,2,3)$ with normal vector $n=(2,-1,4)$.|||Viết phương trình mặt phẳng đi qua điểm $(1,2,3)$ với vectơ pháp tuyến $n=(2,-1,4)$.",
+          "options": [
+            {
+              "text": "$2x-y+4z=12$|||$2x-y+4z=12$"
+            },
+            {
+              "text": "$2x-y+4z=0$|||$2x-y+4z=0$"
+            },
+            {
+              "text": "$x+2y+3z=12$|||$x+2y+3z=12$"
+            },
+            {
+              "text": "$2x+y+4z=16$|||$2x+y+4z=16$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The plane is $2(x-1)-1(y-2)+4(z-3)=0$, i.e. $2x-y+4z=2-2+12=12$. Option B is the parallel plane through the origin; option C wrongly uses the point as the normal vector.</div><div class=\"ml-vi\">Mặt phẳng là $2(x-1)-1(y-2)+4(z-3)=0$, tức $2x-y+4z=2-2+12=12$. Phương án B là mặt phẳng song song đi qua gốc; phương án C lấy nhầm toạ độ điểm làm vectơ pháp tuyến.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Find the distance from the point $(1,1,1)$ to the plane $x+2y+2z=6$.|||Tính khoảng cách từ điểm $(1,1,1)$ tới mặt phẳng $x+2y+2z=6$.",
+          "options": [
+            {
+              "text": "$\\dfrac13$|||$\\dfrac13$"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "$\\dfrac19$|||$\\dfrac19$"
+            },
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">$d=\\dfrac{|ax_0+by_0+cz_0-d_0|}{\\sqrt{a^2+b^2+c^2}}=\\dfrac{|1+2+2-6|}{\\sqrt{1+4+4}}=\\dfrac{1}{3}$. The denominator is the length of the normal vector, so forgetting the square root is the usual mistake.</div><div class=\"ml-vi\">$d=\\dfrac{|ax_0+by_0+cz_0-d_0|}{\\sqrt{a^2+b^2+c^2}}=\\dfrac{|1+2+2-6|}{\\sqrt{1+4+4}}=\\dfrac{1}{3}$. Mẫu số là độ dài vectơ pháp tuyến, nên quên lấy căn là lỗi thường gặp.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "A line passes through the point $(1,0,2)$ with direction vector $(2,1,-1)$. Which of the following points also lies on this line?|||Một đường thẳng đi qua điểm $(1,0,2)$ với vectơ chỉ phương $(2,1,-1)$. Điểm nào sau đây cũng nằm trên đường thẳng đó?",
+          "options": [
+            {
+              "text": "$(3,1,1)$|||$(3,1,1)$"
+            },
+            {
+              "text": "$(2,1,1)$|||$(2,1,1)$"
+            },
+            {
+              "text": "$(3,1,3)$|||$(3,1,3)$"
+            },
+            {
+              "text": "$(0,1,2)$|||$(0,1,2)$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Parametric equations: $(x,y,z)=(1+2t,\\ t,\\ 2-t)$. Taking $t=1$ gives $(3,1,1)$. Checking the others: $(2,1,1)$ would need $t=1$ from $y$ but then $x=3\\ne2$; $(3,1,3)$ fails in $z$; $(0,1,2)$ fails in both $x$ and $z$.</div><div class=\"ml-vi\">Phương trình tham số: $(x,y,z)=(1+2t,\\ t,\\ 2-t)$. Lấy $t=1$ được $(3,1,1)$. Kiểm tra các điểm khác: $(2,1,1)$ thì từ $y$ suy ra $t=1$ nhưng khi đó $x=3\\ne2$; $(3,1,3)$ sai ở $z$; $(0,1,2)$ sai ở cả $x$ và $z$.</div>"
         }
       ]
     }

@@ -3539,7 +3539,7 @@ export default {
       "source": "REAL",
       "sortOrder": 3,
       "title": "Đề 4 — FA25 Retake Exam|||Đề 4 — Thi lại FA25",
-      "description": "PRF192 real FE multiple-choice paper (Fall 2025 retake), transcribed from the exam images; answers reasoned and code-verified here. (49 questions)|||Đề trắc nghiệm FE thật môn PRF192 (kỳ Thu 2025, thi lại), chép từ ảnh đề; đáp án được suy luận và chạy thử mã để kiểm chứng. (49 câu)",
+      "description": "PRF192 real FE multiple-choice paper (Fall 2025 retake), transcribed from the exam images; answers reasoned and code-verified here. (50 questions)|||Đề trắc nghiệm FE thật môn PRF192 (kỳ Thu 2025, thi lại), chép từ ảnh đề; đáp án được suy luận và chạy thử mã để kiểm chứng. (50 câu)",
       "durationMinutes": 60,
       "totalPoints": 10,
       "passMark": 4,
@@ -4684,6 +4684,29 @@ export default {
             0
           ],
           "explanation": "<div class=\"ml-en\">The loop reads and echoes the file ONE character at a time with <code>fgetc</code> until <code>EOF</code>, printing every character exactly as stored — including the newline between the two lines. So the program simply reproduces the file's full content verbatim: \"Hello\", a newline, then \"This is a sample text file.\". Verified by compiling and running against a matching test file.</div><div class=\"ml-vi\">Vòng lặp đọc và in lại tệp TỪNG KÝ TỰ MỘT bằng <code>fgetc</code> cho đến <code>EOF</code>, in ra mọi ký tự đúng như lưu trong tệp — kể cả ký tự xuống dòng giữa hai dòng. Vậy chương trình chỉ đơn giản tái hiện lại TOÀN BỘ nội dung tệp y nguyên: \"Hello\", xuống dòng, rồi \"This is a sample text file.\". Đã biên dịch và chạy thử kiểm chứng với tệp test tương ứng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following statements shows an IMPLICIT type conversion in C?|||Câu lệnh nào sau đây thể hiện việc ép kiểu NGẦM ĐỊNH (implicit) trong C?",
+          "options": [
+            {
+              "text": "<code>double t = 2;</code>|||<code>double t = 2;</code>"
+            },
+            {
+              "text": "<code>double t = (double) 2;</code>|||<code>double t = (double) 2;</code>"
+            },
+            {
+              "text": "<code>int i = (int) 2.7;</code>|||<code>int i = (int) 2.7;</code>"
+            },
+            {
+              "text": "<code>double t = double(2);</code>|||<code>double t = double(2);</code>"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">In <code>double t = 2;</code> the programmer writes NO cast at all — the compiler silently (implicitly) widens the <code>int</code> literal <code>2</code> to <code>double</code> because it is a safe, lossless conversion. The other three all use an explicit cast keyword or function-style syntax (<code>(double)</code>, <code>(int)</code>, <code>double(...)</code>), which is EXPLICIT casting written by the programmer.</div><div class=\"ml-vi\">Trong <code>double t = 2;</code> người viết mã KHÔNG ép kiểu gì cả — trình biên dịch tự động (ngầm định) mở rộng hằng <code>int</code> <code>2</code> thành <code>double</code> vì đây là chuyển đổi an toàn, không mất dữ liệu. Ba câu còn lại đều dùng từ khoá ép kiểu tường minh hoặc cú pháp giống hàm (<code>(double)</code>, <code>(int)</code>, <code>double(...)</code>), tức là ép kiểu TƯỜNG MINH do người viết mã chỉ định.</div>"
         }
       ]
     }

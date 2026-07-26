@@ -4686,6 +4686,1178 @@ export default {
           "explanation": "<div class=\"ml-en\">An arithmetic (or logical) left shift appends <b>zeros</b> at the least-significant (rightmost) end.</div><div class=\"ml-vi\">Dịch trái số học (hoặc logic) chèn <b>bit 0</b> ở phía bit thấp nhất (bên phải).</div>"
         }
       ]
+    },
+    {
+      "kind": "FE",
+      "code": "FE-D5",
+      "source": "REAL",
+      "sortOrder": 4,
+      "title": "Đề 5 — Final Exam (FA25)|||Đề 5 — Thi cuối kỳ (FA25)",
+      "description": "Real FE multiple-choice paper (CEA201, Fall 2025 Final Exam), 49 questions transcribed from the exam images; answers reasoned here.|||Đề trắc nghiệm FE thật (CEA201, kỳ Thu 2025 - Thi cuối kỳ), 49 câu chép từ ảnh đề; đáp án được suy luận và biên soạn tại đây.",
+      "durationMinutes": 60,
+      "totalPoints": 10,
+      "passMark": 4,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. Watch for \"choose two/three correct answers\" — those need multiple selections. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Chú ý câu \"choose two/three correct answers\" cần chọn nhiều đáp án. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following attributes do not belong to computer architecture? (Choose 2 answers)|||Thuộc tính nào sau đây KHÔNG thuộc kiến trúc máy tính (computer architecture)? (Chọn 2 đáp án)",
+          "options": [
+            {
+              "text": "Number of bits used to represent data types|||Số bit dùng để biểu diễn kiểu dữ liệu"
+            },
+            {
+              "text": "The instruction set|||Tập lệnh"
+            },
+            {
+              "text": "Interface between the computer and peripherals|||Giao diện giữa máy tính và ngoại vi"
+            },
+            {
+              "text": "Techniques for addressing memory|||Kỹ thuật định địa chỉ bộ nhớ"
+            },
+            {
+              "text": "The memory technology used|||Công nghệ bộ nhớ được dùng"
+            },
+            {
+              "text": "I/O mechanisms|||Cơ chế I/O"
+            }
+          ],
+          "correctIndexes": [
+            2,
+            4
+          ],
+          "explanation": "<div class=\"ml-en\">Architecture = what a programmer sees (instruction set, data-type widths, addressing, I/O mechanisms). The <b>peripheral interface</b> and the <b>memory technology</b> are organization (implementation) attributes.</div><div class=\"ml-vi\">Kiến trúc = cái lập trình viên thấy (tập lệnh, độ rộng kiểu dữ liệu, định địa chỉ, cơ chế I/O). <b>Giao diện ngoại vi</b> và <b>công nghệ bộ nhớ</b> là thuộc tính tổ chức (cách hiện thực).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following statements is part of the Von Neumann principle?|||Phát biểu nào sau đây thuộc nguyên lý Von Neumann?",
+          "options": [
+            {
+              "text": "The computer uses a program counter to indicate the location of the next statement|||Máy tính dùng bộ đếm chương trình để chỉ vị trí lệnh kế tiếp"
+            },
+            {
+              "text": "Computer can control all operations with a single program|||Máy tính có thể điều khiển mọi thao tác bằng một chương trình duy nhất"
+            },
+            {
+              "text": "Computer memory is not addressable|||Bộ nhớ máy tính không thể định địa chỉ"
+            },
+            {
+              "text": "Each instruction must have a memory area containing the address of the next instruction|||Mỗi lệnh phải có vùng nhớ chứa địa chỉ của lệnh kế tiếp"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Von Neumann uses a <b>program counter</b> to point to the next instruction (stored-program, sequential). Memory IS addressable (C wrong); an instruction does not store the next address (D wrong).</div><div class=\"ml-vi\">Von Neumann dùng <b>bộ đếm chương trình</b> để trỏ tới lệnh kế tiếp (chương trình lưu trữ, tuần tự). Bộ nhớ CÓ định địa chỉ (C sai); lệnh không chứa địa chỉ lệnh kế (D sai).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following are the four basic functions that a computer performs?|||Đâu là bốn chức năng cơ bản mà một máy tính thực hiện?",
+          "options": [
+            {
+              "text": "Data processing, Data storage, Data movement, Control|||Xử lý dữ liệu, Lưu trữ dữ liệu, Di chuyển dữ liệu, Điều khiển"
+            },
+            {
+              "text": "Data processing, Data storage, Data movement, Interrupt|||Xử lý dữ liệu, Lưu trữ dữ liệu, Di chuyển dữ liệu, Ngắt"
+            },
+            {
+              "text": "Data processing, Data storage, Interrupt, Control|||Xử lý dữ liệu, Lưu trữ dữ liệu, Ngắt, Điều khiển"
+            },
+            {
+              "text": "Data processing, Interrupt, Data movement, Control|||Xử lý dữ liệu, Ngắt, Di chuyển dữ liệu, Điều khiển"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The four basic computer functions are <b>data processing, data storage, data movement, and control</b>.</div><div class=\"ml-vi\">Bốn chức năng cơ bản là <b>xử lý dữ liệu, lưu trữ dữ liệu, di chuyển dữ liệu và điều khiển</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What electronic component is used to govern operations such as fetching, decoding, and performing arithmetic operations executed by a processor?|||Linh kiện điện tử nào được dùng để điều phối các thao tác như lấy lệnh, giải mã và thực hiện phép số học của bộ xử lý?",
+          "options": [
+            {
+              "text": "Using a system clock|||Dùng xung nhịp hệ thống (system clock)"
+            },
+            {
+              "text": "Using a quartz crystal|||Dùng thạch anh (quartz crystal)"
+            },
+            {
+              "text": "Using a analog to digital converter|||Dùng bộ chuyển đổi analog sang số"
+            },
+            {
+              "text": "Using a counter|||Dùng bộ đếm (counter)"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The <b>system clock</b> generates the timing pulses that synchronize fetch, decode, and execute operations.</div><div class=\"ml-vi\"><b>Xung nhịp hệ thống</b> tạo các nhịp định thời đồng bộ hóa các thao tác lấy lệnh, giải mã và thực thi.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In the computer, what categories do external devices include? (choose 3 correct answers)|||Trong máy tính, thiết bị ngoài (external devices) gồm những loại nào? (chọn 3 đáp án đúng)",
+          "options": [
+            {
+              "text": "Human readable|||Đọc được bởi người (Human readable)"
+            },
+            {
+              "text": "Communication|||Giao tiếp (Communication)"
+            },
+            {
+              "text": "Data Conversion|||Chuyển đổi dữ liệu (Data Conversion)"
+            },
+            {
+              "text": "Machine readable|||Đọc được bởi máy (Machine readable)"
+            }
+          ],
+          "correctIndexes": [
+            0,
+            1,
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">External devices are grouped as <b>human-readable, machine-readable, and communication</b>. 'Data conversion' is not a category.</div><div class=\"ml-vi\">Thiết bị ngoài chia thành <b>đọc-được-bởi-người, đọc-được-bởi-máy và giao tiếp</b>. 'Chuyển đổi dữ liệu' không phải một loại.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The instruction, which adds 1 to the value in a memory location, has five stages: fetch opcode (four cycles), fetch operand address (three cycles), fetch operand (three cycles), add 1 to operand (three cycles), and store operand (three cycles). An interrupt sends request at beginning of fetch operand stage. How many cycles does the processor enter the interrupt processing cycle?|||Một lệnh cộng 1 vào giá trị ở một ô nhớ có năm giai đoạn: lấy mã lệnh (4 chu kỳ), lấy địa chỉ toán hạng (3 chu kỳ), lấy toán hạng (3 chu kỳ), cộng 1 vào toán hạng (3 chu kỳ) và lưu toán hạng (3 chu kỳ). Một ngắt gửi yêu cầu vào đầu giai đoạn lấy toán hạng. Sau bao nhiêu chu kỳ thì bộ xử lý bước vào chu kỳ xử lý ngắt?",
+          "options": [
+            {
+              "text": "6|||6"
+            },
+            {
+              "text": "7|||7"
+            },
+            {
+              "text": "8|||8"
+            },
+            {
+              "text": "9|||9"
+            },
+            {
+              "text": "10|||10"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">The interrupt is serviced only after the current instruction finishes. From the start of 'fetch operand': 3 + 3 + 3 = <b>9</b> cycles remain until completion.</div><div class=\"ml-vi\">Ngắt chỉ được xử lý sau khi lệnh hiện tại hoàn tất. Tính từ đầu giai đoạn 'lấy toán hạng': 3 + 3 + 3 = <b>9</b> chu kỳ còn lại tới khi xong.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which representation is most efficient to perform arithmetic operations on the signed integer numbers?|||Cách biểu diễn nào hiệu quả nhất để thực hiện các phép số học trên số nguyên có dấu?",
+          "options": [
+            {
+              "text": "Sign-magnitude|||Dấu-độ lớn (Sign-magnitude)"
+            },
+            {
+              "text": "2's complement|||Bù hai (2's complement)"
+            },
+            {
+              "text": "1's & 2's compliment|||Bù một & bù hai"
+            },
+            {
+              "text": "1's complement|||Bù một (1's complement)"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>2's complement</b> lets addition and subtraction use the same hardware with a single representation of zero — most efficient for signed arithmetic.</div><div class=\"ml-vi\"><b>Bù hai</b> cho phép cộng và trừ dùng chung phần cứng với một biểu diễn duy nhất của số 0 — hiệu quả nhất cho số học có dấu.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "____ interprets the instructions in memory and causes them to be executed.|||____ thông dịch các lệnh trong bộ nhớ và khiến chúng được thực thi.",
+          "options": [
+            {
+              "text": "Registers|||Thanh ghi (Registers)"
+            },
+            {
+              "text": "CPU interconnection|||Liên kết CPU (CPU interconnection)"
+            },
+            {
+              "text": "Arithmetic and Logic Unit (ALU)|||Đơn vị số học-logic (ALU)"
+            },
+            {
+              "text": "I/O Modules|||Mô-đun I/O"
+            },
+            {
+              "text": "Control Unit (CU)|||Đơn vị điều khiển (CU)"
+            }
+          ],
+          "correctIndexes": [
+            4
+          ],
+          "explanation": "<div class=\"ml-en\">The <b>Control Unit (CU)</b> interprets instructions and causes them to be executed.</div><div class=\"ml-vi\"><b>Đơn vị điều khiển (CU)</b> thông dịch lệnh và khiến chúng được thực thi.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the function of the bus system in the computer?|||Chức năng của hệ thống bus trong máy tính là gì?",
+          "options": [
+            {
+              "text": "Extend the communication function of the computer|||Mở rộng chức năng giao tiếp của máy tính"
+            },
+            {
+              "text": "Connect components in the computer|||Kết nối các thành phần trong máy tính"
+            },
+            {
+              "text": "Control peripherals|||Điều khiển ngoại vi"
+            },
+            {
+              "text": "Transform signals in the computer|||Biến đổi tín hiệu trong máy tính"
+            },
+            {
+              "text": "All of the mentioned|||Tất cả các đáp án"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">The bus system <b>connects the components</b> (CPU, memory, I/O) so they can exchange data, addresses, and control signals.</div><div class=\"ml-vi\">Hệ thống bus <b>kết nối các thành phần</b> (CPU, bộ nhớ, I/O) để trao đổi dữ liệu, địa chỉ và tín hiệu điều khiển.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What methods can be used to access units of data in memory?|||Những phương pháp nào có thể dùng để truy cập đơn vị dữ liệu trong bộ nhớ?",
+          "options": [
+            {
+              "text": "Indirect access, Direct access, Random access, Associative|||Truy cập gián tiếp, trực tiếp, ngẫu nhiên, liên kết"
+            },
+            {
+              "text": "Sequential access, Indirect access, Random access, Associative|||Truy cập tuần tự, gián tiếp, ngẫu nhiên, liên kết"
+            },
+            {
+              "text": "Sequential access, Direct access, Random access, Associative|||Truy cập tuần tự, trực tiếp, ngẫu nhiên, liên kết"
+            },
+            {
+              "text": "Sequential access, Direct access, Random access, Indirect access|||Truy cập tuần tự, trực tiếp, ngẫu nhiên, gián tiếp"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">The four memory access methods are <b>sequential, direct, random, and associative</b>.</div><div class=\"ml-vi\">Bốn phương pháp truy cập bộ nhớ là <b>tuần tự, trực tiếp, ngẫu nhiên và liên kết</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "____ is made with cells that store data as charge on capacitors.|||____ được làm từ các ô nhớ lưu dữ liệu dưới dạng điện tích trên tụ điện.",
+          "options": [
+            {
+              "text": "SRAM|||SRAM"
+            },
+            {
+              "text": "DRAM|||DRAM"
+            },
+            {
+              "text": "RDRAM|||RDRAM"
+            },
+            {
+              "text": "CDRAM|||CDRAM"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>DRAM</b> stores each bit as charge on a capacitor (needs periodic refresh). SRAM uses flip-flops.</div><div class=\"ml-vi\"><b>DRAM</b> lưu mỗi bit bằng điện tích trên tụ điện (cần làm tươi định kỳ). SRAM dùng flip-flop.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "How many techniques are there for dealing with an update to a cache line? What are their names?|||Có bao nhiêu kỹ thuật để xử lý việc cập nhật một dòng cache? Tên chúng là gì?",
+          "options": [
+            {
+              "text": "There are 2 techniques and their names are written through, write back|||Có 2 kỹ thuật: write through, write back"
+            },
+            {
+              "text": "There are 3 techniques and their names are written through, write back, and write allocate|||Có 3 kỹ thuật: write through, write back và write allocate"
+            },
+            {
+              "text": "There is only one technique and its name is \"write not allocate\"|||Chỉ có một kỹ thuật tên là \"write not allocate\""
+            },
+            {
+              "text": "There are 4 techniques and their names are written through, write back, write allocate, write not allocate|||Có 4 kỹ thuật: write through, write back, write allocate, write not allocate"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">There are <b>two</b> cache write-update policies: <b>write-through</b> and <b>write-back</b>. (Write allocate/no-write allocate concern write misses, a different choice.)</div><div class=\"ml-vi\">Có <b>hai</b> chính sách cập nhật ghi cache: <b>write-through</b> và <b>write-back</b>. (Write allocate/no-write allocate là lựa chọn khác, về write miss.)</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "A EPROM has 20 address lines and 8 bit data lines, what is maximum memory capacity of this chip?|||Một EPROM có 20 đường địa chỉ và 8 đường dữ liệu, dung lượng bộ nhớ tối đa của chip này là bao nhiêu?",
+          "options": [
+            {
+              "text": "1 Mbits|||1 Mbits"
+            },
+            {
+              "text": "2 Mbits|||2 Mbits"
+            },
+            {
+              "text": "4 Mbits|||4 Mbits"
+            },
+            {
+              "text": "8 Mbits|||8 Mbits"
+            },
+            {
+              "text": "16 Mbits|||16 Mbits"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">2²⁰ addresses × 8 bits = 1M × 8 = <b>8 Mbits</b>.</div><div class=\"ml-vi\">2²⁰ địa chỉ × 8 bit = 1M × 8 = <b>8 Mbits</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Using Hamming Code with one error correction to store an 12-bit word in memory, the stored word 111001001101 consists of 8 bits data and 4 bit bits parity check. What are the parity bits?|||Dùng mã Hamming sửa một lỗi để lưu một từ 12 bit trong bộ nhớ, từ đã lưu 111001001101 gồm 8 bit dữ liệu và 4 bit parity. Các bit parity là gì?",
+          "options": [
+            {
+              "text": "0110|||0110"
+            },
+            {
+              "text": "0111|||0111"
+            },
+            {
+              "text": "1110|||1110"
+            },
+            {
+              "text": "0101|||0101"
+            },
+            {
+              "text": "None of the mentioned|||Không đáp án nào"
+            }
+          ],
+          "correctIndexes": [
+            4
+          ],
+          "explanation": "<div class=\"ml-en\">The parity bits sit at positions 1, 2, 4, 8. Extracting them from the stored word does not match options A–D, so the answer is <b>None of the mentioned</b>.</div><div class=\"ml-vi\">Các bit parity ở vị trí 1, 2, 4, 8. Trích chúng từ từ đã lưu không khớp phương án A–D, nên đáp án là <b>Không đáp án nào</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is correct about increasing performance and endurance?|||Điều nào đúng khi sắp xếp theo hiệu năng và độ bền tăng dần?",
+          "options": [
+            {
+              "text": "Hard Disk - DRAM - NAND Flash - SRAM|||Hard Disk - DRAM - NAND Flash - SRAM"
+            },
+            {
+              "text": "Hard Disk - NAND Flash - DRAM - SRAM|||Hard Disk - NAND Flash - DRAM - SRAM"
+            },
+            {
+              "text": "NAND Flash - Hard Disk - SRAM - DRAM|||NAND Flash - Hard Disk - SRAM - DRAM"
+            },
+            {
+              "text": "Hard Disk - DRAM - SRAM - NAND Flash|||Hard Disk - DRAM - SRAM - NAND Flash"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">By increasing speed/performance: <b>Hard Disk &lt; NAND Flash &lt; DRAM &lt; SRAM</b>.</div><div class=\"ml-vi\">Theo hiệu năng/tốc độ tăng dần: <b>Đĩa cứng &lt; NAND Flash &lt; DRAM &lt; SRAM</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which memory has the fastest speed and smallest capacity?|||Bộ nhớ nào có tốc độ nhanh nhất và dung lượng nhỏ nhất?",
+          "options": [
+            {
+              "text": "Cache|||Cache"
+            },
+            {
+              "text": "Main memory|||Bộ nhớ chính"
+            },
+            {
+              "text": "HDD|||HDD"
+            },
+            {
+              "text": "Magnetic Disk|||Đĩa từ"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Among these, <b>cache</b> is the fastest and smallest.</div><div class=\"ml-vi\">Trong số này, <b>cache</b> nhanh nhất và nhỏ nhất.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Sort the following memory types in ascending order by access speed:|||Sắp xếp các loại bộ nhớ sau theo tốc độ truy cập TĂNG DẦN:",
+          "options": [
+            {
+              "text": "HDD - Main Memory - L2 cache - L1 cache|||HDD - Bộ nhớ chính - Cache L2 - Cache L1"
+            },
+            {
+              "text": "HDD - Main Memory - L1 cache - L2 cache|||HDD - Bộ nhớ chính - Cache L1 - Cache L2"
+            },
+            {
+              "text": "HDD - L2 cache - L1 cache - Main Memory|||HDD - Cache L2 - Cache L1 - Bộ nhớ chính"
+            },
+            {
+              "text": "Main Memory - L2 cache - L1 cache - HDD|||Bộ nhớ chính - Cache L2 - Cache L1 - HDD"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Increasing speed: <b>HDD &lt; Main Memory &lt; L2 &lt; L1</b>.</div><div class=\"ml-vi\">Tốc độ tăng dần: <b>HDD &lt; Bộ nhớ chính &lt; L2 &lt; L1</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which is the correct choice for sorting in increasing speed average of memory?|||Phương án nào đúng khi sắp xếp theo tốc độ trung bình TĂNG DẦN của bộ nhớ?",
+          "options": [
+            {
+              "text": "SSD < Main Memory < Cache Memory < Magnetic Tape|||SSD < Bộ nhớ chính < Cache < Băng từ"
+            },
+            {
+              "text": "Magnetic Tape < SSD < Cache Memory < Main Memory|||Băng từ < SSD < Cache < Bộ nhớ chính"
+            },
+            {
+              "text": "Magnetic Disk < SSD < Main Memory < Cache Memory|||Đĩa từ < SSD < Bộ nhớ chính < Cache"
+            },
+            {
+              "text": "Magnetic Disk < Magnetic Tape < Main Memory < Cache Memory|||Đĩa từ < Băng từ < Bộ nhớ chính < Cache"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">Increasing speed: <b>Magnetic Disk &lt; SSD &lt; Main Memory &lt; Cache</b>.</div><div class=\"ml-vi\">Tốc độ tăng dần: <b>Đĩa từ &lt; SSD &lt; Bộ nhớ chính &lt; Cache</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Consider the expression: NOT(A + B) = ? Apply DeMorgan's Theorem to replace at \"?\"|||Xét biểu thức: NOT(A + B) = ? Áp dụng định lý DeMorgan để thay vào \"?\"",
+          "options": [
+            {
+              "text": "NOT A AND NOT B|||NOT A AND NOT B"
+            },
+            {
+              "text": "NOT A OR NOT B|||NOT A OR NOT B"
+            },
+            {
+              "text": "NOT A AND B|||NOT A AND B"
+            },
+            {
+              "text": "A OR NOT B|||A OR NOT B"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">De Morgan: NOT(A + B) = <b>(NOT A) AND (NOT B)</b>.</div><div class=\"ml-vi\">DeMorgan: NOT(A + B) = <b>(NOT A) AND (NOT B)</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In which I/O technique does an I/O channel or processor manage transfer of data, thus freeing the CPU?|||Trong kỹ thuật I/O nào, một kênh I/O hoặc bộ xử lý quản lý việc truyền dữ liệu, giải phóng CPU?",
+          "options": [
+            {
+              "text": "Programmed I/O|||Programmed I/O"
+            },
+            {
+              "text": "Interrupt-driven I/O|||Interrupt-driven I/O"
+            },
+            {
+              "text": "Channel I/O|||Channel I/O"
+            },
+            {
+              "text": "Memory-mapped I/O|||Memory-mapped I/O"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">With <b>Channel I/O</b>, a dedicated I/O processor/channel handles the transfer, freeing the CPU.</div><div class=\"ml-vi\">Với <b>Channel I/O</b>, một bộ xử lý/kênh I/O riêng lo việc truyền, giải phóng CPU.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is an interrupt vector?|||Vector ngắt (interrupt vector) là gì?",
+          "options": [
+            {
+              "text": "Part of memory which contains the addresses of interrupt handlers|||Phần bộ nhớ chứa địa chỉ của các thủ tục xử lý ngắt"
+            },
+            {
+              "text": "A signal an I/O device sends to CPU|||Tín hiệu thiết bị I/O gửi tới CPU"
+            },
+            {
+              "text": "A signal an I/O software sends to CPU|||Tín hiệu phần mềm I/O gửi tới CPU"
+            },
+            {
+              "text": "None of the mentioned|||Không đáp án nào"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">An <b>interrupt vector</b> is the area of memory holding the addresses of the interrupt handlers.</div><div class=\"ml-vi\"><b>Vector ngắt</b> là vùng nhớ chứa địa chỉ của các thủ tục xử lý ngắt.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the main distinction between Interrupt-Driven I/O and Direct Memory Access (DMA)?|||Khác biệt chính giữa I/O điều khiển bằng ngắt (Interrupt-Driven I/O) và Truy cập bộ nhớ trực tiếp (DMA) là gì?",
+          "options": [
+            {
+              "text": "Interrupt-Driven I/O involves the CPU in every data transfer, while DMA bypasses the CPU and transfers data directly between I/O device and memory|||Interrupt-Driven I/O có CPU tham gia mọi lần truyền, còn DMA bỏ qua CPU và truyền trực tiếp giữa thiết bị I/O và bộ nhớ"
+            },
+            {
+              "text": "Interrupt-Driven I/O requires special hardware and software support, while DMA does not need any additional components|||Interrupt-Driven I/O cần phần cứng/phần mềm đặc biệt, còn DMA không cần thành phần bổ sung"
+            },
+            {
+              "text": "Interrupt-Driven I/O is suitable for small and frequent data transfers, while DMA is suitable for large and infrequent data transfers|||Interrupt-Driven I/O phù hợp truyền nhỏ và thường xuyên, còn DMA phù hợp truyền lớn và không thường xuyên"
+            },
+            {
+              "text": "All of the mentioned|||Tất cả các đáp án"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">All the statements capture real distinctions between interrupt-driven I/O (CPU-involved, small transfers) and DMA (CPU-bypassing, large transfers) — <b>all of the mentioned</b>.</div><div class=\"ml-vi\">Cả các phát biểu đều nêu khác biệt thật giữa I/O ngắt (CPU tham gia, truyền nhỏ) và DMA (bỏ qua CPU, truyền lớn) — <b>tất cả các đáp án</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Choose an operation in which no operating system's utility is called.|||Chọn thao tác mà KHÔNG gọi tiện ích nào của hệ điều hành.",
+          "options": [
+            {
+              "text": "Y=10+7;|||Y=10+7;"
+            },
+            {
+              "text": "Read an integer from the keyboard.|||Đọc một số nguyên từ bàn phím."
+            },
+            {
+              "text": "Print data to monitor.|||In dữ liệu ra màn hình."
+            },
+            {
+              "text": "Read data from a file.|||Đọc dữ liệu từ tệp."
+            },
+            {
+              "text": "None of the others|||Không đáp án nào khác"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">A pure computation like <b>Y = 10 + 7</b> runs on the CPU alone. The others (keyboard, monitor, file) require OS I/O services.</div><div class=\"ml-vi\">Một phép tính thuần như <b>Y = 10 + 7</b> chạy hoàn toàn trên CPU. Các thao tác khác (bàn phím, màn hình, tệp) cần dịch vụ I/O của hệ điều hành.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which state indicates that a process is currently being executed by the processor?|||Trạng thái nào cho biết một tiến trình đang được bộ xử lý thực thi?",
+          "options": [
+            {
+              "text": "Running|||Đang chạy (Running)"
+            },
+            {
+              "text": "Ready|||Sẵn sàng (Ready)"
+            },
+            {
+              "text": "NewBorn|||NewBorn"
+            },
+            {
+              "text": "Halted|||Đã dừng (Halted)"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">A process actively executing on the CPU is in the <b>Running</b> state.</div><div class=\"ml-vi\">Tiến trình đang thực thi trên CPU ở trạng thái <b>Running</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which technique involves dividing physical memory into fixed-size or variable-size blocks to allocate memory to processes?|||Kỹ thuật nào chia bộ nhớ vật lý thành các khối kích thước cố định hoặc thay đổi để cấp phát bộ nhớ cho các tiến trình?",
+          "options": [
+            {
+              "text": "Partitioning|||Phân vùng (Partitioning)"
+            },
+            {
+              "text": "Swapping|||Hoán đổi (Swapping)"
+            },
+            {
+              "text": "Paging|||Phân trang (Paging)"
+            },
+            {
+              "text": "Translation Lookaside Buffer|||Bộ đệm dịch địa chỉ (TLB)"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Partitioning</b> divides memory into fixed- or variable-size blocks for processes (paging is fixed-size only).</div><div class=\"ml-vi\"><b>Phân vùng</b> chia bộ nhớ thành khối cố định hoặc thay đổi cho tiến trình (phân trang chỉ cố định).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "How does Boolean algebra contribute to the design of digital circuits?|||Đại số Boole đóng góp thế nào vào thiết kế mạch số?",
+          "options": [
+            {
+              "text": "It simplifies the implementation of desired functions|||Nó đơn giản hóa việc hiện thực các hàm mong muốn"
+            },
+            {
+              "text": "It helps in the analysis of economic data|||Nó giúp phân tích dữ liệu kinh tế"
+            },
+            {
+              "text": "It facilitates the design of analog circuits|||Nó hỗ trợ thiết kế mạch analog"
+            },
+            {
+              "text": "It is primarily used for chemical engineering and physical engineering|||Nó chủ yếu dùng cho kỹ thuật hóa học và vật lý"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Boolean algebra <b>simplifies logic expressions</b>, making digital circuit implementation cheaper and smaller.</div><div class=\"ml-vi\">Đại số Boole <b>đơn giản hóa biểu thức logic</b>, giúp hiện thực mạch số rẻ và nhỏ hơn.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which gate can be used to create an inverted output of an input signal in digital logic?|||Cổng nào có thể dùng để tạo đầu ra đảo của một tín hiệu vào trong logic số?",
+          "options": [
+            {
+              "text": "NOT gate|||Cổng NOT"
+            },
+            {
+              "text": "OR gate|||Cổng OR"
+            },
+            {
+              "text": "AND gate|||Cổng AND"
+            },
+            {
+              "text": "XOR gate|||Cổng XOR"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">A <b>NOT</b> gate (inverter) produces the inverted output of its input.</div><div class=\"ml-vi\">Cổng <b>NOT</b> (bộ đảo) cho ra đầu ra đảo của tín hiệu vào.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Given the following Karnaugh map, what is the optimal expression in the sum of product format (X' means Not X)?<table class=\"exam-table\"><thead><tr><th></th><th>BC=00</th><th>BC=01</th><th>BC=11</th><th>BC=10</th></tr></thead><tbody><tr><td>A=0</td><td>1</td><td>1</td><td>1</td><td>1</td></tr><tr><td>A=1</td><td>1</td><td>0</td><td>0</td><td>1</td></tr></tbody></table>|||Cho bìa Karnaugh sau, biểu thức tối ưu ở dạng tổng các tích (sum of products) là gì? (X' nghĩa là NOT X)<table class=\"exam-table\"><thead><tr><th></th><th>BC=00</th><th>BC=01</th><th>BC=11</th><th>BC=10</th></tr></thead><tbody><tr><td>A=0</td><td>1</td><td>1</td><td>1</td><td>1</td></tr><tr><td>A=1</td><td>1</td><td>0</td><td>0</td><td>1</td></tr></tbody></table>",
+          "options": [
+            {
+              "text": "A' + C'|||A' + C'"
+            },
+            {
+              "text": "A + B|||A + B"
+            },
+            {
+              "text": "B + C'|||B + C'"
+            },
+            {
+              "text": "A + B'C' + BC'|||A + B'C' + BC'"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The whole A=0 row is 1 → term <b>A'</b>. The two 1s at A=1 (BC=00 and BC=10) share C=0 with the A=0 row → term <b>C'</b>. So F = <b>A' + C'</b>.</div><div class=\"ml-vi\">Cả hàng A=0 đều 1 → hạng tử <b>A'</b>. Hai ô 1 ở A=1 (BC=00 và BC=10) cùng C=0 với hàng A=0 → hạng tử <b>C'</b>. Vậy F = <b>A' + C'</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Given the following Karnaugh map, what is the optimal expression in the sum of product format (X' means Not X)?<table class=\"exam-table\"><thead><tr><th></th><th>CD=00</th><th>CD=01</th><th>CD=11</th><th>CD=10</th></tr></thead><tbody><tr><td>AB=00</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>AB=01</td><td>1</td><td>1</td><td>1</td><td>1</td></tr><tr><td>AB=11</td><td>0</td><td>1</td><td>0</td><td>1</td></tr><tr><td>AB=10</td><td>0</td><td>1</td><td>0</td><td>1</td></tr></tbody></table>|||Cho bìa Karnaugh sau, biểu thức tối ưu ở dạng tổng các tích (sum of products) là gì? (X' nghĩa là NOT X)<table class=\"exam-table\"><thead><tr><th></th><th>CD=00</th><th>CD=01</th><th>CD=11</th><th>CD=10</th></tr></thead><tbody><tr><td>AB=00</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>AB=01</td><td>1</td><td>1</td><td>1</td><td>1</td></tr><tr><td>AB=11</td><td>0</td><td>1</td><td>0</td><td>1</td></tr><tr><td>AB=10</td><td>0</td><td>1</td><td>0</td><td>1</td></tr></tbody></table>",
+          "options": [
+            {
+              "text": "A'B + AC'D + ACD'|||A'B + AC'D + ACD'"
+            },
+            {
+              "text": "AB + AC' + ACD'|||AB + AC' + ACD'"
+            },
+            {
+              "text": "AB' + AD + ACD'|||AB' + AD + ACD'"
+            },
+            {
+              "text": "A'B + C'D + BCD'|||A'B + C'D + BCD'"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The full AB=01 row → <b>A'B</b>. The A=1 cells at CD=01 group to <b>AC'D</b>, and at CD=10 to <b>ACD'</b>. So F = <b>A'B + AC'D + ACD'</b>.</div><div class=\"ml-vi\">Cả hàng AB=01 → <b>A'B</b>. Các ô A=1 ở CD=01 gộp thành <b>AC'D</b>, ở CD=10 thành <b>ACD'</b>. Vậy F = <b>A'B + AC'D + ACD'</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which type of instruction format is more flexible but can lead to inefficient use of memory?|||Loại định dạng lệnh nào linh hoạt hơn nhưng có thể dẫn tới dùng bộ nhớ kém hiệu quả?",
+          "options": [
+            {
+              "text": "Fixed-Length Instruction Format|||Định dạng lệnh độ dài cố định"
+            },
+            {
+              "text": "Variable-Length Instruction Format|||Định dạng lệnh độ dài thay đổi"
+            },
+            {
+              "text": "Compact Instruction Format|||Định dạng lệnh nén"
+            },
+            {
+              "text": "Standardized Instruction Format|||Định dạng lệnh chuẩn hóa"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Variable-length</b> instruction formats are flexible but can waste or fragment memory and complicate decoding.</div><div class=\"ml-vi\">Định dạng lệnh <b>độ dài thay đổi</b> linh hoạt nhưng có thể lãng phí/phân mảnh bộ nhớ và làm giải mã phức tạp.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following is not an operand type?|||Điều nào sau đây KHÔNG phải là một kiểu toán hạng?",
+          "options": [
+            {
+              "text": "Addresses|||Địa chỉ (Addresses)"
+            },
+            {
+              "text": "Logical data|||Dữ liệu logic (Logical data)"
+            },
+            {
+              "text": "Value|||Giá trị (Value)"
+            },
+            {
+              "text": "Characters|||Ký tự (Characters)"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">Operand types are addresses, numbers, characters, logical data. <b>Value</b> is not a distinct operand type.</div><div class=\"ml-vi\">Các kiểu toán hạng: địa chỉ, số, ký tự, dữ liệu logic. <b>Giá trị</b> không phải một kiểu riêng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is a branch instruction?|||Lệnh rẽ nhánh (branch instruction) là gì?",
+          "options": [
+            {
+              "text": "The instructions that are used to divide a program into multiple subprograms|||Lệnh dùng để chia chương trình thành nhiều chương trình con"
+            },
+            {
+              "text": "The instructions that have as one of its operands the address of the next instruction to be executed|||Lệnh có một toán hạng là địa chỉ của lệnh kế tiếp cần thực thi"
+            },
+            {
+              "text": "The instructions that are used to pause the program|||Lệnh dùng để tạm dừng chương trình"
+            },
+            {
+              "text": "The instructions that are used to return to the beginning of the program|||Lệnh dùng để quay về đầu chương trình"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">A <b>branch</b> carries the address of the next instruction to execute as one of its operands.</div><div class=\"ml-vi\">Lệnh <b>rẽ nhánh</b> mang một toán hạng là địa chỉ của lệnh kế tiếp.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Indirect addressing, the length of the address field is usually greater than the word length, because unlimiting the address range.|||Trong địa chỉ gián tiếp (indirect addressing), độ dài trường địa chỉ thường lớn hơn độ dài từ (word) vì để không giới hạn phạm vi địa chỉ.",
+          "options": [
+            {
+              "text": "True|||Đúng"
+            },
+            {
+              "text": "False|||Sai"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>False</b> — indirect addressing lets a <b>small</b> address field reach a full-length address stored in memory; the field is not larger than the word.</div><div class=\"ml-vi\"><b>Sai</b> — địa chỉ gián tiếp cho phép một trường địa chỉ <b>nhỏ</b> vẫn tới được một địa chỉ đầy đủ lưu trong bộ nhớ; trường này không lớn hơn từ.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Assume an instruction set that uses a fixed 16-bit instruction length. Operand specifiers are 6 bits in length. What is the maximum number of one-operand instructions that can be supported?|||Giả sử một tập lệnh dùng độ dài lệnh cố định 16 bit. Trường toán hạng dài 6 bit. Số lệnh một-toán-hạng tối đa có thể hỗ trợ là bao nhiêu?",
+          "options": [
+            {
+              "text": "256|||256"
+            },
+            {
+              "text": "512|||512"
+            },
+            {
+              "text": "1024|||1024"
+            },
+            {
+              "text": "2048|||2048"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">16-bit instruction − 6-bit operand = 10 bits for the opcode → 2¹⁰ = <b>1024</b> one-operand instructions.</div><div class=\"ml-vi\">Lệnh 16 bit − 6 bit toán hạng = 10 bit cho mã lệnh → 2¹⁰ = <b>1024</b> lệnh một-toán-hạng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which instruction is used by MASM32 to return from a procedure?|||Lệnh nào được MASM32 dùng để trở về từ một thủ tục (procedure)?",
+          "options": [
+            {
+              "text": "RET|||RET"
+            },
+            {
+              "text": "EXIT|||EXIT"
+            },
+            {
+              "text": "END|||END"
+            },
+            {
+              "text": "RES|||RES"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>RET</b> returns from a procedure (pops the return address and jumps back).</div><div class=\"ml-vi\"><b>RET</b> trở về từ một thủ tục (lấy địa chỉ trả về khỏi ngăn xếp và nhảy về).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Steps for executing a machine instruction are concerned, choose the correct statement which specifies the role of the fetching instruction step.|||Xét các bước thực thi một lệnh máy, chọn phát biểu đúng cho vai trò của bước lấy lệnh (fetch).",
+          "options": [
+            {
+              "text": "The processor reads an instruction from memory (cache, main memory).|||Bộ xử lý đọc một lệnh từ bộ nhớ (cache, bộ nhớ chính)."
+            },
+            {
+              "text": "The instruction is decoded to determine what action is required.|||Lệnh được giải mã để xác định hành động cần thực hiện."
+            },
+            {
+              "text": "The execution of an instruction may require performing some arithmetic or logical operation on data.|||Việc thực thi lệnh có thể cần thực hiện phép số học hoặc logic trên dữ liệu."
+            },
+            {
+              "text": "The results of an execution may require writing data to memory or an I/O module.|||Kết quả thực thi có thể cần ghi dữ liệu ra bộ nhớ hoặc mô-đun I/O."
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The <b>fetch</b> step reads the next instruction from memory into the CPU.</div><div class=\"ml-vi\">Bước <b>lấy lệnh</b> đọc lệnh kế tiếp từ bộ nhớ vào CPU.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Control and status registers are used by which entities to control the operation of the processor?|||Thanh ghi điều khiển và trạng thái (control and status registers) được những đối tượng nào dùng để điều khiển hoạt động của bộ xử lý?",
+          "options": [
+            {
+              "text": "Privileged, operating system programs|||Chương trình đặc quyền, chương trình của hệ điều hành"
+            },
+            {
+              "text": "Machine or assembly language programmers|||Lập trình viên ngôn ngữ máy hoặc hợp ngữ"
+            },
+            {
+              "text": "External I/O devices|||Thiết bị I/O bên ngoài"
+            },
+            {
+              "text": "Main memory modules|||Các mô-đun bộ nhớ chính"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Control/status registers are used by <b>privileged, operating-system programs</b>, not ordinary programmers.</div><div class=\"ml-vi\">Thanh ghi điều khiển/trạng thái do <b>chương trình đặc quyền của hệ điều hành</b> dùng, không phải lập trình viên thường.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the significance of the program counter (PC) in the fetch phase of the instruction cycle?|||Ý nghĩa của bộ đếm chương trình (PC) trong pha lấy lệnh (fetch) của chu kỳ lệnh là gì?",
+          "options": [
+            {
+              "text": "The program counter (PC) is not used in the fetch phase, and its role is limited to tracking the number of instructions executed by the CPU|||PC không được dùng trong pha fetch, vai trò của nó chỉ là đếm số lệnh CPU đã thực thi"
+            },
+            {
+              "text": "The program counter (PC) in the fetch phase holds the memory address of the next instruction to be fetched and executed|||PC trong pha fetch giữ địa chỉ bộ nhớ của lệnh kế tiếp cần lấy và thực thi"
+            },
+            {
+              "text": "The program counter (PC) is responsible for executing instructions and has no specific role during the fetch phase|||PC chịu trách nhiệm thực thi lệnh và không có vai trò cụ thể trong pha fetch"
+            },
+            {
+              "text": "The program counter (PC) is only relevant in multi-core processors and does not contribute to the fetch phase of the instruction cycle in single-core systems|||PC chỉ liên quan tới bộ xử lý đa nhân, không đóng góp vào pha fetch trong hệ đơn nhân"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">In the fetch phase the <b>PC holds the address of the next instruction</b> to fetch and execute.</div><div class=\"ml-vi\">Trong pha fetch, <b>PC giữ địa chỉ của lệnh kế tiếp</b> cần lấy và thực thi.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following statement is correct in the context of Instruction Pipelining?|||Phát biểu nào sau đây đúng trong ngữ cảnh pipeline lệnh (Instruction Pipelining)?",
+          "options": [
+            {
+              "text": "Instruction Pipelining reduces the efficiency of instruction execution by introducing delays and dependencies between instructions|||Pipeline làm giảm hiệu suất thực thi lệnh do gây trễ và phụ thuộc giữa các lệnh"
+            },
+            {
+              "text": "Instruction Pipelining is only effective for specific types of instructions and has no impact on the overall efficiency of instruction execution|||Pipeline chỉ hiệu quả với một số loại lệnh cụ thể và không ảnh hưởng tới hiệu suất chung"
+            },
+            {
+              "text": "Instruction Pipelining enhances efficiency by enabling simultaneous execution of multiple instructions in different stages, boosting overall throughput|||Pipeline tăng hiệu suất nhờ thực thi đồng thời nhiều lệnh ở các giai đoạn khác nhau, tăng thông lượng chung"
+            },
+            {
+              "text": "Instruction Pipelining improves efficiency by processing multiple instructions simultaneously, reducing execution time. However, it can face challenges like hazards, introducing delays and impacting overall performance|||Pipeline cải thiện hiệu suất bằng cách xử lý đồng thời nhiều lệnh, giảm thời gian thực thi. Tuy nhiên nó có thể gặp thách thức như hazard, gây trễ và ảnh hưởng hiệu năng chung"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">The most complete and correct statement: pipelining boosts throughput by overlapping instructions <b>but can suffer hazards</b> that add delays. (D)</div><div class=\"ml-vi\">Phát biểu đầy đủ và đúng nhất: pipeline tăng thông lượng nhờ chồng lấn lệnh <b>nhưng có thể gặp hazard</b> gây trễ. (D)</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In various statement types in a high-level programming language, what is not the most common statement?|||Trong các loại câu lệnh của ngôn ngữ lập trình bậc cao, đâu KHÔNG phải là câu lệnh phổ biến nhất?",
+          "options": [
+            {
+              "text": "GOTO statement.|||Câu lệnh GOTO."
+            },
+            {
+              "text": "IF statement.|||Câu lệnh IF."
+            },
+            {
+              "text": "CLOOP statement.|||Câu lệnh CLOOP."
+            },
+            {
+              "text": "CALL procedure statement.|||Câu lệnh gọi thủ tục (CALL procedure)."
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">GOTO, IF, and CALL are common HLL statement types. <b>CLOOP</b> is not a standard statement type.</div><div class=\"ml-vi\">GOTO, IF và CALL là các loại câu lệnh HLL phổ biến. <b>CLOOP</b> không phải một loại câu lệnh chuẩn.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In the concept of Register Windows, how many register groups are there?|||Trong khái niệm Cửa sổ thanh ghi (Register Windows), có bao nhiêu nhóm thanh ghi?",
+          "options": [
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "No distinction|||Không phân biệt"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">A register window has <b>3</b> groups: parameter, local, and temporary registers.</div><div class=\"ml-vi\">Một cửa sổ thanh ghi có <b>3</b> nhóm: thanh ghi tham số, cục bộ và tạm thời.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "How does pipelining in a RISC architecture handle branch instruction?|||Pipeline trong kiến trúc RISC xử lý lệnh rẽ nhánh (branch) như thế nào?",
+          "options": [
+            {
+              "text": "By using NOOP instructions inserted by the compiler or assembler|||Bằng cách chèn lệnh NOOP do trình biên dịch hoặc hợp ngữ thêm vào"
+            },
+            {
+              "text": "By eliminating branch instructions from the instruction stream|||Bằng cách loại bỏ lệnh rẽ nhánh khỏi luồng lệnh"
+            },
+            {
+              "text": "By executing branch instructions in a separate pipeline|||Bằng cách thực thi lệnh rẽ nhánh ở một pipeline riêng"
+            },
+            {
+              "text": "By delaying all instructions until branch instructions are executed|||Bằng cách trì hoãn mọi lệnh cho tới khi lệnh rẽ nhánh được thực thi"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">RISC uses the <b>delayed-branch</b> technique: the compiler/assembler fills the branch delay slot with <b>NOOP</b> (or useful) instructions.</div><div class=\"ml-vi\">RISC dùng kỹ thuật <b>rẽ nhánh trì hoãn</b>: trình biên dịch/hợp ngữ điền khe trễ rẽ nhánh bằng lệnh <b>NOOP</b> (hoặc lệnh có ích).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the benefit of using a superscalar organization over a scalar organization?|||Lợi ích của tổ chức siêu vô hướng (superscalar) so với vô hướng (scalar) là gì?",
+          "options": [
+            {
+              "text": "It increases the instruction throughput and improves the performance|||Tăng thông lượng lệnh và cải thiện hiệu năng"
+            },
+            {
+              "text": "It reduces the power consumption and the heat dissipation|||Giảm tiêu thụ điện và tỏa nhiệt"
+            },
+            {
+              "text": "It simplifies the instruction set and the compiler design|||Đơn giản hóa tập lệnh và thiết kế trình biên dịch"
+            },
+            {
+              "text": "All of the mentioned|||Tất cả các đáp án"
+            },
+            {
+              "text": "None of the mentioned|||Không đáp án nào"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">A superscalar processor issues multiple instructions per cycle, <b>increasing throughput and performance</b>.</div><div class=\"ml-vi\">Bộ xử lý siêu vô hướng phát nhiều lệnh mỗi chu kỳ, <b>tăng thông lượng và hiệu năng</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "____ is (are) determined by the number of instructions that can be fetched and executed at the same time (the number of parallel pipelines) and by the speed and sophistication of the mechanisms that the processor uses to find independent instructions.|||____ được quyết định bởi số lệnh có thể được lấy và thực thi cùng lúc (số pipeline song song) và bởi tốc độ, độ tinh vi của cơ chế mà bộ xử lý dùng để tìm các lệnh độc lập.",
+          "options": [
+            {
+              "text": "Instruction-level parallelism|||Song song mức lệnh (Instruction-level parallelism)"
+            },
+            {
+              "text": "Machine parallelism|||Song song máy (Machine parallelism)"
+            },
+            {
+              "text": "Both instruction-level parallelism and machine parallelism|||Cả hai"
+            },
+            {
+              "text": "None of the mentioned|||Không đáp án nào"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Machine parallelism</b> is the processor's ability to exploit ILP, set by parallel pipelines and instruction-issue mechanisms.</div><div class=\"ml-vi\"><b>Song song máy</b> là khả năng của bộ xử lý khai thác ILP, quyết định bởi số pipeline song song và cơ chế phát lệnh.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following are examples of architectural attributes in computer systems? (Choose 2 answers)|||Điều nào sau đây là ví dụ về thuộc tính kiến trúc (architectural attributes) trong hệ máy tính? (Chọn 2 đáp án)",
+          "options": [
+            {
+              "text": "Instruction set|||Tập lệnh"
+            },
+            {
+              "text": "Control signals|||Tín hiệu điều khiển"
+            },
+            {
+              "text": "Memory technology|||Công nghệ bộ nhớ"
+            },
+            {
+              "text": "Number of bits used for data types|||Số bit dùng cho kiểu dữ liệu"
+            },
+            {
+              "text": "Interfaces between peripherals and the computer|||Giao diện giữa ngoại vi và máy tính"
+            }
+          ],
+          "correctIndexes": [
+            0,
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">Architectural attributes are what the programmer sees: the <b>instruction set</b> and the <b>number of bits for data types</b>. Control signals, memory technology, and interfaces are organization.</div><div class=\"ml-vi\">Thuộc tính kiến trúc là cái lập trình viên thấy: <b>tập lệnh</b> và <b>số bit cho kiểu dữ liệu</b>. Tín hiệu điều khiển, công nghệ bộ nhớ và giao diện là tổ chức.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which write technique in which all write operations are made to main memory as well as to the cache, ensuring that main memory is always valid.|||Kỹ thuật ghi nào mà mọi thao tác ghi đều được thực hiện vào cả bộ nhớ chính lẫn cache, đảm bảo bộ nhớ chính luôn hợp lệ?",
+          "options": [
+            {
+              "text": "Write through|||Write through"
+            },
+            {
+              "text": "Write back|||Write back"
+            },
+            {
+              "text": "Write around|||Write around"
+            },
+            {
+              "text": "No write allocate|||No write allocate"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Write-through</b> writes to cache and main memory simultaneously, keeping memory always valid.</div><div class=\"ml-vi\"><b>Write-through</b> ghi vào cache và bộ nhớ chính cùng lúc, giữ bộ nhớ luôn hợp lệ.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "How does multithreading improve the performance of a processor?|||Đa luồng (multithreading) cải thiện hiệu năng bộ xử lý thế nào?",
+          "options": [
+            {
+              "text": "It increases the instruction-level parallelism by issuing multiple instructions from different threads in the same cycle|||Tăng song song mức lệnh bằng cách phát nhiều lệnh từ các luồng khác nhau trong cùng chu kỳ"
+            },
+            {
+              "text": "It increases the thread-level parallelism by executing multiple threads on different cores or processors|||Tăng song song mức luồng bằng cách chạy nhiều luồng trên các nhân/bộ xử lý khác nhau"
+            },
+            {
+              "text": "It increases the utilization of the processor resources by hiding the latency of long-latency events such as cache misses or branch mispredictions|||Tăng tận dụng tài nguyên bằng cách che độ trễ của sự kiện độ trễ dài như cache miss hay dự đoán rẽ nhánh sai"
+            },
+            {
+              "text": "All of the mentioned|||Tất cả các đáp án"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">Multithreading helps in <b>all these ways</b> — boosting ILP, TLP, and hiding long-latency stalls.</div><div class=\"ml-vi\">Đa luồng giúp theo <b>tất cả các cách này</b> — tăng ILP, TLP và che độ trễ dài.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Follow the Amdahl's law for multiprocessors, if only 10% of the code is inherently serial (f = 0.9), running the program on a multicore system with 4 processors, a performance gain (speedup factor) would be ____.|||Theo định luật Amdahl cho đa xử lý, nếu chỉ 10% mã là tuần tự cố hữu (f = 0.9), chạy trên hệ đa nhân 4 bộ xử lý thì độ lợi hiệu năng (hệ số tăng tốc) là ____.",
+          "options": [
+            {
+              "text": "307%|||307%"
+            },
+            {
+              "text": "297%|||297%"
+            },
+            {
+              "text": "317%|||317%"
+            },
+            {
+              "text": "327%|||327%"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Speedup = 1/((1−f)+f/N) = 1/(0.1+0.9/4) = 1/0.325 ≈ 3.08× ≈ <b>307%</b>.</div><div class=\"ml-vi\">Tăng tốc = 1/((1−f)+f/N) = 1/(0.1+0.9/4) = 1/0.325 ≈ 3.08 lần ≈ <b>307%</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which cache is not a shared cache?|||Cache nào KHÔNG phải là cache dùng chung?",
+          "options": [
+            {
+              "text": "L4 cache|||Cache L4"
+            },
+            {
+              "text": "L3 cache|||Cache L3"
+            },
+            {
+              "text": "L2 cache|||Cache L2"
+            },
+            {
+              "text": "L1 cache|||Cache L1"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>L1</b> is private per core (not shared); L2/L3/L4 are typically shared.</div><div class=\"ml-vi\"><b>L1</b> riêng cho từng nhân (không dùng chung); L2/L3/L4 thường dùng chung.</div>"
+        }
+      ]
     }
   ]
 };

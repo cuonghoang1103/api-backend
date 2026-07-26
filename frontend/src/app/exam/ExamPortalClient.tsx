@@ -12,6 +12,7 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import {
   GraduationCap, Search as SearchIcon, Clock as ClockIcon,
@@ -60,6 +61,17 @@ export default function ExamPortalClient() {
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<'ALL' | 'FE' | 'PE'>('ALL');
+
+  // Deep-link support: /exam?course=JPD113&kind=FE pre-fills the search box
+  // (matches course.courseCode via the existing filter below) and the FE/PE
+  // chip, so an "open in Exam Room" link from Academy lands pre-filtered.
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const course = searchParams.get('course');
+    const kind = searchParams.get('kind');
+    if (course) setQuery(course);
+    if (kind === 'FE' || kind === 'PE') setFilter(kind);
+  }, [searchParams]);
 
   const reloadBookmarks = useCallback(() => {
     examApi.myExamBookmarks().then((r) => {

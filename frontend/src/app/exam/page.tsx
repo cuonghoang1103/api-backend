@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import ExamPortalClient from './ExamPortalClient';
 
 export const metadata: Metadata = {
@@ -9,5 +10,10 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 export default function ExamPortalPage() {
-  return <ExamPortalClient />;
+  // ExamPortalClient reads ?course=&kind= via useSearchParams(), which requires a Suspense boundary.
+  return (
+    <Suspense fallback={null}>
+      <ExamPortalClient />
+    </Suspense>
+  );
 }

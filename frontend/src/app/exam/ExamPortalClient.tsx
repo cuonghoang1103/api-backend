@@ -419,7 +419,7 @@ function QuestionCard({ b, L, isVi, onRemoveQ, onSaveNote }: {
             return (
               <div key={oi} className={`flex gap-2 text-[13px] px-2.5 py-1.5 rounded-lg ${correct ? 'bg-[rgba(16,185,129,.12)] border border-[rgba(16,185,129,.3)]' : ''}`}>
                 <span className={`font-bold ${correct ? 'text-[var(--exam-ok)]' : 'text-text-muted'}`}>{LETTERS[oi]}</span>
-                <span>{pickLang(o.text, L)}{correct && <span className="text-[var(--exam-ok)] text-[11px] ml-1">✓ {isVi ? 'đáp án đúng' : 'correct'}</span>}</span>
+                <span><ExamRichContent html={o.text} L={L} inline />{correct && <span className="text-[var(--exam-ok)] text-[11px] ml-1">✓ {isVi ? 'đáp án đúng' : 'correct'}</span>}</span>
               </div>
             );
           })}

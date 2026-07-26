@@ -1,26 +1,33 @@
 'use client';
 
 /**
- * Rich renderer for exam prompts / explanations. Renders sanitized bilingual
- * HTML, then post-processes the mounted DOM for the things an FPTU paper needs
- * to look "exactly like the exam":
+ * Rich renderer for exam prompts / options / explanations. Renders sanitized
+ * bilingual HTML, then post-processes the mounted DOM for the things an FPTU
+ * paper needs to look "exactly like the exam":
  *   • Math — KaTeX auto-render of $…$, $$…$$, \(…\), \[…\] (lib loaded lazily,
  *     only when a delimiter is actually present).
  *   • Diagrams — <pre class="mermaid">…</pre> blocks rendered to SVG (mermaid
  *     loaded lazily, only when a diagram block exists; broken source degrades
  *     to a muted note instead of throwing).
- *   • Tables — plain HTML <table>, styled via exam.css.
- *   • Figures — <img> (scanned crop from the paper) already pass sanitize.
- * All post-processing happens AFTER DOMPurify, so KaTeX/mermaid output is never
- * stripped, and it re-runs whenever the language toggles (content changes).
+ *   • Tables / figures — plain HTML <table> / <img> (already pass sanitize).
+ *
+ * IMPORTANT: this component is wrapped in React.memo. The exam room re-renders
+ * every second (countdown timer). Without memo, React would re-apply
+ * dangerouslySetInnerHTML on every tick and wipe the KaTeX/mermaid nodes we
+ * injected imperatively — the classic "formula renders then reverts to raw
+ * $...$ after 1–2s" bug. memo skips the re-render entirely while props are
+ * unchanged, so the rendered math survives. It re-renders (and re-runs KaTeX)
+ * only when html/L actually change (e.g. the EN/VI toggle).
  */
-import { useEffect, useId, useRef } from 'react';
+import { memo, useEffect, useId, useRef } from 'react';
 import { pickLang, sanitizeHtml, stripInlineColors } from '@/lib/utils';
 
 const MATH_RE = /\$|\\\(|\\\[/;
 
-export default function ExamRichContent({ html, L, className = '' }: { html: string; L: 'en' | 'vi'; className?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
+function ExamRichContent({ html, L, className = '', inline = false }: {
+  html: string; L: 'en' | 'vi'; className?: string; inline?: boolean;
+}) {
+  const ref = useRef<HTMLElement>(null);
   const idBase = useId().replace(/[^a-zA-Z0-9]/g, '');
   const content = sanitizeHtml(stripInlineColors(pickLang(html, L)));
 
@@ -91,5 +98,11 @@ export default function ExamRichContent({ html, L, className = '' }: { html: str
     return () => { cancelled = true; };
   }, [content, idBase, L]);
 
-  return <div ref={ref} className={`rich-content max-w-none ${className}`} data-ml={L} dangerouslySetInnerHTML={{ __html: content }} />;
+  const cls = `rich-content max-w-none ${className}`;
+  if (inline) {
+    return <span ref={ref as React.RefObject<HTMLSpanElement>} className={cls} data-ml={L} dangerouslySetInnerHTML={{ __html: content }} />;
+  }
+  return <div ref={ref as React.RefObject<HTMLDivElement>} className={cls} data-ml={L} dangerouslySetInnerHTML={{ __html: content }} />;
 }
+
+export default memo(ExamRichContent);

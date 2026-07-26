@@ -395,7 +395,7 @@ function McqQuestion({ q, idx, total, L, isVi, selected, flagged, onSelect, onFl
           return (
             <button key={i} className="exam-opt" data-selected={sel} data-multi={q.multiSelect} onClick={() => onSelect(i)}>
               <span className="exam-opt-mark">{sel ? <CheckIcon className="w-4 h-4" /> : letters[i]}</span>
-              <span className="pt-0.5">{pickLang(o.text, L)}</span>
+              <ExamRichContent html={o.text} L={L} inline className="pt-0.5" />
             </button>
           );
         })}

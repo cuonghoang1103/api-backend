@@ -160,7 +160,7 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
                       return (
                         <div key={oi} className="exam-opt" data-state={state} style={{ cursor: 'default' }}>
                           <span className="exam-opt-mark">{letters[oi]}</span>
-                          <span className="pt-0.5">{pickLang(o.text, L)}{state === 'missed' && <em className="text-[var(--exam-ok)] ml-2 text-xs">({isVi ? 'đáp án đúng' : 'correct'})</em>}</span>
+                          <span className="pt-0.5"><ExamRichContent html={o.text} L={L} inline />{state === 'missed' && <em className="text-[var(--exam-ok)] ml-2 text-xs">({isVi ? 'đáp án đúng' : 'correct'})</em>}</span>
                         </div>
                       );
                     })}

@@ -4709,6 +4709,1179 @@ export default {
           "explanation": "<div class=\"ml-en\">In <code>double t = 2;</code> the programmer writes NO cast at all — the compiler silently (implicitly) widens the <code>int</code> literal <code>2</code> to <code>double</code> because it is a safe, lossless conversion. The other three all use an explicit cast keyword or function-style syntax (<code>(double)</code>, <code>(int)</code>, <code>double(...)</code>), which is EXPLICIT casting written by the programmer.</div><div class=\"ml-vi\">Trong <code>double t = 2;</code> người viết mã KHÔNG ép kiểu gì cả — trình biên dịch tự động (ngầm định) mở rộng hằng <code>int</code> <code>2</code> thành <code>double</code> vì đây là chuyển đổi an toàn, không mất dữ liệu. Ba câu còn lại đều dùng từ khoá ép kiểu tường minh hoặc cú pháp giống hàm (<code>(double)</code>, <code>(int)</code>, <code>double(...)</code>), tức là ép kiểu TƯỜNG MINH do người viết mã chỉ định.</div>"
         }
       ]
+    },
+    {
+      "kind": "FE",
+      "code": "FE-D5",
+      "source": "REAL",
+      "sortOrder": 4,
+      "title": "Đề 5 — SU25 Block 5 Exam|||Đề 5 — Block 5 Hè 2025",
+      "description": "PRF192 real FE multiple-choice paper (Summer 2025, Block 5), transcribed from the exam images; answers reasoned and code-verified here. (50 questions)|||Đề trắc nghiệm FE thật môn PRF192 (kỳ Hè 2025, Block 5), chép từ ảnh đề; đáp án được suy luận và chạy thử mã để kiểm chứng. (50 câu)",
+      "durationMinutes": 60,
+      "totalPoints": 10,
+      "passMark": 4,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. Some questions show C source code — read it carefully, especially operator precedence, integer division and where a loop body actually ends. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một số câu có mã nguồn C — đọc kỹ, nhất là thứ tự ưu tiên toán tử, phép chia nguyên và chỗ thân vòng lặp thực sự kết thúc. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following is a valid variable name?|||Tên biến nào sau đây HỢP LỆ?",
+          "options": [
+            {
+              "text": "break|||break"
+            },
+            {
+              "text": "_2|||_2"
+            },
+            {
+              "text": "for|||for"
+            },
+            {
+              "text": "2_|||2_"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">A C identifier must start with a letter or underscore, never a digit — so <code>2_</code> is illegal. <code>break</code> and <code>for</code> are reserved KEYWORDS, which cannot be used as variable names. <code>_2</code> starts with an underscore followed by a digit, which is a perfectly legal identifier.</div><div class=\"ml-vi\">Định danh (identifier) trong C phải bắt đầu bằng chữ cái hoặc dấu gạch dưới, KHÔNG BAO GIỜ bắt đầu bằng chữ số — nên <code>2_</code> không hợp lệ. <code>break</code> và <code>for</code> là các từ khoá DÀNH RIÊNG (reserved keyword), không thể dùng làm tên biến. <code>_2</code> bắt đầu bằng dấu gạch dưới rồi tới chữ số, đây là định danh hoàn toàn hợp lệ.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following statements is correct regarding the first character of an identifier?|||Phát biểu nào sau đây ĐÚNG về ký tự đầu tiên của một định danh (identifier)?",
+          "options": [
+            {
+              "text": "The first character of an identifier can be a number|||Ký tự đầu của định danh có thể là chữ số"
+            },
+            {
+              "text": "The first character of an identifier must be a special symbol|||Ký tự đầu của định danh phải là ký hiệu đặc biệt"
+            },
+            {
+              "text": "The first character of an identifier must be a letter or an underscore|||Ký tự đầu của định danh phải là chữ cái hoặc dấu gạch dưới"
+            },
+            {
+              "text": "The first character of an identifier can be a space|||Ký tự đầu của định danh có thể là khoảng trắng"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">C's identifier rule: the FIRST character must be a letter (a-z, A-Z) or an underscore <code>_</code> — never a digit, a special symbol like <code>@</code>/<code>#</code>, or whitespace (spaces are not even allowed anywhere inside an identifier).</div><div class=\"ml-vi\">Quy tắc định danh của C: ký tự ĐẦU TIÊN phải là chữ cái (a-z, A-Z) hoặc dấu gạch dưới <code>_</code> — không bao giờ là chữ số, ký hiệu đặc biệt như <code>@</code>/<code>#</code>, hay khoảng trắng (khoảng trắng thậm chí không được phép ở bất kỳ đâu bên trong định danh).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following statements is incorrect?|||Phát biểu nào sau đây là SAI?",
+          "options": [
+            {
+              "text": "To make our programs longer, we use higher-level languages.|||Để làm chương trình DÀI hơn, ta dùng ngôn ngữ bậc cao."
+            },
+            {
+              "text": "Program code in a high level language can not run, it must be translated to binary code (machine code) before running.|||Mã chương trình viết bằng ngôn ngữ bậc cao không thể chạy trực tiếp, nó phải được dịch sang mã nhị phân (mã máy) trước khi chạy."
+            },
+            {
+              "text": "C is based on a view of structured programming.|||C dựa trên quan điểm lập trình có cấu trúc."
+            },
+            {
+              "text": "Programs that perform relatively simple tasks and are written in assembly language contain a large number of statements.|||Chương trình thực hiện việc tương đối đơn giản nhưng viết bằng hợp ngữ (assembly) chứa một số lượng LỚN câu lệnh."
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Higher-level languages exist to make programs SHORTER and easier to write (one line of C can replace many lines of assembly), not longer — so statement A reverses the real reason and is the incorrect one. B, C and D are all true: a simple task written in low-level assembly does indeed need many more statements than the same task in a high-level language.</div><div class=\"ml-vi\">Ngôn ngữ bậc cao ra đời để làm chương trình NGẮN gọn và dễ viết hơn (một dòng C có thể thay nhiều dòng hợp ngữ), không phải dài hơn — nên phát biểu A đã nói ngược lý do thật và là câu SAI. B, C, D đều đúng: một việc đơn giản viết bằng hợp ngữ mức thấp thực sự cần NHIỀU câu lệnh hơn hẳn so với cùng việc đó viết bằng ngôn ngữ bậc cao.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the numeric code of the NULL character?|||Mã số của ký tự NULL là gì?",
+          "options": [
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "-1|||-1"
+            },
+            {
+              "text": "32|||32"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">The NULL character (<code>&#x27;\\0&#x27;</code>) always has ASCII code 0 — it is the special sentinel value C uses to mark the end of a string. <code>32</code> is the space character's code, and <code>-1</code> is the value of <code>EOF</code>, not NULL.</div><div class=\"ml-vi\">Ký tự NULL (<code>&#x27;\\0&#x27;</code>) luôn có mã ASCII bằng 0 — đây là giá trị đặc biệt C dùng để đánh dấu kết thúc một chuỗi. <code>32</code> là mã của ký tự khoảng trắng, còn <code>-1</code> là giá trị của <code>EOF</code>, không phải NULL.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What function in C is used to read a single character from a file?|||Hàm nào trong C dùng để đọc MỘT ký tự đơn từ một tệp?",
+          "options": [
+            {
+              "text": "fgetc()|||fgetc()"
+            },
+            {
+              "text": "fgets()|||fgets()"
+            },
+            {
+              "text": "fputc()|||fputc()"
+            },
+            {
+              "text": "fread()|||fread()"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><code>fgetc(file)</code> reads exactly one character from the given file stream. <code>fgets()</code> reads a whole LINE, <code>fputc()</code> WRITES (not reads) a character, and <code>fread()</code> reads a block of raw binary data, not specifically one character.</div><div class=\"ml-vi\"><code>fgetc(file)</code> đọc đúng một ký tự từ luồng tệp cho trước. <code>fgets()</code> đọc cả một DÒNG, <code>fputc()</code> là GHI (không phải đọc) một ký tự, còn <code>fread()</code> đọc một khối dữ liệu nhị phân thô, không riêng một ký tự.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the scope of a global variable in C?|||Phạm vi (scope) của một biến toàn cục (global variable) trong C là gì?",
+          "options": [
+            {
+              "text": "Throughout the entire program|||Trong toàn bộ chương trình"
+            },
+            {
+              "text": "Only within the function where it's declared|||Chỉ trong hàm nơi nó được khai báo"
+            },
+            {
+              "text": "Only within the block where it's declared|||Chỉ trong khối lệnh nơi nó được khai báo"
+            },
+            {
+              "text": "Within the structure where it's defined|||Trong cấu trúc (structure) nơi nó được định nghĩa"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">A global variable is declared OUTSIDE any function, at file scope, so every function in the file (and other files that <code>extern</code> it) can see and use it — its scope is the entire program. \"Only within a function/block\" describes a LOCAL variable instead.</div><div class=\"ml-vi\">Biến toàn cục được khai báo BÊN NGOÀI mọi hàm, ở phạm vi file, nên mọi hàm trong file (và file khác nếu khai báo <code>extern</code>) đều thấy và dùng được — phạm vi của nó là toàn chương trình. \"Chỉ trong một hàm/khối lệnh\" là mô tả của biến CỤC BỘ (local).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Choose the correct definition for \"Simple data types\" in C programming.|||Chọn định nghĩa ĐÚNG cho \"Kiểu dữ liệu đơn giản\" (Simple data types) trong lập trình C.",
+          "options": [
+            {
+              "text": "Changing from one form of representation to another|||Việc chuyển đổi từ dạng biểu diễn này sang dạng khác"
+            },
+            {
+              "text": "A category of data that represents individual, non-complex elements such as integers, floating-point numbers, and characters|||Một loại dữ liệu biểu diễn các phần tử đơn lẻ, không phức tạp như số nguyên, số thực dấu phẩy động, và ký tự"
+            },
+            {
+              "text": "Performing operations and expressions on data|||Việc thực hiện các phép toán và biểu thức trên dữ liệu"
+            },
+            {
+              "text": "Storing a collection of elements accessible by an index or a key|||Việc lưu trữ một tập hợp phần tử truy cập được qua chỉ số hoặc khoá"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">Simple (a.k.a. primitive/basic) data types — <code>int</code>, <code>float</code>, <code>double</code>, <code>char</code> — each hold ONE single, non-decomposable value. Option A describes type CASTING, C describes an EXPRESSION/operator, and D describes a data STRUCTURE like an array — none of those is the definition of a simple data type itself.</div><div class=\"ml-vi\">Kiểu dữ liệu đơn giản (còn gọi nguyên thuỷ/cơ bản) — <code>int</code>, <code>float</code>, <code>double</code>, <code>char</code> — mỗi kiểu chỉ chứa MỘT giá trị đơn lẻ, không thể phân rã thêm. Phương án A mô tả việc ÉP KIỂU, C mô tả BIỂU THỨC/toán tử, còn D mô tả một CẤU TRÚC dữ liệu như mảng — không cái nào là định nghĩa của kiểu dữ liệu đơn giản.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the result of the expression !1?|||Kết quả của biểu thức !1 là gì?",
+          "options": [
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "10|||10"
+            },
+            {
+              "text": "11|||11"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><code>!</code> is the LOGICAL NOT operator. Any non-zero value (like <code>1</code>) is treated as \"true\", and <code>!</code> flips true to <code>0</code> (false). Verified by compiling and running: prints 0.</div><div class=\"ml-vi\"><code>!</code> là toán tử PHỦ ĐỊNH LOGIC (NOT). Bất kỳ giá trị khác 0 nào (như <code>1</code>) được coi là \"đúng\" (true), và <code>!</code> đảo true thành <code>0</code> (false). Đã biên dịch và chạy thử kiểm chứng: in ra 0.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following operators has the lowest priority?|||Toán tử nào sau đây có độ ưu tiên THẤP NHẤT?",
+          "options": [
+            {
+              "text": "+=|||+="
+            },
+            {
+              "text": "+|||+"
+            },
+            {
+              "text": "++|||++"
+            },
+            {
+              "text": "-|||-"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Assignment operators like <code>+=</code> sit near the very BOTTOM of C's precedence table (only the comma operator is lower) — they are evaluated LAST, after every arithmetic operation on their right-hand side. <code>++</code> (increment) is near the TOP of the table, and binary <code>+</code>/<code>-</code> (addition/subtraction) sit in the middle, well above assignment.</div><div class=\"ml-vi\">Các toán tử gán như <code>+=</code> nằm gần ĐÁY BẢNG độ ưu tiên của C (chỉ có toán tử dấu phẩy thấp hơn) — chúng được tính SAU CÙNG, sau khi mọi phép toán số học ở vế phải đã xong. <code>++</code> (tăng) nằm gần ĐỈNH bảng, còn <code>+</code>/<code>-</code> (cộng/trừ hai ngôi) nằm ở giữa, cao hơn hẳn phép gán.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following symbols is used to denote the end statement?|||Ký hiệu nào sau đây dùng để đánh dấu KẾT THÚC một câu lệnh?",
+          "options": [
+            {
+              "text": ";|||;"
+            },
+            {
+              "text": "#|||#"
+            },
+            {
+              "text": "!|||!"
+            },
+            {
+              "text": "-|||-"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Every C statement ends with a semicolon <code>;</code> — this is how the compiler knows one statement has finished and the next begins. <code>#</code> starts a PREPROCESSOR directive, <code>!</code> is logical NOT, and <code>-</code> is subtraction/negation — none marks the end of a statement.</div><div class=\"ml-vi\">Mọi câu lệnh trong C kết thúc bằng dấu chấm phẩy <code>;</code> — đây là cách trình biên dịch biết một câu lệnh đã xong và câu tiếp theo bắt đầu. <code>#</code> mở đầu chỉ thị TIỀN XỬ LÝ, <code>!</code> là phủ định logic, còn <code>-</code> là trừ/lấy đối — không cái nào đánh dấu kết thúc câu lệnh.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the results will be displayed on the screen after executing the following code:<pre><code>char a[] = &quot;Ab&quot;;\nchar *s = a;\nint t=1;\nfor (; *s; ++s)\n    t *= *s;\nprintf(&quot;%d&quot;, t);</code></pre>|||Kết quả hiển thị trên màn hình sau khi chạy đoạn mã sau là gì:<pre><code>char a[] = &quot;Ab&quot;;\nchar *s = a;\nint t=1;\nfor (; *s; ++s)\n    t *= *s;\nprintf(&quot;%d&quot;, t);</code></pre>",
+          "options": [
+            {
+              "text": "Garbage value|||Giá trị rác"
+            },
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "Compiler error|||Lỗi biên dịch"
+            },
+            {
+              "text": "6370|||6370"
+            },
+            {
+              "text": "65|||65"
+            },
+            {
+              "text": "98|||98"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">The loop walks the string \"Ab\" character by character until it hits the terminating <code>&#x27;\\0&#x27;</code> (which is 0/false, stopping the loop). It multiplies <code>t</code> by each character's ASCII code: <code>t = 1 * &#x27;A&#x27;(65) * &#x27;b&#x27;(98) = 65 * 98 = 6370</code>. Verified by compiling and running.</div><div class=\"ml-vi\">Vòng lặp duyệt chuỗi \"Ab\" từng ký tự cho tới khi gặp ký tự kết thúc <code>&#x27;\\0&#x27;</code> (bằng 0/false, dừng vòng lặp). Nó nhân <code>t</code> với mã ASCII của mỗi ký tự: <code>t = 1 * &#x27;A&#x27;(65) * &#x27;b&#x27;(98) = 65 * 98 = 6370</code>. Đã biên dịch và chạy thử kiểm chứng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the result of the \"printf(\\\"%d %d\\\",12<<2,8>>2);\" command?|||Kết quả của lệnh \"printf(\\\"%d %d\\\",12<<2,8>>2);\" là gì?",
+          "options": [
+            {
+              "text": "6 4|||6 4"
+            },
+            {
+              "text": "24 2|||24 2"
+            },
+            {
+              "text": "48 4|||48 4"
+            },
+            {
+              "text": "48 2|||48 2"
+            },
+            {
+              "text": "0 0|||0 0"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><code>12 &lt;&lt; 2</code> (left shift by 2, i.e. multiply by 4) = <code>48</code>. <code>8 &gt;&gt; 2</code> (right shift by 2, i.e. integer-divide by 4) = <code>2</code>. Verified by compiling and running: prints <code>48 2</code>.</div><div class=\"ml-vi\"><code>12 &lt;&lt; 2</code> (dịch trái 2 bit, tức nhân 4) = <code>48</code>. <code>8 &gt;&gt; 2</code> (dịch phải 2 bit, tức chia nguyên cho 4) = <code>2</code>. Đã biên dịch và chạy thử kiểm chứng: in ra <code>48 2</code>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In a for loop, what part of the loop is executed before the loop starts?|||Trong vòng lặp for, phần nào của vòng lặp được thực thi TRƯỚC KHI vòng lặp bắt đầu?",
+          "options": [
+            {
+              "text": "The condition|||Điều kiện (condition)"
+            },
+            {
+              "text": "The initialization block|||Khối khởi tạo (initialization block)"
+            },
+            {
+              "text": "The iteration statement|||Câu lệnh lặp (iteration statement)"
+            },
+            {
+              "text": "The body of the loop|||Thân vòng lặp (body)"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">A <code>for</code> header is <code>for (init; condition; iteration)</code>. The <code>init</code> block (e.g. <code>int i = 0</code>) runs EXACTLY ONCE, before anything else, to set up the loop variable. The condition is then checked before each iteration (including the first), and <code>iteration</code>/the body run AFTER, on every pass except this initial setup.</div><div class=\"ml-vi\">Đầu vòng lặp <code>for</code> là <code>for (khởi_tạo; điều_kiện; bước_lặp)</code>. Khối <code>khởi_tạo</code> (vd <code>int i = 0</code>) chạy ĐÚNG MỘT LẦN, trước mọi thứ khác, để thiết lập biến lặp. Điều kiện sau đó được kiểm tra trước MỖI lần lặp (kể cả lần đầu), còn <code>bước_lặp</code>/thân vòng chạy SAU, ở mỗi lượt trừ bước khởi tạo ban đầu này.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the primary purpose of logic constructs in programming?|||Mục đích chính của các cấu trúc điều khiển (logic constructs) trong lập trình là gì?",
+          "options": [
+            {
+              "text": "To perform calculations and execute statements in a sequential order|||Thực hiện tính toán và thực thi các câu lệnh theo một trình tự"
+            },
+            {
+              "text": "To store data in variables|||Lưu trữ dữ liệu vào biến"
+            },
+            {
+              "text": "To allocate memory dynamically|||Cấp phát bộ nhớ động"
+            },
+            {
+              "text": "To define the syntax of a programming language|||Định nghĩa cú pháp của một ngôn ngữ lập trình"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Logic constructs — sequence, selection (if/else) and iteration (loops) — control the ORDER in which a program's statements/calculations run. Storing data in variables is the job of variable declarations, allocating memory dynamically is <code>malloc()</code>'s job, and defining a language's syntax is the job of its grammar/specification, not of the constructs written inside a program.</div><div class=\"ml-vi\">Các cấu trúc điều khiển (logic construct) — tuần tự, rẽ nhánh (if/else) và lặp (loop) — điều khiển TRÌNH TỰ các câu lệnh/phép tính của chương trình chạy theo. Lưu dữ liệu vào biến là việc của khai báo biến, cấp phát bộ nhớ động là việc của <code>malloc()</code>, còn định nghĩa cú pháp ngôn ngữ là việc của ngữ pháp/đặc tả ngôn ngữ, không phải của các cấu trúc viết bên trong một chương trình.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What will be the output of the following C code?<pre><code>#include &lt;stdio.h&gt;\nvoid main()\n{\n    int x = 0;\n    if (x == 0)\n        printf(&quot;Hi&quot;);\n    else\n        printf(&quot;How are you&quot;);\n        printf(&quot;Hello&quot;);\n}</code></pre>|||Đoạn mã C sau sẽ in ra gì?<pre><code>#include &lt;stdio.h&gt;\nvoid main()\n{\n    int x = 0;\n    if (x == 0)\n        printf(&quot;Hi&quot;);\n    else\n        printf(&quot;How are you&quot;);\n        printf(&quot;Hello&quot;);\n}</code></pre>",
+          "options": [
+            {
+              "text": "Hi|||Hi"
+            },
+            {
+              "text": "How are you|||How are you"
+            },
+            {
+              "text": "Hello|||Hello"
+            },
+            {
+              "text": "HiHello|||HiHello"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">Without braces, only the ONE statement right after <code>else</code> belongs to it — that is <code>printf(&quot;How are you&quot;)</code>. The next line <code>printf(&quot;Hello&quot;)</code> is a separate statement OUTSIDE the if/else, so it always runs regardless of the branch taken. Since <code>x == 0</code> is true, <code>Hi</code> prints, the else is skipped, then <code>Hello</code> prints unconditionally — giving <code>HiHello</code>. Verified by compiling and running.</div><div class=\"ml-vi\">Không có dấu ngoặc <code>{}</code>, chỉ MỘT câu lệnh ngay sau <code>else</code> thuộc về nó — đó là <code>printf(&quot;How are you&quot;)</code>. Dòng kế tiếp <code>printf(&quot;Hello&quot;)</code> là câu lệnh RIÊNG, nằm NGOÀI if/else, nên luôn chạy bất kể nhánh nào được chọn. Vì <code>x == 0</code> đúng nên in <code>Hi</code>, bỏ qua else, rồi <code>Hello</code> in ra vô điều kiện — kết quả <code>HiHello</code>. Đã biên dịch và chạy thử kiểm chứng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "How to declare a variable in C language?|||Khai báo một biến trong ngôn ngữ C như thế nào?",
+          "options": [
+            {
+              "text": "All variables must be declared before we use them in C program.|||Mọi biến phải được khai báo trước khi sử dụng trong chương trình C."
+            },
+            {
+              "text": "To declare a variable you specify its name and data type it can store.|||Để khai báo một biến, bạn chỉ ra tên biến và kiểu dữ liệu nó lưu trữ."
+            },
+            {
+              "text": "All variable are always stored on the stack.|||Mọi biến luôn được lưu trên vùng nhớ stack."
+            },
+            {
+              "text": "Reading a value from keyboard or other device with a OUT statement|||Đọc một giá trị từ bàn phím hoặc thiết bị khác bằng lệnh OUT"
+            },
+            {
+              "text": "The scope of a variable is the range of program statements that can't access that variable.|||Phạm vi của biến là tập các câu lệnh KHÔNG truy cập được biến đó."
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">The question asks HOW to declare: a declaration is written as <code>&lt;type&gt; &lt;name&gt;;</code> — you state the data type and the name. Option A is a true rule about C but it does not describe how to declare; C is false (globals/statics live in static storage, not the stack); D describes input, not declaration, and there is no \"OUT statement\" in C; E inverts the definition of scope (scope is where a variable CAN be accessed).</div><div class=\"ml-vi\">Câu hỏi hỏi CÁCH khai báo: một khai báo viết dạng <code>&lt;kiểu&gt; &lt;tên&gt;;</code> — nêu kiểu dữ liệu và tên biến. Phương án A là quy tắc đúng của C nhưng không mô tả cách khai báo; C sai (biến toàn cục/static nằm ở vùng nhớ tĩnh, không phải stack); D mô tả việc nhập dữ liệu, và C không có \"lệnh OUT\"; E định nghĩa NGƯỢC về phạm vi (scope là nơi biến CÓ THỂ được truy cập).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What term is commonly used to specify both the type and name of a variable or constant in a C programming language?|||Thuật ngữ nào thường dùng để chỉ việc nêu ra cả KIỂU và TÊN của một biến hoặc hằng số trong ngôn ngữ lập trình C?",
+          "options": [
+            {
+              "text": "Identification|||Định danh (Identification)"
+            },
+            {
+              "text": "Name|||Tên (Name)"
+            },
+            {
+              "text": "Declaration|||Khai báo (Declaration)"
+            },
+            {
+              "text": "Definition|||Định nghĩa (Definition)"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">A DECLARATION is exactly this: <code>&lt;type&gt; &lt;name&gt;;</code>, telling the compiler both what kind of data the variable holds and what it's called. \"Name\" alone is just the identifier without a type; \"Identification\" is not a C term; \"Definition\" more precisely refers to where memory is actually reserved/initialized (relevant for functions and <code>extern</code> variables), a finer distinction than this question needs.</div><div class=\"ml-vi\">KHAI BÁO (declaration) chính là việc này: <code>&lt;kiểu&gt; &lt;tên&gt;;</code>, báo cho trình biên dịch biết cả biến chứa loại dữ liệu gì và tên gọi là gì. \"Tên\" (Name) chỉ là định danh, không có kiểu; \"Identification\" không phải thuật ngữ của C; \"Định nghĩa\" (Definition) chỉ chính xác hơn về nơi bộ nhớ thực sự được cấp/khởi tạo (liên quan tới hàm và biến <code>extern</code>), một phân biệt tinh hơn mức câu hỏi này cần.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of these is NOT a relational or logical operator?|||Toán tử nào KHÔNG phải toán tử quan hệ hay toán tử logic?",
+          "options": [
+            {
+              "text": "=|||="
+            },
+            {
+              "text": "|||||||"
+            },
+            {
+              "text": "==|||=="
+            },
+            {
+              "text": "!=|||!="
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">A single <code>=</code> is the ASSIGNMENT operator — it stores a value. <code>||</code> is logical OR, while <code>==</code> and <code>!=</code> are the relational equality operators.</div><div class=\"ml-vi\">Một dấu <code>=</code> là toán tử GÁN — nó lưu giá trị. <code>||</code> là OR logic, còn <code>==</code> và <code>!=</code> là các toán tử quan hệ so sánh bằng/khác.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What will be the output of the following C code?<pre><code>#include &lt;stdio.h&gt;\nvoid main()\n{\n    int total=0;\n    for(int s=1; s&lt;15; s++)\n        total=total+s;\n    printf(&quot;%d&quot;,total);\n}</code></pre>|||Đoạn mã C sau sẽ in ra gì?<pre><code>#include &lt;stdio.h&gt;\nvoid main()\n{\n    int total=0;\n    for(int s=1; s&lt;15; s++)\n        total=total+s;\n    printf(&quot;%d&quot;,total);\n}</code></pre>",
+          "options": [
+            {
+              "text": "105|||105"
+            },
+            {
+              "text": "150|||150"
+            },
+            {
+              "text": "120|||120"
+            },
+            {
+              "text": "210|||210"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The loop adds every integer from 1 up to 14 (<code>s &lt; 15</code> stops the loop once <code>s</code> reaches 15) into <code>total</code>: <code>1+2+...+14 = 14*15/2 = 105</code>. Verified by compiling and running.</div><div class=\"ml-vi\">Vòng lặp cộng dồn mọi số nguyên từ 1 đến 14 (<code>s &lt; 15</code> dừng vòng lặp khi <code>s</code> chạm 15) vào <code>total</code>: <code>1+2+...+14 = 14*15/2 = 105</code>. Đã biên dịch và chạy thử kiểm chứng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Analyze the following C function and determine the output?<pre><code>int f(int a, int b, int c) {\n    int t = 2 * (a + b - c) / 5;\n    return t;\n}\n\nint main() {\n    int x = 5, y = 6, z = 7;\n    int t = 3 * f(x, y, z);\n    printf(&quot;%d&quot;, t);\n    return 0;\n}</code></pre>|||Phân tích hàm C sau và xác định kết quả in ra?<pre><code>int f(int a, int b, int c) {\n    int t = 2 * (a + b - c) / 5;\n    return t;\n}\n\nint main() {\n    int x = 5, y = 6, z = 7;\n    int t = 3 * f(x, y, z);\n    printf(&quot;%d&quot;, t);\n    return 0;\n}</code></pre>",
+          "options": [
+            {
+              "text": "6|||6"
+            },
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "9|||9"
+            },
+            {
+              "text": "0|||0"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">Inside <code>f(5, 6, 7)</code>: <code>a+b-c = 5+6-7 = 4</code>, so <code>2*4/5 = 8/5</code> which is INTEGER division, truncating to <code>1</code> (not 1.6). <code>f</code> returns 1. Back in <code>main</code>, <code>t = 3 * 1 = 3</code>. Verified by compiling and running.</div><div class=\"ml-vi\">Bên trong <code>f(5, 6, 7)</code>: <code>a+b-c = 5+6-7 = 4</code>, nên <code>2*4/5 = 8/5</code> là phép chia NGUYÊN, cắt xuống còn <code>1</code> (không phải 1.6). <code>f</code> trả về 1. Về <code>main</code>, <code>t = 3 * 1 = 3</code>. Đã biên dịch và chạy thử kiểm chứng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What will the following program print?<pre><code>#include &lt;stdio.h&gt;\n\nint main() {\n    int i = 1, j = 0;\n    do {\n        printf(&quot;%d %d &quot;, i, j);\n        i+=1;\n        j-=1;\n    } while (i &lt; j);\n\n    return 0;\n}</code></pre>|||Chương trình sau sẽ in ra gì?<pre><code>#include &lt;stdio.h&gt;\n\nint main() {\n    int i = 1, j = 0;\n    do {\n        printf(&quot;%d %d &quot;, i, j);\n        i+=1;\n        j-=1;\n    } while (i &lt; j);\n\n    return 0;\n}</code></pre>",
+          "options": [
+            {
+              "text": "4 -1|||4 -1"
+            },
+            {
+              "text": "0 1|||0 1"
+            },
+            {
+              "text": "1 0|||1 0"
+            },
+            {
+              "text": "0 2|||0 2"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">A <code>do-while</code> loop ALWAYS runs its body at least once BEFORE checking the condition. First pass prints <code>i</code>=1, <code>j</code>=0, i.e. \"1 0 \", then updates <code>i</code>=2, <code>j</code>=-1. The condition <code>i &lt; j</code> (<code>2 &lt; -1</code>) is now false, so the loop stops after just one pass. Verified by compiling and running.</div><div class=\"ml-vi\">Vòng lặp <code>do-while</code> LUÔN chạy thân vòng ÍT NHẤT MỘT LẦN trước khi kiểm tra điều kiện. Lần đầu in <code>i</code>=1, <code>j</code>=0, tức \"1 0 \", rồi cập nhật <code>i</code>=2, <code>j</code>=-1. Điều kiện <code>i &lt; j</code> (<code>2 &lt; -1</code>) lúc này sai, nên vòng lặp dừng sau đúng một lần. Đã biên dịch và chạy thử kiểm chứng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the loop in C language used for?|||Vòng lặp trong ngôn ngữ C dùng để làm gì?",
+          "options": [
+            {
+              "text": "To execute a block of codes repeatedly as long as a specified condition is true.|||Thực thi một khối mã lặp đi lặp lại chừng nào một điều kiện cho trước còn đúng."
+            },
+            {
+              "text": "To perform mathematical calculations.|||Thực hiện các phép tính toán học."
+            },
+            {
+              "text": "To define variables within a program.|||Định nghĩa biến trong chương trình."
+            },
+            {
+              "text": "To execute a statement based on a condition|||Thực thi một câu lệnh dựa trên một điều kiện"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">This is the defining trait of a loop (<code>for</code>/<code>while</code>/<code>do-while</code>): REPEAT a block while a condition holds. Performing math (B) is just one possible thing a loop's body might do, not the loop's purpose; defining variables (C) is unrelated; \"executing a statement based on a condition\" (D) describes <code>if</code>, which runs AT MOST once, not repeatedly.</div><div class=\"ml-vi\">Đây chính là đặc điểm định nghĩa của vòng lặp (<code>for</code>/<code>while</code>/<code>do-while</code>): LẶP LẠI một khối lệnh chừng nào điều kiện còn đúng. Tính toán (B) chỉ là MỘT việc thân vòng lặp có thể làm, không phải mục đích của vòng lặp; định nghĩa biến (C) không liên quan; \"thực thi câu lệnh dựa trên điều kiện\" (D) mô tả <code>if</code>, vốn chạy TỐI ĐA một lần, không lặp lại.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following is an incorrect iteration construct?|||Cấu trúc nào sau đây KHÔNG PHẢI một cấu trúc lặp (iteration construct)?",
+          "options": [
+            {
+              "text": "(condition) ? True_Value : False_Value|||(condition) ? True_Value : False_Value"
+            },
+            {
+              "text": "for ( InitBlock; Condition; Task2) Task1;|||for ( InitBlock; Condition; Task2) Task1;"
+            },
+            {
+              "text": "do{ statements;} while (condition) ;|||do{ statements;} while (condition) ;"
+            },
+            {
+              "text": "while (condition){ statements; }|||while (condition){ statements; }"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The <code>?:</code> TERNARY (conditional) operator picks ONE of two VALUES based on a condition — it does not repeat anything, so it is not an iteration construct at all; it belongs with <code>if/else</code>. <code>for</code>, <code>do-while</code> and <code>while</code> are C's three real looping constructs.</div><div class=\"ml-vi\">Toán tử BA NGÔI (ternary/conditional) <code>?:</code> chỉ chọn MỘT trong hai GIÁ TRỊ dựa trên điều kiện — nó không lặp lại gì cả, nên hoàn toàn không phải cấu trúc lặp; nó cùng nhóm với <code>if/else</code>. <code>for</code>, <code>do-while</code> và <code>while</code> mới là ba cấu trúc lặp thật sự của C.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What will happen if the condition in a while loop is initially false?|||Điều gì xảy ra nếu điều kiện của vòng lặp while SAI ngay từ đầu?",
+          "options": [
+            {
+              "text": "The loop is skipped entirely.|||Vòng lặp bị BỎ QUA hoàn toàn."
+            },
+            {
+              "text": "The loop executes indefinitely.|||Vòng lặp chạy VÔ HẠN."
+            },
+            {
+              "text": "The loop executes once and then terminates.|||Vòng lặp chạy MỘT LẦN rồi dừng."
+            },
+            {
+              "text": "An error occurs.|||Xảy ra LỖI."
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><code>while</code> checks its condition BEFORE every single pass, including the very first one — if it's false from the start, the body never runs at all, zero times. (This is the key difference from <code>do-while</code>, which always runs the body at least once because it checks the condition AFTER.)</div><div class=\"ml-vi\"><code>while</code> kiểm tra điều kiện TRƯỚC mỗi lượt, kể cả lượt ĐẦU TIÊN — nếu sai ngay từ đầu, thân vòng lặp không chạy lần nào cả, KHÔNG LẦN nào. (Đây là khác biệt then chốt so với <code>do-while</code>, vốn luôn chạy thân vòng ít nhất một lần vì nó kiểm tra điều kiện SAU.)</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What will be the output of the C program?<pre><code>int i = 1, j = 2;\nif(i-- == j)\n    printf(&quot;i = %d&quot;, --i);\nelse\n    printf(&quot;j = %d&quot;, ++j);</code></pre>|||Chương trình C sau sẽ in ra gì?<pre><code>int i = 1, j = 2;\nif(i-- == j)\n    printf(&quot;i = %d&quot;, --i);\nelse\n    printf(&quot;j = %d&quot;, ++j);</code></pre>",
+          "options": [
+            {
+              "text": "i = 2|||i = 2"
+            },
+            {
+              "text": "i = 0|||i = 0"
+            },
+            {
+              "text": "j = 3|||j = 3"
+            },
+            {
+              "text": "j = 1|||j = 1"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><code>i--</code> is POSTFIX: the COMPARISON uses i's value BEFORE decrementing, i.e. <code>1 == 2</code>, which is false (i becomes 0 afterward, but too late to matter here). So the <code>else</code> branch runs: <code>++j</code> is PREFIX, incrementing j to 3 FIRST, then printing \"j = 3\". Verified by compiling and running.</div><div class=\"ml-vi\"><code>i--</code> là HẬU TỐ (postfix): phép SO SÁNH dùng giá trị của i TRƯỚC KHI giảm, tức <code>1 == 2</code>, sai (i giảm còn 0 sau đó, nhưng đã muộn để ảnh hưởng ở đây). Vậy nhánh <code>else</code> chạy: <code>++j</code> là TIỀN TỐ, tăng j lên 3 TRƯỚC, rồi in \"j = 3\". Đã biên dịch và chạy thử kiểm chứng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following statements is used to move to the next loop without executing the remaining part of the loop?|||Câu lệnh nào sau đây dùng để chuyển sang lần lặp tiếp theo mà KHÔNG thực thi phần còn lại của vòng lặp?",
+          "options": [
+            {
+              "text": "continue|||continue"
+            },
+            {
+              "text": "goto|||goto"
+            },
+            {
+              "text": "return|||return"
+            },
+            {
+              "text": "break|||break"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><code>continue</code> skips the REST of the current iteration's body and jumps straight to the next iteration (re-checking the loop condition / running the update). <code>break</code> instead EXITS the loop entirely; <code>return</code> exits the whole function; <code>goto</code> is an unconditional unrelated jump.</div><div class=\"ml-vi\"><code>continue</code> bỏ qua PHẦN CÒN LẠI của thân vòng lặp ở lần lặp hiện tại và nhảy thẳng sang lần lặp kế tiếp (kiểm tra lại điều kiện / chạy bước cập nhật). <code>break</code> thì THOÁT HẲN khỏi vòng lặp; <code>return</code> thoát khỏi toàn bộ hàm; <code>goto</code> là lệnh nhảy vô điều kiện không liên quan.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following statements is used to stop the select or loop statement?|||Câu lệnh nào sau đây dùng để DỪNG một câu lệnh chọn (switch) hoặc lặp (loop)?",
+          "options": [
+            {
+              "text": "break|||break"
+            },
+            {
+              "text": "goto|||goto"
+            },
+            {
+              "text": "continue|||continue"
+            },
+            {
+              "text": "while|||while"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><code>break</code> immediately EXITS/stops the innermost enclosing <code>switch</code>, <code>for</code>, <code>while</code> or <code>do-while</code>. <code>continue</code> skips to the next iteration instead of stopping; <code>goto</code> is an unrelated unconditional jump; <code>while</code> itself starts a loop, it does not stop one.</div><div class=\"ml-vi\"><code>break</code> THOÁT/DỪNG NGAY LẬP TỨC câu lệnh <code>switch</code>, <code>for</code>, <code>while</code> hay <code>do-while</code> gần nhất đang bao nó. <code>continue</code> chuyển sang lần lặp tiếp theo thay vì dừng hẳn; <code>goto</code> là lệnh nhảy vô điều kiện không liên quan; bản thân <code>while</code> KHỞI ĐỘNG một vòng lặp, không phải để dừng nó.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Suppose there is a function in C as follows:<pre><code>double g (double x, double y){\n    return (x - 2)*(x - 2) + y*y;\n}</code></pre>What is the value of z after executing the statement z=g(2,0)?|||Giả sử có hàm C sau:<pre><code>double g (double x, double y){\n    return (x - 2)*(x - 2) + y*y;\n}</code></pre>Giá trị của z sau khi thực thi câu lệnh z=g(2,0) là gì?",
+          "options": [
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "8|||8"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">With <code>x=2, y=0</code>: <code>(2-2)*(2-2) + 0*0 = 0*0 + 0 = 0</code>. Verified by compiling and running: z = 0.</div><div class=\"ml-vi\">Với <code>x=2, y=0</code>: <code>(2-2)*(2-2) + 0*0 = 0*0 + 0 = 0</code>. Đã biên dịch và chạy thử kiểm chứng: z = 0.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Consider the following program and answer the following questions.<pre><code>#include&lt;stdio.h&gt;\nvoid hours_and_minutes(int total, int&amp; phrs, int&amp; pmin)\n{\n   pmin = total % 60;\n   phrs = total / 60;\n}\n\nmain()\n{\n   int tmin, hr = 0, min = 0;\n   printf(&quot;Enter total minutes for videotape: &quot;);\n   scanf(&quot;%d&quot;, &amp;tmin);\n   hours_and_minutes(tmin, hr, min);\n   printf(&quot;That is %d hours and %d minutes\\n&quot;, hr, min);\n}</code></pre>What is the result displayed to the screen if the user inputs 85 ?|||Xét chương trình sau và trả lời câu hỏi.<pre><code>#include&lt;stdio.h&gt;\nvoid hours_and_minutes(int total, int&amp; phrs, int&amp; pmin)\n{\n   pmin = total % 60;\n   phrs = total / 60;\n}\n\nmain()\n{\n   int tmin, hr = 0, min = 0;\n   printf(&quot;Enter total minutes for videotape: &quot;);\n   scanf(&quot;%d&quot;, &amp;tmin);\n   hours_and_minutes(tmin, hr, min);\n   printf(&quot;That is %d hours and %d minutes\\n&quot;, hr, min);\n}</code></pre>Kết quả hiển thị trên màn hình nếu người dùng nhập 85 là gì?",
+          "options": [
+            {
+              "text": "That is 8 hours and 5 minutes|||That is 8 hours and 5 minutes"
+            },
+            {
+              "text": "That is 0 hours and 0 minutes|||That is 0 hours and 0 minutes"
+            },
+            {
+              "text": "That is 1 hours and 25 minutes|||That is 1 hours and 25 minutes"
+            },
+            {
+              "text": "That is 0 hours and 85 minutes|||That is 0 hours and 85 minutes"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">With <code>total = 85</code>: <code>pmin = 85 % 60 = 25</code> (remainder), <code>phrs = 85 / 60 = 1</code> (integer division). So the output is \"That is 1 hours and 25 minutes\" — 85 minutes = 1 full hour plus 25 leftover minutes. Verified by compiling (as pass-by-pointer, the C-legal equivalent of this pass-by-reference pseudocode) and running with input 85.</div><div class=\"ml-vi\">Với <code>total = 85</code>: <code>pmin = 85 % 60 = 25</code> (số dư), <code>phrs = 85 / 60 = 1</code> (chia nguyên). Vậy kết quả là \"That is 1 hours and 25 minutes\" — 85 phút = 1 giờ tròn cộng 25 phút dư. Đã biên dịch (dùng truyền qua con trỏ, dạng hợp lệ trong C tương đương giả mã truyền tham chiếu này) và chạy thử kiểm chứng với input 85.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is incorrect about function prototype?|||Điều gì SAI về nguyên mẫu (prototype) hàm sau đây?",
+          "options": [
+            {
+              "text": "void printSum(int* a, int b);|||void printSum(int* a, int b);"
+            },
+            {
+              "text": "int printSum(int* a, int b);|||int printSum(int* a, int b);"
+            },
+            {
+              "text": "int printSum(int a, b);|||int printSum(int a, b);"
+            },
+            {
+              "text": "int* printSum(int* a, int b);|||int* printSum(int* a, int b);"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">In C, EVERY parameter must have its OWN type written out — <code>int printSum(int a, b);</code> leaves <code>b</code> with NO type at all, which is illegal (modern compilers reject it: \"type specifier missing\"). It is not shorthand for <code>int a, int b</code> the way it might be in math notation. A, B and D each correctly give every parameter an explicit type.</div><div class=\"ml-vi\">Trong C, MỌI tham số đều phải có KIỂU RIÊNG được viết ra — <code>int printSum(int a, b);</code> để <code>b</code> KHÔNG có kiểu nào cả, đây là lỗi (trình biên dịch hiện đại từ chối: \"thiếu chỉ định kiểu\"). Nó không phải cách viết tắt cho <code>int a, int b</code> như trong ký hiệu toán học. A, B, D đều cho mỗi tham số một kiểu tường minh đúng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The pow() function in the math.h library is used to calculate the value of a number raised to a specified power. What is the return value type of the pow() function?|||Hàm pow() trong thư viện math.h dùng để tính giá trị một số được nâng lên luỹ thừa xác định. Kiểu trả về của hàm pow() là gì?",
+          "options": [
+            {
+              "text": "double|||double"
+            },
+            {
+              "text": "int|||int"
+            },
+            {
+              "text": "long double|||long double"
+            },
+            {
+              "text": "float|||float"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The standard C prototype is <code>double pow(double base, double exponent);</code> — both parameters and the return value are <code>double</code>, so fractional bases/exponents/results are handled correctly. If it returned <code>int</code> every fractional result would be destroyed by truncation.</div><div class=\"ml-vi\">Nguyên mẫu chuẩn của C là <code>double pow(double base, double exponent);</code> — cả hai tham số lẫn giá trị trả về đều là <code>double</code>, nên cơ số/số mũ/kết quả có phần thập phân đều được xử lý đúng. Nếu trả về <code>int</code> thì mọi kết quả có phần thập phân sẽ bị huỷ do làm tròn cắt bớt.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is incorrect about getchar() function?|||Điều nào SAI về hàm getchar()?",
+          "options": [
+            {
+              "text": "The getchar() function is defined in the <stdio.h> header file.|||Hàm getchar() được định nghĩa trong tệp header <stdio.h>."
+            },
+            {
+              "text": "getchar() gets a string from stdin.|||getchar() lấy một chuỗi (string) từ stdin."
+            },
+            {
+              "text": "getchar() retrieves a single character from the standard input stream buffer without translating the input.|||getchar() lấy một ký tự đơn từ vùng đệm luồng nhập chuẩn mà không dịch/biến đổi input."
+            },
+            {
+              "text": "getchar() gets a character (an unsigned char) from stdin.|||getchar() lấy một ký tự (dạng unsigned char) từ stdin."
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><code>getchar()</code> reads exactly ONE character per call, never a whole string — that would be <code>gets()</code> or <code>fgets()</code>. A, C, D are all accurate descriptions of <code>getchar()</code> from <code>stdio.h</code>.</div><div class=\"ml-vi\"><code>getchar()</code> chỉ đọc ĐÚNG MỘT ký tự mỗi lần gọi, không bao giờ đọc cả chuỗi — việc đó là của <code>gets()</code> hay <code>fgets()</code>. A, C, D đều là mô tả đúng của <code>getchar()</code> từ <code>stdio.h</code>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The library stdio.h contains functions for printing out data, including ___________|||Thư viện stdio.h chứa các hàm dùng để IN dữ liệu ra, gồm ___________",
+          "options": [
+            {
+              "text": "scanf, printf|||scanf, printf"
+            },
+            {
+              "text": "putchar, printf|||putchar, printf"
+            },
+            {
+              "text": "scanf, putchar|||scanf, putchar"
+            },
+            {
+              "text": "printf, getchar|||printf, getchar"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">The question asks specifically for OUTPUT (printing) functions: <code>putchar()</code> prints one character and <code>printf()</code> prints formatted data — both are pure output. <code>scanf()</code> and <code>getchar()</code> are INPUT functions (they read, not print), so any option pairing one of them in is wrong for this blank.</div><div class=\"ml-vi\">Câu hỏi hỏi cụ thể về các hàm XUẤT (in ra): <code>putchar()</code> in một ký tự và <code>printf()</code> in dữ liệu có định dạng — cả hai đều thuần XUẤT. <code>scanf()</code> và <code>getchar()</code> là các hàm NHẬP (đọc vào, không phải in ra), nên phương án nào ghép một trong hai hàm đó vào đều sai với chỗ trống này.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is an array in C programming?|||Mảng (array) trong lập trình C là gì?",
+          "options": [
+            {
+              "text": "A collection of elements of the same data type stored in contiguous memory locations.|||Một tập hợp các phần tử CÙNG kiểu dữ liệu, được lưu ở các vị trí bộ nhớ LIÊN TIẾP nhau."
+            },
+            {
+              "text": "A single variable that holds multiple values of different data types.|||Một biến đơn lưu nhiều giá trị thuộc các kiểu dữ liệu KHÁC nhau."
+            },
+            {
+              "text": "A pointer to a single element in memory|||Một con trỏ trỏ tới một phần tử đơn lẻ trong bộ nhớ"
+            },
+            {
+              "text": "A function that performs mathematical calculations.|||Một hàm thực hiện các phép tính toán học."
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">A C array is homogeneous (every element shares ONE data type, e.g. all <code>int</code>) and CONTIGUOUS in memory, which is exactly what lets <code>arr[i]</code> be computed as <code>base_address + i * sizeof(type)</code>. \"Different data types\" describes a <code>struct</code> instead; a pointer to one element is not the whole array; a function is unrelated.</div><div class=\"ml-vi\">Mảng trong C là ĐỒNG NHẤT (mọi phần tử cùng MỘT kiểu dữ liệu, vd tất cả <code>int</code>) và LIÊN TIẾP trong bộ nhớ, chính điều này cho phép <code>arr[i]</code> được tính bằng <code>địa_chỉ_gốc + i * sizeof(kiểu)</code>. \"Các kiểu dữ liệu khác nhau\" là mô tả của <code>struct</code>; con trỏ tới một phần tử không phải cả mảng; hàm thì không liên quan.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What will be the result of performing a binary search on an unsorted array?|||Kết quả khi thực hiện tìm kiếm nhị phân (binary search) trên một mảng CHƯA sắp xếp là gì?",
+          "options": [
+            {
+              "text": "The search may return an incorrect index or fail to locate the target element.|||Tìm kiếm có thể trả về chỉ số SAI hoặc KHÔNG tìm ra được phần tử mục tiêu."
+            },
+            {
+              "text": "The search will always find the target element if it is present somewhere in the array.|||Tìm kiếm luôn tìm ra phần tử mục tiêu nếu nó tồn tại đâu đó trong mảng."
+            },
+            {
+              "text": "The search will perform as expected, but only for elements in the lower half of the array.|||Tìm kiếm vẫn hoạt động đúng như mong đợi, nhưng chỉ với các phần tử ở nửa dưới của mảng."
+            },
+            {
+              "text": "The search will automatically sort the array before locating the target element.|||Tìm kiếm sẽ tự động sắp xếp mảng trước khi tìm phần tử mục tiêu."
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Binary search relies ENTIRELY on the array being sorted — it decides which half to discard by comparing the target to the MIDDLE element and assuming everything before is smaller / after is larger. On unsorted data that assumption breaks, so the algorithm can skip over the correct half and miss the target or land on the wrong index. It does NOT sort anything itself and gives no such guarantee.</div><div class=\"ml-vi\">Tìm kiếm nhị phân dựa HOÀN TOÀN vào việc mảng đã được sắp xếp — nó quyết định bỏ nửa nào bằng cách so sánh mục tiêu với phần tử Ở GIỮA và giả định mọi thứ trước đó nhỏ hơn / sau đó lớn hơn. Trên dữ liệu chưa sắp xếp, giả định đó sai, nên thuật toán có thể bỏ qua đúng nửa chứa mục tiêu và không tìm ra hoặc trả về chỉ số sai. Bản thân nó KHÔNG tự sắp xếp gì cả và không đảm bảo gì như vậy.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In C programming, comments are used to add explanatory text that is ignored by the compiler. Which is a correct type of comment?|||Trong lập trình C, chú thích (comment) dùng để thêm văn bản giải thích mà trình biên dịch bỏ qua. Loại chú thích nào ĐÚNG?",
+          "options": [
+            {
+              "text": "*/ Comments */|||*/ Comments */"
+            },
+            {
+              "text": "** Comment **|||** Comment **"
+            },
+            {
+              "text": "/* Comment */|||/* Comment */"
+            },
+            {
+              "text": "{ Comment }|||{ Comment }"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><code>/* ... */</code> is C's block comment syntax — everything between <code>/*</code> and <code>*/</code> is ignored by the compiler (C also supports single-line <code>// ...</code> comments). <code>*/ ... */</code> has the delimiters reversed/duplicated, <code>** ... **</code> uses the wrong symbol, and <code>{ }</code> is reserved for code blocks, not comments.</div><div class=\"ml-vi\"><code>/* ... */</code> là cú pháp chú thích KHỐI của C — mọi thứ giữa <code>/*</code> và <code>*/</code> bị trình biên dịch bỏ qua (C cũng hỗ trợ chú thích một dòng <code>// ...</code>). <code>*/ ... */</code> đảo/lặp ký hiệu phân cách sai, <code>** ... **</code> dùng sai ký hiệu, còn <code>{ }</code> dành riêng cho khối lệnh, không phải chú thích.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is a pointer in C programming?|||Con trỏ (pointer) trong lập trình C là gì?",
+          "options": [
+            {
+              "text": "A variable stores anything|||Một biến lưu bất kỳ thứ gì"
+            },
+            {
+              "text": "A variable stores address of another variable or a variable stores address of the dynamically allocated memory|||Một biến lưu địa chỉ của biến khác hoặc lưu địa chỉ của vùng nhớ cấp phát động"
+            },
+            {
+              "text": "An address in the memory|||Một địa chỉ trong bộ nhớ"
+            },
+            {
+              "text": "A variable stores any number|||Một biến lưu bất kỳ con số nào"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">A pointer is specifically a VARIABLE whose stored value is an ADDRESS (of another variable or of heap memory from <code>malloc</code>). \"An address in memory\" (C) describes only the VALUE it holds, not the pointer variable itself; A and D are too vague — they describe any ordinary variable, not what makes a pointer special.</div><div class=\"ml-vi\">Con trỏ cụ thể là một BIẾN mà giá trị nó lưu là một ĐỊA CHỈ (của biến khác hoặc của bộ nhớ heap từ <code>malloc</code>). \"Một địa chỉ trong bộ nhớ\" (C) chỉ mô tả GIÁ TRỊ nó chứa, không phải bản thân biến con trỏ; A và D quá chung chung — mô tả một biến thông thường bất kỳ, không nêu được điều làm con trỏ đặc biệt.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following is a valid code to use to declare and initialize a two-dimensional array?|||Cách viết nào sau đây là hợp lệ để khai báo và khởi tạo một mảng HAI CHIỀU?",
+          "options": [
+            {
+              "text": "int a[2,3] = [[1,2,3],[4,5,6]];|||int a[2,3] = [[1,2,3],[4,5,6]];"
+            },
+            {
+              "text": "int a[][] = {{1,2,3},{4,5,6}};|||int a[][] = {{1,2,3},{4,5,6}};"
+            },
+            {
+              "text": "int a[2][3] = [[1,2,3],[4,5,6]];|||int a[2][3] = [[1,2,3],[4,5,6]];"
+            },
+            {
+              "text": "int a[][3] = {{1,2,3},{4,5,6}};|||int a[][3] = {{1,2,3},{4,5,6}};"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">C array initializers use CURLY BRACES <code>{ }</code>, never square brackets <code>[ ]</code> for the VALUES — that rules out A and C (<code>[[1,2,3],...]</code>). For a 2D array, C requires the SECOND dimension's size (rows can be inferred from the initializer, but columns cannot) — <code>int a[][]</code> (B) is an incomplete type and fails to compile; <code>int a[][3]</code> (D) gives the column count and compiles correctly. Verified by compiling both B and D.</div><div class=\"ml-vi\">Bộ khởi tạo mảng trong C dùng DẤU NGOẶC NHỌN <code>{ }</code>, không bao giờ dùng ngoặc vuông <code>[ ]</code> cho các GIÁ TRỊ — loại ngay A và C (<code>[[1,2,3],...]</code>). Với mảng 2 chiều, C bắt buộc phải ghi kích thước CHIỀU THỨ HAI (số hàng có thể suy ra từ bộ khởi tạo, nhưng số cột thì không) — <code>int a[][]</code> (B) là kiểu KHÔNG ĐẦY ĐỦ và biên dịch lỗi; <code>int a[][3]</code> (D) cho biết số cột và biên dịch đúng. Đã biên dịch kiểm chứng cả B và D.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the results will be displayed on the screen after executing the following code:<pre><code>int a[] = {1,2,3,4};\nint i, s = 0;\nfor (i=0; i&lt;4; ++i)\n    s += a[i];\nprintf(&quot;%f&quot;, (float)(s/4));</code></pre>|||Kết quả hiển thị trên màn hình sau khi chạy đoạn mã sau là gì:<pre><code>int a[] = {1,2,3,4};\nint i, s = 0;\nfor (i=0; i&lt;4; ++i)\n    s += a[i];\nprintf(&quot;%f&quot;, (float)(s/4));</code></pre>",
+          "options": [
+            {
+              "text": "2.5|||2.5"
+            },
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "2.500000|||2.500000"
+            },
+            {
+              "text": "2.000000|||2.000000"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">The loop sums all elements: <code>s = 1+2+3+4 = 10</code>, both <code>int</code>. <code>s/4</code> is computed FIRST as INTEGER division (<code>10/4 = 2</code>, the fraction is truncated) — the <code>(float)</code> cast only converts the already-truncated result 2 into 2.0, it does NOT undo the truncation. <code>%f</code> prints 6 decimals by default: <code>2.000000</code>. Verified by compiling and running.</div><div class=\"ml-vi\">Vòng lặp cộng dồn mọi phần tử: <code>s = 1+2+3+4 = 10</code>, đều là <code>int</code>. <code>s/4</code> được tính TRƯỚC dưới dạng chia NGUYÊN (<code>10/4 = 2</code>, phần lẻ bị cắt) — ép kiểu <code>(float)</code> chỉ chuyển kết quả ĐÃ BỊ CẮT là 2 thành 2.0, KHÔNG cứu lại được phần lẻ đã mất. <code>%f</code> mặc định in 6 chữ số thập phân: <code>2.000000</code>. Đã biên dịch và chạy thử kiểm chứng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Binary search can be applied to which type of the below data structure in C?|||Tìm kiếm nhị phân (binary search) có thể áp dụng cho loại cấu trúc dữ liệu nào dưới đây trong C?",
+          "options": [
+            {
+              "text": "One-dimensional array|||Mảng một chiều"
+            },
+            {
+              "text": "Two-dimensional array|||Mảng hai chiều"
+            },
+            {
+              "text": "Every kind of array|||Mọi loại mảng"
+            },
+            {
+              "text": "All of the others|||Tất cả các đáp án còn lại"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Binary search is classically defined over a SORTED, linearly-ordered sequence — a one-dimensional array. A 2D array has no single natural ordering to binary-search over directly (you would need to flatten or search row/column separately), so \"every kind of array\" overstates what the plain algorithm handles.</div><div class=\"ml-vi\">Tìm kiếm nhị phân theo định nghĩa kinh điển hoạt động trên một dãy ĐÃ SẮP XẾP, có thứ tự tuyến tính — tức mảng MỘT CHIỀU. Mảng hai chiều không có một thứ tự tự nhiên duy nhất để tìm nhị phân trực tiếp (cần làm phẳng hoặc tìm riêng theo hàng/cột), nên \"mọi loại mảng\" là phóng đại so với những gì thuật toán thuần túy xử lý được.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the output of the following code snippet?<pre><code>void main(){\n    int x = 4;\n    int *p = &amp;x;\n    int *k = p++;\n    int r = p - k;\n    printf(&quot;%d&quot;, r);\n}</code></pre>|||Kết quả của đoạn mã sau là gì?<pre><code>void main(){\n    int x = 4;\n    int *p = &amp;x;\n    int *k = p++;\n    int r = p - k;\n    printf(&quot;%d&quot;, r);\n}</code></pre>",
+          "options": [
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "5|||5"
+            },
+            {
+              "text": "0|||0"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><code>p++</code> is POSTFIX: <code>k</code> gets p's value BEFORE the increment (so k still points at x), THEN p is advanced by one <code>int</code>'s width. Subtracting two pointers of the same type gives the number of ELEMENTS between them, not bytes — since p moved exactly one int ahead of k, <code>p - k = 1</code>. Verified by compiling and running.</div><div class=\"ml-vi\"><code>p++</code> là HẬU TỐ: <code>k</code> nhận giá trị của p TRƯỚC KHI tăng (nên k vẫn trỏ tới x), RỒI p mới nhích thêm đúng một độ rộng <code>int</code>. Trừ hai con trỏ cùng kiểu cho ra số PHẦN TỬ giữa chúng, không phải số byte — vì p đã đi trước k đúng một int, <code>p - k = 1</code>. Đã biên dịch và chạy thử kiểm chứng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What will be the output of the following program?<pre><code>#include &lt;stdio.h&gt;\nint main() {\n    int *pa = a;\n    int a = 10;\n    (*pa)++;\n    a=a+10;\n    printf(&quot;%d&quot;, ++a);\n    getchar();\n    return 0;\n}</code></pre>|||Chương trình sau sẽ in ra gì?<pre><code>#include &lt;stdio.h&gt;\nint main() {\n    int *pa = a;\n    int a = 10;\n    (*pa)++;\n    a=a+10;\n    printf(&quot;%d&quot;, ++a);\n    getchar();\n    return 0;\n}</code></pre>",
+          "options": [
+            {
+              "text": "Compiler error|||Lỗi biên dịch"
+            },
+            {
+              "text": "22|||22"
+            },
+            {
+              "text": "21|||21"
+            },
+            {
+              "text": "20|||20"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The line <code>int *pa = a;</code> tries to use <code>a</code> BEFORE it is declared (the declaration <code>int a = 10;</code> comes on the NEXT line) — C resolves identifiers top-to-bottom, so <code>a</code> does not exist yet at that point, giving \"use of undeclared identifier\". The program never reaches the arithmetic at all. Verified by compiling: fails with exactly this error.</div><div class=\"ml-vi\">Dòng <code>int *pa = a;</code> cố dùng <code>a</code> TRƯỚC KHI nó được khai báo (khai báo <code>int a = 10;</code> nằm ở dòng SAU) — C phân giải định danh từ trên xuống dưới, nên <code>a</code> chưa tồn tại ở thời điểm đó, báo lỗi \"dùng định danh chưa khai báo\". Chương trình không bao giờ chạy tới phần tính toán. Đã biên dịch kiểm chứng: lỗi đúng như vậy.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Assume we have the following code:<pre><code>int i=4;\nint *p = &amp;i;</code></pre>Suppose that an int occupies a memory block of 4 bytes, and the address of i is 1008. What is the result of the following expression: p + 4?|||Giả sử ta có đoạn mã sau:<pre><code>int i=4;\nint *p = &amp;i;</code></pre>Giả sử một int chiếm 4 byte bộ nhớ, và địa chỉ của i là 1008. Kết quả của biểu thức p + 4 là gì?",
+          "options": [
+            {
+              "text": "1024|||1024"
+            },
+            {
+              "text": "1020|||1020"
+            },
+            {
+              "text": "1016|||1016"
+            },
+            {
+              "text": "1012|||1012"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Pointer arithmetic is scaled by the POINTED-TO type's size — <code>p + 4</code> on an <code>int*</code> means \"4 <code>int</code>s ahead\", i.e. <code>4 * 4 bytes = 16 bytes</code> added to the address: <code>1008 + 16 = 1024</code>. This is why C lets you write <code>p + n</code> instead of manually computing <code>address + n * sizeof(type)</code>.</div><div class=\"ml-vi\">Số học con trỏ được NHÂN THEO kích thước kiểu nó trỏ tới — <code>p + 4</code> trên một <code>int*</code> nghĩa là \"4 <code>int</code> về phía trước\", tức cộng <code>4 * 4 byte = 16 byte</code> vào địa chỉ: <code>1008 + 16 = 1024</code>. Đây là lý do C cho phép viết <code>p + n</code> thay vì tự tính <code>địa_chỉ + n * sizeof(kiểu)</code>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following functions is used to read formatted input from the standard input in C?|||Hàm nào sau đây dùng để đọc dữ liệu CÓ ĐỊNH DẠNG từ luồng nhập chuẩn trong C?",
+          "options": [
+            {
+              "text": "gets()|||gets()"
+            },
+            {
+              "text": "printf()|||printf()"
+            },
+            {
+              "text": "scanf()|||scanf()"
+            },
+            {
+              "text": "fgets()|||fgets()"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><code>scanf()</code> reads input according to a FORMAT STRING (<code>%d</code>, <code>%f</code>, <code>%s</code>, …), converting text into the requested types. <code>printf()</code> is the OUTPUT counterpart (writes, not reads); <code>gets()</code> and <code>fgets()</code> read a raw line of text with no format/type conversion at all.</div><div class=\"ml-vi\"><code>scanf()</code> đọc input theo một CHUỖI ĐỊNH DẠNG (<code>%d</code>, <code>%f</code>, <code>%s</code>, …), chuyển văn bản thành các kiểu yêu cầu. <code>printf()</code> là hàm XUẤT tương ứng (ghi, không phải đọc); <code>gets()</code> và <code>fgets()</code> đọc một dòng văn bản thô, không hề chuyển đổi định dạng/kiểu nào.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the output of the following code snippet?<pre><code>#include &lt;stdio.h&gt;\nint main() {\n    char char_array[] = {&#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;, &#x27;d&#x27;, &#x27;e&#x27;};\n    int array_size = sizeof(char_array) / sizeof(char);\n    for (int i = 0; i &lt; array_size; i++) {\n        char_array[i] = char_array[i] + 1;\n    }\n    for (int i = 0; i &lt; array_size; i++) {\n        printf(&quot;%c &quot;, char_array[i]);\n    }\n    return 0;\n}</code></pre>|||Đoạn mã sau in ra gì?<pre><code>#include &lt;stdio.h&gt;\nint main() {\n    char char_array[] = {&#x27;a&#x27;, &#x27;b&#x27;, &#x27;c&#x27;, &#x27;d&#x27;, &#x27;e&#x27;};\n    int array_size = sizeof(char_array) / sizeof(char);\n    for (int i = 0; i &lt; array_size; i++) {\n        char_array[i] = char_array[i] + 1;\n    }\n    for (int i = 0; i &lt; array_size; i++) {\n        printf(&quot;%c &quot;, char_array[i]);\n    }\n    return 0;\n}</code></pre>",
+          "options": [
+            {
+              "text": "b c d e f|||b c d e f"
+            },
+            {
+              "text": "a b c d e|||a b c d e"
+            },
+            {
+              "text": "98 99 100 101 102|||98 99 100 101 102"
+            },
+            {
+              "text": "c d e f g|||c d e f g"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The first loop adds 1 to EVERY character's ASCII code exactly once: <code>a→b, b→c, c→d, d→e, e→f</code>. The second loop then prints those already-shifted characters with <code>%c</code> (as characters, not numbers) — so the output is \"b c d e f\", each letter shifted forward by ONE, not two. Verified by compiling and running.</div><div class=\"ml-vi\">Vòng lặp đầu cộng 1 vào mã ASCII của MỌI ký tự đúng một lần: <code>a→b, b→c, c→d, d→e, e→f</code>. Vòng lặp thứ hai in các ký tự ĐÃ dịch đó bằng <code>%c</code> (dạng ký tự, không phải số) — nên kết quả là \"b c d e f\", mỗi chữ dịch tiến đúng MỘT bước, không phải hai. Đã biên dịch và chạy thử kiểm chứng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the maximum index of the last character in a character array initialized with a size is 10?|||Chỉ số lớn nhất của ký tự cuối cùng trong một mảng ký tự khai báo với kích thước 10 là bao nhiêu?",
+          "options": [
+            {
+              "text": "9|||9"
+            },
+            {
+              "text": "10|||10"
+            },
+            {
+              "text": "8|||8"
+            },
+            {
+              "text": "It depends on the contents of the array|||Phụ thuộc vào nội dung của mảng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">An array declared with size 10, e.g. <code>char arr[10];</code>, has valid indexes from 0 to 9 (C arrays are always zero-indexed) — so the LAST usable index is 9, regardless of what values are stored inside it.</div><div class=\"ml-vi\">Một mảng khai báo với kích thước 10, ví dụ <code>char arr[10];</code>, có chỉ số hợp lệ từ 0 đến 9 (mảng C luôn đánh chỉ số bắt đầu từ 0) — nên chỉ số CUỐI dùng được là 9, bất kể nội dung bên trong là gì.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What will be the output of the following code?<pre><code>printf(&quot;%c&quot;, tolower(&#x27;c&#x27;));</code></pre>|||Đoạn mã sau sẽ in ra gì?<pre><code>printf(&quot;%c&quot;, tolower(&#x27;c&#x27;));</code></pre>",
+          "options": [
+            {
+              "text": "'c'|||'c'"
+            },
+            {
+              "text": "'C'|||'C'"
+            },
+            {
+              "text": "'c' or 'C' (depending on IDE)|||'c' hoặc 'C' (tuỳ IDE)"
+            },
+            {
+              "text": "Compilation error|||Lỗi biên dịch"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><code>tolower()</code> (from <code>ctype.h</code>) converts an UPPERCASE letter to lowercase and leaves any character that is ALREADY lowercase (or not a letter) completely unchanged. Since <code>&#x27;c&#x27;</code> is already lowercase, <code>tolower(&#x27;c&#x27;)</code> simply returns <code>&#x27;c&#x27;</code>. Verified by compiling and running.</div><div class=\"ml-vi\"><code>tolower()</code> (trong <code>ctype.h</code>) chuyển chữ HOA thành chữ thường và giữ NGUYÊN mọi ký tự đã là chữ thường (hoặc không phải chữ cái). Vì <code>&#x27;c&#x27;</code> đã là chữ thường sẵn, <code>tolower(&#x27;c&#x27;)</code> chỉ đơn giản trả về <code>&#x27;c&#x27;</code>. Đã biên dịch và chạy thử kiểm chứng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the maximum size required to store the string \"Hello\" in C?|||Kích thước tối đa cần để lưu chuỗi \"Hello\" trong C là bao nhiêu?",
+          "options": [
+            {
+              "text": "5 bytes|||5 bytes"
+            },
+            {
+              "text": "6 bytes|||6 bytes"
+            },
+            {
+              "text": "4 bytes|||4 bytes"
+            },
+            {
+              "text": "10 bytes|||10 bytes"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">\"Hello\" has 5 visible characters, but every C string needs one EXTRA byte for the terminating null character <code>&#x27;\\0&#x27;</code> that marks where it ends — so the buffer must be at least <code>5 + 1 = 6</code> bytes. Verified: <code>sizeof(&quot;Hello&quot;)</code> (which includes the implicit null terminator) evaluates to 6.</div><div class=\"ml-vi\">\"Hello\" có 5 ký tự hiển thị, nhưng mọi chuỗi C đều cần THÊM một byte cho ký tự null kết thúc <code>&#x27;\\0&#x27;</code> đánh dấu điểm kết thúc — nên bộ đệm cần tối thiểu <code>5 + 1 = 6</code> byte. Đã kiểm chứng: <code>sizeof(&quot;Hello&quot;)</code> (đã tính cả ký tự null ngầm định) cho ra 6.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which function is used to write a string to a file in C?|||Hàm nào dùng để GHI một chuỗi vào tệp trong C?",
+          "options": [
+            {
+              "text": "fputs()|||fputs()"
+            },
+            {
+              "text": "fscanf()|||fscanf()"
+            },
+            {
+              "text": "fgets()|||fgets()"
+            },
+            {
+              "text": "fopen()|||fopen()"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><code>fputs(str, file)</code> writes the string <code>str</code> to the given file stream. <code>fscanf()</code> reads formatted data FROM a file, <code>fgets()</code> reads a line FROM a file (both are input, the reverse direction), and <code>fopen()</code> only OPENS a file — it does not write any content itself.</div><div class=\"ml-vi\"><code>fputs(str, file)</code> ghi chuỗi <code>str</code> vào luồng tệp cho trước. <code>fscanf()</code> đọc dữ liệu có định dạng TỪ tệp, <code>fgets()</code> đọc một dòng TỪ tệp (cả hai đều là nhập, chiều ngược lại), còn <code>fopen()</code> chỉ MỞ tệp — bản thân nó không ghi nội dung nào cả.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The fopen function is used to open a file. Is the following true or false?<pre><code>&quot;r&quot; - tells fopen you will be reading data from the file. If no such file exists, fopen will fail.</code></pre>|||Hàm fopen dùng để mở một tệp. Phát biểu sau ĐÚNG hay SAI?<pre><code>&quot;r&quot; - báo cho fopen biết bạn sẽ đọc dữ liệu từ tệp. Nếu tệp đó không tồn tại, fopen sẽ thất bại.</code></pre>",
+          "options": [
+            {
+              "text": "True|||Đúng"
+            },
+            {
+              "text": "False|||Sai"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">This is an accurate description of mode <code>&quot;r&quot;</code>: it opens an EXISTING file for reading only, and <code>fopen</code> returns <code>NULL</code> (fails) if the file cannot be found — unlike mode <code>&quot;w&quot;</code>, which CREATES the file if it doesn't exist.</div><div class=\"ml-vi\">Đây là mô tả đúng của chế độ <code>&quot;r&quot;</code>: nó mở một tệp ĐÃ TỒN TẠI chỉ để đọc, và <code>fopen</code> trả về <code>NULL</code> (thất bại) nếu không tìm thấy tệp — khác với chế độ <code>&quot;w&quot;</code>, vốn TẠO MỚI tệp nếu chưa có.</div>"
+        }
+      ]
     }
   ]
 };

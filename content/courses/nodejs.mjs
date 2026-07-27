@@ -19,6 +19,7 @@ import s10 from './nodejs/s10-upload.mjs';
 import s11 from './nodejs/s11-realtime.mjs';
 import s12 from './nodejs/s12-redis.mjs';
 import s13 from './nodejs/s13-jobs.mjs';
+import s14 from './nodejs/s14-testing.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -53,5 +54,6 @@ export default {
     s11,
     s12,
     s13,
+    s14,
   ],
 };

@@ -1,2 +1,18 @@
 [extend]
 useDefault = true
+
+# ── Giáo trình khoá học (content/courses, content/exphub) ──────────────────
+# Đây là tài liệu giảng dạy: nó CỐ TÌNH chứa token, chuỗi băm và khoá MẪU
+# sinh ra từ sandbox cục bộ để minh hoạ (ví dụ refresh token 43 ký tự của
+# chương 8, chuỗi bcrypt, JWT demo). Rule đoán mò `generic-api-key` bắt nhầm
+# chúng và chặn commit.
+#
+# Chỉ miễn trừ ĐÚNG rule đó, trên ĐÚNG hai thư mục đó. Mọi rule chính xác khác
+# (khoá riêng tư, AWS, Stripe, GitHub token, Slack…) VẪN chặn bình thường ở
+# đây — nên một khoá thật lỡ dán vào giáo trình vẫn bị bắt.
+[[allowlists]]
+description = "Chuỗi mẫu trong giáo trình — chỉ tắt generic-api-key"
+targetRules = ["generic-api-key"]
+paths = [
+  '''content/(courses|exphub)/''',
+]

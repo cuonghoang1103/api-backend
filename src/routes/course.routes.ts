@@ -2504,6 +2504,16 @@ router.get(
         const signed = inline
           ? await provider.signedUrl(key, 300)
           : await provider.signedUrl(key, 300, document.title);
+        // ?resolve=1 → return the signed URL as JSON instead of redirecting.
+        // Needed for formats the browser can't render natively (docx/pptx):
+        // the frontend hands this public, self-authenticating signed URL to
+        // an external embed (Google Docs Viewer), which fetches it directly
+        // and therefore can't carry our auth cookie the way an <a>/<iframe>
+        // navigation does.
+        if (String((req as any).query?.resolve || '') === '1') {
+          res.json({ success: true, data: { url: signed, fileType: document.fileType, title: document.title } });
+          return;
+        }
         return res.redirect(302, signed);
       }
       // Legacy local file (`/uploads/...`) — keep the old 302

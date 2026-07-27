@@ -1242,6 +1242,13 @@ export const coursesApi = {
     api.delete(`/courses/documents/${documentId}`),
   downloadDocumentUrl: (documentId: number) =>
     `/api/v1/courses/documents/${documentId}/download`,
+  // Resolves a document to a short-lived, publicly-fetchable signed URL
+  // (JSON, not a redirect) — used to hand off to an external viewer
+  // (Google Docs Viewer) that can't carry our auth cookie.
+  resolveDocumentUrl: (documentId: number) =>
+    api.get<{ data: { url: string; fileType: string | null; title: string } }>(
+      `/courses/documents/${documentId}/download?resolve=1`,
+    ),
 
   // Add an external-link document (e.g. a Google Drive folder).
   addDocumentLink: (lessonId: number, title: string, url: string) =>

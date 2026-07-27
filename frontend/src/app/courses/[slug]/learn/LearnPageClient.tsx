@@ -7,7 +7,7 @@ import Link from 'next/link';
 import {
   ChevronLeft, ChevronRight, CheckCircle, Circle, Lock, Menu, X,
   Download, BookOpen, Loader2, Play, ChevronDown, ChevronUp, ArrowLeft,
-  Code2, ExternalLink, FileText, Github, Award, Ticket
+  Code2, ExternalLink, FileText, Github, Award, Ticket, Eye
 } from 'lucide-react';
 import { coursesApi, certificatesApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
@@ -118,6 +118,9 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
     Array<{ id: number; title: string; fileUrl: string; fileType?: string | null; fileSizeBytes: number }>
   >([]);
   const [docsOpen, setDocsOpen] = useState(true);
+  // Document id currently being resolved for in-browser preview (spinner on
+  // its "Xem" button while we fetch the signed URL for the office viewer).
+  const [previewingDocId, setPreviewingDocId] = useState<number | null>(null);
   // Durations measured client-side this session (lessonId → seconds).
   // Overlays the stored videoDurationSeconds so section/lesson labels
   // update in real time as each video's metadata loads — no reload.
@@ -415,6 +418,43 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
     });
   };
 
+  // ── Document preview ("Xem" — open in-browser without downloading) ────
+  // PDFs/images: the browser renders them natively, so a plain ?inline=1
+  // link (no Content-Disposition: attachment) is enough — same trick
+  // LessonPdfViewer uses. Office formats (docx/pptx/xlsx) have no native
+  // browser renderer, so those go through Google Docs Viewer, which needs
+  // a URL it can fetch itself (no auth cookie) — hence the resolve=1 JSON
+  // round-trip to get a short-lived public signed URL first.
+  const previewKind = (doc: { title: string; fileType?: string | null }): 'pdf' | 'image' | 'office' | null => {
+    const t = (doc.fileType || '').toLowerCase();
+    const ext = (doc.title.split('.').pop() || '').toLowerCase();
+    if (t === 'link') return null;
+    if (t.includes('pdf') || ext === 'pdf') return 'pdf';
+    if (t.startsWith('image/') || ['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(ext)) return 'image';
+    if (t.includes('word') || t.includes('presentation') || t.includes('sheet') || ['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'].includes(ext)) return 'office';
+    return null;
+  };
+
+  const previewDocument = async (doc: { id: number; title: string; fileType?: string | null }) => {
+    const kind = previewKind(doc);
+    if (!kind) return;
+    if (kind === 'pdf' || kind === 'image') {
+      window.open(`${coursesApi.downloadDocumentUrl(doc.id)}?inline=1`, '_blank', 'noopener,noreferrer');
+      return;
+    }
+    setPreviewingDocId(doc.id);
+    try {
+      const r = await coursesApi.resolveDocumentUrl(doc.id);
+      const signedUrl = r.data.data.url;
+      const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(signedUrl)}&embedded=true`;
+      window.open(viewerUrl, '_blank', 'noopener,noreferrer');
+    } catch {
+      toast.error('Không mở được bản xem trước — thử tải về nhé.');
+    } finally {
+      setPreviewingDocId(null);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-darkbg flex items-center justify-center">
@@ -564,19 +604,39 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                           {(course as { documentsNote?: string }).documentsNote}
                         </p>
                       )}
-                      {courseDocs.map(doc => (
-                        <a
-                          key={doc.id}
-                          href={coursesApi.downloadDocumentUrl(doc.id)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2.5 p-3 pl-4 text-left hover:bg-darkbg/50 transition-colors"
-                        >
-                          <span className="shrink-0">{doc.fileType === 'link' ? '🔗' : '📄'}</span>
-                          <span className="text-sm text-text-secondary truncate flex-1">{doc.title}</span>
-                          <Download className="w-3.5 h-3.5 text-text-muted shrink-0" />
-                        </a>
-                      ))}
+                      {courseDocs.map(doc => {
+                        const canPreview = previewKind(doc) !== null;
+                        return (
+                          <div key={doc.id} className="flex items-center gap-1 p-3 pl-4 hover:bg-darkbg/50 transition-colors">
+                            <a
+                              href={coursesApi.downloadDocumentUrl(doc.id)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-2.5 text-left flex-1 min-w-0"
+                            >
+                              <span className="shrink-0">{doc.fileType === 'link' ? '🔗' : '📄'}</span>
+                              <span className="text-sm text-text-secondary truncate flex-1">{doc.title}</span>
+                            </a>
+                            {canPreview && (
+                              <button
+                                type="button"
+                                onClick={() => previewDocument(doc)}
+                                disabled={previewingDocId === doc.id}
+                                title="Xem trực tiếp, không cần tải về"
+                                className="shrink-0 p-1.5 rounded-lg text-text-muted hover:text-neon-violet hover:bg-neon-violet/10 transition-colors disabled:opacity-50"
+                              >
+                                {previewingDocId === doc.id
+                                  ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                  : <Eye className="w-3.5 h-3.5" />}
+                              </button>
+                            )}
+                            <a href={coursesApi.downloadDocumentUrl(doc.id)} target="_blank" rel="noopener noreferrer"
+                              title="Tải về" className="shrink-0 p-1.5 rounded-lg text-text-muted hover:text-text-primary">
+                              <Download className="w-3.5 h-3.5" />
+                            </a>
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -917,27 +977,40 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                         ['txt', 'md'].includes(ext) ? '📄' :
                         ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(ext) ? '🖼️' :
                         '📄';
+                      const canPreview = previewKind(doc) !== null;
                       return (
-                        <a
-                          key={doc.id}
-                          href={downloadHref}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-3 p-3 bg-darkbg rounded-xl hover:bg-darkbg/80 transition-colors group"
-                        >
-                          <div className="w-10 h-10 rounded-lg bg-neon-indigo/10 flex items-center justify-center shrink-0 text-lg">
-                            {emoji}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-text-primary group-hover:text-neon-violet transition-colors truncate">
-                              {doc.title}
-                            </p>
-                            <p className="text-xs text-text-muted">
-                              {formatBytes(doc.fileSizeBytes)} • {doc.downloadCount} lượt tải
-                            </p>
-                          </div>
-                          <Download className="w-4 h-4 text-text-muted group-hover:text-neon-indigo transition-colors shrink-0" />
-                        </a>
+                        <div key={doc.id} className="flex items-center gap-3 p-3 bg-darkbg rounded-xl hover:bg-darkbg/80 transition-colors group">
+                          <a href={downloadHref} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 flex-1 min-w-0">
+                            <div className="w-10 h-10 rounded-lg bg-neon-indigo/10 flex items-center justify-center shrink-0 text-lg">
+                              {emoji}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-text-primary group-hover:text-neon-violet transition-colors truncate">
+                                {doc.title}
+                              </p>
+                              <p className="text-xs text-text-muted">
+                                {formatBytes(doc.fileSizeBytes)} • {doc.downloadCount} lượt tải
+                              </p>
+                            </div>
+                          </a>
+                          {canPreview && (
+                            <button
+                              type="button"
+                              onClick={() => previewDocument(doc)}
+                              disabled={previewingDocId === doc.id}
+                              title="Xem trực tiếp, không cần tải về"
+                              className="shrink-0 p-2 rounded-lg text-text-muted hover:text-neon-violet hover:bg-neon-violet/10 transition-colors disabled:opacity-50"
+                            >
+                              {previewingDocId === doc.id
+                                ? <Loader2 className="w-4 h-4 animate-spin" />
+                                : <Eye className="w-4 h-4" />}
+                            </button>
+                          )}
+                          <a href={downloadHref} target="_blank" rel="noopener noreferrer" title="Tải về"
+                            className="shrink-0 p-2 rounded-lg text-text-muted hover:text-neon-indigo transition-colors">
+                            <Download className="w-4 h-4" />
+                          </a>
+                        </div>
                       );
                     })}
                   </div>

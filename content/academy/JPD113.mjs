@@ -281,10 +281,17 @@ export default {
     <tr><td>k</td><td>カ</td><td>キ</td><td>ク</td><td>ケ</td><td>コ</td></tr>
     <tr><td>s</td><td>サ</td><td>シ</td><td>ス</td><td>セ</td><td>ソ</td></tr>
     <tr><td>t</td><td>タ</td><td>チ</td><td>ツ</td><td>テ</td><td>ト</td></tr>
+    <tr><td>n</td><td>ナ</td><td>ニ</td><td>ヌ</td><td>ネ</td><td>ノ</td></tr>
+    <tr><td>h</td><td>ハ</td><td>ヒ</td><td>フ</td><td>ヘ</td><td>ホ</td></tr>
+    <tr><td>m</td><td>マ</td><td>ミ</td><td>ム</td><td>メ</td><td>モ</td></tr>
+    <tr><td>y</td><td>ヤ</td><td></td><td>ユ</td><td></td><td>ヨ</td></tr>
+    <tr><td>r</td><td>ラ</td><td>リ</td><td>ル</td><td>レ</td><td>ロ</td></tr>
+    <tr><td>w</td><td>ワ</td><td></td><td></td><td></td><td>ヲ</td></tr>
+    <tr><td>n</td><td colspan="5">ン (same lone consonant as hiragana ん; ヲ is almost never used in loanwords, only kept to complete the grid)</td></tr>
   </tbody>
 </table>
-<div class="out"><b>Examples:</b> コーヒー = kōhī (coffee) · テレビ = terebi (TV) · ベトナム = Betonamu (Vietnam). Long vowels use a dash ー.</div>
-<div class="pitfall"><b>Easy mix-ups:</b> シ (shi) vs ツ (tsu), and ン (n) vs ソ (so) — the stroke direction differs. Write them by hand to feel the difference.</div>
+<div class="out"><b>Loanwords from real exams:</b> コーヒー=kōhī (coffee) · テレビ=terebi (TV) · タクシー=takushī (taxi) · ホテル=hoteru (hotel) · レストラン=resutoran (restaurant) · エスカレーター=esukarētā (escalator) · トイレ=toire (toilet) · カメラ=kamera (camera) · <b>country names in katakana:</b> ベトナム (Vietnam), アメリカ (America), フランス (France), イギリス (UK), ドイツ (Germany), オーストラリア (Australia), タイ (Thailand) — but neighbouring countries with a Chinese-character name, like かんこく (Korea) and ちゅうごく (China), stay in hiragana, NOT katakana. Long vowels use a dash ー: コーヒー is <em>ko-o-hi-i</em>, four beats, not three.</div>
+<div class="pitfall"><b>Easy mix-ups:</b> シ (shi) vs ツ (tsu), and ン (n) vs ソ (so) — the stroke direction differs. Write them by hand to feel the difference. In multiple-choice exams, a katakana-loanword question usually asks for the <em>Vietnamese meaning</em> of a word like エスカレーター or ホテル — build a mental list of common loanwords rather than trying to "translate" them from English spelling alone.</div>
 <a class="link-card codelab" href="/language/ja/alphabet?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
   <span class="lc-ico">✍️</span>
   <span class="lc-body"><span class="lc-title">Practise katakana</span><span class="lc-sub">Stroke order &amp; spaced repetition on My Language.</span></span>
@@ -665,6 +672,70 @@ Từ 11 trở đi phần lớn đều + にち: 11日 = じゅういち<b>にち
 `,
         },
         {
+          title: '3.5 — Days of the week (曜日)|||3.5 — Ngày trong tuần (曜日)',
+          slug: 'jpd113-youbi',
+          type: 'VIDEO',
+          description: '月火水木金土日 + 曜日, 何曜日ですか — kanji 曜 xuất hiện dày đặc trong đề thi thật.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 3 · Lesson 3.5</span>
+<h2>Days of the week — 曜日 (ようび)</h2>
+<p class="lead">Every day of the week is built the same way: a "element" kanji + 曜日 (yōbi, "day of the ~"). Learn the seven element kanji once and the whole week follows a pattern — no irregular readings here, unlike months and dates.</p>
+<table>
+  <thead><tr><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr></thead>
+  <tbody>
+    <tr><td>月曜日</td><td>火曜日</td><td>水曜日</td><td>木曜日</td><td>金曜日</td><td>土曜日</td><td>日曜日</td></tr>
+    <tr><td>げつようび</td><td>かようび</td><td>すいようび</td><td>もくようび</td><td>きんようび</td><td>どようび</td><td>にちようび</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">Each element kanji also means an element/body: 月=moon, 火=fire, 水=water, 木=wood, 金=gold/money, 土=earth, 日=sun. In fast/casual speech the trailing 日 is often dropped: 月曜 = げつよう.</div>
+<h3>Asking "what day is it?"</h3>
+<div class="out"><b>Q:</b> 今日は何曜日ですか。(きょうは なんようびですか) = What day is today?<br>
+<b>A:</b> 今日は水曜日です。(きょうは すいようびです) = Today is Wednesday.<br><br>
+<b>Q:</b> 何曜日に日本語のクラスがありますか。(なんようびに にほんごの クラスが ありますか) = On which day is the Japanese class?<br>
+<b>A:</b> 月曜日と木曜日です。(げつようびと もくようびです) = Monday and Thursday. (と = "and", connects two nouns.)</div>
+<h3>Ví dụ có lời giải · A weekly schedule</h3>
+<div class="out">月曜日：日本語 (Japanese) · 火曜日：数学 (Math) · 水曜日：休み (day off) · 木曜日：日本語 · 金曜日：スピーキング (Speaking)<br>
+Q: 休みは何曜日ですか。(きゅうびは なんようびですか) → A: 水曜日です。</div>
+<div class="callout"><span class="badge">★ Exam frequency</span> The kanji <b>曜</b> is the <b>3rd most frequent kanji</b> across 420 real FE exam questions (60 occurrences) — right after 日 and 私. If you only memorise a handful of extra kanji before the exam, 曜 must be one of them.</div>
+<div class="pitfall"><b>Watch:</b> 何曜日ですか (which day of the week) is asked with the counter-question-word 何 read <em>なん</em>, not どの — a different question-word pattern than これ/それ/あれ. Don't confuse 曜日 (day of week) with 日 alone (day of month, e.g. 8日).</div>
+<a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">🗓️</span>
+  <span class="lc-body"><span class="lc-title">Drill the 7 days of the week</span><span class="lc-sub">Vocabulary flashcards on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 3 · Bài 3.5</span>
+<h2>Ngày trong tuần — 曜日 (ようび)</h2>
+<p class="lead">Mỗi ngày trong tuần xây theo cùng một mẫu: kanji "nguyên tố" + 曜日 (yōbi, "ngày của ~"). Học 7 kanji nguyên tố một lần là cả tuần theo đúng mẫu — không có cách đọc bất quy tắc nào ở đây, khác với tháng và ngày.</p>
+<table>
+  <thead><tr><th>Thứ 2</th><th>Thứ 3</th><th>Thứ 4</th><th>Thứ 5</th><th>Thứ 6</th><th>Thứ 7</th><th>CN</th></tr></thead>
+  <tbody>
+    <tr><td>月曜日</td><td>火曜日</td><td>水曜日</td><td>木曜日</td><td>金曜日</td><td>土曜日</td><td>日曜日</td></tr>
+    <tr><td>げつようび</td><td>かようび</td><td>すいようび</td><td>もくようび</td><td>きんようび</td><td>どようび</td><td>にちようび</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">Mỗi kanji nguyên tố cũng có nghĩa riêng: 月=mặt trăng, 火=lửa, 水=nước, 木=gỗ/cây, 金=vàng/tiền, 土=đất, 日=mặt trời. Trong lời nói nhanh/thân mật, thường bỏ 日 phía sau: 月曜 = げつよう.</div>
+<h3>Cách hỏi "hôm nay thứ mấy?"</h3>
+<div class="out"><b>Hỏi:</b> 今日は何曜日ですか。(きょうは なんようびですか) = Hôm nay thứ mấy?<br>
+<b>Đáp:</b> 今日は水曜日です。(きょうは すいようびです) = Hôm nay thứ Tư.<br><br>
+<b>Hỏi:</b> 何曜日に日本語のクラスがありますか。(なんようびに にほんごの クラスが ありますか) = Lớp tiếng Nhật vào thứ mấy?<br>
+<b>Đáp:</b> 月曜日と木曜日です。(げつようびと もくようびです) = Thứ Hai và thứ Năm. (と = "và", nối hai danh từ.)</div>
+<h3>Ví dụ có lời giải · Thời khoá biểu trong tuần</h3>
+<div class="out">月曜日：日本語 (Tiếng Nhật) · 火曜日：数学 (Toán) · 水曜日：休み (nghỉ) · 木曜日：日本語 · 金曜日：スピーキング (Nói)<br>
+Hỏi: 休みは何曜日ですか。(きゅうびは なんようびですか) → Đáp: 水曜日です。</div>
+<div class="callout"><span class="badge">★ Tần suất trong đề thi</span> Kanji <b>曜</b> là kanji <b>xuất hiện nhiều thứ 3</b> trong 420 câu FE thật (60 lần) — chỉ sau 日 và 私. Nếu chỉ học thuộc thêm vài kanji trước khi thi, 曜 phải là một trong số đó.</div>
+<div class="pitfall"><b>Chú ý:</b> 何曜日ですか (thứ mấy) dùng từ hỏi 何 đọc là <em>なん</em>, không phải どの — khác mẫu từ hỏi với これ/それ/あれ. Đừng nhầm 曜日 (thứ trong tuần) với 日 đứng một mình (ngày trong tháng, ví dụ 8日).</div>
+<a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">🗓️</span>
+  <span class="lc-body"><span class="lc-title">Luyện 7 ngày trong tuần</span><span class="lc-sub">Flashcard từ vựng trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+`,
+        },
+        {
           title: 'Quiz 2 — Numbers, money & dates|||Quiz 2 — Số, tiền & ngày tháng',
           slug: 'jpd113-quiz-so',
           type: 'QUIZ',
@@ -679,6 +750,8 @@ Từ 11 trở đi phần lớn đều + にち: 11日 = じゅういち<b>にち
               { question: 'The month 4月 (April) is read…|||Tháng 4月 (tháng Tư) đọc là…', options: ['よんがつ', 'しがつ', 'よがつ', 'しちがつ'], correctIndex: 1, points: 1 },
               { question: 'The 1st of the month (1日) is read…|||Ngày mùng 1 (1日) đọc là…', options: ['いちにち', 'ついたち', 'ひとつ', 'いっか'], correctIndex: 1, points: 1 },
               { question: 'To ask someone their age you can say…|||Để hỏi tuổi ai đó bạn có thể nói…', options: ['何歳ですか / おいくつですか', 'いくらですか', 'なんじですか', 'いつですか'], correctIndex: 0, points: 1 },
+              { question: 'Wednesday (水曜日) is read…|||Thứ Tư (水曜日) đọc là…', options: ['もくようび', 'すいようび', 'かようび', 'きんようび'], correctIndex: 1, points: 1 },
+              { question: '"What day of the week is it?" is…|||"Hôm nay thứ mấy?" là…', options: ['何日ですか', '何曜日ですか', '何時ですか', '何歳ですか'], correctIndex: 1, points: 1 },
             ],
           },
         },
@@ -732,6 +805,144 @@ watashi wa An desu.
 <a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
   <span class="lc-ico">📖</span>
   <span class="lc-body"><span class="lc-title">Học mẫu ngữ pháp</span><span class="lc-sub">は/です/の kèm ví dụ trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '4.2 — も (also) & か (question particle)|||4.2 — も (cũng) & か (trợ từ hỏi)',
+          slug: 'jpd113-mo-ka',
+          type: 'VIDEO',
+          description: 'も thay は để nói "cũng"; か thêm vào cuối câu để hỏi — hai trợ từ bị test rất nhiều nhưng chưa có bài riêng.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 4 · Lesson 4.2</span>
+<h2>も (also) &amp; か (question particle)</h2>
+<p class="lead">Two of the most-tested particles on the real exam, yet easy to learn: <b>も</b> replaces は to mean "also/too", and <b>か</b> turns any です statement into a yes/no question just by adding it to the end — no word order change, no question mark needed.</p>
+<h3>も — "also / too"</h3>
+<div class="out">わたしは がくせいです。 → I am a student.<br>
+かれ<b>も</b> がくせいです。 → He is <b>also</b> a student. (も replaces は, not added next to it)<br>
+アンさんは ベトナム人です。マイさん<b>も</b> ベトナム人です。 → An is Vietnamese. Mai is Vietnamese <b>too</b>.</div>
+<div class="pitfall"><b>Trap:</b> も <em>replaces</em> は/が, it never appears together with them in the same slot — わたしはもがくせいです is wrong. Say わたしもがくせいです.</div>
+<h3>か — turning a statement into a question</h3>
+<div class="out">あなたは がくせいです。 → You are a student. (statement)<br>
+あなたは がくせいです<b>か</b>。 → Are you a student? (statement + か, same word order)<br>
+<b>A (yes):</b> はい、そうです。 <b>A (no):</b> いいえ、ちがいます。 / いいえ、がくせいじゃないです。</div>
+<h3>Ví dụ có lời giải · Combining は/です/の/も/か</h3>
+<div class="out"><b>Q:</b> アンさんは ベトナムの がくせいですか。 (Is An a Vietnamese student?)<br>
+<b>A:</b> はい、そうです。マイさんも ベトナムの がくせいです。 (Yes. Mai is also a Vietnamese student.)</div>
+<div class="callout"><span class="badge">★ Exam tip</span> On multiple-choice papers, a blank right before ですか with no other particle in sight is almost always filled by <b>か</b> itself (the sentence needs it to be a grammatical question) or by <b>も</b> (if the sentence already established a similar fact about someone else). Read the sentence <em>before</em> the blank for a matching topic — that is the strongest clue between も and は.</div>
+<a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📖</span>
+  <span class="lc-body"><span class="lc-title">Drill も & か</span><span class="lc-sub">Grammar patterns with examples on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 4 · Bài 4.2</span>
+<h2>も (cũng) &amp; か (trợ từ hỏi)</h2>
+<p class="lead">Hai trợ từ bị test nhiều nhất trong đề thi thật, nhưng lại rất dễ học: <b>も</b> thay thế は để nói "cũng", và <b>か</b> biến bất kỳ câu です nào thành câu hỏi có/không chỉ bằng cách thêm vào cuối câu — không đổi trật tự từ, không cần dấu hỏi.</p>
+<h3>も — "cũng"</h3>
+<div class="out">わたしは がくせいです。 → Tôi là sinh viên.<br>
+かれ<b>も</b> がくせいです。 → Anh ấy <b>cũng</b> là sinh viên. (も thay thế は, không thêm vào bên cạnh)<br>
+アンさんは ベトナム人です。マイさん<b>も</b> ベトナム人です。 → An là người Việt Nam. Mai <b>cũng</b> là người Việt Nam.</div>
+<div class="pitfall"><b>Bẫy:</b> も <em>thay thế</em> は/が, không bao giờ xuất hiện cùng chỗ với chúng — わたしはもがくせいです là SAI. Nói わたしもがくせいです.</div>
+<h3>か — biến câu khẳng định thành câu hỏi</h3>
+<div class="out">あなたは がくせいです。 → Bạn là sinh viên. (câu khẳng định)<br>
+あなたは がくせいです<b>か</b>。 → Bạn có phải là sinh viên không? (khẳng định + か, giữ nguyên trật tự từ)<br>
+<b>Đáp (có):</b> はい、そうです。 <b>Đáp (không):</b> いいえ、ちがいます。 / いいえ、がくせいじゃないです。</div>
+<h3>Ví dụ có lời giải · Kết hợp は/です/の/も/か</h3>
+<div class="out"><b>Hỏi:</b> アンさんは ベトナムの がくせいですか。 (An có phải sinh viên Việt Nam không?)<br>
+<b>Đáp:</b> はい、そうです。マイさんも ベトナムの がくせいです。 (Đúng vậy. Mai cũng là sinh viên Việt Nam.)</div>
+<div class="callout"><span class="badge">★ Mẹo thi</span> Trong đề trắc nghiệm, chỗ trống ngay trước ですか mà không thấy trợ từ nào khác gần đó gần như luôn điền <b>か</b> (câu cần nó để thành câu hỏi đúng ngữ pháp) hoặc <b>も</b> (nếu câu trước đã nói việc tương tự về người khác). Đọc câu <em>trước</em> chỗ trống để tìm chủ đề trùng lặp — đó là manh mối mạnh nhất giữa も và は.</div>
+<a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📖</span>
+  <span class="lc-body"><span class="lc-title">Luyện も & か</span><span class="lc-sub">Mẫu ngữ pháp kèm ví dụ trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '4.3 — Nationality & occupation|||4.3 — Quốc tịch & nghề nghiệp',
+          slug: 'jpd113-quoc-tich-nghe-nghiep',
+          type: 'VIDEO',
+          description: 'Vocab quốc gia/quốc tịch + nghề nghiệp, mẫu câu おくには どちらですか / おしごとは なんですか.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 4 · Lesson 4.3</span>
+<h2>Nationality &amp; occupation</h2>
+<p class="lead">Now that you have は/です/の/も/か, fill in the vocabulary that makes self-introductions real: where you are from, and what you do. This is one of the densest vocabulary groups on the real exam.</p>
+<h3>Countries &amp; nationalities (X + 人 = a person of X)</h3>
+<table>
+  <thead><tr><th>Country</th><th>Reading</th><th>Nationality</th></tr></thead>
+  <tbody>
+    <tr><td>にほん (日本)</td><td>nihon</td><td>にほんじん</td></tr>
+    <tr><td>ベトナム</td><td>Betonamu</td><td>ベトナムじん</td></tr>
+    <tr><td>かんこく (韓国)</td><td>kankoku</td><td>かんこくじん</td></tr>
+    <tr><td>ちゅうごく (中国)</td><td>chūgoku</td><td>ちゅうごくじん</td></tr>
+    <tr><td>アメリカ</td><td>Amerika</td><td>アメリカじん</td></tr>
+    <tr><td>フランス</td><td>Furansu</td><td>フランスじん</td></tr>
+    <tr><td>イギリス</td><td>Igirisu</td><td>イギリスじん</td></tr>
+    <tr><td>ドイツ</td><td>Doitsu</td><td>ドイツじん</td></tr>
+    <tr><td>オーストラリア</td><td>Ōsutoraria</td><td>オーストラリアじん</td></tr>
+    <tr><td>タイ</td><td>Tai</td><td>タイじん</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">Neighbouring countries with a kanji name (にほん, かんこく, ちゅうごく) are usually written in hiragana at this level, while Western/foreign countries are always katakana — see <a href="/courses/elementary-japanese-1-a11/learn">Lesson 2.1</a>.</div>
+<h3>Common occupations</h3>
+<div class="out">がくせい (student) · かいしゃいん (company employee) · きょうし / せんせい (teacher) · しゃいん (staff/employee) · いしゃ (doctor) · かんごし (nurse) · エンジニア (engineer) · デザイナー (designer) · しゅふ (homemaker) · こうむいん (civil servant)</div>
+<h3>Asking politely — おくに &amp; おしごと</h3>
+<div class="out"><b>Q:</b> おくには どちらですか。(Where are you from? — polite, lit. "your country is which way")<br>
+<b>A:</b> ベトナムです。<br><br>
+<b>Q:</b> おしごとは なんですか。(What is your job?)<br>
+<b>A:</b> かいしゃいんです。</div>
+<h3>Ví dụ có lời giải · Full self-introduction</h3>
+<div class="out">はじめまして。わたしは アンです。ベトナムじんです。がくせいです。どうぞよろしく。<br>
+= Nice to meet you. I am An. I am Vietnamese. I am a student. Pleased to meet you.</div>
+<div class="pitfall"><b>Trap:</b> どちら (which way/direction) is the polite way to ask "where", not どこ, when asking about someone's home country to their face — どこ feels blunter. なん vs なに also matters here: おしごとは <b>なん</b>ですか (before です, always なん), never なにですか.</div>
+<a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">🌍</span>
+  <span class="lc-body"><span class="lc-title">Drill countries & occupations</span><span class="lc-sub">Vocabulary flashcards on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 4 · Bài 4.3</span>
+<h2>Quốc tịch &amp; nghề nghiệp</h2>
+<p class="lead">Giờ đã có は/です/の/も/か, hãy lấp đầy vốn từ khiến phần tự giới thiệu trở nên thật: bạn từ đâu tới, và làm nghề gì. Đây là một trong những nhóm từ vựng dày đặc nhất trong đề thi thật.</p>
+<h3>Nước & quốc tịch (X + 人 = người của X)</h3>
+<table>
+  <thead><tr><th>Nước</th><th>Đọc</th><th>Quốc tịch</th></tr></thead>
+  <tbody>
+    <tr><td>にほん (日本)</td><td>nihon</td><td>にほんじん</td></tr>
+    <tr><td>ベトナム</td><td>Betonamu</td><td>ベトナムじん</td></tr>
+    <tr><td>かんこく (韓国)</td><td>kankoku</td><td>かんこくじん</td></tr>
+    <tr><td>ちゅうごく (中国)</td><td>chūgoku</td><td>ちゅうごくじん</td></tr>
+    <tr><td>アメリカ</td><td>Amerika</td><td>アメリカじん</td></tr>
+    <tr><td>フランス</td><td>Furansu</td><td>フランスじん</td></tr>
+    <tr><td>イギリス</td><td>Igirisu</td><td>イギリスじん</td></tr>
+    <tr><td>ドイツ</td><td>Doitsu</td><td>ドイツじん</td></tr>
+    <tr><td>オーストラリア</td><td>Ōsutoraria</td><td>オーストラリアじん</td></tr>
+    <tr><td>タイ</td><td>Tai</td><td>タイじん</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">Các nước láng giềng có tên chữ Hán (にほん, かんこく, ちゅうごく) ở trình độ này thường viết bằng hiragana, còn nước phương Tây/nước ngoài luôn viết katakana — xem <a href="/courses/elementary-japanese-1-a11/learn">Bài 2.1</a>.</div>
+<h3>Nghề nghiệp thường gặp</h3>
+<div class="out">がくせい (sinh viên) · かいしゃいん (nhân viên công ty) · きょうし / せんせい (giáo viên) · しゃいん (nhân viên) · いしゃ (bác sĩ) · かんごし (y tá) · エンジニア (kỹ sư) · デザイナー (nhà thiết kế) · しゅふ (nội trợ) · こうむいん (công chức)</div>
+<h3>Hỏi lịch sự — おくに & おしごと</h3>
+<div class="out"><b>Hỏi:</b> おくには どちらですか。(Bạn đến từ đâu? — lịch sự, nghĩa đen "nước của bạn là hướng nào")<br>
+<b>Đáp:</b> ベトナムです。<br><br>
+<b>Hỏi:</b> おしごとは なんですか。(Nghề của bạn là gì?)<br>
+<b>Đáp:</b> かいしゃいんです。</div>
+<h3>Ví dụ có lời giải · Tự giới thiệu đầy đủ</h3>
+<div class="out">はじめまして。わたしは アンです。ベトナムじんです。がくせいです。どうぞよろしく。<br>
+= Rất vui được gặp. Tôi là An. Tôi là người Việt Nam. Tôi là sinh viên. Mong được giúp đỡ.</div>
+<div class="pitfall"><b>Bẫy:</b> どちら (hướng nào) là cách lịch sự để hỏi "ở đâu", không phải どこ, khi hỏi quốc gia trực tiếp trước mặt ai đó — どこ nghe cộc hơn. なん vs なに cũng quan trọng ở đây: おしごとは <b>なん</b>ですか (trước です, luôn là なん), không bao giờ なにですか.</div>
+<a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">🌍</span>
+  <span class="lc-body"><span class="lc-title">Luyện quốc gia & nghề nghiệp</span><span class="lc-sub">Flashcard từ vựng trên My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
 </div>
@@ -803,22 +1014,377 @@ watashi wa An desu.
 </div>
 `,
         },
+        {
+          title: '5.2 — この/その/あの (before a noun)|||5.2 — この/その/あの (đứng trước danh từ)',
+          slug: 'jpd113-kono-sono-ano',
+          type: 'VIDEO',
+          description: 'Dạng chỉ định ĐỨNG TRƯỚC danh từ, đối lập trực tiếp với これ/それ/あれ (đứng một mình) — bẫy lặp lại nhiều nhất trong đề thi thật.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 5 · Lesson 5.2</span>
+<h2>この/その/あの — the form that stands before a noun</h2>
+<p class="lead">これ/それ/あれ (Lesson 5.1) stand <strong>alone</strong>, replacing a noun entirely. この/その/あの do the opposite job: they <strong>always sit directly in front of a noun</strong>, like "this ___" / "that ___" in English. Mixing the two up is the single most repeated trap across 420 real exam questions.</p>
+<table>
+  <thead><tr><th></th><th>Stands ALONE (= "this/that [thing]")</th><th>Before a NOUN (= "this/that ___")</th></tr></thead>
+  <tbody>
+    <tr><td>Near me</td><td>これ (kore)</td><td>この + noun (kono)</td></tr>
+    <tr><td>Near you</td><td>それ (sore)</td><td>その + noun (sono)</td></tr>
+    <tr><td>Far from both</td><td>あれ (are)</td><td>あの + noun (ano)</td></tr>
+    <tr><td>Which?</td><td>どれ (dore)</td><td>どの + noun (dono)</td></tr>
+  </tbody>
+</table>
+<div class="out"><b>Compare directly:</b><br>
+これは ほんです。 = <b>This</b> is a book. (これ stands alone, no noun after it)<br>
+<b>この</b> ほんは わたしのです。 = <b>This</b> book is mine. (この must be followed by ほん — never alone)<br><br>
+それは だれのペンですか。 = Whose pen is that?<br>
+<b>その</b>ペンは アンさんのです。 = <b>That</b> pen is An's.</div>
+<div class="pitfall"><b>The rule that decides the answer on the exam:</b> look at what comes <em>right after</em> the blank. A bare noun right after → the answer must be この/その/あの/どの. A verb, particle, or nothing (end of clause) right after → the answer must be これ/それ/あれ/どれ. This single check resolves the vast majority of こ/そ/あ fill-in-the-blank questions.</div>
+<h3>Ví dụ có lời giải</h3>
+<div class="out"><b>Q:</b> ＿＿＿ かばんは わたしのです。(A bare noun かばん follows the blank → needs the adnominal form.)<br>
+<b>A:</b> この (This bag is mine.)<br><br>
+<b>Q:</b> ＿＿＿ は なんですか。(Nothing follows but は → needs the standalone pronoun.)<br>
+<b>A:</b> これ (What is this?)</div>
+<a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📖</span>
+  <span class="lc-body"><span class="lc-title">Drill これ/それ/あれ vs この/その/あの</span><span class="lc-sub">Contrast drills on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 5 · Bài 5.2</span>
+<h2>この/その/あの — dạng đứng TRƯỚC danh từ</h2>
+<p class="lead">これ/それ/あれ (Bài 5.1) đứng <strong>một mình</strong>, thay thế hoàn toàn cho danh từ. この/その/あの làm việc ngược lại: chúng <strong>luôn đứng ngay trước một danh từ</strong>, giống "cái ___ này" / "cái ___ đó" trong tiếng Việt. Nhầm lẫn hai nhóm này là bẫy lặp lại nhiều nhất trong 420 câu đề thi thật.</p>
+<table>
+  <thead><tr><th></th><th>Đứng MỘT MÌNH (= "cái này/đó [vật]")</th><th>Đứng trước DANH TỪ (= "___ này/đó")</th></tr></thead>
+  <tbody>
+    <tr><td>Gần tôi</td><td>これ (kore)</td><td>この + danh từ (kono)</td></tr>
+    <tr><td>Gần bạn</td><td>それ (sore)</td><td>その + danh từ (sono)</td></tr>
+    <tr><td>Xa cả hai</td><td>あれ (are)</td><td>あの + danh từ (ano)</td></tr>
+    <tr><td>Cái nào?</td><td>どれ (dore)</td><td>どの + danh từ (dono)</td></tr>
+  </tbody>
+</table>
+<div class="out"><b>So sánh trực tiếp:</b><br>
+これは ほんです。 = <b>Cái này</b> là sách. (これ đứng một mình, không có danh từ theo sau)<br>
+<b>この</b> ほんは わたしのです。 = Quyển sách <b>này</b> là của tôi. (この phải theo sau bởi ほん — không bao giờ đứng một mình)<br><br>
+それは だれのペンですか。 = Đó là bút của ai?<br>
+<b>その</b>ペンは アンさんのです。 = Cây bút <b>đó</b> là của An.</div>
+<div class="pitfall"><b>Quy tắc quyết định đáp án khi thi:</b> nhìn vào phần <em>ngay sau</em> chỗ trống. Có danh từ trần ngay sau → đáp án PHẢI là この/その/あの/どの. Có động từ, trợ từ, hoặc không có gì (hết mệnh đề) ngay sau → đáp án PHẢI là これ/それ/あれ/どれ. Chỉ một phép kiểm tra này giải quyết phần lớn câu điền chỗ trống dạng こ/そ/あ.</div>
+<h3>Ví dụ có lời giải</h3>
+<div class="out"><b>Hỏi:</b> ＿＿＿ かばんは わたしのです。(Danh từ trần かばん theo sau chỗ trống → cần dạng chỉ định trước danh từ.)<br>
+<b>Đáp:</b> この (Cái cặp này là của tôi.)<br><br>
+<b>Hỏi:</b> ＿＿＿ は なんですか。(Không có gì theo sau ngoài は → cần đại từ đứng một mình.)<br>
+<b>Đáp:</b> これ (Cái này là gì?)</div>
+<a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📖</span>
+  <span class="lc-body"><span class="lc-title">Luyện これ/それ/あれ vs この/その/あの</span><span class="lc-sub">Bài tập đối chiếu trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '5.3 — Question words: なに/だれ/どこ/いつ/なん/どちら|||5.3 — Từ để hỏi: なに/だれ/どこ/いつ/なん/どちら',
+          slug: 'jpd113-tu-de-hoi',
+          type: 'VIDEO',
+          description: '6 từ để hỏi cốt lõi, kèm mẹo "đọc câu trả lời trước, suy ngược ra từ hỏi" — kỹ thuật làm bài thi thật.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 5 · Lesson 5.3</span>
+<h2>The 6 core question words</h2>
+<p class="lead">These six words appear in almost every dialogue on the exam. Learn each one with its typical answer shape — that pairing is what lets you solve fill-in-the-blank questions fast.</p>
+<table>
+  <thead><tr><th>Word</th><th>Meaning</th><th>Typical answer</th></tr></thead>
+  <tbody>
+    <tr><td>なに / なん (何)</td><td>what</td><td>a thing/name: ほんです、がくせいです</td></tr>
+    <tr><td>だれ (誰)</td><td>who</td><td>a person: アンさんです</td></tr>
+    <tr><td>どこ</td><td>where</td><td>a place: がっこうです、ここです</td></tr>
+    <tr><td>いつ</td><td>when</td><td>a time: あした、8月4日です</td></tr>
+    <tr><td>どちら</td><td>which way / where (polite)</td><td>a place or direction, politely: ベトナムです</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">何 is read <b>なに</b> when standing alone or before で/を/が (何ですか), but <b>なん</b> right before です/だ or a counter/particle starting with な・だ・と (何ですか is actually なんですか — memorise this exception; 何時 なんじ, 何人 なんにん, 何曜日 なんようび).</div>
+<h3>Working backward from the answer</h3>
+<div class="out"><b>Q:</b> ＿＿＿ですか。 <b>A:</b> アンさんです。 → the answer is a person's name, so the question word must be <b>だれ</b>: だれですか。<br>
+<b>Q:</b> ＿＿＿ですか。 <b>A:</b> 火曜日です。 → the answer is a day, so: 何曜日ですか。<br>
+<b>Q:</b> ＿＿＿ですか。 <b>A:</b> がっこうです。 → the answer is a place: どこですか。</div>
+<div class="pitfall"><b>Exam technique:</b> when a fill-in-the-blank gives you the <em>answer sentence</em> but blanks the question word, always read the answer FIRST — its category (person/place/time/thing) tells you exactly which question word fits. Guessing the question word before reading the answer wastes time.</div>
+<h3>Ví dụ có lời giải</h3>
+<div class="out"><b>Q:</b> おくには どちらですか。 <b>A:</b> タイです。 (Where are you from? — Thailand.)<br>
+<b>Q:</b> たんじょうびは いつですか。 <b>A:</b> 3月です。 (When is your birthday? — March.)</div>
+<a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">❓</span>
+  <span class="lc-body"><span class="lc-title">Drill the 6 question words</span><span class="lc-sub">Pattern practice on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 5 · Bài 5.3</span>
+<h2>6 từ để hỏi cốt lõi</h2>
+<p class="lead">Sáu từ này xuất hiện trong gần như mọi đoạn hội thoại trong đề thi. Học từng từ kèm hình dạng câu trả lời điển hình — sự ghép cặp đó giúp bạn giải câu điền chỗ trống nhanh.</p>
+<table>
+  <thead><tr><th>Từ</th><th>Nghĩa</th><th>Trả lời điển hình</th></tr></thead>
+  <tbody>
+    <tr><td>なに / なん (何)</td><td>cái gì</td><td>một vật/tên: ほんです、がくせいです</td></tr>
+    <tr><td>だれ (誰)</td><td>ai</td><td>một người: アンさんです</td></tr>
+    <tr><td>どこ</td><td>ở đâu</td><td>một nơi: がっこうです、ここです</td></tr>
+    <tr><td>いつ</td><td>khi nào</td><td>một mốc thời gian: あした、8月4日です</td></tr>
+    <tr><td>どちら</td><td>hướng nào / ở đâu (lịch sự)</td><td>nơi hoặc hướng, lịch sự: ベトナムです</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">何 đọc là <b>なに</b> khi đứng một mình hoặc trước で/を/が (何ですか), nhưng đọc <b>なん</b> ngay trước です/だ hoặc trợ số từ/trợ từ bắt đầu bằng な・だ・と (何ですか thực ra là なんですか — học thuộc ngoại lệ này; 何時 なんじ, 何人 なんにん, 何曜日 なんようび).</div>
+<h3>Suy ngược từ câu trả lời</h3>
+<div class="out"><b>Hỏi:</b> ＿＿＿ですか。 <b>Đáp:</b> アンさんです。 → câu trả lời là tên người, nên từ hỏi phải là <b>だれ</b>: だれですか。<br>
+<b>Hỏi:</b> ＿＿＿ですか。 <b>Đáp:</b> 火曜日です。 → câu trả lời là thứ trong tuần, nên: 何曜日ですか。<br>
+<b>Hỏi:</b> ＿＿＿ですか。 <b>Đáp:</b> がっこうです。 → câu trả lời là nơi chốn: どこですか。</div>
+<div class="pitfall"><b>Kỹ thuật làm bài thi:</b> khi câu điền chỗ trống cho bạn <em>câu trả lời</em> nhưng bỏ trống từ hỏi, LUÔN đọc câu trả lời TRƯỚC — loại của nó (người/nơi/thời gian/vật) cho bạn biết chính xác từ hỏi nào phù hợp. Đoán từ hỏi trước khi đọc câu trả lời là phí thời gian.</div>
+<h3>Ví dụ có lời giải</h3>
+<div class="out"><b>Hỏi:</b> おくには どちらですか。 <b>Đáp:</b> タイです。 (Bạn đến từ đâu? — Thái Lan.)<br>
+<b>Hỏi:</b> たんじょうびは いつですか。 <b>Đáp:</b> 3月です。 (Sinh nhật bạn khi nào? — Tháng 3.)</div>
+<a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">❓</span>
+  <span class="lc-body"><span class="lc-title">Luyện 6 từ để hỏi</span><span class="lc-sub">Luyện mẫu câu trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '5.4 — Particles を/に/で/へ|||5.4 — Trợ từ を/に/で/へ',
+          slug: 'jpd113-tro-tu-wo-ni-de-e',
+          type: 'VIDEO',
+          description: 'Đối tượng (を), thời điểm/điểm đến (に), phương tiện-địa điểm hành động (で), hướng đi (へ) — nền tảng bắt buộc trước chương động từ.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 5 · Lesson 5.4</span>
+<h2>Four particles that unlock every verb sentence</h2>
+<p class="lead">You already have は/の/も/が. These four particles mark the pieces of an action sentence — object, time/destination, place of action, and direction. You will use all four constantly once you start conjugating verbs in the next chapter.</p>
+<table>
+  <thead><tr><th>Particle</th><th>Marks</th><th>Example</th></tr></thead>
+  <tbody>
+    <tr><td>を (o)</td><td>the direct object — the thing acted on</td><td>パン<b>を</b> たべます。(eat bread)</td></tr>
+    <tr><td>に (ni)</td><td>a specific point in time, or a destination point</td><td>7時<b>に</b> おきます。(get up at 7); がっこう<b>に</b> いきます。(go to school)</td></tr>
+    <tr><td>で (de)</td><td>the place where an action happens, or the means/tool</td><td>としょかん<b>で</b> べんきょうします。(study at the library); バス<b>で</b> いきます。(go by bus)</td></tr>
+    <tr><td>へ (e)</td><td>direction of movement (read "e", written へ)</td><td>にほん<b>へ</b> いきます。(go to/toward Japan)</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">に and へ can both mark a destination with いきます/きます (がっこうに行きます = がっこうへ行きます), but only に marks a clock time (7時に) — へ never does. で never marks a destination, only the place an action happens or the tool used.</div>
+<div class="pitfall"><b>Trap:</b> を is written with the hiragana を but pronounced "o" (identical sound to お) — it exists ONLY as this object particle, never as a normal syllable in a word. If you see を in a sentence, it is always marking the object right before it.</div>
+<h3>Ví dụ có lời giải</h3>
+<div class="out"><b>Q:</b> まいにち としょかん＿べんきょうします。(Which particle — place of action)<br>
+<b>A:</b> で (としょかんで べんきょうします — study at the library every day.)<br><br>
+<b>Q:</b> あさ7時＿おきます。(Which particle — specific clock time)<br>
+<b>A:</b> に (7時に おきます — get up at 7 o'clock.)</div>
+<a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📖</span>
+  <span class="lc-body"><span class="lc-title">Drill を/に/で/へ</span><span class="lc-sub">Particle-choice practice on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 5 · Bài 5.4</span>
+<h2>Bốn trợ từ mở khoá mọi câu có động từ</h2>
+<p class="lead">Bạn đã có は/の/も/が. Bốn trợ từ này đánh dấu các thành phần của câu hành động — đối tượng, thời điểm/điểm đến, nơi hành động diễn ra, và hướng đi. Bạn sẽ dùng cả bốn liên tục ngay khi bắt đầu chia động từ ở chương sau.</p>
+<table>
+  <thead><tr><th>Trợ từ</th><th>Đánh dấu</th><th>Ví dụ</th></tr></thead>
+  <tbody>
+    <tr><td>を (o)</td><td>tân ngữ trực tiếp — vật bị tác động</td><td>パン<b>を</b> たべます。(ăn bánh mì)</td></tr>
+    <tr><td>に (ni)</td><td>mốc thời gian cụ thể, hoặc điểm đến</td><td>7時<b>に</b> おきます。(dậy lúc 7 giờ); がっこう<b>に</b> いきます。(đi đến trường)</td></tr>
+    <tr><td>で (de)</td><td>nơi hành động diễn ra, hoặc phương tiện/công cụ</td><td>としょかん<b>で</b> べんきょうします。(học ở thư viện); バス<b>で</b> いきます。(đi bằng xe buýt)</td></tr>
+    <tr><td>へ (e)</td><td>hướng di chuyển (đọc "e", viết へ)</td><td>にほん<b>へ</b> いきます。(đi về hướng/đến Nhật)</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">に và へ đều có thể đánh dấu điểm đến với いきます/きます (がっこうに行きます = がっこうへ行きます), nhưng chỉ に đánh dấu giờ đồng hồ (7時に) — へ không bao giờ làm việc này. で không bao giờ đánh dấu điểm đến, chỉ đánh dấu nơi hành động diễn ra hoặc công cụ dùng.</div>
+<div class="pitfall"><b>Bẫy:</b> を viết bằng hiragana を nhưng đọc "o" (âm giống hệt お) — nó chỉ tồn tại như trợ từ tân ngữ này, không bao giờ là âm tiết bình thường trong một từ. Nếu thấy を trong câu, nó luôn đánh dấu tân ngữ ngay trước nó.</div>
+<h3>Ví dụ có lời giải</h3>
+<div class="out"><b>Hỏi:</b> まいにち としょかん＿べんきょうします。(Trợ từ nào — nơi hành động)<br>
+<b>Đáp:</b> で (としょかんで べんきょうします — học ở thư viện mỗi ngày.)<br><br>
+<b>Hỏi:</b> あさ7時＿おきます。(Trợ từ nào — giờ cụ thể)<br>
+<b>Đáp:</b> に (7時に おきます — dậy lúc 7 giờ.)</div>
+<a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📖</span>
+  <span class="lc-body"><span class="lc-title">Luyện を/に/で/へ</span><span class="lc-sub">Bài tập chọn trợ từ trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+`,
+        },
       ],
     },
 
-    /* ══════════════════ CHƯƠNG 6 — KANJI & ĐỌC ══════════════════ */
+    /* ══════════════════ CHƯƠNG 6 — ĐỘNG TỪ ます-FORM ══════════════════ */
     {
-      title: 'Chapter 6 — Kanji & short reading|||Chương 6 — Kanji & đọc đoạn ngắn',
-      description: '35 chữ Hán cơ bản (âm on/kun, bộ thủ) và đọc đoạn văn sơ cấp.',
+      title: 'Chapter 6 — Verbs: the ます-form|||Chương 6 — Động từ: thể ます',
+      description: 'Mảng ngữ pháp lớn nhất bị test trong đề thi thật nhưng chưa từng có bài riêng — động từ lịch sự khẳng định/phủ định và cách ghép trợ từ đúng.',
       lessons: [
         {
-          title: '6.1 — Your first kanji|||6.1 — Những chữ Hán đầu tiên',
-          slug: 'jpd113-kanji',
+          title: '6.1 — The polite ます-form: affirmative & negative|||6.1 — Thể lịch sự ます: khẳng định & phủ định',
+          slug: 'jpd113-masu-form',
           type: 'VIDEO',
-          description: 'Kanji là gì, âm on/kun, số nét & bộ thủ; 35 chữ đầu (số, người, ngày…).',
+          description: 'ます (làm)/ません (không làm), động từ nhóm 3 します/きます, và cách học động từ như từ vựng ở trình độ này.',
           content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.1</span>
+<h2>Verbs: the polite ます-form</h2>
+<p class="lead">Every sentence you have built so far used です (to be). Now come <strong>action verbs</strong> — the single largest grammar area on the real exam, yet the syllabus never gave it its own lesson. At A1.1 level, treat each ます-form as a vocabulary item to memorise whole, the same way you memorised です sentences — the deeper conjugation rules (group 1/2/3 stems) come later at N5/N4.</p>
+<h3>Affirmative &amp; negative</h3>
+<table>
+  <thead><tr><th></th><th>Affirmative</th><th>Negative</th></tr></thead>
+  <tbody>
+    <tr><td>Pattern</td><td>verb stem + <b>ます</b></td><td>verb stem + <b>ません</b></td></tr>
+    <tr><td>go</td><td>いきます (ikimasu)</td><td>いきません (ikimasen)</td></tr>
+    <tr><td>eat</td><td>たべます (tabemasu)</td><td>たべません (tabemasen)</td></tr>
+    <tr><td>do</td><td>します (shimasu)</td><td>しません (shimasen)</td></tr>
+    <tr><td>come</td><td>きます (kimasu)</td><td>きません (kimasen)</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">します and きます are the two irregular "group 3" verbs — you will meet them constantly because they combine with nouns to build new verbs: べんきょう<b>します</b> (study), うんてん<b>します</b> (drive). Any noun + します = "to do [noun]".</div>
+<h3>Present tense = future too</h3>
+<div class="out">The ます-form covers BOTH habitual present and future — there is no separate future tense: まいにち べんきょうします。(I study every day.) / あした べんきょうします。(I will study tomorrow.)</div>
+<h3>Ví dụ có lời giải</h3>
+<div class="out"><b>Q:</b> あさごはんを たべますか。(Do you eat breakfast?)<br>
+<b>A (yes):</b> はい、たべます。 <b>A (no):</b> いいえ、たべません。<br><br>
+<b>Q:</b> にほんごを べんきょうしますか。(Do you study Japanese?)<br>
+<b>A:</b> はい、べんきょうします。</div>
+<div class="pitfall"><b>Trap:</b> か still works exactly as in Lesson 4.2 — just add it to a ます-form sentence to make a question, no word-order change. Don't confuse ません (verb negative) with じゃないです (です negative, Lesson 4.2) — they attach to different word types.</div>
+<a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📖</span>
+  <span class="lc-body"><span class="lc-title">Drill ます/ません</span><span class="lc-sub">Verb pattern practice on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 6 · Bài 6.1</span>
+<h2>Động từ: thể lịch sự ます</h2>
+<p class="lead">Mọi câu bạn xây từ đầu tới giờ đều dùng です (là/thì). Giờ đến <strong>động từ hành động</strong> — mảng ngữ pháp lớn nhất trong đề thi thật, nhưng syllabus chưa bao giờ dành riêng một bài. Ở trình độ A1.1, hãy coi mỗi động từ thể ます như một mục từ vựng học thuộc nguyên khối, giống cách bạn học câu です — quy tắc chia động từ sâu hơn (gốc động từ nhóm 1/2/3) sẽ học sau ở N5/N4.</p>
+<h3>Khẳng định &amp; phủ định</h3>
+<table>
+  <thead><tr><th></th><th>Khẳng định</th><th>Phủ định</th></tr></thead>
+  <tbody>
+    <tr><td>Mẫu</td><td>gốc động từ + <b>ます</b></td><td>gốc động từ + <b>ません</b></td></tr>
+    <tr><td>đi</td><td>いきます (ikimasu)</td><td>いきません (ikimasen)</td></tr>
+    <tr><td>ăn</td><td>たべます (tabemasu)</td><td>たべません (tabemasen)</td></tr>
+    <tr><td>làm</td><td>します (shimasu)</td><td>しません (shimasen)</td></tr>
+    <tr><td>đến</td><td>きます (kimasu)</td><td>きません (kimasen)</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">します và きます là hai động từ bất quy tắc "nhóm 3" — bạn sẽ gặp liên tục vì chúng ghép với danh từ để tạo động từ mới: べんきょう<b>します</b> (học), うんてん<b>します</b> (lái xe). Danh từ bất kỳ + します = "làm [danh từ]".</div>
+<h3>Hiện tại = cả tương lai</h3>
+<div class="out">Thể ます phủ CẢ hiện tại thường xuyên lẫn tương lai — không có thì tương lai riêng: まいにち べんきょうします。(Tôi học mỗi ngày.) / あした べんきょうします。(Ngày mai tôi sẽ học.)</div>
+<h3>Ví dụ có lời giải</h3>
+<div class="out"><b>Hỏi:</b> あさごはんを たべますか。(Bạn có ăn sáng không?)<br>
+<b>Đáp (có):</b> はい、たべます。 <b>Đáp (không):</b> いいえ、たべません。<br><br>
+<b>Hỏi:</b> にほんごを べんきょうしますか。(Bạn có học tiếng Nhật không?)<br>
+<b>Đáp:</b> はい、べんきょうします。</div>
+<div class="pitfall"><b>Bẫy:</b> か vẫn hoạt động y hệt như Bài 4.2 — chỉ cần thêm vào câu thể ます để thành câu hỏi, không đổi trật tự từ. Đừng nhầm ません (phủ định động từ) với じゃないです (phủ định です, Bài 4.2) — chúng gắn vào loại từ khác nhau.</div>
+<a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📖</span>
+  <span class="lc-body"><span class="lc-title">Luyện ます/ません</span><span class="lc-sub">Bài tập mẫu động từ trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '6.2 — Common verbs & the right particle|||6.2 — Động từ thường gặp & ghép đúng trợ từ',
+          slug: 'jpd113-dong-tu-thuong-gap',
+          type: 'VIDEO',
+          description: 'Bảng tần suất thật từ 420 câu FE + cách ghép を/に/で/へ đúng với từng động từ.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 6 · Lesson 6.2</span>
+<h2>The verbs that actually appear on the exam</h2>
+<p class="lead">Counted across 420 real FE questions — this is exactly where to spend your memorisation time, ranked by frequency. Learn each verb <em>together with</em> its usual particle; that pairing is what the exam tests.</p>
+<table>
+  <thead><tr><th>Verb</th><th>Meaning</th><th>Usual particle pattern</th><th>Exam count</th></tr></thead>
+  <tbody>
+    <tr><td>いきます</td><td>go</td><td>[place]へ/に いきます</td><td>43</td></tr>
+    <tr><td>たべます</td><td>eat</td><td>[food]を たべます</td><td>29</td></tr>
+    <tr><td>かいます</td><td>buy</td><td>[thing]を かいます</td><td>23</td></tr>
+    <tr><td>べんきょうします</td><td>study</td><td>[subject]を べんきょうします</td><td>18</td></tr>
+    <tr><td>よみます</td><td>read</td><td>[thing]を よみます</td><td>14</td></tr>
+    <tr><td>おきます</td><td>get up</td><td>[time]に おきます</td><td>13</td></tr>
+    <tr><td>ききます</td><td>listen/ask</td><td>[thing]を ききます</td><td>12</td></tr>
+    <tr><td>はたらきます</td><td>work</td><td>[place]で はたらきます</td><td>11</td></tr>
+    <tr><td>のみます</td><td>drink</td><td>[thing]を のみます</td><td>10</td></tr>
+    <tr><td>かえります</td><td>go home/return</td><td>[place]へ/に かえります</td><td>6</td></tr>
+    <tr><td>みます / します / かります</td><td>watch / do / borrow</td><td>を みます・します・かります</td><td>less frequent, still worth knowing</td></tr>
+  </tbody>
+</table>
+<h3>Ví dụ có lời giải · A daily-routine paragraph</h3>
+<div class="out">まいあさ 7時に おきます。がっこうへ いきます。としょかんで べんきょうします。ひるごはんを たべます。うちへ かえります。<br>
+= Every morning I get up at 7. I go to school. I study at the library. I eat lunch. I go home.</div>
+<div class="callout"><span class="badge">★ Exam tip</span> Fill-in-the-blank particle questions almost always pair one of these verbs with the wrong particle as a distractor (e.g. がっこう<b>を</b> いきます instead of がっこう<b>へ</b> いきます). Memorise the verb+particle PAIR from the table above, not the verb alone.</div>
+<a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">🎯</span>
+  <span class="lc-body"><span class="lc-title">Drill verbs + particles together</span><span class="lc-sub">Ranked by real exam frequency, on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 6 · Bài 6.2</span>
+<h2>Những động từ THẬT SỰ xuất hiện trong đề thi</h2>
+<p class="lead">Đếm được từ 420 câu FE thật — đây chính xác là nơi nên dành thời gian học thuộc, xếp theo tần suất. Học mỗi động từ <em>cùng với</em> trợ từ thường đi kèm — sự ghép cặp đó là thứ đề thi kiểm tra.</p>
+<table>
+  <thead><tr><th>Động từ</th><th>Nghĩa</th><th>Mẫu trợ từ thường dùng</th><th>Số lần trong đề</th></tr></thead>
+  <tbody>
+    <tr><td>いきます</td><td>đi</td><td>[nơi]へ/に いきます</td><td>43</td></tr>
+    <tr><td>たべます</td><td>ăn</td><td>[món]を たべます</td><td>29</td></tr>
+    <tr><td>かいます</td><td>mua</td><td>[vật]を かいます</td><td>23</td></tr>
+    <tr><td>べんきょうします</td><td>học</td><td>[môn]を べんきょうします</td><td>18</td></tr>
+    <tr><td>よみます</td><td>đọc</td><td>[vật]を よみます</td><td>14</td></tr>
+    <tr><td>おきます</td><td>dậy</td><td>[giờ]に おきます</td><td>13</td></tr>
+    <tr><td>ききます</td><td>nghe/hỏi</td><td>[vật]を ききます</td><td>12</td></tr>
+    <tr><td>はたらきます</td><td>làm việc</td><td>[nơi]で はたらきます</td><td>11</td></tr>
+    <tr><td>のみます</td><td>uống</td><td>[vật]を のみます</td><td>10</td></tr>
+    <tr><td>かえります</td><td>về nhà/quay lại</td><td>[nơi]へ/に かえります</td><td>6</td></tr>
+    <tr><td>みます / します / かります</td><td>xem / làm / mượn</td><td>を みます・します・かります</td><td>ít hơn, vẫn nên biết</td></tr>
+  </tbody>
+</table>
+<h3>Ví dụ có lời giải · Đoạn văn sinh hoạt hằng ngày</h3>
+<div class="out">まいあさ 7時に おきます。がっこうへ いきます。としょかんで べんきょうします。ひるごはんを たべます。うちへ かえります。<br>
+= Mỗi sáng tôi dậy lúc 7 giờ. Tôi đi đến trường. Tôi học ở thư viện. Tôi ăn trưa. Tôi về nhà.</div>
+<div class="callout"><span class="badge">★ Mẹo thi</span> Câu điền chỗ trống trợ từ gần như luôn ghép một trong các động từ này với trợ từ SAI làm phương án gây nhiễu (vd. がっこう<b>を</b> いきます thay vì がっこう<b>へ</b> いきます). Học thuộc CẶP động từ+trợ từ trong bảng trên, không học động từ riêng lẻ.</div>
+<a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">🎯</span>
+  <span class="lc-body"><span class="lc-title">Luyện động từ + trợ từ cùng nhau</span><span class="lc-sub">Xếp theo tần suất đề thi thật, trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: 'Quiz 3 — Verbs|||Quiz 3 — Động từ',
+          slug: 'jpd113-quiz-dong-tu',
+          type: 'QUIZ',
+          description: 'Kiểm tra thể ます/ません và ghép trợ từ đúng với động từ.',
+          quiz: {
+            timeLimitSeconds: 300,
+            questions: [
+              { question: 'The negative of たべます (eat) is…|||Phủ định của たべます (ăn) là…', options: ['たべません', 'たべないです', 'たべじゃない', 'たべんです'], correctIndex: 0, points: 1 },
+              { question: '"To study" as a します-compound is…|||"Học" ghép với します là…', options: ['べんきょうします', 'がくせいします', 'にほんごします', 'ほんします'], correctIndex: 0, points: 1 },
+              { question: 'がっこう＿いきます (go TO school) needs…|||がっこう＿いきます (đi ĐẾN trường) cần…', options: ['を', 'へ hoặc に', 'で', 'が'], correctIndex: 1, points: 1 },
+              { question: 'としょかん＿べんきょうします (study AT the library) needs…|||としょかん＿べんきょうします (học Ở thư viện) cần…', options: ['へ', 'を', 'で', 'と'], correctIndex: 2, points: 1 },
+              { question: '7時＿おきます (get up AT 7:00) needs…|||7時＿おきます (dậy LÚC 7 giờ) cần…', options: ['で', 'へ', 'に', 'を'], correctIndex: 2, points: 1 },
+              { question: 'ジュース＿のみます (drink juice) needs…|||ジュース＿のみます (uống nước ép) cần…', options: ['を', 'に', 'で', 'へ'], correctIndex: 0, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+
+    /* ══════════════════ CHƯƠNG 7 — KANJI & ĐỌC ══════════════════ */
+    {
+      title: 'Chapter 7 — Kanji & short reading|||Chương 7 — Kanji & đọc đoạn ngắn',
+      description: '35 chữ Hán cơ bản (âm on/kun, bộ thủ) và đọc đoạn văn sơ cấp.',
+      lessons: [
+        {
+          title: '7.1 — Your first kanji|||7.1 — Những chữ Hán đầu tiên',
+          slug: 'jpd113-kanji',
+          type: 'VIDEO',
+          description: 'Kanji là gì, âm on/kun, số nét & bộ thủ; 5 chữ nền tảng (số, người, ngày, sách, học).',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 7 · Lesson 7.1</span>
 <h2>Your first kanji</h2>
 <p class="lead">Kanji are characters borrowed from Chinese, each carrying meaning. A1.1 introduces about 35 of the most common. Unlike kana, a kanji can have several readings: an <em>on</em> reading (from Chinese) and a <em>kun</em> reading (native Japanese).</p>
 <table>
@@ -840,7 +1406,7 @@ watashi wa An desu.
 </a>
 </div>
 <div class="ml-vi">
-<span class="eyebrow">Chương 6 · Bài 6.1</span>
+<span class="eyebrow">Chương 7 · Bài 7.1</span>
 <h2>Những chữ Hán đầu tiên</h2>
 <p class="lead">Kanji là các chữ mượn từ tiếng Trung, mỗi chữ mang một ý nghĩa. A1.1 giới thiệu khoảng 35 chữ phổ biến nhất. Khác kana, một kanji có thể có nhiều cách đọc: âm <em>on</em> (từ tiếng Hán) và âm <em>kun</em> (thuần Nhật).</p>
 <table>
@@ -858,6 +1424,164 @@ watashi wa An desu.
 <a class="link-card codelab" href="/language/ja/hanzi?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
   <span class="lc-ico">🖌️</span>
   <span class="lc-body"><span class="lc-title">Luyện viết kanji</span><span class="lc-sub">Thứ tự nét động &amp; SRS trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '7.2 — Number & time kanji|||7.2 — Kanji số & thời gian',
+          slug: 'jpd113-kanji-so-thoi-gian',
+          type: 'VIDEO',
+          description: '四五六七八九十百千万 (số) + 時分間何 — nhóm kanji tần suất cao nhất trong đề thi thật, cùng 曜 đã học ở Bài 3.5.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 7 · Lesson 7.2</span>
+<h2>Number &amp; time kanji</h2>
+<p class="lead">You already read 一二三 (Lesson 7.1). Complete the 1–10 set, add the big counting units, and learn the four kanji behind every time expression — together these cover the densest kanji cluster on the real exam.</p>
+<h3>Completing 1–10 &amp; the big units</h3>
+<table>
+  <thead><tr><th>四</th><th>五</th><th>六</th><th>七</th><th>八</th><th>九</th><th>十</th><th>百</th><th>千</th><th>万</th></tr></thead>
+  <tbody>
+    <tr><td>four</td><td>five</td><td>six</td><td>seven</td><td>eight</td><td>nine</td><td>ten</td><td>hundred</td><td>thousand</td><td>ten-thousand</td></tr>
+    <tr><td>し/よん</td><td>ご</td><td>ろく</td><td>しち/なな</td><td>はち</td><td>きゅう/く</td><td>じゅう</td><td>ひゃく</td><td>せん</td><td>まん</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">四, 七 and 九 each have TWO common readings, and the "correct" one depends on context (し・しち・く are the on-readings used for months, よん・なな・きゅう are usually used for standalone counting) — you already met this irregularity for months in Lesson 3.4 (4月=しがつ, 7月=しちがつ, 9月=くがつ).</div>
+<h3>Time kanji — 時・分・間・何</h3>
+<table>
+  <thead><tr><th>Kanji</th><th>Meaning</th><th>Reading</th><th>Example</th></tr></thead>
+  <tbody>
+    <tr><td>時</td><td>hour, o'clock</td><td>じ / とき</td><td>3時 = さんじ</td></tr>
+    <tr><td>分</td><td>minute</td><td>ふん / ぷん</td><td>3分 = さんぷん</td></tr>
+    <tr><td>間</td><td>interval, between</td><td>かん / あいだ</td><td>時間 = じかん (time, duration)</td></tr>
+    <tr><td>何</td><td>what/how many</td><td>なに / なん</td><td>何時 = なんじ (what time)</td></tr>
+  </tbody>
+</table>
+<div class="callout"><span class="badge">★ Exam frequency</span> Among 420 real FE questions: <b>時 appears 66 times</b> (2nd most frequent kanji overall) and <b>何 appears 57 times</b> — both nearly always inside a compound like 何時/何曜日/何歳/何人. Recognising 何+[counter] as a single question-chunk is faster than reading kanji-by-kanji.</div>
+<h3>Already-met kanji from Lesson 3.5</h3>
+<div class="out">月・火・水・木・金・土・日 + 曜 (the seven day-of-week kanji plus 曜) were already introduced in Lesson 3.5 as whole words — you can now recognise each one individually: 月=moon/month, 火=fire, 水=water, 木=wood, 金=gold/money, 土=earth, 日=sun/day.</div>
+<h3>Ví dụ có lời giải</h3>
+<div class="out"><b>Q:</b> 一週間は何日ですか。(How many days in a week?)<br>
+<b>A:</b> 七日です。(Seven days.)<br><br>
+<b>Q:</b> 今、何時何分ですか。(What time is it right now?)<br>
+<b>A:</b> 九時十五分です。(9:15.)</div>
+<a class="link-card codelab" href="/language/ja/hanzi?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">🖌️</span>
+  <span class="lc-body"><span class="lc-title">Practise number & time kanji</span><span class="lc-sub">Stroke order & SRS on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 7 · Bài 7.2</span>
+<h2>Kanji số & thời gian</h2>
+<p class="lead">Bạn đã đọc được 一二三 (Bài 7.1). Hoàn thiện bộ 1–10, thêm các đơn vị đếm lớn, và học 4 kanji đứng sau mọi cách diễn đạt thời gian — cùng nhau chúng là cụm kanji dày đặc nhất trong đề thi thật.</p>
+<h3>Hoàn thiện 1–10 & đơn vị lớn</h3>
+<table>
+  <thead><tr><th>四</th><th>五</th><th>六</th><th>七</th><th>八</th><th>九</th><th>十</th><th>百</th><th>千</th><th>万</th></tr></thead>
+  <tbody>
+    <tr><td>bốn</td><td>năm</td><td>sáu</td><td>bảy</td><td>tám</td><td>chín</td><td>mười</td><td>trăm</td><td>nghìn</td><td>vạn (10.000)</td></tr>
+    <tr><td>し/よん</td><td>ご</td><td>ろく</td><td>しち/なな</td><td>はち</td><td>きゅう/く</td><td>じゅう</td><td>ひゃく</td><td>せん</td><td>まん</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">四, 七, 九 mỗi chữ có HAI cách đọc phổ biến, và cách đọc "đúng" phụ thuộc ngữ cảnh (し・しち・く là âm on dùng cho tháng, よん・なな・きゅう thường dùng khi đếm độc lập) — bạn đã gặp bất quy tắc này với tháng ở Bài 3.4 (4月=しがつ, 7月=しちがつ, 9月=くがつ).</div>
+<h3>Kanji thời gian — 時・分・間・何</h3>
+<table>
+  <thead><tr><th>Kanji</th><th>Nghĩa</th><th>Cách đọc</th><th>Ví dụ</th></tr></thead>
+  <tbody>
+    <tr><td>時</td><td>giờ</td><td>じ / とき</td><td>3時 = さんじ</td></tr>
+    <tr><td>分</td><td>phút</td><td>ふん / ぷん</td><td>3分 = さんぷん</td></tr>
+    <tr><td>間</td><td>khoảng, giữa</td><td>かん / あいだ</td><td>時間 = じかん (thời gian, khoảng thời gian)</td></tr>
+    <tr><td>何</td><td>gì/bao nhiêu</td><td>なに / なん</td><td>何時 = なんじ (mấy giờ)</td></tr>
+  </tbody>
+</table>
+<div class="callout"><span class="badge">★ Tần suất trong đề thi</span> Trong 420 câu FE thật: <b>時 xuất hiện 66 lần</b> (kanji nhiều thứ 2 toàn đề) và <b>何 xuất hiện 57 lần</b> — gần như luôn nằm trong cụm như 何時/何曜日/何歳/何人. Nhận diện 何+[trợ số từ] như MỘT cụm hỏi duy nhất nhanh hơn đọc từng kanji riêng lẻ.</div>
+<h3>Kanji đã gặp ở Bài 3.5</h3>
+<div class="out">月・火・水・木・金・土・日 + 曜 (bảy kanji ngày trong tuần cộng 曜) đã được giới thiệu ở Bài 3.5 dưới dạng từ trọn vẹn — giờ bạn có thể nhận ra từng chữ riêng lẻ: 月=mặt trăng/tháng, 火=lửa, 水=nước, 木=gỗ/cây, 金=vàng/tiền, 土=đất, 日=mặt trời/ngày.</div>
+<h3>Ví dụ có lời giải</h3>
+<div class="out"><b>Hỏi:</b> 一週間は何日ですか。(Một tuần có mấy ngày?)<br>
+<b>Đáp:</b> 七日です。(Bảy ngày.)<br><br>
+<b>Hỏi:</b> 今、何時何分ですか。(Bây giờ là mấy giờ mấy phút?)<br>
+<b>Đáp:</b> 九時十五分です。(9 giờ 15 phút.)</div>
+<a class="link-card codelab" href="/language/ja/hanzi?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">🖌️</span>
+  <span class="lc-body"><span class="lc-title">Luyện kanji số & thời gian</span><span class="lc-sub">Thứ tự nét & SRS trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '7.3 — People, school & everyday life kanji|||7.3 — Kanji người, trường học & đời sống',
+          slug: 'jpd113-kanji-nguoi-truong-hoc',
+          type: 'VIDEO',
+          description: '私生校語先食円才 + 田中誕字性 — nhóm kanji cuối để đạt ~35 chữ, ưu tiên đúng theo tần suất thật.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 7 · Lesson 7.3</span>
+<h2>People, school &amp; everyday life kanji</h2>
+<p class="lead">The last group completes your ~35-kanji target for A1.1 — chosen strictly by how often they actually appear on real exam papers, not by textbook tradition.</p>
+<table>
+  <thead><tr><th>Kanji</th><th>Meaning</th><th>Reading</th><th>Example</th><th>Exam count</th></tr></thead>
+  <tbody>
+    <tr><td>私</td><td>I, me</td><td>わたし</td><td>私は学生です。</td><td>86 (#1 overall!)</td></tr>
+    <tr><td>生</td><td>life, birth, raw</td><td>せい / なま / う-</td><td>学生 (student), 誕生日 (birthday)</td><td>38</td></tr>
+    <tr><td>才</td><td>years old (age counter)</td><td>さい</td><td>18才 = じゅうはっさい</td><td>36</td></tr>
+    <tr><td>円</td><td>yen, circle</td><td>えん</td><td>1000円</td><td>29</td></tr>
+    <tr><td>語</td><td>language</td><td>ご</td><td>日本語 (Japanese), 英語 (English)</td><td>14</td></tr>
+    <tr><td>校</td><td>school</td><td>こう</td><td>学校 (school)</td><td>13</td></tr>
+    <tr><td>食</td><td>eat, food</td><td>しょく / た-</td><td>食べます (eat), 食堂 (canteen)</td><td>12</td></tr>
+    <tr><td>間</td><td>(review, Lesson 7.2)</td><td>かん / あいだ</td><td>時間, 一週間</td><td>11</td></tr>
+    <tr><td>田 / 中</td><td>rice field / middle, inside</td><td>た / ちゅう・なか</td><td>田中さん (surname Tanaka), 中国 (China)</td><td>5 each</td></tr>
+    <tr><td>誕</td><td>birth</td><td>たん</td><td>誕生日 (たんじょうび, birthday)</td><td>4</td></tr>
+    <tr><td>先</td><td>previous, ahead</td><td>せん</td><td>先生 (せんせい, teacher)</td><td>4</td></tr>
+    <tr><td>字</td><td>character, letter</td><td>じ</td><td>漢字 (kanji), 名字 (surname)</td><td>4</td></tr>
+    <tr><td>性</td><td>nature, gender</td><td>せい</td><td>男性 (male), 女性 (female)</td><td>4</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">先生 (せんせい) is built from 先 (ahead/before) + 生 (life) — "one born before you", i.e. teacher. This is a good example of how two kanji you already know combine into a brand-new meaning.</div>
+<h3>Ví dụ có lời giải · A short self-introduction paragraph, in kanji</h3>
+<div class="out">私は アンです。18才です。ベトナムの学生です。日本語学校で勉強します。誕生日は8月です。<br>
+= I am An. I am 18 years old. I am a Vietnamese student. I study at a Japanese-language school. My birthday is in August.</div>
+<div class="callout"><span class="badge">★ Exam frequency</span> 私 is the single MOST frequent kanji across all 420 real FE questions (86 times) — nearly every dialogue starts with 私は. If you learn only one kanji perfectly before the exam, make it this one.</div>
+<div class="pitfall"><b>Watch:</b> 生 has three different readings depending on the compound — がくせい (student), たんじょうび uses 生 read しょう inside 誕生, and なまビール (draft beer) reads it なま. Always learn 生 <em>inside its compound word</em>, never alone.</div>
+<a class="link-card codelab" href="/language/ja/hanzi?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">🖌️</span>
+  <span class="lc-body"><span class="lc-title">Practise the final kanji set</span><span class="lc-sub">Stroke order & SRS on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 7 · Bài 7.3</span>
+<h2>Kanji người, trường học & đời sống</h2>
+<p class="lead">Nhóm cuối hoàn thành mục tiêu ~35 kanji của A1.1 — chọn nghiêm ngặt theo tần suất xuất hiện thật trong đề thi, không theo truyền thống giáo trình.</p>
+<table>
+  <thead><tr><th>Kanji</th><th>Nghĩa</th><th>Cách đọc</th><th>Ví dụ</th><th>Số lần trong đề</th></tr></thead>
+  <tbody>
+    <tr><td>私</td><td>tôi</td><td>わたし</td><td>私は学生です。</td><td>86 (#1 toàn đề!)</td></tr>
+    <tr><td>生</td><td>sự sống, sinh, sống/tươi</td><td>せい / なま / う-</td><td>学生 (sinh viên), 誕生日 (sinh nhật)</td><td>38</td></tr>
+    <tr><td>才</td><td>tuổi (trợ số từ)</td><td>さい</td><td>18才 = じゅうはっさい</td><td>36</td></tr>
+    <tr><td>円</td><td>yên (tiền), vòng tròn</td><td>えん</td><td>1000円</td><td>29</td></tr>
+    <tr><td>語</td><td>ngôn ngữ</td><td>ご</td><td>日本語 (tiếng Nhật), 英語 (tiếng Anh)</td><td>14</td></tr>
+    <tr><td>校</td><td>trường học</td><td>こう</td><td>学校 (trường học)</td><td>13</td></tr>
+    <tr><td>食</td><td>ăn, thức ăn</td><td>しょく / た-</td><td>食べます (ăn), 食堂 (căng-tin)</td><td>12</td></tr>
+    <tr><td>間</td><td>(ôn lại, Bài 7.2)</td><td>かん / あいだ</td><td>時間, 一週間</td><td>11</td></tr>
+    <tr><td>田 / 中</td><td>ruộng / giữa, trong</td><td>た / ちゅう・なか</td><td>田中さん (họ Tanaka), 中国 (Trung Quốc)</td><td>5 mỗi chữ</td></tr>
+    <tr><td>誕</td><td>sinh</td><td>たん</td><td>誕生日 (たんじょうび, sinh nhật)</td><td>4</td></tr>
+    <tr><td>先</td><td>trước, phía trước</td><td>せん</td><td>先生 (せんせい, giáo viên)</td><td>4</td></tr>
+    <tr><td>字</td><td>chữ, ký tự</td><td>じ</td><td>漢字 (kanji), 名字 (họ)</td><td>4</td></tr>
+    <tr><td>性</td><td>bản chất, giới tính</td><td>せい</td><td>男性 (nam giới), 女性 (nữ giới)</td><td>4</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">先生 (せんせい) ghép từ 先 (trước) + 生 (sự sống) — "người sinh ra trước bạn", tức giáo viên. Đây là ví dụ tốt về cách hai kanji đã biết ghép thành một nghĩa hoàn toàn mới.</div>
+<h3>Ví dụ có lời giải · Đoạn tự giới thiệu ngắn, bằng kanji</h3>
+<div class="out">私は アンです。18才です。ベトナムの学生です。日本語学校で勉強します。誕生日は8月です。<br>
+= Tôi là An. Tôi 18 tuổi. Tôi là sinh viên Việt Nam. Tôi học ở trường tiếng Nhật. Sinh nhật tôi vào tháng 8.</div>
+<div class="callout"><span class="badge">★ Tần suất trong đề thi</span> 私 là kanji xuất hiện NHIỀU NHẤT trong toàn bộ 420 câu FE thật (86 lần) — gần như mọi đoạn hội thoại đều bắt đầu bằng 私は. Nếu chỉ học thuộc thật kỹ một kanji trước khi thi, hãy chọn chữ này.</div>
+<div class="pitfall"><b>Chú ý:</b> 生 có ba cách đọc khác nhau tuỳ từ ghép — がくせい (sinh viên), たんじょうび dùng 生 đọc しょう trong 誕生, và なまビール (bia tươi) đọc là なま. Luôn học 生 <em>trong từ ghép của nó</em>, không bao giờ học lẻ.</div>
+<a class="link-card codelab" href="/language/ja/hanzi?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">🖌️</span>
+  <span class="lc-body"><span class="lc-title">Luyện bộ kanji cuối</span><span class="lc-sub">Thứ tự nét & SRS trên My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
 </div>

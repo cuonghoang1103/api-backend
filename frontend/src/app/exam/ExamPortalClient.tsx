@@ -48,6 +48,44 @@ interface QBookmark {
 type Tab = 'browse' | 'history' | 'notebook';
 const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
+// ── Category classification ─────────────────────────────────────────────
+// Reading & Speaking are not separate backend `kind` values (Reading is a
+// regular kind:'FE' MCQ exam whose `code` starts with "READ-" so it reuses
+// the existing auto-grade pipeline unchanged; Speaking is kind:'PE' with
+// peType:'SPEAK', already a real distinct value) — these helpers derive the
+// UI-facing category so Reading/Speaking get their own filter tab & badge
+// without touching grading/taking logic at all.
+type Category = 'FE' | 'PE' | 'READING' | 'SPEAKING';
+const FILTERS = ['ALL', 'FE', 'PE', 'READING', 'SPEAKING'] as const;
+type Filter = (typeof FILTERS)[number];
+
+function examCategory(e: { kind: string; peType?: string | null; code?: string | null }): Category {
+  if (e.peType === 'SPEAK') return 'SPEAKING';
+  if (e.kind === 'FE' && (e.code || '').toUpperCase().startsWith('READ-')) return 'READING';
+  return e.kind === 'FE' ? 'FE' : 'PE';
+}
+
+function examBadgeClass(e: { kind: string; peType?: string | null; code?: string | null }): string {
+  const cat = examCategory(e);
+  if (cat === 'READING') return 'exam-badge-reading';
+  if (cat === 'SPEAKING') return 'exam-badge-speaking';
+  return cat === 'FE' ? 'exam-badge-fe' : 'exam-badge-pe';
+}
+
+function examBadgeLabel(e: { kind: string; peType?: string | null; code?: string | null }, isVi: boolean): string {
+  const cat = examCategory(e);
+  if (cat === 'READING') return isVi ? 'Đọc' : 'Reading';
+  if (cat === 'SPEAKING') return isVi ? 'Nói' : 'Speaking';
+  return cat === 'FE' ? 'FE' : `PE·${e.peType}`;
+}
+
+function filterLabel(f: Filter, isVi: boolean): string {
+  if (f === 'ALL') return isVi ? 'Tất cả' : 'All';
+  if (f === 'READING') return isVi ? 'Đọc' : 'Reading';
+  if (f === 'SPEAKING') return isVi ? 'Nói' : 'Speaking';
+  return f;
+}
+
 export default function ExamPortalClient() {
   const [L, setL] = useState<'en' | 'vi'>('en'); // exams default to English
   const isVi = L === 'vi';
@@ -60,17 +98,18 @@ export default function ExamPortalClient() {
   const [bmIds, setBmIds] = useState<Set<number>>(new Set());
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState<'ALL' | 'FE' | 'PE'>('ALL');
+  const [filter, setFilter] = useState<Filter>('ALL');
 
-  // Deep-link support: /exam?course=JPD113&kind=FE pre-fills the search box
-  // (matches course.courseCode via the existing filter below) and the FE/PE
-  // chip, so an "open in Exam Room" link from Academy lands pre-filtered.
+  // Deep-link support: /exam?course=JPD113&kind=READING pre-fills the search
+  // box (matches course.courseCode via the existing filter below) and the
+  // category chip, so an "open in Exam Room" link from Academy lands
+  // pre-filtered.
   const searchParams = useSearchParams();
   useEffect(() => {
     const course = searchParams.get('course');
     const kind = searchParams.get('kind');
     if (course) setQuery(course);
-    if (kind === 'FE' || kind === 'PE') setFilter(kind);
+    if (kind && (FILTERS as readonly string[]).includes(kind)) setFilter(kind as Filter);
   }, [searchParams]);
 
   const reloadBookmarks = useCallback(() => {
@@ -123,7 +162,7 @@ export default function ExamPortalClient() {
   const filtered = useMemo(() => {
     const qy = query.trim().toLowerCase();
     return exams.filter((e) => {
-      if (filter !== 'ALL' && e.kind !== filter) return false;
+      if (filter !== 'ALL' && examCategory(e) !== filter) return false;
       if (!qy) return true;
       return [e.title, e.course?.title, e.course?.courseCode, e.code].filter(Boolean).some((s) => String(s).toLowerCase().includes(qy));
     });
@@ -193,7 +232,7 @@ function BrowseTab({ loading, groups, L, isVi, query, setQuery, filter, setFilte
   loading: boolean;
   groups: { name: string; ordinal: number; courses: { title: string; slug: string; code: string | null; exams: ExamPortalItem[] }[] }[];
   L: 'en' | 'vi'; isVi: boolean; query: string; setQuery: (v: string) => void;
-  filter: 'ALL' | 'FE' | 'PE'; setFilter: (f: 'ALL' | 'FE' | 'PE') => void;
+  filter: Filter; setFilter: (f: Filter) => void;
   bmIds: Set<number>; onToggleBm: (id: number) => void;
 }) {
   return (
@@ -204,10 +243,10 @@ function BrowseTab({ loading, groups, L, isVi, query, setQuery, filter, setFilte
           <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={isVi ? 'Tìm môn, mã môn, đề…' : 'Search course, code, exam…'}
             className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] outline-none focus:border-[var(--exam-accent)]" />
         </div>
-        <div className="flex gap-2">
-          {(['ALL', 'FE', 'PE'] as const).map((f) => (
+        <div className="flex gap-2 flex-wrap">
+          {FILTERS.map((f) => (
             <button key={f} onClick={() => setFilter(f)} className={`px-4 py-2.5 rounded-xl text-sm font-semibold border ${filter === f ? 'text-white border-transparent' : 'border-[var(--border-color)] text-text-secondary'}`}
-              style={filter === f ? { background: 'linear-gradient(135deg, var(--exam-accent), var(--exam-accent-2))' } : {}}>{f === 'ALL' ? (isVi ? 'Tất cả' : 'All') : f}</button>
+              style={filter === f ? { background: 'linear-gradient(135deg, var(--exam-accent), var(--exam-accent-2))' } : {}}>{filterLabel(f, isVi)}</button>
           ))}
         </div>
       </div>
@@ -234,7 +273,7 @@ function BrowseTab({ loading, groups, L, isVi, query, setQuery, filter, setFilte
                           <Link href={`/exam/${e.id}`} className="flex items-center justify-between gap-3 min-w-0 flex-1">
                             <div className="min-w-0">
                               <div className="flex items-center gap-2 mb-1">
-                                <span className={`exam-badge ${e.kind === 'FE' ? 'exam-badge-fe' : 'exam-badge-pe'}`}>{e.kind === 'FE' ? 'FE' : `PE·${e.peType}`}</span>
+                                <span className={`exam-badge ${examBadgeClass(e)}`}>{examBadgeLabel(e, isVi)}</span>
                                 {e.code && <span className="text-[11px] text-text-muted">{e.code}</span>}
                               </div>
                               <div className="text-sm font-medium truncate">{pickLang(e.title, L)}</div>
@@ -276,7 +315,7 @@ function HistoryTab({ attempts, L, isVi, bmIds, onToggleBm, onDelete }: {
         return (
           <div key={a.id} className="exam-card p-4">
             <div className="flex items-center gap-2 flex-wrap mb-2">
-              <span className={`exam-badge ${a.exam.kind === 'FE' ? 'exam-badge-fe' : 'exam-badge-pe'}`}>{a.exam.kind === 'FE' ? 'FE' : `PE·${a.exam.peType}`}</span>
+              <span className={`exam-badge ${examBadgeClass(a.exam)}`}>{examBadgeLabel(a.exam, isVi)}</span>
               {a.exam.course?.courseCode && <span className="exam-badge" style={{ background: 'var(--bg-surface)', color: 'var(--text-secondary)' }}>{a.exam.course.courseCode}</span>}
               {a.exam.semester && <span className="text-[11px] text-text-muted">{a.exam.semester.name}</span>}
               {a.exam.code && <span className="text-[11px] text-text-muted">· {a.exam.code}</span>}
@@ -346,7 +385,7 @@ function NotebookTab({ examBms, qBms, L, isVi, onRemoveExam, onRemoveQ, onSaveNo
               <div key={b.id} className="flex items-center gap-2 p-3 rounded-xl border border-[var(--border-color)] exam-card">
                 <Link href={`/exam/${b.examId}`} className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className={`exam-badge ${b.exam.kind === 'FE' ? 'exam-badge-fe' : 'exam-badge-pe'}`}>{b.exam.kind === 'FE' ? 'FE' : `PE·${b.exam.peType}`}</span>
+                    <span className={`exam-badge ${examBadgeClass(b.exam)}`}>{examBadgeLabel(b.exam, isVi)}</span>
                     {b.course?.courseCode && <span className="text-[11px] text-text-muted">{b.course.courseCode}</span>}
                     {b.semester && <span className="text-[11px] text-text-muted">· {b.semester.name}</span>}
                   </div>

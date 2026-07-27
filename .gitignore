@@ -111,3 +111,10 @@ scratch/
 # UI/UX Pro Max skill (uipro) — dev tooling, per-machine, not app code
 .claude/skills/
 content/exams/_work/
+
+# Local AI tooling (Claude Code settings, vendored skills, skill lockfile).
+# Machine-specific — settings.local.json holds per-machine permissions/paths,
+# and .agents/.claude/skills are re-fetched by the tooling itself.
+.claude/
+.agents/
+skills-lock.json

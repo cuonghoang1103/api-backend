@@ -15,6 +15,7 @@ import s06 from './nodejs/s06-rest.mjs';
 import s07 from './nodejs/s07-prisma.mjs';
 import s08 from './nodejs/s08-auth.mjs';
 import s09 from './nodejs/s09-security.mjs';
+import s10 from './nodejs/s10-upload.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -45,5 +46,6 @@ export default {
     s07,
     s08,
     s09,
+    s10,
   ],
 };

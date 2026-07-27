@@ -395,6 +395,29 @@ else
  echo "$ACADEMY_SEED_OUT" | tail -6 | sed 's/^/ /'
 fi
 
+# ── Step 3.12b: CuongThai general course content seed (idempotent) ──
+# One .mjs spec per course under content/courses/ (our own curriculum,
+# academyType=GENERAL — NOT the FPTU catalogue). Sub-files live in
+# content/courses/<slug>/ and are imported by the top-level spec, so the
+# glob deliberately matches only depth 1. Same idempotency guarantees as
+# the Academy seeder above: lesson ids are preserved, progress survives.
+info "Running CuongThai course seed..."
+COURSES_SEED_OUT=$($DC exec -T backend sh -c '
+  for f in content/courses/*.mjs; do
+    [ -e "$f" ] || { echo "no course content files"; break; }
+    echo "── $f"
+    node scripts/course-seed.mjs --file "$f" --apply 2>&1
+  done
+') || true
+if echo "$COURSES_SEED_OUT" | grep -qiE "error|cannot find|exception|invalid"; then
+ warn "CuongThai course seed reported errors — see /tmp/seed-courses.log"
+ echo "$COURSES_SEED_OUT" > /tmp/seed-courses.log
+ echo "$COURSES_SEED_OUT" | tail -6 | sed 's/^/ /'
+else
+ ok "CuongThai course seed complete"
+ echo "$COURSES_SEED_OUT" | tail -6 | sed 's/^/ /'
+fi
+
 # ── Step 3.13: Exp Hub setup guides (per-subject, idempotent) ───
 # One .mjs per subject under content/exphub/ → upsert SnippetCategory +
 # Snippet (guide) by slug. Academy courses link "Cài đặt" cards to

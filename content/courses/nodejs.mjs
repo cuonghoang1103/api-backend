@@ -12,6 +12,7 @@ import s03 from './nodejs/s03-core-modules.mjs';
 import s04 from './nodejs/s04-npm.mjs';
 import s05 from './nodejs/s05-express.mjs';
 import s06 from './nodejs/s06-rest.mjs';
+import s07 from './nodejs/s07-prisma.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -39,5 +40,6 @@ export default {
     s04,
     s05,
     s06,
+    s07,
   ],
 };

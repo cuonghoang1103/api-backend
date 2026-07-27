@@ -9,6 +9,7 @@ import s00 from './nodejs/s00-intro.mjs';
 import s01 from './nodejs/s01-javascript.mjs';
 import s02 from './nodejs/s02-runtime.mjs';
 import s03 from './nodejs/s03-core-modules.mjs';
+import s04 from './nodejs/s04-npm.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -33,5 +34,6 @@ export default {
     s01,
     s02,
     s03,
+    s04,
   ],
 };

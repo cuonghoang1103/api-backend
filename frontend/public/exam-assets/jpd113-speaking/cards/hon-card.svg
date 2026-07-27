@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 280" width="340" height="280" font-family="Helvetica, Arial, sans-serif">
+  <rect width="340" height="280" rx="16" fill="#eef7ee" stroke="#4a8a5a" stroke-width="3"/>
+  <rect x="140" y="32" width="60" height="72" fill="#c7e8cf" stroke="#4a8a5a" stroke-width="3"/>
+  <line x1="170" y1="32" x2="170" y2="104" stroke="#4a8a5a" stroke-width="2"/>
+  <line x1="148" y1="48" x2="164" y2="48" stroke="#4a8a5a" stroke-width="2"/>
+  <line x1="148" y1="60" x2="164" y2="60" stroke="#4a8a5a" stroke-width="2"/>
+  <text x="170" y="128" text-anchor="middle" font-size="18" font-weight="bold" fill="#2a5a35">本</text>
+  <g font-size="14" fill="#2a5a35">
+    <text x="30" y="156"><tspan font-weight="bold">Item: </tspan>Nihongo no hon (Japanese book)</text>
+    <text x="30" y="180"><tspan font-weight="bold">Bought at: </tspan>BOOKS shop</text>
+    <text x="30" y="204"><tspan font-weight="bold">Price: </tspan>1,800 yen</text>
+    <text x="30" y="228"><tspan font-weight="bold">Owner: </tspan>マルコさん</text>
+  </g>
+</svg>

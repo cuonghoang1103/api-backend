@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 280" width="340" height="280" font-family="Helvetica, Arial, sans-serif">
+  <rect width="340" height="280" rx="16" fill="#fff8ee" stroke="#c98f4e" stroke-width="3"/>
+  <circle cx="170" cy="62" r="40" fill="#ffe3b0" stroke="#c98f4e" stroke-width="3"/>
+  <circle cx="170" cy="50" r="16" fill="#c98f4e"/>
+  <path d="M138 92 q32 -26 64 0" fill="#c98f4e"/>
+  <text x="170" y="118" text-anchor="middle" font-size="20" font-weight="bold" fill="#7a4a1e">ダニエル</text>
+  <g font-size="14" fill="#5a3d1e">
+    <text x="30" y="150"><tspan font-weight="bold">Nationality: </tspan>Australian</text>
+    <text x="30" y="174"><tspan font-weight="bold">Age: </tspan>31</text>
+    <text x="30" y="198"><tspan font-weight="bold">Occupation: </tspan>Teacher, Sakura High School</text>
+    <text x="30" y="222"><tspan font-weight="bold">Hobbies: </tspan>Reading, Cooking</text>
+    <text x="30" y="246"><tspan font-weight="bold">Date of birth: </tspan>July 24th</text>
+  </g>
+</svg>

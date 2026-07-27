@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 280" width="340" height="280" font-family="Helvetica, Arial, sans-serif">
+  <rect width="340" height="280" rx="16" fill="#fff4ef" stroke="#a05a34" stroke-width="3"/>
+  <path d="M148 44 q22 -22 44 0" fill="none" stroke="#a05a34" stroke-width="4"/>
+  <rect x="138" y="44" width="64" height="52" rx="6" fill="#f0c8a8" stroke="#a05a34" stroke-width="3"/>
+  <rect x="160" y="60" width="20" height="8" fill="#a05a34"/>
+  <text x="170" y="122" text-anchor="middle" font-size="18" font-weight="bold" fill="#6a3a1a">かばん</text>
+  <g font-size="14" fill="#6a3a1a">
+    <text x="30" y="150"><tspan font-weight="bold">Brand: </tspan>グッチ</text>
+    <text x="30" y="174"><tspan font-weight="bold">Made in: </tspan>Italy</text>
+    <text x="30" y="198"><tspan font-weight="bold">Price: </tspan>4,500,000 VND</text>
+    <text x="30" y="222"><tspan font-weight="bold">Owner: </tspan>エレナさん</text>
+  </g>
+</svg>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 280" width="340" height="280" font-family="Helvetica, Arial, sans-serif">
+  <rect width="340" height="280" rx="16" fill="#fff0f3" stroke="#c25a76" stroke-width="3"/>
+  <circle cx="170" cy="62" r="40" fill="#fcd7e0" stroke="#c25a76" stroke-width="3"/>
+  <circle cx="170" cy="50" r="16" fill="#c25a76"/>
+  <path d="M138 92 q32 -26 64 0" fill="#c25a76"/>
+  <text x="170" y="118" text-anchor="middle" font-size="20" font-weight="bold" fill="#7a2c42">アンナ</text>
+  <g font-size="14" fill="#7a2c42">
+    <text x="30" y="150"><tspan font-weight="bold">Nationality: </tspan>Russian</text>
+    <text x="30" y="174"><tspan font-weight="bold">Age: </tspan>27</text>
+    <text x="30" y="198"><tspan font-weight="bold">Occupation: </tspan>Nurse</text>
+    <text x="30" y="222"><tspan font-weight="bold">Hobbies: </tspan>Swimming, Cooking</text>
+    <text x="30" y="246"><tspan font-weight="bold">Date of birth: </tspan>February 9th</text>
+  </g>
+</svg>

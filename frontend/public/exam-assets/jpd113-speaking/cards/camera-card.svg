@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 280" width="340" height="280" font-family="Helvetica, Arial, sans-serif">
+  <rect width="340" height="280" rx="16" fill="#f5f5f5" stroke="#555b66" stroke-width="3"/>
+  <rect x="130" y="46" width="80" height="54" rx="6" fill="#2b2f38" stroke="#555b66" stroke-width="3"/>
+  <rect x="150" y="32" width="24" height="16" fill="#2b2f38"/>
+  <circle cx="170" cy="73" r="18" fill="#8fa3c9" stroke="#e6ebf5" stroke-width="3"/>
+  <circle cx="170" cy="73" r="8" fill="#2b2f38"/>
+  <text x="170" y="128" text-anchor="middle" font-size="18" font-weight="bold" fill="#2b2f38">カメラ</text>
+  <g font-size="14" fill="#2b2f38">
+    <text x="30" y="156"><tspan font-weight="bold">Brand: </tspan>キヤノン</text>
+    <text x="30" y="180"><tspan font-weight="bold">Made in: </tspan>Japan</text>
+    <text x="30" y="204"><tspan font-weight="bold">Price: </tspan>89,000 yen</text>
+    <text x="30" y="228"><tspan font-weight="bold">Owner: </tspan>パクさん</text>
+  </g>
+</svg>

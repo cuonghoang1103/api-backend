@@ -17,11 +17,11 @@
 
 function speakInstructions(personEn, personVi, objectEn, objectVi, qaEn, qaVi, tipsVi) {
   return (
-    '<div class="ml-en"><h3>How this exam works</h3><p>The examiner shows you a <b>person card</b> and an <b>object card</b>, then asks 9 questions about them, one at a time. Record your spoken answer for each question (tap record, answer in Japanese, tap stop) — 9 short recordings total.</p>' +
+    '<div class="ml-en"><h3>How this exam works</h3><p>The examiner shows you a <b>person card</b> and an <b>object card</b>, then asks 9 questions about them, one at a time. For the LAST question, the examiner shows a <b>picture of a place</b> instead of a card, and asks what you do there ("ここで何をしますか"). Record your spoken answer for each question (tap record, answer in Japanese, tap stop) — 10 short recordings total.</p>' +
     '<h3>Person card</h3><p>' + personEn + '</p>' +
     '<h3>Object card</h3><p>' + objectEn + '</p>' +
     '<h3>The 9 questions &amp; model answers</h3><p>' + qaEn + '</p></div>' +
-    '<div class="ml-vi"><h3>Cách làm bài thi này</h3><p>Giám khảo đưa bạn một <b>thẻ nhân vật</b> và một <b>thẻ đồ vật</b>, rồi hỏi lần lượt 9 câu hỏi. Thu âm câu trả lời cho từng câu (bấm ghi âm, trả lời bằng tiếng Nhật, bấm dừng) — tổng cộng 9 đoạn ghi âm ngắn. AI sẽ nghe và chấm nội dung + ngữ pháp, có thể chấm sai lệch một chút do nhận diện giọng nói — hãy nói to, rõ, chậm rãi.</p>' +
+    '<div class="ml-vi"><h3>Cách làm bài thi này</h3><p>Giám khảo đưa bạn một <b>thẻ nhân vật</b> và một <b>thẻ đồ vật</b>, rồi hỏi lần lượt 9 câu hỏi. Ở CÂU CUỐI, thay vì thẻ, giám khảo cho xem một <b>bức tranh vẽ một địa điểm</b> và hỏi bạn làm gì ở đó ("ここで何をしますか") — bạn nhìn tranh rồi trả lời, không có chữ ghi sẵn. Thu âm câu trả lời cho từng câu (bấm ghi âm, trả lời bằng tiếng Nhật, bấm dừng) — tổng cộng 10 đoạn ghi âm ngắn. AI sẽ nghe và chấm nội dung + ngữ pháp, có thể chấm sai lệch một chút do nhận diện giọng nói — hãy nói to, rõ, chậm rãi.</p>' +
     '<h3>Thẻ nhân vật</h3><p>' + personVi + '</p>' +
     '<h3>Thẻ đồ vật</h3><p>' + objectVi + '</p>' +
     '<h3>9 câu hỏi &amp; đáp án mẫu (học thuộc trước khi thi thật)</h3><p>' + qaVi + '</p>' +
@@ -63,7 +63,8 @@ export default {
         '<b>6. ダニエルさんの　しゅみは　なんですか。</b> → どくしょと りょうりです。<br>' +
         '<b>7. この　とけいは　いくらですか。</b> → 560,000ドンです。<br>' +
         '<b>8. この　とけいは　だれのですか。</b> → アインせんせいのです。（ダニエルさんのじゃないです！）<br>' +
-        '<b>9. さくらこうこうは　何曜日が　やすみですか。</b> → 水曜日です。',
+        '<b>9. さくらこうこうは　何曜日が　やすみですか。</b> → 水曜日です。<br>' +
+        '<b>10. (picture) ここで　何を　しますか。</b> → にほんごを べんきょうします。',
         '<b>1. この人の　おなまえは。</b> (Tên người này là gì?) → ダニエルさんです。(Là bạn Daniel.)<br>' +
         '<b>2. ダニエルさんの　おくには　どちらですか。</b> (Daniel đến từ nước nào?) → オーストラリアです。(Nước Úc.)<br>' +
         '<b>3. ダニエルさんの　おしごとは　なんですか。</b> (Nghề nghiệp của Daniel?) → せんせいです。さくらこうこうの せんせいです。(Là giáo viên. Giáo viên trường Sakura High School.)<br>' +
@@ -72,7 +73,8 @@ export default {
         '<b>6. ダニエルさんの　しゅみは　なんですか。</b> (Sở thích của Daniel?) → どくしょと りょうりです。(Đọc sách và nấu ăn.)<br>' +
         '<b>7. この　とけいは　いくらですか。</b> (Đồng hồ này giá bao nhiêu?) → 560,000ドンです。(560.000 đồng.)<br>' +
         '<b>8. この　とけいは　だれのですか。</b> (Đồng hồ này của ai?) → アインせんせいのです。(Của thầy/cô Anh — KHÔNG PHẢI của Daniel, đây là bẫy: đồ vật và nhân vật trên hai thẻ khác nhau không nhất thiết liên quan!)<br>' +
-        '<b>9. さくらこうこうは　何曜日が　やすみですか。</b> (Trường Sakura nghỉ thứ mấy?) → 水曜日です。(Thứ Tư.)',
+        '<b>9. さくらこうこうは　何曜日が　やすみですか。</b> (Trường Sakura nghỉ thứ mấy?) → 水曜日です。(Thứ Tư.)<br>' +
+        '<b>10. (tranh) ここで　何を　しますか。</b> (Giám khảo cho xem một bức tranh — ở đây làm gì?) → にほんごを べんきょうします。(Học tiếng Nhật — vì tranh vẽ một trường học/lớp học.)',
         COMMON_TIPS_VI + ' Bẫy riêng của đề này: đồng hồ KHÔNG phải của Daniel dù cùng xuất hiện trên bàn thi — luôn nghe kỹ câu hỏi "だれの" và tra đúng "Owner" ghi trên thẻ đồ vật, đừng mặc định gán cho người vừa nói tới.',
       ),
       questions: [
@@ -91,6 +93,7 @@ export default {
             { text: 'この　とけいは　いくらですか。|||Chiếc đồng hồ này giá bao nhiêu?' },
             { text: 'この　とけいは　だれのですか。|||Chiếc đồng hồ này của ai?' },
             { text: 'さくらこうこうは　何曜日が　やすみですか。|||Trường Sakura nghỉ thứ mấy?' },
+            { text: 'ここで　何を　しますか。|||Nhìn bức tranh: ở đây bạn làm gì?', imageUrl: '/exam-assets/jpd113-speaking/gakko.svg' },
           ],
           rubric: [
             { id: 'q1', weight: 1, criterion: 'Name: ダニエルさんです。|||Tên: ダニエルさんです。' },
@@ -102,6 +105,7 @@ export default {
             { id: 'q7', weight: 1, criterion: 'Price: 560,000ドンです。|||Giá: 560,000ドンです。' },
             { id: 'q8', weight: 1, criterion: 'Owner: アインせんせいのです (NOT Daniel — a trap).|||Chủ sở hữu: アインせんせいのです (KHÔNG phải Daniel — bẫy).' },
             { id: 'q9', weight: 1, criterion: 'Closed day: 水曜日です。|||Ngày nghỉ: 水曜日です。' },
+            { id: 'q10', weight: 1, criterion: 'Picture shows a school — にほんごをべんきょうします (or any correct school activity, e.g. べんきょうします alone).|||Tranh vẽ trường học — にほんごをべんきょうします (hoặc bất kỳ hoạt động đúng ở trường, ví dụ chỉ cần べんきょうします).' },
           ],
         },
       ],
@@ -132,7 +136,8 @@ export default {
         '<b>6. マルコさんの　しゅみは　なんですか。</b> → おんがくと りょこうです。<br>' +
         '<b>7. この　本は　いくらですか。</b> → 1,800円です。<br>' +
         '<b>8. この　本は　だれのですか。</b> → マルコさんのです。<br>' +
-        '<b>9. ほんやは　何曜日が　やすみですか。</b> → 土曜日と 日曜日です。',
+        '<b>9. ほんやは　何曜日が　やすみですか。</b> → 土曜日と 日曜日です。<br>' +
+        '<b>10. (picture) ここで　何を　しますか。</b> → コーヒーを のみます。',
         '<b>1. この人の　おなまえは。</b> (Tên người này?) → マルコさんです。<br>' +
         '<b>2. マルコさんの　おくには　どちらですか。</b> (Marco đến từ nước nào?) → イタリアです。(Nước Ý.)<br>' +
         '<b>3. マルコさんの　おしごとは　なんですか。</b> (Nghề nghiệp?) → がくせいです。わせだ大学の がくせいです。(Là sinh viên. Sinh viên đại học Waseda.)<br>' +
@@ -141,7 +146,8 @@ export default {
         '<b>6. マルコさんの　しゅみは　なんですか。</b> (Sở thích?) → おんがくと りょこうです。(Âm nhạc và du lịch.)<br>' +
         '<b>7. この　本は　いくらですか。</b> (Sách giá bao nhiêu?) → 1,800円です。(せんはっぴゃくえん.)<br>' +
         '<b>8. この　本は　だれのですか。</b> (Sách của ai?) → マルコさんのです。(Của Marco — lần này ĐÚNG là của người trong thẻ, khác bẫy ở Đề 1!)<br>' +
-        '<b>9. ほんやは　何曜日が　やすみですか。</b> (Tiệm sách nghỉ thứ mấy?) → 土曜日と 日曜日です。(Thứ Bảy và Chủ Nhật.)',
+        '<b>9. ほんやは　何曜日が　やすみですか。</b> (Tiệm sách nghỉ thứ mấy?) → 土曜日と 日曜日です。(Thứ Bảy và Chủ Nhật.)<br>' +
+        '<b>10. (tranh) ここで　何を　しますか。</b> (Nhìn tranh — ở đây làm gì?) → コーヒーを のみます。(Uống cà phê — tranh vẽ quán cà phê.)',
         COMMON_TIPS_VI + ' Đề này KHÔNG có bẫy "chủ sở hữu khác người" như Đề 1 — luôn đọc kỹ thẻ trước khi giả định có bẫy hay không, đừng suy diễn máy móc.',
       ),
       questions: [
@@ -160,6 +166,7 @@ export default {
             { text: 'この　本は　いくらですか。|||Quyển sách này giá bao nhiêu?' },
             { text: 'この　本は　だれのですか。|||Quyển sách này của ai?' },
             { text: 'ほんやは　何曜日が　やすみですか。|||Tiệm sách nghỉ thứ mấy?' },
+            { text: 'ここで　何を　しますか。|||Nhìn bức tranh: ở đây bạn làm gì?', imageUrl: '/exam-assets/jpd113-speaking/cafe.svg' },
           ],
           rubric: [
             { id: 'q1', weight: 1, criterion: 'Name: マルコさんです。|||Tên: マルコさんです。' },
@@ -171,6 +178,7 @@ export default {
             { id: 'q7', weight: 1, criterion: 'Price: 1,800円です (せんはっぴゃくえん).|||Giá: 1,800円です (せんはっぴゃくえん).' },
             { id: 'q8', weight: 1, criterion: 'Owner: マルコさんのです — this time the object DOES belong to the person shown.|||Chủ sở hữu: マルコさんのです — lần này đồ vật ĐÚNG là của người trên thẻ.' },
             { id: 'q9', weight: 1, criterion: 'Closed days: 土曜日と日曜日です。|||Ngày nghỉ: 土曜日と日曜日です。' },
+            { id: 'q10', weight: 1, criterion: 'Picture shows a cafe — コーヒーをのみます (or any correct cafe activity).|||Tranh vẽ quán cà phê — コーヒーをのみます (hoặc hoạt động đúng khác ở quán cà phê).' },
           ],
         },
       ],
@@ -201,7 +209,8 @@ export default {
         '<b>6. アンナさんの　しゅみは　なんですか。</b> → すいえいと りょうりです。<br>' +
         '<b>7. この　けいたいは　いくらですか。</b> → 250ドルです。<br>' +
         '<b>8. この　けいたいは　だれのですか。</b> → アンナさんのです。<br>' +
-        '<b>9. アンナさんは　どこの　国の　人ですか。</b> → ロシアの 人です。',
+        '<b>9. アンナさんは　どこの　国の　人ですか。</b> → ロシアの 人です。<br>' +
+        '<b>10. (picture) ここで　何を　しますか。</b> → しごとを します。',
         '<b>1. この人の　おなまえは。</b> (Tên người này?) → アンナさんです。<br>' +
         '<b>2. アンナさんの　おくには　どちらですか。</b> (Anna đến từ nước nào — dạng lịch sự どちら?) → ロシアです。(Nước Nga.)<br>' +
         '<b>3. アンナさんの　おしごとは　なんですか。</b> (Nghề nghiệp?) → かんごしです。(Y tá.)<br>' +
@@ -210,7 +219,8 @@ export default {
         '<b>6. アンナさんの　しゅみは　なんですか。</b> (Sở thích?) → すいえいと りょうりです。(Bơi lội và nấu ăn.)<br>' +
         '<b>7. この　けいたいは　いくらですか。</b> (Điện thoại giá bao nhiêu?) → 250ドルです。(250 đô la — luyện đọc đơn vị tiền NƯỚC NGOÀI ドル, không phải 円 hay ドン.)<br>' +
         '<b>8. この　けいたいは　だれのですか。</b> (Điện thoại của ai?) → アンナさんのです。<br>' +
-        '<b>9. アンナさんは　どこの　国の　人ですか。</b> (Anna là người của nước nào — mẫu câu hỏi thay thế cho おくにはどちらですか, đã học ở Chương 4.3) → ロシアの 人です。(Người nước Nga.)',
+        '<b>9. アンナさんは　どこの　国の　人ですか。</b> (Anna là người của nước nào — mẫu câu hỏi thay thế cho おくにはどちらですか, đã học ở Chương 4.3) → ロシアの 人です。(Người nước Nga.)<br>' +
+        '<b>10. (tranh) ここで　何を　しますか。</b> (Nhìn tranh — ở đây làm gì?) → しごとを します。(Làm việc — tranh vẽ văn phòng công ty.)',
         COMMON_TIPS_VI + ' Câu 9 dùng mẫu "どこの国の人ですか" thay vì "おくにはどちらですか" — cả hai HỎI CÙNG MỘT THÔNG TIN (quốc tịch), chỉ khác cách diễn đạt; đề thi thật hay đổi cách hỏi để test xem học sinh có hiểu bản chất câu hỏi hay chỉ học thuộc mẫu câu.',
       ),
       questions: [
@@ -229,6 +239,7 @@ export default {
             { text: 'この　けいたいは　いくらですか。|||Chiếc điện thoại này giá bao nhiêu?' },
             { text: 'この　けいたいは　だれのですか。|||Chiếc điện thoại này của ai?' },
             { text: 'アンナさんは　どこの　国の　人ですか。|||Anna là người của nước nào?' },
+            { text: 'ここで　何を　しますか。|||Nhìn bức tranh: ở đây bạn làm gì?', imageUrl: '/exam-assets/jpd113-speaking/kaisha.svg' },
           ],
           rubric: [
             { id: 'q1', weight: 1, criterion: 'Name: アンナさんです。|||Tên: アンナさんです。' },
@@ -240,6 +251,7 @@ export default {
             { id: 'q7', weight: 1, criterion: 'Price: 250ドルです — currency is USD, not yen/dong.|||Giá: 250ドルです — đơn vị đô la, không phải yên/đồng.' },
             { id: 'q8', weight: 1, criterion: 'Owner: アンナさんのです。|||Chủ sở hữu: アンナさんのです。' },
             { id: 'q9', weight: 1, criterion: 'Nationality (alt. phrasing): ロシアの人です — same meaning as おくにはどちらですか.|||Quốc tịch (cách hỏi khác): ロシアの人です — cùng nghĩa với おくにはどちらですか.' },
+            { id: 'q10', weight: 1, criterion: 'Picture shows a company office — しごとをします／はたらきます (or any correct work activity).|||Tranh vẽ văn phòng công ty — しごとをします／はたらきます (hoặc hoạt động đúng khác liên quan công việc).' },
           ],
         },
       ],
@@ -270,7 +282,8 @@ export default {
         '<b>6. パクさんの　しゅみは　なんですか。</b> → しゃしんと どくしょです。<br>' +
         '<b>7. この　カメラは　いくらですか。</b> → 89,000円です。<br>' +
         '<b>8. この　カメラは　だれのですか。</b> → パクさんのです。<br>' +
-        '<b>9. この　カメラは　どこの　くにの　カメラですか。</b> → 日本の カメラです。',
+        '<b>9. この　カメラは　どこの　くにの　カメラですか。</b> → 日本の カメラです。<br>' +
+        '<b>10. (picture) ここで　何を　しますか。</b> → やさいを かいます。',
         '<b>1. この人の　おなまえは。</b> (Tên người này?) → パクさんです。<br>' +
         '<b>2. パクさんは　何人ですか。</b> (Là người nước nào — mẫu câu trực tiếp X人ですか) → かんこくじんです。(Người Hàn Quốc.)<br>' +
         '<b>3. パクさんの　おしごとは　なんですか。</b> (Nghề nghiệp?) → エンジニアです。<br>' +
@@ -279,7 +292,8 @@ export default {
         '<b>6. パクさんの　しゅみは　なんですか。</b> (Sở thích?) → しゃしんと どくしょです。(Nhiếp ảnh và đọc sách.)<br>' +
         '<b>7. この　カメラは　いくらですか。</b> (Máy ảnh giá bao nhiêu?) → 89,000円です。(はちまんきゅうせんえん.)<br>' +
         '<b>8. この　カメラは　だれのですか。</b> (Máy ảnh của ai?) → パクさんのです。<br>' +
-        '<b>9. この　カメラは　どこの　くにの　カメラですか。</b> (Máy ảnh xuất xứ nước nào — hỏi về ĐỒ VẬT chứ không phải người, khác câu 2!) → 日本の カメラです。(Máy ảnh của Nhật Bản — dựa vào "Made in Japan" trên thẻ.)',
+        '<b>9. この　カメラは　どこの　くにの　カメラですか。</b> (Máy ảnh xuất xứ nước nào — hỏi về ĐỒ VẬT chứ không phải người, khác câu 2!) → 日本の カメラです。(Máy ảnh của Nhật Bản — dựa vào "Made in Japan" trên thẻ.)<br>' +
+        '<b>10. (tranh) ここで　何を　しますか。</b> (Nhìn tranh — ở đây làm gì?) → やさいを かいます。(Mua rau — tranh vẽ siêu thị.)',
         COMMON_TIPS_VI + ' So sánh câu 2 (何人ですか — hỏi QUỐC TỊCH của NGƯỜI) với câu 9 (どこの くにの カメラですか — hỏi XUẤT XỨ của ĐỒ VẬT, dùng thông tin "Made in") — hai câu hỏi na ná nhưng tra cứu ở HAI VỊ TRÍ khác nhau trên hai thẻ.',
       ),
       questions: [
@@ -298,6 +312,7 @@ export default {
             { text: 'この　カメラは　いくらですか。|||Chiếc máy ảnh này giá bao nhiêu?' },
             { text: 'この　カメラは　だれのですか。|||Chiếc máy ảnh này của ai?' },
             { text: 'この　カメラは　どこの　くにの　カメラですか。|||Chiếc máy ảnh này xuất xứ nước nào?' },
+            { text: 'ここで　何を　しますか。|||Nhìn bức tranh: ở đây bạn làm gì?', imageUrl: '/exam-assets/jpd113-speaking/super.svg' },
           ],
           rubric: [
             { id: 'q1', weight: 1, criterion: 'Name: パクさんです。|||Tên: パクさんです。' },
@@ -309,6 +324,7 @@ export default {
             { id: 'q7', weight: 1, criterion: 'Price: 89,000円です (はちまんきゅうせんえん).|||Giá: 89,000円です (はちまんきゅうせんえん).' },
             { id: 'q8', weight: 1, criterion: 'Owner: パクさんのです。|||Chủ sở hữu: パクさんのです。' },
             { id: 'q9', weight: 1, criterion: 'Origin of the OBJECT (Made in Japan), not the person\'s nationality: 日本のカメラです。|||Xuất xứ của ĐỒ VẬT (Made in Japan), khác quốc tịch người: 日本のカメラです。' },
+            { id: 'q10', weight: 1, criterion: 'Picture shows a supermarket — やさいをかいます／かいものをします (or any correct shopping activity).|||Tranh vẽ siêu thị — やさいをかいます／かいものをします (hoặc hoạt động mua sắm đúng khác).' },
           ],
         },
       ],
@@ -339,7 +355,8 @@ export default {
         '<b>6. エレナさんの　しゅみは　なんですか。</b> → りょうりと えいがです。<br>' +
         '<b>7. この　かばんは　いくらですか。</b> → 4,500,000ドンです。<br>' +
         '<b>8. この　かばんは　だれのですか。</b> → エレナさんのです。<br>' +
-        '<b>9. この　かばんは　どこの　くにの　かばんですか。</b> → イタリアの かばんです。',
+        '<b>9. この　かばんは　どこの　くにの　かばんですか。</b> → イタリアの かばんです。<br>' +
+        '<b>10. (picture) ここで　何を　しますか。</b> → ほんを よみます。',
         '<b>1. この人の　おなまえは。</b> (Tên người này?) → エレナさんです。<br>' +
         '<b>2. エレナさんの　おくには　どちらですか。</b> (Đến từ nước nào?) → フランスです。(Nước Pháp.)<br>' +
         '<b>3. エレナさんの　おしごとは　なんですか。</b> (Nghề nghiệp?) → がくせいです。ちゅうおう大学の がくせいです。(Là sinh viên. Sinh viên đại học Chuo.)<br>' +
@@ -348,7 +365,8 @@ export default {
         '<b>6. エレナさんの　しゅみは　なんですか。</b> (Sở thích?) → りょうりと えいがです。(Nấu ăn và xem phim.)<br>' +
         '<b>7. この　かばんは　いくらですか。</b> (Cặp giá bao nhiêu?) → 4,500,000ドンです。(4.500.000 đồng.)<br>' +
         '<b>8. この　かばんは　だれのですか。</b> (Cặp của ai?) → エレナさんのです。<br>' +
-        '<b>9. この　かばんは　どこの　くにの　かばんですか。</b> (Cặp xuất xứ nước nào?) → イタリアの かばんです。(Cặp của Ý — chú ý: xuất xứ ĐỒ VẬT là Ý, khác quốc tịch NGƯỜI là Pháp — không cùng một nước!)',
+        '<b>9. この　かばんは　どこの　くにの　かばんですか。</b> (Cặp xuất xứ nước nào?) → イタリアの かばんです。(Cặp của Ý — chú ý: xuất xứ ĐỒ VẬT là Ý, khác quốc tịch NGƯỜI là Pháp — không cùng một nước!)<br>' +
+        '<b>10. (tranh) ここで　何を　しますか。</b> (Nhìn tranh — ở đây làm gì?) → ほんを よみます。(Đọc sách — tranh vẽ thư viện.)',
         COMMON_TIPS_VI + ' Đề này lặp lại đúng bẫy của Đề 4 (xuất xứ đồ vật khác quốc tịch người) nhưng đổi ngữ cảnh — nếu đã làm quen Đề 4, câu 9 ở đây sẽ dễ hơn nhiều. Đây chính là lợi ích của việc luyện đủ 5 đề: các bẫy LẶP LẠI theo mẫu, không phải mỗi lần một kiểu mới.',
       ),
       questions: [
@@ -367,6 +385,7 @@ export default {
             { text: 'この　かばんは　いくらですか。|||Chiếc cặp này giá bao nhiêu?' },
             { text: 'この　かばんは　だれのですか。|||Chiếc cặp này của ai?' },
             { text: 'この　かばんは　どこの　くにの　かばんですか。|||Chiếc cặp này xuất xứ nước nào?' },
+            { text: 'ここで　何を　しますか。|||Nhìn bức tranh: ở đây bạn làm gì?', imageUrl: '/exam-assets/jpd113-speaking/toshokan.svg' },
           ],
           rubric: [
             { id: 'q1', weight: 1, criterion: 'Name: エレナさんです。|||Tên: エレナさんです。' },
@@ -378,6 +397,7 @@ export default {
             { id: 'q7', weight: 1, criterion: 'Price: 4,500,000ドンです。|||Giá: 4,500,000ドンです。' },
             { id: 'q8', weight: 1, criterion: 'Owner: エレナさんのです。|||Chủ sở hữu: エレナさんのです。' },
             { id: 'q9', weight: 1, criterion: 'Origin of the OBJECT (Made in Italy) — different from Elena\'s own nationality (French): イタリアのかばんです。|||Xuất xứ ĐỒ VẬT (Made in Italy) — khác quốc tịch Elena (Pháp): イタリアのかばんです。' },
+            { id: 'q10', weight: 1, criterion: 'Picture shows a library — ほんをよみます (or any correct library activity).|||Tranh vẽ thư viện — ほんをよみます (hoặc hoạt động đúng khác ở thư viện).' },
           ],
         },
       ],

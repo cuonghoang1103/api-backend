@@ -1085,7 +1085,7 @@ export interface ExamTakingQuestion {
   language: string | null;
   starterCode: string | null;
   expectedOutput: string | null;
-  speakingPrompts: { text: string }[] | null;
+  speakingPrompts: { text: string; imageUrl?: string }[] | null;
 }
 
 export interface ExamPortalItem {

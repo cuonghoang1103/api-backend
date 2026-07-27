@@ -57,7 +57,7 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
   const [essays, setEssays] = useState<Record<number, string>>({});
   const [zipFile, setZipFile] = useState<File | null>(null);
   const [recordings, setRecordings] = useState<Record<string, Blob>>({}); // key `${qid}:${promptIdx}`
-  const [genPrompts, setGenPrompts] = useState<Record<number, { text: string }[]>>({});
+  const [genPrompts, setGenPrompts] = useState<Record<number, { text: string; imageUrl?: string }[]>>({});
 
   const submittedRef = useRef(false);
 
@@ -460,7 +460,7 @@ function WriteRunner({ q, idx, total, L, isVi, value, onChange }: {
 function SpeakRunner({ exam, L, isVi, recordings, setRecordings, genPrompts, setGenPrompts }: {
   exam: FullExam; L: 'en' | 'vi';
   isVi: boolean; recordings: Record<string, Blob>; setRecordings: (fn: (r: Record<string, Blob>) => Record<string, Blob>) => void;
-  genPrompts: Record<number, { text: string }[]>; setGenPrompts: (fn: (g: Record<number, { text: string }[]>) => Record<number, { text: string }[]>) => void;
+  genPrompts: Record<number, { text: string; imageUrl?: string }[]>; setGenPrompts: (fn: (g: Record<number, { text: string; imageUrl?: string }[]>) => Record<number, { text: string; imageUrl?: string }[]>) => void;
 }) {
   const q = exam.questions.find((x) => x.kind === 'SPEAK')!;
   const [genLoading, setGenLoading] = useState(false);
@@ -490,7 +490,7 @@ function SpeakRunner({ exam, L, isVi, recordings, setRecordings, genPrompts, set
         </div>
       )}
       {prompts.map((p, i) => (
-        <Recorder key={i} index={i} text={pickLang(p.text, L)} isVi={isVi}
+        <Recorder key={i} index={i} text={pickLang(p.text, L)} imageUrl={p.imageUrl} isVi={isVi}
           blob={recordings[`${q.id}:${i}`]}
           onRecorded={(b) => setRecordings((r) => ({ ...r, [`${q.id}:${i}`]: b }))} />
       ))}
@@ -498,8 +498,8 @@ function SpeakRunner({ exam, L, isVi, recordings, setRecordings, genPrompts, set
   );
 }
 
-function Recorder({ index, text, isVi, blob, onRecorded }: {
-  index: number; text: string; isVi: boolean; blob?: Blob; onRecorded: (b: Blob) => void;
+function Recorder({ index, text, imageUrl, isVi, blob, onRecorded }: {
+  index: number; text: string; imageUrl?: string; isVi: boolean; blob?: Blob; onRecorded: (b: Blob) => void;
 }) {
   const [recording, setRecording] = useState(false);
   const mediaRef = useRef<MediaRecorder | null>(null);
@@ -526,6 +526,9 @@ function Recorder({ index, text, isVi, blob, onRecorded }: {
 
   return (
     <div className="exam-card p-4">
+      {imageUrl && (
+        <img src={imageUrl} alt="" className="mb-3 w-full max-w-xs rounded-lg border border-[var(--border-color)]" />
+      )}
       <div className="text-sm font-medium mb-3">{index + 1}. {text}</div>
       <div className="flex items-center gap-3">
         {!recording ? (

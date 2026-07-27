@@ -223,15 +223,19 @@ router.post('/attempts/:attemptId/submit-speak', authenticate, audioUpload.array
     const filesArr = (req.files as Express.Multer.File[]) || [];
     if (!filesArr.length) throw new AppError('Chưa có audio để nộp', 400);
 
+    // Course code prefix "JPD" (JPD113 — Elementary Japanese) → Japanese STT/grading;
+    // every other course keeps the original English-only behavior.
+    const language = attempt.exam.course?.courseCode?.toUpperCase().startsWith('JPD') ? 'ja' : 'en';
+
     const transcripts: string[] = [];
     for (const f of filesArr) {
-      transcripts.push(await transcribeExamAudio(f.buffer, f.originalname || 'answer.webm', f.mimetype || 'audio/webm'));
+      transcripts.push(await transcribeExamAudio(f.buffer, f.originalname || 'answer.webm', f.mimetype || 'audio/webm', language));
     }
     const speakingPrompts = Array.isArray(q.speakingPrompts) ? (q.speakingPrompts as Array<{ text: string }>) : [];
     const grade = await gradeSpeaking({
       userId: req.userId!, points: num(q.points), prompt: q.prompt,
       speakingPrompts: speakingPrompts.length ? speakingPrompts : transcripts.map((_, i) => ({ text: `Question ${i + 1}` })),
-      transcripts, rubric: q.rubric,
+      transcripts, rubric: q.rubric, language,
     });
     const data = await finalizePe(attemptId, req.userId!, [{ questionId: q.id, grade }], {
       answers: { transcripts }, timeSpentSeconds: Number(req.body?.timeSpentSeconds) || 0, gradingMode: 'AI',

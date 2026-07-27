@@ -165,7 +165,14 @@ export async function startAttempt(examId: number, userId: number) {
 export async function loadOwnedAttempt(attemptId: number, userId: number) {
   const attempt = await prisma.examAttempt.findUnique({
     where: { id: attemptId },
-    include: { exam: { include: { questions: { orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }] } } } },
+    include: {
+      exam: {
+        include: {
+          questions: { orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }] },
+          course: { select: { courseCode: true } },
+        },
+      },
+    },
   });
   if (!attempt || attempt.userId !== userId) throw new AppError('Không tìm thấy bài thi', 404);
   return attempt;

@@ -198,9 +198,9 @@ export async function gradeWrite(params: {
 }
 
 // ── 3) SPEAK — transcribe + grade content & pronunciation ─────────────
-export async function transcribeExamAudio(audio: Buffer, filename: string, mimetype: string): Promise<string> {
+export async function transcribeExamAudio(audio: Buffer, filename: string, mimetype: string, language: string = 'en'): Promise<string> {
   if (!audio?.length) throw new AppError('Không nhận được audio', 400);
-  const r = await transcribeWithGroq(audio, filename, mimetype, { language: 'en' });
+  const r = await transcribeWithGroq(audio, filename, mimetype, { language });
   return (r?.text || '').trim();
 }
 
@@ -211,16 +211,23 @@ export async function gradeSpeaking(params: {
   speakingPrompts: Array<{ text: string }>;
   transcripts: string[]; // one per speaking sub-prompt (already transcribed)
   rubric: unknown;
+  language?: string; // ISO-639-1 the student answered in, e.g. 'ja' — defaults to English
 }): Promise<PeGradeResult> {
   ensureAi();
   if (!(await checkTokenQuota(params.userId))) throw new AppError('Bạn đã đạt giới hạn AI trong ngày. Thử lại vào ngày mai nhé.', 429);
   const joined = params.transcripts.map((t) => t.trim()).join(' ');
   if (joined.length < 3) throw new AppError('Không nghe rõ phần trả lời. Hãy thu âm ở nơi yên tĩnh và nói to, rõ hơn.', 400);
-  const system =
-    'You are a supportive FPTU speaking-exam grader. The student answered speaking questions in English; you are given the auto-transcribed text (via speech-to-text, so tolerate minor STT noise). Grade: content & relevance to the questions, fluency & coherence, grammar, and vocabulary. Give pronunciation-oriented tips where the transcript hints at issues, but be fair about STT limits. ' +
-    GRADE_JSON_SPEC;
+  const isJa = params.language === 'ja';
+  const system = isJa
+    ? 'You are a supportive Japanese (JLPT A1.1 / FPTU JPD113) speaking-exam grader. The student answered speaking questions in Japanese (mix of hiragana/katakana/kanji, romanized filler words possible); you are given the auto-transcribed text (via Japanese speech-to-text, so tolerate STT noise — missing particles, wrong kanji homophones, romaji leaking through). Grade: content correctness (right grammar pattern for the question — は/です/の/も/か, これ/それ/あれ vs この/その/あの, を/に/で/へ, ます/ません), whether the answer matches the fact asked (name/country/job/age/birthday/price/floor/day/time), and natural word order. Be lenient on STT artifacts, but flag real grammar mistakes (wrong particle, wrong demonstrative form, missing です/ます) as concrete tips in Vietnamese. ' +
+        GRADE_JSON_SPEC
+    : 'You are a supportive FPTU speaking-exam grader. The student answered speaking questions in English; you are given the auto-transcribed text (via speech-to-text, so tolerate minor STT noise). Grade: content & relevance to the questions, fluency & coherence, grammar, and vocabulary. Give pronunciation-oriented tips where the transcript hints at issues, but be fair about STT limits. ' +
+        GRADE_JSON_SPEC;
   const qa = params.speakingPrompts.map((p, i) => `Q${i + 1}: ${p.text}\nA${i + 1} (transcribed): ${params.transcripts[i] || '(no answer)'}`).join('\n\n');
-  const user = [`TASK / PROBLEM:\n${params.prompt}`, `QUESTIONS & TRANSCRIBED ANSWERS:\n${qa}`, 'Grade now.'].join('\n\n');
+  const rubricText = Array.isArray(params.rubric) && params.rubric.length
+    ? `\n\nRUBRIC / MODEL ANSWERS (use to check factual correctness, not as the only acceptable wording):\n${(params.rubric as Array<{ id?: string; criterion?: string; weight?: number }>).map((c) => `- ${c.id ?? ''} (weight ${c.weight ?? 1}): ${c.criterion ?? ''}`).join('\n')}`
+    : '';
+  const user = [`TASK / PROBLEM:\n${params.prompt}`, `QUESTIONS & TRANSCRIBED ANSWERS:\n${qa}`, rubricText, 'Grade now.'].filter(Boolean).join('\n\n');
   const raw = await callGrader(params.userId, system, user);
   const g = normalizeGrade(raw, params.points);
   return { ...g, transcript: joined };

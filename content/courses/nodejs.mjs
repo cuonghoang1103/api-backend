@@ -11,6 +11,7 @@ import s02 from './nodejs/s02-runtime.mjs';
 import s03 from './nodejs/s03-core-modules.mjs';
 import s04 from './nodejs/s04-npm.mjs';
 import s05 from './nodejs/s05-express.mjs';
+import s06 from './nodejs/s06-rest.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -37,5 +38,6 @@ export default {
     s03,
     s04,
     s05,
+    s06,
   ],
 };

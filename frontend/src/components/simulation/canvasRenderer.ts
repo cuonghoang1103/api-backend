@@ -113,6 +113,13 @@ export interface FrameState {
   /** Nhãn tuỳ chọn đang chọn, hiện ở tiêu đề (ví dụ "POST · 201"). */
   variantLabel: string;
   finished: boolean;
+  /**
+   * Ảnh linh vật (favicon) đã nạp xong, hoặc null nếu chưa/không nạp được.
+   * Ảnh CÙNG NGUỒN nên `drawImage` không làm canvas bị "nhiễm bẩn" (tainted)
+   * — đây là điều kiện sống còn: canvas nhiễm bẩn thì `captureStream()` và
+   * `toDataURL()` đều ném lỗi bảo mật và nút quay video chết ngay.
+   */
+  logo: HTMLImageElement | null;
 }
 
 /* ────────────────────────────────────────────────────────────
@@ -624,15 +631,80 @@ function drawHeader(ctx: CanvasRenderingContext2D, st: FrameState) {
     ctx.fillText(st.variantLabel, x + 12, 85);
   }
 
-  // Thương hiệu góc phải — có mặt trong mọi video xuất ra.
-  ctx.textAlign = 'right';
-  ctx.font = `700 22px ${SANS}`;
-  ctx.fillStyle = 'rgba(226,235,250,0.9)';
-  ctx.fillText('cuongthai.com', CANVAS_W - 48, 54);
-  ctx.font = `500 15px ${MONO}`;
-  ctx.fillStyle = 'rgba(120,140,175,0.75)';
-  ctx.fillText('Simulation Studio', CANVAS_W - 48, 78);
+  drawBrandMark(ctx, st);
+}
+
+/**
+ * Khối nhận diện thương hiệu ở góc trên phải: linh vật gấu trúc + tên miền.
+ *
+ * Vài lựa chọn có chủ ý, vì đây là thứ xuất hiện trong TỪNG khung hình của
+ * mọi video bài giảng:
+ *  • Góc trên PHẢI — tiêu đề kịch bản đã chiếm góc trái, và đây cũng là chỗ
+ *    quy ước của watermark nên người xem không phải học lại thói quen nhìn.
+ *  • Nằm gọn trong dải 26–98px, trong khi node cao nhất bắt đầu ở ~114px:
+ *    logo KHÔNG BAO GIỜ đè lên nội dung sơ đồ, kể cả kịch bản dày nhất.
+ *  • Nền kính mờ thay vì chữ trần: chữ trần bị nuốt khi có gói tin sáng chạy
+ *    qua phía sau, còn tấm nền giữ độ tương phản ổn định ở mọi khung hình.
+ *  • Vẽ SAU màn kết thúc (xem `drawFrame`) nên thương hiệu vẫn rõ ở khung
+ *    hình cuối — đúng cái khung hay được dùng làm ảnh đại diện video.
+ */
+function drawBrandMark(ctx: CanvasRenderingContext2D, st: FrameState) {
+  const ICON = 42;
+  // Khung cắt vuông trong ảnh 512×512, ôm trọn đầu + hai tai của linh vật.
+  const LOGO_CROP = { x: 32, y: 158, w: 348, h: 348 };
+  const PAD_L = 13;
+  const PAD_R = 18;
+  const GAP = 12;
+  // Khối cao 66px đặt ở y=22 → mép dưới 88px, trong khi node cao nhất bắt đầu
+  // ở ~114px. Chừa 26px trống: logo không bao giờ chạm sơ đồ ở bất kỳ kịch bản nào.
+  const PLATE_H = 66;
+  const plateY = 22;
+
   ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+
+  ctx.font = `700 23px ${SANS}`;
+  const nameW = ctx.measureText('cuongthai.com').width;
+  ctx.font = `600 12px ${MONO}`;
+  const subW = ctx.measureText('SIMULATION STUDIO').width;
+  const textW = Math.max(nameW, subW);
+
+  const hasLogo = !!st.logo;
+  const plateW = PAD_L + (hasLogo ? ICON + GAP : 0) + textW + PAD_R;
+  const plateX = CANVAS_W - 44 - plateW;
+
+  // Tấm nền kính mờ.
+  ctx.fillStyle = 'rgba(8,12,24,0.62)';
+  roundRect(ctx, plateX, plateY, plateW, PLATE_H, 16);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,0.10)';
+  ctx.lineWidth = 1.2;
+  roundRect(ctx, plateX, plateY, plateW, PLATE_H, 16);
+  ctx.stroke();
+
+  // Vệt sáng màu kịch bản ở mép dưới — móc thương hiệu vào chủ đề đang chạy.
+  ctx.fillStyle = rgba(st.scenario.accent, 0.75);
+  roundRect(ctx, plateX + 16, plateY + PLATE_H - 3, plateW - 32, 3, 2);
+  ctx.fill();
+
+  let cursor = plateX + PAD_L;
+  if (st.logo) {
+    // Cắt lấy ĐẦU gấu thay vì vẽ nguyên ảnh favicon. Ảnh gốc là con gấu đang
+    // nằm ngủ kèm chữ "zZ" ở góc trên phải (đo được ở x 239–494, y 17–152):
+    // thu cả bố cục đó xuống 46px thì gấu chỉ còn một đốm trắng và chữ zZ
+    // thành nhiễu. Khung cắt dưới đây giữ trọn đầu + hai tai, bỏ hẳn phần
+    // thân và chữ — đúng cách một thương hiệu rút gọn dấu hiệu cho cỡ nhỏ.
+    ctx.drawImage(st.logo, LOGO_CROP.x, LOGO_CROP.y, LOGO_CROP.w, LOGO_CROP.h, cursor, plateY + (PLATE_H - ICON) / 2, ICON, ICON);
+    cursor += ICON + GAP;
+  }
+
+  ctx.font = `700 23px ${SANS}`;
+  ctx.fillStyle = '#eef3ff';
+  ctx.fillText('cuongthai.com', cursor, plateY + 31);
+
+  ctx.font = `600 12px ${MONO}`;
+  ctx.fillStyle = 'rgba(134,154,190,0.9)';
+  ctx.fillText('SIMULATION STUDIO', cursor, plateY + 50);
 }
 
 function drawLegend(ctx: CanvasRenderingContext2D, st: FrameState) {
@@ -798,7 +870,6 @@ export function drawFrame(
   const step = st.steps[st.stepIndex];
 
   drawBackground(ctx, st.frame, st.scenario.accent);
-  drawHeader(ctx, st);
 
   // Dây trước, node sau — node luôn nằm trên dây.
   for (const g of Array.from(geoms.values())) {
@@ -816,6 +887,9 @@ export function drawFrame(
 
   if (st.showLegend) drawLegend(ctx, st);
   if (st.finished) drawFinishOverlay(ctx, st);
+  // Đầu trang vẽ SAU màn kết thúc: tiêu đề và logo phải còn đọc được ở khung
+  // hình cuối — khung hay bị lấy làm ảnh đại diện cho video.
+  drawHeader(ctx, st);
   if (st.showCaption) drawCaption(ctx, st);
 }
 

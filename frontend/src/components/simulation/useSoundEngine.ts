@@ -14,12 +14,18 @@
  *
  * KIẾN TRÚC ĐƯỜNG TIẾNG
  * ---------------------
- *   dao động ký / nhiễu → envelope gain → masterGain ─┬→ ctx.destination (loa)
- *                                                      └→ recordDest (vào video)
+ *   dao động ký / nhiễu → envelope → master ─┬→ speakerGain → ctx.destination
+ *                                             └────────────→ recordDest ──┐
+ *   micro ────────────────────────────────────────────────→ recordDest ──┴→ video
  *
- * Tách hai nhánh như vậy để: (1) tắt loa vẫn ghi được tiếng vào video nếu
- * muốn, (2) tiếng micro chỉ nối vào recordDest chứ KHÔNG ra loa — nếu nối
- * ra loa sẽ hú phản hồi ngay lập tức.
+ * Hai chi tiết PHẢI đúng, sai là hỏng bản ghi mà chỉ phát hiện ra sau khi đã
+ * quay xong cả bài giảng:
+ *
+ * 1. Nút chỉnh âm lượng loa (`speakerGain`) nằm SAU nhánh rẽ sang recordDest,
+ *    không phải trước. Nếu hạ thẳng `master` thì tắt loa cũng tắt luôn tiếng
+ *    trong video. Người dạy thường tắt loa để khỏi vọng vào micro — mà đó lại
+ *    đúng lúc cần SFX trong bản ghi nhất.
+ * 2. Micro CHỈ nối vào recordDest. Nối thêm ra loa là hú phản hồi tức thì.
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -27,7 +33,10 @@ import type { SfxName } from './types';
 
 interface AudioGraph {
   ctx: AudioContext;
+  /** Điểm gom mọi hiệu ứng. Luôn để nguyên 1.0 — đừng chỉnh để tắt tiếng. */
   master: GainNode;
+  /** Chỉ điều khiển LOA. Hạ nút này không ảnh hưởng tiếng đi vào video. */
+  speakerGain: GainNode;
   recordDest: MediaStreamAudioDestinationNode;
   /** Bộ đệm nhiễu trắng dùng lại cho mọi hiệu ứng "swoosh". */
   noise: AudioBuffer;
@@ -55,9 +64,9 @@ export function useSoundEngine(): SoundEngine {
   useEffect(() => {
     mutedRef.current = muted;
     const g = graphRef.current;
-    // Chỉ hạ tiếng LOA. Nhánh ghi giữ nguyên để video vẫn có SFX kể cả khi
-    // người dạy tắt loa để tránh vọng vào micro.
-    if (g) g.master.gain.value = muted ? 0.0001 : 1;
+    // Chỉ hạ nhánh LOA. Nhánh ghi nằm trước nút này nên video vẫn có đủ SFX
+    // kể cả khi người dạy tắt loa để tránh vọng vào micro.
+    if (g) g.speakerGain.gain.value = muted ? 0.0001 : 1;
   }, [muted]);
 
   const ensure = useCallback(async (): Promise<AudioGraph | null> => {
@@ -72,12 +81,16 @@ export function useSoundEngine(): SoundEngine {
 
     const ctx = new Ctor({ sampleRate: 48000 });
     const master = ctx.createGain();
-    master.gain.value = mutedRef.current ? 0.0001 : 1;
+    master.gain.value = 1;
+
+    const speakerGain = ctx.createGain();
+    speakerGain.gain.value = mutedRef.current ? 0.0001 : 1;
 
     const recordDest = ctx.createMediaStreamDestination();
-    // Một nguồn, hai đích: loa và bản ghi.
-    master.connect(ctx.destination);
+    // Rẽ nhánh TRƯỚC nút âm lượng loa: bản ghi lấy tín hiệu đầy đủ, còn loa
+    // đi qua speakerGain nên tắt được độc lập.
     master.connect(recordDest);
+    master.connect(speakerGain).connect(ctx.destination);
 
     // Nhiễu trắng dựng sẵn 1 giây, tái sử dụng cho swoosh/buzz.
     const noise = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
@@ -90,7 +103,7 @@ export function useSoundEngine(): SoundEngine {
       data[i] = (seed / 2147483648) - 1;
     }
 
-    graphRef.current = { ctx, master, recordDest, noise };
+    graphRef.current = { ctx, master, speakerGain, recordDest, noise };
     if (ctx.state === 'suspended') await ctx.resume();
     return graphRef.current;
   }, []);

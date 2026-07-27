@@ -16,6 +16,13 @@ import { CANVAS_H, CANVAS_W, computeLayout } from './layout';
 import type { Lang, NodeState, Scenario, SimStep } from './types';
 import type { useSimulationEngine } from './useSimulationEngine';
 
+/**
+ * Linh vật gấu trúc dùng làm dấu thương hiệu trên khung hình.
+ * Lấy bản 512px (không phải favicon 32px) để khi vẽ xuống 46px trên canvas
+ * 1080p vẫn nét — thu nhỏ ảnh lớn thì mượt, phóng to ảnh nhỏ thì rỗ.
+ */
+const BRAND_LOGO_SRC = '/android-chrome-512x512.png';
+
 interface Props {
   scenario: Scenario;
   steps: SimStep[];
@@ -53,6 +60,7 @@ export default function SimulationStage({
   const advanceRef = useRef(engine.advance);
   advanceRef.current = engine.advance;
   const snapRef = engine.snapshot;
+  const logoRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -86,23 +94,46 @@ export default function SimulationStage({
         showLegend,
         variantLabel,
         finished: s.finished,
+        logo: logoRef.current,
       };
       drawFrame(ctx, frameState, boxes, geoms);
       raf = requestAnimationFrame(loop);
     };
 
-    // Chờ font tự lưu trữ (@fontsource) nạp xong rồi mới vẽ khung đầu tiên,
-    // nếu không khung đầu dùng font dự phòng và chữ nhảy một nhịp — rất lộ
-    // khi khung đó lọt vào đầu video.
     const startLoop = () => {
       if (cancelled) return;
       raf = requestAnimationFrame(loop);
     };
+
+    // Chờ font tự lưu trữ (@fontsource) VÀ ảnh linh vật nạp xong rồi mới vẽ
+    // khung đầu tiên. Nếu không, khung đầu dùng font dự phòng và thiếu logo
+    // rồi "nhảy" một nhịp — rất lộ khi đúng khung đó mở đầu video, và làm hỏng
+    // tính tất định mà phiên dựng video headless dựa vào.
+    const ready: Promise<unknown>[] = [];
     if (typeof document !== 'undefined' && 'fonts' in document) {
-      void (document as Document & { fonts: FontFaceSet }).fonts.ready.then(startLoop);
-    } else {
-      startLoop();
+      ready.push((document as Document & { fonts: FontFaceSet }).fonts.ready);
     }
+    if (logoRef.current) {
+      // Đã nạp ở lần gắn trước (đổi kịch bản không cần tải lại).
+    } else {
+      ready.push(
+        new Promise<void>((resolve) => {
+          const img = new Image();
+          // Ảnh CÙNG NGUỒN: không cần crossOrigin và không làm canvas nhiễm
+          // bẩn — canvas nhiễm bẩn thì captureStream() ném lỗi và mất nút quay.
+          img.onload = () => {
+            logoRef.current = img;
+            resolve();
+          };
+          // Hỏng ảnh thì vẫn chạy, khối thương hiệu tự lùi về dạng chỉ có chữ.
+          img.onerror = () => resolve();
+          img.src = BRAND_LOGO_SRC;
+        })
+      );
+    }
+
+    if (ready.length === 0) startLoop();
+    else void Promise.all(ready).then(startLoop);
 
     return () => {
       cancelled = true;

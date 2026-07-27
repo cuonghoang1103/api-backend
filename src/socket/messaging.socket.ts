@@ -364,8 +364,50 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
     // user opens the panel for that thread). Idempotent — already
     // auto-joined, but this lets the client ensure join happens
     // even for threads created AFTER connect.
+    //
+    // SECURITY: authentication happens ONCE at the handshake; every
+    // event still needs its own authorization check. Without the
+    // participation query below, any logged-in user could emit
+    // `thread:join` with someone else's thread id (they are sequential
+    // integers) and would then receive that conversation's
+    // `thread:new-message` payloads in real time — the message bodies,
+    // live, with no REST call to audit. This mirrors
+    // `MessagesService.assertParticipant`: for ADMIN threads only the
+    // user and the assigned admin, for USER threads only the two sides.
     socket.on('thread:join', (threadId: number) => {
-      if (typeof threadId === 'number') socket.join(`thread:${threadId}`);
+      if (typeof threadId !== 'number' || !Number.isInteger(threadId) || threadId <= 0) return;
+      // Fast path: auto-join already put us in this room at connect time.
+      if (socket.rooms.has(`thread:${threadId}`)) return;
+      void (async () => {
+        try {
+          const allowed = await prisma.messageThread.findFirst({
+            where: {
+              id: threadId,
+              OR: [
+                { type: 'ADMIN', OR: [{ userId: user.id }, { adminUserId: user.id }] },
+                { type: 'USER', OR: [{ userAId: user.id }, { userBId: user.id }] },
+              ],
+            },
+            select: { id: true },
+          });
+          if (!allowed) {
+            logger.warn('thread:join denied — not a participant', {
+              userId: user.id,
+              threadId,
+            });
+            socket.emit('thread:join-denied', { threadId });
+            return;
+          }
+          socket.join(`thread:${threadId}`);
+        } catch (err) {
+          // Fail CLOSED: a database hiccup must not turn into an open room.
+          logger.error('thread:join check failed', {
+            error: err instanceof Error ? err.message : String(err),
+            userId: user.id,
+            threadId,
+          });
+        }
+      })();
     });
     socket.on('thread:leave', (threadId: number) => {
       if (typeof threadId === 'number') socket.leave(`thread:${threadId}`);
@@ -403,6 +445,12 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
     // conversation (excludes the sender by default).
     socket.on('thread:typing', (payload: { threadId: number; isTyping: boolean }) => {
       if (!payload || typeof payload.threadId !== 'number') return;
+      // SECURITY: same rule as thread:join — you may only write into a
+      // conversation you belong to. Membership of the room IS the
+      // authorization (auto-join at connect + the checked thread:join
+      // above put us there), so a stranger cannot push "… is typing"
+      // into someone else's chat.
+      if (!socket.rooms.has(`thread:${payload.threadId}`)) return;
       socket.to(`thread:${payload.threadId}`).emit('thread:typing', {
         threadId: payload.threadId,
         userId: user.id,

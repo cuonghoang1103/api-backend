@@ -331,6 +331,22 @@ else
  echo "$JA_EXTRA_OUT" | tail -9 | sed 's/^/ /'
 fi
 
+# ── Step 3.9b: JPD113 grammar seed (My Language, level='JPD113') ──
+# content/grammar/jpd113-grammar.mjs → lang_grammar_points, idempotent
+# (matches by languageId+level+title, update-in-place). Mirrors the
+# JPD113 vocab/hanzi seeding already done for /language/ja/vocab & /hanzi.
+info "Running JPD113 grammar seed..."
+JPD113_GRAMMAR_OUT=$($DC exec -T backend sh -c \
+ "node scripts/seed-jpd113-grammar.mjs --apply" 2>&1) || true
+if echo "$JPD113_GRAMMAR_OUT" | grep -qiE "error|cannot find|exception|not found"; then
+ warn "JPD113 grammar seed reported errors — see /tmp/seed-jpd113-grammar.log"
+ echo "$JPD113_GRAMMAR_OUT" > /tmp/seed-jpd113-grammar.log
+ echo "$JPD113_GRAMMAR_OUT" | tail -6 | sed 's/^/ /'
+else
+ ok "JPD113 grammar seed complete"
+ echo "$JPD113_GRAMMAR_OUT" | tail -3 | sed 's/^/ /'
+fi
+
 # ── Step 3.10: Chinese seed (language + full HSK1-3 content) ─────
 info "Running Chinese (zh) seed..."
 ZH_SEED_OUT=$($DC exec -T backend sh -c \

@@ -61,6 +61,9 @@ export default function SimulationStage({
   advanceRef.current = engine.advance;
   const snapRef = engine.snapshot;
   const logoRef = useRef<HTMLImageElement | null>(null);
+  // Đọc qua ref để đổi số vòng KHÔNG phải dựng lại vòng lặp vẽ.
+  const loopCountRef = useRef(engine.loops);
+  loopCountRef.current = engine.loops;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -94,6 +97,8 @@ export default function SimulationStage({
         showLegend,
         variantLabel,
         finished: s.finished,
+        loopIndex: s.loop,
+        loopCount: loopCountRef.current,
         logo: logoRef.current,
       };
       drawFrame(ctx, frameState, boxes, geoms);

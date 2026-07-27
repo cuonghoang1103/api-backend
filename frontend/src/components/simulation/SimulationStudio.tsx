@@ -32,6 +32,7 @@ import {
   Maximize2,
   Pause,
   Play,
+  Repeat,
   RotateCcw,
   Subtitles,
 } from 'lucide-react';
@@ -41,7 +42,7 @@ import RecorderStudio from './RecorderStudio';
 import SimulationStage from './SimulationStage';
 import TimelineScrubber from './TimelineScrubber';
 import { DEFAULT_SCENARIO_ID, defaultOptions, getScenario, resolveSteps, sanitizeOptions, totalDuration } from './scenarios';
-import { SPEEDS, useSimulationEngine } from './useSimulationEngine';
+import { LOOP_CHOICES, SPEEDS, useSimulationEngine } from './useSimulationEngine';
 import { useSoundEngine } from './useSoundEngine';
 import { useStudioRecorder } from './useStudioRecorder';
 import type { Lang, ScenarioOptions, SimStep } from './types';
@@ -50,14 +51,19 @@ import { tr } from './types';
 /** Đọc tham số URL một lần lúc gắn — sau đó URL chỉ được GHI, không đọc lại. */
 function readInitialParams() {
   if (typeof window === 'undefined') {
-    return { raw: {} as Record<string, string>, scenarioId: DEFAULT_SCENARIO_ID, lang: 'vi' as Lang, autoplay: false, chrome: true, caption: true, speed: 1 };
+    return { raw: {} as Record<string, string>, scenarioId: DEFAULT_SCENARIO_ID, lang: 'vi' as Lang, autoplay: false, chrome: true, caption: true, speed: 1, loops: 2 };
   }
   const sp = new URLSearchParams(window.location.search);
   const raw: Record<string, string> = {};
   sp.forEach((v, k) => {
     raw[k] = v;
   });
-  const speedParam = Number(sp.get('speed'));
+  // Cẩn thận với `Number(null) === 0`: nếu URL KHÔNG có tham số thì
+  // `sp.get()` trả null và Number(null) ra 0 — mà 0 lại là mã hợp lệ của
+  // "lặp vô hạn". Thiếu tham số sẽ bị hiểu thành lặp mãi mãi. Ép sang NaN
+  // để giá trị vắng mặt luôn rơi về mặc định.
+  const speedParam = sp.has('speed') ? Number(sp.get('speed')) : NaN;
+  const loopParam = sp.has('loops') ? Number(sp.get('loops')) : NaN;
   return {
     raw,
     scenarioId: sp.get('scenario') ?? DEFAULT_SCENARIO_ID,
@@ -66,6 +72,7 @@ function readInitialParams() {
     chrome: sp.get('chrome') !== 'off',
     caption: sp.get('caption') !== 'off',
     speed: SPEEDS.includes(speedParam as (typeof SPEEDS)[number]) ? speedParam : 1,
+    loops: LOOP_CHOICES.includes(loopParam as (typeof LOOP_CHOICES)[number]) ? loopParam : 2,
   };
 }
 
@@ -93,10 +100,23 @@ export default function SimulationStudio() {
   const soundRef = useRef(sound);
   soundRef.current = sound;
 
+  // Bấm "Quay" thì tự chạy lại kịch bản và tự dừng ghi khi hết vòng cuối.
+  const [autoRun, setAutoRun] = useState(true);
+  const autoRunRef = useRef(true);
+  autoRunRef.current = autoRun;
+  const recorderRef = useRef<ReturnType<typeof useStudioRecorder> | null>(null);
+
   const engine = useSimulationEngine({
     steps,
     onStepEnter: useCallback((_i: number, step: SimStep) => {
       if (step?.sfx) soundRef.current.play(step.sfx);
+    }, []),
+    // Chỉ nổ khi ĐÃ chạy hết TẤT CẢ các vòng.
+    onFinish: useCallback(() => {
+      const rec = recorderRef.current;
+      if (!autoRunRef.current || !rec || rec.state === 'idle') return;
+      // Giữ thêm một nhịp để khung kết thúc kịp lọt vào video, rồi mới cắt.
+      window.setTimeout(() => rec.stop(), 1400);
     }, []),
   });
 
@@ -105,11 +125,34 @@ export default function SimulationStudio() {
     [scenario, options]
   );
   const recorder = useStudioRecorder({ canvasRef, sound, baseName });
+  recorderRef.current = recorder;
+
+  /** Bấm quay: mở bản ghi trước, rồi mới cho kịch bản chạy lại từ đầu. */
+  const handleStartRecording = useCallback(async () => {
+    await recorder.start();
+    if (!autoRunRef.current) return;
+    engine.restart();
+    // Chờ một nhịp để MediaRecorder bắt được vài khung mở đầu — bắt đầu quay
+    // và bắt đầu chạy trong cùng một khung hình sẽ mất mất đoạn mở.
+    window.setTimeout(() => engine.play(), 350);
+  }, [engine, recorder]);
 
   const variantLabel = useMemo(
     () => scenario.options.map((o) => o.choices.find((c) => c.value === options[o.id])?.label ?? '').filter(Boolean).join(' · '),
     [scenario, options]
   );
+
+  /**
+   * Ước lượng thời lượng một lần quay trọn: (thời lượng kịch bản ÷ tốc độ)
+   * × số vòng, cộng khoảng giữ giữa các vòng và nhịp cắt cuối. Dùng để báo
+   * trước dung lượng file — người dạy biết mình sắp tạo ra file bao nhiêu MB
+   * TRƯỚC khi bấm quay, chứ không phải sau.
+   */
+  const estimatedRunMs = useMemo(() => {
+    const loops = engine.loops === 0 ? 3 : engine.loops; // vô hạn thì ước theo 3 vòng
+    const oneRun = totalDuration(steps) / engine.speed;
+    return oneRun * loops + 1200 * (loops - 1) + 1400;
+  }, [engine.loops, engine.speed, steps]);
 
   /* ── Đồng bộ URL ──────────────────────────────────────────── */
 
@@ -119,10 +162,11 @@ export default function SimulationStudio() {
     for (const opt of scenario.options) sp.set(opt.id, options[opt.id]);
     sp.set('lang', lang);
     if (engine.speed !== 1) sp.set('speed', String(engine.speed));
+    sp.set('loops', String(engine.loops));
     if (!showCaption) sp.set('caption', 'off');
     if (!chrome) sp.set('chrome', 'off');
     return sp.toString();
-  }, [chrome, engine.speed, lang, options, scenario, showCaption]);
+  }, [chrome, engine.loops, engine.speed, lang, options, scenario, showCaption]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -215,6 +259,14 @@ export default function SimulationStudio() {
   }, [engine, handleToggle, sound, toggleFullscreen]);
 
   /* ── Tự phát theo tham số URL ─────────────────────────────── */
+
+  // Số vòng mặc định lấy từ URL (mặc định 2 vòng — xem ghi chú ở LOOP_CHOICES).
+  const loopsInit = useRef(false);
+  useEffect(() => {
+    if (loopsInit.current) return;
+    loopsInit.current = true;
+    engine.setLoops(initial.current.loops);
+  }, [engine]);
 
   const autoplayDone = useRef(false);
   useEffect(() => {
@@ -426,6 +478,29 @@ export default function SimulationStudio() {
                 ))}
               </div>
 
+              {/* Số vòng chạy — một vòng thường quá ngắn để kịp hiểu. */}
+              <div className="inline-flex items-center gap-1 rounded-lg border border-[#243050] bg-[#0a0f1e] px-1.5 py-1">
+                <Repeat className="h-3.5 w-3.5 text-[#5d6d8c]" />
+                {LOOP_CHOICES.map((l) => (
+                  <button
+                    key={l}
+                    type="button"
+                    onClick={() => engine.setLoops(l)}
+                    aria-pressed={engine.loops === l}
+                    title={
+                      l === 0
+                        ? vi ? 'Lặp vô hạn — dùng khi trình chiếu' : 'Loop forever — for live presenting'
+                        : vi ? `Chạy ${l} vòng rồi dừng` : `Run ${l} loop(s) then stop`
+                    }
+                    className={`rounded px-1.5 py-0.5 font-mono text-[11.5px] font-bold transition-colors ${
+                      engine.loops === l ? 'bg-[#1c2f52] text-[#7dd3fc]' : 'text-[#6f8098] hover:text-[#c3cfe4]'
+                    }`}
+                  >
+                    {l === 0 ? '∞' : `${l}×`}
+                  </button>
+                ))}
+              </div>
+
               <button
                 type="button"
                 onClick={() => setShowCaption((v) => !v)}
@@ -489,7 +564,16 @@ export default function SimulationStudio() {
                       onChangeOption={handleChangeOption}
                     />
                     <div className="px-4 pb-4">
-                      <RecorderStudio recorder={recorder} lang={lang} muted={sound.muted} onToggleMute={sound.toggleMuted} />
+                      <RecorderStudio
+                        recorder={recorder}
+                        lang={lang}
+                        muted={sound.muted}
+                        onToggleMute={sound.toggleMuted}
+                        autoRun={autoRun}
+                        onToggleAutoRun={() => setAutoRun((v) => !v)}
+                        estimatedMs={estimatedRunMs}
+                        onStart={handleStartRecording}
+                      />
                     </div>
                   </>
                 ) : (
@@ -501,7 +585,16 @@ export default function SimulationStudio() {
 
           {/* Cột phải — phòng thu + bảng soi */}
           <aside className="hidden min-w-0 space-y-3 xl:block">
-            <RecorderStudio recorder={recorder} lang={lang} muted={sound.muted} onToggleMute={sound.toggleMuted} />
+            <RecorderStudio
+                        recorder={recorder}
+                        lang={lang}
+                        muted={sound.muted}
+                        onToggleMute={sound.toggleMuted}
+                        autoRun={autoRun}
+                        onToggleAutoRun={() => setAutoRun((v) => !v)}
+                        estimatedMs={estimatedRunMs}
+                        onStart={handleStartRecording}
+                      />
             <div className="max-h-[calc(100vh-22rem)] overflow-hidden rounded-2xl border border-[#141c31] bg-[#070b16]">
               <InspectorPanel steps={steps} stepIndex={engine.stepIndex} lang={lang} />
             </div>

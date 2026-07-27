@@ -43,6 +43,57 @@ import type { SoundEngine } from './useSoundEngine';
 
 export type RecorderState = 'idle' | 'recording' | 'paused';
 
+export type QualityId = 'high' | 'balanced' | 'light';
+
+export interface QualityPreset {
+  id: QualityId;
+  fps: number;
+  videoBps: number;
+  label: { vi: string; en: string };
+  note: { vi: string; en: string };
+}
+
+/**
+ * Ba mức chất lượng.
+ *
+ * Bản đầu để cứng 8 Mb/s ở 60fps — nét thật, nhưng một video 15 giây đã nặng
+ * 16 MB và người dạy không có cách nào chỉnh. Con số đó thừa thãi với nội
+ * dung của trang này: nền tối phẳng, hình khối đặc, chữ sắc nét — VP9 nén
+ * loại nội dung đồ hoạ tổng hợp cực tốt. Ở 5 Mb/s mắt thường không phân biệt
+ * được với 8 Mb/s, mà dung lượng giảm gần 40%.
+ *
+ * Mức "Nhẹ" hạ xuống 30fps: chính việc giảm một nửa số khung mới là thứ cắt
+ * dung lượng mạnh nhất, chứ không phải riêng bitrate. Hoạt cảnh ở đây chuyển
+ * động chậm và mượt nên 30fps vẫn xem tốt.
+ */
+export const QUALITY_PRESETS: QualityPreset[] = [
+  {
+    id: 'high',
+    fps: 60,
+    videoBps: 10_000_000,
+    label: { vi: 'Nét tối đa', en: 'Maximum' },
+    note: { vi: '10 Mb/s · 60fps · ~80 MB mỗi phút — dành cho bản lưu trữ gốc', en: '10 Mbps · 60fps · ~80 MB per minute — for an archival master' },
+  },
+  {
+    id: 'balanced',
+    fps: 60,
+    videoBps: 4_500_000,
+    label: { vi: 'Cân bằng', en: 'Balanced' },
+    note: { vi: '4,5 Mb/s · 60fps · ~38 MB mỗi phút — vẫn nét chữ, hợp để đăng tải', en: '4.5 Mbps · 60fps · ~38 MB per minute — text stays crisp, ideal for publishing' },
+  },
+  {
+    id: 'light',
+    fps: 30,
+    videoBps: 2_200_000,
+    label: { vi: 'Nhẹ', en: 'Light' },
+    note: { vi: '2,2 Mb/s · 30fps · ~19 MB mỗi phút — gửi qua chat, nhúng vào bài học', en: '2.2 Mbps · 30fps · ~19 MB per minute — for chat and embedding in lessons' },
+  },
+];
+
+export function getQuality(id: QualityId): QualityPreset {
+  return QUALITY_PRESETS.find((q) => q.id === id) ?? QUALITY_PRESETS[1];
+}
+
 export interface RecordingResult {
   url: string;
   blob: Blob;
@@ -74,6 +125,9 @@ export interface UseStudioRecorderArgs {
 
 export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecorderArgs) {
   const [state, setState] = useState<RecorderState>('idle');
+  const [quality, setQuality] = useState<QualityId>('balanced');
+  const qualityRef = useRef<QualityId>('balanced');
+  qualityRef.current = quality;
   const [micEnabled, setMicEnabled] = useState(false);
   const [micReady, setMicReady] = useState(false);
   const [elapsedMs, setElapsedMs] = useState(0);
@@ -194,7 +248,8 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
     }
     setResult(null);
 
-    const canvasStream = canvas.captureStream(60);
+    const preset = getQuality(qualityRef.current);
+    const canvasStream = canvas.captureStream(preset.fps);
     canvasStreamRef.current = canvasStream;
 
     const tracks: MediaStreamTrack[] = [...canvasStream.getVideoTracks()];
@@ -206,7 +261,7 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
     const combined = new MediaStream(tracks);
     const recorder = new MediaRecorder(combined, {
       mimeType,
-      videoBitsPerSecond: 8_000_000, // đủ nét cho chữ nhỏ trên nền tối ở 1080p
+      videoBitsPerSecond: preset.videoBps,
       audioBitsPerSecond: 128_000,
     });
 
@@ -305,6 +360,8 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
     error,
     micEnabled,
     micReady,
+    quality,
+    setQuality,
     start,
     stop,
     pause,

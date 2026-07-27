@@ -42,6 +42,8 @@ export type NodeKind =
   | 'worker' // consumer / background job
   | 'auth' // auth service / token issuer
   | 'socket' // WebSocket hub
+  | 'storage' // object storage: R2, S3
+  | 'ci' // runner CI/CD, registry ảnh
   | 'index'; // chỉ mục B-Tree / storage engine
 
 /** Trạng thái trực quan của một node tại một thời điểm. */
@@ -117,6 +119,17 @@ export type SfxName =
   | 'stream'
   | 'lock';
 
+/** Một gói tin đứng yên trên dây — xem `SimStep.alsoInFlight`. */
+export interface GhostPacket {
+  edge: string;
+  /** Vị trí cố định trên đường, 0 = đầu cạnh, 1 = cuối cạnh. */
+  at: number;
+  reverse?: boolean;
+  label?: string;
+  /** Bỏ trống thì dùng luôn `kind` của bước. */
+  kind?: FlowKind;
+}
+
 export interface SimStep {
   id: string;
   title: I18nText;
@@ -147,6 +160,16 @@ export interface SimStep {
   /** Trạng thái node được ÁP DỤNG khi bước bắt đầu (cộng dồn theo thời gian). */
   nodeStates?: Record<string, NodeState>;
 
+  /**
+   * Gói tin PHỤ đứng yên trên dây trong lúc bước này chạy.
+   *
+   * Engine chỉ có MỘT gói tin chuyển động (gói của bước hiện tại). Nhưng có
+   * những bài học chỉ kể được khi nhiều gói cùng lơ lửng một lúc: người dùng
+   * bấm "Mua ngay" lần thứ hai TRONG KHI request thứ nhất còn chưa tới nơi.
+   * Vẽ chúng đứng yên là đúng bản chất — chúng đang kẹt chờ, không đi tới đâu.
+   */
+  alsoInFlight?: GhostPacket[];
+
   sfx?: SfxName;
   /** Dòng log kiểu DevTools/terminal. */
   log?: I18nText;
@@ -165,9 +188,20 @@ export interface ScenarioChoice {
   value: string;
   /** Nhãn ngắn trên nút chọn — thuật ngữ, không dịch. */
   label: string;
+  /**
+   * Nhãn đầy đủ hiện ở dòng mô tả khi lựa chọn này đang được chọn.
+   * Dùng khi nhãn chuẩn quá dài cho nút bấm ("422 Unprocessable Entity"
+   * không vừa cột 300px, nhưng vẫn cần đọc được ở đâu đó).
+   */
+  fullLabel?: string;
   /** Màu riêng cho lựa chọn (ví dụ DELETE = đỏ). */
   color?: string;
   hint?: I18nText;
+  /**
+   * Tên nhóm. Khi có, bảng điều khiển tự gom các lựa chọn theo nhóm —
+   * cần thiết khi danh sách dài (14 mã HTTP gom thành 2xx/3xx/4xx/5xx).
+   */
+  group?: I18nText;
 }
 
 export interface ScenarioOption {

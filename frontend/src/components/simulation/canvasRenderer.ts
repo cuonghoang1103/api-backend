@@ -25,7 +25,7 @@
 
 import { CANVAS_H, CANVAS_W, CAPTION_H, GRAPH_BOTTOM, GRAPH_TOP, pointOnEdge, quadPoint, tAtDistance, type EdgeGeom, type NodeBox } from './layout';
 import { FLOW_STYLES, NODE_STYLES, STAGE_COLORS, statusColor } from './theme';
-import type { Lang, NodeKind, NodeState, Scenario, SimStep } from './types';
+import type { FlowKind, Lang, NodeKind, NodeState, Scenario, SimStep } from './types';
 import { tr } from './types';
 
 /* ────────────────────────────────────────────────────────────
@@ -113,6 +113,9 @@ export interface FrameState {
   /** Nhãn tuỳ chọn đang chọn, hiện ở tiêu đề (ví dụ "POST · 201"). */
   variantLabel: string;
   finished: boolean;
+  /** Vòng hiện tại (đếm từ 0) và tổng số vòng — 0 = lặp vô hạn. */
+  loopIndex: number;
+  loopCount: number;
   /**
    * Ảnh linh vật (favicon) đã nạp xong, hoặc null nếu chưa/không nạp được.
    * Ảnh CÙNG NGUỒN nên `drawImage` không làm canvas bị "nhiễm bẩn" (tainted)
@@ -296,6 +299,41 @@ function drawGlyph(ctx: CanvasRenderingContext2D, kind: NodeKind, x: number, y: 
       ctx.lineTo(u * 0.66, u * 0.22);
       ctx.moveTo(u * 0.6, u * 0.64);
       ctx.lineTo(u * 0.84, u * 0.4);
+      ctx.stroke();
+      break;
+    }
+    case 'storage': {
+      // Thùng chứa (bucket): hình thang + nắp
+      ctx.beginPath();
+      ctx.moveTo(-u * 0.8, -u * 0.5);
+      ctx.lineTo(u * 0.8, -u * 0.5);
+      ctx.lineTo(u * 0.56, u * 0.85);
+      ctx.lineTo(-u * 0.56, u * 0.85);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.ellipse(0, -u * 0.5, u * 0.8, u * 0.24, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      break;
+    }
+    case 'ci': {
+      // Nhánh pipeline: một đường chính rẽ ra hai nút
+      ctx.beginPath();
+      ctx.arc(-u * 0.62, 0, u * 0.22, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(u * 0.62, -u * 0.5, u * 0.22, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(u * 0.62, u * 0.5, u * 0.22, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(-u * 0.4, 0);
+      ctx.lineTo(u * 0.1, 0);
+      ctx.moveTo(u * 0.1, 0);
+      ctx.quadraticCurveTo(u * 0.36, 0, u * 0.4, -u * 0.5);
+      ctx.moveTo(u * 0.1, 0);
+      ctx.quadraticCurveTo(u * 0.36, 0, u * 0.4, u * 0.5);
       ctx.stroke();
       break;
     }
@@ -533,22 +571,36 @@ function drawEdge(ctx: CanvasRenderingContext2D, g: EdgeGeom, active: boolean, s
    GÓI TIN
    ──────────────────────────────────────────────────────────── */
 
-function drawPacket(ctx: CanvasRenderingContext2D, g: EdgeGeom, step: SimStep, st: FrameState) {
-  const flow = FLOW_STYLES[step.kind];
-  // Vào/ra mượt: gói tin tăng tốc rồi giảm tốc, không giật ở hai đầu dây.
-  const s = easeInOutCubic(clamp01(st.stepProgress));
-  const reverse = !!step.reverse;
+interface PacketOpts {
+  kind: FlowKind;
+  label: string;
+  /** Tỉ lệ quãng đường 0..1 (đã ease sẵn nếu là gói đang chuyển động). */
+  s: number;
+  reverse: boolean;
+  /** Độ mờ tổng thể — gói phụ vẽ nhạt hơn gói chính. */
+  alpha: number;
+  /** Đuôi hạt: chỉ gói đang chuyển động mới có. */
+  trail: boolean;
+}
+
+function drawPacket(ctx: CanvasRenderingContext2D, g: EdgeGeom, o: PacketOpts) {
+  const flow = FLOW_STYLES[o.kind];
+  const { s, reverse } = o;
+
+  ctx.save();
+  ctx.globalAlpha = o.alpha;
 
   // Đuôi hạt: 7 chấm phía sau, mờ dần.
-  for (let i = 7; i >= 1; i--) {
-    const trailS = clamp01(s - i * 0.028);
-    if (trailS <= 0) continue;
-    const p = pointOnEdge(g, trailS, reverse);
-    const alpha = (1 - i / 8) * 0.5;
-    ctx.fillStyle = rgba(flow.glow, alpha);
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, 7 - i * 0.55, 0, Math.PI * 2);
-    ctx.fill();
+  if (o.trail) {
+    for (let i = 7; i >= 1; i--) {
+      const trailS = clamp01(s - i * 0.028);
+      if (trailS <= 0) continue;
+      const p = pointOnEdge(g, trailS, reverse);
+      ctx.fillStyle = rgba(flow.glow, (1 - i / 8) * 0.5);
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 7 - i * 0.55, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
 
   const pos = pointOnEdge(g, s, reverse);
@@ -563,7 +615,7 @@ function drawPacket(ctx: CanvasRenderingContext2D, g: EdgeGeom, step: SimStep, s
   ctx.fill();
 
   // Viên "khối JSON": hộp bo góc mang nhãn, luôn nằm ngang cho dễ đọc.
-  const label = step.packetLabel ?? step.kind;
+  const label = o.label;
   ctx.font = `700 19px ${MONO}`;
   const textW = ctx.measureText(label).width;
   const boxW = textW + 34;
@@ -600,6 +652,8 @@ function drawPacket(ctx: CanvasRenderingContext2D, g: EdgeGeom, step: SimStep, s
   ctx.closePath();
   ctx.fill();
   ctx.restore();
+
+  ctx.restore(); // trả lại globalAlpha
 }
 
 /* ────────────────────────────────────────────────────────────
@@ -620,15 +674,29 @@ function drawHeader(ctx: CanvasRenderingContext2D, st: FrameState) {
   ctx.fillStyle = STAGE_COLORS.textPrimary;
   ctx.fillText(tr(scenario.name, st.lang), 68, 58);
 
+  let chipX = 68;
   if (st.variantLabel) {
     ctx.font = `600 17px ${MONO}`;
     const w = ctx.measureText(st.variantLabel).width + 24;
-    const x = 68;
     ctx.fillStyle = rgba(scenario.accent, 0.16);
-    roundRect(ctx, x, 66, w, 28, 8);
+    roundRect(ctx, chipX, 66, w, 28, 8);
     ctx.fill();
     ctx.fillStyle = rgba(scenario.accent, 1);
-    ctx.fillText(st.variantLabel, x + 12, 85);
+    ctx.fillText(st.variantLabel, chipX + 12, 85);
+    chipX += w + 10;
+  }
+
+  // Chỉ báo vòng. Chỉ hiện khi chạy nhiều hơn một vòng — nếu không, người
+  // xem sẽ tưởng hoạt cảnh bị lặp lỗi thay vì hiểu đây là chủ ý ôn lại.
+  if (st.loopCount !== 1) {
+    const text = st.loopCount === 0 ? `VÒNG ${st.loopIndex + 1} · ∞` : `VÒNG ${st.loopIndex + 1} / ${st.loopCount}`;
+    ctx.font = `700 16px ${MONO}`;
+    const w = ctx.measureText(text).width + 24;
+    ctx.fillStyle = 'rgba(148,163,184,0.14)';
+    roundRect(ctx, chipX, 66, w, 28, 8);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(203,213,225,0.95)';
+    ctx.fillText(text, chipX + 12, 85);
   }
 
   drawBrandMark(ctx, st);
@@ -880,9 +948,39 @@ export function drawFrame(
   }
 
   // Gói tin vẽ sau cùng để luôn nổi trên node.
+  //
+  // Gói PHỤ trước, gói chính sau — gói đang chuyển động phải nằm trên cùng.
+  // Gói phụ đứng yên và thở nhẹ theo `frame`: chúng đang KẸT CHỜ chứ không
+  // chết, và nhịp thở đó là thứ khiến người xem hiểu ngay "cái này chưa xong".
+  if (step?.alsoInFlight) {
+    const breathe = 0.6 + 0.16 * Math.sin(st.frame * 0.09);
+    for (const ghost of step.alsoInFlight) {
+      const g = geoms.get(ghost.edge);
+      if (!g) continue;
+      drawPacket(ctx, g, {
+        kind: ghost.kind ?? step.kind,
+        label: ghost.label ?? step.packetLabel ?? step.kind,
+        s: clamp01(ghost.at),
+        reverse: !!ghost.reverse,
+        alpha: breathe,
+        trail: false,
+      });
+    }
+  }
+
   if (step?.edge) {
     const g = geoms.get(step.edge);
-    if (g) drawPacket(ctx, g, step, st);
+    if (g) {
+      drawPacket(ctx, g, {
+        kind: step.kind,
+        label: step.packetLabel ?? step.kind,
+        // Vào/ra mượt: gói tin tăng tốc rồi giảm tốc, không giật ở hai đầu dây.
+        s: easeInOutCubic(clamp01(st.stepProgress)),
+        reverse: !!step.reverse,
+        alpha: 1,
+        trail: true,
+      });
+    }
   }
 
   if (st.showLegend) drawLegend(ctx, st);

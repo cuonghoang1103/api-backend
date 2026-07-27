@@ -66,44 +66,82 @@ export default function ControlPanel({ scenario, options, lang, onSelectScenario
         </div>
       </div>
 
-      {scenario.options.map((opt) => (
-        <div key={opt.id}>
-          <h2 className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#5d6d8c]">
-            {tr(opt.label, lang)}
-          </h2>
-          <div className="flex flex-wrap gap-1.5">
-            {opt.choices.map((choice) => {
-              const active = options[opt.id] === choice.value;
-              const color = choice.color ?? scenario.accent;
-              return (
-                <button
-                  key={choice.value}
-                  type="button"
-                  onClick={() => onChangeOption(opt.id, choice.value)}
-                  aria-pressed={active}
-                  title={choice.hint ? tr(choice.hint, lang) : undefined}
-                  className="rounded-lg border px-2.5 py-1.5 font-mono text-[12px] font-bold transition-all"
-                  style={{
-                    borderColor: active ? color : '#233052',
-                    background: active ? `${color}22` : '#0a0f1e',
-                    color: active ? color : '#7f8fab',
-                    boxShadow: active ? `0 0 18px -8px ${color}` : 'none',
-                  }}
-                >
-                  {choice.label}
-                </button>
-              );
-            })}
+      {scenario.options.map((opt) => {
+        const current = opt.choices.find((c) => c.value === options[opt.id]);
+
+        // Gom nhóm khi lựa chọn có khai báo `group` (14 mã HTTP → 4 nhóm).
+        // Giữ đúng thứ tự nhóm xuất hiện lần đầu, không sắp xếp lại: thứ tự
+        // trong dữ liệu là thứ tự sư phạm mà tác giả kịch bản đã cân nhắc.
+        const grouped = opt.choices.some((c) => c.group);
+        const groups: { name: string; choices: typeof opt.choices }[] = [];
+        for (const choice of opt.choices) {
+          const name = choice.group ? tr(choice.group, lang) : '';
+          const bucket = groups.find((g) => g.name === name);
+          if (bucket) bucket.choices.push(choice);
+          else groups.push({ name, choices: [choice] });
+        }
+
+        const renderChoice = (choice: (typeof opt.choices)[number]) => {
+          const active = options[opt.id] === choice.value;
+          const color = choice.color ?? scenario.accent;
+          return (
+            <button
+              key={choice.value}
+              type="button"
+              onClick={() => onChangeOption(opt.id, choice.value)}
+              aria-pressed={active}
+              aria-label={choice.fullLabel ?? choice.label}
+              title={[choice.fullLabel, choice.hint ? tr(choice.hint, lang) : null].filter(Boolean).join(' — ') || undefined}
+              className="rounded-lg border px-2.5 py-1.5 font-mono text-[12px] font-bold transition-all"
+              style={{
+                borderColor: active ? color : '#233052',
+                background: active ? `${color}22` : '#0a0f1e',
+                color: active ? color : '#7f8fab',
+                boxShadow: active ? `0 0 18px -8px ${color}` : 'none',
+              }}
+            >
+              {choice.label}
+            </button>
+          );
+        };
+
+        return (
+          <div key={opt.id}>
+            <h2 className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#5d6d8c]">
+              {tr(opt.label, lang)}
+            </h2>
+
+            {grouped ? (
+              <div className="space-y-2">
+                {groups.map((g) => (
+                  <div key={g.name}>
+                    <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-[#4d5b76]">{g.name}</div>
+                    <div className="flex flex-wrap gap-1.5">{g.choices.map(renderChoice)}</div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-wrap gap-1.5">{opt.choices.map(renderChoice)}</div>
+            )}
+
+            {/* Nhãn đầy đủ + gợi ý của lựa chọn đang chọn. Nút bấm chỉ đủ chỗ
+                cho "422", còn "422 Unprocessable Entity" và lời giải thích
+                hiện ở đây — đọc được mà không phải rê chuột. */}
+            {current?.fullLabel || current?.hint ? (
+              <div className="mt-2 space-y-0.5">
+                {current.fullLabel ? (
+                  <p className="font-mono text-[11.5px] font-bold" style={{ color: current.color ?? scenario.accent }}>
+                    {current.fullLabel}
+                  </p>
+                ) : null}
+                {current.hint ? (
+                  <p className="text-[11.5px] leading-relaxed text-[#6f8098]">{tr(current.hint, lang)}</p>
+                ) : null}
+              </div>
+            ) : null}
           </div>
-          {/* Gợi ý của lựa chọn đang chọn — dạy được ngay mà không cần rê chuột. */}
-          {(() => {
-            const current = opt.choices.find((c) => c.value === options[opt.id]);
-            return current?.hint ? (
-              <p className="mt-2 text-[11.5px] leading-relaxed text-[#6f8098]">{tr(current.hint, lang)}</p>
-            ) : null;
-          })()}
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

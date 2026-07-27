@@ -13,7 +13,15 @@ import { authScenario } from './auth';
 import { databaseScenario } from './database';
 import { websocketScenario } from './websocket';
 import { microservicesScenario } from './microservices';
+import { spamClickScenario } from './spamClick';
+import { uploadScenario } from './upload';
+import { nPlusOneScenario } from './nPlusOne';
+import { webhookScenario } from './webhook';
 
+// Thứ tự trong mảng = thứ tự hiện trên bảng chọn, và nó là thứ tự SƯ PHẠM:
+// nền tảng trước (REST → đệm → xác thực → CSDL), rồi tới realtime và kiến
+// trúc phân tán, cuối cùng là nhóm "bẫy thực chiến" — những thứ chỉ vỡ ra
+// khi đã chạy hệ thống thật.
 export const SCENARIOS: Scenario[] = [
   restApiScenario,
   cachingScenario,
@@ -21,6 +29,10 @@ export const SCENARIOS: Scenario[] = [
   databaseScenario,
   websocketScenario,
   microservicesScenario,
+  spamClickScenario,
+  webhookScenario,
+  uploadScenario,
+  nPlusOneScenario,
 ];
 
 export const DEFAULT_SCENARIO_ID = restApiScenario.id;

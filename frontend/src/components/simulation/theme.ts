@@ -58,14 +58,10 @@ export const METHOD_COLORS: Record<string, string> = {
   DELETE: FLOW_STYLES.DELETE.color,
 };
 
-/** Mã trạng thái → màu. 2xx xanh, 3xx lam, 4xx cam, 5xx đỏ. */
-export function statusColor(status?: number): string {
-  if (!status) return '#94a3b8';
-  if (status < 300) return '#34d399';
-  if (status < 400) return '#38bdf8';
-  if (status < 500) return '#fbbf24';
-  return '#ef4444';
-}
+// Màu mã trạng thái được suy ra từ danh mục HTTP (`httpStatus.ts`) để chỉ có
+// MỘT chỗ định nghĩa. Re-export ở đây vì canvas và bảng soi đã quen import
+// từ theme.
+export { statusColor } from './httpStatus';
 
 /* ── Màu theo loại node ──────────────────────────────────────── */
 
@@ -86,6 +82,8 @@ export const NODE_STYLES: Record<NodeKind, NodeStyle> = {
   worker: { color: '#4ade80', kindLabel: 'WORKER' },
   auth: { color: '#facc15', kindLabel: 'AUTH' },
   socket: { color: '#e879f9', kindLabel: 'REALTIME' },
+  storage: { color: '#f59e0b', kindLabel: 'STORAGE' },
+  ci: { color: '#c084fc', kindLabel: 'PIPELINE' },
   index: { color: '#2dd4bf', kindLabel: 'INDEX' },
 };
 

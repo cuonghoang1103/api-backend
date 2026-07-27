@@ -27,6 +27,18 @@ export const FRAME_MS = 1000 / 60;
 /** Các mức tốc độ phát. 1× là thời lượng gốc ghi trong kịch bản. */
 export const SPEEDS = [0.25, 0.5, 1, 1.5, 2, 3] as const;
 
+/** Số vòng chạy. 0 = lặp vô hạn (dùng khi trình chiếu tại chỗ). */
+export const LOOP_CHOICES = [1, 2, 3, 0] as const;
+
+/**
+ * Số khung giữ nguyên màn kết thúc trước khi vào vòng mới (~1,2 giây ở 60fps).
+ *
+ * Không có khoảng nghỉ này thì vòng mới bắt đầu ngay khi vòng cũ vừa dứt, và
+ * người xem không kịp nhận ra một vòng đã khép lại — họ tưởng hoạt cảnh bị
+ * giật chứ không hiểu là đang xem lại.
+ */
+const HOLD_FRAMES = 72;
+
 export interface EngineSnapshot {
   stepIndex: number;
   /** Tiến độ 0..1 trong bước hiện tại. */
@@ -35,6 +47,10 @@ export interface EngineSnapshot {
   frame: number;
   playing: boolean;
   finished: boolean;
+  /** Vòng hiện tại, đếm từ 0. */
+  loop: number;
+  /** Số khung còn phải giữ màn kết thúc trước khi sang vòng mới. */
+  holding: number;
 }
 
 export interface UseSimulationEngineArgs {
@@ -45,8 +61,9 @@ export interface UseSimulationEngineArgs {
 }
 
 export function useSimulationEngine({ steps, onStepEnter, onFinish }: UseSimulationEngineArgs) {
-  const snap = useRef<EngineSnapshot>({ stepIndex: 0, stepProgress: 0, frame: 0, playing: false, finished: false });
+  const snap = useRef<EngineSnapshot>({ stepIndex: 0, stepProgress: 0, frame: 0, playing: false, finished: false, loop: 0, holding: 0 });
   const speedRef = useRef(1);
+  const loopsRef = useRef(1);
 
   // Chỉ những gì giao diện React thực sự cần mới nằm trong state — tiến độ
   // trong bước được cập nhật giới hạn (xem UI_TICK_EVERY) để không render
@@ -55,6 +72,8 @@ export function useSimulationEngine({ steps, onStepEnter, onFinish }: UseSimulat
   const [playing, setPlaying] = useState(false);
   const [finished, setFinished] = useState(false);
   const [speed, setSpeedState] = useState(1);
+  const [loops, setLoopsState] = useState(1);
+  const [loopIndex, setLoopIndex] = useState(0);
   const [uiTick, setUiTick] = useState(0);
 
   const onStepEnterRef = useRef(onStepEnter);
@@ -67,10 +86,11 @@ export function useSimulationEngine({ steps, onStepEnter, onFinish }: UseSimulat
   // Đổi kịch bản / đổi tuỳ chọn → về đầu. So sánh bằng tham chiếu mảng là đủ
   // vì `resolveSteps` được memo hoá theo (scenario, options).
   useEffect(() => {
-    snap.current = { stepIndex: 0, stepProgress: 0, frame: snap.current.frame, playing: false, finished: false };
+    snap.current = { stepIndex: 0, stepProgress: 0, frame: snap.current.frame, playing: false, finished: false, loop: 0, holding: 0 };
     setStepIndex(0);
     setPlaying(false);
     setFinished(false);
+    setLoopIndex(0);
     setUiTick((t) => t + 1);
   }, [steps]);
 
@@ -79,6 +99,22 @@ export function useSimulationEngine({ steps, onStepEnter, onFinish }: UseSimulat
     const s = snap.current;
     s.frame += 1;
     if (!s.playing || steps.length === 0) return;
+
+    // Đang giữ màn kết thúc giữa hai vòng: đếm ngược rồi mở vòng mới.
+    if (s.holding > 0) {
+      s.holding -= 1;
+      if (s.holding === 0) {
+        s.loop += 1;
+        s.stepIndex = 0;
+        s.stepProgress = 0;
+        s.finished = false;
+        setLoopIndex(s.loop);
+        setStepIndex(0);
+        setFinished(false);
+        onStepEnterRef.current?.(0, steps[0]);
+      }
+      return;
+    }
 
     let remaining = FRAME_MS * speedRef.current;
     // Vòng lặp để tốc độ cao (3×) vẫn có thể vượt qua nhiều bước ngắn trong
@@ -94,10 +130,19 @@ export function useSimulationEngine({ steps, onStepEnter, onFinish }: UseSimulat
       remaining -= left;
       if (s.stepIndex >= steps.length - 1) {
         s.stepProgress = 1;
-        s.playing = false;
         s.finished = true;
-        setPlaying(false);
         setFinished(true);
+        // loops = 0 nghĩa là lặp vô hạn.
+        const total = loopsRef.current;
+        const moreToGo = total === 0 || s.loop + 1 < total;
+        if (moreToGo) {
+          // Giữ màn kết thúc rồi tự mở vòng mới — KHÔNG gọi onFinish, vì với
+          // phòng thu thì "xong" nghĩa là xong TẤT CẢ các vòng.
+          s.holding = HOLD_FRAMES;
+          return;
+        }
+        s.playing = false;
+        setPlaying(false);
         onFinishRef.current?.();
         return;
       }
@@ -115,13 +160,16 @@ export function useSimulationEngine({ steps, onStepEnter, onFinish }: UseSimulat
 
   const play = useCallback(() => {
     const s = snap.current;
-    // Bấm phát khi đã chạy hết thì bắt đầu lại từ đầu.
+    // Bấm phát khi đã chạy hết thì bắt đầu lại từ đầu, kể cả bộ đếm vòng.
     if (s.finished) {
       s.stepIndex = 0;
       s.stepProgress = 0;
       s.finished = false;
+      s.holding = 0;
+      s.loop = 0;
       setStepIndex(0);
       setFinished(false);
+      setLoopIndex(0);
       onStepEnterRef.current?.(0, steps[0]);
     }
     s.playing = true;
@@ -146,6 +194,7 @@ export function useSimulationEngine({ steps, onStepEnter, onFinish }: UseSimulat
       s.stepIndex = clamped;
       s.stepProgress = 0;
       s.finished = false;
+      s.holding = 0;
       setStepIndex(clamped);
       setFinished(false);
       setUiTick((t) => t + 1);
@@ -169,12 +218,19 @@ export function useSimulationEngine({ steps, onStepEnter, onFinish }: UseSimulat
   const restart = useCallback(() => {
     seek(0);
     snap.current.playing = false;
+    snap.current.loop = 0;
+    setLoopIndex(0);
     setPlaying(false);
   }, [seek]);
 
   const setSpeed = useCallback((value: number) => {
     speedRef.current = value;
     setSpeedState(value);
+  }, []);
+
+  const setLoops = useCallback((value: number) => {
+    loopsRef.current = value;
+    setLoopsState(value);
   }, []);
 
   return {
@@ -184,6 +240,8 @@ export function useSimulationEngine({ steps, onStepEnter, onFinish }: UseSimulat
     playing,
     finished,
     speed,
+    loops,
+    loopIndex,
     uiTick,
     play,
     pause,
@@ -193,6 +251,7 @@ export function useSimulationEngine({ steps, onStepEnter, onFinish }: UseSimulat
     seek,
     restart,
     setSpeed,
+    setLoops,
   };
 }
 

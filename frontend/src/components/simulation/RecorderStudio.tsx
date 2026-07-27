@@ -8,15 +8,24 @@
  *  2. Vòng lặp vẽ dừng khi tab bị ẩn, nên đừng chuyển tab lúc đang quay.
  */
 
-import { Download, Mic, MicOff, Pause, Play, Square, Trash2, Volume2, VolumeX } from 'lucide-react';
+import { useCallback } from 'react';
+import { Download, Film, Mic, MicOff, Pause, Play, Square, Trash2, Volume2, VolumeX } from 'lucide-react';
 import type { Lang } from './types';
-import type { useStudioRecorder } from './useStudioRecorder';
+import { QUALITY_PRESETS, getQuality, type useStudioRecorder } from './useStudioRecorder';
+import { tr } from './types';
 
 interface Props {
   recorder: ReturnType<typeof useStudioRecorder>;
   lang: Lang;
   muted: boolean;
   onToggleMute: () => void;
+  /** Bấm quay = tự chạy lại kịch bản từ đầu rồi tự dừng khi hết vòng. */
+  autoRun: boolean;
+  onToggleAutoRun: () => void;
+  /** Ước lượng thời lượng một lần chạy đủ số vòng, tính bằng ms. */
+  estimatedMs: number;
+  /** Bắt đầu quay — do trang mẹ xử lý vì nó còn phải khởi động kịch bản. */
+  onStart: () => void;
 }
 
 function clock(ms: number): string {
@@ -31,11 +40,41 @@ function formatBytes(n: number): string {
   return `${(n / 1024 / 1024).toFixed(1)} MB`;
 }
 
-export default function RecorderStudio({ recorder, lang, muted, onToggleMute }: Props) {
+/**
+ * WebM do MediaRecorder sinh ra KHÔNG ghi tổng thời lượng vào header, nên
+ * `video.duration` trả về Infinity và thanh điều khiển của trình duyệt hiển
+ * thị sai — thường là một con số vài giây, khiến người dùng tưởng bản ghi bị
+ * cụt trong khi file thực chất đầy đủ.
+ *
+ * Mẹo chuẩn để ép trình duyệt tự đo: tua tới một mốc thời gian vô lý lớn,
+ * trình duyệt buộc phải quét tới cuối luồng và từ đó biết độ dài thật, rồi
+ * đưa con trỏ về 0. Chỉ sửa được phần HIỂN THỊ; muốn sửa hẳn trong file thì
+ * phải remux bằng ffmpeg (lệnh có ở cuối bảng này).
+ */
+function useFixWebmDuration() {
+  return useCallback((e: React.SyntheticEvent<HTMLVideoElement>) => {
+    const video = e.currentTarget;
+    if (Number.isFinite(video.duration) && video.duration > 0) return;
+    const onTimeUpdate = () => {
+      video.removeEventListener('timeupdate', onTimeUpdate);
+      video.currentTime = 0;
+    };
+    video.addEventListener('timeupdate', onTimeUpdate);
+    video.currentTime = 1e101;
+  }, []);
+}
+
+export default function RecorderStudio({ recorder, lang, muted, onToggleMute, autoRun, onToggleAutoRun, estimatedMs, onStart }: Props) {
   const vi = lang === 'vi';
   const recording = recorder.state === 'recording';
   const paused = recorder.state === 'paused';
   const live = recording || paused;
+  const fixDuration = useFixWebmDuration();
+  const preset = getQuality(recorder.quality);
+  // Ước lượng dung lượng = (bitrate hình + tiếng) × thời lượng, cộng ~15%
+  // cho phần bộ mã hoá vượt mức ở các khung khoá đầu clip (đo thực tế trên
+  // clip ngắn: 4,5 Mb/s cho ra ~40 MB/phút thay vì 34 theo lý thuyết).
+  const estBytes = ((preset.videoBps + 128_000) / 8) * (estimatedMs / 1000) * 1.15;
 
   return (
     <div className="space-y-3 rounded-xl border border-[#1d2740] bg-[#0a0f1e] p-3.5">
@@ -63,7 +102,7 @@ export default function RecorderStudio({ recorder, lang, muted, onToggleMute }: 
             {!live ? (
               <button
                 type="button"
-                onClick={recorder.start}
+                onClick={onStart}
                 className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-[#7f1d1d] bg-[#2a0d0d] px-3 py-2 text-[13px] font-bold text-[#fca5a5] transition-colors hover:border-[#ef4444] hover:text-[#fecaca]"
               >
                 <span className="h-2.5 w-2.5 rounded-full bg-[#ef4444]" />
@@ -91,6 +130,41 @@ export default function RecorderStudio({ recorder, lang, muted, onToggleMute }: 
             )}
           </div>
 
+          {/* Chất lượng — quyết định dung lượng file */}
+          {!live ? (
+            <div>
+              <div className="mb-1.5 flex items-center justify-between">
+                <span className="text-[10.5px] font-semibold uppercase tracking-wider text-[#5d6d8c]">
+                  {vi ? 'Chất lượng' : 'Quality'}
+                </span>
+                <span className="font-mono text-[10.5px] text-[#6f8098]">
+                  ≈ {formatBytes(estBytes)} · {clock(estimatedMs)}
+                </span>
+              </div>
+              <div className="flex gap-1.5">
+                {QUALITY_PRESETS.map((q) => {
+                  const active = recorder.quality === q.id;
+                  return (
+                    <button
+                      key={q.id}
+                      type="button"
+                      onClick={() => recorder.setQuality(q.id)}
+                      aria-pressed={active}
+                      className={`flex-1 rounded-lg border px-2 py-1.5 text-[11.5px] font-bold transition-colors ${
+                        active
+                          ? 'border-[#2b3f6b] bg-[#101c33] text-[#7dd3fc]'
+                          : 'border-[#243050] bg-[#0a0f1e] text-[#6f8098] hover:border-[#3a4d7a]'
+                      }`}
+                    >
+                      {tr(q.label, lang)}
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="mt-1.5 text-[11px] leading-relaxed text-[#6f8098]">{tr(preset.note, lang)}</p>
+            </div>
+          ) : null}
+
           <div className="flex gap-2">
             <button
               type="button"
@@ -116,6 +190,40 @@ export default function RecorderStudio({ recorder, lang, muted, onToggleMute }: 
               {vi ? (muted ? 'Loa tắt' : 'Loa bật') : muted ? 'Speakers off' : 'Speakers on'}
             </button>
           </div>
+
+          {/* Tự chạy kịch bản khi bấm quay — dẹp hẳn cảnh quay nhầm vài giây
+              màn hình đứng yên vì quên bấm Phát. */}
+          <button
+            type="button"
+            onClick={onToggleAutoRun}
+            aria-pressed={autoRun}
+            disabled={live}
+            className="flex w-full items-center gap-2 rounded-lg border px-3 py-1.5 text-left text-[12px] font-semibold transition-colors disabled:opacity-50"
+            style={{
+              borderColor: autoRun ? '#2b3f6b' : '#243050',
+              background: autoRun ? '#101c33' : '#0a0f1e',
+              color: autoRun ? '#7dd3fc' : '#8496b4',
+            }}
+          >
+            <Film className="h-3.5 w-3.5 shrink-0" />
+            <span className="flex-1">{vi ? 'Tự quay trọn kịch bản' : 'Auto-record full scenario'}</span>
+            <span
+              className="h-3.5 w-6 shrink-0 rounded-full transition-colors"
+              style={{ background: autoRun ? '#38bdf8' : '#243050' }}
+            >
+              <span
+                className="block h-3.5 w-3.5 rounded-full bg-[#e8eefc] transition-transform"
+                style={{ transform: autoRun ? 'translateX(10px)' : 'translateX(0)' }}
+              />
+            </span>
+          </button>
+          {autoRun && !live ? (
+            <p className="text-[11px] leading-relaxed text-[#6f8098]">
+              {vi
+                ? 'Bấm quay là kịch bản tự chạy lại từ đầu và tự dừng ghi khi hết vòng — không cần bấm Phát.'
+                : 'Hitting record replays the scenario from the start and stops the recording when the last loop ends — no need to press Play.'}
+            </p>
+          ) : null}
 
           {/* Tắt loa nhưng SFX vẫn vào video — nói rõ để người dạy khỏi lo. */}
           {muted && live ? (
@@ -151,9 +259,15 @@ export default function RecorderStudio({ recorder, lang, muted, onToggleMute }: 
               <video
                 src={recorder.result.url}
                 controls
+                onLoadedMetadata={fixDuration}
                 className="w-full rounded-md border border-[#1b2440] bg-black"
                 preload="metadata"
               />
+              <p className="text-[11px] leading-relaxed text-[#6f8098]">
+                {vi
+                  ? 'Nếu thanh thời gian của trình phát hiện sai vài giây: file vẫn đầy đủ, chỉ là WebM của MediaRecorder không ghi tổng thời lượng vào header. Lệnh ffmpeg bên dưới vá đúng chỗ đó.'
+                  : 'If the player\'s timeline reads only a couple of seconds: the file is complete — MediaRecorder\'s WebM simply omits the total duration from its header. The ffmpeg command below patches exactly that.'}
+              </p>
               <div className="flex gap-2">
                 <button
                   type="button"

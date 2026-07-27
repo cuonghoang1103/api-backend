@@ -517,6 +517,7 @@ gcc hello.c -o hello
   </tbody>
 </table>
 <div class="callout">C is a <strong>compiled</strong> language. So every time you change the code you must recompile (Compile/Build) before running — with practice you'll use the <kbd>F9</kbd>/<kbd>F11</kbd> shortcuts in DevC++.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>"Compile" is really 4 steps.</b> Clicking Build actually runs: <b>preprocessing</b> (expand <code>#include</code>/<code>#define</code>) → <b>compiling</b> (C source → assembly) → <b>assembling</b> (assembly → machine code <code>.o</code>) → <b>linking</b> (combine your <code>.o</code> with library code into one <code>.exe</code>). <em>Chapter N4 (multi-file projects) revisits this pipeline — a "compile error" and a "linker error" are different stages failing.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.2</span>
@@ -539,6 +540,7 @@ gcc hello.c -o hello
   </tbody>
 </table>
 <div class="callout">C là ngôn ngữ <strong>biên dịch</strong>. Vì vậy mỗi lần sửa code, bạn phải biên dịch lại (Compile/Build) rồi mới chạy — quen tay dần sẽ dùng phím tắt <kbd>F9</kbd>/<kbd>F11</kbd> trong DevC++.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>"Biên dịch" thực ra là 4 bước.</b> Bấm Build thực chất chạy: <b>tiền xử lý</b> (mở rộng <code>#include</code>/<code>#define</code>) → <b>biên dịch</b> (mã C → hợp ngữ) → <b>hợp dịch</b> (hợp ngữ → mã máy <code>.o</code>) → <b>liên kết</b> (ghép <code>.o</code> của bạn với code thư viện thành 1 file <code>.exe</code>). <em>Chương N4 (dự án nhiều file) sẽ quay lại pipeline này — "lỗi biên dịch" và "lỗi liên kết" là hai giai đoạn khác nhau thất bại.</em></div>
 </div>
 `,
         },
@@ -704,6 +706,7 @@ age = age + 1;         <span class="tok-comment">// giá trị biến có thể 
 <span class="tok-function">printf</span>(<span class="tok-string">"%f\\n"</span>, (<span class="tok-type">float</span>)a / b); <span class="tok-comment">// 3.5 — cast to float before dividing</span></pre>
 <div class="out"><b>Output:</b> 3<br>3.500000</div>
 <div class="pitfall">Dividing two <code>int</code>s always gives an <code>int</code> (drops the decimals). For a real result, cast at least one operand to <code>float</code>/<code>double</code>.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why 0.1 + 0.2 is not exactly 0.3.</b> <code>float</code>/<code>double</code> store numbers in binary (IEEE-754), and 0.1 has no exact binary representation — just like 1/3 has no exact decimal one. <code>printf("%.20f", 0.1)</code> actually prints <code>0.10000000000000000555…</code>. <em>Never compare floats with <code>==</code>; compare <code>fabs(a - b) &lt; 1e-9</code> instead. This bites almost every beginner once.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.2</span>
@@ -725,6 +728,7 @@ age = age + 1;         <span class="tok-comment">// giá trị biến có thể 
 <span class="tok-function">printf</span>(<span class="tok-string">"%f\\n"</span>, (<span class="tok-type">float</span>)a / b); <span class="tok-comment">// 3.5 — ép float trước khi chia</span></pre>
 <div class="out"><b>Output:</b> 3<br>3.500000</div>
 <div class="pitfall">Chia hai số <code>int</code> luôn cho kết quả <code>int</code> (bỏ phần thập phân). Muốn kết quả thực, ép ít nhất một toán hạng sang <code>float</code>/<code>double</code>.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao 0.1 + 0.2 không đúng bằng 0.3.</b> <code>float</code>/<code>double</code> lưu số ở dạng nhị phân (IEEE-754), và 0.1 không có biểu diễn nhị phân chính xác — giống 1/3 không có biểu diễn thập phân chính xác. <code>printf("%.20f", 0.1)</code> thực ra in ra <code>0.10000000000000000555…</code>. <em>Đừng bao giờ so sánh số thực bằng <code>==</code>; hãy so <code>fabs(a - b) &lt; 1e-9</code>. Hầu như người mới nào cũng dính lỗi này một lần.</em></div>
 </div>
 `,
         },
@@ -752,6 +756,7 @@ age = age + 1;         <span class="tok-comment">// giá trị biến có thể 
 <span class="tok-function">scanf</span>(<span class="tok-string">"%d"</span>, &amp;tuoi);        <span class="tok-comment">// NOTE the &amp; before the variable name</span>
 <span class="tok-function">printf</span>(<span class="tok-string">"Nam sau ban %d tuoi"</span>, tuoi + 1);</pre>
 <div class="pitfall">Forgetting the <code>&amp;</code> in <code>scanf("%d", &amp;tuoi)</code> is the most classic beginner mistake — the program runs but reads input wrong / crashes. <code>&amp;</code> means "address of the variable" — you'll fully understand it in chapter 6 (pointers). <code>printf</code>, however, does <strong>not</strong> need <code>&amp;</code>.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>scanf("%s", …) has no bounds check.</b> <code>scanf("%s", name)</code> keeps writing characters until it sees whitespace, even past the end of your array — a classic <strong>buffer overflow</strong>. The safe form limits the width: <code>scanf("%19s", name)</code> for a 20-byte array (reserve 1 byte for the terminator). <em>This exact bug family (unchecked input length) is behind decades of real-world security exploits.</em></div>
 <a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-279" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Practice: an input &amp; compute program</span><span class="lc-sub">Read 2 numbers then print sum/difference/product — auto-graded on CodeLab.</span></span>
@@ -776,6 +781,7 @@ age = age + 1;         <span class="tok-comment">// giá trị biến có thể 
 <span class="tok-function">scanf</span>(<span class="tok-string">"%d"</span>, &amp;tuoi);        <span class="tok-comment">// LƯU Ý dấu &amp; trước tên biến</span>
 <span class="tok-function">printf</span>(<span class="tok-string">"Nam sau ban %d tuoi"</span>, tuoi + 1);</pre>
 <div class="pitfall">Quên dấu <code>&amp;</code> trong <code>scanf("%d", &amp;tuoi)</code> là lỗi kinh điển nhất của người mới — chương trình chạy nhưng nhập liệu sai/crash. <code>&amp;</code> nghĩa là "địa chỉ của biến" — bạn sẽ hiểu rõ ở chương 6 (con trỏ). Còn <code>printf</code> thì <strong>không</strong> cần <code>&amp;</code>.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>scanf("%s", …) không kiểm tra giới hạn.</b> <code>scanf("%s", name)</code> cứ ghi ký tự tới khi gặp khoảng trắng, kể cả vượt quá cuối mảng — một <strong>tràn bộ đệm (buffer overflow)</strong> kinh điển. Cách an toàn là giới hạn độ rộng: <code>scanf("%19s", name)</code> cho mảng 20 byte (chừa 1 byte cho ký tự kết thúc). <em>Đúng họ lỗi này (độ dài đầu vào không kiểm tra) đứng sau hàng chục năm lỗ hổng bảo mật thực tế.</em></div>
 <a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-279" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện: chương trình nhập & tính toán</span><span class="lc-sub">Nhập 2 số rồi in tổng/hiệu/tích — bài chấm tự động ở CodeLab.</span></span>
@@ -967,6 +973,7 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
     <span class="tok-keyword">default</span>: <span class="tok-function">printf</span>(<span class="tok-string">"Khac"</span>);
 }</pre>
 <div class="pitfall">Forgetting <code>break;</code> in a <code>switch</code> → the program "falls through" to the following cases, running branches you didn't want. Unless intentional, always end each case with <code>break;</code>.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>An if is not free at the hardware level.</b> Every <code>if</code> compiles to a conditional jump; the CPU (CEA201, chapter 12) <em>guesses</em> which way it will go and starts executing ahead of time. A wrong guess flushes the pipeline and costs real cycles — which is why unpredictable branches (e.g. checking random data) run slower than predictable ones (e.g. checking a sorted array), even with identical C code. <em>The syllabus stops at "if chooses a path"; the hardware course explains why the choice has a cost.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.1</span>
@@ -997,6 +1004,7 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
     <span class="tok-keyword">default</span>: <span class="tok-function">printf</span>(<span class="tok-string">"Khac"</span>);
 }</pre>
 <div class="pitfall">Quên <code>break;</code> trong <code>switch</code> → chương trình "rơi" (fall-through) xuống các case sau, chạy cả những nhánh không mong muốn. Trừ khi cố ý, luôn kết thúc mỗi case bằng <code>break;</code>.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>if không miễn phí ở tầng phần cứng.</b> Mỗi <code>if</code> dịch ra một lệnh nhảy có điều kiện; CPU (CEA201, chương 12) <em>đoán</em> nó sẽ đi hướng nào và chạy trước. Đoán sai làm xả pipeline và tốn chu kỳ thật — đó là lý do nhánh khó đoán (vd kiểm dữ liệu ngẫu nhiên) chạy chậm hơn nhánh dễ đoán (vd kiểm mảng đã sắp xếp), dù code C giống hệt nhau. <em>Giáo trình dừng ở "if chọn một nhánh"; môn phần cứng giải thích vì sao lựa chọn đó có cái giá.</em></div>
 </div>
 `,
         },
@@ -1031,6 +1039,8 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
 <h3><code>break</code> &amp; <code>continue</code></h3>
 <ul><li><code>break</code> — exit the loop immediately.</li><li><code>continue</code> — skip the rest, go to the next pass.</li></ul>
 <div class="pitfall">Forgetting to update the condition variable → an <strong>infinite loop</strong>. e.g. <code>while(n&gt;1){ printf("%d",n); }</code> missing <code>n=n/2</code> prints forever. Always ask: "which variable makes the condition become false?".</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Loop order can change speed 10× with zero algorithm change.</b> Looping over a 2D array row-by-row (<code>for i, for j: a[i][j]</code>) matches how C stores it in memory (row-major, chapter 8.2), so each access is next to the last one — cache-friendly (CEA201). Swapping the loops to column-by-column touches memory far apart every step, causing far more cache misses. <em>Same output, same Big-O, measurably different real speed.</em></div>
+
 <div class="note-ct">The counting <code>for</code> loop is the backbone of every array traversal (chapter 8) and every algorithm in CSD201. Master the 3 parts of <code>for</code> now and reading sort/search code later is easy.</div>
 <a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-280" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -1063,6 +1073,8 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
 <h3><code>break</code> &amp; <code>continue</code></h3>
 <ul><li><code>break</code> — thoát ngay khỏi vòng lặp.</li><li><code>continue</code> — bỏ qua phần còn lại, sang vòng kế.</li></ul>
 <div class="pitfall">Quên cập nhật biến điều kiện → <strong>vòng lặp vô hạn</strong>. Ví dụ <code>while(n&gt;1){ printf("%d",n); }</code> thiếu <code>n=n/2</code> sẽ in mãi. Luôn tự hỏi: "biến nào làm điều kiện tiến tới sai?".</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Thứ tự vòng lặp có thể đổi tốc độ 10× dù thuật toán không đổi.</b> Duyệt mảng 2D theo hàng (<code>for i, for j: a[i][j]</code>) khớp với cách C lưu nó trong bộ nhớ (row-major, chương 8.2), nên mỗi lần truy cập nằm sát lần trước — thân thiện cache (CEA201). Đổi vòng lặp thành duyệt theo cột chạm bộ nhớ cách xa nhau mỗi bước, gây nhiều cache miss hơn hẳn. <em>Cùng kết quả, cùng Big-O, nhưng tốc độ thực đo được khác hẳn.</em></div>
+
 <div class="note-ct">Vòng <code>for</code> đếm là xương sống của mọi bài duyệt mảng (chương 8) và mọi thuật toán ở CSD201. Nắm chắc 3 phần của <code>for</code> bây giờ, sau này đọc code sắp xếp/tìm kiếm sẽ nhàn.</div>
 <a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-280" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -1231,6 +1243,7 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
 <span class="tok-function">tang</span>(n);
 <span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, n);   <span class="tok-comment">// still 5 !</span></pre>
 <div class="pitfall">This confuses many people: the function "changes" the variable but nothing changes outside. To let a function modify the original variable, use a <strong>pointer</strong> (chapter 6).</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Where do parameters actually live? The stack frame.</b> Every call pushes a new <strong>stack frame</strong>: a block holding the parameters, local variables and the return address, stacked on top of the caller's frame. That is exactly why the copy in "pass by value" disappears when the function returns — its frame is popped off and that memory is gone. <em>Chapter N2 (Stack vs Heap) draws this frame-by-frame; keep this call in mind when you get there.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.2</span>
@@ -1261,6 +1274,7 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
 <span class="tok-function">tang</span>(n);
 <span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, n);   <span class="tok-comment">// vẫn là 5 !</span></pre>
 <div class="pitfall">Đây là lý do nhiều người bối rối: hàm "sửa" biến nhưng ra ngoài không đổi. Muốn hàm thay đổi được biến gốc, phải dùng <strong>con trỏ</strong> (chương 6).</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Tham số thực ra sống ở đâu? Stack frame.</b> Mỗi lần gọi hàm đẩy thêm một <strong>stack frame</strong>: một khối chứa tham số, biến cục bộ và địa chỉ trả về, xếp chồng lên frame của hàm gọi. Đó chính xác là lý do bản sao trong "truyền theo giá trị" biến mất khi hàm return — frame của nó bị gỡ khỏi stack và vùng nhớ đó mất đi. <em>Chương N2 (Stack vs Heap) sẽ vẽ chi tiết từng frame; nhớ lại chỗ này khi tới đó.</em></div>
 </div>
 `,
         },
@@ -1431,6 +1445,7 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
 <span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, n);    <span class="tok-comment">// 10 !</span></pre>
 <div class="out"><b>Output:</b> 5<br>10</div>
 <div class="note-ct">Remember the <code>&amp;</code> in <code>scanf("%d", &amp;n)</code> from chapter 2 — it is exactly "address of n". Now you see why: <code>scanf</code> needs the address to write the input into n's memory cell.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Pointer arithmetic scales by the type's size.</b> <code>p + 1</code> does not add 1 byte — it adds <code>sizeof(*p)</code> bytes, so for <code>int *p</code> it jumps 4 bytes (typically), landing on the next <code>int</code>. This is exactly how array indexing (chapter 8) really works: <code>a[i]</code> is compiler sugar for <code>*(a + i)</code>. <em>Understanding this now makes chapter N3's array-pointer equivalence click instantly instead of feeling like magic.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.1</span>
@@ -1453,6 +1468,7 @@ a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></p
 <span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, n);    <span class="tok-comment">// 10 !</span></pre>
 <div class="out"><b>Output:</b> 5<br>10</div>
 <div class="note-ct">Nhớ lại dấu <code>&amp;</code> trong <code>scanf("%d", &amp;n)</code> ở chương 2 — chính là "địa chỉ của n". Giờ bạn hiểu vì sao: <code>scanf</code> cần địa chỉ để ghi giá trị nhập vào đúng ô nhớ của n.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Phép toán con trỏ co giãn theo kích thước kiểu.</b> <code>p + 1</code> không cộng 1 byte — nó cộng <code>sizeof(*p)</code> byte, nên với <code>int *p</code> nó nhảy 4 byte (thường vậy), rơi đúng vào <code>int</code> kế tiếp. Đây chính xác là cách chỉ số mảng (chương 8) hoạt động thật: <code>a[i]</code> là cú pháp đường của <code>*(a + i)</code>. <em>Hiểu điều này ngay bây giờ giúp sự tương đương mảng-con trỏ ở chương N3 sáng tỏ ngay lập tức thay vì cảm thấy như phép màu.</em></div>
 </div>
 `,
         },
@@ -1515,6 +1531,7 @@ a[0] = 10;               <span class="tok-comment">// use it like a normal array
   <div class="lz-step"><div class="lz-k">Return</div><div class="lz-t">free(a)</div><div class="lz-d">release when done</div></div>
 </div>
 <div class="pitfall">Requesting without <code>free</code> → a <strong>memory leak</strong>. Calling <code>free</code> twice on the same region, or using it after <code>free</code> → serious bugs. Advanced chapter N2 digs into this.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Tools that catch leaks for you.</b> Real projects do not hunt leaks by reading code — they run under <strong>Valgrind</strong> (Linux) or enable <strong>AddressSanitizer</strong> (<code>-fsanitize=address</code> in gcc), which report exactly which <code>malloc</code> line's memory was never freed, or was used after being freed. <em>You will not spot every leak by eye once programs grow past a few hundred lines — professional C developers lean on these tools, not memorization.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.3</span>
@@ -1531,6 +1548,7 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
   <div class="lz-step"><div class="lz-k">Trả</div><div class="lz-t">free(a)</div><div class="lz-d">giải phóng khi xong</div></div>
 </div>
 <div class="pitfall">Xin mà không <code>free</code> → <strong>rò rỉ bộ nhớ (memory leak)</strong>. <code>free</code> hai lần cùng một vùng, hoặc dùng sau khi đã <code>free</code> → lỗi nghiêm trọng. Chương nâng cao N2 sẽ đào sâu chủ đề này.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Có công cụ bắt rò rỉ giúp bạn.</b> Dự án thật không săn rò rỉ bằng cách đọc code — họ chạy dưới <strong>Valgrind</strong> (Linux) hoặc bật <strong>AddressSanitizer</strong> (<code>-fsanitize=address</code> trong gcc), báo chính xác dòng <code>malloc</code> nào chưa từng được free, hoặc bị dùng sau khi đã free. <em>Bạn sẽ không thấy hết rò rỉ bằng mắt khi chương trình lớn quá vài trăm dòng — dev C chuyên nghiệp dựa vào công cụ, không phải trí nhớ.</em></div>
 </div>
 `,
         },
@@ -1776,6 +1794,7 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
   <div class="lz-step"><div class="lz-k">Repeat</div><div class="lz-t">On the rest</div><div class="lz-d">until done</div></div>
 </div>
 <div class="note-ct">These are the first algorithms you meet — they are studied in much more depth in <span class="badge">CSD201</span> Data Structures &amp; Algorithms. A solid grasp here lightens the load later.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Counting comparisons, not just watching it run.</b> Linear search checks up to n elements (worst case = O(n)); selection sort compares roughly n²/2 pairs (O(n²)) because it re-scans the shrinking unsorted part each round. For n=10 that is only ~45 comparisons — fine. For n=1,000,000 it is ~500 billion — a program that finishes instantly at n=10 can take minutes at scale. <em>The formal name for this (Big-O) comes later in CSD201/MAD101; the intuition — count the operations, not the seconds — starts here.</em></div>
 <a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-281" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Practice: find max/min, count, sort</span><span class="lc-sub">A set of array problems auto-graded on CodeLab.</span></span>
@@ -1796,6 +1815,7 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
   <div class="lz-step"><div class="lz-k">Lặp</div><div class="lz-t">Với phần còn lại</div><div class="lz-d">tới khi hết</div></div>
 </div>
 <div class="note-ct">Đây là các thuật toán đầu tiên bạn gặp — chúng được học kỹ hơn nhiều ở <span class="badge">CSD201</span> Cấu trúc dữ liệu &amp; giải thuật. Hiểu chắc ở đây sẽ nhẹ gánh về sau.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đếm số phép so sánh, không chỉ nhìn nó chạy.</b> Tìm tuyến tính kiểm tối đa n phần tử (xấu nhất O(n)); selection sort so sánh khoảng n²/2 cặp (O(n²)) vì mỗi vòng nó quét lại phần chưa sắp đang co nhỏ dần. Với n=10 chỉ ~45 phép so sánh — ổn. Với n=1.000.000 là ~500 tỷ — chương trình chạy tức thì ở n=10 có thể mất vài phút ở quy mô lớn. <em>Tên chính thức (Big-O) học sau ở CSD201/MAD101; trực giác — đếm số phép toán, không đếm giây — bắt đầu từ đây.</em></div>
 <a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-281" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện: tìm max/min, đếm, sắp xếp</span><span class="lc-sub">Bộ bài mảng có chấm tự động trên CodeLab.</span></span>
@@ -1824,6 +1844,7 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <span class="tok-function">printf</span>(<span class="tok-string">"%s - %.1f"</span>, sv.ten, sv.diem); <span class="tok-comment">// access with the . operator</span></pre>
 <div class="out"><b>Output:</b> An - 8.5</div>
 <div class="callout">The most powerful combo: an <strong>array of structs</strong> — <code>struct SinhVien ds[100];</code> to manage a whole list of students. That is exactly the Workshop 3 task.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>sizeof(struct) is not always the sum of its fields.</b> A <code>struct { char c; int n; }</code> looks like 1+4=5 bytes, but <code>sizeof</code> usually reports 8: the compiler inserts <strong>padding</strong> so <code>int n</code> starts at a 4-byte-aligned address (CPUs read aligned memory faster — CEA201). <em>Reordering fields from biggest to smallest often shrinks a struct's memory footprint with zero behavior change — a real technique in memory-constrained code like IOT102.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.4</span>
@@ -1839,6 +1860,7 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <span class="tok-function">printf</span>(<span class="tok-string">"%s - %.1f"</span>, sv.ten, sv.diem); <span class="tok-comment">// truy cập bằng dấu .</span></pre>
 <div class="out"><b>Output:</b> An - 8.5</div>
 <div class="callout">Kết hợp mạnh nhất: <strong>mảng struct</strong> — <code>struct SinhVien ds[100];</code> để quản lý cả danh sách sinh viên. Đây chính là đề Workshop 3.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>sizeof(struct) không phải luôn bằng tổng các trường.</b> Một <code>struct { char c; int n; }</code> trông như 1+4=5 byte, nhưng <code>sizeof</code> thường báo 8: compiler chèn <strong>padding</strong> để <code>int n</code> bắt đầu tại địa chỉ căn 4 byte (CPU đọc bộ nhớ căn chỉnh nhanh hơn — CEA201). <em>Sắp xếp lại các trường từ to tới nhỏ thường thu nhỏ dung lượng struct mà hành vi không đổi — một kỹ thuật thật trong code hạn chế bộ nhớ như IOT102.</em></div>
 </div>
 `,
         },
@@ -1984,6 +2006,7 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, <span class="tok-function">strlen</span>(s));  <span class="tok-comment">// 5</span></pre>
 <div class="out"><b>Output:</b> 5</div>
 <div class="pitfall">To compare two strings you must use <code>strcmp(a, b) == 0</code>, NOT <code>a == b</code> (that compares addresses and is almost always wrong). A very common trap.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>strcpy has no bounds check — a real security bug family.</b> <code>strcpy(a, b)</code> copies until it hits <code>b</code>'s <code>'\\0'</code>, no matter how small <code>a</code> is — if <code>b</code> is longer than <code>a</code>'s buffer, it overwrites whatever memory comes after, which can corrupt other variables or even the return address on the stack. Modern C prefers <code>strncpy(a, b, sizeof(a)-1)</code> (and still must manually add the <code>'\\0'</code>). <em>This exact bug — an unchecked copy — is the root cause behind decades of real-world buffer-overflow exploits.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 9 · Bài 9.2</span>
@@ -2003,6 +2026,7 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, <span class="tok-function">strlen</span>(s));  <span class="tok-comment">// 5</span></pre>
 <div class="out"><b>Output:</b> 5</div>
 <div class="pitfall">So sánh hai chuỗi phải dùng <code>strcmp(a, b) == 0</code>, KHÔNG dùng <code>a == b</code> (cái đó so sánh địa chỉ, gần như luôn sai). Đây là bẫy rất phổ biến.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>strcpy không kiểm giới hạn — cả một họ lỗi bảo mật thật.</b> <code>strcpy(a, b)</code> chép tới khi gặp <code>'\\0'</code> của <code>b</code>, bất kể <code>a</code> nhỏ cỡ nào — nếu <code>b</code> dài hơn bộ đệm của <code>a</code>, nó ghi đè lên bất cứ vùng nhớ nào phía sau, có thể phá hỏng biến khác hoặc cả địa chỉ trả về trên stack. C hiện đại ưu tiên <code>strncpy(a, b, sizeof(a)-1)</code> (và vẫn phải tự thêm <code>'\\0'</code>). <em>Đúng lỗi này — copy không kiểm tra — là gốc rễ sau hàng chục năm lỗ hổng tràn bộ đệm thực tế.</em></div>
 </div>
 `,
         },

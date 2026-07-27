@@ -770,7 +770,16 @@ cache-control: public, max-age=31536000, immutable
 server: cloudflare
 cf-cache-status: DYNAMIC</div>
 <p>Read <code>cache-control</code> first, because it is the whole strategy in one line. <code>public</code>: any cache may store it. <code>max-age=31536000</code>: one year. <code>immutable</code>: do not even revalidate — the browser will not send a conditional request at all, so a repeat view costs zero network. That is only safe because of the key layout from lesson 10.2: keys contain a timestamp and random bytes, so a changed image is a <em>different key</em>, never a changed object. Content-addressed keys and <code>immutable</code> are the same decision made twice.</p>
-<p>And one finding worth being honest about: <code>cf-cache-status: DYNAMIC</code> on three consecutive requests means Cloudflare is <strong>not</strong> caching this object at the edge — every hit goes to R2. The object is served from an R2 custom domain, and edge caching there needs an explicit Cache Rule. Nothing is broken, and the browser cache still does its job; but the "served from the nearest city" benefit is not being collected yet. Measuring your own headers is how you find things like this.</p>
+<p>Now the last line, and the honest part of this lesson — because the first reading of it was <em>wrong</em>. <code>cf-cache-status: DYNAMIC</code> on three consecutive requests looks like proof that Cloudflare is not caching this object at the edge. It is not proof of anything. Repeat the request as a real GET instead of a HEAD:</p>
+<div class="out">$ curl -s -o /dev/null -D - https://media.cuongthai.com/images/course-covers/nodejs.png
+HTTP/2 200
+age: 27107
+cf-cache-status: HIT
+cf-ray: a21ee83ce982219a-HKG</div>
+<p><code>HIT</code>, and an <code>age</code> of 27107 seconds — this object has been sitting at the edge for seven and a half hours. The edge cache was working the entire time. The measurement was not.</p>
+<div class="pitfall">
+<p><strong>Pitfall — <code>curl -I</code> sends HEAD, and Cloudflare answers HEAD with DYNAMIC.</strong> A HEAD request is not served from the edge cache the way a GET is, so <code>cf-cache-status</code> reports <code>DYNAMIC</code> even while the object is cached and being served to real users from the nearest city. The two requests above were sent seconds apart, to the same URL, from the same machine, and disagree completely. Verify a CDN with <code>curl -s -o /dev/null -D -</code> (a GET whose body you throw away), never with <code>curl -I</code> — and read <code>age</code>, which a cold cache cannot fake. The same trap sits under every "is my CDN working?" answer on the internet.</p>
+</div>
 
 <h3>Measurement 3 — what those headers buy, in bytes</h3>
 <div class="out">GET với If-None-Match: "6a5e9970…"  → HTTP 304, tải về 0 byte
@@ -851,7 +860,16 @@ cache-control: public, max-age=31536000, immutable
 server: cloudflare
 cf-cache-status: DYNAMIC</div>
 <p>Hãy đọc <code>cache-control</code> trước, vì cả chiến lược nằm gọn trong một dòng. <code>public</code>: mọi tầng cache đều được phép lưu. <code>max-age=31536000</code>: một năm. <code>immutable</code>: đừng cả kiểm lại — trình duyệt sẽ không gửi request có điều kiện nào cả, nên lần xem lại tốn 0 byte mạng. Điều đó chỉ an toàn nhờ cách bố trí key ở bài 10.2: key chứa dấu thời gian và byte ngẫu nhiên, nên một ảnh thay đổi là một <em>key khác</em>, không bao giờ là một object bị sửa. Key gắn với nội dung và cờ <code>immutable</code> là cùng một quyết định nói hai lần.</p>
-<p>Và một phát hiện đáng nói thật: <code>cf-cache-status: DYNAMIC</code> ở cả ba request liên tiếp nghĩa là Cloudflare <strong>không</strong> cache object này ở biên — mỗi lượt đều đi tới R2. Object được phục vụ qua custom domain của R2, và muốn cache ở biên thì cần một Cache Rule tường minh. Không có gì hỏng, và cache của trình duyệt vẫn làm việc của nó; nhưng phần lợi "phục vụ từ thành phố gần nhất" thì chưa được thu về. Đo header của chính mình là cách bạn phát hiện những chuyện như vậy.</p>
+<p>Giờ tới dòng cuối, và tới phần trung thực của bài này — bởi vì cách đọc đầu tiên của nó đã <em>sai</em>. Dòng <code>cf-cache-status: DYNAMIC</code> ở cả ba request liên tiếp trông như bằng chứng rằng Cloudflare không cache object này ở biên. Nó không chứng minh được gì cả. Hãy gửi lại đúng request đó bằng một GET thật thay vì một HEAD:</p>
+<div class="out">$ curl -s -o /dev/null -D - https://media.cuongthai.com/images/course-covers/nodejs.png
+HTTP/2 200
+age: 27107
+cf-cache-status: HIT
+cf-ray: a21ee83ce982219a-HKG</div>
+<p><code>HIT</code>, kèm <code>age</code> bằng 27107 giây — object này đã nằm sẵn ở biên suốt bảy tiếng rưỡi. Cache ở biên vẫn chạy suốt từ đầu tới giờ. Thứ không chạy là phép đo.</p>
+<div class="pitfall">
+<p><strong>Bẫy — <code>curl -I</code> gửi HEAD, và Cloudflare trả lời HEAD bằng DYNAMIC.</strong> Một request HEAD không được phục vụ từ cache biên theo cách của GET, nên <code>cf-cache-status</code> báo <code>DYNAMIC</code> ngay cả khi object đang nằm trong cache và đang được phục vụ cho người dùng thật từ thành phố gần nhất. Hai request ở trên cách nhau vài giây, cùng một URL, cùng một máy, mà mâu thuẫn hoàn toàn với nhau. Hãy kiểm CDN bằng <code>curl -s -o /dev/null -D -</code> (một lệnh GET mà bạn vứt phần thân đi), tuyệt đối đừng dùng <code>curl -I</code> — và hãy đọc <code>age</code>, con số mà một cache nguội không giả được. Đúng cái bẫy này nằm dưới mọi câu trả lời "CDN của tôi có chạy không?" trên internet.</p>
+</div>
 
 <h3>Phép đo 3 — mấy header đó mua được gì, tính bằng byte</h3>
 <div class="out">GET với If-None-Match: "6a5e9970…"  → HTTP 304, tải về 0 byte

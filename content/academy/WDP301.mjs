@@ -1159,6 +1159,20 @@ api.interceptors.request.use((cfg) => {
 <div class="callout ok"><strong>Why this wins the defense:</strong> you can demo the happy path (booking works) AND the sad path (a second booking is blocked with a clear message). Showing the rule <em>enforced</em>, not just described, proves real engineering — the single strongest thing in your final presentation.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Two requests at once — the concurrency case.</b> The truly rigorous version proves it under <em>simultaneous</em> requests (e.g. fire two bookings with Promise.all in a test and assert only one succeeds). The unique index makes this correct at the database level, not just in app code. Demonstrating this is a standout move. <em>Beyond the syllabus, but the difference between "it usually works" and "it is correct."</em></div>
+<h3>Worked example · proving it with a real concurrency test</h3>
+<pre><code><span class="tok-comment">// tests/concurrency.test.js — fire the SAME booking twice, at once</span>
+<span class="tok-keyword">const</span> sameBooking = { patientId: <span class="tok-string">'p1'</span>, doctorId: <span class="tok-string">'d1'</span>, slotId: <span class="tok-string">'slot-9am'</span> };
+
+<span class="tok-keyword">const</span> results = <span class="tok-keyword">await</span> Promise.allSettled([
+  book(sameBooking),
+  book(sameBooking),   <span class="tok-comment">// launched in the same tick — a real race</span>
+]);
+
+<span class="tok-keyword">const</span> fulfilled = results.filter(r => r.status === <span class="tok-string">'fulfilled'</span>);
+<span class="tok-keyword">const</span> rejected  = results.filter(r => r.status === <span class="tok-string">'rejected'</span>);
+console.log(fulfilled.length, rejected.length);</code></pre>
+<div class="out"><b>Output:</b> <code>1 1</code><br><b>Reading it:</b> both calls reach MongoDB at nearly the same instant, but the unique index on <code>slotId</code> lets only the first <code>insert</code> win — the second gets error <code>11000</code>, which your service layer turns into the <code>AppError(409, …)</code> you already wrote above. <code>Promise.all</code> would reject the whole batch on the first rejection; <code>Promise.allSettled</code> is what you want here because you need to inspect BOTH outcomes, not fail fast.</div>
+<div class="pitfall">This test only proves anything if the two <code>book()</code> calls are launched together (both promises created before either is awaited) — calling them with <code>await</code> one after another is sequential, not concurrent, and would pass even without the unique index.</div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.1</span>
@@ -1191,6 +1205,20 @@ api.interceptors.request.use((cfg) => {
 <div class="callout ok"><strong>Vì sao điều này thắng phần bảo vệ:</strong> bạn demo được cả happy path (đặt được) LẪN sad path (lần đặt thứ hai bị chặn với thông báo rõ). Cho thấy quy tắc <em>được áp</em>, không chỉ mô tả, chứng minh kỹ thuật thật — thứ mạnh nhất trong thuyết trình cuối.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hai request cùng lúc — ca tương tranh.</b> Phiên bản thật sự chặt chẽ chứng minh nó dưới request <em>đồng thời</em> (vd bắn hai booking bằng Promise.all trong một test và khẳng định chỉ một thành công). Unique index làm điều này đúng ở tầng CSDL, không chỉ trong code app. Trưng điều này là một nước đi nổi bật. <em>Ngoài syllabus, nhưng là khác biệt giữa "thường thì chạy" và "nó đúng".</em></div>
+<h3>Ví dụ có lời giải · chứng minh bằng test tương tranh thật</h3>
+<pre><code><span class="tok-comment">// tests/concurrency.test.js — bắn CÙNG một booking hai lần, cùng lúc</span>
+<span class="tok-keyword">const</span> sameBooking = { patientId: <span class="tok-string">'p1'</span>, doctorId: <span class="tok-string">'d1'</span>, slotId: <span class="tok-string">'slot-9am'</span> };
+
+<span class="tok-keyword">const</span> results = <span class="tok-keyword">await</span> Promise.allSettled([
+  book(sameBooking),
+  book(sameBooking),   <span class="tok-comment">// tung ra cùng một nhịp — một cuộc đua thật</span>
+]);
+
+<span class="tok-keyword">const</span> fulfilled = results.filter(r => r.status === <span class="tok-string">'fulfilled'</span>);
+<span class="tok-keyword">const</span> rejected  = results.filter(r => r.status === <span class="tok-string">'rejected'</span>);
+console.log(fulfilled.length, rejected.length);</code></pre>
+<div class="out"><b>Output:</b> <code>1 1</code><br><b>Đọc kết quả:</b> cả hai lệnh gọi tới MongoDB gần như cùng lúc, nhưng unique index trên <code>slotId</code> chỉ cho lệnh <code>insert</code> đầu tiên thắng — cái thứ hai nhận lỗi <code>11000</code>, mà tầng service của bạn dịch thành <code>AppError(409, …)</code> đã viết ở trên. <code>Promise.all</code> sẽ từ chối cả lô ngay khi có 1 lỗi; <code>Promise.allSettled</code> mới đúng ở đây vì bạn cần xem CẢ HAI kết quả, không phải fail nhanh.</div>
+<div class="pitfall">Test này chỉ chứng minh được gì đó nếu hai lệnh gọi <code>book()</code> được tung ra cùng nhau (cả hai promise tạo ra trước khi await bất kỳ cái nào) — gọi chúng bằng <code>await</code> lần lượt là tuần tự, không phải đồng thời, và sẽ pass ngay cả khi KHÔNG có unique index.</div>
 </div>`,
         },
       ],

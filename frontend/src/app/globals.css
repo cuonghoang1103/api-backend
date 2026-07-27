@@ -3140,3 +3140,32 @@ html.pwa-standalone button[aria-label='Close chat sessions'] {
 .exphub-code-editor .hljs-addition { color: #b5cea8; }
 .exphub-code-editor .hljs-emphasis { font-style: italic; }
 .exphub-code-editor .hljs-strong { font-weight: 700; }
+
+/* ── /simulation — chế độ khung trần (?chrome=off) ─────────────────────
+   Trang mô phỏng dùng để quay video bài giảng và để Playwright dựng video
+   hàng loạt ở chế độ headless. Ở chế độ khung trần, mọi lớp vỏ toàn cục
+   (thanh điều hướng, nút mở dock, robot AI, thanh nhạc) phải biến mất để
+   khung hoạt cảnh 16:9 chiếm trọn màn hình.
+
+   Lớp `sim-bare` do chính trang gắn lên <html> rồi tự gỡ khi rời trang.
+
+   Lưu ý về theme: trang /simulation là DARK-ONLY theo thiết kế (bề mặt quay
+   video phải cố định), nhưng nó KHÔNG đụng tới theme toàn cục — không thêm
+   `.dark` lên <html>, không dùng biến thể Tailwind `dark:`. Toàn bộ màu tối
+   được viết thẳng trong phạm vi `.sim-root`, nên bộ chuyển 3 theme của Notes
+   không bị ảnh hưởng. */
+html.sim-bare .app-top-nav,
+html.sim-bare .ai-robot-fab,
+html.sim-bare .music-bar-fixed,
+html.sim-bare button[aria-label='Open navigation'],
+html.sim-bare button[aria-label='Close navigation'] {
+  display: none !important;
+}
+html.sim-bare,
+html.sim-bare body {
+  overflow: hidden;
+  background: #04050a;
+}
+html.sim-bare .app-main {
+  padding: 0 !important;
+}

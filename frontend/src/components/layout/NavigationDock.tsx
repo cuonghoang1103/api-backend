@@ -12,6 +12,7 @@ import {
   Github, Menu, X, NotebookPen, Languages, Wallet,
   TrendingUp, Gamepad2, Users, PlayCircle, Megaphone, Briefcase, Crown,
   FileText, Newspaper, Radio, Code2, Binary, Map as MapIcon, ClipboardCheck,
+  Waypoints,
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
@@ -82,6 +83,7 @@ const ALL_DOCK_ITEMS: DockItem[] = [
   { href: '/hub', label: 'Hub', icon: Layers, section: 'code' },
   { href: '/roadmap', label: 'RoadMap', icon: MapIcon, section: 'code' },
   { href: '/algorithms', label: 'Algorithms', icon: Binary, section: 'code' },
+  { href: '/simulation', label: 'Simulation', icon: Waypoints, section: 'code' },
   { href: '/projects', label: 'Projects', icon: FolderOpen, section: 'code' },
   { href: '/repos', label: 'GitHub Repos', icon: Github, section: 'code' },
   // Learn

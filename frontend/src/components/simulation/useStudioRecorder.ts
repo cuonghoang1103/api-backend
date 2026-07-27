@@ -1,0 +1,316 @@
+'use client';
+
+/**
+ * Phòng thu: quay canvas + trộn âm thanh, xuất file .webm.
+ *
+ * ĐƯỜNG HÌNH
+ * ----------
+ * `canvas.captureStream(60)` trả về một MediaStream có đúng một video track
+ * lấy thẳng từ backing store 1920×1080 — không phụ thuộc kích thước hiển
+ * thị, không dính thanh trình duyệt, không cần người dạy bấm chọn cửa sổ.
+ * Đây là lý do toàn bộ hoạt cảnh được vẽ trên canvas thay vì SVG: SVG/DOM
+ * KHÔNG có captureStream, muốn quay thì buộc phải dùng getDisplayMedia().
+ *
+ * ĐƯỜNG TIẾNG — phần dễ sai nhất
+ * ------------------------------
+ * MediaRecorder nhận MỘT MediaStream. Nếu ta đưa vào hai audio track (một
+ * của SFX, một của micro) thì đa số trình duyệt chỉ mã hoá track ĐẦU TIÊN
+ * và tiếng còn lại biến mất — lỗi này rất hay gặp và chỉ phát hiện ra sau
+ * khi đã quay xong cả bài giảng. Cách đúng là trộn TRƯỚC trong đồ thị Web
+ * Audio: SFX và micro cùng nối vào một MediaStreamAudioDestinationNode
+ * (xem `useSoundEngine`), rồi lấy đúng MỘT track đã trộn sẵn từ đó.
+ *
+ *   SFX  ─┐
+ *          ├→ recordDest → 1 audio track ─┐
+ *   Mic  ─┘                                ├→ new MediaStream → MediaRecorder
+ *   canvas.captureStream() → 1 video track ┘
+ *
+ * ĐỊNH DẠNG
+ * ---------
+ * Chrome/Firefox chỉ xuất WebM ổn định qua MediaRecorder, nên phần này
+ * KHÔNG hứa hẹn .mp4. Cần .mp4 để đưa lên nền tảng video thì chuyển đổi
+ * bằng ffmpeg phía máy chủ (container backend đã có sẵn /usr/bin/ffmpeg):
+ *
+ *   ffmpeg -i bai-giang.webm -c:v libx264 -crf 20 -preset slow \
+ *          -c:a aac -b:a 192k -movflags +faststart bai-giang.mp4
+ *
+ * Tuyệt đối không dùng ffmpeg.wasm tải từ CDN — CSP `default-src 'self'`
+ * của site chặn thẳng.
+ */
+
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { SoundEngine } from './useSoundEngine';
+
+export type RecorderState = 'idle' | 'recording' | 'paused';
+
+export interface RecordingResult {
+  url: string;
+  blob: Blob;
+  mimeType: string;
+  sizeBytes: number;
+  durationMs: number;
+  filename: string;
+}
+
+/** Thứ tự ưu tiên codec: VP9 nét hơn ở cùng bitrate, VP8 để dự phòng. */
+const MIME_CANDIDATES = [
+  'video/webm;codecs=vp9,opus',
+  'video/webm;codecs=vp8,opus',
+  'video/webm;codecs=vp9',
+  'video/webm',
+];
+
+function pickMimeType(): string | null {
+  if (typeof MediaRecorder === 'undefined') return null;
+  return MIME_CANDIDATES.find((m) => MediaRecorder.isTypeSupported(m)) ?? null;
+}
+
+export interface UseStudioRecorderArgs {
+  canvasRef: React.RefObject<HTMLCanvasElement>;
+  sound: SoundEngine;
+  /** Gợi ý tên file, ví dụ "rest-api-post-201". */
+  baseName: string;
+}
+
+export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecorderArgs) {
+  const [state, setState] = useState<RecorderState>('idle');
+  const [micEnabled, setMicEnabled] = useState(false);
+  const [micReady, setMicReady] = useState(false);
+  const [elapsedMs, setElapsedMs] = useState(0);
+  const [result, setResult] = useState<RecordingResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [supported, setSupported] = useState(true);
+
+  const recorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
+  const micStreamRef = useRef<MediaStream | null>(null);
+  const canvasStreamRef = useRef<MediaStream | null>(null);
+  const startedAtRef = useRef(0);
+  const pausedTotalRef = useRef(0);
+  const pausedAtRef = useRef(0);
+  const timerRef = useRef<number | null>(null);
+  const lastUrlRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    setSupported(typeof MediaRecorder !== 'undefined' && pickMimeType() !== null);
+  }, []);
+
+  /* ── Đồng hồ hiển thị ─────────────────────────────────────────
+     Dùng performance.now() ở ĐÂY là hợp lệ: đây là đồng hồ tường của bản
+     ghi, không phải trục thời gian của mô phỏng. Trục mô phỏng vẫn đếm
+     bằng số khung để giữ tính tất định. */
+  const startTimer = useCallback(() => {
+    if (timerRef.current != null) return;
+    timerRef.current = window.setInterval(() => {
+      if (pausedAtRef.current) return;
+      setElapsedMs(performance.now() - startedAtRef.current - pausedTotalRef.current);
+    }, 200);
+  }, []);
+
+  const stopTimer = useCallback(() => {
+    if (timerRef.current != null) {
+      window.clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  }, []);
+
+  /* ── Micro ────────────────────────────────────────────────── */
+
+  const enableMic = useCallback(async (): Promise<boolean> => {
+    setError(null);
+    if (micStreamRef.current) return true;
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setError('Trình duyệt không hỗ trợ thu âm micro.');
+      return false;
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          // Ba tuỳ chọn này quan trọng khi thu giọng giảng trong phòng thường:
+          // khử vọng, khử ồn nền và tự cân bằng âm lượng.
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+          channelCount: 1,
+        },
+      });
+      micStreamRef.current = stream;
+      await sound.ensure();
+      sound.connectMic(stream);
+      setMicReady(true);
+      return true;
+    } catch (e) {
+      const name = e instanceof DOMException ? e.name : '';
+      setError(
+        name === 'NotAllowedError'
+          ? 'Bạn đã từ chối quyền micro. Mở khoá ở biểu tượng ổ khoá trên thanh địa chỉ rồi thử lại.'
+          : name === 'NotFoundError'
+            ? 'Không tìm thấy thiết bị micro nào.'
+            : 'Không mở được micro.'
+      );
+      setMicReady(false);
+      return false;
+    }
+  }, [sound]);
+
+  const disableMic = useCallback(() => {
+    sound.disconnectMic();
+    micStreamRef.current?.getTracks().forEach((t) => t.stop());
+    micStreamRef.current = null;
+    setMicReady(false);
+  }, [sound]);
+
+  const toggleMic = useCallback(async () => {
+    if (micEnabled) {
+      disableMic();
+      setMicEnabled(false);
+    } else {
+      const ok = await enableMic();
+      setMicEnabled(ok);
+    }
+  }, [micEnabled, disableMic, enableMic]);
+
+  /* ── Bắt đầu / dừng ───────────────────────────────────────── */
+
+  const start = useCallback(async () => {
+    setError(null);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const mimeType = pickMimeType();
+    if (!mimeType) {
+      setError('Trình duyệt này không hỗ trợ MediaRecorder cho WebM. Hãy dùng Chrome, Edge hoặc Firefox bản mới.');
+      return;
+    }
+
+    // AudioContext phải được mở từ trong một cử chỉ người dùng — nút bấm
+    // chính là cử chỉ đó, nên gọi ở đây là đúng chỗ.
+    const graph = await sound.ensure();
+    if (micEnabled && !micStreamRef.current) await enableMic();
+
+    // Giải phóng URL của bản ghi trước để không rò bộ nhớ khi quay nhiều lần.
+    if (lastUrlRef.current) {
+      URL.revokeObjectURL(lastUrlRef.current);
+      lastUrlRef.current = null;
+    }
+    setResult(null);
+
+    const canvasStream = canvas.captureStream(60);
+    canvasStreamRef.current = canvasStream;
+
+    const tracks: MediaStreamTrack[] = [...canvasStream.getVideoTracks()];
+    // Chỉ MỘT audio track: track này đã là bản trộn sẵn của SFX + micro.
+    const mixed = graph ? sound.getRecordStream() : null;
+    const audioTrack = mixed?.getAudioTracks()[0];
+    if (audioTrack) tracks.push(audioTrack);
+
+    const combined = new MediaStream(tracks);
+    const recorder = new MediaRecorder(combined, {
+      mimeType,
+      videoBitsPerSecond: 8_000_000, // đủ nét cho chữ nhỏ trên nền tối ở 1080p
+      audioBitsPerSecond: 128_000,
+    });
+
+    chunksRef.current = [];
+    recorder.ondataavailable = (e) => {
+      if (e.data.size > 0) chunksRef.current.push(e.data);
+    };
+    recorder.onerror = () => setError('Quá trình ghi gặp lỗi và đã dừng.');
+    recorder.onstop = () => {
+      const blob = new Blob(chunksRef.current, { type: mimeType });
+      chunksRef.current = [];
+      const url = URL.createObjectURL(blob);
+      lastUrlRef.current = url;
+      const durationMs = performance.now() - startedAtRef.current - pausedTotalRef.current;
+      setResult({
+        url,
+        blob,
+        mimeType,
+        sizeBytes: blob.size,
+        durationMs,
+        filename: `${baseName || 'simulation'}.webm`,
+      });
+      setState('idle');
+      stopTimer();
+      canvasStreamRef.current?.getTracks().forEach((t) => t.stop());
+      canvasStreamRef.current = null;
+    };
+
+    // timeslice 1000ms: chunk được đẩy ra mỗi giây thay vì dồn tới lúc stop.
+    // Nếu tab sập giữa chừng, phần đã ghi vẫn còn trong bộ nhớ.
+    recorder.start(1000);
+    recorderRef.current = recorder;
+    startedAtRef.current = performance.now();
+    pausedTotalRef.current = 0;
+    pausedAtRef.current = 0;
+    setElapsedMs(0);
+    setState('recording');
+    startTimer();
+  }, [baseName, canvasRef, enableMic, micEnabled, sound, startTimer, stopTimer]);
+
+  const stop = useCallback(() => {
+    const rec = recorderRef.current;
+    if (!rec || rec.state === 'inactive') return;
+    rec.stop();
+    recorderRef.current = null;
+  }, []);
+
+  const pause = useCallback(() => {
+    const rec = recorderRef.current;
+    if (!rec || rec.state !== 'recording') return;
+    rec.pause();
+    pausedAtRef.current = performance.now();
+    setState('paused');
+  }, []);
+
+  const resume = useCallback(() => {
+    const rec = recorderRef.current;
+    if (!rec || rec.state !== 'paused') return;
+    rec.resume();
+    pausedTotalRef.current += performance.now() - pausedAtRef.current;
+    pausedAtRef.current = 0;
+    setState('recording');
+  }, []);
+
+  const download = useCallback(() => {
+    if (!result) return;
+    const a = document.createElement('a');
+    a.href = result.url;
+    a.download = result.filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }, [result]);
+
+  const discard = useCallback(() => {
+    if (lastUrlRef.current) URL.revokeObjectURL(lastUrlRef.current);
+    lastUrlRef.current = null;
+    setResult(null);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      stopTimer();
+      recorderRef.current?.state !== 'inactive' && recorderRef.current?.stop();
+      micStreamRef.current?.getTracks().forEach((t) => t.stop());
+      canvasStreamRef.current?.getTracks().forEach((t) => t.stop());
+      if (lastUrlRef.current) URL.revokeObjectURL(lastUrlRef.current);
+    };
+  }, [stopTimer]);
+
+  return {
+    state,
+    supported,
+    elapsedMs,
+    result,
+    error,
+    micEnabled,
+    micReady,
+    start,
+    stop,
+    pause,
+    resume,
+    toggleMic,
+    download,
+    discard,
+  };
+}

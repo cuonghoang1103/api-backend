@@ -223,7 +223,16 @@ router.post('/files/presign', async (req: Request, res: Response<ApiResponse>, n
       Key: key,
       ContentType: mimeType,
     });
-    const uploadUrl = await getSignedUrl(client, cmd, { expiresIn: 600 });
+    // SECURITY: sign the content-type, don't just default it. With the
+    // default SignedHeaders (`host` only) a client can reuse this URL to PUT
+    // `Content-Type: text/html`, which R2 then serves as HTML from the media
+    // domain. The uploader (HubUploadModal) sends the same `mimeType` it
+    // passed here, so the signature matches. Same fix as
+    // `getSignedUploadUrl` in config/r2.ts.
+    const uploadUrl = await getSignedUrl(client, cmd, {
+      expiresIn: 600,
+      signableHeaders: new Set(['content-type']),
+    });
     res.json({ success: true, data: { uploadUrl, key } });
   } catch (err) { next(err); }
 });

@@ -38,6 +38,47 @@ import sharp from 'sharp';
 const MAX_WIDTH = 1200;
 const WEBP_QUALITY = 80;
 
+// SECURITY: decompression-bomb guard.
+//
+// A PNG of one flat colour compresses absurdly well, so a tiny upload can
+// describe an enormous image. Measured: a 758KB PNG holding 16000x16000
+// (256 MP) sails past every size/MIME/magic-byte check and costs ~99MB RSS
+// and ~208ms of CPU to decode; eight of them at once (5.9MB total on the
+// wire) pushed a server's RSS up by 445MB. Eight REAL 6.85MB photos —
+// nine times the bandwidth — cost 17MB. Byte limits cannot see this
+// coming; only a pixel budget can.
+//
+// sharp's own default is 268,402,689 px (0x3FFF^2), which is far above
+// anything a camera produces and lets the 256MP case through. 100 MP
+// (~10000x10000) is comfortably above every mainstream phone/DSLR while
+// refusing the bombs. Note uploadImage() already caps images at
+// MAX_FILE_SIZE_IMAGES (10MB default) — a genuine 100MP+ photo would not
+// fit under that anyway.
+const MAX_INPUT_PIXELS = 100_000_000;
+
+// The other half of the same defence: bound how many images decode at
+// once, so burst traffic cannot multiply the per-image cost. sharp does
+// its work on libvips threads (not the event loop), so without a gate the
+// only limit is request concurrency.
+const MAX_CONCURRENT_DECODES = 4;
+let activeDecodes = 0;
+const decodeWaiters: Array<() => void> = [];
+
+async function acquireDecodeSlot(): Promise<void> {
+  if (activeDecodes < MAX_CONCURRENT_DECODES) {
+    activeDecodes++;
+    return;
+  }
+  await new Promise<void>((resolve) => decodeWaiters.push(resolve));
+  activeDecodes++;
+}
+
+function releaseDecodeSlot(): void {
+  activeDecodes--;
+  const next = decodeWaiters.shift();
+  if (next) next();
+}
+
 /** Result of a single image optimization pass. */
 export interface OptimizedImage {
   buffer: Buffer;
@@ -96,11 +137,23 @@ export async function optimizeImage(
   // short-circuit when the image is already small + already a
   // good format. We still re-encode — the original is often a
   // PNG from a phone screenshot at 5MB; WebP cuts that 80%.
-  let pipeline = sharp(input, { failOn: 'none' });
+  // `limitInputPixels` is the bomb guard (see MAX_INPUT_PIXELS above);
+  // reading metadata only parses the header, so this is cheap.
+  let pipeline = sharp(input, { failOn: 'none', limitInputPixels: MAX_INPUT_PIXELS });
   let metadata: sharp.Metadata;
   try {
     metadata = await pipeline.metadata();
   } catch (err: any) {
+    // sharp enforces limitInputPixels while reading the header too, so the
+    // bomb usually lands here rather than in the explicit check below.
+    // Give it its own code — "too big" is a different user message from
+    // "this is not an image".
+    if (/pixel limit/i.test(err?.message ?? '')) {
+      throw new ImageOptimizationError(
+        `Image is too large to process (max ${Math.round(MAX_INPUT_PIXELS / 1e6)}MP)`,
+        'TOO_MANY_PIXELS',
+      );
+    }
     throw new ImageOptimizationError(
       `Sharp could not decode image: ${err?.message ?? 'unknown'}`,
       'DECODE_FAILED',
@@ -110,6 +163,19 @@ export async function optimizeImage(
     throw new ImageOptimizationError(
       'Image has no width/height — possibly corrupt or truncated',
       'NO_DIMENSIONS',
+    );
+  }
+
+  // SECURITY: reject the decompression bomb from the HEADER, before any
+  // pixels are decoded. `limitInputPixels` above would also catch it, but
+  // only once decoding starts and with a generic message; this gives the
+  // route layer a clear 400 and costs nothing.
+  const inputPixels = metadata.width * metadata.height;
+  if (inputPixels > MAX_INPUT_PIXELS) {
+    throw new ImageOptimizationError(
+      `Image is too large to process: ${metadata.width}x${metadata.height} = ` +
+        `${Math.round(inputPixels / 1e6)}MP (max ${Math.round(MAX_INPUT_PIXELS / 1e6)}MP)`,
+      'TOO_MANY_PIXELS',
     );
   }
 
@@ -129,9 +195,32 @@ export async function optimizeImage(
   // WebP encode. `effort: 4` is a good speed/ratio tradeoff
   // (0 = best compression, 6 = fastest). 4 is the default but
   // we set it explicitly so future tuning is a one-line change.
-  const out = await pipeline
-    .webp({ quality: WEBP_QUALITY, effort: 4 })
-    .toBuffer({ resolveWithObject: true });
+  //
+  // This is the only genuinely expensive step, so it is the one behind
+  // the concurrency gate — a burst of uploads queues instead of each
+  // multiplying peak RSS.
+  await acquireDecodeSlot();
+  let out: { data: Buffer; info: sharp.OutputInfo };
+  try {
+    out = await pipeline
+      .webp({ quality: WEBP_QUALITY, effort: 4 })
+      .toBuffer({ resolveWithObject: true });
+  } catch (err: any) {
+    // A pixel-limit rejection here (input that lied in its header) is the
+    // user's file being wrong, not the server being broken.
+    if (/pixel limit/i.test(err?.message ?? '')) {
+      throw new ImageOptimizationError(
+        'Image is too large to process (pixel limit exceeded)',
+        'TOO_MANY_PIXELS',
+      );
+    }
+    throw new ImageOptimizationError(
+      `Sharp could not encode image: ${err?.message ?? 'unknown'}`,
+      'ENCODE_FAILED',
+    );
+  } finally {
+    releaseDecodeSlot();
+  }
 
   return {
     buffer: out.data,

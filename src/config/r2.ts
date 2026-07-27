@@ -98,7 +98,22 @@ export async function putObject(
  * Presigned PUT URL — lets the browser upload a large file DIRECTLY to R2
  * (r2.cloudflarestorage.com), bypassing the API server and the Cloudflare
  * proxy's 100MB request-body limit. The signature pins bucket + key +
- * content type; the URL is only valid for `expiresInSeconds`.
+ * content type + deadline; the URL is only valid for `expiresInSeconds`.
+ *
+ * SECURITY: `signableHeaders` is what actually pins the content type.
+ * Without it SigV4 signs only `host` (X-Amz-SignedHeaders: host), and the
+ * `ContentType` passed to PutObjectCommand degrades to a mere DEFAULT — a
+ * client can take the signed URL and PUT `Content-Type: text/html`, which
+ * R2 stores and later serves as HTML from media.cuongthai.com (stored XSS
+ * on the media domain). Verified against a real S3 endpoint: with `host`
+ * only, a text/html PUT returns 200 and the object comes back
+ * `content-type: text/html`; with content-type signed it returns 403.
+ *
+ * The browser side (`filesApi.uploadVideoDirect` in frontend/src/lib/api.ts)
+ * already sends exactly this header — `xhr.setRequestHeader('Content-Type',
+ * file.type)` with the same `file.type` it passed to /presign-r2 — so the
+ * signature matches. Any new caller MUST send the identical value or the
+ * PUT will 403.
  *
  * NOTE: the R2 bucket needs a CORS rule allowing PUT from the site origin
  * for this to work from a browser.
@@ -114,7 +129,10 @@ export async function getSignedUploadUrl(
     Key: key,
     ContentType: contentType,
   });
-  return getSignedUrl(client, cmd, { expiresIn: expiresInSeconds });
+  return getSignedUrl(client, cmd, {
+    expiresIn: expiresInSeconds,
+    signableHeaders: new Set(['content-type']),
+  });
 }
 
 /**

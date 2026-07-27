@@ -755,6 +755,74 @@ Hỏi: 休みは何曜日ですか。(きゅうびは なんようびですか) 
             ],
           },
         },
+        {
+          title: 'Grammar Summary — Chapter 3|||Tóm tắt ngữ pháp — Chương 3',
+          slug: 'jpd113-nguphap-chuong3',
+          type: 'VIDEO',
+          description: 'Gom lại toàn bộ mẫu câu chương 3: chào hỏi, hệ số đếm, tiền, ngày giờ, tuổi, thứ trong tuần — kèm hướng dẫn dùng lại.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 3 · Grammar Summary</span>
+<h2>Everything from Chapter 3, in one place</h2>
+<p class="lead">Chapter 3 packed in a lot of small, high-frequency patterns. This page is your one-stop reference — come back here before quizzes and before the real exam.</p>
+<table>
+  <thead><tr><th>Pattern</th><th>Use</th><th>Example</th></tr></thead>
+  <tbody>
+    <tr><td>Greetings/classroom set phrases</td><td>Fixed daily expressions</td><td>おはようございます、すみません、わかりません</td></tr>
+    <tr><td>Number grouping every 4 digits</td><td>Counting beyond 1,000</td><td>1万=いちまん, 100万=ひゃくまん</td></tr>
+    <tr><td>ひゃく/びゃく/ぴゃく sound changes</td><td>300/600/800 soften</td><td>さんびゃく, ろっぴゃく, はっぴゃく</td></tr>
+    <tr><td>これは いくらですか</td><td>Ask a price</td><td>それは 500円です。</td></tr>
+    <tr><td>[number]年生まれです</td><td>State a birth year</td><td>2005年生まれです。</td></tr>
+    <tr><td>[number]月 — irregular 4,7,9</td><td>Name a month</td><td>4月=しがつ、7月=しちがつ、9月=くがつ</td></tr>
+    <tr><td>[number]日 — irregular 1–10, 14, 20, 24</td><td>Name a day of the month</td><td>1日=ついたち、20日=はつか</td></tr>
+    <tr><td>[number]時[分] &amp; 何時ですか</td><td>Tell/ask the time</td><td>3時30分です。今何時ですか。</td></tr>
+    <tr><td>[number]歳 — irregular 20</td><td>State age</td><td>20歳=はたち、18歳=じゅうはっさい</td></tr>
+    <tr><td>[day]曜日 &amp; 何曜日ですか</td><td>Name/ask a day of the week</td><td>今日は水曜日です。</td></tr>
+  </tbody>
+</table>
+<h3>How to reuse this chapter's grammar together</h3>
+<div class="out">お誕生日は いつですか。8月4日です。何歳ですか。19歳です。2005年生まれです。今日は何曜日ですか。水曜日です。<br>
+= When is your birthday? August 4th. How old are you? 19. Born in 2005. What day is today? Wednesday.<br>
+Notice how every answer follows the same shape: [number/word] + counter + です — that single shape covers dates, money, time, age and days of the week.</div>
+<div class="callout"><span class="badge">★ Study tip</span> Numbers and their irregular readings (4/7/9 months, 1–10/14/20/24 days, 20 years old) cause more lost points on the real FE exam than any grammar logic in this chapter — drill the irregular readings until they are automatic, before worrying about anything else here.</div>
+<a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📖</span>
+  <span class="lc-body"><span class="lc-title">Review all Chapter 3 patterns</span><span class="lc-sub">Grammar reference on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 3 · Tóm tắt ngữ pháp</span>
+<h2>Toàn bộ Chương 3, gom vào một chỗ</h2>
+<p class="lead">Chương 3 nhồi khá nhiều mẫu câu nhỏ nhưng tần suất cao. Trang này là nơi tra cứu duy nhất — quay lại đây trước khi làm quiz và trước khi thi thật.</p>
+<table>
+  <thead><tr><th>Mẫu câu</th><th>Dùng để</th><th>Ví dụ</th></tr></thead>
+  <tbody>
+    <tr><td>Cụm chào hỏi/lớp học cố định</td><td>Câu nói hằng ngày</td><td>おはようございます、すみません、わかりません</td></tr>
+    <tr><td>Nhóm số mỗi 4 chữ số</td><td>Đếm quá 1.000</td><td>1万=いちまん, 100万=ひゃくまん</td></tr>
+    <tr><td>Biến âm ひゃく/びゃく/ぴゃく</td><td>300/600/800 đọc mềm</td><td>さんびゃく, ろっぴゃく, はっぴゃく</td></tr>
+    <tr><td>これは いくらですか</td><td>Hỏi giá</td><td>それは 500円です。</td></tr>
+    <tr><td>[số]年生まれです</td><td>Nói năm sinh</td><td>2005年生まれです。</td></tr>
+    <tr><td>[số]月 — bất quy tắc 4,7,9</td><td>Nói tên tháng</td><td>4月=しがつ、7月=しちがつ、9月=くがつ</td></tr>
+    <tr><td>[số]日 — bất quy tắc 1–10, 14, 20, 24</td><td>Nói ngày trong tháng</td><td>1日=ついたち、20日=はつか</td></tr>
+    <tr><td>[số]時[分] & 何時ですか</td><td>Nói/hỏi giờ</td><td>3時30分です。今何時ですか。</td></tr>
+    <tr><td>[số]歳 — bất quy tắc 20</td><td>Nói tuổi</td><td>20歳=はたち、18歳=じゅうはっさい</td></tr>
+    <tr><td>[thứ]曜日 & 何曜日ですか</td><td>Nói/hỏi thứ trong tuần</td><td>今日は水曜日です。</td></tr>
+  </tbody>
+</table>
+<h3>Cách dùng lại toàn bộ ngữ pháp chương này cùng nhau</h3>
+<div class="out">お誕生日は いつですか。8月4日です。何歳ですか。19歳です。2005年生まれです。今日は何曜日ですか。水曜日です。<br>
+= Sinh nhật bạn khi nào? Ngày 4 tháng 8. Bạn bao nhiêu tuổi? 19 tuổi. Sinh năm 2005. Hôm nay thứ mấy? Thứ Tư.<br>
+Để ý mỗi câu trả lời đều theo cùng một khuôn: [số/từ] + trợ số từ + です — chỉ một khuôn này phủ hết ngày tháng, tiền, giờ, tuổi và thứ trong tuần.</div>
+<div class="callout"><span class="badge">★ Mẹo học</span> Số và cách đọc bất quy tắc của chúng (tháng 4/7/9, ngày 1–10/14/20/24, tuổi 20) khiến mất điểm trong đề FE thật nhiều hơn bất kỳ logic ngữ pháp nào trong chương này — luyện cách đọc bất quy tắc tới khi thành phản xạ trước khi lo những thứ khác.</div>
+<a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📖</span>
+  <span class="lc-body"><span class="lc-title">Ôn lại toàn bộ mẫu câu Chương 3</span><span class="lc-sub">Tra cứu ngữ pháp trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+`,
+        },
       ],
     },
     /* ══════════════════ CHƯƠNG 4 — BÀI 1: TỰ GIỚI THIỆU ══════════════════ */
@@ -787,6 +855,11 @@ watashi wa An desu.
   <span class="lc-body"><span class="lc-title">Study grammar patterns</span><span class="lc-sub">は/です/の with examples on My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
+<a class="link-card codelab" href="/language/ja/vocab?level=JPD113&categoryId=994&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">🌍</span>
+  <span class="lc-body"><span class="lc-title">Bài 1 vocabulary: self & country</span><span class="lc-sub">JPD113 word list on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.1</span>
@@ -805,6 +878,11 @@ watashi wa An desu.
 <a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
   <span class="lc-ico">📖</span>
   <span class="lc-body"><span class="lc-title">Học mẫu ngữ pháp</span><span class="lc-sub">は/です/の kèm ví dụ trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+<a class="link-card codelab" href="/language/ja/vocab?level=JPD113&categoryId=994&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">🌍</span>
+  <span class="lc-body"><span class="lc-title">Từ vựng Bài 1: bản thân & quốc gia</span><span class="lc-sub">Bộ từ JPD113 trên My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
 </div>
@@ -902,9 +980,14 @@ watashi wa An desu.
 <div class="out">はじめまして。わたしは アンです。ベトナムじんです。がくせいです。どうぞよろしく。<br>
 = Nice to meet you. I am An. I am Vietnamese. I am a student. Pleased to meet you.</div>
 <div class="pitfall"><b>Trap:</b> どちら (which way/direction) is the polite way to ask "where", not どこ, when asking about someone's home country to their face — どこ feels blunter. なん vs なに also matters here: おしごとは <b>なん</b>ですか (before です, always なん), never なにですか.</div>
-<a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/language/ja/vocab?level=JPD113&categoryId=994&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
   <span class="lc-ico">🌍</span>
-  <span class="lc-body"><span class="lc-title">Drill countries & occupations</span><span class="lc-sub">Vocabulary flashcards on My Language.</span></span>
+  <span class="lc-body"><span class="lc-title">Drill countries & languages</span><span class="lc-sub">JPD113 word list on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+<a class="link-card codelab" href="/language/ja/vocab?level=JPD113&categoryId=995&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">🏫</span>
+  <span class="lc-body"><span class="lc-title">Drill school & occupations</span><span class="lc-sub">JPD113 word list on My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
 </div>
@@ -940,9 +1023,86 @@ watashi wa An desu.
 <div class="out">はじめまして。わたしは アンです。ベトナムじんです。がくせいです。どうぞよろしく。<br>
 = Rất vui được gặp. Tôi là An. Tôi là người Việt Nam. Tôi là sinh viên. Mong được giúp đỡ.</div>
 <div class="pitfall"><b>Bẫy:</b> どちら (hướng nào) là cách lịch sự để hỏi "ở đâu", không phải どこ, khi hỏi quốc gia trực tiếp trước mặt ai đó — どこ nghe cộc hơn. なん vs なに cũng quan trọng ở đây: おしごとは <b>なん</b>ですか (trước です, luôn là なん), không bao giờ なにですか.</div>
-<a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/language/ja/vocab?level=JPD113&categoryId=994&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
   <span class="lc-ico">🌍</span>
-  <span class="lc-body"><span class="lc-title">Luyện quốc gia & nghề nghiệp</span><span class="lc-sub">Flashcard từ vựng trên My Language.</span></span>
+  <span class="lc-body"><span class="lc-title">Luyện quốc gia & ngôn ngữ</span><span class="lc-sub">Bộ từ JPD113 trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+<a class="link-card codelab" href="/language/ja/vocab?level=JPD113&categoryId=995&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">🏫</span>
+  <span class="lc-body"><span class="lc-title">Luyện trường học & nghề nghiệp</span><span class="lc-sub">Bộ từ JPD113 trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: 'Grammar Summary — Chapter 4|||Tóm tắt ngữ pháp — Chương 4',
+          slug: 'jpd113-nguphap-chuong4',
+          type: 'VIDEO',
+          description: 'Gom lại は/です/の/も/か và mẫu quốc tịch-nghề nghiệp thành một bộ khung tự giới thiệu hoàn chỉnh.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 4 · Grammar Summary</span>
+<h2>Everything from Chapter 4, in one place</h2>
+<p class="lead">Five small words — は, です, の, も, か — plus nationality/occupation vocabulary are ALL you need for a complete self-introduction. Here they are side by side.</p>
+<table>
+  <thead><tr><th>Particle/ending</th><th>Role</th><th>Example</th></tr></thead>
+  <tbody>
+    <tr><td>は (wa)</td><td>marks the topic</td><td>わたしは アンです。</td></tr>
+    <tr><td>です</td><td>polite "am/is/are", always sentence-final</td><td>がくせいです。</td></tr>
+    <tr><td>の</td><td>possession/connection between two nouns</td><td>ベトナムの がくせい</td></tr>
+    <tr><td>も</td><td>"also" — replaces は/が, never sits beside it</td><td>マイさんも がくせいです。</td></tr>
+    <tr><td>か</td><td>turns a です-statement into a question, same word order</td><td>がくせいですか。</td></tr>
+  </tbody>
+</table>
+<h3>The full self-introduction skeleton</h3>
+<div class="out">はじめまして。わたしは[name]です。[country]じんです。[occupation]です。どうぞよろしく。<br>
+Filled in: はじめまして。わたしはアンです。ベトナムじんです。がくせいです。どうぞよろしく。</div>
+<h3>Ví dụ có lời giải · Asking &amp; confirming with か and も together</h3>
+<div class="out"><b>Q:</b> アンさんは ベトナムの がくせいですか。 <b>A:</b> はい、そうです。マイさんも ベトナムの がくせいです。<br>
+(Is An a Vietnamese student? Yes. Mai is also a Vietnamese student.)</div>
+<div class="pitfall"><b>Common exam trap:</b> a blank right before ですか with no other particle nearby is filled by か itself or by も (if the sentence echoes a fact already stated about someone else) — always check the previous sentence's topic first.</div>
+<a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📖</span>
+  <span class="lc-body"><span class="lc-title">Review all Chapter 4 patterns</span><span class="lc-sub">Grammar reference on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+<a class="link-card codelab" href="/language/ja/vocab?level=JPD113&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📚</span>
+  <span class="lc-body"><span class="lc-title">Browse all Bài 1 vocabulary</span><span class="lc-sub">Full JPD113 word list on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 4 · Tóm tắt ngữ pháp</span>
+<h2>Toàn bộ Chương 4, gom vào một chỗ</h2>
+<p class="lead">Năm từ nhỏ — は, です, の, も, か — cộng từ vựng quốc tịch/nghề nghiệp là TẤT CẢ những gì bạn cần cho một câu tự giới thiệu hoàn chỉnh. Đây là chúng đặt cạnh nhau.</p>
+<table>
+  <thead><tr><th>Trợ từ/đuôi câu</th><th>Vai trò</th><th>Ví dụ</th></tr></thead>
+  <tbody>
+    <tr><td>は (wa)</td><td>đánh dấu chủ đề</td><td>わたしは アンです。</td></tr>
+    <tr><td>です</td><td>"là/thì" lịch sự, luôn ở cuối câu</td><td>がくせいです。</td></tr>
+    <tr><td>の</td><td>sở hữu/liên kết giữa hai danh từ</td><td>ベトナムの がくせい</td></tr>
+    <tr><td>も</td><td>"cũng" — thay thế は/が, không đứng cạnh nó</td><td>マイさんも がくせいです。</td></tr>
+    <tr><td>か</td><td>biến câu です thành câu hỏi, giữ nguyên trật tự từ</td><td>がくせいですか。</td></tr>
+  </tbody>
+</table>
+<h3>Khung tự giới thiệu đầy đủ</h3>
+<div class="out">はじめまして。わたしは[tên]です。[nước]じんです。[nghề]です。どうぞよろしく。<br>
+Điền vào: はじめまして。わたしはアンです。ベトナムじんです。がくせいです。どうぞよろしく。</div>
+<h3>Ví dụ có lời giải · Hỏi & xác nhận với か và も cùng nhau</h3>
+<div class="out"><b>Hỏi:</b> アンさんは ベトナムの がくせいですか。 <b>Đáp:</b> はい、そうです。マイさんも ベトナムの がくせいです。<br>
+(An có phải sinh viên Việt Nam không? Đúng vậy. Mai cũng là sinh viên Việt Nam.)</div>
+<div class="pitfall"><b>Bẫy thi thường gặp:</b> chỗ trống ngay trước ですか mà không có trợ từ nào gần đó thì điền か hoặc も (nếu câu lặp lại việc đã nói về người khác) — luôn kiểm tra chủ đề câu trước.</div>
+<a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📖</span>
+  <span class="lc-body"><span class="lc-title">Ôn lại toàn bộ mẫu câu Chương 4</span><span class="lc-sub">Tra cứu ngữ pháp trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+<a class="link-card codelab" href="/language/ja/vocab?level=JPD113&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📚</span>
+  <span class="lc-body"><span class="lc-title">Xem toàn bộ từ vựng Bài 1</span><span class="lc-sub">Trọn bộ từ JPD113 trên My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
 </div>
@@ -986,6 +1146,11 @@ watashi wa An desu.
   <span class="lc-body"><span class="lc-title">Practice these patterns</span><span class="lc-sub">Interactive drills on My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
+<a class="link-card codelab" href="/language/ja/vocab?level=JPD113&categoryId=999&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">❓</span>
+  <span class="lc-body"><span class="lc-title">Bài 2-3 vocabulary: pointing & places</span><span class="lc-sub">JPD113 word list on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.1</span>
@@ -1009,6 +1174,11 @@ watashi wa An desu.
 <a class="link-card codelab" href="/language/ja/practice?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
   <span class="lc-ico">🎯</span>
   <span class="lc-body"><span class="lc-title">Luyện các mẫu này</span><span class="lc-sub">Bài tập tương tác trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+<a class="link-card codelab" href="/language/ja/vocab?level=JPD113&categoryId=999&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">❓</span>
+  <span class="lc-body"><span class="lc-title">Từ vựng Bài 2-3: chỉ định & nơi chốn</span><span class="lc-sub">Bộ từ JPD113 trên My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
 </div>
@@ -1049,6 +1219,11 @@ watashi wa An desu.
   <span class="lc-body"><span class="lc-title">Drill これ/それ/あれ vs この/その/あの</span><span class="lc-sub">Contrast drills on My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
+<a class="link-card codelab" href="/language/ja/vocab?level=JPD113&categoryId=999&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">❓</span>
+  <span class="lc-body"><span class="lc-title">Demonstrative & question-word vocab</span><span class="lc-sub">JPD113 word list on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.2</span>
@@ -1077,6 +1252,11 @@ watashi wa An desu.
 <a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
   <span class="lc-ico">📖</span>
   <span class="lc-body"><span class="lc-title">Luyện これ/それ/あれ vs この/その/あの</span><span class="lc-sub">Bài tập đối chiếu trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+<a class="link-card codelab" href="/language/ja/vocab?level=JPD113&categoryId=999&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">❓</span>
+  <span class="lc-body"><span class="lc-title">Từ vựng chỉ định & từ hỏi</span><span class="lc-sub">Bộ từ JPD113 trên My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
 </div>
@@ -1116,6 +1296,11 @@ watashi wa An desu.
   <span class="lc-body"><span class="lc-title">Drill the 6 question words</span><span class="lc-sub">Pattern practice on My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
+<a class="link-card codelab" href="/language/ja/vocab?level=JPD113&categoryId=999&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">❓</span>
+  <span class="lc-body"><span class="lc-title">Question-word vocab</span><span class="lc-sub">JPD113 word list on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.3</span>
@@ -1143,6 +1328,11 @@ watashi wa An desu.
 <a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
   <span class="lc-ico">❓</span>
   <span class="lc-body"><span class="lc-title">Luyện 6 từ để hỏi</span><span class="lc-sub">Luyện mẫu câu trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+<a class="link-card codelab" href="/language/ja/vocab?level=JPD113&categoryId=999&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">❓</span>
+  <span class="lc-body"><span class="lc-title">Từ vựng từ hỏi</span><span class="lc-sub">Bộ từ JPD113 trên My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
 </div>
@@ -1179,6 +1369,11 @@ watashi wa An desu.
   <span class="lc-body"><span class="lc-title">Drill を/に/で/へ</span><span class="lc-sub">Particle-choice practice on My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
+<a class="link-card codelab" href="/language/ja/vocab?level=JPD113&categoryId=1000&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">🏢</span>
+  <span class="lc-body"><span class="lc-title">Places & shopping vocab</span><span class="lc-sub">JPD113 word list on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.4</span>
@@ -1203,6 +1398,85 @@ watashi wa An desu.
 <a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
   <span class="lc-ico">📖</span>
   <span class="lc-body"><span class="lc-title">Luyện を/に/で/へ</span><span class="lc-sub">Bài tập chọn trợ từ trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+<a class="link-card codelab" href="/language/ja/vocab?level=JPD113&categoryId=1000&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">🏢</span>
+  <span class="lc-body"><span class="lc-title">Từ vựng nơi chốn & mua sắm</span><span class="lc-sub">Bộ từ JPD113 trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: 'Grammar Summary — Chapter 5|||Tóm tắt ngữ pháp — Chương 5',
+          slug: 'jpd113-nguphap-chuong5',
+          type: 'VIDEO',
+          description: 'Gom lại これ/それ/あれ, この/その/あの, 6 từ để hỏi, và を/に/で/へ — nhóm ngữ pháp bị test nhiều nhất đề thi thật.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 5 · Grammar Summary</span>
+<h2>Everything from Chapter 5, in one place</h2>
+<p class="lead">Chapter 5 is the densest grammar chapter before verbs — four separate systems that are frequently confused with each other on the real exam. Seeing them together, side by side, is the fastest way to stop mixing them up.</p>
+<table>
+  <thead><tr><th>System</th><th>Members</th><th>Rule of thumb</th></tr></thead>
+  <tbody>
+    <tr><td>Standalone demonstratives</td><td>これ/それ/あれ/どれ</td><td>Stand ALONE, replace a noun entirely</td></tr>
+    <tr><td>Adnominal demonstratives</td><td>この/その/あの/どの</td><td>ALWAYS sit right before a noun, never alone</td></tr>
+    <tr><td>Place demonstratives</td><td>ここ/そこ/あそこ/どこ</td><td>"here/there/over there/where"</td></tr>
+    <tr><td>Existence verbs</td><td>あります (inanimate) / います (animate)</td><td>Choose by whether the subject is alive</td></tr>
+    <tr><td>Question words</td><td>なに・なん/だれ/どこ/いつ/どちら</td><td>Read the ANSWER first, then match its category</td></tr>
+    <tr><td>Action-sentence particles</td><td>を(object)/に(time,destination)/で(place,means)/へ(direction)</td><td>Each marks a different sentence role</td></tr>
+  </tbody>
+</table>
+<h3>The single most important contrast: これ vs この</h3>
+<div class="out">これは ほんです。(standalone — nothing follows) ／ この ほんは わたしのです。(adnominal — ほん follows immediately)<br>
+<b>Rule:</b> bare noun right after the blank → この/その/あの/どの. Nothing (or a particle/verb) right after → これ/それ/あれ/どれ.</div>
+<h3>Ví dụ có lời giải · Combining everything from this chapter</h3>
+<div class="out">この かばんは だれのですか。 (Whose bag is this?)<br>
+それは アンさんの かばんです。あそこに あります。 (That is An's bag. It is over there.)<br>
+アンさんは としょかんで べんきょうしますか。 (Does An study at the library?) — はい、7時に がっこうへ いきます。それから としょかんで べんきょうします。</div>
+<a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📖</span>
+  <span class="lc-body"><span class="lc-title">Review all Chapter 5 patterns</span><span class="lc-sub">Grammar reference on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+<a class="link-card codelab" href="/language/ja/vocab?level=JPD113&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📚</span>
+  <span class="lc-body"><span class="lc-title">Browse all Bài 2-3 vocabulary</span><span class="lc-sub">Full JPD113 word list on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 5 · Tóm tắt ngữ pháp</span>
+<h2>Toàn bộ Chương 5, gom vào một chỗ</h2>
+<p class="lead">Chương 5 là chương ngữ pháp dày đặc nhất trước khi vào động từ — bốn hệ thống riêng biệt thường bị nhầm lẫn với nhau trong đề thi thật. Nhìn chúng cạnh nhau là cách nhanh nhất để hết nhầm.</p>
+<table>
+  <thead><tr><th>Hệ thống</th><th>Thành viên</th><th>Quy tắc ghi nhớ</th></tr></thead>
+  <tbody>
+    <tr><td>Chỉ định đứng một mình</td><td>これ/それ/あれ/どれ</td><td>Đứng MỘT MÌNH, thay thế hoàn toàn danh từ</td></tr>
+    <tr><td>Chỉ định trước danh từ</td><td>この/その/あの/どの</td><td>LUÔN đứng ngay trước danh từ, không bao giờ một mình</td></tr>
+    <tr><td>Chỉ định nơi chốn</td><td>ここ/そこ/あそこ/どこ</td><td>"ở đây/ở đó/đằng kia/ở đâu"</td></tr>
+    <tr><td>Động từ tồn tại</td><td>あります (vô tri) / います (hữu sinh)</td><td>Chọn theo chủ thể có sống hay không</td></tr>
+    <tr><td>Từ để hỏi</td><td>なに・なん/だれ/どこ/いつ/どちら</td><td>Đọc CÂU TRẢ LỜI trước, rồi khớp loại của nó</td></tr>
+    <tr><td>Trợ từ câu hành động</td><td>を(tân ngữ)/に(thời gian,điểm đến)/で(nơi,phương tiện)/へ(hướng)</td><td>Mỗi trợ từ đánh dấu một vai trò khác nhau trong câu</td></tr>
+  </tbody>
+</table>
+<h3>Đối lập quan trọng nhất: これ vs この</h3>
+<div class="out">これは ほんです。(một mình — không có gì theo sau) ／ この ほんは わたしのです。(trước danh từ — ほん theo ngay sau)<br>
+<b>Quy tắc:</b> danh từ trần ngay sau chỗ trống → この/その/あの/どの. Không có gì (hoặc trợ từ/động từ) ngay sau → これ/それ/あれ/どれ.</div>
+<h3>Ví dụ có lời giải · Kết hợp mọi thứ trong chương này</h3>
+<div class="out">この かばんは だれのですか。 (Cái cặp này của ai?)<br>
+それは アンさんの かばんです。あそこに あります。 (Đó là cặp của An. Nó ở đằng kia.)<br>
+アンさんは としょかんで べんきょうしますか。 (An có học ở thư viện không?) — はい、7時に がっこうへ いきます。それから としょかんで べんきょうします。</div>
+<a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📖</span>
+  <span class="lc-body"><span class="lc-title">Ôn lại toàn bộ mẫu câu Chương 5</span><span class="lc-sub">Tra cứu ngữ pháp trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+<a class="link-card codelab" href="/language/ja/vocab?level=JPD113&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📚</span>
+  <span class="lc-body"><span class="lc-title">Xem toàn bộ từ vựng Bài 2-3</span><span class="lc-sub">Trọn bộ từ JPD113 trên My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
 </div>
@@ -1369,6 +1643,92 @@ watashi wa An desu.
             ],
           },
         },
+        {
+          title: 'Grammar Summary — Chapter 6|||Tóm tắt ngữ pháp — Chương 6',
+          slug: 'jpd113-nguphap-chuong6',
+          type: 'VIDEO',
+          description: 'Gom lại ます/ません, します/きます, và bảng động từ+trợ từ tần suất thật — bản đồ ôn thi nhanh nhất cho mảng lớn nhất của đề.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 6 · Grammar Summary</span>
+<h2>Everything from Chapter 6, in one place</h2>
+<p class="lead">Verbs are the single largest grammar area on the real exam. This page merges the ます/ません rule with the ranked verb+particle table so you can review both together.</p>
+<table>
+  <thead><tr><th>Rule</th><th>Shape</th><th>Example</th></tr></thead>
+  <tbody>
+    <tr><td>Affirmative</td><td>verb stem + ます</td><td>たべます</td></tr>
+    <tr><td>Negative</td><td>verb stem + ません</td><td>たべません</td></tr>
+    <tr><td>Question</td><td>ます-form + か (no word-order change)</td><td>たべますか。</td></tr>
+    <tr><td>Group 3 irregulars</td><td>します / きます; noun + します = "to do [noun]"</td><td>べんきょうします、うんてんします</td></tr>
+    <tr><td>Present = future too</td><td>no separate future tense</td><td>まいにち／あした べんきょうします</td></tr>
+  </tbody>
+</table>
+<h3>The ranked verb + particle table (memorise as pairs, not verbs alone)</h3>
+<table>
+  <thead><tr><th>Verb</th><th>Particle pair</th><th>Exam count</th></tr></thead>
+  <tbody>
+    <tr><td>いきます (go)</td><td>[place]へ/に</td><td>43</td></tr>
+    <tr><td>たべます (eat)</td><td>[food]を</td><td>29</td></tr>
+    <tr><td>かいます (buy)</td><td>[thing]を</td><td>23</td></tr>
+    <tr><td>べんきょうします (study)</td><td>[subject]を</td><td>18</td></tr>
+    <tr><td>よみます (read)</td><td>[thing]を</td><td>14</td></tr>
+    <tr><td>おきます (get up)</td><td>[time]に</td><td>13</td></tr>
+    <tr><td>ききます (listen/ask)</td><td>[thing]を</td><td>12</td></tr>
+    <tr><td>はたらきます (work)</td><td>[place]で</td><td>11</td></tr>
+    <tr><td>のみます (drink)</td><td>[thing]を</td><td>10</td></tr>
+    <tr><td>かえります (go home)</td><td>[place]へ/に</td><td>6</td></tr>
+  </tbody>
+</table>
+<h3>Ví dụ có lời giải · A complete daily-routine paragraph</h3>
+<div class="out">まいあさ 7時に おきます。がっこうへ いきます。としょかんで べんきょうします。ひるごはんを たべます。うちへ かえります。にほんごを べんきょうしません — テレビを みます。<br>
+= Every morning I get up at 7. I go to school. I study at the library. I eat lunch. I go home. I don't study Japanese — I watch TV.</div>
+<a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📖</span>
+  <span class="lc-body"><span class="lc-title">Review all Chapter 6 patterns</span><span class="lc-sub">Grammar reference on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 6 · Tóm tắt ngữ pháp</span>
+<h2>Toàn bộ Chương 6, gom vào một chỗ</h2>
+<p class="lead">Động từ là mảng ngữ pháp lớn nhất trong đề thi thật. Trang này gộp quy tắc ます/ません với bảng động từ+trợ từ xếp theo tần suất để bạn ôn cả hai cùng lúc.</p>
+<table>
+  <thead><tr><th>Quy tắc</th><th>Khuôn mẫu</th><th>Ví dụ</th></tr></thead>
+  <tbody>
+    <tr><td>Khẳng định</td><td>gốc động từ + ます</td><td>たべます</td></tr>
+    <tr><td>Phủ định</td><td>gốc động từ + ません</td><td>たべません</td></tr>
+    <tr><td>Câu hỏi</td><td>thể ます + か (không đổi trật tự từ)</td><td>たべますか。</td></tr>
+    <tr><td>Bất quy tắc nhóm 3</td><td>します / きます; danh từ + します = "làm [danh từ]"</td><td>べんきょうします、うんてんします</td></tr>
+    <tr><td>Hiện tại = cả tương lai</td><td>không có thì tương lai riêng</td><td>まいにち／あした べんきょうします</td></tr>
+  </tbody>
+</table>
+<h3>Bảng động từ + trợ từ xếp theo tần suất (học thuộc theo CẶP, không học động từ riêng)</h3>
+<table>
+  <thead><tr><th>Động từ</th><th>Cặp trợ từ</th><th>Số lần trong đề</th></tr></thead>
+  <tbody>
+    <tr><td>いきます (đi)</td><td>[nơi]へ/に</td><td>43</td></tr>
+    <tr><td>たべます (ăn)</td><td>[món]を</td><td>29</td></tr>
+    <tr><td>かいます (mua)</td><td>[vật]を</td><td>23</td></tr>
+    <tr><td>べんきょうします (học)</td><td>[môn]を</td><td>18</td></tr>
+    <tr><td>よみます (đọc)</td><td>[vật]を</td><td>14</td></tr>
+    <tr><td>おきます (dậy)</td><td>[giờ]に</td><td>13</td></tr>
+    <tr><td>ききます (nghe/hỏi)</td><td>[vật]を</td><td>12</td></tr>
+    <tr><td>はたらきます (làm việc)</td><td>[nơi]で</td><td>11</td></tr>
+    <tr><td>のみます (uống)</td><td>[vật]を</td><td>10</td></tr>
+    <tr><td>かえります (về nhà)</td><td>[nơi]へ/に</td><td>6</td></tr>
+  </tbody>
+</table>
+<h3>Ví dụ có lời giải · Đoạn văn sinh hoạt hằng ngày đầy đủ</h3>
+<div class="out">まいあさ 7時に おきます。がっこうへ いきます。としょかんで べんきょうします。ひるごはんを たべます。うちへ かえります。にほんごを べんきょうしません — テレビを みます。<br>
+= Mỗi sáng tôi dậy lúc 7 giờ. Tôi đi đến trường. Tôi học ở thư viện. Tôi ăn trưa. Tôi về nhà. Tôi không học tiếng Nhật — tôi xem TV.</div>
+<a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+  <span class="lc-ico">📖</span>
+  <span class="lc-body"><span class="lc-title">Ôn lại toàn bộ mẫu câu Chương 6</span><span class="lc-sub">Tra cứu ngữ pháp trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+`,
+        },
       ],
     },
 
@@ -1399,7 +1759,7 @@ watashi wa An desu.
 </table>
 <div class="note-ct">日本 = Nihon (Japan): 日 (sun) + 本 (origin) = "origin of the sun". Kanji combine to build words — learning the pieces makes new words readable.</div>
 <div class="pitfall"><b>Tip:</b> always learn a kanji <em>with a word</em>, not in isolation — 学 alone is abstract, but 学生 (gakusei, student) and 大学 (daigaku, university) make it stick. Write with correct stroke order.</div>
-<a class="link-card codelab" href="/language/ja/hanzi?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/language/ja/hanzi?level=JPD113&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
   <span class="lc-ico">🖌️</span>
   <span class="lc-body"><span class="lc-title">Practise kanji writing</span><span class="lc-sub">Animated stroke order &amp; SRS on My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
@@ -1421,7 +1781,7 @@ watashi wa An desu.
 </table>
 <div class="note-ct">日本 = Nihon (Nhật Bản): 日 (mặt trời) + 本 (gốc) = "gốc của mặt trời". Kanji ghép lại để tạo từ — học các mảnh làm từ mới đọc được.</div>
 <div class="pitfall"><b>Mẹo:</b> luôn học một kanji <em>kèm một từ</em>, không học lẻ — 学 đứng một mình thì trừu tượng, nhưng 学生 (gakusei, sinh viên) và 大学 (daigaku, đại học) làm nó khắc sâu. Viết theo đúng thứ tự nét.</div>
-<a class="link-card codelab" href="/language/ja/hanzi?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/language/ja/hanzi?level=JPD113&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
   <span class="lc-ico">🖌️</span>
   <span class="lc-body"><span class="lc-title">Luyện viết kanji</span><span class="lc-sub">Thứ tự nét động &amp; SRS trên My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
@@ -1466,7 +1826,7 @@ watashi wa An desu.
 <b>A:</b> 七日です。(Seven days.)<br><br>
 <b>Q:</b> 今、何時何分ですか。(What time is it right now?)<br>
 <b>A:</b> 九時十五分です。(9:15.)</div>
-<a class="link-card codelab" href="/language/ja/hanzi?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/language/ja/hanzi?level=JPD113&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
   <span class="lc-ico">🖌️</span>
   <span class="lc-body"><span class="lc-title">Practise number & time kanji</span><span class="lc-sub">Stroke order & SRS on My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
@@ -1503,7 +1863,7 @@ watashi wa An desu.
 <b>Đáp:</b> 七日です。(Bảy ngày.)<br><br>
 <b>Hỏi:</b> 今、何時何分ですか。(Bây giờ là mấy giờ mấy phút?)<br>
 <b>Đáp:</b> 九時十五分です。(9 giờ 15 phút.)</div>
-<a class="link-card codelab" href="/language/ja/hanzi?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/language/ja/hanzi?level=JPD113&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
   <span class="lc-ico">🖌️</span>
   <span class="lc-body"><span class="lc-title">Luyện kanji số & thời gian</span><span class="lc-sub">Thứ tự nét & SRS trên My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
@@ -1545,7 +1905,7 @@ watashi wa An desu.
 = I am An. I am 18 years old. I am a Vietnamese student. I study at a Japanese-language school. My birthday is in August.</div>
 <div class="callout"><span class="badge">★ Exam frequency</span> 私 is the single MOST frequent kanji across all 420 real FE questions (86 times) — nearly every dialogue starts with 私は. If you learn only one kanji perfectly before the exam, make it this one.</div>
 <div class="pitfall"><b>Watch:</b> 生 has three different readings depending on the compound — がくせい (student), たんじょうび uses 生 read しょう inside 誕生, and なまビール (draft beer) reads it なま. Always learn 生 <em>inside its compound word</em>, never alone.</div>
-<a class="link-card codelab" href="/language/ja/hanzi?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/language/ja/hanzi?level=JPD113&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
   <span class="lc-ico">🖌️</span>
   <span class="lc-body"><span class="lc-title">Practise the final kanji set</span><span class="lc-sub">Stroke order & SRS on My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
@@ -1579,7 +1939,7 @@ watashi wa An desu.
 = Tôi là An. Tôi 18 tuổi. Tôi là sinh viên Việt Nam. Tôi học ở trường tiếng Nhật. Sinh nhật tôi vào tháng 8.</div>
 <div class="callout"><span class="badge">★ Tần suất trong đề thi</span> 私 là kanji xuất hiện NHIỀU NHẤT trong toàn bộ 420 câu FE thật (86 lần) — gần như mọi đoạn hội thoại đều bắt đầu bằng 私は. Nếu chỉ học thuộc thật kỹ một kanji trước khi thi, hãy chọn chữ này.</div>
 <div class="pitfall"><b>Chú ý:</b> 生 có ba cách đọc khác nhau tuỳ từ ghép — がくせい (sinh viên), たんじょうび dùng 生 đọc しょう trong 誕生, và なまビール (bia tươi) đọc là なま. Luôn học 生 <em>trong từ ghép của nó</em>, không bao giờ học lẻ.</div>
-<a class="link-card codelab" href="/language/ja/hanzi?ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/language/ja/hanzi?level=JPD113&ref=%2Fcourses%2Felementary-japanese-1-a11%2Flearn&reflabel=JPD113%20%E2%80%94%20Elementary%20Japanese" target="_blank" rel="noopener">
   <span class="lc-ico">🖌️</span>
   <span class="lc-body"><span class="lc-title">Luyện bộ kanji cuối</span><span class="lc-sub">Thứ tự nét & SRS trên My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>

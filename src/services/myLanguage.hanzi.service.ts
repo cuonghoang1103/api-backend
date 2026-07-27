@@ -87,9 +87,17 @@ export async function listChars(
   opts: { level?: string; userId?: number } = {},
 ): Promise<{ levels: string[]; chars: HanziCharDto[] }> {
   const langId = await languageId(code);
-  const where = { languageId: langId, ...(opts.level ? { level: opts.level } : {}) };
+  // extraLevels lets a char also show under a course tab (e.g. "JPD113")
+  // without leaving its primary level (N5..N1) — stored as ",TAG," so a
+  // `contains` match never false-positives on a substring of another tag.
+  const where = {
+    languageId: langId,
+    ...(opts.level
+      ? { OR: [{ level: opts.level }, { extraLevels: { contains: `,${opts.level},` } }] }
+      : {}),
+  };
 
-  const [rows, levelRows] = await Promise.all([
+  const [rows, levelRows, extraLevelRows] = await Promise.all([
     prisma.langHanziChar.findMany({
       where,
       orderBy: [{ order: 'asc' }, { strokeCount: 'asc' }, { id: 'asc' }],
@@ -103,10 +111,22 @@ export async function listChars(
       select: { level: true },
       distinct: ['level'],
     }),
+    prisma.langHanziChar.findMany({
+      where: { languageId: langId, extraLevels: { not: null } },
+      select: { extraLevels: true },
+      distinct: ['extraLevels'],
+    }),
   ]);
 
+  const extraLevels = new Set<string>();
+  for (const r of extraLevelRows) {
+    for (const tag of (r.extraLevels ?? '').split(',')) {
+      if (tag) extraLevels.add(tag);
+    }
+  }
+
   return {
-    levels: levelRows.map((r) => r.level).filter((l): l is string => !!l),
+    levels: [...levelRows.map((r) => r.level).filter((l): l is string => !!l), ...extraLevels],
     chars: rows.map((r) => toDto(r as never)),
   };
 }

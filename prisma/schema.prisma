@@ -4604,6 +4604,9 @@ model LangHanziChar {
   languageId  Int     @map("language_id")
   char        String  @db.VarChar(8) // 漢 — one grapheme (surrogate pairs fit in 8)
   level       String? @db.VarChar(20) // N5..N1 | HSK1..HSK6
+  // Comma-separated extra level tags (e.g. "JPD113") so a char can ALSO
+  // show up under a course-specific tab without leaving its primary level.
+  extraLevels String? @map("extra_levels") @db.VarChar(100)
   strokeCount Int?    @map("stroke_count")
 
   // Readings. JA needs both on'yomi and kun'yomi; ZH uses pinyin. Kept as

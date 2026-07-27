@@ -17,6 +17,7 @@ import s08 from './nodejs/s08-auth.mjs';
 import s09 from './nodejs/s09-security.mjs';
 import s10 from './nodejs/s10-upload.mjs';
 import s11 from './nodejs/s11-realtime.mjs';
+import s12 from './nodejs/s12-redis.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -49,5 +50,6 @@ export default {
     s09,
     s10,
     s11,
+    s12,
   ],
 };

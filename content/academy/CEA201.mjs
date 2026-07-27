@@ -478,7 +478,9 @@ export default {
   <div class="lz-layer"><div class="lz-lt">CPI — Cycles Per Instruction</div><div class="lz-ld">Average clock cycles each instruction takes. Lower is better; pipelining aims to push CPI toward 1.</div></div>
   <div class="lz-layer"><div class="lz-lt">MIPS — Millions of Instructions Per Second</div><div class="lz-ld">A rough throughput measure. Flawed across different instruction sets, but a common headline number.</div></div>
 </div>
-<div class="out"><b>CPU time</b> = Instruction count × CPI × Clock cycle time<br>Speed up by: fewer instructions, lower CPI, or a faster clock.</div>
+<div class="formula"><span class="lbl">CPU time</span>CPU time = Instruction Count (IC) × CPI × Clock cycle time = IC × CPI / Clock rate</div>
+<h3>Worked example · CPU time</h3>
+<div class="out"><b>Given:</b> a program compiles to IC = 2×10⁹ instructions, the CPU averages CPI = 1.5, clock rate = 2.5 GHz (so cycle time = 1/2.5×10⁹ = 0.4 ns).<br><b>Step 1</b> — total cycles = IC × CPI = 2×10⁹ × 1.5 = 3×10⁹ cycles.<br><b>Step 2</b> — CPU time = total cycles × cycle time = 3×10⁹ × 0.4 ns = <b>1.2 seconds</b>.<br><b>Check the levers:</b> a compiler that cuts IC by 10% (fewer instructions), a pipeline that drops CPI to 1.2, or a 3 GHz chip would each cut this time — that is the whole performance-tuning game in one formula.</div>
 <h3>Amdahl&#39;s law — the reality check</h3>
 <p>Amdahl&#39;s law says the overall speedup from improving one part is limited by how much time that part actually takes. If a task spends only 25% of its time on the part you speed up, then even making that part <em>infinitely</em> fast cuts total time by at most 25%.</p>
 <div class="lz-flow">
@@ -486,6 +488,10 @@ export default {
   <div class="lz-step"><div class="lz-k">Limited by</div><div class="lz-t">its time fraction</div><div class="lz-d">the untouched part dominates</div></div>
   <div class="lz-step"><div class="lz-k">Lesson</div><div class="lz-t">optimize the bottleneck</div><div class="lz-d">speed up what takes the most time</div></div>
 </div>
+<div class="formula"><span class="lbl">Amdahl&#39;s Law</span>Overall speedup = 1 / [ (1 − f) + f/S ]<br>f = fraction of execution time the enhancement affects · S = speedup of that fraction alone</div>
+<h3>Worked example · Amdahl&#39;s Law</h3>
+<div class="out"><b>Given:</b> a rendering task spends f = 40% of its time in a routine you can speed up S = 5× (e.g. with a GPU).<br><b>Step 1</b> — unaffected fraction = 1 − f = 0.6 (60% of time, untouched).<br><b>Step 2</b> — affected fraction after speedup = f/S = 0.4/5 = 0.08.<br><b>Step 3</b> — overall speedup = 1 / (0.6 + 0.08) = 1 / 0.68 ≈ <b>1.47×</b>.<br><b>Sanity check:</b> even with S → ∞ (the routine takes zero time), speedup caps at 1/(1−f) = 1/0.6 ≈ 1.67× — the 60% you never touched is the ceiling.</div>
+<div class="pitfall">Common exam mistake: reading "5× faster" and multiplying the WHOLE program by 5. Amdahl&#39;s law only speeds up the fraction <code>f</code> that the enhancement actually covers — the untouched <code>(1 − f)</code> stays exactly as slow as before.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Gustafson&#39;s law, the optimistic twin.</b> Amdahl&#39;s law fixes the problem size, so with 90% parallel code it caps speedup at 1/(1&minus;0.9) = 10x no matter how many cores you add. Gustafson&#39;s law observes that in practice we grow the problem to fill the machine, so for scaled workloads speedup can rise almost linearly with cores &mdash; the reasoning behind supercomputing benchmarks. <em>The syllabus teaches only the pessimistic bound; HPC uses Gustafson&#39;s reframing every day.</em></div>
 <div class="callout ok">Amdahl&#39;s law is one of the most useful ideas in all of computing: <strong>make the common case fast</strong>. It also explains why adding more CPU cores gives diminishing returns — the parts of a program that cannot run in parallel become the ceiling.</div>
 </div>
@@ -499,7 +505,9 @@ export default {
   <div class="lz-layer"><div class="lz-lt">CPI — Chu kỳ trên mỗi lệnh</div><div class="lz-ld">Số chu kỳ clock trung bình mỗi lệnh tốn. Càng thấp càng tốt; pipeline nhắm đẩy CPI về 1.</div></div>
   <div class="lz-layer"><div class="lz-lt">MIPS — Triệu lệnh mỗi giây</div><div class="lz-ld">Một thước đo thông lượng thô. Không chuẩn khi so tập lệnh khác nhau, nhưng là con số hay được nêu.</div></div>
 </div>
-<div class="out"><b>Thời gian CPU</b> = Số lệnh × CPI × Thời gian một chu kỳ<br>Tăng tốc bằng: ít lệnh hơn, CPI thấp hơn, hoặc clock nhanh hơn.</div>
+<div class="formula"><span class="lbl">Thời gian CPU</span>Thời gian CPU = Số lệnh (IC) × CPI × Thời gian 1 chu kỳ = IC × CPI / Tần số clock</div>
+<h3>Ví dụ có lời giải · Thời gian CPU</h3>
+<div class="out"><b>Đề bài:</b> chương trình biên dịch ra IC = 2×10⁹ lệnh, CPU trung bình CPI = 1.5, tần số clock = 2.5 GHz (thời gian 1 chu kỳ = 1/2.5×10⁹ = 0.4 ns).<br><b>Bước 1</b> — tổng số chu kỳ = IC × CPI = 2×10⁹ × 1.5 = 3×10⁹ chu kỳ.<br><b>Bước 2</b> — thời gian CPU = tổng chu kỳ × thời gian 1 chu kỳ = 3×10⁹ × 0.4 ns = <b>1.2 giây</b>.<br><b>Soi lại các đòn bẩy:</b> trình biên dịch giảm 10% IC, pipeline kéo CPI xuống 1.2, hay chip 3 GHz — mỗi cái đều cắt thời gian này; đó chính là toàn bộ trò chơi tối ưu hiệu năng gói trong 1 công thức.</div>
 <h3>Định luật Amdahl — cú kiểm tra thực tế</h3>
 <p>Định luật Amdahl nói mức tăng tốc tổng thể từ cải tiến một phần bị giới hạn bởi phần đó thực sự chiếm bao nhiêu thời gian. Nếu một tác vụ chỉ dành 25% thời gian cho phần bạn tăng tốc, thì dù làm phần đó nhanh <em>vô hạn</em> cũng chỉ cắt tối đa 25% tổng thời gian.</p>
 <div class="lz-flow">
@@ -507,6 +515,10 @@ export default {
   <div class="lz-step"><div class="lz-k">Bị giới hạn bởi</div><div class="lz-t">tỷ lệ thời gian của nó</div><div class="lz-d">phần không đụng tới thống trị</div></div>
   <div class="lz-step"><div class="lz-k">Bài học</div><div class="lz-t">tối ưu điểm nghẽn</div><div class="lz-d">tăng tốc cái tốn nhiều thời gian nhất</div></div>
 </div>
+<div class="formula"><span class="lbl">Định luật Amdahl</span>Tăng tốc tổng thể = 1 / [ (1 − f) + f/S ]<br>f = tỷ lệ thời gian bị ảnh hưởng bởi cải tiến · S = mức tăng tốc của riêng phần đó</div>
+<h3>Ví dụ có lời giải · Định luật Amdahl</h3>
+<div class="out"><b>Đề bài:</b> một tác vụ render dành f = 40% thời gian cho đoạn bạn tăng tốc được S = 5× (vd dùng GPU).<br><b>Bước 1</b> — phần không bị ảnh hưởng = 1 − f = 0.6 (60% thời gian, không đụng tới).<br><b>Bước 2</b> — phần bị ảnh hưởng sau tăng tốc = f/S = 0.4/5 = 0.08.<br><b>Bước 3</b> — tăng tốc tổng thể = 1 / (0.6 + 0.08) = 1 / 0.68 ≈ <b>1.47 lần</b>.<br><b>Kiểm tra biên:</b> dù S → ∞ (đoạn đó tốn 0 thời gian), tăng tốc vẫn chặn ở 1/(1−f) = 1/0.6 ≈ 1.67× — 60% bạn chưa đụng tới chính là trần.</div>
+<div class="pitfall">Lỗi hay gặp khi thi: đọc "nhanh gấp 5" rồi nhân CẢ chương trình lên 5 lần. Định luật Amdahl chỉ tăng tốc đúng phần <code>f</code> mà cải tiến thực sự bao phủ — phần <code>(1 − f)</code> chưa đụng tới vẫn chậm y như cũ.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Định luật Gustafson &mdash; người anh em lạc quan.</b> Định luật Amdahl cố định kích thước bài toán, nên với 90% mã song song nó chặn tăng tốc ở 1/(1&minus;0.9) = 10 lần dù thêm bao nhiêu nhân. Định luật Gustafson quan sát rằng thực tế ta phóng to bài toán cho vừa cỗ máy, nên với khối lượng công việc lớn dần thì tăng tốc gần như tuyến tính theo số nhân &mdash; lý lẽ đằng sau các benchmark siêu máy tính. <em>Syllabus chỉ dạy chặn trên bi quan; HPC dùng cách nhìn của Gustafson mỗi ngày.</em></div>
 <div class="callout ok">Định luật Amdahl là một trong những ý tưởng hữu ích nhất của cả ngành máy tính: <strong>làm cho trường hợp phổ biến nhanh</strong>. Nó cũng giải thích vì sao thêm nhiều nhân CPU cho lợi ích giảm dần — phần chương trình không chạy song song được trở thành trần.</div>
 </div>
@@ -674,6 +686,9 @@ export default {
   <div class="lz-step"><div class="lz-k">Miss</div><div class="lz-t">X not in cache</div><div class="lz-d">fetch a whole BLOCK from RAM</div></div>
 </div>
 <p>On a miss, the cache loads not just X but a whole <strong>block</strong> (line) of neighboring bytes — exploiting spatial locality so the next few accesses hit. The <strong>hit ratio</strong> (fraction of accesses found in cache) is the key performance number; real caches achieve 90%+.</p>
+<div class="formula"><span class="lbl">Average Memory Access Time (AMAT)</span>AMAT = Hit time + Miss rate × Miss penalty</div>
+<h3>Worked example · AMAT</h3>
+<div class="out"><b>Given:</b> hit time = 1 cycle, miss rate = 5%, miss penalty (fetch from RAM) = 100 cycles.<br><b>AMAT</b> = 1 + 0.05 × 100 = 1 + 5 = <b>6 cycles</b> — six times slower than a pure hit, which is why designers chase every extra percent of hit rate.<br><b>What-if:</b> improving the hit rate from 95% to 99% (miss rate 5%→1%) drops AMAT to 1 + 0.01×100 = <b>2 cycles</b> — a 3× speed-up from one number moving 4 points.</div>
 <div class="note-ct">Modern CPUs stack multiple cache levels (L1, L2, L3), each bigger and slower than the last — a mini memory hierarchy inside the chip. This is why writing cache-friendly code (accessing arrays in order) can make programs several times faster with no algorithm change.</div>
 <a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fcomputer-organization-and-architecture%2Flearn&reflabel=CEA201%20%E2%80%94%20Computer%20Organization%20and%20Architecture#module-575" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -698,6 +713,9 @@ export default {
   <div class="lz-step"><div class="lz-k">Miss (trượt)</div><div class="lz-t">X không có trong cache</div><div class="lz-d">nạp cả một BLOCK từ RAM</div></div>
 </div>
 <p>Khi miss, cache nạp không chỉ X mà cả một <strong>block</strong> (dòng) byte lân cận — tận dụng cục bộ không gian để vài truy cập kế tiếp trúng. <strong>Tỷ lệ hit</strong> (phần truy cập tìm thấy trong cache) là con số hiệu năng then chốt; cache thật đạt 90%+.</p>
+<div class="formula"><span class="lbl">Thời gian truy cập bộ nhớ trung bình (AMAT)</span>AMAT = Thời gian trúng + Tỉ lệ trượt × Chi phí trượt</div>
+<h3>Ví dụ có lời giải · AMAT</h3>
+<div class="out"><b>Đề bài:</b> thời gian trúng = 1 chu kỳ, tỉ lệ trượt = 5%, chi phí trượt (lấy từ RAM) = 100 chu kỳ.<br><b>AMAT</b> = 1 + 0.05 × 100 = 1 + 5 = <b>6 chu kỳ</b> — chậm gấp 6 lần so với trúng thuần, đây là lý do kỹ sư săn từng % tỉ lệ trúng.<br><b>Giả sử:</b> cải thiện tỉ lệ trúng từ 95% lên 99% (tỉ lệ trượt 5%→1%) làm AMAT giảm còn 1 + 0.01×100 = <b>2 chu kỳ</b> — nhanh gấp 3 lần chỉ nhờ 1 con số dịch 4 điểm phần trăm.</div>
 <div class="note-ct">CPU hiện đại xếp nhiều mức cache (L1, L2, L3), mỗi mức lớn hơn và chậm hơn mức trước — một phân cấp bộ nhớ mini bên trong chip. Đây là lý do viết code thân thiện cache (truy cập mảng theo thứ tự) có thể làm chương trình nhanh gấp mấy lần mà không đổi thuật toán.</div>
 <a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fcomputer-organization-and-architecture%2Flearn&reflabel=CEA201%20%E2%80%94%20Computer%20Organization%20and%20Architecture#module-575" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -958,6 +976,9 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Mirroring (RAID 1) — reliability</div><div class="lz-ld">Keep an identical copy on a second disk. If one fails, the other has everything. Costs double the storage.</div></div>
   <div class="lz-layer"><div class="lz-lt">Parity (RAID 5) — the balance</div><div class="lz-ld">Stripe data plus a computed parity block across disks, so any one disk can fail and be rebuilt. Good speed + reliability without full duplication.</div></div>
 </div>
+<div class="formula"><span class="lbl">Usable capacity</span>RAID 0 (n disks): n × size · RAID 1 (mirrored pair): 1 × size · RAID 5 (n disks): (n − 1) × size</div>
+<h3>Worked example · RAID 5 capacity</h3>
+<div class="out"><b>Given:</b> 5 disks of 2 TB each in RAID 5.<br><b>Usable capacity</b> = (n − 1) × size = (5 − 1) × 2 TB = <b>8 TB</b> (one disk&#39;s worth is spent on distributed parity, not a spare copy).<br><b>Compare:</b> the same 5 disks in RAID 1 (mirrored pairs) would give only half the raw total, and in RAID 0 the full 10 TB — but one dead disk loses everything.</div>
 <h3>SSD &amp; flash — storage with no moving parts</h3>
 <p>A <strong>solid-state drive (SSD)</strong> stores data in <strong>flash memory</strong> (non-volatile semiconductor cells), with no platters or heads. No seek time, no rotation → dramatically faster and more rugged than a hard disk. The trade-off: higher cost per GB and limited write endurance per cell.</p>
 <div class="lz-flow">
@@ -978,6 +999,9 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Mirroring (RAID 1) — độ tin cậy</div><div class="lz-ld">Giữ bản sao y hệt trên đĩa thứ hai. Nếu một hỏng, cái kia có đủ. Tốn gấp đôi dung lượng.</div></div>
   <div class="lz-layer"><div class="lz-lt">Parity (RAID 5) — cân bằng</div><div class="lz-ld">Chia dữ liệu cộng một block parity tính toán ra nhiều đĩa, để một đĩa bất kỳ hỏng vẫn dựng lại được. Tốc độ + tin cậy tốt mà không cần nhân đôi hoàn toàn.</div></div>
 </div>
+<div class="formula"><span class="lbl">Dung lượng khả dụng</span>RAID 0 (n đĩa): n × dung lượng · RAID 1 (nhân đôi): 1 × dung lượng · RAID 5 (n đĩa): (n − 1) × dung lượng</div>
+<h3>Ví dụ có lời giải · Dung lượng RAID 5</h3>
+<div class="out"><b>Đề bài:</b> 5 đĩa, mỗi đĩa 2 TB, chạy RAID 5.<br><b>Dung lượng khả dụng</b> = (n − 1) × dung lượng = (5 − 1) × 2 TB = <b>8 TB</b> (dung lượng 1 đĩa dùng cho parity rải đều, không phải bản sao dự phòng).<br><b>So sánh:</b> cùng 5 đĩa đó chạy RAID 1 (nhân đôi cặp) chỉ được nửa tổng dung lượng thô, còn RAID 0 được đủ 10 TB — nhưng 1 đĩa chết là mất sạch.</div>
 <h3>SSD &amp; flash — lưu trữ không bộ phận chuyển động</h3>
 <p>Một <strong>ổ thể rắn (SSD)</strong> lưu dữ liệu trong <strong>bộ nhớ flash</strong> (ô bán dẫn không bay hơi), không có đĩa hay đầu đọc. Không seek time, không quay → nhanh và bền hơn hẳn đĩa cứng. Đánh đổi: giá trên mỗi GB cao hơn và số lần ghi mỗi ô có giới hạn.</p>
 <div class="lz-flow">

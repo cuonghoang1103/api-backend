@@ -15,8 +15,11 @@ export default {
       title: '17.1 — The image: 440MB down to 58,8MB|||17.1 — Ảnh Docker: từ 440MB xuống 58,8MB',
       slug: 'nodejs-17-1-anh-docker',
       simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-1-anh-docker.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-1-anh-docker.jpg',
         scenario: 'docker-container',
-        caption: { en: 'What a container actually is: layers, namespaces, limits', vi: 'Container thực chất là gì: tầng, namespace, hạn mức' },
+        durationSeconds: 25,
+        caption: { en: "What a container actually is: layers, namespaces, limits", vi: "Container thực chất là gì: tầng, namespace, hạn mức" },
       },
       type: 'VIDEO',
       description: 'Build cùng một app bằng bốn kiểu Dockerfile và đo cỡ ảnh thật, rồi dựng multi-stage để loại toolchain và devDependencies ra khỏi thứ chạy ở production.',
@@ -230,10 +233,16 @@ CMD ["node", "dist/index.js"]</code></pre>
       slug: 'nodejs-17-2-cache-tang',
       simulations: [
         {
+          url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-2-cache-tang--docker-layers.mp4',
+          poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-2-cache-tang--docker-layers.jpg',
+          durationSeconds: 30,
           scenario: 'docker-layers',
           caption: { en: 'The line order that invalidates every layer below it', vi: 'Thứ tự dòng làm hỏng mọi tầng bên dưới' },
         },
         {
+          url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-2-cache-tang--vps-memory.mp4',
+          poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-2-cache-tang--vps-memory.jpg',
+          durationSeconds: 24,
           scenario: 'vps-memory',
           caption: { en: 'Two parallel builds, 6GB of RAM, and exit 137', vi: 'Hai build song song, 6GB RAM, và exit 137' },
         },
@@ -443,8 +452,11 @@ docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/me/app:1.4.2 -
       title: '17.3 — PID 1: the CMD line that loses every in-flight request|||17.3 — PID 1: dòng CMD làm mất mọi request đang xử lý',
       slug: 'nodejs-17-3-pid-1-tat-em',
       simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-3-pid-1-tat-em.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-3-pid-1-tat-em.jpg',
         scenario: 'docker-compose',
-        caption: { en: '“Running” is not “ready”: depends_on versus healthcheck', vi: '“Đang chạy” không phải “sẵn sàng”: depends_on so với healthcheck' },
+        durationSeconds: 23,
+        caption: { en: "“Running” is not “ready”: depends_on versus healthcheck", vi: "“Đang chạy” không phải “sẵn sàng”: depends_on so với healthcheck" },
       },
       type: 'VIDEO',
       description: 'Ba cách viết CMD, ba tiến trình PID 1 khác nhau, và chỉ một trong ba nhận được SIGTERM — chứng minh bằng một request 3 giây bị cắt ngang giữa lúc deploy.',
@@ -857,6 +869,9 @@ if (missing.length) {
           caption: { en: "Zero-downtime deploy: 1.5% or 0%", vi: "Deploy không gián đoạn: 1,5% hay 0%" },
         },
         {
+          url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-5-deploy-khong-gian-doan--nginx-proxy.mp4',
+          poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-5-deploy-khong-gian-doan--nginx-proxy.jpg',
+          durationSeconds: 24,
           scenario: 'nginx-proxy',
           caption: { en: 'The proxy in front: routing, and the client IP it erases', vi: 'Proxy đứng trước: định tuyến, và địa chỉ IP nó xoá mất' },
         },
@@ -1033,16 +1048,25 @@ docker ps | grep green &amp;&amp; echo "sẵn sàng!"</code></pre>
       slug: 'nodejs-17-6-deploy-hong-quay-lui',
       simulations: [
         {
+          url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-6-deploy-hong-quay-lui--deploy-pipeline.mp4',
+          poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-6-deploy-hong-quay-lui--deploy-pipeline.jpg',
+          durationSeconds: 28,
           scenario: 'deploy-pipeline',
           options: { mode: 'nobuild' },
           caption: { en: 'The deploy that rsyncs but never rebuilds', vi: 'Cú deploy chỉ rsync mà không dựng lại ảnh' },
         },
         {
+          url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-6-deploy-hong-quay-lui--cicd-pipeline.mp4',
+          poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-6-deploy-hong-quay-lui--cicd-pipeline.jpg',
+          durationSeconds: 26,
           scenario: 'cicd-pipeline',
           options: { mode: 'race' },
           caption: { en: 'Two workflows racing on one push', vi: 'Hai workflow giành nhau trên cùng một cú push' },
         },
         {
+          url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-6-deploy-hong-quay-lui--git-flow.mp4',
+          poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-6-deploy-hong-quay-lui--git-flow.jpg',
+          durationSeconds: 28,
           scenario: 'git-flow',
           caption: { en: 'Commit, branch, merge and the revert that rolls back', vi: 'Commit, nhánh, gộp và cú revert để quay lui' },
         },

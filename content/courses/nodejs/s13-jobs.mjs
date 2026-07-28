@@ -16,8 +16,11 @@ export default {
       title: '13.1 — A request is not a place to do work|||13.1 — Request không phải chỗ để làm việc nặng',
       slug: 'nodejs-13-1-vi-sao-hang-doi',
       simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-13-1-vi-sao-hang-doi.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-13-1-vi-sao-hang-doi.jpg',
         scenario: 'webhook',
-        caption: { en: 'Answer 200 first, do the work after', vi: 'Trả 200 trước, làm việc sau' },
+        durationSeconds: 11,
+        caption: { en: "Answer 200 first, do the work after", vi: "Trả 200 trước, làm việc sau" },
       },
       type: 'VIDEO',
       description: 'Cùng một tính năng gửi email, cùng 100 request: làm ngay trong request gửi được 5 email và mất hẳn 95; đẩy vào hàng đợi gửi đủ 100. Có bằng chứng chạy thật.',

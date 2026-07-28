@@ -124,3 +124,6 @@ skills-lock.json
 
 # Video mô phỏng dựng ra (nặng, không đưa vào git — xem scripts/sim-render.mjs)
 _render/
+# Mọi thư mục dựng video tạm (_render_lessons, _render_all…). Trước đây chỉ
+# ignore '_render/' nên '_render10/' suýt bị commit — 11 MB mp4 vào lịch sử git.
+_render*/

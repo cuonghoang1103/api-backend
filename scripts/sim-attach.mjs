@@ -79,10 +79,17 @@ function contentFilesFor(v) {
 
 /** Khoá R2 của một video. Ổn định theo slug bài học, nên dựng lại là ghi đè.
     Môn Academy đi vào nhánh `videos/academy/<MÃ MÔN>/` để không lẫn với
-    khoá CuongThai — hai bên có thể trùng slug bài về sau. */
-const baseKeyFor = (v) => (isAcademy(v)
-  ? `videos/academy/${v.lesson.subject}/${v.lesson.slug}`
-  : `videos/courses/${v.lesson.course}/${v.lesson.slug}`);
+    khoá CuongThai — hai bên có thể trùng slug bài về sau.
+
+    Bài dùng NHIỀU kịch bản (`simulations: [ … ]`) phải thêm đuôi id kịch bản:
+    khoá chỉ theo slug bài thì hai ba video của cùng một bài ghi đè lẫn nhau,
+    bài học cuối cùng chỉ còn một video và nó là cái tải lên sau cùng. */
+const baseKeyFor = (v) => {
+  const stem = isAcademy(v)
+    ? `videos/academy/${v.lesson.subject}/${v.lesson.slug}`
+    : `videos/courses/${v.lesson.course}/${v.lesson.slug}`;
+  return v.multiScenario ? `${stem}--${v.scenarioId}` : stem;
+};
 const keyFor = (v) => `${baseKeyFor(v)}.mp4`;
 const posterKeyFor = (v) => `${baseKeyFor(v)}.jpg`;
 const urlFor = (v) => `${MEDIA_BASE}/${keyFor(v)}`;
@@ -148,7 +155,7 @@ async function upload() {
  * tích cả file .mjs thành AST rồi in lại sẽ làm xáo trộn toàn bộ định dạng
  * của một file 130KB chỉ để thêm ba dòng.
  */
-function patchFile(file, slug, block) {
+function patchFile(file, slug, block, scenarioId) {
   const src = fs.readFileSync(file, 'utf8');
   const anchor = new RegExp(`^(\\s*)slug: '${slug}',[ \\t]*$`, 'm');
   const m = src.match(anchor);
@@ -158,10 +165,14 @@ function patchFile(file, slug, block) {
   const insertAt = m.index + m[0].length;
   const rest = src.slice(insertAt);
 
-  // Bài dùng NHIỀU kịch bản khai bằng `simulations: [ … ]`. Chèn thêm một
-  // `simulation:` bên cạnh sẽ ra hai khối cho cùng một video, nên dừng lại và
-  // để người viết tự sửa mảng đó — không đoán vị trí phần tử trong mảng.
-  if (/^\n\s*simulations: \[/.test(rest)) return 'MANUAL';
+  // Bài dùng NHIỀU kịch bản khai bằng `simulations: [ … ]`: phải sửa ĐÚNG
+  // phần tử mang `scenario: '<id>'`, không phải chèn thêm một `simulation:`
+  // bên cạnh (sẽ ra hai khối cho cùng một video).
+  if (/^\n\s*simulations: \[/.test(rest)) {
+    const patched = patchArrayEntry(rest, scenarioId, indent, block);
+    if (!patched) return 'MANUAL';
+    return src.slice(0, insertAt) + patched;
+  }
 
   // Đã có `simulation: { … },` ngay dưới slug thì thay, không chèn thêm cái
   // thứ hai. Khối trải nhiều dòng nên khớp tới dấu đóng thụt đúng cấp.
@@ -170,6 +181,44 @@ function patchFile(file, slug, block) {
 
   const lines = block.map((l) => `${indent}${l}`).join('\n');
   return `${src.slice(0, insertAt)}\n${lines}${tail}`;
+}
+
+/**
+ * Ghi `url` / `poster` / `durationSeconds` vào đúng phần tử của
+ * `simulations: [ … ]`.
+ *
+ * Trả về `null` khi không tìm thấy phần tử — người gọi sẽ báo MANUAL thay vì
+ * đoán bừa. Ba trường này được XOÁ trước rồi ghi lại, nên dựng lại video lần
+ * hai không đẻ ra dòng trùng.
+ */
+function patchArrayEntry(rest, scenarioId, indent, block) {
+  const open = rest.indexOf('simulations: [');
+  if (open < 0 || !scenarioId) return null;
+  const closeRe = new RegExp(`^${indent}\\],$`, 'm');
+  const afterOpen = rest.slice(open);
+  const closeAt = afterOpen.search(closeRe);
+  if (closeAt < 0) return null;
+
+  const arrayText = afterOpen.slice(0, closeAt);
+  // Phần tử bắt đầu bằng `<indent>  {` và kết thúc bằng `<indent>  },`
+  const entryRe = new RegExp(`^${indent}  \\{\\n([\\s\\S]*?)^${indent}  \\},$`, 'gm');
+  let found = null;
+  for (const m of arrayText.matchAll(entryRe)) {
+    if (m[1].includes(`scenario: '${scenarioId}'`)) { found = m; break; }
+  }
+  if (!found) return null;
+
+  // `block` là dạng `simulation: { … },` — lấy phần thân, bỏ dòng đầu/cuối.
+  const body = block.slice(1, -1).map((l) => l.replace(/^ {2}/, ''));
+  const keep = found[1]
+    .split('\n')
+    .filter((l) => !/^\s*(url|poster|durationSeconds):/.test(l));
+  const media = body.filter((l) => /^(url|poster|durationSeconds):/.test(l.trim()))
+    .map((l) => `${indent}    ${l.trim()}`);
+  const newEntry = `${indent}  {\n${media.join('\n')}\n${keep.filter((l) => l.trim()).join('\n')}\n${indent}  },`;
+
+  const newArray = arrayText.slice(0, found.index) + newEntry + arrayText.slice(found.index + found[0].length);
+  return rest.slice(0, open) + newArray + afterOpen.slice(closeAt);
 }
 
 function patch() {
@@ -203,7 +252,7 @@ function patch() {
 
     let hit = false;
     for (const file of files) {
-      const next = patchFile(file, v.lesson.slug, block);
+      const next = patchFile(file, v.lesson.slug, block, v.scenarioId);
       if (!next) continue;
       if (next === 'MANUAL') {
         hit = true;

@@ -111,6 +111,22 @@ if [ "$MODE" = "local" ]; then
         fi
     fi
 
+    # ── Pre-flight: đề thi trong content/exams ────────────────────
+    # Cũng chạy TRƯỚC rsync, cùng lý do với sim-check: đây là lỗi DỮ LIỆU mà
+    # tsc và `next build` không thấy. Bộ kiểm chạy THẬT từng đáp án mẫu và so
+    # với expectedOutput — một đề mà chính đáp án mẫu không khớp thì học viên
+    # không bao giờ đúng được, và AI cũng chấm sai theo.
+    if [ -f "${REPO_DIR}/scripts/exam-check.mjs" ] && command -v node &>/dev/null; then
+        info "Checking exam papers (đáp án mẫu phải chạy đúng)..."
+        if node "${REPO_DIR}/scripts/exam-check.mjs" >/tmp/exam-check.log 2>&1; then
+            ok "Exam papers OK"
+        else
+            tail -30 /tmp/exam-check.log
+            fail "exam-check thất bại — sửa xong hãy deploy (chạy 'node scripts/exam-check.mjs' để xem đầy đủ)"
+            exit 1
+        fi
+    fi
+
     # Ensure VPS deploy dir exists
     ssh -i "$VPS_SSH_KEY" \
         -o StrictHostKeyChecking=accept-new \

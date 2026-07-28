@@ -41,7 +41,7 @@ import InspectorPanel from './InspectorPanel';
 import RecorderStudio from './RecorderStudio';
 import SimulationStage from './SimulationStage';
 import TimelineScrubber from './TimelineScrubber';
-import { DEFAULT_SCENARIO_ID, defaultOptions, getScenario, resolveSteps, sanitizeOptions, totalDuration } from './scenarios';
+import { DEFAULT_SCENARIO_ID, SCENARIOS, defaultOptions, getScenario, resolveSteps, sanitizeOptions, totalDuration } from './scenarios';
 import { LOOP_CHOICES, SPEEDS, useSimulationEngine } from './useSimulationEngine';
 import { useSoundEngine } from './useSoundEngine';
 import { useStudioRecorder } from './useStudioRecorder';
@@ -388,8 +388,8 @@ export default function SimulationStudio() {
             </h1>
             <p className="mt-1 max-w-3xl text-[13.5px] leading-relaxed text-[#7f8fab]">
               {vi
-                ? 'Sáu kịch bản hệ thống chạy thành hoạt hình 1920×1080, có phụ đề bài giảng, có thanh tua theo bước và quay được thành video ngay trong trình duyệt.'
-                : 'Six system scenarios animated at 1920×1080, with burned-in lecture captions, a step scrubber and in-browser video recording.'}
+                ? `${SCENARIOS.length} kịch bản hệ thống chạy thành hoạt hình 1920×1080, có phụ đề bài giảng, có thanh tua theo bước và quay được thành video ngay trong trình duyệt.`
+                : `${SCENARIOS.length} system scenarios animated at 1920×1080, with burned-in lecture captions, a step scrubber and in-browser video recording.`}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">

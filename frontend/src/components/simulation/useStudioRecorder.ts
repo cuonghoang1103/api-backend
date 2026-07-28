@@ -48,10 +48,28 @@ export type QualityId = 'high' | 'balanced' | 'light';
 
 export interface QualityPreset {
   id: QualityId;
+  /** Độ phân giải XUẤT — độc lập với khung vẽ 1920×1080. */
+  width: number;
+  height: number;
   fps: number;
   videoBps: number;
   label: { vi: string; en: string };
   note: { vi: string; en: string };
+}
+
+/**
+ * Máy di động hay máy yếu?
+ *
+ * Không dò theo chuỗi user-agent (dễ sai và dễ lỗi thời) mà theo thứ đang
+ * thực sự giới hạn: số nhân CPU và việc màn hình có cảm ứng. Một chiếc
+ * MacBook có trackpad vẫn không báo `pointer: coarse`, còn điện thoại thì có.
+ */
+export function isLowPowerDevice(): boolean {
+  if (typeof window === 'undefined') return false;
+  const coarse = window.matchMedia?.('(pointer: coarse)').matches ?? false;
+  const cores = navigator.hardwareConcurrency ?? 8;
+  const narrow = window.screen?.width ? Math.min(window.screen.width, window.screen.height) < 820 : false;
+  return (coarse && narrow) || cores <= 4;
 }
 
 /**
@@ -67,27 +85,58 @@ export interface QualityPreset {
  * dung lượng mạnh nhất, chứ không phải riêng bitrate. Hoạt cảnh ở đây chuyển
  * động chậm và mượt nên 30fps vẫn xem tốt.
  */
+/**
+ * Ba mức chất lượng — độ phân giải là tham số QUAN TRỌNG NHẤT.
+ *
+ * BÀI HỌC TỪ MOBILE (28/07/2026)
+ * ------------------------------
+ * Bản trước quay thẳng canvas 1920×1080 ở 60fps. Trên máy tính thì ổn, trên
+ * điện thoại thì hỏng: bộ mã hoá phần cứng không kham nổi 1080p thời gian
+ * thực, nó tụt lại rồi rớt khung hàng loạt, và khi `stop()` xả bộ đệm thì
+ * phần lớn nội dung chưa kịp mã hoá bị vứt. User quay 24 giây nhưng file chỉ
+ * còn ~5 giây, lại phát nhanh vì các khung thưa bị dồn vào khoảng thời gian
+ * ngắn hơn nhiều.
+ *
+ * Cách chữa là hạ ĐỘ PHÂN GIẢI chứ không phải hạ bitrate: chi phí mã hoá tỉ
+ * lệ với số điểm ảnh mỗi giây. 1080p60 → 720p30 là giảm 4,5 lần khối lượng
+ * việc cho bộ mã hoá, đủ để điện thoại bắt kịp thời gian thực.
+ */
 export const QUALITY_PRESETS: QualityPreset[] = [
   {
     id: 'high',
+    width: 1920,
+    height: 1080,
     fps: 60,
     videoBps: 5_000_000,
-    label: { vi: 'Nét tối đa', en: 'Maximum' },
-    note: { vi: '5 Mb/s · 60fps · ~43 MB mỗi phút — dành cho bản lưu trữ gốc', en: '5 Mbps · 60fps · ~43 MB per minute — for an archival master' },
+    label: { vi: '1080p', en: '1080p' },
+    note: {
+      vi: '1920×1080 · 60fps · 5 Mb/s (~43 MB mỗi phút). Chỉ dùng trên máy tính — điện thoại KHÔNG mã hoá kịp và sẽ rớt khung.',
+      en: '1920×1080 · 60fps · 5 Mbps (~43 MB per minute). Desktop only — phones cannot encode this in real time and will drop frames.',
+    },
   },
   {
     id: 'balanced',
+    width: 1280,
+    height: 720,
     fps: 30,
     videoBps: 2_500_000,
-    label: { vi: 'Cân bằng', en: 'Balanced' },
-    note: { vi: '2,5 Mb/s · 30fps · ~22 MB mỗi phút — vẫn nét chữ, hợp để đăng tải', en: '2.5 Mbps · 30fps · ~22 MB per minute — text stays crisp, ideal for publishing' },
+    label: { vi: '720p', en: '720p' },
+    note: {
+      vi: '1280×720 · 30fps · 2,5 Mb/s (~22 MB mỗi phút). Chữ vẫn đọc rõ, đủ để đăng tải và hầu hết điện thoại kham được.',
+      en: '1280×720 · 30fps · 2.5 Mbps (~22 MB per minute). Text stays legible, fine for publishing, and most phones can keep up.',
+    },
   },
   {
     id: 'light',
+    width: 960,
+    height: 540,
     fps: 30,
     videoBps: 1_200_000,
-    label: { vi: 'Nhẹ', en: 'Light' },
-    note: { vi: '1,2 Mb/s · 30fps · ~11 MB mỗi phút — gửi qua chat, nhúng vào bài học', en: '1.2 Mbps · 30fps · ~11 MB per minute — for chat and embedding in lessons' },
+    label: { vi: '540p', en: '540p' },
+    note: {
+      vi: '960×540 · 30fps · 1,2 Mb/s (~11 MB mỗi phút). Mức an toàn nhất cho điện thoại; gửi qua chat hoặc nhúng vào bài học.',
+      en: '960×540 · 30fps · 1.2 Mbps (~11 MB per minute). The safest choice on a phone; good for chat and embedding in lessons.',
+    },
   },
 ];
 
@@ -104,17 +153,27 @@ export interface RecordingResult {
   filename: string;
 }
 
-/** Thứ tự ưu tiên codec: VP9 nét hơn ở cùng bitrate, VP8 để dự phòng. */
-const MIME_CANDIDATES = [
-  'video/webm;codecs=vp9,opus',
-  'video/webm;codecs=vp8,opus',
-  'video/webm;codecs=vp9',
-  'video/webm',
-];
+/**
+ * Thứ tự ưu tiên codec.
+ *
+ * Máy khoẻ: VP9 trước — nét hơn ở cùng bitrate.
+ * Máy yếu:  VP8 trước — bộ mã hoá phần cứng cho VP8 phổ biến hơn hẳn trên
+ *           điện thoại. VP9 nhiều máy phải mã hoá bằng phần mềm, và đó đúng
+ *           là thứ làm rớt khung.
+ * `video/mp4` xếp cuối cho Safari (từ iOS 17.4 mới có MediaRecorder, và nó
+ * KHÔNG hỗ trợ WebM). Bộ vá thời lượng chỉ hiểu WebM nên với mp4 nó lặng lẽ
+ * trả lại file gốc — an toàn, không làm hỏng gì.
+ */
+function mimeCandidates(lowPower: boolean): string[] {
+  const webm = lowPower
+    ? ['video/webm;codecs=vp8,opus', 'video/webm;codecs=vp9,opus', 'video/webm']
+    : ['video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/webm'];
+  return [...webm, 'video/mp4;codecs=avc1,mp4a', 'video/mp4'];
+}
 
-function pickMimeType(): string | null {
+function pickMimeType(lowPower: boolean): string | null {
   if (typeof MediaRecorder === 'undefined') return null;
-  return MIME_CANDIDATES.find((m) => MediaRecorder.isTypeSupported(m)) ?? null;
+  return mimeCandidates(lowPower).find((m) => MediaRecorder.isTypeSupported(m)) ?? null;
 }
 
 export interface UseStudioRecorderArgs {
@@ -126,9 +185,13 @@ export interface UseStudioRecorderArgs {
 
 export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecorderArgs) {
   const [state, setState] = useState<RecorderState>('idle');
+  // Máy yếu mặc định 540p: thà video nhỏ mà đủ khung, còn hơn 1080p rớt khung.
+  const [lowPower, setLowPower] = useState(false);
   const [quality, setQuality] = useState<QualityId>('balanced');
   const qualityRef = useRef<QualityId>('balanced');
   qualityRef.current = quality;
+  const lowPowerRef = useRef(false);
+  lowPowerRef.current = lowPower;
   const [micEnabled, setMicEnabled] = useState(false);
   const [micReady, setMicReady] = useState(false);
   const [elapsedMs, setElapsedMs] = useState(0);
@@ -142,6 +205,9 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
   const chunksRef = useRef<Blob[]>([]);
   const micStreamRef = useRef<MediaStream | null>(null);
   const canvasStreamRef = useRef<MediaStream | null>(null);
+  const encoderRef = useRef<HTMLCanvasElement | null>(null);
+  const blitRafRef = useRef<number | null>(null);
+  const stopBlitRef = useRef<(() => void) | null>(null);
   const startedAtRef = useRef(0);
   const pausedTotalRef = useRef(0);
   const pausedAtRef = useRef(0);
@@ -149,7 +215,10 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
   const lastUrlRef = useRef<string | null>(null);
 
   useEffect(() => {
-    setSupported(typeof MediaRecorder !== 'undefined' && pickMimeType() !== null);
+    const weak = isLowPowerDevice();
+    setLowPower(weak);
+    if (weak) setQuality('light');
+    setSupported(typeof MediaRecorder !== 'undefined' && pickMimeType(weak) !== null);
   }, []);
 
   /* ── Đồng hồ hiển thị ─────────────────────────────────────────
@@ -233,7 +302,7 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
     setError(null);
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const mimeType = pickMimeType();
+    const mimeType = pickMimeType(lowPowerRef.current);
     if (!mimeType) {
       setError('Trình duyệt này không hỗ trợ MediaRecorder cho WebM. Hãy dùng Chrome, Edge hoặc Firefox bản mới.');
       return;
@@ -252,7 +321,41 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
     setResult(null);
 
     const preset = getQuality(qualityRef.current);
-    const canvasStream = canvas.captureStream(preset.fps);
+
+    // Canvas MÃ HOÁ riêng, tách khỏi canvas vẽ.
+    //
+    // Sân khấu luôn vẽ ở 1920×1080 để bố cục và cỡ chữ cố định. Nhưng quay
+    // thẳng từ đó thì điện thoại chết ngạt. Thay vào đó ta thu nhỏ từng khung
+    // sang một canvas phụ đúng độ phân giải xuất rồi mới `captureStream` từ
+    // canvas phụ đó. Chi phí thêm chỉ là một lần `drawImage` mỗi khung — GPU
+    // làm việc này gần như miễn phí — đổi lại bộ mã hoá nhẹ đi tới 4-5 lần.
+    const encoder = document.createElement('canvas');
+    encoder.width = preset.width;
+    encoder.height = preset.height;
+    const encCtx = encoder.getContext('2d', { alpha: false });
+    if (!encCtx) {
+      setError('Không tạo được canvas mã hoá.');
+      return;
+    }
+    encCtx.imageSmoothingEnabled = true;
+    encCtx.imageSmoothingQuality = 'high';
+    encoderRef.current = encoder;
+
+    let blitting = true;
+    const blit = () => {
+      if (!blitting) return;
+      // Vẽ khung mới nhất của sân khấu, đã thu về độ phân giải xuất.
+      encCtx.drawImage(canvas, 0, 0, encoder.width, encoder.height);
+      blitRafRef.current = requestAnimationFrame(blit);
+    };
+    stopBlitRef.current = () => {
+      blitting = false;
+      if (blitRafRef.current != null) cancelAnimationFrame(blitRafRef.current);
+      blitRafRef.current = null;
+    };
+    blit();
+
+    const canvasStream = encoder.captureStream(preset.fps);
     canvasStreamRef.current = canvasStream;
 
     const tracks: MediaStreamTrack[] = [...canvasStream.getVideoTracks()];
@@ -279,6 +382,9 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
       const durationMs = performance.now() - startedAtRef.current - pausedTotalRef.current;
       setState('idle');
       stopTimer();
+      stopBlitRef.current?.();
+      stopBlitRef.current = null;
+      encoderRef.current = null;
       canvasStreamRef.current?.getTracks().forEach((t) => t.stop());
       canvasStreamRef.current = null;
 
@@ -296,7 +402,9 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
             mimeType,
             sizeBytes: blob.size,
             durationMs,
-            filename: `${baseName || 'simulation'}.webm`,
+            // Safari xuất mp4, phần còn lại xuất webm — đuôi file phải theo
+            // đúng container, nếu không hệ điều hành mở bằng ứng dụng sai.
+            filename: `${baseName || 'simulation'}.${mimeType.includes('mp4') ? 'mp4' : 'webm'}`,
           });
         })
         .finally(() => setFinalising(false));
@@ -357,6 +465,7 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
   useEffect(() => {
     return () => {
       stopTimer();
+      stopBlitRef.current?.();
       recorderRef.current?.state !== 'inactive' && recorderRef.current?.stop();
       micStreamRef.current?.getTracks().forEach((t) => t.stop());
       canvasStreamRef.current?.getTracks().forEach((t) => t.stop());
@@ -375,6 +484,7 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
     micReady,
     quality,
     setQuality,
+    lowPower,
     start,
     stop,
     pause,

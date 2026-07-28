@@ -138,6 +138,16 @@ export default function RecorderStudio({ recorder, lang, muted, onToggleMute, au
                 })}
               </div>
               <p className="mt-1.5 text-[11px] leading-relaxed text-[#6f8098]">{tr(preset.note, lang)}</p>
+              {/* Chọn 1080p trên điện thoại là cách chắc chắn nhất để có một
+                  file hỏng: bộ mã hoá không bắt kịp, rớt khung, và phần chưa
+                  mã hoá bị vứt lúc dừng. Nói thẳng trước khi họ bấm quay. */}
+              {recorder.lowPower && recorder.quality === 'high' ? (
+                <p className="mt-1.5 rounded-md border border-[#4a2020] bg-[#1d0c0c] p-2 text-[11px] leading-relaxed text-[#fca5a5]">
+                  {vi
+                    ? 'Máy này có vẻ là điện thoại hoặc máy cấu hình thấp. Mã hoá 1080p thời gian thực gần như chắc chắn không kịp: video sẽ bị rớt khung, ngắn hơn thực tế và phát nhanh bất thường. Hãy chọn 720p hoặc 540p.'
+                    : 'This looks like a phone or a low-power machine. Encoding 1080p in real time will almost certainly fall behind: the video ends up with dropped frames, shorter than reality and playing too fast. Pick 720p or 540p.'}
+                </p>
+              ) : null}
               {/* Quay ở tốc độ chậm là cách tốn dung lượng nhất: cùng một nội
                   dung nhưng file dài gấp bội, mà bộ mã hoá vẫn tiêu đủ bitrate
                   cho từng giây. Muốn video dài thì tăng SỐ VÒNG rẻ hơn nhiều. */}
@@ -262,7 +272,7 @@ export default function RecorderStudio({ recorder, lang, muted, onToggleMute, au
                   className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-[#166534] bg-[#0c2318] px-3 py-1.5 text-[12px] font-bold text-[#86efac] transition-colors hover:border-[#22c55e]"
                 >
                   <Download className="h-3.5 w-3.5" />
-                  {vi ? 'Tải .webm' : 'Download .webm'}
+                  {vi ? 'Tải' : 'Download'} .{recorder.result.filename.split('.').pop()}
                 </button>
                 <button
                   type="button"

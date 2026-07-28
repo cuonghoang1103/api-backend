@@ -489,7 +489,12 @@ function drawLanesPanel(
       });
     } else {
       // Hàng: FIFO chạy từ TRÁI (đầu hàng, sắp được phục vụ) sang phải.
-      const slotW = Math.min(190, Math.max(96, track.w / Math.max(4, items.length + dying.length)));
+      //
+      // Bề rộng ô co theo SỐ phần tử, và sàn phải thấp (56px) chứ không phải
+      // 96px: với sàn cao, chín byte của một chuỗi UTF-8 cần 864px trong một
+      // làn rộng 764px, và phần tử cuối bị guard bên dưới bỏ vẽ LẶNG LẼ —
+      // người xem đếm được tám byte trong một bài giảng nói rằng có chín.
+      const slotW = Math.min(190, Math.max(56, track.w / Math.max(4, items.length + dying.length)));
       const chipH = Math.min(56, track.h);
       const cy = track.y + (track.h - chipH) / 2;
       // Phần tử đang rời đi chiếm chỗ đầu hàng, phần tử còn lại dồn lên sau nó.

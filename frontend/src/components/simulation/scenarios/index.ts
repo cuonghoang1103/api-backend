@@ -21,6 +21,9 @@ import { webhookScenario } from './webhook';
 import { nodejsEventLoopScenario } from './nodejsEventLoop';
 import { nodejsMicrotaskScenario } from './nodejsMicrotask';
 import { nodejsBlockingScenario } from './nodejsBlocking';
+import { nodejsWorkerScenario } from './nodejsWorker';
+import { nodejsBufferScenario } from './nodejsBuffer';
+import { nodejsStreamScenario } from './nodejsStream';
 
 // Thứ tự trong mảng = thứ tự hiện trên bảng chọn, và nó là thứ tự SƯ PHẠM:
 // nền tảng trước (REST → đệm → xác thực → CSDL), rồi tới realtime và kiến
@@ -43,6 +46,9 @@ export const SCENARIOS: Scenario[] = [
   nodejsEventLoopScenario,
   nodejsMicrotaskScenario,
   nodejsBlockingScenario,
+  nodejsWorkerScenario,
+  nodejsBufferScenario,
+  nodejsStreamScenario,
 ];
 
 /**

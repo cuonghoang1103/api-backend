@@ -39,6 +39,8 @@ interface AudioGraph {
   /** Chỉ điều khiển LOA. Hạ nút này không ảnh hưởng tiếng đi vào video. */
   speakerGain: GainNode;
   recordDest: MediaStreamAudioDestinationNode;
+  /** Nguồn giữ nhịp — xem ghi chú ở `ensure()`. Giữ tham chiếu để dừng khi rời trang. */
+  keepAlive: OscillatorNode;
   /** Bộ đệm nhiễu trắng dùng lại cho mọi hiệu ứng "swoosh". */
   noise: AudioBuffer;
 }
@@ -93,12 +95,38 @@ export function useSoundEngine(): SoundEngine {
     master.connect(recordDest);
     master.connect(speakerGain).connect(ctx.destination);
 
+    /* NGUỒN GIỮ NHỊP — đừng gỡ, video sẽ mất tiếng.
+       ----------------------------------------------
+       `MediaStreamAudioDestinationNode` NGỪNG PHÁT HOÀN TOÀN khi đồ thị
+       Web Audio không còn nguồn nào đang chạy — nó không phát cả khoảng
+       lặng. Hiệu ứng của trang này là những tiếng ngắn rời rạc, nên giữa
+       hai hiệu ứng đồ thị rảnh và track âm thanh đứt quãng.
+
+       Đo trên bản ghi 20 giây thật (28/07): lẽ ra ~1000 gói Opus, thực tế
+       chỉ có 266 gói ở máy dev và 162 gói trên production, với những lỗ
+       hổng 1–2 giây rơi đúng vào các quãng im lặng. Mốc thời gian của gói
+       cuối vẫn là 20,3s nên nhìn qua tưởng đủ — nhưng tổng số MẪU chỉ
+       tương đương 15,96s. Trình phát mất đồng bộ ngay sau lỗ hổng đầu tiên
+       rồi tắt tiếng nốt phần sau: đúng triệu chứng "chỉ nghe được mấy giây
+       đầu".
+
+       Cách chữa: một dao động ký chạy suốt với biên độ 1e-7 (≈ -140 dBFS,
+       nhỏ hơn cả bước lượng tử 16-bit là 3e-5) — đồ thị luôn có việc để
+       render nên destination phát liên tục, còn tai người thì không thể
+       nghe thấy và bộ mã hoá Opus nén nó thành im lặng. */
+    const keepAlive = ctx.createOscillator();
+    const keepGain = ctx.createGain();
+    keepGain.gain.value = 1e-7;
+    keepAlive.frequency.value = 30;
+    keepAlive.connect(keepGain).connect(master);
+    keepAlive.start();
+
     // Nhiễu trắng dựng sẵn 1 giây, tái sử dụng cho swoosh/buzz. Sinh bằng
     // LCG có hạt giống cố định thay cho Math.random(): cùng một tiếng động ở
     // mọi lần chạy, đúng tinh thần tất định của cả trang.
     const noise = makeNoiseBuffer(ctx);
 
-    graphRef.current = { ctx, master, speakerGain, recordDest, noise };
+    graphRef.current = { ctx, master, speakerGain, recordDest, keepAlive, noise };
     if (ctx.state === 'suspended') await ctx.resume();
     return graphRef.current;
   }, []);
@@ -140,7 +168,14 @@ export function useSoundEngine(): SoundEngine {
       micRef.current?.disconnect();
       const g = graphRef.current;
       graphRef.current = null;
-      if (g && g.ctx.state !== 'closed') void g.ctx.close();
+      if (g) {
+        try {
+          g.keepAlive.stop();
+        } catch {
+          // Đã dừng rồi thì thôi — gọi stop() hai lần là ném lỗi.
+        }
+        if (g.ctx.state !== 'closed') void g.ctx.close();
+      }
     };
   }, []);
 

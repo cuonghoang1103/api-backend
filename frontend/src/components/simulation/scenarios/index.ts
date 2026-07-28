@@ -18,6 +18,10 @@ import { spamClickScenario } from './spamClick';
 import { uploadScenario } from './upload';
 import { nPlusOneScenario } from './nPlusOne';
 import { cacheLayersScenario } from './cacheLayers';
+import { rateLimitScenario } from './rateLimit';
+import { passwordHashingScenario } from './passwordHashing';
+import { pubSubScenario } from './pubSub';
+import { aiChatScenario } from './aiChat';
 import { webhookScenario } from './webhook';
 import { nodejsEventLoopScenario } from './nodejsEventLoop';
 import { nodejsMicrotaskScenario } from './nodejsMicrotask';
@@ -65,6 +69,10 @@ export const SCENARIOS: Scenario[] = [
   uploadScenario,
   nPlusOneScenario,
   cacheLayersScenario,
+  rateLimitScenario,
+  passwordHashingScenario,
+  pubSubScenario,
+  aiChatScenario,
 
   // ── Mục Node.js — mỗi kịch bản dựng video cho MỘT bài trong khoá
   // `content/courses/nodejs`. Thứ tự ở đây theo thứ tự chương.

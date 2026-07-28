@@ -56,6 +56,11 @@ import { oopPillarsScenario } from './oopPillars';
 import { listVsLinkedScenario } from './listVsLinked';
 import { hashMapScenario } from './hashMap';
 import { stackHeapScenario } from './stackHeap';
+import { cpuSchedulingScenario } from './cpuScheduling';
+import { deadlockScenario } from './deadlock';
+import { syscallScenario } from './syscall';
+import { tcpHandshakeScenario } from './tcpHandshake';
+import { tcpWindowScenario } from './tcpWindow';
 import { nodejsCacheAsideScenario } from './nodejsCacheAside';
 import { nodejsAtomicScenario } from './nodejsAtomic';
 import { nodejsRetryScenario } from './nodejsRetry';
@@ -136,6 +141,16 @@ export const SCENARIOS: Scenario[] = [
   listVsLinkedScenario,
   hashMapScenario,
   stackHeapScenario,
+
+  // ── Mục Hệ điều hành — OSG202. Bộ lập lịch và đồng bộ hoá.
+  cpuSchedulingScenario,
+  deadlockScenario,
+  syscallScenario,
+
+  // ── Mục Mạng máy tính — NWC203c. TCP dựng độ tin cậy trên nền IP
+  // vốn có thể làm mất, làm trùng và giao lộn thứ tự gói.
+  tcpHandshakeScenario,
+  tcpWindowScenario,
 ];
 
 /**
@@ -183,6 +198,24 @@ export const SCENARIO_GROUPS: ScenarioGroup[] = [
       en: 'PRO192 · CSD201 — the four pillars and data structures, seen from memory',
     },
     accent: '#f472b6',
+  },
+  {
+    id: 'os',
+    name: { vi: 'Hệ điều hành', en: 'Operating systems' },
+    blurb: {
+      vi: 'OSG202 — bộ lập lịch chọn ai chạy, và chuyện hai luồng chờ nhau',
+      en: 'OSG202 — how the scheduler picks, and how threads deadlock',
+    },
+    accent: '#38bdf8',
+  },
+  {
+    id: 'network',
+    name: { vi: 'Mạng máy tính', en: 'Computer networks' },
+    blurb: {
+      vi: 'NWC203c — TCP dựng độ tin cậy trên nền IP không đáng tin',
+      en: 'NWC203c — how TCP builds reliability on unreliable IP',
+    },
+    accent: '#34d399',
   },
 ];
 

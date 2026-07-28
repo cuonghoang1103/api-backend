@@ -81,6 +81,12 @@ RUN rm -rf .next
 ARG NEXT_PUBLIC_API_URL
 ARG NEXTAUTH_URL
 ARG NEXTAUTH_SECRET
+# NextAuth v5 đọc `AUTH_SECRET`; `NEXTAUTH_SECRET` là tên v4 còn giữ lại cho
+# tương thích. Thiếu dòng này thì `lib/auth.ts` kêu "Missing required env var:
+# AUTH_SECRET" ở MỌI lần build — một báo động giả, vì runtime vẫn được
+# docker-compose truyền biến qua `environment:`. docker-compose đã gửi sẵn
+# build arg này, chỉ Dockerfile là chưa nhận.
+ARG AUTH_SECRET
 ARG GOOGLE_CLIENT_ID
 ARG GOOGLE_CLIENT_SECRET
 ARG GITHUB_CLIENT_ID
@@ -101,6 +107,7 @@ ARG BUILD_NUMBER=local
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 ENV NEXTAUTH_URL=$NEXTAUTH_URL
 ENV NEXTAUTH_SECRET=$NEXTAUTH_SECRET
+ENV AUTH_SECRET=$AUTH_SECRET
 ENV GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
 ENV GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET
 ENV GITHUB_CLIENT_ID=$GITHUB_CLIENT_ID

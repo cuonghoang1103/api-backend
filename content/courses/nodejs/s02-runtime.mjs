@@ -113,6 +113,13 @@ node -p <span class="tok-string">"process.versions.uv"</span></code></pre>
     {
       title: '2.2 — The event loop, phase by phase|||2.2 — Event loop, đi qua từng pha',
       slug: 'nodejs-2-2-event-loop',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-2-2-event-loop.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-2-2-event-loop.jpg',
+        scenario: 'nodejs-event-loop',
+        durationSeconds: 40,
+        caption: { en: "The event loop, phase by phase", vi: "Event loop, từng pha một" },
+      },
       type: 'VIDEO',
       description: 'Sáu pha của vòng lặp, thứ tự thực thi thật, và vì sao setTimeout(0) vs setImmediate không đoán được.',
       content: `
@@ -224,6 +231,13 @@ process.<span class="tok-function">nextTick</span>(() =&gt; <span class="tok-fun
     {
       title: '2.3 — nextTick, microtasks and starvation|||2.3 — nextTick, microtask và chuyện bỏ đói hàng đợi',
       slug: 'nodejs-2-3-microtask',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-2-3-microtask.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-2-3-microtask.jpg',
+        scenario: 'nodejs-microtask',
+        durationSeconds: 21,
+        caption: { en: "nextTick, microtasks and starvation", vi: "nextTick, microtask và bỏ đói hàng đợi" },
+      },
       type: 'VIDEO',
       description: 'Hai hàng đợi ưu tiên nằm ngoài sáu pha, thứ tự giữa chúng, và cách chúng làm treo cả tiến trình.',
       content: `
@@ -309,6 +323,13 @@ nextTick đã chạy: 1000000 lần</div>
     {
       title: '2.4 — Blocking the loop: measured|||2.4 — Chặn event loop: đo bằng số thật',
       slug: 'nodejs-2-4-chan-event-loop',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-2-4-chan-event-loop.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-2-4-chan-event-loop.jpg',
+        scenario: 'nodejs-blocking',
+        durationSeconds: 28,
+        caption: { en: "Blocking the loop — measured", vi: "Chặn event loop — đo bằng số thật" },
+      },
       type: 'VIDEO',
       description: 'Đo chính xác điều gì xảy ra khi một phép tính nặng chạy trên luồng chính, và khám phá thread pool ẩn của libuv.',
       content: `
@@ -466,6 +487,13 @@ h.<span class="tok-function">enable</span>();
     {
       title: '2.5 — Getting heavy work off the loop|||2.5 — Đưa việc nặng ra khỏi event loop',
       slug: 'nodejs-2-5-worker-threads',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-2-5-worker-threads.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-2-5-worker-threads.jpg',
+        scenario: 'nodejs-worker',
+        durationSeconds: 22,
+        caption: { en: "Getting heavy work off the loop", vi: "Đưa việc nặng ra khỏi event loop" },
+      },
       type: 'VIDEO',
       description: 'Ba cách xử lý việc nặng CPU — worker threads, chia nhỏ, nhiều tiến trình — kèm số đo và cái giá của từng cách.',
       content: `

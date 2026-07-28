@@ -42,7 +42,6 @@ import AppBootSplash from '@/components/ui/AppBootSplash'
 import AuthBoot from '@/components/providers/AuthBoot'
 import MusicAudioController from '@/components/music/MusicAudioController'
 import MusicHistoryRecorder from '@/components/music/MusicHistoryRecorder'
-import CyberCursor from '@/components/ui/CyberCursor'
 import LocaleWrapper from '@/components/providers/LocaleWrapper'
 import ClientOnly from '@/components/providers/ClientOnly'
 import { ThemeProvider } from '@/context/ThemeContext'
@@ -368,7 +367,6 @@ export default function RootLayout({
             <ClientOnly>
               <Navbar />
               {CART_ENABLED && <CartDrawer />}
-              <CyberCursor />
             </ClientOnly>
 
             {/* DockLayout provides the collapsible left sidebar + animated content shift */}

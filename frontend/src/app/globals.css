@@ -969,11 +969,6 @@ aside ::-webkit-scrollbar-thumb:hover {
   border-bottom: 2px solid; border-right: 2px solid;
 }
 
-/* Hide default cursor globally when custom CyberCursor is active */
-.cyber-cursor-active * {
-  cursor: none !important;
-}
-
 /* ─── Rich content (Lesson Content / Teaching Notes) ─────────────────────────
  * Used on the /learn page. Renders sanitized HTML produced by
  * the TipTap editor in the admin. The blocks below preserve
@@ -1149,6 +1144,76 @@ aside ::-webkit-scrollbar-thumb:hover {
 .rich-content .lead {
   font-size: 1.08rem;
   color: var(--text-primary);
+}
+
+/* --- simulation clip embedded in a lesson body ---
+   Distinct from the lesson's MAIN video frame at the top of the page: that
+   one is reserved for the instructor's own recorded lecture (usually a
+   YouTube embed). This is the animated explainer that belongs to a specific
+   passage of the text, so it is styled as a figure inside the prose rather
+   than as a page-level player.
+
+   Native `controls` are kept on purpose — they carry a real fullscreen
+   button, and a hand-rolled player would have to re-implement fullscreen,
+   keyboard control and captions to match. */
+.rich-content .sim-video {
+  margin: 1.5rem 0;
+  padding: 0;
+  border: 1px solid var(--border-color, #253046);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #05070f;
+  box-shadow: 0 18px 44px -28px rgba(56, 189, 248, 0.55);
+}
+.rich-content .sim-video video {
+  display: block;
+  width: 100%;
+  /* Khoá đúng 16:9 của canvas 1920×1080 nên khung không nhảy khi metadata
+     về, và không bao giờ có viền đen trên/dưới. */
+  aspect-ratio: 16 / 9;
+  background: #05070f;
+  margin: 0;
+}
+.rich-content .sim-video figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem 0.85rem;
+  border-top: 1px solid var(--border-color, #253046);
+  background: rgba(56, 189, 248, 0.05);
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+.rich-content .sim-video .sim-tag {
+  flex-shrink: 0;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.12);
+  color: #7dd3fc;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.rich-content .sim-video .sim-hint {
+  color: var(--text-muted, #7f8fab);
+  font-size: 0.8rem;
+}
+.rich-content .sim-video .sim-open {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: #7dd3fc;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.rich-content .sim-video .sim-open:hover { text-decoration: underline; }
+
+@media (max-width: 640px) {
+  .rich-content .sim-video .sim-open { margin-left: 0; }
 }
 
 /* --- callout boxes (info / ok / warn / danger) --- */

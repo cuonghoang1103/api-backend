@@ -196,13 +196,29 @@ async function renderOne(page, scenarioId, opts) {
 
     const size = fs.statSync(outFile).size;
     const probe = await probeDuration(outFile);
-    console.log(`   ✓ ${outFile} — ${(size / 1048576).toFixed(1)} MB, ${probe.toFixed(2)}s`);
+
+    // 4. Ảnh bìa. Không có nó thì thẻ <video> trong bài học hiện một ô đen
+    //    cho tới khi người học bấm phát — trông như hỏng. Lấy khung ở 40%
+    //    thời lượng: lúc đó hoạt cảnh đã có nội dung, còn khung đầu thì
+    //    thường mới chỉ có tiêu đề.
+    const posterFile = path.join(args.outDir, `${name}.jpg`);
+    await run('ffmpeg', [
+      '-y', '-loglevel', 'error',
+      '-ss', String((probe * 0.4).toFixed(2)),
+      '-i', outFile,
+      '-frames:v', '1', '-q:v', '3',
+      '-vf', 'scale=1280:-2',
+      posterFile,
+    ]);
+
+    console.log(`   ✓ ${outFile} — ${(size / 1048576).toFixed(1)} MB, ${probe.toFixed(2)}s (+ ảnh bìa ${(fs.statSync(posterFile).size / 1024).toFixed(0)} KB)`);
 
     return {
       scenarioId,
       options: opts,
       lang: args.lang,
       file: outFile,
+      poster: posterFile,
       bytes: size,
       durationSeconds: Math.round(probe),
       lesson: meta.lesson,

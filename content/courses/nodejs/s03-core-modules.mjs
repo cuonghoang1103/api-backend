@@ -164,6 +164,13 @@ join    : /var/www/uploads</div>
     {
       title: '3.2 — Buffers: binary data|||3.2 — Buffer: dữ liệu nhị phân',
       slug: 'nodejs-3-2-buffer',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-3-2-buffer.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-3-2-buffer.jpg',
+        scenario: 'nodejs-buffer',
+        durationSeconds: 18,
+        caption: { en: "Buffers — characters are not bytes", vi: "Buffer — ký tự không phải là byte" },
+      },
       type: 'VIDEO',
       description: 'Vì sao "8 ký tự" lại là 9 byte, và điều gì xảy ra khi bạn cắt buffer sai chỗ.',
       content: `
@@ -263,6 +270,13 @@ Buffer.<span class="tok-function">concat</span>([a, b]);                <span cl
     {
       title: '3.3 — Streams: the 348 MB experiment|||3.3 — Stream: thí nghiệm với file 348 MB',
       slug: 'nodejs-3-3-stream',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-3-3-stream.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-3-3-stream.jpg',
+        scenario: 'nodejs-stream',
+        durationSeconds: 18,
+        caption: { en: "Streams — the 348 MB experiment", vi: "Stream — thí nghiệm file 348 MB" },
+      },
       type: 'VIDEO',
       description: 'Đo RAM khi đọc nguyên file so với đọc theo dòng chảy, backpressure, và pipeline.',
       content: `

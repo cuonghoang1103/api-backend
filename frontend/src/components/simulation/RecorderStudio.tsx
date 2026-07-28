@@ -72,6 +72,9 @@ export default function RecorderStudio({ recorder, lang, muted, onToggleMute, au
       const form = new FormData();
       form.append('file', result.blob, result.filename);
       form.append('name', base);
+      // Tốc độ khung của bản ghi: máy chủ giữ nguyên nó thay vì ép về 30,
+      // nếu không bản quay 60fps bị giảm nửa số khung khi xuất mp4.
+      form.append('fps', String(preset.fps));
 
       const res = await fetch('/api/v1/simulation/convert-mp4', {
         method: 'POST',

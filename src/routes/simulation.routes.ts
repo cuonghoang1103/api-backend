@@ -121,6 +121,11 @@ router.post(
       const outPath = path.join(work, 'out.mp4');
       await fs.writeFile(inPath, req.file.buffer);
 
+      // Frame rate of the source recording, sent by the client (it knows its
+      // own quality preset). Clamped, because it arrives from the browser.
+      const rawFps = Number(req.body?.fps);
+      const fps = Number.isFinite(rawFps) && rawFps >= 1 && rawFps <= 60 ? Math.round(rawFps) : 30;
+
       await runFfmpeg([
         '-y', '-loglevel', 'error',
         '-i', inPath,
@@ -129,10 +134,24 @@ router.post(
         // MediaRecorder's VP9 output is often yuv420p already, but a
         // recording made on another device may not be.
         '-pix_fmt', 'yuv420p',
-        // MediaRecorder writes a variable frame rate stream with no
-        // duration in the header. Forcing CFR keeps players from showing a
-        // wrong length or refusing to seek.
-        '-vsync', 'cfr', '-r', '30',
+        // MediaRecorder writes a variable frame rate stream with no duration
+        // in the header. Forcing CFR keeps players from showing a wrong
+        // length or refusing to seek — at the recording's OWN rate, so a
+        // 60fps capture does not get halved on the way out.
+        '-vsync', 'cfr', '-r', String(fps),
+        // Fill gaps in the audio timeline with silence.
+        //
+        // A Web Audio capture can arrive with holes in it (the studio had
+        // exactly that bug: the destination node stopped emitting while the
+        // graph was idle). Without this filter ffmpeg simply CONCATENATES the
+        // surviving packets, so every sound after the first hole plays early
+        // and the tail runs out before the picture does — measured on a real
+        // 20s recording: 9.7s of audio stretched over a 20s video, drifting
+        // further out of sync with every gap. `min_hard_comp=0.100` makes it
+        // insert real silence once drift passes 100ms instead of resampling.
+        // The source bug is fixed, but old recordings and any future hiccup
+        // must not silently produce a desynced download.
+        '-af', 'aresample=async=1:min_hard_comp=0.100:first_pts=0',
         '-c:a', 'aac', '-b:a', '160k',
         '-movflags', '+faststart',
         outPath,

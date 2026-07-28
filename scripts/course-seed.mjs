@@ -63,6 +63,78 @@ function slugify(text) {
 const TYPES = new Set(['VIDEO', 'QUIZ', 'EXERCISE', 'SOLUTION', 'DOCUMENT']);
 const normType = (t) => (TYPES.has(String(t || '').toUpperCase()) ? String(t).toUpperCase() : 'VIDEO');
 
+/* ── Simulation clip embedded INSIDE the lesson body ───────────────────────
+   The lesson's MAIN video frame belongs to the instructor's own recorded
+   lecture (normally a YouTube link), so the animated explainer goes into the
+   body instead, right after the opening paragraph.
+
+   Rendered here rather than pasted into the content files so that every
+   lesson gets identical markup, the bilingual halves stay balanced (the
+   content checker counts ml-en against ml-vi), and restyling later is one
+   edit instead of twenty.
+
+   `<video controls>` carries a real fullscreen button for free; `playsinline`
+   stops iOS from hijacking playback into its own fullscreen player, which
+   would make the surrounding lesson text vanish mid-read. */
+
+const isYouTube = (url) => /(?:youtube\.com|youtu\.be)/i.test(String(url));
+
+const escAttr = (v) => String(v)
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+function simulationBlock(sim, lang) {
+  const vi = lang === 'vi';
+  const caption = (vi ? sim.caption?.vi : sim.caption?.en) || (vi ? 'Mô phỏng bài học' : 'Lesson simulation');
+  const tag = vi ? 'Mô phỏng' : 'Simulation';
+  const hint = vi
+    ? 'Bấm nút toàn màn hình để xem nét ở cỡ lớn.'
+    : 'Use the fullscreen button to watch it full size.';
+  const openLabel = vi ? 'Mở bản tương tác' : 'Open the interactive version';
+  const link = sim.scenario
+    ? ' <a class="sim-open" href="/simulation?scenario=' + escAttr(sim.scenario) + '&amp;lang=' + lang +
+      '" target="_blank" rel="noopener">' + openLabel + ' →</a>'
+    : '';
+  const poster = sim.poster ? ' poster="' + escAttr(sim.poster) + '"' : '';
+
+  return '<figure class="sim-video">\n' +
+    '  <video controls playsinline preload="metadata"' + poster + ' src="' + escAttr(sim.url) + '"></video>\n' +
+    '  <figcaption><span class="sim-tag">' + tag + '</span> ' + escAttr(caption) +
+    ' <span class="sim-hint">' + hint + '</span>' + link + '</figcaption>\n' +
+    '</figure>';
+}
+
+/**
+ * Insert the block into BOTH language halves of a lesson body.
+ *
+ * Anchored after the opening `<p class="lead">…</p>` when there is one — the
+ * lead poses the question the animation answers, so the clip reads as the
+ * answer rather than as decoration. Falls back to just after the `<h2>`, then
+ * to the top of the half. Content without an `ml-*` wrapper is returned
+ * untouched, so a malformed lesson never loses its text.
+ */
+function withSimulation(content, sim) {
+  if (!content || !sim?.url) return content;
+  if (content.includes('class="sim-video"')) return content;   // đã chèn rồi
+
+  return content.replace(
+    /<div class="ml-(en|vi)">([\s\S]*?)<\/div>\s*(?=<div class="ml-(?:en|vi)">|$)/g,
+    (whole, lang, body) => {
+      const block = '\n' + simulationBlock(sim, lang) + '\n';
+      const lead = body.match(/<p class="lead">[\s\S]*?<\/p>/);
+      if (lead) {
+        const at = lead.index + lead[0].length;
+        return '<div class="ml-' + lang + '">' + body.slice(0, at) + block + body.slice(at) + '</div>';
+      }
+      const h2 = body.match(/<h2>[\s\S]*?<\/h2>/);
+      if (h2) {
+        const at = h2.index + h2[0].length;
+        return '<div class="ml-' + lang + '">' + body.slice(0, at) + block + body.slice(at) + '</div>';
+      }
+      return '<div class="ml-' + lang + '">' + block + body + '</div>';
+    }
+  );
+}
+
 const spec = (await import(pathToFileURL(path.resolve(FILE)).href)).default;
 console.log(`── course-seed ${spec.course.slug} : ${APPLY ? 'APPLY' : 'DRY'} ──`);
 
@@ -172,23 +244,31 @@ if (course) {
           options: q.options, correctIndex: q.correctIndex, points: q.points ?? 1,
         })),
       } : undefined;
-      // Simulation video, when the lesson has one:
+      // ── The MAIN video frame ────────────────────────────────────────
       //   video: { url, platform, durationSeconds }
-      // `platform: 'DIRECT'` is what makes the learn page use the native
-      // <video> player instead of the YouTube embed path. Written to BOTH
-      // Lesson and LessonDetail because the learn page reads the detail
-      // first and falls back to the lesson row, and the course card totals
-      // read videoDurationSeconds off the lesson.
+      // This is the big player at the top of the lesson, and it is reserved
+      // for the instructor's own recorded lecture — normally a YouTube link.
+      // Simulation clips must NOT go here (see `simulation` below); they
+      // belong inside the lesson body so the main frame stays free.
+      //
+      // Written to BOTH Lesson and LessonDetail because the learn page reads
+      // the detail first and falls back to the lesson row, and the course
+      // card totals read videoDurationSeconds off the lesson.
       const video = l.video?.url
         ? {
             url: l.video.url,
-            platform: l.video.platform ?? 'DIRECT',
+            // YouTube links must stay on the EMBED path (the IFrame player
+            // reports real duration and true completion); anything else is a
+            // direct file. Guessing from the URL means the author writes one
+            // line and never thinks about platform strings.
+            platform: l.video.platform ?? (isYouTube(l.video.url) ? 'EMBED' : 'DIRECT'),
             durationSeconds: Math.max(0, Math.round(l.video.durationSeconds ?? 0)),
           }
         : null;
 
       const lessonCore = {
-        title: l.title, description: l.description ?? null, content: l.content ?? null,
+        title: l.title, description: l.description ?? null,
+        content: withSimulation(l.content ?? null, l.simulation),
         lessonType: normType(l.type), isFreePreview: l.isFreePreview ?? false, isPublished: l.isPublished ?? true,
         // Only set when present: re-seeding a lesson whose video has not been
         // rendered yet must NOT wipe a video attached in an earlier pass.

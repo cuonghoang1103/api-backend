@@ -57,7 +57,9 @@ if (skipped > 0) {
 
 /** Khoá R2 của một video. Ổn định theo slug bài học, nên dựng lại là ghi đè. */
 const keyFor = (v) => `videos/courses/${v.lesson.course}/${v.lesson.slug}.mp4`;
+const posterKeyFor = (v) => `videos/courses/${v.lesson.course}/${v.lesson.slug}.jpg`;
 const urlFor = (v) => `${MEDIA_BASE}/${keyFor(v)}`;
+const posterUrlFor = (v) => `${MEDIA_BASE}/${posterKeyFor(v)}`;
 
 /* ────────────────────────────────────────────────────────────
    1. TẢI LÊN R2
@@ -66,32 +68,43 @@ const urlFor = (v) => `${MEDIA_BASE}/${keyFor(v)}`;
 async function upload() {
   const { S3Client, PutObjectCommand } = await import('@aws-sdk/client-s3');
 
-  const endpoint = process.env.R2_ENDPOINT;
+  // Tên biến trên VPS là `R2_ENDPOINT_URL`; chấp nhận cả hai để script chạy
+  // được ở mọi môi trường mà không phải nhớ biến thể nào đang dùng.
+  const endpoint = process.env.R2_ENDPOINT_URL || process.env.R2_ENDPOINT;
   const bucket = process.env.R2_BUCKET_NAME || process.env.R2_BUCKET;
   const accessKeyId = process.env.R2_ACCESS_KEY_ID;
   const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY;
   if (!endpoint || !bucket || !accessKeyId || !secretAccessKey) {
-    throw new Error('Thiếu biến môi trường R2_* — script này phải chạy TRONG container backend.');
+    throw new Error(
+      `Thiếu biến môi trường R2 — script này phải chạy TRONG container backend. ` +
+        `Đang thấy: endpoint=${endpoint ? 'có' : 'THIẾU'} bucket=${bucket ? 'có' : 'THIẾU'} ` +
+        `key=${accessKeyId ? 'có' : 'THIẾU'} secret=${secretAccessKey ? 'có' : 'THIẾU'}`
+    );
   }
 
   const s3 = new S3Client({ region: 'auto', endpoint, credentials: { accessKeyId, secretAccessKey } });
 
+  // Video dựng lại thì đổi nội dung ở CÙNG một khoá, nên không đặt cache
+  // vĩnh viễn: một năm mà CDN giữ bản cũ thì bài giảng đứng im.
+  const CACHE = 'public, max-age=86400';
+
   for (const v of videos) {
-    const key = keyFor(v);
     const body = fs.readFileSync(v.file);
-    console.log(`↑ ${key} (${(body.length / 1048576).toFixed(1)} MB)`);
-    if (DRY) continue;
-    await s3.send(
-      new PutObjectCommand({
-        Bucket: bucket,
-        Key: key,
-        Body: body,
-        ContentType: 'video/mp4',
-        // Video dựng lại thì đổi nội dung ở CÙNG một khoá, nên không đặt
-        // cache vĩnh viễn: một năm mà CDN giữ bản cũ thì bài giảng đứng im.
-        CacheControl: 'public, max-age=86400',
-      })
-    );
+    console.log(`↑ ${keyFor(v)} (${(body.length / 1048576).toFixed(1)} MB)`);
+    if (!DRY) {
+      await s3.send(
+        new PutObjectCommand({ Bucket: bucket, Key: keyFor(v), Body: body, ContentType: 'video/mp4', CacheControl: CACHE })
+      );
+    }
+    if (v.poster && fs.existsSync(v.poster)) {
+      const img = fs.readFileSync(v.poster);
+      console.log(`↑ ${posterKeyFor(v)} (${(img.length / 1024).toFixed(0)} KB)`);
+      if (!DRY) {
+        await s3.send(
+          new PutObjectCommand({ Bucket: bucket, Key: posterKeyFor(v), Body: img, ContentType: 'image/jpeg', CacheControl: CACHE })
+        );
+      }
+    }
   }
   console.log(`✓ Đã tải ${videos.length} video lên R2.`);
 }
@@ -118,8 +131,9 @@ function patchFile(file, slug, block) {
   const insertAt = m.index + m[0].length;
   const rest = src.slice(insertAt);
 
-  // Đã có `video: { … },` ngay dưới slug thì thay, không chèn thêm cái thứ hai.
-  const existing = rest.match(/^\n\s*video: \{[^}]*\},/);
+  // Đã có `simulation: { … },` ngay dưới slug thì thay, không chèn thêm cái
+  // thứ hai. Khối trải nhiều dòng nên khớp tới dấu đóng thụt đúng cấp.
+  const existing = rest.match(/^\n\s*simulation: \{[\s\S]*?\n\s*\},/);
   const tail = existing ? rest.slice(existing[0].length) : rest;
 
   const lines = block.map((l) => `${indent}${l}`).join('\n');
@@ -138,8 +152,21 @@ function patch() {
       continue;
     }
 
+    // Ghi vào `simulation`, KHÔNG phải `video`.
+    //
+    // `video` là khung hình chính ở đầu bài — chỗ đó dành cho bài giảng do
+    // chính người dạy quay (thường là link YouTube), phải để trống. Clip mô
+    // phỏng thuộc về THÂN bài, và `course-seed.mjs` sẽ dựng thẻ <video> chèn
+    // vào đúng chỗ trong cả hai vế song ngữ.
+    const cap = v.name ?? {};
     const block = [
-      `video: { url: '${urlFor(v)}', platform: 'DIRECT', durationSeconds: ${v.durationSeconds} },`,
+      'simulation: {',
+      `  url: '${urlFor(v)}',`,
+      `  poster: '${posterUrlFor(v)}',`,
+      `  scenario: '${v.scenarioId}',`,
+      `  durationSeconds: ${v.durationSeconds},`,
+      `  caption: { en: ${JSON.stringify(cap.en ?? '')}, vi: ${JSON.stringify(cap.vi ?? '')} },`,
+      '},',
     ];
 
     let hit = false;

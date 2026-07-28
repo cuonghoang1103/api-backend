@@ -303,8 +303,8 @@ function buildIpLoss(): SimStep[] {
     id: 'realfix',
     title: { vi: 'Cách đúng: đếm ngược từ proxy tin cậy', en: 'The correct fix: count back from the trusted proxy' },
     detail: {
-      vi: 'Nginx **nối thêm** IP thật vào CUỐI chuỗi, phần đầu là do client tự viết nên không đáng tin. Vì bạn biết chính xác có bao nhiêu proxy trước ứng dụng (ở đây là một), hãy lấy phần tử ở đúng vị trí đó tính từ cuối. Trong Express: đặt `trust proxy` bằng SỐ LƯỢNG proxy, không phải `true` — `true` nghĩa là tin toàn bộ chuỗi.',
-      en: 'Nginx **appends** the real IP to the END of the chain; the earlier entries are client-written and untrustworthy. Since you know exactly how many proxies sit in front (here, one), take the element at that offset from the end. In Express: set `trust proxy` to the NUMBER of proxies, not `true` — `true` means trusting the entire chain.',
+      vi: 'Nginx nối thêm IP thật vào CUỐI chuỗi, phần đầu là do client tự viết nên không đáng tin. Vì bạn biết chính xác có bao nhiêu proxy trước ứng dụng (ở đây là một), hãy lấy phần tử ở đúng vị trí đó tính từ cuối. Trong Express: đặt `trust proxy` bằng SỐ LƯỢNG proxy, không phải `true` — `true` nghĩa là tin toàn bộ chuỗi.',
+      en: 'Nginx appends the real IP to the END of the chain; the earlier entries are client-written and untrustworthy. Since you know exactly how many proxies sit in front (here, one), take the element at that offset from the end. In Express: set `trust proxy` to the NUMBER of proxies, not `true` — `true` means trusting the entire chain.',
     },
     duration: 3200,
     edge: 'e_be_limit',

@@ -272,8 +272,8 @@ function buildRace(): SimStep[] {
     id: 'prevent',
     title: { vi: 'Cách phòng: một đường deploy duy nhất', en: 'Prevention: exactly one deployment path' },
     detail: {
-      vi: 'Ba cách, xếp theo độ chắc chắn. Chắc nhất: chỉ để MỘT workflow được phép deploy, cái còn lại chỉ kiểm tra. Kế đó: dùng `concurrency: { group: deploy, cancel-in-progress: false }` để GitHub tự xếp hàng thay vì chạy song song. Và cách dự án này đang dùng: **deploy bằng `bash deploy.sh` từ máy cá nhân, kiểm tra sản xuất xong mới push lên GitHub** — khi đó push chỉ còn là đồng bộ mã, không còn là hành động deploy nữa.',
-      en: 'Three options, ordered by robustness. Strongest: let exactly ONE workflow deploy and reduce the other to checks. Next: add `concurrency: { group: deploy, cancel-in-progress: false }` so GitHub queues them instead of running both. And what this project actually does: **deploy with `bash deploy.sh` from the laptop, verify production, and only then push to GitHub** — at which point the push is just code sync, no longer a deployment.',
+      vi: 'Ba cách, xếp theo độ chắc chắn. Chắc nhất: chỉ để MỘT workflow được phép deploy, cái còn lại chỉ kiểm tra. Kế đó: dùng `concurrency: { group: deploy, cancel-in-progress: false }` để GitHub tự xếp hàng thay vì chạy song song. Và cách dự án này đang dùng: deploy bằng `bash deploy.sh` từ máy cá nhân, kiểm tra sản xuất xong mới push lên GitHub — khi đó push chỉ còn là đồng bộ mã, không còn là hành động deploy nữa.',
+      en: 'Three options, ordered by robustness. Strongest: let exactly ONE workflow deploy and reduce the other to checks. Next: add `concurrency: { group: deploy, cancel-in-progress: false }` so GitHub queues them instead of running both. And what this project actually does: deploy with `bash deploy.sh` from the laptop, verify production, and only then push to GitHub — at which point the push is just code sync, no longer a deployment.',
     },
     duration: 3300,
     at: 'dev',

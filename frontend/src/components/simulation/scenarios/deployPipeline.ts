@@ -108,8 +108,8 @@ function buildFull(): SimStep[] {
     id: 'rsync',
     title: { vi: 'rsync đẩy mã nguồn lên VPS', en: 'rsync pushes the source to the VPS' },
     detail: {
-      vi: 'Không phải `git push`. Script đồng bộ thẳng thư mục làm việc sang `/home/deployer/repo`, bỏ qua `node_modules`, `.next` và — quan trọng nhất — **bỏ qua mọi file `.env*`**. Nhờ đó bí mật sản xuất nằm ở `/opt/cuonghoangdev/.env` trên VPS sống sót qua mọi lần deploy, không bao giờ bị bản `.env` trên máy cá nhân ghi đè.',
-      en: 'Not `git push`. The script syncs your working directory straight to `/home/deployer/repo`, skipping `node_modules`, `.next` and — most importantly — **every `.env*` file**. That is how production secrets in `/opt/cuonghoangdev/.env` survive every deploy and are never overwritten by your laptop’s `.env`.',
+      vi: 'Không phải `git push`. Script đồng bộ thẳng thư mục làm việc sang `/home/deployer/repo`, bỏ qua `node_modules`, `.next` và — quan trọng nhất — bỏ qua mọi file `.env*`. Nhờ đó bí mật sản xuất nằm ở `/opt/cuonghoangdev/.env` trên VPS sống sót qua mọi lần deploy, không bao giờ bị bản `.env` trên máy cá nhân ghi đè.',
+      en: 'Not `git push`. The script syncs your working directory straight to `/home/deployer/repo`, skipping `node_modules`, `.next` and — most importantly — every `.env*` file. That is how production secrets in `/opt/cuonghoangdev/.env` survive every deploy and are never overwritten by your laptop’s `.env`.',
     },
     duration: 2700,
     edge: 'e_mac_repo',
@@ -158,8 +158,8 @@ function buildFull(): SimStep[] {
     id: 'build-fe',
     title: { vi: 'Rồi mới dựng ảnh frontend', en: 'Then build the frontend image' },
     detail: {
-      vi: '`next build` là bước ngốn RAM nhất trong cả quy trình. Nó chỉ bắt đầu khi ảnh backend đã xong hẳn và bộ nhớ của bước đó đã được trả lại. Cũng vì thế mà lát nữa, khi hoán container, **tuyệt đối không được thêm cờ `--build`** — compose sẽ coi đó là lệnh dựng lại song song cả hai ảnh và phá đúng chốt chặn này.',
-      en: '`next build` is the most memory-hungry step in the pipeline. It only starts once the backend image is completely finished and its memory has been returned. That is also why, when swapping containers in a moment, **you must never add `--build`** — compose treats it as a fresh parallel build of both images and defeats this very guard.',
+      vi: '`next build` là bước ngốn RAM nhất trong cả quy trình. Nó chỉ bắt đầu khi ảnh backend đã xong hẳn và bộ nhớ của bước đó đã được trả lại. Cũng vì thế mà lát nữa, khi hoán container, tuyệt đối không được thêm cờ `--build` — compose sẽ coi đó là lệnh dựng lại song song cả hai ảnh và phá đúng chốt chặn này.',
+      en: '`next build` is the most memory-hungry step in the pipeline. It only starts once the backend image is completely finished and its memory has been returned. That is also why, when swapping containers in a moment, you must never add `--build` — compose treats it as a fresh parallel build of both images and defeats this very guard.',
     },
     duration: 2900,
     at: 'build',
@@ -204,8 +204,8 @@ function buildFull(): SimStep[] {
     id: 'smoke',
     title: { vi: 'Smoke-test: gọi 28 route, 404 là hỏng', en: 'Smoke test: hit 28 routes, a 404 means broken' },
     detail: {
-      vi: 'Chốt chặn cuối, và là chốt hữu dụng nhất. Script gọi GET không xác thực vào 28 route lõi. **401 hoặc 200 đều là khoẻ** — nghĩa là route đã được gắn. Chỉ **404 mới là hỏng**: route không tồn tại trong ảnh đang chạy, tức là ảnh cũ hoặc build thiếu. Deploy thất bại ngay tại đây thay vì để người dùng phát hiện hộ.',
-      en: 'The final and most useful gate. The script issues unauthenticated GETs against 28 core routes. **401 or 200 both mean healthy** — the route is mounted. Only a **404 means broken**: the route does not exist in the running image, i.e. a stale or partial build. The deploy fails here instead of letting users find out for you.',
+      vi: 'Chốt chặn cuối, và là chốt hữu dụng nhất. Script gọi GET không xác thực vào 28 route lõi. 401 hoặc 200 đều là khoẻ — nghĩa là route đã được gắn. Chỉ 404 mới là hỏng: route không tồn tại trong ảnh đang chạy, tức là ảnh cũ hoặc build thiếu. Deploy thất bại ngay tại đây thay vì để người dùng phát hiện hộ.',
+      en: 'The final and most useful gate. The script issues unauthenticated GETs against 28 core routes. 401 or 200 both mean healthy — the route is mounted. Only a 404 means broken: the route does not exist in the running image, i.e. a stale or partial build. The deploy fails here instead of letting users find out for you.',
     },
     duration: 3100,
     edge: 'e_stack_smoke',
@@ -331,8 +331,8 @@ function buildNoBuild(): SimStep[] {
     id: 'diagnose',
     title: { vi: 'Cách chẩn đoán trong 5 giây: curl không xác thực', en: 'The five-second diagnosis: an unauthenticated curl' },
     detail: {
-      vi: 'Đừng mở trình duyệt — trình duyệt trộn lẫn lỗi xác thực, CORS và cache thành một mớ. Gọi thẳng: `curl -s -o /dev/null -w "%{http_code}" https://cuongthai.com/api/v1/<route>`. **401 = route đã gắn** (chỉ thiếu đăng nhập), **200 = gắn và công khai**, **404 = route KHÔNG có trong ảnh đang chạy** — tức là build cũ hoặc thiếu. Ba con số đó phân biệt "lỗi của tôi" với "sai ảnh".',
-      en: 'Do not open a browser — it blends auth errors, CORS and caching into one mess. Ask directly: `curl -s -o /dev/null -w "%{http_code}" https://cuongthai.com/api/v1/<route>`. **401 = mounted** (you are just not logged in), **200 = mounted and public**, **404 = the route is NOT in the running image** — a stale or partial build. Those three numbers separate "my bug" from "wrong image".',
+      vi: 'Đừng mở trình duyệt — trình duyệt trộn lẫn lỗi xác thực, CORS và cache thành một mớ. Gọi thẳng: `curl -s -o /dev/null -w "%{http_code}" https://cuongthai.com/api/v1/<route>`. 401 = route đã gắn (chỉ thiếu đăng nhập), 200 = gắn và công khai, 404 = route KHÔNG có trong ảnh đang chạy — tức là build cũ hoặc thiếu. Ba con số đó phân biệt "lỗi của tôi" với "sai ảnh".',
+      en: 'Do not open a browser — it blends auth errors, CORS and caching into one mess. Ask directly: `curl -s -o /dev/null -w "%{http_code}" https://cuongthai.com/api/v1/<route>`. 401 = mounted (you are just not logged in), 200 = mounted and public, 404 = the route is NOT in the running image — a stale or partial build. Those three numbers separate "my bug" from "wrong image".',
     },
     duration: 3200,
     at: 'smoke',

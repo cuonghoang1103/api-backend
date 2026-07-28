@@ -45,6 +45,8 @@ import { nginxProxyScenario } from './nginxProxy';
 import { vpsMemoryScenario } from './vpsMemory';
 import { cicdPipelineScenario } from './cicdPipeline';
 import { gitFlowScenario } from './gitFlow';
+import { cpuCycleScenario } from './cpuCycle';
+import { memoryCacheScenario } from './memoryCache';
 import { nodejsCacheAsideScenario } from './nodejsCacheAside';
 import { nodejsAtomicScenario } from './nodejsAtomic';
 import { nodejsRetryScenario } from './nodejsRetry';
@@ -108,6 +110,11 @@ export const SCENARIOS: Scenario[] = [
   gitFlowScenario,
   deployPipelineScenario,
   cicdPipelineScenario,
+
+  // ── Mục Cách máy tính hoạt động — CEA201 / CSI104. Đi từ chu trình lệnh
+  // của CPU xuống dưới: bộ nhớ, cache, biểu diễn số, mạch logic.
+  cpuCycleScenario,
+  memoryCacheScenario,
 ];
 
 /**
@@ -137,6 +144,15 @@ export const SCENARIO_GROUPS: ScenarioGroup[] = [
       en: 'Images, containers, reverse proxy and the path to production',
     },
     accent: '#38bdf8',
+  },
+  {
+    id: 'computer',
+    name: { vi: 'Cách máy tính hoạt động', en: 'How computers work' },
+    blurb: {
+      vi: 'CEA201 · CSI104 — chu trình lệnh, bộ nhớ, cache, mạch logic',
+      en: 'CEA201 · CSI104 — instruction cycle, memory, cache, logic',
+    },
+    accent: '#f59e0b',
   },
 ];
 

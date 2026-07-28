@@ -258,8 +258,8 @@ function buildParallel(): SimStep[] {
     'diagnose',
     { vi: 'Ba chỗ để nhìn — và không chỗ nào là nhật ký ứng dụng', en: 'Three places to look — none of them the app log' },
     {
-      vi: '`dmesg -T | grep -i "killed process"` cho biết ai bị giết và lúc nào. `docker inspect <c> | grep OOMKilled` phân biệt bị kernel giết với tự thoát. Và mã thoát **137 = 128 + 9**, tức SIGKILL, luôn nghĩa là bị giết chứ không phải tự chết. Ba câu lệnh này biến một sự cố mù mờ thành một câu chuyện rõ ràng.',
-      en: '`dmesg -T | grep -i "killed process"` tells you who died and when. `docker inspect <c> | grep OOMKilled` distinguishes a kernel kill from a clean exit. And exit code **137 = 128 + 9**, SIGKILL, always means killed rather than crashed. Those three commands turn a murky incident into a clear story.',
+      vi: '`dmesg -T | grep -i "killed process"` cho biết ai bị giết và lúc nào. `docker inspect <c> | grep OOMKilled` phân biệt bị kernel giết với tự thoát. Và mã thoát 137 = 128 + 9, tức SIGKILL, luôn nghĩa là bị giết chứ không phải tự chết. Ba câu lệnh này biến một sự cố mù mờ thành một câu chuyện rõ ràng.',
+      en: '`dmesg -T | grep -i "killed process"` tells you who died and when. `docker inspect <c> | grep OOMKilled` distinguishes a kernel kill from a clean exit. And exit code 137 = 128 + 9, SIGKILL, always means killed rather than crashed. Those three commands turn a murky incident into a clear story.',
     },
     3100,
     [out('$ dmesg -T | grep -i "killed process"', 'info'), out('$ docker inspect postgres | grep OOMKilled → true', 'info')],

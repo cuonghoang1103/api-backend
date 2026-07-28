@@ -278,8 +278,8 @@ function buildBasic(): SimStep[] {
     'recap',
     { vi: 'Toàn bộ Git cơ bản gói trong một câu', en: 'All of basic Git in one sentence' },
     {
-      vi: '**Working tree → (add) → Staging → (commit) → Local repo → (push) → origin.** Mỗi lệnh là một mũi tên. Khi nào bối rối không biết mình đang ở đâu, gõ `git status` — nó sẽ nói cho bạn biết file đang nằm ở vùng nào, và mũi tên tiếp theo cần đi là gì.',
-      en: '**Working tree → (add) → Staging → (commit) → Local repo → (push) → origin.** Each command is one arrow. Whenever you lose track of where you are, type `git status` — it tells you which place each file is in and which arrow comes next.',
+      vi: 'Working tree → (add) → Staging → (commit) → Local repo → (push) → origin. Mỗi lệnh là một mũi tên. Khi nào bối rối không biết mình đang ở đâu, gõ `git status` — nó sẽ nói cho bạn biết file đang nằm ở vùng nào, và mũi tên tiếp theo cần đi là gì.',
+      en: 'Working tree → (add) → Staging → (commit) → Local repo → (push) → origin. Each command is one arrow. Whenever you lose track of where you are, type `git status` — it tells you which place each file is in and which arrow comes next.',
     },
     2900,
     [lines([]), focus(null)],

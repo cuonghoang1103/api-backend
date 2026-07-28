@@ -121,3 +121,6 @@ skills-lock.json
 
 # Log của deploy.sh (ghi trên VPS, không đưa vào git)
 .deploy-logs/
+
+# Video mô phỏng dựng ra (nặng, không đưa vào git — xem scripts/sim-render.mjs)
+_render/

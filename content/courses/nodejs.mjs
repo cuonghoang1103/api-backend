@@ -23,6 +23,7 @@ import s14 from './nodejs/s14-testing.mjs';
 import s15 from './nodejs/s15-observability.mjs';
 import s16 from './nodejs/s16-performance.mjs';
 import s17 from './nodejs/s17-docker-deploy.mjs';
+import s18 from './nodejs/s18-kien-truc.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -61,5 +62,6 @@ export default {
     s15,
     s16,
     s17,
+    s18,
   ],
 };

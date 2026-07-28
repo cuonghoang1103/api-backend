@@ -184,19 +184,14 @@ function collector(): { steps: SimStep[]; push: Push } {
 function meters() {
   let plain = 0;
   let layered = 0;
-  let plainTrips = 0;
   return {
-    /** Trả về ops cập nhật hai đường đua sau một request tốn `ms`. */
+    /** Ops cập nhật hai đường đua sau một request tốn `ms` ở nhánh có đệm. */
     tick(ms: number, hitDb: boolean, tone?: 'ok' | 'warn' | 'err'): PanelOp[] {
       plain += MS_DB;
       layered += ms;
-      plainTrips += 1;
       const ops: PanelOp[] = [dbTrip('plain'), clock('plain', plain), clock('layered', layered, tone)];
       if (hitDb) ops.push(dbTrip('layered'));
       return ops;
-    },
-    get plainTrips() {
-      return plainTrips;
     },
   };
 }

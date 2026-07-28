@@ -6,7 +6,8 @@
  * bộ đọc tham số URL và trình vẽ canvas đều đọc từ đây.
  */
 
-import type { Scenario, ScenarioOptions, SimStep } from '../types';
+import type { PanelSpec } from '../panels';
+import type { Scenario, ScenarioGroup, ScenarioOptions, SimStep } from '../types';
 import { restApiScenario } from './restApi';
 import { cachingScenario } from './caching';
 import { authScenario } from './auth';
@@ -17,6 +18,7 @@ import { spamClickScenario } from './spamClick';
 import { uploadScenario } from './upload';
 import { nPlusOneScenario } from './nPlusOne';
 import { webhookScenario } from './webhook';
+import { nodejsEventLoopScenario } from './nodejsEventLoop';
 
 // Thứ tự trong mảng = thứ tự hiện trên bảng chọn, và nó là thứ tự SƯ PHẠM:
 // nền tảng trước (REST → đệm → xác thực → CSDL), rồi tới realtime và kiến
@@ -33,7 +35,42 @@ export const SCENARIOS: Scenario[] = [
   webhookScenario,
   uploadScenario,
   nPlusOneScenario,
+
+  // ── Mục Node.js — mỗi kịch bản dựng video cho MỘT bài trong khoá
+  // `content/courses/nodejs`. Thứ tự ở đây theo thứ tự chương.
+  nodejsEventLoopScenario,
 ];
+
+/**
+ * Các MỤC của bảng chọn.
+ *
+ * Kịch bản không khai `group` thì thuộc mục đầu tiên. Thêm một khoá học mới
+ * = thêm một dòng ở đây rồi đặt `group` cho kịch bản của khoá đó.
+ */
+export const SCENARIO_GROUPS: ScenarioGroup[] = [
+  {
+    id: 'core',
+    name: { vi: 'Nền tảng web', en: 'Web fundamentals' },
+    blurb: { vi: 'Vòng đời một request, từ trình duyệt tới CSDL', en: 'The life of a request, browser to database' },
+    accent: '#38bdf8',
+  },
+  {
+    id: 'nodejs',
+    name: { vi: 'Node.js', en: 'Node.js' },
+    blurb: { vi: 'Đi kèm khoá Node.js trong Khoá học', en: 'Companion to the Node.js course' },
+    accent: '#34d399',
+  },
+];
+
+export const DEFAULT_GROUP_ID = SCENARIO_GROUPS[0].id;
+
+/** Mục của một kịch bản (kịch bản không khai `group` rơi về mục mặc định). */
+export const groupOf = (s: Scenario): string => s.group ?? DEFAULT_GROUP_ID;
+
+/** Kịch bản của một mục, giữ nguyên thứ tự khai báo. */
+export function scenariosInGroup(groupId: string): Scenario[] {
+  return SCENARIOS.filter((s) => groupOf(s) === groupId);
+}
 
 export const DEFAULT_SCENARIO_ID = restApiScenario.id;
 
@@ -71,6 +108,18 @@ export function sanitizeOptions(scenario: Scenario, raw: Record<string, string |
  */
 export function resolveSteps(scenario: Scenario, options: ScenarioOptions): SimStep[] {
   return scenario.build(options);
+}
+
+/**
+ * Bộ panel ĐÃ GIẢI QUYẾT của một kịch bản.
+ *
+ * Song sinh của `resolveSteps`: cùng (kịch bản, tuỳ chọn) thì luôn ra cùng
+ * một bố cục panel. Kịch bản sơ đồ trả về mảng rỗng.
+ */
+export function resolvePanels(scenario: Scenario, options: ScenarioOptions): PanelSpec[] {
+  const p = scenario.panels;
+  if (!p) return [];
+  return typeof p === 'function' ? p(options) : p;
 }
 
 /** Tổng thời lượng hoạt hình (ms, ở tốc độ 1×). */

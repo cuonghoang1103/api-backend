@@ -11,7 +11,7 @@
 import { Check } from 'lucide-react';
 import type { Lang, Scenario, ScenarioOptions } from './types';
 import { tr } from './types';
-import { SCENARIOS } from './scenarios';
+import { SCENARIO_GROUPS, scenariosInGroup } from './scenarios';
 
 interface Props {
   scenario: Scenario;
@@ -24,47 +24,64 @@ interface Props {
 export default function ControlPanel({ scenario, options, lang, onSelectScenario, onChangeOption }: Props) {
   return (
     <div className="flex h-full flex-col gap-5 overflow-y-auto p-4">
-      <div>
-        <h2 className="mb-2.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#5d6d8c]">
-          {lang === 'vi' ? 'Kịch bản' : 'Scenario'}
-        </h2>
-        <div className="space-y-2">
-          {SCENARIOS.map((s) => {
-            const active = s.id === scenario.id;
-            const Icon = s.icon;
-            return (
-              <button
-                key={s.id}
-                type="button"
-                onClick={() => onSelectScenario(s.id)}
-                aria-pressed={active}
-                className="group flex w-full items-start gap-3 rounded-xl border p-3 text-left transition-all"
-                style={{
-                  borderColor: active ? `${s.accent}88` : '#1d2740',
-                  background: active ? `${s.accent}14` : '#0a0f1e',
-                  boxShadow: active ? `0 0 26px -10px ${s.accent}` : 'none',
-                }}
-              >
-                <span
-                  className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border"
-                  style={{ borderColor: `${s.accent}55`, background: `${s.accent}1a`, color: s.accent }}
-                >
-                  <Icon className="h-4 w-4" />
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="flex items-center gap-1.5">
-                    <span className={`text-[13.5px] font-bold ${active ? 'text-[#f2f6ff]' : 'text-[#c3cfe4]'}`}>
-                      {tr(s.name, lang)}
+      {/* Kịch bản gom theo MỤC. Mười kịch bản nền tảng web nằm chung một danh
+          sách phẳng thì còn đọc được; tới khi mỗi khoá học đóng góp thêm hai
+          chục kịch bản của riêng nó thì phải có vách ngăn. */}
+      {SCENARIO_GROUPS.map((group) => {
+        const list = scenariosInGroup(group.id);
+        if (list.length === 0) return null;
+        return (
+          <div key={group.id}>
+            <h2 className="mb-1 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em]">
+              <span className="inline-block h-2 w-2 shrink-0 rounded-full" style={{ background: group.accent, boxShadow: `0 0 10px ${group.accent}` }} />
+              <span style={{ color: group.accent }}>{tr(group.name, lang)}</span>
+              <span className="text-[#3f4d68]">{list.length}</span>
+            </h2>
+            {group.blurb ? <p className="mb-2.5 text-[11px] leading-relaxed text-[#5d6d8c]">{tr(group.blurb, lang)}</p> : null}
+            <div className="space-y-2">
+              {list.map((s) => {
+                const active = s.id === scenario.id;
+                const Icon = s.icon;
+                return (
+                  <button
+                    key={s.id}
+                    type="button"
+                    onClick={() => onSelectScenario(s.id)}
+                    aria-pressed={active}
+                    className="group flex w-full items-start gap-3 rounded-xl border p-3 text-left transition-all"
+                    style={{
+                      borderColor: active ? `${s.accent}88` : '#1d2740',
+                      background: active ? `${s.accent}14` : '#0a0f1e',
+                      boxShadow: active ? `0 0 26px -10px ${s.accent}` : 'none',
+                    }}
+                  >
+                    <span
+                      className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border"
+                      style={{ borderColor: `${s.accent}55`, background: `${s.accent}1a`, color: s.accent }}
+                    >
+                      <Icon className="h-4 w-4" />
                     </span>
-                    {active ? <Check className="h-3.5 w-3.5 shrink-0" style={{ color: s.accent }} /> : null}
-                  </span>
-                  <span className="mt-1 block text-[11.5px] leading-relaxed text-[#6f8098]">{tr(s.tagline, lang)}</span>
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
+                    <span className="min-w-0 flex-1">
+                      <span className="flex items-center gap-1.5">
+                        <span className={`text-[13.5px] font-bold ${active ? 'text-[#f2f6ff]' : 'text-[#c3cfe4]'}`}>
+                          {tr(s.name, lang)}
+                        </span>
+                        {active ? <Check className="h-3.5 w-3.5 shrink-0" style={{ color: s.accent }} /> : null}
+                      </span>
+                      {s.lesson ? (
+                        <span className="mt-1 block font-mono text-[11px] text-[#4d5f7e]">
+                          {lang === 'vi' ? 'Bài' : 'Lesson'} {s.lesson.code} · {tr(s.lesson.title, lang)}
+                        </span>
+                      ) : null}
+                      <span className="mt-1 block text-[11.5px] leading-relaxed text-[#6f8098]">{tr(s.tagline, lang)}</span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
 
       {scenario.options.map((opt) => {
         const current = opt.choices.find((c) => c.value === options[opt.id]);

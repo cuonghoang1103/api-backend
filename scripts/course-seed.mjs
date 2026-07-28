@@ -172,15 +172,35 @@ if (course) {
           options: q.options, correctIndex: q.correctIndex, points: q.points ?? 1,
         })),
       } : undefined;
+      // Simulation video, when the lesson has one:
+      //   video: { url, platform, durationSeconds }
+      // `platform: 'DIRECT'` is what makes the learn page use the native
+      // <video> player instead of the YouTube embed path. Written to BOTH
+      // Lesson and LessonDetail because the learn page reads the detail
+      // first and falls back to the lesson row, and the course card totals
+      // read videoDurationSeconds off the lesson.
+      const video = l.video?.url
+        ? {
+            url: l.video.url,
+            platform: l.video.platform ?? 'DIRECT',
+            durationSeconds: Math.max(0, Math.round(l.video.durationSeconds ?? 0)),
+          }
+        : null;
+
       const lessonCore = {
         title: l.title, description: l.description ?? null, content: l.content ?? null,
         lessonType: normType(l.type), isFreePreview: l.isFreePreview ?? false, isPublished: l.isPublished ?? true,
+        // Only set when present: re-seeding a lesson whose video has not been
+        // rendered yet must NOT wipe a video attached in an earlier pass.
+        ...(video ? { videoUrl: video.url, videoDurationSeconds: video.durationSeconds } : {}),
       };
-      // LessonDetail carries the teaching notes (the on-camera script) and
-      // the quiz payload. Both are optional and patched, never blanked.
+      // LessonDetail carries the teaching notes (the on-camera script), the
+      // quiz payload and the video pointer. All optional and patched, never
+      // blanked.
       const detailPatch = {
         ...(quizData ? { quizData } : {}),
         ...(l.teachingNotes ? { teachingNotes: l.teachingNotes } : {}),
+        ...(video ? { videoUrl: video.url, videoPlatform: video.platform } : {}),
       };
 
       const existing = section ? await prisma.lesson.findFirst({ where: { sectionId: section.id, slug: lslug } }) : null;

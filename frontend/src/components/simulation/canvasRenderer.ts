@@ -24,74 +24,12 @@
  */
 
 import { CANVAS_H, CANVAS_W, CAPTION_H, GRAPH_BOTTOM, GRAPH_TOP, pointOnEdge, quadPoint, tAtDistance, type EdgeGeom, type NodeBox } from './layout';
+import type { PanelSpec, PanelState } from './panels';
+import { drawPanels } from './panelRenderer';
+import { MONO, SANS, clamp01, easeInOutCubic, easeOutCubic, hash01, rgba, roundRect, wrapText } from './drawKit';
 import { FLOW_STYLES, NODE_STYLES, STAGE_COLORS, statusColor } from './theme';
 import type { FlowKind, Lang, NodeKind, NodeState, Scenario, SimStep } from './types';
 import { tr } from './types';
-
-/* ────────────────────────────────────────────────────────────
-   TIỆN ÍCH TẤT ĐỊNH
-   ──────────────────────────────────────────────────────────── */
-
-/** Băm số nguyên → [0,1). Thay cho Math.random() ở mọi nơi cần "nhiễu". */
-function hash01(n: number): number {
-  let h = (n ^ 0x9e3779b9) >>> 0;
-  h = Math.imul(h ^ (h >>> 15), 0x85ebca6b) >>> 0;
-  h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35) >>> 0;
-  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
-}
-
-const easeInOutCubic = (t: number): number => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
-const easeOutCubic = (t: number): number => 1 - (1 - t) ** 3;
-const clamp01 = (t: number): number => (t < 0 ? 0 : t > 1 ? 1 : t);
-
-/** Chuyển hex → rgba với alpha cho trước (canvas không nhận hex 8 số ở mọi engine). */
-function rgba(hex: string, alpha: number): string {
-  const h = hex.replace('#', '');
-  const full = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
-  const r = parseInt(full.slice(0, 2), 16);
-  const g = parseInt(full.slice(2, 4), 16);
-  const b = parseInt(full.slice(4, 6), 16);
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-}
-
-function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
-  const rad = Math.min(r, w / 2, h / 2);
-  ctx.beginPath();
-  ctx.moveTo(x + rad, y);
-  ctx.arcTo(x + w, y, x + w, y + h, rad);
-  ctx.arcTo(x + w, y + h, x, y + h, rad);
-  ctx.arcTo(x, y + h, x, y, rad);
-  ctx.arcTo(x, y, x + w, y, rad);
-  ctx.closePath();
-}
-
-const SANS = 'Inter, "Helvetica Neue", Arial, sans-serif';
-const MONO = '"JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace';
-
-/** Ngắt dòng theo bề rộng thật đo bằng ctx.measureText. */
-function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number, maxLines: number): string[] {
-  const words = text.split(/\s+/);
-  const lines: string[] = [];
-  let line = '';
-  for (const word of words) {
-    const candidate = line ? `${line} ${word}` : word;
-    if (ctx.measureText(candidate).width <= maxWidth) {
-      line = candidate;
-      continue;
-    }
-    if (line) lines.push(line);
-    line = word;
-    if (lines.length === maxLines) break;
-  }
-  if (lines.length < maxLines && line) lines.push(line);
-  if (lines.length === maxLines && line && lines[maxLines - 1] !== line) {
-    // Thêm dấu … khi phải cắt bớt.
-    let last = lines[maxLines - 1];
-    while (last.length > 4 && ctx.measureText(`${last}…`).width > maxWidth) last = last.slice(0, -1);
-    lines[maxLines - 1] = `${last}…`;
-  }
-  return lines;
-}
 
 /* ────────────────────────────────────────────────────────────
    TRẠNG THÁI MỘT KHUNG HÌNH
@@ -123,6 +61,12 @@ export interface FrameState {
    * `toDataURL()` đều ném lỗi bảo mật và nút quay video chết ngay.
    */
   logo: HTMLImageElement | null;
+  /**
+   * Bố cục panel ĐÃ giải quyết theo tuỳ chọn, và trạng thái panel cộng dồn
+   * tới bước hiện tại. Kịch bản sơ đồ để trống cả hai.
+   */
+  panels?: PanelSpec[];
+  panelState?: PanelState;
 }
 
 /* ────────────────────────────────────────────────────────────
@@ -938,6 +882,27 @@ export function drawFrame(
   const step = st.steps[st.stepIndex];
 
   drawBackground(ctx, st.frame, st.scenario.accent);
+
+  // ── Kịch bản dạng PANEL ──────────────────────────────────────
+  // Một kịch bản là sơ đồ HOẶC là panel, không bao giờ cả hai (xem ghi chú ở
+  // `Scenario.panels`). Rẽ nhánh sớm ở đây giữ cho nhánh sơ đồ bên dưới
+  // KHÔNG đổi một dòng nào — mười kịch bản nền tảng web vẫn vẽ ra đúng từng
+  // pixel như trước khi có panel.
+  if (st.panels?.length) {
+    drawPanels(ctx, {
+      panels: st.panels,
+      state: st.panelState ?? {},
+      stepIndex: st.stepIndex,
+      stepProgress: st.stepProgress,
+      frame: st.frame,
+      lang: st.lang,
+      accent: st.scenario.accent,
+    });
+    if (st.finished) drawFinishOverlay(ctx, st);
+    drawHeader(ctx, st);
+    if (st.showCaption) drawCaption(ctx, st);
+    return;
+  }
 
   // Dây trước, node sau — node luôn nằm trên dây.
   for (const g of Array.from(geoms.values())) {

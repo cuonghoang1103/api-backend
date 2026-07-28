@@ -41,10 +41,11 @@ import InspectorPanel from './InspectorPanel';
 import RecorderStudio from './RecorderStudio';
 import SimulationStage from './SimulationStage';
 import TimelineScrubber from './TimelineScrubber';
-import { DEFAULT_SCENARIO_ID, SCENARIOS, defaultOptions, getScenario, resolveSteps, sanitizeOptions, totalDuration } from './scenarios';
+import { DEFAULT_GROUP_ID, DEFAULT_SCENARIO_ID, SCENARIOS, defaultOptions, getScenario, resolvePanels, resolveSteps, sanitizeOptions, totalDuration } from './scenarios';
 import { LOOP_CHOICES, SPEEDS, useSimulationEngine } from './useSimulationEngine';
 import { useSoundEngine } from './useSoundEngine';
 import { useStudioRecorder } from './useStudioRecorder';
+import { renderSfxTrackToWav, type SfxCue } from './sfx';
 import type { Lang, ScenarioOptions, SimStep } from './types';
 import { tr } from './types';
 
@@ -90,11 +91,16 @@ export default function SimulationStudio() {
   const [copiedLink, setCopiedLink] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // Hàm vẽ-tại-thời-điểm do sân khấu lắp vào — xem `SimulationStage.renderRef`.
+  const renderAtRef = useRef<((ms: number) => void) | null>(null);
   const stageWrapRef = useRef<HTMLDivElement>(null);
 
   // Dữ liệu bước — memo theo (kịch bản, tuỳ chọn). Đây cũng chính là biên
   // tất định: cùng đầu vào luôn ra cùng mảng bước.
   const steps = useMemo(() => resolveSteps(scenario, options), [scenario, options]);
+  // Cùng biên tất định với `steps`: bố cục panel cũng chỉ phụ thuộc (kịch
+  // bản, tuỳ chọn). Kịch bản dạng sơ đồ trả về mảng rỗng.
+  const panels = useMemo(() => resolvePanels(scenario, options), [scenario, options]);
 
   const sound = useSoundEngine();
   const soundRef = useRef(sound);
@@ -317,10 +323,76 @@ export default function SimulationStudio() {
       seek: (i: number) => engine.seek(i),
       setSpeed: (v: number) => engine.setSpeed(v),
       getState: () => ({ ...snapshot.current }),
+
+      /* ── Dựng video ngoại tuyến ────────────────────────────────
+         `renderAt` vẽ khung hình tại một mốc thời gian ảo và ĐÓNG BĂNG đồng
+         hồ thời gian thực, nên phiên dựng chụp được từng khung một mà không
+         phụ thuộc tốc độ máy — khác hẳn quay màn hình theo thời gian thực,
+         nơi máy chậm là rớt khung.
+         `sfxCues` trả về lịch tiếng để dựng đường âm thanh bằng
+         OfflineAudioContext, rồi ffmpeg ghép hai thứ lại. */
+      renderAt: (ms: number) => renderAtRef.current?.(ms),
+      sfxCues: () => {
+        const cues: { name: string; at: number }[] = [];
+        let t = 0;
+        for (const step of steps) {
+          if (step.sfx) cues.push({ name: step.sfx, at: t / 1000 });
+          t += step.duration;
+        }
+        return cues;
+      },
+      /**
+       * Đường tiếng của cả kịch bản, dựng ngoại tuyến thành WAV base64.
+       *
+       * `speed` phải KHỚP với tốc độ mà phần hình được lấy mẫu: video bài
+       * giảng dựng ở 0,5× dài gấp đôi, nên mốc nổ của từng hiệu ứng cũng phải
+       * giãn gấp đôi — nếu không tiếng chạy trước hình cả chục giây.
+       */
+      renderAudioWav: async (speed = 1) => {
+        const rate = speed > 0 ? speed : 1;
+        const cues: SfxCue[] = [];
+        let t = 0;
+        for (const step of steps) {
+          if (step.sfx) cues.push({ name: step.sfx, at: t / 1000 / rate });
+          t += step.duration;
+        }
+        const blob = await renderSfxTrackToWav(cues, totalDuration(steps) / 1000 / rate);
+        const buf = await blob.arrayBuffer();
+        // Chuyển sang base64 theo từng khối: `String.fromCharCode(...bytes)`
+        // với một mảng vài triệu phần tử làm tràn ngăn xếp lời gọi.
+        const bytes = new Uint8Array(buf);
+        let bin = '';
+        for (let i = 0; i < bytes.length; i += 0x8000) {
+          bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+        }
+        return btoa(bin);
+      },
+
+      /* Siêu dữ liệu để phiên dựng biết video này thuộc bài học nào. */
+      meta: () => ({
+        id: scenario.id,
+        group: scenario.group ?? null,
+        name: scenario.name,
+        lesson: scenario.lesson ?? null,
+        stepCount: steps.length,
+        totalDurationMs: totalDuration(steps),
+      }),
     };
     (window as unknown as { __SIMULATION__?: typeof api }).__SIMULATION__ = api;
+
+    // Sổ kịch bản cho phiên dựng hàng loạt: "dựng hết mục nodejs" phải hỏi
+    // được trang, chứ không phải chép lại danh sách vào script rồi quên cập nhật.
+    const catalog = SCENARIOS.map((s) => ({
+      id: s.id,
+      group: s.group ?? DEFAULT_GROUP_ID,
+      name: s.name,
+      lesson: s.lesson ?? null,
+    }));
+    (window as unknown as { __SIMULATION_SCENARIOS__?: typeof catalog }).__SIMULATION_SCENARIOS__ = catalog;
+
     return () => {
       delete (window as unknown as { __SIMULATION__?: unknown }).__SIMULATION__;
+      delete (window as unknown as { __SIMULATION_SCENARIOS__?: unknown }).__SIMULATION_SCENARIOS__;
     };
   }, [engine, options, scenario.id, snapshot, steps]);
 
@@ -357,12 +429,14 @@ export default function SimulationStudio() {
           <SimulationStage
             scenario={scenario}
             steps={steps}
+            panels={panels}
             lang={lang}
             engine={engine}
             variantLabel={variantLabel}
             showCaption={showCaption}
             showLegend
             canvasRef={canvasRef}
+            renderRef={renderAtRef}
             onToggle={handleToggle}
           />
         </div>
@@ -432,12 +506,14 @@ export default function SimulationStudio() {
               <SimulationStage
                 scenario={scenario}
                 steps={steps}
+                panels={panels}
                 lang={lang}
                 engine={engine}
                 variantLabel={variantLabel}
                 showCaption={showCaption}
                 showLegend
                 canvasRef={canvasRef}
+                renderRef={renderAtRef}
                 onToggle={handleToggle}
               />
             </div>

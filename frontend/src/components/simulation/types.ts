@@ -13,6 +13,9 @@
  */
 
 import type { LucideIcon } from 'lucide-react';
+// Chỉ nhập KIỂU (`import type`) nên vòng tham chiếu types ↔ panels được xoá
+// hoàn toàn khi biên dịch — không có phụ thuộc vòng lúc chạy.
+import type { PanelOp, PanelSpec } from './panels';
 
 /** Ngôn ngữ hiển thị của studio. Nội dung giảng dạy được viết song ngữ. */
 export type Lang = 'vi' | 'en';
@@ -170,6 +173,13 @@ export interface SimStep {
    */
   alsoInFlight?: GhostPacket[];
 
+  /**
+   * Thao tác lên các panel, áp dụng khi bước BẮT ĐẦU (cộng dồn y hệt
+   * `nodeStates`). Trạng thái panel tại bước i = phát lại ops của bước 0..i,
+   * nên thanh tua vẫn nhảy tới bất kỳ đâu cũng ra đúng trạng thái.
+   */
+  ops?: PanelOp[];
+
   sfx?: SfxName;
   /** Dòng log kiểu DevTools/terminal. */
   log?: I18nText;
@@ -214,6 +224,39 @@ export interface ScenarioOption {
 
 export type ScenarioOptions = Record<string, string>;
 
+/**
+ * Một MỤC trong bảng chọn kịch bản.
+ *
+ * Trước khi có nhóm, `SCENARIOS` là một mảng phẳng — đủ dùng cho 10 kịch bản
+ * nền tảng web, nhưng khi mỗi khoá học đóng góp thêm hai chục kịch bản của
+ * riêng nó thì danh sách phẳng trở thành một bức tường. Nhóm cũng là thứ cho
+ * phép hỏi "kịch bản nào thuộc khoá Node.js" mà không phải dò tên.
+ */
+export interface ScenarioGroup {
+  id: string;
+  name: I18nText;
+  blurb?: I18nText;
+  /** Màu nhãn mục trên bảng điều khiển. */
+  accent: string;
+}
+
+/**
+ * Bài học mà kịch bản này minh hoạ.
+ *
+ * Đây là sợi dây nối studio với giáo trình: script dựng video đọc trường này
+ * để biết file `content/courses/<course>/…` nào cần được vá thêm `video`, và
+ * trang mô phỏng dùng nó để hiện nút "Mở bài học".
+ */
+export interface LessonRef {
+  /** Slug khoá học, ví dụ 'nodejs'. */
+  course: string;
+  /** Nhãn ngắn của bài, ví dụ '2.2'. */
+  code: string;
+  /** Slug bài học trong seeder — khớp `l.slug` của content .mjs. */
+  slug: string;
+  title: I18nText;
+}
+
 export interface Scenario {
   id: string;
   name: I18nText;
@@ -221,9 +264,28 @@ export interface Scenario {
   icon: LucideIcon;
   /** Màu chủ đạo (hex) dùng cho viền glow của thẻ kịch bản. */
   accent: string;
+  /** Mục chứa kịch bản. Bỏ trống = mục mặc định (nền tảng web). */
+  group?: string;
+  /** Bài giảng mà kịch bản này dựng video cho. */
+  lesson?: LessonRef;
   nodes: SimNode[];
   edges: SimEdge[];
   options: ScenarioOption[];
+  /**
+   * Bảng vẽ dạng PANEL — dùng thay cho sơ đồ node/cạnh.
+   *
+   * Một kịch bản là ĐỒ THỊ (nodes + edges + gói tin chạy trên dây) HOẶC là
+   * PANEL (ngăn xếp, hàng đợi, khung mã, đồng hồ đo, biểu đồ). Không trộn
+   * hai kiểu trong một kịch bản: chúng cạnh tranh cùng một vùng khung hình,
+   * và mọi thứ đáng kể của Node.js đều rơi gọn vào một trong hai.
+   *
+   * Có `panels` thì `nodes`/`edges` để rỗng.
+   *
+   * Nhận cả HÀM của tuỳ chọn, vì có kịch bản đổi cả nội dung panel theo lựa
+   * chọn (bài 2.2 đổi hẳn đoạn mã trong khung khi chuyển sang bản I/O). Hàm
+   * này phải THUẦN, đúng như `build`.
+   */
+  panels?: PanelSpec[] | ((opts: ScenarioOptions) => PanelSpec[]);
   /** Sinh danh sách bước từ tuỳ chọn. PHẢI là hàm thuần. */
   build: (opts: ScenarioOptions) => SimStep[];
 }

@@ -236,11 +236,17 @@ export default function RecorderStudio({ recorder, lang, muted, onToggleMute, au
             </p>
           ) : null}
 
-          {live ? (
+          {recorder.autoPaused ? (
+            <p className="rounded-lg border border-[#3f3410] bg-[#1a1503] p-2.5 text-[11.5px] leading-relaxed text-[#e2cf9a]">
+              {vi
+                ? 'Đã tự tạm dừng vì bạn rời khỏi trang. Quay lại đây là ghi tiếp — video sẽ liền mạch, không có đoạn đứng hình.'
+                : 'Auto-paused because you left the page. Come back and it resumes — the video stays continuous, with no frozen stretch.'}
+            </p>
+          ) : live ? (
             <p className="text-[11px] leading-relaxed text-[#6f8098]">
               {vi
-                ? 'Đang quay khung 1920×1080 lấy thẳng từ canvas. Giữ nguyên tab này — chuyển tab sẽ làm trình duyệt tạm dừng vòng vẽ.'
-                : 'Recording the 1920×1080 canvas directly. Stay on this tab — switching tabs pauses the browser\'s render loop.'}
+                ? `Đang quay ${preset.width}×${preset.height}. Rời khỏi trang thì bản ghi tự tạm dừng và tự ghi tiếp khi bạn quay lại.`
+                : `Recording at ${preset.width}×${preset.height}. Leaving the page auto-pauses the recording and it resumes when you return.`}
             </p>
           ) : null}
 

@@ -25,6 +25,12 @@
  *   Mic  ─┘                                ├→ new MediaStream → MediaRecorder
  *   canvas.captureStream() → 1 video track ┘
  *
+ * ĐỘ PHÂN GIẢI XUẤT ≠ ĐỘ PHÂN GIẢI VẼ
+ * -----------------------------------
+ * Sân khấu luôn vẽ 1920×1080, nhưng bản ghi lấy từ một canvas MÃ HOÁ riêng ở
+ * độ phân giải nhỏ hơn (xem `start`). Không có tầng trung gian này thì điện
+ * thoại không mã hoá kịp và cho ra video cụt, phát nhanh.
+ *
  * ĐỊNH DẠNG
  * ---------
  * Chrome/Firefox chỉ xuất WebM ổn định qua MediaRecorder, nên phần này
@@ -72,19 +78,6 @@ export function isLowPowerDevice(): boolean {
   return (coarse && narrow) || cores <= 4;
 }
 
-/**
- * Ba mức chất lượng.
- *
- * Bản đầu để cứng 8 Mb/s ở 60fps — nét thật, nhưng một video 15 giây đã nặng
- * 16 MB và người dạy không có cách nào chỉnh. Con số đó thừa thãi với nội
- * dung của trang này: nền tối phẳng, hình khối đặc, chữ sắc nét — VP9 nén
- * loại nội dung đồ hoạ tổng hợp cực tốt. Ở 5 Mb/s mắt thường không phân biệt
- * được với 8 Mb/s, mà dung lượng giảm gần 40%.
- *
- * Mức "Nhẹ" hạ xuống 30fps: chính việc giảm một nửa số khung mới là thứ cắt
- * dung lượng mạnh nhất, chứ không phải riêng bitrate. Hoạt cảnh ở đây chuyển
- * động chậm và mượt nên 30fps vẫn xem tốt.
- */
 /**
  * Ba mức chất lượng — độ phân giải là tham số QUAN TRỌNG NHẤT.
  *
@@ -198,6 +191,10 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
   const [result, setResult] = useState<RecordingResult | null>(null);
   /** Đang vá header sau khi dừng ghi — vài chục mili giây. */
   const [finalising, setFinalising] = useState(false);
+  /** Bản ghi bị tạm dừng TỰ ĐỘNG vì rời khỏi trang, không phải do người dùng bấm. */
+  const [autoPaused, setAutoPaused] = useState(false);
+  const autoPausedRef = useRef(false);
+  autoPausedRef.current = autoPaused;
   const [error, setError] = useState<string | null>(null);
   const [supported, setSupported] = useState(true);
 
@@ -435,6 +432,7 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
     rec.pause();
     pausedAtRef.current = performance.now();
     setState('paused');
+    setAutoPaused(false);
   }, []);
 
   const resume = useCallback(() => {
@@ -444,6 +442,39 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
     pausedTotalRef.current += performance.now() - pausedAtRef.current;
     pausedAtRef.current = 0;
     setState('recording');
+    setAutoPaused(false);
+  }, []);
+
+  /* ── Rời khỏi trang giữa chừng ─────────────────────────────────
+     Khi tab bị ẩn (chuyển ứng dụng, khoá màn hình, nhận thông báo — chuyện
+     xảy ra liên tục trên điện thoại), trình duyệt NGỪNG HẲN requestAnimation
+     Frame. Sân khấu đứng hình, nhưng MediaRecorder thì vẫn chạy và tiếp tục
+     mã hoá đúng cái khung chết đó. Kết quả là video có một đoạn đứng im dài
+     bằng khoảng thời gian người dùng rời đi.
+
+     Tự tạm dừng bản ghi khi ẩn và chạy tiếp khi quay lại: video ghép liền
+     mạch, không còn đoạn chết. Đây cũng là lý do bảng điều khiển vẫn khuyên
+     giữ nguyên tab trong lúc quay. */
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const onVisibility = () => {
+      const rec = recorderRef.current;
+      if (!rec) return;
+      if (document.hidden && rec.state === 'recording') {
+        rec.pause();
+        pausedAtRef.current = performance.now();
+        setState('paused');
+        setAutoPaused(true);
+      } else if (!document.hidden && rec.state === 'paused' && autoPausedRef.current) {
+        rec.resume();
+        pausedTotalRef.current += performance.now() - pausedAtRef.current;
+        pausedAtRef.current = 0;
+        setState('recording');
+        setAutoPaused(false);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => document.removeEventListener('visibilitychange', onVisibility);
   }, []);
 
   const download = useCallback(() => {
@@ -479,6 +510,7 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
     elapsedMs,
     result,
     finalising,
+    autoPaused,
     error,
     micEnabled,
     micReady,

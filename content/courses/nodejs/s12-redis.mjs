@@ -216,6 +216,13 @@ export function getRedis() {
     {
       title: '12.2 — Cache-aside: the pattern and its four betrayals|||12.2 — Cache-aside: khuôn mẫu và bốn lần nó phản chủ',
       slug: 'nodejs-12-2-cache-aside',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-12-2-cache-aside.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-12-2-cache-aside.jpg',
+        scenario: 'nodejs-cache-aside',
+        durationSeconds: 16,
+        caption: { en: "Cache-aside and its four betrayals", vi: "Cache-aside và bốn lần nó phản chủ" },
+      },
       type: 'VIDEO',
       description: 'Cache nhanh hơn Postgres 120 lần — cho tới payload 1,2MB thì nó THUA. Tỉ lệ trúng 90% chỉ mang lại một phần nhỏ lợi ích so với 99%. Và 200 request cùng lúc biến cache thành một khẩu súng chĩa vào database.',
       content: `
@@ -639,6 +646,13 @@ hash-max-listpack-entries = 512</div>
     {
       title: '12.4 — Atomicity: rate limiting and locks done right|||12.4 — Tính nguyên tử: giới hạn tần suất và khoá phân tán làm cho đúng',
       slug: 'nodejs-12-4-nguyen-tu-rate-limit-lock',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-12-4-nguyen-tu-rate-limit-lock.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-12-4-nguyen-tu-rate-limit-lock.jpg',
+        scenario: 'nodejs-atomic-redis',
+        durationSeconds: 16,
+        caption: { en: "Atomicity: rate limits and locks", vi: "Nguyên tử: giới hạn tần suất và khoá" },
+      },
       type: 'VIDEO',
       description: 'GET → kiểm tra → SET cho lọt cả 500 request qua một giới hạn 100. Cửa sổ cố định cho lọt gấp đôi ở ranh giới. Và một khoá phân tán viết sai xoá nhầm khoá của người khác — có bằng chứng chạy thật.',
       content: `

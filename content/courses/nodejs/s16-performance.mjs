@@ -697,6 +697,13 @@ keepAlive maxSockets:2 (quá chật)          46ms   10.814/giây</div>
     {
       title: '16.4 — Scaling out: 3,4× for CPU work, 1,06× for I/O|||16.4 — Mở rộng theo chiều ngang: 3,4× với việc CPU, 1,06× với việc I/O',
       slug: 'nodejs-16-4-cluster-mo-rong',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-16-4-cluster-mo-rong.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-16-4-cluster-mo-rong.jpg',
+        scenario: 'nodejs-cluster',
+        durationSeconds: 16,
+        caption: { en: "Cluster: 3.4× or 1.06×", vi: "Cluster: 3,4× hay 1,06×" },
+      },
       type: 'VIDEO',
       description: 'Chạy cùng một app với 1 tới 10 worker trên hai loại route khác nhau, và phát hiện cluster nhân ba thông lượng ở route nặng CPU nhưng không làm gì ở route nặng I/O — rồi tệ đi khi thêm worker.',
       content: `
@@ -875,6 +882,13 @@ keepAlive maxSockets:2 (quá chật)          46ms   10.814/giây</div>
     {
       title: '16.5 — Memory: the cache that never forgets|||16.5 — Bộ nhớ: cái cache không bao giờ quên',
       slug: 'nodejs-16-5-ro-ri-bo-nho',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-16-5-ro-ri-bo-nho.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-16-5-ro-ri-bo-nho.jpg',
+        scenario: 'nodejs-memory-leak',
+        durationSeconds: 20,
+        caption: { en: "Memory: the cache that never forgets", vi: "Bộ nhớ: cái cache không bao giờ quên" },
+      },
       type: 'VIDEO',
       description: 'Ba kiểu rò rỉ bộ nhớ tái hiện thật với số đo RSS qua 170.000 request, cách phân biệt rò rỉ với việc heap chỉ đang lớn lên bình thường, và cái cảnh báo Node đã hét vào mặt bạn từ lâu.',
       content: `

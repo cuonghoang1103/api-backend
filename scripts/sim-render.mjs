@@ -279,10 +279,27 @@ async function main() {
   }
 
   // Bản kê để bước tải lên R2 + vá giáo trình đọc, thay vì đoán tên file.
+  //
+  // GỘP với bản kê cũ trong cùng thư mục thay vì ghi đè: dựng từng kịch bản
+  // một bằng `--scenario` là cách dùng bình thường (chạy lại một cái vừa sửa,
+  // hoặc dựng mười cái bằng một vòng lặp shell), mà ghi đè thì bản kê chỉ còn
+  // đúng video CUỐI CÙNG — chín file mp4 kia vẫn nằm trên đĩa nhưng bước
+  // `sim-attach` không nhìn thấy chúng. Khoá gộp là (kịch bản, ngôn ngữ).
   fs.mkdirSync(args.outDir, { recursive: true });
   const manifest = path.join(args.outDir, 'manifest.json');
-  fs.writeFileSync(manifest, JSON.stringify({ renderedAt: new Date().toISOString(), fps: args.fps, speed: args.speed, videos: results }, null, 2));
-  console.log(`\n✓ Xong ${results.length} video. Bản kê: ${manifest}`);
+  let merged = results;
+  if (fs.existsSync(manifest)) {
+    try {
+      const old = JSON.parse(fs.readFileSync(manifest, 'utf8')).videos ?? [];
+      const key = (v) => `${v.scenarioId}__${v.lang}`;
+      const fresh = new Set(results.map(key));
+      merged = [...old.filter((v) => !fresh.has(key(v))), ...results];
+    } catch {
+      /* bản kê cũ hỏng thì bỏ qua, ghi lại từ đầu */
+    }
+  }
+  fs.writeFileSync(manifest, JSON.stringify({ renderedAt: new Date().toISOString(), fps: args.fps, speed: args.speed, videos: merged }, null, 2));
+  console.log(`\n✓ Xong ${results.length} video (bản kê có ${merged.length}). Bản kê: ${manifest}`);
 }
 
 main().catch((e) => {

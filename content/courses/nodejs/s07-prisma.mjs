@@ -1045,6 +1045,13 @@ timeout or doing less work in the transaction.</div>
     {
       title: '7.4 — Relations, and the N+1 problem measured|||7.4 — Quan hệ, và bẫy N+1 đo bằng số thật',
       slug: 'nodejs-7-4-quan-he-va-n-plus-1',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-7-4-quan-he-va-n-plus-1.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-7-4-quan-he-va-n-plus-1.jpg',
+        scenario: 'nodejs-n-plus-1',
+        durationSeconds: 22,
+        caption: { en: "Relations and the N+1 trap", vi: "Quan hệ và bẫy N+1" },
+      },
       type: 'VIDEO',
       description: 'Đọc dữ liệu liên quan bằng include/select, nhìn SQL Prisma sinh ra, và đo chênh lệch giữa 51 truy vấn với 2 truy vấn.',
       content: `
@@ -1295,6 +1302,13 @@ prisma.$<span class="tok-fn">on</span>(<span class="tok-string">'query'</span>, 
     {
       title: '7.5 — Indexes, and reading EXPLAIN ANALYZE|||7.5 — Chỉ mục, và cách đọc EXPLAIN ANALYZE',
       slug: 'nodejs-7-5-chi-muc-va-explain',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-7-5-chi-muc-va-explain.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-7-5-chi-muc-va-explain.jpg',
+        scenario: 'nodejs-index-explain',
+        durationSeconds: 19,
+        caption: { en: "Indexes and EXPLAIN ANALYZE", vi: "Chỉ mục và EXPLAIN ANALYZE" },
+      },
       type: 'VIDEO',
       description: 'Đo cùng một truy vấn trên 751.000 dòng trước và sau khi có chỉ mục, học đọc kế hoạch thực thi, và biết cái giá phải trả khi ghi.',
       content: `

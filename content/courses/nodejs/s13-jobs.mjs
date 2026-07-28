@@ -398,6 +398,13 @@ await emailQueue.add('password-reset', { userId: 42, token });</code></pre>
     {
       title: '13.3 — Failure: retries, backoff, and the charge that ran three times|||13.3 — Thất bại: thử lại, backoff, và cú trừ tiền chạy ba lần',
       slug: 'nodejs-13-3-thu-lai-va-idempotent',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-13-3-thu-lai-va-idempotent.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-13-3-thu-lai-va-idempotent.jpg',
+        scenario: 'nodejs-retry-idempotent',
+        durationSeconds: 16,
+        caption: { en: "Retries, backoff and idempotency", vi: "Thử lại, backoff và idempotent" },
+      },
       type: 'VIDEO',
       description: 'Mặc định BullMQ KHÔNG thử lại. Bật thử lại lên thì backoff luỹ thừa giãn ra 288 → 417 → 826 → 1674ms. Và một job trừ tiền không idempotent đã trừ của khách 300.000đ thay vì 100.000đ.',
       content: `

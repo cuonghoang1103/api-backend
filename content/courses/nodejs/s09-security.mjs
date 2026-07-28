@@ -514,6 +514,13 @@ DOMPurify    12.245ms cho 12.1KB  →    82 lần/giây</div>
     {
       title: '9.3 — Input is the enemy: ReDoS, prototype pollution, body limits, SSRF|||9.3 — Đầu vào là kẻ thù: ReDoS, ô nhiễm nguyên mẫu, giới hạn thân request, SSRF',
       slug: 'nodejs-9-3-dau-vao-doc-hai',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-9-3-dau-vao-doc-hai.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-9-3-dau-vao-doc-hai.jpg',
+        scenario: 'nodejs-input-attacks',
+        durationSeconds: 20,
+        caption: { en: "Input is the enemy", vi: "Đầu vào là kẻ thù" },
+      },
       type: 'VIDEO',
       description: 'Bốn đòn tấn công không cần mật khẩu, không cần XSS: một chuỗi 31 ký tự đóng băng máy chủ, một khoá JSON cấp quyền admin, một request 11MB, và một URL khiến máy chủ tự đi đọc bí mật của chính nó.',
       content: `

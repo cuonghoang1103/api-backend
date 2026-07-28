@@ -403,6 +403,13 @@ loginAnToan  : email KHÔNG tồn tại = 34.73ms | email CÓ tồn tại = 36.6
     {
       title: '8.2 — JWT, refresh tokens and rotation|||8.2 — JWT, refresh token và xoay vòng',
       slug: 'nodejs-8-2-jwt-access-refresh',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-8-2-jwt-access-refresh.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-8-2-jwt-access-refresh.jpg',
+        scenario: 'nodejs-jwt-refresh',
+        durationSeconds: 23,
+        caption: { en: "JWT, refresh tokens and rotation", vi: "JWT, refresh token và xoay vòng" },
+      },
       type: 'VIDEO',
       description: 'Mổ xẻ một JWT bằng tay, thử ba đòn tấn công lên nó, rồi dựng cặp access + refresh có xoay vòng và phát hiện token bị đánh cắp.',
       content: `

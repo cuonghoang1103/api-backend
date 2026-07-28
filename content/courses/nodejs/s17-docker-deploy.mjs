@@ -830,6 +830,13 @@ if (missing.length) {
     {
       title: '17.5 — Zero downtime: 1,5% lost, or 0%|||17.5 — Deploy không gián đoạn: mất 1,5%, hay mất 0%',
       slug: 'nodejs-17-5-deploy-khong-gian-doan',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-5-deploy-khong-gian-doan.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-5-deploy-khong-gian-doan.jpg',
+        scenario: 'nodejs-blue-green',
+        durationSeconds: 12,
+        caption: { en: "Zero-downtime deploy: 1.5% or 0%", vi: "Deploy không gián đoạn: 1,5% hay 0%" },
+      },
       type: 'VIDEO',
       description: 'Bắn request liên tục trong lúc deploy và đếm số cái hỏng: kiểu dừng-rồi-chạy-lại mất 1,5%, "blue-green" tự chế cũng mất 1,5% — chỉ khi có proxy đứng trước mới ra 0/327.',
       content: `

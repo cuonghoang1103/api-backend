@@ -22,6 +22,7 @@ import s13 from './nodejs/s13-jobs.mjs';
 import s14 from './nodejs/s14-testing.mjs';
 import s15 from './nodejs/s15-observability.mjs';
 import s16 from './nodejs/s16-performance.mjs';
+import s17 from './nodejs/s17-docker-deploy.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -59,5 +60,6 @@ export default {
     s14,
     s15,
     s16,
+    s17,
   ],
 };

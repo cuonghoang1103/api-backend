@@ -52,6 +52,10 @@ import { numberBitsScenario } from './numberBits';
 import { logicGatesScenario } from './logicGates';
 import { interruptsScenario } from './interrupts';
 import { textEncodingScenario } from './textEncoding';
+import { oopPillarsScenario } from './oopPillars';
+import { listVsLinkedScenario } from './listVsLinked';
+import { hashMapScenario } from './hashMap';
+import { stackHeapScenario } from './stackHeap';
 import { nodejsCacheAsideScenario } from './nodejsCacheAside';
 import { nodejsAtomicScenario } from './nodejsAtomic';
 import { nodejsRetryScenario } from './nodejsRetry';
@@ -125,6 +129,13 @@ export const SCENARIOS: Scenario[] = [
   logicGatesScenario,
   interruptsScenario,
   textEncodingScenario,
+
+  // ── Mục OOP — PRO192 / CSD201. Bốn tính chất, và cấu trúc dữ liệu
+  // nhìn từ bộ nhớ (phần thuật toán nằm ở trang /algorithms).
+  oopPillarsScenario,
+  listVsLinkedScenario,
+  hashMapScenario,
+  stackHeapScenario,
 ];
 
 /**
@@ -163,6 +174,15 @@ export const SCENARIO_GROUPS: ScenarioGroup[] = [
       en: 'CEA201 · CSI104 — instruction cycle, memory, cache, logic',
     },
     accent: '#f59e0b',
+  },
+  {
+    id: 'oop',
+    name: { vi: 'Lập trình hướng đối tượng', en: 'Object-oriented programming' },
+    blurb: {
+      vi: 'PRO192 · CSD201 — bốn tính chất và cấu trúc dữ liệu, nhìn từ bộ nhớ',
+      en: 'PRO192 · CSD201 — the four pillars and data structures, seen from memory',
+    },
+    accent: '#f472b6',
   },
 ];
 

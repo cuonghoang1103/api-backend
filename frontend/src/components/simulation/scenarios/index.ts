@@ -47,6 +47,11 @@ import { cicdPipelineScenario } from './cicdPipeline';
 import { gitFlowScenario } from './gitFlow';
 import { cpuCycleScenario } from './cpuCycle';
 import { memoryCacheScenario } from './memoryCache';
+import { virtualMemoryScenario } from './virtualMemory';
+import { numberBitsScenario } from './numberBits';
+import { logicGatesScenario } from './logicGates';
+import { interruptsScenario } from './interrupts';
+import { textEncodingScenario } from './textEncoding';
 import { nodejsCacheAsideScenario } from './nodejsCacheAside';
 import { nodejsAtomicScenario } from './nodejsAtomic';
 import { nodejsRetryScenario } from './nodejsRetry';
@@ -115,6 +120,11 @@ export const SCENARIOS: Scenario[] = [
   // của CPU xuống dưới: bộ nhớ, cache, biểu diễn số, mạch logic.
   cpuCycleScenario,
   memoryCacheScenario,
+  virtualMemoryScenario,
+  numberBitsScenario,
+  logicGatesScenario,
+  interruptsScenario,
+  textEncodingScenario,
 ];
 
 /**

@@ -194,6 +194,26 @@ html.theme-dark .exam-blob { opacity: .28; }
 .exam-tab:hover { color: var(--text-primary); }
 .exam-tab[data-active="true"] { color: #fff; background: linear-gradient(135deg, var(--exam-accent), var(--exam-accent-2)); box-shadow: 0 4px 14px rgba(99,102,241,.35); }
 
+/* Browse accordion: semester header + collapsible subject row.
+   The lobby lists semesters and subjects; a subject's exams only appear when
+   the student opens it, so a course with fourteen papers no longer buries
+   every other subject on the page. */
+.exam-sem-head {
+  display: flex; align-items: center; gap: 8px;
+  width: 100%; padding: 6px 2px 10px; cursor: pointer;
+  color: var(--text-primary); text-align: left;
+}
+.exam-sem-head:hover span:first-of-type { color: var(--exam-accent); }
+
+.exam-course-head {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 14px 16px; cursor: pointer;
+  color: var(--text-primary); text-align: left; transition: background .15s ease;
+}
+@media (min-width: 640px) { .exam-course-head { padding: 16px 20px; } }
+.exam-course-head:hover { background: var(--bg-surface); }
+.exam-course-head:focus-visible { outline: 2px solid var(--exam-accent); outline-offset: -2px; }
+
 /* Bookmark toggle button */
 .exam-bm { display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-surface);

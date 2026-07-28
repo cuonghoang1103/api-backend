@@ -86,6 +86,38 @@ function examBadgeLabel(e: { kind: string; peType?: string | null; code?: string
   return cat === 'FE' ? 'FE' : `PE·${e.peType}`;
 }
 
+/** One subject inside a semester group, with every exam it owns. */
+interface CourseGroup {
+  id: number;
+  title: string;
+  slug: string;
+  code: string | null;
+  exams: ExamPortalItem[];
+}
+
+const CAT_ORDER: Category[] = ['PT', 'FE', 'PE', 'READING', 'SPEAKING'];
+
+/** "3 PT · 1 FE · 10 PE" for a collapsed course row, in a stable order. */
+function countByCategory(exams: ExamPortalItem[]): [Category, number][] {
+  const n = new Map<Category, number>();
+  for (const e of exams) n.set(examCategory(e), (n.get(examCategory(e)) ?? 0) + 1);
+  return CAT_ORDER.filter((c) => n.has(c)).map((c) => [c, n.get(c)!]);
+}
+
+function catShort(c: Category, isVi: boolean): string {
+  if (c === 'READING') return isVi ? 'Đọc' : 'Read';
+  if (c === 'SPEAKING') return isVi ? 'Nói' : 'Speak';
+  return c;
+}
+
+const CAT_BADGE: Record<Category, string> = {
+  PT: 'exam-badge-pt',
+  FE: 'exam-badge-fe',
+  PE: 'exam-badge-pe',
+  READING: 'exam-badge-reading',
+  SPEAKING: 'exam-badge-speaking',
+};
+
 function filterLabel(f: Filter, isVi: boolean): string {
   if (f === 'ALL') return isVi ? 'Tất cả' : 'All';
   if (f === 'READING') return isVi ? 'Đọc' : 'Reading';
@@ -166,7 +198,7 @@ export default function ExamPortalClient() {
     catch { toast.error(isVi ? 'Lỗi lưu ghi chú' : 'Could not save note'); }
   };
 
-  // ── Browse groups (semester → course) ──────────────────────────────────
+  // ── Browse groups (semester → course → exams) ──────────────────────────
   const filtered = useMemo(() => {
     const qy = query.trim().toLowerCase();
     return exams.filter((e) => {
@@ -176,17 +208,52 @@ export default function ExamPortalClient() {
     });
   }, [exams, query, filter]);
 
+  // What the student has already done, so a course row can show progress
+  // without another request: attempts are already loaded for the History tab.
+  const attemptStats = useMemo(() => {
+    const taken = new Set<number>();
+    const passed = new Set<number>();
+    for (const a of attempts) {
+      taken.add(a.examId);
+      if (a.passed === true) passed.add(a.examId);
+    }
+    return { taken, passed };
+  }, [attempts]);
+
   const groups = useMemo(() => {
-    const bySem = new Map<string, { name: string; ordinal: number; courses: Map<number, { title: string; slug: string; code: string | null; exams: ExamPortalItem[] }> }>();
+    const bySem = new Map<string, { key: string; name: string; ordinal: number; courses: Map<number, CourseGroup> }>();
     for (const e of filtered) {
-      const semKey = e.semester?.code || 'other';
-      if (!bySem.has(semKey)) bySem.set(semKey, { name: e.semester?.name || (isVi ? 'Khác' : 'Other'), ordinal: e.semester?.ordinal ?? 999, courses: new Map() });
+      // A course with no semester is not an FPTU subject — it is one of the
+      // site's own courses (Node.js, PostgreSQL…). They get their own group at
+      // the bottom instead of a vague "Other".
+      const semKey = e.semester?.code || 'self';
+      if (!bySem.has(semKey)) {
+        bySem.set(semKey, {
+          key: semKey,
+          name: e.semester?.name || (isVi ? 'Môn học' : 'Courses'),
+          ordinal: e.semester?.ordinal ?? 999,
+          courses: new Map(),
+        });
+      }
       const sem = bySem.get(semKey)!;
-      if (!sem.courses.has(e.courseId)) sem.courses.set(e.courseId, { title: e.course?.title || `Course ${e.courseId}`, slug: e.course?.slug || '', code: e.course?.courseCode || null, exams: [] });
+      if (!sem.courses.has(e.courseId)) {
+        sem.courses.set(e.courseId, {
+          id: e.courseId,
+          title: e.course?.title || `Course ${e.courseId}`,
+          slug: e.course?.slug || '',
+          code: e.course?.courseCode || null,
+          exams: [],
+        });
+      }
       sem.courses.get(e.courseId)!.exams.push(e);
     }
-    return [...bySem.values()].sort((a, b) => a.ordinal - b.ordinal)
-      .map((s) => ({ ...s, courses: [...s.courses.values()].sort((a, b) => (a.code || '').localeCompare(b.code || '')) }));
+    return [...bySem.values()]
+      .sort((a, b) => a.ordinal - b.ordinal)
+      .map((s) => ({
+        ...s,
+        courses: [...s.courses.values()].sort((a, b) =>
+          (a.code || '').localeCompare(b.code || '') || a.title.localeCompare(b.title)),
+      }));
   }, [filtered, isVi]);
 
   return (
@@ -219,7 +286,7 @@ export default function ExamPortalClient() {
           <BrowseTab
             loading={loading} groups={groups} L={L} isVi={isVi}
             query={query} setQuery={setQuery} filter={filter} setFilter={setFilter}
-            bmIds={bmIds} onToggleBm={toggleExamBm}
+            bmIds={bmIds} onToggleBm={toggleExamBm} attemptStats={attemptStats}
           />
         )}
 
@@ -236,16 +303,35 @@ export default function ExamPortalClient() {
 }
 
 // ── Browse tab ──────────────────────────────────────────────────────────
-function BrowseTab({ loading, groups, L, isVi, query, setQuery, filter, setFilter, bmIds, onToggleBm }: {
+// Two levels, collapsed by default at the course level. Showing every exam of
+// every subject at once was unreadable the moment one course had fourteen
+// papers: the lobby now answers "which subject?" first and only then "which
+// paper?". Searching or picking a category auto-expands, because a hidden
+// match is the same as no match.
+function BrowseTab({ loading, groups, L, isVi, query, setQuery, filter, setFilter, bmIds, onToggleBm, attemptStats }: {
   loading: boolean;
-  groups: { name: string; ordinal: number; courses: { title: string; slug: string; code: string | null; exams: ExamPortalItem[] }[] }[];
+  groups: { key: string; name: string; ordinal: number; courses: CourseGroup[] }[];
   L: 'en' | 'vi'; isVi: boolean; query: string; setQuery: (v: string) => void;
   filter: Filter; setFilter: (f: Filter) => void;
   bmIds: Set<number>; onToggleBm: (id: number) => void;
+  attemptStats: { taken: Set<number>; passed: Set<number> };
 }) {
+  const [openCourses, setOpenCourses] = useState<Set<number>>(new Set());
+  const [closedSems, setClosedSems] = useState<Set<string>>(new Set());
+  // A search or a category chip narrows the list on purpose — keeping the
+  // matches folded away would hide the very thing the student asked for.
+  const forceOpen = query.trim().length > 0 || filter !== 'ALL';
+
+  const toggleCourse = (id: number) =>
+    setOpenCourses((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
+  const toggleSem = (key: string) =>
+    setClosedSems((s) => { const n = new Set(s); n.has(key) ? n.delete(key) : n.add(key); return n; });
+
+  const totalExams = groups.reduce((n, s) => n + s.courses.reduce((m, c) => m + c.exams.length, 0), 0);
+
   return (
     <>
-      <div className="flex flex-col sm:flex-row gap-3 mb-6">
+      <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <div className="relative flex-1">
           <SearchIcon className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
           <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={isVi ? 'Tìm môn, mã môn, đề…' : 'Search course, code, exam…'}
@@ -259,50 +345,133 @@ function BrowseTab({ loading, groups, L, isVi, query, setQuery, filter, setFilte
         </div>
       </div>
 
+      {!loading && groups.length > 0 && (
+        <div className="flex items-center justify-between gap-3 mb-4 text-xs text-text-muted">
+          <span>
+            {isVi
+              ? `${groups.reduce((n, s) => n + s.courses.length, 0)} môn · ${totalExams} đề`
+              : `${groups.reduce((n, s) => n + s.courses.length, 0)} subjects · ${totalExams} exams`}
+          </span>
+          {!forceOpen && (
+            <button
+              className="font-semibold text-[var(--exam-accent)] hover:underline"
+              onClick={() => {
+                const allIds = groups.flatMap((s) => s.courses.map((c) => c.id));
+                setOpenCourses((s) => (s.size >= allIds.length ? new Set() : new Set(allIds)));
+              }}
+            >
+              {openCourses.size >= groups.reduce((n, s) => n + s.courses.length, 0)
+                ? (isVi ? 'Thu gọn tất cả' : 'Collapse all')
+                : (isVi ? 'Mở tất cả' : 'Expand all')}
+            </button>
+          )}
+        </div>
+      )}
+
       {loading ? (
         <div className="text-center text-text-muted py-16">{isVi ? 'Đang tải…' : 'Loading…'}</div>
       ) : groups.length === 0 ? (
-        <div className="exam-card p-10 text-center text-text-muted">{isVi ? 'Chưa có đề thi nào.' : 'No exams yet.'}</div>
+        <div className="exam-card p-10 text-center text-text-muted">
+          {query.trim() || filter !== 'ALL'
+            ? (isVi ? 'Không có đề nào khớp. Thử bỏ bớt bộ lọc.' : 'No exam matches. Try clearing a filter.')
+            : (isVi ? 'Chưa có đề thi nào.' : 'No exams yet.')}
+        </div>
       ) : (
-        <div className="space-y-8">
-          {groups.map((sem) => (
-            <div key={sem.name}>
-              <h2 className="text-lg font-bold mb-3">{sem.name}</h2>
-              <div className="space-y-4">
-                {sem.courses.map((c) => (
-                  <div key={c.slug || c.title} className="exam-card p-4 sm:p-5">
-                    <div className="flex items-center gap-2 mb-3">
-                      {c.code && <span className="exam-badge" style={{ background: 'var(--bg-surface)', color: 'var(--text-secondary)' }}>{c.code}</span>}
-                      <h3 className="font-semibold">{pickLang(c.title, L)}</h3>
-                    </div>
-                    <div className="grid sm:grid-cols-2 gap-2.5">
-                      {c.exams.map((e) => (
-                        <div key={e.id} className="flex items-center gap-2 p-3 rounded-xl border border-[var(--border-color)] hover:border-[var(--exam-accent)] transition-colors">
-                          <Link href={`/exam/${e.id}`} className="flex items-center justify-between gap-3 min-w-0 flex-1">
-                            <div className="min-w-0">
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className={`exam-badge ${examBadgeClass(e)}`}>{examBadgeLabel(e, isVi)}</span>
-                                {e.code && <span className="text-[11px] text-text-muted">{e.code}</span>}
-                              </div>
-                              <div className="text-sm font-medium truncate">{pickLang(e.title, L)}</div>
-                            </div>
-                            <div className="text-xs text-text-muted text-right shrink-0">
-                              <div className="flex items-center gap-1 justify-end"><ClockIcon className="w-3.5 h-3.5" />{e.durationMinutes}&apos;</div>
-                              <div>{e.questionCount} {isVi ? 'câu' : 'q'}</div>
-                            </div>
-                          </Link>
-                          <button className="exam-bm w-9 h-9 shrink-0" data-on={bmIds.has(e.id)} onClick={() => onToggleBm(e.id)}
-                            title={bmIds.has(e.id) ? (isVi ? 'Bỏ lưu' : 'Remove bookmark') : (isVi ? 'Lưu đề' : 'Bookmark exam')}>
-                            <BookmarkIcon className="w-4 h-4" fill={bmIds.has(e.id) ? 'currentColor' : 'none'} />
+        <div className="space-y-6">
+          {groups.map((sem) => {
+            const semOpen = !closedSems.has(sem.key);
+            const semExams = sem.courses.reduce((n, c) => n + c.exams.length, 0);
+            return (
+              <section key={sem.key}>
+                {/* h2 wraps the button, not the other way round: a heading is
+                    flow content and is not allowed inside <button>. */}
+                <h2>
+                  <button className="exam-sem-head" onClick={() => toggleSem(sem.key)} aria-expanded={semOpen}>
+                    <ChevronDown className={`w-4 h-4 transition-transform ${semOpen ? '' : '-rotate-90'}`} />
+                    <span className="text-base font-bold">{sem.name}</span>
+                    <span className="text-xs text-text-muted font-normal">
+                      {isVi ? `${sem.courses.length} môn · ${semExams} đề` : `${sem.courses.length} subjects · ${semExams} exams`}
+                    </span>
+                  </button>
+                </h2>
+
+                {semOpen && (
+                  <div className="space-y-2.5">
+                    {sem.courses.map((c) => {
+                      const open = forceOpen || openCourses.has(c.id);
+                      const counts = countByCategory(c.exams);
+                      const taken = c.exams.filter((e) => attemptStats.taken.has(e.id)).length;
+                      const passed = c.exams.filter((e) => attemptStats.passed.has(e.id)).length;
+                      return (
+                        <div key={c.id} className="exam-card overflow-hidden">
+                          <button className="exam-course-head" onClick={() => toggleCourse(c.id)} aria-expanded={open}>
+                            <ChevronDown className={`w-4 h-4 shrink-0 text-text-muted transition-transform ${open ? '' : '-rotate-90'}`} />
+                            {c.code && <span className="exam-badge shrink-0" style={{ background: 'var(--bg-surface)', color: 'var(--text-secondary)' }}>{c.code}</span>}
+                            <span className="font-semibold truncate">{pickLang(c.title, L)}</span>
+
+                            <span className="ml-auto flex items-center gap-2 shrink-0">
+                              <span className="hidden sm:flex items-center gap-1.5">
+                                {counts.map(([cat, n]) => (
+                                  <span key={cat} className={`exam-badge ${CAT_BADGE[cat]}`}>
+                                    {catShort(cat, isVi)} {n}
+                                  </span>
+                                ))}
+                              </span>
+                              <span className="text-xs text-text-muted whitespace-nowrap">
+                                {taken > 0
+                                  ? (isVi ? `đã thi ${taken}/${c.exams.length}` : `${taken}/${c.exams.length} taken`)
+                                  : (isVi ? `${c.exams.length} đề` : `${c.exams.length} exams`)}
+                              </span>
+                              {passed > 0 && (
+                                <span className="hidden sm:flex items-center gap-1 text-xs text-[var(--exam-ok)]">
+                                  <CheckCircleIcon className="w-3.5 h-3.5" />{passed}
+                                </span>
+                              )}
+                            </span>
                           </button>
+
+                          {open && (
+                            <div className="grid sm:grid-cols-2 gap-2.5 px-4 pb-4 sm:px-5 sm:pb-5">
+                              {c.exams.map((e) => {
+                                const done = attemptStats.taken.has(e.id);
+                                const ok = attemptStats.passed.has(e.id);
+                                return (
+                                  <div key={e.id} className="flex items-center gap-2 p-3 rounded-xl border border-[var(--border-color)] hover:border-[var(--exam-accent)] transition-colors">
+                                    <Link href={`/exam/${e.id}`} className="flex items-center justify-between gap-3 min-w-0 flex-1">
+                                      <div className="min-w-0">
+                                        <div className="flex items-center gap-2 mb-1">
+                                          <span className={`exam-badge ${examBadgeClass(e)}`}>{examBadgeLabel(e, isVi)}</span>
+                                          {e.code && <span className="text-[11px] text-text-muted">{e.code}</span>}
+                                          {done && (
+                                            <span className={`text-[11px] font-semibold ${ok ? 'text-[var(--exam-ok)]' : 'text-text-muted'}`}>
+                                              {ok ? (isVi ? '✓ đạt' : '✓ passed') : (isVi ? 'đã thi' : 'taken')}
+                                            </span>
+                                          )}
+                                        </div>
+                                        <div className="text-sm font-medium truncate">{pickLang(e.title, L)}</div>
+                                      </div>
+                                      <div className="text-xs text-text-muted text-right shrink-0">
+                                        <div className="flex items-center gap-1 justify-end"><ClockIcon className="w-3.5 h-3.5" />{e.durationMinutes}&apos;</div>
+                                        <div>{e.questionCount} {isVi ? 'câu' : 'q'}</div>
+                                      </div>
+                                    </Link>
+                                    <button className="exam-bm w-9 h-9 shrink-0" data-on={bmIds.has(e.id)} onClick={() => onToggleBm(e.id)}
+                                      title={bmIds.has(e.id) ? (isVi ? 'Bỏ lưu' : 'Remove bookmark') : (isVi ? 'Lưu đề' : 'Bookmark exam')}>
+                                      <BookmarkIcon className="w-4 h-4" fill={bmIds.has(e.id) ? 'currentColor' : 'none'} />
+                                    </button>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
                         </div>
-                      ))}
-                    </div>
+                      );
+                    })}
                   </div>
-                ))}
-              </div>
-            </div>
-          ))}
+                )}
+              </section>
+            );
+          })}
         </div>
       )}
     </>

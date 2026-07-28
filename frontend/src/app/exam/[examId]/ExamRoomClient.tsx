@@ -55,6 +55,9 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
   const [answers, setAnswers] = useState<Record<number, number[]>>({});
   const [flags, setFlags] = useState<Set<number>>(new Set());
   const [essays, setEssays] = useState<Record<number, string>>({});
+  // Code typed in-room for CODE questions that live inside an MCQ paper
+  // (Progress Test = 30 MCQ + 1–2 coding questions). PE CODE still uploads a zip.
+  const [codeAnswers, setCodeAnswers] = useState<Record<number, string>>({});
   const [zipFile, setZipFile] = useState<File | null>(null);
   const [recordings, setRecordings] = useState<Record<string, Blob>>({}); // key `${qid}:${promptIdx}`
   const [genPrompts, setGenPrompts] = useState<Record<number, { text: string; imageUrl?: string }[]>>({});
@@ -116,7 +119,9 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
       if (exam.kind === 'FE') {
         const payload: Record<string, number[]> = {};
         for (const [k, v] of Object.entries(answers)) payload[k] = v;
-        await examApi.submitFe(attemptId, { answers: payload, timeSpentSeconds: ts, integritySignals: integrity });
+        const codePayload: Record<string, string> = {};
+        for (const [k, v] of Object.entries(codeAnswers)) if (v.trim()) codePayload[k] = v;
+        await examApi.submitFe(attemptId, { answers: payload, codeAnswers: codePayload, timeSpentSeconds: ts, integritySignals: integrity });
       } else if (exam.peType === 'CODE') {
         if (!zipFile) { submittedRef.current = false; setPhase('taking'); toast.error(isVi ? 'Hãy chọn file .zip để nộp' : 'Please choose a .zip to submit'); return; }
         await examApi.submitCode(attemptId, zipFile, ts);
@@ -144,7 +149,7 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
       setPhase('taking');
       toast.error((e as { response?: { data?: { message?: string } } })?.response?.data?.message || (isVi ? 'Nộp bài thất bại' : 'Submit failed'));
     }
-  }, [exam, attemptId, answers, essays, zipFile, recordings, genPrompts, router, isVi]);
+  }, [exam, attemptId, answers, codeAnswers, essays, zipFile, recordings, genPrompts, router, isVi]);
 
   // Auto-submit on timeout
   useEffect(() => {
@@ -158,9 +163,11 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
     return <div className="min-h-[60vh] flex items-center justify-center text-text-muted">{isVi ? 'Đang tải…' : 'Loading…'}</div>;
   }
 
-  const answeredCount = exam.kind === 'FE'
-    ? exam.questions.filter((q) => (answers[q.id]?.length ?? 0) > 0).length
-    : 0;
+  // A question counts as done when an option is picked (MCQ) or code is typed
+  // (a CODE question sitting inside an MCQ paper — Progress Test).
+  const isDone = (qq: ExamTakingQuestion) =>
+    qq.kind === 'CODE' ? (codeAnswers[qq.id]?.trim().length ?? 0) > 0 : (answers[qq.id]?.length ?? 0) > 0;
+  const answeredCount = exam.kind === 'FE' ? exam.questions.filter(isDone).length : 0;
 
   // ── Intro screen ─────────────────────────────────────────────────────
   if (phase === 'intro') {
@@ -203,7 +210,11 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
 
             <div className="exam-explain text-sm mb-6">
               {exam.kind === 'FE'
-                ? (isVi ? 'Chọn đáp án cho từng câu. Có câu chọn nhiều đáp án. Đồng hồ chạy ngay khi bắt đầu và tự nộp khi hết giờ.' : 'Answer each question. Some allow multiple answers. The timer starts immediately and auto-submits when it ends.')
+                ? exam.questions.some((qq) => qq.kind === 'CODE')
+                  ? (isVi
+                    ? 'Đề gồm câu trắc nghiệm và câu lập trình. Câu trắc nghiệm chấm tự động, câu lập trình bạn gõ code ngay trong phòng thi và AI chấm theo tiêu chí. Đồng hồ chạy ngay khi bắt đầu và tự nộp khi hết giờ.'
+                    : 'This paper mixes multiple-choice with coding questions. MCQs are auto-graded; for the coding ones you type your code right here and AI grades it against a rubric. The timer starts immediately and auto-submits when it ends.')
+                  : (isVi ? 'Chọn đáp án cho từng câu. Có câu chọn nhiều đáp án. Đồng hồ chạy ngay khi bắt đầu và tự nộp khi hết giờ.' : 'Answer each question. Some allow multiple answers. The timer starts immediately and auto-submits when it ends.')
                 : exam.peType === 'CODE'
                   ? (isVi ? 'Đọc đề, viết code ở IDE/VS Code của bạn, nén tất cả file thành .zip rồi nộp để AI chấm.' : 'Read the problems, code in your own IDE/VS Code, then upload all files as one .zip for AI grading.')
                   : exam.peType === 'WRITE'
@@ -279,7 +290,17 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
       <div className="max-w-6xl mx-auto px-4 py-5 grid lg:grid-cols-[1fr_280px] gap-5">
         {/* Main content */}
         <div className="min-w-0">
-          {exam.kind === 'FE' && (
+          {exam.kind === 'FE' && q.kind === 'CODE' && (
+            <InlineCodeQuestion
+              q={q} idx={idx} total={exam.questions.length} L={L} isVi={isVi}
+              value={codeAnswers[q.id] ?? q.starterCode ?? ''}
+              onChange={(v) => setCodeAnswers((c) => ({ ...c, [q.id]: v }))}
+              flagged={flags.has(q.id)}
+              onFlag={() => setFlags((s) => { const n = new Set(s); n.has(q.id) ? n.delete(q.id) : n.add(q.id); return n; })}
+            />
+          )}
+
+          {exam.kind === 'FE' && q.kind !== 'CODE' && (
             <McqQuestion
               q={q} idx={idx} total={exam.questions.length} L={L} isVi={isVi}
               selected={answers[q.id] || []}
@@ -322,9 +343,10 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
               <div className="exam-nav-grid">
                 {exam.questions.map((qq, i) => (
                   <button key={qq.id} className="exam-nav-cell"
-                    data-answered={(answers[qq.id]?.length ?? 0) > 0}
+                    data-answered={isDone(qq)}
                     data-current={i === idx} data-flagged={flags.has(qq.id)}
-                    onClick={() => setIdx(i)}>{i + 1}</button>
+                    title={qq.kind === 'CODE' ? (isVi ? 'Câu lập trình' : 'Coding question') : undefined}
+                    onClick={() => setIdx(i)}>{qq.kind === 'CODE' ? `${i + 1}⌨` : i + 1}</button>
                 ))}
               </div>
               <div className="flex items-center gap-4 mt-3 text-[11px] text-text-muted">
@@ -433,6 +455,54 @@ function CodeRunner({ exam, L, isVi, zipFile, setZipFile }: {
           <input type="file" accept=".zip" className="hidden" onChange={(e) => setZipFile(e.target.files?.[0] || null)} />
           {zipFile ? zipFile.name : (isVi ? 'Chọn file .zip' : 'Choose .zip file')}
         </label>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * A CODE question living inside a multiple-choice paper (Progress Test).
+ * The student types the answer right here — no zip upload — and the server
+ * grades it with the same AI grader the PE papers use.
+ */
+function InlineCodeQuestion({ q, idx, total, L, isVi, value, onChange, flagged, onFlag }: {
+  q: ExamTakingQuestion; idx: number; total: number; L: 'en' | 'vi'; isVi: boolean;
+  value: string; onChange: (v: string) => void; flagged: boolean; onFlag: () => void;
+}) {
+  const lines = value ? value.split('\n').length : 0;
+  return (
+    <div className="exam-card p-5 sm:p-6">
+      <div className="flex items-center justify-between gap-2 mb-4">
+        <div className="text-sm font-semibold text-text-secondary flex items-center gap-2">
+          <span>{isVi ? 'Câu' : 'Question'} {idx + 1}/{total} · {q.points}đ</span>
+          <span className="exam-badge exam-badge-pe">{isVi ? 'Lập trình' : 'Coding'}{q.language ? ` · ${q.language}` : ''}</span>
+        </div>
+        <button onClick={onFlag} className={`flex items-center gap-1 text-xs px-2 py-1 rounded-lg border ${flagged ? 'border-[var(--exam-warn)] text-[var(--exam-warn)]' : 'border-[var(--border-color)] text-text-muted'}`}>
+          <FlagIcon className="w-3.5 h-3.5" /> {isVi ? 'Đánh dấu' : 'Flag'}
+        </button>
+      </div>
+      <div className="mb-4 text-[15px] leading-relaxed"><Prompt html={q.prompt} L={L} /></div>
+      {q.expectedOutput && (
+        <div className="mb-4">
+          <div className="text-xs text-text-muted mb-1">{isVi ? 'Kết quả mong đợi' : 'Expected output'}</div>
+          <pre className="exam-terminal">{q.expectedOutput}</pre>
+        </div>
+      )}
+      <textarea value={value} onChange={(e) => onChange(e.target.value)} spellCheck={false}
+        placeholder={isVi ? '// Viết code của bạn ở đây…' : '// Write your code here…'}
+        className="w-full min-h-[300px] rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-4 font-mono text-[13.5px] leading-relaxed outline-none focus:border-[var(--exam-accent)] resize-y exam-scroll"
+        onKeyDown={(e) => {
+          // Tab inserts two spaces instead of leaving the editor.
+          if (e.key !== 'Tab') return;
+          e.preventDefault();
+          const el = e.currentTarget;
+          const s = el.selectionStart, t = el.selectionEnd;
+          const next = value.slice(0, s) + '  ' + value.slice(t);
+          onChange(next);
+          requestAnimationFrame(() => { el.selectionStart = el.selectionEnd = s + 2; });
+        }} />
+      <div className="text-xs text-text-muted mt-2">
+        {lines} {isVi ? 'dòng' : 'lines'} · {isVi ? 'Bài này do AI chấm theo tiêu chí' : 'Graded by AI against a rubric'}
       </div>
     </div>
   );

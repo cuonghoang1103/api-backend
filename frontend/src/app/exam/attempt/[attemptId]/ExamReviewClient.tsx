@@ -87,7 +87,7 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
   const pct = max ? Math.round((score / max) * 100) : 0;
   const passed = attempt.passed === true;
   const ringCol = passed ? 'var(--exam-ok)' : 'var(--exam-danger)';
-  const pePerQ = ((attempt.feedback?.perQuestion as { questionId: number; grade: PeGrade }[]) || []);
+  const pePerQ = ((attempt.feedback?.perQuestion as { questionId: number; grade?: PeGrade; ungraded?: boolean }[]) || []);
   const feGrade = attempt.feedback as { correctCount?: number; total?: number };
 
   const mins = Math.floor(attempt.timeSpentSeconds / 60);
@@ -135,7 +135,10 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
         {/* Per-question review */}
         <div className="space-y-4">
           {questions.map((q, i) => {
-            const grade = pePerQ.find((p) => p.questionId === q.id)?.grade;
+            const perQ = pePerQ.find((p) => p.questionId === q.id);
+            const grade = perQ?.grade;
+            // Code typed in-room (Progress Test) is stored as a plain string.
+            const myCode = typeof q.myAnswer === 'string' ? (q.myAnswer as string) : null;
             return (
               <div key={q.id} className="exam-card p-5">
                 <div className="flex items-center justify-between gap-2 mb-3">
@@ -179,6 +182,12 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
                     <div className="flex items-center gap-2">
                       <span className={`exam-badge ${grade.percent >= (exam.passMark / exam.totalPoints * 100) ? 'exam-badge-pass' : 'exam-badge-fail'}`}>{grade.score}/{grade.maxScore} · {grade.verdict}</span>
                     </div>
+                    {myCode && (
+                      <details>
+                        <summary className="cursor-pointer text-sm font-semibold text-text-secondary">{isVi ? 'Bài làm của bạn' : 'Your submission'}</summary>
+                        <pre className="exam-terminal mt-2">{myCode}</pre>
+                      </details>
+                    )}
                     {grade.summary && <p className="text-sm">{pickLang(grade.summary, L)}</p>}
                     {grade.criteria?.length > 0 && (
                       <div className="space-y-1.5">
@@ -212,7 +221,24 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
                   </div>
                 )}
 
-                {q.kind !== 'MCQ' && !grade && <p className="text-sm text-text-muted">{isVi ? 'Chưa có bài chấm cho câu này.' : 'No grade for this question.'}</p>}
+                {q.kind !== 'MCQ' && !grade && (
+                  <div className="space-y-2">
+                    <p className="text-sm text-text-muted">
+                      {perQ?.ungraded
+                        ? (isVi
+                          ? 'AI không chấm được câu này lúc bạn nộp, nên câu này KHÔNG bị tính vào điểm (không trừ điểm của bạn). Thi lại để được chấm.'
+                          : 'AI could not grade this question when you submitted, so it was left OUT of the score (you were not penalised). Retake to get it graded.')
+                        : (isVi ? 'Chưa có bài chấm cho câu này.' : 'No grade for this question.')}
+                    </p>
+                    {myCode && <pre className="exam-terminal">{myCode}</pre>}
+                    {q.sampleSolution && (
+                      <details>
+                        <summary className="cursor-pointer text-sm font-semibold text-[var(--exam-accent)]">{isVi ? 'Xem đáp án mẫu' : 'Show reference solution'}</summary>
+                        <pre className="exam-terminal mt-2">{q.sampleSolution}</pre>
+                      </details>
+                    )}
+                  </div>
+                )}
 
                 {/* Personal note — appears once the question is saved */}
                 {qBm[q.id]?.on && <NoteEditor qid={q.id} initial={qBm[q.id]?.note || ''} isVi={isVi} onSave={saveQNote} />}

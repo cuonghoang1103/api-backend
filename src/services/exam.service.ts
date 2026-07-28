@@ -13,6 +13,7 @@
  */
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
+import { gradeCode, type PeGradeResult } from './exam.grading.service.js';
 
 // ── Shapes ────────────────────────────────────────────────────────────
 export type ExamKind = 'FE' | 'PE';
@@ -187,13 +188,22 @@ function sameSet(a: number[], b: number[]): boolean {
 }
 
 /**
- * Submit a Final Exam. `answers` maps questionId -> selected option indexes.
- * All-or-nothing per question (standard FPTU multiple-choice scoring).
+ * Submit a Final Exam / Progress Test. `answers` maps questionId -> selected
+ * option indexes; MCQ scoring is all-or-nothing per question (standard FPTU
+ * multiple-choice scoring).
+ *
+ * A paper may ALSO carry CODE questions (Progress Tests are 30 MCQ + 1–2 coding
+ * questions in one sitting). Those come in through `codeAnswers`
+ * (questionId -> source the student typed in the exam room) and are graded by
+ * the same AI grader the PE papers use. If the AI is unavailable, the code
+ * question is dropped from BOTH numerator and denominator rather than scored 0,
+ * so an outage can never fail a student who answered the multiple-choice part.
  */
 export async function submitFinalExam(
   attemptId: number,
   userId: number,
   answers: Record<string, number[]>,
+  codeAnswers: Record<string, string> = {},
   timeSpentSeconds?: number,
   integritySignals?: unknown,
 ) {
@@ -202,20 +212,63 @@ export async function submitFinalExam(
   if (attempt.exam.kind !== 'FE') throw new AppError('Đề này không phải trắc nghiệm', 400);
 
   const questions = attempt.exam.questions;
-  const maxRaw = questions.reduce((s, q) => s + num(q.points), 0) || 1;
+  let maxRaw = 0;
   let raw = 0;
-  const perQuestion: Array<{ questionId: number; correct: boolean; selected: number[]; points: number }> = [];
+  const perQuestion: Array<{
+    questionId: number; points: number;
+    correct?: boolean; selected?: number[];
+    kind?: string; grade?: PeGradeResult; ungraded?: boolean;
+  }> = [];
 
   for (const q of questions) {
+    const points = num(q.points);
+
+    if (q.kind === 'CODE') {
+      const submitted = String(codeAnswers[String(q.id)] ?? '').trim();
+      if (!submitted) {
+        maxRaw += points;
+        perQuestion.push({
+          questionId: q.id, points, kind: 'CODE',
+          grade: {
+            score: 0, maxScore: points, percent: 0, verdict: 'fail',
+            summary: 'No answer submitted for this question.|||Bạn chưa nộp bài cho câu này.',
+            criteria: [], suggestions: [],
+          },
+        });
+        continue;
+      }
+      try {
+        const grade = await gradeCode({
+          userId, points,
+          prompt: q.prompt,
+          language: q.language,
+          expectedOutput: q.expectedOutput,
+          sampleSolution: q.sampleSolution,
+          rubric: q.rubric,
+          submittedCode: submitted,
+        });
+        maxRaw += points;
+        raw += grade.score;
+        perQuestion.push({ questionId: q.id, points, kind: 'CODE', grade });
+      } catch {
+        // AI down / quota hit — don't punish the candidate: this question is
+        // simply not part of the score. Flagged so the review page says so.
+        perQuestion.push({ questionId: q.id, points, kind: 'CODE', ungraded: true });
+      }
+      continue;
+    }
+
     const selected = Array.isArray(answers[String(q.id)]) ? answers[String(q.id)].map(Number) : [];
     const key = Array.isArray(q.correctIndexes) ? q.correctIndexes : [];
     const correct = key.length > 0 && sameSet(selected, key);
-    if (correct) raw += num(q.points);
-    perQuestion.push({ questionId: q.id, correct, selected, points: num(q.points) });
+    maxRaw += points;
+    if (correct) raw += points;
+    perQuestion.push({ questionId: q.id, points, correct, selected });
   }
 
+  const mcqResults = perQuestion.filter((p) => p.kind !== 'CODE');
   const totalPoints = num(attempt.exam.totalPoints) || 10;
-  const score = Math.round((raw / maxRaw) * totalPoints * 100) / 100;
+  const score = Math.round((raw / (maxRaw || 1)) * totalPoints * 100) / 100;
   const passed = score >= num(attempt.exam.passMark);
 
   const updated = await prisma.examAttempt.update({
@@ -225,8 +278,12 @@ export async function submitFinalExam(
       submittedAt: new Date(),
       timeSpentSeconds: Math.max(0, Math.floor(timeSpentSeconds ?? 0)),
       score, maxScore: totalPoints, passed,
-      answers: answers as object,
-      feedback: { perQuestion, correctCount: perQuestion.filter((p) => p.correct).length, total: questions.length } as object,
+      answers: { ...answers, ...codeAnswers } as object,
+      feedback: {
+        perQuestion,
+        correctCount: mcqResults.filter((p) => p.correct).length,
+        total: mcqResults.length,
+      } as object,
       integritySignals: (integritySignals ?? undefined) as object | undefined,
     },
   });

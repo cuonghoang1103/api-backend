@@ -11,8 +11,14 @@ useDefault = true
 # (khoá riêng tư, AWS, Stripe, GitHub token, Slack…) VẪN chặn bình thường ở
 # đây — nên một khoá thật lỡ dán vào giáo trình vẫn bị bắt.
 [[allowlists]]
-description = "Chuỗi mẫu trong giáo trình — chỉ tắt generic-api-key"
-targetRules = ["generic-api-key"]
+description = "Chuỗi mẫu trong giáo trình và đề thi — chỉ tắt generic-api-key và jwt"
+# `jwt` nằm đây vì đề thi chương 8 CỐ TÌNH in ra token mẫu để dạy: một token
+# `alg:none` không hề có chữ ký (đó chính là đòn tấn công đang được dạy) và một
+# token HS256 ký bằng khoá giả ghi ngay bên cạnh trong đề. Chúng không mở được
+# cái gì cả. Mọi rule chính xác khác — khoá riêng tư, AWS, Stripe, GitHub,
+# Slack — VẪN chặn ở đây, và rule `jwt` vẫn chặn bình thường ở mọi nơi khác
+# ngoài ba thư mục nội dung này.
+targetRules = ["generic-api-key", "jwt"]
 paths = [
-  '''content/(courses|exphub)/''',
+  '''content/(courses|exphub|exams)/''',
 ]

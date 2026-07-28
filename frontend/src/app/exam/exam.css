@@ -36,6 +36,9 @@
 .exam-badge-pe { background: rgba(139,92,246,.14); color: var(--exam-accent-2); border-color: rgba(139,92,246,.3); }
 .exam-badge-reading { background: rgba(20,184,166,.14); color: #0d9488; border-color: rgba(20,184,166,.3); }
 .exam-badge-speaking { background: rgba(236,72,153,.14); color: #db2777; border-color: rgba(236,72,153,.3); }
+/* Progress Test (PT) — MCQ paper that also carries 1–2 coding questions. */
+.exam-badge-pt { background: rgba(249,115,22,.14); color: #ea580c; border-color: rgba(249,115,22,.3); }
+html.theme-dark .exam-badge-pt { color: #fb923c; }
 .exam-badge-pass { background: rgba(16,185,129,.14); color: var(--exam-ok); border-color: rgba(16,185,129,.3); }
 .exam-badge-fail { background: rgba(239,68,68,.14); color: var(--exam-danger); border-color: rgba(239,68,68,.3); }
 .exam-badge-real { background: rgba(245,158,11,.14); color: var(--exam-warn); border-color: rgba(245,158,11,.3); }

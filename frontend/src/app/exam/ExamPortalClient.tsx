@@ -55,13 +55,18 @@ const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
 // peType:'SPEAK', already a real distinct value) — these helpers derive the
 // UI-facing category so Reading/Speaking get their own filter tab & badge
 // without touching grading/taking logic at all.
-type Category = 'FE' | 'PE' | 'READING' | 'SPEAKING';
-const FILTERS = ['ALL', 'FE', 'PE', 'READING', 'SPEAKING'] as const;
+// A Progress Test follows the same trick: kind:'FE' with a code starting
+// "PT" (PT1/PT2/PT3), so it auto-grades like any MCQ paper — the 1–2 coding
+// questions it also carries are graded by AI inside the same submit call.
+type Category = 'FE' | 'PE' | 'READING' | 'SPEAKING' | 'PT';
+const FILTERS = ['ALL', 'PT', 'FE', 'PE', 'READING', 'SPEAKING'] as const;
 type Filter = (typeof FILTERS)[number];
 
 function examCategory(e: { kind: string; peType?: string | null; code?: string | null }): Category {
   if (e.peType === 'SPEAK') return 'SPEAKING';
-  if (e.kind === 'FE' && (e.code || '').toUpperCase().startsWith('READ-')) return 'READING';
+  const code = (e.code || '').toUpperCase();
+  if (e.kind === 'FE' && code.startsWith('READ-')) return 'READING';
+  if (e.kind === 'FE' && /^PT\d/.test(code)) return 'PT';
   return e.kind === 'FE' ? 'FE' : 'PE';
 }
 
@@ -69,6 +74,7 @@ function examBadgeClass(e: { kind: string; peType?: string | null; code?: string
   const cat = examCategory(e);
   if (cat === 'READING') return 'exam-badge-reading';
   if (cat === 'SPEAKING') return 'exam-badge-speaking';
+  if (cat === 'PT') return 'exam-badge-pt';
   return cat === 'FE' ? 'exam-badge-fe' : 'exam-badge-pe';
 }
 
@@ -76,6 +82,7 @@ function examBadgeLabel(e: { kind: string; peType?: string | null; code?: string
   const cat = examCategory(e);
   if (cat === 'READING') return isVi ? 'Đọc' : 'Reading';
   if (cat === 'SPEAKING') return isVi ? 'Nói' : 'Speaking';
+  if (cat === 'PT') return isVi ? 'Kiểm tra tiến độ' : 'Progress Test';
   return cat === 'FE' ? 'FE' : `PE·${e.peType}`;
 }
 
@@ -83,6 +90,7 @@ function filterLabel(f: Filter, isVi: boolean): string {
   if (f === 'ALL') return isVi ? 'Tất cả' : 'All';
   if (f === 'READING') return isVi ? 'Đọc' : 'Reading';
   if (f === 'SPEAKING') return isVi ? 'Nói' : 'Speaking';
+  if (f === 'PT') return isVi ? 'Tiến độ (PT)' : 'Progress (PT)';
   return f;
 }
 

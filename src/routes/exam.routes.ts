@@ -112,8 +112,10 @@ router.get('/attempts/:attemptId', authenticate, async (req, res: Response<ApiRe
 router.post('/attempts/:attemptId/submit-fe', authenticate, async (req, res: Response<ApiResponse>, next) => {
   try {
     const answers = (req.body?.answers ?? {}) as Record<string, number[]>;
+    // Progress Tests mix MCQ with 1–2 coding questions answered in-room.
+    const codeAnswers = (req.body?.codeAnswers ?? {}) as Record<string, string>;
     const data = await examSvc.submitFinalExam(
-      Number(req.params.attemptId), req.userId!, answers,
+      Number(req.params.attemptId), req.userId!, answers, codeAnswers,
       Number(req.body?.timeSpentSeconds) || 0, req.body?.integritySignals,
     );
     res.json({ success: true, data });

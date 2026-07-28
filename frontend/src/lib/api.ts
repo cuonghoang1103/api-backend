@@ -1116,8 +1116,10 @@ export const examApi = {
   myAttempts: (examId?: number) =>
     api.get(`/exams/attempts/mine`, { params: examId ? { examId } : {} }),
   getAttempt: (attemptId: number) => api.get(`/exams/attempts/${attemptId}`),
-  submitFe: (attemptId: number, data: { answers: Record<string, number[]>; timeSpentSeconds?: number; integritySignals?: unknown }) =>
-    api.post(`/exams/attempts/${attemptId}/submit-fe`, data),
+  // codeAnswers: for mixed papers (Progress Test = MCQ + 1–2 coding questions).
+  // Those are AI-graded server-side, so allow well over the default timeout.
+  submitFe: (attemptId: number, data: { answers: Record<string, number[]>; codeAnswers?: Record<string, string>; timeSpentSeconds?: number; integritySignals?: unknown }) =>
+    api.post(`/exams/attempts/${attemptId}/submit-fe`, data, { timeout: 180000 }),
   submitCode: (attemptId: number, file: File, timeSpentSeconds?: number) => {
     const fd = new FormData();
     fd.append('file', file);

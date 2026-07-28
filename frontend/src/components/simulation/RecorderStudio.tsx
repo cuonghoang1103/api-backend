@@ -8,6 +8,7 @@
  *  2. Vòng lặp vẽ dừng khi tab bị ẩn, nên đừng chuyển tab lúc đang quay.
  */
 
+import { useCallback, useState } from 'react';
 import { Download, Film, Loader2, Mic, MicOff, Pause, Play, Share2, Square, Trash2, Volume2, VolumeX } from 'lucide-react';
 import type { Lang } from './types';
 import { QUALITY_PRESETS, getQuality, type useStudioRecorder } from './useStudioRecorder';
@@ -51,6 +52,65 @@ export default function RecorderStudio({ recorder, lang, muted, onToggleMute, au
   // cho phần bộ mã hoá vượt mức ở các khung khoá đầu clip (đo thực tế trên
   // clip ngắn: 4,5 Mb/s cho ra ~40 MB/phút thay vì 34 theo lý thuyết).
   const estBytes = ((preset.videoBps + 128_000) / 8) * (estimatedMs / 1000) * 1.15;
+
+  /* ── Chuyển sang MP4 ───────────────────────────────────────────
+     Trình duyệt chỉ xuất WebM (Safari là ngoại lệ), mà WebM thì QuickTime
+     không mở, iOS thường không phát, và phần lớn phần mềm dựng phim từ chối.
+     Chuyển ở client là bất khả: CSP `default-src 'self'` chặn ffmpeg.wasm từ
+     CDN. Nên gửi lên backend — nơi đã có sẵn ffmpeg cho đường nhạc — rồi tải
+     file trả về. */
+  const [converting, setConverting] = useState(false);
+  const [convertError, setConvertError] = useState<string | null>(null);
+
+  const convertToMp4 = useCallback(async () => {
+    const result = recorder.result;
+    if (!result || converting) return;
+    setConverting(true);
+    setConvertError(null);
+    try {
+      const base = result.filename.replace(/\.[^.]+$/, '');
+      const form = new FormData();
+      form.append('file', result.blob, result.filename);
+      form.append('name', base);
+
+      const res = await fetch('/api/v1/simulation/convert-mp4', {
+        method: 'POST',
+        body: form,
+        // Cookie phiên đi kèm: route yêu cầu đăng nhập để không thành một
+        // trạm chuyển mã miễn phí cho cả internet.
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        const detail = await res.json().catch(() => null);
+        throw new Error(detail?.message || `HTTP ${res.status}`);
+      }
+
+      const mp4 = await res.blob();
+      const url = URL.createObjectURL(mp4);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${base}.mp4`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      // Thu hồi trễ: Safari huỷ luôn lượt tải nếu URL bị thu hồi ngay lập tức.
+      window.setTimeout(() => URL.revokeObjectURL(url), 30_000);
+    } catch (err) {
+      setConvertError(
+        err instanceof Error && /401|Unauthor/i.test(err.message)
+          ? vi
+            ? 'Cần đăng nhập để dùng chức năng chuyển đổi.'
+            : 'You need to be signed in to convert.'
+          : err instanceof Error
+            ? err.message
+            : vi
+              ? 'Chuyển đổi thất bại.'
+              : 'Conversion failed.'
+      );
+    } finally {
+      setConverting(false);
+    }
+  }, [converting, recorder.result, vi]);
 
   return (
     <div className="space-y-3 rounded-xl border border-[#1d2740] bg-[#0a0f1e] p-3.5">
@@ -307,13 +367,27 @@ export default function RecorderStudio({ recorder, lang, muted, onToggleMute, au
                     {vi ? 'Lưu / Chia sẻ' : 'Save / Share'}
                   </button>
                 ) : null}
+                {/* MP4 là thứ người dùng THỰC SỰ cần: WebM của MediaRecorder
+                    không mở được bằng QuickTime, iOS hay phần lớn phần mềm
+                    dựng phim. Trình duyệt không tự chuyển được (CSP chặn
+                    ffmpeg.wasm từ CDN), nên gửi lên backend — nơi đã có sẵn
+                    ffmpeg cho đường nhạc. */}
+                <button
+                  type="button"
+                  onClick={convertToMp4}
+                  disabled={converting}
+                  className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-[#166534] bg-[#0c2318] px-3 py-1.5 text-[12px] font-bold text-[#86efac] transition-colors hover:border-[#22c55e] disabled:cursor-wait disabled:opacity-60"
+                >
+                  {converting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
+                  {converting ? (vi ? 'Đang chuyển…' : 'Converting…') : vi ? 'Tải .mp4' : 'Download .mp4'}
+                </button>
                 <button
                   type="button"
                   onClick={recorder.download}
-                  className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-[#166534] bg-[#0c2318] px-3 py-1.5 text-[12px] font-bold text-[#86efac] transition-colors hover:border-[#22c55e]"
+                  className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-[#243050] bg-[#0d1426] px-3 py-1.5 text-[12px] font-semibold text-[#8496b4] transition-colors hover:border-[#3b4a72] hover:text-[#c3cfe4]"
                 >
                   <Download className="h-3.5 w-3.5" />
-                  {vi ? 'Tải' : 'Download'} .{recorder.result.filename.split('.').pop()}
+                  .{recorder.result.filename.split('.').pop()}
                 </button>
                 <button
                   type="button"
@@ -324,14 +398,19 @@ export default function RecorderStudio({ recorder, lang, muted, onToggleMute, au
                   {vi ? 'Bỏ' : 'Discard'}
                 </button>
               </div>
+              {convertError ? (
+                <p className="rounded-lg border border-[#4a2020] bg-[#1d0c0c] p-2 text-[11.5px] leading-relaxed text-[#fca5a5]">
+                  {convertError}
+                </p>
+              ) : null}
               <details className="text-[11px] text-[#6f8098]">
                 <summary className="cursor-pointer select-none font-semibold text-[#7f8fab]">
-                  {vi ? 'Cần file .mp4?' : 'Need an .mp4?'}
+                  {vi ? 'Muốn tự chuyển bằng ffmpeg?' : 'Prefer to convert it yourself?'}
                 </summary>
                 <p className="mt-1.5 leading-relaxed">
                   {vi
-                    ? 'Trình duyệt chỉ xuất được WebM. Ngoài ra, WebM do MediaRecorder tạo ra KHÔNG ghi tổng thời lượng vào header, nên nhiều trình phát và phần mềm dựng phim không tua được. Chạy ffmpeg (có sẵn trong container backend) vừa sửa được điều đó vừa cho ra MP4:'
-                    : 'Browsers only export WebM. On top of that, MediaRecorder WebM carries no duration in its header, so many players and editors cannot seek it. Running ffmpeg (already present in the backend container) fixes that and gives you MP4:'}
+                    ? 'Nút "Tải .mp4" ở trên đã làm đúng việc này trên máy chủ rồi. Nếu muốn tự chạy để chỉnh thông số (chất lượng, độ phân giải), đây là lệnh tương đương:'
+                    : 'The "Download .mp4" button above already does this on the server. If you would rather run it yourself to tweak the settings, here is the equivalent command:'}
                 </p>
                 <code className="mt-1.5 block overflow-x-auto whitespace-pre rounded-md border border-[#1b2440] bg-[#070b16] p-2 font-mono text-[10.5px] leading-relaxed text-[#93c5fd]">
                   {`ffmpeg -i ${recorder.result.filename} \\\n  -c:v libx264 -crf 20 -preset slow \\\n  -c:a aac -b:a 192k \\\n  -movflags +faststart out.mp4`}

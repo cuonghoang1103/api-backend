@@ -43,7 +43,17 @@ function parseArgs(argv) {
     base: 'http://localhost:3300',
     lang: 'vi',
     fps: 30,
-    crf: 20,
+    // CRF 18 chứ không phải 20. Đo trên chính bài 2.2 (1197 khung 1080p),
+    // SSIM giữa video và dãy PNG gốc — riêng VÙNG CHỮ của khung mã, nơi nén
+    // làm hỏng trước tiên:
+    //   CRF 16 → 2,77 MB/phút · SSIM 0,999088 (toàn khung)
+    //   CRF 18 → 2,40 MB/phút · SSIM 0,998775 · vùng chữ 0,998579
+    //   CRF 20 → 2,09 MB/phút · SSIM 0,998359 · vùng chữ 0,998072
+    //   CRF 23 → 1,72 MB/phút · SSIM 0,997439 · vùng chữ 0,996956
+    // 18 đắt hơn 20 khoảng 15% dung lượng mà chữ nét hơn đo được. Cả bộ ~20
+    // video bài giảng chỉ tốn ~40MB trên R2 nên không có lý do tiết kiệm ở đây.
+    // ĐỪNG hạ keyint xuống 60 để tua mượt: đo được 1,59 MB → 3,81 MB (2,4 lần).
+    crf: 18,
     outDir: path.resolve('_render'),
     tailMs: 1500,
     // Video bài giảng chạy CHẬM hơn bản xem trên trang: ở 1× người xem vừa kịp

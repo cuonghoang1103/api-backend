@@ -19,6 +19,7 @@ import { uploadScenario } from './upload';
 import { nPlusOneScenario } from './nPlusOne';
 import { webhookScenario } from './webhook';
 import { nodejsEventLoopScenario } from './nodejsEventLoop';
+import { nodejsMicrotaskScenario } from './nodejsMicrotask';
 
 // Thứ tự trong mảng = thứ tự hiện trên bảng chọn, và nó là thứ tự SƯ PHẠM:
 // nền tảng trước (REST → đệm → xác thực → CSDL), rồi tới realtime và kiến
@@ -39,6 +40,7 @@ export const SCENARIOS: Scenario[] = [
   // ── Mục Node.js — mỗi kịch bản dựng video cho MỘT bài trong khoá
   // `content/courses/nodejs`. Thứ tự ở đây theo thứ tự chương.
   nodejsEventLoopScenario,
+  nodejsMicrotaskScenario,
 ];
 
 /**

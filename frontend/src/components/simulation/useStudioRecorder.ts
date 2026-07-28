@@ -39,6 +39,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { withWebmDuration } from './fixWebmDuration';
 import type { SoundEngine } from './useSoundEngine';
 
 export type RecorderState = 'idle' | 'recording' | 'paused';
@@ -70,23 +71,23 @@ export const QUALITY_PRESETS: QualityPreset[] = [
   {
     id: 'high',
     fps: 60,
-    videoBps: 10_000_000,
+    videoBps: 5_000_000,
     label: { vi: 'Nét tối đa', en: 'Maximum' },
-    note: { vi: '10 Mb/s · 60fps · ~80 MB mỗi phút — dành cho bản lưu trữ gốc', en: '10 Mbps · 60fps · ~80 MB per minute — for an archival master' },
+    note: { vi: '5 Mb/s · 60fps · ~43 MB mỗi phút — dành cho bản lưu trữ gốc', en: '5 Mbps · 60fps · ~43 MB per minute — for an archival master' },
   },
   {
     id: 'balanced',
-    fps: 60,
-    videoBps: 4_500_000,
+    fps: 30,
+    videoBps: 2_500_000,
     label: { vi: 'Cân bằng', en: 'Balanced' },
-    note: { vi: '4,5 Mb/s · 60fps · ~38 MB mỗi phút — vẫn nét chữ, hợp để đăng tải', en: '4.5 Mbps · 60fps · ~38 MB per minute — text stays crisp, ideal for publishing' },
+    note: { vi: '2,5 Mb/s · 30fps · ~22 MB mỗi phút — vẫn nét chữ, hợp để đăng tải', en: '2.5 Mbps · 30fps · ~22 MB per minute — text stays crisp, ideal for publishing' },
   },
   {
     id: 'light',
     fps: 30,
-    videoBps: 2_200_000,
+    videoBps: 1_200_000,
     label: { vi: 'Nhẹ', en: 'Light' },
-    note: { vi: '2,2 Mb/s · 30fps · ~19 MB mỗi phút — gửi qua chat, nhúng vào bài học', en: '2.2 Mbps · 30fps · ~19 MB per minute — for chat and embedding in lessons' },
+    note: { vi: '1,2 Mb/s · 30fps · ~11 MB mỗi phút — gửi qua chat, nhúng vào bài học', en: '1.2 Mbps · 30fps · ~11 MB per minute — for chat and embedding in lessons' },
   },
 ];
 
@@ -132,6 +133,8 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
   const [micReady, setMicReady] = useState(false);
   const [elapsedMs, setElapsedMs] = useState(0);
   const [result, setResult] = useState<RecordingResult | null>(null);
+  /** Đang vá header sau khi dừng ghi — vài chục mili giây. */
+  const [finalising, setFinalising] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [supported, setSupported] = useState(true);
 
@@ -271,23 +274,32 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
     };
     recorder.onerror = () => setError('Quá trình ghi gặp lỗi và đã dừng.');
     recorder.onstop = () => {
-      const blob = new Blob(chunksRef.current, { type: mimeType });
+      const raw = new Blob(chunksRef.current, { type: mimeType });
       chunksRef.current = [];
-      const url = URL.createObjectURL(blob);
-      lastUrlRef.current = url;
       const durationMs = performance.now() - startedAtRef.current - pausedTotalRef.current;
-      setResult({
-        url,
-        blob,
-        mimeType,
-        sizeBytes: blob.size,
-        durationMs,
-        filename: `${baseName || 'simulation'}.webm`,
-      });
       setState('idle');
       stopTimer();
       canvasStreamRef.current?.getTracks().forEach((t) => t.stop());
       canvasStreamRef.current = null;
+
+      // Ghi thời lượng thật vào header trước khi giao file cho người dùng.
+      // MediaRecorder ghi theo luồng nên bỏ trống trường này, khiến trình phát
+      // và phần mềm dựng đọc sai độ dài. Vá thất bại thì dùng nguyên bản gốc.
+      setFinalising(true);
+      void withWebmDuration(raw, durationMs)
+        .then((blob) => {
+          const url = URL.createObjectURL(blob);
+          lastUrlRef.current = url;
+          setResult({
+            url,
+            blob,
+            mimeType,
+            sizeBytes: blob.size,
+            durationMs,
+            filename: `${baseName || 'simulation'}.webm`,
+          });
+        })
+        .finally(() => setFinalising(false));
     };
 
     // timeslice 1000ms: chunk được đẩy ra mỗi giây thay vì dồn tới lúc stop.
@@ -357,6 +369,7 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
     supported,
     elapsedMs,
     result,
+    finalising,
     error,
     micEnabled,
     micReady,

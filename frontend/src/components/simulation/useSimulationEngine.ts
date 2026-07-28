@@ -1,28 +1,43 @@
 'use client';
 
 /**
- * Đồng hồ mô phỏng — bước thời gian CỐ ĐỊNH.
+ * Đồng hồ mô phỏng — chạy theo THỜI GIAN THẬT, không theo số khung.
  *
- * Mỗi khung hình đẩy mô phỏng đi đúng 1000/60 ms (nhân với hệ số tốc độ),
- * BẤT KỂ khung đó thực tế mất bao lâu để vẽ. Đây là khác biệt cốt lõi so
- * với cách làm thông thường (lấy delta của performance.now()):
+ * BÀI HỌC ĐẮT GIÁ (28/07/2026)
+ * ---------------------------
+ * Bản đầu đẩy mô phỏng đi đúng 1000/60 ms mỗi lần requestAnimationFrame, với
+ * lập luận "đếm khung thì tất định, chạy lại lần nào cũng khớp". Lập luận đó
+ * SAI ở một điểm chí mạng: rAF không chạy 60 lần mỗi giây trên mọi máy. Trên
+ * màn ProMotion 120Hz (đo được đúng 120,5 fps), rAF nổ gấp đôi, nên mô phỏng
+ * chạy nhanh gấp đôi thời gian thực. Hậu quả người dùng gặp phải: đặt tốc độ
+ * 0,25× rồi quay, đáng lẽ ra video 28 giây thì chỉ được 15 giây, và mọi hoạt
+ * cảnh đều lướt nhanh bất thường.
  *
- *   • Tất định — cùng kịch bản, cùng tốc độ thì luôn ra đúng cùng một dãy
- *     khung hình. Playwright dựng lại video bài giảng lần thứ hai sẽ khớp
- *     từng khung với lần thứ nhất.
- *   • Không "nhảy cóc" — máy yếu chỉ làm video chạy chậm hơn theo đồng hồ
- *     tường, chứ không làm gói tin dịch chuyển giật cục.
- *   • Không đọc giờ hệ thống ở bất kỳ đâu.
+ * Điều trớ trêu là cách đếm khung còn KÉM tái lặp hơn: độ dài video xuất ra
+ * phụ thuộc vào tần số quét của màn hình người quay. Còn cách hiện tại — cộng
+ * dồn delta thật — cho ra video dài đúng bằng nhau trên mọi máy, mà đó mới
+ * chính là thứ cần tái lặp khi dựng video hàng loạt.
  *
- * Đổi lại: nếu trình duyệt tụt xuống 30fps thì mô phỏng cũng chậm đi một
- * nửa theo thời gian thực. Với một trang chỉ vẽ vài chục hình khối thì điều
- * đó gần như không xảy ra, và đánh đổi này rẻ hơn nhiều so với mất tính lặp lại.
+ * `frame` vẫn được giữ làm "khung ảo ở 60fps" (cộng dồn theo delta thật) để
+ * mọi phép tính nhấp nháy/xoay trong trình vẽ giữ nguyên nhịp cảm nhận, bất
+ * kể màn hình 60Hz hay 120Hz.
+ *
+ * Delta bị chặn trên ở MAX_FRAME_MS: khi người dùng chuyển sang tab khác, rAF
+ * ngừng chạy và lúc quay lại delta có thể lên tới vài giây — không chặn thì
+ * mô phỏng nhảy vọt qua vài bước.
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { SimStep } from './types';
 
+/** Một "khung ảo" quy ước ở 60fps — đơn vị của bộ đếm `frame`. */
 export const FRAME_MS = 1000 / 60;
+
+/**
+ * Trần cho một bước delta. Chuyển tab làm rAF ngừng hẳn; lúc quay lại delta
+ * có thể vài giây và mô phỏng sẽ nhảy qua mất mấy bước nếu không chặn.
+ */
+const MAX_FRAME_MS = 100;
 
 /** Các mức tốc độ phát. 1× là thời lượng gốc ghi trong kịch bản. */
 export const SPEEDS = [0.25, 0.5, 1, 1.5, 2, 3] as const;
@@ -31,25 +46,28 @@ export const SPEEDS = [0.25, 0.5, 1, 1.5, 2, 3] as const;
 export const LOOP_CHOICES = [1, 2, 3, 0] as const;
 
 /**
- * Số khung giữ nguyên màn kết thúc trước khi vào vòng mới (~1,2 giây ở 60fps).
+ * Thời gian giữ nguyên màn kết thúc trước khi vào vòng mới.
  *
  * Không có khoảng nghỉ này thì vòng mới bắt đầu ngay khi vòng cũ vừa dứt, và
  * người xem không kịp nhận ra một vòng đã khép lại — họ tưởng hoạt cảnh bị
  * giật chứ không hiểu là đang xem lại.
  */
-const HOLD_FRAMES = 72;
+const HOLD_MS = 1200;
 
 export interface EngineSnapshot {
   stepIndex: number;
   /** Tiến độ 0..1 trong bước hiện tại. */
   stepProgress: number;
-  /** Số khung đã vẽ kể từ khi gắn — trục thời gian của hoạt ảnh nền. */
+  /**
+   * "Khung ảo ở 60fps" đã trôi qua — trục thời gian của hoạt ảnh nền.
+   * Cộng dồn theo thời gian THẬT nên nhịp nhấp nháy giống nhau ở mọi tần số quét.
+   */
   frame: number;
   playing: boolean;
   finished: boolean;
   /** Vòng hiện tại, đếm từ 0. */
   loop: number;
-  /** Số khung còn phải giữ màn kết thúc trước khi sang vòng mới. */
+  /** Số mili-giây còn phải giữ màn kết thúc trước khi sang vòng mới. */
   holding: number;
 }
 
@@ -64,6 +82,9 @@ export function useSimulationEngine({ steps, onStepEnter, onFinish }: UseSimulat
   const snap = useRef<EngineSnapshot>({ stepIndex: 0, stepProgress: 0, frame: 0, playing: false, finished: false, loop: 0, holding: 0 });
   const speedRef = useRef(1);
   const loopsRef = useRef(1);
+  /** Mốc thời gian của khung trước — null ở khung đầu tiên. */
+  const lastTsRef = useRef<number | null>(null);
+  const lastUiBucketRef = useRef(-1);
 
   // Chỉ những gì giao diện React thực sự cần mới nằm trong state — tiến độ
   // trong bước được cập nhật giới hạn (xem UI_TICK_EVERY) để không render
@@ -94,15 +115,23 @@ export function useSimulationEngine({ steps, onStepEnter, onFinish }: UseSimulat
     setUiTick((t) => t + 1);
   }, [steps]);
 
-  /** Đẩy mô phỏng đi đúng một khung. Trình vẽ gọi hàm này mỗi vòng rAF. */
+  /** Đẩy mô phỏng đi một khung. Trình vẽ gọi hàm này mỗi vòng rAF. */
   const advance = useCallback(() => {
     const s = snap.current;
-    s.frame += 1;
+
+    // Delta THẬT giữa hai khung. Đây là điểm khác biệt sống còn so với bản
+    // đầu (cộng cứng 1000/60): trên màn 120Hz bản cũ chạy nhanh gấp đôi.
+    const now = performance.now();
+    const raw = lastTsRef.current == null ? FRAME_MS : now - lastTsRef.current;
+    lastTsRef.current = now;
+    const delta = Math.min(Math.max(raw, 0), MAX_FRAME_MS);
+
+    s.frame += delta / FRAME_MS;
     if (!s.playing || steps.length === 0) return;
 
     // Đang giữ màn kết thúc giữa hai vòng: đếm ngược rồi mở vòng mới.
     if (s.holding > 0) {
-      s.holding -= 1;
+      s.holding = Math.max(0, s.holding - delta);
       if (s.holding === 0) {
         s.loop += 1;
         s.stepIndex = 0;
@@ -116,7 +145,7 @@ export function useSimulationEngine({ steps, onStepEnter, onFinish }: UseSimulat
       return;
     }
 
-    let remaining = FRAME_MS * speedRef.current;
+    let remaining = delta * speedRef.current;
     // Vòng lặp để tốc độ cao (3×) vẫn có thể vượt qua nhiều bước ngắn trong
     // một khung mà không mất bước nào.
     while (remaining > 0) {
@@ -138,7 +167,7 @@ export function useSimulationEngine({ steps, onStepEnter, onFinish }: UseSimulat
         if (moreToGo) {
           // Giữ màn kết thúc rồi tự mở vòng mới — KHÔNG gọi onFinish, vì với
           // phòng thu thì "xong" nghĩa là xong TẤT CẢ các vòng.
-          s.holding = HOLD_FRAMES;
+          s.holding = HOLD_MS;
           return;
         }
         s.playing = false;
@@ -152,8 +181,14 @@ export function useSimulationEngine({ steps, onStepEnter, onFinish }: UseSimulat
       onStepEnterRef.current?.(s.stepIndex, steps[s.stepIndex]);
     }
 
-    // Nhịp cập nhật giao diện: 10 lần/giây là quá đủ cho thanh tiến trình.
-    if (s.frame % UI_TICK_EVERY === 0) setUiTick((t) => t + 1);
+    // Nhịp cập nhật giao diện: ~10 lần/giây là quá đủ cho thanh tiến trình.
+    // `frame` giờ là số THỰC nên `% 6 === 0` gần như không bao giờ đúng —
+    // phải so sánh phần nguyên của nhóm thay vì lấy dư.
+    const bucket = Math.floor(s.frame / UI_TICK_EVERY);
+    if (bucket !== lastUiBucketRef.current) {
+      lastUiBucketRef.current = bucket;
+      setUiTick((t) => t + 1);
+    }
   }, [steps]);
 
   /* ── Điều khiển ───────────────────────────────────────────── */

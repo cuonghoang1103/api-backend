@@ -105,6 +105,7 @@ export default function SimulationStudio() {
   const autoRunRef = useRef(true);
   autoRunRef.current = autoRun;
   const recorderRef = useRef<ReturnType<typeof useStudioRecorder> | null>(null);
+  const autoStopTimerRef = useRef<number | null>(null);
 
   const engine = useSimulationEngine({
     steps,
@@ -116,7 +117,12 @@ export default function SimulationStudio() {
       const rec = recorderRef.current;
       if (!autoRunRef.current || !rec || rec.state === 'idle') return;
       // Giữ thêm một nhịp để khung kết thúc kịp lọt vào video, rồi mới cắt.
-      window.setTimeout(() => rec.stop(), 1400);
+      // Lưu id hẹn giờ để lần quay sau HUỶ được: nếu người dùng tự bấm dừng
+      // rồi quay lại ngay, cái hẹn giờ cũ sẽ cắt ngang bản ghi mới.
+      autoStopTimerRef.current = window.setTimeout(() => {
+        autoStopTimerRef.current = null;
+        rec.stop();
+      }, 1400);
     }, []),
   });
 
@@ -129,6 +135,12 @@ export default function SimulationStudio() {
 
   /** Bấm quay: mở bản ghi trước, rồi mới cho kịch bản chạy lại từ đầu. */
   const handleStartRecording = useCallback(async () => {
+    // Huỷ hẹn giờ tự-dừng còn sót của lần quay trước, nếu không nó sẽ cắt
+    // ngang bản ghi mới ngay khi vừa bắt đầu.
+    if (autoStopTimerRef.current != null) {
+      window.clearTimeout(autoStopTimerRef.current);
+      autoStopTimerRef.current = null;
+    }
     await recorder.start();
     if (!autoRunRef.current) return;
     engine.restart();
@@ -260,11 +272,19 @@ export default function SimulationStudio() {
 
   /* ── Tự phát theo tham số URL ─────────────────────────────── */
 
-  // Số vòng mặc định lấy từ URL (mặc định 2 vòng — xem ghi chú ở LOOP_CHOICES).
-  const loopsInit = useRef(false);
+  /**
+   * Áp tốc độ và số vòng từ URL.
+   *
+   * Trước đây `setSpeed` nằm TRONG nhánh autoplay, nên mở link có `speed=0.25`
+   * mà không kèm `autoplay=1` thì tốc độ bị bỏ qua lặng lẽ — engine chạy 1×
+   * rồi `buildQuery` xoá luôn tham số khỏi URL, khiến link gửi cho người khác
+   * mất thiết lập. Phải áp ở đây, độc lập với autoplay.
+   */
+  const paramsInit = useRef(false);
   useEffect(() => {
-    if (loopsInit.current) return;
-    loopsInit.current = true;
+    if (paramsInit.current) return;
+    paramsInit.current = true;
+    engine.setSpeed(initial.current.speed);
     engine.setLoops(initial.current.loops);
   }, [engine]);
 
@@ -272,7 +292,6 @@ export default function SimulationStudio() {
   useEffect(() => {
     if (autoplayDone.current || !initial.current.autoplay) return;
     autoplayDone.current = true;
-    engine.setSpeed(initial.current.speed);
     // Chờ một nhịp để canvas kịp vẽ khung đầu — nếu quay ngay, khung mở đầu
     // của video sẽ là một ô đen.
     const t = window.setTimeout(() => engine.play(), 400);
@@ -573,6 +592,7 @@ export default function SimulationStudio() {
                         onToggleAutoRun={() => setAutoRun((v) => !v)}
                         estimatedMs={estimatedRunMs}
                         onStart={handleStartRecording}
+                        speed={engine.speed}
                       />
                     </div>
                   </>
@@ -594,6 +614,7 @@ export default function SimulationStudio() {
                         onToggleAutoRun={() => setAutoRun((v) => !v)}
                         estimatedMs={estimatedRunMs}
                         onStart={handleStartRecording}
+                        speed={engine.speed}
                       />
             <div className="max-h-[calc(100vh-22rem)] overflow-hidden rounded-2xl border border-[#141c31] bg-[#070b16]">
               <InspectorPanel steps={steps} stepIndex={engine.stepIndex} lang={lang} />

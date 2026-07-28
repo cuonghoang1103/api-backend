@@ -8,8 +8,7 @@
  *  2. Vòng lặp vẽ dừng khi tab bị ẩn, nên đừng chuyển tab lúc đang quay.
  */
 
-import { useCallback } from 'react';
-import { Download, Film, Mic, MicOff, Pause, Play, Square, Trash2, Volume2, VolumeX } from 'lucide-react';
+import { Download, Film, Loader2, Mic, MicOff, Pause, Play, Square, Trash2, Volume2, VolumeX } from 'lucide-react';
 import type { Lang } from './types';
 import { QUALITY_PRESETS, getQuality, type useStudioRecorder } from './useStudioRecorder';
 import { tr } from './types';
@@ -26,6 +25,8 @@ interface Props {
   estimatedMs: number;
   /** Bắt đầu quay — do trang mẹ xử lý vì nó còn phải khởi động kịch bản. */
   onStart: () => void;
+  /** Tốc độ phát hiện tại — dùng để cảnh báo khi quay ở tốc độ chậm. */
+  speed: number;
 }
 
 function clock(ms: number): string {
@@ -40,36 +41,11 @@ function formatBytes(n: number): string {
   return `${(n / 1024 / 1024).toFixed(1)} MB`;
 }
 
-/**
- * WebM do MediaRecorder sinh ra KHÔNG ghi tổng thời lượng vào header, nên
- * `video.duration` trả về Infinity và thanh điều khiển của trình duyệt hiển
- * thị sai — thường là một con số vài giây, khiến người dùng tưởng bản ghi bị
- * cụt trong khi file thực chất đầy đủ.
- *
- * Mẹo chuẩn để ép trình duyệt tự đo: tua tới một mốc thời gian vô lý lớn,
- * trình duyệt buộc phải quét tới cuối luồng và từ đó biết độ dài thật, rồi
- * đưa con trỏ về 0. Chỉ sửa được phần HIỂN THỊ; muốn sửa hẳn trong file thì
- * phải remux bằng ffmpeg (lệnh có ở cuối bảng này).
- */
-function useFixWebmDuration() {
-  return useCallback((e: React.SyntheticEvent<HTMLVideoElement>) => {
-    const video = e.currentTarget;
-    if (Number.isFinite(video.duration) && video.duration > 0) return;
-    const onTimeUpdate = () => {
-      video.removeEventListener('timeupdate', onTimeUpdate);
-      video.currentTime = 0;
-    };
-    video.addEventListener('timeupdate', onTimeUpdate);
-    video.currentTime = 1e101;
-  }, []);
-}
-
-export default function RecorderStudio({ recorder, lang, muted, onToggleMute, autoRun, onToggleAutoRun, estimatedMs, onStart }: Props) {
+export default function RecorderStudio({ recorder, lang, muted, onToggleMute, autoRun, onToggleAutoRun, estimatedMs, onStart, speed }: Props) {
   const vi = lang === 'vi';
   const recording = recorder.state === 'recording';
   const paused = recorder.state === 'paused';
   const live = recording || paused;
-  const fixDuration = useFixWebmDuration();
   const preset = getQuality(recorder.quality);
   // Ước lượng dung lượng = (bitrate hình + tiếng) × thời lượng, cộng ~15%
   // cho phần bộ mã hoá vượt mức ở các khung khoá đầu clip (đo thực tế trên
@@ -162,6 +138,16 @@ export default function RecorderStudio({ recorder, lang, muted, onToggleMute, au
                 })}
               </div>
               <p className="mt-1.5 text-[11px] leading-relaxed text-[#6f8098]">{tr(preset.note, lang)}</p>
+              {/* Quay ở tốc độ chậm là cách tốn dung lượng nhất: cùng một nội
+                  dung nhưng file dài gấp bội, mà bộ mã hoá vẫn tiêu đủ bitrate
+                  cho từng giây. Muốn video dài thì tăng SỐ VÒNG rẻ hơn nhiều. */}
+              {speed < 1 ? (
+                <p className="mt-1.5 rounded-md border border-[#3f3410] bg-[#1a1503] p-2 text-[11px] leading-relaxed text-[#e2cf9a]">
+                  {vi
+                    ? `Đang quay ở tốc độ ${speed}× nên file dài gấp ${Math.round(1 / speed)} lần và nặng tương ứng. Muốn video dài hơn để dễ theo dõi, tăng SỐ VÒNG ở thanh điều khiển sẽ tiết kiệm hơn nhiều — vì mỗi vòng là nội dung mới chứ không phải cùng một khung hình kéo giãn.`
+                    : `Recording at ${speed}× makes the file ${Math.round(1 / speed)}× longer and correspondingly heavier. If you want a longer video to follow along with, raising the LOOP COUNT in the transport bar is far cheaper — each loop is fresh content rather than the same frame stretched out.`}
+                </p>
+              ) : null}
             </div>
           ) : null}
 
@@ -248,6 +234,13 @@ export default function RecorderStudio({ recorder, lang, muted, onToggleMute, au
             </p>
           ) : null}
 
+          {recorder.finalising ? (
+            <p className="inline-flex items-center gap-2 rounded-lg border border-[#243050] bg-[#0d1426] p-2.5 text-[12px] text-[#93a4c4]">
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              {vi ? 'Đang ghi thời lượng vào file…' : 'Writing the duration into the file…'}
+            </p>
+          ) : null}
+
           {recorder.result ? (
             <div className="space-y-2 rounded-lg border border-[#1e3a2e] bg-[#08160f] p-2.5">
               <div className="flex items-center justify-between text-[12px]">
@@ -259,15 +252,9 @@ export default function RecorderStudio({ recorder, lang, muted, onToggleMute, au
               <video
                 src={recorder.result.url}
                 controls
-                onLoadedMetadata={fixDuration}
                 className="w-full rounded-md border border-[#1b2440] bg-black"
                 preload="metadata"
               />
-              <p className="text-[11px] leading-relaxed text-[#6f8098]">
-                {vi
-                  ? 'Nếu thanh thời gian của trình phát hiện sai vài giây: file vẫn đầy đủ, chỉ là WebM của MediaRecorder không ghi tổng thời lượng vào header. Lệnh ffmpeg bên dưới vá đúng chỗ đó.'
-                  : 'If the player\'s timeline reads only a couple of seconds: the file is complete — MediaRecorder\'s WebM simply omits the total duration from its header. The ffmpeg command below patches exactly that.'}
-              </p>
               <div className="flex gap-2">
                 <button
                   type="button"

@@ -61,6 +61,8 @@ import { deadlockScenario } from './deadlock';
 import { syscallScenario } from './syscall';
 import { tcpHandshakeScenario } from './tcpHandshake';
 import { tcpWindowScenario } from './tcpWindow';
+import { ipJourneyScenario } from './ipJourney';
+import { osiLayersScenario } from './osiLayers';
 import { nodejsCacheAsideScenario } from './nodejsCacheAside';
 import { nodejsAtomicScenario } from './nodejsAtomic';
 import { nodejsRetryScenario } from './nodejsRetry';
@@ -151,6 +153,8 @@ export const SCENARIOS: Scenario[] = [
   // vốn có thể làm mất, làm trùng và giao lộn thứ tự gói.
   tcpHandshakeScenario,
   tcpWindowScenario,
+  ipJourneyScenario,
+  osiLayersScenario,
 ];
 
 /**

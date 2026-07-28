@@ -697,6 +697,18 @@ function drawChartPanel(
   const px = (x: number) => plot.x + (clamp01(x / maxX)) * plot.w;
   const py = (y: number) => plot.y + plot.h - clamp01(y / maxY) * plot.h;
 
+  // Nhãn tên chuỗi đặt ở đầu đường. Hai đường KẾT THÚC SÁT NHAU thì hai nhãn
+  // chồng lên nhau thành một đống chữ không đọc được — mà "hai đường trùng
+  // nhau" lại đúng là điều đáng dạy (cache có trần chạy y hệt app không
+  // cache). Nên nhớ các cao độ đã dùng rồi đẩy nhãn sau xuống dưới.
+  const labelYs: number[] = [];
+  const freeLabelY = (y: number): number => {
+    let out = y;
+    while (labelYs.some((used) => Math.abs(used - out) < 17)) out += 19;
+    labelYs.push(out);
+    return out;
+  };
+
   series.forEach((s) => {
     const pts = rt.points[s.id] ?? [];
     if (pts.length === 0) return;
@@ -736,7 +748,11 @@ function drawChartPanel(
     ctx.font = `700 14px ${SANS}`;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
-    ctx.fillText(s.label, Math.min(px(tail.x) + 10, plot.x + plot.w - 90), py(tail.y) - 12);
+    ctx.fillText(
+      s.label,
+      Math.min(px(tail.x) + 10, plot.x + plot.w - ctx.measureText(s.label).width - 4),
+      freeLabelY(py(tail.y) - 12)
+    );
   });
 
   if (spec.xLabel) {

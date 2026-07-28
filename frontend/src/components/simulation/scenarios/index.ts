@@ -29,6 +29,18 @@ import { nodejsMiddlewareScenario } from './nodejsMiddleware';
 import { nodejsErrorHandlingScenario } from './nodejsErrorHandling';
 import { nodejsPaginationScenario } from './nodejsPagination';
 import { nodejsContractScenario } from './nodejsContract';
+import { nodejsNPlusOneScenario } from './nodejsNPlusOne';
+import { nodejsIndexScenario } from './nodejsIndex';
+import { nodejsJwtScenario } from './nodejsJwt';
+import { nodejsCacheAsideScenario } from './nodejsCacheAside';
+import { nodejsAtomicScenario } from './nodejsAtomic';
+import { nodejsRetryScenario } from './nodejsRetry';
+import { nodejsClusterScenario } from './nodejsCluster';
+import { nodejsMemoryLeakScenario } from './nodejsMemoryLeak';
+import { nodejsInputAttacksScenario } from './nodejsInputAttacks';
+import { nodejsBlueGreenScenario } from './nodejsBlueGreen';
+import { dockerLayersScenario } from './dockerLayers';
+import { dockerContainerScenario } from './dockerContainer';
 
 // Thứ tự trong mảng = thứ tự hiện trên bảng chọn, và nó là thứ tự SƯ PHẠM:
 // nền tảng trước (REST → đệm → xác thực → CSDL), rồi tới realtime và kiến
@@ -59,6 +71,21 @@ export const SCENARIOS: Scenario[] = [
   nodejsErrorHandlingScenario,
   nodejsPaginationScenario,
   nodejsContractScenario,
+  nodejsNPlusOneScenario,
+  nodejsIndexScenario,
+  nodejsJwtScenario,
+  nodejsInputAttacksScenario,
+  nodejsCacheAsideScenario,
+  nodejsAtomicScenario,
+  nodejsRetryScenario,
+  nodejsClusterScenario,
+  nodejsMemoryLeakScenario,
+  nodejsBlueGreenScenario,
+
+  // ── Mục VPS & Docker — hạ tầng thật đang chạy cuongthai.com: tầng ảnh,
+  // container, compose, reverse proxy, bộ nhớ VPS và đường deploy.
+  dockerLayersScenario,
+  dockerContainerScenario,
 ];
 
 /**
@@ -79,6 +106,15 @@ export const SCENARIO_GROUPS: ScenarioGroup[] = [
     name: { vi: 'Node.js', en: 'Node.js' },
     blurb: { vi: 'Đi kèm khoá Node.js trong Khoá học', en: 'Companion to the Node.js course' },
     accent: '#34d399',
+  },
+  {
+    id: 'devops',
+    name: { vi: 'VPS & Docker', en: 'VPS & Docker' },
+    blurb: {
+      vi: 'Ảnh, container, reverse proxy và đường deploy lên máy chủ',
+      en: 'Images, containers, reverse proxy and the path to production',
+    },
+    accent: '#38bdf8',
   },
 ];
 

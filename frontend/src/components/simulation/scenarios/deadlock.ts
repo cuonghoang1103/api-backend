@@ -260,6 +260,13 @@ export const deadlockScenario: Scenario = {
   icon: Split,
   accent: '#f43f5e',
   group: 'os',
+  lesson: {
+    course: 'operating-systems',
+    subject: 'OSG202',
+    code: '6.1',
+    slug: 'osg202-6-1-deadlock',
+    title: { vi: 'Deadlock: điều kiện, phát hiện & phòng tránh', en: 'Deadlock: conditions, detection & prevention' },
+  },
   nodes,
   edges,
   options: [

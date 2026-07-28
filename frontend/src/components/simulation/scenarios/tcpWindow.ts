@@ -292,6 +292,13 @@ export const tcpWindowScenario: Scenario = {
   icon: Gauge,
   accent: '#34d399',
   group: 'network',
+  lesson: {
+    course: 'computer-networking',
+    subject: 'NWC203c',
+    code: '6.1',
+    slug: 'nwc203c-6-1-tcp',
+    title: { vi: 'Bắt tay TCP & điều khiển luồng', en: 'TCP handshake & flow control' },
+  },
   nodes: [],
   edges: [],
   panels: PANELS,

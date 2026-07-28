@@ -360,6 +360,13 @@ export const hashMapScenario: Scenario = {
   icon: Grid3x3,
   accent: '#a78bfa',
   group: 'oop',
+  lesson: {
+    course: 'data-structures-and-algorithms',
+    subject: 'CSD201',
+    code: '7.1',
+    slug: 'csd201-bam',
+    title: { vi: 'Bảng băm & va chạm', en: 'Hash tables & collisions' },
+  },
   nodes: [],
   edges: [],
   panels,

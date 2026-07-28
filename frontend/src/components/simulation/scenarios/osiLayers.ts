@@ -322,6 +322,13 @@ export const osiLayersScenario: Scenario = {
   icon: Layers,
   accent: '#a78bfa',
   group: 'network',
+  lesson: {
+    course: 'computer-networking',
+    subject: 'NWC203c',
+    code: '1.1',
+    slug: 'nwc203c-1-1-phan-tang',
+    title: { vi: 'Mạng, dịch vụ & mô hình phân tầng', en: 'Networks, services & the layered model' },
+  },
   nodes: [],
   edges: [],
   panels: PANELS,

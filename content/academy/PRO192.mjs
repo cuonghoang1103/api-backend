@@ -475,6 +475,10 @@ export default {
         {
           title: '2.1 — Fields, methods & constructors|||2.1 — Trường, phương thức & constructor',
           slug: 'pro192-2-1-lop-doi-tuong',
+          simulation: {
+            scenario: 'stack-heap',
+            caption: { en: 'Stack holds the reference, heap holds the object', vi: 'Ngăn xếp giữ tham chiếu, vùng heap giữ đối tượng' },
+          },
           type: 'VIDEO',
           description: 'Viết một lớp hoàn chỉnh và tạo đối tượng từ nó.',
           content: `
@@ -602,6 +606,10 @@ export default {
         {
           title: '3.1 — Encapsulation & abstraction|||3.1 — Đóng gói & trừu tượng',
           slug: 'pro192-3-1-dong-goi',
+          simulation: {
+            scenario: 'oop-pillars',
+            caption: { en: 'Encapsulation: the field nobody outside can reach', vi: 'Đóng gói: trường mà bên ngoài không với tới được' },
+          },
           type: 'VIDEO',
           description: 'private, getter/setter và ý tưởng giấu chi tiết bên trong.',
           content: `
@@ -809,6 +817,11 @@ acc.<span class="tok-function">deposit</span>(-50);   <span class="tok-comment">
         {
           title: '4.2 — Polymorphism|||4.2 — Đa hình',
           slug: 'pro192-4-2-da-hinh',
+          simulation: {
+            scenario: 'oop-pillars',
+            options: { view: 'poly' },
+            caption: { en: 'One line, three method bodies — the method table', vi: 'Một dòng, ba thân phương thức — bảng phương thức' },
+          },
           type: 'VIDEO',
           description: 'Một giao diện, nhiều hành vi — dynamic dispatch và upcasting.',
           content: `
@@ -1216,6 +1229,16 @@ students[2] = <span class="tok-keyword">new</span> <span class="tok-function">St
         {
           title: '8.1 — List, Set & Map|||8.1 — List, Set & Map',
           slug: 'pro192-8-1-collections',
+          simulations: [
+            {
+              scenario: 'list-vs-linked',
+              caption: { en: 'ArrayList or LinkedList: the same O(n) with a 15× gap', vi: 'ArrayList hay LinkedList: cùng O(n) mà chênh 15 lần' },
+            },
+            {
+              scenario: 'hash-map',
+              caption: { en: 'HashMap: computing the slot instead of searching for it', vi: 'HashMap: TÍNH ra ô cần đến thay vì đi tìm' },
+            },
+          ],
           type: 'VIDEO',
           description: 'Ba ADT collection và khi nào dùng cái nào.',
           content: `

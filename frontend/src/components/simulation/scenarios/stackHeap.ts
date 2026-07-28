@@ -367,6 +367,13 @@ export const stackHeapScenario: Scenario = {
   icon: Split,
   accent: '#f59e0b',
   group: 'oop',
+  lesson: {
+    course: 'object-oriented-programming',
+    subject: 'PRO192',
+    code: '2.1',
+    slug: 'pro192-2-1-lop-doi-tuong',
+    title: { vi: 'Trường, phương thức & constructor', en: 'Fields, methods & constructors' },
+  },
   nodes: [],
   edges: [],
   panels,

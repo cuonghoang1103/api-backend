@@ -255,6 +255,10 @@ export default {
         {
           title: '1.1 — Networks, services & the layered model|||1.1 — Mạng, dịch vụ & mô hình phân tầng',
           slug: 'nwc203c-1-1-phan-tang',
+          simulation: {
+            scenario: 'osi-layers',
+            caption: { en: '12 bytes of data, 66 bytes on the wire — the headers in between', vi: '12 byte dữ liệu, 66 byte trên dây — phần tiêu đề ở giữa' },
+          },
           type: 'VIDEO',
           description: 'Vì sao mạng chia thành các tầng và mỗi tầng làm gì.',
           content: `
@@ -512,6 +516,10 @@ export default {
         {
           title: '4.1 — Packet switching & routing|||4.1 — Chuyển mạch gói & định tuyến',
           slug: 'nwc203c-4-1-dinh-tuyen',
+          simulation: {
+            scenario: 'ip-journey',
+            caption: { en: 'Hop by hop: the routing table decides the next hop, not the path', vi: 'Từng chặng: bảng định tuyến chọn chặng KẾ TIẾP, không chọn cả đường' },
+          },
           type: 'VIDEO',
           description: 'Cắt dữ liệu thành gói, định tuyến từng chặng và điều khiển tắc nghẽn.',
           content: `
@@ -585,6 +593,11 @@ export default {
         {
           title: '5.1 — IP addresses & subnet masks|||5.1 — Địa chỉ IP & subnet mask',
           slug: 'nwc203c-5-1-ip-subnet',
+          simulation: {
+            scenario: 'ip-journey',
+            options: { view: 'nat' },
+            caption: { en: 'A private 192.168.x address the Internet refuses to route — and NAT', vi: 'Địa chỉ riêng 192.168.x mà Internet từ chối định tuyến — và NAT' },
+          },
           type: 'VIDEO',
           description: 'Cấu trúc địa chỉ IPv4, mask, network/host và chia mạng con.',
           content: `
@@ -668,6 +681,16 @@ export default {
         {
           title: '6.1 — TCP handshake & flow control|||6.1 — Bắt tay TCP & điều khiển luồng',
           slug: 'nwc203c-6-1-tcp',
+          simulations: [
+            {
+              scenario: 'tcp-handshake',
+              caption: { en: 'Three-way handshake, then the four-way close', vi: 'Bắt tay ba bước, rồi bốn bước đóng' },
+            },
+            {
+              scenario: 'tcp-window',
+              caption: { en: 'The sliding window, and what happens when a segment is lost', vi: 'Cửa sổ trượt, và chuyện gì xảy ra khi mất một phân đoạn' },
+            },
+          ],
           type: 'VIDEO',
           description: 'Cách TCP thiết lập kết nối tin cậy và điều tiết tốc độ gửi.',
           content: `
@@ -759,6 +782,11 @@ export default {
         {
           title: 'N1.1 — Loading a web page, layer by layer|||N1.1 — Tải một trang web, từng tầng',
           slug: 'nwc203c-n1-1-hanh-trinh',
+          simulation: {
+            scenario: 'osi-layers',
+            options: { view: 'up' },
+            caption: { en: 'Unwrapping the layers on the receiving side', vi: 'Bóc từng lớp tiêu đề ở phía nhận' },
+          },
           type: 'VIDEO',
           description: 'Ghép cả stack: DNS, TCP, IP, và cách một yêu cầu đi và về.',
           content: `

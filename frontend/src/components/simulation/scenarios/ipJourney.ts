@@ -258,6 +258,13 @@ export const ipJourneyScenario: Scenario = {
   icon: Router,
   accent: '#f59e0b',
   group: 'network',
+  lesson: {
+    course: 'computer-networking',
+    subject: 'NWC203c',
+    code: '5.1',
+    slug: 'nwc203c-5-1-ip-subnet',
+    title: { vi: 'Địa chỉ IP & subnet mask', en: 'IP addresses & subnet masks' },
+  },
   nodes,
   edges,
   options: [

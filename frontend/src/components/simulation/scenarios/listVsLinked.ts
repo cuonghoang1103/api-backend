@@ -363,6 +363,13 @@ export const listVsLinkedScenario: Scenario = {
   icon: Layers,
   accent: '#34d399',
   group: 'oop',
+  lesson: {
+    course: 'data-structures-and-algorithms',
+    subject: 'CSD201',
+    code: '1.2',
+    slug: 'csd201-linked-list',
+    title: { vi: 'Danh sách liên kết đơn, vòng & đôi', en: 'Singly, circular & doubly linked lists' },
+  },
   nodes: [],
   edges: [],
   panels,

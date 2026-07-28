@@ -393,6 +393,13 @@ export const cpuSchedulingScenario: Scenario = {
   icon: Timer,
   accent: '#38bdf8',
   group: 'os',
+  lesson: {
+    course: 'operating-systems',
+    subject: 'OSG202',
+    code: '2.1',
+    slug: 'osg202-2-1-tien-trinh-lap-lich',
+    title: { vi: 'Tiến trình & lập lịch', en: 'Processes & scheduling' },
+  },
   nodes: [],
   edges: [],
   panels: PANELS,

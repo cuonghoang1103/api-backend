@@ -234,6 +234,10 @@ export default {
         {
           title: '1.1 — Arrays & dynamic arrays|||1.1 — Mảng & mảng động',
           slug: 'csd201-mang',
+          simulation: {
+            scenario: 'list-vs-linked',
+            caption: { en: 'A contiguous array and the cache line that makes it fast', vi: 'Mảng liền khối và dòng cache khiến nó nhanh' },
+          },
           type: 'VIDEO',
           description: 'Mảng: truy cập O(1) nhưng chèn/xóa O(n); ArrayList và cách nó tự lớn.',
           content: `
@@ -290,6 +294,11 @@ a[2] = 7;              <span class="tok-comment">// truy cập O(1)</span>
         {
           title: '1.2 — Singly, circular & doubly linked lists|||1.2 — Danh sách liên kết đơn, vòng & đôi',
           slug: 'csd201-linked-list',
+          simulation: {
+            scenario: 'list-vs-linked',
+            options: { view: 'insert' },
+            caption: { en: 'Insert in the middle: pointer swap versus shifting everything', vi: 'Chèn vào giữa: đổi con trỏ so với dời cả mảng' },
+          },
           type: 'VIDEO',
           description: 'Node + con trỏ next/prev: chèn/xóa O(1) tại nút đã biết, nhưng truy cập O(n).',
           content: `
@@ -477,6 +486,11 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
         {
           title: '3.1 — Recursion & the call stack|||3.1 — Đệ quy & call stack',
           slug: 'csd201-de-quy',
+          simulation: {
+            scenario: 'stack-heap',
+            options: { view: 'overflow' },
+            caption: { en: 'Frames pile up until the stack runs out', vi: 'Khung hàm chồng lên nhau cho tới khi hết ngăn xếp' },
+          },
           type: 'VIDEO',
           description: 'Ca cơ sở + ca đệ quy; call stack; và bẫy đệ quy ngây thơ O(2ⁿ).',
           content: `
@@ -824,6 +838,10 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
         {
           title: '7.1 — Hash tables & collisions|||7.1 — Bảng băm & va chạm',
           slug: 'csd201-bam',
+          simulation: {
+            scenario: 'hash-map',
+            caption: { en: 'Hash → slot index → jump; and the collision that always comes', vi: 'Băm → chỉ số ô → nhảy thẳng; và va chạm kiểu gì cũng tới' },
+          },
           type: 'VIDEO',
           description: 'Hàm băm ánh xạ khóa → chỉ số; chaining vs open addressing để xử lý va chạm.',
           content: `

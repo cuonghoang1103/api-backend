@@ -416,6 +416,13 @@ export const oopPillarsScenario: Scenario = {
   icon: Boxes,
   accent: '#f472b6',
   group: 'oop',
+  lesson: {
+    course: 'object-oriented-programming',
+    subject: 'PRO192',
+    code: '4.2',
+    slug: 'pro192-4-2-da-hinh',
+    title: { vi: 'Đa hình', en: 'Polymorphism' },
+  },
   nodes: [],
   edges: [],
   panels,

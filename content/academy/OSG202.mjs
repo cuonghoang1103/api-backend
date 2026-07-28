@@ -273,6 +273,10 @@ export default {
         {
           title: '1.1 — What an OS is: kernel & system calls|||1.1 — OS là gì: kernel & system call',
           slug: 'osg202-1-1-kernel-syscall',
+          simulation: {
+            scenario: 'syscall',
+            caption: { en: 'User space → kernel and back: what a syscall costs', vi: 'Vùng người dùng → nhân và ngược lại: một syscall tốn gì' },
+          },
           type: 'VIDEO',
           description: 'Vai trò kép của OS và cách chương trình yêu cầu dịch vụ từ nó.',
           content: `
@@ -341,6 +345,10 @@ export default {
         {
           title: '2.1 — Processes & CPU scheduling|||2.1 — Tiến trình & lập lịch CPU',
           slug: 'osg202-2-1-tien-trinh-lap-lich',
+          simulation: {
+            scenario: 'cpu-scheduling',
+            caption: { en: 'FCFS, SJF and round-robin on the same five processes', vi: 'FCFS, SJF và round-robin trên cùng năm tiến trình' },
+          },
           type: 'VIDEO',
           description: 'Trạng thái tiến trình, chuyển ngữ cảnh và các thuật toán lập lịch.',
           content: `
@@ -415,6 +423,11 @@ export default {
         {
           title: '2.2 — Threads & synchronization|||2.2 — Luồng & đồng bộ hoá',
           slug: 'osg202-2-2-luong-dong-bo',
+          simulation: {
+            scenario: 'cpu-scheduling',
+            options: { algo: 'rr' },
+            caption: { en: 'Round-robin: the quantum, and what a context switch costs', vi: 'Round-robin: lượng tử thời gian và giá của một lần chuyển ngữ cảnh' },
+          },
           type: 'VIDEO',
           description: 'Luồng, tranh chấp (race condition) và mutex/semaphore.',
           content: `
@@ -767,6 +780,10 @@ export default {
         {
           title: '6.1 — Deadlock: conditions & handling|||6.1 — Deadlock: điều kiện & xử lý',
           slug: 'osg202-6-1-deadlock',
+          simulation: {
+            scenario: 'deadlock',
+            caption: { en: 'Four conditions lock the system; breaking one frees it', vi: 'Bốn điều kiện khoá chết hệ thống; phá một là thoát' },
+          },
           type: 'VIDEO',
           description: 'Bốn điều kiện của deadlock và ba chiến lược xử lý.',
           content: `

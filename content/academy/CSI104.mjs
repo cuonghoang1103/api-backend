@@ -1120,6 +1120,10 @@ export default {
         {
           title: '4.2 — TCP/IP & the layered model|||4.2 — TCP/IP & mô hình phân tầng',
           slug: 'csi104-4-2-tcp-ip',
+          simulation: {
+            scenario: 'osi-layers',
+            caption: { en: 'The layered model with real bytes on the wire', vi: 'Mô hình phân tầng với byte thật chạy trên dây' },
+          },
           type: 'VIDEO',
           description: 'Vì sao mạng chia thành các tầng và mỗi tầng làm gì.',
           content: `
@@ -1235,6 +1239,10 @@ export default {
         {
           title: '5.1 — What an OS is & its evolution|||5.1 — Hệ điều hành là gì & sự tiến hoá',
           slug: 'csi104-5-1-os-la-gi',
+          simulation: {
+            scenario: 'syscall',
+            caption: { en: 'What the OS actually does when a program asks for something', vi: 'Hệ điều hành thực sự làm gì khi chương trình xin một thứ' },
+          },
           type: 'VIDEO',
           description: 'Vai trò trung gian giữa phần cứng, phần mềm và người dùng.',
           content: `

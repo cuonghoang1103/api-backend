@@ -299,6 +299,13 @@ export const syscallScenario: Scenario = {
   icon: Shield,
   accent: '#a78bfa',
   group: 'os',
+  lesson: {
+    course: 'operating-systems',
+    subject: 'OSG202',
+    code: '1.1',
+    slug: 'osg202-1-1-kernel-syscall',
+    title: { vi: 'Nhân hệ điều hành & lời gọi hệ thống', en: 'The kernel & system calls' },
+  },
   nodes: [],
   edges: [],
   panels,

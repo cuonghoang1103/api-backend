@@ -262,6 +262,64 @@ elif echo "$PRISMA_OUT" | grep -qi "error"; then
  echo "$PRISMA_OUT" | tail -5 | sed 's/^/ /'
  fi
 
+# ── Bộ dò lỗi seed dùng chung ───────────────────────────────────
+#
+# Trước đây mỗi khối seed tự dò bằng `grep -qiE "error|cannot find|
+# exception|invalid"`. Bộ dò đó khớp chữ "error" Ở BẤT KỲ ĐÂU trong
+# output — kể cả khi nó nằm trong chính NỘI DUNG đang được seed. Giáo
+# trình Node.js có hai bài tên là "5.4 — Centralised error handling" và
+# "9.4 — … what your errors give away", nên MỌI lần deploy đều bật cảnh
+# báo dù seed chạy đúng hoàn toàn (`sections +0 · lessons +0 ~112. Done.`).
+#
+# Cảnh báo kêu mãi mà không có thật thì người deploy sẽ quen tay bỏ qua —
+# và đó chính là lúc một lỗi seed THẬT lọt lưới.
+#
+# Bộ dò mới chỉ khớp DẤU HIỆU LỖI THẬT mà các script này thực sự in ra,
+# đã đối chiếu với output thật trên prod:
+#   ✗ / ✘                    — cách các seeder tự báo lỗi kiểm tra
+#   <Tên>Error:              — TypeError:, ReferenceError:, Prisma…Error:
+#   Cannot find module       — Node ESM (ERR_MODULE_NOT_FOUND)
+#   Invalid `prisma.         — lỗi truy vấn Prisma
+#   ^cần --file              — thiếu tham số bắt buộc
+#
+# Kiểm chứng trước khi dùng (đúng bài học "kiểm bộ kiểm trước khi kiểm
+# nội dung"): 0 khớp trên 136 dòng output thật của seed chạy đúng, và bắt
+# đủ 4 loại lỗi thật dựng lại được trên prod.
+#
+# Tín hiệu CHÍNH vẫn là MÃ THOÁT — các seeder đều `process.exit(1)` khi
+# hỏng. Bộ dò văn bản chỉ là lưới thứ hai cho trường hợp script in lỗi mà
+# vẫn thoát 0.
+SEED_ERR_RE='(^|[[:space:]])(✗|✘)|^[[:space:]]*[A-Za-z]*Error:|Cannot find module|Invalid `prisma\.|^cần --file'
+
+# Log seed nằm trong repo trên VPS thay vì /tmp: thông báo cũ trỏ tới
+# /tmp/seed-*.log nhưng file đó thường KHÔNG tồn tại khi cần đọc (container
+# bị dựng lại sau seed là mất, và /tmp trên máy deploy cũng có thể bị dọn).
+# Nói sai đường dẫn còn tệ hơn không nói.
+SEED_LOG_DIR="$REPO_DIR/.deploy-logs"
+mkdir -p "$SEED_LOG_DIR"
+
+# report_seed <nhãn> <tên-log> <output> [mã-thoát]
+# Gom một chỗ phần "in kết quả + ghi log" mà 11 khối seed đang chép tay.
+report_seed() {
+  local label="$1" slug="$2" out="$3" rc="${4:-0}"
+  local logfile="$SEED_LOG_DIR/$slug.log"
+  printf '%s\n' "$out" > "$logfile"
+  if [ "$rc" != "0" ] || printf '%s\n' "$out" | grep -qE "$SEED_ERR_RE"; then
+    warn "$label reported errors (rc=$rc) — xem $logfile"
+    # Ưu tiên in ĐÚNG dòng lỗi. Không có dòng nào khớp (chỉ rc khác 0) thì
+    # mới in phần đuôi output để có ngữ cảnh.
+    if printf '%s\n' "$out" | grep -qE "$SEED_ERR_RE"; then
+      printf '%s\n' "$out" | grep -E "$SEED_ERR_RE" | head -5 | sed 's/^/ /'
+    else
+      printf '%s\n' "$out" | tail -4 | sed 's/^/ /'
+    fi
+    return 1
+  fi
+  ok "$label complete"
+  printf '%s\n' "$out" | tail -4 | sed 's/^/ /'
+  return 0
+}
+
 # ── Step 3.5: Idempotent seed (Content Creator demo data) ───────
 # `prisma migrate deploy` does NOT auto-run the seed script.
 # We invoke it explicitly here so the /creator/* pages always
@@ -272,13 +330,7 @@ elif echo "$PRISMA_OUT" | grep -qi "error"; then
 info "Running idempotent seed (Content Creator demo data)..."
 SEED_OUT=$($DC exec -T backend sh -c \
  "npx prisma db seed" 2>&1) || true
-if echo "$SEED_OUT" | grep -qi "error"; then
- warn "Seed reported errors — see /tmp/seed.log"
- echo "$SEED_OUT" > /tmp/seed.log
-else
- ok "Seed complete"
- echo "$SEED_OUT" | tail -5 | sed 's/^/ /'
-fi
+report_seed "Seed" "seed" "$SEED_OUT" "${SEED_OUT_RC:-0}" || true
 
 # ── Step 3.6: My Language content seed (EN roadmap + JA kana) ────
 # Separate idempotent seed (find-before-create everywhere; upsert
@@ -287,49 +339,25 @@ fi
 info "Running My Language content seed (English + Japanese)..."
 LANG_SEED_OUT=$($DC exec -T backend sh -c \
  "npx tsx prisma/seed.my-language.ts" 2>&1) || true
-if echo "$LANG_SEED_OUT" | grep -qiE "error|cannot find|exception"; then
- warn "My Language seed reported errors — see /tmp/seed-lang.log"
- echo "$LANG_SEED_OUT" > /tmp/seed-lang.log
-else
- ok "My Language seed complete"
- echo "$LANG_SEED_OUT" | tail -11 | sed 's/^/ /'
-fi
+report_seed "My Language seed" "seed-lang" "$LANG_SEED_OUT" "${LANG_SEED_OUT_RC:-0}" || true
 
 # ── Step 3.7: Japanese extended kana seed (dakuten/yōon/special) ─
 info "Running Japanese extended kana seed..."
 KANA_SEED_OUT=$($DC exec -T backend sh -c \
  "npx tsx prisma/seed.ja-kana.ts" 2>&1) || true
-if echo "$KANA_SEED_OUT" | grep -qiE "error|cannot find|exception|not found"; then
- warn "JA kana seed reported errors — see /tmp/seed-ja-kana.log"
- echo "$KANA_SEED_OUT" > /tmp/seed-ja-kana.log
-else
- ok "JA kana seed complete"
- echo "$KANA_SEED_OUT" | tail -4 | sed 's/^/ /'
-fi
+report_seed "JA kana seed" "seed-ja-kana" "$KANA_SEED_OUT" "${KANA_SEED_OUT_RC:-0}" || true
 
 # ── Step 3.8: English extra seed (alphabet/IPA + grammar A1→C1) ──
 info "Running English extra seed (alphabet + grammar)..."
 EN_EXTRA_OUT=$($DC exec -T backend sh -c \
  "npx tsx prisma/seed.en-extra.ts" 2>&1) || true
-if echo "$EN_EXTRA_OUT" | grep -qiE "error|cannot find|exception|not found"; then
- warn "EN extra seed reported errors — see /tmp/seed-en-extra.log"
- echo "$EN_EXTRA_OUT" > /tmp/seed-en-extra.log
-else
- ok "EN extra seed complete"
- echo "$EN_EXTRA_OUT" | tail -4 | sed 's/^/ /'
-fi
+report_seed "EN extra seed" "seed-en-extra" "$EN_EXTRA_OUT" "${EN_EXTRA_OUT_RC:-0}" || true
 
 # ── Step 3.9: Japanese extra seed (vocab/grammar/conv/reading/qna) ─
 info "Running Japanese extra seed..."
 JA_EXTRA_OUT=$($DC exec -T backend sh -c \
  "npx tsx prisma/seed.ja-extra.ts" 2>&1) || true
-if echo "$JA_EXTRA_OUT" | grep -qiE "error|cannot find|exception|not found"; then
- warn "JA extra seed reported errors — see /tmp/seed-ja-extra.log"
- echo "$JA_EXTRA_OUT" > /tmp/seed-ja-extra.log
-else
- ok "JA extra seed complete"
- echo "$JA_EXTRA_OUT" | tail -9 | sed 's/^/ /'
-fi
+report_seed "JA extra seed" "seed-ja-extra" "$JA_EXTRA_OUT" "${JA_EXTRA_OUT_RC:-0}" || true
 
 # ── Step 3.9b: JPD113 grammar seed (My Language, level='JPD113') ──
 # content/grammar/jpd113-grammar.mjs → lang_grammar_points, idempotent
@@ -338,26 +366,13 @@ fi
 info "Running JPD113 grammar seed..."
 JPD113_GRAMMAR_OUT=$($DC exec -T backend sh -c \
  "node scripts/seed-jpd113-grammar.mjs --apply" 2>&1) || true
-if echo "$JPD113_GRAMMAR_OUT" | grep -qiE "error|cannot find|exception|not found"; then
- warn "JPD113 grammar seed reported errors — see /tmp/seed-jpd113-grammar.log"
- echo "$JPD113_GRAMMAR_OUT" > /tmp/seed-jpd113-grammar.log
- echo "$JPD113_GRAMMAR_OUT" | tail -6 | sed 's/^/ /'
-else
- ok "JPD113 grammar seed complete"
- echo "$JPD113_GRAMMAR_OUT" | tail -3 | sed 's/^/ /'
-fi
+report_seed "JPD113 grammar seed" "seed-jpd113-grammar" "$JPD113_GRAMMAR_OUT" "${JPD113_GRAMMAR_OUT_RC:-0}" || true
 
 # ── Step 3.10: Chinese seed (language + full HSK1-3 content) ─────
 info "Running Chinese (zh) seed..."
 ZH_SEED_OUT=$($DC exec -T backend sh -c \
  "npx tsx prisma/seed.zh.ts" 2>&1) || true
-if echo "$ZH_SEED_OUT" | grep -qiE "error|cannot find|exception"; then
- warn "ZH seed reported errors — see /tmp/seed-zh.log"
- echo "$ZH_SEED_OUT" > /tmp/seed-zh.log
-else
- ok "ZH seed complete"
- echo "$ZH_SEED_OUT" | tail -12 | sed 's/^/ /'
-fi
+report_seed "ZH seed" "seed-zh" "$ZH_SEED_OUT" "${ZH_SEED_OUT_RC:-0}" || true
 
 # ── Step 3.11: Interview Simulator starter bank (idempotent) ────
 # Find-before-create questions + upsert taxonomy by slug; safe to re-run.
@@ -365,13 +380,7 @@ fi
 info "Running Interview Simulator seed (starter question bank)..."
 INTERVIEW_SEED_OUT=$($DC exec -T backend sh -c \
  "npx tsx prisma/seed.interview.ts" 2>&1) || true
-if echo "$INTERVIEW_SEED_OUT" | grep -qiE "error|cannot find|exception"; then
- warn "Interview seed reported errors — see /tmp/seed-interview.log"
- echo "$INTERVIEW_SEED_OUT" > /tmp/seed-interview.log
-else
- ok "Interview seed complete"
- echo "$INTERVIEW_SEED_OUT" | tail -3 | sed 's/^/ /'
-fi
+report_seed "Interview seed" "seed-interview" "$INTERVIEW_SEED_OUT" "${INTERVIEW_SEED_OUT_RC:-0}" || true
 
 # ── Step 3.12: Academy FPTU course content seed (idempotent) ────
 # One .mjs spec per subject under content/academy/. The seeder is
@@ -380,20 +389,17 @@ fi
 # per-user LessonProgress survives). Safe to re-run every deploy.
 info "Running Academy FPTU course seed..."
 ACADEMY_SEED_OUT=$($DC exec -T backend sh -c '
+  rc=0
   for f in content/academy/*.mjs; do
     [ -e "$f" ] || { echo "no academy content files"; break; }
     echo "── $f"
-    node scripts/academy-seed-course.mjs --file "$f" --apply 2>&1
+    node scripts/academy-seed-course.mjs --file "$f" --apply 2>&1 || rc=1
   done
+  echo "__SEED_RC__=$rc"
 ') || true
-if echo "$ACADEMY_SEED_OUT" | grep -qiE "error|cannot find|exception|invalid"; then
- warn "Academy seed reported errors — see /tmp/seed-academy.log"
- echo "$ACADEMY_SEED_OUT" > /tmp/seed-academy.log
- echo "$ACADEMY_SEED_OUT" | tail -6 | sed 's/^/ /'
-else
- ok "Academy seed complete"
- echo "$ACADEMY_SEED_OUT" | tail -6 | sed 's/^/ /'
-fi
+ACADEMY_SEED_OUT_RC="$(printf '%s\n' "$ACADEMY_SEED_OUT" | sed -n 's/^__SEED_RC__=//p' | tail -1)"
+ACADEMY_SEED_OUT="$(printf '%s\n' "$ACADEMY_SEED_OUT" | grep -v '^__SEED_RC__=')"
+report_seed "Academy seed" "seed-academy" "$ACADEMY_SEED_OUT" "${ACADEMY_SEED_OUT_RC:-0}" || true
 
 # ── Step 3.12b: CuongThai general course content seed (idempotent) ──
 # One .mjs spec per course under content/courses/ (our own curriculum,
@@ -402,21 +408,20 @@ fi
 # glob deliberately matches only depth 1. Same idempotency guarantees as
 # the Academy seeder above: lesson ids are preserved, progress survives.
 info "Running CuongThai course seed..."
+# Gom mã thoát của TỪNG file: vòng lặp `for` chỉ trả về mã của lệnh cuối,
+# nên một file hỏng ở giữa mà file cuối chạy đúng thì cả khối vẫn báo 0.
 COURSES_SEED_OUT=$($DC exec -T backend sh -c '
+  rc=0
   for f in content/courses/*.mjs; do
     [ -e "$f" ] || { echo "no course content files"; break; }
     echo "── $f"
-    node scripts/course-seed.mjs --file "$f" --apply 2>&1
+    node scripts/course-seed.mjs --file "$f" --apply 2>&1 || rc=1
   done
+  echo "__SEED_RC__=$rc"
 ') || true
-if echo "$COURSES_SEED_OUT" | grep -qiE "error|cannot find|exception|invalid"; then
- warn "CuongThai course seed reported errors — see /tmp/seed-courses.log"
- echo "$COURSES_SEED_OUT" > /tmp/seed-courses.log
- echo "$COURSES_SEED_OUT" | tail -6 | sed 's/^/ /'
-else
- ok "CuongThai course seed complete"
- echo "$COURSES_SEED_OUT" | tail -6 | sed 's/^/ /'
-fi
+COURSES_SEED_OUT_RC="$(printf '%s\n' "$COURSES_SEED_OUT" | sed -n 's/^__SEED_RC__=//p' | tail -1)"
+COURSES_SEED_OUT="$(printf '%s\n' "$COURSES_SEED_OUT" | grep -v '^__SEED_RC__=')"
+report_seed "CuongThai course seed" "seed-courses" "$COURSES_SEED_OUT" "${COURSES_SEED_OUT_RC:-0}" || true
 
 # ── Step 3.13: Exp Hub setup guides (per-subject, idempotent) ───
 # One .mjs per subject under content/exphub/ → upsert SnippetCategory +
@@ -430,14 +435,7 @@ EXPHUB_SEED_OUT=$($DC exec -T backend sh -c '
     node scripts/exphub-seed-guide.mjs --file "$f" --apply 2>&1
   done
 ') || true
-if echo "$EXPHUB_SEED_OUT" | grep -qiE "error|cannot find|exception|invalid"; then
- warn "Exp Hub seed reported errors — see /tmp/seed-exphub.log"
- echo "$EXPHUB_SEED_OUT" > /tmp/seed-exphub.log
- echo "$EXPHUB_SEED_OUT" | tail -5 | sed 's/^/ /'
-else
- ok "Exp Hub seed complete"
- echo "$EXPHUB_SEED_OUT" | tail -5 | sed 's/^/ /'
-fi
+report_seed "Exp Hub seed" "seed-exphub" "$EXPHUB_SEED_OUT" "${EXPHUB_SEED_OUT_RC:-0}" || true
 
 # ── Step 3.14: Exam Room content seed (idempotent) ─────────────
 # One .mjs per subject under content/exams/ → upsert Exam + questions
@@ -450,14 +448,7 @@ EXAM_SEED_OUT=$($DC exec -T backend sh -c '
     node scripts/academy-seed-exam.mjs --file "$f" --apply 2>&1
   done
 ') || true
-if echo "$EXAM_SEED_OUT" | grep -qiE "error|cannot find|exception|not found"; then
- warn "Exam seed reported errors — see /tmp/seed-exam.log"
- echo "$EXAM_SEED_OUT" > /tmp/seed-exam.log
- echo "$EXAM_SEED_OUT" | tail -5 | sed 's/^/ /'
-else
- ok "Exam Room seed complete"
- echo "$EXAM_SEED_OUT" | tail -6 | sed 's/^/ /'
-fi
+report_seed "Exam seed" "seed-exam" "$EXAM_SEED_OUT" "${EXAM_SEED_OUT_RC:-0}" || true
 
 # ── Step 4: Health checks ─────────────────────────────────────────
 info "Waiting for backend to be healthy..."

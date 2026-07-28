@@ -118,3 +118,6 @@ content/exams/_work/
 .claude/
 .agents/
 skills-lock.json
+
+# Log của deploy.sh (ghi trên VPS, không đưa vào git)
+.deploy-logs/

@@ -20,6 +20,7 @@ import { nPlusOneScenario } from './nPlusOne';
 import { webhookScenario } from './webhook';
 import { nodejsEventLoopScenario } from './nodejsEventLoop';
 import { nodejsMicrotaskScenario } from './nodejsMicrotask';
+import { nodejsBlockingScenario } from './nodejsBlocking';
 
 // Thứ tự trong mảng = thứ tự hiện trên bảng chọn, và nó là thứ tự SƯ PHẠM:
 // nền tảng trước (REST → đệm → xác thực → CSDL), rồi tới realtime và kiến
@@ -41,6 +42,7 @@ export const SCENARIOS: Scenario[] = [
   // `content/courses/nodejs`. Thứ tự ở đây theo thứ tự chương.
   nodejsEventLoopScenario,
   nodejsMicrotaskScenario,
+  nodejsBlockingScenario,
 ];
 
 /**

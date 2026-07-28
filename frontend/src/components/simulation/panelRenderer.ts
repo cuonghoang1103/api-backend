@@ -715,8 +715,15 @@ function drawChartPanel(
     }
     ctx.stroke();
 
-    // Chấm đầu đường + nhãn tên chuỗi.
-    const tail = pts[pts.length - 1];
+    // Chấm đầu đường + nhãn tên chuỗi — đặt ở vị trí ĐANG MỌC chứ không phải
+    // ở đích. Vẽ sẵn tại đích làm chấm đứng tách rời khỏi đầu đường suốt cả
+    // bước, trông như một lỗi vẽ.
+    const last = pts[pts.length - 1];
+    const before = pts.length > 1 ? pts[pts.length - 2] : last;
+    const tail =
+      pts.length > 1
+        ? { x: before.x + (last.x - before.x) * grow, y: before.y + (last.y - before.y) * grow }
+        : last;
     ctx.fillStyle = color;
     ctx.beginPath();
     ctx.arc(px(tail.x), py(tail.y), 5, 0, Math.PI * 2);

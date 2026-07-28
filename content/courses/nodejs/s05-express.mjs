@@ -420,6 +420,13 @@ app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v1/notes'</sp
     {
       title: '5.3 — Middleware: the chain every request walks|||5.3 — Middleware: sợi dây chuyền mọi request đi qua',
       slug: 'nodejs-5-3-middleware',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-5-3-middleware.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-5-3-middleware.jpg',
+        scenario: 'nodejs-middleware',
+        durationSeconds: 26,
+        caption: { en: "Middleware — the chain every request walks", vi: "Middleware — sợi dây chuyền mọi request đi qua" },
+      },
       type: 'VIDEO',
       description: 'next(), thứ tự thực thi, express.json và express.static, middleware theo phạm vi, và chuyện gì xảy ra khi bạn quên next().',
       content: `
@@ -675,6 +682,13 @@ curl exit=28   ← Operation timed out</div>
     {
       title: '5.4 — Centralised error handling|||5.4 — Xử lý lỗi tập trung',
       slug: 'nodejs-5-4-xu-ly-loi',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-5-4-xu-ly-loi.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-5-4-xu-ly-loi.jpg',
+        scenario: 'nodejs-error-handling',
+        durationSeconds: 19,
+        caption: { en: "Centralised error handling", vi: "Xử lý lỗi tập trung" },
+      },
       type: 'VIDEO',
       description: 'Error middleware 4 tham số, lớp AppError, 404 dạng JSON, và cú treo request kinh điển của Express 4 với handler async.',
       content: `

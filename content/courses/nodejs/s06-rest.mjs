@@ -618,6 +618,13 @@ Content-Type: application/json; charset=utf-8
     {
       title: '6.4 — Pagination, filtering and sorting|||6.4 — Phân trang, lọc và sắp xếp',
       slug: 'nodejs-6-4-phan-trang',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-6-4-phan-trang.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-6-4-phan-trang.jpg',
+        scenario: 'nodejs-pagination',
+        durationSeconds: 15,
+        caption: { en: "Pagination — OFFSET versus cursor", vi: "Phân trang — OFFSET so với cursor" },
+      },
       type: 'VIDEO',
       description: 'OFFSET và cursor đo trên 1.000.000 dòng PostgreSQL: 167ms so với 0,015ms — và con bug trùng bản ghi mà OFFSET gây ra.',
       content: `
@@ -799,6 +806,13 @@ SELECT reltuples FROM pg_class …        →   0,025 ms   (ước lượng từ
     {
       title: '6.5 — The API contract: versions, ETag, idempotency|||6.5 — Hợp đồng API: phiên bản, ETag, idempotency',
       slug: 'nodejs-6-5-hop-dong-api',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-6-5-hop-dong-api.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-6-5-hop-dong-api.jpg',
+        scenario: 'nodejs-contract',
+        durationSeconds: 19,
+        caption: { en: "The API contract — idempotency and ETag", vi: "Hợp đồng API — idempotency và ETag" },
+      },
       type: 'VIDEO',
       description: 'Thay đổi API mà không làm vỡ client cũ, chặn mất bản ghi bằng ETag/If-Match (412), và chặn trừ tiền hai lần bằng Idempotency-Key.',
       content: `

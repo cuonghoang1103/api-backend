@@ -24,6 +24,11 @@ import { nodejsBlockingScenario } from './nodejsBlocking';
 import { nodejsWorkerScenario } from './nodejsWorker';
 import { nodejsBufferScenario } from './nodejsBuffer';
 import { nodejsStreamScenario } from './nodejsStream';
+import { nodejsSemverScenario } from './nodejsSemver';
+import { nodejsMiddlewareScenario } from './nodejsMiddleware';
+import { nodejsErrorHandlingScenario } from './nodejsErrorHandling';
+import { nodejsPaginationScenario } from './nodejsPagination';
+import { nodejsContractScenario } from './nodejsContract';
 
 // Thứ tự trong mảng = thứ tự hiện trên bảng chọn, và nó là thứ tự SƯ PHẠM:
 // nền tảng trước (REST → đệm → xác thực → CSDL), rồi tới realtime và kiến
@@ -49,6 +54,11 @@ export const SCENARIOS: Scenario[] = [
   nodejsWorkerScenario,
   nodejsBufferScenario,
   nodejsStreamScenario,
+  nodejsSemverScenario,
+  nodejsMiddlewareScenario,
+  nodejsErrorHandlingScenario,
+  nodejsPaginationScenario,
+  nodejsContractScenario,
 ];
 
 /**

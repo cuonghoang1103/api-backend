@@ -151,6 +151,13 @@ npx &lt;công cụ&gt;                <span class="tok-comment"># chạy công c
     {
       title: '4.2 — Semver and the lockfile|||4.2 — Semver và lockfile',
       slug: 'nodejs-4-2-semver-lockfile',
+      simulation: {
+        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-4-2-semver-lockfile.mp4',
+        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-4-2-semver-lockfile.jpg',
+        scenario: 'nodejs-semver',
+        durationSeconds: 21,
+        caption: { en: "Semver and the lockfile", vi: "Semver và lockfile" },
+      },
       type: 'VIDEO',
       description: 'Dấu ^ thật sự cho phép những gì, và vì sao "máy tôi chạy được mà" hầu hết bắt nguồn từ đây.',
       content: `

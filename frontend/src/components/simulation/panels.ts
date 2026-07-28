@@ -189,6 +189,82 @@ export interface TablePanelSpec extends PanelBase {
   columns: ColumnSpec[];
 }
 
+export interface MembraneLayerSpec {
+  /**
+   * Cũng chính là tên LÀN: đẩy một hạt vào làn này nghĩa là hạt DỪNG LẠI ở
+   * tầng này (trúng đệm). Hạt rơi qua được hết mọi tầng thì đẩy vào làn
+   * `MEMBRANE_SINK`.
+   */
+  id: string;
+  label: string;
+  sub?: I18nText;
+  accent?: string;
+  /** Vị trí theo chiều dọc trong lòng panel: 0 = sát nguồn phát, 1 = sát đáy. */
+  at: number;
+}
+
+/**
+ * HẠT — MÀNG: dữ liệu rơi xuyên qua các tầng đệm.
+ *
+ * Có một họ bài học mà cả sơ đồ lẫn hàng đợi đều kể sai: "cùng một dữ liệu
+ * nhưng lấy ở đâu ra". Đệm trình duyệt, đệm CDN, Redis, rồi mới tới CSDL —
+ * cái người học cần thấy không phải gói tin đi trên dây, mà là **request đi
+ * được BAO SÂU trước khi có người trả lời**. Vẽ nó thành hạt rơi qua các
+ * màng ngang: hạt dừng ở màng nào thì tầng đó trúng, hạt rơi tới đáy nghĩa
+ * là mọi tầng đệm đều trượt và nguồn thật phải làm việc.
+ *
+ * Độ sâu chính là bài học, nên nó phải là thứ mắt đọc được ngay — không cần
+ * đọc chữ, không cần đếm số.
+ */
+export interface MembranePanelSpec extends PanelBase {
+  kind: 'membrane';
+  layers: MembraneLayerSpec[];
+  /** Nhãn nơi hạt sinh ra, hiện ở mép trên. */
+  source?: I18nText;
+  /** Nguồn thật ở đáy. Hạt vào làn `MEMBRANE_SINK` là rơi tới tận đây. */
+  sink?: { label: string; sub?: I18nText; accent?: string };
+}
+
+/** Làn dành cho hạt rơi hết mọi tầng, xuống tới nguồn thật. */
+export const MEMBRANE_SINK = '_sink';
+
+export interface RaceTrackSpec {
+  id: string;
+  label: string;
+  sub?: I18nText;
+  /**
+   * Danh từ ghép sau SỐ phần tử đã đẩy vào làn: `push` bốn lần với
+   * `countLabel = 'truy vấn'` thì đường đua hiện "4 truy vấn". Số này DẪN
+   * XUẤT từ ops, kịch bản không phải tự đếm.
+   */
+  countLabel?: I18nText;
+  accent?: string;
+}
+
+/**
+ * ĐƯỜNG ĐUA — hai cách làm cùng một việc, chạy cạnh nhau trên cùng khung hình.
+ *
+ * Máy này vốn so sánh bằng cách cho người xem BẤM SANG lựa chọn khác rồi chạy
+ * lại. Cách đó đúng nhưng nhờ vào trí nhớ: xem xong nhánh chậm mới xem nhánh
+ * nhanh, và phải tự nhớ con số của nhánh trước. Khi bài học nằm ở TỈ LỆ
+ * (N+1 so với gộp truy vấn, có chỉ mục so với quét bảng) thì hai thanh chạy
+ * song song nói hộ toàn bộ câu chuyện trong một khung.
+ *
+ * Thanh chạy theo `value`, số bên phải lấy `label` — nên đơn vị hiển thị
+ * ("11 ms") tách rời khỏi con số dùng để vẽ.
+ */
+export interface RacePanelSpec extends PanelBase {
+  kind: 'race';
+  tracks: RaceTrackSpec[];
+  /** Giá trị ứng với thanh đầy. Bỏ trống = tự co theo đường lớn nhất. */
+  max?: number;
+  unit?: string;
+  /** Bên nào thắng. Mặc định 'lower' vì phần lớn đường đua đo ms hoặc số truy vấn. */
+  better?: 'lower' | 'higher';
+  /** Hiện chip "×11" ở đường thắng khi mọi đường đã có số. */
+  showDelta?: boolean;
+}
+
 /** Cửa sổ terminal: dòng log chạy dần. */
 export interface LogPanelSpec extends PanelBase {
   kind: 'log';
@@ -206,6 +282,8 @@ export type PanelSpec =
   | ChartPanelSpec
   | TreePanelSpec
   | TablePanelSpec
+  | MembranePanelSpec
+  | RacePanelSpec
   | LogPanelSpec;
 
 export type PanelKind = PanelSpec['kind'];

@@ -47,7 +47,6 @@ import { useSoundEngine } from './useSoundEngine';
 import { useStudioRecorder } from './useStudioRecorder';
 import { renderSfxTrackToWav, type SfxCue } from './sfx';
 import type { Lang, ScenarioOptions, SimStep } from './types';
-import { tr } from './types';
 
 /** Đọc tham số URL một lần lúc gắn — sau đó URL chỉ được GHI, không đọc lại. */
 function readInitialParams() {
@@ -453,19 +452,13 @@ export default function SimulationStudio() {
       data-sim-step={engine.stepIndex}
       data-sim-ready="1"
     >
-      <div className="mx-auto max-w-[1720px] px-3 sm:px-5">
-        {/* Đầu trang */}
-        <header className="mb-4 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h1 className="text-[26px] font-extrabold leading-tight text-[#f2f6ff] sm:text-[32px]">
-              {vi ? 'Xưởng mô phỏng Code & Mạng' : 'Code & Network Animation Studio'}
-            </h1>
-            <p className="mt-1 max-w-3xl text-[13.5px] leading-relaxed text-[#7f8fab]">
-              {vi
-                ? `${SCENARIOS.length} kịch bản hệ thống chạy thành hoạt hình 1920×1080, có phụ đề bài giảng, có thanh tua theo bước và quay được thành video ngay trong trình duyệt.`
-                : `${SCENARIOS.length} system scenarios animated at 1920×1080, with burned-in lecture captions, a step scrubber and in-browser video recording.`}
-            </p>
-          </div>
+      <div className="mx-auto max-w-[1860px] px-3 sm:px-5">
+        {/* Đầu trang — tiêu đề chỉ dành cho trình đọc màn hình/SEO; phần nhìn
+            thấy rút gọn còn hàng nút để nhường tối đa chiều cao cho sân khấu. */}
+        <header className="mb-2 flex flex-wrap items-center justify-end gap-3">
+          <h1 className="sr-only">
+            {vi ? 'Xưởng mô phỏng Code & Mạng' : 'Code & Network Animation Studio'}
+          </h1>
           <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
@@ -490,7 +483,7 @@ export default function SimulationStudio() {
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-[300px_minmax(0,1fr)] xl:grid-cols-[300px_minmax(0,1fr)_360px]">
           {/* Cột trái — chỉ hiện trên desktop; mobile dùng tab bên dưới */}
-          <aside className="hidden rounded-2xl border border-[#141c31] bg-[#070b16] lg:block lg:max-h-[calc(100vh-9rem)]">
+          <aside className="hidden rounded-2xl border border-[#141c31] bg-[#070b16] lg:block lg:max-h-[calc(100vh-7rem)]">
             <ControlPanel
               scenario={scenario}
               options={options}
@@ -692,19 +685,11 @@ export default function SimulationStudio() {
                         onStart={handleStartRecording}
                         speed={engine.speed}
                       />
-            <div className="max-h-[calc(100vh-22rem)] overflow-hidden rounded-2xl border border-[#141c31] bg-[#070b16]">
+            <div className="max-h-[calc(100vh-20rem)] overflow-hidden rounded-2xl border border-[#141c31] bg-[#070b16]">
               <InspectorPanel steps={steps} stepIndex={engine.stepIndex} lang={lang} />
             </div>
           </aside>
         </div>
-
-        <p className="mt-6 text-center text-[11.5px] leading-relaxed text-[#4d5b76]">
-          {vi
-            ? 'Video được lấy thẳng từ canvas 1920×1080 nên không dính thanh trình duyệt. Trình duyệt chỉ xuất WebM — dùng ffmpeg nếu cần MP4.'
-            : 'Video is captured straight from the 1920×1080 canvas, so no browser chrome leaks in. Browsers export WebM only — use ffmpeg if you need MP4.'}
-          {' · '}
-          {tr(scenario.tagline, lang)}
-        </p>
       </div>
     </div>
   );

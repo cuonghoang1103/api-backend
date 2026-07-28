@@ -32,7 +32,15 @@ import {
   roundRect,
 } from './drawKit';
 import { CANVAS_W, GRAPH_BOTTOM, GRAPH_TOP } from './layout';
-import { MAIN_LANE, type ItemTone, type PanelRuntime, type PanelSpec, type PanelState, type RuntimeItem } from './panels';
+import {
+  MAIN_LANE,
+  MEMBRANE_SINK,
+  type ItemTone,
+  type PanelRuntime,
+  type PanelSpec,
+  type PanelState,
+  type RuntimeItem,
+} from './panels';
 import { STAGE_COLORS } from './theme';
 import type { Lang } from './types';
 import { tr } from './types';
@@ -943,6 +951,374 @@ function drawLogPanel(
 }
 
 /* ────────────────────────────────────────────────────────────
+   HẠT — MÀNG
+   ──────────────────────────────────────────────────────────── */
+
+/** Bán kính hạt. Dưới 11px thì qua nén video nó thành một chấm nhoè. */
+const DOT_R = 13;
+
+/**
+ * Hạt rơi có GIA TỐC (`t^1.7`), không phải easeOut như mọi hoạt ảnh khác của
+ * studio. Cố ý lệch khỏi quy ước: mắt người đọc chuyển động rơi bằng gia tốc,
+ * một hạt "rơi" mà chậm dần khi tới đích trông như đang được thả nhẹ xuống —
+ * mất hẳn cảm giác đi sâu thêm một tầng vì không ai giữ lại.
+ */
+const fallProgress = (t: number): number => clamp01(t) ** 1.7;
+
+function drawDot(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  color: string,
+  alpha: number,
+  label?: string,
+  showLabel?: boolean,
+  labelW = 104
+) {
+  if (alpha <= 0.01) return;
+  ctx.globalAlpha = alpha;
+
+  ctx.fillStyle = rgba(color, 0.16);
+  ctx.beginPath();
+  ctx.arc(x, y, DOT_R + 7, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = 'rgba(9, 14, 27, 0.92)';
+  ctx.beginPath();
+  ctx.arc(x, y, DOT_R, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.strokeStyle = rgba(color, 0.95);
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.arc(x, y, DOT_R, 0, Math.PI * 2);
+  ctx.stroke();
+
+  if (showLabel && label) {
+    ctx.font = `600 12px ${MONO}`;
+    ctx.fillStyle = rgba(color, 0.9);
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.fillText(ellipsize(ctx, label, labelW), x, y + DOT_R + 7);
+  }
+
+  ctx.globalAlpha = 1;
+}
+
+function drawMembranePanel(
+  ctx: CanvasRenderingContext2D,
+  spec: Extract<PanelSpec, { kind: 'membrane' }>,
+  rt: PanelRuntime,
+  body: PanelRect,
+  f: PanelFrame
+) {
+  const accent = spec.accent ?? f.accent;
+  const headH = spec.source ? 30 : 6;
+  const sinkH = spec.sink ? Math.min(98, body.h * 0.22) : 0;
+  const topY = body.y + headH;
+  const bottomY = body.y + body.h - (sinkH ? sinkH + 18 : 8);
+  const span = Math.max(40, bottomY - topY);
+  const labelW = Math.min(200, body.w * 0.21);
+  const track = { x: body.x + labelW, w: Math.max(120, body.w - labelW - 96) };
+  const sinkMidY = body.y + body.h - sinkH / 2;
+
+  // Đích rơi của từng làn.
+  const targetY: Record<string, number> = { [MEMBRANE_SINK]: sinkMidY };
+  for (const l of spec.layers) targetY[l.id] = topY + clamp01(l.at) * span;
+
+  /** Vị trí ngang: giãn đều quanh trục giữa theo chỗ đứng trong làn. */
+  const dotX = (i: number, n: number, gap: number): number =>
+    track.x + track.w / 2 + (i - (n - 1) / 2) * gap;
+
+  /**
+   * Khoảng cách giữa hai hạt cùng màng tính theo BỀ RỘNG NHÃN, không theo số
+   * hạt. Bản đầu chia đều 52px: hai hạt thì thoáng, nhưng nhãn "GET /posts"
+   * rộng 72px nên hai nhãn chồng lên nhau thành một dòng chữ vô nghĩa.
+   */
+  const laneGap = (list: RuntimeItem[]): { gap: number; widest: number } => {
+    ctx.font = `600 12px ${MONO}`;
+    const widest = list.reduce((mx, it) => Math.max(mx, ctx.measureText(it.label).width), 0);
+    return {
+      widest,
+      gap: Math.min(track.w / Math.max(1, list.length), Math.max(DOT_R * 2 + 10, widest + 16)),
+    };
+  };
+
+  /** Y hiện tại của một hạt: đang rơi thì nội suy, đã đậu thì nằm yên. */
+  const dotY = (item: RuntimeItem): number => {
+    const dest = targetY[item.lane] ?? sinkMidY;
+    if (item.bornStep !== f.stepIndex) return dest;
+    return topY - 30 + (dest - (topY - 30)) * fallProgress(f.stepProgress * 1.25);
+  };
+
+  // Gợn sóng của màng: hạt đi ngang qua tới đâu thì màng ở đó sáng lên tới đó.
+  // Suy ra từ khoảng cách hạt–màng, nên kịch bản không phải khai "lúc này màng
+  // redis loé lên" — nó chỉ nói hạt dừng ở tầng nào.
+  const ripple: Record<string, number> = {};
+  for (const list of Object.values(rt.items)) {
+    for (const item of list) {
+      if (item.bornStep !== f.stepIndex) continue;
+      const py = dotY(item);
+      for (const l of spec.layers) {
+        const d = Math.abs(py - targetY[l.id]);
+        if (d < 60) ripple[l.id] = Math.max(ripple[l.id] ?? 0, Math.exp(-((d / 28) ** 2)));
+      }
+    }
+  }
+
+  // Nhãn nguồn phát.
+  if (spec.source) {
+    ctx.font = `600 15px ${SANS}`;
+    ctx.fillStyle = STAGE_COLORS.textMuted;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(ellipsize(ctx, tr(spec.source, f.lang), body.w), track.x + track.w / 2, body.y + 12);
+  }
+
+  // Màng.
+  for (const l of spec.layers) {
+    const c = l.accent ?? accent;
+    const y = targetY[l.id];
+    const on = rt.active === l.id;
+    const glow = Math.max(ripple[l.id] ?? 0, on ? 0.75 : 0);
+    const landed = (rt.items[l.id] ?? []).length > 0;
+
+    ctx.strokeStyle = rgba(c, 0.3 + 0.6 * glow + (landed ? 0.15 : 0));
+    ctx.lineWidth = 2 + 2.4 * glow;
+    ctx.beginPath();
+    ctx.moveTo(track.x, y);
+    ctx.lineTo(track.x + track.w, y);
+    ctx.stroke();
+
+    // Chốt hai đầu — làm cái màng ra dáng một mặt phẳng chứ không phải cái gạch.
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = rgba(c, 0.55);
+    for (const ex of [track.x, track.x + track.w]) {
+      ctx.beginPath();
+      ctx.moveTo(ex, y - 9);
+      ctx.lineTo(ex, y + 9);
+      ctx.stroke();
+    }
+
+    // Nhãn tầng ở cột trái.
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.font = `700 17px ${SANS}`;
+    ctx.fillStyle = on || glow > 0.2 ? c : STAGE_COLORS.textSecondary;
+    ctx.fillText(ellipsize(ctx, l.label, labelW - 16), body.x + labelW - 16, l.sub ? y - 9 : y);
+    if (l.sub) {
+      ctx.font = `500 13px ${SANS}`;
+      ctx.fillStyle = STAGE_COLORS.textMuted;
+      ctx.fillText(ellipsize(ctx, tr(l.sub, f.lang), labelW - 16), body.x + labelW - 16, y + 10);
+    }
+
+    // Số đo ở đầu phải, ví dụ "TRÚNG 4".
+    const v = rt.values[l.id];
+    if (v) {
+      ctx.textAlign = 'left';
+      ctx.font = `700 16px ${MONO}`;
+      ctx.fillStyle = v.tone ? toneOf({ tone: v.tone }, c) : rgba(c, 0.95);
+      ctx.fillText(
+        ellipsize(ctx, v.label ?? formatNumber(meterNow(v, f)), body.x + body.w - track.x - track.w - 8),
+        track.x + track.w + 14,
+        y
+      );
+    }
+  }
+
+  // Nguồn thật ở đáy.
+  if (spec.sink) {
+    const c = spec.sink.accent ?? '#f43f5e';
+    const sy = body.y + body.h - sinkH;
+    ctx.fillStyle = rgba(c, 0.08);
+    roundRect(ctx, track.x, sy, track.w, sinkH, 12);
+    ctx.fill();
+    ctx.strokeStyle = rgba(c, 0.4);
+    ctx.lineWidth = 2;
+    roundRect(ctx, track.x, sy, track.w, sinkH, 12);
+    ctx.stroke();
+
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.font = `700 17px ${SANS}`;
+    ctx.fillStyle = STAGE_COLORS.textSecondary;
+    ctx.fillText(ellipsize(ctx, spec.sink.label, labelW - 16), body.x + labelW - 16, spec.sink.sub ? sinkMidY - 9 : sinkMidY);
+    if (spec.sink.sub) {
+      ctx.font = `500 13px ${SANS}`;
+      ctx.fillStyle = STAGE_COLORS.textMuted;
+      ctx.fillText(ellipsize(ctx, tr(spec.sink.sub, f.lang), labelW - 16), body.x + labelW - 16, sinkMidY + 10);
+    }
+
+    const v = rt.values[MEMBRANE_SINK];
+    if (v) {
+      ctx.textAlign = 'left';
+      ctx.font = `700 16px ${MONO}`;
+      ctx.fillStyle = v.tone ? toneOf({ tone: v.tone }, c) : rgba(c, 0.95);
+      ctx.fillText(v.label ?? formatNumber(meterNow(v, f)), track.x + track.w + 14, sinkMidY);
+    }
+  }
+
+  // Hạt: đang rơi hoặc đã đậu.
+  for (const [lane, list] of Object.entries(rt.items)) {
+    if (lane !== MEMBRANE_SINK && !spec.layers.some((l) => l.id === lane)) continue;
+    const laneAccent = spec.layers.find((l) => l.id === lane)?.accent ?? (lane === MEMBRANE_SINK ? spec.sink?.accent ?? '#f43f5e' : accent);
+    const { gap, widest } = laneGap(list);
+    const showLabel = list.length <= 5 && gap >= widest + 14;
+    list.forEach((item, i) => {
+      const p = bornProgress(item, f);
+      const x = dotX(i, list.length, gap);
+      drawDot(ctx, x, dotY(item), toneOf(item, laneAccent), Math.max(p, 0.15), item.label, showLabel, gap - 10);
+    });
+  }
+
+  // Hạt rời đi = dữ liệu được trả ngược lên cho người gọi: bay lên và mờ dần.
+  rt.leaving
+    .filter((it) => it.diedStep === f.stepIndex)
+    .forEach((item, i, arr) => {
+      const a = dyingAlpha(item, f);
+      if (a <= 0.01) return;
+      const laneAccent = spec.layers.find((l) => l.id === item.lane)?.accent ?? accent;
+      const from = targetY[item.lane] ?? sinkMidY;
+      drawDot(ctx, dotX(i, arr.length, 60), from - (1 - a) * 64, toneOf(item, laneAccent), a * 0.85);
+    });
+}
+
+/* ────────────────────────────────────────────────────────────
+   ĐƯỜNG ĐUA
+   ──────────────────────────────────────────────────────────── */
+
+function drawRacePanel(
+  ctx: CanvasRenderingContext2D,
+  spec: Extract<PanelSpec, { kind: 'race' }>,
+  rt: PanelRuntime,
+  body: PanelRect,
+  f: PanelFrame
+) {
+  const accent = spec.accent ?? f.accent;
+  const n = spec.tracks.length || 1;
+  const rowH = body.h / n;
+  const better = spec.better ?? 'lower';
+
+  // Trần trục: tự co theo đường lớn nhất khi kịch bản không chốt sẵn.
+  let max = spec.max ?? 0;
+  if (!spec.max) for (const t of spec.tracks) max = Math.max(max, rt.values[t.id]?.value ?? 0);
+  if (max <= 0) max = 1;
+
+  // Đường thắng chỉ được tính khi MỌI đường đã có số. Tính sớm hơn thì đường
+  // xuất phát trước luôn "thắng" trong lúc đường sau còn chưa chạy — chip
+  // "×11" nhảy từ bên này sang bên kia giữa chừng, người xem đọc ra kết luận
+  // ngược hẳn với kết luận cuối cùng.
+  let winner: string | null = null;
+  let ratio = 0;
+  if (spec.showDelta) {
+    const vals = spec.tracks.map((t) => rt.values[t.id]?.value);
+    if (vals.every((v) => v !== undefined)) {
+      const nums = vals as number[];
+      const best = better === 'lower' ? Math.min(...nums) : Math.max(...nums);
+      const worst = better === 'lower' ? Math.max(...nums) : Math.min(...nums);
+      winner = spec.tracks[nums.indexOf(best)].id;
+      if (best > 0 && worst > 0) ratio = better === 'lower' ? worst / best : best / worst;
+    }
+  }
+
+  spec.tracks.forEach((t, i) => {
+    const base = t.accent ?? accent;
+    const stored = rt.values[t.id];
+    const value = meterNow(stored, f);
+    const color = stored?.tone ? toneOf({ tone: stored.tone }, base) : base;
+    const y = body.y + rowH * i;
+    const on = rt.active === t.id;
+    const items = rt.items[t.id] ?? [];
+
+    if (on) {
+      ctx.fillStyle = rgba(base, 0.07);
+      roundRect(ctx, body.x - 8, y + 2, body.w + 16, rowH - 6, 10);
+      ctx.fill();
+    }
+
+    ctx.textBaseline = 'middle';
+    const textY = y + rowH * 0.3;
+
+    ctx.textAlign = 'left';
+    ctx.font = `700 ${Math.round(Math.min(21, rowH * 0.3))}px ${SANS}`;
+    ctx.fillStyle = on ? color : STAGE_COLORS.textPrimary;
+    ctx.fillText(ellipsize(ctx, t.label, body.w * 0.45), body.x, textY);
+
+    // Giữa: số phần tử đã đẩy vào làn (đếm hộ kịch bản), hoặc dòng phụ tĩnh.
+    const middle = t.countLabel
+      ? `${items.length} ${tr(t.countLabel, f.lang)}`
+      : t.sub
+        ? tr(t.sub, f.lang)
+        : '';
+    if (middle) {
+      ctx.textAlign = 'center';
+      ctx.font = `600 ${Math.round(Math.min(17, rowH * 0.23))}px ${MONO}`;
+      ctx.fillStyle = STAGE_COLORS.textMuted;
+      ctx.fillText(ellipsize(ctx, middle, body.w * 0.34), body.x + body.w * 0.6, textY);
+    }
+
+    ctx.textAlign = 'right';
+    ctx.font = `700 ${Math.round(Math.min(30, rowH * 0.38))}px ${MONO}`;
+    ctx.fillStyle = color;
+    ctx.fillText(stored?.label ?? `${formatNumber(value)}${spec.unit ? ` ${spec.unit}` : ''}`, body.x + body.w, textY);
+
+    // Thanh.
+    const barH = Math.min(22, rowH * 0.26);
+    const barY = y + rowH * 0.58;
+    ctx.fillStyle = 'rgba(255,255,255,0.05)';
+    roundRect(ctx, body.x, barY, body.w, barH, barH / 2);
+    ctx.fill();
+
+    const fillW = body.w * clamp01(value / max);
+    if (fillW > 1) {
+      const w = Math.max(barH, fillW);
+      ctx.fillStyle = rgba(color, 0.85);
+      roundRect(ctx, body.x, barY, w, barH, barH / 2);
+      ctx.fill();
+
+      // Vạch chia: mỗi phần tử trong làn là một lát của thanh. Bốn truy vấn
+      // nối đuôi nhau nhìn ra ngay là bốn lượt đi–về, không phải một lượt dài.
+      if (items.length > 1 && w > items.length * 9) {
+        ctx.strokeStyle = 'rgba(9, 14, 27, 0.6)';
+        ctx.lineWidth = 2;
+        for (let k = 1; k < items.length; k++) {
+          const tx = body.x + (w * k) / items.length;
+          ctx.beginPath();
+          ctx.moveTo(tx, barY + 1);
+          ctx.lineTo(tx, barY + barH - 1);
+          ctx.stroke();
+        }
+      }
+
+      // Đầu thanh loé lên trong đúng bước làm nó dài ra.
+      if (stored && stored.bornStep === f.stepIndex) {
+        ctx.fillStyle = rgba(color, 0.5 + 0.35 * Math.sin(f.frame * 0.22));
+        ctx.beginPath();
+        ctx.arc(body.x + w, barY + barH / 2, barH * 0.62, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // Chip "×11" ở đường thắng. Màu lấy theo màu ĐANG DÙNG của chính đường ấy
+    // chứ không cắm cứng màu xanh: có bài mà đường thắng đang là "nhanh hơn và
+    // SAI" (đệm trả dữ liệu cũ), một chip xanh ở đó khen nhầm chỗ.
+    if (winner === t.id && ratio >= 1.05) {
+      const text = `×${formatNumber(ratio)}`;
+      ctx.font = `700 15px ${MONO}`;
+      const cw = ctx.measureText(text).width + 20;
+      const cx = Math.min(body.x + fillW + 12, body.x + body.w - cw);
+      ctx.fillStyle = rgba(color, 0.18);
+      roundRect(ctx, cx, barY - 2, cw, barH + 4, (barH + 4) / 2);
+      ctx.fill();
+      ctx.fillStyle = color;
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, cx + 10, barY + barH / 2);
+    }
+  });
+}
+
+/* ────────────────────────────────────────────────────────────
    HÀM VẼ CHÍNH
    ──────────────────────────────────────────────────────────── */
 
@@ -979,6 +1355,12 @@ export function drawPanels(ctx: CanvasRenderingContext2D, f: PanelFrame) {
         break;
       case 'table':
         drawTablePanel(ctx, spec, rt, body, f);
+        break;
+      case 'membrane':
+        drawMembranePanel(ctx, spec, rt, body, f);
+        break;
+      case 'race':
+        drawRacePanel(ctx, spec, rt, body, f);
         break;
       case 'log':
         drawLogPanel(ctx, spec, rt, body, f);

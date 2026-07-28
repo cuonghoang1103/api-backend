@@ -17,6 +17,7 @@ import { microservicesScenario } from './microservices';
 import { spamClickScenario } from './spamClick';
 import { uploadScenario } from './upload';
 import { nPlusOneScenario } from './nPlusOne';
+import { cacheLayersScenario } from './cacheLayers';
 import { webhookScenario } from './webhook';
 import { nodejsEventLoopScenario } from './nodejsEventLoop';
 import { nodejsMicrotaskScenario } from './nodejsMicrotask';
@@ -32,6 +33,14 @@ import { nodejsContractScenario } from './nodejsContract';
 import { nodejsNPlusOneScenario } from './nodejsNPlusOne';
 import { nodejsIndexScenario } from './nodejsIndex';
 import { nodejsJwtScenario } from './nodejsJwt';
+import { dockerLayersScenario } from './dockerLayers';
+import { dockerContainerScenario } from './dockerContainer';
+import { dockerComposeScenario } from './dockerCompose';
+import { deployPipelineScenario } from './deployPipeline';
+import { nginxProxyScenario } from './nginxProxy';
+import { vpsMemoryScenario } from './vpsMemory';
+import { cicdPipelineScenario } from './cicdPipeline';
+import { gitFlowScenario } from './gitFlow';
 import { nodejsCacheAsideScenario } from './nodejsCacheAside';
 import { nodejsAtomicScenario } from './nodejsAtomic';
 import { nodejsRetryScenario } from './nodejsRetry';
@@ -39,8 +48,6 @@ import { nodejsClusterScenario } from './nodejsCluster';
 import { nodejsMemoryLeakScenario } from './nodejsMemoryLeak';
 import { nodejsInputAttacksScenario } from './nodejsInputAttacks';
 import { nodejsBlueGreenScenario } from './nodejsBlueGreen';
-import { dockerLayersScenario } from './dockerLayers';
-import { dockerContainerScenario } from './dockerContainer';
 
 // Thứ tự trong mảng = thứ tự hiện trên bảng chọn, và nó là thứ tự SƯ PHẠM:
 // nền tảng trước (REST → đệm → xác thực → CSDL), rồi tới realtime và kiến
@@ -57,6 +64,7 @@ export const SCENARIOS: Scenario[] = [
   webhookScenario,
   uploadScenario,
   nPlusOneScenario,
+  cacheLayersScenario,
 
   // ── Mục Node.js — mỗi kịch bản dựng video cho MỘT bài trong khoá
   // `content/courses/nodejs`. Thứ tự ở đây theo thứ tự chương.
@@ -86,6 +94,12 @@ export const SCENARIOS: Scenario[] = [
   // container, compose, reverse proxy, bộ nhớ VPS và đường deploy.
   dockerLayersScenario,
   dockerContainerScenario,
+  dockerComposeScenario,
+  nginxProxyScenario,
+  vpsMemoryScenario,
+  gitFlowScenario,
+  deployPipelineScenario,
+  cicdPipelineScenario,
 ];
 
 /**

@@ -15,6 +15,11 @@ export default {
     {
       title: '10.1 — Receiving a file: multipart, base64, and the price in RAM|||10.1 — Nhận file: multipart, base64, và cái giá phải trả bằng RAM',
       slug: 'nodejs-10-1-nhan-file-multipart',
+      simulation: {
+        scenario: 'upload',
+        options: { flow: 'proxy' },
+        caption: { en: 'Through the server: every byte passes your process', vi: 'Qua máy chủ: từng byte đi xuyên tiến trình của bạn' },
+      },
       type: 'VIDEO',
       description: 'Bốn cách nhận cùng một file 6,85MB, đo bằng RSS thật: base64 tốn 47MB, memoryStorage 19MB, stream ra đĩa 8,6MB — và bốn video 120MB cùng lúc đẩy máy chủ lên 786MB.',
       content: `
@@ -216,6 +221,10 @@ HTTP 413 | client đã gửi 7.183.298 byte</div>
     {
       title: '10.2 — Object storage and presigned URLs|||10.2 — Object storage và URL ký sẵn',
       slug: 'nodejs-10-2-object-storage-presigned',
+      simulation: {
+        scenario: 'upload',
+        caption: { en: 'Presigned URL: the browser uploads straight to storage', vi: 'URL ký sẵn: trình duyệt tải thẳng lên kho' },
+      },
       type: 'VIDEO',
       description: 'S3/R2 nhìn từ trong ra: bucket, key, metadata; URL ký sẵn mổ xẻ từng tham số; và ba phát hiện đo được — Content-Type KHÔNG bị ký, kích thước KHÔNG bị ràng buộc, key bị sửa thì chữ ký gãy.',
       content: `
@@ -509,6 +518,11 @@ sau 7 giây    → HTTP 403
     {
       title: '10.3 — Never trust the file: sniffing, polyglots and bombs|||10.3 — Đừng tin file người dùng: magic bytes, file lai và bom giải nén',
       slug: 'nodejs-10-3-kiem-file-that',
+      simulation: {
+        scenario: 'upload',
+        options: { threat: 'bomb' },
+        caption: { en: 'A small file that expands into gigabytes', vi: 'Tệp bé tí nở ra hàng gigabyte' },
+      },
       type: 'VIDEO',
       description: 'Ba lời khai của client đều giả được; magic bytes bắt được phần lớn nhưng không bắt được file lai; một PNG 758KB tiêu 445MB RAM của máy chủ; và vì sao mã hoá lại mới là phép kiểm thật.',
       content: `
@@ -734,6 +748,10 @@ nếu gọi withMetadata()  : 12.136 byte | có EXIF: true</div>
     {
       title: '10.4 — Serving media back: formats, caching and the CDN|||10.4 — Phục vụ media trở lại: định dạng, cache và CDN',
       slug: 'nodejs-10-4-phuc-vu-media-cache',
+      simulation: {
+        scenario: 'cache-layers',
+        caption: { en: 'Browser → CDN → Redis → database, and where it stops', vi: 'Trình duyệt → CDN → Redis → CSDL, và nó dừng ở đâu' },
+      },
       type: 'VIDEO',
       description: 'Một tấm ảnh được xem hàng nghìn lần và upload đúng một lần: chọn định dạng và cỡ, đặt Cache-Control ngay lúc ghi, đọc header thật của media.cuongthai.com, và dọn rác object mồ côi.',
       content: `

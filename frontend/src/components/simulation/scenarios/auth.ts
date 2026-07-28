@@ -46,6 +46,12 @@ export const authScenario: Scenario = {
   },
   icon: KeyRound,
   accent: '#facc15',
+  lesson: {
+    course: 'nodejs',
+    code: '8.3',
+    slug: 'nodejs-8-3-requireauth-phan-quyen',
+    title: { vi: 'requireAuth, phân quyền, và xoá bỏ AUTHOR_ID = 1', en: 'requireAuth, roles, and deleting AUTHOR_ID = 1' },
+  },
   nodes,
   edges,
   options: [

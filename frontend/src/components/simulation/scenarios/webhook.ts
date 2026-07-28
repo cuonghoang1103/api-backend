@@ -42,6 +42,12 @@ export const webhookScenario: Scenario = {
   },
   icon: Webhook,
   accent: '#34d399',
+  lesson: {
+    course: 'nodejs',
+    code: '13.1',
+    slug: 'nodejs-13-1-vi-sao-hang-doi',
+    title: { vi: 'Request không phải chỗ để làm việc nặng', en: 'A request is not a place to do work' },
+  },
   nodes,
   edges,
   options: [

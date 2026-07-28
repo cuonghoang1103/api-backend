@@ -103,6 +103,12 @@ export const restApiScenario: Scenario = {
   },
   icon: Globe,
   accent: '#10b981',
+  lesson: {
+    course: 'nodejs',
+    code: '6.1',
+    slug: 'nodejs-6-1-tai-nguyen-phuong-thuc',
+    title: { vi: 'Tài nguyên, phương thức, và REST thật sự là gì', en: 'Resources, methods, and what REST actually is' },
+  },
   nodes,
   edges,
   options: [

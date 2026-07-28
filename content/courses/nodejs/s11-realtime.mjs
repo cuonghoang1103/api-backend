@@ -14,6 +14,10 @@ export default {
     {
       title: '11.1 — From asking repeatedly to being told: WebSocket|||11.1 — Từ hỏi đi hỏi lại tới được báo: WebSocket',
       slug: 'nodejs-11-1-websocket-co-ban',
+      simulation: {
+        scenario: 'websocket',
+        caption: { en: 'The upgrade handshake, then messages both ways', vi: 'Bắt tay nâng cấp, rồi tin nhắn đi hai chiều' },
+      },
       type: 'VIDEO',
       description: 'Bắt tay Upgrade in ra nguyên văn, và phép đo trả lời câu hỏi "polling đắt tới mức nào": 799 byte cho mỗi lần hỏi mà câu trả lời là KHÔNG.',
       content: `
@@ -398,6 +402,11 @@ socket.on(<span class="tok-str">'thread:join'</span>, (id, ack) =&gt; {
     {
       title: '11.3 — Authenticate once, authorize every time|||11.3 — Xác thực một lần, phân quyền mọi lần',
       slug: 'nodejs-11-3-xac-thuc-phan-quyen-socket',
+      simulation: {
+        scenario: 'websocket',
+        options: { flow: 'idor' },
+        caption: { en: 'Joining a room that is not yours', vi: 'Vào một phòng không phải của mình' },
+      },
       type: 'VIDEO',
       description: 'JWT trong lúc bắt tay, và lỗ hổng cả bài này xoay quanh: một dòng thiếu kiểm quyền cho phép người lạ đọc tin nhắn riêng tư theo thời gian thực — tái hiện, rồi vá trên chính production.',
       content: `
@@ -577,6 +586,11 @@ tự kết nối lại sau 1.053ms | id MỚI: eUE1ya (cũ: JBrWhg)
     {
       title: '11.4 — More than one process: adapters, sticky sessions, backpressure|||11.4 — Nhiều hơn một tiến trình: adapter, sticky session, và áp lực ngược',
       slug: 'nodejs-11-4-scale-adapter-backpressure',
+      simulation: {
+        scenario: 'websocket',
+        options: { scale: 'multi' },
+        caption: { en: 'Two processes, and the message that reaches nobody', vi: 'Hai tiến trình, và tin nhắn không tới được ai' },
+      },
       type: 'VIDEO',
       description: 'Ngày bạn chạy tiến trình thứ hai, realtime im lặng hỏng: chứng minh bằng đo, vá bằng adapter Redis 5,02ms, cộng hai cái bẫy — LB luân phiên giết long-polling và một client đọc chậm ăn 192MB RAM.',
       content: `

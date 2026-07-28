@@ -13,6 +13,10 @@ export default {
     {
       title: '6.1 — Resources, methods and what REST actually means|||6.1 — Tài nguyên, phương thức, và REST thật sự là gì',
       slug: 'nodejs-6-1-tai-nguyen-phuong-thuc',
+      simulation: {
+        scenario: 'rest-api',
+        caption: { en: 'One request end to end: DNS, proxy, middleware, handler, database', vi: 'Trọn một request: DNS, proxy, middleware, handler, cơ sở dữ liệu' },
+      },
       type: 'VIDEO',
       description: 'Đặt tên URL bằng danh từ, chọn đúng phương thức, và hiểu hai tính chất an toàn (safe) — bất biến (idempotent) bằng thí nghiệm thật.',
       content: `
@@ -206,6 +210,11 @@ Allow: GET, HEAD</div>
     {
       title: '6.2 — Status codes and response shape|||6.2 — Mã trạng thái và hình dạng phản hồi',
       slug: 'nodejs-6-2-ma-trang-thai',
+      simulation: {
+        scenario: 'rest-api',
+        options: { status: '404' },
+        caption: { en: 'Where each status code actually stops the chain', vi: 'Mỗi mã trạng thái thực sự chết ở chặng nào' },
+      },
       type: 'VIDEO',
       description: 'Chọn đúng mã trong 2xx/4xx/5xx, phân biệt 401/403 và 409/422, và thiết kế một hình dạng JSON mà frontend chỉ phải học một lần.',
       content: `

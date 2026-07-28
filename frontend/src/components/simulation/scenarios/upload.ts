@@ -36,6 +36,12 @@ export const uploadScenario: Scenario = {
   },
   icon: CloudUpload,
   accent: '#f59e0b',
+  lesson: {
+    course: 'nodejs',
+    code: '10.1',
+    slug: 'nodejs-10-1-nhan-file-multipart',
+    title: { vi: 'Nhận file: multipart, base64, và cái giá phải trả', en: 'Receiving files: multipart, base64 and the cost' },
+  },
   nodes,
   edges,
   options: [

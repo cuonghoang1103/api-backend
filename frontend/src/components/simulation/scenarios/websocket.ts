@@ -37,6 +37,12 @@ export const websocketScenario: Scenario = {
   },
   icon: Radio,
   accent: '#e879f9',
+  lesson: {
+    course: 'nodejs',
+    code: '11.1',
+    slug: 'nodejs-11-1-websocket-co-ban',
+    title: { vi: 'Từ hỏi đi hỏi lại tới được báo: WebSocket', en: 'From asking repeatedly to being told: WebSocket' },
+  },
   nodes,
   edges,
   options: [

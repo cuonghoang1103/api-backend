@@ -528,6 +528,10 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
     {
       title: '18.4 — Monolith or services: deciding with numbers|||18.4 — Khối nguyên hay tách dịch vụ: quyết định bằng số',
       slug: 'nodejs-18-4-monolith-hay-tach',
+      simulation: {
+        scenario: 'microservices',
+        caption: { en: 'Splitting the monolith: the broker, and the retry storm', vi: 'Tách khối nguyên: broker, và cơn bão thử lại' },
+      },
       type: 'VIDEO',
       description: 'Dùng chính số đo của các chương trước để trả lời câu hỏi kiến trúc bị hỏi sai nhiều nhất, và ba dấu hiệu THẬT cho biết đã tới lúc tách một dịch vụ ra.',
       content: `

@@ -36,6 +36,12 @@ export const databaseScenario: Scenario = {
   },
   icon: Database,
   accent: '#60a5fa',
+  lesson: {
+    course: 'nodejs',
+    code: '7.1',
+    slug: 'nodejs-7-1-ket-noi-va-pool',
+    title: { vi: 'Vì sao cần cơ sở dữ liệu, và một kết nối thật', en: 'Why a database, and what a real connection is' },
+  },
   nodes,
   edges,
   options: [

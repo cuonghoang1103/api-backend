@@ -15,6 +15,10 @@ export default {
     {
       title: '12.1 — What Redis really is, and where the time goes|||12.1 — Redis thực chất là gì, và thời gian trôi đi đâu',
       slug: 'nodejs-12-1-redis-co-ban',
+      simulation: {
+        scenario: 'caching',
+        caption: { en: 'Hit, miss, stale — and what each costs in milliseconds', vi: 'Trúng, trượt, cũ — mỗi thứ tốn bao nhiêu mili giây' },
+      },
       type: 'VIDEO',
       description: 'Một lệnh Redis mất 0,204ms nhưng chỉ một phần rất nhỏ trong đó là công việc thật. Gộp 10.000 lệnh vào một pipeline nhanh hơn 63 lần — và phép đo đó định hình mọi thứ bạn viết sau này.',
       content: `

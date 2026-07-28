@@ -36,6 +36,12 @@ export const microservicesScenario: Scenario = {
   },
   icon: Boxes,
   accent: '#fb923c',
+  lesson: {
+    course: 'nodejs',
+    code: '18.4',
+    slug: 'nodejs-18-4-monolith-hay-tach',
+    title: { vi: 'Khối nguyên hay tách dịch vụ: quyết định bằng số', en: 'Monolith or services: deciding with numbers' },
+  },
   nodes,
   edges,
   options: [

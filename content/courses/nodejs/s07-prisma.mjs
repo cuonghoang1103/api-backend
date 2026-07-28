@@ -13,6 +13,10 @@ export default {
     {
       title: '7.1 — Why a database, and what one connection really costs|||7.1 — Vì sao cần cơ sở dữ liệu, và một kết nối thật sự tốn gì',
       slug: 'nodejs-7-1-ket-noi-va-pool',
+      simulation: {
+        scenario: 'database',
+        caption: { en: 'A query through the pool, and what an index changes', vi: 'Một truy vấn đi qua pool, và chỉ mục thay đổi điều gì' },
+      },
       type: 'VIDEO',
       description: 'Chứng minh dữ liệu trong RAM biến mất, đo giá của một kết nối PostgreSQL, và hiểu pool bằng bốn phép đo.',
       content: `
@@ -727,6 +731,11 @@ All migrations have been successfully applied.
     {
       title: '7.3 — CRUD, transactions, and swapping the Notes API onto PostgreSQL|||7.3 — CRUD, transaction, và đổi ruột Notes API sang PostgreSQL',
       slug: 'nodejs-7-3-crud-transaction',
+      simulation: {
+        scenario: 'database',
+        options: { op: 'tx' },
+        caption: { en: 'A transaction: all of it, or none of it', vi: 'Giao dịch: được tất cả, hoặc không gì cả' },
+      },
       type: 'VIDEO',
       description: 'Giữ lời hứa của bài 5.5: cùng router, cùng mã trạng thái, ruột đổi từ Map sang PostgreSQL — cộng với chứng minh transaction cuộn ngược thật.',
       content: `

@@ -42,6 +42,12 @@ export const cachingScenario: Scenario = {
   },
   icon: Zap,
   accent: '#a855f7',
+  lesson: {
+    course: 'nodejs',
+    code: '12.1',
+    slug: 'nodejs-12-1-redis-co-ban',
+    title: { vi: 'Redis thực chất là gì, và thời gian trôi đi đâu', en: 'What Redis really is, and where the time goes' },
+  },
   nodes,
   edges,
   options: [

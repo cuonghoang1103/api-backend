@@ -93,6 +93,24 @@ if [ "$MODE" = "local" ]; then
     fi
     ok "SSH connection OK"
 
+    # ── Pre-flight: giáo trình ↔ sổ kịch bản /simulation ───────────
+    # Chạy TRƯỚC rsync, ở đây là nơi DUY NHẤT có đủ cả hai phía: ảnh backend
+    # không copy `frontend/` nên trong container không đối chiếu được.
+    #
+    # Bắt loại lỗi mà tsc và `next build` đều không thấy, vì chúng là lỗi DỮ
+    # LIỆU: id kịch bản sai chính tả, tuỳ chọn không tồn tại, nhánh sai giá
+    # trị, slug khoá lệch CSDL. Tất cả đều hỏng ÂM THẦM trên prod — kịch bản
+    # rơi về mặc định, bài học minh hoạ sai nội dung, nút quay lại 404.
+    if [ -f "${REPO_DIR}/scripts/sim-check.mjs" ] && command -v node &>/dev/null; then
+        info "Checking simulation ↔ curriculum links..."
+        if node "${REPO_DIR}/scripts/sim-check.mjs" --quiet; then
+            ok "Simulation links OK"
+        else
+            fail "sim-check thất bại — sửa xong hãy deploy (chạy 'node scripts/sim-check.mjs' để xem đầy đủ)"
+            exit 1
+        fi
+    fi
+
     # Ensure VPS deploy dir exists
     ssh -i "$VPS_SSH_KEY" \
         -o StrictHostKeyChecking=accept-new \

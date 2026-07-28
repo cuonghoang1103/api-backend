@@ -92,6 +92,19 @@ if (!course) {
   });
 } else {
   console.log(`  ~ course ${c.courseCode} exists (id ${course.id}) → patch metadata`);
+  // Slug KHÔNG nằm trong `courseData`: đổi slug của một khoá đang chạy sẽ làm
+  // chết mọi link đã phát ra ngoài (bài chia sẻ, bookmark, ảnh OG đã cache).
+  // Nhưng im lặng bỏ qua cũng nguy hiểm ngang: khối mô phỏng trong thân bài
+  // dựng đường "Quay lại bài học" TỪ slug trong file này, nên hai bên lệch
+  // nhau là mọi nút quay lại của môn đó trỏ vào trang 404 mà không ai biết.
+  if (course.slug !== cslug) {
+    console.warn(
+      `  ! LỆCH SLUG: file khai '${cslug}' nhưng CSDL đang là '${course.slug}'.\n` +
+      `    Seeder KHÔNG tự đổi slug. Hãy sửa \`course.slug\` trong file nội dung cho khớp CSDL\n` +
+      `    (hoặc đổi slug trong CSDL một cách có chủ đích), rồi seed lại — nếu không, link\n` +
+      `    "Quay lại bài học" của mọi khối mô phỏng trong môn này sẽ trỏ vào /courses/${cslug}/learn (404).`
+    );
+  }
   if (APPLY) await prisma.course.update({ where: { id: course.id }, data: courseData });
 }
 

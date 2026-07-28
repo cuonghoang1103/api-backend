@@ -880,6 +880,10 @@ thử lại với token mới: HTTP 200  {"items":[{"id":1,"title":"Ghi chu cua 
     {
       title: '8.3 — requireAuth, roles, and deleting AUTHOR_ID = 1|||8.3 — requireAuth, phân quyền, và xoá bỏ AUTHOR_ID = 1',
       slug: 'nodejs-8-3-requireauth-phan-quyen',
+      simulation: {
+        scenario: 'auth',
+        caption: { en: 'Login, the token, and the request that gets refused', vi: 'Đăng nhập, token, và request bị từ chối' },
+      },
       type: 'VIDEO',
       description: 'Viết middleware xác thực với đủ sáu nhánh thất bại, phân biệt 401 với 403, và cho Notes API chạy trên người dùng thật thay vì một hằng số.',
       content: `

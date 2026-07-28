@@ -573,6 +573,12 @@ export const cacheLayersScenario: Scenario = {
   icon: Layers,
   accent: '#38bdf8',
   group: 'core',
+  lesson: {
+    course: 'nodejs',
+    code: '10.4',
+    slug: 'nodejs-10-4-phuc-vu-media-cache',
+    title: { vi: 'Phục vụ media trở lại: định dạng, cache và CDN', en: 'Serving media back: formats, cache and CDN' },
+  },
   nodes: [],
   edges: [],
   panels,

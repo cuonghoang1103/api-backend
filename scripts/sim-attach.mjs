@@ -34,6 +34,7 @@ const value = (name, fallback = null) => {
 
 const MANIFEST = path.resolve(value('--manifest', '_render/manifest.json'));
 const CONTENT_DIR = path.resolve(value('--content', 'content/courses'));
+const ACADEMY_DIR = path.resolve(value('--academy', 'content/academy'));
 const MEDIA_BASE = value('--media-base', 'https://media.cuongthai.com');
 const DRY = flag('--dry');
 const DO_UPLOAD = flag('--upload');
@@ -50,22 +51,40 @@ if (!fs.existsSync(MANIFEST)) {
 
 const manifest = JSON.parse(fs.readFileSync(MANIFEST, 'utf8'));
 const all = manifest.videos ?? [];
-// Bài học Academy (`lesson.subject`) nằm ở `content/academy/<MÃ MÔN>.mjs`, một
-// file phẳng theo môn — không phải `content/courses/<khoá>/` mà bộ vá bên dưới
-// đi tìm. Chưa hỗ trợ thì phải nói ra, chứ không phải im lặng vá nhầm chỗ.
-const videos = all.filter((v) => v.lesson && !v.lesson.subject);
-const academy = all.filter((v) => v.lesson?.subject).length;
-const skipped = all.length - videos.length - academy;
+const videos = all.filter((v) => v.lesson);
+const skipped = all.length - videos.length;
 if (skipped > 0) {
   console.log(`ⓘ Bỏ qua ${skipped} video chưa khai \`lesson\` trong kịch bản — không biết gắn vào bài nào.`);
 }
-if (academy > 0) {
-  console.log(`ⓘ Bỏ qua ${academy} video của bài Academy — hãy khai \`simulation\` tay trong content/academy/<MÔN>.mjs.`);
+
+/* ── Hai kiểu giáo trình, hai cách tìm file ────────────────────────────────
+   • Khoá CuongThai: một THƯ MỤC `content/courses/<khoá>/` gồm nhiều file
+     chương, phải quét từng file để tìm bài mang slug đó.
+   • Môn Academy (`lesson.subject`): một FILE phẳng
+     `content/academy/<MÃ MÔN>.mjs` chứa trọn môn — biết luôn đường dẫn.
+   Trước đây chỉ hiểu kiểu thứ nhất, nên video của bài Academy bị bỏ qua. */
+
+const isAcademy = (v) => Boolean(v.lesson.subject);
+
+/** Những file .mjs có thể chứa bài học này, theo thứ tự ưu tiên. */
+function contentFilesFor(v) {
+  if (isAcademy(v)) {
+    const file = path.resolve(ACADEMY_DIR, `${v.lesson.subject}.mjs`);
+    return fs.existsSync(file) ? [file] : [];
+  }
+  const dir = path.join(CONTENT_DIR, v.lesson.course);
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir).filter((f) => f.endsWith('.mjs')).map((f) => path.join(dir, f));
 }
 
-/** Khoá R2 của một video. Ổn định theo slug bài học, nên dựng lại là ghi đè. */
-const keyFor = (v) => `videos/courses/${v.lesson.course}/${v.lesson.slug}.mp4`;
-const posterKeyFor = (v) => `videos/courses/${v.lesson.course}/${v.lesson.slug}.jpg`;
+/** Khoá R2 của một video. Ổn định theo slug bài học, nên dựng lại là ghi đè.
+    Môn Academy đi vào nhánh `videos/academy/<MÃ MÔN>/` để không lẫn với
+    khoá CuongThai — hai bên có thể trùng slug bài về sau. */
+const baseKeyFor = (v) => (isAcademy(v)
+  ? `videos/academy/${v.lesson.subject}/${v.lesson.slug}`
+  : `videos/courses/${v.lesson.course}/${v.lesson.slug}`);
+const keyFor = (v) => `${baseKeyFor(v)}.mp4`;
+const posterKeyFor = (v) => `${baseKeyFor(v)}.jpg`;
 const urlFor = (v) => `${MEDIA_BASE}/${keyFor(v)}`;
 const posterUrlFor = (v) => `${MEDIA_BASE}/${posterKeyFor(v)}`;
 
@@ -158,9 +177,9 @@ function patch() {
   let missing = 0;
 
   for (const v of videos) {
-    const dir = path.join(CONTENT_DIR, v.lesson.course);
-    if (!fs.existsSync(dir)) {
-      console.error(`  ✗ không thấy thư mục giáo trình: ${dir}`);
+    const files = contentFilesFor(v);
+    if (files.length === 0) {
+      console.error(`  ✗ không thấy giáo trình cho ${isAcademy(v) ? `môn ${v.lesson.subject}` : `khoá ${v.lesson.course}`}`);
       missing++;
       continue;
     }
@@ -183,8 +202,7 @@ function patch() {
     ];
 
     let hit = false;
-    for (const f of fs.readdirSync(dir).filter((f) => f.endsWith('.mjs'))) {
-      const file = path.join(dir, f);
+    for (const file of files) {
       const next = patchFile(file, v.lesson.slug, block);
       if (!next) continue;
       if (next === 'MANUAL') {
@@ -199,7 +217,8 @@ function patch() {
       break;
     }
     if (!hit) {
-      console.error(`  ✗ không tìm thấy bài có slug '${v.lesson.slug}' trong ${dir}`);
+      const where = files.map((f) => path.relative(process.cwd(), f)).join(', ');
+      console.error(`  ✗ không tìm thấy bài có slug '${v.lesson.slug}' trong ${where}`);
       missing++;
     }
   }

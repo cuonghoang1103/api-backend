@@ -497,6 +497,13 @@ export const cpuCycleScenario: Scenario = {
   icon: Cpu,
   accent: '#f59e0b',
   group: 'computer',
+  lesson: {
+    course: 'computer-organization-and-architecture',
+    subject: 'CEA201',
+    code: '3.1',
+    slug: 'cea201-3-1-components-cycle',
+    title: { vi: 'Thành phần & chu trình lệnh', en: 'Components & the instruction cycle' },
+  },
   nodes: [],
   edges: [],
   panels,

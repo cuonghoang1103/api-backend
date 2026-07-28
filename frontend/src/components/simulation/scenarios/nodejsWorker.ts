@@ -201,8 +201,8 @@ function buildWorker(): SimStep[] {
     'serving',
     { vi: 'Luồng chính vẫn phục vụ bình thường', en: 'The main thread keeps serving' },
     {
-      vi: 'Nhịp tim trễ 2ms — tức là không trễ. Đây chính là con số cần so: **2.873ms xuống 2ms**, trong khi phép tính vẫn tốn đúng từng ấy thời gian.',
-      en: 'Heartbeat lag of 2ms — that is to say, none. This is the number to compare: **2,873ms down to 2ms**, while the computation itself takes exactly as long as before.',
+      vi: 'Nhịp tim trễ 2ms — tức là không trễ. Đây chính là con số cần so: 2.873ms xuống 2ms, trong khi phép tính vẫn tốn đúng từng ấy thời gian.',
+      en: 'Heartbeat lag of 2ms — that is to say, none. This is the number to compare: 2,873ms down to 2ms, while the computation itself takes exactly as long as before.',
     },
     2500,
     [

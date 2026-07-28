@@ -550,6 +550,10 @@ export default {
         {
           title: '3.1 — Components & the instruction cycle|||3.1 — Thành phần & chu trình lệnh',
           slug: 'cea201-3-1-components-cycle',
+          simulation: {
+            scenario: 'cpu-cycle',
+            caption: { en: 'Fetch–decode–execute, one instruction at a time', vi: 'Nạp–giải mã–thực thi, từng lệnh một' },
+          },
           type: 'VIDEO',
           description: 'Ba thành phần chính và vòng lặp fetch–execute có thêm ngắt.',
           content: `
@@ -667,6 +671,10 @@ export default {
         {
           title: '4.1 — Locality & the cache principle|||4.1 — Tính cục bộ & nguyên lý cache',
           slug: 'cea201-4-1-locality',
+          simulation: {
+            scenario: 'memory-cache',
+            caption: { en: 'The memory hierarchy and why locality pays', vi: 'Phân cấp bộ nhớ và vì sao tính cục bộ có lãi' },
+          },
           type: 'VIDEO',
           description: 'Vì sao một bộ nhớ nhỏ nhanh lại giúp cả hệ nhanh lên rõ rệt.',
           content: `
@@ -729,6 +737,11 @@ export default {
         {
           title: '4.2 — Cache mapping & replacement|||4.2 — Ánh xạ cache & thay thế',
           slug: 'cea201-4-2-mapping',
+          simulation: {
+            scenario: 'memory-cache',
+            options: { view: 'conflict' },
+            caption: { en: 'Direct mapping and the conflict miss', vi: 'Ánh xạ trực tiếp và trượt do xung đột' },
+          },
           type: 'VIDEO',
           description: 'Direct, associative, set-associative và cách chọn dòng để thay.',
           content: `
@@ -1040,6 +1053,10 @@ export default {
         {
           title: '7.1 — I/O modules & three techniques|||7.1 — Module I/O & ba kỹ thuật',
           slug: 'cea201-7-1-io-techniques',
+          simulation: {
+            scenario: 'interrupts',
+            caption: { en: 'Polling versus interrupts, cycle by cycle', vi: 'Hỏi vòng so với ngắt, đếm theo chu kỳ' },
+          },
           type: 'VIDEO',
           description: 'Polling, ngắt và DMA — ba cách CPU giao tiếp thiết bị.',
           content: `
@@ -1104,6 +1121,10 @@ export default {
         {
           title: '8.1 — Scheduling, memory management & virtual memory|||8.1 — Lập lịch, quản lý bộ nhớ & bộ nhớ ảo',
           slug: 'cea201-8-1-os-support',
+          simulation: {
+            scenario: 'virtual-memory',
+            caption: { en: 'Virtual address → physical address, and the page fault', vi: 'Địa chỉ ảo → địa chỉ thật, và lỗi trang' },
+          },
           type: 'VIDEO',
           description: 'Hardware giúp OS chia sẻ CPU và bộ nhớ giữa nhiều chương trình ra sao.',
           content: `
@@ -1180,6 +1201,10 @@ export default {
         {
           title: '9.1 — Boolean algebra & logic gates|||9.1 — Đại số Boole & cổng logic',
           slug: 'cea201-9-1-boolean-gates',
+          simulation: {
+            scenario: 'logic-gates',
+            caption: { en: 'AND, OR, NOT, XOR — truth tables in motion', vi: 'AND, OR, NOT, XOR — bảng chân trị chạy được' },
+          },
           type: 'VIDEO',
           description: 'Ngôn ngữ toán của mạch số và các cổng hiện thực nó.',
           content: `
@@ -1240,6 +1265,11 @@ export default {
         {
           title: '9.2 — Combinational & sequential circuits|||9.2 — Mạch tổ hợp & mạch tuần tự',
           slug: 'cea201-9-2-circuits',
+          simulation: {
+            scenario: 'logic-gates',
+            options: { view: 'adder' },
+            caption: { en: 'Gates wired into a full adder', vi: 'Ghép cổng thành mạch cộng đầy đủ' },
+          },
           type: 'VIDEO',
           description: 'Mạch không nhớ (bộ cộng) vs mạch có nhớ (flip-flop, thanh ghi).',
           content: `
@@ -1529,6 +1559,11 @@ export default {
         {
           title: '12.2 — Pipelining|||12.2 — Pipeline (đường ống lệnh)',
           slug: 'cea201-12-2-pipelining',
+          simulation: {
+            scenario: 'cpu-cycle',
+            options: { mode: 'pipeline' },
+            caption: { en: 'The same cycle, pipelined into five stages', vi: 'Vẫn chu trình đó, chia thành năm chặng ống lệnh' },
+          },
           type: 'VIDEO',
           description: 'Chồng lấn các giai đoạn lệnh để tăng thông lượng, và các hazard.',
           content: `

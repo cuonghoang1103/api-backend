@@ -49,10 +49,18 @@ if (!fs.existsSync(MANIFEST)) {
 }
 
 const manifest = JSON.parse(fs.readFileSync(MANIFEST, 'utf8'));
-const videos = (manifest.videos ?? []).filter((v) => v.lesson);
-const skipped = (manifest.videos ?? []).length - videos.length;
+const all = manifest.videos ?? [];
+// Bài học Academy (`lesson.subject`) nằm ở `content/academy/<MÃ MÔN>.mjs`, một
+// file phẳng theo môn — không phải `content/courses/<khoá>/` mà bộ vá bên dưới
+// đi tìm. Chưa hỗ trợ thì phải nói ra, chứ không phải im lặng vá nhầm chỗ.
+const videos = all.filter((v) => v.lesson && !v.lesson.subject);
+const academy = all.filter((v) => v.lesson?.subject).length;
+const skipped = all.length - videos.length - academy;
 if (skipped > 0) {
   console.log(`ⓘ Bỏ qua ${skipped} video chưa khai \`lesson\` trong kịch bản — không biết gắn vào bài nào.`);
+}
+if (academy > 0) {
+  console.log(`ⓘ Bỏ qua ${academy} video của bài Academy — hãy khai \`simulation\` tay trong content/academy/<MÔN>.mjs.`);
 }
 
 /** Khoá R2 của một video. Ổn định theo slug bài học, nên dựng lại là ghi đè. */
@@ -131,6 +139,11 @@ function patchFile(file, slug, block) {
   const insertAt = m.index + m[0].length;
   const rest = src.slice(insertAt);
 
+  // Bài dùng NHIỀU kịch bản khai bằng `simulations: [ … ]`. Chèn thêm một
+  // `simulation:` bên cạnh sẽ ra hai khối cho cùng một video, nên dừng lại và
+  // để người viết tự sửa mảng đó — không đoán vị trí phần tử trong mảng.
+  if (/^\n\s*simulations: \[/.test(rest)) return 'MANUAL';
+
   // Đã có `simulation: { … },` ngay dưới slug thì thay, không chèn thêm cái
   // thứ hai. Khối trải nhiều dòng nên khớp tới dấu đóng thụt đúng cấp.
   const existing = rest.match(/^\n\s*simulation: \{[\s\S]*?\n\s*\},/);
@@ -174,6 +187,11 @@ function patch() {
       const file = path.join(dir, f);
       const next = patchFile(file, v.lesson.slug, block);
       if (!next) continue;
+      if (next === 'MANUAL') {
+        hit = true;
+        console.error(`  ! ${path.relative(process.cwd(), file)} — bài '${v.lesson.slug}' khai \`simulations: [ … ]\`; cập nhật url/poster của kịch bản '${v.scenarioId}' trong mảng bằng tay.`);
+        break;
+      }
       hit = true;
       console.log(`  ${DRY ? '·' : '✓'} ${path.relative(process.cwd(), file)} ← ${v.lesson.slug} (${v.durationSeconds}s)`);
       if (!DRY) fs.writeFileSync(file, next);

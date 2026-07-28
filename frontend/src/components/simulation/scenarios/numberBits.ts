@@ -293,6 +293,13 @@ export const numberBitsScenario: Scenario = {
   icon: Binary,
   accent: '#34d399',
   group: 'computer',
+  lesson: {
+    course: 'introduction-to-computer-science',
+    subject: 'CSI104',
+    code: '3.1',
+    slug: 'csi104-3-1-luu-so',
+    title: { vi: 'Lưu số: số nguyên & số thực', en: 'Storing numbers: integers & floats' },
+  },
   nodes: [],
   edges: [],
   panels,

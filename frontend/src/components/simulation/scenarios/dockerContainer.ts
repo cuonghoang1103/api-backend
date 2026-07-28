@@ -476,6 +476,12 @@ export const dockerContainerScenario: Scenario = {
   icon: Boxes,
   accent: '#34d399',
   group: 'devops',
+  lesson: {
+    course: 'nodejs',
+    code: '17.1',
+    slug: 'nodejs-17-1-anh-docker',
+    title: { vi: 'Ảnh Docker: từ 440MB xuống 58,8MB', en: 'The image: 440MB down to 58.8MB' },
+  },
   nodes: [],
   edges: [],
   panels,

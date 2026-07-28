@@ -38,6 +38,9 @@
  *           { title, slug, type:'VIDEO'|'QUIZ'|'EXERCISE'|'SOLUTION',
  *             description, content:'<html>', isFreePreview:true,
  *             teachingNotes:'<html>',   // video script — admin/teacher side
+ *             simulation:{ scenario, options?, url?, poster?, caption },
+ *             simulations:[ … ],        // nhiều kịch bản cho một bài
+ *             // xem scripts/lib/simulation-block.mjs
  *             quiz:{ timeLimitSeconds, questions:[{question,options,correctIndex,points}] } },
  *       ] },
  *     ],
@@ -46,6 +49,7 @@
 import { pathToFileURL } from 'node:url';
 import path from 'node:path';
 import { PrismaClient } from '@prisma/client';
+import { withSimulation } from './lib/simulation-block.mjs';
 
 const prisma = new PrismaClient();
 const args = process.argv.slice(2);
@@ -68,72 +72,13 @@ const normType = (t) => (TYPES.has(String(t || '').toUpperCase()) ? String(t).to
    lecture (normally a YouTube link), so the animated explainer goes into the
    body instead, right after the opening paragraph.
 
-   Rendered here rather than pasted into the content files so that every
-   lesson gets identical markup, the bilingual halves stay balanced (the
-   content checker counts ml-en against ml-vi), and restyling later is one
-   edit instead of twenty.
-
-   `<video controls>` carries a real fullscreen button for free; `playsinline`
-   stops iOS from hijacking playback into its own fullscreen player, which
-   would make the surrounding lesson text vanish mid-read. */
+   Rendered by `scripts/lib/simulation-block.mjs` — shared with the Academy
+   seeder — rather than pasted into the content files, so that every lesson
+   gets identical markup, the bilingual halves stay balanced (the content
+   checker counts ml-en against ml-vi), and restyling later is one edit
+   instead of twenty. */
 
 const isYouTube = (url) => /(?:youtube\.com|youtu\.be)/i.test(String(url));
-
-const escAttr = (v) => String(v)
-  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-
-function simulationBlock(sim, lang) {
-  const vi = lang === 'vi';
-  const caption = (vi ? sim.caption?.vi : sim.caption?.en) || (vi ? 'Mô phỏng bài học' : 'Lesson simulation');
-  const tag = vi ? 'Mô phỏng' : 'Simulation';
-  const hint = vi
-    ? 'Bấm nút toàn màn hình để xem nét ở cỡ lớn.'
-    : 'Use the fullscreen button to watch it full size.';
-  const openLabel = vi ? 'Mở bản tương tác' : 'Open the interactive version';
-  const link = sim.scenario
-    ? ' <a class="sim-open" href="/simulation?scenario=' + escAttr(sim.scenario) + '&amp;lang=' + lang +
-      '" target="_blank" rel="noopener">' + openLabel + ' →</a>'
-    : '';
-  const poster = sim.poster ? ' poster="' + escAttr(sim.poster) + '"' : '';
-
-  return '<figure class="sim-video">\n' +
-    '  <video controls playsinline preload="metadata"' + poster + ' src="' + escAttr(sim.url) + '"></video>\n' +
-    '  <figcaption><span class="sim-tag">' + tag + '</span> ' + escAttr(caption) +
-    ' <span class="sim-hint">' + hint + '</span>' + link + '</figcaption>\n' +
-    '</figure>';
-}
-
-/**
- * Insert the block into BOTH language halves of a lesson body.
- *
- * Anchored after the opening `<p class="lead">…</p>` when there is one — the
- * lead poses the question the animation answers, so the clip reads as the
- * answer rather than as decoration. Falls back to just after the `<h2>`, then
- * to the top of the half. Content without an `ml-*` wrapper is returned
- * untouched, so a malformed lesson never loses its text.
- */
-function withSimulation(content, sim) {
-  if (!content || !sim?.url) return content;
-  if (content.includes('class="sim-video"')) return content;   // đã chèn rồi
-
-  return content.replace(
-    /<div class="ml-(en|vi)">([\s\S]*?)<\/div>\s*(?=<div class="ml-(?:en|vi)">|$)/g,
-    (whole, lang, body) => {
-      const block = '\n' + simulationBlock(sim, lang) + '\n';
-      const lead = body.match(/<p class="lead">[\s\S]*?<\/p>/);
-      if (lead) {
-        const at = lead.index + lead[0].length;
-        return '<div class="ml-' + lang + '">' + body.slice(0, at) + block + body.slice(at) + '</div>';
-      }
-      const h2 = body.match(/<h2>[\s\S]*?<\/h2>/);
-      if (h2) {
-        const at = h2.index + h2[0].length;
-        return '<div class="ml-' + lang + '">' + body.slice(0, at) + block + body.slice(at) + '</div>';
-      }
-      return '<div class="ml-' + lang + '">' + block + body + '</div>';
-    }
-  );
-}
 
 const spec = (await import(pathToFileURL(path.resolve(FILE)).href)).default;
 console.log(`── course-seed ${spec.course.slug} : ${APPLY ? 'APPLY' : 'DRY'} ──`);
@@ -268,7 +213,7 @@ if (course) {
 
       const lessonCore = {
         title: l.title, description: l.description ?? null,
-        content: withSimulation(l.content ?? null, l.simulation),
+        content: withSimulation(l.content ?? null, { ...l, slug: lslug }, cslug),
         lessonType: normType(l.type), isFreePreview: l.isFreePreview ?? false, isPublished: l.isPublished ?? true,
         // Only set when present: re-seeding a lesson whose video has not been
         // rendered yet must NOT wipe a video attached in an earlier pass.

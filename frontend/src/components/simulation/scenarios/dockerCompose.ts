@@ -317,6 +317,12 @@ export const dockerComposeScenario: Scenario = {
   icon: Workflow,
   accent: '#a78bfa',
   group: 'devops',
+  lesson: {
+    course: 'nodejs',
+    code: '17.3',
+    slug: 'nodejs-17-3-pid-1-tat-em',
+    title: { vi: 'PID 1: dòng CMD làm mất mọi request đang xử lý', en: 'PID 1: the CMD line that loses every in-flight request' },
+  },
   nodes,
   edges,
   options: [

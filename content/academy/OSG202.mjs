@@ -479,6 +479,10 @@ export default {
         {
           title: '3.1 — Paging & virtual memory|||3.1 — Phân trang & bộ nhớ ảo',
           slug: 'osg202-3-1-phan-trang',
+          simulation: {
+            scenario: 'virtual-memory',
+            caption: { en: 'Page table lookup, address by address', vi: 'Tra bảng trang, từng địa chỉ một' },
+          },
           type: 'VIDEO',
           description: 'Cho mỗi tiến trình một không gian địa chỉ riêng, lớn hơn cả RAM.',
           content: `
@@ -519,6 +523,11 @@ export default {
         {
           title: '3.2 — Page faults & replacement|||3.2 — Lỗi trang & thay trang',
           slug: 'osg202-3-2-thay-trang',
+          simulation: {
+            scenario: 'virtual-memory',
+            options: { view: 'swap' },
+            caption: { en: 'Page fault, replacement and thrashing', vi: 'Lỗi trang, thay trang và hiện tượng thrashing' },
+          },
           type: 'VIDEO',
           description: 'Page fault, các thuật toán thay trang (FIFO/LRU) và thrashing.',
           content: `
@@ -689,6 +698,11 @@ export default {
         {
           title: '5.1 — I/O hardware & software|||5.1 — Phần cứng & phần mềm I/O',
           slug: 'osg202-5-1-io',
+          simulation: {
+            scenario: 'interrupts',
+            options: { view: 'dma' },
+            caption: { en: 'Interrupts and DMA: who moves the bytes', vi: 'Ngắt và DMA: ai là người chuyển byte' },
+          },
           type: 'VIDEO',
           description: 'Driver thiết bị, các lớp phần mềm I/O và đệm (buffering).',
           content: `

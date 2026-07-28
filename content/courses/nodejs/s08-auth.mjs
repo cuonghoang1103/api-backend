@@ -13,6 +13,10 @@ export default {
     {
       title: '8.1 — Storing passwords: why almost every way is wrong|||8.1 — Lưu mật khẩu: vì sao gần như mọi cách đều sai',
       slug: 'nodejs-8-1-mat-khau-va-bam',
+      simulation: {
+        scenario: 'password-hashing',
+        caption: { en: 'Plain text, then a real hash — against the same leak', vi: 'Lưu thô, rồi băm thật — trước cùng một vụ lộ CSDL' },
+      },
       type: 'VIDEO',
       description: 'Đo tốc độ băm, vét cạn một triệu mật khẩu, hiểu muối và tham số argon2id, và bịt lỗ dò tài khoản qua thời gian trả lời.',
       content: `
@@ -1244,6 +1248,10 @@ authorId sau PATCH = 2 (vẫn là Bình id=2)</div>
     {
       title: '8.4 — Cookies, CSRF, revocation and rate limiting|||8.4 — Cookie, CSRF, thu hồi phiên và chặn dò mật khẩu',
       slug: 'nodejs-8-4-cookie-csrf-thu-hoi',
+      simulation: {
+        scenario: 'rate-limit',
+        caption: { en: 'Fixed window versus token bucket under a burst', vi: 'Cửa sổ cố định so với gáo token khi bị dội' },
+      },
       type: 'VIDEO',
       description: 'Chọn chỗ cất token, hiểu CSRF bằng bốn endpoint chạy thật, đăng xuất mọi thiết bị bằng tokenVersion, và chặn dò mật khẩu đúng cách.',
       content: `

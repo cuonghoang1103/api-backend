@@ -899,6 +899,11 @@ const release = (key, token) =&gt; redis.eval(LUA_UNLOCK, 1, key, token);</code>
     {
       title: '12.5 — Pub/Sub and Streams: the message that vanished|||12.5 — Pub/Sub và Streams: tin nhắn đã biến mất',
       slug: 'nodejs-12-5-pubsub-streams',
+      simulation: {
+        scenario: 'pub-sub',
+        options: { style: 'pubsub' },
+        caption: { en: 'Direct calls versus publishing one event', vi: 'Gọi thẳng so với công bố một sự kiện' },
+      },
       type: 'VIDEO',
       description: 'PUBLISH trả về 0 và tin nhắn biến mất khỏi vũ trụ. Stream giữ lại được, chia việc cho nhiều worker và đòi lại việc bỏ dở — có XAUTOCLAIM chạy thật chứng minh.',
       content: `

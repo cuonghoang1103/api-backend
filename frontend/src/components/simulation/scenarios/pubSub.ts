@@ -315,6 +315,12 @@ export const pubSubScenario: Scenario = {
   },
   icon: Waypoints,
   accent: '#a78bfa',
+  lesson: {
+    course: 'nodejs',
+    code: '12.5',
+    slug: 'nodejs-12-5-pubsub-streams',
+    title: { vi: 'Pub/Sub và Streams: tin nhắn đã biến mất', en: 'Pub/Sub and Streams: the message that vanished' },
+  },
   nodes,
   edges,
   options: [

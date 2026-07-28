@@ -1212,8 +1212,57 @@ aside ::-webkit-scrollbar-thumb:hover {
 }
 .rich-content .sim-video .sim-open:hover { text-decoration: underline; }
 
+/* Thẻ mô phỏng CHƯA có video dựng sẵn — chỉ một dòng dẫn sang /simulation.
+   Cùng ngôn ngữ hình ảnh với `.sim-video` nhưng không có khung <video> rỗng:
+   bài học vẫn có đường vào mô phỏng ngay, không phải chờ dựng đủ mp4. */
+.rich-content .sim-card {
+  margin: 1.5rem 0;
+  padding: 0;
+  border: 1px solid var(--border-color, #253046);
+  border-left: 3px solid rgba(56, 189, 248, 0.75);
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(56, 189, 248, 0.05);
+}
+.rich-content .sim-card figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+.rich-content .sim-card .sim-tag {
+  flex-shrink: 0;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.12);
+  color: #7dd3fc;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.rich-content .sim-card .sim-hint {
+  color: var(--text-muted, #7f8fab);
+  font-size: 0.8rem;
+}
+.rich-content .sim-card .sim-open {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: #7dd3fc;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.rich-content .sim-card .sim-open:hover { text-decoration: underline; }
+
 @media (max-width: 640px) {
-  .rich-content .sim-video .sim-open { margin-left: 0; }
+  .rich-content .sim-video .sim-open,
+  .rich-content .sim-card .sim-open { margin-left: 0; }
 }
 
 /* --- callout boxes (info / ok / warn / danger) --- */

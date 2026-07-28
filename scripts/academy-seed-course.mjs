@@ -26,6 +26,9 @@
  *       { title:'Mục 0 — Giới thiệu & Hướng dẫn học', description, lessons:[
  *           { title, slug, type:'VIDEO'|'QUIZ'|'EXERCISE'|'SOLUTION',
  *             description, content:'<html>', isFreePreview:true,
+ *             simulation:{ scenario, options?, url?, poster?, caption },
+ *             simulations:[ … ],   // nhiều kịch bản cho một bài
+ *             // → khối mô phỏng trong thân bài, xem scripts/lib/simulation-block.mjs
  *             quiz:{ timeLimitSeconds, questions:[{question,options,correctIndex,points}] } },
  *       ] },
  *     ],
@@ -34,6 +37,7 @@
 import { pathToFileURL } from 'node:url';
 import path from 'node:path';
 import { PrismaClient } from '@prisma/client';
+import { withSimulation } from './lib/simulation-block.mjs';
 
 const prisma = new PrismaClient();
 const args = process.argv.slice(2);
@@ -138,7 +142,11 @@ if (course) {
         })),
       } : undefined;
       const lessonCore = {
-        title: l.title, description: l.description ?? null, content: l.content ?? null,
+        title: l.title, description: l.description ?? null,
+        // Khối mô phỏng được DỰNG ở đây, không viết tay trong file nội dung:
+        // mọi bài có cùng một dạng markup, hai nửa song ngữ luôn cân nhau, và
+        // link về /simulation mang sẵn ngữ cảnh quay lại đúng bài này.
+        content: withSimulation(l.content ?? null, { ...l, slug: lslug }, cslug),
         lessonType: normType(l.type), isFreePreview: l.isFreePreview ?? false, isPublished: l.isPublished ?? true,
       };
 

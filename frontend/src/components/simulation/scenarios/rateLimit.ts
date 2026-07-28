@@ -358,6 +358,12 @@ export const rateLimitScenario: Scenario = {
   },
   icon: Gauge,
   accent: '#f59e0b',
+  lesson: {
+    course: 'nodejs',
+    code: '8.4',
+    slug: 'nodejs-8-4-cookie-csrf-thu-hoi',
+    title: { vi: 'Cookie, CSRF, thu hồi phiên và chặn dò mật khẩu', en: 'Cookies, CSRF, revocation and rate limiting' },
+  },
   nodes: [],
   edges: [],
   panels,

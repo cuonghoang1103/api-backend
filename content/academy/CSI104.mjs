@@ -446,6 +446,10 @@ export default {
         {
           title: '1.3 — The CPU: fetch–decode–execute|||1.3 — CPU: nạp–giải mã–thực thi',
           slug: 'csi104-1-3-cpu-cycle',
+          simulation: {
+            scenario: 'cpu-cycle',
+            caption: { en: 'Fetch–decode–execute inside the CPU', vi: 'Nạp–giải mã–thực thi bên trong CPU' },
+          },
           type: 'VIDEO',
           description: 'Bên trong bộ não: Control Unit, ALU, thanh ghi và chu trình lệnh.',
           content: `
@@ -510,6 +514,10 @@ export default {
         {
           title: '1.4 — Memory: main, cache & the hierarchy|||1.4 — Bộ nhớ: chính, cache & phân cấp',
           slug: 'csi104-1-4-memory-hierarchy',
+          simulation: {
+            scenario: 'memory-cache',
+            caption: { en: 'Registers → cache → RAM → disk, to scale', vi: 'Thanh ghi → cache → RAM → đĩa, đúng tỉ lệ' },
+          },
           type: 'VIDEO',
           description: 'Vì sao máy có nhiều loại bộ nhớ và cache lấp khoảng cách tốc độ ra sao.',
           content: `
@@ -562,6 +570,10 @@ export default {
         {
           title: '1.5 — Input/Output & different architectures|||1.5 — Nhập/Xuất & các kiến trúc khác nhau',
           slug: 'csi104-1-5-io-architectures',
+          simulation: {
+            scenario: 'interrupts',
+            caption: { en: 'How a device gets the CPU’s attention', vi: 'Thiết bị gọi CPU bằng cách nào' },
+          },
           type: 'VIDEO',
           description: 'Cách máy giao tiếp với thiết bị ngoài và điểm khác giữa các kiến trúc.',
           content: `
@@ -760,6 +772,10 @@ export default {
         {
           title: '2.3 — Binary arithmetic|||2.3 — Số học nhị phân',
           slug: 'csi104-2-3-so-hoc-nhi-phan',
+          simulation: {
+            scenario: 'number-bits',
+            caption: { en: 'Two’s complement addition, bit by bit', vi: 'Cộng số bù hai, từng bit một' },
+          },
           type: 'VIDEO',
           description: 'Cộng, nhân trong nhị phân và khái niệm tràn số (overflow).',
           content: `
@@ -824,6 +840,11 @@ export default {
         {
           title: '3.1 — Storing numbers: integers & floats|||3.1 — Lưu số: số nguyên & số thực',
           slug: 'csi104-3-1-luu-so',
+          simulation: {
+            scenario: 'number-bits',
+            options: { view: 'float' },
+            caption: { en: 'Why 0.1 + 0.2 is not 0.3', vi: 'Vì sao 0,1 + 0,2 không bằng 0,3' },
+          },
           type: 'VIDEO',
           description: 'Không dấu, bù hai (two\'s complement) cho số âm, và dấu phẩy động IEEE.',
           content: `
@@ -872,6 +893,11 @@ export default {
         {
           title: '3.2 — Storing text, images, audio & video|||3.2 — Lưu chữ, ảnh, âm thanh & video',
           slug: 'csi104-3-2-luu-media',
+          simulation: {
+            scenario: 'text-encoding',
+            options: { view: 'utf8' },
+            caption: { en: 'ASCII, UTF-8 and the broken Vietnamese character', vi: 'ASCII, UTF-8 và chữ tiếng Việt bị vỡ' },
+          },
           type: 'VIDEO',
           description: 'ASCII/Unicode cho chữ, pixel cho ảnh, mẫu (sample) cho âm thanh, khung hình cho video.',
           content: `
@@ -922,6 +948,10 @@ export default {
         {
           title: '3.3 — Logic operations on bits|||3.3 — Phép toán logic trên bit',
           slug: 'csi104-3-3-phep-logic',
+          simulation: {
+            scenario: 'logic-gates',
+            caption: { en: 'Bit operations as physical gates', vi: 'Phép toán trên bit dưới dạng cổng vật lý' },
+          },
           type: 'VIDEO',
           description: 'AND, OR, NOT, XOR ở mức bit và cách dùng mặt nạ (mask).',
           content: `

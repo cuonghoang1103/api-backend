@@ -485,6 +485,12 @@ export const dockerLayersScenario: Scenario = {
   icon: Layers,
   accent: '#38bdf8',
   group: 'devops',
+  lesson: {
+    course: 'nodejs',
+    code: '17.2',
+    slug: 'nodejs-17-2-cache-tang',
+    title: { vi: 'Cache tầng: thứ tự dòng làm build chậm gấp 5,6 lần', en: 'Layer cache: the line order that makes builds 5.6× slower' },
+  },
   nodes: [],
   edges: [],
   panels,

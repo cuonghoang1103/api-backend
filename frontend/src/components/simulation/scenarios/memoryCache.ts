@@ -352,6 +352,13 @@ export const memoryCacheScenario: Scenario = {
   icon: Microchip,
   accent: '#38bdf8',
   group: 'computer',
+  lesson: {
+    course: 'computer-organization-and-architecture',
+    subject: 'CEA201',
+    code: '4.1',
+    slug: 'cea201-4-1-locality',
+    title: { vi: 'Tính cục bộ & nguyên lý cache', en: 'Locality & the cache principle' },
+  },
   nodes: [],
   edges: [],
   panels,

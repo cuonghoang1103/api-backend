@@ -343,6 +343,12 @@ export const nginxProxyScenario: Scenario = {
   icon: Router,
   accent: '#38bdf8',
   group: 'devops',
+  lesson: {
+    course: 'nodejs',
+    code: '17.5',
+    slug: 'nodejs-17-5-deploy-khong-gian-doan',
+    title: { vi: 'Deploy không gián đoạn: mất 1,5%, hay mất 0%', en: 'Zero downtime: 1.5% lost, or 0%' },
+  },
   nodes,
   edges,
   options: [

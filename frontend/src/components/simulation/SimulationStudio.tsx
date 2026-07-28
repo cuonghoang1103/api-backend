@@ -46,12 +46,37 @@ import { LOOP_CHOICES, SPEEDS, useSimulationEngine } from './useSimulationEngine
 import { useSoundEngine } from './useSoundEngine';
 import { useStudioRecorder } from './useStudioRecorder';
 import { renderSfxTrackToWav, type SfxCue } from './sfx';
+import { lessonPath, tr } from './types';
 import type { Lang, ScenarioOptions, SimStep } from './types';
+
+/**
+ * Bài học mà người xem vừa rời khỏi để mở mô phỏng này.
+ *
+ * Chỉ nhận slug — KHÔNG nhận URL — nên không có cách nào biến nút "quay lại"
+ * thành một cú chuyển hướng ra ngoài miền.
+ */
+interface FromLesson {
+  course: string;
+  lesson: string;
+  title: string | null;
+}
+
+/** Slug hợp lệ: chữ thường, số, gạch ngang. Sai định dạng thì coi như không có. */
+const cleanSlug = (v: string | null): string | null =>
+  v && /^[a-z0-9][a-z0-9-]{0,120}$/i.test(v) ? v : null;
+
+function readFrom(sp: URLSearchParams): FromLesson | null {
+  const course = cleanSlug(sp.get('fromCourse'));
+  const lesson = cleanSlug(sp.get('fromLesson'));
+  if (!course || !lesson) return null;
+  const title = (sp.get('fromTitle') ?? '').trim();
+  return { course, lesson, title: title ? title.slice(0, 160) : null };
+}
 
 /** Đọc tham số URL một lần lúc gắn — sau đó URL chỉ được GHI, không đọc lại. */
 function readInitialParams() {
   if (typeof window === 'undefined') {
-    return { raw: {} as Record<string, string>, scenarioId: DEFAULT_SCENARIO_ID, lang: 'vi' as Lang, autoplay: false, chrome: true, caption: true, speed: 1, loops: 2 };
+    return { raw: {} as Record<string, string>, scenarioId: DEFAULT_SCENARIO_ID, lang: 'vi' as Lang, autoplay: false, chrome: true, caption: true, speed: 1, loops: 2, from: null as FromLesson | null };
   }
   const sp = new URLSearchParams(window.location.search);
   const raw: Record<string, string> = {};
@@ -73,6 +98,7 @@ function readInitialParams() {
     caption: sp.get('caption') !== 'off',
     speed: SPEEDS.includes(speedParam as (typeof SPEEDS)[number]) ? speedParam : 1,
     loops: LOOP_CHOICES.includes(loopParam as (typeof LOOP_CHOICES)[number]) ? loopParam : 2,
+    from: readFrom(sp),
   };
 }
 
@@ -182,8 +208,35 @@ export default function SimulationStudio() {
     sp.set('loops', String(engine.loops));
     if (!showCaption) sp.set('caption', 'off');
     if (!chrome) sp.set('chrome', 'off');
+    // Ngữ cảnh quay về đi theo URL. Không giữ lại ở đây thì `replaceState`
+    // ngay sau khi gắn sẽ xoá mất nút "Quay lại bài học" — và nút "Chép liên
+    // kết" sẽ đưa cho học viên một link đã mất đường về.
+    const from = initial.current.from;
+    if (from) {
+      sp.set('fromCourse', from.course);
+      sp.set('fromLesson', from.lesson);
+      if (from.title) sp.set('fromTitle', from.title);
+    }
     return sp.toString();
   }, [chrome, engine.loops, engine.speed, lang, options, scenario, showCaption]);
+
+  /* ── Đường về bài học ─────────────────────────────────────────
+     Ưu tiên bài mà người xem VỪA RỜI (tham số `from…`): một kịch bản có thể
+     được nhiều bài của nhiều môn cùng dùng, nên chỉ có URL mới biết đúng chỗ
+     cần quay về. Không có thì rơi về bài "chính chủ" mà kịch bản tự khai —
+     nhờ vậy link chia sẻ hay bookmark vẫn có đường sang giáo trình. */
+  const backTo = useMemo(() => {
+    const from = initial.current.from;
+    if (from) {
+      return {
+        href: lessonPath({ course: from.course, slug: from.lesson }),
+        label: from.title ?? (lang === 'vi' ? 'Quay lại bài học' : 'Back to the lesson'),
+      };
+    }
+    const l = scenario.lesson;
+    if (!l) return null;
+    return { href: lessonPath(l), label: `${l.code} · ${tr(l.title, lang)}` };
+  }, [lang, scenario]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -455,10 +508,26 @@ export default function SimulationStudio() {
       <div className="mx-auto max-w-[1860px] px-3 sm:px-5">
         {/* Đầu trang — tiêu đề chỉ dành cho trình đọc màn hình/SEO; phần nhìn
             thấy rút gọn còn hàng nút để nhường tối đa chiều cao cho sân khấu. */}
-        <header className="mb-2 flex flex-wrap items-center justify-end gap-3">
+        <header className="mb-2 flex flex-wrap items-center justify-between gap-3">
           <h1 className="sr-only">
             {vi ? 'Xưởng mô phỏng Code & Mạng' : 'Code & Network Animation Studio'}
           </h1>
+          {/* Đường về giáo trình. Mô phỏng thường được mở từ trong một bài
+              học ở tab mới, nhưng link chia sẻ và bookmark thì không có tab
+              nào để đóng — nên chỗ này luôn phải có lối ra. */}
+          {backTo ? (
+            <a
+              href={backTo.href}
+              className="inline-flex min-w-0 max-w-full items-center gap-1.5 rounded-lg border border-[#243050] bg-[#0a0f1e] px-2.5 py-1.5 text-[12px] font-semibold text-[#93a4c4] transition-colors hover:border-[#3a4d7a] hover:text-[#e8eefc]"
+              title={vi ? 'Mở bài học tương ứng' : 'Open the matching lesson'}
+            >
+              <ChevronLeft className="h-3.5 w-3.5 shrink-0" />
+              <span className="shrink-0">{vi ? 'Quay lại bài học' : 'Back to the lesson'}</span>
+              <span className="hidden truncate text-[#5d6d8c] sm:inline">· {backTo.label}</span>
+            </a>
+          ) : (
+            <span />
+          )}
           <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"

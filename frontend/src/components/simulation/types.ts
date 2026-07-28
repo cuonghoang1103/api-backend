@@ -248,14 +248,38 @@ export interface ScenarioGroup {
  * trang mô phỏng dùng nó để hiện nút "Mở bài học".
  */
 export interface LessonRef {
-  /** Slug khoá học, ví dụ 'nodejs'. */
+  /**
+   * Slug KHOÁ HỌC — cũng là đoạn giữa của đường dẫn `/courses/<course>/learn`.
+   *
+   * Với khoá CuongThai nó trùng luôn tên thư mục `content/courses/<course>/`
+   * (ví dụ 'nodejs'). Với môn Academy thì slug khoá và tên file nội dung khác
+   * nhau, nên mới có `subject` bên dưới.
+   */
   course: string;
+  /**
+   * Mã môn FPTU ('CEA201', 'CSI104', 'OSG202'…) khi bài học thuộc Academy.
+   *
+   * Có trường này nghĩa là nội dung nằm ở `content/academy/<subject>.mjs`, chứ
+   * KHÔNG phải `content/courses/<course>/` — `sim-attach.mjs` đọc nó để khỏi
+   * đi tìm nhầm thư mục.
+   */
+  subject?: string;
   /** Nhãn ngắn của bài, ví dụ '2.2'. */
   code: string;
   /** Slug bài học trong seeder — khớp `l.slug` của content .mjs. */
   slug: string;
   title: I18nText;
 }
+
+/**
+ * Đường dẫn mở đúng bài học đó trong trang học.
+ *
+ * Môn Academy cũng đi qua `/courses/<slug>/learn` — `/academy/courses/…/learn`
+ * chỉ là một trang chuyển hướng sang đây. `lessonSlug` được trang học đọc để
+ * chọn sẵn bài, thay vì rơi về bài đầu tiên của khoá.
+ */
+export const lessonPath = (ref: Pick<LessonRef, 'course' | 'slug'>): string =>
+  `/courses/${encodeURIComponent(ref.course)}/learn?lessonSlug=${encodeURIComponent(ref.slug)}`;
 
 export interface Scenario {
   id: string;

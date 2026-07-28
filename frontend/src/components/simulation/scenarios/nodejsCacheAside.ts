@@ -470,8 +470,8 @@ function buildTtl(): SimStep[] {
     'countdown',
     { vi: 'TTL đếm ngược — rồi khoá biến mất', en: 'The TTL counts down — then the key is gone' },
     {
-      vi: 'Sau 0 ms: giá trị còn đó, TTL = 3. Sau 2.000 ms: `GET` trả về `null`, TTL = -2. Hai số âm đáng để thuộc lòng: **-2 là đã biến mất, -1 là bất tử**.',
-      en: 'At 0 ms: value present, TTL = 3. At 2,000 ms: `GET` returns `null`, TTL = -2. Two negative numbers worth memorising: **-2 means gone, -1 means immortal**.',
+      vi: 'Sau 0 ms: giá trị còn đó, TTL = 3. Sau 2.000 ms: `GET` trả về `null`, TTL = -2. Hai số âm đáng để thuộc lòng: -2 là đã biến mất, -1 là bất tử.',
+      en: 'At 0 ms: value present, TTL = 3. At 2,000 ms: `GET` returns `null`, TTL = -2. Two negative numbers worth memorising: -2 means gone, -1 means immortal.',
     },
     2500,
     [

@@ -216,14 +216,23 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
       // the page would sit there with the spinner forever showing
       // an empty main column.
       if (data.sections && data.sections.length > 0) {
-        const requestedLessonId = typeof window !== 'undefined'
-          ? Number(new URLSearchParams(window.location.search).get('lessonId')) || null
-          : null;
+        const qs = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+        const requestedLessonId = Number(qs?.get('lessonId')) || null;
+        // `?lessonSlug=` là đường về từ /simulation. Slug ổn định qua mọi lần
+        // seed lại, còn id thì chỉ biết được sau khi đã ghi vào CSDL — nên khối
+        // mô phỏng trong thân bài chỉ có thể trỏ bằng slug.
+        const requestedSlug = qs?.get('lessonSlug') || null;
         const allLessons = data.sections.flatMap(s => s.lessons || []);
         const target = (requestedLessonId && allLessons.find(l => l.id === requestedLessonId))
+          || (requestedSlug && allLessons.find(l => l.slug === requestedSlug))
           || allLessons[0];
         if (target) {
           setCurrentLesson(target);
+          // Mục chứa bài đang mở phải bung ra, nếu không người quay về từ
+          // /simulation thấy đúng bài ở khung chính nhưng thanh bên thì đóng
+          // kín, không biết mình đang đứng ở đâu trong khoá.
+          const holder = data.sections.find(s => (s.lessons || []).some(l => l.id === target.id));
+          if (holder) setExpandedSections(new Set([holder.id]));
           setVideoKey(k => k + 1);
           setVideoCompleted(false);
           // Fire-and-forget the detail fetch — we already have

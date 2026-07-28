@@ -316,8 +316,8 @@ function buildStream(): SimStep[] {
     'done',
     { vi: 'Đỉnh RAM 120 MB · xong sau 2.544 ms', en: 'Peak RAM 120 MB · done in 2,544 ms' },
     {
-      vi: 'Cùng sáu triệu dòng. **395 MB xuống 120 MB, và 3.662 ms xuống 2.544 ms** — vừa nhẹ hơn vừa nhanh hơn. Đây là một trong số ít lần trong nghề mà không có đánh đổi nào cả.',
-      en: 'The same six million lines. **395 MB down to 120 MB, and 3,662 ms down to 2,544 ms** — lighter AND faster. One of the rare times in this job with no trade-off at all.',
+      vi: 'Cùng sáu triệu dòng. 395 MB xuống 120 MB, và 3.662 ms xuống 2.544 ms — vừa nhẹ hơn vừa nhanh hơn. Đây là một trong số ít lần trong nghề mà không có đánh đổi nào cả.',
+      en: 'The same six million lines. 395 MB down to 120 MB, and 3,662 ms down to 2,544 ms — lighter AND faster. One of the rare times in this job with no trade-off at all.',
     },
     2700,
     [

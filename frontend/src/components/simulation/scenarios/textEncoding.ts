@@ -286,6 +286,13 @@ export const textEncodingScenario: Scenario = {
   icon: Table2,
   accent: '#38bdf8',
   group: 'computer',
+  lesson: {
+    course: 'introduction-to-computer-science',
+    subject: 'CSI104',
+    code: '3.2',
+    slug: 'csi104-3-2-luu-media',
+    title: { vi: 'Lưu chữ, ảnh, âm thanh & video', en: 'Storing text, images, audio & video' },
+  },
   nodes: [],
   edges: [],
   panels,

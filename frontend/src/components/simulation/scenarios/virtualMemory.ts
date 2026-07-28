@@ -291,6 +291,13 @@ export const virtualMemoryScenario: Scenario = {
   icon: Grid3x3,
   accent: '#a78bfa',
   group: 'computer',
+  lesson: {
+    course: 'computer-organization-and-architecture',
+    subject: 'CEA201',
+    code: '8.1',
+    slug: 'cea201-8-1-os-support',
+    title: { vi: 'Lập lịch, quản lý bộ nhớ & bộ nhớ ảo', en: 'Scheduling, memory management & virtual memory' },
+  },
   nodes: [],
   edges: [],
   panels: PANELS,

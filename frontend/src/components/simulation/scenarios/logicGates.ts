@@ -323,6 +323,13 @@ export const logicGatesScenario: Scenario = {
   icon: CircuitBoard,
   accent: '#a78bfa',
   group: 'computer',
+  lesson: {
+    course: 'computer-organization-and-architecture',
+    subject: 'CEA201',
+    code: '9.1',
+    slug: 'cea201-9-1-boolean-gates',
+    title: { vi: 'Đại số Boole & cổng logic', en: 'Boolean algebra & logic gates' },
+  },
   nodes: [],
   edges: [],
   panels,

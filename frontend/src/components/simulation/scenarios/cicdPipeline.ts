@@ -297,6 +297,12 @@ export const cicdPipelineScenario: Scenario = {
   icon: GitPullRequest,
   accent: '#a78bfa',
   group: 'devops',
+  lesson: {
+    course: 'nodejs',
+    code: '17.6',
+    slug: 'nodejs-17-6-deploy-hong-quay-lui',
+    title: { vi: 'Khi deploy nói dối: build cũ, smoke test, quay lui', en: 'When the deploy lies: stale builds, smoke tests, rollback' },
+  },
   nodes,
   edges,
   options: [

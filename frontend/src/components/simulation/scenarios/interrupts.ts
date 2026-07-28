@@ -263,6 +263,13 @@ export const interruptsScenario: Scenario = {
   icon: Timer,
   accent: '#38bdf8',
   group: 'computer',
+  lesson: {
+    course: 'computer-organization-and-architecture',
+    subject: 'CEA201',
+    code: '7.1',
+    slug: 'cea201-7-1-io-techniques',
+    title: { vi: 'Module I/O & ba kỹ thuật', en: 'I/O modules & three techniques' },
+  },
   nodes,
   edges,
   options: [

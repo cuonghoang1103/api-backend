@@ -14,6 +14,10 @@ export default {
     {
       title: '17.1 — The image: 440MB down to 58,8MB|||17.1 — Ảnh Docker: từ 440MB xuống 58,8MB',
       slug: 'nodejs-17-1-anh-docker',
+      simulation: {
+        scenario: 'docker-container',
+        caption: { en: 'What a container actually is: layers, namespaces, limits', vi: 'Container thực chất là gì: tầng, namespace, hạn mức' },
+      },
       type: 'VIDEO',
       description: 'Build cùng một app bằng bốn kiểu Dockerfile và đo cỡ ảnh thật, rồi dựng multi-stage để loại toolchain và devDependencies ra khỏi thứ chạy ở production.',
       content: `
@@ -224,6 +228,16 @@ CMD ["node", "dist/index.js"]</code></pre>
     {
       title: '17.2 — Layer cache: the line order that makes builds 5,6× slower|||17.2 — Cache tầng: thứ tự dòng làm build chậm gấp 5,6 lần',
       slug: 'nodejs-17-2-cache-tang',
+      simulations: [
+        {
+          scenario: 'docker-layers',
+          caption: { en: 'The line order that invalidates every layer below it', vi: 'Thứ tự dòng làm hỏng mọi tầng bên dưới' },
+        },
+        {
+          scenario: 'vps-memory',
+          caption: { en: 'Two parallel builds, 6GB of RAM, and exit 137', vi: 'Hai build song song, 6GB RAM, và exit 137' },
+        },
+      ],
       type: 'VIDEO',
       description: 'Đổi chỗ hai dòng trong Dockerfile và đo lại thời gian build sau khi sửa một dòng code, cộng phép đo .dockerignore cắt build context từ 64,27MB xuống 235 byte.',
       content: `
@@ -428,6 +442,10 @@ docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/me/app:1.4.2 -
     {
       title: '17.3 — PID 1: the CMD line that loses every in-flight request|||17.3 — PID 1: dòng CMD làm mất mọi request đang xử lý',
       slug: 'nodejs-17-3-pid-1-tat-em',
+      simulation: {
+        scenario: 'docker-compose',
+        caption: { en: '“Running” is not “ready”: depends_on versus healthcheck', vi: '“Đang chạy” không phải “sẵn sàng”: depends_on so với healthcheck' },
+      },
       type: 'VIDEO',
       description: 'Ba cách viết CMD, ba tiến trình PID 1 khác nhau, và chỉ một trong ba nhận được SIGTERM — chứng minh bằng một request 3 giây bị cắt ngang giữa lúc deploy.',
       content: `
@@ -830,13 +848,19 @@ if (missing.length) {
     {
       title: '17.5 — Zero downtime: 1,5% lost, or 0%|||17.5 — Deploy không gián đoạn: mất 1,5%, hay mất 0%',
       slug: 'nodejs-17-5-deploy-khong-gian-doan',
-      simulation: {
-        url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-5-deploy-khong-gian-doan.mp4',
-        poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-5-deploy-khong-gian-doan.jpg',
-        scenario: 'nodejs-blue-green',
-        durationSeconds: 12,
-        caption: { en: "Zero-downtime deploy: 1.5% or 0%", vi: "Deploy không gián đoạn: 1,5% hay 0%" },
-      },
+      simulations: [
+        {
+          url: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-5-deploy-khong-gian-doan.mp4',
+          poster: 'https://media.cuongthai.com/videos/courses/nodejs/nodejs-17-5-deploy-khong-gian-doan.jpg',
+          scenario: 'nodejs-blue-green',
+          durationSeconds: 12,
+          caption: { en: "Zero-downtime deploy: 1.5% or 0%", vi: "Deploy không gián đoạn: 1,5% hay 0%" },
+        },
+        {
+          scenario: 'nginx-proxy',
+          caption: { en: 'The proxy in front: routing, and the client IP it erases', vi: 'Proxy đứng trước: định tuyến, và địa chỉ IP nó xoá mất' },
+        },
+      ],
       type: 'VIDEO',
       description: 'Bắn request liên tục trong lúc deploy và đếm số cái hỏng: kiểu dừng-rồi-chạy-lại mất 1,5%, "blue-green" tự chế cũng mất 1,5% — chỉ khi có proxy đứng trước mới ra 0/327.',
       content: `
@@ -1007,6 +1031,22 @@ docker ps | grep green &amp;&amp; echo "sẵn sàng!"</code></pre>
     {
       title: '17.6 — When the deploy lies: stale builds, smoke tests, rollback|||17.6 — Khi deploy nói dối: build cũ, smoke test, quay lui',
       slug: 'nodejs-17-6-deploy-hong-quay-lui',
+      simulations: [
+        {
+          scenario: 'deploy-pipeline',
+          options: { mode: 'nobuild' },
+          caption: { en: 'The deploy that rsyncs but never rebuilds', vi: 'Cú deploy chỉ rsync mà không dựng lại ảnh' },
+        },
+        {
+          scenario: 'cicd-pipeline',
+          options: { mode: 'race' },
+          caption: { en: 'Two workflows racing on one push', vi: 'Hai workflow giành nhau trên cùng một cú push' },
+        },
+        {
+          scenario: 'git-flow',
+          caption: { en: 'Commit, branch, merge and the revert that rolls back', vi: 'Commit, nhánh, gộp và cú revert để quay lui' },
+        },
+      ],
       type: 'VIDEO',
       description: 'Một lần deploy báo thành công, container báo khoẻ, và một nửa API im lặng biến mất — sự cố có thật, cách chẩn đoán bằng một lệnh curl, và cái chốt chặn được thêm vào để nó không tái diễn.',
       content: `

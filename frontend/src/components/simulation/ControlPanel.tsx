@@ -8,9 +8,9 @@
  * mọc thêm nút, không phải sửa một dòng nào ở đây.
  */
 
-import { Check } from 'lucide-react';
+import { Check, GraduationCap } from 'lucide-react';
 import type { Lang, Scenario, ScenarioOptions } from './types';
-import { tr } from './types';
+import { lessonPath, tr } from './types';
 import { SCENARIO_GROUPS, scenariosInGroup } from './scenarios';
 
 interface Props {
@@ -43,39 +43,51 @@ export default function ControlPanel({ scenario, options, lang, onSelectScenario
                 const active = s.id === scenario.id;
                 const Icon = s.icon;
                 return (
-                  <button
-                    key={s.id}
-                    type="button"
-                    onClick={() => onSelectScenario(s.id)}
-                    aria-pressed={active}
-                    className="group flex w-full items-start gap-3 rounded-xl border p-3 text-left transition-all"
-                    style={{
-                      borderColor: active ? `${s.accent}88` : '#1d2740',
-                      background: active ? `${s.accent}14` : '#0a0f1e',
-                      boxShadow: active ? `0 0 26px -10px ${s.accent}` : 'none',
-                    }}
-                  >
-                    <span
-                      className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border"
-                      style={{ borderColor: `${s.accent}55`, background: `${s.accent}1a`, color: s.accent }}
+                  <div key={s.id}>
+                    <button
+                      type="button"
+                      onClick={() => onSelectScenario(s.id)}
+                      aria-pressed={active}
+                      className="group flex w-full items-start gap-3 rounded-xl border p-3 text-left transition-all"
+                      style={{
+                        borderColor: active ? `${s.accent}88` : '#1d2740',
+                        background: active ? `${s.accent}14` : '#0a0f1e',
+                        boxShadow: active ? `0 0 26px -10px ${s.accent}` : 'none',
+                      }}
                     >
-                      <Icon className="h-4 w-4" />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="flex items-center gap-1.5">
-                        <span className={`text-[13.5px] font-bold ${active ? 'text-[#f2f6ff]' : 'text-[#c3cfe4]'}`}>
-                          {tr(s.name, lang)}
-                        </span>
-                        {active ? <Check className="h-3.5 w-3.5 shrink-0" style={{ color: s.accent }} /> : null}
+                      <span
+                        className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border"
+                        style={{ borderColor: `${s.accent}55`, background: `${s.accent}1a`, color: s.accent }}
+                      >
+                        <Icon className="h-4 w-4" />
                       </span>
-                      {s.lesson ? (
-                        <span className="mt-1 block font-mono text-[11px] text-[#4d5f7e]">
+                      <span className="min-w-0 flex-1">
+                        <span className="flex items-center gap-1.5">
+                          <span className={`text-[13.5px] font-bold ${active ? 'text-[#f2f6ff]' : 'text-[#c3cfe4]'}`}>
+                            {tr(s.name, lang)}
+                          </span>
+                          {active ? <Check className="h-3.5 w-3.5 shrink-0" style={{ color: s.accent }} /> : null}
+                        </span>
+                        <span className="mt-1 block text-[11.5px] leading-relaxed text-[#6f8098]">{tr(s.tagline, lang)}</span>
+                      </span>
+                    </button>
+                    {/* Bài giảng tương ứng — nằm NGOÀI nút chọn kịch bản, vì
+                        một thẻ <a> lồng trong <button> là HTML sai và trình
+                        duyệt sẽ nuốt mất một trong hai cú bấm. */}
+                    {s.lesson ? (
+                      <a
+                        href={lessonPath(s.lesson)}
+                        className="mt-1 flex items-start gap-1 px-3 font-mono text-[11px] text-[#4d5f7e] transition-colors hover:text-[#93a4c4]"
+                        title={lang === 'vi' ? 'Mở bài học trong giáo trình' : 'Open the lesson in the curriculum'}
+                      >
+                        <GraduationCap className="mt-0.5 h-3 w-3 shrink-0" />
+                        <span>
+                          {s.lesson.subject ? `${s.lesson.subject} ` : ''}
                           {lang === 'vi' ? 'Bài' : 'Lesson'} {s.lesson.code} · {tr(s.lesson.title, lang)}
                         </span>
-                      ) : null}
-                      <span className="mt-1 block text-[11.5px] leading-relaxed text-[#6f8098]">{tr(s.tagline, lang)}</span>
-                    </span>
-                  </button>
+                      </a>
+                    ) : null}
+                  </div>
                 );
               })}
             </div>

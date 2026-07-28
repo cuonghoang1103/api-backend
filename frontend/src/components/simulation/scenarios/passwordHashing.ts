@@ -344,6 +344,12 @@ export const passwordHashingScenario: Scenario = {
   },
   icon: Shield,
   accent: '#f43f5e',
+  lesson: {
+    course: 'nodejs',
+    code: '8.1',
+    slug: 'nodejs-8-1-mat-khau-va-bam',
+    title: { vi: 'Lưu mật khẩu: vì sao gần như mọi cách đều sai', en: 'Storing passwords: why almost every way is wrong' },
+  },
   nodes: [],
   edges: [],
   panels,

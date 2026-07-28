@@ -46,11 +46,11 @@ function parseArgs(argv) {
     crf: 20,
     outDir: path.resolve('_render'),
     tailMs: 1500,
-    // Video bài giảng chạy CHẬM hơn bản xem trên trang. Ở 1× người xem vừa
-    // kịp nhìn hình đã sang bước khác, không đọc kịp phụ đề — mà phụ đề chính
-    // là lời giảng. 0,5× cho một bước ~1,7s thành ~3,4s: đủ để đọc hết câu và
-    // nhìn lại sơ đồ trước khi chuyển.
-    speed: 0.5,
+    // Video bài giảng chạy CHẬM hơn bản xem trên trang: ở 1× người xem vừa kịp
+    // nhìn hình đã sang bước khác, không đọc kịp phụ đề — mà phụ đề chính là
+    // lời giảng. 0,75× cho một bước ~1,7s thành ~2,3s. (Thử 0,5× trước, user
+    // duyệt 28/7 là "chậm quá một chút" — 0,75× là mức chốt.)
+    speed: 0.75,
     scenario: null,
     group: null,
     opts: {},

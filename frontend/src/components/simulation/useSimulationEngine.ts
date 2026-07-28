@@ -39,8 +39,15 @@ export const FRAME_MS = 1000 / 60;
  */
 const MAX_FRAME_MS = 100;
 
-/** Các mức tốc độ phát. 1× là thời lượng gốc ghi trong kịch bản. */
-export const SPEEDS = [0.25, 0.5, 1, 1.5, 2, 3] as const;
+/**
+ * Các mức tốc độ phát. 1× là thời lượng gốc ghi trong kịch bản.
+ *
+ * 0,75× là mức dựng video bài giảng: 0,5× đọc kịp phụ đề nhưng lê thê, còn 1×
+ * thì vừa nhìn xong hình đã sang bước khác. Mức này cũng phải có mặt ở đây,
+ * không chỉ ở script dựng — `?speed=` được kiểm tra ngược lại danh sách này,
+ * nên thiếu nó thì URL 0,75× lặng lẽ rơi về 1×.
+ */
+export const SPEEDS = [0.25, 0.5, 0.75, 1, 1.5, 2, 3] as const;
 
 /** Số vòng chạy. 0 = lặp vô hạn (dùng khi trình chiếu tại chỗ). */
 export const LOOP_CHOICES = [1, 2, 3, 0] as const;

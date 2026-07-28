@@ -8,7 +8,7 @@
  *  2. Vòng lặp vẽ dừng khi tab bị ẩn, nên đừng chuyển tab lúc đang quay.
  */
 
-import { Download, Film, Loader2, Mic, MicOff, Pause, Play, Square, Trash2, Volume2, VolumeX } from 'lucide-react';
+import { Download, Film, Loader2, Mic, MicOff, Pause, Play, Share2, Square, Trash2, Volume2, VolumeX } from 'lucide-react';
 import type { Lang } from './types';
 import { QUALITY_PRESETS, getQuality, type useStudioRecorder } from './useStudioRecorder';
 import { tr } from './types';
@@ -265,13 +265,48 @@ export default function RecorderStudio({ recorder, lang, muted, onToggleMute, au
                   {clock(recorder.result.durationMs)} · {formatBytes(recorder.result.sizeBytes)}
                 </span>
               </div>
+              {/* Dòng chẩn đoán: định dạng thật mà trình duyệt đã chọn + độ
+                  phân giải xuất. Khi người dùng báo lỗi, đây là thông tin đầu
+                  tiên cần biết — Safari đi mp4, Chrome đi webm, và cách xử lý
+                  hai bên khác nhau. */}
+              <p className="font-mono text-[10.5px] leading-relaxed text-[#4d5b76]">
+                {recorder.result.mimeType.replace('video/', '')} · {preset.width}×{preset.height} · {preset.fps}fps
+              </p>
+              {/* playsInline BẮT BUỘC cho iOS: thiếu nó thì bấm phát trên
+                  iPhone sẽ mở trình phát toàn màn hình của hệ thống, đá người
+                  dùng ra khỏi trang. */}
               <video
                 src={recorder.result.url}
                 controls
+                playsInline
                 className="w-full rounded-md border border-[#1b2440] bg-black"
                 preload="metadata"
               />
+
+              {/* Thanh tua của trình phát chỉ đáng tin khi container có khai
+                  báo thời lượng. Kiểm bằng cách nạp thật rồi đọc, chứ không
+                  đoán theo định dạng. */}
+              {recorder.result.probedDurationSec === null ? (
+                <p className="rounded-lg border border-[#3f3410] bg-[#1a1503] p-2.5 text-[11.5px] leading-relaxed text-[#e2cf9a]">
+                  {vi
+                    ? `Nội dung đầy đủ ${clock(recorder.result.durationMs)}, nhưng định dạng này không ghi tổng thời lượng vào file nên thanh tua của trình phát sẽ hiện sai. Lệnh ffmpeg bên dưới vá đúng chỗ đó.`
+                    : `The content is a full ${clock(recorder.result.durationMs)}, but this container does not record its total duration, so the player's timeline will read wrong. The ffmpeg command below patches exactly that.`}
+                </p>
+              ) : null}
               <div className="flex gap-2">
+                {/* Trên iPhone (nhất là PWA) thuộc tính `download` bị bỏ qua —
+                    bấm tải về không ra file nào. Bảng chia sẻ của hệ điều
+                    hành là con đường duy nhất để lưu vào Files/Photos. */}
+                {recorder.canShareFile ? (
+                  <button
+                    type="button"
+                    onClick={recorder.share}
+                    className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-[#166534] bg-[#0c2318] px-3 py-1.5 text-[12px] font-bold text-[#86efac] transition-colors hover:border-[#22c55e]"
+                  >
+                    <Share2 className="h-3.5 w-3.5" />
+                    {vi ? 'Lưu / Chia sẻ' : 'Save / Share'}
+                  </button>
+                ) : null}
                 <button
                   type="button"
                   onClick={recorder.download}

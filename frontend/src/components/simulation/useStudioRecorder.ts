@@ -142,8 +142,45 @@ export interface RecordingResult {
   blob: Blob;
   mimeType: string;
   sizeBytes: number;
+  /** Thời lượng đo bằng đồng hồ tường của phòng thu — luôn đúng. */
   durationMs: number;
+  /**
+   * Thời lượng mà TRÌNH PHÁT đọc được từ file, tính bằng giây.
+   * null = container không khai báo thời lượng (fMP4 của Safari hay bị vậy),
+   * lúc đó thanh tua của trình phát sẽ vô nghĩa dù nội dung vẫn đầy đủ.
+   */
+  probedDurationSec: number | null;
   filename: string;
+}
+
+/**
+ * Hỏi chính trình duyệt xem nó đọc được thời lượng bao nhiêu từ file.
+ *
+ * Đây là phép kiểm THẬT thay cho phỏng đoán: bộ vá WebM chỉ hiểu EBML, còn
+ * Safari xuất fMP4 — thay vì đoán xem container nào khai báo đủ, ta nạp thử
+ * rồi đọc `duration`. Kết quả quyết định giao diện có phải cảnh báo hay không.
+ */
+function probeDuration(url: string): Promise<number | null> {
+  return new Promise((resolve) => {
+    if (typeof document === 'undefined') return resolve(null);
+    const probe = document.createElement('video');
+    probe.preload = 'metadata';
+    probe.muted = true;
+    const done = (value: number | null) => {
+      probe.removeAttribute('src');
+      probe.load();
+      resolve(value);
+    };
+    probe.addEventListener(
+      'loadedmetadata',
+      () => done(Number.isFinite(probe.duration) && probe.duration > 0 ? probe.duration : null),
+      { once: true }
+    );
+    probe.addEventListener('error', () => done(null), { once: true });
+    // Đừng để treo vô hạn nếu trình duyệt không nạp nổi metadata.
+    window.setTimeout(() => done(null), 4000);
+    probe.src = url;
+  });
 }
 
 /**
@@ -390,15 +427,19 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
       // và phần mềm dựng đọc sai độ dài. Vá thất bại thì dùng nguyên bản gốc.
       setFinalising(true);
       void withWebmDuration(raw, durationMs)
-        .then((blob) => {
+        .then(async (blob) => {
           const url = URL.createObjectURL(blob);
           lastUrlRef.current = url;
+          // Kiểm THẬT xem trình phát đọc được thời lượng chưa, thay vì tin
+          // rằng bộ vá đã chạy — Safari xuất mp4 nên bộ vá WebM không đụng tới.
+          const probedDurationSec = await probeDuration(url);
           setResult({
             url,
             blob,
             mimeType,
             sizeBytes: blob.size,
             durationMs,
+            probedDurationSec,
             // Safari xuất mp4, phần còn lại xuất webm — đuôi file phải theo
             // đúng container, nếu không hệ điều hành mở bằng ứng dụng sai.
             filename: `${baseName || 'simulation'}.${mimeType.includes('mp4') ? 'mp4' : 'webm'}`,
@@ -487,6 +528,40 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
     a.remove();
   }, [result]);
 
+  /**
+   * Chia sẻ file qua bảng chia sẻ hệ điều hành.
+   *
+   * Trên iPhone — nhất là khi chạy dạng PWA đã thêm vào màn hình chính —
+   * thuộc tính `download` của thẻ <a> bị BỎ QUA: bấm "Tải về" không ra file
+   * nào cả, và người dùng không có cách nào lấy video ra khỏi máy. Bảng chia
+   * sẻ là con đường chính thống của iOS: lưu vào Files, vào Photos, AirDrop,
+   * gửi thẳng qua tin nhắn.
+   *
+   * Trình duyệt máy tính phần lớn không cho chia sẻ FILE (chỉ chia sẻ link),
+   * nên `canShare({files})` là phép thử đúng — không phải dò hệ điều hành.
+   */
+  const canShareFile = useCallback((): boolean => {
+    if (!result || typeof navigator === 'undefined') return false;
+    const nav = navigator as Navigator & { canShare?: (data: ShareData) => boolean };
+    if (!nav.share || !nav.canShare) return false;
+    try {
+      return nav.canShare({ files: [new File([result.blob], result.filename, { type: result.mimeType })] });
+    } catch {
+      return false;
+    }
+  }, [result]);
+
+  const share = useCallback(async () => {
+    if (!result) return;
+    const nav = navigator as Navigator & { canShare?: (data: ShareData) => boolean };
+    const file = new File([result.blob], result.filename, { type: result.mimeType });
+    try {
+      await nav.share?.({ files: [file], title: result.filename });
+    } catch {
+      /* Người dùng bấm huỷ bảng chia sẻ — không phải lỗi, không báo gì. */
+    }
+  }, [result]);
+
   const discard = useCallback(() => {
     if (lastUrlRef.current) URL.revokeObjectURL(lastUrlRef.current);
     lastUrlRef.current = null;
@@ -523,6 +598,8 @@ export function useStudioRecorder({ canvasRef, sound, baseName }: UseStudioRecor
     resume,
     toggleMic,
     download,
+    share,
+    canShareFile: canShareFile(),
     discard,
   };
 }

@@ -178,9 +178,20 @@ const rowVariants: Variants = {
 
 export default function NavigationDock() {
   const pathname = usePathname();
-  // /creator has its own studio topbar; the dock's floating
-  // button would compete with it for the top-left slot.
-  if (pathname?.startsWith('/creator')) return null;
+
+  // ⚠️ ĐỪNG `return null` ở đây — phải đặt SAU tất cả hook (xem cuối hàm).
+  //
+  // Chỗ này trước đây có `if (pathname?.startsWith('/creator')) return null;`
+  // đứng TRƯỚC toàn bộ ~27 hook bên dưới. Đó là vi phạm Rules of Hooks: dock
+  // nằm trong layout nên KHÔNG unmount khi chuyển trang, mà số hook chạy được
+  // lại đổi giữa hai lần render (27 → 0 khi vào /creator, 0 → 27 khi rời đi).
+  // React ném "Rendered fewer hooks than expected" và trang trắng. ESLint đã
+  // báo 26 lỗi `rules-of-hooks` vì đúng dòng này.
+  //
+  // Cách sửa: cho mọi hook chạy vô điều kiện, chỉ chặn ở khâu VẼ. Đã rà từng
+  // effect trước khi chuyển — tất cả đều thoát sớm bằng `!isOpen` hoặc
+  // `!mounted`, riêng effect "đóng khi đổi route" chỉ set `false`/`null` vốn đã
+  // là giá trị hiện tại. Nên chạy thêm trên /creator không đổi hành vi gì.
 
   // Pages that already have a left-side sidebar of their own.
   // The dock's floating button sits at top-4 left-6 (z-70) and
@@ -377,7 +388,7 @@ export default function NavigationDock() {
   // ⚠️ HIỆU NĂNG — tra cứu bằng Map, ĐỪNG quay lại `findIndex`.
   //
   // Bản cũ gọi `flatItems.findIndex(...)` NGAY TRONG vòng lặp render của từng
-  // hàng (~33 hàng), tức là ~33×33 ≈ 1.089 phép so sánh chuỗi mỗi lần render.
+  // hàng (34 hàng), tức là ~34×34 ≈ 1.156 phép so sánh chuỗi mỗi lần render.
   // Mà `hoveredHref` là state của component cha, nên MỖI lần rê chuột sang
   // hàng khác là render lại toàn bộ panel — đó là chỗ giật khi di chuột trong
   // menu. Map dựng một lần, tra O(1).
@@ -388,6 +399,11 @@ export default function NavigationDock() {
     return m;
   }, [flatItems]);
   const hoveredIdx = hoveredHref ? indexByHref.get(hoveredHref) ?? -1 : -1;
+
+  // /creator có thanh công cụ studio riêng; nút nổi của dock sẽ tranh chỗ
+  // trên cùng bên trái với nó. Chặn ở ĐÂY — sau khi mọi hook đã chạy — chứ
+  // không chặn ở đầu hàm (xem chú thích dài ở đầu component).
+  if (pathname?.startsWith('/creator')) return null;
 
   return (
     <>

@@ -213,7 +213,7 @@ export class InteractivePoints
         const textPaddingLeft = align === InteractivePoints.ALIGN_LEFT ? 60 : 12
         const textPaddingRight = align === InteractivePoints.ALIGN_LEFT ? 12 : 60
         const textOffsetVertical = 2
-        const font = `700 ${height}px "Amatic SC"`
+        const font = `700 ${height}px "Pally-Bold"`
 
         const canvas = document.createElement('canvas')
         canvas.style.position = 'fixed'

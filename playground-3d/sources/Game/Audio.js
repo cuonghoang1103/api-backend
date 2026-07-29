@@ -4,6 +4,7 @@ import { Game } from './Game.js'
 import { remap, remapClamp, clamp } from './utilities/maths.js'
 import gsap from 'gsap'
 import { Events } from './Events.js'
+import musicsData from '../data/musics.js'
 
 export class Audio
 {
@@ -147,22 +148,17 @@ export class Audio
     setPlaylist()
     {
         this.playlist = {}
-        this.playlist.songs = [
-            {
-                path: 'sounds/musics/Sudo.mp3',
-                name: 'Sudo.mp3'
-            },
-            {
-                path: 'sounds/musics/Boy.mp3',
-                name: 'Boy.mp3'
-            },
-            {
-                path: 'sounds/musics/Baguira.mp3',
-                name: 'Baguira.mp3'
-            },
-        ]
-        this.playlist.index = (Math.floor(Date.now() / 1000 / 60 / 3) % this.playlist.songs.length) // Different music every X minutes
-        // this.playlist.index = -1 // Different music every X minutes
+
+        // Danh sách nhạc nền nằm ở `sources/data/musics.js` — mặc định RỖNG vì
+        // nhạc của bản gốc đã được gỡ. Hướng dẫn gắn nhạc riêng nằm trong file
+        // đó. Hiệu ứng âm thanh chi tiết KHÔNG liên quan tới đây: chúng ở
+        // `setAmbiants()` và `setOneOffs()` bên dưới.
+        this.playlist.songs = musicsData
+
+        this.playlist.hasSongs = this.playlist.songs.length > 0
+        this.playlist.index = this.playlist.hasSongs
+            ? (Math.floor(Date.now() / 1000 / 60 / 3) % this.playlist.songs.length) // Different music every X minutes
+            : 0
         this.playlist.current = null
         this.playlist.switching = false
 
@@ -185,6 +181,9 @@ export class Audio
 
         this.playlist.next = () =>
         {
+            if(!this.playlist.hasSongs)
+                return
+
             if(this.playlist.switching)
                 return
 
@@ -238,6 +237,9 @@ export class Audio
 
         this.playlist.play = () =>
         {
+            if(!this.playlist.hasSongs)
+                return
+
             this.playlist.current = this.playlist.songs[this.playlist.index]
 
             if(!this.playlist.current.loaded)

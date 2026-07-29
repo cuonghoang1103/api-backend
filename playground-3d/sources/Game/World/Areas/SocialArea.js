@@ -51,9 +51,15 @@ export class SocialArea extends Area
                 InteractivePoints.STATE_CONCEALED,
                 () =>
                 {
+                    // ⚠️ Bản gốc viết `else(link.modal)` — thiếu chữ `if`, nên
+                    // nhánh else chỉ là biểu thức rỗng và `modals.open()` chạy
+                    // KHÔNG điều kiện. Với mọi mục có `url` (cả 3 mục hiện tại)
+                    // thì nó gọi `modals.open(undefined)` mỗi lần bấm. May là
+                    // `Modals.open` thoát sớm khi không tìm thấy tên nên không
+                    // vỡ gì, nhưng vẫn là mã sai. Sửa lại cho đúng ý ban đầu.
                     if(link.url)
                         window.open(link.url, '_blank')
-                    else(link.modal)
+                    else if(link.modal)
                         this.game.modals.open(link.modal)
                 },
                 () =>

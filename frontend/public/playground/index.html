@@ -49,6 +49,13 @@
         Không nới CSP chỉ vì phông. Dùng Pally có sẵn trong static/fonts/ —
         phông này kho gốc vốn đã tự phục vụ (xem style/fonts.styl), lại đúng là
         phông dựng chữ 3D trên mặt đất nên nhìn đồng bộ với thế giới.
+
+        ⚠️ 30/7/2026 — VIỆC NÀY TRƯỚC ĐÓ MỚI LÀM MỘT NỬA: gỡ Google Fonts rồi
+        nhưng CODE vẫn xin đúng hai phông đã gỡ ở 15 chỗ (nhãn điểm tương tác,
+        tên khu Dự án/Lab, bong bóng chữ, đồng hồ đường đua, phông nền UI). Kết
+        quả: mọi chữ rơi về phông MẶC ĐỊNH CỦA TRÌNH DUYỆT — nghĩa là Windows,
+        macOS và Android mỗi máy hiện một kiểu chữ khác nhau. Đã đổi hết sang
+        Pally-Regular / Pally-Bold để chữ giống nhau trên mọi máy.
     -->
     
 
@@ -64,15 +71,25 @@
     <link rel="preload" href="./intro/sound.ktx" as="fetch" crossorigin>
     <link rel="preload" href="./palette.ktx" as="fetch" crossorigin>
     
-    <!-- Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JMSN30BQ5J"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+    <!--
+        ĐÃ GỠ khối Google Analytics của bản gốc. Ba lý do, lý do nào cũng đủ:
 
-        gtag('config', '');
-    </script>
+        1. Mã đo `G-JMSN30BQ5J` nằm CỨNG trong thẻ <script src> và là tài sản
+           của TÁC GIẢ GỐC. Giữ lại nghĩa là mỗi lượt khách vào sân chơi của
+           CuongThai lại bắn dữ liệu về tài khoản Analytics của người khác.
+        2. Dòng `gtag('config', ...)` đọc biến `VITE_ANALYTICS_TAG` — biến này
+           ĐỂ RỖNG, nên bản dựng ra `gtag('config', '')`: gọi hàm với mã rỗng,
+           chẳng đo được gì cho mình cả.
+           (Không viết lại placeholder `%…%` ở đây vì Vite thay thế nó ngay cả
+           trong chú thích HTML.)
+        3. CSP riêng của /playground không cho phép googletagmanager.com, nên
+           trên production thẻ này chắc chắn bị chặn — chỉ tổ đẻ ra một request
+           hỏng và một dòng lỗi CSP trong console.
+
+        Muốn đo lượt truy cập sân chơi thì dùng mã đo của chính mình, và nhớ mở
+        `script-src` + `connect-src` cho googletagmanager.com / google-analytics.com
+        trong khối header của /playground ở `frontend/next.config.js`.
+    -->
     <!-- ─── Màn chào CuongThai: kiểu dáng ─── -->
     <style>
         .welcome{
@@ -198,8 +215,8 @@
             .vocab-word{ font-size:1.5rem; }
         }
     </style>
-  <script type="module" crossorigin src="./assets/index-IJNNRvgj.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-Dg9DMwY5.css">
+  <script type="module" crossorigin src="./assets/index-BDzN-4q8.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CBBu6z8U.css">
 </head>
 <body>
 
@@ -248,8 +265,8 @@
     </div>
 
     <div class="js-fonts-loader fonts-loader">
-        <div class="font nunito" data-font="400 20px Nunito"> </div>
-        <div class="font amatic-sc" data-font="700 20px 'Amatic SC'"> </div>
+        <div class="font pally-regular" data-font="400 20px Pally-Regular"> </div>
+        <div class="font pally-bold" data-font="700 20px Pally-Bold"> </div>
         <div class="font pally" data-font="500 20px Pally-Medium"> </div>
     </div>
     
@@ -877,49 +894,36 @@
                             <div class="content-inner">
                                 <div class="title">Behind the scene</div>
                                 <p class="text">
-                                    Thank you for visiting my portfolio!
-                                    <br />If you are curious about the stack and how I built this project, here’s everything you need to know.
+                                    Thanks for stopping by this playground!
+                                    <br />It is the 3D front door to <strong>cuongthai.com</strong> — drive into any gate and you land in that part of the site. Here is what it is built on.
                                 </p>
-                                
+
+                                <h2 class="title">Original project</h2>
+                                <p class="text">
+                                    This world is a <strong>fork</strong> of <a href="https://github.com/brunosimon/folio-2025" target="_blank" rel="noreferrer">folio-2025</a>, the open-source portfolio by <strong>Bruno Simon</strong> (<a href="https://bruno-simon.com" target="_blank" rel="noreferrer">bruno-simon.com</a>), released under the <a href="https://choosealicense.com/licenses/mit/" target="_blank" rel="noreferrer">MIT license</a>. Huge thanks to him for opening up a project of this scale.
+                                    <br />The engine, the island and the driving are his work. The identity, the areas, the 3D letters and the vocabulary game are mine.
+                                </p>
+
                                 <h2 class="title">Three.js</h2>
                                 <p class="text">
-                                    <a href="https://threejs.org" target="_blank" rel="noreferrer">Three.js</a> is the library I’m using to render this 3D world.
-                                    <br />It was created by <strong>mr.doob</strong> (<a href="https://x.com/mrdoob" target="_blank" rel="noreferrer">X</a>, <a href="http://github.com/mrdoob" target="_blank" rel="noreferrer">GitHub</a>), followed by hundreds of awesome developers, one of which being Sunag (<a href="https://x.com/sea3dformat" target="_blank" rel="noreferrer">X</a>, <a href="https://github.com/sunag" target="_blank" rel="noreferrer">GitHub</a>) who added <a href="https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language" target="_blank" rel="noreferrer">TSL</a>, enabling the use of both WebGL and WebGPU, making this portfolio possible.
+                                    <a href="https://threejs.org" target="_blank" rel="noreferrer">Three.js</a> is the library rendering this 3D world.
+                                    <br />It was created by <strong>mr.doob</strong> (<a href="https://x.com/mrdoob" target="_blank" rel="noreferrer">X</a>, <a href="http://github.com/mrdoob" target="_blank" rel="noreferrer">GitHub</a>), followed by hundreds of awesome developers, one of which being Sunag (<a href="https://x.com/sea3dformat" target="_blank" rel="noreferrer">X</a>, <a href="https://github.com/sunag" target="_blank" rel="noreferrer">GitHub</a>) who added <a href="https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language" target="_blank" rel="noreferrer">TSL</a>, enabling the use of both WebGL and WebGPU, making this playground possible.
                                 </p>
-                                
-                                <h2 class="title">Three.js Journey</h2>
+
+                                <h2 class="title">The vocabulary game</h2>
                                 <p class="text">
-                                    If you want to learn Three.js, I got you covered with this <a href="https://threejs-journey.com" target="_blank" rel="noreferrer">huge course</a>.
-                                    <br />It contains everything you need to start building awesome stuff with Three.js (and much more).
-                                </p>
-                                
-                                <h2 class="title">Devlogs</h2>
-                                <p class="text">
-                                    I’ve been making devlogs since the very start of this portfolio and you can find them all on my <a href="https://www.youtube.com/playlist?list=PL5nApUt6Z8sTZxEsEMd8x89OCKCAAfNL0" target="_blank" rel="noreferrer">Youtube channel</a>.
-                                </p>
-                                
-                                <h2 class="title">Source code</h2>
-                                <p class="text">
-                                    The code is available on <a href="https://github.com/brunosimon/folio-2025" target="_blank" rel="noreferrer">GitHub</a> under <a href="https://choosealicense.com/licenses/mit/" target="_blank" rel="noreferrer">MIT license</a>. Even the Blender files are there, so have fun!
-                                    <br />For security reasons, I’m not sharing the server code, but the portfolio works without it.
-                                </p>
-                                
-                                <h2 class="title">Musics</h2>
-                                <p class="text">
-                                    The music you hear was made especially for this portfolio by the awesome Kounine (<a href="https://linktr.ee/Kounine" target="_blank" rel="noreferrer">Linktree</a>).
-                                    <br />They are now under <a href="https://choosealicense.com/licenses/cc0-1.0/" target="_blank" rel="noreferrer">CC0 license</a>, meaning you can do whatever you want with them!
-                                    <br />Download them <a href="https://github.com/brunosimon/folio-2025/tree/main/static/sounds/musics" target="_blank" rel="noreferrer">here</a>.
+                                    Smash a brick wall with the car and an English word pops up. The words come straight from the <a href="https://cuongthai.com/language" target="_blank" rel="noreferrer">My Language</a> section of the site.
                                 </p>
 
                                 <h2 class="title">Some more links</h2>
                                 <ul class="text">
                                     <li>Physics library ⇒ <a href="https://rapier.rs" target="_blank" rel="noreferrer">Rapier</a></li>
                                     <li>Audio library ⇒ <a href="https://howlerjs.com" target="_blank" rel="noreferrer">Howler.js</a></li>
-                                    <li>Fonts ⇒ <a href="https://fonts.google.com/specimen/Amatic+SC" target="_blank" rel="noreferrer">Amatic SC</a> & <a href="https://fonts.google.com/specimen/Nunito?query=Nunito" target="_blank" rel="noreferrer">Nunito</a></li>
+                                    <li>Source of the original ⇒ <a href="https://github.com/brunosimon/folio-2025" target="_blank" rel="noreferrer">GitHub</a></li>
                                 </ul>
 
                                 <p class="text text-faded text-align-right">
-                                    — Bruno
+                                    — Cuong
                                 </p>
                             </div>
                         </div>
@@ -1009,49 +1013,19 @@
                 </div>
             </div>
 
-            <!-- Discord -->
-            <div class="js-modal modal discord" data-name="discord">
-                <div class="container">
-                    <div class="content">
-                        <button class="js-close close">
-                            <img class="icon is-default" src="ui/close.svg" loading="lazy">
-                            <span class="icon is-xbox">A</span>
-                        </button>
+            <!--
+                ĐÃ GỠ hộp thoại Discord của bản gốc.
 
-                        <div class="title"><img src="ui/discord.svg" loading="lazy"> Discord</div>
+                Nó trỏ thẳng vào máy chủ Discord và tài khoản cá nhân của Bruno
+                Simon ("Contact me directly"), tức là khách bấm vào sẽ nhắn cho
+                TÁC GIẢ GỐC chứ không phải chủ trang. Sau khi khu Mạng xã hội
+                được thay bằng GitHub/Youtube/Facebook của CuongThai
+                (`sources/data/social.js`) thì cũng không còn chỗ nào mở hộp
+                thoại này nữa — nó là mã chết mang thông tin liên hệ sai.
 
-                        <div class="items">
-                            <div class="item">
-                                <div class="title-container">
-                                    <div class="line left"></div>
-                                    <div class="title">Public server</div>
-                                    <div class="line right"></div>
-                                </div>
-                                <p>Come hang out with the community<span class="optional">, show us your projects and ask us anything</span>.</p>
-                                <div class="button-container">
-                                    <a href="https://discord.com/channels/769928116701233152/1445064878384480288" target="_blank" rel="noreferrer" class="button">
-                                        Join server
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <div class="title-container">
-                                    <div class="line left"></div>
-                                    <div class="title">Private messages</div>
-                                    <div class="line right"></div>
-                                </div>
-                                <p>Contact me directly.<span class="optional"><br />I have to warn you, I try to answer everyone, but it might take a while.</span></p>
-                                <div class="button-container">
-                                    <a href="https://discord.com/users/202907325722263553" target="_blank" rel="noreferrer" class="button">
-                                        Start chating
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    
-                    </div>
-                </div>
-            </div>
+                Muốn có Discord riêng thì thêm một mục vào `data/social.js`
+                (kèm `modal: 'discord'` thay cho `url`) rồi dựng lại khối này.
+            -->
 
             <!-- Map -->
             <div class="js-modal modal map" data-name="map">

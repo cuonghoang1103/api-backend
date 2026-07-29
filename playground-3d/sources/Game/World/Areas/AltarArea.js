@@ -351,7 +351,7 @@ export class AltarArea extends Area
         const ratio = 1 / 4
         this.width = 256
         this.height = this.width * ratio
-        this.font = `700 ${this.height}px "Amatic SC"`
+        this.font = `700 ${this.height}px "Pally-Bold"`
         
         const canvas = document.createElement('canvas')
         canvas.width = this.width

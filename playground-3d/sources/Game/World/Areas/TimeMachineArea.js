@@ -4,6 +4,19 @@ import { Area } from './Area.js'
 import { Fn, texture, uv, vec2, vec3, vec4 } from 'three/tsl'
 import gsap from 'gsap'
 
+/**
+ * Cỗ máy thời gian.
+ *
+ * ⚠️ Bản gốc để nút này mở `https://2019.bruno-simon.com` — portfolio năm 2019
+ *    của TÁC GIẢ GỐC. Giữ nguyên thì khách bấm vào sẽ rời sang trang cá nhân của
+ *    người khác, nên đã đổi thành một trang của chính CuongThai.
+ *
+ * ➕ Muốn trỏ đi chỗ khác: sửa `TIME_MACHINE_URL` bên dưới. Để chuỗi rỗng thì
+ *    nút biến mất hoàn toàn, cỗ máy chỉ còn là mô hình trang trí (cái TV vẫn
+ *    đổi kênh khi tông xe vào — đó là phần riêng, không liên quan).
+ */
+const TIME_MACHINE_URL = 'https://cuongthai.com/games'
+
 export class TimeMachineArea extends Area
 {
     constructor(model)
@@ -17,6 +30,9 @@ export class TimeMachineArea extends Area
 
     setInteractivePoint()
     {
+        if(!TIME_MACHINE_URL)
+            return
+
         this.interactivePoint = this.game.interactivePoints.create(
             this.references.items.get('interactivePoint')[0].position,
             'Time Machine',
@@ -24,7 +40,7 @@ export class TimeMachineArea extends Area
             InteractivePoints.STATE_CONCEALED,
             () =>
             {
-                window.open('https://2019.bruno-simon.com')
+                window.open(TIME_MACHINE_URL, '_blank')
             },
             () =>
             {

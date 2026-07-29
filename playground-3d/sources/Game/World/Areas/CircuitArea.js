@@ -159,7 +159,7 @@ export class CircuitArea extends Area
             this.timer.digits.width = 32 * 6
             
             // Canvas
-            const font = `700 ${this.timer.digits.height}px "Nunito"`
+            const font = `700 ${this.timer.digits.height}px "Pally-Bold"`
 
             const canvas = document.createElement('canvas')
             canvas.style.position = 'fixed'
@@ -794,7 +794,7 @@ export class CircuitArea extends Area
         const resolution = 512
 
         // Canvas
-        const font = `700 ${resolution / 14}px "Nunito"`
+        const font = `700 ${resolution / 14}px "Pally-Bold"`
 
         const canvas = document.createElement('canvas')
         canvas.style.position = 'fixed'
@@ -987,7 +987,7 @@ export class CircuitArea extends Area
         const height = 32
 
         // Canvas
-        const font = `700 ${height / 1.75}px "Nunito"`
+        const font = `700 ${height / 1.75}px "Pally-Bold"`
 
         const canvas = document.createElement('canvas')
         canvas.style.position = 'fixed'

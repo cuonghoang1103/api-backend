@@ -6,6 +6,7 @@ import gsap from 'gsap'
 import { color, float, Fn, instancedBufferAttribute, instanceIndex, max, min, mix, positionGeometry, sin, step, texture, uniform, uv, vec2, vec3, vec4 } from 'three/tsl'
 import { InstancedGroup } from '../../InstancedGroup.js'
 import { Area } from './Area.js'
+import musicsData from '../../../data/musics.js'
 
 export class BowlingArea extends Area
 {
@@ -410,6 +411,12 @@ export class BowlingArea extends Area
 
     setJukebox()
     {
+        // Không có nhạc nền (xem `sources/data/musics.js`) thì jukebox chỉ còn là
+        // đồ đạc: không nốt nhạc bay, không nút "Change song" — bấm vào cũng
+        // chẳng đổi được gì. Thêm nhạc vào `data/musics.js` là nó sống lại.
+        if(musicsData.length === 0)
+            return
+
         const count = 8
 
         // Notes > Base position

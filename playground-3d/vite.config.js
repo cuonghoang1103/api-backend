@@ -21,13 +21,21 @@ export default {
         outDir: '../dist', // Output in the dist/ folder
         emptyOutDir: true, // Empty the folder first
         sourcemap: false, // Add sourcemap
-        // TẮT rút gọn mã — đang thử nghiệm để khoanh lỗi "thế giới kẹt ở màn
-        // hình tải" chỉ xảy ra ở bản BUILD, còn bản dev thì chạy bình thường.
-        // Three.js dựng shader bằng cách sinh mã từ JavaScript (TSL), và việc
-        // rút gọn đổi tên biến/hàm là chỗ kinh điển làm hỏng loại kỹ thuật này.
-        // Nếu tắt đi mà chạy được thì đã tìm ra thủ phạm; lúc đó tinh chỉnh lại
-        // cho gọn hơn thay vì tắt hẳn (gói JS sẽ to hơn đáng kể).
-        minify: false,
+        // ĐÃ BẬT LẠI rút gọn mã (30/7/2026).
+        //
+        // Trước đó bị TẮT để thử khoanh lỗi "thế giới kẹt ở màn hình tải, chỉ
+        // xảy ra ở bản BUILD". Hoá ra rút gọn mã VÔ CAN: thủ phạm là Next.js
+        // chốt danh sách file trong `public/` ngay lúc server KHỞI ĐỘNG. Dựng
+        // lại sân chơi xong chép đè vào `frontend/public/playground/` thì tên
+        // gói JS đổi (tên có mã băm nội dung), server đang chạy không biết tên
+        // mới nên trả 404 → không có JS nào chạy → vòng tròn tải quay mãi mà
+        // KHÔNG có lỗi nào, vì màn hình tải là HTML/CSS thuần trong index.html.
+        //
+        // Chi tiết + cách tránh: xem `sources/index.html` (đầu file) và
+        // `scratchpad/PLAYGROUND-HANDOFF.md`.
+        //
+        // Tắt rút gọn làm gói JS phình 6,5MB thay vì ~4,9MB — không có lý do gì
+        // để chịu thiệt đó nữa.
     },
     plugins:
     [

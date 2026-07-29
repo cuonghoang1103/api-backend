@@ -30,7 +30,6 @@ const text = `
 ║ Tac gia goc: Bruno Simon - Copyright (c) 2025, giay phep MIT.
 ║ Ma nguon goc => https://github.com/brunosimon/folio-2025
 ║ Trang cua tac gia => https://bruno-simon.com
-║ Nhac nen do Kounine sang tac, nay phat hanh theo giay phep CC0.
 ╚═══════════════════════╝
 
 ╔═ Stack ═══════════════╗

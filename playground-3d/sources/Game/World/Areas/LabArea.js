@@ -257,7 +257,7 @@ export class LabArea extends Area
         this.texts = {}
         
         this.texts.density = 200
-        this.texts.fontFamily = 'Amatic SC'
+        this.texts.fontFamily = 'Pally-Bold'
         this.texts.fontWeight = 700
         this.texts.fontSizeMultiplier = 1
         this.texts.baseColor = color('#ffffff')
@@ -474,13 +474,20 @@ export class LabArea extends Area
                     path,
                     (loadedTexture) =>
                     {
-                        resource.texture = loadedTexture
-                        resource.colorSpace = THREE.SRGBColorSpace
-                        resource.flipY = false
-                        resource.magFilter = THREE.LinearFilter
-                        resource.minFilter = THREE.LinearFilter
-                        resource.generateMipmaps = false
+                        // ⚠️ Xem chú thích dài ở `ProjectsArea.js` cùng chỗ này:
+                        // năm dòng dưới trước đây gán vào `resource` (cái hộp dữ
+                        // liệu) chứ không phải vào texture, nên `flipY = false`
+                        // không bao giờ có tác dụng ⇒ ảnh module LỘN NGƯỢC.
+                        // Ảnh mini phía dưới (dòng ~860) vốn gán đúng vào
+                        // `loadedTexture` nên vẫn thuận — đó là bằng chứng đối chứng.
+                        loadedTexture.colorSpace = THREE.SRGBColorSpace
+                        loadedTexture.flipY = false
+                        loadedTexture.magFilter = THREE.LinearFilter
+                        loadedTexture.minFilter = THREE.LinearFilter
+                        loadedTexture.generateMipmaps = false
+                        loadedTexture.needsUpdate = true
 
+                        resource.texture = loadedTexture
                         resource.loaded = true
                         
                         this.images.loadEnded(key)

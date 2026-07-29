@@ -306,7 +306,7 @@ export class CookieArea extends Area
          */
         const height = 64
         const textOffsetVertical = 2
-        const font = `700 ${height}px "Amatic SC"`
+        const font = `700 ${height}px "Pally-Bold"`
 
         const canvas = document.createElement('canvas')
         canvas.style.position = 'fixed'

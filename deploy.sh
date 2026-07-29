@@ -505,15 +505,34 @@ if [ "$backend_ok" = false ]; then
     exit 1
 fi
 
+# ⚠️ 30/7/2026: chốt kiểm này TRƯỚC ĐÂY DÙNG `wget` — mà image frontend KHÔNG
+#    cài wget (Dockerfile ghi rõ: healthcheck của compose dùng module http của
+#    node nên cố tình bỏ `apt-get install wget`). Nghĩa là lệnh luôn thất bại,
+#    vòng lặp quay đủ 6 lần rồi âm thầm đi tiếp: mỗi lần deploy mất không ~25
+#    giây và KHÔNG hề kiểm được frontend sống hay chết. Đổi sang `node -e`.
 info "Checking frontend..."
+frontend_ok=false
 for i in $(seq 1 6); do
-    if docker exec cuonghoangdev_frontend \
-           sh -c "wget -qO- http://localhost:3000/ >/dev/null 2>&1"; then
+    if docker exec cuonghoangdev_frontend node -e '
+const http = require("http")
+const req = http.get({ host: "127.0.0.1", port: 3000, path: "/" }, (res) => {
+    process.exit(res.statusCode >= 200 && res.statusCode < 500 ? 0 : 1)
+})
+req.on("error", () => process.exit(1))
+req.setTimeout(10000, () => { req.destroy(); process.exit(1) })
+' >/dev/null 2>&1; then
         ok "Frontend healthy"
+        frontend_ok=true
         break
     fi
     [ "$i" -lt 6 ] && sleep 5
 done
+# Phải là `if`, KHÔNG dùng `[ … ] && fail …`: script chạy `set -e`, mà một dây
+# `&&` có vế trái sai thì trả về mã khác 0 ⇒ deploy tự chết ĐÚNG LÚC frontend
+# khoẻ mạnh.
+if [ "$frontend_ok" = false ]; then
+    fail "Frontend không phản hồi sau 6 lần thử — xem 'docker logs cuonghoangdev_frontend'"
+fi
 
 # ── Step 4b: Route smoke-test — catch stale/partial builds ────────
 # Incident 2026-07-02: the backend image shipped a stale dist/index.js
@@ -574,6 +593,82 @@ for route in \
 done
 if [ "$smoke_failed" = true ]; then
     fail "Smoke-test FAILED: a core route is missing → the running image is a stale build. Re-run a FULL 'bash deploy.sh' (never --no-build after code changes)."
+    exit 1
+fi
+
+# ── Step 4c: Sân chơi 3D /playground — kiểm tài sản tĩnh ──────────
+# Sân chơi KHÔNG phải route API mà là ~37MB file tĩnh trong
+# `frontend/public/playground/`, Dockerfile copy nguyên thư mục `public/`
+# vào image. Nghĩa là nó hỏng theo một kiểu mà vòng kiểm route ở trên
+# không thấy: build được, container "healthy", API đủ route, nhưng
+# `public/playground/` rỗng hoặc là bản dựng cũ → khách vào /playground
+# gặp 404 hoặc một thế giới kẹt vĩnh viễn ở màn hình tải.
+#
+# Kiểm hai thứ, vì mỗi thứ bắt một kiểu hỏng khác nhau:
+#   - index.html  → thư mục có được copy vào image không
+#   - gói JS chính → bản dựng có khớp với index.html không. Tên file có
+#     mã băm, nên index.html của bản dựng MỚI mà trỏ vào gói JS của bản
+#     dựng CŨ thì file đó không tồn tại ⇒ 404 ⇒ trang trắng.
+#
+# ⚠️ Image frontend KHÔNG có `wget` lẫn `curl` (Dockerfile cố ý không cài — xem
+#    chú thích trong đó). Mọi phép kiểm HTTP bên trong container này PHẢI dùng
+#    `node -e` với module http có sẵn. Dùng wget/curl là lệnh luôn thất bại và
+#    bộ kiểm sẽ báo hỏng trong khi thực tế không hỏng.
+info "Kiểm sân chơi 3D /playground..."
+pg_out=$(docker exec cuonghoangdev_frontend node -e '
+const http = require("http")
+// Bám theo chuyển hướng: Next.js đặt trailingSlash=false nên "/playground/"
+// trả 308 về "/playground". Bộ kiểm mà coi 308 là hỏng thì deploy nào cũng
+// false-fail — đã dẫm đúng bẫy này lúc viết.
+const get = (path, hops = 0) => new Promise((resolve) => {
+    const req = http.get({ host: "127.0.0.1", port: 3000, path }, (res) => {
+        if(res.statusCode >= 300 && res.statusCode < 400 && res.headers.location && hops < 3)
+        {
+            res.resume()
+            const next = res.headers.location.replace(/^https?:\/\/[^/]+/, "")
+            resolve(get(next, hops + 1))
+            return
+        }
+        let body = ""
+        res.on("data", (chunk) => { if(body.length < 200000) body += chunk })
+        res.on("end", () => resolve({ status: res.statusCode, body }))
+    })
+    req.on("error", (err) => resolve({ status: 0, body: "", error: err.code }))
+    req.setTimeout(15000, () => { req.destroy(); resolve({ status: 0, body: "", error: "TIMEOUT" }) })
+})
+;(async () => {
+    const index = await get("/playground/")
+    if(index.status !== 200)
+    {
+        console.log("FAIL index " + (index.error || index.status))
+        process.exit(1)
+    }
+    const match = index.body.match(/assets\/index-[A-Za-z0-9_-]+\.js/)
+    if(!match)
+    {
+        console.log("FAIL nobundle")
+        process.exit(1)
+    }
+    const bundle = await get("/playground/" + match[0])
+    if(bundle.status !== 200)
+    {
+        console.log("FAIL bundle " + match[0] + " " + (bundle.error || bundle.status))
+        process.exit(1)
+    }
+    console.log("OK " + match[0])
+})()
+' 2>&1) && pg_ok=true || pg_ok=false
+
+if [ "$pg_ok" = true ]; then
+    ok "Sân chơi 3D phục vụ được, gói JS khớp bản dựng (${pg_out#OK })"
+else
+    fail "Sân chơi 3D hỏng: ${pg_out}"
+    fail "  • FAIL index …  → thư mục public/playground không có trong image"
+    fail "  • FAIL nobundle → index.html của sân chơi dựng hỏng"
+    fail "  • FAIL bundle … → index.html trỏ vào gói JS không tồn tại (tên file"
+    fail "                    có mã băm ⇒ đây là bản dựng cũ/dở dang)"
+    fail "Sửa: cd playground-3d && npm run build, rsync dist/ sang"
+    fail "     frontend/public/playground/, rồi chạy lại FULL 'bash deploy.sh'."
     exit 1
 fi
 

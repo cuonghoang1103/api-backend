@@ -4,43 +4,89 @@ Cập nhật 30/7/2026. Nhánh `feat/playground-3d`. **CHƯA deploy lên product
 
 ---
 
-# ⚑ ĐỌC MỤC NÀY TRƯỚC
+# ✅ LỖI ĐƠ ĐÃ TÌM RA VÀ ĐÃ SỬA (30/7/2026)
 
-## Lỗi duy nhất còn lại
+## Nguyên nhân thật
 
-**Thế giới kẹt mãi ở màn hình vòng tròn, không vào được.** Không ném lỗi nào
-đáng kể, không 404 nào.
+**Next.js chốt danh sách file trong `public/` NGAY LÚC SERVER KHỞI ĐỘNG.**
+File chép vào `public/` sau khi server đã chạy thì trả **404** dù có thật trên
+đĩa. Dựng lại xong khởi động lại server là hết.
 
-| Môi trường | Loại | Kết quả |
-|---|---|---|
-| `localhost:5173` | Vite **dev** | **CHẠY ĐƯỢC** (user đã chơi, lái xe, tông tường) |
-| `localhost:3000/playground` | bản **build** + Next.js | **ĐƠ** (user xác nhận) |
-| `localhost:4173/playground/` | bản **build** + server tĩnh, KHÔNG header | **CHƯA AI THỬ TRÊN TRÌNH DUYỆT THẬT** |
+Vì sao nó ra đúng triệu chứng "kẹt ở vòng tròn, không lỗi gì":
 
-### VIỆC ĐẦU TIÊN PHẢI LÀM
+1. Dựng lại sân chơi ⇒ gói JS đổi tên (tên chứa **mã băm nội dung**:
+   `assets/index-Hu7RCC_l.js`)
+2. Chép đè vào `frontend/public/playground/`, nhưng server Next **đang chạy từ
+   trước** ⇒ không biết tên mới ⇒ **404**
+3. `index.html` vẫn phục vụ bình thường (tên file không đổi nên vẫn nằm trong
+   danh sách) ⇒ trang mở ra, **màn hình tải hiện lên** — vì màn hình tải là
+   HTML/CSS thuần nằm sẵn trong `index.html`
+4. **Không có JS nào chạy** ⇒ không ai tắt màn hình tải, và cũng **không có lỗi
+   nào** để mà thấy, vì có mã đâu mà lỗi
+5. Mấy file `.ktx` preload trong `<head>` vẫn 200 (tên không đổi) ⇒ nhìn vào
+   tab Network lại tưởng "tài nguyên tải ngon lành"
 
-Nhờ user mở **cả hai** địa chỉ rồi báo kết quả:
+### Bằng chứng (phép thử đối chứng, không phải suy đoán)
+
+| Phép thử | Kết quả |
+|---|---|
+| File **mới toanh** thêm vào `public/playground/` khi server đang chạy | **404** |
+| File có sẵn từ lúc server khởi động (`palette.ktx`) | **200** |
+| Cùng file đó, sau khi **khởi động lại** server | **200** |
+| Đổi tên file cho không có gạch dưới/gạch ngang | vẫn **404** ⇒ không liên quan tên |
+| `next build` lại nhưng KHÔNG khởi động lại server | vẫn **404** ⇒ mốc là **lúc server chạy**, không phải lúc build |
+
+### ⚠️ Bẫy đi kèm khiến lỗi này sống dai
+
+`pkill -f "next start"` **và** `pkill -f "standalone/server.js"` đều **KHÔNG**
+giết được server — Node đổi tên tiến trình thành **`next-server`**. Nên mọi lần
+"khởi động lại" trước đây thực chất là: server mới chết vì cổng bận
+(`EADDRINUSE`), server **cũ** vẫn sống và tiếp tục trả 404. Lỗi trông như bất trị.
+
+**Cách diệt đúng — diệt theo cổng, đừng diệt theo tên:**
 
 ```bash
-# Next.js
-cd frontend && npm run start        # rồi mở http://localhost:3000/playground
-
-# server tĩnh, không Next.js, không header nào
-rm -rf /tmp/pgserve && mkdir -p /tmp/pgserve
-cp -R playground-3d/dist /tmp/pgserve/playground
-cd /tmp/pgserve && python3 -m http.server 4173
-# rồi mở http://localhost:4173/playground/
+lsof -ti:3000 | xargs -r kill -9
 ```
 
-| Kết quả | Kết luận | Việc tiếp |
-|---|---|---|
-| Cả hai chạy | Thủ phạm là **rút gọn mã khi build** — đã tắt `minify` ở `playground-3d/vite.config.js` | Tinh chỉnh lại minify cho gói nhẹ hơn thay vì tắt hẳn (gói JS đang 6,2MB thay vì 4,9MB) |
-| `:4173` chạy, `:3000` đơ | Thủ phạm là **Next.js** | Dò tiếp: `nosniff`, `Cache-Control`, hoặc thử bỏ HẲN mọi header cho `/playground` |
-| Cả hai đơ | Không phải hai thứ trên | Hướng mới: so bản dev vs build ở tầng mã, hoặc chạy `vite build --mode development` |
+## 🟢 PRODUCTION KHÔNG DÍNH LỖI NÀY
 
-## ⚠️ ĐỪNG LẶP LẠI SAI LẦM CỦA PHIÊN NÀY
+`frontend/Dockerfile` làm `COPY . .` (đã có sẵn `public/playground/`) **rồi mới**
+`next build`, và mỗi lần deploy là một container **mới tinh**. Danh sách file
+luôn được chốt sau khi sân chơi đã nằm đúng chỗ.
 
-Phiên này đoán sai **NĂM lần** về nguyên nhân lỗi đơ. Nguyên nhân chung:
+⇒ Lỗi đơ suốt hai phiên vừa qua là **hiện tượng chỉ có khi test ở máy local**,
+không phải lỗi của sân chơi.
+
+## Quy trình test local ĐÚNG
+
+```bash
+# 1. dựng sân chơi
+cd playground-3d && npm run build
+
+# 2. chép sang Next
+cd .. && rm -rf frontend/public/playground && mkdir -p frontend/public/playground
+rsync -a playground-3d/dist/ frontend/public/playground/
+
+# 3. GIẾT server cũ THEO CỔNG rồi mới chạy lại  ← BƯỚC HAY BỊ QUÊN
+lsof -ti:3000 | xargs -r kill -9
+cd frontend && npm run start
+```
+
+Kiểm nhanh xem có dính lại không:
+
+```bash
+B=$(curl -sL http://localhost:3000/playground/ | grep -o 'assets/index-[A-Za-z0-9_-]*\.js' | head -1)
+curl -s -o /dev/null -w "$B => %{http_code}\n" "http://localhost:3000/playground/$B"
+```
+
+**200 = lành. 404 = đang dính đúng lỗi này, khởi động lại server.**
+
+`deploy.sh` nay đã có chốt chặn tự động cho đúng chuyện này (xem mục 3b).
+
+## ⚠️ ĐỪNG LẶP LẠI SAI LẦM CỦA HAI PHIÊN TRƯỚC
+
+Đã đoán sai **NĂM lần** về nguyên nhân lỗi đơ. Nguyên nhân chung:
 **kết luận từ khung xem của Claude thay vì từ phép thử đối chứng.**
 
 > **Khung xem (Browser pane) của Claude KHÔNG BAO GIỜ vẽ xong thế giới này** —
@@ -54,20 +100,47 @@ Chỉ số đo được và đáng tin trong khung xem:
 - `document.querySelector('canvas').dataset.engine` — xác nhận WebGPU khởi tạo
 - Đối chiếu mã băm file giữa các server
 
-### Năm nghi phạm ĐÃ LOẠI bằng phép thử (đừng thử lại)
+### Bảy nghi phạm ĐÃ LOẠI bằng phép thử (đừng thử lại)
 
 1. **CSP thiếu `blob:` ở `connect-src`** — thêm rồi, vẫn lỗi
 2. **`upgrade-insecure-requests`** — tắt rồi, vẫn lỗi (đã khôi phục)
 3. **Service worker can thiệp** — `getRegistrations()` trả về 0
 4. **Kiểu nội dung WASM sai + `nosniff`** — cả hai server đều `application/wasm`
 5. **File truyền bị hỏng/nén sai** — cùng mã băm `d29f11a2…` ở đĩa, `:3000`, `:4173`
+6. **Rút gọn mã (`minify`)** — 30/7 dựng bản CÓ rút gọn: 111 tài nguyên, 0 lỗi,
+   `is-started`, console chỉ còn đúng 2 cảnh báo NaN y hệt bản dev ⇒ vô can.
+   **Đã bật lại `minify`**, gói JS về 4,86MB (gzip 1.030 kB) thay vì 6,52MB
+7. **Ba bản nhạc nền** — gỡ rồi vẫn không liên quan (chúng `preload:false`,
+   không tải lúc khởi động)
 
-### Số đo đã có
+### Số đo cũ đã bị BÁC BỎ
 
-- `:4173` (tĩnh) tải **115** tài nguyên, `:3000` (Next) dừng ở **108** → Next làm đứt sớm 7 bước
-- Bản **dev** tải 250 (nhiều hơn vì không gộp file, không so trực tiếp được)
-- `fetch(blob:)` **OK** trên `:4173`, **bị chặn** trên `:3000` — nhưng CSP đã cho phép `blob:`
-- `img(blob)` lỗi ở **cả hai** → đó là vì blob thử chỉ 8 byte, KHÔNG phải triệu chứng
+> "`:4173` tải **115** tài nguyên, `:3000` dừng ở **108** ⇒ Next làm đứt sớm 7 bước"
+
+**Sai.** Chênh lệch đó phần lớn là khối **Google Analytics**: trên `:4173` (không
+CSP) nó tải được và kéo thêm vài request, còn trên `:3000` thì CSP chặn. Sau khi
+gỡ hẳn khối analytics, đo lại **cùng một bản dựng**:
+
+| | tài nguyên | lỗi ≥400 |
+|---|---|---|
+| `:4173` server tĩnh | 110 | 0 |
+| `:3000` Next standalone | 111 | 0 |
+
+⇒ Next **không** làm đứt gì cả.
+
+### Cảnh báo NaN — có thật nhưng KHÔNG phải thủ phạm
+
+```
+THREE.BufferGeometry.computeBoundingSphere(): Computed radius is NaN … [object Object]
+THREE.BufferGeometry.computeBoundingSphere(): Computed radius is NaN … PlaneGeometry
+```
+
+Xuất hiện **y hệt nhau** ở cả ba môi trường — kể cả bản **dev mà user đã chơi
+được**. Là lỗi có sẵn từ kho gốc, chưa truy nguồn. Đáng dọn lúc rảnh, nhưng đừng
+lôi nó ra làm nghi phạm cho lỗi đơ nữa.
+
+⚠️ Vẫn phải coi trọng NaN nói chung: chú thích trong `data/social.js` ghi rõ một
+NaN chảy vào ma trận là đủ giết vòng lặp vẽ mà không báo gì.
 
 ---
 
@@ -81,11 +154,105 @@ Chỉ số đo được và đáng tin trong khung xem:
 | `692f362` | Nhúng vào `/playground` trên Next.js |
 | `a7b21e8` | Ảnh thật 14 module (22 file, chụp từ production) |
 
+## Phiên 30/7/2026 làm thêm những gì
+
+### A. Gỡ nhạc nền của bản mẫu (user yêu cầu)
+
+Gỡ **đúng nhạc nền**, **không đụng** một hiệu ứng âm thanh nào.
+
+- Xoá `static/sounds/musics/{Sudo,Boy,Baguira}.mp3` + `license.md` — **18MB**,
+  gói giảm từ ~55MB xuống **37MB**
+- **File mới `sources/data/musics.js`** — danh sách nhạc, để rỗng, có hướng dẫn
+  đầy đủ ở đầu file. Muốn gắn nhạc riêng thì **chỉ sửa file này**
+- `Audio.setPlaylist()` đọc danh sách đó; thêm cờ `playlist.hasSongs`, chặn sớm
+  trong `play()` và `next()` để 0 bài không sinh `NaN`/`undefined`
+- `BowlingArea.setJukebox()` thoát sớm khi không có nhạc ⇒ jukebox hết nút
+  "Change song" và hết nốt nhạc bay, chỉ còn là đồ đạc. Thêm nhạc vào là sống lại
+- Bỏ mục "Musics" trong hộp *Behind the scene* và dòng ghi công Kounine trong
+  `data/consoleLog.js`; cập nhật `ATTRIBUTION.md`
+- **GIỮ NGUYÊN** tiếng đổi đĩa `sounds/jukebox/…` (nó là hiệu ứng, và cần lại
+  ngay khi có nhạc)
+
+### B. Bốn chỗ còn sót danh tính tác giả gốc
+
+| Chỗ | Vấn đề | Đã làm |
+|---|---|---|
+| Hộp *Behind the scene* | Ngôi thứ nhất nhưng quảng bá khoá học Three.js Journey + kênh devlog + kho mã của Bruno, ký "— Bruno" | Viết lại, thêm mục "Original project" ghi công đàng hoàng, ký "— Cuong" |
+| Hộp thoại **Discord** | "Contact me directly" trỏ vào Discord cá nhân của Bruno; đã thành mã chết | Gỡ hẳn, để chú thích cách dựng lại |
+| `TimeMachineArea.js` | Nút "Time Machine" mở `2019.bruno-simon.com` | Đổi thành hằng `TIME_MACHINE_URL` → `cuongthai.com/games`. Để rỗng thì nút biến mất |
+| **Google Analytics** | `G-JMSN30BQ5J` nằm CỨNG trong `<script src>` — mã đo của tác giả gốc. Mỗi khách vào sân chơi bắn dữ liệu về tài khoản người khác. Lại còn `gtag('config','')` rỗng, và CSP chặn ⇒ chỉ đẻ request hỏng | Gỡ hẳn khối |
+| **Ảnh bảng Options** | `static/ui/previews/options.png/.webp` là ảnh render thế giới gốc có chữ 3D **"BRUNO SIMON"**, hiện ngay trong bảng Cài đặt (user phát hiện) | Thay bằng `easter.png/.webp` — ảnh cùng bộ, **không ai dùng**, không có danh tính. ⚠️ Muốn đẹp hơn: chụp màn hình khu landing có chữ CUONG THAI rồi đè lên `options.png` + `options.webp` |
+
+### C. Bốn lỗi kỹ thuật
+
+1. **Phông chữ — việc trước đó mới làm một nửa.** Đã gỡ Google Fonts nhưng CODE
+   vẫn xin `"Amatic SC"`/`"Nunito"` ở **15 chỗ** (nhãn điểm tương tác, tên khu
+   Dự án/Lab, bong bóng chữ, đồng hồ đường đua, phông nền UI). Đo được:
+   `measureText` của Amatic SC = Nunito = một phông không tồn tại = **403px**
+   ⇒ tất cả đang rơi về **phông mặc định của trình duyệt**, tức Windows/macOS/
+   Android mỗi máy một kiểu chữ. Đã đổi hết sang **Pally** (tự phục vụ sẵn trong
+   `static/fonts/`, cũng là phông dựng chữ 3D). Đo lại: `bodyFont` =
+   `Pally-Regular`, Pally-Bold = 396px ≠ 403 ⇒ **thật sự đã ăn phông**.
+   ⚠️ Canvas KHÔNG tự kích hoạt tải phông — đó là việc của ba ô ẩn
+   `.fonts-loader` trong `index.html`; đã trỏ cả ba vào Pally.
+2. **Ảnh 14 module LỘN NGƯỢC trên bảng (user phát hiện).** Đoạn nạp ảnh trong
+   `ProjectsArea.js` và `LabArea.js` gán năm thuộc tính texture **vào nhầm đối
+   tượng**:
+
+   ```js
+   loader.load(path, (loadedTexture) => {
+       resource.texture = loadedTexture
+       resource.flipY = false        // ✖ `resource` là cái HỘP dữ liệu,
+       resource.colorSpace = …       //   KHÔNG phải texture ⇒ three.js
+       resource.magFilter = …        //   không bao giờ thấy mấy dòng này
+   })
+   ```
+
+   Mặt phẳng hiện ảnh lấy UV từ file Blender (`.glb`), mà **glTF quy ước V=0 ở
+   ĐỈNH ảnh** — ngược với ảnh PNG thường. Nên texture bắt buộc phải
+   `flipY = false`; không gán được thì nó giữ mặc định `true` của
+   `TextureLoader` ⇒ **ảnh lộn ngược**. `colorSpace` cũng trượt luôn nên ảnh còn
+   bị bợt màu.
+
+   **Bằng chứng đối chứng nằm ngay trong cùng file**: đoạn nạp ảnh *mini* ở
+   `LabArea.js:~860` gán đúng vào `loadedTexture` — và ảnh mini vẫn hiện thuận.
+
+   Đã sửa: gán vào `loadedTexture` ở cả hai file. Ảnh gốc trong `static/` vẫn
+   để **thuận chiều bình thường**, đừng lật file ảnh để "chữa" — sửa ở code mới
+   đúng chỗ.
+
+3. **`SocialArea.js` thiếu chữ `if`.** Bản gốc viết `else(link.modal)` ⇒ nhánh
+   else là biểu thức rỗng, `modals.open()` chạy **vô điều kiện**, mỗi lần bấm
+   link mạng xã hội đều gọi `modals.open(undefined)`. Không vỡ vì `Modals.open`
+   thoát sớm, nhưng vẫn sai. Đã sửa thành `else if`.
+4. **Chốt kiểm frontend trong `deploy.sh` là đồ giả.** Nó gọi `wget` bên trong
+   container frontend — mà image đó **không cài wget lẫn curl** (Dockerfile ghi
+   rõ là cố ý, healthcheck dùng module http của node). Lệnh luôn thất bại ⇒ vòng
+   lặp quay đủ 6 lần, **tốn không ~25 giây mỗi lần deploy** và **không kiểm được
+   gì**. Đã đổi sang `node -e`.
+
+### D. `deploy.sh` — chốt chặn mới cho sân chơi (mục 3b)
+
+Sân chơi là **file tĩnh**, không phải route API, nên vòng smoke-test route cũ
+không đời nào thấy nó hỏng. Chốt mới kiểm hai thứ bằng `node -e`:
+
+- `/playground/` có ra 200 không ⇒ thư mục có được copy vào image không
+- **tên gói JS trong `index.html` có tải được không** ⇒ bắt đúng kiểu hỏng
+  "index.html mới trỏ vào gói JS cũ" (tên có mã băm)
+
+⚠️ Bộ kiểm phải **bám theo chuyển hướng**: Next đặt `trailingSlash=false` nên
+`/playground/` trả **308** về `/playground`. Lúc viết đã dẫm đúng bẫy này, coi
+308 là hỏng thì mọi deploy đều false-fail.
+
+⚠️ Và đừng viết `[ "$x" = false ] && fail "…"` trong `deploy.sh` — script chạy
+`set -euo pipefail`, dây `&&` có vế trái sai thì trả mã khác 0 ⇒ **deploy tự chết
+đúng lúc mọi thứ đang khoẻ**. Phải dùng `if`.
+
 ## Chưa commit
 
 - `frontend/next.config.js` — bộ header riêng cho `/playground` (**đáng giữ**, xem mục 3)
-- `playground-3d/vite.config.js` — `minify: false` (**thử nghiệm**, chưa kiểm chứng)
-- `frontend/public/playground/` — bản dựng mới không rút gọn
+- Toàn bộ thay đổi phiên 30/7 ở trên
+- `frontend/public/playground/` — bản dựng mới (đã bật lại `minify`)
 
 ## Chạy thử
 
@@ -181,8 +348,10 @@ nạp `.mp3`.
 
 ## Nâng cấp so với bản gốc (user hỏi và đã được xác nhận là làm được)
 
-1. **Nhạc nền** — thay bằng nhạc user chọn. Chỉ nhắc: phải là nhạc user có quyền
-   dùng (CC0/tự làm/mua), không lấy nhạc có bản quyền của người khác
+1. ~~**Nhạc nền**~~ — **ĐÃ GỠ nhạc của bản mẫu (30/7)**. Chỗ cắm nhạc riêng đã
+   chừa sẵn: chép `.mp3` vào `static/sounds/musics/` rồi thêm một dòng vào
+   `sources/data/musics.js`. Chỉ nhắc: phải là nhạc user có quyền dùng
+   (CC0/tự làm/mua), không lấy nhạc có bản quyền của người khác
 2. **Bản đồ và phong cảnh** — file Blender nguồn ở
    `scratchpad/folio-2025/resources/folio-2025.blend` (16MB). **CỐ Ý GIỮ LẠI** thay
    vì xoá, chính nhờ nó mới sửa được chữ 3D. Sửa địa hình/cây cối/công trình rồi

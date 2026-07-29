@@ -31,14 +31,21 @@
     top calc(100% + 1px)
     left 0
 
-    .nunito
-        font-family "Nunito", sans-serif
-        font-optical-sizing auto
+    // Ba ô ẩn này chỉ để BUỘC trình duyệt tải phông sớm, trước khi game vẽ chữ
+    // lên canvas. Canvas không kích hoạt việc tải phông: nếu phông chưa tải xong
+    // thì `fillText` lặng lẽ vẽ bằng phông mặc định, và vì texture chỉ vẽ MỘT
+    // LẦN nên chữ sai phông đó nằm lại vĩnh viễn trong thế giới.
+    //
+    // Trước đây hai ô đầu trỏ vào "Nunito" và "Amatic SC" — hai phông Google đã
+    // bị gỡ khỏi trang, nên chúng chẳng tải gì cả. Nay cả ba đều trỏ vào Pally,
+    // phông tự phục vụ trong static/fonts/.
+    .pally-regular
+        font-family "Pally-Regular", sans-serif
         font-weight 400
         font-style normal
 
-    .amatic-sc
-        font-family "Amatic SC", sans-serif
+    .pally-bold
+        font-family "Pally-Bold", sans-serif
         font-weight 700
 
     .pally

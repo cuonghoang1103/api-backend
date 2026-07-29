@@ -256,7 +256,7 @@ export class ProjectsArea extends Area
         this.texts = {}
         
         this.texts.density = 200
-        this.texts.fontFamily = 'Amatic SC'
+        this.texts.fontFamily = 'Pally-Bold'
         this.texts.fontWeight = 700
         this.texts.fontSizeMultiplier = 1
         this.texts.baseColor = color('#ffffff')
@@ -488,13 +488,28 @@ export class ProjectsArea extends Area
                     path,
                     (loadedTexture) =>
                     {
-                        resource.texture = loadedTexture
-                        resource.colorSpace = THREE.SRGBColorSpace
-                        resource.flipY = false
-                        resource.magFilter = THREE.LinearFilter
-                        resource.minFilter = THREE.LinearFilter
-                        resource.generateMipmaps = false
+                        // ⚠️ Năm dòng dưới TRƯỚC ĐÂY gán vào `resource` — mà
+                        // `resource` chỉ là cái hộp dữ liệu, KHÔNG phải texture.
+                        // Gán vào đó thì three.js không bao giờ thấy, texture giữ
+                        // nguyên `flipY = true` mặc định của TextureLoader.
+                        //
+                        // Mặt phẳng hiện ảnh lấy UV từ file Blender (.glb), mà
+                        // glTF quy ước V=0 ở ĐỈNH ảnh — ngược với ảnh PNG thường.
+                        // Nên texture BẮT BUỘC phải `flipY = false`, thiếu là ảnh
+                        // LỘN NGƯỢC. Ảnh mini ở LabArea vốn đã gán đúng vào
+                        // `loadedTexture` nên vẫn hiện thuận — chính chỗ đó là
+                        // bằng chứng đối chứng.
+                        //
+                        // `colorSpace` cũng vậy: không gán đúng thì ảnh sRGB bị
+                        // hiểu là tuyến tính và trông bợt màu.
+                        loadedTexture.colorSpace = THREE.SRGBColorSpace
+                        loadedTexture.flipY = false
+                        loadedTexture.magFilter = THREE.LinearFilter
+                        loadedTexture.minFilter = THREE.LinearFilter
+                        loadedTexture.generateMipmaps = false
+                        loadedTexture.needsUpdate = true
 
+                        resource.texture = loadedTexture
                         resource.loaded = true
                         
                         this.images.loadEnded(key)

@@ -17,12 +17,27 @@ phải giữ lại thông báo bản quyền và nội dung giấy phép. Vì v�
 - **KHÔNG xoá mục "Credits" trong `sources/data/consoleLog.js`** — đó là chỗ ghi
   công hiện ra cho người dùng.
 
-## Nhạc nền
+## Nhạc nền — ĐÃ GỠ BỎ
 
-Ba bản nhạc trong `static/sounds/musics/` do **Kounine** sáng tác riêng cho
-portfolio gốc, nay phát hành theo **CC0**. Bản `.wav` gốc đã bị bỏ khỏi fork này
-để giảm dung lượng (130 MB); mã chỉ nạp bản `.mp3`, và bản `.wav` vẫn tải được
-từ kho gốc nếu cần.
+Bản gốc có ba bản nhạc do **Kounine** sáng tác riêng cho portfolio của Bruno
+Simon (phát hành theo **CC0**). **Fork này đã gỡ cả ba** (`Sudo.mp3`, `Boy.mp3`,
+`Baguira.mp3` — 18 MB) cùng file `license.md` CC0 đi kèm, vì đây là nhạc gắn với
+danh tính của trang gốc, không phải nhạc của CuongThai.
+
+Đi kèm việc gỡ:
+
+- `sources/data/musics.js` — **file mới**, danh sách nhạc nền, hiện để rỗng
+- Danh sách rỗng ⇒ không phát nhạc, và jukebox ở khu Bowling tự ẩn nút
+  "Change song" (`BowlingArea.setJukebox`)
+- Đã bỏ mục "Musics" trong hộp "Behind the scene" và dòng ghi công Kounine
+  trong `sources/data/consoleLog.js`
+
+**Toàn bộ hiệu ứng âm thanh chi tiết vẫn còn nguyên** — chim hót, cú, gà, sói,
+dế, chuông, mưa, gió, sóng, lửa, va chạm đá/gạch/kim loại, click, trượt, lắp
+ráp, TV, đổi đĩa… Chúng nằm ở `Audio.setAmbiants()` và `Audio.setOneOffs()`,
+không dính gì tới nhạc nền.
+
+Muốn gắn nhạc riêng: xem hướng dẫn ở đầu `sources/data/musics.js`.
 
 ## Phông chữ
 
@@ -45,6 +60,19 @@ CuongThai — đây là phần giấy phép MIT *không* phủ, nên bắt buộ
 
 Đã **cố ý bỏ** những thứ thuộc riêng tác giả: cúp giải thưởng (Awwwards, FWA,
 CSSDA), ảnh dự án khách hàng, và mọi liên hệ cá nhân.
+
+Rà lại lần hai (30/7/2026) còn phát hiện và xử lý bốn chỗ sót:
+
+| Chỗ | Vấn đề | Đã làm |
+|---|---|---|
+| Hộp "Behind the scene" (`sources/index.html`) | Viết ở ngôi thứ nhất nhưng quảng bá khoá học Three.js Journey, kênh YouTube devlog và kho mã của tác giả gốc, ký tên "— Bruno" | Viết lại: thêm mục "Original project" ghi công Bruno Simon đàng hoàng, bỏ mục khoá học/devlog, ký "— Cuong" |
+| Hộp thoại Discord (`sources/index.html`) | "Contact me directly" trỏ vào tài khoản Discord cá nhân của tác giả gốc; đã thành mã chết sau khi đổi khu Mạng xã hội | Gỡ hẳn, để lại chú thích cách dựng lại |
+| `TimeMachineArea.js` | Nút "Time Machine" mở `2019.bruno-simon.com` | Đổi sang hằng `TIME_MACHINE_URL`, trỏ về `cuongthai.com/games` |
+| `data/consoleLog.js` | Ghi công nhạc Kounine trong khi nhạc đã bị gỡ | Bỏ dòng đó |
+
+Phần **bắt buộc giữ** vẫn nguyên: `license.md`, mục `Credits` trong
+`consoleLog.js`, và nay có thêm mục "Original project" trong hộp "Behind the
+scene" — ghi công rõ hơn bản trước.
 
 ## Phần thêm mới, không có trong bản gốc
 

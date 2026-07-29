@@ -1,6 +1,8 @@
 # Bàn giao — Sân chơi 3D `/playground` (fork folio-2025)
 
-Cập nhật 30/7/2026. Nhánh `feat/playground-3d`. **CHƯA deploy lên production.**
+Cập nhật 30/7/2026. Nhánh `feat/playground-3d`. **ĐÃ DEPLOY LÊN PRODUCTION** —
+commit `0fd0c0c`, live tại https://cuongthai.com/playground. **CHƯA push lên origin**
+(chờ user xác nhận riêng).
 
 ---
 

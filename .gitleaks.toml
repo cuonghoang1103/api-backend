@@ -22,3 +22,24 @@ targetRules = ["generic-api-key", "jwt"]
 paths = [
   '''content/(courses|exphub|exams)/''',
 ]
+
+# ── Bản dựng của sân chơi 3D (frontend/public/playground) ───────────────────
+# Đây là gói JavaScript do Vite SINH RA, không phải mã viết tay. Nó nhúng cả
+# polyfill crypto cho trình duyệt, và bên trong có thư viện ASN.1 với chuỗi
+# `asn12.signature` — rule đoán mò `generic-api-key` bắt nhầm đúng chuỗi đó và
+# chặn commit. Đã kiểm tận mắt: không phải khoá, chỉ là tên thuộc tính trong mã
+# thư viện.
+#
+# Lộ ra vì bản dựng này TẮT rút gọn mã (đang khoanh lỗi thế giới kẹt ở màn hình
+# tải), nên tên biến còn nguyên. Bản có rút gọn thì chuỗi bị đổi tên và không ai
+# thấy.
+#
+# Chỉ miễn trừ ĐÚNG rule đó, trên ĐÚNG thư mục bản dựng. Mọi rule chính xác khác
+# (khoá riêng tư, AWS, Stripe, GitHub token, Slack…) VẪN chặn ở đây — nên nếu lỡ
+# có khoá thật bị đóng gói vào bundle thì vẫn bị bắt.
+[[allowlists]]
+description = "Bản dựng Vite của sân chơi 3D — chỉ tắt generic-api-key"
+targetRules = ["generic-api-key"]
+paths = [
+  '''frontend/public/playground/''',
+]

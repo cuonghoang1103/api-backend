@@ -135,8 +135,57 @@ const nextConfig = {
           { key: 'Cache-Control', value: 'public, max-age=604800' },
         ],
       },
+      // ─── Header RIÊNG cho sân chơi 3D ────────────────────────────────
+      // Sân chơi là một ứng dụng Vite tách biệt, tự chứa, cùng nguồn. Nó KHÔNG
+      // gọi API nào của site, không nhúng iframe, không nạp gì từ bên ngoài —
+      // nên nó vừa cần một thứ mà site không cần, vừa KHÔNG cần hàng loạt thứ
+      // site phải mở.
+      //
+      // Thứ nó cần: blob: ở connect-src.
+      // Các file .glb nhúng texture bên trong; Three.js bóc ra thành blob: URL
+      // rồi nạp bằng fetch(). Đo được: fetch(blob:) OK trên server tĩnh nhưng bị
+      // chặn dưới CSP của site => mọi texture chết và thế giới kẹt ở màn hình
+      // tải, lỗi báo ra chỉ là "Couldn't load texture blob:", không nhắc gì CSP.
+      //
+      // Đổi lại, CSP này CHẶT HƠN site ở mọi mặt khác: không domain bên thứ ba
+      // nào (site phải mở cho YouTube, Giphy, Sentry, R2, Cloudflare), không
+      // frame-src, form-action 'none', object-src 'none'.
       {
-        source: '/:path*',
+        source: '/playground/:path*',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'X-Powered-By', value: '' },
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self' blob: data:",
+              // 'unsafe-eval' là bắt buộc: Rapier là WebAssembly, biên dịch WASM
+              // cần nó (hoặc 'wasm-unsafe-eval', nhưng trình duyệt cũ chưa hiểu).
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: blob:",
+              "font-src 'self' data:",
+              // blob: chính là chỗ đã hỏng.
+              "connect-src 'self' blob: data:",
+              "media-src 'self' blob: data:",
+              "worker-src 'self' blob:",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'none'",
+              "frame-ancestors 'self'",
+              "upgrade-insecure-requests",
+            ].join('; '),
+          },
+        ],
+      },
+      {
+        // LOẠI TRỪ /playground: nó có bộ header riêng ở trên.
+        // Cần thiết vì Next.js cho quy tắc này thắng quy tắc riêng bất kể đặt
+        // trước hay sau (đã đo khi thử tách cache cho assets/). Không loại ra thì
+        // CSP toàn site vẫn đè lên và sân chơi vẫn hỏng.
+        source: '/:path((?!playground(?:/|$)).*)',
         headers: [
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
@@ -194,7 +243,16 @@ const nextConfig = {
               // fallback for any leftover direct-to-bucket links.
               "img-src 'self' data: blob: https://api.cuongthai.com https://media.cuongthai.com https://images.unsplash.com https://api.dicebear.com https://*.amazonaws.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://cuongthai-media-storage.e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev https://i.ytimg.com https://yt3.ggpht.com https://i9.ytimg.com https://*.giphy.com",
               "font-src 'self' data:",
-              "connect-src 'self' wss://cuongthai.com https://cuongthai.com https://api.cuongthai.com https://media.cuongthai.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://cuongthai-media-storage.e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev https://*.sentry.io wss://*.sentry.io https://www.youtube.com https://api.giphy.com",
+              // blob: BẮT BUỘC cho sân chơi 3D. Các file .glb nhúng texture bên
+              // trong; GLTFLoader bóc ra thành blob: URL rồi nạp bằng
+              // ImageBitmapLoader — thứ dùng fetch() chứ không dùng thẻ <img>,
+              // nên nó rơi vào connect-src chứ KHÔNG phải img-src (img-src đã có
+              // blob: sẵn, nên nhìn qua rất dễ tưởng là đủ).
+              // Thiếu nó thì mọi texture hỏng và thế giới kẹt ở màn hình tải, lỗi
+              // báo ra chỉ là "Couldn't load texture blob:" — không hề nhắc tới CSP.
+              // blob: là dữ liệu do chính trang này tạo ra, không mở cửa cho bên
+              // thứ ba nào.
+              "connect-src 'self' blob: wss://cuongthai.com https://cuongthai.com https://api.cuongthai.com https://media.cuongthai.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://cuongthai-media-storage.e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev https://*.sentry.io wss://*.sentry.io https://www.youtube.com https://api.giphy.com",
               // frame-src also allows R2 / media so lesson PDF (Bài tập/Đáp
               // án) can render inline in an <iframe> — the doc download
               // endpoint 302s to a signed R2 URL, and CSP applies to the

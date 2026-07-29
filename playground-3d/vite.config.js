@@ -20,7 +20,14 @@ export default {
     {
         outDir: '../dist', // Output in the dist/ folder
         emptyOutDir: true, // Empty the folder first
-        sourcemap: false // Add sourcemap
+        sourcemap: false, // Add sourcemap
+        // TẮT rút gọn mã — đang thử nghiệm để khoanh lỗi "thế giới kẹt ở màn
+        // hình tải" chỉ xảy ra ở bản BUILD, còn bản dev thì chạy bình thường.
+        // Three.js dựng shader bằng cách sinh mã từ JavaScript (TSL), và việc
+        // rút gọn đổi tên biến/hàm là chỗ kinh điển làm hỏng loại kỹ thuật này.
+        // Nếu tắt đi mà chạy được thì đã tìm ra thủ phạm; lúc đó tinh chỉnh lại
+        // cho gọn hơn thay vì tắt hẳn (gói JS sẽ to hơn đáng kể).
+        minify: false,
     },
     plugins:
     [

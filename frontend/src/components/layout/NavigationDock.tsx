@@ -147,12 +147,21 @@ const ICON_SPRING = { type: 'spring' as const, stiffness: 320, damping: 22, mass
 // Section reveal variants — used to stagger the fade-in
 // of each section's contents after the panel itself is
 // already in place.
+//
+// ⚠️ NHỊP ĐỘ ĐÃ RÚT NGẮN (30/7/2026). Bản cũ: tiêu đề nhóm cuối trễ
+// `0.18 + 6×0.04` = 0,42s, hàng cuối của nhóm lớn nhất trễ `0.22 + 7×0.018`
+// = 0,35s, cộng 0,22s thời lượng ⇒ menu mất ~0,64s mới đứng yên. Không phải
+// lỗi khung hình, nhưng người dùng đọc nó đúng là "menu ì". Nhịp mới ổn định
+// ở ~0,34s — vẫn thấy hiệu ứng đổ dần, không còn cảm giác chờ.
+//
+// `i` của hàng là chỉ số TRONG TỪNG NHÓM (xem `items.map((item, rowIndex)`),
+// không phải chỉ số toàn danh sách — nhóm lớn nhất có 8 mục.
 const sectionVariants: Variants = {
   hidden: { opacity: 0, y: 4 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: 0.18 + i * 0.04, duration: 0.22, ease: [0.32, 0.94, 0.6, 1] },
+    transition: { delay: 0.05 + i * 0.018, duration: 0.18, ease: [0.32, 0.94, 0.6, 1] },
   }),
 };
 
@@ -163,7 +172,7 @@ const rowVariants: Variants = {
   visible: (i: number) => ({
     opacity: 1,
     x: 0,
-    transition: { delay: 0.22 + i * 0.018, duration: 0.22, ease: [0.32, 0.94, 0.6, 1] },
+    transition: { delay: 0.07 + i * 0.01, duration: 0.18, ease: [0.32, 0.94, 0.6, 1] },
   }),
 };
 
@@ -364,10 +373,21 @@ export default function NavigationDock() {
 
   // Flatten items so the magnify pass can compute distance
   // from the hovered item across section boundaries.
+  //
+  // ⚠️ HIỆU NĂNG — tra cứu bằng Map, ĐỪNG quay lại `findIndex`.
+  //
+  // Bản cũ gọi `flatItems.findIndex(...)` NGAY TRONG vòng lặp render của từng
+  // hàng (~33 hàng), tức là ~33×33 ≈ 1.089 phép so sánh chuỗi mỗi lần render.
+  // Mà `hoveredHref` là state của component cha, nên MỖI lần rê chuột sang
+  // hàng khác là render lại toàn bộ panel — đó là chỗ giật khi di chuột trong
+  // menu. Map dựng một lần, tra O(1).
   const flatItems = useMemo(() => sections.flatMap((s) => s.items), [sections]);
-  const hoveredIdx = hoveredHref
-    ? flatItems.findIndex((i) => i.href === hoveredHref)
-    : -1;
+  const indexByHref = useMemo(() => {
+    const m = new Map<string, number>();
+    flatItems.forEach((it, i) => m.set(it.href, i));
+    return m;
+  }, [flatItems]);
+  const hoveredIdx = hoveredHref ? indexByHref.get(hoveredHref) ?? -1 : -1;
 
   return (
     <>
@@ -438,14 +458,26 @@ export default function NavigationDock() {
         {isOpen && (
           <motion.div
             key="dock-backdrop"
-            initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-            animate={{ opacity: 1, backdropFilter: 'blur(14px)' }}
+            // ⚠️ HIỆU NĂNG — ĐỪNG làm hoạt hình `backdropFilter` ở đây.
+            //
+            // Bản cũ chạy blur(0px) → blur(14px) trên tấm phủ TOÀN MÀN HÌNH.
+            // Đổi bán kính làm mờ mỗi khung hình là một trong những việc đắt
+            // nhất của trình duyệt: nó phải lấy mẫu và làm mờ lại toàn bộ trang
+            // phía sau ở bán kính mới, không tái dùng được kết quả khung trước
+            // và không đẩy xuống GPU dạng transform rẻ tiền. Đó chính là cái
+            // giật khi mở menu mà user báo (30/7/2026).
+            //
+            // Cách đúng: để bán kính làm mờ CỐ ĐỊNH bằng class CSS — trình duyệt
+            // dựng ảnh mờ một lần rồi cache — và chỉ chạy hoạt hình `opacity`,
+            // thứ vốn đã nằm trên luồng compositor.
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             // pointerEvents none applies INSTANTLY at exit start — even if
             // the exit animation stalls and the element zombies in the DOM,
             // it can never swallow clicks meant for the page underneath.
-            exit={{ opacity: 0, backdropFilter: 'blur(0px)', pointerEvents: 'none' }}
-            transition={{ duration: 0.32, ease: [0.32, 0.94, 0.6, 1] }}
-            className="fixed inset-0 z-[65] bg-black/55"
+            exit={{ opacity: 0, pointerEvents: 'none' }}
+            transition={{ duration: 0.24, ease: [0.32, 0.94, 0.6, 1] }}
+            className="fixed inset-0 z-[65] bg-black/55 backdrop-blur-[14px]"
             onMouseDown={close}
             aria-hidden
           />
@@ -475,8 +507,15 @@ export default function NavigationDock() {
             ref={panelRef as React.RefObject<HTMLElement>}
             role="dialog"
             aria-label="Primary navigation"
-            initial={{ opacity: 0, x: -40, scale: 0.92 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
+            // ⚠️ HIỆU NĂNG — ĐỪNG thêm `scale` vào đây.
+            //
+            // Tấm panel này mang `backdrop-blur-2xl`. Phóng to/thu nhỏ một bề
+            // mặt đang làm mờ nền buộc trình duyệt dựng lại ảnh mờ ở kích thước
+            // mới trên TỪNG khung hình — bản cũ chạy scale 0.92 → 1 nên vừa mở
+            // menu là giật. Trượt ngang (`x`) rẻ hơn hẳn vì kích thước vùng lấy
+            // mẫu không đổi. Cảm giác trượt vào từ mép trái vẫn còn nguyên.
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
             // Exit hardening (2026-07-05). The old exit relied on the
             // PANEL_SPRING finishing so AnimatePresence could unmount the
             // panel. When the panel closed BECAUSE of a route change, the
@@ -492,7 +531,6 @@ export default function NavigationDock() {
             exit={{
               opacity: 0,
               x: -32,
-              scale: 0.96,
               pointerEvents: 'none',
               transition: { duration: 0.22, ease: [0.32, 0.94, 0.6, 1] },
             }}
@@ -650,7 +688,7 @@ export default function NavigationDock() {
                         {SECTIONS[key].label}
                       </p>
                       {items.map((item, rowIndex) => {
-                        const flatIdx = flatItems.findIndex((i) => i.href === item.href);
+                        const flatIdx = indexByHref.get(item.href) ?? -1;
                         const isActive =
                           pathname === item.href ||
                           (item.href !== '/' && pathname.startsWith(item.href));

@@ -4,6 +4,10 @@ dist
 .vercel
 .VSCodeCounter
 .env*
+# Hai file này CHỈ chứa base href cho thẻ <base>, không có bí mật nào — và bắt
+# buộc phải có trong repo, thiếu là bản dựng ra đường dẫn tài nguyên sai.
+!.env.development
+!.env.production
 .autosave
 .wav
 !static/sounds/music/*.wav

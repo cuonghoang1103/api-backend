@@ -3,6 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--
+        ⚠️ BẮT BUỘC khi phục vụ dưới thư mục con (/playground) trên cuongthai.com.
+        Mã trong game nạp tài nguyên bằng đường dẫn TƯƠNG ĐỐI ('sounds/…',
+        'areas/…', './draco/'), nên nếu không có thẻ này thì ở URL '/playground'
+        trình duyệt đi tìm '/sounds/…' ở gốc site và 404 sạch — thế giới kẹt mãi
+        ở màn hình tải mà KHÔNG báo lỗi gì.
+
+        Vì sao dùng <base> chứ không redirect sang '/playground/': Next.js mặc
+        định BỎ dấu gạch chéo cuối, nên redirect thêm vào là thành vòng lặp vô hạn.
+        Thẻ này làm đường dẫn tương đối luôn đúng, có hay không có gạch chéo.
+
+        Chạy dev ở gốc (localhost:5173) thì href='/playground/' sai — nên chỉ gắn
+        khi dựng bản production, xem vite.config.js.
+    -->
+    <base href="%VITE_BASE_HREF%">
     <title>CuongThai — Playground</title>
 
     <meta name="description" content="A drivable 3D world and the front door to cuongthai.com">
@@ -23,9 +39,17 @@
     <meta property="og:description" content="A drivable 3D world and the front door to cuongthai.com">
     <meta property="og:image" content="https://cuongthai.com/playground/social/share-image.png">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Nunito:wght@400;700;900&display=block" rel="stylesheet">
+    <!--
+        ĐÃ BỎ Google Fonts (Amatic SC + Nunito).
+        CSP của cuongthai.com đặt `font-src 'self' data:` và `style-src 'self'
+        'unsafe-inline'`, nên cả tệp CSS lẫn tệp phông của Google đều bị chặn —
+        trang vẫn chạy nhưng rơi về phông hệ thống, và ba dòng này chỉ tạo thêm
+        request hỏng cùng một lần preconnect sang máy chủ Google.
+
+        Không nới CSP chỉ vì phông. Dùng Pally có sẵn trong static/fonts/ —
+        phông này kho gốc vốn đã tự phục vụ (xem style/fonts.styl), lại đúng là
+        phông dựng chữ 3D trên mặt đất nên nhìn đồng bộ với thế giới.
+    -->
     
     <link rel="stylesheet" href="./style/index.styl">
 
@@ -58,7 +82,7 @@
             /* Nền tím sẫm có chiều sâu, cùng tông với overlay trong game. */
             background:
                 radial-gradient(120% 90% at 50% 45%, #3b2350 0%, #251f2b 55%, #17131c 100%);
-            font-family:'Nunito',system-ui,sans-serif; color:#efe8f5;
+            font-family:'Pally-Medium',system-ui,sans-serif; color:#efe8f5;
             transition:opacity .8s ease, visibility .8s ease;
             overflow:hidden;
         }
@@ -101,7 +125,7 @@
         .welcome-ring-text{ position:relative; text-align:center; padding:2rem; }
         .welcome-hello{ margin:0; font-size:1rem; letter-spacing:.32em; text-transform:uppercase; opacity:.62; }
         .welcome-brand{
-            margin:.15em 0 .3em; font-family:'Amatic SC','Nunito',cursive;
+            margin:.15em 0 .3em; font-family:'Pally-Bold','Pally-Medium',system-ui,sans-serif;
             font-weight:700; font-size:clamp(3rem,11vw,5.2rem); line-height:1;
             text-shadow:0 0 26px rgba(214,111,255,.55);
         }
@@ -133,7 +157,7 @@
             border-radius:1rem; border:1px solid rgba(214,111,255,.35);
             background:rgba(30,24,36,.93); backdrop-filter:blur(10px);
             box-shadow:0 18px 50px rgba(0,0,0,.5);
-            font-family:'Nunito',system-ui,sans-serif; color:#efe8f5;
+            font-family:'Pally-Medium',system-ui,sans-serif; color:#efe8f5;
             /* Mặc định ẩn hẳn và KHÔNG nhận chuột, để không chắn thao tác lái. */
             opacity:0; visibility:hidden; pointer-events:none;
             transform:translate(1.5rem,-50%);

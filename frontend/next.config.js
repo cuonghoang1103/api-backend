@@ -109,6 +109,32 @@ const nextConfig = {
       //   (we don't share a process with other sites) and cross-origin
       //   for resources (images, fonts can be embedded anywhere).
       // - Content-Security-Policy: see below.
+      // Sân chơi 3D: gói tài nguyên ~59 MB, nhưng chỉ tải nặng đúng LẦN ĐẦU.
+      // Cache dài để lượt sau gần như tức thì và VPS không phải gửi lại.
+      //
+      // Tách làm hai mức có chủ đích:
+      // - assets/ do Vite sinh, tên có băm nội dung => đổi nội dung là đổi tên,
+      //   nên cache vĩnh viễn (immutable) hoàn toàn an toàn.
+      // - phần còn lại (mô hình, âm thanh, ảnh) giữ tên cố định giữa các bản
+      //   dựng => chỉ cache 7 ngày, để thay tài nguyên là người chơi thấy trong
+      //   vòng một tuần chứ không kẹt bản cũ vĩnh viễn.
+      // index.html KHÔNG nằm trong hai nhóm này, nên luôn lấy bản mới.
+      // MỘT quy tắc cho mọi tài nguyên của sân chơi, trừ index.html.
+      //
+      // Đã thử tách riêng 'immutable' cho assets/ (tên có băm nội dung nên cache
+      // vĩnh viễn vốn an toàn) nhưng Next.js không cho hai quy tắc chồng nhau ăn
+      // theo thứ tự — đặt trước hay sau thì quy tắc chung vẫn thắng. Không đáng
+      // đấu với framework vì chênh lệch 7 ngày so với 1 năm: file có băm tên thì
+      // đổi nội dung là đổi tên, nên 7 ngày đã đủ để lượt quay lại gần như tức thì.
+      //
+      // index.html cố ý ĐỨNG NGOÀI: nó phải luôn lấy bản mới, nếu không người
+      // chơi kẹt ở bản cũ trỏ tới tên file assets đã biến mất.
+      {
+        source: '/playground/:path((?!index\\.html$).*)',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=604800' },
+        ],
+      },
       {
         source: '/:path*',
         headers: [
@@ -198,6 +224,18 @@ const nextConfig = {
       {
         source: '/uploads/:path*',
         destination: 'http://backend:3001/uploads/:path*',
+      },
+      // Sân chơi 3D là một app Vite dựng sẵn, nằm ở public/playground/.
+      // Next.js phục vụ được /playground/index.html nhưng KHÔNG tự tìm index.html
+      // cho thư mục, nên phải chỉ đích danh.
+      //
+      // ⚠️ KHÔNG thêm redirect '/playground' -> '/playground/' ở đây. Next.js mặc
+      // định BỎ dấu gạch chéo cuối, nên nó đẩy ngược lại và thành vòng lặp vô hạn
+      // (đã dẫm: curl đi 5 chặng vẫn còn 308). Việc cho đường dẫn tương đối trỏ
+      // đúng do thẻ <base href="/playground/"> trong chính index.html lo.
+      {
+        source: '/playground',
+        destination: '/playground/index.html',
       },
     ];
   },

@@ -578,6 +578,7 @@ for route in \
     voice \
     games \
     landing/promos \
+    landing/stats \
     code-lab/groups \
     roadmaps \
     exams \

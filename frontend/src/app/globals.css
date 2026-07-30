@@ -3283,3 +3283,11 @@ html.sim-bare body {
 html.sim-bare .app-main {
   padding: 0 !important;
 }
+
+/* ── Cửa vào sân chơi 3D (PlaygroundGate) ─────────────────────────────
+   Chỉ chạy hoạt hình `opacity` và `transform` — hai thứ nằm sẵn trên luồng
+   compositor. KHÔNG làm hoạt hình `backdrop-filter`: đổi bán kính làm mờ mỗi
+   khung buộc trình duyệt làm mờ lại toàn bộ nền, và hộp thoại này tồn tại
+   chính là để cảnh báo người dùng máy yếu. */
+@keyframes pg-fade { from { opacity: 0 } to { opacity: 1 } }
+@keyframes pg-rise { from { opacity: 0; transform: translateY(12px) } to { opacity: 1; transform: none } }

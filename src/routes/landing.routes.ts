@@ -1,5 +1,6 @@
 /**
  * Landing page — public promo feed + admin CRUD.
+ *   GET  /api/v1/landing/stats           — số liệu THẬT cho trang chủ (public)
  *   GET  /api/v1/landing/promos          — active promos for the marquee (public)
  *   GET  /api/v1/admin/landing/promos    — all promos (admin)
  *   POST /api/v1/admin/landing/promos    — create
@@ -11,6 +12,7 @@ import { Router, type Request, type Response } from 'express';
 import { authenticate, requireRole } from '../middleware/auth.js';
 import type { ApiResponse } from '../types/index.js';
 import * as svc from '../services/landingPromo.service.js';
+import { getLandingStats } from '../services/landingStats.service.js';
 
 const router = Router();
 const adminRouter = Router();
@@ -24,6 +26,11 @@ function toId(req: Request): number {
 // ── Public ──
 router.get('/promos', async (_req, res: Response<ApiResponse>, next) => {
   try { res.json({ success: true, data: await svc.listActivePromos() }); } catch (e) { next(e); }
+});
+
+// Số liệu thật cho trang chủ — thay cho mấy con số gõ cứng trước đây.
+router.get('/stats', async (_req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await getLandingStats() }); } catch (e) { next(e); }
 });
 
 // ── Admin (gated) ──

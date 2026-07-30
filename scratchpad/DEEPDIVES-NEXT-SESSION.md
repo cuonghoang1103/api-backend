@@ -98,8 +98,8 @@ thành công, không thì là link chết.
 
 ## Trạng thái repo lúc bàn giao
 
-**17 commit local trên `feat/playground-3d`, CHƯA deploy, CHƯA push** (đếm từ `05f0cf1`,
-commit đã push cuối cùng; `git log --oneline 05f0cf1..HEAD`).
+**Nhánh `feat/playground-3d`, CHƯA deploy, CHƯA push.** Đếm commit chưa push bằng
+`git log --oneline 05f0cf1..HEAD | wc -l` (`05f0cf1` = commit đã push cuối).
 Bốn commit gần nhất là của loạt Deep Dives:
 
 ```

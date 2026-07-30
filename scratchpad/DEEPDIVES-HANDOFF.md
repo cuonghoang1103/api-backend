@@ -4,7 +4,10 @@ Cập nhật 30/7/2026. Nhánh `feat/playground-3d`.
 
 # ⚑ ĐỌC MỤC NÀY TRƯỚC
 
-## Trạng thái: 17 commit ở LOCAL, CHƯA deploy, CHƯA push (đếm từ `05f0cf1` — commit đã push cuối)
+## Trạng thái: CHƯA deploy, CHƯA push
+
+Đếm chính xác: `git log --oneline 05f0cf1..HEAD | wc -l` (`05f0cf1` là commit đã push
+cuối). ĐỪNG ghi số cứng vào đây — mỗi commit sau lại làm nó sai.
 
 Phiên 2 thêm 4 commit: `fd842e7` category DeepDive · `8e069b3` bài 1 + seeder ·
 `139f982` bài 2 · `23da6cf` bàn giao + 2 bộ kiểm. Mười commit gốc bên dưới.

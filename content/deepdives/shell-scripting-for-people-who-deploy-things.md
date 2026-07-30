@@ -110,14 +110,27 @@ local sha
 sha=$(git rev-parse HEAD)
 ```
 
-Subshells do inherit the setting, so this is not a hole:
+And the two kinds of subshell do not behave the same, which surprised me enough to check it on both bash versions:
 
 ```
-( false; echo INSIDE )       → rc=1, INSIDE did not print
-out=$( false; echo INSIDE )  → rc=0, out=INSIDE
+( false; echo INSIDE )        → rc=1, INSIDE did not print
+out=$( false; echo INSIDE )   → rc=0, INSIDE ran, out=INSIDE
+echo "$( false; echo INSIDE )"→ rc=0, printed INSIDE
+out=$( false )                → rc=1
 ```
 
-The second row is the `x=$(f)` case again from a different angle: the *assignment* succeeded, so the script continued — but the substitution's own body stopped at `false`… except it didn't, because `echo INSIDE` ran and its output landed in `out`. Command substitution runs in a subshell with its own `set -e` and the last command's status is what propagates.
+Identical on bash 3.2.57 and 5.2.15. A `( … )` subshell inherits `set -e` and aborts. A **command substitution does not**: it runs its body to the end and reports its *last* command's status. That status becomes the assignment's status, and `set -e` judges it at the top level — which is why `out=$(false)` aborts while `out=$(false; echo INSIDE)` doesn't.
+
+Which sounds academic until the last command in the substitution is one that succeeds anyway. I tried four shapes; two abort and two don't:
+
+```
+V=$(cd /nope && cat VERSION)     → rc=1, aborts
+V=$(cd /nope; cat VERSION)       → rc=1, aborts
+V=$(cd /nope; echo fallback)     → rc=0, V=fallback
+V=$(cd /nope; ls | head -1)      → rc=0, V=01-set-e.sh
+```
+
+The last one is the bad one, and I only found it by trying. The `cd` failed, `ls` listed **the directory the script was already in**, and `V` now holds a real-looking value from the wrong place. No error, no empty string to check for — just the wrong answer, confidently.
 
 ---
 

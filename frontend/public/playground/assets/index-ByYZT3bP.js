@@ -92960,10 +92960,18 @@ https://github.com/browserify/crypto-browserify`);
       } else this.mesh.visible = false;
     }
   }
-  const RADIUS = 13, CENTER_Y = -0.5, DISTANCE = 10, BAND = 5, FLATTEN = 0.3, RAIN_ON = 0.35, RAIN_OFF = 0.12, FADE_IN = 3, HOLD = 22, FADE_OUT = 6;
+  const COLORS = [
+    "#ff3b2f",
+    "#ff8b2f",
+    "#ffe14f",
+    "#4fd93a",
+    "#2fb6ff",
+    "#3f5bff",
+    "#a24fff"
+  ], OUTER_RADIUS = 6.6, RING_STEP = 0.34, TUBE_RADIUS = 0.17, DISTANCE = 14, RAIN_ON = 0.35, RAIN_OFF = 0.12, FADE_IN = 2.5, HOLD = 40, FADE_OUT = 5;
   class Rainbow {
     constructor() {
-      this.game = Game.getInstance(), this.strength = uniform$1(0), this.wasRaining = false, this.holdCall = null, this.state = "idle", this.setMesh(), this.game.ticker.events.on("tick", () => {
+      this.game = Game.getInstance(), this.strength = uniform$1(0), this.wasRaining = false, this.holdCall = null, this.state = "idle", this.setGroup(), this.game.ticker.events.on("tick", () => {
         this.update();
       }, 10), this.game.debug.active && (this.debugPanel = this.game.debug.panel.addFolder({
         title: "\u{1F308} Rainbow",
@@ -92979,26 +92987,31 @@ https://github.com/browserify/crypto-browserify`);
         title: "hide"
       }).on("click", () => this.hide()));
     }
-    setMesh() {
-      const e = RADIUS - BAND * 0.5, r = RADIUS + BAND * 0.5, s = new RingGeometry(e, r, 160, 1, 0, Math.PI), o = positionLocal$2.xy.length().sub(e).div(r - e).clamp(0, 1);
-      let a = vec3$1(0.45, 0.15, 0.85);
-      a = a.mix(vec3$1(0.16, 0.4, 0.96), o.smoothstep(0.04, 0.24)), a = a.mix(vec3$1(0.16, 0.85, 0.88), o.smoothstep(0.24, 0.41)), a = a.mix(vec3$1(0.36, 0.9, 0.26), o.smoothstep(0.41, 0.57)), a = a.mix(vec3$1(0.98, 0.9, 0.22), o.smoothstep(0.57, 0.72)), a = a.mix(vec3$1(1, 0.56, 0.13), o.smoothstep(0.72, 0.86)), a = a.mix(vec3$1(1, 0.26, 0.18), o.smoothstep(0.86, 1));
-      const h = o.smoothstep(0, 0.2).mul(o.oneMinus().smoothstep(0, 0.2)), c = atan$1(positionLocal$2.y, positionLocal$2.x), d = c.smoothstep(0, 0.6).mul(float$1(Math.PI).sub(c).smoothstep(0, 0.6)), f = new MeshBasicNodeMaterial({
-        transparent: true,
-        side: DoubleSide$1,
-        depthWrite: false
-      });
-      f.colorNode = a, f.opacityNode = h.mul(d).mul(this.strength).mul(0.8), this.mesh = new Mesh$1(s, f), this.mesh.scale.set(1, FLATTEN, 1), this.mesh.visible = false, this.mesh.frustumCulled = false, this.mesh.userData.preventPreRender = true, this.mesh.castShadow = false, this.mesh.receiveShadow = false, this.game.scene.add(this.mesh);
+    setGroup() {
+      this.group = new Group(), this.group.visible = false, this.game.scene.add(this.group);
+      for (let e = 0; e < COLORS.length; e++) {
+        const r = OUTER_RADIUS - e * RING_STEP, s = new TorusGeometry(r, TUBE_RADIUS, 8, 96, Math.PI), o = atan$1(positionLocal$2.y, positionLocal$2.x), a = o.smoothstep(0, 0.45).mul(float$1(Math.PI).sub(o).smoothstep(0, 0.45)), h = new MeshBasicNodeMaterial({
+          transparent: true,
+          depthWrite: false
+        });
+        h.colorNode = color$1(COLORS[e]), h.opacityNode = a.mul(this.strength).mul(0.9);
+        const c = new Mesh$1(s, h);
+        c.castShadow = false, c.receiveShadow = false, c.userData.preventPreRender = true, this.group.add(c);
+      }
     }
     show() {
-      this.holdCall && (this.holdCall.kill(), this.holdCall = null), this.state = "showing", this.mesh.visible = true, gsapWithCSS.to(this.strength, {
+      this.holdCall && (this.holdCall.kill(), this.holdCall = null);
+      const e = this.game.view.focusPoint.position, r = this.game.view.camera.position;
+      let s = e.x - r.x, o = e.z - r.z;
+      const a = Math.hypot(s, o);
+      a < 1e-3 || (s /= a, o /= a, this.group.position.set(e.x + s * DISTANCE, 0, e.z + o * DISTANCE), this.group.rotation.y = Math.atan2(s, o), this.state = "showing", this.group.visible = true, gsapWithCSS.to(this.strength, {
         value: 1,
         duration: FADE_IN,
         ease: "power1.out",
         overwrite: true
       }), this.holdCall = gsapWithCSS.delayedCall(FADE_IN + HOLD, () => {
         this.holdCall = null, this.hide();
-      });
+      }));
     }
     hide() {
       this.state === "idle" || this.state === "hiding" || (this.holdCall && (this.holdCall.kill(), this.holdCall = null), this.state = "hiding", gsapWithCSS.to(this.strength, {
@@ -93007,7 +93020,7 @@ https://github.com/browserify/crypto-browserify`);
         ease: "power1.in",
         overwrite: true,
         onComplete: () => {
-          this.state = "idle", this.mesh.visible = false;
+          this.state = "idle", this.group.visible = false;
         }
       }));
     }
@@ -93017,14 +93030,9 @@ https://github.com/browserify/crypto-browserify`);
       if (r > RAIN_ON) this.wasRaining = true, this.hide();
       else if (this.wasRaining && r < RAIN_OFF) {
         this.wasRaining = false;
-        const d = (_a2 = this.game.dayCycles.intervalEvents.get("night")) == null ? void 0 : _a2.inInterval, f = e.snow.value > 0.1;
-        !d && !f && this.show();
+        const s = (_a2 = this.game.dayCycles.intervalEvents.get("night")) == null ? void 0 : _a2.inInterval, o = e.snow.value > 0.1;
+        !s && !o && this.show();
       }
-      if (!this.mesh.visible) return;
-      const s = this.game.view.focusPoint.position, o = this.game.view.camera.position;
-      let a = s.x - o.x, h = s.z - o.z;
-      const c = Math.hypot(a, h);
-      c < 1e-3 || (a /= c, h /= c, this.mesh.position.set(s.x + a * DISTANCE, CENTER_Y, s.z + h * DISTANCE), this.mesh.rotation.y = Math.atan2(-a, -h));
     }
   }
   class Bubble {
@@ -108712,7 +108720,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-DhlGCEK4.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-BZYYoZKq.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

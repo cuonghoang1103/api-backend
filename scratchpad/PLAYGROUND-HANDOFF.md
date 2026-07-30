@@ -2,11 +2,13 @@
 
 Cập nhật **31/7/2026**. Nhánh `feat/playground-3d`.
 
-> **TRẠNG THÁI: 6 commit mới, ĐÃ TEST LOCAL VÀ USER DUYỆT, nhưng CHƯA DEPLOY và
-> CHƯA PUSH.** Production đang chạy bản cũ (`b868e82`).
+> **TRẠNG THÁI đợt nhạc/thời tiết/cầu vồng/đèn pha: ĐÃ DEPLOY PROD + ĐÃ PUSH**
+> (`f8b0d9c` trên `origin feat/playground-3d`, KHÔNG đụng `main`).
+>
+> **Đợt LÀM DÀY KHU DỰ ÁN + KHU LAB (mục 2b bên dưới): đã test local, chờ deploy.**
 >
 > **Mốc phục hồi:** thẻ git `backup/playground-pre-expand-20260730` (chỉ ở local).
-> Hoàn nguyên toàn bộ đợt này:
+> Hoàn nguyên:
 > `git checkout backup/playground-pre-expand-20260730 -- playground-3d frontend/public/playground`
 
 ---
@@ -38,9 +40,71 @@ Bản sao dự phòng nhạc + file `.blend` gốc: `~/Downloads/playground-sour
 
 ---
 
+# 2b. ĐÃ LÀM 31/7 (đợt sau): làm dày khu Dự án + khu Lab
+
+User chọn **làm dày khu cũ trước**, chưa dựng khu mới. Kết quả:
+
+| | Trước | Sau |
+|---|---|---|
+| Khu Dự án | 6 module × 1 ảnh | **8 module × 1–3 ảnh** (thêm Courses, Experience Log) |
+| Khu Lab | 8 module | **10 module** (thêm Forum, GitHub Repo Hub) |
+| Tổng ảnh | 6 + 16 | **20 + 20** |
+
+**Đã kiểm bằng cách CHẠY THẬT** (Vite :5174, không qua Next): duyệt trọn 8 dự án
+× mọi ảnh ⇒ đúng 20/20 texture nạp, và trọn 10 mục Lab ⇒ quay vòng về đầu, không
+treo, không lỗi mới.
+
+## Chụp ảnh trưng bày — quy trình
+
+**Playwright 1.61 + chromium có sẵn ngay trong `node_modules` của repo** (không
+phải cài). Script mẫu ở `scratchpad/shoot.mjs` (đường dẫn scratchpad theo phiên,
+chép lại nếu mất): viewport 1600×900 @2x → `sips -z 540 960` → PNG 960×540 (16:9,
+~100–280KB mỗi tấm, ngang ảnh cũ). Lab cần thêm bản mini `sips -z 136 240`.
+
+- Trình duyệt Playwright **sạch, KHÔNG đăng nhập** ⇒ chỉ chụp được nội dung công
+  khai. Đó là CHỦ Ý: `/notes`, `/messages`, `/chat`, `/finance` là dữ liệu riêng
+  tư của user — **đừng đưa lên sân chơi**. `/hub`, `/creator` chỉ ra màn hình
+  đăng nhập nên cũng vô dụng.
+- **`/feed` cố tình BỎ**: trang công khai thật, nhưng ảnh sẽ đóng băng tên + bài
+  viết của người dùng khác vào một file tĩnh vĩnh viễn. User đã chốt không đưa.
+- Nhớ ẩn bong bóng chat AI trước khi chụp (duyệt phần tử `position:fixed` ở góc
+  dưới rồi `display:none`) và đợi ~2,8s cho animation framer-motion xong —
+  `/repos` từng chụp trúng lúc còn đang mờ dần.
+- Duyệt nhanh cả lô ảnh bằng một tấm lưới HTML rồi chụp lại (xem `sheet.mjs`),
+  đỡ phải mở từng tấm.
+
+## Bẫy MỚI phát hiện trong đợt này
+
+| Bẫy | Sự thật |
+|---|---|
+| **TỐI ĐA 5 ảnh mỗi dự án** | Dãy chấm phân trang là mesh CÓ SẴN trong `areas.glb`: `refPagination → inner → 5 plane`, kèm đúng 5 `refIntersectPagination`. Ảnh thứ 6 vẫn lật được nhưng không có chấm và `intersectPagination[i]` thành undefined. ĐO từ file .glb, đọc JSON chunk bằng `buf.readUInt32LE(12)` |
+| Sợ thêm ảnh làm nặng màn hình tải | **KHÔNG.** Ảnh khu Dự án/Lab nạp LƯỜI bằng `resourcesLoader.getLoader('texture')` riêng + `loadSibling`, không nằm trong preload khởi động. `imageMini` của Lab nạp cả loạt nhưng mỗi tấm chỉ ~10–30KB |
+| **Console của khung xem ghi ĐÔI mọi message và GIỮ lịch sử qua reload** | Một `console.error` hiện thành 2 dòng ⇒ "2 lỗi" thường chỉ là MỘT. Muốn biết lỗi cũ hay mới thì phải chèn mốc `console.error('===MOC===')` rồi đếm tương đối — đừng tin số dòng tuyệt đối |
+| `preview_start` báo cổng X nhưng Vite chạy ở cổng khác | 5173 bận ⇒ Vite tự nhảy 5174, trong khi preview cấp 50695 ⇒ mọi thao tác trình duyệt vào 50695 đều fail. **Đọc `preview_logs` lấy cổng THẬT rồi `navigate` tay** |
+| Lỗi `computeBoundingSphere(): radius is NaN` lúc khởi động lần đầu | Xuất hiện đúng một lần khi Vite đang *re-optimizing dependencies* (trang bị cắt ngang rồi tự reload). Đã thử tái hiện 3 lần tải lại với CẢ bản cũ lẫn bản mới: không lặp lại. Không phải do dữ liệu |
+
+## Test khu Dự án / khu Lab mà KHÔNG cần lái xe
+
+```js
+game.reveal.updateStep(1)              // đẩy intro (khung xem không tự bấm được)
+game.player.respawn('projects')        // tên: projects · lab · career · circuit …
+game.world.areas.projects.open()       // mở khu tại chỗ
+game.world.areas.projects.nextProject()  // đổi dự án  (Lab dùng .next())
+game.world.areas.projects.nextImage()    // lật ảnh
+game.world.areas.projects.images.resources.size   // đếm texture ĐÃ nạp thật
+```
+
+`images.resources.size` chính là chốt kiểm đáng tin: nó phải bằng tổng số ảnh
+khai báo sau khi duyệt hết (20 ở bản hiện tại).
+
+Bộ kiểm "mọi tên ảnh có file thật" ở `scratchpad/check-images.mjs`, chạy kèm
+`--selftest` để nó tự chứng minh bắt được file thiếu trước khi tin kết quả.
+
+---
+
 # 2. VIỆC TIẾP THEO: mở rộng bản đồ
 
-User đã chốt sẽ làm phần này. Dưới đây là toàn bộ khảo sát đã có, **đừng đo lại**.
+Vẫn CHƯA làm. Dưới đây là toàn bộ khảo sát đã có, **đừng đo lại**.
 
 ## Bản đồ hiện tại (đo từ `static/areas/areas.glb`)
 

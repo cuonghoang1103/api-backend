@@ -2,7 +2,7 @@
  * Khu Lab — các module nhỏ hơn của cuongthai.com.
  *
  * Bản gốc dùng khu này để trưng thí nghiệm WebGL riêng của tác giả. Ở đây đổi
- * thành 8 module còn lại của site (khu Dự án đã lấy 6 module học tập chính).
+ * thành 10 module còn lại của site (khu Dự án đã lấy 8 module học tập chính).
  *
  * Mọi route đã đối chiếu với frontend/src/app của repo, không phỏng đoán.
  *
@@ -18,4 +18,6 @@ export default [
     { title: 'Music',                url: 'https://cuongthai.com/music',        image: 'music.png',       imageMini: 'music-mini.png' },
     { title: 'Voice Hub',            url: 'https://cuongthai.com/voice',        image: 'voice.png',       imageMini: 'voice-mini.png' },
     { title: 'Games',                url: 'https://cuongthai.com/games',        image: 'games.png',       imageMini: 'games-mini.png' },
+    { title: 'Forum',                url: 'https://cuongthai.com/forum',        image: 'forum.png',       imageMini: 'forum-mini.png' },
+    { title: 'GitHub Repo Hub',      url: 'https://cuongthai.com/repos',        image: 'repos.png',       imageMini: 'repos-mini.png' },
 ]

@@ -87814,7 +87814,9 @@ https://github.com/browserify/crypto-browserify`);
       },
       distinctions: [],
       images: [
-        "code-lab-1.png"
+        "code-lab-1.png",
+        "code-lab-2.png",
+        "code-lab-3.png"
       ]
     },
     {
@@ -87830,7 +87832,9 @@ https://github.com/browserify/crypto-browserify`);
       },
       distinctions: [],
       images: [
-        "academy-1.png"
+        "academy-1.png",
+        "academy-2.png",
+        "academy-3.png"
       ]
     },
     {
@@ -87847,7 +87851,8 @@ https://github.com/browserify/crypto-browserify`);
       },
       distinctions: [],
       images: [
-        "exam-1.png"
+        "exam-1.png",
+        "exam-2.png"
       ]
     },
     {
@@ -87864,7 +87869,9 @@ https://github.com/browserify/crypto-browserify`);
       },
       distinctions: [],
       images: [
-        "simulation-1.png"
+        "simulation-1.png",
+        "simulation-2.png",
+        "simulation-3.png"
       ]
     },
     {
@@ -87880,7 +87887,9 @@ https://github.com/browserify/crypto-browserify`);
       },
       distinctions: [],
       images: [
-        "roadmap-1.png"
+        "roadmap-1.png",
+        "roadmap-2.png",
+        "roadmap-3.png"
       ]
     },
     {
@@ -87897,7 +87906,44 @@ https://github.com/browserify/crypto-browserify`);
       },
       distinctions: [],
       images: [
-        "language-1.png"
+        "language-1.png",
+        "language-2.png",
+        "language-3.png"
+      ]
+    },
+    {
+      title: "Courses",
+      titleSmall: [
+        "Online",
+        "Courses"
+      ],
+      url: "https://cuongthai.com/courses",
+      attributes: {
+        role: "Video courses",
+        at: "cuongthai.com",
+        with: "Node.js Zero to Production, 112 lessons"
+      },
+      distinctions: [],
+      images: [
+        "courses-1.png",
+        "courses-2.png"
+      ]
+    },
+    {
+      title: "Experience Log",
+      titleSmall: [
+        "Experience",
+        "Log"
+      ],
+      url: "https://cuongthai.com/blog",
+      attributes: {
+        role: "Engineering deep-dives",
+        at: "cuongthai.com",
+        with: "Production patterns, written after the incident"
+      },
+      distinctions: [],
+      images: [
+        "blog-1.png"
       ]
     }
   ];
@@ -88723,6 +88769,18 @@ https://github.com/browserify/crypto-browserify`);
       url: "https://cuongthai.com/games",
       image: "games.png",
       imageMini: "games-mini.png"
+    },
+    {
+      title: "Forum",
+      url: "https://cuongthai.com/forum",
+      image: "forum.png",
+      imageMini: "forum-mini.png"
+    },
+    {
+      title: "GitHub Repo Hub",
+      url: "https://cuongthai.com/repos",
+      image: "repos.png",
+      imageMini: "repos-mini.png"
     }
   ];
   const _LabArea = class _LabArea extends Area {
@@ -108858,7 +108916,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-MfKEDdVA.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-BsfT5gFd.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

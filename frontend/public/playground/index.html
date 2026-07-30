@@ -215,8 +215,8 @@
             .vocab-word{ font-size:1.5rem; }
         }
     </style>
-  <script type="module" crossorigin src="./assets/index-H1LI8xPN.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-B_q48LCw.css">
+  <script type="module" crossorigin src="./assets/index-LM4HZmWl.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CynJoBDv.css">
 </head>
 <body>
 
@@ -308,6 +308,48 @@
                 </div>
             </div>
         </button>
+
+        <!--
+            Nút thoát về trang chủ CuongThai.
+
+            Xếp thứ ba trong cột nút bên phải (☰ ở top 0, bản đồ ở top 70px, nút
+            này ở top 140px) — xem style/exit.styl, nó bắt chước map.styl để ba
+            nút trông cùng một họ và cùng ẩn/hiện theo `html.is-started`.
+
+            Icon vẽ bằng SVG NHÚNG THẲNG, cố ý không dùng file trong ui/: thêm
+            một file ảnh là thêm một thứ có thể 404 trên production, mà mũi tên
+            này thì vài dòng SVG là xong.
+        -->
+        <button class="js-exit-trigger exit-trigger" aria-label="Leave the playground">
+            <div class="button-inner">
+                <div class="icon-container">
+                    <svg class="exit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M9 18l-6-6 6-6" />
+                        <path d="M3 12h13a5 5 0 0 1 5 5v2" />
+                    </svg>
+                </div>
+            </div>
+        </button>
+
+        <!--
+            Hộp xác nhận thoát.
+
+            KHÔNG dùng hệ Modals của game: hệ đó gắn với bộ lọc phím
+            (`input-filter-*`) và vòng đời của Game, chen vào là rủi ro không cần
+            thiết cho một câu hỏi có/không. Đây là lớp phủ tự chứa, ẩn/hiện bằng
+            class `is-open`.
+        -->
+        <div class="js-exit-confirm exit-confirm" role="dialog" aria-modal="true" aria-labelledby="exit-confirm-title" hidden>
+            <div class="exit-confirm-backdrop js-exit-cancel"></div>
+            <div class="exit-confirm-panel">
+                <h2 class="exit-confirm-title" id="exit-confirm-title">Do you want to leave?</h2>
+                <p class="exit-confirm-text">You&rsquo;ll go back to the main site. Nothing here is saved.</p>
+                <div class="exit-confirm-actions">
+                    <button class="js-exit-cancel exit-confirm-button">No</button>
+                    <button class="js-exit-confirm-yes exit-confirm-button is-primary">Yes</button>
+                </div>
+            </div>
+        </div>
 
         <!-- Menu -->
         <div class="js-menu menu">
@@ -898,10 +940,21 @@
                                     <br />It is the 3D front door to <strong>cuongthai.com</strong> — drive into any gate and you land in that part of the site. Here is what it is built on.
                                 </p>
 
+                                <!--
+                                    Ghi công đã RÚT GỌN còn một câu (30/7/2026).
+
+                                    ⚠️ Giấy phép MIT KHÔNG đòi mục này. Nó chỉ đòi thông báo bản
+                                    quyền + nội dung giấy phép đi kèm mọi bản sao — và điều đó đã
+                                    được thoả ĐỘC LẬP với mục này ở ba nơi:
+                                      · static/license.md      → phục vụ tại /playground/license.md
+                                      · static/ATTRIBUTION.txt → ai làm phần nào
+                                      · data/consoleLog.js     → khối Credits in ra console
+                                    Gỡ ba cái đó mới là vi phạm. Câu dưới đây là lịch sự tự nguyện,
+                                    sửa hay bỏ đều được.
+                                -->
                                 <h2 class="title">Original project</h2>
                                 <p class="text">
-                                    This world is a <strong>fork</strong> of <a href="https://github.com/brunosimon/folio-2025" target="_blank" rel="noreferrer">folio-2025</a>, the open-source portfolio by <strong>Bruno Simon</strong> (<a href="https://bruno-simon.com" target="_blank" rel="noreferrer">bruno-simon.com</a>), released under the <a href="https://choosealicense.com/licenses/mit/" target="_blank" rel="noreferrer">MIT license</a>. Huge thanks to him for opening up a project of this scale.
-                                    <br />The engine, the island and the driving are his work. The identity, the areas, the 3D letters and the vocabulary game are mine.
+                                    A fork of <a href="https://github.com/brunosimon/folio-2025" target="_blank" rel="noreferrer">folio-2025</a> by <strong>Bruno Simon</strong>, <a href="https://choosealicense.com/licenses/mit/" target="_blank" rel="noreferrer">MIT licensed</a> — thanks for opening up a project of this scale.
                                 </p>
 
                                 <h2 class="title">Three.js</h2>
@@ -1111,6 +1164,61 @@
                     setTimeout(function () { root.remove() }, 900)
                 })
             }
+        })()
+    </script>
+
+    <!--
+        ─── Nút thoát về trang chủ ───
+        Cùng lối với đoạn màn chào ở trên: KHÔNG đụng vào nội bộ game, chỉ làm
+        việc với DOM. Game đổi phiên bản thì chỗ này vẫn chạy.
+    -->
+    <script>
+        (function () {
+            var trigger = document.querySelector('.js-exit-trigger')
+            var confirmEl = document.querySelector('.js-exit-confirm')
+            if (!trigger || !confirmEl) return
+
+            var yesBtn = confirmEl.querySelector('.js-exit-confirm-yes')
+            var cancelEls = confirmEl.querySelectorAll('.js-exit-cancel')
+            var lastFocused = null
+
+            // Ra khỏi sân chơi bằng điều hướng THẬT của trình duyệt, không phải
+            // router phía client: sân chơi là một app tĩnh riêng, không nằm
+            // trong cây route của Next.
+            function leave() { window.location.href = '/' }
+
+            function open() {
+                lastFocused = document.activeElement
+                confirmEl.removeAttribute('hidden')
+                // Đưa tiêu điểm vào "No": mặc định phải là KHÔNG rời đi, để một
+                // lần Enter vô tình không đá người ta ra khỏi thế giới.
+                var noBtn = confirmEl.querySelector('.js-exit-cancel.exit-confirm-button')
+                if (noBtn) noBtn.focus()
+            }
+
+            function close() {
+                confirmEl.setAttribute('hidden', '')
+                if (lastFocused && lastFocused.focus) lastFocused.focus()
+            }
+
+            trigger.addEventListener('click', open)
+            // Phím vào nút này không được lọt xuống game — nếu không, dấu cách
+            // hay Enter vừa bấm nút vừa làm xe nhảy.
+            trigger.addEventListener('keydown', function (e) { e.stopPropagation() })
+
+            for (var i = 0; i < cancelEls.length; i++) {
+                cancelEls[i].addEventListener('click', close)
+            }
+            if (yesBtn) yesBtn.addEventListener('click', leave)
+
+            // Chặn phím ở giai đoạn CAPTURE khi hộp đang mở: game nghe phím ở
+            // window, nên nếu không chặn từ đây thì trong lúc đọc hộp thoại
+            // người dùng vẫn đang lái xe. Esc = đóng, đúng thói quen.
+            window.addEventListener('keydown', function (e) {
+                if (confirmEl.hasAttribute('hidden')) return
+                if (e.key === 'Escape') { close(); return }
+                e.stopPropagation()
+            }, true)
         })()
     </script>
 </body>

@@ -1,0 +1,184 @@
+/**
+ * Nút thoát về trang chủ + hộp xác nhận.
+ *
+ * Nút bắt chước `map.styl` gần như từng dòng để ba nút bên phải (☰ · bản đồ ·
+ * thoát) trông cùng một họ: cùng khối 44px, cùng nền chuyển sắc đỏ-tím, cùng
+ * viền mảnh, cùng kiểu trượt ra khi hover, và cùng ẩn đi khi đang ở màn chào /
+ * menu / cinematic. Đổi kiểu ở đây thì nhớ đổi cả map.styl, không thì lệch.
+ */
+.exit-trigger
+    display none
+    position absolute
+    right 0
+    // ☰ ở top 0, bản đồ ở top 70px ⇒ nút này 140px. Giữ đúng bước 70px.
+    top 140px
+    width 44px
+    height 44px
+    z-index 9
+    -webkit-user-select none
+    -moz-user-select none
+    user-select none
+
+    html.is-started &
+        display block
+
+    // Đang ở màn chào, menu, modal hay đoạn cinematic thì không cho bấm —
+    // giống hệt nút bản đồ.
+    html.input-filter-menu &
+    html.input-filter-cinematic &
+    html.input-filter-intro &
+        pointer-events none
+
+    --hover-translate 4px
+
+    html:not(.is-mode-touch) &:hover
+        .button-inner
+            transform translateX(-4px)
+
+            &::after
+                opacity 0.8
+
+            .icon-container
+                opacity 1
+
+    .button-inner
+        position absolute
+        top 0
+        left 0
+        width calc(100% + var(--hover-translate))
+        height 100%
+        background radial-gradient(ellipse at top right, #C21515, #46123B)
+        transition transform 0.15s 0.15s
+
+        html.input-filter-menu &,
+        html.input-filter-modal &,
+        html.input-filter-intro &
+        html.input-filter-cinematic &
+            transform translateX(100%)
+            transition-delay 0
+
+        &::after
+            content: ''
+            display block
+            position absolute
+            top 3px
+            right 0
+            bottom 3px
+            left 3px
+            border 1px solid #ffffff
+            border-right none
+            opacity 0.35
+            transition opacity 0.15s
+
+        .icon-container
+            display flex
+            position absolute
+            align-items center
+            justify-content center
+            top 0
+            right 0
+            bottom 0
+            left 3px
+            color #ffffff
+            opacity 0.85
+            transition opacity 0.15s
+
+            .exit-icon
+                width 20px
+                height 20px
+
+/**
+ * Hộp xác nhận.
+ *
+ * Tự chứa, không đi qua hệ Modals của game (hệ đó gắn với bộ lọc phím và vòng
+ * đời Game — chen vào là rủi ro không đáng cho một câu hỏi có/không).
+ */
+.exit-confirm
+    position fixed
+    top 0
+    left 0
+    display flex
+    align-items center
+    justify-content center
+    width 100%
+    height 100%
+    // Trên cả nút bấm (z 9) và mọi lớp giao diện trong game.
+    z-index 100
+    padding 20px
+
+    &[hidden]
+        display none
+
+    .exit-confirm-backdrop
+        position absolute
+        top 0
+        left 0
+        width 100%
+        height 100%
+        background alpha(#000000, 0.65)
+        // Bán kính làm mờ CỐ ĐỊNH. Không bao giờ chạy hoạt hình `backdrop-filter`
+        // — đổi bán kính mỗi khung là thao tác đắt nhất trình duyệt phải làm, và
+        // ở đây lại càng sai vì trang này vốn đã ăn hết GPU cho cảnh 3D.
+        backdrop-filter blur(8px)
+        -webkit-backdrop-filter blur(8px)
+        cursor default
+        border none
+
+    .exit-confirm-panel
+        position relative
+        max-width 420px
+        padding 28px 28px 22px
+        background radial-gradient(ellipse at top left, #251f2b, #1d1721)
+        border 1px solid alpha(#ffffff, 0.14)
+        border-radius 10px
+        text-align center
+
+    .exit-confirm-title
+        margin 0
+        font-family "Pally-Bold", sans-serif
+        font-weight 700
+        font-size 1.6rem
+        line-height 1.2
+        color #ffffff
+
+    .exit-confirm-text
+        margin 10px 0 0
+        font-size 0.95rem
+        line-height 1.6
+        color alpha(#ffffff, 0.7)
+
+    .exit-confirm-actions
+        display flex
+        gap 10px
+        justify-content center
+        margin-top 22px
+
+    .exit-confirm-button
+        padding 0 22px
+        height 46px
+        line-height 46px
+        border-radius 8px
+        border 1px solid alpha(#ffffff, 0.35)
+        background none
+        font-family "Pally-Bold", sans-serif
+        font-weight 700
+        font-size 1rem
+        color alpha(#ffffff, 0.85)
+        cursor pointer
+        transition border-color 0.15s, color 0.15s, background 0.15s
+
+        &:hover
+            border-color #ffffff
+            color #ffffff
+
+        &:focus-visible
+            outline 2px solid #d66fff
+            outline-offset 2px
+
+        &.is-primary
+            background #ffffff
+            border-color #ffffff
+            color #1d1721
+
+            &:hover
+                background alpha(#ffffff, 0.88)

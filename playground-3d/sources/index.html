@@ -524,8 +524,8 @@
                                             </td>
                                             <td>
                                                 <div class="music-volume">
-                                                    <input class="js-music-volume range has-tooltip" type="range" min="0" max="100" step="1" value="25">
-                                                    <span class="js-music-volume-value value">25%</span>
+                                                    <input class="js-music-volume range has-tooltip" type="range" min="0" max="100" step="1" value="23">
+                                                    <span class="js-music-volume-value value">23%</span>
                                                 </div>
                                             </td>
                                         </tr>
@@ -1207,13 +1207,55 @@
                 }
             }, 300)
 
+            // ─── Chặn phím lọt xuống game khi màn chào còn hiện ───
+            // Game nghe `keydown` trên `window` ở PHA NỔI và không lọc gì
+            // (`Game/Inputs/Keyboard.js`), mà intro của game nhận đúng các phím
+            // Enter / W / D / ↑ / ↓ để bắt đầu. Màn chào này lại tự đặt tiêu
+            // điểm vào nút Play. Hậu quả: bấm Enter (hoặc lỡ chạm phím mũi tên)
+            // khi ĐANG NHÌN màn chào là game khởi động ngầm bên dưới — nhạc và
+            // tiếng chim nổi lên trong khi màn chào vẫn còn đó. Đúng lỗi user
+            // báo ngày 30/7.
+            //
+            // Chặn ở PHA BẮT (capture) trên window: chạy trước mọi listener nổi
+            // nên game không bao giờ thấy phím. `stopPropagation` KHÔNG huỷ hành
+            // vi mặc định, nên Enter/Space vẫn bấm được nút Play đang có tiêu
+            // điểm — cố ý không gọi `preventDefault`.
+            // `stopImmediatePropagation` chứ không phải `stopPropagation`: khi
+            // sự kiện nhắm THẲNG vào `window` thì listener bắt và listener nổi
+            // trên chính window chạy chung một pha, theo thứ tự đăng ký — lúc
+            // đó `stopPropagation` KHÔNG chặn được listener kia. Bản mạnh hơn
+            // chặn cả các listener còn lại trên cùng đích. Script này nằm nội
+            // tuyến trong <body> nên đăng ký TRƯỚC script module của game
+            // (module luôn hoãn tới sau khi phân tích xong tài liệu).
+            //
+            // ⚠️ Chặn ở pha bắt thì nút Play cũng MẤT LUÔN hành vi "Enter để
+            //    bấm nút đang có tiêu điểm" — đo được: bấm Enter khi nút đang
+            //    focus mà màn chào không đóng. Nên Enter/Space phải tự tay xử
+            //    lý ở đây, đừng trông vào hành vi mặc định của trình duyệt.
+            function swallowKeys(event) {
+                var isConfirm = event.key === 'Enter' || event.key === ' ' || event.code === 'Space'
+
+                event.stopImmediatePropagation()
+
+                if (event.type === 'keydown' && isConfirm && playBtn && !playBtn.hidden) {
+                    event.preventDefault()
+                    dismiss()
+                }
+            }
+            window.addEventListener('keydown', swallowKeys, true)
+            window.addEventListener('keyup', swallowKeys, true)
+
+            function dismiss() {
+                window.removeEventListener('keydown', swallowKeys, true)
+                window.removeEventListener('keyup', swallowKeys, true)
+                root.classList.add('is-hidden')
+                // Gỡ hẳn khỏi cây DOM sau khi mờ xong, để không còn gì chắn
+                // chuột/chạm phía trên canvas.
+                setTimeout(function () { root.remove() }, 900)
+            }
+
             if (playBtn) {
-                playBtn.addEventListener('click', function () {
-                    root.classList.add('is-hidden')
-                    // Gỡ hẳn khỏi cây DOM sau khi mờ xong, để không còn gì chắn
-                    // chuột/chạm phía trên canvas.
-                    setTimeout(function () { root.remove() }, 900)
-                })
+                playBtn.addEventListener('click', dismiss)
             }
         })()
     </script>

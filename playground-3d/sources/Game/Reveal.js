@@ -152,6 +152,11 @@ export class Reveal
             this.game.audio.init()
             this.sound.play()
 
+            // Nhạc nền vào SAU, chứ không nổ ngay lúc bấm: nhãn intro còn đang
+            // mờ đi, máy quay còn lùi ra, và tiếng "whoosh" mở màn ngay dòng
+            // trên vừa kêu. Chi tiết ở `Audio.playlist.startWorld`.
+            this.game.audio.playlist?.startWorld(2)
+
             // Reveal
             gsap.to(
                 this.distance,

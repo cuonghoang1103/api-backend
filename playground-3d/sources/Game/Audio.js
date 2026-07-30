@@ -166,17 +166,19 @@ export class Audio
         /**
          * ÂM LƯỢNG
          *
-         * `slider` là con số người dùng kéo (0..1). Âm lượng thật đưa cho Howler
-         * là `slider²`, vì tai người nghe gần theo hàm mũ: đường cong bình phương
-         * dồn phần lớn hành trình của thanh trượt vào vùng RẤT NHỎ — đúng vùng
-         * mà nhạc nền phải nằm, nên kéo tới đâu cũng chỉnh được tinh.
+         * `slider` là con số người dùng kéo (0..1) và cũng là con số hiện trên
+         * bảng Cài đặt. Âm lượng thật = `slider × MAX_VOLUME`, tuyến tính, nên
+         * số phần trăm hiện ra ĐÚNG là phần trăm — không bịa.
          *
-         * Mặc định `slider = 0.25` ⇒ âm lượng thật **0,0625**. Đối chiếu với
-         * tiếng nền của game: chim 0.3 · dế 0.65 · gió tới 0.7 · lửa 0.8 ·
-         * mưa tới 1.0. Tức nhạc nhỏ hơn tiếng chim ~5 lần và nhỏ hơn tiếng mưa
-         * to ~16 lần — đúng ý "bé xíu so với tiếng chim, gà, sấm sét".
+         * `MAX_VOLUME = 0.15` là TRẦN, cố ý đặt thấp: đây là NHẠC NỀN, không phải
+         * nhạc chính. Đối chiếu tiếng nền của bản mẫu — chim 0.3 · dế 0.65 · gió
+         * 0.7 · lửa 0.8 · mưa 1.0 — thì kéo hết cỡ nhạc vẫn chỉ bằng MỘT NỬA
+         * tiếng chim. Nhạc không bao giờ át được tiếng game, dù kéo tới đâu.
+         *
+         * Mặc định `slider = 0.23` ⇒ âm lượng thật **0,0345**.
          */
-        this.playlist.defaultSlider = 0.25
+        this.playlist.MAX_VOLUME = 0.15
+        this.playlist.defaultSlider = 0.23
         this.playlist.slider = this.playlist.defaultSlider
         this.playlist.enabled = true
 
@@ -188,7 +190,7 @@ export class Audio
         if(localStorage.getItem('musicToggle') === '0')
             this.playlist.enabled = false
 
-        this.playlist.getVolume = () => this.playlist.slider * this.playlist.slider
+        this.playlist.getVolume = () => this.playlist.slider * this.playlist.MAX_VOLUME
 
         for(const song of this.playlist.songs)
         {
@@ -359,9 +361,51 @@ export class Audio
             this.playlist.setEnabled(!this.playlist.enabled)
         }
 
-        // Tự phát ngay khi âm thanh được mở khoá (nút Play ở màn chào gọi
-        // `audio.init()`), trừ khi người dùng đã tắt nhạc từ lần trước
-        this.playlist.play()
+        /**
+         * Bắt đầu nhạc khi THẾ GIỚI mở ra — do `Reveal` gọi ở bước 1, tức ngay
+         * sau khi người chơi bấm vào vòng tròn "Click to Start".
+         *
+         * ⚠️ TUYỆT ĐỐI KHÔNG phát nhạc ngay trong `setPlaylist()`. `audio.init()`
+         *    chạy ở đúng khoảnh khắc bấm, lúc đó nhãn intro còn đang mờ đi và
+         *    máy quay còn đang lùi ra — nhạc nổ lên ngay là quá sớm, nghe như
+         *    nhạc phát từ màn chào. Đó chính là lỗi user báo ngày 30/7.
+         *
+         * `delay` giây im lặng để tiếng "whoosh" mở màn và tiếng chim/gió vào
+         * trước, rồi nhạc mới len vào dưới.
+         */
+        this.playlist.startWorld = (delay = 2) =>
+        {
+            if(!this.playlist.hasSongs)
+                return
+
+            /**
+             * Tắt loa ở màn "Click to Start" ⇒ TẮT HẲN nhạc nền.
+             *
+             * Nút loa đó gọi `audio.mute.toggle()` (xem `World/Intro.js`), tức
+             * tắt tiếng TOÀN CỤC. Nếu chỉ dựa vào cái tắt tiếng toàn cục thì mở
+             * loa lại là nhạc bật lên theo — không phải ý người dùng. Nên ở đây
+             * hạ hẳn cờ `enabled` và ghi nhớ, đúng nghĩa "tắt nhạc nền full":
+             * mọi tiếng GỐC (chim, dế, sấm, gió…) vẫn y nguyên hành vi của bản
+             * mẫu, chỉ riêng nhạc là không bao giờ tự vào.
+             *
+             * Bật lại bất cứ lúc nào bằng nút Music trong bảng Cài đặt.
+             */
+            if(this.mute.active)
+            {
+                this.playlist.enabled = false
+                localStorage.setItem('musicToggle', '0')
+                this.events.trigger('playlistChange')
+                return
+            }
+
+            if(!this.playlist.enabled)
+                return
+
+            gsap.delayedCall(delay, () =>
+            {
+                this.playlist.play()
+            })
+        }
 
         // Bảng Cài đặt được dựng TRƯỚC `audio.init()` nên lúc đó chưa có
         // `playlist`. Báo cho nó biết đã có để nó gắn nút vào.

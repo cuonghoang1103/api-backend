@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 344" width="700" height="344" role="img" aria-label="Measured: dispatching to the ui slice re-renders only the component reading it, and dispatching to the cart slice only the component reading that; but a selector returning a new object re-renders on every dispatch anywhere">
+  <rect width="700" height="344" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="343" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">useSelector subscribes at the leaf. One slice changes, one component re-renders.</text>
+
+  <!-- dispatch 1 -->
+  <rect x="24" y="46" width="320" height="118" rx="6" fill="#0a1120" stroke="#22d3ee"/>
+  <text x="38" y="68" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#22d3ee">dispatch ui/toggle</text>
+  <text x="38" y="90" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">ReadsTheme   ×1</text>
+  <text x="38" y="110" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">ReadsCount   ×0</text>
+  <text x="38" y="130" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">ReadsNothing ×0</text>
+  <text x="38" y="150" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">App, Buttons ×0</text>
+
+  <!-- dispatch 2 -->
+  <rect x="356" y="46" width="320" height="118" rx="6" fill="#0a1120" stroke="#fb923c"/>
+  <text x="370" y="68" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">dispatch cart/addItem</text>
+  <text x="370" y="90" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">ReadsTheme   ×0</text>
+  <text x="370" y="110" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">ReadsCount   ×1</text>
+  <text x="370" y="130" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">ReadsNothing ×0</text>
+  <text x="370" y="150" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">App, Buttons ×0</text>
+
+  <!-- the trap -->
+  <rect x="24" y="180" width="652" height="76" rx="6" fill="#111c30" stroke="#f43f5e"/>
+  <text x="38" y="202" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">the trap: a selector that builds a NEW object every call</text>
+  <text x="38" y="222" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">3 dispatches to an UNRELATED slice → 3 renders</text>
+  <text x="38" y="244" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">same + shallowEqual, or createSelector → 0 renders</text>
+
+  <!-- batching -->
+  <rect x="24" y="266" width="652" height="58" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="38" y="288" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">notifications are not renders</text>
+  <text x="38" y="310" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">3 dispatches in one handler → store notified 3× · component rendered 1×</text>
+</svg>

@@ -76,8 +76,7 @@ export const DEEP_DIVES: DeepDive[] = [
     logo: 'redux',
     title: 'How to Use Redux and React',
     blurb: 'Store, actions, reducers — and when you genuinely need them.',
-    href: '/code-lab',
-    via: 'Graded exercises in Code Lab',
+    article: 'how-to-use-redux-and-react',
   },
   {
     logo: 'vuedotjs',

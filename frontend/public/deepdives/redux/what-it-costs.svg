@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 356" width="700" height="356" role="img" aria-label="The same counter built three ways: useState is 176 bytes gzipped, a nine-line external store 249 bytes, Redux Toolkit with react-redux 10670 bytes; dispatch itself costs 0.3 microseconds in production">
+  <rect width="700" height="356" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="355" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">The same counter button, three ways. esbuild, minified, React marked external.</text>
+
+  <!-- bars -->
+  <text x="24" y="56" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">useState</text>
+  <rect x="24" y="62" width="6" height="22" fill="#4ade80"/>
+  <text x="664" y="78" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">173 B min · 176 B gzip</text>
+
+  <text x="24" y="108" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#22d3ee">useSyncExternalStore, 9 lines</text>
+  <rect x="24" y="114" width="9" height="22" fill="#22d3ee"/>
+  <text x="664" y="130" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">298 B min · 249 B gzip</text>
+
+  <text x="24" y="160" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">RTK + react-redux</text>
+  <rect x="24" y="166" width="400" height="22" fill="#fb923c"/>
+  <text x="664" y="182" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">27288 B min · 10670 B gzip</text>
+
+  <text x="24" y="210" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">A floor, not a slope: 10.7 KB across two slices is a lot, across forty it is nothing.</text>
+
+  <!-- runtime -->
+  <rect x="24" y="226" width="320" height="60" rx="6" fill="#0a1120" stroke="#4ade80"/>
+  <text x="38" y="248" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">dispatch in production</text>
+  <text x="38" y="270" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">20000 in 5 ms = 0.3 µs each</text>
+
+  <rect x="356" y="226" width="320" height="60" rx="6" fill="#0a1120" stroke="#fcd34d"/>
+  <text x="370" y="248" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">with the two dev checks</text>
+  <text x="370" y="270" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">20000 in 36 ms = 1.8 µs each</text>
+
+  <rect x="24" y="298" width="652" height="42" rx="6" fill="#111c30" stroke="#a78bfa"/>
+  <text x="38" y="324" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#a78bfa">what the price buys: a replayable log — 4 actions, 147 B of JSON, exact state</text>
+</svg>

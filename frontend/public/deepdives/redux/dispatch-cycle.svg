@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 356" width="700" height="356" role="img" aria-label="A dispatched action passes through each middleware, reaches the reducer which returns a new state, then the store notifies every subscriber; middleware sees the action on the way in and the result on the way out">
+  <rect width="700" height="356" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="355" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">One dispatch. Middleware wraps the reducer, so each one runs twice — before and after.</text>
+
+  <rect x="24" y="46" width="652" height="36" rx="6" fill="#111c30" stroke="#fcd34d"/>
+  <text x="38" y="69" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">dispatch({ type: &#39;cart/addQty&#39;, payload: 2 })</text>
+
+  <rect x="44" y="92" width="612" height="34" rx="5" fill="#0a1120" stroke="#a78bfa"/>
+  <text x="58" y="114" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#a78bfa">middleware A  →</text>
+  <text x="644" y="114" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">thunk · serializableCheck · your own</text>
+
+  <rect x="64" y="132" width="572" height="34" rx="5" fill="#0a1120" stroke="#22d3ee"/>
+  <text x="78" y="154" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#22d3ee">middleware B  →</text>
+
+  <rect x="84" y="172" width="532" height="46" rx="5" fill="#111c30" stroke="#4ade80"/>
+  <text x="98" y="192" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">reducer(state, action) → new state</text>
+  <text x="98" y="211" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">immer: touched path copied · untouched branches shared</text>
+
+  <rect x="64" y="224" width="572" height="28" rx="5" fill="#0a1120" stroke="#22d3ee"/>
+  <text x="78" y="243" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#22d3ee">←  middleware B  (now sees the result)</text>
+
+  <rect x="44" y="258" width="612" height="28" rx="5" fill="#0a1120" stroke="#a78bfa"/>
+  <text x="58" y="277" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#a78bfa">←  middleware A</text>
+
+  <rect x="24" y="294" width="652" height="46" rx="6" fill="#111c30" stroke="#fb923c"/>
+  <text x="38" y="314" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">store notifies EVERY subscriber — measured</text>
+  <text x="38" y="332" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">1 dispatch = 1 notify, even when state did not change · 3 dispatches = 3 notifies</text>
+</svg>

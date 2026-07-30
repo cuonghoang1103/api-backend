@@ -1,19 +1,19 @@
 # Deep Dives — MỞ PHIÊN MỚI ĐỌC FILE NÀY
 
-Cập nhật 30/7/2026, sau khi xong **6/12 bài**. Nhánh `feat/playground-3d`.
-File này đủ để bắt đầu bài 7 mà **không cần đọc lại phiên cũ**.
+Cập nhật 30/7/2026, sau khi xong **7/12 bài**. Nhánh `feat/playground-3d`.
+File này đủ để bắt đầu bài 8 mà **không cần đọc lại phiên cũ**.
 (Bối cảnh trang chủ + lịch sử bẫy: `scratchpad/DEEPDIVES-HANDOFF.md`.)
 
 ---
 
-## Việc: viết 6 bài Deep Dives còn lại
+## Việc: viết 5 bài Deep Dives còn lại
 
-Bài 7 tiếp theo: **How to Use Redux and React** (thẻ số 7 trong
-`deepDivesData.ts`). Sau đó theo thứ tự: Vue → shell scripting → Mac setup →
+Bài 8 tiếp theo: **How to Use Vue, the JavaScript Framework** (thẻ số 8 trong
+`deepDivesData.ts`). Sau đó theo thứ tự: shell scripting → Mac setup →
 reading production. Bài Node.js (thẻ 3) đã có khoá 112
 bài — giữ `href` chứ không viết lại.
 
-Ngôn ngữ: **tiếng Anh**. Thước đo 6 bài đầu:
+Ngôn ngữ: **tiếng Anh**. Thước đo 7 bài đầu:
 
 | Bài | Từ (không tính code) | Khối code | Sơ đồ | Link nội bộ |
 |---|---|---|---|---|
@@ -23,6 +23,7 @@ Ngôn ngữ: **tiếng Anh**. Thước đo 6 bài đầu:
 | 4. webpack | 5.074 | 95 | 4 | 3 |
 | 5. CSS | 4.835 | 101 | 4 | 3 |
 | 6. React | 4.913 | 64 | 4 | 3 |
+| 7. Redux | 4.827 | 77 | 4 | 3 |
 
 Số khối code tuỳ chủ đề (CLI cần nhiều, GraphQL ít hơn). **Từ 4.800 trở lên.**
 
@@ -87,13 +88,14 @@ value-tracker nên **gán `input.value` trực tiếp KHÔNG kích hoạt `onCha
 phình bundle" SAI — 49 B vs 49 B giống từng byte; giá thật là side effect ở
 top-level module.
 
-**7. Redux** — `npm i @reduxjs/toolkit`. Demo: store + reducer thuần chạy trong
-node · `dispatch` và log state trước/sau · immer trong RTK: mutate mà không
-mutate (chứng minh bằng `Object.is` trên object cũ) · selector chạy lại bao
-nhiêu lần với/không `createSelector` (counter) · async thunk + trạng thái
-pending/fulfilled/rejected · **và mục "khi nào KHÔNG cần Redux"** — `useState` +
-context + query lib đủ cho 90% app; nói thẳng như bài GraphQL.
-(Sơ đồ: dispatch→reducer→store→subscriber · vị trí middleware.)
+**7. Redux** — ✅ XONG 30/7, commit `1eac247`. Lab `scratchpad/redux-lab/`
+(01..06 + `size/`), copy `harness.mjs` từ react-lab. Phát hiện đắt nhất: **"RTK
+bớt nhiều boilerplate" SAI** — 14 dòng → 13 dòng. Kèm: sửa state ngoài reducer
+throw ngay tại dòng đó (RTK đóng băng state, KHÔNG phải middleware báo sau) ·
+`.unwrap()` throw **Object** không phải Error · 3 dispatch = store notify 3 lần
+nhưng render 1 lần · "createSelector có tham số đập cache" đã lỗi thời ở RTK 2.
+Đo byte bằng esbuild với `--external:react` (10.670 B gzip cho một cái nút đếm).
+Đo THỜI GIAN trong Node thì tin được (khác hẳn tab nền của trình duyệt).
 
 **8. Vue** — `npm i vue @vue/server-renderer`. Demo: reactivity thật —
 `ref`/`reactive`, `watchEffect` chạy mấy lần · `reactive` mất tính reactive khi
@@ -217,8 +219,8 @@ thành công, không thì là link chết.
 ## Trạng thái repo lúc bàn giao
 
 **Nhánh `feat/playground-3d` — prod đang chạy `ed26ede` (deploy + push 30/7).**
-Bài 4 (webpack, `c0a2baf`) + bài 5 (CSS, `d21e5ef`) + bài 6 (React, `f65bb19`)
-+ fix sơ đồ (`b85740c`) **đã commit local, CHƯA deploy, CHƯA push** — prod vẫn 3 bài Deep Dives
+Bài 4 (webpack `c0a2baf`) + 5 (CSS `d21e5ef`) + 6 (React `f65bb19`) + 7 (Redux
+`1eac247`) + fix sơ đồ (`b85740c`) **đã commit local, CHƯA deploy, CHƯA push** — prod vẫn 3 bài Deep Dives
 (#22-24). User chốt 30/7: **đợi phiên CSI/SSL xong rồi deploy MỘT THỂ**. Thẻ
 webpack + CSS trên trang chủ đã trỏ `article:` nên **trên prod là LINK CHẾT tới
 khi deploy** (Step 3.15 của
@@ -238,7 +240,7 @@ f438640 feat(deepdives): bài 3 — An Introduction to GraphQL
 8e069b3 feat(deepdives): bài 1 — command line + seeder
 ```
 
-Hạ tầng đã xong, dùng lại cho 6 bài còn lại:
+Hạ tầng đã xong, dùng lại cho 5 bài còn lại:
 
 - `scripts/deepdive-seed.mjs` — idempotent theo slug, `--dry`/`--apply`, render
   `bodyHtml`+`toc` bằng ĐÚNG renderer backend ở `dist/`, giữ `viewCount` +
@@ -255,12 +257,12 @@ Hạ tầng đã xong, dùng lại cho 6 bài còn lại:
   `<pre>`/`<code>` là escape ĐÚNG, không phải thẻ bị sanitizer lọc.
   **Chạy chúng và ĐỌC dòng tự kiểm** — cả hai in ra ✓/✗ cho chính nó
 
-Sáu bài đã seed trên `:5544` = bài #1..#6. Trang đọc:
+Bảy bài đã seed trên `:5544` = bài #1..#7. Trang đọc:
 `/tech-trends/<slug>`.
 
 ---
 
 ## Câu mở đầu gợi ý cho phiên mới
 
-> Đọc `scratchpad/DEEPDIVES-NEXT-SESSION.md` rồi viết bài 7 (Redux) theo
+> Đọc `scratchpad/DEEPDIVES-NEXT-SESSION.md` rồi viết bài 8 (Vue) theo
 > đúng quy trình B1-B8 trong đó.

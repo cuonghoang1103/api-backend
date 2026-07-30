@@ -1,19 +1,19 @@
 # Deep Dives — MỞ PHIÊN MỚI ĐỌC FILE NÀY
 
-Cập nhật 30/7/2026, sau khi xong **4/12 bài**. Nhánh `feat/playground-3d`.
-File này đủ để bắt đầu bài 5 mà **không cần đọc lại phiên cũ**.
+Cập nhật 30/7/2026, sau khi xong **5/12 bài**. Nhánh `feat/playground-3d`.
+File này đủ để bắt đầu bài 6 mà **không cần đọc lại phiên cũ**.
 (Bối cảnh trang chủ + lịch sử bẫy: `scratchpad/DEEPDIVES-HANDOFF.md`.)
 
 ---
 
-## Việc: viết 8 bài Deep Dives còn lại
+## Việc: viết 7 bài Deep Dives còn lại
 
-Bài 5 tiếp theo: **A Complete Guide to CSS Concepts and Fundamentals** (thẻ số 6
-trong `deepDivesData.ts`). Sau đó theo thứ tự: React → Redux → Vue → shell
-scripting → Mac setup → reading production. Bài Node.js (thẻ 3) đã có khoá 112
+Bài 6 tiếp theo: **How to Structure and Organize a React Application** (thẻ số 5
+trong `deepDivesData.ts`). Sau đó theo thứ tự: Redux → Vue → shell scripting →
+Mac setup → reading production. Bài Node.js (thẻ 3) đã có khoá 112
 bài — giữ `href` chứ không viết lại.
 
-Ngôn ngữ: **tiếng Anh**. Thước đo 4 bài đầu:
+Ngôn ngữ: **tiếng Anh**. Thước đo 5 bài đầu:
 
 | Bài | Từ (không tính code) | Khối code | Sơ đồ | Link nội bộ |
 |---|---|---|---|---|
@@ -21,6 +21,7 @@ Ngôn ngữ: **tiếng Anh**. Thước đo 4 bài đầu:
 | 2. event loop | 5.230 | 74 | 4 | 3 |
 | 3. GraphQL | 4.887 | 36 | 3 | 3 |
 | 4. webpack | 5.074 | 95 | 4 | 3 |
+| 5. CSS | 4.835 | 101 | 4 | 3 |
 
 Số khối code tuỳ chủ đề (CLI cần nhiều, GraphQL ít hơn). **Từ 4.800 trở lên.**
 
@@ -63,15 +64,17 @@ mà Next 14.2.15 đóng gói thì VẪN cần) · `splitChunks.minSize` **10000 
 import ra bundle GIỐNG TỪNG BYTE · `babel-loader` nhắm ie11 vẫn để lại 35 arrow
 vì runtime là webpack sinh sau loader, phải thêm `target: ['web','es5']`.
 
-**5. CSS fundamentals** — không cần npm. Demo bằng `node` + một trang HTML rồi
-đo bằng `javascript_tool` (`getComputedStyle`): box model `content-box` vs
-`border-box` (số px thật) · specificity: 4 selector cùng target, cái nào thắng ·
-cascade + `!important` + inline · margin collapse (2 div, đo khoảng cách thật) ·
-flex `min-width:auto` làm item không co (bẫy kinh điển, đo được) · grid
-`fr` vs `%` · `z-index` chỉ ăn khi có `position` · stacking context do
-`transform` tạo ra · `em` vs `rem` lồng nhau (đo px). **CẨN THẬN:** khung xem là
-tab ẩn — đo layout thì được, đo timer/rAF thì KHÔNG (xem bẫy trong file này).
-(Sơ đồ: box model · specificity thang điểm · stacking context.)
+**5. CSS fundamentals** — ✅ XONG 30/7, commit `d21e5ef`. Lab ở
+`scratchpad/css-lab/` (v1→v6, giữ lại để chạy lại được). **CÁCH ĐO TRONG TRÌNH
+DUYỆT — dùng lại cho bài React/Vue:** trang `file://` NGOÀI dự án chỉ ra ảnh chụp
+tĩnh, KHÔNG chạy JS ⇒ phải phục vụ qua HTTP. Thêm một entry vào
+`.claude/launch.json` (thư mục này KHÔNG nằm trong git nên vô hại) trỏ
+`python3 -m http.server <port> --directory <lab>`, rồi `preview_start` theo tên.
+Trang tự in kết quả vào `<pre>`, đọc lại bằng `get_page_text` hoặc
+`javascript_tool`. ⚠️ Tab đó là tab NỀN: đo layout thì tin được, đo **thời gian**
+thì KHÔNG — bài 5 nói thẳng là không có số liệu transition/animation vì thế.
+⚠️ `elementFromPoint` ăn toạ độ **viewport** ⇒ `scrollIntoView` trước khi đo,
+không thì ra `null` (dẫm 3 lần).
 
 **6. React structure** — `npm i react react-dom` + `react-dom/server` để render
 thật trong node. Demo: `renderToString` một cây component · state boundary: cùng
@@ -211,21 +214,28 @@ thành công, không thì là link chết.
 ## Trạng thái repo lúc bàn giao
 
 **Nhánh `feat/playground-3d` — prod đang chạy `ed26ede` (deploy + push 30/7).**
-Bài 4 (webpack) **đã commit local `c0a2baf` nhưng CHƯA deploy, CHƯA push** —
-prod vẫn 3 bài Deep Dives (#22-24). Thẻ webpack trên trang chủ đã trỏ
-`article:` nên **trên prod nó là LINK CHẾT tới khi deploy** (Step 3.15 của
+Bài 4 (webpack, `c0a2baf`) + bài 5 (CSS, `d21e5ef`) + fix sơ đồ (`b85740c`)
+**đã commit local, CHƯA deploy, CHƯA push** — prod vẫn 3 bài Deep Dives
+(#22-24). User chốt 30/7: **đợi phiên CSI/SSL xong rồi deploy MỘT THỂ**. Thẻ
+webpack + CSS trên trang chủ đã trỏ `article:` nên **trên prod là LINK CHẾT tới
+khi deploy** (Step 3.15 của
 `deploy.sh` seed bài lúc deploy). Đếm commit chưa push bằng
 `git log --oneline @{u}..HEAD | wc -l`.
 
 ```
-c5763e5 feat(exam): CSI104 Đề 9 — SU25 Retake   ← phiên khác
+d21e5ef feat(deepdives): bài 5 — A Complete Guide to CSS Concepts and Fundamentals
+6d5e3a4 feat(exam): SSL101c Đề 1                        ← phiên khác
+b85740c fix(deepdives): sơ đồ bài 1-3 — thụt lề + chữ tràn khung
+1984e5b feat(exam): CSI104 Đề 10 — hoàn tất CSI104 10/10 ← phiên khác
+f85f04d docs(deepdives): bàn giao sau bài 4
+c5763e5 feat(exam): CSI104 Đề 9                          ← phiên khác
 c0a2baf feat(deepdives): bài 4 — How to Set Up webpack From Scratch
 f438640 feat(deepdives): bài 3 — An Introduction to GraphQL
 139f982 feat(deepdives): bài 2 — event loop, callbacks, promises, async/await
 8e069b3 feat(deepdives): bài 1 — command line + seeder
 ```
 
-Hạ tầng đã xong, dùng lại cho 8 bài còn lại:
+Hạ tầng đã xong, dùng lại cho 7 bài còn lại:
 
 - `scripts/deepdive-seed.mjs` — idempotent theo slug, `--dry`/`--apply`, render
   `bodyHtml`+`toc` bằng ĐÚNG renderer backend ở `dist/`, giữ `viewCount` +
@@ -242,12 +252,12 @@ Hạ tầng đã xong, dùng lại cho 8 bài còn lại:
   `<pre>`/`<code>` là escape ĐÚNG, không phải thẻ bị sanitizer lọc.
   **Chạy chúng và ĐỌC dòng tự kiểm** — cả hai in ra ✓/✗ cho chính nó
 
-Bốn bài đã seed trên `:5544` = bài #1, #2, #3, #4. Trang đọc:
+Năm bài đã seed trên `:5544` = bài #1..#5. Trang đọc:
 `/tech-trends/<slug>`.
 
 ---
 
 ## Câu mở đầu gợi ý cho phiên mới
 
-> Đọc `scratchpad/DEEPDIVES-NEXT-SESSION.md` rồi viết bài 5 (CSS) theo
+> Đọc `scratchpad/DEEPDIVES-NEXT-SESSION.md` rồi viết bài 6 (React) theo
 > đúng quy trình B1-B8 trong đó.

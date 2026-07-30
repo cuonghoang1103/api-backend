@@ -1,19 +1,19 @@
 # Deep Dives — MỞ PHIÊN MỚI ĐỌC FILE NÀY
 
-Cập nhật 30/7/2026, sau khi xong **5/12 bài**. Nhánh `feat/playground-3d`.
-File này đủ để bắt đầu bài 6 mà **không cần đọc lại phiên cũ**.
+Cập nhật 30/7/2026, sau khi xong **6/12 bài**. Nhánh `feat/playground-3d`.
+File này đủ để bắt đầu bài 7 mà **không cần đọc lại phiên cũ**.
 (Bối cảnh trang chủ + lịch sử bẫy: `scratchpad/DEEPDIVES-HANDOFF.md`.)
 
 ---
 
-## Việc: viết 7 bài Deep Dives còn lại
+## Việc: viết 6 bài Deep Dives còn lại
 
-Bài 6 tiếp theo: **How to Structure and Organize a React Application** (thẻ số 5
-trong `deepDivesData.ts`). Sau đó theo thứ tự: Redux → Vue → shell scripting →
-Mac setup → reading production. Bài Node.js (thẻ 3) đã có khoá 112
+Bài 7 tiếp theo: **How to Use Redux and React** (thẻ số 7 trong
+`deepDivesData.ts`). Sau đó theo thứ tự: Vue → shell scripting → Mac setup →
+reading production. Bài Node.js (thẻ 3) đã có khoá 112
 bài — giữ `href` chứ không viết lại.
 
-Ngôn ngữ: **tiếng Anh**. Thước đo 5 bài đầu:
+Ngôn ngữ: **tiếng Anh**. Thước đo 6 bài đầu:
 
 | Bài | Từ (không tính code) | Khối code | Sơ đồ | Link nội bộ |
 |---|---|---|---|---|
@@ -22,6 +22,7 @@ Ngôn ngữ: **tiếng Anh**. Thước đo 5 bài đầu:
 | 3. GraphQL | 4.887 | 36 | 3 | 3 |
 | 4. webpack | 5.074 | 95 | 4 | 3 |
 | 5. CSS | 4.835 | 101 | 4 | 3 |
+| 6. React | 4.913 | 64 | 4 | 3 |
 
 Số khối code tuỳ chủ đề (CLI cần nhiều, GraphQL ít hơn). **Từ 4.800 trở lên.**
 
@@ -76,13 +77,15 @@ thì KHÔNG — bài 5 nói thẳng là không có số liệu transition/animat
 ⚠️ `elementFromPoint` ăn toạ độ **viewport** ⇒ `scrollIntoView` trước khi đo,
 không thì ra `null` (dẫm 3 lần).
 
-**6. React structure** — `npm i react react-dom` + `react-dom/server` để render
-thật trong node. Demo: `renderToString` một cây component · state boundary: cùng
-state đặt cao vs thấp, đếm số component re-render (dùng counter trong body) ·
-`key` sai làm mất state (chứng minh được bằng render 2 lần) · context làm mọi
-consumer re-render · `useMemo` có/không, đo bằng counter chứ không bằng cảm giác ·
-cấu trúc thư mục: feature-based vs type-based, nói rõ cái nào chịu được rewrite.
-(Sơ đồ: cây component + nơi state nên nằm · re-render lan như thế nào.)
+**6. React structure** — ✅ XONG 30/7, commit `f65bb19`. Lab
+`scratchpad/react-lab/` (harness.mjs + 01..07): jsdom + createRoot + `act`, bộ
+đếm trong thân component. **DÙNG LẠI CHO BÀI VUE.** Bẫy đã dẫm: Node 22 có
+`globalThis.navigator` chỉ-đọc (phải `Object.defineProperty`) · `root.unmount()`
+cũng là một cập nhật, không bọc `act` là ra đúng 1 cảnh báo/lần · React 19 có
+value-tracker nên **gán `input.value` trực tiếp KHÔNG kích hoạt `onChange`**
+(phải gọi setter native của prototype). Phát hiện đắt nhất: "barrel file làm
+phình bundle" SAI — 49 B vs 49 B giống từng byte; giá thật là side effect ở
+top-level module.
 
 **7. Redux** — `npm i @reduxjs/toolkit`. Demo: store + reducer thuần chạy trong
 node · `dispatch` và log state trước/sau · immer trong RTK: mutate mà không
@@ -214,8 +217,8 @@ thành công, không thì là link chết.
 ## Trạng thái repo lúc bàn giao
 
 **Nhánh `feat/playground-3d` — prod đang chạy `ed26ede` (deploy + push 30/7).**
-Bài 4 (webpack, `c0a2baf`) + bài 5 (CSS, `d21e5ef`) + fix sơ đồ (`b85740c`)
-**đã commit local, CHƯA deploy, CHƯA push** — prod vẫn 3 bài Deep Dives
+Bài 4 (webpack, `c0a2baf`) + bài 5 (CSS, `d21e5ef`) + bài 6 (React, `f65bb19`)
++ fix sơ đồ (`b85740c`) **đã commit local, CHƯA deploy, CHƯA push** — prod vẫn 3 bài Deep Dives
 (#22-24). User chốt 30/7: **đợi phiên CSI/SSL xong rồi deploy MỘT THỂ**. Thẻ
 webpack + CSS trên trang chủ đã trỏ `article:` nên **trên prod là LINK CHẾT tới
 khi deploy** (Step 3.15 của
@@ -235,7 +238,7 @@ f438640 feat(deepdives): bài 3 — An Introduction to GraphQL
 8e069b3 feat(deepdives): bài 1 — command line + seeder
 ```
 
-Hạ tầng đã xong, dùng lại cho 7 bài còn lại:
+Hạ tầng đã xong, dùng lại cho 6 bài còn lại:
 
 - `scripts/deepdive-seed.mjs` — idempotent theo slug, `--dry`/`--apply`, render
   `bodyHtml`+`toc` bằng ĐÚNG renderer backend ở `dist/`, giữ `viewCount` +
@@ -252,12 +255,12 @@ Hạ tầng đã xong, dùng lại cho 7 bài còn lại:
   `<pre>`/`<code>` là escape ĐÚNG, không phải thẻ bị sanitizer lọc.
   **Chạy chúng và ĐỌC dòng tự kiểm** — cả hai in ra ✓/✗ cho chính nó
 
-Năm bài đã seed trên `:5544` = bài #1..#5. Trang đọc:
+Sáu bài đã seed trên `:5544` = bài #1..#6. Trang đọc:
 `/tech-trends/<slug>`.
 
 ---
 
 ## Câu mở đầu gợi ý cho phiên mới
 
-> Đọc `scratchpad/DEEPDIVES-NEXT-SESSION.md` rồi viết bài 6 (React) theo
+> Đọc `scratchpad/DEEPDIVES-NEXT-SESSION.md` rồi viết bài 7 (Redux) theo
 > đúng quy trình B1-B8 trong đó.

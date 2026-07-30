@@ -11348,6 +11348,1433 @@ export default {
           "explanation": "<div class=\"ml-en\">Sign-and-magnitude: sign bit 1 (negative) + magnitude of 5 (101) = <b>1101</b>.</div><div class=\"ml-vi\">Dấu-độ lớn: bit dấu 1 (âm) + độ lớn của 5 (101) = <b>1101</b>.</div>"
         }
       ]
+    },
+    {
+      "kind": "FE",
+      "code": "CSI-D9",
+      "source": "REAL",
+      "sortOrder": 8,
+      "title": "Đề 9 — SU25 Retake Exam (CSI106)|||Đề 9 — Thi lại SU25 (CSI106)",
+      "description": "CSI104 real FE multiple-choice paper (Summer 2025 Retake), transcribed from the exam images. 1 of the 61 scanned images (position 28) was a duplicate capture of question 27, leaving exactly 60 unique real questions — no authored filler needed. (60 questions)|||Đề trắc nghiệm FE thật môn CSI104 (kỳ Hè 2025, Thi lại), chép từ ảnh đề. 1 trong 61 ảnh quét (vị trí 28) là bản chụp trùng của câu 27, còn lại đúng 60 câu duy nhất thật — không cần bù câu tự soạn. (60 câu)",
+      "durationMinutes": 60,
+      "totalPoints": 10,
+      "passMark": 5,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "_______ separated the programming task from computer operation tasks.|||_______ tách biệt công việc lập trình khỏi công việc vận hành máy tính.",
+          "options": [
+            {
+              "text": "Algorithms|||Thuật toán"
+            },
+            {
+              "text": "Data processors|||Bộ xử lý dữ liệu"
+            },
+            {
+              "text": "High-level programming languages|||Ngôn ngữ lập trình bậc cao"
+            },
+            {
+              "text": "Operating systems|||Hệ điều hành"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Operating systems</b> took over hardware operation tasks (scheduling, I/O, etc.), letting programmers focus purely on writing programs rather than operating the machine directly.</div><div class=\"ml-vi\"><b>Hệ điều hành</b> đảm nhận các tác vụ vận hành phần cứng (lập lịch, I/O, v.v.), giúp lập trình viên chỉ tập trung viết chương trình thay vì trực tiếp vận hành máy.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "When Minicomputers appeared on the market?|||Máy tính mini xuất hiện trên thị trường vào thời kỳ nào?",
+          "options": [
+            {
+              "text": "First generation|||Thế hệ thứ nhất"
+            },
+            {
+              "text": "Second generation|||Thế hệ thứ hai"
+            },
+            {
+              "text": "Third generation|||Thế hệ thứ ba"
+            },
+            {
+              "text": "Fourth generation|||Thế hệ thứ tư"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Minicomputers</b> emerged during the <b>third generation</b> (IC era), offering smaller, cheaper alternatives to mainframes.</div><div class=\"ml-vi\"><b>Máy tính mini</b> xuất hiện ở <b>thế hệ thứ ba</b> (kỷ nguyên IC), là lựa chọn nhỏ gọn, rẻ hơn so với mainframe.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "A path by which communication is achieved between a central processor and other devices is called______|||Một đường truyền thông giữa bộ xử lý trung tâm và các thiết bị khác được gọi là______",
+          "options": [
+            {
+              "text": "Audit trail|||Dấu vết kiểm toán"
+            },
+            {
+              "text": "Network|||Mạng"
+            },
+            {
+              "text": "Bus|||Bus"
+            },
+            {
+              "text": "Channel|||Kênh (channel)"
+            },
+            {
+              "text": "None of the others|||Không đáp án nào khác đúng"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">A <b>bus</b> is the communication path connecting the central processor to other devices/components.</div><div class=\"ml-vi\"><b>Bus</b> là đường truyền thông kết nối bộ xử lý trung tâm với các thiết bị/thành phần khác.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "A computer has 32 MB (megabytes) of memory. How many bits are needed to address any single byte in memory?|||Một máy tính có 32 MB bộ nhớ. Cần bao nhiêu bit để định địa chỉ cho một byte bất kỳ trong bộ nhớ?",
+          "options": [
+            {
+              "text": "5 bits|||5 bit"
+            },
+            {
+              "text": "20 bits|||20 bit"
+            },
+            {
+              "text": "25 bits|||25 bit"
+            },
+            {
+              "text": "32 bits|||32 bit"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">32 MB = 2^25 bytes, so <b>25 bits</b> are needed to address every byte.</div><div class=\"ml-vi\">32 MB = 2^25 byte, nên cần <b>25 bit</b> để định địa chỉ cho mọi byte.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The device that can both feed data into and accept data from a computer is|||Thiết bị vừa có thể đưa dữ liệu vào vừa nhận dữ liệu từ máy tính là",
+          "options": [
+            {
+              "text": "ALU|||ALU"
+            },
+            {
+              "text": "CPU|||CPU"
+            },
+            {
+              "text": "Input-Output device|||Thiết bị vào/ra"
+            },
+            {
+              "text": "All of the others|||Tất cả đáp án trên"
+            },
+            {
+              "text": "None of the others|||Không đáp án nào khác đúng"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">An <b>input-output device</b> (e.g. a modem or touchscreen) both feeds data into and accepts data from the computer.</div><div class=\"ml-vi\"><b>Thiết bị vào/ra</b> (VD modem hay màn hình cảm ứng) vừa đưa dữ liệu vào vừa nhận dữ liệu từ máy tính.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "How many connections (in the data bus) do we need to transfer 4 bytes of a word at the same time?|||Cần bao nhiêu đường kết nối (trong bus dữ liệu) để truyền 4 byte của một từ cùng lúc?",
+          "options": [
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "8|||8"
+            },
+            {
+              "text": "16|||16"
+            },
+            {
+              "text": "32|||32"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">4 bytes = 32 bits; transferring all bits simultaneously (in parallel) needs <b>32</b> connections, one per bit.</div><div class=\"ml-vi\">4 byte = 32 bit; truyền tất cả bit cùng lúc (song song) cần <b>32</b> đường kết nối, mỗi đường một bit.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Instructions and memory addresses are represented by|||Các lệnh và địa chỉ bộ nhớ được biểu diễn bằng",
+          "options": [
+            {
+              "text": "Character codes|||Mã ký tự"
+            },
+            {
+              "text": "Binary codes|||Mã nhị phân"
+            },
+            {
+              "text": "Binary word|||Từ nhị phân"
+            },
+            {
+              "text": "Parity bit|||Bit chẵn lẻ"
+            },
+            {
+              "text": "None of the others|||Không đáp án nào khác đúng"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">At the hardware level, instructions and memory addresses are represented as <b>binary codes</b>.</div><div class=\"ml-vi\">Ở mức phần cứng, lệnh và địa chỉ bộ nhớ được biểu diễn bằng <b>mã nhị phân</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The base of the hexadecimal number system is ____.|||Cơ số của hệ thập lục phân là ____.",
+          "options": [
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "8|||8"
+            },
+            {
+              "text": "10|||10"
+            },
+            {
+              "text": "16|||16"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">The <b>hexadecimal</b> system has base <b>16</b>.</div><div class=\"ml-vi\">Hệ <b>thập lục phân</b> có cơ số <b>16</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following is equivalent to 24 in decimal?|||Giá trị nào sau đây tương đương với 24 trong hệ thập phân?",
+          "options": [
+            {
+              "text": "(11000)2|||(11000)2"
+            },
+            {
+              "text": "(1A)16|||(1A)16"
+            },
+            {
+              "text": "(31)8|||(31)8"
+            },
+            {
+              "text": "None of the above|||Không đáp án nào ở trên"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">(11000)2 = 16+8 = <b>24</b>. (1A)16 = 26 and (31)8 = 25, so neither matches.</div><div class=\"ml-vi\">(11000)2 = 16+8 = <b>24</b>. (1A)16 = 26 và (31)8 = 25, không khớp giá trị 24.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "A group contains ______ bits in the binary system are represented as one digit in the octal system.|||Một nhóm gồm ______ bit trong hệ nhị phân được biểu diễn thành một chữ số trong hệ bát phân.",
+          "options": [
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "None of the others|||Không đáp án nào khác đúng"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">Octal is base 8 = 2^3, so each octal digit corresponds to <b>3</b> binary bits.</div><div class=\"ml-vi\">Bát phân có cơ số 8 = 2^3, nên mỗi chữ số bát phân tương ứng với <b>3</b> bit nhị phân.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Conversion of binary number 1010101000010111 to hexadecimal number is_________|||Chuyển số nhị phân 1010101000010111 sang số thập lục phân là_________",
+          "options": [
+            {
+              "text": "D8F9|||D8F9"
+            },
+            {
+              "text": "A8B9|||A8B9"
+            },
+            {
+              "text": "AA17|||AA17"
+            },
+            {
+              "text": "D9F8|||D9F8"
+            },
+            {
+              "text": "None of the others|||Không đáp án nào khác đúng"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">Group into 4-bit nibbles: 1010=A, 1010=A, 0001=1, 0111=7 &rarr; <b>AA17</b>.</div><div class=\"ml-vi\">Nhóm 4 bit: 1010=A, 1010=A, 0001=1, 0111=7 &rarr; <b>AA17</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In an Excess conversion, we ________ the number to be converted.|||Trong chuyển đổi Excess (thừa số), ta ________ số cần chuyển.",
+          "options": [
+            {
+              "text": "Add the bias number to|||Cộng số bias vào"
+            },
+            {
+              "text": "Subtract the bias number from|||Trừ số bias từ"
+            },
+            {
+              "text": "Multiply the bias number by|||Nhân số bias với"
+            },
+            {
+              "text": "Divide the bias number by|||Chia số bias cho"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Excess-N representation stores <b>actual value + bias</b>, so converting to the stored form means <b>adding the bias number to</b> the actual exponent.</div><div class=\"ml-vi\">Biểu diễn Excess-N lưu <b>giá trị thật + bias</b>, nên chuyển sang dạng lưu trữ nghĩa là <b>cộng số bias vào</b> số mũ thật.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "How many symbols can be represented by a bit pattern with ten bits?|||Một chuỗi mười bit có thể biểu diễn được bao nhiêu ký hiệu?",
+          "options": [
+            {
+              "text": "128|||128"
+            },
+            {
+              "text": "256|||256"
+            },
+            {
+              "text": "512|||512"
+            },
+            {
+              "text": "1024|||1024"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">10 bits can represent 2^10 = <b>1024</b> distinct symbols.</div><div class=\"ml-vi\">10 bit có thể biểu diễn 2^10 = <b>1024</b> ký hiệu khác nhau.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "If we call the bit depth or number of bits per sample B, the number of samples per second S, so how to calculate BIT RATE (R)?|||Nếu gọi độ sâu bit (số bit trên mỗi mẫu) là B, số mẫu trên giây là S, thì TỐC ĐỘ BIT (R) tính thế nào?",
+          "options": [
+            {
+              "text": "B x 2S|||B x 2S"
+            },
+            {
+              "text": "2B x S|||2B x S"
+            },
+            {
+              "text": "B x S|||B x S"
+            },
+            {
+              "text": "B2 x S2|||B2 x S2"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">Bit rate is simply bits-per-sample times samples-per-second: <b>R = B x S</b>.</div><div class=\"ml-vi\">Tốc độ bit đơn giản là số bit mỗi mẫu nhân số mẫu mỗi giây: <b>R = B x S</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In the storing images, the number of bits used to represent a pixel, its____, depends on how a pixel's color is handled by different encoding techniques.|||Khi lưu trữ ảnh, số bit dùng để biểu diễn một điểm ảnh, tức là____, phụ thuộc vào cách màu điểm ảnh được xử lý bởi các kỹ thuật mã hoá khác nhau.",
+          "options": [
+            {
+              "text": "Bit map|||Bản đồ bit"
+            },
+            {
+              "text": "Pixels|||Điểm ảnh"
+            },
+            {
+              "text": "Resolution|||Độ phân giải"
+            },
+            {
+              "text": "Color depth|||Độ sâu màu (color depth)"
+            },
+            {
+              "text": "None of others|||Không đáp án nào khác đúng"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">The number of bits per pixel is called <b>color depth</b>.</div><div class=\"ml-vi\">Số bit trên mỗi điểm ảnh được gọi là <b>độ sâu màu (color depth)</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Use a simple right shift operation on the bit pattern 1001 1000.|||Áp dụng phép dịch phải đơn giản lên chuỗi bit 1001 1000.",
+          "options": [
+            {
+              "text": "1001 1001|||1001 1001"
+            },
+            {
+              "text": "1001 1000|||1001 1000"
+            },
+            {
+              "text": "0100 1101|||0100 1101"
+            },
+            {
+              "text": "0100 1100|||0100 1100"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">A simple (logical) right shift moves every bit one position right, filling 0 at the MSB: 1001&thinsp;1000 &rarr; <b>0100&thinsp;1100</b>.</div><div class=\"ml-vi\">Dịch phải đơn giản (logic) đẩy mọi bit sang phải một vị trí, điền 0 vào bit cao nhất: 1001&thinsp;1000 &rarr; <b>0100&thinsp;1100</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Use a simple left shift operation on the bit pattern 1001 1000|||Áp dụng phép dịch trái đơn giản lên chuỗi bit 1001 1000",
+          "options": [
+            {
+              "text": "0001 1001|||0001 1001"
+            },
+            {
+              "text": "0001 1010|||0001 1010"
+            },
+            {
+              "text": "0011 0000|||0011 0000"
+            },
+            {
+              "text": "0011 0001|||0011 0001"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">A simple (logical) left shift moves every bit one position left, filling 0 at the LSB, dropping the old MSB: 1001&thinsp;1000 &rarr; <b>0011&thinsp;0000</b>.</div><div class=\"ml-vi\">Dịch trái đơn giản (logic) đẩy mọi bit sang trái một vị trí, điền 0 vào bit thấp nhất, bỏ bit cao nhất cũ: 1001&thinsp;1000 &rarr; <b>0011&thinsp;0000</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "A _____defines the rules that both the sender and receiver and all intermediate devices need to follow to be able to communicate effectively.|||Một _____ định nghĩa các quy tắc mà cả bên gửi, bên nhận và mọi thiết bị trung gian cần tuân theo để giao tiếp hiệu quả.",
+          "options": [
+            {
+              "text": "Protocol|||Giao thức (protocol)"
+            },
+            {
+              "text": "Layers|||Các tầng"
+            },
+            {
+              "text": "Provider networks|||Mạng nhà cung cấp"
+            },
+            {
+              "text": "Hardware and sofware|||Phần cứng và phần mềm"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">A <b>protocol</b> defines the rules that all parties in communication must follow.</div><div class=\"ml-vi\"><b>Giao thức</b> định nghĩa các quy tắc mà mọi bên trong giao tiếp phải tuân theo.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In physical layer, an _____ has infinitely many levels of intensity over a period of time|||Trong tầng vật lý, một _____ có vô số mức cường độ trong một khoảng thời gian",
+          "options": [
+            {
+              "text": "Analog signals|||Tín hiệu tương tự"
+            },
+            {
+              "text": "Electromagnetic signals|||Tín hiệu điện từ"
+            },
+            {
+              "text": "Digital signals|||Tín hiệu số"
+            },
+            {
+              "text": "Electronic signals|||Tín hiệu điện tử"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">An <b>analog</b> signal is continuous, with infinitely many intensity levels, unlike digital signals which have finite discrete levels.</div><div class=\"ml-vi\">Tín hiệu <b>tương tự</b> liên tục, có vô số mức cường độ, khác với tín hiệu số vốn chỉ có hữu hạn mức rời rạc.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "At the transport layer, addresses are called______, and these define the application-layer programs at the source and destination.|||Ở tầng vận chuyển, địa chỉ được gọi là______, và chúng định danh chương trình tầng ứng dụng tại nguồn và đích.",
+          "options": [
+            {
+              "text": "TCP|||TCP"
+            },
+            {
+              "text": "Port numbers|||Số hiệu cổng (port numbers)"
+            },
+            {
+              "text": "UDP|||UDP"
+            },
+            {
+              "text": "IP address|||Địa chỉ IP"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Port numbers</b> identify the application-layer processes at source and destination for the transport layer.</div><div class=\"ml-vi\"><b>Số hiệu cổng</b> định danh các tiến trình tầng ứng dụng tại nguồn và đích cho tầng vận chuyển.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The ____ acts as a liaison between a client program and a server program, a process-to-process connection.|||Tầng ____ đóng vai trò trung gian giữa chương trình client và chương trình server, một kết nối tiến trình-tới-tiến trình.",
+          "options": [
+            {
+              "text": "Physical|||Vật lý"
+            },
+            {
+              "text": "Data-link|||Liên kết dữ liệu"
+            },
+            {
+              "text": "Network|||Mạng"
+            },
+            {
+              "text": "Transport|||Vận chuyển"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">The <b>transport</b> layer provides the process-to-process connection linking client and server programs.</div><div class=\"ml-vi\"><b>Tầng vận chuyển</b> cung cấp kết nối tiến trình-tới-tiến trình liên kết chương trình client và server.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Communication by phone is indeed a _____ activity; no party needs to be running forever waiting for the other party to call|||Giao tiếp qua điện thoại thực chất là hoạt động _____; không bên nào cần chạy mãi mãi chờ bên kia gọi tới",
+          "options": [
+            {
+              "text": "P2P|||P2P (ngang hàng)"
+            },
+            {
+              "text": "Tranditional|||Truyền thống"
+            },
+            {
+              "text": "Client-server|||Client-server"
+            },
+            {
+              "text": "Model|||Mô hình"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">A phone call is <b>P2P</b> (peer-to-peer): either party can initiate, unlike client-server where the server must always be running and waiting.</div><div class=\"ml-vi\">Cuộc gọi điện thoại là <b>P2P</b> (ngang hàng): bên nào cũng có thể khởi xướng, khác với client-server nơi server phải luôn chạy chờ sẵn.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The organization and interconnection of the various components of a computer system is|||Sự tổ chức và kết nối giữa các thành phần khác nhau của một hệ thống máy tính được gọi là",
+          "options": [
+            {
+              "text": "Architecture|||Kiến trúc (architecture)"
+            },
+            {
+              "text": "Networks|||Mạng máy tính"
+            },
+            {
+              "text": "Graphics|||Đồ hoạ"
+            },
+            {
+              "text": "Designing|||Thiết kế"
+            },
+            {
+              "text": "None of the others|||Không đáp án nào khác đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">This is the textbook definition of computer <b>architecture</b>.</div><div class=\"ml-vi\">Đây là định nghĩa kinh điển của <b>kiến trúc máy tính</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "_____ were designed in the 1950s to control mainframe computers.|||_____ được thiết kế vào thập niên 1950 để điều khiển máy tính lớn (mainframe).",
+          "options": [
+            {
+              "text": "Time-sharing systems|||Hệ thống chia sẻ thời gian"
+            },
+            {
+              "text": "Batch operating system|||Hệ điều hành theo lô (batch)"
+            },
+            {
+              "text": "Personal systems|||Hệ thống cá nhân"
+            },
+            {
+              "text": "Parallel systems|||Hệ thống song song"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Batch operating systems</b> were the first OS type, designed in the 1950s to control mainframes by running jobs in batches without interactive intervention.</div><div class=\"ml-vi\"><b>Hệ điều hành theo lô (batch)</b> là loại hệ điều hành đầu tiên, thiết kế vào thập niên 1950 để điều khiển mainframe bằng cách chạy các công việc theo lô mà không cần can thiệp tương tác.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The difference between memory and storages is that memory is _____ and storage is _____|||Sự khác biệt giữa bộ nhớ và lưu trữ là bộ nhớ _____ còn lưu trữ _____",
+          "options": [
+            {
+              "text": "Temporary, permanent|||Tạm thời, vĩnh viễn"
+            },
+            {
+              "text": "Permanent, temporary|||Vĩnh viễn, tạm thời"
+            },
+            {
+              "text": "Slow, fast|||Chậm, nhanh"
+            },
+            {
+              "text": "All of the others|||Tất cả đáp án trên"
+            },
+            {
+              "text": "None of the others|||Không đáp án nào khác đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Memory</b> (RAM) is <b>temporary</b> (volatile), losing data on power loss; <b>storage</b> (disk) is <b>permanent</b> (non-volatile).</div><div class=\"ml-vi\"><b>Bộ nhớ</b> (RAM) <b>tạm thời</b> (bay hơi), mất dữ liệu khi mất điện; <b>lưu trữ</b> (đĩa) <b>vĩnh viễn</b> (không bay hơi).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The ________ scheduler moves a process from one process state to another.|||Bộ lập lịch ________ chuyển một tiến trình từ trạng thái này sang trạng thái khác.",
+          "options": [
+            {
+              "text": "Job|||Công việc (job)"
+            },
+            {
+              "text": "Process|||Tiến trình (process)"
+            },
+            {
+              "text": "Virtual|||Ảo"
+            },
+            {
+              "text": "Queue|||Hàng đợi"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">The <b>process (short-term) scheduler</b> moves a process between states (ready, running, waiting).</div><div class=\"ml-vi\"><b>Bộ lập lịch tiến trình</b> (short-term) chuyển tiến trình giữa các trạng thái (sẵn sàng, chạy, chờ).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The device manager will be tracking every device constantly to ensure that the device is ________|||Trình quản lý thiết bị sẽ theo dõi mọi thiết bị liên tục để đảm bảo thiết bị ________",
+          "options": [
+            {
+              "text": "Ready|||Sẵn sàng"
+            },
+            {
+              "text": "Finished|||Đã xong"
+            },
+            {
+              "text": "Functioning properly|||Hoạt động đúng cách"
+            },
+            {
+              "text": "Running|||Đang chạy"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">The device manager continuously monitors devices to ensure they are <b>functioning properly</b> (detecting malfunctions).</div><div class=\"ml-vi\">Trình quản lý thiết bị liên tục theo dõi thiết bị để đảm bảo chúng <b>hoạt động đúng cách</b> (phát hiện trục trặc).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The ________construct tests a condition.|||Cấu trúc ________ kiểm tra một điều kiện.",
+          "options": [
+            {
+              "text": "sequence|||tuần tự"
+            },
+            {
+              "text": "decision|||rẽ nhánh (decision)"
+            },
+            {
+              "text": "repetition|||lặp"
+            },
+            {
+              "text": "flow|||luồng"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">The <b>decision</b> construct evaluates a condition to branch.</div><div class=\"ml-vi\">Cấu trúc <b>rẽ nhánh (decision)</b> đánh giá một điều kiện để rẽ nhánh.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "___ is an ordered set of unambiguous steps that produces a result and terminates in a finite time.|||___ là một tập hợp có thứ tự các bước rõ ràng, tạo ra kết quả và kết thúc trong thời gian hữu hạn.",
+          "options": [
+            {
+              "text": "A construct|||Một cấu trúc"
+            },
+            {
+              "text": "A recursion|||Đệ quy"
+            },
+            {
+              "text": "An iteration|||Lặp"
+            },
+            {
+              "text": "An algorithm|||Thuật toán"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">This is the standard definition of an <b>algorithm</b>.</div><div class=\"ml-vi\">Đây là định nghĩa chuẩn của <b>thuật toán</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "_______ is a basic algorithm in which we want to find the location of a target in a list of items.|||_______ là thuật toán cơ bản mà ta muốn tìm vị trí của một mục tiêu trong danh sách các phần tử.",
+          "options": [
+            {
+              "text": "Sorting|||Sắp xếp"
+            },
+            {
+              "text": "Searching|||Tìm kiếm (searching)"
+            },
+            {
+              "text": "Product|||Tích"
+            },
+            {
+              "text": "Summation|||Tính tổng"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Searching</b> is exactly this: finding the location of a target item in a list.</div><div class=\"ml-vi\"><b>Tìm kiếm</b> đúng là như vậy: tìm vị trí của một mục tiêu trong danh sách.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In ________ sort, the item that goes into the sorted list is always the first item in the unsorted list.|||Trong sắp xếp ________, phần tử được đưa vào danh sách đã sắp xếp luôn là phần tử đầu tiên của danh sách chưa sắp xếp.",
+          "options": [
+            {
+              "text": "Selection|||Chọn (selection)"
+            },
+            {
+              "text": "Bubble|||Nổi bọt (bubble)"
+            },
+            {
+              "text": "Insertion|||Chèn (insertion)"
+            },
+            {
+              "text": "Every|||Mọi loại"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Insertion sort</b> always takes the next (first remaining) item from the unsorted part.</div><div class=\"ml-vi\"><b>Sắp xếp chèn</b> luôn lấy phần tử kế tiếp (đầu tiên còn lại) từ phần chưa sắp xếp.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Codes consisting of light and dark marks which may be optically read is known as|||Mã gồm các vạch sáng và tối có thể đọc bằng quang học được gọi là",
+          "options": [
+            {
+              "text": "Memonics|||Memonics"
+            },
+            {
+              "text": "Bar code|||Mã vạch (bar code)"
+            },
+            {
+              "text": "Decoder|||Bộ giải mã"
+            },
+            {
+              "text": "All of the others|||Tất cả đáp án trên"
+            },
+            {
+              "text": "None of the others|||Không đáp án nào khác đúng"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">A <b>bar code</b> consists of light and dark marks that can be optically scanned/read.</div><div class=\"ml-vi\"><b>Mã vạch (bar code)</b> gồm các vạch sáng và tối có thể quét/đọc bằng quang học.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The language that is an input for statement translation is called|||Ngôn ngữ là đầu vào cho việc dịch câu lệnh được gọi là",
+          "options": [
+            {
+              "text": "Assembly language|||Hợp ngữ"
+            },
+            {
+              "text": "Source language|||Ngôn ngữ nguồn (source language)"
+            },
+            {
+              "text": "High-level language|||Ngôn ngữ bậc cao"
+            },
+            {
+              "text": "Object language|||Ngôn ngữ đối tượng"
+            },
+            {
+              "text": "None of the others|||Không đáp án nào khác đúng"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">The <b>source language</b> is the input language fed into a translator (compiler/assembler) for statement translation.</div><div class=\"ml-vi\"><b>Ngôn ngữ nguồn</b> là ngôn ngữ đầu vào đưa vào trình dịch (compiler/assembler) để dịch câu lệnh.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "FORTRAN is a(n) ________ language.|||FORTRAN là ngôn ngữ ________.",
+          "options": [
+            {
+              "text": "Procedural|||Thủ tục"
+            },
+            {
+              "text": "Functional|||Hàm"
+            },
+            {
+              "text": "Declarative|||Khai báo"
+            },
+            {
+              "text": "Object-oriented|||Hướng đối tượng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>FORTRAN</b> (FORmula TRANslation) is a classic <b>procedural</b> language, one of the earliest high-level languages.</div><div class=\"ml-vi\"><b>FORTRAN</b> (FORmula TRANslation) là ngôn ngữ <b>thủ tục</b> kinh điển, một trong những ngôn ngữ bậc cao đầu tiên.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which data of the following cannot change value with time?|||Dữ liệu nào sau đây không thể thay đổi giá trị theo thời gian?",
+          "options": [
+            {
+              "text": "Constants|||Hằng số (constants)"
+            },
+            {
+              "text": "Literals|||Giá trị chữ (literals)"
+            },
+            {
+              "text": "Input/output|||Vào/ra"
+            },
+            {
+              "text": "Variables|||Biến (variables)"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Constants</b> hold a fixed value that never changes throughout program execution, unlike variables.</div><div class=\"ml-vi\"><b>Hằng số</b> giữ một giá trị cố định không bao giờ đổi trong suốt quá trình chạy chương trình, khác với biến.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In _____ the development process flows in only one direction. This means that a phase cannot be started until the previous phase is completed.|||Trong _____ quy trình phát triển chỉ chảy theo một hướng. Nghĩa là một giai đoạn không thể bắt đầu cho tới khi giai đoạn trước hoàn tất.",
+          "options": [
+            {
+              "text": "Waterfall model|||Mô hình thác nước"
+            },
+            {
+              "text": "Incremental model|||Mô hình tăng dần"
+            },
+            {
+              "text": "Development proces|||Quy trình phát triển"
+            },
+            {
+              "text": "Software engineering|||Kỹ nghệ phần mềm"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The <b>waterfall model</b> is strictly sequential and one-directional.</div><div class=\"ml-vi\"><b>Mô hình thác nước</b> hoàn toàn tuần tự và một chiều.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "One phase in system development is ________.|||Một giai đoạn trong phát triển hệ thống là ________.",
+          "options": [
+            {
+              "text": "Analysis|||Phân tích"
+            },
+            {
+              "text": "Application|||Ứng dụng"
+            },
+            {
+              "text": "Designing|||Thiết kế"
+            },
+            {
+              "text": "Collecting|||Thu thập"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The standard SDLC phases include <b>Analysis</b>, Design, Implementation and Testing.</div><div class=\"ml-vi\">Các giai đoạn SDLC chuẩn gồm <b>Phân tích</b>, Thiết kế, Cài đặt và Kiểm thử.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In the system development process, structure charts are tools used in the ________ phase.|||Trong quy trình phát triển hệ thống, sơ đồ cấu trúc là công cụ dùng trong giai đoạn ________.",
+          "options": [
+            {
+              "text": "Analysis|||Phân tích"
+            },
+            {
+              "text": "Design|||Thiết kế"
+            },
+            {
+              "text": "Implementation|||Cài đặt"
+            },
+            {
+              "text": "Testing|||Kiểm thử"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Structure charts</b> are a <b>design</b>-phase tool.</div><div class=\"ml-vi\"><b>Sơ đồ cấu trúc</b> là công cụ của giai đoạn <b>thiết kế</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "___ refers to the ability to move data and/or a system from one platform to another and to reuse code.|||___ đề cập tới khả năng di chuyển dữ liệu và/hoặc hệ thống từ nền tảng này sang nền tảng khác và tái sử dụng mã.",
+          "options": [
+            {
+              "text": "Maintainability|||Khả năng bảo trì"
+            },
+            {
+              "text": "Operability|||Khả năng vận hành"
+            },
+            {
+              "text": "Correctability|||Khả năng sửa lỗi"
+            },
+            {
+              "text": "Transferability|||Khả năng chuyển đổi (transferability)"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Transferability</b> (as named in this course's quality factor list) is the ability to move data/systems across platforms and reuse code.</div><div class=\"ml-vi\"><b>Khả năng chuyển đổi (transferability)</b> (theo cách gọi trong danh sách yếu tố chất lượng của môn học này) là khả năng di chuyển dữ liệu/hệ thống qua các nền tảng và tái sử dụng mã.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Testing a software system can involve ________ testing.|||Kiểm thử một hệ thống phần mềm có thể bao gồm kiểm thử ________.",
+          "options": [
+            {
+              "text": "Black-box|||Hộp đen"
+            },
+            {
+              "text": "Glass-box|||Hộp kính"
+            },
+            {
+              "text": "Neither black-box nor glass-box|||Không phải cả hai"
+            },
+            {
+              "text": "Both black-box and glass-box|||Cả hộp đen lẫn hộp kính"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">Software testing uses <b>both</b> black-box and glass-box (white-box) approaches.</div><div class=\"ml-vi\">Kiểm thử phần mềm dùng <b>cả hai</b> cách tiếp cận hộp đen và hộp kính (hộp trắng).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "A(n)____ is a suitable structure when a small number of insertions and deletions are required but a lot of searching and retrieval is needed|||A(n)____ là cấu trúc phù hợp khi cần ít thao tác chèn/xoá nhưng cần tìm kiếm và truy xuất nhiều",
+          "options": [
+            {
+              "text": "Array|||Mảng (array)"
+            },
+            {
+              "text": "Record|||Bản ghi"
+            },
+            {
+              "text": "Linked list|||Danh sách liên kết"
+            },
+            {
+              "text": "Tree|||Cây"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">An <b>array</b> gives fast search/retrieval; best when insert/delete is rare.</div><div class=\"ml-vi\"><b>Mảng</b> cho tìm kiếm/truy xuất nhanh; phù hợp nhất khi chèn/xoá hiếm khi xảy ra.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "_____is the smallest element of named data that has meaning in a record.|||_____ là phần tử nhỏ nhất của dữ liệu có tên mang ý nghĩa trong một bản ghi.",
+          "options": [
+            {
+              "text": "Name of record|||Tên bản ghi"
+            },
+            {
+              "text": "Pointer|||Con trỏ"
+            },
+            {
+              "text": "A field|||Trường (field)"
+            },
+            {
+              "text": "Index|||Chỉ mục"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">A <b>field</b> is the smallest named, meaningful unit of data within a record.</div><div class=\"ml-vi\"><b>Trường (field)</b> là đơn vị dữ liệu nhỏ nhất có tên, mang ý nghĩa trong một bản ghi.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "An array is normally a _______and so is more suitable when the number of data items is fixed|||Một mảng thường là _______ nên phù hợp hơn khi số lượng mục dữ liệu cố định",
+          "options": [
+            {
+              "text": "Dynamic data structure|||Cấu trúc dữ liệu động"
+            },
+            {
+              "text": "Static data structure|||Cấu trúc dữ liệu tĩnh (static)"
+            },
+            {
+              "text": "Same data|||Dữ liệu giống nhau"
+            },
+            {
+              "text": "Related data|||Dữ liệu liên quan"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">An array has a fixed size once created, making it a <b>static data structure</b> — best suited for a fixed number of items.</div><div class=\"ml-vi\">Mảng có kích thước cố định sau khi tạo, khiến nó là <b>cấu trúc dữ liệu tĩnh</b> — phù hợp nhất khi số lượng mục cố định.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Inside the ADT are two different parts of the model that are ___ and __|||Bên trong ADT có hai phần khác nhau của mô hình là ___ và __",
+          "options": [
+            {
+              "text": "Data structure and operations|||Cấu trúc dữ liệu và các thao tác"
+            },
+            {
+              "text": "Application program and public operations|||Chương trình ứng dụng và thao tác công khai"
+            },
+            {
+              "text": "Application program and private operations|||Chương trình ứng dụng và thao tác riêng tư"
+            },
+            {
+              "text": "Data struture and application program|||Cấu trúc dữ liệu và chương trình ứng dụng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">An ADT consists of a <b>data structure</b> and the <b>operations</b> defined on it.</div><div class=\"ml-vi\">ADT gồm một <b>cấu trúc dữ liệu</b> và các <b>thao tác</b> định nghĩa trên nó.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "If A is the first data element input into a queue, followed by B, C, and D, then_____is the first element to be removed.|||Nếu A là phần tử dữ liệu đầu tiên đưa vào hàng đợi, tiếp theo là B, C, D, thì_____là phần tử đầu tiên bị lấy ra.",
+          "options": [
+            {
+              "text": "A|||A"
+            },
+            {
+              "text": "B|||B"
+            },
+            {
+              "text": "C|||C"
+            },
+            {
+              "text": "D|||D"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">A queue is FIFO, so <b>A</b> (first in) is also first out.</div><div class=\"ml-vi\">Hàng đợi là FIFO, nên <b>A</b> (vào trước) cũng ra trước.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The dequeue operation ___ the item at the ___ of the queue|||Thao tác dequeue ___ phần tử ở ___ của hàng đợi",
+          "options": [
+            {
+              "text": "delete/front|||xoá/đầu"
+            },
+            {
+              "text": "delete/end|||xoá/cuối"
+            },
+            {
+              "text": "inserts/front|||chèn/đầu"
+            },
+            {
+              "text": "insert/rear|||chèn/cuối"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Dequeue</b> removes the item at the <b>front</b> of the queue.</div><div class=\"ml-vi\"><b>Dequeue</b> lấy phần tử ở <b>đầu</b> hàng đợi.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The file structure allows random access is _____|||Cấu trúc tệp cho phép truy cập ngẫu nhiên là _____",
+          "options": [
+            {
+              "text": "Hashed file|||Tệp băm"
+            },
+            {
+              "text": "Sequential file|||Tệp tuần tự"
+            },
+            {
+              "text": "EOF|||EOF"
+            },
+            {
+              "text": "None of others|||Không đáp án nào khác đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">A <b>hashed</b> file computes a record's location directly from its key, allowing random access.</div><div class=\"ml-vi\"><b>Tệp băm</b> tính trực tiếp vị trí bản ghi từ khoá của nó, cho phép truy cập ngẫu nhiên.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "_______ file can be accessed sequentially.|||Tệp _______ có thể được truy cập tuần tự.",
+          "options": [
+            {
+              "text": "A sequential|||Tuần tự"
+            },
+            {
+              "text": "An indexed|||Có chỉ mục"
+            },
+            {
+              "text": "A hashed|||Băm"
+            },
+            {
+              "text": "No|||Không tệp nào"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">A <b>sequential</b> file is read in order, record by record — this is its defining access method.</div><div class=\"ml-vi\"><b>Tệp tuần tự</b> được đọc theo thứ tự, từng bản ghi một — đây là phương thức truy cập đặc trưng của nó.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The address produced by a hashing algorithm is the ________ address.|||Địa chỉ do thuật toán băm tạo ra được gọi là địa chỉ ________.",
+          "options": [
+            {
+              "text": "Probe|||Probe (dò)"
+            },
+            {
+              "text": "Synonym|||Đồng nghĩa (synonym)"
+            },
+            {
+              "text": "Collision|||Va chạm (collision)"
+            },
+            {
+              "text": "Home|||Nhà (home)"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">The address directly computed by the hash function (before any collision resolution) is called the <b>home</b> address.</div><div class=\"ml-vi\">Địa chỉ được tính trực tiếp bởi hàm băm (trước khi xử lý va chạm) được gọi là địa chỉ <b>home</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In a three-level DBMS architecture, the ________ level determines where data is actually stored on storage devices.|||Trong kiến trúc DBMS ba mức, mức ________ xác định dữ liệu thực sự được lưu ở đâu trên thiết bị lưu trữ.",
+          "options": [
+            {
+              "text": "External|||Ngoài"
+            },
+            {
+              "text": "Conceptual|||Khái niệm"
+            },
+            {
+              "text": "Internal|||Trong (internal)"
+            },
+            {
+              "text": "Physical|||Vật lý"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">The ANSI-SPARC three-level architecture's <b>Internal</b> level determines physical storage.</div><div class=\"ml-vi\">Mức <b>Internal</b> trong kiến trúc ba mức ANSI-SPARC xác định lưu trữ vật lý.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In the relational database model, data is organized in ______called relations.|||Trong mô hình cơ sở dữ liệu quan hệ, dữ liệu được tổ chức thành ______ gọi là các quan hệ.",
+          "options": [
+            {
+              "text": "Two-dimensional array|||Mảng hai chiều"
+            },
+            {
+              "text": "Two-dimensional tables|||Bảng hai chiều"
+            },
+            {
+              "text": "Two-dimensional record|||Bản ghi hai chiều"
+            },
+            {
+              "text": "None of others|||Không đáp án nào khác đúng"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">Data in the relational model is organized as <b>two-dimensional tables</b>.</div><div class=\"ml-vi\">Dữ liệu trong mô hình quan hệ được tổ chức thành <b>bảng hai chiều</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "_____ is needed to allow any relation in the database to be represented, to allow a language like SQL to use powerful retrieval operations composed of atomic operations, to remove anomalies in insertion, deletion, and updating, and reduce the need for restructuring the database as new data type are added.|||_____ cần thiết để cho phép biểu diễn mọi quan hệ, cho phép SQL dùng các thao tác truy xuất mạnh ghép từ thao tác nguyên tử, loại bỏ dị thường chèn/xoá/cập nhật, giảm nhu cầu tái cấu trúc CSDL khi thêm kiểu dữ liệu mới.",
+          "options": [
+            {
+              "text": "Relational database|||Cơ sở dữ liệu quan hệ"
+            },
+            {
+              "text": "Database system|||Hệ cơ sở dữ liệu"
+            },
+            {
+              "text": "Atomic operations|||Thao tác nguyên tử"
+            },
+            {
+              "text": "Normalization|||Chuẩn hoá (normalization)"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Normalization</b> achieves all of these goals: proper representation, powerful queries, anomaly removal, and reduced restructuring.</div><div class=\"ml-vi\"><b>Chuẩn hoá</b> đạt được tất cả các mục tiêu này: biểu diễn đúng đắn, truy vấn mạnh, loại bỏ dị thường, giảm tái cấu trúc.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the result of difference database operation from 2 relation tables?|||Kết quả của phép toán hiệu (difference) giữa hai bảng quan hệ là gì?",
+          "options": [
+            {
+              "text": "Neither the first relation nor the second.|||Không phải quan hệ thứ nhất cũng không phải thứ hai."
+            },
+            {
+              "text": "Both of the first relation and the second.|||Cả quan hệ thứ nhất và thứ hai."
+            },
+            {
+              "text": "The first relation but not the second.|||Quan hệ thứ nhất nhưng không phải thứ hai."
+            },
+            {
+              "text": "The second but not the first|||Quan hệ thứ hai nhưng không phải thứ nhất"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">The <b>difference (minus)</b> operation A-B returns rows in <b>the first relation but not the second</b>.</div><div class=\"ml-vi\">Thao tác <b>hiệu (minus)</b> A-B trả về các dòng thuộc <b>quan hệ thứ nhất nhưng không phải thứ hai</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The term users in a DBMS has a broad meaning. We can divide users into:|||Thuật ngữ người dùng trong DBMS có nghĩa rộng. Ta có thể chia người dùng thành:",
+          "options": [
+            {
+              "text": "End users and database asministrators|||Người dùng cuối và quản trị viên cơ sở dữ liệu"
+            },
+            {
+              "text": "End users and normal users|||Người dùng cuối và người dùng thường"
+            },
+            {
+              "text": "Application programs and end users|||Chương trình ứng dụng và người dùng cuối"
+            },
+            {
+              "text": "Application programs and database adminitrators|||Chương trình ứng dụng và quản trị viên cơ sở dữ liệu"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">DBMS users are broadly divided into <b>end users</b> (who query/use the data) and <b>database administrators</b> (who manage the system).</div><div class=\"ml-vi\">Người dùng DBMS được chia rộng thành <b>người dùng cuối</b> (truy vấn/dùng dữ liệu) và <b>quản trị viên cơ sở dữ liệu</b> (quản lý hệ thống).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "_______ can be threatened by security attacks.|||_______ có thể bị đe doạ bởi các tấn công bảo mật.",
+          "options": [
+            {
+              "text": "Confidentiality, cryptography, nonrepudiation|||Bí mật, mật mã học, không thể chối bỏ"
+            },
+            {
+              "text": "Confidentiality, encryption, decryption|||Bí mật, mã hoá, giải mã"
+            },
+            {
+              "text": "Confidentiality, integrity, availability|||Bí mật, toàn vẹn, sẵn sàng"
+            },
+            {
+              "text": "Confidentiality, denial of service, masquerading|||Bí mật, từ chối dịch vụ, giả mạo"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">The three security goals threatened by attacks are the CIA triad: <b>Confidentiality, Integrity, Availability</b>.</div><div class=\"ml-vi\">Ba mục tiêu bảo mật bị đe doạ bởi tấn công là bộ ba CIA: <b>Bí mật, Toàn vẹn, Sẵn sàng</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "_____________ means that the data must arrive at the receiver exactly as they were sent.|||_____________ nghĩa là dữ liệu phải đến nơi nhận đúng y hệt như lúc gửi.",
+          "options": [
+            {
+              "text": "Nonrepudiation|||Không thể chối bỏ"
+            },
+            {
+              "text": "Message integrity|||Toàn vẹn thông điệp"
+            },
+            {
+              "text": "Authentication|||Xác thực"
+            },
+            {
+              "text": "Secrecy|||Bí mật"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Message integrity</b> guarantees data arrives unchanged, exactly as sent.</div><div class=\"ml-vi\"><b>Toàn vẹn thông điệp</b> đảm bảo dữ liệu đến nơi không đổi, đúng y hệt lúc gửi.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "_____ is an attack that reduce the capability of a computer system to function correctly or bring the system down altogether by exhausting its resources.|||_____ là tấn công làm giảm khả năng hoạt động đúng của hệ thống máy tính hoặc khiến hệ thống sập hoàn toàn bằng cách làm cạn kiệt tài nguyên.",
+          "options": [
+            {
+              "text": "DoS|||DoS (từ chối dịch vụ)"
+            },
+            {
+              "text": "Trojan horses|||Ngựa thành Troy"
+            },
+            {
+              "text": "Worms|||Sâu máy tính"
+            },
+            {
+              "text": "Viruses|||Virus"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>DoS</b> (Denial of Service) exhausts system resources to degrade or crash it.</div><div class=\"ml-vi\"><b>DoS</b> (từ chối dịch vụ) làm cạn kiệt tài nguyên hệ thống để làm suy giảm hoặc sập hệ thống.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The attack that reduces the capability of a computer is called a ________ attack.|||Tấn công làm giảm khả năng hoạt động của máy tính được gọi là tấn công ________.",
+          "options": [
+            {
+              "text": "Penetration|||Xâm nhập"
+            },
+            {
+              "text": "Denial of service|||Từ chối dịch vụ"
+            },
+            {
+              "text": "Either a or b|||Cả a và b"
+            },
+            {
+              "text": "Neither a nor b|||Không phải a cũng không phải b"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">Reducing a computer's capability to function is exactly a <b>denial of service</b> attack.</div><div class=\"ml-vi\">Làm giảm khả năng hoạt động của máy tính chính là tấn công <b>từ chối dịch vụ</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In ________ cryptography symbols are permuted or substituted; in asymmetric-key cryptography numbers are manipulated|||Trong mật mã ________ các ký hiệu được hoán vị hoặc thay thế; trong mật mã khoá bất đối xứng các con số được thao túng",
+          "options": [
+            {
+              "text": "Symmetric-key|||Khoá đối xứng"
+            },
+            {
+              "text": "Asymmetric-key|||Khoá bất đối xứng"
+            },
+            {
+              "text": "Public-key|||Khoá công khai"
+            },
+            {
+              "text": "Private-key|||Khoá riêng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Classical <b>symmetric-key</b> ciphers permute or substitute symbols; asymmetric-key cryptography manipulates numbers mathematically.</div><div class=\"ml-vi\">Mật mã <b>khoá đối xứng</b> cổ điển hoán vị hoặc thay thế ký hiệu; mật mã khoá bất đối xứng thao túng con số bằng toán học.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In the asymmetric-key method used for confidentiality, which key(s) is (are) publicly known?|||Trong phương pháp khoá bất đối xứng dùng cho tính bí mật, khoá nào được công khai?",
+          "options": [
+            {
+              "text": "Encryption key only|||Chỉ khoá mã hoá"
+            },
+            {
+              "text": "Decryption key only|||Chỉ khoá giải mã"
+            },
+            {
+              "text": "Both encryption and decryption keys|||Cả khoá mã hoá và giải mã"
+            },
+            {
+              "text": "Neither encryption key nor decryption key|||Không khoá nào"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">For confidentiality, the <b>encryption key</b> (public key) is known to everyone; only the recipient holds the private decryption key.</div><div class=\"ml-vi\">Để đảm bảo bí mật, <b>khoá mã hoá</b> (khoá công khai) được mọi người biết; chỉ người nhận giữ khoá giải mã riêng tư.</div>"
+        }
+      ]
     }
   ]
 };

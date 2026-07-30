@@ -1,16 +1,16 @@
 # Deep Dives — MỞ PHIÊN MỚI ĐỌC FILE NÀY
 
-Cập nhật 30/7/2026, sau khi xong **8/12 bài**. Nhánh `feat/playground-3d`.
-File này đủ để bắt đầu bài 9 mà **không cần đọc lại phiên cũ**.
+Cập nhật 30/7/2026, sau khi xong **9/12 bài**. Nhánh `feat/playground-3d`.
+File này đủ để bắt đầu bài 10 mà **không cần đọc lại phiên cũ**.
 (Bối cảnh trang chủ + lịch sử bẫy: `scratchpad/DEEPDIVES-HANDOFF.md`.)
 
 ---
 
 ## Việc: viết 5 bài Deep Dives còn lại
 
-Bài 9 tiếp theo: **Shell Scripting for People Who Deploy Things** (thẻ số 10
-trong `deepDivesData.ts`). Sau đó: Mac setup → reading production. Bài Node.js
-(thẻ 3) đã có khoá 112 bài — giữ `href` chứ không viết lại.
+Bài 10 tiếp theo: **How to Set up a Mac for Development** (thẻ số 11 trong
+`deepDivesData.ts`). Sau đó: reading production. Bài Node.js (thẻ 3) đã có khoá
+112 bài — giữ `href` chứ không viết lại.
 
 Ngôn ngữ: **tiếng Anh**. Thước đo 7 bài đầu:
 
@@ -24,6 +24,7 @@ Ngôn ngữ: **tiếng Anh**. Thước đo 7 bài đầu:
 | 6. React | 4.913 | 64 | 4 | 3 |
 | 7. Redux | 4.827 | 77 | 4 | 3 |
 | 8. Vue | 4.939 | 76 | 4 | 3 |
+| 9. shell scripting | 4.854 | 81 | 4 | 3 |
 
 Số khối code tuỳ chủ đề (CLI cần nhiều, GraphQL ít hơn). **Từ 4.800 trở lên.**
 
@@ -123,14 +124,27 @@ Số đắt nhất của bài: thêm 1 hàng vào danh sách 1.000 hàng → Vue
 **1** hàm render, Vue không key **1001**, React thường **1001**, React + memo()
 **1**. Mặc định của Vue = React bọc `memo()` khắp nơi.
 
-**9. Shell scripting** — nối tiếp bài 1 nhưng sâu hơn: `set -euo pipefail` từng
-cờ tách riêng (bài 1 đã có, ở đây đào sâu) · `trap` ERR/EXIT/INT · subshell vs
-`source` (biến đi đâu) · `$()` trong `local` làm mất exit code · `[[ ]]` vs
-`[ ]` · mảng và `"${arr[@]}"` vs `"${arr[*]}"` · `getopts` phân tích tham số ·
-`mktemp -d` + cleanup · lock file chống chạy trùng (`flock`, macOS không có →
-`mkdir` atomic) · retry + timeout · **và soi chính `deploy.sh` của repo** làm ví
-dụ thật (bẫy `&& fail` đã làm deploy tự chết). (Sơ đồ: đời một script từ
-shebang tới trap EXIT · subshell vs source.)
+**9. Shell scripting** — ✅ XONG 30/7, commit `c5a1c46`. Lab (ĐƯỜNG DẪN TUYỆT
+ĐỐI): `/private/tmp/claude-501/-Users-admin-Downloads-api-backend/becd3039-952a-4510-9831-f6bb0c076484/scratchpad/sh-lab`
+(01..11 + `ALL-OUTPUT.txt`). Cách đo dùng lại được: **mỗi ca một `bash -c`
+riêng** để một lần `exit` không giết bộ đo; bảng macOS-vs-Linux dựng bằng cách
+chạy CÙNG MỘT file script trên host và trong `debian:bookworm-slim`; shellcheck
+qua `docker run koalaman/shellcheck:stable`.
+
+**7 chỗ việc chạy BÁC BỎ dự đoán** (đủ trong docstring `.mjs`). Đắt nhất:
+"`set -e` không cứu được `cd $DIR; rm -rf ./*`" là **SAI** — nó cứu hoàn toàn
+(4 file còn nguyên với `set -e`, 0 file khi không có), và shellcheck cũng tắt
+SC2164 khi thấy `set -e` · `set -e` bị **TẮT cho toàn thân hàm** khi hàm dùng
+làm điều kiện · `pipefail` biến `yes | head -1` đang chạy đúng thành rc=141 ·
+`which grep` nói `/usr/bin/grep` trong khi `grep --version` ra **ugrep 7.5.0**
+(shell function che, `which` là chương trình ngoài nên mù) · `for f in $(ls)`
+3 file → 6 tham số · khoá `[ ! -f lock ] && touch`: 40 tiến trình → **6/9/10
+cùng thắng**, còn `mkdir`/`noclobber`/`ln -s` đúng 1 · shellcheck bắt 6 lỗi
+nhưng **KHÔNG** bắt cái đã làm hỏng deploy thật của repo.
+
+⚠️ macOS chỉ có **bash 3.2.57** (2007) — không `timeout`, không `flock`, không
+`nproc`, không `mapfile`/`declare -A`/`lastpipe`/`$BASHPID`, và `${v^^}`/`${v@Q}`
+là **lỗi CÚ PHÁP**. Muốn bash 5 thì dùng docker.
 
 **10. Mac setup for development** — chạy thật những gì đo được trên máy này:
 `softwareupdate --list` / `xcode-select -p` · Homebrew: `brew --prefix` khác
@@ -239,14 +253,19 @@ thành công, không thì là link chết.
 
 **Nhánh `feat/playground-3d` — prod đang chạy `ed26ede` (deploy + push 30/7).**
 Bài 4 (webpack `c0a2baf`) + 5 (CSS `d21e5ef`) + 6 (React `f65bb19`) + 7 (Redux
-`1eac247`) + 8 (Vue `3949acd`) + fix sơ đồ (`b85740c`) **đã commit local, CHƯA
-deploy, CHƯA push** — prod vẫn 3 bài Deep Dives (#22-24). User chốt 30/7: **đợi
-phiên CSI/SSL xong rồi deploy MỘT THỂ**. Thẻ webpack + CSS + React + Redux + Vue
-trên trang chủ đã trỏ `article:` nên **trên prod là LINK CHẾT tới khi deploy**
-(Step 3.15 của `deploy.sh` seed bài lúc deploy). Đếm commit chưa push bằng
-`git log --oneline @{u}..HEAD | wc -l`.
+**30/7 13:47 — ĐÃ DEPLOY bài 4-8 lên prod** (`bash deploy.sh`, exit 0, smoke-test
+mọi route 401/200). Verify: 5 slug mới đều HTTP 200 trên cuongthai.com, mọi SVG
+sơ đồ 200. Deploy thứ hai ngay sau đó cho `e91b79d` (bỏ vệt xanh trang chủ).
+**Bài 9 (`c5a1c46`) commit sau lượt rsync của deploy 2 ⇒ CHƯA lên prod, cần một
+`bash deploy.sh` nữa.** Tất cả VẪN CHƯA push origin — chờ user test prod xong
+(quy trình chuẩn ở CLAUDE.md: deploy → user xác nhận → mới push).
+Đếm commit chưa push bằng `git log --oneline @{u}..HEAD | wc -l`.
 
 ```
+c5a1c46 feat(deepdives): bài 9 — Shell Scripting for People Who Deploy Things
+e91b79d fix(landing): bỏ vệt xanh 2px cắt ngang trang chủ
+fd7cd53 feat(exam): SSL101c Đề 5-7                        ← phiên khác, commit hộ
+4e32d7d docs(deepdives): bàn giao sau bài 8
 3949acd feat(deepdives): bài 8 — How to Use Vue, the JavaScript Framework
 5980a09 docs(deepdives): bàn giao sau bài 7
 1eac247 feat(deepdives): bài 7 — How to Use Redux and React
@@ -268,7 +287,7 @@ f438640 feat(deepdives): bài 3 — An Introduction to GraphQL
 8e069b3 feat(deepdives): bài 1 — command line + seeder
 ```
 
-Hạ tầng đã xong, dùng lại cho 4 bài còn lại:
+Hạ tầng đã xong, dùng lại cho 3 bài còn lại:
 
 - `scripts/deepdive-seed.mjs` — idempotent theo slug, `--dry`/`--apply`, render
   `bodyHtml`+`toc` bằng ĐÚNG renderer backend ở `dist/`, giữ `viewCount` +
@@ -285,12 +304,12 @@ Hạ tầng đã xong, dùng lại cho 4 bài còn lại:
   `<pre>`/`<code>` là escape ĐÚNG, không phải thẻ bị sanitizer lọc.
   **Chạy chúng và ĐỌC dòng tự kiểm** — cả hai in ra ✓/✗ cho chính nó
 
-Tám bài đã seed trên `:5544` = bài #1..#8. Trang đọc:
+Chín bài đã seed trên `:5544` = bài #1..#9; bài #1..#8 đã lên prod. Trang đọc:
 `/tech-trends/<slug>`.
 
 ---
 
 ## Câu mở đầu gợi ý cho phiên mới
 
-> Đọc `scratchpad/DEEPDIVES-NEXT-SESSION.md` rồi viết bài 9 (shell scripting)
-> theo đúng quy trình B1-B8 trong đó.
+> Đọc `scratchpad/DEEPDIVES-NEXT-SESSION.md` rồi viết bài 10 (Mac setup) theo
+> đúng quy trình B1-B8 trong đó.

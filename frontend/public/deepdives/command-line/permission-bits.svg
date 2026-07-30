@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 300" width="700" height="300" role="img" aria-label="Reading the permission string -rwxr-xr--: file type, then owner, group and everyone-else triads, and the matching octal number 754">
+  <rect width="700" height="300" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="299" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="28" y="32" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">The ten characters at the start of every <tspan font-family="ui-monospace, Menlo, monospace" fill="#94a3b8">ls -l</tspan> line. Read them in groups of three.</text>
+
+  <g font-family="ui-monospace, Menlo, monospace" font-size="30">
+    <text x="30" y="88" fill="#64748b">-</text>
+    <text x="82" y="88" fill="#4ade80">rwx</text>
+    <text x="232" y="88" fill="#22d3ee">r-x</text>
+    <text x="382" y="88" fill="#fb923c">r--</text>
+  </g>
+
+  <g stroke="#334155" fill="none">
+    <path d="M78 100 v9 h76 v-9"/>
+    <path d="M228 100 v9 h76 v-9"/>
+    <path d="M378 100 v9 h76 v-9"/>
+  </g>
+
+  <g font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13">
+    <text x="24" y="130" fill="#64748b">type</text>
+    <text x="78" y="130" fill="#4ade80">owner</text>
+    <text x="228" y="130" fill="#22d3ee">group</text>
+    <text x="378" y="130" fill="#fb923c">everyone else</text>
+  </g>
+
+  <g font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">
+    <text x="24" y="152">- file</text>
+    <text x="24" y="170">d dir</text>
+    <text x="24" y="188">l link</text>
+    <text x="78" y="152">read, write,</text>
+    <text x="78" y="170">execute</text>
+    <text x="228" y="152">read, execute —</text>
+    <text x="228" y="170">cannot change it</text>
+    <text x="378" y="152">read only</text>
+  </g>
+
+  <line x1="28" y1="210" x2="672" y2="210" stroke="#1e293b"/>
+
+  <g font-family="ui-monospace, Menlo, monospace" font-size="14.5">
+    <text x="28" y="238" fill="#94a3b8">r = 4    w = 2    x = 1</text>
+    <text x="28" y="264" fill="#4ade80">rwx = 7</text>
+    <text x="150" y="264" fill="#22d3ee">r-x = 5</text>
+    <text x="272" y="264" fill="#fb923c">r-- = 4</text>
+    <text x="404" y="264" fill="#fcd34d">chmod 754 file</text>
+  </g>
+  <text x="28" y="288" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">Without the owner’s <tspan font-family="ui-monospace, Menlo, monospace" fill="#4ade80">x</tspan>, running <tspan font-family="ui-monospace, Menlo, monospace" fill="#94a3b8">./deploy.sh</tspan> answers “permission denied”.</text>
+</svg>

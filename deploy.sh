@@ -484,6 +484,29 @@ EXAM_SEED_OUT=$($DC exec -T backend sh -c '
 ') || true
 report_seed "Exam seed" "seed-exam" "$EXAM_SEED_OUT" "${EXAM_SEED_OUT_RC:-0}" || true
 
+# ── Step 3.15: Deep Dive guides (idempotent) ───────────────────
+# One .mjs spec per guide under content/deepdives/ (prose in a sibling .md)
+# → upsert TechTrendArticle keyed by slug, category 'DeepDive'. These are the
+# long-form tutorials the home page's Deep Dives strip links to, so a card
+# whose `article:` slug never got seeded is a dead link on the front page —
+# which is exactly why this runs on every deploy rather than by hand.
+# The seeder renders bodyHtml with the backend's OWN renderer from dist/,
+# preserves viewCount and the original publishedAt, and exits non-zero if a
+# referenced image is missing from frontend/public.
+info "Running Deep Dive seed..."
+DEEPDIVE_SEED_OUT=$($DC exec -T backend sh -c '
+  rc=0
+  for f in content/deepdives/*.mjs; do
+    [ -e "$f" ] || { echo "no deepdive content files"; break; }
+    echo "── $f"
+    node scripts/deepdive-seed.mjs --file "$f" --apply 2>&1 || rc=1
+  done
+  echo "__SEED_RC__=$rc"
+') || true
+DEEPDIVE_SEED_OUT_RC="$(printf '%s\n' "$DEEPDIVE_SEED_OUT" | sed -n 's/^__SEED_RC__=//p' | tail -1)"
+DEEPDIVE_SEED_OUT="$(printf '%s\n' "$DEEPDIVE_SEED_OUT" | grep -v '^__SEED_RC__=')"
+report_seed "Deep Dive seed" "seed-deepdives" "$DEEPDIVE_SEED_OUT" "${DEEPDIVE_SEED_OUT_RC:-0}" || true
+
 # ── Step 4: Health checks ─────────────────────────────────────────
 info "Waiting for backend to be healthy..."
 backend_ok=false

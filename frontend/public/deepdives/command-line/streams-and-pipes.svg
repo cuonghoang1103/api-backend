@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 428" width="700" height="428" role="img" aria-label="A command has three streams — stdin, stdout, stderr. A pipe connects stdout to the next stdin; redirection sends a stream to a file.">
+  <rect width="700" height="428" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="427" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="28" y="32" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">Every command has three wires.</text>
+
+  <rect x="266" y="70" width="168" height="72" rx="10" fill="#111c30" stroke="#334155"/>
+  <text x="350" y="104" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="15" fill="#e2e8f0">grep ERROR</text>
+  <text x="350" y="126" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#64748b">one process</text>
+
+  <!-- stdin -->
+  <line x1="96" y1="106" x2="258" y2="106" stroke="#22d3ee" stroke-width="1.6"/>
+  <path d="M258 106 l-8 -4.5 v9 z" fill="#22d3ee"/>
+  <text x="28" y="96" font-family="ui-monospace, Menlo, monospace" font-size="13.5" fill="#22d3ee">stdin 0</text>
+  <text x="28" y="130" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">keyboard, a file,</text>
+  <text x="28" y="146" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">or the pipe before it</text>
+
+  <!-- stdout -->
+  <line x1="442" y1="92" x2="600" y2="92" stroke="#4ade80" stroke-width="1.6"/>
+  <path d="M600 92 l-8 -4.5 v9 z" fill="#4ade80"/>
+  <text x="608" y="88" font-family="ui-monospace, Menlo, monospace" font-size="13.5" fill="#4ade80">stdout 1</text>
+  <text x="608" y="106" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">the answer</text>
+
+  <!-- stderr -->
+  <line x1="442" y1="132" x2="600" y2="132" stroke="#f43f5e" stroke-width="1.6"/>
+  <path d="M600 132 l-8 -4.5 v9 z" fill="#f43f5e"/>
+  <text x="608" y="150" font-family="ui-monospace, Menlo, monospace" font-size="13.5" fill="#f43f5e">stderr 2</text>
+  <text x="608" y="168" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">complaints,</text>
+  <text x="608" y="184" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">separately</text>
+
+  <line x1="28" y1="204" x2="672" y2="204" stroke="#1e293b"/>
+
+  <g font-family="ui-monospace, Menlo, monospace" font-size="14" fill="#fcd34d">
+    <text x="28" y="232">a | b</text>
+    <text x="28" y="258">&gt; file</text>
+    <text x="28" y="284">&gt;&gt; file</text>
+    <text x="28" y="310">2&gt; file</text>
+    <text x="28" y="336">2&gt;&amp;1</text>
+    <text x="28" y="362">&gt; /dev/null</text>
+    <text x="28" y="388">| tee file</text>
+  </g>
+  <g font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#94a3b8">
+    <text x="150" y="232">a’s stdout becomes b’s stdin</text>
+    <text x="150" y="258">stdout to a file, overwriting it</text>
+    <text x="150" y="284">stdout appended to the end</text>
+    <text x="150" y="310">stderr only — stdout still prints</text>
+    <text x="150" y="336">stderr into wherever stdout goes</text>
+    <text x="150" y="362">throw it away</text>
+    <text x="150" y="388">screen and file, both</text>
+  </g>
+</svg>

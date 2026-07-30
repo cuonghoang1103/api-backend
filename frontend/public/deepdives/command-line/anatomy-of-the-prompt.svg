@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 246" width="700" height="246" role="img" aria-label="Anatomy of a shell prompt: user, host, current directory, prompt symbol, typed command, cursor">
+  <rect width="700" height="246" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="245" rx="12" fill="none" stroke="#1e293b"/>
+
+  <circle cx="24" cy="22" r="4.5" fill="#334155"/>
+  <circle cx="40" cy="22" r="4.5" fill="#334155"/>
+  <circle cx="56" cy="22" r="4.5" fill="#334155"/>
+  <text x="80" y="26" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">zsh — 80×24</text>
+  <line x1="0" y1="42" x2="700" y2="42" stroke="#1e293b"/>
+
+  <g font-family="ui-monospace, Menlo, monospace" font-size="18">
+    <text x="28" y="86" fill="#4ade80">admin</text>
+    <text x="83" y="86" fill="#475569">@</text>
+    <text x="94" y="86" fill="#22d3ee">mac</text>
+    <text x="127" y="86" fill="#475569">:</text>
+    <text x="138" y="86" fill="#fb923c">~/project</text>
+    <text x="238" y="86" fill="#e2e8f0">%</text>
+    <text x="260" y="86" fill="#e2e8f0">git status</text>
+    <rect x="371" y="71" width="9" height="19" fill="#e2e8f0"/>
+  </g>
+
+  <g stroke="#334155" stroke-width="1" fill="none">
+    <path d="M50 96 V 122"/>
+    <path d="M108 96 V 152"/>
+    <path d="M180 96 V 182"/>
+    <path d="M242 96 V 122 H 396"/>
+    <path d="M300 96 V 152 H 396"/>
+    <path d="M376 96 V 182 H 396"/>
+  </g>
+
+  <g font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13">
+    <text x="28" y="127" fill="#4ade80">your user</text>
+    <text x="28" y="157" fill="#22d3ee">the machine</text>
+    <text x="28" y="187" fill="#fb923c">current directory</text>
+
+    <text x="404" y="127" fill="#94a3b8">shell is waiting</text>
+    <text x="404" y="157" fill="#94a3b8">what you typed</text>
+    <text x="404" y="187" fill="#94a3b8">cursor</text>
+  </g>
+
+  <line x1="28" y1="206" x2="672" y2="206" stroke="#1e293b"/>
+  <text x="28" y="228" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#64748b">Everything left of <tspan font-family="ui-monospace, Menlo, monospace" fill="#94a3b8">%</tspan> is decoration your shell prints. <tspan font-family="ui-monospace, Menlo, monospace" fill="#e2e8f0">#</tspan> instead of <tspan font-family="ui-monospace, Menlo, monospace" fill="#e2e8f0">%</tspan> means you are root.</text>
+</svg>

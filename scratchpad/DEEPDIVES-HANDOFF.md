@@ -37,20 +37,49 @@ Ba luật bắt buộc:
 
 ---
 
-# VIỆC TIẾP THEO — viết 12 bài Deep Dives
+# TRẠNG THÁI DEEP DIVES — 1/12 bài xong (30/7, phiên 2)
 
-User đã chốt: **phương án A** (bài viết mới), và bài nào chủ đề đã có nội dung sâu
-trên site thì trong bài cắm thẻ dẫn vào đó.
+User chốt: **phương án A** (bài viết mới), bài nào chủ đề đã có nội dung sâu trên
+site thì cắm thẻ dẫn vào đó. Ngôn ngữ: **tiếng Anh** (user chốt phiên 2).
 
-## Bắt đầu từ đâu
+## ✅ Bài 1 XONG — *How to Use the Command Line in Linux and macOS*
 
-**Bài 1: *How to Use the Command Line in Linux and macOS***
+- `content/deepdives/how-to-use-the-command-line-in-linux-and-macos.md` —
+  **5.679 từ** (không tính code), **70 khối code**, 42.7KB markdown, 27 heading
+- `.mjs` cùng tên = metadata (đọc `.md` bằng `fs.readFileSync`). **Prose đặt ở
+  `.md` chứ không nhúng template literal** — 70 khối code thì mọi backtick phải
+  escape, vô nghĩa
+- 4 sơ đồ SVG tự phục vụ: `frontend/public/deepdives/command-line/`
+- Đã seed + xác nhận idempotent trên DB tạm `:5544` (view_count giữ nguyên,
+  publishedAt không bị đóng dấu lại, chạy 2 lần vẫn 1 bài)
+- Thẻ số 1 trong `deepDivesData.ts` đã trỏ `article:` sẵn từ phiên 1 → nay hợp lệ
 
-User đưa mẫu: https://www.taniarascia.com/how-to-use-the-command-line-for-apple-macos-and-linux/
-— khoảng **6.000 từ, vài chục khối code**. Đó là thước đo độ sâu, không phải gợi ý.
+**Mọi lệnh trong bài đã CHẠY THẬT** trước khi viết — macOS 26 (BSD) và
+`debian:bookworm-slim` trong Docker (GNU) cho bảng khác biệt nền tảng. Ba lần
+suýt viết sai vì tin lý thuyết: xem mục "BẪY ĐO LƯỜNG" bên dưới.
 
-Yêu cầu nguyên văn của user: *"dựa vào mẫu viết và hướng dẫn đầy đủ, chi tiết như
-mẫu + code + ảnh, chuyên nghiệp như thế"*.
+## Hạ tầng đã dựng xong (dùng lại cho 11 bài còn lại)
+
+- **`scripts/deepdive-seed.mjs`** — idempotent theo slug, `--dry`/`--apply`,
+  `--author <username>`. Render `bodyHtml` + `toc` bằng ĐÚNG renderer của backend
+  (`dist/services/techTrendsRenderer.service.js`) chứ không dựng pipeline marked
+  thứ hai. Giữ `viewCount`, `publishedAt` gốc, `authorId`. Đọc lại row sau khi
+  ghi (bodyHtml < 500 ký tự hoặc toc rỗng ⇒ exit 1)
+- **Category `DeepDive`** — đã thêm ở BE (`techTrends.routes.ts:68`,
+  `ai.service.ts:31`) và FE (`types.ts` 3 chỗ, `TechTrendsClient`, `[slug]/page`,
+  `admin/tech-trends/page` 2 chỗ). `lib/api.ts` nay dùng alias
+  `TechTrendCategoryName` thay cho 8 union gõ tay — category sau chỉ sửa 1 chỗ
+- **`deploy.sh` Step 3.15** — seed mọi `content/deepdives/*.mjs` mỗi lần deploy,
+  ngay sau Step 3.14 (exams). Không có bước này thì thẻ trang chủ là link chết
+
+## Còn 11 bài — thứ tự gợi ý
+
+event loop → GraphQL → webpack → CSS → React → Redux → Vue → shell scripting →
+Mac setup → reading production → Node.js (bài này đã có khoá 112 bài, giữ `href`).
+
+Quy trình cho mỗi bài: viết `.md` (chạy thật mọi lệnh) → `.mjs` metadata → SVG
+nếu cần → `node scripts/deepdive-seed.mjs --file … --dry` → `--apply` vào `:5544`
+→ đổi thẻ trong `deepDivesData.ts` từ `href:` sang `article:`.
 
 ## Đường ống — KHÔNG viết trang Next riêng
 
@@ -66,10 +95,22 @@ Bài nằm trong **`TechTrendArticle`** (đã có sẵn, xem `prisma/schema.pris
 
 Được miễn phí: trang `/tech-trends/[slug]` với SSR + JSON-LD + RSS + bình luận.
 
-**CÒN PHẢI LÀM: `scripts/deepdive-seed.mjs`** — chưa viết. Bắt chước
-`scripts/course-seed.mjs` (đọc file spec từ `content/`, idempotent, có `--dry` /
-`--apply`, khoá theo `slug`). Nội dung bài đặt ở `content/deepdives/<slug>.mjs`.
-Thư mục `content/deepdives/` đã tạo, đang rỗng.
+`scripts/deepdive-seed.mjs` ĐÃ CÓ (xem mục trên). Nội dung bài đặt ở
+`content/deepdives/<slug>.md` + `<slug>.mjs`.
+
+---
+
+# 🪤 BẪY ĐO LƯỜNG — phiên 2 (đắt nhất trong phiên)
+
+| Bẫy | Hậu quả | Cách tránh |
+|---|---|---|
+| **`grep`/`find` trong shell của Claude Code bị BỌC** thành `ugrep`/`bfs` | Mọi phép thử về hành vi `grep`/`find` đo SAI tool. Máy user còn cài ugrep 7.5.0 đứng trước `/usr/bin` trong PATH | Đo bằng **đường dẫn tuyệt đối** `/usr/bin/grep`, `/usr/bin/find`, `/usr/bin/sed` khi cần hành vi BSD thật |
+| Bộ kiểm bảng tự viết dùng regex `/<th/` | Khớp luôn `<thead>` ⇒ thổi số cột lên 1 ⇒ báo **cả 5 bảng "LỆCH"** trong khi tất cả đều đúng | `/<th[ >]/`. Và khi MỌI hàng lệch đúng 1 ô thì nghi bộ kiểm trước, đừng nghi dữ liệu — xem [[feedback_verify_the_checker_before_the_content]] |
+| Thông báo lỗi của BSD `sed -i` **đổi theo tên file** | Viết vào bài "unescaped newline inside substitute pattern" trong khi với `access.log` nó là "command a expects \\ followed by text" | Chạy đúng cặp lệnh + tên file mình đưa vào bài, đừng chép output của lần thử khác |
+| `!$` trong CÙNG một dòng lệnh | `mkdir -p x && cd !$` không lấy `x` mà lấy đối số cuối của lệnh TRƯỚC ĐÓ. Suýt dạy sai | `!$` chỉ dùng ở dòng SAU. Cùng dòng thì `$_` (đã verify cả zsh và bash) |
+| SVG rộng 880px trong bài | Cột nội dung `/tech-trends/[slug]` chỉ **~699px** (`max-w-6xl` − padding, `lg:col-span-8`, `gap-10`) ⇒ ảnh co 0.79 ⇒ chữ 12px thành 9px, **không đọc được** | Vẽ SVG **viewBox rộng 700** để tỷ lệ 1:1. Chữ nhãn ≥ 12.5px, mono chính 14-18px |
+| Seeder kiểm ảnh ở `frontend/public` | **Container backend KHÔNG có `frontend/`** (Dockerfile.backend chỉ copy `content`, `scripts`, `src`, `dist`, `data`) ⇒ phép kiểm sẽ làm FAIL MỌI DEPLOY | Seeder chỉ kiểm khi `frontend/public` tồn tại, không có thì in dòng "bỏ qua". Đã thử bằng cây mô phỏng — và **symlink không mô phỏng được**, `import.meta.dirname` giải về repo thật, phải `cp` bản thật của `scripts/` |
+| Dòng code dài > ~80 ký tự trong bài | Khối `pre` cuộn ngang, người đọc mất nửa comment | Kiểm bằng `awk '/^```/{f=!f;next} f && length($0)>80'` |
 
 ## Sau khi publish bài — BƯỚC HAY QUÊN
 
@@ -224,9 +265,12 @@ Gỡ ba cái đó là **vi phạm giấy phép**. Mục "Original project" trong
 
 # VIỆC CÒN NỢ
 
-- [ ] **Viết 12 bài Deep Dives** — việc chính, bắt đầu bài command line
-- [ ] `scripts/deepdive-seed.mjs` — chưa có
-- [ ] Deploy + push 9 commit (hỏi phiên kia trước)
+- [ ] **Viết 11 bài Deep Dives còn lại** — việc chính (bài command line đã xong)
+- [ ] Seed bài 1 lên **DB local `:5432`** — hiện KHÔNG được: DB local thiếu 5 cột
+      mới của `tech_trend_articles` (`kind`, `sources`, `ai_generated`,
+      `ai_model`, `scheduled_at`) ⇒ `P2022`. Prod có đủ (migration news bulletin
+      20/7 đã áp). Đã seed + verify trên DB tạm `:5544` thay thế
+- [ ] Deploy + push (nay là **11 commit** local; hỏi phiên đề thi trước)
 - [ ] Dọn 7 file landing cũ không ai dùng (chờ user ưng trang chủ mới)
 - [ ] Phông: vẫn Inter + Poppins. "Inter ở mọi nơi" là dấu hiệu AI có tên. Muốn
       đúng chất editorial cần một phông serif hiển thị — nhưng thêm nó là đổi

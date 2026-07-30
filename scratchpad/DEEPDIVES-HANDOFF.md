@@ -37,7 +37,7 @@ Ba luật bắt buộc:
 
 ---
 
-# TRẠNG THÁI DEEP DIVES — 1/12 bài xong (30/7, phiên 2)
+# TRẠNG THÁI DEEP DIVES — 2/12 bài xong (30/7, phiên 2)
 
 User chốt: **phương án A** (bài viết mới), bài nào chủ đề đã có nội dung sâu trên
 site thì cắm thẻ dẫn vào đó. Ngôn ngữ: **tiếng Anh** (user chốt phiên 2).
@@ -58,7 +58,22 @@ site thì cắm thẻ dẫn vào đó. Ngôn ngữ: **tiếng Anh** (user chốt
 `debian:bookworm-slim` trong Docker (GNU) cho bảng khác biệt nền tảng. Ba lần
 suýt viết sai vì tin lý thuyết: xem mục "BẪY ĐO LƯỜNG" bên dưới.
 
-## Hạ tầng đã dựng xong (dùng lại cho 11 bài còn lại)
+## ✅ Bài 2 XONG — *The Event Loop, Callbacks, Promises and Async/Await*
+
+- 5.230 từ, 74 khối code, 4 sơ đồ ở `frontend/public/deepdives/event-loop/`
+- Thẻ số 2 trong `deepDivesData.ts` đã đổi `href:'/simulation'` → `article:`
+- Seed + verify trên `:5544` (bài #2), commit `139f982`
+- **Hai phát hiện đã bác bỏ bản nháp** (giá trị nhất của bài):
+  1. `process.nextTick` vs `Promise.then` **đổi chỗ giữa CJS và ESM** — thân
+     module `.mjs` tự nó là promise job. Gần như mọi bài trên mạng nói
+     "nextTick luôn trước" mà không nói điều kiện
+  2. **Đo timer trong tab ẩn là vô nghĩa**: `requestAnimationFrame` không chạy
+     lần nào sau 600ms, hai `setTimeout(0)` lồng nhau cách 700ms. Đã cắt một
+     đoạn về MessageChannel vì số liệu lấy từ tab ẩn
+- Demo mạnh nhất: HTTP server 2 route — `/ping` một mình 10ms, `/ping` khi có
+  một `/report` parse 20MB JSON là 110ms
+
+## Hạ tầng đã dựng xong (dùng lại cho 10 bài còn lại)
 
 - **`scripts/deepdive-seed.mjs`** — idempotent theo slug, `--dry`/`--apply`,
   `--author <username>`. Render `bodyHtml` + `toc` bằng ĐÚNG renderer của backend
@@ -72,10 +87,14 @@ suýt viết sai vì tin lý thuyết: xem mục "BẪY ĐO LƯỜNG" bên dư�
 - **`deploy.sh` Step 3.15** — seed mọi `content/deepdives/*.mjs` mỗi lần deploy,
   ngay sau Step 3.14 (exams). Không có bước này thì thẻ trang chủ là link chết
 
-## Còn 11 bài — thứ tự gợi ý
+## Còn 10 bài — thứ tự gợi ý
 
-event loop → GraphQL → webpack → CSS → React → Redux → Vue → shell scripting →
-Mac setup → reading production → Node.js (bài này đã có khoá 112 bài, giữ `href`).
+GraphQL → webpack → CSS → React → Redux → Vue → shell scripting → Mac setup →
+reading production → Node.js (bài cuối đã có khoá 112 bài, có thể giữ `href`).
+
+Thước đo hai bài đầu: **5.200–5.700 từ, 70+ khối code, 4 sơ đồ, 3 link nội bộ**.
+Điều làm nên giá trị không phải độ dài mà là **chạy thật rồi mới viết** — mỗi bài
+tới nay đều có 2-3 chỗ mà việc chạy đã bác bỏ điều sắp viết ra.
 
 Quy trình cho mỗi bài: viết `.md` (chạy thật mọi lệnh) → `.mjs` metadata → SVG
 nếu cần → `node scripts/deepdive-seed.mjs --file … --dry` → `--apply` vào `:5544`
@@ -111,6 +130,9 @@ Bài nằm trong **`TechTrendArticle`** (đã có sẵn, xem `prisma/schema.pris
 | SVG rộng 880px trong bài | Cột nội dung `/tech-trends/[slug]` chỉ **~699px** (`max-w-6xl` − padding, `lg:col-span-8`, `gap-10`) ⇒ ảnh co 0.79 ⇒ chữ 12px thành 9px, **không đọc được** | Vẽ SVG **viewBox rộng 700** để tỷ lệ 1:1. Chữ nhãn ≥ 12.5px, mono chính 14-18px |
 | Seeder kiểm ảnh ở `frontend/public` | **Container backend KHÔNG có `frontend/`** (Dockerfile.backend chỉ copy `content`, `scripts`, `src`, `dist`, `data`) ⇒ phép kiểm sẽ làm FAIL MỌI DEPLOY | Seeder chỉ kiểm khi `frontend/public` tồn tại, không có thì in dòng "bỏ qua". Đã thử bằng cây mô phỏng — và **symlink không mô phỏng được**, `import.meta.dirname` giải về repo thật, phải `cp` bản thật của `scripts/` |
 | Dòng code dài > ~80 ký tự trong bài | Khối `pre` cuộn ngang, người đọc mất nửa comment | Kiểm bằng `awk '/^```/{f=!f;next} f && length($0)>80'` |
+| Sửa text bên trong khối code sau khi đã dán output | Code in ra một đằng, output trong bài một nẻo — người đọc chạy lại thấy khác | Đổi code ⇒ CHẠY LẠI, dán output mới. Bài 2 phải chạy lại 2 demo vì rút ngắn dòng |
+| `perl -pi -e` với chuỗi chứa `${...}` | Perl hiểu `${Date.now()}` là biến của nó → `Undefined subroutine &main::now`, file KHÔNG đổi mà lệnh vẫn "chạy xong" | Dùng Edit cho code JS/TS, đừng dùng perl/sed |
+| Tin ảnh chụp khung xem để kiểm sơ đồ | Khung xem là tab **ẩn**, có lúc chụp ra ảnh trống, có lúc không mở nổi file | Kiểm hình học bằng script (`scratchpad/svg-fit.mjs`: text có tràn viewBox không) và **tự kiểm bộ kiểm** bằng một ca tràn cố ý |
 
 ## Sau khi publish bài — BƯỚC HAY QUÊN
 
@@ -265,12 +287,12 @@ Gỡ ba cái đó là **vi phạm giấy phép**. Mục "Original project" trong
 
 # VIỆC CÒN NỢ
 
-- [ ] **Viết 11 bài Deep Dives còn lại** — việc chính (bài command line đã xong)
+- [ ] **Viết 10 bài Deep Dives còn lại** — việc chính (command line + event loop đã xong)
 - [ ] Seed bài 1 lên **DB local `:5432`** — hiện KHÔNG được: DB local thiếu 5 cột
       mới của `tech_trend_articles` (`kind`, `sources`, `ai_generated`,
       `ai_model`, `scheduled_at`) ⇒ `P2022`. Prod có đủ (migration news bulletin
       20/7 đã áp). Đã seed + verify trên DB tạm `:5544` thay thế
-- [ ] Deploy + push (nay là **11 commit** local; hỏi phiên đề thi trước)
+- [ ] Deploy + push (nay là **13 commit** local; hỏi phiên đề thi trước)
 - [ ] Dọn 7 file landing cũ không ai dùng (chờ user ưng trang chủ mới)
 - [ ] Phông: vẫn Inter + Poppins. "Inter ở mọi nơi" là dấu hiệu AI có tên. Muốn
       đúng chất editorial cần một phông serif hiển thị — nhưng thêm nó là đổi

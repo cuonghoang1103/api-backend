@@ -1,16 +1,17 @@
 # Deep Dives — MỞ PHIÊN MỚI ĐỌC FILE NÀY
 
-Cập nhật 30/7/2026, sau khi xong **9/12 bài**. Nhánh `feat/playground-3d`.
-File này đủ để bắt đầu bài 10 mà **không cần đọc lại phiên cũ**.
+Cập nhật 30/7/2026, sau khi xong **10/12 bài**. Nhánh `feat/playground-3d`.
+File này đủ để bắt đầu bài 11 mà **không cần đọc lại phiên cũ**.
 (Bối cảnh trang chủ + lịch sử bẫy: `scratchpad/DEEPDIVES-HANDOFF.md`.)
 
 ---
 
 ## Việc: viết 5 bài Deep Dives còn lại
 
-Bài 10 tiếp theo: **How to Set up a Mac for Development** (thẻ số 11 trong
-`deepDivesData.ts`). Sau đó: reading production. Bài Node.js (thẻ 3) đã có khoá
-112 bài — giữ `href` chứ không viết lại.
+Bài 11 tiếp theo — **BÀI CUỐI phải viết**: *Reading Production: Logs, Metrics
+and a Calm Head* (thẻ số 12 trong `deepDivesData.ts`, đang trỏ `/exam`). Bài
+Node.js (thẻ 3) đã có khoá 112 bài — giữ `href` chứ không viết lại, nên xong
+bài 11 là **loạt bài HOÀN TẤT**.
 
 Ngôn ngữ: **tiếng Anh**. Thước đo 7 bài đầu:
 
@@ -25,6 +26,7 @@ Ngôn ngữ: **tiếng Anh**. Thước đo 7 bài đầu:
 | 7. Redux | 4.827 | 77 | 4 | 3 |
 | 8. Vue | 4.939 | 76 | 4 | 3 |
 | 9. shell scripting | 4.854 | 81 | 4 | 3 |
+| 10. Mac setup | 4.829 | 63 | 4 | 3 |
 
 Số khối code tuỳ chủ đề (CLI cần nhiều, GraphQL ít hơn). **Từ 4.800 trở lên.**
 
@@ -146,13 +148,33 @@ nhưng **KHÔNG** bắt cái đã làm hỏng deploy thật của repo.
 `nproc`, không `mapfile`/`declare -A`/`lastpipe`/`$BASHPID`, và `${v^^}`/`${v@Q}`
 là **lỗi CÚ PHÁP**. Muốn bash 5 thì dùng docker.
 
-**10. Mac setup for development** — chạy thật những gì đo được trên máy này:
-`softwareupdate --list` / `xcode-select -p` · Homebrew: `brew --prefix` khác
-nhau giữa Intel/ARM (số liệu thật) · nvm/fnm và `PATH` order (dùng lại phát hiện
-ugrep che grep) · SSH key ed25519 + `~/.ssh/config` + `chmod 600` · Docker
-Desktop vs colima · dotfiles + `defaults write` vài tuỳ chọn hữu ích · kiểm
-đúng-sai bằng `command -v` sau mỗi bước. (Sơ đồ: PATH order và ai thắng · sơ đồ
-một máy đã sẵn sàng làm việc.)
+**10. Mac setup** — ✅ XONG 30/7, commit `ebbcbe8`. Lab (ĐƯỜNG DẪN TUYỆT ĐỐI):
+`/private/tmp/claude-501/-Users-admin-Downloads-api-backend/becd3039-952a-4510-9831-f6bb0c076484/scratchpad/mac-lab`
+(01-path, 02-fs, 03-git-case, 04-ssh + `ALL-OUTPUT.txt`).
+
+⚠️ **CHỈ ĐỌC máy user.** Không cài gì, không `defaults write`, không sửa
+`~/.zshrc` hay `~/.ssh`. Hồ sơ zsh lấy qua **BẢN SAO** rc dưới `ZDOTDIR` tạm;
+khoá SSH sinh trong `mktemp -d`. Và **lọc riêng tư**: output `ssh-add` lộ
+`user@hostname`, `ssh-keygen` lộ vân tay — đừng dán nguyên vào bài.
+
+**7 chỗ việc chạy BÁC BỎ dự đoán.** Đắt nhất và cũng là bài học chung: **"đo
+riêng một thành phần" cho kết quả SAI** — `compinit` đo riêng 0,02s nhưng trong
+cấu hình thật là 206ms/lần (fpath rỗng vs fpath thật). Kèm: `ulimit -n` nay là
+**1.048.576** chứ không phải 256 (mọi hướng dẫn cũ đều thừa) · APFS **giữ NFC**,
+chuyện "macOS đổi sang NFD" là của HFS+ · `git mv` đổi hoa/thường làm thẳng được
+trên git 2.51 · `ssh -i` KHÔNG cảnh báo khoá 0666 nếu server từ chối khoá công
+khai (vì không đọc tới nửa khoá riêng) · `which` mù với shell function.
+
+**Và lỗi của chính tôi, giữ lại trong bài làm ví dụ:** đếm `.d.ts` ra
+"frontend: 0" — vô lý với một dự án Next.js. Nguyên nhân: shell còn giữ
+`cd frontend` từ lệnh TRƯỚC, nên đường dẫn tương đối trỏ sang cây khác. Số 0 vô
+lý nên bắt được; **một con số sai mà hợp lý thì đã lên bài**. ⇒ In `pwd` trong
+mọi phép đo có đường dẫn tương đối.
+
+Số trục: khởi động shell **1,06s → 0,12s** khi nạp nvm lười · `rg` 0,08s/4.024
+file vs `grep -r` 120s/149.068 file · máy dev ăn **~51GB** trước khi có code
+(Docker 35GB) · `tsc` backend chậm gấp đôi frontend vì
+`.prisma/client/index.d.ts` nặng **21MB**.
 
 **11. Reading production** — bài "3am" thực dụng: `curl -s -o /dev/null -w` đo
 TTFB/status · `docker stats`/`docker logs --since` · `df -h` + `du -sh` (đĩa đầy
@@ -256,12 +278,17 @@ Bài 4 (webpack `c0a2baf`) + 5 (CSS `d21e5ef`) + 6 (React `f65bb19`) + 7 (Redux
 **30/7 13:47 — ĐÃ DEPLOY bài 4-8 lên prod** (`bash deploy.sh`, exit 0, smoke-test
 mọi route 401/200). Verify: 5 slug mới đều HTTP 200 trên cuongthai.com, mọi SVG
 sơ đồ 200. Deploy thứ hai ngay sau đó cho `e91b79d` (bỏ vệt xanh trang chủ).
-**Bài 9 (`c5a1c46`) commit sau lượt rsync của deploy 2 ⇒ CHƯA lên prod, cần một
-`bash deploy.sh` nữa.** Tất cả VẪN CHƯA push origin — chờ user test prod xong
+Bài 9 đã lên prod 14:15 (deploy 3) và bản sửa `a113185` lên 14:19 (deploy 4).
+Bài 10 (`ebbcbe8`) deploy ngay sau đó. **BÀI HỌC deploy: commit SAU lượt rsync
+thì KHÔNG lên prod** — rsync chạy ở đầu `deploy.sh`, nên sửa file lúc đang
+deploy là phải deploy lại. Tất cả VẪN CHƯA push origin — chờ user test prod xong
 (quy trình chuẩn ở CLAUDE.md: deploy → user xác nhận → mới push).
 Đếm commit chưa push bằng `git log --oneline @{u}..HEAD | wc -l`.
 
 ```
+ebbcbe8 feat(deepdives): bài 10 — How to Set up a Mac for Development
+a113185 fix(deepdives): bài 9 — sửa đoạn nói sai về set -e trong $( )
+5185da4 docs(deepdives): bàn giao sau bài 9
 c5a1c46 feat(deepdives): bài 9 — Shell Scripting for People Who Deploy Things
 e91b79d fix(landing): bỏ vệt xanh 2px cắt ngang trang chủ
 fd7cd53 feat(exam): SSL101c Đề 5-7                        ← phiên khác, commit hộ
@@ -287,7 +314,7 @@ f438640 feat(deepdives): bài 3 — An Introduction to GraphQL
 8e069b3 feat(deepdives): bài 1 — command line + seeder
 ```
 
-Hạ tầng đã xong, dùng lại cho 3 bài còn lại:
+Hạ tầng đã xong, dùng lại cho bài cuối:
 
 - `scripts/deepdive-seed.mjs` — idempotent theo slug, `--dry`/`--apply`, render
   `bodyHtml`+`toc` bằng ĐÚNG renderer backend ở `dist/`, giữ `viewCount` +
@@ -304,12 +331,11 @@ Hạ tầng đã xong, dùng lại cho 3 bài còn lại:
   `<pre>`/`<code>` là escape ĐÚNG, không phải thẻ bị sanitizer lọc.
   **Chạy chúng và ĐỌC dòng tự kiểm** — cả hai in ra ✓/✗ cho chính nó
 
-Chín bài đã seed trên `:5544` = bài #1..#9; bài #1..#8 đã lên prod. Trang đọc:
-`/tech-trends/<slug>`.
+Mười bài đã seed trên `:5544` = bài #1..#10. Trang đọc: `/tech-trends/<slug>`.
 
 ---
 
 ## Câu mở đầu gợi ý cho phiên mới
 
-> Đọc `scratchpad/DEEPDIVES-NEXT-SESSION.md` rồi viết bài 10 (Mac setup) theo
-> đúng quy trình B1-B8 trong đó.
+> Đọc `scratchpad/DEEPDIVES-NEXT-SESSION.md` rồi viết bài 11 (reading
+> production) theo đúng quy trình B1-B8 trong đó. Đó là bài CUỐI.

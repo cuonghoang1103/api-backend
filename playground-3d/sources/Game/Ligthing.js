@@ -1,5 +1,6 @@
 import * as THREE from 'three/webgpu'
 import { Game } from './Game.js'
+import { Events } from './Events.js'
 import { uniform, color, float, Fn, vec4, positionWorld, vec3, mix, max, If, frontFacing } from 'three/tsl'
 
 
@@ -8,6 +9,7 @@ export class Lighting
     constructor()
     {
         this.game = Game.getInstance()
+        this.events = new Events()
 
         this.useDayCycles = true
         this.phi = 0.63
@@ -133,6 +135,52 @@ export class Lighting
 
         // 0 = tắt hẳn. Bật/tắt theo ngày đêm bằng cách chạy số này lên xuống
         this.headlights.intensity = uniform(float(0))
+
+        /**
+         * Chế độ do người chơi chọn (nút Headlights trong bảng Cài đặt).
+         *  · auto = sáng khi trời tối, tắt khi trời sáng (mặc định)
+         *  · on   = luôn sáng, kể cả giữa trưa
+         *  · off  = không bao giờ sáng
+         *
+         * Để ở ĐÂY chứ không để trong `VisualVehicle` vì cái xe chỉ sinh ra ở
+         * `World.step(1)`, mãi sau khi bảng Cài đặt được dựng — mà `Lighting`
+         * thì sống suốt.
+         */
+        this.headlights.modes = [ 'auto', 'on', 'off' ]
+        this.headlights.labels = { auto: 'Auto', on: 'On', off: 'Off' }
+        this.headlights.mode = 'auto'
+
+        const storedMode = localStorage.getItem('headlightsMode')
+        if(storedMode && this.headlights.modes.includes(storedMode))
+            this.headlights.mode = storedMode
+
+        this.headlights.setMode = (mode) =>
+        {
+            if(!this.headlights.modes.includes(mode))
+                return
+
+            this.headlights.mode = mode
+            localStorage.setItem('headlightsMode', mode)
+            this.events.trigger('headlightsChange')
+        }
+
+        this.headlights.nextMode = () =>
+        {
+            const index = this.headlights.modes.indexOf(this.headlights.mode)
+            this.headlights.setMode(this.headlights.modes[(index + 1) % this.headlights.modes.length])
+        }
+
+        // Đèn CÓ NÊN sáng lúc này không — `VisualVehicle` hỏi mỗi khung hình
+        this.headlights.shouldBeOn = () =>
+        {
+            if(this.headlights.mode === 'on')
+                return true
+
+            if(this.headlights.mode === 'off')
+                return false
+
+            return this.game.dayCycles.isNight()
+        }
 
         this.headlights.color = uniform(color('#ffeccc'))
         this.headlights.distance = uniform(float(26)) // chiếu xa bao nhiêu

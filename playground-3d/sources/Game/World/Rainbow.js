@@ -236,7 +236,9 @@ export class Rainbow
              * không phải trời tuyết — tuyết thì hạt là băng, không tán sắc ra
              * cầu vồng được.
              */
-            const isNight = this.game.dayCycles.intervalEvents.get('night')?.inInterval
+            // ⚠️ `isNight()` chứ không phải cờ `intervalEvents` — cờ đó không
+            //    biết người chơi đã ép giờ trong Cài đặt (xem `DayCycles.isNight`)
+            const isNight = this.game.dayCycles.isNight()
             const isSnowy = weather.snow.value > 0.1
 
             if(!isNight && !isSnowy)

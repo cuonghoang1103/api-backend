@@ -9,6 +9,8 @@ export class Options
 
         this.setSound()
         this.setMusic()
+        this.setTime()
+        this.setHeadlights()
         this.setWeather()
         this.setQuality()
         this.setRespawn()
@@ -42,6 +44,69 @@ export class Options
             // không nghe thấy gì
             this.playClick(this.game.audio.mute.active)
             this.game.audio.mute.toggle()
+        })
+    }
+
+    /**
+     * Giờ trong ngày: bấm đổi vòng Auto → Day → Night.
+     *
+     * `DayCycles` dựng ở dòng 85 của `Game.js`, trước bảng Cài đặt (dòng 110),
+     * nên ở đây chạm thẳng được — khác `Weather` (dòng 117) và đèn pha.
+     */
+    setTime()
+    {
+        const element = this.element.querySelector('.js-time-toggle')
+        const text = element.querySelector('span')
+        const preference = this.game.dayCycles.preference
+
+        const update = () =>
+        {
+            text.textContent = preference.labels[preference.current]
+            element.classList.toggle('is-success', preference.isForced())
+        }
+
+        update()
+        this.game.dayCycles.events.on('preferenceChange', update)
+
+        element.addEventListener('click', () =>
+        {
+            this.playClick()
+            preference.next()
+        })
+    }
+
+    /**
+     * Đèn pha: bấm đổi vòng Auto → On → Off.
+     *
+     * ⚠️ Hoãn một nhịp tick: `Lighting` dựng ở dòng 120 của `Game.js`, SAU bảng
+     *    Cài đặt (dòng 110). Chạm sớm là chết cả game mà không in dòng lỗi nào —
+     *    đúng cái bẫy đã dẫm với nút Weather.
+     */
+    setHeadlights()
+    {
+        this.game.ticker.wait(1, () =>
+        {
+            const element = this.element.querySelector('.js-headlights-toggle')
+            const text = element.querySelector('span')
+            const headlights = this.game.lighting.headlights
+
+            const update = () =>
+            {
+                text.textContent = headlights.labels[headlights.mode]
+
+                // Tô khác khi người chơi đã tự quyết, để phân biệt với Auto
+                element.classList.toggle('is-success', headlights.mode === 'on')
+                element.classList.toggle('is-danger', headlights.mode === 'off')
+            }
+
+            update()
+            this.game.lighting.events.on('headlightsChange', update)
+
+            element.addEventListener('click', () =>
+            {
+                this.playClick()
+                headlights.nextMode()
+            })
         })
     }
 

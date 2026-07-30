@@ -408,19 +408,10 @@ export class VisualVehicle
             gsap.to(lighting.headlights.intensity, { value: 0, duration: 2.5, ease: 'power2.in', overwrite: true })
         }
 
-        const nightChange = (inNight) =>
-        {
-            if(inNight)
-                this.headlights.turnOn()
-            else
-                this.headlights.turnOff()
-        }
-
-        // Cùng khuôn mẫu đèn đường đang dùng (`PoleLights.js`): nghe sự kiện
-        // đổi khoảng, rồi gọi một lần ngay để bắt kịp trạng thái hiện tại —
-        // vào game giữa đêm thì đèn phải sáng sẵn chứ không đợi tới sáng hôm sau
-        this.game.dayCycles.events.on('night', nightChange)
-        nightChange(this.game.dayCycles.intervalEvents.get('night').inInterval)
+        // Bắt kịp trạng thái ngay từ khung hình đầu — vào game giữa đêm thì đèn
+        // phải sáng sẵn chứ không đợi tới đêm hôm sau
+        if(lighting.headlights.shouldBeOn())
+            this.headlights.turnOn()
     }
 
     /**
@@ -433,6 +424,24 @@ export class VisualVehicle
 
         const lighting = this.game.lighting
         const physicalVehicle = this.game.physicalVehicle
+
+        /**
+         * Hỏi lại mỗi khung hình thay vì chỉ nghe sự kiện `night` một lần.
+         *
+         * ⚠️ Bắt buộc phải hỏi liên tục: người chơi đổi nút Headlights hoặc nút
+         *    Time trong Cài đặt bất cứ lúc nào, mà **ép giờ thì sự kiện `night`
+         *    KHÔNG hề bắn** — các mốc ngày đêm được kiểm bằng tiến trình tự
+         *    nhiên của đồng hồ, không phải giá trị đã bị ghi đè (xem
+         *    `DayCycles.isNight`). Chỉ nghe sự kiện là ép Đêm xong đèn vẫn tối
+         *    thui.
+         *
+         * `turnOn`/`turnOff` đều tự thoát sớm khi đã đúng trạng thái nên gọi mỗi
+         * khung hình không tốn gì.
+         */
+        if(lighting.headlights.shouldBeOn())
+            this.headlights.turnOn()
+        else
+            this.headlights.turnOff()
 
         /**
          * ⚠️ Hướng tiến của xe là trục cục bộ +X, KHÔNG phải -Z như thói quen.

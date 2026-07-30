@@ -282,6 +282,22 @@ export class Cycles
 
         this.override.end = (duration = 5) =>
         {
+            /**
+             * ⚠️ "Kết thúc ghi đè" KHÔNG phải lúc nào cũng là "trả về chu kỳ tự
+             *    nhiên". Người chơi có thể đã CHỌN ép ngày hoặc ép đêm trong
+             *    bảng Cài đặt, và phải quay về lựa chọn đó.
+             *
+             *    Cần chốt này vì khu Đua (`CircuitArea`) và cơn Lốc (`Tornado`)
+             *    cũng ghi đè chu kỳ ngày rồi gọi `override.end()` khi xong.
+             *    Thiếu nó thì: ép Đêm → chạy một vòng đua → ra là trời sáng
+             *    trưng, mà nút trong Cài đặt vẫn hiện "Night".
+             */
+            if(this.preference && this.preference.current !== 'auto')
+            {
+                this.preference.apply(duration)
+                return
+            }
+
             // Transition
             if(duration === 0)
                 this.override.strength = 0

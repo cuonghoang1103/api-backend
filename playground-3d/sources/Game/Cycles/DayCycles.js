@@ -1,4 +1,5 @@
 import * as THREE from 'three/webgpu'
+import gsap from 'gsap'
 import { Cycles } from './Cycles.js'
 
 const presets = {
@@ -8,12 +9,98 @@ const presets = {
     dawn:  { revealColor: new THREE.Color('#ff9d9d'), revealIntensity: 4.85, electricField: 0.25, temperature: 0, lightColor: new THREE.Color('#ffa882'), lightIntensity: 1.2, shadowColor: new THREE.Color('#db004f'), fogColorA: new THREE.Color('#f885ff'), fogColorB: new THREE.Color('#ff7d24'), fogNearRatio: 0.3, fogFarRatio: 1.25 },
 }
 
+// Ép giờ trong ngày. 0.05 rơi giữa khoảng "day", 0.47 rơi giữa khoảng
+// "deepNight" (xem `getIntervalDescriptions` cuối file).
+const PREFERENCE_PRESETS = {
+    day: { progress: 0.05 },
+    night: { progress: 0.47 },
+}
+
 export class DayCycles extends Cycles
 {
     constructor()
     {
         const forcedProgress = import.meta.env.VITE_DAY_CYCLE_PROGRESS ? parseFloat(import.meta.env.VITE_DAY_CYCLE_PROGRESS) : null
         super('🕜 Day Cycles', 4 * 60, forcedProgress, false)
+
+        this.setPreference()
+    }
+
+    /**
+     * "Bây giờ có phải ban đêm không" — CÂU HỎI DUY NHẤT mà đèn pha và cầu vồng
+     * được phép hỏi.
+     *
+     * ⚠️ ĐỪNG đọc thẳng `intervalEvents.get('night').inInterval`. Cờ đó được
+     *    kiểm bằng tiến trình TỰ NHIÊN của đồng hồ, TRƯỚC khi `override.progress`
+     *    được áp vào (xem `Cycles.update`) — tức ép trời tối thì cảnh tối đi
+     *    nhưng cờ vẫn báo "ban ngày". Đã dẫm đúng bẫy này khi thử cầu vồng: cảnh
+     *    tối thui mà cầu vồng vẫn tưởng đang nắng.
+     *
+     *    Hàm này đọc `this.progress` — giá trị CUỐI CÙNG, đã gồm cả ghi đè —
+     *    nên đúng cho cả chu kỳ tự nhiên lẫn khi người chơi ép giờ.
+     */
+    isNight()
+    {
+        const night = this.intervalEvents.get('night')
+
+        if(!night)
+            return false
+
+        return this.progress > night.startProgress && this.progress < night.endProgress
+    }
+
+    /**
+     * Lựa chọn giờ trong ngày của người chơi (nút Time trong bảng Cài đặt).
+     * Mặc định `auto` = chu kỳ 4 phút của bản mẫu, không đụng gì.
+     */
+    setPreference()
+    {
+        this.preference = {}
+        this.preference.names = [ 'auto', 'day', 'night' ]
+        this.preference.labels = { auto: 'Auto', day: 'Day', night: 'Night' }
+        this.preference.current = 'auto'
+
+        const stored = localStorage.getItem('dayCyclePreference')
+        if(stored && this.preference.names.includes(stored))
+            this.preference.current = stored
+
+        this.preference.apply = (duration = 4) =>
+        {
+            const preset = PREFERENCE_PRESETS[this.preference.current]
+
+            if(preset)
+                this.override.start(preset, duration)
+            else if(duration === 0)
+                this.override.strength = 0
+            else
+                gsap.to(this.override, { strength: 0, duration, overwrite: true })
+        }
+
+        this.preference.set = (name, duration = 4) =>
+        {
+            if(!this.preference.names.includes(name))
+                return
+
+            this.preference.current = name
+            localStorage.setItem('dayCyclePreference', name)
+
+            this.preference.apply(duration)
+            this.events.trigger('preferenceChange')
+        }
+
+        this.preference.next = (duration = 4) =>
+        {
+            const index = this.preference.names.indexOf(this.preference.current)
+            this.preference.set(this.preference.names[(index + 1) % this.preference.names.length], duration)
+        }
+
+        this.preference.isForced = () => this.preference.current !== 'auto'
+
+        // Khôi phục lựa chọn của lần chơi trước, vào ngay không chuyển dần.
+        // Khác `Weather`, ở đây gọi được luôn vì `override.start` với `progress`
+        // không phụ thuộc danh sách thuộc tính đã dựng xong hay chưa.
+        if(this.preference.current !== 'auto')
+            this.preference.apply(0)
     }
 
     get presets()

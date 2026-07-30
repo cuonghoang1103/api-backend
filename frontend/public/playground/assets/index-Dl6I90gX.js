@@ -93025,12 +93025,11 @@ https://github.com/browserify/crypto-browserify`);
       }));
     }
     update() {
-      var _a2;
       const e = this.game.weather, r = e.rain.value;
       if (r > RAIN_ON) this.wasRaining = true, this.hide();
       else if (this.wasRaining && r < RAIN_OFF) {
         this.wasRaining = false;
-        const s = (_a2 = this.game.dayCycles.intervalEvents.get("night")) == null ? void 0 : _a2.inInterval, o = e.snow.value > 0.1;
+        const s = this.game.dayCycles.isNight(), o = e.snow.value > 0.1;
         !s && !o && this.show();
       }
     }
@@ -93628,15 +93627,13 @@ https://github.com/browserify/crypto-browserify`);
           ease: "power2.in",
           overwrite: true
         }));
-      };
-      const r = (s) => {
-        s ? this.headlights.turnOn() : this.headlights.turnOff();
-      };
-      this.game.dayCycles.events.on("night", r), r(this.game.dayCycles.intervalEvents.get("night").inInterval);
+      }, e.headlights.shouldBeOn() && this.headlights.turnOn();
     }
     updateHeadlights() {
       if (!this.parts.headlights) return;
-      const e = this.game.lighting, s = this.game.physicalVehicle.forward, o = this.parts.chassis.position;
+      const e = this.game.lighting, r = this.game.physicalVehicle;
+      e.headlights.shouldBeOn() ? this.headlights.turnOn() : this.headlights.turnOff();
+      const s = r.forward, o = this.parts.chassis.position;
       e.headlights.position.value.set(o.x + s.x * 1.3, o.y + 0.15, o.z + s.z * 1.3), e.headlights.direction.value.set(s.x, -0.34, s.z).normalize();
     }
     setAntenna() {
@@ -94834,7 +94831,7 @@ https://github.com/browserify/crypto-browserify`);
   }
   class Lighting {
     constructor() {
-      this.game = Game.getInstance(), this.useDayCycles = true, this.phi = 0.63, this.theta = 0.72, this.phiAmplitude = 0.62, this.thetaAmplitude = 1.25, this.near = 1, this.spherical = new Spherical(this.game.view.optimalArea.radius + this.near, this.phi, this.theta), this.direction = new Vector3$1().setFromSpherical(this.spherical).normalize(), this.directionUniform = uniform$1(this.direction), this.colorUniform = uniform$1(color$1("#ffffff")), this.intensityUniform = uniform$1(1), this.count = 1, this.mapSize = this.game.quality.level === 0 ? 2048 : 512, this.shadowAmplitude = this.game.view.optimalArea.radius, this.depth = this.game.view.optimalArea.radius * 2, this.shadowBias = -1e-3, this.shadowNormalBias = 0.1, this.shadowRadius = this.game.quality.level === 0 ? 3 : 2, this.game.debug.active && (this.debugPanel = this.game.debug.panel.addFolder({
+      this.game = Game.getInstance(), this.events = new Events(), this.useDayCycles = true, this.phi = 0.63, this.theta = 0.72, this.phiAmplitude = 0.62, this.thetaAmplitude = 1.25, this.near = 1, this.spherical = new Spherical(this.game.view.optimalArea.radius + this.near, this.phi, this.theta), this.direction = new Vector3$1().setFromSpherical(this.spherical).normalize(), this.directionUniform = uniform$1(this.direction), this.colorUniform = uniform$1(color$1("#ffffff")), this.intensityUniform = uniform$1(1), this.count = 1, this.mapSize = this.game.quality.level === 0 ? 2048 : 512, this.shadowAmplitude = this.game.view.optimalArea.radius, this.depth = this.game.view.optimalArea.radius * 2, this.shadowBias = -1e-3, this.shadowNormalBias = 0.1, this.shadowRadius = this.game.quality.level === 0 ? 3 : 2, this.game.debug.active && (this.debugPanel = this.game.debug.panel.addFolder({
         title: "\u{1F4A1} Lighting",
         expanded: false
       })), this.setNodes(), this.setHeadlights(), this.setLight(), this.updateShadow(), this.setHelpers(), this.game.ticker.events.on("tick", () => {
@@ -94916,36 +94913,51 @@ https://github.com/browserify/crypto-browserify`);
       }));
     }
     setHeadlights() {
-      if (this.headlights = {}, this.headlights.position = uniform$1(new Vector3$1(0, 0.6, 0)), this.headlights.direction = uniform$1(new Vector3$1(0, 0, 1)), this.headlights.intensity = uniform$1(float$1(0)), this.headlights.color = uniform$1(color$1("#ffeccc")), this.headlights.distance = uniform$1(float$1(26)), this.headlights.spread = uniform$1(float$1(0.55)), this.headlights.softness = uniform$1(float$1(0.42)), this.game.debug.active) {
-        const e = this.debugPanel.addFolder({
+      this.headlights = {}, this.headlights.position = uniform$1(new Vector3$1(0, 0.6, 0)), this.headlights.direction = uniform$1(new Vector3$1(0, 0, 1)), this.headlights.intensity = uniform$1(float$1(0)), this.headlights.modes = [
+        "auto",
+        "on",
+        "off"
+      ], this.headlights.labels = {
+        auto: "Auto",
+        on: "On",
+        off: "Off"
+      }, this.headlights.mode = "auto";
+      const e = localStorage.getItem("headlightsMode");
+      if (e && this.headlights.modes.includes(e) && (this.headlights.mode = e), this.headlights.setMode = (r) => {
+        this.headlights.modes.includes(r) && (this.headlights.mode = r, localStorage.setItem("headlightsMode", r), this.events.trigger("headlightsChange"));
+      }, this.headlights.nextMode = () => {
+        const r = this.headlights.modes.indexOf(this.headlights.mode);
+        this.headlights.setMode(this.headlights.modes[(r + 1) % this.headlights.modes.length]);
+      }, this.headlights.shouldBeOn = () => this.headlights.mode === "on" ? true : this.headlights.mode === "off" ? false : this.game.dayCycles.isNight(), this.headlights.color = uniform$1(color$1("#ffeccc")), this.headlights.distance = uniform$1(float$1(26)), this.headlights.spread = uniform$1(float$1(0.55)), this.headlights.softness = uniform$1(float$1(0.42)), this.game.debug.active) {
+        const r = this.debugPanel.addFolder({
           title: "\u{1F526} Headlights",
           expanded: false
         });
-        e.addBinding(this.headlights.intensity, "value", {
+        r.addBinding(this.headlights.intensity, "value", {
           label: "intensity",
           min: 0,
           max: 4,
           step: 0.01
-        }), e.addBinding(this.headlights.distance, "value", {
+        }), r.addBinding(this.headlights.distance, "value", {
           label: "distance",
           min: 1,
           max: 80,
           step: 0.5
-        }), e.addBinding(this.headlights.spread, "value", {
+        }), r.addBinding(this.headlights.spread, "value", {
           label: "spread",
           min: 0.05,
           max: 1,
           step: 0.01
-        }), e.addBinding(this.headlights.softness, "value", {
+        }), r.addBinding(this.headlights.softness, "value", {
           label: "softness",
           min: 0.01,
           max: 1,
           step: 0.01
-        }), this.game.debug.addThreeColorBinding(e, this.headlights.color.value, "color");
+        }), this.game.debug.addThreeColorBinding(r, this.headlights.color.value, "color");
       }
-      this.headlights.getContribution = (e) => {
-        const r = positionWorld.sub(this.headlights.position), s = r.length().max(1e-3), o = r.div(s), h = o.dot(this.headlights.direction).smoothstep(this.headlights.spread.oneMinus(), this.headlights.spread.oneMinus().add(this.headlights.softness).min(0.999)), c = s.div(this.headlights.distance).oneMinus().max(0).pow(2), d = e.dot(o.negate()).max(0);
-        return this.headlights.color.mul(h.mul(c).mul(d).mul(this.headlights.intensity));
+      this.headlights.getContribution = (r) => {
+        const s = positionWorld.sub(this.headlights.position), o = s.length().max(1e-3), a = s.div(o), c = a.dot(this.headlights.direction).smoothstep(this.headlights.spread.oneMinus(), this.headlights.spread.oneMinus().add(this.headlights.softness).min(0.999)), d = o.div(this.headlights.distance).oneMinus().max(0).pow(2), f = r.dot(a.negate()).max(0);
+        return this.headlights.color.mul(c.mul(d).mul(f).mul(this.headlights.intensity));
       };
     }
     setLight() {
@@ -95404,6 +95416,10 @@ https://github.com/browserify/crypto-browserify`);
           overwrite: true
         });
       }, this.override.end = (e = 5) => {
+        if (this.preference && this.preference.current !== "auto") {
+          this.preference.apply(e);
+          return;
+        }
         e === 0 ? this.override.strength = 0 : gsapWithCSS.to(this.override, {
           strength: 0,
           duration: e,
@@ -95483,10 +95499,46 @@ https://github.com/browserify/crypto-browserify`);
       fogNearRatio: 0.3,
       fogFarRatio: 1.25
     }
+  }, PREFERENCE_PRESETS = {
+    day: {
+      progress: 0.05
+    },
+    night: {
+      progress: 0.47
+    }
   };
   class DayCycles extends Cycles {
     constructor() {
-      super("\u{1F55C} Day Cycles", 240, null, false);
+      super("\u{1F55C} Day Cycles", 240, null, false), this.setPreference();
+    }
+    isNight() {
+      const e = this.intervalEvents.get("night");
+      return e ? this.progress > e.startProgress && this.progress < e.endProgress : false;
+    }
+    setPreference() {
+      this.preference = {}, this.preference.names = [
+        "auto",
+        "day",
+        "night"
+      ], this.preference.labels = {
+        auto: "Auto",
+        day: "Day",
+        night: "Night"
+      }, this.preference.current = "auto";
+      const e = localStorage.getItem("dayCyclePreference");
+      e && this.preference.names.includes(e) && (this.preference.current = e), this.preference.apply = (r = 4) => {
+        const s = PREFERENCE_PRESETS[this.preference.current];
+        s ? this.override.start(s, r) : r === 0 ? this.override.strength = 0 : gsapWithCSS.to(this.override, {
+          strength: 0,
+          duration: r,
+          overwrite: true
+        });
+      }, this.preference.set = (r, s = 4) => {
+        this.preference.names.includes(r) && (this.preference.current = r, localStorage.setItem("dayCyclePreference", r), this.preference.apply(s), this.events.trigger("preferenceChange"));
+      }, this.preference.next = (r = 4) => {
+        const s = this.preference.names.indexOf(this.preference.current);
+        this.preference.set(this.preference.names[(s + 1) % this.preference.names.length], r);
+      }, this.preference.isForced = () => this.preference.current !== "auto", this.preference.current !== "auto" && this.preference.apply(0);
     }
     get presets() {
       return presets;
@@ -108475,7 +108527,7 @@ ${e.tab}if ( ${m} ) {
   }
   class Options {
     constructor() {
-      this.game = Game.getInstance(), this.element = this.game.menu.items.get("options").contentElement, this.setSound(), this.setMusic(), this.setWeather(), this.setQuality(), this.setRespawn(), this.setReset(), this.setRenderer(), this.setServer();
+      this.game = Game.getInstance(), this.element = this.game.menu.items.get("options").contentElement, this.setSound(), this.setMusic(), this.setTime(), this.setHeadlights(), this.setWeather(), this.setQuality(), this.setRespawn(), this.setReset(), this.setRenderer(), this.setServer();
     }
     playClick(e = true) {
       const r = this.game.audio.groups.get("click");
@@ -108484,6 +108536,24 @@ ${e.tab}if ( ${m} ) {
     setSound() {
       this.element.querySelector(".js-audio-toggle").addEventListener("click", () => {
         this.playClick(this.game.audio.mute.active), this.game.audio.mute.toggle();
+      });
+    }
+    setTime() {
+      const e = this.element.querySelector(".js-time-toggle"), r = e.querySelector("span"), s = this.game.dayCycles.preference, o = () => {
+        r.textContent = s.labels[s.current], e.classList.toggle("is-success", s.isForced());
+      };
+      o(), this.game.dayCycles.events.on("preferenceChange", o), e.addEventListener("click", () => {
+        this.playClick(), s.next();
+      });
+    }
+    setHeadlights() {
+      this.game.ticker.wait(1, () => {
+        const e = this.element.querySelector(".js-headlights-toggle"), r = e.querySelector("span"), s = this.game.lighting.headlights, o = () => {
+          r.textContent = s.labels[s.mode], e.classList.toggle("is-success", s.mode === "on"), e.classList.toggle("is-danger", s.mode === "off");
+        };
+        o(), this.game.lighting.events.on("headlightsChange", o), e.addEventListener("click", () => {
+          this.playClick(), s.nextMode();
+        });
       });
     }
     setWeather() {
@@ -108788,7 +108858,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-B0IeJ-sd.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-MfKEDdVA.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

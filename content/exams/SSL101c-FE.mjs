@@ -4291,6 +4291,1423 @@ export default {
           "explanation": "<div class=\"ml-en\"><b>Behaving ethically and honestly</b> IS academic integrity; the other three (plagiarism, cheating, falsification) are all VIOLATIONS of it.</div><div class=\"ml-vi\"><b>Hành xử có đạo đức và trung thực</b> CHÍNH LÀ liêm chính học thuật; ba đáp án còn lại (đạo văn, gian lận, làm giả) đều là VI PHẠM liêm chính.</div>"
         }
       ]
+    },
+    {
+      "kind": "FE",
+      "code": "SSL-D4",
+      "source": "REAL",
+      "sortOrder": 3,
+      "title": "Đề 4 — FA25 Final Exam|||Đề 4 — Thi cuối kỳ FA25",
+      "description": "SSL101c real FE multiple-choice paper (Fall 2025), transcribed from the exam images. Each image had an explicit \"Question: N\" label and \"(Choose N answer)\" count, no answer key shown, answers reasoned here. (60 questions)|||Đề trắc nghiệm FE thật môn SSL101c (kỳ Thu 2025), chép từ ảnh đề. Mỗi ảnh có nhãn \"Question: N\" và số lượng \"(Choose N answer)\" rõ ràng, không có đáp án sẵn, được suy luận và biên soạn tại đây. (60 câu)",
+      "durationMinutes": 60,
+      "totalPoints": 10,
+      "passMark": 5,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What problems are there with the following 'laundry list' approach to the following issue: Too many private cars => Inadequate public transport => congestion. Insufficient road networks => Check two options.|||Cách tiếp cận 'danh sách liệt kê' sau có vấn đề gì: Quá nhiều xe cá nhân => Giao thông công cộng chưa đủ => tắc nghẽn. Mạng lưới đường chưa đủ => Chọn hai đáp án.",
+          "options": [
+            {
+              "text": "It suggests that there are only three causes that contribute to the issue.|||Nó ngụ ý chỉ có ba nguyên nhân góp phần gây ra vấn đề."
+            },
+            {
+              "text": "It suggests a one-way relationship between the causes and the effect.|||Nó ngụ ý mối quan hệ một chiều giữa nguyên nhân và kết quả."
+            },
+            {
+              "text": "It suggests that each factor is of equal importance.|||Nó ngụ ý mỗi yếu tố có tầm quan trọng ngang nhau."
+            },
+            {
+              "text": "It doesn't provide any solutions to the problem.|||Nó không đưa ra giải pháp nào cho vấn đề."
+            }
+          ],
+          "correctIndexes": [
+            1,
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">A laundry list implies causes act independently and in <b>one direction</b> toward the effect, and treats every listed cause as <b>equally important</b> — neither is usually true.</div><div class=\"ml-vi\">Danh sách liệt kê ngụ ý các nguyên nhân hoạt động độc lập và theo <b>một chiều</b> tới kết quả, và coi mỗi nguyên nhân có <b>tầm quan trọng ngang nhau</b> — cả hai điều này thường không đúng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Consider the following argument. Young people in lowly-paid jobs need to be given rental assistance from the government. They also need to get paid more by their employers. Perhaps employers could receive tax breaks from the government, which they could then pass on to young employees as higher wages. Which of the following statements, about the claims and evidence in this argument, are true? Check two options.|||Xét lập luận sau. Người trẻ lương thấp cần được chính phủ hỗ trợ tiền thuê nhà. Họ cũng cần được chủ lao động trả lương cao hơn. Có lẽ chủ lao động có thể nhận ưu đãi thuế từ chính phủ, để chuyển thành lương cao hơn cho nhân viên trẻ. Phát biểu nào sau đây về tuyên bố (claim) và bằng chứng trong lập luận này là đúng? Chọn hai đáp án.",
+          "options": [
+            {
+              "text": "'Rental assistance is necessary for lowly-paid poor people' is a claim of this argument.|||'Hỗ trợ tiền thuê nhà cần thiết cho người nghèo lương thấp' là một tuyên bố (claim) của lập luận này."
+            },
+            {
+              "text": "'Employers getting tax breaks from the government' is a form of evidence in this argument.|||'Chủ lao động nhận ưu đãi thuế từ chính phủ' là một dạng bằng chứng trong lập luận này."
+            },
+            {
+              "text": "The origin of the evidence in this argument is not clearly stated.|||Nguồn gốc của bằng chứng trong lập luận này không được nêu rõ."
+            },
+            {
+              "text": "No evidence is presented in this argument.|||Không có bằng chứng nào được trình bày trong lập luận này."
+            }
+          ],
+          "correctIndexes": [
+            0,
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">\"Rental assistance is necessary\" is stated as a <b>claim</b>, and the entire argument is built from opinions/proposals with <b>no cited evidence or data source</b> at all — just a chain of unsupported claims.</div><div class=\"ml-vi\">\"Hỗ trợ tiền thuê nhà cần thiết\" được nêu như một <b>tuyên bố (claim)</b>, và toàn bộ lập luận được xây từ ý kiến/đề xuất mà <b>không có bằng chứng hay nguồn dữ liệu trích dẫn</b> nào — chỉ là chuỗi tuyên bố không có bằng chứng hỗ trợ.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Consider the following argument. Social housing should be considered an opportunity to move past current market-based methods of organizing shelter for people, rather than as a burden for governments. What type of argument is this? Check one option.|||Xét lập luận sau. Nhà ở xã hội nên được coi là cơ hội để vượt qua các phương pháp tổ chức chỗ ở dựa vào thị trường hiện tại, thay vì là gánh nặng cho chính phủ. Đây là loại lập luận nào? Chọn một đáp án.",
+          "options": [
+            {
+              "text": "Dissociation argument|||Lập luận tách biệt (Dissociation)"
+            },
+            {
+              "text": "Co-existential argument|||Lập luận đồng tồn tại"
+            },
+            {
+              "text": "Generalization|||Khái quát hoá"
+            },
+            {
+              "text": "Causal argument|||Lập luận nhân quả"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The argument splits the notion of \"social housing\" into two opposing framings — \"opportunity\" vs \"burden\" — and argues for favoring one over the conventional view. Reframing a concept by separating it into two parts is a <b>dissociation argument</b>.</div><div class=\"ml-vi\">Lập luận tách khái niệm \"nhà ở xã hội\" thành hai cách nhìn đối lập — \"cơ hội\" và \"gánh nặng\" — rồi lập luận ủng hộ cách nhìn này thay vì cách nhìn thông thường. Tái định khung một khái niệm bằng cách tách nó thành hai phần là <b>lập luận tách biệt (dissociation)</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Five generally recognized core cultural dimensions are|||Năm chiều văn hoá cốt lõi được công nhận rộng rãi là",
+          "options": [
+            {
+              "text": "ethnicity, race, gender, age, and physical disability.|||sắc tộc, chủng tộc, giới, tuổi, và khuyết tật thể chất."
+            },
+            {
+              "text": "corporate, multicultural, language, ethnicity, and global.|||doanh nghiệp, đa văn hoá, ngôn ngữ, sắc tộc, và toàn cầu."
+            },
+            {
+              "text": "English, German, Scandinavian, French, and Japanese.|||Anh, Đức, Scandinavia, Pháp, và Nhật."
+            },
+            {
+              "text": "All of the answers are incorrect.|||Tất cả các đáp án đều sai."
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">None of the listed groupings match recognized cultural-dimension frameworks (e.g. individualism/collectivism, power distance, uncertainty avoidance) — <b>all are incorrect</b>.</div><div class=\"ml-vi\">Không nhóm nào được liệt kê khớp với khung chiều văn hoá được công nhận (VD chủ nghĩa cá nhân/tập thể, khoảng cách quyền lực, né tránh bất định) — <b>tất cả đều sai</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Consider the following situation. You are in a Political Science tutorial examining non-traditional security. Your tutor has given you a hypothetical scenario involving a security threat. There are four people in your group. You each have to play a role as the head of a government department. You must work together to coordinate your departments after the security incident. Myriam, who is playing Minister for Immigration, is the first to speak, saying, 'We'll call the army to secure the airports.' Is Myriam's use of an assertion here a good idea?|||Xét tình huống sau. Bạn ở tutorial Khoa học Chính trị xem xét an ninh phi truyền thống. Giảng viên đưa ra kịch bản giả định về một mối đe doạ an ninh. Nhóm có bốn người, mỗi người đóng vai trưởng một bộ của chính phủ. Các bạn phải phối hợp các bộ sau sự cố an ninh. Myriam, đóng vai Bộ trưởng Nhập cư, là người nói đầu tiên: 'Chúng ta sẽ gọi quân đội để bảo vệ sân bay.' Việc Myriam dùng một assertion ở đây có phải ý hay không?",
+          "options": [
+            {
+              "text": "Yes, because she is role-playing the head of a government department|||Có, vì cô đang đóng vai trưởng một bộ của chính phủ"
+            },
+            {
+              "text": "Yes, because someone needs to take control in this situation|||Có, vì ai đó cần nắm quyền kiểm soát trong tình huống này"
+            },
+            {
+              "text": "No, because she should be quiet and wait for the other members to speak|||Không, vì cô nên im lặng và chờ các thành viên khác nói"
+            },
+            {
+              "text": "No, because she is amongst peers|||Không, vì cô đang ở giữa các đồng cấp (peers)"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">In her role-play as a government minister, making a direct assertion is exactly the kind of authoritative communication expected of that role — <b>appropriate given the role she is playing</b>.</div><div class=\"ml-vi\">Trong vai trò đóng giả bộ trưởng chính phủ, việc đưa ra một assertion trực tiếp chính là kiểu giao tiếp có thẩm quyền phù hợp với vai trò đó — <b>phù hợp vì vai trò cô đang đóng</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Limited eye contact during presentation may signal:|||Giao tiếp mắt hạn chế khi thuyết trình có thể là dấu hiệu của:",
+          "options": [
+            {
+              "text": "Control|||Kiểm soát"
+            },
+            {
+              "text": "Lack of confidence|||Thiếu tự tin"
+            },
+            {
+              "text": "Intimidation|||Đe doạ"
+            },
+            {
+              "text": "Playfulness|||Tinh nghịch"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Limited eye contact</b> is a classic nonverbal signal of nervousness or a <b>lack of confidence</b> in a speaker.</div><div class=\"ml-vi\"><b>Giao tiếp mắt hạn chế</b> là dấu hiệu phi ngôn ngữ kinh điển của sự lo lắng hoặc <b>thiếu tự tin</b> ở người nói.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "How to engage your audience and find your own style? More than one option is correct.|||Làm thế nào để thu hút khán giả và tìm ra phong cách riêng? Có nhiều hơn một đáp án đúng.",
+          "options": [
+            {
+              "text": "Use quizzes or discuss questions|||Dùng câu đố hoặc câu hỏi thảo luận"
+            },
+            {
+              "text": "Throw a question back to the audience|||Ném câu hỏi ngược lại cho khán giả"
+            },
+            {
+              "text": "Try to be defensive|||Cố gắng phòng thủ"
+            },
+            {
+              "text": "Prepare controversial questions for discussion|||Chuẩn bị câu hỏi gây tranh luận để thảo luận"
+            }
+          ],
+          "correctIndexes": [
+            0,
+            1,
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">Quizzes, throwing questions back, and controversial discussion questions all actively <b>engage</b> the audience. Being <b>defensive</b> shuts down engagement instead.</div><div class=\"ml-vi\">Câu đố, ném câu hỏi ngược lại, và câu hỏi gây tranh luận đều chủ động <b>thu hút</b> khán giả. Còn <b>phòng thủ</b> lại làm giảm sự tương tác.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which common rhetorical situations can make up university courses? Choose 4 options.|||Những tình huống tu từ phổ biến nào có thể tạo nên các môn học đại học? Chọn 4 đáp án.",
+          "options": [
+            {
+              "text": "Lectures|||Bài giảng (Lectures)"
+            },
+            {
+              "text": "Discussion|||Thảo luận (Discussion)"
+            },
+            {
+              "text": "Tutorials|||Tutorials"
+            },
+            {
+              "text": "Workshop|||Workshop"
+            },
+            {
+              "text": "Seminars|||Seminars"
+            },
+            {
+              "text": "Assessments|||Đánh giá (Assessments)"
+            }
+          ],
+          "correctIndexes": [
+            0,
+            1,
+            2,
+            4
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Lectures, discussion, tutorials, and seminars</b> are the core, classic rhetorical situations/venues that structure a university course — workshop and assessments are less central formats for this list.</div><div class=\"ml-vi\"><b>Bài giảng, thảo luận, tutorials, và seminars</b> là các tình huống/hình thức tu từ cốt lõi, kinh điển cấu thành một môn học đại học — workshop và đánh giá là các hình thức ít trung tâm hơn trong danh sách này.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Cultural background affects how individuals communicate and how they interpret messages from others.|||Bối cảnh văn hoá ảnh hưởng tới cách cá nhân giao tiếp và cách họ diễn giải thông điệp từ người khác.",
+          "options": [
+            {
+              "text": "True|||Đúng"
+            },
+            {
+              "text": "False|||Sai"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">This is a foundational, well-established premise of cross-cultural communication — <b>true</b>.</div><div class=\"ml-vi\">Đây là tiền đề nền tảng, đã được xác lập rõ của giao tiếp liên văn hoá — <b>đúng</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following is an assertion? Check two options.|||Câu nào sau đây là một assertion (khẳng định)? Chọn hai đáp án.",
+          "options": [
+            {
+              "text": "\"Submit data by Friday.\"|||\"Nộp dữ liệu trước thứ Sáu.\""
+            },
+            {
+              "text": "\"Next task is to collect data.\"|||\"Việc tiếp theo là thu thập dữ liệu.\""
+            },
+            {
+              "text": "\"We might start by collecting data from customers.\"|||\"Chúng ta có thể bắt đầu bằng cách thu thập dữ liệu từ khách hàng.\""
+            },
+            {
+              "text": "\"Should we start by collecting data from customers?\"|||\"Chúng ta nên bắt đầu bằng cách thu thập dữ liệu từ khách hàng không?\""
+            }
+          ],
+          "correctIndexes": [
+            1,
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">\"Next task is...\" and \"We might start by...\" are both declarative statements making a claim — <b>assertions</b>. A is a command and D is a question, neither asserting anything.</div><div class=\"ml-vi\">\"Việc tiếp theo là...\" và \"Chúng ta có thể bắt đầu...\" đều là câu khẳng định nêu ra một tuyên bố — <b>assertion</b>. A là câu mệnh lệnh còn D là câu hỏi, cả hai đều không khẳng định điều gì.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Jiyoung is an international student from Korea studying in Australia. In the past, she has had trouble participating in seminars, but over the last month, she has successfully attained her goal 'Speak once in a seminar.' According to lesson 2.3a, what goals can she set herself now to increase her participation? Choose 2 options.|||Jiyoung là sinh viên quốc tế từ Hàn Quốc học ở Úc. Trước đây, cô gặp khó khăn khi tham gia seminar, nhưng tháng vừa qua đã đạt được mục tiêu 'Nói một lần trong seminar.' Theo bài 2.3a, cô có thể đặt mục tiêu gì tiếp theo để tăng sự tham gia? Chọn 2 đáp án.",
+          "options": [
+            {
+              "text": "Refer back to what someone else contributed to the discussion|||Nhắc lại điều người khác đã đóng góp vào thảo luận"
+            },
+            {
+              "text": "Challenge an argument made in the seminar|||Thách thức một lập luận được đưa ra trong seminar"
+            },
+            {
+              "text": "Speak twice in each seminar|||Nói hai lần trong mỗi seminar"
+            },
+            {
+              "text": "Make a presentation|||Thuyết trình"
+            }
+          ],
+          "correctIndexes": [
+            0,
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">Building incrementally on \"speak once,\" the natural next small steps are <b>referring back to someone else's point</b> and <b>speaking twice</b> — modest increases in participation, rather than the much bigger leaps of challenging an argument or presenting.</div><div class=\"ml-vi\">Xây dựng dần từ \"nói một lần,\" các bước nhỏ tiếp theo tự nhiên là <b>nhắc lại điểm của người khác</b> và <b>nói hai lần</b> — mức tăng khiêm tốn về tham gia, thay vì bước nhảy lớn hơn nhiều như thách thức lập luận hay thuyết trình.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "\"Canada is one of the best countries in the world to live in. First, Canada has an excellent health care system. All Canadians have access to medical services at a reasonable price. Second, Canada has a high standard of education. Students are taught by well-trained teachers and are encouraged to continue studying at university. Finally, Canada's cities are clean and efficiently managed. Canadian cities have many parks and lots of space for people to live. As a result, Canada is a desirable place to live.\" In the above paragraph, which sentence is the topic sentence?|||Trong đoạn văn về Canada trên, câu nào là câu chủ đề (topic sentence)?",
+          "options": [
+            {
+              "text": "As a result, Canada is a desirable place to live.|||Vì vậy, Canada là nơi đáng sống."
+            },
+            {
+              "text": "All Canadians have access to medical services at a reasonable price.|||Mọi người Canada đều được tiếp cận dịch vụ y tế với giá hợp lý."
+            },
+            {
+              "text": "Canada is one of the best countries in the world to live in.|||Canada là một trong những quốc gia tốt nhất thế giới để sống."
+            },
+            {
+              "text": "Canadian cities have many parks and lots of space for people to live.|||Các thành phố Canada có nhiều công viên và không gian sống."
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">\"Canada is one of the best countries...\" is the opening claim that every subsequent sentence (healthcare, education, cities) supports — the <b>topic sentence</b>.</div><div class=\"ml-vi\">\"Canada là một trong những quốc gia tốt nhất...\" là tuyên bố mở đầu mà mọi câu sau đó (y tế, giáo dục, thành phố) đều hỗ trợ — <b>câu chủ đề</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "It's the end of the presentation, and someone had asked you a difficult question. What do you do? Choose 2 options.|||Cuối buổi thuyết trình, ai đó hỏi bạn một câu khó. Bạn làm gì? Chọn 2 đáp án.",
+          "options": [
+            {
+              "text": "Ask them to repeat the question to buy more time|||Yêu cầu họ nhắc lại câu hỏi để có thêm thời gian"
+            },
+            {
+              "text": "Move on to the next question without answering it|||Chuyển sang câu hỏi tiếp theo mà không trả lời"
+            },
+            {
+              "text": "Throw the question back to the audience to answer|||Ném câu hỏi lại cho khán giả trả lời"
+            },
+            {
+              "text": "Ask them to be quiet for a minute or two while you look up the answer on your phone|||Yêu cầu họ im lặng vài phút trong khi bạn tra Google trên điện thoại"
+            }
+          ],
+          "correctIndexes": [
+            0,
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">Asking them to repeat the question buys thinking time gracefully, and throwing it back to the audience is a legitimate presentation technique — both professional. Ignoring the question or making the room wait while you search your phone are unprofessional.</div><div class=\"ml-vi\">Yêu cầu nhắc lại câu hỏi giúp có thêm thời gian suy nghĩ một cách khéo léo, và ném câu hỏi lại cho khán giả là kỹ thuật thuyết trình hợp lệ — cả hai đều chuyên nghiệp. Bỏ qua câu hỏi hay bắt mọi người chờ trong khi tra điện thoại là thiếu chuyên nghiệp.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "An introduction should be no more than about _____of your overall essay.|||Phần mở bài không nên dài quá khoảng _____ của toàn bộ essay.",
+          "options": [
+            {
+              "text": "10%|||10%"
+            },
+            {
+              "text": "15%|||15%"
+            },
+            {
+              "text": "20%|||20%"
+            },
+            {
+              "text": "25%|||25%"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The standard guideline taught is that an introduction should be about <b>10%</b> of the overall essay length.</div><div class=\"ml-vi\">Hướng dẫn chuẩn được dạy là mở bài nên chiếm khoảng <b>10%</b> độ dài toàn bộ essay.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Effective presentation for body structure should NOT use which approach:|||Cấu trúc thân bài thuyết trình hiệu quả KHÔNG nên dùng cách tiếp cận nào:",
+          "options": [
+            {
+              "text": "Interpreting|||Diễn giải"
+            },
+            {
+              "text": "Comparison|||So sánh"
+            },
+            {
+              "text": "Chronological|||Theo trình tự thời gian"
+            },
+            {
+              "text": "Narrative|||Tường thuật"
+            },
+            {
+              "text": "Residue|||Residue"
+            }
+          ],
+          "correctIndexes": [
+            4
+          ],
+          "explanation": "<div class=\"ml-en\">Interpreting, comparison, chronological, and narrative are all legitimate structural approaches for a presentation body; \"<b>Residue</b>\" is not a recognized structuring approach.</div><div class=\"ml-vi\">Diễn giải, so sánh, theo trình tự thời gian, và tường thuật đều là cách tiếp cận cấu trúc hợp lệ cho thân bài thuyết trình; \"<b>Residue</b>\" không phải cách tiếp cận cấu trúc được công nhận.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "\"Canada is one of the best countries in the world to live in. First, Canada has an excellent health care system... Finally, Canada's cities are clean and efficiently managed... As a result, Canada is a desirable place to live.\" In the above paragraph, which sentence is the closing sentence?|||Trong đoạn văn về Canada, câu nào là câu kết (closing sentence)?",
+          "options": [
+            {
+              "text": "As a result, Canada is a desirable place to live.|||Vì vậy, Canada là nơi đáng sống."
+            },
+            {
+              "text": "All Canadians have access to medical services at a reasonable price.|||Mọi người Canada đều được tiếp cận dịch vụ y tế với giá hợp lý."
+            },
+            {
+              "text": "Canada is one of the best countries in the world to live in.|||Canada là một trong những quốc gia tốt nhất thế giới để sống."
+            },
+            {
+              "text": "There is no closing sentence in the paragraph|||Không có câu kết trong đoạn văn"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">\"As a result, Canada is a desirable place to live\" wraps up the paragraph by drawing the conclusion from all the supporting points — the <b>closing sentence</b>.</div><div class=\"ml-vi\">\"Vì vậy, Canada là nơi đáng sống\" khép lại đoạn văn bằng cách rút ra kết luận từ mọi điểm hỗ trợ — <b>câu kết</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Consider the following situation. In Jeong Woo's first semester at university he often forgot to get his course readings done in time, and had to ask for an extension twice for his assignments as he couldn't complete them. In his second semester he became a lot more aware of when he needed to have completed readings and assignments, which resulted in better grades and greater contributions to tutorials. Which survival skill mentioned in lesson 1.3 does this refer to? Check one option.|||Xét tình huống sau. Kỳ đầu ở đại học, Jeong Woo thường quên hoàn thành bài đọc đúng hạn, phải xin gia hạn hai lần vì không hoàn thành được bài tập. Kỳ hai, anh chú ý hơn nhiều tới thời điểm cần hoàn thành bài đọc và bài tập, giúp điểm số tốt hơn và đóng góp nhiều hơn cho tutorial. Kỹ năng sinh tồn nào ở bài 1.3 được nhắc tới ở đây? Chọn một đáp án.",
+          "options": [
+            {
+              "text": "Time management|||Quản lý thời gian"
+            },
+            {
+              "text": "Collaboration|||Hợp tác"
+            },
+            {
+              "text": "Noticing how your field structures knowledge|||Nhận biết cách lĩnh vực tổ chức kiến thức"
+            },
+            {
+              "text": "Study Skills|||Kỹ năng học tập"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Forgetting deadlines and needing extensions, then improving by tracking when things are due, is a classic <b>time management</b> story.</div><div class=\"ml-vi\">Quên deadline và cần gia hạn, rồi cải thiện bằng cách theo dõi thời điểm cần hoàn thành, là câu chuyện <b>quản lý thời gian</b> điển hình.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Consider the following situation. Fatima is writing an essay for her Macroeconomics course on the Great Recession. She is firmly convinced that a lack of government regulation of the financial industry was responsible for the crisis. However, she wants to find some evidence to support her argument before she starts writing. In lesson 1.2b Michelle Harrison refers to 3 ways that information and digital literacy contribute to the values of academic culture. Which way does Fatima's situation refer to? Check one option.|||Xét tình huống sau. Fatima viết essay môn Kinh tế vĩ mô về Đại Suy thoái. Cô tin chắc rằng việc thiếu quản lý tài chính của chính phủ là nguyên nhân khủng hoảng. Tuy nhiên, cô muốn tìm bằng chứng hỗ trợ lập luận trước khi viết. Ở bài 1.2b Michelle Harrison nêu 3 cách năng lực thông tin/số đóng góp vào giá trị văn hoá học thuật. Tình huống của Fatima liên quan tới cách nào? Chọn một đáp án.",
+          "options": [
+            {
+              "text": "The importance of finding good evidence to support your argument|||Tầm quan trọng của việc tìm bằng chứng tốt để hỗ trợ lập luận"
+            },
+            {
+              "text": "The flexibility to change your opinion on an issue based on evidence to the contrary|||Sự linh hoạt thay đổi ý kiến dựa trên bằng chứng trái chiều"
+            },
+            {
+              "text": "The ability to identify a problem or research question|||Khả năng xác định vấn đề hoặc câu hỏi nghiên cứu"
+            },
+            {
+              "text": "The importance of using academic journal databases to find information|||Tầm quan trọng của việc dùng cơ sở dữ liệu tạp chí học thuật để tìm thông tin"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Fatima already holds a firm opinion and is now actively <b>seeking evidence to support it</b> before writing — exactly the \"finding good evidence\" value, not opinion-change (she isn't reconsidering) or problem identification (she already has her thesis).</div><div class=\"ml-vi\">Fatima đã có ý kiến vững chắc và giờ đang chủ động <b>tìm bằng chứng để hỗ trợ</b> nó trước khi viết — đúng giá trị \"tìm bằng chứng tốt\", không phải thay đổi ý kiến (cô không xem xét lại) hay xác định vấn đề (cô đã có luận điểm).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following are examples of plagiarism? (Refer to 4.1) Check 3 options.|||Đâu là ví dụ về đạo văn? (Tham khảo 4.1) Chọn 3 đáp án.",
+          "options": [
+            {
+              "text": "A student takes notes into an exam.|||Sinh viên mang ghi chú vào phòng thi."
+            },
+            {
+              "text": "A student uses an information source in an assignment without referencing it.|||Sinh viên dùng nguồn thông tin trong bài tập mà không trích dẫn."
+            },
+            {
+              "text": "A student buys an essay off the internet.|||Sinh viên mua essay trên mạng."
+            },
+            {
+              "text": "A student borrows another student's essay, rewords and restructures parts of it, and submits it as their own.|||Sinh viên mượn essay của bạn, diễn đạt và tái cấu trúc lại một phần, rồi nộp như bài của mình."
+            }
+          ],
+          "correctIndexes": [
+            1,
+            2,
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">Using a source without referencing, buying an essay, and reworking someone else's essay to submit as your own are all forms of <b>plagiarism</b>. Taking notes into an exam is a different violation (unauthorized materials/cheating), not plagiarism.</div><div class=\"ml-vi\">Dùng nguồn không trích dẫn, mua essay, và diễn đạt lại essay người khác để nộp như của mình đều là các dạng <b>đạo văn</b>. Mang ghi chú vào phòng thi là một vi phạm khác (tài liệu trái phép/gian lận), không phải đạo văn.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the below steps is NOT a step in evaluating solutions using general methods?|||Bước nào sau đây KHÔNG phải bước trong đánh giá giải pháp bằng phương pháp chung?",
+          "options": [
+            {
+              "text": "Create a decision statement|||Tạo tuyên bố quyết định"
+            },
+            {
+              "text": "Decide on \"must\" and \"want\"|||Quyết định \"phải có\" và \"muốn có\""
+            },
+            {
+              "text": "Create a list of objectives|||Lập danh sách mục tiêu"
+            },
+            {
+              "text": "Choose a solution without considering objectives|||Chọn giải pháp mà không xem xét mục tiêu"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">Choosing a solution WITHOUT considering objectives is the opposite of proper evaluation — the other three (decision statement, must/want, list of objectives) are genuine steps.</div><div class=\"ml-vi\">Chọn giải pháp KHÔNG xem xét mục tiêu là điều ngược lại với đánh giá đúng đắn — ba đáp án còn lại (tuyên bố quyết định, phải/muốn, danh sách mục tiêu) đều là bước thật sự.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Consider the following situation. David is a very intelligent Business student, he is excellent at marketing subjects. Last semester, he missed the final exam of Digital Marketing subject because of a traffic accident. He had to retake this subject. In this semester, David studied Digital Marketing with Mr. Ambe and the lecturer assigned David to be group leader of a group of 5. His group members are too new to the subject and David needed to put a lot of time to guide the group. He could complete the assignment by himself, so, to save time guiding his group to do the assignment, he asked the lecturer to allow him to do the group assignment alone. Which survival skill mentioned in lesson 1.3 is missed in this situation?|||David là sinh viên Kinh doanh rất giỏi marketing. Kỳ trước anh lỡ thi cuối kỳ Digital Marketing vì tai nạn giao thông, phải học lại. Kỳ này học với thầy Ambe, được phân làm trưởng nhóm 5 người. Thành viên nhóm còn mới với môn học, David cần nhiều thời gian hướng dẫn. Anh có thể tự làm một mình nên xin thầy cho làm bài nhóm một mình để tiết kiệm thời gian. Kỹ năng sinh tồn nào ở bài 1.3 bị thiếu?",
+          "options": [
+            {
+              "text": "Time management|||Quản lý thời gian"
+            },
+            {
+              "text": "Collaboration|||Hợp tác"
+            },
+            {
+              "text": "Noticing how your field structure knowledge|||Nhận biết cách lĩnh vực tổ chức kiến thức"
+            },
+            {
+              "text": "Study skills|||Kỹ năng học tập"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">David avoids working WITH and guiding his group, choosing to do everything alone instead — the missing skill is <b>collaboration</b>.</div><div class=\"ml-vi\">David né tránh làm việc CÙNG và hướng dẫn nhóm, chọn tự làm hết một mình — kỹ năng bị thiếu là <b>hợp tác</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following describe serial arguments?|||Điều nào sau đây mô tả lập luận nối tiếp (serial argument)?",
+          "options": [
+            {
+              "text": "Claim and evidence are linked to in cause and effect chains.|||Tuyên bố và bằng chứng liên kết theo chuỗi nhân quả."
+            },
+            {
+              "text": "Two or more reasons lead to the same conclusion.|||Hai hoặc nhiều lý do dẫn tới cùng một kết luận."
+            },
+            {
+              "text": "One reason supports several conclusions.|||Một lý do hỗ trợ nhiều kết luận."
+            },
+            {
+              "text": "More than one reason can be used to support more than one conclusion.|||Nhiều hơn một lý do có thể dùng để hỗ trợ nhiều hơn một kết luận."
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">A <b>serial (chain) argument</b> links claims and evidence in successive cause-and-effect steps — each conclusion becomes a premise for the next, forming a chain.</div><div class=\"ml-vi\"><b>Lập luận nối tiếp (chain)</b> liên kết tuyên bố và bằng chứng theo các bước nhân quả nối tiếp nhau — mỗi kết luận trở thành tiền đề cho bước tiếp theo, tạo thành một chuỗi.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "All journal articles have one of the things that are the same. That is:|||Mọi bài báo tạp chí đều có chung một điều. Đó là:",
+          "options": [
+            {
+              "text": "They include a conclusion.|||Chúng có kết luận."
+            },
+            {
+              "text": "They have an introduction and conclusion, and they typically list all of the references at the end.|||Chúng có mở đầu và kết luận, và thường liệt kê mọi tài liệu tham khảo ở cuối."
+            },
+            {
+              "text": "The body of the work is much more essay-like|||Phần thân bài giống văn tự luận hơn nhiều."
+            },
+            {
+              "text": "They may cover previous research on the topic|||Chúng có thể đề cập nghiên cứu trước đó về chủ đề"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">Having an <b>introduction, conclusion, and a reference list at the end</b> is a structural feature common to virtually every journal article, regardless of field — unlike essay-like body style or literature coverage, which vary.</div><div class=\"ml-vi\">Có <b>mở đầu, kết luận, và danh sách tài liệu tham khảo ở cuối</b> là đặc điểm cấu trúc chung cho hầu hết mọi bài báo tạp chí, bất kể lĩnh vực — khác với phong cách thân bài giống tự luận hay việc có đề cập nghiên cứu trước hay không, vốn khác nhau tuỳ bài.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is an advantage of textbooks compared to academic journal articles?|||Ưu điểm của sách giáo khoa so với bài báo tạp chí học thuật là gì?",
+          "options": [
+            {
+              "text": "The scope of information provided by books is too broad.|||Phạm vi thông tin của sách quá rộng."
+            },
+            {
+              "text": "They are shorter than journal articles, thereby the quality of information is low.|||Sách ngắn hơn bài báo tạp chí, nên chất lượng thông tin thấp."
+            },
+            {
+              "text": "They are easy to read as the vocabulary used is understandable by everyone.|||Sách dễ đọc vì từ vựng dùng ai cũng hiểu được."
+            },
+            {
+              "text": "You have to pay for books while journal articles are free.|||Bạn phải trả tiền cho sách trong khi bài báo tạp chí miễn phí."
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">Textbooks use accessible, general vocabulary understandable by a broad (non-expert) audience — a genuine readability advantage over specialist journal articles.</div><div class=\"ml-vi\">Sách giáo khoa dùng từ vựng phổ thông, dễ tiếp cận mà đối tượng rộng (không chuyên) đều hiểu được — một ưu điểm dễ đọc thật sự so với bài báo tạp chí chuyên ngành.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following statements is TRUE about information literacy?|||Phát biểu nào sau đây ĐÚNG về năng lực thông tin?",
+          "options": [
+            {
+              "text": "Information literacy in an academic context relates to information.|||Năng lực thông tin trong ngữ cảnh học thuật liên quan đến thông tin."
+            },
+            {
+              "text": "Information literacy is a fundamental part of study at university.|||Năng lực thông tin là phần nền tảng của việc học đại học."
+            },
+            {
+              "text": "Information literacy is what equips you not just for university life.|||Năng lực thông tin trang bị cho bạn không chỉ cho đời sống đại học."
+            },
+            {
+              "text": "All answers are correct|||Tất cả các đáp án đều đúng"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">All three statements about information literacy are accurate at once — <b>all correct</b>.</div><div class=\"ml-vi\">Cả ba phát biểu về năng lực thông tin đều đúng cùng lúc — <b>tất cả đều đúng</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following is NOT a strategy for paraphrasing?|||Đâu KHÔNG phải một chiến lược để diễn giải lại (paraphrase)?",
+          "options": [
+            {
+              "text": "Identify the key information|||Xác định thông tin chính"
+            },
+            {
+              "text": "Identify liking phrases and expressions|||Xác định các cụm từ và cách diễn đạt ưa thích"
+            },
+            {
+              "text": "Replace the key words with synonyms and keep the other information the same from the original|||Thay từ khoá bằng từ đồng nghĩa, giữ nguyên phần còn lại từ bản gốc"
+            },
+            {
+              "text": "Think about what you want to say about the claim in the original text|||Nghĩ về điều bạn muốn nói về tuyên bố trong văn bản gốc"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">\"Identify liking phrases and expressions\" is not a coherent paraphrasing strategy; identifying key info, using synonyms, and thinking about what you want to say about the claim are all real strategies.</div><div class=\"ml-vi\">\"Xác định cụm từ và cách diễn đạt ưa thích\" không phải một chiến lược diễn giải lại có ý nghĩa; xác định thông tin chính, dùng từ đồng nghĩa, và nghĩ về điều muốn nói về tuyên bố đều là chiến lược thật sự.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What type of texts you can find in the cultural record?|||Loại văn bản nào có thể tìm thấy trong ghi chép văn hoá (cultural record)?",
+          "options": [
+            {
+              "text": "textbooks|||sách giáo khoa"
+            },
+            {
+              "text": "novels|||tiểu thuyết"
+            },
+            {
+              "text": "journal articles|||bài báo tạp chí"
+            },
+            {
+              "text": "conference proceedings|||kỷ yếu hội nghị"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Novels</b> (creative/fictional works) belong to the cultural record; textbooks are academic, and journal articles/conference proceedings belong to the scholarly record.</div><div class=\"ml-vi\"><b>Tiểu thuyết</b> (tác phẩm sáng tạo/hư cấu) thuộc ghi chép văn hoá; sách giáo khoa là học thuật, còn bài báo tạp chí/kỷ yếu hội nghị thuộc ghi chép học thuật.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following is NOT included in general guide in naming conventions and folder hierarchies?|||Điều nào sau đây KHÔNG có trong hướng dẫn chung về quy ước đặt tên và phân cấp thư mục?",
+          "options": [
+            {
+              "text": "Vary your naming system in different files|||Thay đổi hệ thống đặt tên ở các tệp khác nhau"
+            },
+            {
+              "text": "Save downloaded materials in the appropriate folder in your hierarchy|||Lưu tài liệu tải về vào đúng thư mục trong hệ phân cấp"
+            },
+            {
+              "text": "Use date format YYYYMMDD|||Dùng định dạng ngày YYYYMMDD"
+            },
+            {
+              "text": "Decide on a naming style and stick on it|||Quyết định một kiểu đặt tên và giữ nguyên"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Varying</b> your naming system defeats the purpose of a naming convention — consistency (deciding on a style and sticking to it) is the actual guidance, making \"vary\" the opposite/wrong answer.</div><div class=\"ml-vi\"><b>Thay đổi</b> hệ thống đặt tên đi ngược lại mục đích của quy ước đặt tên — tính nhất quán (quyết định một kiểu và giữ nguyên) mới là hướng dẫn thật, khiến \"thay đổi\" là đáp án ngược/sai.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following is NOT an issue of academic misconduct?|||Điều nào sau đây KHÔNG phải là vấn đề vi phạm liêm chính học thuật?",
+          "options": [
+            {
+              "text": "Plagiarism|||Đạo văn"
+            },
+            {
+              "text": "Re-submission|||Nộp lại bài"
+            },
+            {
+              "text": "Cheating|||Gian lận"
+            },
+            {
+              "text": "Falsification of data|||Làm giả dữ liệu"
+            },
+            {
+              "text": "Facilitation of data collection|||Hỗ trợ thu thập dữ liệu"
+            }
+          ],
+          "correctIndexes": [
+            4
+          ],
+          "explanation": "<div class=\"ml-en\">Helping someone <b>collect data</b> (a benign, helpful research activity) is not itself misconduct — unlike plagiarism, re-submission, cheating, and falsification, which are all recognized violations.</div><div class=\"ml-vi\">Giúp ai đó <b>thu thập dữ liệu</b> (hoạt động nghiên cứu hữu ích, vô hại) tự nó không phải vi phạm — khác với đạo văn, nộp lại bài, gian lận, và làm giả dữ liệu, đều là các vi phạm được công nhận.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following is NOT a joint activity?|||Điều nào sau đây KHÔNG phải là hoạt động chung (joint activity)?",
+          "options": [
+            {
+              "text": "Moving house with family|||Chuyển nhà cùng gia đình"
+            },
+            {
+              "text": "Group work|||Làm việc nhóm"
+            },
+            {
+              "text": "Greeting to the person next to you in class|||Chào người ngồi cạnh trong lớp"
+            },
+            {
+              "text": "Listening to concert with other audiences|||Nghe hoà nhạc cùng khán giả khác"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">A joint activity requires coordinated action toward a shared goal. Sitting among an audience listening to the same concert is merely being co-present, not <b>coordinating</b> with each other.</div><div class=\"ml-vi\">Hoạt động chung đòi hỏi hành động phối hợp hướng tới mục tiêu chung. Ngồi trong khán giả cùng nghe hoà nhạc chỉ là cùng có mặt, không phải <b>phối hợp</b> với nhau.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "FPT university is trying to prepare students to be global citizens, which means beside professional background, FPT university is trying to prepare students......|||FPT University đang chuẩn bị cho sinh viên trở thành công dân toàn cầu, nghĩa là bên cạnh nền tảng chuyên môn, FPT còn cố gắng chuẩn bị cho sinh viên......",
+          "options": [
+            {
+              "text": "To behave ethically|||Hành xử có đạo đức"
+            },
+            {
+              "text": "To have a good job in the future|||Có công việc tốt trong tương lai"
+            },
+            {
+              "text": "To have happy life|||Có cuộc sống hạnh phúc"
+            },
+            {
+              "text": "To get high marks at university|||Đạt điểm cao ở đại học"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">\"Global citizen\" preparation goes beyond professional skills to emphasize <b>ethical behavior</b>.</div><div class=\"ml-vi\">Chuẩn bị \"công dân toàn cầu\" vượt ra ngoài kỹ năng chuyên môn để nhấn mạnh <b>hành xử có đạo đức</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Ill-defined problem refers to a problem that:|||Vấn đề \"ill-defined\" (chưa xác định rõ) là vấn đề mà:",
+          "options": [
+            {
+              "text": "Clearly specify the goal|||Xác định rõ mục tiêu"
+            },
+            {
+              "text": "Clearly set criterion on whether the goal is achieved|||Xác định rõ tiêu chí để biết mục tiêu đã đạt được chưa"
+            },
+            {
+              "text": "Sufficiently provide necessary information|||Cung cấp đủ thông tin cần thiết"
+            },
+            {
+              "text": "Is not obvious when a goal has been reached|||Không rõ ràng khi nào mục tiêu đã đạt được"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">An <b>ill-defined problem</b> lacks a clear success criterion — you can't tell when you've actually solved it.</div><div class=\"ml-vi\"><b>Vấn đề ill-defined</b> thiếu tiêu chí thành công rõ ràng — không thể biết khi nào đã thực sự giải quyết xong.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Abstract, Introduction, Body, Conclusion, References. This is the usual structure of.......|||Tóm tắt, Mở đầu, Thân bài, Kết luận, Tài liệu tham khảo. Đây là cấu trúc thường thấy của.......",
+          "options": [
+            {
+              "text": "Humanities journal article|||Bài báo Khoa học Nhân văn"
+            },
+            {
+              "text": "Science journal article|||Bài báo Khoa học tự nhiên"
+            },
+            {
+              "text": "Junk article|||Bài báo rác"
+            },
+            {
+              "text": "Any scholarly journal article|||Bất kỳ bài báo học thuật nào"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">This rigid, sectioned structure is characteristic of <b>science journal articles</b>; humanities articles tend to be more essay-like and less rigidly sectioned.</div><div class=\"ml-vi\">Cấu trúc chặt chẽ, phân đoạn này đặc trưng cho <b>bài báo khoa học tự nhiên</b>; bài báo khoa học nhân văn thường giống văn tự luận hơn và ít phân đoạn chặt chẽ hơn.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Consider the following problem: You have just been hired as the new CEO of a major multi-national company. A company-wide survey has revealed that there is high absenteeism, low productivity and that 31% of employees are bored or otherwise unsatisfied with their work. Additionally, 13% are seriously considering offers from rival companies. The company is losing money, and work that should take a few days is taking weeks to complete. What are some leadership measures that you could put in place to help improve workplace productivity and morale? Which of the following case studies could you choose to use? Choose 3 options.|||Xét vấn đề: Bạn vừa được thuê làm CEO mới của một tập đoàn đa quốc gia lớn. Khảo sát toàn công ty cho thấy vắng mặt cao, năng suất thấp, 31% nhân viên chán nản hoặc không hài lòng, 13% đang cân nhắc lời mời từ đối thủ. Công ty đang lỗ, việc đáng lẽ vài ngày lại mất hàng tuần. Bạn có thể chọn dùng case study nào? Chọn 3 đáp án.",
+          "options": [
+            {
+              "text": "A case study of a small, local business with high morale, high productivity and strong employee and customer loyalty|||Case study về doanh nghiệp nhỏ, địa phương với tinh thần cao, năng suất cao và lòng trung thành mạnh"
+            },
+            {
+              "text": "A case study of a major multi-national company with high morale, high productivity and strong employee and customer loyalty|||Case study về tập đoàn đa quốc gia lớn với tinh thần cao, năng suất cao và lòng trung thành mạnh"
+            },
+            {
+              "text": "A case study of how the CEO of a large company changed workplace culture from a similar state and increased her employee's work-life balance and work satisfaction|||Case study về cách một CEO thay đổi văn hoá nơi làm việc từ tình trạng tương tự, tăng cân bằng công việc-cuộc sống"
+            },
+            {
+              "text": "A case study of how a principle in a large international high school with high absenteeism, low marks and low school-pride managed to change the school culture, increasing the students' school-pride and satisfaction|||Case study về cách một hiệu trưởng trường quốc tế lớn với vắng mặt cao, điểm thấp, niềm tự hào trường thấp đã thay đổi văn hoá trường"
+            }
+          ],
+          "correctIndexes": [
+            0,
+            1,
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">Case studies from the <b>same argument field (business)</b> — small business success, comparable multi-national success, and a CEO's transformation story — are the most directly relevant analogies; the school case is from a different field (education).</div><div class=\"ml-vi\">Case study từ <b>cùng argument field (kinh doanh)</b> — doanh nghiệp nhỏ thành công, tập đoàn tương đương thành công, và câu chuyện chuyển đổi của một CEO — là phép tương tự liên quan trực tiếp nhất; case trường học thuộc lĩnh vực khác (giáo dục).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Your group needs to come up with a discussion topic for a class assignment. The group works together, suggesting as many topics as possible. Members welcome all ideas and do not criticize the suggestions of other members. Which decision-making method is the group using?|||Nhóm bạn cần tìm chủ đề thảo luận cho bài tập lớp. Nhóm cùng làm việc, đề xuất càng nhiều chủ đề càng tốt. Thành viên đón nhận mọi ý tưởng và không chỉ trích đề xuất của người khác. Nhóm đang dùng phương pháp ra quyết định nào?",
+          "options": [
+            {
+              "text": "The Functional Approach|||Phương pháp Chức năng"
+            },
+            {
+              "text": "The Single Question Format|||Định dạng Câu hỏi Đơn"
+            },
+            {
+              "text": "Brainstorming|||Động não (Brainstorming)"
+            },
+            {
+              "text": "Consensus seeking|||Tìm đồng thuận"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">Welcoming all ideas with no criticism while generating as many topics as possible is the defining rule of <b>brainstorming</b>.</div><div class=\"ml-vi\">Đón nhận mọi ý tưởng, không chỉ trích, trong khi tạo ra càng nhiều chủ đề càng tốt là quy tắc định nghĩa của <b>brainstorming</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "\"The weather has a huge impact on Mai's mood. The sun makes her tired. The rain makes her sad. Only the autumn breeze makes her happy.\" What form of reasoning is used in the above sentence?|||\"Thời tiết ảnh hưởng lớn tới tâm trạng của Mai. Nắng làm cô mệt. Mưa làm cô buồn. Chỉ gió heo may mới làm cô vui.\" Kiểu lập luận nào được dùng trong câu trên?",
+          "options": [
+            {
+              "text": "Systematic|||Hệ thống"
+            },
+            {
+              "text": "Inductive|||Quy nạp"
+            },
+            {
+              "text": "Deductive|||Diễn dịch"
+            },
+            {
+              "text": "Abductive|||Suy luận ngược"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">Several specific observations are generalized into a broad claim about mood — reasoning from specific cases to a general conclusion is <b>inductive</b>.</div><div class=\"ml-vi\">Nhiều quan sát cụ thể được khái quát thành một tuyên bố chung về tâm trạng — suy luận từ trường hợp cụ thể tới kết luận chung là <b>quy nạp</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What should you do before you sit an exam? Choose 3 options.|||Bạn nên làm gì trước khi thi? Chọn 3 đáp án.",
+          "options": [
+            {
+              "text": "Check what will be covered in the exam|||Kiểm tra phạm vi thi"
+            },
+            {
+              "text": "Read your textbook cover-to-cover|||Đọc hết giáo trình từ đầu tới cuối"
+            },
+            {
+              "text": "Practice writing (and thinking) under time pressure|||Luyện viết (và suy nghĩ) dưới áp lực thời gian"
+            },
+            {
+              "text": "Listen to every lecture recording again and make detailed notes|||Nghe lại mọi bản ghi bài giảng và ghi chú chi tiết"
+            },
+            {
+              "text": "Make sure you understand all of the core concepts in the exam|||Đảm bảo hiểu mọi khái niệm cốt lõi trong đề thi"
+            }
+          ],
+          "correctIndexes": [
+            0,
+            2,
+            4
+          ],
+          "explanation": "<div class=\"ml-en\">Checking exam scope, practicing under time pressure, and understanding core concepts are efficient, targeted preparation; reading everything cover-to-cover or re-listening to every recording is inefficient and unfocused.</div><div class=\"ml-vi\">Kiểm tra phạm vi thi, luyện viết dưới áp lực thời gian, và hiểu khái niệm cốt lõi là chuẩn bị hiệu quả, có mục tiêu; đọc hết mọi thứ hay nghe lại mọi bản ghi là thiếu hiệu quả, không tập trung.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "\"Mike drinks coffee two or three times a week. Every time he drinks coffee, he couldn't sleep at night. Therefore, coffee makes Mike sleepless.\" What form of reasoning is used in the above sentence?|||\"Mike uống cà phê hai ba lần một tuần. Mỗi lần uống cà phê, anh không ngủ được. Vì vậy, cà phê làm Mike mất ngủ.\" Kiểu lập luận nào được dùng?",
+          "options": [
+            {
+              "text": "Systematic|||Hệ thống"
+            },
+            {
+              "text": "Inductive|||Quy nạp"
+            },
+            {
+              "text": "Deductive|||Diễn dịch"
+            },
+            {
+              "text": "Abductive|||Suy luận ngược"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">Repeated specific observations (coffee → sleeplessness, each time) are generalized into a causal rule — reasoning from repeated instances to a general claim is <b>inductive</b>.</div><div class=\"ml-vi\">Các quan sát cụ thể lặp lại (cà phê → mất ngủ, mỗi lần) được khái quát thành một quy luật nhân quả — suy luận từ các lần lặp lại tới một tuyên bố chung là <b>quy nạp</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the evaluation processes that applies to any context?|||Quy trình đánh giá nào áp dụng cho mọi ngữ cảnh?",
+          "options": [
+            {
+              "text": "General process|||Quy trình chung (General)"
+            },
+            {
+              "text": "Specific process|||Quy trình cụ thể (Specific)"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">A process that applies to ANY context, by definition, must be <b>general</b> rather than tailored to one specific situation.</div><div class=\"ml-vi\">Một quy trình áp dụng cho MỌI ngữ cảnh, theo định nghĩa, phải là quy trình <b>chung (general)</b> thay vì được thiết kế riêng cho một tình huống cụ thể.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following are cultural record which is not suggested for academic literacy?|||Đâu là ghi chép văn hoá KHÔNG được khuyến nghị cho năng lực học thuật?",
+          "options": [
+            {
+              "text": "Research reports|||Báo cáo nghiên cứu"
+            },
+            {
+              "text": "Theses|||Luận văn"
+            },
+            {
+              "text": "Conference proceedings|||Kỷ yếu hội nghị"
+            },
+            {
+              "text": "Films and television shows|||Phim và chương trình truyền hình"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">Research reports, theses, and conference proceedings are part of the scholarly record; <b>films and TV shows</b> are entertainment/cultural records, not suggested academic sources.</div><div class=\"ml-vi\">Báo cáo nghiên cứu, luận văn, và kỷ yếu hội nghị thuộc ghi chép học thuật; <b>phim và chương trình truyền hình</b> là ghi chép giải trí/văn hoá, không được khuyến nghị làm nguồn học thuật.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "\"In what ways will marketing fundamentally change our needs and wants?\" At university, are you able to disagree with the underlying assumption in this question?|||\"Marketing sẽ thay đổi nhu cầu và mong muốn của chúng ta theo cách nào?\" Ở đại học, bạn có thể bất đồng với giả định nền tảng của câu hỏi này không?",
+          "options": [
+            {
+              "text": "Yes|||Có"
+            },
+            {
+              "text": "No|||Không"
+            },
+            {
+              "text": "Only during a tutorial|||Chỉ trong tutorial"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">University academic culture encourages questioning underlying assumptions in any question — <b>yes</b>, you can and should challenge the premise itself, not just answer within it.</div><div class=\"ml-vi\">Văn hoá học thuật đại học khuyến khích đặt câu hỏi về giả định nền tảng của bất kỳ câu hỏi nào — <b>có</b>, bạn có thể và nên thách thức chính tiền đề, không chỉ trả lời trong khuôn khổ nó.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the natural tendency of people in resolving problems?|||Xu hướng tự nhiên của con người khi giải quyết vấn đề là gì?",
+          "options": [
+            {
+              "text": "Select the first reasonable solution that comes to mind.|||Chọn giải pháp hợp lý đầu tiên nghĩ đến."
+            },
+            {
+              "text": "Select the first reasonable problem that comes to mind.|||Chọn vấn đề hợp lý đầu tiên nghĩ đến."
+            },
+            {
+              "text": "Select the best solution after evaluating all the alternatives.|||Chọn giải pháp tốt nhất sau khi đánh giá mọi lựa chọn."
+            },
+            {
+              "text": "None of the answer choices are correct.|||Không đáp án nào đúng."
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Left unchecked, people naturally <b>settle for the first reasonable solution</b> that comes to mind rather than systematically evaluating alternatives — the very bias structured problem-solving methods try to counteract.</div><div class=\"ml-vi\">Nếu không kiểm soát, con người tự nhiên <b>chọn ngay giải pháp hợp lý đầu tiên</b> nghĩ đến thay vì đánh giá có hệ thống mọi lựa chọn — chính thiên kiến mà các phương pháp giải quyết vấn đề có cấu trúc cố gắng khắc phục.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following is the part which presents the bibliography you used in your essay?|||Phần nào trình bày danh mục tài liệu tham khảo bạn đã dùng trong essay?",
+          "options": [
+            {
+              "text": "Abstract|||Tóm tắt"
+            },
+            {
+              "text": "Introduction|||Mở đầu"
+            },
+            {
+              "text": "Reference|||Tài liệu tham khảo (Reference)"
+            },
+            {
+              "text": "Conclusion|||Kết luận"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">The <b>Reference</b> section lists every source cited in the essay.</div><div class=\"ml-vi\">Phần <b>Tài liệu tham khảo (Reference)</b> liệt kê mọi nguồn được trích dẫn trong essay.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Refer to course 2, the RESULTS part of an academic journal article includes......|||Tham khảo course 2, phần RESULTS (kết quả) của bài báo học thuật gồm......",
+          "options": [
+            {
+              "text": "The findings or outcomes of the research that was conducted|||Phát hiện hoặc kết quả của nghiên cứu đã thực hiện"
+            },
+            {
+              "text": "The research method of the research that was conducted|||Phương pháp nghiên cứu đã thực hiện"
+            },
+            {
+              "text": "The reference list of the research that was conducted|||Danh mục tài liệu tham khảo của nghiên cứu"
+            },
+            {
+              "text": "The brief introduction of the research that was conducted|||Phần giới thiệu ngắn của nghiên cứu"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The <b>Results</b> section reports the actual findings/outcomes of the research — not the method (that's Methods), references, or introduction.</div><div class=\"ml-vi\">Phần <b>Results (kết quả)</b> báo cáo phát hiện/kết quả thực sự của nghiên cứu — không phải phương pháp (thuộc Methods), tài liệu tham khảo, hay phần giới thiệu.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which strategy is recommended when you sit an exam?|||Chiến lược nào được khuyến nghị khi làm bài thi?",
+          "options": [
+            {
+              "text": "Answer the questions you know the answers first|||Trả lời câu bạn biết đáp án trước"
+            },
+            {
+              "text": "Answer the most difficult questions first|||Trả lời câu khó nhất trước"
+            },
+            {
+              "text": "Answer the questions you are unsure about first|||Trả lời câu bạn không chắc trước"
+            },
+            {
+              "text": "Spend time equally in all types of question|||Dành thời gian đều nhau cho mọi loại câu hỏi"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Answering known questions first</b> secures points quickly and builds confidence/time buffer for harder questions later — standard exam strategy.</div><div class=\"ml-vi\"><b>Trả lời câu đã biết trước</b> giúp chắc điểm nhanh và tạo khoảng đệm tự tin/thời gian cho câu khó hơn sau đó — chiến lược thi chuẩn.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "You're in a lecture for your course on 'Cross-cultural communication' on the topic of code-switching and translanguaging. Which of the following are suitable ways to participate during the lecture? Check two options.|||Bạn đang trong buổi giảng môn 'Giao tiếp liên văn hoá' về code-switching và translanguaging. Cách nào sau đây phù hợp để tham gia trong buổi giảng? Chọn hai đáp án.",
+          "options": [
+            {
+              "text": "Ask a question at the end about what Gumperz meant about contextualization cues, which was mentioned in the readings.|||Cuối buổi hỏi về ý Gumperz nói gì về contextualization cues, được nhắc trong bài đọc."
+            },
+            {
+              "text": "Do the readings for the week on your laptop.|||Làm bài đọc tuần này trên laptop."
+            },
+            {
+              "text": "Ask a question about whether you can have an extension for your assignment that's due next week.|||Hỏi xem có được gia hạn bài tập tuần sau không."
+            },
+            {
+              "text": "Ask a question on what 'translanguaging' means.|||Hỏi 'translanguaging' nghĩa là gì."
+            }
+          ],
+          "correctIndexes": [
+            0,
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">Both are substantive, on-topic academic questions directly engaging with the lecture content — asking about a concept from the readings and asking to clarify a key term. Doing readings during the lecture and asking off-topic administrative questions are not suitable participation.</div><div class=\"ml-vi\">Cả hai đều là câu hỏi học thuật thực chất, đúng chủ đề, trực tiếp tương tác với nội dung bài giảng — hỏi về một khái niệm trong bài đọc và hỏi làm rõ một thuật ngữ chính. Làm bài đọc trong lúc giảng và hỏi câu hành chính lạc đề không phải cách tham gia phù hợp.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Consider the following problem from a Landscape Architecture course: A local government has put out a tender for a park design... The brief for the park indicates that it should \"embody the community spirit\" and \"encourage a fit and healthy lifestyle\". Develop a proposal that answers the brief and is both sustainable and ecological. When developing a brainstorm or mind-map, what would be some key points that you should start with? Check one option.|||Xét vấn đề từ môn Kiến trúc Cảnh quan: Chính phủ địa phương ra đề thiết kế công viên... Đề bài yêu cầu công viên phải \"thể hiện tinh thần cộng đồng\" và \"khuyến khích lối sống lành mạnh\". Phát triển đề xuất đáp ứng đề bài, bền vững và sinh thái. Khi lập brainstorm/mind-map, nên bắt đầu từ những điểm chính nào? Chọn một đáp án.",
+          "options": [
+            {
+              "text": "Community spirit; Fit and Healthy Lifestyle; Sustainable; Ecological.|||Tinh thần cộng đồng; Lối sống lành mạnh; Bền vững; Sinh thái."
+            },
+            {
+              "text": "Young professionals; University students; Young families.|||Chuyên gia trẻ; Sinh viên đại học; Gia đình trẻ."
+            },
+            {
+              "text": "Newly residential; apartment living; busy road; multi-cultural.|||Khu dân cư mới; sống chung cư; đường đông; đa văn hoá."
+            },
+            {
+              "text": "All of the above.|||Tất cả các đáp án trên."
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The brief's own stated requirements — <b>community spirit, fit/healthy lifestyle, sustainable, ecological</b> — are the actual design goals to brainstorm around; the other options are context/audience details, not starting points for the design brief itself.</div><div class=\"ml-vi\">Các yêu cầu chính đề bài đã nêu — <b>tinh thần cộng đồng, lối sống lành mạnh, bền vững, sinh thái</b> — là mục tiêu thiết kế thật sự để brainstorm xoay quanh; các đáp án khác là chi tiết bối cảnh/đối tượng, không phải điểm khởi đầu cho chính đề bài thiết kế.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Consider the following brain-teaser problem: \"What letters are missing from the sequence? ACE, GIK, M__ __, SUW\" What specialized knowledge does question rely on? Check one option.|||Xét câu đố sau: \"Chữ nào bị thiếu trong dãy sau? ACE, GIK, M__ __, SUW\" Câu hỏi này dựa vào kiến thức chuyên biệt nào? Chọn một đáp án.",
+          "options": [
+            {
+              "text": "Knowledge of the English alphabet.|||Kiến thức bảng chữ cái tiếng Anh."
+            },
+            {
+              "text": "Knowledge of English three-letter words.|||Kiến thức từ ba chữ cái tiếng Anh."
+            },
+            {
+              "text": "Knowledge of government acronyms.|||Kiến thức viết tắt của chính phủ."
+            },
+            {
+              "text": "Knowledge of card-games.|||Kiến thức trò chơi bài."
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The sequence skips 2 letters each group (A,C,E / G,I,K / M,O,Q / S,U,W) — solving it requires only <b>knowledge of the English alphabet</b> order.</div><div class=\"ml-vi\">Dãy bỏ qua 2 chữ mỗi nhóm (A,C,E / G,I,K / M,O,Q / S,U,W) — giải nó chỉ cần <b>kiến thức thứ tự bảng chữ cái tiếng Anh</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In the course Critical thinking skills for University Success, part Academic Culture, which of the following statements about lecturers is true?|||Trong môn Kỹ năng tư duy phản biện, phần Văn hoá học thuật, phát biểu nào sau đây về giảng viên là đúng?",
+          "options": [
+            {
+              "text": "Lecturers are considered as facilitators rather than teachers.|||Giảng viên được coi là người hỗ trợ (facilitator) chứ không phải giáo viên."
+            },
+            {
+              "text": "Lecturers are considered as friends and coworkers of students.|||Giảng viên được coi là bạn bè và đồng nghiệp của sinh viên."
+            },
+            {
+              "text": "Lecturers are expected to always be there to hold the student's hand and guide them on studying and researching.|||Giảng viên được kỳ vọng luôn cầm tay chỉ việc, hướng dẫn sinh viên học và nghiên cứu."
+            },
+            {
+              "text": "Lecturers are similar to high school teachers.|||Giảng viên tương tự giáo viên trung học."
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">At university, lecturers act as <b>facilitators</b> guiding independent learning, not as spoon-feeding teachers (high school style) or as friends/hand-holders.</div><div class=\"ml-vi\">Ở đại học, giảng viên đóng vai <b>người hỗ trợ (facilitator)</b> định hướng việc học độc lập, không phải kiểu \"đút ăn\" như giáo viên trung học hay bạn bè/cầm tay chỉ việc.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Consider the following list of traits of the different spheres of argumentation. 1. Uses any example or means as evidence in arguments 2. No fixed rules for reasoning or evidence 3. Aimed at a specific audience 4. Tries to change opinions or values 5. Adheres to strict rules about data collection and analysis 6. Aimed at the general public. Which traits describe the technical sphere of argumentation?|||Xét danh sách đặc điểm các phạm vi (spheres) lập luận khác nhau. 1. Dùng bất kỳ ví dụ/phương tiện nào làm bằng chứng 2. Không có quy tắc cố định cho lý lẽ/bằng chứng 3. Nhắm tới đối tượng cụ thể 4. Cố thay đổi ý kiến/giá trị 5. Tuân theo quy tắc chặt chẽ về thu thập/phân tích dữ liệu 6. Nhắm tới công chúng nói chung. Đặc điểm nào mô tả phạm vi kỹ thuật (technical sphere) của lập luận?",
+          "options": [
+            {
+              "text": "1 and 2|||1 và 2"
+            },
+            {
+              "text": "2 and 3|||2 và 3"
+            },
+            {
+              "text": "3 and 4|||3 và 4"
+            },
+            {
+              "text": "3 and 5|||3 và 5"
+            },
+            {
+              "text": "4 and 6|||4 và 6"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">The <b>technical sphere</b> (e.g. scientific/academic argumentation) targets a <b>specific (expert) audience</b> and follows <b>strict rules for data collection/analysis</b> — traits 3 and 5.</div><div class=\"ml-vi\"><b>Phạm vi kỹ thuật</b> (VD lập luận khoa học/học thuật) nhắm tới <b>đối tượng cụ thể (chuyên gia)</b> và tuân theo <b>quy tắc chặt chẽ về thu thập/phân tích dữ liệu</b> — đặc điểm 3 và 5.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Why do we need to take a questioning stance in our learning at university?|||Vì sao cần có thái độ đặt câu hỏi trong việc học ở đại học?",
+          "options": [
+            {
+              "text": "Because it is so important in academic culture.|||Vì nó quan trọng trong văn hoá học thuật."
+            },
+            {
+              "text": "To poke holes in an argument.|||Để bới lỗi trong lập luận."
+            },
+            {
+              "text": "To more fully understand the topic you are learning.|||Để hiểu sâu hơn chủ đề đang học."
+            },
+            {
+              "text": "To avoid the 'who cares' questions.|||Để tránh câu hỏi kiểu 'ai quan tâm'."
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">The genuine purpose of a questioning stance is <b>deeper understanding</b> of the topic — not merely to attack arguments or to conform to academic culture for its own sake.</div><div class=\"ml-vi\">Mục đích thật sự của thái độ đặt câu hỏi là <b>hiểu sâu hơn</b> chủ đề — không chỉ để công kích lập luận hay tuân theo văn hoá học thuật vì bản thân nó.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following is NOT reflecting academic integrity?|||Điều nào sau đây KHÔNG phản ánh liêm chính học thuật?",
+          "options": [
+            {
+              "text": "Dishonest|||Không trung thực"
+            },
+            {
+              "text": "Plagiarism|||Đạo văn"
+            },
+            {
+              "text": "Cheating|||Gian lận"
+            },
+            {
+              "text": "All of the answers|||Tất cả các đáp án"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">Dishonesty, plagiarism, and cheating are all VIOLATIONS of academic integrity, not reflections of it — so <b>all of the answers</b> are things that are NOT academic integrity.</div><div class=\"ml-vi\">Không trung thực, đạo văn, và gian lận đều là VI PHẠM liêm chính học thuật, không phải phản ánh của nó — nên <b>tất cả các đáp án</b> đều là những điều KHÔNG phải liêm chính học thuật.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "\"If we can put a man on the moon, why can't we find the cure for Covid-19?\" - is an example of:|||\"Nếu đưa được người lên mặt trăng, sao không tìm được thuốc chữa Covid-19?\" - là ví dụ của:",
+          "options": [
+            {
+              "text": "Hasty generalization|||Khái quát hoá vội vàng"
+            },
+            {
+              "text": "Jumping from correlation to cause|||Nhảy từ tương quan sang nhân quả"
+            },
+            {
+              "text": "Straw man fallacy|||Nguỵ biện rơm (Straw man)"
+            },
+            {
+              "text": "Misinterpretation of reasoning|||Diễn giải sai lý lẽ"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">This compares two fundamentally different kinds of problems (an engineering feat vs. a biological/medical challenge) and wrongly assumes solving one implies the other should be equally solvable — a <b>misinterpretation of reasoning</b> about what makes problems comparable.</div><div class=\"ml-vi\">Câu này so sánh hai loại vấn đề về bản chất khác nhau (một kỳ tích kỹ thuật với một thách thức y sinh) và sai lầm giả định rằng giải được cái này thì cái kia cũng phải giải được tương tự — một <b>diễn giải sai lý lẽ</b> về điều gì khiến các vấn đề có thể so sánh với nhau.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What are the purposes of conducting research?|||Mục đích của việc nghiên cứu là gì?",
+          "options": [
+            {
+              "text": "Support, explain or clarify certain points|||Hỗ trợ, giải thích, hoặc làm rõ các điểm nhất định"
+            },
+            {
+              "text": "Add detail to or more accurately define specific ideas|||Thêm chi tiết hoặc định nghĩa chính xác hơn các ý tưởng cụ thể"
+            },
+            {
+              "text": "Build and focus arguments|||Xây dựng và tập trung lập luận"
+            },
+            {
+              "text": "All of the answers are correct|||Tất cả các đáp án đều đúng"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">Research serves all three purposes together — supporting/clarifying points, adding precise detail, and building/focusing arguments — <b>all correct</b>.</div><div class=\"ml-vi\">Nghiên cứu phục vụ cả ba mục đích cùng lúc — hỗ trợ/làm rõ điểm, thêm chi tiết chính xác, và xây dựng/tập trung lập luận — <b>tất cả đều đúng</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is NOT a characteristic of argument fields?|||Điều nào KHÔNG phải đặc điểm của argument fields?",
+          "options": [
+            {
+              "text": "There is a common purpose of study or object of study.|||Có mục đích/đối tượng nghiên cứu chung."
+            },
+            {
+              "text": "Common purpose or object of study frequently has shared content of inquiry.|||Mục đích/đối tượng nghiên cứu chung thường có nội dung tìm hiểu chung."
+            },
+            {
+              "text": "There is an agreement in an argument field about what exactly knowledge is.|||Có sự đồng thuận trong một argument field về kiến thức chính xác là gì."
+            },
+            {
+              "text": "There are no processes of thought and inquiry specific to the area of study developed.|||Không có quy trình tư duy và tìm hiểu đặc thù riêng cho lĩnh vực nghiên cứu được phát triển."
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">Argument fields DO develop their own specific processes of thought (as shown by the Conversation Analysis example elsewhere in this course) — claiming there are <b>none</b> directly contradicts this established characteristic, making it the false statement.</div><div class=\"ml-vi\">Argument field THẬT SỰ phát triển quy trình tư duy đặc thù riêng (như ví dụ Phân tích hội thoại ở phần khác của môn học) — nói rằng KHÔNG CÓ quy trình nào mâu thuẫn trực tiếp với đặc điểm đã xác lập này, khiến đây là phát biểu sai.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Have a look at the following argument. What is one problem with the argument? According to the Universal Declaration of Human Rights, article 24, everyone has the right to rest and leisure, including reasonable limitation of working hours. I have been working an unreasonable amount of hours. Therefore, I have the right to leave work after lunch. Check one option.|||Xem lập luận sau. Vấn đề của lập luận là gì? Theo Tuyên ngôn Nhân quyền, điều 24, mọi người có quyền nghỉ ngơi và giải trí, gồm giới hạn hợp lý về giờ làm. Tôi đã làm việc số giờ không hợp lý. Vì vậy, tôi có quyền rời việc sau bữa trưa. Chọn một đáp án.",
+          "options": [
+            {
+              "text": "The conclusion doesn't logically follow the premises.|||Kết luận không theo logic từ tiền đề."
+            },
+            {
+              "text": "The premises are not logically connected.|||Các tiền đề không liên kết logic."
+            },
+            {
+              "text": "The first premise is not valid.|||Tiền đề đầu không hợp lệ."
+            },
+            {
+              "text": "The second premise is not strong, because the definition of 'reasonable' is unclear and needs to be further illustrated.|||Tiền đề thứ hai không mạnh, vì định nghĩa 'hợp lý' không rõ ràng và cần minh hoạ thêm."
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">\"An unreasonable amount of hours\" is undefined/subjective, making the <b>second premise weak</b> — unclear whether it meets any actual threshold.</div><div class=\"ml-vi\">\"Số giờ không hợp lý\" không được định nghĩa/mang tính chủ quan, khiến <b>tiền đề thứ hai yếu</b> — không rõ có đạt ngưỡng thực sự nào không.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following is NOT a criterion used to judge the creditability of web resources?|||Điều nào sau đây KHÔNG phải tiêu chí đánh giá độ tin cậy của nguồn web?",
+          "options": [
+            {
+              "text": "Looking for the publisher of the web resource.|||Tìm nhà xuất bản của nguồn web."
+            },
+            {
+              "text": "Evaluating the purpose of the web resource.|||Đánh giá mục đích của nguồn web."
+            },
+            {
+              "text": "Checking the number of subscribers of the web resource.|||Kiểm tra số lượng người theo dõi của nguồn web."
+            },
+            {
+              "text": "Looking at the aesthetics of the web source.|||Xem tính thẩm mỹ của nguồn web."
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">The <b>number of subscribers</b> reflects popularity, not credibility — publisher, purpose, and professional aesthetics are all legitimate credibility criteria.</div><div class=\"ml-vi\"><b>Số lượng người theo dõi</b> phản ánh độ phổ biến, không phải độ tin cậy — nhà xuất bản, mục đích, và tính thẩm mỹ chuyên nghiệp đều là tiêu chí tin cậy hợp lệ.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "File naming conventions and folder hierarchy help to.......:|||Quy ước đặt tên tệp và phân cấp thư mục giúp.......:",
+          "options": [
+            {
+              "text": "make your files' names and folders' names have an academic look.|||làm tên tệp/thư mục trông có vẻ học thuật."
+            },
+            {
+              "text": "keep your files organized and make them easy to find.|||giữ tệp có tổ chức và dễ tìm."
+            },
+            {
+              "text": "give you more space for large amount of information.|||cho thêm không gian lưu trữ lượng lớn thông tin."
+            },
+            {
+              "text": "keep you from accidentally deleting important files and folders.|||tránh xoá nhầm tệp/thư mục quan trọng."
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">The core purpose of naming conventions and folder hierarchy is to <b>keep files organized and easy to find</b> — not about storage space, academic appearance, or accident prevention.</div><div class=\"ml-vi\">Mục đích cốt lõi của quy ước đặt tên và phân cấp thư mục là <b>giữ tệp có tổ chức và dễ tìm</b> — không phải về dung lượng lưu trữ, vẻ ngoài học thuật, hay ngăn tai nạn.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Consider the following situation. Mohammed is a third year undergraduate student studying epidemiology... while trying to replicate one of his professor's experiments, Mohammed notices that his professor made a small error when calculating the data for the original experiment. When Mohammed fixes the error, it changes the results so much that the conclusion isn't correct any more. Mohammed checks the original and his own multiple times but he still gets the same result. Mohammed is very concerned because the paper with the published results has been referenced many times. Mohammed decides to approach his professor with the mistake and his calculations. However, his professor tells him not to worry about it and that 'is just how science is'. His professor does nothing. What should Mohammed do now?|||Xét tình huống sau. Mohammed là sinh viên năm ba dịch tễ học... khi cố tái lập thí nghiệm của giáo sư, anh nhận thấy giáo sư đã tính sai một chút dữ liệu thí nghiệm gốc. Khi sửa lỗi, kết quả thay đổi nhiều đến mức kết luận không còn đúng nữa. Anh kiểm tra lại nhiều lần vẫn ra cùng kết quả. Anh lo lắng vì bài báo đã được trích dẫn nhiều lần. Anh trình bày lỗi với giáo sư, nhưng giáo sư bảo đừng lo, 'khoa học là vậy' và không làm gì. Mohammed nên làm gì tiếp theo?",
+          "options": [
+            {
+              "text": "Go to the head of the school and tell her that his professor is has been falsifying his results.|||Đến gặp trưởng khoa và nói giáo sư đã làm giả kết quả."
+            },
+            {
+              "text": "Do nothing. Maybe that is just how science is done in epidemiology.|||Không làm gì. Có lẽ dịch tễ học vốn vậy."
+            },
+            {
+              "text": "Go to the head of the school and ask for their opinion on the situation.|||Đến gặp trưởng khoa và xin ý kiến của họ về tình huống."
+            },
+            {
+              "text": "Tell his friend who works at the university's newspaper all about it, so they can write up an expose on his professor.|||Kể cho bạn làm ở báo trường để họ viết bài phanh phui giáo sư."
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">Given the professor dismissed a serious, verified error without action, the proportionate next step is to <b>escalate and ask the head of school for their opinion</b> — not accuse of deliberate falsification (unproven intent), stay silent (the error is real and referenced widely), or leak to the press (disproportionate, bypasses proper channels).</div><div class=\"ml-vi\">Vì giáo sư phớt lờ một lỗi nghiêm trọng, đã xác minh mà không hành động, bước tiếp theo cân xứng là <b>báo lên và xin ý kiến trưởng khoa</b> — không buộc tội làm giả có chủ đích (chưa chứng minh được ý định), không im lặng (lỗi có thật và được trích dẫn rộng rãi), hay rò rỉ cho báo chí (quá mức, bỏ qua kênh chính thức).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Examples of hasty generalization:|||Ví dụ về khái quát hoá vội vàng:",
+          "options": [
+            {
+              "text": "Hearing disability results in miscommunication.|||Khiếm thính dẫn đến hiểu lầm giao tiếp."
+            },
+            {
+              "text": "Inappropriate gestures in certain countries result in miscommunication.|||Cử chỉ không phù hợp ở một số quốc gia dẫn đến hiểu lầm giao tiếp."
+            },
+            {
+              "text": "Women listen better than men.|||Phụ nữ nghe tốt hơn đàn ông."
+            },
+            {
+              "text": "Women tend to have empathic listening.|||Phụ nữ có xu hướng lắng nghe đồng cảm hơn."
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">\"Women listen better than men\" is an absolute, unqualified comparative claim about an entire gender with no cited evidence — a classic hasty generalization. Option D is hedged with \"tend to\", a more careful, qualified claim.</div><div class=\"ml-vi\">\"Phụ nữ nghe tốt hơn đàn ông\" là tuyên bố so sánh tuyệt đối, không điều kiện về cả một giới tính mà không có bằng chứng — khái quát hoá vội vàng điển hình. Đáp án D được giảm nhẹ bằng \"có xu hướng\", một tuyên bố cẩn trọng, có điều kiện hơn.</div>"
+        }
+      ]
     }
   ]
 };

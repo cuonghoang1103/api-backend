@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 340" width="700" height="340" role="img" aria-label="A one second zsh startup profiled: nvm sourced eagerly costs about seven hundred milliseconds and compinit called twice costs four hundred, leaving very little for everything else; loading nvm lazily brings the same shell down to about a tenth of a second">
+  <rect width="700" height="340" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="339" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="28" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">time zsh -i -c exit said 1.06 s. zprof said where. Nothing here is a plugin you would suspect.</text>
+
+  <text x="24" y="56" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">BEFORE — 1.06 s</text>
+
+  <rect x="24" y="64" width="424" height="30" rx="4" fill="#111c30" stroke="#f43f5e"/>
+  <text x="38" y="84" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">nvm sourced eagerly — 4,661 lines of shell</text>
+  <text x="600" y="84" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">697 ms</text>
+
+  <rect x="24" y="98" width="248" height="30" rx="4" fill="#111c30" stroke="#fb923c"/>
+  <text x="38" y="118" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">compinit — called TWICE</text>
+  <text x="600" y="118" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">413 ms</text>
+
+  <rect x="24" y="132" width="80" height="30" rx="4" fill="#0a1120" stroke="#334155"/>
+  <text x="38" y="152" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">the rest</text>
+  <text x="600" y="152" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">~130 ms</text>
+
+  <text x="24" y="188" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">AFTER — 0.12 s, same config, nvm loaded on first use</text>
+
+  <rect x="24" y="196" width="48" height="30" rx="4" fill="#111c30" stroke="#4ade80"/>
+  <text x="600" y="216" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">120 ms</text>
+  <text x="86" y="216" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">node -v still answers instantly · nvm use still works</text>
+
+  <rect x="24" y="240" width="652" height="42" rx="6" fill="#0a1120" stroke="#a78bfa"/>
+  <text x="38" y="259" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#a78bfa">nvm() { unset -f nvm; . &quot;$NVM_DIR/nvm.sh&quot;; nvm &quot;$@&quot;; }</text>
+  <text x="38" y="276" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">plus the version you use daily added straight to PATH</text>
+
+  <rect x="24" y="292" width="652" height="34" rx="6" fill="#111c30" stroke="#fcd34d"/>
+  <text x="38" y="313" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">compinit alone measured 0.02 s — in the real config it is 206 ms per call.</text>
+</svg>

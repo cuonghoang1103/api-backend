@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 356" width="700" height="356" role="img" aria-label="When you type a command the shell checks aliases first, then functions, then builtins, then each PATH directory in order; which is an external program so it sees only the PATH layer, while type and command -v are builtins and see all of them">
+  <rect width="700" height="356" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="355" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="28" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">You typed a name. Four layers can answer it, and only two of the three lookup tools see them all.</text>
+
+  <rect x="24" y="44" width="416" height="30" rx="5" fill="#111c30" stroke="#fcd34d"/>
+  <text x="38" y="64" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">1 · alias</text>
+  <text x="426" y="64" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">interactive shells only</text>
+
+  <rect x="24" y="80" width="416" height="30" rx="5" fill="#111c30" stroke="#fb923c"/>
+  <text x="38" y="100" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">2 · shell function</text>
+  <text x="426" y="100" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">this is where grep became ugrep</text>
+
+  <rect x="24" y="116" width="416" height="30" rx="5" fill="#111c30" stroke="#22d3ee"/>
+  <text x="38" y="136" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#22d3ee">3 · builtin</text>
+  <text x="426" y="136" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">cd, echo, type, command</text>
+
+  <rect x="24" y="152" width="416" height="86" rx="5" fill="#0a1120" stroke="#4ade80"/>
+  <text x="38" y="172" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">4 · $PATH, first match wins</text>
+  <text x="38" y="192" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">  ~/.nvm/…/bin      node</text>
+  <text x="38" y="210" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">  /opt/homebrew/bin git 2.51.1 · python3 3.14</text>
+  <text x="38" y="228" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">  /usr/bin          git 2.50.1 · make 3.81</text>
+
+  <rect x="456" y="44" width="220" height="194" rx="6" fill="#0a1120" stroke="#1e293b"/>
+  <text x="470" y="64" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">what each tool can see</text>
+  <text x="470" y="88" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">type -a</text>
+  <text x="470" y="105" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">builtin · layers 1-4</text>
+  <text x="470" y="128" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">command -v</text>
+  <text x="470" y="145" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">builtin · the winner only</text>
+  <text x="470" y="168" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">which</text>
+  <text x="470" y="185" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">a separate PROGRAM —</text>
+  <text x="470" y="200" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">it only sees layer 4</text>
+  <text x="470" y="222" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">confidently wrong, in short</text>
+
+  <rect x="24" y="252" width="652" height="86" rx="6" fill="#111c30" stroke="#f43f5e"/>
+  <text x="38" y="272" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">Measured on this machine — three answers, all correct, all different:</text>
+  <text x="38" y="294" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">grep --version</text>
+  <text x="240" y="294" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">ugrep 7.5.0</text>
+  <text x="38" y="312" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">type grep</text>
+  <text x="240" y="312" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">grep is a shell function</text>
+  <text x="38" y="330" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">which grep</text>
+  <text x="240" y="330" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">/usr/bin/grep</text>
+</svg>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 348" width="700" height="348" role="img" aria-label="APFS is case insensitive and normalization preserving, so a repository created on Linux containing two files whose names differ only in case checks out as one file on a Mac and can never show a clean working tree, while unicode filenames written as NFC or NFD resolve to the same single file">
+  <rect width="700" height="348" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="347" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="28" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">APFS: case-preserving, case-INSENSITIVE. Git detects it and sets core.ignorecase=true by itself.</text>
+
+  <rect x="24" y="44" width="652" height="118" rx="6" fill="#111c30" stroke="#f43f5e"/>
+  <text x="38" y="64" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">a repo made on Linux, checked out here</text>
+  <text x="38" y="88" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">tracked by git</text>
+  <text x="240" y="88" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">CASE.txt   case.txt   a.txt</text>
+  <text x="38" y="110" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">on disk</text>
+  <text x="240" y="110" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">case.txt   a.txt</text>
+  <text x="530" y="110" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">one file, not two</text>
+  <text x="38" y="132" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">git status</text>
+  <text x="240" y="132" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">M CASE.txt</text>
+  <text x="530" y="132" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">forever</text>
+  <text x="38" y="153" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">no local setting fixes this — one of the two names has to be changed upstream</text>
+
+  <rect x="24" y="176" width="318" height="72" rx="6" fill="#0a1120" stroke="#4ade80"/>
+  <text x="38" y="196" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">what DOES work now</text>
+  <text x="38" y="218" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">git mv Foo.txt foo.txt</text>
+  <text x="38" y="238" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">git 2.51 — no temp-name dance needed</text>
+
+  <rect x="358" y="176" width="318" height="72" rx="6" fill="#0a1120" stroke="#22d3ee"/>
+  <text x="372" y="196" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#22d3ee">unicode: also fine now</text>
+  <text x="372" y="218" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">wrote &quot;Đề.txt&quot; as NFC and NFD</text>
+  <text x="372" y="238" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">→ ONE file, stored NFC, samefile true</text>
+
+  <rect x="24" y="262" width="652" height="70" rx="6" fill="#111c30" stroke="#fcd34d"/>
+  <text x="38" y="282" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">Two pieces of Mac folklore that expired:</text>
+  <text x="38" y="303" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">&quot;macOS rewrites filenames to NFD&quot; — that was HFS+, not the default since 2017</text>
+  <text x="38" y="322" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">&quot;a case-only rename needs a temp name&quot; — not on any current git</text>
+</svg>

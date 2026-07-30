@@ -100,8 +100,7 @@ export const DEEP_DIVES: DeepDive[] = [
     logo: 'apple',
     title: 'How to Set up a Mac for Development',
     blurb: 'Shell, Homebrew, Node, Docker, keys — a machine ready to work.',
-    href: '/exp-hub',
-    via: 'Setup guides in Exp Hub',
+    article: 'how-to-set-up-a-mac-for-development',
   },
   {
     logo: 'linux',

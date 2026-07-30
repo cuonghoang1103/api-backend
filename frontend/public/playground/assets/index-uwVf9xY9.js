@@ -86251,7 +86251,7 @@ https://github.com/browserify/crypto-browserify`);
   }
   const _MeshDefaultMaterial = class _MeshDefaultMaterial extends MeshLambertNodeMaterial {
     constructor(e = {}) {
-      super(), this.game = Game.getInstance(), this.depthWrite = e.depthWrite ?? true, this.depthTest = e.depthTest ?? true, this.side = e.side ?? FrontSide$1, this.wireframe = e.wireframe ?? false, this.transparent = e.transparent ?? false, this.shadowSide = e.shadowSide ?? FrontSide$1, this.hasCoreShadows = e.hasCoreShadows ?? true, this.hasDropShadows = e.hasDropShadows ?? true, this.hasLightBounce = e.hasLightBounce ?? true, this.hasFog = e.hasFog ?? true, this.hasWater = e.hasWater ?? true, this.hasReveal = e.hasReveal ?? true, this._colorNode = e.colorNode ?? color$1(16777215), this._normalNode = e.normalNode ?? normalWorld$1, this._alphaNode = e.alphaNode ?? float$1(1), this._shadowNode = e.shadowNode ?? float$1(0), this.alphaTest = e.alphaTest ?? 0.1, this.normalNode = this._normalNode;
+      super(), this.game = Game.getInstance(), this.depthWrite = e.depthWrite ?? true, this.depthTest = e.depthTest ?? true, this.side = e.side ?? FrontSide$1, this.wireframe = e.wireframe ?? false, this.transparent = e.transparent ?? false, this.shadowSide = e.shadowSide ?? FrontSide$1, this.hasCoreShadows = e.hasCoreShadows ?? true, this.hasDropShadows = e.hasDropShadows ?? true, this.hasLightBounce = e.hasLightBounce ?? true, this.hasFog = e.hasFog ?? true, this.hasHeadlights = e.hasHeadlights ?? true, this.hasWater = e.hasWater ?? true, this.hasReveal = e.hasReveal ?? true, this._colorNode = e.colorNode ?? color$1(16777215), this._normalNode = e.normalNode ?? normalWorld$1, this._alphaNode = e.alphaNode ?? float$1(1), this._shadowNode = e.shadowNode ?? float$1(0), this.alphaTest = e.alphaTest ?? 0.1, this.normalNode = this._normalNode;
       const r = float$1(1).toVar();
       this.hasDropShadows && (this.receivedShadowNode = Fn$1(([s]) => (r.mulAssign(s.r), float$1(1)))), this.outputNode = Fn$1(() => {
         const s = this._colorNode.toVar(), o = this._colorNode.toVar(), a = this._normalNode.toVar();
@@ -86273,7 +86273,7 @@ https://github.com/browserify/crypto-browserify`);
           const d = max$2(h, c, this._shadowNode).clamp(0, 1), f = s.rgb.mul(this.game.lighting.shadowColor).rgb;
           o.assign(mix$1(o, f, d));
         }
-        return this.hasFog && o.assign(this.game.fog.strength.mix(o, this.game.fog.color)), this._alphaNode.lessThan(this.alphaTest).discard(), this.hasReveal && o.assign(_MeshDefaultMaterial.revealDiscardNodeBuilder(this.game, o)), vec4$1(o, this._alphaNode);
+        return this.hasHeadlights && o.addAssign(this.game.lighting.headlights.getContribution(a)), this.hasFog && o.assign(this.game.fog.strength.mix(o, this.game.fog.color)), this._alphaNode.lessThan(this.alphaTest).discard(), this.hasReveal && o.assign(_MeshDefaultMaterial.revealDiscardNodeBuilder(this.game, o)), vec4$1(o, this._alphaNode);
       })();
     }
   };
@@ -93473,7 +93473,7 @@ https://github.com/browserify/crypto-browserify`);
   }
   class VisualVehicle {
     constructor(e) {
-      this.game = Game.getInstance(), this.model = e, this.setParts(), this.setMainGroundTrack(), this.setWheels(), this.setBlinkers(), this.setBackLights(), this.setAntenna(), this.setBoostTrails(), this.setBoostAnimation(), this.setScreenPosition(), this.setPaints(), this.tickCallback = () => {
+      this.game = Game.getInstance(), this.model = e, this.setParts(), this.setMainGroundTrack(), this.setWheels(), this.setBlinkers(), this.setBackLights(), this.setHeadlights(), this.setAntenna(), this.setBoostTrails(), this.setBoostAnimation(), this.setScreenPosition(), this.setPaints(), this.tickCallback = () => {
         this.update();
       }, this.game.ticker.events.on("tick", this.tickCallback, 8);
     }
@@ -93492,6 +93492,7 @@ https://github.com/browserify/crypto-browserify`);
         "blinkerRight",
         "stopLights",
         "backLights",
+        "headlights",
         "wheelContainer",
         "antenna",
         "cell1",
@@ -93604,6 +93605,40 @@ https://github.com/browserify/crypto-browserify`);
         colorNode: vec3$1(2.2)
       });
     }
+    setHeadlights() {
+      if (this.headlights = {}, this.headlights.on = false, !this.parts.headlights) {
+        this.game.lighting.headlights.intensity.value = 0;
+        return;
+      }
+      this.headlights.dayMaterial = this.parts.headlights.material, this.headlights.nightMaterial = new MeshBasicNodeMaterial({
+        colorNode: vec3$1(2.8)
+      });
+      const e = this.game.lighting;
+      this.headlights.turnOn = () => {
+        this.headlights.on || (this.headlights.on = true, this.parts.headlights.material = this.headlights.nightMaterial, gsapWithCSS.to(e.headlights.intensity, {
+          value: 1,
+          duration: 1.6,
+          ease: "power2.out",
+          overwrite: true
+        }));
+      }, this.headlights.turnOff = () => {
+        this.headlights.on && (this.headlights.on = false, this.parts.headlights.material = this.headlights.dayMaterial, gsapWithCSS.to(e.headlights.intensity, {
+          value: 0,
+          duration: 2.5,
+          ease: "power2.in",
+          overwrite: true
+        }));
+      };
+      const r = (s) => {
+        s ? this.headlights.turnOn() : this.headlights.turnOff();
+      };
+      this.game.dayCycles.events.on("night", r), r(this.game.dayCycles.intervalEvents.get("night").inInterval);
+    }
+    updateHeadlights() {
+      if (!this.parts.headlights) return;
+      const e = this.game.lighting, s = this.game.physicalVehicle.forward, o = this.parts.chassis.position;
+      e.headlights.position.value.set(o.x + s.x * 1.3, o.y + 0.15, o.z + s.z * 1.3), e.headlights.direction.value.set(s.x, -0.34, s.z).normalize();
+    }
     setAntenna() {
       this.parts.antenna && (this.antenna = {}, this.antenna.target = new Vector3$1(0, 2, 0), this.antenna.target = new Vector3$1(0, 2, 0), this.antenna.object = this.parts.antenna, this.antenna.head = this.game.resources.vehicle.scene.getObjectByName("antennaHead"), this.antenna.headAxle = this.antenna.head.children[0], this.antenna.headReference = this.antenna.object.getObjectByName("antennaHeadReference"), this.game.materials.updateObject(this.antenna.head), this.game.scene.add(this.antenna.head));
     }
@@ -93621,7 +93656,7 @@ https://github.com/browserify/crypto-browserify`);
     }
     update() {
       const e = this.game.physicalVehicle;
-      this.parts.chassis.position.copy(e.position), this.parts.chassis.quaternion.copy(e.quaternion), this.wheels.steering += (this.game.player.steering * e.steeringAmplitude - this.wheels.steering) * this.game.ticker.deltaScaled * 16;
+      this.parts.chassis.position.copy(e.position), this.parts.chassis.quaternion.copy(e.quaternion), this.updateHeadlights(), this.wheels.steering += (this.game.player.steering * e.steeringAmplitude - this.wheels.steering) * this.game.ticker.deltaScaled * 16;
       const r = e.forwardSpeed / e.wheels.settings.radius * 6e-3;
       for (let a = 0; a < 4; a++) {
         const h = this.wheels.items[a], c = e.wheels.items[a];
@@ -94802,7 +94837,7 @@ https://github.com/browserify/crypto-browserify`);
       this.game = Game.getInstance(), this.useDayCycles = true, this.phi = 0.63, this.theta = 0.72, this.phiAmplitude = 0.62, this.thetaAmplitude = 1.25, this.near = 1, this.spherical = new Spherical(this.game.view.optimalArea.radius + this.near, this.phi, this.theta), this.direction = new Vector3$1().setFromSpherical(this.spherical).normalize(), this.directionUniform = uniform$1(this.direction), this.colorUniform = uniform$1(color$1("#ffffff")), this.intensityUniform = uniform$1(1), this.count = 1, this.mapSize = this.game.quality.level === 0 ? 2048 : 512, this.shadowAmplitude = this.game.view.optimalArea.radius, this.depth = this.game.view.optimalArea.radius * 2, this.shadowBias = -1e-3, this.shadowNormalBias = 0.1, this.shadowRadius = this.game.quality.level === 0 ? 3 : 2, this.game.debug.active && (this.debugPanel = this.game.debug.panel.addFolder({
         title: "\u{1F4A1} Lighting",
         expanded: false
-      })), this.setNodes(), this.setLight(), this.updateShadow(), this.setHelpers(), this.game.ticker.events.on("tick", () => {
+      })), this.setNodes(), this.setHeadlights(), this.setLight(), this.updateShadow(), this.setHelpers(), this.game.ticker.events.on("tick", () => {
         this.update();
       }, 9), this.game.viewport.events.on("throttleChange", () => {
         this.spherical.radius = this.game.view.optimalArea.radius, this.shadowAmplitude = this.game.view.optimalArea.radius, this.updateShadow();
@@ -94879,6 +94914,39 @@ https://github.com/browserify/crypto-browserify`);
         max: 1,
         step: 0.01
       }));
+    }
+    setHeadlights() {
+      if (this.headlights = {}, this.headlights.position = uniform$1(new Vector3$1(0, 0.6, 0)), this.headlights.direction = uniform$1(new Vector3$1(0, 0, 1)), this.headlights.intensity = uniform$1(float$1(0)), this.headlights.color = uniform$1(color$1("#ffeccc")), this.headlights.distance = uniform$1(float$1(26)), this.headlights.spread = uniform$1(float$1(0.55)), this.headlights.softness = uniform$1(float$1(0.42)), this.game.debug.active) {
+        const e = this.debugPanel.addFolder({
+          title: "\u{1F526} Headlights",
+          expanded: false
+        });
+        e.addBinding(this.headlights.intensity, "value", {
+          label: "intensity",
+          min: 0,
+          max: 4,
+          step: 0.01
+        }), e.addBinding(this.headlights.distance, "value", {
+          label: "distance",
+          min: 1,
+          max: 80,
+          step: 0.5
+        }), e.addBinding(this.headlights.spread, "value", {
+          label: "spread",
+          min: 0.05,
+          max: 1,
+          step: 0.01
+        }), e.addBinding(this.headlights.softness, "value", {
+          label: "softness",
+          min: 0.01,
+          max: 1,
+          step: 0.01
+        }), this.game.debug.addThreeColorBinding(e, this.headlights.color.value, "color");
+      }
+      this.headlights.getContribution = (e) => {
+        const r = positionWorld.sub(this.headlights.position), s = r.length().max(1e-3), o = r.div(s), h = o.dot(this.headlights.direction).smoothstep(this.headlights.spread.oneMinus(), this.headlights.spread.oneMinus().add(this.headlights.softness).min(0.999)), c = s.div(this.headlights.distance).oneMinus().max(0).pow(2), d = e.dot(o.negate()).max(0);
+        return this.headlights.color.mul(h.mul(c).mul(d).mul(this.headlights.intensity));
+      };
     }
     setLight() {
       this.light = new DirectionalLight(16777215, 5), this.light.position.setFromSpherical(this.spherical), this.light.castShadow = true, this.game.scene.add(this.light), this.game.scene.add(this.light.target);
@@ -108720,7 +108788,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-BZYYoZKq.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-B0IeJ-sd.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

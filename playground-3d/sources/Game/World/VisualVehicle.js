@@ -21,6 +21,7 @@ export class VisualVehicle
         this.setWheels()
         this.setBlinkers()
         this.setBackLights()
+        this.setHeadlights()
         this.setAntenna()
         this.setBoostTrails()
         this.setBoostAnimation()
@@ -69,6 +70,10 @@ export class VisualVehicle
             'blinkerRight',
             'stopLights',
             'backLights',
+            // ⚠️ Bản gốc có sẵn hình học `headlights.001` trong `vehicle/default.glb`
+            //    nhưng KHÔNG hề liệt kê ở đây, nên mã chưa bao giờ đụng tới nó:
+            //    đèn pha cứ phát sáng cam 24/24 và không rọi sáng cái gì cả.
+            'headlights',
             'wheelContainer',
             'antenna',
             'cell1',
@@ -353,6 +358,106 @@ export class VisualVehicle
         this.backLights.material = new THREE.MeshBasicNodeMaterial({ colorNode: vec3(2.2) })
     }
 
+    /**
+     * ĐÈN PHA — bật khi trời tối, và RỌI SÁNG THẬT xuống mặt đường.
+     *
+     * Hai phần tách bạch:
+     *  1. Cái đèn sáng lên (kính đèn chuyển sang trắng chói) — giống hệt cách
+     *     đèn đường làm ở `World/PoleLights.js`;
+     *  2. Vệt sáng đổ xuống đất — do `Lighting.headlights` lo, ở đây chỉ nuôi
+     *     nó vị trí, hướng và độ mạnh mỗi khung hình.
+     */
+    setHeadlights()
+    {
+        this.headlights = {}
+        this.headlights.on = false
+
+        if(!this.parts.headlights)
+        {
+            // Xe không có hình học đèn pha (mẫu `oldSchool` chẳng hạn) thì phải
+            // DẬP hẳn độ mạnh về 0. Bỏ qua bước này là chùm sáng cũ còn treo lại
+            // ở toạ độ cuối cùng, rọi một vũng sáng lơ lửng giữa đồng không.
+            this.game.lighting.headlights.intensity.value = 0
+            return
+        }
+
+        // Giữ lại vật liệu ban ngày để trả về nguyên trạng khi trời sáng —
+        // ban ngày phải giống HỆT như trước khi có tính năng này
+        this.headlights.dayMaterial = this.parts.headlights.material
+        this.headlights.nightMaterial = new THREE.MeshBasicNodeMaterial({ colorNode: vec3(2.8) })
+
+        const lighting = this.game.lighting
+
+        this.headlights.turnOn = () =>
+        {
+            if(this.headlights.on)
+                return
+
+            this.headlights.on = true
+            this.parts.headlights.material = this.headlights.nightMaterial
+            gsap.to(lighting.headlights.intensity, { value: 1, duration: 1.6, ease: 'power2.out', overwrite: true })
+        }
+
+        this.headlights.turnOff = () =>
+        {
+            if(!this.headlights.on)
+                return
+
+            this.headlights.on = false
+            this.parts.headlights.material = this.headlights.dayMaterial
+            gsap.to(lighting.headlights.intensity, { value: 0, duration: 2.5, ease: 'power2.in', overwrite: true })
+        }
+
+        const nightChange = (inNight) =>
+        {
+            if(inNight)
+                this.headlights.turnOn()
+            else
+                this.headlights.turnOff()
+        }
+
+        // Cùng khuôn mẫu đèn đường đang dùng (`PoleLights.js`): nghe sự kiện
+        // đổi khoảng, rồi gọi một lần ngay để bắt kịp trạng thái hiện tại —
+        // vào game giữa đêm thì đèn phải sáng sẵn chứ không đợi tới sáng hôm sau
+        this.game.dayCycles.events.on('night', nightChange)
+        nightChange(this.game.dayCycles.intervalEvents.get('night').inInterval)
+    }
+
+    /**
+     * Nuôi vị trí và hướng chùm sáng cho vật liệu, mỗi khung hình.
+     */
+    updateHeadlights()
+    {
+        if(!this.parts.headlights)
+            return
+
+        const lighting = this.game.lighting
+        const physicalVehicle = this.game.physicalVehicle
+
+        /**
+         * ⚠️ Hướng tiến của xe là trục cục bộ +X, KHÔNG phải -Z như thói quen.
+         *    `PhysicsVehicle` ghi rõ: `this.forward.set(1, 0, 0).applyQuaternion(...)`.
+         *    Và đây đã là vector trong hệ thế giới, cập nhật sẵn mỗi khung hình,
+         *    nên cứ dùng thẳng chứ đừng tự tính lại từ quaternion.
+         */
+        const forward = physicalVehicle.forward
+        const chassis = this.parts.chassis.position
+
+        // Gốc chùm sáng: nhô ra phía trước mũi xe một chút, cao ngang cặp đèn
+        lighting.headlights.position.value.set(
+            chassis.x + forward.x * 1.3,
+            chassis.y + 0.15,
+            chassis.z + forward.z * 1.3
+        )
+
+        /**
+         * Chúc xuống một chút — đèn pha thật cũng chúc xuống, và quan trọng hơn:
+         * chùm sáng nằm ngang thì gần như không chạm mặt đường, chỉ quét vào
+         * thân cây và tường ở xa, nhìn rất vô lý.
+         */
+        lighting.headlights.direction.value.set(forward.x, -0.34, forward.z).normalize()
+    }
+
     setAntenna()
     {
         if(!this.parts.antenna)
@@ -422,6 +527,10 @@ export class VisualVehicle
         // Chassis
         this.parts.chassis.position.copy(physicalVehicle.position)
         this.parts.chassis.quaternion.copy(physicalVehicle.quaternion)
+
+        // Đèn pha — phải chạy SAU khi thân xe đã cập nhật xong, nếu không chùm
+        // sáng chậm hơn xe một khung hình và bị "trượt" lúc rẽ gấp
+        this.updateHeadlights()
         
         // Wheels
         this.wheels.steering += ((this.game.player.steering * physicalVehicle.steeringAmplitude) - this.wheels.steering) * this.game.ticker.deltaScaled * 16

@@ -35,6 +35,10 @@ export class MeshDefaultMaterial extends THREE.MeshLambertNodeMaterial
         this.hasDropShadows = parameters.hasDropShadows ?? true
         this.hasLightBounce = parameters.hasLightBounce ?? true
         this.hasFog = parameters.hasFog ?? true
+        // Đèn pha chỉ có nghĩa với những gì ĐỨNG TRONG thế giới. Hạt mưa, bông
+        // tuyết, giấy hoa giấy… tự phát sáng và bay lung tung, cộng thêm ánh
+        // đèn vào chỉ làm chúng loé lên vô lý ⇒ chỗ nào không cần thì tắt cờ này.
+        this.hasHeadlights = parameters.hasHeadlights ?? true
         this.hasWater = parameters.hasWater ?? true
         this.hasReveal = parameters.hasReveal ?? true
 
@@ -118,6 +122,21 @@ export class MeshDefaultMaterial extends THREE.MeshLambertNodeMaterial
                 outputColor.assign(mix(outputColor, shadowColor, combinedShadowMix))
             }
             
+            /**
+             * Đèn pha xe.
+             *
+             * Đặt ở ĐÚNG chỗ này là có chủ ý:
+             *  · SAU bóng đổ — đèn pha phải rọi sáng được cả vùng đang trong
+             *    bóng tối, chứ bóng đổ mà đè lên đèn thì đèn thành vô nghĩa;
+             *  · TRƯỚC sương mù — chỗ đất được rọi sáng ở xa vẫn phải mờ đi
+             *    theo sương như mọi thứ khác, nếu không nó nổi bật một cách phi lý.
+             *
+             * `intensity = 0` (ban ngày) thì số hạng này bằng 0 tuyệt đối ⇒ ảnh
+             * ra y hệt như trước khi có tính năng.
+             */
+            if(this.hasHeadlights)
+                outputColor.addAssign(this.game.lighting.headlights.getContribution(reorientedNormal))
+
             // Fog
             if(this.hasFog)
                 outputColor.assign(this.game.fog.strength.mix(outputColor, this.game.fog.color))

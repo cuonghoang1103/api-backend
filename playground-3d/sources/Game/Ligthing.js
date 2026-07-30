@@ -2,6 +2,7 @@ import * as THREE from 'three/webgpu'
 import { Game } from './Game.js'
 import { uniform, color, float, Fn, vec4, positionWorld, vec3, mix, max, If, frontFacing } from 'three/tsl'
 
+
 export class Lighting
 {
     constructor()
@@ -36,6 +37,7 @@ export class Lighting
         }
 
         this.setNodes()
+        this.setHeadlights()
         this.setLight()
         this.updateShadow()
         this.setHelpers()
@@ -102,6 +104,87 @@ export class Lighting
             this.debugPanel.addBlade({ view: 'separator' })
             this.debugPanel.addBinding(this.coreShadowEdgeLow, 'value', { label: 'coreShadowEdgeLow', min: - 1, max: 1, step: 0.01 })
             this.debugPanel.addBinding(this.coreShadowEdgeHigh, 'value', { label: 'coreShadowEdgeHigh', min: - 1, max: 1, step: 0.01 })
+        }
+    }
+
+    /**
+     * ĐÈN PHA XE — nguồn sáng thứ hai của thế giới.
+     *
+     * ─── VÌ SAO PHẢI TỰ TÍNH THAY VÌ THÊM MỘT ĐÈN CỦA THREE.JS ───
+     * Cả thế giới này chỉ có ĐÚNG MỘT đèn (`count = 1`, đèn hướng ở dưới) và
+     * mọi vật đều tự tính sáng-tối bằng TSL trong `MeshDefaultMaterial`, không
+     * đi qua hệ chiếu sáng của three.js. Thả một `SpotLight` vào đây là nó
+     * không ăn vào đâu cả, lại còn kéo theo bản đồ bóng đổ thứ hai rất đắt.
+     *
+     * Nên đèn pha là một số hạng CỘNG THÊM vào vật liệu chung: vài phép tính
+     * mỗi điểm ảnh, KHÔNG thêm lượt vẽ, KHÔNG thêm bản đồ bóng đổ.
+     *
+     * ─── CHỐT AN TOÀN ───
+     * `intensity = 0` thì số hạng bằng 0 tuyệt đối ⇒ ảnh ra y hệt như trước khi
+     * có tính năng này. Ban ngày và trên máy không bật đèn đều rơi vào nhánh đó.
+     */
+    setHeadlights()
+    {
+        this.headlights = {}
+
+        // Vị trí và hướng của cặp đèn — `VisualVehicle` cập nhật mỗi khung hình
+        this.headlights.position = uniform(new THREE.Vector3(0, 0.6, 0))
+        this.headlights.direction = uniform(new THREE.Vector3(0, 0, 1))
+
+        // 0 = tắt hẳn. Bật/tắt theo ngày đêm bằng cách chạy số này lên xuống
+        this.headlights.intensity = uniform(float(0))
+
+        this.headlights.color = uniform(color('#ffeccc'))
+        this.headlights.distance = uniform(float(26)) // chiếu xa bao nhiêu
+        this.headlights.spread = uniform(float(0.55)) // độ mở của chùm sáng
+        this.headlights.softness = uniform(float(0.42)) // mép chùm mềm hay gắt
+
+        if(this.game.debug.active)
+        {
+            const panel = this.debugPanel.addFolder({ title: '🔦 Headlights', expanded: false })
+            panel.addBinding(this.headlights.intensity, 'value', { label: 'intensity', min: 0, max: 4, step: 0.01 })
+            panel.addBinding(this.headlights.distance, 'value', { label: 'distance', min: 1, max: 80, step: 0.5 })
+            panel.addBinding(this.headlights.spread, 'value', { label: 'spread', min: 0.05, max: 1, step: 0.01 })
+            panel.addBinding(this.headlights.softness, 'value', { label: 'softness', min: 0.01, max: 1, step: 0.01 })
+            this.game.debug.addThreeColorBinding(panel, this.headlights.color.value, 'color')
+        }
+
+        /**
+         * Số hạng ánh sáng cộng thêm cho một điểm trên bề mặt.
+         *
+         * @param {*} surfaceNormal pháp tuyến ĐÃ lật đúng chiều của bề mặt
+         */
+        this.headlights.getContribution = (surfaceNormal) =>
+        {
+            const toSurface = positionWorld.sub(this.headlights.position)
+
+            /**
+             * ⚠️ TUYỆT ĐỐI KHÔNG dùng `.normalize()` ở đây.
+             *
+             * Điểm đang vẽ trùng đúng vị trí đèn thì vector bằng 0, `normalize`
+             * ra NaN, và một NaN chảy vào là đủ GIẾT CẢ VÒNG LẶP VẼ mà không in
+             * một dòng lỗi nào (bẫy đã ghi trong `data/social.js` của bản gốc).
+             * Nên chia tay bằng khoảng cách đã kẹp sàn.
+             */
+            const distance = toSurface.length().max(0.001)
+            const direction = toSurface.div(distance)
+
+            // Trong hay ngoài chùm sáng
+            const alignment = direction.dot(this.headlights.direction)
+            const cone = alignment.smoothstep(
+                this.headlights.spread.oneMinus(),
+                this.headlights.spread.oneMinus().add(this.headlights.softness).min(0.999)
+            )
+
+            // Xa thì tối dần, bình phương cho giống ánh sáng thật
+            const falloff = distance.div(this.headlights.distance).oneMinus().max(0).pow(2)
+
+            // Mặt quay lưng lại thì không nhận sáng
+            const facing = surfaceNormal.dot(direction.negate()).max(0)
+
+            return this.headlights.color.mul(
+                cone.mul(falloff).mul(facing).mul(this.headlights.intensity)
+            )
         }
     }
 

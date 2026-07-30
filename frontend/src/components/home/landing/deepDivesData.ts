@@ -58,8 +58,7 @@ export const DEEP_DIVES: DeepDive[] = [
     logo: 'graphql',
     title: 'An Introduction to GraphQL',
     blurb: 'Schemas, resolvers and why it is not a REST replacement.',
-    href: '/code-lab',
-    via: 'Graded exercises in Code Lab',
+    article: 'an-introduction-to-graphql',
   },
   {
     logo: 'react',

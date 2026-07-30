@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 344" width="700" height="344" role="img" aria-label="How a resolver error propagates: a failing non-null field nulls its whole parent, while the same failure on a nullable field only nulls that field">
+  <rect width="700" height="344" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="343" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">Same failing resolver. One <tspan font-family="ui-monospace, Menlo, monospace" fill="#fcd34d">!</tspan> decides how much of the response survives.</text>
+
+  <!-- left: non-null -->
+  <rect x="24" y="48" width="316" height="132" rx="6" fill="#0a1120" stroke="#f43f5e"/>
+  <text x="36" y="70" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">type User {</text>
+  <text x="36" y="90" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">  name: String!</text>
+  <text x="36" y="110" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">  profile: Profile<tspan fill="#f43f5e">!</tspan>   ← throws</text>
+  <text x="36" y="130" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">}</text>
+  <text x="36" y="160" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#f43f5e">non-null cannot hold null → error climbs</text>
+
+  <rect x="24" y="192" width="316" height="66" rx="6" fill="#111c30" stroke="#334155"/>
+  <text x="36" y="214" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#f43f5e">"data": { "user": null }</text>
+  <text x="36" y="234" font-family="ui-monospace, Menlo, monospace" font-size="11.5" fill="#94a3b8">"errors": [ … path: user.profile ]</text>
+  <text x="36" y="251" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#64748b">name is lost too, though it was fine</text>
+
+  <!-- right: nullable -->
+  <rect x="360" y="48" width="316" height="132" rx="6" fill="#0a1120" stroke="#4ade80"/>
+  <text x="372" y="70" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">type User {</text>
+  <text x="372" y="90" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">  name: String!</text>
+  <text x="372" y="110" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">  profile: Profile    ← throws</text>
+  <text x="372" y="130" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">}</text>
+  <text x="372" y="160" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#4ade80">nullable absorbs the failure → stops here</text>
+
+  <rect x="360" y="192" width="316" height="66" rx="6" fill="#111c30" stroke="#334155"/>
+  <text x="372" y="214" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#4ade80">"data": { "user": {</text>
+  <text x="372" y="231" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#4ade80">  "name": "Mai", "profile": null } }</text>
+  <text x="372" y="251" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#64748b">the screen can still render a name</text>
+
+  <line x1="24" y1="278" x2="676" y2="278" stroke="#1e293b"/>
+  <text x="24" y="302" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#94a3b8">So <tspan fill="#e2e8f0">nullability is a blast-radius decision</tspan>, not a typing preference. Mark a field non-null when the</text>
+  <text x="24" y="320" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#94a3b8">parent is genuinely meaningless without it; leave it nullable when a partial answer still helps.</text>
+  <text x="24" y="338" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">Non-null everywhere is how one flaky downstream service blanks an entire page.</text>
+</svg>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 320" width="700" height="320" role="img" aria-label="The same screen fetched two ways: three REST endpoints returning whole resources, versus one GraphQL query returning only the fields the screen uses">
+  <rect width="700" height="320" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="319" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">One screen — post title, author name, three comment bodies. Two ways to fetch it.</text>
+
+  <!-- REST side -->
+  <text x="24" y="60" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#22d3ee">REST · 3 round trips</text>
+  <g font-family="ui-monospace, Menlo, monospace" font-size="12">
+    <rect x="24" y="70" width="300" height="26" rx="5" fill="#111c30" stroke="#334155"/>
+    <text x="36" y="87" fill="#94a3b8">GET /posts/10</text>
+    <text x="210" y="87" fill="#f43f5e">+ body, views, draft</text>
+
+    <rect x="24" y="102" width="300" height="26" rx="5" fill="#111c30" stroke="#334155"/>
+    <text x="36" y="119" fill="#94a3b8">GET /users/1</text>
+    <text x="210" y="119" fill="#f43f5e">+ bio, email, dates</text>
+
+    <rect x="24" y="134" width="300" height="26" rx="5" fill="#111c30" stroke="#334155"/>
+    <text x="36" y="151" fill="#94a3b8">GET /posts/10/comments</text>
+    <text x="248" y="151" fill="#f43f5e">+ spam</text>
+  </g>
+  <text x="24" y="182" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">each endpoint returns the WHOLE resource</text>
+  <rect x="24" y="194" width="300" height="30" rx="5" fill="#111c30" stroke="#f43f5e"/>
+  <text x="36" y="214" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#f43f5e">3062 bytes</text>
+
+  <!-- GraphQL side -->
+  <text x="376" y="60" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#4ade80">GraphQL · 1 round trip</text>
+  <rect x="376" y="70" width="300" height="90" rx="5" fill="#0a1120" stroke="#334155"/>
+  <g font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">
+    <text x="388" y="88">{ post(id: "10") {</text>
+    <text x="388" y="104">    title</text>
+    <text x="388" y="120">    author { name }</text>
+    <text x="388" y="136">    comments { body }</text>
+    <text x="388" y="152">} }</text>
+  </g>
+  <text x="376" y="182" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">the client states the shape it wants</text>
+  <rect x="376" y="194" width="300" height="30" rx="5" fill="#111c30" stroke="#4ade80"/>
+  <text x="388" y="214" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#4ade80">478 bytes</text>
+
+  <line x1="24" y1="248" x2="676" y2="248" stroke="#1e293b"/>
+  <text x="24" y="272" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#94a3b8">6.4× fewer bytes and one request instead of three — measured, not estimated.</text>
+  <text x="24" y="296" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#64748b">What you pay for it: no HTTP caching by URL, a resolver layer to keep honest, and a</text>
+  <text x="24" y="312" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#64748b">server that must survive whatever query a client decides to send.</text>
+</svg>

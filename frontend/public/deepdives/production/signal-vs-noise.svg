@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 316" width="700" height="316" role="img" aria-label="Four signals worth trusting during an incident are an unauthenticated status code, a container exit code with the OOMKilled flag, the Postgres blocking-pid graph and a p99; four that mislead are a mean, a health check, CPU usage on a Node process and reading exit 137 as out of memory">
+  <rect width="700" height="316" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="315" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="28" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">Every number is silent about something. Knowing what is the whole skill.</text>
+
+  <rect x="24" y="44" width="318" height="164" rx="6" fill="#111c30" stroke="#4ade80"/>
+  <text x="38" y="64" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">trust</text>
+  <text x="38" y="88" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">unauth status code from outside</text>
+  <text x="38" y="104" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">no session, no cache, no opinions</text>
+  <text x="38" y="128" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">ExitCode + OOMKilled</text>
+  <text x="38" y="144" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">recorded by the kernel, not the app</text>
+  <text x="38" y="168" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">pg_blocking_pids()</text>
+  <text x="38" y="184" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">the lock graph itself · and: p99</text>
+
+  <rect x="358" y="44" width="318" height="164" rx="6" fill="#111c30" stroke="#f43f5e"/>
+  <text x="372" y="64" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">will waste your window</text>
+  <text x="372" y="88" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">a mean</text>
+  <text x="372" y="104" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">66.9 ms, between p50 45.9 and p90 186.8</text>
+  <text x="372" y="128" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">a health check</text>
+  <text x="372" y="144" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">both lab containers said healthy</text>
+  <text x="372" y="168" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">CPU% on Node · 137 read as OOM</text>
+  <text x="372" y="184" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">blocked and busy look identical</text>
+
+  <rect x="24" y="222" width="652" height="76" rx="6" fill="#0a1120" stroke="#fcd34d"/>
+  <text x="38" y="242" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">and the fifth misleading signal: your memory of what normal looks like</text>
+  <text x="38" y="262" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">if you do not know this site&#39;s usual p99, every number you read tonight is unanchored</text>
+  <text x="38" y="280" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">run all of these on a HEALTHY system once — that is what makes them readable later</text>
+</svg>

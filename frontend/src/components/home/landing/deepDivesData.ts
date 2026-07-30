@@ -106,7 +106,6 @@ export const DEEP_DIVES: DeepDive[] = [
     logo: 'linux',
     title: 'Reading Production: Logs, Metrics and a Calm Head',
     blurb: 'What to look at first when the thing you shipped is on fire.',
-    href: '/exam',
-    via: 'Practical exam · PE-10',
+    article: 'reading-production-logs-metrics-and-a-calm-head',
   },
 ];

@@ -12775,6 +12775,1412 @@ export default {
           "explanation": "<div class=\"ml-en\">For confidentiality, the <b>encryption key</b> (public key) is known to everyone; only the recipient holds the private decryption key.</div><div class=\"ml-vi\">Để đảm bảo bí mật, <b>khoá mã hoá</b> (khoá công khai) được mọi người biết; chỉ người nhận giữ khoá giải mã riêng tư.</div>"
         }
       ]
+    },
+    {
+      "kind": "FE",
+      "code": "CSI-D10",
+      "source": "REAL",
+      "sortOrder": 9,
+      "title": "Đề 10 — FA25 Final Exam (CSI106)|||Đề 10 — Thi cuối kỳ FA25 (CSI106)",
+      "description": "CSI104 real FE multiple-choice paper (Fall 2025), transcribed from the exam images. 1 of the 61 scanned images (position 21) was a duplicate capture of question 20, leaving exactly 60 unique real questions — no authored filler needed. (60 questions)|||Đề trắc nghiệm FE thật môn CSI104 (kỳ Thu 2025), chép từ ảnh đề. 1 trong 61 ảnh quét (vị trí 21) là bản chụp trùng của câu 20, còn lại đúng 60 câu duy nhất thật — không cần bù câu tự soạn. (60 câu)",
+      "durationMinutes": 60,
+      "totalPoints": 10,
+      "passMark": 5,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In which phase of the software lifecycle is the problem domain analyzed?|||Miền vấn đề (problem domain) được phân tích ở giai đoạn nào của vòng đời phần mềm?",
+          "options": [
+            {
+              "text": "Design|||Thiết kế"
+            },
+            {
+              "text": "Testing|||Kiểm thử"
+            },
+            {
+              "text": "Analysis|||Phân tích"
+            },
+            {
+              "text": "Implementation|||Triển khai"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">The <b>Analysis</b> phase studies the problem domain and requirements before any design decisions are made.</div><div class=\"ml-vi\">Giai đoạn <b>Phân tích</b> nghiên cứu miền vấn đề và yêu cầu trước khi đưa ra bất kỳ quyết định thiết kế nào.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following software development methodologies emphasizes iterative development, collaboration among cross-functional teams, and frequent customer feedback?|||Phương pháp phát triển phần mềm nào nhấn mạnh phát triển lặp, hợp tác giữa các nhóm đa chức năng, và phản hồi thường xuyên từ khách hàng?",
+          "options": [
+            {
+              "text": "Waterfall model|||Mô hình thác nước"
+            },
+            {
+              "text": "Agile methodology|||Phương pháp Agile"
+            },
+            {
+              "text": "Spiral model|||Mô hình xoắn ốc"
+            },
+            {
+              "text": "RAD (Rapid Application Development)|||RAD (Phát triển ứng dụng nhanh)"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Agile</b> is defined by short iterations, cross-functional collaboration, and continuous customer feedback.</div><div class=\"ml-vi\"><b>Agile</b> được định nghĩa bởi các lần lặp ngắn, hợp tác đa chức năng, và phản hồi liên tục từ khách hàng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is a key difference between glass-box testing and black-box testing?|||Điểm khác biệt chính giữa kiểm thử hộp kính (glass-box) và kiểm thử hộp đen (black-box) là gì?",
+          "options": [
+            {
+              "text": "Glass-box testing focuses on the internal logic of the software, while black-box testing focuses on the external functionality|||Kiểm thử hộp kính tập trung vào logic nội bộ của phần mềm, còn hộp đen tập trung vào chức năng bên ngoài"
+            },
+            {
+              "text": "Glass-box testing does not require any knowledge of the internal code, while black-box testing does|||Kiểm thử hộp kính không cần biết mã nguồn nội bộ, còn hộp đen thì cần"
+            },
+            {
+              "text": "Black-box testing is performed by developers, while glass-box testing is performed by users.|||Kiểm thử hộp đen do lập trình viên thực hiện, còn hộp kính do người dùng thực hiện."
+            },
+            {
+              "text": "There is no significant difference between glass-box testing and black-box testing.|||Không có khác biệt đáng kể giữa hai kiểu kiểm thử."
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Glass-box (white-box) testing</b> examines internal code paths and logic; <b>black-box testing</b> only checks external behavior against requirements, with no knowledge of internals.</div><div class=\"ml-vi\"><b>Kiểm thử hộp kính (white-box)</b> xem xét các luồng mã và logic nội bộ; <b>kiểm thử hộp đen</b> chỉ kiểm tra hành vi bên ngoài so với yêu cầu, không biết gì về nội bộ.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Why is documentation considered important in software engineering?|||Vì sao tài liệu (documentation) được coi là quan trọng trong kỹ nghệ phần mềm?",
+          "options": [
+            {
+              "text": "It makes the software look more professional.|||Nó làm phần mềm trông chuyên nghiệp hơn."
+            },
+            {
+              "text": "It helps ensure that the software can be maintained, understood, and used effectively by different stakeholders|||Nó giúp đảm bảo phần mềm có thể được bảo trì, hiểu, và sử dụng hiệu quả bởi các bên liên quan khác nhau"
+            },
+            {
+              "text": "It is required by law in most countries.|||Nó là yêu cầu bắt buộc theo luật ở hầu hết các nước."
+            },
+            {
+              "text": "It reduces the time needed for coding.|||Nó giảm thời gian cần để viết code."
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">Documentation lets developers, maintainers, testers, and users all understand and work with the software correctly over its lifetime.</div><div class=\"ml-vi\">Tài liệu giúp lập trình viên, người bảo trì, tester, và người dùng đều hiểu và làm việc đúng với phần mềm trong suốt vòng đời của nó.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In a relational database, what operations can we define to create new relationships?|||Trong cơ sở dữ liệu quan hệ, ta có thể định nghĩa những phép toán nào để tạo ra các quan hệ mới?",
+          "options": [
+            {
+              "text": "Insert, delete, update, select, join, union, intersection, and difference|||Chèn, xoá, cập nhật, chọn, kết nối, hợp, giao, và hiệu"
+            },
+            {
+              "text": "Insert, delete, update, select, project, union, intersection, and except|||Chèn, xoá, cập nhật, chọn, chiếu, hợp, giao, và except"
+            },
+            {
+              "text": "Insert, delete, update, select, project, join, union, intersection, and difference|||Chèn, xoá, cập nhật, chọn, chiếu, kết nối, hợp, giao, và hiệu"
+            },
+            {
+              "text": "Insert, delete, update, select, project, join, union, intersection, and except|||Chèn, xoá, cập nhật, chọn, chiếu, kết nối, hợp, giao, và except"
+            },
+            {
+              "text": "None of the others|||Không đáp án nào khác đúng"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">The relational-algebra operators that build new relations from existing ones are <b>project, join, union, intersection, and difference</b> (the academic term is \"difference\", not SQL's \"EXCEPT\") — together with the basic DML ops insert/delete/update/select.</div><div class=\"ml-vi\">Các phép toán đại số quan hệ dựng ra quan hệ mới từ các quan hệ có sẵn là <b>chiếu, kết nối, hợp, giao, và hiệu</b> (thuật ngữ học thuật là \"difference\", không phải \"EXCEPT\" của SQL) — cùng với các phép DML cơ bản chèn/xoá/cập nhật/chọn.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following is NOT a component of a database management system (DBMS)?|||Thành phần nào sau đây KHÔNG phải là một thành phần của hệ quản trị cơ sở dữ liệu (DBMS)?",
+          "options": [
+            {
+              "text": "Hardware|||Phần cứng"
+            },
+            {
+              "text": "Software|||Phần mềm"
+            },
+            {
+              "text": "Network|||Mạng"
+            },
+            {
+              "text": "Data|||Dữ liệu"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">The standard DBMS components are <b>hardware, software, data, and procedures/users</b>. A network is only relevant for distributed setups, not a core DBMS component.</div><div class=\"ml-vi\">Các thành phần chuẩn của DBMS là <b>phần cứng, phần mềm, dữ liệu, và thủ tục/người dùng</b>. Mạng chỉ liên quan trong triển khai phân tán, không phải thành phần cốt lõi của DBMS.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the primary key in a relational database table?|||Khoá chính (primary key) trong một bảng cơ sở dữ liệu quan hệ là gì?",
+          "options": [
+            {
+              "text": "A column that can store null values|||Một cột có thể lưu giá trị null"
+            },
+            {
+              "text": "A column or combination of columns that uniquely identify each row in the table|||Một cột hoặc tổ hợp cột định danh duy nhất mỗi dòng trong bảng"
+            },
+            {
+              "text": "A column used for indexing|||Một cột dùng để đánh chỉ mục"
+            },
+            {
+              "text": "A foreign key reference in another table|||Một tham chiếu khoá ngoại ở bảng khác"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">A <b>primary key</b> is the column (or set of columns) that uniquely identifies every row and cannot be null.</div><div class=\"ml-vi\"><b>Khoá chính</b> là cột (hoặc tập cột) định danh duy nhất mỗi dòng và không được phép null.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which is true about organizing relational data storage?|||Điều nào đúng về cách tổ chức lưu trữ dữ liệu quan hệ?",
+          "options": [
+            {
+              "text": "The physical storage of the data is independent of the way in which the data is logically organized|||Lưu trữ vật lý của dữ liệu độc lập với cách dữ liệu được tổ chức logic"
+            },
+            {
+              "text": "The abstract storage of the data is independent of the way in which the data is logically organized|||Lưu trữ trừu tượng của dữ liệu độc lập với cách dữ liệu được tổ chức logic"
+            },
+            {
+              "text": "The logical storage of the data is independent of the way in which the data is logically organized|||Lưu trữ logic của dữ liệu độc lập với cách dữ liệu được tổ chức logic"
+            },
+            {
+              "text": "The virtual storage of the data is independent of the way in which the data is logically organized|||Lưu trữ ảo của dữ liệu độc lập với cách dữ liệu được tổ chức logic"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">This is the principle of <b>physical data independence</b>: how bytes sit on disk can change without affecting the logical (table) view the user works with.</div><div class=\"ml-vi\">Đây là nguyên lý <b>độc lập dữ liệu vật lý</b>: cách byte nằm trên đĩa có thể thay đổi mà không ảnh hưởng tới góc nhìn logic (bảng) mà người dùng thao tác.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following examples demonstrates the \"repetition\" construct in an algorithm?|||Ví dụ nào sau đây thể hiện cấu trúc \"lặp\" (repetition) trong một thuật toán?",
+          "options": [
+            {
+              "text": "Assigning a value to a variable|||Gán giá trị cho một biến"
+            },
+            {
+              "text": "Evaluating a condition once|||Đánh giá một điều kiện một lần"
+            },
+            {
+              "text": "Using a for loop to iterate over a list|||Dùng vòng lặp for để duyệt qua một danh sách"
+            },
+            {
+              "text": "Breaking out of a loop|||Thoát khỏi một vòng lặp"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">A <b>for loop iterating over a list</b> repeats the same block of steps for each element — the definition of the repetition construct.</div><div class=\"ml-vi\"><b>Vòng lặp for duyệt qua danh sách</b> lặp lại cùng một khối bước cho mỗi phần tử — đúng định nghĩa của cấu trúc lặp.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following statements is true regarding search algorithms for a list of elements?|||Phát biểu nào đúng về các thuật toán tìm kiếm trên danh sách phần tử?",
+          "options": [
+            {
+              "text": "Binary search is more efficient than sequential search for large lists, but it requires the list to be sorted.|||Tìm kiếm nhị phân hiệu quả hơn tìm kiếm tuần tự với danh sách lớn, nhưng đòi hỏi danh sách phải đã sắp xếp."
+            },
+            {
+              "text": "Binary search can be used on an unsorted list to improve search efficiency compared to sequential search.|||Tìm kiếm nhị phân có thể dùng trên danh sách chưa sắp xếp để cải thiện hiệu quả so với tìm kiếm tuần tự."
+            },
+            {
+              "text": "Sequential search requires fewer comparisons than binary search in the worst case, regardless of whether the list is sorted or not.|||Tìm kiếm tuần tự cần ít phép so sánh hơn tìm kiếm nhị phân trong trường hợp xấu nhất, bất kể danh sách đã sắp xếp hay chưa."
+            },
+            {
+              "text": "Sequential search and binary search require the same number of comparisons in the worst case if the list is sorted.|||Tìm kiếm tuần tự và tìm kiếm nhị phân cần cùng số phép so sánh trong trường hợp xấu nhất nếu danh sách đã sắp xếp."
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Binary search</b> runs in O(log n) vs sequential search's O(n), but only works correctly on a <b>sorted</b> list.</div><div class=\"ml-vi\"><b>Tìm kiếm nhị phân</b> chạy O(log n) so với O(n) của tìm kiếm tuần tự, nhưng chỉ đúng khi danh sách đã được <b>sắp xếp</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is an algorithm?|||Thuật toán (algorithm) là gì?",
+          "options": [
+            {
+              "text": "A set of programming commands or instructions that are executed in a specific order to perform a task|||Một tập lệnh lập trình được thực thi theo thứ tự cụ thể để thực hiện một tác vụ"
+            },
+            {
+              "text": "A step-by-step procedure to solve a problem or accomplish a task|||Một quy trình từng bước để giải quyết vấn đề hoặc hoàn thành một tác vụ"
+            },
+            {
+              "text": "A program that is loaded into the computer's memory and is ready for execution|||Một chương trình được nạp vào bộ nhớ máy tính và sẵn sàng thực thi"
+            },
+            {
+              "text": "A method for compressing data to reduce its size for efficient storage or transmission|||Một phương pháp nén dữ liệu để giảm kích thước nhằm lưu trữ/truyền tải hiệu quả"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">An <b>algorithm</b> is a general step-by-step procedure for solving a problem, independent of any specific programming language.</div><div class=\"ml-vi\"><b>Thuật toán</b> là một quy trình từng bước tổng quát để giải quyết vấn đề, độc lập với bất kỳ ngôn ngữ lập trình cụ thể nào.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In which scenario is a binary search algorithm ineffective?|||Trong tình huống nào thuật toán tìm kiếm nhị phân KHÔNG hiệu quả?",
+          "options": [
+            {
+              "text": "When the data is sorted|||Khi dữ liệu đã sắp xếp"
+            },
+            {
+              "text": "When the data is unsorted|||Khi dữ liệu chưa sắp xếp"
+            },
+            {
+              "text": "When the data is in an array|||Khi dữ liệu nằm trong mảng"
+            },
+            {
+              "text": "When the data is in a linked list|||Khi dữ liệu nằm trong danh sách liên kết"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">Binary search relies on comparing against a sorted midpoint; on <b>unsorted data</b> it gives wrong results and offers no advantage over sequential search.</div><div class=\"ml-vi\">Tìm kiếm nhị phân dựa vào so sánh với điểm giữa đã sắp xếp; với <b>dữ liệu chưa sắp xếp</b> nó cho kết quả sai và không có lợi thế gì so với tìm kiếm tuần tự.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following UML diagram types is most suitable for representing the flow of control within an algorithm, including loops and conditional statements?|||Loại biểu đồ UML nào phù hợp nhất để biểu diễn luồng điều khiển bên trong một thuật toán, gồm cả vòng lặp và câu lệnh điều kiện?",
+          "options": [
+            {
+              "text": "Class diagram|||Biểu đồ lớp (Class diagram)"
+            },
+            {
+              "text": "Sequence diagram|||Biểu đồ tuần tự (Sequence diagram)"
+            },
+            {
+              "text": "Activity diagram|||Biểu đồ hoạt động (Activity diagram)"
+            },
+            {
+              "text": "State diagram|||Biểu đồ trạng thái (State diagram)"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">An <b>Activity diagram</b> models control flow — decisions, loops, and parallel paths — much like a flowchart for an algorithm.</div><div class=\"ml-vi\"><b>Biểu đồ hoạt động (Activity diagram)</b> mô hình hoá luồng điều khiển — rẽ nhánh, vòng lặp, đường chạy song song — giống một lưu đồ cho thuật toán.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Each element in a record is called a(n) ______|||Mỗi phần tử trong một bản ghi (record) được gọi là ______",
+          "options": [
+            {
+              "text": "Cell|||Ô (Cell)"
+            },
+            {
+              "text": "Word|||Từ (Word)"
+            },
+            {
+              "text": "Item|||Mục (Item)"
+            },
+            {
+              "text": "Field|||Trường (Field)"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">Each individual element inside a record is called a <b>field</b> (e.g. a \"name\" or \"age\" field).</div><div class=\"ml-vi\">Mỗi phần tử riêng lẻ bên trong một bản ghi được gọi là một <b>trường (field)</b> (ví dụ trường \"tên\" hoặc \"tuổi\").</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What are the characteristics of a binary search tree (BST) in terms of data order?|||Đặc điểm của cây tìm kiếm nhị phân (BST) về thứ tự dữ liệu là gì?",
+          "options": [
+            {
+              "text": "The data in the parent node is always larger than the data in the left child node and smaller than the data in the right child node|||Dữ liệu ở nút cha luôn lớn hơn dữ liệu ở nút con trái và nhỏ hơn dữ liệu ở nút con phải"
+            },
+            {
+              "text": "The data in the parent node is always smaller than the data in the left child node and larger than the data in the right child node|||Dữ liệu ở nút cha luôn nhỏ hơn dữ liệu ở nút con trái và lớn hơn dữ liệu ở nút con phải"
+            },
+            {
+              "text": "The data at the nodes does not have any order|||Dữ liệu ở các nút không theo thứ tự nào cả"
+            },
+            {
+              "text": "The data in the left child node and right child node are always equal|||Dữ liệu ở nút con trái và nút con phải luôn bằng nhau"
+            },
+            {
+              "text": "None of the others|||Không đáp án nào khác đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">In a <b>BST</b>, every left-subtree value is smaller than the parent and every right-subtree value is larger — i.e. parent > left child, parent < right child.</div><div class=\"ml-vi\">Trong <b>BST</b>, mọi giá trị ở cây con trái nhỏ hơn nút cha và mọi giá trị ở cây con phải lớn hơn nút cha — tức nút cha > con trái, nút cha < con phải.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is Queue used for?|||Hàng đợi (Queue) dùng để làm gì?",
+          "options": [
+            {
+              "text": "Keep the same order|||Giữ nguyên thứ tự"
+            },
+            {
+              "text": "Reverse the order of elements|||Đảo ngược thứ tự phần tử"
+            },
+            {
+              "text": "Random elements|||Lấy phần tử ngẫu nhiên"
+            },
+            {
+              "text": "Sort the elements|||Sắp xếp các phần tử"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">A <b>queue</b> is FIFO (first-in, first-out), so elements come out in the <b>same order</b> they went in.</div><div class=\"ml-vi\"><b>Hàng đợi</b> hoạt động theo nguyên tắc FIFO (vào trước ra trước), nên các phần tử ra theo <b>đúng thứ tự</b> lúc vào.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Inside the ADT (abstract data type) are two different parts of the model:|||Bên trong ADT (kiểu dữ liệu trừu tượng) gồm hai phần khác nhau của mô hình:",
+          "options": [
+            {
+              "text": "Hardware and software|||Phần cứng và phần mềm"
+            },
+            {
+              "text": "Database and operations|||Cơ sở dữ liệu và các thao tác"
+            },
+            {
+              "text": "Data structure and algorithms|||Cấu trúc dữ liệu và thuật toán"
+            },
+            {
+              "text": "Data structure and operations|||Cấu trúc dữ liệu và các thao tác"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">An <b>ADT</b> is defined by its <b>data structure</b> (how values are organized) plus the <b>operations</b> allowed on it (its interface), hiding the implementation.</div><div class=\"ml-vi\"><b>ADT</b> được định nghĩa bởi <b>cấu trúc dữ liệu</b> (cách tổ chức giá trị) cộng với các <b>thao tác</b> được phép trên nó (giao diện), ẩn đi phần cài đặt.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which data structure is commonly used for First-In, First-Out (FIFO) data processing?|||Cấu trúc dữ liệu nào thường dùng cho xử lý dữ liệu Vào Trước Ra Trước (FIFO)?",
+          "options": [
+            {
+              "text": "Stack|||Ngăn xếp (Stack)"
+            },
+            {
+              "text": "Queue|||Hàng đợi (Queue)"
+            },
+            {
+              "text": "Tree|||Cây (Tree)"
+            },
+            {
+              "text": "Linked list|||Danh sách liên kết (Linked list)"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Queue</b> is the standard FIFO structure — elements are removed in the order they were added.</div><div class=\"ml-vi\"><b>Queue (hàng đợi)</b> là cấu trúc FIFO chuẩn — các phần tử được lấy ra theo đúng thứ tự chúng được thêm vào.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "________ is the mask to unset (clear) the four leftmost bits of the pattern 1010 0111?|||________ là mặt nạ (mask) để xoá (đặt về 0) bốn bit ngoài cùng bên trái của mẫu bit 1010 0111?",
+          "options": [
+            {
+              "text": "0000 1111|||0000 1111"
+            },
+            {
+              "text": "1111 0000|||1111 0000"
+            },
+            {
+              "text": "0101 1000|||0101 1000"
+            },
+            {
+              "text": "1010 0000|||1010 0000"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">ANDing with a mask clears any bit where the mask is 0. To clear the four leftmost bits while keeping the rest, the mask must be <b>0000 1111</b> (0s over the bits to clear, 1s over the bits to keep).</div><div class=\"ml-vi\">Phép AND với mặt nạ sẽ xoá bất kỳ bit nào mà mặt nạ có giá trị 0. Để xoá bốn bit ngoài cùng bên trái mà giữ nguyên phần còn lại, mặt nạ phải là <b>0000 1111</b> (0 ở các bit cần xoá, 1 ở các bit cần giữ).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which IEEE standard is most commonly used for representing floating-point numbers in computers?|||Chuẩn IEEE nào được dùng phổ biến nhất để biểu diễn số thực dấu phẩy động (floating-point) trong máy tính?",
+          "options": [
+            {
+              "text": "IEEE 754|||IEEE 754"
+            },
+            {
+              "text": "IEEE 802|||IEEE 802"
+            },
+            {
+              "text": "IEEE 1284|||IEEE 1284"
+            },
+            {
+              "text": "IEEE 1394|||IEEE 1394"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>IEEE 754</b> is the universal standard for floating-point representation (single/double precision).</div><div class=\"ml-vi\"><b>IEEE 754</b> là chuẩn phổ quát cho biểu diễn số thực dấu phẩy động (đơn/kép chính xác).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "To un-set (force to 0) all the bits of a bit pattern, we ____|||Để đặt về 0 (xoá) toàn bộ các bit của một mẫu bit, ta ____",
+          "options": [
+            {
+              "text": "make a mask of all 0s and then AND the bit pattern and the mask.|||tạo một mặt nạ toàn số 0 rồi thực hiện AND mẫu bit với mặt nạ."
+            },
+            {
+              "text": "make a mask exactly the same as the bit pattern and then XOR the bit pattern and the mask.|||tạo một mặt nạ giống hệt mẫu bit rồi thực hiện XOR mẫu bit với mặt nạ."
+            },
+            {
+              "text": "Both a and b are correct|||Cả a và b đều đúng"
+            },
+            {
+              "text": "Both a and b are incorrect|||Cả a và b đều sai"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">ANDing with an all-0 mask forces every bit to 0. XORing a pattern with an identical copy of itself also always yields all 0s (x XOR x = 0). <b>Both methods work</b>.</div><div class=\"ml-vi\">AND với mặt nạ toàn số 0 buộc mọi bit về 0. XOR một mẫu bit với chính bản sao của nó cũng luôn cho toàn số 0 (x XOR x = 0). <b>Cả hai cách đều đúng</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What does \"sampling\" refer to in the context of audio storage?|||\"Lấy mẫu\" (sampling) trong lưu trữ âm thanh nghĩa là gì?",
+          "options": [
+            {
+              "text": "Converting audio into hexadecimal format|||Chuyển âm thanh sang định dạng thập lục phân"
+            },
+            {
+              "text": "Capturing discrete values of the sound wave at regular intervals|||Ghi lại các giá trị rời rạc của sóng âm ở các khoảng thời gian đều nhau"
+            },
+            {
+              "text": "Compressing the audio file|||Nén tệp âm thanh"
+            },
+            {
+              "text": "Encoding text metadata for audio|||Mã hoá siêu dữ liệu văn bản cho âm thanh"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Sampling</b> measures and records the amplitude of an analog sound wave at fixed time intervals to digitize it.</div><div class=\"ml-vi\"><b>Lấy mẫu</b> đo và ghi lại biên độ của sóng âm tương tự ở các khoảng thời gian cố định để số hoá nó.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which shift operation would you use to divide a signed integer by 2?|||Phép dịch bit nào dùng để chia một số nguyên có dấu cho 2?",
+          "options": [
+            {
+              "text": "Logical right shift|||Dịch phải logic"
+            },
+            {
+              "text": "Arithmetic right shift|||Dịch phải số học"
+            },
+            {
+              "text": "Logical left shift|||Dịch trái logic"
+            },
+            {
+              "text": "Arithmetic left shift|||Dịch trái số học"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">An <b>arithmetic right shift</b> preserves the sign bit while halving the value — the correct way to divide a signed integer by 2.</div><div class=\"ml-vi\"><b>Dịch phải số học</b> giữ nguyên bit dấu trong khi chia đôi giá trị — cách đúng để chia một số nguyên có dấu cho 2.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which file format is commonly used for storing vector images?|||Định dạng tệp nào thường dùng để lưu ảnh vector?",
+          "options": [
+            {
+              "text": ".jpg|||.jpg"
+            },
+            {
+              "text": ".svg|||.svg"
+            },
+            {
+              "text": ".gif|||.gif"
+            },
+            {
+              "text": ".mp4|||.mp4"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>.svg</b> (Scalable Vector Graphics) stores images as mathematical shapes, unlike .jpg/.gif which are raster (pixel-based).</div><div class=\"ml-vi\"><b>.svg</b> (Scalable Vector Graphics) lưu ảnh dưới dạng hình học toán học, khác với .jpg/.gif là ảnh raster (theo điểm ảnh).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "To guarantee secure communication among 10 hosts using asymmetric-key encryption, how many keys are necessary?|||Để đảm bảo giao tiếp an toàn giữa 10 máy chủ dùng mã hoá khoá bất đối xứng, cần bao nhiêu khoá?",
+          "options": [
+            {
+              "text": "20|||20"
+            },
+            {
+              "text": "21|||21"
+            },
+            {
+              "text": "100|||100"
+            },
+            {
+              "text": "90|||90"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">With asymmetric encryption, each host needs its own key <b>pair</b> (1 public + 1 private) = 2 keys per host, so 10 hosts need <b>2×10 = 20</b> keys total — far fewer than symmetric key's n(n-1)/2 pairwise keys.</div><div class=\"ml-vi\">Với mã hoá bất đối xứng, mỗi máy chủ cần một <b>cặp khoá</b> riêng (1 công khai + 1 riêng tư) = 2 khoá/máy, nên 10 máy cần <b>2×10 = 20</b> khoá tổng cộng — ít hơn nhiều so với n(n-1)/2 khoá theo cặp của mã hoá đối xứng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which statement describes red hat hackers?|||Phát biểu nào mô tả đúng về hacker mũ đỏ (red hat hackers)?",
+          "options": [
+            {
+              "text": "Hackers who infiltrate computer networks with negative motives, such as monetary gain or reputation building|||Hacker xâm nhập mạng máy tính với động cơ xấu, như trục lợi tiền bạc hoặc gây dựng danh tiếng"
+            },
+            {
+              "text": "Hackers who track down black hat hackers and work to stop their activities|||Hacker truy lùng hacker mũ đen và ra tay ngăn chặn hoạt động của họ"
+            },
+            {
+              "text": "Hackers whose actions are often driven by revenge or personal agendas|||Hacker hành động thường vì trả thù hoặc mục đích cá nhân"
+            },
+            {
+              "text": "Hackers who expose large datasets online for the public good|||Hacker công khai các bộ dữ liệu lớn lên mạng vì lợi ích công cộng"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Red hat hackers</b> act as vigilantes — they hunt down black hat hackers and aggressively shut down their operations.</div><div class=\"ml-vi\"><b>Hacker mũ đỏ</b> đóng vai trò \"tự xử\" — họ truy lùng hacker mũ đen và mạnh tay triệt phá hoạt động của những kẻ này.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "How many types of cyber attacks exist?|||Có bao nhiêu loại tấn công mạng (cyber attack)?",
+          "options": [
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "5|||5"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Introductory security material commonly splits cyber attacks into two broad categories: <b>active attacks</b> (modify/disrupt data or systems) and <b>passive attacks</b> (only eavesdrop/monitor). This matches the \"2\" answer used in this course's slides.</div><div class=\"ml-vi\">Tài liệu nhập môn bảo mật thường chia tấn công mạng thành hai loại chính: <b>tấn công chủ động</b> (thay đổi/phá hoại dữ liệu hoặc hệ thống) và <b>tấn công bị động</b> (chỉ nghe lén/theo dõi). Khớp với đáp án \"2\" theo slide môn học này.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "How many main types of intellectual property are recognized?|||Có bao nhiêu loại tài sản trí tuệ (intellectual property) chính được công nhận?",
+          "options": [
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "5|||5"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">The four widely recognized types of intellectual property are <b>patents, trademarks, copyrights, and trade secrets</b>.</div><div class=\"ml-vi\">Bốn loại tài sản trí tuệ được công nhận rộng rãi là <b>bằng sáng chế, nhãn hiệu, bản quyền, và bí mật thương mại</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following is NOT a computer language paradigm?|||Yếu tố nào sau đây KHÔNG phải là một mô hình lập trình (programming paradigm)?",
+          "options": [
+            {
+              "text": "Procedural|||Thủ tục (Procedural)"
+            },
+            {
+              "text": "Object-oriented|||Hướng đối tượng (Object-oriented)"
+            },
+            {
+              "text": "Functional|||Hàm (Functional)"
+            },
+            {
+              "text": "Declarative|||Khai báo (Declarative)"
+            },
+            {
+              "text": "Mathematical|||Toán học (Mathematical)"
+            }
+          ],
+          "correctIndexes": [
+            4
+          ],
+          "explanation": "<div class=\"ml-en\">Procedural, object-oriented, functional, and declarative are all recognized programming paradigms; \"<b>Mathematical</b>\" is not a standard paradigm name.</div><div class=\"ml-vi\">Thủ tục, hướng đối tượng, hàm, và khai báo đều là các mô hình lập trình được công nhận; \"<b>Toán học</b>\" không phải tên một mô hình lập trình chuẩn.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is a major difference between procedural and object-oriented programming?|||Khác biệt chính giữa lập trình thủ tục và lập trình hướng đối tượng là gì?",
+          "options": [
+            {
+              "text": "Procedural programming uses functions, while object-oriented programming uses loops.|||Lập trình thủ tục dùng hàm, còn lập trình hướng đối tượng dùng vòng lặp."
+            },
+            {
+              "text": "Object-oriented programming organizes code into objects, while procedural programming uses a linear sequence of instructions.|||Lập trình hướng đối tượng tổ chức mã thành các đối tượng, còn lập trình thủ tục dùng một chuỗi lệnh tuyến tính."
+            },
+            {
+              "text": "Procedural programming supports inheritance, while object-oriented programming does not.|||Lập trình thủ tục hỗ trợ kế thừa, còn lập trình hướng đối tượng thì không."
+            },
+            {
+              "text": "Object-oriented programming does not allow code reuse, while procedural programming does.|||Lập trình hướng đối tượng không cho phép tái sử dụng mã, còn lập trình thủ tục thì có."
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>OOP</b> bundles data and behavior into objects; <b>procedural</b> code is a straight-line (or function-call) sequence of instructions operating on separate data.</div><div class=\"ml-vi\"><b>OOP</b> gói dữ liệu và hành vi vào các đối tượng; mã <b>thủ tục</b> là một chuỗi lệnh tuyến tính (hoặc gọi hàm) thao tác trên dữ liệu tách rời.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "How does a compiler function in the context of high-level languages?|||Trình biên dịch (compiler) hoạt động thế nào với ngôn ngữ bậc cao?",
+          "options": [
+            {
+              "text": "It directly executes the high-level code|||Nó thực thi trực tiếp mã bậc cao"
+            },
+            {
+              "text": "It translates high-level code into machine language all at once|||Nó dịch toàn bộ mã bậc cao sang ngôn ngữ máy cùng một lúc"
+            },
+            {
+              "text": "It translates and executes the code line by line|||Nó dịch và thực thi mã từng dòng một"
+            },
+            {
+              "text": "It optimizes the code for better performance|||Nó tối ưu hoá mã để tăng hiệu năng"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">A <b>compiler</b> translates the entire source program into machine code in one pass, before execution (unlike an interpreter, which runs line by line).</div><div class=\"ml-vi\"><b>Trình biên dịch</b> dịch toàn bộ chương trình nguồn sang mã máy trong một lượt, trước khi thực thi (khác với trình thông dịch chạy từng dòng).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Choose the most suitable answer: Python is a/an _____ language|||Chọn đáp án phù hợp nhất: Python là một ngôn ngữ _____",
+          "options": [
+            {
+              "text": "object-oriented|||hướng đối tượng"
+            },
+            {
+              "text": "procedural|||thủ tục"
+            },
+            {
+              "text": "functional|||hàm"
+            },
+            {
+              "text": "declarative|||khai báo"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Python is most commonly classified as an <b>object-oriented</b> language (everything is an object), even though it also supports procedural and functional styles.</div><div class=\"ml-vi\">Python thường được xếp vào nhóm ngôn ngữ <b>hướng đối tượng</b> (mọi thứ đều là object), dù nó cũng hỗ trợ phong cách thủ tục và hàm.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Who is known as the \"Father of the Computer\"?|||Ai được coi là \"Cha đẻ của máy tính\"?",
+          "options": [
+            {
+              "text": "Alan Turing|||Alan Turing"
+            },
+            {
+              "text": "Charles Babbage|||Charles Babbage"
+            },
+            {
+              "text": "Steve Jobs|||Steve Jobs"
+            },
+            {
+              "text": "Bill Gates|||Bill Gates"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Charles Babbage</b> designed the Analytical Engine, the first mechanical general-purpose computer concept, earning him the title \"Father of the Computer\".</div><div class=\"ml-vi\"><b>Charles Babbage</b> thiết kế Analytical Engine, khái niệm máy tính cơ khí đa năng đầu tiên, nên được gọi là \"Cha đẻ của máy tính\".</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What model is the foundation of modern computers?|||Mô hình nào là nền tảng của máy tính hiện đại?",
+          "options": [
+            {
+              "text": "Leibnitz|||Leibnitz"
+            },
+            {
+              "text": "von Neumann|||von Neumann"
+            },
+            {
+              "text": "Pascal|||Pascal"
+            },
+            {
+              "text": "Charles Babbage|||Charles Babbage"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">The <b>von Neumann architecture</b> (stored-program concept: shared memory for instructions and data) underlies virtually all modern computers.</div><div class=\"ml-vi\"><b>Kiến trúc von Neumann</b> (khái niệm chương trình lưu trữ: bộ nhớ chung cho lệnh và dữ liệu) là nền tảng của hầu hết máy tính hiện đại.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "According to the Von Neumann model, which one is NOT a computer hardware subsystem?|||Theo mô hình Von Neumann, đâu KHÔNG phải là một phân hệ phần cứng của máy tính?",
+          "options": [
+            {
+              "text": "Arithmetic logic unit (ALU)|||Đơn vị số học-logic (ALU)"
+            },
+            {
+              "text": "Input/Output (I/O)|||Vào/Ra (I/O)"
+            },
+            {
+              "text": "Control unit (CU)|||Đơn vị điều khiển (CU)"
+            },
+            {
+              "text": "Power supply unit (PSU)|||Bộ nguồn (PSU)"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">The Von Neumann model defines CPU (ALU + CU), memory, and I/O as its subsystems; the <b>power supply unit</b> is not part of this architectural model.</div><div class=\"ml-vi\">Mô hình Von Neumann định nghĩa CPU (ALU + CU), bộ nhớ, và I/O là các phân hệ; <b>bộ nguồn</b> không thuộc mô hình kiến trúc này.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "A memory with 128 kilobytes and a word size of 1 byte has an address space that ranges from ______ to ______.|||Một bộ nhớ 128 kilobyte với kích thước từ (word) 1 byte có không gian địa chỉ chạy từ ______ đến ______.",
+          "options": [
+            {
+              "text": "0; 131 071|||0; 131 071"
+            },
+            {
+              "text": "1; 131 071|||1; 131 071"
+            },
+            {
+              "text": "0; 131 072|||0; 131 072"
+            },
+            {
+              "text": "1; 131 072|||1; 131 072"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">128 KB = 131 072 bytes. With byte-addressing starting at 0, valid addresses run from <b>0 to 131 071</b> (131 072 total addresses).</div><div class=\"ml-vi\">128 KB = 131 072 byte. Với địa chỉ theo byte bắt đầu từ 0, địa chỉ hợp lệ chạy từ <b>0 đến 131 071</b> (tổng cộng 131 072 địa chỉ).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following is closest to the CPU in the memory hierarchy?|||Thành phần nào sau đây gần CPU nhất trong hệ thống phân cấp bộ nhớ?",
+          "options": [
+            {
+              "text": "Cache memory|||Bộ nhớ đệm (Cache)"
+            },
+            {
+              "text": "Secondary storage|||Bộ nhớ phụ (Secondary storage)"
+            },
+            {
+              "text": "Main memory|||Bộ nhớ chính (Main memory)"
+            },
+            {
+              "text": "Virtual memory|||Bộ nhớ ảo (Virtual memory)"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Cache memory</b> sits directly next to the CPU core (often on-chip), making it the fastest and closest level in the memory hierarchy.</div><div class=\"ml-vi\"><b>Bộ nhớ đệm (Cache)</b> nằm ngay sát lõi CPU (thường trên cùng chip), là tầng nhanh nhất và gần nhất trong hệ thống phân cấp bộ nhớ.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which type of file structure uses hash functions for indexing?|||Loại cấu trúc tệp nào dùng hàm băm (hash function) để đánh chỉ mục?",
+          "options": [
+            {
+              "text": "Sequential files|||Tệp tuần tự (Sequential files)"
+            },
+            {
+              "text": "Indexed files|||Tệp có chỉ mục (Indexed files)"
+            },
+            {
+              "text": "Hashed files|||Tệp băm (Hashed files)"
+            },
+            {
+              "text": "Binary files|||Tệp nhị phân (Binary files)"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Hashed files</b> compute a record's storage location directly from its key using a hash function, instead of scanning or using a separate index.</div><div class=\"ml-vi\"><b>Tệp băm</b> tính trực tiếp vị trí lưu trữ của bản ghi từ khoá của nó bằng hàm băm, thay vì quét tuần tự hay dùng chỉ mục riêng.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What does the bit string '0110000101100011' mean?|||Chuỗi bit '0110000101100011' có nghĩa gì?",
+          "options": [
+            {
+              "text": "It represents the two characters 'A' and 'C'|||Nó biểu diễn hai ký tự 'A' và 'C'"
+            },
+            {
+              "text": "It represents the two characters 'A' and 'b'|||Nó biểu diễn hai ký tự 'A' và 'b'"
+            },
+            {
+              "text": "It represents the two characters 'a' and 'c'|||Nó biểu diễn hai ký tự 'a' và 'c'"
+            },
+            {
+              "text": "It represents the decimal number 24903|||Nó biểu diễn số thập phân 24903"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">Split into bytes: 01100001 = 0x61 = ASCII <b>'a'</b>; 01100011 = 0x63 = ASCII <b>'c'</b>. So the string encodes 'a' and 'c'.</div><div class=\"ml-vi\">Tách thành byte: 01100001 = 0x61 = ASCII <b>'a'</b>; 01100011 = 0x63 = ASCII <b>'c'</b>. Vậy chuỗi mã hoá 'a' và 'c'.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "If we need to access one specific record without having to retrieve all records before it, we use a ______|||Nếu cần truy cập một bản ghi cụ thể mà không phải lấy hết các bản ghi đứng trước nó, ta dùng ______",
+          "options": [
+            {
+              "text": "sequential file structure|||cấu trúc tệp tuần tự"
+            },
+            {
+              "text": "random file structure|||cấu trúc tệp truy cập ngẫu nhiên"
+            },
+            {
+              "text": "Both a and b are correct|||Cả a và b đều đúng"
+            },
+            {
+              "text": "Both a and b are incorrect|||Cả a và b đều sai"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">A <b>random (direct-access) file structure</b> lets you jump straight to any record's location without reading the ones before it — unlike sequential files.</div><div class=\"ml-vi\"><b>Cấu trúc tệp truy cập ngẫu nhiên</b> cho phép nhảy thẳng tới vị trí bất kỳ bản ghi nào mà không cần đọc các bản ghi trước nó — khác với tệp tuần tự.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which access method typically requires additional space for maintaining an index structure but provides faster access to records compared to sequential access?|||Phương thức truy cập nào thường cần thêm không gian để duy trì cấu trúc chỉ mục nhưng cho phép truy cập bản ghi nhanh hơn so với truy cập tuần tự?",
+          "options": [
+            {
+              "text": "Sequential access|||Truy cập tuần tự"
+            },
+            {
+              "text": "Direct access|||Truy cập trực tiếp"
+            },
+            {
+              "text": "Indexed sequential access|||Truy cập tuần tự có chỉ mục"
+            },
+            {
+              "text": "Hashing|||Băm (Hashing)"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Indexed sequential access</b> (ISAM) keeps a separate index structure (extra space) that speeds up lookups while still allowing sequential scans.</div><div class=\"ml-vi\"><b>Truy cập tuần tự có chỉ mục</b> (ISAM) duy trì một cấu trúc chỉ mục riêng (tốn thêm không gian) giúp tra cứu nhanh hơn trong khi vẫn cho phép quét tuần tự.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What type of network device operates at the Data Link layer of the OSI model?|||Loại thiết bị mạng nào hoạt động ở tầng Liên kết dữ liệu (Data Link) của mô hình OSI?",
+          "options": [
+            {
+              "text": "Router|||Bộ định tuyến (Router)"
+            },
+            {
+              "text": "Switch|||Bộ chuyển mạch (Switch)"
+            },
+            {
+              "text": "Firewall|||Tường lửa (Firewall)"
+            },
+            {
+              "text": "Hub|||Bộ tập trung (Hub)"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">A <b>switch</b> forwards frames based on MAC addresses, which is Data Link layer (Layer 2) functionality.</div><div class=\"ml-vi\"><b>Switch</b> chuyển tiếp khung (frame) dựa trên địa chỉ MAC, đây là chức năng của tầng Liên kết dữ liệu (Layer 2).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the meaning of the first part of a URL? (for example: rtsp://192.168.1.1:8080/cam1)|||Phần đầu tiên của một URL có ý nghĩa gì? (ví dụ: rtsp://192.168.1.1:8080/cam1)",
+          "options": [
+            {
+              "text": "Define a protocol|||Định nghĩa một giao thức"
+            },
+            {
+              "text": "Define a host name|||Định nghĩa tên máy chủ"
+            },
+            {
+              "text": "Define a port|||Định nghĩa cổng"
+            },
+            {
+              "text": "Define a device|||Định nghĩa thiết bị"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The scheme before \"://\" (here <b>rtsp</b>) specifies the <b>protocol</b> used to access the resource.</div><div class=\"ml-vi\">Phần trước \"://\" (ở đây là <b>rtsp</b>) chỉ định <b>giao thức</b> dùng để truy cập tài nguyên.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which cryptographic protocol forms the foundation of HTTPS for secure communication over the internet?|||Giao thức mật mã nào là nền tảng của HTTPS cho giao tiếp an toàn trên internet?",
+          "options": [
+            {
+              "text": "RSA|||RSA"
+            },
+            {
+              "text": "SSL/TLS|||SSL/TLS"
+            },
+            {
+              "text": "AES|||AES"
+            },
+            {
+              "text": "SHA-256|||SHA-256"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>SSL/TLS</b> is the protocol layer that encrypts HTTP traffic to form HTTPS (RSA/AES/SHA are algorithms used inside TLS, not the protocol itself).</div><div class=\"ml-vi\"><b>SSL/TLS</b> là tầng giao thức mã hoá lưu lượng HTTP để tạo thành HTTPS (RSA/AES/SHA là các thuật toán được dùng bên trong TLS, không phải bản thân giao thức).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which layer of the TCP/IP model ensures reliable data transfer?|||Tầng nào của mô hình TCP/IP đảm bảo truyền dữ liệu tin cậy?",
+          "options": [
+            {
+              "text": "Physical layer|||Tầng Vật lý"
+            },
+            {
+              "text": "Transport layer|||Tầng Giao vận (Transport)"
+            },
+            {
+              "text": "Application layer|||Tầng Ứng dụng"
+            },
+            {
+              "text": "Data link layer|||Tầng Liên kết dữ liệu"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">The <b>Transport layer</b> (via TCP) provides reliable delivery — acknowledgments, retransmission, and ordering.</div><div class=\"ml-vi\"><b>Tầng Giao vận</b> (qua TCP) cung cấp truyền tin cậy — xác nhận, truyền lại, và sắp thứ tự.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "A device is sending out data at the rate of 1000 bps. How long does it take to send out 10 bits?|||Một thiết bị gửi dữ liệu với tốc độ 1000 bps. Cần bao lâu để gửi 10 bit?",
+          "options": [
+            {
+              "text": "10 ms|||10 ms"
+            },
+            {
+              "text": "1 ms|||1 ms"
+            },
+            {
+              "text": "10 000 ms|||10 000 ms"
+            },
+            {
+              "text": "100 ms|||100 ms"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Time = bits / rate = 10 / 1000 bps = 0.01 s = <b>10 ms</b>.</div><div class=\"ml-vi\">Thời gian = số bit / tốc độ = 10 / 1000 bps = 0,01 s = <b>10 ms</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the hexadecimal equivalent of the binary number (11011011)2?|||Giá trị thập lục phân tương đương của số nhị phân (11011011)2 là gì?",
+          "options": [
+            {
+              "text": "6D|||6D"
+            },
+            {
+              "text": "DB|||DB"
+            },
+            {
+              "text": "D6|||D6"
+            },
+            {
+              "text": "B6|||B6"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">Split into 4-bit nibbles: 1101 = D, 1011 = B → <b>DB</b>.</div><div class=\"ml-vi\">Tách thành các nhóm 4 bit: 1101 = D, 1011 = B → <b>DB</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following representations is erroneous?|||Cách biểu diễn nào sau đây là sai?",
+          "options": [
+            {
+              "text": "(10111)2|||(10111)2"
+            },
+            {
+              "text": "(349)8|||(349)8"
+            },
+            {
+              "text": "(3AB)16|||(3AB)16"
+            },
+            {
+              "text": "2656|||2656"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">Octal digits can only be 0-7, but <b>(349)8</b> contains a '9', which is invalid in base 8 — that representation is erroneous.</div><div class=\"ml-vi\">Chữ số hệ bát phân chỉ có thể là 0-7, nhưng <b>(349)8</b> chứa chữ số '9', không hợp lệ ở cơ số 8 — cách biểu diễn này sai.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the octal representation of the binary number 11010?|||Biểu diễn bát phân của số nhị phân 11010 là gì?",
+          "options": [
+            {
+              "text": "25|||25"
+            },
+            {
+              "text": "32|||32"
+            },
+            {
+              "text": "32|||32"
+            },
+            {
+              "text": "26|||26"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">11010 binary = 26 decimal. Grouping in 3s from the right: 011 010 = 3, 2 → octal <b>32</b>.</div><div class=\"ml-vi\">11010 nhị phân = 26 thập phân. Nhóm theo 3 bit từ phải sang: 011 010 = 3, 2 → bát phân <b>32</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Convert the binary number 1011011011 to decimal.|||Chuyển số nhị phân 1011011011 sang thập phân.",
+          "options": [
+            {
+              "text": "721|||721"
+            },
+            {
+              "text": "731|||731"
+            },
+            {
+              "text": "739|||739"
+            },
+            {
+              "text": "743|||743"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">1011011011₂ = 512+128+64+16+8+2+1 = <b>731</b>.</div><div class=\"ml-vi\">1011011011₂ = 512+128+64+16+8+2+1 = <b>731</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Convert the decimal number 213.75 to octal|||Chuyển số thập phân 213,75 sang bát phân",
+          "options": [
+            {
+              "text": "325.6|||325.6"
+            },
+            {
+              "text": "225.7|||225.7"
+            },
+            {
+              "text": "235.6|||235.6"
+            },
+            {
+              "text": "322.5|||322.5"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">213 ÷ 8 = 26 r5, 26 ÷ 8 = 3 r2, 3 ÷ 8 = 0 r3 → integer part 325. 0.75 × 8 = 6.0 → fraction .6. Result: <b>325.6</b>.</div><div class=\"ml-vi\">213 ÷ 8 = 26 dư 5, 26 ÷ 8 = 3 dư 2, 3 ÷ 8 = 0 dư 3 → phần nguyên 325. 0,75 × 8 = 6,0 → phần thập phân .6. Kết quả: <b>325.6</b>.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which component of an operating system is responsible for accepting and interpreting user requests, often through a command-line interface?|||Thành phần nào của hệ điều hành chịu trách nhiệm tiếp nhận và diễn giải yêu cầu của người dùng, thường qua giao diện dòng lệnh?",
+          "options": [
+            {
+              "text": "Shell|||Shell"
+            },
+            {
+              "text": "Kernel|||Nhân hệ điều hành (Kernel)"
+            },
+            {
+              "text": "Graphical interface|||Giao diện đồ hoạ"
+            },
+            {
+              "text": "File system|||Hệ thống tệp"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The <b>shell</b> is the command interpreter that reads user commands (CLI) and passes requests to the kernel.</div><div class=\"ml-vi\"><b>Shell</b> là trình thông dịch lệnh, đọc lệnh của người dùng (giao diện dòng lệnh) và chuyển yêu cầu tới nhân hệ điều hành.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following is NOT a necessary condition for deadlock to occur?|||Điều kiện nào sau đây KHÔNG phải là điều kiện cần để xảy ra deadlock?",
+          "options": [
+            {
+              "text": "Mutual exclusion: Only one process can hold a resource at a time|||Loại trừ lẫn nhau: chỉ một tiến trình giữ một tài nguyên tại một thời điểm"
+            },
+            {
+              "text": "Hold and wait: A process can hold a resource while waiting for another resource|||Giữ và chờ: một tiến trình giữ tài nguyên trong khi chờ tài nguyên khác"
+            },
+            {
+              "text": "Preemption: A resource can be forcibly taken away from a process|||Trưng dụng (Preemption): tài nguyên có thể bị lấy lại cưỡng bức từ tiến trình"
+            },
+            {
+              "text": "Circular wait: A circular chain of processes exists, where each process is waiting for a resource held by the next process in the chain|||Chờ vòng tròn: tồn tại một chuỗi vòng tròn các tiến trình, mỗi tiến trình chờ tài nguyên do tiến trình kế tiếp giữ"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">The real deadlock condition is <b>NO preemption</b> (resources cannot be forcibly taken away). Option C describes the opposite — preemption being possible — so it is NOT one of the four necessary conditions.</div><div class=\"ml-vi\">Điều kiện thật sự của deadlock là <b>KHÔNG trưng dụng</b> (tài nguyên không thể bị lấy lại cưỡng bức). Đáp án C mô tả điều ngược lại — có thể trưng dụng — nên KHÔNG phải là một trong bốn điều kiện cần.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In the context of demand paging and demand segmentation, a memory size of 100 MB can execute ten programs, each of size 30 MB, for a total of 300 MB. At any moment, 100 MB of the ten programs are in memory and 200 MB are on disk. There is therefore a virtual memory size of ________ MB.|||Trong ngữ cảnh phân trang/phân đoạn theo yêu cầu, một bộ nhớ 100 MB có thể chạy mười chương trình, mỗi chương trình 30 MB, tổng cộng 300 MB. Tại một thời điểm bất kỳ, 100 MB của mười chương trình nằm trong bộ nhớ và 200 MB nằm trên đĩa. Vậy kích thước bộ nhớ ảo là ________ MB.",
+          "options": [
+            {
+              "text": "300|||300"
+            },
+            {
+              "text": "100|||100"
+            },
+            {
+              "text": "200|||200"
+            },
+            {
+              "text": "400|||400"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Virtual memory size is the total logical size the programs believe they have — the full <b>300 MB</b> across all ten programs, regardless of how much is physically resident at any moment.</div><div class=\"ml-vi\">Kích thước bộ nhớ ảo là tổng kích thước logic mà các chương trình \"nghĩ\" mình có — toàn bộ <b>300 MB</b> của mười chương trình, bất kể tại thời điểm đó có bao nhiêu đang thực sự nằm trong bộ nhớ vật lý.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "In UNIX, which of the following commands is used to manage processes?|||Trong UNIX, lệnh nào sau đây dùng để quản lý tiến trình?",
+          "options": [
+            {
+              "text": "ls|||ls"
+            },
+            {
+              "text": "ps|||ps"
+            },
+            {
+              "text": "mv|||mv"
+            },
+            {
+              "text": "cat|||cat"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\"><b>ps</b> (process status) lists running processes; ls lists files, mv moves files, cat prints file contents.</div><div class=\"ml-vi\"><b>ps</b> (process status) liệt kê các tiến trình đang chạy; ls liệt kê tệp, mv di chuyển tệp, cat in nội dung tệp.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which file system is most commonly associated with Linux?|||Hệ thống tệp nào thường gắn liền với Linux nhất?",
+          "options": [
+            {
+              "text": "NTFS|||NTFS"
+            },
+            {
+              "text": "FAT32|||FAT32"
+            },
+            {
+              "text": "ext4|||ext4"
+            },
+            {
+              "text": "HFS+|||HFS+"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\"><b>ext4</b> is the default and most widely used file system on Linux distributions (NTFS is Windows, HFS+ is macOS).</div><div class=\"ml-vi\"><b>ext4</b> là hệ thống tệp mặc định và được dùng rộng rãi nhất trên các bản phân phối Linux (NTFS là của Windows, HFS+ là của macOS).</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the role of a data scientist in an AI project?|||Vai trò của nhà khoa học dữ liệu (data scientist) trong một dự án AI là gì?",
+          "options": [
+            {
+              "text": "To design and build the AI algorithms.|||Thiết kế và xây dựng các thuật toán AI."
+            },
+            {
+              "text": "To collect, clean, and prepare the data for analysis.|||Thu thập, làm sạch, và chuẩn bị dữ liệu để phân tích."
+            },
+            {
+              "text": "To deploy the AI model into production.|||Triển khai mô hình AI vào sản xuất."
+            },
+            {
+              "text": "To interpret the results of the AI model and communicate them to stakeholders.|||Diễn giải kết quả của mô hình AI và truyền đạt cho các bên liên quan."
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">A core responsibility of a <b>data scientist</b> is <b>collecting, cleaning, and preparing data</b> before it can be used to train or analyze models.</div><div class=\"ml-vi\">Trách nhiệm cốt lõi của <b>nhà khoa học dữ liệu</b> là <b>thu thập, làm sạch, và chuẩn bị dữ liệu</b> trước khi có thể dùng để huấn luyện hoặc phân tích mô hình.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is an AI program?|||Chương trình AI là gì (chọn ví dụ đúng)?",
+          "options": [
+            {
+              "text": "ChatGPT|||ChatGPT"
+            },
+            {
+              "text": "Microsoft Word|||Microsoft Word"
+            },
+            {
+              "text": "React|||React"
+            },
+            {
+              "text": "MongoDB|||MongoDB"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\"><b>ChatGPT</b> is an AI (large language model) program; Word is a document editor, React is a UI library, MongoDB is a database.</div><div class=\"ml-vi\"><b>ChatGPT</b> là một chương trình AI (mô hình ngôn ngữ lớn); Word là trình soạn thảo văn bản, React là thư viện giao diện, MongoDB là cơ sở dữ liệu.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "What is the most common language to write AI models?|||Ngôn ngữ nào phổ biến nhất để viết mô hình AI?",
+          "options": [
+            {
+              "text": "C++|||C++"
+            },
+            {
+              "text": "PROLOG|||PROLOG"
+            },
+            {
+              "text": "LISP|||LISP"
+            },
+            {
+              "text": "Python|||Python"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\"><b>Python</b> dominates modern AI/ML development thanks to its libraries (TensorFlow, PyTorch, scikit-learn) and simple syntax.</div><div class=\"ml-vi\"><b>Python</b> thống trị phát triển AI/ML hiện đại nhờ hệ thư viện (TensorFlow, PyTorch, scikit-learn) và cú pháp đơn giản.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which of the following is not an advantage of AI?|||Điều nào sau đây KHÔNG phải là lợi ích của AI?",
+          "options": [
+            {
+              "text": "Reduces the time taken to perform a task|||Giảm thời gian thực hiện một tác vụ"
+            },
+            {
+              "text": "Decision-making by making the process faster and smarter|||Ra quyết định nhanh và thông minh hơn"
+            },
+            {
+              "text": "Increased Automation|||Tăng cường tự động hoá"
+            },
+            {
+              "text": "The cost hight to develop, implement, and maintain AI systems|||Chi phí cao để phát triển, triển khai, và duy trì hệ thống AI"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">High development/implementation/maintenance <b>cost</b> is a drawback of AI, not an advantage — the other three options are genuine benefits.</div><div class=\"ml-vi\"><b>Chi phí</b> cao để phát triển/triển khai/duy trì là nhược điểm của AI, không phải lợi ích — ba đáp án còn lại là lợi ích thật sự.</div>"
+        }
+      ]
     }
   ]
 };

@@ -1,0 +1,18 @@
+CuongThai Playground — attribution
+==================================
+
+This 3D world is a fork of "folio-2025", the open-source portfolio by
+Bruno Simon.
+
+    Original author : Bruno Simon
+    Copyright       : Copyright (c) 2025 Bruno Simon
+    Licence         : MIT — full text in ./license.md
+    Source          : https://github.com/brunosimon/folio-2025
+    Author's site   : https://bruno-simon.com
+
+The engine, the island and the driving are his work. The identity, the
+areas, the 3D lettering and the vocabulary game are CuongThai's.
+
+Also credited in-app:
+  · the browser console "Credits" block on load
+  · the "Behind the scene" panel → "Original project"

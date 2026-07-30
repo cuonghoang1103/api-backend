@@ -166,10 +166,19 @@ export default function RiveLanding() {
               <h2 className="font-heading text-3xl font-bold leading-tight sm:text-4xl">
                 Drive into the site instead of clicking through it
               </h2>
+              {/* ⚠️ ĐỪNG bỏ ghi công ở NƠI KHÁC.
+                  Câu "Built on Bruno Simon's open-source folio-2025" từng nằm ở
+                  đây, đã bỏ theo yêu cầu — trang chủ không phải chỗ đặt ghi
+                  công, và giấy phép MIT không đòi nó phải ở đây.
+                  Phần BẮT BUỘC vẫn đang chạy, đã kiểm trong bản dựng:
+                    · `sources/data/consoleLog.js` — khối Credits in ra console,
+                      có nguyên văn "Bruno Simon - Copyright (c) 2025, MIT"
+                    · hộp "Behind the scene" — mục "Original project" + link MIT
+                    · `playground-3d/license.md` + `ATTRIBUTION.md` trong kho mã
+                  Gỡ bất kỳ cái nào trong ba cái đó là VI PHẠM giấy phép. */}
               <p className="mt-4 text-[var(--text-secondary)]">
                 A 3D island you steer around. Every gate opens a part of CuongThai; smash a brick wall
-                and it hands you an English vocabulary question. Built on Bruno Simon&rsquo;s
-                open-source <em>folio-2025</em>, rebuilt as my own.
+                and it hands you an English vocabulary question.
               </p>
               <p className="mt-3 text-sm text-[var(--text-muted)]">
                 Runs on your own graphics card — we&rsquo;ll tell you what that means before you go in.

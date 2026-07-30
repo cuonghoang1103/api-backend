@@ -71,8 +71,7 @@ export const DEEP_DIVES: DeepDive[] = [
     logo: 'css',
     title: 'A Complete Guide to CSS Concepts and Fundamentals',
     blurb: 'The box model, cascade, specificity, flex and grid — properly.',
-    href: '/code-lab',
-    via: 'Graded exercises in Code Lab',
+    article: 'a-complete-guide-to-css-concepts-and-fundamentals',
   },
   {
     logo: 'redux',

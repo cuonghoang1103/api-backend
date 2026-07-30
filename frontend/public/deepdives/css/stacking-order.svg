@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 380" width="700" height="380" role="img" aria-label="Paint order inside one stacking context, and two measured hit tests showing that z-index does nothing on a static element and that a transform traps a child's z-index inside the parent">
+  <rect width="700" height="380" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="379" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">z-index only compares within ONE stacking context. Inside one, this is the painting order.</text>
+
+  <!-- paint order, bottom to top -->
+  <text x="24" y="54" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">top</text>
+  <rect x="24" y="62" width="320" height="28" rx="5" fill="#111c30" stroke="#4ade80"/>
+  <text x="38" y="81" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">5 · z-index &gt; 0, in order</text>
+  <rect x="24" y="94" width="320" height="28" rx="5" fill="#111c30" stroke="#22d3ee"/>
+  <text x="38" y="113" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#22d3ee">4 · positioned, z-index: auto</text>
+  <rect x="24" y="126" width="320" height="28" rx="5" fill="#111c30" stroke="#a78bfa"/>
+  <text x="38" y="145" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#a78bfa">3 · in-flow content and text</text>
+  <rect x="24" y="158" width="320" height="28" rx="5" fill="#111c30" stroke="#fb923c"/>
+  <text x="38" y="177" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">2 · z-index &lt; 0 descendants</text>
+  <rect x="24" y="190" width="320" height="28" rx="5" fill="#111c30" stroke="#f43f5e"/>
+  <text x="38" y="209" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">1 · the element&#39;s own background</text>
+  <text x="24" y="234" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">bottom</text>
+
+  <!-- measured hit tests -->
+  <rect x="356" y="62" width="320" height="80" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="370" y="84" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">measured · z-index needs position</text>
+  <text x="370" y="106" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">static  + z-index:999  → LOSES</text>
+  <text x="370" y="128" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">relative + z-index:1   → wins</text>
+
+  <rect x="356" y="152" width="320" height="102" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="370" y="174" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">measured · transform traps the child</text>
+  <text x="370" y="196" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">child z-index:999 vs</text>
+  <text x="370" y="214" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">parent&#39;s sibling z-index:5</text>
+  <text x="370" y="234" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">plain parent      → child on top</text>
+  <text x="370" y="250" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">transformed parent → sibling on top</text>
+
+  <!-- what creates a context -->
+  <rect x="24" y="266" width="652" height="94" rx="6" fill="#0a1120" stroke="#a78bfa"/>
+  <text x="38" y="288" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#a78bfa">these create a stacking context — look at ANCESTORS when z-index is ignored</text>
+  <text x="38" y="310" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">transform · filter · opacity &lt; 1 · will-change · backdrop-filter</text>
+  <text x="38" y="330" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">contain: paint · isolation: isolate · mix-blend-mode</text>
+  <text x="38" y="350" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">position: fixed · position: sticky · a positioned element with z-index</text>
+</svg>

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 350" width="700" height="350" role="img" aria-label="The cascade compares two declarations in four rounds — origin and importance, cascade layers, specificity, then source order — and stops at the first round that separates them">
+  <rect width="700" height="350" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="349" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">Two declarations both apply. The browser walks these rounds and stops at the first difference.</text>
+
+  <!-- round 1 -->
+  <rect x="24" y="46" width="652" height="40" rx="6" fill="#111c30" stroke="#f43f5e"/>
+  <text x="38" y="71" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#f43f5e">1 · origin + importance</text>
+  <text x="664" y="71" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">UA &lt; user &lt; author · !important flips it</text>
+
+  <!-- round 2 -->
+  <rect x="24" y="94" width="652" height="40" rx="6" fill="#111c30" stroke="#fb923c"/>
+  <text x="38" y="119" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#fb923c">2 · cascade layers</text>
+  <text x="664" y="119" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">base &lt; theme &lt; unlayered · !important flips it</text>
+
+  <!-- round 3 -->
+  <rect x="24" y="142" width="652" height="40" rx="6" fill="#111c30" stroke="#4ade80"/>
+  <text x="38" y="167" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#4ade80">3 · specificity</text>
+  <text x="664" y="167" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">ids · classes · types — compared left to right</text>
+
+  <!-- round 4 -->
+  <rect x="24" y="190" width="652" height="40" rx="6" fill="#111c30" stroke="#22d3ee"/>
+  <text x="38" y="215" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#22d3ee">4 · source order</text>
+  <text x="664" y="215" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">last declaration wins</text>
+
+  <g stroke="#334155" stroke-width="1.5" fill="none">
+    <path d="M52 86 L52 94"/>
+    <path d="M52 134 L52 142"/>
+    <path d="M52 182 L52 190"/>
+  </g>
+
+  <!-- measured example -->
+  <rect x="24" y="246" width="652" height="88" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="38" y="268" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">measured — four rules on one &lt;p class="para"&gt;</text>
+  <text x="38" y="288" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">#wrap .box p   1-1-1   ← WINS on round 3</text>
+  <text x="38" y="306" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">#wrap p        1-0-1</text>
+  <text x="38" y="324" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">p.para         0-1-1   declared last, never reaches round 4</text>
+</svg>

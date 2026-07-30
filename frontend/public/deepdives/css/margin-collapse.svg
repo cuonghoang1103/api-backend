@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 372" width="700" height="372" role="img" aria-label="Four measured margin collapse cases: adjacent siblings take the larger margin, a child's margins escape its parent, a block formatting context contains both, and padding-top contains only the top one">
+  <rect width="700" height="372" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="371" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">Vertical margins merge instead of adding. Every number below was measured, not derived.</text>
+
+  <!-- case 1 -->
+  <rect x="24" y="46" width="320" height="96" rx="6" fill="#0a1120" stroke="#4ade80"/>
+  <text x="38" y="68" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">1 · adjacent siblings</text>
+  <text x="38" y="90" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">margin-bottom 30 + margin-top 20</text>
+  <text x="38" y="112" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">gap measured</text>
+  <text x="330" y="112" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#fcd34d">30px</text>
+  <text x="38" y="132" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">larger wins — never 50</text>
+
+  <!-- case 2 -->
+  <rect x="356" y="46" width="320" height="96" rx="6" fill="#0a1120" stroke="#f43f5e"/>
+  <text x="370" y="68" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">2 · child margins escape</text>
+  <text x="370" y="90" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">child margin 40/40, height 10</text>
+  <text x="370" y="112" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">parent height</text>
+  <text x="662" y="112" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#fcd34d">10px</text>
+  <text x="370" y="132" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">the background-doesn&#39;t-cover bug</text>
+
+  <!-- case 3 -->
+  <rect x="24" y="154" width="320" height="96" rx="6" fill="#0a1120" stroke="#22d3ee"/>
+  <text x="38" y="176" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#22d3ee">3 · parent becomes a BFC</text>
+  <text x="38" y="198" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">overflow: hidden (or flow-root)</text>
+  <text x="38" y="220" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">parent height</text>
+  <text x="330" y="220" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#4ade80">90px</text>
+  <text x="38" y="240" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">40 + 10 + 40 — both contained</text>
+
+  <!-- case 4 -->
+  <rect x="356" y="154" width="320" height="96" rx="6" fill="#0a1120" stroke="#fb923c"/>
+  <text x="370" y="176" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">4 · padding-top: 1px only</text>
+  <text x="370" y="198" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">top margin blocked, bottom not</text>
+  <text x="370" y="220" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">parent height</text>
+  <text x="662" y="220" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#fb923c">51px</text>
+  <text x="370" y="240" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">1 + 40 + 10 — half a fix</text>
+
+  <!-- case 5 wide -->
+  <rect x="24" y="262" width="652" height="86" rx="6" fill="#0a1120" stroke="#a78bfa"/>
+  <text x="38" y="284" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#a78bfa">5 · an empty spacer div collapses through itself</text>
+  <text x="38" y="306" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">div(mb 30) · div(margin 25, EMPTY) · div(mt 20)  →  max(30,25,25,20)</text>
+  <text x="38" y="328" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">gap measured</text>
+  <text x="662" y="328" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#fcd34d">30px — the spacer added nothing</text>
+</svg>

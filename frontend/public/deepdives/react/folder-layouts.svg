@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 348" width="700" height="348" role="img" aria-label="Type-based folders spread one feature across four directories, so a billing change touches four places; feature-based folders keep it in one directory with a shared folder for domain-free code">
+  <rect width="700" height="348" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="347" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">The test is not which looks tidier. It is where one change lands.</text>
+
+  <!-- type-based -->
+  <text x="24" y="56" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#fb923c">type-based</text>
+  <rect x="24" y="66" width="316" height="150" rx="6" fill="#0a1120" stroke="#fb923c"/>
+  <text x="38" y="88" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">components/  InvoiceRow  ChartLegend</text>
+  <text x="38" y="110" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">hooks/       useInvoices useChartData</text>
+  <text x="38" y="132" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">utils/       money       dates</text>
+  <text x="38" y="154" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">api/         invoices    billing</text>
+  <text x="38" y="184" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">one billing change → 4 directories</text>
+  <text x="38" y="204" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">deleting the feature is archaeology</text>
+
+  <!-- feature-based -->
+  <text x="360" y="56" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#4ade80">feature-based</text>
+  <rect x="360" y="66" width="316" height="150" rx="6" fill="#0a1120" stroke="#4ade80"/>
+  <text x="374" y="88" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">features/billing/</text>
+  <text x="374" y="110" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">  InvoiceRow  useInvoices</text>
+  <text x="374" y="132" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">  api  money  index (no side effects)</text>
+  <text x="374" y="154" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">shared/ui  shared/lib</text>
+  <text x="374" y="184" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">one billing change → 1 directory</text>
+  <text x="374" y="204" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">deleting the feature is rm -rf</text>
+
+  <!-- rules -->
+  <rect x="24" y="234" width="652" height="98" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="38" y="256" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">three rules that matter more than the layout</text>
+  <text x="38" y="278" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">shared/ holds only code with NO domain knowledge (Button yes, InvoiceRow no)</text>
+  <text x="38" y="300" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">features never import features — enforce with an import/no-restricted-paths zone</text>
+  <text x="38" y="322" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">co-locate whatever changes together, tests included</text>
+</svg>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 320" width="700" height="320" role="img" aria-label="Measured: with key equals index, inserting an item at the front moves beta's counter state to alpha; with key equals item id, the state stays with beta">
+  <rect width="700" height="320" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="319" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">Each row owns a counter. I clicked beta twice, then inserted zulu at the FRONT of the list.</text>
+
+  <!-- before -->
+  <text x="24" y="56" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">before insert (both key modes identical)</text>
+  <rect x="24" y="64" width="652" height="30" rx="5" fill="#0a1120" stroke="#334155"/>
+  <text x="38" y="84" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">alpha=0    beta=2    gamma=0</text>
+
+  <!-- key index -->
+  <text x="24" y="126" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#f43f5e">key={index}  — state follows POSITION</text>
+  <rect x="24" y="136" width="652" height="30" rx="5" fill="#111c30" stroke="#f43f5e"/>
+  <text x="38" y="156" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">zulu=0     alpha=2   beta=0    gamma=0</text>
+  <text x="38" y="182" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">beta&#39;s two clicks now belong to alpha</text>
+
+  <!-- key id -->
+  <text x="24" y="220" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#4ade80">key={item.id}  — state follows the ITEM</text>
+  <rect x="24" y="230" width="652" height="30" rx="5" fill="#111c30" stroke="#4ade80"/>
+  <text x="38" y="250" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">zulu=0     alpha=0   beta=2    gamma=0</text>
+  <text x="38" y="276" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">state stayed with beta — what the user expects</text>
+
+  <text x="24" y="306" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">Used deliberately, the same mechanism resets a component: key={userId} remounts the form.</text>
+</svg>

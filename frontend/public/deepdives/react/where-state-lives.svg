@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 356" width="700" height="356" role="img" aria-label="The same component tree with state at the top re-renders all five components on every click, fifteen renders over three clicks; with state at the leaf that needs it, only that leaf re-renders, three renders">
+  <rect width="700" height="356" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="355" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">Same tree, same DOM output. The only difference is which component owns the useState.</text>
+
+  <!-- left: state high -->
+  <text x="24" y="56" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#f43f5e">state in App</text>
+  <rect x="24" y="66" width="316" height="34" rx="5" fill="#111c30" stroke="#f43f5e"/>
+  <text x="38" y="88" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">App  ← useState here</text>
+  <text x="328" y="88" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">×3</text>
+
+  <rect x="44" y="106" width="296" height="30" rx="5" fill="#111c30" stroke="#f43f5e"/>
+  <text x="58" y="126" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">Header</text>
+  <text x="328" y="126" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">×3</text>
+  <rect x="44" y="142" width="296" height="30" rx="5" fill="#111c30" stroke="#f43f5e"/>
+  <text x="58" y="162" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">Sidebar</text>
+  <text x="328" y="162" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">×3</text>
+  <rect x="44" y="178" width="296" height="30" rx="5" fill="#111c30" stroke="#f43f5e"/>
+  <text x="58" y="198" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">Main</text>
+  <text x="328" y="198" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">×3</text>
+  <rect x="64" y="214" width="276" height="30" rx="5" fill="#111c30" stroke="#f43f5e"/>
+  <text x="78" y="234" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">Display</text>
+  <text x="328" y="234" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">×3</text>
+
+  <!-- right: state low -->
+  <text x="360" y="56" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#4ade80">state in Display</text>
+  <rect x="360" y="66" width="316" height="34" rx="5" fill="#0a1120" stroke="#334155"/>
+  <text x="374" y="88" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">App</text>
+  <text x="664" y="88" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">×0</text>
+
+  <rect x="380" y="106" width="296" height="30" rx="5" fill="#0a1120" stroke="#334155"/>
+  <text x="394" y="126" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">Header</text>
+  <text x="664" y="126" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">×0</text>
+  <rect x="380" y="142" width="296" height="30" rx="5" fill="#0a1120" stroke="#334155"/>
+  <text x="394" y="162" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">Sidebar</text>
+  <text x="664" y="162" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">×0</text>
+  <rect x="380" y="178" width="296" height="30" rx="5" fill="#0a1120" stroke="#334155"/>
+  <text x="394" y="198" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">Main</text>
+  <text x="664" y="198" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">×0</text>
+  <rect x="400" y="214" width="276" height="30" rx="5" fill="#111c30" stroke="#4ade80"/>
+  <text x="414" y="234" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">Display ← useState here</text>
+  <text x="664" y="234" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">×3</text>
+
+  <!-- totals -->
+  <rect x="24" y="266" width="316" height="36" rx="6" fill="#111c30" stroke="#f43f5e"/>
+  <text x="38" y="290" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#f43f5e">15 renders for 3 clicks</text>
+  <rect x="360" y="266" width="316" height="36" rx="6" fill="#111c30" stroke="#4ade80"/>
+  <text x="374" y="290" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#4ade80">3 renders for 3 clicks</text>
+
+  <text x="24" y="326" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">A re-render re-renders ALL children by default — not only the ones whose props changed.</text>
+  <text x="24" y="344" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">Header and Sidebar never read the value. They re-rendered because their parent did.</text>
+</svg>

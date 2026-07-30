@@ -64,8 +64,7 @@ export const DEEP_DIVES: DeepDive[] = [
     logo: 'react',
     title: 'How to Structure and Organize a React Application',
     blurb: 'Folders, state boundaries and the seams that survive a rewrite.',
-    href: '/code-lab',
-    via: 'Graded exercises in Code Lab',
+    article: 'how-to-structure-and-organize-a-react-application',
   },
   {
     logo: 'css',

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 372" width="700" height="372" role="img" aria-label="Measured comparison of six approaches to one value changing: state at the top re-renders five components, state at the leaf one, one context three, split contexts two, an external store one, and children passed in zero">
+  <rect width="700" height="372" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="371" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">One value changes. How far does the render travel? All six measured in the same tree.</text>
+
+  <rect x="24" y="46" width="652" height="32" rx="5" fill="#111c30" stroke="#f43f5e"/>
+  <text x="38" y="67" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">state at the top, props down</text>
+  <text x="664" y="67" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">5 components</text>
+
+  <rect x="24" y="84" width="652" height="32" rx="5" fill="#111c30" stroke="#fb923c"/>
+  <text x="38" y="105" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">one context holding two values</text>
+  <text x="664" y="105" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">3 components</text>
+
+  <rect x="24" y="122" width="652" height="32" rx="5" fill="#111c30" stroke="#fcd34d"/>
+  <text x="38" y="143" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">two contexts, split by rate of change</text>
+  <text x="664" y="143" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">2 components</text>
+
+  <rect x="24" y="160" width="652" height="32" rx="5" fill="#111c30" stroke="#22d3ee"/>
+  <text x="38" y="181" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">state at the leaf that needs it</text>
+  <text x="664" y="181" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#22d3ee">1 component</text>
+
+  <rect x="24" y="198" width="652" height="32" rx="5" fill="#111c30" stroke="#22d3ee"/>
+  <text x="38" y="219" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">external store, useSyncExternalStore</text>
+  <text x="664" y="219" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#22d3ee">1 component</text>
+
+  <rect x="24" y="236" width="652" height="32" rx="5" fill="#111c30" stroke="#4ade80"/>
+  <text x="38" y="257" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">expensive child passed as children</text>
+  <text x="664" y="257" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">0 components</text>
+
+  <!-- what memo does and does not do -->
+  <rect x="24" y="284" width="320" height="74" rx="6" fill="#0a1120" stroke="#a78bfa"/>
+  <text x="38" y="306" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#a78bfa">memo — measured</text>
+  <text x="38" y="326" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">props new each render → 2 renders</text>
+  <text x="38" y="346" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">props stabilised      → 0 renders</text>
+
+  <rect x="356" y="284" width="320" height="74" rx="6" fill="#0a1120" stroke="#fb923c"/>
+  <text x="370" y="306" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">useMemo — measured</text>
+  <text x="370" y="326" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">3 renders, 3 computations</text>
+  <text x="370" y="346" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">3 renders, 0 computations</text>
+</svg>

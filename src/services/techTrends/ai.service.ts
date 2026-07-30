@@ -28,7 +28,7 @@
 import { llmComplete, isAiAvailable, extractJson, type LLMMessage } from '../interview/llm/index.js';
 import { AppError } from '../../middleware/errorHandler.js';
 
-export const TECH_TREND_CATEGORIES = ['TechNews', 'FixBug', 'Experience', 'Interviews'] as const;
+export const TECH_TREND_CATEGORIES = ['TechNews', 'FixBug', 'Experience', 'Interviews', 'DeepDive'] as const;
 export type TechTrendCategory = (typeof TECH_TREND_CATEGORIES)[number];
 
 const MAX_INPUT = 8_000; // cap any single free-text input so a paste can't blow the prompt

@@ -69,6 +69,7 @@ const CATEGORY_LABEL: Record<string, { emoji: string; label: string }> = {
   FixBug: { emoji: '🐛', label: '#FixBug' },
   Experience: { emoji: '💼', label: '#Experience' },
   Interviews: { emoji: '🎯', label: '#Interviews' },
+  DeepDive: { emoji: '📖', label: '#DeepDive' },
 };
 
 function authorName(a: PublicTechTrendArticle['author']): string {

@@ -5,7 +5,10 @@
 // admin form types are defined alongside the admin page
 // since they're an admin-only concern.
 
-export type Category = 'TechNews' | 'FixBug' | 'Experience' | 'Interviews';
+// 'DeepDive' = the long-form guides linked from the home page's Deep Dives
+// strip (see components/home/landing/deepDivesData.ts). They live in the same
+// table as everything else so they inherit SSR, JSON-LD, RSS and comments.
+export type Category = 'TechNews' | 'FixBug' | 'Experience' | 'Interviews' | 'DeepDive';
 
 export type CodeBlock = {
   lang: 'tsx' | 'ts' | 'js' | 'java' | 'bash' | 'json' | 'css' | 'html' | 'sql' | string;
@@ -89,6 +92,7 @@ export const CATEGORY_TABS: { id: 'All' | Category; label: string; emoji: string
   { id: 'FixBug',      label: '#FixBug',     emoji: '🐛', accent: 'from-neon-red to-neon-pink'       },
   { id: 'Experience',  label: '#Experience', emoji: '💼', accent: 'from-neon-cyan to-neon-blue'      },
   { id: 'Interviews',  label: '#Interviews', emoji: '🎯', accent: 'from-neon-fuchsia to-neon-violet' },
+  { id: 'DeepDive',    label: '#DeepDive',   emoji: '📖', accent: 'from-neon-orange to-neon-red'     },
 ];
 
 // Default cover emoji per category — used when an article
@@ -100,6 +104,7 @@ export const CATEGORY_DEFAULT_EMOJI: Record<Category, string> = {
   FixBug: '🐛',
   Experience: '💼',
   Interviews: '🎯',
+  DeepDive: '📖',
 };
 
 // Sidebar "Quick Coding Tips" — these are editorial, not

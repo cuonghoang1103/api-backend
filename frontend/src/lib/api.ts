@@ -2983,6 +2983,21 @@ export interface TocItem {
   level: 1 | 2 | 3;
 }
 
+/**
+ * Article categories, mirroring the backend allowlist in
+ * `src/routes/techTrends.routes.ts`. This used to be spelled out inline at
+ * eight separate places in this file, which is why adding 'DeepDive'
+ * (2026-07-30) meant touching all eight. One alias now, so the next category
+ * is one edit. Keep it in sync with `app/tech-trends/types.ts` — that copy is
+ * the one the page components import.
+ */
+export type TechTrendCategoryName =
+  | 'TechNews'
+  | 'FixBug'
+  | 'Experience'
+  | 'Interviews'
+  | 'DeepDive';
+
 export interface PublicTechTrendArticle {
   id: number;
   title: string;
@@ -3010,7 +3025,7 @@ export interface PublicTechTrendArticle {
   // for the editor.
   bodyMdx?: string | null;
   toc: TocItem[];
-  category: 'TechNews' | 'FixBug' | 'Experience' | 'Interviews';
+  category: TechTrendCategoryName;
   coverEmoji: string | null;
   coverImageUrl: string | null;
   codeBlock: {
@@ -3057,7 +3072,7 @@ export interface RelatedTechTrendArticle {
   slug: string;
   title: string;
   summary: string;
-  category: 'TechNews' | 'FixBug' | 'Experience' | 'Interviews';
+  category: TechTrendCategoryName;
   coverEmoji: string | null;
   coverImageUrl: string | null;
   readTimeMin: number;
@@ -3147,7 +3162,7 @@ export const techTrendsApi = {
   // do its own bento-grid ordering and client-side
   // search without paging the server.
   list(params?: {
-    category?: 'TechNews' | 'FixBug' | 'Experience' | 'Interviews' | 'All';
+    category?: TechTrendCategoryName | 'All';
     q?: string;
     featured?: boolean;
     page?: number;
@@ -3287,7 +3302,7 @@ export const adminTechTrendsApi = {
   // as public but no status filter.
   list(params?: {
     status?: 'DRAFT' | 'PUBLISHED';
-    category?: 'TechNews' | 'FixBug' | 'Experience' | 'Interviews';
+    category?: TechTrendCategoryName;
     q?: string;
     page?: number;
     size?: number;
@@ -3304,7 +3319,7 @@ export const adminTechTrendsApi = {
     title: string;
     summary: string;
     body: string[];
-    category: 'TechNews' | 'FixBug' | 'Experience' | 'Interviews';
+    category: TechTrendCategoryName;
     coverEmoji?: string;
     coverImageUrl?: string;
     codeBlock?: AdminTechTrendArticle['codeBlock'];
@@ -3327,7 +3342,7 @@ export const adminTechTrendsApi = {
       title: string;
       summary: string;
       body: string[];
-      category: 'TechNews' | 'FixBug' | 'Experience' | 'Interviews';
+      category: TechTrendCategoryName;
       coverEmoji: string;
       coverImageUrl: string;
       codeBlock: AdminTechTrendArticle['codeBlock'];
@@ -3374,7 +3389,7 @@ export const adminTechTrendsApi = {
   aiStatus() {
     return api.get<{ data: { available: boolean } }>('/admin/tech-trends/ai/status');
   },
-  aiDraft(payload: { topic: string; category: 'TechNews' | 'FixBug' | 'Experience' | 'Interviews'; notes?: string }) {
+  aiDraft(payload: { topic: string; category: TechTrendCategoryName; notes?: string }) {
     return api.post<{ data: AiGeneratedArticle }>('/admin/tech-trends/ai/draft', payload, { timeout: 300_000 });
   },
   aiFixBug(payload: { errorText: string; context?: string }) {
@@ -3441,7 +3456,7 @@ export interface AiGeneratedArticle {
   tags: string[];
   readTimeMin: number;
   coverEmoji: string;
-  category?: 'TechNews' | 'FixBug' | 'Experience' | 'Interviews';
+  category?: TechTrendCategoryName;
   codeBlock?: {
     before: { lang: string; lines: string[] };
     after: { lang: string; lines: string[] };

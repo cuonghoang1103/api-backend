@@ -341,6 +341,7 @@ const CATEGORY_STYLES: Record<Category, { bg: string; text: string; border: stri
   FixBug:     { bg: 'bg-neon-red/10',       text: 'text-neon-red',       border: 'border-neon-red/20',       emoji: '🐛' },
   Experience: { bg: 'bg-neon-cyan/10',      text: 'text-neon-cyan',      border: 'border-neon-cyan/20',      emoji: '💼' },
   Interviews: { bg: 'bg-neon-fuchsia/10',   text: 'text-neon-fuchsia',   border: 'border-neon-fuchsia/20',   emoji: '🎯' },
+  DeepDive:   { bg: 'bg-neon-orange/10',    text: 'text-neon-orange',    border: 'border-neon-orange/20',    emoji: '📖' },
 };
 
 // Runtime fallback: the backend could return a category not in the `Category`

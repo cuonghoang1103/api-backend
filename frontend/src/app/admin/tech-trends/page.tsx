@@ -28,13 +28,14 @@ import TechArticleEditor from '@/components/tech-trends/TechArticleEditor';
 import AiAssistPanel from '@/components/tech-trends/AiAssistPanel';
 import NewsBulletinPanel from '@/components/tech-trends/NewsBulletinPanel';
 
-const CATEGORIES: Category[] = ['TechNews', 'FixBug', 'Experience', 'Interviews'];
+const CATEGORIES: Category[] = ['TechNews', 'FixBug', 'Experience', 'Interviews', 'DeepDive'];
 
 const CATEGORY_STYLES: Record<Category, { bg: string; text: string; border: string; emoji: string }> = {
   TechNews:   { bg: 'bg-neon-emerald/10',  text: 'text-neon-emerald',  border: 'border-neon-emerald/20',  emoji: '📰' },
   FixBug:     { bg: 'bg-neon-red/10',       text: 'text-neon-red',       border: 'border-neon-red/20',       emoji: '🐛' },
   Experience: { bg: 'bg-neon-cyan/10',      text: 'text-neon-cyan',      border: 'border-neon-cyan/20',      emoji: '💼' },
   Interviews: { bg: 'bg-neon-fuchsia/10',   text: 'text-neon-fuchsia',   border: 'border-neon-fuchsia/20',   emoji: '🎯' },
+  DeepDive:   { bg: 'bg-neon-orange/10',    text: 'text-neon-orange',    border: 'border-neon-orange/20',    emoji: '📖' },
 };
 
 const LANGS = ['tsx', 'ts', 'js', 'java', 'bash', 'json', 'css', 'html', 'sql'] as const;

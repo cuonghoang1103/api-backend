@@ -65,7 +65,14 @@ import {
  * stay stable.
  */
 
-const CATEGORIES = ['TechNews', 'FixBug', 'Experience', 'Interviews'] as const;
+// 'DeepDive' (added 2026-07-30) holds the long-form guides linked from the
+// home page's Deep Dives strip — seeded from content/deepdives/*.mjs by
+// scripts/deepdive-seed.mjs rather than typed into the admin editor.
+// Adding a category here is not enough on its own: the frontend keeps its own
+// copy of the union (frontend/src/app/tech-trends/types.ts + lib/api.ts) plus
+// three label/style maps. Grep for an existing category name before shipping
+// a new one, or the tab renders but the badge falls back to a generic tag.
+const CATEGORIES = ['TechNews', 'FixBug', 'Experience', 'Interviews', 'DeepDive'] as const;
 type Category = (typeof CATEGORIES)[number];
 
 function slugify(value: string): string {
@@ -656,7 +663,7 @@ adminRouter.post('/', async (req, res: Response<ApiResponse>, next) => {
     if (!title?.toString().trim()) throw new AppError('Title is required', 400, 'TITLE_REQUIRED');
     if (!summary?.toString().trim()) throw new AppError('Summary is required', 400, 'SUMMARY_REQUIRED');
     if (!category || !CATEGORIES.includes(category as Category)) {
-      throw new AppError('Category must be one of: TechNews, FixBug, Experience, Interviews', 400, 'INVALID_CATEGORY');
+      throw new AppError(`Category must be one of: ${CATEGORIES.join(', ')}`, 400, 'INVALID_CATEGORY');
     }
     // Tier 1A — accept either the new bodyMdx (TipTap markdown)
     // OR the legacy `body` (paragraph array). If both are sent
@@ -763,7 +770,7 @@ adminRouter.put('/:id', async (req, res: Response<ApiResponse>, next) => {
     }
     if (category !== undefined) {
       if (!CATEGORIES.includes(category as Category)) {
-        throw new AppError('Category must be one of: TechNews, FixBug, Experience, Interviews', 400, 'INVALID_CATEGORY');
+        throw new AppError(`Category must be one of: ${CATEGORIES.join(', ')}`, 400, 'INVALID_CATEGORY');
       }
       data.category = String(category);
     }

@@ -38,8 +38,16 @@ import Link from 'next/link';
 import PlaygroundGate from './PlaygroundGate';
 import { useLandingStats, fmt } from './useLandingStats';
 
-/** Một dải nội dung: nhãn + tiêu đề + các mục đi vào. */
+/**
+ * Một dải nội dung: số thứ tự + nhãn + tiêu đề + các mục đi vào.
+ *
+ * `index` ("01", "02"…) là NGÔN NGỮ PHÂN CÁCH của Ecosystem Index — nó nói cho
+ * người đọc biết trang này có mấy phần và đang ở phần nào, giống mục lục sách.
+ * Đây KHÔNG phải "eyebrow trên mọi section" (thứ bị chấm là dấu hiệu AI): kia là
+ * nhãn trang trí lặp lại vô nghĩa, còn đây là chỉ mục có thật và đếm được.
+ */
 interface Rail {
+  index: string;
   label: string;
   title: string;
   blurb: string;
@@ -48,6 +56,7 @@ interface Rail {
 
 const RAILS: Rail[] = [
   {
+    index: '01',
     label: 'Learn',
     title: 'Structured, from the first line',
     blurb: 'Full curricula rather than scattered tutorials — each with its own order, exercises and exams.',
@@ -61,6 +70,7 @@ const RAILS: Rail[] = [
     ],
   },
   {
+    index: '02',
     label: 'Build',
     title: 'Things that make the work easier',
     blurb: 'The tools that sit beside the learning — notes, snippets, diagrams, a CV that gets read.',
@@ -74,6 +84,7 @@ const RAILS: Rail[] = [
     ],
   },
   {
+    index: '03',
     label: 'Practice & play',
     title: 'Where it stops being theory',
     blurb: 'Rehearse under pressure, then go somewhere that has nothing to do with work.',
@@ -156,10 +167,13 @@ export default function RiveLanding() {
           Đặt ngay dưới phần mở đầu vì đây là thứ khác biệt nhất của site, và
           cũng là thứ khách sẽ nhớ. Bấm vào KHÔNG đi thẳng: `PlaygroundGate` mở
           hộp thoại cảnh báo dùng GPU máy khách + nặng ~35MB trước đã. */}
-      <section className="border-y border-[var(--border-color)] bg-[var(--bg-card)]">
+      {/* Vạch nhấn mảnh trên đỉnh dải nổi bật — dấu hiệu duy nhất cho biết khối
+          này khác các khối còn lại. Rẻ hơn và bền hơn mọi kiểu đổ bóng phát sáng:
+          không tốn GPU, không bợt trong chế độ sáng. */}
+      <section className="border-b border-[var(--border-color)] border-t-2 border-t-[var(--accent-color)] bg-[var(--bg-card)]">
         <div className="mx-auto max-w-5xl px-5 py-14 sm:px-8">
           <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--text-muted)]">
-            Featured — the front door
+            <span className="text-[var(--accent-color)]">★</span> Featured — the front door
           </p>
           <div className="mt-4 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl">
@@ -202,10 +216,15 @@ export default function RiveLanding() {
         <section key={rail.label} className="border-b border-[var(--border-color)]">
           <div className="mx-auto max-w-5xl px-5 py-14 sm:px-8">
             <div className="max-w-2xl">
-              <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--text-muted)]">
-                {rail.label}
+              <p className="flex items-baseline gap-3 font-mono text-[11px] uppercase tracking-[0.22em]">
+                {/* Số thứ tự là chỗ DUY NHẤT trong dải dùng màu nhấn. Một điểm
+                    màu cho mỗi phần — đủ để mắt bắt được nhịp, không đủ để thành
+                    trang trí. Dùng `--accent-color` của site, không đặt màu riêng
+                    cho trang chủ, để còn đổi theo chế độ sáng/tối. */}
+                <span className="text-[var(--accent-color)]">{rail.index}</span>
+                <span className="text-[var(--text-muted)]">{rail.label}</span>
               </p>
-              <h2 className="mt-3 font-heading text-2xl font-bold leading-tight sm:text-3xl">
+              <h2 className="mt-3 font-heading text-2xl font-bold leading-[1.12] tracking-tight sm:text-[2rem]">
                 {rail.title}
               </h2>
               <p className="mt-3 text-[var(--text-secondary)]">{rail.blurb}</p>
@@ -218,15 +237,24 @@ export default function RiveLanding() {
                 <li key={it.href} className="border-t border-[var(--border-color)]">
                   <Link
                     href={it.href}
-                    className="group flex items-baseline gap-4 py-4 transition-colors hover:bg-[var(--bg-surface-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--accent-color)]"
+                    className="group relative flex items-baseline gap-4 py-4 pl-0 transition-[padding,background-color] duration-200 hover:bg-[var(--bg-surface-hover)] hover:pl-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--accent-color)]"
                   >
+                    {/* Vạch nhấn trượt vào ở mép trái khi hover. Đây là thứ thay
+                        cho `hover:scale` và `hover:-translate-y` — nó chỉ ĐÁNH DẤU
+                        dòng đang trỏ tới chứ không làm cả hàng nhảy, nên đọc bảng
+                        mục lục không bị giật. Chỉ chạy scale-Y (transform), không
+                        đụng layout. */}
+                    <span
+                      aria-hidden
+                      className="absolute bottom-2 left-0 top-2 w-[2px] origin-center scale-y-0 bg-[var(--accent-color)] transition-transform duration-200 group-hover:scale-y-100"
+                    />
                     <span className="font-heading text-base font-semibold">{it.name}</span>
                     <span className="min-w-0 flex-1 truncate text-sm text-[var(--text-muted)]">
                       {it.note}
                     </span>
                     <span
                       aria-hidden
-                      className="text-[var(--text-muted)] transition-transform group-hover:translate-x-0.5"
+                      className="text-[var(--text-muted)] transition-colors group-hover:text-[var(--accent-color)]"
                     >
                       →
                     </span>

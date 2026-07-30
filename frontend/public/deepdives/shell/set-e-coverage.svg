@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 356" width="700" height="356" role="img" aria-label="set -e aborts a script on a plain failing command, but ignores any command whose failure is being tested: inside if, after and-and or or-or, after not, and in a while condition; using a function as a condition disables set -e for that function's entire body">
+  <rect width="700" height="356" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="355" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="28" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">set -e ignores every command whose failure is being TESTED. That is the whole rule.</text>
+
+  <rect x="24" y="44" width="318" height="150" rx="6" fill="#111c30" stroke="#f43f5e"/>
+  <text x="38" y="64" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">ABORTS the script</text>
+  <text x="38" y="88" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">f</text>
+  <text x="38" y="110" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">x=$(f)</text>
+  <text x="38" y="132" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">( f )</text>
+  <text x="38" y="154" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">cd /nope</text>
+  <text x="38" y="178" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">a plain command, at the top level</text>
+
+  <rect x="358" y="44" width="318" height="150" rx="6" fill="#111c30" stroke="#4ade80"/>
+  <text x="372" y="64" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">IGNORED — script continues</text>
+  <text x="372" y="88" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">if f; then … fi</text>
+  <text x="372" y="110" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">f &amp;&amp; g        f || g</text>
+  <text x="372" y="132" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">! f          while f; do</text>
+  <text x="372" y="154" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">local x=$(f)</text>
+  <text x="372" y="178" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">local/declare/export report their own rc</text>
+
+  <rect x="24" y="206" width="652" height="60" rx="6" fill="#0a1120" stroke="#fb923c"/>
+  <text x="38" y="226" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">The one that surprises people: a function used as a condition</text>
+  <text x="38" y="246" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">f() { false; echo INSIDE; }</text>
+  <text x="38" y="260" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">f → exits, INSIDE silent  ·  if f; then → set -e OFF for the WHOLE body, INSIDE prints</text>
+
+  <rect x="24" y="278" width="652" height="60" rx="6" fill="#111c30" stroke="#fcd34d"/>
+  <text x="38" y="298" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">[ &quot;$ok&quot; = false ] &amp;&amp; fail &quot;…&quot;        ← as the LAST line of the script</text>
+  <text x="38" y="316" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">ok=true ⇒ left side false ⇒ chain returns 1 ⇒ the script kills itself</text>
+  <text x="38" y="332" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">harmless on any other line · this really failed a deploy at the moment it succeeded</text>
+</svg>

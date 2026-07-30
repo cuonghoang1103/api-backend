@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 352" width="700" height="352" role="img" aria-label="Every stage of a pipeline runs in its own process, so a counter incremented inside a while-read loop fed by a pipe is lost when that process exits; redirecting from a process substitution or a file keeps the loop in the current shell and the counter survives">
+  <rect width="700" height="352" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="351" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="28" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">Same loop, same file, same counter. The only difference is which process the loop runs in.</text>
+
+  <rect x="24" y="44" width="318" height="122" rx="6" fill="#111c30" stroke="#f43f5e"/>
+  <text x="38" y="64" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">printf … | while read</text>
+  <rect x="36" y="74" width="294" height="54" rx="4" fill="#0a1120" stroke="#334155" stroke-dasharray="4 3"/>
+  <text x="48" y="93" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">child process</text>
+  <text x="48" y="113" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">n=1 → n=2 → n=3</text>
+  <text x="38" y="147" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">echo &quot;n=$n&quot;</text>
+  <text x="328" y="147" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">n=0</text>
+  <text x="38" y="161" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">the child exited and took n with it</text>
+
+  <rect x="358" y="44" width="318" height="122" rx="6" fill="#111c30" stroke="#4ade80"/>
+  <text x="372" y="64" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">while read … done &lt; &lt;(printf …)</text>
+  <rect x="370" y="74" width="294" height="54" rx="4" fill="#0a1120" stroke="#4ade80"/>
+  <text x="382" y="93" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">SAME process</text>
+  <text x="382" y="113" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">n=1 → n=2 → n=3</text>
+  <text x="372" y="147" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">echo &quot;n=$n&quot;</text>
+  <text x="662" y="147" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">n=3</text>
+  <text x="372" y="161" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">&lt; file works the same way</text>
+
+  <rect x="24" y="178" width="318" height="118" rx="6" fill="#0a1120" stroke="#fb923c"/>
+  <text x="38" y="198" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">makes a subshell</text>
+  <text x="38" y="220" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">( ... )</text>
+  <text x="38" y="240" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">$( ... )   and backticks</text>
+  <text x="38" y="260" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">every stage of  a | b</text>
+  <text x="38" y="280" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">cmd &amp;</text>
+
+  <rect x="358" y="178" width="318" height="118" rx="6" fill="#0a1120" stroke="#22d3ee"/>
+  <text x="372" y="198" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#22d3ee">does NOT</text>
+  <text x="372" y="220" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">{ ...; }        just grouping</text>
+  <text x="372" y="240" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">a function call</text>
+  <text x="372" y="260" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">. lib.sh        source</text>
+  <text x="372" y="282" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">a sourced file can cd you, exit you</text>
+
+  <rect x="24" y="308" width="652" height="32" rx="6" fill="#111c30" stroke="#1e293b"/>
+  <text x="38" y="329" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">exit inside ( ) ends the SUBSHELL  ·  exit inside { } ends YOUR SCRIPT</text>
+</svg>

@@ -94,8 +94,7 @@ export const DEEP_DIVES: DeepDive[] = [
     logo: 'gnubash',
     title: 'Shell Scripting for People Who Deploy Things',
     blurb: 'set -euo pipefail, traps, and why your script eats its own errors.',
-    href: '/exp-hub',
-    via: 'Snippets in Exp Hub',
+    article: 'shell-scripting-for-people-who-deploy-things',
   },
   {
     logo: 'apple',

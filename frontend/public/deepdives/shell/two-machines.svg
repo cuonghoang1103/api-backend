@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 368" width="700" height="368" role="img" aria-label="The same script meets two different systems: macOS ships bash 3.2 and BSD userland with no timeout or flock, while a Debian server ships bash 5.2 and GNU userland, and nearly every flag that differs is inverted between them">
+  <rect width="700" height="368" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="367" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="28" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">One script, two userlands. Nearly every row here is inverted, not merely different.</text>
+
+  <rect x="24" y="44" width="318" height="46" rx="6" fill="#111c30" stroke="#fb923c"/>
+  <text x="38" y="64" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">your Mac</text>
+  <text x="38" y="82" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">bash 3.2.57 (2007, GPLv2) · BSD tools</text>
+
+  <rect x="358" y="44" width="318" height="46" rx="6" fill="#111c30" stroke="#22d3ee"/>
+  <text x="372" y="64" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#22d3ee">the server</text>
+  <text x="372" y="82" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">bash 5.2.15 · GNU coreutils</text>
+
+  <rect x="24" y="98" width="652" height="106" rx="6" fill="#0a1120" stroke="#1e293b"/>
+  <text x="38" y="118" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">same flag, opposite outcome</text>
+  <text x="38" y="140" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">sed -i &#39;s/a/b/&#39; f</text>
+  <text x="336" y="140" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">fails</text>
+  <text x="662" y="140" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">works</text>
+  <text x="38" y="160" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">sed -i &#39;&#39; &#39;s/a/b/&#39; f</text>
+  <text x="336" y="160" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">works</text>
+  <text x="662" y="160" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">fails</text>
+  <text x="38" y="180" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">date -d &#39;1 day ago&#39;   vs   date -v-1d</text>
+  <text x="662" y="180" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">each rejects the other</text>
+  <text x="38" y="198" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">stat -c %s   vs   stat -f %z</text>
+  <text x="662" y="198" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">same, and so does grep -P</text>
+
+  <rect x="24" y="212" width="318" height="90" rx="6" fill="#0a1120" stroke="#f43f5e"/>
+  <text x="38" y="232" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#f43f5e">not installed on macOS at all</text>
+  <text x="38" y="254" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">timeout    flock    nproc</text>
+  <text x="38" y="276" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">so the standard lock and the standard</text>
+  <text x="38" y="292" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">timeout both have to be hand-rolled</text>
+
+  <rect x="358" y="212" width="318" height="90" rx="6" fill="#0a1120" stroke="#f43f5e"/>
+  <text x="372" y="232" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#f43f5e">missing from bash 3.2</text>
+  <text x="372" y="254" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">mapfile  declare -A  lastpipe</text>
+  <text x="372" y="272" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">$BASHPID  ${v^^}  ${v@Q}</text>
+  <text x="372" y="292" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">the last two are PARSE errors</text>
+
+  <rect x="24" y="314" width="652" height="42" rx="6" fill="#111c30" stroke="#fcd34d"/>
+  <text x="38" y="334" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">set -u + &quot;${empty_array[@]}&quot;   →   bash 3.2: script DIES   ·   bash 5.2: fine</text>
+  <text x="38" y="350" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">write &quot;${arr[@]:-}&quot; and it works on both</text>
+</svg>

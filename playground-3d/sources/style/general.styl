@@ -70,6 +70,12 @@ ol
 .text
     margin-bottom 0.75em
     font-size 1rem
+    // Trước đây KHÔNG khai báo line-height, nên mọi đoạn văn thừa hưởng mặc
+    // định của trình duyệt (~1,2). Với phông Pally — chữ cao, thân rộng — 1,2
+    // là quá chật: các dòng dính nhau và mắt khó bắt đầu dòng tiếp theo. Đây là
+    // chữ để ĐỌC (bảng Behind the scene, các hộp thoại), không phải tiêu đề,
+    // nên cần khoảng thở. 1,65 là mức dễ đọc cho cỡ chữ 1rem.
+    line-height 1.65
 
     a
         color inherit

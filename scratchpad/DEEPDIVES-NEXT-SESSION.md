@@ -1,17 +1,16 @@
 # Deep Dives — MỞ PHIÊN MỚI ĐỌC FILE NÀY
 
-Cập nhật 30/7/2026, sau khi xong **7/12 bài**. Nhánh `feat/playground-3d`.
-File này đủ để bắt đầu bài 8 mà **không cần đọc lại phiên cũ**.
+Cập nhật 30/7/2026, sau khi xong **8/12 bài**. Nhánh `feat/playground-3d`.
+File này đủ để bắt đầu bài 9 mà **không cần đọc lại phiên cũ**.
 (Bối cảnh trang chủ + lịch sử bẫy: `scratchpad/DEEPDIVES-HANDOFF.md`.)
 
 ---
 
 ## Việc: viết 5 bài Deep Dives còn lại
 
-Bài 8 tiếp theo: **How to Use Vue, the JavaScript Framework** (thẻ số 8 trong
-`deepDivesData.ts`). Sau đó theo thứ tự: shell scripting → Mac setup →
-reading production. Bài Node.js (thẻ 3) đã có khoá 112
-bài — giữ `href` chứ không viết lại.
+Bài 9 tiếp theo: **Shell Scripting for People Who Deploy Things** (thẻ số 10
+trong `deepDivesData.ts`). Sau đó: Mac setup → reading production. Bài Node.js
+(thẻ 3) đã có khoá 112 bài — giữ `href` chứ không viết lại.
 
 Ngôn ngữ: **tiếng Anh**. Thước đo 7 bài đầu:
 
@@ -24,6 +23,7 @@ Ngôn ngữ: **tiếng Anh**. Thước đo 7 bài đầu:
 | 5. CSS | 4.835 | 101 | 4 | 3 |
 | 6. React | 4.913 | 64 | 4 | 3 |
 | 7. Redux | 4.827 | 77 | 4 | 3 |
+| 8. Vue | 4.939 | 76 | 4 | 3 |
 
 Số khối code tuỳ chủ đề (CLI cần nhiều, GraphQL ít hơn). **Từ 4.800 trở lên.**
 
@@ -97,12 +97,31 @@ nhưng render 1 lần · "createSelector có tham số đập cache" đã lỗi 
 Đo byte bằng esbuild với `--external:react` (10.670 B gzip cho một cái nút đếm).
 Đo THỜI GIAN trong Node thì tin được (khác hẳn tab nền của trình duyệt).
 
-**8. Vue** — `npm i vue @vue/server-renderer`. Demo: reactivity thật —
-`ref`/`reactive`, `watchEffect` chạy mấy lần · `reactive` mất tính reactive khi
-destructure (bẫy số 1, chứng minh được) · computed cache vs method gọi lại ·
-SFC compile ra gì (`@vue/compiler-sfc` → in ra render function) · so sánh thẳng
-với React ở chỗ nào khác thật (proxy vs immutable + re-render).
-(Sơ đồ: dependency tracking của reactivity · SFC → render function.)
+**8. Vue** — ✅ XONG 30/7, commit `3949acd`. Lab (ĐƯỜNG DẪN TUYỆT ĐỐI, vì
+scratchpad mỗi phiên một thư mục khác — phiên trước ghi đường dẫn tương đối nên
+phải đi tìm):
+`/private/tmp/claude-501/-Users-admin-Downloads-api-backend/becd3039-952a-4510-9831-f6bb0c076484/scratchpad/vue-lab`
+(01..10 + `bench-*.mjs` + `size/` + **`ALL-OUTPUT.txt` đã lưu mọi output**).
+Lab bài 4-7 nằm ở `.../e9117f46-abc6-4e6b-b4b3-810b07e8770c/scratchpad/{wp,css,react,redux}-lab`.
+
+Cách đo, dùng lại được: đếm render bằng `probe()` gọi TRONG TEMPLATE (đừng dùng
+render() viết tay — compiler sinh PatchFlags nên hành vi khác hẳn), đối chứng
+bằng hook `updated()`; đếm thao tác DOM bằng `MutationObserver` thật.
+
+**6 chỗ việc chạy BÁC BỎ dự đoán** (ghi đủ trong docstring `.mjs`). Đắt nhất:
+"Proxy của Vue 3 nhanh hơn defineProperty của Vue 2" là **NGƯỢC** (290 ns vs
+3,2 ns mỗi lần ghi; Proxy trần trap rỗng đã 182 ns ⇒ phần lớn là do NGÔN NGỮ,
+không phải Vue) — Proxy đổi lấy tính ĐÚNG + khởi tạo lười nhanh **17×** ·
+"đừng destructure reactive" chỉ đúng với giá trị NGUYÊN THUỶ · `v-model` KHÔNG
+phải `:value` + `@input` (là `onUpdate:modelValue` + directive `_vModelText`) ·
+"dịch template trước làm mount nhanh hơn" là **nhiễu JIT** vì chạy chung một
+process ⇒ từ nay đo mỗi framework MỘT PROCESS RIÊNG, 7 lượt, lấy trung vị ·
+lệch hydrate KHÔNG bỏ DOM server (vá text tại chỗ, node y nguyên) · đổi text là
+1 `childList` chứ không phải `characterData` (`textContent` thay con theo spec).
+
+Số đắt nhất của bài: thêm 1 hàng vào danh sách 1.000 hàng → Vue có key gọi lại
+**1** hàm render, Vue không key **1001**, React thường **1001**, React + memo()
+**1**. Mặc định của Vue = React bọc `memo()` khắp nơi.
 
 **9. Shell scripting** — nối tiếp bài 1 nhưng sâu hơn: `set -euo pipefail` từng
 cờ tách riêng (bài 1 đã có, ở đây đào sâu) · `trap` ERR/EXIT/INT · subshell vs
@@ -220,14 +239,23 @@ thành công, không thì là link chết.
 
 **Nhánh `feat/playground-3d` — prod đang chạy `ed26ede` (deploy + push 30/7).**
 Bài 4 (webpack `c0a2baf`) + 5 (CSS `d21e5ef`) + 6 (React `f65bb19`) + 7 (Redux
-`1eac247`) + fix sơ đồ (`b85740c`) **đã commit local, CHƯA deploy, CHƯA push** — prod vẫn 3 bài Deep Dives
-(#22-24). User chốt 30/7: **đợi phiên CSI/SSL xong rồi deploy MỘT THỂ**. Thẻ
-webpack + CSS trên trang chủ đã trỏ `article:` nên **trên prod là LINK CHẾT tới
-khi deploy** (Step 3.15 của
-`deploy.sh` seed bài lúc deploy). Đếm commit chưa push bằng
+`1eac247`) + 8 (Vue `3949acd`) + fix sơ đồ (`b85740c`) **đã commit local, CHƯA
+deploy, CHƯA push** — prod vẫn 3 bài Deep Dives (#22-24). User chốt 30/7: **đợi
+phiên CSI/SSL xong rồi deploy MỘT THỂ**. Thẻ webpack + CSS + React + Redux + Vue
+trên trang chủ đã trỏ `article:` nên **trên prod là LINK CHẾT tới khi deploy**
+(Step 3.15 của `deploy.sh` seed bài lúc deploy). Đếm commit chưa push bằng
 `git log --oneline @{u}..HEAD | wc -l`.
 
 ```
+3949acd feat(deepdives): bài 8 — How to Use Vue, the JavaScript Framework
+5980a09 docs(deepdives): bàn giao sau bài 7
+1eac247 feat(deepdives): bài 7 — How to Use Redux and React
+aa1e645 feat(exam): SSL101c Đề 4                          ← phiên khác
+5dcf9c0 docs(deepdives): bàn giao sau bài 6
+f65bb19 feat(deepdives): bài 6 — How to Structure and Organize a React Application
+33c5d6b feat(exam): SSL101c Đề 3                          ← phiên khác
+a2edf0e docs(deepdives): bàn giao sau bài 5
+c69d4a7 feat(exam): SSL101c Đề 2                          ← phiên khác
 d21e5ef feat(deepdives): bài 5 — A Complete Guide to CSS Concepts and Fundamentals
 6d5e3a4 feat(exam): SSL101c Đề 1                        ← phiên khác
 b85740c fix(deepdives): sơ đồ bài 1-3 — thụt lề + chữ tràn khung
@@ -240,7 +268,7 @@ f438640 feat(deepdives): bài 3 — An Introduction to GraphQL
 8e069b3 feat(deepdives): bài 1 — command line + seeder
 ```
 
-Hạ tầng đã xong, dùng lại cho 5 bài còn lại:
+Hạ tầng đã xong, dùng lại cho 4 bài còn lại:
 
 - `scripts/deepdive-seed.mjs` — idempotent theo slug, `--dry`/`--apply`, render
   `bodyHtml`+`toc` bằng ĐÚNG renderer backend ở `dist/`, giữ `viewCount` +
@@ -257,12 +285,12 @@ Hạ tầng đã xong, dùng lại cho 5 bài còn lại:
   `<pre>`/`<code>` là escape ĐÚNG, không phải thẻ bị sanitizer lọc.
   **Chạy chúng và ĐỌC dòng tự kiểm** — cả hai in ra ✓/✗ cho chính nó
 
-Bảy bài đã seed trên `:5544` = bài #1..#7. Trang đọc:
+Tám bài đã seed trên `:5544` = bài #1..#8. Trang đọc:
 `/tech-trends/<slug>`.
 
 ---
 
 ## Câu mở đầu gợi ý cho phiên mới
 
-> Đọc `scratchpad/DEEPDIVES-NEXT-SESSION.md` rồi viết bài 8 (Vue) theo
-> đúng quy trình B1-B8 trong đó.
+> Đọc `scratchpad/DEEPDIVES-NEXT-SESSION.md` rồi viết bài 9 (shell scripting)
+> theo đúng quy trình B1-B8 trong đó.

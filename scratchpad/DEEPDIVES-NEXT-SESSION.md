@@ -25,6 +25,107 @@ Số khối code tuỳ chủ đề (CLI cần nhiều, GraphQL ít hơn). **Từ
 
 ---
 
+## CHUẨN CHẤT LƯỢNG — user chốt 30/7: "làm cực kì chi tiết đầy đủ chuyên nghiệp như này"
+
+Không phải độ dài. Sáu thứ dưới đây là những gì làm nên 3 bài đầu — thiếu chúng
+thì dài mấy cũng thành nội dung đại trà:
+
+1. **Chạy thật rồi mới viết.** Mọi output trong bài là output thật của đúng đoạn
+   code in trong bài. Mỗi bài tới nay đều có **2-3 chỗ việc chạy đã BÁC BỎ** điều
+   sắp viết ra (`nextTick` vs promise đổi chỗ giữa CJS/ESM · thông báo lỗi BSD
+   `sed -i` đổi theo tên file · `!$` không dùng được trong cùng dòng).
+2. **Thừa nhận khi bị bác bỏ, ngay trong bài.** Bài 2 có hẳn một đoạn kể việc đo
+   trong tab ẩn cho số liệu vô nghĩa và **đã cắt** một đoạn viết dựa trên nó.
+   Người đọc tin bài viết dám nói nó đã sai ở đâu.
+3. **Nói thẳng khi KHÔNG nên dùng.** Bài 3 có mục "when not to use it" ghi rõ site
+   này phục vụ ~40 module qua REST và đó là lựa chọn đúng. Đừng bán hàng.
+4. **Số liệu đo được, không phải "nhanh hơn đáng kể".** 3062 byte → 478 byte ·
+   5 lookup → 1 · `/ping` 10ms → 110ms khi có request chặn · 604ms → 202ms.
+5. **Ví dụ lấy từ chính hệ thống này** khi có: `lsof -ti:3000` vì `pkill -f`
+   không khớp `next-server` · `[ "$x" = false ] && fail` làm deploy tự chết ·
+   `df -h` khi Docker build cache ăn hết đĩa. Chân thực hơn ví dụ bịa.
+6. **Giọng người, câu có ý kiến.** Không "In today's fast-paced world", không
+   "Let's dive in", không đoạn mở đầu tóm tắt lại tiêu đề.
+
+---
+
+## Kế hoạch demo cho từng bài còn lại (dùng luôn, khỏi nghĩ lại)
+
+Mỗi dòng là thứ **phải chạy thật** rồi dán output. Sơ đồ đề xuất trong ngoặc.
+
+**4. webpack from scratch** — dựng lab trong scratchpad, `npm i webpack
+webpack-cli babel-loader css-loader`. Demo: bundle đầu tiên và ĐỌC output
+(`asset main.js X KiB`) · entry/output · thêm loader cho CSS rồi xem file đổi cỡ
+· `mode: development` vs `production` (số byte thật, thường 8-10×) · source map
+4 kiểu và cỡ file mỗi kiểu · code splitting `import()` → đếm chunk sinh ra ·
+`stats.json` + `--analyze` chỉ ra ai chiếm chỗ · tree shaking: export không dùng
+có bị loại thật không (kiểm bằng `grep` trong bundle) · cache busting
+`[contenthash]` đổi khi nào · so `esbuild`/`vite` cùng một entry, đo thời gian.
+(Sơ đồ: entry→loader→plugin→output · anatomy của một chunk · dev-server HMR.)
+
+**5. CSS fundamentals** — không cần npm. Demo bằng `node` + một trang HTML rồi
+đo bằng `javascript_tool` (`getComputedStyle`): box model `content-box` vs
+`border-box` (số px thật) · specificity: 4 selector cùng target, cái nào thắng ·
+cascade + `!important` + inline · margin collapse (2 div, đo khoảng cách thật) ·
+flex `min-width:auto` làm item không co (bẫy kinh điển, đo được) · grid
+`fr` vs `%` · `z-index` chỉ ăn khi có `position` · stacking context do
+`transform` tạo ra · `em` vs `rem` lồng nhau (đo px). **CẨN THẬN:** khung xem là
+tab ẩn — đo layout thì được, đo timer/rAF thì KHÔNG (xem bẫy trong file này).
+(Sơ đồ: box model · specificity thang điểm · stacking context.)
+
+**6. React structure** — `npm i react react-dom` + `react-dom/server` để render
+thật trong node. Demo: `renderToString` một cây component · state boundary: cùng
+state đặt cao vs thấp, đếm số component re-render (dùng counter trong body) ·
+`key` sai làm mất state (chứng minh được bằng render 2 lần) · context làm mọi
+consumer re-render · `useMemo` có/không, đo bằng counter chứ không bằng cảm giác ·
+cấu trúc thư mục: feature-based vs type-based, nói rõ cái nào chịu được rewrite.
+(Sơ đồ: cây component + nơi state nên nằm · re-render lan như thế nào.)
+
+**7. Redux** — `npm i @reduxjs/toolkit`. Demo: store + reducer thuần chạy trong
+node · `dispatch` và log state trước/sau · immer trong RTK: mutate mà không
+mutate (chứng minh bằng `Object.is` trên object cũ) · selector chạy lại bao
+nhiêu lần với/không `createSelector` (counter) · async thunk + trạng thái
+pending/fulfilled/rejected · **và mục "khi nào KHÔNG cần Redux"** — `useState` +
+context + query lib đủ cho 90% app; nói thẳng như bài GraphQL.
+(Sơ đồ: dispatch→reducer→store→subscriber · vị trí middleware.)
+
+**8. Vue** — `npm i vue @vue/server-renderer`. Demo: reactivity thật —
+`ref`/`reactive`, `watchEffect` chạy mấy lần · `reactive` mất tính reactive khi
+destructure (bẫy số 1, chứng minh được) · computed cache vs method gọi lại ·
+SFC compile ra gì (`@vue/compiler-sfc` → in ra render function) · so sánh thẳng
+với React ở chỗ nào khác thật (proxy vs immutable + re-render).
+(Sơ đồ: dependency tracking của reactivity · SFC → render function.)
+
+**9. Shell scripting** — nối tiếp bài 1 nhưng sâu hơn: `set -euo pipefail` từng
+cờ tách riêng (bài 1 đã có, ở đây đào sâu) · `trap` ERR/EXIT/INT · subshell vs
+`source` (biến đi đâu) · `$()` trong `local` làm mất exit code · `[[ ]]` vs
+`[ ]` · mảng và `"${arr[@]}"` vs `"${arr[*]}"` · `getopts` phân tích tham số ·
+`mktemp -d` + cleanup · lock file chống chạy trùng (`flock`, macOS không có →
+`mkdir` atomic) · retry + timeout · **và soi chính `deploy.sh` của repo** làm ví
+dụ thật (bẫy `&& fail` đã làm deploy tự chết). (Sơ đồ: đời một script từ
+shebang tới trap EXIT · subshell vs source.)
+
+**10. Mac setup for development** — chạy thật những gì đo được trên máy này:
+`softwareupdate --list` / `xcode-select -p` · Homebrew: `brew --prefix` khác
+nhau giữa Intel/ARM (số liệu thật) · nvm/fnm và `PATH` order (dùng lại phát hiện
+ugrep che grep) · SSH key ed25519 + `~/.ssh/config` + `chmod 600` · Docker
+Desktop vs colima · dotfiles + `defaults write` vài tuỳ chọn hữu ích · kiểm
+đúng-sai bằng `command -v` sau mỗi bước. (Sơ đồ: PATH order và ai thắng · sơ đồ
+một máy đã sẵn sàng làm việc.)
+
+**11. Reading production** — bài "3am" thực dụng: `curl -s -o /dev/null -w` đo
+TTFB/status · `docker stats`/`docker logs --since` · `df -h` + `du -sh` (đĩa đầy
+làm Postgres chết — đã xảy ra trên VPS này) · loop delay p99 (dùng lại demo bài
+2) · `pg_stat_activity` truy vấn đang treo · đọc nginx log ra top status/endpoint
+bằng `awk|sort|uniq -c` · phân biệt "429 ≠ outage" (sự cố thật của repo) ·
+checklist 10 phút đầu khi có báo động. (Sơ đồ: cây quyết định "trang chết → xem
+gì trước" · 4 tín hiệu đáng tin vs 4 tín hiệu gây nhiễu.)
+
+**12. Node.js** (thẻ 3) — **giữ `href: '/courses'`**, đã có khoá 112 bài. Đừng
+viết lại; nếu muốn thì chỉ viết bài dẫn nhập ngắn trỏ vào khoá.
+
+---
+
 ## Quy trình một bài (đã chạy 3 lần, cứ theo đúng thứ tự)
 
 **B1. Chạy thật TRƯỚC khi viết.** Dựng lab trong scratchpad, cài dep ở đó

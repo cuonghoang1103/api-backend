@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 356" width="700" height="356" role="img" aria-label="The phases of one libuv loop iteration in Node: timers, pending callbacks, idle and prepare, poll, check, close — with nextTick and microtasks drained between every phase">
+  <rect width="700" height="356" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="355" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">Node runs one libuv iteration as six phases. Each has its own queue.</text>
+
+  <g font-family="ui-monospace, Menlo, monospace" font-size="12.5">
+    <rect x="24" y="48" width="200" height="40" rx="6" fill="#111c30" stroke="#fb923c"/>
+    <text x="38" y="73" fill="#fb923c">timers</text>
+    <text x="150" y="73" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#64748b">setTimeout</text>
+
+    <rect x="24" y="98" width="200" height="40" rx="6" fill="#111c30" stroke="#334155"/>
+    <text x="38" y="123" fill="#94a3b8">pending callbacks</text>
+
+    <rect x="24" y="148" width="200" height="40" rx="6" fill="#111c30" stroke="#334155"/>
+    <text x="38" y="173" fill="#94a3b8">idle, prepare</text>
+    <text x="150" y="173" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#475569">internal</text>
+
+    <rect x="24" y="198" width="200" height="40" rx="6" fill="#111c30" stroke="#22d3ee"/>
+    <text x="38" y="223" fill="#22d3ee">poll</text>
+    <text x="150" y="223" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#64748b">I/O · waits here</text>
+
+    <rect x="24" y="248" width="200" height="40" rx="6" fill="#111c30" stroke="#4ade80"/>
+    <text x="38" y="273" fill="#4ade80">check</text>
+    <text x="150" y="273" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#64748b">setImmediate</text>
+
+    <rect x="24" y="298" width="200" height="40" rx="6" fill="#111c30" stroke="#334155"/>
+    <text x="38" y="323" fill="#94a3b8">close</text>
+    <text x="150" y="323" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#475569">'close' events</text>
+  </g>
+
+  <!-- loop arrow -->
+  <g stroke="#475569" stroke-width="1.3" fill="none">
+    <path d="M124 344 V 350 H 12 V 42 H 124 V 44"/>
+    <path d="M124 44 l-4 8 h8 z" fill="#475569" stroke="none"/>
+  </g>
+
+  <!-- between-phase drain -->
+  <rect x="266" y="120" width="410" height="96" rx="8" fill="#111c30" stroke="#a78bfa"/>
+  <text x="284" y="144" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#a78bfa">between EVERY phase, in this order</text>
+  <text x="284" y="168" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">1. process.nextTick queue — until empty</text>
+  <text x="284" y="190" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">2. microtasks (.then / await) — until empty</text>
+  <text x="284" y="208" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#64748b">“until empty” is why a recursive nextTick starves the loop</text>
+
+  <g stroke="#334155" stroke-width="1.2" fill="none">
+    <path d="M232 168 H 260"/><path d="M260 168 l-8 -4.5 v9 z" fill="#334155" stroke="none"/>
+  </g>
+
+  <text x="266" y="252" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#e2e8f0">Two consequences worth remembering</text>
+  <g font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">
+    <text x="266" y="276">Inside an I/O callback, <tspan font-family="ui-monospace, Menlo, monospace" fill="#4ade80">setImmediate</tspan> always beats</text>
+    <text x="266" y="292"><tspan font-family="ui-monospace, Menlo, monospace" fill="#fb923c">setTimeout(…, 0)</tspan> — check comes right after poll.</text>
+    <text x="266" y="318">At startup the two race: which one wins depends on</text>
+    <text x="266" y="334">how long the loop took to start. Don’t depend on it.</text>
+  </g>
+</svg>

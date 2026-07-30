@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 342" width="700" height="342" role="img" aria-label="An await splits an async function in two: the part before it runs synchronously, the part after becomes a microtask scheduled when the awaited promise settles">
+  <rect width="700" height="342" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="341" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">An <tspan font-family="ui-monospace, Menlo, monospace" fill="#fcd34d">await</tspan> is a pair of scissors. Everything after the cut is a callback wearing a disguise.</text>
+
+  <!-- code -->
+  <rect x="24" y="50" width="316" height="150" rx="8" fill="#0a1120" stroke="#1e293b"/>
+  <g font-family="ui-monospace, Menlo, monospace" font-size="12.5">
+    <text x="40" y="74" fill="#a78bfa">async function f() {</text>
+    <text x="52" y="96" fill="#4ade80">  console.log('runs now')</text>
+    <text x="52" y="122" fill="#fcd34d">  const r = await fetch(url)</text>
+    <text x="52" y="148" fill="#22d3ee">  console.log('runs later')</text>
+    <text x="52" y="170" fill="#22d3ee">  return r</text>
+    <text x="40" y="192" fill="#a78bfa">}</text>
+  </g>
+
+  <!-- scissors line -->
+  <line x1="30" y1="108" x2="334" y2="108" stroke="#fb923c" stroke-width="1" stroke-dasharray="4 3"/>
+
+  <!-- right: timeline -->
+  <text x="368" y="70" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#e2e8f0">what actually happens</text>
+
+  <rect x="368" y="82" width="308" height="34" rx="6" fill="#111c30" stroke="#4ade80"/>
+  <text x="382" y="104" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#4ade80">1 · body runs synchronously, up to the await</text>
+
+  <rect x="368" y="124" width="308" height="34" rx="6" fill="#111c30" stroke="#fcd34d"/>
+  <text x="382" y="146" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#fcd34d">2 · f() RETURNS a pending promise, right here</text>
+
+  <rect x="368" y="166" width="308" height="34" rx="6" fill="#111c30" stroke="#334155"/>
+  <text x="382" y="188" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">3 · caller keeps going — the stack unwinds</text>
+
+  <rect x="368" y="208" width="308" height="34" rx="6" fill="#111c30" stroke="#a78bfa"/>
+  <text x="382" y="230" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#a78bfa">4 · rest of f() resumes as a MICROTASK</text>
+
+  <g stroke="#475569" stroke-width="1.2" fill="none">
+    <path d="M340 99 H 362"/><path d="M362 99 l-7 -4 v8 z" fill="#475569" stroke="none"/>
+    <path d="M340 141 H 362"/><path d="M362 141 l-7 -4 v8 z" fill="#475569" stroke="none"/>
+  </g>
+
+  <line x1="24" y1="262" x2="676" y2="262" stroke="#1e293b"/>
+
+  <g font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#94a3b8">
+    <text x="24" y="288"><tspan fill="#e2e8f0">Therefore:</tspan> <tspan font-family="ui-monospace, Menlo, monospace" fill="#fcd34d">await</tspan> does not pause the program — it pauses <tspan font-style="italic">this function</tspan> and hands the thread back.</text>
+    <text x="24" y="310">Three sequential <tspan font-family="ui-monospace, Menlo, monospace" fill="#fcd34d">await</tspan>s of 200ms each cost 600ms because you asked for them one at a time,</text>
+    <text x="24" y="328">not because awaiting is slow. Start all three first, then await — that is what <tspan font-family="ui-monospace, Menlo, monospace" fill="#fcd34d">Promise.all</tspan> is.</text>
+  </g>
+</svg>

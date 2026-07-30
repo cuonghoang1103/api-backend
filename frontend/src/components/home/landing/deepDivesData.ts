@@ -45,8 +45,7 @@ export const DEEP_DIVES: DeepDive[] = [
     logo: 'javascript',
     title: 'The Event Loop, Callbacks, Promises and Async/Await',
     blurb: 'Why JavaScript never blocks, and where your await actually goes.',
-    href: '/simulation',
-    via: 'Watch it run in Simulation',
+    article: 'the-event-loop-callbacks-promises-and-async-await',
   },
   {
     logo: 'nodedotjs',

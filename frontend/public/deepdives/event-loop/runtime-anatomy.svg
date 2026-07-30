@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 396" width="700" height="396" role="img" aria-label="Anatomy of a JavaScript runtime: one call stack, the host APIs that do the waiting, a task queue and a microtask queue, with the event loop moving work between them">
+  <rect width="700" height="396" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="395" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">Your code owns one of these boxes. The runtime owns the rest.</text>
+
+  <!-- call stack -->
+  <rect x="24" y="48" width="150" height="176" rx="8" fill="#111c30" stroke="#4ade80"/>
+  <text x="99" y="70" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#4ade80">call stack</text>
+  <rect x="38" y="184" width="122" height="26" rx="4" fill="#0d1424" stroke="#334155"/>
+  <text x="99" y="201" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">main()</text>
+  <rect x="38" y="154" width="122" height="26" rx="4" fill="#0d1424" stroke="#334155"/>
+  <text x="99" y="171" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">handler()</text>
+  <rect x="38" y="124" width="122" height="26" rx="4" fill="#0d1424" stroke="#334155"/>
+  <text x="99" y="141" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#e2e8f0">parse()</text>
+  <text x="99" y="106" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#475569">one frame at a time</text>
+  <text x="99" y="244" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#64748b">SINGLE THREAD</text>
+
+  <!-- host apis -->
+  <rect x="266" y="48" width="188" height="120" rx="8" fill="#111c30" stroke="#22d3ee"/>
+  <text x="360" y="70" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#22d3ee">the host, not the language</text>
+  <g font-family="ui-monospace, Menlo, monospace" font-size="11.5" fill="#94a3b8">
+    <text x="282" y="92">timers</text>
+    <text x="282" y="110">sockets, fetch</text>
+    <text x="282" y="128">file I/O (libuv pool)</text>
+    <text x="282" y="146">DNS, crypto, zlib</text>
+  </g>
+  <text x="360" y="188" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#64748b">these wait; your thread does not</text>
+
+  <!-- queues -->
+  <rect x="486" y="48" width="190" height="70" rx="8" fill="#111c30" stroke="#fb923c"/>
+  <text x="581" y="70" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#fb923c">task queue</text>
+  <text x="581" y="90" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11.5" fill="#94a3b8">setTimeout · I/O · events</text>
+  <text x="581" y="108" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#475569">one per turn</text>
+
+  <rect x="486" y="132" width="190" height="70" rx="8" fill="#111c30" stroke="#a78bfa"/>
+  <text x="581" y="154" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#a78bfa">microtask queue</text>
+  <text x="581" y="174" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11.5" fill="#94a3b8">.then · await · nextTick</text>
+  <text x="581" y="192" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#475569">drained completely</text>
+
+  <!-- arrows -->
+  <g stroke="#334155" stroke-width="1.4" fill="none">
+    <path d="M174 100 H 258"/><path d="M258 100 l-8 -4.5 v9 z" fill="#334155" stroke="none"/>
+    <path d="M454 84 H 480"/><path d="M480 84 l-8 -4.5 v9 z" fill="#334155" stroke="none"/>
+  </g>
+  <text x="182" y="92" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#64748b">“wake me later”</text>
+  <text x="300" y="212" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#64748b">when done → queue the callback</text>
+
+  <!-- event loop bar -->
+  <rect x="24" y="266" width="652" height="52" rx="8" fill="#111c30" stroke="#334155"/>
+  <text x="350" y="288" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#e2e8f0">the event loop</text>
+  <text x="350" y="308" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#94a3b8">stack empty? take one task → run it → drain every microtask → repeat</text>
+  <g stroke="#475569" stroke-width="1.2" fill="none">
+    <path d="M100 266 V 254 H 560"/>
+    <path d="M560 254 V 214"/><path d="M560 214 l-4.5 8 h9 z" fill="#475569" stroke="none"/>
+  </g>
+
+  <line x1="24" y1="336" x2="676" y2="336" stroke="#1e293b"/>
+  <text x="24" y="360" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">Nothing here is parallel except the host’s own waiting. Two frames on the stack at once</text>
+  <text x="24" y="378" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">is not a state that exists — so a 200ms loop is 200ms of frozen page, and nothing interrupts you.</text>
+</svg>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 320" width="700" height="320" role="img" aria-label="One turn of the event loop: run exactly one task, then drain the entire microtask queue, then let the browser paint, then take the next task">
+  <rect width="700" height="320" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="319" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">One turn. The asymmetry between the two queues is the whole trick.</text>
+
+  <!-- turn 1 -->
+  <rect x="24" y="52" width="120" height="58" rx="8" fill="#111c30" stroke="#fb923c"/>
+  <text x="84" y="76" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#fb923c">1 task</text>
+  <text x="84" y="96" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#94a3b8">exactly one</text>
+
+  <rect x="164" y="52" width="232" height="58" rx="8" fill="#111c30" stroke="#a78bfa"/>
+  <text x="280" y="76" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#a78bfa">ALL microtasks</text>
+  <text x="280" y="96" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#94a3b8">including ones added while draining</text>
+
+  <rect x="416" y="52" width="120" height="58" rx="8" fill="#111c30" stroke="#22d3ee"/>
+  <text x="476" y="76" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#22d3ee">paint</text>
+  <text x="476" y="96" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#94a3b8">browser only</text>
+
+  <rect x="556" y="52" width="120" height="58" rx="8" fill="#111c30" stroke="#fb923c"/>
+  <text x="616" y="76" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#fb923c">next task</text>
+  <text x="616" y="96" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#94a3b8">…and around</text>
+
+  <g stroke="#475569" stroke-width="1.3" fill="none">
+    <path d="M144 81 H 158"/><path d="M158 81 l-7 -4 v8 z" fill="#475569" stroke="none"/>
+    <path d="M396 81 H 410"/><path d="M410 81 l-7 -4 v8 z" fill="#475569" stroke="none"/>
+    <path d="M536 81 H 550"/><path d="M550 81 l-7 -4 v8 z" fill="#475569" stroke="none"/>
+  </g>
+
+  <line x1="24" y1="132" x2="676" y2="132" stroke="#1e293b"/>
+
+  <!-- consequences -->
+  <text x="24" y="158" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#e2e8f0">What follows from that</text>
+
+  <g font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12.5" fill="#94a3b8">
+    <text x="24" y="184"><tspan fill="#a78bfa">·</tspan> A microtask that queues another microtask is handled in the SAME turn. An infinite chain of them</text>
+    <text x="36" y="202">never lets the loop continue — the page freezes with no long function to blame.</text>
+    <text x="24" y="228"><tspan fill="#fb923c">·</tspan> Two <tspan font-family="ui-monospace, Menlo, monospace" fill="#fcd34d">setTimeout</tspan> callbacks are two separate turns, so a paint can happen between them.</text>
+    <text x="24" y="254"><tspan fill="#22d3ee">·</tspan> Paint comes after microtasks, so <tspan font-family="ui-monospace, Menlo, monospace" fill="#fcd34d">await</tspan>-ing inside a click handler still blocks the frame.</text>
+    <text x="24" y="280"><tspan fill="#4ade80">·</tspan> Node has no paint step. It has phases instead — see the next diagram.</text>
+  </g>
+
+  <text x="24" y="306" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#475569">“Macrotask” is not in the HTML spec — the spec word is task. Everyone says macrotask anyway.</text>
+</svg>

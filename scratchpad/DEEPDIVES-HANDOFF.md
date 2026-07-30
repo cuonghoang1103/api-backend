@@ -27,15 +27,17 @@ f3b25f0 fix(nav): chuyển `return null` của /creator xuống sau hooks — h�
 05f0cf1 docs(playground): ghi nhận đã deploy prod — commit 0fd0c0c, live tại /playground
 ```
 
-⚠️ **`05f0cf1` trở về trước ĐÃ deploy + ĐÃ push.** Chín commit từ `57abdb5` lên
-thì chưa. Sân chơi 3D đang chạy trên prod; trang chủ mới thì chưa.
+✅ **Toàn bộ danh sách trên nay ĐÃ deploy prod + ĐÃ push** (30/7, mốc `ed26ede`).
+Sân chơi 3D, trang chủ mới, 3 bài Deep Dives và 8 đề CSI104 đều đang chạy thật.
 
-## ⚠️ CÓ PHIÊN CLAUDE KHÁC ĐANG LÀM CHUNG CÂY
+## PHIÊN CLAUDE KHÁC — đã dừng (hết hạn mức)
 
-Phiên đó soạn đề thi trong `content/exams/`. Lúc bàn giao còn
-`content/exams/CSI104-FE.mjs` chưa commit.
+Phiên đó soạn đề thi trong `content/exams/`. `CSI104-FE.mjs` (8 đề × 60 câu) đã
+được verify + commit `ed26ede` + deploy: 480/480 câu song ngữ, có giải thích
+`ml-en`/`ml-vi`, `correctIndexes` hợp lệ. **CÒN NỢ: CSI104 đề 9-10 + SSL101c
+8 đề** — xem [[project_exam_csi_ssl]].
 
-Ba luật bắt buộc:
+Ba luật vẫn nên giữ khi có phiên song song:
 
 1. **ĐỪNG `git add -A`.** Luôn `git add` chỉ định từng file của mình, nếu không
    là vơ luôn file đề đang viết dở của họ vào commit.

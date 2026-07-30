@@ -4,7 +4,7 @@ Cập nhật 30/7/2026. Nhánh `feat/playground-3d`.
 
 # ⚑ ĐỌC MỤC NÀY TRƯỚC
 
-## Trạng thái: 13 commit ở LOCAL, CHƯA deploy, CHƯA push
+## Trạng thái: 15 commit ở LOCAL, CHƯA deploy, CHƯA push
 
 Phiên 2 thêm 4 commit: `fd842e7` category DeepDive · `8e069b3` bài 1 + seeder ·
 `139f982` bài 2 · `23da6cf` bàn giao + 2 bộ kiểm. Mười commit gốc bên dưới.
@@ -40,7 +40,10 @@ Ba luật bắt buộc:
 
 ---
 
-# TRẠNG THÁI DEEP DIVES — 2/12 bài xong (30/7, phiên 2)
+# TRẠNG THÁI DEEP DIVES — 3/12 bài xong (30/7, phiên 2)
+
+➡️ **PHIÊN MỚI: đọc `scratchpad/DEEPDIVES-NEXT-SESSION.md`** — có quy trình B1-B8
+đầy đủ cho bài 4 trở đi. File này là bối cảnh + lịch sử bẫy.
 
 User chốt: **phương án A** (bài viết mới), bài nào chủ đề đã có nội dung sâu trên
 site thì cắm thẻ dẫn vào đó. Ngôn ngữ: **tiếng Anh** (user chốt phiên 2).

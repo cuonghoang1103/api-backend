@@ -1,17 +1,20 @@
 # Deep Dives — MỞ PHIÊN MỚI ĐỌC FILE NÀY
 
-Cập nhật 30/7/2026, sau khi xong **10/12 bài**. Nhánh `feat/playground-3d`.
-File này đủ để bắt đầu bài 11 mà **không cần đọc lại phiên cũ**.
+Cập nhật 30/7/2026 — ✅ **LOẠT BÀI HOÀN TẤT 12/12**. Nhánh `feat/playground-3d`.
+11 bài viết + 1 thẻ trỏ khoá Node.js 112 bài. Không còn bài nào phải viết.
 (Bối cảnh trang chủ + lịch sử bẫy: `scratchpad/DEEPDIVES-HANDOFF.md`.)
 
 ---
 
 ## Việc: viết 5 bài Deep Dives còn lại
 
-Bài 11 tiếp theo — **BÀI CUỐI phải viết**: *Reading Production: Logs, Metrics
-and a Calm Head* (thẻ số 12 trong `deepDivesData.ts`, đang trỏ `/exam`). Bài
-Node.js (thẻ 3) đã có khoá 112 bài — giữ `href` chứ không viết lại, nên xong
-bài 11 là **loạt bài HOÀN TẤT**.
+✅ XONG HẾT. `deepDivesData.ts` giờ có 12 thẻ: **11 trỏ `article:`, 1 trỏ
+`href: '/courses'`** (Node.js, đã có khoá 112 bài — cố ý không viết lại).
+Đếm lại bằng: đoạn `export const DEEP_DIVES` có 12 `logo:`, 11 `article: '`,
+1 `href: '`.
+
+Việc còn lại KHÔNG phải viết bài: **chưa push origin lần nào** — chờ user test
+prod rồi mới push (quy trình CLAUDE.md: deploy → user xác nhận → push).
 
 Ngôn ngữ: **tiếng Anh**. Thước đo 7 bài đầu:
 
@@ -27,6 +30,7 @@ Ngôn ngữ: **tiếng Anh**. Thước đo 7 bài đầu:
 | 8. Vue | 4.939 | 76 | 4 | 3 |
 | 9. shell scripting | 4.854 | 81 | 4 | 3 |
 | 10. Mac setup | 4.829 | 63 | 4 | 3 |
+| 11. reading production | 4.894 | 41 | 4 | 3 |
 
 Số khối code tuỳ chủ đề (CLI cần nhiều, GraphQL ít hơn). **Từ 4.800 trở lên.**
 
@@ -176,13 +180,25 @@ file vs `grep -r` 120s/149.068 file · máy dev ăn **~51GB** trước khi có c
 (Docker 35GB) · `tsc` backend chậm gấp đôi frontend vì
 `.prisma/client/index.d.ts` nặng **21MB**.
 
-**11. Reading production** — bài "3am" thực dụng: `curl -s -o /dev/null -w` đo
-TTFB/status · `docker stats`/`docker logs --since` · `df -h` + `du -sh` (đĩa đầy
-làm Postgres chết — đã xảy ra trên VPS này) · loop delay p99 (dùng lại demo bài
-2) · `pg_stat_activity` truy vấn đang treo · đọc nginx log ra top status/endpoint
-bằng `awk|sort|uniq -c` · phân biệt "429 ≠ outage" (sự cố thật của repo) ·
-checklist 10 phút đầu khi có báo động. (Sơ đồ: cây quyết định "trang chết → xem
-gì trước" · 4 tín hiệu đáng tin vs 4 tín hiệu gây nhiễu.)
+**11. Reading production** — ✅ XONG 30/7, commit `cb2c466`. Lab (ĐƯỜNG DẪN
+TUYỆT ĐỐI):
+`/private/tmp/claude-501/-Users-admin-Downloads-api-backend/becd3039-952a-4510-9831-f6bb0c076484/scratchpad/prod-lab`
+
+⚠️ **KHÔNG SSH vào VPS.** Số liệu từ hai nguồn: đo site live từ BÊN NGOÀI bằng
+HTTPS (chỉ `curl`) và dựng ca hỏng CÓ CHỦ Ý ở lab local (docker, postgres,
+node). Bài dùng `example.com` + `203.0.113.x`, không lộ host/IP thật.
+
+**6 chỗ việc chạy BÁC BỎ dự đoán.** Đắt nhất: **`exit 137` KHÔNG có nghĩa là
+OOM** — nó là SIGKILL; `docker kill` cho 137 với `OOMKilled=false`, vượt
+`--memory` cho 137 với `OOMKilled=true`. Và: **PID 1 không có handler tín hiệu
+mặc định** nên 3/4 dạng container ăn trọn 10,2s timeout rồi bị hard-kill
+(`docker run --init` → exit 143 sau 0,1s) · hai container cùng báo `healthy`
+nhưng một cái 404 route đáng lẽ 401 · trung bình 66,9ms nằm giữa p50 45,9 và
+p90 186,8, không mô tả ai · 26,39GB làm đầy đĩa là **build cache Docker**, nằm
+ngoài mọi cây dự án nên `du` không thấy · 900 lượt 429 trải trên **60 IP** =
+hạn mức quá chặt, không phải tấn công.
+
+Đường ống `awk` được kiểm bằng log sinh với **phân bố đã biết** trước khi tin.
 
 **12. Node.js** (thẻ 3) — **giữ `href: '/courses'`**, đã có khoá 112 bài. Đừng
 viết lại; nếu muốn thì chỉ viết bài dẫn nhập ngắn trỏ vào khoá.
@@ -286,6 +302,9 @@ deploy là phải deploy lại. Tất cả VẪN CHƯA push origin — chờ use
 Đếm commit chưa push bằng `git log --oneline @{u}..HEAD | wc -l`.
 
 ```
+d7e8532 feat(exam): SSL101c Đề 8 — hoàn tất 8/8            ← phiên khác, commit hộ
+cb2c466 feat(deepdives): bài 11 — Reading Production (12/12)
+23e53ca docs(deepdives): bàn giao sau bài 10
 ebbcbe8 feat(deepdives): bài 10 — How to Set up a Mac for Development
 a113185 fix(deepdives): bài 9 — sửa đoạn nói sai về set -e trong $( )
 5185da4 docs(deepdives): bàn giao sau bài 9
@@ -314,7 +333,7 @@ f438640 feat(deepdives): bài 3 — An Introduction to GraphQL
 8e069b3 feat(deepdives): bài 1 — command line + seeder
 ```
 
-Hạ tầng đã xong, dùng lại cho bài cuối:
+Hạ tầng (giữ lại — dùng cho mọi bài sau này nếu có):
 
 - `scripts/deepdive-seed.mjs` — idempotent theo slug, `--dry`/`--apply`, render
   `bodyHtml`+`toc` bằng ĐÚNG renderer backend ở `dist/`, giữ `viewCount` +
@@ -331,11 +350,11 @@ Hạ tầng đã xong, dùng lại cho bài cuối:
   `<pre>`/`<code>` là escape ĐÚNG, không phải thẻ bị sanitizer lọc.
   **Chạy chúng và ĐỌC dòng tự kiểm** — cả hai in ra ✓/✗ cho chính nó
 
-Mười bài đã seed trên `:5544` = bài #1..#10. Trang đọc: `/tech-trends/<slug>`.
+Mười một bài đã seed trên `:5544` = bài #1..#11. Trang đọc: `/tech-trends/<slug>`.
 
 ---
 
 ## Câu mở đầu gợi ý cho phiên mới
 
-> Đọc `scratchpad/DEEPDIVES-NEXT-SESSION.md` rồi viết bài 11 (reading
-> production) theo đúng quy trình B1-B8 trong đó. Đó là bài CUỐI.
+> Loạt Deep Dives đã xong 12/12. Việc còn lại: push origin sau khi user test
+> prod xong. Nếu muốn thêm bài mới thì theo quy trình B1-B8 trong file này.

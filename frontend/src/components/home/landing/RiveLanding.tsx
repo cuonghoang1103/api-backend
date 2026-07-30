@@ -168,10 +168,13 @@ export default function RiveLanding() {
           Đặt ngay dưới phần mở đầu vì đây là thứ khác biệt nhất của site, và
           cũng là thứ khách sẽ nhớ. Bấm vào KHÔNG đi thẳng: `PlaygroundGate` mở
           hộp thoại cảnh báo dùng GPU máy khách + nặng ~35MB trước đã. */}
-      {/* Vạch nhấn mảnh trên đỉnh dải nổi bật — dấu hiệu duy nhất cho biết khối
-          này khác các khối còn lại. Rẻ hơn và bền hơn mọi kiểu đổ bóng phát sáng:
-          không tốn GPU, không bợt trong chế độ sáng. */}
-      <section className="border-b border-[var(--border-color)] border-t-2 border-t-[var(--accent-color)] bg-[var(--bg-card)]">
+      {/* ⚠️ ĐỪNG đưa lại `border-t-2 border-t-[var(--accent-color)]` vào đây.
+          Vạch xanh 2px từng chạy ngang hết bề rộng trang, cắt đôi trang chủ và
+          user chê xấu (30/7) — bỏ rồi. Khối này vẫn được đánh dấu là "nổi bật"
+          bằng ★ + nhãn "Featured" ở dòng eyebrow ngay dưới, và bằng nền
+          `--bg-card` khác nền trang. Muốn nhấn thêm thì nhấn TRONG khối, đừng
+          kẻ ngang toàn trang. */}
+      <section className="border-y border-[var(--border-color)] bg-[var(--bg-card)]">
         <div className="mx-auto max-w-5xl px-5 py-14 sm:px-8">
           <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--text-muted)]">
             <span className="text-[var(--accent-color)]">★</span> Featured — the front door

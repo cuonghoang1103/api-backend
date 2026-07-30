@@ -16,7 +16,26 @@ console.log(bad ? `✗ ${bad} bảng lệch` : '✓ mọi bảng đủ ô');
 const ids = [...html.matchAll(/<h[1-3] id="([^"]+)"/g)].map(m => m[1]);
 const dup = ids.filter((v, i) => ids.indexOf(v) !== i);
 console.log(dup.length ? `✗ id trùng: ${dup.join(',')}` : '✓ không id trùng');
-const stray = html.match(/&lt;(figure|details|section|aside|kbd|script)/g);
-console.log(stray ? `✗ thẻ bị sanitizer chặn: ${[...new Set(stray)].join(',')}` : '✓ không thẻ nào bị chặn');
+// Chỉ soi NGOÀI <pre>: trong khối code thì `&lt;script` là escape ĐÚNG, không phải
+// thẻ bị sanitizer lọc. Không bỏ <pre> ra thì mọi bài có ví dụ HTML đều báo oan
+// (đã dẫm 30/7 với `<script defer src="main.js">` của HtmlWebpackPlugin).
+const outsidePre = html
+  .replace(/<pre>[\s\S]*?<\/pre>/g, '')
+  .replace(/<code>[\s\S]*?<\/code>/g, ''); // ← cả `<script>` nội dòng nữa
+const BLOCKED = /&lt;(figure|details|section|aside|kbd|script)/g;
+const stray = outsidePre.match(BLOCKED);
+console.log(stray ? `✗ thẻ bị sanitizer chặn: ${[...new Set(stray)].join(',')}` : '✓ không thẻ nào bị chặn (ngoài khối code)');
+const inPre = (html.match(BLOCKED) ?? []).length - (stray ?? []).length;
+if (inPre) console.log(`  (${inPre} lần &lt;… trong khối code — đúng, bỏ qua)`);
+// tự kiểm: một thẻ bị chặn NGOÀI pre phải bị bắt, trong pre thì không
+const probe = '<p>&lt;aside x</p><pre><code>&lt;script y</code></pre>'
+  + '<p>xem <code>&lt;script&gt;</code> nội dòng</p>';
+const pOut = probe
+  .replace(/<pre>[\s\S]*?<\/pre>/g, '')
+  .replace(/<code>[\s\S]*?<\/code>/g, '')
+  .match(BLOCKED) ?? [];
+console.log(pOut.length === 1 && pOut[0].includes('aside')
+  ? '✓ bộ kiểm: bắt thẻ chặn ngoài code, bỏ qua trong pre/code (tự kiểm)'
+  : `✗ BỘ KIỂM HỎNG — ca tự kiểm ra ${JSON.stringify(pOut)}`);
 fs.writeFileSync(mdPath.replace(/\.md$/, '') .split('/').pop() + '.html', html);
 process.stdout.write(`html ${(html.length / 1024).toFixed(1)}KB → ${process.cwd()}/${mdPath.replace(/\.md$/, '').split('/').pop()}.html\n`);

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 356" width="700" height="356" role="img" aria-label="webpack walks from one entry file through the module graph, loaders and optimisation to the assets on disk; loaders act on single files while plugins hook every stage">
+  <rect width="700" height="356" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="355" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">One entry, five stages, three files on disk. Numbers are this guide&#39;s app in production mode.</text>
+
+  <!-- stage 1 -->
+  <rect x="24" y="46" width="170" height="40" rx="6" fill="#111c30" stroke="#4ade80"/>
+  <text x="38" y="71" font-family="ui-monospace, Menlo, monospace" font-size="14" fill="#4ade80">1 · entry</text>
+  <rect x="206" y="46" width="470" height="40" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="220" y="71" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#94a3b8">&#39;./src/app/main.js&#39; — the only file you name</text>
+
+  <!-- stage 2 -->
+  <rect x="24" y="96" width="170" height="40" rx="6" fill="#111c30" stroke="#22d3ee"/>
+  <text x="38" y="121" font-family="ui-monospace, Menlo, monospace" font-size="14" fill="#22d3ee">2 · module graph</text>
+  <rect x="206" y="96" width="470" height="40" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="220" y="121" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#94a3b8">follow every import — 4 of my files + 133 lodash-es</text>
+
+  <!-- stage 3 -->
+  <rect x="24" y="146" width="170" height="40" rx="6" fill="#111c30" stroke="#fcd34d"/>
+  <text x="38" y="171" font-family="ui-monospace, Menlo, monospace" font-size="14" fill="#fcd34d">3 · loaders</text>
+  <rect x="206" y="146" width="470" height="40" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="220" y="171" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#94a3b8">source text in, source text out — one file at a time</text>
+
+  <!-- stage 4 -->
+  <rect x="24" y="196" width="170" height="40" rx="6" fill="#111c30" stroke="#fb923c"/>
+  <text x="38" y="221" font-family="ui-monospace, Menlo, monospace" font-size="14" fill="#fb923c">4 · optimize</text>
+  <rect x="206" y="196" width="470" height="40" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="220" y="221" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#94a3b8">tree shake · concatenate · split · minify (prod only)</text>
+
+  <!-- stage 5 -->
+  <rect x="24" y="246" width="170" height="40" rx="6" fill="#111c30" stroke="#a78bfa"/>
+  <text x="38" y="271" font-family="ui-monospace, Menlo, monospace" font-size="14" fill="#a78bfa">5 · emit</text>
+  <rect x="206" y="246" width="470" height="40" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="220" y="271" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#94a3b8">main.js 20535 B · 81.js 2439 B · main.css 322 B</text>
+
+  <!-- arrows down the left edge -->
+  <g stroke="#334155" stroke-width="1.5" fill="none">
+    <path d="M109 86 L109 96"/>
+    <path d="M109 136 L109 146"/>
+    <path d="M109 186 L109 196"/>
+    <path d="M109 236 L109 246"/>
+  </g>
+
+  <!-- footer: who hooks what -->
+  <rect x="24" y="300" width="326" height="34" rx="6" fill="#0a1120" stroke="#fcd34d"/>
+  <text x="38" y="322" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">loaders see stage 3 only</text>
+  <rect x="362" y="300" width="314" height="34" rx="6" fill="#0a1120" stroke="#a78bfa"/>
+  <text x="376" y="322" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#a78bfa">plugins hook all five stages</text>
+</svg>

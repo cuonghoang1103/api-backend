@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 384" width="700" height="384" role="img" aria-label="Inside an emitted bundle: a module map keyed by path, webpack's runtime with the chunk-to-filename map, and the entry call; runtimeChunk single moves the map into its own file">
+  <rect width="700" height="384" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="383" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">A bundle is an object of modules plus a small loader. Everything else is decoration on this.</text>
+
+  <!-- left: inside main.js -->
+  <text x="24" y="54" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#4ade80">inside main.js</text>
+  <rect x="24" y="62" width="336" height="120" rx="6" fill="#0a1120" stroke="#4ade80"/>
+  <text x="38" y="84" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">__webpack_modules__ = {</text>
+  <text x="38" y="104" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">  &quot;./src/app/main.js&quot;:   fn,</text>
+  <text x="38" y="124" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">  &quot;./src/app/format.js&quot;: fn,</text>
+  <text x="38" y="144" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">  &quot;…/lodash-es/sumBy.js&quot;: fn,</text>
+  <text x="38" y="164" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">}</text>
+
+  <rect x="24" y="190" width="336" height="76" rx="6" fill="#0a1120" stroke="#22d3ee"/>
+  <text x="38" y="212" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#22d3ee">runtime — the loader webpack wrote</text>
+  <text x="38" y="232" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">__webpack_require__(id) + cache</text>
+  <text x="38" y="252" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">chunk id → filename map</text>
+
+  <rect x="24" y="274" width="336" height="38" rx="6" fill="#111c30" stroke="#a78bfa"/>
+  <text x="38" y="298" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#a78bfa">__webpack_require__(&quot;./src/app/main.js&quot;)</text>
+
+  <!-- right: files on disk -->
+  <text x="376" y="54" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#fb923c">files on disk</text>
+  <rect x="376" y="62" width="300" height="34" rx="5" fill="#111c30" stroke="#fb923c"/>
+  <text x="390" y="84" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">main.[hash].js</text>
+  <text x="664" y="84" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">16592 B</text>
+  <rect x="376" y="104" width="300" height="34" rx="5" fill="#111c30" stroke="#22d3ee"/>
+  <text x="390" y="126" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">runtime.[hash].js</text>
+  <text x="664" y="126" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">4493 B</text>
+  <rect x="376" y="146" width="300" height="34" rx="5" fill="#111c30" stroke="#a78bfa"/>
+  <text x="390" y="168" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">81.[hash].chunk.js</text>
+  <text x="664" y="168" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">2439 B</text>
+  <rect x="376" y="188" width="300" height="34" rx="5" fill="#111c30" stroke="#4ade80"/>
+  <text x="390" y="210" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">main.[hash].css</text>
+  <text x="664" y="210" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">322 B</text>
+
+  <text x="376" y="248" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">runtimeChunk: &#39;single&#39; moves the chunk map</text>
+  <text x="376" y="266" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">out of main.js, so editing a lazy chunk</text>
+  <text x="376" y="284" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">no longer changes main.js&#39;s hash.</text>
+
+  <!-- footer measured line -->
+  <rect x="24" y="330" width="652" height="36" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="38" y="353" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">edit chart.js → 81 and runtime rehash · main.js unchanged (measured)</text>
+</svg>

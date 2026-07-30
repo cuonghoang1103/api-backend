@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 372" width="700" height="372" role="img" aria-label="The same source built in development and production yields different chunk graphs, because splitChunks minSize is 10000 in development and 20000 in production">
+  <rect width="700" height="372" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="371" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">Same files, same imports, different output structure. Not just smaller — shaped differently.</text>
+
+  <!-- development column -->
+  <text x="24" y="56" font-family="ui-monospace, Menlo, monospace" font-size="14" fill="#22d3ee">mode: development</text>
+  <rect x="24" y="66" width="316" height="34" rx="5" fill="#111c30" stroke="#22d3ee"/>
+  <text x="38" y="88" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">main.js</text>
+  <text x="328" y="88" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">199555 B</text>
+  <rect x="24" y="106" width="316" height="34" rx="5" fill="#111c30" stroke="#fb923c"/>
+  <text x="38" y="128" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">vendors-…lodash-es…js</text>
+  <text x="328" y="128" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">29709 B</text>
+  <rect x="24" y="146" width="316" height="34" rx="5" fill="#111c30" stroke="#a78bfa"/>
+  <text x="38" y="168" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">src_app_chart_js.js</text>
+  <text x="328" y="168" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">1446 B</text>
+  <rect x="24" y="186" width="316" height="34" rx="5" fill="#111c30" stroke="#4ade80"/>
+  <text x="38" y="208" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">main.css</text>
+  <text x="328" y="208" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">435 B</text>
+  <text x="24" y="242" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#22d3ee">3 chunks · 231145 B · 166 ms</text>
+
+  <!-- production column -->
+  <text x="360" y="56" font-family="ui-monospace, Menlo, monospace" font-size="14" fill="#4ade80">mode: production</text>
+  <rect x="360" y="66" width="316" height="34" rx="5" fill="#111c30" stroke="#4ade80"/>
+  <text x="374" y="88" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">main.js</text>
+  <text x="664" y="88" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">20535 B</text>
+  <rect x="360" y="106" width="316" height="34" rx="5" fill="#111c30" stroke="#a78bfa"/>
+  <text x="374" y="128" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">81.js</text>
+  <text x="664" y="128" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">2439 B</text>
+  <rect x="360" y="146" width="316" height="34" rx="5" fill="#111c30" stroke="#4ade80"/>
+  <text x="374" y="168" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">main.css</text>
+  <text x="664" y="168" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">322 B</text>
+  <rect x="360" y="186" width="316" height="34" rx="5" fill="#0a1120" stroke="#fb923c" stroke-dasharray="4 3"/>
+  <text x="374" y="208" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">vendors folded into 81.js</text>
+  <text x="360" y="242" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#4ade80">2 chunks · 23296 B · 483 ms</text>
+
+  <!-- the defaults that differ -->
+  <rect x="24" y="262" width="652" height="90" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="38" y="284" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">defaults mode flipped, asked of webpack directly:</text>
+  <text x="38" y="306" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">splitChunks.minSize   10000   →   20000</text>
+  <text x="38" y="326" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">chunkIds / moduleIds  named   →   deterministic</text>
+  <text x="38" y="346" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">maxAsyncRequests      Infinity →  30</text>
+</svg>

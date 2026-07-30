@@ -92,8 +92,7 @@ export const DEEP_DIVES: DeepDive[] = [
     logo: 'webpack',
     title: 'How to Set Up webpack From Scratch',
     blurb: 'Entry, output, loaders, plugins — a bundler you can reason about.',
-    href: '/code-lab',
-    via: 'Graded exercises in Code Lab',
+    article: 'how-to-set-up-webpack-from-scratch',
   },
   {
     logo: 'gnubash',

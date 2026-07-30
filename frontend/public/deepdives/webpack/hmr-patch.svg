@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 340" width="700" height="340" role="img" aria-label="A hot update rebuilds one module in 29 milliseconds and sends a 28-byte manifest plus a 1792-byte patch, instead of reloading the 394 kilobyte bundle">
+  <rect width="700" height="340" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="339" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">One string changed in format.js. Everything below is what the dev server actually did.</text>
+
+  <!-- step 1 -->
+  <rect x="24" y="48" width="200" height="52" rx="6" fill="#111c30" stroke="#fcd34d"/>
+  <text x="38" y="70" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">1 · you save a file</text>
+  <text x="38" y="90" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">src/app/format.js</text>
+
+  <!-- step 2 -->
+  <rect x="250" y="48" width="200" height="52" rx="6" fill="#111c30" stroke="#22d3ee"/>
+  <text x="264" y="70" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#22d3ee">2 · rebuild, 29 ms</text>
+  <text x="264" y="90" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">1 built, 150 cached</text>
+
+  <!-- step 3 -->
+  <rect x="476" y="48" width="200" height="52" rx="6" fill="#111c30" stroke="#4ade80"/>
+  <text x="490" y="70" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">3 · emit a patch</text>
+  <text x="490" y="90" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">two small files</text>
+
+  <g stroke="#334155" stroke-width="1.5" fill="none">
+    <path d="M224 74 L250 74"/>
+    <path d="M450 74 L476 74"/>
+  </g>
+
+  <!-- the two files -->
+  <rect x="24" y="118" width="652" height="44" rx="6" fill="#0a1120" stroke="#4ade80"/>
+  <text x="38" y="139" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">main.0e2a…hot-update.json     28 B</text>
+  <text x="38" y="156" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">{&quot;c&quot;:[&quot;main&quot;],&quot;r&quot;:[],&quot;m&quot;:[]}  — chunks changed, removed, modules gone</text>
+
+  <rect x="24" y="170" width="652" height="44" rx="6" fill="#0a1120" stroke="#a78bfa"/>
+  <text x="38" y="191" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#a78bfa">main.0e2a…hot-update.js     1792 B</text>
+  <text x="38" y="208" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">contains exactly one module: &quot;./src/app/format.js&quot;</text>
+
+  <!-- comparison -->
+  <rect x="24" y="232" width="316" height="52" rx="6" fill="#111c30" stroke="#f43f5e"/>
+  <text x="38" y="254" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">full reload</text>
+  <text x="38" y="274" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">394643 B over the wire</text>
+
+  <rect x="360" y="232" width="316" height="52" rx="6" fill="#111c30" stroke="#4ade80"/>
+  <text x="374" y="254" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">hot update</text>
+  <text x="374" y="274" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">1820 B → 220× less</text>
+
+  <text x="24" y="312" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">Caveat: a module with no webpackHot.accept handler falls back to a full reload anyway.</text>
+</svg>

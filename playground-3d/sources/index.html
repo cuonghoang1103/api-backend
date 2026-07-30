@@ -502,9 +502,54 @@
                                                 </button>
                                             </td>
                                         </tr>
+                                        <!--
+                                            Nhạc nền. Ba dòng này TỰ ẨN khi
+                                            `sources/data/musics.js` rỗng —
+                                            `Options.setMusic()` lo việc đó.
+                                        -->
+                                        <tr class="js-music-row">
+                                            <td>
+                                                Music
+                                            </td>
+                                            <td>
+                                                <button class="js-music-toggle music-toggle button is-small has-tooltip">
+                                                    <div class="tooltip">Toggles the background music</div>
+                                                    <span>On</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr class="js-music-row">
+                                            <td>
+                                                Volume
+                                            </td>
+                                            <td>
+                                                <div class="music-volume">
+                                                    <input class="js-music-volume range has-tooltip" type="range" min="0" max="100" step="1" value="25">
+                                                    <span class="js-music-volume-value value">25%</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class="js-music-row">
+                                            <td>
+                                                Track
+                                            </td>
+                                            <td>
+                                                <div class="music-track">
+                                                    <button class="js-music-previous button is-small has-tooltip">
+                                                        <div class="tooltip">Previous beat</div>
+                                                        <span>&lsaquo;</span>
+                                                    </button>
+                                                    <span class="js-music-name name">&nbsp;</span>
+                                                    <button class="js-music-next button is-small has-tooltip">
+                                                        <div class="tooltip">Next beat</div>
+                                                        <span>&rsaquo;</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
                                         <tr>
                                             <td>
-                                                Quality 
+                                                Quality
                                             </td>
                                             <td>
                                                 <button class="js-quality-toggle quality-toggle button is-small has-tooltip">
@@ -965,6 +1010,12 @@
                                 <h2 class="title">The vocabulary game</h2>
                                 <p class="text">
                                     Smash a brick wall with the car and an English word pops up. The words come straight from the <a href="https://cuongthai.com/language" target="_blank" rel="noreferrer">My Language</a> section of the site.
+                                </p>
+
+                                <h2 class="title">The music</h2>
+                                <p class="text">
+                                    The beats playing in the background are my own — written and produced by me, not licensed from anyone.
+                                    <br />Change track, set the volume or turn them off entirely in <strong>Options</strong>.
                                 </p>
 
                                 <h2 class="title">Some more links</h2>

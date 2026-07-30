@@ -8,6 +8,7 @@ export class Options
         this.element = this.game.menu.items.get('options').contentElement
 
         this.setSound()
+        this.setMusic()
         this.setQuality()
         this.setRespawn()
         this.setReset()
@@ -15,11 +16,118 @@ export class Options
         this.setServer()
     }
 
+    /**
+     * Tiếng bấm nút — cùng một tiếng mà Menu và Modals dùng, để nút mới nghe
+     * y hệt nút cũ của bản mẫu.
+     *
+     * ⚠️ `audio.groups` chỉ có sau `audio.init()` (nút Play ở màn chào mở khoá
+     *    âm thanh), nên phải kiểm tra tồn tại — bấm trước lúc đó thì im lặng
+     *    chứ không được ném lỗi.
+     */
+    playClick(isOpen = true)
+    {
+        const sound = this.game.audio.groups.get('click')
+        if(sound)
+            sound.play(isOpen)
+    }
+
     setSound()
     {
         const element = this.element.querySelector('.js-audio-toggle')
 
-        element.addEventListener('click', this.game.audio.mute.toggle)
+        element.addEventListener('click', () =>
+        {
+            // Tiếng bấm phát TRƯỚC khi tắt tiếng, nếu không thì bấm tắt sẽ
+            // không nghe thấy gì
+            this.playClick(this.game.audio.mute.active)
+            this.game.audio.mute.toggle()
+        })
+    }
+
+    /**
+     * Nhạc nền: bật/tắt · âm lượng · đổi bài.
+     *
+     * ⚠️ Bảng Cài đặt được dựng ở `Game.js` TRƯỚC khi `audio.init()` chạy, nên
+     *    lúc này `audio.playlist` thường CHƯA tồn tại. Vì vậy phải chờ sự kiện
+     *    `playlistReady`. Gắn thẳng vào `audio.playlist` ở đây là lỗi rỗng.
+     */
+    setMusic()
+    {
+        const rowElements = [ ...this.element.querySelectorAll('.js-music-row') ]
+        const toggleElement = this.element.querySelector('.js-music-toggle')
+        const toggleText = toggleElement.querySelector('span')
+        const volumeElement = this.element.querySelector('.js-music-volume')
+        const volumeValueElement = this.element.querySelector('.js-music-volume-value')
+        const nameElement = this.element.querySelector('.js-music-name')
+        const previousElement = this.element.querySelector('.js-music-previous')
+        const nextElement = this.element.querySelector('.js-music-next')
+
+        // Chưa có nhạc thì giấu hẳn ba dòng đi, đừng để nút chết trong bảng
+        const hide = () =>
+        {
+            for(const rowElement of rowElements)
+                rowElement.classList.add('is-hidden')
+        }
+
+        hide()
+
+        const bind = () =>
+        {
+            const playlist = this.game.audio.playlist
+
+            if(!playlist || !playlist.hasSongs)
+                return
+
+            for(const rowElement of rowElements)
+                rowElement.classList.remove('is-hidden')
+
+            // Giao diện đi theo trạng thái thật của trình phát, không tự nhớ
+            // riêng một bản sao — nhạc còn đổi bài do hết bài và do jukebox ở
+            // khu Bowling nữa
+            const update = () =>
+            {
+                toggleText.textContent = playlist.enabled ? 'On' : 'Off'
+                toggleElement.classList.toggle('is-danger', !playlist.enabled)
+
+                const percentage = Math.round(playlist.slider * 100)
+                volumeElement.value = percentage
+                volumeValueElement.textContent = `${percentage}%`
+
+                nameElement.textContent = playlist.songs[playlist.index].name
+            }
+
+            update()
+            this.game.audio.events.on('playlistChange', update)
+
+            toggleElement.addEventListener('click', () =>
+            {
+                this.playClick(!playlist.enabled)
+                playlist.toggle()
+            })
+
+            previousElement.addEventListener('click', () =>
+            {
+                this.playClick(false)
+                playlist.previous()
+            })
+
+            nextElement.addEventListener('click', () =>
+            {
+                this.playClick()
+                playlist.next()
+            })
+
+            // `input` chứ không phải `change`: nghe được ngay lúc đang kéo
+            volumeElement.addEventListener('input', () =>
+            {
+                playlist.setVolume(parseInt(volumeElement.value) / 100)
+            })
+        }
+
+        if(this.game.audio.initiated)
+            bind()
+        else
+            this.game.audio.events.on('playlistReady', bind)
     }
 
     setQuality()

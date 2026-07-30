@@ -149,18 +149,46 @@ export class Audio
     {
         this.playlist = {}
 
-        // Danh sách nhạc nền nằm ở `sources/data/musics.js` — mặc định RỖNG vì
-        // nhạc của bản gốc đã được gỡ. Hướng dẫn gắn nhạc riêng nằm trong file
-        // đó. Hiệu ứng âm thanh chi tiết KHÔNG liên quan tới đây: chúng ở
+        // Danh sách nhạc nền nằm ở `sources/data/musics.js` — thêm/bớt bài chỉ
+        // sửa đúng file đó. Hiệu ứng âm thanh KHÔNG liên quan tới đây: chúng ở
         // `setAmbiants()` và `setOneOffs()` bên dưới.
         this.playlist.songs = musicsData
-
         this.playlist.hasSongs = this.playlist.songs.length > 0
-        this.playlist.index = this.playlist.hasSongs
-            ? (Math.floor(Date.now() / 1000 / 60 / 3) % this.playlist.songs.length) // Different music every X minutes
-            : 0
+
+        // Chạy TUẦN TỰ từ bài đầu tới bài cuối rồi quay lại bài đầu.
+        // ⚠️ Bản mẫu bốc bài theo đồng hồ (`Date.now()/1000/60/3 % length`) nên
+        //    mỗi lần mở trang lại rơi vào giữa danh sách. Đã bỏ hẳn cách đó.
+        this.playlist.index = 0
         this.playlist.current = null
         this.playlist.switching = false
+        this.playlist.pendingCall = null
+
+        /**
+         * ÂM LƯỢNG
+         *
+         * `slider` là con số người dùng kéo (0..1). Âm lượng thật đưa cho Howler
+         * là `slider²`, vì tai người nghe gần theo hàm mũ: đường cong bình phương
+         * dồn phần lớn hành trình của thanh trượt vào vùng RẤT NHỎ — đúng vùng
+         * mà nhạc nền phải nằm, nên kéo tới đâu cũng chỉnh được tinh.
+         *
+         * Mặc định `slider = 0.25` ⇒ âm lượng thật **0,0625**. Đối chiếu với
+         * tiếng nền của game: chim 0.3 · dế 0.65 · gió tới 0.7 · lửa 0.8 ·
+         * mưa tới 1.0. Tức nhạc nhỏ hơn tiếng chim ~5 lần và nhỏ hơn tiếng mưa
+         * to ~16 lần — đúng ý "bé xíu so với tiếng chim, gà, sấm sét".
+         */
+        this.playlist.defaultSlider = 0.25
+        this.playlist.slider = this.playlist.defaultSlider
+        this.playlist.enabled = true
+
+        // Lựa chọn cũ của người dùng (nếu có)
+        const storedVolume = parseFloat(localStorage.getItem('musicVolume'))
+        if(!Number.isNaN(storedVolume))
+            this.playlist.slider = clamp(storedVolume, 0, 1)
+
+        if(localStorage.getItem('musicToggle') === '0')
+            this.playlist.enabled = false
+
+        this.playlist.getVolume = () => this.playlist.slider * this.playlist.slider
 
         for(const song of this.playlist.songs)
         {
@@ -171,7 +199,11 @@ export class Audio
                 autoplay: false,
                 loop: false,
                 preload: false,
-                volume: 0.2,
+                volume: this.playlist.getVolume(),
+                onload: () =>
+                {
+                    song.loaded = true
+                },
                 onend: () =>
                 {
                     this.playlist.next()
@@ -179,9 +211,25 @@ export class Audio
             })
         }
 
-        this.playlist.next = () =>
+        /**
+         * Nhảy tới một bài bất kỳ.
+         *
+         * Chỉ số đổi NGAY để bảng Cài đặt cập nhật tên bài tức thì, còn nhạc mới
+         * vào sau `delay` giây — đúng nhịp tiếng đổi đĩa của bản mẫu (jukebox ở
+         * khu Bowling cũng đi qua đây, nên hai chỗ cùng một cảm giác).
+         */
+        this.playlist.goTo = (index, delay = 3) =>
         {
             if(!this.playlist.hasSongs)
+                return
+
+            const count = this.playlist.songs.length
+            this.playlist.index = ((index % count) + count) % count // luôn dương
+
+            this.events.trigger('playlistChange')
+
+            // Tắt nhạc thì chỉ đổi bài trên giấy tờ, không phát gì
+            if(!this.playlist.enabled)
                 return
 
             if(this.playlist.switching)
@@ -194,25 +242,19 @@ export class Audio
 
             // Old one
             if(this.playlist.current)
-            {
                 this.playlist.current.sound.stop()
-            }
-            
-            gsap.delayedCall(3, () =>
-            {
-                this.playlist.index++
 
-                if(this.playlist.index >= this.playlist.songs.length)
-                    this.playlist.index = 0
+            this.playlist.pendingCall = gsap.delayedCall(delay, () =>
+            {
+                this.playlist.pendingCall = null
 
                 // New one
                 this.playlist.current = this.playlist.songs[this.playlist.index]
 
                 if(!this.playlist.current.loaded)
-                {
                     this.playlist.current.sound.load()
-                }
 
+                this.playlist.current.sound.volume(this.playlist.getVolume())
                 this.playlist.current.sound.play()
 
                 // Notification
@@ -230,30 +272,100 @@ export class Audio
                     // () => {
                     // }
                 )
-                
+
                 this.playlist.switching = false
             })
         }
 
+        this.playlist.next = () =>
+        {
+            this.playlist.goTo(this.playlist.index + 1)
+        }
+
+        this.playlist.previous = () =>
+        {
+            this.playlist.goTo(this.playlist.index - 1)
+        }
+
         this.playlist.play = () =>
         {
-            if(!this.playlist.hasSongs)
+            if(!this.playlist.hasSongs || !this.playlist.enabled)
                 return
 
             this.playlist.current = this.playlist.songs[this.playlist.index]
 
             if(!this.playlist.current.loaded)
-            {
                 this.playlist.current.sound.load()
-            }
 
+            this.playlist.current.sound.volume(this.playlist.getVolume())
             this.playlist.current.sound.play()
         }
 
-        if(import.meta.env.VITE_MUSIC)
+        this.playlist.stop = () =>
         {
-            this.playlist.play()
+            // Huỷ cả lần đổi bài đang chờ, nếu không nhạc sẽ tự bật lại sau vài
+            // giây dù người dùng vừa tắt
+            if(this.playlist.pendingCall)
+            {
+                this.playlist.pendingCall.kill()
+                this.playlist.pendingCall = null
+            }
+            this.playlist.switching = false
+
+            if(this.playlist.current)
+                this.playlist.current.sound.stop()
         }
+
+        this.playlist.setVolume = (slider) =>
+        {
+            this.playlist.slider = clamp(slider, 0, 1)
+            localStorage.setItem('musicVolume', this.playlist.slider)
+
+            /**
+             * ⚠️ `Howl.volume(v)` bị BỎ QUA khi bài chưa nạp (`preload: false`
+             *    nên chỉ bài đang phát mới nạp). Đo được: chỉnh lên 60%, hai bài
+             *    đã nạp nhận 0.36 còn ba bài chưa nạp giữ nguyên 0.0625 ⇒ chỉnh
+             *    to xong, sang bài sau lại bé như cũ.
+             *
+             *    Nên âm lượng còn được đặt LẠI ngay trước mỗi lần `play()` —
+             *    đó mới là chỗ chắc chắn ăn. Vòng lặp dưới đây chỉ để bài ĐANG
+             *    PHÁT đổi âm lượng tức thì lúc người dùng đang kéo thanh trượt.
+             */
+            const volume = this.playlist.getVolume()
+            for(const song of this.playlist.songs)
+                song.sound.volume(volume)
+
+            this.events.trigger('playlistChange')
+        }
+
+        this.playlist.setEnabled = (enabled) =>
+        {
+            if(enabled === this.playlist.enabled)
+                return
+
+            this.playlist.enabled = enabled
+            localStorage.setItem('musicToggle', enabled ? '1' : '0')
+
+            if(enabled)
+                this.playlist.play()
+            else
+                this.playlist.stop()
+
+            this.events.trigger('playlistChange')
+        }
+
+        this.playlist.toggle = () =>
+        {
+            this.playlist.setEnabled(!this.playlist.enabled)
+        }
+
+        // Tự phát ngay khi âm thanh được mở khoá (nút Play ở màn chào gọi
+        // `audio.init()`), trừ khi người dùng đã tắt nhạc từ lần trước
+        this.playlist.play()
+
+        // Bảng Cài đặt được dựng TRƯỚC `audio.init()` nên lúc đó chưa có
+        // `playlist`. Báo cho nó biết đã có để nó gắn nút vào.
+        this.events.trigger('playlistReady')
     }
 
     setAmbiants()
@@ -705,7 +817,9 @@ export class Audio
             {
                 Howler.mute(false)
 
-                if(this.playlist?.current)
+                // ⚠️ `enabled` phải kiểm ở đây: tắt nhạc rồi chuyển tab đi, quay
+                //    lại là nhạc tự bật lên nếu thiếu điều kiện này
+                if(this.playlist?.current && this.playlist.enabled)
                     this.playlist.current.sound.play()
             }
         })

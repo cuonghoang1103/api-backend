@@ -36,3 +36,81 @@
         align-items center
         justify-content center
         width 100%
+
+    /*
+     * Nhạc nền — ba dòng Music / Volume / Track.
+     * Dùng ĐÚNG bảng màu của bản mẫu: viền và chữ `alpha(#ffffff, 0.8)`, hover
+     * lên `1`, bo góc 8px. Không thêm màu mới nào.
+     */
+    tr.is-hidden
+        display none
+
+    .music-volume
+        display flex
+        align-items center
+        gap 12px
+        width 100%
+
+        .value
+            flex none
+            width 46px
+            text-align right
+            color alpha(#ffffff, 0.8)
+
+        .range
+            flex 1 1 auto
+            -webkit-appearance none
+            appearance none
+            width 100%
+            height 8px
+            padding 0
+            border 1px solid alpha(#ffffff, 0.8)
+            border-radius 8px
+            background none
+            cursor pointer
+
+            /* Con trượt phải khai báo RIÊNG cho WebKit và Firefox — gộp hai
+               bộ chọn vào một khối là cả hai cùng bị bỏ qua */
+            &::-webkit-slider-thumb
+                -webkit-appearance none
+                appearance none
+                width 18px
+                height 18px
+                border-radius 50%
+                border 1px solid alpha(#ffffff, 0.8)
+                background #ffffff
+                cursor pointer
+
+            &::-moz-range-thumb
+                width 16px
+                height 16px
+                border-radius 50%
+                border 1px solid alpha(#ffffff, 0.8)
+                background #ffffff
+                cursor pointer
+
+            html:not(.is-mode-touch) &:hover
+                border-color alpha(#ffffff, 1)
+
+    .music-track
+        display flex
+        align-items center
+        gap 10px
+        width 100%
+
+        .name
+            flex 1 1 auto
+            min-width 0
+            text-align center
+            white-space nowrap
+            overflow hidden
+            text-overflow ellipsis
+            color alpha(#ffffff, 0.8)
+
+        .button
+            flex none
+            width 46px
+            padding 0
+
+            @media only screen and (max-width 440px)
+                width 38px

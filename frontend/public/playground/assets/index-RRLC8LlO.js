@@ -89758,7 +89758,28 @@ https://github.com/browserify/crypto-browserify`);
       }
     }
   }
-  const musicsData = [];
+  const musicsData = [
+    {
+      path: "sounds/musics/CuongThai1.mp3",
+      name: "Beat 1"
+    },
+    {
+      path: "sounds/musics/CuongThai2.mp3",
+      name: "Beat 2"
+    },
+    {
+      path: "sounds/musics/CuongThai3.mp3",
+      name: "Beat 3"
+    },
+    {
+      path: "sounds/musics/CuongThai4.mp3",
+      name: "Beat 4"
+    },
+    {
+      path: "sounds/musics/CuongThai5.mp3",
+      name: "Beat 5"
+    }
+  ];
   class BowlingArea extends Area {
     constructor(e) {
       super(e), this.game.debug.active && (this.debugPanel = this.game.debug.panel.addFolder({
@@ -98848,34 +98869,56 @@ https://github.com/browserify/crypto-browserify`);
       }, s.items.push(o), o;
     }
     setPlaylist() {
-      this.playlist = {}, this.playlist.songs = musicsData, this.playlist.hasSongs = this.playlist.songs.length > 0, this.playlist.index = this.playlist.hasSongs ? Math.floor(Date.now() / 1e3 / 60 / 3) % this.playlist.songs.length : 0, this.playlist.current = null, this.playlist.switching = false;
-      for (const e of this.playlist.songs) e.loaded = false, e.sound = new howlerExports.Howl({
+      this.playlist = {}, this.playlist.songs = musicsData, this.playlist.hasSongs = this.playlist.songs.length > 0, this.playlist.index = 0, this.playlist.current = null, this.playlist.switching = false, this.playlist.pendingCall = null, this.playlist.defaultSlider = 0.25, this.playlist.slider = this.playlist.defaultSlider, this.playlist.enabled = true;
+      const e = parseFloat(localStorage.getItem("musicVolume"));
+      Number.isNaN(e) || (this.playlist.slider = clamp$5(e, 0, 1)), localStorage.getItem("musicToggle") === "0" && (this.playlist.enabled = false), this.playlist.getVolume = () => this.playlist.slider * this.playlist.slider;
+      for (const r of this.playlist.songs) r.loaded = false, r.sound = new howlerExports.Howl({
         src: [
-          e.path
+          r.path
         ],
         pool: 0,
         autoplay: false,
         loop: false,
         preload: false,
-        volume: 0.2,
+        volume: this.playlist.getVolume(),
+        onload: () => {
+          r.loaded = true;
+        },
         onend: () => {
           this.playlist.next();
         }
       });
-      this.playlist.next = () => {
-        this.playlist.hasSongs && (this.playlist.switching || (this.playlist.switching = true, this.game.audio.groups.get("discChange").play(), this.playlist.current && this.playlist.current.sound.stop(), gsapWithCSS.delayedCall(3, () => {
-          this.playlist.index++, this.playlist.index >= this.playlist.songs.length && (this.playlist.index = 0), this.playlist.current = this.playlist.songs[this.playlist.index], this.playlist.current.loaded || this.playlist.current.sound.load(), this.playlist.current.sound.play();
-          const e = `
+      this.playlist.goTo = (r, s = 3) => {
+        if (!this.playlist.hasSongs) return;
+        const o = this.playlist.songs.length;
+        this.playlist.index = (r % o + o) % o, this.events.trigger("playlistChange"), this.playlist.enabled && (this.playlist.switching || (this.playlist.switching = true, this.game.audio.groups.get("discChange").play(), this.playlist.current && this.playlist.current.sound.stop(), this.playlist.pendingCall = gsapWithCSS.delayedCall(s, () => {
+          this.playlist.pendingCall = null, this.playlist.current = this.playlist.songs[this.playlist.index], this.playlist.current.loaded || this.playlist.current.sound.load(), this.playlist.current.sound.volume(this.playlist.getVolume()), this.playlist.current.sound.play();
+          const a = `
                     <div class="top">
                         <div class="title">Now playing<br /><span class="song-name">${this.playlist.current.name}</span></div>
                         <div class="music-note-icon"></div>
                     </div>
                 `;
-          this.game.notifications.show(e, "song", 5), this.playlist.switching = false;
+          this.game.notifications.show(a, "song", 5), this.playlist.switching = false;
         })));
+      }, this.playlist.next = () => {
+        this.playlist.goTo(this.playlist.index + 1);
+      }, this.playlist.previous = () => {
+        this.playlist.goTo(this.playlist.index - 1);
       }, this.playlist.play = () => {
-        this.playlist.hasSongs && (this.playlist.current = this.playlist.songs[this.playlist.index], this.playlist.current.loaded || this.playlist.current.sound.load(), this.playlist.current.sound.play());
-      }, this.playlist.play();
+        !this.playlist.hasSongs || !this.playlist.enabled || (this.playlist.current = this.playlist.songs[this.playlist.index], this.playlist.current.loaded || this.playlist.current.sound.load(), this.playlist.current.sound.volume(this.playlist.getVolume()), this.playlist.current.sound.play());
+      }, this.playlist.stop = () => {
+        this.playlist.pendingCall && (this.playlist.pendingCall.kill(), this.playlist.pendingCall = null), this.playlist.switching = false, this.playlist.current && this.playlist.current.sound.stop();
+      }, this.playlist.setVolume = (r) => {
+        this.playlist.slider = clamp$5(r, 0, 1), localStorage.setItem("musicVolume", this.playlist.slider);
+        const s = this.playlist.getVolume();
+        for (const o of this.playlist.songs) o.sound.volume(s);
+        this.events.trigger("playlistChange");
+      }, this.playlist.setEnabled = (r) => {
+        r !== this.playlist.enabled && (this.playlist.enabled = r, localStorage.setItem("musicToggle", r ? "1" : "0"), r ? this.playlist.play() : this.playlist.stop(), this.events.trigger("playlistChange"));
+      }, this.playlist.toggle = () => {
+        this.playlist.setEnabled(!this.playlist.enabled);
+      }, this.playlist.play(), this.events.trigger("playlistReady");
     }
     setAmbiants() {
       var _a2, _b, _c;
@@ -99202,7 +99245,7 @@ https://github.com/browserify/crypto-browserify`);
         howlerExports.Howler.mute(true), ((_a2 = this.playlist) == null ? void 0 : _a2.current) && this.playlist.current.sound.pause();
       }), window.addEventListener("focus", () => {
         var _a2;
-        this.mute.active || (howlerExports.Howler.mute(false), ((_a2 = this.playlist) == null ? void 0 : _a2.current) && this.playlist.current.sound.play());
+        this.mute.active || (howlerExports.Howler.mute(false), ((_a2 = this.playlist) == null ? void 0 : _a2.current) && this.playlist.enabled && this.playlist.current.sound.play());
       });
     }
     update() {
@@ -108218,10 +108261,44 @@ ${e.tab}if ( ${m} ) {
   }
   class Options {
     constructor() {
-      this.game = Game.getInstance(), this.element = this.game.menu.items.get("options").contentElement, this.setSound(), this.setQuality(), this.setRespawn(), this.setReset(), this.setRenderer(), this.setServer();
+      this.game = Game.getInstance(), this.element = this.game.menu.items.get("options").contentElement, this.setSound(), this.setMusic(), this.setQuality(), this.setRespawn(), this.setReset(), this.setRenderer(), this.setServer();
+    }
+    playClick(e = true) {
+      const r = this.game.audio.groups.get("click");
+      r && r.play(e);
     }
     setSound() {
-      this.element.querySelector(".js-audio-toggle").addEventListener("click", this.game.audio.mute.toggle);
+      this.element.querySelector(".js-audio-toggle").addEventListener("click", () => {
+        this.playClick(this.game.audio.mute.active), this.game.audio.mute.toggle();
+      });
+    }
+    setMusic() {
+      const e = [
+        ...this.element.querySelectorAll(".js-music-row")
+      ], r = this.element.querySelector(".js-music-toggle"), s = r.querySelector("span"), o = this.element.querySelector(".js-music-volume"), a = this.element.querySelector(".js-music-volume-value"), h = this.element.querySelector(".js-music-name"), c = this.element.querySelector(".js-music-previous"), d = this.element.querySelector(".js-music-next");
+      (() => {
+        for (const m of e) m.classList.add("is-hidden");
+      })();
+      const p = () => {
+        const m = this.game.audio.playlist;
+        if (!m || !m.hasSongs) return;
+        for (const w of e) w.classList.remove("is-hidden");
+        const b = () => {
+          s.textContent = m.enabled ? "On" : "Off", r.classList.toggle("is-danger", !m.enabled);
+          const w = Math.round(m.slider * 100);
+          o.value = w, a.textContent = `${w}%`, h.textContent = m.songs[m.index].name;
+        };
+        b(), this.game.audio.events.on("playlistChange", b), r.addEventListener("click", () => {
+          this.playClick(!m.enabled), m.toggle();
+        }), c.addEventListener("click", () => {
+          this.playClick(false), m.previous();
+        }), d.addEventListener("click", () => {
+          this.playClick(), m.next();
+        }), o.addEventListener("input", () => {
+          m.setVolume(parseInt(o.value) / 100);
+        });
+      };
+      this.game.audio.initiated ? p() : this.game.audio.events.on("playlistReady", p);
     }
     setQuality() {
       const e = this.element.querySelector(".js-quality-toggle"), r = e.querySelector("span");
@@ -108487,7 +108564,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-DepNhAug.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-CW_mj0yY.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

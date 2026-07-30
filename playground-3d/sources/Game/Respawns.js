@@ -1,5 +1,6 @@
 import * as THREE from 'three/webgpu'
 import { Game } from './Game.js'
+import { RESPAWN } from '../data/fptu.js'
 
 export class Respawns
 {
@@ -35,6 +36,21 @@ export class Respawns
 
             this.items.set(name, item)
         }
+
+        /**
+         * Điểm hồi sinh của khu Đại học FPT — thêm BẰNG MÃ vì khu đó cũng dựng
+         * bằng mã, `respawnsReferences.glb` không có node nào cho nó.
+         *
+         * ⚠️ Phải nằm ở ĐÂY chứ không phải trong `FptuCampus`: `Map` khởi tạo ở
+         * Game.js dòng 196, còn nội dung thế giới mãi dòng 199 (`world.step(1)`)
+         * mới dựng. Thêm từ FptuCampus thì bản đồ đã đọc xong danh sách rồi và
+         * mục "FPT University" biến mất khỏi bản đồ mà không báo lỗi gì.
+         */
+        this.items.set('fptu', {
+            name: 'fptu',
+            position: new THREE.Vector3(RESPAWN.x, 4, RESPAWN.z),
+            rotation: RESPAWN.rotation
+        })
     }
 
     getByName(name)

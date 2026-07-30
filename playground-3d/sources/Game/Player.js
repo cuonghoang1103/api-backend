@@ -4,6 +4,7 @@ import { remapClamp, smallestAngle } from './utilities/maths.js'
 import * as THREE from 'three/webgpu'
 import { Inputs } from './Inputs/Inputs.js'
 import { clamp } from 'three/src/math/MathUtils.js'
+import { BRIDGE as FPTU_BRIDGE, ISLAND as FPTU_ISLAND } from '../data/fptu.js'
 
 export class Player
 {
@@ -640,8 +641,15 @@ export class Player
         }
 
         // Sea achievement
+        // ⚠️ Đảo Đại học FPT nằm ngoài khơi (tâm −152·40, cách gốc ~157) nên
+        // điều kiện "cách tâm > 120" cũ sẽ tặng "Under the sea" cho người đứng
+        // trên đất khô giữa sân trường. Loại trừ hình chữ nhật đảo + cầu.
         const distanceToCenter = this.position2.length()
-        if(distanceToCenter > 120)
+        const onFptuLand = this.position.x < FPTU_BRIDGE.fromX + 2
+            && this.position.x > FPTU_ISLAND.x - FPTU_ISLAND.width * 0.5 - 8
+            && this.position.z > FPTU_ISLAND.z - FPTU_ISLAND.depth * 0.5 - 8
+            && this.position.z < FPTU_ISLAND.z + FPTU_ISLAND.depth * 0.5 + 8
+        if(distanceToCenter > 120 && !onFptuLand)
             this.game.achievements.setProgress('sea', 1)
 
         // Go high achievements

@@ -48,6 +48,9 @@ export class Map
             { name: 'Career', respawnName: 'career', offset: { x: 0, y: -0.06 } },
             { name: 'Circuit', respawnName: 'circuit', offset: { x: -0.08, y: -0.05 } },
             { name: 'Cookie', respawnName: 'cookie', offset: { x: -0.02, y: -0.01 } },
+            // Khu trường nằm trên đảo riêng NGOÀI phạm vi ảnh bản đồ (worldToMap
+            // clamp về 0) — nhích offset để pin đậu ở mép Tây thay vì dính sát viền
+            { name: 'FPT<br /> University', respawnName: 'fptu', offset: { x: 0.03, y: -0.02 } },
             { name: 'Lab', respawnName: 'lab', offset: { x: -0.03, y: 0 } },
             { name: 'Landing', respawnName: 'landing', offset: { x: 0.02, y: 0 } },
             { name: 'Projects', respawnName: 'projects', offset: { x: 0, y: -0.02 } },

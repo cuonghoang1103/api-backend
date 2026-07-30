@@ -29,6 +29,7 @@ import { Lanterns } from './Lanterns.js'
 import { Fences } from './Fences.js'
 import { Benches } from './Benches.js'
 import { Scenery } from './Scenery.js'
+import { FptuCampus } from './FptuCampus.js'
 
 export class World
 {
@@ -79,6 +80,7 @@ export class World
             this.poleLights = new PoleLights()
             this.lanterns = new Lanterns()
             this.scenery = new Scenery()
+            this.fptuCampus = new FptuCampus()
             this.areas = new Areas()
         }
         else if(step === 2)

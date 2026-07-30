@@ -215,6 +215,46 @@
             .vocab.is-open{ transform:translateY(0); }
             .vocab-word{ font-size:1.5rem; }
         }
+
+        /* ─── Cổng trường FPT: hỏi sinh viên & chọn kỳ ─── */
+        .fptu-gate{
+            position:fixed; inset:0; z-index:960; display:grid; place-items:center;
+            padding:1.25rem; background:rgba(12,9,16,.72); backdrop-filter:blur(6px);
+            font-family:'Pally-Medium',system-ui,sans-serif; color:#efe8f5;
+            opacity:0; visibility:hidden; pointer-events:none; transition:opacity .25s ease, visibility .25s ease;
+        }
+        .fptu-gate.is-open{ opacity:1; visibility:visible; pointer-events:auto; }
+        .fptu-gate-panel{
+            width:min(92vw,32rem); padding:1.5rem 1.5rem 1.25rem; border-radius:1.1rem;
+            border:1px solid rgba(243,112,33,.45); background:rgba(28,22,30,.97);
+            box-shadow:0 24px 70px rgba(0,0,0,.6);
+        }
+        .fptu-gate-badge{ font-size:.7rem; letter-spacing:.16em; text-transform:uppercase; color:#f37021; font-weight:800; }
+        .fptu-gate-title{ margin:.5rem 0 .35rem; font-size:1.5rem; font-weight:900; line-height:1.2; }
+        .fptu-gate-sub{ margin:0 0 1rem; font-size:.9rem; opacity:.6; }
+        .fptu-gate-actions{ display:flex; flex-wrap:wrap; gap:.6rem; }
+        .fptu-gate-semesters{ display:grid; grid-template-columns:repeat(3,1fr); gap:.5rem; }
+        /* `display:flex/grid` ở trên THẮNG thuộc tính `hidden` của HTML (vốn chỉ
+           là display:none trong style mặc định của trình duyệt), nên bước 1 vẫn
+           hiện chồng lên bảng chọn kỳ. Phải chặn tường minh. */
+        .fptu-gate-actions[hidden], .fptu-gate-semesters[hidden]{ display:none; }
+        .fptu-btn{
+            flex:1 1 auto; padding:.65rem .9rem; border-radius:.65rem; cursor:pointer;
+            border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.06);
+            color:inherit; font-family:inherit; font-size:.95rem; font-weight:700;
+            transition:background .15s ease, border-color .15s ease;
+        }
+        .fptu-btn:hover{ background:rgba(243,112,33,.2); border-color:rgba(243,112,33,.6); }
+        .fptu-btn.is-primary{ background:rgba(243,112,33,.85); border-color:#f37021; color:#1b1116; }
+        .fptu-btn.is-primary:hover{ background:#f37021; }
+        .fptu-btn small{ display:block; margin-top:.15rem; font-size:.66rem; font-weight:600; opacity:.65; }
+        .fptu-btn.is-empty{ opacity:.55; }
+        .fptu-gate-note{ margin:.9rem 0 0; font-size:.75rem; opacity:.45; text-align:center; }
+
+        @media (max-width:640px){
+            .fptu-gate-semesters{ grid-template-columns:repeat(2,1fr); }
+            .fptu-gate-title{ font-size:1.25rem; }
+        }
     </style>
 </head>
 <body>
@@ -261,6 +301,39 @@
         <p class="js-vocab-example vocab-example"></p>
         <div class="js-vocab-choices vocab-choices"></div>
         <p class="vocab-hint">Press 1–4 or click</p>
+    </div>
+
+    <!--
+        ─── Khu Đại học FPT: hộp thoại ở cổng + bảng câu hỏi theo kỳ ───
+        Logic ở Game/World/FptuQuiz.js, vùng kích hoạt đặt trong FptuCampus.js.
+        Bảng câu hỏi mượn nguyên bộ class `vocab-*` cho đồng bộ, chỉ khác dữ liệu.
+    -->
+    <div class="js-fptu-gate fptu-gate" role="dialog" aria-modal="true" aria-labelledby="fptu-gate-title">
+        <div class="fptu-gate-panel">
+            <span class="fptu-gate-badge">FPT University · Hoà Lạc</span>
+            <h2 class="js-fptu-gate-title fptu-gate-title" id="fptu-gate-title">Bạn là sinh viên FPT đúng không?</h2>
+            <p class="js-fptu-gate-sub fptu-gate-sub">Nhận là sinh viên thì dọc đường vào trường sẽ có các khối “?” chứa câu hỏi đúng môn kỳ bạn đang học.</p>
+
+            <div class="js-fptu-gate-step1 fptu-gate-actions">
+                <button class="js-fptu-yes fptu-btn is-primary" type="button">Đúng, tôi là sinh viên FPT</button>
+                <button class="js-fptu-no fptu-btn" type="button">Không, tôi ghé chơi thôi</button>
+            </div>
+
+            <div class="js-fptu-gate-step2 fptu-gate-semesters" hidden></div>
+
+            <p class="js-fptu-gate-note fptu-gate-note">Đổi lại lúc nào cũng được: lái qua cổng trường lần nữa.</p>
+        </div>
+    </div>
+
+    <div class="js-fptu-quiz vocab" aria-live="polite">
+        <div class="vocab-head">
+            <span class="js-fptu-quiz-topic vocab-topic"></span>
+            <span class="js-fptu-quiz-score vocab-score">0/0</span>
+        </div>
+        <p class="js-fptu-quiz-question vocab-word"></p>
+        <p class="js-fptu-quiz-explain vocab-example" hidden></p>
+        <div class="js-fptu-quiz-choices vocab-choices"></div>
+        <p class="vocab-hint">Bấm 1–6 hoặc bấm chuột</p>
     </div>
 
     <div class="js-fonts-loader fonts-loader">

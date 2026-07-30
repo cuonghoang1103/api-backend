@@ -4,9 +4,11 @@ Cập nhật 30/7/2026. Nhánh `feat/playground-3d`.
 
 # ⚑ ĐỌC MỤC NÀY TRƯỚC
 
-## Trạng thái: CHƯA deploy, CHƯA push
+## Trạng thái: ✅ ĐÃ DEPLOY PROD + ĐÃ PUSH (30/7, 10:10)
 
-Đếm chính xác: `git log --oneline 05f0cf1..HEAD | wc -l` (`05f0cf1` là commit đã push
+Toàn bộ trang chủ mới + 3 bài Deep Dives + 8 đề CSI104 đã LIVE tại cuongthai.com,
+và nhánh `feat/playground-3d` đã đồng bộ với origin (`ed26ede`). Mốc push mới:
+`ed26ede`. Đếm commit chưa push: `git log --oneline @{u}..HEAD | wc -l` (`05f0cf1` là mốc cũ
 cuối). ĐỪNG ghi số cứng vào đây — mỗi commit sau lại làm nó sai.
 
 Phiên 2 thêm 4 commit: `fd842e7` category DeepDive · `8e069b3` bài 1 + seeder ·

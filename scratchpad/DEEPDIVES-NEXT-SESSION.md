@@ -98,8 +98,10 @@ thành công, không thì là link chết.
 
 ## Trạng thái repo lúc bàn giao
 
-**Nhánh `feat/playground-3d`, CHƯA deploy, CHƯA push.** Đếm commit chưa push bằng
-`git log --oneline 05f0cf1..HEAD | wc -l` (`05f0cf1` = commit đã push cuối).
+**Nhánh `feat/playground-3d` — ĐÃ deploy prod và ĐÃ push tới `ed26ede` (30/7).**
+3 bài Deep Dives live (#22-24), 8 đề CSI104 live (95 đề công khai). Đếm commit
+chưa push bằng
+`git log --oneline @{u}..HEAD | wc -l`.
 Bốn commit gần nhất là của loạt Deep Dives:
 
 ```

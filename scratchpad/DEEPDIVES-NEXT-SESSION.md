@@ -1,25 +1,26 @@
 # Deep Dives — MỞ PHIÊN MỚI ĐỌC FILE NÀY
 
-Cập nhật 30/7/2026, sau khi xong 3/12 bài. Nhánh `feat/playground-3d`.
-File này đủ để bắt đầu bài 4 mà **không cần đọc lại phiên cũ**.
+Cập nhật 30/7/2026, sau khi xong **4/12 bài**. Nhánh `feat/playground-3d`.
+File này đủ để bắt đầu bài 5 mà **không cần đọc lại phiên cũ**.
 (Bối cảnh trang chủ + lịch sử bẫy: `scratchpad/DEEPDIVES-HANDOFF.md`.)
 
 ---
 
-## Việc: viết 9 bài Deep Dives còn lại
+## Việc: viết 8 bài Deep Dives còn lại
 
-Bài 4 tiếp theo: **How to Set Up webpack From Scratch** (thẻ số 9 trong
-`deepDivesData.ts`). Sau đó theo thứ tự: CSS → React → Redux → Vue → shell
+Bài 5 tiếp theo: **A Complete Guide to CSS Concepts and Fundamentals** (thẻ số 6
+trong `deepDivesData.ts`). Sau đó theo thứ tự: React → Redux → Vue → shell
 scripting → Mac setup → reading production. Bài Node.js (thẻ 3) đã có khoá 112
 bài — giữ `href` chứ không viết lại.
 
-Ngôn ngữ: **tiếng Anh**. Thước đo 3 bài đầu:
+Ngôn ngữ: **tiếng Anh**. Thước đo 4 bài đầu:
 
 | Bài | Từ (không tính code) | Khối code | Sơ đồ | Link nội bộ |
 |---|---|---|---|---|
 | 1. command line | 5.679 | 70 | 4 | 3 |
 | 2. event loop | 5.230 | 74 | 4 | 3 |
 | 3. GraphQL | 4.887 | 36 | 3 | 3 |
+| 4. webpack | 5.074 | 95 | 4 | 3 |
 
 Số khối code tuỳ chủ đề (CLI cần nhiều, GraphQL ít hơn). **Từ 4.800 trở lên.**
 
@@ -53,15 +54,14 @@ thì dài mấy cũng thành nội dung đại trà:
 
 Mỗi dòng là thứ **phải chạy thật** rồi dán output. Sơ đồ đề xuất trong ngoặc.
 
-**4. webpack from scratch** — dựng lab trong scratchpad, `npm i webpack
-webpack-cli babel-loader css-loader`. Demo: bundle đầu tiên và ĐỌC output
-(`asset main.js X KiB`) · entry/output · thêm loader cho CSS rồi xem file đổi cỡ
-· `mode: development` vs `production` (số byte thật, thường 8-10×) · source map
-4 kiểu và cỡ file mỗi kiểu · code splitting `import()` → đếm chunk sinh ra ·
-`stats.json` + `--analyze` chỉ ra ai chiếm chỗ · tree shaking: export không dùng
-có bị loại thật không (kiểm bằng `grep` trong bundle) · cache busting
-`[contenthash]` đổi khi nào · so `esbuild`/`vite` cùng một entry, đo thời gian.
-(Sơ đồ: entry→loader→plugin→output · anatomy của một chunk · dev-server HMR.)
+**4. webpack from scratch** — ✅ XONG 30/7, commit `c0a2baf`. Lab ở
+`scratchpad/wp-lab` (ngoài repo). 6 chỗ việc chạy BÁC BỎ dự đoán, đều ghi trong
+docstring của `.mjs` — đọc nó nếu cần sửa bài. Đắt nhất: `experiments.css` là
+`'auto'` từ webpack ~5.9x nên **KHÔNG cần css-loader nữa** (nhưng webpack 5.90
+mà Next 14.2.15 đóng gói thì VẪN cần) · `splitChunks.minSize` **10000 ở dev vs
+20000 ở prod** nên đồ thị chunk hai bên khác nhau · `lodash-es` barrel vs deep
+import ra bundle GIỐNG TỪNG BYTE · `babel-loader` nhắm ie11 vẫn để lại 35 arrow
+vì runtime là webpack sinh sau loader, phải thêm `target: ['web','es5']`.
 
 **5. CSS fundamentals** — không cần npm. Demo bằng `node` + một trang HTML rồi
 đo bằng `javascript_tool` (`getComputedStyle`): box model `content-box` vs
@@ -141,6 +141,12 @@ heading, đoạn, ul/ol, bảng, ```fence```, blockquote, hr, ảnh, link, `stro
 **B3. Sơ đồ SVG** ở `frontend/public/deepdives/<chủ-đề>/*.svg`:
 - **viewBox rộng ĐÚNG 700** (cột bài chỉ ~699px; 880px bị co 0.79 ⇒ chữ 12px
   thành 9px, không đọc nổi)
+- **SVG GỘP dấu cách** (mặc định `xml:space="default"`) ⇒ căn cột bằng dấu cách
+  là VÔ HIỆU, thụt lề trong khối giống-code BIẾN MẤT. Muốn thẳng cột thì tách hai
+  `<text>`, cái phải dùng `text-anchor="end"`; muốn giữ thụt lề thì thêm
+  `xml:space="preserve"`. ⚠️ Sơ đồ 3 bài ĐẦU đang bị mất thụt lề vì chưa biết
+  điều này (ví dụ khối query trong `graphql/resolver-tree.svg`) — sửa được bằng
+  một dòng, chưa làm vì phải deploy lại
 - chữ nhãn ≥ 12px, mono chính 14-18px, nền `#0d1424`, viền `#1e293b`
 - màu: `#4ade80` xanh lá · `#22d3ee` lơ · `#fb923c` cam · `#f43f5e` đỏ ·
   `#a78bfa` tím · `#fcd34d` vàng (code) · `#94a3b8` chữ phụ · `#64748b` chú thích
@@ -181,9 +187,14 @@ thành công, không thì là link chết.
 
 ## ⚠️ Bốn điều BẮT BUỘC biết
 
-1. **CÓ PHIÊN CLAUDE KHÁC làm chung cây** (`content/exams/CSI104-FE.mjs` đang
-   untracked). **ĐỪNG `git add -A`** — `git add` chỉ định từng file của mình.
+1. **CÓ PHIÊN CLAUDE KHÁC làm chung cây** (`content/exams/CSI104-FE.mjs`).
+   **ĐỪNG `git add -A`** — `git add` chỉ định từng file của mình.
    **ĐỪNG deploy khi chưa hỏi user** (`deploy.sh` rsync CẢ cây làm việc).
+   ⚠️ 30/7: phiên kia **tự commit hộ** cả 9 file của bài 4 (`c0a2baf`, 11:03)
+   trước khi commit đề CSI104 của nó (`c5763e5`, 11:07) — tách đúng, không lẫn
+   file, nội dung khớp đĩa từng byte. Nhưng hệ quả: **`git status` có thể TRỐNG
+   dù bạn vừa viết cả chục file**. Đừng kết luận "mất việc"; kiểm bằng
+   `git log --oneline -5` và `git show HEAD:<file>` trước khi làm lại bất cứ gì.
 2. **DB local `:5432` thiếu 5 cột** của `tech_trend_articles` (`kind`,
    `sources`, `ai_generated`, `ai_model`, `scheduled_at`) ⇒ seed lỗi `P2022`.
    Dùng DB tạm **`:5544/academy_tmp`** (đủ cột). Prod đủ cả.
@@ -199,20 +210,22 @@ thành công, không thì là link chết.
 
 ## Trạng thái repo lúc bàn giao
 
-**Nhánh `feat/playground-3d` — ĐÃ deploy prod và ĐÃ push tới `ed26ede` (30/7).**
-3 bài Deep Dives live (#22-24), 8 đề CSI104 live (95 đề công khai). Đếm commit
-chưa push bằng
+**Nhánh `feat/playground-3d` — prod đang chạy `ed26ede` (deploy + push 30/7).**
+Bài 4 (webpack) **đã commit local `c0a2baf` nhưng CHƯA deploy, CHƯA push** —
+prod vẫn 3 bài Deep Dives (#22-24). Thẻ webpack trên trang chủ đã trỏ
+`article:` nên **trên prod nó là LINK CHẾT tới khi deploy** (Step 3.15 của
+`deploy.sh` seed bài lúc deploy). Đếm commit chưa push bằng
 `git log --oneline @{u}..HEAD | wc -l`.
-Bốn commit gần nhất là của loạt Deep Dives:
 
 ```
+c5763e5 feat(exam): CSI104 Đề 9 — SU25 Retake   ← phiên khác
+c0a2baf feat(deepdives): bài 4 — How to Set Up webpack From Scratch
 f438640 feat(deepdives): bài 3 — An Introduction to GraphQL
 139f982 feat(deepdives): bài 2 — event loop, callbacks, promises, async/await
 8e069b3 feat(deepdives): bài 1 — command line + seeder
-fd842e7 feat(tech-trends): thêm category DeepDive
 ```
 
-Hạ tầng đã xong, dùng lại cho 9 bài còn lại:
+Hạ tầng đã xong, dùng lại cho 8 bài còn lại:
 
 - `scripts/deepdive-seed.mjs` — idempotent theo slug, `--dry`/`--apply`, render
   `bodyHtml`+`toc` bằng ĐÚNG renderer backend ở `dist/`, giữ `viewCount` +
@@ -223,14 +236,18 @@ Hạ tầng đã xong, dùng lại cho 9 bài còn lại:
   `TechTrendCategoryName`
 - `deploy.sh` **Step 3.15** tự seed mọi `content/deepdives/*.mjs` mỗi deploy
 - `scratchpad/svg-fit.mjs` + `scratchpad/check-article.mjs` — hai bộ kiểm, đều
-  có phần **tự kiểm** vì cả hai từng báo sai khi mới viết
+  có phần **tự kiểm** vì cả hai từng báo sai khi mới viết. Phiên bài 4 sửa thêm
+  **3 lần báo oan** và thêm tự kiểm cho từng ca: `&quot;` bị đếm là 6 ký tự ·
+  `text-anchor="end"` (x là mép PHẢI, không phải trái) · `&lt;script` trong
+  `<pre>`/`<code>` là escape ĐÚNG, không phải thẻ bị sanitizer lọc.
+  **Chạy chúng và ĐỌC dòng tự kiểm** — cả hai in ra ✓/✗ cho chính nó
 
-Ba bài đã seed trên `:5544` = bài #1, #2, #3. Trang đọc:
+Bốn bài đã seed trên `:5544` = bài #1, #2, #3, #4. Trang đọc:
 `/tech-trends/<slug>`.
 
 ---
 
 ## Câu mở đầu gợi ý cho phiên mới
 
-> Đọc `scratchpad/DEEPDIVES-NEXT-SESSION.md` rồi viết bài 4 (webpack) theo
+> Đọc `scratchpad/DEEPDIVES-NEXT-SESSION.md` rồi viết bài 5 (CSS) theo
 > đúng quy trình B1-B8 trong đó.

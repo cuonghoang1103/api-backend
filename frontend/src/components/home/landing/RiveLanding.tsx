@@ -36,6 +36,7 @@
  */
 import Link from 'next/link';
 import PlaygroundGate from './PlaygroundGate';
+import DeepDives from './DeepDives';
 import { useLandingStats, fmt } from './useLandingStats';
 
 /**
@@ -208,6 +209,11 @@ export default function RiveLanding() {
           </div>
         </div>
       </section>
+
+      {/* ── Deep Dives — chèn GIỮA dải nổi bật và rail 01, đúng chỗ user
+          chỉ định. Đánh số 00 nên nó đứng trước 01/02/03 mà không phá
+          mạch đếm của ba dải. */}
+      <DeepDives />
 
       {/* ── Các dải nội dung ──────────────────────────────────────────────
           Đây là phần "index" của Ecosystem Index: bày ra để duyệt, mỗi mục là

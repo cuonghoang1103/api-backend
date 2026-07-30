@@ -430,7 +430,9 @@ export class Snow
             this.mesh.visible = true
 
             // Achievement
-            if(!this.achievementAchieved && this.game.reveal.step === 2 && this.elevation.value > 0)
+            // ⚠️ Không trao khi thời tiết bị ÉP bằng nút trong Cài đặt. "Witness
+            //    snowy weather" mà bấm một nút là xong thì thành tựu hết nghĩa.
+            if(!this.achievementAchieved && this.game.reveal.step === 2 && this.elevation.value > 0 && !this.game.weather.preference.isForced())
             {
                 this.achievementAchieved = true
                 this.game.achievements.setProgress('weatherSnow', 1)

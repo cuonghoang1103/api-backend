@@ -92954,10 +92954,77 @@ https://github.com/browserify/crypto-browserify`);
     }
     update() {
       if (this.elevationBinding.update(), this.elevation.value > -0.9) {
-        this.mesh.visible = true, !this.achievementAchieved && this.game.reveal.step === 2 && this.elevation.value > 0 && (this.achievementAchieved = true, this.game.achievements.setProgress("weatherSnow", 1)), this.glitterVariation.value += this.game.ticker.deltaScaled * this.glitterTimeMultiplier + this.game.view.delta.length() * this.glitterViewMultiplier, this.roundedPosition.value.x = Math.round(this.game.view.optimalArea.position.x / this.subdivisionSize) * this.subdivisionSize, this.roundedPosition.value.y = Math.round(this.game.view.optimalArea.position.z / this.subdivisionSize) * this.subdivisionSize, this.tracksDelta.value.set(this.roundedPosition.value.x - this.game.tracks.focusPoint.x, this.roundedPosition.value.y - this.game.tracks.focusPoint.y);
+        this.mesh.visible = true, !this.achievementAchieved && this.game.reveal.step === 2 && this.elevation.value > 0 && !this.game.weather.preference.isForced() && (this.achievementAchieved = true, this.game.achievements.setProgress("weatherSnow", 1)), this.glitterVariation.value += this.game.ticker.deltaScaled * this.glitterTimeMultiplier + this.game.view.delta.length() * this.glitterViewMultiplier, this.roundedPosition.value.x = Math.round(this.game.view.optimalArea.position.x / this.subdivisionSize) * this.subdivisionSize, this.roundedPosition.value.y = Math.round(this.game.view.optimalArea.position.z / this.subdivisionSize) * this.subdivisionSize, this.tracksDelta.value.set(this.roundedPosition.value.x - this.game.tracks.focusPoint.x, this.roundedPosition.value.y - this.game.tracks.focusPoint.y);
         const e = RendererUtils.resetRendererState(this.game.rendering.renderer);
         this.game.rendering.renderer.setPixelRatio(1), this.game.rendering.renderer.setRenderTarget(this.snowElevation.renderTarget), this.snowElevation.quadMesh.render(this.game.rendering.renderer), this.game.rendering.renderer.setRenderTarget(null), RendererUtils.restoreRendererState(this.game.rendering.renderer, e);
       } else this.mesh.visible = false;
+    }
+  }
+  const RADIUS = 13, CENTER_Y = -0.5, DISTANCE = 10, BAND = 5, FLATTEN = 0.3, RAIN_ON = 0.35, RAIN_OFF = 0.12, FADE_IN = 3, HOLD = 22, FADE_OUT = 6;
+  class Rainbow {
+    constructor() {
+      this.game = Game.getInstance(), this.strength = uniform$1(0), this.wasRaining = false, this.holdCall = null, this.state = "idle", this.setMesh(), this.game.ticker.events.on("tick", () => {
+        this.update();
+      }, 10), this.game.debug.active && (this.debugPanel = this.game.debug.panel.addFolder({
+        title: "\u{1F308} Rainbow",
+        expanded: false
+      }), this.debugPanel.addBinding(this.strength, "value", {
+        label: "strength",
+        min: 0,
+        max: 1,
+        step: 0.01
+      }), this.debugPanel.addButton({
+        title: "show"
+      }).on("click", () => this.show()), this.debugPanel.addButton({
+        title: "hide"
+      }).on("click", () => this.hide()));
+    }
+    setMesh() {
+      const e = RADIUS - BAND * 0.5, r = RADIUS + BAND * 0.5, s = new RingGeometry(e, r, 160, 1, 0, Math.PI), o = positionLocal$2.xy.length().sub(e).div(r - e).clamp(0, 1);
+      let a = vec3$1(0.45, 0.15, 0.85);
+      a = a.mix(vec3$1(0.16, 0.4, 0.96), o.smoothstep(0.04, 0.24)), a = a.mix(vec3$1(0.16, 0.85, 0.88), o.smoothstep(0.24, 0.41)), a = a.mix(vec3$1(0.36, 0.9, 0.26), o.smoothstep(0.41, 0.57)), a = a.mix(vec3$1(0.98, 0.9, 0.22), o.smoothstep(0.57, 0.72)), a = a.mix(vec3$1(1, 0.56, 0.13), o.smoothstep(0.72, 0.86)), a = a.mix(vec3$1(1, 0.26, 0.18), o.smoothstep(0.86, 1));
+      const h = o.smoothstep(0, 0.2).mul(o.oneMinus().smoothstep(0, 0.2)), c = atan$1(positionLocal$2.y, positionLocal$2.x), d = c.smoothstep(0, 0.6).mul(float$1(Math.PI).sub(c).smoothstep(0, 0.6)), f = new MeshBasicNodeMaterial({
+        transparent: true,
+        side: DoubleSide$1,
+        depthWrite: false
+      });
+      f.colorNode = a, f.opacityNode = h.mul(d).mul(this.strength).mul(0.8), this.mesh = new Mesh$1(s, f), this.mesh.scale.set(1, FLATTEN, 1), this.mesh.visible = false, this.mesh.frustumCulled = false, this.mesh.userData.preventPreRender = true, this.mesh.castShadow = false, this.mesh.receiveShadow = false, this.game.scene.add(this.mesh);
+    }
+    show() {
+      this.holdCall && (this.holdCall.kill(), this.holdCall = null), this.state = "showing", this.mesh.visible = true, gsapWithCSS.to(this.strength, {
+        value: 1,
+        duration: FADE_IN,
+        ease: "power1.out",
+        overwrite: true
+      }), this.holdCall = gsapWithCSS.delayedCall(FADE_IN + HOLD, () => {
+        this.holdCall = null, this.hide();
+      });
+    }
+    hide() {
+      this.state === "idle" || this.state === "hiding" || (this.holdCall && (this.holdCall.kill(), this.holdCall = null), this.state = "hiding", gsapWithCSS.to(this.strength, {
+        value: 0,
+        duration: FADE_OUT,
+        ease: "power1.in",
+        overwrite: true,
+        onComplete: () => {
+          this.state = "idle", this.mesh.visible = false;
+        }
+      }));
+    }
+    update() {
+      var _a2;
+      const e = this.game.weather, r = e.rain.value;
+      if (r > RAIN_ON) this.wasRaining = true, this.hide();
+      else if (this.wasRaining && r < RAIN_OFF) {
+        this.wasRaining = false;
+        const d = (_a2 = this.game.dayCycles.intervalEvents.get("night")) == null ? void 0 : _a2.inInterval, f = e.snow.value > 0.1;
+        !d && !f && this.show();
+      }
+      if (!this.mesh.visible) return;
+      const s = this.game.view.focusPoint.position, o = this.game.view.camera.position;
+      let a = s.x - o.x, h = s.z - o.z;
+      const c = Math.hypot(a, h);
+      c < 1e-3 || (a /= c, h /= c, this.mesh.position.set(s.x + a * DISTANCE, CENTER_Y, s.z + h * DISTANCE), this.mesh.rotation.y = Math.atan2(-a, -h));
     }
   }
   class Bubble {
@@ -94211,7 +94278,7 @@ https://github.com/browserify/crypto-browserify`);
       this.mesh = new Mesh$1(this.geometry, this.material), this.mesh.position.y = -0.3, this.mesh.frustumCulled = false, this.mesh.renderOrder = 1, this.game.scene.add(this.mesh);
     }
     update() {
-      this.visibleRatioBinding.update(), this.lengthRatioBinding.update(), this.speedRatioBinding.update(), this.inclineRatioBinding.update(), this.mesh.visible = this.visibleRatio.value > 1e-5, this.mesh.visible && (this.center.value.set(this.game.view.optimalArea.position.x, this.game.view.optimalArea.position.z), this.localTime.value += this.game.ticker.deltaScaled * this.speed, !this.achievementAchieved && this.game.reveal.step === 2 && this.visibleRatio.value > 0.04 && this.length.value > 0.2 && (this.achievementAchieved = true, this.game.achievements.setProgress("weatherRain", 1)));
+      this.visibleRatioBinding.update(), this.lengthRatioBinding.update(), this.speedRatioBinding.update(), this.inclineRatioBinding.update(), this.mesh.visible = this.visibleRatio.value > 1e-5, this.mesh.visible && (this.center.value.set(this.game.view.optimalArea.position.x, this.game.view.optimalArea.position.z), this.localTime.value += this.game.ticker.deltaScaled * this.speed, !this.achievementAchieved && this.game.reveal.step === 2 && this.visibleRatio.value > 0.04 && this.length.value > 0.2 && !this.game.weather.preference.isForced() && (this.achievementAchieved = true, this.game.achievements.setProgress("weatherRain", 1)));
     }
   }
   class Confetti {
@@ -94656,7 +94723,7 @@ https://github.com/browserify/crypto-browserify`);
       this.game = Game.getInstance(), this.step(0);
     }
     step(e) {
-      e === 0 ? (this.grid = new Grid(), this.intro = new Intro()) : e === 1 ? (this.visualVehicle = new VisualVehicle(this.game.resources.vehicle.scene), this.floor = new Floor(), this.waterSurface = new WaterSurface(), this.grass = new Grass(), this.windLines = new WindLines(), this.confetti = new Confetti(), this.leaves = new Leaves(), this.rain = new RainLines(), this.lightnings = new Lightnings(), this.fireballs = new Fireballs(), this.snow = new Snow(), this.visualTornado = new VisualTornado(), this.bushes = new Bushes(), this.birchTrees = new Trees("Birch Tree", this.game.resources.birchTreesVisualModel.scene, this.game.resources.birchTreesReferencesModel.scene.children, "#ff4f2b", "#ff903f"), this.oakTrees = new Trees("Oak Tree", this.game.resources.oakTreesVisualModel.scene, this.game.resources.oakTreesReferencesModel.scene.children, "#b4b536", "#d8cf3b"), this.cherryTrees = new Trees("Cherry Tree", this.game.resources.cherryTreesVisualModel.scene, this.game.resources.cherryTreesReferencesModel.scene.children, "#ff6d6d", "#ff9990"), this.flowers = new Flowers(), this.bricks = new Bricks(), this.fences = new Fences(), this.benches = new Benches(), this.explosiveCrates = new ExplosiveCrates(), this.poleLights = new PoleLights(), this.lanterns = new Lanterns(), this.scenery = new Scenery(), this.areas = new Areas()) : e === 2 && (this.whispers = new Whispers());
+      e === 0 ? (this.grid = new Grid(), this.intro = new Intro()) : e === 1 ? (this.visualVehicle = new VisualVehicle(this.game.resources.vehicle.scene), this.floor = new Floor(), this.waterSurface = new WaterSurface(), this.grass = new Grass(), this.windLines = new WindLines(), this.confetti = new Confetti(), this.leaves = new Leaves(), this.rain = new RainLines(), this.lightnings = new Lightnings(), this.fireballs = new Fireballs(), this.snow = new Snow(), this.rainbow = new Rainbow(), this.visualTornado = new VisualTornado(), this.bushes = new Bushes(), this.birchTrees = new Trees("Birch Tree", this.game.resources.birchTreesVisualModel.scene, this.game.resources.birchTreesReferencesModel.scene.children, "#ff4f2b", "#ff903f"), this.oakTrees = new Trees("Oak Tree", this.game.resources.oakTreesVisualModel.scene, this.game.resources.oakTreesReferencesModel.scene.children, "#b4b536", "#d8cf3b"), this.cherryTrees = new Trees("Cherry Tree", this.game.resources.cherryTreesVisualModel.scene, this.game.resources.cherryTreesReferencesModel.scene.children, "#ff6d6d", "#ff9990"), this.flowers = new Flowers(), this.bricks = new Bricks(), this.fences = new Fences(), this.benches = new Benches(), this.explosiveCrates = new ExplosiveCrates(), this.poleLights = new PoleLights(), this.lanterns = new Lanterns(), this.scenery = new Scenery(), this.areas = new Areas()) : e === 2 && (this.whispers = new Whispers());
     }
     setPhysicalFloor() {
       this.game.objects.add(null, {
@@ -95430,10 +95497,10 @@ https://github.com/browserify/crypto-browserify`);
   }
   class Weather {
     constructor() {
-      this.game = Game.getInstance(), this.game.debug.active && (this.debugPanel = this.game.debug.panel.addFolder({
+      this.game = Game.getInstance(), this.events = new Events(), this.game.debug.active && (this.debugPanel = this.game.debug.panel.addFolder({
         title: "\u{1F326}\uFE0F Weather",
         expanded: false
-      })), this.properties = [], this.setOverride(), this.addProperty("temperature", -15, 40, () => {
+      })), this.properties = [], this.setOverride(), this.setPreference(), this.addProperty("temperature", -15, 40, () => {
         const e = this.game.yearCycles.properties.temperature.value, r = this.game.dayCycles.properties.temperature.value, a = this.noise(this.game.dayCycles.absoluteProgress * 0.4) * 7.5;
         return e + r + a;
       }), this.addProperty("humidity", 0, 1, () => {
@@ -95445,7 +95512,7 @@ https://github.com/browserify/crypto-browserify`);
       }), this.addProperty("clouds", -1, 1, () => this.noise(this.game.dayCycles.absoluteProgress * 0.44) * 1), this.addProperty("wind", 0, 1, () => this.noise(this.game.dayCycles.absoluteProgress * 1) * 0.5 + 0.5), this.addProperty("rain", 0, 1, () => remapClamp$2(this.humidity.value, 0.65, 1, 0, 1) * remapClamp$2(this.clouds.value, 0, 1, 0, 1)), this.addProperty("snow", -1, 1, () => {
         const e = remapClamp$2(this.rain.value, 0.05, 0.3, 0, 1), r = remapClamp$2(this.temperature.value, 0, -5, 0, 1), s = remapClamp$2(this.temperature.value, 0, 10, 0, -1);
         return e * r + s;
-      }), this.game.ticker.events.on("tick", () => {
+      }), this.preference.current !== "auto" && this.preference.apply(0), this.game.ticker.events.on("tick", () => {
         this.update();
       }, 8);
     }
@@ -95483,12 +95550,72 @@ https://github.com/browserify/crypto-browserify`);
           overwrite: true
         });
       }, this.override.end = (e = 5) => {
+        if (this.preference && this.preference.current !== "auto") {
+          this.preference.apply(e);
+          return;
+        }
         e === 0 ? this.override.strength = 0 : gsapWithCSS.to(this.override, {
           strength: 0,
           duration: e,
           overwrite: true
         });
       };
+    }
+    setPreference() {
+      const e = {
+        rain: {
+          humidity: 1,
+          clouds: 1,
+          rain: 1,
+          snow: -1,
+          temperature: 12,
+          wind: 0.55,
+          electricField: 0.6
+        },
+        snow: {
+          humidity: 1,
+          clouds: 0.8,
+          rain: 0.7,
+          snow: 1,
+          temperature: -8,
+          wind: 0.35,
+          electricField: 0
+        },
+        clear: {
+          humidity: 0,
+          clouds: -1,
+          rain: 0,
+          snow: -1,
+          temperature: 18,
+          wind: 0.15,
+          electricField: 0
+        }
+      };
+      this.preference = {}, this.preference.presets = e, this.preference.names = [
+        "auto",
+        "rain",
+        "snow",
+        "clear"
+      ], this.preference.labels = {
+        auto: "Auto",
+        rain: "Rain",
+        snow: "Snow",
+        clear: "Clear"
+      }, this.preference.current = "auto";
+      const r = localStorage.getItem("weatherPreference");
+      r && this.preference.names.includes(r) && (this.preference.current = r), this.preference.apply = (s = 4) => {
+        const o = e[this.preference.current];
+        o ? this.override.start(o, s) : s === 0 ? this.override.strength = 0 : gsapWithCSS.to(this.override, {
+          strength: 0,
+          duration: s,
+          overwrite: true
+        });
+      }, this.preference.set = (s, o = 4) => {
+        this.preference.names.includes(s) && (this.preference.current = s, localStorage.setItem("weatherPreference", s), this.preference.apply(o), this.events.trigger("preferenceChange"));
+      }, this.preference.next = (s = 4) => {
+        const o = this.preference.names.indexOf(this.preference.current);
+        this.preference.set(this.preference.names[(o + 1) % this.preference.names.length], s);
+      }, this.preference.isForced = () => this.preference.current !== "auto";
     }
     update() {
       for (const e of this.properties) e.binding.update();
@@ -108272,7 +108399,7 @@ ${e.tab}if ( ${m} ) {
   }
   class Options {
     constructor() {
-      this.game = Game.getInstance(), this.element = this.game.menu.items.get("options").contentElement, this.setSound(), this.setMusic(), this.setQuality(), this.setRespawn(), this.setReset(), this.setRenderer(), this.setServer();
+      this.game = Game.getInstance(), this.element = this.game.menu.items.get("options").contentElement, this.setSound(), this.setMusic(), this.setWeather(), this.setQuality(), this.setRespawn(), this.setReset(), this.setRenderer(), this.setServer();
     }
     playClick(e = true) {
       const r = this.game.audio.groups.get("click");
@@ -108281,6 +108408,16 @@ ${e.tab}if ( ${m} ) {
     setSound() {
       this.element.querySelector(".js-audio-toggle").addEventListener("click", () => {
         this.playClick(this.game.audio.mute.active), this.game.audio.mute.toggle();
+      });
+    }
+    setWeather() {
+      this.game.ticker.wait(1, () => {
+        const e = this.element.querySelector(".js-weather-toggle"), r = e.querySelector("span"), s = this.game.weather.preference, o = () => {
+          r.textContent = s.labels[s.current], e.classList.toggle("is-success", s.isForced());
+        };
+        o(), this.game.weather.events.on("preferenceChange", o), e.addEventListener("click", () => {
+          this.playClick(), s.next();
+        });
       });
     }
     setMusic() {
@@ -108575,7 +108712,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-B7d2RC1i.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-DhlGCEK4.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

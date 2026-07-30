@@ -9,6 +9,7 @@ export class Options
 
         this.setSound()
         this.setMusic()
+        this.setWeather()
         this.setQuality()
         this.setRespawn()
         this.setReset()
@@ -41,6 +42,46 @@ export class Options
             // không nghe thấy gì
             this.playClick(this.game.audio.mute.active)
             this.game.audio.mute.toggle()
+        })
+    }
+
+    /**
+     * Thời tiết: bấm đổi vòng Auto → Rain → Snow → Clear.
+     *
+     * Cùng kiểu nút với Quality (bấm là đổi, chữ trên nút cho biết đang ở đâu),
+     * để bảng Cài đặt chỉ có một loại nút chứ không pha tạp.
+     *
+     * ⚠️ PHẢI hoãn một nhịp tick. `Game.js` dựng `Options` ở dòng 110 nhưng mãi
+     *    dòng 117 mới dựng `Weather` — chạm vào `game.weather` ngay trong hàm
+     *    dựng là ném lỗi và **chết cả game từ dòng 110 trở đi**: đo được, đối
+     *    tượng `game` dừng lại ở đúng `resources`, không có `weather`, `world`
+     *    hay `reveal` nào cả, mà màn hình thì chỉ đứng im không báo gì.
+     */
+    setWeather()
+    {
+        this.game.ticker.wait(1, () =>
+        {
+            const element = this.element.querySelector('.js-weather-toggle')
+            const text = element.querySelector('span')
+            const preference = this.game.weather.preference
+
+            const update = () =>
+            {
+                text.textContent = preference.labels[preference.current]
+
+                // Tô khác đi khi thời tiết đang bị ép, để nhìn là biết mình
+                // đang không xem thời tiết tự nhiên nữa
+                element.classList.toggle('is-success', preference.isForced())
+            }
+
+            update()
+            this.game.weather.events.on('preferenceChange', update)
+
+            element.addEventListener('click', () =>
+            {
+                this.playClick()
+                preference.next()
+            })
         })
     }
 

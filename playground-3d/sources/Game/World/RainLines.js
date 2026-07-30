@@ -238,7 +238,9 @@ export class RainLines
             this.localTime.value += this.game.ticker.deltaScaled * this.speed
 
             // Achievement
-            if(!this.achievementAchieved && this.game.reveal.step === 2 && this.visibleRatio.value > 0.04 && this.length.value > 0.2)
+            // ⚠️ Không trao khi thời tiết bị ÉP bằng nút trong Cài đặt — xem chú
+            //    thích cùng loại trong `Snow.js`
+            if(!this.achievementAchieved && this.game.reveal.step === 2 && this.visibleRatio.value > 0.04 && this.length.value > 0.2 && !this.game.weather.preference.isForced())
             {
                 this.achievementAchieved = true
                 this.game.achievements.setProgress('weatherRain', 1)

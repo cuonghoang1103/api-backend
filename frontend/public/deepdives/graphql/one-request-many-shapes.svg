@@ -9,15 +9,15 @@
   <g font-family="ui-monospace, Menlo, monospace" font-size="12">
     <rect x="24" y="70" width="300" height="26" rx="5" fill="#111c30" stroke="#334155"/>
     <text x="36" y="87" fill="#94a3b8">GET /posts/10</text>
-    <text x="210" y="87" fill="#f43f5e">+ body, views, draft</text>
+    <text x="312" y="87" text-anchor="end" fill="#f43f5e">+ body, views, draft</text>
 
     <rect x="24" y="102" width="300" height="26" rx="5" fill="#111c30" stroke="#334155"/>
     <text x="36" y="119" fill="#94a3b8">GET /users/1</text>
-    <text x="210" y="119" fill="#f43f5e">+ bio, email, dates</text>
+    <text x="312" y="119" text-anchor="end" fill="#f43f5e">+ bio, email, dates</text>
 
     <rect x="24" y="134" width="300" height="26" rx="5" fill="#111c30" stroke="#334155"/>
     <text x="36" y="151" fill="#94a3b8">GET /posts/10/comments</text>
-    <text x="248" y="151" fill="#f43f5e">+ spam</text>
+    <text x="312" y="151" text-anchor="end" fill="#f43f5e">+ spam</text>
   </g>
   <text x="24" y="182" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">each endpoint returns the WHOLE resource</text>
   <rect x="24" y="194" width="300" height="30" rx="5" fill="#111c30" stroke="#f43f5e"/>
@@ -28,9 +28,9 @@
   <rect x="376" y="70" width="300" height="90" rx="5" fill="#0a1120" stroke="#334155"/>
   <g font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">
     <text x="388" y="88">{ post(id: "10") {</text>
-    <text x="388" y="104">    title</text>
-    <text x="388" y="120">    author { name }</text>
-    <text x="388" y="136">    comments { body }</text>
+    <text x="388" y="104" xml:space="preserve">    title</text>
+    <text x="388" y="120" xml:space="preserve">    author { name }</text>
+    <text x="388" y="136" xml:space="preserve">    comments { body }</text>
     <text x="388" y="152">} }</text>
   </g>
   <text x="376" y="182" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">the client states the shape it wants</text>

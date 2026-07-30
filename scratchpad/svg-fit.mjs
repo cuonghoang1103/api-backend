@@ -6,6 +6,11 @@ function check(file) {
   const s = fs.readFileSync(file, 'utf8');
   const [, w, h] = s.match(/viewBox="0 0 (\d+) (\d+)"/).map(Number);
   const out = [];
+  // Mọi <rect> để kiểm text có nằm gọn trong KHUNG chứa nó, không chỉ trong viewBox.
+  // Vừa khung mà chạm viền panel thì vẫn xấu — svg-fit bản đầu không thấy (dẫm 30/7
+  // khi phục hồi thụt lề làm một dòng đụng viền trong resolver-tree.svg).
+  const rects = [...s.matchAll(/<rect x="([\d.]+)" y="([\d.]+)" width="([\d.]+)" height="([\d.]+)"/g)]
+    .map((m) => ({ x: +m[1], y: +m[2], w: +m[3], h: +m[4] }));
   for (const m of s.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)) {
     const attrs = m[1], inner = m[2];
     const x = Number((attrs.match(/\bx="([\d.]+)"/) ?? [])[1] ?? 0);
@@ -28,6 +33,13 @@ function check(file) {
     if (right > w - 4) out.push(`  ✗ tràn PHẢI ${Math.round(right - w)}px: "${text.slice(0, 46)}"`);
     if (left < 0) out.push(`  ✗ tràn TRÁI: "${text.slice(0, 46)}"`);
     if (y > h - 2) out.push(`  ✗ tràn ĐÁY: "${text.slice(0, 46)}"`);
+    // khung NHỎ NHẤT chứa điểm neo — panel thật của dòng chữ này
+    const box = rects
+      .filter((r) => x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h)
+      .sort((p, q) => p.w * p.h - q.w * q.h)[0];
+    if (box && box.w < w - 8 && right > box.x + box.w - 6) {
+      out.push(`  ✗ chạm viền KHUNG (thừa ${Math.round(right - (box.x + box.w))}px): "${text.slice(0, 40)}"`);
+    }
   }
   console.log(`${file.split('/').pop().padEnd(26)} ${w}×${h}  ${out.length ? '' : '✓ vừa khung'}`);
   out.forEach(l => console.log(l));
@@ -52,4 +64,13 @@ fs.writeFileSync(probe3, `<svg viewBox="0 0 700 100">` +
   `</svg>`);
 const anchorCase = check(probe3);
 console.log(anchorCase === 1 ? '✓ bộ kiểm hiểu text-anchor="end": bỏ qua số căn phải, bắt được tràn TRÁI (tự kiểm)' : `✗ BỘ KIỂM HỎNG — ca text-anchor="end" ra ${anchorCase} lỗi, cần đúng 1`);
+const probe4 = '/tmp/probe-inbox.svg';
+fs.writeFileSync(probe4, `<svg viewBox="0 0 700 120">` +
+  `<rect x="24" y="20" width="200" height="30"/>` +
+  `<text x="36" y="40" font-size="12" font-family="monospace">${'z'.repeat(40)}</text>` + // đụng viền khung, KHÔNG tràn viewBox
+  `<rect x="24" y="70" width="200" height="30"/>` +
+  `<text x="36" y="90" font-size="12" font-family="monospace">ngắn thôi</text>` +          // gọn
+  `</svg>`);
+const boxCase = check(probe4);
+console.log(boxCase === 1 ? '✓ bộ kiểm bắt được text chạm viền KHUNG dù còn trong viewBox (tự kiểm)' : `✗ BỘ KIỂM HỎNG — ca chạm viền khung ra ${boxCase} lỗi, cần đúng 1`);
 process.exit(bad ? 1 : 0);

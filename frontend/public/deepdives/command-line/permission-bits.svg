@@ -38,7 +38,7 @@
   <line x1="28" y1="210" x2="672" y2="210" stroke="#1e293b"/>
 
   <g font-family="ui-monospace, Menlo, monospace" font-size="14.5">
-    <text x="28" y="238" fill="#94a3b8">r = 4    w = 2    x = 1</text>
+    <text x="28" y="238" fill="#94a3b8" xml:space="preserve">r = 4    w = 2    x = 1</text>
     <text x="28" y="264" fill="#4ade80">rwx = 7</text>
     <text x="150" y="264" fill="#22d3ee">r-x = 5</text>
     <text x="272" y="264" fill="#fb923c">r-- = 4</text>

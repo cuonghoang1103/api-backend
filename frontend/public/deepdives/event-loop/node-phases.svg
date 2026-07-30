@@ -7,26 +7,26 @@
   <g font-family="ui-monospace, Menlo, monospace" font-size="12.5">
     <rect x="24" y="48" width="200" height="40" rx="6" fill="#111c30" stroke="#fb923c"/>
     <text x="38" y="73" fill="#fb923c">timers</text>
-    <text x="150" y="73" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#64748b">setTimeout</text>
+    <text x="212" y="73" text-anchor="end" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#64748b">setTimeout</text>
 
     <rect x="24" y="98" width="200" height="40" rx="6" fill="#111c30" stroke="#334155"/>
     <text x="38" y="123" fill="#94a3b8">pending callbacks</text>
 
     <rect x="24" y="148" width="200" height="40" rx="6" fill="#111c30" stroke="#334155"/>
     <text x="38" y="173" fill="#94a3b8">idle, prepare</text>
-    <text x="150" y="173" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#475569">internal</text>
+    <text x="212" y="173" text-anchor="end" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#475569">internal</text>
 
     <rect x="24" y="198" width="200" height="40" rx="6" fill="#111c30" stroke="#22d3ee"/>
     <text x="38" y="223" fill="#22d3ee">poll</text>
-    <text x="150" y="223" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#64748b">I/O · waits here</text>
+    <text x="212" y="223" text-anchor="end" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#64748b">I/O · waits here</text>
 
     <rect x="24" y="248" width="200" height="40" rx="6" fill="#111c30" stroke="#4ade80"/>
     <text x="38" y="273" fill="#4ade80">check</text>
-    <text x="150" y="273" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#64748b">setImmediate</text>
+    <text x="212" y="273" text-anchor="end" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#64748b">setImmediate</text>
 
     <rect x="24" y="298" width="200" height="40" rx="6" fill="#111c30" stroke="#334155"/>
     <text x="38" y="323" fill="#94a3b8">close</text>
-    <text x="150" y="323" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#475569">'close' events</text>
+    <text x="212" y="323" text-anchor="end" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#475569">'close' events</text>
   </g>
 
   <!-- loop arrow -->

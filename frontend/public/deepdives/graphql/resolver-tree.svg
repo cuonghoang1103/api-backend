@@ -8,23 +8,25 @@
   <rect x="24" y="48" width="250" height="112" rx="6" fill="#0a1120" stroke="#334155"/>
   <g font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">
     <text x="36" y="70">{ posts {</text>
-    <text x="36" y="90">    title</text>
-    <text x="36" y="110">    author {</text>
-    <text x="36" y="130">      name</text>
+    <text x="36" y="90" xml:space="preserve">    title</text>
+    <text x="36" y="110" xml:space="preserve">    author {</text>
+    <text x="36" y="130" xml:space="preserve">      name</text>
     <text x="36" y="150">} } }</text>
   </g>
 
   <!-- levels -->
   <text x="310" y="62" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#fb923c">level 1 — once</text>
   <rect x="310" y="70" width="366" height="26" rx="5" fill="#111c30" stroke="#fb923c"/>
-  <text x="322" y="87" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">Query.posts()  →  [ p0, p1, p2, p3, p4 ]</text>
+  <text x="322" y="87" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8" xml:space="preserve">Query.posts()  →  [ p0, p1, p2, p3, p4 ]</text>
 
   <text x="310" y="118" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#22d3ee">level 2 — once per post</text>
   <rect x="310" y="126" width="366" height="26" rx="5" fill="#111c30" stroke="#22d3ee"/>
-  <text x="322" y="143" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">Post.title(p0) … Post.title(p4)   free, in memory</text>
+  <text x="322" y="143" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">Post.title(p0) … Post.title(p4)</text>
+  <text x="664" y="143" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">free, in memory</text>
 
   <rect x="310" y="158" width="366" height="26" rx="5" fill="#111c30" stroke="#f43f5e"/>
-  <text x="322" y="175" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#f43f5e">Post.author(p0) … Post.author(p4)  5 DB queries</text>
+  <text x="322" y="175" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#f43f5e">Post.author(p0) … Post.author(p4)</text>
+  <text x="664" y="175" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#f43f5e">5 DB queries</text>
 
   <text x="310" y="206" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#a78bfa">level 3 — once per author</text>
   <rect x="310" y="214" width="366" height="26" rx="5" fill="#111c30" stroke="#a78bfa"/>

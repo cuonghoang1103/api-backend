@@ -8,10 +8,10 @@
   <rect x="24" y="50" width="316" height="150" rx="8" fill="#0a1120" stroke="#1e293b"/>
   <g font-family="ui-monospace, Menlo, monospace" font-size="12.5">
     <text x="40" y="74" fill="#a78bfa">async function f() {</text>
-    <text x="52" y="96" fill="#4ade80">  console.log('runs now')</text>
-    <text x="52" y="122" fill="#fcd34d">  const r = await fetch(url)</text>
-    <text x="52" y="148" fill="#22d3ee">  console.log('runs later')</text>
-    <text x="52" y="170" fill="#22d3ee">  return r</text>
+    <text x="52" y="96" fill="#4ade80" xml:space="preserve">  console.log('runs now')</text>
+    <text x="52" y="122" fill="#fcd34d" xml:space="preserve">  const r = await fetch(url)</text>
+    <text x="52" y="148" fill="#22d3ee" xml:space="preserve">  console.log('runs later')</text>
+    <text x="52" y="170" fill="#22d3ee" xml:space="preserve">  return r</text>
     <text x="40" y="192" fill="#a78bfa">}</text>
   </g>
 

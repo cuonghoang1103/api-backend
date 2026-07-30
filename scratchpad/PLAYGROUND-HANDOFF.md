@@ -102,9 +102,45 @@ Bộ kiểm "mọi tên ảnh có file thật" ở `scratchpad/check-images.mjs`
 
 ---
 
+# 2c. KHU ĐẠI HỌC FPT — đảo riêng (commit `3d8bc58`, chưa deploy)
+
+User yêu cầu và đã duyệt hướng: trường nằm trên MẢNH ĐẤT RIÊNG ngoài khơi Tây
+(đảo `ISLAND` tâm −152·40, 104×84), nối bằng cầu từ bờ Tây đảo chính. Bố cục
+xếp theo BẢN ĐỒ CHÍNH THỨC user gửi: trục cổng → đường dọc trường → biển xếp
+hạng → chữ FPT UNIVERSITY → cỏ + cọ → **Alpha GIẬT CẤP 3-4-5-6-7-7-6-5-4-3**
+→ **hồ sen SAU LƯNG Alpha** → Beta bên kia hồ · Delta/Gamma Bắc · Dom A–D giữa
++ Dom E–H Tây · tượng SELF MADE MAN giữa vườn Dom · bóng đá giữa · bóng rổ góc
+Bắc · nhà ăn · bãi xe. Trục giữa TRỐNG (nhà lùi ≥18) nên không che xe.
+
+Mọi thứ trong `sources/data/fptu.js` (số liệu, LÝ DO) + `Game/World/FptuCampus.js`
++ `FptuQuiz.js` (hộp thoại sinh viên/kỳ + bảng hỏi) + `tools/build-fptu-questions.mjs`
+(sinh `static/fptu/questions-ky{1,2,3}.json` từ `content/exams` — đề THẬT, Kỳ 4–9
+chưa có đề thì bảng nói thẳng) + `tools/make-fptu-sign.py` (chữ 3D).
+
+## 🪤 Bẫy MỚI dẫm trong đợt FPTU — đắt nhất là nhóm đo đạc
+
+| Bẫy | Sự thật |
+|---|---|
+| **`physicalVehicle.moveTo(pos, rotation)` nhận GÓC SỐ** | Truyền object quaternion vào là hướng xe thành rác KHÔNG báo lỗi. `Respawns` lưu `rotation` là số — nhìn đó mà theo |
+| **`player.respawn()` chạy overlay BẤT ĐỒNG BỘ** | Callback teleport nổ sau vài giây, ĐÈ LÊN mọi `moveTo` gọi xen giữa. Một bài test "đo hướng xe" cho kết quả NGƯỢC vì xe thật ra đang đứng ở landing. **Đừng tin phép đo nào chạy xen giữa một respawn** |
+| **Sau `reveal.updateStep(1)`, `player.state` vẫn LOCKED** | Muốn lái được trong test phải `respawn('fptu')` một phát (respawn tự đặt STATE_DEFAULT ở cuối) |
+| Mũi xe ở yaw 0 hướng **+X** (đo SẠCH 31/7) | Respawn quay vào trường (−X) ⇒ `rotation: Math.PI` |
+| Chờ intro phải chờ CẢ `intro.text.mesh` LẪN `intro.soundButton.mesh` | `hideLabel()` đụng cả hai; chờ thiếu một là reveal đứt NGẮT QUÃNG (lúc được lúc không) |
+| Thành tựu `sea` = "cách tâm > 120" | Đảo trường cách tâm ~157 ⇒ đứng giữa sân cũng được tặng "Under the sea". Đã loại trừ hình chữ nhật đảo+cầu trong `Player.js` |
+| Headless SwiftShader chỉ ~15fps | Xe bò — test lái phải giữ W 25–30s KÈM Shift (boost), đừng kết luận "không lái được" sau 9s |
+| Khung xem `visibilityState:hidden` ⇒ rAF = 0 | Game "đứng hình" dù mã lành — dùng Playwright (`scratchpad/play.mjs` của phiên) |
+| Xe thả gần cổng là hộp thoại bật che khung chụp | Trước screenshot phải `display:none` cái `.js-fptu-gate` (gỡ class chưa đủ) |
+
+Test trọn gói: `test-fptu2.mjs` (lái thật qua cổng · luồng hỏi đáp · sea ·
+đất cũ sạch). Chạy bằng node với dev server :5174 đang sống.
+
+---
+
 # 2. VIỆC TIẾP THEO: mở rộng bản đồ
 
-Vẫn CHƯA làm. Dưới đây là toàn bộ khảo sát đã có, **đừng đo lại**.
+~~Vẫn CHƯA làm~~ → **ĐÃ LÀM theo cách khác** (đảo riêng, mục 2c). Khảo sát góc
+Tây-Nam dưới đây GIỮ NGUYÊN GIÁ TRỊ cho khu tiếp theo nếu muốn thêm gì đó
+trên đảo chính, **đừng đo lại**.
 
 ## Bản đồ hiện tại (đo từ `static/areas/areas.glb`)
 
@@ -213,6 +249,28 @@ Thứ tự trong `Game.js`: `dayCycles` 85 · `audio` 88 · **`options` 110** ·
 # 4. Quy trình
 
 ## Test local (đúng cách)
+
+⚠️ **`npm run preview` PHẢI mở ở `http://localhost:4173/playground/`, KHÔNG phải
+`http://localhost:4173/`.** `dist/index.html` có `<base href="/playground/">`
+(từ `VITE_BASE_HREF` trong `.env.production`) nên mọi đường dẫn tương đối
+`./assets/...` bị đẩy thành `/playground/assets/...`. Vite preview lại phục vụ
+tại GỐC, nên vào `/` thì CSS/JS trả về **HTML fallback** (`content_type:
+text/html` thay vì `text/javascript`) — trang hiện ra HTML THÔ, chữ đen trắng,
+ảnh vỡ, không canvas. Nhìn y như game hỏng nhưng bản dựng hoàn toàn lành.
+
+Cách chắc ăn nhất khi cần đưa user test bản dựng: phục vụ `dist` DƯỚI đường dẫn
+`/playground/` bằng symlink —
+
+```bash
+mkdir -p /tmp/preview-root && ln -sfn "$PWD/playground-3d/dist" /tmp/preview-root/playground
+cd /tmp/preview-root && python3 -m http.server 4173   # → http://localhost:4173/playground/
+```
+
+Chốt kiểm: `curl -s -o /dev/null -w "%{content_type}" .../assets/index-*.js` phải
+ra `text/javascript`. Ra `text/html` là đang trúng fallback.
+
+Production KHÔNG dính lỗi này (Next phục vụ đúng tại `cuongthai.com/playground/`).
+
 
 ```bash
 cd playground-3d && npm run dev      # :5173 — KHÔNG đi qua Next, tránh hẳn bẫy 404

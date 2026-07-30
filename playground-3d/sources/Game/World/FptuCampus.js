@@ -2,8 +2,11 @@ import * as THREE from 'three/webgpu'
 import { color } from 'three/tsl'
 import { Game } from '../Game.js'
 import { MeshDefaultMaterial } from '../Materials/MeshDefaultMaterial.js'
-import { ALPHA, AXIS, BASKETBALL, BRIDGE, BUILDINGS, CANTEEN, COLORS, DORMS, FOOTBALL, FORECOURT, GATE, ISLAND, LAKE, LAWN, MAIN_ROAD, MARTIAL, PARKING, QUESTION_BLOCKS, RANKING_PLAZA, RANKING_SIGN, SIGN, STATUE } from '../../data/fptu.js'
+import { ALPHA, ALPHA_LOBBY, AXIS, THROUGH_ROAD, BASKETBALL, BRIDGE, BUILDINGS, CANTEEN, COLORS, DORMS, FOOTBALL, FORECOURT, GATE, ISLAND, LAKE, LAWN, MAIN_ROAD, MARTIAL, PARKING, QUESTION_BLOCKS, RANKING_PLAZA, RANKING_SIGN, SIGN, STATUE } from '../../data/fptu.js'
 import { FptuQuiz } from './FptuQuiz.js'
+import { Trees } from './Trees.js'
+import { Foliage } from './Foliage.js'
+import { uniform } from 'three/tsl'
 
 /**
  * KHUÔN VIÊN ĐẠI HỌC FPT — nằm trên MẢNH ĐẤT RIÊNG ngoài khơi phía Tây,
@@ -131,22 +134,57 @@ export class FptuCampus
     setIsland()
     {
         // Viền cát — to hơn nền một vòng, mặt thấp hơn một bậc
-        this.box(ISLAND.width + 5, 1.1, ISLAND.depth + 5, ISLAND.x, GROUND_TOP - 0.72, ISLAND.z, '#d8b47e', { castShadow: false })
+        this.box(ISLAND.width + 5, 1.1, ISLAND.depth + 5, ISLAND.x, GROUND_TOP - 0.78, ISLAND.z, '#d8b47e', { castShadow: false })
 
-        // Nền chính — mặt cỏ
-        this.box(ISLAND.width, 1.5, ISLAND.depth, ISLAND.x, GROUND_TOP - 0.73, ISLAND.z, COLORS.grass, { castShadow: false })
+        /**
+         * Nền đảo dựng thành BỐN DẢI chừa một lỗ đúng chỗ hồ sen, thay vì một
+         * phiến liền.
+         *
+         * Vì sao bõ công: mặt biển của game (`WaterSurface`) là mặt phẳng bám
+         * theo máy quay ở cao độ `water.surfaceElevation = −0,3`, tức CAO HƠN
+         * đáy đảo. Khoét thủng nền là nước thật trồi lên thành hồ — có gợn
+         * sóng, có loang màu, có đóng băng khi trời lạnh, xe lội xuống còn nghe
+         * tiếng nước. Đắp một tấm phẳng màu xanh như bản trước thì chỉ ra miếng
+         * bìa, đúng như người dùng chê "vuông, nhọn như đồ chơi".
+         */
+        const halfW = ISLAND.width * 0.5
+        const halfD = ISLAND.depth * 0.5
+        const hole = {
+            minX: LAKE.x - LAKE.radiusX, maxX: LAKE.x + LAKE.radiusX,
+            minZ: LAKE.z - LAKE.radiusZ, maxZ: LAKE.z + LAKE.radiusZ,
+        }
 
-        // Thân vật lý mặt đảo: một hộp mỏng đúng bằng mặt trên
-        this.game.objects.add(
-            null,
-            {
-                type: 'fixed',
-                friction: 0.25,
-                restitution: 0,
-                position: { x: ISLAND.x, y: GROUND_TOP - 0.5, z: ISLAND.z },
-                colliders: [ { shape: 'cuboid', parameters: [ (ISLAND.width + 5) * 0.5, 0.5, (ISLAND.depth + 5) * 0.5 ] } ]
-            }
-        )
+        const strips = [
+            // Tây và Đông của hồ — chạy trọn chiều sâu đảo
+            { x0: ISLAND.x - halfW, x1: hole.minX, z0: ISLAND.z - halfD, z1: ISLAND.z + halfD },
+            { x0: hole.maxX, x1: ISLAND.x + halfW, z0: ISLAND.z - halfD, z1: ISLAND.z + halfD },
+            // Bắc và Nam của hồ — chỉ trong khoảng ngang của hồ
+            { x0: hole.minX, x1: hole.maxX, z0: ISLAND.z - halfD, z1: hole.minZ },
+            { x0: hole.minX, x1: hole.maxX, z0: hole.maxZ, z1: ISLAND.z + halfD },
+        ]
+
+        for(const strip of strips)
+        {
+            const width = strip.x1 - strip.x0
+            const depth = strip.z1 - strip.z0
+            if(width <= 0 || depth <= 0) continue
+
+            const cx = (strip.x0 + strip.x1) * 0.5
+            const cz = (strip.z0 + strip.z1) * 0.5
+
+            this.box(width, 1.5, depth, cx, GROUND_TOP - 0.75, cz, COLORS.grass, { castShadow: false })
+
+            this.game.objects.add(
+                null,
+                {
+                    type: 'fixed',
+                    friction: 0.25,
+                    restitution: 0,
+                    position: { x: cx, y: GROUND_TOP - 0.75, z: cz },
+                    colliders: [ { shape: 'cuboid', parameters: [ width * 0.5, 0.75, depth * 0.5 ] } ]
+                }
+            )
+        }
     }
 
     /** Cầu nối đảo chính — mặt thấp sát nước, có lan can hai bên. */
@@ -223,6 +261,14 @@ export class FptuCampus
 
         // Sân trước chân toà Alpha
         this.slab(FORECOURT.width, FORECOURT.depth, FORECOURT.x, FORECOURT.z, '#a8a294')
+
+        // CON ĐƯỜNG XUYÊN SẢNH — chui qua gầm toà Alpha rồi chạy thẳng tới cuối
+        // đảo (nét đen người dùng vẽ trên bản đồ)
+        const throughLength = Math.abs(THROUGH_ROAD.toX - THROUGH_ROAD.fromX)
+        this.slab(throughLength, THROUGH_ROAD.halfWidth * 2, (THROUGH_ROAD.fromX + THROUGH_ROAD.toX) * 0.5, THROUGH_ROAD.z, COLORS.road)
+
+        for(let i = 0; i < 12; i++)
+            this.slab(2.4, 0.2, THROUGH_ROAD.fromX - 6 - i * 5, THROUGH_ROAD.z, '#e8e4da', { y: GROUND_TOP + 0.045 })
     }
 
     /**
@@ -233,21 +279,23 @@ export class FptuCampus
     {
         const { x, z, height, width } = RANKING_SIGN
 
-        // Bệ + thân biển
-        this.box(1.6, 0.5, width + 1.2, x, 0.25, z, '#7c6f5a', { physical: true })
-        this.box(1, height, width, x, height * 0.5 + 0.5, z, '#8d7f68', { physical: true })
+        // Bệ + thân biển. Bản trước để biển cao 3,2 rộng 8,5 ĐỨNG GIỮA sảnh nên
+        // trông như bức tường chắn ngang; nay thu nhỏ còn ~60% và dời hẳn sang
+        // mép sảnh, đúng chỗ tấm biển đá ở cổng trường thật.
+        this.box(1.1, 0.35, width + 0.8, x, 0.17, z, '#7c6f5a', { physical: true })
+        this.box(0.7, height, width, x, height * 0.5 + 0.35, z, '#8d7f68', { physical: true })
 
-        // Logo FPT ba khối màu ở mặt hướng ra cổng (+X), canh đúng tâm biển
-        this.box(0.16, 0.75, 1.35, x + 0.56, height - 0.35, z - 1.5, COLORS.orange)
-        this.box(0.16, 0.75, 1.35, x + 0.56, height - 0.35, z, COLORS.green)
-        this.box(0.16, 0.75, 1.35, x + 0.56, height - 0.35, z + 1.5, COLORS.blue)
+        // Logo FPT ba khối màu ở mặt hướng ra cổng (+X)
+        this.box(0.14, 0.5, 0.9, x + 0.4, height - 0.2, z - 1, COLORS.orange)
+        this.box(0.14, 0.5, 0.9, x + 0.4, height - 0.2, z, COLORS.green)
+        this.box(0.14, 0.5, 0.9, x + 0.4, height - 0.2, z + 1, COLORS.blue)
 
-        // Hàng năm sao — biển xếp hạng, cũng canh tâm
+        // Hàng năm sao — biển xếp hạng đại học
         for(let i = 0; i < 5; i++)
-            this.box(0.14, 0.55, 0.55, x + 0.56, height - 1.5, z + (i - 2) * 1.15, '#f6c945', { rotationZ: Math.PI * 0.25 })
+            this.box(0.12, 0.4, 0.4, x + 0.4, height - 1.1, z + (i - 2) * 0.85, '#f6c945', { rotationZ: Math.PI * 0.25 })
 
         // Dải chân biển màu cam
-        this.box(0.16, 0.5, width - 0.8, x + 0.56, 0.9, z, COLORS.orange)
+        this.box(0.14, 0.35, width - 0.6, x + 0.4, 0.62, z, COLORS.orange)
     }
 
     /**
@@ -271,8 +319,24 @@ export class FptuCampus
             const zCenter = startZ + (index + 0.5) * ALPHA.columnWidth
             const xCenter = ALPHA.x + column.bow // bow dương = nhô về phía sân trước
 
-            // Thân cột
-            this.box(ALPHA.depth, height, ALPHA.columnWidth, xCenter, height * 0.5, zCenter, COLORS.wall, { physical: true })
+            /**
+             * Thân cột. Hai cột giữa được nâng lên thành CỔNG VÒM: phần dưới bỏ
+             * trống làm SẢNH XUYÊN QUA — xe chui lọt từ sân trước ra thẳng con
+             * đường phía sau, đúng cái sảnh lớn của toà Alpha thật.
+             */
+            const overLobby = Math.abs(zCenter - ALPHA.z) < ALPHA_LOBBY.halfWidth
+
+            if(overLobby)
+            {
+                // Chỉ dựng phần TRÊN sảnh, và thân vật lý cũng chỉ ở phần trên
+                const upperHeight = height - ALPHA_LOBBY.height
+                if(upperHeight > 0.1)
+                    this.box(ALPHA.depth, upperHeight, ALPHA.columnWidth, xCenter, ALPHA_LOBBY.height + upperHeight * 0.5, zCenter, COLORS.wall, { physical: true })
+            }
+            else
+            {
+                this.box(ALPHA.depth, height, ALPHA.columnWidth, xCenter, height * 0.5, zCenter, COLORS.wall, { physical: true })
+            }
 
             // Mái cột
             this.box(ALPHA.depth + 0.35, 0.22, ALPHA.columnWidth + 0.1, xCenter, height + 0.11, zCenter, COLORS.roof)
@@ -303,6 +367,9 @@ export class FptuCampus
                     const cellY = floor * ALPHA.floorHeight + ALPHA.floorHeight * 0.5
                     const cellX = xCenter + ALPHA.depth * 0.5 + 0.06
 
+                    // Không dán ô lên khoảng trống của sảnh xuyên qua
+                    if(overLobby && cellY < ALPHA_LOBBY.height) continue
+
                     darkCells.push({ x: cellX, y: cellY, z: cellZ, w: cellW * 0.8, h: ALPHA.floorHeight * 0.74 })
 
                     if(hasFoliage(floor, globalCell))
@@ -311,8 +378,9 @@ export class FptuCampus
             }
         })
 
-        // Sảnh vào ở giữa: khoang tối cao 1,5 tầng giữa hai cột trung tâm
-        this.box(0.5, ALPHA.floorHeight * 1.4, 5.5, ALPHA.x + ALPHA.depth * 0.5 + 0.08, ALPHA.floorHeight * 0.7, ALPHA.z, COLORS.windowDark)
+        // Dầm ngang đỡ phần trên sảnh — viền tối cho ra dáng cửa sảnh lớn
+        for(const side of [ -1, 1 ])
+            this.box(ALPHA.depth + 0.2, 0.35, 0.5, ALPHA.x, ALPHA_LOBBY.height - 0.18, ALPHA.z + side * ALPHA_LOBBY.halfWidth, COLORS.windowDark)
 
         this.addCells(darkCells, COLORS.windowDark)
         this.addFoliage(foliageCells)
@@ -404,21 +472,35 @@ export class FptuCampus
      * HỒ SEN LỚN sau lưng toà Alpha — đúng điểm nhận diện của campus thật:
      * "toà nhà hình rồng soi bóng xuống hồ". Sen + lá rải tất định.
      */
+    /**
+     * HỒ SEN — nền đảo đã được KHOÉT THỦNG đúng chỗ này (xem `setIsland`), nên
+     * cái nhìn thấy dưới đáy là MẶT BIỂN THẬT của game: có gợn sóng, có loang
+     * màu theo trời, lạnh thì đóng băng, xe lội xuống có tiếng nước. Ở đây chỉ
+     * cần đắp bờ cát và thả sen.
+     */
     setLake()
     {
-        this.box(LAKE.radiusX * 2 + 1.8, 0.06, LAKE.radiusZ * 2 + 1.8, LAKE.x, GROUND_TOP + 0.03, LAKE.z, '#d8b47e', { castShadow: false })
-        this.box(LAKE.radiusX * 2, 0.07, LAKE.radiusZ * 2, LAKE.x, GROUND_TOP + 0.055, LAKE.z, COLORS.water, { castShadow: false })
+        const waterY = this.game.water.surfaceElevation
 
-        for(let i = 0; i < 34; i++)
+        // Bờ cát chạy quanh miệng hồ — bốn cạnh, hơi thụt xuống cho ra dáng mép nước
+        const bank = 1.6
+        for(const side of [ -1, 1 ])
+        {
+            this.box(LAKE.radiusX * 2 + bank * 2, 0.5, bank, LAKE.x, GROUND_TOP - 0.22, LAKE.z + side * (LAKE.radiusZ + bank * 0.5), '#d8b47e', { castShadow: false })
+            this.box(bank, 0.5, LAKE.radiusZ * 2, LAKE.x + side * (LAKE.radiusX + bank * 0.5), GROUND_TOP - 0.22, LAKE.z, '#d8b47e', { castShadow: false })
+        }
+
+        // Lá sen + hoa nổi TRÊN mặt nước thật
+        for(let i = 0; i < 30; i++)
         {
             const angle = i * 2.39996
-            const radius = 0.22 + (i % 8) / 10
-            const x = LAKE.x + Math.cos(angle) * LAKE.radiusX * radius
-            const z = LAKE.z + Math.sin(angle) * LAKE.radiusZ * radius
+            const radius = 0.2 + (i % 8) / 10
+            const x = LAKE.x + Math.cos(angle) * (LAKE.radiusX - 1.5) * radius
+            const z = LAKE.z + Math.sin(angle) * (LAKE.radiusZ - 1.5) * radius
 
-            this.box(1, 0.05, 1, x, GROUND_TOP + 0.1, z, '#3f8f4a', { castShadow: false })
+            this.box(1.15, 0.04, 1.15, x, waterY + 0.03, z, '#3f8f4a', { castShadow: false })
             if(i % 4 === 0)
-                this.box(0.28, 0.4, 0.28, x, GROUND_TOP + 0.3, z, '#ff8fb0')
+                this.box(0.26, 0.36, 0.26, x, waterY + 0.2, z, '#ff8fb0')
         }
     }
 
@@ -525,22 +607,69 @@ export class FptuCampus
         this.box(0.42, 0.38, 0.42, x, 3.85, z, '#8f6b2f')
     }
 
-    /** Cây tán tròn rải quanh đảo cho có "công viên xanh" — tránh trục và nhà. */
+    /**
+     * CÂY CỐI THẬT — dùng lại đúng hệ `Trees` và `Foliage` của thế giới gốc thay
+     * vì tự đắp hộp.
+     *
+     * Vì sao: bản trước dựng cây bằng hai khối hộp chồng nhau nên cả khu trông
+     * "vuông, nhọn như đồ chơi" — người dùng chê đúng. Hai lớp này cho tán lá
+     * dựng từ hàng chục phiến xoay ngẫu nhiên, có sắc độ chuyển, LAY THEO GIÓ,
+     * đổ bóng mềm và luôn hơi xoay về phía máy quay. Chúng chỉ cần một mảng
+     * Object3D làm mốc vị trí (`setFromReferences` đọc `position` và `scale.x`),
+     * nên tạo bằng mã được, không phải sửa file .glb nào.
+     */
     setTrees()
     {
-        const spots = [
-            { x: -105, z: 32 }, { x: -105, z: 52 }, { x: -110, z: 74 },
-            { x: -122, z: 10 }, { x: -131, z: 20 }, { x: -158, z: 57 },
-            { x: -178, z: 30 }, { x: -180, z: 52 }, { x: -127, z: 74 },
-            { x: -156, z: 22 }, { x: -128, z: 52 },
-        ]
-
-        for(const spot of spots)
+        const make = (list) => list.map(([ x, z, scale ]) =>
         {
-            this.box(0.4, 2.2, 0.4, spot.x, 1.1, spot.z, COLORS.trunk, { physical: true, geometry: this.cylinderGeometry })
-            this.box(2.4, 2, 2.4, spot.x, 3.1, spot.z, '#6f9e3f', { castShadow: false })
-            this.box(1.7, 1, 1.7, spot.x, 4.35, spot.z, '#7fae4a', { castShadow: false })
+            const object = new THREE.Object3D()
+            object.position.set(x, 0, z)
+            object.scale.setScalar(scale)
+            return object
+        })
+
+        // Ba loại cây, đặt tránh trục đường và tránh chân nhà
+        const birch = make([
+            [ -104, 30, 1.1 ], [ -104, 52, 1 ], [ -122, 12, 1.2 ], [ -131, 22, 1 ],
+            [ -150, 58, 1.1 ], [ -166, 34, 1 ], [ -178, 30, 1.2 ], [ -196, 34, 1 ],
+        ])
+        const oak = make([
+            [ -110, 20, 1.2 ], [ -127, 30, 1 ], [ -134, 14, 1.1 ], [ -145, 56, 1.2 ],
+            [ -158, 52, 1 ], [ -172, 26, 1.1 ], [ -190, 46, 1 ], [ -200, 22, 1.2 ],
+        ])
+        const cherry = make([
+            [ -116, 32, 1 ], [ -124, 50, 1.1 ], [ -140, 30, 1 ], [ -152, 12, 1.1 ],
+            [ -164, 46, 1 ], [ -182, 20, 1.1 ], [ -194, 60, 1 ],
+        ])
+
+        this.birchTrees = new Trees('FPTU Birch', this.game.resources.birchTreesVisualModel.scene, birch, '#ff4f2b', '#ff903f')
+        this.oakTrees = new Trees('FPTU Oak', this.game.resources.oakTreesVisualModel.scene, oak, '#b4b536', '#d8cf3b')
+        this.cherryTrees = new Trees('FPTU Cherry', this.game.resources.cherryTreesVisualModel.scene, cherry, '#ff6d6d', '#ff9990')
+
+        // Bụi thấp rải khắp cho mặt cỏ đỡ trơ — cùng hệ lá với bụi của đảo chính
+        const bushSpots = []
+        for(let i = 0; i < 90; i++)
+        {
+            // Rải tất định bằng dãy Fibonacci góc vàng, bỏ những chỗ rơi vào
+            // đường, sân hoặc chân nhà
+            const angle = i * 2.39996
+            const radius = Math.sqrt(i / 90)
+            const x = ISLAND.x + Math.cos(angle) * radius * (ISLAND.width * 0.46)
+            const z = ISLAND.z + Math.sin(angle) * radius * (ISLAND.depth * 0.46)
+
+            if(Math.abs(z - AXIS.z) < 7) continue                       // trục lễ nghi
+            if(Math.abs(z - THROUGH_ROAD.z) < 7 && x < THROUGH_ROAD.fromX) continue
+            if(Math.abs(x - MAIN_ROAD.x) < 6) continue                  // đường dọc trường
+            if(Math.abs(x - ALPHA.x) < 6) continue                      // chân toà Alpha
+            if(Math.abs(x - LAKE.x) < LAKE.radiusX + 2 && Math.abs(z - LAKE.z) < LAKE.radiusZ + 2) continue
+
+            const object = new THREE.Object3D()
+            object.position.set(x, 0, z)
+            object.scale.setScalar(0.5 + (i % 5) * 0.14)
+            bushSpots.push(object)
         }
+
+        this.bushes = new Foliage(bushSpots, uniform(color('#8fbe45')), uniform(color('#c6d94f')))
     }
 
     /**

@@ -47,9 +47,19 @@ export const MAIN_ROAD = { x: -112, z: 40, length: 68, width: 7 }
 /** Trục lễ nghi từ cổng thẳng vào toà Alpha. */
 export const AXIS = { z: 40, halfWidth: 4.5, fromX: -104, toX: -132 }
 
+/**
+ * CON ĐƯỜNG XUYÊN SẢNH — chui qua sảnh lớn giữa toà Alpha rồi chạy thẳng ra
+ * tới cuối đảo (nét đen người dùng vẽ trên bản đồ). Vì đường này phải THÔNG
+ * suốt, hồ sen đã được dời lệch xuống dải z nhỏ hơn để không chắn ngang.
+ */
+export const THROUGH_ROAD = { z: 40, halfWidth: 5, fromX: -137, toX: -200 }
+
+/** Sảnh xuyên qua toà Alpha: bề rộng lối chui (theo trục z) và chiều cao. */
+export const ALPHA_LOBBY = { halfWidth: 5, height: 3.6 }
+
 /** Sảnh + biển top xếp hạng đại học thế giới — ngay sau con đường. */
 export const RANKING_PLAZA = { x: -119, z: 40, width: 8, depth: 26 }
-export const RANKING_SIGN = { x: -118, z: 40, height: 3.2, width: 8.5 }
+export const RANKING_SIGN = { x: -118, z: 50.5, height: 2.1, width: 5 }
 
 /** Hàng chữ FPT UNIVERSITY — mặt đường, ngay trước thảm cỏ dẫn vào Alpha. */
 export const SIGN = { x: -125.5, y: 0, z: 40, rotationY: Math.PI * 0.5, scale: 1.35 }
@@ -88,11 +98,11 @@ export const ALPHA = {
  * HỒ SEN LỚN — sau lưng toà Alpha, đúng điểm nhận diện "toà nhà hình rồng soi
  * bóng xuống hồ". Kéo dài theo trục z như hồ thật.
  */
-export const LAKE = { x: -156, z: 40, radiusX: 8.5, radiusZ: 14 }
+export const LAKE = { x: -158, z: 22, radiusX: 12, radiusZ: 9 }
 
 /** Beta bên kia hồ (soi mặt với Alpha) · Delta, Gamma phía Bắc như bản đồ. */
 export const BUILDINGS = [
-    { name: 'Beta', x: -172, z: 40, width: 8, depth: 18, floors: 5 },
+    { name: 'Beta', x: -170, z: 60, width: 16, depth: 8, floors: 5 },
     { name: 'Delta', x: -148, z: 12, width: 14, depth: 7, floors: 4 },
     { name: 'Gamma', x: -170, z: 16, width: 12, depth: 7, floors: 4 },
 ]
@@ -104,12 +114,12 @@ export const BUILDINGS = [
 export const DORMS = [
     { name: 'A', x: -138, z: 62 }, { name: 'B', x: -147, z: 62 },
     { name: 'C', x: -138, z: 71 }, { name: 'D', x: -147, z: 71 },
-    { name: 'E', x: -163, z: 62 }, { name: 'F', x: -172, z: 62 },
-    { name: 'G', x: -163, z: 71 }, { name: 'H', x: -172, z: 71 },
+    { name: 'E', x: -186, z: 60 }, { name: 'F', x: -186, z: 70 },
+    { name: 'G', x: -196, z: 60 }, { name: 'H', x: -196, z: 70 },
 ]
 
 /** Tượng SELF MADE MAN — giữa vườn hai cụm ký túc xá, như ảnh thật. */
-export const STATUE = { x: -155, z: 66 }
+export const STATUE = { x: -160, z: 68 }
 
 /** Sân bóng đá giữa trường (bản đồ: 16, giữa khu). */
 export const FOOTBALL = { x: -124, z: 62, width: 12, depth: 18 }

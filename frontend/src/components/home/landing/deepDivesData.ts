@@ -82,8 +82,7 @@ export const DEEP_DIVES: DeepDive[] = [
     logo: 'vuedotjs',
     title: 'How to Use Vue, the JavaScript Framework',
     blurb: 'Reactivity, components and the single-file component model.',
-    href: '/code-lab',
-    via: 'Graded exercises in Code Lab',
+    article: 'how-to-use-vue-the-javascript-framework',
   },
   {
     logo: 'webpack',

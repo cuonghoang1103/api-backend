@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 400" width="700" height="400" role="img" aria-label="A single-file component is parsed into three blocks; compileScript rewrites script setup into a setup function with props access, compileTemplate emits a render function annotated with patch flags, and compileStyle rewrites scoped CSS into attribute selectors">
+  <rect width="700" height="400" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="399" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="28" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">One .vue file, three compilers, one plain JS object — and none of it runs in the browser.</text>
+
+  <!-- input -->
+  <rect x="24" y="44" width="180" height="150" rx="6" fill="#111c30" stroke="#4ade80"/>
+  <text x="38" y="64" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#4ade80">Counter.vue</text>
+  <rect x="36" y="74" width="156" height="34" rx="4" fill="#0a1120" stroke="#1e293b"/>
+  <text x="46" y="95" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">&lt;script setup&gt;</text>
+  <rect x="36" y="114" width="156" height="34" rx="4" fill="#0a1120" stroke="#1e293b"/>
+  <text x="46" y="135" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">&lt;template&gt;</text>
+  <rect x="36" y="154" width="156" height="30" rx="4" fill="#0a1120" stroke="#1e293b"/>
+  <text x="46" y="174" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">&lt;style scoped&gt;</text>
+
+  <text x="212" y="120" font-family="ui-monospace, Menlo, monospace" font-size="16" fill="#64748b">→</text>
+
+  <!-- three outputs -->
+  <rect x="240" y="44" width="436" height="46" rx="5" fill="#0a1120" stroke="#22d3ee"/>
+  <text x="252" y="62" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#22d3ee">compileScript()</text>
+  <text x="252" y="81" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">setup(__props) { … } · { max } = defineProps → __props.max</text>
+
+  <rect x="240" y="96" width="436" height="64" rx="5" fill="#0a1120" stroke="#a78bfa"/>
+  <text x="252" y="114" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#a78bfa">compileTemplate()</text>
+  <text x="252" y="133" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">render(_ctx, _cache) { … } — a flag on every dynamic node</text>
+  <text x="252" y="151" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">static children hoisted out, never rebuilt</text>
+
+  <rect x="240" y="166" width="436" height="46" rx="5" fill="#0a1120" stroke="#fb923c"/>
+  <text x="252" y="184" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#fb923c">compileStyle({ scoped: true })</text>
+  <text x="252" y="203" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">.counter h3 → .counter h3[data-v-abc123]</text>
+
+  <!-- patch flags -->
+  <text x="24" y="238" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">The flag is the whole point: it tells the runtime what is allowed to change, so the diff skips the rest.</text>
+
+  <rect x="24" y="248" width="652" height="96" rx="6" fill="#111c30" stroke="#1e293b"/>
+  <text x="38" y="268" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">_createElementVNode(&quot;p&quot;, null, _toDisplayString($props.label), 1 /* TEXT */)</text>
+  <text x="38" y="288" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">_createElementVNode(&quot;button&quot;, { disabled: … }, &quot;+1&quot;, 8 /* PROPS */)</text>
+  <text x="38" y="308" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">_cache[1] || (_cache[1] = _createElementVNode(&quot;h3&quot;, null, &quot;Counter&quot;, -1))</text>
+  <text x="38" y="332" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">1 TEXT · 2 CLASS · 4 STYLE · 8 PROPS · 128 KEYED_FRAG · 256 UNKEYED_FRAG · −1 CACHED</text>
+
+  <rect x="24" y="352" width="652" height="34" rx="6" fill="#0a1120" stroke="#f43f5e"/>
+  <text x="38" y="374" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">Ship the compiler to the browser and the same counter goes 24 KB → 67 KB gzipped.</text>
+</svg>

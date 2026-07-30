@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 396" width="700" height="396" role="img" aria-label="Same component tree in Vue and React: after one state change in the root, Vue re-renders only the child whose props changed while React re-renders every child unless it is wrapped in memo; on a thousand-row list a prepend costs one row render in keyed Vue and a thousand and one in plain React">
+  <rect width="700" height="396" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="395" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="28" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">Same tree, same jsdom, same process. One state change in Root. Counts are render-function calls.</text>
+
+  <!-- VUE -->
+  <rect x="24" y="42" width="318" height="188" rx="6" fill="#111c30" stroke="#4ade80"/>
+  <text x="38" y="62" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">Vue 3.5</text>
+  <text x="38" y="86" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">Root</text>
+  <text x="328" y="86" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">+1</text>
+  <text x="38" y="110" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">  Live   :text=&quot;&#39;n=&#39; + n&quot;</text>
+  <text x="328" y="110" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">+1</text>
+  <text x="38" y="134" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">  Stable text=&quot;fixed&quot;</text>
+  <text x="328" y="134" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">+0</text>
+  <text x="38" y="158" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">  Leaf   (no props)</text>
+  <text x="328" y="158" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">+0</text>
+  <text x="38" y="188" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">Re-renders when what IT read changed,</text>
+  <text x="38" y="205" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">or when a prop it was given changed.</text>
+  <text x="38" y="222" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">Where it sits in the tree: irrelevant.</text>
+
+  <!-- REACT -->
+  <rect x="358" y="42" width="318" height="188" rx="6" fill="#111c30" stroke="#22d3ee"/>
+  <text x="372" y="62" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#22d3ee">React 19.2</text>
+  <text x="372" y="86" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">Root</text>
+  <text x="662" y="86" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">+1</text>
+  <text x="372" y="110" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">  Live   text={&#39;n=&#39; + n}</text>
+  <text x="662" y="110" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">+1</text>
+  <text x="372" y="134" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">  Stable text=&quot;fixed&quot;</text>
+  <text x="662" y="134" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">+1</text>
+  <text x="372" y="158" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">  Leaf   (no props)</text>
+  <text x="662" y="158" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">+1</text>
+  <text x="372" y="182" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">  Stable + memo()</text>
+  <text x="662" y="182" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">+0</text>
+  <text x="372" y="206" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">The whole subtree below the change</text>
+  <text x="372" y="223" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#94a3b8">re-runs, unless you opt out with memo().</text>
+
+  <!-- 1000 rows -->
+  <text x="24" y="256" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">1,000-row list · prepend one row · row render-function calls</text>
+
+  <rect x="24" y="266" width="652" height="94" rx="6" fill="#0a1120" stroke="#1e293b"/>
+  <text x="38" y="286" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">Vue, :key=&quot;r.id&quot;</text>
+  <text x="300" y="286" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">1</text>
+  <text x="330" y="286" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">React + memo()</text>
+  <text x="662" y="286" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">1</text>
+  <text x="38" y="308" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">Vue, no key</text>
+  <text x="300" y="308" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">1001</text>
+  <text x="330" y="308" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">React, plain</text>
+  <text x="662" y="308" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#f43f5e">1001</text>
+  <text x="38" y="336" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">Vue&#39;s default is React-with-memo-everywhere. Forgetting :key costs exactly what</text>
+  <text x="38" y="352" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">forgetting memo() costs. Neither framework is doing anything the other cannot.</text>
+
+  <rect x="24" y="368" width="652" height="16" rx="4" fill="#0d1424"/>
+</svg>

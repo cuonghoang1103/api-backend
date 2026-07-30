@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 372" width="700" height="372" role="img" aria-label="Vue reactivity: an effect runs and every property it reads is recorded in a per-key dependency map; a write only queues the effects registered under that one key, which is why changing one property does not re-run effects that read a different property">
+  <rect width="700" height="372" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="371" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="28" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">Tracking is bookkeeping, not magic: read → record, write → look up. Both directions per KEY.</text>
+
+  <!-- step 1 -->
+  <text x="24" y="56" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">1 · RUN the effect — the proxy&#39;s get trap records every key it touches</text>
+  <rect x="24" y="64" width="300" height="82" rx="6" fill="#111c30" stroke="#22d3ee"/>
+  <text x="38" y="86" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#22d3ee">watchEffect(() =&gt; {</text>
+  <text x="38" y="105" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">  state.a          // read</text>
+  <text x="38" y="124" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">  state.nested.deep // read</text>
+  <text x="38" y="140" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#22d3ee">})</text>
+
+  <text x="336" y="110" font-family="ui-monospace, Menlo, monospace" font-size="16" fill="#64748b">→</text>
+
+  <!-- dep map -->
+  <rect x="364" y="64" width="312" height="82" rx="6" fill="#0a1120" stroke="#a78bfa"/>
+  <text x="378" y="82" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#a78bfa">dep map for this object</text>
+  <text x="378" y="103" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">&#39;a&#39;</text>
+  <text x="418" y="103" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">→ { effect }</text>
+  <text x="378" y="121" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">&#39;b&#39;</text>
+  <text x="418" y="121" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">→ { }  nobody read it</text>
+  <text x="378" y="139" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">ITERATE</text>
+  <text x="448" y="139" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">→ { }  for Object.keys</text>
+
+  <!-- step 2 -->
+  <text x="24" y="176" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#94a3b8">2 · WRITE — the set trap looks up ONE key and queues only what is in it</text>
+
+  <rect x="24" y="186" width="200" height="34" rx="5" fill="#111c30" stroke="#fcd34d"/>
+  <text x="38" y="208" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">state.a = 2</text>
+  <text x="236" y="208" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">→ 1 effect queued</text>
+
+  <rect x="24" y="226" width="200" height="34" rx="5" fill="#111c30" stroke="#fcd34d"/>
+  <text x="38" y="248" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">state.b = 2</text>
+  <text x="236" y="248" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">→ 0 effects queued</text>
+
+  <rect x="24" y="266" width="200" height="34" rx="5" fill="#111c30" stroke="#fcd34d"/>
+  <text x="38" y="288" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">state.a = 2 again</text>
+  <text x="236" y="288" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#64748b">→ 0 · hasChanged() said no</text>
+
+  <rect x="404" y="186" width="272" height="114" rx="6" fill="#0a1120" stroke="#fb923c"/>
+  <text x="418" y="206" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#fb923c">things Vue 2 could not see</text>
+  <text x="418" y="227" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">state.newKey = 1</text>
+  <text x="662" y="227" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">tracked</text>
+  <text x="418" y="246" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">delete state.newKey</text>
+  <text x="662" y="246" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">tracked</text>
+  <text x="418" y="265" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#94a3b8">arr.push(x) · arr.length = 1</text>
+  <text x="662" y="265" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#4ade80">tracked</text>
+  <text x="418" y="288" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">Map and Set get instrumented too</text>
+
+  <!-- footer -->
+  <rect x="24" y="312" width="652" height="42" rx="6" fill="#111c30" stroke="#1e293b"/>
+  <text x="38" y="330" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">reactive() is LAZY — 1,000-node tree: 0.31 ms; child proxies appear on first read</text>
+  <text x="38" y="347" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">walking that same tree up front, Vue 2 style: 5.39 ms — the trade Proxy bought</text>
+</svg>

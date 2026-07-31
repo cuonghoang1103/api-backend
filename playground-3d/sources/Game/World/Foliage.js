@@ -170,11 +170,16 @@ export class Foliage
     {
         this.transformMatrices = []
 
+        // Toạ độ từng cụm, giữ riêng ra để hệ phá huỷ tìm được cụm nào nằm
+        // trong bán kính nổ mà không phải bóc ngược ma trận.
+        this.spots = []
+
         const towardCamera = this.game.view.spherical.offset.clone().normalize()
 
         for(const _child of this.references)
         {
             const size = _child.scale.x
+            this.spots.push(_child.position.clone())
 
             const object = new THREE.Object3D()
             
@@ -209,6 +214,23 @@ export class Foliage
             matrix.toArray(this.instanceMatrix.array, i * 16)
             i++
         }
+    }
+
+    /**
+     * BẬT/TẮT MỘT CỤM LÁ. Co tỉ lệ về 0 chứ không xoá instance — xem lý do ở
+     * `Trees.setTreeEnabled()`.
+     */
+    setInstanceEnabled(index, enabled)
+    {
+        const source = this.transformMatrices[index]
+        if(!source) return
+
+        if(!this.zeroScale)
+            this.zeroScale = new THREE.Vector3(0, 0, 0)
+
+        const matrix = enabled ? source : source.clone().scale(this.zeroScale)
+        matrix.toArray(this.instanceMatrix.array, index * 16)
+        this.instanceMatrix.needsUpdate = true
     }
 
     update()

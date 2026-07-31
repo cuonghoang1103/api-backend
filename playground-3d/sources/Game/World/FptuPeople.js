@@ -270,6 +270,49 @@ export class FptuPeople
      * Nhịp đi: đùi và tay đánh ngược pha nhau, gối gập khi chân ra sau, thân
      * nhún nhẹ theo bước. Ba thứ đó là cái mắt dùng để đọc ra "đang đi bộ".
      */
+    /**
+     * NGƯỜI TRÚNG BOM — bị hất văng ra, ngã sấp rồi nằm im.
+     *
+     * Không xoá thẳng: biến mất một phát trông như lỗi hình. Ngã đổ thì đọc ra
+     * ngay là "trúng đòn", và `reset()` dựng lại được y nguyên.
+     */
+    killAround(x, z, radius)
+    {
+        let killed = 0
+
+        for(const p of this.people)
+        {
+            if(p.dead) continue
+            if(Math.hypot(p.root.position.x - x, p.root.position.z - z) > radius) continue
+
+            p.dead = true
+            p.deathAge = 0
+            p.deathHome = { x: p.root.position.x, y: p.root.position.y, z: p.root.position.z, rotY: p.root.rotation.y }
+
+            const away = Math.atan2(p.root.position.x - x, p.root.position.z - z)
+            p.deathDriftX = Math.sin(away) * (1.4 + Math.random() * 2.2)
+            p.deathDriftZ = Math.cos(away) * (1.4 + Math.random() * 2.2)
+            p.deathSpin = (Math.random() - 0.5) * 3
+            killed++
+        }
+
+        return killed
+    }
+
+    /** Dựng lại tất cả — nút Reset của hệ phá huỷ gọi vào đây. */
+    revive()
+    {
+        for(const p of this.people)
+        {
+            if(!p.dead) continue
+
+            p.dead = false
+            p.root.position.set(p.deathHome.x, p.deathHome.y, p.deathHome.z)
+            p.root.rotation.set(0, p.deathHome.rotY, 0)
+            p.root.visible = true
+        }
+    }
+
     update()
     {
         const delta = Math.min(this.game.ticker.delta, 0.1)
@@ -278,6 +321,29 @@ export class FptuPeople
 
         for(const p of this.people)
         {
+            /**
+             * ── Người đã chết: ngã đổ, KHÔNG chạy tiếp phần đi đứng ─────────
+             * Bỏ sót nhánh này thì người chết vẫn tung tăng bước, chỉ nằm
+             * nghiêng — hệt một lỗi hình.
+             */
+            if(p.dead)
+            {
+                p.deathAge += delta
+
+                const fall = Math.min(1, p.deathAge / 0.7)
+                const drift = 1 - fall
+                p.root.position.x += p.deathDriftX * delta * drift
+                p.root.position.z += p.deathDriftZ * delta * drift
+
+                // Ngã sấp: xoay quanh trục X cho tới khi nằm ngang, kèm chút
+                // xoay ngang cho khỏi ngã đều tăm tắp như đồ hộp
+                p.root.rotation.x = fall * Math.PI * 0.5
+                p.root.rotation.y = p.deathHome.rotY + p.deathSpin * fall
+                p.root.position.y = p.deathHome.y + Math.sin(fall * Math.PI) * 0.35 - fall * 0.12
+
+                continue
+            }
+
             if(p.mode !== 'walk') continue
 
             p.phase += delta * p.speed * 5.2

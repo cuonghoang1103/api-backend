@@ -115,9 +115,58 @@ export class FptuSwans
                 wanderTimer: 1 + i * 0.6,
             }
 
+            // Chỗ đứng ban đầu, để `revive()` trả đúng con về đúng nơi
+            swan.home = { x: swan.x, z: swan.z, heading: swan.heading }
+
             group.position.set(swan.x, this.waterY, swan.z)
             this.group.add(group)
             this.swans.push(swan)
+        }
+    }
+
+    /**
+     * GIẾT những con nằm trong bán kính nổ.
+     *
+     * Chết thì lật ngửa và chìm dần — không xoá ngay, vì biến mất một phát
+     * trông như lỗi hình chứ không như bị bắn trúng.
+     */
+    killAround(x, z, radius)
+    {
+        let killed = 0
+
+        for(const swan of this.swans)
+        {
+            if(swan.dead) continue
+            if(Math.hypot(swan.x - x, swan.z - z) > radius) continue
+
+            swan.dead = true
+            swan.deathAge = 0
+            // Bị hất văng ra xa tâm nổ một chút trước khi chìm
+            const away = Math.atan2(swan.x - x, swan.z - z)
+            swan.deathDriftX = Math.sin(away) * 1.6
+            swan.deathDriftZ = Math.cos(away) * 1.6
+            killed++
+        }
+
+        return killed
+    }
+
+    /** Trả cả đàn về nguyên trạng — nút Reset của hệ phá huỷ gọi vào đây. */
+    revive()
+    {
+        for(const swan of this.swans)
+        {
+            if(!swan.dead) continue
+
+            swan.dead = false
+            swan.x = swan.home.x
+            swan.z = swan.home.z
+            swan.heading = swan.home.heading
+            swan.target = swan.home.heading
+            swan.speed = CRUISE_SPEED
+            swan.group.visible = true
+            swan.group.rotation.set(0, swan.heading, 0)
+            swan.group.position.set(swan.x, this.waterY, swan.z)
         }
     }
 
@@ -130,6 +179,28 @@ export class FptuSwans
 
         for(const swan of this.swans)
         {
+            /**
+             * ── Con đã chết: lật ngửa rồi chìm, KHÔNG chạy tiếp phần AI ─────
+             *
+             * Bỏ sót nhánh này thì con chết vẫn bơi lượn như thường — chỉ nằm
+             * nghiêng, trông hệt một lỗi hình.
+             */
+            if(swan.dead)
+            {
+                swan.deathAge += delta
+
+                const sinking = Math.min(1, swan.deathAge / 2.6)
+                swan.x += swan.deathDriftX * delta * (1 - sinking)
+                swan.z += swan.deathDriftZ * delta * (1 - sinking)
+
+                swan.group.position.set(swan.x, this.waterY - sinking * 1.1, swan.z)
+                swan.group.rotation.z = Math.min(Math.PI, sinking * Math.PI * 1.1)
+                swan.group.rotation.y = swan.heading + sinking * 1.4
+
+                if(sinking >= 1) swan.group.visible = false
+                continue
+            }
+
             // ── Thấy xe thì quay đầu bỏ chạy ────────────────────────────────
             let fleeing = false
 

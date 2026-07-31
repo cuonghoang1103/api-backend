@@ -10,6 +10,7 @@ import { FptuProps } from './FptuProps.js'
 import { FptuPeople } from './FptuPeople.js'
 import { FptuLights } from './FptuLights.js'
 import { FptuSigns } from './FptuSigns.js'
+import { FptuDestruction } from './FptuDestruction.js'
 import { Trees } from './Trees.js'
 import { Foliage } from './Foliage.js'
 import { uniform } from 'three/tsl'
@@ -100,6 +101,15 @@ export class FptuCampus
          */
         this.canopySpots = []
 
+        /**
+         * Sổ đăng ký mảnh phá huỷ — `box()` tự nhét vào đây.
+         *
+         * ⚠️ Phải khai TRƯỚC `setIsland()`: `box()` chỉ ghi sổ khi mảng này đã
+         * tồn tại, khai muộn một dòng là mất trọn phần khu dựng trước đó mà
+         * KHÔNG có lỗi nào — chỉ là bắn vào mấy thứ đó thì không suy suyển gì.
+         */
+        this.destructibles = []
+
         // Dời chướng ngại vật của bản mẫu ra khỏi lối vào trường. Hoãn sang
         // nhịp sau vì `Objects` dựng thân vật lý LƯỜI — trong hàm dựng nó chưa có.
         this.game.ticker.wait(2, () => this.relocateSampleObstacles())
@@ -153,6 +163,13 @@ export class FptuCampus
         this.quiz = new FptuQuiz()
         this.setGateZone()
         this.setQuestionBlocks()
+
+        /**
+         * HỆ PHÁ HUỶ — dựng SAU CÙNG, khi sổ đăng ký đã đầy và mọi cây, cụm lá,
+         * đàn thiên nga đều đã có mặt. Nó chỉ ĐỌC lại những thứ đó, không dựng
+         * thêm hình nào, nên không đẻ ra va chạm mới.
+         */
+        this.destruction = new FptuDestruction(this)
     }
 
     /**
@@ -234,7 +251,7 @@ export class FptuCampus
         return material
     }
 
-    box(width, height, depth, x, y, z, hex, { rotationX = 0, rotationY = 0, rotationZ = 0, physical = false, geometry = null, castShadow = true, receiveShadow = true } = {})
+    box(width, height, depth, x, y, z, hex, { rotationX = 0, rotationY = 0, rotationZ = 0, physical = false, geometry = null, castShadow = true, receiveShadow = true, destructible = null } = {})
     {
         const mesh = new THREE.Mesh(geometry ?? this.boxGeometry, this.getMaterial(hex))
         mesh.scale.set(width, height, depth)
@@ -247,13 +264,21 @@ export class FptuCampus
         mesh.receiveShadow = receiveShadow
         this.group.add(mesh)
 
+        let object = null
+
         if(physical)
         {
             // Lấy quaternion từ ĐÚNG bộ Euler của hình. Bản trước chỉ dựng từ
             // mỗi rotationY nên khối nào nghiêng là hình một đằng va chạm một nẻo.
             const quaternion = new THREE.Quaternion().setFromEuler(new THREE.Euler(rotationX, rotationY, rotationZ, 'YZX'))
 
-            this.game.objects.add(
+            /**
+             * ⚠️ PHẢI GIỮ giá trị trả về. `objects.add()` trả về chính cái
+             * object mang `physical.body` — không giữ thì sau này không còn
+             * đường nào tắt va chạm của khối đã vỡ, và mảnh vỡ bay đi rồi mà
+             * xe vẫn đâm vào tường vô hình.
+             */
+            object = this.game.objects.add(
                 null,
                 {
                     type: 'fixed',
@@ -263,6 +288,28 @@ export class FptuCampus
                 }
             )
         }
+
+        /**
+         * SỔ ĐĂNG KÝ MẢNH PHÁ HUỶ.
+         *
+         * `box()` là cửa duy nhất mọi khối của khu trường đi qua (tường, mái,
+         * đố cửa, cổng, cột đèn, ghế, biển…) nên nhét sổ đăng ký vào đây là bắt
+         * TRỌN, khỏi phải kê khai tay từng thứ — kê tay thì bắn vào thứ quên
+         * khai là nó đứng trơ ra giữa đống đổ nát.
+         *
+         * ⚠️ Loại trừ MẶT ĐẤT ĐI ĐƯỢC. Quy tắc: khối nào có NÓC nằm dưới 0,5
+         * thì không phá. Nó gạt đúng những thứ mà thủng một cái là xe rơi hoặc
+         * kẹt: tấm lát của `slab()` (nóc 0,11), mặt cầu (nóc 0,09), bậc sảnh
+         * cổng (nóc 0,34), vạch kẻ đường. Còn hàng rào (nóc 0,79) trở lên thì
+         * phá thoải mái. `destructible` truyền tay vẫn thắng quy tắc này.
+         */
+        if(this.destructibles && (destructible ?? (y + height * 0.5 > 0.5)))
+            this.destructibles.push({ mesh, object })
+        else
+            // Dấu "ĐỪNG PHÁ" cho lượt quét vét của `FptuDestruction`: lượt đó
+            // gom mọi mesh dựng thẳng không qua `box()` (biển vẽ canvas, thông
+            // trên đồi), và nếu không có dấu này nó sẽ gom nhầm cả tấm lát.
+            mesh.userData.fptuGround = true
 
         return mesh
     }
@@ -312,7 +359,9 @@ export class FptuCampus
          * nhau hơn. Cho tấm một thân vật lý là xe đứng ĐÚNG trên mặt sân, và
          * mép sân thành cái bó vỉa cao 1–3 phân — xe leo qua không thấy gì.
          */
-        return this.box(width, 0.04, depth, x, y, z, hex, { castShadow: false, receiveShadow: false, physical: true })
+        // `destructible: false` — tấm lát LÀ mặt xe chạy. Thủng một tấm là xe
+        // rơi tụt xuống mặt đảo bên dưới hoặc kẹt ở mép hố.
+        return this.box(width, 0.04, depth, x, y, z, hex, { castShadow: false, receiveShadow: false, physical: true, destructible: false })
     }
 
     /**
@@ -386,6 +435,8 @@ export class FptuCampus
         mesh.position.set(cx, 0, cz)
         mesh.receiveShadow = true
         mesh.castShadow = false
+        // ĐẤT — không bao giờ được phá. Phá nền đảo thì không còn đảo.
+        mesh.userData.fptuGround = true
         this.group.add(mesh)
 
         const nx = cols + 1
@@ -1402,6 +1453,11 @@ export class FptuCampus
 
                 this.group.add(group)
                 this.sign = group
+
+                // Hàng chữ nạp BẤT ĐỒNG BỘ nên nó vào sau khi sổ đăng ký đã
+                // chốt — phải tự khai lấy, không thì bắn sập cả bệ mà chữ vẫn
+                // lơ lửng giữa trời.
+                this.destruction?.register(group)
             },
             undefined,
             () => { console.warn('[FPTU] không nạp được fptu/sign.glb — khu trường vẫn chạy, chỉ thiếu hàng chữ') }

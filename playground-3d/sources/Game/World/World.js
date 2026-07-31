@@ -30,6 +30,7 @@ import { Fences } from './Fences.js'
 import { Benches } from './Benches.js'
 import { Scenery } from './Scenery.js'
 import { FptuCampus } from './FptuCampus.js'
+import { VehicleRocket } from './VehicleRocket.js'
 
 export class World
 {
@@ -81,6 +82,10 @@ export class World
             this.lanterns = new Lanterns()
             this.scenery = new Scenery()
             this.fptuCampus = new FptuCampus()
+
+            // Pháo tên lửa trên nóc xe. Dựng SAU `visualVehicle` vì nó gắn khẩu
+            // pháo vào chính thân xe (`parts.chassis`).
+            this.vehicleRocket = new VehicleRocket()
             this.areas = new Areas()
         }
         else if(step === 2)

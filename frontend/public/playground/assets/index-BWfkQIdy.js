@@ -97006,16 +97006,28 @@ https://github.com/browserify/crypto-browserify`);
       for (const r of e.drops) this.game.scene.remove(r.mesh);
     }
     reset() {
-      var _a2, _b, _c, _d, _e;
-      for (const e of this.pieces) e.broken && (e.mesh.position.copy(e.home.position), e.mesh.quaternion.copy(e.home.quaternion), e.mesh.scale.copy(e.home.scale), e.mesh.visible = e.home.visible, (_c = (_b = (_a2 = e.object) == null ? void 0 : _a2.physical) == null ? void 0 : _b.body) == null ? void 0 : _c.setEnabled(true), e.broken = false, e.state = null);
-      for (const e of this.deadTrees) e.set.setTreeEnabled(e.index, true), e.alive = true;
+      var _a2, _b, _c, _d;
+      const e = [];
+      for (const r of this.pieces) {
+        if (!r.broken) continue;
+        r.mesh.position.copy(r.home.position), r.mesh.quaternion.copy(r.home.quaternion), r.mesh.scale.copy(r.home.scale), r.mesh.visible = r.home.visible;
+        const s = (_b = (_a2 = r.object) == null ? void 0 : _a2.physical) == null ? void 0 : _b.body;
+        s && e.push(s), r.broken = false, r.state = null;
+      }
+      e.length && this.game.ticker.wait(1, () => {
+        for (const r of e) try {
+          r.setEnabled(true);
+        } catch {
+        }
+      });
+      for (const r of this.deadTrees) r.set.setTreeEnabled(r.index, true), r.alive = true;
       this.deadTrees.length = 0;
-      for (const e of this.hiddenClusters) e.foliage.setInstanceEnabled(e.index, true), e.alive = true;
+      for (const r of this.hiddenClusters) r.foliage.setInstanceEnabled(r.index, true), r.alive = true;
       this.hiddenClusters.length = 0;
-      for (const e of this.shards) this.game.scene.remove(e.mesh);
+      for (const r of this.shards) this.game.scene.remove(r.mesh);
       this.shards.length = 0;
-      for (const e of this.splashes) this.disposeSplash(e);
-      this.splashes.length = 0, (_d = this.campus.swans) == null ? void 0 : _d.revive(), (_e = this.campus.people) == null ? void 0 : _e.revive();
+      for (const r of this.splashes) this.disposeSplash(r);
+      this.splashes.length = 0, (_c = this.campus.swans) == null ? void 0 : _c.revive(), (_d = this.campus.people) == null ? void 0 : _d.revive();
     }
     setSettingsButtons() {
       const e = document.querySelector(".js-destruction-modes");
@@ -98015,11 +98027,11 @@ https://github.com/browserify/crypto-browserify`);
       speed: 34,
       bodyScale: 1.5,
       apex: 26,
-      orbitRadius: 5,
+      orbitRadius: 9,
       boost: 0.6,
       orbit: 2.5,
       dive: 0.75,
-      turns: 1.25,
+      turns: 1,
       fireRadius: 9,
       blastRadius: 12,
       shockRadius: 18,
@@ -98028,7 +98040,7 @@ https://github.com/browserify/crypto-browserify`);
       damagePower: 5,
       blastScale: 2.2
     }
-  };
+  }, CAMERA_LEAD = 0.3;
   class VehicleRocket {
     constructor() {
       this.game = Game.getInstance(), this.events = new Events(), this.enabled = false, this.rockets = [], this.blasts = [], this.launchKick = 0, this.aim = new Vector3$1(), this.hasAim = false, this.raycaster = new Raycaster(), this.groundPlane = new Plane(new Vector3$1(0, 1, 0), 0), this.ndc = new Vector2$1(), this.materials = /* @__PURE__ */ new Map(), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1, 10), this.coneGeometry = new ConeGeometry(0.5, 1, 10), this.sphereGeometry = new SphereGeometry(0.5, 10, 8), this.setPreference(), this.setWeaponPreference(), this.setCannon(), this.setMarker(), this.setSounds(), this.setAction(), this.setSettingsButtons(), this.apply(), this.game.ticker.events.on("tick", () => this.update(), 11), this.game.ticker.events.on("tick", () => this.updateCameraFollow(), 6);
@@ -98538,12 +98550,17 @@ https://github.com/browserify/crypto-browserify`);
       for (const a of this.rockets) a.isMissile && (r = a);
       const s = Math.min(this.game.ticker.delta, 0.1);
       if (r) {
-        r.time > r.boost * 0.6 && (this.followRatio = Math.min(1, (this.followRatio ?? 0) + s * 1.5)), e.zoom.override = 0.24;
-        const h = this.cameraTargetFor(r);
-        if (!this.followTarget) this.followTarget = h;
-        else {
-          const c = Math.min(1, s * 5);
-          this.followTarget.x += (h.x - this.followTarget.x) * c, this.followTarget.z += (h.z - this.followTarget.z) * c;
+        this.followRatio = Math.min(1, (this.followRatio ?? 0) + s * 2.2), e.zoom.override = 0.24;
+        const a = this.cameraTargetFor(r);
+        if (this.followTarget) {
+          const h = Math.min(1, s * 5);
+          this.followTarget.x += (a.x - this.followTarget.x) * h, this.followTarget.z += (a.z - this.followTarget.z) * h;
+        } else {
+          const h = e.focusPoint.trackedPosition;
+          this.followTarget = {
+            x: h.x,
+            z: h.z
+          };
         }
       } else if (this.followRatio = Math.max(0, (this.followRatio ?? 0) - s * 1.2), this.followRatio <= 0) {
         this.followTarget = null, e.zoom.override = null;
@@ -98554,15 +98571,15 @@ https://github.com/browserify/crypto-browserify`);
       o.x += (this.followTarget.x - o.x) * this.followRatio, o.z += (this.followTarget.z - o.z) * this.followRatio;
     }
     cameraTargetFor(e) {
-      const r = e.to, s = e.apexY * 0.85, o = this.game.view.spherical.offset;
-      if (!o || Math.abs(o.y) < 1e-3) return {
+      const r = this.positionAt(e, e.time + CAMERA_LEAD), s = this.game.view.spherical.offset;
+      if (!s || Math.abs(s.y) < 1e-3) return {
         x: r.x,
         z: r.z
       };
-      const a = Math.min(0.85, s / o.y);
+      const o = Math.min(0.85, r.y / s.y);
       return {
-        x: r.x - o.x * a,
-        z: r.z - o.z * a
+        x: r.x - s.x * o,
+        z: r.z - s.z * o
       };
     }
   }
@@ -103022,7 +103039,7 @@ https://github.com/browserify/crypto-browserify`);
           }
         }));
         const o = () => {
-          !this.game.dayCycles.intervalEvents.get("night").inInterval && Math.random() < 0.5 && s[Math.floor(Math.random() * s.length)].play(), gsapWithCSS.delayedCall(0.5 + Math.random() * 5, o);
+          !this.game.dayCycles.isNight() && Math.random() < 0.5 && s[Math.floor(Math.random() * s.length)].play(), gsapWithCSS.delayedCall(0.5 + Math.random() * 5, o);
         };
         o();
       }
@@ -103038,7 +103055,7 @@ https://github.com/browserify/crypto-browserify`);
             o.volume = 0.2 + Math.random() * 0.25, o.rate = 1 + Math.random() * 0.3, o.positions[0].copy(e());
           }
         }), s = () => {
-          this.game.dayCycles.intervalEvents.get("night").inInterval && Math.random() < 0.5 && r.play(), gsapWithCSS.delayedCall(30 + Math.random() * 60, s);
+          this.game.dayCycles.isNight() && Math.random() < 0.5 && r.play(), gsapWithCSS.delayedCall(30 + Math.random() * 60, s);
         };
         gsapWithCSS.delayedCall(30 + Math.random() * 60, s);
       }
@@ -103050,12 +103067,14 @@ https://github.com/browserify/crypto-browserify`);
           loop: false,
           volume: 0.1,
           positions: new Vector3$1(),
-          onPlay: (s) => {
-            s.volume = 0.1 + Math.random() * 0.2, s.positions[0].copy(e());
+          onPlay: (o) => {
+            o.volume = 0.1 + Math.random() * 0.2, o.positions[0].copy(e());
           }
         });
-        this.game.dayCycles.events.on("night", (s) => {
-          s || r.play();
+        let s = this.game.dayCycles.isNight();
+        this.game.ticker.events.on("tick", () => {
+          const o = this.game.dayCycles.isNight();
+          s && !o && r.play(), s = o;
         });
       }
       {
@@ -103066,31 +103085,27 @@ https://github.com/browserify/crypto-browserify`);
           loop: false,
           volume: 0.1,
           positions: new Vector3$1(),
-          onPlay: (s) => {
-            s.volume = 0.1 + Math.random() * 0.2, s.positions[0].copy(e());
+          onPlay: (o) => {
+            o.volume = 0.1 + Math.random() * 0.2, o.positions[0].copy(e());
           }
         });
-        this.game.dayCycles.events.on("deepNight", (s) => {
-          s && r.play();
-        });
-      }
-      {
-        const r = this.register({
-          group: "crickets",
-          path: "sounds/crickets/Crickets.mp3",
-          autoplay: true,
-          loop: true,
-          volume: this.game.dayCycles.intervalEvents.get("night").inInterval ? 0.65 : 0
-        });
-        this.game.dayCycles.events.on("night", (s) => {
-          gsapWithCSS.to(r, {
-            volume: s ? 0.65 : 0,
-            duration: 15,
-            overwrite: true
-          });
+        let s = this.game.dayCycles.isNight();
+        this.game.ticker.events.on("tick", () => {
+          const o = this.game.dayCycles.isNight();
+          !s && o && gsapWithCSS.delayedCall(8 + Math.random() * 17, () => r.play()), s = o;
         });
       }
       this.register({
+        group: "crickets",
+        path: "sounds/crickets/Crickets.mp3",
+        autoplay: true,
+        loop: true,
+        volume: this.game.dayCycles.isNight() ? 0.65 : 0,
+        onPlaying: (r) => {
+          const s = this.game.dayCycles.isNight() ? 0.65 : 0;
+          r.volume += (s - r.volume) * Math.min(1, this.game.ticker.delta / 5);
+        }
+      }), this.register({
         group: "jingleBells",
         path: "sounds/jingleBells/Mountain Audio - Christmas Bells.mp3",
         autoplay: true,
@@ -112685,7 +112700,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-Big8kR1G.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-CGAa3Can.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

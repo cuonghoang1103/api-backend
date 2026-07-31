@@ -706,6 +706,23 @@ export class FptuDestruction
      */
     reset()
     {
+        /**
+         * ⚠️ BẬT LẠI VA CHẠM PHẢI HOÃN SANG NHỊP SAU.
+         *
+         * `body.setEnabled()` đi thẳng vào wasm của Rapier, và gọi nó trong lúc
+         * Rapier còn đang giữ một tham chiếu vào chính bộ thân đó thì nó ném
+         * "recursive use of an object detected which would lead to unsafe
+         * aliasing in rust" — bắt được ngày 1/8 khi bộ kiểm gọi `reset()` xen
+         * vào giữa vòng lặp vật lý. Ném ở đây là hỏng NỬA CHỪNG: phần khối đã
+         * duyệt thì sống lại, phần còn lại kẹt ở trạng thái vỡ mà hình thì đã
+         * dựng lại — tức là "vật vô hình chặn xe", đúng thứ tệ nhất.
+         *
+         * Gom hết vào một mảng rồi bật ở nhịp sau qua `ticker.wait(1)` thì chắc
+         * chắn đứng ngoài mọi vòng lặp của Rapier. Phần HÌNH vẫn dựng lại ngay
+         * nên mắt không thấy độ trễ một nhịp.
+         */
+        const bodiesToEnable = []
+
         for(const piece of this.pieces)
         {
             if(!piece.broken) continue
@@ -714,10 +731,23 @@ export class FptuDestruction
             piece.mesh.quaternion.copy(piece.home.quaternion)
             piece.mesh.scale.copy(piece.home.scale)
             piece.mesh.visible = piece.home.visible
-            piece.object?.physical?.body?.setEnabled(true)
+
+            const body = piece.object?.physical?.body
+            if(body) bodiesToEnable.push(body)
+
             piece.broken = false
             piece.state = null
         }
+
+        if(bodiesToEnable.length)
+            this.game.ticker.wait(1, () =>
+            {
+                for(const body of bodiesToEnable)
+                {
+                    try { body.setEnabled(true) }
+                    catch(error) { /* thân đã bị dọn — bỏ qua, đừng để chết cả vòng */ }
+                }
+            })
 
         for(const tree of this.deadTrees)
         {

@@ -456,8 +456,18 @@ export class Audio
 
             const tryPlay = () =>
             {
-                // Chance to trigger
-                if(!this.game.dayCycles.intervalEvents.get('night').inInterval && Math.random() < 0.5)
+                /**
+                 * ⚠️ `isNight()` chứ KHÔNG phải `intervalEvents.get('night')`.
+                 *
+                 * Cờ interval được kiểm bằng tiến trình TỰ NHIÊN của đồng hồ,
+                 * TRƯỚC khi `override.progress` được áp — nên khi người chơi ép
+                 * Time → Night trong Cài đặt thì cảnh tối thui mà cờ vẫn báo
+                 * "ban ngày". Hậu quả: chim hót suốt đêm, cú không bao giờ kêu,
+                 * dế nằm im ở âm lượng 0. User báo đúng chỗ này ngày 1/8.
+                 * `DayCycles.isNight()` đọc `progress` cuối cùng nên đúng cho
+                 * cả chu kỳ tự nhiên lẫn khi bị ép giờ.
+                 */
+                if(!this.game.dayCycles.isNight() && Math.random() < 0.5)
                 {
                     const sound = tweets[Math.floor(Math.random() * tweets.length)]
                     sound.play()
@@ -488,8 +498,8 @@ export class Audio
 
             const tryPlay = () =>
             {
-                // Chance to trigger
-                if(this.game.dayCycles.intervalEvents.get('night').inInterval && Math.random() < 0.5)
+                // `isNight()`, KHÔNG phải cờ interval — xem chú thích ở tiếng chim
+                if(this.game.dayCycles.isNight() && Math.random() < 0.5)
                 {
                     sound.play()
                 }
@@ -516,10 +526,18 @@ export class Audio
                 }
             })
 
-            this.game.dayCycles.events.on('night', (inInterval) =>
+            /**
+             * Gáy lúc TRỜI SÁNG — dò lằn ranh của `isNight()` thay vì nghe sự
+             * kiện `night` của chu kỳ tự nhiên. Sự kiện đó không phát khi người
+             * chơi ép giờ trong Cài đặt, nên chuyển Night → Day mãi không có
+             * tiếng gà nào. `onPlaying` chạy mỗi nhịp nên bắt được cả hai đường.
+             */
+            let wasNight = this.game.dayCycles.isNight()
+            this.game.ticker.events.on('tick', () =>
             {
-                if(!inInterval)
-                    sound.play()
+                const night = this.game.dayCycles.isNight()
+                if(wasNight && !night) sound.play()
+                wasNight = night
             })
         }
 
@@ -539,26 +557,52 @@ export class Audio
                 }
             })
 
-            this.game.dayCycles.events.on('deepNight', (inInterval) =>
+            /**
+             * Hú lúc TRỜI TỐI — cùng lý do với tiếng gà: sự kiện `deepNight`
+             * chỉ phát theo chu kỳ tự nhiên, ép giờ thì im.
+             *
+             * Hoãn 8–25 giây sau khi tối để nó rơi vào giữa đêm chứ không hú
+             * đúng lúc chạng vạng — giữ lại cái ý "đêm sâu" của bản gốc.
+             */
+            let wasNight = this.game.dayCycles.isNight()
+            this.game.ticker.events.on('tick', () =>
             {
-                if(inInterval)
-                    sound.play()
+                const night = this.game.dayCycles.isNight()
+                if(!wasNight && night)
+                    gsap.delayedCall(8 + Math.random() * 17, () => sound.play())
+                wasNight = night
             })
         }
 
         // Crickets
         {
-            const sound = this.register({
+            /**
+             * Âm lượng bám `isNight()` MỖI NHỊP, không nghe sự kiện nữa.
+             *
+             * Bản gốc chỉ nghe `dayCycles.events.on('night')` — sự kiện đó chỉ
+             * phát khi chu kỳ TỰ NHIÊN chuyển giao, nên ép Time → Night trong
+             * Cài đặt là dế nằm im ở âm lượng 0 giữa đêm đen. Hỏi mỗi nhịp thì
+             * đúng cho cả hai đường, và vẫn chuyển êm vì tự tiến dần chứ không
+             * nhảy phát một (dùng luôn cách này thay `gsap.to`, khỏi phải huỷ
+             * tween khi người chơi đổi giờ liên tục).
+             */
+            this.register({
                 group: 'crickets',
-                    path: 'sounds/crickets/Crickets.mp3',
+                path: 'sounds/crickets/Crickets.mp3',
                 autoplay: true,
                 loop: true,
-                volume: this.game.dayCycles.intervalEvents.get('night').inInterval ? 0.65 : 0
-            })
-
-            this.game.dayCycles.events.on('night', (inInterval) =>
-            {
-                gsap.to(sound, { volume: inInterval ? 0.65 : 0, duration: 15, overwrite: true })
+                volume: this.game.dayCycles.isNight() ? 0.65 : 0,
+                onPlaying: (item) =>
+                {
+                    const target = this.game.dayCycles.isNight() ? 0.65 : 0
+                    /**
+                     * Hằng số thời gian 5 giây ⇒ chuyển xong ~95% sau 15 giây,
+                     * đúng bằng độ dài tween `gsap` của bản gốc. Để 15 ở đây là
+                     * NHẦM: đó là hằng số thời gian chứ không phải tổng thời
+                     * gian, đo ra dế vẫn kêu 0,64 giữa ban ngày.
+                     */
+                    item.volume += (target - item.volume) * Math.min(1, this.game.ticker.delta / 5)
+                }
             })
         }
 

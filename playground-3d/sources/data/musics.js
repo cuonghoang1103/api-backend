@@ -31,7 +31,7 @@
  *    đặt tự ẩn, jukebox tự tắt nút "Change song". Mọi hiệu ứng âm thanh khác
  *    không liên quan gì tới file này.
  *
- * ⚠️ Nhạc là nhóm file NẶNG nhất trong gói (5 bài hiện tại ~22MB). Chúng
+ * ⚠️ Nhạc là nhóm file NẶNG nhất trong gói (12 bài). Chúng
  *    `preload: false` nên KHÔNG tải lúc mở trang — chỉ tải đúng bài đang phát.
  *    Nhưng vẫn nằm trong image Docker, nên đừng thêm vô tội vạ.
  * ─────────────────────────────────────────────────────────────────────────────
@@ -42,4 +42,11 @@ export default [
     { path: 'sounds/musics/CuongThai3.mp3', name: 'Beat 3' },
     { path: 'sounds/musics/CuongThai4.mp3', name: 'Beat 4' },
     { path: 'sounds/musics/CuongThai5.mp3', name: 'Beat 5' },
+    { path: 'sounds/musics/CuongThai7.mp3', name: 'Beat 7' },
+    { path: 'sounds/musics/CuongThai8.mp3', name: 'Beat 8' },
+    { path: 'sounds/musics/CuongThai9.mp3', name: 'Beat 9' },
+    { path: 'sounds/musics/CuongThai10.mp3', name: 'Beat 10' },
+    { path: 'sounds/musics/CuongThai11.mp3', name: 'Beat 11' },
+    { path: 'sounds/musics/CuongThai12.mp3', name: 'Beat 12' },
+    { path: 'sounds/musics/CuongThai13.mp3', name: 'Beat 13' },
 ]

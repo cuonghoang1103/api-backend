@@ -219,7 +219,9 @@ export class FptuSigns
 
         // Mũ tường + chân bệ
         this.box(wallW + 0.3, 0.22, wallD + 0.3, x, this.y + wallH + 0.11, z, '#8d7f68')
-        this.box(wallW + 0.4, 0.3, wallD + 0.4, x, this.y + 0.15, z, '#7c6f5a')
+        // Mặt trên bệ 0,42 — KHÔNG để 0,34, vì đó đúng bằng mặt bậc sảnh và hai
+        // mặt trùng nhau sinh nhiễu (bộ kiểm bắt được cặp 26×20 vs 1,9×7,8)
+        this.box(wallW + 0.4, 0.46, wallD + 0.4, x, this.y + 0.19, z, '#7c6f5a')
 
         // Tấm biển: khung viền + mặt vẽ
         const boardH = height

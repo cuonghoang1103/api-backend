@@ -191,9 +191,19 @@ export class FptuCampus
             const body = object?.physical?.body
             if(!mesh || !NAMES.test(mesh.name || '')) continue
 
-            // Chỉ dời cái đang nằm trong hành lang vào trường
-            const t = body ? body.translation() : mesh.position
-            if(t.x <= -95 || t.x >= -55 || t.z <= 5 || t.z >= 75) continue
+            /**
+             * Xét CẢ vị trí thân LẪN vị trí hình.
+             *
+             * Cụm này thật ra là HAI vật rời: `blocks` giữ phần HÌNH (ở −77,5 ·
+             * 31,1) còn `bumpers001` giữ phần VA CHẠM (thân ở −80,9 · 41). Bản
+             * trước chỉ xét thân nên dời được va chạm mà bỏ lại hình — bộ kiểm
+             * `check-ghost-colliders.mjs` bắt được 6 va chạm mồ côi ở chỗ mới.
+             */
+            const bt = body ? body.translation() : null
+            const inCorridor = (x, z) => x > -95 && x < -55 && z > 5 && z < 75
+            const hit = (bt && inCorridor(bt.x, bt.z)) || inCorridor(mesh.position.x, mesh.position.z)
+            if(!hit) continue
+            const t = bt ?? mesh.position
 
             if(body)
                 body.setTranslation({ x: t.x + OFFSET.x, y: t.y, z: t.z + OFFSET.z }, true)
@@ -676,8 +686,10 @@ export class FptuCampus
                 this.slab(2.2, 0.2, roadFrom - 4 - i * (roadLen / 9), gz, '#e8e4da', { layer: 2 })
         }
 
-        // Nhánh nối dọc trong sân trước, đi qua trước cửa sảnh Alpha
-        this.slab(gateHalf * 2, gates[1] - gates[0] + gateHalf * 2, roadTo, plaza.z, COLORS.road, { layer: 1 })
+        // Nhánh nối dọc trong sân trước. Lớp 2 chứ KHÔNG phải 1: nó cắt ngang
+        // hai đường vào (cùng lớp 1) nên để chung lớp là hai mặt trùng cao độ
+        // đúng chỗ giao nhau — bộ kiểm bắt được, ra vệt nhiễu.
+        this.slab(gateHalf * 2, gates[1] - gates[0] + gateHalf * 2, roadTo, plaza.z, COLORS.road, { layer: 2 })
     }
 
     /** Mặt đường, sảnh, thảm cỏ, sân trước — toàn bộ phần lát nền. */
@@ -969,6 +981,7 @@ export class FptuCampus
         ]
 
         let seed = 0
+        let padIndex = 0
         const rand = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff }
 
         for(const cluster of clusters)
@@ -990,8 +1003,24 @@ export class FptuCampus
                 const z = LAKE.z + nz * LAKE.radiusZ
                 const size = 0.85 + rand() * 0.75
 
-                // Lá sen — tấm tròn dẹt nổi sát mặt nước
-                this.box(size, 0.05, size, x, waterY + 0.025, z, i % 3 === 0 ? '#3f8f4a' : '#4f9e4a', { castShadow: false, geometry: this.cylinderGeometry })
+                /**
+                 * Lá sen — tấm tròn dẹt nổi sát mặt nước.
+                 *
+                 * Cao độ phải NHÍCH theo từng lá. Sen rải dày nên lá nào cũng
+                 * chạm lá bên cạnh; để chung một cao độ là hàng chục cặp mặt
+                 * tranh nhau chiều sâu, mặt hồ lấm tấm nhiễu.
+                 * `check-ghost-colliders.mjs` bắt được 17 cặp như vậy.
+                 */
+                /**
+                 * 13 MỨC cao độ cách nhau 0,009, xoay vòng theo thứ tự đặt lá.
+                 *
+                 * Hai đầu đều sai: băm theo `i` thì lá cạnh nhau vẫn trúng cùng
+                 * mức; còn đếm tăng dần với bước 0,0007 thì lá liền kề chỉ cách
+                 * nhau 0,0007 — vẫn là hai mặt gần trùng. Xoay vòng thì lá liền
+                 * kề luôn khác mức, mà tổng chênh chỉ 0,117 nên mắt không thấy.
+                 */
+                const lift = ((padIndex++) % 13) * 0.009
+                this.box(size, 0.05, size, x, waterY + 0.025 + lift, z, i % 3 === 0 ? '#3f8f4a' : '#4f9e4a', { castShadow: false, geometry: this.cylinderGeometry })
             }
         }
 
@@ -1044,18 +1073,21 @@ export class FptuCampus
             [ 0.28, 0.64 ], [ -0.38, 0.62 ], [ -0.68, 0.28 ], [ -0.32, -0.68 ],
         ]
 
-        for(const [ nx, nz ] of blooms)
+        // Mỗi bông nhích cao độ một chút — cánh sen của hai bông cạnh nhau mà
+        // cùng cao độ là hai mặt tranh nhau chiều sâu (bộ kiểm bắt 17 cặp)
+        for(const [ b, [ nx, nz ] ] of blooms.entries())
         {
             const x = LAKE.x + nx * LAKE.radiusX
             const z = LAKE.z + nz * LAKE.radiusZ
+            const lift = b * 0.012
 
             for(let i = 0; i < 6; i++)
             {
                 const angle = i * Math.PI / 3
-                this.box(0.34, 0.1, 0.16, x + Math.cos(angle) * 0.17, waterY + 0.14, z + Math.sin(angle) * 0.17, '#ff9ec4', { rotationY: -angle, rotationZ: -0.5, castShadow: false })
+                this.box(0.34, 0.1, 0.16, x + Math.cos(angle) * 0.17, waterY + 0.14 + lift, z + Math.sin(angle) * 0.17, '#ff9ec4', { rotationY: -angle, rotationZ: -0.5, castShadow: false })
             }
 
-            this.box(0.16, 0.16, 0.16, x, waterY + 0.24, z, '#ffd76b', { castShadow: false })
+            this.box(0.16, 0.16, 0.16, x, waterY + 0.26 + lift, z, '#ffd76b', { castShadow: false })
         }
     }
 

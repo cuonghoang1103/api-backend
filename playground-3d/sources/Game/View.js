@@ -334,11 +334,35 @@ export class View
         this.zoom.baseRatio = 0.6
         this.zoom.ratio = this.zoom.baseRatio
         this.zoom.smoothedRatio = this.zoom.baseRatio
-        this.zoom.speedAmplitude = - 0.4
+        /**
+         * Lùi máy quay ra khi xe chạy nhanh. GIẢM từ −0,4 xuống −0,1.
+         *
+         * Con số −0,4 của bản mẫu tính cho dải bán kính 15–30 nội suy TUYẾN
+         * TÍNH: nó cho ra cảnh giãn thêm ~18% khi phóng hết ga, vừa đủ để thấy
+         * "đang nhanh". Dải nay là 15–48 và đường cong là mũ 3, nên vẫn để −0,4
+         * thì mỗi lần tăng tốc cảnh giãn 82% — máy quay thụt ra thụt vào loạn
+         * xạ. −0,1 trả về đúng cảm giác ~21% như bản gốc.
+         */
+        this.zoom.speedAmplitude = - 0.1
         this.zoom.speedEdge = { min: 5, max: 40 }
         this.zoom.sensitivity = 0.05
         this.zoom.toggle = 0
         this.zoom.toggleLast = -1
+
+        /**
+         * TRẦN THU PHÓNG TẠM THỜI, `null` là không ép.
+         *
+         * Ai đó (hiện là `VehicleRocket` lúc bám tên lửa) đặt số vào đây thì
+         * máy quay không được phép gần hơn mức ấy. Cần vì phép bám tên lửa có
+         * một điểm KỲ DỊ: kéo gần hết cỡ thì ống kính chỉ cao 8,5 trong khi quả
+         * đạn bay cao 8 — ngang tầm nhau, và "đưa đạn vào giữa khung" biến
+         * thành "dán đạn lên ống kính". Đo ngày 31/7: 10/11 mẫu văng khỏi khung.
+         *
+         * Không sờ vào `baseRatio` (đó là mức user tự chọn bằng cuộn chuột) nên
+         * bỏ ép là mọi thứ về đúng chỗ cũ, và `smoothedRatio` lo phần chuyển
+         * tiếp mượt.
+         */
+        this.zoom.override = null
 
         this.game.inputs.addActions([
             { name: 'zoom',    categories: [ 'wandering', 'racing' ], keys: [ 'Wheel.roll' ] },
@@ -400,7 +424,27 @@ export class View
          * chuyện thường ngày ở đó rồi.
          */
         this.spherical.radius.edges = { min: 15, max: 48 }
-        this.spherical.radius.current = lerp(this.spherical.radius.edges.min, this.spherical.radius.edges.max, 1 - this.zoom.smoothedRatio)
+
+        /**
+         * ĐƯỜNG CONG THU PHÓNG — mũ 3, KHÔNG phải tuyến tính.
+         *
+         * ⚠️ Đây là chỗ đã hỏng một lần, ghi kỹ. Bản mẫu nội suy TUYẾN TÍNH
+         * `lerp(min, max, 1 − ratio)`. Nâng `max` 30 → 48 để có tầm nhìn rộng
+         * thì nó KHÔNG chỉ nới đầu xa — nó KÉO GIÃN CẢ DẢI, kể cả mức mặc định
+         * lúc lái (ratio 0,3): bán kính nhảy từ ~25 lên ~38. Cảnh rộng gấp rưỡi,
+         * xe bé lại, và quả tên lửa mà máy quay đang bám theo thành một chấm —
+         * user báo đúng chỗ này: "camera không theo tên lửa như trước nữa".
+         *
+         * Mũ 3 thì mức mặc định gần như y nguyên (0,7³ = 0,343 ⇒ bán kính 26,3
+         * so với 25,5 của bản cũ) mà kéo hết cỡ vẫn tới 48. Nghĩa là: lái xe
+         * cảm giác không đổi, chỉ khi CỐ Ý cuộn ra hết mới có cảnh toàn khu.
+         */
+        this.spherical.radius.zoomCurve = 3
+        this.spherical.radius.current = lerp(
+            this.spherical.radius.edges.min,
+            this.spherical.radius.edges.max,
+            Math.pow(1 - this.zoom.smoothedRatio, this.spherical.radius.zoomCurve),
+        )
         this.spherical.radius.nonIdealRatioOffset = 9
 
         this.spherical.offset = new THREE.Vector3()
@@ -740,7 +784,20 @@ export class View
         // }
 
         const smoothFocusPointDelta = newSmoothFocusPoint.clone().sub(this.focusPoint.smoothedPosition)
-        const focusPointSpeed = Math.hypot(smoothFocusPointDelta.x, smoothFocusPointDelta.z) / this.game.ticker.delta
+
+        /**
+         * ⚠️ CHIA CHO `delta` PHẢI CÓ SÀN.
+         *
+         * `ticker.delta` xuống 0 ở khung hình đầu sau khi tab được đánh thức
+         * (hoặc khi trình duyệt bóp `requestAnimationFrame`). Lúc đó điểm nhìn
+         * cũng chưa kịp nhúc nhích ⇒ `0 / 0 = NaN`. Và NaN ở đây KHÔNG tự khỏi:
+         * nó chạy vào `zoom.ratio`, rồi `smoothedRatio = lerp(NaN, …)` giữ NaN
+         * VĨNH VIỄN, kéo theo bán kính, `spherical.offset` và vị trí máy quay —
+         * máy quay chết hẳn cho tới khi tải lại trang. Đúng triệu chứng user
+         * báo: "camera cứ lúc được lúc không".
+         */
+        const safeDelta = Math.max(this.game.ticker.delta, 0.0001)
+        const focusPointSpeed = Math.hypot(smoothFocusPointDelta.x, smoothFocusPointDelta.z) / safeDelta
         this.focusPoint.smoothedPosition.copy(newSmoothFocusPoint)
 
         if(this.focusPoint.helper.visible)
@@ -762,12 +819,43 @@ export class View
             if(this.focusPoint.isTracking && this.game.quality.level === 0)
                 this.zoom.ratio += this.zoom.speedAmplitude * zoomSpeedRatio
 
+            /**
+             * ⚠️ KẸP LẠI TRONG [0; 1] — bản mẫu QUÊN bước này.
+             *
+             * `baseRatio` được kẹp ở chỗ nhận cuộn chuột, nhưng TỔNG sau khi
+             * cộng số hạng tốc độ thì không: chạy nhanh với `speedAmplitude`
+             * âm là `ratio` tụt xuống dưới 0, và `lerp` bên dưới ngoại suy ra
+             * NGOÀI dải. Với dải gốc 15–30 thì lệch vài phần trăm, không ai
+             * thấy. Từ khi nới trần lên 48 thì nó thành cú giật lớn — đo ngày
+             * 31/7: bán kính vọt tới 104,8 trong khi trần là 48. Đúng triệu
+             * chứng user báo: "di chuyển bị lệch loạn camera".
+             */
+            this.zoom.ratio = clamp(this.zoom.ratio, 0, 1)
+
+            // Trần tạm thời — xem chú thích ở `setZoom()`
+            if(this.zoom.override !== null)
+                this.zoom.ratio = Math.min(this.zoom.ratio, this.zoom.override)
+
             this.zoom.smoothedRatio = lerp(this.zoom.smoothedRatio, this.zoom.ratio, this.game.ticker.delta * 10)
+
+            /**
+             * CHỐT TỰ LÀNH. `smoothedRatio` là một bộ lọc hồi tiếp: một khung
+             * hình NaN lọt vào là nó ở lại mãi mãi, vì `lerp(NaN, x, k)` vẫn
+             * NaN. Bắt tại chỗ rồi kéo về mức người chơi đang chọn thì dù có
+             * nguồn NaN nào khác lọt qua, máy quay cũng chỉ vấp một khung hình
+             * chứ không chết.
+             */
+            if(!Number.isFinite(this.zoom.smoothedRatio))
+                this.zoom.smoothedRatio = clamp(this.zoom.baseRatio, 0, 1)
         }
 
-        // Radius
+        // Radius — mũ 3 chứ KHÔNG tuyến tính, xem chú thích ở `setSpherical()`
         const radiusMax = this.spherical.radius.edges.max + this.ratioOverflow * this.spherical.radius.nonIdealRatioOffset
-        this.spherical.radius.current = lerp(this.spherical.radius.edges.min, radiusMax, 1 - this.zoom.smoothedRatio)
+        this.spherical.radius.current = lerp(
+            this.spherical.radius.edges.min,
+            radiusMax,
+            Math.pow(1 - this.zoom.smoothedRatio, this.spherical.radius.zoomCurve),
+        )
         this.spherical.offset.setFromSphericalCoords(this.spherical.radius.current, this.spherical.phi, this.spherical.theta)
 
         // Position

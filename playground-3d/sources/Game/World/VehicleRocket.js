@@ -98,7 +98,16 @@ const WEAPONS = {
         bodyScale: 1.5,
         /** Trần bay khi lượn vòng, và bán kính vòng lượn quanh mục tiêu. */
         apex: 26,
-        orbitRadius: 11,
+        /**
+         * Bán kính vòng lượn THU TỪ 11 XUỐNG 5.
+         *
+         * Máy quay neo vào mục tiêu (xem `cameraTargetFor`) nên cả vòng lượn
+         * phải NẰM GỌN trong khung hình. Nửa chiều cao khung ở mức thu phóng
+         * của cảnh bắn là chừng 6 đơn vị — vòng bán kính 11 thò hẳn ra ngoài,
+         * đo được quả đạn văng khỏi khung suốt pha lượn. 5 thì nó lượn ngay
+         * trong khung, thấy trọn vòng.
+         */
+        orbitRadius: 5,
         /** Ba pha, tính bằng GIÂY. Vòng lượn 2,5s — user chốt "2–3 giây". */
         boost: 0.6,
         orbit: 2.5,
@@ -732,14 +741,25 @@ export class VehicleRocket
              *
              * TRẦN BAY chính là nút vặn cỡ quả đạn trên màn hình: máy quay bám
              * nó, nên khoảng cách tới ống kính đúng bằng
-             * `(caoMáyQuay − trầnBay) / cos(góc chúc)`. Trần càng thấp thì quả
-             * đạn càng xa ống kính và nhìn càng nhỏ.
+             * `(caoMáyQuay − trầnBay) / cos(góc chúc)`, trong khi cái XE thì
+             * luôn ở khoảng `caoMáyQuay / cos(góc chúc)`. Tức là tỉ số
+             * `1 − trầnBay/caoMáyQuay` quyết định quả đạn trông TO BẰNG MẤY LẦN
+             * cái xe — và tỉ số đó chỉ phụ thuộc HỆ SỐ, không phụ thuộc mức thu
+             * phóng.
              *
-             * 0,34 lần chiều cao máy quay là mức quả đạn to rõ mà vẫn thấy
-             * được khu trường bên dưới. Sàn 9 để nó còn cao hơn mái nhà.
+             * ⚠️ Vì vậy trần bay PHẢI là bội số của chiều cao máy quay, KHÔNG
+             * được có sàn cứng. Bản trước để `max(9, 0,34 × cao)`: khi kéo xa
+             * thì máy quay cao 34 mà sàn 9 vẫn thắng, tỉ số tụt còn 0,26 và quả
+             * đạn nhìn chỉ nhỉnh hơn cái xe một chút — user báo "camera không
+             * theo tên lửa như trước nữa". Đo được: đạn cách ống kính 27–45
+             * trong khi bán kính máy quay là 50.
+             *
+             * 0,52 cho ra quả đạn trông gấp chừng HAI LẦN cái xe ở MỌI mức thu
+             * phóng. Kẹp 8–22 chỉ để tránh hai đầu cực đoan: quá thấp thì đạn
+             * chui vào nhà, quá cao thì bay khỏi tầm nhìn.
              */
             const cameraHeight = this.game.view?.spherical?.offset?.y || 24
-            rocket.apexY = Math.min(spec.apex, Math.max(9, cameraHeight * 0.34))
+            rocket.apexY = Math.min(spec.apex, Math.max(8, Math.min(22, cameraHeight * 0.52)))
             rocket.orbitRadius = spec.orbitRadius
             rocket.turns = spec.turns
             rocket.boost = spec.boost
@@ -1260,15 +1280,66 @@ export class VehicleRocket
         for(const rocket of this.rockets)
             if(rocket.isMissile) missile = rocket
 
+        const delta = Math.min(this.game.ticker.delta, 0.1)
+
         if(!missile)
         {
-            this.followRatio = Math.max(0, (this.followRatio ?? 0) - this.game.ticker.delta * 1.6)
-            if(this.followRatio <= 0) return
+            this.followRatio = Math.max(0, (this.followRatio ?? 0) - delta * 1.2)
+
+            if(this.followRatio <= 0)
+            {
+                // Quên đích cũ đi, không thì phát bắn sau máy quay giật từ chỗ
+                // rơi của phát trước
+                this.followTarget = null
+                view.zoom.override = null
+                return
+            }
         }
         else
         {
-            this.followRatio = Math.min(1, (this.followRatio ?? 0) + this.game.ticker.delta * 3)
-            this.followTarget = this.cameraTargetFor(missile)
+            /**
+             * ⚠️ ĐỪNG bám ngay từ nhịp đầu.
+             *
+             * Nửa giây đầu quả đạn còn nằm SÁT nóc xe và bốc lên rất nhanh, mà
+             * phép bù chiếu lại chia cho chiều cao máy quay — nên đích ngắm
+             * quăng đi rất mạnh trong đúng khoảnh khắc đó. Đo ngày 31/7: quả
+             * đạn văng ra ngoài khung (toạ độ màn hình x = −1,5 · y = 1,6) rồi
+             * mới quay lại. Đợi qua 60% pha bốc lên mới bắt đầu bám thì hết hẳn.
+             */
+            const engaged = missile.time > missile.boost * 0.6
+            if(engaged)
+                this.followRatio = Math.min(1, (this.followRatio ?? 0) + delta * 1.5)
+
+            /**
+             * LÙI MÁY QUAY RA trong suốt hành trình.
+             *
+             * Không phải để cho đẹp mà vì hình học: phép bám đưa quả đạn vào
+             * giữa khung, nên nếu ống kính đang ở thấp ngang tầm quả đạn thì
+             * "giữa khung" cũng là "sát ống kính" và cả cảnh quay loạn. Ép trần
+             * 0,28 thì ống kính luôn cao chừng 26 trong khi đạn bay cao ~13,5 —
+             * cách nhau đủ xa để khung hình đứng yên. Bỏ ép ngay khi hết bám,
+             * và `smoothedRatio` lo phần chuyển tiếp nên mắt không thấy giật.
+             */
+            view.zoom.override = 0.24
+
+            const target = this.cameraTargetFor(missile)
+
+            if(!this.followTarget)
+            {
+                this.followTarget = target
+            }
+            else
+            {
+                /**
+                 * LỌC THÔNG THẤP trên chính đích ngắm. `View` đã làm mượt một
+                 * lần nữa ở sau, nhưng nó làm mượt cái ĐÍCH — nếu bản thân đích
+                 * nhảy giật thì kết quả vẫn giật. Hai tầng làm mượt là thứ biến
+                 * "máy quay đuổi theo" thành "máy quay lướt theo".
+                 */
+                const k = Math.min(1, delta * 5)
+                this.followTarget.x += (target.x - this.followTarget.x) * k
+                this.followTarget.z += (target.z - this.followTarget.z) * k
+            }
         }
 
         if(!this.followTarget) return
@@ -1279,9 +1350,29 @@ export class VehicleRocket
         tracked.z += (this.followTarget.z - tracked.z) * this.followRatio
     }
 
+    /**
+     * ĐIỂM MÁY QUAY NHÌN VÀO trong lúc tên lửa bay.
+     *
+     * ⚠️ Neo vào MỤC TIÊU, KHÔNG đuổi theo quả đạn. Đây là chỗ đã làm sai một
+     * lần và user báo đúng: "nó cứ lúc được lúc không, di chuyển bị lệch loạn".
+     *
+     * Vì sao đuổi theo là hỏng: quả đạn lượn vòng bán kính 11 trong 2,5 giây,
+     * tức 27 đơn vị/giây, trong khi nửa chiều cao khung hình chỉ chừng 6 đơn
+     * vị. Mọi tầng làm mượt cộng lại trễ khoảng 0,3 giây ⇒ trễ 8 đơn vị ⇒ quả
+     * đạn nằm lệch 1,4 lần nửa khung, tức RA NGOÀI. Càng làm mượt càng trễ,
+     * càng bớt mượt càng giật — không có lối thoát trong cách làm đó.
+     *
+     * Neo tĩnh thì máy quay chỉ có MỘT chuyển động duy nhất: rời xe, tới vùng
+     * mục tiêu, rồi đứng yên cho quả đạn lượn và bổ nhào ngay trong khung. Vừa
+     * đứng hình vừa nhìn rõ chỗ sắp trúng.
+     *
+     * Cao độ neo lấy 0,85 lần trần bay để khung hình ôm được cả vòng lượn trên
+     * cao lẫn điểm chạm đất bên dưới.
+     */
     cameraTargetFor(missile)
     {
-        const position = this.positionAt(missile, missile.time)
+        const position = missile.to
+        const anchorY = missile.apexY * 0.85
         const offset = this.game.view.spherical.offset
 
         if(!offset || Math.abs(offset.y) < 0.001)
@@ -1304,7 +1395,7 @@ export class VehicleRocket
          * quả đạn giao cho TRẦN BAY lo (xem `fire()`): trần thấp thì quả đạn ở
          * xa ống kính hơn và nhìn nhỏ lại.
          */
-        const ratio = Math.min(0.85, position.y / offset.y)
+        const ratio = Math.min(0.85, anchorY / offset.y)
         return {
             x: position.x - offset.x * ratio,
             z: position.z - offset.z * ratio,

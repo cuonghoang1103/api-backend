@@ -98,6 +98,56 @@ Mã: `FptuDestruction.js` (mới) + sửa `FptuCampus`, `Trees`, `Foliage`, `Fpt
   chính `View.setFreeCameraButtons()` nối — `Options` dựng ở `Game.js:110`,
   sớm hơn `View`, nối từ đó là chưa có gì để nối.
 
+## Máy quay MƯỢT VÀ ỔN ĐỊNH — bốn lỗi đã sửa (31/7 chiều)
+
+User báo "camera cứ lúc được lúc không, di chuyển bị lệch loạn". Bốn nguyên
+nhân RIÊNG BIỆT, đều nằm trong `View.js` trừ cái cuối:
+
+1. **`zoom.ratio` KHÔNG được kẹp sau số hạng tốc độ.** `baseRatio` có kẹp
+   [0;1] nhưng tổng `baseRatio + speedAmplitude × zoomSpeedRatio` thì không.
+   Chạy nhanh ⇒ ratio âm ⇒ `lerp` ngoại suy ra ngoài dải. Với dải gốc 15–30
+   lệch vài phần trăm không ai thấy; nới trần lên 48 là thành cú giật lớn — đo
+   được bán kính vọt tới **104,8** khi trần là 48. → thêm `clamp(ratio, 0, 1)`.
+
+2. **Nội suy TUYẾN TÍNH kéo giãn CẢ DẢI.** Nâng `max` 30 → 48 làm mức mặc định
+   lúc lái (ratio 0,3) nhảy từ ~25 lên ~38 — cảnh rộng gấp rưỡi, quả tên lửa
+   thành một chấm. → đổi sang **mũ 3** (`radius.zoomCurve`): mặc định về lại
+   26,3 (bản cũ 25,5) mà kéo hết cỡ vẫn 48.
+
+3. **`speedAmplitude = −0,4` tính cho dải cũ.** Với dải + đường cong mới nó cho
+   ra cảnh giãn 82% mỗi lần tăng tốc. → **−0,1**, giãn ~21% như bản gốc.
+
+4. ⚠️ **NaN VĨNH VIỄN — thủ phạm của "lúc được lúc không".**
+   `focusPointSpeed = quãng đường / ticker.delta`. `delta` xuống 0 ở khung hình
+   đầu sau khi tab được đánh thức, mà điểm nhìn cũng chưa nhúc nhích ⇒ `0/0 =
+   NaN`. NaN chạy vào `zoom.ratio`, rồi `smoothedRatio = lerp(NaN, …)` **giữ
+   NaN mãi mãi** (bộ lọc hồi tiếp), kéo theo bán kính và vị trí máy quay. Máy
+   quay chết hẳn tới khi tải lại trang. → sàn cho `delta` + chốt tự lành
+   `if(!Number.isFinite(smoothedRatio)) smoothedRatio = baseRatio`.
+   **Đây là lỗi CÓ SẴN của bản mẫu**, chỉ chưa ai gặp vì hiếm khi delta = 0.
+
+## Bám tên lửa: NEO vào mục tiêu, ĐỪNG đuổi theo quả đạn
+
+Bản đầu cho máy quay đuổi theo quả đạn ⇒ hỏng không cứu được: đạn lượn vòng
+bán kính 11 trong 2,5 giây tức **27 đơn vị/giây**, trong khi nửa chiều cao
+khung hình chỉ ~6 đơn vị. Mọi tầng làm mượt cộng lại trễ ~0,3 giây ⇒ trễ 8 đơn
+vị ⇒ đạn nằm lệch 1,4 lần nửa khung, tức RA NGOÀI. **Càng làm mượt càng trễ,
+càng bớt mượt càng giật — không có lối thoát.**
+
+Cách chạy được: `cameraTargetFor()` trả về điểm **MỤC TIÊU** (bù chiếu theo
+0,85 lần trần bay), KHÔNG phải vị trí quả đạn. Máy quay chỉ có MỘT chuyển động:
+rời xe → tới vùng mục tiêu → đứng yên cho đạn lượn và bổ nhào ngay trong khung.
+Kèm hai điều kiện:
+- **Thu vòng lượn 11 → 5** để cả vòng nằm gọn trong khung.
+- **Ép trần thu phóng 0,24** (`view.zoom.override`) suốt hành trình: kéo gần
+  hết cỡ thì ống kính chỉ cao 8,5 trong khi đạn bay cao 8 — ngang tầm nhau, và
+  "đưa đạn vào giữa khung" biến thành "dán đạn lên ống kính" (đo được 10/11
+  mẫu văng khỏi khung).
+
+Đo sau khi sửa: cả ba mức thu phóng chỉ còn **1/11 mẫu** ra ngoài khung, đúng
+khoảnh khắc đạn rời bệ ngay cạnh ống kính. Bán kính dao động **0,05 đơn vị**
+sau khi ổn định. Khuôn đo ở `scratchpad/diag-follow2.mjs` và `diag-nan.mjs`.
+
 ## Tiếng sóng gào suốt trong trường — ĐÃ SỬA
 
 Âm lượng sóng (`Audio.js`, nhóm `waves`) tính theo khoảng cách tới mép **ĐỊA

@@ -86299,10 +86299,10 @@ https://github.com/browserify/crypto-browserify`);
       };
     }
     setZoom() {
-      if (this.zoom = {}, this.zoom.baseRatio = 0.6, this.zoom.ratio = this.zoom.baseRatio, this.zoom.smoothedRatio = this.zoom.baseRatio, this.zoom.speedAmplitude = -0.4, this.zoom.speedEdge = {
+      if (this.zoom = {}, this.zoom.baseRatio = 0.6, this.zoom.ratio = this.zoom.baseRatio, this.zoom.smoothedRatio = this.zoom.baseRatio, this.zoom.speedAmplitude = -0.1, this.zoom.speedEdge = {
         min: 5,
         max: 40
-      }, this.zoom.sensitivity = 0.05, this.zoom.toggle = 0, this.zoom.toggleLast = -1, this.game.inputs.addActions([
+      }, this.zoom.sensitivity = 0.05, this.zoom.toggle = 0, this.zoom.toggleLast = -1, this.zoom.override = null, this.game.inputs.addActions([
         {
           name: "zoom",
           categories: [
@@ -86351,7 +86351,7 @@ https://github.com/browserify/crypto-browserify`);
       if (this.spherical = {}, this.spherical.phi = Math.PI * (this.game.quality.level === 0 ? 0.31 : 0.27), this.spherical.theta = Math.PI * 0.25, this.spherical.radius = {}, this.spherical.radius.edges = {
         min: 15,
         max: 48
-      }, this.spherical.radius.current = lerp$1(this.spherical.radius.edges.min, this.spherical.radius.edges.max, 1 - this.zoom.smoothedRatio), this.spherical.radius.nonIdealRatioOffset = 9, this.spherical.offset = new Vector3$1(), this.spherical.offset.setFromSphericalCoords(this.spherical.radius.current, this.spherical.phi, this.spherical.theta), this.game.debug.active) {
+      }, this.spherical.radius.zoomCurve = 3, this.spherical.radius.current = lerp$1(this.spherical.radius.edges.min, this.spherical.radius.edges.max, Math.pow(1 - this.zoom.smoothedRatio, this.spherical.radius.zoomCurve)), this.spherical.radius.nonIdealRatioOffset = 9, this.spherical.offset = new Vector3$1(), this.spherical.offset.setFromSphericalCoords(this.spherical.radius.current, this.spherical.phi, this.spherical.theta), this.game.debug.active) {
         const e = this.debugPanel.addFolder({
           title: "Spherical",
           expanded: false
@@ -86508,28 +86508,28 @@ https://github.com/browserify/crypto-browserify`);
     update() {
       if (this.mode === _View.MODE_DEFAULT && this.game.inputs.gamepad.joysticks.right.active && !this.cinematic.active) {
         this.focusPoint.isTracking = false;
-        const h = new Vector2$1(this.game.inputs.gamepad.joysticks.right.x, this.game.inputs.gamepad.joysticks.right.y);
-        h.rotateAround(new Vector2$1(), -this.spherical.theta), h.multiplyScalar(20 * this.game.ticker.delta), this.focusPoint.position.x += h.x, this.focusPoint.position.z += h.y;
+        const c = new Vector2$1(this.game.inputs.gamepad.joysticks.right.x, this.game.inputs.gamepad.joysticks.right.y);
+        c.rotateAround(new Vector2$1(), -this.spherical.theta), c.multiplyScalar(20 * this.game.ticker.delta), this.focusPoint.position.x += c.x, this.focusPoint.position.z += c.y;
       }
       if (this.focusPoint.isTracking && (this.focusPoint.position.x = this.focusPoint.trackedPosition.x, this.focusPoint.position.z = this.focusPoint.trackedPosition.z), this.focusPoint.magnet.active) {
-        const h = {
+        const c = {
           x: this.focusPoint.trackedPosition.x - this.focusPoint.position.x,
           z: this.focusPoint.trackedPosition.z - this.focusPoint.position.z
-        }, d = Math.hypot(h.x, h.z) * this.focusPoint.magnet.multiplier;
-        this.focusPoint.position.x += d * h.x * this.game.ticker.delta, this.focusPoint.position.z += d * h.z * this.game.ticker.delta;
+        }, f = Math.hypot(c.x, c.z) * this.focusPoint.magnet.multiplier;
+        this.focusPoint.position.x += f * c.x * this.game.ticker.delta, this.focusPoint.position.z += f * c.z * this.game.ticker.delta;
       }
-      const e = remap$2(this.focusPoint.easing, 0, 1, 1, this.game.ticker.delta * 10), r = this.focusPoint.smoothedPosition.clone().lerp(this.focusPoint.position, e), s = r.clone().sub(this.focusPoint.smoothedPosition), o = Math.hypot(s.x, s.z) / this.game.ticker.delta;
+      const e = remap$2(this.focusPoint.easing, 0, 1, 1, this.game.ticker.delta * 10), r = this.focusPoint.smoothedPosition.clone().lerp(this.focusPoint.position, e), s = r.clone().sub(this.focusPoint.smoothedPosition), o = Math.max(this.game.ticker.delta, 1e-4), a = Math.hypot(s.x, s.z) / o;
       if (this.focusPoint.smoothedPosition.copy(r), this.focusPoint.helper.visible && this.focusPoint.helper.position.copy(r), this.mode === _View.MODE_DEFAULT) {
         this.zoom.toggle !== 0 && (this.zoom.baseRatio += this.zoom.toggle * 0.01, this.zoom.baseRatio = clamp$5(this.zoom.baseRatio, 0, 1));
-        const h = smoothstep$3(o, this.zoom.speedEdge.min, this.zoom.speedEdge.max);
-        this.zoom.ratio = this.zoom.baseRatio, this.focusPoint.isTracking && this.game.quality.level === 0 && (this.zoom.ratio += this.zoom.speedAmplitude * h), this.zoom.smoothedRatio = lerp$1(this.zoom.smoothedRatio, this.zoom.ratio, this.game.ticker.delta * 10);
+        const c = smoothstep$3(a, this.zoom.speedEdge.min, this.zoom.speedEdge.max);
+        this.zoom.ratio = this.zoom.baseRatio, this.focusPoint.isTracking && this.game.quality.level === 0 && (this.zoom.ratio += this.zoom.speedAmplitude * c), this.zoom.ratio = clamp$5(this.zoom.ratio, 0, 1), this.zoom.override !== null && (this.zoom.ratio = Math.min(this.zoom.ratio, this.zoom.override)), this.zoom.smoothedRatio = lerp$1(this.zoom.smoothedRatio, this.zoom.ratio, this.game.ticker.delta * 10), Number.isFinite(this.zoom.smoothedRatio) || (this.zoom.smoothedRatio = clamp$5(this.zoom.baseRatio, 0, 1));
       }
-      const a = this.spherical.radius.edges.max + this.ratioOverflow * this.spherical.radius.nonIdealRatioOffset;
-      this.spherical.radius.current = lerp$1(this.spherical.radius.edges.min, a, 1 - this.zoom.smoothedRatio), this.spherical.offset.setFromSphericalCoords(this.spherical.radius.current, this.spherical.phi, this.spherical.theta), this.position.copy(this.focusPoint.smoothedPosition).add(this.spherical.offset), this.delta = this.position.clone().sub(this.defaultCamera.position), this.defaultCamera.position.copy(this.position), this.defaultCamera.rotation.set(0, 0, 0), this.defaultCamera.lookAt(this.focusPoint.smoothedPosition), this.roll.velocity = -this.roll.value * this.roll.pullStrength * this.game.ticker.deltaScaled, this.roll.speed += this.roll.velocity, this.roll.value += this.roll.speed * this.game.ticker.deltaScaled, this.roll.speed *= 1 - this.roll.damping * this.game.ticker.deltaScaled, this.defaultCamera.rotation.z += this.roll.value, this.cinematic.progress > 0 && (this.cinematic.dummy.position.copy(this.cinematic.position), this.cinematic.dummy.lookAt(this.cinematic.target), this.defaultCamera.position.lerp(this.cinematic.dummy.position, this.cinematic.progress), this.defaultCamera.quaternion.slerp(this.cinematic.dummy.quaternion, this.cinematic.progress)), this.mode === _View.MODE_DEFAULT ? (this.camera.position.copy(this.defaultCamera.position), this.camera.quaternion.copy(this.defaultCamera.quaternion)) : this.mode === _View.MODE_FREE && (this.freeMode.update(this.game.ticker.delta), this.camera.position.copy(this.freeCamera.position), this.camera.quaternion.copy(this.freeCamera.quaternion)), this.camera.updateMatrixWorld(), this.defaultCamera.updateMatrixWorld(), this.freeCamera.updateMatrixWorld(), this.optimalArea.needsUpdate && this.optimalArea.update(), this.optimalArea.position.copy(this.optimalArea.basePosition).add(new Vector3$1(this.focusPoint.smoothedPosition.x, 0, this.focusPoint.smoothedPosition.z));
-      for (const h of this.optimalArea.quad2) h.offseted.x = h.base.x + this.focusPoint.position.x, h.offseted.y = h.base.y + this.focusPoint.position.z;
+      const h = this.spherical.radius.edges.max + this.ratioOverflow * this.spherical.radius.nonIdealRatioOffset;
+      this.spherical.radius.current = lerp$1(this.spherical.radius.edges.min, h, Math.pow(1 - this.zoom.smoothedRatio, this.spherical.radius.zoomCurve)), this.spherical.offset.setFromSphericalCoords(this.spherical.radius.current, this.spherical.phi, this.spherical.theta), this.position.copy(this.focusPoint.smoothedPosition).add(this.spherical.offset), this.delta = this.position.clone().sub(this.defaultCamera.position), this.defaultCamera.position.copy(this.position), this.defaultCamera.rotation.set(0, 0, 0), this.defaultCamera.lookAt(this.focusPoint.smoothedPosition), this.roll.velocity = -this.roll.value * this.roll.pullStrength * this.game.ticker.deltaScaled, this.roll.speed += this.roll.velocity, this.roll.value += this.roll.speed * this.game.ticker.deltaScaled, this.roll.speed *= 1 - this.roll.damping * this.game.ticker.deltaScaled, this.defaultCamera.rotation.z += this.roll.value, this.cinematic.progress > 0 && (this.cinematic.dummy.position.copy(this.cinematic.position), this.cinematic.dummy.lookAt(this.cinematic.target), this.defaultCamera.position.lerp(this.cinematic.dummy.position, this.cinematic.progress), this.defaultCamera.quaternion.slerp(this.cinematic.dummy.quaternion, this.cinematic.progress)), this.mode === _View.MODE_DEFAULT ? (this.camera.position.copy(this.defaultCamera.position), this.camera.quaternion.copy(this.defaultCamera.quaternion)) : this.mode === _View.MODE_FREE && (this.freeMode.update(this.game.ticker.delta), this.camera.position.copy(this.freeCamera.position), this.camera.quaternion.copy(this.freeCamera.quaternion)), this.camera.updateMatrixWorld(), this.defaultCamera.updateMatrixWorld(), this.freeCamera.updateMatrixWorld(), this.optimalArea.needsUpdate && this.optimalArea.update(), this.optimalArea.position.copy(this.optimalArea.basePosition).add(new Vector3$1(this.focusPoint.smoothedPosition.x, 0, this.focusPoint.smoothedPosition.z));
+      for (const c of this.optimalArea.quad2) c.offseted.x = c.base.x + this.focusPoint.position.x, c.offseted.y = c.base.y + this.focusPoint.position.z;
       if (this.optimalArea.quad2Helper && this.optimalArea.quad2Helper.visible) {
-        const h = new LineGeometry$1();
-        h.setPositions([
+        const c = new LineGeometry$1();
+        c.setPositions([
           this.optimalArea.quad2[0].offseted.x,
           0.5,
           this.optimalArea.quad2[0].offseted.y,
@@ -86545,7 +86545,7 @@ https://github.com/browserify/crypto-browserify`);
           this.optimalArea.quad2[0].offseted.x,
           0.5,
           this.optimalArea.quad2[0].offseted.y
-        ]), this.optimalArea.quad2Helper.geometry = h;
+        ]), this.optimalArea.quad2Helper.geometry = c;
       }
       this.speedLines.clipSpaceTarget.value.copy(this.speedLines.worldTarget), this.speedLines.clipSpaceTarget.value.project(this.camera), this.speedLines.smoothedStrength.value = lerp$1(this.speedLines.smoothedStrength.value, this.speedLines.strength, this.game.ticker.delta * 2);
     }
@@ -98015,7 +98015,7 @@ https://github.com/browserify/crypto-browserify`);
       speed: 34,
       bodyScale: 1.5,
       apex: 26,
-      orbitRadius: 11,
+      orbitRadius: 5,
       boost: 0.6,
       orbit: 2.5,
       dive: 0.75,
@@ -98318,7 +98318,7 @@ https://github.com/browserify/crypto-browserify`);
       if (r) {
         p.startAngle = Math.atan2(s.z - o.z, s.x - o.x);
         const m = ((_c = (_b = (_a2 = this.game.view) == null ? void 0 : _a2.spherical) == null ? void 0 : _b.offset) == null ? void 0 : _c.y) || 24;
-        p.apexY = Math.min(e.apex, Math.max(9, m * 0.34)), p.orbitRadius = e.orbitRadius, p.turns = e.turns, p.boost = e.boost, p.orbit = e.orbit, p.dive = e.dive, p.duration = e.boost + e.orbit + e.dive, p.trailStep = 0.05, p.roll = 5 + Math.random() * 3, this.launchKick = 0.32, this.spawnLaunchSmoke(s), (_d = this.sounds.missileLaunch) == null ? void 0 : _d.play(s), (_e = this.sounds.missileIgnite) == null ? void 0 : _e.play(s), this.startEngineSound(s);
+        p.apexY = Math.min(e.apex, Math.max(8, Math.min(22, m * 0.52))), p.orbitRadius = e.orbitRadius, p.turns = e.turns, p.boost = e.boost, p.orbit = e.orbit, p.dive = e.dive, p.duration = e.boost + e.orbit + e.dive, p.trailStep = 0.05, p.roll = 5 + Math.random() * 3, this.launchKick = 0.32, this.spawnLaunchSmoke(s), (_d = this.sounds.missileLaunch) == null ? void 0 : _d.play(s), (_e = this.sounds.missileIgnite) == null ? void 0 : _e.play(s), this.startEngineSound(s);
       } else p.arc = Math.min(e.arcCeiling, a * e.arcHeight), p.duration = Math.max(0.35, a / e.speed), p.trailStep = 0.028 * p.duration;
       this.rockets.push(p), (_f = this.sounds.launch) == null ? void 0 : _f.play(s);
     }
@@ -98535,23 +98535,34 @@ https://github.com/browserify/crypto-browserify`);
       const e = this.game.view;
       if (!((_a2 = e == null ? void 0 : e.focusPoint) == null ? void 0 : _a2.isTracking)) return;
       let r = null;
-      for (const o of this.rockets) o.isMissile && (r = o);
-      if (r) this.followRatio = Math.min(1, (this.followRatio ?? 0) + this.game.ticker.delta * 3), this.followTarget = this.cameraTargetFor(r);
-      else if (this.followRatio = Math.max(0, (this.followRatio ?? 0) - this.game.ticker.delta * 1.6), this.followRatio <= 0) return;
+      for (const a of this.rockets) a.isMissile && (r = a);
+      const s = Math.min(this.game.ticker.delta, 0.1);
+      if (r) {
+        r.time > r.boost * 0.6 && (this.followRatio = Math.min(1, (this.followRatio ?? 0) + s * 1.5)), e.zoom.override = 0.24;
+        const h = this.cameraTargetFor(r);
+        if (!this.followTarget) this.followTarget = h;
+        else {
+          const c = Math.min(1, s * 5);
+          this.followTarget.x += (h.x - this.followTarget.x) * c, this.followTarget.z += (h.z - this.followTarget.z) * c;
+        }
+      } else if (this.followRatio = Math.max(0, (this.followRatio ?? 0) - s * 1.2), this.followRatio <= 0) {
+        this.followTarget = null, e.zoom.override = null;
+        return;
+      }
       if (!this.followTarget) return;
-      const s = e.focusPoint.trackedPosition;
-      s.x += (this.followTarget.x - s.x) * this.followRatio, s.z += (this.followTarget.z - s.z) * this.followRatio;
+      const o = e.focusPoint.trackedPosition;
+      o.x += (this.followTarget.x - o.x) * this.followRatio, o.z += (this.followTarget.z - o.z) * this.followRatio;
     }
     cameraTargetFor(e) {
-      const r = this.positionAt(e, e.time), s = this.game.view.spherical.offset;
-      if (!s || Math.abs(s.y) < 1e-3) return {
+      const r = e.to, s = e.apexY * 0.85, o = this.game.view.spherical.offset;
+      if (!o || Math.abs(o.y) < 1e-3) return {
         x: r.x,
         z: r.z
       };
-      const o = Math.min(0.85, r.y / s.y);
+      const a = Math.min(0.85, s / o.y);
       return {
-        x: r.x - s.x * o,
-        z: r.z - s.z * o
+        x: r.x - o.x * a,
+        z: r.z - o.z * a
       };
     }
   }
@@ -112674,7 +112685,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-BRNkNDtP.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-Big8kR1G.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

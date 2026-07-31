@@ -194,11 +194,22 @@ export class FptuProps
     {
         const spots = []
 
-        // Dọc con đường lớn (chạy theo trục z tại x = −106), hai bên lề
+        /**
+         * Dọc đường lớn — CHỈ lề Tây.
+         *
+         * Lề Đông (x = −100,4) nay trùng đúng hàng rào mặt tiền, và một cột rơi
+         * vào z = 24 tức GIỮA LỐI CỔNG NAM: lái thử ngày 31/7 xe đi được 1,4
+         * đơn vị rồi đứng. Ánh sáng phía đó đã có đèn dọc hai đường vào lo.
+         */
         for(let z = MAIN_ROAD.z - MAIN_ROAD.length * 0.5 + 6; z <= MAIN_ROAD.z + MAIN_ROAD.length * 0.5 - 6; z += 13)
-        {
             spots.push({ x: MAIN_ROAD.x - MAIN_ROAD.width * 0.5 - 1.6, z, dir: 1 })
-            spots.push({ x: MAIN_ROAD.x + MAIN_ROAD.width * 0.5 + 1.6, z, dir: -1 })
+
+        // Dọc hai đường vào từ hai cổng, đặt ở lề PHÍA NGOÀI để không chắn lối
+        for(const [ i, gz ] of FRONTAGE.gates.entries())
+        {
+            const side = i === 0 ? -1 : 1
+            for(let x = -106; x >= -142; x -= 12)
+                spots.push({ x, z: gz + side * (FRONTAGE.gateHalf + 1.8), dir: -side, along: 'x' })
         }
 
         // Dọc trục lễ nghi (chạy theo trục x tại z = 40)
@@ -218,6 +229,9 @@ export class FptuProps
             // với chính con đường đó; chỉ tránh nhà cửa và hồ.
             if(this.roundBlockers.some((b) => Math.hypot((s.x - b.x) / b.rx, (s.z - b.z) / b.rz) < 1)) continue
             if(s.x < this.bounds.minX || s.x > this.bounds.maxX || s.z < this.bounds.minZ || s.z > this.bounds.maxZ) continue
+
+            // Chốt chặn: tuyệt đối không cột nào rơi vào lòng hai lối cổng
+            if(Math.abs(s.x - FRONTAGE.x) < 6 && FRONTAGE.gates.some(gz => Math.abs(s.z - gz) < FRONTAGE.gateHalf + 1.2)) continue
 
             this.lampPost(s.x, s.z, s.along === 'x' ? (s.dir > 0 ? Math.PI * 0.5 : -Math.PI * 0.5) : (s.dir > 0 ? 0 : Math.PI), i)
         }

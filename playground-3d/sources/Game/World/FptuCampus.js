@@ -100,6 +100,17 @@ export class FptuCampus
          */
         this.canopySpots = []
 
+        /**
+         * Ghi lại danh sách đồ CỦA THẾ GIỚI MẪU ngay bây giờ — trước khi mình
+         * thêm bất cứ thứ gì — rồi mới dời chúng ở nhịp sau.
+         *
+         * Phải hoãn vì `Objects` gắn phần HÌNH vào cảnh muộn hơn lúc này: quét
+         * ngay trong hàm dựng thì mesh `blocks` chưa có mặt, đo lại thấy nó vẫn
+         * đứng nguyên chỗ cũ dù mã "đã chạy".
+         */
+        this.sampleObjectKeys = new Set(this.game.objects.list.keys())
+        this.game.ticker.wait(2, () => this.relocateSampleObstacles())
+
         this.setIsland()
         this.setBridge()
         this.setFrontage()
@@ -149,6 +160,76 @@ export class FptuCampus
         this.quiz = new FptuQuiz()
         this.setGateZone()
         this.setQuestionBlocks()
+    }
+
+    /**
+     * DỜI cụm chướng ngại vật của thế giới mẫu ra khỏi lối vào trường.
+     *
+     * Cụm `blocks` (khối bê tông + lốp xe) của bản gốc nằm ở (−77,5 · 31,1),
+     * đúng giữa hành lang từ bờ Tây đảo chính sang cầu — user chụp ảnh: "đường
+     * lớn đang bị chặn bởi các chướng ngại vật trước cổng".
+     *
+     * KHÔNG XOÁ (user dặn) — dời nguyên cụm sang đường xuyên sảnh phía sau toà
+     * Alpha, một đoạn thẳng dài đang trống, chơi chướng ngại vật ở đó còn hợp
+     * hơn. Dời bằng MỘT độ lệch chung nên thế trận của cụm giữ nguyên.
+     */
+    relocateSampleObstacles()
+    {
+        const inCorridor = (x, z) => x > -95 && x < -55 && z > 5 && z < 75
+        const OFFSET = { x: -107.5, z: 8.9 }   // (−77,5 · 31,1) → (−185 · 40)
+
+        let moved = 0
+
+        /**
+         * Nhắm ĐÍCH DANH theo tên. Bản đầu lọc "chỉ nhóm cấp cao" nên bỏ sót
+         * chính cụm `blocks` (nó nằm lồng trong một nhóm), đo lại thấy nó vẫn
+         * đứng nguyên chỗ cũ. Còn quét theo vị trí mà không lọc tên thì rất dễ
+         * tóm nhầm mặt sàn — `Floor.mesh` bám theo máy quay nên vị trí của nó
+         * có lúc rơi đúng vào hành lang này.
+         */
+        const OBSTACLE_NAMES = /^(blocks|tires|tyres|barriers|obstacles)/i
+        const targets = []
+
+        this.game.scene.traverse((object) =>
+        {
+            if(!object.isMesh && !object.isGroup) return
+            if(!OBSTACLE_NAMES.test(object.name || '')) return
+            if(!inCorridor(object.position.x, object.position.z)) return
+            targets.push(object)
+        })
+
+        for(const object of targets)
+        {
+            object.position.x += OFFSET.x
+            object.position.z += OFFSET.z
+            object.updateMatrix()
+            object.updateMatrixWorld(true)
+            moved++
+        }
+
+        for(const [ key, object ] of this.game.objects.list)
+        {
+            // CHỈ đồ của thế giới mẫu — không đụng vào cầu, cổng, hàng rào mình
+            // vừa dựng (chúng cũng nằm trong hành lang này)
+            if(!this.sampleObjectKeys.has(key)) continue
+
+            const body = object?.physical?.body
+            if(!body) continue
+
+            const t = body.translation()
+            if(!inCorridor(t.x, t.z)) continue
+
+            body.setTranslation({ x: t.x + OFFSET.x, y: t.y, z: t.z + OFFSET.z }, true)
+            if(object.visual?.object3D)
+            {
+                object.visual.object3D.position.x += OFFSET.x
+                object.visual.object3D.position.z += OFFSET.z
+                object.visual.object3D.needsUpdate = true
+            }
+            moved++
+        }
+
+        this.relocatedObstacles = moved
     }
 
     getMaterial(hex)
@@ -604,8 +685,30 @@ export class FptuCampus
         for(let i = 0; i < 9; i++)
             this.slab(0.18, 1.6, x + 6.5, fromZ - 3 + i * 6.6, '#e8e4da', { layer: 1 })
 
+        /**
+         * HAI ĐƯỜNG VÀO từ hai cổng chạy thẳng tới sân trước Alpha, rồi một
+         * nhánh nối dọc trong sân trước đưa xe về sảnh giữa.
+         *
+         * Vì cụm chữ FPT UNIVERSITY nay đứng ĐÚNG GIỮA (tâm z = 40, bệ trải
+         * z 30,5 → 49,5), trục lễ nghi cũ chạy xuyên z = 40 sẽ bị bệ chắn. Nên
+         * lối xe vòng ra hai bên — đúng cách đi thật của trường: giữa là sảnh
+         * đi bộ, xe chạy hai bên.
+         */
+        const roadFrom = -102
+        const roadTo = FORECOURT.x - 3
+        const roadLen = Math.abs(roadTo - roadFrom)
+
         for(const gz of gates)
-            this.slab(12, gateHalf * 2, x - 4, gz, COLORS.road, { layer: 1 })
+        {
+            this.slab(roadLen, gateHalf * 2, (roadFrom + roadTo) * 0.5, gz, COLORS.road, { layer: 1 })
+
+            // Vạch tim đường trên từng lối vào
+            for(let i = 0; i < 9; i++)
+                this.slab(2.2, 0.2, roadFrom - 4 - i * (roadLen / 9), gz, '#e8e4da', { layer: 2 })
+        }
+
+        // Nhánh nối dọc trong sân trước, đi qua trước cửa sảnh Alpha
+        this.slab(gateHalf * 2, gates[1] - gates[0] + gateHalf * 2, roadTo, plaza.z, COLORS.road, { layer: 1 })
     }
 
     /** Mặt đường, sảnh, thảm cỏ, sân trước — toàn bộ phần lát nền. */

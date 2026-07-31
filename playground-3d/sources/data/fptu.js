@@ -54,7 +54,7 @@ export const FRONTAGE = {
     gateHalf: 4.6,      // nửa bề rộng mỗi lối xe
     gates: [ 24, 56 ],  // tâm hai cổng — đủ xa để bậc sảnh không lấn vào lối
     // Bậc sảnh mang CẢ HAI tấm biển (xếp hạng + bảng hiệu FPT/QS) nên phải dài
-    plaza: { z: 40, halfZ: 9, depth: 9, rise: 0.3 },
+    plaza: { z: 40, halfZ: 10, depth: 26, rise: 0.3 },
 }
 
 /**
@@ -64,7 +64,7 @@ export const FRONTAGE = {
 export const MAIN_ROAD = { x: -106, z: 40, length: 96, width: 8 }
 
 /** Trục lễ nghi từ cổng thẳng vào toà Alpha. */
-export const AXIS = { z: 40, halfWidth: 5, fromX: -105, toX: -146 }
+export const AXIS = { z: 40, halfWidth: 5, fromX: -144, toX: -153 }
 
 /**
  * CON ĐƯỜNG XUYÊN SẢNH — chui qua sảnh lớn giữa toà Alpha rồi chạy thẳng ra
@@ -77,7 +77,7 @@ export const THROUGH_ROAD = { z: 40, halfWidth: 5.5, fromX: -152, toX: -232 }
 export const ALPHA_LOBBY = { halfWidth: 5, height: 3.6 }
 
 /** Sảnh + biển top xếp hạng đại học thế giới — ngay sau con đường. */
-export const RANKING_PLAZA = { x: -116, z: 40, width: 10, depth: 30 }
+export const RANKING_PLAZA = { x: -114, z: 40, width: 18, depth: 20 }
 /**
  * Biển xếp hạng Times Higher Education — nay đứng trên BẬC SẢNH GIỮA hai cổng,
  * đúng như ảnh mặt trước trường: hai cổng xe hai bên, ô giữa là bậc sảnh mang
@@ -90,17 +90,18 @@ export const RANKING_SIGN = { x: -99.2, z: 44, height: 2.1, width: 5 }
  * Hàng chữ FPT UNIVERSITY — đứng trên một BỆ (xem `FptuSigns`) và QUAY MẶT VỀ
  * PHÍA CỔNG (+X): lái từ cổng vào là đọc thẳng được, đúng như user yêu cầu.
  *
- * Chữ chạy dọc trục z nên PHẢI đặt lệch hẳn khỏi lòng đường: cụm chữ dài 16,9
- * cộng bệ thành 19,1, tâm ở z = 58 nên trải z 48,5 → 67,5, trong khi lòng
- * đường là z 35 → 45 và cột đèn mé Bắc ở z 46,4. Bản trước để tâm ngay z = 40
- * nên nó vắt ngang đường, chắn mất lối xe chạy.
+ * Cụm chữ nằm ĐÚNG GIỮA hai cổng (tâm z = 40), ngay sau sảnh nâng — đúng ảnh
+ * mặt trước trường. Vì bệ chữ là một bức tường dài 19,1 vắt ngang z 30,5 → 49,5
+ * nên trục lễ nghi KHÔNG còn chạy xuyên qua đây nữa: xe vào bằng hai đường từ
+ * hai cổng (z = 24 và 56) rồi vòng lên sân trước Alpha. Xem `AXIS` và
+ * `setFrontage()`.
  *
  * ⚠️ Xoay −π/2 là ra MẶT SAU, chữ lật gương đọc ngược — phải +π/2.
  */
-export const SIGN = { x: -127, y: 0, z: 58, rotationY: Math.PI * 0.5, scale: 1.35 }
+export const SIGN = { x: -129, y: 0, z: 40, rotationY: Math.PI * 0.5, scale: 1.35 }
 
 /** Thảm cỏ + lối đi bộ + hai hàng cọ giữa hàng chữ và toà Alpha. */
-export const LAWN = { x: -137, z: 40, width: 14, depth: 34 }
+export const LAWN = { x: -137, z: 40, width: 14, depth: 18 }
 
 /** Sân trước chân toà Alpha. */
 export const FORECOURT = { x: -147, z: 40, width: 6, depth: 46 }

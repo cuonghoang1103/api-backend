@@ -24,7 +24,12 @@ items.push(rect('sân võ', D.MARTIAL.x, D.MARTIAL.z, D.MARTIAL.width, D.MARTIAL
 items.push(rect('bãi xe', D.PARKING.x, D.PARKING.z, D.PARKING.width, D.PARKING.depth))
 items.push(rect('biển xếp hạng', D.RANKING_SIGN.x, D.RANKING_SIGN.z, 1.4, D.RANKING_SIGN.width))
 items.push(rect('chữ FPT UNIVERSITY', D.SIGN.x, D.SIGN.z, 1.2, 12.53 * D.SIGN.scale))
-items.push(rect('cổng', D.GATE.x, D.GATE.z, 3, 16))
+// Mặt tiền nay là HAI cổng hai bên + bậc sảnh giữa (xem `FRONTAGE`), không
+// còn một khối cổng nằm giữa trục như bản trước. Bảng xếp hạng đứng ĐÚNG trên
+// bậc sảnh giữa nên phải khai hai cổng riêng, nếu không bộ kiểm báo oan là
+// "biển xếp hạng đè lên cổng".
+for(const [ i, gz ] of D.FRONTAGE.gates.entries())
+    items.push(rect(`cổng ${i + 1}`, D.FRONTAGE.x, gz, 3, D.FRONTAGE.gateHalf * 2 + 3.4))
 
 let bad = 0
 
@@ -45,7 +50,7 @@ for (const r of roads) {
   for (const it of items) {
     // Cố ý nằm trên trục: sảnh Alpha để chui qua, cổng có lối mở giữa hai trụ,
     // hàng chữ đặt giữa quảng trường (xe vòng hai bên như trường thật)
-    if ([ 'toà ALPHA', 'cổng', 'chữ FPT UNIVERSITY' ].includes(it.name)) continue
+    if ([ 'toà ALPHA', 'cổng 1', 'cổng 2', 'chữ FPT UNIVERSITY' ].includes(it.name)) continue
     if (overlap(it, band)) { console.log(`  ✗ ${r.name} bị ${it.name} chắn`); n++; bad++ }
   }
   if (!n) console.log(`  ✓ ${r.name} thông suốt`)

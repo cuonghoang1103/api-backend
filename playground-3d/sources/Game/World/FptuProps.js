@@ -2,7 +2,7 @@ import * as THREE from 'three/webgpu'
 import { Game } from '../Game.js'
 import {
     ALPHA, BASKETBALL, BUILDINGS, CANTEEN, DORMS, FOOTBALL, FORECOURT, GATE,
-    LAKE, LAWN, MAIN_ROAD, MARTIAL, PARKING, PINE_HILL, RANKING_PLAZA,
+    FRONTAGE, LAKE, LAWN, MAIN_ROAD, MARTIAL, PARKING, PINE_HILL, RANKING_PLAZA,
     RANKING_SIGN, SIGN, SWAN_LAKE, THROUGH_ROAD, AXIS,
 } from '../../data/fptu.js'
 
@@ -57,6 +57,59 @@ export class FptuProps
         this.setBicycles()
         this.setParkedCars()
         this.setPicnicArea()
+        this.setSportsGreenery()
+    }
+
+    /**
+     * VIỀN CÂY XANH quanh các sân thể thao — user chốt "sân bóng, bóng rổ hay
+     * sân thể thao đó nhớ phủ cây xanh xung quanh khuôn".
+     *
+     * Dùng cụm lá của hệ mẫu, rải thành viền quanh mép sân, có bụi cao thấp xen
+     * kẽ nên nhìn ra hàng cây chứ không phải hàng rào.
+     */
+    setSportsGreenery()
+    {
+        const fields = [
+            { f: FOOTBALL, pad: 2.6 },
+            { f: BASKETBALL, pad: 2.4 },
+            { f: MARTIAL, pad: 2.2 },
+        ]
+
+        let seed = 100
+        for(const { f, pad } of fields)
+        {
+            const hw = f.width * 0.5 + pad
+            const hd = f.depth * 0.5 + pad
+            const perimeter = (hw + hd) * 2
+            const steps = Math.max(14, Math.round(perimeter / 2.1))
+
+            for(let i = 0; i < steps; i++)
+            {
+                seed++
+                const t = (i / steps) * 4
+                let x, z
+
+                // Đi vòng quanh hình chữ nhật: mỗi cạnh một phần tư quãng đường
+                if(t < 1) { x = f.x - hw + (t) * hw * 2; z = f.z - hd }
+                else if(t < 2) { x = f.x + hw; z = f.z - hd + (t - 1) * hd * 2 }
+                else if(t < 3) { x = f.x + hw - (t - 2) * hw * 2; z = f.z + hd }
+                else { x = f.x - hw; z = f.z + hd - (t - 3) * hd * 2 }
+
+                const jx = (rand(seed * 3) - 0.5) * 1.1
+                const jz = (rand(seed * 5) - 0.5) * 1.1
+                if(this.blocked(x + jx, z + jz)) continue
+
+                this.campus.canopy(x + jx, this.y + 0.25, z + jz, 0.55 + rand(seed * 7) * 0.4)
+
+                // Cứ vài bụi lại có một cây thân gỗ cho hàng cây có tầng
+                if(i % 4 === 0)
+                {
+                    this.box(0.26, 1.6, 0.26, x + jx, this.y + 0.8, z + jz, '#7a5b3a',
+                        { geometry: this.campus.cylinderGeometry, castShadow: false })
+                    this.campus.canopy(x + jx, this.y + 2.2, z + jz, 1.05 + rand(seed * 11) * 0.3)
+                }
+            }
+        }
     }
 
     box(...args) { return this.campus.box(...args) }
@@ -82,7 +135,8 @@ export class FptuProps
             rect(RANKING_PLAZA.x, RANKING_PLAZA.z, RANKING_PLAZA.width, RANKING_PLAZA.depth, 0.5),
             rect(CANTEEN.x, CANTEEN.z, CANTEEN.width, CANTEEN.depth),
             rect(PARKING.x, PARKING.z, PARKING.width, PARKING.depth, 0.5),
-            rect(GATE.x, GATE.z, 6, 16),
+            // Cả dải mặt tiền: hàng rào, hai cổng, bậc sảnh và đường trước cổng
+            rect(FRONTAGE.x + 3, (FRONTAGE.fromZ + FRONTAGE.toZ) * 0.5, 20, FRONTAGE.toZ - FRONTAGE.fromZ + 12, 0),
 
             /**
              * Hàng chữ FPT UNIVERSITY + biển xếp hạng + thảm cỏ trục chính —

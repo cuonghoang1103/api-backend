@@ -39,13 +39,32 @@ export const BRIDGE = { fromX: -84, toX: -94, z: 40, width: 9 }
 export const GATE = { x: -100, z: 40 }
 
 /**
+ * MẶT TIỀN TRƯỜNG — dựng theo ảnh thật user gửi.
+ *
+ * Trường có HAI CỔNG XE hai bên, và Ô GIỮA là một BẬC SẢNH cao hơn mặt đường
+ * một chút, trên đó đặt bảng xếp hạng. Người lái từ cầu vào sẽ gặp bậc sảnh
+ * chắn ngay trục, phải rẽ sang một trong hai cổng — đúng cách vào trường thật.
+ *
+ * Bậc chỉ cao 0,3 nên nếu ai cố leo qua vẫn leo được, không có chỗ nào kẹt.
+ */
+export const FRONTAGE = {
+    x: -100,            // đường ranh giới chạy dọc trục z
+    fromZ: 12,
+    toZ: 68,
+    gateHalf: 4.6,      // nửa bề rộng mỗi lối xe
+    gates: [ 24, 56 ],  // tâm hai cổng — đủ xa để bậc sảnh không lấn vào lối
+    // Bậc sảnh mang CẢ HAI tấm biển (xếp hạng + bảng hiệu FPT/QS) nên phải dài
+    plaza: { z: 40, halfZ: 9, depth: 9, rise: 0.3 },
+}
+
+/**
  * CON ĐƯỜNG chạy dọc mép Đông trường (bản đồ thật: đường chính mép Nam).
  * "Trước cái biển và sảnh đó là con đường" — đường này.
  */
 export const MAIN_ROAD = { x: -106, z: 40, length: 96, width: 8 }
 
 /** Trục lễ nghi từ cổng thẳng vào toà Alpha. */
-export const AXIS = { z: 40, halfWidth: 5, fromX: -96, toX: -146 }
+export const AXIS = { z: 40, halfWidth: 5, fromX: -105, toX: -146 }
 
 /**
  * CON ĐƯỜNG XUYÊN SẢNH — chui qua sảnh lớn giữa toà Alpha rồi chạy thẳng ra
@@ -60,10 +79,11 @@ export const ALPHA_LOBBY = { halfWidth: 5, height: 3.6 }
 /** Sảnh + biển top xếp hạng đại học thế giới — ngay sau con đường. */
 export const RANKING_PLAZA = { x: -116, z: 40, width: 10, depth: 30 }
 /**
- * Biển xếp hạng Times Higher Education — user chốt DỜI sang phía bên kia trục
- * (trước ở z = 52, tức mé Bắc; nay xuống mé Nam) để nó đối diện hàng chữ.
+ * Biển xếp hạng Times Higher Education — nay đứng trên BẬC SẢNH GIỮA hai cổng,
+ * đúng như ảnh mặt trước trường: hai cổng xe hai bên, ô giữa là bậc sảnh mang
+ * tấm biển này.
  */
-export const RANKING_SIGN = { x: -116, z: 28, height: 2.1, width: 5 }
+export const RANKING_SIGN = { x: -99.2, z: 44, height: 2.1, width: 5 }
 
 /** Hàng chữ FPT UNIVERSITY — mặt đường, ngay trước thảm cỏ dẫn vào Alpha. */
 /**

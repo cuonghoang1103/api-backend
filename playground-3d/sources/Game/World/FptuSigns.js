@@ -382,8 +382,15 @@ export class FptuSigns
      */
     setGateSign()
     {
-        const x = GATE.x + 1.2
-        const z = GATE.z + 9.9
+        /**
+         * Đứng trên BẬC SẢNH GIỮA, nửa phía Nam, cạnh biển xếp hạng — đúng ảnh
+         * mặt trước trường (hai tấm biển cùng nằm ở ô giữa).
+         *
+         * Bản trước đặt ở z ≈ 50 và nó CHẮN NGANG lối vào cổng Bắc: lái thử
+         * ngày 31/7, xe đi được 1,4 đơn vị rồi đứng.
+         */
+        const x = GATE.x + 0.8
+        const z = GATE.z - 5
         const wallW = 0.75
         const wallH = 2.5
         const wallD = 6.6

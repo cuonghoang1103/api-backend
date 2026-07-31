@@ -2,7 +2,7 @@ import * as THREE from 'three/webgpu'
 import { attribute, color } from 'three/tsl'
 import { Game } from '../Game.js'
 import { MeshDefaultMaterial } from '../Materials/MeshDefaultMaterial.js'
-import { ALPHA, ALPHA_LOBBY, SWAN_LAKE, LAKE_ISLET, AXIS, THROUGH_ROAD, BASKETBALL, BRIDGE, BUILDINGS, CANTEEN, COLORS, DORMS, FOOTBALL, FORECOURT, GATE, ISLAND, LAKE, LAWN, MAIN_ROAD, MARTIAL, PARKING, QUESTION_BLOCKS, RANKING_PLAZA, RANKING_SIGN, SIGN, STATUE } from '../../data/fptu.js'
+import { ALPHA, ALPHA_LOBBY, SWAN_LAKE, LAKE_ISLET, AXIS, THROUGH_ROAD, BASKETBALL, BRIDGE, BUILDINGS, FRONTAGE, CANTEEN, COLORS, DORMS, FOOTBALL, FORECOURT, GATE, ISLAND, LAKE, LAWN, MAIN_ROAD, MARTIAL, PARKING, QUESTION_BLOCKS, RANKING_PLAZA, RANKING_SIGN, SIGN, STATUE } from '../../data/fptu.js'
 import { FptuQuiz } from './FptuQuiz.js'
 import { FptuPineHill } from './FptuPineHill.js'
 import { FptuSwans } from './FptuSwans.js'
@@ -102,7 +102,7 @@ export class FptuCampus
 
         this.setIsland()
         this.setBridge()
-        this.setGate()
+        this.setFrontage()
         this.setGround()
         this.setAlpha()
         this.setBuildings()
@@ -520,39 +520,92 @@ export class FptuCampus
         }
     }
 
-    /** Cổng chính — hai trụ, thanh ngang cam, biển đá + logo FPT, bốt bảo vệ. */
-    setGate()
+    /**
+     * MẶT TIỀN TRƯỜNG — hai cổng xe hai bên, bậc sảnh ở giữa mang bảng xếp hạng.
+     *
+     * Dựng theo ảnh thật user gửi. Bản trước chỉ có MỘT cổng nằm giữa trục, sai
+     * hẳn so với mặt trước thật của trường.
+     *
+     * Bậc sảnh giữa cao 0,3 so với mặt đường — đủ để mắt đọc ra "đây là bậc,
+     * không phải lối xe", mà xe lỡ leo lên vẫn xuống được, không tạo chỗ kẹt.
+     */
+    setFrontage()
     {
-        const { x, z } = GATE
-        const opening = 6.5 // nửa độ rộng lối vào — trục đường rộng 9 nên dư sức
+        const { x, fromZ, toZ, gateHalf, gates, plaza } = FRONTAGE
 
-        // Trụ cổng có ĐẾ LOE, GỜ và MŨ — hết cảnh hai cột hộp trơn user chê
-        for(const side of [ -1, 1 ])
+        // ── Bậc sảnh giữa: nền gạch đỏ nhô cao, viền đá ─────────────────────
+        const pz0 = plaza.z - plaza.halfZ
+        const pz1 = plaza.z + plaza.halfZ
+
+        this.box(plaza.depth, plaza.rise, plaza.halfZ * 2, x - plaza.depth * 0.5 + 2, GROUND_TOP + plaza.rise * 0.5, plaza.z, '#b0a693', { physical: true })
+        this.slab(plaza.depth - 0.5, plaza.halfZ * 2 - 0.5, x - plaza.depth * 0.5 + 2, plaza.z, COLORS.plazaBrick, { layer: 3 })
+
+        // ── Hàng rào chạy dọc mặt tiền, chừa hai lối cổng và ô giữa ─────────
+        const openings = [
+            [ gates[0] - gateHalf, gates[0] + gateHalf ],
+            [ pz0, pz1 ],
+            [ gates[1] - gateHalf, gates[1] + gateHalf ],
+        ]
+
+        let cursor = fromZ
+        const runs = []
+        for(const [ a, b ] of openings)
         {
-            const pz = z + side * opening
-            this.box(1.7, 0.5, 1.7, x, 0.25, pz, '#b9b2a2', { physical: true })
-            this.box(1.25, 4.3, 1.25, x, 2.55, pz, COLORS.wall, { physical: true })
-            // Panel ốp nổi hai mặt cho trụ có chiều sâu
-            this.box(0.95, 3.6, 0.16, x, 2.45, pz + (side > 0 ? -0.66 : 0.66), '#e3ded2', { castShadow: false })
-            this.box(0.16, 3.6, 0.95, x + 0.66, 2.45, pz, '#e3ded2', { castShadow: false })
-            // Gờ + mũ trụ hai bậc, chóp tròn
-            this.box(1.45, 0.28, 1.45, x, 4.85, pz, '#c3bdae')
-            this.box(1.15, 0.35, 1.15, x, 5.15, pz, COLORS.wall)
-            this.box(0.85, 0.3, 0.85, x, 5.48, pz, '#c3bdae', { geometry: this.cylinderGeometry })
+            if(a > cursor) runs.push([ cursor, a ])
+            cursor = Math.max(cursor, b)
+        }
+        if(cursor < toZ) runs.push([ cursor, toZ ])
+
+        for(const [ z0, z1 ] of runs)
+        {
+            const len = z1 - z0
+            const cz = (z0 + z1) * 0.5
+
+            // Tường lửng + song sắt bên trên, đúng kiểu hàng rào trường
+            this.box(0.4, 0.75, len, x, GROUND_TOP + 0.37, cz, '#d9d5cc', { physical: true })
+            this.box(0.5, 0.16, len, x, GROUND_TOP + 0.82, cz, '#c3bdae', { castShadow: false })
+            this.box(0.16, 0.12, len, x, GROUND_TOP + 1.72, cz, '#b9b2a2', { castShadow: false })
+
+            const bars = Math.max(2, Math.round(len / 0.85))
+            for(let i = 0; i <= bars; i++)
+                this.box(0.1, 0.95, 0.09, x, GROUND_TOP + 1.28, z0 + (i / bars) * len, '#c9c4b6', { castShadow: false })
         }
 
-        // Thanh ngang hai lớp + logo ba khối màu quay ra phía cầu đón khách
-        this.box(0.7, 0.55, opening * 2 + 1.1, x, 5.62, z, COLORS.orange)
-        this.box(0.78, 0.16, opening * 2 + 1.5, x, 5.98, z, '#c3bdae')
-        for(const [ i, hex ] of [ COLORS.orange, COLORS.green, COLORS.blue ].entries())
-            this.box(0.2, 0.34, 0.62, x + 0.42, 5.62, z + (i - 1) * 0.78, hex, { castShadow: false })
+        // ── Hai cổng: trụ có đế loe, panel, mũ hai bậc; thanh ngang cam ─────
+        for(const gz of gates)
+            for(const side of [ -1, 1 ])
+            {
+                const pz = gz + side * (gateHalf + 0.7)
 
-        // Biển đá bên phải cổng nay do `FptuSigns.setGateSign()` dựng — tường đá
-        // ong có logo FPT và bảng QS Stars vẽ thật, thay cho ba khối màu cũ
+                this.box(1.7, 0.5, 1.7, x, GROUND_TOP + 0.25, pz, '#b9b2a2', { physical: true })
+                this.box(1.25, 4.3, 1.25, x, GROUND_TOP + 2.55, pz, COLORS.wall, { physical: true })
+                this.box(0.95, 3.6, 0.16, x, GROUND_TOP + 2.45, pz + (side > 0 ? -0.66 : 0.66), '#e3ded2', { castShadow: false })
+                this.box(0.16, 3.6, 0.95, x + 0.66, GROUND_TOP + 2.45, pz, '#e3ded2', { castShadow: false })
+                this.box(1.45, 0.28, 1.45, x, GROUND_TOP + 4.85, pz, '#c3bdae')
+                this.box(1.15, 0.35, 1.15, x, GROUND_TOP + 5.15, pz, COLORS.wall)
+                this.box(0.85, 0.3, 0.85, x, GROUND_TOP + 5.48, pz, '#c3bdae', { geometry: this.cylinderGeometry })
+            }
 
-        // Bốt bảo vệ bên trái
-        this.box(2.4, 2.5, 2.4, x, 1.25, z - opening - 2.6, COLORS.wall, { physical: true })
-        this.box(2.8, 0.25, 2.8, x, 2.62, z - opening - 2.6, COLORS.roof)
+        // Thanh ngang trên mỗi cổng — cao hơn nóc xe rất nhiều
+        for(const gz of gates)
+        {
+            this.box(0.7, 0.55, (gateHalf + 0.7) * 2 + 1.1, x, GROUND_TOP + 5.62, gz, COLORS.orange)
+            this.box(0.78, 0.16, (gateHalf + 0.7) * 2 + 1.5, x, GROUND_TOP + 5.98, gz, '#c3bdae')
+            for(const [ i, hex ] of [ COLORS.orange, COLORS.green, COLORS.blue ].entries())
+                this.box(0.2, 0.34, 0.62, x + 0.42, GROUND_TOP + 5.62, gz + (i - 1) * 0.78, hex, { castShadow: false })
+        }
+
+        // Bốt bảo vệ cạnh cổng phía Nam
+        this.box(2.4, 2.5, 2.4, x + 2.6, GROUND_TOP + 1.25, gates[0] - gateHalf - 3.4, COLORS.wall, { physical: true })
+        this.box(2.8, 0.25, 2.8, x + 2.6, GROUND_TOP + 2.62, gates[0] - gateHalf - 3.4, COLORS.roof)
+
+        // ── Mặt đường trước cổng: dải nhựa chạy dọc mặt tiền + hai lối vào ──
+        this.slab(9, toZ - fromZ + 10, x + 6.5, (fromZ + toZ) * 0.5, COLORS.road)
+        for(let i = 0; i < 9; i++)
+            this.slab(0.18, 1.6, x + 6.5, fromZ - 3 + i * 6.6, '#e8e4da', { layer: 1 })
+
+        for(const gz of gates)
+            this.slab(12, gateHalf * 2, x - 4, gz, COLORS.road, { layer: 1 })
     }
 
     /** Mặt đường, sảnh, thảm cỏ, sân trước — toàn bộ phần lát nền. */
@@ -1020,16 +1073,23 @@ export class FptuCampus
      */
     setPalms()
     {
-        const spots = []
-        for(let i = 0; i < 3; i++)
-        {
-            const x = LAWN.x + LAWN.width * 0.5 - 1.4 - i * 4.4
-            spots.push({ x, z: LAWN.z - 5.4 }, { x, z: LAWN.z + 5.4 })
-        }
+        /**
+         * MỘT hàng cọ chạy dọc, NGANG với hàng chữ FPT UNIVERSITY và đứng phía
+         * sau nó — đúng ảnh mặt trước trường user gửi.
+         *
+         * Bản trước xếp hai hàng ba cây kẹp hai bên lối đi; user chê thẳng
+         * "6 cây cọ nó không nằm 2 bên 2 phía như thế, nó nằm ngang với chữ
+         * FPT University ở phía sau".
+         */
+        const textLength = 12.53 * SIGN.scale
+        const count = 6
 
-        // Mỗi cây một hướng nghiêng và cỡ khác nhau — hàng cọ hết trông nhân bản
-        spots.forEach((spot, i) =>
-            this.palm(spot.x, spot.z, { scale: 0.7 + ((i * 5) % 4) * 0.05, lean: i * 1.7 }))
+        for(let i = 0; i < count; i++)
+        {
+            const t = (i + 0.5) / count
+            const z = SIGN.z - textLength * 0.5 + t * textLength
+            this.palm(SIGN.x - 5.5, z, { scale: 0.82 + ((i * 5) % 4) * 0.05, lean: i * 1.7 })
+        }
     }
 
     /**
@@ -1246,7 +1306,9 @@ export class FptuCampus
     /** Vùng tròn quanh cổng — lái vào là hiện hộp thoại hỏi sinh viên. */
     setGateZone()
     {
-        const zone = this.game.zones.create('cylinder', new THREE.Vector3(GATE.x, 0, GATE.z), 8)
+        // Bán kính phải bao TRÙM cả hai cổng (z 27 và 53, cách tâm 13) — bản
+        // trước để 8 nên vào bằng cổng bên là không hiện hộp thoại hỏi kỳ nào
+        const zone = this.game.zones.create('cylinder', new THREE.Vector3(GATE.x, 0, GATE.z), 18)
 
         zone.events.on('enter', () =>
         {

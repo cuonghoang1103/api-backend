@@ -91,12 +91,13 @@ export class FptuCampus
         return material
     }
 
-    box(width, height, depth, x, y, z, hex, { rotationY = 0, rotationZ = 0, physical = false, geometry = null, castShadow = true } = {})
+    box(width, height, depth, x, y, z, hex, { rotationX = 0, rotationY = 0, rotationZ = 0, physical = false, geometry = null, castShadow = true } = {})
     {
         const mesh = new THREE.Mesh(geometry ?? this.boxGeometry, this.getMaterial(hex))
         mesh.scale.set(width, height, depth)
         mesh.position.set(x, y, z)
         mesh.rotation.order = 'YZX'
+        mesh.rotation.x = rotationX
         mesh.rotation.y = rotationY
         mesh.rotation.z = rotationZ
         mesh.castShadow = castShadow
@@ -105,7 +106,9 @@ export class FptuCampus
 
         if(physical)
         {
-            const quaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), rotationY)
+            // Lấy quaternion từ ĐÚNG bộ Euler của hình. Bản trước chỉ dựng từ
+            // mỗi rotationY nên khối nào nghiêng là hình một đằng va chạm một nẻo.
+            const quaternion = new THREE.Quaternion().setFromEuler(new THREE.Euler(rotationX, rotationY, rotationZ, 'YZX'))
 
             this.game.objects.add(
                 null,
@@ -158,25 +161,54 @@ export class FptuCampus
          * hồ chỉ thấy màu cát cam thay vì nước. Đúng chỗ người dùng chê "hồ sen
          * xấu thế này".
          */
-        const bandW = 3
-        const outerW = ISLAND.width + bandW * 2
+        /**
+         * BỜ CÁT THOẢI quanh đảo — và nó PHẢI CÓ THÂN VẬT LÝ.
+         *
+         * Bản trước vành cát chỉ là hình: xe chạy ra mép liền rơi xuống "sàn
+         * đáy" toàn cục (y = −0,01) trong khi mặt cát vẽ ở −0,19, tức xe đứng
+         * lơ lửng CAO HƠN mặt cát 18 phân — nhìn đúng như đi xuyên qua bờ, và
+         * lúc rơi xuống nước thì loay hoay không có gì để leo lên.
+         *
+         * Nay bờ làm hai bậc rất thoải: bậc ngoài mặt ở y = 0,00 (chỉ nhỉnh hơn
+         * đáy 1 phân) rồi bậc trong ở y = 0,02, cuối cùng mới tới mặt đảo 0,04.
+         * Chênh mỗi bậc chỉ 1–2 phân nên xe bò lên được từ mọi phía, không cần
+         * tìm chỗ nào là "bến".
+         */
+        /**
+         * BỜ DỐC quanh đảo — mặt phẳng NGHIÊNG thật, có thân vật lý.
+         *
+         * Bậc thang phẳng không ăn thua: xe rơi xuống biển nổi ở khoảng
+         * y = −0,7, mà bậc bờ ở y = 0 thì chênh 70 phân — vách đứng, bánh không
+         * bám nổi, đúng cảnh "kẹt dưới nước không lên được". Nên bờ phải là
+         * DỐC: chìm hẳn xuống −1,4 ở mép ngoài rồi thoải dần lên bằng mặt đảo,
+         * chạy dài 10 đơn vị nên độ dốc chỉ chừng 8° — xe bò lên từ mọi phía.
+         */
+        const RAMP_RUN = 10      // bề rộng dải dốc
+        const RAMP_DROP = 1.45   // mép ngoài thấp hơn mặt đảo bao nhiêu
+        const rampAngle = Math.atan2(RAMP_DROP, RAMP_RUN)
+        const rampThickness = 1.6
+        const rampLength = Math.hypot(RAMP_RUN, RAMP_DROP)
+        const midY = GROUND_TOP - RAMP_DROP * 0.5 - Math.cos(rampAngle) * rampThickness * 0.5
+
         for(const side of [ -1, 1 ])
         {
-            this.box(outerW, 1.1, bandW, ISLAND.x, GROUND_TOP - 0.78, ISLAND.z + side * (ISLAND.depth * 0.5 + bandW * 0.5), '#d8b47e', { castShadow: false })
-            this.box(bandW, 1.1, ISLAND.depth, ISLAND.x + side * (ISLAND.width * 0.5 + bandW * 0.5), GROUND_TOP - 0.78, ISLAND.z, '#d8b47e', { castShadow: false })
+            // Bờ Bắc / Nam: dốc nghiêng quanh trục X
+            const zMid = ISLAND.z + side * (ISLAND.depth * 0.5 + RAMP_RUN * 0.5)
+            this.box(
+                ISLAND.width + RAMP_RUN * 2, rampThickness, rampLength,
+                ISLAND.x, midY, zMid, '#d8b47e',
+                { rotationX: side * rampAngle, physical: true, castShadow: false }
+            )
+
+            // Bờ Đông / Tây: dốc nghiêng quanh trục Z
+            const xMid = ISLAND.x + side * (ISLAND.width * 0.5 + RAMP_RUN * 0.5)
+            this.box(
+                rampLength, rampThickness, ISLAND.depth,
+                xMid, midY, ISLAND.z, '#d8b47e',
+                { rotationZ: -side * rampAngle, physical: true, castShadow: false }
+            )
         }
 
-        /**
-         * Nền đảo dựng thành BỐN DẢI chừa một lỗ đúng chỗ hồ sen, thay vì một
-         * phiến liền.
-         *
-         * Vì sao bõ công: mặt biển của game (`WaterSurface`) là mặt phẳng bám
-         * theo máy quay ở cao độ `water.surfaceElevation = −0,3`, tức CAO HƠN
-         * đáy đảo. Khoét thủng nền là nước thật trồi lên thành hồ — có gợn
-         * sóng, có loang màu, có đóng băng khi trời lạnh, xe lội xuống còn nghe
-         * tiếng nước. Đắp một tấm phẳng màu xanh như bản trước thì chỉ ra miếng
-         * bìa, đúng như người dùng chê "vuông, nhọn như đồ chơi".
-         */
         const halfW = ISLAND.width * 0.5
         const halfD = ISLAND.depth * 0.5
 
@@ -532,6 +564,57 @@ export class FptuCampus
         const waterY = this.game.water.surfaceElevation
 
         /**
+         * VÀNH DỐC quanh miệng hồ — cùng lý do với bờ đảo: rơi xuống hồ mà mép
+         * là vách đứng thì xe nằm dưới đó vĩnh viễn. Chia chu vi bầu dục thành
+         * 20 đoạn, mỗi đoạn là một tấm nghiêng đặt tiếp tuyến, mép ngoài bằng
+         * mặt đất còn mép trong chìm xuống đáy hồ.
+         */
+        /**
+         * ĐÁY HỒ NÔNG. Mặt nước ở −0,3, đáy đặt ở −0,75 nên hồ sâu chừng 45
+         * phân: xe lội qua được, nước ngập tới nửa bánh, và quan trọng nhất là
+         * KHÔNG BAO GIỜ KẸT — cứ đi thẳng là lên bờ.
+         *
+         * Trước đó lòng hồ hoàn toàn rỗng (bắn tia xuống không thấy mặt rắn
+         * nào), xe rơi xuống nổi lơ lửng ở −0,6 trong khi mép dốc nằm mãi dưới
+         * −1,2 nên chẳng có gì mà bò lên.
+         */
+        const lakeFloorY = -0.75
+        this.box(LAKE.radiusX * 2 + 2, 0.6, LAKE.radiusZ * 2 + 2, LAKE.x, lakeFloorY - 0.3, LAKE.z, '#6f6a52', { castShadow: false })
+        this.game.objects.add(null, {
+            type: 'fixed', friction: 0.3, restitution: 0,
+            position: { x: LAKE.x, y: lakeFloorY - 0.3, z: LAKE.z },
+            colliders: [ { shape: 'cuboid', parameters: [ (LAKE.radiusX + 1), 0.3, (LAKE.radiusZ + 1) ] } ]
+        })
+
+        const LAKE_RUN = 8
+        const LAKE_DROP = 1.35
+        const lakeAngle = Math.atan2(LAKE_DROP, LAKE_RUN)
+        const lakeRampLength = Math.hypot(LAKE_RUN, LAKE_DROP)
+        const segments = 20
+
+        for(let i = 0; i < segments; i++)
+        {
+            const theta = (i / segments) * Math.PI * 2
+            const cos = Math.cos(theta)
+            const sin = Math.sin(theta)
+
+            // Tâm đoạn dốc nằm TRONG LÒNG hồ, thụt vào nửa bề rộng dốc.
+            // Đặt ra ngoài mép (bản trước) là dốc chìm hẳn dưới nền đất, xe bơi
+            // tới nơi vẫn đâm vào vách đứng của nền.
+            const px = LAKE.x + cos * (LAKE.radiusX - LAKE_RUN * 0.5)
+            const pz = LAKE.z + sin * (LAKE.radiusZ - LAKE_RUN * 0.5)
+
+            // Bề dài mỗi đoạn = cung chu vi, cộng dư để các đoạn gối lên nhau
+            const arc = (Math.PI * 2 * Math.max(LAKE.radiusX, LAKE.radiusZ)) / segments * 1.5
+
+            this.box(
+                lakeRampLength, 1.4, arc,
+                px, GROUND_TOP - LAKE_DROP * 0.5 - 0.7, pz, '#d8b47e',
+                { rotationY: -theta, rotationZ: lakeAngle, physical: true, castShadow: false }
+            )
+        }
+
+        /**
          * Không đắp bờ hay đáy gì cả: miệng hồ đã khoét hình bầu dục ở
          * `setIsland`, nên nhìn xuống là MẶT NƯỚC THẬT của game — cùng thứ nước
          * làm nên mấy cái hồ đẹp của bản đồ gốc: có sóng lượn, loang màu theo
@@ -707,26 +790,39 @@ export class FptuCampus
      */
     setTrees()
     {
+        /**
+         * ⚠️ PHẢI gọi `updateMatrix()` + `updateMatrixWorld()`.
+         *
+         * `Trees` dựng phần THÂN và LÁ từ `reference.matrix` / `.matrixWorld`
+         * (Trees.js:61 và :76), nhưng dựng THÂN VẬT LÝ từ `reference.position`
+         * (:108). Object3D tạo bằng mã có `position` đúng ngay nhưng `matrix`
+         * vẫn là ma trận đơn vị cho tới khi được cập nhật — nên cây HIỆN Ở GỐC
+         * TOẠ ĐỘ trong khi va chạm nằm đúng chỗ mình đặt. Đó chính là "bức
+         * tường vô hình" người dùng đâm phải trước sảnh Alpha.
+         */
         const make = (list) => list.map(([ x, z, scale ]) =>
         {
             const object = new THREE.Object3D()
             object.position.set(x, 0, z)
             object.scale.setScalar(scale)
+            object.updateMatrix()
+            object.updateMatrixWorld(true)
             return object
         })
 
-        // Ba loại cây, đặt tránh trục đường và tránh chân nhà
+        // Ba loại cây — toạ độ theo đảo MỚI (150×116, tâm −162·40), đều cách
+        // tim hai con đường ≥ 9 đơn vị nên không cây nào thò vào lòng đường
         const birch = make([
-            [ -104, 30, 1.1 ], [ -104, 52, 1 ], [ -122, 12, 1.2 ], [ -131, 22, 1 ],
-            [ -150, 58, 1.1 ], [ -166, 34, 1 ], [ -178, 30, 1.2 ], [ -196, 34, 1 ],
+            [ -98, 66, 1.1 ], [ -114, 12, 1 ], [ -120, 60, 1.2 ], [ -134, 16, 1 ],
+            [ -150, 62, 1.1 ], [ -168, 56, 1 ], [ -196, 62, 1.2 ], [ -214, 52, 1 ],
         ])
         const oak = make([
-            [ -110, 20, 1.2 ], [ -127, 30, 1 ], [ -134, 14, 1.1 ], [ -145, 56, 1.2 ],
-            [ -158, 52, 1 ], [ -172, 26, 1.1 ], [ -190, 46, 1 ], [ -200, 22, 1.2 ],
+            [ -98, 28, 1.2 ], [ -114, 56, 1 ], [ -130, 60, 1.1 ], [ -146, 20, 1.2 ],
+            [ -164, 62, 1 ], [ -182, 56, 1.1 ], [ -206, 20, 1 ], [ -224, 56, 1.2 ],
         ])
         const cherry = make([
-            [ -116, 32, 1 ], [ -124, 50, 1.1 ], [ -140, 30, 1 ], [ -152, 12, 1.1 ],
-            [ -164, 46, 1 ], [ -182, 20, 1.1 ], [ -194, 60, 1 ],
+            [ -120, 66, 1 ], [ -122, 24, 1.1 ], [ -140, 62, 1 ], [ -158, 24, 1.1 ],
+            [ -176, 62, 1 ], [ -200, 22, 1.1 ], [ -220, 66, 1 ],
         ])
 
         this.birchTrees = new Trees('FPTU Birch', this.game.resources.birchTreesVisualModel.scene, birch, '#ff4f2b', '#ff903f')

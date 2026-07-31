@@ -95237,10 +95237,10 @@ https://github.com/browserify/crypto-browserify`);
         colorNode: color$1(e)
       }), this.materials.set(e, r)), r;
     }
-    box(e, r, s, o, a, h, c, { rotationY: d = 0, rotationZ: f = 0, physical: p = false, geometry: m = null, castShadow: b = true } = {}) {
-      const w = new Mesh$1(m ?? this.boxGeometry, this.getMaterial(c));
-      if (w.scale.set(e, r, s), w.position.set(o, a, h), w.rotation.order = "YZX", w.rotation.y = d, w.rotation.z = f, w.castShadow = b, w.receiveShadow = true, this.group.add(w), p) {
-        const M = new Quaternion$1().setFromAxisAngle(new Vector3$1(0, 1, 0), d);
+    box(e, r, s, o, a, h, c, { rotationX: d = 0, rotationY: f = 0, rotationZ: p = 0, physical: m = false, geometry: b = null, castShadow: w = true } = {}) {
+      const M = new Mesh$1(b ?? this.boxGeometry, this.getMaterial(c));
+      if (M.scale.set(e, r, s), M.position.set(o, a, h), M.rotation.order = "YZX", M.rotation.x = d, M.rotation.y = f, M.rotation.z = p, M.castShadow = w, M.receiveShadow = true, this.group.add(M), m) {
+        const R = new Quaternion$1().setFromEuler(new Euler$1(d, f, p, "YZX"));
         this.game.objects.add(null, {
           type: "fixed",
           position: {
@@ -95249,10 +95249,10 @@ https://github.com/browserify/crypto-browserify`);
             z: h
           },
           rotation: {
-            x: M.x,
-            y: M.y,
-            z: M.z,
-            w: M.w
+            x: R.x,
+            y: R.y,
+            z: R.z,
+            w: R.w
           },
           colliders: [
             {
@@ -95266,7 +95266,7 @@ https://github.com/browserify/crypto-browserify`);
           ]
         });
       }
-      return w;
+      return M;
     }
     slab(e, r, s, o, a, { layer: h = 0 } = {}) {
       const c = GROUND_TOP + 0.05 + h * 0.03;
@@ -95275,63 +95275,72 @@ https://github.com/browserify/crypto-browserify`);
       });
     }
     setIsland() {
-      const r = ISLAND.width + 6;
-      for (const d of [
+      const s = Math.atan2(1.45, 10), o = 1.6, a = Math.hypot(10, 1.45), h = GROUND_TOP - 1.45 * 0.5 - Math.cos(s) * o * 0.5;
+      for (const b of [
         -1,
         1
-      ]) this.box(r, 1.1, 3, ISLAND.x, GROUND_TOP - 0.78, ISLAND.z + d * (ISLAND.depth * 0.5 + 3 * 0.5), "#d8b47e", {
-        castShadow: false
-      }), this.box(3, 1.1, ISLAND.depth, ISLAND.x + d * (ISLAND.width * 0.5 + 3 * 0.5), GROUND_TOP - 0.78, ISLAND.z, "#d8b47e", {
-        castShadow: false
-      });
-      const s = ISLAND.width * 0.5, o = ISLAND.depth * 0.5, a = 18, h = LAKE.radiusX * 2 / a, c = [];
-      c.push({
-        x0: ISLAND.x - s,
-        x1: LAKE.x - LAKE.radiusX,
-        z0: ISLAND.z - o,
-        z1: ISLAND.z + o
-      }), c.push({
-        x0: LAKE.x + LAKE.radiusX,
-        x1: ISLAND.x + s,
-        z0: ISLAND.z - o,
-        z1: ISLAND.z + o
-      });
-      for (let d = 0; d < a; d++) {
-        const f = LAKE.x - LAKE.radiusX + d * h, p = f + h, m = Math.max(Math.abs(f - LAKE.x), Math.abs(p - LAKE.x)) / LAKE.radiusX, b = m >= 1 ? 0 : LAKE.radiusZ * Math.sqrt(1 - m * m);
-        c.push({
-          x0: f,
-          x1: p,
-          z0: ISLAND.z - o,
-          z1: LAKE.z - b
-        }), c.push({
-          x0: f,
-          x1: p,
-          z0: LAKE.z + b,
-          z1: ISLAND.z + o
+      ]) {
+        const w = ISLAND.z + b * (ISLAND.depth * 0.5 + 5);
+        this.box(ISLAND.width + 20, o, a, ISLAND.x, h, w, "#d8b47e", {
+          rotationX: b * s,
+          physical: true,
+          castShadow: false
+        });
+        const M = ISLAND.x + b * (ISLAND.width * 0.5 + 10 * 0.5);
+        this.box(a, o, ISLAND.depth, M, h, ISLAND.z, "#d8b47e", {
+          rotationZ: -b * s,
+          physical: true,
+          castShadow: false
         });
       }
-      for (const d of c) {
-        const f = d.x1 - d.x0, p = d.z1 - d.z0;
-        if (f <= 0.01 || p <= 0.01) continue;
-        const m = (d.x0 + d.x1) * 0.5, b = (d.z0 + d.z1) * 0.5;
-        this.box(f, 1.5, p, m, GROUND_TOP - 0.75, b, COLORS$1.grass, {
+      const c = ISLAND.width * 0.5, d = ISLAND.depth * 0.5, f = 18, p = LAKE.radiusX * 2 / f, m = [];
+      m.push({
+        x0: ISLAND.x - c,
+        x1: LAKE.x - LAKE.radiusX,
+        z0: ISLAND.z - d,
+        z1: ISLAND.z + d
+      }), m.push({
+        x0: LAKE.x + LAKE.radiusX,
+        x1: ISLAND.x + c,
+        z0: ISLAND.z - d,
+        z1: ISLAND.z + d
+      });
+      for (let b = 0; b < f; b++) {
+        const w = LAKE.x - LAKE.radiusX + b * p, M = w + p, R = Math.max(Math.abs(w - LAKE.x), Math.abs(M - LAKE.x)) / LAKE.radiusX, V = R >= 1 ? 0 : LAKE.radiusZ * Math.sqrt(1 - R * R);
+        m.push({
+          x0: w,
+          x1: M,
+          z0: ISLAND.z - d,
+          z1: LAKE.z - V
+        }), m.push({
+          x0: w,
+          x1: M,
+          z0: LAKE.z + V,
+          z1: ISLAND.z + d
+        });
+      }
+      for (const b of m) {
+        const w = b.x1 - b.x0, M = b.z1 - b.z0;
+        if (w <= 0.01 || M <= 0.01) continue;
+        const R = (b.x0 + b.x1) * 0.5, V = (b.z0 + b.z1) * 0.5;
+        this.box(w, 1.5, M, R, GROUND_TOP - 0.75, V, COLORS$1.grass, {
           castShadow: false
         }), this.game.objects.add(null, {
           type: "fixed",
           friction: 0.25,
           restitution: 0,
           position: {
-            x: m,
+            x: R,
             y: GROUND_TOP - 0.75,
-            z: b
+            z: V
           },
           colliders: [
             {
               shape: "cuboid",
               parameters: [
-                f * 0.5,
+                w * 0.5,
                 0.75,
-                p * 0.5
+                M * 0.5
               ]
             }
           ]
@@ -95504,7 +95513,40 @@ https://github.com/browserify/crypto-browserify`);
       }
     }
     setLake() {
-      const e = this.game.water.surfaceElevation, r = [
+      const e = this.game.water.surfaceElevation, r = -0.75;
+      this.box(LAKE.radiusX * 2 + 2, 0.6, LAKE.radiusZ * 2 + 2, LAKE.x, r - 0.3, LAKE.z, "#6f6a52", {
+        castShadow: false
+      }), this.game.objects.add(null, {
+        type: "fixed",
+        friction: 0.3,
+        restitution: 0,
+        position: {
+          x: LAKE.x,
+          y: r - 0.3,
+          z: LAKE.z
+        },
+        colliders: [
+          {
+            shape: "cuboid",
+            parameters: [
+              LAKE.radiusX + 1,
+              0.3,
+              LAKE.radiusZ + 1
+            ]
+          }
+        ]
+      });
+      const s = 8, o = 1.35, a = Math.atan2(o, s), h = Math.hypot(s, o), c = 20;
+      for (let b = 0; b < c; b++) {
+        const w = b / c * Math.PI * 2, M = Math.cos(w), R = Math.sin(w), V = LAKE.x + M * (LAKE.radiusX - s * 0.5), O = LAKE.z + R * (LAKE.radiusZ - s * 0.5), z = Math.PI * 2 * Math.max(LAKE.radiusX, LAKE.radiusZ) / c * 1.5;
+        this.box(h, 1.4, z, V, GROUND_TOP - o * 0.5 - 0.7, O, "#d8b47e", {
+          rotationY: -w,
+          rotationZ: a,
+          physical: true,
+          castShadow: false
+        });
+      }
+      const d = [
         {
           x: -0.45,
           z: -0.35,
@@ -95536,18 +95578,18 @@ https://github.com/browserify/crypto-browserify`);
           n: 10
         }
       ];
-      let s = 0;
-      const o = () => (s = s * 1103515245 + 12345 & 2147483647, s / 2147483647);
-      for (const h of r) for (let c = 0; c < h.n; c++) {
-        const d = (o() - 0.5) * 0.42, f = (o() - 0.5) * 0.42, p = h.x + d, m = h.z + f;
-        if (p * p + m * m > 0.9) continue;
-        const b = LAKE.x + p * LAKE.radiusX, w = LAKE.z + m * LAKE.radiusZ, M = 0.85 + o() * 0.75;
-        this.box(M, 0.05, M, b, e + 0.025, w, c % 3 === 0 ? "#3f8f4a" : "#4f9e4a", {
+      let f = 0;
+      const p = () => (f = f * 1103515245 + 12345 & 2147483647, f / 2147483647);
+      for (const b of d) for (let w = 0; w < b.n; w++) {
+        const M = (p() - 0.5) * 0.42, R = (p() - 0.5) * 0.42, V = b.x + M, O = b.z + R;
+        if (V * V + O * O > 0.9) continue;
+        const z = LAKE.x + V * LAKE.radiusX, H = LAKE.z + O * LAKE.radiusZ, q = 0.85 + p() * 0.75;
+        this.box(q, 0.05, q, z, e + 0.025, H, w % 3 === 0 ? "#3f8f4a" : "#4f9e4a", {
           castShadow: false,
           geometry: this.cylinderGeometry
         });
       }
-      const a = [
+      const m = [
         [
           -0.35,
           -0.3
@@ -95577,17 +95619,17 @@ https://github.com/browserify/crypto-browserify`);
           0.02
         ]
       ];
-      for (const [h, c] of a) {
-        const d = LAKE.x + h * LAKE.radiusX, f = LAKE.z + c * LAKE.radiusZ;
-        for (let p = 0; p < 6; p++) {
-          const m = p * Math.PI / 3;
-          this.box(0.34, 0.1, 0.16, d + Math.cos(m) * 0.17, e + 0.14, f + Math.sin(m) * 0.17, "#ff9ec4", {
-            rotationY: -m,
+      for (const [b, w] of m) {
+        const M = LAKE.x + b * LAKE.radiusX, R = LAKE.z + w * LAKE.radiusZ;
+        for (let V = 0; V < 6; V++) {
+          const O = V * Math.PI / 3;
+          this.box(0.34, 0.1, 0.16, M + Math.cos(O) * 0.17, e + 0.14, R + Math.sin(O) * 0.17, "#ff9ec4", {
+            rotationY: -O,
             rotationZ: -0.5,
             castShadow: false
           });
         }
-        this.box(0.16, 0.16, 0.16, d, e + 0.24, f, "#ffd76b", {
+        this.box(0.16, 0.16, 0.16, M, e + 0.24, R, "#ffd76b", {
           castShadow: false
         });
       }
@@ -95681,123 +95723,123 @@ https://github.com/browserify/crypto-browserify`);
     setTrees() {
       const e = (h) => h.map(([c, d, f]) => {
         const p = new Object3D$1();
-        return p.position.set(c, 0, d), p.scale.setScalar(f), p;
+        return p.position.set(c, 0, d), p.scale.setScalar(f), p.updateMatrix(), p.updateMatrixWorld(true), p;
       }), r = e([
         [
-          -104,
-          30,
+          -98,
+          66,
           1.1
         ],
         [
-          -104,
-          52,
+          -114,
+          12,
           1
         ],
         [
-          -122,
-          12,
+          -120,
+          60,
           1.2
         ],
         [
-          -131,
-          22,
+          -134,
+          16,
           1
         ],
         [
           -150,
-          58,
+          62,
           1.1
         ],
         [
-          -166,
-          34,
+          -168,
+          56,
           1
         ],
         [
-          -178,
-          30,
+          -196,
+          62,
           1.2
         ],
         [
-          -196,
-          34,
+          -214,
+          52,
           1
         ]
       ]), s = e([
         [
-          -110,
+          -98,
+          28,
+          1.2
+        ],
+        [
+          -114,
+          56,
+          1
+        ],
+        [
+          -130,
+          60,
+          1.1
+        ],
+        [
+          -146,
           20,
           1.2
         ],
         [
-          -127,
-          30,
+          -164,
+          62,
           1
         ],
         [
-          -134,
-          14,
+          -182,
+          56,
           1.1
         ],
         [
-          -145,
+          -206,
+          20,
+          1
+        ],
+        [
+          -224,
           56,
           1.2
+        ]
+      ]), o = e([
+        [
+          -120,
+          66,
+          1
+        ],
+        [
+          -122,
+          24,
+          1.1
+        ],
+        [
+          -140,
+          62,
+          1
         ],
         [
           -158,
-          52,
-          1
-        ],
-        [
-          -172,
-          26,
+          24,
           1.1
         ],
         [
-          -190,
-          46,
+          -176,
+          62,
           1
         ],
         [
           -200,
           22,
-          1.2
-        ]
-      ]), o = e([
-        [
-          -116,
-          32,
-          1
-        ],
-        [
-          -124,
-          50,
           1.1
         ],
         [
-          -140,
-          30,
-          1
-        ],
-        [
-          -152,
-          12,
-          1.1
-        ],
-        [
-          -164,
-          46,
-          1
-        ],
-        [
-          -182,
-          20,
-          1.1
-        ],
-        [
-          -194,
-          60,
+          -220,
+          66,
           1
         ]
       ]);
@@ -110019,7 +110061,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-CE3HuFfQ.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-BqIMNttV.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

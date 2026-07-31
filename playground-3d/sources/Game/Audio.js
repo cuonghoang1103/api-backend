@@ -683,12 +683,15 @@ export class Audio
                  */
                 const distanceToCampusShore = this.game.world?.fptuCampus?.distanceToShore?.(position.x, position.z)
                 const distanceToPlayShore = this.game.world?.playIsland?.distanceToShore?.(position.x, position.z)
+                const distanceToCityShore = this.game.world?.cityIsland?.distanceToShore?.(position.x, position.z)
 
                 let distanceToSide = distanceToMainShore
                 if(typeof distanceToCampusShore === 'number')
                     distanceToSide = Math.max(distanceToSide, distanceToCampusShore)
                 if(typeof distanceToPlayShore === 'number')
                     distanceToSide = Math.max(distanceToSide, distanceToPlayShore)
+                if(typeof distanceToCityShore === 'number')
+                    distanceToSide = Math.max(distanceToSide, distanceToCityShore)
 
                 item.volume = Math.pow(remapClamp(distanceToSide, 0, 40, 1, 0.1), 2) * 0.7
             }

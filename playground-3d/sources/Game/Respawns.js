@@ -2,6 +2,7 @@ import * as THREE from 'three/webgpu'
 import { Game } from './Game.js'
 import { RESPAWN } from '../data/fptu.js'
 import { PLAY_RESPAWN } from '../data/playisland.js'
+import { CITY_RESPAWN } from '../data/cityisland.js'
 
 export class Respawns
 {
@@ -58,6 +59,13 @@ export class Respawns
             name: 'arena',
             position: new THREE.Vector3(PLAY_RESPAWN.x, 4, PLAY_RESPAWN.z),
             rotation: PLAY_RESPAWN.rotation
+        })
+
+        /** Đảo thành phố phía Đông — cũng dựng bằng mã, cũng phải khai ở đây. */
+        this.items.set('city', {
+            name: 'city',
+            position: new THREE.Vector3(CITY_RESPAWN.x, 4, CITY_RESPAWN.z),
+            rotation: CITY_RESPAWN.rotation
         })
     }
 

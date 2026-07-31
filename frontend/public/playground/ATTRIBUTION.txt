@@ -16,3 +16,29 @@ areas, the 3D lettering and the vocabulary game are CuongThai's.
 Also credited in-app:
   · the browser console "Credits" block on load
   · the "Behind the scene" panel → "Original project"
+
+
+Third-party 3D assets
+---------------------
+
+Downtown City MegaKit — used for the city district on the Play Island.
+
+    Author  : Quaternius
+    Licence : CC0 1.0 (public domain) — no attribution required, credited
+              here anyway as a courtesy
+    Source  : https://quaternius.com/packs/downtowncitymegakit.html
+    Files   : static/city/city.glb (30 modular pieces: streets, sidewalks,
+              buildings, props — merged, simplified, WebP 1024, Draco)
+
+Tiger Russian Military Vehicle — reserved for the Survival mode.
+
+    ⚠ CC BY REQUIRES CREDIT. This block is the credit — do not remove it,
+      and keep it in sync with the in-app Credits block. Verbatim notice
+      supplied by the author's "Copy credits" button:
+
+    "Tiger Russian Military Vehicle" (https://skfb.ly/pDrJS) by Gerhald is
+    licensed under Creative Commons Attribution
+    (http://creativecommons.org/licenses/by/4.0/).
+
+    Commercial use is allowed. Modifications made: mesh simplified,
+    textures resized to 1024 and re-encoded, geometry Draco-compressed.

@@ -31,6 +31,7 @@ import { Benches } from './Benches.js'
 import { Scenery } from './Scenery.js'
 import { FptuCampus } from './FptuCampus.js'
 import { PlayIsland } from './PlayIsland.js'
+import { CityIsland } from './CityIsland.js'
 import { VehicleRocket } from './VehicleRocket.js'
 
 export class World
@@ -88,6 +89,10 @@ export class World
             // Đảo riêng, không đụng một khối nào của đảo chính — xem
             // `data/playisland.js` để biết vì sao không dựng ở quận Tây-Nam.
             this.playIsland = new PlayIsland()
+
+            // Đảo thành phố phía Đông — khu đầu tiên dựng từ MODEL NGOÀI
+            // (Downtown City MegaKit, CC0). Xem `data/cityisland.js`.
+            this.cityIsland = new CityIsland()
 
             // Pháo tên lửa trên nóc xe. Dựng SAU `visualVehicle` vì nó gắn khẩu
             // pháo vào chính thân xe (`parts.chassis`).

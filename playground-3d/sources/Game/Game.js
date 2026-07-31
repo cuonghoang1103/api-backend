@@ -138,6 +138,16 @@ export class Game
                 [ 'playgroundPhysical',                    `playground/playgroundPhysical${compressedModelSuffix}.glb${cb}`,                     'gltf' ],
                 [ 'flowersReferencesModel',                `flowers/flowersReferences${compressedModelSuffix}.glb${cb}`,                         'gltf' ],
                 [ 'bricksModel',                           `bricks/bricks${compressedModelSuffix}.glb${cb}`,                                     'gltf' ],
+                /**
+                 * Downtown City MegaKit (Quaternius, CC0) — 153 mảnh ghép cho
+                 * đảo thành phố. Xem `static/ATTRIBUTION.txt`.
+                 *
+                 * ⚠️ KHÔNG có `${compressedModelSuffix}`: file này đến từ nguồn
+                 * ngoài và ĐÃ tối ưu sẵn (Draco + WebP 1024, 91,7 MB → 2,4 MB),
+                 * nên chỉ có MỘT bản dùng cho cả dev lẫn production. three.js
+                 * đọc được WebP trong glTF qua `EXT_texture_webp`.
+                 */
+                [ 'cityModel',                             `city/city.glb${cb}`,                                                                 'gltf' ],
                 [ 'fencesModel',                           `fences/fences${compressedModelSuffix}.glb${cb}`,                                     'gltf' ],
                 [ 'benchesModel',                          `benches/benches${compressedModelSuffix}.glb${cb}`,                                   'gltf' ],
                 [ 'explosiveCratesModel',                  `explosiveCrates/explosiveCrates${compressedModelSuffix}.glb${cb}`,                   'gltf' ],

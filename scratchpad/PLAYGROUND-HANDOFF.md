@@ -8,29 +8,50 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
 # 0. TRẠNG THÁI
 
 - **Đã deploy prod** — chạy tại `cuongthai.com/playground/`.
-- Mục **0b đã LÀM XONG** ngày 31/7 (commit `ed5ba98`) — xem mục 0c bên dưới.
+- Mục **0b** (phá huỷ + tên lửa) và **0c** (máy quay + âm thanh) xong 31/7.
+- Mục **0d** (đảo sân chơi + sân bóng đá lái xe) xong 1/8, commit `44c4c0a` —
+  **CHỜ deploy + user test rồi mới push**.
 - ⚠️ **Có phiên Claude thứ hai làm chung cây repo** (đang sửa `content/academy/*`).
   ĐỪNG `git add -A` ở gốc. Chỉ add đúng thư mục của mình. (Đã kiểm: mấy file
   `content/academy/*.mjs` là dữ liệu seed CHẠY TAY, không có gì tự chạy chúng,
   nên chúng nằm trong cây làm việc lúc `deploy.sh` rsync cũng vô hại.)
 
-## Việc CÒN LẠI (user đã chốt làm, chưa động tới)
+## Việc CÒN LẠI
 
-**Quận Tây-Nam đảo chính** — đất trống hoàn toàn ở `X −80…−25, Z +20…+80`.
-User đã chọn **CẢ BỐN** khu:
+Ba khu nữa trên **đảo sân chơi** (đất đã chừa sẵn trong `PLOTS`, xem mục 0d):
 
-1. **Sân khấu nhạc hội** — sàn nhảy nhấp theo nhạc thật (đọc biên độ từ Howler),
-   lái xe lên 5 bục đĩa than để đổi bài, điểm tương tác dẫn về `/music`.
-2. **Sân bóng đá lái xe** (kiểu Rocket League) — bóng Rapier động, 2 khung thành,
-   đếm bàn thắng + thành tựu. Kèm dốc nhảy, vòng lật, bập bênh.
-3. **Làng ngôn ngữ JA/EN/ZH** — torii + vườn đá, cổng tam quan + đèn lồng, tháp
-   đồng hồ. Tông vào khối chữ = câu hỏi từ vựng, nối `VocabQuiz` (1221 từ sẵn có).
-4. **Bến cảng + hải đăng** — cầu tàu, thuyền, đèn hải đăng QUÉT thật ban đêm,
-   container xếp chồng để húc.
+1. **Sân khấu nhạc hội** (`PLOTS.concert`, tâm 34 · 150) — sàn nhảy nhấp theo
+   nhạc thật (đọc biên độ từ Howler), lái xe lên 5 bục đĩa than để đổi bài,
+   điểm tương tác dẫn về `/music`.
+2. **Làng ngôn ngữ JA/EN/ZH** (`PLOTS.village`, tâm −30 · 184) — torii + vườn
+   đá, cổng tam quan + đèn lồng, tháp đồng hồ. Tông vào khối chữ = câu hỏi từ
+   vựng, nối `VocabQuiz` (1221 từ sẵn có).
+3. **Bến cảng + hải đăng** (`PLOTS.harbour`, tâm 34 · 186) — cầu tàu, thuyền,
+   đèn hải đăng QUÉT thật ban đêm, container xếp chồng để húc.
 
 Khi dựng khu mới nhớ: **điểm hồi sinh phải khai trong `Respawns.js`** (chạy
 TRƯỚC `world.step(1)`, thêm từ chỗ khác là mất mục trên bản đồ mà không báo lỗi),
-và thêm một dòng vào `Map.js → setLocations()`.
+thêm một dòng vào `Map.js → setLocations()`, và **thêm ô đất vào `PLOTS`** để
+`PlayIsland.setScenery()` không trồng cây vào giữa khu.
+
+## ⛔ "Quận Tây-Nam đảo chính" — Ý TƯỞNG NÀY ĐÃ CHẾT, ĐỪNG HỒI SINH
+
+Bàn giao cũ ghi *"đất trống hoàn toàn X −80…−25, Z +20…+80"*. **SAI.** Đo lại
+ngày 1/8 bằng ba cách độc lập, đều khớp:
+
+| Cách đo | Kết quả |
+|---|---|
+| Bắn tia lưới 1 đơn vị | Hình chữ nhật trống lớn nhất ở đó chỉ **17 × 12** |
+| Quét collider | **Đường đua Circuit chạy xuyên qua** — checkpoint 006 (−60,8 · 16), 007 (−56 · 70,5) và bốn tấm mặt đường lớn |
+| Ảnh `static/ui/map/map-day.png` + cao độ | Một **cái hồ** chiếm x −69…−36, z 25…52, lòng sâu −1,46 (đáy nước −1,5 nên vật rơi vào là bị `Objects.update()` reset) |
+
+Quét **toàn bộ đảo chính**: chỗ trống lớn nhất trên cả đảo là **24 × 14**
+(x −92…−70, z 28…40). Sân bóng lái xe cần tối thiểu ~40 × 28 ⇒ **đảo chính đã
+kín**. Muốn thêm khu mới thì dựng đảo mới, đừng đi tìm đất trên đảo cũ.
+
+Mẹo đo lại nhanh: bắn tia xuống theo lưới, loại ô nào nằm trong tấm đường đua
+hoặc gần một trong ~590 collider đứng, rồi tìm hình chữ nhật toàn-trống lớn nhất
+bằng thuật toán histogram.
 
 ---
 
@@ -213,14 +234,84 @@ Khuôn đo (đặt `player.position` + `focusPoint.position` rồi gọi
 
 ---
 
-# 1. BA BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
+---
+
+# 0d. ĐẢO SÂN CHƠI + SÂN BÓNG ĐÁ LÁI XE — làm 1/8 (`44c4c0a`)
+
+Đảo riêng thứ HAI, ngoài khơi phía **Nam**, nối bằng cầu từ (x = 0, z = 76).
+Mã: `data/playisland.js` · `PlayIsland.js` · `FootballArena.js` (đều MỚI), cộng
+bốn chỗ móc vào `World.js` · `Respawns.js` · `Map.js` · `Audio.js`.
+
+**`PlayIsland` CỐ Ý ĐỘC LẬP với `FptuCampus`** dù bộ hàm dựng (`box`, `slab`,
+`heightPatch`, `canopy`) gần như y hệt. Gộp chung nghĩa là mỗi lần sửa đảo mới
+đều có thể làm hỏng khu FPTU đang chạy trên production. Với dự án này, cách ly
+đáng giá hơn tránh trùng mã.
+
+## Số đo chốt
+
+| Thứ | Toạ độ |
+|---|---|
+| Đảo (phần đất) | x −56…68 · z 100…200 (tâm 6 · 150, 124 × 100) |
+| Cầu | x = 0, z 76 → 106, rộng 9, không lan can |
+| Đường trục | x = 0, z 104 → 190 |
+| Đường ngang | z = 126 (x −50…4) · z = 150 (x −4…56) · z = 184 (x −34…44) |
+| Sân bóng | tâm −30 · 150, lòng sân 34 × 26, tường cao 2,6 |
+| Sân tập | tâm −29 · 118, dàn theo X: vòng lật −50…−40 · dốc −38,5…−19,5 · bập bênh −20…−8 |
+| Điểm hồi sinh `arena` | (0 · 110), yaw −π/2 (quay vào đảo) |
+
+## NĂM chỗ đã sụp bẫy
+
+1. **Chiều dài sân bị chặn bởi BỀ NGANG ĐẤT, không phải ý thích.** Tổng bề ngang
+   sân = `innerWidth + 2 × (goal.depth + tường)` = innerWidth + 12, mà chỗ dùng
+   được chỉ từ x −52 (chừa bờ) tới −8 (chừa lòng đường) tức 44. Để innerWidth 42
+   ⇒ khung thành Đông ĐÈ LÊN ĐƯỜNG TRỤC. Muốn sân dài hơn phải nới đảo hoặc dời
+   trục, không phải chỉ sửa mỗi con số đó.
+2. **Đường ngang z = 150 xuyên thẳng qua lòng sân bóng.** Bản đầu cho nó chạy từ
+   x = −50; bắn tia đo được bậc 3,43 ngay giữa "đường" — chính là tường sân. Nay
+   nó chỉ chạy về phía Đông, lối vào sân đi bằng đường z = 126.
+3. **Bập bênh đặt `z + 16` với `ARENA_STUNTS.z = 119` ra đúng z = 135**, tức
+   biên Bắc sân bóng: hai tấm nghiêng cao 1,32 nằm chềnh ềnh trong lòng sân.
+   Nay mọi thứ ở sân tập dàn theo TRỤC X trên cùng một dải z.
+4. **Hình trụ của `cylinderGeometry` DÀI THEO TRỤC Y.** Truyền chiều dài vào
+   `depth` rồi xoay X 90° thì trục lăn bập bênh hoá thành CỘT CAO 8 ĐƠN VỊ đâm
+   lên trời (bắn tia đo được nóc ở 4,59). Chiều dài phải vào tham số `height`.
+5. **Bảng điểm không có chỗ đặt xuống đất.** Khoảng giữa mép đường z = 126
+   (tới 130,5) và bậc khán đài ngoài cùng (từ 130,7) chỉ hở 0,2. Nay treo lên
+   tường Bắc, cột đỡ đứng trên ĐỈNH TƯỜNG, cả bảng lẫn cột đều không va chạm.
+
+## API dễ gọi nhầm
+
+- `notifications.show(html, type, duration, callback, id)` — **không có** `add({…})`.
+- `View.MODE_FREE` là **SỐ (2)**, không phải chuỗi `'free'`. `setMode('free')`
+  không khớp nhánh nào trong `View.update()` và máy quay đứng chết ở khung cũ.
+- `RAPIER.ShapeType.HeightField` là **7**, KHÔNG phải 8 (enum bỏ trống số 8, đẩy
+  `HalfSpace` xuống 17). Đoán số này là nền đảo bị tính thành "vật cứng nằm giữa
+  đường" — heightfield không có `halfExtents` nên nóc rơi vào nhánh mặc định 0,5.
+
+---
+
+# 1. BỐN BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
 
 Cần dev server sống: `cd playground-3d && npm run dev` (xem mục 4).
 
 ```bash
-node tools/check-fptu-layout.mjs        # công trình đè nhau, đường bị chắn, thò ra biển
-node tools/check-ghost-colliders.mjs    # VA CHẠM MỒ CÔI + MẶT TRANH NHAU CHIỀU SÂU
+node tools/check-fptu-layout.mjs             # công trình đè nhau, đường bị chắn, thò ra biển
+URL=http://localhost:5173/ node tools/check-ghost-colliders.mjs   # VA CHẠM MỒ CÔI + MẶT TRANH NHAU CHIỀU SÂU
+node tools/check-play-island.mjs             # đảo sân chơi: 9 mục, có QUÉT HÀNH LANG XE
+node tools/check-arena-rules.mjs             # luật chơi sân bóng: 9 mục
 ```
+
+⚠️ `check-ghost-colliders.mjs` mặc định gõ cứng cổng **5175** — truyền `URL=` cho
+đúng cổng Vite đang chạy, không thì nó chỉ báo `ERR_CONNECTION_REFUSED`.
+
+**Cả bốn hiện 0 lỗi.**
+
+`check-play-island.mjs` có mục **quét hành lang xe**: đẩy một khối hộp bằng đúng
+kích cỡ xe (rộng 1,9 · cao 1,4) dọc từng tuyến đường bằng
+`world.intersectionsWithShape`. Nó bắt được cả vật đứng NGOÀI lòng đường mà thân
+thò vào — thứ mà phép kiểm "tâm collider nằm trong lòng đường" bỏ sót, và cũng
+đúng kiểu lỗi đã bốn lần chặn lối xe ở khu FPTU. **Đây là thứ thay cho lái thử**
+(xem mục 3 để biết vì sao không lái được).
 
 `check-ghost-colliders.mjs` là bộ kiểm **quan trọng nhất** của khu này — nó bắt
 đúng hai lỗi mà mắt không thấy và người dùng đâm phải suốt:
@@ -336,37 +427,56 @@ scratchpad ngoài repo phải nạp theo đường dẫn tuyệt đối:
 const { chromium } = await import('/Users/admin/Downloads/api-backend/node_modules/playwright/index.mjs')
 ```
 
-## Vào game (khuôn đã chạy được)
+## Vào game (khuôn ĐÃ CẬP NHẬT 1/8 — khuôn cũ đã lỗi thời)
 
 ```js
-await page.waitForFunction(() => window.game?.world?.intro?.text?.mesh && window.game?.world?.intro?.soundButton?.mesh)
-await page.getByRole('button', { name: /play/i }).first().click().catch(async () => {
-    await page.evaluate(() => document.querySelector('.js-intro-play, .intro button, button')?.click())
-})
+await page.goto(`${BASE}/#skip`, { waitUntil: 'load' })
+await page.waitForFunction(() => window.game?.world?.playIsland?.arena)   // hoặc mốc khác
+await page.evaluate(() => document.querySelector('.js-welcome-play')?.click())
 await page.waitForTimeout(2500)
-await page.evaluate(() => { if(window.game.world.intro?.text) window.game.reveal.updateStep(1) })
-await page.waitForTimeout(3000)
-await page.evaluate(() => window.game.player.respawn('fptu'))
-await page.waitForTimeout(6000)
-// CHỐT KIỂM: màn chào phải biến mất, không thì mọi ảnh chụp đều vô nghĩa
+// giờ `reveal.step` = 1 và `inputs.filters` có 'wandering'
 ```
 
-- Màn chào là lớp **HTML nằm trên canvas** — `reveal.updateStep(1)` KHÔNG gỡ nó.
-- Gọi `updateStep(1)` khi `world.intro.text` đã bị dọn là **ném lỗi** trong `Reveal.js`.
+- ⚠️ **`#skip` KHÔNG bỏ qua màn chào**, nó chỉ bỏ bước click-vào-xe của `Reveal`.
+  **Phải bấm `.js-welcome-play`.** Chưa bấm thì `inputs.filters` chưa có
+  `'wandering'`, mọi phím lái bị nuốt.
+- `world.intro` nay chỉ có `{ game, center, circle, label, update }` — **không còn
+  `text`, `soundButton`, `destroy`**. Mọi khuôn cũ chờ `intro.text.mesh` sẽ treo
+  vĩnh viễn, và `reveal.updateStep(2)` ném `Cannot read properties of undefined`.
 - Ép ban ngày/đêm: `game.dayCycles.preference.set('day'|'night', 0)`.
 
-## Lái tự động
+## ⛔ LÁI TỰ ĐỘNG KHÔNG CHẠY ĐƯỢC TRONG HEADLESS — đừng mất buổi nữa
 
-`Player.updatePrePhysics()` kiểm `action.**active**` RỒI mới cộng `action.value`.
-Bơm mỗi `value` thì xe đứng im và **mọi ca test đều báo "kẹt"**, kể cả trên đất trống.
+Đo ngày 1/8: xe **không nhúc nhích ở BẤT KỲ ĐÂU** trong headless chromium — kể
+cả điểm landing (0 · 0) của bản mẫu và giữa sân trường FPTU, tức những chỗ chắc
+chắn lái được trong game thật. Ca đối chứng đi đúng **0,0 đơn vị**.
 
-```js
-const a = window.game.inputs.actions.get('forward'); a.active = true; a.value = 1
-```
+Nguyên nhân, truy tận gốc:
 
-⚠️ **Luôn để một CA ĐỐI CHỨNG ở chỗ chắc chắn lái được.** Ca đó fail thì dừng,
-đừng tin số nào. Và thả xe tránh nhà + cột đèn (cột đèn ở x = −106 ± 5,6 dọc
-đường lớn; và dọc hai đường vào ở lề ngoài).
+1. `PhysicsVehicle.updatePostPhysics()` tính `this.speed` từ **TOÀN BỘ** vector
+   dịch chuyển giữa hai khung hình, **kể cả thành phần Y**, rồi
+   `goingForward = direction · forward > 0.5`.
+2. Xe ở headless **nhún giảm xóc không bao giờ tắt** — đo được `linvel.y` đứng ở
+   −1,15 sau nhiều giây. Nên `direction` gần như thẳng đứng ⇒ `forwardRatio ≈ 0`
+   ⇒ `goingForward = false`.
+3. Trong `updatePrePhysics()`, nhánh "đang lùi mà đạp ga" khớp
+   (`speed > 0.5 && accelerating > 0 && !goingForward`) ⇒ **`engineForce = 0` và
+   phanh gấp, vĩnh viễn**. Đo được `engineForce` = 0 ở cả bốn bánh dù
+   `player.accelerating` = 1 và cả bốn bánh đều `wheelIsInContact` = true.
+
+⇒ **Dùng phép quét hành lang xe trong `check-play-island.mjs` thay cho lái thử.**
+Nó tất định, nhanh, và bắt được đúng loại lỗi mà lái thử dùng để bắt.
+
+Hai ghi chú phụ, đều **bác bỏ bàn giao cũ**:
+- Bàn giao cũ ghi *"vòng lặp game ở đó chạy ~1 nhịp/giây"* — **SAI**. Đo được
+  **630% tốc độ thực** (5 giây thực = 31,5 giây game): không render nên rAF chạy
+  tự do. Chính tốc độ đó làm giảm xóc dao động mãi không tắt.
+- Gọi thẳng `physicalVehicle.moveTo()` **không** gây lỗi Rapier như lo ngại,
+  nhưng cũng vô ích vì xe vẫn không chạy.
+
+Nếu vẫn muốn lái thật: phải chạy trong trình duyệt CÓ WebGPU và tab đang HIỆN.
+Khung xem (Browser pane) đóng băng khi bị ẩn, và mất WebGPU context sau vài lần
+tải lại (mọi ảnh chụp sau đó đen kịt hoặc đứng ở khung cũ) — cũng không dùng được.
 
 ---
 
@@ -409,6 +519,7 @@ Deploy: `bash deploy.sh` → **user test prod** → mới `git push`.
 ```
 playground-3d/sources/
   data/fptu.js                  ← MỌI SỐ LIỆU BỐ CỤC khu trường + LÝ DO
+  data/playisland.js            ← MỌI SỐ LIỆU BỐ CỤC đảo sân chơi + LÝ DO
   data/musics.js                ← danh sách nhạc (nay 12 bài Beat 1–5, 7–13)
   Game/World/
     FptuCampus.js               ← nền đảo, đường, Alpha, nhà, hồ · heightPatch · canopy
@@ -418,12 +529,15 @@ playground-3d/sources/
     FptuSigns.js                ← biển xếp hạng THE, biển đá cổng, bệ chữ (canvas)
     FptuPineHill.js             ← đồi thông + tượng Self Made Man
     FptuSwans.js · FptuQuiz.js  ← thiên nga · hộp thoại cổng + câu hỏi theo kỳ
-    VehicleRocket.js            ← MỚI: pháo tên lửa trên nóc xe
+    VehicleRocket.js            ← pháo tên lửa trên nóc xe
+    PlayIsland.js               ← MỚI: đảo sân chơi (nền, cầu, đường, cảnh quan)
+    FootballArena.js            ← MỚI: sân bóng đá lái xe + sân tập kỹ năng
   Game/Options.js               ← nút trong bảng Cài đặt
   index.html                    ← màn chào, bảng Cài đặt, hộp thoại cổng
   style/general.styl            ← `.segmented`, `.fptu-gate-mute`
 playground-3d/tools/
   check-fptu-layout.mjs · check-ghost-colliders.mjs
+  check-play-island.mjs · check-arena-rules.mjs
 frontend/public/playground/     ← GÓI ĐÃ DỰNG (nhớ commit!)
 ```
 

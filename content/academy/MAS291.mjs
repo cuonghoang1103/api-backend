@@ -1009,6 +1009,166 @@ z = (19.5 − 16)/4 = 0.875 → P = 1 − Φ(0.875) ≈ 1 − 0.8092 = <b>0.1908
 </div>
 `,
         },
+        {
+          title: '5.2 — Charts & the z/t lookup tables|||5.2 — Biểu đồ mô tả & bảng tra z/t',
+          slug: 'mas291-bieu-do-bang-tra',
+          type: 'VIDEO',
+          description: 'Stem-and-leaf, bảng tần suất, histogram, box plot — dựng bằng tay; kèm cách tra bảng z và bảng t.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 5 · Lesson 5.2</span>
+<h2>Drawing the data, and reading the two tables you need all semester</h2>
+<p class="lead">Lesson 5.1 computed the numbers. Here you draw them — and learn to read the z and t tables, which every later chapter depends on and which the exam expects you to use without a calculator.</p>
+
+<h3>The data set for all four charts</h3>
+<div class="diagram">Exam marks of 20 students:
+52 57 58 61 63 65 65 67 68 70 71 72 74 75 77 78 82 85 88 93</div>
+
+<h3>1 · Stem-and-leaf — keeps every original value</h3>
+<pre>Stem | Leaf              Count
+  5  | 2 7 8               3
+  6  | 1 3 5 5 7 8         6
+  7  | 0 1 2 4 5 7 8       7
+  8  | 2 5 8               3
+  9  | 3                   1
+Key: 6 | 3 means 63</pre>
+<div class="out"><b>What it shows at a glance:</b> the shape is roughly symmetric with the bulk in the 60s and 70s. Unlike a histogram, <em>no information is lost</em> — you can read every original mark back off the diagram, which is why it is the tool for small data sets (n ≤ 50).</div>
+
+<h3>2 · Frequency distribution → histogram</h3>
+<div class="out"><b>Building the table.</b> Range = 93 − 52 = 41. Sturges' rule suggests k ≈ 1 + 3.322 log₁₀(20) ≈ 5.3 → take <b>5 classes</b>, width = 41/5 = 8.2 → round up to <b>10</b>, starting at 50.<br>
+<table><thead><tr><th>Class</th><th>Tally</th><th>Frequency f</th><th>Relative f</th><th>Cumulative f</th></tr></thead><tbody>
+<tr><td>50 – 59</td><td>|||</td><td>3</td><td>0.15</td><td>3</td></tr>
+<tr><td>60 – 69</td><td>||||||</td><td>6</td><td>0.30</td><td>9</td></tr>
+<tr><td>70 – 79</td><td>|||||||</td><td>7</td><td>0.35</td><td>16</td></tr>
+<tr><td>80 – 89</td><td>|||</td><td>3</td><td>0.15</td><td>19</td></tr>
+<tr><td>90 – 99</td><td>|</td><td>1</td><td>0.05</td><td>20</td></tr>
+</tbody></table>
+<b>Checks the marker looks for:</b> Σf = 20 = n ✓ · Σ relative f = 1.00 ✓ · the last cumulative frequency = n ✓. Classes must not overlap and must cover every value.<br>
+<b>The histogram</b> plots these frequencies as adjacent bars with no gaps (the gaps belong to a bar chart, which is for <em>categorical</em> data — a distinction worth one mark).</div>
+
+<h3>3 · Box plot — the five-number summary</h3>
+<div class="out"><b>Compute the five numbers.</b> n = 20, data already sorted.<br>
+Min = <b>52</b> · Max = <b>93</b><br>
+Q2 (median) = average of the 10th and 11th values = (70 + 71)/2 = <b>70.5</b><br>
+Q1 = median of the lower 10 = (63 + 65)/2 = <b>64</b> · Q3 = median of the upper 10 = (77 + 78)/2 = <b>77.5</b><br>
+<b>IQR = Q3 − Q1 = 77.5 − 64 = 13.5</b><br>
+<b>Outlier fences:</b> lower = Q1 − 1.5 × IQR = 64 − 20.25 = 43.75 · upper = Q3 + 1.5 × IQR = 77.5 + 20.25 = <b>97.75</b><br>
+No value falls outside [43.75, 97.75] → <b>no outliers</b>; the whiskers therefore reach the true min and max.<br>
+<div class="diagram">   52        64    70.5   77.5           93
+    ├─────────┤▓▓▓▓▓|▓▓▓▓▓▓├──────────────┤
+   min       Q1    Q2      Q3            max</div>
+<b>Reading skew from the box:</b> the median sits slightly left of the box centre and the right whisker is longer → mild right skew, consistent with mean (70.6) &gt; median (70.5).</div>
+
+<h3>4 · Reading the z table</h3>
+<div class="out"><b>Φ(z) = P(Z ≤ z), cumulative from −∞.</b> Row = z to one decimal, column = the second decimal.<br>
+<table><thead><tr><th>z</th><th>0.00</th><th>0.02</th><th>0.05</th><th>0.06</th></tr></thead><tbody>
+<tr><td>1.2</td><td>0.8849</td><td>0.8888</td><td>0.8944</td><td>0.8962</td></tr>
+<tr><td>1.5</td><td>0.9332</td><td>0.9357</td><td>0.9394</td><td>0.9406</td></tr>
+<tr><td>1.9</td><td>0.9713</td><td>0.9726</td><td>0.9744</td><td>0.9750</td></tr>
+</tbody></table>
+<b>Φ(1.96) = 0.9750</b> → that is where the famous 1.96 comes from: it leaves 0.025 in each tail.<br>
+<b>Negative z:</b> the table usually stops at 0, so use symmetry: Φ(−1.50) = 1 − Φ(1.50) = 1 − 0.9332 = <b>0.0668</b>.<br>
+<b>Backwards (find z from a probability):</b> for a 95% CI you need the z with 0.9750 below it → read the body of the table for 0.9750 → z = 1.96.<br>
+<b>The four values worth memorising:</b> 90% → 1.645 · 95% → 1.96 · 98% → 2.326 · 99% → 2.576.</div>
+
+<h3>5 · Reading the t table</h3>
+<div class="out"><b>The t table is indexed by degrees of freedom and by tail area α, not by the body.</b><br>
+<table><thead><tr><th>df</th><th>t<sub>0.10</sub></th><th>t<sub>0.05</sub></th><th>t<sub>0.025</sub></th><th>t<sub>0.01</sub></th><th>t<sub>0.005</sub></th></tr></thead><tbody>
+<tr><td>4</td><td>1.533</td><td>2.132</td><td>2.776</td><td>3.747</td><td>4.604</td></tr>
+<tr><td>10</td><td>1.372</td><td>1.812</td><td>2.228</td><td>2.764</td><td>3.169</td></tr>
+<tr><td>15</td><td>1.341</td><td>1.753</td><td>2.131</td><td>2.602</td><td>2.947</td></tr>
+<tr><td>20</td><td>1.325</td><td>1.725</td><td>2.086</td><td>2.528</td><td>2.845</td></tr>
+<tr><td>24</td><td>1.318</td><td>1.711</td><td>2.064</td><td>2.492</td><td>2.797</td></tr>
+<tr><td>30</td><td>1.310</td><td>1.697</td><td>2.042</td><td>2.457</td><td>2.750</td></tr>
+<tr><td>∞</td><td>1.282</td><td><b>1.645</b></td><td><b>1.960</b></td><td>2.326</td><td><b>2.576</b></td></tr>
+</tbody></table>
+<b>Two-sided 95% CI with df = 15</b> → each tail is 0.025 → column t<sub>0.025</sub> → <b>2.131</b>.<br>
+<b>One-sided test at α = 0.05 with df = 20</b> → column t<sub>0.05</sub> → <b>1.725</b>. Using 2.086 there is the classic error: that column is for a two-sided test.<br>
+<b>Notice the last row:</b> at df = ∞ the t values are exactly the z values. The t distribution <em>is</em> the normal, widened to pay for estimating σ — and the penalty vanishes as n grows, which is why n ≥ 30 lets you use z.<br>
+<b>Bounding a p-value:</b> with df = 24 and t₀ = 2.50, scan the row — 2.492 &lt; 2.50 &lt; 2.797 → one tail is between 0.005 and 0.01 → two-sided p is between 0.01 and 0.02 (question 1 of PT3).</div>
+
+<div class="pitfall"><b>Deciding the number of classes is not free choice.</b> Too few classes (2–3) hides the shape; too many (15 for n = 20) leaves most bars empty and equally hides it. Sturges' rule k ≈ 1 + 3.322 log₁₀ n gives a defensible number, and stating the rule earns the mark even if your k differs by one.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The box plot's 1.5 × IQR is a convention, not a theorem.</b> John Tukey chose 1.5 because for normal data it flags about 0.7% of observations — rare enough to be interesting, common enough to be useful. On a skewed distribution such as income it flags far more, which is why software offers 3 × IQR ("far out") and why a flagged point means "look at this", never "delete this". Removing points because a formula flagged them is one of the most common ways real analyses go wrong. <em>Beyond syllabus because the course gives the rule as fixed, while its interpretation is a judgement call you have to defend.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 5 · Bài 5.2</span>
+<h2>Vẽ dữ liệu ra, và đọc hai cái bảng dùng suốt cả kỳ</h2>
+<p class="lead">Bài 5.1 đã tính ra các con số. Ở đây ta vẽ chúng — và học cách tra bảng z cùng bảng t, thứ mà mọi chương sau đều dựa vào và đề thi mong bạn dùng được mà không cần máy tính.</p>
+
+<h3>Bộ dữ liệu dùng cho cả bốn loại biểu đồ</h3>
+<div class="diagram">Điểm thi của 20 sinh viên:
+52 57 58 61 63 65 65 67 68 70 71 72 74 75 77 78 82 85 88 93</div>
+
+<h3>1 · Biểu đồ thân–lá — giữ nguyên mọi giá trị gốc</h3>
+<pre>Thân | Lá                 Đếm
+  5  | 2 7 8               3
+  6  | 1 3 5 5 7 8         6
+  7  | 0 1 2 4 5 7 8       7
+  8  | 2 5 8               3
+  9  | 3                   1
+Chú giải: 6 | 3 nghĩa là 63</pre>
+<div class="out"><b>Nhìn phát thấy ngay:</b> hình dạng khá đối xứng với phần lớn dữ liệu ở khoảng 60 và 70. Khác histogram, <em>không mất thông tin nào</em> — bạn đọc ngược lại được từng điểm gốc từ biểu đồ, và vì thế đây là công cụ cho bộ dữ liệu nhỏ (n ≤ 50).</div>
+
+<h3>2 · Bảng phân bố tần suất → histogram</h3>
+<div class="out"><b>Dựng bảng.</b> Khoảng biến thiên = 93 − 52 = 41. Quy tắc Sturges gợi ý k ≈ 1 + 3,322 log₁₀(20) ≈ 5,3 → lấy <b>5 lớp</b>, độ rộng = 41/5 = 8,2 → làm tròn lên <b>10</b>, bắt đầu từ 50.<br>
+<table><thead><tr><th>Lớp</th><th>Vạch đếm</th><th>Tần số f</th><th>Tần suất</th><th>Tần số tích luỹ</th></tr></thead><tbody>
+<tr><td>50 – 59</td><td>|||</td><td>3</td><td>0,15</td><td>3</td></tr>
+<tr><td>60 – 69</td><td>||||||</td><td>6</td><td>0,30</td><td>9</td></tr>
+<tr><td>70 – 79</td><td>|||||||</td><td>7</td><td>0,35</td><td>16</td></tr>
+<tr><td>80 – 89</td><td>|||</td><td>3</td><td>0,15</td><td>19</td></tr>
+<tr><td>90 – 99</td><td>|</td><td>1</td><td>0,05</td><td>20</td></tr>
+</tbody></table>
+<b>Những phép kiểm người chấm tìm:</b> Σf = 20 = n ✓ · Σ tần suất = 1,00 ✓ · tần số tích luỹ cuối = n ✓. Các lớp không được chồng nhau và phải phủ hết mọi giá trị.<br>
+<b>Histogram</b> vẽ các tần số này thành những cột liền nhau không có khe hở (khe hở là của biểu đồ cột, vốn dành cho dữ liệu <em>định tính</em> — phân biệt này đáng một điểm).</div>
+
+<h3>3 · Biểu đồ hộp — tóm tắt năm số</h3>
+<div class="out"><b>Tính năm con số.</b> n = 20, dữ liệu đã sắp.<br>
+Min = <b>52</b> · Max = <b>93</b><br>
+Q2 (trung vị) = trung bình giá trị thứ 10 và 11 = (70 + 71)/2 = <b>70,5</b><br>
+Q1 = trung vị của 10 giá trị dưới = (63 + 65)/2 = <b>64</b> · Q3 = trung vị của 10 giá trị trên = (77 + 78)/2 = <b>77,5</b><br>
+<b>IQR = Q3 − Q1 = 77,5 − 64 = 13,5</b><br>
+<b>Ngưỡng ngoại lai:</b> dưới = Q1 − 1,5 × IQR = 64 − 20,25 = 43,75 · trên = Q3 + 1,5 × IQR = 77,5 + 20,25 = <b>97,75</b><br>
+Không giá trị nào nằm ngoài [43,75; 97,75] → <b>không có ngoại lai</b>; do đó hai râu vươn tới đúng min và max.<br>
+<div class="diagram">   52        64    70,5   77,5           93
+    ├─────────┤▓▓▓▓▓|▓▓▓▓▓▓├──────────────┤
+   min       Q1    Q2      Q3            max</div>
+<b>Đọc độ lệch từ cái hộp:</b> trung vị hơi lệch trái so với tâm hộp và râu phải dài hơn → lệch phải nhẹ, khớp với trung bình (70,6) &gt; trung vị (70,5).</div>
+
+<h3>4 · Cách tra bảng z</h3>
+<div class="out"><b>Φ(z) = P(Z ≤ z), tích luỹ từ −∞.</b> Hàng = z tới một chữ số thập phân, cột = chữ số thập phân thứ hai.<br>
+<table><thead><tr><th>z</th><th>0,00</th><th>0,02</th><th>0,05</th><th>0,06</th></tr></thead><tbody>
+<tr><td>1,2</td><td>0,8849</td><td>0,8888</td><td>0,8944</td><td>0,8962</td></tr>
+<tr><td>1,5</td><td>0,9332</td><td>0,9357</td><td>0,9394</td><td>0,9406</td></tr>
+<tr><td>1,9</td><td>0,9713</td><td>0,9726</td><td>0,9744</td><td>0,9750</td></tr>
+</tbody></table>
+<b>Φ(1,96) = 0,9750</b> → đó là nguồn gốc của con số 1,96 nổi tiếng: nó chừa 0,025 ở mỗi đuôi.<br>
+<b>Với z âm:</b> bảng thường chỉ có từ 0 trở lên, nên dùng tính đối xứng: Φ(−1,50) = 1 − Φ(1,50) = 1 − 0,9332 = <b>0,0668</b>.<br>
+<b>Tra ngược (từ xác suất tìm z):</b> muốn khoảng tin cậy 95% thì cần z có 0,9750 nằm dưới → dò trong thân bảng lấy 0,9750 → z = 1,96.<br>
+<b>Bốn giá trị đáng thuộc:</b> 90% → 1,645 · 95% → 1,96 · 98% → 2,326 · 99% → 2,576.</div>
+
+<h3>5 · Cách tra bảng t</h3>
+<div class="out"><b>Bảng t đánh chỉ số theo bậc tự do và theo diện tích đuôi α, không tra trong thân bảng.</b><br>
+<table><thead><tr><th>df</th><th>t<sub>0,10</sub></th><th>t<sub>0,05</sub></th><th>t<sub>0,025</sub></th><th>t<sub>0,01</sub></th><th>t<sub>0,005</sub></th></tr></thead><tbody>
+<tr><td>4</td><td>1,533</td><td>2,132</td><td>2,776</td><td>3,747</td><td>4,604</td></tr>
+<tr><td>10</td><td>1,372</td><td>1,812</td><td>2,228</td><td>2,764</td><td>3,169</td></tr>
+<tr><td>15</td><td>1,341</td><td>1,753</td><td>2,131</td><td>2,602</td><td>2,947</td></tr>
+<tr><td>20</td><td>1,325</td><td>1,725</td><td>2,086</td><td>2,528</td><td>2,845</td></tr>
+<tr><td>24</td><td>1,318</td><td>1,711</td><td>2,064</td><td>2,492</td><td>2,797</td></tr>
+<tr><td>30</td><td>1,310</td><td>1,697</td><td>2,042</td><td>2,457</td><td>2,750</td></tr>
+<tr><td>∞</td><td>1,282</td><td><b>1,645</b></td><td><b>1,960</b></td><td>2,326</td><td><b>2,576</b></td></tr>
+</tbody></table>
+<b>Khoảng tin cậy 95% hai phía với df = 15</b> → mỗi đuôi 0,025 → cột t<sub>0,025</sub> → <b>2,131</b>.<br>
+<b>Kiểm định một phía ở α = 0,05 với df = 20</b> → cột t<sub>0,05</sub> → <b>1,725</b>. Lấy 2,086 ở đây là lỗi kinh điển: cột đó dành cho kiểm định hai phía.<br>
+<b>Để ý dòng cuối:</b> ở df = ∞, các giá trị t đúng bằng giá trị z. Phân phối t <em>chính là</em> phân phối chuẩn được nới rộng ra để trả giá cho việc phải ước lượng σ — và phần phạt đó tan biến khi n lớn, đó là lý do n ≥ 30 thì dùng z được.<br>
+<b>Chặn giá trị p:</b> với df = 24 và t₀ = 2,50, dò dọc hàng — 2,492 &lt; 2,50 &lt; 2,797 → một đuôi nằm giữa 0,005 và 0,01 → p hai phía nằm giữa 0,01 và 0,02 (đúng câu 1 của PT3).</div>
+
+<div class="pitfall"><b>Chọn số lớp không phải muốn bao nhiêu cũng được.</b> Quá ít lớp (2–3) giấu mất hình dạng; quá nhiều (15 lớp cho n = 20) làm hầu hết cột rỗng và cũng giấu mất hình dạng y như vậy. Quy tắc Sturges k ≈ 1 + 3,322 log₁₀ n cho một con số biện minh được, và nêu ra quy tắc là ăn điểm dù k của bạn lệch một đơn vị.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hệ số 1,5 × IQR của biểu đồ hộp là quy ước, không phải định lý.</b> John Tukey chọn 1,5 vì với dữ liệu chuẩn nó gắn cờ khoảng 0,7% số quan sát — đủ hiếm để đáng chú ý, đủ thường để có ích. Trên phân phối lệch như thu nhập thì nó gắn cờ nhiều hơn hẳn, vì thế phần mềm có thêm mức 3 × IQR ("rất xa") và vì thế một điểm bị gắn cờ nghĩa là "hãy xem lại điểm này", không bao giờ nghĩa là "hãy xoá nó đi". Xoá dữ liệu chỉ vì một công thức gắn cờ là một trong những cách phổ biến nhất khiến các phân tích thật đi sai. <em>Ngoài giáo trình vì môn học đưa quy tắc như một hằng số, còn cách diễn giải nó là một phán đoán bạn phải bảo vệ được.</em></div>
+</div>
+`,
+        },
       ],
     },
 
@@ -2056,6 +2216,316 @@ stats.<span class="tok-function">ttest_1samp</span>(data, 5)  <span class="tok-c
         },
       ],
     },
+    /* ══════════════════ TỰ KIỂM TRA — LUYỆN ĐỀ PT ══════════════════ */
+    {
+      title: 'Self-test — worked PT papers|||Tự kiểm tra — luyện đề PT có lời giải',
+      description: 'Ba bộ đề theo đúng ba kỳ Progress Test, mọi câu giải hết số, không bỏ trống bước nào.',
+      lessons: [
+        {
+          title: 'PT1 — Probability & random variables (5 solved)|||PT1 — Xác suất & biến ngẫu nhiên (5 câu có lời giải)',
+          slug: 'mas291-pt1-luyen-de',
+          type: 'VIDEO',
+          description: 'Năm câu bao trọn chương 1–3: xác suất có điều kiện, Bayes, nhị thức, Poisson, kỳ vọng & phương sai.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Self-test · PT1</span>
+<h2>Five questions covering chapters 1–3</h2>
+<p class="lead">Do them on paper first. If a question takes more than 8 minutes, stop and read only the step you got stuck on — what costs marks in the exam room is almost always picking the wrong formula at step 1, not arithmetic at step 4.</p>
+
+<h3>Question 1 — sampling without replacement</h3>
+<div class="out"><b>A box holds 4 red and 6 blue balls. Two balls are drawn one after another without replacement. Find P(both the same colour).</b><br>
+<b>Solution.</b> Two disjoint cases, so add them. The denominator drops because there is no replacement:<br>
+P(2 red) = (4/10) × (3/9) = 12/90 · P(2 blue) = (6/10) × (5/9) = 30/90<br>
+<b>P(same colour) = (12 + 30)/90 = 42/90 = 7/15 ≈ 0.4667</b><br>
+<b>The trap:</b> writing (4/10) × (3/10) — that is <em>with</em> replacement. Read the wording twice.</div>
+
+<h3>Question 2 — the binomial distribution</h3>
+<div class="out"><b>X ~ B(n = 10, p = 0.3). Find P(X = 3), E(X) and Var(X).</b><br>
+P(X = 3) = C(10,3) × 0.3³ × 0.7⁷ = 120 × 0.027 × 0.0823543 ≈ <b>0.2668</b><br>
+E(X) = np = 10 × 0.3 = <b>3</b> · Var(X) = np(1−p) = 10 × 0.3 × 0.7 = <b>2.1</b> · σ = √2.1 ≈ 1.449<br>
+<b>Sanity check:</b> the mode of a binomial sits next to np = 3, so P(X = 3) being the largest single probability is consistent. If you ever get P(X = k) &gt; 0.5 here, it is wrong — the mass is spread over 11 values.</div>
+
+<h3>Question 3 — the normal distribution</h3>
+<div class="out"><b>Student heights X ~ N(μ = 170, σ = 6) cm. Find P(164 &lt; X &lt; 179).</b><br>
+Standardise both ends: z₁ = (164 − 170)/6 = −1.00 · z₂ = (179 − 170)/6 = +1.50<br>
+P = Φ(1.50) − Φ(−1.00) = 0.9332 − 0.1587 = <b>0.7745 ≈ 77.45%</b><br>
+<b>Always subtract, never add:</b> the Φ table gives cumulative probability from −∞, so Φ(1.50) already contains the part below 164 that you do not want.</div>
+
+<h3>Question 4 — Bayes' theorem</h3>
+<div class="out"><b>A factory has two machines: A makes 60% of the output with a 2% defect rate, B makes 40% with a 5% defect rate. An item is found defective. What is the probability it came from B?</b><br>
+<b>Step 1 — total probability:</b> P(D) = P(A)P(D|A) + P(B)P(D|B) = 0.6 × 0.02 + 0.4 × 0.05 = 0.012 + 0.020 = <b>0.032</b><br>
+<b>Step 2 — Bayes:</b> P(B|D) = P(B)P(D|B) / P(D) = 0.020 / 0.032 = <b>0.625</b><br>
+<b>Interpretation:</b> B produces only 40% of the items but 62.5% of the defects — the posterior swings toward B precisely because its defect rate is higher. Check: P(A|D) = 0.012/0.032 = 0.375, and 0.625 + 0.375 = 1 ✓.</div>
+
+<h3>Question 5 — Poisson, and a discrete expectation</h3>
+<div class="out"><b>(a) Calls arrive at a switchboard at λ = 3 per minute. Find P(exactly 5 calls in one minute) and P(at least 1 call).</b><br>
+P(X = 5) = e⁻³ × 3⁵ / 5! = 0.049787 × 243 / 120 ≈ <b>0.1008</b><br>
+P(X ≥ 1) = 1 − P(X = 0) = 1 − e⁻³ = 1 − 0.049787 = <b>0.9502</b><br>
+<b>The pattern to remember:</b> "at least one" is always 1 minus "none" — computing P(1) + P(2) + … is the slow, error-prone route.<br>
+<b>(b) X takes values 0, 1, 2, 3 with probabilities 0.1, 0.3, 0.4, 0.2. Find E(X) and Var(X).</b><br>
+E(X) = 0(0.1) + 1(0.3) + 2(0.4) + 3(0.2) = 0 + 0.3 + 0.8 + 0.6 = <b>1.7</b><br>
+E(X²) = 0 + 1(0.3) + 4(0.4) + 9(0.2) = 0.3 + 1.6 + 1.8 = 3.7<br>
+Var(X) = E(X²) − [E(X)]² = 3.7 − 1.7² = 3.7 − 2.89 = <b>0.81</b> · σ = 0.9<br>
+<b>Check:</b> the probabilities sum to 1 ✓ and E(X) = 1.7 lies between 0 and 3 ✓. Never compute Var as E(X²) − E(X) — squaring the mean is the step everyone forgets.</div>
+
+<div class="pitfall"><b>The single most common PT1 error: mixing up "and" with "or".</b> "Both defective" multiplies (and, intersection); "at least one defective" is 1 − P(none) (or, union). Underline those words in the question before you write anything.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Sanity-check every answer with a bound.</b> A probability must lie in [0, 1]; a variance can never be negative; E(X) must lie between the smallest and largest possible value of X; and for a binomial, E(X) = np must be near the most likely outcome. Spending five seconds on these checks catches most arithmetic slips — and in a computer-graded exam, an answer of 1.4 for a probability scores exactly the same as leaving it blank. <em>Beyond syllabus because nobody teaches checking, yet it is the highest-return habit in a timed statistics paper.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Tự kiểm tra · PT1</span>
+<h2>Năm câu bao trọn chương 1–3</h2>
+<p class="lead">Hãy làm trên giấy trước. Nếu một câu quá 8 phút thì dừng lại, chỉ đọc đúng bước bạn bị tắc — thứ làm mất điểm trong phòng thi gần như luôn là chọn sai công thức ở bước 1, chứ không phải tính sai ở bước 4.</p>
+
+<h3>Câu 1 — lấy mẫu không hoàn lại</h3>
+<div class="out"><b>Một hộp có 4 bóng đỏ và 6 bóng xanh. Bốc lần lượt 2 bóng không hoàn lại. Tính xác suất hai bóng cùng màu.</b><br>
+<b>Lời giải.</b> Hai trường hợp rời nhau nên cộng lại. Mẫu số giảm dần vì không hoàn lại:<br>
+P(2 đỏ) = (4/10) × (3/9) = 12/90 · P(2 xanh) = (6/10) × (5/9) = 30/90<br>
+<b>P(cùng màu) = (12 + 30)/90 = 42/90 = 7/15 ≈ 0,4667</b><br>
+<b>Bẫy:</b> viết (4/10) × (3/10) — đó là trường hợp <em>có</em> hoàn lại. Hãy đọc đề hai lần.</div>
+
+<h3>Câu 2 — phân phối nhị thức</h3>
+<div class="out"><b>X ~ B(n = 10, p = 0,3). Tính P(X = 3), E(X) và Var(X).</b><br>
+P(X = 3) = C(10,3) × 0,3³ × 0,7⁷ = 120 × 0,027 × 0,0823543 ≈ <b>0,2668</b><br>
+E(X) = np = 10 × 0,3 = <b>3</b> · Var(X) = np(1−p) = 10 × 0,3 × 0,7 = <b>2,1</b> · σ = √2,1 ≈ 1,449<br>
+<b>Kiểm nhanh:</b> mốt của phân phối nhị thức nằm cạnh np = 3, nên P(X = 3) là xác suất đơn lớn nhất là hợp lý. Nếu ra P(X = k) &gt; 0,5 ở đây thì chắc chắn sai — khối xác suất trải trên 11 giá trị.</div>
+
+<h3>Câu 3 — phân phối chuẩn</h3>
+<div class="out"><b>Chiều cao sinh viên X ~ N(μ = 170, σ = 6) cm. Tính P(164 &lt; X &lt; 179).</b><br>
+Chuẩn hoá hai đầu: z₁ = (164 − 170)/6 = −1,00 · z₂ = (179 − 170)/6 = +1,50<br>
+P = Φ(1,50) − Φ(−1,00) = 0,9332 − 0,1587 = <b>0,7745 ≈ 77,45%</b><br>
+<b>Luôn TRỪ, đừng cộng:</b> bảng Φ cho xác suất tích luỹ từ −∞, nên Φ(1,50) đã bao gồm cả phần dưới 164 mà ta không muốn lấy.</div>
+
+<h3>Câu 4 — định lý Bayes</h3>
+<div class="out"><b>Một nhà máy có hai máy: A làm 60% sản lượng với tỉ lệ lỗi 2%, B làm 40% với tỉ lệ lỗi 5%. Lấy ra một sản phẩm thấy bị lỗi. Xác suất nó do máy B làm là bao nhiêu?</b><br>
+<b>Bước 1 — xác suất toàn phần:</b> P(D) = P(A)P(D|A) + P(B)P(D|B) = 0,6 × 0,02 + 0,4 × 0,05 = 0,012 + 0,020 = <b>0,032</b><br>
+<b>Bước 2 — Bayes:</b> P(B|D) = P(B)P(D|B) / P(D) = 0,020 / 0,032 = <b>0,625</b><br>
+<b>Diễn giải:</b> B chỉ làm 40% sản phẩm nhưng gánh 62,5% số hàng lỗi — hậu nghiệm nghiêng về B đúng vì tỉ lệ lỗi của nó cao hơn. Kiểm: P(A|D) = 0,012/0,032 = 0,375, và 0,625 + 0,375 = 1 ✓.</div>
+
+<h3>Câu 5 — Poisson và kỳ vọng rời rạc</h3>
+<div class="out"><b>(a) Cuộc gọi tới tổng đài với λ = 3 cuộc mỗi phút. Tính P(đúng 5 cuộc trong một phút) và P(ít nhất 1 cuộc).</b><br>
+P(X = 5) = e⁻³ × 3⁵ / 5! = 0,049787 × 243 / 120 ≈ <b>0,1008</b><br>
+P(X ≥ 1) = 1 − P(X = 0) = 1 − e⁻³ = 1 − 0,049787 = <b>0,9502</b><br>
+<b>Khuôn cần nhớ:</b> "ít nhất một" luôn bằng 1 trừ "không có cái nào" — cộng P(1) + P(2) + … vừa chậm vừa dễ sai.<br>
+<b>(b) X nhận giá trị 0, 1, 2, 3 với xác suất 0,1; 0,3; 0,4; 0,2. Tính E(X) và Var(X).</b><br>
+E(X) = 0(0,1) + 1(0,3) + 2(0,4) + 3(0,2) = 0 + 0,3 + 0,8 + 0,6 = <b>1,7</b><br>
+E(X²) = 0 + 1(0,3) + 4(0,4) + 9(0,2) = 0,3 + 1,6 + 1,8 = 3,7<br>
+Var(X) = E(X²) − [E(X)]² = 3,7 − 1,7² = 3,7 − 2,89 = <b>0,81</b> · σ = 0,9<br>
+<b>Kiểm:</b> tổng xác suất bằng 1 ✓ và E(X) = 1,7 nằm giữa 0 và 3 ✓. Đừng bao giờ tính Var bằng E(X²) − E(X) — bình phương giá trị trung bình là bước ai cũng quên.</div>
+
+<div class="pitfall"><b>Lỗi PT1 phổ biến nhất: lẫn lộn "và" với "hoặc".</b> "Cả hai đều lỗi" thì NHÂN (và, giao); "có ít nhất một cái lỗi" thì lấy 1 − P(không có cái nào) (hoặc, hợp). Hãy gạch chân những từ đó trong đề trước khi viết bất cứ thứ gì.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Kiểm mọi đáp án bằng một cận.</b> Xác suất phải nằm trong [0; 1]; phương sai không bao giờ âm; E(X) phải nằm giữa giá trị nhỏ nhất và lớn nhất của X; và với nhị thức, E(X) = np phải nằm cạnh kết cục dễ xảy ra nhất. Bỏ ra năm giây cho các phép kiểm này bắt được hầu hết lỗi tính toán — mà trong bài thi chấm máy, một đáp án xác suất bằng 1,4 được đúng bằng số điểm của việc bỏ trống. <em>Ngoài giáo trình vì không ai dạy cách kiểm lại, nhưng đó là thói quen sinh lợi cao nhất trong một bài thi thống kê có giới hạn thời gian.</em></div>
+</div>
+`,
+        },
+        {
+          title: 'PT2 — Descriptive stats, sampling & CI (5 solved)|||PT2 — Thống kê mô tả, phân phối mẫu & khoảng tin cậy (5 câu có lời giải)',
+          slug: 'mas291-pt2-luyen-de',
+          type: 'VIDEO',
+          description: 'Năm câu bao chương 4, 6, 7: tóm tắt số liệu, CLT, khoảng tin cậy, cỡ mẫu, xấp xỉ chuẩn.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Self-test · PT2</span>
+<h2>Five questions covering chapters 4, 6 and 7</h2>
+
+<h3>Question 1 — every summary measure at once</h3>
+<div class="out"><b>Sample: 12, 15, 15, 18, 20. Find the mean, median, mode, sample variance and standard deviation.</b><br>
+x̄ = (12 + 15 + 15 + 18 + 20)/5 = 80/5 = <b>16</b><br>
+Median: data already sorted, n = 5 is odd → the 3rd value = <b>15</b>. Mode = <b>15</b> (appears twice).<br>
+Σ(xᵢ − x̄)² = (−4)² + (−1)² + (−1)² + 2² + 4² = 16 + 1 + 1 + 4 + 16 = 38<br>
+s² = 38/(5 − 1) = <b>9.5</b> · s = √9.5 ≈ <b>3.082</b><br>
+<b>Two checks:</b> the deviations must sum to zero — (−4) + (−1) + (−1) + 2 + 4 = 0 ✓ — and the denominator is n − 1 = 4, not 5. Here mean 16 &gt; median 15, a sign of slight right skew.</div>
+
+<h3>Question 2 — confidence interval when σ is known</h3>
+<div class="out"><b>n = 36, x̄ = 21.5, σ = 3 (known). Build a 95% CI for μ.</b><br>
+σ known → use <b>z</b>, not t: σ<sub>x̄</sub> = 3/√36 = 3/6 = 0.5<br>
+E = z<sub>0.025</sub> × σ<sub>x̄</sub> = 1.96 × 0.5 = <b>0.98</b><br>
+CI = 21.5 ± 0.98 = <b>[20.52, 22.48]</b><br>
+<b>Reading it correctly:</b> "95% confident that μ lies in this interval" — <em>not</em> "95% of the data lies here" and <em>not</em> "P(μ ∈ interval) = 0.95". μ is a fixed number; it is the interval that is random.</div>
+
+<h3>Question 3 — required sample size</h3>
+<div class="out"><b>With σ = 4 and 95% confidence, what minimum sample size keeps the margin of error at most 1?</b><br>
+E = z<sub>α/2</sub> σ/√n ≤ 1 → n ≥ (z<sub>α/2</sub> σ / E)² = (1.96 × 4 / 1)² = 7.84² = 61.47<br>
+<b>n = 62.</b><br>
+<b>This is the only place in the whole course where you round UP</b>, even for a tiny fraction: n = 61 gives E &gt; 1, which fails the requirement. Note also that n depends on E <em>squared</em> — halving the margin of error costs four times the sample.</div>
+
+<h3>Question 4 — CI when σ is unknown, and a proportion</h3>
+<div class="out"><b>(a) n = 16, x̄ = 50, s = 4. Build a 95% CI for μ.</b><br>
+σ unknown and n &lt; 30 → use <b>t</b> with df = n − 1 = 15 → t<sub>0.025,15</sub> = 2.131<br>
+E = 2.131 × 4/√16 = 2.131 × 1 = 2.131 → CI = <b>[47.87, 52.13]</b><br>
+Compare with using z = 1.96 by mistake: [48.04, 51.96] — too narrow, because t is always wider than z to pay for not knowing σ.<br>
+<b>(b) In a survey of 400 people, 240 said yes. Build a 95% CI for the population proportion.</b><br>
+p̂ = 240/400 = 0.6 · SE = √(p̂(1−p̂)/n) = √(0.6 × 0.4 / 400) = √0.0006 = 0.0245<br>
+E = 1.96 × 0.0245 = 0.048 → CI = <b>[0.552, 0.648]</b>, i.e. 55.2% to 64.8%.<br>
+<b>Check the condition:</b> np̂ = 240 ≥ 5 and n(1−p̂) = 160 ≥ 5 ✓ so the normal approximation is valid.</div>
+
+<h3>Question 5 — the Central Limit Theorem</h3>
+<div class="out"><b>A population has μ = 100 and σ = 15. A sample of n = 25 is drawn. Find P(x̄ &gt; 106).</b><br>
+By the CLT, x̄ ~ N(μ, σ/√n) → σ<sub>x̄</sub> = 15/√25 = <b>3</b><br>
+z = (106 − 100)/3 = <b>2.00</b> → P(x̄ &gt; 106) = 1 − Φ(2.00) = 1 − 0.9772 = <b>0.0228</b><br>
+<b>The distinction the exam tests:</b> P(<em>one individual</em> X &gt; 106) would use σ = 15 → z = 0.40 → 0.3446, fifteen times larger. Sample means cluster far more tightly than individuals — that is the whole content of the CLT, and reading "x̄" versus "X" in the question is where the mark is won.</div>
+
+<div class="pitfall"><b>z or t? Answer with the flowchart, not by feel.</b> σ known → z (any n). σ unknown and n ≥ 30 → z is acceptable. σ unknown and n &lt; 30 → <b>t with df = n − 1</b>. For proportions always z. Write the flowchart in the margin before you compute anything.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Where the 1.96 comes from — and why 95% is arbitrary.</b> 1.96 is simply the z value cutting 2.5% into each tail of the standard normal; 90% gives 1.645 and 99% gives 2.576. The choice of 95% is a convention from Fisher in the 1920s, not a mathematical result. Modern practice increasingly reports the interval itself rather than a yes/no verdict at 95%, precisely because the threshold carries no special meaning — a point the ASA made formally in its 2016 statement on p-values. <em>Beyond syllabus because the course treats 95% as given, while knowing it is a convention is what stops you over-interpreting a result that just missed it.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Tự kiểm tra · PT2</span>
+<h2>Năm câu bao chương 4, 6 và 7</h2>
+
+<h3>Câu 1 — tất cả đại lượng tóm tắt trong một câu</h3>
+<div class="out"><b>Mẫu: 12, 15, 15, 18, 20. Tính trung bình, trung vị, mốt, phương sai mẫu và độ lệch chuẩn.</b><br>
+x̄ = (12 + 15 + 15 + 18 + 20)/5 = 80/5 = <b>16</b><br>
+Trung vị: dữ liệu đã sắp, n = 5 lẻ → lấy giá trị thứ 3 = <b>15</b>. Mốt = <b>15</b> (xuất hiện 2 lần).<br>
+Σ(xᵢ − x̄)² = (−4)² + (−1)² + (−1)² + 2² + 4² = 16 + 1 + 1 + 4 + 16 = 38<br>
+s² = 38/(5 − 1) = <b>9,5</b> · s = √9,5 ≈ <b>3,082</b><br>
+<b>Hai phép kiểm:</b> tổng các độ lệch phải bằng 0 — (−4) + (−1) + (−1) + 2 + 4 = 0 ✓ — và mẫu số là n − 1 = 4, không phải 5. Ở đây trung bình 16 &gt; trung vị 15, dấu hiệu lệch phải nhẹ.</div>
+
+<h3>Câu 2 — khoảng tin cậy khi ĐÃ BIẾT σ</h3>
+<div class="out"><b>n = 36, x̄ = 21,5, σ = 3 (đã biết). Lập khoảng tin cậy 95% cho μ.</b><br>
+Biết σ → dùng <b>z</b>, không dùng t: σ<sub>x̄</sub> = 3/√36 = 3/6 = 0,5<br>
+E = z<sub>0,025</sub> × σ<sub>x̄</sub> = 1,96 × 0,5 = <b>0,98</b><br>
+KTC = 21,5 ± 0,98 = <b>[20,52; 22,48]</b><br>
+<b>Đọc cho đúng:</b> "tin cậy 95% rằng μ nằm trong khoảng này" — <em>không phải</em> "95% dữ liệu nằm ở đây" và <em>không phải</em> "P(μ ∈ khoảng) = 0,95". μ là một con số cố định; chính cái khoảng mới là ngẫu nhiên.</div>
+
+<h3>Câu 3 — cỡ mẫu cần thiết</h3>
+<div class="out"><b>Với σ = 4 và độ tin cậy 95%, cần cỡ mẫu tối thiểu bao nhiêu để biên sai số không vượt quá 1?</b><br>
+E = z<sub>α/2</sub> σ/√n ≤ 1 → n ≥ (z<sub>α/2</sub> σ / E)² = (1,96 × 4 / 1)² = 7,84² = 61,47<br>
+<b>n = 62.</b><br>
+<b>Đây là chỗ DUY NHẤT trong cả môn mà bạn làm tròn LÊN</b>, kể cả khi phần thập phân rất nhỏ: n = 61 cho E &gt; 1, tức không đạt yêu cầu. Cũng để ý n phụ thuộc E theo <em>bình phương</em> — muốn biên sai số nhỏ đi một nửa thì cần mẫu gấp bốn lần.</div>
+
+<h3>Câu 4 — khoảng tin cậy khi CHƯA BIẾT σ, và cho tỉ lệ</h3>
+<div class="out"><b>(a) n = 16, x̄ = 50, s = 4. Lập khoảng tin cậy 95% cho μ.</b><br>
+Chưa biết σ và n &lt; 30 → dùng <b>t</b> với df = n − 1 = 15 → t<sub>0,025;15</sub> = 2,131<br>
+E = 2,131 × 4/√16 = 2,131 × 1 = 2,131 → KTC = <b>[47,87; 52,13]</b><br>
+So với việc dùng nhầm z = 1,96: [48,04; 51,96] — hẹp quá, vì t luôn rộng hơn z để trả giá cho việc không biết σ.<br>
+<b>(b) Khảo sát 400 người, 240 người trả lời có. Lập khoảng tin cậy 95% cho tỉ lệ tổng thể.</b><br>
+p̂ = 240/400 = 0,6 · SE = √(p̂(1−p̂)/n) = √(0,6 × 0,4 / 400) = √0,0006 = 0,0245<br>
+E = 1,96 × 0,0245 = 0,048 → KTC = <b>[0,552; 0,648]</b>, tức từ 55,2% tới 64,8%.<br>
+<b>Kiểm điều kiện:</b> np̂ = 240 ≥ 5 và n(1−p̂) = 160 ≥ 5 ✓ nên xấp xỉ chuẩn dùng được.</div>
+
+<h3>Câu 5 — Định lý giới hạn trung tâm</h3>
+<div class="out"><b>Một tổng thể có μ = 100 và σ = 15. Lấy mẫu n = 25. Tính P(x̄ &gt; 106).</b><br>
+Theo CLT, x̄ ~ N(μ, σ/√n) → σ<sub>x̄</sub> = 15/√25 = <b>3</b><br>
+z = (106 − 100)/3 = <b>2,00</b> → P(x̄ &gt; 106) = 1 − Φ(2,00) = 1 − 0,9772 = <b>0,0228</b><br>
+<b>Điểm phân biệt mà đề thi nhắm vào:</b> P(<em>một cá thể</em> X &gt; 106) sẽ dùng σ = 15 → z = 0,40 → 0,3446, lớn gấp mười lăm lần. Trung bình mẫu co cụm chặt hơn cá thể rất nhiều — đó là toàn bộ nội dung của CLT, và việc đọc kỹ "x̄" hay "X" trong đề chính là chỗ ăn điểm.</div>
+
+<div class="pitfall"><b>Dùng z hay t? Trả lời bằng sơ đồ, đừng theo cảm tính.</b> Biết σ → z (mọi n). Không biết σ và n ≥ 30 → z chấp nhận được. Không biết σ và n &lt; 30 → <b>t với df = n − 1</b>. Với tỉ lệ thì luôn dùng z. Hãy viết sơ đồ đó ra lề giấy trước khi tính bất cứ thứ gì.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Con số 1,96 từ đâu ra — và vì sao mức 95% là quy ước.</b> 1,96 đơn giản là giá trị z cắt 2,5% ở mỗi đuôi của phân phối chuẩn chuẩn tắc; mức 90% cho 1,645 còn 99% cho 2,576. Việc chọn 95% là quy ước có từ Fisher những năm 1920, không phải một kết quả toán học. Thực hành hiện đại ngày càng báo cáo chính cái khoảng thay vì một phán quyết có/không ở mức 95%, đúng vì cái ngưỡng ấy chẳng mang ý nghĩa đặc biệt nào — điều mà Hội Thống kê Hoa Kỳ đã nói chính thức trong tuyên bố năm 2016 về giá trị p. <em>Ngoài giáo trình vì môn học coi 95% là cho sẵn, còn biết nó là quy ước mới giúp bạn không diễn giải quá lời một kết quả vừa chớm trượt ngưỡng.</em></div>
+</div>
+`,
+        },
+        {
+          title: 'PT3 — Testing, two samples & regression (5 solved)|||PT3 — Kiểm định, hai mẫu & hồi quy (5 câu có lời giải)',
+          slug: 'mas291-pt3-luyen-de',
+          type: 'VIDEO',
+          description: 'Năm câu bao chương 8–11: kiểm định t, giá trị p, hai trung bình, mẫu cặp, hồi quy tuyến tính.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Self-test · PT3</span>
+<h2>Five questions covering chapters 8–11</h2>
+
+<h3>Question 1 — a one-sample t test, with the p-value</h3>
+<div class="out"><b>Test H₀: μ = 100 against H₁: μ ≠ 100, with n = 25, x̄ = 103.5, s = 7, α = 0.05. Conclude, and bound the p-value.</b><br>
+σ unknown → t with df = n − 1 = 24:<br>
+t₀ = (x̄ − μ₀)/(s/√n) = (103.5 − 100)/(7/√25) = 3.5/1.4 = <b>2.50</b><br>
+Critical value t<sub>0.025,24</sub> = 2.064. Since |2.50| &gt; 2.064 → <b>reject H₀</b>.<br>
+<b>p-value:</b> on row df = 24, t<sub>0.01</sub> = 2.492 and t<sub>0.005</sub> = 2.797. Because 2.492 &lt; 2.50 &lt; 2.797, the two-sided p lies between 2(0.005) = 0.01 and 2(0.01) = 0.02 → <b>0.01 &lt; p &lt; 0.02</b> (exactly ≈ 0.0198).<br>
+<b>Note how close it is:</b> t₀ = 2.50 only just clears 2.064. Reject at α = 0.05, but at α = 0.01 the critical value is 2.797 and you would <em>fail to reject</em> — the same data, the opposite verdict. That is why reporting p is more informative than reporting the verdict.</div>
+
+<h3>Question 2 — difference of two means</h3>
+<div class="out"><b>Method A: n₁ = 12, x̄₁ = 85, s₁ = 4. Method B: n₂ = 10, x̄₂ = 81, s₂ = 5. Assume equal variances, α = 0.05, test H₁: μ₁ ≠ μ₂.</b><br>
+<b>Step 1 — pooled variance:</b> s²<sub>p</sub> = [(n₁−1)s₁² + (n₂−1)s₂²]/(n₁+n₂−2) = [11(16) + 9(25)]/20 = (176 + 225)/20 = 401/20 = <b>20.05</b> → s<sub>p</sub> = 4.478<br>
+<b>Step 2 — the statistic:</b> t₀ = (85 − 81)/(4.478 × √(1/12 + 1/10)) = 4/(4.478 × √0.1833) = 4/(4.478 × 0.4282) = 4/1.917 = <b>2.087</b><br>
+<b>Step 3 — decide:</b> df = 12 + 10 − 2 = 20 → t<sub>0.025,20</sub> = 2.086. Since 2.087 &gt; 2.086 → <b>reject H₀ — but only just</b>. With data this marginal, the honest report is "significant at 5%, p ≈ 0.0499", not "method A is better".</div>
+
+<h3>Question 3 — paired samples</h3>
+<div class="out"><b>Five students, score before and after a course: (65,70), (70,74), (58,60), (80,85), (72,75). Test at α = 0.05 whether the course helped.</b><br>
+<b>The key decision:</b> the two measurements come from the <em>same</em> student → this is <b>paired</b>, so work with the differences, not with two independent samples.<br>
+d = 5, 4, 2, 5, 3 → d̄ = 19/5 = <b>3.8</b><br>
+Σ(dᵢ − d̄)² = (1.2)² + (0.2)² + (−1.8)² + (1.2)² + (−0.8)² = 1.44 + 0.04 + 3.24 + 1.44 + 0.64 = 6.8 → s²<sub>d</sub> = 6.8/4 = 1.7 → s<sub>d</sub> = <b>1.304</b><br>
+t₀ = d̄/(s<sub>d</sub>/√n) = 3.8/(1.304/√5) = 3.8/0.583 = <b>6.52</b>, df = 4<br>
+One-sided critical value t<sub>0.05,4</sub> = 2.132 → 6.52 ≫ 2.132 → <b>reject H₀: the course did improve scores</b>.<br>
+<b>Why pairing matters:</b> treating these as two independent samples would put the between-student variation (58 to 80) into the error term and almost certainly hide the effect. Pairing removes it — the same design idea as a before/after medical trial.</div>
+
+<h3>Question 4 — difference of two proportions</h3>
+<div class="out"><b>Sample 1: 45 successes out of 150. Sample 2: 30 out of 120. Test H₁: p₁ ≠ p₂ at α = 0.05.</b><br>
+p̂₁ = 0.30 · p̂₂ = 0.25 · pooled p̂ = (45 + 30)/(150 + 120) = 75/270 = <b>0.2778</b><br>
+SE = √[p̂(1−p̂)(1/n₁ + 1/n₂)] = √[0.2778 × 0.7222 × (1/150 + 1/120)] = √[0.2006 × 0.015] = √0.003009 = <b>0.05485</b><br>
+z₀ = (0.30 − 0.25)/0.05485 = <b>0.911</b><br>
+|0.911| &lt; 1.96 → <b>fail to reject H₀</b>: no evidence the proportions differ (p ≈ 0.362).<br>
+<b>Vocabulary that costs marks:</b> write "fail to reject H₀", never "accept H₀". Absence of evidence is not evidence of equality — with n this small the test simply cannot see a 5-point difference.</div>
+
+<h3>Question 5 — simple linear regression</h3>
+<div class="out"><b>n = 5 points: x = 1,2,3,4,5 and y = 2,4,5,4,5. Find the regression line, r and R².</b><br>
+x̄ = 3, ȳ = 4 · S<sub>xx</sub> = Σ(x−x̄)² = 4 + 1 + 0 + 1 + 4 = <b>10</b><br>
+S<sub>xy</sub> = Σ(x−x̄)(y−ȳ) = (−2)(−2) + (−1)(0) + 0(1) + 1(0) + 2(1) = 4 + 0 + 0 + 0 + 2 = <b>6</b><br>
+S<sub>yy</sub> = Σ(y−ȳ)² = 4 + 0 + 1 + 0 + 1 = <b>6</b><br>
+<b>β̂₁ = S<sub>xy</sub>/S<sub>xx</sub> = 6/10 = 0.6</b> · <b>β̂₀ = ȳ − β̂₁x̄ = 4 − 0.6(3) = 2.2</b> → <b>ŷ = 2.2 + 0.6x</b><br>
+r = S<sub>xy</sub>/√(S<sub>xx</sub>S<sub>yy</sub>) = 6/√60 = 6/7.746 = <b>0.7746</b> → <b>R² = 0.60</b><br>
+<b>Interpretation, in the words the marker wants:</b> each extra unit of x is associated with a 0.6 increase in y, and 60% of the variation in y is explained by the model. Not "x causes y" — regression measures association, and the remaining 40% is everything the model does not include.<br>
+<b>Prediction:</b> at x = 6, ŷ = 2.2 + 3.6 = 5.8 — but x = 6 is outside the observed range 1–5, so this is <em>extrapolation</em> and the exam expects you to say so.</div>
+
+<div class="pitfall"><b>State the conclusion in context, not in symbols.</b> "Reject H₀" alone loses marks; the full answer is "reject H₀ at α = 0.05; there is sufficient evidence that the mean differs from 100". Every marking scheme in this course awards a separate point for that sentence.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>A significant result is not necessarily a large one.</b> With n = 10,000, a difference of 0.2 points can be "highly significant" (p &lt; 0.001) and completely useless in practice. That is why modern reporting pairs the p-value with an <em>effect size</em> (Cohen's d = (x̄₁ − x̄₂)/s<sub>p</sub>) and a confidence interval, which show <em>how big</em> the difference is rather than only whether it is non-zero. In the example of question 2, d = 4/4.478 = 0.89 — a large effect, which is why it reached significance despite only 22 observations. <em>Beyond syllabus because MAS291 tests only the mechanics of hypothesis testing, while every field that uses statistics has moved to reporting effect sizes alongside them.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Tự kiểm tra · PT3</span>
+<h2>Năm câu bao chương 8–11</h2>
+
+<h3>Câu 1 — kiểm định t một mẫu, kèm giá trị p</h3>
+<div class="out"><b>Kiểm định H₀: μ = 100 với H₁: μ ≠ 100, biết n = 25, x̄ = 103,5, s = 7, α = 0,05. Kết luận và chặn giá trị p.</b><br>
+Chưa biết σ → dùng t với df = n − 1 = 24:<br>
+t₀ = (x̄ − μ₀)/(s/√n) = (103,5 − 100)/(7/√25) = 3,5/1,4 = <b>2,50</b><br>
+Giá trị tới hạn t<sub>0,025;24</sub> = 2,064. Vì |2,50| &gt; 2,064 → <b>bác bỏ H₀</b>.<br>
+<b>Giá trị p:</b> trên dòng df = 24 có t<sub>0,01</sub> = 2,492 và t<sub>0,005</sub> = 2,797. Vì 2,492 &lt; 2,50 &lt; 2,797, giá trị p hai phía nằm giữa 2(0,005) = 0,01 và 2(0,01) = 0,02 → <b>0,01 &lt; p &lt; 0,02</b> (chính xác ≈ 0,0198).<br>
+<b>Để ý mức độ sát nút:</b> t₀ = 2,50 chỉ vừa vượt 2,064. Bác bỏ ở α = 0,05, nhưng ở α = 0,01 thì giá trị tới hạn là 2,797 và bạn sẽ <em>không bác bỏ được</em> — cùng dữ liệu, ngược phán quyết. Vì thế báo cáo giá trị p cung cấp nhiều thông tin hơn là chỉ báo phán quyết.</div>
+
+<h3>Câu 2 — hiệu hai trung bình</h3>
+<div class="out"><b>Phương pháp A: n₁ = 12, x̄₁ = 85, s₁ = 4. Phương pháp B: n₂ = 10, x̄₂ = 81, s₂ = 5. Giả sử hai phương sai bằng nhau, α = 0,05, kiểm định H₁: μ₁ ≠ μ₂.</b><br>
+<b>Bước 1 — phương sai gộp:</b> s²<sub>p</sub> = [(n₁−1)s₁² + (n₂−1)s₂²]/(n₁+n₂−2) = [11(16) + 9(25)]/20 = (176 + 225)/20 = 401/20 = <b>20,05</b> → s<sub>p</sub> = 4,478<br>
+<b>Bước 2 — thống kê kiểm định:</b> t₀ = (85 − 81)/(4,478 × √(1/12 + 1/10)) = 4/(4,478 × √0,1833) = 4/(4,478 × 0,4282) = 4/1,917 = <b>2,087</b><br>
+<b>Bước 3 — quyết định:</b> df = 12 + 10 − 2 = 20 → t<sub>0,025;20</sub> = 2,086. Vì 2,087 &gt; 2,086 → <b>bác bỏ H₀ — nhưng chỉ vừa đúng sát nút</b>. Với dữ liệu sát sạt như vậy, báo cáo trung thực là "có ý nghĩa ở mức 5%, p ≈ 0,0499", chứ không phải "phương pháp A tốt hơn".</div>
+
+<h3>Câu 3 — mẫu cặp</h3>
+<div class="out"><b>Năm sinh viên, điểm trước và sau khoá học: (65,70), (70,74), (58,60), (80,85), (72,75). Kiểm định ở α = 0,05 xem khoá học có giúp ích không.</b><br>
+<b>Quyết định then chốt:</b> hai lần đo trên <em>cùng</em> một sinh viên → đây là <b>mẫu cặp</b>, nên làm việc với hiệu số chứ không coi là hai mẫu độc lập.<br>
+d = 5, 4, 2, 5, 3 → d̄ = 19/5 = <b>3,8</b><br>
+Σ(dᵢ − d̄)² = (1,2)² + (0,2)² + (−1,8)² + (1,2)² + (−0,8)² = 1,44 + 0,04 + 3,24 + 1,44 + 0,64 = 6,8 → s²<sub>d</sub> = 6,8/4 = 1,7 → s<sub>d</sub> = <b>1,304</b><br>
+t₀ = d̄/(s<sub>d</sub>/√n) = 3,8/(1,304/√5) = 3,8/0,583 = <b>6,52</b>, df = 4<br>
+Giá trị tới hạn một phía t<sub>0,05;4</sub> = 2,132 → 6,52 ≫ 2,132 → <b>bác bỏ H₀: khoá học có làm điểm tăng</b>.<br>
+<b>Vì sao ghép cặp lại quan trọng:</b> coi đây là hai mẫu độc lập sẽ đẩy phần dao động giữa các sinh viên (từ 58 tới 80) vào sai số và gần như chắc chắn che mất hiệu ứng. Ghép cặp khử phần đó đi — cùng ý tưởng thiết kế như một thử nghiệm y khoa trước/sau.</div>
+
+<h3>Câu 4 — hiệu hai tỉ lệ</h3>
+<div class="out"><b>Mẫu 1: 45 thành công trên 150. Mẫu 2: 30 trên 120. Kiểm định H₁: p₁ ≠ p₂ ở α = 0,05.</b><br>
+p̂₁ = 0,30 · p̂₂ = 0,25 · tỉ lệ gộp p̂ = (45 + 30)/(150 + 120) = 75/270 = <b>0,2778</b><br>
+SE = √[p̂(1−p̂)(1/n₁ + 1/n₂)] = √[0,2778 × 0,7222 × (1/150 + 1/120)] = √[0,2006 × 0,015] = √0,003009 = <b>0,05485</b><br>
+z₀ = (0,30 − 0,25)/0,05485 = <b>0,911</b><br>
+|0,911| &lt; 1,96 → <b>không bác bỏ được H₀</b>: chưa có bằng chứng hai tỉ lệ khác nhau (p ≈ 0,362).<br>
+<b>Cách dùng từ ăn điểm:</b> phải viết "không bác bỏ được H₀", đừng bao giờ viết "chấp nhận H₀". Không có bằng chứng không phải là bằng chứng của sự bằng nhau — với cỡ mẫu nhỏ như vậy, phép kiểm đơn giản là không đủ nhạy để thấy chênh lệch 5 điểm phần trăm.</div>
+
+<h3>Câu 5 — hồi quy tuyến tính đơn</h3>
+<div class="out"><b>n = 5 điểm: x = 1,2,3,4,5 và y = 2,4,5,4,5. Tìm đường hồi quy, r và R².</b><br>
+x̄ = 3, ȳ = 4 · S<sub>xx</sub> = Σ(x−x̄)² = 4 + 1 + 0 + 1 + 4 = <b>10</b><br>
+S<sub>xy</sub> = Σ(x−x̄)(y−ȳ) = (−2)(−2) + (−1)(0) + 0(1) + 1(0) + 2(1) = 4 + 0 + 0 + 0 + 2 = <b>6</b><br>
+S<sub>yy</sub> = Σ(y−ȳ)² = 4 + 0 + 1 + 0 + 1 = <b>6</b><br>
+<b>β̂₁ = S<sub>xy</sub>/S<sub>xx</sub> = 6/10 = 0,6</b> · <b>β̂₀ = ȳ − β̂₁x̄ = 4 − 0,6(3) = 2,2</b> → <b>ŷ = 2,2 + 0,6x</b><br>
+r = S<sub>xy</sub>/√(S<sub>xx</sub>S<sub>yy</sub>) = 6/√60 = 6/7,746 = <b>0,7746</b> → <b>R² = 0,60</b><br>
+<b>Diễn giải đúng ý người chấm:</b> mỗi đơn vị tăng của x gắn với mức tăng 0,6 của y, và 60% biến thiên của y được mô hình giải thích. Không nói "x gây ra y" — hồi quy đo sự liên hệ, và 40% còn lại là mọi thứ mô hình chưa đưa vào.<br>
+<b>Dự đoán:</b> tại x = 6, ŷ = 2,2 + 3,6 = 5,8 — nhưng x = 6 nằm ngoài khoảng quan sát 1–5, nên đây là <em>ngoại suy</em> và đề thi mong bạn nói rõ điều đó.</div>
+
+<div class="pitfall"><b>Phải phát biểu kết luận theo ngữ cảnh, không phải bằng ký hiệu.</b> Chỉ viết "bác bỏ H₀" là mất điểm; đáp án đủ là "bác bỏ H₀ ở mức α = 0,05; có đủ bằng chứng cho thấy trung bình khác 100". Mọi thang chấm của môn này đều cho một điểm riêng cho câu văn đó.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Có ý nghĩa thống kê không đồng nghĩa với lớn.</b> Với n = 10.000, một chênh lệch 0,2 điểm có thể "rất có ý nghĩa" (p &lt; 0,001) mà hoàn toàn vô dụng trong thực tế. Vì thế cách báo cáo hiện đại đi kèm giá trị p với một <em>độ lớn hiệu ứng</em> (Cohen's d = (x̄₁ − x̄₂)/s<sub>p</sub>) và một khoảng tin cậy, để cho thấy chênh lệch <em>lớn cỡ nào</em> chứ không chỉ có khác 0 hay không. Ở câu 2 phía trên, d = 4/4,478 = 0,89 — hiệu ứng lớn, và đó là lý do nó đạt mức ý nghĩa dù chỉ có 22 quan sát. <em>Ngoài giáo trình vì MAS291 chỉ kiểm phần cơ học của kiểm định giả thuyết, trong khi mọi ngành có dùng thống kê đều đã chuyển sang báo cáo kèm độ lớn hiệu ứng.</em></div>
+</div>
+`,
+        },
+      ],
+    },
+
     /* END-SECTIONS-MARKER */
     {
       "title": "Final Exam|||Thi cuối kỳ",

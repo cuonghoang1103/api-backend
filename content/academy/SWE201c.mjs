@@ -1703,7 +1703,191 @@ Release 1 phải chạm tới mọi activity để hành trình người dùng c
 `,
         },
         {
-          title: 'E.2 — The Final Exam: vocabulary & key theory|||E.2 — Bài thi cuối kỳ: từ vựng & lý thuyết trọng tâm',
+          title: 'E.2 — A full sample PE paper, with model answers|||E.2 — Một đề PE mẫu đầy đủ, kèm bài giải mẫu',
+          slug: 'swe201c-de-mau-pe',
+          type: 'VIDEO',
+          description: 'Đề PE 10 điểm sáu câu theo đúng khung thật, kèm bài làm mẫu đạt điểm tối đa và thang chấm từng ý.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Exam prep · Lesson E.2</span>
+<h2>One complete paper, answered the way it is marked</h2>
+<p class="lead">Lesson E.1 listed the six question types. This is a full paper on one scenario, with a model answer for each question and the marking points made explicit — so you can score your own attempt before the real one.</p>
+
+<div class="callout ok"><b>The scenario (used by every question below).</b> <em>GreenGrocer</em> is a start-up building an online shop for a chain of 12 organic-food stores. The owner has a rough idea of the features but expects them to change as they learn from customers. Launch is needed in 4 months for the harvest season. The team is 6 developers, 2 of them new graduates, all in one office. Payment handling must satisfy the bank's security audit. The owner is available every week.</div>
+
+<h3>Question 1 — Choose a development model (2.0 marks)</h3>
+<div class="out"><b>Model answer.</b> I choose <b>Scrum</b> with 2-week sprints.<br>
+<b>Justification tied to the scenario</b> (this is where the marks are, not in describing Scrum):<br>
+· Requirements are <em>expected to change</em> → an iterative model, so Waterfall is ruled out (its cost of change rises steeply after the requirements phase).<br>
+· The customer is <em>available weekly</em> → satisfies Scrum's need for a Product Owner; without that availability Scrum degrades badly.<br>
+· A <em>fixed 4-month deadline</em> → sprints deliver a shippable increment every 2 weeks, so the team can cut scope rather than miss the date (fixed time, variable scope).<br>
+· Team of 6, co-located → within Scrum's recommended 3–9 and daily stand-ups are cheap.<br>
+· 2 new graduates → sprint reviews and pairing give the feedback they need faster than a document hand-off would.<br>
+<b>Why not the alternatives:</b> Waterfall — requirements are not stable. V-Model — same problem, plus it is heavier on documentation than a start-up can afford. Spiral — its risk-driven prototyping suits large, high-risk systems; here the risk is modest and the timeline short. Kanban — a good fallback if the work were an unpredictable stream of support tickets, but the fixed launch date favours the rhythm of sprints.<br>
+<b>Marking:</b> naming a model 0.5 · at least three justifications drawn from the scenario 1.0 · rejecting at least one alternative with a reason 0.5.</div>
+
+<h3>Question 2 — Test levels and responsibilities (1.0 mark)</h3>
+<div class="out"><b>Model answer.</b>
+<table><thead><tr><th>Level</th><th>What is tested</th><th>Who does it</th><th>Example for GreenGrocer</th></tr></thead><tbody>
+<tr><td>Unit</td><td>one function or class in isolation</td><td><b>developer</b></td><td>the function that computes a basket's total with a discount</td></tr>
+<tr><td>Integration</td><td>the interfaces between modules</td><td>developer / tester</td><td>the order module calling the payment gateway</td></tr>
+<tr><td>System</td><td>the complete product against the requirements</td><td><b>tester / QA</b></td><td>place an order end to end and receive the confirmation email</td></tr>
+<tr><td>Acceptance (UAT)</td><td>fitness for business use</td><td><b>customer / end user</b></td><td>the shop owner checks the flow before go-live</td></tr>
+</tbody></table>
+<b>Marking:</b> four levels in the correct order 0.5 · the right responsible role for each 0.25 · a scenario-specific example 0.25. Writing the levels without saying <em>who</em> performs them is the standard half-mark loss.</div>
+
+<h3>Question 3 — Functional vs non-functional requirements (2.0 marks)</h3>
+<div class="out"><b>Model answer — three of each, all specific to GreenGrocer.</b><br>
+<b>Functional</b> (what the system <em>does</em>):<br>
+1. The system shall let a customer add a product to the basket and change its quantity.<br>
+2. The system shall process card payments through the bank's gateway and issue a receipt by email.<br>
+3. The system shall let a store manager view the orders for their own store only.<br>
+<b>Non-functional</b> (how <em>well</em> it does it — each one measurable):<br>
+1. <b>Performance:</b> a product page shall load in under 2 seconds for 95% of requests with 500 concurrent users.<br>
+2. <b>Security:</b> all card data shall be handled in accordance with PCI-DSS; passwords shall be stored hashed with bcrypt.<br>
+3. <b>Availability:</b> the system shall be available 99.5% of the time during opening hours (08:00–22:00).<br>
+<b>Marking:</b> 3 functional 0.75 · 3 non-functional 0.75 · each non-functional carrying a <em>number</em> 0.5. "The system must be fast and secure" scores zero: it cannot be tested, so it cannot be a requirement.</div>
+
+<h3>Question 4 — Write user stories (1.5 marks)</h3>
+<div class="out"><b>Model answer — the template plus acceptance criteria.</b><br>
+<b>US-01.</b> <em>As a</em> customer, <em>I want to</em> filter products by category and price, <em>so that</em> I can find what I need without scrolling the whole catalogue.<br>
+Acceptance criteria: (a) filters combine (category AND price range); (b) the result count updates within 1 s; (c) clearing filters restores the full list; (d) filters survive a page refresh.<br>
+<b>US-02.</b> <em>As a</em> store manager, <em>I want to</em> see today's orders for my store, <em>so that</em> I can prepare deliveries in the morning.<br>
+Acceptance criteria: (a) only my store's orders are shown; (b) sorted by delivery time; (c) exportable to CSV.<br>
+<b>US-03.</b> <em>As a</em> customer, <em>I want to</em> pay by card without creating an account, <em>so that</em> a first purchase is not blocked by registration.<br>
+Acceptance criteria: (a) guest checkout requires only email and address; (b) the receipt is emailed; (c) card details are never stored on our servers.<br>
+<b>Marking:</b> correct three-part template 0.5 · a real business benefit in the "so that" clause 0.5 · testable acceptance criteria 0.5. The "so that" must state a <em>benefit</em>, not repeat the action — "so that I can filter products" scores nothing.</div>
+
+<h3>Question 5 — Quality metrics (1.0 mark)</h3>
+<div class="out"><b>Model answer — three metrics, each with what it tells you and its blind spot.</b><br>
+<b>1. Defect density</b> = defects ÷ KLOC (or ÷ story points). Tracks whether quality is improving release over release. Blind spot: it rewards writing more code.<br>
+<b>2. Test coverage</b> = executed lines ÷ total lines. Shows what the tests never touch. Blind spot: 100% coverage with no assertions proves nothing — coverage measures execution, not verification.<br>
+<b>3. Velocity</b> = story points completed per sprint. Used for forecasting how much fits before the launch date. Blind spot: it is a planning aid, never a productivity score across teams — points are not comparable between teams, and using velocity as a target guarantees inflated estimates (Goodhart's law).<br>
+<b>Marking:</b> three metrics 0.5 · a correct interpretation of each 0.25 · naming at least one limitation 0.25.</div>
+
+<h3>Question 6 — Story mapping (2.5 marks)</h3>
+<div class="out"><b>Model answer — the map, then the release slices.</b><br>
+<b>Backbone (the user's journey, left to right):</b><br>
+Browse → Choose → Order → Pay → Track → Support<br>
+<b>Under each, the tasks, arranged top to bottom by priority:</b><br>
+<pre>Browse        Choose         Order          Pay            Track         Support
+─────────────────────────────────────────────────────────────────────────────── R1 (MVP)
+search        view detail    add to basket  card payment   order status  contact form
+category      photos         guest checkout receipt email
+─────────────────────────────────────────────────────────────────────────────── R2
+filters       reviews        saved address  e-wallet       delivery map  FAQ / chat
+─────────────────────────────────────────────────────────────────────────────── R3
+recommend     compare        subscription   instalments    live tracking  loyalty points</pre>
+<b>Release 1 (the MVP, month 1–2):</b> everything above the first line. Rationale: this is the thinnest possible slice through <em>the whole journey</em> — a customer can find a product, buy it and know it is coming. Cutting a column instead (for example "no payment in R1") would leave a product nobody can use.<br>
+<b>Release 2 (month 3):</b> convenience features that raise conversion — filters, saved addresses, e-wallet.<br>
+<b>Release 3 (month 4+):</b> growth features once real usage data exists.<br>
+<b>Marking:</b> a horizontal backbone of user activities 0.75 · tasks arranged vertically by priority 0.75 · release slices drawn <em>horizontally</em> 0.5 · a justification for what is in the MVP 0.5.<br>
+<b>The mistake that costs most:</b> slicing vertically (delivering "the whole Browse column" first). A story map is sliced horizontally precisely so that every release is a usable end-to-end product.</div>
+
+<h3>Scoring your own attempt</h3>
+<div class="lz-flow">
+  <div class="lz-fitem"><b>≥ 8.0</b><span>Answers are tied to the scenario, non-functional requirements carry numbers, the MVP slice is justified.</span></div>
+  <div class="lz-fitem"><b>6.0 – 7.9</b><span>Correct theory but generic — the marker cannot tell which case study you were given.</span></div>
+  <div class="lz-fitem"><b>&lt; 6.0</b><span>Usually one of three things: no justification in Q1, unmeasurable NFRs in Q3, or a vertically sliced story map in Q6.</span></div>
+</div>
+
+<div class="pitfall"><b>Every mark in the PE is for <em>applying</em> theory to the given scenario.</b> A perfect textbook description of Scrum with no reference to GreenGrocer scores about half. Before writing each answer, underline the three facts in the scenario you are going to cite — deadline, team, customer availability, security constraint — and make sure they appear in your text.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The MVP slice is a real business decision, not an exam device.</b> Cutting horizontally through the journey is how Amazon, Spotify and every start-up you have heard of shipped their first version — release something thin but complete, learn from real users, then deepen. Cutting vertically (a perfect catalogue with no checkout) produces a product nobody can use and no data to learn from. The technique has a name, <em>Walking Skeleton</em>, and the same reasoning drives the "thin vertical slice" rule in SWP391 and WDP301. <em>Beyond syllabus because the course grades the diagram, while the reasoning behind the slice is what makes it worth drawing.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Luyện thi · Bài E.2</span>
+<h2>Một đề trọn vẹn, làm đúng theo cách nó được chấm</h2>
+<p class="lead">Bài E.1 đã liệt kê sáu dạng câu hỏi. Đây là một đề đầy đủ trên một tình huống, kèm bài giải mẫu cho từng câu và thang chấm ghi rõ từng ý — để bạn tự chấm bài của mình trước khi vào phòng thi thật.</p>
+
+<div class="callout ok"><b>Tình huống (dùng cho mọi câu bên dưới).</b> <em>GreenGrocer</em> là một start-up làm cửa hàng trực tuyến cho chuỗi 12 cửa hàng thực phẩm hữu cơ. Chủ đầu tư đã hình dung sơ bộ các tính năng nhưng lường trước rằng chúng sẽ thay đổi khi hiểu khách hàng hơn. Cần ra mắt trong 4 tháng để kịp mùa thu hoạch. Đội có 6 lập trình viên, 2 người mới tốt nghiệp, tất cả ngồi chung một văn phòng. Phần thanh toán phải qua được vòng kiểm định an ninh của ngân hàng. Chủ đầu tư rảnh làm việc hằng tuần.</div>
+
+<h3>Câu 1 — Chọn mô hình phát triển (2,0 điểm)</h3>
+<div class="out"><b>Bài giải mẫu.</b> Tôi chọn <b>Scrum</b> với sprint 2 tuần.<br>
+<b>Biện minh gắn với tình huống</b> (điểm nằm ở đây, không nằm ở việc mô tả Scrum là gì):<br>
+· Yêu cầu <em>được dự báo sẽ thay đổi</em> → cần mô hình lặp, nên loại Waterfall (chi phí thay đổi của nó tăng vọt sau giai đoạn phân tích yêu cầu).<br>
+· Khách hàng <em>rảnh hằng tuần</em> → đáp ứng nhu cầu có Product Owner của Scrum; thiếu điều này thì Scrum xuống cấp rất nhanh.<br>
+· <em>Hạn chót cố định 4 tháng</em> → sprint giao được sản phẩm dùng được sau mỗi 2 tuần, nên đội có thể cắt phạm vi thay vì trễ hạn (cố định thời gian, linh hoạt phạm vi).<br>
+· Đội 6 người, ngồi cùng chỗ → nằm trong khuyến nghị 3–9 người của Scrum và họp đứng hằng ngày rất rẻ.<br>
+· 2 người mới tốt nghiệp → sprint review và lập trình cặp cho họ phản hồi nhanh hơn nhiều so với bàn giao bằng tài liệu.<br>
+<b>Vì sao không chọn phương án khác:</b> Waterfall — yêu cầu không ổn định. V-Model — cùng vấn đề đó, lại nặng tài liệu hơn mức một start-up kham nổi. Spiral — kiểu tạo nguyên mẫu theo rủi ro của nó hợp với hệ thống lớn, rủi ro cao; ở đây rủi ro vừa phải và thời gian ngắn. Kanban — sẽ là lựa chọn tốt nếu công việc là dòng phiếu hỗ trợ khó đoán, nhưng hạn ra mắt cố định thì nhịp sprint hợp hơn.<br>
+<b>Thang chấm:</b> gọi tên mô hình 0,5 · ít nhất ba luận cứ rút từ tình huống 1,0 · loại ít nhất một phương án khác kèm lý do 0,5.</div>
+
+<h3>Câu 2 — Các mức kiểm thử và trách nhiệm (1,0 điểm)</h3>
+<div class="out"><b>Bài giải mẫu.</b>
+<table><thead><tr><th>Mức</th><th>Kiểm cái gì</th><th>Ai làm</th><th>Ví dụ cho GreenGrocer</th></tr></thead><tbody>
+<tr><td>Đơn vị</td><td>một hàm hoặc một lớp, tách riêng</td><td><b>lập trình viên</b></td><td>hàm tính tổng giỏ hàng có áp mã giảm giá</td></tr>
+<tr><td>Tích hợp</td><td>giao diện giữa các mô-đun</td><td>lập trình viên / tester</td><td>mô-đun đơn hàng gọi cổng thanh toán</td></tr>
+<tr><td>Hệ thống</td><td>toàn bộ sản phẩm đối chiếu yêu cầu</td><td><b>tester / QA</b></td><td>đặt một đơn hàng đầu-cuối và nhận email xác nhận</td></tr>
+<tr><td>Chấp nhận (UAT)</td><td>có dùng được cho nghiệp vụ không</td><td><b>khách hàng / người dùng cuối</b></td><td>chủ cửa hàng kiểm luồng trước ngày mở bán</td></tr>
+</tbody></table>
+<b>Thang chấm:</b> bốn mức đúng thứ tự 0,5 · đúng vai trò chịu trách nhiệm 0,25 · ví dụ bám tình huống 0,25. Viết đủ bốn mức mà không nói <em>ai</em> làm là chỗ mất nửa điểm điển hình.</div>
+
+<h3>Câu 3 — Yêu cầu chức năng và phi chức năng (2,0 điểm)</h3>
+<div class="out"><b>Bài giải mẫu — mỗi loại ba yêu cầu, đều bám GreenGrocer.</b><br>
+<b>Chức năng</b> (hệ thống <em>làm gì</em>):<br>
+1. Hệ thống phải cho phép khách hàng thêm sản phẩm vào giỏ và đổi số lượng.<br>
+2. Hệ thống phải xử lý thanh toán thẻ qua cổng của ngân hàng và gửi biên nhận qua email.<br>
+3. Hệ thống phải cho quản lý cửa hàng xem đơn hàng của riêng cửa hàng mình.<br>
+<b>Phi chức năng</b> (làm <em>tốt tới mức nào</em> — mỗi cái phải đo được):<br>
+1. <b>Hiệu năng:</b> trang sản phẩm phải tải dưới 2 giây với 95% số yêu cầu khi có 500 người dùng đồng thời.<br>
+2. <b>An ninh:</b> mọi dữ liệu thẻ phải được xử lý theo chuẩn PCI-DSS; mật khẩu phải băm bằng bcrypt.<br>
+3. <b>Tính sẵn sàng:</b> hệ thống phải hoạt động 99,5% thời gian trong giờ mở cửa (08:00–22:00).<br>
+<b>Thang chấm:</b> 3 yêu cầu chức năng 0,75 · 3 phi chức năng 0,75 · mỗi yêu cầu phi chức năng có <em>con số</em> 0,5. Viết "hệ thống phải nhanh và bảo mật" được 0 điểm: không kiểm được thì không phải là yêu cầu.</div>
+
+<h3>Câu 4 — Viết User Story (1,5 điểm)</h3>
+<div class="out"><b>Bài giải mẫu — khuôn ba phần cộng tiêu chí chấp nhận.</b><br>
+<b>US-01.</b> <em>Là một</em> khách hàng, <em>tôi muốn</em> lọc sản phẩm theo danh mục và giá, <em>để</em> tìm được thứ mình cần mà không phải cuộn hết cả danh mục.<br>
+Tiêu chí chấp nhận: (a) các bộ lọc kết hợp được (danh mục VÀ khoảng giá); (b) số kết quả cập nhật trong 1 giây; (c) xoá lọc thì danh sách đầy đủ trở lại; (d) bộ lọc còn nguyên sau khi tải lại trang.<br>
+<b>US-02.</b> <em>Là một</em> quản lý cửa hàng, <em>tôi muốn</em> xem đơn hàng hôm nay của cửa hàng mình, <em>để</em> chuẩn bị giao hàng ngay buổi sáng.<br>
+Tiêu chí chấp nhận: (a) chỉ hiện đơn của cửa hàng tôi; (b) sắp theo giờ giao; (c) xuất được ra CSV.<br>
+<b>US-03.</b> <em>Là một</em> khách hàng, <em>tôi muốn</em> thanh toán thẻ mà không phải tạo tài khoản, <em>để</em> lần mua đầu tiên không bị chặn bởi thủ tục đăng ký.<br>
+Tiêu chí chấp nhận: (a) mua với tư cách khách chỉ cần email và địa chỉ; (b) biên nhận gửi qua email; (c) thông tin thẻ không bao giờ lưu trên máy chủ của ta.<br>
+<b>Thang chấm:</b> đúng khuôn ba phần 0,5 · vế "để" nêu lợi ích nghiệp vụ thật 0,5 · tiêu chí chấp nhận kiểm được 0,5. Vế "để" bắt buộc nêu <em>lợi ích</em>, không được lặp lại hành động — viết "để tôi có thể lọc sản phẩm" thì không được điểm nào.</div>
+
+<h3>Câu 5 — Thước đo chất lượng (1,0 điểm)</h3>
+<div class="out"><b>Bài giải mẫu — ba thước đo, mỗi cái kèm ý nghĩa và điểm mù.</b><br>
+<b>1. Mật độ lỗi</b> = số lỗi ÷ KLOC (hoặc ÷ story point). Theo dõi chất lượng có cải thiện qua từng bản phát hành không. Điểm mù: nó thưởng cho việc viết nhiều code hơn.<br>
+<b>2. Độ phủ kiểm thử</b> = số dòng được thực thi ÷ tổng số dòng. Cho thấy phần nào bộ test chưa bao giờ chạm tới. Điểm mù: phủ 100% mà không có phép khẳng định nào thì chẳng chứng minh được gì — độ phủ đo việc thực thi, không đo việc kiểm chứng.<br>
+<b>3. Velocity</b> = số story point hoàn thành mỗi sprint. Dùng để dự báo làm được bao nhiêu trước ngày ra mắt. Điểm mù: đây là công cụ lập kế hoạch, không bao giờ là thước đo năng suất giữa các đội — point không so sánh được giữa đội này với đội khác, và lấy velocity làm chỉ tiêu là chắc chắn sinh ra ước lượng bị thổi phồng (định luật Goodhart).<br>
+<b>Thang chấm:</b> ba thước đo 0,5 · diễn giải đúng từng cái 0,25 · nêu được ít nhất một hạn chế 0,25.</div>
+
+<h3>Câu 6 — Story Mapping (2,5 điểm)</h3>
+<div class="out"><b>Bài giải mẫu — bản đồ, rồi tới các lát cắt phát hành.</b><br>
+<b>Xương sống (hành trình người dùng, từ trái sang phải):</b><br>
+Duyệt → Chọn → Đặt hàng → Thanh toán → Theo dõi → Hỗ trợ<br>
+<b>Dưới mỗi cột là các tác vụ, xếp từ trên xuống theo độ ưu tiên:</b><br>
+<pre>Duyệt        Chọn          Đặt hàng      Thanh toán    Theo dõi      Hỗ trợ
+─────────────────────────────────────────────────────────────────────────── R1 (MVP)
+tìm kiếm     xem chi tiết  thêm vào giỏ  thẻ ngân hàng trạng thái đơn form liên hệ
+danh mục     hình ảnh      mua không     email biên
+                           cần tài khoản nhận
+─────────────────────────────────────────────────────────────────────────── R2
+bộ lọc       đánh giá      lưu địa chỉ   ví điện tử    bản đồ giao   FAQ / chat
+─────────────────────────────────────────────────────────────────────────── R3
+gợi ý        so sánh       mua định kỳ   trả góp       theo dõi trực điểm thưởng
+                                                        tiếp</pre>
+<b>Bản phát hành 1 (MVP, tháng 1–2):</b> tất cả những gì nằm trên vạch đầu tiên. Lý do: đây là lát cắt mỏng nhất đi xuyên <em>toàn bộ hành trình</em> — khách hàng tìm được sản phẩm, mua được và biết hàng đang tới. Cắt theo cột (ví dụ "R1 chưa có thanh toán") sẽ để lại một sản phẩm không ai dùng được.<br>
+<b>Bản 2 (tháng 3):</b> các tính năng tiện lợi làm tăng tỉ lệ chuyển đổi — bộ lọc, lưu địa chỉ, ví điện tử.<br>
+<b>Bản 3 (tháng 4 trở đi):</b> các tính năng tăng trưởng, khi đã có dữ liệu sử dụng thật.<br>
+<b>Thang chấm:</b> xương sống nằm ngang gồm các hoạt động của người dùng 0,75 · tác vụ xếp dọc theo độ ưu tiên 0,75 · lát cắt phát hành vẽ <em>nằm ngang</em> 0,5 · biện minh cho nội dung MVP 0,5.<br>
+<b>Lỗi mất điểm nhiều nhất:</b> cắt theo chiều dọc (giao trọn "cột Duyệt" trước). Bản đồ story được cắt ngang đúng để mỗi bản phát hành là một sản phẩm đầu-cuối dùng được.</div>
+
+<h3>Tự chấm bài của mình</h3>
+<div class="lz-flow">
+  <div class="lz-fitem"><b>≥ 8,0</b><span>Câu trả lời bám tình huống, yêu cầu phi chức năng có con số, lát cắt MVP được biện minh.</span></div>
+  <div class="lz-fitem"><b>6,0 – 7,9</b><span>Lý thuyết đúng nhưng chung chung — người chấm không nhận ra bạn được giao tình huống nào.</span></div>
+  <div class="lz-fitem"><b>&lt; 6,0</b><span>Thường do một trong ba lỗi: câu 1 không biện minh, câu 3 yêu cầu phi chức năng không đo được, hoặc câu 6 cắt bản đồ theo chiều dọc.</span></div>
+</div>
+
+<div class="pitfall"><b>Mọi điểm trong bài PE đều dành cho việc <em>áp dụng</em> lý thuyết vào tình huống được cho.</b> Một đoạn mô tả Scrum hoàn hảo như sách mà không hề nhắc tới GreenGrocer chỉ được khoảng một nửa. Trước khi viết mỗi câu, hãy gạch chân ba dữ kiện trong đề mà bạn sẽ trích dẫn — hạn chót, đội ngũ, mức độ sẵn sàng của khách hàng, ràng buộc an ninh — và bảo đảm chúng xuất hiện trong bài làm.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Lát cắt MVP là một quyết định kinh doanh thật, không phải mẹo thi.</b> Cắt ngang qua hành trình là cách Amazon, Spotify và mọi start-up bạn từng nghe tên đã ra mắt phiên bản đầu tiên — phát hành một thứ mỏng nhưng trọn vẹn, học từ người dùng thật, rồi mới làm sâu thêm. Cắt dọc (một danh mục sản phẩm hoàn hảo mà không có phần thanh toán) sinh ra một sản phẩm không ai dùng được và cũng không thu được dữ liệu nào để học. Kỹ thuật này có tên riêng — <em>Walking Skeleton</em> — và cùng lập luận đó chi phối quy tắc "lát cắt dọc mỏng" ở SWP391 và WDP301. <em>Ngoài giáo trình vì môn học chấm cái sơ đồ, còn phần lập luận đằng sau lát cắt mới là thứ khiến sơ đồ đó đáng vẽ.</em></div>
+</div>
+`,
+        },
+        {
+          title: 'E.3 — The Final Exam: vocabulary & key theory|||E.3 — Bài thi cuối kỳ: từ vựng & lý thuyết trọng tâm',
           slug: 'swe201c-luyen-thi-fe',
           type: 'VIDEO',
           description: 'Từ vựng chuyên ngành hay ra trong FE, chuỗi Error → Fault → Failure, Agile Manifesto đầy đủ và các cặp khái niệm dễ nhầm.',

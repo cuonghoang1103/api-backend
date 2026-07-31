@@ -43,15 +43,16 @@ export default {
   <div class="lz-stage">Probability</div>
   <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Role of statistics &amp; data</div><div class="lz-nsub">Populations · samples · variables</div></div></div>
   <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Probability</div><div class="lz-nsub">Rules · conditional · Bayes · counting</div></div></div>
-  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Discrete distributions</div><div class="lz-nsub">Binomial · Poisson · mean &amp; variance</div></div></div>
-  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Continuous distributions</div><div class="lz-nsub">Normal · z-scores · z-table</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Discrete distributions</div><div class="lz-nsub">Binomial · Poisson · hypergeometric · geometric</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Continuous distributions</div><div class="lz-nsub">Normal · PDF/CDF · uniform · exponential · approximation</div></div></div>
   <div class="lz-stage">Statistics</div>
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Descriptive statistics</div><div class="lz-nsub">All summary measures</div></div></div>
-  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Sampling &amp; the CLT</div><div class="lz-nsub">Standard error · normality of x̄</div></div></div>
+  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Sampling &amp; the CLT</div><div class="lz-nsub">SE · x̄ · proportions · differences</div></div></div>
   <div class="lz-stage">Inference</div>
-  <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Confidence intervals</div><div class="lz-nsub">z, t, proportion, sample size</div></div></div>
+  <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Confidence intervals</div><div class="lz-nsub">z, t, proportion, sample size, one-sided</div></div></div>
   <div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Hypothesis testing</div><div class="lz-nsub">z-test · t-test · p-value</div></div></div>
-  <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Regression &amp; correlation</div><div class="lz-nsub">r · slope · R² · prediction</div></div></div>
+  <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Two-sample inference</div><div class="lz-nsub">Two means · two proportions · paired t</div></div></div>
+  <div class="lz-node"><div class="lz-badge">10</div><div class="lz-nbody"><div class="lz-ntitle">Regression &amp; correlation</div><div class="lz-nsub">r · slope · R² · ANOVA · tests on β</div></div></div>
   <div class="lz-stage">Advanced · beyond the syllabus</div>
   <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Statistics in Python/Excel</div><div class="lz-nsub">The computer project</div></div></div>
 </div>
@@ -72,15 +73,16 @@ export default {
   <div class="lz-stage">Xác suất</div>
   <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Vai trò thống kê &amp; dữ liệu</div><div class="lz-nsub">Tổng thể · mẫu · biến</div></div></div>
   <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Xác suất</div><div class="lz-nsub">Quy tắc · có điều kiện · Bayes · tổ hợp</div></div></div>
-  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Phân phối rời rạc</div><div class="lz-nsub">Nhị thức · Poisson · kỳ vọng &amp; phương sai</div></div></div>
-  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Phân phối liên tục</div><div class="lz-nsub">Chuẩn · điểm z · bảng z</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Phân phối rời rạc</div><div class="lz-nsub">Nhị thức · Poisson · siêu bội · hình học</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Phân phối liên tục</div><div class="lz-nsub">Chuẩn · PDF/CDF · đều · mũ · xấp xỉ</div></div></div>
   <div class="lz-stage">Thống kê</div>
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Thống kê mô tả</div><div class="lz-nsub">Mọi đại lượng tóm tắt</div></div></div>
-  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Phân phối mẫu &amp; CLT</div><div class="lz-nsub">Sai số chuẩn · x̄ chuẩn</div></div></div>
+  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Phân phối mẫu &amp; CLT</div><div class="lz-nsub">SE · x̄ · tỷ lệ · hiệu</div></div></div>
   <div class="lz-stage">Suy diễn</div>
-  <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Khoảng tin cậy</div><div class="lz-nsub">z, t, tỷ lệ, cỡ mẫu</div></div></div>
+  <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Khoảng tin cậy</div><div class="lz-nsub">z, t, tỷ lệ, cỡ mẫu, một phía</div></div></div>
   <div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Kiểm định giả thuyết</div><div class="lz-nsub">z-test · t-test · p-value</div></div></div>
-  <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Hồi quy &amp; tương quan</div><div class="lz-nsub">r · hệ số góc · R² · dự đoán</div></div></div>
+  <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Suy luận hai mẫu</div><div class="lz-nsub">Hai trung bình · hai tỷ lệ · mẫu cặp</div></div></div>
+  <div class="lz-node"><div class="lz-badge">10</div><div class="lz-nbody"><div class="lz-ntitle">Hồi quy &amp; tương quan</div><div class="lz-nsub">r · hệ số góc · R² · ANOVA · kiểm định β</div></div></div>
   <div class="lz-stage">Nâng cao · ngoài giáo trình</div>
   <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Thống kê trong Python/Excel</div><div class="lz-nsub">Computer project</div></div></div>
 </div>
@@ -534,6 +536,112 @@ E(X) = 0·0.5 + 10·0.4 + 50·0.1 = 0 + 4 + 5 = <b>9</b>. Nếu một vé giá 8
 </div>
 `,
         },
+        {
+          title: '3.2 — The other discrete distributions (hypergeometric, geometric, negative binomial)|||3.2 — Các phân phối rời rạc còn lại (siêu bội, hình học, nhị thức âm)',
+          slug: 'mas291-phan-phoi-roi-rac-khac',
+          type: 'VIDEO',
+          description: 'Đều rời rạc, siêu bội (rút KHÔNG hoàn lại), hình học (chờ lần thành công đầu), nhị thức âm — kèm bảng chọn phân phối.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 3 · Lesson 3.2</span>
+<h2>Four more discrete distributions</h2>
+<p class="lead">Lesson 3.1 covered the binomial and the Poisson — the two you meet most. The exam also expects four others. Each one exists because it answers a question the binomial cannot.</p>
+
+<h3>1. Discrete uniform — every value equally likely</h3>
+<div class="formula"><span class="lbl">Discrete uniform on a, a+1, …, b</span>P(X = k) = 1/n where n = b − a + 1<br>E(X) = (a + b)/2     V(X) = [(b − a + 1)² − 1]/12</div>
+<div class="out"><b>Example.</b> A fair die: values 1…6, so n = 6, P(X = k) = 1/6.<br>
+E(X) = (1 + 6)/2 = <b>3.5</b> · V(X) = (6² − 1)/12 = 35/12 ≈ <b>2.917</b>.</div>
+
+<h3>2. Hypergeometric — drawing WITHOUT replacement</h3>
+<div class="formula"><span class="lbl">Hypergeometric: N items, K successes, draw n</span>P(X = k) = C(K, k) · C(N − K, n − k) / C(N, n)<br>E(X) = n·K/N     V(X) = n·(K/N)·(1 − K/N)·(N − n)/(N − 1)</div>
+<div class="out"><b>Example.</b> A box has N = 20 parts, K = 5 defective. Draw n = 4 without replacement. P(exactly 2 defective)?<br>
+P(X = 2) = C(5,2)·C(15,2) / C(20,4) = (10 × 105) / 4845 = 1050/4845 ≈ <b>0.2167</b>.<br>
+E(X) = 4 × 5/20 = <b>1</b> defective on average.</div>
+<div class="note-ct">The hypergeometric is the binomial's "without replacement" twin. If you drew <em>with</em> replacement, each draw would stay p = K/N and it would be binomial. Because you do not put the item back, the probability shifts after each draw — hence the C(...)·C(...)/C(...) counting form. The extra factor (N−n)/(N−1) in the variance is called the <b>finite population correction</b>; when N is huge compared with n it approaches 1 and the hypergeometric ≈ binomial.</div>
+
+<h3>3. Geometric — how many trials until the FIRST success</h3>
+<div class="formula"><span class="lbl">Geometric with success probability p</span>P(X = k) = (1 − p)^(k−1) · p     for k = 1, 2, 3, …<br>E(X) = 1/p     V(X) = (1 − p)/p²</div>
+<div class="out"><b>Example.</b> A machine produces a defect with p = 0.1. What is the probability the first defect is the 4th item?<br>
+P(X = 4) = (0.9)³ × 0.1 = 0.729 × 0.1 = <b>0.0729</b>.<br>
+On average you wait E(X) = 1/0.1 = <b>10</b> items for the first defect.</div>
+
+<h3>4. Negative binomial — how many trials until the r-th success</h3>
+<div class="formula"><span class="lbl">Negative binomial: waiting for r successes</span>P(X = k) = C(k − 1, r − 1) · p^r · (1 − p)^(k−r)     for k = r, r+1, …<br>E(X) = r/p     V(X) = r(1 − p)/p²</div>
+<div class="out"><b>Example.</b> p = 0.1. Probability that the 3rd defect occurs on the 10th item?<br>
+P(X = 10) = C(9, 2) · (0.1)³ · (0.9)⁷ = 36 × 0.001 × 0.4783 ≈ <b>0.0172</b>.<br>
+Note the geometric is just the negative binomial with r = 1 — same family.</div>
+
+<h3>How to tell which distribution a question wants</h3>
+<table>
+  <thead><tr><th>The question sounds like…</th><th>Distribution</th><th>Fixed quantity</th></tr></thead>
+  <tbody>
+    <tr><td>"in n trials, how many successes"</td><td>Binomial</td><td>n fixed, count X</td></tr>
+    <tr><td>"events per hour/page/km", rare</td><td>Poisson</td><td>rate λ</td></tr>
+    <tr><td>"drawn from a box, <b>not replaced</b>"</td><td>Hypergeometric</td><td>finite N, no replacement</td></tr>
+    <tr><td>"until the <b>first</b> success"</td><td>Geometric</td><td>count trials, r = 1</td></tr>
+    <tr><td>"until the <b>r-th</b> success"</td><td>Negative binomial</td><td>count trials, r fixed</td></tr>
+    <tr><td>"all outcomes equally likely"</td><td>Discrete uniform</td><td>n equal values</td></tr>
+  </tbody>
+</table>
+<div class="pitfall"><b>The decisive question is: what is fixed and what is counted?</b> Binomial fixes the number of <em>trials</em> and counts <em>successes</em>. Geometric and negative binomial fix the number of <em>successes</em> and count <em>trials</em>. That single swap is the most common exam trap — read whether n or r is given before you pick a formula.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why "negative" binomial?</b> The name comes from writing its probabilities using binomial coefficients with a negative upper index, C(−r, k). You will never need that algebra here, but the label makes sense once you know the geometric (r = 1) is its simplest case — and that both are "inverse" views of the binomial: instead of fixing trials and asking about successes, they fix successes and ask about trials.</div>
+<a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-255" target="_blank" rel="noopener">
+  <span class="lc-ico">🐍</span>
+  <span class="lc-body"><span class="lc-title">Simulate these distributions in Python</span><span class="lc-sub">Loops &amp; functions — check the formulas by experiment.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 3 · Bài 3.2</span>
+<h2>Bốn phân phối rời rạc nữa</h2>
+<p class="lead">Bài 3.1 đã học nhị thức và Poisson — hai phân phối gặp nhiều nhất. Đề thi còn đòi bốn phân phối khác. Mỗi cái tồn tại vì nó trả lời một câu hỏi mà nhị thức không trả lời được.</p>
+
+<h3>1. Đều rời rạc — mọi giá trị khả năng như nhau</h3>
+<div class="formula"><span class="lbl">Đều rời rạc trên a, a+1, …, b</span>P(X = k) = 1/n với n = b − a + 1<br>E(X) = (a + b)/2     V(X) = [(b − a + 1)² − 1]/12</div>
+<div class="out"><b>Ví dụ.</b> Con xúc xắc cân đối: giá trị 1…6, nên n = 6, P(X = k) = 1/6.<br>
+E(X) = (1 + 6)/2 = <b>3.5</b> · V(X) = (6² − 1)/12 = 35/12 ≈ <b>2.917</b>.</div>
+
+<h3>2. Siêu bội — rút KHÔNG hoàn lại</h3>
+<div class="formula"><span class="lbl">Siêu bội: N phần tử, K "thành công", rút n</span>P(X = k) = C(K, k) · C(N − K, n − k) / C(N, n)<br>E(X) = n·K/N     V(X) = n·(K/N)·(1 − K/N)·(N − n)/(N − 1)</div>
+<div class="out"><b>Ví dụ.</b> Một hộp có N = 20 chi tiết, trong đó K = 5 phế phẩm. Rút n = 4 cái không hoàn lại. Xác suất đúng 2 phế phẩm?<br>
+P(X = 2) = C(5,2)·C(15,2) / C(20,4) = (10 × 105) / 4845 = 1050/4845 ≈ <b>0.2167</b>.<br>
+E(X) = 4 × 5/20 = <b>1</b> phế phẩm trung bình.</div>
+<div class="note-ct">Siêu bội là người anh em "không hoàn lại" của nhị thức. Nếu bạn rút <em>có</em> hoàn lại thì mỗi lần rút vẫn giữ p = K/N và đó là nhị thức. Vì không bỏ vật trở lại nên xác suất đổi sau mỗi lần rút — do đó mới có dạng đếm C(...)·C(...)/C(...). Thừa số thêm (N−n)/(N−1) trong phương sai gọi là <b>hiệu chỉnh tổng thể hữu hạn</b>; khi N rất lớn so với n thì nó tiến về 1 và siêu bội ≈ nhị thức.</div>
+
+<h3>3. Hình học — bao nhiêu phép thử tới lần thành công ĐẦU TIÊN</h3>
+<div class="formula"><span class="lbl">Hình học với xác suất thành công p</span>P(X = k) = (1 − p)^(k−1) · p     với k = 1, 2, 3, …<br>E(X) = 1/p     V(X) = (1 − p)/p²</div>
+<div class="out"><b>Ví dụ.</b> Một máy tạo ra phế phẩm với p = 0.1. Xác suất phế phẩm đầu tiên là sản phẩm thứ 4?<br>
+P(X = 4) = (0.9)³ × 0.1 = 0.729 × 0.1 = <b>0.0729</b>.<br>
+Trung bình bạn phải chờ E(X) = 1/0.1 = <b>10</b> sản phẩm mới gặp phế phẩm đầu tiên.</div>
+
+<h3>4. Nhị thức âm — bao nhiêu phép thử tới lần thành công thứ r</h3>
+<div class="formula"><span class="lbl">Nhị thức âm: chờ đủ r lần thành công</span>P(X = k) = C(k − 1, r − 1) · p^r · (1 − p)^(k−r)     với k = r, r+1, …<br>E(X) = r/p     V(X) = r(1 − p)/p²</div>
+<div class="out"><b>Ví dụ.</b> p = 0.1. Xác suất phế phẩm thứ 3 rơi vào sản phẩm thứ 10?<br>
+P(X = 10) = C(9, 2) · (0.1)³ · (0.9)⁷ = 36 × 0.001 × 0.4783 ≈ <b>0.0172</b>.<br>
+Lưu ý phân phối hình học chính là nhị thức âm với r = 1 — cùng một họ.</div>
+
+<h3>Cách nhận ra đề đang hỏi phân phối nào</h3>
+<table>
+  <thead><tr><th>Đề nghe giống…</th><th>Phân phối</th><th>Đại lượng bị cố định</th></tr></thead>
+  <tbody>
+    <tr><td>"trong n phép thử, bao nhiêu lần thành công"</td><td>Nhị thức</td><td>n cố định, đếm X</td></tr>
+    <tr><td>"số biến cố mỗi giờ/trang/km", hiếm</td><td>Poisson</td><td>tốc độ λ</td></tr>
+    <tr><td>"rút từ hộp, <b>không hoàn lại</b>"</td><td>Siêu bội</td><td>N hữu hạn, không hoàn lại</td></tr>
+    <tr><td>"cho tới lần thành công <b>đầu tiên</b>"</td><td>Hình học</td><td>đếm phép thử, r = 1</td></tr>
+    <tr><td>"cho tới lần thành công <b>thứ r</b>"</td><td>Nhị thức âm</td><td>đếm phép thử, r cố định</td></tr>
+    <tr><td>"mọi kết quả khả năng như nhau"</td><td>Đều rời rạc</td><td>n giá trị bằng nhau</td></tr>
+  </tbody>
+</table>
+<div class="pitfall"><b>Câu hỏi quyết định là: cái gì bị cố định và cái gì được đếm?</b> Nhị thức cố định số <em>phép thử</em> và đếm số <em>thành công</em>. Hình học và nhị thức âm cố định số <em>thành công</em> và đếm số <em>phép thử</em>. Đúng một chỗ hoán đổi đó là bẫy thi phổ biến nhất — hãy đọc xem đề cho n hay cho r trước khi chọn công thức.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao gọi là nhị thức "âm"?</b> Tên này đến từ việc viết xác suất của nó bằng hệ số nhị thức với chỉ số trên âm, C(−r, k). Bạn sẽ không bao giờ cần đến phần đại số đó ở đây, nhưng cái tên trở nên có lý khi bạn biết phân phối hình học (r = 1) là trường hợp đơn giản nhất của nó — và cả hai đều là góc nhìn "đảo ngược" của nhị thức: thay vì cố định phép thử rồi hỏi về thành công, chúng cố định thành công rồi hỏi về phép thử.</div>
+<a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-255" target="_blank" rel="noopener">
+  <span class="lc-ico">🐍</span>
+  <span class="lc-body"><span class="lc-title">Mô phỏng các phân phối này bằng Python</span><span class="lc-sub">Vòng lặp &amp; hàm — kiểm chứng công thức bằng thực nghiệm.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
       ],
     },
 
@@ -573,7 +681,7 @@ E(X) = 0·0.5 + 10·0.4 + 50·0.1 = 0 + 4 + 5 = <b>9</b>. Nếu một vé giá 8
 
 <div class="pitfall"><b>Trap:</b> a continuous distribution gives probability over an <em>interval</em>, not at a point — P(X = exactly 100) = 0. Always compute an area P(a ≤ X ≤ b). Also watch the sign of z: a value below the mean gives a negative z.</div>
 
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Two other continuous distributions worth knowing.</b> The <b>uniform</b> spreads probability evenly over [a, b] with mean (a+b)/2 — a fair random number. The <b>exponential</b> models waiting time between random events, with P(X &gt; t) = e^(−λt), and pairs naturally with the Poisson (if events per hour are Poisson(λ), the gap between them is exponential). The normal is your default, but recognising which distribution fits a situation is half of applied statistics.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why the normal turns up everywhere.</b> Heights, measurement errors, exam scores and sample means all end up bell-shaped, and that is not a coincidence: whenever a quantity is the <em>sum of many small independent effects</em>, its distribution drifts towards the normal no matter what the individual effects look like. That result is the Central Limit Theorem (Chapter 6), and it is the reason the normal deserves a whole lesson of its own while other distributions get a paragraph. The uniform, exponential and the general PDF/CDF machinery are covered next, in Lesson 4.2.</div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.1</span>
@@ -600,7 +708,199 @@ E(X) = 0·0.5 + 10·0.4 + 50·0.1 = 0 + 4 + 5 = <b>9</b>. Nếu một vé giá 8
 
 <div class="pitfall"><b>Bẫy:</b> phân phối liên tục cho xác suất trên một <em>khoảng</em>, không phải tại một điểm — P(X = đúng 100) = 0. Luôn tính diện tích P(a ≤ X ≤ b). Cũng chú ý dấu của z: giá trị dưới trung bình cho z âm.</div>
 
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hai phân phối liên tục khác đáng biết.</b> Phân phối <b>đều</b> rải xác suất đều trên [a, b] với trung bình (a+b)/2 — một số ngẫu nhiên công bằng. Phân phối <b>mũ</b> mô hình thời gian chờ giữa các biến cố ngẫu nhiên, với P(X &gt; t) = e^(−λt), và đi cặp tự nhiên với Poisson (nếu số biến cố mỗi giờ là Poisson(λ), khoảng cách giữa chúng là phân phối mũ). Chuẩn là mặc định, nhưng nhận ra phân phối nào hợp tình huống là một nửa của thống kê ứng dụng.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao phân phối chuẩn xuất hiện ở khắp nơi.</b> Chiều cao, sai số đo, điểm thi và trung bình mẫu đều có dạng hình chuông, và đó không phải ngẫu nhiên: hễ một đại lượng là <em>tổng của nhiều tác động nhỏ độc lập</em>, phân phối của nó sẽ trôi dần về phân phối chuẩn bất kể từng tác động riêng lẻ có dạng gì. Kết quả đó chính là Định lý giới hạn trung tâm (Chương 6), và là lý do phân phối chuẩn xứng đáng có hẳn một bài riêng trong khi các phân phối khác chỉ được một đoạn. Phân phối đều, phân phối mũ và bộ máy PDF/CDF tổng quát sẽ học ngay sau đây, ở Bài 4.2.</div>
+</div>
+`,
+        },
+        {
+          title: '4.2 — PDF, CDF, the continuous uniform & the exponential|||4.2 — PDF, CDF, phân phối đều liên tục & phân phối mũ',
+          slug: 'mas291-pdf-cdf-deu-mu',
+          type: 'VIDEO',
+          description: 'Bộ máy chung của mọi biến liên tục (f(x), F(x), E(X), V(X) bằng tích phân) rồi áp dụng cho phân phối đều và phân phối mũ.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 4 · Lesson 4.2</span>
+<h2>The general machinery — and two more distributions</h2>
+<p class="lead">Lesson 4.1 gave you the normal by table lookup. This lesson shows where those probabilities come from: for a continuous variable, probability is <strong>area under a curve</strong>, computed by integration.</p>
+
+<h3>1. The probability density function (PDF)</h3>
+<div class="formula"><span class="lbl">Requirements for a valid PDF</span>f(x) ≥ 0 for all x     and     ∫<sub>−∞</sub><sup>+∞</sup> f(x) dx = 1</div>
+<div class="formula"><span class="lbl">Probability over an interval</span>P(a ≤ X ≤ b) = ∫<sub>a</sub><sup>b</sup> f(x) dx</div>
+<div class="note-ct">f(x) is a <em>density</em>, not a probability — it can exceed 1. Only the area is a probability. This is why P(X = c) = 0 for any single point c: an interval of zero width has zero area. A direct consequence: for continuous variables &lt; and ≤ give the same answer, so P(a &lt; X &lt; b) = P(a ≤ X ≤ b).</div>
+
+<h3>2. The cumulative distribution function (CDF)</h3>
+<div class="formula"><span class="lbl">CDF and its use</span>F(x) = P(X ≤ x) = ∫<sub>−∞</sub><sup>x</sup> f(t) dt<br>P(a ≤ X ≤ b) = F(b) − F(a)     and     f(x) = F′(x)</div>
+<div class="out"><b>Worked example.</b> f(x) = 2x on [0, 1], 0 elsewhere. (Check: ∫₀¹ 2x dx = x²|₀¹ = 1 ✓ valid.)<br>
+CDF: F(x) = ∫₀ˣ 2t dt = <b>x²</b> on [0,1].<br>
+P(0.2 ≤ X ≤ 0.5) = F(0.5) − F(0.2) = 0.25 − 0.04 = <b>0.21</b>.</div>
+
+<h3>3. Mean and variance by integration</h3>
+<div class="formula"><span class="lbl">Continuous E(X) and V(X)</span>E(X) = ∫ x · f(x) dx<br>V(X) = ∫ (x − μ)² · f(x) dx = E(X²) − [E(X)]²</div>
+<div class="out"><b>Same example</b> f(x) = 2x on [0,1]:<br>
+E(X) = ∫₀¹ x·2x dx = ∫₀¹ 2x² dx = 2/3 ≈ <b>0.667</b><br>
+E(X²) = ∫₀¹ x²·2x dx = ∫₀¹ 2x³ dx = 1/2 → V(X) = 1/2 − (2/3)² = 1/2 − 4/9 = <b>1/18 ≈ 0.0556</b>.</div>
+<div class="note-ct">Compare with the discrete case from Chapter 3: E(X) = Σ x·P(X = x) becomes E(X) = ∫ x·f(x) dx. The shortcut V(X) = E(X²) − [E(X)]² works identically in both worlds — it is usually far less work than the definition.</div>
+
+<h3>4. The continuous uniform distribution</h3>
+<div class="formula"><span class="lbl">Uniform on [a, b]</span>f(x) = 1/(b − a) on [a, b]     F(x) = (x − a)/(b − a)<br>μ = (a + b)/2     σ² = (b − a)²/12</div>
+<div class="out"><b>Example.</b> A bus arrives uniformly between 10:00 and 10:30, so X ~ U(0, 30) minutes.<br>
+P(waiting more than 20 min) = (30 − 20)/30 = <b>1/3</b>.<br>
+μ = (0 + 30)/2 = <b>15</b> min · σ² = 30²/12 = <b>75</b> → σ ≈ 8.66 min.</div>
+
+<h3>5. The exponential distribution — waiting time</h3>
+<div class="formula"><span class="lbl">Exponential with rate λ</span>f(x) = λ·e^(−λx) for x ≥ 0     F(x) = 1 − e^(−λx)     P(X &gt; t) = e^(−λt)<br>E(X) = 1/λ     V(X) = 1/λ²</div>
+<div class="out"><b>Example.</b> Calls arrive at λ = 3 per hour. What is the probability of waiting more than 30 minutes (0.5 h) for the next call?<br>
+P(X &gt; 0.5) = e^(−3 × 0.5) = e^(−1.5) ≈ <b>0.2231</b>.<br>
+Mean waiting time E(X) = 1/3 hour = <b>20 minutes</b>.</div>
+<div class="note-ct"><b>The Poisson–exponential pair.</b> If the <em>number</em> of events per unit time is Poisson(λ), then the <em>gap</em> between consecutive events is Exponential(λ). Same process, two viewpoints: Poisson counts, exponential measures the wait. That is why the two λ are the same number.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The exponential is memoryless:</b> P(X &gt; s + t | X &gt; s) = P(X &gt; t). If a bus has not come for 10 minutes, the distribution of your remaining wait is exactly the same as when you arrived — the process has no memory of how long you have waited. It is the only continuous distribution with this property, which is why it models "random failures with a constant rate" so well and why it is the wrong model for things that wear out (those need the Weibull).</div>
+<a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-255" target="_blank" rel="noopener">
+  <span class="lc-ico">🐍</span>
+  <span class="lc-body"><span class="lc-title">Integrate &amp; simulate in Python</span><span class="lc-sub">Check these PDFs and CDFs numerically.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 4 · Bài 4.2</span>
+<h2>Bộ máy tổng quát — và hai phân phối nữa</h2>
+<p class="lead">Bài 4.1 cho bạn phân phối chuẩn qua tra bảng. Bài này chỉ ra các xác suất đó đến từ đâu: với biến liên tục, xác suất là <strong>diện tích dưới đường cong</strong>, tính bằng tích phân.</p>
+
+<h3>1. Hàm mật độ xác suất (PDF)</h3>
+<div class="formula"><span class="lbl">Điều kiện để f là PDF hợp lệ</span>f(x) ≥ 0 với mọi x     và     ∫<sub>−∞</sub><sup>+∞</sup> f(x) dx = 1</div>
+<div class="formula"><span class="lbl">Xác suất trên một khoảng</span>P(a ≤ X ≤ b) = ∫<sub>a</sub><sup>b</sup> f(x) dx</div>
+<div class="note-ct">f(x) là <em>mật độ</em>, không phải xác suất — nó có thể lớn hơn 1. Chỉ diện tích mới là xác suất. Đó là lý do P(X = c) = 0 với mọi điểm c: một khoảng có bề rộng bằng 0 thì diện tích bằng 0. Hệ quả trực tiếp: với biến liên tục, &lt; và ≤ cho cùng kết quả, nên P(a &lt; X &lt; b) = P(a ≤ X ≤ b).</div>
+
+<h3>2. Hàm phân phối tích lũy (CDF)</h3>
+<div class="formula"><span class="lbl">CDF và cách dùng</span>F(x) = P(X ≤ x) = ∫<sub>−∞</sub><sup>x</sup> f(t) dt<br>P(a ≤ X ≤ b) = F(b) − F(a)     và     f(x) = F′(x)</div>
+<div class="out"><b>Ví dụ có lời giải.</b> f(x) = 2x trên [0, 1], bằng 0 ở nơi khác. (Kiểm: ∫₀¹ 2x dx = x²|₀¹ = 1 ✓ hợp lệ.)<br>
+CDF: F(x) = ∫₀ˣ 2t dt = <b>x²</b> trên [0,1].<br>
+P(0.2 ≤ X ≤ 0.5) = F(0.5) − F(0.2) = 0.25 − 0.04 = <b>0.21</b>.</div>
+
+<h3>3. Kỳ vọng và phương sai bằng tích phân</h3>
+<div class="formula"><span class="lbl">E(X) và V(X) liên tục</span>E(X) = ∫ x · f(x) dx<br>V(X) = ∫ (x − μ)² · f(x) dx = E(X²) − [E(X)]²</div>
+<div class="out"><b>Vẫn ví dụ đó</b> f(x) = 2x trên [0,1]:<br>
+E(X) = ∫₀¹ x·2x dx = ∫₀¹ 2x² dx = 2/3 ≈ <b>0.667</b><br>
+E(X²) = ∫₀¹ x²·2x dx = ∫₀¹ 2x³ dx = 1/2 → V(X) = 1/2 − (2/3)² = 1/2 − 4/9 = <b>1/18 ≈ 0.0556</b>.</div>
+<div class="note-ct">So với trường hợp rời rạc ở Chương 3: E(X) = Σ x·P(X = x) trở thành E(X) = ∫ x·f(x) dx. Mẹo V(X) = E(X²) − [E(X)]² dùng được y hệt ở cả hai thế giới — và thường ít việc hơn nhiều so với dùng định nghĩa.</div>
+
+<h3>4. Phân phối đều liên tục</h3>
+<div class="formula"><span class="lbl">Đều trên [a, b]</span>f(x) = 1/(b − a) trên [a, b]     F(x) = (x − a)/(b − a)<br>μ = (a + b)/2     σ² = (b − a)²/12</div>
+<div class="out"><b>Ví dụ.</b> Một chuyến xe buýt đến ngẫu nhiên đều trong khoảng 10:00–10:30, nên X ~ U(0, 30) phút.<br>
+P(chờ hơn 20 phút) = (30 − 20)/30 = <b>1/3</b>.<br>
+μ = (0 + 30)/2 = <b>15</b> phút · σ² = 30²/12 = <b>75</b> → σ ≈ 8.66 phút.</div>
+
+<h3>5. Phân phối mũ — thời gian chờ</h3>
+<div class="formula"><span class="lbl">Phân phối mũ với tốc độ λ</span>f(x) = λ·e^(−λx) với x ≥ 0     F(x) = 1 − e^(−λx)     P(X &gt; t) = e^(−λt)<br>E(X) = 1/λ     V(X) = 1/λ²</div>
+<div class="out"><b>Ví dụ.</b> Cuộc gọi đến với λ = 3 cuộc mỗi giờ. Xác suất phải chờ hơn 30 phút (0.5 giờ) cho cuộc gọi tiếp theo?<br>
+P(X &gt; 0.5) = e^(−3 × 0.5) = e^(−1.5) ≈ <b>0.2231</b>.<br>
+Thời gian chờ trung bình E(X) = 1/3 giờ = <b>20 phút</b>.</div>
+<div class="note-ct"><b>Cặp đôi Poisson–mũ.</b> Nếu <em>số lượng</em> biến cố trong một đơn vị thời gian tuân theo Poisson(λ), thì <em>khoảng cách</em> giữa hai biến cố liên tiếp tuân theo phân phối mũ(λ). Cùng một quá trình, hai góc nhìn: Poisson đếm, phân phối mũ đo thời gian chờ. Đó là lý do hai chữ λ là cùng một số.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Phân phối mũ không có trí nhớ:</b> P(X &gt; s + t | X &gt; s) = P(X &gt; t). Nếu xe buýt đã không đến suốt 10 phút, phân phối của thời gian chờ còn lại vẫn y hệt lúc bạn mới tới — quá trình không nhớ bạn đã chờ bao lâu. Đây là phân phối liên tục DUY NHẤT có tính chất này, nên nó mô hình rất tốt "hỏng hóc ngẫu nhiên với tốc độ không đổi", và cũng vì thế nó là mô hình SAI cho những thứ bị hao mòn theo thời gian (những thứ đó cần phân phối Weibull).</div>
+<a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-255" target="_blank" rel="noopener">
+  <span class="lc-ico">🐍</span>
+  <span class="lc-body"><span class="lc-title">Tích phân &amp; mô phỏng bằng Python</span><span class="lc-sub">Kiểm chứng các PDF và CDF này bằng số.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '4.3 — Normal approximation & the continuity correction|||4.3 — Xấp xỉ chuẩn & hiệu chỉnh liên tục',
+          slug: 'mas291-xap-xi-chuan',
+          type: 'VIDEO',
+          description: 'Khi nào thay nhị thức/Poisson bằng phân phối chuẩn, điều kiện np>5 & n(1−p)>5, và hiệu chỉnh ±0.5.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 4 · Lesson 4.3</span>
+<h2>Using the normal to replace a discrete distribution</h2>
+<p class="lead">Computing P(X ≤ 40) for B(100, 0.5) means summing 41 binomial terms. Instead, you can approximate the discrete distribution with a normal one — a standard exam technique with two rules you must respect.</p>
+
+<h3>1. Binomial → Normal</h3>
+<div class="formula"><span class="lbl">Condition and parameters</span>Valid when <b>np &gt; 5</b> AND <b>n(1 − p) &gt; 5</b><br>Then B(n, p) ≈ N( μ = np , σ² = np(1 − p) )</div>
+
+<h3>2. Poisson → Normal</h3>
+<div class="formula"><span class="lbl">Condition and parameters</span>Valid when <b>λ &gt; 5</b><br>Then Poisson(λ) ≈ N( μ = λ , σ² = λ )</div>
+
+<h3>3. The continuity correction — ±0.5</h3>
+<p>A binomial variable takes whole numbers; a normal one takes any real value. To bridge that gap, expand each whole number into an interval of width 1 by shifting the boundary by <b>0.5</b>.</p>
+<table>
+  <thead><tr><th>Discrete question</th><th>Normal version</th></tr></thead>
+  <tbody>
+    <tr><td>P(X = k)</td><td>P(k − 0.5 &lt; X &lt; k + 0.5)</td></tr>
+    <tr><td>P(X ≤ k)</td><td>P(X &lt; k + 0.5)</td></tr>
+    <tr><td>P(X &lt; k)</td><td>P(X &lt; k − 0.5)</td></tr>
+    <tr><td>P(X ≥ k)</td><td>P(X &gt; k − 0.5)</td></tr>
+    <tr><td>P(X &gt; k)</td><td>P(X &gt; k + 0.5)</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">The logic: "X ≤ 40" includes the whole block for 40, which stretches to 40.5 on a continuous scale — so the boundary moves <em>outward</em>. "X &lt; 40" excludes 40 entirely, so the boundary moves <em>inward</em> to 39.5. Ask yourself whether k itself is included; if yes push the boundary away from k, if no pull it towards k.</div>
+
+<h3>Ví dụ có lời giải · Worked example</h3>
+<div class="out"><b>Problem.</b> X ~ B(100, 0.5). Estimate P(X ≤ 45).<br>
+<b>Step 1 — check the condition.</b> np = 50 &gt; 5 and n(1−p) = 50 &gt; 5 ✓ approximation allowed.<br>
+<b>Step 2 — parameters.</b> μ = np = 50, σ² = np(1−p) = 25, so σ = 5.<br>
+<b>Step 3 — continuity correction.</b> P(X ≤ 45) → P(X &lt; 45.5).<br>
+<b>Step 4 — standardise.</b> z = (45.5 − 50)/5 = −0.9.<br>
+<b>Step 5 — table.</b> Φ(−0.9) = <b>0.1841</b>.<br>
+(The exact binomial value is 0.1841 — the approximation is excellent here.)</div>
+
+<div class="out"><b>Second example (Poisson).</b> Defects arrive at λ = 16 per batch. Estimate P(X ≥ 20).<br>
+λ = 16 &gt; 5 ✓ · μ = 16, σ = √16 = 4 · correction: P(X ≥ 20) → P(X &gt; 19.5)<br>
+z = (19.5 − 16)/4 = 0.875 → P = 1 − Φ(0.875) ≈ 1 − 0.8092 = <b>0.1908</b>.</div>
+
+<div class="pitfall"><b>Two marks lost most often here:</b> (1) forgetting the ±0.5 entirely — you will get a plausible but wrong answer, and the grader can see it immediately; (2) shifting it the wrong way. Write down whether the boundary value k is <em>included</em> before you touch the calculator. Note also that σ² = np(1−p), so you must take a <b>square root</b> before dividing — using the variance instead of the standard deviation is the other classic slip.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> The normal approximation is really the Central Limit Theorem in disguise: a binomial count is the <em>sum</em> of n independent Bernoulli trials, and the CLT (Chapter 6) says sums of many independent pieces tend to a normal. The conditions np &gt; 5 and n(1−p) &gt; 5 are just a practical way of saying "n is big enough and p is not so extreme that the distribution is still lop-sided". With modern software you would simply compute the exact binomial — but the approximation remains on the exam because it shows you understand why the normal is everywhere.</div>
+<a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-255" target="_blank" rel="noopener">
+  <span class="lc-ico">🐍</span>
+  <span class="lc-body"><span class="lc-title">Compare exact vs approximate</span><span class="lc-sub">Compute both in Python and see the error shrink.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 4 · Bài 4.3</span>
+<h2>Dùng phân phối chuẩn để thay một phân phối rời rạc</h2>
+<p class="lead">Tính P(X ≤ 40) cho B(100, 0.5) nghĩa là cộng 41 số hạng nhị thức. Thay vào đó, bạn có thể xấp xỉ phân phối rời rạc bằng phân phối chuẩn — một kỹ thuật thi chuẩn mực với hai quy tắc bắt buộc tôn trọng.</p>
+
+<h3>1. Nhị thức → Chuẩn</h3>
+<div class="formula"><span class="lbl">Điều kiện và tham số</span>Hợp lệ khi <b>np &gt; 5</b> VÀ <b>n(1 − p) &gt; 5</b><br>Khi đó B(n, p) ≈ N( μ = np , σ² = np(1 − p) )</div>
+
+<h3>2. Poisson → Chuẩn</h3>
+<div class="formula"><span class="lbl">Điều kiện và tham số</span>Hợp lệ khi <b>λ &gt; 5</b><br>Khi đó Poisson(λ) ≈ N( μ = λ , σ² = λ )</div>
+
+<h3>3. Hiệu chỉnh liên tục — ±0.5</h3>
+<p>Biến nhị thức nhận giá trị nguyên; biến chuẩn nhận mọi số thực. Để nối khoảng cách đó, hãy mở rộng mỗi số nguyên thành một khoảng rộng 1 bằng cách dịch biên đi <b>0.5</b>.</p>
+<table>
+  <thead><tr><th>Câu hỏi rời rạc</th><th>Phiên bản chuẩn</th></tr></thead>
+  <tbody>
+    <tr><td>P(X = k)</td><td>P(k − 0.5 &lt; X &lt; k + 0.5)</td></tr>
+    <tr><td>P(X ≤ k)</td><td>P(X &lt; k + 0.5)</td></tr>
+    <tr><td>P(X &lt; k)</td><td>P(X &lt; k − 0.5)</td></tr>
+    <tr><td>P(X ≥ k)</td><td>P(X &gt; k − 0.5)</td></tr>
+    <tr><td>P(X &gt; k)</td><td>P(X &gt; k + 0.5)</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">Logic ở đây: "X ≤ 40" bao gồm trọn khối của số 40, mà khối đó kéo tới 40.5 trên thang liên tục — nên biên dịch ra <em>phía ngoài</em>. "X &lt; 40" loại hẳn số 40, nên biên dịch vào <em>phía trong</em> thành 39.5. Hãy tự hỏi bản thân số k có được tính vào không; nếu có thì đẩy biên ra xa k, nếu không thì kéo biên về phía k.</div>
+
+<h3>Ví dụ có lời giải</h3>
+<div class="out"><b>Đề.</b> X ~ B(100, 0.5). Ước lượng P(X ≤ 45).<br>
+<b>Bước 1 — kiểm điều kiện.</b> np = 50 &gt; 5 và n(1−p) = 50 &gt; 5 ✓ được phép xấp xỉ.<br>
+<b>Bước 2 — tham số.</b> μ = np = 50, σ² = np(1−p) = 25, nên σ = 5.<br>
+<b>Bước 3 — hiệu chỉnh liên tục.</b> P(X ≤ 45) → P(X &lt; 45.5).<br>
+<b>Bước 4 — chuẩn hóa.</b> z = (45.5 − 50)/5 = −0.9.<br>
+<b>Bước 5 — tra bảng.</b> Φ(−0.9) = <b>0.1841</b>.<br>
+(Giá trị nhị thức chính xác là 0.1841 — xấp xỉ ở đây rất tốt.)</div>
+
+<div class="out"><b>Ví dụ thứ hai (Poisson).</b> Lỗi xuất hiện với λ = 16 mỗi lô. Ước lượng P(X ≥ 20).<br>
+λ = 16 &gt; 5 ✓ · μ = 16, σ = √16 = 4 · hiệu chỉnh: P(X ≥ 20) → P(X &gt; 19.5)<br>
+z = (19.5 − 16)/4 = 0.875 → P = 1 − Φ(0.875) ≈ 1 − 0.8092 = <b>0.1908</b>.</div>
+
+<div class="pitfall"><b>Hai chỗ mất điểm nhiều nhất:</b> (1) quên hẳn ±0.5 — bạn sẽ ra một đáp án nghe hợp lý nhưng sai, và người chấm nhìn ra ngay; (2) dịch biên nhầm hướng. Hãy viết ra xem giá trị biên k có <em>được tính vào</em> hay không TRƯỚC khi chạm máy tính. Cũng lưu ý σ² = np(1−p), nên bạn phải <b>lấy căn bậc hai</b> trước khi chia — dùng nhầm phương sai thay cho độ lệch chuẩn là lỗi kinh điển còn lại.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> Xấp xỉ chuẩn thực chất là Định lý giới hạn trung tâm trá hình: một biến đếm nhị thức là <em>tổng</em> của n phép thử Bernoulli độc lập, và CLT (Chương 6) nói rằng tổng của nhiều mảnh độc lập sẽ tiến về phân phối chuẩn. Điều kiện np &gt; 5 và n(1−p) &gt; 5 chỉ là cách nói thực dụng rằng "n đủ lớn và p không quá lệch tới mức phân phối vẫn còn méo một bên". Với phần mềm hiện đại bạn chỉ việc tính nhị thức chính xác — nhưng phép xấp xỉ vẫn nằm trong đề thi vì nó cho thấy bạn hiểu vì sao phân phối chuẩn ở khắp nơi.</div>
+<a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-255" target="_blank" rel="noopener">
+  <span class="lc-ico">🐍</span>
+  <span class="lc-body"><span class="lc-title">So sánh chính xác vs xấp xỉ</span><span class="lc-sub">Tính cả hai bằng Python và xem sai số nhỏ dần.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
 </div>
 `,
         },
@@ -776,6 +1076,96 @@ So sánh: một giá trị đơn P(X &gt; 106) với σ=15 cho z = 0.4, P ≈ 0.
 `,
         },
         {
+          title: '6.2 — Sampling distributions of proportions & differences|||6.2 — Phân phối mẫu của tỷ lệ & của hiệu',
+          slug: 'mas291-phan-phoi-mau-ty-le-hieu',
+          type: 'VIDEO',
+          description: 'Phân phối mẫu của p̂, của x̄₁−x̄₂ và của p̂₁−p̂₂ — nền tảng bắt buộc trước khi làm khoảng tin cậy và kiểm định hai mẫu.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 6 · Lesson 6.2</span>
+<h2>Three more sampling distributions</h2>
+<p class="lead">Lesson 6.1 gave you the sampling distribution of the mean x̄. Three others follow the same logic and are needed for every two-sample method later: the sample proportion, the difference of two means, and the difference of two proportions.</p>
+
+<h3>1. Sampling distribution of a proportion p̂</h3>
+<div class="formula"><span class="lbl">Distribution of the sample proportion</span>p̂ ~ N( p , p(1 − p)/n )     approximately<br>SE(p̂) = √( p(1 − p)/n )     z = (p̂ − p) / SE</div>
+<div class="note-ct"><b>Condition:</b> the normal shape is safe only when <b>np ≥ 5 AND n(1 − p) ≥ 5</b> — both, not either. With p very close to 0 or 1 the distribution stays skewed until n is large, which is exactly what the two conditions detect.</div>
+<div class="out"><b>Example.</b> 40% of a population support a policy (p = 0.4). In a sample of n = 100, what is P(p̂ &gt; 0.5)?<br>
+Check: np = 40 ≥ 5 ✓, n(1−p) = 60 ≥ 5 ✓<br>
+SE = √(0.4 × 0.6/100) = √0.0024 = 0.04899<br>
+z = (0.5 − 0.4)/0.04899 = 2.04 → P = 1 − Φ(2.04) ≈ <b>0.0207</b>.</div>
+
+<h3>2. Sampling distribution of a difference of means x̄₁ − x̄₂</h3>
+<div class="formula"><span class="lbl">Two independent samples</span>x̄₁ − x̄₂ ~ N( μ₁ − μ₂ , σ₁²/n₁ + σ₂²/n₂ )<br>SE = √( σ₁²/n₁ + σ₂²/n₂ )</div>
+<div class="pitfall"><b>Variances ADD, even for a difference.</b> It feels wrong the first time: you subtract the means but you <em>add</em> the variances. The reason is that both samples bring their own random error, and two sources of noise can only make the difference more variable — never less. Never write σ₁²/n₁ − σ₂²/n₂.</div>
+
+<h3>3. Sampling distribution of a difference of proportions p̂₁ − p̂₂</h3>
+<div class="formula"><span class="lbl">Two independent samples</span>p̂₁ − p̂₂ ~ N( p₁ − p₂ , p₁(1−p₁)/n₁ + p₂(1−p₂)/n₂ )<br>SE = √( p₁(1−p₁)/n₁ + p₂(1−p₂)/n₂ )</div>
+<div class="out"><b>Example.</b> p₁ = 0.5 with n₁ = 100, p₂ = 0.4 with n₂ = 150. SE of the difference?<br>
+SE = √(0.5×0.5/100 + 0.4×0.6/150) = √(0.0025 + 0.0016) = √0.0041 ≈ <b>0.064</b>.</div>
+
+<h3>4. Point estimation — which statistic estimates which parameter</h3>
+<table>
+  <thead><tr><th>Population parameter</th><th>Point estimator</th><th>Note</th></tr></thead>
+  <tbody>
+    <tr><td>μ (mean)</td><td>x̄</td><td>unbiased: E(x̄) = μ</td></tr>
+    <tr><td>σ² (variance)</td><td>s²</td><td>unbiased <b>only</b> when dividing by n − 1</td></tr>
+    <tr><td>p (proportion)</td><td>p̂ = x/n</td><td>unbiased: E(p̂) = p</td></tr>
+    <tr><td>μ₁ − μ₂</td><td>x̄₁ − x̄₂</td><td>unbiased</td></tr>
+    <tr><td>p₁ − p₂</td><td>p̂₁ − p̂₂</td><td>unbiased</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">"Unbiased" means the estimator is right <em>on average</em> over many samples — it does not mean any single sample is correct. This is exactly why dividing by n − 1 in s² matters: dividing by n would make s² systematically too small, and the bias would never wash out no matter how many samples you took.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> Every formula on this page has the same shape: <b>estimate ± (nothing yet) with SE = √(variance/n)</b>. That common shape is why the next three chapters feel repetitive — a confidence interval is "estimate ± critical value × SE", and a test statistic is "(estimate − hypothesised value)/SE". Learn to identify the estimate and its SE, and every method in Chapters 7, 8 and the two-sample chapter reduces to filling in one template.</div>
+<a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-255" target="_blank" rel="noopener">
+  <span class="lc-ico">🐍</span>
+  <span class="lc-body"><span class="lc-title">Simulate sampling distributions</span><span class="lc-sub">Draw many samples and watch the shape appear.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 6 · Bài 6.2</span>
+<h2>Ba phân phối mẫu nữa</h2>
+<p class="lead">Bài 6.1 đã cho bạn phân phối mẫu của trung bình x̄. Ba phân phối sau theo cùng logic đó và là thứ bắt buộc cho mọi phương pháp hai mẫu về sau: tỷ lệ mẫu, hiệu hai trung bình, và hiệu hai tỷ lệ.</p>
+
+<h3>1. Phân phối mẫu của tỷ lệ p̂</h3>
+<div class="formula"><span class="lbl">Phân phối của tỷ lệ mẫu</span>p̂ ~ N( p , p(1 − p)/n )     xấp xỉ<br>SE(p̂) = √( p(1 − p)/n )     z = (p̂ − p) / SE</div>
+<div class="note-ct"><b>Điều kiện:</b> dạng chuẩn chỉ an toàn khi <b>np ≥ 5 VÀ n(1 − p) ≥ 5</b> — cả hai, không phải một trong hai. Với p rất gần 0 hoặc 1, phân phối vẫn còn lệch cho tới khi n đủ lớn, và đó chính là thứ hai điều kiện này phát hiện.</div>
+<div class="out"><b>Ví dụ.</b> 40% dân số ủng hộ một chính sách (p = 0.4). Trong mẫu n = 100, tính P(p̂ &gt; 0.5)?<br>
+Kiểm: np = 40 ≥ 5 ✓, n(1−p) = 60 ≥ 5 ✓<br>
+SE = √(0.4 × 0.6/100) = √0.0024 = 0.04899<br>
+z = (0.5 − 0.4)/0.04899 = 2.04 → P = 1 − Φ(2.04) ≈ <b>0.0207</b>.</div>
+
+<h3>2. Phân phối mẫu của hiệu hai trung bình x̄₁ − x̄₂</h3>
+<div class="formula"><span class="lbl">Hai mẫu độc lập</span>x̄₁ − x̄₂ ~ N( μ₁ − μ₂ , σ₁²/n₁ + σ₂²/n₂ )<br>SE = √( σ₁²/n₁ + σ₂²/n₂ )</div>
+<div class="pitfall"><b>Phương sai thì CỘNG, ngay cả khi lấy hiệu.</b> Lần đầu nhìn thấy sẽ thấy sai sai: bạn trừ các trung bình nhưng lại <em>cộng</em> các phương sai. Lý do là cả hai mẫu đều mang sai số ngẫu nhiên của riêng nó, và hai nguồn nhiễu chỉ có thể làm hiệu số biến động nhiều hơn — không bao giờ ít đi. Đừng bao giờ viết σ₁²/n₁ − σ₂²/n₂.</div>
+
+<h3>3. Phân phối mẫu của hiệu hai tỷ lệ p̂₁ − p̂₂</h3>
+<div class="formula"><span class="lbl">Hai mẫu độc lập</span>p̂₁ − p̂₂ ~ N( p₁ − p₂ , p₁(1−p₁)/n₁ + p₂(1−p₂)/n₂ )<br>SE = √( p₁(1−p₁)/n₁ + p₂(1−p₂)/n₂ )</div>
+<div class="out"><b>Ví dụ.</b> p₁ = 0.5 với n₁ = 100, p₂ = 0.4 với n₂ = 150. Tính SE của hiệu?<br>
+SE = √(0.5×0.5/100 + 0.4×0.6/150) = √(0.0025 + 0.0016) = √0.0041 ≈ <b>0.064</b>.</div>
+
+<h3>4. Ước lượng điểm — thống kê nào ước lượng tham số nào</h3>
+<table>
+  <thead><tr><th>Tham số tổng thể</th><th>Ước lượng điểm</th><th>Ghi chú</th></tr></thead>
+  <tbody>
+    <tr><td>μ (trung bình)</td><td>x̄</td><td>không chệch: E(x̄) = μ</td></tr>
+    <tr><td>σ² (phương sai)</td><td>s²</td><td>không chệch <b>chỉ khi</b> chia cho n − 1</td></tr>
+    <tr><td>p (tỷ lệ)</td><td>p̂ = x/n</td><td>không chệch: E(p̂) = p</td></tr>
+    <tr><td>μ₁ − μ₂</td><td>x̄₁ − x̄₂</td><td>không chệch</td></tr>
+    <tr><td>p₁ − p₂</td><td>p̂₁ − p̂₂</td><td>không chệch</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">"Không chệch" nghĩa là ước lượng đúng <em>trung bình qua nhiều mẫu</em> — nó không có nghĩa là một mẫu đơn lẻ sẽ đúng. Đây chính là lý do việc chia cho n − 1 trong s² lại quan trọng: chia cho n sẽ làm s² nhỏ đi một cách hệ thống, và độ chệch đó không bao giờ mất đi dù bạn lấy bao nhiêu mẫu.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> Mọi công thức trên trang này đều có cùng một hình dạng: <b>ước lượng, với SE = √(phương sai/n)</b>. Chính hình dạng chung đó khiến ba chương tiếp theo có cảm giác lặp lại — một khoảng tin cậy là "ước lượng ± giá trị tới hạn × SE", còn một thống kê kiểm định là "(ước lượng − giá trị giả thuyết)/SE". Hãy học cách nhận ra đâu là ước lượng và đâu là SE của nó, thì mọi phương pháp ở Chương 7, 8 và chương hai mẫu đều rút gọn thành việc điền vào một khuôn duy nhất.</div>
+<a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-255" target="_blank" rel="noopener">
+  <span class="lc-ico">🐍</span>
+  <span class="lc-body"><span class="lc-title">Mô phỏng phân phối mẫu</span><span class="lc-sub">Lấy nhiều mẫu và xem hình dạng hiện ra.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
           title: 'Quiz 3 — Descriptive stats & sampling|||Quiz 3 — Thống kê mô tả & phân phối mẫu',
           slug: 'mas291-quiz-3',
           type: 'QUIZ',
@@ -870,6 +1260,86 @@ n = (1.96 · 6 / 1)² = (11.76)² = 138.3 → làm tròn lên <b>n = 139</b>.</d
 <div class="pitfall"><b>Bẫy diễn giải:</b> "tin cậy 95%" KHÔNG nghĩa là "xác suất 95% μ nằm trong khoảng này". μ cố định. Nó nghĩa là: <em>nếu lặp lấy mẫu nhiều lần, 95% các khoảng ta lập sẽ chứa μ.</em> Ngoài ra: tin cậy cao hơn → khoảng rộng hơn (đánh đổi độ chính xác lấy độ chắc chắn).</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao dùng phân phối t, thực chất.</b> Khi ước lượng σ bằng s, bạn thêm độ bất định, nên phân phối chuẩn quá hẹp — <b>phân phối t</b> rộng hơn một chút, điều khiển bởi bậc tự do (n−1). Với mẫu nhỏ t có đuôi dày hơn rõ rệt; khi n lớn, t → z. Dùng z khi lẽ ra phải dùng t cho khoảng quá lạc quan (quá hẹp) — một lỗi tinh vi nhưng có thật mà slide lướt qua.</div>
+</div>
+`,
+        },
+        {
+          title: '7.2 — One-sided confidence bounds|||7.2 — Khoảng tin cậy một phía',
+          slug: 'mas291-khoang-tin-cay-mot-phia',
+          type: 'VIDEO',
+          description: 'Khi chỉ quan tâm một chiều: cận dưới / cận trên, dùng z_α thay vì z_{α/2} — và vì sao khoảng một phía chặt hơn.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 7 · Lesson 7.2</span>
+<h2>When you only care about one direction</h2>
+<p class="lead">Lesson 7.1 built two-sided intervals: "μ is between L and U". But many real questions only look one way — a supplier cares that strength is <em>at least</em> some value; a buyer cares that impurity is <em>at most</em> some value. For those, use a one-sided bound.</p>
+
+<h3>The two forms</h3>
+<div class="formula"><span class="lbl">Lower confidence bound (σ known)</span>μ ≥ x̄ − z<sub>α</sub> · (σ/√n)<br><small>"we are (1−α) confident μ is at least this"</small></div>
+<div class="formula"><span class="lbl">Upper confidence bound (σ known)</span>μ ≤ x̄ + z<sub>α</sub> · (σ/√n)<br><small>"we are (1−α) confident μ is at most this"</small></div>
+<div class="note-ct">If σ is unknown and the population is normal, replace z<sub>α</sub> with t<sub>α, n−1</sub> — exactly the same substitution rule as in Lesson 7.1.</div>
+
+<h3>The one change that matters: z<sub>α</sub>, not z<sub>α/2</sub></h3>
+<table>
+  <thead><tr><th>Confidence</th><th>Two-sided z<sub>α/2</sub></th><th>One-sided z<sub>α</sub></th></tr></thead>
+  <tbody>
+    <tr><td>90%</td><td>1.645</td><td>1.282</td></tr>
+    <tr><td>95%</td><td>1.960</td><td>1.645</td></tr>
+    <tr><td>99%</td><td>2.576</td><td>2.326</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">A two-sided interval splits the risk α into two tails of α/2 each; a one-sided bound puts the entire α in one tail. Since all the risk sits on one side, the critical value is smaller — so a one-sided bound is <b>tighter</b> at the same confidence level. Notice that the one-sided 95% value (1.645) equals the two-sided 90% value: same tail area, 5% in one tail.</div>
+
+<h3>Ví dụ có lời giải · Worked example</h3>
+<div class="out"><b>Problem.</b> n = 25, x̄ = 120 MPa, σ = 10 MPa. Find a 95% lower confidence bound for mean strength.<br>
+SE = 10/√25 = 2 · one-sided z<sub>0.05</sub> = 1.645<br>
+μ ≥ 120 − 1.645 × 2 = 120 − 3.29 = <b>116.71 MPa</b><br>
+Conclusion: we are 95% confident the true mean strength is at least 116.71 MPa.<br><br>
+<b>Compare</b> with the two-sided 95% interval: 120 ± 1.96 × 2 = (116.08, 123.92). The lower end 116.08 is <em>lower</em> (weaker claim) than the one-sided bound 116.71 — proof that concentrating the risk on one side buys you a sharper statement in that direction.</div>
+
+<div class="pitfall"><b>Trap:</b> using z<sub>α/2</sub> in a one-sided problem (or vice versa). Read the question for direction words — "at least", "minimum", "no less than" → lower bound; "at most", "maximum", "does not exceed" → upper bound; "between", "within" → two-sided. Also note a one-sided bound is a single number, not a pair: writing it as an interval (116.71, 123.29) is wrong — the correct statement is μ ≥ 116.71 with no upper limit.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> One-sided bounds and one-sided hypothesis tests are the same idea seen twice. A 95% lower bound of 116.71 tells you immediately that H₀: μ = 115 against H₁: μ &gt; 115 would be <em>rejected</em> at α = 0.05 (since 115 falls below the bound), while H₀: μ = 118 would not. This duality — a confidence bound is the set of hypothesised values you would fail to reject — is the cleanest way to connect Chapter 7 with Chapter 8.</div>
+<a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-255" target="_blank" rel="noopener">
+  <span class="lc-ico">🐍</span>
+  <span class="lc-body"><span class="lc-title">Compute bounds in Python</span><span class="lc-sub">One-sided vs two-sided, side by side.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 7 · Bài 7.2</span>
+<h2>Khi bạn chỉ quan tâm một chiều</h2>
+<p class="lead">Bài 7.1 dựng khoảng hai phía: "μ nằm giữa L và U". Nhưng nhiều câu hỏi thực tế chỉ nhìn một hướng — nhà cung cấp quan tâm độ bền <em>ít nhất</em> bằng bao nhiêu; người mua quan tâm tạp chất <em>nhiều nhất</em> là bao nhiêu. Với những trường hợp đó, dùng cận một phía.</p>
+
+<h3>Hai dạng</h3>
+<div class="formula"><span class="lbl">Cận dưới tin cậy (biết σ)</span>μ ≥ x̄ − z<sub>α</sub> · (σ/√n)<br><small>"ta tin cậy (1−α) rằng μ ít nhất bằng giá trị này"</small></div>
+<div class="formula"><span class="lbl">Cận trên tin cậy (biết σ)</span>μ ≤ x̄ + z<sub>α</sub> · (σ/√n)<br><small>"ta tin cậy (1−α) rằng μ nhiều nhất bằng giá trị này"</small></div>
+<div class="note-ct">Nếu chưa biết σ và tổng thể phân phối chuẩn, thay z<sub>α</sub> bằng t<sub>α, n−1</sub> — đúng cùng quy tắc thay thế như ở bài 7.1.</div>
+
+<h3>Thay đổi duy nhất đáng kể: z<sub>α</sub>, không phải z<sub>α/2</sub></h3>
+<table>
+  <thead><tr><th>Độ tin cậy</th><th>Hai phía z<sub>α/2</sub></th><th>Một phía z<sub>α</sub></th></tr></thead>
+  <tbody>
+    <tr><td>90%</td><td>1.645</td><td>1.282</td></tr>
+    <tr><td>95%</td><td>1.960</td><td>1.645</td></tr>
+    <tr><td>99%</td><td>2.576</td><td>2.326</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">Khoảng hai phía chia rủi ro α thành hai đuôi, mỗi đuôi α/2; cận một phía dồn toàn bộ α vào một đuôi. Vì mọi rủi ro nằm về một bên nên giá trị tới hạn nhỏ hơn — do đó cận một phía <b>chặt hơn</b> ở cùng mức tin cậy. Để ý giá trị một phía 95% (1.645) bằng đúng giá trị hai phía 90%: cùng diện tích đuôi, 5% ở một đuôi.</div>
+
+<h3>Ví dụ có lời giải</h3>
+<div class="out"><b>Đề.</b> n = 25, x̄ = 120 MPa, σ = 10 MPa. Tìm cận dưới tin cậy 95% cho độ bền trung bình.<br>
+SE = 10/√25 = 2 · z một phía z<sub>0.05</sub> = 1.645<br>
+μ ≥ 120 − 1.645 × 2 = 120 − 3.29 = <b>116.71 MPa</b><br>
+Kết luận: ta tin cậy 95% rằng độ bền trung bình thật ít nhất là 116.71 MPa.<br><br>
+<b>So sánh</b> với khoảng hai phía 95%: 120 ± 1.96 × 2 = (116.08, 123.92). Đầu dưới 116.08 <em>thấp hơn</em> (khẳng định yếu hơn) so với cận một phía 116.71 — chứng tỏ việc dồn rủi ro về một bên mua cho bạn một phát biểu sắc hơn theo hướng đó.</div>
+
+<div class="pitfall"><b>Bẫy:</b> dùng z<sub>α/2</sub> cho bài toán một phía (hoặc ngược lại). Hãy đọc đề tìm từ chỉ hướng — "ít nhất", "tối thiểu", "không dưới" → cận dưới; "nhiều nhất", "tối đa", "không vượt quá" → cận trên; "nằm trong khoảng", "trong vòng" → hai phía. Cũng lưu ý cận một phía là MỘT số, không phải một cặp: viết nó thành khoảng (116.71, 123.29) là sai — phát biểu đúng là μ ≥ 116.71 và không có giới hạn trên.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> Cận một phía và kiểm định giả thuyết một phía là cùng một ý tưởng nhìn hai lần. Cận dưới 95% bằng 116.71 cho bạn biết ngay rằng H₀: μ = 115 đối với H₁: μ &gt; 115 sẽ <em>bị bác bỏ</em> ở mức α = 0.05 (vì 115 nằm dưới cận), còn H₀: μ = 118 thì không. Tính đối ngẫu này — một cận tin cậy chính là tập các giá trị giả thuyết mà bạn sẽ không bác bỏ — là cách gọn gàng nhất để nối Chương 7 với Chương 8.</div>
+<a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-255" target="_blank" rel="noopener">
+  <span class="lc-ico">🐍</span>
+  <span class="lc-body"><span class="lc-title">Tính các cận bằng Python</span><span class="lc-sub">Một phía vs hai phía, đặt cạnh nhau.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
 </div>
 `,
         },
@@ -991,19 +1461,332 @@ Kết luận: có bằng chứng ý nghĩa rằng máy không rót đúng 500ml.
       ],
     },
 
-    /* ══════════════════ CHƯƠNG 9 — HỒI QUY & TƯƠNG QUAN ══════════════════ */
+    /* ══════════════════ CHƯƠNG 9 — SUY LUẬN HAI MẪU ══════════════════ */
     {
-      title: 'Chapter 9 — Regression & correlation|||Chương 9 — Hồi quy & tương quan',
+      title: 'Chapter 9 — Inference for two samples|||Chương 9 — Suy luận hai mẫu',
+      description: 'So sánh hai tổng thể: hiệu hai trung bình (3 trường hợp), hiệu hai tỷ lệ, và mẫu cặp — phần lớn nhất của PT3.',
+      lessons: [
+        {
+          title: '9.1 — Difference of two means: which of the three cases|||9.1 — Hiệu hai trung bình: rơi vào trường hợp nào trong ba',
+          slug: 'mas291-hai-trung-binh',
+          type: 'VIDEO',
+          description: 'Biết σ → z; chưa biết nhưng σ₁=σ₂ → t với phương sai gộp; σ₁≠σ₂ → Welch. Kèm CI và cách đọc "khoảng có chứa 0".',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 9 · Lesson 9.1</span>
+<h2>Comparing two population means</h2>
+<p class="lead">Everything you did in Chapters 7 and 8 for one mean now happens for the <em>difference</em> μ₁ − μ₂. The template is unchanged — estimate ± critical × SE — only the SE changes, and it changes in three ways depending on what you know about the variances.</p>
+
+<h3>Case 1 — both σ₁ and σ₂ known → use z</h3>
+<div class="formula"><span class="lbl">CI for μ₁ − μ₂ (σ known)</span>(x̄₁ − x̄₂) ± z<sub>α/2</sub> · √( σ₁²/n₁ + σ₂²/n₂ )</div>
+
+<h3>Case 2 — σ unknown but assumed equal → pooled t</h3>
+<div class="formula"><span class="lbl">Pooled variance</span>s<sub>p</sub>² = [ (n₁ − 1)·s₁² + (n₂ − 1)·s₂² ] / (n₁ + n₂ − 2)</div>
+<div class="formula"><span class="lbl">CI for μ₁ − μ₂ (pooled)</span>(x̄₁ − x̄₂) ± t<sub>α/2, n₁+n₂−2</sub> · s<sub>p</sub> · √( 1/n₁ + 1/n₂ )<br>df = n₁ + n₂ − 2</div>
+<div class="note-ct">The pooled variance is a <b>weighted average</b> of the two sample variances, weighted by degrees of freedom (n−1 each). It only makes sense if the two populations really do have similar spread — a common rule of thumb is that the larger s should not exceed twice the smaller.</div>
+
+<h3>Case 3 — σ unknown and clearly unequal → Welch</h3>
+<div class="formula"><span class="lbl">Welch (unequal variances)</span>SE = √( s₁²/n₁ + s₂²/n₂ )<br>(x̄₁ − x̄₂) ± t<sub>α/2, df</sub> · SE, with df from the Welch–Satterthwaite formula</div>
+<div class="note-ct">Welch does not pool: each sample keeps its own variance. The degrees of freedom come out as a messy non-integer number, which exams usually give you or round down — you are not expected to compute the Welch–Satterthwaite expression by hand.</div>
+
+<h3>The decision table</h3>
+<table>
+  <thead><tr><th>What you are given</th><th>Use</th><th>df</th></tr></thead>
+  <tbody>
+    <tr><td>σ₁, σ₂ known</td><td>z</td><td>—</td></tr>
+    <tr><td>s₁, s₂ only; variances assumed equal</td><td>pooled t</td><td>n₁ + n₂ − 2</td></tr>
+    <tr><td>s₁, s₂ only; variances clearly unequal</td><td>Welch t</td><td>given / Welch formula</td></tr>
+  </tbody>
+</table>
+
+<h3>Hypothesis test on the difference</h3>
+<div class="formula"><span class="lbl">Test statistic</span>t (or z) = [ (x̄₁ − x̄₂) − Δ₀ ] / SE<br>usually Δ₀ = 0, testing H₀: μ₁ = μ₂</div>
+
+<h3>Ví dụ có lời giải · Worked example (pooled)</h3>
+<div class="out"><b>Problem.</b> Method A: n₁ = 10, x̄₁ = 85, s₁ = 4. Method B: n₂ = 12, x̄₂ = 81, s₂ = 5. Assume equal variances. Build a 95% CI for μ₁ − μ₂ and test H₀: μ₁ = μ₂ at α = 0.05.<br><br>
+<b>Step 1 — pooled variance.</b> s<sub>p</sub>² = [9×16 + 11×25]/(10+12−2) = (144 + 275)/20 = 419/20 = 20.95 → s<sub>p</sub> = 4.577<br>
+<b>Step 2 — SE.</b> SE = 4.577 × √(1/10 + 1/12) = 4.577 × √0.18333 = 4.577 × 0.4282 = 1.960<br>
+<b>Step 3 — critical value.</b> df = 20, t<sub>0.025,20</sub> = 2.086<br>
+<b>Step 4 — CI.</b> (85 − 81) ± 2.086 × 1.960 = 4 ± 4.088 = <b>(−0.088, 8.088)</b><br>
+<b>Step 5 — test.</b> t = (4 − 0)/1.960 = 2.041. Since |2.041| &lt; 2.086, <b>do not reject H₀</b>.<br>
+Both routes agree — as they must, because the interval contains 0.</div>
+
+<div class="callout"><span class="badge">★ Reading the interval</span> <b>Does the interval contain 0?</b><br>
+· <b>Contains 0</b> → the difference could plausibly be zero → you cannot claim the means differ (fail to reject H₀).<br>
+· <b>Does not contain 0</b> → zero is not a plausible value → the means differ significantly (reject H₀).<br>
+This is the fastest sanity check in the whole chapter, and it is exactly equivalent to the two-sided test at the matching α.</div>
+<div class="pitfall"><b>Traps:</b> (1) subtracting variances instead of adding — SE always adds the two variance terms; (2) using df = n₁ + n₂ instead of n₁ + n₂ − 2 for the pooled case; (3) forgetting to take the square root of s<sub>p</sub>² before multiplying; (4) mixing up which sample is "1" — decide the order at the start and keep it, because the sign of the difference (and hence the interpretation) depends on it.</div>
+<a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-255" target="_blank" rel="noopener">
+  <span class="lc-ico">🐍</span>
+  <span class="lc-body"><span class="lc-title">Run a two-sample t-test</span><span class="lc-sub">Compare pooled vs Welch in Python.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 9 · Bài 9.1</span>
+<h2>So sánh trung bình của hai tổng thể</h2>
+<p class="lead">Mọi thứ bạn đã làm ở Chương 7 và 8 cho một trung bình giờ diễn ra cho <em>hiệu</em> μ₁ − μ₂. Khuôn mẫu không đổi — ước lượng ± tới hạn × SE — chỉ có SE thay đổi, và nó thay đổi theo ba cách tuỳ vào bạn biết gì về phương sai.</p>
+
+<h3>Trường hợp 1 — biết cả σ₁ và σ₂ → dùng z</h3>
+<div class="formula"><span class="lbl">CI cho μ₁ − μ₂ (biết σ)</span>(x̄₁ − x̄₂) ± z<sub>α/2</sub> · √( σ₁²/n₁ + σ₂²/n₂ )</div>
+
+<h3>Trường hợp 2 — chưa biết σ nhưng giả định bằng nhau → t với phương sai gộp</h3>
+<div class="formula"><span class="lbl">Phương sai gộp</span>s<sub>p</sub>² = [ (n₁ − 1)·s₁² + (n₂ − 1)·s₂² ] / (n₁ + n₂ − 2)</div>
+<div class="formula"><span class="lbl">CI cho μ₁ − μ₂ (gộp)</span>(x̄₁ − x̄₂) ± t<sub>α/2, n₁+n₂−2</sub> · s<sub>p</sub> · √( 1/n₁ + 1/n₂ )<br>df = n₁ + n₂ − 2</div>
+<div class="note-ct">Phương sai gộp là <b>trung bình có trọng số</b> của hai phương sai mẫu, trọng số là bậc tự do (mỗi cái n−1). Nó chỉ có nghĩa khi hai tổng thể thực sự có độ phân tán tương đương — quy tắc ngón tay cái thường dùng là s lớn hơn không nên vượt quá hai lần s nhỏ hơn.</div>
+
+<h3>Trường hợp 3 — chưa biết σ và rõ ràng khác nhau → Welch</h3>
+<div class="formula"><span class="lbl">Welch (phương sai không bằng nhau)</span>SE = √( s₁²/n₁ + s₂²/n₂ )<br>(x̄₁ − x̄₂) ± t<sub>α/2, df</sub> · SE, với df từ công thức Welch–Satterthwaite</div>
+<div class="note-ct">Welch không gộp: mỗi mẫu giữ phương sai riêng của nó. Bậc tự do ra một số lẻ không nguyên, mà đề thi thường cho sẵn hoặc làm tròn xuống — bạn không được kỳ vọng tính biểu thức Welch–Satterthwaite bằng tay.</div>
+
+<h3>Bảng quyết định</h3>
+<table>
+  <thead><tr><th>Đề cho bạn cái gì</th><th>Dùng</th><th>df</th></tr></thead>
+  <tbody>
+    <tr><td>Biết σ₁, σ₂</td><td>z</td><td>—</td></tr>
+    <tr><td>Chỉ có s₁, s₂; giả định phương sai bằng nhau</td><td>t gộp</td><td>n₁ + n₂ − 2</td></tr>
+    <tr><td>Chỉ có s₁, s₂; phương sai rõ ràng khác nhau</td><td>t Welch</td><td>cho sẵn / công thức Welch</td></tr>
+  </tbody>
+</table>
+
+<h3>Kiểm định giả thuyết trên hiệu</h3>
+<div class="formula"><span class="lbl">Thống kê kiểm định</span>t (hoặc z) = [ (x̄₁ − x̄₂) − Δ₀ ] / SE<br>thường Δ₀ = 0, tức kiểm định H₀: μ₁ = μ₂</div>
+
+<h3>Ví dụ có lời giải (dùng phương sai gộp)</h3>
+<div class="out"><b>Đề.</b> Phương pháp A: n₁ = 10, x̄₁ = 85, s₁ = 4. Phương pháp B: n₂ = 12, x̄₂ = 81, s₂ = 5. Giả định phương sai bằng nhau. Lập CI 95% cho μ₁ − μ₂ và kiểm định H₀: μ₁ = μ₂ ở α = 0.05.<br><br>
+<b>Bước 1 — phương sai gộp.</b> s<sub>p</sub>² = [9×16 + 11×25]/(10+12−2) = (144 + 275)/20 = 419/20 = 20.95 → s<sub>p</sub> = 4.577<br>
+<b>Bước 2 — SE.</b> SE = 4.577 × √(1/10 + 1/12) = 4.577 × √0.18333 = 4.577 × 0.4282 = 1.960<br>
+<b>Bước 3 — giá trị tới hạn.</b> df = 20, t<sub>0.025,20</sub> = 2.086<br>
+<b>Bước 4 — CI.</b> (85 − 81) ± 2.086 × 1.960 = 4 ± 4.088 = <b>(−0.088, 8.088)</b><br>
+<b>Bước 5 — kiểm định.</b> t = (4 − 0)/1.960 = 2.041. Vì |2.041| &lt; 2.086, <b>không bác bỏ H₀</b>.<br>
+Hai con đường cho cùng kết luận — tất yếu phải vậy, vì khoảng có chứa 0.</div>
+
+<div class="callout"><span class="badge">★ Cách đọc khoảng</span> <b>Khoảng có chứa 0 không?</b><br>
+· <b>Có chứa 0</b> → hiệu số hoàn toàn có thể bằng không → bạn không thể khẳng định hai trung bình khác nhau (không bác bỏ H₀).<br>
+· <b>Không chứa 0</b> → 0 không phải giá trị hợp lý → hai trung bình khác nhau có ý nghĩa thống kê (bác bỏ H₀).<br>
+Đây là phép kiểm tra nhanh hữu ích nhất cả chương, và nó tương đương chính xác với kiểm định hai phía ở cùng mức α.</div>
+<div class="pitfall"><b>Các bẫy:</b> (1) trừ phương sai thay vì cộng — SE luôn CỘNG hai số hạng phương sai; (2) dùng df = n₁ + n₂ thay vì n₁ + n₂ − 2 cho trường hợp gộp; (3) quên lấy căn bậc hai của s<sub>p</sub>² trước khi nhân; (4) lẫn lộn mẫu nào là "1" — hãy quyết thứ tự ngay từ đầu và giữ nguyên, vì dấu của hiệu (và do đó cách diễn giải) phụ thuộc vào nó.</div>
+<a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-255" target="_blank" rel="noopener">
+  <span class="lc-ico">🐍</span>
+  <span class="lc-body"><span class="lc-title">Chạy kiểm định t hai mẫu</span><span class="lc-sub">So sánh gộp vs Welch bằng Python.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '9.2 — Difference of two proportions|||9.2 — Hiệu hai tỷ lệ',
+          slug: 'mas291-hai-ty-le',
+          type: 'VIDEO',
+          description: 'CI cho p₁−p₂ dùng SE riêng, còn kiểm định dùng tỷ lệ GỘP p̂ — điểm khác biệt hay bị nhầm nhất.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 9 · Lesson 9.2</span>
+<h2>Comparing two proportions</h2>
+<p class="lead">Same template again — but this topic has one genuine subtlety: the standard error you use for the <em>confidence interval</em> is not the one you use for the <em>test</em>.</p>
+
+<h3>Confidence interval — separate standard errors</h3>
+<div class="formula"><span class="lbl">CI for p₁ − p₂</span>(p̂₁ − p̂₂) ± z<sub>α/2</sub> · √( p̂₁(1−p̂₁)/n₁ + p̂₂(1−p̂₂)/n₂ )</div>
+
+<h3>Hypothesis test — POOLED proportion</h3>
+<div class="formula"><span class="lbl">Pooled proportion</span>p̂ = (x₁ + x₂) / (n₁ + n₂)     <small>total successes over total trials</small></div>
+<div class="formula"><span class="lbl">Test statistic for H₀: p₁ = p₂</span>z = (p̂₁ − p̂₂) / √( p̂(1 − p̂) · (1/n₁ + 1/n₂) )</div>
+<div class="note-ct"><b>Why the difference?</b> Under H₀ the two proportions are <em>assumed equal</em>, so the best estimate of that single common value is all the successes pooled together. A confidence interval makes no such assumption — it lets each sample speak for itself. This mirrors Lesson 8.1, where the test for one proportion also uses p₀ from H₀ in the denominator rather than p̂.</div>
+
+<h3>Ví dụ có lời giải · Worked example</h3>
+<div class="out"><b>Problem.</b> Machine 1: 30 defects out of n₁ = 200. Machine 2: 20 defects out of n₂ = 250. Test H₀: p₁ = p₂ at α = 0.05, and build a 95% CI.<br><br>
+p̂₁ = 30/200 = 0.15 · p̂₂ = 20/250 = 0.08 · difference = 0.07<br><br>
+<b>Test (pooled).</b> p̂ = (30 + 20)/(200 + 250) = 50/450 = 0.1111<br>
+SE<sub>test</sub> = √(0.1111 × 0.8889 × (1/200 + 1/250)) = √(0.09877 × 0.009) = √0.000889 = 0.02982<br>
+z = 0.07/0.02982 = <b>2.35</b> → |2.35| &gt; 1.96 → <b>reject H₀</b>: the defect rates differ.<br><br>
+<b>CI (separate SEs).</b> SE<sub>CI</sub> = √(0.15×0.85/200 + 0.08×0.92/250) = √(0.0006375 + 0.0002944) = √0.0009319 = 0.03053<br>
+CI = 0.07 ± 1.96 × 0.03053 = 0.07 ± 0.0598 = <b>(0.0102, 0.1298)</b><br>
+The interval excludes 0, agreeing with the rejection above.</div>
+<div class="note-ct">Notice the two standard errors are close (0.0298 vs 0.0305) but not identical — that is normal. They can occasionally disagree at the boundary of significance, and when they do, the pooled test is the one that answers the hypothesis question.</div>
+<div class="pitfall"><b>Conditions first.</b> Both samples need np̂ ≥ 5 and n(1 − p̂) ≥ 5. Here: 30, 170, 20, 230 — all ≥ 5 ✓. If a count were tiny (say 2 defects out of 200), the normal approximation collapses and none of these formulas apply.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> The pooled-vs-separate distinction is a small instance of a big principle: <b>a hypothesis test computes everything assuming H₀ is true</b>, because it asks "how surprising is this data <em>if</em> H₀ holds?". A confidence interval asks a different question — "what values are plausible given the data?" — so it never assumes H₀. Once you see that, you stop memorising which SE goes where and simply derive it from what the method is trying to do.</div>
+<a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-255" target="_blank" rel="noopener">
+  <span class="lc-ico">🐍</span>
+  <span class="lc-body"><span class="lc-title">Two-proportion test in Python</span><span class="lc-sub">Pooled vs separate SE, computed side by side.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 9 · Bài 9.2</span>
+<h2>So sánh hai tỷ lệ</h2>
+<p class="lead">Vẫn khuôn mẫu đó — nhưng chủ đề này có một điểm tinh tế thật sự: sai số chuẩn bạn dùng cho <em>khoảng tin cậy</em> không phải cái bạn dùng cho <em>kiểm định</em>.</p>
+
+<h3>Khoảng tin cậy — sai số chuẩn riêng biệt</h3>
+<div class="formula"><span class="lbl">CI cho p₁ − p₂</span>(p̂₁ − p̂₂) ± z<sub>α/2</sub> · √( p̂₁(1−p̂₁)/n₁ + p̂₂(1−p̂₂)/n₂ )</div>
+
+<h3>Kiểm định giả thuyết — tỷ lệ GỘP</h3>
+<div class="formula"><span class="lbl">Tỷ lệ gộp</span>p̂ = (x₁ + x₂) / (n₁ + n₂)     <small>tổng số thành công chia tổng số phép thử</small></div>
+<div class="formula"><span class="lbl">Thống kê kiểm định cho H₀: p₁ = p₂</span>z = (p̂₁ − p̂₂) / √( p̂(1 − p̂) · (1/n₁ + 1/n₂) )</div>
+<div class="note-ct"><b>Vì sao lại khác nhau?</b> Dưới H₀, hai tỷ lệ được <em>giả định bằng nhau</em>, nên ước lượng tốt nhất cho giá trị chung duy nhất đó là gộp toàn bộ số thành công lại. Khoảng tin cậy không đưa ra giả định nào như vậy — nó để mỗi mẫu tự lên tiếng. Điều này soi chiếu đúng bài 8.1, nơi kiểm định cho một tỷ lệ cũng dùng p₀ từ H₀ ở mẫu số chứ không dùng p̂.</div>
+
+<h3>Ví dụ có lời giải</h3>
+<div class="out"><b>Đề.</b> Máy 1: 30 phế phẩm trên n₁ = 200. Máy 2: 20 phế phẩm trên n₂ = 250. Kiểm định H₀: p₁ = p₂ ở α = 0.05, và lập CI 95%.<br><br>
+p̂₁ = 30/200 = 0.15 · p̂₂ = 20/250 = 0.08 · hiệu = 0.07<br><br>
+<b>Kiểm định (gộp).</b> p̂ = (30 + 20)/(200 + 250) = 50/450 = 0.1111<br>
+SE<sub>kiểm định</sub> = √(0.1111 × 0.8889 × (1/200 + 1/250)) = √(0.09877 × 0.009) = √0.000889 = 0.02982<br>
+z = 0.07/0.02982 = <b>2.35</b> → |2.35| &gt; 1.96 → <b>bác bỏ H₀</b>: tỷ lệ phế phẩm khác nhau.<br><br>
+<b>CI (SE riêng).</b> SE<sub>CI</sub> = √(0.15×0.85/200 + 0.08×0.92/250) = √(0.0006375 + 0.0002944) = √0.0009319 = 0.03053<br>
+CI = 0.07 ± 1.96 × 0.03053 = 0.07 ± 0.0598 = <b>(0.0102, 0.1298)</b><br>
+Khoảng không chứa 0, khớp với kết luận bác bỏ ở trên.</div>
+<div class="note-ct">Để ý hai sai số chuẩn gần nhau (0.0298 vs 0.0305) nhưng không giống hệt — đó là bình thường. Thỉnh thoảng chúng có thể cho kết luận lệch nhau ngay ranh giới ý nghĩa, và khi đó kiểm định dùng tỷ lệ gộp mới là cái trả lời câu hỏi giả thuyết.</div>
+<div class="pitfall"><b>Kiểm điều kiện trước.</b> Cả hai mẫu đều cần np̂ ≥ 5 và n(1 − p̂) ≥ 5. Ở đây: 30, 170, 20, 230 — đều ≥ 5 ✓. Nếu một số đếm quá nhỏ (chẳng hạn 2 phế phẩm trên 200), xấp xỉ chuẩn sụp đổ và không công thức nào ở trên còn dùng được.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> Sự phân biệt gộp-vs-riêng là một ví dụ nhỏ của một nguyên tắc lớn: <b>kiểm định giả thuyết tính mọi thứ với giả định H₀ đúng</b>, bởi nó hỏi "dữ liệu này bất ngờ đến mức nào <em>nếu</em> H₀ đúng?". Khoảng tin cậy hỏi câu khác — "những giá trị nào là hợp lý với dữ liệu này?" — nên nó không bao giờ giả định H₀. Khi đã thấy điều đó, bạn thôi phải học thuộc SE nào dùng ở đâu mà chỉ cần suy ra từ mục đích của phương pháp.</div>
+<a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-255" target="_blank" rel="noopener">
+  <span class="lc-ico">🐍</span>
+  <span class="lc-body"><span class="lc-title">Kiểm định hai tỷ lệ bằng Python</span><span class="lc-sub">SE gộp vs riêng, tính cạnh nhau.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '9.3 — Paired samples (the paired t-test)|||9.3 — Mẫu cặp (kiểm định t theo cặp)',
+          slug: 'mas291-mau-cap',
+          type: 'VIDEO',
+          description: 'Khi hai mẫu ghép cặp tự nhiên (trước/sau, cùng một đối tượng): lập cột hiệu d rồi quay về bài toán MỘT mẫu.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 9 · Lesson 9.3</span>
+<h2>When the two samples are not independent</h2>
+<p class="lead">Lesson 9.1 assumed two <em>separate</em> groups. But often the same subject is measured twice — before and after a treatment, left hand and right hand, two methods on the same specimen. Those measurements are paired, and treating them as independent throws away the design.</p>
+
+<h3>The method: reduce two samples to one</h3>
+<div class="formula"><span class="lbl">Step 1 — build the difference column</span>d<sub>i</sub> = x₁ᵢ − x₂ᵢ     for each pair i</div>
+<div class="formula"><span class="lbl">Step 2 — one-sample t on the d values</span>t = ( d̄ − Δ₀ ) / ( s<sub>d</sub>/√n )     df = n − 1<br><small>n = number of PAIRS, not total measurements</small></div>
+<div class="formula"><span class="lbl">Confidence interval for the mean difference</span>d̄ ± t<sub>α/2, n−1</sub> · ( s<sub>d</sub>/√n )</div>
+<div class="note-ct">Once the d column exists, everything is Chapter 7 and 8 material applied to a single sample. There is no pooled variance, no Welch, no n₁ + n₂ − 2 — just n − 1 where n counts pairs.</div>
+
+<h3>Ví dụ có lời giải · Worked example</h3>
+<div class="out"><b>Problem.</b> Five workers are timed before and after training. Did training reduce the time? α = 0.05.<br><br>
+<table>
+  <thead><tr><th>Worker</th><th>Before</th><th>After</th><th>d = Before − After</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>22</td><td>19</td><td>3</td></tr>
+    <tr><td>2</td><td>25</td><td>22</td><td>3</td></tr>
+    <tr><td>3</td><td>20</td><td>18</td><td>2</td></tr>
+    <tr><td>4</td><td>28</td><td>23</td><td>5</td></tr>
+    <tr><td>5</td><td>24</td><td>22</td><td>2</td></tr>
+  </tbody>
+</table>
+<b>Step 1.</b> d values: 3, 3, 2, 5, 2 → d̄ = 15/5 = <b>3</b><br>
+<b>Step 2.</b> deviations: 0, 0, −1, 2, −1 → squares: 0, 0, 1, 4, 1 → Σ = 6<br>
+s<sub>d</sub>² = 6/(5−1) = 1.5 → s<sub>d</sub> = 1.2247<br>
+<b>Step 3.</b> SE = 1.2247/√5 = 0.5477<br>
+<b>Step 4.</b> t = (3 − 0)/0.5477 = <b>5.477</b>, df = 4<br>
+<b>Step 5.</b> t<sub>0.05, 4</sub> = 2.132 (one-sided, since we ask "reduced"). 5.477 &gt; 2.132 → <b>reject H₀</b>: training significantly reduced the time.<br><br>
+95% CI for the mean reduction: 3 ± 2.776 × 0.5477 = 3 ± 1.52 = <b>(1.48, 4.52)</b> — does not contain 0, same conclusion.</div>
+
+<h3>Paired or independent? Read the design</h3>
+<table>
+  <thead><tr><th>Clue in the question</th><th>Method</th></tr></thead>
+  <tbody>
+    <tr><td>"before and after", "the same subjects/specimens"</td><td>Paired t</td></tr>
+    <tr><td>Data arrives in a table with two columns of equal length, matched row by row</td><td>Paired t</td></tr>
+    <tr><td>"two independent groups", different people in each group</td><td>Two-sample (9.1)</td></tr>
+    <tr><td>n₁ ≠ n₂</td><td>Must be independent — pairing is impossible</td></tr>
+  </tbody>
+</table>
+<div class="pitfall"><b>The costly mistake</b> is running the independent two-sample test on paired data. It is not just stylistically wrong: it usually <em>fails to detect a real effect</em>. In the example above, the two groups overlap heavily (means 23.8 vs 20.8 with spreads around 3), and an independent test would not reach significance — yet every single worker improved. Pairing removes the person-to-person variation and lets the consistent improvement show through.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why pairing is more powerful.</b> Each worker carries their own baseline speed — worker 4 is simply slower than worker 3 in both columns. In an independent test that between-person spread sits in the denominator as noise. Subtracting within each pair cancels the baseline entirely, so s<sub>d</sub> measures only the treatment effect's variability. That is why a good experimental design (pairing, blocking, matching) can be worth more than collecting a larger sample.</div>
+<a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-255" target="_blank" rel="noopener">
+  <span class="lc-ico">🐍</span>
+  <span class="lc-body"><span class="lc-title">Paired t-test in Python</span><span class="lc-sub">Compare paired vs independent on the same data.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 9 · Bài 9.3</span>
+<h2>Khi hai mẫu không độc lập</h2>
+<p class="lead">Bài 9.1 giả định hai nhóm <em>tách biệt</em>. Nhưng thường cùng một đối tượng được đo hai lần — trước và sau khi can thiệp, tay trái và tay phải, hai phương pháp trên cùng một mẫu vật. Những phép đo đó ghép thành cặp, và coi chúng như độc lập là vứt bỏ chính thiết kế thí nghiệm.</p>
+
+<h3>Phương pháp: rút hai mẫu về một mẫu</h3>
+<div class="formula"><span class="lbl">Bước 1 — lập cột hiệu</span>d<sub>i</sub> = x₁ᵢ − x₂ᵢ     cho từng cặp i</div>
+<div class="formula"><span class="lbl">Bước 2 — kiểm định t một mẫu trên các giá trị d</span>t = ( d̄ − Δ₀ ) / ( s<sub>d</sub>/√n )     df = n − 1<br><small>n = số CẶP, không phải tổng số phép đo</small></div>
+<div class="formula"><span class="lbl">Khoảng tin cậy cho hiệu trung bình</span>d̄ ± t<sub>α/2, n−1</sub> · ( s<sub>d</sub>/√n )</div>
+<div class="note-ct">Khi cột d đã có, mọi thứ trở thành kiến thức Chương 7 và 8 áp dụng cho một mẫu duy nhất. Không có phương sai gộp, không Welch, không n₁ + n₂ − 2 — chỉ có n − 1 với n đếm số cặp.</div>
+
+<h3>Ví dụ có lời giải</h3>
+<div class="out"><b>Đề.</b> Năm công nhân được bấm giờ trước và sau khi tập huấn. Tập huấn có làm giảm thời gian không? α = 0.05.<br><br>
+<table>
+  <thead><tr><th>Công nhân</th><th>Trước</th><th>Sau</th><th>d = Trước − Sau</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>22</td><td>19</td><td>3</td></tr>
+    <tr><td>2</td><td>25</td><td>22</td><td>3</td></tr>
+    <tr><td>3</td><td>20</td><td>18</td><td>2</td></tr>
+    <tr><td>4</td><td>28</td><td>23</td><td>5</td></tr>
+    <tr><td>5</td><td>24</td><td>22</td><td>2</td></tr>
+  </tbody>
+</table>
+<b>Bước 1.</b> Các giá trị d: 3, 3, 2, 5, 2 → d̄ = 15/5 = <b>3</b><br>
+<b>Bước 2.</b> độ lệch: 0, 0, −1, 2, −1 → bình phương: 0, 0, 1, 4, 1 → Σ = 6<br>
+s<sub>d</sub>² = 6/(5−1) = 1.5 → s<sub>d</sub> = 1.2247<br>
+<b>Bước 3.</b> SE = 1.2247/√5 = 0.5477<br>
+<b>Bước 4.</b> t = (3 − 0)/0.5477 = <b>5.477</b>, df = 4<br>
+<b>Bước 5.</b> t<sub>0.05, 4</sub> = 2.132 (một phía, vì đề hỏi "có giảm không"). 5.477 &gt; 2.132 → <b>bác bỏ H₀</b>: tập huấn giảm thời gian có ý nghĩa thống kê.<br><br>
+CI 95% cho mức giảm trung bình: 3 ± 2.776 × 0.5477 = 3 ± 1.52 = <b>(1.48, 4.52)</b> — không chứa 0, cùng kết luận.</div>
+
+<h3>Mẫu cặp hay độc lập? Đọc thiết kế</h3>
+<table>
+  <thead><tr><th>Dấu hiệu trong đề</th><th>Phương pháp</th></tr></thead>
+  <tbody>
+    <tr><td>"trước và sau", "cùng những đối tượng/mẫu vật"</td><td>t theo cặp</td></tr>
+    <tr><td>Dữ liệu cho dưới dạng bảng hai cột dài bằng nhau, khớp từng dòng</td><td>t theo cặp</td></tr>
+    <tr><td>"hai nhóm độc lập", người khác nhau ở mỗi nhóm</td><td>Hai mẫu (bài 9.1)</td></tr>
+    <tr><td>n₁ ≠ n₂</td><td>Bắt buộc là độc lập — không thể ghép cặp</td></tr>
+  </tbody>
+</table>
+<div class="pitfall"><b>Sai lầm đắt giá</b> là chạy kiểm định hai mẫu độc lập trên dữ liệu ghép cặp. Nó không chỉ sai về hình thức: nó thường <em>không phát hiện ra hiệu ứng có thật</em>. Trong ví dụ trên, hai nhóm chồng lấn nhiều (trung bình 23.8 vs 20.8 với độ phân tán khoảng 3), và kiểm định độc lập sẽ không đạt mức ý nghĩa — dù từng công nhân một đều cải thiện. Ghép cặp loại bỏ biến thiên giữa người với người và để mức cải thiện nhất quán lộ ra.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao ghép cặp mạnh hơn.</b> Mỗi công nhân mang theo tốc độ nền của riêng mình — công nhân 4 đơn giản là chậm hơn công nhân 3 ở cả hai cột. Trong kiểm định độc lập, độ phân tán giữa người đó nằm ở mẫu số như nhiễu. Việc trừ trong từng cặp triệt tiêu hoàn toàn mức nền, nên s<sub>d</sub> chỉ còn đo độ biến động của chính hiệu ứng can thiệp. Đó là lý do một thiết kế thí nghiệm tốt (ghép cặp, chia khối, so khớp) có thể đáng giá hơn cả việc đi thu thập mẫu lớn hơn.</div>
+<a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-255" target="_blank" rel="noopener">
+  <span class="lc-ico">🐍</span>
+  <span class="lc-body"><span class="lc-title">Kiểm định t theo cặp bằng Python</span><span class="lc-sub">So sánh cặp vs độc lập trên cùng bộ dữ liệu.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: 'Quiz 5 — Two-sample inference|||Quiz 5 — Suy luận hai mẫu',
+          slug: 'mas291-quiz-hai-mau',
+          type: 'QUIZ',
+          description: 'Kiểm tra chọn đúng trường hợp (z/gộp/Welch), phương sai gộp, tỷ lệ gộp, và nhận diện mẫu cặp.',
+          quiz: {
+            timeLimitSeconds: 480,
+            questions: [
+              { question: 'For the SE of x̄₁ − x̄₂, the two variance terms are…|||Với SE của x̄₁ − x̄₂, hai số hạng phương sai được…', options: ['subtracted|||trừ nhau', 'added|||cộng lại', 'multiplied|||nhân nhau', 'averaged|||lấy trung bình'], correctIndex: 1, points: 1 },
+              { question: 'Degrees of freedom for the pooled two-sample t are…|||Bậc tự do của t hai mẫu dùng phương sai gộp là…', options: ['n₁ + n₂', 'n₁ + n₂ − 1', 'n₁ + n₂ − 2', 'n − 1'], correctIndex: 2, points: 1 },
+              { question: 'Welch t is used when…|||t Welch được dùng khi…', options: ['variances are assumed equal|||giả định phương sai bằng nhau', 'variances are clearly unequal|||phương sai rõ ràng khác nhau', 'σ is known|||đã biết σ', 'samples are paired|||mẫu ghép cặp'], correctIndex: 1, points: 1 },
+              { question: 'A 95% CI for μ₁ − μ₂ is (−0.5, 3.2). At α = 0.05 you…|||CI 95% cho μ₁ − μ₂ là (−0.5, 3.2). Ở α = 0.05 bạn…', options: ['reject H₀: μ₁ = μ₂|||bác bỏ H₀: μ₁ = μ₂', 'do not reject H₀ (interval contains 0)|||không bác bỏ H₀ (khoảng chứa 0)', 'cannot decide|||không thể kết luận', 'must use a bigger sample|||phải lấy mẫu lớn hơn'], correctIndex: 1, points: 1 },
+              { question: 'In a TEST for p₁ = p₂, the standard error uses…|||Trong KIỂM ĐỊNH p₁ = p₂, sai số chuẩn dùng…', options: ['separate p̂₁ and p̂₂|||p̂₁ và p̂₂ riêng biệt', 'the pooled p̂ = (x₁+x₂)/(n₁+n₂)|||tỷ lệ gộp p̂ = (x₁+x₂)/(n₁+n₂)', 'p₀ = 0.5 always|||luôn dùng p₀ = 0.5', 'the larger of the two|||cái lớn hơn trong hai'], correctIndex: 1, points: 1 },
+              { question: 'In a CONFIDENCE INTERVAL for p₁ − p₂, the standard error uses…|||Trong KHOẢNG TIN CẬY cho p₁ − p₂, sai số chuẩn dùng…', options: ['the pooled p̂|||tỷ lệ gộp p̂', 'separate p̂₁ and p̂₂|||p̂₁ và p̂₂ riêng biệt', 'p₀ from H₀|||p₀ từ H₀', 'σ₁ and σ₂'], correctIndex: 1, points: 1 },
+              { question: 'Data measured "before and after" on the same people needs…|||Dữ liệu đo "trước và sau" trên cùng những người cần dùng…', options: ['independent two-sample t|||t hai mẫu độc lập', 'paired t|||t theo cặp', 'z for proportions|||z cho tỷ lệ', 'chi-square|||khi bình phương'], correctIndex: 1, points: 1 },
+              { question: 'In a paired t-test with 8 pairs, df equals…|||Trong kiểm định t theo cặp với 8 cặp, df bằng…', options: ['16', '14', '8', '7'], correctIndex: 3, points: 1 },
+              { question: 'If n₁ = 10 and n₂ = 13, the data…|||Nếu n₁ = 10 và n₂ = 13, dữ liệu…', options: ['can be paired|||có thể ghép cặp', 'cannot be paired — must be independent|||không thể ghép cặp — bắt buộc độc lập', 'needs pooling|||cần gộp phương sai', 'is invalid|||không hợp lệ'], correctIndex: 1, points: 1 },
+              { question: 'Pooled variance s_p² is a weighted average weighted by…|||Phương sai gộp s_p² là trung bình có trọng số, trọng số theo…', options: ['sample means|||trung bình mẫu', 'degrees of freedom (n−1)|||bậc tự do (n−1)', 'sample sizes n|||cỡ mẫu n', 'the confidence level|||mức tin cậy'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+
+    /* ══════════════════ CHƯƠNG 10 — HỒI QUY & TƯƠNG QUAN ══════════════════ */
+    {
+      title: 'Chapter 10 — Regression & correlation|||Chương 10 — Hồi quy & tương quan',
       description: 'Bộ công thức đầy đủ: hệ số tương quan r, đường hồi quy (hệ số góc & tung độ gốc), R² và dự đoán.',
       lessons: [
         {
-          title: '9.1 — Correlation r, the regression line & R²|||9.1 — Tương quan r, đường hồi quy & R²',
+          title: '10.1 — Correlation r, the regression line & R²|||10.1 — Tương quan r, đường hồi quy & R²',
           slug: 'mas291-hoi-quy',
           type: 'VIDEO',
           description: 'Công thức r, hệ số góc b₁, tung độ gốc b₀, R², cách dự đoán; kèm ví dụ và bẫy nhân quả.',
           content: `
 <div class="ml-en">
-<span class="eyebrow">Chapter 9 · Lesson 9.1</span>
+<span class="eyebrow">Chapter 10 · Lesson 10.1</span>
 <h2>Modelling the relationship between two variables</h2>
 <p class="lead">Does study time relate to exam score? First we <em>measure</em> the relationship (correlation r), then we <em>model</em> it as a line you can predict from.</p>
 
@@ -1031,7 +1814,7 @@ Kết luận: có bằng chứng ý nghĩa rằng máy không rót đúng 500ml.
 </a>
 </div>
 <div class="ml-vi">
-<span class="eyebrow">Chương 9 · Bài 9.1</span>
+<span class="eyebrow">Chương 10 · Bài 10.1</span>
 <h2>Mô hình hóa quan hệ giữa hai biến</h2>
 <p class="lead">Thời gian học có liên quan điểm thi không? Trước tiên ta <em>đo</em> quan hệ (tương quan r), rồi <em>mô hình hóa</em> nó thành một đường thẳng để dự đoán.</p>
 
@@ -1055,6 +1838,124 @@ Kết luận: có bằng chứng ý nghĩa rằng máy không rót đúng 500ml.
 <a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-550" target="_blank" rel="noopener">
   <span class="lc-ico">📈</span>
   <span class="lc-body"><span class="lc-title">Khớp hồi quy bằng Python</span><span class="lc-sub">Tích hợp & phân tích dữ liệu với dữ liệu thật.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '10.2 — Inference on the regression model (ANOVA, t-tests on β)|||10.2 — Suy luận trên mô hình hồi quy (ANOVA, kiểm định t trên β)',
+          slug: 'mas291-suy-luan-hoi-quy',
+          type: 'VIDEO',
+          description: 'Phân rã SST = SSR + SSE, sai số chuẩn của hệ số, CI và kiểm định t cho β₀/β₁, và kiểm định hệ số tương quan ρ.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 10 · Lesson 10.2</span>
+<h2>Is the regression line actually real?</h2>
+<p class="lead">Lesson 10.1 fitted a line and measured fit with R². But a line can always be fitted, even to noise. This lesson asks the inference question: <strong>is the slope significantly different from zero</strong>, and how much of the variation does the model genuinely explain?</p>
+
+<h3>1. The variance decomposition (regression ANOVA)</h3>
+<div class="formula"><span class="lbl">Total = Explained + Unexplained</span>SST = SSR + SSE<br>SST = Σ(yᵢ − ȳ)² = S<sub>yy</sub>     SSR = β̂₁ · S<sub>xy</sub>     SSE = Σ(yᵢ − ŷᵢ)² = Σeᵢ²</div>
+<table>
+  <thead><tr><th>Term</th><th>Name</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td>SST</td><td>Total sum of squares</td><td>All the variation in y</td></tr>
+    <tr><td>SSR</td><td>Regression sum of squares</td><td>The part the line explains</td></tr>
+    <tr><td>SSE</td><td>Error (residual) sum of squares</td><td>The part left over</td></tr>
+  </tbody>
+</table>
+<div class="formula"><span class="lbl">R² from the decomposition</span>R² = SSR/SST = 1 − SSE/SST</div>
+<div class="note-ct">This shows exactly what R² has been all along: the <em>fraction of total variation explained by the model</em>. R² = 0.85 means the line accounts for 85% of the ups and downs in y, and 15% remains unexplained.</div>
+
+<h3>2. Residual variance — the s of the regression</h3>
+<div class="formula"><span class="lbl">Estimating the error variance</span>s² = SSE / (n − 2)     s = √(SSE/(n − 2))</div>
+<div class="pitfall"><b>Divide by n − 2, not n − 1.</b> You estimated <em>two</em> parameters from the data (β̂₀ and β̂₁), so two degrees of freedom are consumed. Every t-test and CI in this lesson uses <b>df = n − 2</b>.</div>
+
+<h3>3. Standard errors of the coefficients</h3>
+<div class="formula"><span class="lbl">SE of the slope and intercept</span>s<sub>β̂₁</sub> = s / √S<sub>xx</sub><br>s<sub>β̂₀</sub> = s · √( 1/n + x̄²/S<sub>xx</sub> )</div>
+<div class="note-ct">Look at s<sub>β̂₁</sub>: the larger S<sub>xx</sub> (the more spread out your x values), the smaller the standard error. Spreading your predictor over a wide range gives a more precisely estimated slope — a genuinely useful piece of experimental-design advice hiding inside a formula.</div>
+
+<h3>4. Confidence intervals and tests on the coefficients</h3>
+<div class="formula"><span class="lbl">CI for the slope</span>β̂₁ ± t<sub>α/2, n−2</sub> · s<sub>β̂₁</sub></div>
+<div class="formula"><span class="lbl">Test H₀: β₁ = 0 (is there a linear relationship?)</span>t = ( β̂₁ − 0 ) / s<sub>β̂₁</sub>     df = n − 2<br>reject if |t| &gt; t<sub>α/2, n−2</sub></div>
+<div class="formula"><span class="lbl">Same for the intercept</span>β̂₀ ± t<sub>α/2, n−2</sub> · s<sub>β̂₀</sub>     ·     t = (β̂₀ − β₀,₀)/s<sub>β̂₀</sub></div>
+<div class="note-ct">The test on β₁ is the important one: <b>H₀: β₁ = 0 says "x tells you nothing about y"</b>. Rejecting it means the linear relationship is real, not an artefact of the sample. The test on β₀ (does the line pass through the origin?) matters far less and is often meaningless when x = 0 is outside the data range.</div>
+
+<h3>5. Testing the correlation coefficient</h3>
+<div class="formula"><span class="lbl">Test H₀: ρ = 0</span>t = r·√(n − 2) / √(1 − r²)     df = n − 2</div>
+<div class="callout"><span class="badge">★ A neat identity</span> This t is <b>numerically identical</b> to the t from testing H₀: β₁ = 0. That is not a coincidence — in simple linear regression, "the slope is non-zero" and "the correlation is non-zero" are literally the same statement. If an exam asks you to test both, you may compute one and cite the equality.</div>
+
+<h3>Ví dụ có lời giải · Worked example</h3>
+<div class="out"><b>Problem.</b> n = 12 points give S<sub>xx</sub> = 100, S<sub>xy</sub> = 60, S<sub>yy</sub> = 50. Test whether the slope is significant at α = 0.05.<br><br>
+<b>Step 1 — slope.</b> β̂₁ = S<sub>xy</sub>/S<sub>xx</sub> = 60/100 = <b>0.6</b><br>
+<b>Step 2 — sums of squares.</b> SSR = β̂₁ · S<sub>xy</sub> = 0.6 × 60 = 36 · SST = S<sub>yy</sub> = 50 · SSE = 50 − 36 = <b>14</b><br>
+<b>Step 3 — R².</b> R² = 36/50 = <b>0.72</b> (the line explains 72% of the variation)<br>
+<b>Step 4 — residual s.</b> s² = 14/(12 − 2) = 1.4 → s = 1.1832<br>
+<b>Step 5 — SE of slope.</b> s<sub>β̂₁</sub> = 1.1832/√100 = 0.11832<br>
+<b>Step 6 — test.</b> t = 0.6/0.11832 = <b>5.07</b>, df = 10, t<sub>0.025,10</sub> = 2.228<br>
+5.07 &gt; 2.228 → <b>reject H₀</b>: the slope is significantly different from zero.<br><br>
+<b>95% CI for β₁:</b> 0.6 ± 2.228 × 0.11832 = 0.6 ± 0.264 = <b>(0.336, 0.864)</b> — excludes 0, same conclusion.<br>
+<b>Check via correlation:</b> r = S<sub>xy</sub>/√(S<sub>xx</sub>·S<sub>yy</sub>) = 60/√5000 = 0.8485, and t = 0.8485×√10/√(1−0.72) = 2.683/0.5292 = <b>5.07</b> ✓ identical.</div>
+
+<div class="pitfall"><b>Traps:</b> (1) using df = n − 1 instead of n − 2; (2) confusing SSR (explained) with SSE (error) — SSR uses the slope, SSE is what is left; (3) concluding causation from a significant slope — a real linear association still says nothing about what causes what; (4) extrapolating the line beyond the observed x range, where the model has no evidence at all.</div>
+<a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-550" target="_blank" rel="noopener">
+  <span class="lc-ico">📈</span>
+  <span class="lc-body"><span class="lc-title">Read a regression output table</span><span class="lc-sub">Every number above appears in statsmodels output.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 10 · Bài 10.2</span>
+<h2>Đường hồi quy đó có thật không?</h2>
+<p class="lead">Bài 10.1 đã khớp một đường thẳng và đo độ khớp bằng R². Nhưng đường thẳng thì lúc nào cũng khớp được, kể cả với nhiễu. Bài này đặt câu hỏi suy luận: <strong>hệ số góc có khác 0 một cách có ý nghĩa không</strong>, và mô hình thực sự giải thích được bao nhiêu phần biến thiên?</p>
+
+<h3>1. Phân rã phương sai (ANOVA hồi quy)</h3>
+<div class="formula"><span class="lbl">Tổng = Giải thích được + Không giải thích được</span>SST = SSR + SSE<br>SST = Σ(yᵢ − ȳ)² = S<sub>yy</sub>     SSR = β̂₁ · S<sub>xy</sub>     SSE = Σ(yᵢ − ŷᵢ)² = Σeᵢ²</div>
+<table>
+  <thead><tr><th>Ký hiệu</th><th>Tên</th><th>Ý nghĩa</th></tr></thead>
+  <tbody>
+    <tr><td>SST</td><td>Tổng bình phương toàn phần</td><td>Toàn bộ biến thiên của y</td></tr>
+    <tr><td>SSR</td><td>Tổng bình phương hồi quy</td><td>Phần đường thẳng giải thích được</td></tr>
+    <tr><td>SSE</td><td>Tổng bình phương sai số (phần dư)</td><td>Phần còn sót lại</td></tr>
+  </tbody>
+</table>
+<div class="formula"><span class="lbl">R² từ phép phân rã</span>R² = SSR/SST = 1 − SSE/SST</div>
+<div class="note-ct">Điều này cho thấy chính xác R² là gì từ đầu tới giờ: <em>tỷ lệ biến thiên toàn phần được mô hình giải thích</em>. R² = 0.85 nghĩa là đường thẳng giải thích được 85% các dao động của y, và 15% còn lại chưa giải thích được.</div>
+
+<h3>2. Phương sai phần dư — chữ s của hồi quy</h3>
+<div class="formula"><span class="lbl">Ước lượng phương sai sai số</span>s² = SSE / (n − 2)     s = √(SSE/(n − 2))</div>
+<div class="pitfall"><b>Chia cho n − 2, không phải n − 1.</b> Bạn đã ước lượng <em>hai</em> tham số từ dữ liệu (β̂₀ và β̂₁), nên hai bậc tự do bị tiêu tốn. Mọi kiểm định t và CI trong bài này đều dùng <b>df = n − 2</b>.</div>
+
+<h3>3. Sai số chuẩn của các hệ số</h3>
+<div class="formula"><span class="lbl">SE của hệ số góc và hệ số chặn</span>s<sub>β̂₁</sub> = s / √S<sub>xx</sub><br>s<sub>β̂₀</sub> = s · √( 1/n + x̄²/S<sub>xx</sub> )</div>
+<div class="note-ct">Hãy nhìn s<sub>β̂₁</sub>: S<sub>xx</sub> càng lớn (các giá trị x càng trải rộng) thì sai số chuẩn càng nhỏ. Trải biến độc lập trên một khoảng rộng cho ước lượng hệ số góc chính xác hơn — một lời khuyên thiết kế thí nghiệm thực sự hữu ích đang ẩn trong một công thức.</div>
+
+<h3>4. Khoảng tin cậy và kiểm định trên các hệ số</h3>
+<div class="formula"><span class="lbl">CI cho hệ số góc</span>β̂₁ ± t<sub>α/2, n−2</sub> · s<sub>β̂₁</sub></div>
+<div class="formula"><span class="lbl">Kiểm định H₀: β₁ = 0 (có quan hệ tuyến tính không?)</span>t = ( β̂₁ − 0 ) / s<sub>β̂₁</sub>     df = n − 2<br>bác bỏ nếu |t| &gt; t<sub>α/2, n−2</sub></div>
+<div class="formula"><span class="lbl">Tương tự cho hệ số chặn</span>β̂₀ ± t<sub>α/2, n−2</sub> · s<sub>β̂₀</sub>     ·     t = (β̂₀ − β₀,₀)/s<sub>β̂₀</sub></div>
+<div class="note-ct">Kiểm định trên β₁ mới là cái quan trọng: <b>H₀: β₁ = 0 nói rằng "x không cho biết gì về y"</b>. Bác bỏ nó nghĩa là quan hệ tuyến tính là có thật, không phải sản phẩm ngẫu nhiên của mẫu. Kiểm định trên β₀ (đường thẳng có đi qua gốc toạ độ không?) ít quan trọng hơn nhiều và thường vô nghĩa khi x = 0 nằm ngoài phạm vi dữ liệu.</div>
+
+<h3>5. Kiểm định hệ số tương quan</h3>
+<div class="formula"><span class="lbl">Kiểm định H₀: ρ = 0</span>t = r·√(n − 2) / √(1 − r²)     df = n − 2</div>
+<div class="callout"><span class="badge">★ Một đẳng thức đẹp</span> Giá trị t này <b>bằng đúng</b> giá trị t khi kiểm định H₀: β₁ = 0. Đó không phải trùng hợp — trong hồi quy tuyến tính đơn, "hệ số góc khác 0" và "hệ số tương quan khác 0" theo nghĩa đen là cùng một phát biểu. Nếu đề yêu cầu kiểm định cả hai, bạn có thể tính một cái rồi viện dẫn đẳng thức này.</div>
+
+<h3>Ví dụ có lời giải</h3>
+<div class="out"><b>Đề.</b> n = 12 điểm cho S<sub>xx</sub> = 100, S<sub>xy</sub> = 60, S<sub>yy</sub> = 50. Kiểm định xem hệ số góc có ý nghĩa ở α = 0.05 không.<br><br>
+<b>Bước 1 — hệ số góc.</b> β̂₁ = S<sub>xy</sub>/S<sub>xx</sub> = 60/100 = <b>0.6</b><br>
+<b>Bước 2 — các tổng bình phương.</b> SSR = β̂₁ · S<sub>xy</sub> = 0.6 × 60 = 36 · SST = S<sub>yy</sub> = 50 · SSE = 50 − 36 = <b>14</b><br>
+<b>Bước 3 — R².</b> R² = 36/50 = <b>0.72</b> (đường thẳng giải thích 72% biến thiên)<br>
+<b>Bước 4 — s phần dư.</b> s² = 14/(12 − 2) = 1.4 → s = 1.1832<br>
+<b>Bước 5 — SE hệ số góc.</b> s<sub>β̂₁</sub> = 1.1832/√100 = 0.11832<br>
+<b>Bước 6 — kiểm định.</b> t = 0.6/0.11832 = <b>5.07</b>, df = 10, t<sub>0.025,10</sub> = 2.228<br>
+5.07 &gt; 2.228 → <b>bác bỏ H₀</b>: hệ số góc khác 0 có ý nghĩa thống kê.<br><br>
+<b>CI 95% cho β₁:</b> 0.6 ± 2.228 × 0.11832 = 0.6 ± 0.264 = <b>(0.336, 0.864)</b> — không chứa 0, cùng kết luận.<br>
+<b>Kiểm chứng qua tương quan:</b> r = S<sub>xy</sub>/√(S<sub>xx</sub>·S<sub>yy</sub>) = 60/√5000 = 0.8485, và t = 0.8485×√10/√(1−0.72) = 2.683/0.5292 = <b>5.07</b> ✓ giống hệt.</div>
+
+<div class="pitfall"><b>Các bẫy:</b> (1) dùng df = n − 1 thay vì n − 2; (2) lẫn SSR (giải thích được) với SSE (sai số) — SSR dùng hệ số góc, SSE là phần còn lại; (3) kết luận nhân quả từ một hệ số góc có ý nghĩa — một liên hệ tuyến tính có thật vẫn không nói gì về cái gì gây ra cái gì; (4) ngoại suy đường thẳng ra ngoài phạm vi x đã quan sát, nơi mô hình hoàn toàn không có bằng chứng nào.</div>
+<a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-550" target="_blank" rel="noopener">
+  <span class="lc-ico">📈</span>
+  <span class="lc-body"><span class="lc-title">Đọc bảng kết quả hồi quy</span><span class="lc-sub">Mọi con số ở trên đều xuất hiện trong output của statsmodels.</span></span>
   <span class="lc-cta">CODE LAB →</span>
 </a>
 </div>
@@ -1137,7 +2038,7 @@ stats.<span class="tok-function">ttest_1samp</span>(data, 5)  <span class="tok-c
 `,
         },
         {
-          title: 'Quiz 5 — Regression & applications|||Quiz 5 — Hồi quy & ứng dụng',
+          title: 'Quiz 6 — Regression & applications|||Quiz 6 — Hồi quy & ứng dụng',
           slug: 'mas291-quiz-5',
           type: 'QUIZ',
           description: 'Kiểm tra tương quan, hồi quy, R², diễn giải và bẫy nhân quả.',

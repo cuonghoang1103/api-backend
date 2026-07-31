@@ -12,12 +12,13 @@ import { COLORS, PINE_HILL, STATUE } from '../../data/fptu.js'
  * — cùng đại lượng mà `Snow.js` và `Rainbow.js` đang dùng, nên đồi đổi cùng
  * nhịp với cả thế giới chứ không lệch pha.
  *
- * ─── ĐỒI PHẢI LEO ĐƯỢC ───
- * Sườn đồi dựng bằng nhiều ĐĨA CHỒNG nhỏ dần. Mỗi tầng chỉ cao 0,55 nên xe bò
- * lên tới đỉnh được — bậc cao hơn là bánh không bám, y như bài học ở bờ hồ.
+ * ─── ĐỒI PHẢI LEO ĐƯỢC, VÀ PHẢI MƯỢT ───
+ * Sườn đồi là MỘT mảng địa hình liền (`campus.heightPatch`), sinh ra từ đúng
+ * một hàm cao độ `surface()`. Bản trước xếp 10 đĩa chồng lên nhau và nhìn ra
+ * đúng bậc thang — người dùng chê thẳng, và phép đo ngày 31/7 xác nhận: mặt
+ * cắt tụt đều 0,55 một nấc.
  */
 
-const TIERS = 10          // số tầng đĩa xếp thành đồi
 const PINE_COUNT = 22     // số cây thông
 const SNOW_ON = 0.12      // trên ngưỡng này coi là "trời tuyết"
 
@@ -56,39 +57,51 @@ export class FptuPineHill
         return material
     }
 
-    /** Gò đất: các đĩa tròn chồng lên nhau, nhỏ và cao dần. */
+    /**
+     * CAO ĐỘ MẶT ĐỒI tại một điểm — một hàm duy nhất, dùng chung cho hình, cho
+     * va chạm, cho chỗ trồng thông, đặt tượng và người tuyết. Mọi thứ trên đồi
+     * vì thế luôn đứng đúng mặt đất, không lơ lửng cũng không thụt xuống.
+     *
+     * Đường sinh là smoothstep: đạo hàm bằng 0 ở CHÂN đồi (hoà thẳng vào mặt
+     * đất, không có gờ để mắc bánh) và bằng 0 ở ĐỈNH (chỏm tròn, không nhọn).
+     * Dốc lớn nhất ở lưng chừng, bằng 1,5·H/R ≈ 0,59 — đúng bằng độ dốc trung
+     * bình của bản xếp đĩa cũ, nên xe vẫn bò lên được y như trước.
+     */
+    surface(x, z)
+    {
+        const base = this.campus.groundTop
+        const r = Math.hypot(x - PINE_HILL.x, z - PINE_HILL.z) / PINE_HILL.radius
+        if(r >= 1) return base
+        const t = 1 - r
+        return base + PINE_HILL.height * t * t * (3 - 2 * t)
+    }
+
+    /**
+     * Gò đất LIỀN MỘT KHỐI.
+     *
+     * Bản trước xếp 10 cái đĩa chồng lên nhau, mỗi đĩa cao 0,55 — và đó đúng là
+     * thứ người dùng nhìn thấy: bậc thang. Đo ngày 31/7 trên mặt cắt z = −20,
+     * cao độ tụt đều 0,55 một nấc: 3,32 → 2,77 → 2,22 → 1,67 → 1,12 → 0,57.
+     *
+     * Nay hình và va chạm cùng sinh ra từ `surface()` nên sườn liền mượt, và
+     * bánh xe chạm đúng chỗ mắt nhìn thấy.
+     */
     setHill()
     {
-        const cylinder = this.campus.cylinderGeometry
+        const size = PINE_HILL.radius * 2 + 6
 
-        for(let i = 0; i < TIERS; i++)
-        {
-            const ratio = i / TIERS
-            const radius = PINE_HILL.radius * (1 - ratio * 0.82)
-            const tierHeight = PINE_HILL.height / TIERS
-            const y = tierHeight * i + tierHeight * 0.5
-
-            // Cỏ đậm dần lên đỉnh cho đồi có khối, không bẹt như cái bánh
-            const hex = i < TIERS * 0.4 ? '#6f9e3f' : (i < TIERS * 0.75 ? '#659237' : '#5c8531')
-
-            const mesh = new THREE.Mesh(cylinder, this.material(hex))
-            mesh.scale.set(radius * 2, tierHeight * 1.06, radius * 2)
-            mesh.position.set(PINE_HILL.x, y, PINE_HILL.z)
-            mesh.receiveShadow = true
-            mesh.castShadow = i > TIERS * 0.5
-            this.group.add(mesh)
-
-            this.game.objects.add(
-                null,
-                {
-                    type: 'fixed',
-                    friction: 0.3,
-                    restitution: 0,
-                    position: { x: PINE_HILL.x, y, z: PINE_HILL.z },
-                    colliders: [ { shape: 'cylinder', parameters: [ tierHeight * 0.53, radius ] } ]
-                }
-            )
-        }
+        this.campus.heightPatch(
+            PINE_HILL.x, PINE_HILL.z, size, size, 64, 64,
+            (x, z) =>
+            {
+                const y = this.surface(x, z)
+                // Ra ngoài chân đồi thì nấp xuống dưới mặt đảo một chút, để nền
+                // đảo che hẳn mép mảng — không thì hai mặt cùng cao độ sẽ tranh
+                // nhau và nhấp nháy như nhiễu sóng.
+                return y <= this.campus.groundTop + 0.0001 ? this.campus.groundTop - 0.05 : y
+            },
+            '#6b9a3c',
+        )
     }
 
     /**
@@ -112,9 +125,8 @@ export class FptuPineHill
             const x = PINE_HILL.x + Math.cos(angle) * radius
             const z = PINE_HILL.z + Math.sin(angle) * radius
 
-            // Cao độ mặt đồi tại bán kính đó — cùng công thức với setHill
-            const tierRatio = 1 - radius / PINE_HILL.radius
-            const groundY = PINE_HILL.height * Math.max(0, Math.min(1, tierRatio / 0.82))
+            // Cao độ mặt đồi tại đúng chỗ trồng — cùng một hàm với hình và va chạm
+            const groundY = this.surface(x, z)
 
             // Chừa đỉnh cho tượng
             if(radius < 6.5) continue // chừa hẳn khoảng trống quanh tượng, đừng để thông che mất
@@ -178,7 +190,7 @@ export class FptuPineHill
     {
         const x = STATUE.x
         const z = STATUE.z
-        const base = PINE_HILL.height
+        const base = this.surface(x, z)   // đứng đúng trên đỉnh đồi, không lơ lửng
         const S = 1.45 // phóng to tượng cho nổi hẳn trên tán thông
 
         const stone = COLORS.stone
@@ -220,7 +232,9 @@ export class FptuPineHill
         for(const spot of spots)
         {
             const group = new THREE.Group()
-            group.position.set(spot.x, 0, spot.z)
+            // Đứng đúng trên sườn đồi. Bản trước để y = 0 nên người tuyết bị
+            // chôn nửa người trong đồi (chỗ này cách tâm 9–11, sườn còn cao ~2,4).
+            group.position.set(spot.x, this.surface(spot.x, spot.z), spot.z)
             group.visible = false
             this.group.add(group)
 

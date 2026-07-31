@@ -165,14 +165,20 @@ export default function TableOfContents({
  internally keeps every entry reachable no matter how long the article
  gets. */}
  <aside
- className="hidden lg:flex lg:flex-col sticky"
+ className="hidden lg:flex lg:flex-col sticky overflow-hidden"
  style={{ top: `${headingOffset}px`, maxHeight: `calc(100vh - ${headingOffset + 24}px)` }}
  >
  <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-text-muted mb-3 shrink-0">
  <List className="w-3.5 h-3.5" />
  Mục lục
  </div>
- <div className="overflow-y-auto pr-1 min-h-0">
+ {/* flex-1 is load-bearing: without it a flex-column child sizes to
+ its own content (flex-basis: auto, flex-grow: 0) and never actually
+ gets squeezed into the remaining space, so `overflow-y-auto` has
+ nothing to clip against and the list just spills past the aside's
+ max-height instead of scrolling. `overflow-hidden` on the aside
+ itself is a backstop for the same failure mode. */}
+ <div className="flex-1 overflow-y-auto pr-1 min-h-0">
  {list}
  </div>
  </aside>

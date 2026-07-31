@@ -14191,7 +14191,7 @@ ${r}`;
   MathNode$1.REFRACT = "refract";
   MathNode$1.SMOOTHSTEP = "smoothstep";
   MathNode$1.FACEFORWARD = "faceforward";
-  const EPSILON$1 = float$2(1e-6), INFINITY = float$2(1e6), PI$2 = float$2(Math.PI), PI2$1 = float$2(Math.PI * 2), TWO_PI = float$2(Math.PI * 2), HALF_PI = float$2(Math.PI * 0.5), all$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ALL).setParameterLength(1), any$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ANY).setParameterLength(1), radians$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.RADIANS).setParameterLength(1), degrees$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.DEGREES).setParameterLength(1), exp$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.EXP).setParameterLength(1), exp2$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.EXP2).setParameterLength(1), log$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.LOG).setParameterLength(1), log2$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.LOG2).setParameterLength(1), sqrt$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.SQRT).setParameterLength(1), inverseSqrt$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.INVERSE_SQRT).setParameterLength(1), floor$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.FLOOR).setParameterLength(1), ceil$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.CEIL).setParameterLength(1), normalize$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.NORMALIZE).setParameterLength(1), fract$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.FRACT).setParameterLength(1), sin$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.SIN).setParameterLength(1), cos$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.COS).setParameterLength(1), tan$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TAN).setParameterLength(1), asin$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ASIN).setParameterLength(1), acos$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ACOS).setParameterLength(1), atan$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.ATAN).setParameterLength(1, 2), abs$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.ABS).setParameterLength(1), sign$4 = nodeProxyIntent$1(MathNode$1, MathNode$1.SIGN).setParameterLength(1), length$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.LENGTH).setParameterLength(1), negate$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.NEGATE).setParameterLength(1), oneMinus$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ONE_MINUS).setParameterLength(1), dFdx$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DFDX).setParameterLength(1), dFdy$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DFDY).setParameterLength(1), round$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.ROUND).setParameterLength(1), reciprocal$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.RECIPROCAL).setParameterLength(1), trunc$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRUNC).setParameterLength(1), fwidth$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.FWIDTH).setParameterLength(1), transpose$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRANSPOSE).setParameterLength(1), determinant$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DETERMINANT).setParameterLength(1), inverse$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.INVERSE).setParameterLength(1), min$1$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.MIN).setParameterLength(2, 1 / 0), max$1$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.MAX).setParameterLength(2, 1 / 0), step$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.STEP).setParameterLength(2), reflect$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.REFLECT).setParameterLength(2), distance$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DISTANCE).setParameterLength(2), difference$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DIFFERENCE).setParameterLength(2), dot$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.DOT).setParameterLength(2), cross$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.CROSS).setParameterLength(2), pow$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.POW).setParameterLength(2), pow2$1 = (l) => mul$2(l, l), pow3$1 = (l) => mul$2(l, l, l), pow4$1 = (l) => mul$2(l, l, l, l), transformDirection$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRANSFORM_DIRECTION).setParameterLength(2), cbrt$1 = (l) => mul$2(sign$4(l), pow$2(abs$3(l), 1 / 3)), lengthSq$1 = (l) => dot$2(l, l), mix$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.MIX).setParameterLength(3), clamp$6 = (l, e = 0, r = 1) => new MathNode$1(MathNode$1.CLAMP, nodeObject$2(l), nodeObject$2(e), nodeObject$2(r)), saturate$1 = (l) => clamp$6(l), refract$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.REFRACT).setParameterLength(3), smoothstep$4 = nodeProxyIntent$1(MathNode$1, MathNode$1.SMOOTHSTEP).setParameterLength(3), faceForward$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.FACEFORWARD).setParameterLength(3), rand$2 = Fn$2(([l]) => {
+  const EPSILON$1 = float$2(1e-6), INFINITY = float$2(1e6), PI$2 = float$2(Math.PI), PI2$1 = float$2(Math.PI * 2), TWO_PI = float$2(Math.PI * 2), HALF_PI = float$2(Math.PI * 0.5), all$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ALL).setParameterLength(1), any$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ANY).setParameterLength(1), radians$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.RADIANS).setParameterLength(1), degrees$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.DEGREES).setParameterLength(1), exp$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.EXP).setParameterLength(1), exp2$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.EXP2).setParameterLength(1), log$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.LOG).setParameterLength(1), log2$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.LOG2).setParameterLength(1), sqrt$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.SQRT).setParameterLength(1), inverseSqrt$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.INVERSE_SQRT).setParameterLength(1), floor$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.FLOOR).setParameterLength(1), ceil$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.CEIL).setParameterLength(1), normalize$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.NORMALIZE).setParameterLength(1), fract$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.FRACT).setParameterLength(1), sin$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.SIN).setParameterLength(1), cos$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.COS).setParameterLength(1), tan$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TAN).setParameterLength(1), asin$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ASIN).setParameterLength(1), acos$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ACOS).setParameterLength(1), atan$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.ATAN).setParameterLength(1, 2), abs$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.ABS).setParameterLength(1), sign$4 = nodeProxyIntent$1(MathNode$1, MathNode$1.SIGN).setParameterLength(1), length$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.LENGTH).setParameterLength(1), negate$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.NEGATE).setParameterLength(1), oneMinus$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ONE_MINUS).setParameterLength(1), dFdx$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DFDX).setParameterLength(1), dFdy$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DFDY).setParameterLength(1), round$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.ROUND).setParameterLength(1), reciprocal$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.RECIPROCAL).setParameterLength(1), trunc$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRUNC).setParameterLength(1), fwidth$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.FWIDTH).setParameterLength(1), transpose$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRANSPOSE).setParameterLength(1), determinant$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DETERMINANT).setParameterLength(1), inverse$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.INVERSE).setParameterLength(1), min$1$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.MIN).setParameterLength(2, 1 / 0), max$1$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.MAX).setParameterLength(2, 1 / 0), step$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.STEP).setParameterLength(2), reflect$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.REFLECT).setParameterLength(2), distance$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DISTANCE).setParameterLength(2), difference$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DIFFERENCE).setParameterLength(2), dot$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.DOT).setParameterLength(2), cross$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.CROSS).setParameterLength(2), pow$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.POW).setParameterLength(2), pow2$1 = (l) => mul$2(l, l), pow3$1 = (l) => mul$2(l, l, l), pow4$1 = (l) => mul$2(l, l, l, l), transformDirection$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRANSFORM_DIRECTION).setParameterLength(2), cbrt$1 = (l) => mul$2(sign$4(l), pow$2(abs$3(l), 1 / 3)), lengthSq$1 = (l) => dot$2(l, l), mix$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.MIX).setParameterLength(3), clamp$6 = (l, e = 0, r = 1) => new MathNode$1(MathNode$1.CLAMP, nodeObject$2(l), nodeObject$2(e), nodeObject$2(r)), saturate$1 = (l) => clamp$6(l), refract$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.REFRACT).setParameterLength(3), smoothstep$4 = nodeProxyIntent$1(MathNode$1, MathNode$1.SMOOTHSTEP).setParameterLength(3), faceForward$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.FACEFORWARD).setParameterLength(3), rand$3 = Fn$2(([l]) => {
     const s = 43758.5453, o = dot$2(l.xy, vec2$2(12.9898, 78.233)), a = mod$3(o, PI$2);
     return fract$2(sin$2(a).mul(s));
   }), mixElement$1 = (l, e, r) => mix$2(e, r, l), smoothstepElement$1 = (l, e, r) => smoothstep$4(e, r, l), stepElement$1 = (l, e) => step$2(e, l), faceforward = faceForward$1, inversesqrt = inverseSqrt$1;
@@ -14250,7 +14250,7 @@ ${r}`;
   addMethodChaining$1("transpose", transpose$1);
   addMethodChaining$1("determinant", determinant$1);
   addMethodChaining$1("inverse", inverse$1);
-  addMethodChaining$1("rand", rand$2);
+  addMethodChaining$1("rand", rand$3);
   let ConditionalNode$1 = class extends Node$1 {
     static get type() {
       return "ConditionalNode";
@@ -24395,7 +24395,7 @@ ${e.tab}if ( ${m} ) {
     quadSwapX,
     quadSwapY,
     radians: radians$1,
-    rand: rand$2,
+    rand: rand$3,
     range: range$1,
     rangeFogFactor: rangeFogFactor$1,
     reciprocal: reciprocal$1,
@@ -52817,7 +52817,7 @@ var<${s}> ${e} : ${h};`;
   const premultiplyAlpha$1 = TSL.premultiplyAlpha;
   TSL.property;
   TSL.radians;
-  const rand$1 = TSL.rand;
+  const rand$2 = TSL.rand;
   TSL.range;
   TSL.rangeFog;
   const rangeFogFactor = TSL.rangeFogFactor;
@@ -55791,7 +55791,7 @@ var<${s}> ${e} : ${h};`;
       end: s,
       type: "float"
     }, ({ i: d }) => {
-      const f = vec2$1(vec2$1(cos$1(degrees$1(d.div(s).mul(360))), sin$1(degrees$1(d.div(s).mul(360)))).mul(rand$1(vec2$1(d, h.x.add(h.y))).add(e))), p = vec2$1(h.add(f.mul(e)));
+      const f = vec2$1(vec2$1(cos$1(degrees$1(d.div(s).mul(360))), sin$1(degrees$1(d.div(s).mul(360)))).mul(rand$2(vec2$1(d, h.x.add(h.y))).add(e))), p = vec2$1(h.add(f.mul(e)));
       c.addAssign(a(p));
     }), c.divAssign(s), o ? unpremultiplyAlpha(c) : c;
   });
@@ -62695,7 +62695,6 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
     foliage: "#5aa832",
     plazaBrick: "#b4573c",
     road: "#8f8a80",
-    grass: "#6f9e3f",
     court: "#3a7abf",
     pitch: "#4e8f3a",
     roof: "#d8d3c7",
@@ -95241,7 +95240,7 @@ https://github.com/browserify/crypto-browserify`);
       return String(e).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
   }
-  const TIERS = 10, PINE_COUNT = 22, SNOW_ON = 0.12;
+  const PINE_COUNT = 22, SNOW_ON = 0.12;
   class FptuPineHill {
     constructor(e) {
       this.game = Game.getInstance(), this.campus = e, this.group = new Group(), this.group.name = "fptuPineHill", this.game.scene.add(this.group), this.snowy = null, this.setHill(), this.setPines(), this.setStatue(), this.setSnowmen(), this.game.ticker.events.on("tick", () => this.update());
@@ -95256,70 +95255,58 @@ https://github.com/browserify/crypto-browserify`);
         colorNode: color$1(e)
       }), this.materials.set(e, r)), r;
     }
+    surface(e, r) {
+      const s = this.campus.groundTop, o = Math.hypot(e - PINE_HILL.x, r - PINE_HILL.z) / PINE_HILL.radius;
+      if (o >= 1) return s;
+      const a = 1 - o;
+      return s + PINE_HILL.height * a * a * (3 - 2 * a);
+    }
     setHill() {
-      const e = this.campus.cylinderGeometry;
-      for (let r = 0; r < TIERS; r++) {
-        const s = r / TIERS, o = PINE_HILL.radius * (1 - s * 0.82), a = PINE_HILL.height / TIERS, h = a * r + a * 0.5, c = r < TIERS * 0.4 ? "#6f9e3f" : r < TIERS * 0.75 ? "#659237" : "#5c8531", d = new Mesh$1(e, this.material(c));
-        d.scale.set(o * 2, a * 1.06, o * 2), d.position.set(PINE_HILL.x, h, PINE_HILL.z), d.receiveShadow = true, d.castShadow = r > TIERS * 0.5, this.group.add(d), this.game.objects.add(null, {
-          type: "fixed",
-          friction: 0.3,
-          restitution: 0,
-          position: {
-            x: PINE_HILL.x,
-            y: h,
-            z: PINE_HILL.z
-          },
-          colliders: [
-            {
-              shape: "cylinder",
-              parameters: [
-                a * 0.53,
-                o
-              ]
-            }
-          ]
-        });
-      }
+      const e = PINE_HILL.radius * 2 + 6;
+      this.campus.heightPatch(PINE_HILL.x, PINE_HILL.z, e, e, 64, 64, (r, s) => {
+        const o = this.surface(r, s);
+        return o <= this.campus.groundTop + 1e-4 ? this.campus.groundTop - 0.05 : o;
+      }, "#6b9a3c");
     }
     setPines() {
       this.pines = [];
       const e = new ConeGeometry(1, 1, 7), r = this.campus.cylinderGeometry;
       for (let s = 0; s < PINE_COUNT; s++) {
-        const o = s * 2.39996, a = Math.sqrt((s + 0.5) / PINE_COUNT), h = PINE_HILL.radius * 0.86 * a, c = PINE_HILL.x + Math.cos(o) * h, d = PINE_HILL.z + Math.sin(o) * h, f = 1 - h / PINE_HILL.radius, p = PINE_HILL.height * Math.max(0, Math.min(1, f / 0.82));
+        const o = s * 2.39996, a = Math.sqrt((s + 0.5) / PINE_COUNT), h = PINE_HILL.radius * 0.86 * a, c = PINE_HILL.x + Math.cos(o) * h, d = PINE_HILL.z + Math.sin(o) * h, f = this.surface(c, d);
         if (h < 6.5) continue;
-        const m = 0.6 + s * 37 % 10 / 30, b = 1.5 * m, w = new Mesh$1(r, this.material(COLORS$1.trunk));
-        w.scale.set(0.34 * m, b, 0.34 * m), w.position.set(c, p + b * 0.5, d), w.castShadow = true, w.receiveShadow = true, this.group.add(w);
-        const M = {
+        const p = 0.6 + s * 37 % 10 / 30, m = 1.5 * p, b = new Mesh$1(r, this.material(COLORS$1.trunk));
+        b.scale.set(0.34 * p, m, 0.34 * p), b.position.set(c, f + m * 0.5, d), b.castShadow = true, b.receiveShadow = true, this.group.add(b);
+        const w = {
           canopies: [],
           caps: []
         };
-        for (let R = 0; R < 3; R++) {
-          const V = (1 - R * 0.24) * m, O = p + b + R * 1.05 * m + 0.65 * m, z = new Mesh$1(e, this.material("#2f6d3a"));
-          z.scale.set(2.5 * V, 2 * V, 2.5 * V), z.position.set(c, O, d), z.castShadow = true, z.receiveShadow = true, this.group.add(z), M.canopies.push(z);
-          const H = new Mesh$1(e, this.material("#f2f6fa"));
-          H.scale.set(2.5 * V * 0.78, 2 * V * 0.5, 2.5 * V * 0.78), H.position.set(c, O + 0.5 * V, d), H.castShadow = false, H.receiveShadow = false, H.visible = false, this.group.add(H), M.caps.push(H);
+        for (let M = 0; M < 3; M++) {
+          const R = (1 - M * 0.24) * p, V = f + m + M * 1.05 * p + 0.65 * p, O = new Mesh$1(e, this.material("#2f6d3a"));
+          O.scale.set(2.5 * R, 2 * R, 2.5 * R), O.position.set(c, V, d), O.castShadow = true, O.receiveShadow = true, this.group.add(O), w.canopies.push(O);
+          const z = new Mesh$1(e, this.material("#f2f6fa"));
+          z.scale.set(2.5 * R * 0.78, 2 * R * 0.5, 2.5 * R * 0.78), z.position.set(c, V + 0.5 * R, d), z.castShadow = false, z.receiveShadow = false, z.visible = false, this.group.add(z), w.caps.push(z);
         }
         this.game.objects.add(null, {
           type: "fixed",
           position: {
             x: c,
-            y: p + b * 0.5,
+            y: f + m * 0.5,
             z: d
           },
           colliders: [
             {
               shape: "cylinder",
               parameters: [
-                b * 0.5,
-                0.34 * m
+                m * 0.5,
+                0.34 * p
               ]
             }
           ]
-        }), this.pines.push(M);
+        }), this.pines.push(w);
       }
     }
     setStatue() {
-      const e = STATUE.x, r = STATUE.z, s = PINE_HILL.height, o = 1.45, a = COLORS$1.stone, h = COLORS$1.bronze;
+      const e = STATUE.x, r = STATUE.z, s = this.surface(e, r), o = 1.45, a = COLORS$1.stone, h = COLORS$1.bronze;
       this.box(4.2 * o, 0.4 * o, 4.2 * o, e, s + 0.2 * o, r, "#7e7a70", {
         physical: true
       }), this.box(2.6 * o, 2.2 * o, 2.6 * o, e, s + 1.5 * o, r, a, {
@@ -95352,7 +95339,7 @@ https://github.com/browserify/crypto-browserify`);
       ];
       for (const r of e) {
         const s = new Group();
-        s.position.set(r.x, 0, r.z), s.visible = false, this.group.add(s);
+        s.position.set(r.x, this.surface(r.x, r.z), r.z), s.visible = false, this.group.add(s);
         const o = (h, c, d, f, p, m = {}) => {
           const b = new Mesh$1(m.geometry ?? this.campus.boxGeometry, this.material(p));
           return b.scale.set(h, c, d), b.position.set(m.x ?? 0, f, m.z ?? 0), b.castShadow = true, b.receiveShadow = true, s.add(b), b;
@@ -95459,10 +95446,603 @@ https://github.com/browserify/crypto-browserify`);
       return e + o * s;
     }
   }
-  const isDarkCell = (l, e) => ((l * 73856093 ^ e * 19349663) >>> 0) % 100 < 46, hasFoliage = (l, e) => ((l * 83492791 ^ e * 29349643) >>> 0) % 100 < 40, GROUND_TOP = 0.04;
+  const rand$1 = (l) => {
+    const e = Math.sin(l * 127.1 + 311.7) * 43758.5453;
+    return e - Math.floor(e);
+  };
+  class FptuProps {
+    constructor(e) {
+      this.game = Game.getInstance(), this.campus = e, this.y = e.groundTop, this.setBlockers(), this.setLampPosts(), this.setBenchesAndBins(), this.setHedges(), this.setFlowerBeds(), this.setFlagPoles(), this.setNoticeBoards(), this.setBicycles(), this.setParkedCars(), this.setPicnicArea(), this.setStudents();
+    }
+    box(...e) {
+      return this.campus.box(...e);
+    }
+    slab(...e) {
+      return this.campus.slab(...e);
+    }
+    setBlockers() {
+      const e = (r, s, o, a, h = 1.5) => ({
+        x: r,
+        z: s,
+        w: o * 0.5 + h,
+        d: a * 0.5 + h
+      });
+      this.blockers = [
+        e(MAIN_ROAD.x, MAIN_ROAD.z, MAIN_ROAD.width, MAIN_ROAD.length, 1.2),
+        e((AXIS.fromX + AXIS.toX) * 0.5, AXIS.z, Math.abs(AXIS.toX - AXIS.fromX), AXIS.halfWidth * 2, 1.2),
+        e((THROUGH_ROAD.fromX + THROUGH_ROAD.toX) * 0.5, THROUGH_ROAD.z, Math.abs(THROUGH_ROAD.toX - THROUGH_ROAD.fromX), THROUGH_ROAD.halfWidth * 2, 1.2),
+        e(ALPHA.x, ALPHA.z, ALPHA.depth + 6, ALPHA.columnWidth * ALPHA.columns.length),
+        e(FORECOURT.x, FORECOURT.z, FORECOURT.width, FORECOURT.depth, 0.5),
+        e(RANKING_PLAZA.x, RANKING_PLAZA.z, RANKING_PLAZA.width, RANKING_PLAZA.depth, 0.5),
+        e(CANTEEN.x, CANTEEN.z, CANTEEN.width, CANTEEN.depth),
+        e(PARKING.x, PARKING.z, PARKING.width, PARKING.depth, 0.5),
+        e(GATE.x, GATE.z, 6, 16),
+        e(FOOTBALL.x, FOOTBALL.z, FOOTBALL.width, FOOTBALL.depth),
+        e(BASKETBALL.x, BASKETBALL.z, BASKETBALL.width, BASKETBALL.depth),
+        e(MARTIAL.x, MARTIAL.z, MARTIAL.width, MARTIAL.depth),
+        ...BUILDINGS.map((r) => e(r.x, r.z, r.width, r.depth)),
+        ...DORMS.map((r) => e(r.x, r.z, 6.5, 5))
+      ], this.roundBlockers = [
+        {
+          x: LAKE.x,
+          z: LAKE.z,
+          rx: LAKE.radiusX + 2,
+          rz: LAKE.radiusZ + 2
+        },
+        {
+          x: SWAN_LAKE.x,
+          z: SWAN_LAKE.z,
+          rx: SWAN_LAKE.radiusX + 2,
+          rz: SWAN_LAKE.radiusZ + 2
+        },
+        {
+          x: PINE_HILL.x,
+          z: PINE_HILL.z,
+          rx: PINE_HILL.radius + 1,
+          rz: PINE_HILL.radius + 1
+        }
+      ], this.bounds = {
+        minX: -234,
+        maxX: -90,
+        minZ: -36,
+        maxZ: 96
+      };
+    }
+    blocked(e, r) {
+      if (e < this.bounds.minX || e > this.bounds.maxX || r < this.bounds.minZ || r > this.bounds.maxZ) return true;
+      for (const s of this.blockers) if (Math.abs(e - s.x) < s.w && Math.abs(r - s.z) < s.d) return true;
+      for (const s of this.roundBlockers) if (Math.hypot((e - s.x) / s.rx, (r - s.z) / s.rz) < 1) return true;
+      return false;
+    }
+    setLampPosts() {
+      const e = [];
+      for (let r = MAIN_ROAD.z - MAIN_ROAD.length * 0.5 + 6; r <= MAIN_ROAD.z + MAIN_ROAD.length * 0.5 - 6; r += 13) e.push({
+        x: MAIN_ROAD.x - MAIN_ROAD.width * 0.5 - 1.6,
+        z: r,
+        dir: 1
+      }), e.push({
+        x: MAIN_ROAD.x + MAIN_ROAD.width * 0.5 + 1.6,
+        z: r,
+        dir: -1
+      });
+      for (let r = AXIS.fromX - 8; r >= AXIS.toX + 6; r -= 12) e.push({
+        x: r,
+        z: AXIS.z - AXIS.halfWidth - 1.4,
+        dir: 1,
+        along: "x"
+      }), e.push({
+        x: r,
+        z: AXIS.z + AXIS.halfWidth + 1.4,
+        dir: -1,
+        along: "x"
+      });
+      for (const [r, s] of e.entries()) this.roundBlockers.some((o) => Math.hypot((s.x - o.x) / o.rx, (s.z - o.z) / o.rz) < 1) || s.x < this.bounds.minX || s.x > this.bounds.maxX || s.z < this.bounds.minZ || s.z > this.bounds.maxZ || this.lampPost(s.x, s.z, s.along === "x" ? s.dir > 0 ? Math.PI * 0.5 : -Math.PI * 0.5 : s.dir > 0 ? 0 : Math.PI, r);
+    }
+    lampPost(e, r, s, o) {
+      const h = this.campus.cylinderGeometry;
+      this.box(0.62, 0.22, 0.62, e, this.y + 0.11, r, "#5d5f63", {
+        geometry: h,
+        castShadow: false
+      }), this.box(0.26, 4.2, 0.26, e, this.y + 4.2 * 0.5, r, "#6a6d72", {
+        geometry: h,
+        physical: true
+      });
+      const c = Math.cos(s), d = Math.sin(s);
+      this.box(1.5, 0.16, 0.16, e + c * 0.75, this.y + 4.2 - 0.1, r + d * 0.75, "#6a6d72", {
+        rotationY: -s
+      }), this.box(0.72, 0.3, 0.42, e + c * 1.45, this.y + 4.2 - 0.28, r + d * 1.45, "#4a4d52", {
+        rotationY: -s
+      }), this.box(0.6, 0.08, 0.34, e + c * 1.45, this.y + 4.2 - 0.44, r + d * 1.45, "#ffe9b8", {
+        rotationY: -s,
+        castShadow: false
+      }), rand$1(o) > 0.55 && (this.box(0.42, 0.26, 0.42, e + c * 0.85, this.y + 4.2 - 0.95, r + d * 0.85, "#7a5b3a", {
+        geometry: h,
+        castShadow: false
+      }), this.box(0.52, 0.3, 0.52, e + c * 0.85, this.y + 4.2 - 0.74, r + d * 0.74, "#d04d6a", {
+        geometry: h,
+        castShadow: false
+      }));
+    }
+    setBenchesAndBins() {
+      const e = [];
+      for (let s = 0; s < 10; s++) {
+        const o = s / 10 * Math.PI * 2;
+        e.push({
+          x: LAKE.x + Math.cos(o) * (LAKE.radiusX + 4.5),
+          z: LAKE.z + Math.sin(o) * (LAKE.radiusZ + 4.5),
+          rot: o + Math.PI
+        });
+      }
+      for (let s = 0; s < 6; s++) {
+        const o = s / 6 * Math.PI * 2;
+        e.push({
+          x: SWAN_LAKE.x + Math.cos(o) * (SWAN_LAKE.radiusX + 4),
+          z: SWAN_LAKE.z + Math.sin(o) * (SWAN_LAKE.radiusZ + 4),
+          rot: o + Math.PI
+        });
+      }
+      for (let s = 0; s < 5; s++) {
+        const o = s / 5 * Math.PI * 2 + 0.4;
+        e.push({
+          x: PINE_HILL.x + Math.cos(o) * (PINE_HILL.radius + 3.5),
+          z: PINE_HILL.z + Math.sin(o) * (PINE_HILL.radius + 3.5),
+          rot: o + Math.PI
+        });
+      }
+      for (let s = 0; s < 4; s++) {
+        const o = LAWN.x + LAWN.width * 0.5 - 2 - s * 3.4;
+        e.push({
+          x: o,
+          z: LAWN.z - LAWN.depth * 0.5 - 2.5,
+          rot: -Math.PI * 0.5
+        }), e.push({
+          x: o,
+          z: LAWN.z + LAWN.depth * 0.5 + 2.5,
+          rot: Math.PI * 0.5
+        });
+      }
+      let r = 0;
+      for (const [s, o] of e.entries()) if (!this.blocked(o.x, o.z) && (this.bench(o.x, o.z, o.rot), r++, r % 3 === 0)) {
+        const a = o.x + Math.cos(o.rot + Math.PI * 0.5) * 1.9, h = o.z + Math.sin(o.rot + Math.PI * 0.5) * 1.9;
+        this.blocked(a, h) || this.bin(a, h, s);
+      }
+    }
+    bench(e, r, s) {
+      for (const h of [
+        -1,
+        1
+      ]) this.box(0.18, 0.44, 0.5, e + Math.cos(s + Math.PI * 0.5) * h * 0.85, this.y + 0.22, r + Math.sin(s + Math.PI * 0.5) * h * 0.85, "#6f6a60", {
+        rotationY: -s
+      });
+      this.box(0.62, 0.11, 2.2, e, this.y + 0.48, r, "#a8814e", {
+        rotationY: -s,
+        physical: true
+      });
+      const o = Math.cos(s) * -0.26, a = Math.sin(s) * -0.26;
+      this.box(0.12, 0.62, 2.2, e + o, this.y + 0.82, r + a, "#a8814e", {
+        rotationY: -s,
+        rotationZ: 0.16
+      });
+    }
+    bin(e, r, s) {
+      const o = this.campus.cylinderGeometry;
+      this.box(0.62, 0.86, 0.62, e, this.y + 0.43, r, rand$1(s) > 0.5 ? "#3f6f4a" : "#4a5560", {
+        geometry: o,
+        physical: true
+      }), this.box(0.7, 0.1, 0.7, e, this.y + 0.9, r, "#2f3a33", {
+        geometry: o,
+        castShadow: false
+      });
+    }
+    setHedges() {
+      const e = [
+        {
+          x0: LAWN.x - LAWN.width * 0.5,
+          z0: LAWN.z - LAWN.depth * 0.5 - 1.4,
+          x1: LAWN.x + LAWN.width * 0.5,
+          z1: LAWN.z - LAWN.depth * 0.5 - 1.4
+        },
+        {
+          x0: LAWN.x - LAWN.width * 0.5,
+          z0: LAWN.z + LAWN.depth * 0.5 + 1.4,
+          x1: LAWN.x + LAWN.width * 0.5,
+          z1: LAWN.z + LAWN.depth * 0.5 + 1.4
+        },
+        {
+          x0: RANKING_PLAZA.x - 6,
+          z0: RANKING_PLAZA.z - RANKING_PLAZA.depth * 0.5 - 1.2,
+          x1: RANKING_PLAZA.x + 6,
+          z1: RANKING_PLAZA.z - RANKING_PLAZA.depth * 0.5 - 1.2
+        },
+        {
+          x0: RANKING_PLAZA.x - 6,
+          z0: RANKING_PLAZA.z + RANKING_PLAZA.depth * 0.5 + 1.2,
+          x1: RANKING_PLAZA.x + 6,
+          z1: RANKING_PLAZA.z + RANKING_PLAZA.depth * 0.5 + 1.2
+        },
+        {
+          x0: -148,
+          z0: 69,
+          x1: -122,
+          z1: 69
+        },
+        {
+          x0: -148,
+          z0: 97,
+          x1: -122,
+          z1: 97
+        }
+      ];
+      for (const [r, s] of e.entries()) {
+        const o = Math.hypot(s.x1 - s.x0, s.z1 - s.z0), a = Math.max(1, Math.round(o / 1.1));
+        for (let h = 0; h <= a; h++) {
+          const c = h / a, d = s.x0 + (s.x1 - s.x0) * c, f = s.z0 + (s.z1 - s.z0) * c;
+          if (this.blocked(d, f)) continue;
+          const p = 0.66 + rand$1(r * 31 + h) * 0.22;
+          this.box(1.2, p, 1.15, d, this.y + p * 0.5, f, h % 2 ? "#3f7a34" : "#48883a", {
+            castShadow: false
+          });
+        }
+      }
+    }
+    setFlowerBeds() {
+      const e = [
+        {
+          x: RANKING_PLAZA.x + 7.5,
+          z: RANKING_PLAZA.z - 12
+        },
+        {
+          x: RANKING_PLAZA.x + 7.5,
+          z: RANKING_PLAZA.z + 12
+        },
+        {
+          x: LAWN.x - 9,
+          z: LAWN.z - 13
+        },
+        {
+          x: LAWN.x - 9,
+          z: LAWN.z + 13
+        },
+        {
+          x: CANTEEN.x + 9,
+          z: CANTEEN.z + 6
+        },
+        {
+          x: -132,
+          z: 66
+        },
+        {
+          x: -176,
+          z: 66
+        },
+        {
+          x: -206,
+          z: 30
+        },
+        {
+          x: -120,
+          z: 30
+        }
+      ], r = [
+        "#e0556b",
+        "#f0a93c",
+        "#d94f8a",
+        "#f2e05a",
+        "#c96bd6"
+      ], s = this.campus.cylinderGeometry;
+      for (const [o, a] of e.entries()) if (!this.blocked(a.x, a.z)) {
+        this.box(4.4, 0.4, 4.4, a.x, this.y + 0.2, a.z, "#b0a693", {
+          geometry: s
+        }), this.box(3.9, 0.42, 3.9, a.x, this.y + 0.24, a.z, "#6b4f36", {
+          geometry: s,
+          castShadow: false
+        });
+        for (let h = 0; h < 16; h++) {
+          const c = h * 2.39996, d = 1.75 * Math.sqrt((h + 0.5) / 16), f = r[(o + h) % r.length], p = 0.34 + rand$1(o * 17 + h) * 0.2;
+          this.box(p, p * 0.8, p, a.x + Math.cos(c) * d, this.y + 0.56, a.z + Math.sin(c) * d, f, {
+            geometry: s,
+            castShadow: false
+          });
+        }
+      }
+    }
+    setFlagPoles() {
+      const e = this.campus.cylinderGeometry, r = [
+        "#da251d",
+        "#f37021",
+        "#00a3e0"
+      ];
+      for (let s = 0; s < 3; s++) {
+        const o = RANKING_PLAZA.x - 8, a = RANKING_PLAZA.z - 5 + s * 5;
+        this.box(1.1, 0.3, 1.1, o, this.y + 0.15, a, "#9c968a", {
+          geometry: e,
+          castShadow: false
+        }), this.box(0.2, 7.2, 0.2, o, this.y + 3.6, a, "#d9d5cc", {
+          geometry: e,
+          physical: true
+        }), this.box(0.06, 1.1, 1.8, o + 0.06, this.y + 6.3, a + 0.95, r[s], {
+          castShadow: false
+        });
+      }
+    }
+    setNoticeBoards() {
+      const e = [
+        {
+          x: -124,
+          z: 32,
+          rot: 0
+        },
+        {
+          x: -124,
+          z: 48,
+          rot: 0
+        },
+        {
+          x: -168,
+          z: 70,
+          rot: Math.PI * 0.5
+        },
+        {
+          x: -100,
+          z: 26,
+          rot: Math.PI
+        }
+      ];
+      for (const [r, s] of e.entries()) if (!this.blocked(s.x, s.z)) {
+        for (const o of [
+          -1,
+          1
+        ]) this.box(0.16, 1.9, 0.16, s.x + Math.cos(s.rot + Math.PI * 0.5) * o * 1.25, this.y + 0.95, s.z + Math.sin(s.rot + Math.PI * 0.5) * o * 1.25, "#6f6a60", {
+          rotationY: -s.rot
+        });
+        this.box(0.18, 1.5, 3, s.x, this.y + 2.2, s.z, "#f4f2ec", {
+          rotationY: -s.rot,
+          physical: true
+        });
+        for (let o = 0; o < 4; o++) {
+          const a = [
+            "#f37021",
+            "#00a3e0",
+            "#a6ce39",
+            "#e8e4d8"
+          ][(r + o) % 4];
+          this.box(0.05, 0.5, 0.62, s.x + Math.cos(s.rot) * 0.12, this.y + 2.5 - o % 2 * 0.62, s.z + Math.sin(s.rot) * 0.12 + (o < 2 ? -0.78 : 0.78), a, {
+            rotationY: -s.rot,
+            castShadow: false
+          });
+        }
+        this.box(0.6, 0.12, 3.3, s.x, this.y + 3.02, s.z, "#8a5a3a", {
+          rotationY: -s.rot,
+          rotationZ: 0.12
+        });
+      }
+    }
+    setBicycles() {
+      const e = [
+        {
+          x: -135,
+          z: 72,
+          rot: 0
+        },
+        {
+          x: -135,
+          z: 94,
+          rot: 0
+        },
+        {
+          x: -179,
+          z: 72,
+          rot: 0
+        },
+        {
+          x: -179,
+          z: 94,
+          rot: 0
+        },
+        {
+          x: -150,
+          z: 24,
+          rot: Math.PI * 0.5
+        }
+      ], r = this.campus.cylinderGeometry;
+      for (const [s, o] of e.entries()) {
+        if (this.blocked(o.x, o.z)) continue;
+        const a = Math.cos(o.rot + Math.PI * 0.5), h = Math.sin(o.rot + Math.PI * 0.5);
+        for (let c = 0; c < 5; c++) {
+          const d = o.x + a * (c - 2) * 1.15, f = o.z + h * (c - 2) * 1.15;
+          this.box(0.1, 0.75, 0.1, d, this.y + 0.37, f, "#7c8189", {
+            geometry: r
+          }), this.box(0.1, 0.75, 0.1, d + Math.cos(o.rot) * 0.8, this.y + 0.37, f + Math.sin(o.rot) * 0.8, "#7c8189", {
+            geometry: r
+          }), this.box(0.9, 0.1, 0.1, d + Math.cos(o.rot) * 0.4, this.y + 0.75, f + Math.sin(o.rot) * 0.4, "#7c8189", {
+            rotationY: -o.rot
+          }), !(rand$1(s * 13 + c) < 0.35) && this.bicycle(d + Math.cos(o.rot) * 0.4, f + Math.sin(o.rot) * 0.4, o.rot, s * 13 + c);
+        }
+      }
+    }
+    bicycle(e, r, s, o) {
+      const a = this.campus.cylinderGeometry, h = [
+        "#2f6d9e",
+        "#c0392b",
+        "#3f7a34",
+        "#e0a52c",
+        "#7a4a9e"
+      ][Math.floor(rand$1(o) * 5)], c = Math.cos(s), d = Math.sin(s);
+      for (const f of [
+        -1,
+        1
+      ]) this.box(0.62, 0.09, 0.62, e + c * f * 0.52, this.y + 0.32, r + d * f * 0.52, "#2b2b30", {
+        geometry: a,
+        rotationY: -s,
+        rotationX: Math.PI * 0.5,
+        castShadow: false
+      });
+      this.box(1.02, 0.08, 0.08, e, this.y + 0.5, r, h, {
+        rotationY: -s
+      }), this.box(0.08, 0.34, 0.08, e - c * 0.2, this.y + 0.62, r - d * 0.2, h, {
+        rotationY: -s
+      }), this.box(0.3, 0.07, 0.12, e - c * 0.24, this.y + 0.8, r - d * 0.24, "#33333a", {
+        rotationY: -s
+      }), this.box(0.08, 0.42, 0.5, e + c * 0.45, this.y + 0.68, r + d * 0.45, "#33333a", {
+        rotationY: -s
+      });
+    }
+    setParkedCars() {
+      const e = [
+        "#c0392b",
+        "#2f6d9e",
+        "#e8e4d8",
+        "#3f4a55",
+        "#4e8f3a",
+        "#d8b43a"
+      ], r = Math.floor(PARKING.depth / 3.2);
+      for (let s = 0; s < r; s++) {
+        if (rand$1(s * 9 + 3) < 0.22) continue;
+        const o = PARKING.z - PARKING.depth * 0.5 + 1.9 + s * 3.2, a = PARKING.x, h = e[s % e.length];
+        this.box(4.2, 0.72, 1.9, a, this.y + 0.5, o, h, {
+          physical: true
+        }), this.box(2.3, 0.62, 1.74, a - 0.15, this.y + 1.14, o, h), this.box(2, 0.42, 1.78, a - 0.15, this.y + 1.2, o, "#33414f", {
+          castShadow: false
+        });
+        for (const c of [
+          -1.35,
+          1.35
+        ]) for (const d of [
+          -0.92,
+          0.92
+        ]) this.box(0.66, 0.62, 0.28, a + c, this.y + 0.34, o + d, "#26262b", {
+          geometry: this.campus.cylinderGeometry,
+          rotationX: Math.PI * 0.5,
+          castShadow: false
+        });
+      }
+    }
+    setPicnicArea() {
+      const e = this.campus.cylinderGeometry, r = [
+        "#f37021",
+        "#00a3e0",
+        "#a6ce39"
+      ];
+      for (let s = 0; s < 6; s++) {
+        const o = CANTEEN.x + 9 + s % 3 * 4.6, a = CANTEEN.z - 5 + Math.floor(s / 3) * 5.4;
+        if (!this.blocked(o, a)) {
+          this.box(0.24, 0.72, 0.24, o, this.y + 0.36, a, "#8a8578", {
+            geometry: e
+          }), this.box(2.1, 0.12, 2.1, o, this.y + 0.76, a, "#c9a06a", {
+            geometry: e,
+            physical: true
+          });
+          for (let h = 0; h < 4; h++) {
+            const c = h * Math.PI * 0.5 + 0.4;
+            this.box(0.6, 0.5, 0.6, o + Math.cos(c) * 1.75, this.y + 0.25, a + Math.sin(c) * 1.75, "#a8814e", {
+              geometry: e,
+              castShadow: false
+            });
+          }
+          this.box(0.14, 2.4, 0.14, o, this.y + 1.9, a, "#7c8189", {
+            geometry: e
+          }), this.box(3.4, 0.5, 3.4, o, this.y + 3.25, a, r[s % 3], {
+            geometry: this.coneGeometry()
+          });
+        }
+      }
+    }
+    coneGeometry() {
+      return this._cone || (this._cone = new ConeGeometry(0.5, 1, 10)), this._cone;
+    }
+    setStudents() {
+      const e = [
+        "#f0f2f5",
+        "#f37021",
+        "#2f6d9e",
+        "#d04d6a",
+        "#a6ce39",
+        "#f2e05a",
+        "#7a4a9e"
+      ], r = [
+        "#e8c39e",
+        "#d9a877",
+        "#c68a5e",
+        "#8d5a3b"
+      ], s = this.campus.cylinderGeometry;
+      let o = 0;
+      for (let a = 0; a < 260 && o < 70; a++) {
+        const h = [
+          {
+            x: RANKING_PLAZA.x + 8,
+            z: RANKING_PLAZA.z,
+            r: 12
+          },
+          {
+            x: LAWN.x,
+            z: LAWN.z,
+            r: 15
+          },
+          {
+            x: CANTEEN.x + 8,
+            z: CANTEEN.z,
+            r: 12
+          },
+          {
+            x: -135,
+            z: 83,
+            r: 12
+          },
+          {
+            x: -179,
+            z: 83,
+            r: 12
+          },
+          {
+            x: LAKE.x,
+            z: LAKE.z,
+            r: 34
+          },
+          {
+            x: PINE_HILL.x,
+            z: PINE_HILL.z,
+            r: 20
+          },
+          {
+            x: FOOTBALL.x,
+            z: FOOTBALL.z,
+            r: 16
+          }
+        ], c = h[a % h.length], d = rand$1(a * 3 + 1) * Math.PI * 2, f = Math.sqrt(rand$1(a * 5 + 2)) * c.r, p = c.x + Math.cos(d) * f, m = c.z + Math.sin(d) * f;
+        if (this.blocked(p, m)) continue;
+        const b = rand$1(a * 7 + 4) * Math.PI * 2, w = 0.9 + rand$1(a * 11 + 6) * 0.22, M = e[Math.floor(rand$1(a * 13 + 8) * e.length)], R = r[Math.floor(rand$1(a * 17 + 9) * r.length)];
+        this.box(0.34, 0.72 * w, 0.3, p, this.y + 0.36 * w, m, "#3a4250", {
+          rotationY: -b,
+          castShadow: false
+        }), this.box(0.46, 0.66 * w, 0.34, p, this.y + (0.72 + 0.33) * w, m, M, {
+          rotationY: -b
+        }), this.box(0.3, 0.3, 0.3, p, this.y + (1.38 + 0.18) * w, m, R, {
+          geometry: s,
+          castShadow: false
+        }), this.box(0.33, 0.14, 0.33, p, this.y + (1.38 + 0.3) * w, m, "#2b2b30", {
+          geometry: s,
+          castShadow: false
+        }), rand$1(a * 19 + 12) > 0.5 && this.box(0.24, 0.5 * w, 0.3, p - Math.cos(b) * 0.28, this.y + 1.05 * w, m - Math.sin(b) * 0.28, [
+          "#c0392b",
+          "#2f6d9e",
+          "#3f7a34"
+        ][a % 3], {
+          rotationY: -b,
+          castShadow: false
+        }), o++;
+      }
+    }
+  }
+  const isDarkCell = (l, e) => ((l * 73856093 ^ e * 19349663) >>> 0) % 100 < 46, hasFoliage = (l, e) => ((l * 83492791 ^ e * 29349643) >>> 0) % 100 < 40, GROUND_TOP = 0.04, SEA_FLOOR = -1.6, LAKE_FLOOR = -0.75, ISLAND_SHORE = 0.13, ISLAND_PALETTE = {
+    grass: "#6f9e3f",
+    sand: "#d8b47e",
+    shallow: "#4d8a86",
+    bed: "#3d6f57",
+    deep: "#27515e"
+  };
   class FptuCampus {
     constructor() {
-      this.game = Game.getInstance(), this.group = new Group(), this.group.name = "fptuCampus", this.game.scene.add(this.group), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1, 8), this.materials = /* @__PURE__ */ new Map(), this.setIsland(), this.setBridge(), this.setGate(), this.setGround(), this.setRankingSign(), this.setAlpha(), this.setBuildings(), this.setDorms(), this.setLake(), this.setSports(), this.setCanteen(), this.setParking(), this.setPalms(), this.setTrees(), this.setSign(), this.setSwanLake(), this.pineHill = new FptuPineHill(this), this.swans = new FptuSwans(this), this.quiz = new FptuQuiz(), this.setGateZone(), this.setQuestionBlocks();
+      this.game = Game.getInstance(), this.group = new Group(), this.group.name = "fptuCampus", this.game.scene.add(this.group), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1, 8), this.materials = /* @__PURE__ */ new Map(), this.groundTop = GROUND_TOP, this.setIsland(), this.setBridge(), this.setGate(), this.setGround(), this.setRankingSign(), this.setAlpha(), this.setBuildings(), this.setDorms(), this.setLake(), this.setSports(), this.setCanteen(), this.setParking(), this.setPalms(), this.setTrees(), this.setSign(), this.setSwanLake(), this.pineHill = new FptuPineHill(this), this.swans = new FptuSwans(this), this.props = new FptuProps(this), this.quiz = new FptuQuiz(), this.setGateZone(), this.setQuestionBlocks();
     }
     getMaterial(e) {
       let r = this.materials.get(e);
@@ -95508,87 +96088,119 @@ https://github.com/browserify/crypto-browserify`);
         receiveShadow: false
       });
     }
-    setIsland() {
-      const s = Math.atan2(1.45, 10), o = 1.6, a = Math.hypot(10, 1.45), h = GROUND_TOP - 1.45 * 0.5 - Math.cos(s) * o * 0.5;
-      for (const w of [
-        -1,
-        1
-      ]) {
-        const M = ISLAND.z + w * (ISLAND.depth * 0.5 + 5);
-        this.box(ISLAND.width + 20, o, a, ISLAND.x, h, M, "#d8b47e", {
-          rotationX: w * s,
-          physical: true,
-          castShadow: false
-        });
-        const R = ISLAND.x + w * (ISLAND.width * 0.5 + 10 * 0.5);
-        this.box(a, o, ISLAND.depth, R, h, ISLAND.z, "#d8b47e", {
-          rotationZ: -w * s,
-          physical: true,
-          castShadow: false
-        });
+    heightPatch(e, r, s, o, a, h, c, d, f = null) {
+      const p = new PlaneGeometry(s, o, a, h);
+      p.rotateX(-Math.PI * 0.5);
+      const m = p.attributes.position;
+      for (let O = 0; O < m.count; O++) m.setY(O, c(m.getX(O) + e, m.getZ(O) + r));
+      p.computeVertexNormals();
+      let b;
+      if (f) {
+        const O = new Float32Array(m.count * 3), z = new Color$1();
+        for (let H = 0; H < m.count; H++) z.set(f(m.getX(H) + e, m.getZ(H) + r, m.getY(H))), O[H * 3] = z.r, O[H * 3 + 1] = z.g, O[H * 3 + 2] = z.b;
+        p.setAttribute("color", new BufferAttribute$1(O, 3)), this.vertexColorMaterial || (this.vertexColorMaterial = new MeshDefaultMaterial({
+          colorNode: attribute$1("color")
+        })), b = this.vertexColorMaterial;
+      } else b = this.getMaterial(d);
+      const w = new Mesh$1(p, b);
+      w.position.set(e, 0, r), w.receiveShadow = true, w.castShadow = false, this.group.add(w);
+      const M = a + 1, R = h + 1, V = new Float32Array(M * R);
+      for (let O = 0; O < M; O++) for (let z = 0; z < R; z++) V[z + O * R] = c(e - s * 0.5 + O / a * s, r - o * 0.5 + z / h * o);
+      return this.game.objects.add(null, {
+        type: "fixed",
+        friction: 0.35,
+        restitution: 0,
+        position: {
+          x: e,
+          y: 0,
+          z: r
+        },
+        colliders: [
+          {
+            shape: "heightfield",
+            parameters: [
+              h,
+              a,
+              V,
+              {
+                x: s,
+                y: 1,
+                z: o
+              }
+            ]
+          }
+        ]
+      }), w;
+    }
+    islandHeight(e, r) {
+      const s = (e - ISLAND.x) / (ISLAND.width * 0.5), o = (r - ISLAND.z) / (ISLAND.depth * 0.5);
+      let a = Math.pow(Math.pow(Math.abs(s), 4) + Math.pow(Math.abs(o), 4), 0.25);
+      const h = Math.atan2(o, s);
+      a /= 1 + 0.035 * Math.sin(h * 3 + 0.6) + 0.018 * Math.sin(h * 7 - 1.1);
+      let c;
+      if (a <= 1) c = GROUND_TOP;
+      else {
+        const d = Math.min(1, (a - 1) / ISLAND_SHORE), f = d * d * (3 - 2 * d);
+        c = GROUND_TOP + (SEA_FLOOR - GROUND_TOP) * f;
       }
-      const c = ISLAND.width * 0.5, d = ISLAND.depth * 0.5, f = [
+      for (const d of [
         LAKE,
         SWAN_LAKE
-      ].map((w) => ({
-        x: w.x,
-        z: w.z,
-        rx: w.radiusX ?? w.radius,
-        rz: w.radiusZ ?? w.radius
-      })), p = 3, m = Math.ceil(ISLAND.width / p), b = [];
-      for (let w = 0; w < m; w++) {
-        const M = ISLAND.x - c + w * p, R = Math.min(M + p, ISLAND.x + c), V = [];
-        for (const z of f) {
-          const H = Math.max(Math.abs(M - z.x), Math.abs(R - z.x)) / z.rx;
-          if (H >= 1) continue;
-          const q = z.rz * Math.sqrt(1 - H * H);
-          V.push([
-            z.z - q,
-            z.z + q
-          ]);
+      ]) {
+        const f = d.radiusX ?? d.radius, p = d.radiusZ ?? d.radius, m = Math.hypot((e - d.x) / f, (r - d.z) / p);
+        if (m >= 1) continue;
+        const b = Math.min(6, Math.min(f, p) * 0.45) / Math.min(f, p), w = 1 - b, M = m <= w ? LAKE_FLOOR : LAKE_FLOOR + (GROUND_TOP - LAKE_FLOOR) * (() => {
+          const R = (m - w) / b;
+          return R * R * (3 - 2 * R);
+        })();
+        c = Math.min(c, M);
+      }
+      return c;
+    }
+    islandColor(e, r, s) {
+      this._colorScratch || (this._colorScratch = new Color$1(), this._colorStops = [
+        {
+          y: SEA_FLOOR,
+          c: new Color$1(ISLAND_PALETTE.deep)
+        },
+        {
+          y: -0.62,
+          c: new Color$1(ISLAND_PALETTE.bed)
+        },
+        {
+          y: -0.24,
+          c: new Color$1(ISLAND_PALETTE.shallow)
+        },
+        {
+          y: -0.05,
+          c: new Color$1(ISLAND_PALETTE.sand)
+        },
+        {
+          y: GROUND_TOP - 5e-3,
+          c: new Color$1(ISLAND_PALETTE.sand)
+        },
+        {
+          y: GROUND_TOP,
+          c: new Color$1(ISLAND_PALETTE.grass)
         }
-        V.sort((z, H) => z[0] - H[0]);
-        let O = ISLAND.z - d;
-        for (const [z, H] of V) z > O && b.push({
-          x0: M,
-          x1: R,
-          z0: O,
-          z1: z
-        }), O = Math.max(O, H);
-        O < ISLAND.z + d && b.push({
-          x0: M,
-          x1: R,
-          z0: O,
-          z1: ISLAND.z + d
-        });
+      ]);
+      let o = s;
+      if (s < GROUND_TOP - 2e-3) {
+        const h = Math.sin(e * 12.9898 + r * 78.233) * 43758.5453;
+        o += (h - Math.floor(h) - 0.5) * 0.07;
       }
-      for (const w of b) {
-        const M = w.x1 - w.x0, R = w.z1 - w.z0;
-        if (M <= 0.01 || R <= 0.01) continue;
-        const V = (w.x0 + w.x1) * 0.5, O = (w.z0 + w.z1) * 0.5;
-        this.box(M, 1.5, R, V, GROUND_TOP - 0.75, O, COLORS$1.grass, {
-          castShadow: false
-        }), this.game.objects.add(null, {
-          type: "fixed",
-          friction: 0.25,
-          restitution: 0,
-          position: {
-            x: V,
-            y: GROUND_TOP - 0.75,
-            z: O
-          },
-          colliders: [
-            {
-              shape: "cuboid",
-              parameters: [
-                M * 0.5,
-                0.75,
-                R * 0.5
-              ]
-            }
-          ]
-        });
+      const a = this._colorStops;
+      if (o <= a[0].y) return a[0].c;
+      for (let h = 1; h < a.length; h++) {
+        if (o > a[h].y) continue;
+        const c = a[h - 1], d = a[h], f = (o - c.y) / (d.y - c.y);
+        return this._colorScratch.copy(c.c).lerp(d.c, f);
       }
+      return a[a.length - 1].c;
+    }
+    setIsland() {
+      const e = ISLAND.width + ISLAND.width * ISLAND_SHORE + 12, r = ISLAND.depth + ISLAND.depth * ISLAND_SHORE + 12;
+      this.heightPatch(ISLAND.x, ISLAND.z, e, r, Math.round(e / 1.15), Math.round(r / 1.15), (s, o) => this.islandHeight(s, o), null, (s, o, a) => this.islandColor(s, o, a));
     }
     setBridge() {
       const e = Math.abs(BRIDGE.toX - BRIDGE.fromX) + 6, r = (BRIDGE.fromX + BRIDGE.toX) * 0.5;
@@ -95740,11 +96352,32 @@ https://github.com/browserify/crypto-browserify`);
         const r = e.floors * 1.3;
         this.box(e.width, r, e.depth, e.x, r * 0.5, e.z, COLORS$1.wall, {
           physical: true
-        }), this.box(e.width + 0.4, 0.25, e.depth + 0.4, e.x, r + 0.12, e.z, COLORS$1.roof);
+        }), this.box(e.width + 0.4, 0.25, e.depth + 0.4, e.x, r + 0.12, e.z, COLORS$1.roof), this.box(e.width + 0.5, 0.34, e.depth + 0.5, e.x, r + 0.4, e.z, "#c3bdae", {
+          castShadow: false
+        }), this.box(e.width + 0.16, 0.55, e.depth + 0.16, e.x, 0.27, e.z, "#b9b2a2");
         for (let s = 0; s < e.floors; s++) {
           const o = s * 1.3 + 0.75;
           this.box(e.width * 0.88, 0.55, 0.1, e.x, o, e.z + e.depth * 0.5 + 0.05, COLORS$1.windowDark), this.box(e.width * 0.88, 0.55, 0.1, e.x, o, e.z - e.depth * 0.5 - 0.05, COLORS$1.windowDark);
+          const a = Math.max(3, Math.round(e.width / 2.4));
+          for (let h = 1; h < a; h++) {
+            const c = -e.width * 0.44 + e.width * 0.88 * h / a;
+            for (const d of [
+              -1,
+              1
+            ]) this.box(0.16, 0.6, 0.14, e.x + c, o, e.z + d * (e.depth * 0.5 + 0.06), COLORS$1.wall, {
+              castShadow: false
+            });
+          }
         }
+        this.box(3.4, 0.2, 1.6, e.x, 2.3, e.z + e.depth * 0.5 + 0.8, COLORS$1.orange, {
+          castShadow: false
+        });
+        for (const s of [
+          -1.4,
+          1.4
+        ]) this.box(0.16, 2.2, 0.16, e.x + s, 1.1, e.z + e.depth * 0.5 + 1.45, "#8a8578", {
+          geometry: this.cylinderGeometry
+        });
       }
     }
     setDorms() {
@@ -95756,40 +96389,7 @@ https://github.com/browserify/crypto-browserify`);
       }
     }
     setLake() {
-      const e = this.game.water.surfaceElevation, r = -0.75;
-      this.box(LAKE.radiusX * 2 + 2, 0.6, LAKE.radiusZ * 2 + 2, LAKE.x, r - 0.3, LAKE.z, "#3d6f57", {
-        castShadow: false
-      }), this.game.objects.add(null, {
-        type: "fixed",
-        friction: 0.3,
-        restitution: 0,
-        position: {
-          x: LAKE.x,
-          y: r - 0.3,
-          z: LAKE.z
-        },
-        colliders: [
-          {
-            shape: "cuboid",
-            parameters: [
-              LAKE.radiusX + 1,
-              0.3,
-              LAKE.radiusZ + 1
-            ]
-          }
-        ]
-      });
-      const s = Math.min(6, Math.min(LAKE.radiusX, LAKE.radiusZ) * 0.45), o = 1.35, a = Math.atan2(o, s), h = Math.hypot(s, o), c = 20;
-      for (let w = 0; w < c; w++) {
-        const M = w / c * Math.PI * 2, R = Math.cos(M), V = Math.sin(M), O = LAKE.x + R * (LAKE.radiusX - s * 0.5), z = LAKE.z + V * (LAKE.radiusZ - s * 0.5), H = Math.PI * 2 * Math.max(LAKE.radiusX, LAKE.radiusZ) / c * 1.5;
-        this.box(h, 1.4, H, O, GROUND_TOP - o * 0.5 - 0.7, z, "#d8b47e", {
-          rotationY: -M,
-          rotationZ: a,
-          physical: true,
-          castShadow: false
-        });
-      }
-      const d = [
+      const e = this.game.water.surfaceElevation, r = [
         {
           x: -0.62,
           z: -0.42,
@@ -95841,59 +96441,59 @@ https://github.com/browserify/crypto-browserify`);
           n: 12
         }
       ];
-      let f = 0;
-      const p = () => (f = f * 1103515245 + 12345 & 2147483647, f / 2147483647);
-      for (const w of d) for (let M = 0; M < w.n; M++) {
-        const R = (p() - 0.5) * 0.42, V = (p() - 0.5) * 0.42, O = w.x + R, z = w.z + V;
-        if (O * O + z * z > 0.9) continue;
-        const H = LAKE.x + O * LAKE.radiusX - LAKE_ISLET.x, q = LAKE.z + z * LAKE.radiusZ - LAKE_ISLET.z;
-        if (Math.hypot(H, q) < LAKE_ISLET.radius + 2) continue;
-        const W = LAKE.x + O * LAKE.radiusX, K = LAKE.z + z * LAKE.radiusZ, J = 0.85 + p() * 0.75;
-        this.box(J, 0.05, J, W, e + 0.025, K, M % 3 === 0 ? "#3f8f4a" : "#4f9e4a", {
+      let s = 0;
+      const o = () => (s = s * 1103515245 + 12345 & 2147483647, s / 2147483647);
+      for (const c of r) for (let d = 0; d < c.n; d++) {
+        const f = (o() - 0.5) * 0.42, p = (o() - 0.5) * 0.42, m = c.x + f, b = c.z + p;
+        if (m * m + b * b > 0.9) continue;
+        const w = LAKE.x + m * LAKE.radiusX - LAKE_ISLET.x, M = LAKE.z + b * LAKE.radiusZ - LAKE_ISLET.z;
+        if (Math.hypot(w, M) < LAKE_ISLET.radius + 2) continue;
+        const R = LAKE.x + m * LAKE.radiusX, V = LAKE.z + b * LAKE.radiusZ, O = 0.85 + o() * 0.75;
+        this.box(O, 0.05, O, R, e + 0.025, V, d % 3 === 0 ? "#3f8f4a" : "#4f9e4a", {
           castShadow: false,
           geometry: this.cylinderGeometry
         });
       }
-      const m = 6;
-      for (let w = 0; w < m; w++) {
-        const M = w / m, R = LAKE_ISLET.radius * (1 - M * 0.55), V = (LAKE_ISLET.height + 0.9) / m, O = -0.9 + V * w + V * 0.5;
-        this.box(R * 2, V * 1.06, R * 2, LAKE_ISLET.x, O, LAKE_ISLET.z, w === 0 ? "#c2a878" : "#5f9438", {
+      const a = 6;
+      for (let c = 0; c < a; c++) {
+        const d = c / a, f = LAKE_ISLET.radius * (1 - d * 0.55), p = (LAKE_ISLET.height + 0.9) / a, m = -0.9 + p * c + p * 0.5;
+        this.box(f * 2, p * 1.06, f * 2, LAKE_ISLET.x, m, LAKE_ISLET.z, c === 0 ? "#c2a878" : "#5f9438", {
           geometry: this.cylinderGeometry,
-          castShadow: w > 1
+          castShadow: c > 1
         }), this.game.objects.add(null, {
           type: "fixed",
           friction: 0.3,
           restitution: 0,
           position: {
             x: LAKE_ISLET.x,
-            y: O,
+            y: m,
             z: LAKE_ISLET.z
           },
           colliders: [
             {
               shape: "cylinder",
               parameters: [
-                V * 0.53,
-                R
+                p * 0.53,
+                f
               ]
             }
           ]
         });
       }
-      for (let w = 0; w < 9; w++) {
-        const M = w * 2.39996, R = Math.sqrt((w + 0.4) / 9), V = LAKE_ISLET.radius * 0.55 * R, O = LAKE_ISLET.x + Math.cos(M) * V, z = LAKE_ISLET.z + Math.sin(M) * V, H = LAKE_ISLET.height * (1 - V / LAKE_ISLET.radius * 0.7), q = 0.9 + w * 31 % 7 / 12;
-        this.box(0.3 * q, 1.5 * q, 0.3 * q, O, H + 0.75 * q, z, COLORS$1.trunk, {
+      for (let c = 0; c < 9; c++) {
+        const d = c * 2.39996, f = Math.sqrt((c + 0.4) / 9), p = LAKE_ISLET.radius * 0.55 * f, m = LAKE_ISLET.x + Math.cos(d) * p, b = LAKE_ISLET.z + Math.sin(d) * p, w = LAKE_ISLET.height * (1 - p / LAKE_ISLET.radius * 0.7), M = 0.9 + c * 31 % 7 / 12;
+        this.box(0.3 * M, 1.5 * M, 0.3 * M, m, w + 0.75 * M, b, COLORS$1.trunk, {
           geometry: this.cylinderGeometry,
           castShadow: false
-        }), this.box(1.7 * q, 1.4 * q, 1.7 * q, O, H + 2 * q, z, "#3f7f3a", {
+        }), this.box(1.7 * M, 1.4 * M, 1.7 * M, m, w + 2 * M, b, "#3f7f3a", {
           castShadow: false,
           geometry: this.cylinderGeometry
-        }), this.box(1.15 * q, 0.9 * q, 1.15 * q, O, H + 2.9 * q, z, "#559a44", {
+        }), this.box(1.15 * M, 0.9 * M, 1.15 * M, m, w + 2.9 * M, b, "#559a44", {
           castShadow: false,
           geometry: this.cylinderGeometry
         });
       }
-      const b = [
+      const h = [
         [
           -0.6,
           -0.4
@@ -95927,54 +96527,22 @@ https://github.com/browserify/crypto-browserify`);
           -0.68
         ]
       ];
-      for (const [w, M] of b) {
-        const R = LAKE.x + w * LAKE.radiusX, V = LAKE.z + M * LAKE.radiusZ;
-        for (let O = 0; O < 6; O++) {
-          const z = O * Math.PI / 3;
-          this.box(0.34, 0.1, 0.16, R + Math.cos(z) * 0.17, e + 0.14, V + Math.sin(z) * 0.17, "#ff9ec4", {
-            rotationY: -z,
+      for (const [c, d] of h) {
+        const f = LAKE.x + c * LAKE.radiusX, p = LAKE.z + d * LAKE.radiusZ;
+        for (let m = 0; m < 6; m++) {
+          const b = m * Math.PI / 3;
+          this.box(0.34, 0.1, 0.16, f + Math.cos(b) * 0.17, e + 0.14, p + Math.sin(b) * 0.17, "#ff9ec4", {
+            rotationY: -b,
             rotationZ: -0.5,
             castShadow: false
           });
         }
-        this.box(0.16, 0.16, 0.16, R, e + 0.24, V, "#ffd76b", {
+        this.box(0.16, 0.16, 0.16, f, e + 0.24, p, "#ffd76b", {
           castShadow: false
         });
       }
     }
     setSwanLake() {
-      this.box(SWAN_LAKE.radiusX * 2 + 2, 0.6, SWAN_LAKE.radiusZ * 2 + 2, SWAN_LAKE.x, -0.75 - 0.3, SWAN_LAKE.z, "#3f6f78", {
-        castShadow: false
-      }), this.game.objects.add(null, {
-        type: "fixed",
-        friction: 0.3,
-        restitution: 0,
-        position: {
-          x: SWAN_LAKE.x,
-          y: -0.75 - 0.3,
-          z: SWAN_LAKE.z
-        },
-        colliders: [
-          {
-            shape: "cuboid",
-            parameters: [
-              SWAN_LAKE.radiusX + 1,
-              0.3,
-              SWAN_LAKE.radiusZ + 1
-            ]
-          }
-        ]
-      });
-      const r = Math.min(6, Math.min(SWAN_LAKE.radiusX, SWAN_LAKE.radiusZ) * 0.45), s = 1.35, o = Math.atan2(s, r), a = Math.hypot(r, s), h = 20;
-      for (let c = 0; c < h; c++) {
-        const d = c / h * Math.PI * 2, f = SWAN_LAKE.x + Math.cos(d) * (SWAN_LAKE.radiusX - r * 0.5), p = SWAN_LAKE.z + Math.sin(d) * (SWAN_LAKE.radiusZ - r * 0.5), m = Math.PI * 2 * Math.max(SWAN_LAKE.radiusX, SWAN_LAKE.radiusZ) / h * 1.5;
-        this.box(a, 1.4, m, f, GROUND_TOP - s * 0.5 - 0.7, p, "#d8b47e", {
-          rotationY: -d,
-          rotationZ: o,
-          physical: true,
-          castShadow: false
-        });
-      }
     }
     setSports() {
       this.slab(BASKETBALL.width, BASKETBALL.depth, BASKETBALL.x, BASKETBALL.z, COLORS$1.court, {
@@ -96021,31 +96589,58 @@ https://github.com/browserify/crypto-browserify`);
     setPalms() {
       const e = [];
       for (let r = 0; r < 3; r++) {
-        const s = LAWN.x + LAWN.width * 0.5 - 1.2 - r * 2.6;
+        const s = LAWN.x + LAWN.width * 0.5 - 1.4 - r * 4.4;
         e.push({
           x: s,
-          z: LAWN.z - 4.5
+          z: LAWN.z - 5.4
         }, {
           x: s,
-          z: LAWN.z + 4.5
+          z: LAWN.z + 5.4
         });
       }
-      for (const r of e) this.palm(r.x, r.z);
+      e.forEach((r, s) => this.palm(r.x, r.z, {
+        scale: 0.7 + s * 5 % 4 * 0.05,
+        lean: s * 1.7
+      }));
     }
-    palm(e, r) {
-      this.box(0.32, 4, 0.32, e, 2, r, COLORS$1.trunk, {
-        physical: true,
+    palm(e, r, { scale: s = 1, lean: o = 0 } = {}) {
+      const a = 4.6 * s, h = 8, c = 0.75 * s, d = Math.cos(o), f = Math.sin(o);
+      for (let w = 0; w < h; w++) {
+        const M = (w + 0.5) / h, R = a / h, V = (0.29 - 0.12 * M) * s, O = c * M * M, z = Math.atan2(2 * c * M, a);
+        this.box(V * 2, R * 1.08, V * 2, e + d * O, a * M, r + f * O, w % 2 ? "#8a6a42" : "#7b5c39", {
+          rotationZ: -d * z,
+          rotationX: f * z,
+          geometry: this.cylinderGeometry,
+          physical: w === 0
+        });
+      }
+      const p = e + d * c, m = r + f * c;
+      this.box(0.5 * s, 0.42 * s, 0.5 * s, p, a, m, "#6f5a33", {
         geometry: this.cylinderGeometry
       });
-      for (let s = 0; s < 6; s++) {
-        const o = s * Math.PI / 3 + 0.35;
-        this.box(2, 0.12, 0.48, e + Math.cos(o) * 0.9, 4.05, r + Math.sin(o) * 0.9, COLORS$1.foliage, {
-          rotationY: -o,
-          rotationZ: -0.42,
+      const b = 11;
+      for (let w = 0; w < b; w++) {
+        const M = w / b * Math.PI * 2 + o * 0.5, R = (1.35 + w * 7 % 5 * 0.16) * s, V = (2.15 + w * 3 % 4 * 0.14) * s, O = w % 3 === 0 ? "#4f8f34" : w % 3 === 1 ? "#5aa832" : "#448029";
+        for (let z = 0; z < 5; z++) {
+          const H = (z + 0.5) / 5, q = 0.12 * s + H * V, W = R * H * H, K = Math.atan2(2 * R * H, V);
+          this.box(V / 5 * 1.15, 0.075 * s, (0.56 - 0.34 * H) * s, p + Math.cos(M) * q, a + 0.34 * s - W, m + Math.sin(M) * q, O, {
+            rotationY: -M,
+            rotationZ: -K,
+            castShadow: z < 3
+          });
+        }
+      }
+      this.box(0.62 * s, 0.3 * s, 0.62 * s, p, a + 0.4 * s, m, "#4f8f34", {
+        geometry: this.cylinderGeometry,
+        castShadow: false
+      });
+      for (let w = 0; w < 4; w++) {
+        const M = w * 1.9;
+        this.box(0.3 * s, 0.3 * s, 0.3 * s, p + Math.cos(M) * 0.36 * s, a - 0.16 * s, m + Math.sin(M) * 0.36 * s, "#6b4a2a", {
+          geometry: this.cylinderGeometry,
           castShadow: false
         });
       }
-      this.box(0.42, 0.38, 0.42, e, 3.85, r, "#8f6b2f");
     }
     setTrees() {
       const e = (h) => h.map(([c, d, f]) => {
@@ -110388,7 +110983,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-B6KVX3hV.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-BPlGkz8z.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

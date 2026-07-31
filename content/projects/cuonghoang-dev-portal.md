@@ -1,4 +1,4 @@
-# cuongthai.com — nhật ký xây một nền tảng full-stack, một mình, trong hơn 50 ngày
+# cuongthai.com (Portfolio web)
 
 Commit đầu tiên là `2026-06-08`: *"init optimized nodejs backend with pgvector infrastructure for VPS"*. Bảy commit tiếp theo trong cùng 24 giờ đó toàn là `fix:` — build path lệch tsconfig, Docker build fail, rsync xoá nhầm volume dữ liệu. Không có "giai đoạn thiết kế" tách biệt khỏi "giai đoạn code": kiến trúc bị bẻ cong theo từng lần triển khai thất bại, ngay từ ngày đầu tiên.
 

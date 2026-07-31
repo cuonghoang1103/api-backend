@@ -23,7 +23,7 @@ const bodyMdx = fs.readFileSync(
 
 export default {
   slug: 'cuonghoang-dev-portal',
-  title: 'cuongthai.com — nhật ký xây một nền tảng full-stack, một mình',
+  title: 'cuongthai.com (Portfolio web)',
   description:
     'Nền tảng học tập + mạng xã hội full-stack: 248 model Prisma, 63 router backend, 180 trang frontend, 46 module tính năng — từ Messenger, Phòng thi chấm bằng AI, Xưởng mô phỏng tới Sân chơi 3D. Xây một mình trong hơn 50 ngày, 1.672 commit.',
   techStack: [

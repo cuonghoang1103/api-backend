@@ -1,11 +1,12 @@
 import * as THREE from 'three/webgpu'
-import { color } from 'three/tsl'
+import { attribute, color } from 'three/tsl'
 import { Game } from '../Game.js'
 import { MeshDefaultMaterial } from '../Materials/MeshDefaultMaterial.js'
 import { ALPHA, ALPHA_LOBBY, SWAN_LAKE, LAKE_ISLET, AXIS, THROUGH_ROAD, BASKETBALL, BRIDGE, BUILDINGS, CANTEEN, COLORS, DORMS, FOOTBALL, FORECOURT, GATE, ISLAND, LAKE, LAWN, MAIN_ROAD, MARTIAL, PARKING, QUESTION_BLOCKS, RANKING_PLAZA, RANKING_SIGN, SIGN, STATUE } from '../../data/fptu.js'
 import { FptuQuiz } from './FptuQuiz.js'
 import { FptuPineHill } from './FptuPineHill.js'
 import { FptuSwans } from './FptuSwans.js'
+import { FptuProps } from './FptuProps.js'
 import { Trees } from './Trees.js'
 import { Foliage } from './Foliage.js'
 import { uniform } from 'three/tsl'
@@ -18,7 +19,10 @@ import { uniform } from 'three/tsl'
  * cả bốn điểm: nhà đè lên hồ có sẵn, chữ chồng vào nhà khu cũ, nhà cao che mất
  * xe khi lái ngang, và bố cục sai trục. Bản này sửa tận gốc:
  *
- * - Đảo cũ TRẢ NGUYÊN TRẠNG — file này không đặt bất cứ khối nào trong ±96.
+ * - Đảo cũ gần như nguyên trạng. (Ghi chú cũ nói "không đặt khối nào trong
+ *   ±96" — nay SAI: từ lần nới đảo gấp đôi, mép Đông đảo trường ở x = −82 nên
+ *   có lấn vào rìa Tây đảo chính. Đã lái thử ngày 31/7: đi lại giữa hai đảo
+ *   thông suốt, không có bậc nào chặn.)
  * - Trục chính để TRỐNG hoàn toàn, mọi toà nhà lùi xa khỏi trục ≥ 18 đơn vị,
  *   nên máy quay (cao 22, chúc xuống) không bao giờ bị nhà chắn giữa nó và xe
  *   khi chạy trên trục.
@@ -30,8 +34,11 @@ import { uniform } from 'three/tsl'
  * 1. Không có kiểm tra biên nào giết người chơi (`die()` chỉ gọi từ AltarArea).
  * 2. `WaterSurface.update()` copy vị trí máy quay mỗi khung hình nên mặt biển
  *    đi theo người chơi ra tận đây.
- * 3. Sàn vật lý toàn cục là hộp 1000×1000 (`World.setPhysicalFloor`) nên ngoài
- *    địa hình vẫn có "đáy biển" đỡ xe — nền đảo chỉ việc kê lên trên.
+ * 3. Ra khỏi địa hình vẫn có thứ đỡ xe — nhưng KHÔNG phải sàn 1000×1000 như
+ *    ghi chú cũ nói: `World.setPhysicalFloor()` được định nghĩa mà KHÔNG AI
+ *    GỌI. Thứ đỡ thật là `Floor.bedRock`, một tấm 12×12 bám theo xe, chỉ bật
+ *    khi |x| hoặc |z| > 90 (đo ngày 31/7). Đảo trường nằm ở x −242…−82 nên
+ *    luôn nằm ngoài ngưỡng đó, tức lúc nào cũng có tấm này bên dưới.
  */
 
 /** Ô caro là ĐẶC hay RỖNG — băm tất định, KHÔNG dùng Math.random. */
@@ -41,6 +48,27 @@ const isDarkCell = (i, j) => ((((i * 73856093) ^ (j * 19349663)) >>> 0) % 100) <
 const hasFoliage = (i, j) => ((((i * 83492791) ^ (j * 29349643)) >>> 0) % 100) < 40
 
 const GROUND_TOP = 0.04 // mặt đảo cao hơn "đáy biển" vật lý (−0,01) chừng này
+
+/** Đáy biển quanh đảo. Thấp hơn mực nước (−0,3) đủ để ra dáng chỗ nước sâu. */
+const SEA_FLOOR = -1.6
+
+/** Đáy hai cái hồ trong sân trường — nông, xe lội qua được. */
+const LAKE_FLOOR = -0.75
+
+/**
+ * Bề rộng bãi bờ, tính theo TỈ LỆ bán kính đảo (0,13 ≈ 10 đơn vị ở cạnh dài).
+ * Thoải cỡ này thì xe bò lên từ mọi phía mà không cần tìm "bến".
+ */
+const ISLAND_SHORE = 0.13
+
+/** Màu mặt đảo theo cao độ — cỏ, cát, nước nông, đáy hồ. */
+const ISLAND_PALETTE = {
+    grass: '#6f9e3f',
+    sand: '#d8b47e',
+    shallow: '#4d8a86',
+    bed: '#3d6f57',
+    deep: '#27515e',
+}
 
 export class FptuCampus
 {
@@ -57,6 +85,9 @@ export class FptuCampus
         this.boxGeometry = new THREE.BoxGeometry(1, 1, 1)
         this.cylinderGeometry = new THREE.CylinderGeometry(0.5, 0.5, 1, 8)
         this.materials = new Map()
+
+        // Cao độ mặt đảo, để các bộ phận khác (đồi thông…) khỏi phải đoán lại
+        this.groundTop = GROUND_TOP
 
         this.setIsland()
         this.setBridge()
@@ -78,6 +109,10 @@ export class FptuCampus
 
         this.pineHill = new FptuPineHill(this)
         this.swans = new FptuSwans(this)
+
+        // Đồ đạc sân trường — đặt SAU mọi công trình vì nó đọc vùng cấm từ
+        // chính các công trình đó để tự tránh
+        this.props = new FptuProps(this)
 
         this.quiz = new FptuQuiz()
         this.setGateZone()
@@ -157,144 +192,227 @@ export class FptuCampus
     }
 
     /**
-     * Nền đảo: một phiến lớn nổi trên biển, viền cát thò ra quanh mép để nhìn
-     * nghiêng ra dáng bờ đảo chứ không phải tấm ván trôi.
+     * MẢNG ĐỊA HÌNH MƯỢT — một hàm cao độ duy nhất sinh ra CẢ hình LẪN va chạm.
+     *
+     * Vì sao phải có: mọi chỗ "xe kẹt" của khu này đều sinh ra từ cùng một kiểu
+     * làm — ghép nhiều hộp nghiêng lại thành một cái dốc. Hộp ghép bao giờ cũng
+     * hở, chồng hoặc bị nền đè, và mỗi khe hở là một cái bậc bánh xe không leo
+     * nổi. Đo ngày 31/7: bờ hồ thiên nga còn nguyên một bậc 0,71 ở hai đầu.
+     *
+     * Cách này thì không thể lệch: `fn` vừa kéo đỉnh lưới của hình, vừa nạp
+     * mảng cao độ cho `heightfield` của Rapier. Hình mượt thì va chạm mượt.
+     *
+     * ⚠️ Quy ước chỉ số của heightfield lấy Y HỆT `Floor.setPhysical()`
+     * (`heights[iz + ix * n]`) — chỗ duy nhất trong dự án đã chạy đúng thật.
+     * Vẫn phải bắn tia kiểm lại sau khi dựng, đừng tin quy ước suông.
+     *
+     * @param fn (x, z) → cao độ tuyệt đối
      */
+    heightPatch(cx, cz, sizeX, sizeZ, cols, rows, fn, hex, colorFn = null)
+    {
+        const geometry = new THREE.PlaneGeometry(sizeX, sizeZ, cols, rows)
+        geometry.rotateX(-Math.PI * 0.5)
+
+        const position = geometry.attributes.position
+        for(let i = 0; i < position.count; i++)
+            position.setY(i, fn(position.getX(i) + cx, position.getZ(i) + cz))
+        geometry.computeVertexNormals()
+
+        let material
+        if(colorFn)
+        {
+            // Màu theo ĐỈNH: một tấm địa hình duy nhất mà vẫn có cỏ, cát, nước
+            // nông và đáy hồ — khỏi phải chồng thêm mặt nào lên nhau (chồng mặt
+            // chính là nguồn gốc của cảnh "nhiễu sóng" đã gặp).
+            const colors = new Float32Array(position.count * 3)
+            const tmp = new THREE.Color()
+            for(let i = 0; i < position.count; i++)
+            {
+                tmp.set(colorFn(position.getX(i) + cx, position.getZ(i) + cz, position.getY(i)))
+                colors[i * 3] = tmp.r
+                colors[i * 3 + 1] = tmp.g
+                colors[i * 3 + 2] = tmp.b
+            }
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+
+            if(!this.vertexColorMaterial)
+                this.vertexColorMaterial = new MeshDefaultMaterial({ colorNode: attribute('color') })
+            material = this.vertexColorMaterial
+        }
+        else
+        {
+            material = this.getMaterial(hex)
+        }
+
+        const mesh = new THREE.Mesh(geometry, material)
+        mesh.position.set(cx, 0, cz)
+        mesh.receiveShadow = true
+        mesh.castShadow = false
+        this.group.add(mesh)
+
+        const nx = cols + 1
+        const nz = rows + 1
+        const heights = new Float32Array(nx * nz)
+        for(let ix = 0; ix < nx; ix++)
+            for(let iz = 0; iz < nz; iz++)
+                heights[iz + ix * nz] = fn(
+                    cx - sizeX * 0.5 + (ix / cols) * sizeX,
+                    cz - sizeZ * 0.5 + (iz / rows) * sizeZ,
+                )
+
+        /**
+         * ⚠️ THỨ TỰ HAI THAM SỐ ĐẦU: `nrows` là số ô theo trục **Z**, `ncols`
+         * theo trục **X** — KHÔNG phải ngược lại.
+         *
+         * Suy ra từ `Floor.setPhysical()`, chỗ duy nhất trong dự án đã chạy
+         * đúng thật: nó nạp `heights[iz + ix * rowsCount]`, tức chỉ số HÀNG
+         * chạy theo z (ma trận của Rapier xếp theo cột). Lưới địa hình là hình
+         * vuông nên ở đó đổi chỗ hai tham số cũng chẳng ai thấy — còn hồ thì
+         * dẹt (36 × 26) nên đổi chỗ là lộ ngay: đo ngày 31/7 thấy cao độ dọc
+         * trục Z trả về đúng giá trị "ngoài hồ" ở chỗ lẽ ra còn là thành hồ.
+         */
+        this.game.objects.add(null, {
+            type: 'fixed',
+            friction: 0.35,
+            restitution: 0,
+            position: { x: cx, y: 0, z: cz },
+            colliders: [ { shape: 'heightfield', parameters: [ rows, cols, heights, { x: sizeX, y: 1, z: sizeZ } ] } ]
+        })
+
+        return mesh
+    }
+
+    /**
+     * NỀN ĐẢO — một mảng địa hình LIỀN, dựng từ đúng một hàm cao độ.
+     *
+     * Bản trước ghép hơn hai trăm hộp: nền chia thành cột dọc, cộng bốn tấm
+     * nghiêng làm bờ. Mỗi mối ghép là một chỗ có thể hở, và đo ngày 31/7 vẫn
+     * còn bậc 0,77 ở bờ Bắc — leo lên không nổi. Nay cả nền, cả bờ, cả hai lòng
+     * hồ chỉ là MỘT `heightPatch`: không còn mối ghép thì không còn bậc.
+     *
+     * Tiện thể sửa luôn chỗ người dùng chê "vuông với nhọn": mép đảo không còn
+     * là hình chữ nhật mà là SIÊU-ELLIPSE bậc 4 (bốn góc bo tròn) rồi cộng thêm
+     * hai tầng sóng nhẹ, nên đường bờ uốn lượn tự nhiên như bờ biển thật.
+     */
+    islandHeight(x, z)
+    {
+        const nx = (x - ISLAND.x) / (ISLAND.width * 0.5)
+        const nz = (z - ISLAND.z) / (ISLAND.depth * 0.5)
+
+        // Siêu-ellipse bậc 4: gần chữ nhật ở giữa cạnh, bo tròn ở bốn góc
+        let d = Math.pow(Math.pow(Math.abs(nx), 4) + Math.pow(Math.abs(nz), 4), 0.25)
+
+        // Sóng bờ: hai tần số lệch pha, biên độ nhỏ — đủ để bờ hết thẳng đơ mà
+        // không ăn vào chỗ đã có công trình (biên độ tối đa ~5% bán kính)
+        const theta = Math.atan2(nz, nx)
+        d /= 1 + 0.035 * Math.sin(theta * 3 + 0.6) + 0.018 * Math.sin(theta * 7 - 1.1)
+
+        let y
+        if(d <= 1)
+        {
+            y = GROUND_TOP
+        }
+        else
+        {
+            // Bờ thoải xuống đáy biển. Dốc bằng 0 ở mép đất (không có gờ) và
+            // bằng 0 ở đáy (không có hố) — cùng kiểu đường cong với lòng hồ.
+            const t = Math.min(1, (d - 1) / ISLAND_SHORE)
+            const s = t * t * (3 - 2 * t)
+            y = GROUND_TOP + (SEA_FLOOR - GROUND_TOP) * s
+        }
+
+        // Khoét hai cái hồ vào chính mặt đất này
+        for(const lake of [ LAKE, SWAN_LAKE ])
+        {
+            const rx = lake.radiusX ?? lake.radius
+            const rz = lake.radiusZ ?? lake.radius
+            const r = Math.hypot((x - lake.x) / rx, (z - lake.z) / rz)
+            if(r >= 1) continue
+
+            const wall = Math.min(6, Math.min(rx, rz) * 0.45) / Math.min(rx, rz)
+            const inner = 1 - wall
+            const bed = r <= inner
+                ? LAKE_FLOOR
+                : LAKE_FLOOR + (GROUND_TOP - LAKE_FLOOR) * (() =>
+                {
+                    const t = (r - inner) / wall
+                    return t * t * (3 - 2 * t)
+                })()
+
+            y = Math.min(y, bed)
+        }
+
+        return y
+    }
+
+    /**
+     * Màu mặt đảo theo cao độ, PHA LIÊN TỤC.
+     *
+     * Bản đầu cắt màu theo ngưỡng cứng: mỗi đỉnh lưới nhận trọn một màu nên
+     * ranh giới cát–cỏ chạy men theo cạnh tam giác, ra đúng dải RĂNG CƯA nhìn
+     * thấy trong ảnh chụp. Pha dần thì mắt không còn thấy cái lưới nữa.
+     *
+     * Cộng thêm một chút nhiễu TẤT ĐỊNH (băm từ toạ độ, không dùng
+     * Math.random để bản dựng còn tái lập được) cho mép bãi cát khỏi đều tăm
+     * tắp như vẽ bằng compa.
+     */
+    islandColor(x, z, y)
+    {
+        if(!this._colorScratch)
+        {
+            this._colorScratch = new THREE.Color()
+            this._colorStops = [
+                { y: SEA_FLOOR, c: new THREE.Color(ISLAND_PALETTE.deep) },
+                { y: -0.62, c: new THREE.Color(ISLAND_PALETTE.bed) },
+                { y: -0.24, c: new THREE.Color(ISLAND_PALETTE.shallow) },
+                { y: -0.05, c: new THREE.Color(ISLAND_PALETTE.sand) },
+                { y: GROUND_TOP - 0.005, c: new THREE.Color(ISLAND_PALETTE.sand) },
+                { y: GROUND_TOP, c: new THREE.Color(ISLAND_PALETTE.grass) },
+            ]
+        }
+
+        /**
+         * Nhiễu CHỈ rắc ở vùng ven nước.
+         *
+         * Bản đầu rắc đều khắp với biên độ ±4 phân, trong khi dải chuyển cỏ→cát
+         * chỉ dày 0,5 phân — nên đất bằng phẳng trong sân trường cũng bị đẩy
+         * sang màu cát, mặt cỏ nổi vệt loang lổ như bị hắt sơn (thấy rõ trong
+         * ảnh chụp khu ký túc xá). Đất bằng thì y đúng bằng GROUND_TOP, nên chỉ
+         * cần chừa nó ra là xong, mà mép bãi cát vẫn ráp tự nhiên.
+         */
+        let yy = y
+        if(y < GROUND_TOP - 0.002)
+        {
+            const h = Math.sin(x * 12.9898 + z * 78.233) * 43758.5453
+            yy += (h - Math.floor(h) - 0.5) * 0.07
+        }
+
+        const stops = this._colorStops
+        if(yy <= stops[0].y) return stops[0].c
+        for(let i = 1; i < stops.length; i++)
+        {
+            if(yy > stops[i].y) continue
+            const a = stops[i - 1], b = stops[i]
+            const t = (yy - a.y) / (b.y - a.y)
+            return this._colorScratch.copy(a.c).lerp(b.c, t)
+        }
+        return stops[stops.length - 1].c
+    }
+
     setIsland()
     {
-        /**
-         * Viền cát quanh mép đảo — dựng thành BỐN DẢI VIỀN chứ không phải một
-         * tấm đặc trải khắp.
-         *
-         * Bản trước để tấm đặc: mặt trên của nó nằm ở y ≈ −0,19, tức CAO HƠN
-         * mặt biển (−0,3), nên nó BỊT KÍN cái lỗ vừa khoét làm hồ — nhìn xuống
-         * hồ chỉ thấy màu cát cam thay vì nước. Đúng chỗ người dùng chê "hồ sen
-         * xấu thế này".
-         */
-        /**
-         * BỜ CÁT THOẢI quanh đảo — và nó PHẢI CÓ THÂN VẬT LÝ.
-         *
-         * Bản trước vành cát chỉ là hình: xe chạy ra mép liền rơi xuống "sàn
-         * đáy" toàn cục (y = −0,01) trong khi mặt cát vẽ ở −0,19, tức xe đứng
-         * lơ lửng CAO HƠN mặt cát 18 phân — nhìn đúng như đi xuyên qua bờ, và
-         * lúc rơi xuống nước thì loay hoay không có gì để leo lên.
-         *
-         * Nay bờ làm hai bậc rất thoải: bậc ngoài mặt ở y = 0,00 (chỉ nhỉnh hơn
-         * đáy 1 phân) rồi bậc trong ở y = 0,02, cuối cùng mới tới mặt đảo 0,04.
-         * Chênh mỗi bậc chỉ 1–2 phân nên xe bò lên được từ mọi phía, không cần
-         * tìm chỗ nào là "bến".
-         */
-        /**
-         * BỜ DỐC quanh đảo — mặt phẳng NGHIÊNG thật, có thân vật lý.
-         *
-         * Bậc thang phẳng không ăn thua: xe rơi xuống biển nổi ở khoảng
-         * y = −0,7, mà bậc bờ ở y = 0 thì chênh 70 phân — vách đứng, bánh không
-         * bám nổi, đúng cảnh "kẹt dưới nước không lên được". Nên bờ phải là
-         * DỐC: chìm hẳn xuống −1,4 ở mép ngoài rồi thoải dần lên bằng mặt đảo,
-         * chạy dài 10 đơn vị nên độ dốc chỉ chừng 8° — xe bò lên từ mọi phía.
-         */
-        const RAMP_RUN = 10      // bề rộng dải dốc
-        const RAMP_DROP = 1.45   // mép ngoài thấp hơn mặt đảo bao nhiêu
-        const rampAngle = Math.atan2(RAMP_DROP, RAMP_RUN)
-        const rampThickness = 1.6
-        const rampLength = Math.hypot(RAMP_RUN, RAMP_DROP)
-        const midY = GROUND_TOP - RAMP_DROP * 0.5 - Math.cos(rampAngle) * rampThickness * 0.5
+        const width = ISLAND.width + ISLAND.width * ISLAND_SHORE + 12
+        const depth = ISLAND.depth + ISLAND.depth * ISLAND_SHORE + 12
 
-        for(const side of [ -1, 1 ])
-        {
-            // Bờ Bắc / Nam: dốc nghiêng quanh trục X
-            const zMid = ISLAND.z + side * (ISLAND.depth * 0.5 + RAMP_RUN * 0.5)
-            this.box(
-                ISLAND.width + RAMP_RUN * 2, rampThickness, rampLength,
-                ISLAND.x, midY, zMid, '#d8b47e',
-                { rotationX: side * rampAngle, physical: true, castShadow: false }
-            )
-
-            // Bờ Đông / Tây: dốc nghiêng quanh trục Z
-            const xMid = ISLAND.x + side * (ISLAND.width * 0.5 + RAMP_RUN * 0.5)
-            this.box(
-                rampLength, rampThickness, ISLAND.depth,
-                xMid, midY, ISLAND.z, '#d8b47e',
-                { rotationZ: -side * rampAngle, physical: true, castShadow: false }
-            )
-        }
-
-        const halfW = ISLAND.width * 0.5
-        const halfD = ISLAND.depth * 0.5
-
-        /**
-         * Miệng hồ khoét theo hình BẦU DỤC, không phải chữ nhật.
-         *
-         * Cách làm: chia dải đất nằm trong bề ngang của hồ thành nhiều CỘT dọc
-         * trục x; mỗi cột chừa ra một khoảng z đúng bằng nửa dây cung của hình
-         * bầu dục tại cột đó. Nhiều cột thì bờ càng mượt — 18 cột đã đủ để nhìn
-         * ra bờ cong tự nhiên như mấy hồ của bản đồ gốc, thay vì bốn góc vuông.
-         */
-        /**
-         * Nền đảo chia thành CỘT DỌC trục X. Mỗi cột bị hai cái hồ khoét thủng
-         * theo dây cung bầu dục, nên một cột có thể vỡ thành nhiều đoạn z rời
-         * nhau. Xử lý tổng quát: với mỗi cột, dựng danh sách "khoảng cấm" rồi
-         * lấy phần bù — thêm hồ thứ ba sau này cũng không phải viết lại.
-         */
-        const holes = [ LAKE, SWAN_LAKE ].map((lake) => ({
-            x: lake.x, z: lake.z,
-            rx: lake.radiusX ?? lake.radius,
-            rz: lake.radiusZ ?? lake.radius,
-        }))
-
-        const columnWidth = 3
-        const columnCount = Math.ceil(ISLAND.width / columnWidth)
-        const ground = []
-
-        for(let i = 0; i < columnCount; i++)
-        {
-            const x0 = ISLAND.x - halfW + i * columnWidth
-            const x1 = Math.min(x0 + columnWidth, ISLAND.x + halfW)
-
-            // Khoảng z bị hồ chiếm trong cột này
-            const bans = []
-            for(const hole of holes)
-            {
-                const dx = Math.max(Math.abs(x0 - hole.x), Math.abs(x1 - hole.x)) / hole.rx
-                if(dx >= 1) continue
-                const halfChord = hole.rz * Math.sqrt(1 - dx * dx)
-                bans.push([ hole.z - halfChord, hole.z + halfChord ])
-            }
-
-            bans.sort((a, b) => a[0] - b[0])
-
-            let cursor = ISLAND.z - halfD
-            for(const [ banStart, banEnd ] of bans)
-            {
-                if(banStart > cursor) ground.push({ x0, x1, z0: cursor, z1: banStart })
-                cursor = Math.max(cursor, banEnd)
-            }
-            if(cursor < ISLAND.z + halfD) ground.push({ x0, x1, z0: cursor, z1: ISLAND.z + halfD })
-        }
-
-        for(const piece of ground)
-        {
-            const width = piece.x1 - piece.x0
-            const depth = piece.z1 - piece.z0
-            if(width <= 0.01 || depth <= 0.01) continue
-
-            const cx = (piece.x0 + piece.x1) * 0.5
-            const cz = (piece.z0 + piece.z1) * 0.5
-
-            this.box(width, 1.5, depth, cx, GROUND_TOP - 0.75, cz, COLORS.grass, { castShadow: false })
-
-            this.game.objects.add(
-                null,
-                {
-                    type: 'fixed',
-                    friction: 0.25,
-                    restitution: 0,
-                    position: { x: cx, y: GROUND_TOP - 0.75, z: cz },
-                    colliders: [ { shape: 'cuboid', parameters: [ width * 0.5, 0.75, depth * 0.5 ] } ]
-                }
-            )
-        }
+        this.heightPatch(
+            ISLAND.x, ISLAND.z, width, depth,
+            Math.round(width / 1.15), Math.round(depth / 1.15),
+            (x, z) => this.islandHeight(x, z),
+            null,
+            (x, z, y) => this.islandColor(x, z, y),
+        )
     }
+
 
     /** Cầu nối đảo chính — mặt thấp sát nước, có lan can hai bên. */
     setBridge()
@@ -552,12 +670,30 @@ export class FptuCampus
             this.box(building.width, height, building.depth, building.x, height * 0.5, building.z, COLORS.wall, { physical: true })
             this.box(building.width + 0.4, 0.25, building.depth + 0.4, building.x, height + 0.12, building.z, COLORS.roof)
 
+            // Lan can mái + đế nhà: hai đường ngang chia khối cho nhà bớt trơ
+            this.box(building.width + 0.5, 0.34, building.depth + 0.5, building.x, height + 0.4, building.z, '#c3bdae', { castShadow: false })
+            this.box(building.width + 0.16, 0.55, building.depth + 0.16, building.x, 0.27, building.z, '#b9b2a2')
+
             for(let floor = 0; floor < building.floors; floor++)
             {
                 const y = floor * 1.3 + 0.75
                 this.box(building.width * 0.88, 0.55, 0.1, building.x, y, building.z + building.depth * 0.5 + 0.05, COLORS.windowDark)
                 this.box(building.width * 0.88, 0.55, 0.1, building.x, y, building.z - building.depth * 0.5 - 0.05, COLORS.windowDark)
+
+                // Đố dọc chia ô cửa — không có thì mỗi tầng là một vệt đen dài
+                const bays = Math.max(3, Math.round(building.width / 2.4))
+                for(let b = 1; b < bays; b++)
+                {
+                    const dx = -building.width * 0.44 + (building.width * 0.88 * b) / bays
+                    for(const side of [ -1, 1 ])
+                        this.box(0.16, 0.6, 0.14, building.x + dx, y, building.z + side * (building.depth * 0.5 + 0.06), COLORS.wall, { castShadow: false })
+                }
             }
+
+            // Mái hiên lối vào
+            this.box(3.4, 0.2, 1.6, building.x, 2.3, building.z + building.depth * 0.5 + 0.8, COLORS.orange, { castShadow: false })
+            for(const side of [ -1.4, 1.4 ])
+                this.box(0.16, 2.2, 0.16, building.x + side, 1.1, building.z + building.depth * 0.5 + 1.45, '#8a8578', { geometry: this.cylinderGeometry })
         }
     }
 
@@ -606,47 +742,19 @@ export class FptuCampus
          * nào), xe rơi xuống nổi lơ lửng ở −0,6 trong khi mép dốc nằm mãi dưới
          * −1,2 nên chẳng có gì mà bò lên.
          */
-        const lakeFloorY = -0.75
-        // Màu ĐÁY hồ phải là màu nước, không phải màu bùn: mặt nước của game
-        // (`WaterSurface`) là tấm phẳng bám theo máy quay, bán kính chỉ chừng 29,
-        // nên phần hồ ở xa xe chưa được phủ nước và lộ nguyên đáy ra
-        this.box(LAKE.radiusX * 2 + 2, 0.6, LAKE.radiusZ * 2 + 2, LAKE.x, lakeFloorY - 0.3, LAKE.z, '#3d6f57', { castShadow: false })
-        this.game.objects.add(null, {
-            type: 'fixed', friction: 0.3, restitution: 0,
-            position: { x: LAKE.x, y: lakeFloorY - 0.3, z: LAKE.z },
-            colliders: [ { shape: 'cuboid', parameters: [ (LAKE.radiusX + 1), 0.3, (LAKE.radiusZ + 1) ] } ]
-        })
-
-        // Bề rộng dốc phải TỈ LỆ với bán kính nhỏ nhất của hồ. Để cứng 8 thì
-        // với hồ bề ngang 8 (hồ thiên nga) vành dốc lấp kín cả lòng hồ — thiên
-        // nga hoá ra đứng trên cạn.
-        const LAKE_RUN = Math.min(6, Math.min(LAKE.radiusX, LAKE.radiusZ) * 0.45)
-        const LAKE_DROP = 1.35
-        const lakeAngle = Math.atan2(LAKE_DROP, LAKE_RUN)
-        const lakeRampLength = Math.hypot(LAKE_RUN, LAKE_DROP)
-        const segments = 20
-
-        for(let i = 0; i < segments; i++)
-        {
-            const theta = (i / segments) * Math.PI * 2
-            const cos = Math.cos(theta)
-            const sin = Math.sin(theta)
-
-            // Tâm đoạn dốc nằm TRONG LÒNG hồ, thụt vào nửa bề rộng dốc.
-            // Đặt ra ngoài mép (bản trước) là dốc chìm hẳn dưới nền đất, xe bơi
-            // tới nơi vẫn đâm vào vách đứng của nền.
-            const px = LAKE.x + cos * (LAKE.radiusX - LAKE_RUN * 0.5)
-            const pz = LAKE.z + sin * (LAKE.radiusZ - LAKE_RUN * 0.5)
-
-            // Bề dài mỗi đoạn = cung chu vi, cộng dư để các đoạn gối lên nhau
-            const arc = (Math.PI * 2 * Math.max(LAKE.radiusX, LAKE.radiusZ)) / segments * 1.5
-
-            this.box(
-                lakeRampLength, 1.4, arc,
-                px, GROUND_TOP - LAKE_DROP * 0.5 - 0.7, pz, '#d8b47e',
-                { rotationY: -theta, rotationZ: lakeAngle, physical: true, castShadow: false }
-            )
-        }
+        /**
+         * Lòng hồ nay là MỘT mảng địa hình liền, không còn vành hai mươi hộp
+         * nghiêng ghép lại. Vành hộp cũ là nguồn gốc của bậc 0,71 đo được ở hai
+         * đầu hồ thiên nga: hộp ghép theo GÓC THAM SỐ của hình bầu dục, mà góc
+         * tham số không phải hướng pháp tuyến, nên hồ càng dẹt các hộp càng lệch
+         * nhau và hở ra khe. Xem `heightPatch()`.
+         *
+         * Màu đáy vẫn là màu NƯỚC chứ không phải màu bùn: mặt nước của game
+         * (`WaterSurface`) là tấm phẳng bám theo máy quay, bán kính chỉ chừng
+         * 29, nên phần hồ ở xa xe chưa được phủ nước và lộ nguyên đáy ra.
+         */
+        // Lòng hồ nay nằm ngay trong `islandHeight()` — cùng một mảng địa
+        // hình với cả hòn đảo, nên giữa bờ và lòng hồ không còn mối ghép nào
 
         /**
          * Không đắp bờ hay đáy gì cả: miệng hồ đã khoét hình bầu dục ở
@@ -763,31 +871,9 @@ export class FptuCampus
      */
     setSwanLake()
     {
-        const floorY = -0.75
-
-        this.box(SWAN_LAKE.radiusX * 2 + 2, 0.6, SWAN_LAKE.radiusZ * 2 + 2, SWAN_LAKE.x, floorY - 0.3, SWAN_LAKE.z, '#3f6f78', { castShadow: false })
-        this.game.objects.add(null, {
-            type: 'fixed', friction: 0.3, restitution: 0,
-            position: { x: SWAN_LAKE.x, y: floorY - 0.3, z: SWAN_LAKE.z },
-            colliders: [ { shape: 'cuboid', parameters: [ SWAN_LAKE.radiusX + 1, 0.3, SWAN_LAKE.radiusZ + 1 ] } ]
-        })
-
-        const RUN = Math.min(6, Math.min(SWAN_LAKE.radiusX, SWAN_LAKE.radiusZ) * 0.45)
-        const DROP = 1.35
-        const angle = Math.atan2(DROP, RUN)
-        const rampLength = Math.hypot(RUN, DROP)
-        const segments = 20
-
-        for(let i = 0; i < segments; i++)
-        {
-            const theta = (i / segments) * Math.PI * 2
-            const px = SWAN_LAKE.x + Math.cos(theta) * (SWAN_LAKE.radiusX - RUN * 0.5)
-            const pz = SWAN_LAKE.z + Math.sin(theta) * (SWAN_LAKE.radiusZ - RUN * 0.5)
-            const arc = (Math.PI * 2 * Math.max(SWAN_LAKE.radiusX, SWAN_LAKE.radiusZ)) / segments * 1.5
-
-            this.box(rampLength, 1.4, arc, px, GROUND_TOP - DROP * 0.5 - 0.7, pz, '#d8b47e',
-                { rotationY: -theta, rotationZ: angle, physical: true, castShadow: false })
-        }
+        // Hồ dẹt nhất khu (14 × 9) nên chính nó dính bậc 0,71 ở hai đầu Đông–Tây
+        // khi còn dùng vành hộp nghiêng. Nay là mảng địa hình liền — xem `basin()`.
+        // Lòng hồ do `islandHeight()` khoét — xem chú thích ở hồ sen
     }
 
     /** Sân bóng rổ (góc Bắc cạnh đường) + sân bóng đá (giữa trường) + sân võ. */
@@ -852,25 +938,102 @@ export class FptuCampus
         const spots = []
         for(let i = 0; i < 3; i++)
         {
-            const x = LAWN.x + LAWN.width * 0.5 - 1.2 - i * 2.6
-            spots.push({ x, z: LAWN.z - 4.5 }, { x, z: LAWN.z + 4.5 })
+            const x = LAWN.x + LAWN.width * 0.5 - 1.4 - i * 4.4
+            spots.push({ x, z: LAWN.z - 5.4 }, { x, z: LAWN.z + 5.4 })
         }
 
-        for(const spot of spots)
-            this.palm(spot.x, spot.z)
+        // Mỗi cây một hướng nghiêng và cỡ khác nhau — hàng cọ hết trông nhân bản
+        spots.forEach((spot, i) =>
+            this.palm(spot.x, spot.z, { scale: 0.7 + ((i * 5) % 4) * 0.05, lean: i * 1.7 }))
     }
 
-    palm(x, z)
+    /**
+     * CÂY CỌ — thân cong, tán lá rủ xuống, có buồng dừa.
+     *
+     * Bản trước là một cái cột thẳng đơ cắm sáu thanh dẹt chìa ngang — đúng thứ
+     * người dùng chê "hình vuông hình nhọn". Cọ thật thì thân hơi cong theo một
+     * hướng, các tàu lá vươn ra rồi RỦ XUỐNG thành đường cong, và lá hẹp dần về
+     * phía ngọn. Dựng đúng ba đặc điểm đó là nhìn ra cây ngay.
+     *
+     * `lean` là hướng nghiêng của thân (radian). Truyền khác nhau cho mỗi cây
+     * thì cả hàng cọ hết trông như nhân bản.
+     */
+    palm(x, z, { scale = 1, lean = 0 } = {})
     {
-        this.box(0.32, 4, 0.32, x, 2, z, COLORS.trunk, { physical: true, geometry: this.cylinderGeometry })
+        const H = 4.6 * scale          // chiều cao thân
+        const SEGS = 8                 // số đốt thân
+        const BEND = 0.75 * scale      // thân ngả bao nhiêu ở ngọn
+        const dx = Math.cos(lean)
+        const dz = Math.sin(lean)
 
-        for(let i = 0; i < 6; i++)
+        // Thân: các đốt bám theo một cung parabol, mỗi đốt nghiêng đúng bằng
+        // tiếp tuyến của cung tại đó nên nối nhau liền, không gãy khúc.
+        for(let i = 0; i < SEGS; i++)
         {
-            const angle = i * Math.PI / 3 + 0.35
-            this.box(2, 0.12, 0.48, x + Math.cos(angle) * 0.9, 4.05, z + Math.sin(angle) * 0.9, COLORS.foliage, { rotationY: -angle, rotationZ: -0.42, castShadow: false })
+            const t = (i + 0.5) / SEGS
+            const segH = H / SEGS
+            const radius = (0.29 - 0.12 * t) * scale
+            const offset = BEND * t * t
+            const tilt = Math.atan2(2 * BEND * t, H)
+
+            this.box(
+                radius * 2, segH * 1.08, radius * 2,
+                x + dx * offset, H * t, z + dz * offset,
+                i % 2 ? '#8a6a42' : '#7b5c39',
+                {
+                    rotationZ: -dx * tilt,
+                    rotationX: dz * tilt,
+                    geometry: this.cylinderGeometry,
+                    physical: i === 0,
+                },
+            )
         }
 
-        this.box(0.42, 0.38, 0.42, x, 3.85, z, '#8f6b2f')
+        const topX = x + dx * BEND
+        const topZ = z + dz * BEND
+
+        // Bẹ lá ôm ngọn
+        this.box(0.5 * scale, 0.42 * scale, 0.5 * scale, topX, H, topZ, '#6f5a33', { geometry: this.cylinderGeometry })
+
+        // Tán: 11 tàu lá toả đều, mỗi tàu là một chuỗi đốt vươn ra rồi rủ xuống
+        const FRONDS = 11
+        for(let f = 0; f < FRONDS; f++)
+        {
+            const a = (f / FRONDS) * Math.PI * 2 + lean * 0.5
+            // Tàu nào rủ nhiều tàu nào rủ ít — tất định theo chỉ số, không random
+            const droop = (1.35 + ((f * 7) % 5) * 0.16) * scale
+            const reach = (2.15 + ((f * 3) % 4) * 0.14) * scale
+            const hue = f % 3 === 0 ? '#4f8f34' : (f % 3 === 1 ? '#5aa832' : '#448029')
+
+            for(let j = 0; j < 5; j++)
+            {
+                const u = (j + 0.5) / 5
+                const r = 0.12 * scale + u * reach
+                const drop = droop * u * u
+                const pitch = Math.atan2(2 * droop * u, reach)
+
+                this.box(
+                    (reach / 5) * 1.15, 0.075 * scale, (0.56 - 0.34 * u) * scale,
+                    topX + Math.cos(a) * r, H + 0.34 * scale - drop, topZ + Math.sin(a) * r,
+                    hue,
+                    { rotationY: -a, rotationZ: -pitch, castShadow: j < 3 },
+                )
+            }
+        }
+
+        // Chỏm giữa tán — không có thì nhìn từ trên xuống thấy thủng một lỗ
+        this.box(0.62 * scale, 0.3 * scale, 0.62 * scale, topX, H + 0.4 * scale, topZ, '#4f8f34', { geometry: this.cylinderGeometry, castShadow: false })
+
+        // Buồng dừa dưới tán
+        for(let c = 0; c < 4; c++)
+        {
+            const a = c * 1.9
+            this.box(
+                0.3 * scale, 0.3 * scale, 0.3 * scale,
+                topX + Math.cos(a) * 0.36 * scale, H - 0.16 * scale, topZ + Math.sin(a) * 0.36 * scale,
+                '#6b4a2a', { geometry: this.cylinderGeometry, castShadow: false },
+            )
+        }
     }
 
     /**

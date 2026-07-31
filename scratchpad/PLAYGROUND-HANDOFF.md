@@ -1,374 +1,288 @@
-# Bàn giao — Sân chơi 3D `/playground` (fork folio-2025)
+# Bàn giao — Sân chơi 3D `/playground` (fork folio-2025, MIT, Bruno Simon)
 
-Cập nhật **31/7/2026**. Nhánh `feat/playground-3d`.
-
-> **TRẠNG THÁI đợt nhạc/thời tiết/cầu vồng/đèn pha: ĐÃ DEPLOY PROD + ĐÃ PUSH**
-> (`f8b0d9c` trên `origin feat/playground-3d`, KHÔNG đụng `main`).
->
-> **Đợt LÀM DÀY KHU DỰ ÁN + KHU LAB (mục 2b bên dưới): đã test local, chờ deploy.**
->
-> **Mốc phục hồi:** thẻ git `backup/playground-pre-expand-20260730` (chỉ ở local).
-> Hoàn nguyên:
-> `git checkout backup/playground-pre-expand-20260730 -- playground-3d frontend/public/playground`
+Viết lại **31/7/2026**, sau phiên làm khu Đại học FPT + pháo tên lửa.
+Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa bất cứ thứ gì.**
 
 ---
 
-# 1. Đợt 31/7 đã làm gì
+# 0. TRẠNG THÁI
 
-| Commit | Nội dung |
-|---|---|
-| `57db3ad` | Nhạc nền 5 beat riêng của user + mục Music trong Cài đặt (bật/tắt · âm lượng · đổi bài) |
-| `0fc4dde` | Nhạc chỉ vào sau khi bấm "Click to Start" 1,5s; mặc định 23% |
-| `111859b` | Nút Weather đổi vòng Auto/Rain/Snow/Clear |
-| `a2b3b33` | Cổng cầu vồng lái xuyên qua được, mọc lên sau mưa |
-| `d894ab2` | Đèn pha rọi sáng thật mặt đường ban đêm |
-| `ff0d4d8` | Nút Headlights (Auto/On/Off) và nút Time (Auto/Day/Night) |
+- **Đã deploy prod nhiều đợt trong phiên** — chạy tại `cuongthai.com/playground/`.
+- **CHƯA push origin.** 12 commit từ `3a6361d` tới `cda5cdf` đang nằm ở local.
+  Quy trình chuẩn: user test prod xong xác nhận → mới `git push`.
+- ⚠️ **Có phiên Claude thứ hai làm chung cây repo** (đang sửa `content/academy/*`).
+  ĐỪNG `git add -A` ở gốc. Chỉ add đúng thư mục của mình.
 
-Bảng Cài đặt hiện có, theo thứ tự: Audio · **Music · Volume · Track · Time ·
-Headlights · Weather** · Quality · I'm stuck · Reset · Renderer · Server.
-Tất cả nút mới đều dùng đúng họ nút của bản mẫu (`.button`, viền
-`alpha(#ffffff,.8)`, bo 8px), có tiếng click, và nhớ qua `localStorage`.
+## Việc CÒN LẠI (user đã chốt làm, chưa động tới)
 
-## Nhạc
+**Quận Tây-Nam đảo chính** — đất trống hoàn toàn ở `X −80…−25, Z +20…+80`.
+User đã chọn **CẢ BỐN** khu:
 
-5 file ở `static/sounds/musics/CuongThai{1..5}.mp3` (~22MB), khai trong
-`sources/data/musics.js`. Thêm bài = chỉ sửa file đó. Nhạc của chính user, không
-dính bản quyền ai. **Âm lượng thật = thanh trượt × 0,15** (trần thấp có chủ
-đích: kéo hết cỡ vẫn chỉ bằng nửa tiếng chim). Mặc định 23% ⇒ 0,0345.
+1. **Sân khấu nhạc hội** — sàn nhảy nhấp theo nhạc thật (đọc biên độ từ Howler),
+   lái xe lên 5 bục đĩa than để đổi bài, điểm tương tác dẫn về `/music`.
+2. **Sân bóng đá lái xe** (kiểu Rocket League) — bóng Rapier động, 2 khung thành,
+   đếm bàn thắng + thành tựu. Kèm dốc nhảy, vòng lật, bập bênh.
+3. **Làng ngôn ngữ JA/EN/ZH** — torii + vườn đá, cổng tam quan + đèn lồng, tháp
+   đồng hồ. Tông vào khối chữ = câu hỏi từ vựng, nối `VocabQuiz` (1221 từ sẵn có).
+4. **Bến cảng + hải đăng** — cầu tàu, thuyền, đèn hải đăng QUÉT thật ban đêm,
+   container xếp chồng để húc.
 
-Bản sao dự phòng nhạc + file `.blend` gốc: `~/Downloads/playground-source-assets/`.
+Khi dựng khu mới nhớ: **điểm hồi sinh phải khai trong `Respawns.js`** (chạy
+TRƯỚC `world.step(1)`, thêm từ chỗ khác là mất mục trên bản đồ mà không báo lỗi),
+và thêm một dòng vào `Map.js → setLocations()`.
 
 ---
 
-# 2b. ĐÃ LÀM 31/7 (đợt sau): làm dày khu Dự án + khu Lab
+# 1. BA BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
 
-User chọn **làm dày khu cũ trước**, chưa dựng khu mới. Kết quả:
+Cần dev server sống: `cd playground-3d && npm run dev` (xem mục 4).
 
-| | Trước | Sau |
+```bash
+node tools/check-fptu-layout.mjs        # công trình đè nhau, đường bị chắn, thò ra biển
+node tools/check-ghost-colliders.mjs    # VA CHẠM MỒ CÔI + MẶT TRANH NHAU CHIỀU SÂU
+```
+
+`check-ghost-colliders.mjs` là bộ kiểm **quan trọng nhất** của khu này — nó bắt
+đúng hai lỗi mà mắt không thấy và người dùng đâm phải suốt:
+
+- **A. Va chạm mồ côi** = collider không có hình nào gần ⇒ "vật vô hình chặn xe"
+- **B. Mặt tranh nhau chiều sâu** = hai tấm chồng nhau, mặt trên lệch < 0,008
+  ⇒ vệt nhiễu nhấp nháy
+
+⚠️ **Chính bộ kiểm đã tự báo sai HAI lần**, phải sửa nó trước khi tin:
+1. Không đọc `InstancedMesh` → báo oan mọi gốc cây là mồ côi.
+2. Đo mesh bằng GỐC TOẠ ĐỘ → báo oan 6 mồ côi ở cụm chướng ngại vật (nó là một
+   mesh gộp, gốc nằm lệch hẳn khỏi hình). Nay đo bằng **hộp bao**.
+
+**Hiện tại cả hai bộ kiểm đều 0 lỗi.**
+
+## Bộ kiểm KHÔNG bắt được gì
+
+Không bộ nào so **vật cản với LÒNG ĐƯỜNG**. Trong phiên này tôi đặt vật chắn lối
+xe **BỐN lần liên tiếp**, lần nào cũng chỉ lái thật mới lộ:
+
+| # | Vật | Chỗ |
 |---|---|---|
-| Khu Dự án | 6 module × 1 ảnh | **8 module × 1–3 ảnh** (thêm Courses, Experience Log) |
-| Khu Lab | 8 module | **10 module** (thêm Forum, GitHub Repo Hub) |
-| Tổng ảnh | 6 + 16 | **20 + 20** |
+| 1 | cột cờ | giữa tim trục lễ nghi |
+| 2 | biển hiệu FPT/QS | giữa lối cổng Bắc |
+| 3 | cột đèn | (−100,4 · 24), giữa lối cổng Nam |
+| 4 | hai tường biển | đúng ĐẦU CẦU, chừa khe 2 đơn vị trong khi xe rộng 1,9 |
 
-**Đã kiểm bằng cách CHẠY THẬT** (Vite :5174, không qua Next): duyệt trọn 8 dự án
-× mọi ảnh ⇒ đúng 20/20 texture nạp, và trọn 10 mục Lab ⇒ quay vòng về đầu, không
-treo, không lỗi mới.
+⚠️ **Quy tắc: thêm bất cứ vật nào có `physical: true` gần đường ⇒ PHẢI lái thử
+lại tuyến đó.** Xem mục 3 để biết cách lái tự động.
 
-## Chụp ảnh trưng bày — quy trình
+---
 
-**Playwright 1.61 + chromium có sẵn ngay trong `node_modules` của repo** (không
-phải cài). Script mẫu ở `scratchpad/shoot.mjs` (đường dẫn scratchpad theo phiên,
-chép lại nếu mất): viewport 1600×900 @2x → `sips -z 540 960` → PNG 960×540 (16:9,
-~100–280KB mỗi tấm, ngang ảnh cũ). Lab cần thêm bản mini `sips -z 136 240`.
+# 2. BẢY BÀI HỌC ĐẮT NHẤT
 
-- Trình duyệt Playwright **sạch, KHÔNG đăng nhập** ⇒ chỉ chụp được nội dung công
-  khai. Đó là CHỦ Ý: `/notes`, `/messages`, `/chat`, `/finance` là dữ liệu riêng
-  tư của user — **đừng đưa lên sân chơi**. `/hub`, `/creator` chỉ ra màn hình
-  đăng nhập nên cũng vô dụng.
-- **`/feed` cố tình BỎ**: trang công khai thật, nhưng ảnh sẽ đóng băng tên + bài
-  viết của người dùng khác vào một file tĩnh vĩnh viễn. User đã chốt không đưa.
-- Nhớ ẩn bong bóng chat AI trước khi chụp (duyệt phần tử `position:fixed` ở góc
-  dưới rồi `display:none`) và đợi ~2,8s cho animation framer-motion xong —
-  `/repos` từng chụp trúng lúc còn đang mờ dần.
-- Duyệt nhanh cả lô ảnh bằng một tấm lưới HTML rồi chụp lại (xem `sheet.mjs`),
-  đỡ phải mở từng tấm.
+## 2.1 MỘT hàm cao độ, đừng ghép hộp nghiêng
 
-## Bẫy MỚI phát hiện trong đợt này
+Mọi chỗ "xe kẹt" đều sinh ra từ cùng một kiểu làm: ghép nhiều hộp nghiêng thành
+một cái dốc. Hộp ghép bao giờ cũng hở, và mỗi khe là một bậc bánh xe không leo nổi.
 
-| Bẫy | Sự thật |
-|---|---|
-| **TỐI ĐA 5 ảnh mỗi dự án** | Dãy chấm phân trang là mesh CÓ SẴN trong `areas.glb`: `refPagination → inner → 5 plane`, kèm đúng 5 `refIntersectPagination`. Ảnh thứ 6 vẫn lật được nhưng không có chấm và `intersectPagination[i]` thành undefined. ĐO từ file .glb, đọc JSON chunk bằng `buf.readUInt32LE(12)` |
-| Sợ thêm ảnh làm nặng màn hình tải | **KHÔNG.** Ảnh khu Dự án/Lab nạp LƯỜI bằng `resourcesLoader.getLoader('texture')` riêng + `loadSibling`, không nằm trong preload khởi động. `imageMini` của Lab nạp cả loạt nhưng mỗi tấm chỉ ~10–30KB |
-| **Console của khung xem ghi ĐÔI mọi message và GIỮ lịch sử qua reload** | Một `console.error` hiện thành 2 dòng ⇒ "2 lỗi" thường chỉ là MỘT. Muốn biết lỗi cũ hay mới thì phải chèn mốc `console.error('===MOC===')` rồi đếm tương đối — đừng tin số dòng tuyệt đối |
-| `preview_start` báo cổng X nhưng Vite chạy ở cổng khác | 5173 bận ⇒ Vite tự nhảy 5174, trong khi preview cấp 50695 ⇒ mọi thao tác trình duyệt vào 50695 đều fail. **Đọc `preview_logs` lấy cổng THẬT rồi `navigate` tay** |
-| Lỗi `computeBoundingSphere(): radius is NaN` lúc khởi động lần đầu | Xuất hiện đúng một lần khi Vite đang *re-optimizing dependencies* (trang bị cắt ngang rồi tự reload). Đã thử tái hiện 3 lần tải lại với CẢ bản cũ lẫn bản mới: không lặp lại. Không phải do dữ liệu |
+Dùng `FptuCampus.heightPatch(cx, cz, sizeX, sizeZ, cols, rows, fn, hex, colorFn)`
+— một hàm `fn(x,z)` sinh ra CẢ hình LẪN va chạm nên không thể lệch.
 
-## Test khu Dự án / khu Lab mà KHÔNG cần lái xe
+- ⚠️ **Thứ tự tham số heightfield của Rapier: `[nrows, ncols]` với `nrows` là số
+  ô theo trục Z, `ncols` theo trục X.** Mảng xếp `heights[iz + ix*(nrows+1)]`.
+  Suy từ `Floor.setPhysical()` — chỗ duy nhất đã chạy đúng thật. Lưới ở đó VUÔNG
+  nên đổi chỗ hai tham số không ai thấy; hồ thì dẹt (36×26) nên lộ ngay.
+- Đường sinh nên là **smoothstep** `t*t*(3-2t)`: đạo hàm 0 ở cả hai đầu nên không
+  có gờ ở chân lẫn đỉnh.
+- Mép mảng trả về thấp hơn mặt nền ~5 phân để nền che, tránh z-fighting.
+
+Nay cả đảo, cả bờ, hai lòng hồ, đồi thông và cù lao đều là `heightPatch`.
+
+## 2.2 Tấm lát PHẢI có va chạm
+
+`slab()` tạo luôn collider. Trước đó tấm lát chỉ là hình còn mặt cứng vẫn là mặt
+đảo ở 0,04 ⇒ xe chìm 10–16 phân dưới mặt sân (user: "đi đang bị lún").
+
+## 2.3 Đừng đắp hộp làm cây
+
+Mọi tán lá mềm đi qua `campus.canopy(x, y, z, scale)` → gom vào `canopySpots` →
+cuối hàm dựng tạo MỘT `Foliage` chung (hệ lá của bản mẫu: phiến xoay, chuyển sắc,
+lay theo gió). **Thấy `COLORS.foliage` trong một `box()` là sai.**
+
+## 2.4 Nội dung biển bảng vẽ bằng CANVAS
+
+`FptuSigns.painted(w, h, draw)` → `CanvasTexture` + `MeshDefaultMaterial({
+colorNode: textureNode(map) })`. Đắp hộp thì ra mấy ô màu vô nghĩa (user chê 2 lần).
+
+⚠️ Hàm co chữ: **đừng `parseInt(font)`** — chuỗi "bold 129px sans-serif" cho NaN
+nên vòng lặp không chạy và chữ tràn đè lên nhau. Bóc bằng `/(\d+)px/`.
+
+## 2.5 Đồ của thế giới mẫu dựng LƯỜI
+
+`Objects` chỉ tạo thân vật lý khi người chơi tới gần. Muốn dời đồ của bản mẫu:
+
+- Gọi trong hàm dựng → KHÔNG ăn (thân chưa tồn tại). Phải `ticker.wait(2)`.
+- Cụm `blocks`/`bumpers001` là **HAI vật rời**: `blocks` giữ HÌNH, `bumpers001`
+  giữ VA CHẠM (một thân mang TÁM collider lệch ra quanh nó). Xét mỗi vị trí thân
+  là dời được va chạm mà bỏ lại hình, và ngược lại.
+- Xem `FptuCampus.relocateSampleObstacles()` — nó ghi lại đủ ba cách đã thất bại.
+
+## 2.6 Vật liệu và ánh sáng
+
+- Chỉ có **MỘT nguồn sáng** trong cả thế giới. Thả `PointLight` là vô nghĩa —
+  ánh lửa phải là vật liệu tự phát sáng `emissiveOrangeRadialGradient`
+  (lấy qua `game.materials.getFromName(...)`).
+- **Cộng sáng trên nền đất cam đẩy màu về TRẮNG.** Dùng pha trộn thường.
+- Khói/vệt sáng mềm: canvas radial gradient → `colorNode = tex.rgb`,
+  `opacityNode = tex.a`, `transparent`, `depthWrite:false`.
+- ⚠️ Vệt sáng phải treo **CAO HƠN mọi lớp lát** (lát cao nhất 0,20 → vệt ở 0,36).
+- Màu theo đỉnh: `colorNode: attribute('color')`. **Pha LIÊN TỤC, đừng cắt ngưỡng**
+  (cắt ngưỡng thì ranh giới chạy men theo cạnh tam giác, ra dải răng cưa). Nhiễu
+  cho mép tự nhiên phải NHỎ HƠN dải chuyển màu.
+
+## 2.7 Thứ tự khởi tạo
+
+`Game.js`: `options` 110 · `weather` 117 · `world` 126 · **nội dung thế giới ở
+`world.step(1)` dòng 199**. Chạm sớm ⇒ game đứng ở `resources`, **KHÔNG một dòng
+lỗi**. Cách nhận biết: `Object.keys(window.game)` dừng ở `resources`.
+
+⇒ **Nút trong bảng Cài đặt cho thứ dựng trong world phải do CHÍNH module tự nối**,
+không nối từ `Options` (đã thử `ticker.wait(2)` và vẫn sớm). Xem
+`VehicleRocket.setSettingsButtons()`.
+
+---
+
+# 3. TEST TỰ ĐỘNG
+
+Playwright 1.61 + chromium **có sẵn trong `node_modules` của repo gốc**. Script ở
+scratchpad ngoài repo phải nạp theo đường dẫn tuyệt đối:
 
 ```js
-game.reveal.updateStep(1)              // đẩy intro (khung xem không tự bấm được)
-game.player.respawn('projects')        // tên: projects · lab · career · circuit …
-game.world.areas.projects.open()       // mở khu tại chỗ
-game.world.areas.projects.nextProject()  // đổi dự án  (Lab dùng .next())
-game.world.areas.projects.nextImage()    // lật ảnh
-game.world.areas.projects.images.resources.size   // đếm texture ĐÃ nạp thật
+const { chromium } = await import('/Users/admin/Downloads/api-backend/node_modules/playwright/index.mjs')
 ```
 
-`images.resources.size` chính là chốt kiểm đáng tin: nó phải bằng tổng số ảnh
-khai báo sau khi duyệt hết (20 ở bản hiện tại).
+## Vào game (khuôn đã chạy được)
 
-Bộ kiểm "mọi tên ảnh có file thật" ở `scratchpad/check-images.mjs`, chạy kèm
-`--selftest` để nó tự chứng minh bắt được file thiếu trước khi tin kết quả.
+```js
+await page.waitForFunction(() => window.game?.world?.intro?.text?.mesh && window.game?.world?.intro?.soundButton?.mesh)
+await page.getByRole('button', { name: /play/i }).first().click().catch(async () => {
+    await page.evaluate(() => document.querySelector('.js-intro-play, .intro button, button')?.click())
+})
+await page.waitForTimeout(2500)
+await page.evaluate(() => { if(window.game.world.intro?.text) window.game.reveal.updateStep(1) })
+await page.waitForTimeout(3000)
+await page.evaluate(() => window.game.player.respawn('fptu'))
+await page.waitForTimeout(6000)
+// CHỐT KIỂM: màn chào phải biến mất, không thì mọi ảnh chụp đều vô nghĩa
+```
 
----
+- Màn chào là lớp **HTML nằm trên canvas** — `reveal.updateStep(1)` KHÔNG gỡ nó.
+- Gọi `updateStep(1)` khi `world.intro.text` đã bị dọn là **ném lỗi** trong `Reveal.js`.
+- Ép ban ngày/đêm: `game.dayCycles.preference.set('day'|'night', 0)`.
 
-# 2c. KHU ĐẠI HỌC FPT — đảo riêng (commit `3d8bc58`, chưa deploy)
+## Lái tự động
 
-User yêu cầu và đã duyệt hướng: trường nằm trên MẢNH ĐẤT RIÊNG ngoài khơi Tây
-(đảo `ISLAND` tâm −152·40, 104×84), nối bằng cầu từ bờ Tây đảo chính. Bố cục
-xếp theo BẢN ĐỒ CHÍNH THỨC user gửi: trục cổng → đường dọc trường → biển xếp
-hạng → chữ FPT UNIVERSITY → cỏ + cọ → **Alpha GIẬT CẤP 3-4-5-6-7-7-6-5-4-3**
-→ **hồ sen SAU LƯNG Alpha** → Beta bên kia hồ · Delta/Gamma Bắc · Dom A–D giữa
-+ Dom E–H Tây · tượng SELF MADE MAN giữa vườn Dom · bóng đá giữa · bóng rổ góc
-Bắc · nhà ăn · bãi xe. Trục giữa TRỐNG (nhà lùi ≥18) nên không che xe.
+`Player.updatePrePhysics()` kiểm `action.**active**` RỒI mới cộng `action.value`.
+Bơm mỗi `value` thì xe đứng im và **mọi ca test đều báo "kẹt"**, kể cả trên đất trống.
 
-Mọi thứ trong `sources/data/fptu.js` (số liệu, LÝ DO) + `Game/World/FptuCampus.js`
-+ `FptuQuiz.js` (hộp thoại sinh viên/kỳ + bảng hỏi) + `tools/build-fptu-questions.mjs`
-(sinh `static/fptu/questions-ky{1,2,3}.json` từ `content/exams` — đề THẬT, Kỳ 4–9
-chưa có đề thì bảng nói thẳng) + `tools/make-fptu-sign.py` (chữ 3D).
+```js
+const a = window.game.inputs.actions.get('forward'); a.active = true; a.value = 1
+```
 
-## 🪤 Bẫy MỚI dẫm trong đợt FPTU — đắt nhất là nhóm đo đạc
-
-| Bẫy | Sự thật |
-|---|---|
-| **`physicalVehicle.moveTo(pos, rotation)` nhận GÓC SỐ** | Truyền object quaternion vào là hướng xe thành rác KHÔNG báo lỗi. `Respawns` lưu `rotation` là số — nhìn đó mà theo |
-| **`player.respawn()` chạy overlay BẤT ĐỒNG BỘ** | Callback teleport nổ sau vài giây, ĐÈ LÊN mọi `moveTo` gọi xen giữa. Một bài test "đo hướng xe" cho kết quả NGƯỢC vì xe thật ra đang đứng ở landing. **Đừng tin phép đo nào chạy xen giữa một respawn** |
-| **Sau `reveal.updateStep(1)`, `player.state` vẫn LOCKED** | Muốn lái được trong test phải `respawn('fptu')` một phát (respawn tự đặt STATE_DEFAULT ở cuối) |
-| Mũi xe ở yaw 0 hướng **+X** (đo SẠCH 31/7) | Respawn quay vào trường (−X) ⇒ `rotation: Math.PI` |
-| Chờ intro phải chờ CẢ `intro.text.mesh` LẪN `intro.soundButton.mesh` | `hideLabel()` đụng cả hai; chờ thiếu một là reveal đứt NGẮT QUÃNG (lúc được lúc không) |
-| Thành tựu `sea` = "cách tâm > 120" | Đảo trường cách tâm ~157 ⇒ đứng giữa sân cũng được tặng "Under the sea". Đã loại trừ hình chữ nhật đảo+cầu trong `Player.js` |
-| Headless SwiftShader chỉ ~15fps | Xe bò — test lái phải giữ W 25–30s KÈM Shift (boost), đừng kết luận "không lái được" sau 9s |
-| Khung xem `visibilityState:hidden` ⇒ rAF = 0 | Game "đứng hình" dù mã lành — dùng Playwright (`scratchpad/play.mjs` của phiên) |
-| Xe thả gần cổng là hộp thoại bật che khung chụp | Trước screenshot phải `display:none` cái `.js-fptu-gate` (gỡ class chưa đủ) |
-
-Test trọn gói: `test-fptu2.mjs` (lái thật qua cổng · luồng hỏi đáp · sea ·
-đất cũ sạch). Chạy bằng node với dev server :5174 đang sống.
+⚠️ **Luôn để một CA ĐỐI CHỨNG ở chỗ chắc chắn lái được.** Ca đó fail thì dừng,
+đừng tin số nào. Và thả xe tránh nhà + cột đèn (cột đèn ở x = −106 ± 5,6 dọc
+đường lớn; và dọc hai đường vào ở lề ngoài).
 
 ---
 
-# 2. VIỆC TIẾP THEO: mở rộng bản đồ
-
-~~Vẫn CHƯA làm~~ → **ĐÃ LÀM theo cách khác** (đảo riêng, mục 2c). Khảo sát góc
-Tây-Nam dưới đây GIỮ NGUYÊN GIÁ TRỊ cho khu tiếp theo nếu muốn thêm gì đó
-trên đảo chính, **đừng đo lại**.
-
-## Bản đồ hiện tại (đo từ `static/areas/areas.glb`)
-
-13 khu, toạ độ tâm:
-
-| Khu | x, z | Khu | x, z |
-|---|---|---|---|
-| achievements | 70,6 · 9,9 | landing | 49,3 · 38,5 |
-| altar | 75,3 · −27,9 | projects | 35,8 · 13,4 |
-| behindTheScene | 52,5 · −12 | social | 28,9 · −21,8 |
-| bowling | 2,3 · 68,9 | timeMachine | −54,5 · −67,4 |
-| career | 25,8 · −0,9 | toilet | 66,9 · 66,7 |
-| circuit | −17,7 · 7,1 | cookie | 12,3 · 35,3 |
-| lab | 13,1 · 17,7 | | |
-
-- Địa hình `terrain.glb`: **192×192** (−96…96), **lái được toàn bộ**
-- Vùng đường nhựa/dốc (`playgroundPhysical.glb`) chỉ ở X −14,5…35 · Z −37,3…27,2
-- **⇒ Góc Tây-Nam TRỐNG HOÀN TOÀN: X −80…−25, Z +20…+80.** Đủ chỗ cho 1–2 khu
-  mới mà không phải dịch bất cứ thứ gì đang có.
-
-## Thêm khu mới — hai đường
-
-`Areas.js` duyệt các node CẤP CAO của `areas.glb` và khớp tên theo TIỀN TỐ với
-một danh sách cứng. Một "khu" = một node cấp cao + các node mốc bên trong
-(`zoneBounding`, `zoneFrustum`, `interactivePoint`…, xem `Area.js`).
-
-- **A1 — dựng bằng mã (KHUYẾN NGHỊ, rủi ro thấp).** Tự tạo hình + thân vật lý +
-  vùng bằng `game.zones.create('cylinder', position, radius)` + điểm tương tác
-  bằng `game.interactivePoints.create(...)`. Không đụng `.glb`. Đúng cách chữ 3D
-  CUONG THAI đã được dựng.
-- **A2 — sửa `.blend` rồi xuất lại `areas.glb` (RỦI RO CAO).** Đây đúng chỗ đã
-  dẫm bẫy: ghép chữ thẳng vào `areas.glb` từng làm **cả thế giới kẹt ở màn hình
-  tải, dừng ở tài nguyên 244/250, KHÔNG ném lỗi nào**. Nếu làm: Blender 5.1.2 có
-  sẵn trong máy, `.blend` gốc 16MB ở `~/Downloads/playground-source-assets/blender/`.
-
-Khu mới còn cần: một điểm hồi sinh (`respawnsReferences.glb`, xem `Respawns.js`)
-và một dòng trong `Map.js → setLocations()` để hiện trên bản đồ.
-
-## Làm dày khu đã có — rẻ nhất
-
-Khu Dự án và khu Lab **phân trang theo độ dài dữ liệu** (`projectsData.length` /
-`labData.length`), **KHÔNG bị bó vào số bảng trong model**. Thêm module thứ 7,
-8, 9… chỉ là thêm mục vào `data/projects.js` + ảnh 960×540 vào `static/`.
-
-## Cổng dẫn vào các phần khác của site
-
-`game.interactivePoints.create(<Vector3 bất kỳ>, 'nhãn', align, state, onInteract, …)`
-— khuôn mẫu ở `TimeMachineArea.js` (đang trỏ về `cuongthai.com/games`). Không
-cần sửa model. Hộp xác nhận "rời trang" đã có sẵn từ nút thoát trong `index.html`.
-
----
-
-# 3. 🪤 BẪY ĐÃ DẪM — đừng lặp lại
-
-## Về công cụ và môi trường
-
-| Bẫy | Hậu quả |
-|---|---|
-| **Khung xem của Claude VẼ ĐƯỢC cảnh 3D** | Ghi chú cũ nói "không bao giờ vẽ xong" là SAI, đã bác bỏ 31/7. Chụp màn hình duyệt hình ảnh được. Cái nó KHÔNG làm được là tự đẩy intro qua — gọi `game.reveal.updateStep(1)` từ console |
-| `window.game` chỉ có khi `VITE_GAME_PUBLIC` | Đã đặt trong `playground-3d/.env.development` (chỉ chế độ dev). **ĐỪNG đặt vào `.env`** — file đó áp cho CẢ bản dựng production và `window.game` sẽ lọt vào gói phát hành (đã dẫm). `vite.config.js` gọi `import 'dotenv/config'` nạp `.env` vào process.env, mà process.env THẮNG mọi file `.env.<mode>`, kể cả khi giá trị rỗng |
-| Next.js chốt danh sách file `public/` lúc SERVER KHỞI ĐỘNG | Dựng lại sân chơi ⇒ gói JS đổi mã băm ⇒ server đang chạy trả **404** ⇒ không mã nào chạy ⇒ màn hình tải quay mãi, **không lỗi nào để thấy**. Test bằng `npm run dev` ở `playground-3d` (:5173) là tránh hẳn |
-| `pkill -f "next start"` không giết được | Node đổi tên tiến trình thành `next-server`. Diệt theo CỔNG: `lsof -ti:3000 \| xargs -r kill -9` |
-| `JSON.stringify` biến NaN/Infinity thành `null` | Phép đo ra toàn `null` mà tưởng mã hỏng. In `String(giá trị)` ra kiểm |
-| Đọc `camera.x` thay vì `camera.position.x` | Ra `undefined` ⇒ NaN ⇒ khối biến mất khỏi cảnh, tưởng lỗi vẽ. Mất 4 lượt mới tìm ra |
-| `timeout` không có trên macOS | Dùng `perl -e 'select(undef,undef,undef,N)'` để chờ |
-
-## Về thế giới 3D này
-
-| Bẫy | Hậu quả |
-|---|---|
-| **Máy quay nhìn từ trên xuống, khung hình gần như KHÔNG CÓ TRỜI** | Đo bằng `Vector3.project`: đỉnh một vòng cung tròn LUÔN rơi ở y > 1 (mép trên là 1,0) với MỌI bán kính 6→22 và MỌI khoảng cách 10→70 — càng xa càng vọt cao. Mọi thứ "treo trên trời" đều vô hình. Máy quay cao 22, vùng nhìn bán kính ~29, FOV 25, far 200, sương mù 43→85 |
-| Cộng sáng (`AdditiveBlending`) trên nền đất cam | Đẩy mọi màu bão hoà về TRẮNG. Dùng pha trộn thường mới giữ được màu |
-| Bẹp một khối theo chiều đứng thì bẹp luôn BỀ DÀY của nó | Dải cầu vồng 1,6 bẹp 0,3 còn 0,48 đơn vị = một sợi chỉ mờ |
-| **`.normalize()` trong TSL khi vector có thể bằng 0** | Ra NaN, và một NaN chảy vào ma trận là đủ GIẾT CẢ VÒNG LẶP VẼ không một dòng lỗi. Chia tay bằng `length().max(0.001)` |
-| Hướng tiến của xe là trục **+X**, không phải −Z | `PhysicsVehicle` ghi rõ `this.forward.set(1,0,0).applyQuaternion(...)`, và đó đã là vector thế giới cập nhật sẵn |
-| Chỉ có ĐÚNG MỘT đèn trong cả thế giới (`Lighting.count = 1`) | Mọi vật tự tính sáng-tối bằng TSL. Thả thêm `SpotLight` là không ăn vào đâu. Đèn pha phải là số hạng cộng thêm trong `MeshDefaultMaterial` |
-| `Floor.js` CHÍNH LÀ địa hình | Nó lấy hình học từ `terrainModel`. `MeshGridMaterial` chỉ là lưới gỡ lỗi, `Terrain.js` import mà không dùng |
-
-## Về thứ tự khởi tạo — nhóm nguy hiểm nhất
-
-**Cả ba lỗi dưới đây đều làm chết game mà KHÔNG in một dòng lỗi nào**, màn hình
-chỉ đứng im. Cách nhận biết: đọc `Object.keys(window.game)` — nếu danh sách dừng
-ở `resources` thì hàm dựng đã ném lỗi ở khoảng dòng 110 của `Game.js`.
-
-Thứ tự trong `Game.js`: `dayCycles` 85 · `audio` 88 · **`options` 110** ·
-`weather` 117 · `lighting` 120 · `materials` 123 · `world` 126.
-
-| Bẫy | Cách vá đã dùng |
-|---|---|
-| `Options` chạm `game.weather` / `game.lighting` ngay trong hàm dựng | Hoãn bằng `this.game.ticker.wait(1, () => …)` |
-| `Options` chạm `audio.playlist` (chỉ sinh sau `audio.init()`, tức sau nút Play) | Nghe sự kiện `playlistReady` do `Audio` bắn |
-| `Weather` khôi phục lựa chọn cũ khi `this.properties` còn RỖNG | `override.start` duyệt mảng trống, cờ `strength` vẫn lên 1 nên **nhìn mã tưởng chạy mà thời tiết không đổi gì**. Phải gọi SAU mọi `addProperty` |
-
-## Về hệ thời tiết và chu kỳ ngày
-
-| Bẫy | Hậu quả |
-|---|---|
-| **Mốc ngày/đêm kiểm bằng tiến trình TỰ NHIÊN, trước khi `override.progress` được áp** | Ép trời tối thì CẢNH tối đi nhưng cờ `intervalEvents.get('night').inInterval` vẫn báo ban ngày. **Luôn hỏi `DayCycles.isNight()`**, đừng đọc cờ đó |
-| `override.end()` của cả Weather lẫn DayCycles | Đã sửa để quay về LỰA CHỌN của người chơi, vì `CircuitArea` và `Tornado` cũng ép rồi gọi `end()` khi xong |
-| Ép thời tiết phải ép cả NHÓM | `rain` sinh từ ẩm×mây, `snow` từ rain×nhiệt độ, và `Snow.js`/`WaterSurface.js` đọc THẲNG `temperature`. Ép mỗi `snow=1` ra cảnh tuyết rơi mà hồ không đóng băng |
-| `Howl.volume(v)` bị BỎ QUA khi bài chưa nạp | `preload:false` nên chỉ bài đang phát mới nạp. Phải đặt lại âm lượng ngay trước mỗi `play()` |
-| Game nghe `keydown` trên `window` pha nổi, không lọc gì | Màn chào tự focus nút Play ⇒ bấm Enter/W/↑/↓/D ở màn chào là game chạy ngầm. Đã chặn ở pha bắt bằng `stopImmediatePropagation` — nhưng chặn thế thì nút Play mất luôn hành vi Enter mặc định, phải tự xử lý Enter/Space |
-
----
-
-# 4. Quy trình
-
-## Test local (đúng cách)
-
-⚠️ **`npm run preview` PHẢI mở ở `http://localhost:4173/playground/`, KHÔNG phải
-`http://localhost:4173/`.** `dist/index.html` có `<base href="/playground/">`
-(từ `VITE_BASE_HREF` trong `.env.production`) nên mọi đường dẫn tương đối
-`./assets/...` bị đẩy thành `/playground/assets/...`. Vite preview lại phục vụ
-tại GỐC, nên vào `/` thì CSS/JS trả về **HTML fallback** (`content_type:
-text/html` thay vì `text/javascript`) — trang hiện ra HTML THÔ, chữ đen trắng,
-ảnh vỡ, không canvas. Nhìn y như game hỏng nhưng bản dựng hoàn toàn lành.
-
-Cách chắc ăn nhất khi cần đưa user test bản dựng: phục vụ `dist` DƯỚI đường dẫn
-`/playground/` bằng symlink —
+# 4. QUY TRÌNH DỰNG & DEPLOY
 
 ```bash
-mkdir -p /tmp/preview-root && ln -sfn "$PWD/playground-3d/dist" /tmp/preview-root/playground
-cd /tmp/preview-root && python3 -m http.server 4173   # → http://localhost:4173/playground/
+cd playground-3d && npm run dev          # :5173 — KHÔNG đi qua Next
 ```
 
-Chốt kiểm: `curl -s -o /dev/null -w "%{content_type}" .../assets/index-*.js` phải
-ra `text/javascript`. Ra `text/html` là đang trúng fallback.
-
-Production KHÔNG dính lỗi này (Next phục vụ đúng tại `cuongthai.com/playground/`).
-
-
-```bash
-cd playground-3d && npm run dev      # :5173 — KHÔNG đi qua Next, tránh hẳn bẫy 404
-```
-
-Vào game: bấm **Play** (đóng màn chào) → bấm **Enter/W** hoặc bấm vào vòng tròn
-"Click to Start". Từ console thì `game.reveal.updateStep(1)`.
-
-## Dựng và chép sang Next
+⚠️ `preview_start` báo một cổng nhưng **Vite nhảy cổng khác** khi bận —
+đọc `preview_logs` lấy cổng THẬT. Phiên này Vite chạy ở **:5175**.
 
 ```bash
 cd playground-3d && npm run build
 cd .. && rm -rf frontend/public/playground && mkdir -p frontend/public/playground
 rsync -a playground-3d/dist/ frontend/public/playground/
-```
 
-Kiểm sau khi chép — tên gói JS trong `index.html` phải khớp file có thật:
-
-```bash
+# Kiểm tên gói khớp
 B=$(grep -o 'assets/index-[A-Za-z0-9_-]*\.js' frontend/public/playground/index.html | head -1)
-ls "frontend/public/playground/$B" && echo OK
+ls "frontend/public/playground/$B"
+# Cờ dev KHÔNG được lọt vào gói phát hành
+grep -c "window.game" frontend/public/playground/assets/index-*.js   # phải 0
 ```
 
-Và kiểm cờ dev không lọt vào gói phát hành:
+⚠️ **Commit PHẢI gồm CẢ HAI thư mục**:
+`git add -A playground-3d frontend/public/playground`
+Phiên này đã sót `frontend/public/playground` suốt 6 commit — prod vẫn đúng (deploy
+rsync thẳng cây làm việc) nhưng repo giữ gói cũ, ai checkout sạch là ra bản cũ.
+Đã vá ở `cda5cdf`.
 
-```bash
-grep -c "window.game" frontend/public/playground/assets/index-*.js   # phải là 0
-```
+Deploy: `bash deploy.sh` → **user test prod** → mới `git push`.
 
-Build **tái lập được** (`cb='?cb=1'`, không dấu thời gian): cùng nguồn ra cùng mã
-băm. Dùng để đối chiếu bản đã commit có khớp nguồn không.
-
-## Deploy
-
-`deploy.sh` có chốt riêng cho `/playground` (kiểm 200 + mã băm gói JS khớp
-`index.html`). Xem quy trình chuẩn trong `CLAUDE.md`: commit local → `bash deploy.sh`
-→ **user test prod** → mới `git push`.
+⚠️ `window.game` chỉ lộ khi `VITE_GAME_PUBLIC` (đặt trong `.env.development`).
+**ĐỪNG đặt vào `.env`** — file đó áp cho cả bản dựng production.
 
 ---
 
-# 5. Bản đồ file
+# 5. BẢN ĐỒ FILE
 
 ```
-playground-3d/
-  sources/
-    index.html                       ← màn chào (có chốt nuốt phím) + bảng Options + modal
-    data/musics.js                   ← DANH SÁCH NHẠC — thêm bài chỉ sửa đây
-    data/projects.js · data/lab.js   ← module học tập, PHÂN TRANG theo độ dài
-    data/social.js                   ← ⚠️ TỐI THIỂU 2 mục (chia cho length-1)
-    data/consoleLog.js               ← GIỮ mục Credits (giấy phép MIT)
-    Game/Options.js                  ← toàn bộ nút trong bảng Cài đặt
-    Game/Audio.js                    ← playlist + tiếng nền theo thời tiết
-    Game/Weather.js                  ← 7 đại lượng + override + preference
-    Game/Cycles/DayCycles.js         ← chu kỳ ngày + isNight() + preference
-    Game/Ligthing.js                 ← đèn hướng + ĐÈN PHA (uniform + hàm TSL)
-    Game/Materials/MeshDefaultMaterial.js ← vật liệu chung, chỗ cộng ánh đèn pha
-    Game/World/Rainbow.js            ← MỚI: cổng cầu vồng
-    Game/World/VisualVehicle.js      ← xe + đèn pha (bộ phận `headlights`)
-    Game/World/Areas/*.js            ← 13 khu
-  static/
-    areas/areas.glb                  ← 13 khu + các node mốc
-    sounds/musics/CuongThai{1..5}.mp3
-  .env                               ← GITIGNORE, chỉ ở máy local
-  .env.development / .env.production ← ⚠️ PHẢI có trong repo (base href)
-
-frontend/
-  next.config.js                     ← rewrite + header riêng /playground
-  public/playground/                 ← bản dựng đã commit
+playground-3d/sources/
+  data/fptu.js                  ← MỌI SỐ LIỆU BỐ CỤC khu trường + LÝ DO
+  data/musics.js                ← danh sách nhạc (nay 12 bài Beat 1–5, 7–13)
+  Game/World/
+    FptuCampus.js               ← nền đảo, đường, Alpha, nhà, hồ · heightPatch · canopy
+    FptuProps.js                ← đồ đạc + `blocked()` (VÙNG CẤM ĐẶT ĐỒ)
+    FptuPeople.js               ← người có khớp, biết đứng/ngồi/đi
+    FptuLights.js               ← 103 đèn lồng mẫu + vệt sáng ban đêm
+    FptuSigns.js                ← biển xếp hạng THE, biển đá cổng, bệ chữ (canvas)
+    FptuPineHill.js             ← đồi thông + tượng Self Made Man
+    FptuSwans.js · FptuQuiz.js  ← thiên nga · hộp thoại cổng + câu hỏi theo kỳ
+    VehicleRocket.js            ← MỚI: pháo tên lửa trên nóc xe
+  Game/Options.js               ← nút trong bảng Cài đặt
+  index.html                    ← màn chào, bảng Cài đặt, hộp thoại cổng
+  style/general.styl            ← `.segmented`, `.fptu-gate-mute`
+playground-3d/tools/
+  check-fptu-layout.mjs · check-ghost-colliders.mjs
+frontend/public/playground/     ← GÓI ĐÃ DỰNG (nhớ commit!)
 ```
 
-## Đổi nội dung nhanh
+## Khu FPTU có gì (bản hiện tại)
 
-| Đổi gì | Làm gì |
-|---|---|
-| Thêm/bớt nhạc | sửa `data/musics.js` |
-| Thêm module Dự án/Lab | thêm mục vào `data/projects.js` hoặc `data/lab.js` + ảnh 960×540 |
-| Chữ 3D | sửa `TEXT` trong `tools/make-letters.py`, chạy Blender headless |
-| Nhãn sự nghiệp | sửa `LABELS` trong `tools/make-career.mjs` |
-| Từ vựng | xuất lại từ DB local :5432 `cuonghoangdev_db`, bảng `lang_vocab_words` |
-| Độ mạnh/tầm đèn pha | `Lighting.setHeadlights()` — `distance`, `spread`, `softness` |
-| Kích thước cổng cầu vồng | `World/Rainbow.js` — `OUTER_RADIUS`, `DISTANCE` |
+Đảo riêng ngoài khơi Tây, nối bằng cầu (đã BỎ lan can theo yêu cầu user).
+Mặt tiền: **hai cổng xe hai bên + bậc sảnh giữa** mang biển xếp hạng THE và biển
+hiệu FPT/QS. Sau sảnh là cụm chữ **FPT UNIVERSITY** trên bệ ghi "CAMPUS HA NOI",
+quay mặt về cổng, có một hàng cọ phía sau. Trong sân: Alpha giật cấp có sảnh
+xuyên qua, hồ sen có cù lao, hồ thiên nga, đồi thông + tượng, 8 Dom, nhà ăn, bãi
+xe, sân bóng đá/rổ/võ (đều có viền cây xanh).
+
+⚠️ **Trục lễ nghi cũ đã BỎ**: bệ chữ nằm giữa nên xe đi bằng **hai đường từ hai
+cổng** rồi vòng qua sân trước Alpha. `AXIS` nay chỉ còn đoạn tiếp cận sảnh
+(−144 → −153).
+
+## Pháo tên lửa
+
+Cài đặt → **Rocket → On**. Ngắm bằng chuột (có vòng ngắm dưới đất), bấm **X** để
+bắn (Enter là phím phụ — nó trùng `interact`).
+
+Dùng lại bộ máy của bản mẫu: `world.fireballs.create()` +
+`explosions.explode()` (sức nổ VẬT LÝ thật, hất lật cả xe) + tiếng nổ của thùng
+thuốc nổ. Đắp thêm sóng xung kích, chớp sáng, khói cuộn, 12 mảnh văng.
+
+⚠️ Đăng ký âm thanh phải theo ĐÚNG khuôn `ExplosiveCrates` (kể cả `positions`,
+`distanceFade`, `onPlay`) — thiếu `onPlay` thì `play(toạ độ)` không kêu gì.
+
+Vòng cung cao (hệ số 0,78, trần 24) nên đạn có lúc khuất khỏi khung hình — bù lại
+có **bóng đổ** chạy dưới đất bám theo đạn.
 
 ---
 
-# 6. Giấy phép — KHÔNG được xoá
+# 6. GIẤY PHÉP — KHÔNG ĐƯỢC XOÁ
 
-Nguồn: https://github.com/brunosimon/folio-2025 của **Bruno Simon**, **MIT**.
+MIT, Copyright (c) 2025 Bruno Simon. GIỮ `playground-3d/license.md` và mục
+`Credits` trong `sources/data/consoleLog.js`. Chi tiết ở `playground-3d/ATTRIBUTION.md`.
+Phông gốc Neue Montreal Bold là phông THƯƠNG MẠI — dùng `Pally-*` trong `static/fonts/`.
+Nhạc là beat gốc của user, không dính bản quyền ai.
 
-- **GIỮ** `playground-3d/license.md`
-- **GIỮ** mục `Credits` trong `sources/data/consoleLog.js`
-- Chi tiết: `playground-3d/ATTRIBUTION.md`
-
-Danh tính cá nhân của tác giả gốc không thuộc phạm vi MIT nên bắt buộc phải đổi
-— đã làm xong từ đợt trước. Nhạc hiện tại là beat gốc của user, không dính bản
-quyền ai; đã ghi rõ trong hộp *Behind the scene*.
-
-⚠️ Phông gốc **Neue Montreal Bold** là phông THƯƠNG MẠI, không có trong kho. Dùng
-`Pally-*` sẵn trong `static/fonts/`.
-
-⚠️ **`main` tụt lại HÀNG TRĂM commit** — production chạy từ nhánh `feat/*` vì
+⚠️ **`main` tụt lại hàng trăm commit** — production chạy từ nhánh `feat/*` vì
 `deploy.sh` rsync thẳng thư mục làm việc. **ĐỪNG gộp vào `main`.**

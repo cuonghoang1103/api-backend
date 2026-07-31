@@ -126,27 +126,65 @@ nhân RIÊNG BIỆT, đều nằm trong `View.js` trừ cái cuối:
    `if(!Number.isFinite(smoothedRatio)) smoothedRatio = baseRatio`.
    **Đây là lỗi CÓ SẴN của bản mẫu**, chỉ chưa ai gặp vì hiếm khi delta = 0.
 
-## Bám tên lửa: NEO vào mục tiêu, ĐỪNG đuổi theo quả đạn
+## Bám tên lửa: BÙ ĐỘ TRỄ, đừng chống nó
 
-Bản đầu cho máy quay đuổi theo quả đạn ⇒ hỏng không cứu được: đạn lượn vòng
-bán kính 11 trong 2,5 giây tức **27 đơn vị/giây**, trong khi nửa chiều cao
-khung hình chỉ ~6 đơn vị. Mọi tầng làm mượt cộng lại trễ ~0,3 giây ⇒ trễ 8 đơn
-vị ⇒ đạn nằm lệch 1,4 lần nửa khung, tức RA NGOÀI. **Càng làm mượt càng trễ,
-càng bớt mượt càng giật — không có lối thoát.**
+Đã đi sai HAI lần trước khi ra cách đúng — ghi cả ba để khỏi quay vòng:
 
-Cách chạy được: `cameraTargetFor()` trả về điểm **MỤC TIÊU** (bù chiếu theo
-0,85 lần trần bay), KHÔNG phải vị trí quả đạn. Máy quay chỉ có MỘT chuyển động:
-rời xe → tới vùng mục tiêu → đứng yên cho đạn lượn và bổ nhào ngay trong khung.
-Kèm hai điều kiện:
-- **Thu vòng lượn 11 → 5** để cả vòng nằm gọn trong khung.
+1. **Ngắm vào vị trí HIỆN TẠI của quả đạn.** Hỏng: đạn lượn ~27 đơn vị/giây mà
+   nửa chiều cao khung chỉ ~6; hai tầng làm mượt trễ ~0,3s ⇒ trễ 8 đơn vị ⇒ đạn
+   ra ngoài khung. Càng làm mượt càng trễ, càng bớt mượt càng giật.
+2. **Neo tĩnh vào mục tiêu.** Hết giật thật, nhưng user bác đúng: "cam nó theo
+   tên lửa chứ không đứng ở 1 khung hình như này".
+3. ✅ **BÙ độ trễ**: ngắm vào `positionAt(missile.time + CAMERA_LEAD)` với
+   `CAMERA_LEAD = 0,3s` — đúng bằng tổng độ trễ. Lúc khung hình đuổi kịp thì
+   quả đạn vừa vặn ở đó. Bám sát mà vẫn mượt vì KHÔNG đụng gì vào phần làm
+   mượt, chỉ dịch pha. Quá `duration` thì `positionAt` tự bão hoà ở điểm chạm
+   đất nên lúc bổ nhào lượng nhìn trước tự về 0.
+
+Kèm ba điều bắt buộc:
+- **Bám NGAY từ nhịp đầu** (bỏ hoãn 0,36s cũ — hoãn đó vốn để né cú quăng lúc
+  rời bệ, nay ngắm trước nên không còn cú quăng ấy).
+- **Bộ lọc đích khởi động từ chỗ máy quay ĐANG NHÌN**, đừng gán thẳng đích:
+  gán thẳng thì nhịp đầu nhảy 6,2 đơn vị.
 - **Ép trần thu phóng 0,24** (`view.zoom.override`) suốt hành trình: kéo gần
-  hết cỡ thì ống kính chỉ cao 8,5 trong khi đạn bay cao 8 — ngang tầm nhau, và
-  "đưa đạn vào giữa khung" biến thành "dán đạn lên ống kính" (đo được 10/11
-  mẫu văng khỏi khung).
+  hết cỡ thì ống kính chỉ cao 8,5 mà đạn bay cao 8 — ngang tầm nhau, "đưa đạn
+  vào giữa khung" thành "dán đạn lên ống kính".
 
-Đo sau khi sửa: cả ba mức thu phóng chỉ còn **1/11 mẫu** ra ngoài khung, đúng
-khoảnh khắc đạn rời bệ ngay cạnh ống kính. Bán kính dao động **0,05 đơn vị**
-sau khi ổn định. Khuôn đo ở `scratchpad/diag-follow2.mjs` và `diag-nan.mjs`.
+Đo sau khi sửa: **0/231 mẫu ra ngoài khung**, bước nhảy lớn nhất **0,72**, máy
+quay đi 69–162 đơn vị (tức bám thật, không đứng yên). Khuôn đo:
+`scratchpad/diag-chase.mjs`.
+
+## ⚠️ ÂM THANH: `isNight()`, KHÔNG BAO GIỜ đọc cờ interval
+
+`intervalEvents.get('night').inInterval` kiểm theo tiến trình TỰ NHIÊN của đồng
+hồ, TRƯỚC khi `override.progress` được áp. Ép Time → Night thì cảnh tối mà cờ
+vẫn báo "ban ngày". Bẫy này đã ghi sẵn ở `DayCycles.isNight()` và đã né ở
+`Ligthing`/`Rainbow`/`FptuLights`/`VisualVehicle` — **chỉ `Audio.js` bị bỏ sót**
+tới 1/8/2026, nên ép ban đêm là chim vẫn hót, cú im, dế nằm ở âm lượng 0.
+
+Nay cả năm chỗ đều hỏi `dayCycles.isNight()`:
+- chim chỉ ban ngày · cú chỉ ban đêm
+- **dế**: âm lượng bám `isNight()` MỖI NHỊP (`onPlaying`) thay vì chỉ nghe sự
+  kiện chu kỳ tự nhiên. Hằng số thời gian **5 giây** ⇒ ~95% sau 15 giây, bằng
+  tween gsap gốc. ⚠️ Để 15 là NHẦM hằng số thời gian với tổng thời gian — đo ra
+  dế vẫn kêu 0,64 giữa ban ngày.
+- **gà gáy / sói hú**: dò LẰN RANH của `isNight()` thay vì nghe sự kiện
+  `night`/`deepNight` (sự kiện đó không phát khi ép giờ). Sói hoãn 8–25s.
+
+Khuôn đo: `scratchpad/diag-scene-audio.mjs` và `diag-crickets.mjs`.
+
+## ⚠️ Rapier: đừng gọi vào wasm khi nó còn đang giữ tham chiếu
+
+`FptuDestruction.reset()` gọi `body.setEnabled(true)` có thể ném "recursive use
+of an object … unsafe aliasing in rust". Ném GIỮA CHỪNG là tệ nhất: nửa số khối
+sống lại, nửa kẹt ở trạng thái vỡ mà hình đã dựng lại — tức "vật vô hình chặn
+xe". Nay gom vào mảng rồi bật ở nhịp sau qua `ticker.wait(1)`, có `try/catch`.
+
+⚠️ Cùng lý do: **bộ kiểm ĐỪNG tự bơm `ticker.events.trigger('tick')`** hay gọi
+`physicalVehicle.moveTo()` từ `page.evaluate` — vòng lặp rAF thật vẫn chạy song
+song, bơm chồng lên là Rapier ném đúng lỗi trên. Đổi cài đặt rồi để game tự
+chạy vài nhịp thật. (`audio.update()` không đụng Rapier nên bơm riêng nó thì an
+toàn.)
 
 ## Tiếng sóng gào suốt trong trường — ĐÃ SỬA
 

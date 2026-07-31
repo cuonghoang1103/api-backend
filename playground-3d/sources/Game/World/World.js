@@ -30,6 +30,7 @@ import { Fences } from './Fences.js'
 import { Benches } from './Benches.js'
 import { Scenery } from './Scenery.js'
 import { FptuCampus } from './FptuCampus.js'
+import { PlayIsland } from './PlayIsland.js'
 import { VehicleRocket } from './VehicleRocket.js'
 
 export class World
@@ -82,6 +83,11 @@ export class World
             this.lanterns = new Lanterns()
             this.scenery = new Scenery()
             this.fptuCampus = new FptuCampus()
+
+            // Đảo sân chơi phía Nam (sân bóng đá lái xe + ba khu chừa sẵn).
+            // Đảo riêng, không đụng một khối nào của đảo chính — xem
+            // `data/playisland.js` để biết vì sao không dựng ở quận Tây-Nam.
+            this.playIsland = new PlayIsland()
 
             // Pháo tên lửa trên nóc xe. Dựng SAU `visualVehicle` vì nó gắn khẩu
             // pháo vào chính thân xe (`parts.chassis`).

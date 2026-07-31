@@ -1,6 +1,7 @@
 import * as THREE from 'three/webgpu'
 import { Game } from './Game.js'
 import { RESPAWN } from '../data/fptu.js'
+import { PLAY_RESPAWN } from '../data/playisland.js'
 
 export class Respawns
 {
@@ -50,6 +51,13 @@ export class Respawns
             name: 'fptu',
             position: new THREE.Vector3(RESPAWN.x, 4, RESPAWN.z),
             rotation: RESPAWN.rotation
+        })
+
+        /** Đảo sân chơi — cùng lý do phải khai ở đây, xem ghi chú ngay trên. */
+        this.items.set('arena', {
+            name: 'arena',
+            position: new THREE.Vector3(PLAY_RESPAWN.x, 4, PLAY_RESPAWN.z),
+            rotation: PLAY_RESPAWN.rotation
         })
     }
 

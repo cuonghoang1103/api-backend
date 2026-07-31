@@ -42,6 +42,10 @@ export class Map
         this.locations = {}
         this.locations.items = [
             { name: 'Achievements', respawnName: 'achievements', offset: { x: 0, y: -0.01 } },
+            // Đảo sân chơi nằm ở z ≈ 110, NGOÀI phạm vi ảnh bản đồ (nửa cạnh
+            // địa hình gốc chỉ 96) nên `worldToMap` kẹp về 1 — pin đậu sát viền
+            // dưới. Nhích lên một chút cho đỡ dính mép, y hệt cách đã làm với FPTU.
+            { name: 'Sân bóng', respawnName: 'arena', offset: { x: 0, y: -0.03 } },
             { name: 'Altar', respawnName: 'altar', offset: { x: 0, y: -0.05 } },
             { name: 'Behind<br /> the scene', respawnName: 'behindTheScene', offset: { x: 0.01, y: 0 } },
             { name: 'Bowling', respawnName: 'bowling', offset: { x: -0.08, y: 0.03 } },

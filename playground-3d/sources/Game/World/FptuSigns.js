@@ -389,7 +389,7 @@ export class FptuSigns
          * Bản trước đặt ở z ≈ 50 và nó CHẮN NGANG lối vào cổng Bắc: lái thử
          * ngày 31/7, xe đi được 1,4 đơn vị rồi đứng.
          */
-        const x = GATE.x + 0.8
+        const x = GATE.x - 6   // lùi vào sảnh, tránh hẳn đầu cầu
         const z = GATE.z - 5
         const wallW = 0.75
         const wallH = 2.5

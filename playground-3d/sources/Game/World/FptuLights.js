@@ -66,36 +66,35 @@ export class FptuLights
         const push = (x, z, y = 0) => spots.push({ x, z, y })
 
         // Dọc hai lề trục lễ nghi, so le nhau
-        for(let x = AXIS.fromX - 4; x >= AXIS.toX + 4; x -= 6)
+        for(let x = AXIS.fromX - 4; x >= AXIS.toX + 4; x -= 11)
         {
             const side = ((x / 6) | 0) % 2 === 0 ? 1 : -1
             push(x, AXIS.z + side * (AXIS.halfWidth + 2.6))
         }
 
         // Dọc đường xuyên sảnh ra cuối đảo
-        for(let x = THROUGH_ROAD.fromX - 6; x >= THROUGH_ROAD.toX + 6; x -= 9)
+        for(let x = THROUGH_ROAD.fromX - 6; x >= THROUGH_ROAD.toX + 6; x -= 17)
             push(x, THROUGH_ROAD.z + (((x / 9) | 0) % 2 === 0 ? 1 : -1) * (THROUGH_ROAD.halfWidth + 2.6))
 
         // Dọc con đường lớn
-        for(let z = MAIN_ROAD.z - MAIN_ROAD.length * 0.5 + 8; z <= MAIN_ROAD.z + MAIN_ROAD.length * 0.5 - 8; z += 9)
+        for(let z = MAIN_ROAD.z - MAIN_ROAD.length * 0.5 + 8; z <= MAIN_ROAD.z + MAIN_ROAD.length * 0.5 - 8; z += 17)
             push(MAIN_ROAD.x - MAIN_ROAD.width * 0.5 - 2.8, z)
 
         // Vòng quanh hồ sen và hồ thiên nga — đúng kiểu đèn ven hồ
-        for(let i = 0; i < 14; i++)
-        {
-            const a = (i / 14) * Math.PI * 2
-            push(LAKE.x + Math.cos(a) * (LAKE.radiusX + 2.6), LAKE.z + Math.sin(a) * (LAKE.radiusZ + 2.6))
-        }
         for(let i = 0; i < 8; i++)
         {
-            const a = (i / 8) * Math.PI * 2 + 0.4
+            const a = (i / 8) * Math.PI * 2
+            push(LAKE.x + Math.cos(a) * (LAKE.radiusX + 2.6), LAKE.z + Math.sin(a) * (LAKE.radiusZ + 2.6))
+        }
+        for(let i = 0; i < 5; i++)
+        {
+            const a = (i / 5) * Math.PI * 2 + 0.4
             push(SWAN_LAKE.x + Math.cos(a) * (SWAN_LAKE.radiusX + 2.6), SWAN_LAKE.z + Math.sin(a) * (SWAN_LAKE.radiusZ + 2.6))
         }
 
         // Trước cửa từng toà ký túc xá, hai bên lối vào
         for(const dorm of DORMS)
-            for(const side of [ -1.9, 1.9 ])
-                push(dorm.x + side, dorm.z + 3.6)
+            push(dorm.x + 1.9, dorm.z + 3.6)
 
         // Hai bên thảm cỏ trục chính + bốn góc sảnh xếp hạng
         for(const side of [ -1, 1 ])
@@ -107,11 +106,13 @@ export class FptuLights
         }
 
         // Dọc lan can cầu — hai hàng đối xứng, đây là đường vào trường ban đêm
+        // Cầu: thưa hẳn và nép SÁT MÉP. Bản trước cứ 4 đơn vị một ĐÔI đèn kẹp
+        // hai bên nên mặt cầu chật cứng — user chê "mấy cái đèn giảm bớt đi
+        // được không". Nay cách 9 đơn vị và mỗi chỗ chỉ một bên.
         const bridgeFrom = Math.min(BRIDGE.fromX, BRIDGE.toX) - 2
         const bridgeTo = Math.max(BRIDGE.fromX, BRIDGE.toX) + 2
-        for(let x = bridgeFrom; x <= bridgeTo; x += 4)
-            for(const side of [ -1, 1 ])
-                push(x, BRIDGE.z + side * (BRIDGE.width * 0.5 - 0.6), 0.55)
+        for(let x = bridgeFrom, i = 0; x <= bridgeTo; x += 9, i++)
+            push(x, BRIDGE.z + (i % 2 === 0 ? -1 : 1) * (BRIDGE.width * 0.5 - 0.35), 0.55)
 
         // Hai bên cổng
         for(const side of [ -1, 1 ])
@@ -146,7 +147,7 @@ export class FptuLights
         }
 
         // Chân toà Alpha, dọc mặt tiền
-        for(let i = -2; i <= 2; i++)
+        for(let i = -1; i <= 1; i++)
             push(ALPHA.x + ALPHA.depth * 0.5 + 3.4, ALPHA.z + i * 7)
 
         // Loại những chỗ rơi vào lòng hồ (đèn không cắm giữa mặt nước được)

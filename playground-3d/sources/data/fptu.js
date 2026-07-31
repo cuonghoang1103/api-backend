@@ -83,7 +83,7 @@ export const RANKING_PLAZA = { x: -114, z: 40, width: 18, depth: 20 }
  * đúng như ảnh mặt trước trường: hai cổng xe hai bên, ô giữa là bậc sảnh mang
  * tấm biển này.
  */
-export const RANKING_SIGN = { x: -99.2, z: 44, height: 2.1, width: 5 }
+export const RANKING_SIGN = { x: -106, z: 44, height: 2.1, width: 5 }
 
 /** Hàng chữ FPT UNIVERSITY — mặt đường, ngay trước thảm cỏ dẫn vào Alpha. */
 /**

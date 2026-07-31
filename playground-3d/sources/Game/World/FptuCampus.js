@@ -583,22 +583,12 @@ export class FptuCampus
         )
 
         /**
-         * Lan can THẬT: hai thanh ngang mảnh trên hàng trụ con — bản trước là
-         * một bức tường đặc cao 0,55 chạy suốt cầu, user chụp ảnh chê "bậc
-         * trắng trắng vuông". Cả hai thanh đều có thân vật lý: khe giữa chúng
-         * (0,28 → 0,55) nhỏ hơn bánh xe nên vẫn không lọt xuống biển được.
+         * KHÔNG lan can — user chốt bỏ ("xoá cái phần rào chắn kia").
+         *
+         * Bỏ được vì rơi xuống biển không còn là án tử: mặt biển lái được (tấm
+         * `Floor.bedRock` bám theo xe), cứ vòng lại là lên bờ. Đổi lại mặt cầu
+         * thoáng hẳn, và hết hai dãy va chạm kẹp hai bên.
          */
-        for(const side of [ -1, 1 ])
-        {
-            const zz = BRIDGE.z + side * (BRIDGE.width * 0.5 + 0.2)
-
-            this.box(length, 0.14, 0.22, centerX, GROUND_TOP + 0.66, zz, '#e3ded2', { physical: true })
-            this.box(length, 0.1, 0.16, centerX, GROUND_TOP + 0.3, zz, '#cfc9bb', { physical: true, castShadow: false })
-
-            const posts = Math.round(length / 1.15)
-            for(let i = 0; i <= posts; i++)
-                this.box(0.12, 0.66, 0.12, centerX - length * 0.5 + (i / posts) * length, GROUND_TOP + 0.33, zz, '#d8d3c7', { castShadow: false })
-        }
     }
 
     /**

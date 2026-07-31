@@ -85,6 +85,19 @@ export const ARENA = {
         height: 3.2,
         depth: 5,       // độ sâu lưới, thụt ra SAU tường
     },
+    /**
+     * CỬA CHO XE VÀO SÂN — khoét giữa tường Bắc, thẳng hàng với đường z = 126.
+     *
+     * ⚠️ BẮT BUỘC PHẢI CÓ. Bản đầu quây tường kín cả tám cạnh và quên mất lối
+     * vào: đo được 0/360 hướng thông từ ngoài vào, tức người chơi chỉ đứng
+     * ngoài nhìn. Tệ hơn, mục "tường sân kín" trong `check-play-island.mjs`
+     * lại KHẲNG ĐỊNH cái sai đó là đạt — nên bộ kiểm nay có thêm mục "phải có
+     * lối vào cho xe".
+     *
+     * Rộng 5 so với xe rộng 1,9: đủ thoáng để lao vào mà không phải căn. Bóng
+     * (đường kính 2,9) lọt ra được, nhưng `update()` tự đưa nó về giữa sân.
+     */
+    gate: { width: 5 },
     ball: {
         radius: 1.45,
         restitution: 0.82,

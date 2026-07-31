@@ -151,10 +151,40 @@ const report = await page.evaluate(() =>
             // Hướng gần như thẳng theo trục X là hướng của hai miệng khung —
             // ở đó tia chui qua miệng và chỉ gặp đáy lưới, xa hơn nửa chiều dài
             const towardsGoal = Math.abs(dz) < 0.22 && Math.abs(dx) > 0.9
-            if(hit === null && !towardsGoal) gaps.push(`${deg.toFixed(1)}°`)
+            // Hướng về CỬA CHO XE ở giữa tường Bắc (−Z)
+            const towardsGate = dz < -0.9 && Math.abs(dx) < 0.25
+            if(hit === null && !towardsGoal && !towardsGate) gaps.push(`${deg.toFixed(1)}°`)
         }
-        facts.tuongHo = gaps.length ? gaps.slice(0, 12).join(', ') : 'kín (bắn 720 tia từ tâm)'
+        facts.tuongHo = gaps.length ? gaps.slice(0, 12).join(', ') : 'kín trừ hai khung thành và cửa xe'
         if(gaps.length) problems.push(`Tường sân HỞ ở ${gaps.length}/720 hướng: ${gaps.slice(0, 8).join(', ')}`)
+    }
+
+    /**
+     * ── 3b. PHẢI CÓ LỐI VÀO SÂN CHO XE ─────────────────────────────────────
+     *
+     * ⚠️ MỤC NÀY SINH RA TỪ MỘT LỖI THẬT. Bản đầu quây tường kín cả tám cạnh và
+     * QUÊN MẤT lối vào: đo được 0/360 hướng thông từ ngoài vào, tức người chơi
+     * chỉ đứng ngoài nhìn cái sân. Tệ hơn, mục 3 ở trên lại KHẲNG ĐỊNH "tường
+     * kín" là ĐẠT — bộ kiểm xác nhận đúng cái sai.
+     *
+     * Bài học rộng hơn: mỗi khi thêm một mục kiểm "phải kín / phải chặn", hãy
+     * hỏi luôn "thế còn đường vào thì sao?" và thêm mục ngược lại.
+     */
+    {
+        const y = 0.35                                   // cao độ gầm xe
+        const centre = { x: (arena.x0 + arena.x1) / 2, z: (arena.z0 + arena.z1) / 2 }
+        const ways = []
+        for(let deg = 0; deg < 360; deg += 1)
+        {
+            const rad = deg * Math.PI / 180
+            const ox = centre.x + Math.cos(rad) * 40
+            const oz = centre.z + Math.sin(rad) * 40
+            const hit = W.castRay(new R.Ray({ x: ox, y, z: oz }, { x: (centre.x - ox) / 40, y: 0, z: (centre.z - oz) / 40 }), 40, true)
+            if(!hit || hit.timeOfImpact > 39) ways.push(deg)
+        }
+        facts.loiVaoSan = ways.length ? `${ways.length}/360 hướng thông từ ngoài vào (${ways[0]}°…${ways[ways.length - 1]}°)` : 'KHÔNG CÓ'
+        if(ways.length === 0)
+            problems.push('SÂN KÍN MÍT — không có lối nào cho xe vào, người chơi chỉ đứng ngoài nhìn')
     }
 
     // ── 4. Miệng khung thành thông ──────────────────────────────────────────

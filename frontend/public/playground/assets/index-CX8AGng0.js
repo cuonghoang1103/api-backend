@@ -98055,6 +98055,9 @@ https://github.com/browserify/crypto-browserify`);
       height: 3.2,
       depth: 5
     },
+    gate: {
+      width: 5
+    },
     ball: {
       radius: 1.45,
       restitution: 0.82,
@@ -98215,14 +98218,32 @@ https://github.com/browserify/crypto-browserify`);
       });
     }
     setWalls() {
-      const e = this.corners(), r = ARENA.wallThickness, s = ARENA.wallHeight, o = ARENA.goal.width * 0.5;
-      for (let a = 0; a < e.length; a++) {
-        const h = e[a], c = e[(a + 1) % e.length], d = Math.abs(h.x - c.x) < 0.01 && (Math.abs(h.x - this.x0) < 0.01 || Math.abs(h.x - this.x1) < 0.01);
-        if (d) {
-          const f = Math.min(h.z, c.z), p = Math.max(h.z, c.z);
-          this.wallSegment(h.x, f, h.x, ARENA.z - o, s, r, PLAY_COLORS.wall), this.wallSegment(h.x, ARENA.z + o, h.x, p, s, r, PLAY_COLORS.wall);
-        } else this.wallSegment(h.x, h.z, c.x, c.z, s, r, PLAY_COLORS.wall);
-        d || this.wallSegment(h.x, h.z, c.x, c.z, 0.22, r + 0.12, PLAY_COLORS.wallTrim, {
+      const e = this.corners(), r = ARENA.wallThickness, s = ARENA.wallHeight, o = ARENA.goal.width * 0.5, a = ARENA.gate.width * 0.5;
+      for (let h = 0; h < e.length; h++) {
+        const c = e[h], d = e[(h + 1) % e.length], f = Math.abs(c.x - d.x) < 0.01 && (Math.abs(c.x - this.x0) < 0.01 || Math.abs(c.x - this.x1) < 0.01), p = Math.abs(c.z - this.z0) < 0.01 && Math.abs(d.z - this.z0) < 0.01;
+        if (f) {
+          const m = Math.min(c.z, d.z), b = Math.max(c.z, d.z);
+          this.wallSegment(c.x, m, c.x, ARENA.z - o, s, r, PLAY_COLORS.wall), this.wallSegment(c.x, ARENA.z + o, c.x, b, s, r, PLAY_COLORS.wall);
+        } else if (p) {
+          const m = Math.min(c.x, d.x), b = Math.max(c.x, d.x);
+          this.wallSegment(m, c.z, ARENA.x - a, c.z, s, r, PLAY_COLORS.wall), this.wallSegment(ARENA.x + a, c.z, b, c.z, s, r, PLAY_COLORS.wall);
+          for (const w of [
+            -1,
+            1
+          ]) this.island.box(0.7, s + 0.9, r + 0.2, ARENA.x + w * (a + 0.35), this.island.groundTop + (s + 0.9) * 0.5, c.z - r * 0.5 - 0.35, PLAY_COLORS.wallTrim, {
+            physical: true
+          });
+        } else this.wallSegment(c.x, c.z, d.x, d.z, s, r, PLAY_COLORS.wall);
+        if (p) {
+          const m = Math.min(c.x, d.x), b = Math.max(c.x, d.x);
+          this.wallSegment(m, c.z, ARENA.x - a, c.z, 0.22, r + 0.12, PLAY_COLORS.wallTrim, {
+            yOffset: s,
+            physical: false
+          }), this.wallSegment(ARENA.x + a, c.z, b, c.z, 0.22, r + 0.12, PLAY_COLORS.wallTrim, {
+            yOffset: s,
+            physical: false
+          });
+        } else f || this.wallSegment(c.x, c.z, d.x, d.z, 0.22, r + 0.12, PLAY_COLORS.wallTrim, {
           yOffset: s,
           physical: false
         });
@@ -98266,23 +98287,26 @@ https://github.com/browserify/crypto-browserify`);
       }
     }
     setStands() {
-      const e = this.island.groundTop, r = ARENA.innerWidth - ARENA.cornerCut * 2;
-      for (const s of [
-        -1,
-        1
-      ]) for (let o = 0; o < 3; o++) {
-        const a = 0.55 * (o + 1), h = ARENA.z + s * (ARENA.innerDepth * 0.5 + ARENA.wallThickness + 1.4 + o * 1.6);
-        this.island.box(r, a, 1.6, ARENA.x, e + a * 0.5, h, PLAY_COLORS.stand, {
+      const e = this.island.groundTop, r = ARENA.innerWidth - ARENA.cornerCut * 2, s = ARENA.x - r * 0.5, o = ARENA.x + r * 0.5, a = ARENA.gate.width * 0.5, h = (c, d, f, p) => {
+        const m = d - c;
+        if (m < 0.5) return;
+        this.island.box(m, f, 1.6, (c + d) * 0.5, e + f * 0.5, p, PLAY_COLORS.stand, {
           physical: true
         });
-        for (let c = 0; c < 12; c++) {
-          const d = ARENA.x - r * 0.5 + (c + 0.5) * (r / 12);
-          this.island.box(1.6, 0.35, 0.5, d, e + a + 0.18, h, PLAY_COLORS.standSeat, {
-            physical: false,
-            castShadow: false
-          });
-        }
+        const b = Math.max(1, Math.round(m / 2.1));
+        for (let w = 0; w < b; w++) this.island.box(1.6, 0.35, 0.5, c + (w + 0.5) * (m / b), e + f + 0.18, p, PLAY_COLORS.standSeat, {
+          physical: false,
+          castShadow: false
+        });
+      };
+      for (const c of [
+        -1,
+        1
+      ]) for (let d = 0; d < 3; d++) {
+        const f = 0.55 * (d + 1), p = ARENA.z + c * (ARENA.innerDepth * 0.5 + ARENA.wallThickness + 1.4 + d * 1.6);
+        c < 0 ? (h(s, ARENA.x - a, f, p), h(ARENA.x + a, o, f, p)) : h(s, o, f, p);
       }
+      this.island.slab(ARENA.gate.width, this.z0 - 126 + 1, ARENA.x, (126 + this.z0) * 0.5, PLAY_COLORS.road);
     }
     setScoreboard() {
       this.board = {}, this.board.canvas = document.createElement("canvas"), this.board.canvas.width = 1024, this.board.canvas.height = Math.round(1024 * 5 / 12), this.board.ctx = this.board.canvas.getContext("2d"), this.board.map = new CanvasTexture(this.board.canvas), this.board.map.colorSpace = SRGBColorSpace$1, this.board.map.anisotropy = 8;
@@ -113448,7 +113472,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-CNbYDyHh.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-CXALC1Ok.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

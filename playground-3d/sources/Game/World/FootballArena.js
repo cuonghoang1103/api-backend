@@ -178,6 +178,7 @@ export class FootballArena
         const t = ARENA.wallThickness
         const h = ARENA.wallHeight
         const goalHalf = ARENA.goal.width * 0.5
+        const gateHalf = ARENA.gate.width * 0.5
 
         for(let i = 0; i < pts.length; i++)
         {
@@ -187,12 +188,31 @@ export class FootballArena
             // Hai cạnh Tây/Đông mang khung thành — chừa miệng khung ở giữa
             const isGoalSide = Math.abs(a.x - b.x) < 0.01 && (Math.abs(a.x - this.x0) < 0.01 || Math.abs(a.x - this.x1) < 0.01)
 
+            // Cạnh Bắc mang CỬA CHO XE VÀO — chừa khe ở giữa
+            const isEntranceSide = Math.abs(a.z - this.z0) < 0.01 && Math.abs(b.z - this.z0) < 0.01
+
             if(isGoalSide)
             {
                 const zLow = Math.min(a.z, b.z)
                 const zHigh = Math.max(a.z, b.z)
                 this.wallSegment(a.x, zLow, a.x, ARENA.z - goalHalf, h, t, PLAY_COLORS.wall)
                 this.wallSegment(a.x, ARENA.z + goalHalf, a.x, zHigh, h, t, PLAY_COLORS.wall)
+            }
+            else if(isEntranceSide)
+            {
+                const xLow = Math.min(a.x, b.x)
+                const xHigh = Math.max(a.x, b.x)
+                this.wallSegment(xLow, a.z, ARENA.x - gateHalf, a.z, h, t, PLAY_COLORS.wall)
+                this.wallSegment(ARENA.x + gateHalf, a.z, xHigh, a.z, h, t, PLAY_COLORS.wall)
+
+                /**
+                 * Hai trụ cửa cho mắt đọc ra ngay "đây là lối vào".
+                 * ⚠️ Đặt HẲN RA NGOÀI mép sân (z nhỏ hơn `z0`), không thì thân
+                 * trụ thò vào lòng sân — bắn tia đo được nóc 3,54 ở (−33 · 138),
+                 * tức một cái cột chình ình ngay sau vạch vôi.
+                 */
+                for(const s of [ -1, 1 ])
+                    this.island.box(0.7, h + 0.9, t + 0.2, ARENA.x + s * (gateHalf + 0.35), this.island.groundTop + (h + 0.9) * 0.5, a.z - t * 0.5 - 0.35, PLAY_COLORS.wallTrim, { physical: true })
             }
             else
             {
@@ -201,8 +221,17 @@ export class FootballArena
 
             // Nẹp sẫm trên đỉnh tường — thuần trang trí, KHÔNG va chạm (thêm
             // một tầng collider chồng lên tường chỉ tổ đẻ va chạm mồ côi)
-            if(!isGoalSide)
+            if(isEntranceSide)
+            {
+                const xLow = Math.min(a.x, b.x)
+                const xHigh = Math.max(a.x, b.x)
+                this.wallSegment(xLow, a.z, ARENA.x - gateHalf, a.z, 0.22, t + 0.12, PLAY_COLORS.wallTrim, { yOffset: h, physical: false })
+                this.wallSegment(ARENA.x + gateHalf, a.z, xHigh, a.z, 0.22, t + 0.12, PLAY_COLORS.wallTrim, { yOffset: h, physical: false })
+            }
+            else if(!isGoalSide)
+            {
                 this.wallSegment(a.x, a.z, b.x, b.z, 0.22, t + 0.12, PLAY_COLORS.wallTrim, { yOffset: h, physical: false })
+            }
         }
     }
 
@@ -249,6 +278,23 @@ export class FootballArena
     {
         const g = this.island.groundTop
         const length = ARENA.innerWidth - ARENA.cornerCut * 2
+        const xLow = ARENA.x - length * 0.5
+        const xHigh = ARENA.x + length * 0.5
+        const gateHalf = ARENA.gate.width * 0.5
+
+        const bench = (x0, x1, height, z) =>
+        {
+            const width = x1 - x0
+            if(width < 0.5) return
+
+            this.island.box(width, height, 1.6, (x0 + x1) * 0.5, g + height * 0.5, z, PLAY_COLORS.stand, { physical: true })
+
+            // Ghế — hàng khối nhỏ trên mặt bậc, KHÔNG va chạm để không biến
+            // mặt bậc thành mê cung hộp nhỏ mà bánh xe vướng vào
+            const count = Math.max(1, Math.round(width / 2.1))
+            for(let j = 0; j < count; j++)
+                this.island.box(1.6, 0.35, 0.5, x0 + (j + 0.5) * (width / count), g + height + 0.18, z, PLAY_COLORS.standSeat, { physical: false, castShadow: false })
+        }
 
         for(const side of [ -1, 1 ])
         {
@@ -257,17 +303,25 @@ export class FootballArena
                 const height = 0.55 * (i + 1)
                 const z = ARENA.z + side * (ARENA.innerDepth * 0.5 + ARENA.wallThickness + 1.4 + i * 1.6)
 
-                this.island.box(length, height, 1.6, ARENA.x, g + height * 0.5, z, PLAY_COLORS.stand, { physical: true })
-
-                // Ghế — hàng khối nhỏ trên mặt bậc, KHÔNG va chạm để không biến
-                // mặt bậc thành mê cung hộp nhỏ mà bánh xe vướng vào
-                for(let j = 0; j < 12; j++)
+                /**
+                 * ⚠️ Khán đài BẮC phải khoét ĐÚNG khe cửa. Mở cửa trên tường mà
+                 * quên khán đài thì xe vẫn bị chắn ngay trước mặt — cửa chỉ để
+                 * nhìn. Cạnh Nam không có cửa nên để liền.
+                 */
+                if(side < 0)
                 {
-                    const x = ARENA.x - length * 0.5 + (j + 0.5) * (length / 12)
-                    this.island.box(1.6, 0.35, 0.5, x, g + height + 0.18, z, PLAY_COLORS.standSeat, { physical: false, castShadow: false })
+                    bench(xLow, ARENA.x - gateHalf, height, z)
+                    bench(ARENA.x + gateHalf, xHigh, height, z)
+                }
+                else
+                {
+                    bench(xLow, xHigh, height, z)
                 }
             }
         }
+
+        // Đường dẫn từ đường ngang z = 126 vào thẳng cửa sân
+        this.island.slab(ARENA.gate.width, this.z0 - 126 + 1, ARENA.x, (126 + this.z0) * 0.5, PLAY_COLORS.road)
     }
 
     /**

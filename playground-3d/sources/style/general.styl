@@ -408,3 +408,49 @@ html:not(.is-server-offline) .offline-element
 html:not(.is-server-online) .online-element
     display none !important
 
+
+// Ô "đừng hỏi lại nữa" dưới hộp thoại cổng trường. Chỉ có tác dụng trong PHIÊN
+// chơi hiện tại — tải lại trang là hỏi lại, đúng như user chốt.
+.fptu-gate-mute
+    display flex
+    align-items center
+    justify-content center
+    gap 10px
+    margin-top 18px
+    color alpha(#ffffff, 0.62)
+    font-size 15px
+    cursor pointer
+    user-select none
+
+    input
+        position absolute
+        opacity 0
+        width 0
+        height 0
+
+    .fptu-gate-mute-box
+        position relative
+        flex-shrink 0
+        width 20px
+        height 20px
+        border-radius 6px
+        border 1px solid alpha(#ffffff, 0.35)
+        transition border-color 0.15s, background 0.15s
+
+    input:checked + .fptu-gate-mute-box
+        border-color #f0821e
+        background #f0821e
+
+        &:after
+            content ''
+            position absolute
+            left 6px
+            top 2px
+            width 5px
+            height 10px
+            border solid #1a1a1c
+            border-width 0 2px 2px 0
+            transform rotate(45deg)
+
+    &:hover
+        color alpha(#ffffff, 0.9)

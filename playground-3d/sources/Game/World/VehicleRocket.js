@@ -37,16 +37,22 @@ import { Events } from '../Events.js'
  */
 
 const TRAIL_COUNT = 14        // số đốt khói để lại phía sau
-const FLIGHT_SPEED = 46       // đơn vị mỗi giây
+// Chậm hơn một chút so với bản đầu: vòng cung nay cao nên phải có thời gian mà
+// nhìn, bay nhanh quá thì chỉ thấy một cái chớp.
+const FLIGHT_SPEED = 34       // đơn vị mỗi giây
 /**
  * Chiều cao vòng cung, tính theo quãng đường bay.
  *
- * User muốn tên lửa "bay lên trời", nhưng máy quay ở đây chúc thẳng xuống và
- * khung hình gần như KHÔNG CÓ TRỜI — bay cao quá là ra ngoài khung, người chơi
- * mất dấu quả đạn. 0,22 (trần 12 đơn vị) là mức cao nhất còn nhìn thấy trọn
- * đường bay ở tầm bắn thường.
+ * User chốt nâng cao hẳn lên, chấp nhận có đoạn đạn khuất khỏi khung hình
+ * (máy quay chúc thẳng xuống, khung gần như không có trời).
+ *
+ * Vùng nhìn chỉ chừng 29 đơn vị nên tầm bắn cũng chỉ tới đó — hệ số phải LỚN
+ * thì vòng cung mới rõ: 0,78 nghĩa là bắn xa 25 đơn vị thì đạn vọt lên gần 20.
+ *
+ * Đổi lại phải có cách BÁM DẤU: mỗi quả đạn kéo theo một vệt BÓNG ĐỔ trên mặt
+ * đất, nên dù đạn vọt lên khỏi màn hình vẫn thấy bóng nó chạy tới đích.
  */
-const ARC_HEIGHT = 0.22
+const ARC_HEIGHT = 0.78
 
 export class VehicleRocket
 {
@@ -445,11 +451,16 @@ export class VehicleRocket
             trail.push(this.makePuff(material))
         }
 
+        // Bóng đổ chạy dưới đất — thứ giúp bám dấu khi đạn vọt lên quá cao
+        const shadow = this.makePuff(this.puffMaterial(24, 20, 28, 0.5))
+        shadow.visible = true
+        shadow.scale.setScalar(1.6)
+
         this.rockets.push({
-            group, flame, trail,
+            group, flame, trail, shadow,
             from: muzzle.clone(), to: target,
             distance,
-            arc: Math.min(12, distance * ARC_HEIGHT),
+            arc: Math.min(24, distance * ARC_HEIGHT),
             progress: 0,
             duration: Math.max(0.35, distance / FLIGHT_SPEED),
         })
@@ -472,6 +483,7 @@ export class VehicleRocket
         this.spawnBlast(at)
 
         this.game.scene.remove(rocket.group)
+        this.game.scene.remove(rocket.shadow)
         for(const puff of rocket.trail) this.game.scene.remove(puff)
     }
 
@@ -646,6 +658,11 @@ export class VehicleRocket
             rocket.group.rotateY(Math.PI * 0.5)   // thân nằm dọc trục X cục bộ
 
             rocket.flame.scale.y = 0.4 + Math.abs(Math.sin(this.game.ticker.elapsed * 40)) * 0.3
+
+            // Bóng: bám XZ của đạn, càng lên cao càng to và càng nhạt
+            const height = position.y
+            rocket.shadow.position.set(position.x, 0.2, position.z)
+            rocket.shadow.scale.setScalar(1.4 + height * 0.14)
 
             // Vệt khói: đốt càng cũ càng to và càng lùi lại phía sau
             for(let j = 0; j < rocket.trail.length; j++)

@@ -48,6 +48,16 @@ export class FptuQuiz
         this.gateStep1 = document.querySelector('.js-fptu-gate-step1')
         this.gateStep2 = document.querySelector('.js-fptu-gate-step2')
         this.gateNote = document.querySelector('.js-fptu-gate-note')
+        this.gateMute = document.querySelector('.js-fptu-gate-mute-input')
+
+        /**
+         * "Đừng hỏi lại nữa" — chỉ sống trong PHIÊN chơi này.
+         *
+         * User chốt: hỏi liên tục mỗi lần lái qua cổng thì rất phiền, nhưng
+         * cũng không muốn tắt vĩnh viễn. Nên cờ này để trong bộ nhớ thường,
+         * KHÔNG ghi `localStorage`: tải lại trang là nó tự quên, cổng lại hỏi.
+         */
+        this.muted = false
 
         this.panel = document.querySelector('.js-fptu-quiz')
         this.topicElement = document.querySelector('.js-fptu-quiz-topic')
@@ -115,11 +125,20 @@ export class FptuQuiz
         {
             if(event.target === this.gate) this.closeGate()
         })
+
+        // Tích ô là ghi nhớ ngay, kể cả khi đóng hộp thoại mà chưa chọn gì
+        this.gateMute?.addEventListener('change', () =>
+        {
+            this.muted = !!this.gateMute.checked
+        })
     }
 
     openGate()
     {
         if(!this.gate) return
+
+        // Đã bảo đừng hỏi lại thì im luôn tới hết phiên
+        if(this.muted) return
 
         this.gateTitle.textContent = 'Bạn là sinh viên FPT đúng không?'
         this.gateSub.textContent = 'Nhận là sinh viên thì dọc đường vào trường sẽ có các khối “?” chứa câu hỏi đúng môn kỳ bạn đang học.'

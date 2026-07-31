@@ -88,12 +88,23 @@ function formatNumber(n: number): string {
 
 /**
  * Reading time fallback — backend doesn't expose this yet,
- * so we compute client-side. Strips code fences first
- * because they read slower (200wpm assumes prose).
+ * so we compute client-side from `bodyHtml`, NOT `bodyMdx`:
+ * the public API route deliberately omits `bodyMdx` from the
+ * wire (it carries admin-only callout directives), so it is
+ * always `undefined` here — computing from it silently
+ * floored every case-study's reading time to 1 minute. Strip
+ * tags (and code blocks, which read slower) before counting
+ * words; `content` is the legacy plain-text fallback for
+ * projects written before the case-study body existed.
  */
-function computeReadingTime(mdx: string | null | undefined): number {
- if (!mdx) return 1;
- const stripped = mdx.replace(/```[\s\S]*?```/g, ' ').replace(/`[^`]*`/g, ' ');
+function computeReadingTime(html: string | null | undefined, legacyContent?: string | null): number {
+ const source = html || legacyContent || '';
+ if (!source) return 1;
+ const stripped = source
+ .replace(/<pre[\s\S]*?<\/pre>/g, ' ')
+ .replace(/<[^>]+>/g, ' ')
+ .replace(/```[\s\S]*?```/g, ' ')
+ .replace(/`[^`]*`/g, ' ');
  const words = stripped.split(/\s+/).filter(Boolean).length;
  return Math.max(1, Math.round(words / 200));
 }
@@ -186,8 +197,7 @@ export default function ProjectDetailPage() {
 
  const readingMinutes = useMemo(() => {
  if (!project) return 0;
- const src = project.bodyMdx || project.content || '';
- return computeReadingTime(src);
+ return computeReadingTime(project.bodyHtml, project.content);
  }, [project]);
 
  // Filter list-of-strings items by kind. We keep them as

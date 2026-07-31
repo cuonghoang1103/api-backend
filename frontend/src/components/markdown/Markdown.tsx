@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
 import CodeBlock from './CodeBlock';
+import { MermaidDiagram } from '@/components/exp-hub/MermaidDiagram';
 
 interface MarkdownProps {
  /** Server-rendered HTML (preferred fast path on the public page). */
@@ -67,6 +68,7 @@ export default function Markdown({
  openLinksInNewTab = true,
 }: MarkdownProps) {
  const [safeHtml, setSafeHtml] = useState<string>('');
+ const bodyRef = useRef<HTMLDivElement | null>(null);
 
  // Sanitize the server-rendered HTML once on the client.
  // The backend already ran rehype-sanitize, but defence in
@@ -104,9 +106,25 @@ export default function Markdown({
  return () => { cancelled = true; };
  }, [html]);
 
+ // Draw ```mermaid fences as SVG once the sanitised HTML is in the DOM.
+ // Mutating in place (rather than portalling) keeps `.case-study-body`'s
+ // children exactly as the CSS expects — see mermaidRuntime for why.
+ useEffect(() => {
+ if (!safeHtml) return;
+ const root = bodyRef.current;
+ if (!root) return;
+ let cancelled = false;
+ (async () => {
+ const { renderMermaidBlocks } = await import('./mermaidRuntime');
+ if (!cancelled && bodyRef.current) await renderMermaidBlocks(bodyRef.current);
+ })().catch(() => { /* diagram stays a code block */ });
+ return () => { cancelled = true; };
+ }, [safeHtml]);
+
  if (html && safeHtml) {
  return (
  <div
+ ref={bodyRef}
  className="case-study-body"
  dangerouslySetInnerHTML={{ __html: safeHtml }}
  />
@@ -142,6 +160,9 @@ export default function Markdown({
  const match = /language-(\w+)/.exec(className ?? '');
  if (match) {
  const code = String(children ?? '').replace(/\n$/, '');
+ // Diagrams render as diagrams in the admin preview too, so the
+ // editor sees exactly what the visitor will get.
+ if (match[1] === 'mermaid') return <MermaidDiagram chart={code} className="my-6" />;
  return <CodeBlock code={code} language={match[1]} />;
  }
  return (

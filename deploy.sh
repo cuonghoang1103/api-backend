@@ -507,6 +507,29 @@ DEEPDIVE_SEED_OUT_RC="$(printf '%s\n' "$DEEPDIVE_SEED_OUT" | sed -n 's/^__SEED_R
 DEEPDIVE_SEED_OUT="$(printf '%s\n' "$DEEPDIVE_SEED_OUT" | grep -v '^__SEED_RC__=')"
 report_seed "Deep Dive seed" "seed-deepdives" "$DEEPDIVE_SEED_OUT" "${DEEPDIVE_SEED_OUT_RC:-0}" || true
 
+# ── Step 3.16: Project case-study seed (idempotent) ────────────
+# One .mjs spec per case-study under content/projects/ (prose in a sibling
+# .md) → upsert Project + its milestones/features/resources/listItems, keyed
+# by slug. Same reason as Deep Dive above: the public /projects page links to
+# these by slug, so a case-study edited in content/ but never re-seeded is a
+# stale page in production even though the repo has the new prose.
+# The seeder renders bodyHtml with the backend's OWN renderer from dist/,
+# preserves viewCount/likeCount and any thumbnailUrl/images set via the admin
+# UI, and exits non-zero if a referenced local image is missing.
+info "Running Project case-study seed..."
+PROJECT_SEED_OUT=$($DC exec -T backend sh -c '
+  rc=0
+  for f in content/projects/*.mjs; do
+    [ -e "$f" ] || { echo "no project content files"; break; }
+    echo "── $f"
+    node scripts/project-seed.mjs --file "$f" --apply 2>&1 || rc=1
+  done
+  echo "__SEED_RC__=$rc"
+') || true
+PROJECT_SEED_OUT_RC="$(printf '%s\n' "$PROJECT_SEED_OUT" | sed -n 's/^__SEED_RC__=//p' | tail -1)"
+PROJECT_SEED_OUT="$(printf '%s\n' "$PROJECT_SEED_OUT" | grep -v '^__SEED_RC__=')"
+report_seed "Project seed" "seed-projects" "$PROJECT_SEED_OUT" "${PROJECT_SEED_OUT_RC:-0}" || true
+
 # ── Step 4: Health checks ─────────────────────────────────────────
 info "Waiting for backend to be healthy..."
 backend_ok=false

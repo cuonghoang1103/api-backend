@@ -148,13 +148,31 @@ export default function TableOfContents({
 
  return (
  <>
- {/* Desktop: sticky sidebar (lg+ only) */}
- <aside className="hidden lg:block">
- <div className="sticky" style={{ top: `${headingOffset}px` }}>
- <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-text-muted mb-3">
+ {/* Desktop: sticky sidebar (lg+ only). This MUST be a single element —
+ `hidden lg:block` and `sticky` on the same node — not an `<aside>`
+ wrapping a `sticky` div. A `position: sticky` element's travel range is
+ bounded by its own parent's box; a wrapper `<aside>` here would only be
+ as tall as its sticky child (which is height-capped below), leaving it
+ ~0px of room to stick within and making it float off with the page
+ instead of pinning. The real tall container it needs to stick inside
+ (the article's grid row, stretched to the article's full height) is
+ whatever wraps `<TableOfContents />` from the call site — one level of
+ wrapper is exactly right, not two.
+ A long article can produce more TOC entries than fit one viewport
+ (e.g. 68 headings ≈ 4000px tall) — without a height cap the list just
+ renders past the fold and the tail becomes unreachable while pinned.
+ Capping height to the remaining viewport and scrolling the list
+ internally keeps every entry reachable no matter how long the article
+ gets. */}
+ <aside
+ className="hidden lg:flex lg:flex-col sticky"
+ style={{ top: `${headingOffset}px`, maxHeight: `calc(100vh - ${headingOffset + 24}px)` }}
+ >
+ <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-text-muted mb-3 shrink-0">
  <List className="w-3.5 h-3.5" />
  Mục lục
  </div>
+ <div className="overflow-y-auto pr-1 min-h-0">
  {list}
  </div>
  </aside>

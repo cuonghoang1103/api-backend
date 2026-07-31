@@ -63,7 +63,12 @@ export default function FeatureChecklist({ features }: FeatureChecklistProps) {
  </h2>
  <span className="text-xs text-text-muted">{total} mục</span>
  </div>
- <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+ {/* items-start: without it, CSS Grid's default stretch makes
+ every column match the TALLEST one — a lopsided status split
+ (e.g. 12 done vs. 2 planned) turns the short columns into
+ mostly-empty bordered boxes. Each card should size to its own
+ content. */}
+ <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
  {(['DONE', 'IN_PROGRESS', 'PLANNED'] as ProjectFeatureStatus[]).map((status) => {
  const items = grouped[status] ?? [];
  const meta = STATUS_META[status];

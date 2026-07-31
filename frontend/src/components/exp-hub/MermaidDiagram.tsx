@@ -75,7 +75,7 @@ function quoteLabels(body: string): string {
  * backend sanitizeMermaid (src/utils/mermaid.ts) — the backend now sanitizes at
  * write time; this is the client-side backstop.
  */
-function cleanMermaid(raw: string): string {
+export function cleanMermaid(raw: string): string {
   let s = (raw || '').trim();
   s = s.replace(/^```(?:mermaid)?\s*/i, '').replace(/\s*```$/i, '').trim();
   if (!s) return s;

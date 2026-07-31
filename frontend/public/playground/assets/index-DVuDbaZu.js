@@ -62692,7 +62692,6 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
     blue: "#00a3e0",
     wall: "#f4f2ec",
     windowDark: "#3b4450",
-    foliage: "#5aa832",
     plazaBrick: "#b4573c",
     road: "#8f8a80",
     court: "#3a7abf",
@@ -95477,6 +95476,9 @@ https://github.com/browserify/crypto-browserify`);
         e(CANTEEN.x, CANTEEN.z, CANTEEN.width, CANTEEN.depth),
         e(PARKING.x, PARKING.z, PARKING.width, PARKING.depth, 0.5),
         e(GATE.x, GATE.z, 6, 16),
+        e(SIGN.x, SIGN.z, 6, 30, 1),
+        e(RANKING_SIGN.x, RANKING_SIGN.z, 3, RANKING_SIGN.width + 3, 1),
+        e(LAWN.x, LAWN.z, LAWN.width, LAWN.depth, 0.5),
         e(FOOTBALL.x, FOOTBALL.z, FOOTBALL.width, FOOTBALL.depth),
         e(BASKETBALL.x, BASKETBALL.z, BASKETBALL.width, BASKETBALL.depth),
         e(MARTIAL.x, MARTIAL.z, MARTIAL.width, MARTIAL.depth),
@@ -95525,7 +95527,7 @@ https://github.com/browserify/crypto-browserify`);
         z: r,
         dir: -1
       });
-      for (let r = AXIS.fromX - 8; r >= AXIS.toX + 6; r -= 12) e.push({
+      for (let r = AXIS.fromX - 8; r >= AXIS.toX + 6; r -= 12) Math.abs(r - SIGN.x) < 5 || (e.push({
         x: r,
         z: AXIS.z - AXIS.halfWidth - 1.4,
         dir: 1,
@@ -95535,7 +95537,7 @@ https://github.com/browserify/crypto-browserify`);
         z: AXIS.z + AXIS.halfWidth + 1.4,
         dir: -1,
         along: "x"
-      });
+      }));
       for (const [r, s] of e.entries()) this.roundBlockers.some((o) => Math.hypot((s.x - o.x) / o.rx, (s.z - o.z) / o.rz) < 1) || s.x < this.bounds.minX || s.x > this.bounds.maxX || s.z < this.bounds.minZ || s.z > this.bounds.maxZ || this.lampPost(s.x, s.z, s.along === "x" ? s.dir > 0 ? Math.PI * 0.5 : -Math.PI * 0.5 : s.dir > 0 ? 0 : Math.PI, r);
     }
     lampPost(e, r, s, o) {
@@ -95678,10 +95680,8 @@ https://github.com/browserify/crypto-browserify`);
         for (let h = 0; h <= a; h++) {
           const c = h / a, d = s.x0 + (s.x1 - s.x0) * c, f = s.z0 + (s.z1 - s.z0) * c;
           if (this.blocked(d, f)) continue;
-          const p = 0.66 + rand$2(r * 31 + h) * 0.22;
-          this.box(1.2, p, 1.15, d, this.y + p * 0.5, f, h % 2 ? "#3f7a34" : "#48883a", {
-            castShadow: false
-          });
+          const p = (rand$2(r * 47 + h) - 0.5) * 0.5, m = (rand$2(r * 53 + h) - 0.5) * 0.5;
+          this.campus.canopy(d + p, this.y + 0.3, f + m, 0.5 + rand$2(r * 31 + h) * 0.28);
         }
       }
     }
@@ -95768,13 +95768,13 @@ https://github.com/browserify/crypto-browserify`);
     setNoticeBoards() {
       const e = [
         {
-          x: -124,
-          z: 32,
-          rot: 0
+          x: -162,
+          z: 88,
+          rot: Math.PI * 0.5
         },
         {
-          x: -124,
-          z: 48,
+          x: -114,
+          z: 62,
           rot: 0
         },
         {
@@ -95899,23 +95899,45 @@ https://github.com/browserify/crypto-browserify`);
       for (let s = 0; s < r; s++) {
         if (rand$2(s * 9 + 3) < 0.22) continue;
         const o = PARKING.z - PARKING.depth * 0.5 + 1.9 + s * 3.2, a = PARKING.x, h = e[s % e.length];
-        this.box(4.2, 0.72, 1.9, a, this.y + 0.5, o, h, {
-          physical: true
-        }), this.box(2.3, 0.62, 1.74, a - 0.15, this.y + 1.14, o, h), this.box(2, 0.42, 1.78, a - 0.15, this.y + 1.2, o, "#33414f", {
-          castShadow: false
-        });
-        for (const c of [
-          -1.35,
-          1.35
-        ]) for (const d of [
-          -0.92,
-          0.92
-        ]) this.box(0.66, 0.62, 0.28, a + c, this.y + 0.34, o + d, "#26262b", {
-          geometry: this.campus.cylinderGeometry,
-          rotationX: Math.PI * 0.5,
-          castShadow: false
-        });
+        this.parkedCar(a, o, h);
       }
+    }
+    parkedCar(e, r, s) {
+      const o = this.campus.cylinderGeometry, a = this.y;
+      this.box(4.1, 0.52, 1.86, e, a + 0.46, r, s, {
+        physical: true
+      }), this.box(1.15, 0.32, 1.7, e + 1.45, a + 0.76, r, s, {
+        rotationZ: -0.1
+      }), this.box(0.9, 0.28, 1.7, e - 1.62, a + 0.74, r, s, {
+        rotationZ: 0.12
+      }), this.box(1.78, 0.34, 1.74, e - 0.15, a + 0.98, r, "#33414f", {
+        castShadow: false
+      }), this.box(1.95, 0.16, 1.66, e - 0.15, a + 1.2, r, s), this.box(0.55, 0.5, 1.58, e + 0.92, a + 0.92, r, "#33414f", {
+        rotationZ: -0.55,
+        castShadow: false
+      }), this.box(0.5, 0.46, 1.58, e - 1.2, a + 0.9, r, "#33414f", {
+        rotationZ: 0.6,
+        castShadow: false
+      });
+      for (const h of [
+        -0.58,
+        0.58
+      ]) this.box(0.1, 0.15, 0.42, e + 2.02, a + 0.58, r + h, "#ffe9b0", {
+        castShadow: false
+      }), this.box(0.08, 0.13, 0.4, e - 2.02, a + 0.56, r + h, "#c03535", {
+        castShadow: false
+      });
+      for (const h of [
+        -1.3,
+        1.3
+      ]) for (const c of [
+        -0.95,
+        0.95
+      ]) this.box(0.6, 0.6, 0.26, e + h, a + 0.3, r + c, "#26262b", {
+        geometry: o,
+        rotationX: Math.PI * 0.5,
+        castShadow: false
+      });
     }
     setPicnicArea() {
       const e = this.campus.cylinderGeometry, r = [
@@ -96145,7 +96167,7 @@ https://github.com/browserify/crypto-browserify`);
   };
   class FptuCampus {
     constructor() {
-      this.game = Game.getInstance(), this.group = new Group(), this.group.name = "fptuCampus", this.game.scene.add(this.group), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1, 8), this.materials = /* @__PURE__ */ new Map(), this.groundTop = GROUND_TOP, this.setIsland(), this.setBridge(), this.setGate(), this.setGround(), this.setRankingSign(), this.setAlpha(), this.setBuildings(), this.setDorms(), this.setLake(), this.setSports(), this.setCanteen(), this.setParking(), this.setPalms(), this.setTrees(), this.setSign(), this.setSwanLake(), this.pineHill = new FptuPineHill(this), this.swans = new FptuSwans(this), this.props = new FptuProps(this), this.people = new FptuPeople(this), this.quiz = new FptuQuiz(), this.setGateZone(), this.setQuestionBlocks();
+      this.game = Game.getInstance(), this.group = new Group(), this.group.name = "fptuCampus", this.game.scene.add(this.group), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1, 8), this.materials = /* @__PURE__ */ new Map(), this.groundTop = GROUND_TOP, this.canopySpots = [], this.setIsland(), this.setBridge(), this.setGate(), this.setGround(), this.setRankingSign(), this.setAlpha(), this.setBuildings(), this.setDorms(), this.setLake(), this.setSports(), this.setCanteen(), this.setParking(), this.setPalms(), this.setTrees(), this.setSign(), this.setSwanLake(), this.pineHill = new FptuPineHill(this), this.swans = new FptuSwans(this), this.props = new FptuProps(this), this.people = new FptuPeople(this), this.leafClusters = new Foliage(this.canopySpots, uniform$1(color$1("#7fb43f")), uniform$1(color$1("#b4d150"))), this.quiz = new FptuQuiz(), this.setGateZone(), this.setQuestionBlocks();
     }
     getMaterial(e) {
       let r = this.materials.get(e);
@@ -96191,6 +96213,10 @@ https://github.com/browserify/crypto-browserify`);
         receiveShadow: false,
         physical: true
       });
+    }
+    canopy(e, r, s, o) {
+      const a = new Object3D$1();
+      a.position.set(e, r, s), a.scale.setScalar(o), a.updateMatrix(), a.updateMatrixWorld(true), this.canopySpots.push(a);
     }
     heightPatch(e, r, s, o, a, h, c, d, f = null) {
       const p = new PlaneGeometry(s, o, a, h);
@@ -96335,8 +96361,15 @@ https://github.com/browserify/crypto-browserify`);
         1
       ]) {
         const o = BRIDGE.z + s * (BRIDGE.width * 0.5 + 0.2);
-        this.box(e, 0.55, 0.3, r, GROUND_TOP + 0.32, o, COLORS$1.wall, {
+        this.box(e, 0.14, 0.22, r, GROUND_TOP + 0.66, o, "#e3ded2", {
           physical: true
+        }), this.box(e, 0.1, 0.16, r, GROUND_TOP + 0.3, o, "#cfc9bb", {
+          physical: true,
+          castShadow: false
+        });
+        const a = Math.round(e / 1.15);
+        for (let h = 0; h <= a; h++) this.box(0.12, 0.66, 0.12, r - e * 0.5 + h / a * e, GROUND_TOP + 0.33, o, "#d8d3c7", {
+          castShadow: false
         });
       }
     }
@@ -96345,10 +96378,29 @@ https://github.com/browserify/crypto-browserify`);
       for (const o of [
         -1,
         1
-      ]) this.box(1.3, 5.2, 1.3, e, 2.6, r + o * s, COLORS$1.wall, {
-        physical: true
+      ]) {
+        const a = r + o * s;
+        this.box(1.7, 0.5, 1.7, e, 0.25, a, "#b9b2a2", {
+          physical: true
+        }), this.box(1.25, 4.3, 1.25, e, 2.55, a, COLORS$1.wall, {
+          physical: true
+        }), this.box(0.95, 3.6, 0.16, e, 2.45, a + (o > 0 ? -0.66 : 0.66), "#e3ded2", {
+          castShadow: false
+        }), this.box(0.16, 3.6, 0.95, e + 0.66, 2.45, a, "#e3ded2", {
+          castShadow: false
+        }), this.box(1.45, 0.28, 1.45, e, 4.85, a, "#c3bdae"), this.box(1.15, 0.35, 1.15, e, 5.15, a, COLORS$1.wall), this.box(0.85, 0.3, 0.85, e, 5.48, a, "#c3bdae", {
+          geometry: this.cylinderGeometry
+        });
+      }
+      this.box(0.7, 0.55, s * 2 + 1.1, e, 5.62, r, COLORS$1.orange), this.box(0.78, 0.16, s * 2 + 1.5, e, 5.98, r, "#c3bdae");
+      for (const [o, a] of [
+        COLORS$1.orange,
+        COLORS$1.green,
+        COLORS$1.blue
+      ].entries()) this.box(0.2, 0.34, 0.62, e + 0.42, 5.62, r + (o - 1) * 0.78, a, {
+        castShadow: false
       });
-      this.box(0.8, 0.8, s * 2 + 1.3, e, 5.6, r, COLORS$1.orange), this.box(0.5, 2, 4.6, e + 1.2, 1, r + s + 3.4, "#8d7f68", {
+      this.box(0.5, 2, 4.6, e + 1.2, 1, r + s + 3.4, "#8d7f68", {
         physical: true
       }), this.box(0.18, 0.55, 1, e + 1.5, 1.55, r + s + 2.3, COLORS$1.orange), this.box(0.18, 0.55, 1, e + 1.5, 1.55, r + s + 3.4, COLORS$1.green), this.box(0.18, 0.55, 1, e + 1.5, 1.55, r + s + 4.5, COLORS$1.blue), this.box(2.4, 2.5, 2.4, e, 1.25, r - s - 2.6, COLORS$1.wall, {
         physical: true
@@ -96401,14 +96453,12 @@ https://github.com/browserify/crypto-browserify`);
         } else this.box(ALPHA.depth, c, ALPHA.columnWidth, f, c * 0.5, d, COLORS$1.wall, {
           physical: true
         });
-        this.box(ALPHA.depth + 0.35, 0.22, ALPHA.columnWidth + 0.1, f, c + 0.11, d, COLORS$1.roof), this.box(1.1, 0.55, ALPHA.columnWidth - 0.7, f + ALPHA.depth * 0.5 - 0.75, c + 0.5, d, COLORS$1.foliage, {
-          castShadow: false
-        }), a.floors <= 5 && (this.box(0.3, 1, 0.3, f - 1, c + 0.72, d - 1, COLORS$1.trunk, {
+        this.box(ALPHA.depth + 0.35, 0.22, ALPHA.columnWidth + 0.1, f, c + 0.11, d, COLORS$1.roof);
+        for (let w = -1; w <= 1; w++) this.canopy(f + ALPHA.depth * 0.5 - 0.75, c + 0.62, d + w * (ALPHA.columnWidth - 1.4) * 0.5, 0.5);
+        a.floors <= 5 && (this.box(0.22, 1.1, 0.22, f - 1, c + 0.75, d - 1, COLORS$1.trunk, {
           geometry: this.cylinderGeometry,
           castShadow: false
-        }), this.box(1, 0.9, 1, f - 1, c + 1.55, d - 1, COLORS$1.foliage, {
-          castShadow: false
-        }));
+        }), this.canopy(f - 1, c + 1.75, d - 1, 0.85));
         const m = 3, b = ALPHA.columnWidth / m;
         for (let w = 0; w < a.floors; w++) for (let M = 0; M < m; M++) {
           const R = h * m + M;
@@ -96443,12 +96493,7 @@ https://github.com/browserify/crypto-browserify`);
       }), s.instanceMatrix.needsUpdate = true, this.group.add(s);
     }
     addFoliage(e) {
-      if (e.length === 0) return;
-      const r = e.map((s) => {
-        const o = new Object3D$1();
-        return o.position.set(s.x, s.y, s.z), o.scale.setScalar(0.5 + Math.abs(Math.round(s.x * 7 + s.z * 13)) % 5 * 0.1), o.updateMatrix(), o.updateMatrixWorld(true), o;
-      });
-      this.terraceFoliage = new Foliage(r, uniform$1(color$1("#7fb43f")), uniform$1(color$1("#b4d150")));
+      for (const r of e) this.canopy(r.x, r.y, r.z, 0.5 + Math.abs(Math.round(r.x * 7 + r.z * 13)) % 5 * 0.1);
     }
     setBuildings() {
       for (const e of BUILDINGS) {
@@ -96487,8 +96532,25 @@ https://github.com/browserify/crypto-browserify`);
       for (const e of DORMS) {
         this.box(6.5, 4.6, 5, e.x, 4.6 * 0.5, e.z, COLORS$1.wall, {
           physical: true
-        }), this.box(6.9, 0.22, 5.4, e.x, 4.6 + 0.11, e.z, COLORS$1.roof), this.box(1.5, 0.5, 0.12, e.x, 4.6 - 0.45, e.z + 2.56, COLORS$1.orange);
-        for (let s = 0; s < 4; s++) this.box(5.4, 0.45, 0.1, e.x, s * 1.15 + 0.7, e.z + 2.55, COLORS$1.windowDark);
+        }), this.box(6.9, 0.22, 5.4, e.x, 4.6 + 0.11, e.z, COLORS$1.roof), this.box(7, 0.3, 5.5, e.x, 4.6 + 0.35, e.z, "#c3bdae", {
+          castShadow: false
+        }), this.box(6.66, 0.5, 5.16, e.x, 0.25, e.z, "#b9b2a2"), this.box(1.5, 0.5, 0.12, e.x, 4.6 - 0.45, e.z + 2.56, COLORS$1.orange);
+        for (let s = 0; s < 4; s++) {
+          const o = s * 1.15 + 0.7;
+          this.box(5.4, 0.45, 0.1, e.x, o, e.z + 2.55, COLORS$1.windowDark);
+          for (let a = 1; a < 4; a++) this.box(0.14, 0.5, 0.12, e.x - 2.7 + a * 1.35, o, e.z + 2.56, COLORS$1.wall, {
+            castShadow: false
+          });
+        }
+        this.box(2.2, 0.16, 1.2, e.x, 2.05, e.z + 3.1, COLORS$1.orange, {
+          castShadow: false
+        });
+        for (const s of [
+          -0.9,
+          0.9
+        ]) this.box(0.13, 2, 0.13, e.x + s, 1, e.z + 3.6, "#8a8578", {
+          geometry: this.cylinderGeometry
+        });
       }
     }
     setLake() {
@@ -96546,57 +96608,31 @@ https://github.com/browserify/crypto-browserify`);
       ];
       let s = 0;
       const o = () => (s = s * 1103515245 + 12345 & 2147483647, s / 2147483647);
-      for (const c of r) for (let d = 0; d < c.n; d++) {
-        const f = (o() - 0.5) * 0.42, p = (o() - 0.5) * 0.42, m = c.x + f, b = c.z + p;
-        if (m * m + b * b > 0.9) continue;
-        const w = LAKE.x + m * LAKE.radiusX - LAKE_ISLET.x, M = LAKE.z + b * LAKE.radiusZ - LAKE_ISLET.z;
-        if (Math.hypot(w, M) < LAKE_ISLET.radius + 2) continue;
-        const R = LAKE.x + m * LAKE.radiusX, V = LAKE.z + b * LAKE.radiusZ, O = 0.85 + o() * 0.75;
-        this.box(O, 0.05, O, R, e + 0.025, V, d % 3 === 0 ? "#3f8f4a" : "#4f9e4a", {
+      for (const h of r) for (let c = 0; c < h.n; c++) {
+        const d = (o() - 0.5) * 0.42, f = (o() - 0.5) * 0.42, p = h.x + d, m = h.z + f;
+        if (p * p + m * m > 0.9) continue;
+        const b = LAKE.x + p * LAKE.radiusX - LAKE_ISLET.x, w = LAKE.z + m * LAKE.radiusZ - LAKE_ISLET.z;
+        if (Math.hypot(b, w) < LAKE_ISLET.radius + 2) continue;
+        const M = LAKE.x + p * LAKE.radiusX, R = LAKE.z + m * LAKE.radiusZ, V = 0.85 + o() * 0.75;
+        this.box(V, 0.05, V, M, e + 0.025, R, c % 3 === 0 ? "#3f8f4a" : "#4f9e4a", {
           castShadow: false,
           geometry: this.cylinderGeometry
         });
       }
-      const a = 6;
-      for (let c = 0; c < a; c++) {
-        const d = c / a, f = LAKE_ISLET.radius * (1 - d * 0.55), p = (LAKE_ISLET.height + 0.9) / a, m = -0.9 + p * c + p * 0.5;
-        this.box(f * 2, p * 1.06, f * 2, LAKE_ISLET.x, m, LAKE_ISLET.z, c === 0 ? "#c2a878" : "#5f9438", {
-          geometry: this.cylinderGeometry,
-          castShadow: c > 1
-        }), this.game.objects.add(null, {
-          type: "fixed",
-          friction: 0.3,
-          restitution: 0,
-          position: {
-            x: LAKE_ISLET.x,
-            y: m,
-            z: LAKE_ISLET.z
-          },
-          colliders: [
-            {
-              shape: "cylinder",
-              parameters: [
-                p * 0.53,
-                f
-              ]
-            }
-          ]
-        });
-      }
-      for (let c = 0; c < 9; c++) {
-        const d = c * 2.39996, f = Math.sqrt((c + 0.4) / 9), p = LAKE_ISLET.radius * 0.55 * f, m = LAKE_ISLET.x + Math.cos(d) * p, b = LAKE_ISLET.z + Math.sin(d) * p, w = LAKE_ISLET.height * (1 - p / LAKE_ISLET.radius * 0.7), M = 0.9 + c * 31 % 7 / 12;
-        this.box(0.3 * M, 1.5 * M, 0.3 * M, m, w + 0.75 * M, b, COLORS$1.trunk, {
+      this.heightPatch(LAKE_ISLET.x, LAKE_ISLET.z, LAKE_ISLET.radius * 2 + 4, LAKE_ISLET.radius * 2 + 4, 40, 40, (h, c) => {
+        const d = Math.hypot(h - LAKE_ISLET.x, c - LAKE_ISLET.z) / LAKE_ISLET.radius;
+        if (d >= 1) return -0.95;
+        const f = 1 - d;
+        return -0.9 + (LAKE_ISLET.height + 0.9) * (f * f * (3 - 2 * f));
+      }, "#5f9438");
+      for (let h = 0; h < 9; h++) {
+        const c = h * 2.39996, d = Math.sqrt((h + 0.4) / 9), f = LAKE_ISLET.radius * 0.55 * d, p = LAKE_ISLET.x + Math.cos(c) * f, m = LAKE_ISLET.z + Math.sin(c) * f, b = 1 - f / LAKE_ISLET.radius, w = -0.9 + (LAKE_ISLET.height + 0.9) * (b * b * (3 - 2 * b)), M = 0.9 + h * 31 % 7 / 12;
+        this.box(0.3 * M, 1.5 * M, 0.3 * M, p, w + 0.75 * M, m, COLORS$1.trunk, {
           geometry: this.cylinderGeometry,
           castShadow: false
-        }), this.box(1.7 * M, 1.4 * M, 1.7 * M, m, w + 2 * M, b, "#3f7f3a", {
-          castShadow: false,
-          geometry: this.cylinderGeometry
-        }), this.box(1.15 * M, 0.9 * M, 1.15 * M, m, w + 2.9 * M, b, "#559a44", {
-          castShadow: false,
-          geometry: this.cylinderGeometry
-        });
+        }), this.canopy(p, w + 2 * M, m, 1.05 * M), this.canopy(p, w + 2.75 * M, m, 0.7 * M);
       }
-      const h = [
+      const a = [
         [
           -0.6,
           -0.4
@@ -96630,17 +96666,17 @@ https://github.com/browserify/crypto-browserify`);
           -0.68
         ]
       ];
-      for (const [c, d] of h) {
-        const f = LAKE.x + c * LAKE.radiusX, p = LAKE.z + d * LAKE.radiusZ;
-        for (let m = 0; m < 6; m++) {
-          const b = m * Math.PI / 3;
-          this.box(0.34, 0.1, 0.16, f + Math.cos(b) * 0.17, e + 0.14, p + Math.sin(b) * 0.17, "#ff9ec4", {
-            rotationY: -b,
+      for (const [h, c] of a) {
+        const d = LAKE.x + h * LAKE.radiusX, f = LAKE.z + c * LAKE.radiusZ;
+        for (let p = 0; p < 6; p++) {
+          const m = p * Math.PI / 3;
+          this.box(0.34, 0.1, 0.16, d + Math.cos(m) * 0.17, e + 0.14, f + Math.sin(m) * 0.17, "#ff9ec4", {
+            rotationY: -m,
             rotationZ: -0.5,
             castShadow: false
           });
         }
-        this.box(0.16, 0.16, 0.16, f, e + 0.24, p, "#ffd76b", {
+        this.box(0.16, 0.16, 0.16, d, e + 0.24, f, "#ffd76b", {
           castShadow: false
         });
       }
@@ -96682,14 +96718,21 @@ https://github.com/browserify/crypto-browserify`);
       const e = CANTEEN.floors * 1.25;
       this.box(CANTEEN.width, e, CANTEEN.depth, CANTEEN.x, e * 0.5, CANTEEN.z, COLORS$1.wall, {
         physical: true
-      }), this.box(CANTEEN.width + 0.4, 0.22, CANTEEN.depth + 0.4, CANTEEN.x, e + 0.11, CANTEEN.z, COLORS$1.roof), this.box(CANTEEN.width * 0.86, 0.5, 0.1, CANTEEN.x, 0.75, CANTEEN.z + CANTEEN.depth * 0.5 + 0.05, COLORS$1.windowDark), this.box(2, 0.45, 0.12, CANTEEN.x, e - 0.4, CANTEEN.z + CANTEEN.depth * 0.5 + 0.06, COLORS$1.orange);
+      }), this.box(CANTEEN.width + 0.4, 0.22, CANTEEN.depth + 0.4, CANTEEN.x, e + 0.11, CANTEEN.z, COLORS$1.roof), this.box(CANTEEN.width + 0.5, 0.28, CANTEEN.depth + 0.5, CANTEEN.x, e + 0.34, CANTEEN.z, "#c3bdae", {
+        castShadow: false
+      }), this.box(CANTEEN.width + 0.16, 0.45, CANTEEN.depth + 0.16, CANTEEN.x, 0.22, CANTEEN.z, "#b9b2a2"), this.box(CANTEEN.width * 0.86, 0.5, 0.1, CANTEEN.x, 0.75, CANTEEN.z + CANTEEN.depth * 0.5 + 0.05, COLORS$1.windowDark);
+      for (let r = 1; r < 5; r++) this.box(0.14, 0.55, 0.12, CANTEEN.x - CANTEEN.width * 0.43 + r * CANTEEN.width * 0.86 / 5, 0.75, CANTEEN.z + CANTEEN.depth * 0.5 + 0.06, COLORS$1.wall, {
+        castShadow: false
+      });
+      this.box(2, 0.45, 0.12, CANTEEN.x, e - 0.4, CANTEEN.z + CANTEEN.depth * 0.5 + 0.06, COLORS$1.orange), this.box(CANTEEN.width * 0.7, 0.14, 1.4, CANTEEN.x, 1.5, CANTEEN.z + CANTEEN.depth * 0.5 + 0.75, COLORS$1.orange, {
+        castShadow: false
+      });
     }
     setParking() {
       this.slab(PARKING.width, PARKING.depth, PARKING.x, PARKING.z, "#7d7a72");
       for (let e = 0; e < 4; e++) this.slab(PARKING.width - 1, 0.16, PARKING.x, PARKING.z - PARKING.depth * 0.5 + 2 + e * 4, "#e8e4da", {
         layer: 1
       });
-      this.box(1.6, 0.62, 0.85, PARKING.x, 0.35, PARKING.z - 4, "#c94f39"), this.box(1.6, 0.62, 0.85, PARKING.x, 0.35, PARKING.z + 4.2, "#3a6fc9");
     }
     setPalms() {
       const e = [];
@@ -111088,7 +111131,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-j0wFlcre.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-Dx5PZ7EZ.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

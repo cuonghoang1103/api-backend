@@ -90,6 +90,14 @@ export class FptuCampus
         // Cao độ mặt đảo, để các bộ phận khác (đồi thông…) khỏi phải đoán lại
         this.groundTop = GROUND_TOP
 
+        /**
+         * Mọi TÁN LÁ MỀM (hàng rào cây, cây trên bậc Alpha, cây cù lao…) chỉ
+         * ghi MỐC vào mảng này; cuối hàm dựng gom hết thành MỘT hệ `Foliage` —
+         * đúng hệ lá của bản mẫu (phiến xoay, chuyển sắc, lay theo gió), và cả
+         * trăm cụm vẫn chỉ một lệnh vẽ.
+         */
+        this.canopySpots = []
+
         this.setIsland()
         this.setBridge()
         this.setGate()
@@ -118,6 +126,14 @@ export class FptuCampus
         // Người phải dựng SAU đồ đạc: nó dùng chung `props.blocked()` để khỏi
         // đứng giữa lòng đường hay lọt vào trong tường
         this.people = new FptuPeople(this)
+
+        /**
+         * Hệ lá chung — dựng SAU CÙNG để gom đủ mốc từ mọi nơi (kể cả hàng rào
+         * cây của FptuProps). User chụp ba tấm ảnh chê "cây vuông như
+         * Minecraft": hộp xanh trên bậc Alpha, hàng rào hộp, tán trụ cù lao —
+         * tất cả nay đi qua đây.
+         */
+        this.leafClusters = new Foliage(this.canopySpots, uniform(color('#7fb43f')), uniform(color('#b4d150')))
 
         this.quiz = new FptuQuiz()
         this.setGateZone()
@@ -216,6 +232,20 @@ export class FptuCampus
          * mép sân thành cái bó vỉa cao 1–3 phân — xe leo qua không thấy gì.
          */
         return this.box(width, 0.04, depth, x, y, z, hex, { castShadow: false, receiveShadow: false, physical: true })
+    }
+
+    /**
+     * Ghi một MỐC TÁN LÁ. `Foliage` đọc `matrix`/`matrixWorld` nên PHẢI
+     * updateMatrix trước (bẫy Trees cũ: quên là hình hiện ở gốc toạ độ).
+     */
+    canopy(x, y, z, scale)
+    {
+        const object = new THREE.Object3D()
+        object.position.set(x, y, z)
+        object.scale.setScalar(scale)
+        object.updateMatrix()
+        object.updateMatrixWorld(true)
+        this.canopySpots.push(object)
     }
 
     /**
@@ -460,11 +490,22 @@ export class FptuCampus
             }
         )
 
-        // Lan can — vật lý, để xe không rơi xuống biển giữa chừng
+        /**
+         * Lan can THẬT: hai thanh ngang mảnh trên hàng trụ con — bản trước là
+         * một bức tường đặc cao 0,55 chạy suốt cầu, user chụp ảnh chê "bậc
+         * trắng trắng vuông". Cả hai thanh đều có thân vật lý: khe giữa chúng
+         * (0,28 → 0,55) nhỏ hơn bánh xe nên vẫn không lọt xuống biển được.
+         */
         for(const side of [ -1, 1 ])
         {
-            const z = BRIDGE.z + side * (BRIDGE.width * 0.5 + 0.2)
-            this.box(length, 0.55, 0.3, centerX, GROUND_TOP + 0.32, z, COLORS.wall, { physical: true })
+            const zz = BRIDGE.z + side * (BRIDGE.width * 0.5 + 0.2)
+
+            this.box(length, 0.14, 0.22, centerX, GROUND_TOP + 0.66, zz, '#e3ded2', { physical: true })
+            this.box(length, 0.1, 0.16, centerX, GROUND_TOP + 0.3, zz, '#cfc9bb', { physical: true, castShadow: false })
+
+            const posts = Math.round(length / 1.15)
+            for(let i = 0; i <= posts; i++)
+                this.box(0.12, 0.66, 0.12, centerX - length * 0.5 + (i / posts) * length, GROUND_TOP + 0.33, zz, '#d8d3c7', { castShadow: false })
         }
     }
 
@@ -474,11 +515,26 @@ export class FptuCampus
         const { x, z } = GATE
         const opening = 6.5 // nửa độ rộng lối vào — trục đường rộng 9 nên dư sức
 
+        // Trụ cổng có ĐẾ LOE, GỜ và MŨ — hết cảnh hai cột hộp trơn user chê
         for(const side of [ -1, 1 ])
-            this.box(1.3, 5.2, 1.3, x, 2.6, z + side * opening, COLORS.wall, { physical: true })
+        {
+            const pz = z + side * opening
+            this.box(1.7, 0.5, 1.7, x, 0.25, pz, '#b9b2a2', { physical: true })
+            this.box(1.25, 4.3, 1.25, x, 2.55, pz, COLORS.wall, { physical: true })
+            // Panel ốp nổi hai mặt cho trụ có chiều sâu
+            this.box(0.95, 3.6, 0.16, x, 2.45, pz + (side > 0 ? -0.66 : 0.66), '#e3ded2', { castShadow: false })
+            this.box(0.16, 3.6, 0.95, x + 0.66, 2.45, pz, '#e3ded2', { castShadow: false })
+            // Gờ + mũ trụ hai bậc, chóp tròn
+            this.box(1.45, 0.28, 1.45, x, 4.85, pz, '#c3bdae')
+            this.box(1.15, 0.35, 1.15, x, 5.15, pz, COLORS.wall)
+            this.box(0.85, 0.3, 0.85, x, 5.48, pz, '#c3bdae', { geometry: this.cylinderGeometry })
+        }
 
-        // Thanh ngang cao hơn nóc xe rất nhiều, chui qua thoải mái
-        this.box(0.8, 0.8, opening * 2 + 1.3, x, 5.6, z, COLORS.orange)
+        // Thanh ngang hai lớp + logo ba khối màu quay ra phía cầu đón khách
+        this.box(0.7, 0.55, opening * 2 + 1.1, x, 5.62, z, COLORS.orange)
+        this.box(0.78, 0.16, opening * 2 + 1.5, x, 5.98, z, '#c3bdae')
+        for(const [ i, hex ] of [ COLORS.orange, COLORS.green, COLORS.blue ].entries())
+            this.box(0.2, 0.34, 0.62, x + 0.42, 5.62, z + (i - 1) * 0.78, hex, { castShadow: false })
 
         // Biển đá bên phải cổng + logo FPT ba khối màu
         this.box(0.5, 2, 4.6, x + 1.2, 1, z + opening + 3.4, '#8d7f68', { physical: true })
@@ -597,13 +653,16 @@ export class FptuCampus
 
             // CÂY XANH trên mặt bậc: dải cây sát mép trước của mái — chính là
             // thứ làm toà nhà "bậc thang phủ cây" nhận ra được từ xa
-            this.box(1.1, 0.55, ALPHA.columnWidth - 0.7, xCenter + ALPHA.depth * 0.5 - 0.75, height + 0.5, zCenter, COLORS.foliage, { castShadow: false })
+            // Dải cây mép bậc — CỤM LÁ THẬT của hệ mẫu, không phải hộp xanh
+            // (chính cái hộp xanh này bị user chụp ảnh chê "như Minecraft")
+            for(let c = -1; c <= 1; c++)
+                this.canopy(xCenter + ALPHA.depth * 0.5 - 0.75, height + 0.62, zCenter + c * (ALPHA.columnWidth - 1.4) * 0.5, 0.5)
 
-            // Vài chóp cây nhỏ nhô cao trên các bậc thấp (như ảnh: cây thật trên sân thượng)
+            // Vài cây nhỏ trên các bậc thấp: thân trụ + tán lá mềm
             if(column.floors <= 5)
             {
-                this.box(0.3, 1, 0.3, xCenter - 1, height + 0.72, zCenter - 1, COLORS.trunk, { geometry: this.cylinderGeometry, castShadow: false })
-                this.box(1, 0.9, 1, xCenter - 1, height + 1.55, zCenter - 1, COLORS.foliage, { castShadow: false })
+                this.box(0.22, 1.1, 0.22, xCenter - 1, height + 0.75, zCenter - 1, COLORS.trunk, { geometry: this.cylinderGeometry, castShadow: false })
+                this.canopy(xCenter - 1, height + 1.75, zCenter - 1, 0.85)
             }
 
             // Lưới ô caro trên mặt TRƯỚC (+X) của cột — 3 ô mỗi tầng
@@ -664,34 +723,10 @@ export class FptuCampus
         this.group.add(mesh)
     }
 
-    /**
-     * CÂY trên các bậc toà Alpha — dùng ĐÚNG hệ `Foliage` của thế giới mẫu.
-     *
-     * Bản trước là những khối hộp 0,3×0,4×0,72 xếp vào ô caro, và user chê thẳng:
-     * "cây ở trên toà nhà và góc nhà hình vuông vuông giống trò chơi Minecraft
-     * vậy, tôi muốn nó tự nhiên chân thật như mẫu cơ mà". Đúng — thế giới gốc đã
-     * có sẵn hệ lá tử tế (`Foliage`: hàng chục phiến xoay, chuyển sắc, lay theo
-     * gió, luôn hơi quay về máy quay). Cùng thứ đang dùng cho bụi cây dưới đất,
-     * chỉ việc đưa lên bậc nhà.
-     *
-     * `Foliage` nhận một mảng Object3D làm mốc, đọc `position` và `scale.x`.
-     */
     addFoliage(cells)
     {
-        if(cells.length === 0) return
-
-        const spots = cells.map((cell) =>
-        {
-            const object = new THREE.Object3D()
-            object.position.set(cell.x, cell.y, cell.z)
-            // Bụi trên bậc nhỏ hơn bụi dưới đất, và mỗi bụi một cỡ
-            object.scale.setScalar(0.5 + ((Math.abs(Math.round(cell.x * 7 + cell.z * 13))) % 5) * 0.1)
-            object.updateMatrix()
-            object.updateMatrixWorld(true)
-            return object
-        })
-
-        this.terraceFoliage = new Foliage(spots, uniform(color('#7fb43f')), uniform(color('#b4d150')))
+        for(const cell of cells)
+            this.canopy(cell.x, cell.y, cell.z, 0.5 + (Math.abs(Math.round(cell.x * 7 + cell.z * 13)) % 5) * 0.1)
     }
 
     /** Beta / Gamma / Delta — lùi hẳn khỏi trục, kiểu khối giảng đường mặt kính. */
@@ -739,11 +774,28 @@ export class FptuCampus
             const height = 4 * 1.15
 
             this.box(6.5, height, 5, dorm.x, height * 0.5, dorm.z, COLORS.wall, { physical: true })
+
+            // Cùng ngôn ngữ với Beta/Delta/Gamma: lan can mái + gờ, đế nhà —
+            // hết cảnh "cái hộp đặt trên cỏ"
             this.box(6.9, 0.22, 5.4, dorm.x, height + 0.11, dorm.z, COLORS.roof)
+            this.box(7.0, 0.3, 5.5, dorm.x, height + 0.35, dorm.z, '#c3bdae', { castShadow: false })
+            this.box(6.66, 0.5, 5.16, dorm.x, 0.25, dorm.z, '#b9b2a2')
             this.box(1.5, 0.5, 0.12, dorm.x, height - 0.45, dorm.z + 2.56, COLORS.orange)
 
             for(let floor = 0; floor < 4; floor++)
-                this.box(5.4, 0.45, 0.1, dorm.x, floor * 1.15 + 0.7, dorm.z + 2.55, COLORS.windowDark)
+            {
+                const y = floor * 1.15 + 0.7
+                this.box(5.4, 0.45, 0.1, dorm.x, y, dorm.z + 2.55, COLORS.windowDark)
+
+                // Đố dọc chia ô cửa — mỗi tầng 4 ô, hết vệt đen dài
+                for(let b = 1; b < 4; b++)
+                    this.box(0.14, 0.5, 0.12, dorm.x - 2.7 + b * 1.35, y, dorm.z + 2.56, COLORS.wall, { castShadow: false })
+            }
+
+            // Mái hiên cửa vào + hai cột tròn
+            this.box(2.2, 0.16, 1.2, dorm.x, 2.05, dorm.z + 3.1, COLORS.orange, { castShadow: false })
+            for(const side of [ -0.9, 0.9 ])
+                this.box(0.13, 2, 0.13, dorm.x + side, 1, dorm.z + 3.6, '#8a8578', { geometry: this.cylinderGeometry })
         }
     }
 
@@ -842,23 +894,24 @@ export class FptuCampus
          * Dựng bằng đĩa chồng như đồi thông (leo lên được), trên trồng cây tán
          * tròn cho rậm.
          */
-        const tiers = 6
-        for(let i = 0; i < tiers; i++)
-        {
-            const ratio = i / tiers
-            const radius = LAKE_ISLET.radius * (1 - ratio * 0.55)
-            const tierHeight = (LAKE_ISLET.height + 0.9) / tiers
-            const y = -0.9 + tierHeight * i + tierHeight * 0.5
-
-            this.box(radius * 2, tierHeight * 1.06, radius * 2, LAKE_ISLET.x, y, LAKE_ISLET.z,
-                i === 0 ? '#c2a878' : '#5f9438', { geometry: this.cylinderGeometry, castShadow: i > 1 })
-
-            this.game.objects.add(null, {
-                type: 'fixed', friction: 0.3, restitution: 0,
-                position: { x: LAKE_ISLET.x, y, z: LAKE_ISLET.z },
-                colliders: [ { shape: 'cylinder', parameters: [ tierHeight * 0.53, radius ] } ]
-            })
-        }
+        /**
+         * Thân cù lao là MỘT mảng địa hình mượt — cùng kỹ thuật đồi thông.
+         * Bản trước xếp 6 đĩa chồng và trong ảnh cận nó lộ nguyên hình bậc
+         * thang, đúng thứ user đang yêu cầu dẹp bỏ. Đường sinh smoothstep từ
+         * đáy hồ (−0,9) lên đỉnh, mép hoà xuống dưới đáy hồ để nền che.
+         */
+        this.heightPatch(
+            LAKE_ISLET.x, LAKE_ISLET.z,
+            LAKE_ISLET.radius * 2 + 4, LAKE_ISLET.radius * 2 + 4, 40, 40,
+            (x, z) =>
+            {
+                const r = Math.hypot(x - LAKE_ISLET.x, z - LAKE_ISLET.z) / LAKE_ISLET.radius
+                if(r >= 1) return -0.95
+                const t = 1 - r
+                return -0.9 + (LAKE_ISLET.height + 0.9) * (t * t * (3 - 2 * t))
+            },
+            '#5f9438',
+        )
 
         // Cây um tùm trên cù lao
         for(let i = 0; i < 9; i++)
@@ -868,12 +921,15 @@ export class FptuCampus
             const radius = LAKE_ISLET.radius * 0.55 * spread
             const x = LAKE_ISLET.x + Math.cos(angle) * radius
             const z = LAKE_ISLET.z + Math.sin(angle) * radius
-            const top = LAKE_ISLET.height * (1 - radius / LAKE_ISLET.radius * 0.7)
+            // Cao độ mặt cù lao tại chỗ trồng — cùng công thức với heightPatch
+            const tt = 1 - radius / LAKE_ISLET.radius
+            const top = -0.9 + (LAKE_ISLET.height + 0.9) * (tt * tt * (3 - 2 * tt))
             const scale = 0.9 + ((i * 31) % 7) / 12
 
             this.box(0.3 * scale, 1.5 * scale, 0.3 * scale, x, top + 0.75 * scale, z, COLORS.trunk, { geometry: this.cylinderGeometry, castShadow: false })
-            this.box(1.7 * scale, 1.4 * scale, 1.7 * scale, x, top + 2 * scale, z, '#3f7f3a', { castShadow: false, geometry: this.cylinderGeometry })
-            this.box(1.15 * scale, 0.9 * scale, 1.15 * scale, x, top + 2.9 * scale, z, '#559a44', { castShadow: false, geometry: this.cylinderGeometry })
+            // Tán bằng hệ lá mẫu — hai cụm chồng cho dáng tròn rậm
+            this.canopy(x, top + 2 * scale, z, 1.05 * scale)
+            this.canopy(x, top + 2.75 * scale, z, 0.7 * scale)
         }
 
         // Vài bông sen hồng nhô lên — cánh xoè quanh nhuỵ vàng
@@ -953,8 +1009,15 @@ export class FptuCampus
 
         this.box(CANTEEN.width, height, CANTEEN.depth, CANTEEN.x, height * 0.5, CANTEEN.z, COLORS.wall, { physical: true })
         this.box(CANTEEN.width + 0.4, 0.22, CANTEEN.depth + 0.4, CANTEEN.x, height + 0.11, CANTEEN.z, COLORS.roof)
+        this.box(CANTEEN.width + 0.5, 0.28, CANTEEN.depth + 0.5, CANTEEN.x, height + 0.34, CANTEEN.z, '#c3bdae', { castShadow: false })
+        this.box(CANTEEN.width + 0.16, 0.45, CANTEEN.depth + 0.16, CANTEEN.x, 0.22, CANTEEN.z, '#b9b2a2')
+
+        // Dải kính mặt trước chia ô + biển hiệu + mái hiên dài che lối vào
         this.box(CANTEEN.width * 0.86, 0.5, 0.1, CANTEEN.x, 0.75, CANTEEN.z + CANTEEN.depth * 0.5 + 0.05, COLORS.windowDark)
+        for(let b = 1; b < 5; b++)
+            this.box(0.14, 0.55, 0.12, CANTEEN.x - CANTEEN.width * 0.43 + b * CANTEEN.width * 0.86 / 5, 0.75, CANTEEN.z + CANTEEN.depth * 0.5 + 0.06, COLORS.wall, { castShadow: false })
         this.box(2, 0.45, 0.12, CANTEEN.x, height - 0.4, CANTEEN.z + CANTEEN.depth * 0.5 + 0.06, COLORS.orange)
+        this.box(CANTEEN.width * 0.7, 0.14, 1.4, CANTEEN.x, 1.5, CANTEEN.z + CANTEEN.depth * 0.5 + 0.75, COLORS.orange, { castShadow: false })
     }
 
     /** Bãi gửi xe dọc mép đường — vài ô kẻ trắng và hai xe đỗ sẵn. */
@@ -965,8 +1028,8 @@ export class FptuCampus
         for(let i = 0; i < 4; i++)
             this.slab(PARKING.width - 1, 0.16, PARKING.x, PARKING.z - PARKING.depth * 0.5 + 2 + i * 4, '#e8e4da', { layer: 1 })
 
-        this.box(1.6, 0.62, 0.85, PARKING.x, 0.35, PARKING.z - 4, '#c94f39')
-        this.box(1.6, 0.62, 0.85, PARKING.x, 0.35, PARKING.z + 4.2, '#3a6fc9')
+        // Xe đậu do FptuProps dựng (dáng thật: capô, kính vát, bánh) — hai
+        // cục hộp mộc từng nằm ở đây đã bị user chụp ảnh chê, bỏ hẳn
     }
 
     /**

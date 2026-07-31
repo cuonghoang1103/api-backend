@@ -2,8 +2,8 @@ import * as THREE from 'three/webgpu'
 import { Game } from '../Game.js'
 import {
     ALPHA, BASKETBALL, BUILDINGS, CANTEEN, DORMS, FOOTBALL, FORECOURT, GATE,
-    LAKE, LAWN, MAIN_ROAD, MARTIAL, PARKING, PINE_HILL, RANKING_PLAZA, SWAN_LAKE,
-    THROUGH_ROAD, AXIS,
+    LAKE, LAWN, MAIN_ROAD, MARTIAL, PARKING, PINE_HILL, RANKING_PLAZA,
+    RANKING_SIGN, SIGN, SWAN_LAKE, THROUGH_ROAD, AXIS,
 } from '../../data/fptu.js'
 
 /**
@@ -80,6 +80,17 @@ export class FptuProps
             rect(PARKING.x, PARKING.z, PARKING.width, PARKING.depth, 0.5),
             rect(GATE.x, GATE.z, 6, 16),
 
+            /**
+             * Hàng chữ FPT UNIVERSITY + biển xếp hạng + thảm cỏ trục chính —
+             * KHÔNG đặt gì vào đây. Bản đầu bảng tin cắm ngay TRƯỚC hàng chữ
+             * (−124, 32/48 — chữ ở x −127, trải z 28…52) che mất chữ, user chụp
+             * ảnh chê. Vùng cấm phải nằm trong `blocked()` chứ không phải trong
+             * trí nhớ của người đặt đồ.
+             */
+            rect(SIGN.x, SIGN.z, 6, 30, 1),
+            rect(RANKING_SIGN.x, RANKING_SIGN.z, 3, RANKING_SIGN.width + 3, 1),
+            rect(LAWN.x, LAWN.z, LAWN.width, LAWN.depth, 0.5),
+
             // Sân thể thao
             rect(FOOTBALL.x, FOOTBALL.z, FOOTBALL.width, FOOTBALL.depth),
             rect(BASKETBALL.x, BASKETBALL.z, BASKETBALL.width, BASKETBALL.depth),
@@ -135,6 +146,10 @@ export class FptuProps
         // Dọc trục lễ nghi (chạy theo trục x tại z = 40)
         for(let x = AXIS.fromX - 8; x >= AXIS.toX + 6; x -= 12)
         {
+            // Né hàng chữ FPT UNIVERSITY — cột đèn đứng chen giữa các ký tự
+            // nhìn rất bẩn (chữ ở x −127, cột lưới 12 rơi đúng x −128)
+            if(Math.abs(x - SIGN.x) < 5) continue
+
             spots.push({ x, z: AXIS.z - AXIS.halfWidth - 1.4, dir: 1, along: 'x' })
             spots.push({ x, z: AXIS.z + AXIS.halfWidth + 1.4, dir: -1, along: 'x' })
         }
@@ -284,9 +299,11 @@ export class FptuProps
                 const z = run.z0 + (run.z1 - run.z0) * t
                 if(this.blocked(x, z)) continue
 
-                // Cao thấp nhấp nhô nhẹ cho ra bụi cây tỉa, không ra bức tường
-                const h = 0.66 + rand(r * 31 + i) * 0.22
-                this.box(1.2, h, 1.15, x, this.y + h * 0.5, z, i % 2 ? '#3f7a34' : '#48883a', { castShadow: false })
+                // CỤM LÁ THẬT của hệ mẫu, không phải hộp xanh — hàng rào hộp
+                // chính là thứ user chụp ảnh chê "vuông như Minecraft"
+                const jx = (rand(r * 47 + i) - 0.5) * 0.5
+                const jz = (rand(r * 53 + i) - 0.5) * 0.5
+                this.campus.canopy(x + jx, this.y + 0.3, z + jz, 0.5 + rand(r * 31 + i) * 0.28)
             }
         }
     }
@@ -361,9 +378,14 @@ export class FptuProps
     /** Bảng tin và biển chỉ dẫn — thứ sân trường nào cũng có. */
     setNoticeBoards()
     {
+        /**
+         * Chỗ đặt bảng tin — đã DỜI khỏi mặt tiền hàng chữ (bản đầu ở −124,
+         * 32/48 là ngay trước chữ FPT UNIVERSITY). Nay ở những chỗ người thật
+         * hay dán thông báo: giữa hai cụm ký túc xá, cạnh nhà ăn, gần sân bóng.
+         */
         const spots = [
-            { x: -124, z: 32, rot: 0 },
-            { x: -124, z: 48, rot: 0 },
+            { x: -162, z: 88, rot: Math.PI * 0.5 },
+            { x: -114, z: 62, rot: 0 },
             { x: -168, z: 70, rot: Math.PI * 0.5 },
             { x: -100, z: 26, rot: Math.PI },
         ]
@@ -455,16 +477,45 @@ export class FptuProps
             const x = PARKING.x
             const hex = COLORS_CAR[i % COLORS_CAR.length]
 
-            // Thân dưới, ca-bin, kính, bánh
-            this.box(4.2, 0.72, 1.9, x, this.y + 0.5, z, hex, { physical: true })
-            this.box(2.3, 0.62, 1.74, x - 0.15, this.y + 1.14, z, hex)
-            this.box(2.0, 0.42, 1.78, x - 0.15, this.y + 1.2, z, '#33414f', { castShadow: false })
-
-            for(const sx of [ -1.35, 1.35 ])
-                for(const sz of [ -0.92, 0.92 ])
-                    this.box(0.66, 0.62, 0.28, x + sx, this.y + 0.34, z + sz, '#26262b',
-                        { geometry: this.campus.cylinderGeometry, rotationX: Math.PI * 0.5, castShadow: false })
+            this.parkedCar(x, z, hex)
         }
+    }
+
+    /**
+     * Một chiếc xe đậu — dáng XE THẬT: capô vát xuống mũi, kính chắn nghiêng,
+     * mui, cốp, đèn trước sau, bánh trụ. Bản trước là hai khối hộp chồng nhau
+     * và user chụp ảnh chê "xe gì hình vuông xấu thế" — đúng.
+     */
+    parkedCar(x, z, hex)
+    {
+        const cyl = this.campus.cylinderGeometry
+        const y = this.y
+
+        // Thân dưới + capô vát + cốp vát
+        this.box(4.1, 0.52, 1.86, x, y + 0.46, z, hex, { physical: true })
+        this.box(1.15, 0.32, 1.7, x + 1.45, y + 0.76, z, hex, { rotationZ: -0.1 })
+        this.box(0.9, 0.28, 1.7, x - 1.62, y + 0.74, z, hex, { rotationZ: 0.12 })
+
+        // Ca-bin: dải kính bọc quanh (khối kính rộng hơn mui một chút) + mui
+        this.box(1.78, 0.34, 1.74, x - 0.15, y + 0.98, z, '#33414f', { castShadow: false })
+        this.box(1.95, 0.16, 1.66, x - 0.15, y + 1.2, z, hex)
+
+        // Kính chắn trước / sau nghiêng
+        this.box(0.55, 0.5, 1.58, x + 0.92, y + 0.92, z, '#33414f', { rotationZ: -0.55, castShadow: false })
+        this.box(0.5, 0.46, 1.58, x - 1.2, y + 0.9, z, '#33414f', { rotationZ: 0.6, castShadow: false })
+
+        // Đèn trước vàng ấm, đèn hậu đỏ
+        for(const sz of [ -0.58, 0.58 ])
+        {
+            this.box(0.1, 0.15, 0.42, x + 2.02, y + 0.58, z + sz, '#ffe9b0', { castShadow: false })
+            this.box(0.08, 0.13, 0.4, x - 2.02, y + 0.56, z + sz, '#c03535', { castShadow: false })
+        }
+
+        // Bánh
+        for(const sx of [ -1.3, 1.3 ])
+            for(const sz of [ -0.95, 0.95 ])
+                this.box(0.6, 0.6, 0.26, x + sx, y + 0.3, z + sz, '#26262b',
+                    { geometry: cyl, rotationX: Math.PI * 0.5, castShadow: false })
     }
 
     /** Khu bàn ăn ngoài trời cạnh nhà ăn — có ô che nắng. */

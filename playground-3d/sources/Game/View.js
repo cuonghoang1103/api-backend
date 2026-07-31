@@ -80,21 +80,66 @@ export class View
             this.throttleResize()
         }, 1)
 
-        // Toggle
-        if(this.game.debug.active)
-        {
-            this.game.inputs.addActions([
-                { name: 'viewToggle', categories: [], keys: [ 'Keyboard.KeyV' ] }
-            ])
+        /**
+         * MÁY QUAY TỰ DO — phím **V**.
+         *
+         * Bản mẫu đã dựng sẵn trọn bộ (`freeMode` là một `CameraControls`: xoay,
+         * rê, tiến lùi tuỳ ý, không giới hạn tầm) nhưng KHOÁ sau `debug.active`,
+         * nên bản phát hành không ai dùng được. User muốn "nhìn tổng quát toàn
+         * diện như fly cam" — chính là thứ này, nên gỡ khoá.
+         *
+         * V không trùng phím nào đang dùng (W/A/S/D lái, Shift tăng tốc, B/Ctrl
+         * phanh, Space giảm xóc, R hồi sinh, H còi, E/F/Enter tương tác, T thì
+         * thầm, L tắt tiếng, X bắn, J/K trò chơi khu Social).
+         *
+         * `categories: []` nghĩa là phím ăn ở MỌI trạng thái — kể cả lúc đang
+         * đua — đúng như bản mẫu để.
+         */
+        this.game.inputs.addActions([
+            { name: 'viewToggle', categories: [], keys: [ 'Keyboard.KeyV' ] }
+        ])
 
-            this.game.inputs.events.on('viewToggle', (action) =>
+        this.game.inputs.events.on('viewToggle', (action) =>
+        {
+            if(action.active)
             {
-                if(action.active)
-                {
-                    this.toggleMode()
-                }
-            })
+                this.toggleMode()
+            }
+        })
+
+        this.setFreeCameraButtons()
+    }
+
+    /**
+     * Hai nút Follow / Free trong bảng Cài đặt.
+     *
+     * Nối từ CHÍNH `View` chứ không từ `Options`: `View` dựng ở `Game.js` dòng
+     * ~140 còn `Options` ở dòng 110, nên `Options` chạy trước và lúc đó
+     * `game.view` chưa tồn tại. (Cùng một bài học với `VehicleRocket`, chỉ khác
+     * chiều.) Bảng Cài đặt là HTML tĩnh nên `querySelector` lúc nào cũng có.
+     */
+    setFreeCameraButtons()
+    {
+        const container = document.querySelector('.js-camera-modes')
+        if(!container) return
+
+        const buttons = [ ...container.querySelectorAll('button[data-mode]') ]
+
+        this.updateCameraButtons = () =>
+        {
+            const current = this.mode === View.MODE_FREE ? 'free' : 'follow'
+            for(const button of buttons)
+                button.classList.toggle('is-active', button.dataset.mode === current)
         }
+
+        this.updateCameraButtons()
+
+        for(const button of buttons)
+            button.addEventListener('click', () =>
+            {
+                this.game.audio?.play?.('uiClick')
+                this.setMode(button.dataset.mode === 'free' ? View.MODE_FREE : View.MODE_DEFAULT)
+            })
     }
 
     toggleMode()
@@ -111,6 +156,8 @@ export class View
         this.freeMode.enabled = this.mode === View.MODE_FREE
         this.freeMode.setTarget(this.focusPoint.position.x, this.focusPoint.position.y, this.focusPoint.position.z)
         this.freeMode.setPosition(this.camera.position.x, this.camera.position.y, this.camera.position.z)
+
+        this.updateCameraButtons?.()
     }
 
     setFocusPoint()
@@ -336,7 +383,23 @@ export class View
         this.spherical.theta = Math.PI * 0.25
 
         this.spherical.radius = {}
-        this.spherical.radius.edges = { min: 15, max: 30 }
+        /**
+         * `max` NỚI TỪ 30 LÊN 48 — user muốn kéo xa để nhìn tổng quát khu trường.
+         *
+         * ⚠️ Con số này KHÔNG chỉ là mức thu phóng. `optimalArea.update()` dựng
+         * vùng nhìn tối ưu từ chính `edges.max`, và vùng đó lại định:
+         *   - `Ligthing.shadowAmplitude` — bề rộng tấm bóng đổ
+         *   - `Fog.near/far` — tầm sương mù
+         *   - `WaterSurface` halfExtent — bề rộng mặt nước
+         * Nới gấp 1,6 nghĩa là cùng tấm bóng 2048 (hoặc 512 ở mức thấp) trải
+         * trên vùng rộng gấp 1,6 ⇒ bóng đổ rỗ hơn. Đây là cái giá đã biết trước
+         * và user chấp nhận.
+         *
+         * Không phải vùng đất chưa ai đặt chân: cửa sổ cao-hẹp vốn đã cộng thêm
+         * `ratioOverflow * nonIdealRatioOffset` (tới +9) nên bán kính 40–54 là
+         * chuyện thường ngày ở đó rồi.
+         */
+        this.spherical.radius.edges = { min: 15, max: 48 }
         this.spherical.radius.current = lerp(this.spherical.radius.edges.min, this.spherical.radius.edges.max, 1 - this.zoom.smoothedRatio)
         this.spherical.radius.nonIdealRatioOffset = 9
 

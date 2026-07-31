@@ -86193,7 +86193,7 @@ https://github.com/browserify/crypto-browserify`);
         this.resize();
       }), this.game.viewport.events.on("throttleChange", () => {
         this.throttleResize();
-      }, 1), this.game.debug.active && (this.game.inputs.addActions([
+      }, 1), this.game.inputs.addActions([
         {
           name: "viewToggle",
           categories: [],
@@ -86203,13 +86203,29 @@ https://github.com/browserify/crypto-browserify`);
         }
       ]), this.game.inputs.events.on("viewToggle", (r) => {
         r.active && this.toggleMode();
-      }));
+      }), this.setFreeCameraButtons();
+    }
+    setFreeCameraButtons() {
+      const e = document.querySelector(".js-camera-modes");
+      if (!e) return;
+      const r = [
+        ...e.querySelectorAll("button[data-mode]")
+      ];
+      this.updateCameraButtons = () => {
+        const s = this.mode === _View.MODE_FREE ? "free" : "follow";
+        for (const o of r) o.classList.toggle("is-active", o.dataset.mode === s);
+      }, this.updateCameraButtons();
+      for (const s of r) s.addEventListener("click", () => {
+        var _a2, _b;
+        (_b = (_a2 = this.game.audio) == null ? void 0 : _a2.play) == null ? void 0 : _b.call(_a2, "uiClick"), this.setMode(s.dataset.mode === "free" ? _View.MODE_FREE : _View.MODE_DEFAULT);
+      });
     }
     toggleMode() {
       this.setMode(this.mode === _View.MODE_FREE ? _View.MODE_DEFAULT : _View.MODE_FREE);
     }
     setMode(e) {
-      this.mode = e, this.focusPoint.smoothedPosition.copy(this.focusPoint.position), this.freeMode.enabled = this.mode === _View.MODE_FREE, this.freeMode.setTarget(this.focusPoint.position.x, this.focusPoint.position.y, this.focusPoint.position.z), this.freeMode.setPosition(this.camera.position.x, this.camera.position.y, this.camera.position.z);
+      var _a2;
+      this.mode = e, this.focusPoint.smoothedPosition.copy(this.focusPoint.position), this.freeMode.enabled = this.mode === _View.MODE_FREE, this.freeMode.setTarget(this.focusPoint.position.x, this.focusPoint.position.y, this.focusPoint.position.z), this.freeMode.setPosition(this.camera.position.x, this.camera.position.y, this.camera.position.z), (_a2 = this.updateCameraButtons) == null ? void 0 : _a2.call(this);
     }
     setFocusPoint() {
       const e = this.game.respawns.getDefault();
@@ -86334,7 +86350,7 @@ https://github.com/browserify/crypto-browserify`);
     setSpherical() {
       if (this.spherical = {}, this.spherical.phi = Math.PI * (this.game.quality.level === 0 ? 0.31 : 0.27), this.spherical.theta = Math.PI * 0.25, this.spherical.radius = {}, this.spherical.radius.edges = {
         min: 15,
-        max: 30
+        max: 48
       }, this.spherical.radius.current = lerp$1(this.spherical.radius.edges.min, this.spherical.radius.edges.max, 1 - this.zoom.smoothedRatio), this.spherical.radius.nonIdealRatioOffset = 9, this.spherical.offset = new Vector3$1(), this.spherical.offset.setFromSphericalCoords(this.spherical.radius.current, this.spherical.phi, this.spherical.theta), this.game.debug.active) {
         const e = this.debugPanel.addFolder({
           title: "Spherical",
@@ -97206,6 +97222,12 @@ https://github.com/browserify/crypto-browserify`);
         ]
       }), w;
     }
+    distanceToShore(e, r) {
+      const s = (e - ISLAND.x) / (ISLAND.width * 0.5), o = (r - ISLAND.z) / (ISLAND.depth * 0.5);
+      let a = Math.pow(Math.pow(Math.abs(s), 4) + Math.pow(Math.abs(o), 4), 0.25);
+      const h = Math.atan2(o, s);
+      return a /= 1 + 0.035 * Math.sin(h * 3 + 0.6) + 0.018 * Math.sin(h * 7 - 1.1), (1 - a) * (ISLAND.width + ISLAND.depth) * 0.25;
+    }
     islandHeight(e, r) {
       const s = (e - ISLAND.x) / (ISLAND.width * 0.5), o = (r - ISLAND.z) / (ISLAND.depth * 0.5);
       let a = Math.pow(Math.pow(Math.abs(s), 4) + Math.pow(Math.abs(o), 4), 0.25);
@@ -103093,8 +103115,9 @@ https://github.com/browserify/crypto-browserify`);
         loop: true,
         volume: 0,
         onPlaying: (r) => {
-          const s = Math.min(this.game.terrain.size / 2 - Math.abs(this.game.player.position.x), this.game.terrain.size / 2 - Math.abs(this.game.player.position.z));
-          r.volume = Math.pow(remapClamp$2(s, 0, 40, 1, 0.1), 2) * 0.7;
+          var _a3, _b2, _c3;
+          const s = this.game.player.position, o = Math.min(this.game.terrain.size / 2 - Math.abs(s.x), this.game.terrain.size / 2 - Math.abs(s.z)), a = (_c3 = (_b2 = (_a3 = this.game.world) == null ? void 0 : _a3.fptuCampus) == null ? void 0 : _b2.distanceToShore) == null ? void 0 : _c3.call(_b2, s.x, s.z), h = typeof a == "number" ? Math.max(o, a) : o;
+          r.volume = Math.pow(remapClamp$2(h, 0, 40, 1, 0.1), 2) * 0.7;
         }
       });
       {
@@ -112651,7 +112674,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-BpMqTXTi.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-BRNkNDtP.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

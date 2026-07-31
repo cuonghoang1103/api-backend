@@ -616,10 +616,33 @@ export class Audio
             volume: 0,
             onPlaying: (item) =>
             {
-                const distanceToSide = Math.min(
-                    this.game.terrain.size / 2 - Math.abs(this.game.player.position.x),
-                    this.game.terrain.size / 2 - Math.abs(this.game.player.position.z)
+                const position = this.game.player.position
+
+                const distanceToMainShore = Math.min(
+                    this.game.terrain.size / 2 - Math.abs(position.x),
+                    this.game.terrain.size / 2 - Math.abs(position.z)
                 )
+
+                /**
+                 * ⚠️ PHẢI xét CẢ đảo trường, không chỉ địa hình gốc.
+                 *
+                 * Địa hình gốc rộng 192 (nửa cạnh 96) còn khu ĐH FPT nằm ở
+                 * x −242…−82, tức hẳn NGOÀI nó. Chỉ đo theo địa hình gốc thì ở
+                 * trong trường công thức trả về số ÂM, bị kẹp về 1, và tiếng
+                 * sóng gào hết cỡ suốt thời gian ở đó — user báo đúng chỗ này
+                 * ngày 31/7 ("tôi cứ nghe mãi âm thanh của nước"). Đo được: 0,7
+                 * (kịch trần) ở CẢ giữa sân trường.
+                 *
+                 * Lấy giá trị LỚN HƠN trong hai: đứng trên đảo nào thì đảo đó
+                 * cho số dương, còn ở giữa biển thì cả hai đều âm và sóng to —
+                 * đúng như phải thế.
+                 */
+                const distanceToCampusShore = this.game.world?.fptuCampus?.distanceToShore?.(position.x, position.z)
+
+                const distanceToSide = typeof distanceToCampusShore === 'number'
+                    ? Math.max(distanceToMainShore, distanceToCampusShore)
+                    : distanceToMainShore
+
                 item.volume = Math.pow(remapClamp(distanceToSide, 0, 40, 1, 0.1), 2) * 0.7
             }
         })

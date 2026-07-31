@@ -483,6 +483,34 @@ export class FptuCampus
      * là hình chữ nhật mà là SIÊU-ELLIPSE bậc 4 (bốn góc bo tròn) rồi cộng thêm
      * hai tầng sóng nhẹ, nên đường bờ uốn lượn tự nhiên như bờ biển thật.
      */
+    /**
+     * KHOẢNG CÁCH TỚI BỜ của đảo trường, tính bằng đơn vị thế giới.
+     * Dương = đang đứng trên đất, 0 = ngay mép nước, âm = đang ở ngoài biển.
+     *
+     * Dùng cho TIẾNG SÓNG. Bản mẫu tính âm lượng sóng theo khoảng cách tới mép
+     * ĐỊA HÌNH GỐC (`terrain.size / 2 − |x|`), mà địa hình gốc chỉ rộng 192 nên
+     * nửa cạnh là 96 — trong khi đảo trường nằm ở x −242…−82, tức HẲN NGOÀI nó.
+     * Kết quả là công thức trả về số ÂM ở khắp khu trường, bị kẹp về 1, và tiếng
+     * sóng gào hết cỡ (0,7) suốt thời gian ở trong trường. User báo đúng chỗ này
+     * ngày 31/7: "tôi cứ nghe mãi âm thanh của nước".
+     *
+     * Dùng lại y hệt hình siêu-ellipse của `islandHeight()` để mép nước nghe
+     * được trùng với mép nước NHÌN được.
+     */
+    distanceToShore(x, z)
+    {
+        const nx = (x - ISLAND.x) / (ISLAND.width * 0.5)
+        const nz = (z - ISLAND.z) / (ISLAND.depth * 0.5)
+
+        let d = Math.pow(Math.pow(Math.abs(nx), 4) + Math.pow(Math.abs(nz), 4), 0.25)
+
+        const theta = Math.atan2(nz, nx)
+        d /= 1 + 0.035 * Math.sin(theta * 3 + 0.6) + 0.018 * Math.sin(theta * 7 - 1.1)
+
+        // `d = 1` là mép đất. Quy về đơn vị thế giới bằng bán kính trung bình.
+        return (1 - d) * (ISLAND.width + ISLAND.depth) * 0.25
+    }
+
     islandHeight(x, z)
     {
         const nx = (x - ISLAND.x) / (ISLAND.width * 0.5)

@@ -7,11 +7,12 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
 
 # 0. TRẠNG THÁI
 
-- **Đã deploy prod nhiều đợt trong phiên** — chạy tại `cuongthai.com/playground/`.
-- **CHƯA push origin.** 12 commit từ `3a6361d` tới `cda5cdf` đang nằm ở local.
-  Quy trình chuẩn: user test prod xong xác nhận → mới `git push`.
+- **Đã deploy prod** — chạy tại `cuongthai.com/playground/`.
+- Mục **0b đã LÀM XONG** ngày 31/7 (commit `ed5ba98`) — xem mục 0c bên dưới.
 - ⚠️ **Có phiên Claude thứ hai làm chung cây repo** (đang sửa `content/academy/*`).
-  ĐỪNG `git add -A` ở gốc. Chỉ add đúng thư mục của mình.
+  ĐỪNG `git add -A` ở gốc. Chỉ add đúng thư mục của mình. (Đã kiểm: mấy file
+  `content/academy/*.mjs` là dữ liệu seed CHẠY TAY, không có gì tự chạy chúng,
+  nên chúng nằm trong cây làm việc lúc `deploy.sh` rsync cũng vô hại.)
 
 ## Việc CÒN LẠI (user đã chốt làm, chưa động tới)
 
@@ -33,53 +34,53 @@ và thêm một dòng vào `Map.js → setLocations()`.
 
 ---
 
-# 0b. YÊU CẦU MỚI — user chốt 31/7, CHƯA LÀM (ưu tiên hơn quận Tây-Nam)
+# 0b. HỆ PHÁ HUỶ + VŨ KHÍ TÊN LỬA — ĐÃ LÀM XONG 31/7 (`ed5ba98`)
 
-## A. Hệ PHÁ HUỶ + mục Cài đặt 3 nút: Bật · Tắt · Reset lại như ban đầu
+Bật ở Cài đặt: **Destruction** (Off · On · Reset) và **Weapon** (Rocket · Missile).
+Mã: `FptuDestruction.js` (mới) + sửa `FptuCampus`, `Trees`, `Foliage`, `FptuSwans`,
+`FptuPeople`, `VehicleRocket`, `sources/index.html`.
 
-Bắn tới đâu phá tới đó, càng chân thật càng tốt:
-- **Nhà**: vỡ DẦN, đổ sập từng mảng (không biến mất một phát)
-- **Cây cối**: gãy/biến mất
-- **Nước**: bắn xuống hồ thì tung toé lên
-- **Thiên nga**: trúng thì chết
-- **Reset**: trả toàn khu về nguyên trạng ban đầu
+## Cách nó ráp vào
 
-## B. Vũ khí thứ hai: TÊN LỬA (đổi vũ khí trong Cài đặt)
-
-Mạnh hơn rocket hiện tại. Đường bay: bắn xong **lượn một vòng tròn 2–3 giây trên
-trời**, rồi **bổ nhào từ trên xuống**. Sức công phá + xung kích **gấp 5 lần**
-rocket. Âm thanh, khói… phải giống tên lửa thật.
-
-## KHẢO SÁT ĐÃ LÀM SẴN — đừng dò lại
-
-| Cần gì | Đã tìm thấy |
+| Việc | Chỗ làm |
 |---|---|
-| Sổ đăng ký mảnh phá huỷ | `FptuCampus.box()` là cửa duy nhất mọi khối đi qua ⇒ nhét đăng ký vào đó là bắt trọn tường/mái/cửa sổ, không phải kê khai tay. Nhớ **loại trừ `slab()`** (nó gọi `box()` để lát nền — nền không được phá) |
-| Tắt va chạm của mảnh đã vỡ | `game.objects.add()` **trả về object**, lấy `object.physical.body` rồi `setEnabled(false)`. Hiện `box()` vứt giá trị trả về đi — phải giữ lại |
-| Gỡ TỪNG cây | `Trees` có `this.references` (mảng Object3D) và `Foliage` cũng `this.references`, mỗi phần tử dùng `scale.x` làm cỡ ⇒ đặt `scale` về 0 + `needsUpdate` là cây biến mất. `campus.leafClusters` là `Foliage` chung của mọi tán lá mềm |
-| Giết thiên nga | `FptuSwans` giữ `this.swans` (mảng, mỗi con có `group`). Lật `group` + cho chìm, và nhớ **cho `update()` bỏ qua con đã chết** |
-| Vụ nổ sẵn có | `world.fireballs.create(toạ độ, bánKínhLửa, bánKínhNổ)` · `explosions.explode(toạ độ, bánKính, sứcMạnh)` · tiếng nổ đăng ký theo khuôn `ExplosiveCrates` |
-| Mảnh vỡ bay | **ĐỪNG** tạo thân Rapier cho từng mảnh (nặng). Tự tính vận tốc + trọng lực + nảy như `VehicleRocket.spawnBlast()` đang làm với 12 mảnh văng |
+| Sổ đăng ký 1544 mảnh | `FptuCampus.box()` — cửa duy nhất mọi khối đi qua |
+| Vét nốt mesh KHÔNG qua `box()` | `FptuDestruction.collectPieces()` quét `campus.group` **và** `campus.pineHill.group` (đồi thông treo group riêng dưới `scene`). Bắt được biển vẽ canvas + thông |
+| Loại trừ mặt xe chạy | quy tắc "nóc dưới 0,5" trong `box()`, cộng cờ `userData.fptuGround` cho tấm lát và cho mọi mảng `heightPatch` |
+| Tắt va chạm mảnh vỡ | `box()` nay GIỮ giá trị `objects.add()` trả về |
+| Gỡ từng cây | `Trees.setTreeEnabled(index, bool)` — thân + tán + gốc va chạm cùng lúc |
+| Gỡ từng cụm lá | `Foliage.setInstanceEnabled(index, bool)` + `foliage.spots[]` |
+| Giết thiên nga / người | `FptuSwans.killAround()` · `FptuPeople.killAround()`, đều có `revive()` |
 
-## GỢI Ý KIẾN TRÚC
+## BỐN CHỖ ĐÃ SỤP BẪY — đừng đi lại
 
-- `FptuDestruction.js` — giữ `pieces[]` gồm `{ mesh, object, home: {position, quaternion, scale} }`;
-  `damage(center, radius, power)`; `reset()`. `FptuCampus` sở hữu mảng `this.destructibles`
-  (khai TRƯỚC `setIsland()`), `FptuDestruction` đọc lại.
-- **Nhà vỡ dần**: nhà vốn đã ghép từ nhiều khối (tường, mái, lan can, đố cửa) nên
-  chỉ cần phá theo bán kính là tự ra hiệu ứng sập từng mảng.
-- Vũ khí thành **tham số** của `VehicleRocket` (`weapon: 'rocket' | 'missile'`),
-  đừng viết class thứ hai — chỉ khác đường bay và hệ số nổ.
-- Tên lửa 3 pha: **bốc lên** (~0,6s) → **lượn vòng** trên cao 2–3s → **bổ nhào**.
-  Bóng đổ dưới đất (đã có ở rocket) sẽ vẽ nguyên vòng tròn — chính là thứ giúp
-  người chơi bám dấu khi đạn khuất khỏi khung hình.
-- Nút Cài đặt: theo khuôn `.segmented` sẵn có (xem mục Time/Rocket trong
-  `index.html` + `Options.js`). ⚠️ Nút cho thứ dựng trong world phải do **chính
-  module tự nối** — xem bài học 2.7.
+1. **ĐỪNG đo khối bằng `Box3.setFromObject()` trong `world.step(1)`.** Lúc đó
+   `matrixWorld` của mấy nghìn mesh còn là ma trận đơn vị ⇒ mọi hộp bao trả về
+   1×1×1 ở GỐC TOẠ ĐỘ. Triệu chứng cực im: mọi khối "ở xa mọi vụ nổ", không lỗi.
+   Đo bằng hộp bao CỤC BỘ của hình học nhân `scale` (`register()`).
+2. **Đo khoảng cách tới MẶT hộp, không tới tâm hộp.** Tường Alpha dài 7×8×4;
+   đo tới tâm thì đầu tường nằm giữa đám lửa vẫn tính là "ở xa".
+3. **Đuôi đường cong xác suất KHÔNG ĐƯỢC chạm 0.** Bản đầu `closeness^1,5×1,6`
+   ở mép chỉ ~3%/phát ⇒ bắn 4 phát vào Alpha thì hai phát cuối không suy suyển
+   gì, đọc ra hệt "toà nhà bất tử". Nay có SÀN 0,35.
+4. **Bán kính phá phải bằng `shockRadius`.** Để 6 thì chỉ 6 mảng lọt vào tầm.
 
-⚠️ **Sau khi thêm bất cứ thứ gì có va chạm: chạy lại hai bộ kiểm ở mục 1 VÀ lái
-thử lại tuyến liên quan.** Phá huỷ đụng thẳng vào collider nên rủi ro sinh "vật
-vô hình" là cao nhất từ trước tới nay.
+## Tên lửa — ba điều đáng nhớ
+
+- **Khí tài đổi theo vũ khí**: `setCannon()` và `setLauncher()` dựng cả hai lên
+  thân xe, `apply()` chỉ đổi cái nào `visible`. Getter `this.mount` trả về bộ
+  đang dùng, đoạn mã ngắm chỉ viết một lần.
+- **Máy quay bám đạn** đăng ký ở **thứ tự 6**, không phải 11: `Player` ghi
+  `focusPoint.trackedPosition` ở thứ tự 6 và `View` đọc ở thứ tự 7. Để ở 11 thì
+  mỗi nhịp `Player` lại giành máy quay về xe.
+- **Bù chiếu** `F = P.xz − offset.xz × (P.y / offset.y)` để quả đạn không nằm
+  ngoài khung. ⚠️ Rig máy quay treo THẤP (14–30) và chúc 55°, nên thứ gì bay cao
+  cũng gần ống kính: bù đủ thì đạn CHE KÍN màn hình, bù 0,38 thì đạn bay ra ngoài
+  mép trên. Chốt: chặn bù ở 0,85 và điều tiết cỡ bằng TRẦN BAY
+  (`0,34 × chiều cao máy quay`, sàn 9). Đây là số chỉnh bằng MẮT — cứ vặn.
+
+⚠️ Hệ này chỉ **TẮT** va chạm, không đẻ thêm vật `physical` nào ⇒ không có rủi ro
+"vật vô hình chặn xe" theo chiều thêm mới. Hai bộ kiểm vẫn 0 lỗi sau khi làm.
 
 ---
 

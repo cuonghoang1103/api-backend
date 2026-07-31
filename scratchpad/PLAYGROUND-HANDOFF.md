@@ -33,6 +33,56 @@ và thêm một dòng vào `Map.js → setLocations()`.
 
 ---
 
+# 0b. YÊU CẦU MỚI — user chốt 31/7, CHƯA LÀM (ưu tiên hơn quận Tây-Nam)
+
+## A. Hệ PHÁ HUỶ + mục Cài đặt 3 nút: Bật · Tắt · Reset lại như ban đầu
+
+Bắn tới đâu phá tới đó, càng chân thật càng tốt:
+- **Nhà**: vỡ DẦN, đổ sập từng mảng (không biến mất một phát)
+- **Cây cối**: gãy/biến mất
+- **Nước**: bắn xuống hồ thì tung toé lên
+- **Thiên nga**: trúng thì chết
+- **Reset**: trả toàn khu về nguyên trạng ban đầu
+
+## B. Vũ khí thứ hai: TÊN LỬA (đổi vũ khí trong Cài đặt)
+
+Mạnh hơn rocket hiện tại. Đường bay: bắn xong **lượn một vòng tròn 2–3 giây trên
+trời**, rồi **bổ nhào từ trên xuống**. Sức công phá + xung kích **gấp 5 lần**
+rocket. Âm thanh, khói… phải giống tên lửa thật.
+
+## KHẢO SÁT ĐÃ LÀM SẴN — đừng dò lại
+
+| Cần gì | Đã tìm thấy |
+|---|---|
+| Sổ đăng ký mảnh phá huỷ | `FptuCampus.box()` là cửa duy nhất mọi khối đi qua ⇒ nhét đăng ký vào đó là bắt trọn tường/mái/cửa sổ, không phải kê khai tay. Nhớ **loại trừ `slab()`** (nó gọi `box()` để lát nền — nền không được phá) |
+| Tắt va chạm của mảnh đã vỡ | `game.objects.add()` **trả về object**, lấy `object.physical.body` rồi `setEnabled(false)`. Hiện `box()` vứt giá trị trả về đi — phải giữ lại |
+| Gỡ TỪNG cây | `Trees` có `this.references` (mảng Object3D) và `Foliage` cũng `this.references`, mỗi phần tử dùng `scale.x` làm cỡ ⇒ đặt `scale` về 0 + `needsUpdate` là cây biến mất. `campus.leafClusters` là `Foliage` chung của mọi tán lá mềm |
+| Giết thiên nga | `FptuSwans` giữ `this.swans` (mảng, mỗi con có `group`). Lật `group` + cho chìm, và nhớ **cho `update()` bỏ qua con đã chết** |
+| Vụ nổ sẵn có | `world.fireballs.create(toạ độ, bánKínhLửa, bánKínhNổ)` · `explosions.explode(toạ độ, bánKính, sứcMạnh)` · tiếng nổ đăng ký theo khuôn `ExplosiveCrates` |
+| Mảnh vỡ bay | **ĐỪNG** tạo thân Rapier cho từng mảnh (nặng). Tự tính vận tốc + trọng lực + nảy như `VehicleRocket.spawnBlast()` đang làm với 12 mảnh văng |
+
+## GỢI Ý KIẾN TRÚC
+
+- `FptuDestruction.js` — giữ `pieces[]` gồm `{ mesh, object, home: {position, quaternion, scale} }`;
+  `damage(center, radius, power)`; `reset()`. `FptuCampus` sở hữu mảng `this.destructibles`
+  (khai TRƯỚC `setIsland()`), `FptuDestruction` đọc lại.
+- **Nhà vỡ dần**: nhà vốn đã ghép từ nhiều khối (tường, mái, lan can, đố cửa) nên
+  chỉ cần phá theo bán kính là tự ra hiệu ứng sập từng mảng.
+- Vũ khí thành **tham số** của `VehicleRocket` (`weapon: 'rocket' | 'missile'`),
+  đừng viết class thứ hai — chỉ khác đường bay và hệ số nổ.
+- Tên lửa 3 pha: **bốc lên** (~0,6s) → **lượn vòng** trên cao 2–3s → **bổ nhào**.
+  Bóng đổ dưới đất (đã có ở rocket) sẽ vẽ nguyên vòng tròn — chính là thứ giúp
+  người chơi bám dấu khi đạn khuất khỏi khung hình.
+- Nút Cài đặt: theo khuôn `.segmented` sẵn có (xem mục Time/Rocket trong
+  `index.html` + `Options.js`). ⚠️ Nút cho thứ dựng trong world phải do **chính
+  module tự nối** — xem bài học 2.7.
+
+⚠️ **Sau khi thêm bất cứ thứ gì có va chạm: chạy lại hai bộ kiểm ở mục 1 VÀ lái
+thử lại tuyến liên quan.** Phá huỷ đụng thẳng vào collider nên rủi ro sinh "vật
+vô hình" là cao nhất từ trước tới nay.
+
+---
+
 # 1. BA BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
 
 Cần dev server sống: `cd playground-3d && npm run dev` (xem mục 4).

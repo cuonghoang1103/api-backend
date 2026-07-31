@@ -84,6 +84,47 @@ Mã: `FptuDestruction.js` (mới) + sửa `FptuCampus`, `Trees`, `Foliage`, `Fpt
 
 ---
 
+# 0c. MÁY QUAY + ÂM THANH — làm 31/7 (`570b3e1`)
+
+## Máy quay rộng hơn
+
+- Thu phóng xa nới `View.spherical.radius.edges.max` **30 → 48**.
+  ⚠️ Con số này KHÔNG chỉ là mức thu phóng: `optimalArea.update()` dựng vùng
+  nhìn từ chính nó, và vùng đó định `Ligthing.shadowAmplitude` (bề rộng tấm
+  bóng đổ), `Fog.near/far`, và halfExtent của `WaterSurface`. Nới thì bóng đổ
+  rỗ hơn — đó là cái giá, user đã chấp nhận. Muốn vặn thì vặn đúng chỗ này.
+- **Máy quay tự do đã MỞ KHOÁ**: phím **V**, hoặc Cài đặt → Camera → Free.
+  `CameraControls` của bản mẫu, vốn khoá sau `debug.active`. Nút Cài đặt do
+  chính `View.setFreeCameraButtons()` nối — `Options` dựng ở `Game.js:110`,
+  sớm hơn `View`, nối từ đó là chưa có gì để nối.
+
+## Tiếng sóng gào suốt trong trường — ĐÃ SỬA
+
+Âm lượng sóng (`Audio.js`, nhóm `waves`) tính theo khoảng cách tới mép **ĐỊA
+HÌNH GỐC**: `terrain.size / 2 − |x|`. Địa hình gốc rộng 192 ⇒ nửa cạnh 96, mà
+đảo trường ở `x −242…−82` nằm HẲN NGOÀI ⇒ công thức trả số ÂM khắp khu trường,
+bị `remapClamp` kẹp về 1, sóng gào kịch trần 0,7 **suốt thời gian ở trong
+trường**. Đo trước khi sửa: 0,700 ở cả GIỮA SÂN TRƯỜNG.
+
+Sửa bằng `FptuCampus.distanceToShore(x, z)` — dùng lại y hệt hình siêu-ellipse
+của `islandHeight()` để mép nước NGHE được trùng mép nước NHÌN được — rồi lấy
+giá trị lớn hơn giữa hai đảo.
+
+⚠️ **Bài học rộng hơn**: mọi thứ trong bản mẫu tính theo `terrain.size` đều SAI
+ở khu trường, vì khu trường nằm ngoài địa hình gốc. Thêm gì mà đụng
+`terrain.size` thì phải hỏi "ở đảo trường thì sao?".
+
+Đã rà cả 21 nhóm âm thanh, chỉ sóng hỏng:
+- gió/mưa/dế/chuông → theo thời tiết và ngày-đêm, đúng
+- chim/cú/gà/sói → `getRandomDirection()` bám theo máy quay, đúng ở mọi nơi
+- lò lửa/lửa trại → có toạ độ, tự tắt theo khoảng cách, đúng
+
+Khuôn đo (đặt `player.position` + `focusPoint.position` rồi gọi
+`game.audio.update()` vài nhịp, đọc `item.volume`) nằm ở
+`scratchpad/diag-audio2.mjs` của phiên — chép lại khi cần đo âm thanh.
+
+---
+
 # 1. BA BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
 
 Cần dev server sống: `cd playground-3d && npm run dev` (xem mục 4).

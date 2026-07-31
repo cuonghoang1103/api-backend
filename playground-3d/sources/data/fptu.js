@@ -59,10 +59,25 @@ export const ALPHA_LOBBY = { halfWidth: 5, height: 3.6 }
 
 /** Sảnh + biển top xếp hạng đại học thế giới — ngay sau con đường. */
 export const RANKING_PLAZA = { x: -116, z: 40, width: 10, depth: 30 }
-export const RANKING_SIGN = { x: -116, z: 52, height: 2.1, width: 5 }
+/**
+ * Biển xếp hạng Times Higher Education — user chốt DỜI sang phía bên kia trục
+ * (trước ở z = 52, tức mé Bắc; nay xuống mé Nam) để nó đối diện hàng chữ.
+ */
+export const RANKING_SIGN = { x: -116, z: 28, height: 2.1, width: 5 }
 
 /** Hàng chữ FPT UNIVERSITY — mặt đường, ngay trước thảm cỏ dẫn vào Alpha. */
-export const SIGN = { x: -127, y: 0, z: 40, rotationY: Math.PI * 0.5, scale: 1.35 }
+/**
+ * Hàng chữ FPT UNIVERSITY — đứng trên một BỆ (xem `FptuSigns`) và QUAY MẶT VỀ
+ * PHÍA CỔNG (+X): lái từ cổng vào là đọc thẳng được, đúng như user yêu cầu.
+ *
+ * Chữ chạy dọc trục z nên PHẢI đặt lệch hẳn khỏi lòng đường: cụm chữ dài 16,9
+ * cộng bệ thành 19,1, tâm ở z = 58 nên trải z 48,5 → 67,5, trong khi lòng
+ * đường là z 35 → 45 và cột đèn mé Bắc ở z 46,4. Bản trước để tâm ngay z = 40
+ * nên nó vắt ngang đường, chắn mất lối xe chạy.
+ *
+ * ⚠️ Xoay −π/2 là ra MẶT SAU, chữ lật gương đọc ngược — phải +π/2.
+ */
+export const SIGN = { x: -127, y: 0, z: 58, rotationY: Math.PI * 0.5, scale: 1.35 }
 
 /** Thảm cỏ + lối đi bộ + hai hàng cọ giữa hàng chữ và toà Alpha. */
 export const LAWN = { x: -137, z: 40, width: 14, depth: 34 }

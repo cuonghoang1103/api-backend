@@ -44,6 +44,10 @@ export class FptuProps
 
         this.setBlockers()
 
+        // Mặt kính của từng cột đèn — `FptuLights` đổi sang vật liệu phát sáng
+        // và treo vũng sáng ban đêm lên đây
+        this.lampLenses = []
+
         this.setLampPosts()
         this.setBenchesAndBins()
         this.setHedges()
@@ -178,8 +182,9 @@ export class FptuProps
         const az = Math.sin(rotation)
         this.box(1.5, 0.16, 0.16, x + ax * 0.75, this.y + H - 0.1, z + az * 0.75, '#6a6d72', { rotationY: -rotation })
         this.box(0.72, 0.3, 0.42, x + ax * 1.45, this.y + H - 0.28, z + az * 1.45, '#4a4d52', { rotationY: -rotation })
-        // Mặt kính — sáng nhẹ, thấy được cả ban ngày
-        this.box(0.6, 0.08, 0.34, x + ax * 1.45, this.y + H - 0.44, z + az * 1.45, '#ffe9b8', { rotationY: -rotation, castShadow: false })
+        // Mặt kính — ghi lại để `FptuLights` gắn vật liệu phát sáng
+        const lens = this.box(0.6, 0.08, 0.34, x + ax * 1.45, this.y + H - 0.44, z + az * 1.45, '#ffe9b8', { rotationY: -rotation, castShadow: false })
+        this.lampLenses.push({ mesh: lens, x: x + ax * 1.45, z: z + az * 1.45 })
 
         // Thi thoảng treo giỏ hoa cho đỡ đơn điệu
         if(rand(seed) > 0.55)
@@ -482,40 +487,90 @@ export class FptuProps
     }
 
     /**
-     * Một chiếc xe đậu — dáng XE THẬT: capô vát xuống mũi, kính chắn nghiêng,
-     * mui, cốp, đèn trước sau, bánh trụ. Bản trước là hai khối hộp chồng nhau
-     * và user chụp ảnh chê "xe gì hình vuông xấu thế" — đúng.
+     * MỘT CHIẾC Ô TÔ ĐẬU.
+     *
+     * Bản trước chỉ là mấy tấm phẳng chồng lên nhau nên user chê "hình vuông
+     * giống Minecraft". Cái làm mắt đọc ra "ô tô" không phải số tam giác, mà là
+     * bốn đặc điểm hình khối sau — bản này có đủ cả bốn:
+     *
+     *   1. MUI HẸP HƠN THÂN (greenhouse thóp vào), chứ không phải hộp trên hộp.
+     *   2. CA-PÔ DỐC XUỐNG MŨI và đuôi vát nhẹ — thân xe không phẳng lì.
+     *   3. HỐC BÁNH tối ôm quanh bánh, tách bánh khỏi thân.
+     *   4. BA-ĐỜ-SỐC + gờ hông chạy dọc, cắt mảng màu lớn thành nhiều tầng.
+     *
+     * Vát cạnh làm bằng cách xếp nhiều tầng thóp dần rồi xoay nhẹ vài khối —
+     * cùng thủ pháp mà xe của thế giới mẫu đang dùng.
      */
     parkedCar(x, z, hex)
     {
         const cyl = this.campus.cylinderGeometry
         const y = this.y
+        const dark = '#2b2f36'
+        const glass = '#2d3a49'
 
-        // Thân dưới + capô vát + cốp vát
-        this.box(4.1, 0.52, 1.86, x, y + 0.46, z, hex, { physical: true })
-        this.box(1.15, 0.32, 1.7, x + 1.45, y + 0.76, z, hex, { rotationZ: -0.1 })
-        this.box(0.9, 0.28, 1.7, x - 1.62, y + 0.74, z, hex, { rotationZ: 0.12 })
+        // Tông tối hơn một chút cho phần dưới thân — xe thật bao giờ cũng vậy
+        const lower = new THREE.Color(hex).multiplyScalar(0.78).getHexString()
 
-        // Ca-bin: dải kính bọc quanh (khối kính rộng hơn mui một chút) + mui
-        this.box(1.78, 0.34, 1.74, x - 0.15, y + 0.98, z, '#33414f', { castShadow: false })
-        this.box(1.95, 0.16, 1.66, x - 0.15, y + 1.2, z, hex)
+        // ── Gầm và thân, xếp ba tầng thóp dần để cạnh trông có vát ──────────
+        this.box(3.9, 0.26, 1.66, x, y + 0.30, z, `#${lower}`)
+        this.box(4.15, 0.40, 1.84, x, y + 0.60, z, hex, { physical: true })
+        this.box(3.95, 0.20, 1.72, x, y + 0.88, z, hex)
 
-        // Kính chắn trước / sau nghiêng
-        this.box(0.55, 0.5, 1.58, x + 0.92, y + 0.92, z, '#33414f', { rotationZ: -0.55, castShadow: false })
-        this.box(0.5, 0.46, 1.58, x - 1.2, y + 0.9, z, '#33414f', { rotationZ: 0.6, castShadow: false })
+        // Ca-pô dốc xuống mũi, đuôi vát nhẹ lên
+        this.box(1.35, 0.16, 1.66, x + 1.28, y + 0.93, z, hex, { rotationZ: -0.085 })
+        this.box(1.05, 0.16, 1.66, x - 1.45, y + 0.95, z, hex, { rotationZ: 0.055 })
 
-        // Đèn trước vàng ấm, đèn hậu đỏ
-        for(const sz of [ -0.58, 0.58 ])
+        // Gờ hông chạy dọc — cắt mảng màu lớn làm hai tầng
+        for(const sz of [ -0.93, 0.93 ])
+            this.box(3.7, 0.07, 0.06, x, y + 0.74, z + sz, `#${lower}`, { castShadow: false })
+
+        // ── Khoang mui: HẸP hơn thân, đây là điểm mấu chốt ──────────────────
+        this.box(1.95, 0.44, 1.56, x - 0.12, y + 1.20, z, hex)
+        this.box(1.62, 0.12, 1.44, x - 0.14, y + 1.46, z, hex)   // nóc, thóp thêm
+
+        // Kính chắn trước / sau nghiêng, kính hông hai bên
+        this.box(0.62, 0.52, 1.5, x + 0.97, y + 1.16, z, glass, { rotationZ: -0.62, castShadow: false })
+        this.box(0.5, 0.48, 1.5, x - 1.2, y + 1.16, z, glass, { rotationZ: 0.66, castShadow: false })
+        for(const sz of [ -0.79, 0.79 ])
+            this.box(1.75, 0.34, 0.06, x - 0.12, y + 1.22, z + sz, glass, { castShadow: false })
+
+        // Trụ nóc mảnh giữa hai ô kính hông
+        for(const sz of [ -0.8, 0.8 ])
+            this.box(0.1, 0.36, 0.08, x - 0.42, y + 1.22, z + sz, hex, { castShadow: false })
+
+        // ── Hốc bánh + bánh ─────────────────────────────────────────────────
+        for(const sx of [ -1.28, 1.32 ])
         {
-            this.box(0.1, 0.15, 0.42, x + 2.02, y + 0.58, z + sz, '#ffe9b0', { castShadow: false })
-            this.box(0.08, 0.13, 0.4, x - 2.02, y + 0.56, z + sz, '#c03535', { castShadow: false })
+            for(const sz of [ -0.95, 0.95 ])
+            {
+                this.box(1.06, 0.5, 0.2, x + sx, y + 0.44, z + sz, dark, { castShadow: false })
+                this.box(0.66, 0.66, 0.3, x + sx, y + 0.33, z + sz, '#1e1e22',
+                    { geometry: cyl, rotationX: Math.PI * 0.5, castShadow: false })
+                this.box(0.3, 0.3, 0.32, x + sx, y + 0.33, z + sz, '#8b8f96',
+                    { geometry: cyl, rotationX: Math.PI * 0.5, castShadow: false })
+            }
         }
 
-        // Bánh
-        for(const sx of [ -1.3, 1.3 ])
-            for(const sz of [ -0.95, 0.95 ])
-                this.box(0.6, 0.6, 0.26, x + sx, y + 0.3, z + sz, '#26262b',
-                    { geometry: cyl, rotationX: Math.PI * 0.5, castShadow: false })
+        // ── Ba-đờ-sốc, đèn, gương ───────────────────────────────────────────
+        this.box(0.34, 0.3, 1.86, x + 2.02, y + 0.5, z, dark)
+        this.box(0.3, 0.28, 1.84, x - 2.04, y + 0.5, z, dark)
+
+        for(const sz of [ -0.62, 0.62 ])
+        {
+            this.box(0.12, 0.19, 0.44, x + 2.06, y + 0.78, z + sz, '#ffeec2', { castShadow: false })
+            this.box(0.1, 0.17, 0.42, x - 2.06, y + 0.78, z + sz, '#c33a30', { castShadow: false })
+        }
+
+        // Lưới tản nhiệt
+        this.box(0.1, 0.16, 1.1, x + 2.06, y + 0.55, z, '#3a3f47', { castShadow: false })
+
+        // Gương chiếu hậu
+        for(const sz of [ -0.92, 0.92 ])
+            this.box(0.24, 0.14, 0.16, x + 0.78, y + 1.16, z + sz * 1.05, dark, { castShadow: false })
+
+        // Tay nắm cửa
+        for(const sz of [ -0.94, 0.94 ])
+            this.box(0.28, 0.06, 0.05, x - 0.35, y + 0.92, z + sz, `#${lower}`, { castShadow: false })
     }
 
     /** Khu bàn ăn ngoài trời cạnh nhà ăn — có ô che nắng. */

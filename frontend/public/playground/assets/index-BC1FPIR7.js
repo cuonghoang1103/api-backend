@@ -773,16 +773,16 @@ let __tla = (async () => {
       this.isQuaternion = true, this._x = e, this._y = r, this._z = s, this._w = o;
     }
     static slerpFlat(e, r, s, o, a, h, c) {
-      let d = s[o + 0], f = s[o + 1], p = s[o + 2], m = s[o + 3], b = a[h + 0], w = a[h + 1], M = a[h + 2], R = a[h + 3];
-      if (m !== R || d !== b || f !== w || p !== M) {
-        let V = d * b + f * w + p * M + m * R;
-        V < 0 && (b = -b, w = -w, M = -M, R = -R, V = -V);
+      let d = s[o + 0], f = s[o + 1], p = s[o + 2], m = s[o + 3], b = a[h + 0], w = a[h + 1], M = a[h + 2], P = a[h + 3];
+      if (m !== P || d !== b || f !== w || p !== M) {
+        let V = d * b + f * w + p * M + m * P;
+        V < 0 && (b = -b, w = -w, M = -M, P = -P, V = -V);
         let O = 1 - c;
         if (V < 0.9995) {
           const z = Math.acos(V), H = Math.sin(z);
-          O = Math.sin(O * z) / H, c = Math.sin(c * z) / H, d = d * O + b * c, f = f * O + w * c, p = p * O + M * c, m = m * O + R * c;
+          O = Math.sin(O * z) / H, c = Math.sin(c * z) / H, d = d * O + b * c, f = f * O + w * c, p = p * O + M * c, m = m * O + P * c;
         } else {
-          d = d * O + b * c, f = f * O + w * c, p = p * O + M * c, m = m * O + R * c;
+          d = d * O + b * c, f = f * O + w * c, p = p * O + M * c, m = m * O + P * c;
           const z = 1 / Math.sqrt(d * d + f * f + p * p + m * m);
           d *= z, f *= z, p *= z, m *= z;
         }
@@ -1264,8 +1264,8 @@ let __tla = (async () => {
       return this.multiplyMatrices(e, this);
     }
     multiplyMatrices(e, r) {
-      const s = e.elements, o = r.elements, a = this.elements, h = s[0], c = s[3], d = s[6], f = s[1], p = s[4], m = s[7], b = s[2], w = s[5], M = s[8], R = o[0], V = o[3], O = o[6], z = o[1], H = o[4], q = o[7], W = o[2], K = o[5], J = o[8];
-      return a[0] = h * R + c * z + d * W, a[3] = h * V + c * H + d * K, a[6] = h * O + c * q + d * J, a[1] = f * R + p * z + m * W, a[4] = f * V + p * H + m * K, a[7] = f * O + p * q + m * J, a[2] = b * R + w * z + M * W, a[5] = b * V + w * H + M * K, a[8] = b * O + w * q + M * J, this;
+      const s = e.elements, o = r.elements, a = this.elements, h = s[0], c = s[3], d = s[6], f = s[1], p = s[4], m = s[7], b = s[2], w = s[5], M = s[8], P = o[0], V = o[3], O = o[6], z = o[1], H = o[4], q = o[7], W = o[2], K = o[5], J = o[8];
+      return a[0] = h * P + c * z + d * W, a[3] = h * V + c * H + d * K, a[6] = h * O + c * q + d * J, a[1] = f * P + p * z + m * W, a[4] = f * V + p * H + m * K, a[7] = f * O + p * q + m * J, a[2] = b * P + w * z + M * W, a[5] = b * V + w * H + M * K, a[8] = b * O + w * q + M * J, this;
     }
     multiplyScalar(e) {
       const r = this.elements;
@@ -1278,8 +1278,8 @@ let __tla = (async () => {
     invert() {
       const e = this.elements, r = e[0], s = e[1], o = e[2], a = e[3], h = e[4], c = e[5], d = e[6], f = e[7], p = e[8], m = p * h - c * f, b = c * d - p * a, w = f * a - h * d, M = r * m + s * b + o * w;
       if (M === 0) return this.set(0, 0, 0, 0, 0, 0, 0, 0, 0);
-      const R = 1 / M;
-      return e[0] = m * R, e[1] = (o * f - p * s) * R, e[2] = (c * s - o * h) * R, e[3] = b * R, e[4] = (p * r - o * d) * R, e[5] = (o * a - c * r) * R, e[6] = w * R, e[7] = (s * d - f * r) * R, e[8] = (h * r - s * a) * R, this;
+      const P = 1 / M;
+      return e[0] = m * P, e[1] = (o * f - p * s) * P, e[2] = (c * s - o * h) * P, e[3] = b * P, e[4] = (p * r - o * d) * P, e[5] = (o * a - c * r) * P, e[6] = w * P, e[7] = (s * d - f * r) * P, e[8] = (h * r - s * a) * P, this;
     }
     transpose() {
       let e;
@@ -1757,15 +1757,15 @@ let __tla = (async () => {
     }
     setAxisAngleFromRotationMatrix(e) {
       let r, s, o, a;
-      const d = e.elements, f = d[0], p = d[4], m = d[8], b = d[1], w = d[5], M = d[9], R = d[2], V = d[6], O = d[10];
-      if (Math.abs(p - b) < 0.01 && Math.abs(m - R) < 0.01 && Math.abs(M - V) < 0.01) {
-        if (Math.abs(p + b) < 0.1 && Math.abs(m + R) < 0.1 && Math.abs(M + V) < 0.1 && Math.abs(f + w + O - 3) < 0.1) return this.set(1, 0, 0, 0), this;
+      const d = e.elements, f = d[0], p = d[4], m = d[8], b = d[1], w = d[5], M = d[9], P = d[2], V = d[6], O = d[10];
+      if (Math.abs(p - b) < 0.01 && Math.abs(m - P) < 0.01 && Math.abs(M - V) < 0.01) {
+        if (Math.abs(p + b) < 0.1 && Math.abs(m + P) < 0.1 && Math.abs(M + V) < 0.1 && Math.abs(f + w + O - 3) < 0.1) return this.set(1, 0, 0, 0), this;
         r = Math.PI;
-        const H = (f + 1) / 2, q = (w + 1) / 2, W = (O + 1) / 2, K = (p + b) / 4, J = (m + R) / 4, ee = (M + V) / 4;
+        const H = (f + 1) / 2, q = (w + 1) / 2, W = (O + 1) / 2, K = (p + b) / 4, J = (m + P) / 4, ee = (M + V) / 4;
         return H > q && H > W ? H < 0.01 ? (s = 0, o = 0.707106781, a = 0.707106781) : (s = Math.sqrt(H), o = K / s, a = J / s) : q > W ? q < 0.01 ? (s = 0.707106781, o = 0, a = 0.707106781) : (o = Math.sqrt(q), s = K / o, a = ee / o) : W < 0.01 ? (s = 0.707106781, o = 0.707106781, a = 0) : (a = Math.sqrt(W), s = J / a, o = ee / a), this.set(s, o, a, r), this;
       }
-      let z = Math.sqrt((V - M) * (V - M) + (m - R) * (m - R) + (b - p) * (b - p));
-      return Math.abs(z) < 1e-3 && (z = 1), this.x = (V - M) / z, this.y = (m - R) / z, this.z = (b - p) / z, this.w = Math.acos((f + w + O - 1) / 2), this;
+      let z = Math.sqrt((V - M) * (V - M) + (m - P) * (m - P) + (b - p) * (b - p));
+      return Math.abs(z) < 1e-3 && (z = 1), this.x = (V - M) / z, this.y = (m - P) / z, this.z = (b - p) / z, this.w = Math.acos((f + w + O - 1) / 2), this;
     }
     setFromMatrixPosition(e) {
       const r = e.elements;
@@ -1958,7 +1958,7 @@ let __tla = (async () => {
     }
   }
   let Matrix4$1 = class si {
-    constructor(e, r, s, o, a, h, c, d, f, p, m, b, w, M, R, V) {
+    constructor(e, r, s, o, a, h, c, d, f, p, m, b, w, M, P, V) {
       si.prototype.isMatrix4 = true, this.elements = [
         1,
         0,
@@ -1976,11 +1976,11 @@ let __tla = (async () => {
         0,
         0,
         1
-      ], e !== void 0 && this.set(e, r, s, o, a, h, c, d, f, p, m, b, w, M, R, V);
+      ], e !== void 0 && this.set(e, r, s, o, a, h, c, d, f, p, m, b, w, M, P, V);
     }
-    set(e, r, s, o, a, h, c, d, f, p, m, b, w, M, R, V) {
+    set(e, r, s, o, a, h, c, d, f, p, m, b, w, M, P, V) {
       const O = this.elements;
-      return O[0] = e, O[4] = r, O[8] = s, O[12] = o, O[1] = a, O[5] = h, O[9] = c, O[13] = d, O[2] = f, O[6] = p, O[10] = m, O[14] = b, O[3] = w, O[7] = M, O[11] = R, O[15] = V, this;
+      return O[0] = e, O[4] = r, O[8] = s, O[12] = o, O[1] = a, O[5] = h, O[9] = c, O[13] = d, O[2] = f, O[6] = p, O[10] = m, O[14] = b, O[3] = w, O[7] = M, O[11] = P, O[15] = V, this;
     }
     identity() {
       return this.set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1), this;
@@ -2014,23 +2014,23 @@ let __tla = (async () => {
     makeRotationFromEuler(e) {
       const r = this.elements, s = e.x, o = e.y, a = e.z, h = Math.cos(s), c = Math.sin(s), d = Math.cos(o), f = Math.sin(o), p = Math.cos(a), m = Math.sin(a);
       if (e.order === "XYZ") {
-        const b = h * p, w = h * m, M = c * p, R = c * m;
-        r[0] = d * p, r[4] = -d * m, r[8] = f, r[1] = w + M * f, r[5] = b - R * f, r[9] = -c * d, r[2] = R - b * f, r[6] = M + w * f, r[10] = h * d;
+        const b = h * p, w = h * m, M = c * p, P = c * m;
+        r[0] = d * p, r[4] = -d * m, r[8] = f, r[1] = w + M * f, r[5] = b - P * f, r[9] = -c * d, r[2] = P - b * f, r[6] = M + w * f, r[10] = h * d;
       } else if (e.order === "YXZ") {
-        const b = d * p, w = d * m, M = f * p, R = f * m;
-        r[0] = b + R * c, r[4] = M * c - w, r[8] = h * f, r[1] = h * m, r[5] = h * p, r[9] = -c, r[2] = w * c - M, r[6] = R + b * c, r[10] = h * d;
+        const b = d * p, w = d * m, M = f * p, P = f * m;
+        r[0] = b + P * c, r[4] = M * c - w, r[8] = h * f, r[1] = h * m, r[5] = h * p, r[9] = -c, r[2] = w * c - M, r[6] = P + b * c, r[10] = h * d;
       } else if (e.order === "ZXY") {
-        const b = d * p, w = d * m, M = f * p, R = f * m;
-        r[0] = b - R * c, r[4] = -h * m, r[8] = M + w * c, r[1] = w + M * c, r[5] = h * p, r[9] = R - b * c, r[2] = -h * f, r[6] = c, r[10] = h * d;
+        const b = d * p, w = d * m, M = f * p, P = f * m;
+        r[0] = b - P * c, r[4] = -h * m, r[8] = M + w * c, r[1] = w + M * c, r[5] = h * p, r[9] = P - b * c, r[2] = -h * f, r[6] = c, r[10] = h * d;
       } else if (e.order === "ZYX") {
-        const b = h * p, w = h * m, M = c * p, R = c * m;
-        r[0] = d * p, r[4] = M * f - w, r[8] = b * f + R, r[1] = d * m, r[5] = R * f + b, r[9] = w * f - M, r[2] = -f, r[6] = c * d, r[10] = h * d;
+        const b = h * p, w = h * m, M = c * p, P = c * m;
+        r[0] = d * p, r[4] = M * f - w, r[8] = b * f + P, r[1] = d * m, r[5] = P * f + b, r[9] = w * f - M, r[2] = -f, r[6] = c * d, r[10] = h * d;
       } else if (e.order === "YZX") {
-        const b = h * d, w = h * f, M = c * d, R = c * f;
-        r[0] = d * p, r[4] = R - b * m, r[8] = M * m + w, r[1] = m, r[5] = h * p, r[9] = -c * p, r[2] = -f * p, r[6] = w * m + M, r[10] = b - R * m;
+        const b = h * d, w = h * f, M = c * d, P = c * f;
+        r[0] = d * p, r[4] = P - b * m, r[8] = M * m + w, r[1] = m, r[5] = h * p, r[9] = -c * p, r[2] = -f * p, r[6] = w * m + M, r[10] = b - P * m;
       } else if (e.order === "XZY") {
-        const b = h * d, w = h * f, M = c * d, R = c * f;
-        r[0] = d * p, r[4] = -m, r[8] = f * p, r[1] = b * m + R, r[5] = h * p, r[9] = w * m - M, r[2] = M * m - w, r[6] = c * p, r[10] = R * m + b;
+        const b = h * d, w = h * f, M = c * d, P = c * f;
+        r[0] = d * p, r[4] = -m, r[8] = f * p, r[1] = b * m + P, r[5] = h * p, r[9] = w * m - M, r[2] = M * m - w, r[6] = c * p, r[10] = P * m + b;
       }
       return r[3] = 0, r[7] = 0, r[11] = 0, r[12] = 0, r[13] = 0, r[14] = 0, r[15] = 1, this;
     }
@@ -2048,16 +2048,16 @@ let __tla = (async () => {
       return this.multiplyMatrices(e, this);
     }
     multiplyMatrices(e, r) {
-      const s = e.elements, o = r.elements, a = this.elements, h = s[0], c = s[4], d = s[8], f = s[12], p = s[1], m = s[5], b = s[9], w = s[13], M = s[2], R = s[6], V = s[10], O = s[14], z = s[3], H = s[7], q = s[11], W = s[15], K = o[0], J = o[4], ee = o[8], ie = o[12], pe = o[1], U = o[5], v = o[9], _ = o[13], $ = o[2], P = o[6], F = o[10], k = o[14], G = o[3], D = o[7], x = o[11], L = o[15];
-      return a[0] = h * K + c * pe + d * $ + f * G, a[4] = h * J + c * U + d * P + f * D, a[8] = h * ee + c * v + d * F + f * x, a[12] = h * ie + c * _ + d * k + f * L, a[1] = p * K + m * pe + b * $ + w * G, a[5] = p * J + m * U + b * P + w * D, a[9] = p * ee + m * v + b * F + w * x, a[13] = p * ie + m * _ + b * k + w * L, a[2] = M * K + R * pe + V * $ + O * G, a[6] = M * J + R * U + V * P + O * D, a[10] = M * ee + R * v + V * F + O * x, a[14] = M * ie + R * _ + V * k + O * L, a[3] = z * K + H * pe + q * $ + W * G, a[7] = z * J + H * U + q * P + W * D, a[11] = z * ee + H * v + q * F + W * x, a[15] = z * ie + H * _ + q * k + W * L, this;
+      const s = e.elements, o = r.elements, a = this.elements, h = s[0], c = s[4], d = s[8], f = s[12], p = s[1], m = s[5], b = s[9], w = s[13], M = s[2], P = s[6], V = s[10], O = s[14], z = s[3], H = s[7], q = s[11], W = s[15], K = o[0], J = o[4], ee = o[8], ie = o[12], pe = o[1], U = o[5], v = o[9], _ = o[13], $ = o[2], R = o[6], F = o[10], k = o[14], G = o[3], D = o[7], x = o[11], L = o[15];
+      return a[0] = h * K + c * pe + d * $ + f * G, a[4] = h * J + c * U + d * R + f * D, a[8] = h * ee + c * v + d * F + f * x, a[12] = h * ie + c * _ + d * k + f * L, a[1] = p * K + m * pe + b * $ + w * G, a[5] = p * J + m * U + b * R + w * D, a[9] = p * ee + m * v + b * F + w * x, a[13] = p * ie + m * _ + b * k + w * L, a[2] = M * K + P * pe + V * $ + O * G, a[6] = M * J + P * U + V * R + O * D, a[10] = M * ee + P * v + V * F + O * x, a[14] = M * ie + P * _ + V * k + O * L, a[3] = z * K + H * pe + q * $ + W * G, a[7] = z * J + H * U + q * R + W * D, a[11] = z * ee + H * v + q * F + W * x, a[15] = z * ie + H * _ + q * k + W * L, this;
     }
     multiplyScalar(e) {
       const r = this.elements;
       return r[0] *= e, r[4] *= e, r[8] *= e, r[12] *= e, r[1] *= e, r[5] *= e, r[9] *= e, r[13] *= e, r[2] *= e, r[6] *= e, r[10] *= e, r[14] *= e, r[3] *= e, r[7] *= e, r[11] *= e, r[15] *= e, this;
     }
     determinant() {
-      const e = this.elements, r = e[0], s = e[4], o = e[8], a = e[12], h = e[1], c = e[5], d = e[9], f = e[13], p = e[2], m = e[6], b = e[10], w = e[14], M = e[3], R = e[7], V = e[11], O = e[15], z = d * w - f * b, H = c * w - f * m, q = c * b - d * m, W = h * w - f * p, K = h * b - d * p, J = h * m - c * p;
-      return r * (R * z - V * H + O * q) - s * (M * z - V * W + O * K) + o * (M * H - R * W + O * J) - a * (M * q - R * K + V * J);
+      const e = this.elements, r = e[0], s = e[4], o = e[8], a = e[12], h = e[1], c = e[5], d = e[9], f = e[13], p = e[2], m = e[6], b = e[10], w = e[14], M = e[3], P = e[7], V = e[11], O = e[15], z = d * w - f * b, H = c * w - f * m, q = c * b - d * m, W = h * w - f * p, K = h * b - d * p, J = h * m - c * p;
+      return r * (P * z - V * H + O * q) - s * (M * z - V * W + O * K) + o * (M * H - P * W + O * J) - a * (M * q - P * K + V * J);
     }
     transpose() {
       const e = this.elements;
@@ -2069,10 +2069,10 @@ let __tla = (async () => {
       return e.isVector3 ? (o[12] = e.x, o[13] = e.y, o[14] = e.z) : (o[12] = e, o[13] = r, o[14] = s), this;
     }
     invert() {
-      const e = this.elements, r = e[0], s = e[1], o = e[2], a = e[3], h = e[4], c = e[5], d = e[6], f = e[7], p = e[8], m = e[9], b = e[10], w = e[11], M = e[12], R = e[13], V = e[14], O = e[15], z = r * c - s * h, H = r * d - o * h, q = r * f - a * h, W = s * d - o * c, K = s * f - a * c, J = o * f - a * d, ee = p * R - m * M, ie = p * V - b * M, pe = p * O - w * M, U = m * V - b * R, v = m * O - w * R, _ = b * O - w * V, $ = z * _ - H * v + q * U + W * pe - K * ie + J * ee;
+      const e = this.elements, r = e[0], s = e[1], o = e[2], a = e[3], h = e[4], c = e[5], d = e[6], f = e[7], p = e[8], m = e[9], b = e[10], w = e[11], M = e[12], P = e[13], V = e[14], O = e[15], z = r * c - s * h, H = r * d - o * h, q = r * f - a * h, W = s * d - o * c, K = s * f - a * c, J = o * f - a * d, ee = p * P - m * M, ie = p * V - b * M, pe = p * O - w * M, U = m * V - b * P, v = m * O - w * P, _ = b * O - w * V, $ = z * _ - H * v + q * U + W * pe - K * ie + J * ee;
       if ($ === 0) return this.set(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-      const P = 1 / $;
-      return e[0] = (c * _ - d * v + f * U) * P, e[1] = (o * v - s * _ - a * U) * P, e[2] = (R * J - V * K + O * W) * P, e[3] = (b * K - m * J - w * W) * P, e[4] = (d * pe - h * _ - f * ie) * P, e[5] = (r * _ - o * pe + a * ie) * P, e[6] = (V * q - M * J - O * H) * P, e[7] = (p * J - b * q + w * H) * P, e[8] = (h * v - c * pe + f * ee) * P, e[9] = (s * pe - r * v - a * ee) * P, e[10] = (M * K - R * q + O * z) * P, e[11] = (m * q - p * K - w * z) * P, e[12] = (c * ie - h * U - d * ee) * P, e[13] = (r * U - s * ie + o * ee) * P, e[14] = (R * H - M * W - V * z) * P, e[15] = (p * W - m * H + b * z) * P, this;
+      const R = 1 / $;
+      return e[0] = (c * _ - d * v + f * U) * R, e[1] = (o * v - s * _ - a * U) * R, e[2] = (P * J - V * K + O * W) * R, e[3] = (b * K - m * J - w * W) * R, e[4] = (d * pe - h * _ - f * ie) * R, e[5] = (r * _ - o * pe + a * ie) * R, e[6] = (V * q - M * J - O * H) * R, e[7] = (p * J - b * q + w * H) * R, e[8] = (h * v - c * pe + f * ee) * R, e[9] = (s * pe - r * v - a * ee) * R, e[10] = (M * K - P * q + O * z) * R, e[11] = (m * q - p * K - w * z) * R, e[12] = (c * ie - h * U - d * ee) * R, e[13] = (r * U - s * ie + o * ee) * R, e[14] = (P * H - M * W - V * z) * R, e[15] = (p * W - m * H + b * z) * R, this;
     }
     scale(e) {
       const r = this.elements, s = e.x, o = e.y, a = e.z;
@@ -2108,8 +2108,8 @@ let __tla = (async () => {
       return this.set(1, s, a, 0, e, 1, h, 0, r, o, 1, 0, 0, 0, 0, 1), this;
     }
     compose(e, r, s) {
-      const o = this.elements, a = r._x, h = r._y, c = r._z, d = r._w, f = a + a, p = h + h, m = c + c, b = a * f, w = a * p, M = a * m, R = h * p, V = h * m, O = c * m, z = d * f, H = d * p, q = d * m, W = s.x, K = s.y, J = s.z;
-      return o[0] = (1 - (R + O)) * W, o[1] = (w + q) * W, o[2] = (M - H) * W, o[3] = 0, o[4] = (w - q) * K, o[5] = (1 - (b + O)) * K, o[6] = (V + z) * K, o[7] = 0, o[8] = (M + H) * J, o[9] = (V - z) * J, o[10] = (1 - (b + R)) * J, o[11] = 0, o[12] = e.x, o[13] = e.y, o[14] = e.z, o[15] = 1, this;
+      const o = this.elements, a = r._x, h = r._y, c = r._z, d = r._w, f = a + a, p = h + h, m = c + c, b = a * f, w = a * p, M = a * m, P = h * p, V = h * m, O = c * m, z = d * f, H = d * p, q = d * m, W = s.x, K = s.y, J = s.z;
+      return o[0] = (1 - (P + O)) * W, o[1] = (w + q) * W, o[2] = (M - H) * W, o[3] = 0, o[4] = (w - q) * K, o[5] = (1 - (b + O)) * K, o[6] = (V + z) * K, o[7] = 0, o[8] = (M + H) * J, o[9] = (V - z) * J, o[10] = (1 - (b + P)) * J, o[11] = 0, o[12] = e.x, o[13] = e.y, o[14] = e.z, o[15] = 1, this;
     }
     decompose(e, r, s) {
       const o = this.elements;
@@ -2124,21 +2124,21 @@ let __tla = (async () => {
     }
     makePerspective(e, r, s, o, a, h, c = WebGLCoordinateSystem$1, d = false) {
       const f = this.elements, p = 2 * a / (r - e), m = 2 * a / (s - o), b = (r + e) / (r - e), w = (s + o) / (s - o);
-      let M, R;
-      if (d) M = a / (h - a), R = h * a / (h - a);
-      else if (c === WebGLCoordinateSystem$1) M = -(h + a) / (h - a), R = -2 * h * a / (h - a);
-      else if (c === WebGPUCoordinateSystem$1) M = -h / (h - a), R = -h * a / (h - a);
+      let M, P;
+      if (d) M = a / (h - a), P = h * a / (h - a);
+      else if (c === WebGLCoordinateSystem$1) M = -(h + a) / (h - a), P = -2 * h * a / (h - a);
+      else if (c === WebGPUCoordinateSystem$1) M = -h / (h - a), P = -h * a / (h - a);
       else throw new Error("THREE.Matrix4.makePerspective(): Invalid coordinate system: " + c);
-      return f[0] = p, f[4] = 0, f[8] = b, f[12] = 0, f[1] = 0, f[5] = m, f[9] = w, f[13] = 0, f[2] = 0, f[6] = 0, f[10] = M, f[14] = R, f[3] = 0, f[7] = 0, f[11] = -1, f[15] = 0, this;
+      return f[0] = p, f[4] = 0, f[8] = b, f[12] = 0, f[1] = 0, f[5] = m, f[9] = w, f[13] = 0, f[2] = 0, f[6] = 0, f[10] = M, f[14] = P, f[3] = 0, f[7] = 0, f[11] = -1, f[15] = 0, this;
     }
     makeOrthographic(e, r, s, o, a, h, c = WebGLCoordinateSystem$1, d = false) {
       const f = this.elements, p = 2 / (r - e), m = 2 / (s - o), b = -(r + e) / (r - e), w = -(s + o) / (s - o);
-      let M, R;
-      if (d) M = 1 / (h - a), R = h / (h - a);
-      else if (c === WebGLCoordinateSystem$1) M = -2 / (h - a), R = -(h + a) / (h - a);
-      else if (c === WebGPUCoordinateSystem$1) M = -1 / (h - a), R = -a / (h - a);
+      let M, P;
+      if (d) M = 1 / (h - a), P = h / (h - a);
+      else if (c === WebGLCoordinateSystem$1) M = -2 / (h - a), P = -(h + a) / (h - a);
+      else if (c === WebGPUCoordinateSystem$1) M = -1 / (h - a), P = -a / (h - a);
       else throw new Error("THREE.Matrix4.makeOrthographic(): Invalid coordinate system: " + c);
-      return f[0] = p, f[4] = 0, f[8] = 0, f[12] = b, f[1] = 0, f[5] = m, f[9] = 0, f[13] = w, f[2] = 0, f[6] = 0, f[10] = M, f[14] = R, f[3] = 0, f[7] = 0, f[11] = 0, f[15] = 1, this;
+      return f[0] = p, f[4] = 0, f[8] = 0, f[12] = b, f[1] = 0, f[5] = m, f[9] = 0, f[13] = w, f[2] = 0, f[6] = 0, f[10] = M, f[14] = P, f[3] = 0, f[7] = 0, f[11] = 0, f[15] = 1, this;
     }
     equals(e) {
       const r = this.elements, s = e.elements;
@@ -2619,8 +2619,8 @@ let __tla = (async () => {
       if (e && r.session.visibilityState !== "visible-blurred") {
         if (f && e.hand) {
           h = true;
-          for (const R of e.hand.values()) {
-            const V = r.getJointPose(R, s), O = this._getHandJoint(f, R);
+          for (const P of e.hand.values()) {
+            const V = r.getJointPose(P, s), O = this._getHandJoint(f, P);
             V !== null && (O.matrix.fromArray(V.transform.matrix), O.matrix.decompose(O.position, O.rotation, O.scale), O.matrixWorldNeedsUpdate = true, O.jointRadius = V.radius), O.visible = V !== null;
           }
           const p = f.joints["index-finger-tip"], m = f.joints["thumb-tip"], b = p.position.distanceTo(m.position), w = 0.02, M = 5e-3;
@@ -3114,12 +3114,12 @@ let __tla = (async () => {
       _vcp$1.subVectors(e, a);
       const w = _vab$1.dot(_vcp$1), M = _vac$1.dot(_vcp$1);
       if (M >= 0 && w <= M) return r.copy(a);
-      const R = w * f - d * M;
-      if (R <= 0 && f >= 0 && M <= 0) return c = f / (f - M), r.copy(s).addScaledVector(_vac$1, c);
+      const P = w * f - d * M;
+      if (P <= 0 && f >= 0 && M <= 0) return c = f / (f - M), r.copy(s).addScaledVector(_vac$1, c);
       const V = p * M - w * m;
       if (V <= 0 && m - p >= 0 && w - M >= 0) return _vbc$1.subVectors(a, o), c = (m - p) / (m - p + (w - M)), r.copy(o).addScaledVector(_vbc$1, c);
-      const O = 1 / (V + R + b);
-      return h = R * O, c = b * O, r.copy(s).addScaledVector(_vab$1, h).addScaledVector(_vac$1, c);
+      const O = 1 / (V + P + b);
+      return h = P * O, c = b * O, r.copy(s).addScaledVector(_vab$1, h).addScaledVector(_vac$1, c);
     }
     equals(e) {
       return e.a.equals(this.a) && e.b.equals(this.b) && e.c.equals(this.c);
@@ -3786,11 +3786,11 @@ let __tla = (async () => {
       this.hasAttribute("tangent") === false && this.setAttribute("tangent", new BufferAttribute$1(new Float32Array(4 * s.count), 4));
       const h = this.getAttribute("tangent"), c = [], d = [];
       for (let ee = 0; ee < s.count; ee++) c[ee] = new Vector3$1(), d[ee] = new Vector3$1();
-      const f = new Vector3$1(), p = new Vector3$1(), m = new Vector3$1(), b = new Vector2$1(), w = new Vector2$1(), M = new Vector2$1(), R = new Vector3$1(), V = new Vector3$1();
+      const f = new Vector3$1(), p = new Vector3$1(), m = new Vector3$1(), b = new Vector2$1(), w = new Vector2$1(), M = new Vector2$1(), P = new Vector3$1(), V = new Vector3$1();
       function O(ee, ie, pe) {
         f.fromBufferAttribute(s, ee), p.fromBufferAttribute(s, ie), m.fromBufferAttribute(s, pe), b.fromBufferAttribute(a, ee), w.fromBufferAttribute(a, ie), M.fromBufferAttribute(a, pe), p.sub(f), m.sub(f), w.sub(b), M.sub(b);
         const U = 1 / (w.x * M.y - M.x * w.y);
-        isFinite(U) && (R.copy(p).multiplyScalar(M.y).addScaledVector(m, -w.y).multiplyScalar(U), V.copy(m).multiplyScalar(w.x).addScaledVector(p, -M.x).multiplyScalar(U), c[ee].add(R), c[ie].add(R), c[pe].add(R), d[ee].add(V), d[ie].add(V), d[pe].add(V));
+        isFinite(U) && (P.copy(p).multiplyScalar(M.y).addScaledVector(m, -w.y).multiplyScalar(U), V.copy(m).multiplyScalar(w.x).addScaledVector(p, -M.x).multiplyScalar(U), c[ee].add(P), c[ie].add(P), c[pe].add(P), d[ee].add(V), d[ie].add(V), d[pe].add(V));
       }
       let z = this.groups;
       z.length === 0 && (z = [
@@ -3824,8 +3824,8 @@ let __tla = (async () => {
         else for (let b = 0, w = s.count; b < w; b++) s.setXYZ(b, 0, 0, 0);
         const o = new Vector3$1(), a = new Vector3$1(), h = new Vector3$1(), c = new Vector3$1(), d = new Vector3$1(), f = new Vector3$1(), p = new Vector3$1(), m = new Vector3$1();
         if (e) for (let b = 0, w = e.count; b < w; b += 3) {
-          const M = e.getX(b + 0), R = e.getX(b + 1), V = e.getX(b + 2);
-          o.fromBufferAttribute(r, M), a.fromBufferAttribute(r, R), h.fromBufferAttribute(r, V), p.subVectors(h, a), m.subVectors(o, a), p.cross(m), c.fromBufferAttribute(s, M), d.fromBufferAttribute(s, R), f.fromBufferAttribute(s, V), c.add(p), d.add(p), f.add(p), s.setXYZ(M, c.x, c.y, c.z), s.setXYZ(R, d.x, d.y, d.z), s.setXYZ(V, f.x, f.y, f.z);
+          const M = e.getX(b + 0), P = e.getX(b + 1), V = e.getX(b + 2);
+          o.fromBufferAttribute(r, M), a.fromBufferAttribute(r, P), h.fromBufferAttribute(r, V), p.subVectors(h, a), m.subVectors(o, a), p.cross(m), c.fromBufferAttribute(s, M), d.fromBufferAttribute(s, P), f.fromBufferAttribute(s, V), c.add(p), d.add(p), f.add(p), s.setXYZ(M, c.x, c.y, c.z), s.setXYZ(P, d.x, d.y, d.z), s.setXYZ(V, f.x, f.y, f.z);
         }
         else for (let b = 0, w = r.count; b < w; b += 3) o.fromBufferAttribute(r, b + 0), a.fromBufferAttribute(r, b + 1), h.fromBufferAttribute(r, b + 2), p.subVectors(h, a), m.subVectors(o, a), p.cross(m), s.setXYZ(b + 0, p.x, p.y, p.z), s.setXYZ(b + 1, p.x, p.y, p.z), s.setXYZ(b + 2, p.x, p.y, p.z);
         this.normalizeNormals(), s.needsUpdate = true;
@@ -3839,8 +3839,8 @@ let __tla = (async () => {
       function e(c, d) {
         const f = c.array, p = c.itemSize, m = c.normalized, b = new f.constructor(d.length * p);
         let w = 0, M = 0;
-        for (let R = 0, V = d.length; R < V; R++) {
-          c.isInterleavedBufferAttribute ? w = d[R] * c.data.stride + c.offset : w = d[R] * p;
+        for (let P = 0, V = d.length; P < V; P++) {
+          c.isInterleavedBufferAttribute ? w = d[P] * c.data.stride + c.offset : w = d[P] * p;
           for (let O = 0; O < p; O++) b[M++] = f[w++];
         }
         return new BufferAttribute$1(b, p, m);
@@ -4382,8 +4382,8 @@ let __tla = (async () => {
       const a = e.distanceTo(r) * 0.5, h = -this.direction.dot(_segDir$1), c = _diff$1.dot(this.direction), d = -_diff$1.dot(_segDir$1), f = _diff$1.lengthSq(), p = Math.abs(1 - h * h);
       let m, b, w, M;
       if (p > 0) if (m = h * d - c, b = h * c - d, M = a * p, m >= 0) if (b >= -M) if (b <= M) {
-        const R = 1 / p;
-        m *= R, b *= R, w = m * (m + h * b + 2 * c) + b * (h * m + b + 2 * d) + f;
+        const P = 1 / p;
+        m *= P, b *= P, w = m * (m + h * b + 2 * c) + b * (h * m + b + 2 * d) + f;
       } else b = a, m = Math.max(0, -(h * b + c)), w = -m * m + b * (b + 2 * d) + f;
       else b = -a, m = Math.max(0, -(h * b + c)), w = -m * m + b * (b + 2 * d) + f;
       else b <= -M ? (m = Math.max(0, -(-h * a + c)), b = m > 0 ? -a : Math.min(Math.max(-a, -d), a), w = -m * m + b * (b + 2 * d) + f) : b <= M ? (m = 0, b = Math.min(Math.max(-a, -d), a), w = b * (b + 2 * d) + f) : (m = Math.max(0, -(h * a + c)), b = m > 0 ? a : Math.min(Math.max(-a, -d), a), w = -m * m + b * (b + 2 * d) + f);
@@ -4497,7 +4497,7 @@ let __tla = (async () => {
     _computeIntersections(e, r, s) {
       let o;
       const a = this.geometry, h = this.material, c = a.index, d = a.attributes.position, f = a.attributes.uv, p = a.attributes.uv1, m = a.attributes.normal, b = a.groups, w = a.drawRange;
-      if (c !== null) if (Array.isArray(h)) for (let M = 0, R = b.length; M < R; M++) {
+      if (c !== null) if (Array.isArray(h)) for (let M = 0, P = b.length; M < P; M++) {
         const V = b[M], O = h[V.materialIndex], z = Math.max(V.start, w.start), H = Math.min(c.count, Math.min(V.start + V.count, w.start + w.count));
         for (let q = z, W = H; q < W; q += 3) {
           const K = c.getX(q), J = c.getX(q + 1), ee = c.getX(q + 2);
@@ -4505,13 +4505,13 @@ let __tla = (async () => {
         }
       }
       else {
-        const M = Math.max(0, w.start), R = Math.min(c.count, w.start + w.count);
-        for (let V = M, O = R; V < O; V += 3) {
+        const M = Math.max(0, w.start), P = Math.min(c.count, w.start + w.count);
+        for (let V = M, O = P; V < O; V += 3) {
           const z = c.getX(V), H = c.getX(V + 1), q = c.getX(V + 2);
           o = checkGeometryIntersection$1(this, h, e, s, f, p, m, z, H, q), o && (o.faceIndex = Math.floor(V / 3), r.push(o));
         }
       }
-      else if (d !== void 0) if (Array.isArray(h)) for (let M = 0, R = b.length; M < R; M++) {
+      else if (d !== void 0) if (Array.isArray(h)) for (let M = 0, P = b.length; M < P; M++) {
         const V = b[M], O = h[V.materialIndex], z = Math.max(V.start, w.start), H = Math.min(d.count, Math.min(V.start + V.count, w.start + w.count));
         for (let q = z, W = H; q < W; q += 3) {
           const K = q, J = q + 1, ee = q + 2;
@@ -4519,8 +4519,8 @@ let __tla = (async () => {
         }
       }
       else {
-        const M = Math.max(0, w.start), R = Math.min(d.count, w.start + w.count);
-        for (let V = M, O = R; V < O; V += 3) {
+        const M = Math.max(0, w.start), P = Math.min(d.count, w.start + w.count);
+        for (let V = M, O = P; V < O; V += 3) {
           const z = V, H = V + 1, q = V + 2;
           o = checkGeometryIntersection$1(this, h, e, s, f, p, m, z, H, q), o && (o.faceIndex = Math.floor(V / 3), r.push(o));
         }
@@ -4881,8 +4881,8 @@ let __tla = (async () => {
       return this;
     }
     setFromProjectionMatrix(e, r = WebGLCoordinateSystem$1, s = false) {
-      const o = this.planes, a = e.elements, h = a[0], c = a[1], d = a[2], f = a[3], p = a[4], m = a[5], b = a[6], w = a[7], M = a[8], R = a[9], V = a[10], O = a[11], z = a[12], H = a[13], q = a[14], W = a[15];
-      if (o[0].setComponents(f - h, w - p, O - M, W - z).normalize(), o[1].setComponents(f + h, w + p, O + M, W + z).normalize(), o[2].setComponents(f + c, w + m, O + R, W + H).normalize(), o[3].setComponents(f - c, w - m, O - R, W - H).normalize(), s) o[4].setComponents(d, b, V, q).normalize(), o[5].setComponents(f - d, w - b, O - V, W - q).normalize();
+      const o = this.planes, a = e.elements, h = a[0], c = a[1], d = a[2], f = a[3], p = a[4], m = a[5], b = a[6], w = a[7], M = a[8], P = a[9], V = a[10], O = a[11], z = a[12], H = a[13], q = a[14], W = a[15];
+      if (o[0].setComponents(f - h, w - p, O - M, W - z).normalize(), o[1].setComponents(f + h, w + p, O + M, W + z).normalize(), o[2].setComponents(f + c, w + m, O + P, W + H).normalize(), o[3].setComponents(f - c, w - m, O - P, W - H).normalize(), s) o[4].setComponents(d, b, V, q).normalize(), o[5].setComponents(f - d, w - b, O - V, W - q).normalize();
       else if (o[4].setComponents(f - d, w - b, O - V, W - q).normalize(), r === WebGLCoordinateSystem$1) o[5].setComponents(f + d, w + b, O + V, W + q).normalize();
       else if (r === WebGPUCoordinateSystem$1) o[5].setComponents(d, b, V, q).normalize();
       else throw new Error("THREE.Frustum.setFromProjectionMatrix(): Invalid coordinate system: " + r);
@@ -5152,7 +5152,7 @@ let __tla = (async () => {
         const m = r.getAttribute(p), b = s.getAttribute(p);
         copyAttributeData(m, b, d);
         const w = m.itemSize;
-        for (let M = m.count, R = f; M < R; M++) {
+        for (let M = m.count, P = f; M < P; M++) {
           const V = d + M;
           for (let O = 0; O < w; O++) b.setComponent(V, O, 0);
         }
@@ -5185,8 +5185,8 @@ let __tla = (async () => {
         if (f.active !== false) {
           if (a.index !== null) {
             if (f.indexStart !== r) {
-              const { indexStart: p, vertexStart: m, reservedIndexCount: b } = f, w = a.index, M = w.array, R = e - m;
-              for (let V = p; V < p + b; V++) M[V] = M[V] + R;
+              const { indexStart: p, vertexStart: m, reservedIndexCount: b } = f, w = a.index, M = w.array, P = e - m;
+              for (let V = p; V < p + b; V++) M[V] = M[V] + P;
               w.array.copyWithin(r, p, p + b), w.addUpdateRange(r, b), w.needsUpdate = true, f.indexStart = r;
             }
             r += f.reservedIndexCount;
@@ -5194,8 +5194,8 @@ let __tla = (async () => {
           if (f.vertexStart !== e) {
             const { vertexStart: p, reservedVertexCount: m } = f, b = a.attributes;
             for (const w in b) {
-              const M = b[w], { array: R, itemSize: V } = M;
-              R.copyWithin(e * V, p * V, (p + m) * V), M.addUpdateRange(e * V, m * V), M.needsUpdate = true;
+              const M = b[w], { array: P, itemSize: V } = M;
+              P.copyWithin(e * V, p * V, (p + m) * V), M.addUpdateRange(e * V, m * V), M.needsUpdate = true;
             }
             f.vertexStart = e;
           }
@@ -5317,7 +5317,7 @@ let __tla = (async () => {
       const h = o.getIndex();
       let c = h === null ? 1 : h.array.BYTES_PER_ELEMENT, d = 1;
       a.wireframe && (d = 2, c = o.attributes.position.count > 65535 ? 4 : 2);
-      const f = this._instanceInfo, p = this._multiDrawStarts, m = this._multiDrawCounts, b = this._geometryInfo, w = this.perObjectFrustumCulled, M = this._indirectTexture, R = M.image.data, V = s.isArrayCamera ? _frustumArray$1 : _frustum$2;
+      const f = this._instanceInfo, p = this._multiDrawStarts, m = this._multiDrawCounts, b = this._geometryInfo, w = this.perObjectFrustumCulled, M = this._indirectTexture, P = M.image.data, V = s.isArrayCamera ? _frustumArray$1 : _frustum$2;
       w && !s.isArrayCamera && (_matrix$1.multiplyMatrices(s.projectionMatrix, s.matrixWorldInverse).multiply(this.matrixWorld), _frustum$2.setFromProjectionMatrix(_matrix$1, s.coordinateSystem, s.reversedDepth));
       let O = 0;
       if (this.sortObjects) {
@@ -5335,7 +5335,7 @@ let __tla = (async () => {
         H === null ? z.sort(a.transparent ? sortTransparent : sortOpaque) : H.call(this, z, s);
         for (let q = 0, W = z.length; q < W; q++) {
           const K = z[q];
-          p[O] = K.start * c * d, m[O] = K.count * d, R[O] = K.index, O++;
+          p[O] = K.start * c * d, m[O] = K.count * d, P[O] = K.index, O++;
         }
         _renderList.reset();
       } else for (let z = 0, H = f.length; z < H; z++) if (f[z].visible && f[z].active) {
@@ -5343,7 +5343,7 @@ let __tla = (async () => {
         let W = false;
         if (w && (this.getMatrixAt(z, _matrix$1), this.getBoundingSphereAt(q, _sphere$2$1).applyMatrix4(_matrix$1), W = !V.intersectsSphere(_sphere$2$1, s)), !W) {
           const K = b[q];
-          p[O] = K.start * c * d, m[O] = K.count * d, R[O] = z, O++;
+          p[O] = K.start * c * d, m[O] = K.count * d, P[O] = z, O++;
         }
       }
       M.needsUpdate = true, this._multiDrawCount = O, this._visibilityChanged = false;
@@ -5386,23 +5386,23 @@ let __tla = (async () => {
       const c = a / ((this.scale.x + this.scale.y + this.scale.z) / 3), d = c * c, f = this.isLineSegments ? 2 : 1, p = s.index, b = s.attributes.position;
       if (p !== null) {
         const w = Math.max(0, h.start), M = Math.min(p.count, h.start + h.count);
-        for (let R = w, V = M - 1; R < V; R += f) {
-          const O = p.getX(R), z = p.getX(R + 1), H = checkIntersection$2(this, e, _ray$1$1, d, O, z, R);
+        for (let P = w, V = M - 1; P < V; P += f) {
+          const O = p.getX(P), z = p.getX(P + 1), H = checkIntersection$2(this, e, _ray$1$1, d, O, z, P);
           H && r.push(H);
         }
         if (this.isLineLoop) {
-          const R = p.getX(M - 1), V = p.getX(w), O = checkIntersection$2(this, e, _ray$1$1, d, R, V, M - 1);
+          const P = p.getX(M - 1), V = p.getX(w), O = checkIntersection$2(this, e, _ray$1$1, d, P, V, M - 1);
           O && r.push(O);
         }
       } else {
         const w = Math.max(0, h.start), M = Math.min(b.count, h.start + h.count);
-        for (let R = w, V = M - 1; R < V; R += f) {
-          const O = checkIntersection$2(this, e, _ray$1$1, d, R, R + 1, R);
+        for (let P = w, V = M - 1; P < V; P += f) {
+          const O = checkIntersection$2(this, e, _ray$1$1, d, P, P + 1, P);
           O && r.push(O);
         }
         if (this.isLineLoop) {
-          const R = checkIntersection$2(this, e, _ray$1$1, d, M - 1, w, M - 1);
-          R && r.push(R);
+          const P = checkIntersection$2(this, e, _ray$1$1, d, M - 1, w, M - 1);
+          P && r.push(P);
         }
       }
     }
@@ -5478,13 +5478,13 @@ let __tla = (async () => {
       const c = a / ((this.scale.x + this.scale.y + this.scale.z) / 3), d = c * c, f = s.index, m = s.attributes.position;
       if (f !== null) {
         const b = Math.max(0, h.start), w = Math.min(f.count, h.start + h.count);
-        for (let M = b, R = w; M < R; M++) {
+        for (let M = b, P = w; M < P; M++) {
           const V = f.getX(M);
           _position$3.fromBufferAttribute(m, V), testPoint(_position$3, V, d, o, e, r, this);
         }
       } else {
         const b = Math.max(0, h.start), w = Math.min(m.count, h.start + h.count);
-        for (let M = b, R = w; M < R; M++) _position$3.fromBufferAttribute(m, M), testPoint(_position$3, M, d, o, e, r, this);
+        for (let M = b, P = w; M < P; M++) _position$3.fromBufferAttribute(m, M), testPoint(_position$3, M, d, o, e, r, this);
       }
     }
     updateMorphTargets() {
@@ -5665,19 +5665,19 @@ let __tla = (async () => {
       const d = [], f = [], p = [], m = [];
       let b = 0, w = 0;
       M("z", "y", "x", -1, -1, s, r, e, h, a, 0), M("z", "y", "x", 1, -1, s, r, -e, h, a, 1), M("x", "z", "y", 1, 1, e, s, r, o, h, 2), M("x", "z", "y", 1, -1, e, s, -r, o, h, 3), M("x", "y", "z", 1, -1, e, r, s, o, a, 4), M("x", "y", "z", -1, -1, e, r, -s, o, a, 5), this.setIndex(d), this.setAttribute("position", new Float32BufferAttribute$1(f, 3)), this.setAttribute("normal", new Float32BufferAttribute$1(p, 3)), this.setAttribute("uv", new Float32BufferAttribute$1(m, 2));
-      function M(R, V, O, z, H, q, W, K, J, ee, ie) {
-        const pe = q / J, U = W / ee, v = q / 2, _ = W / 2, $ = K / 2, P = J + 1, F = ee + 1;
+      function M(P, V, O, z, H, q, W, K, J, ee, ie) {
+        const pe = q / J, U = W / ee, v = q / 2, _ = W / 2, $ = K / 2, R = J + 1, F = ee + 1;
         let k = 0, G = 0;
         const D = new Vector3$1();
         for (let x = 0; x < F; x++) {
           const L = x * U - _;
-          for (let j = 0; j < P; j++) {
+          for (let j = 0; j < R; j++) {
             const Y = j * pe - v;
-            D[R] = Y * z, D[V] = L * H, D[O] = $, f.push(D.x, D.y, D.z), D[R] = 0, D[V] = 0, D[O] = K > 0 ? 1 : -1, p.push(D.x, D.y, D.z), m.push(j / J), m.push(1 - x / ee), k += 1;
+            D[P] = Y * z, D[V] = L * H, D[O] = $, f.push(D.x, D.y, D.z), D[P] = 0, D[V] = 0, D[O] = K > 0 ? 1 : -1, p.push(D.x, D.y, D.z), m.push(j / J), m.push(1 - x / ee), k += 1;
           }
         }
         for (let x = 0; x < ee; x++) for (let L = 0; L < J; L++) {
-          const j = b + L + P * x, Y = b + L + P * (x + 1), oe = b + (L + 1) + P * (x + 1), me = b + (L + 1) + P * x;
+          const j = b + L + R * x, Y = b + L + R * (x + 1), oe = b + (L + 1) + R * (x + 1), me = b + (L + 1) + R * x;
           d.push(j, Y, me), d.push(Y, oe, me), G += 6;
         }
         c.addGroup(w, G, ie), w += G, b += k;
@@ -5699,7 +5699,7 @@ let __tla = (async () => {
         radialSegments: o,
         heightSegments: a
       }, r = Math.max(0, r), s = Math.max(1, Math.floor(s)), o = Math.max(3, Math.floor(o)), a = Math.max(1, Math.floor(a));
-      const h = [], c = [], d = [], f = [], p = r / 2, m = Math.PI / 2 * e, b = r, w = 2 * m + b, M = s * 2 + a, R = o + 1, V = new Vector3$1(), O = new Vector3$1();
+      const h = [], c = [], d = [], f = [], p = r / 2, m = Math.PI / 2 * e, b = r, w = 2 * m + b, M = s * 2 + a, P = o + 1, V = new Vector3$1(), O = new Vector3$1();
       for (let z = 0; z <= M; z++) {
         let H = 0, q = 0, W = 0, K = 0;
         if (z <= s) {
@@ -5720,9 +5720,9 @@ let __tla = (async () => {
           O.x = -W * _, O.y = q, O.z = W * v, c.push(O.x, O.y, O.z), V.set(-W * _, K, W * v), V.normalize(), d.push(V.x, V.y, V.z), f.push(pe + ee, J);
         }
         if (z > 0) {
-          const ie = (z - 1) * R;
+          const ie = (z - 1) * P;
           for (let pe = 0; pe < o; pe++) {
-            const U = ie + pe, v = ie + pe + 1, _ = z * R + pe, $ = z * R + pe + 1;
+            const U = ie + pe, v = ie + pe + 1, _ = z * P + pe, $ = z * P + pe + 1;
             h.push(U, v, _), h.push(v, $, _);
           }
         }
@@ -5776,7 +5776,7 @@ let __tla = (async () => {
       o = Math.floor(o), a = Math.floor(a);
       const p = [], m = [], b = [], w = [];
       let M = 0;
-      const R = [], V = s / 2;
+      const P = [], V = s / 2;
       let O = 0;
       z(), h === false && (e > 0 && H(true), r > 0 && H(false)), this.setIndex(p), this.setAttribute("position", new Float32BufferAttribute$1(m, 3)), this.setAttribute("normal", new Float32BufferAttribute$1(b, 3)), this.setAttribute("uv", new Float32BufferAttribute$1(w, 2));
       function z() {
@@ -5786,13 +5786,13 @@ let __tla = (async () => {
         for (let ee = 0; ee <= a; ee++) {
           const ie = [], pe = ee / a, U = pe * (r - e) + e;
           for (let v = 0; v <= o; v++) {
-            const _ = v / o, $ = _ * d + c, P = Math.sin($), F = Math.cos($);
-            W.x = U * P, W.y = -pe * s + V, W.z = U * F, m.push(W.x, W.y, W.z), q.set(P, J, F).normalize(), b.push(q.x, q.y, q.z), w.push(_, 1 - pe), ie.push(M++);
+            const _ = v / o, $ = _ * d + c, R = Math.sin($), F = Math.cos($);
+            W.x = U * R, W.y = -pe * s + V, W.z = U * F, m.push(W.x, W.y, W.z), q.set(R, J, F).normalize(), b.push(q.x, q.y, q.z), w.push(_, 1 - pe), ie.push(M++);
           }
-          R.push(ie);
+          P.push(ie);
         }
         for (let ee = 0; ee < o; ee++) for (let ie = 0; ie < a; ie++) {
-          const pe = R[ie][ee], U = R[ie + 1][ee], v = R[ie + 1][ee + 1], _ = R[ie][ee + 1];
+          const pe = P[ie][ee], U = P[ie + 1][ee], v = P[ie + 1][ee + 1], _ = P[ie][ee + 1];
           (e > 0 || ie !== 0) && (p.push(pe, U, _), K += 3), (r > 0 || ie !== a - 1) && (p.push(U, v, _), K += 3);
         }
         f.addGroup(O, K, 0), O += K;
@@ -5804,8 +5804,8 @@ let __tla = (async () => {
         for (let v = 1; v <= o; v++) m.push(0, V * pe, 0), b.push(0, pe, 0), w.push(0.5, 0.5), M++;
         const U = M;
         for (let v = 0; v <= o; v++) {
-          const $ = v / o * d + c, P = Math.cos($), F = Math.sin($);
-          J.x = ie * F, J.y = V * pe, J.z = ie * P, m.push(J.x, J.y, J.z), b.push(0, pe, 0), K.x = P * 0.5 + 0.5, K.y = F * 0.5 * pe + 0.5, w.push(K.x, K.y), M++;
+          const $ = v / o * d + c, R = Math.cos($), F = Math.sin($);
+          J.x = ie * F, J.y = V * pe, J.z = ie * R, m.push(J.x, J.y, J.z), b.push(0, pe, 0), K.x = R * 0.5 + 0.5, K.y = F * 0.5 * pe + 0.5, w.push(K.x, K.y), M++;
         }
         for (let v = 0; v < o; v++) {
           const _ = W + v, $ = U + v;
@@ -5894,10 +5894,10 @@ let __tla = (async () => {
         for (let ie = 0, pe = 0; ie < a.length; ie += 9, pe += 6) {
           z.set(a[ie + 0], a[ie + 1], a[ie + 2]), H.set(a[ie + 3], a[ie + 4], a[ie + 5]), q.set(a[ie + 6], a[ie + 7], a[ie + 8]), K.set(h[pe + 0], h[pe + 1]), J.set(h[pe + 2], h[pe + 3]), ee.set(h[pe + 4], h[pe + 5]), W.copy(z).add(H).add(q).divideScalar(3);
           const U = V(W);
-          R(K, pe + 0, z, U), R(J, pe + 2, H, U), R(ee, pe + 4, q, U);
+          P(K, pe + 0, z, U), P(J, pe + 2, H, U), P(ee, pe + 4, q, U);
         }
       }
-      function R(z, H, q, W) {
+      function P(z, H, q, W) {
         W < 0 && z.x === 1 && (h[H] = z.x - 1), q.x === 0 && q.z === 0 && (h[H] = W / 2 / Math.PI + 0.5);
       }
       function V(z) {
@@ -6114,8 +6114,8 @@ let __tla = (async () => {
         ], m = new Array(3), b = {}, w = [];
         for (let M = 0; M < d; M += 3) {
           h ? (f[0] = h.getX(M), f[1] = h.getX(M + 1), f[2] = h.getX(M + 2)) : (f[0] = M, f[1] = M + 1, f[2] = M + 2);
-          const { a: R, b: V, c: O } = _triangle;
-          if (R.fromBufferAttribute(c, f[0]), V.fromBufferAttribute(c, f[1]), O.fromBufferAttribute(c, f[2]), _triangle.getNormal(_normal$2), m[0] = `${Math.round(R.x * o)},${Math.round(R.y * o)},${Math.round(R.z * o)}`, m[1] = `${Math.round(V.x * o)},${Math.round(V.y * o)},${Math.round(V.z * o)}`, m[2] = `${Math.round(O.x * o)},${Math.round(O.y * o)},${Math.round(O.z * o)}`, !(m[0] === m[1] || m[1] === m[2] || m[2] === m[0])) for (let z = 0; z < 3; z++) {
+          const { a: P, b: V, c: O } = _triangle;
+          if (P.fromBufferAttribute(c, f[0]), V.fromBufferAttribute(c, f[1]), O.fromBufferAttribute(c, f[2]), _triangle.getNormal(_normal$2), m[0] = `${Math.round(P.x * o)},${Math.round(P.y * o)},${Math.round(P.z * o)}`, m[1] = `${Math.round(V.x * o)},${Math.round(V.y * o)},${Math.round(V.z * o)}`, m[2] = `${Math.round(O.x * o)},${Math.round(O.y * o)},${Math.round(O.z * o)}`, !(m[0] === m[1] || m[1] === m[2] || m[2] === m[0])) for (let z = 0; z < 3; z++) {
             const H = (z + 1) % 3, q = m[z], W = m[H], K = _triangle[p[z]], J = _triangle[p[H]], ee = `${q}_${W}`, ie = `${W}_${q}`;
             ie in b && b[ie] ? (_normal$2.dot(b[ie].normal) <= a && (w.push(K.x, K.y, K.z), w.push(J.x, J.y, J.z)), b[ie] = null) : ee in b || (b[ee] = {
               index0: f[z],
@@ -6125,8 +6125,8 @@ let __tla = (async () => {
           }
         }
         for (const M in b) if (b[M]) {
-          const { index0: R, index1: V } = b[M];
-          _v0$3.fromBufferAttribute(c, R), _v1$1$1.fromBufferAttribute(c, V), w.push(_v0$3.x, _v0$3.y, _v0$3.z), w.push(_v1$1$1.x, _v1$1$1.y, _v1$1$1.z);
+          const { index0: P, index1: V } = b[M];
+          _v0$3.fromBufferAttribute(c, P), _v1$1$1.fromBufferAttribute(c, V), w.push(_v0$3.x, _v0$3.y, _v0$3.z), w.push(_v1$1$1.x, _v1$1$1.y, _v1$1$1.z);
         }
         this.setAttribute("position", new Float32BufferAttribute$1(w, 3));
       }
@@ -6316,8 +6316,8 @@ let __tla = (async () => {
       const m = o[c % a], b = o[(c + 1) % a];
       if (this.closed || c + 2 < a ? p = o[(c + 2) % a] : (tmp.subVectors(o[a - 1], o[a - 2]).add(o[a - 1]), p = tmp), this.curveType === "centripetal" || this.curveType === "chordal") {
         const w = this.curveType === "chordal" ? 0.5 : 0.25;
-        let M = Math.pow(f.distanceToSquared(m), w), R = Math.pow(m.distanceToSquared(b), w), V = Math.pow(b.distanceToSquared(p), w);
-        R < 1e-4 && (R = 1), M < 1e-4 && (M = R), V < 1e-4 && (V = R), px.initNonuniformCatmullRom(f.x, m.x, b.x, p.x, M, R, V), py.initNonuniformCatmullRom(f.y, m.y, b.y, p.y, M, R, V), pz.initNonuniformCatmullRom(f.z, m.z, b.z, p.z, M, R, V);
+        let M = Math.pow(f.distanceToSquared(m), w), P = Math.pow(m.distanceToSquared(b), w), V = Math.pow(b.distanceToSquared(p), w);
+        P < 1e-4 && (P = 1), M < 1e-4 && (M = P), V < 1e-4 && (V = P), px.initNonuniformCatmullRom(f.x, m.x, b.x, p.x, M, P, V), py.initNonuniformCatmullRom(f.y, m.y, b.y, p.y, M, P, V), pz.initNonuniformCatmullRom(f.z, m.z, b.z, p.z, M, P, V);
       } else this.curveType === "catmullrom" && (px.initCatmullRom(f.x, m.x, b.x, p.x, this.tension), py.initCatmullRom(f.y, m.y, b.y, p.y, this.tension), pz.initCatmullRom(f.z, m.z, b.z, p.z, this.tension));
       return s.set(px.calc(d), py.calc(d), pz.calc(d)), s;
     }
@@ -6812,18 +6812,18 @@ let __tla = (async () => {
   function isEarHashed(l, e, r, s) {
     const o = l.prev, a = l, h = l.next;
     if (area(o, a, h) >= 0) return false;
-    const c = o.x, d = a.x, f = h.x, p = o.y, m = a.y, b = h.y, w = Math.min(c, d, f), M = Math.min(p, m, b), R = Math.max(c, d, f), V = Math.max(p, m, b), O = zOrder(w, M, e, r, s), z = zOrder(R, V, e, r, s);
+    const c = o.x, d = a.x, f = h.x, p = o.y, m = a.y, b = h.y, w = Math.min(c, d, f), M = Math.min(p, m, b), P = Math.max(c, d, f), V = Math.max(p, m, b), O = zOrder(w, M, e, r, s), z = zOrder(P, V, e, r, s);
     let H = l.prevZ, q = l.nextZ;
     for (; H && H.z >= O && q && q.z <= z; ) {
-      if (H.x >= w && H.x <= R && H.y >= M && H.y <= V && H !== o && H !== h && pointInTriangleExceptFirst(c, p, d, m, f, b, H.x, H.y) && area(H.prev, H, H.next) >= 0 || (H = H.prevZ, q.x >= w && q.x <= R && q.y >= M && q.y <= V && q !== o && q !== h && pointInTriangleExceptFirst(c, p, d, m, f, b, q.x, q.y) && area(q.prev, q, q.next) >= 0)) return false;
+      if (H.x >= w && H.x <= P && H.y >= M && H.y <= V && H !== o && H !== h && pointInTriangleExceptFirst(c, p, d, m, f, b, H.x, H.y) && area(H.prev, H, H.next) >= 0 || (H = H.prevZ, q.x >= w && q.x <= P && q.y >= M && q.y <= V && q !== o && q !== h && pointInTriangleExceptFirst(c, p, d, m, f, b, q.x, q.y) && area(q.prev, q, q.next) >= 0)) return false;
       q = q.nextZ;
     }
     for (; H && H.z >= O; ) {
-      if (H.x >= w && H.x <= R && H.y >= M && H.y <= V && H !== o && H !== h && pointInTriangleExceptFirst(c, p, d, m, f, b, H.x, H.y) && area(H.prev, H, H.next) >= 0) return false;
+      if (H.x >= w && H.x <= P && H.y >= M && H.y <= V && H !== o && H !== h && pointInTriangleExceptFirst(c, p, d, m, f, b, H.x, H.y) && area(H.prev, H, H.next) >= 0) return false;
       H = H.prevZ;
     }
     for (; q && q.z <= z; ) {
-      if (q.x >= w && q.x <= R && q.y >= M && q.y <= V && q !== o && q !== h && pointInTriangleExceptFirst(c, p, d, m, f, b, q.x, q.y) && area(q.prev, q, q.next) >= 0) return false;
+      if (q.x >= w && q.x <= P && q.y >= M && q.y <= V && q !== o && q !== h && pointInTriangleExceptFirst(c, p, d, m, f, b, q.x, q.y) && area(q.prev, q, q.next) >= 0) return false;
       q = q.nextZ;
     }
     return true;
@@ -7066,7 +7066,7 @@ let __tla = (async () => {
       this.setAttribute("position", new Float32BufferAttribute$1(o, 3)), this.setAttribute("uv", new Float32BufferAttribute$1(a, 2)), this.computeVertexNormals();
       function h(c) {
         const d = [], f = r.curveSegments !== void 0 ? r.curveSegments : 12, p = r.steps !== void 0 ? r.steps : 1, m = r.depth !== void 0 ? r.depth : 1;
-        let b = r.bevelEnabled !== void 0 ? r.bevelEnabled : true, w = r.bevelThickness !== void 0 ? r.bevelThickness : 0.2, M = r.bevelSize !== void 0 ? r.bevelSize : w - 0.1, R = r.bevelOffset !== void 0 ? r.bevelOffset : 0, V = r.bevelSegments !== void 0 ? r.bevelSegments : 3;
+        let b = r.bevelEnabled !== void 0 ? r.bevelEnabled : true, w = r.bevelThickness !== void 0 ? r.bevelThickness : 0.2, M = r.bevelSize !== void 0 ? r.bevelSize : w - 0.1, P = r.bevelOffset !== void 0 ? r.bevelOffset : 0, V = r.bevelSegments !== void 0 ? r.bevelSegments : 3;
         const O = r.extrudePath, z = r.UVGenerator !== void 0 ? r.UVGenerator : WorldUVGenerator;
         let H, q = false, W, K, J, ee;
         if (O) {
@@ -7074,7 +7074,7 @@ let __tla = (async () => {
           const Re = O.isCatmullRomCurve3 ? O.closed : false;
           W = O.computeFrenetFrames(p, Re), K = new Vector3$1(), J = new Vector3$1(), ee = new Vector3$1();
         }
-        b || (V = 0, w = 0, M = 0, R = 0);
+        b || (V = 0, w = 0, M = 0, P = 0);
         const ie = c.extractPoints(f);
         let pe = ie.shape;
         const U = ie.holes;
@@ -7098,7 +7098,7 @@ let __tla = (async () => {
           }
         }
         _(pe), U.forEach(_);
-        const $ = U.length, P = pe;
+        const $ = U.length, R = pe;
         for (let Re = 0; Re < $; Re++) {
           const Be = U[Re];
           pe = pe.concat(Be);
@@ -7123,7 +7123,7 @@ let __tla = (async () => {
           return new Vector2$1(rt / Te, Pe / Te);
         }
         const D = [];
-        for (let Re = 0, Be = P.length, Ee = Be - 1, rt = Re + 1; Re < Be; Re++, Ee++, rt++) Ee === Be && (Ee = 0), rt === Be && (rt = 0), D[Re] = G(P[Re], P[Ee], P[rt]);
+        for (let Re = 0, Be = R.length, Ee = Be - 1, rt = Re + 1; Re < Be; Re++, Ee++, rt++) Ee === Be && (Ee = 0), rt === Be && (rt = 0), D[Re] = G(R[Re], R[Ee], R[rt]);
         const x = [];
         let L, j = D.concat();
         for (let Re = 0, Be = $; Re < Be; Re++) {
@@ -7133,13 +7133,13 @@ let __tla = (async () => {
           x.push(L), j = j.concat(L);
         }
         let Y;
-        if (V === 0) Y = ShapeUtils.triangulateShape(P, U);
+        if (V === 0) Y = ShapeUtils.triangulateShape(R, U);
         else {
           const Re = [], Be = [];
           for (let Ee = 0; Ee < V; Ee++) {
-            const rt = Ee / V, Pe = w * Math.cos(rt * Math.PI / 2), Te = M * Math.sin(rt * Math.PI / 2) + R;
-            for (let ut = 0, De = P.length; ut < De; ut++) {
-              const Fe = F(P[ut], D[ut], Te);
+            const rt = Ee / V, Pe = w * Math.cos(rt * Math.PI / 2), Te = M * Math.sin(rt * Math.PI / 2) + P;
+            for (let ut = 0, De = R.length; ut < De; ut++) {
+              const Fe = F(R[ut], D[ut], Te);
               fe(Fe.x, Fe.y, -Pe), rt === 0 && Re.push(Fe);
             }
             for (let ut = 0, De = $; ut < De; ut++) {
@@ -7155,7 +7155,7 @@ let __tla = (async () => {
           }
           Y = ShapeUtils.triangulateShape(Re, Be);
         }
-        const oe = Y.length, me = M + R;
+        const oe = Y.length, me = M + P;
         for (let Re = 0; Re < k; Re++) {
           const Be = b ? F(pe[Re], j[Re], me) : pe[Re];
           q ? (J.copy(W.normals[0]).multiplyScalar(Be.x), K.copy(W.binormals[0]).multiplyScalar(Be.y), ee.copy(H[0]).add(J).add(K), fe(ee.x, ee.y, ee.z)) : fe(Be.x, Be.y, 0);
@@ -7165,9 +7165,9 @@ let __tla = (async () => {
           q ? (J.copy(W.normals[Re]).multiplyScalar(Ee.x), K.copy(W.binormals[Re]).multiplyScalar(Ee.y), ee.copy(H[Re]).add(J).add(K), fe(ee.x, ee.y, ee.z)) : fe(Ee.x, Ee.y, m / p * Re);
         }
         for (let Re = V - 1; Re >= 0; Re--) {
-          const Be = Re / V, Ee = w * Math.cos(Be * Math.PI / 2), rt = M * Math.sin(Be * Math.PI / 2) + R;
-          for (let Pe = 0, Te = P.length; Pe < Te; Pe++) {
-            const ut = F(P[Pe], D[Pe], rt);
+          const Be = Re / V, Ee = w * Math.cos(Be * Math.PI / 2), rt = M * Math.sin(Be * Math.PI / 2) + P;
+          for (let Pe = 0, Te = R.length; Pe < Te; Pe++) {
+            const ut = F(R[Pe], D[Pe], rt);
             fe(ut.x, ut.y, m + Ee);
           }
           for (let Pe = 0, Te = U.length; Pe < Te; Pe++) {
@@ -7208,7 +7208,7 @@ let __tla = (async () => {
         function Z() {
           const Re = o.length / 3;
           let Be = 0;
-          se(P, Be), Be += P.length;
+          se(R, Be), Be += R.length;
           for (let Ee = 0, rt = U.length; Ee < rt; Ee++) {
             const Pe = U[Ee];
             se(Pe, Be), Be += Pe.length;
@@ -7275,12 +7275,12 @@ let __tla = (async () => {
       ];
     },
     generateSideWallUV: function(l, e, r, s, o, a) {
-      const h = e[r * 3], c = e[r * 3 + 1], d = e[r * 3 + 2], f = e[s * 3], p = e[s * 3 + 1], m = e[s * 3 + 2], b = e[o * 3], w = e[o * 3 + 1], M = e[o * 3 + 2], R = e[a * 3], V = e[a * 3 + 1], O = e[a * 3 + 2];
+      const h = e[r * 3], c = e[r * 3 + 1], d = e[r * 3 + 2], f = e[s * 3], p = e[s * 3 + 1], m = e[s * 3 + 2], b = e[o * 3], w = e[o * 3 + 1], M = e[o * 3 + 2], P = e[a * 3], V = e[a * 3 + 1], O = e[a * 3 + 2];
       return Math.abs(c - p) < Math.abs(h - f) ? [
         new Vector2$1(h, 1 - d),
         new Vector2$1(f, 1 - m),
         new Vector2$1(b, 1 - M),
-        new Vector2$1(R, 1 - O)
+        new Vector2$1(P, 1 - O)
       ] : [
         new Vector2$1(c, 1 - d),
         new Vector2$1(p, 1 - m),
@@ -7419,17 +7419,17 @@ let __tla = (async () => {
         phiStart: s,
         phiLength: o
       }, r = Math.floor(r), o = clamp$7(o, 0, Math.PI * 2);
-      const a = [], h = [], c = [], d = [], f = [], p = 1 / r, m = new Vector3$1(), b = new Vector2$1(), w = new Vector3$1(), M = new Vector3$1(), R = new Vector3$1();
+      const a = [], h = [], c = [], d = [], f = [], p = 1 / r, m = new Vector3$1(), b = new Vector2$1(), w = new Vector3$1(), M = new Vector3$1(), P = new Vector3$1();
       let V = 0, O = 0;
       for (let z = 0; z <= e.length - 1; z++) switch (z) {
         case 0:
-          V = e[z + 1].x - e[z].x, O = e[z + 1].y - e[z].y, w.x = O * 1, w.y = -V, w.z = O * 0, R.copy(w), w.normalize(), d.push(w.x, w.y, w.z);
+          V = e[z + 1].x - e[z].x, O = e[z + 1].y - e[z].y, w.x = O * 1, w.y = -V, w.z = O * 0, P.copy(w), w.normalize(), d.push(w.x, w.y, w.z);
           break;
         case e.length - 1:
-          d.push(R.x, R.y, R.z);
+          d.push(P.x, P.y, P.z);
           break;
         default:
-          V = e[z + 1].x - e[z].x, O = e[z + 1].y - e[z].y, w.x = O * 1, w.y = -V, w.z = O * 0, M.copy(w), w.x += R.x, w.y += R.y, w.z += R.z, w.normalize(), d.push(w.x, w.y, w.z), R.copy(M);
+          V = e[z + 1].x - e[z].x, O = e[z + 1].y - e[z].y, w.x = O * 1, w.y = -V, w.z = O * 0, M.copy(w), w.x += P.x, w.y += P.y, w.z += P.z, w.normalize(), d.push(w.x, w.y, w.z), P.copy(M);
       }
       for (let z = 0; z <= r; z++) {
         const H = s + z * p * o, q = Math.sin(H), W = Math.cos(H);
@@ -7516,19 +7516,19 @@ let __tla = (async () => {
         widthSegments: s,
         heightSegments: o
       };
-      const a = e / 2, h = r / 2, c = Math.floor(s), d = Math.floor(o), f = c + 1, p = d + 1, m = e / c, b = r / d, w = [], M = [], R = [], V = [];
+      const a = e / 2, h = r / 2, c = Math.floor(s), d = Math.floor(o), f = c + 1, p = d + 1, m = e / c, b = r / d, w = [], M = [], P = [], V = [];
       for (let O = 0; O < p; O++) {
         const z = O * b - h;
         for (let H = 0; H < f; H++) {
           const q = H * m - a;
-          M.push(q, -z, 0), R.push(0, 0, 1), V.push(H / c), V.push(1 - O / d);
+          M.push(q, -z, 0), P.push(0, 0, 1), V.push(H / c), V.push(1 - O / d);
         }
       }
       for (let O = 0; O < d; O++) for (let z = 0; z < c; z++) {
         const H = z + f * O, q = z + f * (O + 1), W = z + 1 + f * (O + 1), K = z + 1 + f * O;
         w.push(H, q, K), w.push(q, W, K);
       }
-      this.setIndex(w), this.setAttribute("position", new Float32BufferAttribute$1(M, 3)), this.setAttribute("normal", new Float32BufferAttribute$1(R, 3)), this.setAttribute("uv", new Float32BufferAttribute$1(V, 2));
+      this.setIndex(w), this.setAttribute("position", new Float32BufferAttribute$1(M, 3)), this.setAttribute("normal", new Float32BufferAttribute$1(P, 3)), this.setAttribute("uv", new Float32BufferAttribute$1(V, 2));
     }
     copy(e) {
       return super.copy(e), this.parameters = Object.assign({}, e.parameters), this;
@@ -7550,15 +7550,15 @@ let __tla = (async () => {
       const c = [], d = [], f = [], p = [];
       let m = e;
       const b = (r - e) / o, w = new Vector3$1(), M = new Vector2$1();
-      for (let R = 0; R <= o; R++) {
+      for (let P = 0; P <= o; P++) {
         for (let V = 0; V <= s; V++) {
           const O = a + V / s * h;
           w.x = m * Math.cos(O), w.y = m * Math.sin(O), d.push(w.x, w.y, w.z), f.push(0, 0, 1), M.x = (w.x / r + 1) / 2, M.y = (w.y / r + 1) / 2, p.push(M.x, M.y);
         }
         m += b;
       }
-      for (let R = 0; R < o; R++) {
-        const V = R * (s + 1);
+      for (let P = 0; P < o; P++) {
+        const V = P * (s + 1);
         for (let O = 0; O < s; O++) {
           const z = O + V, H = z, q = z + s + 1, W = z + s + 2, K = z + 1;
           c.push(H, q, K), c.push(q, W, K);
@@ -7597,7 +7597,7 @@ let __tla = (async () => {
           const z = M[V];
           ShapeUtils.isClockWise(z) === true && (M[V] = z.reverse());
         }
-        const R = ShapeUtils.triangulateShape(w, M);
+        const P = ShapeUtils.triangulateShape(w, M);
         for (let V = 0, O = M.length; V < O; V++) {
           const z = M[V];
           w = w.concat(z);
@@ -7606,8 +7606,8 @@ let __tla = (async () => {
           const z = w[V];
           o.push(z.x, z.y, 0), a.push(0, 0, 1), h.push(z.x, z.y);
         }
-        for (let V = 0, O = R.length; V < O; V++) {
-          const z = R[V], H = z[0] + m, q = z[1] + m, W = z[2] + m;
+        for (let V = 0, O = P.length; V < O; V++) {
+          const z = P[V], H = z[0] + m, q = z[1] + m, W = z[2] + m;
           s.push(H, q, W), d += 3;
         }
       }
@@ -7649,14 +7649,14 @@ let __tla = (async () => {
       }, r = Math.max(3, Math.floor(r)), s = Math.max(2, Math.floor(s));
       const d = Math.min(h + c, Math.PI);
       let f = 0;
-      const p = [], m = new Vector3$1(), b = new Vector3$1(), w = [], M = [], R = [], V = [];
+      const p = [], m = new Vector3$1(), b = new Vector3$1(), w = [], M = [], P = [], V = [];
       for (let O = 0; O <= s; O++) {
         const z = [], H = O / s;
         let q = 0;
         O === 0 && h === 0 ? q = 0.5 / r : O === s && d === Math.PI && (q = -0.5 / r);
         for (let W = 0; W <= r; W++) {
           const K = W / r;
-          m.x = -e * Math.cos(o + K * a) * Math.sin(h + H * c), m.y = e * Math.cos(h + H * c), m.z = e * Math.sin(o + K * a) * Math.sin(h + H * c), M.push(m.x, m.y, m.z), b.copy(m).normalize(), R.push(b.x, b.y, b.z), V.push(K + q, 1 - H), z.push(f++);
+          m.x = -e * Math.cos(o + K * a) * Math.sin(h + H * c), m.y = e * Math.cos(h + H * c), m.z = e * Math.sin(o + K * a) * Math.sin(h + H * c), M.push(m.x, m.y, m.z), b.copy(m).normalize(), P.push(b.x, b.y, b.z), V.push(K + q, 1 - H), z.push(f++);
         }
         p.push(z);
       }
@@ -7664,7 +7664,7 @@ let __tla = (async () => {
         const H = p[O][z + 1], q = p[O][z], W = p[O + 1][z], K = p[O + 1][z + 1];
         (O !== 0 || h > 0) && w.push(H, q, K), (O !== s - 1 || d < Math.PI) && w.push(q, W, K);
       }
-      this.setIndex(w), this.setAttribute("position", new Float32BufferAttribute$1(M, 3)), this.setAttribute("normal", new Float32BufferAttribute$1(R, 3)), this.setAttribute("uv", new Float32BufferAttribute$1(V, 2));
+      this.setIndex(w), this.setAttribute("position", new Float32BufferAttribute$1(M, 3)), this.setAttribute("normal", new Float32BufferAttribute$1(P, 3)), this.setAttribute("uv", new Float32BufferAttribute$1(V, 2));
     }
     copy(e) {
       return super.copy(e), this.parameters = Object.assign({}, e.parameters), this;
@@ -7723,15 +7723,15 @@ let __tla = (async () => {
         thetaLength: c
       }, s = Math.floor(s), o = Math.floor(o);
       const d = [], f = [], p = [], m = [], b = new Vector3$1(), w = new Vector3$1(), M = new Vector3$1();
-      for (let R = 0; R <= s; R++) {
-        const V = h + R / s * c;
+      for (let P = 0; P <= s; P++) {
+        const V = h + P / s * c;
         for (let O = 0; O <= o; O++) {
           const z = O / o * a;
-          w.x = (e + r * Math.cos(V)) * Math.cos(z), w.y = (e + r * Math.cos(V)) * Math.sin(z), w.z = r * Math.sin(V), f.push(w.x, w.y, w.z), b.x = e * Math.cos(z), b.y = e * Math.sin(z), M.subVectors(w, b).normalize(), p.push(M.x, M.y, M.z), m.push(O / o), m.push(R / s);
+          w.x = (e + r * Math.cos(V)) * Math.cos(z), w.y = (e + r * Math.cos(V)) * Math.sin(z), w.z = r * Math.sin(V), f.push(w.x, w.y, w.z), b.x = e * Math.cos(z), b.y = e * Math.sin(z), M.subVectors(w, b).normalize(), p.push(M.x, M.y, M.z), m.push(O / o), m.push(P / s);
         }
       }
-      for (let R = 1; R <= s; R++) for (let V = 1; V <= o; V++) {
-        const O = (o + 1) * R + V - 1, z = (o + 1) * (R - 1) + V - 1, H = (o + 1) * (R - 1) + V, q = (o + 1) * R + V;
+      for (let P = 1; P <= s; P++) for (let V = 1; V <= o; V++) {
+        const O = (o + 1) * P + V - 1, z = (o + 1) * (P - 1) + V - 1, H = (o + 1) * (P - 1) + V, q = (o + 1) * P + V;
         d.push(O, z, q), d.push(z, H, q);
       }
       this.setIndex(d), this.setAttribute("position", new Float32BufferAttribute$1(f, 3)), this.setAttribute("normal", new Float32BufferAttribute$1(p, 3)), this.setAttribute("uv", new Float32BufferAttribute$1(m, 2));
@@ -7753,13 +7753,13 @@ let __tla = (async () => {
         p: a,
         q: h
       }, s = Math.floor(s), o = Math.floor(o);
-      const c = [], d = [], f = [], p = [], m = new Vector3$1(), b = new Vector3$1(), w = new Vector3$1(), M = new Vector3$1(), R = new Vector3$1(), V = new Vector3$1(), O = new Vector3$1();
+      const c = [], d = [], f = [], p = [], m = new Vector3$1(), b = new Vector3$1(), w = new Vector3$1(), M = new Vector3$1(), P = new Vector3$1(), V = new Vector3$1(), O = new Vector3$1();
       for (let H = 0; H <= s; ++H) {
         const q = H / s * a * Math.PI * 2;
-        z(q, a, h, e, w), z(q + 0.01, a, h, e, M), V.subVectors(M, w), O.addVectors(M, w), R.crossVectors(V, O), O.crossVectors(R, V), R.normalize(), O.normalize();
+        z(q, a, h, e, w), z(q + 0.01, a, h, e, M), V.subVectors(M, w), O.addVectors(M, w), P.crossVectors(V, O), O.crossVectors(P, V), P.normalize(), O.normalize();
         for (let W = 0; W <= o; ++W) {
           const K = W / o * Math.PI * 2, J = -r * Math.cos(K), ee = r * Math.sin(K);
-          m.x = w.x + (J * O.x + ee * R.x), m.y = w.y + (J * O.y + ee * R.y), m.z = w.z + (J * O.z + ee * R.z), d.push(m.x, m.y, m.z), b.subVectors(m, w).normalize(), f.push(b.x, b.y, b.z), p.push(H / s), p.push(W / o);
+          m.x = w.x + (J * O.x + ee * P.x), m.y = w.y + (J * O.y + ee * P.y), m.z = w.z + (J * O.z + ee * P.z), d.push(m.x, m.y, m.z), b.subVectors(m, w).normalize(), f.push(b.x, b.y, b.z), p.push(H / s), p.push(W / o);
         }
       }
       for (let H = 1; H <= s; H++) for (let q = 1; q <= o; q++) {
@@ -7793,8 +7793,8 @@ let __tla = (async () => {
       const c = new Vector3$1(), d = new Vector3$1(), f = new Vector2$1();
       let p = new Vector3$1();
       const m = [], b = [], w = [], M = [];
-      R(), this.setIndex(M), this.setAttribute("position", new Float32BufferAttribute$1(m, 3)), this.setAttribute("normal", new Float32BufferAttribute$1(b, 3)), this.setAttribute("uv", new Float32BufferAttribute$1(w, 2));
-      function R() {
+      P(), this.setIndex(M), this.setAttribute("position", new Float32BufferAttribute$1(m, 3)), this.setAttribute("normal", new Float32BufferAttribute$1(b, 3)), this.setAttribute("uv", new Float32BufferAttribute$1(w, 2));
+      function P() {
         for (let H = 0; H < r; H++) V(H);
         V(a === false ? r : 0), z(), O();
       }
@@ -7845,7 +7845,7 @@ let __tla = (async () => {
           ]);
           for (let f = 0, p = d.length; f < p; ++f) {
             const m = d[f], b = m.start, w = m.count;
-            for (let M = b, R = b + w; M < R; M += 3) for (let V = 0; V < 3; V++) {
+            for (let M = b, P = b + w; M < P; M += 3) for (let V = 0; V < 3; V++) {
               const O = c.getX(M + V), z = c.getX(M + (V + 1) % 3);
               o.fromBufferAttribute(h, O), a.fromBufferAttribute(h, z), isUniqueEdge(o, a, s) === true && (r.push(o.x, o.y, o.z), r.push(a.x, a.y, a.z));
             }
@@ -8174,7 +8174,7 @@ let __tla = (async () => {
         const M = f.times[w] * o;
         if (!(M < r || M >= s)) {
           m.push(f.times[w]);
-          for (let R = 0; R < p; ++R) b.push(f.values[w * p + R]);
+          for (let P = 0; P < p; ++P) b.push(f.values[w * p + P]);
         }
       }
       m.length !== 0 && (f.times = convertArray(m, f.times.constructor), f.values = convertArray(b, f.values.constructor), h.push(f));
@@ -8202,25 +8202,25 @@ let __tla = (async () => {
       const w = f.getValueSize();
       f.createInterpolant.isInterpolantFactoryMethodGLTFCubicSpline && (b = w / 3);
       const M = c.times.length - 1;
-      let R;
+      let P;
       if (a <= c.times[0]) {
         const O = p, z = m - p;
-        R = c.values.slice(O, z);
+        P = c.values.slice(O, z);
       } else if (a >= c.times[M]) {
         const O = M * m + p, z = O + m - p;
-        R = c.values.slice(O, z);
+        P = c.values.slice(O, z);
       } else {
         const O = c.createInterpolant(), z = p, H = m - p;
-        O.evaluate(a), R = O.resultBuffer.slice(z, H);
+        O.evaluate(a), P = O.resultBuffer.slice(z, H);
       }
-      d === "quaternion" && new Quaternion$1().fromArray(R).normalize().conjugate().toArray(R);
+      d === "quaternion" && new Quaternion$1().fromArray(P).normalize().conjugate().toArray(P);
       const V = f.times.length;
       for (let O = 0; O < V; ++O) {
         const z = O * w + b;
-        if (d === "quaternion") Quaternion$1.multiplyQuaternionsFlat(f.values, z, R, 0, f.values, z);
+        if (d === "quaternion") Quaternion$1.multiplyQuaternionsFlat(f.values, z, P, 0, f.values, z);
         else {
           const H = w - b * 2;
-          for (let q = 0; q < H; ++q) f.values[z + q] -= R[q];
+          for (let q = 0; q < H; ++q) f.values[z + q] -= P[q];
         }
       }
     }
@@ -8344,7 +8344,7 @@ let __tla = (async () => {
       this._weightPrev = f / (r - c), this._weightNext = f / (d - s), this._offsetPrev = a * p, this._offsetNext = h * p;
     }
     interpolate_(e, r, s, o) {
-      const a = this.resultBuffer, h = this.sampleValues, c = this.valueSize, d = e * c, f = d - c, p = this._offsetPrev, m = this._offsetNext, b = this._weightPrev, w = this._weightNext, M = (s - r) / (o - r), R = M * M, V = R * M, O = -b * V + 2 * b * R - b * M, z = (1 + b) * V + (-1.5 - 2 * b) * R + (-0.5 + b) * M + 1, H = (-1 - w) * V + (1.5 + w) * R + 0.5 * M, q = w * V - w * R;
+      const a = this.resultBuffer, h = this.sampleValues, c = this.valueSize, d = e * c, f = d - c, p = this._offsetPrev, m = this._offsetNext, b = this._weightPrev, w = this._weightNext, M = (s - r) / (o - r), P = M * M, V = P * M, O = -b * V + 2 * b * P - b * M, z = (1 + b) * V + (-1.5 - 2 * b) * P + (-0.5 + b) * M + 1, H = (-1 - w) * V + (1.5 + w) * P + 0.5 * M, q = w * V - w * P;
       for (let W = 0; W !== c; ++W) a[W] = O * h[p + W] + z * h[f + W] + H * h[d + W] + q * h[m + W];
       return a;
     }
@@ -8371,13 +8371,13 @@ let __tla = (async () => {
     interpolate_(e, r, s, o) {
       const a = this.resultBuffer, h = this.sampleValues, c = this.valueSize, d = e * c, f = d - c, p = this.settings || this.DefaultSettings_, m = p.inTangents, b = p.outTangents;
       if (!m || !b) {
-        const R = (s - r) / (o - r), V = 1 - R;
-        for (let O = 0; O !== c; ++O) a[O] = h[f + O] * V + h[d + O] * R;
+        const P = (s - r) / (o - r), V = 1 - P;
+        for (let O = 0; O !== c; ++O) a[O] = h[f + O] * V + h[d + O] * P;
         return a;
       }
       const w = c * 2, M = e - 1;
-      for (let R = 0; R !== c; ++R) {
-        const V = h[f + R], O = h[d + R], z = M * w + R * 2, H = b[z], q = b[z + 1], W = e * w + R * 2, K = m[W], J = m[W + 1];
+      for (let P = 0; P !== c; ++P) {
+        const V = h[f + P], O = h[d + P], z = M * w + P * 2, H = b[z], q = b[z + 1], W = e * w + P * 2, K = m[W], J = m[W + 1];
         let ee = (s - r) / (o - r), ie, pe, U, v, _;
         for (let $ = 0; $ < 8; $++) {
           ie = ee * ee, pe = ie * ee, U = 1 - ee, v = U * U, _ = v * U;
@@ -8387,7 +8387,7 @@ let __tla = (async () => {
           if (Math.abs(k) < 1e-10) break;
           ee = ee - F / k, ee = Math.max(0, Math.min(1, ee));
         }
-        a[R] = _ * V + 3 * v * ee * q + 3 * U * ie * J + pe * O;
+        a[P] = _ * V + 3 * v * ee * q + 3 * U * ie * J + pe * O;
       }
       return a;
     }
@@ -8529,8 +8529,8 @@ let __tla = (async () => {
         else {
           const m = c * s, b = m - s, w = m + s;
           for (let M = 0; M !== s; ++M) {
-            const R = r[m + M];
-            if (R !== r[b + M] || R !== r[w + M]) {
+            const P = r[m + M];
+            if (P !== r[b + M] || P !== r[w + M]) {
               d = true;
               break;
             }
@@ -8677,10 +8677,10 @@ let __tla = (async () => {
     }
     static parseAnimation(e, r) {
       if (warn$1("AnimationClip: parseAnimation() is deprecated and will be removed with r185"), !e) return error$1("AnimationClip: No animation in JSONLoader data."), null;
-      const s = function(m, b, w, M, R) {
+      const s = function(m, b, w, M, P) {
         if (w.length !== 0) {
           const V = [], O = [];
-          flattenJSON(w, V, O, M), V.length !== 0 && R.push(new m(b, V, O));
+          flattenJSON(w, V, O, M), V.length !== 0 && P.push(new m(b, V, O));
         }
       }, o = [], a = e.name || "default", h = e.fps || 30, c = e.blendMode;
       let d = e.length || -1;
@@ -8690,14 +8690,14 @@ let __tla = (async () => {
         if (!(!b || b.length === 0)) if (b[0].morphTargets) {
           const w = {};
           let M;
-          for (M = 0; M < b.length; M++) if (b[M].morphTargets) for (let R = 0; R < b[M].morphTargets.length; R++) w[b[M].morphTargets[R]] = -1;
-          for (const R in w) {
+          for (M = 0; M < b.length; M++) if (b[M].morphTargets) for (let P = 0; P < b[M].morphTargets.length; P++) w[b[M].morphTargets[P]] = -1;
+          for (const P in w) {
             const V = [], O = [];
             for (let z = 0; z !== b[M].morphTargets.length; ++z) {
               const H = b[M];
-              V.push(H.time), O.push(H.morphTarget === R ? 1 : 0);
+              V.push(H.time), O.push(H.morphTarget === P ? 1 : 0);
             }
-            o.push(new NumberKeyframeTrack(".morphTargetInfluence[" + R + "]", V, O));
+            o.push(new NumberKeyframeTrack(".morphTargetInfluence[" + P + "]", V, O));
           }
           d = w.length * h;
         } else {
@@ -8909,7 +8909,7 @@ let __tla = (async () => {
         if (f.status === 200 || f.status === 0) {
           if (f.status === 0 && warn$1("FileLoader: HTTP Status 0 received."), typeof ReadableStream > "u" || f.body === void 0 || f.body.getReader === void 0) return f;
           const p = loading[e], m = f.body.getReader(), b = f.headers.get("X-File-Size") || f.headers.get("Content-Length"), w = b ? parseInt(b) : 0, M = w !== 0;
-          let R = 0;
+          let P = 0;
           const V = new ReadableStream({
             start(O) {
               z();
@@ -8917,10 +8917,10 @@ let __tla = (async () => {
                 m.read().then(({ done: H, value: q }) => {
                   if (H) O.close();
                   else {
-                    R += q.byteLength;
+                    P += q.byteLength;
                     const W = new ProgressEvent("progress", {
                       lengthComputable: M,
-                      loaded: R,
+                      loaded: P,
                       total: w
                     });
                     for (let K = 0, J = p.length; K < J; K++) {
@@ -9036,7 +9036,7 @@ let __tla = (async () => {
             h[M] = {
               mipmaps: []
             };
-            for (let R = 0; R < b.mipmapCount; R++) h[M].mipmaps.push(b.mipmaps[M * b.mipmapCount + R]), h[M].format = b.format, h[M].width = b.width, h[M].height = b.height;
+            for (let P = 0; P < b.mipmapCount; P++) h[M].mipmaps.push(b.mipmaps[M * b.mipmapCount + P]), h[M].format = b.format, h[M].width = b.width, h[M].height = b.height;
           }
           c.image = h;
         } else c.image.width = b.width, c.image.height = b.height, c.mipmaps = b.mipmaps;
@@ -9647,19 +9647,19 @@ let __tla = (async () => {
       const d = e.data.attributes;
       for (const w in d) {
         const M = d[w];
-        let R;
+        let P;
         if (M.isInterleavedBufferAttribute) {
           const V = o(e.data, M.data);
-          R = new InterleavedBufferAttribute$1(V, M.itemSize, M.offset, M.normalized);
+          P = new InterleavedBufferAttribute$1(V, M.itemSize, M.offset, M.normalized);
         } else {
           const V = getTypedArray(M.type, M.array), O = M.isInstancedBufferAttribute ? InstancedBufferAttribute$1 : BufferAttribute$1;
-          R = new O(V, M.itemSize, M.normalized);
+          P = new O(V, M.itemSize, M.normalized);
         }
-        M.name !== void 0 && (R.name = M.name), M.usage !== void 0 && R.setUsage(M.usage), h.setAttribute(w, R);
+        M.name !== void 0 && (P.name = M.name), M.usage !== void 0 && P.setUsage(M.usage), h.setAttribute(w, P);
       }
       const f = e.data.morphAttributes;
       if (f) for (const w in f) {
-        const M = f[w], R = [];
+        const M = f[w], P = [];
         for (let V = 0, O = M.length; V < O; V++) {
           const z = M[V];
           let H;
@@ -9670,15 +9670,15 @@ let __tla = (async () => {
             const q = getTypedArray(z.type, z.array);
             H = new BufferAttribute$1(q, z.itemSize, z.normalized);
           }
-          z.name !== void 0 && (H.name = z.name), R.push(H);
+          z.name !== void 0 && (H.name = z.name), P.push(H);
         }
-        h.morphAttributes[w] = R;
+        h.morphAttributes[w] = P;
       }
       e.data.morphTargetsRelative && (h.morphTargetsRelative = true);
       const m = e.data.groups || e.data.drawcalls || e.data.offsets;
       if (m !== void 0) for (let w = 0, M = m.length; w !== M; ++w) {
-        const R = m[w];
-        h.addGroup(R.start, R.count, R.materialIndex);
+        const P = m[w];
+        h.addGroup(P.start, P.count, P.materialIndex);
       }
       const b = e.data.boundingSphere;
       return b !== void 0 && (h.boundingSphere = new Sphere$1().fromJSON(b)), e.name && (h.name = e.name), e.userData && (h.userData = e.userData), h;
@@ -9827,7 +9827,7 @@ let __tla = (async () => {
           const m = e[f], b = m.url;
           if (Array.isArray(b)) {
             const w = [];
-            for (let M = 0, R = b.length; M < R; M++) {
+            for (let M = 0, P = b.length; M < P; M++) {
               const V = b[M], O = c(V);
               O !== null && (O instanceof HTMLImageElement ? w.push(O) : w.push(new DataTexture(O.data, O.width, O.height)));
             }
@@ -9895,7 +9895,7 @@ let __tla = (async () => {
         if (b !== void 0) {
           if (Array.isArray(b)) {
             const w = [];
-            for (let M = 0, R = b.length; M < R; M++) {
+            for (let M = 0, P = b.length; M < P; M++) {
               const V = b[M];
               s[V] === void 0 && warn$1("ObjectLoader: Undefined material", V), w.push(s[V]);
             }
@@ -9948,8 +9948,8 @@ let __tla = (async () => {
           break;
         case "InstancedMesh":
           p = c(e.geometry), m = d(e.material);
-          const w = e.count, M = e.instanceMatrix, R = e.instanceColor;
-          h = new InstancedMesh(p, m, w), h.instanceMatrix = new InstancedBufferAttribute$1(new Float32Array(M.array), 16), R !== void 0 && (h.instanceColor = new InstancedBufferAttribute$1(new Float32Array(R.array), R.itemSize));
+          const w = e.count, M = e.instanceMatrix, P = e.instanceColor;
+          h = new InstancedMesh(p, m, w), h.instanceMatrix = new InstancedBufferAttribute$1(new Float32Array(M.array), 16), P !== void 0 && (h.instanceColor = new InstancedBufferAttribute$1(new Float32Array(P.array), P.itemSize));
           break;
         case "BatchedMesh":
           p = c(e.geometry), m = d(e.material), h = new BatchedMesh(e.maxInstanceCount, e.maxVertexCount, e.maxIndexCount, m), h.geometry = p, h.perObjectFrustumCulled = e.perObjectFrustumCulled, h.sortObjects = e.sortObjects, h._drawRanges = e.drawRanges, h._reservedRanges = e.reservedRanges, h._geometryInfo = e.geometryInfo.map((V) => {
@@ -10004,8 +10004,8 @@ let __tla = (async () => {
         e.autoUpdate !== void 0 && (h.autoUpdate = e.autoUpdate);
         const b = e.levels;
         for (let w = 0; w < b.length; w++) {
-          const M = b[w], R = h.getObjectByProperty("uuid", M.object);
-          R !== void 0 && h.addLevel(R, M.distance, M.hysteresis);
+          const M = b[w], P = h.getObjectByProperty("uuid", M.object);
+          P !== void 0 && h.addLevel(P, M.distance, M.hysteresis);
         }
       }
       return h;
@@ -10176,10 +10176,10 @@ let __tla = (async () => {
       this.coordinateSystem !== e.coordinateSystem && (this.coordinateSystem = e.coordinateSystem, this.updateCoordinateSystem());
       const [a, h, c, d, f, p] = this.children, m = e.getRenderTarget(), b = e.getActiveCubeFace(), w = e.getActiveMipmapLevel(), M = e.xr.enabled;
       e.xr.enabled = false;
-      const R = s.texture.generateMipmaps;
+      const P = s.texture.generateMipmaps;
       s.texture.generateMipmaps = false;
       let V = false;
-      e.isWebGLRenderer === true ? V = e.state.buffers.depth.getReversed() : V = e.reversedDepthBuffer, e.setRenderTarget(s, 0, o), V && e.autoClear === false && e.clearDepth(), e.render(r, a), e.setRenderTarget(s, 1, o), V && e.autoClear === false && e.clearDepth(), e.render(r, h), e.setRenderTarget(s, 2, o), V && e.autoClear === false && e.clearDepth(), e.render(r, c), e.setRenderTarget(s, 3, o), V && e.autoClear === false && e.clearDepth(), e.render(r, d), e.setRenderTarget(s, 4, o), V && e.autoClear === false && e.clearDepth(), e.render(r, f), s.texture.generateMipmaps = R, e.setRenderTarget(s, 5, o), V && e.autoClear === false && e.clearDepth(), e.render(r, p), e.setRenderTarget(m, b, w), e.xr.enabled = M, s.texture.needsPMREMUpdate = true;
+      e.isWebGLRenderer === true ? V = e.state.buffers.depth.getReversed() : V = e.reversedDepthBuffer, e.setRenderTarget(s, 0, o), V && e.autoClear === false && e.clearDepth(), e.render(r, a), e.setRenderTarget(s, 1, o), V && e.autoClear === false && e.clearDepth(), e.render(r, h), e.setRenderTarget(s, 2, o), V && e.autoClear === false && e.clearDepth(), e.render(r, c), e.setRenderTarget(s, 3, o), V && e.autoClear === false && e.clearDepth(), e.render(r, d), e.setRenderTarget(s, 4, o), V && e.autoClear === false && e.clearDepth(), e.render(r, f), s.texture.generateMipmaps = P, e.setRenderTarget(s, 5, o), V && e.autoClear === false && e.clearDepth(), e.render(r, p), e.setRenderTarget(m, b, w), e.xr.enabled = M, s.texture.needsPMREMUpdate = true;
     }
   };
   class ArrayCamera extends PerspectiveCamera$1 {
@@ -10838,15 +10838,15 @@ let __tla = (async () => {
         let M = r[w];
         if (M === void 0) {
           M = d++, r[w] = M, e.push(b);
-          for (let R = 0, V = h; R !== V; ++R) a[R].push(new PropertyBinding(b, s[R], o[R]));
+          for (let P = 0, V = h; P !== V; ++P) a[P].push(new PropertyBinding(b, s[P], o[P]));
         } else if (M < f) {
           c = e[M];
-          const R = --f, V = e[R];
-          r[V.uuid] = M, e[M] = V, r[w] = R, e[R] = b;
+          const P = --f, V = e[P];
+          r[V.uuid] = M, e[M] = V, r[w] = P, e[P] = b;
           for (let O = 0, z = h; O !== z; ++O) {
-            const H = a[O], q = H[R];
+            const H = a[O], q = H[P];
             let W = H[M];
-            H[M] = q, W === void 0 && (W = new PropertyBinding(b, s[O], o[O])), H[R] = W;
+            H[M] = q, W === void 0 && (W = new PropertyBinding(b, s[O], o[O])), H[P] = W;
           }
         } else e[M] !== c && error$1("AnimationObjectGroup: Different objects with the same UUID detected. Clean the caches or recreate your infrastructure when reloading scenes.");
       }
@@ -10861,8 +10861,8 @@ let __tla = (async () => {
           const m = a++, b = e[m];
           r[b.uuid] = p, e[p] = b, r[f] = m, e[m] = d;
           for (let w = 0, M = o; w !== M; ++w) {
-            const R = s[w], V = R[m], O = R[p];
-            R[p] = V, R[m] = O;
+            const P = s[w], V = P[m], O = P[p];
+            P[p] = V, P[m] = O;
           }
         }
       }
@@ -10874,8 +10874,8 @@ let __tla = (async () => {
       for (let c = 0, d = arguments.length; c !== d; ++c) {
         const f = arguments[c], p = f.uuid, m = r[p];
         if (m !== void 0) if (delete r[p], m < a) {
-          const b = --a, w = e[b], M = --h, R = e[M];
-          r[w.uuid] = m, e[m] = w, r[R.uuid] = b, e[b] = R, e.pop();
+          const b = --a, w = e[b], M = --h, P = e[M];
+          r[w.uuid] = m, e[m] = w, r[P.uuid] = b, e[b] = P, e.pop();
           for (let V = 0, O = o; V !== O; ++V) {
             const z = s[V], H = z[b], q = z[M];
             z[m] = H, z[b] = q, z.pop();
@@ -10883,7 +10883,7 @@ let __tla = (async () => {
         } else {
           const b = --h, w = e[b];
           b > 0 && (r[w.uuid] = m), e[m] = w, e.pop();
-          for (let M = 0, R = o; M !== R; ++M) {
+          for (let M = 0, P = o; M !== P; ++M) {
             const V = s[M];
             V[m] = V[b], V.pop();
           }
@@ -11133,8 +11133,8 @@ let __tla = (async () => {
             M._cacheIndex === null && (++M.referenceCount, this._addInactiveBinding(M, d, w));
             continue;
           }
-          const R = r && r._propertyBindings[m].binding.parsedPath;
-          M = new PropertyMixer(PropertyBinding.create(s, w, R), b.ValueTypeName, b.getValueSize()), ++M.referenceCount, this._addInactiveBinding(M, d, w), h[m] = M;
+          const P = r && r._propertyBindings[m].binding.parsedPath;
+          M = new PropertyMixer(PropertyBinding.create(s, w, P), b.ValueTypeName, b.getValueSize()), ++M.referenceCount, this._addInactiveBinding(M, d, w), h[m] = M;
         }
         c[m].resultBuffer = M.buffer;
       }
@@ -11669,8 +11669,8 @@ let __tla = (async () => {
         const M = _d1.dot(_r);
         if (b <= o) h = 0, a = clamp$7(-M / m, 0, 1);
         else {
-          const R = _d1.dot(_d2), V = m * b - R * R;
-          V !== 0 ? a = clamp$7((R * w - M * b) / V, 0, 1) : a = 0, h = (R * a + w) / b, h < 0 ? (h = 0, a = clamp$7(-M / m, 0, 1)) : h > 1 && (h = 1, a = clamp$7((R - M) / m, 0, 1));
+          const P = _d1.dot(_d2), V = m * b - P * P;
+          V !== 0 ? a = clamp$7((P * w - M * b) / V, 0, 1) : a = 0, h = (P * a + w) / b, h < 0 ? (h = 0, a = clamp$7(-M / m, 0, 1)) : h > 1 && (h = 1, a = clamp$7((P - M) / m, 0, 1));
         }
       }
       return r.copy(c).addScaledVector(_d1, a), s.copy(d).addScaledVector(_d2, h), r.distanceToSquared(s);
@@ -11838,8 +11838,8 @@ let __tla = (async () => {
       const a = r / 2, h = e / r, c = e / 2, d = [], f = [];
       for (let b = 0, w = 0, M = -c; b <= r; b++, M += h) {
         d.push(-c, 0, M, c, 0, M), d.push(M, 0, -c, M, 0, c);
-        const R = b === a ? s : o;
-        R.toArray(f, w), w += 3, R.toArray(f, w), w += 3, R.toArray(f, w), w += 3, R.toArray(f, w), w += 3;
+        const P = b === a ? s : o;
+        P.toArray(f, w), w += 3, P.toArray(f, w), w += 3, P.toArray(f, w), w += 3, P.toArray(f, w), w += 3;
       }
       const p = new BufferGeometry$1();
       p.setAttribute("position", new Float32BufferAttribute$1(d, 3)), p.setAttribute("color", new Float32BufferAttribute$1(f, 3));
@@ -11860,14 +11860,14 @@ let __tla = (async () => {
       if (r > 1) for (let m = 0; m < r; m++) {
         const b = m / r * (Math.PI * 2), w = Math.sin(b) * e, M = Math.cos(b) * e;
         c.push(0, 0, 0), c.push(w, 0, M);
-        const R = m & 1 ? a : h;
-        d.push(R.r, R.g, R.b), d.push(R.r, R.g, R.b);
+        const P = m & 1 ? a : h;
+        d.push(P.r, P.g, P.b), d.push(P.r, P.g, P.b);
       }
       for (let m = 0; m < s; m++) {
         const b = m & 1 ? a : h, w = e - e / s * m;
         for (let M = 0; M < o; M++) {
-          let R = M / o * (Math.PI * 2), V = Math.sin(R) * w, O = Math.cos(R) * w;
-          c.push(V, 0, O), d.push(b.r, b.g, b.b), R = (M + 1) / o * (Math.PI * 2), V = Math.sin(R) * w, O = Math.cos(R) * w, c.push(V, 0, O), d.push(b.r, b.g, b.b);
+          let P = M / o * (Math.PI * 2), V = Math.sin(P) * w, O = Math.cos(P) * w;
+          c.push(V, 0, O), d.push(b.r, b.g, b.b), P = (M + 1) / o * (Math.PI * 2), V = Math.sin(P) * w, O = Math.cos(P) * w, c.push(V, 0, O), d.push(b.r, b.g, b.b);
         }
       }
       const f = new BufferGeometry$1();
@@ -11933,8 +11933,8 @@ let __tla = (async () => {
         toneMapped: false
       }), o = [], a = [], h = {};
       c("n1", "n2"), c("n2", "n4"), c("n4", "n3"), c("n3", "n1"), c("f1", "f2"), c("f2", "f4"), c("f4", "f3"), c("f3", "f1"), c("n1", "f1"), c("n2", "f2"), c("n3", "f3"), c("n4", "f4"), c("p", "n1"), c("p", "n2"), c("p", "n3"), c("p", "n4"), c("u1", "u2"), c("u2", "u3"), c("u3", "u1"), c("c", "t"), c("p", "c"), c("cn1", "cn2"), c("cn3", "cn4"), c("cf1", "cf2"), c("cf3", "cf4");
-      function c(M, R) {
-        d(M), d(R);
+      function c(M, P) {
+        d(M), d(P);
       }
       function d(M) {
         o.push(0, 0, 0), a.push(0, 0, 0), h[M] === void 0 && (h[M] = []), h[M].push(o.length / 3 - 1);
@@ -12305,14 +12305,14 @@ let __tla = (async () => {
       let p = !o(a[0].getPoints());
       p = e ? !p : p;
       const m = [], b = [];
-      let w = [], M = 0, R;
+      let w = [], M = 0, P;
       b[M] = void 0, w[M] = [];
-      for (let O = 0, z = a.length; O < z; O++) c = a[O], R = c.getPoints(), h = o(R), h = e ? !h : h, h ? (!p && b[M] && M++, b[M] = {
+      for (let O = 0, z = a.length; O < z; O++) c = a[O], P = c.getPoints(), h = o(P), h = e ? !h : h, h ? (!p && b[M] && M++, b[M] = {
         s: new Shape(),
-        p: R
+        p: P
       }, b[M].s.curves = c.curves, p && M++, w[M] = []) : w[M].push({
         h: c,
-        p: R[0]
+        p: P[0]
       });
       if (!b[0]) return r(a);
       if (b.length > 1) {
@@ -12654,8 +12654,8 @@ let __tla = (async () => {
         if (q === void 0) return delete p[z], false;
         if (H.id !== q.id || H.version !== q.version) return H.id = q.id, H.version = q.version, false;
       }
-      const w = a.index, M = d.indexId, R = d.indexVersion, V = w ? w.id : null, O = w ? w.version : null;
-      if (M !== V || R !== O) return d.indexId = V, d.indexVersion = O, false;
+      const w = a.index, M = d.indexId, P = d.indexVersion, V = w ? w.id : null, O = w ? w.version : null;
+      if (M !== V || P !== O) return d.indexId = V, d.indexVersion = O, false;
       if (d.drawRange.start !== a.drawRange.start || d.drawRange.count !== a.drawRange.count) return d.drawRange.start = a.drawRange.start, d.drawRange.count = a.drawRange.count, false;
       if (h.morphTargetInfluences) {
         let z = false;
@@ -13239,8 +13239,8 @@ ${r}`;
         }
         let m = p.getNodeType(e), b = e.getTypeLength(m), w;
         if (d + b > o && (error$1(`TSL: Length of '${s}()' data exceeds maximum length of output type.`, this.stackTrace), b = o - d, m = e.getTypeFromLength(b)), d += b, w = p.build(e, m), e.getComponentType(m) !== h) {
-          const R = e.getTypeFromLength(b, h);
-          w = e.format(w, m, R);
+          const P = e.getTypeFromLength(b, h);
+          w = e.format(w, m, P);
         }
         c.push(w);
       }
@@ -13531,11 +13531,11 @@ ${r}`;
         f = nodeObject$2(m.call(b));
       } else {
         const p = new Proxy(e, {
-          get: (R, V, O) => {
+          get: (P, V, O) => {
             let z;
             return Symbol.iterator === V ? z = function* () {
               yield void 0;
-            } : z = Reflect.get(R, V, O), z;
+            } : z = Reflect.get(P, V, O), z;
           }
         }), m = s ? getProxyParameters$1(s) : null, b = Array.isArray(s) ? s.length > 0 : s !== null, w = r.jsFunc, M = b || w.length > 1 ? w(m, p) : w(p);
         f = nodeObject$2(M);
@@ -14191,7 +14191,7 @@ ${r}`;
   MathNode$1.REFRACT = "refract";
   MathNode$1.SMOOTHSTEP = "smoothstep";
   MathNode$1.FACEFORWARD = "faceforward";
-  const EPSILON$1 = float$2(1e-6), INFINITY = float$2(1e6), PI$2 = float$2(Math.PI), PI2$1 = float$2(Math.PI * 2), TWO_PI = float$2(Math.PI * 2), HALF_PI = float$2(Math.PI * 0.5), all$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ALL).setParameterLength(1), any$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ANY).setParameterLength(1), radians$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.RADIANS).setParameterLength(1), degrees$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.DEGREES).setParameterLength(1), exp$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.EXP).setParameterLength(1), exp2$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.EXP2).setParameterLength(1), log$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.LOG).setParameterLength(1), log2$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.LOG2).setParameterLength(1), sqrt$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.SQRT).setParameterLength(1), inverseSqrt$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.INVERSE_SQRT).setParameterLength(1), floor$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.FLOOR).setParameterLength(1), ceil$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.CEIL).setParameterLength(1), normalize$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.NORMALIZE).setParameterLength(1), fract$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.FRACT).setParameterLength(1), sin$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.SIN).setParameterLength(1), cos$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.COS).setParameterLength(1), tan$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TAN).setParameterLength(1), asin$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ASIN).setParameterLength(1), acos$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ACOS).setParameterLength(1), atan$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.ATAN).setParameterLength(1, 2), abs$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.ABS).setParameterLength(1), sign$4 = nodeProxyIntent$1(MathNode$1, MathNode$1.SIGN).setParameterLength(1), length$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.LENGTH).setParameterLength(1), negate$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.NEGATE).setParameterLength(1), oneMinus$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ONE_MINUS).setParameterLength(1), dFdx$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DFDX).setParameterLength(1), dFdy$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DFDY).setParameterLength(1), round$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.ROUND).setParameterLength(1), reciprocal$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.RECIPROCAL).setParameterLength(1), trunc$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRUNC).setParameterLength(1), fwidth$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.FWIDTH).setParameterLength(1), transpose$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRANSPOSE).setParameterLength(1), determinant$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DETERMINANT).setParameterLength(1), inverse$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.INVERSE).setParameterLength(1), min$1$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.MIN).setParameterLength(2, 1 / 0), max$1$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.MAX).setParameterLength(2, 1 / 0), step$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.STEP).setParameterLength(2), reflect$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.REFLECT).setParameterLength(2), distance$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DISTANCE).setParameterLength(2), difference$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DIFFERENCE).setParameterLength(2), dot$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.DOT).setParameterLength(2), cross$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.CROSS).setParameterLength(2), pow$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.POW).setParameterLength(2), pow2$1 = (l) => mul$2(l, l), pow3$1 = (l) => mul$2(l, l, l), pow4$1 = (l) => mul$2(l, l, l, l), transformDirection$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRANSFORM_DIRECTION).setParameterLength(2), cbrt$1 = (l) => mul$2(sign$4(l), pow$2(abs$3(l), 1 / 3)), lengthSq$1 = (l) => dot$2(l, l), mix$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.MIX).setParameterLength(3), clamp$6 = (l, e = 0, r = 1) => new MathNode$1(MathNode$1.CLAMP, nodeObject$2(l), nodeObject$2(e), nodeObject$2(r)), saturate$1 = (l) => clamp$6(l), refract$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.REFRACT).setParameterLength(3), smoothstep$4 = nodeProxyIntent$1(MathNode$1, MathNode$1.SMOOTHSTEP).setParameterLength(3), faceForward$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.FACEFORWARD).setParameterLength(3), rand$4 = Fn$2(([l]) => {
+  const EPSILON$1 = float$2(1e-6), INFINITY = float$2(1e6), PI$2 = float$2(Math.PI), PI2$1 = float$2(Math.PI * 2), TWO_PI = float$2(Math.PI * 2), HALF_PI = float$2(Math.PI * 0.5), all$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ALL).setParameterLength(1), any$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ANY).setParameterLength(1), radians$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.RADIANS).setParameterLength(1), degrees$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.DEGREES).setParameterLength(1), exp$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.EXP).setParameterLength(1), exp2$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.EXP2).setParameterLength(1), log$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.LOG).setParameterLength(1), log2$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.LOG2).setParameterLength(1), sqrt$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.SQRT).setParameterLength(1), inverseSqrt$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.INVERSE_SQRT).setParameterLength(1), floor$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.FLOOR).setParameterLength(1), ceil$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.CEIL).setParameterLength(1), normalize$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.NORMALIZE).setParameterLength(1), fract$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.FRACT).setParameterLength(1), sin$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.SIN).setParameterLength(1), cos$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.COS).setParameterLength(1), tan$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TAN).setParameterLength(1), asin$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ASIN).setParameterLength(1), acos$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ACOS).setParameterLength(1), atan$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.ATAN).setParameterLength(1, 2), abs$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.ABS).setParameterLength(1), sign$4 = nodeProxyIntent$1(MathNode$1, MathNode$1.SIGN).setParameterLength(1), length$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.LENGTH).setParameterLength(1), negate$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.NEGATE).setParameterLength(1), oneMinus$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ONE_MINUS).setParameterLength(1), dFdx$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DFDX).setParameterLength(1), dFdy$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DFDY).setParameterLength(1), round$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.ROUND).setParameterLength(1), reciprocal$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.RECIPROCAL).setParameterLength(1), trunc$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRUNC).setParameterLength(1), fwidth$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.FWIDTH).setParameterLength(1), transpose$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRANSPOSE).setParameterLength(1), determinant$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DETERMINANT).setParameterLength(1), inverse$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.INVERSE).setParameterLength(1), min$1$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.MIN).setParameterLength(2, 1 / 0), max$1$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.MAX).setParameterLength(2, 1 / 0), step$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.STEP).setParameterLength(2), reflect$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.REFLECT).setParameterLength(2), distance$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DISTANCE).setParameterLength(2), difference$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DIFFERENCE).setParameterLength(2), dot$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.DOT).setParameterLength(2), cross$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.CROSS).setParameterLength(2), pow$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.POW).setParameterLength(2), pow2$1 = (l) => mul$2(l, l), pow3$1 = (l) => mul$2(l, l, l), pow4$1 = (l) => mul$2(l, l, l, l), transformDirection$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRANSFORM_DIRECTION).setParameterLength(2), cbrt$1 = (l) => mul$2(sign$4(l), pow$2(abs$3(l), 1 / 3)), lengthSq$1 = (l) => dot$2(l, l), mix$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.MIX).setParameterLength(3), clamp$6 = (l, e = 0, r = 1) => new MathNode$1(MathNode$1.CLAMP, nodeObject$2(l), nodeObject$2(e), nodeObject$2(r)), saturate$1 = (l) => clamp$6(l), refract$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.REFRACT).setParameterLength(3), smoothstep$4 = nodeProxyIntent$1(MathNode$1, MathNode$1.SMOOTHSTEP).setParameterLength(3), faceForward$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.FACEFORWARD).setParameterLength(3), rand$5 = Fn$2(([l]) => {
     const s = 43758.5453, o = dot$2(l.xy, vec2$2(12.9898, 78.233)), a = mod$3(o, PI$2);
     return fract$2(sin$2(a).mul(s));
   }), mixElement$1 = (l, e, r) => mix$2(e, r, l), smoothstepElement$1 = (l, e, r) => smoothstep$4(e, r, l), stepElement$1 = (l, e) => step$2(e, l), faceforward = faceForward$1, inversesqrt = inverseSqrt$1;
@@ -14250,7 +14250,7 @@ ${r}`;
   addMethodChaining$1("transpose", transpose$1);
   addMethodChaining$1("determinant", determinant$1);
   addMethodChaining$1("inverse", inverse$1);
-  addMethodChaining$1("rand", rand$4);
+  addMethodChaining$1("rand", rand$5);
   let ConditionalNode$1 = class extends Node$1 {
     static get type() {
       return "ConditionalNode";
@@ -14285,7 +14285,7 @@ ${r}`;
       o.nodeProperty = p;
       const m = a.build(e, "bool");
       if (e.context.uniformFlow && c !== null) {
-        const M = h.build(e, s), R = c.build(e, s), V = e.getTernary(m, M, R);
+        const M = h.build(e, s), P = c.build(e, s), V = e.getTernary(m, M, P);
         return e.format(V, s, r);
       }
       e.addFlowCode(`
@@ -14429,8 +14429,8 @@ ${e.tab}if ( ${m} ) {
       let M = w;
       if (d) if (h) M = c ? `const ${w}` : `let ${w}`;
       else {
-        const R = r.getArrayCount(e);
-        M = `const ${e.getVar(b.type, w, R)}`;
+        const P = r.getArrayCount(e);
+        M = `const ${e.getVar(b.type, w, P)}`;
       }
       return e.addLineFlowCode(`${M} = ${m}`, this), w;
     }
@@ -15114,7 +15114,7 @@ ${e.tab}if ( ${m} ) {
         const h = e.getDataFromNode(this), c = this.getNodeType(e);
         let d = h.propertyName;
         if (d === void 0) {
-          const { uvNode: p, levelNode: m, biasNode: b, compareNode: w, compareStepNode: M, depthNode: R, gradNode: V, offsetNode: O } = o, z = this.generateUV(e, p), H = m ? m.build(e, "float") : null, q = b ? b.build(e, "float") : null, W = R ? R.build(e, "int") : null, K = w ? w.build(e, "float") : null, J = M ? M.build(e, "float") : null, ee = V ? [
+          const { uvNode: p, levelNode: m, biasNode: b, compareNode: w, compareStepNode: M, depthNode: P, gradNode: V, offsetNode: O } = o, z = this.generateUV(e, p), H = m ? m.build(e, "float") : null, q = b ? b.build(e, "float") : null, W = P ? P.build(e, "int") : null, K = w ? w.build(e, "float") : null, J = M ? M.build(e, "float") : null, ee = V ? [
             V[0].build(e, "vec2"),
             V[1].build(e, "vec2")
           ] : null, ie = O ? this.generateOffset(e, O) : null, pe = e.getVarFromNode(this);
@@ -16049,7 +16049,7 @@ ${e.tab}if ( ${m} ) {
     setup(e) {
       this.batchingIdNode === null && (e.getDrawIndex() === null ? this.batchingIdNode = instanceIndex$2 : this.batchingIdNode = drawIndex$1);
       const s = Fn$2(([M]) => {
-        const R = int$2(textureSize$1(textureLoad$1(this.batchMesh._indirectTexture), 0).x).toConst(), V = int$2(M).mod(R).toConst(), O = int$2(M).div(R).toConst();
+        const P = int$2(textureSize$1(textureLoad$1(this.batchMesh._indirectTexture), 0).x).toConst(), V = int$2(M).mod(P).toConst(), O = int$2(M).div(P).toConst();
         return textureLoad$1(this.batchMesh._indirectTexture, ivec2$1(V, O)).x;
       }).setLayout({
         name: "getIndirectIndex",
@@ -16062,7 +16062,7 @@ ${e.tab}if ( ${m} ) {
         ]
       })(int$2(this.batchingIdNode)), o = this.batchMesh._matricesTexture, a = int$2(textureSize$1(textureLoad$1(o), 0).x).toConst(), h = float$2(s).mul(4).toInt().toConst(), c = h.mod(a).toConst(), d = h.div(a).toConst(), f = mat4$1(textureLoad$1(o, ivec2$1(c, d)), textureLoad$1(o, ivec2$1(c.add(1), d)), textureLoad$1(o, ivec2$1(c.add(2), d)), textureLoad$1(o, ivec2$1(c.add(3), d))), p = this.batchMesh._colorsTexture;
       if (p !== null) {
-        const R = Fn$2(([V]) => {
+        const P = Fn$2(([V]) => {
           const O = int$2(textureSize$1(textureLoad$1(p), 0).x).toConst(), z = V, H = z.mod(O).toConst(), q = z.div(O).toConst();
           return textureLoad$1(p, ivec2$1(H, q)).rgb;
         }).setLayout({
@@ -16075,7 +16075,7 @@ ${e.tab}if ( ${m} ) {
             }
           ]
         })(s);
-        varyingProperty$1("vec3", "vBatchColor").assign(R);
+        varyingProperty$1("vec3", "vBatchColor").assign(P);
       }
       const m = mat3$2(f);
       positionLocal$3.assign(f.mul(positionLocal$3));
@@ -16171,8 +16171,8 @@ ${e.tab}if ( ${m} ) {
       const r = this.getProperties(e), s = this.params, o = r.stackNode;
       for (let h = 0, c = s.length - 1; h < c; h++) {
         const d = s[h];
-        let f = false, p = null, m = null, b = null, w = null, M = null, R = null;
-        d.isNode ? d.getNodeType(e) === "bool" ? (f = true, w = "bool", m = d.build(e, w)) : (w = "int", b = this.getVarName(h), p = "0", m = d.build(e, w), M = "<") : (w = d.type || "int", b = d.name || this.getVarName(h), p = d.start, m = d.end, M = d.condition, R = d.update, typeof p == "number" ? p = e.generateConst(w, p) : p && p.isNode && (p = p.build(e, w)), typeof m == "number" ? m = e.generateConst(w, m) : m && m.isNode && (m = m.build(e, w)), p !== void 0 && m === void 0 ? (p = p + " - 1", m = "0", M = ">=") : m !== void 0 && p === void 0 && (p = "0", M = "<"), M === void 0 && (Number(p) > Number(m) ? M = ">=" : M = "<"));
+        let f = false, p = null, m = null, b = null, w = null, M = null, P = null;
+        d.isNode ? d.getNodeType(e) === "bool" ? (f = true, w = "bool", m = d.build(e, w)) : (w = "int", b = this.getVarName(h), p = "0", m = d.build(e, w), M = "<") : (w = d.type || "int", b = d.name || this.getVarName(h), p = d.start, m = d.end, M = d.condition, P = d.update, typeof p == "number" ? p = e.generateConst(w, p) : p && p.isNode && (p = p.build(e, w)), typeof m == "number" ? m = e.generateConst(w, m) : m && m.isNode && (m = m.build(e, w)), p !== void 0 && m === void 0 ? (p = p + " - 1", m = "0", M = ">=") : m !== void 0 && p === void 0 && (p = "0", M = "<"), M === void 0 && (Number(p) > Number(m) ? M = ">=" : M = "<"));
         let V;
         if (f) V = `while ( ${m} )`;
         else {
@@ -16182,20 +16182,20 @@ ${e.tab}if ( ${m} ) {
           }, z = O.start, H = O.end;
           let q;
           const W = () => M.includes("<") ? "+=" : "-=";
-          if (R != null) switch (typeof R) {
+          if (P != null) switch (typeof P) {
             case "function":
               q = e.flowStagesNode(r.updateNode, "void").code.replace(/\t|;/g, "");
               break;
             case "number":
-              q = b + " " + W() + " " + e.generateConst(w, R);
+              q = b + " " + W() + " " + e.generateConst(w, P);
               break;
             case "string":
-              q = b + " " + R;
+              q = b + " " + P;
               break;
             default:
-              R.isNode ? q = b + " " + W() + " " + R.build(e) : (error$1("TSL: 'Loop( { update: ... } )' is not a function, string or number.", this.stackTrace), q = "break /* invalid update */");
+              P.isNode ? q = b + " " + W() + " " + P.build(e) : (error$1("TSL: 'Loop( { update: ... } )' is not a function, string or number.", this.stackTrace), q = "break /* invalid update */");
           }
-          else w === "int" || w === "uint" ? R = M.includes("<") ? "++" : "--" : R = W() + " 1.", q = b + " " + R;
+          else w === "int" || w === "uint" ? P = M.includes("<") ? "++" : "--" : P = W() + " 1.", q = b + " " + P;
           const K = e.getVar(w, b) + " = " + z, J = b + " " + M + " " + H;
           V = `for ( ${K}; ${J}; ${q} )`;
         }
@@ -16222,7 +16222,7 @@ ${e.tab}if ( ${m} ) {
     let h = _morphTextures$1.get(l);
     if (h === void 0 || h.count !== a) {
       let O = function() {
-        R.dispose(), _morphTextures$1.delete(l), l.removeEventListener("dispose", O);
+        P.dispose(), _morphTextures$1.delete(l), l.removeEventListener("dispose", O);
       };
       h !== void 0 && h.texture.dispose();
       const c = l.morphAttributes.position || [], d = l.morphAttributes.normal || [], f = l.morphAttributes.color || [];
@@ -16231,8 +16231,8 @@ ${e.tab}if ( ${m} ) {
       let m = l.attributes.position.count * p, b = 1;
       const w = 4096;
       m > w && (b = Math.ceil(m / w), m = w);
-      const M = new Float32Array(m * b * 4 * a), R = new DataArrayTexture$1(M, m, b, a);
-      R.type = FloatType$1, R.needsUpdate = true;
+      const M = new Float32Array(m * b * 4 * a), P = new DataArrayTexture$1(M, m, b, a);
+      P.type = FloatType$1, P.needsUpdate = true;
       const V = p * 4;
       for (let z = 0; z < a; z++) {
         const H = c[z], q = d[z], W = f[z], K = m * b * 4 * z;
@@ -16243,7 +16243,7 @@ ${e.tab}if ( ${m} ) {
       }
       h = {
         count: a,
-        texture: R,
+        texture: P,
         stride: p,
         size: new Vector2$1(m, b)
       }, _morphTextures$1.set(l, h), l.addEventListener("dispose", O);
@@ -16884,7 +16884,7 @@ ${e.tab}if ( ${m} ) {
             }));
           });
         });
-        const R = cameraProjectionMatrix$2.mul(m), V = cameraProjectionMatrix$2.mul(b), O = R.xyz.div(R.w), z = V.xyz.div(V.w), H = z.xy.sub(O.xy).toVar();
+        const P = cameraProjectionMatrix$2.mul(m), V = cameraProjectionMatrix$2.mul(b), O = P.xyz.div(P.w), z = V.xyz.div(V.w), H = z.xy.sub(O.xy).toVar();
         H.x.assign(H.x.mul(w)), H.assign(H.normalize());
         const q = vec4$2().toVar();
         if (h) {
@@ -16902,12 +16902,12 @@ ${e.tab}if ( ${m} ) {
             W.assign(W.sub(H));
           }).ElseIf(positionGeometry$2.y.greaterThan(1), () => {
             W.assign(W.add(H));
-          }), W.assign(W.mul(materialLineWidth)), W.assign(W.div(viewport$1.w.div(screenDPR))), q.assign(positionGeometry$2.y.lessThan(0.5).select(R, V)), W.assign(W.mul(q.w)), q.assign(q.add(vec4$2(W, 0, 0)));
+          }), W.assign(W.mul(materialLineWidth)), W.assign(W.div(viewport$1.w.div(screenDPR))), q.assign(positionGeometry$2.y.lessThan(0.5).select(P, V)), W.assign(W.mul(q.w)), q.assign(q.add(vec4$2(W, 0, 0)));
         }
         return q;
       })();
       const d = Fn$2(({ p1: f, p2: p, p3: m, p4: b }) => {
-        const w = f.sub(m), M = b.sub(m), R = p.sub(f), V = w.dot(M), O = M.dot(R), z = w.dot(R), H = M.dot(M), W = R.dot(R).mul(H).sub(O.mul(O)), J = V.mul(O).sub(z.mul(H)).div(W).clamp(), ee = V.add(O.mul(J)).div(H).clamp();
+        const w = f.sub(m), M = b.sub(m), P = p.sub(f), V = w.dot(M), O = M.dot(P), z = w.dot(P), H = M.dot(M), W = P.dot(P).mul(H).sub(O.mul(O)), J = V.mul(O).sub(z.mul(H)).div(W).clamp(), ee = V.add(O.mul(J)).div(H).clamp();
         return vec2$2(J, ee);
       });
       if (this.colorNode = Fn$2(() => {
@@ -16920,20 +16920,20 @@ ${e.tab}if ( ${m} ) {
         }
         const p = float$2(1).toVar("alpha");
         if (h) {
-          const b = varyingProperty$1("vec3", "worldStart"), w = varyingProperty$1("vec3", "worldEnd"), M = varyingProperty$1("vec4", "worldPos").xyz.normalize().mul(1e5), R = w.sub(b), V = d({
+          const b = varyingProperty$1("vec3", "worldStart"), w = varyingProperty$1("vec3", "worldEnd"), M = varyingProperty$1("vec4", "worldPos").xyz.normalize().mul(1e5), P = w.sub(b), V = d({
             p1: b,
             p2: w,
             p3: vec3$2(0, 0, 0),
             p4: M
-          }), O = b.add(R.mul(V.x)), z = M.mul(V.y), W = O.sub(z).length().div(materialLineWidth);
+          }), O = b.add(P.mul(V.x)), z = M.mul(V.y), W = O.sub(z).length().div(materialLineWidth);
           if (!a) if (s && r.currentSamples > 0) {
             const K = W.fwidth();
             p.assign(smoothstep$4(K.negate().add(0.5), K.add(0.5), W).oneMinus());
           } else W.greaterThan(0.5).discard();
         } else if (s && r.currentSamples > 0) {
-          const b = f.x, w = f.y.greaterThan(0).select(f.y.sub(1), f.y.add(1)), M = b.mul(b).add(w.mul(w)), R = float$2(M.fwidth()).toVar("dlen");
+          const b = f.x, w = f.y.greaterThan(0).select(f.y.sub(1), f.y.add(1)), M = b.mul(b).add(w.mul(w)), P = float$2(M.fwidth()).toVar("dlen");
           If$2(f.y.abs().greaterThan(1), () => {
-            p.assign(smoothstep$4(R.oneMinus(), R.add(1), M).oneMinus());
+            p.assign(smoothstep$4(P.oneMinus(), P.add(1), M).oneMinus());
           });
         } else If$2(f.y.abs().greaterThan(1), () => {
           const b = f.x, w = f.y.greaterThan(0).select(f.y.sub(1), f.y.add(1));
@@ -17364,10 +17364,10 @@ ${e.tab}if ( ${m} ) {
       f0: e,
       f90: r,
       dotVH: w
-    }), R, V;
+    }), P, V;
     if (defined(h) && (M = iridescence.mix(M, o)), defined(c)) {
       const O = anisotropyT.dot(l), z = anisotropyT.dot(positionViewDirection$1), H = anisotropyT.dot(f), q = anisotropyB.dot(l), W = anisotropyB.dot(positionViewDirection$1), K = anisotropyB.dot(f);
-      R = V_GGX_SmithCorrelated_Anisotropic({
+      P = V_GGX_SmithCorrelated_Anisotropic({
         alphaT,
         alphaB: d,
         dotTV: z,
@@ -17383,7 +17383,7 @@ ${e.tab}if ( ${m} ) {
         dotTH: H,
         dotBH: K
       });
-    } else R = V_GGX_SmithCorrelated({
+    } else P = V_GGX_SmithCorrelated({
       alpha: d,
       dotNL: p,
       dotNV: m
@@ -17391,7 +17391,7 @@ ${e.tab}if ( ${m} ) {
       alpha: d,
       dotNH: b
     });
-    return M.mul(R).mul(V);
+    return M.mul(P).mul(V);
   }), DATA = new Uint16Array([
     12469,
     15057,
@@ -17926,7 +17926,7 @@ ${e.tab}if ( ${m} ) {
     }), m = DFGLUT({
       roughness: s,
       dotNV: d
-    }), b = e.mul(p.x).add(r.mul(p.y)), w = e.mul(m.x).add(r.mul(m.y)), M = p.x.add(p.y), R = m.x.add(m.y), V = float$2(1).sub(M), O = float$2(1).sub(R), z = e.add(e.oneMinus().mul(0.047619)), H = b.mul(w).mul(z).div(float$2(1).sub(V.mul(O).mul(z).mul(z)).add(EPSILON$1)), q = V.mul(O), W = H.mul(q);
+    }), b = e.mul(p.x).add(r.mul(p.y)), w = e.mul(m.x).add(r.mul(m.y)), M = p.x.add(p.y), P = m.x.add(m.y), V = float$2(1).sub(M), O = float$2(1).sub(P), z = e.add(e.oneMinus().mul(0.047619)), H = b.mul(w).mul(z).div(float$2(1).sub(V.mul(O).mul(z).mul(z)).add(EPSILON$1)), q = V.mul(O), W = H.mul(q);
     return c.add(W);
   }), EnvironmentBRDF = Fn$2((l) => {
     const { dotNV: e, specularColor: r, specularF90: s, roughness: o } = l, a = DFGLUT({
@@ -18043,9 +18043,9 @@ ${e.tab}if ( ${m} ) {
   }), LTC_Evaluate = Fn$2(({ N: l, V: e, P: r, mInv: s, p0: o, p1: a, p2: h, p3: c }) => {
     const d = a.sub(o).toVar(), f = c.sub(o).toVar(), p = d.cross(f), m = vec3$2().toVar();
     return If$2(p.dot(r.sub(o)).greaterThanEqual(0), () => {
-      const b = e.sub(l.mul(e.dot(l))).normalize(), w = l.cross(b).negate(), M = s.mul(mat3$2(b, w, l).transpose()).toVar(), R = M.mul(o.sub(r)).normalize().toVar(), V = M.mul(a.sub(r)).normalize().toVar(), O = M.mul(h.sub(r)).normalize().toVar(), z = M.mul(c.sub(r)).normalize().toVar(), H = vec3$2(0).toVar();
+      const b = e.sub(l.mul(e.dot(l))).normalize(), w = l.cross(b).negate(), M = s.mul(mat3$2(b, w, l).transpose()).toVar(), P = M.mul(o.sub(r)).normalize().toVar(), V = M.mul(a.sub(r)).normalize().toVar(), O = M.mul(h.sub(r)).normalize().toVar(), z = M.mul(c.sub(r)).normalize().toVar(), H = vec3$2(0).toVar();
       H.addAssign(LTC_EdgeVectorFormFactor({
-        v1: R,
+        v1: P,
         v2: V
       })), H.addAssign(LTC_EdgeVectorFormFactor({
         v1: V,
@@ -18055,7 +18055,7 @@ ${e.tab}if ( ${m} ) {
         v2: z
       })), H.addAssign(LTC_EdgeVectorFormFactor({
         v1: z,
-        v2: R
+        v2: P
       })), m.assign(vec3$2(LTC_ClippedSphereFormFactor({
         f: H
       })));
@@ -18143,7 +18143,7 @@ ${e.tab}if ( ${m} ) {
       }
     ]
   }), bC = 1 / 6, w0 = (l) => mul$2(bC, mul$2(l, mul$2(l, l.negate().add(3)).sub(3)).add(1)), w1 = (l) => mul$2(bC, mul$2(l, mul$2(l, mul$2(3, l).sub(6))).add(4)), w2 = (l) => mul$2(bC, mul$2(l, mul$2(l, mul$2(-3, l).add(3)).add(3)).add(1)), w3 = (l) => mul$2(bC, pow$2(l, 3)), g0 = (l) => w0(l).add(w1(l)), g1 = (l) => w2(l).add(w3(l)), h0 = (l) => add$2(-1, w1(l).div(w0(l).add(w1(l)))), h1 = (l) => add$2(1, w3(l).div(w2(l).add(w3(l)))), bicubic = (l, e, r) => {
-    const s = l.uvNode, o = mul$2(s, e.zw).add(0.5), a = floor$3(o), h = fract$2(o), c = g0(h.x), d = g1(h.x), f = h0(h.x), p = h1(h.x), m = h0(h.y), b = h1(h.y), w = vec2$2(a.x.add(f), a.y.add(m)).sub(0.5).mul(e.xy), M = vec2$2(a.x.add(p), a.y.add(m)).sub(0.5).mul(e.xy), R = vec2$2(a.x.add(f), a.y.add(b)).sub(0.5).mul(e.xy), V = vec2$2(a.x.add(p), a.y.add(b)).sub(0.5).mul(e.xy), O = g0(h.y).mul(add$2(c.mul(l.sample(w).level(r)), d.mul(l.sample(M).level(r)))), z = g1(h.y).mul(add$2(c.mul(l.sample(R).level(r)), d.mul(l.sample(V).level(r))));
+    const s = l.uvNode, o = mul$2(s, e.zw).add(0.5), a = floor$3(o), h = fract$2(o), c = g0(h.x), d = g1(h.x), f = h0(h.x), p = h1(h.x), m = h0(h.y), b = h1(h.y), w = vec2$2(a.x.add(f), a.y.add(m)).sub(0.5).mul(e.xy), M = vec2$2(a.x.add(p), a.y.add(m)).sub(0.5).mul(e.xy), P = vec2$2(a.x.add(f), a.y.add(b)).sub(0.5).mul(e.xy), V = vec2$2(a.x.add(p), a.y.add(b)).sub(0.5).mul(e.xy), O = g0(h.y).mul(add$2(c.mul(l.sample(w).level(r)), d.mul(l.sample(M).level(r)))), z = g1(h.y).mul(add$2(c.mul(l.sample(P).level(r)), d.mul(l.sample(V).level(r))));
     return O.add(z);
   }, textureBicubicLevel = Fn$2(([l, e]) => {
     const r = vec2$2(l.size(int$2(e))), s = vec2$2(l.size(int$2(e.add(1)))), o = div$1(1, r), a = div$1(1, s), h = bicubic(l, vec4$2(o, r), floor$3(e)), c = bicubic(l, vec4$2(a, s), ceil$2(e));
@@ -18216,9 +18216,9 @@ ${e.tab}if ( ${m} ) {
       }
     ]
   }), getIBLVolumeRefraction = Fn$2(([l, e, r, s, o, a, h, c, d, f, p, m, b, w, M]) => {
-    let R, V;
+    let P, V;
     if (M) {
-      R = vec4$2().toVar(), V = vec3$2().toVar();
+      P = vec4$2().toVar(), V = vec3$2().toVar();
       const W = p.sub(1).mul(M.mul(0.025)), K = vec3$2(p.sub(W), p, p.add(W));
       Loop$2({
         start: 0,
@@ -18227,19 +18227,19 @@ ${e.tab}if ( ${m} ) {
         const ee = K.element(J), ie = getVolumeTransmissionRay(l, e, m, ee, c), pe = h.add(ie), U = f.mul(d.mul(vec4$2(pe, 1))), v = vec2$2(U.xy.div(U.w)).toVar();
         v.addAssign(1), v.divAssign(2), v.assign(vec2$2(v.x, v.y.oneMinus()));
         const _ = getTransmissionSample(v, r, ee);
-        R.element(J).assign(_.element(J)), R.a.addAssign(_.a), V.element(J).assign(s.element(J).mul(volumeAttenuation(length$2(ie), b, w).element(J)));
-      }), R.a.divAssign(3);
+        P.element(J).assign(_.element(J)), P.a.addAssign(_.a), V.element(J).assign(s.element(J).mul(volumeAttenuation(length$2(ie), b, w).element(J)));
+      }), P.a.divAssign(3);
     } else {
       const W = getVolumeTransmissionRay(l, e, m, p, c), K = h.add(W), J = f.mul(d.mul(vec4$2(K, 1))), ee = vec2$2(J.xy.div(J.w)).toVar();
-      ee.addAssign(1), ee.divAssign(2), ee.assign(vec2$2(ee.x, ee.y.oneMinus())), R = getTransmissionSample(ee, r, p), V = s.mul(volumeAttenuation(length$2(W), b, w));
+      ee.addAssign(1), ee.divAssign(2), ee.assign(vec2$2(ee.x, ee.y.oneMinus())), P = getTransmissionSample(ee, r, p), V = s.mul(volumeAttenuation(length$2(W), b, w));
     }
-    const O = V.rgb.mul(R.rgb), z = l.dot(e).clamp(), H = vec3$2(EnvironmentBRDF({
+    const O = V.rgb.mul(P.rgb), z = l.dot(e).clamp(), H = vec3$2(EnvironmentBRDF({
       dotNV: z,
       specularColor: o,
       specularF90: a,
       roughness: r
     })), q = V.r.add(V.g, V.b).div(3);
-    return vec4$2(H.oneMinus().mul(O), R.a.oneMinus().mul(q).oneMinus());
+    return vec4$2(H.oneMinus().mul(O), P.a.oneMinus().mul(q).oneMinus());
   }), XYZ_TO_REC709 = mat3$2(3.2404542, -0.969266, 0.0556434, -1.5371385, 1.8760108, -0.2040259, -0.4985314, 0.041556, 1.0572252), Fresnel0ToIor = (l) => {
     const e = l.sqrt();
     return vec3$2(1).add(e).div(vec3$2(1).sub(e));
@@ -18254,8 +18254,8 @@ ${e.tab}if ( ${m} ) {
       f0: f,
       f90: 1,
       dotVH: r
-    }), m = p.oneMinus(), b = a.lessThan(l).select(Math.PI, 0), w = float$2(Math.PI).sub(b), M = Fresnel0ToIor(o.clamp(0, 0.9999)), R = IorToFresnel0(M, a.toVec3()), V = F_Schlick({
-      f0: R,
+    }), m = p.oneMinus(), b = a.lessThan(l).select(Math.PI, 0), w = float$2(Math.PI).sub(b), M = Fresnel0ToIor(o.clamp(0, 0.9999)), P = IorToFresnel0(M, a.toVec3()), V = F_Schlick({
+      f0: P,
       f90: 1,
       dotVH: d
     }), O = vec3$2(M.x.lessThan(a).select(Math.PI, 0), M.y.lessThan(a).select(Math.PI, 0), M.z.lessThan(a).select(Math.PI, 0)), z = a.mul(s, d, 2), H = vec3$2(w).add(O), q = p.mul(V).clamp(1e-5, 0.9999), W = q.sqrt(), K = m.pow2().mul(V).div(vec3$2(1).sub(q)), ee = p.add(K).toVar(), ie = K.sub(m).toVar();
@@ -18380,11 +18380,11 @@ ${e.tab}if ( ${m} ) {
       })));
     }
     directRectArea({ lightColor: e, lightPosition: r, halfWidth: s, halfHeight: o, reflectedLight: a, ltc_1: h, ltc_2: c }) {
-      const d = r.add(s).sub(o), f = r.sub(s).sub(o), p = r.sub(s).add(o), m = r.add(s).add(o), b = normalView$1, w = positionViewDirection$1, M = positionView$1.toVar(), R = LTC_Uv({
+      const d = r.add(s).sub(o), f = r.sub(s).sub(o), p = r.sub(s).add(o), m = r.add(s).add(o), b = normalView$1, w = positionViewDirection$1, M = positionView$1.toVar(), P = LTC_Uv({
         N: b,
         V: w,
         roughness
-      }), V = h.sample(R).toVar(), O = c.sample(R).toVar(), z = mat3$2(vec3$2(V.x, 0, V.y), vec3$2(0, 1, 0), vec3$2(V.z, 0, V.w)).toVar(), H = specularColorBlended.mul(O.x).add(specularF90.sub(specularColorBlended).mul(O.y)).toVar();
+      }), V = h.sample(P).toVar(), O = c.sample(P).toVar(), z = mat3$2(vec3$2(V.x, 0, V.y), vec3$2(0, 1, 0), vec3$2(V.z, 0, V.w)).toVar(), H = specularColorBlended.mul(O.x).add(specularF90.sub(specularColorBlended).mul(O.y)).toVar();
       if (a.directSpecular.addAssign(e.mul(H).mul(LTC_Evaluate({
         N: b,
         V: w,
@@ -18455,16 +18455,16 @@ ${e.tab}if ( ${m} ) {
       }
       const a = vec3$2().toVar("singleScatteringDielectric"), h = vec3$2().toVar("multiScatteringDielectric"), c = vec3$2().toVar("singleScatteringMetallic"), d = vec3$2().toVar("multiScatteringMetallic");
       this.computeMultiscattering(a, h, specularF90, specularColor, this.iridescenceF0Dielectric), this.computeMultiscattering(c, d, specularF90, diffuseColor$1.rgb, this.iridescenceF0Metallic);
-      const f = mix$2(a, c, metalness), p = mix$2(h, d, metalness), m = a.add(h), b = diffuseContribution.mul(m.oneMinus()), w = s.mul(1 / Math.PI), M = r.mul(f).add(p.mul(w)).toVar(), R = b.mul(w).toVar();
+      const f = mix$2(a, c, metalness), p = mix$2(h, d, metalness), m = a.add(h), b = diffuseContribution.mul(m.oneMinus()), w = s.mul(1 / Math.PI), M = r.mul(f).add(p.mul(w)).toVar(), P = b.mul(w).toVar();
       if (this.sheen === true) {
         const V = IBLSheenBRDF({
           normal: normalView$1,
           viewDir: positionViewDirection$1,
           roughness: sheenRoughness
         }), O = sheen.r.max(sheen.g).max(sheen.b).mul(V).oneMinus();
-        M.mulAssign(O), R.mulAssign(O);
+        M.mulAssign(O), P.mulAssign(O);
       }
-      o.indirectSpecular.addAssign(M), o.indirectDiffuse.addAssign(R);
+      o.indirectSpecular.addAssign(M), o.indirectDiffuse.addAssign(P);
     }
     ambientOcclusion(e) {
       const { ambientOcclusion: r, reflectedLight: s } = e.context, a = normalView$1.dot(positionViewDirection$1).clamp().add(r), h = roughness.mul(-16).oneMinus().negate().exp2(), c = r.sub(a.pow(h).oneMinus()).clamp();
@@ -18628,9 +18628,9 @@ ${e.tab}if ( ${m} ) {
       If$2(M.greaterThanEqual(a), () => {
         Break();
       });
-      const R = float$2(h.mul(float$2(M))).toVar();
+      const P = float$2(h.mul(float$2(M))).toVar();
       w.addAssign(o.element(M).mul(getSample({
-        theta: R.mul(-1),
+        theta: P.mul(-1),
         axis: b,
         outputDirection: s,
         mipInt: c,
@@ -18639,7 +18639,7 @@ ${e.tab}if ( ${m} ) {
         CUBEUV_TEXEL_HEIGHT: p,
         CUBEUV_MAX_MIP: m
       }))), w.addAssign(o.element(M).mul(getSample({
-        theta: R,
+        theta: P,
         axis: b,
         outputDirection: s,
         mipInt: c,
@@ -18667,7 +18667,7 @@ ${e.tab}if ( ${m} ) {
         start: uint$1(0),
         end: o
       }, ({ i: M }) => {
-        const R = hammersley(M, o), V = importanceSampleGGX_VNDF(R, vec3$2(0, 0, 1), l), O = normalize$3(b.mul(V.x).add(w.mul(V.y)).add(d.mul(V.z))), z = normalize$3(O.mul(dot$2(d, O).mul(2)).sub(d)), H = max$1$1(dot$2(d, z), 0);
+        const P = hammersley(M, o), V = importanceSampleGGX_VNDF(P, vec3$2(0, 0, 1), l), O = normalize$3(b.mul(V.x).add(w.mul(V.y)).add(d.mul(V.z))), z = normalize$3(O.mul(dot$2(d, O).mul(2)).sub(d)), H = max$1$1(dot$2(d, z), 0);
         If$2(H.greaterThan(0), () => {
           const q = bilinearCubeUV(r, z, e, a, h, c);
           f.addAssign(q.mul(H)), p.addAssign(H);
@@ -18806,11 +18806,11 @@ ${e.tab}if ( ${m} ) {
       let w = false;
       const M = e.background;
       M ? M.isColor && (b.color.copy(M), e.background = null, w = true) : (b.color.copy(_clearColor$2), w = true), f.setRenderTarget(o), f.clear(), w && f.render(m, h);
-      for (let R = 0; R < 6; R++) {
-        const V = R % 3;
-        V === 0 ? (h.up.set(0, c[R], 0), h.position.set(a.x, a.y, a.z), h.lookAt(a.x + d[R], a.y, a.z)) : V === 1 ? (h.up.set(0, 0, c[R]), h.position.set(a.x, a.y, a.z), h.lookAt(a.x, a.y + d[R], a.z)) : (h.up.set(0, c[R], 0), h.position.set(a.x, a.y, a.z), h.lookAt(a.x, a.y, a.z + d[R]));
+      for (let P = 0; P < 6; P++) {
+        const V = P % 3;
+        V === 0 ? (h.up.set(0, c[P], 0), h.position.set(a.x, a.y, a.z), h.lookAt(a.x + d[P], a.y, a.z)) : V === 1 ? (h.up.set(0, 0, c[P]), h.position.set(a.x, a.y, a.z), h.lookAt(a.x, a.y + d[P], a.z)) : (h.up.set(0, c[P], 0), h.position.set(a.x, a.y, a.z), h.lookAt(a.x, a.y, a.z + d[P]));
         const O = this._cubeSize;
-        _setViewport(o, V * O, R > 2 ? O : 0, O, O), f.render(e, h);
+        _setViewport(o, V * O, P > 2 ? O : 0, O, O), f.render(e, h);
       }
       f.autoClear = p, e.background = M;
     }
@@ -18834,8 +18834,8 @@ ${e.tab}if ( ${m} ) {
     _applyGGXFilter(e, r, s) {
       const o = this._renderer, a = this._pingPongRenderTarget, h = this._ggxMaterial, c = this._lodMeshes[s];
       c.material = h;
-      const d = _uniformsMap.get(h), f = s / (this._lodMeshes.length - 1), p = r / (this._lodMeshes.length - 1), m = Math.sqrt(f * f - p * p), b = 0 + f * 1.25, w = m * b, { _lodMax: M } = this, R = this._sizeLods[s], V = 3 * R * (s > M - LOD_MIN ? s - M + LOD_MIN : 0), O = 4 * (this._cubeSize - R);
-      e.texture.frame = (e.texture.frame || 0) + 1, d.envMap.value = e.texture, d.roughness.value = w, d.mipInt.value = M - r, _setViewport(a, V, O, 3 * R, 2 * R), o.setRenderTarget(a), o.render(c, _flatCamera), a.texture.frame = (a.texture.frame || 0) + 1, d.envMap.value = a.texture, d.roughness.value = 0, d.mipInt.value = M - s, _setViewport(e, V, O, 3 * R, 2 * R), o.setRenderTarget(e), o.render(c, _flatCamera);
+      const d = _uniformsMap.get(h), f = s / (this._lodMeshes.length - 1), p = r / (this._lodMeshes.length - 1), m = Math.sqrt(f * f - p * p), b = 0 + f * 1.25, w = m * b, { _lodMax: M } = this, P = this._sizeLods[s], V = 3 * P * (s > M - LOD_MIN ? s - M + LOD_MIN : 0), O = 4 * (this._cubeSize - P);
+      e.texture.frame = (e.texture.frame || 0) + 1, d.envMap.value = e.texture, d.roughness.value = w, d.mipInt.value = M - r, _setViewport(a, V, O, 3 * P, 2 * P), o.setRenderTarget(a), o.render(c, _flatCamera), a.texture.frame = (a.texture.frame || 0) + 1, d.envMap.value = a.texture, d.roughness.value = 0, d.mipInt.value = M - s, _setViewport(e, V, O, 3 * P, 2 * P), o.setRenderTarget(e), o.render(c, _flatCamera);
     }
     _blur(e, r, s, o, a) {
       const h = this._pingPongRenderTarget;
@@ -18846,12 +18846,12 @@ ${e.tab}if ( ${m} ) {
       h !== "latitudinal" && h !== "longitudinal" && error$1("blur direction must be either latitudinal or longitudinal!");
       const p = 3, m = this._lodMeshes[o];
       m.material = f;
-      const b = _uniformsMap.get(f), w = this._sizeLods[s] - 1, M = isFinite(a) ? Math.PI / (2 * w) : 2 * Math.PI / (2 * MAX_SAMPLES - 1), R = a / M, V = isFinite(a) ? 1 + Math.floor(p * R) : MAX_SAMPLES;
+      const b = _uniformsMap.get(f), w = this._sizeLods[s] - 1, M = isFinite(a) ? Math.PI / (2 * w) : 2 * Math.PI / (2 * MAX_SAMPLES - 1), P = a / M, V = isFinite(a) ? 1 + Math.floor(p * P) : MAX_SAMPLES;
       V > MAX_SAMPLES && warn$1(`sigmaRadians, ${a}, is too large and will clip, as it requested ${V} samples when the maximum is set to ${MAX_SAMPLES}`);
       const O = [];
       let z = 0;
       for (let J = 0; J < MAX_SAMPLES; ++J) {
-        const ee = J / R, ie = Math.exp(-ee * ee / 2);
+        const ee = J / P, ie = Math.exp(-ee * ee / 2);
         O.push(ie), J === 0 ? z += ie : J < V && (z += 2 * ie);
       }
       for (let J = 0; J < O.length; J++) O[J] = O[J] / z;
@@ -18884,7 +18884,7 @@ ${e.tab}if ( ${m} ) {
         m,
         p,
         m
-      ], w = 6, M = 6, R = 3, V = 2, O = 1, z = new Float32Array(R * M * w), H = new Float32Array(V * M * w), q = new Float32Array(O * M * w);
+      ], w = 6, M = 6, P = 3, V = 2, O = 1, z = new Float32Array(P * M * w), H = new Float32Array(V * M * w), q = new Float32Array(O * M * w);
       for (let K = 0; K < w; K++) {
         const J = K % 3 * 2 / 3 - 1, ee = K > 2 ? 0 : -1, ie = [
           J,
@@ -18906,7 +18906,7 @@ ${e.tab}if ( ${m} ) {
           ee + 1,
           0
         ], pe = _faceLib[K];
-        z.set(ie, R * M * pe), H.set(b, V * M * pe);
+        z.set(ie, P * M * pe), H.set(b, V * M * pe);
         const U = [
           pe,
           pe,
@@ -18918,7 +18918,7 @@ ${e.tab}if ( ${m} ) {
         q.set(U, O * M * pe);
       }
       const W = new BufferGeometry$1();
-      W.setAttribute("position", new BufferAttribute$1(z, R)), W.setAttribute("uv", new BufferAttribute$1(H, V)), W.setAttribute("faceIndex", new BufferAttribute$1(q, O)), s.push(new Mesh$1(W, null)), o > LOD_MIN && o--;
+      W.setAttribute("position", new BufferAttribute$1(z, P)), W.setAttribute("uv", new BufferAttribute$1(H, V)), W.setAttribute("faceIndex", new BufferAttribute$1(q, O)), s.push(new Mesh$1(W, null)), o > LOD_MIN && o--;
     }
     return {
       lodMeshes: s,
@@ -18958,11 +18958,11 @@ ${e.tab}if ( ${m} ) {
       CUBEUV_TEXEL_WIDTH: m,
       CUBEUV_TEXEL_HEIGHT: b,
       CUBEUV_MAX_MIP: w
-    }, R = _getMaterial("blur");
-    return R.fragmentNode = blur({
+    }, P = _getMaterial("blur");
+    return P.fragmentNode = blur({
       ...M,
       latitudinal: c.equal(1)
-    }), _uniformsMap.set(R, M), R;
+    }), _uniformsMap.set(P, M), P;
   }
   function _getGGXShader(l, e, r) {
     const s = texture$2(), o = uniform$2(0), a = uniform$2(0), h = float$2(1 / e), c = float$2(1 / r), d = float$2(l), f = {
@@ -19624,8 +19624,8 @@ ${e.tab}if ( ${m} ) {
       const w = s.attributes.position;
       let M = 1 / 0;
       d ? M = c.count : w != null && (M = w.count), m = Math.max(m, 0), b = Math.min(b, M);
-      const R = b - m;
-      return R < 0 || R === 1 / 0 ? null : (h.vertexCount = R, h.firstVertex = m, h);
+      const P = b - m;
+      return P < 0 || P === 1 / 0 ? null : (h.vertexCount = P, h.firstVertex = m, h);
     }
     getGeometryCacheKey() {
       const { geometry: e } = this;
@@ -20164,8 +20164,8 @@ ${e.tab}if ( ${m} ) {
       };
       if (e.isXRRenderTarget !== true) {
         for (let M = 0; M < h.length; M++) {
-          const R = h[M];
-          b && (R.needsUpdate = true), this.updateTexture(R, w);
+          const P = h[M];
+          b && (P.needsUpdate = true), this.updateTexture(P, w);
         }
         p && this.updateTexture(p, w);
       }
@@ -20840,8 +20840,8 @@ ${e.tab}if ( ${m} ) {
   }), triplanarTextures = Fn$2(([l, e = null, r = null, s = float$2(1), o = positionLocal$3, a = normalLocal$1]) => {
     let h = a.abs().normalize();
     h = h.div(h.dot(vec3$2(1)));
-    const c = o.yz.mul(s), d = o.zx.mul(s), f = o.xy.mul(s), p = l.value, m = e !== null ? e.value : p, b = r !== null ? r.value : p, w = texture$2(p, c).mul(h.x), M = texture$2(m, d).mul(h.y), R = texture$2(b, f).mul(h.z);
-    return add$2(w, M, R);
+    const c = o.yz.mul(s), d = o.zx.mul(s), f = o.xy.mul(s), p = l.value, m = e !== null ? e.value : p, b = r !== null ? r.value : p, w = texture$2(p, c).mul(h.x), M = texture$2(m, d).mul(h.y), P = texture$2(b, f).mul(h.z);
+    return add$2(w, M, P);
   }), triplanarTexture = (...l) => triplanarTextures(...l), _reflectorPlane = new Plane(), _normal$1 = new Vector3$1(), _reflectorWorldPosition = new Vector3$1(), _cameraWorldPosition = new Vector3$1(), _rotationMatrix$1 = new Matrix4$1(), _lookAtPosition = new Vector3$1(0, 0, -1), clipPlane = new Vector4$1(), _view = new Vector3$1(), _target$1 = new Vector3$1(), _q = new Vector4$1(), _size$2 = new Vector2$1(), _defaultRT = new RenderTarget$1(), _defaultUV = screenUV$2.flipX();
   _defaultRT.depthTexture = new DepthTexture$1(1, 1);
   let _inReflector = false;
@@ -20929,10 +20929,10 @@ ${e.tab}if ( ${m} ) {
       _q.x = (Math.sign(clipPlane.x) + m.elements[8]) / m.elements[0], _q.y = (Math.sign(clipPlane.y) + m.elements[9]) / m.elements[5], _q.z = -1, _q.w = (1 + m.elements[10]) / m.elements[14], clipPlane.multiplyScalar(1 / clipPlane.dot(_q));
       const b = 0;
       m.elements[2] = clipPlane.x, m.elements[6] = clipPlane.y, m.elements[10] = o.coordinateSystem === WebGPUCoordinateSystem$1 ? clipPlane.z - b : clipPlane.z + 1 - b, m.elements[14] = clipPlane.w, this.textureNode.value = d.texture, this.depth === true && (this.textureNode.getDepthNode().value = d.depthTexture), a.visible = false;
-      const w = o.getRenderTarget(), M = o.getMRT(), R = o.autoClear;
+      const w = o.getRenderTarget(), M = o.getMRT(), P = o.autoClear;
       o.setMRT(null), o.setRenderTarget(d), o.autoClear = true;
       const V = r.name;
-      r.name = (r.name || "Scene") + " [ Reflector ]", p ? (o.clear(), this.hasOutput = false) : (o.render(r, c), this.hasOutput = true), r.name = V, o.setMRT(M), o.setRenderTarget(w), o.autoClear = R, a.visible = true, _inReflector = false, this.forceUpdate = false;
+      r.name = (r.name || "Scene") + " [ Reflector ]", p ? (o.clear(), this.hasOutput = false) : (o.render(r, c), this.hasOutput = true), r.name = V, o.setMRT(M), o.setRenderTarget(w), o.autoClear = P, a.visible = true, _inReflector = false, this.forceUpdate = false;
     }
     get resolution() {
       return warnOnce$1('ReflectorNode: The "resolution" property has been renamed to "resolutionScale".'), this.resolutionScale;
@@ -21035,7 +21035,7 @@ ${e.tab}if ( ${m} ) {
     const r = e.mul(vec4$2(l, 1)), s = r.xy.div(r.w).mul(0.5).add(0.5).toVar();
     return vec2$2(s.x, s.y.oneMinus());
   }), getNormalFromDepth = Fn$2(([l, e, r]) => {
-    const s = textureSize$1(textureLoad$1(e)), o = ivec2$1(l.mul(s)).toVar(), a = textureLoad$1(e, o).toVar(), h = textureLoad$1(e, o.sub(ivec2$1(2, 0))).toVar(), c = textureLoad$1(e, o.sub(ivec2$1(1, 0))).toVar(), d = textureLoad$1(e, o.add(ivec2$1(1, 0))).toVar(), f = textureLoad$1(e, o.add(ivec2$1(2, 0))).toVar(), p = textureLoad$1(e, o.add(ivec2$1(0, 2))).toVar(), m = textureLoad$1(e, o.add(ivec2$1(0, 1))).toVar(), b = textureLoad$1(e, o.sub(ivec2$1(0, 1))).toVar(), w = textureLoad$1(e, o.sub(ivec2$1(0, 2))).toVar(), M = abs$3(sub$1(float$2(2).mul(c).sub(h), a)).toVar(), R = abs$3(sub$1(float$2(2).mul(d).sub(f), a)).toVar(), V = abs$3(sub$1(float$2(2).mul(m).sub(p), a)).toVar(), O = abs$3(sub$1(float$2(2).mul(b).sub(w), a)).toVar(), z = getViewPosition(l, a, r).toVar(), H = M.lessThan(R).select(z.sub(getViewPosition(l.sub(vec2$2(float$2(1).div(s.x), 0)), c, r)), z.negate().add(getViewPosition(l.add(vec2$2(float$2(1).div(s.x), 0)), d, r))), q = V.lessThan(O).select(z.sub(getViewPosition(l.add(vec2$2(0, float$2(1).div(s.y))), m, r)), z.negate().add(getViewPosition(l.sub(vec2$2(0, float$2(1).div(s.y))), b, r)));
+    const s = textureSize$1(textureLoad$1(e)), o = ivec2$1(l.mul(s)).toVar(), a = textureLoad$1(e, o).toVar(), h = textureLoad$1(e, o.sub(ivec2$1(2, 0))).toVar(), c = textureLoad$1(e, o.sub(ivec2$1(1, 0))).toVar(), d = textureLoad$1(e, o.add(ivec2$1(1, 0))).toVar(), f = textureLoad$1(e, o.add(ivec2$1(2, 0))).toVar(), p = textureLoad$1(e, o.add(ivec2$1(0, 2))).toVar(), m = textureLoad$1(e, o.add(ivec2$1(0, 1))).toVar(), b = textureLoad$1(e, o.sub(ivec2$1(0, 1))).toVar(), w = textureLoad$1(e, o.sub(ivec2$1(0, 2))).toVar(), M = abs$3(sub$1(float$2(2).mul(c).sub(h), a)).toVar(), P = abs$3(sub$1(float$2(2).mul(d).sub(f), a)).toVar(), V = abs$3(sub$1(float$2(2).mul(m).sub(p), a)).toVar(), O = abs$3(sub$1(float$2(2).mul(b).sub(w), a)).toVar(), z = getViewPosition(l, a, r).toVar(), H = M.lessThan(P).select(z.sub(getViewPosition(l.sub(vec2$2(float$2(1).div(s.x), 0)), c, r)), z.negate().add(getViewPosition(l.add(vec2$2(float$2(1).div(s.x), 0)), d, r))), q = V.lessThan(O).select(z.sub(getViewPosition(l.add(vec2$2(0, float$2(1).div(s.y))), m, r)), z.negate().add(getViewPosition(l.sub(vec2$2(0, float$2(1).div(s.y))), b, r)));
     return normalize$3(cross$2(H, q));
   }), interleavedGradientNoise = Fn$2(([l]) => fract$2(float$2(52.9829189).mul(fract$2(dot$2(l, vec2$2(0.06711056, 583715e-8)))))).setLayout({
     name: "interleavedGradientNoise",
@@ -21449,8 +21449,8 @@ ${e.tab}if ( ${m} ) {
           ...this.contextNode.getFlowContextData()
         })
       }), r.contextNode = this._contextNodeCache.context);
-      const R = s.name;
-      s.name = this.name ? this.name : s.name, r.render(s, o), s.name = R, s.overrideMaterial = M, r.setRenderTarget(c), r.setMRT(d), r.autoClear = f, r.transparent = p, r.opaque = m, r.contextNode = w, o.layers.mask = b;
+      const P = s.name;
+      s.name = this.name ? this.name : s.name, r.render(s, o), s.name = P, s.overrideMaterial = M, r.setRenderTarget(c), r.setMRT(d), r.autoClear = f, r.transparent = p, r.opaque = m, r.contextNode = w, o.layers.mask = b;
     }
     setSize(e, r) {
       this._width = e, this._height = r;
@@ -21717,15 +21717,15 @@ ${e.tab}if ( ${m} ) {
         const o = this.getConstNode(this.minNode), a = this.getConstNode(this.maxNode), h = o.value, c = a.value, d = e.getTypeLength(getValueType$1(h)), f = e.getTypeLength(getValueType$1(c));
         min$3 = min$3 || new Vector4$1(), max$3 = max$3 || new Vector4$1(), min$3.setScalar(0), max$3.setScalar(0), d === 1 ? min$3.setScalar(h) : h.isColor ? min$3.set(h.r, h.g, h.b, 1) : min$3.set(h.x, h.y, h.z || 0, h.w || 0), f === 1 ? max$3.setScalar(c) : c.isColor ? max$3.set(c.r, c.g, c.b, 1) : max$3.set(c.x, c.y, c.z || 0, c.w || 0);
         const p = 4, m = p * r.count, b = new Float32Array(m);
-        for (let R = 0; R < m; R++) {
-          const V = R % p, O = min$3.getComponent(V), z = max$3.getComponent(V);
-          b[R] = MathUtils$1.lerp(O, z, Math.random());
+        for (let P = 0; P < m; P++) {
+          const V = P % p, O = min$3.getComponent(V), z = max$3.getComponent(V);
+          b[P] = MathUtils$1.lerp(O, z, Math.random());
         }
         const w = this.getNodeType(e);
         if (r.count * 4 * 4 <= e.getUniformBufferLimit()) s = buffer$3(b, "vec4", r.count).element(instanceIndex$2).convert(w);
         else {
-          const R = new InstancedBufferAttribute$1(b, 4);
-          e.geometry.setAttribute("__range" + this.id, R), s = instancedBufferAttribute$2(R).convert(w);
+          const P = new InstancedBufferAttribute$1(b, 4);
+          e.geometry.setAttribute("__range" + this.id, P), s = instancedBufferAttribute$2(P).convert(w);
         }
       } else s = float$2(0);
       return s;
@@ -22021,9 +22021,9 @@ ${e.tab}if ( ${m} ) {
         o.outgoingLight = s;
         const f = e.addStack();
         h.nodes = f.nodes, a.start(e);
-        const { backdrop: p, backdropAlpha: m } = o, { directDiffuse: b, directSpecular: w, indirectDiffuse: M, indirectSpecular: R } = o.reflectedLight;
+        const { backdrop: p, backdropAlpha: m } = o, { directDiffuse: b, directSpecular: w, indirectDiffuse: M, indirectSpecular: P } = o.reflectedLight;
         let V = b.add(M);
-        p !== null && (m !== null ? V = vec3$2(m.mix(V, p)) : V = vec3$2(p)), c.assign(V), d.assign(w.add(R)), s.assign(c.add(d)), a.finish(e), s = s.bypass(e.removeStack());
+        p !== null && (m !== null ? V = vec3$2(m.mix(V, p)) : V = vec3$2(p)), c.assign(V), d.assign(w.add(P)), s.assign(c.add(d)), a.finish(e), s = s.bypass(e.removeStack());
       } else h.nodes = [];
       return e.lightsNode = r, s;
     }
@@ -22245,10 +22245,10 @@ ${e.tab}if ( ${m} ) {
       }
       const p = reference$2("intensity", "float", a).setGroup(renderGroup$1), m = reference$2("normalBias", "float", a).setGroup(renderGroup$1), b = lightShadowMatrix(o).mul(shadowPositionWorld.add(normalWorld$2.mul(m))), w = this.setupShadowCoord(e, b), M = a.filterNode || this.getShadowFilterFn(r.shadowMap.type) || null;
       if (M === null) throw new Error("THREE.WebGPURenderer: Shadow map type not supported yet.");
-      const R = d === VSMShadowMap && a.isPointLightShadow !== true ? this.vsmShadowMapHorizontal.texture : h, V = this.setupShadowFilter(e, {
+      const P = d === VSMShadowMap && a.isPointLightShadow !== true ? this.vsmShadowMapHorizontal.texture : h, V = this.setupShadowFilter(e, {
         filterFn: M,
         shadowTexture: c.texture,
-        depthTexture: R,
+        depthTexture: P,
         shadowCoord: w,
         shadow: a,
         depthLayer: this.depthLayer
@@ -22327,8 +22327,8 @@ ${e.tab}if ( ${m} ) {
     new Vector3$1(0, -1, 0),
     new Vector3$1(0, -1, 0)
   ], BasicPointShadowFilter = Fn$2(({ depthTexture: l, bd3D: e, dp: r }) => cubeTexture$1(l, e).compare(r)), PointShadowFilter = Fn$2(({ depthTexture: l, bd3D: e, dp: r, shadow: s }) => {
-    const o = reference$2("radius", "float", s).setGroup(renderGroup$1), a = reference$2("mapSize", "vec2", s).setGroup(renderGroup$1), h = o.div(a.x), c = abs$3(e), d = normalize$3(cross$2(e, c.x.greaterThan(c.z).select(vec3$2(0, 1, 0), vec3$2(1, 0, 0)))), f = cross$2(e, d), p = interleavedGradientNoise(screenCoordinate$2.xy).mul(6.28318530718), m = vogelDiskSample(0, 5, p), b = vogelDiskSample(1, 5, p), w = vogelDiskSample(2, 5, p), M = vogelDiskSample(3, 5, p), R = vogelDiskSample(4, 5, p);
-    return cubeTexture$1(l, e.add(d.mul(m.x).add(f.mul(m.y)).mul(h))).compare(r).add(cubeTexture$1(l, e.add(d.mul(b.x).add(f.mul(b.y)).mul(h))).compare(r)).add(cubeTexture$1(l, e.add(d.mul(w.x).add(f.mul(w.y)).mul(h))).compare(r)).add(cubeTexture$1(l, e.add(d.mul(M.x).add(f.mul(M.y)).mul(h))).compare(r)).add(cubeTexture$1(l, e.add(d.mul(R.x).add(f.mul(R.y)).mul(h))).compare(r)).mul(1 / 5);
+    const o = reference$2("radius", "float", s).setGroup(renderGroup$1), a = reference$2("mapSize", "vec2", s).setGroup(renderGroup$1), h = o.div(a.x), c = abs$3(e), d = normalize$3(cross$2(e, c.x.greaterThan(c.z).select(vec3$2(0, 1, 0), vec3$2(1, 0, 0)))), f = cross$2(e, d), p = interleavedGradientNoise(screenCoordinate$2.xy).mul(6.28318530718), m = vogelDiskSample(0, 5, p), b = vogelDiskSample(1, 5, p), w = vogelDiskSample(2, 5, p), M = vogelDiskSample(3, 5, p), P = vogelDiskSample(4, 5, p);
+    return cubeTexture$1(l, e.add(d.mul(m.x).add(f.mul(m.y)).mul(h))).compare(r).add(cubeTexture$1(l, e.add(d.mul(b.x).add(f.mul(b.y)).mul(h))).compare(r)).add(cubeTexture$1(l, e.add(d.mul(w.x).add(f.mul(w.y)).mul(h))).compare(r)).add(cubeTexture$1(l, e.add(d.mul(M.x).add(f.mul(M.y)).mul(h))).compare(r)).add(cubeTexture$1(l, e.add(d.mul(P.x).add(f.mul(P.y)).mul(h))).compare(r)).mul(1 / 5);
   }), pointShadowFilter = Fn$2(({ filterFn: l, depthTexture: e, shadowCoord: r, shadow: s }, o) => {
     const a = r.xyz.toConst(), h = a.abs().toConst(), c = h.x.max(h.y).max(h.z), d = uniform$2("float").setGroup(renderGroup$1).onRenderUpdate(() => s.camera.near), f = uniform$2("float").setGroup(renderGroup$1).onRenderUpdate(() => s.camera.far), p = reference$2("bias", "float", s).setGroup(renderGroup$1), m = float$2(1).toVar();
     return If$2(c.sub(f).lessThanEqual(0).and(c.sub(d).greaterThanEqual(0)), () => {
@@ -22378,12 +22378,12 @@ ${e.tab}if ( ${m} ) {
       s.setSize(r.mapSize.width, r.mapSize.width);
       const b = a.autoClear, w = a.getClearColor(_clearColor$1), M = a.getClearAlpha();
       a.autoClear = false, a.setClearColor(r.clearColor, r.clearAlpha);
-      for (let R = 0; R < 6; R++) {
-        a.setRenderTarget(s, R), a.clear();
+      for (let P = 0; P < 6; P++) {
+        a.setRenderTarget(s, P), a.clear();
         const V = o.distance || c.far;
-        V !== c.far && (c.far = V, c.updateProjectionMatrix()), _lightPositionWorld.setFromMatrixPosition(o.matrixWorld), c.position.copy(_lightPositionWorld), _lookTarget.copy(c.position), _lookTarget.add(p[R]), c.up.copy(m[R]), c.lookAt(_lookTarget), c.updateMatrixWorld(), d.makeTranslation(-_lightPositionWorld.x, -_lightPositionWorld.y, -_lightPositionWorld.z), _projScreenMatrix$1.multiplyMatrices(c.projectionMatrix, c.matrixWorldInverse), r._frustum.setFromProjectionMatrix(_projScreenMatrix$1, c.coordinateSystem, c.reversedDepth);
+        V !== c.far && (c.far = V, c.updateProjectionMatrix()), _lightPositionWorld.setFromMatrixPosition(o.matrixWorld), c.position.copy(_lightPositionWorld), _lookTarget.copy(c.position), _lookTarget.add(p[P]), c.up.copy(m[P]), c.lookAt(_lookTarget), c.updateMatrixWorld(), d.makeTranslation(-_lightPositionWorld.x, -_lightPositionWorld.y, -_lightPositionWorld.z), _projScreenMatrix$1.multiplyMatrices(c.projectionMatrix, c.matrixWorldInverse), r._frustum.setFromProjectionMatrix(_projScreenMatrix$1, c.coordinateSystem, c.reversedDepth);
         const O = h.name;
-        h.name = `Point Light Shadow [ ${o.name || "ID: " + o.id} ] - Face ${R + 1}`, a.render(h, c), h.name = O;
+        h.name = `Point Light Shadow [ ${o.name || "ID: " + o.id} ] - Face ${P + 1}`, a.render(h, c), h.name = O;
       }
       a.autoClear = b, a.setClearColor(w, M);
     }
@@ -22605,8 +22605,8 @@ ${e.tab}if ( ${m} ) {
     mx_bilerp_0,
     mx_bilerp_1
   ]), mx_trilerp_0 = Fn$2(([l, e, r, s, o, a, h, c, d, f, p]) => {
-    const m = float$2(p).toVar(), b = float$2(f).toVar(), w = float$2(d).toVar(), M = float$2(c).toVar(), R = float$2(h).toVar(), V = float$2(a).toVar(), O = float$2(o).toVar(), z = float$2(s).toVar(), H = float$2(r).toVar(), q = float$2(e).toVar(), W = float$2(l).toVar(), K = float$2(sub$1(1, w)).toVar(), J = float$2(sub$1(1, b)).toVar();
-    return float$2(sub$1(1, m)).toVar().mul(J.mul(W.mul(K).add(q.mul(w))).add(b.mul(H.mul(K).add(z.mul(w))))).add(m.mul(J.mul(O.mul(K).add(V.mul(w))).add(b.mul(R.mul(K).add(M.mul(w))))));
+    const m = float$2(p).toVar(), b = float$2(f).toVar(), w = float$2(d).toVar(), M = float$2(c).toVar(), P = float$2(h).toVar(), V = float$2(a).toVar(), O = float$2(o).toVar(), z = float$2(s).toVar(), H = float$2(r).toVar(), q = float$2(e).toVar(), W = float$2(l).toVar(), K = float$2(sub$1(1, w)).toVar(), J = float$2(sub$1(1, b)).toVar();
+    return float$2(sub$1(1, m)).toVar().mul(J.mul(W.mul(K).add(q.mul(w))).add(b.mul(H.mul(K).add(z.mul(w))))).add(m.mul(J.mul(O.mul(K).add(V.mul(w))).add(b.mul(P.mul(K).add(M.mul(w))))));
   }).setLayout({
     name: "mx_trilerp_0",
     type: "float",
@@ -22657,8 +22657,8 @@ ${e.tab}if ( ${m} ) {
       }
     ]
   }), mx_trilerp_1 = Fn$2(([l, e, r, s, o, a, h, c, d, f, p]) => {
-    const m = float$2(p).toVar(), b = float$2(f).toVar(), w = float$2(d).toVar(), M = vec3$2(c).toVar(), R = vec3$2(h).toVar(), V = vec3$2(a).toVar(), O = vec3$2(o).toVar(), z = vec3$2(s).toVar(), H = vec3$2(r).toVar(), q = vec3$2(e).toVar(), W = vec3$2(l).toVar(), K = float$2(sub$1(1, w)).toVar(), J = float$2(sub$1(1, b)).toVar();
-    return float$2(sub$1(1, m)).toVar().mul(J.mul(W.mul(K).add(q.mul(w))).add(b.mul(H.mul(K).add(z.mul(w))))).add(m.mul(J.mul(O.mul(K).add(V.mul(w))).add(b.mul(R.mul(K).add(M.mul(w))))));
+    const m = float$2(p).toVar(), b = float$2(f).toVar(), w = float$2(d).toVar(), M = vec3$2(c).toVar(), P = vec3$2(h).toVar(), V = vec3$2(a).toVar(), O = vec3$2(o).toVar(), z = vec3$2(s).toVar(), H = vec3$2(r).toVar(), q = vec3$2(e).toVar(), W = vec3$2(l).toVar(), K = float$2(sub$1(1, w)).toVar(), J = float$2(sub$1(1, b)).toVar();
+    return float$2(sub$1(1, m)).toVar().mul(J.mul(W.mul(K).add(q.mul(w))).add(b.mul(H.mul(K).add(z.mul(w))))).add(m.mul(J.mul(O.mul(K).add(V.mul(w))).add(b.mul(P.mul(K).add(M.mul(w))))));
   }).setLayout({
     name: "mx_trilerp_1",
     type: "vec3",
@@ -23327,9 +23327,9 @@ ${e.tab}if ( ${m} ) {
       }
     ]
   }), mx_worley_distance_0 = Fn$2(([l, e, r, s, o, a, h]) => {
-    const c = int$2(h).toVar(), d = float$2(a).toVar(), f = int$2(o).toVar(), p = int$2(s).toVar(), m = int$2(r).toVar(), b = int$2(e).toVar(), w = vec2$2(l).toVar(), M = vec3$2(mx_cell_noise_vec3(vec2$2(b.add(p), m.add(f)))).toVar(), R = vec2$2(M.x, M.y).toVar();
-    R.subAssign(0.5), R.mulAssign(d), R.addAssign(0.5);
-    const V = vec2$2(vec2$2(float$2(b), float$2(m)).add(R)).toVar(), O = vec2$2(V.sub(w)).toVar();
+    const c = int$2(h).toVar(), d = float$2(a).toVar(), f = int$2(o).toVar(), p = int$2(s).toVar(), m = int$2(r).toVar(), b = int$2(e).toVar(), w = vec2$2(l).toVar(), M = vec3$2(mx_cell_noise_vec3(vec2$2(b.add(p), m.add(f)))).toVar(), P = vec2$2(M.x, M.y).toVar();
+    P.subAssign(0.5), P.mulAssign(d), P.addAssign(0.5);
+    const V = vec2$2(vec2$2(float$2(b), float$2(m)).add(P)).toVar(), O = vec2$2(V.sub(w)).toVar();
     return If$2(c.equal(int$2(2)), () => abs$3(O.x).add(abs$3(O.y))), If$2(c.equal(int$2(3)), () => max$1$1(abs$3(O.x), abs$3(O.y))), dot$2(O, O);
   }).setLayout({
     name: "mx_worley_distance_0",
@@ -23365,9 +23365,9 @@ ${e.tab}if ( ${m} ) {
       }
     ]
   }), mx_worley_distance_1 = Fn$2(([l, e, r, s, o, a, h, c, d]) => {
-    const f = int$2(d).toVar(), p = float$2(c).toVar(), m = int$2(h).toVar(), b = int$2(a).toVar(), w = int$2(o).toVar(), M = int$2(s).toVar(), R = int$2(r).toVar(), V = int$2(e).toVar(), O = vec3$2(l).toVar(), z = vec3$2(mx_cell_noise_vec3(vec3$2(V.add(w), R.add(b), M.add(m)))).toVar();
+    const f = int$2(d).toVar(), p = float$2(c).toVar(), m = int$2(h).toVar(), b = int$2(a).toVar(), w = int$2(o).toVar(), M = int$2(s).toVar(), P = int$2(r).toVar(), V = int$2(e).toVar(), O = vec3$2(l).toVar(), z = vec3$2(mx_cell_noise_vec3(vec3$2(V.add(w), P.add(b), M.add(m)))).toVar();
     z.subAssign(0.5), z.mulAssign(p), z.addAssign(0.5);
-    const H = vec3$2(vec3$2(float$2(V), float$2(R), float$2(M)).add(z)).toVar(), q = vec3$2(H.sub(O)).toVar();
+    const H = vec3$2(vec3$2(float$2(V), float$2(P), float$2(M)).add(z)).toVar(), q = vec3$2(H.sub(O)).toVar();
     return If$2(f.equal(int$2(2)), () => abs$3(q.x).add(abs$3(q.y)).add(abs$3(q.z))), If$2(f.equal(int$2(3)), () => max$1$1(abs$3(q.x), abs$3(q.y), abs$3(q.z))), dot$2(q, q);
   }).setLayout({
     name: "mx_worley_distance_1",
@@ -23686,13 +23686,13 @@ ${e.tab}if ( ${m} ) {
     mx_worley_noise_vec3_0,
     mx_worley_noise_vec3_1
   ]), mx_unifiednoise2d$1 = Fn$2(([l, e, r, s, o, a, h, c, d, f, p]) => {
-    const m = int$2(l).toVar(), b = vec2$2(e).toVar(), w = vec2$2(r).toVar(), M = vec2$2(s).toVar(), R = float$2(o).toVar(), V = float$2(a).toVar(), O = float$2(h).toVar(), z = bool$1(c).toVar(), H = int$2(d).toVar(), q = float$2(f).toVar(), W = float$2(p).toVar(), K = b.mul(w).add(M), J = float$2(0).toVar();
+    const m = int$2(l).toVar(), b = vec2$2(e).toVar(), w = vec2$2(r).toVar(), M = vec2$2(s).toVar(), P = float$2(o).toVar(), V = float$2(a).toVar(), O = float$2(h).toVar(), z = bool$1(c).toVar(), H = int$2(d).toVar(), q = float$2(f).toVar(), W = float$2(p).toVar(), K = b.mul(w).add(M), J = float$2(0).toVar();
     return If$2(m.equal(int$2(0)), () => {
       J.assign(mx_perlin_noise_vec3(K));
     }), If$2(m.equal(int$2(1)), () => {
       J.assign(mx_cell_noise_vec3(K));
     }), If$2(m.equal(int$2(2)), () => {
-      J.assign(mx_worley_noise_vec3$1(K, R, int$2(0)));
+      J.assign(mx_worley_noise_vec3$1(K, P, int$2(0)));
     }), If$2(m.equal(int$2(3)), () => {
       J.assign(mx_fractal_noise_vec3$1(vec3$2(K, 0), H, q, W));
     }), J.assign(J.mul(O.sub(V)).add(V)), If$2(z, () => {
@@ -23748,13 +23748,13 @@ ${e.tab}if ( ${m} ) {
       }
     ]
   }), mx_unifiednoise3d$1 = Fn$2(([l, e, r, s, o, a, h, c, d, f, p]) => {
-    const m = int$2(l).toVar(), b = vec3$2(e).toVar(), w = vec3$2(r).toVar(), M = vec3$2(s).toVar(), R = float$2(o).toVar(), V = float$2(a).toVar(), O = float$2(h).toVar(), z = bool$1(c).toVar(), H = int$2(d).toVar(), q = float$2(f).toVar(), W = float$2(p).toVar(), K = b.mul(w).add(M), J = float$2(0).toVar();
+    const m = int$2(l).toVar(), b = vec3$2(e).toVar(), w = vec3$2(r).toVar(), M = vec3$2(s).toVar(), P = float$2(o).toVar(), V = float$2(a).toVar(), O = float$2(h).toVar(), z = bool$1(c).toVar(), H = int$2(d).toVar(), q = float$2(f).toVar(), W = float$2(p).toVar(), K = b.mul(w).add(M), J = float$2(0).toVar();
     return If$2(m.equal(int$2(0)), () => {
       J.assign(mx_perlin_noise_vec3(K));
     }), If$2(m.equal(int$2(1)), () => {
       J.assign(mx_cell_noise_vec3(K));
     }), If$2(m.equal(int$2(2)), () => {
-      J.assign(mx_worley_noise_vec3$1(K, R, int$2(0)));
+      J.assign(mx_worley_noise_vec3$1(K, P, int$2(0)));
     }), If$2(m.equal(int$2(3)), () => {
       J.assign(mx_fractal_noise_vec3$1(K, H, q, W));
     }), J.assign(J.mul(O.sub(V)).add(V)), If$2(z, () => {
@@ -24395,7 +24395,7 @@ ${e.tab}if ( ${m} ) {
     quadSwapX,
     quadSwapY,
     radians: radians$1,
-    rand: rand$4,
+    rand: rand$5,
     range: range$1,
     rangeFogFactor: rangeFogFactor$1,
     reciprocal: reciprocal$1,
@@ -24600,7 +24600,7 @@ ${e.tab}if ( ${m} ) {
           const b = vec4$2(f).mul(backgroundIntensity).context({
             getUV: () => backgroundRotation.mul(normalWorldGeometry),
             getTextureLevel: () => backgroundBlurriness
-          }), w = cameraProjectionMatrix$2.element(3).element(3).equal(1), M = div$1(1, cameraProjectionMatrix$2.element(1).element(1)).mul(3), R = w.select(positionLocal$3.mul(M), positionLocal$3), V = modelViewMatrix$2.mul(vec4$2(R, 0));
+          }), w = cameraProjectionMatrix$2.element(3).element(3).equal(1), M = div$1(1, cameraProjectionMatrix$2.element(1).element(1)).mul(3), P = w.select(positionLocal$3.mul(M), positionLocal$3), V = modelViewMatrix$2.mul(vec4$2(P, 0));
           let O = cameraProjectionMatrix$2.mul(vec4$2(V.xyz, 1));
           O = O.setZ(O.w);
           const z = new NodeMaterial$1();
@@ -25785,13 +25785,13 @@ ${e.tab}if ( ${m} ) {
       for (; d < a.length; ) {
         const M = a[d][0] === "const";
         M === true && d++;
-        let R = a[d][0];
-        R === "in" || R === "out" || R === "inout" ? d++ : R = "";
+        let P = a[d][0];
+        P === "in" || P === "out" || P === "inout" ? d++ : P = "";
         const V = a[d++][0];
         let O = Number.parseInt(a[d][0]);
         Number.isNaN(O) === false ? d++ : O = null;
         const z = a[d++][0];
-        c.push(new NodeFunctionInput(V, z, O, R, M));
+        c.push(new NodeFunctionInput(V, z, O, P, M));
       }
       const f = r.substring(s[0].length), p = s[3] !== void 0 ? s[3] : "", m = s[2], b = s[1] !== void 0 ? s[1] : "", w = e !== -1 ? l.slice(0, e) : "";
       return {
@@ -26286,9 +26286,9 @@ ${e.tab}if ( ${m} ) {
           color: 16777215,
           side: BackSide$1
         }), M.plane.material.blending = CustomBlending, M.plane.material.blendEquation = AddEquation$1, M.plane.material.blendSrc = ZeroFactor, M.plane.material.blendDst = ZeroFactor, M.xrlayer = this._createXRLayer(M);
-        const R = this._session.renderState.layers;
-        R.unshift(M.xrlayer), this._session.updateRenderState({
-          layers: R
+        const P = this._session.renderState.layers;
+        P.unshift(M.xrlayer), this._session.updateRenderState({
+          layers: P
         });
       } else m.isXRRenderTarget = false;
       return w;
@@ -26400,10 +26400,10 @@ ${e.tab}if ( ${m} ) {
   }
   function setProjectionFromUnion(l, e, r) {
     _cameraLPos.setFromMatrixPosition(e.matrixWorld), _cameraRPos.setFromMatrixPosition(r.matrixWorld);
-    const s = _cameraLPos.distanceTo(_cameraRPos), o = e.projectionMatrix.elements, a = r.projectionMatrix.elements, h = o[14] / (o[10] - 1), c = o[14] / (o[10] + 1), d = (o[9] + 1) / o[5], f = (o[9] - 1) / o[5], p = (o[8] - 1) / o[0], m = (a[8] + 1) / a[0], b = h * p, w = h * m, M = s / (-p + m), R = M * -p;
-    if (e.matrixWorld.decompose(l.position, l.quaternion, l.scale), l.translateX(R), l.translateZ(M), l.matrixWorld.compose(l.position, l.quaternion, l.scale), l.matrixWorldInverse.copy(l.matrixWorld).invert(), o[10] === -1) l.projectionMatrix.copy(e.projectionMatrix), l.projectionMatrixInverse.copy(e.projectionMatrixInverse);
+    const s = _cameraLPos.distanceTo(_cameraRPos), o = e.projectionMatrix.elements, a = r.projectionMatrix.elements, h = o[14] / (o[10] - 1), c = o[14] / (o[10] + 1), d = (o[9] + 1) / o[5], f = (o[9] - 1) / o[5], p = (o[8] - 1) / o[0], m = (a[8] + 1) / a[0], b = h * p, w = h * m, M = s / (-p + m), P = M * -p;
+    if (e.matrixWorld.decompose(l.position, l.quaternion, l.scale), l.translateX(P), l.translateZ(M), l.matrixWorld.compose(l.position, l.quaternion, l.scale), l.matrixWorldInverse.copy(l.matrixWorld).invert(), o[10] === -1) l.projectionMatrix.copy(e.projectionMatrix), l.projectionMatrixInverse.copy(e.projectionMatrixInverse);
     else {
-      const V = h + M, O = c + M, z = b - R, H = w + (s - R), q = d * c / O * V, W = f * c / O * V;
+      const V = h + M, O = c + M, z = b - P, H = w + (s - P), q = d * c / O * V, W = f * c / O * V;
       l.projectionMatrix.makePerspective(z, H, q, W, V, O), l.projectionMatrixInverse.copy(l.projectionMatrix).invert();
     }
   }
@@ -26588,9 +26588,9 @@ ${e.tab}if ( ${m} ) {
       }, this.xr = new XRManager(this, b), this.debug = {
         checkShaderErrors: true,
         onShaderError: null,
-        getShaderAsync: async (M, R, V) => {
-          await this.compileAsync(M, R);
-          const O = this._renderLists.get(M, R), z = this._renderContexts.get(this._renderTarget, this._mrt), H = M.overrideMaterial || V.material, q = this._objects.get(V, H, M, R, O.lightsNode, z, z.clippingContext), { fragmentShader: W, vertexShader: K } = q.getNodeBuilderState();
+        getShaderAsync: async (M, P, V) => {
+          await this.compileAsync(M, P);
+          const O = this._renderLists.get(M, P), z = this._renderContexts.get(this._renderTarget, this._mrt), H = M.overrideMaterial || V.material, q = this._objects.get(V, H, M, P, O.lightsNode, z, z.clippingContext), { fragmentShader: W, vertexShader: K } = q.getNodeBuilderState();
           return {
             fragmentShader: W,
             vertexShader: K
@@ -26631,16 +26631,16 @@ ${e.tab}if ( ${m} ) {
       s === null && (s = e);
       const m = this._renderTarget, b = this._renderContexts.get(m, this._mrt), w = this._activeMipmapLevel, M = [];
       this._currentRenderContext = b, this._currentRenderObjectFunction = this.renderObject, this._handleObjectFunction = this._createObjectPipeline, this._compilationPromises = M, o.renderId++, o.update(), b.depth = this.depth, b.stencil = this.stencil, b.clippingContext || (b.clippingContext = new ClippingContext()), b.clippingContext.updateGlobal(p, r), p.onBeforeRender(this, e, r, m);
-      const R = this._renderLists.get(e, r);
-      if (R.begin(), this._projectObject(e, r, 0, R, b.clippingContext), s !== e && s.traverseVisible(function(q) {
-        q.isLight && q.layers.test(r.layers) && R.pushLight(q);
-      }), R.finish(), m !== null) {
+      const P = this._renderLists.get(e, r);
+      if (P.begin(), this._projectObject(e, r, 0, P, b.clippingContext), s !== e && s.traverseVisible(function(q) {
+        q.isLight && q.layers.test(r.layers) && P.pushLight(q);
+      }), P.finish(), m !== null) {
         this._textures.updateRenderTarget(m, w);
         const q = this._textures.get(m);
         b.textures = q.textures, b.depthTexture = q.depthTexture;
       } else b.textures = null, b.depthTexture = null;
-      s !== e ? this._background.update(s, R, b) : this._background.update(p, R, b);
-      const V = R.opaque, O = R.transparent, z = R.transparentDoublePass, H = R.lightsNode;
+      s !== e ? this._background.update(s, P, b) : this._background.update(p, P, b);
+      const V = P.opaque, O = P.transparent, z = P.transparentDoublePass, H = P.lightsNode;
       this.opaque === true && V.length > 0 && this._renderObjects(V, r, p, H), this.transparent === true && O.length > 0 && this._renderTransparents(O, z, r, p, H), o.renderId = a, this._currentRenderContext = h, this._currentRenderObjectFunction = c, this._handleObjectFunction = d, this._compilationPromises = f, await Promise.all(M);
     }
     async renderAsync(e, r) {
@@ -26693,8 +26693,8 @@ Reason: ${e.reason}`), error$1(r), this._isDeviceLost = true;
       } else {
         const { renderObjects: b } = f;
         for (let w = 0, M = b.length; w < M; w++) {
-          const R = b[w];
-          this._nodes.needsRefresh(R) && (this._nodes.updateBefore(R), this._nodes.updateForRender(R), this._bindings.updateForRender(R), this._nodes.updateAfter(R));
+          const P = b[w];
+          this._nodes.needsRefresh(P) && (this._nodes.updateBefore(P), this._nodes.updateForRender(P), this._bindings.updateForRender(P), this._nodes.updateAfter(P));
         }
       }
       this.backend.addBundle(c, d);
@@ -26734,8 +26734,8 @@ Reason: ${e.reason}`), error$1(r), this._isDeviceLost = true;
       const p = e.isScene === true ? e : _scene, m = this._renderTarget || this._outputRenderTarget, b = this._activeCubeFace, w = this._activeMipmapLevel;
       let M;
       o !== null ? (M = o, this.setRenderTarget(M)) : M = m;
-      const R = this._renderContexts.get(M, this._mrt, this._callDepth);
-      this._currentRenderContext = R, this._currentRenderObjectFunction = this._renderObjectFunction || this.renderObject, this._handleObjectFunction = this._renderObjectDirect, this.info.calls++, this.info.render.calls++, this.info.render.frameCalls++, a.renderId = this.info.calls, this.backend.updateTimeStampUID(R), this.inspector.beginRender(this.backend.getTimestampUID(R), e, r, M);
+      const P = this._renderContexts.get(M, this._mrt, this._callDepth);
+      this._currentRenderContext = P, this._currentRenderObjectFunction = this._renderObjectFunction || this.renderObject, this._handleObjectFunction = this._renderObjectDirect, this.info.calls++, this.info.render.calls++, this.info.render.frameCalls++, a.renderId = this.info.calls, this.backend.updateTimeStampUID(P), this.inspector.beginRender(this.backend.getTimestampUID(P), e, r, M);
       const V = this.xr;
       if (V.isPresenting === false) {
         let $ = false;
@@ -26743,9 +26743,9 @@ Reason: ${e.reason}`), error$1(r), this._isDeviceLost = true;
           if (r._reversedDepth = true, r.isArrayCamera) for (const F of r.cameras) F._reversedDepth = true;
           $ = true;
         }
-        const P = this.coordinateSystem;
-        if (r.coordinateSystem !== P) {
-          if (r.coordinateSystem = P, r.isArrayCamera) for (const F of r.cameras) F.coordinateSystem = P;
+        const R = this.coordinateSystem;
+        if (r.coordinateSystem !== R) {
+          if (r.coordinateSystem = R, r.isArrayCamera) for (const F of r.cameras) F.coordinateSystem = R;
           $ = true;
         }
         if ($ === true && (r.updateProjectionMatrix(), r.isArrayCamera)) for (const F of r.cameras) F.updateProjectionMatrix();
@@ -26755,18 +26755,18 @@ Reason: ${e.reason}`), error$1(r), this._isDeviceLost = true;
       let z = O._viewport, H = O._scissor, q = O._pixelRatio;
       M !== null && (z = M.viewport, H = M.scissor, q = 1), this.getDrawingBufferSize(_drawingBufferSize), _screen.set(0, 0, _drawingBufferSize.width, _drawingBufferSize.height);
       const W = z.minDepth === void 0 ? 0 : z.minDepth, K = z.maxDepth === void 0 ? 1 : z.maxDepth;
-      R.viewportValue.copy(z).multiplyScalar(q).floor(), R.viewportValue.width >>= w, R.viewportValue.height >>= w, R.viewportValue.minDepth = W, R.viewportValue.maxDepth = K, R.viewport = R.viewportValue.equals(_screen) === false, R.scissorValue.copy(H).multiplyScalar(q).floor(), R.scissor = O._scissorTest && R.scissorValue.equals(_screen) === false, R.scissorValue.width >>= w, R.scissorValue.height >>= w, R.clippingContext || (R.clippingContext = new ClippingContext()), R.clippingContext.updateGlobal(p, r), p.onBeforeRender(this, e, r, M);
+      P.viewportValue.copy(z).multiplyScalar(q).floor(), P.viewportValue.width >>= w, P.viewportValue.height >>= w, P.viewportValue.minDepth = W, P.viewportValue.maxDepth = K, P.viewport = P.viewportValue.equals(_screen) === false, P.scissorValue.copy(H).multiplyScalar(q).floor(), P.scissor = O._scissorTest && P.scissorValue.equals(_screen) === false, P.scissorValue.width >>= w, P.scissorValue.height >>= w, P.clippingContext || (P.clippingContext = new ClippingContext()), P.clippingContext.updateGlobal(p, r), p.onBeforeRender(this, e, r, M);
       const J = r.isArrayCamera ? _frustumArray : _frustum;
       r.isArrayCamera || (_projScreenMatrix.multiplyMatrices(r.projectionMatrix, r.matrixWorldInverse), J.setFromProjectionMatrix(_projScreenMatrix, r.coordinateSystem, r.reversedDepth));
       const ee = this._renderLists.get(e, r);
-      if (ee.begin(), this._projectObject(e, r, 0, ee, R.clippingContext), ee.finish(), this.sortObjects === true && ee.sort(this._opaqueSort, this._transparentSort), M !== null) {
+      if (ee.begin(), this._projectObject(e, r, 0, ee, P.clippingContext), ee.finish(), this.sortObjects === true && ee.sort(this._opaqueSort, this._transparentSort), M !== null) {
         this._textures.updateRenderTarget(M, w);
         const $ = this._textures.get(M);
-        R.textures = $.textures, R.depthTexture = $.depthTexture, R.width = $.width, R.height = $.height, R.renderTarget = M, R.depth = M.depthBuffer, R.stencil = M.stencilBuffer;
-      } else R.textures = null, R.depthTexture = null, R.width = _drawingBufferSize.width, R.height = _drawingBufferSize.height, R.depth = this.depth, R.stencil = this.stencil;
-      R.width >>= w, R.height >>= w, R.activeCubeFace = b, R.activeMipmapLevel = w, R.occlusionQueryCount = ee.occlusionQueryCount, R.scissorValue.max(_vector4.set(0, 0, 0, 0)), R.scissorValue.x + R.scissorValue.width > R.width && (R.scissorValue.width = Math.max(R.width - R.scissorValue.x, 0)), R.scissorValue.y + R.scissorValue.height > R.height && (R.scissorValue.height = Math.max(R.height - R.scissorValue.y, 0)), this._background.update(p, ee, R), R.camera = r, this.backend.beginRender(R);
+        P.textures = $.textures, P.depthTexture = $.depthTexture, P.width = $.width, P.height = $.height, P.renderTarget = M, P.depth = M.depthBuffer, P.stencil = M.stencilBuffer;
+      } else P.textures = null, P.depthTexture = null, P.width = _drawingBufferSize.width, P.height = _drawingBufferSize.height, P.depth = this.depth, P.stencil = this.stencil;
+      P.width >>= w, P.height >>= w, P.activeCubeFace = b, P.activeMipmapLevel = w, P.occlusionQueryCount = ee.occlusionQueryCount, P.scissorValue.max(_vector4.set(0, 0, 0, 0)), P.scissorValue.x + P.scissorValue.width > P.width && (P.scissorValue.width = Math.max(P.width - P.scissorValue.x, 0)), P.scissorValue.y + P.scissorValue.height > P.height && (P.scissorValue.height = Math.max(P.height - P.scissorValue.y, 0)), this._background.update(p, ee, P), P.camera = r, this.backend.beginRender(P);
       const { bundles: ie, lightsNode: pe, transparentDoublePass: U, transparent: v, opaque: _ } = ee;
-      return ie.length > 0 && this._renderBundles(ie, p, pe), this.opaque === true && _.length > 0 && this._renderObjects(_, r, p, pe), this.transparent === true && v.length > 0 && this._renderTransparents(v, U, r, p, pe), this.backend.finishRender(R), a.renderId = h, this._currentRenderContext = c, this._currentRenderObjectFunction = d, this._handleObjectFunction = f, this._callDepth--, o !== null && (this.setRenderTarget(m, b, w), this._renderOutput(M)), p.onAfterRender(this, e, r, M), this.inspector.finishRender(this.backend.getTimestampUID(R)), R;
+      return ie.length > 0 && this._renderBundles(ie, p, pe), this.opaque === true && _.length > 0 && this._renderObjects(_, r, p, pe), this.transparent === true && v.length > 0 && this._renderTransparents(v, U, r, p, pe), this.backend.finishRender(P), a.renderId = h, this._currentRenderContext = c, this._currentRenderObjectFunction = d, this._handleObjectFunction = f, this._callDepth--, o !== null && (this.setRenderTarget(m, b, w), this._renderOutput(M)), p.onAfterRender(this, e, r, M), this.inspector.finishRender(this.backend.getTimestampUID(P)), P;
     }
     _setXRLayerSize(e, r) {
       this._canvasTarget._width = e, this._canvasTarget._height = r, this.setViewport(0, 0, e, r);
@@ -27050,8 +27050,8 @@ Reason: ${e.reason}`), error$1(r), this._isDeviceLost = true;
             if (this.sortObjects === true && (f.boundingSphere === null && f.computeBoundingSphere(), _vector4.copy(f.boundingSphere.center).applyMatrix4(e.matrixWorld).applyMatrix4(_projScreenMatrix)), Array.isArray(p)) {
               const m = f.groups;
               for (let b = 0, w = m.length; b < w; b++) {
-                const M = m[b], R = p[M.materialIndex];
-                R && R.visible && o.push(e, f, R, s, _vector4.z, M, a);
+                const M = m[b], P = p[M.materialIndex];
+                P && P.visible && o.push(e, f, P, s, _vector4.z, M, a);
               }
             } else p.visible && o.push(e, f, p, s, _vector4.z, null, a);
           }
@@ -27111,12 +27111,12 @@ Reason: ${e.reason}`), error$1(r), this._isDeviceLost = true;
     renderObject(e, r, s, o, a, h, c, d = null, f = null) {
       let p = false, m, b, w, M;
       if (e.onBeforeRender(this, r, s, o, a, h), a.allowOverride === true && r.overrideMaterial !== null) {
-        const R = r.overrideMaterial;
-        if (p = true, m = R.isNodeMaterial ? R.colorNode : null, b = R.isNodeMaterial ? R.depthNode : null, w = R.isNodeMaterial ? R.positionNode : null, M = r.overrideMaterial.side, a.positionNode && a.positionNode.isNode && (R.positionNode = a.positionNode), R.alphaTest = a.alphaTest, R.alphaMap = a.alphaMap, R.transparent = a.transparent || a.transmission > 0 || a.transmissionNode && a.transmissionNode.isNode || a.backdropNode && a.backdropNode.isNode, R.isShadowPassMaterial) {
+        const P = r.overrideMaterial;
+        if (p = true, m = P.isNodeMaterial ? P.colorNode : null, b = P.isNodeMaterial ? P.depthNode : null, w = P.isNodeMaterial ? P.positionNode : null, M = r.overrideMaterial.side, a.positionNode && a.positionNode.isNode && (P.positionNode = a.positionNode), P.alphaTest = a.alphaTest, P.alphaMap = a.alphaMap, P.transparent = a.transparent || a.transmission > 0 || a.transmissionNode && a.transmissionNode.isNode || a.backdropNode && a.backdropNode.isNode, P.isShadowPassMaterial) {
           const { colorNode: V, depthNode: O, positionNode: z } = this._getShadowNodes(a);
-          this.shadowMap.type === VSMShadowMap ? R.side = a.shadowSide !== null ? a.shadowSide : a.side : R.side = a.shadowSide !== null ? a.shadowSide : _shadowSide[a.side], V !== null && (R.colorNode = V), O !== null && (R.depthNode = O), z !== null && (R.positionNode = z);
+          this.shadowMap.type === VSMShadowMap ? P.side = a.shadowSide !== null ? a.shadowSide : a.side : P.side = a.shadowSide !== null ? a.shadowSide : _shadowSide[a.side], V !== null && (P.colorNode = V), O !== null && (P.depthNode = O), z !== null && (P.positionNode = z);
         }
-        a = R;
+        a = P;
       }
       a.transparent === true && a.side === DoubleSide$1 && a.forceSinglePass === false ? (a.side = BackSide$1, this._handleObjectFunction(e, a, r, s, c, h, d, "backSide"), a.side = FrontSide$1, this._handleObjectFunction(e, a, r, s, c, h, d, f), a.side = DoubleSide$1) : this._handleObjectFunction(e, a, r, s, c, h, d, f), p && (r.overrideMaterial.colorNode = m, r.overrideMaterial.depthNode = b, r.overrideMaterial.positionNode = w, r.overrideMaterial.side = M), e.onAfterRender(this, r, s, o, a, h);
     }
@@ -27534,7 +27534,7 @@ ${s.code}
         const m = this.getDataFromNode(r);
         let b = m.propertySizeName;
         b === void 0 && (b = f + "Size", this.getVarFromNode(r, b, "uint"), this.addLineFlowCode(`${b} = uint( textureSize( ${h}, 0 ).x )`, e), m.propertySizeName = b);
-        const { itemSize: w } = o, M = "." + vectorComponents$1.join("").slice(0, w), R = `ivec2(${c} % ${b}, ${c} / ${b})`, V = this.generateTextureLoad(null, h, R, "0", null, null);
+        const { itemSize: w } = o, M = "." + vectorComponents$1.join("").slice(0, w), P = `ivec2(${c} % ${b}, ${c} / ${b})`, V = this.generateTextureLoad(null, h, P, "0", null, null);
         let O = "vec4";
         o.pbo.type === UnsignedIntType$1 ? O = "uvec4" : o.pbo.type === IntType$1 && (O = "ivec4"), this.addLineFlowCode(`${f} = ${O}(${V})${M}`, e), d.propertyName = f;
       }
@@ -27590,9 +27590,9 @@ ${s.code}
             if (p !== void 0) {
               const m = [];
               for (const b of p.uniforms) {
-                const w = b.getType(), M = this.getVectorType(w), R = b.nodeUniform.node.precision;
+                const w = b.getType(), M = this.getVectorType(w), P = b.nodeUniform.node.precision;
                 let V = `${M} ${b.name};`;
-                R !== null && (V = precisionLib[R] + " " + V), m.push("	" + V);
+                P !== null && (V = precisionLib[P] + " " + V), m.push("	" + V);
               }
               o[f] = m;
             }
@@ -28664,9 +28664,9 @@ void main() {
         for (let w = 0; w < 6; w++) {
           const M = getImage(m[w]);
           s.texSubImage2D(s.TEXTURE_CUBE_MAP_POSITIVE_X + w, 0, 0, 0, o, a, d, f, M);
-          for (let R = 0; R < b.length; R++) {
-            const V = b[R], O = getImage(V.images[w]);
-            s.texSubImage2D(s.TEXTURE_CUBE_MAP_POSITIVE_X + w, R + 1, 0, 0, O.width, O.height, d, f, O);
+          for (let P = 0; P < b.length; P++) {
+            const V = b[P], O = getImage(V.images[w]);
+            s.texSubImage2D(s.TEXTURE_CUBE_MAP_POSITIVE_X + w, P + 1, 0, 0, O.width, O.height, d, f, O);
           }
         }
       } else if (e.isDataArrayTexture || e.isArrayTexture) {
@@ -28686,8 +28686,8 @@ void main() {
       else {
         const m = e.mipmaps;
         if (m.length > 0) for (let b = 0, w = m.length; b < w; b++) {
-          const M = m[b], R = getImage(M);
-          s.texSubImage2D(c, b, 0, 0, M.width, M.height, d, f, R);
+          const M = m[b], P = getImage(M);
+          s.texSubImage2D(c, b, 0, 0, M.width, M.height, d, f, P);
         }
         else {
           const b = getImage(r.image);
@@ -28720,43 +28720,43 @@ void main() {
     copyTextureToTexture(e, r, s = null, o = null, a = 0, h = 0) {
       const { gl: c, backend: d } = this, { state: f } = this.backend, { textureGPU: p, glTextureType: m, glType: b, glFormat: w } = d.get(r);
       f.bindTexture(m, p);
-      let M, R, V, O, z, H, q, W, K;
+      let M, P, V, O, z, H, q, W, K;
       const J = e.isCompressedTexture ? e.mipmaps[h] : e.image;
-      if (s !== null) M = s.max.x - s.min.x, R = s.max.y - s.min.y, V = s.isBox3 ? s.max.z - s.min.z : 1, O = s.min.x, z = s.min.y, H = s.isBox3 ? s.min.z : 0;
+      if (s !== null) M = s.max.x - s.min.x, P = s.max.y - s.min.y, V = s.isBox3 ? s.max.z - s.min.z : 1, O = s.min.x, z = s.min.y, H = s.isBox3 ? s.min.z : 0;
       else {
-        const P = Math.pow(2, -a);
-        M = Math.floor(J.width * P), R = Math.floor(J.height * P), e.isDataArrayTexture || e.isArrayTexture ? V = J.depth : e.isData3DTexture ? V = Math.floor(J.depth * P) : V = 1, O = 0, z = 0, H = 0;
+        const R = Math.pow(2, -a);
+        M = Math.floor(J.width * R), P = Math.floor(J.height * R), e.isDataArrayTexture || e.isArrayTexture ? V = J.depth : e.isData3DTexture ? V = Math.floor(J.depth * R) : V = 1, O = 0, z = 0, H = 0;
       }
       o !== null ? (q = o.x, W = o.y, K = o.z) : (q = 0, W = 0, K = 0), c.pixelStorei(c.UNPACK_FLIP_Y_WEBGL, r.flipY), c.pixelStorei(c.UNPACK_PREMULTIPLY_ALPHA_WEBGL, r.premultiplyAlpha), c.pixelStorei(c.UNPACK_ALIGNMENT, r.unpackAlignment);
       const ee = c.getParameter(c.UNPACK_ROW_LENGTH), ie = c.getParameter(c.UNPACK_IMAGE_HEIGHT), pe = c.getParameter(c.UNPACK_SKIP_PIXELS), U = c.getParameter(c.UNPACK_SKIP_ROWS), v = c.getParameter(c.UNPACK_SKIP_IMAGES);
       c.pixelStorei(c.UNPACK_ROW_LENGTH, J.width), c.pixelStorei(c.UNPACK_IMAGE_HEIGHT, J.height), c.pixelStorei(c.UNPACK_SKIP_PIXELS, O), c.pixelStorei(c.UNPACK_SKIP_ROWS, z), c.pixelStorei(c.UNPACK_SKIP_IMAGES, H);
       const _ = e.isDataArrayTexture || e.isData3DTexture || r.isArrayTexture, $ = r.isDataArrayTexture || r.isData3DTexture || r.isArrayTexture;
       if (e.isDepthTexture) {
-        const P = d.get(e), F = d.get(r), k = d.get(P.renderTarget), G = d.get(F.renderTarget), D = k.framebuffers[P.cacheKey], x = G.framebuffers[F.cacheKey];
+        const R = d.get(e), F = d.get(r), k = d.get(R.renderTarget), G = d.get(F.renderTarget), D = k.framebuffers[R.cacheKey], x = G.framebuffers[F.cacheKey];
         f.bindFramebuffer(c.READ_FRAMEBUFFER, D), f.bindFramebuffer(c.DRAW_FRAMEBUFFER, x);
-        for (let L = 0; L < V; L++) _ && (c.framebufferTextureLayer(c.READ_FRAMEBUFFER, c.COLOR_ATTACHMENT0, P.textureGPU, a, H + L), c.framebufferTextureLayer(c.DRAW_FRAMEBUFFER, c.COLOR_ATTACHMENT0, p, h, K + L)), c.blitFramebuffer(O, z, M, R, q, W, M, R, c.DEPTH_BUFFER_BIT, c.NEAREST);
+        for (let L = 0; L < V; L++) _ && (c.framebufferTextureLayer(c.READ_FRAMEBUFFER, c.COLOR_ATTACHMENT0, R.textureGPU, a, H + L), c.framebufferTextureLayer(c.DRAW_FRAMEBUFFER, c.COLOR_ATTACHMENT0, p, h, K + L)), c.blitFramebuffer(O, z, M, P, q, W, M, P, c.DEPTH_BUFFER_BIT, c.NEAREST);
         f.bindFramebuffer(c.READ_FRAMEBUFFER, null), f.bindFramebuffer(c.DRAW_FRAMEBUFFER, null);
       } else if (a !== 0 || e.isRenderTargetTexture || d.has(e)) {
-        const P = d.get(e);
+        const R = d.get(e);
         this._srcFramebuffer === null && (this._srcFramebuffer = c.createFramebuffer()), this._dstFramebuffer === null && (this._dstFramebuffer = c.createFramebuffer()), f.bindFramebuffer(c.READ_FRAMEBUFFER, this._srcFramebuffer), f.bindFramebuffer(c.DRAW_FRAMEBUFFER, this._dstFramebuffer);
-        for (let F = 0; F < V; F++) _ ? c.framebufferTextureLayer(c.READ_FRAMEBUFFER, c.COLOR_ATTACHMENT0, P.textureGPU, a, H + F) : c.framebufferTexture2D(c.READ_FRAMEBUFFER, c.COLOR_ATTACHMENT0, c.TEXTURE_2D, P.textureGPU, a), $ ? c.framebufferTextureLayer(c.DRAW_FRAMEBUFFER, c.COLOR_ATTACHMENT0, p, h, K + F) : c.framebufferTexture2D(c.DRAW_FRAMEBUFFER, c.COLOR_ATTACHMENT0, c.TEXTURE_2D, p, h), a !== 0 ? c.blitFramebuffer(O, z, M, R, q, W, M, R, c.COLOR_BUFFER_BIT, c.NEAREST) : $ ? c.copyTexSubImage3D(m, h, q, W, K + F, O, z, M, R) : c.copyTexSubImage2D(m, h, q, W, O, z, M, R);
+        for (let F = 0; F < V; F++) _ ? c.framebufferTextureLayer(c.READ_FRAMEBUFFER, c.COLOR_ATTACHMENT0, R.textureGPU, a, H + F) : c.framebufferTexture2D(c.READ_FRAMEBUFFER, c.COLOR_ATTACHMENT0, c.TEXTURE_2D, R.textureGPU, a), $ ? c.framebufferTextureLayer(c.DRAW_FRAMEBUFFER, c.COLOR_ATTACHMENT0, p, h, K + F) : c.framebufferTexture2D(c.DRAW_FRAMEBUFFER, c.COLOR_ATTACHMENT0, c.TEXTURE_2D, p, h), a !== 0 ? c.blitFramebuffer(O, z, M, P, q, W, M, P, c.COLOR_BUFFER_BIT, c.NEAREST) : $ ? c.copyTexSubImage3D(m, h, q, W, K + F, O, z, M, P) : c.copyTexSubImage2D(m, h, q, W, O, z, M, P);
         f.bindFramebuffer(c.READ_FRAMEBUFFER, null), f.bindFramebuffer(c.DRAW_FRAMEBUFFER, null);
-      } else $ ? e.isDataTexture || e.isData3DTexture ? c.texSubImage3D(m, h, q, W, K, M, R, V, w, b, J.data) : r.isCompressedArrayTexture ? c.compressedTexSubImage3D(m, h, q, W, K, M, R, V, w, J.data) : c.texSubImage3D(m, h, q, W, K, M, R, V, w, b, J) : e.isDataTexture ? c.texSubImage2D(c.TEXTURE_2D, h, q, W, M, R, w, b, J.data) : e.isCompressedTexture ? c.compressedTexSubImage2D(c.TEXTURE_2D, h, q, W, J.width, J.height, w, J.data) : c.texSubImage2D(c.TEXTURE_2D, h, q, W, M, R, w, b, J);
+      } else $ ? e.isDataTexture || e.isData3DTexture ? c.texSubImage3D(m, h, q, W, K, M, P, V, w, b, J.data) : r.isCompressedArrayTexture ? c.compressedTexSubImage3D(m, h, q, W, K, M, P, V, w, J.data) : c.texSubImage3D(m, h, q, W, K, M, P, V, w, b, J) : e.isDataTexture ? c.texSubImage2D(c.TEXTURE_2D, h, q, W, M, P, w, b, J.data) : e.isCompressedTexture ? c.compressedTexSubImage2D(c.TEXTURE_2D, h, q, W, J.width, J.height, w, J.data) : c.texSubImage2D(c.TEXTURE_2D, h, q, W, M, P, w, b, J);
       c.pixelStorei(c.UNPACK_ROW_LENGTH, ee), c.pixelStorei(c.UNPACK_IMAGE_HEIGHT, ie), c.pixelStorei(c.UNPACK_SKIP_PIXELS, pe), c.pixelStorei(c.UNPACK_SKIP_ROWS, U), c.pixelStorei(c.UNPACK_SKIP_IMAGES, v), h === 0 && r.generateMipmaps && c.generateMipmap(m), f.unbindTexture();
     }
     copyFramebufferToTexture(e, r, s) {
       const { gl: o } = this, { state: a } = this.backend, { textureGPU: h } = this.backend.get(e), { x: c, y: d, z: f, w: p } = s, m = e.isDepthTexture === true || r.renderTarget && r.renderTarget.samples > 0, b = r.renderTarget ? r.renderTarget.height : this.backend.getDrawingBufferSize().y;
       if (m) {
         const w = c !== 0 || d !== 0;
-        let M, R;
-        if (e.isDepthTexture === true ? (M = o.DEPTH_BUFFER_BIT, R = o.DEPTH_ATTACHMENT, r.stencil && (M |= o.STENCIL_BUFFER_BIT)) : (M = o.COLOR_BUFFER_BIT, R = o.COLOR_ATTACHMENT0), w) {
+        let M, P;
+        if (e.isDepthTexture === true ? (M = o.DEPTH_BUFFER_BIT, P = o.DEPTH_ATTACHMENT, r.stencil && (M |= o.STENCIL_BUFFER_BIT)) : (M = o.COLOR_BUFFER_BIT, P = o.COLOR_ATTACHMENT0), w) {
           const V = this.backend.get(r.renderTarget), O = V.framebuffers[r.getCacheKey()], z = V.msaaFrameBuffer;
           a.bindFramebuffer(o.DRAW_FRAMEBUFFER, O), a.bindFramebuffer(o.READ_FRAMEBUFFER, z);
           const H = b - d - p;
           o.blitFramebuffer(c, H, c + f, H + p, c, H, c + f, H + p, M, o.NEAREST), a.bindFramebuffer(o.READ_FRAMEBUFFER, O), a.bindTexture(o.TEXTURE_2D, h), o.copyTexSubImage2D(o.TEXTURE_2D, 0, 0, 0, c, H, f, p), a.unbindTexture();
         } else {
           const V = o.createFramebuffer();
-          a.bindFramebuffer(o.DRAW_FRAMEBUFFER, V), o.framebufferTexture2D(o.DRAW_FRAMEBUFFER, R, o.TEXTURE_2D, h, 0), o.blitFramebuffer(0, 0, f, p, 0, 0, f, p, M, o.NEAREST), o.deleteFramebuffer(V);
+          a.bindFramebuffer(o.DRAW_FRAMEBUFFER, V), o.framebufferTexture2D(o.DRAW_FRAMEBUFFER, P, o.TEXTURE_2D, h, 0), o.blitFramebuffer(0, 0, f, p, 0, 0, f, p, M, o.NEAREST), o.deleteFramebuffer(V);
         }
       } else a.bindTexture(o.TEXTURE_2D, h), o.copyTexSubImage2D(o.TEXTURE_2D, 0, 0, 0, c, b - p - d, f, p), a.unbindTexture();
       e.generateMipmaps && this.generateMipmaps(e), this.backend._setFramebuffer(r);
@@ -28774,7 +28774,7 @@ void main() {
       c.state.bindFramebuffer(d.READ_FRAMEBUFFER, b);
       const w = e.isCubeTexture ? d.TEXTURE_CUBE_MAP_POSITIVE_X + h : d.TEXTURE_2D;
       d.framebufferTexture2D(d.READ_FRAMEBUFFER, d.COLOR_ATTACHMENT0, w, f, 0);
-      const M = this._getTypedArrayType(m), R = this._getBytesPerTexel(m, p), O = o * a * R, z = d.createBuffer();
+      const M = this._getTypedArrayType(m), P = this._getBytesPerTexel(m, p), O = o * a * P, z = d.createBuffer();
       d.bindBuffer(d.PIXEL_PACK_BUFFER, z), d.bufferData(d.PIXEL_PACK_BUFFER, O, d.STREAM_READ), d.readPixels(r, s, o, a, p, m, 0), d.bindBuffer(d.PIXEL_PACK_BUFFER, null), await c.utils._clientWaitAsync();
       const H = new M(O / M.BYTES_PER_ELEMENT);
       return d.bindBuffer(d.PIXEL_PACK_BUFFER, z), d.getBufferSubData(d.PIXEL_PACK_BUFFER, 0, H), d.bindBuffer(d.PIXEL_PACK_BUFFER, null), c.state.bindFramebuffer(d.READ_FRAMEBUFFER, null), d.deleteFramebuffer(b), H;
@@ -29181,8 +29181,8 @@ void main() {
       const w = this._getTransformFeedback(f);
       c.bindTransformFeedback(c.TRANSFORM_FEEDBACK, w), c.beginTransformFeedback(c.POINTS), a = a !== null ? a : r.count, Array.isArray(a) ? (warnOnce$1("WebGLBackend.compute(): The count parameter must be a single number, not an array."), a = a[0]) : a && typeof a == "object" && a.isIndirectStorageBufferAttribute && (warnOnce$1("WebGLBackend.compute(): The count parameter must be a single number, not IndirectStorageBufferAttribute"), a = r.count), p[0].isStorageInstancedBufferAttribute ? c.drawArraysInstanced(c.POINTS, 0, 1, a) : c.drawArrays(c.POINTS, 0, a), c.endTransformFeedback(), c.bindTransformFeedback(c.TRANSFORM_FEEDBACK, null);
       for (let M = 0; M < f.length; M++) {
-        const R = f[M];
-        R.pbo && this.has(R.pbo) && this.textureUtils.copyBufferToTexture(R.transformBuffer, R.pbo), R.switchBuffers();
+        const P = f[M];
+        P.pbo && this.has(P.pbo) && this.textureUtils.copyBufferToTexture(P.transformBuffer, P.pbo), P.switchBuffers();
       }
     }
     finishCompute(e) {
@@ -29199,13 +29199,13 @@ void main() {
       const b = r.isMesh && r.matrixWorld.determinant() < 0;
       f.setMaterial(o, b, h), a.mrt !== null && a.textures !== null && f.setMRTBlending(a.textures, a.mrt, o), f.useProgram(c);
       const w = e.getAttributes(), M = this.get(w);
-      let R = M.vaoGPU;
-      if (R === void 0) {
+      let P = M.vaoGPU;
+      if (P === void 0) {
         const ee = this._getVaoKey(w);
-        R = this.vaoCache[ee], R === void 0 && (R = this._createVao(w), this.vaoCache[ee] = R, M.vaoGPU = R);
+        P = this.vaoCache[ee], P === void 0 && (P = this._createVao(w), this.vaoCache[ee] = P, M.vaoGPU = P);
       }
       const V = e.getIndex(), O = V !== null ? this.get(V).bufferGPU : null;
-      f.setVertexState(R, O);
+      f.setVertexState(P, O);
       const z = p.lastOcclusionObject;
       if (z !== r && z !== void 0) {
         if (z !== null && z.occlusionTest === true && (d.endQuery(d.ANY_SAMPLES_PASSED), p.occlusionQueryIndex++), r.occlusionTest === true) {
@@ -29241,14 +29241,14 @@ void main() {
           }
           ee.indexesGPU = k;
         }
-        const U = this.get(pe), v = this.renderer.getPixelRatio(), _ = this._currentContext.renderTarget, $ = this._isRenderCameraDepthArray(this._currentContext), P = this._currentContext.activeCubeFace;
+        const U = this.get(pe), v = this.renderer.getPixelRatio(), _ = this._currentContext.renderTarget, $ = this._isRenderCameraDepthArray(this._currentContext), R = this._currentContext.activeCubeFace;
         if ($) {
           const F = this.get(_.depthTexture);
           if (F.clearedRenderId !== this.renderer._nodes.nodeFrame.renderId) {
             F.clearedRenderId = this.renderer._nodes.nodeFrame.renderId;
             const { stencilBuffer: k } = _;
             for (let G = 0, D = ie.length; G < D; G++) this.renderer._activeCubeFace = G, this._currentContext.activeCubeFace = G, this._setFramebuffer(this._currentContext), this.clear(false, true, k, this._currentContext, false, false);
-            this.renderer._activeCubeFace = P, this._currentContext.activeCubeFace = P;
+            this.renderer._activeCubeFace = R, this._currentContext.activeCubeFace = R;
           }
         }
         for (let F = 0, k = ie.length; F < k; F++) {
@@ -29262,7 +29262,7 @@ void main() {
             }
             f.bindBufferBase(d.UNIFORM_BUFFER, U.index, ee.indexesGPU[F]), J();
           }
-          this._currentContext.activeCubeFace = P, this.renderer._activeCubeFace = P;
+          this._currentContext.activeCubeFace = R, this.renderer._activeCubeFace = R;
         }
       } else J();
     }
@@ -29383,7 +29383,7 @@ void main() {}`
         m.push(O.varyingName), b.push(O.attributeNode);
       }
       o.attachShader(c, d), o.attachShader(c, f), o.transformFeedbackVaryings(c, m, o.SEPARATE_ATTRIBS), o.linkProgram(c), o.getProgramParameter(c, o.LINK_STATUS) === false && this._logProgramError(c, d, f), s.useProgram(c), this._setupBindings(r, c);
-      const w = h.attributes, M = [], R = [];
+      const w = h.attributes, M = [], P = [];
       for (let V = 0; V < w.length; V++) {
         const O = w[V].node.attribute;
         M.push(O), this.has(O) || this.attributeUtils.createAttribute(O, o.ARRAY_BUFFER);
@@ -29392,11 +29392,11 @@ void main() {}`
         const O = b[V].attribute;
         this.has(O) || this.attributeUtils.createAttribute(O, o.ARRAY_BUFFER);
         const z = this.get(O);
-        R.push(z);
+        P.push(z);
       }
       this.set(e, {
         programGPU: c,
-        transformBuffers: R,
+        transformBuffers: P,
         attributes: M
       });
     }
@@ -29430,7 +29430,7 @@ void main() {}`
           else {
             const m = isTypedArray$1(d), b = m ? 1 : d.BYTES_PER_ELEMENT;
             for (let w = 0, M = p.length; w < M; w++) {
-              const R = p[w], V = R.start * b, O = R.count * b, z = V * (m ? d.BYTES_PER_ELEMENT : 1);
+              const P = p[w], V = P.start * b, O = P.count * b, z = V * (m ? d.BYTES_PER_ELEMENT : 1);
               r.bufferSubData(r.UNIFORM_BUFFER, z, d, V, O);
             }
           }
@@ -29501,7 +29501,7 @@ void main() {}`
       let o = null;
       if (e.textures !== null) {
         const a = e.renderTarget, h = this.get(a), { samples: c, depthBuffer: d, stencilBuffer: f } = a, p = a.isCubeRenderTarget === true, m = a.isRenderTarget3D === true, b = a.depth > 1, w = a.isXRRenderTarget === true, M = w === true && a._hasExternalTextures === true;
-        let R = h.msaaFrameBuffer, V = h.depthRenderbuffer;
+        let P = h.msaaFrameBuffer, V = h.depthRenderbuffer;
         const O = this.extensions.get("WEBGL_multisampled_render_to_texture"), z = this.extensions.get("OVR_multiview2"), H = this._useMultisampledExtension(a), q = getCacheKey(e);
         let W;
         if (p ? (h.cubeFramebuffers || (h.cubeFramebuffers = {}), W = h.cubeFramebuffers[q]) : w && M === false ? W = this._xrFramebuffer : (h.framebuffers || (h.framebuffers = {}), W = h.framebuffers[q]), W === void 0) {
@@ -29567,16 +29567,16 @@ void main() {}`
           }
         }
         if (c > 0 && H === false && !a.multiview) {
-          if (R === void 0) {
+          if (P === void 0) {
             const K = [];
-            R = r.createFramebuffer(), s.bindFramebuffer(r.FRAMEBUFFER, R);
+            P = r.createFramebuffer(), s.bindFramebuffer(r.FRAMEBUFFER, P);
             const J = [], ee = e.textures;
             for (let ie = 0; ie < ee.length; ie++) {
               J[ie] = r.createRenderbuffer(), r.bindRenderbuffer(r.RENDERBUFFER, J[ie]), K.push(r.COLOR_ATTACHMENT0 + ie);
               const pe = e.textures[ie], U = this.get(pe);
               r.renderbufferStorageMultisample(r.RENDERBUFFER, c, U.glInternalFormat, e.width, e.height), r.framebufferRenderbuffer(r.FRAMEBUFFER, r.COLOR_ATTACHMENT0 + ie, r.RENDERBUFFER, J[ie]);
             }
-            if (r.bindRenderbuffer(r.RENDERBUFFER, null), h.msaaFrameBuffer = R, h.msaaRenderbuffers = J, d && V === void 0) {
+            if (r.bindRenderbuffer(r.RENDERBUFFER, null), h.msaaFrameBuffer = P, h.msaaRenderbuffers = J, d && V === void 0) {
               V = r.createRenderbuffer(), this.textureUtils.setupRenderBufferStorage(V, e, c), h.depthRenderbuffer = V;
               const ie = f ? r.DEPTH_STENCIL_ATTACHMENT : r.DEPTH_ATTACHMENT;
               K.push(ie);
@@ -29657,8 +29657,8 @@ void main() {}`
               r.framebufferRenderbuffer(r.READ_FRAMEBUFFER, r.COLOR_ATTACHMENT0, r.RENDERBUFFER, f[b]), r.framebufferTexture2D(r.DRAW_FRAMEBUFFER, r.COLOR_ATTACHMENT0, r.TEXTURE_2D, w, 0);
             }
             if (e.scissor) {
-              const { x: w, y: M, width: R, height: V } = e.scissorValue, O = e.height - V - M;
-              r.blitFramebuffer(w, O, w + R, O + V, w, O, w + R, O + V, c, r.NEAREST);
+              const { x: w, y: M, width: P, height: V } = e.scissorValue, O = e.height - V - M;
+              r.blitFramebuffer(w, O, w + P, O + V, w, O, w + P, O + V, c, r.NEAREST);
             } else r.blitFramebuffer(0, 0, e.width, e.height, 0, 0, e.width, e.height, c, r.NEAREST);
           }
           if (m) for (let b = 0; b < p.length; b++) {
@@ -30053,7 +30053,7 @@ fn main_cube( Varys: VarysStruct ) -> @location( 0 ) vec4<f32> {
         },
         format: o,
         usage: GPUTextureUsage.RENDER_ATTACHMENT | GPUTextureUsage.TEXTURE_BINDING
-      }), d = this.getTransferPipeline(o, e.textureBindingViewDimension), f = this.getTransferPipeline(o, c.textureBindingViewDimension), p = this.device.createCommandEncoder({}), m = (b, w, M, R, V, O) => {
+      }), d = this.getTransferPipeline(o, e.textureBindingViewDimension), f = this.getTransferPipeline(o, c.textureBindingViewDimension), p = this.device.createCommandEncoder({}), m = (b, w, M, P, V, O) => {
         const z = b.getBindGroupLayout(0), H = this.device.createBindGroup({
           layout: z,
           entries: [
@@ -30079,7 +30079,7 @@ fn main_cube( Varys: VarysStruct ) -> @location( 0 ) vec4<f32> {
         }), q = p.beginRenderPass({
           colorAttachments: [
             {
-              view: R.createView({
+              view: P.createView({
                 dimension: "2d",
                 baseMipLevel: 0,
                 mipLevelCount: 1,
@@ -30235,7 +30235,7 @@ fn main_cube( Varys: VarysStruct ) -> @location( 0 ) vec4<f32> {
       const { samples: m, primarySamples: b, isMSAA: w } = s.utils.getTextureSampleData(e);
       let M = GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.COPY_SRC;
       e.isStorageTexture === true && (M |= GPUTextureUsage.STORAGE_BINDING), e.isCompressedTexture !== true && e.isCompressedArrayTexture !== true && p !== GPUTextureFormat.RGB9E5UFloat && (M |= GPUTextureUsage.RENDER_ATTACHMENT);
-      const R = {
+      const P = {
         label: e.name,
         size: {
           width: a,
@@ -30252,18 +30252,18 @@ fn main_cube( Varys: VarysStruct ) -> @location( 0 ) vec4<f32> {
         warn$1("WebGPURenderer: Texture format not supported."), this.createDefaultTexture(e);
         return;
       }
-      e.isCubeTexture && (R.textureBindingViewDimension = GPUTextureViewDimension.Cube);
+      e.isCubeTexture && (P.textureBindingViewDimension = GPUTextureViewDimension.Cube);
       try {
-        o.texture = s.device.createTexture(R);
+        o.texture = s.device.createTexture(P);
       } catch {
-        warn$1("WebGPURenderer: Failed to create texture with descriptor:", R), this.createDefaultTexture(e);
+        warn$1("WebGPURenderer: Failed to create texture with descriptor:", P), this.createDefaultTexture(e);
         return;
       }
       if (w) {
-        const V = Object.assign({}, R);
+        const V = Object.assign({}, P);
         V.label = V.label + "-msaa", V.sampleCount = m, V.mipLevelCount = 1, o.msaaTexture = s.device.createTexture(V);
       }
-      o.initialized = true, o.textureDescriptorGPU = R;
+      o.initialized = true, o.textureDescriptorGPU = P;
     }
     destroyTexture(e, r = false) {
       const s = this.backend, o = s.get(e);
@@ -30344,12 +30344,12 @@ fn main_cube( Varys: VarysStruct ) -> @location( 0 ) vec4<f32> {
         width: o,
         height: a
       });
-      const R = this._getTypedArrayType(p);
+      const P = this._getTypedArrayType(p);
       c.queue.submit([
         M.finish()
       ]), await w.mapAsync(GPUMapMode.READ);
       const V = w.getMappedRange();
-      return new R(V);
+      return new P(V);
     }
     dispose() {
       this._samplerCache.clear();
@@ -31499,8 +31499,8 @@ ${r.join(`
           const m = d.node.value;
           (m.isCubeTexture === true || this.isUnfilterable(m) === false && d.node.isStorageTextureNode !== true) && (this.isSampleCompare(m) ? s.push(`@binding( ${p.binding++} ) @group( ${p.group} ) var ${d.name}_sampler : sampler_comparison;`) : s.push(`@binding( ${p.binding++} ) @group( ${p.group} ) var ${d.name}_sampler : sampler;`));
           let w, M = "";
-          const { primarySamples: R } = this.renderer.backend.utils.getTextureSampleData(m);
-          if (R > 1 && (M = "_multisampled"), m.isCubeTexture === true && m.isDepthTexture === true) w = "texture_depth_cube";
+          const { primarySamples: P } = this.renderer.backend.utils.getTextureSampleData(m);
+          if (P > 1 && (M = "_multisampled"), m.isCubeTexture === true && m.isDepthTexture === true) w = "texture_depth_cube";
           else if (m.isCubeTexture === true) w = "texture_cube<f32>";
           else if (m.isDepthTexture === true) this.renderer.backend.compatibilityMode && m.compareFunction === null ? w = `texture${M}_2d<f32>` : w = `texture_depth${M}_2d${m.isArrayTexture === true ? "_array" : ""}`;
           else if (d.node.isStorageTextureNode === true) {
@@ -31514,11 +31514,11 @@ ${r.join(`
           }
           s.push(`@binding( ${p.binding++} ) @group( ${p.group} ) var ${d.name} : ${w};`);
         } else if (d.type === "buffer" || d.type === "storageBuffer" || d.type === "indirectStorageBuffer") {
-          const m = d.node, b = this.getType(m.getNodeType(this)), w = m.bufferCount, M = w > 0 && d.type === "buffer" ? ", " + w : "", R = m.isStorageBufferNode ? `storage, ${this.getStorageAccess(m, e)}` : "uniform";
-          if (this.isCustomStruct(d)) o.push(`@binding( ${p.binding++} ) @group( ${p.group} ) var<${R}> ${d.name} : ${b};`);
+          const m = d.node, b = this.getType(m.getNodeType(this)), w = m.bufferCount, M = w > 0 && d.type === "buffer" ? ", " + w : "", P = m.isStorageBufferNode ? `storage, ${this.getStorageAccess(m, e)}` : "uniform";
+          if (this.isCustomStruct(d)) o.push(`@binding( ${p.binding++} ) @group( ${p.group} ) var<${P}> ${d.name} : ${b};`);
           else {
             const O = `	value : array< ${m.isAtomic ? `atomic<${b}>` : `${b}`}${M} >`;
-            o.push(this._getWGSLStructBinding(d.name, O, R, p.binding++, p.group));
+            o.push(this._getWGSLStructBinding(d.name, O, P, p.binding++, p.group));
           }
         } else {
           const m = d.groupNode.name;
@@ -31526,9 +31526,9 @@ ${r.join(`
             const b = this.uniformGroups[m];
             if (b !== void 0) {
               const w = [];
-              for (const R of b.uniforms) {
-                const V = R.getType(), O = this.getType(this.getVectorType(V));
-                w.push(`	${R.name} : ${O}`);
+              for (const P of b.uniforms) {
+                const V = P.getType(), O = this.getType(this.getVectorType(V));
+                w.push(`	${P.name} : ${O}`);
               }
               let M = this.uniformGroupsBindings[m];
               M === void 0 && (M = {
@@ -31925,13 +31925,13 @@ var<${s}> ${e} : ${h};`;
         const f = isTypedArray$1(c), p = f ? 1 : c.BYTES_PER_ELEMENT;
         for (let m = 0, b = d.length; m < b; m++) {
           const w = d[m];
-          let M, R;
+          let M, P;
           if (a._force3to4BytesAlignment === true) {
             const O = Math.floor(w.start / 3), z = Math.ceil(w.count / 3);
-            M = O * 4 * p, R = z * 4 * p;
-          } else M = w.start * p, R = w.count * p;
+            M = O * 4 * p, P = z * 4 * p;
+          } else M = w.start * p, P = w.count * p;
           const V = M * (f ? c.BYTES_PER_ELEMENT : 1);
-          o.queue.writeBuffer(h, V, c, M, R);
+          o.queue.writeBuffer(h, V, c, M, P);
         }
         r.clearUpdateRanges();
       }
@@ -32174,12 +32174,12 @@ var<${s}> ${e} : ${h};`;
     createRenderPipeline(e, r) {
       const { object: s, material: o, geometry: a, pipeline: h } = e, { vertexProgram: c, fragmentProgram: d } = h, f = this.backend, p = f.device, m = f.utils, b = f.get(h), w = [];
       for (const _ of e.getBindings()) {
-        const $ = f.get(_), { layoutGPU: P } = $.layout;
-        w.push(P);
+        const $ = f.get(_), { layoutGPU: R } = $.layout;
+        w.push(R);
       }
       const M = f.attributeUtils.createShaderVertexBuffers(e);
-      let R;
-      o.blending !== NoBlending$1 && (o.blending !== NormalBlending$1 || o.transparent !== false) && (R = this._getBlending(o));
+      let P;
+      o.blending !== NoBlending$1 && (o.blending !== NormalBlending$1 || o.transparent !== false) && (P = this._getBlending(o));
       let V = {};
       o.stencilWrite === true && (V = {
         compare: this._getStencilCompare(o),
@@ -32190,14 +32190,14 @@ var<${s}> ${e} : ${h};`;
       const O = this._getColorWriteMask(o), z = [];
       if (e.context.textures !== null) {
         const _ = e.context.textures, $ = e.context.mrt;
-        for (let P = 0; P < _.length; P++) {
-          const F = _[P], k = m.getTextureFormatGPU(F);
+        for (let R = 0; R < _.length; R++) {
+          const F = _[R], k = m.getTextureFormatGPU(F);
           let G;
           if ($ !== null) if (this.backend.compatibilityMode !== true) {
             const D = $.getBlendMode(F.name);
-            D.blending === MaterialBlending ? G = R : D.blending !== NoBlending$1 && (G = this._getBlending(D));
-          } else warnOnce$1("WebGPURenderer: Multiple Render Targets (MRT) blending configuration is not fully supported in compatibility mode. The material blending will be used for all render targets."), G = R;
-          else G = R;
+            D.blending === MaterialBlending ? G = P : D.blending !== NoBlending$1 && (G = this._getBlending(D));
+          } else warnOnce$1("WebGPURenderer: Multiple Render Targets (MRT) blending configuration is not fully supported in compatibility mode. The material blending will be used for all render targets."), G = P;
+          else G = P;
           z.push({
             format: k,
             blend: G,
@@ -32208,7 +32208,7 @@ var<${s}> ${e} : ${h};`;
         const _ = m.getCurrentColorFormat(e.context);
         z.push({
           format: _,
-          blend: R,
+          blend: P,
           writeMask: O
         });
       }
@@ -32238,8 +32238,8 @@ var<${s}> ${e} : ${h};`;
             b.pipeline = await p.createRenderPipelineAsync(ie);
           } catch {
           }
-          const P = await p.popErrorScope();
-          P !== null && (b.error = true, error$1(P.message)), $();
+          const R = await p.popErrorScope();
+          R !== null && (b.error = true, error$1(R.message)), $();
         });
         r.push(_);
       }
@@ -32559,7 +32559,7 @@ var<${s}> ${e} : ${h};`;
         for (const [p, m] of e) {
           const b = p.match(/^(.*):f(\d+)$/), w = parseInt(b[2]);
           d.includes(w) === false && d.push(w), c[w] === void 0 && (c[w] = 0);
-          const M = h[m], R = h[m + 1], V = Number(R - M) / 1e6;
+          const M = h[m], P = h[m + 1], V = Number(P - M) / 1e6;
           this.timestamps.set(p, V), c[w] += V;
         }
         const f = c[d[d.length - 1]];
@@ -32682,7 +32682,7 @@ var<${s}> ${e} : ${h};`;
         let m;
         const b = this._isRenderCameraDepthArray(e);
         for (let w = 0; w < f.length; w++) {
-          const M = this.get(f[w]), R = {
+          const M = this.get(f[w]), P = {
             label: `colorAttachment_${w}`,
             baseMipLevel: e.activeMipmapLevel,
             mipLevelCount: 1,
@@ -32690,12 +32690,12 @@ var<${s}> ${e} : ${h};`;
             arrayLayerCount: 1,
             dimension: GPUTextureViewDimension.TwoD
           };
-          if (s.isRenderTarget3D) m = e.activeCubeFace, R.baseArrayLayer = 0, R.dimension = GPUTextureViewDimension.ThreeD, R.depthOrArrayLayers = f[w].image.depth;
+          if (s.isRenderTarget3D) m = e.activeCubeFace, P.baseArrayLayer = 0, P.dimension = GPUTextureViewDimension.ThreeD, P.depthOrArrayLayers = f[w].image.depth;
           else if (s.isRenderTarget && f[w].image.depth > 1) if (b === true) {
             const V = e.camera.cameras;
             for (let O = 0; O < V.length; O++) {
               const z = {
-                ...R,
+                ...P,
                 baseArrayLayer: O,
                 arrayLayerCount: 1,
                 dimension: GPUTextureViewDimension.TwoD
@@ -32706,9 +32706,9 @@ var<${s}> ${e} : ${h};`;
                 depthSlice: void 0
               });
             }
-          } else R.dimension = GPUTextureViewDimension.TwoDArray, R.depthOrArrayLayers = f[w].image.depth;
+          } else P.dimension = GPUTextureViewDimension.TwoDArray, P.depthOrArrayLayers = f[w].image.depth;
           if (b !== true) {
-            const V = M.texture.createView(R);
+            const V = M.texture.createView(P);
             let O, z;
             M.msaaTexture !== void 0 ? (O = M.msaaTexture.createView(), z = V) : (O = V, z = void 0), p.push({
               view: O,
@@ -32938,8 +32938,8 @@ var<${s}> ${e} : ${h};`;
         const M = this._getDefaultRenderPassDescriptor();
         if (e) {
           c = M.colorAttachments;
-          const R = c[0];
-          R.clearValue = f, R.loadOp = GPULoadOp.Clear, R.storeOp = GPUStoreOp.Store;
+          const P = c[0];
+          P.clearValue = f, P.loadOp = GPULoadOp.Clear, P.storeOp = GPUStoreOp.Store;
         }
         (p || m) && (d = M.depthStencilAttachment);
       } else {
@@ -32949,8 +32949,8 @@ var<${s}> ${e} : ${h};`;
           clearValue: e ? f : void 0
         };
         p && (M.depthLoadOp = r ? GPULoadOp.Clear : GPULoadOp.Load, M.depthClearValue = r ? h.getClearDepth() : void 0, M.depthStoreOp = GPUStoreOp.Store), m && (M.stencilLoadOp = s ? GPULoadOp.Clear : GPULoadOp.Load, M.stencilClearValue = s ? h.getClearStencil() : void 0, M.stencilStoreOp = GPUStoreOp.Store);
-        const R = this._getRenderPassDescriptor(o, M);
-        c = R.colorAttachments, d = R.depthStencilAttachment;
+        const P = this._getRenderPassDescriptor(o, M);
+        c = P.colorAttachments, d = P.depthStencilAttachment;
       }
       p && d && (r ? (d.depthLoadOp = GPULoadOp.Clear, d.depthClearValue = h.getClearDepth(), d.depthStoreOp = GPUStoreOp.Store) : (d.depthLoadOp = GPULoadOp.Load, d.depthStoreOp = GPUStoreOp.Store)), m && d && (s ? (d.stencilLoadOp = GPULoadOp.Clear, d.stencilClearValue = h.getClearStencil(), d.stencilStoreOp = GPUStoreOp.Store) : (d.stencilLoadOp = GPULoadOp.Load, d.stencilStoreOp = GPUStoreOp.Store));
       const b = a.createCommandEncoder({
@@ -33036,7 +33036,7 @@ var<${s}> ${e} : ${h};`;
           }
         }
         a.stencil === true && o.stencilWrite === true && d.currentStencilRef !== o.stencilRef && (V.setStencilReference(o.stencilRef), d.currentStencilRef = o.stencilRef);
-      }, R = (V, O) => {
+      }, P = (V, O) => {
         if (M(V, O), s.isBatchedMesh === true) {
           const z = s._multiDrawStarts, H = s._multiDrawCounts, q = s._multiDrawCount, W = s._multiDrawInstances;
           W !== null && warnOnce$1("WebGPUBackend: renderMultiDrawInstances has been deprecated and will be removed in r184. Append to renderMultiDraw arguments and use indirection.");
@@ -33092,7 +33092,7 @@ var<${s}> ${e} : ${h};`;
               const pe = d.bundleEncoders[q], U = d.bundleSets[q];
               ee = pe, ie = U;
             }
-            J && ee.setViewport(Math.floor(J.x * H), Math.floor(J.y * H), Math.floor(J.width * H), Math.floor(J.height * H), a.viewportValue.minDepth, a.viewportValue.maxDepth), z && V.indexesGPU && (ee.setBindGroup(z.index, V.indexesGPU[q]), ie.bindingGroups[z.index] = z.id), R(ee, ie);
+            J && ee.setViewport(Math.floor(J.x * H), Math.floor(J.y * H), Math.floor(J.width * H), Math.floor(J.height * H), a.viewportValue.minDepth, a.viewportValue.maxDepth), z && V.indexesGPU && (ee.setBindGroup(z.index, V.indexesGPU[q]), ie.bindingGroups[z.index] = z.id), P(ee, ie);
           }
         }
       } else if (d.currentPass) {
@@ -33100,7 +33100,7 @@ var<${s}> ${e} : ${h};`;
           const V = d.lastOcclusionObject;
           V !== s && (V !== null && V.occlusionTest === true && (d.currentPass.endOcclusionQuery(), d.occlusionQueryIndex++), s.occlusionTest === true && (d.currentPass.beginOcclusionQuery(d.occlusionQueryIndex), d.occlusionQueryObjects[d.occlusionQueryIndex] = s), d.lastOcclusionObject = s);
         }
-        R(d.currentPass, d.currentSets);
+        P(d.currentPass, d.currentSets);
       }
     }
     needsRenderUpdate(e) {
@@ -33252,8 +33252,8 @@ var<${s}> ${e} : ${h};`;
       return GPUFeatureMap[e] !== void 0 && (e = GPUFeatureMap[e]), this.device.features.has(e);
     }
     copyTextureToTexture(e, r, s = null, o = null, a = 0, h = 0) {
-      let c = 0, d = 0, f = 0, p = 0, m = 0, b = 0, w = e.image.width, M = e.image.height, R = 1;
-      s !== null && (s.isBox3 === true ? (p = s.min.x, m = s.min.y, b = s.min.z, w = s.max.x - s.min.x, M = s.max.y - s.min.y, R = s.max.z - s.min.z) : (p = s.min.x, m = s.min.y, w = s.max.x - s.min.x, M = s.max.y - s.min.y, R = 1)), o !== null && (c = o.x, d = o.y, f = o.z || 0);
+      let c = 0, d = 0, f = 0, p = 0, m = 0, b = 0, w = e.image.width, M = e.image.height, P = 1;
+      s !== null && (s.isBox3 === true ? (p = s.min.x, m = s.min.y, b = s.min.z, w = s.max.x - s.min.x, M = s.max.y - s.min.y, P = s.max.z - s.min.z) : (p = s.min.x, m = s.min.y, w = s.max.x - s.min.x, M = s.max.y - s.min.y, P = 1)), o !== null && (c = o.x, d = o.y, f = o.z || 0);
       const V = this.device.createCommandEncoder({
         label: "copyTextureToTexture_" + e.id + "_" + r.id
       }), O = this.get(e).texture, z = this.get(r).texture;
@@ -33276,7 +33276,7 @@ var<${s}> ${e} : ${h};`;
       }, [
         w,
         M,
-        R
+        P
       ]), this.device.queue.submit([
         V.finish()
       ]), h === 0 && r.generateMipmaps && this.textureUtils.generateMipmaps(r);
@@ -34214,13 +34214,13 @@ var<${s}> ${e} : ${h};`;
         seen[p] = true;
         const m = p.endsWith(".css"), b = m ? '[rel="stylesheet"]' : "";
         if (s) for (let M = h.length - 1; M >= 0; M--) {
-          const R = h[M];
-          if (R.href === p && (!m || R.rel === "stylesheet")) return;
+          const P = h[M];
+          if (P.href === p && (!m || P.rel === "stylesheet")) return;
         }
         else if (document.querySelector(`link[href="${p}"]${b}`)) return;
         const w = document.createElement("link");
-        if (w.rel = m ? "stylesheet" : scriptRel, m || (w.as = "script"), w.crossOrigin = "", w.href = p, d && w.setAttribute("nonce", d), document.head.appendChild(w), m) return new Promise((M, R) => {
-          w.addEventListener("load", M), w.addEventListener("error", () => R(new Error(`Unable to preload CSS for ${p}`)));
+        if (w.rel = m ? "stylesheet" : scriptRel, m || (w.as = "script"), w.crossOrigin = "", w.href = p, d && w.setAttribute("nonce", d), document.head.appendChild(w), m) return new Promise((M, P) => {
+          w.addEventListener("load", M), w.addEventListener("error", () => P(new Error(`Unable to preload CSS for ${p}`)));
         });
       }));
     }
@@ -38074,8 +38074,8 @@ var<${s}> ${e} : ${h};`;
       if (!e) return;
       const s = this.value.rawValue.getComponents("hsv"), o = this.canvasElement.width, a = this.canvasElement.height, h = e.getImageData(0, 0, o, a), c = h.data;
       for (let p = 0; p < a; p++) for (let m = 0; m < o; m++) {
-        const b = mapRange$3(m, 0, o, 0, 100), w = mapRange$3(p, 0, a, 100, 0), M = hsvToRgbInt$2(s[0], b, w), R = (p * o + m) * 4;
-        c[R] = M[0], c[R + 1] = M[1], c[R + 2] = M[2], c[R + 3] = 255;
+        const b = mapRange$3(m, 0, o, 0, 100), w = mapRange$3(p, 0, a, 100, 0), M = hsvToRgbInt$2(s[0], b, w), P = (p * o + m) * 4;
+        c[P] = M[0], c[P + 1] = M[1], c[P + 2] = M[2], c[P + 3] = 255;
       }
       e.putImageData(h, 0, 0);
       const d = mapRange$3(s[1], 0, 100, 0, 100);
@@ -43673,8 +43673,8 @@ var<${s}> ${e} : ${h};`;
       if (!e) return;
       const s = this.value.rawValue.getComponents("hsv"), o = this.canvasElement.width, a = this.canvasElement.height, h = e.getImageData(0, 0, o, a), c = h.data;
       for (let p = 0; p < a; p++) for (let m = 0; m < o; m++) {
-        const b = mapRange$2(m, 0, o, 0, 100), w = mapRange$2(p, 0, a, 100, 0), M = hsvToRgbInt$1(s[0], b, w), R = (p * o + m) * 4;
-        c[R] = M[0], c[R + 1] = M[1], c[R + 2] = M[2], c[R + 3] = 255;
+        const b = mapRange$2(m, 0, o, 0, 100), w = mapRange$2(p, 0, a, 100, 0), M = hsvToRgbInt$1(s[0], b, w), P = (p * o + m) * 4;
+        c[P] = M[0], c[P + 1] = M[1], c[P + 2] = M[2], c[P + 3] = 255;
       }
       e.putImageData(h, 0, 0);
       const d = mapRange$2(s[1], 0, 100, 0, 100);
@@ -49874,8 +49874,8 @@ var<${s}> ${e} : ${h};`;
       if (!e) return;
       const s = this.value.rawValue.getComponents("hsv"), o = this.canvasElement.width, a = this.canvasElement.height, h = e.getImageData(0, 0, o, a), c = h.data;
       for (let p = 0; p < a; p++) for (let m = 0; m < o; m++) {
-        const b = mapRange$1(m, 0, o, 0, 100), w = mapRange$1(p, 0, a, 100, 0), M = hsvToRgbInt(s[0], b, w), R = (p * o + m) * 4;
-        c[R] = M[0], c[R + 1] = M[1], c[R + 2] = M[2], c[R + 3] = 255;
+        const b = mapRange$1(m, 0, o, 0, 100), w = mapRange$1(p, 0, a, 100, 0), M = hsvToRgbInt(s[0], b, w), P = (p * o + m) * 4;
+        c[P] = M[0], c[P + 1] = M[1], c[P + 2] = M[2], c[P + 3] = 255;
       }
       e.putImageData(h, 0, 0);
       const d = mapRange$1(s[1], 0, 100, 0, 100);
@@ -51570,14 +51570,14 @@ var<${s}> ${e} : ${h};`;
   function segmentCircleIntersection(l, e, r, s, o, a, h) {
     const c = r - l, d = s - e, f = l - o, p = e - a, m = c * c + d * d, b = 2 * (f * c + p * d), w = f * f + p * p - h * h, M = b * b - 4 * m * w;
     if (M < 0) return [];
-    const R = [], V = Math.sqrt(M), O = (-b - V) / (2 * m), z = (-b + V) / (2 * m);
-    return O >= 0 && O <= 1 && R.push({
+    const P = [], V = Math.sqrt(M), O = (-b - V) / (2 * m), z = (-b + V) / (2 * m);
+    return O >= 0 && O <= 1 && P.push({
       x: l + O * c,
       y: e + O * d
-    }), z >= 0 && z <= 1 && M !== 0 && R.push({
+    }), z >= 0 && z <= 1 && M !== 0 && P.push({
       x: l + z * c,
       y: e + z * d
-    }), R;
+    }), P;
   }
   const TAU = 2 * Math.PI;
   var mod$2 = function(l, e) {
@@ -52245,12 +52245,12 @@ var<${s}> ${e} : ${h};`;
   function requireUserAgent_DEPRECATED() {
     if (hasRequiredUserAgent_DEPRECATED) return UserAgent_DEPRECATED_1;
     hasRequiredUserAgent_DEPRECATED = 1;
-    var l = false, e, r, s, o, a, h, c, d, f, p, m, b, w, M, R;
+    var l = false, e, r, s, o, a, h, c, d, f, p, m, b, w, M, P;
     function V() {
       if (!l) {
         l = true;
         var z = navigator.userAgent, H = /(?:MSIE.(\d+\.\d+))|(?:(?:Firefox|GranParadiso|Iceweasel).(\d+\.\d+))|(?:Opera(?:.+Version.|.)(\d+\.\d+))|(?:AppleWebKit.(\d+(?:\.\d+)?))|(?:Trident\/\d+\.\d+.*rv:(\d+\.\d+))/.exec(z), q = /(Mac OS X)|(Windows)|(Linux)/.exec(z);
-        if (b = /\b(iPhone|iP[ao]d)/.exec(z), w = /\b(iP[ao]d)/.exec(z), p = /Android/i.exec(z), M = /FBAN\/\w+;/i.exec(z), R = /Mobile/i.exec(z), m = !!/Win64/.exec(z), H) {
+        if (b = /\b(iPhone|iP[ao]d)/.exec(z), w = /\b(iP[ao]d)/.exec(z), p = /Android/i.exec(z), M = /FBAN\/\w+;/i.exec(z), P = /Mobile/i.exec(z), m = !!/Win64/.exec(z), H) {
           e = H[1] ? parseFloat(H[1]) : H[5] ? parseFloat(H[5]) : NaN, e && document && document.documentMode && (e = document.documentMode);
           var W = /(?:Trident\/(\d+.\d+))/.exec(z);
           h = W ? parseFloat(W[1]) + 4 : e, r = H[2] ? parseFloat(H[2]) : NaN, s = H[3] ? parseFloat(H[3]) : NaN, o = H[4] ? parseFloat(H[4]) : NaN, o ? (H = /(?:Chrome\/(\d+\.\d+))/.exec(z), a = H && H[1] ? parseFloat(H[1]) : NaN) : a = NaN;
@@ -52302,7 +52302,7 @@ var<${s}> ${e} : ${h};`;
         return V() || b;
       },
       mobile: function() {
-        return V() || b || w || p || R;
+        return V() || b || w || p || P;
       },
       nativeApp: function() {
         return V() || M;
@@ -52817,7 +52817,7 @@ var<${s}> ${e} : ${h};`;
   const premultiplyAlpha$1 = TSL.premultiplyAlpha;
   TSL.property;
   TSL.radians;
-  const rand$3 = TSL.rand;
+  const rand$4 = TSL.rand;
   TSL.range;
   TSL.rangeFog;
   const rangeFogFactor = TSL.rangeFogFactor;
@@ -53687,19 +53687,19 @@ var<${s}> ${e} : ${h};`;
       edges: 0.5,
       end: 1
     }[o] || 0 : !c && d && (p = o[0], m = o[1]), function(b, w, M) {
-      var R = (M || r).length, V = h[R], O, z, H, q, W, K, J, ee, ie;
+      var P = (M || r).length, V = h[P], O, z, H, q, W, K, J, ee, ie;
       if (!V) {
         if (ie = r.grid === "auto" ? 0 : (r.grid || [
           1,
           _bigNum$1
         ])[1], !ie) {
-          for (J = -_bigNum$1; J < (J = M[ie++].getBoundingClientRect().left) && ie < R; ) ;
-          ie < R && ie--;
+          for (J = -_bigNum$1; J < (J = M[ie++].getBoundingClientRect().left) && ie < P; ) ;
+          ie < P && ie--;
         }
-        for (V = h[R] = [], O = d ? Math.min(ie, R) * p - 0.5 : o % ie, z = ie === _bigNum$1 ? 0 : d ? R * m / ie - 0.5 : o / ie | 0, J = 0, ee = _bigNum$1, K = 0; K < R; K++) H = K % ie - O, q = z - (K / ie | 0), V[K] = W = f ? Math.abs(f === "y" ? q : H) : _sqrt(H * H + q * q), W > J && (J = W), W < ee && (ee = W);
-        o === "random" && shuffle(V), V.max = J - ee, V.min = ee, V.v = R = (parseFloat(r.amount) || parseFloat(r.each) * (ie > R ? R - 1 : f ? f === "y" ? R / ie : ie : Math.max(ie, R / ie)) || 0) * (o === "edges" ? -1 : 1), V.b = R < 0 ? a - R : a, V.u = getUnit(r.amount || r.each) || 0, s = s && R < 0 ? _invertEase(s) : s;
+        for (V = h[P] = [], O = d ? Math.min(ie, P) * p - 0.5 : o % ie, z = ie === _bigNum$1 ? 0 : d ? P * m / ie - 0.5 : o / ie | 0, J = 0, ee = _bigNum$1, K = 0; K < P; K++) H = K % ie - O, q = z - (K / ie | 0), V[K] = W = f ? Math.abs(f === "y" ? q : H) : _sqrt(H * H + q * q), W > J && (J = W), W < ee && (ee = W);
+        o === "random" && shuffle(V), V.max = J - ee, V.min = ee, V.v = P = (parseFloat(r.amount) || parseFloat(r.each) * (ie > P ? P - 1 : f ? f === "y" ? P / ie : ie : Math.max(ie, P / ie)) || 0) * (o === "edges" ? -1 : 1), V.b = P < 0 ? a - P : a, V.u = getUnit(r.amount || r.each) || 0, s = s && P < 0 ? _invertEase(s) : s;
       }
-      return R = (V[b] - V.min) / V.max || 0, _roundPrecise(V.b + (s ? s(R) : R) * V.v) + V.u;
+      return P = (V[b] - V.min) / V.max || 0, _roundPrecise(V.b + (s ? s(P) : P) * V.v) + V.u;
     };
   }, _roundModifier = function(e) {
     var r = Math.pow(10, ((e + "").split(".")[1] || "").length);
@@ -53769,8 +53769,8 @@ var<${s}> ${e} : ${h};`;
         for (p = [], m = e.length, b = m - 2, f = 1; f < m; f++) p.push(l(e[f - 1], e[f]));
         m--, a = function(M) {
           M *= m;
-          var R = Math.min(b, ~~M);
-          return p[R](M - R);
+          var P = Math.min(b, ~~M);
+          return p[P](M - P);
         }, s = r;
       } else o || (e = _merge(_isArray(e) ? [] : {}, e));
       if (!p) {
@@ -53962,9 +53962,9 @@ var<${s}> ${e} : ${h};`;
     var r = e.join(" "), s;
     if (_colorExp.lastIndex = 0, _colorExp.test(r)) return s = _hslExp.test(r), e[1] = _formatColors(e[1], s), e[0] = _formatColors(e[0], s, _colorOrderData(e[1])), true;
   }, _tickerActive, _ticker = (function() {
-    var l = Date.now, e = 500, r = 33, s = l(), o = s, a = 1e3 / 240, h = a, c = [], d, f, p, m, b, w, M = function R(V) {
+    var l = Date.now, e = 500, r = 33, s = l(), o = s, a = 1e3 / 240, h = a, c = [], d, f, p, m, b, w, M = function P(V) {
       var O = l() - o, z = V === true, H, q, W, K;
-      if ((O > e || O < 0) && (s += O - r), o += O, W = o - s, H = W - h, (H > 0 || z) && (K = ++m.frame, b = W - m.time * 1e3, m.time = W = W / 1e3, h += H + (H >= a ? 4 : a - H), q = 1), z || (d = f(R)), q) for (w = 0; w < c.length; w++) c[w](W, b, K, V);
+      if ((O > e || O < 0) && (s += O - r), o += O, W = o - s, H = W - h, (H > 0 || z) && (K = ++m.frame, b = W - m.time * 1e3, m.time = W = W / 1e3, h += H + (H >= a ? 4 : a - H), q = 1), z || (d = f(P)), q) for (w = 0; w < c.length; w++) c[w](W, b, K, V);
     };
     return m = {
       time: 0,
@@ -54250,18 +54250,18 @@ var<${s}> ${e} : ${h};`;
     }, r.staggerFromTo = function(o, a, h, c, d, f, p, m) {
       return c.startAt = h, _inheritDefaults(c).immediateRender = _isNotFalse(c.immediateRender), this.staggerTo(o, a, c, d, f, p, m);
     }, r.render = function(o, a, h) {
-      var c = this._time, d = this._dirty ? this.totalDuration() : this._tDur, f = this._dur, p = o <= 0 ? 0 : _roundPrecise(o), m = this._zTime < 0 != o < 0 && (this._initted || !f), b, w, M, R, V, O, z, H, q, W, K, J;
+      var c = this._time, d = this._dirty ? this.totalDuration() : this._tDur, f = this._dur, p = o <= 0 ? 0 : _roundPrecise(o), m = this._zTime < 0 != o < 0 && (this._initted || !f), b, w, M, P, V, O, z, H, q, W, K, J;
       if (this !== _globalTimeline && p > d && o >= 0 && (p = d), p !== this._tTime || h || m) {
         if (c !== this._time && f && (p += this._time - c, o += this._time - c), b = p, q = this._start, H = this._ts, O = !H, m && (f || (c = this._zTime), (o || !a) && (this._zTime = o)), this._repeat) {
           if (K = this._yoyo, V = f + this._rDelay, this._repeat < -1 && o < 0) return this.totalTime(V * 100 + o, a, h);
-          if (b = _roundPrecise(p % V), p === d ? (R = this._repeat, b = f) : (R = ~~(p / V), R && R === p / V && (b = f, R--), b > f && (b = f)), W = _animationCycle(this._tTime, V), !c && this._tTime && W !== R && this._tTime - W * V - this._dur <= 0 && (W = R), K && R & 1 && (b = f - b, J = 1), R !== W && !this._lock) {
-            var ee = K && W & 1, ie = ee === (K && R & 1);
-            if (R < W && (ee = !ee), c = ee ? 0 : p % f ? f : p, this._lock = 1, this.render(c || (J ? 0 : _roundPrecise(R * V)), a, !f)._lock = 0, this._tTime = p, !a && this.parent && _callback(this, "onRepeat"), this.vars.repeatRefresh && !J && (this.invalidate()._lock = 1), c && c !== this._time || O !== !this._ts || this.vars.onRepeat && !this.parent && !this._act) return this;
+          if (b = _roundPrecise(p % V), p === d ? (P = this._repeat, b = f) : (P = ~~(p / V), P && P === p / V && (b = f, P--), b > f && (b = f)), W = _animationCycle(this._tTime, V), !c && this._tTime && W !== P && this._tTime - W * V - this._dur <= 0 && (W = P), K && P & 1 && (b = f - b, J = 1), P !== W && !this._lock) {
+            var ee = K && W & 1, ie = ee === (K && P & 1);
+            if (P < W && (ee = !ee), c = ee ? 0 : p % f ? f : p, this._lock = 1, this.render(c || (J ? 0 : _roundPrecise(P * V)), a, !f)._lock = 0, this._tTime = p, !a && this.parent && _callback(this, "onRepeat"), this.vars.repeatRefresh && !J && (this.invalidate()._lock = 1), c && c !== this._time || O !== !this._ts || this.vars.onRepeat && !this.parent && !this._act) return this;
             if (f = this._dur, d = this._tDur, ie && (this._lock = 2, c = ee ? f : -1e-4, this.render(c, true), this.vars.repeatRefresh && !J && this.invalidate()), this._lock = 0, !this._ts && !O) return this;
             _propagateYoyoEase(this, J);
           }
         }
-        if (this._hasPause && !this._forcing && this._lock < 2 && (z = _findNextPauseTween(this, _roundPrecise(c), _roundPrecise(b)), z && (p -= b - (b = z._start))), this._tTime = p, this._time = b, this._act = !H, this._initted || (this._onUpdate = this.vars.onUpdate, this._initted = 1, this._zTime = o, c = 0), !c && b && !a && !R && (_callback(this, "onStart"), this._tTime !== p)) return this;
+        if (this._hasPause && !this._forcing && this._lock < 2 && (z = _findNextPauseTween(this, _roundPrecise(c), _roundPrecise(b)), z && (p -= b - (b = z._start))), this._tTime = p, this._time = b, this._act = !H, this._initted || (this._onUpdate = this.vars.onUpdate, this._initted = 1, this._zTime = o, c = 0), !c && b && !a && !P && (_callback(this, "onStart"), this._tTime !== p)) return this;
         if (b >= c && o >= 0) for (w = this._first; w; ) {
           if (M = w._next, (w._act || b >= w._start) && w._ts && z !== w) {
             if (w.parent !== this) return this.render(o, a, h);
@@ -54396,13 +54396,13 @@ var<${s}> ${e} : ${h};`;
     _forcing: 0
   });
   var _addComplexStringPropTween = function(e, r, s, o, a, h, c) {
-    var d = new PropTween(this._pt, e, r, 0, 1, _renderComplexString, null, a), f = 0, p = 0, m, b, w, M, R, V, O, z;
+    var d = new PropTween(this._pt, e, r, 0, 1, _renderComplexString, null, a), f = 0, p = 0, m, b, w, M, P, V, O, z;
     for (d.b = s, d.e = o, s += "", o += "", (O = ~o.indexOf("random(")) && (o = _replaceRandom(o)), h && (z = [
       s,
       o
-    ], h(z, e, r), s = z[0], o = z[1]), b = s.match(_complexStringNumExp) || []; m = _complexStringNumExp.exec(o); ) M = m[0], R = o.substring(f, m.index), w ? w = (w + 1) % 5 : R.substr(-5) === "rgba(" && (w = 1), M !== b[p++] && (V = parseFloat(b[p - 1]) || 0, d._pt = {
+    ], h(z, e, r), s = z[0], o = z[1]), b = s.match(_complexStringNumExp) || []; m = _complexStringNumExp.exec(o); ) M = m[0], P = o.substring(f, m.index), w ? w = (w + 1) % 5 : P.substr(-5) === "rgba(" && (w = 1), M !== b[p++] && (V = parseFloat(b[p - 1]) || 0, d._pt = {
       _next: d._pt,
-      p: R || p === 1 ? R : ",",
+      p: P || p === 1 ? P : ",",
       s: V,
       c: M.charAt(1) === "=" ? _parseRelative(V, M) - V : parseFloat(M) - V,
       m: w && w < 4 ? Math.round : 0
@@ -54422,15 +54422,15 @@ var<${s}> ${e} : ${h};`;
     if (_plugins[e] && (c = new _plugins[e]()).init(a, c.rawVars ? r[e] : _processVars(r[e], o, a, h, s), s, o, h) !== false && (s._pt = d = new PropTween(s._pt, a, e, 0, 1, c.render, c, 0, c.priority), s !== _quickTween)) for (f = s._ptLookup[s._targets.indexOf(a)], p = c._props.length; p--; ) f[c._props[p]] = d;
     return c;
   }, _overwritingTween, _forceAllPropTweens, _initTween = function l(e, r, s) {
-    var o = e.vars, a = o.ease, h = o.startAt, c = o.immediateRender, d = o.lazy, f = o.onUpdate, p = o.runBackwards, m = o.yoyoEase, b = o.keyframes, w = o.autoRevert, M = e._dur, R = e._startAt, V = e._targets, O = e.parent, z = O && O.data === "nested" ? O.vars.targets : V, H = e._overwrite === "auto" && !_suppressOverwrites, q = e.timeline, W, K, J, ee, ie, pe, U, v, _, $, P, F, k;
+    var o = e.vars, a = o.ease, h = o.startAt, c = o.immediateRender, d = o.lazy, f = o.onUpdate, p = o.runBackwards, m = o.yoyoEase, b = o.keyframes, w = o.autoRevert, M = e._dur, P = e._startAt, V = e._targets, O = e.parent, z = O && O.data === "nested" ? O.vars.targets : V, H = e._overwrite === "auto" && !_suppressOverwrites, q = e.timeline, W, K, J, ee, ie, pe, U, v, _, $, R, F, k;
     if (q && (!b || !a) && (a = "none"), e._ease = _parseEase(a, _defaults.ease), e._yEase = m ? _invertEase(_parseEase(m === true ? a : m, _defaults.ease)) : 0, m && e._yoyo && !e._repeat && (m = e._yEase, e._yEase = e._ease, e._ease = m), e._from = !q && !!o.runBackwards, !q || b && !o.stagger) {
-      if (v = V[0] ? _getCache(V[0]).harness : 0, F = v && o[v.prop], W = _copyExcluding(o, _reservedProps), R && (R._zTime < 0 && R.progress(1), r < 0 && p && c && !w ? R.render(-1, true) : R.revert(p && M ? _revertConfigNoKill : _startAtRevertConfig), R._lazy = 0), h) {
+      if (v = V[0] ? _getCache(V[0]).harness : 0, F = v && o[v.prop], W = _copyExcluding(o, _reservedProps), P && (P._zTime < 0 && P.progress(1), r < 0 && p && c && !w ? P.render(-1, true) : P.revert(p && M ? _revertConfigNoKill : _startAtRevertConfig), P._lazy = 0), h) {
         if (_removeFromParent(e._startAt = Tween.set(V, _setDefaults({
           data: "isStart",
           overwrite: false,
           parent: O,
           immediateRender: true,
-          lazy: !R && _isNotFalse(d),
+          lazy: !P && _isNotFalse(d),
           startAt: null,
           delay: 0,
           onUpdate: f && function() {
@@ -54441,11 +54441,11 @@ var<${s}> ${e} : ${h};`;
           r && (e._zTime = r);
           return;
         }
-      } else if (p && M && !R) {
+      } else if (p && M && !P) {
         if (r && (c = false), J = _setDefaults({
           overwrite: false,
           data: "isFromStart",
-          lazy: c && !R && _isNotFalse(d),
+          lazy: c && !P && _isNotFalse(d),
           immediateRender: c,
           stagger: 0,
           parent: O
@@ -54453,9 +54453,9 @@ var<${s}> ${e} : ${h};`;
         else if (!r) return;
       }
       for (e._pt = e._ptCache = 0, d = M && _isNotFalse(d) || d && !M, K = 0; K < V.length; K++) {
-        if (ie = V[K], U = ie._gsap || _harness(V)[K]._gsap, e._ptLookup[K] = $ = {}, _lazyLookup[U.id] && _lazyTweens.length && _lazyRender(), P = z === V ? K : z.indexOf(ie), v && (_ = new v()).init(ie, F || W, e, P, z) !== false && (e._pt = ee = new PropTween(e._pt, ie, _.name, 0, 1, _.render, _, 0, _.priority), _._props.forEach(function(G) {
+        if (ie = V[K], U = ie._gsap || _harness(V)[K]._gsap, e._ptLookup[K] = $ = {}, _lazyLookup[U.id] && _lazyTweens.length && _lazyRender(), R = z === V ? K : z.indexOf(ie), v && (_ = new v()).init(ie, F || W, e, R, z) !== false && (e._pt = ee = new PropTween(e._pt, ie, _.name, 0, 1, _.render, _, 0, _.priority), _._props.forEach(function(G) {
           $[G] = ee;
-        }), _.priority && (pe = 1)), !v || F) for (J in W) _plugins[J] && (_ = _checkPlugin(J, W, e, P, ie, z)) ? _.priority && (pe = 1) : $[J] = ee = _addPropTween.call(e, ie, J, "get", W[J], P, z, 0, o.stringFilter);
+        }), _.priority && (pe = 1)), !v || F) for (J in W) _plugins[J] && (_ = _checkPlugin(J, W, e, R, ie, z)) ? _.priority && (pe = 1) : $[J] = ee = _addPropTween.call(e, ie, J, "get", W[J], R, z, 0, o.stringFilter);
         e._op && e._op[K] && e.kill(ie, e._op[K]), H && e._pt && (_overwritingTween = e, _globalTimeline.killTweensOf(ie, $, e.globalTime(r)), k = !e.parent, _overwritingTween = 0), e._pt && d && (_lazyLookup[U.id] = 1);
       }
       pe && _sortPropTweensByPriority(e), e._onInit && e._onInit(e);
@@ -54500,13 +54500,13 @@ var<${s}> ${e} : ${h};`;
     function e(s, o, a, h) {
       var c;
       typeof o == "number" && (a.duration = o, o = a, a = null), c = l.call(this, h ? o : _inheritDefaults(o)) || this;
-      var d = c.vars, f = d.duration, p = d.delay, m = d.immediateRender, b = d.stagger, w = d.overwrite, M = d.keyframes, R = d.defaults, V = d.scrollTrigger, O = d.yoyoEase, z = o.parent || _globalTimeline, H = (_isArray(s) || _isTypedArray(s) ? _isNumber(s[0]) : "length" in o) ? [
+      var d = c.vars, f = d.duration, p = d.delay, m = d.immediateRender, b = d.stagger, w = d.overwrite, M = d.keyframes, P = d.defaults, V = d.scrollTrigger, O = d.yoyoEase, z = o.parent || _globalTimeline, H = (_isArray(s) || _isTypedArray(s) ? _isNumber(s[0]) : "length" in o) ? [
         s
       ] : toArray(s), q, W, K, J, ee, ie, pe, U;
       if (c._targets = H.length ? _harness(H) : _warn("GSAP target " + s + " not found. https://gsap.com", !_config.nullTargetWarn) || [], c._ptLookup = [], c._overwrite = w, M || b || _isFuncOrString(f) || _isFuncOrString(p)) {
         if (o = c.vars, q = c.timeline = new Timeline({
           data: "nested",
-          defaults: R || {},
+          defaults: P || {},
           targets: z && z.data === "nested" ? z.vars.targets : H
         }), q.kill(), q.parent = q._dp = _assertThisInitialized(c), q._start = 0, b || _isFuncOrString(f) || _isFuncOrString(p)) {
           if (J = H.length, pe = b && distribute(b), _isObject(b)) for (ee in b) ~_staggerTweenProps.indexOf(ee) && (U || (U = {}), U[ee] = b[ee]);
@@ -54516,7 +54516,7 @@ var<${s}> ${e} : ${h};`;
           _inheritDefaults(_setDefaults(q.vars.defaults, {
             ease: "none"
           })), q._ease = _parseEase(M.ease || o.ease || "none");
-          var v = 0, _, $, P;
+          var v = 0, _, $, R;
           if (_isArray(M)) M.forEach(function(F) {
             return q.to(H, F, ">");
           }), q.duration();
@@ -54525,10 +54525,10 @@ var<${s}> ${e} : ${h};`;
             for (ee in M) ee === "ease" || ee === "easeEach" || _parseKeyframe(ee, M[ee], K, M.easeEach);
             for (ee in K) for (_ = K[ee].sort(function(F, k) {
               return F.t - k.t;
-            }), v = 0, W = 0; W < _.length; W++) $ = _[W], P = {
+            }), v = 0, W = 0; W < _.length; W++) $ = _[W], R = {
               ease: $.e,
               duration: ($.t - (W ? _[W - 1].t : 0)) / 100 * f
-            }, P[ee] = $.v, q.to(H, P, v), v += P.duration;
+            }, R[ee] = $.v, q.to(H, R, v), v += R.duration;
             q.duration() < f && q.to({}, {
               duration: f - q.duration()
             });
@@ -54540,13 +54540,13 @@ var<${s}> ${e} : ${h};`;
     }
     var r = e.prototype;
     return r.render = function(o, a, h) {
-      var c = this._time, d = this._tDur, f = this._dur, p = o < 0, m = o > d - _tinyNum && !p ? d : o < _tinyNum ? 0 : o, b, w, M, R, V, O, z, H, q;
+      var c = this._time, d = this._tDur, f = this._dur, p = o < 0, m = o > d - _tinyNum && !p ? d : o < _tinyNum ? 0 : o, b, w, M, P, V, O, z, H, q;
       if (!f) _renderZeroDurationTween(this, o, a, h);
       else if (m !== this._tTime || !o || h || !this._initted && this._tTime || this._startAt && this._zTime < 0 !== p) {
         if (b = m, H = this.timeline, this._repeat) {
-          if (R = f + this._rDelay, this._repeat < -1 && p) return this.totalTime(R * 100 + o, a, h);
-          if (b = _roundPrecise(m % R), m === d ? (M = this._repeat, b = f) : (M = ~~(m / R), M && M === _roundPrecise(m / R) && (b = f, M--), b > f && (b = f)), O = this._yoyo && M & 1, O && (q = this._yEase, b = f - b), V = _animationCycle(this._tTime, R), b === c && !h && this._initted && M === V) return this._tTime = m, this;
-          M !== V && (H && this._yEase && _propagateYoyoEase(H, O), this.vars.repeatRefresh && !O && !this._lock && this._time !== R && this._initted && (this._lock = h = 1, this.render(_roundPrecise(R * M), true).invalidate()._lock = 0));
+          if (P = f + this._rDelay, this._repeat < -1 && p) return this.totalTime(P * 100 + o, a, h);
+          if (b = _roundPrecise(m % P), m === d ? (M = this._repeat, b = f) : (M = ~~(m / P), M && M === _roundPrecise(m / P) && (b = f, M--), b > f && (b = f)), O = this._yoyo && M & 1, O && (q = this._yEase, b = f - b), V = _animationCycle(this._tTime, P), b === c && !h && this._initted && M === V) return this._tTime = m, this;
+          M !== V && (H && this._yEase && _propagateYoyoEase(H, O), this.vars.repeatRefresh && !O && !this._lock && this._time !== P && this._initted && (this._lock = h = 1, this.render(_roundPrecise(P * M), true).invalidate()._lock = 0));
         }
         if (!this._initted) {
           if (_attemptInitTween(this, p ? o : b, h, a, m)) return this._tTime = 0, this;
@@ -54572,13 +54572,13 @@ var<${s}> ${e} : ${h};`;
         var h = this.timeline.totalDuration();
         return this.timeline.killTweensOf(o, a, _overwritingTween && _overwritingTween.vars.overwrite !== true)._first || _interrupt(this), this.parent && h !== this.timeline.totalDuration() && _setDuration(this, this._dur * this.timeline._tDur / h, 0, 1), this;
       }
-      var c = this._targets, d = o ? toArray(o) : c, f = this._ptLookup, p = this._pt, m, b, w, M, R, V, O;
+      var c = this._targets, d = o ? toArray(o) : c, f = this._ptLookup, p = this._pt, m, b, w, M, P, V, O;
       if ((!a || a === "all") && _arraysMatch(c, d)) return a === "all" && (this._pt = 0), _interrupt(this);
-      for (m = this._op = this._op || [], a !== "all" && (_isString(a) && (R = {}, _forEachName(a, function(z) {
-        return R[z] = 1;
-      }), a = R), a = _addAliasesToVars(c, a)), O = c.length; O--; ) if (~d.indexOf(c[O])) {
+      for (m = this._op = this._op || [], a !== "all" && (_isString(a) && (P = {}, _forEachName(a, function(z) {
+        return P[z] = 1;
+      }), a = P), a = _addAliasesToVars(c, a)), O = c.length; O--; ) if (~d.indexOf(c[O])) {
         b = f[O], a === "all" ? (m[O] = a, M = b, w = {}) : (w = m[O] = m[O] || {}, M = a);
-        for (R in M) V = b && b[R], V && ((!("kill" in V.d) || V.d.kill(R) === true) && _removeLinkedListItem(this, V, "_pt"), delete b[R]), w !== "all" && (w[R] = 1);
+        for (P in M) V = b && b[P], V && ((!("kill" in V.d) || V.d.kill(P) === true) && _removeLinkedListItem(this, V, "_pt"), delete b[P]), w !== "all" && (w[P] = 1);
       }
       return this._initted && !this._pt && p && _interrupt(this), this;
     }, e.to = function(o, a) {
@@ -55105,15 +55105,15 @@ var<${s}> ${e} : ${h};`;
     grid: 1,
     flex: 1
   }, _convertToUnit = function l(e, r, s, o) {
-    var a = parseFloat(s) || 0, h = (s + "").trim().substr((a + "").length) || "px", c = _tempDiv.style, d = _horizontalExp.test(r), f = e.tagName.toLowerCase() === "svg", p = (f ? "client" : "offset") + (d ? "Width" : "Height"), m = 100, b = o === "px", w = o === "%", M, R, V, O;
+    var a = parseFloat(s) || 0, h = (s + "").trim().substr((a + "").length) || "px", c = _tempDiv.style, d = _horizontalExp.test(r), f = e.tagName.toLowerCase() === "svg", p = (f ? "client" : "offset") + (d ? "Width" : "Height"), m = 100, b = o === "px", w = o === "%", M, P, V, O;
     if (o === h || !a || _nonConvertibleUnits[o] || _nonConvertibleUnits[h]) return a;
     if (h !== "px" && !b && (a = l(e, r, s, "px")), O = e.getCTM && _isSVG(e), (w || h === "%") && (_transformProps[r] || ~r.indexOf("adius"))) return M = O ? e.getBBox()[d ? "width" : "height"] : e[p], _round(w ? a / M * m : a / 100 * M);
-    if (c[d ? "width" : "height"] = m + (b ? h : o), R = ~r.indexOf("adius") || o === "em" && e.appendChild && !f ? e : e.parentNode, O && (R = (e.ownerSVGElement || {}).parentNode), (!R || R === _doc || !R.appendChild) && (R = _doc.body), V = R._gsap, V && w && V.width && d && V.time === _ticker.time && !V.uncache) return _round(a / V.width * m);
+    if (c[d ? "width" : "height"] = m + (b ? h : o), P = ~r.indexOf("adius") || o === "em" && e.appendChild && !f ? e : e.parentNode, O && (P = (e.ownerSVGElement || {}).parentNode), (!P || P === _doc || !P.appendChild) && (P = _doc.body), V = P._gsap, V && w && V.width && d && V.time === _ticker.time && !V.uncache) return _round(a / V.width * m);
     if (w && (r === "height" || r === "width")) {
       var z = e.style[r];
       e.style[r] = m + o, M = e[p], z ? e.style[r] = z : _removeProperty(e, r);
-    } else (w || h === "%") && !_nonStandardLayouts[_getComputedProperty(R, "display")] && (c.position = _getComputedProperty(e, "position")), R === e && (c.position = "static"), R.appendChild(_tempDiv), M = _tempDiv[p], R.removeChild(_tempDiv), c.position = "absolute";
-    return d && w && (V = _getCache(R), V.time = _ticker.time, V.width = R[p]), _round(b ? M * a / m : M && a ? m / M * a : 0);
+    } else (w || h === "%") && !_nonStandardLayouts[_getComputedProperty(P, "display")] && (c.position = _getComputedProperty(e, "position")), P === e && (c.position = "static"), P.appendChild(_tempDiv), M = _tempDiv[p], P.removeChild(_tempDiv), c.position = "absolute";
+    return d && w && (V = _getCache(P), V.time = _ticker.time, V.width = P[p]), _round(b ? M * a / m : M && a ? m / M * a : 0);
   }, _get = function(e, r, s, o) {
     var a;
     return _pluginInitted || _initCore(), r in _propertyAliases && r !== "transform" && (r = _propertyAliases[r], ~r.indexOf(",") && (r = r.split(",")[0])), _transformProps[r] && r !== "transform" ? (a = _parseTransform(e, o), a = r !== "transformOrigin" ? a[r] : a.svg ? a.origin : _firstTwoOnly(_getComputedProperty(e, _transformOriginProp)) + " " + a.zOrigin + "px") : (a = e.style[r], (!a || a === "auto" || o || ~(a + "").indexOf("calc(")) && (a = _specialProps[r] && _specialProps[r](e, r, s) || _getComputedProperty(e, r) || _getProperty(e, r) || (r === "opacity" ? 1 : 0))), s && !~(a + "").trim().indexOf(" ") ? _convertToUnit(e, r, a, s) + s : a;
@@ -55122,12 +55122,12 @@ var<${s}> ${e} : ${h};`;
       var a = _checkPropPrefix(r, e, 1), h = a && _getComputedProperty(e, a, 1);
       h && h !== s ? (r = a, s = h) : r === "borderColor" && (s = _getComputedProperty(e, "borderTopColor"));
     }
-    var c = new PropTween(this._pt, e.style, r, 0, 1, _renderComplexString), d = 0, f = 0, p, m, b, w, M, R, V, O, z, H, q, W;
-    if (c.b = s, c.e = o, s += "", o += "", o === "auto" && (R = e.style[r], e.style[r] = o, o = _getComputedProperty(e, r) || o, R ? e.style[r] = R : _removeProperty(e, r)), p = [
+    var c = new PropTween(this._pt, e.style, r, 0, 1, _renderComplexString), d = 0, f = 0, p, m, b, w, M, P, V, O, z, H, q, W;
+    if (c.b = s, c.e = o, s += "", o += "", o === "auto" && (P = e.style[r], e.style[r] = o, o = _getComputedProperty(e, r) || o, P ? e.style[r] = P : _removeProperty(e, r)), p = [
       s,
       o
     ], _colorStringFilter(p), s = p[0], o = p[1], b = s.match(_numWithUnitExp) || [], W = o.match(_numWithUnitExp) || [], W.length) {
-      for (; m = _numWithUnitExp.exec(o); ) V = m[0], z = o.substring(d, m.index), M ? M = (M + 1) % 5 : (z.substr(-5) === "rgba(" || z.substr(-5) === "hsla(") && (M = 1), V !== (R = b[f++] || "") && (w = parseFloat(R) || 0, q = R.substr((w + "").length), V.charAt(1) === "=" && (V = _parseRelative(w, V) + q), O = parseFloat(V), H = V.substr((O + "").length), d = _numWithUnitExp.lastIndex - H.length, H || (H = H || _config.units[r] || q, d === o.length && (o += H, c.e += H)), q !== H && (w = _convertToUnit(e, r, R, H) || 0), c._pt = {
+      for (; m = _numWithUnitExp.exec(o); ) V = m[0], z = o.substring(d, m.index), M ? M = (M + 1) % 5 : (z.substr(-5) === "rgba(" || z.substr(-5) === "hsla(") && (M = 1), V !== (P = b[f++] || "") && (w = parseFloat(P) || 0, q = P.substr((w + "").length), V.charAt(1) === "=" && (V = _parseRelative(w, V) + q), O = parseFloat(V), H = V.substr((O + "").length), d = _numWithUnitExp.lastIndex - H.length, H || (H = H || _config.units[r] || q, d === o.length && (o += H, c.e += H)), q !== H && (w = _convertToUnit(e, r, P, H) || 0), c._pt = {
         _next: c._pt,
         p: z || f === 1 ? z : ",",
         s: w,
@@ -55190,13 +55190,13 @@ var<${s}> ${e} : ${h};`;
       a[13]
     ] : a);
   }, _applySVGOrigin = function(e, r, s, o, a, h) {
-    var c = e._gsap, d = a || _getMatrix(e, true), f = c.xOrigin || 0, p = c.yOrigin || 0, m = c.xOffset || 0, b = c.yOffset || 0, w = d[0], M = d[1], R = d[2], V = d[3], O = d[4], z = d[5], H = r.split(" "), q = parseFloat(H[0]) || 0, W = parseFloat(H[1]) || 0, K, J, ee, ie;
-    s ? d !== _identity2DMatrix && (J = w * V - M * R) && (ee = q * (V / J) + W * (-R / J) + (R * z - V * O) / J, ie = q * (-M / J) + W * (w / J) - (w * z - M * O) / J, q = ee, W = ie) : (K = _getBBox(e), q = K.x + (~H[0].indexOf("%") ? q / 100 * K.width : q), W = K.y + (~(H[1] || H[0]).indexOf("%") ? W / 100 * K.height : W)), o || o !== false && c.smooth ? (O = q - f, z = W - p, c.xOffset = m + (O * w + z * R) - O, c.yOffset = b + (O * M + z * V) - z) : c.xOffset = c.yOffset = 0, c.xOrigin = q, c.yOrigin = W, c.smooth = !!o, c.origin = r, c.originIsAbsolute = !!s, e.style[_transformOriginProp] = "0px 0px", h && (_addNonTweeningPT(h, c, "xOrigin", f, q), _addNonTweeningPT(h, c, "yOrigin", p, W), _addNonTweeningPT(h, c, "xOffset", m, c.xOffset), _addNonTweeningPT(h, c, "yOffset", b, c.yOffset)), e.setAttribute("data-svg-origin", q + " " + W);
+    var c = e._gsap, d = a || _getMatrix(e, true), f = c.xOrigin || 0, p = c.yOrigin || 0, m = c.xOffset || 0, b = c.yOffset || 0, w = d[0], M = d[1], P = d[2], V = d[3], O = d[4], z = d[5], H = r.split(" "), q = parseFloat(H[0]) || 0, W = parseFloat(H[1]) || 0, K, J, ee, ie;
+    s ? d !== _identity2DMatrix && (J = w * V - M * P) && (ee = q * (V / J) + W * (-P / J) + (P * z - V * O) / J, ie = q * (-M / J) + W * (w / J) - (w * z - M * O) / J, q = ee, W = ie) : (K = _getBBox(e), q = K.x + (~H[0].indexOf("%") ? q / 100 * K.width : q), W = K.y + (~(H[1] || H[0]).indexOf("%") ? W / 100 * K.height : W)), o || o !== false && c.smooth ? (O = q - f, z = W - p, c.xOffset = m + (O * w + z * P) - O, c.yOffset = b + (O * M + z * V) - z) : c.xOffset = c.yOffset = 0, c.xOrigin = q, c.yOrigin = W, c.smooth = !!o, c.origin = r, c.originIsAbsolute = !!s, e.style[_transformOriginProp] = "0px 0px", h && (_addNonTweeningPT(h, c, "xOrigin", f, q), _addNonTweeningPT(h, c, "yOrigin", p, W), _addNonTweeningPT(h, c, "xOffset", m, c.xOffset), _addNonTweeningPT(h, c, "yOffset", b, c.yOffset)), e.setAttribute("data-svg-origin", q + " " + W);
   }, _parseTransform = function(e, r) {
     var s = e._gsap || new GSCache(e);
     if ("x" in s && !r && !s.uncache) return s;
-    var o = e.style, a = s.scaleX < 0, h = "px", c = "deg", d = getComputedStyle(e), f = _getComputedProperty(e, _transformOriginProp) || "0", p, m, b, w, M, R, V, O, z, H, q, W, K, J, ee, ie, pe, U, v, _, $, P, F, k, G, D, x, L, j, Y, oe, me;
-    return p = m = b = R = V = O = z = H = q = 0, w = M = 1, s.svg = !!(e.getCTM && _isSVG(e)), d.translate && ((d.translate !== "none" || d.scale !== "none" || d.rotate !== "none") && (o[_transformProp] = (d.translate !== "none" ? "translate3d(" + (d.translate + " 0 0").split(" ").slice(0, 3).join(", ") + ") " : "") + (d.rotate !== "none" ? "rotate(" + d.rotate + ") " : "") + (d.scale !== "none" ? "scale(" + d.scale.split(" ").join(",") + ") " : "") + (d[_transformProp] !== "none" ? d[_transformProp] : "")), o.scale = o.rotate = o.translate = "none"), J = _getMatrix(e, s.svg), s.svg && (s.uncache ? (G = e.getBBox(), f = s.xOrigin - G.x + "px " + (s.yOrigin - G.y) + "px", k = "") : k = !r && e.getAttribute("data-svg-origin"), _applySVGOrigin(e, k || f, !!k || s.originIsAbsolute, s.smooth !== false, J)), W = s.xOrigin || 0, K = s.yOrigin || 0, J !== _identity2DMatrix && (U = J[0], v = J[1], _ = J[2], $ = J[3], p = P = J[4], m = F = J[5], J.length === 6 ? (w = Math.sqrt(U * U + v * v), M = Math.sqrt($ * $ + _ * _), R = U || v ? _atan2(v, U) * _RAD2DEG : 0, z = _ || $ ? _atan2(_, $) * _RAD2DEG + R : 0, z && (M *= Math.abs(Math.cos(z * _DEG2RAD))), s.svg && (p -= W - (W * U + K * _), m -= K - (W * v + K * $))) : (me = J[6], Y = J[7], x = J[8], L = J[9], j = J[10], oe = J[11], p = J[12], m = J[13], b = J[14], ee = _atan2(me, j), V = ee * _RAD2DEG, ee && (ie = Math.cos(-ee), pe = Math.sin(-ee), k = P * ie + x * pe, G = F * ie + L * pe, D = me * ie + j * pe, x = P * -pe + x * ie, L = F * -pe + L * ie, j = me * -pe + j * ie, oe = Y * -pe + oe * ie, P = k, F = G, me = D), ee = _atan2(-_, j), O = ee * _RAD2DEG, ee && (ie = Math.cos(-ee), pe = Math.sin(-ee), k = U * ie - x * pe, G = v * ie - L * pe, D = _ * ie - j * pe, oe = $ * pe + oe * ie, U = k, v = G, _ = D), ee = _atan2(v, U), R = ee * _RAD2DEG, ee && (ie = Math.cos(ee), pe = Math.sin(ee), k = U * ie + v * pe, G = P * ie + F * pe, v = v * ie - U * pe, F = F * ie - P * pe, U = k, P = G), V && Math.abs(V) + Math.abs(R) > 359.9 && (V = R = 0, O = 180 - O), w = _round(Math.sqrt(U * U + v * v + _ * _)), M = _round(Math.sqrt(F * F + me * me)), ee = _atan2(P, F), z = Math.abs(ee) > 2e-4 ? ee * _RAD2DEG : 0, q = oe ? 1 / (oe < 0 ? -oe : oe) : 0), s.svg && (k = e.getAttribute("transform"), s.forceCSS = e.setAttribute("transform", "") || !_isNullTransform(_getComputedProperty(e, _transformProp)), k && e.setAttribute("transform", k))), Math.abs(z) > 90 && Math.abs(z) < 270 && (a ? (w *= -1, z += R <= 0 ? 180 : -180, R += R <= 0 ? 180 : -180) : (M *= -1, z += z <= 0 ? 180 : -180)), r = r || s.uncache, s.x = p - ((s.xPercent = p && (!r && s.xPercent || (Math.round(e.offsetWidth / 2) === Math.round(-p) ? -50 : 0))) ? e.offsetWidth * s.xPercent / 100 : 0) + h, s.y = m - ((s.yPercent = m && (!r && s.yPercent || (Math.round(e.offsetHeight / 2) === Math.round(-m) ? -50 : 0))) ? e.offsetHeight * s.yPercent / 100 : 0) + h, s.z = b + h, s.scaleX = _round(w), s.scaleY = _round(M), s.rotation = _round(R) + c, s.rotationX = _round(V) + c, s.rotationY = _round(O) + c, s.skewX = z + c, s.skewY = H + c, s.transformPerspective = q + h, (s.zOrigin = parseFloat(f.split(" ")[2]) || !r && s.zOrigin || 0) && (o[_transformOriginProp] = _firstTwoOnly(f)), s.xOffset = s.yOffset = 0, s.force3D = _config.force3D, s.renderTransform = s.svg ? _renderSVGTransforms : _supports3D ? _renderCSSTransforms : _renderNon3DTransforms, s.uncache = 0, s;
+    var o = e.style, a = s.scaleX < 0, h = "px", c = "deg", d = getComputedStyle(e), f = _getComputedProperty(e, _transformOriginProp) || "0", p, m, b, w, M, P, V, O, z, H, q, W, K, J, ee, ie, pe, U, v, _, $, R, F, k, G, D, x, L, j, Y, oe, me;
+    return p = m = b = P = V = O = z = H = q = 0, w = M = 1, s.svg = !!(e.getCTM && _isSVG(e)), d.translate && ((d.translate !== "none" || d.scale !== "none" || d.rotate !== "none") && (o[_transformProp] = (d.translate !== "none" ? "translate3d(" + (d.translate + " 0 0").split(" ").slice(0, 3).join(", ") + ") " : "") + (d.rotate !== "none" ? "rotate(" + d.rotate + ") " : "") + (d.scale !== "none" ? "scale(" + d.scale.split(" ").join(",") + ") " : "") + (d[_transformProp] !== "none" ? d[_transformProp] : "")), o.scale = o.rotate = o.translate = "none"), J = _getMatrix(e, s.svg), s.svg && (s.uncache ? (G = e.getBBox(), f = s.xOrigin - G.x + "px " + (s.yOrigin - G.y) + "px", k = "") : k = !r && e.getAttribute("data-svg-origin"), _applySVGOrigin(e, k || f, !!k || s.originIsAbsolute, s.smooth !== false, J)), W = s.xOrigin || 0, K = s.yOrigin || 0, J !== _identity2DMatrix && (U = J[0], v = J[1], _ = J[2], $ = J[3], p = R = J[4], m = F = J[5], J.length === 6 ? (w = Math.sqrt(U * U + v * v), M = Math.sqrt($ * $ + _ * _), P = U || v ? _atan2(v, U) * _RAD2DEG : 0, z = _ || $ ? _atan2(_, $) * _RAD2DEG + P : 0, z && (M *= Math.abs(Math.cos(z * _DEG2RAD))), s.svg && (p -= W - (W * U + K * _), m -= K - (W * v + K * $))) : (me = J[6], Y = J[7], x = J[8], L = J[9], j = J[10], oe = J[11], p = J[12], m = J[13], b = J[14], ee = _atan2(me, j), V = ee * _RAD2DEG, ee && (ie = Math.cos(-ee), pe = Math.sin(-ee), k = R * ie + x * pe, G = F * ie + L * pe, D = me * ie + j * pe, x = R * -pe + x * ie, L = F * -pe + L * ie, j = me * -pe + j * ie, oe = Y * -pe + oe * ie, R = k, F = G, me = D), ee = _atan2(-_, j), O = ee * _RAD2DEG, ee && (ie = Math.cos(-ee), pe = Math.sin(-ee), k = U * ie - x * pe, G = v * ie - L * pe, D = _ * ie - j * pe, oe = $ * pe + oe * ie, U = k, v = G, _ = D), ee = _atan2(v, U), P = ee * _RAD2DEG, ee && (ie = Math.cos(ee), pe = Math.sin(ee), k = U * ie + v * pe, G = R * ie + F * pe, v = v * ie - U * pe, F = F * ie - R * pe, U = k, R = G), V && Math.abs(V) + Math.abs(P) > 359.9 && (V = P = 0, O = 180 - O), w = _round(Math.sqrt(U * U + v * v + _ * _)), M = _round(Math.sqrt(F * F + me * me)), ee = _atan2(R, F), z = Math.abs(ee) > 2e-4 ? ee * _RAD2DEG : 0, q = oe ? 1 / (oe < 0 ? -oe : oe) : 0), s.svg && (k = e.getAttribute("transform"), s.forceCSS = e.setAttribute("transform", "") || !_isNullTransform(_getComputedProperty(e, _transformProp)), k && e.setAttribute("transform", k))), Math.abs(z) > 90 && Math.abs(z) < 270 && (a ? (w *= -1, z += P <= 0 ? 180 : -180, P += P <= 0 ? 180 : -180) : (M *= -1, z += z <= 0 ? 180 : -180)), r = r || s.uncache, s.x = p - ((s.xPercent = p && (!r && s.xPercent || (Math.round(e.offsetWidth / 2) === Math.round(-p) ? -50 : 0))) ? e.offsetWidth * s.xPercent / 100 : 0) + h, s.y = m - ((s.yPercent = m && (!r && s.yPercent || (Math.round(e.offsetHeight / 2) === Math.round(-m) ? -50 : 0))) ? e.offsetHeight * s.yPercent / 100 : 0) + h, s.z = b + h, s.scaleX = _round(w), s.scaleY = _round(M), s.rotation = _round(P) + c, s.rotationX = _round(V) + c, s.rotationY = _round(O) + c, s.skewX = z + c, s.skewY = H + c, s.transformPerspective = q + h, (s.zOrigin = parseFloat(f.split(" ")[2]) || !r && s.zOrigin || 0) && (o[_transformOriginProp] = _firstTwoOnly(f)), s.xOffset = s.yOffset = 0, s.force3D = _config.force3D, s.renderTransform = s.svg ? _renderSVGTransforms : _supports3D ? _renderCSSTransforms : _renderNon3DTransforms, s.uncache = 0, s;
   }, _firstTwoOnly = function(e) {
     return (e = e.split(" "))[0] + " " + e[1];
   }, _addPxTranslate = function(e, r, s) {
@@ -55205,15 +55205,15 @@ var<${s}> ${e} : ${h};`;
   }, _renderNon3DTransforms = function(e, r) {
     r.z = "0px", r.rotationY = r.rotationX = "0deg", r.force3D = 0, _renderCSSTransforms(e, r);
   }, _zeroDeg = "0deg", _zeroPx = "0px", _endParenthesis = ") ", _renderCSSTransforms = function(e, r) {
-    var s = r || this, o = s.xPercent, a = s.yPercent, h = s.x, c = s.y, d = s.z, f = s.rotation, p = s.rotationY, m = s.rotationX, b = s.skewX, w = s.skewY, M = s.scaleX, R = s.scaleY, V = s.transformPerspective, O = s.force3D, z = s.target, H = s.zOrigin, q = "", W = O === "auto" && e && e !== 1 || O === true;
+    var s = r || this, o = s.xPercent, a = s.yPercent, h = s.x, c = s.y, d = s.z, f = s.rotation, p = s.rotationY, m = s.rotationX, b = s.skewX, w = s.skewY, M = s.scaleX, P = s.scaleY, V = s.transformPerspective, O = s.force3D, z = s.target, H = s.zOrigin, q = "", W = O === "auto" && e && e !== 1 || O === true;
     if (H && (m !== _zeroDeg || p !== _zeroDeg)) {
       var K = parseFloat(p) * _DEG2RAD, J = Math.sin(K), ee = Math.cos(K), ie;
       K = parseFloat(m) * _DEG2RAD, ie = Math.cos(K), h = _addPxTranslate(z, h, J * ie * -H), c = _addPxTranslate(z, c, -Math.sin(K) * -H), d = _addPxTranslate(z, d, ee * ie * -H + H);
     }
-    V !== _zeroPx && (q += "perspective(" + V + _endParenthesis), (o || a) && (q += "translate(" + o + "%, " + a + "%) "), (W || h !== _zeroPx || c !== _zeroPx || d !== _zeroPx) && (q += d !== _zeroPx || W ? "translate3d(" + h + ", " + c + ", " + d + ") " : "translate(" + h + ", " + c + _endParenthesis), f !== _zeroDeg && (q += "rotate(" + f + _endParenthesis), p !== _zeroDeg && (q += "rotateY(" + p + _endParenthesis), m !== _zeroDeg && (q += "rotateX(" + m + _endParenthesis), (b !== _zeroDeg || w !== _zeroDeg) && (q += "skew(" + b + ", " + w + _endParenthesis), (M !== 1 || R !== 1) && (q += "scale(" + M + ", " + R + _endParenthesis), z.style[_transformProp] = q || "translate(0, 0)";
+    V !== _zeroPx && (q += "perspective(" + V + _endParenthesis), (o || a) && (q += "translate(" + o + "%, " + a + "%) "), (W || h !== _zeroPx || c !== _zeroPx || d !== _zeroPx) && (q += d !== _zeroPx || W ? "translate3d(" + h + ", " + c + ", " + d + ") " : "translate(" + h + ", " + c + _endParenthesis), f !== _zeroDeg && (q += "rotate(" + f + _endParenthesis), p !== _zeroDeg && (q += "rotateY(" + p + _endParenthesis), m !== _zeroDeg && (q += "rotateX(" + m + _endParenthesis), (b !== _zeroDeg || w !== _zeroDeg) && (q += "skew(" + b + ", " + w + _endParenthesis), (M !== 1 || P !== 1) && (q += "scale(" + M + ", " + P + _endParenthesis), z.style[_transformProp] = q || "translate(0, 0)";
   }, _renderSVGTransforms = function(e, r) {
-    var s = r || this, o = s.xPercent, a = s.yPercent, h = s.x, c = s.y, d = s.rotation, f = s.skewX, p = s.skewY, m = s.scaleX, b = s.scaleY, w = s.target, M = s.xOrigin, R = s.yOrigin, V = s.xOffset, O = s.yOffset, z = s.forceCSS, H = parseFloat(h), q = parseFloat(c), W, K, J, ee, ie;
-    d = parseFloat(d), f = parseFloat(f), p = parseFloat(p), p && (p = parseFloat(p), f += p, d += p), d || f ? (d *= _DEG2RAD, f *= _DEG2RAD, W = Math.cos(d) * m, K = Math.sin(d) * m, J = Math.sin(d - f) * -b, ee = Math.cos(d - f) * b, f && (p *= _DEG2RAD, ie = Math.tan(f - p), ie = Math.sqrt(1 + ie * ie), J *= ie, ee *= ie, p && (ie = Math.tan(p), ie = Math.sqrt(1 + ie * ie), W *= ie, K *= ie)), W = _round(W), K = _round(K), J = _round(J), ee = _round(ee)) : (W = m, ee = b, K = J = 0), (H && !~(h + "").indexOf("px") || q && !~(c + "").indexOf("px")) && (H = _convertToUnit(w, "x", h, "px"), q = _convertToUnit(w, "y", c, "px")), (M || R || V || O) && (H = _round(H + M - (M * W + R * J) + V), q = _round(q + R - (M * K + R * ee) + O)), (o || a) && (ie = w.getBBox(), H = _round(H + o / 100 * ie.width), q = _round(q + a / 100 * ie.height)), ie = "matrix(" + W + "," + K + "," + J + "," + ee + "," + H + "," + q + ")", w.setAttribute("transform", ie), z && (w.style[_transformProp] = ie);
+    var s = r || this, o = s.xPercent, a = s.yPercent, h = s.x, c = s.y, d = s.rotation, f = s.skewX, p = s.skewY, m = s.scaleX, b = s.scaleY, w = s.target, M = s.xOrigin, P = s.yOrigin, V = s.xOffset, O = s.yOffset, z = s.forceCSS, H = parseFloat(h), q = parseFloat(c), W, K, J, ee, ie;
+    d = parseFloat(d), f = parseFloat(f), p = parseFloat(p), p && (p = parseFloat(p), f += p, d += p), d || f ? (d *= _DEG2RAD, f *= _DEG2RAD, W = Math.cos(d) * m, K = Math.sin(d) * m, J = Math.sin(d - f) * -b, ee = Math.cos(d - f) * b, f && (p *= _DEG2RAD, ie = Math.tan(f - p), ie = Math.sqrt(1 + ie * ie), J *= ie, ee *= ie, p && (ie = Math.tan(p), ie = Math.sqrt(1 + ie * ie), W *= ie, K *= ie)), W = _round(W), K = _round(K), J = _round(J), ee = _round(ee)) : (W = m, ee = b, K = J = 0), (H && !~(h + "").indexOf("px") || q && !~(c + "").indexOf("px")) && (H = _convertToUnit(w, "x", h, "px"), q = _convertToUnit(w, "y", c, "px")), (M || P || V || O) && (H = _round(H + M - (M * W + P * J) + V), q = _round(q + P - (M * K + P * ee) + O)), (o || a) && (ie = w.getBBox(), H = _round(H + o / 100 * ie.width), q = _round(q + a / 100 * ie.height)), ie = "matrix(" + W + "," + K + "," + J + "," + ee + "," + H + "," + q + ")", w.setAttribute("transform", ie), z && (w.style[_transformProp] = ie);
   }, _addRotationalPropTween = function(e, r, s, o, a) {
     var h = 360, c = _isString(a), d = parseFloat(a) * (c && ~a.indexOf("rad") ? _RAD2DEG : 1), f = d - o, p = o + f + "deg", m, b;
     return c && (m = a.split("_")[1], m === "short" && (f %= h, f !== f % (h / 2) && (f += f < 0 ? h : -h)), m === "cw" && f < 0 ? f = (f + h * _bigNum) % h - ~~(f / h) * h : m === "ccw" && f > 0 && (f = (f - h * _bigNum) % h - ~~(f / h) * h)), e._pt = b = new PropTween(e._pt, r, s, o, f, _renderPropWithEnd), b.e = p, b.u = "deg", e._props.push(s), b;
@@ -55245,8 +55245,8 @@ var<${s}> ${e} : ${h};`;
       if (arguments.length < 4) return b = h.map(function(M) {
         return _get(c, M, f);
       }), w = b.join(" "), w.split(b[0]).length === 5 ? b[0] : w;
-      b = (p + "").split(" "), w = {}, h.forEach(function(M, R) {
-        return w[M] = b[R] = b[R] || b[(R - 1) / 2 | 0];
+      b = (p + "").split(" "), w = {}, h.forEach(function(M, P) {
+        return w[M] = b[P] = b[P] || b[(P - 1) / 2 | 0];
       }), c.init(d, w, m);
     };
   });
@@ -55257,42 +55257,42 @@ var<${s}> ${e} : ${h};`;
       return e.style && e.nodeType;
     },
     init: function(e, r, s, o, a) {
-      var h = this._props, c = e.style, d = s.vars.startAt, f, p, m, b, w, M, R, V, O, z, H, q, W, K, J, ee;
+      var h = this._props, c = e.style, d = s.vars.startAt, f, p, m, b, w, M, P, V, O, z, H, q, W, K, J, ee;
       _pluginInitted || _initCore(), this.styles = this.styles || _getStyleSaver(e), ee = this.styles.props, this.tween = s;
-      for (R in r) if (R !== "autoRound" && (p = r[R], !(_plugins[R] && _checkPlugin(R, r, s, o, e, a)))) {
-        if (w = typeof p, M = _specialProps[R], w === "function" && (p = p.call(s, o, e, a), w = typeof p), w === "string" && ~p.indexOf("random(") && (p = _replaceRandom(p)), M) M(this, e, R, p, s) && (J = 1);
-        else if (R.substr(0, 2) === "--") f = (getComputedStyle(e).getPropertyValue(R) + "").trim(), p += "", _colorExp.lastIndex = 0, _colorExp.test(f) || (V = getUnit(f), O = getUnit(p)), O ? V !== O && (f = _convertToUnit(e, R, f, O) + O) : V && (p += V), this.add(c, "setProperty", f, p, o, a, 0, 0, R), h.push(R), ee.push(R, 0, c[R]);
+      for (P in r) if (P !== "autoRound" && (p = r[P], !(_plugins[P] && _checkPlugin(P, r, s, o, e, a)))) {
+        if (w = typeof p, M = _specialProps[P], w === "function" && (p = p.call(s, o, e, a), w = typeof p), w === "string" && ~p.indexOf("random(") && (p = _replaceRandom(p)), M) M(this, e, P, p, s) && (J = 1);
+        else if (P.substr(0, 2) === "--") f = (getComputedStyle(e).getPropertyValue(P) + "").trim(), p += "", _colorExp.lastIndex = 0, _colorExp.test(f) || (V = getUnit(f), O = getUnit(p)), O ? V !== O && (f = _convertToUnit(e, P, f, O) + O) : V && (p += V), this.add(c, "setProperty", f, p, o, a, 0, 0, P), h.push(P), ee.push(P, 0, c[P]);
         else if (w !== "undefined") {
-          if (d && R in d ? (f = typeof d[R] == "function" ? d[R].call(s, o, e, a) : d[R], _isString(f) && ~f.indexOf("random(") && (f = _replaceRandom(f)), getUnit(f + "") || f === "auto" || (f += _config.units[R] || getUnit(_get(e, R)) || ""), (f + "").charAt(1) === "=" && (f = _get(e, R))) : f = _get(e, R), b = parseFloat(f), z = w === "string" && p.charAt(1) === "=" && p.substr(0, 2), z && (p = p.substr(2)), m = parseFloat(p), R in _propertyAliases && (R === "autoAlpha" && (b === 1 && _get(e, "visibility") === "hidden" && m && (b = 0), ee.push("visibility", 0, c.visibility), _addNonTweeningPT(this, c, "visibility", b ? "inherit" : "hidden", m ? "inherit" : "hidden", !m)), R !== "scale" && R !== "transform" && (R = _propertyAliases[R], ~R.indexOf(",") && (R = R.split(",")[0]))), H = R in _transformProps, H) {
-            if (this.styles.save(R), q || (W = e._gsap, W.renderTransform && !r.parseTransform || _parseTransform(e, r.parseTransform), K = r.smoothOrigin !== false && W.smooth, q = this._pt = new PropTween(this._pt, c, _transformProp, 0, 1, W.renderTransform, W, 0, -1), q.dep = 1), R === "scale") this._pt = new PropTween(this._pt, W, "scaleY", W.scaleY, (z ? _parseRelative(W.scaleY, z + m) : m) - W.scaleY || 0, _renderCSSProp), this._pt.u = 0, h.push("scaleY", R), R += "X";
-            else if (R === "transformOrigin") {
-              ee.push(_transformOriginProp, 0, c[_transformOriginProp]), p = _convertKeywordsToPercentages(p), W.svg ? _applySVGOrigin(e, p, 0, K, 0, this) : (O = parseFloat(p.split(" ")[2]) || 0, O !== W.zOrigin && _addNonTweeningPT(this, W, "zOrigin", W.zOrigin, O), _addNonTweeningPT(this, c, R, _firstTwoOnly(f), _firstTwoOnly(p)));
+          if (d && P in d ? (f = typeof d[P] == "function" ? d[P].call(s, o, e, a) : d[P], _isString(f) && ~f.indexOf("random(") && (f = _replaceRandom(f)), getUnit(f + "") || f === "auto" || (f += _config.units[P] || getUnit(_get(e, P)) || ""), (f + "").charAt(1) === "=" && (f = _get(e, P))) : f = _get(e, P), b = parseFloat(f), z = w === "string" && p.charAt(1) === "=" && p.substr(0, 2), z && (p = p.substr(2)), m = parseFloat(p), P in _propertyAliases && (P === "autoAlpha" && (b === 1 && _get(e, "visibility") === "hidden" && m && (b = 0), ee.push("visibility", 0, c.visibility), _addNonTweeningPT(this, c, "visibility", b ? "inherit" : "hidden", m ? "inherit" : "hidden", !m)), P !== "scale" && P !== "transform" && (P = _propertyAliases[P], ~P.indexOf(",") && (P = P.split(",")[0]))), H = P in _transformProps, H) {
+            if (this.styles.save(P), q || (W = e._gsap, W.renderTransform && !r.parseTransform || _parseTransform(e, r.parseTransform), K = r.smoothOrigin !== false && W.smooth, q = this._pt = new PropTween(this._pt, c, _transformProp, 0, 1, W.renderTransform, W, 0, -1), q.dep = 1), P === "scale") this._pt = new PropTween(this._pt, W, "scaleY", W.scaleY, (z ? _parseRelative(W.scaleY, z + m) : m) - W.scaleY || 0, _renderCSSProp), this._pt.u = 0, h.push("scaleY", P), P += "X";
+            else if (P === "transformOrigin") {
+              ee.push(_transformOriginProp, 0, c[_transformOriginProp]), p = _convertKeywordsToPercentages(p), W.svg ? _applySVGOrigin(e, p, 0, K, 0, this) : (O = parseFloat(p.split(" ")[2]) || 0, O !== W.zOrigin && _addNonTweeningPT(this, W, "zOrigin", W.zOrigin, O), _addNonTweeningPT(this, c, P, _firstTwoOnly(f), _firstTwoOnly(p)));
               continue;
-            } else if (R === "svgOrigin") {
+            } else if (P === "svgOrigin") {
               _applySVGOrigin(e, p, 1, K, 0, this);
               continue;
-            } else if (R in _rotationalProperties) {
-              _addRotationalPropTween(this, W, R, b, z ? _parseRelative(b, z + p) : p);
+            } else if (P in _rotationalProperties) {
+              _addRotationalPropTween(this, W, P, b, z ? _parseRelative(b, z + p) : p);
               continue;
-            } else if (R === "smoothOrigin") {
+            } else if (P === "smoothOrigin") {
               _addNonTweeningPT(this, W, "smooth", W.smooth, p);
               continue;
-            } else if (R === "force3D") {
-              W[R] = p;
+            } else if (P === "force3D") {
+              W[P] = p;
               continue;
-            } else if (R === "transform") {
+            } else if (P === "transform") {
               _addRawTransformPTs(this, p, e);
               continue;
             }
-          } else R in c || (R = _checkPropPrefix(R) || R);
-          if (H || (m || m === 0) && (b || b === 0) && !_complexExp.test(p) && R in c) V = (f + "").substr((b + "").length), m || (m = 0), O = getUnit(p) || (R in _config.units ? _config.units[R] : V), V !== O && (b = _convertToUnit(e, R, f, O)), this._pt = new PropTween(this._pt, H ? W : c, R, b, (z ? _parseRelative(b, z + m) : m) - b, !H && (O === "px" || R === "zIndex") && r.autoRound !== false ? _renderRoundedCSSProp : _renderCSSProp), this._pt.u = O || 0, V !== O && O !== "%" && (this._pt.b = f, this._pt.r = _renderCSSPropWithBeginning);
-          else if (R in c) _tweenComplexCSSString.call(this, e, R, f, z ? z + p : p);
-          else if (R in e) this.add(e, R, f || e[R], z ? z + p : p, o, a);
-          else if (R !== "parseTransform") {
-            _missingPlugin(R, p);
+          } else P in c || (P = _checkPropPrefix(P) || P);
+          if (H || (m || m === 0) && (b || b === 0) && !_complexExp.test(p) && P in c) V = (f + "").substr((b + "").length), m || (m = 0), O = getUnit(p) || (P in _config.units ? _config.units[P] : V), V !== O && (b = _convertToUnit(e, P, f, O)), this._pt = new PropTween(this._pt, H ? W : c, P, b, (z ? _parseRelative(b, z + m) : m) - b, !H && (O === "px" || P === "zIndex") && r.autoRound !== false ? _renderRoundedCSSProp : _renderCSSProp), this._pt.u = O || 0, V !== O && O !== "%" && (this._pt.b = f, this._pt.r = _renderCSSPropWithBeginning);
+          else if (P in c) _tweenComplexCSSString.call(this, e, P, f, z ? z + p : p);
+          else if (P in e) this.add(e, P, f || e[P], z ? z + p : p, o, a);
+          else if (P !== "parseTransform") {
+            _missingPlugin(P, p);
             continue;
           }
-          H || (R in c ? ee.push(R, 0, c[R]) : ee.push(R, 1, f || e[R])), h.push(R);
+          H || (P in c ? ee.push(P, 0, c[P]) : ee.push(P, 1, f || e[P])), h.push(P);
         }
       }
       J && _sortPropTweensByPriority(this);
@@ -55349,13 +55349,13 @@ var<${s}> ${e} : ${h};`;
         If$1(this.uniforms.forward.lessThan(0.5), () => {
           a.assign(a.negate());
         });
-        const h = step$1(a, 0), c = abs$2(s.length().sub(this.progressRadiusLow)).toVar(), d = abs$2(s.length().sub(this.progressRadiusHigh)).toVar(), f = step$1(c, this.edgesThickness / 2).toVar(), p = step$1(c, this.outlineThickness / 2).toVar(), m = step$1(d, this.edgesThickness / 2).mul(h).toVar(), b = step$1(d, this.outlineThickness / 2).toVar(), w = max$2(f, m), M = max$2(p, b), R = s.length().sub(this.progressRadiusLow).sub(this.uniforms.progress.mul(this.progressRadiusHigh - this.progressRadiusLow - this.outlineThickness / 2)).toVar(), V = s.length().sub(this.progressRadiusLow + this.outlineThickness / 2).negate();
-        R.assign(max$2(R, V));
-        const O = step$1(R, 0).toVar(), z = float$1(0).toVar();
+        const h = step$1(a, 0), c = abs$2(s.length().sub(this.progressRadiusLow)).toVar(), d = abs$2(s.length().sub(this.progressRadiusHigh)).toVar(), f = step$1(c, this.edgesThickness / 2).toVar(), p = step$1(c, this.outlineThickness / 2).toVar(), m = step$1(d, this.edgesThickness / 2).mul(h).toVar(), b = step$1(d, this.outlineThickness / 2).toVar(), w = max$2(f, m), M = max$2(p, b), P = s.length().sub(this.progressRadiusLow).sub(this.uniforms.progress.mul(this.progressRadiusHigh - this.progressRadiusLow - this.outlineThickness / 2)).toVar(), V = s.length().sub(this.progressRadiusLow + this.outlineThickness / 2).negate();
+        P.assign(max$2(P, V));
+        const O = step$1(P, 0).toVar(), z = float$1(0).toVar();
         If$1(o.greaterThan(this.uniforms.progressStartAngle).and(o.lessThan(this.uniforms.progressEndAngle)), () => {
           z.assign(1);
         }), O.assign(O.mul(z));
-        const H = step$1(R, this.outlineThickness / 4).mul(h), q = max$2(M, H), W = max$2(w, O).toVar();
+        const H = step$1(P, this.outlineThickness / 4).mul(h), q = max$2(M, H), W = max$2(w, O).toVar();
         q.lessThan(1e-5).discard();
         const K = q.mul(0.35).add(W.mul(0.75));
         return vec4$1(vec3$1(W).mul(this.uniforms.colorMultiplier), K);
@@ -55773,7 +55773,7 @@ var<${s}> ${e} : ${h};`;
           type: "int",
           condition: "<"
         }, ({ i: M }) => {
-          const R = float$1(M), V = h.element(M), O = d.mul(c).mul(R), z = p(f.add(O)).rgb, H = p(f.sub(O)).rgb;
+          const P = float$1(M), V = h.element(M), O = d.mul(c).mul(P), z = p(f.add(O)).rgb, H = p(f.sub(O)).rgb;
           w.addAssign(add$1(z, H).mul(V));
         }), vec4$1(w, 1);
       }), b = new NodeMaterial$1();
@@ -55791,7 +55791,7 @@ var<${s}> ${e} : ${h};`;
       end: s,
       type: "float"
     }, ({ i: d }) => {
-      const f = vec2$1(vec2$1(cos$1(degrees$1(d.div(s).mul(360))), sin$1(degrees$1(d.div(s).mul(360)))).mul(rand$3(vec2$1(d, h.x.add(h.y))).add(e))), p = vec2$1(h.add(f.mul(e)));
+      const f = vec2$1(vec2$1(cos$1(degrees$1(d.div(s).mul(360))), sin$1(degrees$1(d.div(s).mul(360)))).mul(rand$4(vec2$1(d, h.x.add(h.y))).add(e))), p = vec2$1(h.add(f.mul(e)));
       c.addAssign(a(p));
     }), c.divAssign(s), o ? unpremultiplyAlpha(c) : c;
   });
@@ -57681,8 +57681,8 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       const c = 10, d = (m) => {
         s = m.clientX, o = m.clientY, r = false, a = false, e.button.setPointerCapture(m.pointerId);
       }, f = (m) => {
-        const b = m.clientX, w = m.clientY, M = Math.abs(b - s), R = Math.abs(w - o);
-        !r && (M > c || R > c) && (r = true, e.button.style.cursor = "grabbing", e.button.style.opacity = "0.5", e.button.style.transform = "scale(1.05)", h = this.createPreviewWindow(e, b, w), h.style.opacity = "0.8"), r && h && (a = true, m.preventDefault(), h.style.left = `${b - 200}px`, h.style.top = `${w - 20}px`);
+        const b = m.clientX, w = m.clientY, M = Math.abs(b - s), P = Math.abs(w - o);
+        !r && (M > c || P > c) && (r = true, e.button.style.cursor = "grabbing", e.button.style.opacity = "0.5", e.button.style.transform = "scale(1.05)", h = this.createPreviewWindow(e, b, w), h.style.opacity = "0.8"), r && h && (a = true, m.preventDefault(), h.style.left = `${b - 200}px`, h.style.top = `${w - 20}px`);
       }, p = () => {
         if (r && a && h) {
           h.parentNode && h.parentNode.removeChild(h);
@@ -57750,8 +57750,8 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       w.className = "detached-header-controls";
       const M = document.createElement("button");
       M.className = "detached-reattach-btn", M.innerHTML = "\u21A9", M.title = "Reattach to main panel", M.onclick = () => this.reattachTab(e), w.appendChild(M), m.appendChild(w);
-      const R = document.createElement("div");
-      R.className = "detached-tab-content", R.appendChild(e.content), e.content.style.display = "block", e.content.classList.add("active");
+      const P = document.createElement("div");
+      P.className = "detached-tab-content", P.appendChild(e.content), e.content.style.display = "block", e.content.classList.add("active");
       const V = document.createElement("div");
       V.className = "detached-tab-resizer-top";
       const O = document.createElement("div");
@@ -57761,7 +57761,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       const H = document.createElement("div");
       H.className = "detached-tab-resizer-left";
       const q = document.createElement("div");
-      return q.className = "detached-tab-resizer", p.appendChild(V), p.appendChild(O), p.appendChild(z), p.appendChild(H), p.appendChild(q), p.appendChild(m), p.appendChild(R), document.body.appendChild(p), this.setupDetachedWindowDrag(p, m, e), this.setupDetachedWindowResize(p, V, O, z, H, q), p.style.setProperty("z-index", this.maxZIndex, "important"), {
+      return q.className = "detached-tab-resizer", p.appendChild(V), p.appendChild(O), p.appendChild(z), p.appendChild(H), p.appendChild(q), p.appendChild(m), p.appendChild(P), document.body.appendChild(p), this.setupDetachedWindowDrag(p, m, e), this.setupDetachedWindowResize(p, V, O, z, H, q), p.style.setProperty("z-index", this.maxZIndex, "important"), {
         panel: p,
         tab: e
       };
@@ -57782,8 +57782,8 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       }, p = (b) => {
         if (!o) return;
         b.preventDefault();
-        const w = b.clientX, M = b.clientY, R = w - a, V = M - h;
-        let O = c + R, z = d + V;
+        const w = b.clientX, M = b.clientY, P = w - a, V = M - h;
+        let O = c + P, z = d + V;
         const H = window.innerWidth, q = window.innerHeight, W = e.offsetWidth, K = e.offsetHeight, J = W / 2, ee = K / 2;
         O + W > H + J && (O = H + J - W), O < -J && (O = -J), z + K > q + ee && (z = q + ee - K), z < -ee && (z = -ee), e.style.left = `${O}px`, e.style.top = `${z}px`;
         const ie = this.panel.getBoundingClientRect();
@@ -57793,8 +57793,8 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
         o = false, r.style.cursor = "", e.style.opacity = "", this.panel.style.outline = "";
         const w = b.clientX, M = b.clientY;
         if (w !== void 0 && M !== void 0) {
-          const R = this.panel.getBoundingClientRect();
-          w >= R.left && w <= R.right && M >= R.top && M <= R.bottom && s ? this.reattachTab(s) : this.saveLayout();
+          const P = this.panel.getBoundingClientRect();
+          w >= P.left && w <= P.right && M >= P.top && M <= P.bottom && s ? this.reattachTab(s) : this.saveLayout();
         }
         r.removeEventListener("pointermove", p), r.removeEventListener("pointerup", m), r.removeEventListener("pointercancel", m);
       };
@@ -57804,15 +57804,15 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
     }
     setupDetachedWindowResize(e, r, s, o, a, h) {
       const f = (p, m) => {
-        let b = false, w, M, R, V, O, z;
+        let b = false, w, M, P, V, O, z;
         const H = (K) => {
-          K.preventDefault(), K.stopPropagation(), b = true, this.bringWindowToFront(e), p.setPointerCapture(K.pointerId), w = K.clientX, M = K.clientY, R = e.offsetWidth, V = e.offsetHeight, O = e.offsetLeft, z = e.offsetTop;
+          K.preventDefault(), K.stopPropagation(), b = true, this.bringWindowToFront(e), p.setPointerCapture(K.pointerId), w = K.clientX, M = K.clientY, P = e.offsetWidth, V = e.offsetHeight, O = e.offsetLeft, z = e.offsetTop;
         }, q = (K) => {
           if (!b) return;
           K.preventDefault();
           const J = K.clientX, ee = K.clientY, ie = J - w, pe = ee - M, U = window.innerWidth, v = window.innerHeight;
           if (m === "right" || m === "corner") {
-            const _ = R + ie, $ = U - O;
+            const _ = P + ie, $ = U - O;
             _ >= 250 && _ <= $ && (e.style.width = `${_}px`);
           }
           if (m === "bottom" || m === "corner") {
@@ -57820,17 +57820,17 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
             _ >= 150 && _ <= $ && (e.style.height = `${_}px`);
           }
           if (m === "left") {
-            const _ = R - ie, $ = O + R - 250;
+            const _ = P - ie, $ = O + P - 250;
             if (_ >= 250) {
-              const P = O + ie;
-              P >= 0 && P <= $ && (e.style.width = `${_}px`, e.style.left = `${P}px`);
+              const R = O + ie;
+              R >= 0 && R <= $ && (e.style.width = `${_}px`, e.style.left = `${R}px`);
             }
           }
           if (m === "top") {
             const _ = V - pe, $ = z + V - 150;
             if (_ >= 150) {
-              const P = z + pe;
-              P >= 0 && P <= $ && (e.style.height = `${_}px`, e.style.top = `${P}px`);
+              const R = z + pe;
+              R >= 0 && R <= $ && (e.style.height = `${_}px`, e.style.top = `${R}px`);
             }
           }
         }, W = () => {
@@ -58658,8 +58658,8 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
         a.setPixelRatio(window.devicePixelRatio), a.setSize(140, 140);
         const h = e.id, { path: c, name: d } = splitPath(splitCamelCase(e.getName() || "(unnamed)")), f = e.context({
           getUV: (w) => {
-            const M = aspectRatioUV(screenUV$1, w), R = M.xy, V = M.z;
-            return R.mul(V);
+            const M = aspectRatioUV(screenUV$1, w), P = M.xy, V = M.z;
+            return P.mul(V);
           }
         });
         let p = vec4$1(vec3$1(f), 1);
@@ -58868,7 +58868,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       d.morphAttributes = d.morphAttributes || {}, d.morphAttributes[p] = [];
       for (let b = 0; b < m; ++b) {
         const w = [];
-        for (let R = 0; R < h[p].length; ++R) w.push(h[p][R][b]);
+        for (let P = 0; P < h[p].length; ++P) w.push(h[p][P][b]);
         const M = mergeAttributes(w);
         if (!M) return console.error("THREE.BufferGeometryUtils: .mergeGeometries() failed while trying to merge the " + p + " morphAttribute."), null;
         d.morphAttributes[p].push(M);
@@ -58893,8 +58893,8 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       if (p.isInterleavedBufferAttribute) {
         const m = d / r;
         for (let b = 0, w = p.count; b < w; b++) for (let M = 0; M < r; M++) {
-          const R = p.getComponent(b, M);
-          c.setComponent(b + m, M, R);
+          const P = p.getComponent(b, M);
+          c.setComponent(b + m, M, P);
         }
       } else h.set(p.array, d);
       d += p.count * r;
@@ -59442,8 +59442,8 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
           p
         ], b = f[0].count, w = [];
         for (const M of m) {
-          const R = new Matrix4$1(), V = new Vector3$1(), O = new Quaternion$1(), z = new Vector3$1(1, 1, 1), H = new InstancedMesh(M.geometry, M.material, b);
-          for (let q = 0; q < b; q++) d.TRANSLATION && V.fromBufferAttribute(d.TRANSLATION, q), d.ROTATION && O.fromBufferAttribute(d.ROTATION, q), d.SCALE && z.fromBufferAttribute(d.SCALE, q), H.setMatrixAt(q, R.compose(V, O, z));
+          const P = new Matrix4$1(), V = new Vector3$1(), O = new Quaternion$1(), z = new Vector3$1(1, 1, 1), H = new InstancedMesh(M.geometry, M.material, b);
+          for (let q = 0; q < b; q++) d.TRANSLATION && V.fromBufferAttribute(d.TRANSLATION, q), d.ROTATION && O.fromBufferAttribute(d.ROTATION, q), d.SCALE && z.fromBufferAttribute(d.SCALE, q), H.setMatrixAt(q, P.compose(V, O, z));
           for (const q in d) if (q === "_COLOR_0") {
             const W = d[q];
             H.instanceColor = new InstancedBufferAttribute$1(W.array, W.itemSize, W.normalized);
@@ -59508,8 +59508,8 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
         return new Promise(function(m, b) {
           o.decodeDracoFile(p, function(w) {
             for (const M in w.attributes) {
-              const R = w.attributes[M], V = d[M];
-              V !== void 0 && (R.normalized = V);
+              const P = w.attributes[M], V = d[M];
+              V !== void 0 && (P.normalized = V);
             }
             m(w);
           }, c, f, LinearSRGBColorSpace$1, b);
@@ -59540,9 +59540,9 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       return r;
     }
     interpolate_(e, r, s, o) {
-      const a = this.resultBuffer, h = this.sampleValues, c = this.valueSize, d = c * 2, f = c * 3, p = o - r, m = (s - r) / p, b = m * m, w = b * m, M = e * f, R = M - f, V = -2 * w + 3 * b, O = w - b, z = 1 - V, H = O - b + m;
+      const a = this.resultBuffer, h = this.sampleValues, c = this.valueSize, d = c * 2, f = c * 3, p = o - r, m = (s - r) / p, b = m * m, w = b * m, M = e * f, P = M - f, V = -2 * w + 3 * b, O = w - b, z = 1 - V, H = O - b + m;
       for (let q = 0; q !== c; q++) {
-        const W = h[R + q + c], K = h[R + q + d] * p, J = h[M + q + c], ee = h[M + q] * p;
+        const W = h[P + q + c], K = h[P + q + d] * p, J = h[M + q + c], ee = h[M + q] * p;
         a[q] = z * W + H * K + V * J + O * ee;
       }
       return a;
@@ -59899,12 +59899,12 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       const a = [];
       return o.bufferView !== void 0 ? a.push(this.getDependency("bufferView", o.bufferView)) : a.push(null), o.sparse !== void 0 && (a.push(this.getDependency("bufferView", o.sparse.indices.bufferView)), a.push(this.getDependency("bufferView", o.sparse.values.bufferView))), Promise.all(a).then(function(h) {
         const c = h[0], d = WEBGL_TYPE_SIZES[o.type], f = WEBGL_COMPONENT_TYPES[o.componentType], p = f.BYTES_PER_ELEMENT, m = p * d, b = o.byteOffset || 0, w = o.bufferView !== void 0 ? s.bufferViews[o.bufferView].byteStride : void 0, M = o.normalized === true;
-        let R, V;
+        let P, V;
         if (w && w !== m) {
           const O = Math.floor(b / w), z = "InterleavedBuffer:" + o.bufferView + ":" + o.componentType + ":" + O + ":" + o.count;
           let H = r.cache.get(z);
-          H || (R = new f(c, O * w, o.count * w / p), H = new InterleavedBuffer$1(R, w / p), r.cache.add(z, H)), V = new InterleavedBufferAttribute$1(H, d, b % w / p, M);
-        } else c === null ? R = new f(o.count * d) : R = new f(c, b, o.count * d), V = new BufferAttribute$1(R, d, M);
+          H || (P = new f(c, O * w, o.count * w / p), H = new InterleavedBuffer$1(P, w / p), r.cache.add(z, H)), V = new InterleavedBufferAttribute$1(H, d, b % w / p, M);
+        } else c === null ? P = new f(o.count * d) : P = new f(c, b, o.count * d), V = new BufferAttribute$1(P, d, M);
         if (o.sparse !== void 0) {
           const O = WEBGL_TYPE_SIZES.SCALAR, z = WEBGL_COMPONENT_TYPES[o.sparse.indices.componentType], H = o.sparse.indices.byteOffset || 0, q = o.sparse.values.byteOffset || 0, W = new z(h[1], H, o.sparse.count * O), K = new f(h[2], q, o.sparse.count * d);
           c !== null && (V = new BufferAttribute$1(V.array.slice(), V.itemSize, V.normalized)), V.normalized = false;
@@ -59958,8 +59958,8 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       const p = Promise.resolve(d).then(function(m) {
         return new Promise(function(b, w) {
           let M = b;
-          r.isImageBitmapLoader === true && (M = function(R) {
-            const V = new Texture$1(R);
+          r.isImageBitmapLoader === true && (M = function(P) {
+            const V = new Texture$1(P);
             V.needsUpdate = true, b(V);
           }), r.load(LoaderUtils.resolveURL(m, a.path), M, void 0, w);
         });
@@ -60078,14 +60078,14 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       return c.push(r.loadGeometries(h)), Promise.all(c).then(function(d) {
         const f = d.slice(0, d.length - 1), p = d[d.length - 1], m = [];
         for (let w = 0, M = p.length; w < M; w++) {
-          const R = p[w], V = h[w];
+          const P = p[w], V = h[w];
           let O;
           const z = f[w];
-          if (V.mode === WEBGL_CONSTANTS.TRIANGLES || V.mode === WEBGL_CONSTANTS.TRIANGLE_STRIP || V.mode === WEBGL_CONSTANTS.TRIANGLE_FAN || V.mode === void 0) O = a.isSkinnedMesh === true ? new SkinnedMesh(R, z) : new Mesh$1(R, z), O.isSkinnedMesh === true && O.normalizeSkinWeights(), V.mode === WEBGL_CONSTANTS.TRIANGLE_STRIP ? O.geometry = toTrianglesDrawMode(O.geometry, TriangleStripDrawMode) : V.mode === WEBGL_CONSTANTS.TRIANGLE_FAN && (O.geometry = toTrianglesDrawMode(O.geometry, TriangleFanDrawMode));
-          else if (V.mode === WEBGL_CONSTANTS.LINES) O = new LineSegments(R, z);
-          else if (V.mode === WEBGL_CONSTANTS.LINE_STRIP) O = new Line(R, z);
-          else if (V.mode === WEBGL_CONSTANTS.LINE_LOOP) O = new LineLoop(R, z);
-          else if (V.mode === WEBGL_CONSTANTS.POINTS) O = new Points(R, z);
+          if (V.mode === WEBGL_CONSTANTS.TRIANGLES || V.mode === WEBGL_CONSTANTS.TRIANGLE_STRIP || V.mode === WEBGL_CONSTANTS.TRIANGLE_FAN || V.mode === void 0) O = a.isSkinnedMesh === true ? new SkinnedMesh(P, z) : new Mesh$1(P, z), O.isSkinnedMesh === true && O.normalizeSkinWeights(), V.mode === WEBGL_CONSTANTS.TRIANGLE_STRIP ? O.geometry = toTrianglesDrawMode(O.geometry, TriangleStripDrawMode) : V.mode === WEBGL_CONSTANTS.TRIANGLE_FAN && (O.geometry = toTrianglesDrawMode(O.geometry, TriangleFanDrawMode));
+          else if (V.mode === WEBGL_CONSTANTS.LINES) O = new LineSegments(P, z);
+          else if (V.mode === WEBGL_CONSTANTS.LINE_STRIP) O = new Line(P, z);
+          else if (V.mode === WEBGL_CONSTANTS.LINE_LOOP) O = new LineLoop(P, z);
+          else if (V.mode === WEBGL_CONSTANTS.POINTS) O = new Points(P, z);
           else throw new Error("THREE.GLTFLoader: Primitive mode unsupported: " + V.mode);
           Object.keys(O.geometry.morphAttributes).length > 0 && updateMorphTargets(O, a), O.name = r.createUniqueName(a.name || "mesh_" + e), assignExtrasToUserData(O, a), V.extensions && addUnknownExtensionsToUserData(o, O, V), r.assignFinalMaterial(O), m.push(O);
         }
@@ -60130,8 +60130,8 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
     loadAnimation(e) {
       const r = this.json, s = this, o = r.animations[e], a = o.name ? o.name : "animation_" + e, h = [], c = [], d = [], f = [], p = [];
       for (let m = 0, b = o.channels.length; m < b; m++) {
-        const w = o.channels[m], M = o.samplers[w.sampler], R = w.target, V = R.node, O = o.parameters !== void 0 ? o.parameters[M.input] : M.input, z = o.parameters !== void 0 ? o.parameters[M.output] : M.output;
-        R.node !== void 0 && (h.push(this.getDependency("node", V)), c.push(this.getDependency("accessor", O)), d.push(this.getDependency("accessor", z)), f.push(M), p.push(R));
+        const w = o.channels[m], M = o.samplers[w.sampler], P = w.target, V = P.node, O = o.parameters !== void 0 ? o.parameters[M.input] : M.input, z = o.parameters !== void 0 ? o.parameters[M.output] : M.output;
+        P.node !== void 0 && (h.push(this.getDependency("node", V)), c.push(this.getDependency("accessor", O)), d.push(this.getDependency("accessor", z)), f.push(M), p.push(P));
       }
       return Promise.all([
         Promise.all(h),
@@ -60140,9 +60140,9 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
         Promise.all(f),
         Promise.all(p)
       ]).then(function(m) {
-        const b = m[0], w = m[1], M = m[2], R = m[3], V = m[4], O = [];
+        const b = m[0], w = m[1], M = m[2], P = m[3], V = m[4], O = [];
         for (let H = 0, q = b.length; H < q; H++) {
-          const W = b[H], K = w[H], J = M[H], ee = R[H], ie = V[H];
+          const W = b[H], K = w[H], J = M[H], ee = P[H], ie = V[H];
           if (W === void 0) continue;
           W.updateMatrix && W.updateMatrix();
           const pe = s._createAnimationTracks(W, K, J, ee, ie);
@@ -60308,8 +60308,8 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
           const b = r.json.accessors[m.POSITION], w = b.min, M = b.max;
           if (w !== void 0 && M !== void 0) {
             if (d.setX(Math.max(Math.abs(w[0]), Math.abs(M[0]))), d.setY(Math.max(Math.abs(w[1]), Math.abs(M[1]))), d.setZ(Math.max(Math.abs(w[2]), Math.abs(M[2]))), b.normalized) {
-              const R = getNormalizedComponentScale(WEBGL_COMPONENT_TYPES[b.componentType]);
-              d.multiplyScalar(R);
+              const P = getNormalizedComponentScale(WEBGL_COMPONENT_TYPES[b.componentType]);
+              d.multiplyScalar(P);
             }
             c.max(d);
           } else console.warn("THREE.GLTFLoader: Missing min/max properties for accessor POSITION.");
@@ -60519,7 +60519,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
           e.then((p) => {
             const m = p.draco, b = new m.Decoder();
             try {
-              const w = r(m, b, new Int8Array(d), f), M = w.attributes.map((R) => R.array.buffer);
+              const w = r(m, b, new Int8Array(d), f), M = w.attributes.map((P) => P.array.buffer);
               w.index && M.push(w.index.array.buffer), self.postMessage({
                 type: "decode",
                 id: c.id,
@@ -60546,7 +60546,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       else if (M === h.POINT_CLOUD) b = new h.PointCloud(), w = c.DecodeArrayToPointCloud(d, d.byteLength, b);
       else throw new Error("THREE.DRACOLoader: Unexpected geometry type.");
       if (!w.ok() || b.ptr === 0) throw new Error("THREE.DRACOLoader: Decoding failed: " + w.error_msg());
-      const R = {
+      const P = {
         index: null,
         attributes: []
       };
@@ -60559,9 +60559,9 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
           z = c.GetAttribute(b, H);
         }
         const q = o(h, c, b, V, O, z);
-        V === "color" && (q.vertexColorSpace = f.vertexColorSpace), R.attributes.push(q);
+        V === "color" && (q.vertexColorSpace = f.vertexColorSpace), P.attributes.push(q);
       }
-      return M === h.TRIANGULAR_MESH && (R.index = s(h, c, b)), h.destroy(b), R;
+      return M === h.TRIANGULAR_MESH && (P.index = s(h, c, b)), h.destroy(b), P;
     }
     function s(h, c, d) {
       const p = d.num_faces() * 3, m = p * 4, b = h._malloc(m);
@@ -60573,11 +60573,11 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       };
     }
     function o(h, c, d, f, p, m) {
-      const b = d.num_points(), w = m.num_components(), M = a(h, p), R = w * p.BYTES_PER_ELEMENT, V = Math.ceil(R / 4) * 4, O = V / p.BYTES_PER_ELEMENT, z = b * R, H = b * V, q = h._malloc(z);
+      const b = d.num_points(), w = m.num_components(), M = a(h, p), P = w * p.BYTES_PER_ELEMENT, V = Math.ceil(P / 4) * 4, O = V / p.BYTES_PER_ELEMENT, z = b * P, H = b * V, q = h._malloc(z);
       c.GetAttributeDataArrayForAllPoints(d, m, M, z, q);
       const W = new p(h.HEAPF32.buffer, q, z / p.BYTES_PER_ELEMENT);
       let K;
-      if (R === V) K = W.slice();
+      if (P === V) K = W.slice();
       else {
         K = new p(H / p.BYTES_PER_ELEMENT);
         let J = 0;
@@ -60763,9 +60763,9 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
     });
     const w = new Ci(l, a, h, true);
     w._skip(4);
-    const M = w._nextUint16(), R = w._nextUint16(), V = w._nextUint16(), O = w._nextUint16(), z = {
+    const M = w._nextUint16(), P = w._nextUint16(), V = w._nextUint16(), O = w._nextUint16(), z = {
       vendorId: M,
-      descriptorType: R,
+      descriptorType: P,
       versionNumber: V,
       colorModel: w._nextUint8(),
       colorPrimaries: w._nextUint8(),
@@ -60824,7 +60824,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       alphaSliceByteOffset: W._nextUint32(),
       alphaSliceByteLength: W._nextUint32()
     });
-    const _ = f + W._offset, $ = _ + ee, P = $ + ie, F = P + pe, k = new Uint8Array(l.buffer, l.byteOffset + _, ee), G = new Uint8Array(l.buffer, l.byteOffset + $, ie), D = new Uint8Array(l.buffer, l.byteOffset + P, pe), x = new Uint8Array(l.buffer, l.byteOffset + F, U);
+    const _ = f + W._offset, $ = _ + ee, R = $ + ie, F = R + pe, k = new Uint8Array(l.buffer, l.byteOffset + _, ee), G = new Uint8Array(l.buffer, l.byteOffset + $, ie), D = new Uint8Array(l.buffer, l.byteOffset + R, pe), x = new Uint8Array(l.buffer, l.byteOffset + F, U);
     return r.globalData = {
       endpointCount: K,
       selectorCount: J,
@@ -60890,10 +60890,10 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
     return (w ? -1 : 1) * h * Math.pow(2, a - s);
   };
   ieee754$1.write = function(l, e, r, s, o, a) {
-    var h, c, d, f = a * 8 - o - 1, p = (1 << f) - 1, m = p >> 1, b = o === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0, w = s ? 0 : a - 1, M = s ? 1 : -1, R = e < 0 || e === 0 && 1 / e < 0 ? 1 : 0;
+    var h, c, d, f = a * 8 - o - 1, p = (1 << f) - 1, m = p >> 1, b = o === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0, w = s ? 0 : a - 1, M = s ? 1 : -1, P = e < 0 || e === 0 && 1 / e < 0 ? 1 : 0;
     for (e = Math.abs(e), isNaN(e) || e === 1 / 0 ? (c = isNaN(e) ? 1 : 0, h = p) : (h = Math.floor(Math.log(e) / Math.LN2), e * (d = Math.pow(2, -h)) < 1 && (h--, d *= 2), h + m >= 1 ? e += b / d : e += b * Math.pow(2, 1 - m), e * d >= 2 && (h++, d /= 2), h + m >= p ? (c = 0, h = p) : h + m >= 1 ? (c = (e * d - 1) * Math.pow(2, o), h = h + m) : (c = e * Math.pow(2, m - 1) * Math.pow(2, o), h = 0)); o >= 8; l[r + w] = c & 255, w += M, c /= 256, o -= 8) ;
     for (h = h << o | c, f += o; f > 0; l[r + w] = h & 255, w += M, h /= 256, f -= 8) ;
-    l[r + w - M] |= R * 128;
+    l[r + w - M] |= P * 128;
   };
   (function(l) {
     const e = base64Js, r = ieee754$1, s = typeof Symbol == "function" && typeof Symbol.for == "function" ? Symbol.for("nodejs.util.inspect.custom") : null;
@@ -60939,7 +60939,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
     }
     p.poolSize = 8192;
     function m(ge, re, he) {
-      if (typeof ge == "string") return R(ge, re);
+      if (typeof ge == "string") return P(ge, re);
       if (h.isView(ge)) return O(ge);
       if (ge == null) throw new TypeError("The first argument must be one of type string, Buffer, ArrayBuffer, Array, or Array-like Object. Received type " + typeof ge);
       if (Ue(ge, h) || ge && Ue(ge.buffer, h) || typeof c < "u" && (Ue(ge, c) || ge && Ue(ge.buffer, c))) return z(ge, re, he);
@@ -60972,7 +60972,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
     }, p.allocUnsafeSlow = function(ge) {
       return M(ge);
     };
-    function R(ge, re) {
+    function P(ge, re) {
       if ((typeof re != "string" || re === "") && (re = "utf8"), !p.isEncoding(re)) throw new TypeError("Unknown encoding: " + re);
       const he = K(ge, re) | 0;
       let we = f(he);
@@ -61225,7 +61225,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
     function $(ge, re, he, we) {
       return Le(ct(re), ge, he, we);
     }
-    function P(ge, re, he, we) {
+    function R(ge, re, he, we) {
       return Le(Fe(re, ge.length - he), ge, he, we);
     }
     p.prototype.write = function(re, he, we, Se) {
@@ -61253,7 +61253,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
         case "ucs-2":
         case "utf16le":
         case "utf-16le":
-          return P(this, re, he, we);
+          return R(this, re, he, we);
         default:
           if (Ne) throw new TypeError("Unknown encoding: " + Se);
           Se = ("" + Se).toLowerCase(), Ne = true;
@@ -61879,18 +61879,18 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
     let l, e, r;
     const s = _EngineFormat, o = _EngineType, a = _TranscoderFormat, h = _BasisFormat;
     self.addEventListener("message", function(M) {
-      const R = M.data;
-      switch (R.type) {
+      const P = M.data;
+      switch (P.type) {
         case "init":
-          l = R.config, c(R.transcoderBinary);
+          l = P.config, c(P.transcoderBinary);
           break;
         case "transcode":
           e.then(() => {
             try {
-              const { faces: V, buffers: O, width: z, height: H, hasAlpha: q, format: W, type: K, dfdFlags: J } = d(R.buffer);
+              const { faces: V, buffers: O, width: z, height: H, hasAlpha: q, format: W, type: K, dfdFlags: J } = d(P.buffer);
               self.postMessage({
                 type: "transcode",
-                id: R.id,
+                id: P.id,
                 data: {
                   faces: V,
                   width: z,
@@ -61904,7 +61904,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
             } catch (V) {
               console.error(V), self.postMessage({
                 type: "error",
-                id: R.id,
+                id: P.id,
                 error: V.message
               });
             }
@@ -61913,52 +61913,52 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       }
     });
     function c(M) {
-      e = new Promise((R) => {
+      e = new Promise((P) => {
         r = {
           wasmBinary: M,
-          onRuntimeInitialized: R
+          onRuntimeInitialized: P
         }, BASIS(r);
       }).then(() => {
         r.initializeBasis(), r.KTX2File === void 0 && console.warn("THREE.KTX2Loader: Please update Basis Universal transcoder.");
       });
     }
     function d(M) {
-      const R = new r.KTX2File(new Uint8Array(M));
+      const P = new r.KTX2File(new Uint8Array(M));
       function V() {
-        R.close(), R.delete();
+        P.close(), P.delete();
       }
-      if (!R.isValid()) throw V(), new Error("THREE.KTX2Loader:	Invalid or unsupported .ktx2 file");
+      if (!P.isValid()) throw V(), new Error("THREE.KTX2Loader:	Invalid or unsupported .ktx2 file");
       let O;
-      if (R.isUASTC()) O = h.UASTC;
-      else if (R.isETC1S()) O = h.ETC1S;
-      else if (R.isHDR()) O = h.UASTC_HDR;
+      if (P.isUASTC()) O = h.UASTC;
+      else if (P.isETC1S()) O = h.ETC1S;
+      else if (P.isHDR()) O = h.UASTC_HDR;
       else throw new Error("THREE.KTX2Loader: Unknown Basis encoding");
-      const z = R.getWidth(), H = R.getHeight(), q = R.getLayers() || 1, W = R.getLevels(), K = R.getFaces(), J = R.getHasAlpha(), ee = R.getDFDFlags(), { transcoderFormat: ie, engineFormat: pe, engineType: U } = m(O, z, H, J);
+      const z = P.getWidth(), H = P.getHeight(), q = P.getLayers() || 1, W = P.getLevels(), K = P.getFaces(), J = P.getHasAlpha(), ee = P.getDFDFlags(), { transcoderFormat: ie, engineFormat: pe, engineType: U } = m(O, z, H, J);
       if (!z || !H || !W) throw V(), new Error("THREE.KTX2Loader:	Invalid texture");
-      if (!R.startTranscoding()) throw V(), new Error("THREE.KTX2Loader: .startTranscoding failed");
+      if (!P.startTranscoding()) throw V(), new Error("THREE.KTX2Loader: .startTranscoding failed");
       const v = [], _ = [];
       for (let $ = 0; $ < K; $++) {
-        const P = [];
+        const R = [];
         for (let F = 0; F < W; F++) {
           const k = [];
           let G, D;
           for (let L = 0; L < q; L++) {
-            const j = R.getImageLevelInfo(F, L, $);
+            const j = P.getImageLevelInfo(F, L, $);
             $ === 0 && F === 0 && L === 0 && (j.origWidth % 4 !== 0 || j.origHeight % 4 !== 0) && console.warn("THREE.KTX2Loader: ETC1S and UASTC textures should use multiple-of-four dimensions."), W > 1 ? (G = j.origWidth, D = j.origHeight) : (G = j.width, D = j.height);
-            let Y = new Uint8Array(R.getImageTranscodedSizeInBytes(F, L, 0, ie));
-            const oe = R.transcodeImage(Y, F, L, $, ie, 0, -1, -1);
+            let Y = new Uint8Array(P.getImageTranscodedSizeInBytes(F, L, 0, ie));
+            const oe = P.transcodeImage(Y, F, L, $, ie, 0, -1, -1);
             if (U === o.HalfFloatType && (Y = new Uint16Array(Y.buffer, Y.byteOffset, Y.byteLength / Uint16Array.BYTES_PER_ELEMENT)), !oe) throw V(), new Error("THREE.KTX2Loader: .transcodeImage failed.");
             k.push(Y);
           }
           const x = w(k);
-          P.push({
+          R.push({
             data: x,
             width: G,
             height: D
           }), _.push(x.buffer);
         }
         v.push({
-          mipmaps: P,
+          mipmaps: R,
           width: z,
           height: H,
           format: pe,
@@ -62155,15 +62155,15 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
         needsPowerOfTwo: false
       }
     ], p = {
-      [h.ETC1S]: f.filter((M) => M.basisFormat.includes(h.ETC1S)).sort((M, R) => M.priorityETC1S - R.priorityETC1S),
-      [h.UASTC]: f.filter((M) => M.basisFormat.includes(h.UASTC)).sort((M, R) => M.priorityUASTC - R.priorityUASTC),
-      [h.UASTC_HDR]: f.filter((M) => M.basisFormat.includes(h.UASTC_HDR)).sort((M, R) => M.priorityHDR - R.priorityHDR)
+      [h.ETC1S]: f.filter((M) => M.basisFormat.includes(h.ETC1S)).sort((M, P) => M.priorityETC1S - P.priorityETC1S),
+      [h.UASTC]: f.filter((M) => M.basisFormat.includes(h.UASTC)).sort((M, P) => M.priorityUASTC - P.priorityUASTC),
+      [h.UASTC_HDR]: f.filter((M) => M.basisFormat.includes(h.UASTC_HDR)).sort((M, P) => M.priorityHDR - P.priorityHDR)
     };
-    function m(M, R, V, O) {
+    function m(M, P, V, O) {
       const z = p[M];
       for (let H = 0; H < z.length; H++) {
         const q = z[H];
-        if (q.if && !l[q.if] || !q.basisFormat.includes(M) || O && q.transcoderFormat.length < 2 || q.needsPowerOfTwo && !(b(R) && b(V))) continue;
+        if (q.if && !l[q.if] || !q.basisFormat.includes(M) || O && q.transcoderFormat.length < 2 || q.needsPowerOfTwo && !(b(P) && b(V))) continue;
         const W = q.transcoderFormat[O ? 1 : 0], K = q.engineFormat[O ? 1 : 0], J = q.engineType[0];
         return {
           transcoderFormat: W,
@@ -62178,12 +62178,12 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
     }
     function w(M) {
       if (M.length === 1) return M[0];
-      let R = 0;
+      let P = 0;
       for (let z = 0; z < M.length; z++) {
         const H = M[z];
-        R += H.byteLength;
+        P += H.byteLength;
       }
-      const V = new Uint8Array(R);
+      const V = new Uint8Array(P);
       let O = 0;
       for (let z = 0; z < M.length; z++) {
         const H = M[z];
@@ -62451,13 +62451,13 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
     depth: 30
   }, RANKING_SIGN = {
     x: -116,
-    z: 52,
+    z: 28,
     height: 2.1,
     width: 5
   }, SIGN = {
     x: -127,
     y: 0,
-    z: 40,
+    z: 58,
     rotationY: Math.PI * 0.5,
     scale: 1.35
   }, LAWN = {
@@ -63211,15 +63211,15 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
   function smoothDampVec3(l, e, r, s, o = 1 / 0, a, h) {
     s = Math.max(1e-4, s);
     const c = 2 / s, d = c * a, f = 1 / (1 + d + 0.48 * d * d + 0.235 * d * d * d);
-    let p = e.x, m = e.y, b = e.z, w = l.x - p, M = l.y - m, R = l.z - b;
-    const V = p, O = m, z = b, H = o * s, q = H * H, W = w * w + M * M + R * R;
+    let p = e.x, m = e.y, b = e.z, w = l.x - p, M = l.y - m, P = l.z - b;
+    const V = p, O = m, z = b, H = o * s, q = H * H, W = w * w + M * M + P * P;
     if (W > q) {
-      const P = Math.sqrt(W);
-      w = w / P * H, M = M / P * H, R = R / P * H;
+      const R = Math.sqrt(W);
+      w = w / R * H, M = M / R * H, P = P / R * H;
     }
-    p = l.x - w, m = l.y - M, b = l.z - R;
-    const K = (r.x + c * w) * a, J = (r.y + c * M) * a, ee = (r.z + c * R) * a;
-    r.x = (r.x - c * K) * f, r.y = (r.y - c * J) * f, r.z = (r.z - c * ee) * f, h.x = p + (w + K) * f, h.y = m + (M + J) * f, h.z = b + (R + ee) * f;
+    p = l.x - w, m = l.y - M, b = l.z - P;
+    const K = (r.x + c * w) * a, J = (r.y + c * M) * a, ee = (r.z + c * P) * a;
+    r.x = (r.x - c * K) * f, r.y = (r.y - c * J) * f, r.z = (r.z - c * ee) * f, h.x = p + (w + K) * f, h.y = m + (M + J) * f, h.z = b + (P + ee) * f;
     const ie = V - l.x, pe = O - l.y, U = z - l.z, v = h.x - V, _ = h.y - O, $ = h.z - z;
     return ie * v + pe * _ + U * $ > 0 && (h.x = V, h.y = O, h.z = z, r.x = (h.x - V) / a, r.y = (h.y - O) / a, r.z = (h.z - z) / a), h;
   }
@@ -63568,14 +63568,14 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
           mouseButton: null
         }, this._activePointers.push(this._lockedPointer), this._domElement.ownerDocument.removeEventListener("pointermove", c, {
           passive: false
-        }), this._domElement.ownerDocument.removeEventListener("pointerup", d), this._domElement.requestPointerLock(), this._domElement.ownerDocument.addEventListener("pointerlockchange", R), this._domElement.ownerDocument.addEventListener("pointerlockerror", V), this._domElement.ownerDocument.addEventListener("pointermove", c, {
+        }), this._domElement.ownerDocument.removeEventListener("pointerup", d), this._domElement.requestPointerLock(), this._domElement.ownerDocument.addEventListener("pointerlockchange", P), this._domElement.ownerDocument.addEventListener("pointerlockerror", V), this._domElement.ownerDocument.addEventListener("pointermove", c, {
           passive: false
         }), this._domElement.ownerDocument.addEventListener("pointerup", d), b());
       }, this.unlockPointer = () => {
         var _a2, _b, _c;
-        this._lockedPointer !== null && (this._disposePointer(this._lockedPointer), this._lockedPointer = null), (_a2 = this._domElement) == null ? void 0 : _a2.ownerDocument.exitPointerLock(), (_b = this._domElement) == null ? void 0 : _b.ownerDocument.removeEventListener("pointerlockchange", R), (_c = this._domElement) == null ? void 0 : _c.ownerDocument.removeEventListener("pointerlockerror", V), this.cancel();
+        this._lockedPointer !== null && (this._disposePointer(this._lockedPointer), this._lockedPointer = null), (_a2 = this._domElement) == null ? void 0 : _a2.ownerDocument.exitPointerLock(), (_b = this._domElement) == null ? void 0 : _b.ownerDocument.removeEventListener("pointerlockchange", P), (_c = this._domElement) == null ? void 0 : _c.ownerDocument.removeEventListener("pointerlockerror", V), this.cancel();
       };
-      const R = () => {
+      const P = () => {
         this._domElement && this._domElement.ownerDocument.pointerLockElement === this._domElement || this.unlockPointer();
       }, V = () => {
         this.unlockPointer();
@@ -63589,7 +63589,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
           passive: false
         }), this._domElement.removeEventListener("contextmenu", m), this._domElement.ownerDocument.removeEventListener("pointermove", c, {
           passive: false
-        }), this._domElement.ownerDocument.removeEventListener("pointerup", d), this._domElement.ownerDocument.removeEventListener("pointerlockchange", R), this._domElement.ownerDocument.removeEventListener("pointerlockerror", V));
+        }), this._domElement.ownerDocument.removeEventListener("pointerup", d), this._domElement.ownerDocument.removeEventListener("pointerlockchange", P), this._domElement.ownerDocument.removeEventListener("pointerlockerror", V));
       }, this.cancel = () => {
         this._state !== ACTION.NONE && (this._state = ACTION.NONE, this._activePointers.length = 0, M());
       }, r && this.connect(r), this.update(0);
@@ -63734,9 +63734,9 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       d.push(this.rotateTo(p, m, r));
       const b = _v3A.setFromSpherical(this._sphericalEnd).normalize(), w = _quaternionA.setFromUnitVectors(b, _AXIS_Z), M = approxEquals(Math.abs(b.y), 1);
       M && w.multiply(_quaternionB.setFromAxisAngle(_AXIS_Y, p)), w.multiply(this._yAxisUpSpaceInverse);
-      const R = _box3B.makeEmpty();
-      _v3B.copy(f.min).applyQuaternion(w), R.expandByPoint(_v3B), _v3B.copy(f.min).setX(f.max.x).applyQuaternion(w), R.expandByPoint(_v3B), _v3B.copy(f.min).setY(f.max.y).applyQuaternion(w), R.expandByPoint(_v3B), _v3B.copy(f.max).setZ(f.min.z).applyQuaternion(w), R.expandByPoint(_v3B), _v3B.copy(f.min).setZ(f.max.z).applyQuaternion(w), R.expandByPoint(_v3B), _v3B.copy(f.max).setY(f.min.y).applyQuaternion(w), R.expandByPoint(_v3B), _v3B.copy(f.max).setX(f.min.x).applyQuaternion(w), R.expandByPoint(_v3B), _v3B.copy(f.max).applyQuaternion(w), R.expandByPoint(_v3B), R.min.x -= o, R.min.y -= h, R.max.x += a, R.max.y += c, w.setFromUnitVectors(_AXIS_Z, b), M && w.premultiply(_quaternionB.invert()), w.premultiply(this._yAxisUpSpace);
-      const V = R.getSize(_v3A), O = R.getCenter(_v3B).applyQuaternion(w);
+      const P = _box3B.makeEmpty();
+      _v3B.copy(f.min).applyQuaternion(w), P.expandByPoint(_v3B), _v3B.copy(f.min).setX(f.max.x).applyQuaternion(w), P.expandByPoint(_v3B), _v3B.copy(f.min).setY(f.max.y).applyQuaternion(w), P.expandByPoint(_v3B), _v3B.copy(f.max).setZ(f.min.z).applyQuaternion(w), P.expandByPoint(_v3B), _v3B.copy(f.min).setZ(f.max.z).applyQuaternion(w), P.expandByPoint(_v3B), _v3B.copy(f.max).setY(f.min.y).applyQuaternion(w), P.expandByPoint(_v3B), _v3B.copy(f.max).setX(f.min.x).applyQuaternion(w), P.expandByPoint(_v3B), _v3B.copy(f.max).applyQuaternion(w), P.expandByPoint(_v3B), P.min.x -= o, P.min.y -= h, P.max.x += a, P.max.y += c, w.setFromUnitVectors(_AXIS_Z, b), M && w.premultiply(_quaternionB.invert()), w.premultiply(this._yAxisUpSpace);
+      const V = P.getSize(_v3A), O = P.getCenter(_v3B).applyQuaternion(w);
       if (isPerspectiveCamera(this._camera)) {
         const z = this.getDistanceToFitBox(V.x, V.y, V.z, s);
         d.push(this.moveTo(O.x, O.y, O.z, r)), d.push(this.dollyTo(z, r)), d.push(this.setFocalOffset(0, 0, 0, r));
@@ -63929,7 +63929,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
         if (isPerspectiveCamera(this._camera) && this._changedDolly !== 0) {
           const m = this._spherical.radius - this._lastDistance, b = this._camera, w = this._getCameraDirection(_cameraDirection), M = _v3A.copy(w).cross(b.up).normalize();
           M.lengthSq() === 0 && (M.x = 1);
-          const R = _v3B.crossVectors(M, w), V = this._sphericalEnd.radius * Math.tan(b.getEffectiveFOV() * DEG2RAD * 0.5), z = (this._sphericalEnd.radius - m - this._sphericalEnd.radius) / this._sphericalEnd.radius, H = _v3C.copy(this._targetEnd).add(M.multiplyScalar(this._dollyControlCoord.x * V * b.aspect)).add(R.multiplyScalar(this._dollyControlCoord.y * V)), q = _v3A.copy(this._targetEnd).lerp(H, z), W = this._lastDollyDirection === DOLLY_DIRECTION.IN && this._spherical.radius <= this.minDistance, K = this._lastDollyDirection === DOLLY_DIRECTION.OUT && this.maxDistance <= this._spherical.radius;
+          const P = _v3B.crossVectors(M, w), V = this._sphericalEnd.radius * Math.tan(b.getEffectiveFOV() * DEG2RAD * 0.5), z = (this._sphericalEnd.radius - m - this._sphericalEnd.radius) / this._sphericalEnd.radius, H = _v3C.copy(this._targetEnd).add(M.multiplyScalar(this._dollyControlCoord.x * V * b.aspect)).add(P.multiplyScalar(this._dollyControlCoord.y * V)), q = _v3A.copy(this._targetEnd).lerp(H, z), W = this._lastDollyDirection === DOLLY_DIRECTION.IN && this._spherical.radius <= this.minDistance, K = this._lastDollyDirection === DOLLY_DIRECTION.OUT && this.maxDistance <= this._spherical.radius;
           if (this.infinityDolly && (W || K)) {
             this._sphericalEnd.radius -= m, this._spherical.radius -= m;
             const ee = _v3B.copy(w).multiplyScalar(-m);
@@ -63939,7 +63939,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
           const J = _v3B.subVectors(q, this._targetEnd);
           this._targetEnd.copy(q), this._target.add(J), this._changedDolly -= m, approxZero(this._changedDolly) && (this._changedDolly = 0);
         } else if (isOrthographicCamera(this._camera) && this._changedZoom !== 0) {
-          const m = this._zoom - this._lastZoom, b = this._camera, w = _v3A.set(this._dollyControlCoord.x, this._dollyControlCoord.y, (b.near + b.far) / (b.near - b.far)).unproject(b), M = _v3B.set(0, 0, -1).applyQuaternion(b.quaternion), R = _v3C.copy(w).add(M.multiplyScalar(-w.dot(b.up))), O = -(this._zoom - m - this._zoom) / this._zoom, z = this._getCameraDirection(_cameraDirection), H = this._targetEnd.dot(z), q = _v3A.copy(this._targetEnd).lerp(R, O), W = q.dot(z), K = z.multiplyScalar(W - H);
+          const m = this._zoom - this._lastZoom, b = this._camera, w = _v3A.set(this._dollyControlCoord.x, this._dollyControlCoord.y, (b.near + b.far) / (b.near - b.far)).unproject(b), M = _v3B.set(0, 0, -1).applyQuaternion(b.quaternion), P = _v3C.copy(w).add(M.multiplyScalar(-w.dot(b.up))), O = -(this._zoom - m - this._zoom) / this._zoom, z = this._getCameraDirection(_cameraDirection), H = this._targetEnd.dot(z), q = _v3A.copy(this._targetEnd).lerp(P, O), W = q.dot(z), K = z.multiplyScalar(W - H);
           q.sub(K), this._boundary.clampPoint(q, q);
           const J = _v3B.subVectors(q, this._targetEnd);
           this._targetEnd.copy(q), this._target.add(J), this._changedZoom -= m, approxZero(this._changedZoom) && (this._changedZoom = 0);
@@ -64269,9 +64269,9 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
             return d.w = p = p + 1640531527 | 0, M = m[b + 34 & 127], w = m[b = b + 1 & 127], M ^= M << 13, w ^= w << 17, M ^= M >>> 15, w ^= w >>> 12, M = m[b] = M ^ w, d.i = b, M + (p ^ p >>> 16) | 0;
           };
           function f(p, m) {
-            var b, w, M, R, V, O = [], z = 128;
-            for (m === (m | 0) ? (w = m, m = null) : (m = m + "\0", w = 0, z = Math.max(z, m.length)), M = 0, R = -32; R < z; ++R) m && (w ^= m.charCodeAt((R + 32) % m.length)), R === 0 && (V = w), w ^= w << 10, w ^= w >>> 15, w ^= w << 4, w ^= w >>> 13, R >= 0 && (V = V + 1640531527 | 0, b = O[R & 127] ^= w + V, M = b == 0 ? M + 1 : 0);
-            for (M >= 128 && (O[(m && m.length || 0) & 127] = -1), M = 127, R = 512; R > 0; --R) w = O[M + 34 & 127], b = O[M = M + 1 & 127], w ^= w << 13, b ^= b << 17, w ^= w >>> 15, b ^= b >>> 12, O[M] = w ^ b;
+            var b, w, M, P, V, O = [], z = 128;
+            for (m === (m | 0) ? (w = m, m = null) : (m = m + "\0", w = 0, z = Math.max(z, m.length)), M = 0, P = -32; P < z; ++P) m && (w ^= m.charCodeAt((P + 32) % m.length)), P === 0 && (V = w), w ^= w << 10, w ^= w >>> 15, w ^= w << 4, w ^= w >>> 13, P >= 0 && (V = V + 1640531527 | 0, b = O[P & 127] ^= w + V, M = b == 0 ? M + 1 : 0);
+            for (M >= 128 && (O[(m && m.length || 0) & 127] = -1), M = 127, P = 512; P > 0; --P) w = O[M + 34 & 127], b = O[M = M + 1 & 127], w ^= w << 13, b ^= b << 17, w ^= w >>> 15, b ^= b >>> 12, O[M] = w ^ b;
             p.w = V, p.X = O, p.i = M;
           }
           f(d, c);
@@ -64460,7 +64460,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
         }
       });
       var e = {}, r = {};
-      r.byteLength = p, r.toByteArray = b, r.fromByteArray = R;
+      r.byteLength = p, r.toByteArray = b, r.fromByteArray = P;
       for (var s = [], o = [], a = typeof Uint8Array < "u" ? Uint8Array : Array, h = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", c = 0, d = h.length; c < d; ++c) s[c] = h[c], o[h.charCodeAt(c)] = c;
       o[45] = 62, o[95] = 63;
       function f(z) {
@@ -64493,26 +64493,26 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
         for (var W, K = [], J = H; J < q; J += 3) W = (z[J] << 16 & 16711680) + (z[J + 1] << 8 & 65280) + (z[J + 2] & 255), K.push(w(W));
         return K.join("");
       }
-      function R(z) {
+      function P(z) {
         for (var H, q = z.length, W = q % 3, K = [], J = 16383, ee = 0, ie = q - W; ee < ie; ee += J) K.push(M(z, ee, ee + J > ie ? ie : ee + J));
         return W === 1 ? (H = z[q - 1], K.push(s[H >> 2] + s[H << 4 & 63] + "==")) : W === 2 && (H = (z[q - 2] << 8) + z[q - 1], K.push(s[H >> 10] + s[H >> 4 & 63] + s[H << 2 & 63] + "=")), K.join("");
       }
       var V = {};
       V.read = function(z, H, q, W, K) {
-        var J, ee, ie = K * 8 - W - 1, pe = (1 << ie) - 1, U = pe >> 1, v = -7, _ = q ? K - 1 : 0, $ = q ? -1 : 1, P = z[H + _];
-        for (_ += $, J = P & (1 << -v) - 1, P >>= -v, v += ie; v > 0; J = J * 256 + z[H + _], _ += $, v -= 8) ;
+        var J, ee, ie = K * 8 - W - 1, pe = (1 << ie) - 1, U = pe >> 1, v = -7, _ = q ? K - 1 : 0, $ = q ? -1 : 1, R = z[H + _];
+        for (_ += $, J = R & (1 << -v) - 1, R >>= -v, v += ie; v > 0; J = J * 256 + z[H + _], _ += $, v -= 8) ;
         for (ee = J & (1 << -v) - 1, J >>= -v, v += W; v > 0; ee = ee * 256 + z[H + _], _ += $, v -= 8) ;
         if (J === 0) J = 1 - U;
         else {
-          if (J === pe) return ee ? NaN : (P ? -1 : 1) * (1 / 0);
+          if (J === pe) return ee ? NaN : (R ? -1 : 1) * (1 / 0);
           ee = ee + Math.pow(2, W), J = J - U;
         }
-        return (P ? -1 : 1) * ee * Math.pow(2, J - W);
+        return (R ? -1 : 1) * ee * Math.pow(2, J - W);
       }, V.write = function(z, H, q, W, K, J) {
-        var ee, ie, pe, U = J * 8 - K - 1, v = (1 << U) - 1, _ = v >> 1, $ = K === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0, P = W ? 0 : J - 1, F = W ? 1 : -1, k = H < 0 || H === 0 && 1 / H < 0 ? 1 : 0;
-        for (H = Math.abs(H), isNaN(H) || H === 1 / 0 ? (ie = isNaN(H) ? 1 : 0, ee = v) : (ee = Math.floor(Math.log(H) / Math.LN2), H * (pe = Math.pow(2, -ee)) < 1 && (ee--, pe *= 2), ee + _ >= 1 ? H += $ / pe : H += $ * Math.pow(2, 1 - _), H * pe >= 2 && (ee++, pe /= 2), ee + _ >= v ? (ie = 0, ee = v) : ee + _ >= 1 ? (ie = (H * pe - 1) * Math.pow(2, K), ee = ee + _) : (ie = H * Math.pow(2, _ - 1) * Math.pow(2, K), ee = 0)); K >= 8; z[q + P] = ie & 255, P += F, ie /= 256, K -= 8) ;
-        for (ee = ee << K | ie, U += K; U > 0; z[q + P] = ee & 255, P += F, ee /= 256, U -= 8) ;
-        z[q + P - F] |= k * 128;
+        var ee, ie, pe, U = J * 8 - K - 1, v = (1 << U) - 1, _ = v >> 1, $ = K === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0, R = W ? 0 : J - 1, F = W ? 1 : -1, k = H < 0 || H === 0 && 1 / H < 0 ? 1 : 0;
+        for (H = Math.abs(H), isNaN(H) || H === 1 / 0 ? (ie = isNaN(H) ? 1 : 0, ee = v) : (ee = Math.floor(Math.log(H) / Math.LN2), H * (pe = Math.pow(2, -ee)) < 1 && (ee--, pe *= 2), ee + _ >= 1 ? H += $ / pe : H += $ * Math.pow(2, 1 - _), H * pe >= 2 && (ee++, pe /= 2), ee + _ >= v ? (ie = 0, ee = v) : ee + _ >= 1 ? (ie = (H * pe - 1) * Math.pow(2, K), ee = ee + _) : (ie = H * Math.pow(2, _ - 1) * Math.pow(2, K), ee = 0)); K >= 8; z[q + R] = ie & 255, R += F, ie /= 256, K -= 8) ;
+        for (ee = ee << K | ie, U += K; U > 0; z[q + R] = ee & 255, R += F, ee /= 256, U -= 8) ;
+        z[q + R - F] |= k * 128;
       };
       (function(z) {
         const H = r, q = V, W = typeof Symbol == "function" && typeof Symbol.for == "function" ? Symbol.for("nodejs.util.inspect.custom") : null;
@@ -64577,11 +64577,11 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
           if (typeof ve != "number") throw new TypeError('"size" argument must be of type number');
           if (ve < 0) throw new RangeError('The value "' + ve + '" is invalid for option "size"');
         }
-        function P(ve, ne, ce) {
+        function R(ve, ne, ce) {
           return $(ve), ve <= 0 ? U(ve) : ne !== void 0 ? typeof ce == "string" ? U(ve).fill(ne, ce) : U(ve).fill(ne) : U(ve);
         }
         v.alloc = function(ve, ne, ce) {
-          return P(ve, ne, ce);
+          return R(ve, ne, ce);
         };
         function F(ve) {
           return $(ve), U(ve < 0 ? 0 : j(ve) | 0);
@@ -65496,7 +65496,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
           break;
         }
         if (ie < 0) return this;
-        ie === 0 ? J.shift() : R(J, ie), J.length === 1 && (ee[W] = J[0]), ee.removeListener !== void 0 && this.emit("removeListener", W, U || K);
+        ie === 0 ? J.shift() : P(J, ie), J.length === 1 && (ee[W] = J[0]), ee.removeListener !== void 0 && this.emit("removeListener", W, U || K);
       }
       return this;
     }, a.prototype.off = a.prototype.removeListener, a.prototype.removeAllListeners = function(W) {
@@ -65545,7 +65545,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       for (var K = new Array(W), J = 0; J < W; ++J) K[J] = q[J];
       return K;
     }
-    function R(q, W) {
+    function P(q, W) {
       for (; W + 1 < q.length; W++) q[W] = q[W + 1];
       q.pop();
     }
@@ -65758,7 +65758,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return Object(O) === O ? O : this;
         }
         return f.apply(d, o(p, arguments));
-      }, w = r(0, f.length - p.length), M = [], R = 0; R < w; R++) M[R] = "$" + R;
+      }, w = r(0, f.length - p.length), M = [], P = 0; P < w; P++) M[P] = "$" + P;
       if (m = Function("binder", "return function (" + h(M, ",") + "){ return binder.apply(this,arguments); }")(b), f.prototype) {
         var V = function() {
         };
@@ -65845,7 +65845,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
   function requireGetIntrinsic() {
     if (hasRequiredGetIntrinsic) return getIntrinsic;
     hasRequiredGetIntrinsic = 1;
-    var l, e = requireEsObjectAtoms(), r = requireEsErrors(), s = require_eval(), o = requireRange(), a = requireRef(), h = requireSyntax(), c = requireType(), d = requireUri(), f = requireAbs(), p = requireFloor(), m = requireMax(), b = requireMin(), w = requirePow(), M = requireRound(), R = requireSign$1(), V = Function, O = function(fe) {
+    var l, e = requireEsObjectAtoms(), r = requireEsErrors(), s = require_eval(), o = requireRange(), a = requireRef(), h = requireSyntax(), c = requireType(), d = requireUri(), f = requireAbs(), p = requireFloor(), m = requireMax(), b = requireMin(), w = requirePow(), M = requireRound(), P = requireSign$1(), V = Function, O = function(fe) {
       try {
         return V('"use strict"; return (' + fe + ").constructor;")();
       } catch {
@@ -65942,14 +65942,14 @@ Use Chrome, Firefox or Internet Explorer 11`);
       "%Math.min%": b,
       "%Math.pow%": w,
       "%Math.round%": M,
-      "%Math.sign%": R,
+      "%Math.sign%": P,
       "%Reflect.getPrototypeOf%": ie
     };
     if (J) try {
       null.error;
     } catch (fe) {
-      var P = J(J(fe));
-      $["%Error.prototype%"] = P;
+      var R = J(J(fe));
+      $["%Error.prototype%"] = R;
     }
     var F = function fe(_e) {
       var xe;
@@ -66273,8 +66273,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         if (!M) return false;
         try {
           a(b, d);
-        } catch (R) {
-          return R === h;
+        } catch (P) {
+          return P === h;
         }
       };
     } else {
@@ -66352,7 +66352,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       } catch {
         return false;
       }
-    }, c = Object.prototype.toString, d = "[object Object]", f = "[object Function]", p = "[object GeneratorFunction]", m = "[object HTMLAllCollection]", b = "[object HTML document.all class]", w = "[object HTMLCollection]", M = typeof Symbol == "function" && !!Symbol.toStringTag, R = !(0 in [
+    }, c = Object.prototype.toString, d = "[object Object]", f = "[object Function]", p = "[object GeneratorFunction]", m = "[object HTMLAllCollection]", b = "[object HTML document.all class]", w = "[object HTMLCollection]", M = typeof Symbol == "function" && !!Symbol.toStringTag, P = !(0 in [
       ,
     ]), V = function() {
       return false;
@@ -66360,7 +66360,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     if (typeof document == "object") {
       var O = document.all;
       c.call(O) === c.call(document.all) && (V = function(H) {
-        if ((R || !H) && (typeof H > "u" || typeof H == "object")) try {
+        if ((P || !H) && (typeof H > "u" || typeof H == "object")) try {
           var q = c.call(H);
           return (q === m || q === b || q === w || q === d) && H("") == null;
         } catch {
@@ -66523,19 +66523,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }, b = {
       __proto__: null
     };
-    c && o && a ? l(f, function(R) {
-      var V = new d[R]();
+    c && o && a ? l(f, function(P) {
+      var V = new d[P]();
       if (Symbol.toStringTag in V && a) {
         var O = a(V), z = o(O, Symbol.toStringTag);
         if (!z && O) {
           var H = a(O);
           z = o(H, Symbol.toStringTag);
         }
-        b["$" + R] = r(z.get);
+        b["$" + P] = r(z.get);
       }
-    }) : l(f, function(R) {
-      var V = new d[R](), O = V.slice || V.set;
-      O && (b["$" + R] = r(O));
+    }) : l(f, function(P) {
+      var V = new d[P](), O = V.slice || V.set;
+      O && (b["$" + P] = r(O));
     });
     var w = function(V) {
       var O = false;
@@ -66591,10 +66591,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }
       }
       l.isArgumentsObject = e, l.isGeneratorFunction = r, l.isTypedArray = o;
-      function R(Te) {
+      function P(Te) {
         return typeof Promise < "u" && Te instanceof Promise || Te !== null && typeof Te == "object" && typeof Te.then == "function" && typeof Te.catch == "function";
       }
-      l.isPromise = R;
+      l.isPromise = P;
       function V(Te) {
         return typeof ArrayBuffer < "u" && ArrayBuffer.isView ? ArrayBuffer.isView(Te) : o(Te) || Y(Te);
       }
@@ -66655,10 +66655,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
         return d(Te) === "[object Set]";
       }
       $.working = typeof Set < "u" && $(/* @__PURE__ */ new Set());
-      function P(Te) {
+      function R(Te) {
         return typeof Set > "u" ? false : $.working ? $(Te) : Te instanceof Set;
       }
-      l.isSet = P;
+      l.isSet = R;
       function F(Te) {
         return d(Te) === "[object WeakMap]";
       }
@@ -66945,7 +66945,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         Y.seen.push(oe);
         var Be;
         return le ? Be = M(Y, oe, me, fe, se) : Be = se.map(function(Ee) {
-          return R(Y, oe, me, fe, Ee, le);
+          return P(Y, oe, me, fe, Ee, le);
         }), Y.seen.pop(), V(Be, xe, Ce);
       }
       function b(Y, oe) {
@@ -66962,12 +66962,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
         return "[" + Error.prototype.toString.call(Y) + "]";
       }
       function M(Y, oe, me, be, Z) {
-        for (var se = [], fe = 0, _e = oe.length; fe < _e; ++fe) D(oe, String(fe)) ? se.push(R(Y, oe, me, be, String(fe), true)) : se.push("");
+        for (var se = [], fe = 0, _e = oe.length; fe < _e; ++fe) D(oe, String(fe)) ? se.push(P(Y, oe, me, be, String(fe), true)) : se.push("");
         return Z.forEach(function(xe) {
-          xe.match(/^\d+$/) || se.push(R(Y, oe, me, be, xe, true));
+          xe.match(/^\d+$/) || se.push(P(Y, oe, me, be, xe, true));
         }), se;
       }
-      function R(Y, oe, me, be, Z, se) {
+      function P(Y, oe, me, be, Z, se) {
         var fe, _e, xe;
         if (xe = Object.getOwnPropertyDescriptor(oe, Z) || {
           value: oe[Z]
@@ -67030,7 +67030,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       l.isUndefined = ee;
       function ie(Y) {
-        return pe(Y) && P(Y) === "[object RegExp]";
+        return pe(Y) && R(Y) === "[object RegExp]";
       }
       l.isRegExp = ie, l.types.isRegExp = ie;
       function pe(Y) {
@@ -67038,11 +67038,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       l.isObject = pe;
       function U(Y) {
-        return pe(Y) && P(Y) === "[object Date]";
+        return pe(Y) && R(Y) === "[object Date]";
       }
       l.isDate = U, l.types.isDate = U;
       function v(Y) {
-        return pe(Y) && (P(Y) === "[object Error]" || Y instanceof Error);
+        return pe(Y) && (R(Y) === "[object Error]" || Y instanceof Error);
       }
       l.isError = v, l.types.isNativeError = v;
       function _(Y) {
@@ -67053,7 +67053,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         return Y === null || typeof Y == "boolean" || typeof Y == "number" || typeof Y == "string" || typeof Y == "symbol" || typeof Y > "u";
       }
       l.isPrimitive = $, l.isBuffer = requireIsBufferBrowser();
-      function P(Y) {
+      function R(Y) {
         return Object.prototype.toString.call(Y);
       }
       function F(Y) {
@@ -67160,20 +67160,20 @@ Use Chrome, Firefox or Internet Explorer 11`);
   function requireBuffer_list() {
     if (hasRequiredBuffer_list) return buffer_list;
     hasRequiredBuffer_list = 1;
-    function l(M, R) {
+    function l(M, P) {
       var V = Object.keys(M);
       if (Object.getOwnPropertySymbols) {
         var O = Object.getOwnPropertySymbols(M);
-        R && (O = O.filter(function(z) {
+        P && (O = O.filter(function(z) {
           return Object.getOwnPropertyDescriptor(M, z).enumerable;
         })), V.push.apply(V, O);
       }
       return V;
     }
     function e(M) {
-      for (var R = 1; R < arguments.length; R++) {
-        var V = arguments[R] != null ? arguments[R] : {};
-        R % 2 ? l(Object(V), true).forEach(function(O) {
+      for (var P = 1; P < arguments.length; P++) {
+        var V = arguments[P] != null ? arguments[P] : {};
+        P % 2 ? l(Object(V), true).forEach(function(O) {
           r(M, O, V[O]);
         }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(M, Object.getOwnPropertyDescriptors(V)) : l(Object(V)).forEach(function(O) {
           Object.defineProperty(M, O, Object.getOwnPropertyDescriptor(V, O));
@@ -67181,45 +67181,45 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       return M;
     }
-    function r(M, R, V) {
-      return R = h(R), R in M ? Object.defineProperty(M, R, {
+    function r(M, P, V) {
+      return P = h(P), P in M ? Object.defineProperty(M, P, {
         value: V,
         enumerable: true,
         configurable: true,
         writable: true
-      }) : M[R] = V, M;
+      }) : M[P] = V, M;
     }
-    function s(M, R) {
-      if (!(M instanceof R)) throw new TypeError("Cannot call a class as a function");
+    function s(M, P) {
+      if (!(M instanceof P)) throw new TypeError("Cannot call a class as a function");
     }
-    function o(M, R) {
-      for (var V = 0; V < R.length; V++) {
-        var O = R[V];
+    function o(M, P) {
+      for (var V = 0; V < P.length; V++) {
+        var O = P[V];
         O.enumerable = O.enumerable || false, O.configurable = true, "value" in O && (O.writable = true), Object.defineProperty(M, h(O.key), O);
       }
     }
-    function a(M, R, V) {
-      return R && o(M.prototype, R), Object.defineProperty(M, "prototype", {
+    function a(M, P, V) {
+      return P && o(M.prototype, P), Object.defineProperty(M, "prototype", {
         writable: false
       }), M;
     }
     function h(M) {
-      var R = c(M, "string");
-      return typeof R == "symbol" ? R : String(R);
+      var P = c(M, "string");
+      return typeof P == "symbol" ? P : String(P);
     }
-    function c(M, R) {
+    function c(M, P) {
       if (typeof M != "object" || M === null) return M;
       var V = M[Symbol.toPrimitive];
       if (V !== void 0) {
-        var O = V.call(M, R);
+        var O = V.call(M, P);
         if (typeof O != "object") return O;
         throw new TypeError("@@toPrimitive must return a primitive value.");
       }
       return String(M);
     }
     var d = requireDist(), f = d.Buffer, p = requireUtil$1(), m = p.inspect, b = m && m.custom || "inspect";
-    function w(M, R, V) {
-      f.prototype.copy.call(M, R, V);
+    function w(M, P, V) {
+      f.prototype.copy.call(M, P, V);
     }
     return buffer_list = (function() {
       function M() {
@@ -67379,8 +67379,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       var m = (function(b) {
         l(w, b);
-        function w(M, R, V) {
-          return b.call(this, p(M, R, V)) || this;
+        function w(M, P, V) {
+          return b.call(this, p(M, P, V)) || this;
         }
         return w;
       })(f);
@@ -67495,7 +67495,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function c(be) {
       return o.isBuffer(be) || be instanceof a;
     }
-    var d = requireDestroy$2(), f = requireState(), p = f.getHighWaterMark, m = requireErrorsBrowser().codes, b = m.ERR_INVALID_ARG_TYPE, w = m.ERR_METHOD_NOT_IMPLEMENTED, M = m.ERR_MULTIPLE_CALLBACK, R = m.ERR_STREAM_CANNOT_PIPE, V = m.ERR_STREAM_DESTROYED, O = m.ERR_STREAM_NULL_VALUES, z = m.ERR_STREAM_WRITE_AFTER_END, H = m.ERR_UNKNOWN_ENCODING, q = d.errorOrDestroy;
+    var d = requireDestroy$2(), f = requireState(), p = f.getHighWaterMark, m = requireErrorsBrowser().codes, b = m.ERR_INVALID_ARG_TYPE, w = m.ERR_METHOD_NOT_IMPLEMENTED, M = m.ERR_MULTIPLE_CALLBACK, P = m.ERR_STREAM_CANNOT_PIPE, V = m.ERR_STREAM_DESTROYED, O = m.ERR_STREAM_NULL_VALUES, z = m.ERR_STREAM_WRITE_AFTER_END, H = m.ERR_UNKNOWN_ENCODING, q = d.errorOrDestroy;
     requireInherits_browser()(ee, s);
     function W() {
     }
@@ -67534,7 +67534,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       this._writableState = new K(be, this, Z), this.writable = true, be && (typeof be.write == "function" && (this._write = be.write), typeof be.writev == "function" && (this._writev = be.writev), typeof be.destroy == "function" && (this._destroy = be.destroy), typeof be.final == "function" && (this._final = be.final)), s.call(this);
     }
     ee.prototype.pipe = function() {
-      q(this, new R());
+      q(this, new P());
     };
     function ie(be, Z) {
       var se = new z();
@@ -67611,13 +67611,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function $(be, Z, se, fe, _e) {
       --Z.pendingcb, se ? (process$1.nextTick(_e, fe), process$1.nextTick(Y, be, Z), be._writableState.errorEmitted = true, q(be, fe)) : (_e(fe), be._writableState.errorEmitted = true, q(be, fe), Y(be, Z));
     }
-    function P(be) {
+    function R(be) {
       be.writing = false, be.writecb = null, be.length -= be.writelen, be.writelen = 0;
     }
     function F(be, Z) {
       var se = be._writableState, fe = se.sync, _e = se.writecb;
       if (typeof _e != "function") throw new M();
-      if (P(se), Z) $(be, se, fe, Z, _e);
+      if (R(se), Z) $(be, se, fe, Z, _e);
       else {
         var xe = x(se) || be.destroyed;
         !xe && !se.corked && !se.bufferProcessing && se.bufferedRequest && D(be, se), fe ? process$1.nextTick(k, be, se, xe, _e) : k(be, se, xe, _e);
@@ -67816,7 +67816,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
           this.text = w, this.end = M, z = 3;
           break;
         default:
-          this.write = R, this.end = V;
+          this.write = P, this.end = V;
           return;
       }
       this.lastNeed = 0, this.lastTotal = 0, this.lastChar = l.allocUnsafe(z);
@@ -67893,7 +67893,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       var z = O && O.length ? this.write(O) : "";
       return this.lastNeed ? z + this.lastChar.toString("base64", 0, 3 - this.lastNeed) : z;
     }
-    function R(O) {
+    function P(O) {
       return O.toString(this.encoding);
     }
     function V(O) {
@@ -67930,7 +67930,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         f = false, m = true, d || c.call(a);
       }, w = a._readableState && a._readableState.endEmitted, M = function() {
         d = false, w = true, f || c.call(a);
-      }, R = function(H) {
+      }, P = function(H) {
         c.call(a, H);
       }, V = function() {
         var H;
@@ -67939,8 +67939,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }, O = function() {
         a.req.on("finish", b);
       };
-      return s(a) ? (a.on("complete", b), a.on("abort", V), a.req ? O() : a.on("request", O)) : f && !a._writableState && (a.on("end", p), a.on("close", p)), a.on("end", M), a.on("finish", b), h.error !== false && a.on("error", R), a.on("close", V), function() {
-        a.removeListener("complete", b), a.removeListener("abort", V), a.removeListener("request", O), a.req && a.req.removeListener("finish", b), a.removeListener("end", p), a.removeListener("close", p), a.removeListener("finish", b), a.removeListener("end", M), a.removeListener("error", R), a.removeListener("close", V);
+      return s(a) ? (a.on("complete", b), a.on("abort", V), a.req ? O() : a.on("request", O)) : f && !a._writableState && (a.on("end", p), a.on("close", p)), a.on("end", M), a.on("finish", b), h.error !== false && a.on("error", P), a.on("close", V), function() {
+        a.removeListener("complete", b), a.removeListener("abort", V), a.removeListener("request", O), a.req && a.req.removeListener("finish", b), a.removeListener("end", p), a.removeListener("close", p), a.removeListener("finish", b), a.removeListener("end", M), a.removeListener("error", P), a.removeListener("close", V);
       };
     }
     return endOfStream = o, endOfStream;
@@ -67989,7 +67989,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function M(H) {
       process$1.nextTick(w, H);
     }
-    function R(H, q) {
+    function P(H, q) {
       return function(W, K) {
         H.then(function() {
           if (q[d]) {
@@ -68015,7 +68015,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
           });
         });
         var K = this[f], J;
-        if (K) J = new Promise(R(K, this));
+        if (K) J = new Promise(P(K, this));
         else {
           var ee = this[m].read();
           if (ee !== null) return Promise.resolve(b(ee, false));
@@ -68096,7 +68096,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     var c = requireUtil$1(), d;
     c && c.debuglog ? d = c.debuglog("stream") : d = function() {
     };
-    var f = requireBuffer_list(), p = requireDestroy$2(), m = requireState(), b = m.getHighWaterMark, w = requireErrorsBrowser().codes, M = w.ERR_INVALID_ARG_TYPE, R = w.ERR_STREAM_PUSH_AFTER_EOF, V = w.ERR_METHOD_NOT_IMPLEMENTED, O = w.ERR_STREAM_UNSHIFT_AFTER_END_EVENT, z, H, q;
+    var f = requireBuffer_list(), p = requireDestroy$2(), m = requireState(), b = m.getHighWaterMark, w = requireErrorsBrowser().codes, M = w.ERR_INVALID_ARG_TYPE, P = w.ERR_STREAM_PUSH_AFTER_EOF, V = w.ERR_METHOD_NOT_IMPLEMENTED, O = w.ERR_STREAM_UNSHIFT_AFTER_END_EVENT, z, H, q;
     requireInherits_browser()(ie, r);
     var W = p.errorOrDestroy, K = [
       "error",
@@ -68144,7 +68144,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         var rt;
         if (Be || (rt = v(Ee, le)), rt) W(xe, rt);
         else if (Ee.objectMode || le && le.length > 0) if (typeof le != "string" && !Ee.objectMode && Object.getPrototypeOf(le) !== s.prototype && (le = a(le)), Re) Ee.endEmitted ? W(xe, new O()) : U(xe, Ee, le, true);
-        else if (Ee.ended) W(xe, new R());
+        else if (Ee.ended) W(xe, new P());
         else {
           if (Ee.destroyed) return false;
           Ee.reading = false, Ee.decoder && !Ce ? (le = Ee.decoder.write(le), Ee.objectMode || le.length !== 0 ? U(xe, Ee, le, false) : D(xe, Ee)) : U(xe, Ee, le, false);
@@ -68177,16 +68177,16 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function $(xe) {
       return xe >= _ ? xe = _ : (xe--, xe |= xe >>> 1, xe |= xe >>> 2, xe |= xe >>> 4, xe |= xe >>> 8, xe |= xe >>> 16, xe++), xe;
     }
-    function P(xe, le) {
+    function R(xe, le) {
       return xe <= 0 || le.length === 0 && le.ended ? 0 : le.objectMode ? 1 : xe !== xe ? le.flowing && le.length ? le.buffer.head.data.length : le.length : (xe > le.highWaterMark && (le.highWaterMark = $(xe)), xe <= le.length ? xe : le.ended ? le.length : (le.needReadable = true, 0));
     }
     ie.prototype.read = function(xe) {
       d("read", xe), xe = parseInt(xe, 10);
       var le = this._readableState, Ce = xe;
       if (xe !== 0 && (le.emittedReadable = false), xe === 0 && le.needReadable && ((le.highWaterMark !== 0 ? le.length >= le.highWaterMark : le.length > 0) || le.ended)) return d("read: emitReadable", le.length, le.ended), le.length === 0 && le.ended ? se(this) : k(this), null;
-      if (xe = P(xe, le), xe === 0 && le.ended) return le.length === 0 && se(this), null;
+      if (xe = R(xe, le), xe === 0 && le.ended) return le.length === 0 && se(this), null;
       var Re = le.needReadable;
-      d("need readable", Re), (le.length === 0 || le.length - xe < le.highWaterMark) && (Re = true, d("length less than watermark", Re)), le.ended || le.reading ? (Re = false, d("reading or ended", Re)) : Re && (d("do read"), le.reading = true, le.sync = true, le.length === 0 && (le.needReadable = true), this._read(le.highWaterMark), le.sync = false, le.reading || (xe = P(Ce, le)));
+      d("need readable", Re), (le.length === 0 || le.length - xe < le.highWaterMark) && (Re = true, d("length less than watermark", Re)), le.ended || le.reading ? (Re = false, d("reading or ended", Re)) : Re && (d("do read"), le.reading = true, le.sync = true, le.length === 0 && (le.needReadable = true), this._read(le.highWaterMark), le.sync = false, le.reading || (xe = R(Ce, le)));
       var Be;
       return xe > 0 ? Be = Z(xe, le) : Be = null, Be === null ? (le.needReadable = le.length <= le.highWaterMark, xe = 0) : (le.length -= xe, le.awaitDrain = 0), le.length === 0 && (le.ended || (le.needReadable = true), Ce !== xe && le.ended && se(this)), Be !== null && this.emit("data", Be), Be;
     };
@@ -68492,8 +68492,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function h(b) {
       return b.setHeader && typeof b.abort == "function";
     }
-    function c(b, w, M, R) {
-      R = e(R);
+    function c(b, w, M, P) {
+      P = e(P);
       var V = false;
       b.on("close", function() {
         V = true;
@@ -68501,15 +68501,15 @@ Use Chrome, Firefox or Internet Explorer 11`);
         readable: w,
         writable: M
       }, function(z) {
-        if (z) return R(z);
-        V = true, R();
+        if (z) return P(z);
+        V = true, P();
       });
       var O = false;
       return function(z) {
         if (!V && !O) {
           if (O = true, h(b)) return b.abort();
           if (typeof b.destroy == "function") return b.destroy();
-          R(z || new o("pipe"));
+          P(z || new o("pipe"));
         }
       };
     }
@@ -68524,12 +68524,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }
     function m() {
       for (var b = arguments.length, w = new Array(b), M = 0; M < b; M++) w[M] = arguments[M];
-      var R = p(w);
+      var P = p(w);
       if (Array.isArray(w[0]) && (w = w[0]), w.length < 2) throw new s("streams");
       var V, O = w.map(function(z, H) {
         var q = H < w.length - 1, W = H > 0;
         return c(z, q, W, function(K) {
-          V || (V = K), K && O.forEach(d), !q && (O.forEach(d), R(V));
+          V || (V = K), K && O.forEach(d), !q && (O.forEach(d), P(V));
         });
       });
       return w.reduce(f);
@@ -68647,8 +68647,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }
     l(o, e), o.prototype._update = function() {
       for (var p = s, m = 0; m < 16; ++m) p[m] = this._block.readInt32LE(m * 4);
-      var b = this._a, w = this._b, M = this._c, R = this._d;
-      b = h(b, w, M, R, p[0], 3614090360, 7), R = h(R, b, w, M, p[1], 3905402710, 12), M = h(M, R, b, w, p[2], 606105819, 17), w = h(w, M, R, b, p[3], 3250441966, 22), b = h(b, w, M, R, p[4], 4118548399, 7), R = h(R, b, w, M, p[5], 1200080426, 12), M = h(M, R, b, w, p[6], 2821735955, 17), w = h(w, M, R, b, p[7], 4249261313, 22), b = h(b, w, M, R, p[8], 1770035416, 7), R = h(R, b, w, M, p[9], 2336552879, 12), M = h(M, R, b, w, p[10], 4294925233, 17), w = h(w, M, R, b, p[11], 2304563134, 22), b = h(b, w, M, R, p[12], 1804603682, 7), R = h(R, b, w, M, p[13], 4254626195, 12), M = h(M, R, b, w, p[14], 2792965006, 17), w = h(w, M, R, b, p[15], 1236535329, 22), b = c(b, w, M, R, p[1], 4129170786, 5), R = c(R, b, w, M, p[6], 3225465664, 9), M = c(M, R, b, w, p[11], 643717713, 14), w = c(w, M, R, b, p[0], 3921069994, 20), b = c(b, w, M, R, p[5], 3593408605, 5), R = c(R, b, w, M, p[10], 38016083, 9), M = c(M, R, b, w, p[15], 3634488961, 14), w = c(w, M, R, b, p[4], 3889429448, 20), b = c(b, w, M, R, p[9], 568446438, 5), R = c(R, b, w, M, p[14], 3275163606, 9), M = c(M, R, b, w, p[3], 4107603335, 14), w = c(w, M, R, b, p[8], 1163531501, 20), b = c(b, w, M, R, p[13], 2850285829, 5), R = c(R, b, w, M, p[2], 4243563512, 9), M = c(M, R, b, w, p[7], 1735328473, 14), w = c(w, M, R, b, p[12], 2368359562, 20), b = d(b, w, M, R, p[5], 4294588738, 4), R = d(R, b, w, M, p[8], 2272392833, 11), M = d(M, R, b, w, p[11], 1839030562, 16), w = d(w, M, R, b, p[14], 4259657740, 23), b = d(b, w, M, R, p[1], 2763975236, 4), R = d(R, b, w, M, p[4], 1272893353, 11), M = d(M, R, b, w, p[7], 4139469664, 16), w = d(w, M, R, b, p[10], 3200236656, 23), b = d(b, w, M, R, p[13], 681279174, 4), R = d(R, b, w, M, p[0], 3936430074, 11), M = d(M, R, b, w, p[3], 3572445317, 16), w = d(w, M, R, b, p[6], 76029189, 23), b = d(b, w, M, R, p[9], 3654602809, 4), R = d(R, b, w, M, p[12], 3873151461, 11), M = d(M, R, b, w, p[15], 530742520, 16), w = d(w, M, R, b, p[2], 3299628645, 23), b = f(b, w, M, R, p[0], 4096336452, 6), R = f(R, b, w, M, p[7], 1126891415, 10), M = f(M, R, b, w, p[14], 2878612391, 15), w = f(w, M, R, b, p[5], 4237533241, 21), b = f(b, w, M, R, p[12], 1700485571, 6), R = f(R, b, w, M, p[3], 2399980690, 10), M = f(M, R, b, w, p[10], 4293915773, 15), w = f(w, M, R, b, p[1], 2240044497, 21), b = f(b, w, M, R, p[8], 1873313359, 6), R = f(R, b, w, M, p[15], 4264355552, 10), M = f(M, R, b, w, p[6], 2734768916, 15), w = f(w, M, R, b, p[13], 1309151649, 21), b = f(b, w, M, R, p[4], 4149444226, 6), R = f(R, b, w, M, p[11], 3174756917, 10), M = f(M, R, b, w, p[2], 718787259, 15), w = f(w, M, R, b, p[9], 3951481745, 21), this._a = this._a + b | 0, this._b = this._b + w | 0, this._c = this._c + M | 0, this._d = this._d + R | 0;
+      var b = this._a, w = this._b, M = this._c, P = this._d;
+      b = h(b, w, M, P, p[0], 3614090360, 7), P = h(P, b, w, M, p[1], 3905402710, 12), M = h(M, P, b, w, p[2], 606105819, 17), w = h(w, M, P, b, p[3], 3250441966, 22), b = h(b, w, M, P, p[4], 4118548399, 7), P = h(P, b, w, M, p[5], 1200080426, 12), M = h(M, P, b, w, p[6], 2821735955, 17), w = h(w, M, P, b, p[7], 4249261313, 22), b = h(b, w, M, P, p[8], 1770035416, 7), P = h(P, b, w, M, p[9], 2336552879, 12), M = h(M, P, b, w, p[10], 4294925233, 17), w = h(w, M, P, b, p[11], 2304563134, 22), b = h(b, w, M, P, p[12], 1804603682, 7), P = h(P, b, w, M, p[13], 4254626195, 12), M = h(M, P, b, w, p[14], 2792965006, 17), w = h(w, M, P, b, p[15], 1236535329, 22), b = c(b, w, M, P, p[1], 4129170786, 5), P = c(P, b, w, M, p[6], 3225465664, 9), M = c(M, P, b, w, p[11], 643717713, 14), w = c(w, M, P, b, p[0], 3921069994, 20), b = c(b, w, M, P, p[5], 3593408605, 5), P = c(P, b, w, M, p[10], 38016083, 9), M = c(M, P, b, w, p[15], 3634488961, 14), w = c(w, M, P, b, p[4], 3889429448, 20), b = c(b, w, M, P, p[9], 568446438, 5), P = c(P, b, w, M, p[14], 3275163606, 9), M = c(M, P, b, w, p[3], 4107603335, 14), w = c(w, M, P, b, p[8], 1163531501, 20), b = c(b, w, M, P, p[13], 2850285829, 5), P = c(P, b, w, M, p[2], 4243563512, 9), M = c(M, P, b, w, p[7], 1735328473, 14), w = c(w, M, P, b, p[12], 2368359562, 20), b = d(b, w, M, P, p[5], 4294588738, 4), P = d(P, b, w, M, p[8], 2272392833, 11), M = d(M, P, b, w, p[11], 1839030562, 16), w = d(w, M, P, b, p[14], 4259657740, 23), b = d(b, w, M, P, p[1], 2763975236, 4), P = d(P, b, w, M, p[4], 1272893353, 11), M = d(M, P, b, w, p[7], 4139469664, 16), w = d(w, M, P, b, p[10], 3200236656, 23), b = d(b, w, M, P, p[13], 681279174, 4), P = d(P, b, w, M, p[0], 3936430074, 11), M = d(M, P, b, w, p[3], 3572445317, 16), w = d(w, M, P, b, p[6], 76029189, 23), b = d(b, w, M, P, p[9], 3654602809, 4), P = d(P, b, w, M, p[12], 3873151461, 11), M = d(M, P, b, w, p[15], 530742520, 16), w = d(w, M, P, b, p[2], 3299628645, 23), b = f(b, w, M, P, p[0], 4096336452, 6), P = f(P, b, w, M, p[7], 1126891415, 10), M = f(M, P, b, w, p[14], 2878612391, 15), w = f(w, M, P, b, p[5], 4237533241, 21), b = f(b, w, M, P, p[12], 1700485571, 6), P = f(P, b, w, M, p[3], 2399980690, 10), M = f(M, P, b, w, p[10], 4293915773, 15), w = f(w, M, P, b, p[1], 2240044497, 21), b = f(b, w, M, P, p[8], 1873313359, 6), P = f(P, b, w, M, p[15], 4264355552, 10), M = f(M, P, b, w, p[6], 2734768916, 15), w = f(w, M, P, b, p[13], 1309151649, 21), b = f(b, w, M, P, p[4], 4149444226, 6), P = f(P, b, w, M, p[11], 3174756917, 10), M = f(M, P, b, w, p[2], 718787259, 15), w = f(w, M, P, b, p[9], 3951481745, 21), this._a = this._a + b | 0, this._b = this._b + w | 0, this._c = this._c + M | 0, this._d = this._d + P | 0;
     }, o.prototype._digest = function() {
       this._block[this._blockOffset++] = 128, this._blockOffset > 56 && (this._block.fill(0, this._blockOffset, 64), this._update(), this._blockOffset = 0), this._block.fill(0, this._blockOffset, 56), this._block.writeUInt32LE(this._length[0], 56), this._block.writeUInt32LE(this._length[1], 60), this._update();
       var p = r.allocUnsafe(16);
@@ -68657,17 +68657,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function a(p, m) {
       return p << m | p >>> 32 - m;
     }
-    function h(p, m, b, w, M, R, V) {
-      return a(p + (m & b | ~m & w) + M + R | 0, V) + m | 0;
+    function h(p, m, b, w, M, P, V) {
+      return a(p + (m & b | ~m & w) + M + P | 0, V) + m | 0;
     }
-    function c(p, m, b, w, M, R, V) {
-      return a(p + (m & w | b & ~w) + M + R | 0, V) + m | 0;
+    function c(p, m, b, w, M, P, V) {
+      return a(p + (m & w | b & ~w) + M + P | 0, V) + m | 0;
     }
-    function d(p, m, b, w, M, R, V) {
-      return a(p + (m ^ b ^ w) + M + R | 0, V) + m | 0;
+    function d(p, m, b, w, M, P, V) {
+      return a(p + (m ^ b ^ w) + M + P | 0, V) + m | 0;
     }
-    function f(p, m, b, w, M, R, V) {
-      return a(p + (b ^ (m | ~w)) + M + R | 0, V) + m | 0;
+    function f(p, m, b, w, M, P, V) {
+      return a(p + (b ^ (m | ~w)) + M + P | 0, V) + m | 0;
     }
     return md5_js = o, md5_js;
   }
@@ -68716,8 +68716,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
       if (o && d instanceof Uint8Array) return l.from(d);
       var w = e(d);
       if (w) for (var M = 0; M < d.length; M += 1) {
-        var R = d[M];
-        if (typeof R != "number" || R < 0 || R > 255 || ~~R !== R) throw new RangeError("Array items must be numbers in the range 0-255.");
+        var P = d[M];
+        if (typeof P != "number" || P < 0 || P > 255 || ~~P !== P) throw new RangeError("Array items must be numbers in the range 0-255.");
       }
       if (w || l.isBuffer(d) && d.constructor && typeof d.constructor.isBuffer == "function" && d.constructor.isBuffer(d)) return l.from(d);
       throw new TypeError('The "data" argument must be a string, an Array, a Buffer, a Uint8Array, or a DataView.');
@@ -68817,64 +68817,64 @@ Use Chrome, Firefox or Internet Explorer 11`);
   function requireUtil() {
     if (hasRequiredUtil) return util;
     hasRequiredUtil = 1;
-    function l(R) {
-      return Array.isArray ? Array.isArray(R) : M(R) === "[object Array]";
+    function l(P) {
+      return Array.isArray ? Array.isArray(P) : M(P) === "[object Array]";
     }
     util.isArray = l;
-    function e(R) {
-      return typeof R == "boolean";
+    function e(P) {
+      return typeof P == "boolean";
     }
     util.isBoolean = e;
-    function r(R) {
-      return R === null;
+    function r(P) {
+      return P === null;
     }
     util.isNull = r;
-    function s(R) {
-      return R == null;
+    function s(P) {
+      return P == null;
     }
     util.isNullOrUndefined = s;
-    function o(R) {
-      return typeof R == "number";
+    function o(P) {
+      return typeof P == "number";
     }
     util.isNumber = o;
-    function a(R) {
-      return typeof R == "string";
+    function a(P) {
+      return typeof P == "string";
     }
     util.isString = a;
-    function h(R) {
-      return typeof R == "symbol";
+    function h(P) {
+      return typeof P == "symbol";
     }
     util.isSymbol = h;
-    function c(R) {
-      return R === void 0;
+    function c(P) {
+      return P === void 0;
     }
     util.isUndefined = c;
-    function d(R) {
-      return M(R) === "[object RegExp]";
+    function d(P) {
+      return M(P) === "[object RegExp]";
     }
     util.isRegExp = d;
-    function f(R) {
-      return typeof R == "object" && R !== null;
+    function f(P) {
+      return typeof P == "object" && P !== null;
     }
     util.isObject = f;
-    function p(R) {
-      return M(R) === "[object Date]";
+    function p(P) {
+      return M(P) === "[object Date]";
     }
     util.isDate = p;
-    function m(R) {
-      return M(R) === "[object Error]" || R instanceof Error;
+    function m(P) {
+      return M(P) === "[object Error]" || P instanceof Error;
     }
     util.isError = m;
-    function b(R) {
-      return typeof R == "function";
+    function b(P) {
+      return typeof P == "function";
     }
     util.isFunction = b;
-    function w(R) {
-      return R === null || typeof R == "boolean" || typeof R == "number" || typeof R == "string" || typeof R == "symbol" || typeof R > "u";
+    function w(P) {
+      return P === null || typeof P == "boolean" || typeof P == "number" || typeof P == "string" || typeof P == "symbol" || typeof P > "u";
     }
     util.isPrimitive = w, util.isBuffer = requireDist().Buffer.isBuffer;
-    function M(R) {
-      return Object.prototype.toString.call(R);
+    function M(P) {
+      return Object.prototype.toString.call(P);
     }
     return util;
   }
@@ -68957,7 +68957,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     if (hasRequired_stream_writable$1) return _stream_writable$1;
     hasRequired_stream_writable$1 = 1;
     var l = requireProcessNextickArgs();
-    _stream_writable$1 = R;
+    _stream_writable$1 = P;
     function e(k) {
       var G = this;
       this.next = null, this.entry = null, this.finish = function() {
@@ -68968,7 +68968,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       "v0.10",
       "v0.9."
     ].indexOf(process$1.version.slice(0, 5)) > -1 ? setImmediate : l.nextTick, s;
-    R.WritableState = w;
+    P.WritableState = w;
     var o = Object.create(requireUtil());
     o.inherits = requireInherits_browser();
     var a = {
@@ -68982,7 +68982,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return c.isBuffer(k) || k instanceof d;
     }
     var m = requireDestroy$1();
-    o.inherits(R, h);
+    o.inherits(P, h);
     function b() {
     }
     function w(k, G) {
@@ -69010,18 +69010,18 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
     })();
     var M;
-    typeof Symbol == "function" && Symbol.hasInstance && typeof Function.prototype[Symbol.hasInstance] == "function" ? (M = Function.prototype[Symbol.hasInstance], Object.defineProperty(R, Symbol.hasInstance, {
+    typeof Symbol == "function" && Symbol.hasInstance && typeof Function.prototype[Symbol.hasInstance] == "function" ? (M = Function.prototype[Symbol.hasInstance], Object.defineProperty(P, Symbol.hasInstance, {
       value: function(k) {
-        return M.call(this, k) ? true : this !== R ? false : k && k._writableState instanceof w;
+        return M.call(this, k) ? true : this !== P ? false : k && k._writableState instanceof w;
       }
     })) : M = function(k) {
       return k instanceof this;
     };
-    function R(k) {
-      if (s = s || require_stream_duplex$1(), !M.call(R, this) && !(this instanceof s)) return new R(k);
+    function P(k) {
+      if (s = s || require_stream_duplex$1(), !M.call(P, this) && !(this instanceof s)) return new P(k);
       this._writableState = new w(k, this), this.writable = true, k && (typeof k.write == "function" && (this._write = k.write), typeof k.writev == "function" && (this._writev = k.writev), typeof k.destroy == "function" && (this._destroy = k.destroy), typeof k.final == "function" && (this._final = k.final)), h.call(this);
     }
-    R.prototype.pipe = function() {
+    P.prototype.pipe = function() {
       this.emit("error", new Error("Cannot pipe, not readable"));
     };
     function V(k, G) {
@@ -69032,16 +69032,16 @@ Use Chrome, Firefox or Internet Explorer 11`);
       var L = true, j = false;
       return D === null ? j = new TypeError("May not write null values to stream") : typeof D != "string" && D !== void 0 && !G.objectMode && (j = new TypeError("Invalid non-string/buffer chunk")), j && (k.emit("error", j), l.nextTick(x, j), L = false), L;
     }
-    R.prototype.write = function(k, G, D) {
+    P.prototype.write = function(k, G, D) {
       var x = this._writableState, L = false, j = !x.objectMode && p(k);
       return j && !c.isBuffer(k) && (k = f(k)), typeof G == "function" && (D = G, G = null), j ? G = "buffer" : G || (G = x.defaultEncoding), typeof D != "function" && (D = b), x.ended ? V(this, D) : (j || O(this, x, k, D)) && (x.pendingcb++, L = H(this, x, j, k, G, D)), L;
-    }, R.prototype.cork = function() {
+    }, P.prototype.cork = function() {
       var k = this._writableState;
       k.corked++;
-    }, R.prototype.uncork = function() {
+    }, P.prototype.uncork = function() {
       var k = this._writableState;
       k.corked && (k.corked--, !k.writing && !k.corked && !k.bufferProcessing && k.bufferedRequest && pe(this, k));
-    }, R.prototype.setDefaultEncoding = function(G) {
+    }, P.prototype.setDefaultEncoding = function(G) {
       if (typeof G == "string" && (G = G.toLowerCase()), !([
         "hex",
         "utf8",
@@ -69060,7 +69060,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function z(k, G, D) {
       return !k.objectMode && k.decodeStrings !== false && typeof G == "string" && (G = c.from(G, D)), G;
     }
-    Object.defineProperty(R.prototype, "writableHighWaterMark", {
+    Object.defineProperty(P.prototype, "writableHighWaterMark", {
       enumerable: false,
       get: function() {
         return this._writableState.highWaterMark;
@@ -69126,11 +69126,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       G.bufferedRequest = D, G.bufferProcessing = false;
     }
-    R.prototype._write = function(k, G, D) {
+    P.prototype._write = function(k, G, D) {
       D(new Error("_write() is not implemented"));
-    }, R.prototype._writev = null, R.prototype.end = function(k, G, D) {
+    }, P.prototype._writev = null, P.prototype.end = function(k, G, D) {
       var x = this._writableState;
-      typeof k == "function" ? (D = k, k = null, G = null) : typeof G == "function" && (D = G, G = null), k != null && this.write(k, G), x.corked && (x.corked = 1, this.uncork()), x.ending || P(this, x, D);
+      typeof k == "function" ? (D = k, k = null, G = null) : typeof G == "function" && (D = G, G = null), k != null && this.write(k, G), x.corked && (x.corked = 1, this.uncork()), x.ending || R(this, x, D);
     };
     function U(k) {
       return k.ending && k.length === 0 && k.bufferedRequest === null && !k.finished && !k.writing;
@@ -69147,7 +69147,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       var D = U(G);
       return D && (_(k, G), G.pendingcb === 0 && (G.finished = true, k.emit("finish"))), D;
     }
-    function P(k, G, D) {
+    function R(k, G, D) {
       G.ending = true, $(k, G), D && (G.finished ? l.nextTick(D) : k.once("finish", D)), G.ended = true, k.writable = false;
     }
     function F(k, G, D) {
@@ -69158,14 +69158,14 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       G.corkedRequestsFree.next = k;
     }
-    return Object.defineProperty(R.prototype, "destroyed", {
+    return Object.defineProperty(P.prototype, "destroyed", {
       get: function() {
         return this._writableState === void 0 ? false : this._writableState.destroyed;
       },
       set: function(k) {
         this._writableState && (this._writableState.destroyed = k);
       }
-    }), R.prototype.destroy = m.destroy, R.prototype._undestroy = m.undestroy, R.prototype._destroy = function(k, G) {
+    }), P.prototype.destroy = m.destroy, P.prototype._undestroy = m.undestroy, P.prototype._destroy = function(k, G) {
       this.end(), G(k);
     }, _stream_writable$1;
   }
@@ -69239,7 +69239,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     };
     var b = requireBufferList$1(), w = requireDestroy$1(), M;
     f.inherits(z, o);
-    var R = [
+    var P = [
       "error",
       "close",
       "destroy",
@@ -69370,7 +69370,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       function Re() {
         m("onend"), Z.end();
       }
-      var Be = P(fe);
+      var Be = R(fe);
       Z.on("drain", Be);
       var Ee = false;
       function rt() {
@@ -69400,7 +69400,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       return Z.emit("pipe", fe), _e.flowing || (m("pipe resume"), fe.resume()), Z;
     };
-    function P(Z) {
+    function R(Z) {
       return function() {
         var se = Z._readableState;
         m("pipeOnDrain", se.awaitDrain), se.awaitDrain && se.awaitDrain--, se.awaitDrain === 0 && s(Z, "data") && (se.flowing = true, D(Z));
@@ -69470,7 +69470,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return Z[Ce].apply(Z, arguments);
         };
       })(xe));
-      for (var le = 0; le < R.length; le++) Z.on(R[le], this.emit.bind(this, R[le]));
+      for (var le = 0; le < P.length; le++) Z.on(P[le], this.emit.bind(this, P[le]));
       return this._read = function(Ce) {
         m("wrapped _read", Ce), _e && (_e = false, Z.resume());
       }, this;
@@ -70013,7 +70013,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function M(O, z, H, q, W, K, J, ee) {
       return p(O + (z & q | H & ~q) + K + J | 0, ee) + W | 0;
     }
-    function R(O, z, H, q, W, K, J, ee) {
+    function P(O, z, H, q, W, K, J, ee) {
       return p(O + (z ^ (H | ~q)) + K + J | 0, ee) + W | 0;
     }
     function V() {
@@ -70022,8 +70022,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
     return e(V, r), V.prototype._update = function() {
       for (var O = s, z = 0; z < 16; ++z) O[z] = this._block.readInt32LE(z * 4);
       for (var H = this._a | 0, q = this._b | 0, W = this._c | 0, K = this._d | 0, J = this._e | 0, ee = this._a | 0, ie = this._b | 0, pe = this._c | 0, U = this._d | 0, v = this._e | 0, _ = 0; _ < 80; _ += 1) {
-        var $, P;
-        _ < 16 ? ($ = m(H, q, W, K, J, O[o[_]], d[0], h[_]), P = R(ee, ie, pe, U, v, O[a[_]], f[0], c[_])) : _ < 32 ? ($ = b(H, q, W, K, J, O[o[_]], d[1], h[_]), P = M(ee, ie, pe, U, v, O[a[_]], f[1], c[_])) : _ < 48 ? ($ = w(H, q, W, K, J, O[o[_]], d[2], h[_]), P = w(ee, ie, pe, U, v, O[a[_]], f[2], c[_])) : _ < 64 ? ($ = M(H, q, W, K, J, O[o[_]], d[3], h[_]), P = b(ee, ie, pe, U, v, O[a[_]], f[3], c[_])) : ($ = R(H, q, W, K, J, O[o[_]], d[4], h[_]), P = m(ee, ie, pe, U, v, O[a[_]], f[4], c[_])), H = J, J = K, K = p(W, 10), W = q, q = $, ee = v, v = U, U = p(pe, 10), pe = ie, ie = P;
+        var $, R;
+        _ < 16 ? ($ = m(H, q, W, K, J, O[o[_]], d[0], h[_]), R = P(ee, ie, pe, U, v, O[a[_]], f[0], c[_])) : _ < 32 ? ($ = b(H, q, W, K, J, O[o[_]], d[1], h[_]), R = M(ee, ie, pe, U, v, O[a[_]], f[1], c[_])) : _ < 48 ? ($ = w(H, q, W, K, J, O[o[_]], d[2], h[_]), R = w(ee, ie, pe, U, v, O[a[_]], f[2], c[_])) : _ < 64 ? ($ = M(H, q, W, K, J, O[o[_]], d[3], h[_]), R = b(ee, ie, pe, U, v, O[a[_]], f[3], c[_])) : ($ = P(H, q, W, K, J, O[o[_]], d[4], h[_]), R = m(ee, ie, pe, U, v, O[a[_]], f[4], c[_])), H = J, J = K, K = p(W, 10), W = q, q = $, ee = v, v = U, U = p(pe, 10), pe = ie, ie = R;
       }
       var F = this._b + W + U | 0;
       this._b = this._c + K + v | 0, this._c = this._d + J + ee | 0, this._d = this._e + H + ie | 0, this._e = this._a + q + pe | 0, this._a = F;
@@ -70092,13 +70092,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return f === 0 ? p & m | ~p & b : f === 2 ? p & m | p & b | m & b : p ^ m ^ b;
     }
     return a.prototype._update = function(f) {
-      for (var p = this._w, m = this._a | 0, b = this._b | 0, w = this._c | 0, M = this._d | 0, R = this._e | 0, V = 0; V < 16; ++V) p[V] = f.readInt32BE(V * 4);
+      for (var p = this._w, m = this._a | 0, b = this._b | 0, w = this._c | 0, M = this._d | 0, P = this._e | 0, V = 0; V < 16; ++V) p[V] = f.readInt32BE(V * 4);
       for (; V < 80; ++V) p[V] = p[V - 3] ^ p[V - 8] ^ p[V - 14] ^ p[V - 16];
       for (var O = 0; O < 80; ++O) {
-        var z = ~~(O / 20), H = h(m) + d(z, b, w, M) + R + p[O] + s[z] | 0;
-        R = M, M = w, w = c(b), b = m, m = H;
+        var z = ~~(O / 20), H = h(m) + d(z, b, w, M) + P + p[O] + s[z] | 0;
+        P = M, M = w, w = c(b), b = m, m = H;
       }
-      this._a = m + this._a | 0, this._b = b + this._b | 0, this._c = w + this._c | 0, this._d = M + this._d | 0, this._e = R + this._e | 0;
+      this._a = m + this._a | 0, this._b = b + this._b | 0, this._c = w + this._c | 0, this._d = M + this._d | 0, this._e = P + this._e | 0;
     }, a.prototype._hash = function() {
       var f = r.allocUnsafe(20);
       return f.writeInt32BE(this._a | 0, 0), f.writeInt32BE(this._b | 0, 4), f.writeInt32BE(this._c | 0, 8), f.writeInt32BE(this._d | 0, 12), f.writeInt32BE(this._e | 0, 16), f;
@@ -70133,13 +70133,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return p === 0 ? m & b | ~m & w : p === 2 ? m & b | m & w | b & w : m ^ b ^ w;
     }
     return a.prototype._update = function(p) {
-      for (var m = this._w, b = this._a | 0, w = this._b | 0, M = this._c | 0, R = this._d | 0, V = this._e | 0, O = 0; O < 16; ++O) m[O] = p.readInt32BE(O * 4);
+      for (var m = this._w, b = this._a | 0, w = this._b | 0, M = this._c | 0, P = this._d | 0, V = this._e | 0, O = 0; O < 16; ++O) m[O] = p.readInt32BE(O * 4);
       for (; O < 80; ++O) m[O] = h(m[O - 3] ^ m[O - 8] ^ m[O - 14] ^ m[O - 16]);
       for (var z = 0; z < 80; ++z) {
-        var H = ~~(z / 20), q = c(b) + f(H, w, M, R) + V + m[z] + s[H] | 0;
-        V = R, R = M, M = d(w), w = b, b = q;
+        var H = ~~(z / 20), q = c(b) + f(H, w, M, P) + V + m[z] + s[H] | 0;
+        V = P, P = M, M = d(w), w = b, b = q;
       }
-      this._a = b + this._a | 0, this._b = w + this._b | 0, this._c = M + this._c | 0, this._d = R + this._d | 0, this._e = V + this._e | 0;
+      this._a = b + this._a | 0, this._b = w + this._b | 0, this._c = M + this._c | 0, this._d = P + this._d | 0, this._e = V + this._e | 0;
     }, a.prototype._hash = function() {
       var p = r.allocUnsafe(20);
       return p.writeInt32BE(this._a | 0, 0), p.writeInt32BE(this._b | 0, 4), p.writeInt32BE(this._c | 0, 8), p.writeInt32BE(this._d | 0, 12), p.writeInt32BE(this._e | 0, 16), p;
@@ -70240,13 +70240,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return (b >>> 17 | b << 15) ^ (b >>> 19 | b << 13) ^ b >>> 10;
     }
     return a.prototype._update = function(b) {
-      for (var w = this._w, M = this._a | 0, R = this._b | 0, V = this._c | 0, O = this._d | 0, z = this._e | 0, H = this._f | 0, q = this._g | 0, W = this._h | 0, K = 0; K < 16; ++K) w[K] = b.readInt32BE(K * 4);
+      for (var w = this._w, M = this._a | 0, P = this._b | 0, V = this._c | 0, O = this._d | 0, z = this._e | 0, H = this._f | 0, q = this._g | 0, W = this._h | 0, K = 0; K < 16; ++K) w[K] = b.readInt32BE(K * 4);
       for (; K < 64; ++K) w[K] = m(w[K - 2]) + w[K - 7] + p(w[K - 15]) + w[K - 16] | 0;
       for (var J = 0; J < 64; ++J) {
-        var ee = W + f(z) + h(z, H, q) + s[J] + w[J] | 0, ie = d(M) + c(M, R, V) | 0;
-        W = q, q = H, H = z, z = O + ee | 0, O = V, V = R, R = M, M = ee + ie | 0;
+        var ee = W + f(z) + h(z, H, q) + s[J] + w[J] | 0, ie = d(M) + c(M, P, V) | 0;
+        W = q, q = H, H = z, z = O + ee | 0, O = V, V = P, P = M, M = ee + ie | 0;
       }
-      this._a = M + this._a | 0, this._b = R + this._b | 0, this._c = V + this._c | 0, this._d = O + this._d | 0, this._e = z + this._e | 0, this._f = H + this._f | 0, this._g = q + this._g | 0, this._h = W + this._h | 0;
+      this._a = M + this._a | 0, this._b = P + this._b | 0, this._c = V + this._c | 0, this._d = O + this._d | 0, this._e = z + this._e | 0, this._f = H + this._f | 0, this._g = q + this._g | 0, this._h = W + this._h | 0;
     }, a.prototype._hash = function() {
       var b = r.allocUnsafe(32);
       return b.writeInt32BE(this._a, 0), b.writeInt32BE(this._b, 4), b.writeInt32BE(this._c, 8), b.writeInt32BE(this._d, 12), b.writeInt32BE(this._e, 16), b.writeInt32BE(this._f, 20), b.writeInt32BE(this._g, 24), b.writeInt32BE(this._h, 28), b;
@@ -70439,35 +70439,35 @@ Use Chrome, Firefox or Internet Explorer 11`);
     l(a, e), a.prototype.init = function() {
       return this._ah = 1779033703, this._bh = 3144134277, this._ch = 1013904242, this._dh = 2773480762, this._eh = 1359893119, this._fh = 2600822924, this._gh = 528734635, this._hh = 1541459225, this._al = 4089235720, this._bl = 2227873595, this._cl = 4271175723, this._dl = 1595750129, this._el = 2917565137, this._fl = 725511199, this._gl = 4215389547, this._hl = 327033209, this;
     };
-    function h(R, V, O) {
-      return O ^ R & (V ^ O);
+    function h(P, V, O) {
+      return O ^ P & (V ^ O);
     }
-    function c(R, V, O) {
-      return R & V | O & (R | V);
+    function c(P, V, O) {
+      return P & V | O & (P | V);
     }
-    function d(R, V) {
-      return (R >>> 28 | V << 4) ^ (V >>> 2 | R << 30) ^ (V >>> 7 | R << 25);
+    function d(P, V) {
+      return (P >>> 28 | V << 4) ^ (V >>> 2 | P << 30) ^ (V >>> 7 | P << 25);
     }
-    function f(R, V) {
-      return (R >>> 14 | V << 18) ^ (R >>> 18 | V << 14) ^ (V >>> 9 | R << 23);
+    function f(P, V) {
+      return (P >>> 14 | V << 18) ^ (P >>> 18 | V << 14) ^ (V >>> 9 | P << 23);
     }
-    function p(R, V) {
-      return (R >>> 1 | V << 31) ^ (R >>> 8 | V << 24) ^ R >>> 7;
+    function p(P, V) {
+      return (P >>> 1 | V << 31) ^ (P >>> 8 | V << 24) ^ P >>> 7;
     }
-    function m(R, V) {
-      return (R >>> 1 | V << 31) ^ (R >>> 8 | V << 24) ^ (R >>> 7 | V << 25);
+    function m(P, V) {
+      return (P >>> 1 | V << 31) ^ (P >>> 8 | V << 24) ^ (P >>> 7 | V << 25);
     }
-    function b(R, V) {
-      return (R >>> 19 | V << 13) ^ (V >>> 29 | R << 3) ^ R >>> 6;
+    function b(P, V) {
+      return (P >>> 19 | V << 13) ^ (V >>> 29 | P << 3) ^ P >>> 6;
     }
-    function w(R, V) {
-      return (R >>> 19 | V << 13) ^ (V >>> 29 | R << 3) ^ (R >>> 6 | V << 26);
+    function w(P, V) {
+      return (P >>> 19 | V << 13) ^ (V >>> 29 | P << 3) ^ (P >>> 6 | V << 26);
     }
-    function M(R, V) {
-      return R >>> 0 < V >>> 0 ? 1 : 0;
+    function M(P, V) {
+      return P >>> 0 < V >>> 0 ? 1 : 0;
     }
-    return a.prototype._update = function(R) {
-      for (var V = this._w, O = this._ah | 0, z = this._bh | 0, H = this._ch | 0, q = this._dh | 0, W = this._eh | 0, K = this._fh | 0, J = this._gh | 0, ee = this._hh | 0, ie = this._al | 0, pe = this._bl | 0, U = this._cl | 0, v = this._dl | 0, _ = this._el | 0, $ = this._fl | 0, P = this._gl | 0, F = this._hl | 0, k = 0; k < 32; k += 2) V[k] = R.readInt32BE(k * 4), V[k + 1] = R.readInt32BE(k * 4 + 4);
+    return a.prototype._update = function(P) {
+      for (var V = this._w, O = this._ah | 0, z = this._bh | 0, H = this._ch | 0, q = this._dh | 0, W = this._eh | 0, K = this._fh | 0, J = this._gh | 0, ee = this._hh | 0, ie = this._al | 0, pe = this._bl | 0, U = this._cl | 0, v = this._dl | 0, _ = this._el | 0, $ = this._fl | 0, R = this._gl | 0, F = this._hl | 0, k = 0; k < 32; k += 2) V[k] = P.readInt32BE(k * 4), V[k + 1] = P.readInt32BE(k * 4 + 4);
       for (; k < 160; k += 2) {
         var G = V[k - 30], D = V[k - 30 + 1], x = p(G, D), L = m(D, G);
         G = V[k - 4], D = V[k - 4 + 1];
@@ -70476,18 +70476,18 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       for (var _e = 0; _e < 160; _e += 2) {
         fe = V[_e], se = V[_e + 1];
-        var xe = c(O, z, H), le = c(ie, pe, U), Ce = d(O, ie), Re = d(ie, O), Be = f(W, _), Ee = f(_, W), rt = s[_e], Pe = s[_e + 1], Te = h(W, K, J), ut = h(_, $, P), De = F + Ee | 0, Fe = ee + Be + M(De, F) | 0;
+        var xe = c(O, z, H), le = c(ie, pe, U), Ce = d(O, ie), Re = d(ie, O), Be = f(W, _), Ee = f(_, W), rt = s[_e], Pe = s[_e + 1], Te = h(W, K, J), ut = h(_, $, R), De = F + Ee | 0, Fe = ee + Be + M(De, F) | 0;
         De = De + ut | 0, Fe = Fe + Te + M(De, ut) | 0, De = De + Pe | 0, Fe = Fe + rt + M(De, Pe) | 0, De = De + se | 0, Fe = Fe + fe + M(De, se) | 0;
         var ct = Re + le | 0, Le = Ce + xe + M(ct, Re) | 0;
-        ee = J, F = P, J = K, P = $, K = W, $ = _, _ = v + De | 0, W = q + Fe + M(_, v) | 0, q = H, v = U, H = z, U = pe, z = O, pe = ie, ie = De + ct | 0, O = Fe + Le + M(ie, De) | 0;
+        ee = J, F = R, J = K, R = $, K = W, $ = _, _ = v + De | 0, W = q + Fe + M(_, v) | 0, q = H, v = U, H = z, U = pe, z = O, pe = ie, ie = De + ct | 0, O = Fe + Le + M(ie, De) | 0;
       }
-      this._al = this._al + ie | 0, this._bl = this._bl + pe | 0, this._cl = this._cl + U | 0, this._dl = this._dl + v | 0, this._el = this._el + _ | 0, this._fl = this._fl + $ | 0, this._gl = this._gl + P | 0, this._hl = this._hl + F | 0, this._ah = this._ah + O + M(this._al, ie) | 0, this._bh = this._bh + z + M(this._bl, pe) | 0, this._ch = this._ch + H + M(this._cl, U) | 0, this._dh = this._dh + q + M(this._dl, v) | 0, this._eh = this._eh + W + M(this._el, _) | 0, this._fh = this._fh + K + M(this._fl, $) | 0, this._gh = this._gh + J + M(this._gl, P) | 0, this._hh = this._hh + ee + M(this._hl, F) | 0;
+      this._al = this._al + ie | 0, this._bl = this._bl + pe | 0, this._cl = this._cl + U | 0, this._dl = this._dl + v | 0, this._el = this._el + _ | 0, this._fl = this._fl + $ | 0, this._gl = this._gl + R | 0, this._hl = this._hl + F | 0, this._ah = this._ah + O + M(this._al, ie) | 0, this._bh = this._bh + z + M(this._bl, pe) | 0, this._ch = this._ch + H + M(this._cl, U) | 0, this._dh = this._dh + q + M(this._dl, v) | 0, this._eh = this._eh + W + M(this._el, _) | 0, this._fh = this._fh + K + M(this._fl, $) | 0, this._gh = this._gh + J + M(this._gl, R) | 0, this._hh = this._hh + ee + M(this._hl, F) | 0;
     }, a.prototype._hash = function() {
-      var R = r.allocUnsafe(64);
+      var P = r.allocUnsafe(64);
       function V(O, z, H) {
-        R.writeInt32BE(O, H), R.writeInt32BE(z, H + 4);
+        P.writeInt32BE(O, H), P.writeInt32BE(z, H + 4);
       }
-      return V(this._ah, this._al, 0), V(this._bh, this._bl, 8), V(this._ch, this._cl, 16), V(this._dh, this._dl, 24), V(this._eh, this._el, 32), V(this._fh, this._fl, 40), V(this._gh, this._gl, 48), V(this._hh, this._hl, 56), R;
+      return V(this._ah, this._al, 0), V(this._bh, this._bl, 8), V(this._ch, this._cl, 16), V(this._dh, this._dl, 24), V(this._eh, this._el, 32), V(this._fh, this._fl, 40), V(this._gh, this._gl, 48), V(this._hh, this._hl, 56), P;
     }, sha512$1 = a, sha512$1;
   }
   var sha384$1, hasRequiredSha384;
@@ -70627,7 +70627,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         p,
         c
       ], m));
-      for (var w = this._ipad = s.allocUnsafe(m), M = this._opad = s.allocUnsafe(m), R = 0; R < m; R++) w[R] = p[R] ^ 54, M[R] = p[R] ^ 92;
+      for (var w = this._ipad = s.allocUnsafe(m), M = this._opad = s.allocUnsafe(m), P = 0; P < m; P++) w[P] = p[P] ^ 54, M[P] = p[P] ^ 92;
       this._hash = f === "rmd160" ? new a() : h(f), this._hash.update(w);
     }
     return l(d, r), d.prototype._update = function(f) {
@@ -70857,35 +70857,35 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return new e().update(M).digest();
     }
     function m(M) {
-      function R(V) {
+      function P(V) {
         return r(M).update(V).digest();
       }
-      return M === "rmd160" || M === "ripemd160" ? p : M === "md5" ? l : R;
+      return M === "rmd160" || M === "ripemd160" ? p : M === "md5" ? l : P;
     }
-    function b(M, R, V) {
+    function b(M, P, V) {
       var O = m(M), z = M === "sha512" || M === "sha384" ? 128 : 64;
-      R.length > z ? R = O(R) : R.length < z && (R = s.concat([
-        R,
+      P.length > z ? P = O(P) : P.length < z && (P = s.concat([
+        P,
         c
       ], z));
-      for (var H = s.allocUnsafe(z + d[M]), q = s.allocUnsafe(z + d[M]), W = 0; W < z; W++) H[W] = R[W] ^ 54, q[W] = R[W] ^ 92;
+      for (var H = s.allocUnsafe(z + d[M]), q = s.allocUnsafe(z + d[M]), W = 0; W < z; W++) H[W] = P[W] ^ 54, q[W] = P[W] ^ 92;
       var K = s.allocUnsafe(z + V + 4);
       H.copy(K, 0, 0, z), this.ipad1 = K, this.ipad2 = H, this.opad = q, this.alg = M, this.blocksize = z, this.hash = O, this.size = d[M];
     }
-    b.prototype.run = function(M, R) {
-      M.copy(R, this.blocksize);
-      var V = this.hash(R);
+    b.prototype.run = function(M, P) {
+      M.copy(P, this.blocksize);
+      var V = this.hash(P);
       return V.copy(this.opad, this.blocksize), this.hash(this.opad);
     };
-    function w(M, R, V, O, z) {
-      o(V, O), M = h(M, a, "Password"), R = h(R, a, "Salt");
+    function w(M, P, V, O, z) {
+      o(V, O), M = h(M, a, "Password"), P = h(P, a, "Salt");
       var H = (z || "sha1").toLowerCase(), q = f[H] || H, W = d[q];
       if (typeof W != "number" || !W) throw new TypeError("Digest algorithm not supported: " + z);
-      var K = new b(q, M, R.length), J = s.allocUnsafe(O), ee = s.allocUnsafe(R.length + 4);
-      R.copy(ee, 0, 0, R.length);
+      var K = new b(q, M, P.length), J = s.allocUnsafe(O), ee = s.allocUnsafe(P.length + 4);
+      P.copy(ee, 0, 0, P.length);
       for (var ie = 0, pe = W, U = Math.ceil(O / pe), v = 1; v <= U; v++) {
-        ee.writeUInt32BE(v, R.length);
-        for (var _ = K.run(ee, K.ipad1), $ = _, P = 1; P < V; P++) {
+        ee.writeUInt32BE(v, P.length);
+        for (var _ = K.run(ee, K.ipad1), $ = _, R = 1; R < V; R++) {
           $ = K.run($, K.ipad2);
           for (var F = 0; F < pe; F++) _[F] ^= $[F];
         }
@@ -70913,7 +70913,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function p() {
       return f || (commonjsGlobal.process && commonjsGlobal.process.nextTick ? f = commonjsGlobal.process.nextTick : commonjsGlobal.queueMicrotask ? f = commonjsGlobal.queueMicrotask : commonjsGlobal.setImmediate ? f = commonjsGlobal.setImmediate : f = commonjsGlobal.setTimeout, f);
     }
-    function m(M, R, V, O, z) {
+    function m(M, P, V, O, z) {
       return h.importKey("raw", M, {
         name: "PBKDF2"
       }, false, [
@@ -70921,7 +70921,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       ]).then(function(H) {
         return h.deriveBits({
           name: "PBKDF2",
-          salt: R,
+          salt: P,
           iterations: V,
           hash: {
             name: z
@@ -70935,33 +70935,33 @@ Use Chrome, Firefox or Internet Explorer 11`);
       if (commonjsGlobal.process && !commonjsGlobal.process.browser || !h || !h.importKey || !h.deriveBits) return Promise.resolve(false);
       if (d[M] !== void 0) return d[M];
       a = a || l.alloc(8);
-      var R = m(a, a, 10, 128, M).then(function() {
+      var P = m(a, a, 10, 128, M).then(function() {
         return true;
       }, function() {
         return false;
       });
-      return d[M] = R, R;
+      return d[M] = P, P;
     }
-    function w(M, R) {
+    function w(M, P) {
       M.then(function(V) {
         p()(function() {
-          R(null, V);
+          P(null, V);
         });
       }, function(V) {
         p()(function() {
-          R(V);
+          P(V);
         });
       });
     }
-    return async = function(M, R, V, O, z, H) {
-      if (typeof z == "function" && (H = z, z = void 0), e(V, O), M = o(M, r, "Password"), R = o(R, r, "Salt"), typeof H != "function") throw new Error("No callback provided to pbkdf2");
+    return async = function(M, P, V, O, z, H) {
+      if (typeof z == "function" && (H = z, z = void 0), e(V, O), M = o(M, r, "Password"), P = o(P, r, "Salt"), typeof H != "function") throw new Error("No callback provided to pbkdf2");
       z = z || "sha1";
       var q = c[z.toLowerCase()];
       if (!q || typeof commonjsGlobal.Promise != "function") {
         p()(function() {
           var W;
           try {
-            W = s(M, R, V, O, z);
+            W = s(M, P, V, O, z);
           } catch (K) {
             H(K);
             return;
@@ -70971,7 +70971,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         return;
       }
       w(b(q).then(function(W) {
-        return W ? m(M, R, V, O, q) : s(M, R, V, O, z);
+        return W ? m(M, P, V, O, q) : s(M, P, V, O, z);
       }), H);
     }, async;
   }
@@ -71756,16 +71756,16 @@ Use Chrome, Firefox or Internet Explorer 11`);
       for (var f = d[d.length - 1], p = d.length - f; p < d.length; p++) l.equal(d[p], f);
       return d.slice(0, d.length - f);
     }, a.prototype._encrypt = function(d, f, p, m, b) {
-      for (var w = f, M = p, R = 0; R < d.keys.length; R += 2) {
-        var V = d.keys[R], O = d.keys[R + 1];
+      for (var w = f, M = p, P = 0; P < d.keys.length; P += 2) {
+        var V = d.keys[P], O = d.keys[P + 1];
         r.expand(M, d.tmp, 0), V ^= d.tmp[0], O ^= d.tmp[1];
         var z = r.substitute(V, O), H = r.permute(z), q = M;
         M = (w ^ H) >>> 0, w = q;
       }
       r.rip(M, w, m, b);
     }, a.prototype._decrypt = function(d, f, p, m, b) {
-      for (var w = p, M = f, R = d.keys.length - 2; R >= 0; R -= 2) {
-        var V = d.keys[R], O = d.keys[R + 1];
+      for (var w = p, M = f, P = d.keys.length - 2; P >= 0; P -= 2) {
+        var V = d.keys[P], O = d.keys[P + 1];
         r.expand(w, d.tmp, 0), V ^= d.tmp[0], O ^= d.tmp[1];
         var z = r.substitute(V, O), H = r.permute(z), q = w;
         w = (M ^ H) >>> 0, M = q;
@@ -72274,7 +72274,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       for (var d = 0; d < c.length; c++) c[d] = 0;
     }
     function s(c, d, f, p, m) {
-      for (var b = f[0], w = f[1], M = f[2], R = f[3], V = c[0] ^ d[0], O = c[1] ^ d[1], z = c[2] ^ d[2], H = c[3] ^ d[3], q, W, K, J, ee = 4, ie = 1; ie < m; ie++) q = b[V >>> 24] ^ w[O >>> 16 & 255] ^ M[z >>> 8 & 255] ^ R[H & 255] ^ d[ee++], W = b[O >>> 24] ^ w[z >>> 16 & 255] ^ M[H >>> 8 & 255] ^ R[V & 255] ^ d[ee++], K = b[z >>> 24] ^ w[H >>> 16 & 255] ^ M[V >>> 8 & 255] ^ R[O & 255] ^ d[ee++], J = b[H >>> 24] ^ w[V >>> 16 & 255] ^ M[O >>> 8 & 255] ^ R[z & 255] ^ d[ee++], V = q, O = W, z = K, H = J;
+      for (var b = f[0], w = f[1], M = f[2], P = f[3], V = c[0] ^ d[0], O = c[1] ^ d[1], z = c[2] ^ d[2], H = c[3] ^ d[3], q, W, K, J, ee = 4, ie = 1; ie < m; ie++) q = b[V >>> 24] ^ w[O >>> 16 & 255] ^ M[z >>> 8 & 255] ^ P[H & 255] ^ d[ee++], W = b[O >>> 24] ^ w[z >>> 16 & 255] ^ M[H >>> 8 & 255] ^ P[V & 255] ^ d[ee++], K = b[z >>> 24] ^ w[H >>> 16 & 255] ^ M[V >>> 8 & 255] ^ P[O & 255] ^ d[ee++], J = b[H >>> 24] ^ w[V >>> 16 & 255] ^ M[O >>> 8 & 255] ^ P[z & 255] ^ d[ee++], V = q, O = W, z = K, H = J;
       return q = (p[V >>> 24] << 24 | p[O >>> 16 & 255] << 16 | p[z >>> 8 & 255] << 8 | p[H & 255]) ^ d[ee++], W = (p[O >>> 24] << 24 | p[z >>> 16 & 255] << 16 | p[H >>> 8 & 255] << 8 | p[V & 255]) ^ d[ee++], K = (p[z >>> 24] << 24 | p[H >>> 16 & 255] << 16 | p[V >>> 8 & 255] << 8 | p[O & 255]) ^ d[ee++], J = (p[H >>> 24] << 24 | p[V >>> 16 & 255] << 16 | p[O >>> 8 & 255] << 8 | p[z & 255]) ^ d[ee++], q = q >>> 0, W = W >>> 0, K = K >>> 0, J = J >>> 0, [
         q,
         W,
@@ -72306,7 +72306,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         [],
         [],
         []
-      ], w = 0, M = 0, R = 0; R < 256; ++R) {
+      ], w = 0, M = 0, P = 0; P < 256; ++P) {
         var V = M ^ M << 1 ^ M << 2 ^ M << 3 ^ M << 4;
         V = V >>> 8 ^ V & 255 ^ 99, f[w] = V, p[V] = w;
         var O = c[w], z = c[O], H = c[z], q = c[V] * 257 ^ V * 16843008;
@@ -72328,9 +72328,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
         var w = m[b - 1];
         b % d === 0 ? (w = w << 8 | w >>> 24, w = a.SBOX[w >>> 24] << 24 | a.SBOX[w >>> 16 & 255] << 16 | a.SBOX[w >>> 8 & 255] << 8 | a.SBOX[w & 255], w ^= o[b / d | 0] << 24) : d > 6 && b % d === 4 && (w = a.SBOX[w >>> 24] << 24 | a.SBOX[w >>> 16 & 255] << 16 | a.SBOX[w >>> 8 & 255] << 8 | a.SBOX[w & 255]), m[b] = m[b - d] ^ w;
       }
-      for (var M = [], R = 0; R < p; R++) {
-        var V = p - R, O = m[V - (R % 4 ? 0 : 4)];
-        R < 4 || V <= 4 ? M[R] = O : M[R] = a.INV_SUB_MIX[0][a.SBOX[O >>> 24]] ^ a.INV_SUB_MIX[1][a.SBOX[O >>> 16 & 255]] ^ a.INV_SUB_MIX[2][a.SBOX[O >>> 8 & 255]] ^ a.INV_SUB_MIX[3][a.SBOX[O & 255]];
+      for (var M = [], P = 0; P < p; P++) {
+        var V = p - P, O = m[V - (P % 4 ? 0 : 4)];
+        P < 4 || V <= 4 ? M[P] = O : M[P] = a.INV_SUB_MIX[0][a.SBOX[O >>> 24]] ^ a.INV_SUB_MIX[1][a.SBOX[O >>> 16 & 255]] ^ a.INV_SUB_MIX[2][a.SBOX[O >>> 8 & 255]] ^ a.INV_SUB_MIX[3][a.SBOX[O & 255]];
       }
       this._nRounds = f, this._keySchedule = m, this._invKeySchedule = M;
     }, h.prototype.encryptBlockRaw = function(c) {
@@ -72429,8 +72429,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           2
         ])
       ]);
-      var w = new o(b), M = m.length, R = M % 16;
-      w.update(m), R && (R = 16 - R, w.update(e.alloc(R, 0))), w.update(e.alloc(8, 0));
+      var w = new o(b), M = m.length, P = M % 16;
+      w.update(m), P && (P = 16 - P, w.update(e.alloc(P, 0))), w.update(e.alloc(8, 0));
       var V = M * 8, O = e.alloc(8);
       O.writeUIntBE(V, 0, 8), w.update(O), p._finID = w.state;
       var z = e.from(p._finID);
@@ -72440,8 +72440,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
       r.call(this);
       var M = e.alloc(4, 0);
       this._cipher = new l.AES(m);
-      var R = this._cipher.encryptBlock(M);
-      this._ghash = new o(R), b = d(this, b, R), this._prev = e.from(b), this._cache = e.allocUnsafe(0), this._secCache = e.allocUnsafe(0), this._decrypt = w, this._alen = 0, this._len = 0, this._mode = p, this._authTag = null, this._called = false;
+      var P = this._cipher.encryptBlock(M);
+      this._ghash = new o(P), b = d(this, b, P), this._prev = e.from(b), this._cache = e.allocUnsafe(0), this._secCache = e.allocUnsafe(0), this._decrypt = w, this._alen = 0, this._len = 0, this._mode = p, this._authTag = null, this._called = false;
     }
     return s(f, r), f.prototype._update = function(p) {
       if (!this._called && this._alen) {
@@ -72497,8 +72497,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           b = Math.min(c, p.length), p.copy(d, w, 0, b), c -= b;
         }
         if (b < p.length && h > 0) {
-          var M = f.length - h, R = Math.min(h, p.length - b);
-          p.copy(f, M, b, b + R), h -= R;
+          var M = f.length - h, P = Math.min(h, p.length - b);
+          p.copy(f, M, b, b + P), h -= P;
         }
       }
       return p.fill(0), {
@@ -72513,12 +72513,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
     if (hasRequiredEncrypter) return encrypter;
     hasRequiredEncrypter = 1;
     var l = requireModes$1(), e = requireAuthCipher(), r = requireSafeBuffer$2().Buffer, s = requireStreamCipher(), o = requireCipherBase(), a = requireAes(), h = requireEvp_bytestokey(), c = requireInherits_browser();
-    function d(w, M, R) {
-      o.call(this), this._cache = new p(), this._cipher = new a.AES(M), this._prev = r.from(R), this._mode = w, this._autopadding = true;
+    function d(w, M, P) {
+      o.call(this), this._cache = new p(), this._cipher = new a.AES(M), this._prev = r.from(P), this._mode = w, this._autopadding = true;
     }
     c(d, o), d.prototype._update = function(w) {
       this._cache.add(w);
-      for (var M, R, V = []; M = this._cache.get(); ) R = this._mode.encrypt(this, M), V.push(R);
+      for (var M, P, V = []; M = this._cache.get(); ) P = this._mode.encrypt(this, M), V.push(P);
       return r.concat(V);
     };
     var f = r.alloc(16, 16);
@@ -72544,23 +72544,23 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       return null;
     }, p.prototype.flush = function() {
-      for (var w = 16 - this.cache.length, M = r.allocUnsafe(w), R = -1; ++R < w; ) M.writeUInt8(w, R);
+      for (var w = 16 - this.cache.length, M = r.allocUnsafe(w), P = -1; ++P < w; ) M.writeUInt8(w, P);
       return r.concat([
         this.cache,
         M
       ]);
     };
-    function m(w, M, R) {
+    function m(w, M, P) {
       var V = l[w.toLowerCase()];
       if (!V) throw new TypeError("invalid suite type");
       if (typeof M == "string" && (M = r.from(M)), M.length !== V.key / 8) throw new TypeError("invalid key length " + M.length);
-      if (typeof R == "string" && (R = r.from(R)), V.mode !== "GCM" && R.length !== V.iv) throw new TypeError("invalid iv length " + R.length);
-      return V.type === "stream" ? new s(V.module, M, R) : V.type === "auth" ? new e(V.module, M, R) : new d(V.module, M, R);
+      if (typeof P == "string" && (P = r.from(P)), V.mode !== "GCM" && P.length !== V.iv) throw new TypeError("invalid iv length " + P.length);
+      return V.type === "stream" ? new s(V.module, M, P) : V.type === "auth" ? new e(V.module, M, P) : new d(V.module, M, P);
     }
     function b(w, M) {
-      var R = l[w.toLowerCase()];
-      if (!R) throw new TypeError("invalid suite type");
-      var V = h(M, false, R.key, R.iv);
+      var P = l[w.toLowerCase()];
+      if (!P) throw new TypeError("invalid suite type");
+      var V = h(M, false, P.key, P.iv);
       return m(w, V.key, V.iv);
     }
     return encrypter.createCipheriv = m, encrypter.createCipher = b, encrypter;
@@ -72570,12 +72570,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
     if (hasRequiredDecrypter) return decrypter;
     hasRequiredDecrypter = 1;
     var l = requireAuthCipher(), e = requireSafeBuffer$2().Buffer, r = requireModes$1(), s = requireStreamCipher(), o = requireCipherBase(), a = requireAes(), h = requireEvp_bytestokey(), c = requireInherits_browser();
-    function d(w, M, R) {
-      o.call(this), this._cache = new f(), this._last = void 0, this._cipher = new a.AES(M), this._prev = e.from(R), this._mode = w, this._autopadding = true;
+    function d(w, M, P) {
+      o.call(this), this._cache = new f(), this._last = void 0, this._cipher = new a.AES(M), this._prev = e.from(P), this._mode = w, this._autopadding = true;
     }
     c(d, o), d.prototype._update = function(w) {
       this._cache.add(w);
-      for (var M, R, V = []; M = this._cache.get(this._autopadding); ) R = this._mode.decrypt(this, M), V.push(R);
+      for (var M, P, V = []; M = this._cache.get(this._autopadding); ) P = this._mode.decrypt(this, M), V.push(P);
       return e.concat(V);
     }, d.prototype._final = function() {
       var w = this._cache.flush();
@@ -72604,20 +72604,20 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function p(w) {
       var M = w[15];
       if (M < 1 || M > 16) throw new Error("unable to decrypt data");
-      for (var R = -1; ++R < M; ) if (w[R + (16 - M)] !== M) throw new Error("unable to decrypt data");
+      for (var P = -1; ++P < M; ) if (w[P + (16 - M)] !== M) throw new Error("unable to decrypt data");
       if (M !== 16) return w.slice(0, 16 - M);
     }
-    function m(w, M, R) {
+    function m(w, M, P) {
       var V = r[w.toLowerCase()];
       if (!V) throw new TypeError("invalid suite type");
-      if (typeof R == "string" && (R = e.from(R)), V.mode !== "GCM" && R.length !== V.iv) throw new TypeError("invalid iv length " + R.length);
+      if (typeof P == "string" && (P = e.from(P)), V.mode !== "GCM" && P.length !== V.iv) throw new TypeError("invalid iv length " + P.length);
       if (typeof M == "string" && (M = e.from(M)), M.length !== V.key / 8) throw new TypeError("invalid key length " + M.length);
-      return V.type === "stream" ? new s(V.module, M, R, true) : V.type === "auth" ? new l(V.module, M, R, true) : new d(V.module, M, R);
+      return V.type === "stream" ? new s(V.module, M, P, true) : V.type === "auth" ? new l(V.module, M, P, true) : new d(V.module, M, P);
     }
     function b(w, M) {
-      var R = r[w.toLowerCase()];
-      if (!R) throw new TypeError("invalid suite type");
-      var V = h(M, false, R.key, R.iv);
+      var P = r[w.toLowerCase()];
+      if (!P) throw new TypeError("invalid suite type");
+      var V = h(M, false, P.key, P.iv);
       return m(w, V.key, V.iv);
     }
     return decrypter.createDecipher = b, decrypter.createDecipheriv = m, decrypter;
@@ -72738,8 +72738,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (typeof v == "number") return this._initNumber(v, _, $);
           if (typeof v == "object") return this._initArray(v, _, $);
           _ === "hex" && (_ = 16), s(_ === (_ | 0) && _ >= 2 && _ <= 36), v = v.toString().replace(/\s+/g, "");
-          var P = 0;
-          v[0] === "-" && (P++, this.negative = 1), P < v.length && (_ === 16 ? this._parseHex(v, P, $) : (this._parseBase(v, _, P), $ === "le" && this._initArray(this.toArray(), _, $)));
+          var R = 0;
+          v[0] === "-" && (R++, this.negative = 1), R < v.length && (_ === 16 ? this._parseHex(v, R, $) : (this._parseBase(v, _, R), $ === "le" && this._initArray(this.toArray(), _, $)));
         }, a.prototype._initNumber = function(v, _, $) {
           v < 0 && (this.negative = 1, v = -v), v < 67108864 ? (this.words = [
             v & 67108863
@@ -72756,10 +72756,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
             0
           ], this.length = 1, this;
           this.length = Math.ceil(v.length / 3), this.words = new Array(this.length);
-          for (var P = 0; P < this.length; P++) this.words[P] = 0;
+          for (var R = 0; R < this.length; R++) this.words[R] = 0;
           var F, k, G = 0;
-          if ($ === "be") for (P = v.length - 1, F = 0; P >= 0; P -= 3) k = v[P] | v[P - 1] << 8 | v[P - 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
-          else if ($ === "le") for (P = 0, F = 0; P < v.length; P += 3) k = v[P] | v[P + 1] << 8 | v[P + 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
+          if ($ === "be") for (R = v.length - 1, F = 0; R >= 0; R -= 3) k = v[R] | v[R - 1] << 8 | v[R - 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
+          else if ($ === "le") for (R = 0, F = 0; R < v.length; R += 3) k = v[R] | v[R + 1] << 8 | v[R + 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
           return this.strip();
         };
         function c(U, v) {
@@ -72772,29 +72772,29 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }
         a.prototype._parseHex = function(v, _, $) {
           this.length = Math.ceil((v.length - _) / 6), this.words = new Array(this.length);
-          for (var P = 0; P < this.length; P++) this.words[P] = 0;
+          for (var R = 0; R < this.length; R++) this.words[R] = 0;
           var F = 0, k = 0, G;
-          if ($ === "be") for (P = v.length - 1; P >= _; P -= 2) G = d(v, _, P) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
+          if ($ === "be") for (R = v.length - 1; R >= _; R -= 2) G = d(v, _, R) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
           else {
             var D = v.length - _;
-            for (P = D % 2 === 0 ? _ + 1 : _; P < v.length; P += 2) G = d(v, _, P) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
+            for (R = D % 2 === 0 ? _ + 1 : _; R < v.length; R += 2) G = d(v, _, R) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
           }
           this.strip();
         };
         function f(U, v, _, $) {
-          for (var P = 0, F = Math.min(U.length, _), k = v; k < F; k++) {
+          for (var R = 0, F = Math.min(U.length, _), k = v; k < F; k++) {
             var G = U.charCodeAt(k) - 48;
-            P *= $, G >= 49 ? P += G - 49 + 10 : G >= 17 ? P += G - 17 + 10 : P += G;
+            R *= $, G >= 49 ? R += G - 49 + 10 : G >= 17 ? R += G - 17 + 10 : R += G;
           }
-          return P;
+          return R;
         }
         a.prototype._parseBase = function(v, _, $) {
           this.words = [
             0
           ], this.length = 1;
-          for (var P = 0, F = 1; F <= 67108863; F *= _) P++;
-          P--, F = F / _ | 0;
-          for (var k = v.length - $, G = k % P, D = Math.min(k, k - G) + $, x = 0, L = $; L < D; L += P) x = f(v, L, L + P, _), this.imuln(F), this.words[0] + x < 67108864 ? this.words[0] += x : this._iaddn(x);
+          for (var R = 0, F = 1; F <= 67108863; F *= _) R++;
+          R--, F = F / _ | 0;
+          for (var k = v.length - $, G = k % R, D = Math.min(k, k - G) + $, x = 0, L = $; L < D; L += R) x = f(v, L, L + R, _), this.imuln(F), this.words[0] + x < 67108864 ? this.words[0] += x : this._iaddn(x);
           if (G !== 0) {
             var j = 1;
             for (x = f(v, L, v.length, _), L = 0; L < G; L++) j *= _;
@@ -72928,9 +72928,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
           var $;
           if (v === 16 || v === "hex") {
             $ = "";
-            for (var P = 0, F = 0, k = 0; k < this.length; k++) {
-              var G = this.words[k], D = ((G << P | F) & 16777215).toString(16);
-              F = G >>> 24 - P & 16777215, P += 2, P >= 26 && (P -= 26, k--), F !== 0 || k !== this.length - 1 ? $ = p[6 - D.length] + D + $ : $ = D + $;
+            for (var R = 0, F = 0, k = 0; k < this.length; k++) {
+              var G = this.words[k], D = ((G << R | F) & 16777215).toString(16);
+              F = G >>> 24 - R & 16777215, R += 2, R >= 26 && (R -= 26, k--), F !== 0 || k !== this.length - 1 ? $ = p[6 - D.length] + D + $ : $ = D + $;
             }
             for (F !== 0 && ($ = F.toString(16) + $); $.length % _ !== 0; ) $ = "0" + $;
             return this.negative !== 0 && ($ = "-" + $), $;
@@ -72957,14 +72957,14 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.toArray = function(v, _) {
           return this.toArrayLike(Array, v, _);
         }, a.prototype.toArrayLike = function(v, _, $) {
-          var P = this.byteLength(), F = $ || Math.max(1, P);
-          s(P <= F, "byte array longer than desired length"), s(F > 0, "Requested array length <= 0"), this.strip();
+          var R = this.byteLength(), F = $ || Math.max(1, R);
+          s(R <= F, "byte array longer than desired length"), s(F > 0, "Requested array length <= 0"), this.strip();
           var k = _ === "le", G = new v(F), D, x, L = this.clone();
           if (k) {
             for (x = 0; !L.isZero(); x++) D = L.andln(255), L.iushrn(8), G[x] = D;
             for (; x < F; x++) G[x] = 0;
           } else {
-            for (x = 0; x < F - P; x++) G[x] = 0;
+            for (x = 0; x < F - R; x++) G[x] = 0;
             for (x = 0; !L.isZero(); x++) D = L.andln(255), L.iushrn(8), G[F - x - 1] = D;
           }
           return G;
@@ -72983,8 +72983,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         };
         function w(U) {
           for (var v = new Array(U.bitLength()), _ = 0; _ < v.length; _++) {
-            var $ = _ / 26 | 0, P = _ % 26;
-            v[_] = (U.words[$] & 1 << P) >>> P;
+            var $ = _ / 26 | 0, R = _ % 26;
+            v[_] = (U.words[$] & 1 << R) >>> R;
           }
           return v;
         }
@@ -73031,8 +73031,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.iuxor = function(v) {
           var _, $;
           this.length > v.length ? (_ = this, $ = v) : (_ = v, $ = this);
-          for (var P = 0; P < $.length; P++) this.words[P] = _.words[P] ^ $.words[P];
-          if (this !== _) for (; P < _.length; P++) this.words[P] = _.words[P];
+          for (var R = 0; R < $.length; R++) this.words[R] = _.words[R] ^ $.words[R];
+          if (this !== _) for (; R < _.length; R++) this.words[R] = _.words[R];
           return this.length = _.length, this.strip();
         }, a.prototype.ixor = function(v) {
           return s((this.negative | v.negative) === 0), this.iuxor(v);
@@ -73044,21 +73044,21 @@ Use Chrome, Firefox or Internet Explorer 11`);
           s(typeof v == "number" && v >= 0);
           var _ = Math.ceil(v / 26) | 0, $ = v % 26;
           this._expand(_), $ > 0 && _--;
-          for (var P = 0; P < _; P++) this.words[P] = ~this.words[P] & 67108863;
-          return $ > 0 && (this.words[P] = ~this.words[P] & 67108863 >> 26 - $), this.strip();
+          for (var R = 0; R < _; R++) this.words[R] = ~this.words[R] & 67108863;
+          return $ > 0 && (this.words[R] = ~this.words[R] & 67108863 >> 26 - $), this.strip();
         }, a.prototype.notn = function(v) {
           return this.clone().inotn(v);
         }, a.prototype.setn = function(v, _) {
           s(typeof v == "number" && v >= 0);
-          var $ = v / 26 | 0, P = v % 26;
-          return this._expand($ + 1), _ ? this.words[$] = this.words[$] | 1 << P : this.words[$] = this.words[$] & ~(1 << P), this.strip();
+          var $ = v / 26 | 0, R = v % 26;
+          return this._expand($ + 1), _ ? this.words[$] = this.words[$] | 1 << R : this.words[$] = this.words[$] & ~(1 << R), this.strip();
         }, a.prototype.iadd = function(v) {
           var _;
           if (this.negative !== 0 && v.negative === 0) return this.negative = 0, _ = this.isub(v), this.negative ^= 1, this._normSign();
           if (this.negative === 0 && v.negative !== 0) return v.negative = 0, _ = this.isub(v), v.negative = 1, _._normSign();
-          var $, P;
-          this.length > v.length ? ($ = this, P = v) : ($ = v, P = this);
-          for (var F = 0, k = 0; k < P.length; k++) _ = ($.words[k] | 0) + (P.words[k] | 0) + F, this.words[k] = _ & 67108863, F = _ >>> 26;
+          var $, R;
+          this.length > v.length ? ($ = this, R = v) : ($ = v, R = this);
+          for (var F = 0, k = 0; k < R.length; k++) _ = ($.words[k] | 0) + (R.words[k] | 0) + F, this.words[k] = _ & 67108863, F = _ >>> 26;
           for (; F !== 0 && k < $.length; k++) _ = ($.words[k] | 0) + F, this.words[k] = _ & 67108863, F = _ >>> 26;
           if (this.length = $.length, F !== 0) this.words[this.length] = F, this.length++;
           else if ($ !== this) for (; k < $.length; k++) this.words[k] = $.words[k];
@@ -73074,12 +73074,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
           } else if (this.negative !== 0) return this.negative = 0, this.iadd(v), this.negative = 1, this._normSign();
           var $ = this.cmp(v);
           if ($ === 0) return this.negative = 0, this.length = 1, this.words[0] = 0, this;
-          var P, F;
-          $ > 0 ? (P = this, F = v) : (P = v, F = this);
-          for (var k = 0, G = 0; G < F.length; G++) _ = (P.words[G] | 0) - (F.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
-          for (; k !== 0 && G < P.length; G++) _ = (P.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
-          if (k === 0 && G < P.length && P !== this) for (; G < P.length; G++) this.words[G] = P.words[G];
-          return this.length = Math.max(this.length, G), P !== this && (this.negative = 1), this.strip();
+          var R, F;
+          $ > 0 ? (R = this, F = v) : (R = v, F = this);
+          for (var k = 0, G = 0; G < F.length; G++) _ = (R.words[G] | 0) - (F.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
+          for (; k !== 0 && G < R.length; G++) _ = (R.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
+          if (k === 0 && G < R.length && R !== this) for (; G < R.length; G++) this.words[G] = R.words[G];
+          return this.length = Math.max(this.length, G), R !== this && (this.negative = 1), this.strip();
         }, a.prototype.sub = function(v) {
           return this.clone().isub(v);
         };
@@ -73087,19 +73087,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
           _.negative = v.negative ^ U.negative;
           var $ = U.length + v.length | 0;
           _.length = $, $ = $ - 1 | 0;
-          var P = U.words[0] | 0, F = v.words[0] | 0, k = P * F, G = k & 67108863, D = k / 67108864 | 0;
+          var R = U.words[0] | 0, F = v.words[0] | 0, k = R * F, G = k & 67108863, D = k / 67108864 | 0;
           _.words[0] = G;
           for (var x = 1; x < $; x++) {
             for (var L = D >>> 26, j = D & 67108863, Y = Math.min(x, v.length - 1), oe = Math.max(0, x - U.length + 1); oe <= Y; oe++) {
               var me = x - oe | 0;
-              P = U.words[me] | 0, F = v.words[oe] | 0, k = P * F + j, L += k / 67108864 | 0, j = k & 67108863;
+              R = U.words[me] | 0, F = v.words[oe] | 0, k = R * F + j, L += k / 67108864 | 0, j = k & 67108863;
             }
             _.words[x] = j | 0, D = L | 0;
           }
           return D !== 0 ? _.words[x] = D | 0 : _.length--, _.strip();
         }
-        var R = function(v, _, $) {
-          var P = v.words, F = _.words, k = $.words, G = 0, D, x, L, j = P[0] | 0, Y = j & 8191, oe = j >>> 13, me = P[1] | 0, be = me & 8191, Z = me >>> 13, se = P[2] | 0, fe = se & 8191, _e = se >>> 13, xe = P[3] | 0, le = xe & 8191, Ce = xe >>> 13, Re = P[4] | 0, Be = Re & 8191, Ee = Re >>> 13, rt = P[5] | 0, Pe = rt & 8191, Te = rt >>> 13, ut = P[6] | 0, De = ut & 8191, Fe = ut >>> 13, ct = P[7] | 0, Le = ct & 8191, Ue = ct >>> 13, pt = P[8] | 0, Ke = pt & 8191, tt = pt >>> 13, bt = P[9] | 0, ge = bt & 8191, re = bt >>> 13, he = F[0] | 0, we = he & 8191, Se = he >>> 13, ke = F[1] | 0, Ne = ke & 8191, ze = ke >>> 13, vt = F[2] | 0, Ve = vt & 8191, Xe = vt >>> 13, ft = F[3] | 0, Ye = ft & 8191, ot = ft >>> 13, wt = F[4] | 0, nt = wt & 8191, at = wt >>> 13, $t = F[5] | 0, ve = $t & 8191, ne = $t >>> 13, ce = F[6] | 0, $e = ce & 8191, Me = ce >>> 13, Oe = F[7] | 0, Ie = Oe & 8191, je = Oe >>> 13, yt = F[8] | 0, Ge = yt & 8191, et = yt >>> 13, mt = F[9] | 0, st = mt & 8191, lt = mt >>> 13;
+        var P = function(v, _, $) {
+          var R = v.words, F = _.words, k = $.words, G = 0, D, x, L, j = R[0] | 0, Y = j & 8191, oe = j >>> 13, me = R[1] | 0, be = me & 8191, Z = me >>> 13, se = R[2] | 0, fe = se & 8191, _e = se >>> 13, xe = R[3] | 0, le = xe & 8191, Ce = xe >>> 13, Re = R[4] | 0, Be = Re & 8191, Ee = Re >>> 13, rt = R[5] | 0, Pe = rt & 8191, Te = rt >>> 13, ut = R[6] | 0, De = ut & 8191, Fe = ut >>> 13, ct = R[7] | 0, Le = ct & 8191, Ue = ct >>> 13, pt = R[8] | 0, Ke = pt & 8191, tt = pt >>> 13, bt = R[9] | 0, ge = bt & 8191, re = bt >>> 13, he = F[0] | 0, we = he & 8191, Se = he >>> 13, ke = F[1] | 0, Ne = ke & 8191, ze = ke >>> 13, vt = F[2] | 0, Ve = vt & 8191, Xe = vt >>> 13, ft = F[3] | 0, Ye = ft & 8191, ot = ft >>> 13, wt = F[4] | 0, nt = wt & 8191, at = wt >>> 13, $t = F[5] | 0, ve = $t & 8191, ne = $t >>> 13, ce = F[6] | 0, $e = ce & 8191, Me = ce >>> 13, Oe = F[7] | 0, Ie = Oe & 8191, je = Oe >>> 13, yt = F[8] | 0, Ge = yt & 8191, et = yt >>> 13, mt = F[9] | 0, st = mt & 8191, lt = mt >>> 13;
           $.negative = v.negative ^ _.negative, $.length = 19, D = Math.imul(Y, we), x = Math.imul(Y, Se), x = x + Math.imul(oe, we) | 0, L = Math.imul(oe, Se);
           var _t = (G + D | 0) + ((x & 8191) << 13) | 0;
           G = (L + (x >>> 13) | 0) + (_t >>> 26) | 0, _t &= 67108863, D = Math.imul(be, we), x = Math.imul(be, Se), x = x + Math.imul(Z, we) | 0, L = Math.imul(Z, Se), D = D + Math.imul(Y, Ne) | 0, x = x + Math.imul(Y, ze) | 0, x = x + Math.imul(oe, Ne) | 0, L = L + Math.imul(oe, ze) | 0;
@@ -73140,17 +73140,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
           var zt = (G + D | 0) + ((x & 8191) << 13) | 0;
           return G = (L + (x >>> 13) | 0) + (zt >>> 26) | 0, zt &= 67108863, k[0] = _t, k[1] = At, k[2] = Ct, k[3] = St, k[4] = Mt, k[5] = Tt, k[6] = Bt, k[7] = Nt, k[8] = It, k[9] = Pt, k[10] = Rt, k[11] = Dt, k[12] = Lt, k[13] = kt, k[14] = Ot, k[15] = Vt, k[16] = Ut, k[17] = Gt, k[18] = zt, G !== 0 && (k[19] = G, $.length++), $;
         };
-        Math.imul || (R = M);
+        Math.imul || (P = M);
         function V(U, v, _) {
           _.negative = v.negative ^ U.negative, _.length = U.length + v.length;
-          for (var $ = 0, P = 0, F = 0; F < _.length - 1; F++) {
-            var k = P;
-            P = 0;
+          for (var $ = 0, R = 0, F = 0; F < _.length - 1; F++) {
+            var k = R;
+            R = 0;
             for (var G = $ & 67108863, D = Math.min(F, v.length - 1), x = Math.max(0, F - U.length + 1); x <= D; x++) {
               var L = F - x, j = U.words[L] | 0, Y = v.words[x] | 0, oe = j * Y, me = oe & 67108863;
-              k = k + (oe / 67108864 | 0) | 0, me = me + G | 0, G = me & 67108863, k = k + (me >>> 26) | 0, P += k >>> 26, k &= 67108863;
+              k = k + (oe / 67108864 | 0) | 0, me = me + G | 0, G = me & 67108863, k = k + (me >>> 26) | 0, R += k >>> 26, k &= 67108863;
             }
-            _.words[F] = G, $ = k, k = P;
+            _.words[F] = G, $ = k, k = R;
           }
           return $ !== 0 ? _.words[F] = $ : _.length--, _.strip();
         }
@@ -73159,57 +73159,57 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return $.mulp(U, v, _);
         }
         a.prototype.mulTo = function(v, _) {
-          var $, P = this.length + v.length;
-          return this.length === 10 && v.length === 10 ? $ = R(this, v, _) : P < 63 ? $ = M(this, v, _) : P < 1024 ? $ = V(this, v, _) : $ = O(this, v, _), $;
+          var $, R = this.length + v.length;
+          return this.length === 10 && v.length === 10 ? $ = P(this, v, _) : R < 63 ? $ = M(this, v, _) : R < 1024 ? $ = V(this, v, _) : $ = O(this, v, _), $;
         };
         function z(U, v) {
           this.x = U, this.y = v;
         }
         z.prototype.makeRBT = function(v) {
-          for (var _ = new Array(v), $ = a.prototype._countBits(v) - 1, P = 0; P < v; P++) _[P] = this.revBin(P, $, v);
+          for (var _ = new Array(v), $ = a.prototype._countBits(v) - 1, R = 0; R < v; R++) _[R] = this.revBin(R, $, v);
           return _;
         }, z.prototype.revBin = function(v, _, $) {
           if (v === 0 || v === $ - 1) return v;
-          for (var P = 0, F = 0; F < _; F++) P |= (v & 1) << _ - F - 1, v >>= 1;
-          return P;
-        }, z.prototype.permute = function(v, _, $, P, F, k) {
-          for (var G = 0; G < k; G++) P[G] = _[v[G]], F[G] = $[v[G]];
-        }, z.prototype.transform = function(v, _, $, P, F, k) {
-          this.permute(k, v, _, $, P, F);
+          for (var R = 0, F = 0; F < _; F++) R |= (v & 1) << _ - F - 1, v >>= 1;
+          return R;
+        }, z.prototype.permute = function(v, _, $, R, F, k) {
+          for (var G = 0; G < k; G++) R[G] = _[v[G]], F[G] = $[v[G]];
+        }, z.prototype.transform = function(v, _, $, R, F, k) {
+          this.permute(k, v, _, $, R, F);
           for (var G = 1; G < F; G <<= 1) for (var D = G << 1, x = Math.cos(2 * Math.PI / D), L = Math.sin(2 * Math.PI / D), j = 0; j < F; j += D) for (var Y = x, oe = L, me = 0; me < G; me++) {
-            var be = $[j + me], Z = P[j + me], se = $[j + me + G], fe = P[j + me + G], _e = Y * se - oe * fe;
-            fe = Y * fe + oe * se, se = _e, $[j + me] = be + se, P[j + me] = Z + fe, $[j + me + G] = be - se, P[j + me + G] = Z - fe, me !== D && (_e = x * Y - L * oe, oe = x * oe + L * Y, Y = _e);
+            var be = $[j + me], Z = R[j + me], se = $[j + me + G], fe = R[j + me + G], _e = Y * se - oe * fe;
+            fe = Y * fe + oe * se, se = _e, $[j + me] = be + se, R[j + me] = Z + fe, $[j + me + G] = be - se, R[j + me + G] = Z - fe, me !== D && (_e = x * Y - L * oe, oe = x * oe + L * Y, Y = _e);
           }
         }, z.prototype.guessLen13b = function(v, _) {
-          var $ = Math.max(_, v) | 1, P = $ & 1, F = 0;
+          var $ = Math.max(_, v) | 1, R = $ & 1, F = 0;
           for ($ = $ / 2 | 0; $; $ = $ >>> 1) F++;
-          return 1 << F + 1 + P;
+          return 1 << F + 1 + R;
         }, z.prototype.conjugate = function(v, _, $) {
-          if (!($ <= 1)) for (var P = 0; P < $ / 2; P++) {
-            var F = v[P];
-            v[P] = v[$ - P - 1], v[$ - P - 1] = F, F = _[P], _[P] = -_[$ - P - 1], _[$ - P - 1] = -F;
+          if (!($ <= 1)) for (var R = 0; R < $ / 2; R++) {
+            var F = v[R];
+            v[R] = v[$ - R - 1], v[$ - R - 1] = F, F = _[R], _[R] = -_[$ - R - 1], _[$ - R - 1] = -F;
           }
         }, z.prototype.normalize13b = function(v, _) {
-          for (var $ = 0, P = 0; P < _ / 2; P++) {
-            var F = Math.round(v[2 * P + 1] / _) * 8192 + Math.round(v[2 * P] / _) + $;
-            v[P] = F & 67108863, F < 67108864 ? $ = 0 : $ = F / 67108864 | 0;
+          for (var $ = 0, R = 0; R < _ / 2; R++) {
+            var F = Math.round(v[2 * R + 1] / _) * 8192 + Math.round(v[2 * R] / _) + $;
+            v[R] = F & 67108863, F < 67108864 ? $ = 0 : $ = F / 67108864 | 0;
           }
           return v;
-        }, z.prototype.convert13b = function(v, _, $, P) {
+        }, z.prototype.convert13b = function(v, _, $, R) {
           for (var F = 0, k = 0; k < _; k++) F = F + (v[k] | 0), $[2 * k] = F & 8191, F = F >>> 13, $[2 * k + 1] = F & 8191, F = F >>> 13;
-          for (k = 2 * _; k < P; ++k) $[k] = 0;
+          for (k = 2 * _; k < R; ++k) $[k] = 0;
           s(F === 0), s((F & -8192) === 0);
         }, z.prototype.stub = function(v) {
           for (var _ = new Array(v), $ = 0; $ < v; $++) _[$] = 0;
           return _;
         }, z.prototype.mulp = function(v, _, $) {
-          var P = 2 * this.guessLen13b(v.length, _.length), F = this.makeRBT(P), k = this.stub(P), G = new Array(P), D = new Array(P), x = new Array(P), L = new Array(P), j = new Array(P), Y = new Array(P), oe = $.words;
-          oe.length = P, this.convert13b(v.words, v.length, G, P), this.convert13b(_.words, _.length, L, P), this.transform(G, k, D, x, P, F), this.transform(L, k, j, Y, P, F);
-          for (var me = 0; me < P; me++) {
+          var R = 2 * this.guessLen13b(v.length, _.length), F = this.makeRBT(R), k = this.stub(R), G = new Array(R), D = new Array(R), x = new Array(R), L = new Array(R), j = new Array(R), Y = new Array(R), oe = $.words;
+          oe.length = R, this.convert13b(v.words, v.length, G, R), this.convert13b(_.words, _.length, L, R), this.transform(G, k, D, x, R, F), this.transform(L, k, j, Y, R, F);
+          for (var me = 0; me < R; me++) {
             var be = D[me] * j[me] - x[me] * Y[me];
             x[me] = D[me] * Y[me] + x[me] * j[me], D[me] = be;
           }
-          return this.conjugate(D, x, P), this.transform(D, x, oe, k, P, F), this.conjugate(oe, k, P), this.normalize13b(oe, P), $.negative = v.negative ^ _.negative, $.length = v.length + _.length, $.strip();
+          return this.conjugate(D, x, R), this.transform(D, x, oe, k, R, F), this.conjugate(oe, k, R), this.normalize13b(oe, R), $.negative = v.negative ^ _.negative, $.length = v.length + _.length, $.strip();
         }, a.prototype.mul = function(v) {
           var _ = new a(null);
           return _.words = new Array(this.length + v.length), this.mulTo(v, _);
@@ -73221,8 +73221,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.imuln = function(v) {
           s(typeof v == "number"), s(v < 67108864);
           for (var _ = 0, $ = 0; $ < this.length; $++) {
-            var P = (this.words[$] | 0) * v, F = (P & 67108863) + (_ & 67108863);
-            _ >>= 26, _ += P / 67108864 | 0, _ += F >>> 26, this.words[$] = F & 67108863;
+            var R = (this.words[$] | 0) * v, F = (R & 67108863) + (_ & 67108863);
+            _ >>= 26, _ += R / 67108864 | 0, _ += F >>> 26, this.words[$] = F & 67108863;
           }
           return _ !== 0 && (this.words[$] = _, this.length++), this.length = v === 0 ? 1 : this.length, this;
         }, a.prototype.muln = function(v) {
@@ -73234,16 +73234,16 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.pow = function(v) {
           var _ = w(v);
           if (_.length === 0) return new a(1);
-          for (var $ = this, P = 0; P < _.length && _[P] === 0; P++, $ = $.sqr()) ;
-          if (++P < _.length) for (var F = $.sqr(); P < _.length; P++, F = F.sqr()) _[P] !== 0 && ($ = $.mul(F));
+          for (var $ = this, R = 0; R < _.length && _[R] === 0; R++, $ = $.sqr()) ;
+          if (++R < _.length) for (var F = $.sqr(); R < _.length; R++, F = F.sqr()) _[R] !== 0 && ($ = $.mul(F));
           return $;
         }, a.prototype.iushln = function(v) {
           s(typeof v == "number" && v >= 0);
-          var _ = v % 26, $ = (v - _) / 26, P = 67108863 >>> 26 - _ << 26 - _, F;
+          var _ = v % 26, $ = (v - _) / 26, R = 67108863 >>> 26 - _ << 26 - _, F;
           if (_ !== 0) {
             var k = 0;
             for (F = 0; F < this.length; F++) {
-              var G = this.words[F] & P, D = (this.words[F] | 0) - G << _;
+              var G = this.words[F] & R, D = (this.words[F] | 0) - G << _;
               this.words[F] = D | k, k = G >>> 26 - _;
             }
             k && (this.words[F] = k, this.length++);
@@ -73258,17 +73258,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return s(this.negative === 0), this.iushln(v);
         }, a.prototype.iushrn = function(v, _, $) {
           s(typeof v == "number" && v >= 0);
-          var P;
-          _ ? P = (_ - _ % 26) / 26 : P = 0;
+          var R;
+          _ ? R = (_ - _ % 26) / 26 : R = 0;
           var F = v % 26, k = Math.min((v - F) / 26, this.length), G = 67108863 ^ 67108863 >>> F << F, D = $;
-          if (P -= k, P = Math.max(0, P), D) {
+          if (R -= k, R = Math.max(0, R), D) {
             for (var x = 0; x < k; x++) D.words[x] = this.words[x];
             D.length = k;
           }
           if (k !== 0) if (this.length > k) for (this.length -= k, x = 0; x < this.length; x++) this.words[x] = this.words[x + k];
           else this.words[0] = 0, this.length = 1;
           var L = 0;
-          for (x = this.length - 1; x >= 0 && (L !== 0 || x >= P); x--) {
+          for (x = this.length - 1; x >= 0 && (L !== 0 || x >= R); x--) {
             var j = this.words[x] | 0;
             this.words[x] = L << 26 - F | j >>> F, L = j & G;
           }
@@ -73285,17 +73285,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return this.clone().iushrn(v);
         }, a.prototype.testn = function(v) {
           s(typeof v == "number" && v >= 0);
-          var _ = v % 26, $ = (v - _) / 26, P = 1 << _;
+          var _ = v % 26, $ = (v - _) / 26, R = 1 << _;
           if (this.length <= $) return false;
           var F = this.words[$];
-          return !!(F & P);
+          return !!(F & R);
         }, a.prototype.imaskn = function(v) {
           s(typeof v == "number" && v >= 0);
           var _ = v % 26, $ = (v - _) / 26;
           if (s(this.negative === 0, "imaskn works only with positive numbers"), this.length <= $) return this;
           if (_ !== 0 && $++, this.length = Math.min($, this.length), _ !== 0) {
-            var P = 67108863 ^ 67108863 >>> _ << _;
-            this.words[this.length - 1] &= P;
+            var R = 67108863 ^ 67108863 >>> _ << _;
+            this.words[this.length - 1] &= R;
           }
           return this.strip();
         }, a.prototype.maskn = function(v) {
@@ -73321,8 +73321,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.abs = function() {
           return this.clone().iabs();
         }, a.prototype._ishlnsubmul = function(v, _, $) {
-          var P = v.length + $, F;
-          this._expand(P);
+          var R = v.length + $, F;
+          this._expand(R);
           var k, G = 0;
           for (F = 0; F < v.length; F++) {
             k = (this.words[F + $] | 0) + G;
@@ -73334,35 +73334,35 @@ Use Chrome, Firefox or Internet Explorer 11`);
           for (s(G === -1), G = 0, F = 0; F < this.length; F++) k = -(this.words[F] | 0) + G, G = k >> 26, this.words[F] = k & 67108863;
           return this.negative = 1, this.strip();
         }, a.prototype._wordDiv = function(v, _) {
-          var $ = this.length - v.length, P = this.clone(), F = v, k = F.words[F.length - 1] | 0, G = this._countBits(k);
-          $ = 26 - G, $ !== 0 && (F = F.ushln($), P.iushln($), k = F.words[F.length - 1] | 0);
-          var D = P.length - F.length, x;
+          var $ = this.length - v.length, R = this.clone(), F = v, k = F.words[F.length - 1] | 0, G = this._countBits(k);
+          $ = 26 - G, $ !== 0 && (F = F.ushln($), R.iushln($), k = F.words[F.length - 1] | 0);
+          var D = R.length - F.length, x;
           if (_ !== "mod") {
             x = new a(null), x.length = D + 1, x.words = new Array(x.length);
             for (var L = 0; L < x.length; L++) x.words[L] = 0;
           }
-          var j = P.clone()._ishlnsubmul(F, 1, D);
-          j.negative === 0 && (P = j, x && (x.words[D] = 1));
+          var j = R.clone()._ishlnsubmul(F, 1, D);
+          j.negative === 0 && (R = j, x && (x.words[D] = 1));
           for (var Y = D - 1; Y >= 0; Y--) {
-            var oe = (P.words[F.length + Y] | 0) * 67108864 + (P.words[F.length + Y - 1] | 0);
-            for (oe = Math.min(oe / k | 0, 67108863), P._ishlnsubmul(F, oe, Y); P.negative !== 0; ) oe--, P.negative = 0, P._ishlnsubmul(F, 1, Y), P.isZero() || (P.negative ^= 1);
+            var oe = (R.words[F.length + Y] | 0) * 67108864 + (R.words[F.length + Y - 1] | 0);
+            for (oe = Math.min(oe / k | 0, 67108863), R._ishlnsubmul(F, oe, Y); R.negative !== 0; ) oe--, R.negative = 0, R._ishlnsubmul(F, 1, Y), R.isZero() || (R.negative ^= 1);
             x && (x.words[Y] = oe);
           }
-          return x && x.strip(), P.strip(), _ !== "div" && $ !== 0 && P.iushrn($), {
+          return x && x.strip(), R.strip(), _ !== "div" && $ !== 0 && R.iushrn($), {
             div: x || null,
-            mod: P
+            mod: R
           };
         }, a.prototype.divmod = function(v, _, $) {
           if (s(!v.isZero()), this.isZero()) return {
             div: new a(0),
             mod: new a(0)
           };
-          var P, F, k;
-          return this.negative !== 0 && v.negative === 0 ? (k = this.neg().divmod(v, _), _ !== "mod" && (P = k.div.neg()), _ !== "div" && (F = k.mod.neg(), $ && F.negative !== 0 && F.iadd(v)), {
-            div: P,
+          var R, F, k;
+          return this.negative !== 0 && v.negative === 0 ? (k = this.neg().divmod(v, _), _ !== "mod" && (R = k.div.neg()), _ !== "div" && (F = k.mod.neg(), $ && F.negative !== 0 && F.iadd(v)), {
+            div: R,
             mod: F
-          }) : this.negative === 0 && v.negative !== 0 ? (k = this.divmod(v.neg(), _), _ !== "mod" && (P = k.div.neg()), {
-            div: P,
+          }) : this.negative === 0 && v.negative !== 0 ? (k = this.divmod(v.neg(), _), _ !== "mod" && (R = k.div.neg()), {
+            div: R,
             mod: k.mod
           }) : (this.negative & v.negative) !== 0 ? (k = this.neg().divmod(v.neg(), _), _ !== "div" && (F = k.mod.neg(), $ && F.negative !== 0 && F.isub(v)), {
             div: k.div,
@@ -73389,17 +73389,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.divRound = function(v) {
           var _ = this.divmod(v);
           if (_.mod.isZero()) return _.div;
-          var $ = _.div.negative !== 0 ? _.mod.isub(v) : _.mod, P = v.ushrn(1), F = v.andln(1), k = $.cmp(P);
+          var $ = _.div.negative !== 0 ? _.mod.isub(v) : _.mod, R = v.ushrn(1), F = v.andln(1), k = $.cmp(R);
           return k < 0 || F === 1 && k === 0 ? _.div : _.div.negative !== 0 ? _.div.isubn(1) : _.div.iaddn(1);
         }, a.prototype.modn = function(v) {
           s(v <= 67108863);
-          for (var _ = (1 << 26) % v, $ = 0, P = this.length - 1; P >= 0; P--) $ = (_ * $ + (this.words[P] | 0)) % v;
+          for (var _ = (1 << 26) % v, $ = 0, R = this.length - 1; R >= 0; R--) $ = (_ * $ + (this.words[R] | 0)) % v;
           return $;
         }, a.prototype.idivn = function(v) {
           s(v <= 67108863);
           for (var _ = 0, $ = this.length - 1; $ >= 0; $--) {
-            var P = (this.words[$] | 0) + _ * 67108864;
-            this.words[$] = P / v | 0, _ = P % v;
+            var R = (this.words[$] | 0) + _ * 67108864;
+            this.words[$] = R / v | 0, _ = R % v;
           }
           return this.strip();
         }, a.prototype.divn = function(v) {
@@ -73408,13 +73408,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
           s(v.negative === 0), s(!v.isZero());
           var _ = this, $ = v.clone();
           _.negative !== 0 ? _ = _.umod(v) : _ = _.clone();
-          for (var P = new a(1), F = new a(0), k = new a(0), G = new a(1), D = 0; _.isEven() && $.isEven(); ) _.iushrn(1), $.iushrn(1), ++D;
+          for (var R = new a(1), F = new a(0), k = new a(0), G = new a(1), D = 0; _.isEven() && $.isEven(); ) _.iushrn(1), $.iushrn(1), ++D;
           for (var x = $.clone(), L = _.clone(); !_.isZero(); ) {
             for (var j = 0, Y = 1; (_.words[0] & Y) === 0 && j < 26; ++j, Y <<= 1) ;
-            if (j > 0) for (_.iushrn(j); j-- > 0; ) (P.isOdd() || F.isOdd()) && (P.iadd(x), F.isub(L)), P.iushrn(1), F.iushrn(1);
+            if (j > 0) for (_.iushrn(j); j-- > 0; ) (R.isOdd() || F.isOdd()) && (R.iadd(x), F.isub(L)), R.iushrn(1), F.iushrn(1);
             for (var oe = 0, me = 1; ($.words[0] & me) === 0 && oe < 26; ++oe, me <<= 1) ;
             if (oe > 0) for ($.iushrn(oe); oe-- > 0; ) (k.isOdd() || G.isOdd()) && (k.iadd(x), G.isub(L)), k.iushrn(1), G.iushrn(1);
-            _.cmp($) >= 0 ? (_.isub($), P.isub(k), F.isub(G)) : ($.isub(_), k.isub(P), G.isub(F));
+            _.cmp($) >= 0 ? (_.isub($), R.isub(k), F.isub(G)) : ($.isub(_), k.isub(R), G.isub(F));
           }
           return {
             a: k,
@@ -73425,21 +73425,21 @@ Use Chrome, Firefox or Internet Explorer 11`);
           s(v.negative === 0), s(!v.isZero());
           var _ = this, $ = v.clone();
           _.negative !== 0 ? _ = _.umod(v) : _ = _.clone();
-          for (var P = new a(1), F = new a(0), k = $.clone(); _.cmpn(1) > 0 && $.cmpn(1) > 0; ) {
+          for (var R = new a(1), F = new a(0), k = $.clone(); _.cmpn(1) > 0 && $.cmpn(1) > 0; ) {
             for (var G = 0, D = 1; (_.words[0] & D) === 0 && G < 26; ++G, D <<= 1) ;
-            if (G > 0) for (_.iushrn(G); G-- > 0; ) P.isOdd() && P.iadd(k), P.iushrn(1);
+            if (G > 0) for (_.iushrn(G); G-- > 0; ) R.isOdd() && R.iadd(k), R.iushrn(1);
             for (var x = 0, L = 1; ($.words[0] & L) === 0 && x < 26; ++x, L <<= 1) ;
             if (x > 0) for ($.iushrn(x); x-- > 0; ) F.isOdd() && F.iadd(k), F.iushrn(1);
-            _.cmp($) >= 0 ? (_.isub($), P.isub(F)) : ($.isub(_), F.isub(P));
+            _.cmp($) >= 0 ? (_.isub($), R.isub(F)) : ($.isub(_), F.isub(R));
           }
           var j;
-          return _.cmpn(1) === 0 ? j = P : j = F, j.cmpn(0) < 0 && j.iadd(v), j;
+          return _.cmpn(1) === 0 ? j = R : j = F, j.cmpn(0) < 0 && j.iadd(v), j;
         }, a.prototype.gcd = function(v) {
           if (this.isZero()) return v.abs();
           if (v.isZero()) return this.abs();
           var _ = this.clone(), $ = v.clone();
           _.negative = 0, $.negative = 0;
-          for (var P = 0; _.isEven() && $.isEven(); P++) _.iushrn(1), $.iushrn(1);
+          for (var R = 0; _.isEven() && $.isEven(); R++) _.iushrn(1), $.iushrn(1);
           do {
             for (; _.isEven(); ) _.iushrn(1);
             for (; $.isEven(); ) $.iushrn(1);
@@ -73450,7 +73450,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
             } else if (F === 0 || $.cmpn(1) === 0) break;
             _.isub($);
           } while (true);
-          return $.iushln(P);
+          return $.iushln(R);
         }, a.prototype.invm = function(v) {
           return this.egcd(v).a.umod(v);
         }, a.prototype.isEven = function() {
@@ -73461,9 +73461,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return this.words[0] & v;
         }, a.prototype.bincn = function(v) {
           s(typeof v == "number");
-          var _ = v % 26, $ = (v - _) / 26, P = 1 << _;
-          if (this.length <= $) return this._expand($ + 1), this.words[$] |= P, this;
-          for (var F = P, k = $; F !== 0 && k < this.length; k++) {
+          var _ = v % 26, $ = (v - _) / 26, R = 1 << _;
+          if (this.length <= $) return this._expand($ + 1), this.words[$] |= R, this;
+          for (var F = R, k = $; F !== 0 && k < this.length; k++) {
             var G = this.words[k] | 0;
             G += F, F = G >>> 26, G &= 67108863, this.words[k] = G;
           }
@@ -73479,8 +73479,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (this.length > 1) $ = 1;
           else {
             _ && (v = -v), s(v <= 67108863, "Number is too big");
-            var P = this.words[0] | 0;
-            $ = P === v ? 0 : P < v ? -1 : 1;
+            var R = this.words[0] | 0;
+            $ = R === v ? 0 : R < v ? -1 : 1;
           }
           return this.negative !== 0 ? -$ | 0 : $;
         }, a.prototype.cmp = function(v) {
@@ -73492,9 +73492,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (this.length > v.length) return 1;
           if (this.length < v.length) return -1;
           for (var _ = 0, $ = this.length - 1; $ >= 0; $--) {
-            var P = this.words[$] | 0, F = v.words[$] | 0;
-            if (P !== F) {
-              P < F ? _ = -1 : P > F && (_ = 1);
+            var R = this.words[$] | 0, F = v.words[$] | 0;
+            if (R !== F) {
+              R < F ? _ = -1 : R > F && (_ = 1);
               break;
             }
           }
@@ -73573,8 +73573,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           do
             this.split(_, this.tmp), _ = this.imulK(_), _ = _.iadd(this.tmp), $ = _.bitLength();
           while ($ > this.n);
-          var P = $ < this.n ? -1 : _.ucmp(this.p);
-          return P === 0 ? (_.words[0] = 0, _.length = 1) : P > 0 ? _.isub(this.p) : _.strip !== void 0 ? _.strip() : _._strip(), _;
+          var R = $ < this.n ? -1 : _.ucmp(this.p);
+          return R === 0 ? (_.words[0] = 0, _.length = 1) : R > 0 ? _.isub(this.p) : _.strip !== void 0 ? _.strip() : _._strip(), _;
         }, q.prototype.split = function(v, _) {
           v.iushrn(this.n, 0, _);
         }, q.prototype.imulK = function(v) {
@@ -73584,8 +73584,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           q.call(this, "k256", "ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff fffffffe fffffc2f");
         }
         o(W, q), W.prototype.split = function(v, _) {
-          for (var $ = 4194303, P = Math.min(v.length, 9), F = 0; F < P; F++) _.words[F] = v.words[F];
-          if (_.length = P, v.length <= 9) {
+          for (var $ = 4194303, R = Math.min(v.length, 9), F = 0; F < R; F++) _.words[F] = v.words[F];
+          if (_.length = R, v.length <= 9) {
             v.words[0] = 0, v.length = 1;
             return;
           }
@@ -73598,8 +73598,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, W.prototype.imulK = function(v) {
           v.words[v.length] = 0, v.words[v.length + 1] = 0, v.length += 2;
           for (var _ = 0, $ = 0; $ < v.length; $++) {
-            var P = v.words[$] | 0;
-            _ += P * 977, v.words[$] = _ & 67108863, _ = P * 64 + (_ / 67108864 | 0);
+            var R = v.words[$] | 0;
+            _ += R * 977, v.words[$] = _ & 67108863, _ = R * 64 + (_ / 67108864 | 0);
           }
           return v.words[v.length - 1] === 0 && (v.length--, v.words[v.length - 1] === 0 && v.length--), v;
         };
@@ -73616,8 +73616,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }
         o(ee, q), ee.prototype.imulK = function(v) {
           for (var _ = 0, $ = 0; $ < v.length; $++) {
-            var P = (v.words[$] | 0) * 19 + _, F = P & 67108863;
-            P >>>= 26, v.words[$] = F, _ = P;
+            var R = (v.words[$] | 0) * 19 + _, F = R & 67108863;
+            R >>>= 26, v.words[$] = F, _ = R;
           }
           return _ !== 0 && (v.words[v.length++] = _), v;
         }, a._prime = function(v) {
@@ -73677,11 +73677,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
             var $ = this.m.add(new a(1)).iushrn(2);
             return this.pow(v, $);
           }
-          for (var P = this.m.subn(1), F = 0; !P.isZero() && P.andln(1) === 0; ) F++, P.iushrn(1);
-          s(!P.isZero());
+          for (var R = this.m.subn(1), F = 0; !R.isZero() && R.andln(1) === 0; ) F++, R.iushrn(1);
+          s(!R.isZero());
           var k = new a(1).toRed(this), G = k.redNeg(), D = this.m.subn(1).iushrn(1), x = this.m.bitLength();
           for (x = new a(2 * x * x).toRed(this); this.pow(x, D).cmp(G) !== 0; ) x.redIAdd(G);
-          for (var L = this.pow(x, P), j = this.pow(v, P.addn(1).iushrn(1)), Y = this.pow(v, P), oe = F; Y.cmp(k) !== 0; ) {
+          for (var L = this.pow(x, R), j = this.pow(v, R.addn(1).iushrn(1)), Y = this.pow(v, R), oe = F; Y.cmp(k) !== 0; ) {
             for (var me = Y, be = 0; me.cmp(k) !== 0; be++) me = me.redSqr();
             s(be < oe);
             var Z = this.pow(L, new a(1).iushln(oe - be - 1));
@@ -73694,18 +73694,18 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, ie.prototype.pow = function(v, _) {
           if (_.isZero()) return new a(1).toRed(this);
           if (_.cmpn(1) === 0) return v.clone();
-          var $ = 4, P = new Array(1 << $);
-          P[0] = new a(1).toRed(this), P[1] = v;
-          for (var F = 2; F < P.length; F++) P[F] = this.mul(P[F - 1], v);
-          var k = P[0], G = 0, D = 0, x = _.bitLength() % 26;
+          var $ = 4, R = new Array(1 << $);
+          R[0] = new a(1).toRed(this), R[1] = v;
+          for (var F = 2; F < R.length; F++) R[F] = this.mul(R[F - 1], v);
+          var k = R[0], G = 0, D = 0, x = _.bitLength() % 26;
           for (x === 0 && (x = 26), F = _.length - 1; F >= 0; F--) {
             for (var L = _.words[F], j = x - 1; j >= 0; j--) {
               var Y = L >> j & 1;
-              if (k !== P[0] && (k = this.sqr(k)), Y === 0 && G === 0) {
+              if (k !== R[0] && (k = this.sqr(k)), Y === 0 && G === 0) {
                 D = 0;
                 continue;
               }
-              G <<= 1, G |= Y, D++, !(D !== $ && (F !== 0 || j !== 0)) && (k = this.mul(k, P[G]), D = 0, G = 0);
+              G <<= 1, G |= Y, D++, !(D !== $ && (F !== 0 || j !== 0)) && (k = this.mul(k, R[G]), D = 0, G = 0);
             }
             x = 26;
           }
@@ -73729,11 +73729,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return _.red = null, _;
         }, pe.prototype.imul = function(v, _) {
           if (v.isZero() || _.isZero()) return v.words[0] = 0, v.length = 1, v;
-          var $ = v.imul(_), P = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(P).iushrn(this.shift), k = F;
+          var $ = v.imul(_), R = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(R).iushrn(this.shift), k = F;
           return F.cmp(this.m) >= 0 ? k = F.isub(this.m) : F.cmpn(0) < 0 && (k = F.iadd(this.m)), k._forceRed(this);
         }, pe.prototype.mul = function(v, _) {
           if (v.isZero() || _.isZero()) return new a(0)._forceRed(this);
-          var $ = v.mul(_), P = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(P).iushrn(this.shift), k = F;
+          var $ = v.mul(_), R = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(R).iushrn(this.shift), k = F;
           return F.cmp(this.m) >= 0 ? k = F.isub(this.m) : F.cmpn(0) < 0 && (k = F.iadd(this.m)), k._forceRed(this);
         }, pe.prototype.invm = function(v) {
           var _ = this.imod(v._invmp(this.m).mul(this.r2));
@@ -73777,8 +73777,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (typeof v == "number") return this._initNumber(v, _, $);
           if (typeof v == "object") return this._initArray(v, _, $);
           _ === "hex" && (_ = 16), s(_ === (_ | 0) && _ >= 2 && _ <= 36), v = v.toString().replace(/\s+/g, "");
-          var P = 0;
-          v[0] === "-" && (P++, this.negative = 1), P < v.length && (_ === 16 ? this._parseHex(v, P, $) : (this._parseBase(v, _, P), $ === "le" && this._initArray(this.toArray(), _, $)));
+          var R = 0;
+          v[0] === "-" && (R++, this.negative = 1), R < v.length && (_ === 16 ? this._parseHex(v, R, $) : (this._parseBase(v, _, R), $ === "le" && this._initArray(this.toArray(), _, $)));
         }, a.prototype._initNumber = function(v, _, $) {
           v < 0 && (this.negative = 1, v = -v), v < 67108864 ? (this.words = [
             v & 67108863
@@ -73795,10 +73795,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
             0
           ], this.length = 1, this;
           this.length = Math.ceil(v.length / 3), this.words = new Array(this.length);
-          for (var P = 0; P < this.length; P++) this.words[P] = 0;
+          for (var R = 0; R < this.length; R++) this.words[R] = 0;
           var F, k, G = 0;
-          if ($ === "be") for (P = v.length - 1, F = 0; P >= 0; P -= 3) k = v[P] | v[P - 1] << 8 | v[P - 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
-          else if ($ === "le") for (P = 0, F = 0; P < v.length; P += 3) k = v[P] | v[P + 1] << 8 | v[P + 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
+          if ($ === "be") for (R = v.length - 1, F = 0; R >= 0; R -= 3) k = v[R] | v[R - 1] << 8 | v[R - 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
+          else if ($ === "le") for (R = 0, F = 0; R < v.length; R += 3) k = v[R] | v[R + 1] << 8 | v[R + 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
           return this.strip();
         };
         function c(U, v) {
@@ -73811,29 +73811,29 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }
         a.prototype._parseHex = function(v, _, $) {
           this.length = Math.ceil((v.length - _) / 6), this.words = new Array(this.length);
-          for (var P = 0; P < this.length; P++) this.words[P] = 0;
+          for (var R = 0; R < this.length; R++) this.words[R] = 0;
           var F = 0, k = 0, G;
-          if ($ === "be") for (P = v.length - 1; P >= _; P -= 2) G = d(v, _, P) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
+          if ($ === "be") for (R = v.length - 1; R >= _; R -= 2) G = d(v, _, R) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
           else {
             var D = v.length - _;
-            for (P = D % 2 === 0 ? _ + 1 : _; P < v.length; P += 2) G = d(v, _, P) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
+            for (R = D % 2 === 0 ? _ + 1 : _; R < v.length; R += 2) G = d(v, _, R) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
           }
           this.strip();
         };
         function f(U, v, _, $) {
-          for (var P = 0, F = Math.min(U.length, _), k = v; k < F; k++) {
+          for (var R = 0, F = Math.min(U.length, _), k = v; k < F; k++) {
             var G = U.charCodeAt(k) - 48;
-            P *= $, G >= 49 ? P += G - 49 + 10 : G >= 17 ? P += G - 17 + 10 : P += G;
+            R *= $, G >= 49 ? R += G - 49 + 10 : G >= 17 ? R += G - 17 + 10 : R += G;
           }
-          return P;
+          return R;
         }
         a.prototype._parseBase = function(v, _, $) {
           this.words = [
             0
           ], this.length = 1;
-          for (var P = 0, F = 1; F <= 67108863; F *= _) P++;
-          P--, F = F / _ | 0;
-          for (var k = v.length - $, G = k % P, D = Math.min(k, k - G) + $, x = 0, L = $; L < D; L += P) x = f(v, L, L + P, _), this.imuln(F), this.words[0] + x < 67108864 ? this.words[0] += x : this._iaddn(x);
+          for (var R = 0, F = 1; F <= 67108863; F *= _) R++;
+          R--, F = F / _ | 0;
+          for (var k = v.length - $, G = k % R, D = Math.min(k, k - G) + $, x = 0, L = $; L < D; L += R) x = f(v, L, L + R, _), this.imuln(F), this.words[0] + x < 67108864 ? this.words[0] += x : this._iaddn(x);
           if (G !== 0) {
             var j = 1;
             for (x = f(v, L, v.length, _), L = 0; L < G; L++) j *= _;
@@ -73967,9 +73967,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
           var $;
           if (v === 16 || v === "hex") {
             $ = "";
-            for (var P = 0, F = 0, k = 0; k < this.length; k++) {
-              var G = this.words[k], D = ((G << P | F) & 16777215).toString(16);
-              F = G >>> 24 - P & 16777215, P += 2, P >= 26 && (P -= 26, k--), F !== 0 || k !== this.length - 1 ? $ = p[6 - D.length] + D + $ : $ = D + $;
+            for (var R = 0, F = 0, k = 0; k < this.length; k++) {
+              var G = this.words[k], D = ((G << R | F) & 16777215).toString(16);
+              F = G >>> 24 - R & 16777215, R += 2, R >= 26 && (R -= 26, k--), F !== 0 || k !== this.length - 1 ? $ = p[6 - D.length] + D + $ : $ = D + $;
             }
             for (F !== 0 && ($ = F.toString(16) + $); $.length % _ !== 0; ) $ = "0" + $;
             return this.negative !== 0 && ($ = "-" + $), $;
@@ -73996,14 +73996,14 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.toArray = function(v, _) {
           return this.toArrayLike(Array, v, _);
         }, a.prototype.toArrayLike = function(v, _, $) {
-          var P = this.byteLength(), F = $ || Math.max(1, P);
-          s(P <= F, "byte array longer than desired length"), s(F > 0, "Requested array length <= 0"), this.strip();
+          var R = this.byteLength(), F = $ || Math.max(1, R);
+          s(R <= F, "byte array longer than desired length"), s(F > 0, "Requested array length <= 0"), this.strip();
           var k = _ === "le", G = new v(F), D, x, L = this.clone();
           if (k) {
             for (x = 0; !L.isZero(); x++) D = L.andln(255), L.iushrn(8), G[x] = D;
             for (; x < F; x++) G[x] = 0;
           } else {
-            for (x = 0; x < F - P; x++) G[x] = 0;
+            for (x = 0; x < F - R; x++) G[x] = 0;
             for (x = 0; !L.isZero(); x++) D = L.andln(255), L.iushrn(8), G[F - x - 1] = D;
           }
           return G;
@@ -74022,8 +74022,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         };
         function w(U) {
           for (var v = new Array(U.bitLength()), _ = 0; _ < v.length; _++) {
-            var $ = _ / 26 | 0, P = _ % 26;
-            v[_] = (U.words[$] & 1 << P) >>> P;
+            var $ = _ / 26 | 0, R = _ % 26;
+            v[_] = (U.words[$] & 1 << R) >>> R;
           }
           return v;
         }
@@ -74070,8 +74070,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.iuxor = function(v) {
           var _, $;
           this.length > v.length ? (_ = this, $ = v) : (_ = v, $ = this);
-          for (var P = 0; P < $.length; P++) this.words[P] = _.words[P] ^ $.words[P];
-          if (this !== _) for (; P < _.length; P++) this.words[P] = _.words[P];
+          for (var R = 0; R < $.length; R++) this.words[R] = _.words[R] ^ $.words[R];
+          if (this !== _) for (; R < _.length; R++) this.words[R] = _.words[R];
           return this.length = _.length, this.strip();
         }, a.prototype.ixor = function(v) {
           return s((this.negative | v.negative) === 0), this.iuxor(v);
@@ -74083,21 +74083,21 @@ Use Chrome, Firefox or Internet Explorer 11`);
           s(typeof v == "number" && v >= 0);
           var _ = Math.ceil(v / 26) | 0, $ = v % 26;
           this._expand(_), $ > 0 && _--;
-          for (var P = 0; P < _; P++) this.words[P] = ~this.words[P] & 67108863;
-          return $ > 0 && (this.words[P] = ~this.words[P] & 67108863 >> 26 - $), this.strip();
+          for (var R = 0; R < _; R++) this.words[R] = ~this.words[R] & 67108863;
+          return $ > 0 && (this.words[R] = ~this.words[R] & 67108863 >> 26 - $), this.strip();
         }, a.prototype.notn = function(v) {
           return this.clone().inotn(v);
         }, a.prototype.setn = function(v, _) {
           s(typeof v == "number" && v >= 0);
-          var $ = v / 26 | 0, P = v % 26;
-          return this._expand($ + 1), _ ? this.words[$] = this.words[$] | 1 << P : this.words[$] = this.words[$] & ~(1 << P), this.strip();
+          var $ = v / 26 | 0, R = v % 26;
+          return this._expand($ + 1), _ ? this.words[$] = this.words[$] | 1 << R : this.words[$] = this.words[$] & ~(1 << R), this.strip();
         }, a.prototype.iadd = function(v) {
           var _;
           if (this.negative !== 0 && v.negative === 0) return this.negative = 0, _ = this.isub(v), this.negative ^= 1, this._normSign();
           if (this.negative === 0 && v.negative !== 0) return v.negative = 0, _ = this.isub(v), v.negative = 1, _._normSign();
-          var $, P;
-          this.length > v.length ? ($ = this, P = v) : ($ = v, P = this);
-          for (var F = 0, k = 0; k < P.length; k++) _ = ($.words[k] | 0) + (P.words[k] | 0) + F, this.words[k] = _ & 67108863, F = _ >>> 26;
+          var $, R;
+          this.length > v.length ? ($ = this, R = v) : ($ = v, R = this);
+          for (var F = 0, k = 0; k < R.length; k++) _ = ($.words[k] | 0) + (R.words[k] | 0) + F, this.words[k] = _ & 67108863, F = _ >>> 26;
           for (; F !== 0 && k < $.length; k++) _ = ($.words[k] | 0) + F, this.words[k] = _ & 67108863, F = _ >>> 26;
           if (this.length = $.length, F !== 0) this.words[this.length] = F, this.length++;
           else if ($ !== this) for (; k < $.length; k++) this.words[k] = $.words[k];
@@ -74113,12 +74113,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
           } else if (this.negative !== 0) return this.negative = 0, this.iadd(v), this.negative = 1, this._normSign();
           var $ = this.cmp(v);
           if ($ === 0) return this.negative = 0, this.length = 1, this.words[0] = 0, this;
-          var P, F;
-          $ > 0 ? (P = this, F = v) : (P = v, F = this);
-          for (var k = 0, G = 0; G < F.length; G++) _ = (P.words[G] | 0) - (F.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
-          for (; k !== 0 && G < P.length; G++) _ = (P.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
-          if (k === 0 && G < P.length && P !== this) for (; G < P.length; G++) this.words[G] = P.words[G];
-          return this.length = Math.max(this.length, G), P !== this && (this.negative = 1), this.strip();
+          var R, F;
+          $ > 0 ? (R = this, F = v) : (R = v, F = this);
+          for (var k = 0, G = 0; G < F.length; G++) _ = (R.words[G] | 0) - (F.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
+          for (; k !== 0 && G < R.length; G++) _ = (R.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
+          if (k === 0 && G < R.length && R !== this) for (; G < R.length; G++) this.words[G] = R.words[G];
+          return this.length = Math.max(this.length, G), R !== this && (this.negative = 1), this.strip();
         }, a.prototype.sub = function(v) {
           return this.clone().isub(v);
         };
@@ -74126,19 +74126,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
           _.negative = v.negative ^ U.negative;
           var $ = U.length + v.length | 0;
           _.length = $, $ = $ - 1 | 0;
-          var P = U.words[0] | 0, F = v.words[0] | 0, k = P * F, G = k & 67108863, D = k / 67108864 | 0;
+          var R = U.words[0] | 0, F = v.words[0] | 0, k = R * F, G = k & 67108863, D = k / 67108864 | 0;
           _.words[0] = G;
           for (var x = 1; x < $; x++) {
             for (var L = D >>> 26, j = D & 67108863, Y = Math.min(x, v.length - 1), oe = Math.max(0, x - U.length + 1); oe <= Y; oe++) {
               var me = x - oe | 0;
-              P = U.words[me] | 0, F = v.words[oe] | 0, k = P * F + j, L += k / 67108864 | 0, j = k & 67108863;
+              R = U.words[me] | 0, F = v.words[oe] | 0, k = R * F + j, L += k / 67108864 | 0, j = k & 67108863;
             }
             _.words[x] = j | 0, D = L | 0;
           }
           return D !== 0 ? _.words[x] = D | 0 : _.length--, _.strip();
         }
-        var R = function(v, _, $) {
-          var P = v.words, F = _.words, k = $.words, G = 0, D, x, L, j = P[0] | 0, Y = j & 8191, oe = j >>> 13, me = P[1] | 0, be = me & 8191, Z = me >>> 13, se = P[2] | 0, fe = se & 8191, _e = se >>> 13, xe = P[3] | 0, le = xe & 8191, Ce = xe >>> 13, Re = P[4] | 0, Be = Re & 8191, Ee = Re >>> 13, rt = P[5] | 0, Pe = rt & 8191, Te = rt >>> 13, ut = P[6] | 0, De = ut & 8191, Fe = ut >>> 13, ct = P[7] | 0, Le = ct & 8191, Ue = ct >>> 13, pt = P[8] | 0, Ke = pt & 8191, tt = pt >>> 13, bt = P[9] | 0, ge = bt & 8191, re = bt >>> 13, he = F[0] | 0, we = he & 8191, Se = he >>> 13, ke = F[1] | 0, Ne = ke & 8191, ze = ke >>> 13, vt = F[2] | 0, Ve = vt & 8191, Xe = vt >>> 13, ft = F[3] | 0, Ye = ft & 8191, ot = ft >>> 13, wt = F[4] | 0, nt = wt & 8191, at = wt >>> 13, $t = F[5] | 0, ve = $t & 8191, ne = $t >>> 13, ce = F[6] | 0, $e = ce & 8191, Me = ce >>> 13, Oe = F[7] | 0, Ie = Oe & 8191, je = Oe >>> 13, yt = F[8] | 0, Ge = yt & 8191, et = yt >>> 13, mt = F[9] | 0, st = mt & 8191, lt = mt >>> 13;
+        var P = function(v, _, $) {
+          var R = v.words, F = _.words, k = $.words, G = 0, D, x, L, j = R[0] | 0, Y = j & 8191, oe = j >>> 13, me = R[1] | 0, be = me & 8191, Z = me >>> 13, se = R[2] | 0, fe = se & 8191, _e = se >>> 13, xe = R[3] | 0, le = xe & 8191, Ce = xe >>> 13, Re = R[4] | 0, Be = Re & 8191, Ee = Re >>> 13, rt = R[5] | 0, Pe = rt & 8191, Te = rt >>> 13, ut = R[6] | 0, De = ut & 8191, Fe = ut >>> 13, ct = R[7] | 0, Le = ct & 8191, Ue = ct >>> 13, pt = R[8] | 0, Ke = pt & 8191, tt = pt >>> 13, bt = R[9] | 0, ge = bt & 8191, re = bt >>> 13, he = F[0] | 0, we = he & 8191, Se = he >>> 13, ke = F[1] | 0, Ne = ke & 8191, ze = ke >>> 13, vt = F[2] | 0, Ve = vt & 8191, Xe = vt >>> 13, ft = F[3] | 0, Ye = ft & 8191, ot = ft >>> 13, wt = F[4] | 0, nt = wt & 8191, at = wt >>> 13, $t = F[5] | 0, ve = $t & 8191, ne = $t >>> 13, ce = F[6] | 0, $e = ce & 8191, Me = ce >>> 13, Oe = F[7] | 0, Ie = Oe & 8191, je = Oe >>> 13, yt = F[8] | 0, Ge = yt & 8191, et = yt >>> 13, mt = F[9] | 0, st = mt & 8191, lt = mt >>> 13;
           $.negative = v.negative ^ _.negative, $.length = 19, D = Math.imul(Y, we), x = Math.imul(Y, Se), x = x + Math.imul(oe, we) | 0, L = Math.imul(oe, Se);
           var _t = (G + D | 0) + ((x & 8191) << 13) | 0;
           G = (L + (x >>> 13) | 0) + (_t >>> 26) | 0, _t &= 67108863, D = Math.imul(be, we), x = Math.imul(be, Se), x = x + Math.imul(Z, we) | 0, L = Math.imul(Z, Se), D = D + Math.imul(Y, Ne) | 0, x = x + Math.imul(Y, ze) | 0, x = x + Math.imul(oe, Ne) | 0, L = L + Math.imul(oe, ze) | 0;
@@ -74179,17 +74179,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
           var zt = (G + D | 0) + ((x & 8191) << 13) | 0;
           return G = (L + (x >>> 13) | 0) + (zt >>> 26) | 0, zt &= 67108863, k[0] = _t, k[1] = At, k[2] = Ct, k[3] = St, k[4] = Mt, k[5] = Tt, k[6] = Bt, k[7] = Nt, k[8] = It, k[9] = Pt, k[10] = Rt, k[11] = Dt, k[12] = Lt, k[13] = kt, k[14] = Ot, k[15] = Vt, k[16] = Ut, k[17] = Gt, k[18] = zt, G !== 0 && (k[19] = G, $.length++), $;
         };
-        Math.imul || (R = M);
+        Math.imul || (P = M);
         function V(U, v, _) {
           _.negative = v.negative ^ U.negative, _.length = U.length + v.length;
-          for (var $ = 0, P = 0, F = 0; F < _.length - 1; F++) {
-            var k = P;
-            P = 0;
+          for (var $ = 0, R = 0, F = 0; F < _.length - 1; F++) {
+            var k = R;
+            R = 0;
             for (var G = $ & 67108863, D = Math.min(F, v.length - 1), x = Math.max(0, F - U.length + 1); x <= D; x++) {
               var L = F - x, j = U.words[L] | 0, Y = v.words[x] | 0, oe = j * Y, me = oe & 67108863;
-              k = k + (oe / 67108864 | 0) | 0, me = me + G | 0, G = me & 67108863, k = k + (me >>> 26) | 0, P += k >>> 26, k &= 67108863;
+              k = k + (oe / 67108864 | 0) | 0, me = me + G | 0, G = me & 67108863, k = k + (me >>> 26) | 0, R += k >>> 26, k &= 67108863;
             }
-            _.words[F] = G, $ = k, k = P;
+            _.words[F] = G, $ = k, k = R;
           }
           return $ !== 0 ? _.words[F] = $ : _.length--, _.strip();
         }
@@ -74198,57 +74198,57 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return $.mulp(U, v, _);
         }
         a.prototype.mulTo = function(v, _) {
-          var $, P = this.length + v.length;
-          return this.length === 10 && v.length === 10 ? $ = R(this, v, _) : P < 63 ? $ = M(this, v, _) : P < 1024 ? $ = V(this, v, _) : $ = O(this, v, _), $;
+          var $, R = this.length + v.length;
+          return this.length === 10 && v.length === 10 ? $ = P(this, v, _) : R < 63 ? $ = M(this, v, _) : R < 1024 ? $ = V(this, v, _) : $ = O(this, v, _), $;
         };
         function z(U, v) {
           this.x = U, this.y = v;
         }
         z.prototype.makeRBT = function(v) {
-          for (var _ = new Array(v), $ = a.prototype._countBits(v) - 1, P = 0; P < v; P++) _[P] = this.revBin(P, $, v);
+          for (var _ = new Array(v), $ = a.prototype._countBits(v) - 1, R = 0; R < v; R++) _[R] = this.revBin(R, $, v);
           return _;
         }, z.prototype.revBin = function(v, _, $) {
           if (v === 0 || v === $ - 1) return v;
-          for (var P = 0, F = 0; F < _; F++) P |= (v & 1) << _ - F - 1, v >>= 1;
-          return P;
-        }, z.prototype.permute = function(v, _, $, P, F, k) {
-          for (var G = 0; G < k; G++) P[G] = _[v[G]], F[G] = $[v[G]];
-        }, z.prototype.transform = function(v, _, $, P, F, k) {
-          this.permute(k, v, _, $, P, F);
+          for (var R = 0, F = 0; F < _; F++) R |= (v & 1) << _ - F - 1, v >>= 1;
+          return R;
+        }, z.prototype.permute = function(v, _, $, R, F, k) {
+          for (var G = 0; G < k; G++) R[G] = _[v[G]], F[G] = $[v[G]];
+        }, z.prototype.transform = function(v, _, $, R, F, k) {
+          this.permute(k, v, _, $, R, F);
           for (var G = 1; G < F; G <<= 1) for (var D = G << 1, x = Math.cos(2 * Math.PI / D), L = Math.sin(2 * Math.PI / D), j = 0; j < F; j += D) for (var Y = x, oe = L, me = 0; me < G; me++) {
-            var be = $[j + me], Z = P[j + me], se = $[j + me + G], fe = P[j + me + G], _e = Y * se - oe * fe;
-            fe = Y * fe + oe * se, se = _e, $[j + me] = be + se, P[j + me] = Z + fe, $[j + me + G] = be - se, P[j + me + G] = Z - fe, me !== D && (_e = x * Y - L * oe, oe = x * oe + L * Y, Y = _e);
+            var be = $[j + me], Z = R[j + me], se = $[j + me + G], fe = R[j + me + G], _e = Y * se - oe * fe;
+            fe = Y * fe + oe * se, se = _e, $[j + me] = be + se, R[j + me] = Z + fe, $[j + me + G] = be - se, R[j + me + G] = Z - fe, me !== D && (_e = x * Y - L * oe, oe = x * oe + L * Y, Y = _e);
           }
         }, z.prototype.guessLen13b = function(v, _) {
-          var $ = Math.max(_, v) | 1, P = $ & 1, F = 0;
+          var $ = Math.max(_, v) | 1, R = $ & 1, F = 0;
           for ($ = $ / 2 | 0; $; $ = $ >>> 1) F++;
-          return 1 << F + 1 + P;
+          return 1 << F + 1 + R;
         }, z.prototype.conjugate = function(v, _, $) {
-          if (!($ <= 1)) for (var P = 0; P < $ / 2; P++) {
-            var F = v[P];
-            v[P] = v[$ - P - 1], v[$ - P - 1] = F, F = _[P], _[P] = -_[$ - P - 1], _[$ - P - 1] = -F;
+          if (!($ <= 1)) for (var R = 0; R < $ / 2; R++) {
+            var F = v[R];
+            v[R] = v[$ - R - 1], v[$ - R - 1] = F, F = _[R], _[R] = -_[$ - R - 1], _[$ - R - 1] = -F;
           }
         }, z.prototype.normalize13b = function(v, _) {
-          for (var $ = 0, P = 0; P < _ / 2; P++) {
-            var F = Math.round(v[2 * P + 1] / _) * 8192 + Math.round(v[2 * P] / _) + $;
-            v[P] = F & 67108863, F < 67108864 ? $ = 0 : $ = F / 67108864 | 0;
+          for (var $ = 0, R = 0; R < _ / 2; R++) {
+            var F = Math.round(v[2 * R + 1] / _) * 8192 + Math.round(v[2 * R] / _) + $;
+            v[R] = F & 67108863, F < 67108864 ? $ = 0 : $ = F / 67108864 | 0;
           }
           return v;
-        }, z.prototype.convert13b = function(v, _, $, P) {
+        }, z.prototype.convert13b = function(v, _, $, R) {
           for (var F = 0, k = 0; k < _; k++) F = F + (v[k] | 0), $[2 * k] = F & 8191, F = F >>> 13, $[2 * k + 1] = F & 8191, F = F >>> 13;
-          for (k = 2 * _; k < P; ++k) $[k] = 0;
+          for (k = 2 * _; k < R; ++k) $[k] = 0;
           s(F === 0), s((F & -8192) === 0);
         }, z.prototype.stub = function(v) {
           for (var _ = new Array(v), $ = 0; $ < v; $++) _[$] = 0;
           return _;
         }, z.prototype.mulp = function(v, _, $) {
-          var P = 2 * this.guessLen13b(v.length, _.length), F = this.makeRBT(P), k = this.stub(P), G = new Array(P), D = new Array(P), x = new Array(P), L = new Array(P), j = new Array(P), Y = new Array(P), oe = $.words;
-          oe.length = P, this.convert13b(v.words, v.length, G, P), this.convert13b(_.words, _.length, L, P), this.transform(G, k, D, x, P, F), this.transform(L, k, j, Y, P, F);
-          for (var me = 0; me < P; me++) {
+          var R = 2 * this.guessLen13b(v.length, _.length), F = this.makeRBT(R), k = this.stub(R), G = new Array(R), D = new Array(R), x = new Array(R), L = new Array(R), j = new Array(R), Y = new Array(R), oe = $.words;
+          oe.length = R, this.convert13b(v.words, v.length, G, R), this.convert13b(_.words, _.length, L, R), this.transform(G, k, D, x, R, F), this.transform(L, k, j, Y, R, F);
+          for (var me = 0; me < R; me++) {
             var be = D[me] * j[me] - x[me] * Y[me];
             x[me] = D[me] * Y[me] + x[me] * j[me], D[me] = be;
           }
-          return this.conjugate(D, x, P), this.transform(D, x, oe, k, P, F), this.conjugate(oe, k, P), this.normalize13b(oe, P), $.negative = v.negative ^ _.negative, $.length = v.length + _.length, $.strip();
+          return this.conjugate(D, x, R), this.transform(D, x, oe, k, R, F), this.conjugate(oe, k, R), this.normalize13b(oe, R), $.negative = v.negative ^ _.negative, $.length = v.length + _.length, $.strip();
         }, a.prototype.mul = function(v) {
           var _ = new a(null);
           return _.words = new Array(this.length + v.length), this.mulTo(v, _);
@@ -74260,8 +74260,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.imuln = function(v) {
           s(typeof v == "number"), s(v < 67108864);
           for (var _ = 0, $ = 0; $ < this.length; $++) {
-            var P = (this.words[$] | 0) * v, F = (P & 67108863) + (_ & 67108863);
-            _ >>= 26, _ += P / 67108864 | 0, _ += F >>> 26, this.words[$] = F & 67108863;
+            var R = (this.words[$] | 0) * v, F = (R & 67108863) + (_ & 67108863);
+            _ >>= 26, _ += R / 67108864 | 0, _ += F >>> 26, this.words[$] = F & 67108863;
           }
           return _ !== 0 && (this.words[$] = _, this.length++), this.length = v === 0 ? 1 : this.length, this;
         }, a.prototype.muln = function(v) {
@@ -74273,16 +74273,16 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.pow = function(v) {
           var _ = w(v);
           if (_.length === 0) return new a(1);
-          for (var $ = this, P = 0; P < _.length && _[P] === 0; P++, $ = $.sqr()) ;
-          if (++P < _.length) for (var F = $.sqr(); P < _.length; P++, F = F.sqr()) _[P] !== 0 && ($ = $.mul(F));
+          for (var $ = this, R = 0; R < _.length && _[R] === 0; R++, $ = $.sqr()) ;
+          if (++R < _.length) for (var F = $.sqr(); R < _.length; R++, F = F.sqr()) _[R] !== 0 && ($ = $.mul(F));
           return $;
         }, a.prototype.iushln = function(v) {
           s(typeof v == "number" && v >= 0);
-          var _ = v % 26, $ = (v - _) / 26, P = 67108863 >>> 26 - _ << 26 - _, F;
+          var _ = v % 26, $ = (v - _) / 26, R = 67108863 >>> 26 - _ << 26 - _, F;
           if (_ !== 0) {
             var k = 0;
             for (F = 0; F < this.length; F++) {
-              var G = this.words[F] & P, D = (this.words[F] | 0) - G << _;
+              var G = this.words[F] & R, D = (this.words[F] | 0) - G << _;
               this.words[F] = D | k, k = G >>> 26 - _;
             }
             k && (this.words[F] = k, this.length++);
@@ -74297,17 +74297,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return s(this.negative === 0), this.iushln(v);
         }, a.prototype.iushrn = function(v, _, $) {
           s(typeof v == "number" && v >= 0);
-          var P;
-          _ ? P = (_ - _ % 26) / 26 : P = 0;
+          var R;
+          _ ? R = (_ - _ % 26) / 26 : R = 0;
           var F = v % 26, k = Math.min((v - F) / 26, this.length), G = 67108863 ^ 67108863 >>> F << F, D = $;
-          if (P -= k, P = Math.max(0, P), D) {
+          if (R -= k, R = Math.max(0, R), D) {
             for (var x = 0; x < k; x++) D.words[x] = this.words[x];
             D.length = k;
           }
           if (k !== 0) if (this.length > k) for (this.length -= k, x = 0; x < this.length; x++) this.words[x] = this.words[x + k];
           else this.words[0] = 0, this.length = 1;
           var L = 0;
-          for (x = this.length - 1; x >= 0 && (L !== 0 || x >= P); x--) {
+          for (x = this.length - 1; x >= 0 && (L !== 0 || x >= R); x--) {
             var j = this.words[x] | 0;
             this.words[x] = L << 26 - F | j >>> F, L = j & G;
           }
@@ -74324,17 +74324,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return this.clone().iushrn(v);
         }, a.prototype.testn = function(v) {
           s(typeof v == "number" && v >= 0);
-          var _ = v % 26, $ = (v - _) / 26, P = 1 << _;
+          var _ = v % 26, $ = (v - _) / 26, R = 1 << _;
           if (this.length <= $) return false;
           var F = this.words[$];
-          return !!(F & P);
+          return !!(F & R);
         }, a.prototype.imaskn = function(v) {
           s(typeof v == "number" && v >= 0);
           var _ = v % 26, $ = (v - _) / 26;
           if (s(this.negative === 0, "imaskn works only with positive numbers"), this.length <= $) return this;
           if (_ !== 0 && $++, this.length = Math.min($, this.length), _ !== 0) {
-            var P = 67108863 ^ 67108863 >>> _ << _;
-            this.words[this.length - 1] &= P;
+            var R = 67108863 ^ 67108863 >>> _ << _;
+            this.words[this.length - 1] &= R;
           }
           return this.strip();
         }, a.prototype.maskn = function(v) {
@@ -74360,8 +74360,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.abs = function() {
           return this.clone().iabs();
         }, a.prototype._ishlnsubmul = function(v, _, $) {
-          var P = v.length + $, F;
-          this._expand(P);
+          var R = v.length + $, F;
+          this._expand(R);
           var k, G = 0;
           for (F = 0; F < v.length; F++) {
             k = (this.words[F + $] | 0) + G;
@@ -74373,35 +74373,35 @@ Use Chrome, Firefox or Internet Explorer 11`);
           for (s(G === -1), G = 0, F = 0; F < this.length; F++) k = -(this.words[F] | 0) + G, G = k >> 26, this.words[F] = k & 67108863;
           return this.negative = 1, this.strip();
         }, a.prototype._wordDiv = function(v, _) {
-          var $ = this.length - v.length, P = this.clone(), F = v, k = F.words[F.length - 1] | 0, G = this._countBits(k);
-          $ = 26 - G, $ !== 0 && (F = F.ushln($), P.iushln($), k = F.words[F.length - 1] | 0);
-          var D = P.length - F.length, x;
+          var $ = this.length - v.length, R = this.clone(), F = v, k = F.words[F.length - 1] | 0, G = this._countBits(k);
+          $ = 26 - G, $ !== 0 && (F = F.ushln($), R.iushln($), k = F.words[F.length - 1] | 0);
+          var D = R.length - F.length, x;
           if (_ !== "mod") {
             x = new a(null), x.length = D + 1, x.words = new Array(x.length);
             for (var L = 0; L < x.length; L++) x.words[L] = 0;
           }
-          var j = P.clone()._ishlnsubmul(F, 1, D);
-          j.negative === 0 && (P = j, x && (x.words[D] = 1));
+          var j = R.clone()._ishlnsubmul(F, 1, D);
+          j.negative === 0 && (R = j, x && (x.words[D] = 1));
           for (var Y = D - 1; Y >= 0; Y--) {
-            var oe = (P.words[F.length + Y] | 0) * 67108864 + (P.words[F.length + Y - 1] | 0);
-            for (oe = Math.min(oe / k | 0, 67108863), P._ishlnsubmul(F, oe, Y); P.negative !== 0; ) oe--, P.negative = 0, P._ishlnsubmul(F, 1, Y), P.isZero() || (P.negative ^= 1);
+            var oe = (R.words[F.length + Y] | 0) * 67108864 + (R.words[F.length + Y - 1] | 0);
+            for (oe = Math.min(oe / k | 0, 67108863), R._ishlnsubmul(F, oe, Y); R.negative !== 0; ) oe--, R.negative = 0, R._ishlnsubmul(F, 1, Y), R.isZero() || (R.negative ^= 1);
             x && (x.words[Y] = oe);
           }
-          return x && x.strip(), P.strip(), _ !== "div" && $ !== 0 && P.iushrn($), {
+          return x && x.strip(), R.strip(), _ !== "div" && $ !== 0 && R.iushrn($), {
             div: x || null,
-            mod: P
+            mod: R
           };
         }, a.prototype.divmod = function(v, _, $) {
           if (s(!v.isZero()), this.isZero()) return {
             div: new a(0),
             mod: new a(0)
           };
-          var P, F, k;
-          return this.negative !== 0 && v.negative === 0 ? (k = this.neg().divmod(v, _), _ !== "mod" && (P = k.div.neg()), _ !== "div" && (F = k.mod.neg(), $ && F.negative !== 0 && F.iadd(v)), {
-            div: P,
+          var R, F, k;
+          return this.negative !== 0 && v.negative === 0 ? (k = this.neg().divmod(v, _), _ !== "mod" && (R = k.div.neg()), _ !== "div" && (F = k.mod.neg(), $ && F.negative !== 0 && F.iadd(v)), {
+            div: R,
             mod: F
-          }) : this.negative === 0 && v.negative !== 0 ? (k = this.divmod(v.neg(), _), _ !== "mod" && (P = k.div.neg()), {
-            div: P,
+          }) : this.negative === 0 && v.negative !== 0 ? (k = this.divmod(v.neg(), _), _ !== "mod" && (R = k.div.neg()), {
+            div: R,
             mod: k.mod
           }) : (this.negative & v.negative) !== 0 ? (k = this.neg().divmod(v.neg(), _), _ !== "div" && (F = k.mod.neg(), $ && F.negative !== 0 && F.isub(v)), {
             div: k.div,
@@ -74428,17 +74428,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.divRound = function(v) {
           var _ = this.divmod(v);
           if (_.mod.isZero()) return _.div;
-          var $ = _.div.negative !== 0 ? _.mod.isub(v) : _.mod, P = v.ushrn(1), F = v.andln(1), k = $.cmp(P);
+          var $ = _.div.negative !== 0 ? _.mod.isub(v) : _.mod, R = v.ushrn(1), F = v.andln(1), k = $.cmp(R);
           return k < 0 || F === 1 && k === 0 ? _.div : _.div.negative !== 0 ? _.div.isubn(1) : _.div.iaddn(1);
         }, a.prototype.modn = function(v) {
           s(v <= 67108863);
-          for (var _ = (1 << 26) % v, $ = 0, P = this.length - 1; P >= 0; P--) $ = (_ * $ + (this.words[P] | 0)) % v;
+          for (var _ = (1 << 26) % v, $ = 0, R = this.length - 1; R >= 0; R--) $ = (_ * $ + (this.words[R] | 0)) % v;
           return $;
         }, a.prototype.idivn = function(v) {
           s(v <= 67108863);
           for (var _ = 0, $ = this.length - 1; $ >= 0; $--) {
-            var P = (this.words[$] | 0) + _ * 67108864;
-            this.words[$] = P / v | 0, _ = P % v;
+            var R = (this.words[$] | 0) + _ * 67108864;
+            this.words[$] = R / v | 0, _ = R % v;
           }
           return this.strip();
         }, a.prototype.divn = function(v) {
@@ -74447,13 +74447,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
           s(v.negative === 0), s(!v.isZero());
           var _ = this, $ = v.clone();
           _.negative !== 0 ? _ = _.umod(v) : _ = _.clone();
-          for (var P = new a(1), F = new a(0), k = new a(0), G = new a(1), D = 0; _.isEven() && $.isEven(); ) _.iushrn(1), $.iushrn(1), ++D;
+          for (var R = new a(1), F = new a(0), k = new a(0), G = new a(1), D = 0; _.isEven() && $.isEven(); ) _.iushrn(1), $.iushrn(1), ++D;
           for (var x = $.clone(), L = _.clone(); !_.isZero(); ) {
             for (var j = 0, Y = 1; (_.words[0] & Y) === 0 && j < 26; ++j, Y <<= 1) ;
-            if (j > 0) for (_.iushrn(j); j-- > 0; ) (P.isOdd() || F.isOdd()) && (P.iadd(x), F.isub(L)), P.iushrn(1), F.iushrn(1);
+            if (j > 0) for (_.iushrn(j); j-- > 0; ) (R.isOdd() || F.isOdd()) && (R.iadd(x), F.isub(L)), R.iushrn(1), F.iushrn(1);
             for (var oe = 0, me = 1; ($.words[0] & me) === 0 && oe < 26; ++oe, me <<= 1) ;
             if (oe > 0) for ($.iushrn(oe); oe-- > 0; ) (k.isOdd() || G.isOdd()) && (k.iadd(x), G.isub(L)), k.iushrn(1), G.iushrn(1);
-            _.cmp($) >= 0 ? (_.isub($), P.isub(k), F.isub(G)) : ($.isub(_), k.isub(P), G.isub(F));
+            _.cmp($) >= 0 ? (_.isub($), R.isub(k), F.isub(G)) : ($.isub(_), k.isub(R), G.isub(F));
           }
           return {
             a: k,
@@ -74464,21 +74464,21 @@ Use Chrome, Firefox or Internet Explorer 11`);
           s(v.negative === 0), s(!v.isZero());
           var _ = this, $ = v.clone();
           _.negative !== 0 ? _ = _.umod(v) : _ = _.clone();
-          for (var P = new a(1), F = new a(0), k = $.clone(); _.cmpn(1) > 0 && $.cmpn(1) > 0; ) {
+          for (var R = new a(1), F = new a(0), k = $.clone(); _.cmpn(1) > 0 && $.cmpn(1) > 0; ) {
             for (var G = 0, D = 1; (_.words[0] & D) === 0 && G < 26; ++G, D <<= 1) ;
-            if (G > 0) for (_.iushrn(G); G-- > 0; ) P.isOdd() && P.iadd(k), P.iushrn(1);
+            if (G > 0) for (_.iushrn(G); G-- > 0; ) R.isOdd() && R.iadd(k), R.iushrn(1);
             for (var x = 0, L = 1; ($.words[0] & L) === 0 && x < 26; ++x, L <<= 1) ;
             if (x > 0) for ($.iushrn(x); x-- > 0; ) F.isOdd() && F.iadd(k), F.iushrn(1);
-            _.cmp($) >= 0 ? (_.isub($), P.isub(F)) : ($.isub(_), F.isub(P));
+            _.cmp($) >= 0 ? (_.isub($), R.isub(F)) : ($.isub(_), F.isub(R));
           }
           var j;
-          return _.cmpn(1) === 0 ? j = P : j = F, j.cmpn(0) < 0 && j.iadd(v), j;
+          return _.cmpn(1) === 0 ? j = R : j = F, j.cmpn(0) < 0 && j.iadd(v), j;
         }, a.prototype.gcd = function(v) {
           if (this.isZero()) return v.abs();
           if (v.isZero()) return this.abs();
           var _ = this.clone(), $ = v.clone();
           _.negative = 0, $.negative = 0;
-          for (var P = 0; _.isEven() && $.isEven(); P++) _.iushrn(1), $.iushrn(1);
+          for (var R = 0; _.isEven() && $.isEven(); R++) _.iushrn(1), $.iushrn(1);
           do {
             for (; _.isEven(); ) _.iushrn(1);
             for (; $.isEven(); ) $.iushrn(1);
@@ -74489,7 +74489,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
             } else if (F === 0 || $.cmpn(1) === 0) break;
             _.isub($);
           } while (true);
-          return $.iushln(P);
+          return $.iushln(R);
         }, a.prototype.invm = function(v) {
           return this.egcd(v).a.umod(v);
         }, a.prototype.isEven = function() {
@@ -74500,9 +74500,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return this.words[0] & v;
         }, a.prototype.bincn = function(v) {
           s(typeof v == "number");
-          var _ = v % 26, $ = (v - _) / 26, P = 1 << _;
-          if (this.length <= $) return this._expand($ + 1), this.words[$] |= P, this;
-          for (var F = P, k = $; F !== 0 && k < this.length; k++) {
+          var _ = v % 26, $ = (v - _) / 26, R = 1 << _;
+          if (this.length <= $) return this._expand($ + 1), this.words[$] |= R, this;
+          for (var F = R, k = $; F !== 0 && k < this.length; k++) {
             var G = this.words[k] | 0;
             G += F, F = G >>> 26, G &= 67108863, this.words[k] = G;
           }
@@ -74518,8 +74518,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (this.length > 1) $ = 1;
           else {
             _ && (v = -v), s(v <= 67108863, "Number is too big");
-            var P = this.words[0] | 0;
-            $ = P === v ? 0 : P < v ? -1 : 1;
+            var R = this.words[0] | 0;
+            $ = R === v ? 0 : R < v ? -1 : 1;
           }
           return this.negative !== 0 ? -$ | 0 : $;
         }, a.prototype.cmp = function(v) {
@@ -74531,9 +74531,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (this.length > v.length) return 1;
           if (this.length < v.length) return -1;
           for (var _ = 0, $ = this.length - 1; $ >= 0; $--) {
-            var P = this.words[$] | 0, F = v.words[$] | 0;
-            if (P !== F) {
-              P < F ? _ = -1 : P > F && (_ = 1);
+            var R = this.words[$] | 0, F = v.words[$] | 0;
+            if (R !== F) {
+              R < F ? _ = -1 : R > F && (_ = 1);
               break;
             }
           }
@@ -74612,8 +74612,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           do
             this.split(_, this.tmp), _ = this.imulK(_), _ = _.iadd(this.tmp), $ = _.bitLength();
           while ($ > this.n);
-          var P = $ < this.n ? -1 : _.ucmp(this.p);
-          return P === 0 ? (_.words[0] = 0, _.length = 1) : P > 0 ? _.isub(this.p) : _.strip !== void 0 ? _.strip() : _._strip(), _;
+          var R = $ < this.n ? -1 : _.ucmp(this.p);
+          return R === 0 ? (_.words[0] = 0, _.length = 1) : R > 0 ? _.isub(this.p) : _.strip !== void 0 ? _.strip() : _._strip(), _;
         }, q.prototype.split = function(v, _) {
           v.iushrn(this.n, 0, _);
         }, q.prototype.imulK = function(v) {
@@ -74623,8 +74623,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           q.call(this, "k256", "ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff fffffffe fffffc2f");
         }
         o(W, q), W.prototype.split = function(v, _) {
-          for (var $ = 4194303, P = Math.min(v.length, 9), F = 0; F < P; F++) _.words[F] = v.words[F];
-          if (_.length = P, v.length <= 9) {
+          for (var $ = 4194303, R = Math.min(v.length, 9), F = 0; F < R; F++) _.words[F] = v.words[F];
+          if (_.length = R, v.length <= 9) {
             v.words[0] = 0, v.length = 1;
             return;
           }
@@ -74637,8 +74637,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, W.prototype.imulK = function(v) {
           v.words[v.length] = 0, v.words[v.length + 1] = 0, v.length += 2;
           for (var _ = 0, $ = 0; $ < v.length; $++) {
-            var P = v.words[$] | 0;
-            _ += P * 977, v.words[$] = _ & 67108863, _ = P * 64 + (_ / 67108864 | 0);
+            var R = v.words[$] | 0;
+            _ += R * 977, v.words[$] = _ & 67108863, _ = R * 64 + (_ / 67108864 | 0);
           }
           return v.words[v.length - 1] === 0 && (v.length--, v.words[v.length - 1] === 0 && v.length--), v;
         };
@@ -74655,8 +74655,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }
         o(ee, q), ee.prototype.imulK = function(v) {
           for (var _ = 0, $ = 0; $ < v.length; $++) {
-            var P = (v.words[$] | 0) * 19 + _, F = P & 67108863;
-            P >>>= 26, v.words[$] = F, _ = P;
+            var R = (v.words[$] | 0) * 19 + _, F = R & 67108863;
+            R >>>= 26, v.words[$] = F, _ = R;
           }
           return _ !== 0 && (v.words[v.length++] = _), v;
         }, a._prime = function(v) {
@@ -74716,11 +74716,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
             var $ = this.m.add(new a(1)).iushrn(2);
             return this.pow(v, $);
           }
-          for (var P = this.m.subn(1), F = 0; !P.isZero() && P.andln(1) === 0; ) F++, P.iushrn(1);
-          s(!P.isZero());
+          for (var R = this.m.subn(1), F = 0; !R.isZero() && R.andln(1) === 0; ) F++, R.iushrn(1);
+          s(!R.isZero());
           var k = new a(1).toRed(this), G = k.redNeg(), D = this.m.subn(1).iushrn(1), x = this.m.bitLength();
           for (x = new a(2 * x * x).toRed(this); this.pow(x, D).cmp(G) !== 0; ) x.redIAdd(G);
-          for (var L = this.pow(x, P), j = this.pow(v, P.addn(1).iushrn(1)), Y = this.pow(v, P), oe = F; Y.cmp(k) !== 0; ) {
+          for (var L = this.pow(x, R), j = this.pow(v, R.addn(1).iushrn(1)), Y = this.pow(v, R), oe = F; Y.cmp(k) !== 0; ) {
             for (var me = Y, be = 0; me.cmp(k) !== 0; be++) me = me.redSqr();
             s(be < oe);
             var Z = this.pow(L, new a(1).iushln(oe - be - 1));
@@ -74733,18 +74733,18 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, ie.prototype.pow = function(v, _) {
           if (_.isZero()) return new a(1).toRed(this);
           if (_.cmpn(1) === 0) return v.clone();
-          var $ = 4, P = new Array(1 << $);
-          P[0] = new a(1).toRed(this), P[1] = v;
-          for (var F = 2; F < P.length; F++) P[F] = this.mul(P[F - 1], v);
-          var k = P[0], G = 0, D = 0, x = _.bitLength() % 26;
+          var $ = 4, R = new Array(1 << $);
+          R[0] = new a(1).toRed(this), R[1] = v;
+          for (var F = 2; F < R.length; F++) R[F] = this.mul(R[F - 1], v);
+          var k = R[0], G = 0, D = 0, x = _.bitLength() % 26;
           for (x === 0 && (x = 26), F = _.length - 1; F >= 0; F--) {
             for (var L = _.words[F], j = x - 1; j >= 0; j--) {
               var Y = L >> j & 1;
-              if (k !== P[0] && (k = this.sqr(k)), Y === 0 && G === 0) {
+              if (k !== R[0] && (k = this.sqr(k)), Y === 0 && G === 0) {
                 D = 0;
                 continue;
               }
-              G <<= 1, G |= Y, D++, !(D !== $ && (F !== 0 || j !== 0)) && (k = this.mul(k, P[G]), D = 0, G = 0);
+              G <<= 1, G |= Y, D++, !(D !== $ && (F !== 0 || j !== 0)) && (k = this.mul(k, R[G]), D = 0, G = 0);
             }
             x = 26;
           }
@@ -74768,11 +74768,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return _.red = null, _;
         }, pe.prototype.imul = function(v, _) {
           if (v.isZero() || _.isZero()) return v.words[0] = 0, v.length = 1, v;
-          var $ = v.imul(_), P = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(P).iushrn(this.shift), k = F;
+          var $ = v.imul(_), R = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(R).iushrn(this.shift), k = F;
           return F.cmp(this.m) >= 0 ? k = F.isub(this.m) : F.cmpn(0) < 0 && (k = F.iadd(this.m)), k._forceRed(this);
         }, pe.prototype.mul = function(v, _) {
           if (v.isZero() || _.isZero()) return new a(0)._forceRed(this);
-          var $ = v.mul(_), P = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(P).iushrn(this.shift), k = F;
+          var $ = v.mul(_), R = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(R).iushrn(this.shift), k = F;
           return F.cmp(this.m) >= 0 ? k = F.isub(this.m) : F.cmpn(0) < 0 && (k = F.iadd(this.m)), k._forceRed(this);
         }, pe.prototype.invm = function(v) {
           var _ = this.imod(v._invmp(this.m).mul(this.r2));
@@ -74843,9 +74843,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
       a || (a = Math.max(1, c / 48 | 0));
       for (var p = o.subn(1), m = 0; !p.testn(m); m++) ;
       for (var b = o.shrn(m), w = p.toRed(d), M = true; a > 0; a--) {
-        var R = this._randrange(new l(2), p);
-        h && h(R);
-        var V = R.toRed(d).redPow(b);
+        var P = this._randrange(new l(2), p);
+        h && h(P);
+        var V = P.toRed(d).redPow(b);
         if (!(V.cmp(f) === 0 || V.cmp(w) === 0)) {
           for (var O = 1; O < m; O++) {
             if (V = V.redSqr(), V.cmp(f) === 0) return false;
@@ -74862,13 +74862,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
       for (var m = o.shrn(p), b = f.toRed(c); a > 0; a--) {
         var w = this._randrange(new l(2), f), M = o.gcd(w);
         if (M.cmpn(1) !== 0) return M;
-        var R = w.toRed(c).redPow(m);
-        if (!(R.cmp(d) === 0 || R.cmp(b) === 0)) {
+        var P = w.toRed(c).redPow(m);
+        if (!(P.cmp(d) === 0 || P.cmp(b) === 0)) {
           for (var V = 1; V < p; V++) {
-            if (R = R.redSqr(), R.cmp(d) === 0) return R.fromRed().subn(1).gcd(o);
-            if (R.cmp(b) === 0) break;
+            if (P = P.redSqr(), P.cmp(d) === 0) return P.fromRed().subn(1).gcd(o);
+            if (P.cmp(b) === 0) break;
           }
-          if (V === p) return R = R.redSqr(), R.fromRed().subn(1).gcd(o);
+          if (V === p) return P = P.redSqr(), P.fromRed().subn(1).gcd(o);
         }
       }
       return false;
@@ -74879,7 +74879,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     if (hasRequiredGeneratePrime) return generatePrime;
     hasRequiredGeneratePrime = 1;
     var l = requireBrowser$c();
-    generatePrime = V, V.simpleSieve = M, V.fermatTest = R;
+    generatePrime = V, V.simpleSieve = M, V.fermatTest = P;
     var e = requireBn$6(), r = new e(24), s = requireMr(), o = new s(), a = new e(1), h = new e(2), c = new e(5);
     new e(16), new e(8);
     var d = new e(10), f = new e(3);
@@ -74901,7 +74901,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       for (var z = w(), H = 0; H < z.length; H++) if (O.modn(z[H]) === 0) return O.cmpn(z[H]) === 0;
       return true;
     }
-    function R(O) {
+    function P(O) {
       var z = e.mont(O);
       return h.toRed(z).redPow(O.subn(1)).fromRed().cmpn(1) === 0;
     }
@@ -74919,7 +74919,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         if (H.isEven() && H.iadd(a), H.testn(1) || H.iadd(h), z.cmp(h)) {
           if (!z.cmp(c)) for (; H.mod(d).cmp(f); ) H.iadd(m);
         } else for (; H.mod(r).cmp(p); ) H.iadd(m);
-        if (q = H.shrn(1), M(q) && M(H) && R(q) && R(H) && o.test(q) && o.test(H)) return H;
+        if (q = H.shrn(1), M(q) && M(H) && P(q) && P(H) && o.test(q) && o.test(H)) return H;
       }
     }
     return generatePrime;
@@ -75015,17 +75015,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       return z;
     }, M.prototype.getPublicKey = function(O) {
-      return R(this._pub, O);
+      return P(this._pub, O);
     }, M.prototype.getPrivateKey = function(O) {
-      return R(this._priv, O);
+      return P(this._priv, O);
     }, M.prototype.getPrime = function(V) {
-      return R(this.__prime, V);
+      return P(this.__prime, V);
     }, M.prototype.getGenerator = function(V) {
-      return R(this._gen, V);
+      return P(this._gen, V);
     }, M.prototype.setGenerator = function(V, O) {
       return O = O || "utf8", Buffer.isBuffer(V) || (V = new Buffer(V, O)), this.__gen = V, this._gen = new l(V), this;
     };
-    function R(V, O) {
+    function P(V, O) {
       var z = new Buffer(V.toArray());
       return O ? z.toString(O) : z;
     }
@@ -75166,7 +75166,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     if (hasRequired_stream_writable) return _stream_writable;
     hasRequired_stream_writable = 1;
     var l = requireProcessNextickArgs();
-    _stream_writable = R;
+    _stream_writable = P;
     function e(k) {
       var G = this;
       this.next = null, this.entry = null, this.finish = function() {
@@ -75177,7 +75177,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       "v0.10",
       "v0.9."
     ].indexOf(process$1.version.slice(0, 5)) > -1 ? setImmediate : l.nextTick, s;
-    R.WritableState = w;
+    P.WritableState = w;
     var o = Object.create(requireUtil());
     o.inherits = requireInherits_browser();
     var a = {
@@ -75191,7 +75191,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return c.isBuffer(k) || k instanceof d;
     }
     var m = requireDestroy();
-    o.inherits(R, h);
+    o.inherits(P, h);
     function b() {
     }
     function w(k, G) {
@@ -75219,18 +75219,18 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
     })();
     var M;
-    typeof Symbol == "function" && Symbol.hasInstance && typeof Function.prototype[Symbol.hasInstance] == "function" ? (M = Function.prototype[Symbol.hasInstance], Object.defineProperty(R, Symbol.hasInstance, {
+    typeof Symbol == "function" && Symbol.hasInstance && typeof Function.prototype[Symbol.hasInstance] == "function" ? (M = Function.prototype[Symbol.hasInstance], Object.defineProperty(P, Symbol.hasInstance, {
       value: function(k) {
-        return M.call(this, k) ? true : this !== R ? false : k && k._writableState instanceof w;
+        return M.call(this, k) ? true : this !== P ? false : k && k._writableState instanceof w;
       }
     })) : M = function(k) {
       return k instanceof this;
     };
-    function R(k) {
-      if (s = s || require_stream_duplex(), !M.call(R, this) && !(this instanceof s)) return new R(k);
+    function P(k) {
+      if (s = s || require_stream_duplex(), !M.call(P, this) && !(this instanceof s)) return new P(k);
       this._writableState = new w(k, this), this.writable = true, k && (typeof k.write == "function" && (this._write = k.write), typeof k.writev == "function" && (this._writev = k.writev), typeof k.destroy == "function" && (this._destroy = k.destroy), typeof k.final == "function" && (this._final = k.final)), h.call(this);
     }
-    R.prototype.pipe = function() {
+    P.prototype.pipe = function() {
       this.emit("error", new Error("Cannot pipe, not readable"));
     };
     function V(k, G) {
@@ -75241,16 +75241,16 @@ Use Chrome, Firefox or Internet Explorer 11`);
       var L = true, j = false;
       return D === null ? j = new TypeError("May not write null values to stream") : typeof D != "string" && D !== void 0 && !G.objectMode && (j = new TypeError("Invalid non-string/buffer chunk")), j && (k.emit("error", j), l.nextTick(x, j), L = false), L;
     }
-    R.prototype.write = function(k, G, D) {
+    P.prototype.write = function(k, G, D) {
       var x = this._writableState, L = false, j = !x.objectMode && p(k);
       return j && !c.isBuffer(k) && (k = f(k)), typeof G == "function" && (D = G, G = null), j ? G = "buffer" : G || (G = x.defaultEncoding), typeof D != "function" && (D = b), x.ended ? V(this, D) : (j || O(this, x, k, D)) && (x.pendingcb++, L = H(this, x, j, k, G, D)), L;
-    }, R.prototype.cork = function() {
+    }, P.prototype.cork = function() {
       var k = this._writableState;
       k.corked++;
-    }, R.prototype.uncork = function() {
+    }, P.prototype.uncork = function() {
       var k = this._writableState;
       k.corked && (k.corked--, !k.writing && !k.corked && !k.bufferProcessing && k.bufferedRequest && pe(this, k));
-    }, R.prototype.setDefaultEncoding = function(G) {
+    }, P.prototype.setDefaultEncoding = function(G) {
       if (typeof G == "string" && (G = G.toLowerCase()), !([
         "hex",
         "utf8",
@@ -75269,7 +75269,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function z(k, G, D) {
       return !k.objectMode && k.decodeStrings !== false && typeof G == "string" && (G = c.from(G, D)), G;
     }
-    Object.defineProperty(R.prototype, "writableHighWaterMark", {
+    Object.defineProperty(P.prototype, "writableHighWaterMark", {
       enumerable: false,
       get: function() {
         return this._writableState.highWaterMark;
@@ -75335,11 +75335,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       G.bufferedRequest = D, G.bufferProcessing = false;
     }
-    R.prototype._write = function(k, G, D) {
+    P.prototype._write = function(k, G, D) {
       D(new Error("_write() is not implemented"));
-    }, R.prototype._writev = null, R.prototype.end = function(k, G, D) {
+    }, P.prototype._writev = null, P.prototype.end = function(k, G, D) {
       var x = this._writableState;
-      typeof k == "function" ? (D = k, k = null, G = null) : typeof G == "function" && (D = G, G = null), k != null && this.write(k, G), x.corked && (x.corked = 1, this.uncork()), x.ending || P(this, x, D);
+      typeof k == "function" ? (D = k, k = null, G = null) : typeof G == "function" && (D = G, G = null), k != null && this.write(k, G), x.corked && (x.corked = 1, this.uncork()), x.ending || R(this, x, D);
     };
     function U(k) {
       return k.ending && k.length === 0 && k.bufferedRequest === null && !k.finished && !k.writing;
@@ -75356,7 +75356,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       var D = U(G);
       return D && (_(k, G), G.pendingcb === 0 && (G.finished = true, k.emit("finish"))), D;
     }
-    function P(k, G, D) {
+    function R(k, G, D) {
       G.ending = true, $(k, G), D && (G.finished ? l.nextTick(D) : k.once("finish", D)), G.ended = true, k.writable = false;
     }
     function F(k, G, D) {
@@ -75367,14 +75367,14 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       G.corkedRequestsFree.next = k;
     }
-    return Object.defineProperty(R.prototype, "destroyed", {
+    return Object.defineProperty(P.prototype, "destroyed", {
       get: function() {
         return this._writableState === void 0 ? false : this._writableState.destroyed;
       },
       set: function(k) {
         this._writableState && (this._writableState.destroyed = k);
       }
-    }), R.prototype.destroy = m.destroy, R.prototype._undestroy = m.undestroy, R.prototype._destroy = function(k, G) {
+    }), P.prototype.destroy = m.destroy, P.prototype._undestroy = m.undestroy, P.prototype._destroy = function(k, G) {
       this.end(), G(k);
     }, _stream_writable;
   }
@@ -75448,7 +75448,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     };
     var b = requireBufferList(), w = requireDestroy(), M;
     f.inherits(z, o);
-    var R = [
+    var P = [
       "error",
       "close",
       "destroy",
@@ -75579,7 +75579,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       function Re() {
         m("onend"), Z.end();
       }
-      var Be = P(fe);
+      var Be = R(fe);
       Z.on("drain", Be);
       var Ee = false;
       function rt() {
@@ -75609,7 +75609,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       return Z.emit("pipe", fe), _e.flowing || (m("pipe resume"), fe.resume()), Z;
     };
-    function P(Z) {
+    function R(Z) {
       return function() {
         var se = Z._readableState;
         m("pipeOnDrain", se.awaitDrain), se.awaitDrain && se.awaitDrain--, se.awaitDrain === 0 && s(Z, "data") && (se.flowing = true, D(Z));
@@ -75679,7 +75679,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return Z[Ce].apply(Z, arguments);
         };
       })(xe));
-      for (var le = 0; le < R.length; le++) Z.on(R[le], this.emit.bind(this, R[le]));
+      for (var le = 0; le < P.length; le++) Z.on(P[le], this.emit.bind(this, P[le]));
       return this._read = function(Ce) {
         m("wrapped _read", Ce), _e && (_e = false, Z.resume());
       }, this;
@@ -75828,13 +75828,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }
         function o(_, $) {
           _.super_ = $;
-          var P = function() {
+          var R = function() {
           };
-          P.prototype = $.prototype, _.prototype = new P(), _.prototype.constructor = _;
+          R.prototype = $.prototype, _.prototype = new R(), _.prototype.constructor = _;
         }
-        function a(_, $, P) {
+        function a(_, $, R) {
           if (a.isBN(_)) return _;
-          this.negative = 0, this.words = null, this.length = 0, this.red = null, _ !== null && (($ === "le" || $ === "be") && (P = $, $ = 10), this._init(_ || 0, $ || 10, P || "be"));
+          this.negative = 0, this.words = null, this.length = 0, this.red = null, _ !== null && (($ === "le" || $ === "be") && (R = $, $ = 10), this._init(_ || 0, $ || 10, R || "be"));
         }
         typeof e == "object" ? e.exports = a : r.BN = a, a.BN = a, a.wordSize = 26;
         var h;
@@ -75844,17 +75844,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }
         a.isBN = function($) {
           return $ instanceof a ? true : $ !== null && typeof $ == "object" && $.constructor.wordSize === a.wordSize && Array.isArray($.words);
-        }, a.max = function($, P) {
-          return $.cmp(P) > 0 ? $ : P;
-        }, a.min = function($, P) {
-          return $.cmp(P) < 0 ? $ : P;
-        }, a.prototype._init = function($, P, F) {
-          if (typeof $ == "number") return this._initNumber($, P, F);
-          if (typeof $ == "object") return this._initArray($, P, F);
-          P === "hex" && (P = 16), s(P === (P | 0) && P >= 2 && P <= 36), $ = $.toString().replace(/\s+/g, "");
+        }, a.max = function($, R) {
+          return $.cmp(R) > 0 ? $ : R;
+        }, a.min = function($, R) {
+          return $.cmp(R) < 0 ? $ : R;
+        }, a.prototype._init = function($, R, F) {
+          if (typeof $ == "number") return this._initNumber($, R, F);
+          if (typeof $ == "object") return this._initArray($, R, F);
+          R === "hex" && (R = 16), s(R === (R | 0) && R >= 2 && R <= 36), $ = $.toString().replace(/\s+/g, "");
           var k = 0;
-          $[0] === "-" && (k++, this.negative = 1), k < $.length && (P === 16 ? this._parseHex($, k, F) : (this._parseBase($, P, k), F === "le" && this._initArray(this.toArray(), P, F)));
-        }, a.prototype._initNumber = function($, P, F) {
+          $[0] === "-" && (k++, this.negative = 1), k < $.length && (R === 16 ? this._parseHex($, k, F) : (this._parseBase($, R, k), F === "le" && this._initArray(this.toArray(), R, F)));
+        }, a.prototype._initNumber = function($, R, F) {
           $ < 0 && (this.negative = 1, $ = -$), $ < 67108864 ? (this.words = [
             $ & 67108863
           ], this.length = 1) : $ < 4503599627370496 ? (this.words = [
@@ -75864,8 +75864,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
             $ & 67108863,
             $ / 67108864 & 67108863,
             1
-          ], this.length = 3), F === "le" && this._initArray(this.toArray(), P, F);
-        }, a.prototype._initArray = function($, P, F) {
+          ], this.length = 3), F === "le" && this._initArray(this.toArray(), R, F);
+        }, a.prototype._initArray = function($, R, F) {
           if (s(typeof $.length == "number"), $.length <= 0) return this.words = [
             0
           ], this.length = 1, this;
@@ -75877,50 +75877,50 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return this._strip();
         };
         function c(_, $) {
-          var P = _.charCodeAt($);
-          if (P >= 48 && P <= 57) return P - 48;
-          if (P >= 65 && P <= 70) return P - 55;
-          if (P >= 97 && P <= 102) return P - 87;
+          var R = _.charCodeAt($);
+          if (R >= 48 && R <= 57) return R - 48;
+          if (R >= 65 && R <= 70) return R - 55;
+          if (R >= 97 && R <= 102) return R - 87;
           s(false, "Invalid character in " + _);
         }
-        function d(_, $, P) {
-          var F = c(_, P);
-          return P - 1 >= $ && (F |= c(_, P - 1) << 4), F;
+        function d(_, $, R) {
+          var F = c(_, R);
+          return R - 1 >= $ && (F |= c(_, R - 1) << 4), F;
         }
-        a.prototype._parseHex = function($, P, F) {
-          this.length = Math.ceil(($.length - P) / 6), this.words = new Array(this.length);
+        a.prototype._parseHex = function($, R, F) {
+          this.length = Math.ceil(($.length - R) / 6), this.words = new Array(this.length);
           for (var k = 0; k < this.length; k++) this.words[k] = 0;
           var G = 0, D = 0, x;
-          if (F === "be") for (k = $.length - 1; k >= P; k -= 2) x = d($, P, k) << G, this.words[D] |= x & 67108863, G >= 18 ? (G -= 18, D += 1, this.words[D] |= x >>> 26) : G += 8;
+          if (F === "be") for (k = $.length - 1; k >= R; k -= 2) x = d($, R, k) << G, this.words[D] |= x & 67108863, G >= 18 ? (G -= 18, D += 1, this.words[D] |= x >>> 26) : G += 8;
           else {
-            var L = $.length - P;
-            for (k = L % 2 === 0 ? P + 1 : P; k < $.length; k += 2) x = d($, P, k) << G, this.words[D] |= x & 67108863, G >= 18 ? (G -= 18, D += 1, this.words[D] |= x >>> 26) : G += 8;
+            var L = $.length - R;
+            for (k = L % 2 === 0 ? R + 1 : R; k < $.length; k += 2) x = d($, R, k) << G, this.words[D] |= x & 67108863, G >= 18 ? (G -= 18, D += 1, this.words[D] |= x >>> 26) : G += 8;
           }
           this._strip();
         };
-        function f(_, $, P, F) {
-          for (var k = 0, G = 0, D = Math.min(_.length, P), x = $; x < D; x++) {
+        function f(_, $, R, F) {
+          for (var k = 0, G = 0, D = Math.min(_.length, R), x = $; x < D; x++) {
             var L = _.charCodeAt(x) - 48;
             k *= F, L >= 49 ? G = L - 49 + 10 : L >= 17 ? G = L - 17 + 10 : G = L, s(L >= 0 && G < F, "Invalid character"), k += G;
           }
           return k;
         }
-        a.prototype._parseBase = function($, P, F) {
+        a.prototype._parseBase = function($, R, F) {
           this.words = [
             0
           ], this.length = 1;
-          for (var k = 0, G = 1; G <= 67108863; G *= P) k++;
-          k--, G = G / P | 0;
-          for (var D = $.length - F, x = D % k, L = Math.min(D, D - x) + F, j = 0, Y = F; Y < L; Y += k) j = f($, Y, Y + k, P), this.imuln(G), this.words[0] + j < 67108864 ? this.words[0] += j : this._iaddn(j);
+          for (var k = 0, G = 1; G <= 67108863; G *= R) k++;
+          k--, G = G / R | 0;
+          for (var D = $.length - F, x = D % k, L = Math.min(D, D - x) + F, j = 0, Y = F; Y < L; Y += k) j = f($, Y, Y + k, R), this.imuln(G), this.words[0] + j < 67108864 ? this.words[0] += j : this._iaddn(j);
           if (x !== 0) {
             var oe = 1;
-            for (j = f($, Y, $.length, P), Y = 0; Y < x; Y++) oe *= P;
+            for (j = f($, Y, $.length, R), Y = 0; Y < x; Y++) oe *= R;
             this.imuln(oe), this.words[0] + j < 67108864 ? this.words[0] += j : this._iaddn(j);
           }
           this._strip();
         }, a.prototype.copy = function($) {
           $.words = new Array(this.length);
-          for (var P = 0; P < this.length; P++) $.words[P] = this.words[P];
+          for (var R = 0; R < this.length; R++) $.words[R] = this.words[R];
           $.length = this.length, $.negative = this.negative, $.red = this.red;
         };
         function p(_, $) {
@@ -76052,8 +76052,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           52521875,
           60466176
         ];
-        a.prototype.toString = function($, P) {
-          $ = $ || 10, P = P | 0 || 1;
+        a.prototype.toString = function($, R) {
+          $ = $ || 10, R = R | 0 || 1;
           var F;
           if ($ === 16 || $ === "hex") {
             F = "";
@@ -76061,7 +76061,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
               var x = this.words[D], L = ((x << k | G) & 16777215).toString(16);
               G = x >>> 24 - k & 16777215, k += 2, k >= 26 && (k -= 26, D--), G !== 0 || D !== this.length - 1 ? F = b[6 - L.length] + L + F : F = L + F;
             }
-            for (G !== 0 && (F = G.toString(16) + F); F.length % P !== 0; ) F = "0" + F;
+            for (G !== 0 && (F = G.toString(16) + F); F.length % R !== 0; ) F = "0" + F;
             return this.negative !== 0 && (F = "-" + F), F;
           }
           if ($ === ($ | 0) && $ >= 2 && $ <= 36) {
@@ -76072,7 +76072,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
               var me = oe.modrn(Y).toString($);
               oe = oe.idivn(Y), oe.isZero() ? F = me + F : F = b[j - me.length] + me + F;
             }
-            for (this.isZero() && (F = "0" + F); F.length % P !== 0; ) F = "0" + F;
+            for (this.isZero() && (F = "0" + F); F.length % R !== 0; ) F = "0" + F;
             return this.negative !== 0 && (F = "-" + F), F;
           }
           s(false, "Base should be between 2 and 36");
@@ -76081,27 +76081,27 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return this.length === 2 ? $ += this.words[1] * 67108864 : this.length === 3 && this.words[2] === 1 ? $ += 4503599627370496 + this.words[1] * 67108864 : this.length > 2 && s(false, "Number can only safely store up to 53 bits"), this.negative !== 0 ? -$ : $;
         }, a.prototype.toJSON = function() {
           return this.toString(16, 2);
-        }, h && (a.prototype.toBuffer = function($, P) {
-          return this.toArrayLike(h, $, P);
-        }), a.prototype.toArray = function($, P) {
-          return this.toArrayLike(Array, $, P);
+        }, h && (a.prototype.toBuffer = function($, R) {
+          return this.toArrayLike(h, $, R);
+        }), a.prototype.toArray = function($, R) {
+          return this.toArrayLike(Array, $, R);
         };
-        var R = function($, P) {
-          return $.allocUnsafe ? $.allocUnsafe(P) : new $(P);
+        var P = function($, R) {
+          return $.allocUnsafe ? $.allocUnsafe(R) : new $(R);
         };
-        a.prototype.toArrayLike = function($, P, F) {
+        a.prototype.toArrayLike = function($, R, F) {
           this._strip();
           var k = this.byteLength(), G = F || Math.max(1, k);
           s(k <= G, "byte array longer than desired length"), s(G > 0, "Requested array length <= 0");
-          var D = R($, G), x = P === "le" ? "LE" : "BE";
+          var D = P($, G), x = R === "le" ? "LE" : "BE";
           return this["_toArrayLike" + x](D, k), D;
-        }, a.prototype._toArrayLikeLE = function($, P) {
+        }, a.prototype._toArrayLikeLE = function($, R) {
           for (var F = 0, k = 0, G = 0, D = 0; G < this.length; G++) {
             var x = this.words[G] << D | k;
             $[F++] = x & 255, F < $.length && ($[F++] = x >> 8 & 255), F < $.length && ($[F++] = x >> 16 & 255), D === 6 ? (F < $.length && ($[F++] = x >> 24 & 255), k = 0, D = 0) : (k = x >>> 24, D += 2);
           }
           if (F < $.length) for ($[F++] = k; F < $.length; ) $[F++] = 0;
-        }, a.prototype._toArrayLikeBE = function($, P) {
+        }, a.prototype._toArrayLikeBE = function($, R) {
           for (var F = $.length - 1, k = 0, G = 0, D = 0; G < this.length; G++) {
             var x = this.words[G] << D | k;
             $[F--] = x & 255, F >= 0 && ($[F--] = x >> 8 & 255), F >= 0 && ($[F--] = x >> 16 & 255), D === 6 ? (F >= 0 && ($[F--] = x >> 24 & 255), k = 0, D = 0) : (k = x >>> 24, D += 2);
@@ -76110,27 +76110,27 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, Math.clz32 ? a.prototype._countBits = function($) {
           return 32 - Math.clz32($);
         } : a.prototype._countBits = function($) {
-          var P = $, F = 0;
-          return P >= 4096 && (F += 13, P >>>= 13), P >= 64 && (F += 7, P >>>= 7), P >= 8 && (F += 4, P >>>= 4), P >= 2 && (F += 2, P >>>= 2), F + P;
+          var R = $, F = 0;
+          return R >= 4096 && (F += 13, R >>>= 13), R >= 64 && (F += 7, R >>>= 7), R >= 8 && (F += 4, R >>>= 4), R >= 2 && (F += 2, R >>>= 2), F + R;
         }, a.prototype._zeroBits = function($) {
           if ($ === 0) return 26;
-          var P = $, F = 0;
-          return (P & 8191) === 0 && (F += 13, P >>>= 13), (P & 127) === 0 && (F += 7, P >>>= 7), (P & 15) === 0 && (F += 4, P >>>= 4), (P & 3) === 0 && (F += 2, P >>>= 2), (P & 1) === 0 && F++, F;
+          var R = $, F = 0;
+          return (R & 8191) === 0 && (F += 13, R >>>= 13), (R & 127) === 0 && (F += 7, R >>>= 7), (R & 15) === 0 && (F += 4, R >>>= 4), (R & 3) === 0 && (F += 2, R >>>= 2), (R & 1) === 0 && F++, F;
         }, a.prototype.bitLength = function() {
-          var $ = this.words[this.length - 1], P = this._countBits($);
-          return (this.length - 1) * 26 + P;
+          var $ = this.words[this.length - 1], R = this._countBits($);
+          return (this.length - 1) * 26 + R;
         };
         function V(_) {
-          for (var $ = new Array(_.bitLength()), P = 0; P < $.length; P++) {
-            var F = P / 26 | 0, k = P % 26;
-            $[P] = _.words[F] >>> k & 1;
+          for (var $ = new Array(_.bitLength()), R = 0; R < $.length; R++) {
+            var F = R / 26 | 0, k = R % 26;
+            $[R] = _.words[F] >>> k & 1;
           }
           return $;
         }
         a.prototype.zeroBits = function() {
           if (this.isZero()) return 0;
-          for (var $ = 0, P = 0; P < this.length; P++) {
-            var F = this._zeroBits(this.words[P]);
+          for (var $ = 0, R = 0; R < this.length; R++) {
+            var F = this._zeroBits(this.words[R]);
             if ($ += F, F !== 26) break;
           }
           return $;
@@ -76148,7 +76148,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return this.isZero() || (this.negative ^= 1), this;
         }, a.prototype.iuor = function($) {
           for (; this.length < $.length; ) this.words[this.length++] = 0;
-          for (var P = 0; P < $.length; P++) this.words[P] = this.words[P] | $.words[P];
+          for (var R = 0; R < $.length; R++) this.words[R] = this.words[R] | $.words[R];
           return this._strip();
         }, a.prototype.ior = function($) {
           return s((this.negative | $.negative) === 0), this.iuor($);
@@ -76157,10 +76157,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.uor = function($) {
           return this.length > $.length ? this.clone().iuor($) : $.clone().iuor(this);
         }, a.prototype.iuand = function($) {
-          var P;
-          this.length > $.length ? P = $ : P = this;
-          for (var F = 0; F < P.length; F++) this.words[F] = this.words[F] & $.words[F];
-          return this.length = P.length, this._strip();
+          var R;
+          this.length > $.length ? R = $ : R = this;
+          for (var F = 0; F < R.length; F++) this.words[F] = this.words[F] & $.words[F];
+          return this.length = R.length, this._strip();
         }, a.prototype.iand = function($) {
           return s((this.negative | $.negative) === 0), this.iuand($);
         }, a.prototype.and = function($) {
@@ -76168,11 +76168,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.uand = function($) {
           return this.length > $.length ? this.clone().iuand($) : $.clone().iuand(this);
         }, a.prototype.iuxor = function($) {
-          var P, F;
-          this.length > $.length ? (P = this, F = $) : (P = $, F = this);
-          for (var k = 0; k < F.length; k++) this.words[k] = P.words[k] ^ F.words[k];
-          if (this !== P) for (; k < P.length; k++) this.words[k] = P.words[k];
-          return this.length = P.length, this._strip();
+          var R, F;
+          this.length > $.length ? (R = this, F = $) : (R = $, F = this);
+          for (var k = 0; k < F.length; k++) this.words[k] = R.words[k] ^ F.words[k];
+          if (this !== R) for (; k < R.length; k++) this.words[k] = R.words[k];
+          return this.length = R.length, this._strip();
         }, a.prototype.ixor = function($) {
           return s((this.negative | $.negative) === 0), this.iuxor($);
         }, a.prototype.xor = function($) {
@@ -76181,65 +76181,65 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return this.length > $.length ? this.clone().iuxor($) : $.clone().iuxor(this);
         }, a.prototype.inotn = function($) {
           s(typeof $ == "number" && $ >= 0);
-          var P = Math.ceil($ / 26) | 0, F = $ % 26;
-          this._expand(P), F > 0 && P--;
-          for (var k = 0; k < P; k++) this.words[k] = ~this.words[k] & 67108863;
+          var R = Math.ceil($ / 26) | 0, F = $ % 26;
+          this._expand(R), F > 0 && R--;
+          for (var k = 0; k < R; k++) this.words[k] = ~this.words[k] & 67108863;
           return F > 0 && (this.words[k] = ~this.words[k] & 67108863 >> 26 - F), this._strip();
         }, a.prototype.notn = function($) {
           return this.clone().inotn($);
-        }, a.prototype.setn = function($, P) {
+        }, a.prototype.setn = function($, R) {
           s(typeof $ == "number" && $ >= 0);
           var F = $ / 26 | 0, k = $ % 26;
-          return this._expand(F + 1), P ? this.words[F] = this.words[F] | 1 << k : this.words[F] = this.words[F] & ~(1 << k), this._strip();
+          return this._expand(F + 1), R ? this.words[F] = this.words[F] | 1 << k : this.words[F] = this.words[F] & ~(1 << k), this._strip();
         }, a.prototype.iadd = function($) {
-          var P;
-          if (this.negative !== 0 && $.negative === 0) return this.negative = 0, P = this.isub($), this.negative ^= 1, this._normSign();
-          if (this.negative === 0 && $.negative !== 0) return $.negative = 0, P = this.isub($), $.negative = 1, P._normSign();
+          var R;
+          if (this.negative !== 0 && $.negative === 0) return this.negative = 0, R = this.isub($), this.negative ^= 1, this._normSign();
+          if (this.negative === 0 && $.negative !== 0) return $.negative = 0, R = this.isub($), $.negative = 1, R._normSign();
           var F, k;
           this.length > $.length ? (F = this, k = $) : (F = $, k = this);
-          for (var G = 0, D = 0; D < k.length; D++) P = (F.words[D] | 0) + (k.words[D] | 0) + G, this.words[D] = P & 67108863, G = P >>> 26;
-          for (; G !== 0 && D < F.length; D++) P = (F.words[D] | 0) + G, this.words[D] = P & 67108863, G = P >>> 26;
+          for (var G = 0, D = 0; D < k.length; D++) R = (F.words[D] | 0) + (k.words[D] | 0) + G, this.words[D] = R & 67108863, G = R >>> 26;
+          for (; G !== 0 && D < F.length; D++) R = (F.words[D] | 0) + G, this.words[D] = R & 67108863, G = R >>> 26;
           if (this.length = F.length, G !== 0) this.words[this.length] = G, this.length++;
           else if (F !== this) for (; D < F.length; D++) this.words[D] = F.words[D];
           return this;
         }, a.prototype.add = function($) {
-          var P;
-          return $.negative !== 0 && this.negative === 0 ? ($.negative = 0, P = this.sub($), $.negative ^= 1, P) : $.negative === 0 && this.negative !== 0 ? (this.negative = 0, P = $.sub(this), this.negative = 1, P) : this.length > $.length ? this.clone().iadd($) : $.clone().iadd(this);
+          var R;
+          return $.negative !== 0 && this.negative === 0 ? ($.negative = 0, R = this.sub($), $.negative ^= 1, R) : $.negative === 0 && this.negative !== 0 ? (this.negative = 0, R = $.sub(this), this.negative = 1, R) : this.length > $.length ? this.clone().iadd($) : $.clone().iadd(this);
         }, a.prototype.isub = function($) {
           if ($.negative !== 0) {
             $.negative = 0;
-            var P = this.iadd($);
-            return $.negative = 1, P._normSign();
+            var R = this.iadd($);
+            return $.negative = 1, R._normSign();
           } else if (this.negative !== 0) return this.negative = 0, this.iadd($), this.negative = 1, this._normSign();
           var F = this.cmp($);
           if (F === 0) return this.negative = 0, this.length = 1, this.words[0] = 0, this;
           var k, G;
           F > 0 ? (k = this, G = $) : (k = $, G = this);
-          for (var D = 0, x = 0; x < G.length; x++) P = (k.words[x] | 0) - (G.words[x] | 0) + D, D = P >> 26, this.words[x] = P & 67108863;
-          for (; D !== 0 && x < k.length; x++) P = (k.words[x] | 0) + D, D = P >> 26, this.words[x] = P & 67108863;
+          for (var D = 0, x = 0; x < G.length; x++) R = (k.words[x] | 0) - (G.words[x] | 0) + D, D = R >> 26, this.words[x] = R & 67108863;
+          for (; D !== 0 && x < k.length; x++) R = (k.words[x] | 0) + D, D = R >> 26, this.words[x] = R & 67108863;
           if (D === 0 && x < k.length && k !== this) for (; x < k.length; x++) this.words[x] = k.words[x];
           return this.length = Math.max(this.length, x), k !== this && (this.negative = 1), this._strip();
         }, a.prototype.sub = function($) {
           return this.clone().isub($);
         };
-        function O(_, $, P) {
-          P.negative = $.negative ^ _.negative;
+        function O(_, $, R) {
+          R.negative = $.negative ^ _.negative;
           var F = _.length + $.length | 0;
-          P.length = F, F = F - 1 | 0;
+          R.length = F, F = F - 1 | 0;
           var k = _.words[0] | 0, G = $.words[0] | 0, D = k * G, x = D & 67108863, L = D / 67108864 | 0;
-          P.words[0] = x;
+          R.words[0] = x;
           for (var j = 1; j < F; j++) {
             for (var Y = L >>> 26, oe = L & 67108863, me = Math.min(j, $.length - 1), be = Math.max(0, j - _.length + 1); be <= me; be++) {
               var Z = j - be | 0;
               k = _.words[Z] | 0, G = $.words[be] | 0, D = k * G + oe, Y += D / 67108864 | 0, oe = D & 67108863;
             }
-            P.words[j] = oe | 0, L = Y | 0;
+            R.words[j] = oe | 0, L = Y | 0;
           }
-          return L !== 0 ? P.words[j] = L | 0 : P.length--, P._strip();
+          return L !== 0 ? R.words[j] = L | 0 : R.length--, R._strip();
         }
-        var z = function($, P, F) {
-          var k = $.words, G = P.words, D = F.words, x = 0, L, j, Y, oe = k[0] | 0, me = oe & 8191, be = oe >>> 13, Z = k[1] | 0, se = Z & 8191, fe = Z >>> 13, _e = k[2] | 0, xe = _e & 8191, le = _e >>> 13, Ce = k[3] | 0, Re = Ce & 8191, Be = Ce >>> 13, Ee = k[4] | 0, rt = Ee & 8191, Pe = Ee >>> 13, Te = k[5] | 0, ut = Te & 8191, De = Te >>> 13, Fe = k[6] | 0, ct = Fe & 8191, Le = Fe >>> 13, Ue = k[7] | 0, pt = Ue & 8191, Ke = Ue >>> 13, tt = k[8] | 0, bt = tt & 8191, ge = tt >>> 13, re = k[9] | 0, he = re & 8191, we = re >>> 13, Se = G[0] | 0, ke = Se & 8191, Ne = Se >>> 13, ze = G[1] | 0, vt = ze & 8191, Ve = ze >>> 13, Xe = G[2] | 0, ft = Xe & 8191, Ye = Xe >>> 13, ot = G[3] | 0, wt = ot & 8191, nt = ot >>> 13, at = G[4] | 0, $t = at & 8191, ve = at >>> 13, ne = G[5] | 0, ce = ne & 8191, $e = ne >>> 13, Me = G[6] | 0, Oe = Me & 8191, Ie = Me >>> 13, je = G[7] | 0, yt = je & 8191, Ge = je >>> 13, et = G[8] | 0, mt = et & 8191, st = et >>> 13, lt = G[9] | 0, _t = lt & 8191, At = lt >>> 13;
-          F.negative = $.negative ^ P.negative, F.length = 19, L = Math.imul(me, ke), j = Math.imul(me, Ne), j = j + Math.imul(be, ke) | 0, Y = Math.imul(be, Ne);
+        var z = function($, R, F) {
+          var k = $.words, G = R.words, D = F.words, x = 0, L, j, Y, oe = k[0] | 0, me = oe & 8191, be = oe >>> 13, Z = k[1] | 0, se = Z & 8191, fe = Z >>> 13, _e = k[2] | 0, xe = _e & 8191, le = _e >>> 13, Ce = k[3] | 0, Re = Ce & 8191, Be = Ce >>> 13, Ee = k[4] | 0, rt = Ee & 8191, Pe = Ee >>> 13, Te = k[5] | 0, ut = Te & 8191, De = Te >>> 13, Fe = k[6] | 0, ct = Fe & 8191, Le = Fe >>> 13, Ue = k[7] | 0, pt = Ue & 8191, Ke = Ue >>> 13, tt = k[8] | 0, bt = tt & 8191, ge = tt >>> 13, re = k[9] | 0, he = re & 8191, we = re >>> 13, Se = G[0] | 0, ke = Se & 8191, Ne = Se >>> 13, ze = G[1] | 0, vt = ze & 8191, Ve = ze >>> 13, Xe = G[2] | 0, ft = Xe & 8191, Ye = Xe >>> 13, ot = G[3] | 0, wt = ot & 8191, nt = ot >>> 13, at = G[4] | 0, $t = at & 8191, ve = at >>> 13, ne = G[5] | 0, ce = ne & 8191, $e = ne >>> 13, Me = G[6] | 0, Oe = Me & 8191, Ie = Me >>> 13, je = G[7] | 0, yt = je & 8191, Ge = je >>> 13, et = G[8] | 0, mt = et & 8191, st = et >>> 13, lt = G[9] | 0, _t = lt & 8191, At = lt >>> 13;
+          F.negative = $.negative ^ R.negative, F.length = 19, L = Math.imul(me, ke), j = Math.imul(me, Ne), j = j + Math.imul(be, ke) | 0, Y = Math.imul(be, Ne);
           var Ct = (x + L | 0) + ((j & 8191) << 13) | 0;
           x = (Y + (j >>> 13) | 0) + (Ct >>> 26) | 0, Ct &= 67108863, L = Math.imul(se, ke), j = Math.imul(se, Ne), j = j + Math.imul(fe, ke) | 0, Y = Math.imul(fe, Ne), L = L + Math.imul(me, vt) | 0, j = j + Math.imul(me, Ve) | 0, j = j + Math.imul(be, vt) | 0, Y = Y + Math.imul(be, Ve) | 0;
           var St = (x + L | 0) + ((j & 8191) << 13) | 0;
@@ -76280,41 +76280,41 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return x = (Y + (j >>> 13) | 0) + (ni >>> 26) | 0, ni &= 67108863, D[0] = Ct, D[1] = St, D[2] = Mt, D[3] = Tt, D[4] = Bt, D[5] = Nt, D[6] = It, D[7] = Pt, D[8] = Rt, D[9] = Dt, D[10] = Lt, D[11] = kt, D[12] = Ot, D[13] = Vt, D[14] = Ut, D[15] = Gt, D[16] = zt, D[17] = ii, D[18] = ni, x !== 0 && (D[19] = x, F.length++), F;
         };
         Math.imul || (z = O);
-        function H(_, $, P) {
-          P.negative = $.negative ^ _.negative, P.length = _.length + $.length;
-          for (var F = 0, k = 0, G = 0; G < P.length - 1; G++) {
+        function H(_, $, R) {
+          R.negative = $.negative ^ _.negative, R.length = _.length + $.length;
+          for (var F = 0, k = 0, G = 0; G < R.length - 1; G++) {
             var D = k;
             k = 0;
             for (var x = F & 67108863, L = Math.min(G, $.length - 1), j = Math.max(0, G - _.length + 1); j <= L; j++) {
               var Y = G - j, oe = _.words[Y] | 0, me = $.words[j] | 0, be = oe * me, Z = be & 67108863;
               D = D + (be / 67108864 | 0) | 0, Z = Z + x | 0, x = Z & 67108863, D = D + (Z >>> 26) | 0, k += D >>> 26, D &= 67108863;
             }
-            P.words[G] = x, F = D, D = k;
+            R.words[G] = x, F = D, D = k;
           }
-          return F !== 0 ? P.words[G] = F : P.length--, P._strip();
+          return F !== 0 ? R.words[G] = F : R.length--, R._strip();
         }
-        function q(_, $, P) {
-          return H(_, $, P);
+        function q(_, $, R) {
+          return H(_, $, R);
         }
-        a.prototype.mulTo = function($, P) {
+        a.prototype.mulTo = function($, R) {
           var F, k = this.length + $.length;
-          return this.length === 10 && $.length === 10 ? F = z(this, $, P) : k < 63 ? F = O(this, $, P) : k < 1024 ? F = H(this, $, P) : F = q(this, $, P), F;
+          return this.length === 10 && $.length === 10 ? F = z(this, $, R) : k < 63 ? F = O(this, $, R) : k < 1024 ? F = H(this, $, R) : F = q(this, $, R), F;
         }, a.prototype.mul = function($) {
-          var P = new a(null);
-          return P.words = new Array(this.length + $.length), this.mulTo($, P);
+          var R = new a(null);
+          return R.words = new Array(this.length + $.length), this.mulTo($, R);
         }, a.prototype.mulf = function($) {
-          var P = new a(null);
-          return P.words = new Array(this.length + $.length), q(this, $, P);
+          var R = new a(null);
+          return R.words = new Array(this.length + $.length), q(this, $, R);
         }, a.prototype.imul = function($) {
           return this.clone().mulTo($, this);
         }, a.prototype.imuln = function($) {
-          var P = $ < 0;
-          P && ($ = -$), s(typeof $ == "number"), s($ < 67108864);
+          var R = $ < 0;
+          R && ($ = -$), s(typeof $ == "number"), s($ < 67108864);
           for (var F = 0, k = 0; k < this.length; k++) {
             var G = (this.words[k] | 0) * $, D = (G & 67108863) + (F & 67108863);
             F >>= 26, F += G / 67108864 | 0, F += D >>> 26, this.words[k] = D & 67108863;
           }
-          return F !== 0 && (this.words[k] = F, this.length++), this.length = $ === 0 ? 1 : this.length, P ? this.ineg() : this;
+          return F !== 0 && (this.words[k] = F, this.length++), this.length = $ === 0 ? 1 : this.length, R ? this.ineg() : this;
         }, a.prototype.muln = function($) {
           return this.clone().imuln($);
         }, a.prototype.sqr = function() {
@@ -76322,19 +76322,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.isqr = function() {
           return this.imul(this.clone());
         }, a.prototype.pow = function($) {
-          var P = V($);
-          if (P.length === 0) return new a(1);
-          for (var F = this, k = 0; k < P.length && P[k] === 0; k++, F = F.sqr()) ;
-          if (++k < P.length) for (var G = F.sqr(); k < P.length; k++, G = G.sqr()) P[k] !== 0 && (F = F.mul(G));
+          var R = V($);
+          if (R.length === 0) return new a(1);
+          for (var F = this, k = 0; k < R.length && R[k] === 0; k++, F = F.sqr()) ;
+          if (++k < R.length) for (var G = F.sqr(); k < R.length; k++, G = G.sqr()) R[k] !== 0 && (F = F.mul(G));
           return F;
         }, a.prototype.iushln = function($) {
           s(typeof $ == "number" && $ >= 0);
-          var P = $ % 26, F = ($ - P) / 26, k = 67108863 >>> 26 - P << 26 - P, G;
-          if (P !== 0) {
+          var R = $ % 26, F = ($ - R) / 26, k = 67108863 >>> 26 - R << 26 - R, G;
+          if (R !== 0) {
             var D = 0;
             for (G = 0; G < this.length; G++) {
-              var x = this.words[G] & k, L = (this.words[G] | 0) - x << P;
-              this.words[G] = L | D, D = x >>> 26 - P;
+              var x = this.words[G] & k, L = (this.words[G] | 0) - x << R;
+              this.words[G] = L | D, D = x >>> 26 - R;
             }
             D && (this.words[G] = D, this.length++);
           }
@@ -76346,10 +76346,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return this._strip();
         }, a.prototype.ishln = function($) {
           return s(this.negative === 0), this.iushln($);
-        }, a.prototype.iushrn = function($, P, F) {
+        }, a.prototype.iushrn = function($, R, F) {
           s(typeof $ == "number" && $ >= 0);
           var k;
-          P ? k = (P - P % 26) / 26 : k = 0;
+          R ? k = (R - R % 26) / 26 : k = 0;
           var G = $ % 26, D = Math.min(($ - G) / 26, this.length), x = 67108863 ^ 67108863 >>> G << G, L = F;
           if (k -= D, k = Math.max(0, k), L) {
             for (var j = 0; j < D; j++) L.words[j] = this.words[j];
@@ -76363,8 +76363,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
             this.words[j] = Y << 26 - G | oe >>> G, Y = oe & x;
           }
           return L && Y !== 0 && (L.words[L.length++] = Y), this.length === 0 && (this.words[0] = 0, this.length = 1), this._strip();
-        }, a.prototype.ishrn = function($, P, F) {
-          return s(this.negative === 0), this.iushrn($, P, F);
+        }, a.prototype.ishrn = function($, R, F) {
+          return s(this.negative === 0), this.iushrn($, R, F);
         }, a.prototype.shln = function($) {
           return this.clone().ishln($);
         }, a.prototype.ushln = function($) {
@@ -76375,16 +76375,16 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return this.clone().iushrn($);
         }, a.prototype.testn = function($) {
           s(typeof $ == "number" && $ >= 0);
-          var P = $ % 26, F = ($ - P) / 26, k = 1 << P;
+          var R = $ % 26, F = ($ - R) / 26, k = 1 << R;
           if (this.length <= F) return false;
           var G = this.words[F];
           return !!(G & k);
         }, a.prototype.imaskn = function($) {
           s(typeof $ == "number" && $ >= 0);
-          var P = $ % 26, F = ($ - P) / 26;
+          var R = $ % 26, F = ($ - R) / 26;
           if (s(this.negative === 0, "imaskn works only with positive numbers"), this.length <= F) return this;
-          if (P !== 0 && F++, this.length = Math.min(F, this.length), P !== 0) {
-            var k = 67108863 ^ 67108863 >>> P << P;
+          if (R !== 0 && F++, this.length = Math.min(F, this.length), R !== 0) {
+            var k = 67108863 ^ 67108863 >>> R << R;
             this.words[this.length - 1] &= k;
           }
           return this._strip();
@@ -76394,13 +76394,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return s(typeof $ == "number"), s($ < 67108864), $ < 0 ? this.isubn(-$) : this.negative !== 0 ? this.length === 1 && (this.words[0] | 0) <= $ ? (this.words[0] = $ - (this.words[0] | 0), this.negative = 0, this) : (this.negative = 0, this.isubn($), this.negative = 1, this) : this._iaddn($);
         }, a.prototype._iaddn = function($) {
           this.words[0] += $;
-          for (var P = 0; P < this.length && this.words[P] >= 67108864; P++) this.words[P] -= 67108864, P === this.length - 1 ? this.words[P + 1] = 1 : this.words[P + 1]++;
-          return this.length = Math.max(this.length, P + 1), this;
+          for (var R = 0; R < this.length && this.words[R] >= 67108864; R++) this.words[R] -= 67108864, R === this.length - 1 ? this.words[R + 1] = 1 : this.words[R + 1]++;
+          return this.length = Math.max(this.length, R + 1), this;
         }, a.prototype.isubn = function($) {
           if (s(typeof $ == "number"), s($ < 67108864), $ < 0) return this.iaddn(-$);
           if (this.negative !== 0) return this.negative = 0, this.iaddn($), this.negative = 1, this;
           if (this.words[0] -= $, this.length === 1 && this.words[0] < 0) this.words[0] = -this.words[0], this.negative = 1;
-          else for (var P = 0; P < this.length && this.words[P] < 0; P++) this.words[P] += 67108864, this.words[P + 1] -= 1;
+          else for (var R = 0; R < this.length && this.words[R] < 0; R++) this.words[R] += 67108864, this.words[R + 1] -= 1;
           return this._strip();
         }, a.prototype.addn = function($) {
           return this.clone().iaddn($);
@@ -76410,24 +76410,24 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return this.negative = 0, this;
         }, a.prototype.abs = function() {
           return this.clone().iabs();
-        }, a.prototype._ishlnsubmul = function($, P, F) {
+        }, a.prototype._ishlnsubmul = function($, R, F) {
           var k = $.length + F, G;
           this._expand(k);
           var D, x = 0;
           for (G = 0; G < $.length; G++) {
             D = (this.words[G + F] | 0) + x;
-            var L = ($.words[G] | 0) * P;
+            var L = ($.words[G] | 0) * R;
             D -= L & 67108863, x = (D >> 26) - (L / 67108864 | 0), this.words[G + F] = D & 67108863;
           }
           for (; G < this.length - F; G++) D = (this.words[G + F] | 0) + x, x = D >> 26, this.words[G + F] = D & 67108863;
           if (x === 0) return this._strip();
           for (s(x === -1), x = 0, G = 0; G < this.length; G++) D = -(this.words[G] | 0) + x, x = D >> 26, this.words[G] = D & 67108863;
           return this.negative = 1, this._strip();
-        }, a.prototype._wordDiv = function($, P) {
+        }, a.prototype._wordDiv = function($, R) {
           var F = this.length - $.length, k = this.clone(), G = $, D = G.words[G.length - 1] | 0, x = this._countBits(D);
           F = 26 - x, F !== 0 && (G = G.ushln(F), k.iushln(F), D = G.words[G.length - 1] | 0);
           var L = k.length - G.length, j;
-          if (P !== "mod") {
+          if (R !== "mod") {
             j = new a(null), j.length = L + 1, j.words = new Array(j.length);
             for (var Y = 0; Y < j.length; Y++) j.words[Y] = 0;
           }
@@ -76438,38 +76438,38 @@ Use Chrome, Firefox or Internet Explorer 11`);
             for (be = Math.min(be / D | 0, 67108863), k._ishlnsubmul(G, be, me); k.negative !== 0; ) be--, k.negative = 0, k._ishlnsubmul(G, 1, me), k.isZero() || (k.negative ^= 1);
             j && (j.words[me] = be);
           }
-          return j && j._strip(), k._strip(), P !== "div" && F !== 0 && k.iushrn(F), {
+          return j && j._strip(), k._strip(), R !== "div" && F !== 0 && k.iushrn(F), {
             div: j || null,
             mod: k
           };
-        }, a.prototype.divmod = function($, P, F) {
+        }, a.prototype.divmod = function($, R, F) {
           if (s(!$.isZero()), this.isZero()) return {
             div: new a(0),
             mod: new a(0)
           };
           var k, G, D;
-          return this.negative !== 0 && $.negative === 0 ? (D = this.neg().divmod($, P), P !== "mod" && (k = D.div.neg()), P !== "div" && (G = D.mod.neg(), F && G.negative !== 0 && G.iadd($)), {
+          return this.negative !== 0 && $.negative === 0 ? (D = this.neg().divmod($, R), R !== "mod" && (k = D.div.neg()), R !== "div" && (G = D.mod.neg(), F && G.negative !== 0 && G.iadd($)), {
             div: k,
             mod: G
-          }) : this.negative === 0 && $.negative !== 0 ? (D = this.divmod($.neg(), P), P !== "mod" && (k = D.div.neg()), {
+          }) : this.negative === 0 && $.negative !== 0 ? (D = this.divmod($.neg(), R), R !== "mod" && (k = D.div.neg()), {
             div: k,
             mod: D.mod
-          }) : (this.negative & $.negative) !== 0 ? (D = this.neg().divmod($.neg(), P), P !== "div" && (G = D.mod.neg(), F && G.negative !== 0 && G.isub($)), {
+          }) : (this.negative & $.negative) !== 0 ? (D = this.neg().divmod($.neg(), R), R !== "div" && (G = D.mod.neg(), F && G.negative !== 0 && G.isub($)), {
             div: D.div,
             mod: G
           }) : $.length > this.length || this.cmp($) < 0 ? {
             div: new a(0),
             mod: this
-          } : $.length === 1 ? P === "div" ? {
+          } : $.length === 1 ? R === "div" ? {
             div: this.divn($.words[0]),
             mod: null
-          } : P === "mod" ? {
+          } : R === "mod" ? {
             div: null,
             mod: new a(this.modrn($.words[0]))
           } : {
             div: this.divn($.words[0]),
             mod: new a(this.modrn($.words[0]))
-          } : this._wordDiv($, P);
+          } : this._wordDiv($, R);
         }, a.prototype.div = function($) {
           return this.divmod($, "div", false).div;
         }, a.prototype.mod = function($) {
@@ -76477,38 +76477,38 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.umod = function($) {
           return this.divmod($, "mod", true).mod;
         }, a.prototype.divRound = function($) {
-          var P = this.divmod($);
-          if (P.mod.isZero()) return P.div;
-          var F = P.div.negative !== 0 ? P.mod.isub($) : P.mod, k = $.ushrn(1), G = $.andln(1), D = F.cmp(k);
-          return D < 0 || G === 1 && D === 0 ? P.div : P.div.negative !== 0 ? P.div.isubn(1) : P.div.iaddn(1);
+          var R = this.divmod($);
+          if (R.mod.isZero()) return R.div;
+          var F = R.div.negative !== 0 ? R.mod.isub($) : R.mod, k = $.ushrn(1), G = $.andln(1), D = F.cmp(k);
+          return D < 0 || G === 1 && D === 0 ? R.div : R.div.negative !== 0 ? R.div.isubn(1) : R.div.iaddn(1);
         }, a.prototype.modrn = function($) {
-          var P = $ < 0;
-          P && ($ = -$), s($ <= 67108863);
+          var R = $ < 0;
+          R && ($ = -$), s($ <= 67108863);
           for (var F = (1 << 26) % $, k = 0, G = this.length - 1; G >= 0; G--) k = (F * k + (this.words[G] | 0)) % $;
-          return P ? -k : k;
+          return R ? -k : k;
         }, a.prototype.modn = function($) {
           return this.modrn($);
         }, a.prototype.idivn = function($) {
-          var P = $ < 0;
-          P && ($ = -$), s($ <= 67108863);
+          var R = $ < 0;
+          R && ($ = -$), s($ <= 67108863);
           for (var F = 0, k = this.length - 1; k >= 0; k--) {
             var G = (this.words[k] | 0) + F * 67108864;
             this.words[k] = G / $ | 0, F = G % $;
           }
-          return this._strip(), P ? this.ineg() : this;
+          return this._strip(), R ? this.ineg() : this;
         }, a.prototype.divn = function($) {
           return this.clone().idivn($);
         }, a.prototype.egcd = function($) {
           s($.negative === 0), s(!$.isZero());
-          var P = this, F = $.clone();
-          P.negative !== 0 ? P = P.umod($) : P = P.clone();
-          for (var k = new a(1), G = new a(0), D = new a(0), x = new a(1), L = 0; P.isEven() && F.isEven(); ) P.iushrn(1), F.iushrn(1), ++L;
-          for (var j = F.clone(), Y = P.clone(); !P.isZero(); ) {
-            for (var oe = 0, me = 1; (P.words[0] & me) === 0 && oe < 26; ++oe, me <<= 1) ;
-            if (oe > 0) for (P.iushrn(oe); oe-- > 0; ) (k.isOdd() || G.isOdd()) && (k.iadd(j), G.isub(Y)), k.iushrn(1), G.iushrn(1);
+          var R = this, F = $.clone();
+          R.negative !== 0 ? R = R.umod($) : R = R.clone();
+          for (var k = new a(1), G = new a(0), D = new a(0), x = new a(1), L = 0; R.isEven() && F.isEven(); ) R.iushrn(1), F.iushrn(1), ++L;
+          for (var j = F.clone(), Y = R.clone(); !R.isZero(); ) {
+            for (var oe = 0, me = 1; (R.words[0] & me) === 0 && oe < 26; ++oe, me <<= 1) ;
+            if (oe > 0) for (R.iushrn(oe); oe-- > 0; ) (k.isOdd() || G.isOdd()) && (k.iadd(j), G.isub(Y)), k.iushrn(1), G.iushrn(1);
             for (var be = 0, Z = 1; (F.words[0] & Z) === 0 && be < 26; ++be, Z <<= 1) ;
             if (be > 0) for (F.iushrn(be); be-- > 0; ) (D.isOdd() || x.isOdd()) && (D.iadd(j), x.isub(Y)), D.iushrn(1), x.iushrn(1);
-            P.cmp(F) >= 0 ? (P.isub(F), k.isub(D), G.isub(x)) : (F.isub(P), D.isub(k), x.isub(G));
+            R.cmp(F) >= 0 ? (R.isub(F), k.isub(D), G.isub(x)) : (F.isub(R), D.isub(k), x.isub(G));
           }
           return {
             a: D,
@@ -76517,32 +76517,32 @@ Use Chrome, Firefox or Internet Explorer 11`);
           };
         }, a.prototype._invmp = function($) {
           s($.negative === 0), s(!$.isZero());
-          var P = this, F = $.clone();
-          P.negative !== 0 ? P = P.umod($) : P = P.clone();
-          for (var k = new a(1), G = new a(0), D = F.clone(); P.cmpn(1) > 0 && F.cmpn(1) > 0; ) {
-            for (var x = 0, L = 1; (P.words[0] & L) === 0 && x < 26; ++x, L <<= 1) ;
-            if (x > 0) for (P.iushrn(x); x-- > 0; ) k.isOdd() && k.iadd(D), k.iushrn(1);
+          var R = this, F = $.clone();
+          R.negative !== 0 ? R = R.umod($) : R = R.clone();
+          for (var k = new a(1), G = new a(0), D = F.clone(); R.cmpn(1) > 0 && F.cmpn(1) > 0; ) {
+            for (var x = 0, L = 1; (R.words[0] & L) === 0 && x < 26; ++x, L <<= 1) ;
+            if (x > 0) for (R.iushrn(x); x-- > 0; ) k.isOdd() && k.iadd(D), k.iushrn(1);
             for (var j = 0, Y = 1; (F.words[0] & Y) === 0 && j < 26; ++j, Y <<= 1) ;
             if (j > 0) for (F.iushrn(j); j-- > 0; ) G.isOdd() && G.iadd(D), G.iushrn(1);
-            P.cmp(F) >= 0 ? (P.isub(F), k.isub(G)) : (F.isub(P), G.isub(k));
+            R.cmp(F) >= 0 ? (R.isub(F), k.isub(G)) : (F.isub(R), G.isub(k));
           }
           var oe;
-          return P.cmpn(1) === 0 ? oe = k : oe = G, oe.cmpn(0) < 0 && oe.iadd($), oe;
+          return R.cmpn(1) === 0 ? oe = k : oe = G, oe.cmpn(0) < 0 && oe.iadd($), oe;
         }, a.prototype.gcd = function($) {
           if (this.isZero()) return $.abs();
           if ($.isZero()) return this.abs();
-          var P = this.clone(), F = $.clone();
-          P.negative = 0, F.negative = 0;
-          for (var k = 0; P.isEven() && F.isEven(); k++) P.iushrn(1), F.iushrn(1);
+          var R = this.clone(), F = $.clone();
+          R.negative = 0, F.negative = 0;
+          for (var k = 0; R.isEven() && F.isEven(); k++) R.iushrn(1), F.iushrn(1);
           do {
-            for (; P.isEven(); ) P.iushrn(1);
+            for (; R.isEven(); ) R.iushrn(1);
             for (; F.isEven(); ) F.iushrn(1);
-            var G = P.cmp(F);
+            var G = R.cmp(F);
             if (G < 0) {
-              var D = P;
-              P = F, F = D;
+              var D = R;
+              R = F, F = D;
             } else if (G === 0 || F.cmpn(1) === 0) break;
-            P.isub(F);
+            R.isub(F);
           } while (true);
           return F.iushln(k);
         }, a.prototype.invm = function($) {
@@ -76555,7 +76555,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return this.words[0] & $;
         }, a.prototype.bincn = function($) {
           s(typeof $ == "number");
-          var P = $ % 26, F = ($ - P) / 26, k = 1 << P;
+          var R = $ % 26, F = ($ - R) / 26, k = 1 << R;
           if (this.length <= F) return this._expand(F + 1), this.words[F] |= k, this;
           for (var G = k, D = F; G !== 0 && D < this.length; D++) {
             var x = this.words[D] | 0;
@@ -76565,14 +76565,14 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.isZero = function() {
           return this.length === 1 && this.words[0] === 0;
         }, a.prototype.cmpn = function($) {
-          var P = $ < 0;
-          if (this.negative !== 0 && !P) return -1;
-          if (this.negative === 0 && P) return 1;
+          var R = $ < 0;
+          if (this.negative !== 0 && !R) return -1;
+          if (this.negative === 0 && R) return 1;
           this._strip();
           var F;
           if (this.length > 1) F = 1;
           else {
-            P && ($ = -$), s($ <= 67108863, "Number is too big");
+            R && ($ = -$), s($ <= 67108863, "Number is too big");
             var k = this.words[0] | 0;
             F = k === $ ? 0 : k < $ ? -1 : 1;
           }
@@ -76580,19 +76580,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.cmp = function($) {
           if (this.negative !== 0 && $.negative === 0) return -1;
           if (this.negative === 0 && $.negative !== 0) return 1;
-          var P = this.ucmp($);
-          return this.negative !== 0 ? -P | 0 : P;
+          var R = this.ucmp($);
+          return this.negative !== 0 ? -R | 0 : R;
         }, a.prototype.ucmp = function($) {
           if (this.length > $.length) return 1;
           if (this.length < $.length) return -1;
-          for (var P = 0, F = this.length - 1; F >= 0; F--) {
+          for (var R = 0, F = this.length - 1; F >= 0; F--) {
             var k = this.words[F] | 0, G = $.words[F] | 0;
             if (k !== G) {
-              k < G ? P = -1 : k > G && (P = 1);
+              k < G ? R = -1 : k > G && (R = 1);
               break;
             }
           }
-          return P;
+          return R;
         }, a.prototype.gtn = function($) {
           return this.cmpn($) === 1;
         }, a.prototype.gt = function($) {
@@ -76663,37 +76663,37 @@ Use Chrome, Firefox or Internet Explorer 11`);
           var $ = new a(null);
           return $.words = new Array(Math.ceil(this.n / 13)), $;
         }, K.prototype.ireduce = function($) {
-          var P = $, F;
+          var R = $, F;
           do
-            this.split(P, this.tmp), P = this.imulK(P), P = P.iadd(this.tmp), F = P.bitLength();
+            this.split(R, this.tmp), R = this.imulK(R), R = R.iadd(this.tmp), F = R.bitLength();
           while (F > this.n);
-          var k = F < this.n ? -1 : P.ucmp(this.p);
-          return k === 0 ? (P.words[0] = 0, P.length = 1) : k > 0 ? P.isub(this.p) : P.strip !== void 0 ? P.strip() : P._strip(), P;
-        }, K.prototype.split = function($, P) {
-          $.iushrn(this.n, 0, P);
+          var k = F < this.n ? -1 : R.ucmp(this.p);
+          return k === 0 ? (R.words[0] = 0, R.length = 1) : k > 0 ? R.isub(this.p) : R.strip !== void 0 ? R.strip() : R._strip(), R;
+        }, K.prototype.split = function($, R) {
+          $.iushrn(this.n, 0, R);
         }, K.prototype.imulK = function($) {
           return $.imul(this.k);
         };
         function J() {
           K.call(this, "k256", "ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff fffffffe fffffc2f");
         }
-        o(J, K), J.prototype.split = function($, P) {
-          for (var F = 4194303, k = Math.min($.length, 9), G = 0; G < k; G++) P.words[G] = $.words[G];
-          if (P.length = k, $.length <= 9) {
+        o(J, K), J.prototype.split = function($, R) {
+          for (var F = 4194303, k = Math.min($.length, 9), G = 0; G < k; G++) R.words[G] = $.words[G];
+          if (R.length = k, $.length <= 9) {
             $.words[0] = 0, $.length = 1;
             return;
           }
           var D = $.words[9];
-          for (P.words[P.length++] = D & F, G = 10; G < $.length; G++) {
+          for (R.words[R.length++] = D & F, G = 10; G < $.length; G++) {
             var x = $.words[G] | 0;
             $.words[G - 10] = (x & F) << 4 | D >>> 22, D = x;
           }
           D >>>= 22, $.words[G - 10] = D, D === 0 && $.length > 10 ? $.length -= 10 : $.length -= 9;
         }, J.prototype.imulK = function($) {
           $.words[$.length] = 0, $.words[$.length + 1] = 0, $.length += 2;
-          for (var P = 0, F = 0; F < $.length; F++) {
+          for (var R = 0, F = 0; F < $.length; F++) {
             var k = $.words[F] | 0;
-            P += k * 977, $.words[F] = P & 67108863, P = k * 64 + (P / 67108864 | 0);
+            R += k * 977, $.words[F] = R & 67108863, R = k * 64 + (R / 67108864 | 0);
           }
           return $.words[$.length - 1] === 0 && ($.length--, $.words[$.length - 1] === 0 && $.length--), $;
         };
@@ -76709,20 +76709,20 @@ Use Chrome, Firefox or Internet Explorer 11`);
           K.call(this, "25519", "7fffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffed");
         }
         o(pe, K), pe.prototype.imulK = function($) {
-          for (var P = 0, F = 0; F < $.length; F++) {
-            var k = ($.words[F] | 0) * 19 + P, G = k & 67108863;
-            k >>>= 26, $.words[F] = G, P = k;
+          for (var R = 0, F = 0; F < $.length; F++) {
+            var k = ($.words[F] | 0) * 19 + R, G = k & 67108863;
+            k >>>= 26, $.words[F] = G, R = k;
           }
-          return P !== 0 && ($.words[$.length++] = P), $;
+          return R !== 0 && ($.words[$.length++] = R), $;
         }, a._prime = function($) {
           if (W[$]) return W[$];
-          var P;
-          if ($ === "k256") P = new J();
-          else if ($ === "p224") P = new ee();
-          else if ($ === "p192") P = new ie();
-          else if ($ === "p25519") P = new pe();
+          var R;
+          if ($ === "k256") R = new J();
+          else if ($ === "p224") R = new ee();
+          else if ($ === "p192") R = new ie();
+          else if ($ === "p25519") R = new pe();
           else throw new Error("Unknown prime " + $);
-          return W[$] = P, P;
+          return W[$] = R, R;
         };
         function U(_) {
           if (typeof _ == "string") {
@@ -76732,42 +76732,42 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }
         U.prototype._verify1 = function($) {
           s($.negative === 0, "red works only with positives"), s($.red, "red works only with red numbers");
-        }, U.prototype._verify2 = function($, P) {
-          s(($.negative | P.negative) === 0, "red works only with positives"), s($.red && $.red === P.red, "red works only with red numbers");
+        }, U.prototype._verify2 = function($, R) {
+          s(($.negative | R.negative) === 0, "red works only with positives"), s($.red && $.red === R.red, "red works only with red numbers");
         }, U.prototype.imod = function($) {
           return this.prime ? this.prime.ireduce($)._forceRed(this) : (p($, $.umod(this.m)._forceRed(this)), $);
         }, U.prototype.neg = function($) {
           return $.isZero() ? $.clone() : this.m.sub($)._forceRed(this);
-        }, U.prototype.add = function($, P) {
-          this._verify2($, P);
-          var F = $.add(P);
+        }, U.prototype.add = function($, R) {
+          this._verify2($, R);
+          var F = $.add(R);
           return F.cmp(this.m) >= 0 && F.isub(this.m), F._forceRed(this);
-        }, U.prototype.iadd = function($, P) {
-          this._verify2($, P);
-          var F = $.iadd(P);
+        }, U.prototype.iadd = function($, R) {
+          this._verify2($, R);
+          var F = $.iadd(R);
           return F.cmp(this.m) >= 0 && F.isub(this.m), F;
-        }, U.prototype.sub = function($, P) {
-          this._verify2($, P);
-          var F = $.sub(P);
+        }, U.prototype.sub = function($, R) {
+          this._verify2($, R);
+          var F = $.sub(R);
           return F.cmpn(0) < 0 && F.iadd(this.m), F._forceRed(this);
-        }, U.prototype.isub = function($, P) {
-          this._verify2($, P);
-          var F = $.isub(P);
+        }, U.prototype.isub = function($, R) {
+          this._verify2($, R);
+          var F = $.isub(R);
           return F.cmpn(0) < 0 && F.iadd(this.m), F;
-        }, U.prototype.shl = function($, P) {
-          return this._verify1($), this.imod($.ushln(P));
-        }, U.prototype.imul = function($, P) {
-          return this._verify2($, P), this.imod($.imul(P));
-        }, U.prototype.mul = function($, P) {
-          return this._verify2($, P), this.imod($.mul(P));
+        }, U.prototype.shl = function($, R) {
+          return this._verify1($), this.imod($.ushln(R));
+        }, U.prototype.imul = function($, R) {
+          return this._verify2($, R), this.imod($.imul(R));
+        }, U.prototype.mul = function($, R) {
+          return this._verify2($, R), this.imod($.mul(R));
         }, U.prototype.isqr = function($) {
           return this.imul($, $.clone());
         }, U.prototype.sqr = function($) {
           return this.mul($, $);
         }, U.prototype.sqrt = function($) {
           if ($.isZero()) return $.clone();
-          var P = this.m.andln(3);
-          if (s(P % 2 === 1), P === 3) {
+          var R = this.m.andln(3);
+          if (s(R % 2 === 1), R === 3) {
             var F = this.m.add(new a(1)).iushrn(2);
             return this.pow($, F);
           }
@@ -76783,17 +76783,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
           }
           return oe;
         }, U.prototype.invm = function($) {
-          var P = $._invmp(this.m);
-          return P.negative !== 0 ? (P.negative = 0, this.imod(P).redNeg()) : this.imod(P);
-        }, U.prototype.pow = function($, P) {
-          if (P.isZero()) return new a(1).toRed(this);
-          if (P.cmpn(1) === 0) return $.clone();
+          var R = $._invmp(this.m);
+          return R.negative !== 0 ? (R.negative = 0, this.imod(R).redNeg()) : this.imod(R);
+        }, U.prototype.pow = function($, R) {
+          if (R.isZero()) return new a(1).toRed(this);
+          if (R.cmpn(1) === 0) return $.clone();
           var F = 4, k = new Array(1 << F);
           k[0] = new a(1).toRed(this), k[1] = $;
           for (var G = 2; G < k.length; G++) k[G] = this.mul(k[G - 1], $);
-          var D = k[0], x = 0, L = 0, j = P.bitLength() % 26;
-          for (j === 0 && (j = 26), G = P.length - 1; G >= 0; G--) {
-            for (var Y = P.words[G], oe = j - 1; oe >= 0; oe--) {
+          var D = k[0], x = 0, L = 0, j = R.bitLength() % 26;
+          for (j === 0 && (j = 26), G = R.length - 1; G >= 0; G--) {
+            for (var Y = R.words[G], oe = j - 1; oe >= 0; oe--) {
               var me = Y >> oe & 1;
               if (D !== k[0] && (D = this.sqr(D)), me === 0 && x === 0) {
                 L = 0;
@@ -76805,11 +76805,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
           }
           return D;
         }, U.prototype.convertTo = function($) {
-          var P = $.umod(this.m);
-          return P === $ ? P.clone() : P;
+          var R = $.umod(this.m);
+          return R === $ ? R.clone() : R;
         }, U.prototype.convertFrom = function($) {
-          var P = $.clone();
-          return P.red = null, P;
+          var R = $.clone();
+          return R.red = null, R;
         }, a.mont = function($) {
           return new v($);
         };
@@ -76819,19 +76819,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
         o(v, U), v.prototype.convertTo = function($) {
           return this.imod($.ushln(this.shift));
         }, v.prototype.convertFrom = function($) {
-          var P = this.imod($.mul(this.rinv));
-          return P.red = null, P;
-        }, v.prototype.imul = function($, P) {
-          if ($.isZero() || P.isZero()) return $.words[0] = 0, $.length = 1, $;
-          var F = $.imul(P), k = F.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), G = F.isub(k).iushrn(this.shift), D = G;
+          var R = this.imod($.mul(this.rinv));
+          return R.red = null, R;
+        }, v.prototype.imul = function($, R) {
+          if ($.isZero() || R.isZero()) return $.words[0] = 0, $.length = 1, $;
+          var F = $.imul(R), k = F.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), G = F.isub(k).iushrn(this.shift), D = G;
           return G.cmp(this.m) >= 0 ? D = G.isub(this.m) : G.cmpn(0) < 0 && (D = G.iadd(this.m)), D._forceRed(this);
-        }, v.prototype.mul = function($, P) {
-          if ($.isZero() || P.isZero()) return new a(0)._forceRed(this);
-          var F = $.mul(P), k = F.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), G = F.isub(k).iushrn(this.shift), D = G;
+        }, v.prototype.mul = function($, R) {
+          if ($.isZero() || R.isZero()) return new a(0)._forceRed(this);
+          var F = $.mul(R), k = F.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), G = F.isub(k).iushrn(this.shift), D = G;
           return G.cmp(this.m) >= 0 ? D = G.isub(this.m) : G.cmpn(0) < 0 && (D = G.iadd(this.m)), D._forceRed(this);
         }, v.prototype.invm = function($) {
-          var P = this.imod($._invmp(this.m).mul(this.r2));
-          return P._forceRed(this);
+          var R = this.imod($._invmp(this.m).mul(this.r2));
+          return R._forceRed(this);
         };
       })(l, bn$8);
     })(bn$9)), bn$9.exports;
@@ -76856,7 +76856,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       };
     }
     function a(h, c) {
-      var d = o(c), f = c.modulus.byteLength(), p = new l(h).mul(d.blinder).umod(c.modulus), m = p.toRed(l.mont(c.prime1)), b = p.toRed(l.mont(c.prime2)), w = c.coefficient, M = c.prime1, R = c.prime2, V = m.redPow(c.exponent1).fromRed(), O = b.redPow(c.exponent2).fromRed(), z = V.isub(O).imul(w).umod(M).imul(R);
+      var d = o(c), f = c.modulus.byteLength(), p = new l(h).mul(d.blinder).umod(c.modulus), m = p.toRed(l.mont(c.prime1)), b = p.toRed(l.mont(c.prime2)), w = c.coefficient, M = c.prime1, P = c.prime2, V = m.redPow(c.exponent1).fromRed(), O = b.redPow(c.exponent2).fromRed(), z = V.isub(O).imul(w).umod(M).imul(P);
       return O.iadd(z).imul(d.unblinder).umod(c.modulus).toArrayLike(r, "be", f);
     }
     return a.getr = s, browserifyRsa = a, browserifyRsa;
@@ -76900,8 +76900,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (typeof v == "number") return this._initNumber(v, _, $);
           if (typeof v == "object") return this._initArray(v, _, $);
           _ === "hex" && (_ = 16), s(_ === (_ | 0) && _ >= 2 && _ <= 36), v = v.toString().replace(/\s+/g, "");
-          var P = 0;
-          v[0] === "-" && (P++, this.negative = 1), P < v.length && (_ === 16 ? this._parseHex(v, P, $) : (this._parseBase(v, _, P), $ === "le" && this._initArray(this.toArray(), _, $)));
+          var R = 0;
+          v[0] === "-" && (R++, this.negative = 1), R < v.length && (_ === 16 ? this._parseHex(v, R, $) : (this._parseBase(v, _, R), $ === "le" && this._initArray(this.toArray(), _, $)));
         }, a.prototype._initNumber = function(v, _, $) {
           v < 0 && (this.negative = 1, v = -v), v < 67108864 ? (this.words = [
             v & 67108863
@@ -76918,10 +76918,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
             0
           ], this.length = 1, this;
           this.length = Math.ceil(v.length / 3), this.words = new Array(this.length);
-          for (var P = 0; P < this.length; P++) this.words[P] = 0;
+          for (var R = 0; R < this.length; R++) this.words[R] = 0;
           var F, k, G = 0;
-          if ($ === "be") for (P = v.length - 1, F = 0; P >= 0; P -= 3) k = v[P] | v[P - 1] << 8 | v[P - 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
-          else if ($ === "le") for (P = 0, F = 0; P < v.length; P += 3) k = v[P] | v[P + 1] << 8 | v[P + 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
+          if ($ === "be") for (R = v.length - 1, F = 0; R >= 0; R -= 3) k = v[R] | v[R - 1] << 8 | v[R - 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
+          else if ($ === "le") for (R = 0, F = 0; R < v.length; R += 3) k = v[R] | v[R + 1] << 8 | v[R + 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
           return this.strip();
         };
         function c(U, v) {
@@ -76934,29 +76934,29 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }
         a.prototype._parseHex = function(v, _, $) {
           this.length = Math.ceil((v.length - _) / 6), this.words = new Array(this.length);
-          for (var P = 0; P < this.length; P++) this.words[P] = 0;
+          for (var R = 0; R < this.length; R++) this.words[R] = 0;
           var F = 0, k = 0, G;
-          if ($ === "be") for (P = v.length - 1; P >= _; P -= 2) G = d(v, _, P) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
+          if ($ === "be") for (R = v.length - 1; R >= _; R -= 2) G = d(v, _, R) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
           else {
             var D = v.length - _;
-            for (P = D % 2 === 0 ? _ + 1 : _; P < v.length; P += 2) G = d(v, _, P) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
+            for (R = D % 2 === 0 ? _ + 1 : _; R < v.length; R += 2) G = d(v, _, R) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
           }
           this.strip();
         };
         function f(U, v, _, $) {
-          for (var P = 0, F = Math.min(U.length, _), k = v; k < F; k++) {
+          for (var R = 0, F = Math.min(U.length, _), k = v; k < F; k++) {
             var G = U.charCodeAt(k) - 48;
-            P *= $, G >= 49 ? P += G - 49 + 10 : G >= 17 ? P += G - 17 + 10 : P += G;
+            R *= $, G >= 49 ? R += G - 49 + 10 : G >= 17 ? R += G - 17 + 10 : R += G;
           }
-          return P;
+          return R;
         }
         a.prototype._parseBase = function(v, _, $) {
           this.words = [
             0
           ], this.length = 1;
-          for (var P = 0, F = 1; F <= 67108863; F *= _) P++;
-          P--, F = F / _ | 0;
-          for (var k = v.length - $, G = k % P, D = Math.min(k, k - G) + $, x = 0, L = $; L < D; L += P) x = f(v, L, L + P, _), this.imuln(F), this.words[0] + x < 67108864 ? this.words[0] += x : this._iaddn(x);
+          for (var R = 0, F = 1; F <= 67108863; F *= _) R++;
+          R--, F = F / _ | 0;
+          for (var k = v.length - $, G = k % R, D = Math.min(k, k - G) + $, x = 0, L = $; L < D; L += R) x = f(v, L, L + R, _), this.imuln(F), this.words[0] + x < 67108864 ? this.words[0] += x : this._iaddn(x);
           if (G !== 0) {
             var j = 1;
             for (x = f(v, L, v.length, _), L = 0; L < G; L++) j *= _;
@@ -77090,9 +77090,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
           var $;
           if (v === 16 || v === "hex") {
             $ = "";
-            for (var P = 0, F = 0, k = 0; k < this.length; k++) {
-              var G = this.words[k], D = ((G << P | F) & 16777215).toString(16);
-              F = G >>> 24 - P & 16777215, P += 2, P >= 26 && (P -= 26, k--), F !== 0 || k !== this.length - 1 ? $ = p[6 - D.length] + D + $ : $ = D + $;
+            for (var R = 0, F = 0, k = 0; k < this.length; k++) {
+              var G = this.words[k], D = ((G << R | F) & 16777215).toString(16);
+              F = G >>> 24 - R & 16777215, R += 2, R >= 26 && (R -= 26, k--), F !== 0 || k !== this.length - 1 ? $ = p[6 - D.length] + D + $ : $ = D + $;
             }
             for (F !== 0 && ($ = F.toString(16) + $); $.length % _ !== 0; ) $ = "0" + $;
             return this.negative !== 0 && ($ = "-" + $), $;
@@ -77119,14 +77119,14 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.toArray = function(v, _) {
           return this.toArrayLike(Array, v, _);
         }, a.prototype.toArrayLike = function(v, _, $) {
-          var P = this.byteLength(), F = $ || Math.max(1, P);
-          s(P <= F, "byte array longer than desired length"), s(F > 0, "Requested array length <= 0"), this.strip();
+          var R = this.byteLength(), F = $ || Math.max(1, R);
+          s(R <= F, "byte array longer than desired length"), s(F > 0, "Requested array length <= 0"), this.strip();
           var k = _ === "le", G = new v(F), D, x, L = this.clone();
           if (k) {
             for (x = 0; !L.isZero(); x++) D = L.andln(255), L.iushrn(8), G[x] = D;
             for (; x < F; x++) G[x] = 0;
           } else {
-            for (x = 0; x < F - P; x++) G[x] = 0;
+            for (x = 0; x < F - R; x++) G[x] = 0;
             for (x = 0; !L.isZero(); x++) D = L.andln(255), L.iushrn(8), G[F - x - 1] = D;
           }
           return G;
@@ -77145,8 +77145,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         };
         function w(U) {
           for (var v = new Array(U.bitLength()), _ = 0; _ < v.length; _++) {
-            var $ = _ / 26 | 0, P = _ % 26;
-            v[_] = (U.words[$] & 1 << P) >>> P;
+            var $ = _ / 26 | 0, R = _ % 26;
+            v[_] = (U.words[$] & 1 << R) >>> R;
           }
           return v;
         }
@@ -77193,8 +77193,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.iuxor = function(v) {
           var _, $;
           this.length > v.length ? (_ = this, $ = v) : (_ = v, $ = this);
-          for (var P = 0; P < $.length; P++) this.words[P] = _.words[P] ^ $.words[P];
-          if (this !== _) for (; P < _.length; P++) this.words[P] = _.words[P];
+          for (var R = 0; R < $.length; R++) this.words[R] = _.words[R] ^ $.words[R];
+          if (this !== _) for (; R < _.length; R++) this.words[R] = _.words[R];
           return this.length = _.length, this.strip();
         }, a.prototype.ixor = function(v) {
           return s((this.negative | v.negative) === 0), this.iuxor(v);
@@ -77206,21 +77206,21 @@ Use Chrome, Firefox or Internet Explorer 11`);
           s(typeof v == "number" && v >= 0);
           var _ = Math.ceil(v / 26) | 0, $ = v % 26;
           this._expand(_), $ > 0 && _--;
-          for (var P = 0; P < _; P++) this.words[P] = ~this.words[P] & 67108863;
-          return $ > 0 && (this.words[P] = ~this.words[P] & 67108863 >> 26 - $), this.strip();
+          for (var R = 0; R < _; R++) this.words[R] = ~this.words[R] & 67108863;
+          return $ > 0 && (this.words[R] = ~this.words[R] & 67108863 >> 26 - $), this.strip();
         }, a.prototype.notn = function(v) {
           return this.clone().inotn(v);
         }, a.prototype.setn = function(v, _) {
           s(typeof v == "number" && v >= 0);
-          var $ = v / 26 | 0, P = v % 26;
-          return this._expand($ + 1), _ ? this.words[$] = this.words[$] | 1 << P : this.words[$] = this.words[$] & ~(1 << P), this.strip();
+          var $ = v / 26 | 0, R = v % 26;
+          return this._expand($ + 1), _ ? this.words[$] = this.words[$] | 1 << R : this.words[$] = this.words[$] & ~(1 << R), this.strip();
         }, a.prototype.iadd = function(v) {
           var _;
           if (this.negative !== 0 && v.negative === 0) return this.negative = 0, _ = this.isub(v), this.negative ^= 1, this._normSign();
           if (this.negative === 0 && v.negative !== 0) return v.negative = 0, _ = this.isub(v), v.negative = 1, _._normSign();
-          var $, P;
-          this.length > v.length ? ($ = this, P = v) : ($ = v, P = this);
-          for (var F = 0, k = 0; k < P.length; k++) _ = ($.words[k] | 0) + (P.words[k] | 0) + F, this.words[k] = _ & 67108863, F = _ >>> 26;
+          var $, R;
+          this.length > v.length ? ($ = this, R = v) : ($ = v, R = this);
+          for (var F = 0, k = 0; k < R.length; k++) _ = ($.words[k] | 0) + (R.words[k] | 0) + F, this.words[k] = _ & 67108863, F = _ >>> 26;
           for (; F !== 0 && k < $.length; k++) _ = ($.words[k] | 0) + F, this.words[k] = _ & 67108863, F = _ >>> 26;
           if (this.length = $.length, F !== 0) this.words[this.length] = F, this.length++;
           else if ($ !== this) for (; k < $.length; k++) this.words[k] = $.words[k];
@@ -77236,12 +77236,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
           } else if (this.negative !== 0) return this.negative = 0, this.iadd(v), this.negative = 1, this._normSign();
           var $ = this.cmp(v);
           if ($ === 0) return this.negative = 0, this.length = 1, this.words[0] = 0, this;
-          var P, F;
-          $ > 0 ? (P = this, F = v) : (P = v, F = this);
-          for (var k = 0, G = 0; G < F.length; G++) _ = (P.words[G] | 0) - (F.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
-          for (; k !== 0 && G < P.length; G++) _ = (P.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
-          if (k === 0 && G < P.length && P !== this) for (; G < P.length; G++) this.words[G] = P.words[G];
-          return this.length = Math.max(this.length, G), P !== this && (this.negative = 1), this.strip();
+          var R, F;
+          $ > 0 ? (R = this, F = v) : (R = v, F = this);
+          for (var k = 0, G = 0; G < F.length; G++) _ = (R.words[G] | 0) - (F.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
+          for (; k !== 0 && G < R.length; G++) _ = (R.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
+          if (k === 0 && G < R.length && R !== this) for (; G < R.length; G++) this.words[G] = R.words[G];
+          return this.length = Math.max(this.length, G), R !== this && (this.negative = 1), this.strip();
         }, a.prototype.sub = function(v) {
           return this.clone().isub(v);
         };
@@ -77249,19 +77249,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
           _.negative = v.negative ^ U.negative;
           var $ = U.length + v.length | 0;
           _.length = $, $ = $ - 1 | 0;
-          var P = U.words[0] | 0, F = v.words[0] | 0, k = P * F, G = k & 67108863, D = k / 67108864 | 0;
+          var R = U.words[0] | 0, F = v.words[0] | 0, k = R * F, G = k & 67108863, D = k / 67108864 | 0;
           _.words[0] = G;
           for (var x = 1; x < $; x++) {
             for (var L = D >>> 26, j = D & 67108863, Y = Math.min(x, v.length - 1), oe = Math.max(0, x - U.length + 1); oe <= Y; oe++) {
               var me = x - oe | 0;
-              P = U.words[me] | 0, F = v.words[oe] | 0, k = P * F + j, L += k / 67108864 | 0, j = k & 67108863;
+              R = U.words[me] | 0, F = v.words[oe] | 0, k = R * F + j, L += k / 67108864 | 0, j = k & 67108863;
             }
             _.words[x] = j | 0, D = L | 0;
           }
           return D !== 0 ? _.words[x] = D | 0 : _.length--, _.strip();
         }
-        var R = function(v, _, $) {
-          var P = v.words, F = _.words, k = $.words, G = 0, D, x, L, j = P[0] | 0, Y = j & 8191, oe = j >>> 13, me = P[1] | 0, be = me & 8191, Z = me >>> 13, se = P[2] | 0, fe = se & 8191, _e = se >>> 13, xe = P[3] | 0, le = xe & 8191, Ce = xe >>> 13, Re = P[4] | 0, Be = Re & 8191, Ee = Re >>> 13, rt = P[5] | 0, Pe = rt & 8191, Te = rt >>> 13, ut = P[6] | 0, De = ut & 8191, Fe = ut >>> 13, ct = P[7] | 0, Le = ct & 8191, Ue = ct >>> 13, pt = P[8] | 0, Ke = pt & 8191, tt = pt >>> 13, bt = P[9] | 0, ge = bt & 8191, re = bt >>> 13, he = F[0] | 0, we = he & 8191, Se = he >>> 13, ke = F[1] | 0, Ne = ke & 8191, ze = ke >>> 13, vt = F[2] | 0, Ve = vt & 8191, Xe = vt >>> 13, ft = F[3] | 0, Ye = ft & 8191, ot = ft >>> 13, wt = F[4] | 0, nt = wt & 8191, at = wt >>> 13, $t = F[5] | 0, ve = $t & 8191, ne = $t >>> 13, ce = F[6] | 0, $e = ce & 8191, Me = ce >>> 13, Oe = F[7] | 0, Ie = Oe & 8191, je = Oe >>> 13, yt = F[8] | 0, Ge = yt & 8191, et = yt >>> 13, mt = F[9] | 0, st = mt & 8191, lt = mt >>> 13;
+        var P = function(v, _, $) {
+          var R = v.words, F = _.words, k = $.words, G = 0, D, x, L, j = R[0] | 0, Y = j & 8191, oe = j >>> 13, me = R[1] | 0, be = me & 8191, Z = me >>> 13, se = R[2] | 0, fe = se & 8191, _e = se >>> 13, xe = R[3] | 0, le = xe & 8191, Ce = xe >>> 13, Re = R[4] | 0, Be = Re & 8191, Ee = Re >>> 13, rt = R[5] | 0, Pe = rt & 8191, Te = rt >>> 13, ut = R[6] | 0, De = ut & 8191, Fe = ut >>> 13, ct = R[7] | 0, Le = ct & 8191, Ue = ct >>> 13, pt = R[8] | 0, Ke = pt & 8191, tt = pt >>> 13, bt = R[9] | 0, ge = bt & 8191, re = bt >>> 13, he = F[0] | 0, we = he & 8191, Se = he >>> 13, ke = F[1] | 0, Ne = ke & 8191, ze = ke >>> 13, vt = F[2] | 0, Ve = vt & 8191, Xe = vt >>> 13, ft = F[3] | 0, Ye = ft & 8191, ot = ft >>> 13, wt = F[4] | 0, nt = wt & 8191, at = wt >>> 13, $t = F[5] | 0, ve = $t & 8191, ne = $t >>> 13, ce = F[6] | 0, $e = ce & 8191, Me = ce >>> 13, Oe = F[7] | 0, Ie = Oe & 8191, je = Oe >>> 13, yt = F[8] | 0, Ge = yt & 8191, et = yt >>> 13, mt = F[9] | 0, st = mt & 8191, lt = mt >>> 13;
           $.negative = v.negative ^ _.negative, $.length = 19, D = Math.imul(Y, we), x = Math.imul(Y, Se), x = x + Math.imul(oe, we) | 0, L = Math.imul(oe, Se);
           var _t = (G + D | 0) + ((x & 8191) << 13) | 0;
           G = (L + (x >>> 13) | 0) + (_t >>> 26) | 0, _t &= 67108863, D = Math.imul(be, we), x = Math.imul(be, Se), x = x + Math.imul(Z, we) | 0, L = Math.imul(Z, Se), D = D + Math.imul(Y, Ne) | 0, x = x + Math.imul(Y, ze) | 0, x = x + Math.imul(oe, Ne) | 0, L = L + Math.imul(oe, ze) | 0;
@@ -77302,17 +77302,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
           var zt = (G + D | 0) + ((x & 8191) << 13) | 0;
           return G = (L + (x >>> 13) | 0) + (zt >>> 26) | 0, zt &= 67108863, k[0] = _t, k[1] = At, k[2] = Ct, k[3] = St, k[4] = Mt, k[5] = Tt, k[6] = Bt, k[7] = Nt, k[8] = It, k[9] = Pt, k[10] = Rt, k[11] = Dt, k[12] = Lt, k[13] = kt, k[14] = Ot, k[15] = Vt, k[16] = Ut, k[17] = Gt, k[18] = zt, G !== 0 && (k[19] = G, $.length++), $;
         };
-        Math.imul || (R = M);
+        Math.imul || (P = M);
         function V(U, v, _) {
           _.negative = v.negative ^ U.negative, _.length = U.length + v.length;
-          for (var $ = 0, P = 0, F = 0; F < _.length - 1; F++) {
-            var k = P;
-            P = 0;
+          for (var $ = 0, R = 0, F = 0; F < _.length - 1; F++) {
+            var k = R;
+            R = 0;
             for (var G = $ & 67108863, D = Math.min(F, v.length - 1), x = Math.max(0, F - U.length + 1); x <= D; x++) {
               var L = F - x, j = U.words[L] | 0, Y = v.words[x] | 0, oe = j * Y, me = oe & 67108863;
-              k = k + (oe / 67108864 | 0) | 0, me = me + G | 0, G = me & 67108863, k = k + (me >>> 26) | 0, P += k >>> 26, k &= 67108863;
+              k = k + (oe / 67108864 | 0) | 0, me = me + G | 0, G = me & 67108863, k = k + (me >>> 26) | 0, R += k >>> 26, k &= 67108863;
             }
-            _.words[F] = G, $ = k, k = P;
+            _.words[F] = G, $ = k, k = R;
           }
           return $ !== 0 ? _.words[F] = $ : _.length--, _.strip();
         }
@@ -77321,57 +77321,57 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return $.mulp(U, v, _);
         }
         a.prototype.mulTo = function(v, _) {
-          var $, P = this.length + v.length;
-          return this.length === 10 && v.length === 10 ? $ = R(this, v, _) : P < 63 ? $ = M(this, v, _) : P < 1024 ? $ = V(this, v, _) : $ = O(this, v, _), $;
+          var $, R = this.length + v.length;
+          return this.length === 10 && v.length === 10 ? $ = P(this, v, _) : R < 63 ? $ = M(this, v, _) : R < 1024 ? $ = V(this, v, _) : $ = O(this, v, _), $;
         };
         function z(U, v) {
           this.x = U, this.y = v;
         }
         z.prototype.makeRBT = function(v) {
-          for (var _ = new Array(v), $ = a.prototype._countBits(v) - 1, P = 0; P < v; P++) _[P] = this.revBin(P, $, v);
+          for (var _ = new Array(v), $ = a.prototype._countBits(v) - 1, R = 0; R < v; R++) _[R] = this.revBin(R, $, v);
           return _;
         }, z.prototype.revBin = function(v, _, $) {
           if (v === 0 || v === $ - 1) return v;
-          for (var P = 0, F = 0; F < _; F++) P |= (v & 1) << _ - F - 1, v >>= 1;
-          return P;
-        }, z.prototype.permute = function(v, _, $, P, F, k) {
-          for (var G = 0; G < k; G++) P[G] = _[v[G]], F[G] = $[v[G]];
-        }, z.prototype.transform = function(v, _, $, P, F, k) {
-          this.permute(k, v, _, $, P, F);
+          for (var R = 0, F = 0; F < _; F++) R |= (v & 1) << _ - F - 1, v >>= 1;
+          return R;
+        }, z.prototype.permute = function(v, _, $, R, F, k) {
+          for (var G = 0; G < k; G++) R[G] = _[v[G]], F[G] = $[v[G]];
+        }, z.prototype.transform = function(v, _, $, R, F, k) {
+          this.permute(k, v, _, $, R, F);
           for (var G = 1; G < F; G <<= 1) for (var D = G << 1, x = Math.cos(2 * Math.PI / D), L = Math.sin(2 * Math.PI / D), j = 0; j < F; j += D) for (var Y = x, oe = L, me = 0; me < G; me++) {
-            var be = $[j + me], Z = P[j + me], se = $[j + me + G], fe = P[j + me + G], _e = Y * se - oe * fe;
-            fe = Y * fe + oe * se, se = _e, $[j + me] = be + se, P[j + me] = Z + fe, $[j + me + G] = be - se, P[j + me + G] = Z - fe, me !== D && (_e = x * Y - L * oe, oe = x * oe + L * Y, Y = _e);
+            var be = $[j + me], Z = R[j + me], se = $[j + me + G], fe = R[j + me + G], _e = Y * se - oe * fe;
+            fe = Y * fe + oe * se, se = _e, $[j + me] = be + se, R[j + me] = Z + fe, $[j + me + G] = be - se, R[j + me + G] = Z - fe, me !== D && (_e = x * Y - L * oe, oe = x * oe + L * Y, Y = _e);
           }
         }, z.prototype.guessLen13b = function(v, _) {
-          var $ = Math.max(_, v) | 1, P = $ & 1, F = 0;
+          var $ = Math.max(_, v) | 1, R = $ & 1, F = 0;
           for ($ = $ / 2 | 0; $; $ = $ >>> 1) F++;
-          return 1 << F + 1 + P;
+          return 1 << F + 1 + R;
         }, z.prototype.conjugate = function(v, _, $) {
-          if (!($ <= 1)) for (var P = 0; P < $ / 2; P++) {
-            var F = v[P];
-            v[P] = v[$ - P - 1], v[$ - P - 1] = F, F = _[P], _[P] = -_[$ - P - 1], _[$ - P - 1] = -F;
+          if (!($ <= 1)) for (var R = 0; R < $ / 2; R++) {
+            var F = v[R];
+            v[R] = v[$ - R - 1], v[$ - R - 1] = F, F = _[R], _[R] = -_[$ - R - 1], _[$ - R - 1] = -F;
           }
         }, z.prototype.normalize13b = function(v, _) {
-          for (var $ = 0, P = 0; P < _ / 2; P++) {
-            var F = Math.round(v[2 * P + 1] / _) * 8192 + Math.round(v[2 * P] / _) + $;
-            v[P] = F & 67108863, F < 67108864 ? $ = 0 : $ = F / 67108864 | 0;
+          for (var $ = 0, R = 0; R < _ / 2; R++) {
+            var F = Math.round(v[2 * R + 1] / _) * 8192 + Math.round(v[2 * R] / _) + $;
+            v[R] = F & 67108863, F < 67108864 ? $ = 0 : $ = F / 67108864 | 0;
           }
           return v;
-        }, z.prototype.convert13b = function(v, _, $, P) {
+        }, z.prototype.convert13b = function(v, _, $, R) {
           for (var F = 0, k = 0; k < _; k++) F = F + (v[k] | 0), $[2 * k] = F & 8191, F = F >>> 13, $[2 * k + 1] = F & 8191, F = F >>> 13;
-          for (k = 2 * _; k < P; ++k) $[k] = 0;
+          for (k = 2 * _; k < R; ++k) $[k] = 0;
           s(F === 0), s((F & -8192) === 0);
         }, z.prototype.stub = function(v) {
           for (var _ = new Array(v), $ = 0; $ < v; $++) _[$] = 0;
           return _;
         }, z.prototype.mulp = function(v, _, $) {
-          var P = 2 * this.guessLen13b(v.length, _.length), F = this.makeRBT(P), k = this.stub(P), G = new Array(P), D = new Array(P), x = new Array(P), L = new Array(P), j = new Array(P), Y = new Array(P), oe = $.words;
-          oe.length = P, this.convert13b(v.words, v.length, G, P), this.convert13b(_.words, _.length, L, P), this.transform(G, k, D, x, P, F), this.transform(L, k, j, Y, P, F);
-          for (var me = 0; me < P; me++) {
+          var R = 2 * this.guessLen13b(v.length, _.length), F = this.makeRBT(R), k = this.stub(R), G = new Array(R), D = new Array(R), x = new Array(R), L = new Array(R), j = new Array(R), Y = new Array(R), oe = $.words;
+          oe.length = R, this.convert13b(v.words, v.length, G, R), this.convert13b(_.words, _.length, L, R), this.transform(G, k, D, x, R, F), this.transform(L, k, j, Y, R, F);
+          for (var me = 0; me < R; me++) {
             var be = D[me] * j[me] - x[me] * Y[me];
             x[me] = D[me] * Y[me] + x[me] * j[me], D[me] = be;
           }
-          return this.conjugate(D, x, P), this.transform(D, x, oe, k, P, F), this.conjugate(oe, k, P), this.normalize13b(oe, P), $.negative = v.negative ^ _.negative, $.length = v.length + _.length, $.strip();
+          return this.conjugate(D, x, R), this.transform(D, x, oe, k, R, F), this.conjugate(oe, k, R), this.normalize13b(oe, R), $.negative = v.negative ^ _.negative, $.length = v.length + _.length, $.strip();
         }, a.prototype.mul = function(v) {
           var _ = new a(null);
           return _.words = new Array(this.length + v.length), this.mulTo(v, _);
@@ -77383,8 +77383,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.imuln = function(v) {
           s(typeof v == "number"), s(v < 67108864);
           for (var _ = 0, $ = 0; $ < this.length; $++) {
-            var P = (this.words[$] | 0) * v, F = (P & 67108863) + (_ & 67108863);
-            _ >>= 26, _ += P / 67108864 | 0, _ += F >>> 26, this.words[$] = F & 67108863;
+            var R = (this.words[$] | 0) * v, F = (R & 67108863) + (_ & 67108863);
+            _ >>= 26, _ += R / 67108864 | 0, _ += F >>> 26, this.words[$] = F & 67108863;
           }
           return _ !== 0 && (this.words[$] = _, this.length++), this.length = v === 0 ? 1 : this.length, this;
         }, a.prototype.muln = function(v) {
@@ -77396,16 +77396,16 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.pow = function(v) {
           var _ = w(v);
           if (_.length === 0) return new a(1);
-          for (var $ = this, P = 0; P < _.length && _[P] === 0; P++, $ = $.sqr()) ;
-          if (++P < _.length) for (var F = $.sqr(); P < _.length; P++, F = F.sqr()) _[P] !== 0 && ($ = $.mul(F));
+          for (var $ = this, R = 0; R < _.length && _[R] === 0; R++, $ = $.sqr()) ;
+          if (++R < _.length) for (var F = $.sqr(); R < _.length; R++, F = F.sqr()) _[R] !== 0 && ($ = $.mul(F));
           return $;
         }, a.prototype.iushln = function(v) {
           s(typeof v == "number" && v >= 0);
-          var _ = v % 26, $ = (v - _) / 26, P = 67108863 >>> 26 - _ << 26 - _, F;
+          var _ = v % 26, $ = (v - _) / 26, R = 67108863 >>> 26 - _ << 26 - _, F;
           if (_ !== 0) {
             var k = 0;
             for (F = 0; F < this.length; F++) {
-              var G = this.words[F] & P, D = (this.words[F] | 0) - G << _;
+              var G = this.words[F] & R, D = (this.words[F] | 0) - G << _;
               this.words[F] = D | k, k = G >>> 26 - _;
             }
             k && (this.words[F] = k, this.length++);
@@ -77420,17 +77420,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return s(this.negative === 0), this.iushln(v);
         }, a.prototype.iushrn = function(v, _, $) {
           s(typeof v == "number" && v >= 0);
-          var P;
-          _ ? P = (_ - _ % 26) / 26 : P = 0;
+          var R;
+          _ ? R = (_ - _ % 26) / 26 : R = 0;
           var F = v % 26, k = Math.min((v - F) / 26, this.length), G = 67108863 ^ 67108863 >>> F << F, D = $;
-          if (P -= k, P = Math.max(0, P), D) {
+          if (R -= k, R = Math.max(0, R), D) {
             for (var x = 0; x < k; x++) D.words[x] = this.words[x];
             D.length = k;
           }
           if (k !== 0) if (this.length > k) for (this.length -= k, x = 0; x < this.length; x++) this.words[x] = this.words[x + k];
           else this.words[0] = 0, this.length = 1;
           var L = 0;
-          for (x = this.length - 1; x >= 0 && (L !== 0 || x >= P); x--) {
+          for (x = this.length - 1; x >= 0 && (L !== 0 || x >= R); x--) {
             var j = this.words[x] | 0;
             this.words[x] = L << 26 - F | j >>> F, L = j & G;
           }
@@ -77447,17 +77447,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return this.clone().iushrn(v);
         }, a.prototype.testn = function(v) {
           s(typeof v == "number" && v >= 0);
-          var _ = v % 26, $ = (v - _) / 26, P = 1 << _;
+          var _ = v % 26, $ = (v - _) / 26, R = 1 << _;
           if (this.length <= $) return false;
           var F = this.words[$];
-          return !!(F & P);
+          return !!(F & R);
         }, a.prototype.imaskn = function(v) {
           s(typeof v == "number" && v >= 0);
           var _ = v % 26, $ = (v - _) / 26;
           if (s(this.negative === 0, "imaskn works only with positive numbers"), this.length <= $) return this;
           if (_ !== 0 && $++, this.length = Math.min($, this.length), _ !== 0) {
-            var P = 67108863 ^ 67108863 >>> _ << _;
-            this.words[this.length - 1] &= P;
+            var R = 67108863 ^ 67108863 >>> _ << _;
+            this.words[this.length - 1] &= R;
           }
           return this.strip();
         }, a.prototype.maskn = function(v) {
@@ -77483,8 +77483,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.abs = function() {
           return this.clone().iabs();
         }, a.prototype._ishlnsubmul = function(v, _, $) {
-          var P = v.length + $, F;
-          this._expand(P);
+          var R = v.length + $, F;
+          this._expand(R);
           var k, G = 0;
           for (F = 0; F < v.length; F++) {
             k = (this.words[F + $] | 0) + G;
@@ -77496,35 +77496,35 @@ Use Chrome, Firefox or Internet Explorer 11`);
           for (s(G === -1), G = 0, F = 0; F < this.length; F++) k = -(this.words[F] | 0) + G, G = k >> 26, this.words[F] = k & 67108863;
           return this.negative = 1, this.strip();
         }, a.prototype._wordDiv = function(v, _) {
-          var $ = this.length - v.length, P = this.clone(), F = v, k = F.words[F.length - 1] | 0, G = this._countBits(k);
-          $ = 26 - G, $ !== 0 && (F = F.ushln($), P.iushln($), k = F.words[F.length - 1] | 0);
-          var D = P.length - F.length, x;
+          var $ = this.length - v.length, R = this.clone(), F = v, k = F.words[F.length - 1] | 0, G = this._countBits(k);
+          $ = 26 - G, $ !== 0 && (F = F.ushln($), R.iushln($), k = F.words[F.length - 1] | 0);
+          var D = R.length - F.length, x;
           if (_ !== "mod") {
             x = new a(null), x.length = D + 1, x.words = new Array(x.length);
             for (var L = 0; L < x.length; L++) x.words[L] = 0;
           }
-          var j = P.clone()._ishlnsubmul(F, 1, D);
-          j.negative === 0 && (P = j, x && (x.words[D] = 1));
+          var j = R.clone()._ishlnsubmul(F, 1, D);
+          j.negative === 0 && (R = j, x && (x.words[D] = 1));
           for (var Y = D - 1; Y >= 0; Y--) {
-            var oe = (P.words[F.length + Y] | 0) * 67108864 + (P.words[F.length + Y - 1] | 0);
-            for (oe = Math.min(oe / k | 0, 67108863), P._ishlnsubmul(F, oe, Y); P.negative !== 0; ) oe--, P.negative = 0, P._ishlnsubmul(F, 1, Y), P.isZero() || (P.negative ^= 1);
+            var oe = (R.words[F.length + Y] | 0) * 67108864 + (R.words[F.length + Y - 1] | 0);
+            for (oe = Math.min(oe / k | 0, 67108863), R._ishlnsubmul(F, oe, Y); R.negative !== 0; ) oe--, R.negative = 0, R._ishlnsubmul(F, 1, Y), R.isZero() || (R.negative ^= 1);
             x && (x.words[Y] = oe);
           }
-          return x && x.strip(), P.strip(), _ !== "div" && $ !== 0 && P.iushrn($), {
+          return x && x.strip(), R.strip(), _ !== "div" && $ !== 0 && R.iushrn($), {
             div: x || null,
-            mod: P
+            mod: R
           };
         }, a.prototype.divmod = function(v, _, $) {
           if (s(!v.isZero()), this.isZero()) return {
             div: new a(0),
             mod: new a(0)
           };
-          var P, F, k;
-          return this.negative !== 0 && v.negative === 0 ? (k = this.neg().divmod(v, _), _ !== "mod" && (P = k.div.neg()), _ !== "div" && (F = k.mod.neg(), $ && F.negative !== 0 && F.iadd(v)), {
-            div: P,
+          var R, F, k;
+          return this.negative !== 0 && v.negative === 0 ? (k = this.neg().divmod(v, _), _ !== "mod" && (R = k.div.neg()), _ !== "div" && (F = k.mod.neg(), $ && F.negative !== 0 && F.iadd(v)), {
+            div: R,
             mod: F
-          }) : this.negative === 0 && v.negative !== 0 ? (k = this.divmod(v.neg(), _), _ !== "mod" && (P = k.div.neg()), {
-            div: P,
+          }) : this.negative === 0 && v.negative !== 0 ? (k = this.divmod(v.neg(), _), _ !== "mod" && (R = k.div.neg()), {
+            div: R,
             mod: k.mod
           }) : (this.negative & v.negative) !== 0 ? (k = this.neg().divmod(v.neg(), _), _ !== "div" && (F = k.mod.neg(), $ && F.negative !== 0 && F.isub(v)), {
             div: k.div,
@@ -77551,17 +77551,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.divRound = function(v) {
           var _ = this.divmod(v);
           if (_.mod.isZero()) return _.div;
-          var $ = _.div.negative !== 0 ? _.mod.isub(v) : _.mod, P = v.ushrn(1), F = v.andln(1), k = $.cmp(P);
+          var $ = _.div.negative !== 0 ? _.mod.isub(v) : _.mod, R = v.ushrn(1), F = v.andln(1), k = $.cmp(R);
           return k < 0 || F === 1 && k === 0 ? _.div : _.div.negative !== 0 ? _.div.isubn(1) : _.div.iaddn(1);
         }, a.prototype.modn = function(v) {
           s(v <= 67108863);
-          for (var _ = (1 << 26) % v, $ = 0, P = this.length - 1; P >= 0; P--) $ = (_ * $ + (this.words[P] | 0)) % v;
+          for (var _ = (1 << 26) % v, $ = 0, R = this.length - 1; R >= 0; R--) $ = (_ * $ + (this.words[R] | 0)) % v;
           return $;
         }, a.prototype.idivn = function(v) {
           s(v <= 67108863);
           for (var _ = 0, $ = this.length - 1; $ >= 0; $--) {
-            var P = (this.words[$] | 0) + _ * 67108864;
-            this.words[$] = P / v | 0, _ = P % v;
+            var R = (this.words[$] | 0) + _ * 67108864;
+            this.words[$] = R / v | 0, _ = R % v;
           }
           return this.strip();
         }, a.prototype.divn = function(v) {
@@ -77570,13 +77570,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
           s(v.negative === 0), s(!v.isZero());
           var _ = this, $ = v.clone();
           _.negative !== 0 ? _ = _.umod(v) : _ = _.clone();
-          for (var P = new a(1), F = new a(0), k = new a(0), G = new a(1), D = 0; _.isEven() && $.isEven(); ) _.iushrn(1), $.iushrn(1), ++D;
+          for (var R = new a(1), F = new a(0), k = new a(0), G = new a(1), D = 0; _.isEven() && $.isEven(); ) _.iushrn(1), $.iushrn(1), ++D;
           for (var x = $.clone(), L = _.clone(); !_.isZero(); ) {
             for (var j = 0, Y = 1; (_.words[0] & Y) === 0 && j < 26; ++j, Y <<= 1) ;
-            if (j > 0) for (_.iushrn(j); j-- > 0; ) (P.isOdd() || F.isOdd()) && (P.iadd(x), F.isub(L)), P.iushrn(1), F.iushrn(1);
+            if (j > 0) for (_.iushrn(j); j-- > 0; ) (R.isOdd() || F.isOdd()) && (R.iadd(x), F.isub(L)), R.iushrn(1), F.iushrn(1);
             for (var oe = 0, me = 1; ($.words[0] & me) === 0 && oe < 26; ++oe, me <<= 1) ;
             if (oe > 0) for ($.iushrn(oe); oe-- > 0; ) (k.isOdd() || G.isOdd()) && (k.iadd(x), G.isub(L)), k.iushrn(1), G.iushrn(1);
-            _.cmp($) >= 0 ? (_.isub($), P.isub(k), F.isub(G)) : ($.isub(_), k.isub(P), G.isub(F));
+            _.cmp($) >= 0 ? (_.isub($), R.isub(k), F.isub(G)) : ($.isub(_), k.isub(R), G.isub(F));
           }
           return {
             a: k,
@@ -77587,21 +77587,21 @@ Use Chrome, Firefox or Internet Explorer 11`);
           s(v.negative === 0), s(!v.isZero());
           var _ = this, $ = v.clone();
           _.negative !== 0 ? _ = _.umod(v) : _ = _.clone();
-          for (var P = new a(1), F = new a(0), k = $.clone(); _.cmpn(1) > 0 && $.cmpn(1) > 0; ) {
+          for (var R = new a(1), F = new a(0), k = $.clone(); _.cmpn(1) > 0 && $.cmpn(1) > 0; ) {
             for (var G = 0, D = 1; (_.words[0] & D) === 0 && G < 26; ++G, D <<= 1) ;
-            if (G > 0) for (_.iushrn(G); G-- > 0; ) P.isOdd() && P.iadd(k), P.iushrn(1);
+            if (G > 0) for (_.iushrn(G); G-- > 0; ) R.isOdd() && R.iadd(k), R.iushrn(1);
             for (var x = 0, L = 1; ($.words[0] & L) === 0 && x < 26; ++x, L <<= 1) ;
             if (x > 0) for ($.iushrn(x); x-- > 0; ) F.isOdd() && F.iadd(k), F.iushrn(1);
-            _.cmp($) >= 0 ? (_.isub($), P.isub(F)) : ($.isub(_), F.isub(P));
+            _.cmp($) >= 0 ? (_.isub($), R.isub(F)) : ($.isub(_), F.isub(R));
           }
           var j;
-          return _.cmpn(1) === 0 ? j = P : j = F, j.cmpn(0) < 0 && j.iadd(v), j;
+          return _.cmpn(1) === 0 ? j = R : j = F, j.cmpn(0) < 0 && j.iadd(v), j;
         }, a.prototype.gcd = function(v) {
           if (this.isZero()) return v.abs();
           if (v.isZero()) return this.abs();
           var _ = this.clone(), $ = v.clone();
           _.negative = 0, $.negative = 0;
-          for (var P = 0; _.isEven() && $.isEven(); P++) _.iushrn(1), $.iushrn(1);
+          for (var R = 0; _.isEven() && $.isEven(); R++) _.iushrn(1), $.iushrn(1);
           do {
             for (; _.isEven(); ) _.iushrn(1);
             for (; $.isEven(); ) $.iushrn(1);
@@ -77612,7 +77612,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
             } else if (F === 0 || $.cmpn(1) === 0) break;
             _.isub($);
           } while (true);
-          return $.iushln(P);
+          return $.iushln(R);
         }, a.prototype.invm = function(v) {
           return this.egcd(v).a.umod(v);
         }, a.prototype.isEven = function() {
@@ -77623,9 +77623,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return this.words[0] & v;
         }, a.prototype.bincn = function(v) {
           s(typeof v == "number");
-          var _ = v % 26, $ = (v - _) / 26, P = 1 << _;
-          if (this.length <= $) return this._expand($ + 1), this.words[$] |= P, this;
-          for (var F = P, k = $; F !== 0 && k < this.length; k++) {
+          var _ = v % 26, $ = (v - _) / 26, R = 1 << _;
+          if (this.length <= $) return this._expand($ + 1), this.words[$] |= R, this;
+          for (var F = R, k = $; F !== 0 && k < this.length; k++) {
             var G = this.words[k] | 0;
             G += F, F = G >>> 26, G &= 67108863, this.words[k] = G;
           }
@@ -77641,8 +77641,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (this.length > 1) $ = 1;
           else {
             _ && (v = -v), s(v <= 67108863, "Number is too big");
-            var P = this.words[0] | 0;
-            $ = P === v ? 0 : P < v ? -1 : 1;
+            var R = this.words[0] | 0;
+            $ = R === v ? 0 : R < v ? -1 : 1;
           }
           return this.negative !== 0 ? -$ | 0 : $;
         }, a.prototype.cmp = function(v) {
@@ -77654,9 +77654,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (this.length > v.length) return 1;
           if (this.length < v.length) return -1;
           for (var _ = 0, $ = this.length - 1; $ >= 0; $--) {
-            var P = this.words[$] | 0, F = v.words[$] | 0;
-            if (P !== F) {
-              P < F ? _ = -1 : P > F && (_ = 1);
+            var R = this.words[$] | 0, F = v.words[$] | 0;
+            if (R !== F) {
+              R < F ? _ = -1 : R > F && (_ = 1);
               break;
             }
           }
@@ -77735,8 +77735,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           do
             this.split(_, this.tmp), _ = this.imulK(_), _ = _.iadd(this.tmp), $ = _.bitLength();
           while ($ > this.n);
-          var P = $ < this.n ? -1 : _.ucmp(this.p);
-          return P === 0 ? (_.words[0] = 0, _.length = 1) : P > 0 ? _.isub(this.p) : _.strip !== void 0 ? _.strip() : _._strip(), _;
+          var R = $ < this.n ? -1 : _.ucmp(this.p);
+          return R === 0 ? (_.words[0] = 0, _.length = 1) : R > 0 ? _.isub(this.p) : _.strip !== void 0 ? _.strip() : _._strip(), _;
         }, q.prototype.split = function(v, _) {
           v.iushrn(this.n, 0, _);
         }, q.prototype.imulK = function(v) {
@@ -77746,8 +77746,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           q.call(this, "k256", "ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff fffffffe fffffc2f");
         }
         o(W, q), W.prototype.split = function(v, _) {
-          for (var $ = 4194303, P = Math.min(v.length, 9), F = 0; F < P; F++) _.words[F] = v.words[F];
-          if (_.length = P, v.length <= 9) {
+          for (var $ = 4194303, R = Math.min(v.length, 9), F = 0; F < R; F++) _.words[F] = v.words[F];
+          if (_.length = R, v.length <= 9) {
             v.words[0] = 0, v.length = 1;
             return;
           }
@@ -77760,8 +77760,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, W.prototype.imulK = function(v) {
           v.words[v.length] = 0, v.words[v.length + 1] = 0, v.length += 2;
           for (var _ = 0, $ = 0; $ < v.length; $++) {
-            var P = v.words[$] | 0;
-            _ += P * 977, v.words[$] = _ & 67108863, _ = P * 64 + (_ / 67108864 | 0);
+            var R = v.words[$] | 0;
+            _ += R * 977, v.words[$] = _ & 67108863, _ = R * 64 + (_ / 67108864 | 0);
           }
           return v.words[v.length - 1] === 0 && (v.length--, v.words[v.length - 1] === 0 && v.length--), v;
         };
@@ -77778,8 +77778,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }
         o(ee, q), ee.prototype.imulK = function(v) {
           for (var _ = 0, $ = 0; $ < v.length; $++) {
-            var P = (v.words[$] | 0) * 19 + _, F = P & 67108863;
-            P >>>= 26, v.words[$] = F, _ = P;
+            var R = (v.words[$] | 0) * 19 + _, F = R & 67108863;
+            R >>>= 26, v.words[$] = F, _ = R;
           }
           return _ !== 0 && (v.words[v.length++] = _), v;
         }, a._prime = function(v) {
@@ -77839,11 +77839,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
             var $ = this.m.add(new a(1)).iushrn(2);
             return this.pow(v, $);
           }
-          for (var P = this.m.subn(1), F = 0; !P.isZero() && P.andln(1) === 0; ) F++, P.iushrn(1);
-          s(!P.isZero());
+          for (var R = this.m.subn(1), F = 0; !R.isZero() && R.andln(1) === 0; ) F++, R.iushrn(1);
+          s(!R.isZero());
           var k = new a(1).toRed(this), G = k.redNeg(), D = this.m.subn(1).iushrn(1), x = this.m.bitLength();
           for (x = new a(2 * x * x).toRed(this); this.pow(x, D).cmp(G) !== 0; ) x.redIAdd(G);
-          for (var L = this.pow(x, P), j = this.pow(v, P.addn(1).iushrn(1)), Y = this.pow(v, P), oe = F; Y.cmp(k) !== 0; ) {
+          for (var L = this.pow(x, R), j = this.pow(v, R.addn(1).iushrn(1)), Y = this.pow(v, R), oe = F; Y.cmp(k) !== 0; ) {
             for (var me = Y, be = 0; me.cmp(k) !== 0; be++) me = me.redSqr();
             s(be < oe);
             var Z = this.pow(L, new a(1).iushln(oe - be - 1));
@@ -77856,18 +77856,18 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, ie.prototype.pow = function(v, _) {
           if (_.isZero()) return new a(1).toRed(this);
           if (_.cmpn(1) === 0) return v.clone();
-          var $ = 4, P = new Array(1 << $);
-          P[0] = new a(1).toRed(this), P[1] = v;
-          for (var F = 2; F < P.length; F++) P[F] = this.mul(P[F - 1], v);
-          var k = P[0], G = 0, D = 0, x = _.bitLength() % 26;
+          var $ = 4, R = new Array(1 << $);
+          R[0] = new a(1).toRed(this), R[1] = v;
+          for (var F = 2; F < R.length; F++) R[F] = this.mul(R[F - 1], v);
+          var k = R[0], G = 0, D = 0, x = _.bitLength() % 26;
           for (x === 0 && (x = 26), F = _.length - 1; F >= 0; F--) {
             for (var L = _.words[F], j = x - 1; j >= 0; j--) {
               var Y = L >> j & 1;
-              if (k !== P[0] && (k = this.sqr(k)), Y === 0 && G === 0) {
+              if (k !== R[0] && (k = this.sqr(k)), Y === 0 && G === 0) {
                 D = 0;
                 continue;
               }
-              G <<= 1, G |= Y, D++, !(D !== $ && (F !== 0 || j !== 0)) && (k = this.mul(k, P[G]), D = 0, G = 0);
+              G <<= 1, G |= Y, D++, !(D !== $ && (F !== 0 || j !== 0)) && (k = this.mul(k, R[G]), D = 0, G = 0);
             }
             x = 26;
           }
@@ -77891,11 +77891,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return _.red = null, _;
         }, pe.prototype.imul = function(v, _) {
           if (v.isZero() || _.isZero()) return v.words[0] = 0, v.length = 1, v;
-          var $ = v.imul(_), P = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(P).iushrn(this.shift), k = F;
+          var $ = v.imul(_), R = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(R).iushrn(this.shift), k = F;
           return F.cmp(this.m) >= 0 ? k = F.isub(this.m) : F.cmpn(0) < 0 && (k = F.iadd(this.m)), k._forceRed(this);
         }, pe.prototype.mul = function(v, _) {
           if (v.isZero() || _.isZero()) return new a(0)._forceRed(this);
-          var $ = v.mul(_), P = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(P).iushrn(this.shift), k = F;
+          var $ = v.mul(_), R = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(R).iushrn(this.shift), k = F;
           return F.cmp(this.m) >= 0 ? k = F.isub(this.m) : F.cmpn(0) < 0 && (k = F.iadd(this.m)), k._forceRed(this);
         }, pe.prototype.invm = function(v) {
           var _ = this.imod(v._invmp(this.m).mul(this.r2));
@@ -77947,10 +77947,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
       function a(p, m, b) {
         var w = new Array(Math.max(p.bitLength(), b) + 1), M;
         for (M = 0; M < w.length; M += 1) w[M] = 0;
-        var R = 1 << m + 1, V = p.clone();
+        var P = 1 << m + 1, V = p.clone();
         for (M = 0; M < w.length; M++) {
-          var O, z = V.andln(R - 1);
-          V.isOdd() ? (z > (R >> 1) - 1 ? O = (R >> 1) - z : O = z, V.isubn(O)) : O = 0, w[M] = O, V.iushrn(1);
+          var O, z = V.andln(P - 1);
+          V.isOdd() ? (z > (P >> 1) - 1 ? O = (P >> 1) - z : O = z, V.isubn(O)) : O = 0, w[M] = O, V.iushrn(1);
         }
         return w;
       }
@@ -77961,13 +77961,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
           []
         ];
         p = p.clone(), m = m.clone();
-        for (var w = 0, M = 0, R; p.cmpn(-w) > 0 || m.cmpn(-M) > 0; ) {
+        for (var w = 0, M = 0, P; p.cmpn(-w) > 0 || m.cmpn(-M) > 0; ) {
           var V = p.andln(3) + w & 3, O = m.andln(3) + M & 3;
           V === 3 && (V = -1), O === 3 && (O = -1);
           var z;
-          (V & 1) === 0 ? z = 0 : (R = p.andln(7) + w & 7, (R === 3 || R === 5) && O === 2 ? z = -V : z = V), b[0].push(z);
+          (V & 1) === 0 ? z = 0 : (P = p.andln(7) + w & 7, (P === 3 || P === 5) && O === 2 ? z = -V : z = V), b[0].push(z);
           var H;
-          (O & 1) === 0 ? H = 0 : (R = m.andln(7) + M & 7, (R === 3 || R === 5) && V === 2 ? H = -O : H = O), b[1].push(H), 2 * w === z + 1 && (w = 1 - w), 2 * M === H + 1 && (M = 1 - M), p.iushrn(1), m.iushrn(1);
+          (O & 1) === 0 ? H = 0 : (P = m.andln(7) + M & 7, (P === 3 || P === 5) && V === 2 ? H = -O : H = O), b[1].push(H), 2 * w === z + 1 && (w = 1 - w), 2 * M === H + 1 && (M = 1 - M), p.iushrn(1), m.iushrn(1);
         }
         return b;
       }
@@ -78007,29 +78007,29 @@ Use Chrome, Firefox or Internet Explorer 11`);
       o(d.precomputed);
       var p = d._getDoubles(), m = r(f, 1, this._bitLength), b = (1 << p.step + 1) - (p.step % 2 === 0 ? 2 : 1);
       b /= 3;
-      var w = [], M, R;
+      var w = [], M, P;
       for (M = 0; M < m.length; M += p.step) {
-        R = 0;
-        for (var V = M + p.step - 1; V >= M; V--) R = (R << 1) + m[V];
-        w.push(R);
+        P = 0;
+        for (var V = M + p.step - 1; V >= M; V--) P = (P << 1) + m[V];
+        w.push(P);
       }
       for (var O = this.jpoint(null, null, null), z = this.jpoint(null, null, null), H = b; H > 0; H--) {
-        for (M = 0; M < w.length; M++) R = w[M], R === H ? z = z.mixedAdd(p.points[M]) : R === -H && (z = z.mixedAdd(p.points[M].neg()));
+        for (M = 0; M < w.length; M++) P = w[M], P === H ? z = z.mixedAdd(p.points[M]) : P === -H && (z = z.mixedAdd(p.points[M].neg()));
         O = O.add(z);
       }
       return O.toP();
     }, a.prototype._wnafMul = function(d, f) {
       var p = 4, m = d._getNAFPoints(p);
       p = m.wnd;
-      for (var b = m.points, w = r(f, p, this._bitLength), M = this.jpoint(null, null, null), R = w.length - 1; R >= 0; R--) {
-        for (var V = 0; R >= 0 && w[R] === 0; R--) V++;
-        if (R >= 0 && V++, M = M.dblp(V), R < 0) break;
-        var O = w[R];
+      for (var b = m.points, w = r(f, p, this._bitLength), M = this.jpoint(null, null, null), P = w.length - 1; P >= 0; P--) {
+        for (var V = 0; P >= 0 && w[P] === 0; P--) V++;
+        if (P >= 0 && V++, M = M.dblp(V), P < 0) break;
+        var O = w[P];
         o(O !== 0), d.type === "affine" ? O > 0 ? M = M.mixedAdd(b[O - 1 >> 1]) : M = M.mixedAdd(b[-O - 1 >> 1].neg()) : O > 0 ? M = M.add(b[O - 1 >> 1]) : M = M.add(b[-O - 1 >> 1].neg());
       }
       return d.type === "affine" ? M.toP() : M;
     }, a.prototype._wnafMulAdd = function(d, f, p, m, b) {
-      var w = this._wnafT1, M = this._wnafT2, R = this._wnafT3, V = 0, O, z, H;
+      var w = this._wnafT1, M = this._wnafT2, P = this._wnafT3, V = 0, O, z, H;
       for (O = 0; O < m; O++) {
         H = f[O];
         var q = H._getNAFPoints(d);
@@ -78038,7 +78038,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       for (O = m - 1; O >= 1; O -= 2) {
         var W = O - 1, K = O;
         if (w[W] !== 1 || w[K] !== 1) {
-          R[W] = r(p[W], w[W], this._bitLength), R[K] = r(p[K], w[K], this._bitLength), V = Math.max(R[W].length, V), V = Math.max(R[K].length, V);
+          P[W] = r(p[W], w[W], this._bitLength), P[K] = r(p[K], w[K], this._bitLength), V = Math.max(P[W].length, V), V = Math.max(P[K].length, V);
           continue;
         }
         var J = [
@@ -78059,17 +78059,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
           1,
           3
         ], ie = s(p[W], p[K]);
-        for (V = Math.max(ie[0].length, V), R[W] = new Array(V), R[K] = new Array(V), z = 0; z < V; z++) {
+        for (V = Math.max(ie[0].length, V), P[W] = new Array(V), P[K] = new Array(V), z = 0; z < V; z++) {
           var pe = ie[0][z] | 0, U = ie[1][z] | 0;
-          R[W][z] = ee[(pe + 1) * 3 + (U + 1)], R[K][z] = 0, M[W] = J;
+          P[W][z] = ee[(pe + 1) * 3 + (U + 1)], P[K][z] = 0, M[W] = J;
         }
       }
       var v = this.jpoint(null, null, null), _ = this._wnafT4;
       for (O = V; O >= 0; O--) {
         for (var $ = 0; O >= 0; ) {
-          var P = true;
-          for (z = 0; z < m; z++) _[z] = R[z][O] | 0, _[z] !== 0 && (P = false);
-          if (!P) break;
+          var R = true;
+          for (z = 0; z < m; z++) _[z] = P[z][O] | 0, _[z] !== 0 && (R = false);
+          if (!R) break;
           $++, O--;
         }
         if (O >= 0 && $++, v = v.dblp($), O < 0) break;
@@ -78170,10 +78170,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
           this.g.mul(w[0]).x.cmp(this.g.x.redMul(p)) === 0 ? m = w[0] : (m = w[1], o(this.g.mul(m).x.cmp(this.g.x.redMul(p)) === 0));
         }
         var M;
-        return f.basis ? M = f.basis.map(function(R) {
+        return f.basis ? M = f.basis.map(function(P) {
           return {
-            a: new e(R.a, 16),
-            b: new e(R.b, 16)
+            a: new e(P.a, 16),
+            b: new e(P.b, 16)
           };
         }) : M = this._getEndoBasis(m), {
           beta: p,
@@ -78182,19 +78182,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
         };
       }
     }, a.prototype._getEndoRoots = function(f) {
-      var p = f === this.p ? this.red : e.mont(f), m = new e(2).toRed(p).redInvm(), b = m.redNeg(), w = new e(3).toRed(p).redNeg().redSqrt().redMul(m), M = b.redAdd(w).fromRed(), R = b.redSub(w).fromRed();
+      var p = f === this.p ? this.red : e.mont(f), m = new e(2).toRed(p).redInvm(), b = m.redNeg(), w = new e(3).toRed(p).redNeg().redSqrt().redMul(m), M = b.redAdd(w).fromRed(), P = b.redSub(w).fromRed();
       return [
         M,
-        R
+        P
       ];
     }, a.prototype._getEndoBasis = function(f) {
-      for (var p = this.n.ushrn(Math.floor(this.n.bitLength() / 2)), m = f, b = this.n.clone(), w = new e(1), M = new e(0), R = new e(0), V = new e(1), O, z, H, q, W, K, J, ee = 0, ie, pe; m.cmpn(0) !== 0; ) {
+      for (var p = this.n.ushrn(Math.floor(this.n.bitLength() / 2)), m = f, b = this.n.clone(), w = new e(1), M = new e(0), P = new e(0), V = new e(1), O, z, H, q, W, K, J, ee = 0, ie, pe; m.cmpn(0) !== 0; ) {
         var U = b.div(m);
-        ie = b.sub(U.mul(m)), pe = R.sub(U.mul(w));
+        ie = b.sub(U.mul(m)), pe = P.sub(U.mul(w));
         var v = V.sub(U.mul(M));
         if (!H && ie.cmp(p) < 0) O = J.neg(), z = w, H = ie.neg(), q = pe;
         else if (H && ++ee === 2) break;
-        J = ie, b = m, m = ie, R = w, w = pe, V = M, M = v;
+        J = ie, b = m, m = ie, P = w, w = pe, V = M, M = v;
       }
       W = ie.neg(), K = pe;
       var _ = H.sqr().add(q.sqr()), $ = W.sqr().add(K.sqr());
@@ -78209,7 +78209,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }
       ];
     }, a.prototype._endoSplit = function(f) {
-      var p = this.endo.basis, m = p[0], b = p[1], w = b.b.mul(f).divRound(this.n), M = m.b.neg().mul(f).divRound(this.n), R = w.mul(m.a), V = M.mul(b.a), O = w.mul(m.b), z = M.mul(b.b), H = f.sub(R).sub(V), q = O.add(z).neg();
+      var p = this.endo.basis, m = p[0], b = p[1], w = b.b.mul(f).divRound(this.n), M = m.b.neg().mul(f).divRound(this.n), P = w.mul(m.a), V = M.mul(b.a), O = w.mul(m.b), z = M.mul(b.b), H = f.sub(P).sub(V), q = O.add(z).neg();
       return {
         k1: H,
         k2: q
@@ -78226,8 +78226,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return m.redSqr().redISub(w).cmpn(0) === 0;
     }, a.prototype._endoWnafMulAdd = function(f, p, m) {
       for (var b = this._endoWnafT1, w = this._endoWnafT2, M = 0; M < f.length; M++) {
-        var R = this._endoSplit(p[M]), V = f[M], O = V._getBeta();
-        R.k1.negative && (R.k1.ineg(), V = V.neg(true)), R.k2.negative && (R.k2.ineg(), O = O.neg(true)), b[M * 2] = V, b[M * 2 + 1] = O, w[M * 2] = R.k1, w[M * 2 + 1] = R.k2;
+        var P = this._endoSplit(p[M]), V = f[M], O = V._getBeta();
+        P.k1.negative && (P.k1.ineg(), V = V.neg(true)), P.k2.negative && (P.k2.ineg(), O = O.neg(true)), b[M * 2] = V, b[M * 2 + 1] = O, w[M * 2] = P.k1, w[M * 2 + 1] = P.k2;
       }
       for (var z = this._wnafMulAdd(1, b, w, M * 2, m), H = 0; H < M * 2; H++) b[H] = null, w[H] = null;
       return z;
@@ -78284,8 +78284,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
       typeof p == "string" && (p = JSON.parse(p));
       var b = f.point(p[0], p[1], m);
       if (!p[2]) return b;
-      function w(R) {
-        return f.point(R[0], R[1], m);
+      function w(P) {
+        return f.point(P[0], P[1], m);
       }
       var M = p[2];
       return b.precomputed = {
@@ -78321,8 +78321,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
       if (this.inf) return this;
       var f = this.y.redAdd(this.y);
       if (f.cmpn(0) === 0) return this.curve.point(null, null);
-      var p = this.curve.a, m = this.x.redSqr(), b = f.redInvm(), w = m.redAdd(m).redIAdd(m).redIAdd(p).redMul(b), M = w.redSqr().redISub(this.x.redAdd(this.x)), R = w.redMul(this.x.redSub(M)).redISub(this.y);
-      return this.curve.point(M, R);
+      var p = this.curve.a, m = this.x.redSqr(), b = f.redInvm(), w = m.redAdd(m).redIAdd(m).redIAdd(p).redMul(b), M = w.redSqr().redISub(this.x.redAdd(this.x)), P = w.redMul(this.x.redSub(M)).redISub(this.y);
+      return this.curve.point(M, P);
     }, h.prototype.getX = function() {
       return this.x.fromRed();
     }, h.prototype.getY = function() {
@@ -78391,16 +78391,16 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }, c.prototype.add = function(f) {
       if (this.isInfinity()) return f;
       if (f.isInfinity()) return this;
-      var p = f.z.redSqr(), m = this.z.redSqr(), b = this.x.redMul(p), w = f.x.redMul(m), M = this.y.redMul(p.redMul(f.z)), R = f.y.redMul(m.redMul(this.z)), V = b.redSub(w), O = M.redSub(R);
+      var p = f.z.redSqr(), m = this.z.redSqr(), b = this.x.redMul(p), w = f.x.redMul(m), M = this.y.redMul(p.redMul(f.z)), P = f.y.redMul(m.redMul(this.z)), V = b.redSub(w), O = M.redSub(P);
       if (V.cmpn(0) === 0) return O.cmpn(0) !== 0 ? this.curve.jpoint(null, null, null) : this.dbl();
       var z = V.redSqr(), H = z.redMul(V), q = b.redMul(z), W = O.redSqr().redIAdd(H).redISub(q).redISub(q), K = O.redMul(q.redISub(W)).redISub(M.redMul(H)), J = this.z.redMul(f.z).redMul(V);
       return this.curve.jpoint(W, K, J);
     }, c.prototype.mixedAdd = function(f) {
       if (this.isInfinity()) return f.toJ();
       if (f.isInfinity()) return this;
-      var p = this.z.redSqr(), m = this.x, b = f.x.redMul(p), w = this.y, M = f.y.redMul(p).redMul(this.z), R = m.redSub(b), V = w.redSub(M);
-      if (R.cmpn(0) === 0) return V.cmpn(0) !== 0 ? this.curve.jpoint(null, null, null) : this.dbl();
-      var O = R.redSqr(), z = O.redMul(R), H = m.redMul(O), q = V.redSqr().redIAdd(z).redISub(H).redISub(H), W = V.redMul(H.redISub(q)).redISub(w.redMul(z)), K = this.z.redMul(R);
+      var p = this.z.redSqr(), m = this.x, b = f.x.redMul(p), w = this.y, M = f.y.redMul(p).redMul(this.z), P = m.redSub(b), V = w.redSub(M);
+      if (P.cmpn(0) === 0) return V.cmpn(0) !== 0 ? this.curve.jpoint(null, null, null) : this.dbl();
+      var O = P.redSqr(), z = O.redMul(P), H = m.redMul(O), q = V.redSqr().redIAdd(z).redISub(H).redISub(H), W = V.redMul(H.redISub(q)).redISub(w.redMul(z)), K = this.z.redMul(P);
       return this.curve.jpoint(q, W, K);
     }, c.prototype.dblp = function(f) {
       if (f === 0) return this;
@@ -78412,7 +78412,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         for (p = 0; p < f; p++) m = m.dbl();
         return m;
       }
-      var b = this.curve.a, w = this.curve.tinv, M = this.x, R = this.y, V = this.z, O = V.redSqr().redSqr(), z = R.redAdd(R);
+      var b = this.curve.a, w = this.curve.tinv, M = this.x, P = this.y, V = this.z, O = V.redSqr().redSqr(), z = P.redAdd(P);
       for (p = 0; p < f; p++) {
         var H = M.redSqr(), q = z.redSqr(), W = q.redSqr(), K = H.redAdd(H).redIAdd(H).redIAdd(b.redMul(O)), J = M.redMul(q), ee = K.redSqr().redISub(J.redAdd(J)), ie = J.redISub(ee), pe = K.redMul(ie);
         pe = pe.redIAdd(pe).redISub(W);
@@ -78425,10 +78425,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }, c.prototype._zeroDbl = function() {
       var f, p, m;
       if (this.zOne) {
-        var b = this.x.redSqr(), w = this.y.redSqr(), M = w.redSqr(), R = this.x.redAdd(w).redSqr().redISub(b).redISub(M);
-        R = R.redIAdd(R);
-        var V = b.redAdd(b).redIAdd(b), O = V.redSqr().redISub(R).redISub(R), z = M.redIAdd(M);
-        z = z.redIAdd(z), z = z.redIAdd(z), f = O, p = V.redMul(R.redISub(O)).redISub(z), m = this.y.redAdd(this.y);
+        var b = this.x.redSqr(), w = this.y.redSqr(), M = w.redSqr(), P = this.x.redAdd(w).redSqr().redISub(b).redISub(M);
+        P = P.redIAdd(P);
+        var V = b.redAdd(b).redIAdd(b), O = V.redSqr().redISub(P).redISub(P), z = M.redIAdd(M);
+        z = z.redIAdd(z), z = z.redIAdd(z), f = O, p = V.redMul(P.redISub(O)).redISub(z), m = this.y.redAdd(this.y);
       } else {
         var H = this.x.redSqr(), q = this.y.redSqr(), W = q.redSqr(), K = this.x.redAdd(q).redSqr().redISub(H).redISub(W);
         K = K.redIAdd(K);
@@ -78439,12 +78439,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }, c.prototype._threeDbl = function() {
       var f, p, m;
       if (this.zOne) {
-        var b = this.x.redSqr(), w = this.y.redSqr(), M = w.redSqr(), R = this.x.redAdd(w).redSqr().redISub(b).redISub(M);
-        R = R.redIAdd(R);
-        var V = b.redAdd(b).redIAdd(b).redIAdd(this.curve.a), O = V.redSqr().redISub(R).redISub(R);
+        var b = this.x.redSqr(), w = this.y.redSqr(), M = w.redSqr(), P = this.x.redAdd(w).redSqr().redISub(b).redISub(M);
+        P = P.redIAdd(P);
+        var V = b.redAdd(b).redIAdd(b).redIAdd(this.curve.a), O = V.redSqr().redISub(P).redISub(P);
         f = O;
         var z = M.redIAdd(M);
-        z = z.redIAdd(z), z = z.redIAdd(z), p = V.redMul(R.redISub(O)).redISub(z), m = this.y.redAdd(this.y);
+        z = z.redIAdd(z), z = z.redIAdd(z), p = V.redMul(P.redISub(O)).redISub(z), m = this.y.redAdd(this.y);
       } else {
         var H = this.z.redSqr(), q = this.y.redSqr(), W = this.x.redMul(q), K = this.x.redSub(H).redMul(this.x.redAdd(H));
         K = K.redAdd(K).redIAdd(K);
@@ -78457,25 +78457,25 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       return this.curve.jpoint(f, p, m);
     }, c.prototype._dbl = function() {
-      var f = this.curve.a, p = this.x, m = this.y, b = this.z, w = b.redSqr().redSqr(), M = p.redSqr(), R = m.redSqr(), V = M.redAdd(M).redIAdd(M).redIAdd(f.redMul(w)), O = p.redAdd(p);
+      var f = this.curve.a, p = this.x, m = this.y, b = this.z, w = b.redSqr().redSqr(), M = p.redSqr(), P = m.redSqr(), V = M.redAdd(M).redIAdd(M).redIAdd(f.redMul(w)), O = p.redAdd(p);
       O = O.redIAdd(O);
-      var z = O.redMul(R), H = V.redSqr().redISub(z.redAdd(z)), q = z.redISub(H), W = R.redSqr();
+      var z = O.redMul(P), H = V.redSqr().redISub(z.redAdd(z)), q = z.redISub(H), W = P.redSqr();
       W = W.redIAdd(W), W = W.redIAdd(W), W = W.redIAdd(W);
       var K = V.redMul(q).redISub(W), J = m.redAdd(m).redMul(b);
       return this.curve.jpoint(H, K, J);
     }, c.prototype.trpl = function() {
       if (!this.curve.zeroA) return this.dbl().add(this);
-      var f = this.x.redSqr(), p = this.y.redSqr(), m = this.z.redSqr(), b = p.redSqr(), w = f.redAdd(f).redIAdd(f), M = w.redSqr(), R = this.x.redAdd(p).redSqr().redISub(f).redISub(b);
-      R = R.redIAdd(R), R = R.redAdd(R).redIAdd(R), R = R.redISub(M);
-      var V = R.redSqr(), O = b.redIAdd(b);
+      var f = this.x.redSqr(), p = this.y.redSqr(), m = this.z.redSqr(), b = p.redSqr(), w = f.redAdd(f).redIAdd(f), M = w.redSqr(), P = this.x.redAdd(p).redSqr().redISub(f).redISub(b);
+      P = P.redIAdd(P), P = P.redAdd(P).redIAdd(P), P = P.redISub(M);
+      var V = P.redSqr(), O = b.redIAdd(b);
       O = O.redIAdd(O), O = O.redIAdd(O), O = O.redIAdd(O);
-      var z = w.redIAdd(R).redSqr().redISub(M).redISub(V).redISub(O), H = p.redMul(z);
+      var z = w.redIAdd(P).redSqr().redISub(M).redISub(V).redISub(O), H = p.redMul(z);
       H = H.redIAdd(H), H = H.redIAdd(H);
       var q = this.x.redMul(V).redISub(H);
       q = q.redIAdd(q), q = q.redIAdd(q);
-      var W = this.y.redMul(z.redMul(O.redISub(z)).redISub(R.redMul(V)));
+      var W = this.y.redMul(z.redMul(O.redISub(z)).redISub(P.redMul(V)));
       W = W.redIAdd(W), W = W.redIAdd(W), W = W.redIAdd(W);
-      var K = this.z.redAdd(R).redSqr().redISub(m).redISub(V);
+      var K = this.z.redAdd(P).redSqr().redISub(m).redISub(V);
       return this.curve.jpoint(q, W, K);
     }, c.prototype.mul = function(f, p) {
       return f = new e(f, p), this.curve._wnafMul(this, f);
@@ -78535,8 +78535,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }, a.prototype.add = function() {
       throw new Error("Not supported on Montgomery curve");
     }, a.prototype.diffAdd = function(c, d) {
-      var f = this.x.redAdd(this.z), p = this.x.redSub(this.z), m = c.x.redAdd(c.z), b = c.x.redSub(c.z), w = b.redMul(f), M = m.redMul(p), R = d.z.redMul(w.redAdd(M).redSqr()), V = d.x.redMul(w.redISub(M).redSqr());
-      return this.curve.point(R, V);
+      var f = this.x.redAdd(this.z), p = this.x.redSub(this.z), m = c.x.redAdd(c.z), b = c.x.redSub(c.z), w = b.redMul(f), M = m.redMul(p), P = d.z.redMul(w.redAdd(M).redSqr()), V = d.x.redMul(w.redISub(M).redSqr());
+      return this.curve.point(P, V);
     }, a.prototype.mul = function(c) {
       for (var d = c.clone(), f = this, p = this.curve.point(null, null), m = this, b = []; d.cmpn(0) !== 0; d.iushrn(1)) b.push(d.andln(1));
       for (var w = b.length - 1; w >= 0; w--) b[w] === 0 ? (f = f.diffAdd(p, m), p = p.dbl()) : (p = f.diffAdd(p, m), f = f.dbl());
@@ -78571,8 +78571,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
       d = new e(d, 16), d.red || (d = d.toRed(this.red));
       var p = d.redSqr(), m = this.c2.redSub(this.a.redMul(p)), b = this.one.redSub(this.c2.redMul(this.d).redMul(p)), w = m.redMul(b.redInvm()), M = w.redSqrt();
       if (M.redSqr().redSub(w).cmp(this.zero) !== 0) throw new Error("invalid point");
-      var R = M.fromRed().isOdd();
-      return (f && !R || !f && R) && (M = M.redNeg()), this.point(d, M);
+      var P = M.fromRed().isOdd();
+      return (f && !P || !f && P) && (M = M.redNeg()), this.point(d, M);
     }, a.prototype.pointFromY = function(d, f) {
       d = new e(d, 16), d.red || (d = d.toRed(this.red));
       var p = d.redSqr(), m = p.redSub(this.c2), b = p.redMul(this.d).redMul(this.c2).redSub(this.a), w = m.redMul(b.redInvm());
@@ -78605,24 +78605,24 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }, h.prototype._extDbl = function() {
       var d = this.x.redSqr(), f = this.y.redSqr(), p = this.z.redSqr();
       p = p.redIAdd(p);
-      var m = this.curve._mulA(d), b = this.x.redAdd(this.y).redSqr().redISub(d).redISub(f), w = m.redAdd(f), M = w.redSub(p), R = m.redSub(f), V = b.redMul(M), O = w.redMul(R), z = b.redMul(R), H = M.redMul(w);
+      var m = this.curve._mulA(d), b = this.x.redAdd(this.y).redSqr().redISub(d).redISub(f), w = m.redAdd(f), M = w.redSub(p), P = m.redSub(f), V = b.redMul(M), O = w.redMul(P), z = b.redMul(P), H = M.redMul(w);
       return this.curve.point(V, O, H, z);
     }, h.prototype._projDbl = function() {
-      var d = this.x.redAdd(this.y).redSqr(), f = this.x.redSqr(), p = this.y.redSqr(), m, b, w, M, R, V;
+      var d = this.x.redAdd(this.y).redSqr(), f = this.x.redSqr(), p = this.y.redSqr(), m, b, w, M, P, V;
       if (this.curve.twisted) {
         M = this.curve._mulA(f);
         var O = M.redAdd(p);
-        this.zOne ? (m = d.redSub(f).redSub(p).redMul(O.redSub(this.curve.two)), b = O.redMul(M.redSub(p)), w = O.redSqr().redSub(O).redSub(O)) : (R = this.z.redSqr(), V = O.redSub(R).redISub(R), m = d.redSub(f).redISub(p).redMul(V), b = O.redMul(M.redSub(p)), w = O.redMul(V));
-      } else M = f.redAdd(p), R = this.curve._mulC(this.z).redSqr(), V = M.redSub(R).redSub(R), m = this.curve._mulC(d.redISub(M)).redMul(V), b = this.curve._mulC(M).redMul(f.redISub(p)), w = M.redMul(V);
+        this.zOne ? (m = d.redSub(f).redSub(p).redMul(O.redSub(this.curve.two)), b = O.redMul(M.redSub(p)), w = O.redSqr().redSub(O).redSub(O)) : (P = this.z.redSqr(), V = O.redSub(P).redISub(P), m = d.redSub(f).redISub(p).redMul(V), b = O.redMul(M.redSub(p)), w = O.redMul(V));
+      } else M = f.redAdd(p), P = this.curve._mulC(this.z).redSqr(), V = M.redSub(P).redSub(P), m = this.curve._mulC(d.redISub(M)).redMul(V), b = this.curve._mulC(M).redMul(f.redISub(p)), w = M.redMul(V);
       return this.curve.point(m, b, w);
     }, h.prototype.dbl = function() {
       return this.isInfinity() ? this : this.curve.extended ? this._extDbl() : this._projDbl();
     }, h.prototype._extAdd = function(d) {
-      var f = this.y.redSub(this.x).redMul(d.y.redSub(d.x)), p = this.y.redAdd(this.x).redMul(d.y.redAdd(d.x)), m = this.t.redMul(this.curve.dd).redMul(d.t), b = this.z.redMul(d.z.redAdd(d.z)), w = p.redSub(f), M = b.redSub(m), R = b.redAdd(m), V = p.redAdd(f), O = w.redMul(M), z = R.redMul(V), H = w.redMul(V), q = M.redMul(R);
+      var f = this.y.redSub(this.x).redMul(d.y.redSub(d.x)), p = this.y.redAdd(this.x).redMul(d.y.redAdd(d.x)), m = this.t.redMul(this.curve.dd).redMul(d.t), b = this.z.redMul(d.z.redAdd(d.z)), w = p.redSub(f), M = b.redSub(m), P = b.redAdd(m), V = p.redAdd(f), O = w.redMul(M), z = P.redMul(V), H = w.redMul(V), q = M.redMul(P);
       return this.curve.point(O, z, q, H);
     }, h.prototype._projAdd = function(d) {
-      var f = this.z.redMul(d.z), p = f.redSqr(), m = this.x.redMul(d.x), b = this.y.redMul(d.y), w = this.curve.d.redMul(m).redMul(b), M = p.redSub(w), R = p.redAdd(w), V = this.x.redAdd(this.y).redMul(d.x.redAdd(d.y)).redISub(m).redISub(b), O = f.redMul(M).redMul(V), z, H;
-      return this.curve.twisted ? (z = f.redMul(R).redMul(b.redSub(this.curve._mulA(m))), H = M.redMul(R)) : (z = f.redMul(R).redMul(b.redSub(m)), H = this.curve._mulC(M).redMul(R)), this.curve.point(O, z, H);
+      var f = this.z.redMul(d.z), p = f.redSqr(), m = this.x.redMul(d.x), b = this.y.redMul(d.y), w = this.curve.d.redMul(m).redMul(b), M = p.redSub(w), P = p.redAdd(w), V = this.x.redAdd(this.y).redMul(d.x.redAdd(d.y)).redISub(m).redISub(b), O = f.redMul(M).redMul(V), z, H;
+      return this.curve.twisted ? (z = f.redMul(P).redMul(b.redSub(this.curve._mulA(m))), H = M.redMul(P)) : (z = f.redMul(P).redMul(b.redSub(m)), H = this.curve._mulC(M).redMul(P)), this.curve.point(O, z, H);
     }, h.prototype.add = function(d) {
       return this.isInfinity() ? d : d.isInfinity() ? this : this.curve.extended ? this._extAdd(d) : this._projAdd(d);
     }, h.prototype.mul = function(d) {
@@ -78686,9 +78686,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
       var $ = [];
       if (typeof v == "string") if (_) {
         if (_ === "hex") for (v = v.replace(/[^a-z0-9]+/ig, ""), v.length % 2 !== 0 && (v = "0" + v), F = 0; F < v.length; F += 2) $.push(parseInt(v[F] + v[F + 1], 16));
-      } else for (var P = 0, F = 0; F < v.length; F++) {
+      } else for (var R = 0, F = 0; F < v.length; F++) {
         var k = v.charCodeAt(F);
-        k < 128 ? $[P++] = k : k < 2048 ? ($[P++] = k >> 6 | 192, $[P++] = k & 63 | 128) : r(v, F) ? (k = 65536 + ((k & 1023) << 10) + (v.charCodeAt(++F) & 1023), $[P++] = k >> 18 | 240, $[P++] = k >> 12 & 63 | 128, $[P++] = k >> 6 & 63 | 128, $[P++] = k & 63 | 128) : ($[P++] = k >> 12 | 224, $[P++] = k >> 6 & 63 | 128, $[P++] = k & 63 | 128);
+        k < 128 ? $[R++] = k : k < 2048 ? ($[R++] = k >> 6 | 192, $[R++] = k & 63 | 128) : r(v, F) ? (k = 65536 + ((k & 1023) << 10) + (v.charCodeAt(++F) & 1023), $[R++] = k >> 18 | 240, $[R++] = k >> 12 & 63 | 128, $[R++] = k >> 6 & 63 | 128, $[R++] = k & 63 | 128) : ($[R++] = k >> 12 | 224, $[R++] = k >> 6 & 63 | 128, $[R++] = k & 63 | 128);
       }
       else for (F = 0; F < v.length; F++) $[F] = v[F] | 0;
       return $;
@@ -78705,8 +78705,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }
     utils.htonl = a;
     function h(v, _) {
-      for (var $ = "", P = 0; P < v.length; P++) {
-        var F = v[P];
+      for (var $ = "", R = 0; R < v.length; R++) {
+        var F = v[R];
         _ === "little" && (F = a(F)), $ += d(F.toString(16));
       }
       return $;
@@ -78720,19 +78720,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return v.length === 7 ? "0" + v : v.length === 6 ? "00" + v : v.length === 5 ? "000" + v : v.length === 4 ? "0000" + v : v.length === 3 ? "00000" + v : v.length === 2 ? "000000" + v : v.length === 1 ? "0000000" + v : v;
     }
     utils.zero8 = d;
-    function f(v, _, $, P) {
+    function f(v, _, $, R) {
       var F = $ - _;
       l(F % 4 === 0);
       for (var k = new Array(F / 4), G = 0, D = _; G < k.length; G++, D += 4) {
         var x;
-        P === "big" ? x = v[D] << 24 | v[D + 1] << 16 | v[D + 2] << 8 | v[D + 3] : x = v[D + 3] << 24 | v[D + 2] << 16 | v[D + 1] << 8 | v[D], k[G] = x >>> 0;
+        R === "big" ? x = v[D] << 24 | v[D + 1] << 16 | v[D + 2] << 8 | v[D + 3] : x = v[D + 3] << 24 | v[D + 2] << 16 | v[D + 1] << 8 | v[D], k[G] = x >>> 0;
       }
       return k;
     }
     utils.join32 = f;
     function p(v, _) {
-      for (var $ = new Array(v.length * 4), P = 0, F = 0; P < v.length; P++, F += 4) {
-        var k = v[P];
+      for (var $ = new Array(v.length * 4), R = 0, F = 0; R < v.length; R++, F += 4) {
+        var k = v[R];
         _ === "big" ? ($[F] = k >>> 24, $[F + 1] = k >>> 16 & 255, $[F + 2] = k >>> 8 & 255, $[F + 3] = k & 255) : ($[F + 3] = k >>> 24, $[F + 2] = k >>> 16 & 255, $[F + 1] = k >>> 8 & 255, $[F] = k & 255);
       }
       return $;
@@ -78754,61 +78754,61 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return v + _ + $ >>> 0;
     }
     utils.sum32_3 = M;
-    function R(v, _, $, P) {
-      return v + _ + $ + P >>> 0;
+    function P(v, _, $, R) {
+      return v + _ + $ + R >>> 0;
     }
-    utils.sum32_4 = R;
-    function V(v, _, $, P, F) {
-      return v + _ + $ + P + F >>> 0;
+    utils.sum32_4 = P;
+    function V(v, _, $, R, F) {
+      return v + _ + $ + R + F >>> 0;
     }
     utils.sum32_5 = V;
-    function O(v, _, $, P) {
-      var F = v[_], k = v[_ + 1], G = P + k >>> 0, D = (G < P ? 1 : 0) + $ + F;
+    function O(v, _, $, R) {
+      var F = v[_], k = v[_ + 1], G = R + k >>> 0, D = (G < R ? 1 : 0) + $ + F;
       v[_] = D >>> 0, v[_ + 1] = G;
     }
     utils.sum64 = O;
-    function z(v, _, $, P) {
-      var F = _ + P >>> 0, k = (F < _ ? 1 : 0) + v + $;
+    function z(v, _, $, R) {
+      var F = _ + R >>> 0, k = (F < _ ? 1 : 0) + v + $;
       return k >>> 0;
     }
     utils.sum64_hi = z;
-    function H(v, _, $, P) {
-      var F = _ + P;
+    function H(v, _, $, R) {
+      var F = _ + R;
       return F >>> 0;
     }
     utils.sum64_lo = H;
-    function q(v, _, $, P, F, k, G, D) {
+    function q(v, _, $, R, F, k, G, D) {
       var x = 0, L = _;
-      L = L + P >>> 0, x += L < _ ? 1 : 0, L = L + k >>> 0, x += L < k ? 1 : 0, L = L + D >>> 0, x += L < D ? 1 : 0;
+      L = L + R >>> 0, x += L < _ ? 1 : 0, L = L + k >>> 0, x += L < k ? 1 : 0, L = L + D >>> 0, x += L < D ? 1 : 0;
       var j = v + $ + F + G + x;
       return j >>> 0;
     }
     utils.sum64_4_hi = q;
-    function W(v, _, $, P, F, k, G, D) {
-      var x = _ + P + k + D;
+    function W(v, _, $, R, F, k, G, D) {
+      var x = _ + R + k + D;
       return x >>> 0;
     }
     utils.sum64_4_lo = W;
-    function K(v, _, $, P, F, k, G, D, x, L) {
+    function K(v, _, $, R, F, k, G, D, x, L) {
       var j = 0, Y = _;
-      Y = Y + P >>> 0, j += Y < _ ? 1 : 0, Y = Y + k >>> 0, j += Y < k ? 1 : 0, Y = Y + D >>> 0, j += Y < D ? 1 : 0, Y = Y + L >>> 0, j += Y < L ? 1 : 0;
+      Y = Y + R >>> 0, j += Y < _ ? 1 : 0, Y = Y + k >>> 0, j += Y < k ? 1 : 0, Y = Y + D >>> 0, j += Y < D ? 1 : 0, Y = Y + L >>> 0, j += Y < L ? 1 : 0;
       var oe = v + $ + F + G + x + j;
       return oe >>> 0;
     }
     utils.sum64_5_hi = K;
-    function J(v, _, $, P, F, k, G, D, x, L) {
-      var j = _ + P + k + D + L;
+    function J(v, _, $, R, F, k, G, D, x, L) {
+      var j = _ + R + k + D + L;
       return j >>> 0;
     }
     utils.sum64_5_lo = J;
     function ee(v, _, $) {
-      var P = _ << 32 - $ | v >>> $;
-      return P >>> 0;
+      var R = _ << 32 - $ | v >>> $;
+      return R >>> 0;
     }
     utils.rotr64_hi = ee;
     function ie(v, _, $) {
-      var P = v << 32 - $ | _ >>> $;
-      return P >>> 0;
+      var R = v << 32 - $ | _ >>> $;
+      return R >>> 0;
     }
     utils.rotr64_lo = ie;
     function pe(v, _, $) {
@@ -78816,8 +78816,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }
     utils.shr64_hi = pe;
     function U(v, _, $) {
-      var P = v << 32 - $ | _ >>> $;
-      return P >>> 0;
+      var R = v << 32 - $ | _ >>> $;
+      return R >>> 0;
     }
     return utils.shr64_lo = U, utils;
   }
@@ -78913,12 +78913,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
     return l.inherits(f, c), _1 = f, f.blockSize = 512, f.outSize = 160, f.hmacStrength = 80, f.padLength = 64, f.prototype._update = function(m, b) {
       for (var w = this.W, M = 0; M < 16; M++) w[M] = m[b + M];
       for (; M < w.length; M++) w[M] = s(w[M - 3] ^ w[M - 8] ^ w[M - 14] ^ w[M - 16], 1);
-      var R = this.h[0], V = this.h[1], O = this.h[2], z = this.h[3], H = this.h[4];
+      var P = this.h[0], V = this.h[1], O = this.h[2], z = this.h[3], H = this.h[4];
       for (M = 0; M < w.length; M++) {
-        var q = ~~(M / 20), W = a(s(R, 5), h(q, V, O, z), H, w[M], d[q]);
-        H = z, z = O, O = s(V, 30), V = R, R = W;
+        var q = ~~(M / 20), W = a(s(P, 5), h(q, V, O, z), H, w[M], d[q]);
+        H = z, z = O, O = s(V, 30), V = P, P = W;
       }
-      this.h[0] = o(this.h[0], R), this.h[1] = o(this.h[1], V), this.h[2] = o(this.h[2], O), this.h[3] = o(this.h[3], z), this.h[4] = o(this.h[4], H);
+      this.h[0] = o(this.h[0], P), this.h[1] = o(this.h[1], V), this.h[2] = o(this.h[2], O), this.h[3] = o(this.h[3], z), this.h[4] = o(this.h[4], H);
     }, f.prototype._digest = function(m) {
       return m === "hex" ? l.toHex32(this.h, "big") : l.split32(this.h, "big");
     }, _1;
@@ -78993,8 +78993,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
       3204031479,
       3329325298
     ];
-    function R() {
-      if (!(this instanceof R)) return new R();
+    function P() {
+      if (!(this instanceof P)) return new P();
       w.call(this), this.h = [
         1779033703,
         3144134277,
@@ -79006,7 +79006,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         1541459225
       ], this.k = M, this.W = new Array(64);
     }
-    return l.inherits(R, w), _256 = R, R.blockSize = 512, R.outSize = 256, R.hmacStrength = 192, R.padLength = 64, R.prototype._update = function(O, z) {
+    return l.inherits(P, w), _256 = P, P.blockSize = 512, P.outSize = 256, P.hmacStrength = 192, P.padLength = 64, P.prototype._update = function(O, z) {
       for (var H = this.W, q = 0; q < 16; q++) H[q] = O[z + q];
       for (; q < H.length; q++) H[q] = a(b(H[q - 2]), H[q - 7], m(H[q - 15]), H[q - 16]);
       var W = this.h[0], K = this.h[1], J = this.h[2], ee = this.h[3], ie = this.h[4], pe = this.h[5], U = this.h[6], v = this.h[7];
@@ -79015,7 +79015,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         v = U, U = pe, pe = ie, ie = o(ee, _), ee = J, J = K, K = W, W = o(_, $);
       }
       this.h[0] = o(this.h[0], W), this.h[1] = o(this.h[1], K), this.h[2] = o(this.h[2], J), this.h[3] = o(this.h[3], ee), this.h[4] = o(this.h[4], ie), this.h[5] = o(this.h[5], pe), this.h[6] = o(this.h[6], U), this.h[7] = o(this.h[7], v);
-    }, R.prototype._digest = function(O) {
+    }, P.prototype._digest = function(O) {
       return O === "hex" ? l.toHex32(this.h, "big") : l.split32(this.h, "big");
     }, _256;
   }
@@ -79045,7 +79045,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
   function require_512() {
     if (hasRequired_512) return _512;
     hasRequired_512 = 1;
-    var l = requireUtils(), e = requireCommon$1(), r = requireMinimalisticAssert(), s = l.rotr64_hi, o = l.rotr64_lo, a = l.shr64_hi, h = l.shr64_lo, c = l.sum64, d = l.sum64_hi, f = l.sum64_lo, p = l.sum64_4_hi, m = l.sum64_4_lo, b = l.sum64_5_hi, w = l.sum64_5_lo, M = e.BlockHash, R = [
+    var l = requireUtils(), e = requireCommon$1(), r = requireMinimalisticAssert(), s = l.rotr64_hi, o = l.rotr64_lo, a = l.shr64_hi, h = l.shr64_lo, c = l.sum64, d = l.sum64_hi, f = l.sum64_lo, p = l.sum64_4_hi, m = l.sum64_4_lo, b = l.sum64_5_hi, w = l.sum64_5_lo, M = e.BlockHash, P = [
       1116352408,
       3609767458,
       1899447441,
@@ -79226,16 +79226,16 @@ Use Chrome, Firefox or Internet Explorer 11`);
         4215389547,
         1541459225,
         327033209
-      ], this.k = R, this.W = new Array(160);
+      ], this.k = P, this.W = new Array(160);
     }
-    l.inherits(V, M), _512 = V, V.blockSize = 1024, V.outSize = 512, V.hmacStrength = 192, V.padLength = 128, V.prototype._prepareBlock = function($, P) {
-      for (var F = this.W, k = 0; k < 32; k++) F[k] = $[P + k];
+    l.inherits(V, M), _512 = V, V.blockSize = 1024, V.outSize = 512, V.hmacStrength = 192, V.padLength = 128, V.prototype._prepareBlock = function($, R) {
+      for (var F = this.W, k = 0; k < 32; k++) F[k] = $[R + k];
       for (; k < F.length; k += 2) {
         var G = U(F[k - 4], F[k - 3]), D = v(F[k - 4], F[k - 3]), x = F[k - 14], L = F[k - 13], j = ie(F[k - 30], F[k - 29]), Y = pe(F[k - 30], F[k - 29]), oe = F[k - 32], me = F[k - 31];
         F[k] = p(G, D, x, L, j, Y, oe, me), F[k + 1] = m(G, D, x, L, j, Y, oe, me);
       }
-    }, V.prototype._update = function($, P) {
-      this._prepareBlock($, P);
+    }, V.prototype._update = function($, R) {
+      this._prepareBlock($, R);
       var F = this.W, k = this.h[0], G = this.h[1], D = this.h[2], x = this.h[3], L = this.h[4], j = this.h[5], Y = this.h[6], oe = this.h[7], me = this.h[8], be = this.h[9], Z = this.h[10], se = this.h[11], fe = this.h[12], _e = this.h[13], xe = this.h[14], le = this.h[15];
       r(this.k.length === F.length);
       for (var Ce = 0; Ce < F.length; Ce += 2) {
@@ -79248,52 +79248,52 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }, V.prototype._digest = function($) {
       return $ === "hex" ? l.toHex32(this.h, "big") : l.split32(this.h, "big");
     };
-    function O(_, $, P, F, k) {
-      var G = _ & P ^ ~_ & k;
+    function O(_, $, R, F, k) {
+      var G = _ & R ^ ~_ & k;
       return G < 0 && (G += 4294967296), G;
     }
-    function z(_, $, P, F, k, G) {
+    function z(_, $, R, F, k, G) {
       var D = $ & F ^ ~$ & G;
       return D < 0 && (D += 4294967296), D;
     }
-    function H(_, $, P, F, k) {
-      var G = _ & P ^ _ & k ^ P & k;
+    function H(_, $, R, F, k) {
+      var G = _ & R ^ _ & k ^ R & k;
       return G < 0 && (G += 4294967296), G;
     }
-    function q(_, $, P, F, k, G) {
+    function q(_, $, R, F, k, G) {
       var D = $ & F ^ $ & G ^ F & G;
       return D < 0 && (D += 4294967296), D;
     }
     function W(_, $) {
-      var P = s(_, $, 28), F = s($, _, 2), k = s($, _, 7), G = P ^ F ^ k;
+      var R = s(_, $, 28), F = s($, _, 2), k = s($, _, 7), G = R ^ F ^ k;
       return G < 0 && (G += 4294967296), G;
     }
     function K(_, $) {
-      var P = o(_, $, 28), F = o($, _, 2), k = o($, _, 7), G = P ^ F ^ k;
+      var R = o(_, $, 28), F = o($, _, 2), k = o($, _, 7), G = R ^ F ^ k;
       return G < 0 && (G += 4294967296), G;
     }
     function J(_, $) {
-      var P = s(_, $, 14), F = s(_, $, 18), k = s($, _, 9), G = P ^ F ^ k;
+      var R = s(_, $, 14), F = s(_, $, 18), k = s($, _, 9), G = R ^ F ^ k;
       return G < 0 && (G += 4294967296), G;
     }
     function ee(_, $) {
-      var P = o(_, $, 14), F = o(_, $, 18), k = o($, _, 9), G = P ^ F ^ k;
+      var R = o(_, $, 14), F = o(_, $, 18), k = o($, _, 9), G = R ^ F ^ k;
       return G < 0 && (G += 4294967296), G;
     }
     function ie(_, $) {
-      var P = s(_, $, 1), F = s(_, $, 8), k = a(_, $, 7), G = P ^ F ^ k;
+      var R = s(_, $, 1), F = s(_, $, 8), k = a(_, $, 7), G = R ^ F ^ k;
       return G < 0 && (G += 4294967296), G;
     }
     function pe(_, $) {
-      var P = o(_, $, 1), F = o(_, $, 8), k = h(_, $, 7), G = P ^ F ^ k;
+      var R = o(_, $, 1), F = o(_, $, 8), k = h(_, $, 7), G = R ^ F ^ k;
       return G < 0 && (G += 4294967296), G;
     }
     function U(_, $) {
-      var P = s(_, $, 19), F = s($, _, 29), k = a(_, $, 6), G = P ^ F ^ k;
+      var R = s(_, $, 19), F = s($, _, 29), k = a(_, $, 6), G = R ^ F ^ k;
       return G < 0 && (G += 4294967296), G;
     }
     function v(_, $) {
-      var P = o(_, $, 19), F = o($, _, 29), k = h(_, $, 6), G = P ^ F ^ k;
+      var R = o(_, $, 19), F = o($, _, 29), k = h(_, $, 6), G = R ^ F ^ k;
       return G < 0 && (G += 4294967296), G;
     }
     return _512;
@@ -79356,14 +79356,14 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }, c.prototype._digest = function(V) {
       return V === "hex" ? l.toHex32(this.h, "little") : l.split32(this.h, "little");
     };
-    function d(R, V, O, z) {
-      return R <= 15 ? V ^ O ^ z : R <= 31 ? V & O | ~V & z : R <= 47 ? (V | ~O) ^ z : R <= 63 ? V & z | O & ~z : V ^ (O | ~z);
+    function d(P, V, O, z) {
+      return P <= 15 ? V ^ O ^ z : P <= 31 ? V & O | ~V & z : P <= 47 ? (V | ~O) ^ z : P <= 63 ? V & z | O & ~z : V ^ (O | ~z);
     }
-    function f(R) {
-      return R <= 15 ? 0 : R <= 31 ? 1518500249 : R <= 47 ? 1859775393 : R <= 63 ? 2400959708 : 2840853838;
+    function f(P) {
+      return P <= 15 ? 0 : P <= 31 ? 1518500249 : P <= 47 ? 1859775393 : P <= 63 ? 2400959708 : 2840853838;
     }
-    function p(R) {
-      return R <= 15 ? 1352829926 : R <= 31 ? 1548603684 : R <= 47 ? 1836072691 : R <= 63 ? 2053994217 : 0;
+    function p(P) {
+      return P <= 15 ? 1352829926 : P <= 31 ? 1548603684 : P <= 47 ? 1836072691 : P <= 63 ? 2053994217 : 0;
     }
     var m = [
       0,
@@ -80778,9 +80778,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
       if (w === false || (f[m.place] & 128) !== 0) return false;
       var M = f.slice(m.place, w + m.place);
       if (m.place += w, f[m.place++] !== 2) return false;
-      var R = a(f, m);
-      if (R === false || f.length !== R + m.place || (f[m.place] & 128) !== 0) return false;
-      var V = f.slice(m.place, R + m.place);
+      var P = a(f, m);
+      if (P === false || f.length !== P + m.place || (f[m.place] & 128) !== 0) return false;
+      var V = f.slice(m.place, P + m.place);
       if (M[0] === 0) if (M[1] & 128) M = M.slice(1);
       else return false;
       if (V[0] === 0) if (V[1] & 128) V = V.slice(1);
@@ -80852,15 +80852,15 @@ Use Chrome, Firefox or Internet Explorer 11`);
         w = M.length + 1 >>> 1, p = new l(M, 16);
       }
       typeof b != "number" && (b = w * 8);
-      var R = b - this.n.bitLength();
-      return R > 0 && (p = p.ushrn(R)), !m && p.cmp(this.n) >= 0 ? p.sub(this.n) : p;
+      var P = b - this.n.bitLength();
+      return P > 0 && (p = p.ushrn(P)), !m && p.cmp(this.n) >= 0 ? p.sub(this.n) : p;
     }, d.prototype.sign = function(p, m, b, w) {
       if (typeof b == "object" && (w = b, b = null), w || (w = {}), typeof p != "string" && typeof p != "number" && !l.isBN(p)) {
         a(typeof p == "object" && p && typeof p.length == "number", "Expected message to be an array-like, a hex string, or a BN instance"), a(p.length >>> 0 === p.length);
         for (var M = 0; M < p.length; M++) a((p[M] & 255) === p[M]);
       }
       m = this.keyFromPrivate(m, b), p = this._truncateToN(p, false, w.msgBitLength), a(!p.isNeg(), "Can not sign a negative message");
-      var R = this.n.byteLength(), V = m.getPrivate().toArray("be", R), O = p.toArray("be", R);
+      var P = this.n.byteLength(), V = m.getPrivate().toArray("be", P), O = p.toArray("be", P);
       a(new l(O).eq(p), "Can not sign message");
       for (var z = new e({
         hash: this.hash,
@@ -80890,17 +80890,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
     }, d.prototype.verify = function(p, m, b, w, M) {
       M || (M = {}), p = this._truncateToN(p, false, M.msgBitLength), b = this.keyFromPublic(b, w), m = new c(m, "hex");
-      var R = m.r, V = m.s;
-      if (R.cmpn(1) < 0 || R.cmp(this.n) >= 0 || V.cmpn(1) < 0 || V.cmp(this.n) >= 0) return false;
-      var O = V.invm(this.n), z = O.mul(p).umod(this.n), H = O.mul(R).umod(this.n), q;
-      return this.curve._maxwellTrick ? (q = this.g.jmulAdd(z, b.getPublic(), H), q.isInfinity() ? false : q.eqXToP(R)) : (q = this.g.mulAdd(z, b.getPublic(), H), q.isInfinity() ? false : q.getX().umod(this.n).cmp(R) === 0);
+      var P = m.r, V = m.s;
+      if (P.cmpn(1) < 0 || P.cmp(this.n) >= 0 || V.cmpn(1) < 0 || V.cmp(this.n) >= 0) return false;
+      var O = V.invm(this.n), z = O.mul(p).umod(this.n), H = O.mul(P).umod(this.n), q;
+      return this.curve._maxwellTrick ? (q = this.g.jmulAdd(z, b.getPublic(), H), q.isInfinity() ? false : q.eqXToP(P)) : (q = this.g.mulAdd(z, b.getPublic(), H), q.isInfinity() ? false : q.getX().umod(this.n).cmp(P) === 0);
     }, d.prototype.recoverPubKey = function(f, p, m, b) {
       a((3 & m) === m, "The recovery param is more than two bits"), p = new c(p, b);
-      var w = this.n, M = new l(f), R = p.r, V = p.s, O = m & 1, z = m >> 1;
-      if (R.cmp(this.curve.p.umod(this.curve.n)) >= 0 && z) throw new Error("Unable to find sencond key candinate");
-      z ? R = this.curve.pointFromX(R.add(this.curve.n), O) : R = this.curve.pointFromX(R, O);
+      var w = this.n, M = new l(f), P = p.r, V = p.s, O = m & 1, z = m >> 1;
+      if (P.cmp(this.curve.p.umod(this.curve.n)) >= 0 && z) throw new Error("Unable to find sencond key candinate");
+      z ? P = this.curve.pointFromX(P.add(this.curve.n), O) : P = this.curve.pointFromX(P, O);
       var H = p.r.invm(w), q = w.sub(M).mul(H).umod(w), W = V.mul(H).umod(w);
-      return this.g.mulAdd(q, R, W);
+      return this.g.mulAdd(q, P, W);
     }, d.prototype.getKeyRecoveryParam = function(f, p, m, b) {
       if (p = new c(p, b), p.recoveryParam !== null) return p.recoveryParam;
       for (var w = 0; w < 4; w++) {
@@ -80992,7 +80992,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }
     return eddsa = c, c.prototype.sign = function(f, p) {
       f = o(f);
-      var m = this.keyFromSecret(p), b = this.hashInt(m.messagePrefix(), f), w = this.g.mul(b), M = this.encodePoint(w), R = this.hashInt(M, m.pubBytes(), f).mul(m.priv()), V = b.add(R).umod(this.curve.n);
+      var m = this.keyFromSecret(p), b = this.hashInt(m.messagePrefix(), f), w = this.g.mul(b), M = this.encodePoint(w), P = this.hashInt(M, m.pubBytes(), f).mul(m.priv()), V = b.add(P).umod(this.curve.n);
       return this.makeSignature({
         R: w,
         S: V,
@@ -81000,8 +81000,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
       });
     }, c.prototype.verify = function(f, p, m) {
       if (f = o(f), p = this.makeSignature(p), p.S().gte(p.eddsa.curve.n) || p.S().isNeg()) return false;
-      var b = this.keyFromPublic(m), w = this.hashInt(p.Rencoded(), b.pubBytes(), f), M = this.g.mul(p.S()), R = p.R().add(b.pub().mul(w));
-      return R.eq(M);
+      var b = this.keyFromPublic(m), w = this.hashInt(p.Rencoded(), b.pubBytes(), f), M = this.g.mul(p.S()), P = p.R().add(b.pub().mul(w));
+      return P.eq(M);
     }, c.prototype.hashInt = function() {
       for (var f = this.hash(), p = 0; p < arguments.length; p++) f.update(arguments[p]);
       return r.intFromLE(f.digest()).umod(this.curve.n);
@@ -81068,8 +81068,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (typeof v == "number") return this._initNumber(v, _, $);
           if (typeof v == "object") return this._initArray(v, _, $);
           _ === "hex" && (_ = 16), s(_ === (_ | 0) && _ >= 2 && _ <= 36), v = v.toString().replace(/\s+/g, "");
-          var P = 0;
-          v[0] === "-" && (P++, this.negative = 1), P < v.length && (_ === 16 ? this._parseHex(v, P, $) : (this._parseBase(v, _, P), $ === "le" && this._initArray(this.toArray(), _, $)));
+          var R = 0;
+          v[0] === "-" && (R++, this.negative = 1), R < v.length && (_ === 16 ? this._parseHex(v, R, $) : (this._parseBase(v, _, R), $ === "le" && this._initArray(this.toArray(), _, $)));
         }, a.prototype._initNumber = function(v, _, $) {
           v < 0 && (this.negative = 1, v = -v), v < 67108864 ? (this.words = [
             v & 67108863
@@ -81086,10 +81086,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
             0
           ], this.length = 1, this;
           this.length = Math.ceil(v.length / 3), this.words = new Array(this.length);
-          for (var P = 0; P < this.length; P++) this.words[P] = 0;
+          for (var R = 0; R < this.length; R++) this.words[R] = 0;
           var F, k, G = 0;
-          if ($ === "be") for (P = v.length - 1, F = 0; P >= 0; P -= 3) k = v[P] | v[P - 1] << 8 | v[P - 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
-          else if ($ === "le") for (P = 0, F = 0; P < v.length; P += 3) k = v[P] | v[P + 1] << 8 | v[P + 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
+          if ($ === "be") for (R = v.length - 1, F = 0; R >= 0; R -= 3) k = v[R] | v[R - 1] << 8 | v[R - 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
+          else if ($ === "le") for (R = 0, F = 0; R < v.length; R += 3) k = v[R] | v[R + 1] << 8 | v[R + 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
           return this.strip();
         };
         function c(U, v) {
@@ -81102,29 +81102,29 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }
         a.prototype._parseHex = function(v, _, $) {
           this.length = Math.ceil((v.length - _) / 6), this.words = new Array(this.length);
-          for (var P = 0; P < this.length; P++) this.words[P] = 0;
+          for (var R = 0; R < this.length; R++) this.words[R] = 0;
           var F = 0, k = 0, G;
-          if ($ === "be") for (P = v.length - 1; P >= _; P -= 2) G = d(v, _, P) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
+          if ($ === "be") for (R = v.length - 1; R >= _; R -= 2) G = d(v, _, R) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
           else {
             var D = v.length - _;
-            for (P = D % 2 === 0 ? _ + 1 : _; P < v.length; P += 2) G = d(v, _, P) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
+            for (R = D % 2 === 0 ? _ + 1 : _; R < v.length; R += 2) G = d(v, _, R) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
           }
           this.strip();
         };
         function f(U, v, _, $) {
-          for (var P = 0, F = Math.min(U.length, _), k = v; k < F; k++) {
+          for (var R = 0, F = Math.min(U.length, _), k = v; k < F; k++) {
             var G = U.charCodeAt(k) - 48;
-            P *= $, G >= 49 ? P += G - 49 + 10 : G >= 17 ? P += G - 17 + 10 : P += G;
+            R *= $, G >= 49 ? R += G - 49 + 10 : G >= 17 ? R += G - 17 + 10 : R += G;
           }
-          return P;
+          return R;
         }
         a.prototype._parseBase = function(v, _, $) {
           this.words = [
             0
           ], this.length = 1;
-          for (var P = 0, F = 1; F <= 67108863; F *= _) P++;
-          P--, F = F / _ | 0;
-          for (var k = v.length - $, G = k % P, D = Math.min(k, k - G) + $, x = 0, L = $; L < D; L += P) x = f(v, L, L + P, _), this.imuln(F), this.words[0] + x < 67108864 ? this.words[0] += x : this._iaddn(x);
+          for (var R = 0, F = 1; F <= 67108863; F *= _) R++;
+          R--, F = F / _ | 0;
+          for (var k = v.length - $, G = k % R, D = Math.min(k, k - G) + $, x = 0, L = $; L < D; L += R) x = f(v, L, L + R, _), this.imuln(F), this.words[0] + x < 67108864 ? this.words[0] += x : this._iaddn(x);
           if (G !== 0) {
             var j = 1;
             for (x = f(v, L, v.length, _), L = 0; L < G; L++) j *= _;
@@ -81258,9 +81258,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
           var $;
           if (v === 16 || v === "hex") {
             $ = "";
-            for (var P = 0, F = 0, k = 0; k < this.length; k++) {
-              var G = this.words[k], D = ((G << P | F) & 16777215).toString(16);
-              F = G >>> 24 - P & 16777215, P += 2, P >= 26 && (P -= 26, k--), F !== 0 || k !== this.length - 1 ? $ = p[6 - D.length] + D + $ : $ = D + $;
+            for (var R = 0, F = 0, k = 0; k < this.length; k++) {
+              var G = this.words[k], D = ((G << R | F) & 16777215).toString(16);
+              F = G >>> 24 - R & 16777215, R += 2, R >= 26 && (R -= 26, k--), F !== 0 || k !== this.length - 1 ? $ = p[6 - D.length] + D + $ : $ = D + $;
             }
             for (F !== 0 && ($ = F.toString(16) + $); $.length % _ !== 0; ) $ = "0" + $;
             return this.negative !== 0 && ($ = "-" + $), $;
@@ -81287,14 +81287,14 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.toArray = function(v, _) {
           return this.toArrayLike(Array, v, _);
         }, a.prototype.toArrayLike = function(v, _, $) {
-          var P = this.byteLength(), F = $ || Math.max(1, P);
-          s(P <= F, "byte array longer than desired length"), s(F > 0, "Requested array length <= 0"), this.strip();
+          var R = this.byteLength(), F = $ || Math.max(1, R);
+          s(R <= F, "byte array longer than desired length"), s(F > 0, "Requested array length <= 0"), this.strip();
           var k = _ === "le", G = new v(F), D, x, L = this.clone();
           if (k) {
             for (x = 0; !L.isZero(); x++) D = L.andln(255), L.iushrn(8), G[x] = D;
             for (; x < F; x++) G[x] = 0;
           } else {
-            for (x = 0; x < F - P; x++) G[x] = 0;
+            for (x = 0; x < F - R; x++) G[x] = 0;
             for (x = 0; !L.isZero(); x++) D = L.andln(255), L.iushrn(8), G[F - x - 1] = D;
           }
           return G;
@@ -81313,8 +81313,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         };
         function w(U) {
           for (var v = new Array(U.bitLength()), _ = 0; _ < v.length; _++) {
-            var $ = _ / 26 | 0, P = _ % 26;
-            v[_] = (U.words[$] & 1 << P) >>> P;
+            var $ = _ / 26 | 0, R = _ % 26;
+            v[_] = (U.words[$] & 1 << R) >>> R;
           }
           return v;
         }
@@ -81361,8 +81361,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.iuxor = function(v) {
           var _, $;
           this.length > v.length ? (_ = this, $ = v) : (_ = v, $ = this);
-          for (var P = 0; P < $.length; P++) this.words[P] = _.words[P] ^ $.words[P];
-          if (this !== _) for (; P < _.length; P++) this.words[P] = _.words[P];
+          for (var R = 0; R < $.length; R++) this.words[R] = _.words[R] ^ $.words[R];
+          if (this !== _) for (; R < _.length; R++) this.words[R] = _.words[R];
           return this.length = _.length, this.strip();
         }, a.prototype.ixor = function(v) {
           return s((this.negative | v.negative) === 0), this.iuxor(v);
@@ -81374,21 +81374,21 @@ Use Chrome, Firefox or Internet Explorer 11`);
           s(typeof v == "number" && v >= 0);
           var _ = Math.ceil(v / 26) | 0, $ = v % 26;
           this._expand(_), $ > 0 && _--;
-          for (var P = 0; P < _; P++) this.words[P] = ~this.words[P] & 67108863;
-          return $ > 0 && (this.words[P] = ~this.words[P] & 67108863 >> 26 - $), this.strip();
+          for (var R = 0; R < _; R++) this.words[R] = ~this.words[R] & 67108863;
+          return $ > 0 && (this.words[R] = ~this.words[R] & 67108863 >> 26 - $), this.strip();
         }, a.prototype.notn = function(v) {
           return this.clone().inotn(v);
         }, a.prototype.setn = function(v, _) {
           s(typeof v == "number" && v >= 0);
-          var $ = v / 26 | 0, P = v % 26;
-          return this._expand($ + 1), _ ? this.words[$] = this.words[$] | 1 << P : this.words[$] = this.words[$] & ~(1 << P), this.strip();
+          var $ = v / 26 | 0, R = v % 26;
+          return this._expand($ + 1), _ ? this.words[$] = this.words[$] | 1 << R : this.words[$] = this.words[$] & ~(1 << R), this.strip();
         }, a.prototype.iadd = function(v) {
           var _;
           if (this.negative !== 0 && v.negative === 0) return this.negative = 0, _ = this.isub(v), this.negative ^= 1, this._normSign();
           if (this.negative === 0 && v.negative !== 0) return v.negative = 0, _ = this.isub(v), v.negative = 1, _._normSign();
-          var $, P;
-          this.length > v.length ? ($ = this, P = v) : ($ = v, P = this);
-          for (var F = 0, k = 0; k < P.length; k++) _ = ($.words[k] | 0) + (P.words[k] | 0) + F, this.words[k] = _ & 67108863, F = _ >>> 26;
+          var $, R;
+          this.length > v.length ? ($ = this, R = v) : ($ = v, R = this);
+          for (var F = 0, k = 0; k < R.length; k++) _ = ($.words[k] | 0) + (R.words[k] | 0) + F, this.words[k] = _ & 67108863, F = _ >>> 26;
           for (; F !== 0 && k < $.length; k++) _ = ($.words[k] | 0) + F, this.words[k] = _ & 67108863, F = _ >>> 26;
           if (this.length = $.length, F !== 0) this.words[this.length] = F, this.length++;
           else if ($ !== this) for (; k < $.length; k++) this.words[k] = $.words[k];
@@ -81404,12 +81404,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
           } else if (this.negative !== 0) return this.negative = 0, this.iadd(v), this.negative = 1, this._normSign();
           var $ = this.cmp(v);
           if ($ === 0) return this.negative = 0, this.length = 1, this.words[0] = 0, this;
-          var P, F;
-          $ > 0 ? (P = this, F = v) : (P = v, F = this);
-          for (var k = 0, G = 0; G < F.length; G++) _ = (P.words[G] | 0) - (F.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
-          for (; k !== 0 && G < P.length; G++) _ = (P.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
-          if (k === 0 && G < P.length && P !== this) for (; G < P.length; G++) this.words[G] = P.words[G];
-          return this.length = Math.max(this.length, G), P !== this && (this.negative = 1), this.strip();
+          var R, F;
+          $ > 0 ? (R = this, F = v) : (R = v, F = this);
+          for (var k = 0, G = 0; G < F.length; G++) _ = (R.words[G] | 0) - (F.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
+          for (; k !== 0 && G < R.length; G++) _ = (R.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
+          if (k === 0 && G < R.length && R !== this) for (; G < R.length; G++) this.words[G] = R.words[G];
+          return this.length = Math.max(this.length, G), R !== this && (this.negative = 1), this.strip();
         }, a.prototype.sub = function(v) {
           return this.clone().isub(v);
         };
@@ -81417,19 +81417,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
           _.negative = v.negative ^ U.negative;
           var $ = U.length + v.length | 0;
           _.length = $, $ = $ - 1 | 0;
-          var P = U.words[0] | 0, F = v.words[0] | 0, k = P * F, G = k & 67108863, D = k / 67108864 | 0;
+          var R = U.words[0] | 0, F = v.words[0] | 0, k = R * F, G = k & 67108863, D = k / 67108864 | 0;
           _.words[0] = G;
           for (var x = 1; x < $; x++) {
             for (var L = D >>> 26, j = D & 67108863, Y = Math.min(x, v.length - 1), oe = Math.max(0, x - U.length + 1); oe <= Y; oe++) {
               var me = x - oe | 0;
-              P = U.words[me] | 0, F = v.words[oe] | 0, k = P * F + j, L += k / 67108864 | 0, j = k & 67108863;
+              R = U.words[me] | 0, F = v.words[oe] | 0, k = R * F + j, L += k / 67108864 | 0, j = k & 67108863;
             }
             _.words[x] = j | 0, D = L | 0;
           }
           return D !== 0 ? _.words[x] = D | 0 : _.length--, _.strip();
         }
-        var R = function(v, _, $) {
-          var P = v.words, F = _.words, k = $.words, G = 0, D, x, L, j = P[0] | 0, Y = j & 8191, oe = j >>> 13, me = P[1] | 0, be = me & 8191, Z = me >>> 13, se = P[2] | 0, fe = se & 8191, _e = se >>> 13, xe = P[3] | 0, le = xe & 8191, Ce = xe >>> 13, Re = P[4] | 0, Be = Re & 8191, Ee = Re >>> 13, rt = P[5] | 0, Pe = rt & 8191, Te = rt >>> 13, ut = P[6] | 0, De = ut & 8191, Fe = ut >>> 13, ct = P[7] | 0, Le = ct & 8191, Ue = ct >>> 13, pt = P[8] | 0, Ke = pt & 8191, tt = pt >>> 13, bt = P[9] | 0, ge = bt & 8191, re = bt >>> 13, he = F[0] | 0, we = he & 8191, Se = he >>> 13, ke = F[1] | 0, Ne = ke & 8191, ze = ke >>> 13, vt = F[2] | 0, Ve = vt & 8191, Xe = vt >>> 13, ft = F[3] | 0, Ye = ft & 8191, ot = ft >>> 13, wt = F[4] | 0, nt = wt & 8191, at = wt >>> 13, $t = F[5] | 0, ve = $t & 8191, ne = $t >>> 13, ce = F[6] | 0, $e = ce & 8191, Me = ce >>> 13, Oe = F[7] | 0, Ie = Oe & 8191, je = Oe >>> 13, yt = F[8] | 0, Ge = yt & 8191, et = yt >>> 13, mt = F[9] | 0, st = mt & 8191, lt = mt >>> 13;
+        var P = function(v, _, $) {
+          var R = v.words, F = _.words, k = $.words, G = 0, D, x, L, j = R[0] | 0, Y = j & 8191, oe = j >>> 13, me = R[1] | 0, be = me & 8191, Z = me >>> 13, se = R[2] | 0, fe = se & 8191, _e = se >>> 13, xe = R[3] | 0, le = xe & 8191, Ce = xe >>> 13, Re = R[4] | 0, Be = Re & 8191, Ee = Re >>> 13, rt = R[5] | 0, Pe = rt & 8191, Te = rt >>> 13, ut = R[6] | 0, De = ut & 8191, Fe = ut >>> 13, ct = R[7] | 0, Le = ct & 8191, Ue = ct >>> 13, pt = R[8] | 0, Ke = pt & 8191, tt = pt >>> 13, bt = R[9] | 0, ge = bt & 8191, re = bt >>> 13, he = F[0] | 0, we = he & 8191, Se = he >>> 13, ke = F[1] | 0, Ne = ke & 8191, ze = ke >>> 13, vt = F[2] | 0, Ve = vt & 8191, Xe = vt >>> 13, ft = F[3] | 0, Ye = ft & 8191, ot = ft >>> 13, wt = F[4] | 0, nt = wt & 8191, at = wt >>> 13, $t = F[5] | 0, ve = $t & 8191, ne = $t >>> 13, ce = F[6] | 0, $e = ce & 8191, Me = ce >>> 13, Oe = F[7] | 0, Ie = Oe & 8191, je = Oe >>> 13, yt = F[8] | 0, Ge = yt & 8191, et = yt >>> 13, mt = F[9] | 0, st = mt & 8191, lt = mt >>> 13;
           $.negative = v.negative ^ _.negative, $.length = 19, D = Math.imul(Y, we), x = Math.imul(Y, Se), x = x + Math.imul(oe, we) | 0, L = Math.imul(oe, Se);
           var _t = (G + D | 0) + ((x & 8191) << 13) | 0;
           G = (L + (x >>> 13) | 0) + (_t >>> 26) | 0, _t &= 67108863, D = Math.imul(be, we), x = Math.imul(be, Se), x = x + Math.imul(Z, we) | 0, L = Math.imul(Z, Se), D = D + Math.imul(Y, Ne) | 0, x = x + Math.imul(Y, ze) | 0, x = x + Math.imul(oe, Ne) | 0, L = L + Math.imul(oe, ze) | 0;
@@ -81470,17 +81470,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
           var zt = (G + D | 0) + ((x & 8191) << 13) | 0;
           return G = (L + (x >>> 13) | 0) + (zt >>> 26) | 0, zt &= 67108863, k[0] = _t, k[1] = At, k[2] = Ct, k[3] = St, k[4] = Mt, k[5] = Tt, k[6] = Bt, k[7] = Nt, k[8] = It, k[9] = Pt, k[10] = Rt, k[11] = Dt, k[12] = Lt, k[13] = kt, k[14] = Ot, k[15] = Vt, k[16] = Ut, k[17] = Gt, k[18] = zt, G !== 0 && (k[19] = G, $.length++), $;
         };
-        Math.imul || (R = M);
+        Math.imul || (P = M);
         function V(U, v, _) {
           _.negative = v.negative ^ U.negative, _.length = U.length + v.length;
-          for (var $ = 0, P = 0, F = 0; F < _.length - 1; F++) {
-            var k = P;
-            P = 0;
+          for (var $ = 0, R = 0, F = 0; F < _.length - 1; F++) {
+            var k = R;
+            R = 0;
             for (var G = $ & 67108863, D = Math.min(F, v.length - 1), x = Math.max(0, F - U.length + 1); x <= D; x++) {
               var L = F - x, j = U.words[L] | 0, Y = v.words[x] | 0, oe = j * Y, me = oe & 67108863;
-              k = k + (oe / 67108864 | 0) | 0, me = me + G | 0, G = me & 67108863, k = k + (me >>> 26) | 0, P += k >>> 26, k &= 67108863;
+              k = k + (oe / 67108864 | 0) | 0, me = me + G | 0, G = me & 67108863, k = k + (me >>> 26) | 0, R += k >>> 26, k &= 67108863;
             }
-            _.words[F] = G, $ = k, k = P;
+            _.words[F] = G, $ = k, k = R;
           }
           return $ !== 0 ? _.words[F] = $ : _.length--, _.strip();
         }
@@ -81489,57 +81489,57 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return $.mulp(U, v, _);
         }
         a.prototype.mulTo = function(v, _) {
-          var $, P = this.length + v.length;
-          return this.length === 10 && v.length === 10 ? $ = R(this, v, _) : P < 63 ? $ = M(this, v, _) : P < 1024 ? $ = V(this, v, _) : $ = O(this, v, _), $;
+          var $, R = this.length + v.length;
+          return this.length === 10 && v.length === 10 ? $ = P(this, v, _) : R < 63 ? $ = M(this, v, _) : R < 1024 ? $ = V(this, v, _) : $ = O(this, v, _), $;
         };
         function z(U, v) {
           this.x = U, this.y = v;
         }
         z.prototype.makeRBT = function(v) {
-          for (var _ = new Array(v), $ = a.prototype._countBits(v) - 1, P = 0; P < v; P++) _[P] = this.revBin(P, $, v);
+          for (var _ = new Array(v), $ = a.prototype._countBits(v) - 1, R = 0; R < v; R++) _[R] = this.revBin(R, $, v);
           return _;
         }, z.prototype.revBin = function(v, _, $) {
           if (v === 0 || v === $ - 1) return v;
-          for (var P = 0, F = 0; F < _; F++) P |= (v & 1) << _ - F - 1, v >>= 1;
-          return P;
-        }, z.prototype.permute = function(v, _, $, P, F, k) {
-          for (var G = 0; G < k; G++) P[G] = _[v[G]], F[G] = $[v[G]];
-        }, z.prototype.transform = function(v, _, $, P, F, k) {
-          this.permute(k, v, _, $, P, F);
+          for (var R = 0, F = 0; F < _; F++) R |= (v & 1) << _ - F - 1, v >>= 1;
+          return R;
+        }, z.prototype.permute = function(v, _, $, R, F, k) {
+          for (var G = 0; G < k; G++) R[G] = _[v[G]], F[G] = $[v[G]];
+        }, z.prototype.transform = function(v, _, $, R, F, k) {
+          this.permute(k, v, _, $, R, F);
           for (var G = 1; G < F; G <<= 1) for (var D = G << 1, x = Math.cos(2 * Math.PI / D), L = Math.sin(2 * Math.PI / D), j = 0; j < F; j += D) for (var Y = x, oe = L, me = 0; me < G; me++) {
-            var be = $[j + me], Z = P[j + me], se = $[j + me + G], fe = P[j + me + G], _e = Y * se - oe * fe;
-            fe = Y * fe + oe * se, se = _e, $[j + me] = be + se, P[j + me] = Z + fe, $[j + me + G] = be - se, P[j + me + G] = Z - fe, me !== D && (_e = x * Y - L * oe, oe = x * oe + L * Y, Y = _e);
+            var be = $[j + me], Z = R[j + me], se = $[j + me + G], fe = R[j + me + G], _e = Y * se - oe * fe;
+            fe = Y * fe + oe * se, se = _e, $[j + me] = be + se, R[j + me] = Z + fe, $[j + me + G] = be - se, R[j + me + G] = Z - fe, me !== D && (_e = x * Y - L * oe, oe = x * oe + L * Y, Y = _e);
           }
         }, z.prototype.guessLen13b = function(v, _) {
-          var $ = Math.max(_, v) | 1, P = $ & 1, F = 0;
+          var $ = Math.max(_, v) | 1, R = $ & 1, F = 0;
           for ($ = $ / 2 | 0; $; $ = $ >>> 1) F++;
-          return 1 << F + 1 + P;
+          return 1 << F + 1 + R;
         }, z.prototype.conjugate = function(v, _, $) {
-          if (!($ <= 1)) for (var P = 0; P < $ / 2; P++) {
-            var F = v[P];
-            v[P] = v[$ - P - 1], v[$ - P - 1] = F, F = _[P], _[P] = -_[$ - P - 1], _[$ - P - 1] = -F;
+          if (!($ <= 1)) for (var R = 0; R < $ / 2; R++) {
+            var F = v[R];
+            v[R] = v[$ - R - 1], v[$ - R - 1] = F, F = _[R], _[R] = -_[$ - R - 1], _[$ - R - 1] = -F;
           }
         }, z.prototype.normalize13b = function(v, _) {
-          for (var $ = 0, P = 0; P < _ / 2; P++) {
-            var F = Math.round(v[2 * P + 1] / _) * 8192 + Math.round(v[2 * P] / _) + $;
-            v[P] = F & 67108863, F < 67108864 ? $ = 0 : $ = F / 67108864 | 0;
+          for (var $ = 0, R = 0; R < _ / 2; R++) {
+            var F = Math.round(v[2 * R + 1] / _) * 8192 + Math.round(v[2 * R] / _) + $;
+            v[R] = F & 67108863, F < 67108864 ? $ = 0 : $ = F / 67108864 | 0;
           }
           return v;
-        }, z.prototype.convert13b = function(v, _, $, P) {
+        }, z.prototype.convert13b = function(v, _, $, R) {
           for (var F = 0, k = 0; k < _; k++) F = F + (v[k] | 0), $[2 * k] = F & 8191, F = F >>> 13, $[2 * k + 1] = F & 8191, F = F >>> 13;
-          for (k = 2 * _; k < P; ++k) $[k] = 0;
+          for (k = 2 * _; k < R; ++k) $[k] = 0;
           s(F === 0), s((F & -8192) === 0);
         }, z.prototype.stub = function(v) {
           for (var _ = new Array(v), $ = 0; $ < v; $++) _[$] = 0;
           return _;
         }, z.prototype.mulp = function(v, _, $) {
-          var P = 2 * this.guessLen13b(v.length, _.length), F = this.makeRBT(P), k = this.stub(P), G = new Array(P), D = new Array(P), x = new Array(P), L = new Array(P), j = new Array(P), Y = new Array(P), oe = $.words;
-          oe.length = P, this.convert13b(v.words, v.length, G, P), this.convert13b(_.words, _.length, L, P), this.transform(G, k, D, x, P, F), this.transform(L, k, j, Y, P, F);
-          for (var me = 0; me < P; me++) {
+          var R = 2 * this.guessLen13b(v.length, _.length), F = this.makeRBT(R), k = this.stub(R), G = new Array(R), D = new Array(R), x = new Array(R), L = new Array(R), j = new Array(R), Y = new Array(R), oe = $.words;
+          oe.length = R, this.convert13b(v.words, v.length, G, R), this.convert13b(_.words, _.length, L, R), this.transform(G, k, D, x, R, F), this.transform(L, k, j, Y, R, F);
+          for (var me = 0; me < R; me++) {
             var be = D[me] * j[me] - x[me] * Y[me];
             x[me] = D[me] * Y[me] + x[me] * j[me], D[me] = be;
           }
-          return this.conjugate(D, x, P), this.transform(D, x, oe, k, P, F), this.conjugate(oe, k, P), this.normalize13b(oe, P), $.negative = v.negative ^ _.negative, $.length = v.length + _.length, $.strip();
+          return this.conjugate(D, x, R), this.transform(D, x, oe, k, R, F), this.conjugate(oe, k, R), this.normalize13b(oe, R), $.negative = v.negative ^ _.negative, $.length = v.length + _.length, $.strip();
         }, a.prototype.mul = function(v) {
           var _ = new a(null);
           return _.words = new Array(this.length + v.length), this.mulTo(v, _);
@@ -81551,8 +81551,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.imuln = function(v) {
           s(typeof v == "number"), s(v < 67108864);
           for (var _ = 0, $ = 0; $ < this.length; $++) {
-            var P = (this.words[$] | 0) * v, F = (P & 67108863) + (_ & 67108863);
-            _ >>= 26, _ += P / 67108864 | 0, _ += F >>> 26, this.words[$] = F & 67108863;
+            var R = (this.words[$] | 0) * v, F = (R & 67108863) + (_ & 67108863);
+            _ >>= 26, _ += R / 67108864 | 0, _ += F >>> 26, this.words[$] = F & 67108863;
           }
           return _ !== 0 && (this.words[$] = _, this.length++), this.length = v === 0 ? 1 : this.length, this;
         }, a.prototype.muln = function(v) {
@@ -81564,16 +81564,16 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.pow = function(v) {
           var _ = w(v);
           if (_.length === 0) return new a(1);
-          for (var $ = this, P = 0; P < _.length && _[P] === 0; P++, $ = $.sqr()) ;
-          if (++P < _.length) for (var F = $.sqr(); P < _.length; P++, F = F.sqr()) _[P] !== 0 && ($ = $.mul(F));
+          for (var $ = this, R = 0; R < _.length && _[R] === 0; R++, $ = $.sqr()) ;
+          if (++R < _.length) for (var F = $.sqr(); R < _.length; R++, F = F.sqr()) _[R] !== 0 && ($ = $.mul(F));
           return $;
         }, a.prototype.iushln = function(v) {
           s(typeof v == "number" && v >= 0);
-          var _ = v % 26, $ = (v - _) / 26, P = 67108863 >>> 26 - _ << 26 - _, F;
+          var _ = v % 26, $ = (v - _) / 26, R = 67108863 >>> 26 - _ << 26 - _, F;
           if (_ !== 0) {
             var k = 0;
             for (F = 0; F < this.length; F++) {
-              var G = this.words[F] & P, D = (this.words[F] | 0) - G << _;
+              var G = this.words[F] & R, D = (this.words[F] | 0) - G << _;
               this.words[F] = D | k, k = G >>> 26 - _;
             }
             k && (this.words[F] = k, this.length++);
@@ -81588,17 +81588,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return s(this.negative === 0), this.iushln(v);
         }, a.prototype.iushrn = function(v, _, $) {
           s(typeof v == "number" && v >= 0);
-          var P;
-          _ ? P = (_ - _ % 26) / 26 : P = 0;
+          var R;
+          _ ? R = (_ - _ % 26) / 26 : R = 0;
           var F = v % 26, k = Math.min((v - F) / 26, this.length), G = 67108863 ^ 67108863 >>> F << F, D = $;
-          if (P -= k, P = Math.max(0, P), D) {
+          if (R -= k, R = Math.max(0, R), D) {
             for (var x = 0; x < k; x++) D.words[x] = this.words[x];
             D.length = k;
           }
           if (k !== 0) if (this.length > k) for (this.length -= k, x = 0; x < this.length; x++) this.words[x] = this.words[x + k];
           else this.words[0] = 0, this.length = 1;
           var L = 0;
-          for (x = this.length - 1; x >= 0 && (L !== 0 || x >= P); x--) {
+          for (x = this.length - 1; x >= 0 && (L !== 0 || x >= R); x--) {
             var j = this.words[x] | 0;
             this.words[x] = L << 26 - F | j >>> F, L = j & G;
           }
@@ -81615,17 +81615,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return this.clone().iushrn(v);
         }, a.prototype.testn = function(v) {
           s(typeof v == "number" && v >= 0);
-          var _ = v % 26, $ = (v - _) / 26, P = 1 << _;
+          var _ = v % 26, $ = (v - _) / 26, R = 1 << _;
           if (this.length <= $) return false;
           var F = this.words[$];
-          return !!(F & P);
+          return !!(F & R);
         }, a.prototype.imaskn = function(v) {
           s(typeof v == "number" && v >= 0);
           var _ = v % 26, $ = (v - _) / 26;
           if (s(this.negative === 0, "imaskn works only with positive numbers"), this.length <= $) return this;
           if (_ !== 0 && $++, this.length = Math.min($, this.length), _ !== 0) {
-            var P = 67108863 ^ 67108863 >>> _ << _;
-            this.words[this.length - 1] &= P;
+            var R = 67108863 ^ 67108863 >>> _ << _;
+            this.words[this.length - 1] &= R;
           }
           return this.strip();
         }, a.prototype.maskn = function(v) {
@@ -81651,8 +81651,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.abs = function() {
           return this.clone().iabs();
         }, a.prototype._ishlnsubmul = function(v, _, $) {
-          var P = v.length + $, F;
-          this._expand(P);
+          var R = v.length + $, F;
+          this._expand(R);
           var k, G = 0;
           for (F = 0; F < v.length; F++) {
             k = (this.words[F + $] | 0) + G;
@@ -81664,35 +81664,35 @@ Use Chrome, Firefox or Internet Explorer 11`);
           for (s(G === -1), G = 0, F = 0; F < this.length; F++) k = -(this.words[F] | 0) + G, G = k >> 26, this.words[F] = k & 67108863;
           return this.negative = 1, this.strip();
         }, a.prototype._wordDiv = function(v, _) {
-          var $ = this.length - v.length, P = this.clone(), F = v, k = F.words[F.length - 1] | 0, G = this._countBits(k);
-          $ = 26 - G, $ !== 0 && (F = F.ushln($), P.iushln($), k = F.words[F.length - 1] | 0);
-          var D = P.length - F.length, x;
+          var $ = this.length - v.length, R = this.clone(), F = v, k = F.words[F.length - 1] | 0, G = this._countBits(k);
+          $ = 26 - G, $ !== 0 && (F = F.ushln($), R.iushln($), k = F.words[F.length - 1] | 0);
+          var D = R.length - F.length, x;
           if (_ !== "mod") {
             x = new a(null), x.length = D + 1, x.words = new Array(x.length);
             for (var L = 0; L < x.length; L++) x.words[L] = 0;
           }
-          var j = P.clone()._ishlnsubmul(F, 1, D);
-          j.negative === 0 && (P = j, x && (x.words[D] = 1));
+          var j = R.clone()._ishlnsubmul(F, 1, D);
+          j.negative === 0 && (R = j, x && (x.words[D] = 1));
           for (var Y = D - 1; Y >= 0; Y--) {
-            var oe = (P.words[F.length + Y] | 0) * 67108864 + (P.words[F.length + Y - 1] | 0);
-            for (oe = Math.min(oe / k | 0, 67108863), P._ishlnsubmul(F, oe, Y); P.negative !== 0; ) oe--, P.negative = 0, P._ishlnsubmul(F, 1, Y), P.isZero() || (P.negative ^= 1);
+            var oe = (R.words[F.length + Y] | 0) * 67108864 + (R.words[F.length + Y - 1] | 0);
+            for (oe = Math.min(oe / k | 0, 67108863), R._ishlnsubmul(F, oe, Y); R.negative !== 0; ) oe--, R.negative = 0, R._ishlnsubmul(F, 1, Y), R.isZero() || (R.negative ^= 1);
             x && (x.words[Y] = oe);
           }
-          return x && x.strip(), P.strip(), _ !== "div" && $ !== 0 && P.iushrn($), {
+          return x && x.strip(), R.strip(), _ !== "div" && $ !== 0 && R.iushrn($), {
             div: x || null,
-            mod: P
+            mod: R
           };
         }, a.prototype.divmod = function(v, _, $) {
           if (s(!v.isZero()), this.isZero()) return {
             div: new a(0),
             mod: new a(0)
           };
-          var P, F, k;
-          return this.negative !== 0 && v.negative === 0 ? (k = this.neg().divmod(v, _), _ !== "mod" && (P = k.div.neg()), _ !== "div" && (F = k.mod.neg(), $ && F.negative !== 0 && F.iadd(v)), {
-            div: P,
+          var R, F, k;
+          return this.negative !== 0 && v.negative === 0 ? (k = this.neg().divmod(v, _), _ !== "mod" && (R = k.div.neg()), _ !== "div" && (F = k.mod.neg(), $ && F.negative !== 0 && F.iadd(v)), {
+            div: R,
             mod: F
-          }) : this.negative === 0 && v.negative !== 0 ? (k = this.divmod(v.neg(), _), _ !== "mod" && (P = k.div.neg()), {
-            div: P,
+          }) : this.negative === 0 && v.negative !== 0 ? (k = this.divmod(v.neg(), _), _ !== "mod" && (R = k.div.neg()), {
+            div: R,
             mod: k.mod
           }) : (this.negative & v.negative) !== 0 ? (k = this.neg().divmod(v.neg(), _), _ !== "div" && (F = k.mod.neg(), $ && F.negative !== 0 && F.isub(v)), {
             div: k.div,
@@ -81719,17 +81719,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.divRound = function(v) {
           var _ = this.divmod(v);
           if (_.mod.isZero()) return _.div;
-          var $ = _.div.negative !== 0 ? _.mod.isub(v) : _.mod, P = v.ushrn(1), F = v.andln(1), k = $.cmp(P);
+          var $ = _.div.negative !== 0 ? _.mod.isub(v) : _.mod, R = v.ushrn(1), F = v.andln(1), k = $.cmp(R);
           return k < 0 || F === 1 && k === 0 ? _.div : _.div.negative !== 0 ? _.div.isubn(1) : _.div.iaddn(1);
         }, a.prototype.modn = function(v) {
           s(v <= 67108863);
-          for (var _ = (1 << 26) % v, $ = 0, P = this.length - 1; P >= 0; P--) $ = (_ * $ + (this.words[P] | 0)) % v;
+          for (var _ = (1 << 26) % v, $ = 0, R = this.length - 1; R >= 0; R--) $ = (_ * $ + (this.words[R] | 0)) % v;
           return $;
         }, a.prototype.idivn = function(v) {
           s(v <= 67108863);
           for (var _ = 0, $ = this.length - 1; $ >= 0; $--) {
-            var P = (this.words[$] | 0) + _ * 67108864;
-            this.words[$] = P / v | 0, _ = P % v;
+            var R = (this.words[$] | 0) + _ * 67108864;
+            this.words[$] = R / v | 0, _ = R % v;
           }
           return this.strip();
         }, a.prototype.divn = function(v) {
@@ -81738,13 +81738,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
           s(v.negative === 0), s(!v.isZero());
           var _ = this, $ = v.clone();
           _.negative !== 0 ? _ = _.umod(v) : _ = _.clone();
-          for (var P = new a(1), F = new a(0), k = new a(0), G = new a(1), D = 0; _.isEven() && $.isEven(); ) _.iushrn(1), $.iushrn(1), ++D;
+          for (var R = new a(1), F = new a(0), k = new a(0), G = new a(1), D = 0; _.isEven() && $.isEven(); ) _.iushrn(1), $.iushrn(1), ++D;
           for (var x = $.clone(), L = _.clone(); !_.isZero(); ) {
             for (var j = 0, Y = 1; (_.words[0] & Y) === 0 && j < 26; ++j, Y <<= 1) ;
-            if (j > 0) for (_.iushrn(j); j-- > 0; ) (P.isOdd() || F.isOdd()) && (P.iadd(x), F.isub(L)), P.iushrn(1), F.iushrn(1);
+            if (j > 0) for (_.iushrn(j); j-- > 0; ) (R.isOdd() || F.isOdd()) && (R.iadd(x), F.isub(L)), R.iushrn(1), F.iushrn(1);
             for (var oe = 0, me = 1; ($.words[0] & me) === 0 && oe < 26; ++oe, me <<= 1) ;
             if (oe > 0) for ($.iushrn(oe); oe-- > 0; ) (k.isOdd() || G.isOdd()) && (k.iadd(x), G.isub(L)), k.iushrn(1), G.iushrn(1);
-            _.cmp($) >= 0 ? (_.isub($), P.isub(k), F.isub(G)) : ($.isub(_), k.isub(P), G.isub(F));
+            _.cmp($) >= 0 ? (_.isub($), R.isub(k), F.isub(G)) : ($.isub(_), k.isub(R), G.isub(F));
           }
           return {
             a: k,
@@ -81755,21 +81755,21 @@ Use Chrome, Firefox or Internet Explorer 11`);
           s(v.negative === 0), s(!v.isZero());
           var _ = this, $ = v.clone();
           _.negative !== 0 ? _ = _.umod(v) : _ = _.clone();
-          for (var P = new a(1), F = new a(0), k = $.clone(); _.cmpn(1) > 0 && $.cmpn(1) > 0; ) {
+          for (var R = new a(1), F = new a(0), k = $.clone(); _.cmpn(1) > 0 && $.cmpn(1) > 0; ) {
             for (var G = 0, D = 1; (_.words[0] & D) === 0 && G < 26; ++G, D <<= 1) ;
-            if (G > 0) for (_.iushrn(G); G-- > 0; ) P.isOdd() && P.iadd(k), P.iushrn(1);
+            if (G > 0) for (_.iushrn(G); G-- > 0; ) R.isOdd() && R.iadd(k), R.iushrn(1);
             for (var x = 0, L = 1; ($.words[0] & L) === 0 && x < 26; ++x, L <<= 1) ;
             if (x > 0) for ($.iushrn(x); x-- > 0; ) F.isOdd() && F.iadd(k), F.iushrn(1);
-            _.cmp($) >= 0 ? (_.isub($), P.isub(F)) : ($.isub(_), F.isub(P));
+            _.cmp($) >= 0 ? (_.isub($), R.isub(F)) : ($.isub(_), F.isub(R));
           }
           var j;
-          return _.cmpn(1) === 0 ? j = P : j = F, j.cmpn(0) < 0 && j.iadd(v), j;
+          return _.cmpn(1) === 0 ? j = R : j = F, j.cmpn(0) < 0 && j.iadd(v), j;
         }, a.prototype.gcd = function(v) {
           if (this.isZero()) return v.abs();
           if (v.isZero()) return this.abs();
           var _ = this.clone(), $ = v.clone();
           _.negative = 0, $.negative = 0;
-          for (var P = 0; _.isEven() && $.isEven(); P++) _.iushrn(1), $.iushrn(1);
+          for (var R = 0; _.isEven() && $.isEven(); R++) _.iushrn(1), $.iushrn(1);
           do {
             for (; _.isEven(); ) _.iushrn(1);
             for (; $.isEven(); ) $.iushrn(1);
@@ -81780,7 +81780,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
             } else if (F === 0 || $.cmpn(1) === 0) break;
             _.isub($);
           } while (true);
-          return $.iushln(P);
+          return $.iushln(R);
         }, a.prototype.invm = function(v) {
           return this.egcd(v).a.umod(v);
         }, a.prototype.isEven = function() {
@@ -81791,9 +81791,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return this.words[0] & v;
         }, a.prototype.bincn = function(v) {
           s(typeof v == "number");
-          var _ = v % 26, $ = (v - _) / 26, P = 1 << _;
-          if (this.length <= $) return this._expand($ + 1), this.words[$] |= P, this;
-          for (var F = P, k = $; F !== 0 && k < this.length; k++) {
+          var _ = v % 26, $ = (v - _) / 26, R = 1 << _;
+          if (this.length <= $) return this._expand($ + 1), this.words[$] |= R, this;
+          for (var F = R, k = $; F !== 0 && k < this.length; k++) {
             var G = this.words[k] | 0;
             G += F, F = G >>> 26, G &= 67108863, this.words[k] = G;
           }
@@ -81809,8 +81809,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (this.length > 1) $ = 1;
           else {
             _ && (v = -v), s(v <= 67108863, "Number is too big");
-            var P = this.words[0] | 0;
-            $ = P === v ? 0 : P < v ? -1 : 1;
+            var R = this.words[0] | 0;
+            $ = R === v ? 0 : R < v ? -1 : 1;
           }
           return this.negative !== 0 ? -$ | 0 : $;
         }, a.prototype.cmp = function(v) {
@@ -81822,9 +81822,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (this.length > v.length) return 1;
           if (this.length < v.length) return -1;
           for (var _ = 0, $ = this.length - 1; $ >= 0; $--) {
-            var P = this.words[$] | 0, F = v.words[$] | 0;
-            if (P !== F) {
-              P < F ? _ = -1 : P > F && (_ = 1);
+            var R = this.words[$] | 0, F = v.words[$] | 0;
+            if (R !== F) {
+              R < F ? _ = -1 : R > F && (_ = 1);
               break;
             }
           }
@@ -81903,8 +81903,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           do
             this.split(_, this.tmp), _ = this.imulK(_), _ = _.iadd(this.tmp), $ = _.bitLength();
           while ($ > this.n);
-          var P = $ < this.n ? -1 : _.ucmp(this.p);
-          return P === 0 ? (_.words[0] = 0, _.length = 1) : P > 0 ? _.isub(this.p) : _.strip !== void 0 ? _.strip() : _._strip(), _;
+          var R = $ < this.n ? -1 : _.ucmp(this.p);
+          return R === 0 ? (_.words[0] = 0, _.length = 1) : R > 0 ? _.isub(this.p) : _.strip !== void 0 ? _.strip() : _._strip(), _;
         }, q.prototype.split = function(v, _) {
           v.iushrn(this.n, 0, _);
         }, q.prototype.imulK = function(v) {
@@ -81914,8 +81914,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           q.call(this, "k256", "ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff fffffffe fffffc2f");
         }
         o(W, q), W.prototype.split = function(v, _) {
-          for (var $ = 4194303, P = Math.min(v.length, 9), F = 0; F < P; F++) _.words[F] = v.words[F];
-          if (_.length = P, v.length <= 9) {
+          for (var $ = 4194303, R = Math.min(v.length, 9), F = 0; F < R; F++) _.words[F] = v.words[F];
+          if (_.length = R, v.length <= 9) {
             v.words[0] = 0, v.length = 1;
             return;
           }
@@ -81928,8 +81928,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, W.prototype.imulK = function(v) {
           v.words[v.length] = 0, v.words[v.length + 1] = 0, v.length += 2;
           for (var _ = 0, $ = 0; $ < v.length; $++) {
-            var P = v.words[$] | 0;
-            _ += P * 977, v.words[$] = _ & 67108863, _ = P * 64 + (_ / 67108864 | 0);
+            var R = v.words[$] | 0;
+            _ += R * 977, v.words[$] = _ & 67108863, _ = R * 64 + (_ / 67108864 | 0);
           }
           return v.words[v.length - 1] === 0 && (v.length--, v.words[v.length - 1] === 0 && v.length--), v;
         };
@@ -81946,8 +81946,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }
         o(ee, q), ee.prototype.imulK = function(v) {
           for (var _ = 0, $ = 0; $ < v.length; $++) {
-            var P = (v.words[$] | 0) * 19 + _, F = P & 67108863;
-            P >>>= 26, v.words[$] = F, _ = P;
+            var R = (v.words[$] | 0) * 19 + _, F = R & 67108863;
+            R >>>= 26, v.words[$] = F, _ = R;
           }
           return _ !== 0 && (v.words[v.length++] = _), v;
         }, a._prime = function(v) {
@@ -82007,11 +82007,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
             var $ = this.m.add(new a(1)).iushrn(2);
             return this.pow(v, $);
           }
-          for (var P = this.m.subn(1), F = 0; !P.isZero() && P.andln(1) === 0; ) F++, P.iushrn(1);
-          s(!P.isZero());
+          for (var R = this.m.subn(1), F = 0; !R.isZero() && R.andln(1) === 0; ) F++, R.iushrn(1);
+          s(!R.isZero());
           var k = new a(1).toRed(this), G = k.redNeg(), D = this.m.subn(1).iushrn(1), x = this.m.bitLength();
           for (x = new a(2 * x * x).toRed(this); this.pow(x, D).cmp(G) !== 0; ) x.redIAdd(G);
-          for (var L = this.pow(x, P), j = this.pow(v, P.addn(1).iushrn(1)), Y = this.pow(v, P), oe = F; Y.cmp(k) !== 0; ) {
+          for (var L = this.pow(x, R), j = this.pow(v, R.addn(1).iushrn(1)), Y = this.pow(v, R), oe = F; Y.cmp(k) !== 0; ) {
             for (var me = Y, be = 0; me.cmp(k) !== 0; be++) me = me.redSqr();
             s(be < oe);
             var Z = this.pow(L, new a(1).iushln(oe - be - 1));
@@ -82024,18 +82024,18 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, ie.prototype.pow = function(v, _) {
           if (_.isZero()) return new a(1).toRed(this);
           if (_.cmpn(1) === 0) return v.clone();
-          var $ = 4, P = new Array(1 << $);
-          P[0] = new a(1).toRed(this), P[1] = v;
-          for (var F = 2; F < P.length; F++) P[F] = this.mul(P[F - 1], v);
-          var k = P[0], G = 0, D = 0, x = _.bitLength() % 26;
+          var $ = 4, R = new Array(1 << $);
+          R[0] = new a(1).toRed(this), R[1] = v;
+          for (var F = 2; F < R.length; F++) R[F] = this.mul(R[F - 1], v);
+          var k = R[0], G = 0, D = 0, x = _.bitLength() % 26;
           for (x === 0 && (x = 26), F = _.length - 1; F >= 0; F--) {
             for (var L = _.words[F], j = x - 1; j >= 0; j--) {
               var Y = L >> j & 1;
-              if (k !== P[0] && (k = this.sqr(k)), Y === 0 && G === 0) {
+              if (k !== R[0] && (k = this.sqr(k)), Y === 0 && G === 0) {
                 D = 0;
                 continue;
               }
-              G <<= 1, G |= Y, D++, !(D !== $ && (F !== 0 || j !== 0)) && (k = this.mul(k, P[G]), D = 0, G = 0);
+              G <<= 1, G |= Y, D++, !(D !== $ && (F !== 0 || j !== 0)) && (k = this.mul(k, R[G]), D = 0, G = 0);
             }
             x = 26;
           }
@@ -82059,11 +82059,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return _.red = null, _;
         }, pe.prototype.imul = function(v, _) {
           if (v.isZero() || _.isZero()) return v.words[0] = 0, v.length = 1, v;
-          var $ = v.imul(_), P = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(P).iushrn(this.shift), k = F;
+          var $ = v.imul(_), R = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(R).iushrn(this.shift), k = F;
           return F.cmp(this.m) >= 0 ? k = F.isub(this.m) : F.cmpn(0) < 0 && (k = F.iadd(this.m)), k._forceRed(this);
         }, pe.prototype.mul = function(v, _) {
           if (v.isZero() || _.isZero()) return new a(0)._forceRed(this);
-          var $ = v.mul(_), P = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(P).iushrn(this.shift), k = F;
+          var $ = v.mul(_), R = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(R).iushrn(this.shift), k = F;
           return F.cmp(this.m) >= 0 ? k = F.isub(this.m) : F.cmpn(0) < 0 && (k = F.iadd(this.m)), k._forceRed(this);
         }, pe.prototype.invm = function(v) {
           var _ = this.imod(v._invmp(this.m).mul(this.r2));
@@ -82446,10 +82446,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }, this)), p.length !== 0 && (s(m.args === null), m.args = p, m.reverseArgs = p.map(function(w) {
         if (typeof w != "object" || w.constructor !== Object) return w;
         var M = {};
-        return Object.keys(w).forEach(function(R) {
-          R == (R | 0) && (R |= 0);
-          var V = w[R];
-          M[V] = R;
+        return Object.keys(w).forEach(function(P) {
+          P == (P | 0) && (P |= 0);
+          var V = w[P];
+          M[V] = P;
         }), M;
       }));
     }, h.forEach(function(f) {
@@ -82498,8 +82498,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }, c.prototype._decode = function(p, m) {
       var b = this._baseState;
       if (b.parent === null) return p.wrapResult(b.children[0]._decode(p, m));
-      var w = b.default, M = true, R = null;
-      if (b.key !== null && (R = p.enterKey(b.key)), b.optional) {
+      var w = b.default, M = true, P = null;
+      if (b.key !== null && (P = p.enterKey(b.key)), b.optional) {
         var V = null;
         if (b.explicit !== null ? V = b.explicit : b.implicit !== null ? V = b.implicit : b.tag !== null && (V = b.tag), V === null && !b.any) {
           var O = p.save();
@@ -82533,7 +82533,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
           w = this._getUse(b.contains, p._reporterState.obj)._decode(K, m);
         }
       }
-      return b.obj && M && (w = p.leaveObject(z)), b.key !== null && (w !== null || M === true) ? p.leaveKey(R, b.key, w) : R !== null && p.exitKey(R), w;
+      return b.obj && M && (w = p.leaveObject(z)), b.key !== null && (w !== null || M === true) ? p.leaveKey(P, b.key, w) : P !== null && p.exitKey(P), w;
     }, c.prototype._decodeGeneric = function(p, m, b) {
       var w = this._baseState;
       return p === "seq" || p === "set" ? null : p === "seqof" || p === "setof" ? this._decodeList(m, p, w.args[0], b) : /str$/.test(p) ? this._decodeStr(m, p, b) : p === "objid" && w.args ? this._decodeObjid(m, w.args[0], w.args[1], b) : p === "objid" ? this._decodeObjid(m, null, null, b) : p === "gentime" || p === "utctime" ? this._decodeTime(m, p, b) : p === "null_" ? this._decodeNull(m, b) : p === "bool" ? this._decodeBool(m, b) : p === "objDesc" ? this._decodeStr(m, p, b) : p === "int" || p === "enum" ? this._decodeInt(m, w.args && w.args[0], b) : w.use !== null ? this._getUse(w.use, m._reporterState.obj)._decode(m, b) : m.error("unknown tag: " + p);
@@ -82542,13 +82542,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return b.useDecoder = this._use(p, m), s(b.useDecoder._baseState.parent === null), b.useDecoder = b.useDecoder._baseState.children[0], b.implicit !== b.useDecoder._baseState.implicit && (b.useDecoder = b.useDecoder.clone(), b.useDecoder._baseState.implicit = b.implicit), b.useDecoder;
     }, c.prototype._decodeChoice = function(p, m) {
       var b = this._baseState, w = null, M = false;
-      return Object.keys(b.choice).some(function(R) {
-        var V = p.save(), O = b.choice[R];
+      return Object.keys(b.choice).some(function(P) {
+        var V = p.save(), O = b.choice[P];
         try {
           var z = O._decode(p, m);
           if (p.isError(z)) return false;
           w = {
-            type: R,
+            type: P,
             value: z
           }, M = true;
         } catch {
@@ -82570,10 +82570,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
       var O = null;
       if (this.reporter = m, w.optional && p === void 0) if (w.default !== null) p = w.default;
       else return;
-      var M = null, R = false;
+      var M = null, P = false;
       if (w.any) O = this._createEncoderBuffer(p);
       else if (w.choice) O = this._encodeChoice(p, m);
-      else if (w.contains) M = this._getUse(w.contains, b)._encode(p, m), R = true;
+      else if (w.contains) M = this._getUse(w.contains, b)._encode(p, m), P = true;
       else if (w.children) M = w.children.map(function(q) {
         if (q._baseState.tag === "null_") return q._encode(null, m, p);
         if (q._baseState.key === null) return m.error("Child should have a key");
@@ -82592,11 +82592,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
           var W = this._baseState;
           return this._getUse(W.args[0], p)._encode(q, m);
         }, V));
-      } else w.use !== null ? O = this._getUse(w.use, b)._encode(p, m) : (M = this._encodePrimitive(w.tag, p), R = true);
+      } else w.use !== null ? O = this._getUse(w.use, b)._encode(p, m) : (M = this._encodePrimitive(w.tag, p), P = true);
       var O;
       if (!w.any && w.choice === null) {
         var z = w.implicit !== null ? w.implicit : w.tag, H = w.implicit === null ? "universal" : "context";
-        z === null ? w.use === null && m.error("Tag could be omitted only for .use()") : w.use === null && (O = this._encodeComposite(z, R, H, M));
+        z === null ? w.use === null && m.error("Tag could be omitted only for .use()") : w.use === null && (O = this._encodeComposite(z, P, H, M));
       }
       return w.explicit !== null && (O = this._encodeComposite(w.explicit, false, "context", O)), O;
     }, c.prototype._encodeChoice = function(p, m) {
@@ -82707,8 +82707,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
       if (p.isError(M)) return M;
       if (!b && w.tag !== m && w.tagStr !== m && w.tagStr + "of" !== m) return p.error('Failed to match tag: "' + m + '"');
       if (w.primitive || M !== null) return p.skip(M, 'Failed to match body of: "' + m + '"');
-      var R = p.save(), V = this._skipUntilEnd(p, 'Failed to skip indefinite length body: "' + this.tag + '"');
-      return p.isError(V) ? V : (M = p.offset - R.offset, p.restore(R), p.skip(M, 'Failed to match body of: "' + m + '"'));
+      var P = p.save(), V = this._skipUntilEnd(p, 'Failed to skip indefinite length body: "' + this.tag + '"');
+      return p.isError(V) ? V : (M = p.offset - P.offset, p.restore(P), p.skip(M, 'Failed to match body of: "' + m + '"'));
     }, h.prototype._skipUntilEnd = function(p, m) {
       for (; ; ) {
         var b = c(p, m);
@@ -82721,10 +82721,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
     }, h.prototype._decodeList = function(p, m, b, w) {
       for (var M = []; !p.isEmpty(); ) {
-        var R = this._peekTag(p, "end");
-        if (p.isError(R)) return R;
+        var P = this._peekTag(p, "end");
+        if (p.isError(P)) return P;
         var V = b.decode(p, "der", w);
-        if (p.isError(V) && R) break;
+        if (p.isError(V) && P) break;
         M.push(V);
       }
       return M;
@@ -82738,7 +82738,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       } else if (m === "bmpstr") {
         var w = p.raw();
         if (w.length % 2 === 1) return p.error("Decoding of string type: bmpstr length mismatch");
-        for (var M = "", R = 0; R < w.length / 2; R++) M += String.fromCharCode(w.readUInt16BE(R * 2));
+        for (var M = "", P = 0; P < w.length / 2; P++) M += String.fromCharCode(w.readUInt16BE(P * 2));
         return M;
       } else if (m === "numstr") {
         var V = p.raw().toString("ascii");
@@ -82752,11 +82752,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
         } else return /str$/.test(m) ? p.raw().toString() : p.error("Decoding of string type: " + m + " unsupported");
       }
     }, h.prototype._decodeObjid = function(p, m, b) {
-      for (var w, M = [], R = 0; !p.isEmpty(); ) {
+      for (var w, M = [], P = 0; !p.isEmpty(); ) {
         var V = p.readUInt8();
-        R <<= 7, R |= V & 127, (V & 128) === 0 && (M.push(R), R = 0);
+        P <<= 7, P |= V & 127, (V & 128) === 0 && (M.push(P), P = 0);
       }
-      V & 128 && M.push(R);
+      V & 128 && M.push(P);
       var O = M[0] / 40 | 0, z = M[0] % 40;
       if (b ? w = M : w = [
         O,
@@ -82768,12 +82768,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return w;
     }, h.prototype._decodeTime = function(p, m) {
       var b = p.raw().toString();
-      if (m === "gentime") var w = b.slice(0, 4) | 0, M = b.slice(4, 6) | 0, R = b.slice(6, 8) | 0, V = b.slice(8, 10) | 0, O = b.slice(10, 12) | 0, z = b.slice(12, 14) | 0;
+      if (m === "gentime") var w = b.slice(0, 4) | 0, M = b.slice(4, 6) | 0, P = b.slice(6, 8) | 0, V = b.slice(8, 10) | 0, O = b.slice(10, 12) | 0, z = b.slice(12, 14) | 0;
       else if (m === "utctime") {
-        var w = b.slice(0, 2) | 0, M = b.slice(2, 4) | 0, R = b.slice(4, 6) | 0, V = b.slice(6, 8) | 0, O = b.slice(8, 10) | 0, z = b.slice(10, 12) | 0;
+        var w = b.slice(0, 2) | 0, M = b.slice(2, 4) | 0, P = b.slice(4, 6) | 0, V = b.slice(6, 8) | 0, O = b.slice(8, 10) | 0, z = b.slice(10, 12) | 0;
         w < 70 ? w = 2e3 + w : w = 1900 + w;
       } else return p.error("Decoding " + m + " time is not supported yet");
-      return Date.UTC(w, M - 1, R, V, O, z, 0);
+      return Date.UTC(w, M - 1, P, V, O, z, 0);
     }, h.prototype._decodeNull = function(p) {
       return null;
     }, h.prototype._decodeBool = function(p) {
@@ -82796,12 +82796,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
           m <<= 7, m |= M & 127;
         }
       } else m &= 31;
-      var R = o.tag[m];
+      var P = o.tag[m];
       return {
         cls: b,
         primitive: w,
         tag: m,
-        tagStr: R
+        tagStr: P
       };
     }
     function d(f, p, m) {
@@ -82814,9 +82814,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
       b = 0;
       for (var M = 0; M < w; M++) {
         b <<= 8;
-        var R = f.readUInt8(m);
-        if (f.isError(R)) return R;
-        b |= R;
+        var P = f.readUInt8(m);
+        if (f.isError(P)) return P;
+        b |= P;
       }
       return b;
     }
@@ -82845,8 +82845,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
       if (p === -1 || m === -1) throw new Error("PEM section not found for: " + d);
       var M = c.slice(p + 1, m).join("");
       M.replace(/[^a-z0-9\+\/=]+/gi, "");
-      var R = new e(M, "base64");
-      return r.prototype.decode.call(this, R, h);
+      var P = new e(M, "base64");
+      return r.prototype.decode.call(this, P, h);
     }, pem$1;
   }
   var hasRequiredDecoders;
@@ -82879,10 +82879,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
           w
         ]);
       }
-      for (var R = 1, V = w.length; V >= 256; V >>= 8) R++;
-      var O = new e(2 + R);
-      O[0] = M, O[1] = 128 | R;
-      for (var V = 1 + R, z = w.length; z > 0; V--, z >>= 8) O[V] = z & 255;
+      for (var P = 1, V = w.length; V >= 256; V >>= 8) P++;
+      var O = new e(2 + P);
+      O[0] = M, O[1] = 128 | P;
+      for (var V = 1 + P, z = w.length; z > 0; V--, z >>= 8) O[V] = z & 255;
       return this._createEncoderBuffer([
         O,
         w
@@ -82912,12 +82912,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
         p.splice(0, 2, p[0] * 40 + p[1]);
       }
       for (var M = 0, w = 0; w < p.length; w++) {
-        var R = p[w];
-        for (M++; R >= 128; R >>= 7) M++;
+        var P = p[w];
+        for (M++; P >= 128; P >>= 7) M++;
       }
       for (var V = new e(M), O = V.length - 1, w = p.length - 1; w >= 0; w--) {
-        var R = p[w];
-        for (V[O--] = R & 127; (R >>= 7) > 0; ) V[O--] = 128 | R & 127;
+        var P = p[w];
+        for (V[O--] = P & 127; (P >>= 7) > 0; ) V[O--] = 128 | P & 127;
       }
       return this._createEncoderBuffer(V);
     };
@@ -82958,8 +82958,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
       if (e.isBuffer(p)) {
         var w = p.length;
         p.length === 0 && w++;
-        var R = new e(w);
-        return p.copy(R), p.length === 0 && (R[0] = 0), this._createEncoderBuffer(R);
+        var P = new e(w);
+        return p.copy(P), p.length === 0 && (P[0] = 0), this._createEncoderBuffer(P);
       }
       if (p < 128) return this._createEncoderBuffer(p);
       if (p < 256) return this._createEncoderBuffer([
@@ -82967,8 +82967,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         p
       ]);
       for (var w = 1, M = p; M >= 256; M >>= 8) w++;
-      for (var R = new Array(w), M = R.length - 1; M >= 0; M--) R[M] = p & 255, p >>= 8;
-      return R[0] & 128 && R.unshift(0), this._createEncoderBuffer(new e(R));
+      for (var P = new Array(w), M = P.length - 1; M >= 0; M--) P[M] = p & 255, p >>= 8;
+      return P[0] & 128 && P.unshift(0), this._createEncoderBuffer(new e(P));
     }, h.prototype._encodeBool = function(p) {
       return this._createEncoderBuffer(p ? 255 : 0);
     }, h.prototype._use = function(p, m) {
@@ -82976,9 +82976,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }, h.prototype._skipDefault = function(p, m, b) {
       var w = this._baseState, M;
       if (w.default === null) return false;
-      var R = p.join();
-      if (w.defaultBuffer === void 0 && (w.defaultBuffer = this._encodeValue(w.default, m, b).join()), R.length !== w.defaultBuffer.length) return false;
-      for (M = 0; M < R.length; M++) if (R[M] !== w.defaultBuffer[M]) return false;
+      var P = p.join();
+      if (w.defaultBuffer === void 0 && (w.defaultBuffer = this._encodeValue(w.default, m, b).join()), P.length !== w.defaultBuffer.length) return false;
+      for (M = 0; M < P.length; M++) if (P[M] !== w.defaultBuffer[M]) return false;
       return true;
     };
     function d(f, p, m, b) {
@@ -83121,7 +83121,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     return fixProc = function(h, c) {
       var d = h.toString(), f = d.match(l), p;
       if (f) {
-        var b = "aes" + f[1], w = a.from(f[2], "hex"), M = a.from(f[3].replace(/[\r\n]/g, ""), "base64"), R = s(c, w.slice(0, 8), parseInt(f[1], 10)).key, V = [], O = o.createDecipheriv(b, R, w);
+        var b = "aes" + f[1], w = a.from(f[2], "hex"), M = a.from(f[3].replace(/[\r\n]/g, ""), "base64"), P = s(c, w.slice(0, 8), parseInt(f[1], 10)).key, V = [], O = o.createDecipheriv(b, P, w);
         V.push(O.update(M)), V.push(O.final()), p = a.concat(V);
       } else {
         var m = d.match(r);
@@ -83140,7 +83140,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     hasRequiredParseAsn1 = 1;
     var l = requireAsn1(), e = require$$1, r = requireFixProc(), s = requireBrowser$7(), o = requireBrowser$8().pbkdf2Sync, a = requireSafeBuffer$2().Buffer;
     function h(d, f) {
-      var p = d.algorithm.decrypt.kde.kdeparams.salt, m = parseInt(d.algorithm.decrypt.kde.kdeparams.iters.toString(), 10), b = e[d.algorithm.decrypt.cipher.algo.join(".")], w = d.algorithm.decrypt.cipher.iv, M = d.subjectPrivateKey, R = parseInt(b.split("-")[1], 10) / 8, V = o(f, p, m, R, "sha1"), O = s.createDecipheriv(b, V, w), z = [];
+      var p = d.algorithm.decrypt.kde.kdeparams.salt, m = parseInt(d.algorithm.decrypt.kde.kdeparams.iters.toString(), 10), b = e[d.algorithm.decrypt.cipher.algo.join(".")], w = d.algorithm.decrypt.cipher.iv, M = d.subjectPrivateKey, P = parseInt(b.split("-")[1], 10) / 8, V = o(f, p, m, P, "sha1"), O = s.createDecipheriv(b, V, w), z = [];
       return z.push(O.update(M)), z.push(O.final()), a.concat(z);
     }
     function c(d) {
@@ -83250,7 +83250,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return l.from(K.toDER());
     }
     function p(O, z, H) {
-      for (var q = z.params.priv_key, W = z.params.p, K = z.params.q, J = z.params.g, ee = new o(0), ie, pe = w(O, K).mod(K), U = false, v = b(q, K, O, H); U === false; ) ie = R(K, v, H), ee = V(J, ie, W, K), U = ie.invm(K).imul(pe.add(q.mul(ee))).mod(K), U.cmpn(0) === 0 && (U = false, ee = new o(0));
+      for (var q = z.params.priv_key, W = z.params.p, K = z.params.q, J = z.params.g, ee = new o(0), ie, pe = w(O, K).mod(K), U = false, v = b(q, K, O, H); U === false; ) ie = P(K, v, H), ee = V(J, ie, W, K), U = ie.invm(K).imul(pe.add(q.mul(ee))).mod(K), U.cmpn(0) === 0 && (U = false, ee = new o(0));
       return m(ee, U);
     }
     function m(O, z) {
@@ -83306,7 +83306,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       return H;
     }
-    function R(O, z, H) {
+    function P(O, z, H) {
       var q, W;
       do {
         for (q = l.alloc(0); q.length * 8 < O.bitLength(); ) z.v = e(H, z.k).update(z.v).digest(), q = l.concat([
@@ -83322,7 +83322,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function V(O, z, H, q) {
       return O.toRed(o.mont(H)).redPow(z).fromRed().mod(q);
     }
-    return sign$1.exports = d, sign$1.exports.getKey = b, sign$1.exports.makeKey = R, sign$1.exports;
+    return sign$1.exports = d, sign$1.exports.getKey = b, sign$1.exports.makeKey = P, sign$1.exports;
   }
   var verify_1, hasRequiredVerify;
   function requireVerify() {
@@ -83343,16 +83343,16 @@ Use Chrome, Firefox or Internet Explorer 11`);
         w,
         p
       ]);
-      for (var R = M.modulus.byteLength(), V = [
+      for (var P = M.modulus.byteLength(), V = [
         1
-      ], O = 0; p.length + V.length + 2 < R; ) V.push(255), O += 1;
+      ], O = 0; p.length + V.length + 2 < P; ) V.push(255), O += 1;
       V.push(0);
       for (var z = -1; ++z < p.length; ) V.push(p[z]);
       V = l.from(V);
       var H = e.mont(M.modulus);
       f = new e(f).toRed(H), f = f.redPow(new e(M.publicExponent)), f = l.from(f.fromRed().toArray());
       var q = O < 8 ? 1 : 0;
-      for (R = Math.min(f.length, V.length), f.length !== V.length && (q = 1), z = -1; ++z < R; ) q |= f[z] ^ V[z];
+      for (P = Math.min(f.length, V.length), f.length !== V.length && (q = 1), z = -1; ++z < P; ) q |= f[z] ^ V[z];
       return q === 0;
     }
     function h(f, p, m) {
@@ -83362,9 +83362,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return w.verify(p, f, M);
     }
     function c(f, p, m) {
-      var b = m.data.p, w = m.data.q, M = m.data.g, R = m.data.pub_key, V = s.signature.decode(f, "der"), O = V.s, z = V.r;
+      var b = m.data.p, w = m.data.q, M = m.data.g, P = m.data.pub_key, V = s.signature.decode(f, "der"), O = V.s, z = V.r;
       d(O, w), d(z, w);
-      var H = e.mont(b), q = O.invm(w), W = M.toRed(H).redPow(new e(p).mul(q).mod(w)).fromRed().mul(R.toRed(H).redPow(z.mul(q).mod(w)).fromRed()).mod(b).mod(w);
+      var H = e.mont(b), q = O.invm(w), W = M.toRed(H).redPow(new e(p).mul(q).mod(w)).fromRed().mul(P.toRed(H).redPow(z.mul(q).mod(w)).fromRed()).mod(b).mod(w);
       return W.cmp(z) === 0;
     }
     function d(f, p) {
@@ -83393,8 +83393,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return this._hash.update(typeof b == "string" ? l.from(b, w) : b), this;
     }, c.prototype.sign = function(b, w) {
       this.end();
-      var M = this._hash.digest(), R = o(M, b, this._hashType, this._signType, this._tag);
-      return w ? R.toString(w) : R;
+      var M = this._hash.digest(), P = o(M, b, this._hashType, this._signType, this._tag);
+      return w ? P.toString(w) : P;
     };
     function d(m) {
       r.Writable.call(this);
@@ -83407,10 +83407,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }, d.prototype.update = function(b, w) {
       return this._hash.update(typeof b == "string" ? l.from(b, w) : b), this;
     }, d.prototype.verify = function(b, w, M) {
-      var R = typeof w == "string" ? l.from(w, M) : w;
+      var P = typeof w == "string" ? l.from(w, M) : w;
       this.end();
       var V = this._hash.digest();
-      return a(R, V, b, this._signType, this._tag);
+      return a(P, V, b, this._signType, this._tag);
     };
     function f(m) {
       return new c(m);
@@ -83460,8 +83460,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (typeof v == "number") return this._initNumber(v, _, $);
           if (typeof v == "object") return this._initArray(v, _, $);
           _ === "hex" && (_ = 16), s(_ === (_ | 0) && _ >= 2 && _ <= 36), v = v.toString().replace(/\s+/g, "");
-          var P = 0;
-          v[0] === "-" && (P++, this.negative = 1), P < v.length && (_ === 16 ? this._parseHex(v, P, $) : (this._parseBase(v, _, P), $ === "le" && this._initArray(this.toArray(), _, $)));
+          var R = 0;
+          v[0] === "-" && (R++, this.negative = 1), R < v.length && (_ === 16 ? this._parseHex(v, R, $) : (this._parseBase(v, _, R), $ === "le" && this._initArray(this.toArray(), _, $)));
         }, a.prototype._initNumber = function(v, _, $) {
           v < 0 && (this.negative = 1, v = -v), v < 67108864 ? (this.words = [
             v & 67108863
@@ -83478,10 +83478,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
             0
           ], this.length = 1, this;
           this.length = Math.ceil(v.length / 3), this.words = new Array(this.length);
-          for (var P = 0; P < this.length; P++) this.words[P] = 0;
+          for (var R = 0; R < this.length; R++) this.words[R] = 0;
           var F, k, G = 0;
-          if ($ === "be") for (P = v.length - 1, F = 0; P >= 0; P -= 3) k = v[P] | v[P - 1] << 8 | v[P - 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
-          else if ($ === "le") for (P = 0, F = 0; P < v.length; P += 3) k = v[P] | v[P + 1] << 8 | v[P + 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
+          if ($ === "be") for (R = v.length - 1, F = 0; R >= 0; R -= 3) k = v[R] | v[R - 1] << 8 | v[R - 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
+          else if ($ === "le") for (R = 0, F = 0; R < v.length; R += 3) k = v[R] | v[R + 1] << 8 | v[R + 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
           return this.strip();
         };
         function c(U, v) {
@@ -83494,29 +83494,29 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }
         a.prototype._parseHex = function(v, _, $) {
           this.length = Math.ceil((v.length - _) / 6), this.words = new Array(this.length);
-          for (var P = 0; P < this.length; P++) this.words[P] = 0;
+          for (var R = 0; R < this.length; R++) this.words[R] = 0;
           var F = 0, k = 0, G;
-          if ($ === "be") for (P = v.length - 1; P >= _; P -= 2) G = d(v, _, P) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
+          if ($ === "be") for (R = v.length - 1; R >= _; R -= 2) G = d(v, _, R) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
           else {
             var D = v.length - _;
-            for (P = D % 2 === 0 ? _ + 1 : _; P < v.length; P += 2) G = d(v, _, P) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
+            for (R = D % 2 === 0 ? _ + 1 : _; R < v.length; R += 2) G = d(v, _, R) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
           }
           this.strip();
         };
         function f(U, v, _, $) {
-          for (var P = 0, F = Math.min(U.length, _), k = v; k < F; k++) {
+          for (var R = 0, F = Math.min(U.length, _), k = v; k < F; k++) {
             var G = U.charCodeAt(k) - 48;
-            P *= $, G >= 49 ? P += G - 49 + 10 : G >= 17 ? P += G - 17 + 10 : P += G;
+            R *= $, G >= 49 ? R += G - 49 + 10 : G >= 17 ? R += G - 17 + 10 : R += G;
           }
-          return P;
+          return R;
         }
         a.prototype._parseBase = function(v, _, $) {
           this.words = [
             0
           ], this.length = 1;
-          for (var P = 0, F = 1; F <= 67108863; F *= _) P++;
-          P--, F = F / _ | 0;
-          for (var k = v.length - $, G = k % P, D = Math.min(k, k - G) + $, x = 0, L = $; L < D; L += P) x = f(v, L, L + P, _), this.imuln(F), this.words[0] + x < 67108864 ? this.words[0] += x : this._iaddn(x);
+          for (var R = 0, F = 1; F <= 67108863; F *= _) R++;
+          R--, F = F / _ | 0;
+          for (var k = v.length - $, G = k % R, D = Math.min(k, k - G) + $, x = 0, L = $; L < D; L += R) x = f(v, L, L + R, _), this.imuln(F), this.words[0] + x < 67108864 ? this.words[0] += x : this._iaddn(x);
           if (G !== 0) {
             var j = 1;
             for (x = f(v, L, v.length, _), L = 0; L < G; L++) j *= _;
@@ -83650,9 +83650,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
           var $;
           if (v === 16 || v === "hex") {
             $ = "";
-            for (var P = 0, F = 0, k = 0; k < this.length; k++) {
-              var G = this.words[k], D = ((G << P | F) & 16777215).toString(16);
-              F = G >>> 24 - P & 16777215, P += 2, P >= 26 && (P -= 26, k--), F !== 0 || k !== this.length - 1 ? $ = p[6 - D.length] + D + $ : $ = D + $;
+            for (var R = 0, F = 0, k = 0; k < this.length; k++) {
+              var G = this.words[k], D = ((G << R | F) & 16777215).toString(16);
+              F = G >>> 24 - R & 16777215, R += 2, R >= 26 && (R -= 26, k--), F !== 0 || k !== this.length - 1 ? $ = p[6 - D.length] + D + $ : $ = D + $;
             }
             for (F !== 0 && ($ = F.toString(16) + $); $.length % _ !== 0; ) $ = "0" + $;
             return this.negative !== 0 && ($ = "-" + $), $;
@@ -83679,14 +83679,14 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.toArray = function(v, _) {
           return this.toArrayLike(Array, v, _);
         }, a.prototype.toArrayLike = function(v, _, $) {
-          var P = this.byteLength(), F = $ || Math.max(1, P);
-          s(P <= F, "byte array longer than desired length"), s(F > 0, "Requested array length <= 0"), this.strip();
+          var R = this.byteLength(), F = $ || Math.max(1, R);
+          s(R <= F, "byte array longer than desired length"), s(F > 0, "Requested array length <= 0"), this.strip();
           var k = _ === "le", G = new v(F), D, x, L = this.clone();
           if (k) {
             for (x = 0; !L.isZero(); x++) D = L.andln(255), L.iushrn(8), G[x] = D;
             for (; x < F; x++) G[x] = 0;
           } else {
-            for (x = 0; x < F - P; x++) G[x] = 0;
+            for (x = 0; x < F - R; x++) G[x] = 0;
             for (x = 0; !L.isZero(); x++) D = L.andln(255), L.iushrn(8), G[F - x - 1] = D;
           }
           return G;
@@ -83705,8 +83705,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         };
         function w(U) {
           for (var v = new Array(U.bitLength()), _ = 0; _ < v.length; _++) {
-            var $ = _ / 26 | 0, P = _ % 26;
-            v[_] = (U.words[$] & 1 << P) >>> P;
+            var $ = _ / 26 | 0, R = _ % 26;
+            v[_] = (U.words[$] & 1 << R) >>> R;
           }
           return v;
         }
@@ -83753,8 +83753,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.iuxor = function(v) {
           var _, $;
           this.length > v.length ? (_ = this, $ = v) : (_ = v, $ = this);
-          for (var P = 0; P < $.length; P++) this.words[P] = _.words[P] ^ $.words[P];
-          if (this !== _) for (; P < _.length; P++) this.words[P] = _.words[P];
+          for (var R = 0; R < $.length; R++) this.words[R] = _.words[R] ^ $.words[R];
+          if (this !== _) for (; R < _.length; R++) this.words[R] = _.words[R];
           return this.length = _.length, this.strip();
         }, a.prototype.ixor = function(v) {
           return s((this.negative | v.negative) === 0), this.iuxor(v);
@@ -83766,21 +83766,21 @@ Use Chrome, Firefox or Internet Explorer 11`);
           s(typeof v == "number" && v >= 0);
           var _ = Math.ceil(v / 26) | 0, $ = v % 26;
           this._expand(_), $ > 0 && _--;
-          for (var P = 0; P < _; P++) this.words[P] = ~this.words[P] & 67108863;
-          return $ > 0 && (this.words[P] = ~this.words[P] & 67108863 >> 26 - $), this.strip();
+          for (var R = 0; R < _; R++) this.words[R] = ~this.words[R] & 67108863;
+          return $ > 0 && (this.words[R] = ~this.words[R] & 67108863 >> 26 - $), this.strip();
         }, a.prototype.notn = function(v) {
           return this.clone().inotn(v);
         }, a.prototype.setn = function(v, _) {
           s(typeof v == "number" && v >= 0);
-          var $ = v / 26 | 0, P = v % 26;
-          return this._expand($ + 1), _ ? this.words[$] = this.words[$] | 1 << P : this.words[$] = this.words[$] & ~(1 << P), this.strip();
+          var $ = v / 26 | 0, R = v % 26;
+          return this._expand($ + 1), _ ? this.words[$] = this.words[$] | 1 << R : this.words[$] = this.words[$] & ~(1 << R), this.strip();
         }, a.prototype.iadd = function(v) {
           var _;
           if (this.negative !== 0 && v.negative === 0) return this.negative = 0, _ = this.isub(v), this.negative ^= 1, this._normSign();
           if (this.negative === 0 && v.negative !== 0) return v.negative = 0, _ = this.isub(v), v.negative = 1, _._normSign();
-          var $, P;
-          this.length > v.length ? ($ = this, P = v) : ($ = v, P = this);
-          for (var F = 0, k = 0; k < P.length; k++) _ = ($.words[k] | 0) + (P.words[k] | 0) + F, this.words[k] = _ & 67108863, F = _ >>> 26;
+          var $, R;
+          this.length > v.length ? ($ = this, R = v) : ($ = v, R = this);
+          for (var F = 0, k = 0; k < R.length; k++) _ = ($.words[k] | 0) + (R.words[k] | 0) + F, this.words[k] = _ & 67108863, F = _ >>> 26;
           for (; F !== 0 && k < $.length; k++) _ = ($.words[k] | 0) + F, this.words[k] = _ & 67108863, F = _ >>> 26;
           if (this.length = $.length, F !== 0) this.words[this.length] = F, this.length++;
           else if ($ !== this) for (; k < $.length; k++) this.words[k] = $.words[k];
@@ -83796,12 +83796,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
           } else if (this.negative !== 0) return this.negative = 0, this.iadd(v), this.negative = 1, this._normSign();
           var $ = this.cmp(v);
           if ($ === 0) return this.negative = 0, this.length = 1, this.words[0] = 0, this;
-          var P, F;
-          $ > 0 ? (P = this, F = v) : (P = v, F = this);
-          for (var k = 0, G = 0; G < F.length; G++) _ = (P.words[G] | 0) - (F.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
-          for (; k !== 0 && G < P.length; G++) _ = (P.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
-          if (k === 0 && G < P.length && P !== this) for (; G < P.length; G++) this.words[G] = P.words[G];
-          return this.length = Math.max(this.length, G), P !== this && (this.negative = 1), this.strip();
+          var R, F;
+          $ > 0 ? (R = this, F = v) : (R = v, F = this);
+          for (var k = 0, G = 0; G < F.length; G++) _ = (R.words[G] | 0) - (F.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
+          for (; k !== 0 && G < R.length; G++) _ = (R.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
+          if (k === 0 && G < R.length && R !== this) for (; G < R.length; G++) this.words[G] = R.words[G];
+          return this.length = Math.max(this.length, G), R !== this && (this.negative = 1), this.strip();
         }, a.prototype.sub = function(v) {
           return this.clone().isub(v);
         };
@@ -83809,19 +83809,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
           _.negative = v.negative ^ U.negative;
           var $ = U.length + v.length | 0;
           _.length = $, $ = $ - 1 | 0;
-          var P = U.words[0] | 0, F = v.words[0] | 0, k = P * F, G = k & 67108863, D = k / 67108864 | 0;
+          var R = U.words[0] | 0, F = v.words[0] | 0, k = R * F, G = k & 67108863, D = k / 67108864 | 0;
           _.words[0] = G;
           for (var x = 1; x < $; x++) {
             for (var L = D >>> 26, j = D & 67108863, Y = Math.min(x, v.length - 1), oe = Math.max(0, x - U.length + 1); oe <= Y; oe++) {
               var me = x - oe | 0;
-              P = U.words[me] | 0, F = v.words[oe] | 0, k = P * F + j, L += k / 67108864 | 0, j = k & 67108863;
+              R = U.words[me] | 0, F = v.words[oe] | 0, k = R * F + j, L += k / 67108864 | 0, j = k & 67108863;
             }
             _.words[x] = j | 0, D = L | 0;
           }
           return D !== 0 ? _.words[x] = D | 0 : _.length--, _.strip();
         }
-        var R = function(v, _, $) {
-          var P = v.words, F = _.words, k = $.words, G = 0, D, x, L, j = P[0] | 0, Y = j & 8191, oe = j >>> 13, me = P[1] | 0, be = me & 8191, Z = me >>> 13, se = P[2] | 0, fe = se & 8191, _e = se >>> 13, xe = P[3] | 0, le = xe & 8191, Ce = xe >>> 13, Re = P[4] | 0, Be = Re & 8191, Ee = Re >>> 13, rt = P[5] | 0, Pe = rt & 8191, Te = rt >>> 13, ut = P[6] | 0, De = ut & 8191, Fe = ut >>> 13, ct = P[7] | 0, Le = ct & 8191, Ue = ct >>> 13, pt = P[8] | 0, Ke = pt & 8191, tt = pt >>> 13, bt = P[9] | 0, ge = bt & 8191, re = bt >>> 13, he = F[0] | 0, we = he & 8191, Se = he >>> 13, ke = F[1] | 0, Ne = ke & 8191, ze = ke >>> 13, vt = F[2] | 0, Ve = vt & 8191, Xe = vt >>> 13, ft = F[3] | 0, Ye = ft & 8191, ot = ft >>> 13, wt = F[4] | 0, nt = wt & 8191, at = wt >>> 13, $t = F[5] | 0, ve = $t & 8191, ne = $t >>> 13, ce = F[6] | 0, $e = ce & 8191, Me = ce >>> 13, Oe = F[7] | 0, Ie = Oe & 8191, je = Oe >>> 13, yt = F[8] | 0, Ge = yt & 8191, et = yt >>> 13, mt = F[9] | 0, st = mt & 8191, lt = mt >>> 13;
+        var P = function(v, _, $) {
+          var R = v.words, F = _.words, k = $.words, G = 0, D, x, L, j = R[0] | 0, Y = j & 8191, oe = j >>> 13, me = R[1] | 0, be = me & 8191, Z = me >>> 13, se = R[2] | 0, fe = se & 8191, _e = se >>> 13, xe = R[3] | 0, le = xe & 8191, Ce = xe >>> 13, Re = R[4] | 0, Be = Re & 8191, Ee = Re >>> 13, rt = R[5] | 0, Pe = rt & 8191, Te = rt >>> 13, ut = R[6] | 0, De = ut & 8191, Fe = ut >>> 13, ct = R[7] | 0, Le = ct & 8191, Ue = ct >>> 13, pt = R[8] | 0, Ke = pt & 8191, tt = pt >>> 13, bt = R[9] | 0, ge = bt & 8191, re = bt >>> 13, he = F[0] | 0, we = he & 8191, Se = he >>> 13, ke = F[1] | 0, Ne = ke & 8191, ze = ke >>> 13, vt = F[2] | 0, Ve = vt & 8191, Xe = vt >>> 13, ft = F[3] | 0, Ye = ft & 8191, ot = ft >>> 13, wt = F[4] | 0, nt = wt & 8191, at = wt >>> 13, $t = F[5] | 0, ve = $t & 8191, ne = $t >>> 13, ce = F[6] | 0, $e = ce & 8191, Me = ce >>> 13, Oe = F[7] | 0, Ie = Oe & 8191, je = Oe >>> 13, yt = F[8] | 0, Ge = yt & 8191, et = yt >>> 13, mt = F[9] | 0, st = mt & 8191, lt = mt >>> 13;
           $.negative = v.negative ^ _.negative, $.length = 19, D = Math.imul(Y, we), x = Math.imul(Y, Se), x = x + Math.imul(oe, we) | 0, L = Math.imul(oe, Se);
           var _t = (G + D | 0) + ((x & 8191) << 13) | 0;
           G = (L + (x >>> 13) | 0) + (_t >>> 26) | 0, _t &= 67108863, D = Math.imul(be, we), x = Math.imul(be, Se), x = x + Math.imul(Z, we) | 0, L = Math.imul(Z, Se), D = D + Math.imul(Y, Ne) | 0, x = x + Math.imul(Y, ze) | 0, x = x + Math.imul(oe, Ne) | 0, L = L + Math.imul(oe, ze) | 0;
@@ -83862,17 +83862,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
           var zt = (G + D | 0) + ((x & 8191) << 13) | 0;
           return G = (L + (x >>> 13) | 0) + (zt >>> 26) | 0, zt &= 67108863, k[0] = _t, k[1] = At, k[2] = Ct, k[3] = St, k[4] = Mt, k[5] = Tt, k[6] = Bt, k[7] = Nt, k[8] = It, k[9] = Pt, k[10] = Rt, k[11] = Dt, k[12] = Lt, k[13] = kt, k[14] = Ot, k[15] = Vt, k[16] = Ut, k[17] = Gt, k[18] = zt, G !== 0 && (k[19] = G, $.length++), $;
         };
-        Math.imul || (R = M);
+        Math.imul || (P = M);
         function V(U, v, _) {
           _.negative = v.negative ^ U.negative, _.length = U.length + v.length;
-          for (var $ = 0, P = 0, F = 0; F < _.length - 1; F++) {
-            var k = P;
-            P = 0;
+          for (var $ = 0, R = 0, F = 0; F < _.length - 1; F++) {
+            var k = R;
+            R = 0;
             for (var G = $ & 67108863, D = Math.min(F, v.length - 1), x = Math.max(0, F - U.length + 1); x <= D; x++) {
               var L = F - x, j = U.words[L] | 0, Y = v.words[x] | 0, oe = j * Y, me = oe & 67108863;
-              k = k + (oe / 67108864 | 0) | 0, me = me + G | 0, G = me & 67108863, k = k + (me >>> 26) | 0, P += k >>> 26, k &= 67108863;
+              k = k + (oe / 67108864 | 0) | 0, me = me + G | 0, G = me & 67108863, k = k + (me >>> 26) | 0, R += k >>> 26, k &= 67108863;
             }
-            _.words[F] = G, $ = k, k = P;
+            _.words[F] = G, $ = k, k = R;
           }
           return $ !== 0 ? _.words[F] = $ : _.length--, _.strip();
         }
@@ -83881,57 +83881,57 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return $.mulp(U, v, _);
         }
         a.prototype.mulTo = function(v, _) {
-          var $, P = this.length + v.length;
-          return this.length === 10 && v.length === 10 ? $ = R(this, v, _) : P < 63 ? $ = M(this, v, _) : P < 1024 ? $ = V(this, v, _) : $ = O(this, v, _), $;
+          var $, R = this.length + v.length;
+          return this.length === 10 && v.length === 10 ? $ = P(this, v, _) : R < 63 ? $ = M(this, v, _) : R < 1024 ? $ = V(this, v, _) : $ = O(this, v, _), $;
         };
         function z(U, v) {
           this.x = U, this.y = v;
         }
         z.prototype.makeRBT = function(v) {
-          for (var _ = new Array(v), $ = a.prototype._countBits(v) - 1, P = 0; P < v; P++) _[P] = this.revBin(P, $, v);
+          for (var _ = new Array(v), $ = a.prototype._countBits(v) - 1, R = 0; R < v; R++) _[R] = this.revBin(R, $, v);
           return _;
         }, z.prototype.revBin = function(v, _, $) {
           if (v === 0 || v === $ - 1) return v;
-          for (var P = 0, F = 0; F < _; F++) P |= (v & 1) << _ - F - 1, v >>= 1;
-          return P;
-        }, z.prototype.permute = function(v, _, $, P, F, k) {
-          for (var G = 0; G < k; G++) P[G] = _[v[G]], F[G] = $[v[G]];
-        }, z.prototype.transform = function(v, _, $, P, F, k) {
-          this.permute(k, v, _, $, P, F);
+          for (var R = 0, F = 0; F < _; F++) R |= (v & 1) << _ - F - 1, v >>= 1;
+          return R;
+        }, z.prototype.permute = function(v, _, $, R, F, k) {
+          for (var G = 0; G < k; G++) R[G] = _[v[G]], F[G] = $[v[G]];
+        }, z.prototype.transform = function(v, _, $, R, F, k) {
+          this.permute(k, v, _, $, R, F);
           for (var G = 1; G < F; G <<= 1) for (var D = G << 1, x = Math.cos(2 * Math.PI / D), L = Math.sin(2 * Math.PI / D), j = 0; j < F; j += D) for (var Y = x, oe = L, me = 0; me < G; me++) {
-            var be = $[j + me], Z = P[j + me], se = $[j + me + G], fe = P[j + me + G], _e = Y * se - oe * fe;
-            fe = Y * fe + oe * se, se = _e, $[j + me] = be + se, P[j + me] = Z + fe, $[j + me + G] = be - se, P[j + me + G] = Z - fe, me !== D && (_e = x * Y - L * oe, oe = x * oe + L * Y, Y = _e);
+            var be = $[j + me], Z = R[j + me], se = $[j + me + G], fe = R[j + me + G], _e = Y * se - oe * fe;
+            fe = Y * fe + oe * se, se = _e, $[j + me] = be + se, R[j + me] = Z + fe, $[j + me + G] = be - se, R[j + me + G] = Z - fe, me !== D && (_e = x * Y - L * oe, oe = x * oe + L * Y, Y = _e);
           }
         }, z.prototype.guessLen13b = function(v, _) {
-          var $ = Math.max(_, v) | 1, P = $ & 1, F = 0;
+          var $ = Math.max(_, v) | 1, R = $ & 1, F = 0;
           for ($ = $ / 2 | 0; $; $ = $ >>> 1) F++;
-          return 1 << F + 1 + P;
+          return 1 << F + 1 + R;
         }, z.prototype.conjugate = function(v, _, $) {
-          if (!($ <= 1)) for (var P = 0; P < $ / 2; P++) {
-            var F = v[P];
-            v[P] = v[$ - P - 1], v[$ - P - 1] = F, F = _[P], _[P] = -_[$ - P - 1], _[$ - P - 1] = -F;
+          if (!($ <= 1)) for (var R = 0; R < $ / 2; R++) {
+            var F = v[R];
+            v[R] = v[$ - R - 1], v[$ - R - 1] = F, F = _[R], _[R] = -_[$ - R - 1], _[$ - R - 1] = -F;
           }
         }, z.prototype.normalize13b = function(v, _) {
-          for (var $ = 0, P = 0; P < _ / 2; P++) {
-            var F = Math.round(v[2 * P + 1] / _) * 8192 + Math.round(v[2 * P] / _) + $;
-            v[P] = F & 67108863, F < 67108864 ? $ = 0 : $ = F / 67108864 | 0;
+          for (var $ = 0, R = 0; R < _ / 2; R++) {
+            var F = Math.round(v[2 * R + 1] / _) * 8192 + Math.round(v[2 * R] / _) + $;
+            v[R] = F & 67108863, F < 67108864 ? $ = 0 : $ = F / 67108864 | 0;
           }
           return v;
-        }, z.prototype.convert13b = function(v, _, $, P) {
+        }, z.prototype.convert13b = function(v, _, $, R) {
           for (var F = 0, k = 0; k < _; k++) F = F + (v[k] | 0), $[2 * k] = F & 8191, F = F >>> 13, $[2 * k + 1] = F & 8191, F = F >>> 13;
-          for (k = 2 * _; k < P; ++k) $[k] = 0;
+          for (k = 2 * _; k < R; ++k) $[k] = 0;
           s(F === 0), s((F & -8192) === 0);
         }, z.prototype.stub = function(v) {
           for (var _ = new Array(v), $ = 0; $ < v; $++) _[$] = 0;
           return _;
         }, z.prototype.mulp = function(v, _, $) {
-          var P = 2 * this.guessLen13b(v.length, _.length), F = this.makeRBT(P), k = this.stub(P), G = new Array(P), D = new Array(P), x = new Array(P), L = new Array(P), j = new Array(P), Y = new Array(P), oe = $.words;
-          oe.length = P, this.convert13b(v.words, v.length, G, P), this.convert13b(_.words, _.length, L, P), this.transform(G, k, D, x, P, F), this.transform(L, k, j, Y, P, F);
-          for (var me = 0; me < P; me++) {
+          var R = 2 * this.guessLen13b(v.length, _.length), F = this.makeRBT(R), k = this.stub(R), G = new Array(R), D = new Array(R), x = new Array(R), L = new Array(R), j = new Array(R), Y = new Array(R), oe = $.words;
+          oe.length = R, this.convert13b(v.words, v.length, G, R), this.convert13b(_.words, _.length, L, R), this.transform(G, k, D, x, R, F), this.transform(L, k, j, Y, R, F);
+          for (var me = 0; me < R; me++) {
             var be = D[me] * j[me] - x[me] * Y[me];
             x[me] = D[me] * Y[me] + x[me] * j[me], D[me] = be;
           }
-          return this.conjugate(D, x, P), this.transform(D, x, oe, k, P, F), this.conjugate(oe, k, P), this.normalize13b(oe, P), $.negative = v.negative ^ _.negative, $.length = v.length + _.length, $.strip();
+          return this.conjugate(D, x, R), this.transform(D, x, oe, k, R, F), this.conjugate(oe, k, R), this.normalize13b(oe, R), $.negative = v.negative ^ _.negative, $.length = v.length + _.length, $.strip();
         }, a.prototype.mul = function(v) {
           var _ = new a(null);
           return _.words = new Array(this.length + v.length), this.mulTo(v, _);
@@ -83943,8 +83943,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.imuln = function(v) {
           s(typeof v == "number"), s(v < 67108864);
           for (var _ = 0, $ = 0; $ < this.length; $++) {
-            var P = (this.words[$] | 0) * v, F = (P & 67108863) + (_ & 67108863);
-            _ >>= 26, _ += P / 67108864 | 0, _ += F >>> 26, this.words[$] = F & 67108863;
+            var R = (this.words[$] | 0) * v, F = (R & 67108863) + (_ & 67108863);
+            _ >>= 26, _ += R / 67108864 | 0, _ += F >>> 26, this.words[$] = F & 67108863;
           }
           return _ !== 0 && (this.words[$] = _, this.length++), this.length = v === 0 ? 1 : this.length, this;
         }, a.prototype.muln = function(v) {
@@ -83956,16 +83956,16 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.pow = function(v) {
           var _ = w(v);
           if (_.length === 0) return new a(1);
-          for (var $ = this, P = 0; P < _.length && _[P] === 0; P++, $ = $.sqr()) ;
-          if (++P < _.length) for (var F = $.sqr(); P < _.length; P++, F = F.sqr()) _[P] !== 0 && ($ = $.mul(F));
+          for (var $ = this, R = 0; R < _.length && _[R] === 0; R++, $ = $.sqr()) ;
+          if (++R < _.length) for (var F = $.sqr(); R < _.length; R++, F = F.sqr()) _[R] !== 0 && ($ = $.mul(F));
           return $;
         }, a.prototype.iushln = function(v) {
           s(typeof v == "number" && v >= 0);
-          var _ = v % 26, $ = (v - _) / 26, P = 67108863 >>> 26 - _ << 26 - _, F;
+          var _ = v % 26, $ = (v - _) / 26, R = 67108863 >>> 26 - _ << 26 - _, F;
           if (_ !== 0) {
             var k = 0;
             for (F = 0; F < this.length; F++) {
-              var G = this.words[F] & P, D = (this.words[F] | 0) - G << _;
+              var G = this.words[F] & R, D = (this.words[F] | 0) - G << _;
               this.words[F] = D | k, k = G >>> 26 - _;
             }
             k && (this.words[F] = k, this.length++);
@@ -83980,17 +83980,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return s(this.negative === 0), this.iushln(v);
         }, a.prototype.iushrn = function(v, _, $) {
           s(typeof v == "number" && v >= 0);
-          var P;
-          _ ? P = (_ - _ % 26) / 26 : P = 0;
+          var R;
+          _ ? R = (_ - _ % 26) / 26 : R = 0;
           var F = v % 26, k = Math.min((v - F) / 26, this.length), G = 67108863 ^ 67108863 >>> F << F, D = $;
-          if (P -= k, P = Math.max(0, P), D) {
+          if (R -= k, R = Math.max(0, R), D) {
             for (var x = 0; x < k; x++) D.words[x] = this.words[x];
             D.length = k;
           }
           if (k !== 0) if (this.length > k) for (this.length -= k, x = 0; x < this.length; x++) this.words[x] = this.words[x + k];
           else this.words[0] = 0, this.length = 1;
           var L = 0;
-          for (x = this.length - 1; x >= 0 && (L !== 0 || x >= P); x--) {
+          for (x = this.length - 1; x >= 0 && (L !== 0 || x >= R); x--) {
             var j = this.words[x] | 0;
             this.words[x] = L << 26 - F | j >>> F, L = j & G;
           }
@@ -84007,17 +84007,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return this.clone().iushrn(v);
         }, a.prototype.testn = function(v) {
           s(typeof v == "number" && v >= 0);
-          var _ = v % 26, $ = (v - _) / 26, P = 1 << _;
+          var _ = v % 26, $ = (v - _) / 26, R = 1 << _;
           if (this.length <= $) return false;
           var F = this.words[$];
-          return !!(F & P);
+          return !!(F & R);
         }, a.prototype.imaskn = function(v) {
           s(typeof v == "number" && v >= 0);
           var _ = v % 26, $ = (v - _) / 26;
           if (s(this.negative === 0, "imaskn works only with positive numbers"), this.length <= $) return this;
           if (_ !== 0 && $++, this.length = Math.min($, this.length), _ !== 0) {
-            var P = 67108863 ^ 67108863 >>> _ << _;
-            this.words[this.length - 1] &= P;
+            var R = 67108863 ^ 67108863 >>> _ << _;
+            this.words[this.length - 1] &= R;
           }
           return this.strip();
         }, a.prototype.maskn = function(v) {
@@ -84043,8 +84043,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.abs = function() {
           return this.clone().iabs();
         }, a.prototype._ishlnsubmul = function(v, _, $) {
-          var P = v.length + $, F;
-          this._expand(P);
+          var R = v.length + $, F;
+          this._expand(R);
           var k, G = 0;
           for (F = 0; F < v.length; F++) {
             k = (this.words[F + $] | 0) + G;
@@ -84056,35 +84056,35 @@ Use Chrome, Firefox or Internet Explorer 11`);
           for (s(G === -1), G = 0, F = 0; F < this.length; F++) k = -(this.words[F] | 0) + G, G = k >> 26, this.words[F] = k & 67108863;
           return this.negative = 1, this.strip();
         }, a.prototype._wordDiv = function(v, _) {
-          var $ = this.length - v.length, P = this.clone(), F = v, k = F.words[F.length - 1] | 0, G = this._countBits(k);
-          $ = 26 - G, $ !== 0 && (F = F.ushln($), P.iushln($), k = F.words[F.length - 1] | 0);
-          var D = P.length - F.length, x;
+          var $ = this.length - v.length, R = this.clone(), F = v, k = F.words[F.length - 1] | 0, G = this._countBits(k);
+          $ = 26 - G, $ !== 0 && (F = F.ushln($), R.iushln($), k = F.words[F.length - 1] | 0);
+          var D = R.length - F.length, x;
           if (_ !== "mod") {
             x = new a(null), x.length = D + 1, x.words = new Array(x.length);
             for (var L = 0; L < x.length; L++) x.words[L] = 0;
           }
-          var j = P.clone()._ishlnsubmul(F, 1, D);
-          j.negative === 0 && (P = j, x && (x.words[D] = 1));
+          var j = R.clone()._ishlnsubmul(F, 1, D);
+          j.negative === 0 && (R = j, x && (x.words[D] = 1));
           for (var Y = D - 1; Y >= 0; Y--) {
-            var oe = (P.words[F.length + Y] | 0) * 67108864 + (P.words[F.length + Y - 1] | 0);
-            for (oe = Math.min(oe / k | 0, 67108863), P._ishlnsubmul(F, oe, Y); P.negative !== 0; ) oe--, P.negative = 0, P._ishlnsubmul(F, 1, Y), P.isZero() || (P.negative ^= 1);
+            var oe = (R.words[F.length + Y] | 0) * 67108864 + (R.words[F.length + Y - 1] | 0);
+            for (oe = Math.min(oe / k | 0, 67108863), R._ishlnsubmul(F, oe, Y); R.negative !== 0; ) oe--, R.negative = 0, R._ishlnsubmul(F, 1, Y), R.isZero() || (R.negative ^= 1);
             x && (x.words[Y] = oe);
           }
-          return x && x.strip(), P.strip(), _ !== "div" && $ !== 0 && P.iushrn($), {
+          return x && x.strip(), R.strip(), _ !== "div" && $ !== 0 && R.iushrn($), {
             div: x || null,
-            mod: P
+            mod: R
           };
         }, a.prototype.divmod = function(v, _, $) {
           if (s(!v.isZero()), this.isZero()) return {
             div: new a(0),
             mod: new a(0)
           };
-          var P, F, k;
-          return this.negative !== 0 && v.negative === 0 ? (k = this.neg().divmod(v, _), _ !== "mod" && (P = k.div.neg()), _ !== "div" && (F = k.mod.neg(), $ && F.negative !== 0 && F.iadd(v)), {
-            div: P,
+          var R, F, k;
+          return this.negative !== 0 && v.negative === 0 ? (k = this.neg().divmod(v, _), _ !== "mod" && (R = k.div.neg()), _ !== "div" && (F = k.mod.neg(), $ && F.negative !== 0 && F.iadd(v)), {
+            div: R,
             mod: F
-          }) : this.negative === 0 && v.negative !== 0 ? (k = this.divmod(v.neg(), _), _ !== "mod" && (P = k.div.neg()), {
-            div: P,
+          }) : this.negative === 0 && v.negative !== 0 ? (k = this.divmod(v.neg(), _), _ !== "mod" && (R = k.div.neg()), {
+            div: R,
             mod: k.mod
           }) : (this.negative & v.negative) !== 0 ? (k = this.neg().divmod(v.neg(), _), _ !== "div" && (F = k.mod.neg(), $ && F.negative !== 0 && F.isub(v)), {
             div: k.div,
@@ -84111,17 +84111,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.divRound = function(v) {
           var _ = this.divmod(v);
           if (_.mod.isZero()) return _.div;
-          var $ = _.div.negative !== 0 ? _.mod.isub(v) : _.mod, P = v.ushrn(1), F = v.andln(1), k = $.cmp(P);
+          var $ = _.div.negative !== 0 ? _.mod.isub(v) : _.mod, R = v.ushrn(1), F = v.andln(1), k = $.cmp(R);
           return k < 0 || F === 1 && k === 0 ? _.div : _.div.negative !== 0 ? _.div.isubn(1) : _.div.iaddn(1);
         }, a.prototype.modn = function(v) {
           s(v <= 67108863);
-          for (var _ = (1 << 26) % v, $ = 0, P = this.length - 1; P >= 0; P--) $ = (_ * $ + (this.words[P] | 0)) % v;
+          for (var _ = (1 << 26) % v, $ = 0, R = this.length - 1; R >= 0; R--) $ = (_ * $ + (this.words[R] | 0)) % v;
           return $;
         }, a.prototype.idivn = function(v) {
           s(v <= 67108863);
           for (var _ = 0, $ = this.length - 1; $ >= 0; $--) {
-            var P = (this.words[$] | 0) + _ * 67108864;
-            this.words[$] = P / v | 0, _ = P % v;
+            var R = (this.words[$] | 0) + _ * 67108864;
+            this.words[$] = R / v | 0, _ = R % v;
           }
           return this.strip();
         }, a.prototype.divn = function(v) {
@@ -84130,13 +84130,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
           s(v.negative === 0), s(!v.isZero());
           var _ = this, $ = v.clone();
           _.negative !== 0 ? _ = _.umod(v) : _ = _.clone();
-          for (var P = new a(1), F = new a(0), k = new a(0), G = new a(1), D = 0; _.isEven() && $.isEven(); ) _.iushrn(1), $.iushrn(1), ++D;
+          for (var R = new a(1), F = new a(0), k = new a(0), G = new a(1), D = 0; _.isEven() && $.isEven(); ) _.iushrn(1), $.iushrn(1), ++D;
           for (var x = $.clone(), L = _.clone(); !_.isZero(); ) {
             for (var j = 0, Y = 1; (_.words[0] & Y) === 0 && j < 26; ++j, Y <<= 1) ;
-            if (j > 0) for (_.iushrn(j); j-- > 0; ) (P.isOdd() || F.isOdd()) && (P.iadd(x), F.isub(L)), P.iushrn(1), F.iushrn(1);
+            if (j > 0) for (_.iushrn(j); j-- > 0; ) (R.isOdd() || F.isOdd()) && (R.iadd(x), F.isub(L)), R.iushrn(1), F.iushrn(1);
             for (var oe = 0, me = 1; ($.words[0] & me) === 0 && oe < 26; ++oe, me <<= 1) ;
             if (oe > 0) for ($.iushrn(oe); oe-- > 0; ) (k.isOdd() || G.isOdd()) && (k.iadd(x), G.isub(L)), k.iushrn(1), G.iushrn(1);
-            _.cmp($) >= 0 ? (_.isub($), P.isub(k), F.isub(G)) : ($.isub(_), k.isub(P), G.isub(F));
+            _.cmp($) >= 0 ? (_.isub($), R.isub(k), F.isub(G)) : ($.isub(_), k.isub(R), G.isub(F));
           }
           return {
             a: k,
@@ -84147,21 +84147,21 @@ Use Chrome, Firefox or Internet Explorer 11`);
           s(v.negative === 0), s(!v.isZero());
           var _ = this, $ = v.clone();
           _.negative !== 0 ? _ = _.umod(v) : _ = _.clone();
-          for (var P = new a(1), F = new a(0), k = $.clone(); _.cmpn(1) > 0 && $.cmpn(1) > 0; ) {
+          for (var R = new a(1), F = new a(0), k = $.clone(); _.cmpn(1) > 0 && $.cmpn(1) > 0; ) {
             for (var G = 0, D = 1; (_.words[0] & D) === 0 && G < 26; ++G, D <<= 1) ;
-            if (G > 0) for (_.iushrn(G); G-- > 0; ) P.isOdd() && P.iadd(k), P.iushrn(1);
+            if (G > 0) for (_.iushrn(G); G-- > 0; ) R.isOdd() && R.iadd(k), R.iushrn(1);
             for (var x = 0, L = 1; ($.words[0] & L) === 0 && x < 26; ++x, L <<= 1) ;
             if (x > 0) for ($.iushrn(x); x-- > 0; ) F.isOdd() && F.iadd(k), F.iushrn(1);
-            _.cmp($) >= 0 ? (_.isub($), P.isub(F)) : ($.isub(_), F.isub(P));
+            _.cmp($) >= 0 ? (_.isub($), R.isub(F)) : ($.isub(_), F.isub(R));
           }
           var j;
-          return _.cmpn(1) === 0 ? j = P : j = F, j.cmpn(0) < 0 && j.iadd(v), j;
+          return _.cmpn(1) === 0 ? j = R : j = F, j.cmpn(0) < 0 && j.iadd(v), j;
         }, a.prototype.gcd = function(v) {
           if (this.isZero()) return v.abs();
           if (v.isZero()) return this.abs();
           var _ = this.clone(), $ = v.clone();
           _.negative = 0, $.negative = 0;
-          for (var P = 0; _.isEven() && $.isEven(); P++) _.iushrn(1), $.iushrn(1);
+          for (var R = 0; _.isEven() && $.isEven(); R++) _.iushrn(1), $.iushrn(1);
           do {
             for (; _.isEven(); ) _.iushrn(1);
             for (; $.isEven(); ) $.iushrn(1);
@@ -84172,7 +84172,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
             } else if (F === 0 || $.cmpn(1) === 0) break;
             _.isub($);
           } while (true);
-          return $.iushln(P);
+          return $.iushln(R);
         }, a.prototype.invm = function(v) {
           return this.egcd(v).a.umod(v);
         }, a.prototype.isEven = function() {
@@ -84183,9 +84183,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return this.words[0] & v;
         }, a.prototype.bincn = function(v) {
           s(typeof v == "number");
-          var _ = v % 26, $ = (v - _) / 26, P = 1 << _;
-          if (this.length <= $) return this._expand($ + 1), this.words[$] |= P, this;
-          for (var F = P, k = $; F !== 0 && k < this.length; k++) {
+          var _ = v % 26, $ = (v - _) / 26, R = 1 << _;
+          if (this.length <= $) return this._expand($ + 1), this.words[$] |= R, this;
+          for (var F = R, k = $; F !== 0 && k < this.length; k++) {
             var G = this.words[k] | 0;
             G += F, F = G >>> 26, G &= 67108863, this.words[k] = G;
           }
@@ -84201,8 +84201,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (this.length > 1) $ = 1;
           else {
             _ && (v = -v), s(v <= 67108863, "Number is too big");
-            var P = this.words[0] | 0;
-            $ = P === v ? 0 : P < v ? -1 : 1;
+            var R = this.words[0] | 0;
+            $ = R === v ? 0 : R < v ? -1 : 1;
           }
           return this.negative !== 0 ? -$ | 0 : $;
         }, a.prototype.cmp = function(v) {
@@ -84214,9 +84214,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (this.length > v.length) return 1;
           if (this.length < v.length) return -1;
           for (var _ = 0, $ = this.length - 1; $ >= 0; $--) {
-            var P = this.words[$] | 0, F = v.words[$] | 0;
-            if (P !== F) {
-              P < F ? _ = -1 : P > F && (_ = 1);
+            var R = this.words[$] | 0, F = v.words[$] | 0;
+            if (R !== F) {
+              R < F ? _ = -1 : R > F && (_ = 1);
               break;
             }
           }
@@ -84295,8 +84295,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           do
             this.split(_, this.tmp), _ = this.imulK(_), _ = _.iadd(this.tmp), $ = _.bitLength();
           while ($ > this.n);
-          var P = $ < this.n ? -1 : _.ucmp(this.p);
-          return P === 0 ? (_.words[0] = 0, _.length = 1) : P > 0 ? _.isub(this.p) : _.strip !== void 0 ? _.strip() : _._strip(), _;
+          var R = $ < this.n ? -1 : _.ucmp(this.p);
+          return R === 0 ? (_.words[0] = 0, _.length = 1) : R > 0 ? _.isub(this.p) : _.strip !== void 0 ? _.strip() : _._strip(), _;
         }, q.prototype.split = function(v, _) {
           v.iushrn(this.n, 0, _);
         }, q.prototype.imulK = function(v) {
@@ -84306,8 +84306,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           q.call(this, "k256", "ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff fffffffe fffffc2f");
         }
         o(W, q), W.prototype.split = function(v, _) {
-          for (var $ = 4194303, P = Math.min(v.length, 9), F = 0; F < P; F++) _.words[F] = v.words[F];
-          if (_.length = P, v.length <= 9) {
+          for (var $ = 4194303, R = Math.min(v.length, 9), F = 0; F < R; F++) _.words[F] = v.words[F];
+          if (_.length = R, v.length <= 9) {
             v.words[0] = 0, v.length = 1;
             return;
           }
@@ -84320,8 +84320,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, W.prototype.imulK = function(v) {
           v.words[v.length] = 0, v.words[v.length + 1] = 0, v.length += 2;
           for (var _ = 0, $ = 0; $ < v.length; $++) {
-            var P = v.words[$] | 0;
-            _ += P * 977, v.words[$] = _ & 67108863, _ = P * 64 + (_ / 67108864 | 0);
+            var R = v.words[$] | 0;
+            _ += R * 977, v.words[$] = _ & 67108863, _ = R * 64 + (_ / 67108864 | 0);
           }
           return v.words[v.length - 1] === 0 && (v.length--, v.words[v.length - 1] === 0 && v.length--), v;
         };
@@ -84338,8 +84338,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }
         o(ee, q), ee.prototype.imulK = function(v) {
           for (var _ = 0, $ = 0; $ < v.length; $++) {
-            var P = (v.words[$] | 0) * 19 + _, F = P & 67108863;
-            P >>>= 26, v.words[$] = F, _ = P;
+            var R = (v.words[$] | 0) * 19 + _, F = R & 67108863;
+            R >>>= 26, v.words[$] = F, _ = R;
           }
           return _ !== 0 && (v.words[v.length++] = _), v;
         }, a._prime = function(v) {
@@ -84399,11 +84399,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
             var $ = this.m.add(new a(1)).iushrn(2);
             return this.pow(v, $);
           }
-          for (var P = this.m.subn(1), F = 0; !P.isZero() && P.andln(1) === 0; ) F++, P.iushrn(1);
-          s(!P.isZero());
+          for (var R = this.m.subn(1), F = 0; !R.isZero() && R.andln(1) === 0; ) F++, R.iushrn(1);
+          s(!R.isZero());
           var k = new a(1).toRed(this), G = k.redNeg(), D = this.m.subn(1).iushrn(1), x = this.m.bitLength();
           for (x = new a(2 * x * x).toRed(this); this.pow(x, D).cmp(G) !== 0; ) x.redIAdd(G);
-          for (var L = this.pow(x, P), j = this.pow(v, P.addn(1).iushrn(1)), Y = this.pow(v, P), oe = F; Y.cmp(k) !== 0; ) {
+          for (var L = this.pow(x, R), j = this.pow(v, R.addn(1).iushrn(1)), Y = this.pow(v, R), oe = F; Y.cmp(k) !== 0; ) {
             for (var me = Y, be = 0; me.cmp(k) !== 0; be++) me = me.redSqr();
             s(be < oe);
             var Z = this.pow(L, new a(1).iushln(oe - be - 1));
@@ -84416,18 +84416,18 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, ie.prototype.pow = function(v, _) {
           if (_.isZero()) return new a(1).toRed(this);
           if (_.cmpn(1) === 0) return v.clone();
-          var $ = 4, P = new Array(1 << $);
-          P[0] = new a(1).toRed(this), P[1] = v;
-          for (var F = 2; F < P.length; F++) P[F] = this.mul(P[F - 1], v);
-          var k = P[0], G = 0, D = 0, x = _.bitLength() % 26;
+          var $ = 4, R = new Array(1 << $);
+          R[0] = new a(1).toRed(this), R[1] = v;
+          for (var F = 2; F < R.length; F++) R[F] = this.mul(R[F - 1], v);
+          var k = R[0], G = 0, D = 0, x = _.bitLength() % 26;
           for (x === 0 && (x = 26), F = _.length - 1; F >= 0; F--) {
             for (var L = _.words[F], j = x - 1; j >= 0; j--) {
               var Y = L >> j & 1;
-              if (k !== P[0] && (k = this.sqr(k)), Y === 0 && G === 0) {
+              if (k !== R[0] && (k = this.sqr(k)), Y === 0 && G === 0) {
                 D = 0;
                 continue;
               }
-              G <<= 1, G |= Y, D++, !(D !== $ && (F !== 0 || j !== 0)) && (k = this.mul(k, P[G]), D = 0, G = 0);
+              G <<= 1, G |= Y, D++, !(D !== $ && (F !== 0 || j !== 0)) && (k = this.mul(k, R[G]), D = 0, G = 0);
             }
             x = 26;
           }
@@ -84451,11 +84451,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return _.red = null, _;
         }, pe.prototype.imul = function(v, _) {
           if (v.isZero() || _.isZero()) return v.words[0] = 0, v.length = 1, v;
-          var $ = v.imul(_), P = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(P).iushrn(this.shift), k = F;
+          var $ = v.imul(_), R = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(R).iushrn(this.shift), k = F;
           return F.cmp(this.m) >= 0 ? k = F.isub(this.m) : F.cmpn(0) < 0 && (k = F.iadd(this.m)), k._forceRed(this);
         }, pe.prototype.mul = function(v, _) {
           if (v.isZero() || _.isZero()) return new a(0)._forceRed(this);
-          var $ = v.mul(_), P = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(P).iushrn(this.shift), k = F;
+          var $ = v.mul(_), R = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(R).iushrn(this.shift), k = F;
           return F.cmp(this.m) >= 0 ? k = F.isub(this.m) : F.cmpn(0) < 0 && (k = F.iadd(this.m)), k._forceRed(this);
         }, pe.prototype.invm = function(v) {
           var _ = this.imod(v._invmp(this.m).mul(this.r2));
@@ -84600,8 +84600,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (typeof v == "number") return this._initNumber(v, _, $);
           if (typeof v == "object") return this._initArray(v, _, $);
           _ === "hex" && (_ = 16), s(_ === (_ | 0) && _ >= 2 && _ <= 36), v = v.toString().replace(/\s+/g, "");
-          var P = 0;
-          v[0] === "-" && (P++, this.negative = 1), P < v.length && (_ === 16 ? this._parseHex(v, P, $) : (this._parseBase(v, _, P), $ === "le" && this._initArray(this.toArray(), _, $)));
+          var R = 0;
+          v[0] === "-" && (R++, this.negative = 1), R < v.length && (_ === 16 ? this._parseHex(v, R, $) : (this._parseBase(v, _, R), $ === "le" && this._initArray(this.toArray(), _, $)));
         }, a.prototype._initNumber = function(v, _, $) {
           v < 0 && (this.negative = 1, v = -v), v < 67108864 ? (this.words = [
             v & 67108863
@@ -84618,10 +84618,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
             0
           ], this.length = 1, this;
           this.length = Math.ceil(v.length / 3), this.words = new Array(this.length);
-          for (var P = 0; P < this.length; P++) this.words[P] = 0;
+          for (var R = 0; R < this.length; R++) this.words[R] = 0;
           var F, k, G = 0;
-          if ($ === "be") for (P = v.length - 1, F = 0; P >= 0; P -= 3) k = v[P] | v[P - 1] << 8 | v[P - 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
-          else if ($ === "le") for (P = 0, F = 0; P < v.length; P += 3) k = v[P] | v[P + 1] << 8 | v[P + 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
+          if ($ === "be") for (R = v.length - 1, F = 0; R >= 0; R -= 3) k = v[R] | v[R - 1] << 8 | v[R - 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
+          else if ($ === "le") for (R = 0, F = 0; R < v.length; R += 3) k = v[R] | v[R + 1] << 8 | v[R + 2] << 16, this.words[F] |= k << G & 67108863, this.words[F + 1] = k >>> 26 - G & 67108863, G += 24, G >= 26 && (G -= 26, F++);
           return this.strip();
         };
         function c(U, v) {
@@ -84634,29 +84634,29 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }
         a.prototype._parseHex = function(v, _, $) {
           this.length = Math.ceil((v.length - _) / 6), this.words = new Array(this.length);
-          for (var P = 0; P < this.length; P++) this.words[P] = 0;
+          for (var R = 0; R < this.length; R++) this.words[R] = 0;
           var F = 0, k = 0, G;
-          if ($ === "be") for (P = v.length - 1; P >= _; P -= 2) G = d(v, _, P) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
+          if ($ === "be") for (R = v.length - 1; R >= _; R -= 2) G = d(v, _, R) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
           else {
             var D = v.length - _;
-            for (P = D % 2 === 0 ? _ + 1 : _; P < v.length; P += 2) G = d(v, _, P) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
+            for (R = D % 2 === 0 ? _ + 1 : _; R < v.length; R += 2) G = d(v, _, R) << F, this.words[k] |= G & 67108863, F >= 18 ? (F -= 18, k += 1, this.words[k] |= G >>> 26) : F += 8;
           }
           this.strip();
         };
         function f(U, v, _, $) {
-          for (var P = 0, F = Math.min(U.length, _), k = v; k < F; k++) {
+          for (var R = 0, F = Math.min(U.length, _), k = v; k < F; k++) {
             var G = U.charCodeAt(k) - 48;
-            P *= $, G >= 49 ? P += G - 49 + 10 : G >= 17 ? P += G - 17 + 10 : P += G;
+            R *= $, G >= 49 ? R += G - 49 + 10 : G >= 17 ? R += G - 17 + 10 : R += G;
           }
-          return P;
+          return R;
         }
         a.prototype._parseBase = function(v, _, $) {
           this.words = [
             0
           ], this.length = 1;
-          for (var P = 0, F = 1; F <= 67108863; F *= _) P++;
-          P--, F = F / _ | 0;
-          for (var k = v.length - $, G = k % P, D = Math.min(k, k - G) + $, x = 0, L = $; L < D; L += P) x = f(v, L, L + P, _), this.imuln(F), this.words[0] + x < 67108864 ? this.words[0] += x : this._iaddn(x);
+          for (var R = 0, F = 1; F <= 67108863; F *= _) R++;
+          R--, F = F / _ | 0;
+          for (var k = v.length - $, G = k % R, D = Math.min(k, k - G) + $, x = 0, L = $; L < D; L += R) x = f(v, L, L + R, _), this.imuln(F), this.words[0] + x < 67108864 ? this.words[0] += x : this._iaddn(x);
           if (G !== 0) {
             var j = 1;
             for (x = f(v, L, v.length, _), L = 0; L < G; L++) j *= _;
@@ -84790,9 +84790,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
           var $;
           if (v === 16 || v === "hex") {
             $ = "";
-            for (var P = 0, F = 0, k = 0; k < this.length; k++) {
-              var G = this.words[k], D = ((G << P | F) & 16777215).toString(16);
-              F = G >>> 24 - P & 16777215, P += 2, P >= 26 && (P -= 26, k--), F !== 0 || k !== this.length - 1 ? $ = p[6 - D.length] + D + $ : $ = D + $;
+            for (var R = 0, F = 0, k = 0; k < this.length; k++) {
+              var G = this.words[k], D = ((G << R | F) & 16777215).toString(16);
+              F = G >>> 24 - R & 16777215, R += 2, R >= 26 && (R -= 26, k--), F !== 0 || k !== this.length - 1 ? $ = p[6 - D.length] + D + $ : $ = D + $;
             }
             for (F !== 0 && ($ = F.toString(16) + $); $.length % _ !== 0; ) $ = "0" + $;
             return this.negative !== 0 && ($ = "-" + $), $;
@@ -84819,14 +84819,14 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.toArray = function(v, _) {
           return this.toArrayLike(Array, v, _);
         }, a.prototype.toArrayLike = function(v, _, $) {
-          var P = this.byteLength(), F = $ || Math.max(1, P);
-          s(P <= F, "byte array longer than desired length"), s(F > 0, "Requested array length <= 0"), this.strip();
+          var R = this.byteLength(), F = $ || Math.max(1, R);
+          s(R <= F, "byte array longer than desired length"), s(F > 0, "Requested array length <= 0"), this.strip();
           var k = _ === "le", G = new v(F), D, x, L = this.clone();
           if (k) {
             for (x = 0; !L.isZero(); x++) D = L.andln(255), L.iushrn(8), G[x] = D;
             for (; x < F; x++) G[x] = 0;
           } else {
-            for (x = 0; x < F - P; x++) G[x] = 0;
+            for (x = 0; x < F - R; x++) G[x] = 0;
             for (x = 0; !L.isZero(); x++) D = L.andln(255), L.iushrn(8), G[F - x - 1] = D;
           }
           return G;
@@ -84845,8 +84845,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         };
         function w(U) {
           for (var v = new Array(U.bitLength()), _ = 0; _ < v.length; _++) {
-            var $ = _ / 26 | 0, P = _ % 26;
-            v[_] = (U.words[$] & 1 << P) >>> P;
+            var $ = _ / 26 | 0, R = _ % 26;
+            v[_] = (U.words[$] & 1 << R) >>> R;
           }
           return v;
         }
@@ -84893,8 +84893,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.iuxor = function(v) {
           var _, $;
           this.length > v.length ? (_ = this, $ = v) : (_ = v, $ = this);
-          for (var P = 0; P < $.length; P++) this.words[P] = _.words[P] ^ $.words[P];
-          if (this !== _) for (; P < _.length; P++) this.words[P] = _.words[P];
+          for (var R = 0; R < $.length; R++) this.words[R] = _.words[R] ^ $.words[R];
+          if (this !== _) for (; R < _.length; R++) this.words[R] = _.words[R];
           return this.length = _.length, this.strip();
         }, a.prototype.ixor = function(v) {
           return s((this.negative | v.negative) === 0), this.iuxor(v);
@@ -84906,21 +84906,21 @@ Use Chrome, Firefox or Internet Explorer 11`);
           s(typeof v == "number" && v >= 0);
           var _ = Math.ceil(v / 26) | 0, $ = v % 26;
           this._expand(_), $ > 0 && _--;
-          for (var P = 0; P < _; P++) this.words[P] = ~this.words[P] & 67108863;
-          return $ > 0 && (this.words[P] = ~this.words[P] & 67108863 >> 26 - $), this.strip();
+          for (var R = 0; R < _; R++) this.words[R] = ~this.words[R] & 67108863;
+          return $ > 0 && (this.words[R] = ~this.words[R] & 67108863 >> 26 - $), this.strip();
         }, a.prototype.notn = function(v) {
           return this.clone().inotn(v);
         }, a.prototype.setn = function(v, _) {
           s(typeof v == "number" && v >= 0);
-          var $ = v / 26 | 0, P = v % 26;
-          return this._expand($ + 1), _ ? this.words[$] = this.words[$] | 1 << P : this.words[$] = this.words[$] & ~(1 << P), this.strip();
+          var $ = v / 26 | 0, R = v % 26;
+          return this._expand($ + 1), _ ? this.words[$] = this.words[$] | 1 << R : this.words[$] = this.words[$] & ~(1 << R), this.strip();
         }, a.prototype.iadd = function(v) {
           var _;
           if (this.negative !== 0 && v.negative === 0) return this.negative = 0, _ = this.isub(v), this.negative ^= 1, this._normSign();
           if (this.negative === 0 && v.negative !== 0) return v.negative = 0, _ = this.isub(v), v.negative = 1, _._normSign();
-          var $, P;
-          this.length > v.length ? ($ = this, P = v) : ($ = v, P = this);
-          for (var F = 0, k = 0; k < P.length; k++) _ = ($.words[k] | 0) + (P.words[k] | 0) + F, this.words[k] = _ & 67108863, F = _ >>> 26;
+          var $, R;
+          this.length > v.length ? ($ = this, R = v) : ($ = v, R = this);
+          for (var F = 0, k = 0; k < R.length; k++) _ = ($.words[k] | 0) + (R.words[k] | 0) + F, this.words[k] = _ & 67108863, F = _ >>> 26;
           for (; F !== 0 && k < $.length; k++) _ = ($.words[k] | 0) + F, this.words[k] = _ & 67108863, F = _ >>> 26;
           if (this.length = $.length, F !== 0) this.words[this.length] = F, this.length++;
           else if ($ !== this) for (; k < $.length; k++) this.words[k] = $.words[k];
@@ -84936,12 +84936,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
           } else if (this.negative !== 0) return this.negative = 0, this.iadd(v), this.negative = 1, this._normSign();
           var $ = this.cmp(v);
           if ($ === 0) return this.negative = 0, this.length = 1, this.words[0] = 0, this;
-          var P, F;
-          $ > 0 ? (P = this, F = v) : (P = v, F = this);
-          for (var k = 0, G = 0; G < F.length; G++) _ = (P.words[G] | 0) - (F.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
-          for (; k !== 0 && G < P.length; G++) _ = (P.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
-          if (k === 0 && G < P.length && P !== this) for (; G < P.length; G++) this.words[G] = P.words[G];
-          return this.length = Math.max(this.length, G), P !== this && (this.negative = 1), this.strip();
+          var R, F;
+          $ > 0 ? (R = this, F = v) : (R = v, F = this);
+          for (var k = 0, G = 0; G < F.length; G++) _ = (R.words[G] | 0) - (F.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
+          for (; k !== 0 && G < R.length; G++) _ = (R.words[G] | 0) + k, k = _ >> 26, this.words[G] = _ & 67108863;
+          if (k === 0 && G < R.length && R !== this) for (; G < R.length; G++) this.words[G] = R.words[G];
+          return this.length = Math.max(this.length, G), R !== this && (this.negative = 1), this.strip();
         }, a.prototype.sub = function(v) {
           return this.clone().isub(v);
         };
@@ -84949,19 +84949,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
           _.negative = v.negative ^ U.negative;
           var $ = U.length + v.length | 0;
           _.length = $, $ = $ - 1 | 0;
-          var P = U.words[0] | 0, F = v.words[0] | 0, k = P * F, G = k & 67108863, D = k / 67108864 | 0;
+          var R = U.words[0] | 0, F = v.words[0] | 0, k = R * F, G = k & 67108863, D = k / 67108864 | 0;
           _.words[0] = G;
           for (var x = 1; x < $; x++) {
             for (var L = D >>> 26, j = D & 67108863, Y = Math.min(x, v.length - 1), oe = Math.max(0, x - U.length + 1); oe <= Y; oe++) {
               var me = x - oe | 0;
-              P = U.words[me] | 0, F = v.words[oe] | 0, k = P * F + j, L += k / 67108864 | 0, j = k & 67108863;
+              R = U.words[me] | 0, F = v.words[oe] | 0, k = R * F + j, L += k / 67108864 | 0, j = k & 67108863;
             }
             _.words[x] = j | 0, D = L | 0;
           }
           return D !== 0 ? _.words[x] = D | 0 : _.length--, _.strip();
         }
-        var R = function(v, _, $) {
-          var P = v.words, F = _.words, k = $.words, G = 0, D, x, L, j = P[0] | 0, Y = j & 8191, oe = j >>> 13, me = P[1] | 0, be = me & 8191, Z = me >>> 13, se = P[2] | 0, fe = se & 8191, _e = se >>> 13, xe = P[3] | 0, le = xe & 8191, Ce = xe >>> 13, Re = P[4] | 0, Be = Re & 8191, Ee = Re >>> 13, rt = P[5] | 0, Pe = rt & 8191, Te = rt >>> 13, ut = P[6] | 0, De = ut & 8191, Fe = ut >>> 13, ct = P[7] | 0, Le = ct & 8191, Ue = ct >>> 13, pt = P[8] | 0, Ke = pt & 8191, tt = pt >>> 13, bt = P[9] | 0, ge = bt & 8191, re = bt >>> 13, he = F[0] | 0, we = he & 8191, Se = he >>> 13, ke = F[1] | 0, Ne = ke & 8191, ze = ke >>> 13, vt = F[2] | 0, Ve = vt & 8191, Xe = vt >>> 13, ft = F[3] | 0, Ye = ft & 8191, ot = ft >>> 13, wt = F[4] | 0, nt = wt & 8191, at = wt >>> 13, $t = F[5] | 0, ve = $t & 8191, ne = $t >>> 13, ce = F[6] | 0, $e = ce & 8191, Me = ce >>> 13, Oe = F[7] | 0, Ie = Oe & 8191, je = Oe >>> 13, yt = F[8] | 0, Ge = yt & 8191, et = yt >>> 13, mt = F[9] | 0, st = mt & 8191, lt = mt >>> 13;
+        var P = function(v, _, $) {
+          var R = v.words, F = _.words, k = $.words, G = 0, D, x, L, j = R[0] | 0, Y = j & 8191, oe = j >>> 13, me = R[1] | 0, be = me & 8191, Z = me >>> 13, se = R[2] | 0, fe = se & 8191, _e = se >>> 13, xe = R[3] | 0, le = xe & 8191, Ce = xe >>> 13, Re = R[4] | 0, Be = Re & 8191, Ee = Re >>> 13, rt = R[5] | 0, Pe = rt & 8191, Te = rt >>> 13, ut = R[6] | 0, De = ut & 8191, Fe = ut >>> 13, ct = R[7] | 0, Le = ct & 8191, Ue = ct >>> 13, pt = R[8] | 0, Ke = pt & 8191, tt = pt >>> 13, bt = R[9] | 0, ge = bt & 8191, re = bt >>> 13, he = F[0] | 0, we = he & 8191, Se = he >>> 13, ke = F[1] | 0, Ne = ke & 8191, ze = ke >>> 13, vt = F[2] | 0, Ve = vt & 8191, Xe = vt >>> 13, ft = F[3] | 0, Ye = ft & 8191, ot = ft >>> 13, wt = F[4] | 0, nt = wt & 8191, at = wt >>> 13, $t = F[5] | 0, ve = $t & 8191, ne = $t >>> 13, ce = F[6] | 0, $e = ce & 8191, Me = ce >>> 13, Oe = F[7] | 0, Ie = Oe & 8191, je = Oe >>> 13, yt = F[8] | 0, Ge = yt & 8191, et = yt >>> 13, mt = F[9] | 0, st = mt & 8191, lt = mt >>> 13;
           $.negative = v.negative ^ _.negative, $.length = 19, D = Math.imul(Y, we), x = Math.imul(Y, Se), x = x + Math.imul(oe, we) | 0, L = Math.imul(oe, Se);
           var _t = (G + D | 0) + ((x & 8191) << 13) | 0;
           G = (L + (x >>> 13) | 0) + (_t >>> 26) | 0, _t &= 67108863, D = Math.imul(be, we), x = Math.imul(be, Se), x = x + Math.imul(Z, we) | 0, L = Math.imul(Z, Se), D = D + Math.imul(Y, Ne) | 0, x = x + Math.imul(Y, ze) | 0, x = x + Math.imul(oe, Ne) | 0, L = L + Math.imul(oe, ze) | 0;
@@ -85002,17 +85002,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
           var zt = (G + D | 0) + ((x & 8191) << 13) | 0;
           return G = (L + (x >>> 13) | 0) + (zt >>> 26) | 0, zt &= 67108863, k[0] = _t, k[1] = At, k[2] = Ct, k[3] = St, k[4] = Mt, k[5] = Tt, k[6] = Bt, k[7] = Nt, k[8] = It, k[9] = Pt, k[10] = Rt, k[11] = Dt, k[12] = Lt, k[13] = kt, k[14] = Ot, k[15] = Vt, k[16] = Ut, k[17] = Gt, k[18] = zt, G !== 0 && (k[19] = G, $.length++), $;
         };
-        Math.imul || (R = M);
+        Math.imul || (P = M);
         function V(U, v, _) {
           _.negative = v.negative ^ U.negative, _.length = U.length + v.length;
-          for (var $ = 0, P = 0, F = 0; F < _.length - 1; F++) {
-            var k = P;
-            P = 0;
+          for (var $ = 0, R = 0, F = 0; F < _.length - 1; F++) {
+            var k = R;
+            R = 0;
             for (var G = $ & 67108863, D = Math.min(F, v.length - 1), x = Math.max(0, F - U.length + 1); x <= D; x++) {
               var L = F - x, j = U.words[L] | 0, Y = v.words[x] | 0, oe = j * Y, me = oe & 67108863;
-              k = k + (oe / 67108864 | 0) | 0, me = me + G | 0, G = me & 67108863, k = k + (me >>> 26) | 0, P += k >>> 26, k &= 67108863;
+              k = k + (oe / 67108864 | 0) | 0, me = me + G | 0, G = me & 67108863, k = k + (me >>> 26) | 0, R += k >>> 26, k &= 67108863;
             }
-            _.words[F] = G, $ = k, k = P;
+            _.words[F] = G, $ = k, k = R;
           }
           return $ !== 0 ? _.words[F] = $ : _.length--, _.strip();
         }
@@ -85021,57 +85021,57 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return $.mulp(U, v, _);
         }
         a.prototype.mulTo = function(v, _) {
-          var $, P = this.length + v.length;
-          return this.length === 10 && v.length === 10 ? $ = R(this, v, _) : P < 63 ? $ = M(this, v, _) : P < 1024 ? $ = V(this, v, _) : $ = O(this, v, _), $;
+          var $, R = this.length + v.length;
+          return this.length === 10 && v.length === 10 ? $ = P(this, v, _) : R < 63 ? $ = M(this, v, _) : R < 1024 ? $ = V(this, v, _) : $ = O(this, v, _), $;
         };
         function z(U, v) {
           this.x = U, this.y = v;
         }
         z.prototype.makeRBT = function(v) {
-          for (var _ = new Array(v), $ = a.prototype._countBits(v) - 1, P = 0; P < v; P++) _[P] = this.revBin(P, $, v);
+          for (var _ = new Array(v), $ = a.prototype._countBits(v) - 1, R = 0; R < v; R++) _[R] = this.revBin(R, $, v);
           return _;
         }, z.prototype.revBin = function(v, _, $) {
           if (v === 0 || v === $ - 1) return v;
-          for (var P = 0, F = 0; F < _; F++) P |= (v & 1) << _ - F - 1, v >>= 1;
-          return P;
-        }, z.prototype.permute = function(v, _, $, P, F, k) {
-          for (var G = 0; G < k; G++) P[G] = _[v[G]], F[G] = $[v[G]];
-        }, z.prototype.transform = function(v, _, $, P, F, k) {
-          this.permute(k, v, _, $, P, F);
+          for (var R = 0, F = 0; F < _; F++) R |= (v & 1) << _ - F - 1, v >>= 1;
+          return R;
+        }, z.prototype.permute = function(v, _, $, R, F, k) {
+          for (var G = 0; G < k; G++) R[G] = _[v[G]], F[G] = $[v[G]];
+        }, z.prototype.transform = function(v, _, $, R, F, k) {
+          this.permute(k, v, _, $, R, F);
           for (var G = 1; G < F; G <<= 1) for (var D = G << 1, x = Math.cos(2 * Math.PI / D), L = Math.sin(2 * Math.PI / D), j = 0; j < F; j += D) for (var Y = x, oe = L, me = 0; me < G; me++) {
-            var be = $[j + me], Z = P[j + me], se = $[j + me + G], fe = P[j + me + G], _e = Y * se - oe * fe;
-            fe = Y * fe + oe * se, se = _e, $[j + me] = be + se, P[j + me] = Z + fe, $[j + me + G] = be - se, P[j + me + G] = Z - fe, me !== D && (_e = x * Y - L * oe, oe = x * oe + L * Y, Y = _e);
+            var be = $[j + me], Z = R[j + me], se = $[j + me + G], fe = R[j + me + G], _e = Y * se - oe * fe;
+            fe = Y * fe + oe * se, se = _e, $[j + me] = be + se, R[j + me] = Z + fe, $[j + me + G] = be - se, R[j + me + G] = Z - fe, me !== D && (_e = x * Y - L * oe, oe = x * oe + L * Y, Y = _e);
           }
         }, z.prototype.guessLen13b = function(v, _) {
-          var $ = Math.max(_, v) | 1, P = $ & 1, F = 0;
+          var $ = Math.max(_, v) | 1, R = $ & 1, F = 0;
           for ($ = $ / 2 | 0; $; $ = $ >>> 1) F++;
-          return 1 << F + 1 + P;
+          return 1 << F + 1 + R;
         }, z.prototype.conjugate = function(v, _, $) {
-          if (!($ <= 1)) for (var P = 0; P < $ / 2; P++) {
-            var F = v[P];
-            v[P] = v[$ - P - 1], v[$ - P - 1] = F, F = _[P], _[P] = -_[$ - P - 1], _[$ - P - 1] = -F;
+          if (!($ <= 1)) for (var R = 0; R < $ / 2; R++) {
+            var F = v[R];
+            v[R] = v[$ - R - 1], v[$ - R - 1] = F, F = _[R], _[R] = -_[$ - R - 1], _[$ - R - 1] = -F;
           }
         }, z.prototype.normalize13b = function(v, _) {
-          for (var $ = 0, P = 0; P < _ / 2; P++) {
-            var F = Math.round(v[2 * P + 1] / _) * 8192 + Math.round(v[2 * P] / _) + $;
-            v[P] = F & 67108863, F < 67108864 ? $ = 0 : $ = F / 67108864 | 0;
+          for (var $ = 0, R = 0; R < _ / 2; R++) {
+            var F = Math.round(v[2 * R + 1] / _) * 8192 + Math.round(v[2 * R] / _) + $;
+            v[R] = F & 67108863, F < 67108864 ? $ = 0 : $ = F / 67108864 | 0;
           }
           return v;
-        }, z.prototype.convert13b = function(v, _, $, P) {
+        }, z.prototype.convert13b = function(v, _, $, R) {
           for (var F = 0, k = 0; k < _; k++) F = F + (v[k] | 0), $[2 * k] = F & 8191, F = F >>> 13, $[2 * k + 1] = F & 8191, F = F >>> 13;
-          for (k = 2 * _; k < P; ++k) $[k] = 0;
+          for (k = 2 * _; k < R; ++k) $[k] = 0;
           s(F === 0), s((F & -8192) === 0);
         }, z.prototype.stub = function(v) {
           for (var _ = new Array(v), $ = 0; $ < v; $++) _[$] = 0;
           return _;
         }, z.prototype.mulp = function(v, _, $) {
-          var P = 2 * this.guessLen13b(v.length, _.length), F = this.makeRBT(P), k = this.stub(P), G = new Array(P), D = new Array(P), x = new Array(P), L = new Array(P), j = new Array(P), Y = new Array(P), oe = $.words;
-          oe.length = P, this.convert13b(v.words, v.length, G, P), this.convert13b(_.words, _.length, L, P), this.transform(G, k, D, x, P, F), this.transform(L, k, j, Y, P, F);
-          for (var me = 0; me < P; me++) {
+          var R = 2 * this.guessLen13b(v.length, _.length), F = this.makeRBT(R), k = this.stub(R), G = new Array(R), D = new Array(R), x = new Array(R), L = new Array(R), j = new Array(R), Y = new Array(R), oe = $.words;
+          oe.length = R, this.convert13b(v.words, v.length, G, R), this.convert13b(_.words, _.length, L, R), this.transform(G, k, D, x, R, F), this.transform(L, k, j, Y, R, F);
+          for (var me = 0; me < R; me++) {
             var be = D[me] * j[me] - x[me] * Y[me];
             x[me] = D[me] * Y[me] + x[me] * j[me], D[me] = be;
           }
-          return this.conjugate(D, x, P), this.transform(D, x, oe, k, P, F), this.conjugate(oe, k, P), this.normalize13b(oe, P), $.negative = v.negative ^ _.negative, $.length = v.length + _.length, $.strip();
+          return this.conjugate(D, x, R), this.transform(D, x, oe, k, R, F), this.conjugate(oe, k, R), this.normalize13b(oe, R), $.negative = v.negative ^ _.negative, $.length = v.length + _.length, $.strip();
         }, a.prototype.mul = function(v) {
           var _ = new a(null);
           return _.words = new Array(this.length + v.length), this.mulTo(v, _);
@@ -85083,8 +85083,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.imuln = function(v) {
           s(typeof v == "number"), s(v < 67108864);
           for (var _ = 0, $ = 0; $ < this.length; $++) {
-            var P = (this.words[$] | 0) * v, F = (P & 67108863) + (_ & 67108863);
-            _ >>= 26, _ += P / 67108864 | 0, _ += F >>> 26, this.words[$] = F & 67108863;
+            var R = (this.words[$] | 0) * v, F = (R & 67108863) + (_ & 67108863);
+            _ >>= 26, _ += R / 67108864 | 0, _ += F >>> 26, this.words[$] = F & 67108863;
           }
           return _ !== 0 && (this.words[$] = _, this.length++), this.length = v === 0 ? 1 : this.length, this;
         }, a.prototype.muln = function(v) {
@@ -85096,16 +85096,16 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.pow = function(v) {
           var _ = w(v);
           if (_.length === 0) return new a(1);
-          for (var $ = this, P = 0; P < _.length && _[P] === 0; P++, $ = $.sqr()) ;
-          if (++P < _.length) for (var F = $.sqr(); P < _.length; P++, F = F.sqr()) _[P] !== 0 && ($ = $.mul(F));
+          for (var $ = this, R = 0; R < _.length && _[R] === 0; R++, $ = $.sqr()) ;
+          if (++R < _.length) for (var F = $.sqr(); R < _.length; R++, F = F.sqr()) _[R] !== 0 && ($ = $.mul(F));
           return $;
         }, a.prototype.iushln = function(v) {
           s(typeof v == "number" && v >= 0);
-          var _ = v % 26, $ = (v - _) / 26, P = 67108863 >>> 26 - _ << 26 - _, F;
+          var _ = v % 26, $ = (v - _) / 26, R = 67108863 >>> 26 - _ << 26 - _, F;
           if (_ !== 0) {
             var k = 0;
             for (F = 0; F < this.length; F++) {
-              var G = this.words[F] & P, D = (this.words[F] | 0) - G << _;
+              var G = this.words[F] & R, D = (this.words[F] | 0) - G << _;
               this.words[F] = D | k, k = G >>> 26 - _;
             }
             k && (this.words[F] = k, this.length++);
@@ -85120,17 +85120,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return s(this.negative === 0), this.iushln(v);
         }, a.prototype.iushrn = function(v, _, $) {
           s(typeof v == "number" && v >= 0);
-          var P;
-          _ ? P = (_ - _ % 26) / 26 : P = 0;
+          var R;
+          _ ? R = (_ - _ % 26) / 26 : R = 0;
           var F = v % 26, k = Math.min((v - F) / 26, this.length), G = 67108863 ^ 67108863 >>> F << F, D = $;
-          if (P -= k, P = Math.max(0, P), D) {
+          if (R -= k, R = Math.max(0, R), D) {
             for (var x = 0; x < k; x++) D.words[x] = this.words[x];
             D.length = k;
           }
           if (k !== 0) if (this.length > k) for (this.length -= k, x = 0; x < this.length; x++) this.words[x] = this.words[x + k];
           else this.words[0] = 0, this.length = 1;
           var L = 0;
-          for (x = this.length - 1; x >= 0 && (L !== 0 || x >= P); x--) {
+          for (x = this.length - 1; x >= 0 && (L !== 0 || x >= R); x--) {
             var j = this.words[x] | 0;
             this.words[x] = L << 26 - F | j >>> F, L = j & G;
           }
@@ -85147,17 +85147,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return this.clone().iushrn(v);
         }, a.prototype.testn = function(v) {
           s(typeof v == "number" && v >= 0);
-          var _ = v % 26, $ = (v - _) / 26, P = 1 << _;
+          var _ = v % 26, $ = (v - _) / 26, R = 1 << _;
           if (this.length <= $) return false;
           var F = this.words[$];
-          return !!(F & P);
+          return !!(F & R);
         }, a.prototype.imaskn = function(v) {
           s(typeof v == "number" && v >= 0);
           var _ = v % 26, $ = (v - _) / 26;
           if (s(this.negative === 0, "imaskn works only with positive numbers"), this.length <= $) return this;
           if (_ !== 0 && $++, this.length = Math.min($, this.length), _ !== 0) {
-            var P = 67108863 ^ 67108863 >>> _ << _;
-            this.words[this.length - 1] &= P;
+            var R = 67108863 ^ 67108863 >>> _ << _;
+            this.words[this.length - 1] &= R;
           }
           return this.strip();
         }, a.prototype.maskn = function(v) {
@@ -85183,8 +85183,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.abs = function() {
           return this.clone().iabs();
         }, a.prototype._ishlnsubmul = function(v, _, $) {
-          var P = v.length + $, F;
-          this._expand(P);
+          var R = v.length + $, F;
+          this._expand(R);
           var k, G = 0;
           for (F = 0; F < v.length; F++) {
             k = (this.words[F + $] | 0) + G;
@@ -85196,35 +85196,35 @@ Use Chrome, Firefox or Internet Explorer 11`);
           for (s(G === -1), G = 0, F = 0; F < this.length; F++) k = -(this.words[F] | 0) + G, G = k >> 26, this.words[F] = k & 67108863;
           return this.negative = 1, this.strip();
         }, a.prototype._wordDiv = function(v, _) {
-          var $ = this.length - v.length, P = this.clone(), F = v, k = F.words[F.length - 1] | 0, G = this._countBits(k);
-          $ = 26 - G, $ !== 0 && (F = F.ushln($), P.iushln($), k = F.words[F.length - 1] | 0);
-          var D = P.length - F.length, x;
+          var $ = this.length - v.length, R = this.clone(), F = v, k = F.words[F.length - 1] | 0, G = this._countBits(k);
+          $ = 26 - G, $ !== 0 && (F = F.ushln($), R.iushln($), k = F.words[F.length - 1] | 0);
+          var D = R.length - F.length, x;
           if (_ !== "mod") {
             x = new a(null), x.length = D + 1, x.words = new Array(x.length);
             for (var L = 0; L < x.length; L++) x.words[L] = 0;
           }
-          var j = P.clone()._ishlnsubmul(F, 1, D);
-          j.negative === 0 && (P = j, x && (x.words[D] = 1));
+          var j = R.clone()._ishlnsubmul(F, 1, D);
+          j.negative === 0 && (R = j, x && (x.words[D] = 1));
           for (var Y = D - 1; Y >= 0; Y--) {
-            var oe = (P.words[F.length + Y] | 0) * 67108864 + (P.words[F.length + Y - 1] | 0);
-            for (oe = Math.min(oe / k | 0, 67108863), P._ishlnsubmul(F, oe, Y); P.negative !== 0; ) oe--, P.negative = 0, P._ishlnsubmul(F, 1, Y), P.isZero() || (P.negative ^= 1);
+            var oe = (R.words[F.length + Y] | 0) * 67108864 + (R.words[F.length + Y - 1] | 0);
+            for (oe = Math.min(oe / k | 0, 67108863), R._ishlnsubmul(F, oe, Y); R.negative !== 0; ) oe--, R.negative = 0, R._ishlnsubmul(F, 1, Y), R.isZero() || (R.negative ^= 1);
             x && (x.words[Y] = oe);
           }
-          return x && x.strip(), P.strip(), _ !== "div" && $ !== 0 && P.iushrn($), {
+          return x && x.strip(), R.strip(), _ !== "div" && $ !== 0 && R.iushrn($), {
             div: x || null,
-            mod: P
+            mod: R
           };
         }, a.prototype.divmod = function(v, _, $) {
           if (s(!v.isZero()), this.isZero()) return {
             div: new a(0),
             mod: new a(0)
           };
-          var P, F, k;
-          return this.negative !== 0 && v.negative === 0 ? (k = this.neg().divmod(v, _), _ !== "mod" && (P = k.div.neg()), _ !== "div" && (F = k.mod.neg(), $ && F.negative !== 0 && F.iadd(v)), {
-            div: P,
+          var R, F, k;
+          return this.negative !== 0 && v.negative === 0 ? (k = this.neg().divmod(v, _), _ !== "mod" && (R = k.div.neg()), _ !== "div" && (F = k.mod.neg(), $ && F.negative !== 0 && F.iadd(v)), {
+            div: R,
             mod: F
-          }) : this.negative === 0 && v.negative !== 0 ? (k = this.divmod(v.neg(), _), _ !== "mod" && (P = k.div.neg()), {
-            div: P,
+          }) : this.negative === 0 && v.negative !== 0 ? (k = this.divmod(v.neg(), _), _ !== "mod" && (R = k.div.neg()), {
+            div: R,
             mod: k.mod
           }) : (this.negative & v.negative) !== 0 ? (k = this.neg().divmod(v.neg(), _), _ !== "div" && (F = k.mod.neg(), $ && F.negative !== 0 && F.isub(v)), {
             div: k.div,
@@ -85251,17 +85251,17 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.divRound = function(v) {
           var _ = this.divmod(v);
           if (_.mod.isZero()) return _.div;
-          var $ = _.div.negative !== 0 ? _.mod.isub(v) : _.mod, P = v.ushrn(1), F = v.andln(1), k = $.cmp(P);
+          var $ = _.div.negative !== 0 ? _.mod.isub(v) : _.mod, R = v.ushrn(1), F = v.andln(1), k = $.cmp(R);
           return k < 0 || F === 1 && k === 0 ? _.div : _.div.negative !== 0 ? _.div.isubn(1) : _.div.iaddn(1);
         }, a.prototype.modn = function(v) {
           s(v <= 67108863);
-          for (var _ = (1 << 26) % v, $ = 0, P = this.length - 1; P >= 0; P--) $ = (_ * $ + (this.words[P] | 0)) % v;
+          for (var _ = (1 << 26) % v, $ = 0, R = this.length - 1; R >= 0; R--) $ = (_ * $ + (this.words[R] | 0)) % v;
           return $;
         }, a.prototype.idivn = function(v) {
           s(v <= 67108863);
           for (var _ = 0, $ = this.length - 1; $ >= 0; $--) {
-            var P = (this.words[$] | 0) + _ * 67108864;
-            this.words[$] = P / v | 0, _ = P % v;
+            var R = (this.words[$] | 0) + _ * 67108864;
+            this.words[$] = R / v | 0, _ = R % v;
           }
           return this.strip();
         }, a.prototype.divn = function(v) {
@@ -85270,13 +85270,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
           s(v.negative === 0), s(!v.isZero());
           var _ = this, $ = v.clone();
           _.negative !== 0 ? _ = _.umod(v) : _ = _.clone();
-          for (var P = new a(1), F = new a(0), k = new a(0), G = new a(1), D = 0; _.isEven() && $.isEven(); ) _.iushrn(1), $.iushrn(1), ++D;
+          for (var R = new a(1), F = new a(0), k = new a(0), G = new a(1), D = 0; _.isEven() && $.isEven(); ) _.iushrn(1), $.iushrn(1), ++D;
           for (var x = $.clone(), L = _.clone(); !_.isZero(); ) {
             for (var j = 0, Y = 1; (_.words[0] & Y) === 0 && j < 26; ++j, Y <<= 1) ;
-            if (j > 0) for (_.iushrn(j); j-- > 0; ) (P.isOdd() || F.isOdd()) && (P.iadd(x), F.isub(L)), P.iushrn(1), F.iushrn(1);
+            if (j > 0) for (_.iushrn(j); j-- > 0; ) (R.isOdd() || F.isOdd()) && (R.iadd(x), F.isub(L)), R.iushrn(1), F.iushrn(1);
             for (var oe = 0, me = 1; ($.words[0] & me) === 0 && oe < 26; ++oe, me <<= 1) ;
             if (oe > 0) for ($.iushrn(oe); oe-- > 0; ) (k.isOdd() || G.isOdd()) && (k.iadd(x), G.isub(L)), k.iushrn(1), G.iushrn(1);
-            _.cmp($) >= 0 ? (_.isub($), P.isub(k), F.isub(G)) : ($.isub(_), k.isub(P), G.isub(F));
+            _.cmp($) >= 0 ? (_.isub($), R.isub(k), F.isub(G)) : ($.isub(_), k.isub(R), G.isub(F));
           }
           return {
             a: k,
@@ -85287,21 +85287,21 @@ Use Chrome, Firefox or Internet Explorer 11`);
           s(v.negative === 0), s(!v.isZero());
           var _ = this, $ = v.clone();
           _.negative !== 0 ? _ = _.umod(v) : _ = _.clone();
-          for (var P = new a(1), F = new a(0), k = $.clone(); _.cmpn(1) > 0 && $.cmpn(1) > 0; ) {
+          for (var R = new a(1), F = new a(0), k = $.clone(); _.cmpn(1) > 0 && $.cmpn(1) > 0; ) {
             for (var G = 0, D = 1; (_.words[0] & D) === 0 && G < 26; ++G, D <<= 1) ;
-            if (G > 0) for (_.iushrn(G); G-- > 0; ) P.isOdd() && P.iadd(k), P.iushrn(1);
+            if (G > 0) for (_.iushrn(G); G-- > 0; ) R.isOdd() && R.iadd(k), R.iushrn(1);
             for (var x = 0, L = 1; ($.words[0] & L) === 0 && x < 26; ++x, L <<= 1) ;
             if (x > 0) for ($.iushrn(x); x-- > 0; ) F.isOdd() && F.iadd(k), F.iushrn(1);
-            _.cmp($) >= 0 ? (_.isub($), P.isub(F)) : ($.isub(_), F.isub(P));
+            _.cmp($) >= 0 ? (_.isub($), R.isub(F)) : ($.isub(_), F.isub(R));
           }
           var j;
-          return _.cmpn(1) === 0 ? j = P : j = F, j.cmpn(0) < 0 && j.iadd(v), j;
+          return _.cmpn(1) === 0 ? j = R : j = F, j.cmpn(0) < 0 && j.iadd(v), j;
         }, a.prototype.gcd = function(v) {
           if (this.isZero()) return v.abs();
           if (v.isZero()) return this.abs();
           var _ = this.clone(), $ = v.clone();
           _.negative = 0, $.negative = 0;
-          for (var P = 0; _.isEven() && $.isEven(); P++) _.iushrn(1), $.iushrn(1);
+          for (var R = 0; _.isEven() && $.isEven(); R++) _.iushrn(1), $.iushrn(1);
           do {
             for (; _.isEven(); ) _.iushrn(1);
             for (; $.isEven(); ) $.iushrn(1);
@@ -85312,7 +85312,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
             } else if (F === 0 || $.cmpn(1) === 0) break;
             _.isub($);
           } while (true);
-          return $.iushln(P);
+          return $.iushln(R);
         }, a.prototype.invm = function(v) {
           return this.egcd(v).a.umod(v);
         }, a.prototype.isEven = function() {
@@ -85323,9 +85323,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return this.words[0] & v;
         }, a.prototype.bincn = function(v) {
           s(typeof v == "number");
-          var _ = v % 26, $ = (v - _) / 26, P = 1 << _;
-          if (this.length <= $) return this._expand($ + 1), this.words[$] |= P, this;
-          for (var F = P, k = $; F !== 0 && k < this.length; k++) {
+          var _ = v % 26, $ = (v - _) / 26, R = 1 << _;
+          if (this.length <= $) return this._expand($ + 1), this.words[$] |= R, this;
+          for (var F = R, k = $; F !== 0 && k < this.length; k++) {
             var G = this.words[k] | 0;
             G += F, F = G >>> 26, G &= 67108863, this.words[k] = G;
           }
@@ -85341,8 +85341,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (this.length > 1) $ = 1;
           else {
             _ && (v = -v), s(v <= 67108863, "Number is too big");
-            var P = this.words[0] | 0;
-            $ = P === v ? 0 : P < v ? -1 : 1;
+            var R = this.words[0] | 0;
+            $ = R === v ? 0 : R < v ? -1 : 1;
           }
           return this.negative !== 0 ? -$ | 0 : $;
         }, a.prototype.cmp = function(v) {
@@ -85354,9 +85354,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (this.length > v.length) return 1;
           if (this.length < v.length) return -1;
           for (var _ = 0, $ = this.length - 1; $ >= 0; $--) {
-            var P = this.words[$] | 0, F = v.words[$] | 0;
-            if (P !== F) {
-              P < F ? _ = -1 : P > F && (_ = 1);
+            var R = this.words[$] | 0, F = v.words[$] | 0;
+            if (R !== F) {
+              R < F ? _ = -1 : R > F && (_ = 1);
               break;
             }
           }
@@ -85435,8 +85435,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           do
             this.split(_, this.tmp), _ = this.imulK(_), _ = _.iadd(this.tmp), $ = _.bitLength();
           while ($ > this.n);
-          var P = $ < this.n ? -1 : _.ucmp(this.p);
-          return P === 0 ? (_.words[0] = 0, _.length = 1) : P > 0 ? _.isub(this.p) : _.strip !== void 0 ? _.strip() : _._strip(), _;
+          var R = $ < this.n ? -1 : _.ucmp(this.p);
+          return R === 0 ? (_.words[0] = 0, _.length = 1) : R > 0 ? _.isub(this.p) : _.strip !== void 0 ? _.strip() : _._strip(), _;
         }, q.prototype.split = function(v, _) {
           v.iushrn(this.n, 0, _);
         }, q.prototype.imulK = function(v) {
@@ -85446,8 +85446,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           q.call(this, "k256", "ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff fffffffe fffffc2f");
         }
         o(W, q), W.prototype.split = function(v, _) {
-          for (var $ = 4194303, P = Math.min(v.length, 9), F = 0; F < P; F++) _.words[F] = v.words[F];
-          if (_.length = P, v.length <= 9) {
+          for (var $ = 4194303, R = Math.min(v.length, 9), F = 0; F < R; F++) _.words[F] = v.words[F];
+          if (_.length = R, v.length <= 9) {
             v.words[0] = 0, v.length = 1;
             return;
           }
@@ -85460,8 +85460,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, W.prototype.imulK = function(v) {
           v.words[v.length] = 0, v.words[v.length + 1] = 0, v.length += 2;
           for (var _ = 0, $ = 0; $ < v.length; $++) {
-            var P = v.words[$] | 0;
-            _ += P * 977, v.words[$] = _ & 67108863, _ = P * 64 + (_ / 67108864 | 0);
+            var R = v.words[$] | 0;
+            _ += R * 977, v.words[$] = _ & 67108863, _ = R * 64 + (_ / 67108864 | 0);
           }
           return v.words[v.length - 1] === 0 && (v.length--, v.words[v.length - 1] === 0 && v.length--), v;
         };
@@ -85478,8 +85478,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }
         o(ee, q), ee.prototype.imulK = function(v) {
           for (var _ = 0, $ = 0; $ < v.length; $++) {
-            var P = (v.words[$] | 0) * 19 + _, F = P & 67108863;
-            P >>>= 26, v.words[$] = F, _ = P;
+            var R = (v.words[$] | 0) * 19 + _, F = R & 67108863;
+            R >>>= 26, v.words[$] = F, _ = R;
           }
           return _ !== 0 && (v.words[v.length++] = _), v;
         }, a._prime = function(v) {
@@ -85539,11 +85539,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
             var $ = this.m.add(new a(1)).iushrn(2);
             return this.pow(v, $);
           }
-          for (var P = this.m.subn(1), F = 0; !P.isZero() && P.andln(1) === 0; ) F++, P.iushrn(1);
-          s(!P.isZero());
+          for (var R = this.m.subn(1), F = 0; !R.isZero() && R.andln(1) === 0; ) F++, R.iushrn(1);
+          s(!R.isZero());
           var k = new a(1).toRed(this), G = k.redNeg(), D = this.m.subn(1).iushrn(1), x = this.m.bitLength();
           for (x = new a(2 * x * x).toRed(this); this.pow(x, D).cmp(G) !== 0; ) x.redIAdd(G);
-          for (var L = this.pow(x, P), j = this.pow(v, P.addn(1).iushrn(1)), Y = this.pow(v, P), oe = F; Y.cmp(k) !== 0; ) {
+          for (var L = this.pow(x, R), j = this.pow(v, R.addn(1).iushrn(1)), Y = this.pow(v, R), oe = F; Y.cmp(k) !== 0; ) {
             for (var me = Y, be = 0; me.cmp(k) !== 0; be++) me = me.redSqr();
             s(be < oe);
             var Z = this.pow(L, new a(1).iushln(oe - be - 1));
@@ -85556,18 +85556,18 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, ie.prototype.pow = function(v, _) {
           if (_.isZero()) return new a(1).toRed(this);
           if (_.cmpn(1) === 0) return v.clone();
-          var $ = 4, P = new Array(1 << $);
-          P[0] = new a(1).toRed(this), P[1] = v;
-          for (var F = 2; F < P.length; F++) P[F] = this.mul(P[F - 1], v);
-          var k = P[0], G = 0, D = 0, x = _.bitLength() % 26;
+          var $ = 4, R = new Array(1 << $);
+          R[0] = new a(1).toRed(this), R[1] = v;
+          for (var F = 2; F < R.length; F++) R[F] = this.mul(R[F - 1], v);
+          var k = R[0], G = 0, D = 0, x = _.bitLength() % 26;
           for (x === 0 && (x = 26), F = _.length - 1; F >= 0; F--) {
             for (var L = _.words[F], j = x - 1; j >= 0; j--) {
               var Y = L >> j & 1;
-              if (k !== P[0] && (k = this.sqr(k)), Y === 0 && G === 0) {
+              if (k !== R[0] && (k = this.sqr(k)), Y === 0 && G === 0) {
                 D = 0;
                 continue;
               }
-              G <<= 1, G |= Y, D++, !(D !== $ && (F !== 0 || j !== 0)) && (k = this.mul(k, P[G]), D = 0, G = 0);
+              G <<= 1, G |= Y, D++, !(D !== $ && (F !== 0 || j !== 0)) && (k = this.mul(k, R[G]), D = 0, G = 0);
             }
             x = 26;
           }
@@ -85591,11 +85591,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return _.red = null, _;
         }, pe.prototype.imul = function(v, _) {
           if (v.isZero() || _.isZero()) return v.words[0] = 0, v.length = 1, v;
-          var $ = v.imul(_), P = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(P).iushrn(this.shift), k = F;
+          var $ = v.imul(_), R = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(R).iushrn(this.shift), k = F;
           return F.cmp(this.m) >= 0 ? k = F.isub(this.m) : F.cmpn(0) < 0 && (k = F.iadd(this.m)), k._forceRed(this);
         }, pe.prototype.mul = function(v, _) {
           if (v.isZero() || _.isZero()) return new a(0)._forceRed(this);
-          var $ = v.mul(_), P = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(P).iushrn(this.shift), k = F;
+          var $ = v.mul(_), R = $.maskn(this.shift).mul(this.minv).imaskn(this.shift).mul(this.m), F = $.isub(R).iushrn(this.shift), k = F;
           return F.cmp(this.m) >= 0 ? k = F.isub(this.m) : F.cmpn(0) < 0 && (k = F.iadd(this.m)), k._forceRed(this);
         }, pe.prototype.invm = function(v) {
           var _ = this.imod(v._invmp(this.m).mul(this.r2));
@@ -85619,21 +85619,21 @@ Use Chrome, Firefox or Internet Explorer 11`);
     if (hasRequiredPublicEncrypt) return publicEncrypt;
     hasRequiredPublicEncrypt = 1;
     var l = requireParseAsn1(), e = requireBrowser$c(), r = requireBrowser$a(), s = requireMgf(), o = requireXor(), a = requireBn(), h = requireWithPublic(), c = requireBrowserifyRsa(), d = requireSafeBuffer$2().Buffer;
-    publicEncrypt = function(w, M, R) {
+    publicEncrypt = function(w, M, P) {
       var V;
-      w.padding ? V = w.padding : R ? V = 1 : V = 4;
+      w.padding ? V = w.padding : P ? V = 1 : V = 4;
       var O = l(w), z;
       if (V === 4) z = f(O, M);
-      else if (V === 1) z = p(O, M, R);
+      else if (V === 1) z = p(O, M, P);
       else if (V === 3) {
         if (z = new a(M), z.cmp(O.modulus) >= 0) throw new Error("data too long for modulus");
       } else throw new Error("unknown padding");
-      return R ? c(z, O) : h(z, O);
+      return P ? c(z, O) : h(z, O);
     };
     function f(b, w) {
-      var M = b.modulus.byteLength(), R = w.length, V = r("sha1").update(d.alloc(0)).digest(), O = V.length, z = 2 * O;
-      if (R > M - z - 2) throw new Error("message too long");
-      var H = d.alloc(M - R - z - 2), q = M - O - 1, W = e(O), K = o(d.concat([
+      var M = b.modulus.byteLength(), P = w.length, V = r("sha1").update(d.alloc(0)).digest(), O = V.length, z = 2 * O;
+      if (P > M - z - 2) throw new Error("message too long");
+      var H = d.alloc(M - P - z - 2), q = M - O - 1, W = e(O), K = o(d.concat([
         V,
         H,
         d.alloc(1, 1),
@@ -85646,10 +85646,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
       ], M));
     }
     function p(b, w, M) {
-      var R = w.length, V = b.modulus.byteLength();
-      if (R > V - 11) throw new Error("message too long");
+      var P = w.length, V = b.modulus.byteLength();
+      if (P > V - 11) throw new Error("message too long");
       var O;
-      return M ? O = d.alloc(V - R - 3, 255) : O = m(V - R - 3), new a(d.concat([
+      return M ? O = d.alloc(V - P - 3, 255) : O = m(V - P - 3), new a(d.concat([
         d.from([
           0,
           M ? 1 : 2
@@ -85660,7 +85660,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       ], V));
     }
     function m(b) {
-      for (var w = d.allocUnsafe(b), M = 0, R = e(b * 2), V = 0, O; M < b; ) V === R.length && (R = e(b * 2), V = 0), O = R[V++], O && (w[M++] = O);
+      for (var w = d.allocUnsafe(b), M = 0, P = e(b * 2), V = 0, O; M < b; ) V === P.length && (P = e(b * 2), V = 0), O = P[V++], O && (w[M++] = O);
       return w;
     }
     return publicEncrypt;
@@ -85671,8 +85671,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
     hasRequiredPrivateDecrypt = 1;
     var l = requireParseAsn1(), e = requireMgf(), r = requireXor(), s = requireBn(), o = requireBrowserifyRsa(), a = requireBrowser$a(), h = requireWithPublic(), c = requireSafeBuffer$2().Buffer;
     privateDecrypt = function(b, w, M) {
-      var R;
-      b.padding ? R = b.padding : M ? R = 1 : R = 4;
+      var P;
+      b.padding ? P = b.padding : M ? P = 1 : P = 4;
       var V = l(b), O = V.modulus.byteLength();
       if (w.length > O || new s(w).cmp(V.modulus) >= 0) throw new Error("decryption error");
       var z;
@@ -85681,34 +85681,34 @@ Use Chrome, Firefox or Internet Explorer 11`);
       if (z = c.concat([
         H,
         z
-      ], O), R === 4) return d(V, z);
-      if (R === 1) return f(V, z, M);
-      if (R === 3) return z;
+      ], O), P === 4) return d(V, z);
+      if (P === 1) return f(V, z, M);
+      if (P === 3) return z;
       throw new Error("unknown padding");
     };
     function d(m, b) {
-      var w = m.modulus.byteLength(), M = a("sha1").update(c.alloc(0)).digest(), R = M.length;
+      var w = m.modulus.byteLength(), M = a("sha1").update(c.alloc(0)).digest(), P = M.length;
       if (b[0] !== 0) throw new Error("decryption error");
-      var V = b.slice(1, R + 1), O = b.slice(R + 1), z = r(V, e(O, R)), H = r(O, e(z, w - R - 1));
-      if (p(M, H.slice(0, R))) throw new Error("decryption error");
-      for (var q = R; H[q] === 0; ) q++;
+      var V = b.slice(1, P + 1), O = b.slice(P + 1), z = r(V, e(O, P)), H = r(O, e(z, w - P - 1));
+      if (p(M, H.slice(0, P))) throw new Error("decryption error");
+      for (var q = P; H[q] === 0; ) q++;
       if (H[q++] !== 1) throw new Error("decryption error");
       return H.slice(q);
     }
     function f(m, b, w) {
-      for (var M = b.slice(0, 2), R = 2, V = 0; b[R++] !== 0; ) if (R >= b.length) {
+      for (var M = b.slice(0, 2), P = 2, V = 0; b[P++] !== 0; ) if (P >= b.length) {
         V++;
         break;
       }
-      var O = b.slice(2, R - 1);
+      var O = b.slice(2, P - 1);
       if ((M.toString("hex") !== "0002" && !w || M.toString("hex") !== "0001" && w) && V++, O.length < 8 && V++, V) throw new Error("decryption error");
-      return b.slice(R);
+      return b.slice(P);
     }
     function p(m, b) {
       m = c.from(m), b = c.from(b);
       var w = 0, M = m.length;
       m.length !== b.length && (w++, M = Math.min(m.length, b.length));
-      for (var R = -1; ++R < M; ) w += m[R] ^ b[R];
+      for (var P = -1; ++P < M; ) w += m[P] ^ b[P];
       return w;
     }
     return privateDecrypt;
@@ -85743,28 +85743,28 @@ use chrome, FireFox or Internet Explorer 11`);
       if (b + w > M || b > o) throw new RangeError("buffer too small");
     }
     a && a.getRandomValues || !process$1.browser ? (browser$1.randomFill = f, browser$1.randomFillSync = m) : (browser$1.randomFill = l, browser$1.randomFillSync = l);
-    function f(b, w, M, R) {
+    function f(b, w, M, P) {
       if (!s.isBuffer(b) && !(b instanceof commonjsGlobal.Uint8Array)) throw new TypeError('"buf" argument must be a Buffer or Uint8Array');
-      if (typeof w == "function") R = w, w = 0, M = b.length;
-      else if (typeof M == "function") R = M, M = b.length - w;
-      else if (typeof R != "function") throw new TypeError('"cb" argument must be a function');
-      return c(w, b.length), d(M, w, b.length), p(b, w, M, R);
+      if (typeof w == "function") P = w, w = 0, M = b.length;
+      else if (typeof M == "function") P = M, M = b.length - w;
+      else if (typeof P != "function") throw new TypeError('"cb" argument must be a function');
+      return c(w, b.length), d(M, w, b.length), p(b, w, M, P);
     }
-    function p(b, w, M, R) {
+    function p(b, w, M, P) {
       if (process$1.browser) {
         var V = b.buffer, O = new Uint8Array(V, w, M);
-        if (a.getRandomValues(O), R) {
+        if (a.getRandomValues(O), P) {
           process$1.nextTick(function() {
-            R(null, b);
+            P(null, b);
           });
           return;
         }
         return b;
       }
-      if (R) {
+      if (P) {
         r(M, function(H, q) {
-          if (H) return R(H);
-          q.copy(b, w), R(null, b);
+          if (H) return P(H);
+          q.copy(b, w), P(null, b);
         });
         return;
       }
@@ -85849,8 +85849,8 @@ https://github.com/browserify/crypto-browserify`);
           }, pe.quick = function() {
             return ie.g(4) / 4294967296;
           }, pe.double = pe, O(H(ie.S), r), (W.pass || K || function(U, v, _, $) {
-            return $ && ($.S && R($, ie), U.state = function() {
-              return R(ie, {});
+            return $ && ($.S && P($, ie), U.state = function() {
+              return P(ie, {});
             }), _ ? (s[c] = U, v) : U;
           })(pe, ee, "global" in W ? W.global : this == s, W.state);
         }
@@ -85861,11 +85861,11 @@ https://github.com/browserify/crypto-browserify`);
           ]); ee < o; ) pe[ee] = ee++;
           for (ee = 0; ee < o; ee++) pe[ee] = pe[ie = m & ie + q[ee % K] + (W = pe[ee])], pe[ie] = W;
           (J.g = function(U) {
-            for (var v, _ = 0, $ = J.i, P = J.j, F = J.S; U--; ) v = F[$ = m & $ + 1], _ = _ * o + F[m & (F[$] = F[P = m & P + v]) + (F[P] = v)];
-            return J.i = $, J.j = P, _;
+            for (var v, _ = 0, $ = J.i, R = J.j, F = J.S; U--; ) v = F[$ = m & $ + 1], _ = _ * o + F[m & (F[$] = F[R = m & R + v]) + (F[R] = v)];
+            return J.i = $, J.j = R, _;
           })(o);
         }
-        function R(q, W) {
+        function P(q, W) {
           return W.i = q.i, W.j = q.j, W.S = q.S.slice(), W;
         }
         function V(q, W) {
@@ -86093,7 +86093,7 @@ https://github.com/browserify/crypto-browserify`);
       _start4.applyMatrix4(s), _end4.applyMatrix4(s), _start4.multiplyScalar(1 / _start4.w), _end4.multiplyScalar(1 / _end4.w), _start4.x *= a.x / 2, _start4.y *= a.y / 2, _end4.x *= a.x / 2, _end4.y *= a.y / 2, _line.start.copy(_start4), _line.start.z = 0, _line.end.copy(_end4), _line.end.z = 0;
       const M = _line.closestPointToPointParameter(_ssOrigin3, true);
       _line.at(M, _closestPoint);
-      const R = MathUtils$1.lerp(_start4.z, _end4.z, M), V = R >= -1 && R <= 1, O = _ssOrigin3.distanceTo(_closestPoint) < _lineWidth * 0.5;
+      const P = MathUtils$1.lerp(_start4.z, _end4.z, M), V = P >= -1 && P <= 1, O = _ssOrigin3.distanceTo(_closestPoint) < _lineWidth * 0.5;
       if (V && O) {
         _line.start.fromBufferAttribute(c, m), _line.end.fromBufferAttribute(d, m), _line.start.applyMatrix4(o), _line.end.applyMatrix4(o);
         const z = new Vector3$1(), H = new Vector3$1();
@@ -86415,8 +86415,8 @@ https://github.com/browserify/crypto-browserify`);
         p.rotateAround(new Vector2$1(), m);
         const b = rng$5() * 0.01 + 2e-3, w = p.clone().rotateAround(new Vector2$1(), b), M = p.clone().rotateAround(new Vector2$1(), -b);
         p.multiplyScalar(h), w.multiplyScalar(h), M.multiplyScalar(h), r[d + 0] = w.x, r[d + 1] = w.y, r[d + 2] = 0, r[d + 3] = p.x, r[d + 4] = p.y, r[d + 5] = 0, r[d + 6] = M.x, r[d + 7] = M.y, r[d + 8] = 0, s[f + 0] = c, s[f + 1] = c, s[f + 2] = c;
-        const R = rng$5() * 0.4 + 0.4;
-        o[f + 0] = R, o[f + 1] = R, o[f + 2] = R, a[f + 0] = 0, a[f + 1] = 1, a[f + 2] = 0;
+        const P = rng$5() * 0.4 + 0.4;
+        o[f + 0] = P, o[f + 1] = P, o[f + 2] = P, a[f + 0] = 0, a[f + 1] = 1, a[f + 2] = 0;
       }
       if (this.speedLines.geometry = new BufferGeometry$1(), this.speedLines.geometry.setAttribute("position", new Float32BufferAttribute$1(r, 3)), this.speedLines.geometry.setAttribute("timeRandomness", new Float32BufferAttribute$1(s, 1)), this.speedLines.geometry.setAttribute("distance", new Float32BufferAttribute$1(o, 1)), this.speedLines.geometry.setAttribute("tipness", new Float32BufferAttribute$1(a, 1)), this.speedLines.material = new MeshBasicNodeMaterial({
         wireframe: false,
@@ -86588,8 +86588,8 @@ https://github.com/browserify/crypto-browserify`);
       let e = new PlaneGeometry(this.size, this.size, this.subdivisions, this.subdivisions);
       e.rotateX(-Math.PI * 0.5), e.deleteAttribute("normal");
       const r = this.game.terrain.terrainNode(positionWorld.xz), s = uniform$1(color$1("#ffcf8b")), o = uniform$1(color$1("#a87762")), a = uniform$1(0.175), h = uniform$1(0.03), c = Fn$1(() => {
-        const f = this.game.terrain.colorNode(r), p = r.r, m = positionWorld.xz.mul(h), b = texture$1(this.game.noises.perlin, m).r, w = texture$1(this.game.resources.floorSlabsTexture, positionWorld.xz.mul(a)).r, M = mix$1(o, s, w), R = p.mul(b);
-        return mix$1(f, M, R);
+        const f = this.game.terrain.colorNode(r), p = r.r, m = positionWorld.xz.mul(h), b = texture$1(this.game.noises.perlin, m).r, w = texture$1(this.game.resources.floorSlabsTexture, positionWorld.xz.mul(a)).r, M = mix$1(o, s, w), P = p.mul(b);
+        return mix$1(f, M, P);
       })(), d = new MeshDefaultMaterial({
         colorNode: c,
         normalNode: vec3$1(0, 1, 0),
@@ -86838,10 +86838,10 @@ https://github.com/browserify/crypto-browserify`);
       }), this.material.positionNode = Fn$1(() => {
         const b = attribute$1("position").sub(this.center), w = this.sizeUniform.mul(0.5);
         b.x.assign(mod$1(b.x.add(w), this.sizeUniform).sub(w)), b.y.assign(mod$1(b.y.add(w), this.sizeUniform).sub(w));
-        const M = vec3$1(b.x, 0, b.y).add(vec3$1(this.center.x, 0, this.center.y)), R = modelWorldMatrix$1.mul(M);
-        o.assign(R.xz);
-        const V = texture$1(this.game.noises.perlin, o.mul(0.0321)).r.add(0.5), O = this.bladeHeight.mul(this.bladeHeightRandomness.mul(attribute$1("heightRandomness")).add(this.bladeHeightRandomness.oneMinus())).mul(V).mul(d), z = vec3$1(a.element(e.mod(3).mul(2)).mul(this.bladeWidth).mul(d), a.element(e.mod(3).mul(2).add(1)).mul(O), 0), H = M.add(z), q = atan$1(R.z.sub(cameraPosition.z), R.x.sub(cameraPosition.x)).add(-Math.PI * 0.5);
-        return H.xz.assign(rotateUV(H.xz, q, R.xz)), s.assign(this.game.wind.offsetNode(R.xz).mul(r).mul(O).mul(2)), H.addAssign(vec3$1(s.x, 0, s.y)), H.y.addAssign(f.mul(100)), H;
+        const M = vec3$1(b.x, 0, b.y).add(vec3$1(this.center.x, 0, this.center.y)), P = modelWorldMatrix$1.mul(M);
+        o.assign(P.xz);
+        const V = texture$1(this.game.noises.perlin, o.mul(0.0321)).r.add(0.5), O = this.bladeHeight.mul(this.bladeHeightRandomness.mul(attribute$1("heightRandomness")).add(this.bladeHeightRandomness.oneMinus())).mul(V).mul(d), z = vec3$1(a.element(e.mod(3).mul(2)).mul(this.bladeWidth).mul(d), a.element(e.mod(3).mul(2).add(1)).mul(O), 0), H = M.add(z), q = atan$1(P.z.sub(cameraPosition.z), P.x.sub(cameraPosition.x)).add(-Math.PI * 0.5);
+        return H.xz.assign(rotateUV(H.xz, q, P.xz)), s.assign(this.game.wind.offsetNode(P.xz).mul(r).mul(O).mul(2)), H.addAssign(vec3$1(s.x, 0, s.y)), H.y.addAssign(f.mul(100)), H;
       })(), this.game.debug.active) {
         const m = this.game.debug.panel.addFolder({
           title: "\u{1F331} Grass",
@@ -86996,14 +86996,14 @@ https://github.com/browserify/crypto-browserify`);
         const V = this.game.terrain.terrainNode(positionWorld.xz), O = float$1(0);
         return this.hasRipples && O.assign(max$2(O, o(V))), this.hasIce && O.assign(max$2(O, h(V))), this.hasSplashes && O.assign(max$2(O, b())), O.assign(max$2(O, M(V))), O;
       })();
-      const R = uniform$1(0.01);
+      const P = uniform$1(0.01);
       this.blurOutputNode = Fn$1(() => {
         const V = hashBlur(viewportSharedTexture(screenUV$1), 0.01, {
           repeats: 25,
           premultipliedAlpha: true
         });
         return vec3$1(V);
-      }), this.game.debug.active && this.blurDebugPanel.addBinding(R, "value", {
+      }), this.game.debug.active && this.blurDebugPanel.addBinding(P, "value", {
         label: "blurStrength",
         min: 0,
         max: 0.1
@@ -87193,8 +87193,8 @@ https://github.com/browserify/crypto-browserify`);
       s.outputNode = Fn$1(() => {
         const f = uv$2(), p = vec2$1(f.x.mul(6).add(f.y.mul(-2)), f.y.mul(1).sub(this.game.ticker.elapsedScaledUniform.mul(0.2))), m = texture$1(this.game.noises.perlin, p).r;
         m.addAssign(f.y.mul(this.beamAttenuation.add(1)));
-        const b = this.color.mul(this.emissive), w = this.game.fog.strength.mix(vec3$1(0), this.game.fog.color), M = step$1(0.65, m), R = mix$1(b, w, M);
-        return m.greaterThan(1).discard(), vec4$1(R, 1);
+        const b = this.color.mul(this.emissive), w = this.game.fog.strength.mix(vec3$1(0), this.game.fog.color), M = step$1(0.65, m), P = mix$1(b, w, M);
+        return m.greaterThan(1).discard(), vec4$1(P, 1);
       })();
       const o = new Mesh$1(r, s);
       o.position.copy(this.position), this.game.scene.add(o), this.objects.hideable.push(o);
@@ -87228,13 +87228,13 @@ https://github.com/browserify/crypto-browserify`);
     setBeamParticles() {
       const r = uniform$1(0), s = new Float32Array(450), o = new Float32Array(150), a = new Float32Array(150);
       for (let b = 0; b < 150; b++) {
-        const w = b * 3, M = new Spherical((1 - Math.pow(1 - Math.random(), 2)) * 5, Math.random() * Math.PI * 0.4, Math.random() * Math.PI * 2), R = new Vector3$1().setFromSpherical(M);
-        s[w + 0] = R.x, s[w + 1] = R.y, s[w + 2] = R.z, o[b] = Math.random(), a[b] = Math.random();
+        const w = b * 3, M = new Spherical((1 - Math.pow(1 - Math.random(), 2)) * 5, Math.random() * Math.PI * 0.4, Math.random() * Math.PI * 2), P = new Vector3$1().setFromSpherical(M);
+        s[w + 0] = P.x, s[w + 1] = P.y, s[w + 2] = P.z, o[b] = Math.random(), a[b] = Math.random();
       }
       const h = instancedArray(s, "vec3").toAttribute(), c = instancedArray(o, "float").toAttribute(), d = instancedArray(a, "float").toAttribute(), f = new SpriteNodeMaterial();
       f.outputNode = Fn$1(() => {
-        const b = uv$2().sub(0.5).length(), w = this.game.fog.strength.mix(vec3$1(0), this.game.fog.color), M = this.color.mul(this.emissive), R = mix$1(w, M, step$1(b, 0.35));
-        return b.greaterThan(0.5).discard(), vec4$1(R, 1);
+        const b = uv$2().sub(0.5).length(), w = this.game.fog.strength.mix(vec3$1(0), this.game.fog.color), M = this.color.mul(this.emissive), P = mix$1(w, M, step$1(b, 0.35));
+        return b.greaterThan(0.5).discard(), vec4$1(P, 1);
       })(), f.positionNode = Fn$1(() => {
         const b = r.remapClamp(0, 0.5, 1, 0).pow(6).oneMinus(), w = h.toVar().mulAssign(b);
         return w.y.addAssign(r.mul(d)), w;
@@ -87253,8 +87253,8 @@ https://github.com/browserify/crypto-browserify`);
     setGlyphs() {
       const r = new Float32Array(120), s = new Float32Array(40);
       for (let w = 0; w < 40; w++) {
-        const M = Math.PI * 2 * Math.random(), R = Math.random() * 5, V = Math.random() * 8;
-        r[w * 3 + 0] = Math.sin(M) * V, r[w * 3 + 1] = R, r[w * 3 + 2] = Math.cos(M) * V, s[w] = 0.2 + Math.random() * 0.8;
+        const M = Math.PI * 2 * Math.random(), P = Math.random() * 5, V = Math.random() * 8;
+        r[w * 3 + 0] = Math.sin(M) * V, r[w * 3 + 1] = P, r[w * 3 + 2] = Math.cos(M) * V, s[w] = 0.2 + Math.random() * 0.8;
       }
       const o = instancedArray(r, "vec3").toAttribute(), a = instancedArray(s, "float").toAttribute(), h = new SpriteNodeMaterial({
         transparent: true
@@ -87442,12 +87442,12 @@ https://github.com/browserify/crypto-browserify`);
     create(e, r = "", s = _InteractivePoints.ALIGN_LEFT, o = _InteractivePoints.STATE_CONCEALED, a = null, h = null, c = null, d = null) {
       const f = e.clone(), p = new Group();
       p.rotation.reorder("YXZ"), p.rotation.x = -Math.PI * 0.15, p.rotation.y = Math.PI * 0.25, p.position.copy(f), p.scale.setScalar(0.85), this.game.scene.add(p);
-      const m = [], b = 64, w = s === _InteractivePoints.ALIGN_LEFT ? 60 : 12, M = s === _InteractivePoints.ALIGN_LEFT ? 12 : 60, R = 2, V = `700 ${b}px "Pally-Bold"`, O = document.createElement("canvas");
+      const m = [], b = 64, w = s === _InteractivePoints.ALIGN_LEFT ? 60 : 12, M = s === _InteractivePoints.ALIGN_LEFT ? 12 : 60, P = 2, V = `700 ${b}px "Pally-Bold"`, O = document.createElement("canvas");
       O.style.position = "fixed", O.style.zIndex = 999, O.style.top = 0, O.style.left = 0;
       const z = O.getContext("2d");
       z.font = V;
       const H = z.measureText(r), q = Math.ceil(H.width) + w + M + 2;
-      O.width = q, O.height = b, z.fillStyle = "#000000", z.fillRect(0, 0, q, b), z.font = V, z.fillStyle = "#ffffff", z.textAlign = "start", z.textBaseline = "middle", z.fillText(r, w + 1, b * 0.5 + R);
+      O.width = q, O.height = b, z.fillStyle = "#000000", z.fillRect(0, 0, q, b), z.font = V, z.fillStyle = "#ffffff", z.textAlign = "start", z.textBaseline = "middle", z.fillText(r, w + 1, b * 0.5 + P);
       const W = new Texture$1(O);
       W.minFilter = NearestFilter$1, W.magFilter = NearestFilter$1, W.generateMipmaps = false, W.needsUpdate = true;
       const K = new MeshLambertNodeMaterial({
@@ -87457,8 +87457,8 @@ https://github.com/browserify/crypto-browserify`);
       m.push(K);
       const J = uniform$1(1);
       K.outputNode = Fn$1(() => {
-        const P = vec2$1(uv$2().x.sub(J), uv$2().y), F = texture$1(W, P).r;
-        P.x.greaterThan(1).discard(), P.x.lessThan(0).discard();
+        const R = vec2$1(uv$2().x.sub(J), uv$2().y), F = texture$1(W, R).r;
+        R.x.greaterThan(1).discard(), R.x.lessThan(0).discard();
         const k = this.game.fog.strength.mix(this.backColor, this.game.fog.color), G = mix$1(k, this.frontColor, F);
         return vec4$1(vec3$1(G), 1);
       })();
@@ -87471,7 +87471,7 @@ https://github.com/browserify/crypto-browserify`);
       m.push(ie);
       const pe = uniform$1(0), U = uniform$1(0.15), v = uniform$1(0.175);
       ie.outputNode = Fn$1(() => {
-        const P = uv$2(), F = max$2(P.x.sub(0.5).abs(), P.y.sub(0.5).abs()).mul(2), k = pe.sub(F).sub(v).abs(), G = step$1(k, U.mul(0.5));
+        const R = uv$2(), F = max$2(R.x.sub(0.5).abs(), R.y.sub(0.5).abs()).mul(2), k = pe.sub(F).sub(v).abs(), G = step$1(k, U.mul(0.5));
         F.greaterThan(pe).discard();
         const D = this.game.fog.strength.mix(this.backColor, this.game.fog.color), x = mix$1(D, this.frontColor, G);
         return vec4$1(vec3$1(x), 1);
@@ -87558,14 +87558,14 @@ https://github.com/browserify/crypto-browserify`);
             delay: 0.2,
             overwrite: true
           });
-          for (const P of $.materials) P.depthTest = false, P.needsUpdate = true;
+          for (const R of $.materials) R.depthTest = false, R.needsUpdate = true;
           this.sounds.reveal.play(), typeof $.revealCallback == "function" && $.revealCallback();
         }
       }, $.conceal = () => {
         if ($.state === _InteractivePoints.STATE_CONCEALED) return;
-        const P = $.state;
+        const R = $.state;
         $.state = _InteractivePoints.STATE_CONCEALED, $.intersect.active = true, _.visible = true;
-        const F = P === _InteractivePoints.STATE_HIDDEN ? "power2.out" : "back.in(4.5)";
+        const F = R === _InteractivePoints.STATE_HIDDEN ? "power2.out" : "back.in(4.5)";
         gsapWithCSS.to(pe, {
           value: 0.25,
           ease: F,
@@ -87704,8 +87704,8 @@ https://github.com/browserify/crypto-browserify`);
       const e = this.game.materials.getFromName("emissiveOrangeRadialGradient"), r = 30, s = uniform$1(3), o = new Float32Array(r * 3), a = new Float32Array(r);
       this.localTime = uniform$1(0);
       for (let w = 0; w < r; w++) {
-        const M = w * 3, R = Math.PI * 2 * Math.random(), V = Math.pow(Math.random(), 1.5) * 0.4;
-        o[M + 0] = Math.cos(R) * V, o[M + 1] = Math.random(), o[M + 2] = Math.sin(R) * V, a[w] = Math.random() * 1 + 0.75;
+        const M = w * 3, P = Math.PI * 2 * Math.random(), V = Math.pow(Math.random(), 1.5) * 0.4;
+        o[M + 0] = Math.cos(P) * V, o[M + 1] = Math.random(), o[M + 2] = Math.sin(P) * V, a[w] = Math.random() * 1 + 0.75;
       }
       const h = instancedArray(o, "vec3").toAttribute(), c = instancedArray(a, "float").toAttribute(), d = new SpriteNodeMaterial();
       d.outputNode = e.outputNode;
@@ -87908,21 +87908,21 @@ https://github.com/browserify/crypto-browserify`);
         try {
           h.scene.updateMatrixWorld(true);
           const c = [];
-          if (h.scene.traverse((R) => {
-            R.isMesh && R.geometry && c.push(R);
+          if (h.scene.traverse((P) => {
+            P.isMesh && P.geometry && c.push(P);
           }), c.length === 0) return;
           const d = new Vector3$1(), f = new Vector3$1();
-          for (const R of c) R.getWorldPosition(f), d.add(f);
+          for (const P of c) P.getWorldPosition(f), d.add(f);
           d.multiplyScalar(1 / c.length);
           const p = new Group();
           p.name = "cuongThaiTitle";
-          const m = [], b = c.map((R) => {
-            R.geometry.computeBoundingBox();
-            const V = R.geometry.boundingBox;
+          const m = [], b = c.map((P) => {
+            P.geometry.computeBoundingBox();
+            const V = P.geometry.boundingBox;
             return V ? V.max.y - V.min.y : 0;
-          }), w = b.slice().filter((R) => R > 0).sort((R, V) => R - V), M = w.length > 0 ? w[Math.floor(w.length / 2)] : 0;
-          for (let R = 0; R < c.length; R++) {
-            const V = c[R], O = V.geometry;
+          }), w = b.slice().filter((P) => P > 0).sort((P, V) => P - V), M = w.length > 0 ? w[Math.floor(w.length / 2)] : 0;
+          for (let P = 0; P < c.length; P++) {
+            const V = c[P], O = V.geometry;
             if (a && ((_a3 = O.attributes) == null ? void 0 : _a3.uv)) {
               const W = a.getX(0), K = a.getY(0), J = O.attributes.uv;
               for (let ee = 0; ee < J.count; ee++) J.setXY(ee, W, K);
@@ -87931,7 +87931,7 @@ https://github.com/browserify/crypto-browserify`);
             const z = new Mesh$1(O, o);
             z.castShadow = true, z.receiveShadow = true, z.quaternion.copy(V.quaternion), z.scale.copy(V.scale);
             let H = 1;
-            const q = b[R];
+            const q = b[P];
             q > 0 && M > 0 && q < M * 0.98 && (H = M / q, z.scale.multiplyScalar(H)), V.getWorldPosition(f), z.position.copy(r).add(f.sub(d)), H !== 1 && (z.position.y += (q * H - q) / 2), p.add(z);
             try {
               O.computeBoundingBox();
@@ -87969,13 +87969,13 @@ https://github.com/browserify/crypto-browserify`);
             }
           }
           p.children.length > 0 && this.game.scene.add(p), m.length > 0 && this.game.ticker.events.on("tick", () => {
-            for (const R of m) {
-              if (R.body.isSleeping() || !R.body.isEnabled()) continue;
-              const V = R.body.translation(), O = R.body.rotation();
-              R.mesh.position.set(V.x, V.y, V.z), R.mesh.quaternion.set(O.x, O.y, O.z, O.w);
+            for (const P of m) {
+              if (P.body.isSleeping() || !P.body.isEnabled()) continue;
+              const V = P.body.translation(), O = P.body.rotation();
+              P.mesh.position.set(V.x, V.y, V.z), P.mesh.quaternion.set(O.x, O.y, O.z, O.w);
             }
           }, 10);
-          for (const R of e) R.visible = false, R.scale.setScalar(0), R.updateMatrixWorld(true), (_d = (_c = (_b2 = R.userData.object) == null ? void 0 : _b2.physical) == null ? void 0 : _c.body) == null ? void 0 : _d.setEnabled(false);
+          for (const P of e) P.visible = false, P.scale.setScalar(0), P.updateMatrixWorld(true), (_d = (_c = (_b2 = P.userData.object) == null ? void 0 : _b2.physical) == null ? void 0 : _c.body) == null ? void 0 : _d.setEnabled(false);
         } catch (c) {
           console.warn("[CT] khong dung duoc chu:", c);
         }
@@ -88027,8 +88027,8 @@ https://github.com/browserify/crypto-browserify`);
       {
         const o = this.game.materials.getFromName("emissiveOrangeRadialGradient"), a = 30, h = uniform$1(5), c = new Float32Array(a * 3), d = new Float32Array(a);
         for (let M = 0; M < a; M++) {
-          const R = M * 3, V = Math.PI * 2 * Math.random(), O = Math.pow(Math.random(), 1.5) * 1;
-          c[R + 0] = Math.cos(V) * O, c[R + 1] = Math.random(), c[R + 2] = Math.sin(V) * O, d[M] = 0.02 + Math.random() * 0.06;
+          const P = M * 3, V = Math.PI * 2 * Math.random(), O = Math.pow(Math.random(), 1.5) * 1;
+          c[P + 0] = Math.cos(V) * O, c[P + 1] = Math.random(), c[P + 2] = Math.sin(V) * O, d[M] = 0.02 + Math.random() * 0.06;
         }
         const f = instancedArray(c, "vec3").toAttribute(), p = instancedArray(d, "float").toAttribute(), m = new SpriteNodeMaterial();
         m.outputNode = o.outputNode;
@@ -88036,8 +88036,8 @@ https://github.com/browserify/crypto-browserify`);
         m.positionNode = Fn$1(() => {
           const M = f.toVar();
           b.assign(M.y.add(this.localTime.mul(M.y)).fract()), M.y.assign(b.mul(h)), M.xz.addAssign(this.game.wind.direction.mul(b));
-          const R = step$1(0.8, b).mul(100);
-          return M.y.addAssign(R), M;
+          const P = step$1(0.8, b).mul(100);
+          return M.y.addAssign(P), M;
         })(), m.scaleNode = Fn$1(() => {
           const M = b.remapClamp(0.5, 1, 1, 0);
           return p.mul(M);
@@ -89443,8 +89443,8 @@ https://github.com/browserify/crypto-browserify`);
                 hasWater: false,
                 hasLightBounce: false,
                 transparent: true
-              }), R = M.outputNode;
-              M.outputNode = Fn$1(() => vec4$1(mix$1(R.rgb, w, this.shadeMix.images.mixUniform), b))(), h.material = M, h.visible = true;
+              }), P = M.outputNode;
+              M.outputNode = Fn$1(() => vec4$1(mix$1(P.rgb, w, this.shadeMix.images.mixUniform), b))(), h.material = M, h.visible = true;
             }), a.startedLoading = true;
           };
           {
@@ -92064,7 +92064,7 @@ https://github.com/browserify/crypto-browserify`);
         }
       ], p = e / 12, m = /* @__PURE__ */ new Map(), b = 54, w = 36;
       this.leaderboard.update = (M = null) => {
-        const R = () => {
+        const P = () => {
           if (o.clearRect(0, 0, s.width, s.height), M === null) o.font = r, o.fillStyle = "#ff87a2", o.textBaseline = "middle", o.textAlign = "center", o.fillText("OFFLINE", e * 0.5, e * 0.5);
           else if (M.length === 0) o.font = r, o.fillStyle = "#ffffff", o.textBaseline = "middle", o.textAlign = "center", o.fillText("NO SCORE YET TODAY", e * 0.5, e * 0.5);
           else {
@@ -92078,7 +92078,7 @@ https://github.com/browserify/crypto-browserify`);
           }
           a.needsUpdate = true;
         }, V = () => {
-          O === 0 && R();
+          O === 0 && P();
         };
         let O = 0;
         if (this.leaderboard.maxTime = 0, this.leaderboard.scores = M, M) for (const z of M) {
@@ -92289,14 +92289,14 @@ https://github.com/browserify/crypto-browserify`);
         size: e,
         columnsCount: r
       };
-      const s = new PortalSlabGeometry(), o = s.attributes.position.count, a = s.index.count, h = s.attributes.position.array, c = s.attributes.edge.array, d = s.index.array, f = r * r, p = new Float32Array(o * f * 3), m = new Float32Array(o * f * 2), b = new Float32Array(o * f), w = new Float32Array(o * f), M = new Float32Array(o * f), R = new Uint16Array(a * f);
+      const s = new PortalSlabGeometry(), o = s.attributes.position.count, a = s.index.count, h = s.attributes.position.array, c = s.attributes.edge.array, d = s.index.array, f = r * r, p = new Float32Array(o * f * 3), m = new Float32Array(o * f * 2), b = new Float32Array(o * f), w = new Float32Array(o * f), M = new Float32Array(o * f), P = new Uint16Array(a * f);
       for (let V = 0; V < r; V++) for (let O = 0; O < r; O++) {
         const z = (V - (r - 1) * 0.5) * e, H = (O - (r - 1) * 0.5) * e, q = Math.random();
         let W = O + V * r;
         for (let K = 0; K < o; K++) p[(W * o + K) * 3 + 0] = h[K * 3 + 0] * e / 2 + z, p[(W * o + K) * 3 + 1] = h[K * 3 + 1], p[(W * o + K) * 3 + 2] = h[K * 3 + 2] * e / 2 + H, m[(W * o + K) * 2 + 0] = z, m[(W * o + K) * 2 + 1] = H, b[W * o + K] = c[K], w[W * o + K] = q, M[W * o + K] = Math.hypot(z, H);
-        for (let K = 0; K < a; K++) R[W * a + K] = W * o + d[K + 0];
+        for (let K = 0; K < a; K++) P[W * a + K] = W * o + d[K + 0];
       }
-      this.setAttribute("position", new Float32BufferAttribute$1(p, 3)), this.setAttribute("center", new Float32BufferAttribute$1(m, 2)), this.setAttribute("edge", new Float32BufferAttribute$1(b, 1)), this.setAttribute("random", new Float32BufferAttribute$1(w, 1)), this.setAttribute("distanceToCenter", new Float32BufferAttribute$1(M, 1)), this.setIndex(new Uint16BufferAttribute$1(R, 1));
+      this.setAttribute("position", new Float32BufferAttribute$1(p, 3)), this.setAttribute("center", new Float32BufferAttribute$1(m, 2)), this.setAttribute("edge", new Float32BufferAttribute$1(b, 1)), this.setAttribute("random", new Float32BufferAttribute$1(w, 1)), this.setAttribute("distanceToCenter", new Float32BufferAttribute$1(M, 1)), this.setIndex(new Uint16BufferAttribute$1(P, 1));
     }
   }
   class BehindTheSceneArea extends Area {
@@ -92392,8 +92392,8 @@ https://github.com/browserify/crypto-browserify`);
           {
             const d = h.toVar();
             d.x.assign(d.x.sub(0.5).abs().mul(2));
-            const f = d.sub(vec2$1(this.game.ticker.elapsedScaledUniform.mul(0.05), 0)).mul(vec2$1(0.35, 0.96)), p = texture$1(this.game.noises.voronoi, f).r, m = d.sub(vec2$1(this.game.ticker.elapsedScaledUniform.mul(0.041), 0)).mul(vec2$1(0.75, 1.28)), b = texture$1(this.game.noises.voronoi, m).r, w = min$2(p, b), M = h.x.sub(0.5).abs().mul(2).add(0.5).mul(0.5).oneMinus(), R = w.step(M);
-            c.assign(mix$1(c, color$1("#ffffff"), R));
+            const f = d.sub(vec2$1(this.game.ticker.elapsedScaledUniform.mul(0.05), 0)).mul(vec2$1(0.35, 0.96)), p = texture$1(this.game.noises.voronoi, f).r, m = d.sub(vec2$1(this.game.ticker.elapsedScaledUniform.mul(0.041), 0)).mul(vec2$1(0.75, 1.28)), b = texture$1(this.game.noises.voronoi, m).r, w = min$2(p, b), M = h.x.sub(0.5).abs().mul(2).add(0.5).mul(0.5).oneMinus(), P = w.step(M);
+            c.assign(mix$1(c, color$1("#ffffff"), P));
           }
           return vec3$1(c);
         })(), o = new MeshDefaultMaterial({
@@ -92439,8 +92439,8 @@ https://github.com/browserify/crypto-browserify`);
         })(), w._alphaNode = Fn$1(() => uv$2().sub(0.5).length().oneMinus().sub(0.5))();
         const M = new PlaneGeometry(1, 1);
         M.rotateY(-Math.PI * 0.5), M.rotateZ(-Math.PI * 0.25);
-        const R = new InstancedMesh(M, w, d);
-        R.receiveShadow = true, R.castShadow = true, R.lookAt(c.multiplyScalar(-1)), R.position.copy(a), R.count = d, this.game.scene.add(R), this.objects.hideable.push(R);
+        const P = new InstancedMesh(M, w, d);
+        P.receiveShadow = true, P.castShadow = true, P.lookAt(c.multiplyScalar(-1)), P.position.copy(a), P.count = d, this.game.scene.add(P), this.objects.hideable.push(P);
       }
     }
     setPillar() {
@@ -92448,8 +92448,8 @@ https://github.com/browserify/crypto-browserify`);
       {
         const e = this.game.achievements.globalProgress.totalCount, r = new Float32Array(e * 3), s = new Float32Array(e);
         for (let b = 0; b < e; b++) {
-          const w = Math.PI * rng$4() - Math.PI * 0.25, M = rng$4() * 2, R = 2 + rng$4() * 0.25;
-          r[b * 3 + 0] = Math.sin(w) * R, r[b * 3 + 1] = M, r[b * 3 + 2] = Math.cos(w) * R, s[b] = 0.2 + rng$4() * 0.8;
+          const w = Math.PI * rng$4() - Math.PI * 0.25, M = rng$4() * 2, P = 2 + rng$4() * 0.25;
+          r[b * 3 + 0] = Math.sin(w) * P, r[b * 3 + 1] = M, r[b * 3 + 2] = Math.cos(w) * P, s[b] = 0.2 + rng$4() * 0.8;
         }
         const o = instancedArray(r, "vec3").toAttribute(), a = instancedArray(s, "float").toAttribute(), h = new SpriteNodeMaterial({}), c = varying$1(float$1(0));
         h.positionNode = Fn$1(() => {
@@ -92746,18 +92746,18 @@ https://github.com/browserify/crypto-browserify`);
     setMaterial() {
       this.focusPoint = uniform$1(vec2$1()), this.vehicleVelocity = uniform$1(vec3$1()), this.vehiclePosition = uniform$1(vec3$1()), this.scale = uniform$1(0.25), this.rotationFrequency = uniform$1(3), this.rotationElevationMultiplier = uniform$1(1), this.pushSidewaysMultiplier = uniform$1(20), this.pushMultiplier = uniform$1(100), this.windFrequency = uniform$1(5e-3), this.windMultiplier = uniform$1(0.5), this.upwardMultiplier = uniform$1(1), this.defaultDamping = uniform$1(1.5), this.waterDamping = uniform$1(0.75), this.gravity = uniform$1(9.807), this.explosion = uniform$1(vec4$1(0)), this.tornado = uniform$1(vec4$1(0)), this.positionBuffer = instancedArray(this.count, "vec3"), this.velocityBuffer = instancedArray(this.count, "vec3");
       const e = new Float32Array(this.count);
-      for (let R = 0; R < this.count; R++) e[R] = Math.random() * Math.PI * 2;
+      for (let P = 0; P < this.count; P++) e[P] = Math.random() * Math.PI * 2;
       const r = instancedArray(e, "float").toAttribute(), s = new Float32Array(this.count);
-      for (let R = 0; R < this.count; R++) s[R] = Math.random() * 0.5 + 0.5;
+      for (let P = 0; P < this.count; P++) s[P] = Math.random() * 0.5 + 0.5;
       const o = instancedArray(s, "float").toAttribute(), a = new Float32Array(this.count);
-      for (let R = 0; R < this.count; R++) a[R] = Math.random() * 0.1 + 0.1;
+      for (let P = 0; P < this.count; P++) a[P] = Math.random() * 0.1 + 0.1;
       const h = instancedArray(a, "float"), c = uniform$1(color$1(9785658)), d = uniform$1(color$1(16083514)), f = Fn$1(() => {
-        const R = hash$4(instanceIndex$1.add(99));
-        return vec3$1(mix$1(c, d, R));
+        const P = hash$4(instanceIndex$1.add(99));
+        return vec3$1(mix$1(c, d, P));
       })(), p = new Float32Array(this.count * 3);
-      for (let R = 0; R < this.count; R++) {
+      for (let P = 0; P < this.count; P++) {
         const V = new Vector3$1(0, 1, 0);
-        V.applyAxisAngle(new Vector3$1(1, 0, 0), (Math.random() - 0.5) * 2), V.applyAxisAngle(new Vector3$1(0, 0, 1), (Math.random() - 0.5) * 2), V.toArray(p, R * 3);
+        V.applyAxisAngle(new Vector3$1(1, 0, 0), (Math.random() - 0.5) * 2), V.applyAxisAngle(new Vector3$1(0, 0, 1), (Math.random() - 0.5) * 2), V.toArray(p, P * 3);
       }
       const m = instancedArray(p, "vec3").toAttribute();
       this.material = new MeshDefaultMaterial({
@@ -92768,31 +92768,31 @@ https://github.com/browserify/crypto-browserify`);
         transparent: true
       }), this.material.positionNode = Fn$1(() => {
         materialNormal$1.assign(modelViewMatrix$1.mul(vec4$1(m, 0)));
-        const R = this.positionBuffer.toAttribute(), V = positionGeometry$1.mul(o).mul(this.scale), O = max$2(R.y.mul(this.rotationElevationMultiplier), 0), z = sin$1(R.x.mul(this.rotationFrequency)).mul(O), H = sin$1(R.z.mul(this.rotationFrequency)).mul(O), q = r;
-        return V.xy.assign(rotateUV(V.xy, z, vec2$1(0))), V.yz.assign(rotateUV(V.yz, H, vec2$1(0))), V.xz.assign(rotateUV(V.xz, q, vec2$1(0))), V.add(R);
+        const P = this.positionBuffer.toAttribute(), V = positionGeometry$1.mul(o).mul(this.scale), O = max$2(P.y.mul(this.rotationElevationMultiplier), 0), z = sin$1(P.x.mul(this.rotationFrequency)).mul(O), H = sin$1(P.z.mul(this.rotationFrequency)).mul(O), q = r;
+        return V.xy.assign(rotateUV(V.xy, z, vec2$1(0))), V.yz.assign(rotateUV(V.yz, H, vec2$1(0))), V.xz.assign(rotateUV(V.xz, q, vec2$1(0))), V.add(P);
       })(), this.size = float$1(this.game.view.optimalArea.radius * 2);
       const w = Fn$1(() => {
-        const R = this.positionBuffer.element(instanceIndex$1);
-        R.assign(vec3$1(hash$4(instanceIndex$1).sub(0.5).mul(this.size), 0, hash$4(instanceIndex$1.add(1)).sub(0.5).mul(this.size)));
-        const V = R.xz.mul(0.02), O = texture$1(this.game.noises.perlin, V).r;
-        R.x.addAssign(O.mul(15));
+        const P = this.positionBuffer.element(instanceIndex$1);
+        P.assign(vec3$1(hash$4(instanceIndex$1).sub(0.5).mul(this.size), 0, hash$4(instanceIndex$1.add(1)).sub(0.5).mul(this.size)));
+        const V = P.xz.mul(0.02), O = texture$1(this.game.noises.perlin, V).r;
+        P.x.addAssign(O.mul(15));
       })().compute(this.count);
       this.game.rendering.renderer.computeAsync(w);
       const M = Fn$1(() => {
-        const R = this.positionBuffer.element(instanceIndex$1), V = this.velocityBuffer.element(instanceIndex$1), O = h.element(instanceIndex$1), z = this.game.terrain.terrainNode(R.xz), H = R.sub(this.vehiclePosition), q = vec3$1(H.x, 0, H.z).normalize().mul(this.pushSidewaysMultiplier), W = vec3$1(this.vehicleVelocity.x, 0, this.vehicleVelocity.z).mul(this.pushMultiplier), J = H.length().remapClamp(0.5, 2, 1, 0), ee = this.vehicleVelocity.length(), ie = W.add(q).mul(ee).mul(J);
+        const P = this.positionBuffer.element(instanceIndex$1), V = this.velocityBuffer.element(instanceIndex$1), O = h.element(instanceIndex$1), z = this.game.terrain.terrainNode(P.xz), H = P.sub(this.vehiclePosition), q = vec3$1(H.x, 0, H.z).normalize().mul(this.pushSidewaysMultiplier), W = vec3$1(this.vehicleVelocity.x, 0, this.vehicleVelocity.z).mul(this.pushMultiplier), J = H.length().remapClamp(0.5, 2, 1, 0), ee = this.vehicleVelocity.length(), ie = W.add(q).mul(ee).mul(J);
         V.addAssign(ie);
-        const pe = R.xz.mul(this.windFrequency).add(this.game.wind.direction.mul(this.game.wind.localTime)).xy, U = texture$1(this.game.noises.perlin, pe).r, v = this.game.wind.strength.sub(U).mul(O).mul(this.windMultiplier).max(0);
+        const pe = P.xz.mul(this.windFrequency).add(this.game.wind.direction.mul(this.game.wind.localTime)).xy, U = texture$1(this.game.noises.perlin, pe).r, v = this.game.wind.strength.sub(U).mul(O).mul(this.windMultiplier).max(0);
         V.x.addAssign(this.game.wind.direction.x.mul(v)), V.z.addAssign(this.game.wind.direction.y.mul(v));
-        const _ = R.xz.sub(this.explosion.xy), P = _.length().remapClamp(this.explosion.z.mul(0.5), this.explosion.z.mul(1), 0.2, 0), k = vec2$1(_.x, _.y).mul(P).mul(this.explosion.a);
+        const _ = P.xz.sub(this.explosion.xy), R = _.length().remapClamp(this.explosion.z.mul(0.5), this.explosion.z.mul(1), 0.2, 0), k = vec2$1(_.x, _.y).mul(R).mul(this.explosion.a);
         V.addAssign(vec3$1(k.x, 0, k.y));
-        const G = R.y.remapClamp(0, 6, 1, 0);
+        const G = P.y.remapClamp(0, 6, 1, 0);
         V.y = V.xz.length().min(2).mul(this.upwardMultiplier).mul(G);
-        const D = z.b.remapClamp(0.4, 0, this.waterDamping, this.defaultDamping), x = step$1(0.05, R.y).mul(this.defaultDamping), L = max$2(D, x).mul(this.game.ticker.deltaScaledUniform);
-        V.mulAssign(float$1(1).sub(L)), V.y = V.y.sub(this.gravity.mul(O)), R.addAssign(V.mul(this.game.ticker.deltaScaledUniform));
+        const D = z.b.remapClamp(0.4, 0, this.waterDamping, this.defaultDamping), x = step$1(0.05, P.y).mul(this.defaultDamping), L = max$2(D, x).mul(this.game.ticker.deltaScaledUniform);
+        V.mulAssign(float$1(1).sub(L)), V.y = V.y.sub(this.gravity.mul(O)), P.addAssign(V.mul(this.game.ticker.deltaScaledUniform));
         const j = z.b.remapClamp(0.02, 0.13, 0, this.game.water.surfaceElevationUniform).add(0.02);
-        R.y.assign(max$2(R.y, j));
+        P.y.assign(max$2(P.y, j));
         const Y = this.size.mul(0.5);
-        R.x.assign(mod$1(R.x.add(Y).sub(this.focusPoint.x), this.size).sub(Y).add(this.focusPoint.x)), R.z.assign(mod$1(R.z.add(Y).sub(this.focusPoint.y), this.size).sub(Y).add(this.focusPoint.y));
+        P.x.assign(mod$1(P.x.add(Y).sub(this.focusPoint.x), this.size).sub(Y).add(this.focusPoint.x)), P.z.assign(mod$1(P.z.add(Y).sub(this.focusPoint.y), this.size).sub(Y).add(this.focusPoint.y));
       })();
       this.updateCompute = M.compute(this.count), this.game.debug.active && (this.game.debug.addThreeColorBinding(this.debugPanel, c.value, "colorA"), this.game.debug.addThreeColorBinding(this.debugPanel, d.value, "colorB"), this.debugPanel.addBinding(this.scale, "value", {
         label: "scale",
@@ -92991,7 +92991,7 @@ https://github.com/browserify/crypto-browserify`);
       if (this.arc.vertexNode = Fn$1(([d]) => {
         const f = attribute$1("ratio"), p = step$1(f, 0.01), m = this.game.ticker.elapsedScaledUniform.sub(d), b = min$2(m.div(this.arc.duration), 1), w = positionGeometry$1.toVar();
         w.xz.mulAssign(b.oneMinus().pow(h).oneMinus().mul(p.oneMinus()).mul(c).add(1));
-        const M = modelWorldMatrix$1.mul(vec4$1(w, 1)), R = M.xyz.sub(cameraPosition).normalize(), V = positionGeometry$1.add(attribute$1("direction")), z = modelWorldMatrix$1.mul(vec4$1(V, 1)).xyz.sub(M.xyz).normalize(), H = cross$1(z, R).normalize(), q = f.mul(10).min(1), W = b.oneMinus(), K = mul$1(a, q, W), J = floor$2(vertexIndex$1.toFloat().mul(3).sub(2).div(3).mod(2)).sub(0.5), ee = H.mul(J.mul(K));
+        const M = modelWorldMatrix$1.mul(vec4$1(w, 1)), P = M.xyz.sub(cameraPosition).normalize(), V = positionGeometry$1.add(attribute$1("direction")), z = modelWorldMatrix$1.mul(vec4$1(V, 1)).xyz.sub(M.xyz).normalize(), H = cross$1(z, P).normalize(), q = f.mul(10).min(1), W = b.oneMinus(), K = mul$1(a, q, W), J = floor$2(vertexIndex$1.toFloat().mul(3).sub(2).div(3).mod(2)).sub(0.5), ee = H.mul(J.mul(K));
         M.addAssign(vec4$1(ee, 0));
         const ie = cameraViewMatrix$1.mul(M);
         return cameraProjectionMatrix$1.mul(ie);
@@ -93195,8 +93195,8 @@ https://github.com/browserify/crypto-browserify`);
         f.x.addAssign(this.roundedPosition.x), f.z.addAssign(this.roundedPosition.y);
         const p = f.add(vec3$1(-this.subdivisionSize, 0, -this.subdivisionSize)), m = f.add(vec3$1(this.subdivisionSize, 0, -this.subdivisionSize)), b = f.add(vec3$1(this.subdivisionSize, 0, this.subdivisionSize)), w = f.add(vec3$1(-this.subdivisionSize, 0, this.subdivisionSize));
         f.y.assign(h(f.xz)), p.y.assign(h(p.xz).sub(f.y)), m.y.assign(h(m.xz).sub(f.y)), b.y.assign(h(b.xz).sub(f.y)), w.y.assign(h(w.xz).sub(f.y));
-        const M = p.y.sub(b.y).abs(), R = m.y.sub(w.y).abs(), V = float$1(0);
-        If$1(M.lessThan(R), () => {
+        const M = p.y.sub(b.y).abs(), P = m.y.sub(w.y).abs(), V = float$1(0);
+        If$1(M.lessThan(P), () => {
           V.assign(a);
         }), d.xz.assign(rotateUV(d.xz, V, f.xz));
         const O = d, z = O.add(vec3$1(this.normalNeighbourShift, 0, 0)), H = O.add(vec3$1(0, 0, this.normalNeighbourShift.negate()));
@@ -94053,9 +94053,9 @@ https://github.com/browserify/crypto-browserify`);
         m.assign(remap$1(m, -1, 1, -1, 1));
         const b = this.visibility.remap(0, 1, -4, 0), w = uv$2().add(vec2$1(f.mul(1.1), f.mul(1.1)));
         w.assign(skewedUv(w, vec2$1(-1, 0)).mul(vec2$1(4, 0.5)));
-        const M = texture$1(this.game.noises.perlin, w, 1).r.remap(0.45, 0.7), R = uv$2().add(vec2$1(f.mul(0.7), f.mul(0.7)));
-        R.assign(skewedUv(R, vec2$1(-1, 0)).mul(vec2$1(10, 2)));
-        const V = texture$1(this.game.noises.perlin, R, 1).r.remap(0.45, 0.7), O = M.mul(V).add(m).add(b);
+        const M = texture$1(this.game.noises.perlin, w, 1).r.remap(0.45, 0.7), P = uv$2().add(vec2$1(f.mul(0.7), f.mul(0.7)));
+        P.assign(skewedUv(P, vec2$1(-1, 0)).mul(vec2$1(10, 2)));
+        const V = texture$1(this.game.noises.perlin, P, 1).r.remap(0.45, 0.7), O = M.mul(V).add(m).add(b);
         O.assign(smoothstep$2(0, 0.4, O));
         const z = e.mul(r), H = uv$2().add(vec2$1(f.mul(0.88), f.mul(0.88))).add(vec2$1(0.5));
         H.assign(skewedUv(H, vec2$1(-1, 0)).mul(vec2$1(3, 0.4)));
@@ -94453,12 +94453,12 @@ https://github.com/browserify/crypto-browserify`);
       o.outputNode = Fn$1(() => {
         const d = positionGeometry$1.yz.mul(0.8), f = positionGeometry$1.xz.mul(0.8).add(0.8), p = positionGeometry$1.xy.mul(0.8).add(1.6), m = texture$1(this.game.noises.perlin, d, 1).r, b = texture$1(this.game.noises.perlin, f, 1).r, w = texture$1(this.game.noises.perlin, p, 1).r, M = normalGeometry$1.abs().normalize();
         M.assign(M.div(M.x.add(M.y).add(M.z)));
-        const R = add$1(m.mul(M.x), b.mul(M.y), w.mul(M.z)).remap(0.15, 0.9, 0, 1).toVar();
-        R.mulAssign(positionWorld.y.mul(2).clamp(0, 1)), R.subAssign(a);
-        const V = mix$1(this.emissiveColorA, this.emissiveColorB, R);
+        const P = add$1(m.mul(M.x), b.mul(M.y), w.mul(M.z)).remap(0.15, 0.9, 0, 1).toVar();
+        P.mulAssign(positionWorld.y.mul(2).clamp(0, 1)), P.subAssign(a);
+        const V = mix$1(this.emissiveColorA, this.emissiveColorB, P);
         V.mulAssign(this.emissiveStrength);
-        const O = this.game.fog.strength.mix(vec3$1(0), this.game.fog.color), z = step$1(R, 0.1), H = mix$1(V, O, z);
-        return R.lessThan(0).discard(), vec4$1(vec3$1(H), 1);
+        const O = this.game.fog.strength.mix(vec3$1(0), this.game.fog.color), z = step$1(P, 0.1), H = mix$1(V, O, z);
+        return P.lessThan(0).discard(), vec4$1(vec3$1(H), 1);
       })();
       const h = new Mesh$1(this.geometry, o);
       h.position.copy(e), h.rotation.reorder("XYZ"), h.rotation.x = Math.random() * Math.PI * 2, h.rotation.y = Math.random() * Math.PI * 2, this.game.scene.add(h);
@@ -94704,16 +94704,16 @@ https://github.com/browserify/crypto-browserify`);
           instance(this.count, p).toStack();
           const m = positionLocal$2, b = f.mul(a), w = b.add(r.amplitudeUniform), M = remapClamp$1(r.progressUniform, b, w, 0, 1).toVar();
           M.assign(M.oneMinus().pow(3).oneMinus());
-          const R = M.sub(0.5).mul(2).abs().oneMinus().mul(20).min(1);
-          m.mulAssign(R);
+          const P = M.sub(0.5).mul(2).abs().oneMinus().mul(20).min(1);
+          m.mulAssign(P);
           const V = sin$1(h), O = cos$1(h), z = a.mul(99).fract(), H = V.mul(M).mul(z).mul(r.radiusUniform), q = O.mul(M).mul(z).mul(r.radiusUniform), W = M.mul(2).oneMinus().pow(2).oneMinus().mul(z).mul(r.elevationUniform);
           return vec3$1(m.x.add(H), m.y.add(W), m.z.add(q));
         })(), r.mesh = new InstancedMesh(this.geometry, d, this.count), r.mesh.visible = false, r.mesh.castShadow = true;
         const p = new InstancedBufferAttribute$1(new Float32Array(this.count * 16), 16);
         p.setUsage(StaticDrawUsage$1);
         for (let m = 0; m < this.count; m++) {
-          const b = new Matrix4$1(), w = new Vector3$1(0, 0, 0), M = new Quaternion$1().random(), R = new Vector3$1(1, 1, 1);
-          b.compose(w, M, R), b.toArray(p.array, m * 16);
+          const b = new Matrix4$1(), w = new Vector3$1(0, 0, 0), M = new Quaternion$1().random(), P = new Vector3$1(1, 1, 1);
+          b.compose(w, M, P), b.toArray(p.array, m * 16);
         }
         r.mesh.position.y = 3, this.game.scene.add(r.mesh), this.game.debug.active && this.debugPanel.addBinding(r.progressUniform, "value", {
           label: "confetti.progressUniform",
@@ -95280,10 +95280,10 @@ https://github.com/browserify/crypto-browserify`);
           caps: []
         };
         for (let M = 0; M < 3; M++) {
-          const R = (1 - M * 0.24) * p, V = f + m + M * 1.05 * p + 0.65 * p, O = new Mesh$1(e, this.material("#2f6d3a"));
-          O.scale.set(2.5 * R, 2 * R, 2.5 * R), O.position.set(c, V, d), O.castShadow = true, O.receiveShadow = true, this.group.add(O), w.canopies.push(O);
+          const P = (1 - M * 0.24) * p, V = f + m + M * 1.05 * p + 0.65 * p, O = new Mesh$1(e, this.material("#2f6d3a"));
+          O.scale.set(2.5 * P, 2 * P, 2.5 * P), O.position.set(c, V, d), O.castShadow = true, O.receiveShadow = true, this.group.add(O), w.canopies.push(O);
           const z = new Mesh$1(e, this.material("#f2f6fa"));
-          z.scale.set(2.5 * R * 0.78, 2 * R * 0.5, 2.5 * R * 0.78), z.position.set(c, V + 0.5 * R, d), z.castShadow = false, z.receiveShadow = false, z.visible = false, this.group.add(z), w.caps.push(z);
+          z.scale.set(2.5 * P * 0.78, 2 * P * 0.5, 2.5 * P * 0.78), z.position.set(c, V + 0.5 * P, d), z.castShadow = false, z.receiveShadow = false, z.visible = false, this.group.add(z), w.caps.push(z);
         }
         this.game.objects.add(null, {
           type: "fixed",
@@ -95396,9 +95396,9 @@ https://github.com/browserify/crypto-browserify`);
       this.swans = [];
       const e = this.campus.cylinderGeometry, r = this.campus.boxGeometry;
       for (let s = 0; s < COUNT; s++) {
-        const o = new Group(), a = (f, p, m, b, w, M, R, V, O = 0) => {
+        const o = new Group(), a = (f, p, m, b, w, M, P, V, O = 0) => {
           const z = new Mesh$1(f, this.material(p));
-          return z.scale.set(m, b, w), z.position.set(M, R, V), z.rotation.x = O, z.castShadow = true, z.receiveShadow = true, o.add(z), z;
+          return z.scale.set(m, b, w), z.position.set(M, P, V), z.rotation.x = O, z.castShadow = true, z.receiveShadow = true, o.add(z), z;
         };
         a(e, "#fdfdfa", 1.15, 0.62, 1.75, 0, 0.12, 0), a(r, "#f6f6f2", 0.5, 0.34, 1.1, 0.42, 0.2, -0.1, 0), a(r, "#f6f6f2", 0.5, 0.34, 1.1, -0.42, 0.2, -0.1, 0), a(e, "#fdfdfa", 0.3, 0.55, 0.3, 0, 0.5, 0.55, 0.32), a(e, "#fdfdfa", 0.27, 0.5, 0.27, 0, 0.9, 0.74, 0.1), a(e, "#fdfdfa", 0.26, 0.42, 0.26, 0, 1.22, 0.82, -0.22), a(e, "#fdfdfa", 0.36, 0.34, 0.42, 0, 1.5, 0.86), a(r, "#f0821e", 0.16, 0.12, 0.34, 0, 1.47, 1.12), a(r, "#1d1d22", 0.06, 0.06, 0.06, 0.12, 1.56, 1), a(r, "#1d1d22", 0.06, 0.06, 0.06, -0.12, 1.56, 1), a(r, "#fdfdfa", 0.5, 0.3, 0.5, 0, 0.32, -0.85, -0.5);
         const h = s / COUNT * Math.PI * 2, c = 0.35 + s % 3 * 0.18, d = {
@@ -95445,13 +95445,13 @@ https://github.com/browserify/crypto-browserify`);
       return e + o * s;
     }
   }
-  const rand$2 = (l) => {
+  const rand$3 = (l) => {
     const e = Math.sin(l * 127.1 + 311.7) * 43758.5453;
     return e - Math.floor(e);
   };
   class FptuProps {
     constructor(e) {
-      this.game = Game.getInstance(), this.campus = e, this.y = e.groundTop, this.setBlockers(), this.setLampPosts(), this.setBenchesAndBins(), this.setHedges(), this.setFlowerBeds(), this.setFlagPoles(), this.setNoticeBoards(), this.setBicycles(), this.setParkedCars(), this.setPicnicArea();
+      this.game = Game.getInstance(), this.campus = e, this.y = e.groundTop, this.setBlockers(), this.lampLenses = [], this.setLampPosts(), this.setBenchesAndBins(), this.setHedges(), this.setFlowerBeds(), this.setFlagPoles(), this.setNoticeBoards(), this.setBicycles(), this.setParkedCars(), this.setPicnicArea();
     }
     box(...e) {
       return this.campus.box(...e);
@@ -95554,10 +95554,16 @@ https://github.com/browserify/crypto-browserify`);
         rotationY: -s
       }), this.box(0.72, 0.3, 0.42, e + c * 1.45, this.y + 4.2 - 0.28, r + d * 1.45, "#4a4d52", {
         rotationY: -s
-      }), this.box(0.6, 0.08, 0.34, e + c * 1.45, this.y + 4.2 - 0.44, r + d * 1.45, "#ffe9b8", {
+      });
+      const f = this.box(0.6, 0.08, 0.34, e + c * 1.45, this.y + 4.2 - 0.44, r + d * 1.45, "#ffe9b8", {
         rotationY: -s,
         castShadow: false
-      }), rand$2(o) > 0.55 && (this.box(0.42, 0.26, 0.42, e + c * 0.85, this.y + 4.2 - 0.95, r + d * 0.85, "#7a5b3a", {
+      });
+      this.lampLenses.push({
+        mesh: f,
+        x: e + c * 1.45,
+        z: r + d * 1.45
+      }), rand$3(o) > 0.55 && (this.box(0.42, 0.26, 0.42, e + c * 0.85, this.y + 4.2 - 0.95, r + d * 0.85, "#7a5b3a", {
         geometry: h,
         castShadow: false
       }), this.box(0.52, 0.3, 0.52, e + c * 0.85, this.y + 4.2 - 0.74, r + d * 0.74, "#d04d6a", {
@@ -95628,7 +95634,7 @@ https://github.com/browserify/crypto-browserify`);
     }
     bin(e, r, s) {
       const o = this.campus.cylinderGeometry;
-      this.box(0.62, 0.86, 0.62, e, this.y + 0.43, r, rand$2(s) > 0.5 ? "#3f6f4a" : "#4a5560", {
+      this.box(0.62, 0.86, 0.62, e, this.y + 0.43, r, rand$3(s) > 0.5 ? "#3f6f4a" : "#4a5560", {
         geometry: o,
         physical: true
       }), this.box(0.7, 0.1, 0.7, e, this.y + 0.9, r, "#2f3a33", {
@@ -95680,8 +95686,8 @@ https://github.com/browserify/crypto-browserify`);
         for (let h = 0; h <= a; h++) {
           const c = h / a, d = s.x0 + (s.x1 - s.x0) * c, f = s.z0 + (s.z1 - s.z0) * c;
           if (this.blocked(d, f)) continue;
-          const p = (rand$2(r * 47 + h) - 0.5) * 0.5, m = (rand$2(r * 53 + h) - 0.5) * 0.5;
-          this.campus.canopy(d + p, this.y + 0.3, f + m, 0.5 + rand$2(r * 31 + h) * 0.28);
+          const p = (rand$3(r * 47 + h) - 0.5) * 0.5, m = (rand$3(r * 53 + h) - 0.5) * 0.5;
+          this.campus.canopy(d + p, this.y + 0.3, f + m, 0.5 + rand$3(r * 31 + h) * 0.28);
         }
       }
     }
@@ -95738,7 +95744,7 @@ https://github.com/browserify/crypto-browserify`);
           castShadow: false
         });
         for (let h = 0; h < 16; h++) {
-          const c = h * 2.39996, d = 1.75 * Math.sqrt((h + 0.5) / 16), f = r[(o + h) % r.length], p = 0.34 + rand$2(o * 17 + h) * 0.2;
+          const c = h * 2.39996, d = 1.75 * Math.sqrt((h + 0.5) / 16), f = r[(o + h) % r.length], p = 0.34 + rand$3(o * 17 + h) * 0.2;
           this.box(p, p * 0.8, p, a.x + Math.cos(c) * d, this.y + 0.56, a.z + Math.sin(c) * d, f, {
             geometry: s,
             castShadow: false
@@ -95856,7 +95862,7 @@ https://github.com/browserify/crypto-browserify`);
             geometry: r
           }), this.box(0.9, 0.1, 0.1, d + Math.cos(o.rot) * 0.4, this.y + 0.75, f + Math.sin(o.rot) * 0.4, "#7c8189", {
             rotationY: -o.rot
-          }), !(rand$2(s * 13 + c) < 0.35) && this.bicycle(d + Math.cos(o.rot) * 0.4, f + Math.sin(o.rot) * 0.4, o.rot, s * 13 + c);
+          }), !(rand$3(s * 13 + c) < 0.35) && this.bicycle(d + Math.cos(o.rot) * 0.4, f + Math.sin(o.rot) * 0.4, o.rot, s * 13 + c);
         }
       }
     }
@@ -95867,7 +95873,7 @@ https://github.com/browserify/crypto-browserify`);
         "#3f7a34",
         "#e0a52c",
         "#7a4a9e"
-      ][Math.floor(rand$2(o) * 5)], c = Math.cos(s), d = Math.sin(s);
+      ][Math.floor(rand$3(o) * 5)], c = Math.cos(s), d = Math.sin(s);
       for (const f of [
         -1,
         1
@@ -95897,45 +95903,84 @@ https://github.com/browserify/crypto-browserify`);
         "#d8b43a"
       ], r = Math.floor(PARKING.depth / 3.2);
       for (let s = 0; s < r; s++) {
-        if (rand$2(s * 9 + 3) < 0.22) continue;
+        if (rand$3(s * 9 + 3) < 0.22) continue;
         const o = PARKING.z - PARKING.depth * 0.5 + 1.9 + s * 3.2, a = PARKING.x, h = e[s % e.length];
         this.parkedCar(a, o, h);
       }
     }
     parkedCar(e, r, s) {
-      const o = this.campus.cylinderGeometry, a = this.y;
-      this.box(4.1, 0.52, 1.86, e, a + 0.46, r, s, {
+      const o = this.campus.cylinderGeometry, a = this.y, h = "#2b2f36", c = "#2d3a49", d = new Color$1(s).multiplyScalar(0.78).getHexString();
+      this.box(3.9, 0.26, 1.66, e, a + 0.3, r, `#${d}`), this.box(4.15, 0.4, 1.84, e, a + 0.6, r, s, {
         physical: true
-      }), this.box(1.15, 0.32, 1.7, e + 1.45, a + 0.76, r, s, {
-        rotationZ: -0.1
-      }), this.box(0.9, 0.28, 1.7, e - 1.62, a + 0.74, r, s, {
-        rotationZ: 0.12
-      }), this.box(1.78, 0.34, 1.74, e - 0.15, a + 0.98, r, "#33414f", {
-        castShadow: false
-      }), this.box(1.95, 0.16, 1.66, e - 0.15, a + 1.2, r, s), this.box(0.55, 0.5, 1.58, e + 0.92, a + 0.92, r, "#33414f", {
-        rotationZ: -0.55,
-        castShadow: false
-      }), this.box(0.5, 0.46, 1.58, e - 1.2, a + 0.9, r, "#33414f", {
-        rotationZ: 0.6,
+      }), this.box(3.95, 0.2, 1.72, e, a + 0.88, r, s), this.box(1.35, 0.16, 1.66, e + 1.28, a + 0.93, r, s, {
+        rotationZ: -0.085
+      }), this.box(1.05, 0.16, 1.66, e - 1.45, a + 0.95, r, s, {
+        rotationZ: 0.055
+      });
+      for (const f of [
+        -0.93,
+        0.93
+      ]) this.box(3.7, 0.07, 0.06, e, a + 0.74, r + f, `#${d}`, {
         castShadow: false
       });
-      for (const h of [
-        -0.58,
-        0.58
-      ]) this.box(0.1, 0.15, 0.42, e + 2.02, a + 0.58, r + h, "#ffe9b0", {
+      this.box(1.95, 0.44, 1.56, e - 0.12, a + 1.2, r, s), this.box(1.62, 0.12, 1.44, e - 0.14, a + 1.46, r, s), this.box(0.62, 0.52, 1.5, e + 0.97, a + 1.16, r, c, {
+        rotationZ: -0.62,
         castShadow: false
-      }), this.box(0.08, 0.13, 0.4, e - 2.02, a + 0.56, r + h, "#c03535", {
+      }), this.box(0.5, 0.48, 1.5, e - 1.2, a + 1.16, r, c, {
+        rotationZ: 0.66,
         castShadow: false
       });
-      for (const h of [
-        -1.3,
-        1.3
-      ]) for (const c of [
+      for (const f of [
+        -0.79,
+        0.79
+      ]) this.box(1.75, 0.34, 0.06, e - 0.12, a + 1.22, r + f, c, {
+        castShadow: false
+      });
+      for (const f of [
+        -0.8,
+        0.8
+      ]) this.box(0.1, 0.36, 0.08, e - 0.42, a + 1.22, r + f, s, {
+        castShadow: false
+      });
+      for (const f of [
+        -1.28,
+        1.32
+      ]) for (const p of [
         -0.95,
         0.95
-      ]) this.box(0.6, 0.6, 0.26, e + h, a + 0.3, r + c, "#26262b", {
+      ]) this.box(1.06, 0.5, 0.2, e + f, a + 0.44, r + p, h, {
+        castShadow: false
+      }), this.box(0.66, 0.66, 0.3, e + f, a + 0.33, r + p, "#1e1e22", {
         geometry: o,
         rotationX: Math.PI * 0.5,
+        castShadow: false
+      }), this.box(0.3, 0.3, 0.32, e + f, a + 0.33, r + p, "#8b8f96", {
+        geometry: o,
+        rotationX: Math.PI * 0.5,
+        castShadow: false
+      });
+      this.box(0.34, 0.3, 1.86, e + 2.02, a + 0.5, r, h), this.box(0.3, 0.28, 1.84, e - 2.04, a + 0.5, r, h);
+      for (const f of [
+        -0.62,
+        0.62
+      ]) this.box(0.12, 0.19, 0.44, e + 2.06, a + 0.78, r + f, "#ffeec2", {
+        castShadow: false
+      }), this.box(0.1, 0.17, 0.42, e - 2.06, a + 0.78, r + f, "#c33a30", {
+        castShadow: false
+      });
+      this.box(0.1, 0.16, 1.1, e + 2.06, a + 0.55, r, "#3a3f47", {
+        castShadow: false
+      });
+      for (const f of [
+        -0.92,
+        0.92
+      ]) this.box(0.24, 0.14, 0.16, e + 0.78, a + 1.16, r + f * 1.05, h, {
+        castShadow: false
+      });
+      for (const f of [
+        -0.94,
+        0.94
+      ]) this.box(0.28, 0.06, 0.05, e - 0.35, a + 0.92, r + f, `#${d}`, {
         castShadow: false
       });
     }
@@ -95973,7 +96018,7 @@ https://github.com/browserify/crypto-browserify`);
       return this._cone || (this._cone = new ConeGeometry(0.5, 1, 10)), this._cone;
     }
   }
-  const rand$1 = (l) => {
+  const rand$2 = (l) => {
     const e = Math.sin(l * 127.1 + 311.7) * 43758.5453;
     return e - Math.floor(e);
   }, SKIN = [
@@ -96020,7 +96065,7 @@ https://github.com/browserify/crypto-browserify`);
       return p.scale.set(r, s, o), p.position.set(a, h, c), p.castShadow = true, p.receiveShadow = true, e.add(p), p;
     }
     makePerson(e) {
-      const r = SKIN[Math.floor(rand$1(e * 3 + 1) * SKIN.length)], s = HAIR[Math.floor(rand$1(e * 5 + 2) * HAIR.length)], o = SHIRT[Math.floor(rand$1(e * 7 + 3) * SHIRT.length)], a = PANTS[Math.floor(rand$1(e * 11 + 4) * PANTS.length)], h = 0.94 + rand$1(e * 13 + 5) * 0.16, c = new Group();
+      const r = SKIN[Math.floor(rand$2(e * 3 + 1) * SKIN.length)], s = HAIR[Math.floor(rand$2(e * 5 + 2) * HAIR.length)], o = SHIRT[Math.floor(rand$2(e * 7 + 3) * SHIRT.length)], a = PANTS[Math.floor(rand$2(e * 11 + 4) * PANTS.length)], h = 0.94 + rand$2(e * 13 + 5) * 0.16, c = new Group();
       c.scale.setScalar(h);
       const d = [];
       for (const p of [
@@ -96049,13 +96094,13 @@ https://github.com/browserify/crypto-browserify`);
           elbow: b
         });
       }
-      if (this.part(c, 0.13, 0.1, 0.13, 0, 1.66, 0, r), this.part(c, 0.29, 0.33, 0.28, 0, 1.85, 0, r, this.headGeometry), this.part(c, 0.31, 0.19, 0.3, 0, 1.93, -0.01, s, this.headGeometry), rand$1(e * 17 + 6) > 0.55 && this.part(c, 0.26, 0.3, 0.14, 0, 1.78, -0.13, s), rand$1(e * 19 + 7) > 0.45) {
+      if (this.part(c, 0.13, 0.1, 0.13, 0, 1.66, 0, r), this.part(c, 0.29, 0.33, 0.28, 0, 1.85, 0, r, this.headGeometry), this.part(c, 0.31, 0.19, 0.3, 0, 1.93, -0.01, s, this.headGeometry), rand$2(e * 17 + 6) > 0.55 && this.part(c, 0.26, 0.3, 0.14, 0, 1.78, -0.13, s), rand$2(e * 19 + 7) > 0.45) {
         const p = [
           "#c0392b",
           "#2f6d9e",
           "#3f7a34",
           "#4a4a55"
-        ][Math.floor(rand$1(e * 23 + 8) * 4)];
+        ][Math.floor(rand$2(e * 23 + 8) * 4)];
         this.part(c, 0.3, 0.4, 0.16, 0, 1.32, -0.2, p);
       }
       return {
@@ -96065,7 +96110,7 @@ https://github.com/browserify/crypto-browserify`);
       };
     }
     poseStand(e, r) {
-      const s = (rand$1(r) - 0.5) * 0.16;
+      const s = (rand$2(r) - 0.5) * 0.16;
       e.legs[0].hip.rotation.x = s, e.legs[1].hip.rotation.x = -s * 0.6, e.arms[0].shoulder.rotation.x = 0.08 + s, e.arms[1].shoulder.rotation.x = 0.08 - s, e.arms[0].elbow.rotation.x = -0.18, e.arms[1].elbow.rotation.x = -0.24;
     }
     poseSit(e) {
@@ -96128,10 +96173,10 @@ https://github.com/browserify/crypto-browserify`);
         let a = 0;
         for (let h = 0; h < o.n * 8 && a < o.n; h++) {
           s++;
-          const c = rand$1(s * 3) * Math.PI * 2, d = Math.sqrt(rand$1(s * 5)) * o.r, f = o.x + Math.cos(c) * d, p = o.z + Math.sin(c) * d;
+          const c = rand$2(s * 3) * Math.PI * 2, d = Math.sqrt(rand$2(s * 5)) * o.r, f = o.x + Math.cos(c) * d, p = o.z + Math.sin(c) * d;
           if (e && e.blocked(f, p)) continue;
           const m = this.makePerson(s);
-          m.root.position.set(f, this.y, p), m.root.rotation.y = rand$1(s * 7) * Math.PI * 2, this.group.add(m.root), rand$1(s * 11) > 0.66 ? (m.mode = "walk", m.heading = m.root.rotation.y, m.speed = 0.75 + rand$1(s * 13) * 0.5, m.phase = rand$1(s * 17) * Math.PI * 2, m.home = {
+          m.root.position.set(f, this.y, p), m.root.rotation.y = rand$2(s * 7) * Math.PI * 2, this.group.add(m.root), rand$2(s * 11) > 0.66 ? (m.mode = "walk", m.heading = m.root.rotation.y, m.speed = 0.75 + rand$2(s * 13) * 0.5, m.phase = rand$2(s * 17) * Math.PI * 2, m.home = {
             x: f,
             z: p,
             r: o.r
@@ -96154,8 +96199,373 @@ https://github.com/browserify/crypto-browserify`);
         const a = Math.sin(o.phase), h = Math.sin(o.phase + Math.PI);
         o.legs[0].hip.rotation.x = a * 0.62, o.legs[1].hip.rotation.x = h * 0.62, o.legs[0].knee.rotation.x = Math.max(0, -a) * 0.85, o.legs[1].knee.rotation.x = Math.max(0, -h) * 0.85, o.arms[0].shoulder.rotation.x = h * 0.5, o.arms[1].shoulder.rotation.x = a * 0.5, o.arms[0].elbow.rotation.x = -0.3 - Math.max(0, h) * 0.35, o.arms[1].elbow.rotation.x = -0.3 - Math.max(0, a) * 0.35, o.root.position.y = this.y + Math.abs(Math.sin(o.phase)) * 0.035 * o.root.scale.x;
         const c = o.root.position.x + Math.sin(o.heading) * o.speed * e, d = o.root.position.z + Math.cos(o.heading) * o.speed * e, f = Math.hypot(c - o.home.x, d - o.home.z) > o.home.r, p = s && s.blocked(c, d);
-        f || p ? o.heading = Math.atan2(o.home.x - o.root.position.x, o.home.z - o.root.position.z) + (rand$1(Math.floor(r * 3) + o.speed * 100) - 0.5) * 1.1 : (o.root.position.x = c, o.root.position.z = d, o.heading += Math.sin(r * 0.6 + o.phase * 0.11) * e * 0.35), o.root.rotation.y = o.heading;
+        f || p ? o.heading = Math.atan2(o.home.x - o.root.position.x, o.home.z - o.root.position.z) + (rand$2(Math.floor(r * 3) + o.speed * 100) - 0.5) * 1.1 : (o.root.position.x = c, o.root.position.z = d, o.heading += Math.sin(r * 0.6 + o.phase * 0.11) * e * 0.35), o.root.rotation.y = o.heading;
       }
+    }
+  }
+  const rand$1 = (l) => {
+    const e = Math.sin(l * 127.1 + 311.7) * 43758.5453;
+    return e - Math.floor(e);
+  };
+  class FptuLights {
+    constructor(e) {
+      this.game = Game.getInstance(), this.campus = e, this.y = e.groundTop, this.night = null, this.setLanterns(), this.setLampGlow(), this.game.ticker.events.on("tick", () => this.update(), 12);
+    }
+    get emissive() {
+      return this.game.materials.getFromName("emissiveOrangeRadialGradient");
+    }
+    lanternSpots() {
+      const e = [], r = (a, h, c = 0) => e.push({
+        x: a,
+        z: h,
+        y: c
+      });
+      for (let a = AXIS.fromX - 4; a >= AXIS.toX + 4; a -= 6) {
+        const h = (a / 6 | 0) % 2 === 0 ? 1 : -1;
+        r(a, AXIS.z + h * (AXIS.halfWidth + 2.6));
+      }
+      for (let a = THROUGH_ROAD.fromX - 6; a >= THROUGH_ROAD.toX + 6; a -= 9) r(a, THROUGH_ROAD.z + ((a / 9 | 0) % 2 === 0 ? 1 : -1) * (THROUGH_ROAD.halfWidth + 2.6));
+      for (let a = MAIN_ROAD.z - MAIN_ROAD.length * 0.5 + 8; a <= MAIN_ROAD.z + MAIN_ROAD.length * 0.5 - 8; a += 9) r(MAIN_ROAD.x - MAIN_ROAD.width * 0.5 - 2.8, a);
+      for (let a = 0; a < 14; a++) {
+        const h = a / 14 * Math.PI * 2;
+        r(LAKE.x + Math.cos(h) * (LAKE.radiusX + 2.6), LAKE.z + Math.sin(h) * (LAKE.radiusZ + 2.6));
+      }
+      for (let a = 0; a < 8; a++) {
+        const h = a / 8 * Math.PI * 2 + 0.4;
+        r(SWAN_LAKE.x + Math.cos(h) * (SWAN_LAKE.radiusX + 2.6), SWAN_LAKE.z + Math.sin(h) * (SWAN_LAKE.radiusZ + 2.6));
+      }
+      for (const a of DORMS) for (const h of [
+        -1.9,
+        1.9
+      ]) r(a.x + h, a.z + 3.6);
+      for (const a of [
+        -1,
+        1
+      ]) r(LAWN.x + 3, LAWN.z + a * (LAWN.depth * 0.5 + 2)), r(LAWN.x - 3, LAWN.z + a * (LAWN.depth * 0.5 + 2)), r(RANKING_PLAZA.x + 6.5, RANKING_PLAZA.z + a * 8), r(RANKING_PLAZA.x - 6.5, RANKING_PLAZA.z + a * 8);
+      const s = Math.min(BRIDGE.fromX, BRIDGE.toX) - 2, o = Math.max(BRIDGE.fromX, BRIDGE.toX) + 2;
+      for (let a = s; a <= o; a += 4) for (const h of [
+        -1,
+        1
+      ]) r(a, BRIDGE.z + h * (BRIDGE.width * 0.5 - 0.6), 0.55);
+      for (const a of [
+        -1,
+        1
+      ]) r(GATE.x + 2.4, GATE.z + a * 8.2);
+      for (let a = 0; a < 9; a++) {
+        const h = a * 0.8, c = PINE_HILL.radius * (1 - a / 11), d = PINE_HILL.x + Math.cos(h) * c, f = PINE_HILL.z + Math.sin(h) * c, p = 1 - c / PINE_HILL.radius;
+        r(d, f, PINE_HILL.height * p * p * (3 - 2 * p));
+      }
+      for (let a = 0; a < 4; a++) {
+        const h = a * Math.PI * 0.5 + 0.6, c = LAKE_ISLET.radius * 0.75, d = 1 - 0.75;
+        r(LAKE_ISLET.x + Math.cos(h) * c, LAKE_ISLET.z + Math.sin(h) * c, -0.9 + (LAKE_ISLET.height + 0.9) * (d * d * (3 - 2 * d)));
+      }
+      for (const a of [
+        -1,
+        1
+      ]) r(CANTEEN.x + a * 7, CANTEEN.z + 5), r(FOOTBALL.x + a * (FOOTBALL.width * 0.5 + 2.4), FOOTBALL.z);
+      for (let a = -2; a <= 2; a++) r(ALPHA.x + ALPHA.depth * 0.5 + 3.4, ALPHA.z + a * 7);
+      return e.filter((a) => {
+        for (const h of [
+          LAKE,
+          SWAN_LAKE
+        ]) {
+          const c = Math.hypot((a.x - h.x) / h.radiusX, (a.z - h.z) / h.radiusZ), d = Math.hypot(a.x - LAKE_ISLET.x, a.z - LAKE_ISLET.z) < LAKE_ISLET.radius - 1;
+          if (c < 1 && !d) return false;
+        }
+        return true;
+      });
+    }
+    setLanterns() {
+      const e = this.game.resources.lanternsModel.scene.children[0];
+      if (!e) return;
+      const r = e.clone(true);
+      r.position.set(0, 0, 0), r.rotation.set(0, 0, 0);
+      for (const a of r.children) a.name = a.name.replace(/[0-9]+$/i, ""), a.castShadow = true, a.receiveShadow = true, a.frustumCulled = false;
+      this.game.materials.updateObject(r);
+      const o = this.lanternSpots().map((a, h) => {
+        const c = new Object3D$1();
+        return c.position.set(a.x, this.y + a.y, a.z), c.rotation.y = rand$1(h * 7) * Math.PI * 2, c.scale.setScalar(0.9 + rand$1(h * 11) * 0.35), c.needsUpdate = true, c;
+      });
+      this.lanterns = new InstancedGroup(o, r, false), this.lanternCount = o.length;
+      for (const a of o) this.game.objects.add(null, {
+        type: "fixed",
+        position: a.position,
+        colliders: [
+          {
+            shape: "cuboid",
+            parameters: [
+              0.32,
+              0.5,
+              0.32
+            ],
+            category: "object"
+          }
+        ]
+      });
+    }
+    setLampGlow() {
+      var _a2;
+      const e = ((_a2 = this.campus.props) == null ? void 0 : _a2.lampLenses) ?? [];
+      this.pools = [];
+      const r = new CircleGeometry(1, 32);
+      r.rotateX(-Math.PI * 0.5);
+      const s = this.glowMaterial();
+      for (const o of e) {
+        o.mesh.material = this.emissive;
+        const a = new Mesh$1(r, s);
+        a.position.set(o.x, this.y + 0.32, o.z), a.scale.setScalar(6.4), a.visible = false, a.castShadow = false, a.receiveShadow = false, a.renderOrder = 3, this.campus.group.add(a), this.pools.push(a);
+      }
+    }
+    glowMaterial() {
+      const r = document.createElement("canvas");
+      r.width = 256, r.height = 256;
+      const s = r.getContext("2d"), o = s.createRadialGradient(256 / 2, 256 / 2, 0, 256 / 2, 256 / 2, 256 / 2);
+      o.addColorStop(0, "rgba(255, 236, 178, 0.55)"), o.addColorStop(0.18, "rgba(255, 214, 130, 0.40)"), o.addColorStop(0.42, "rgba(255, 176, 84, 0.20)"), o.addColorStop(0.7, "rgba(255, 150, 60, 0.07)"), o.addColorStop(1, "rgba(255, 140, 50, 0.00)"), s.fillStyle = o, s.fillRect(0, 0, 256, 256);
+      const a = new CanvasTexture(r);
+      a.colorSpace = SRGBColorSpace$1, a.needsUpdate = true;
+      const h = texture$1(a), c = new MeshBasicNodeMaterial();
+      return c.colorNode = h.rgb, c.opacityNode = h.a, c.transparent = true, c.depthWrite = false, c.toneMapped = false, c;
+    }
+    update() {
+      const e = this.game.dayCycles.isNight();
+      if (e !== this.night) {
+        this.night = e;
+        for (const r of this.pools) r.visible = e;
+      }
+    }
+  }
+  class FptuSigns {
+    constructor(e) {
+      this.game = Game.getInstance(), this.campus = e, this.y = e.groundTop, this.setRankingSign(), this.setGateSign(), this.setSignPlinth();
+    }
+    box(...e) {
+      return this.campus.box(...e);
+    }
+    painted(e, r, s) {
+      const o = document.createElement("canvas");
+      o.width = e, o.height = r;
+      const a = o.getContext("2d");
+      s(a, e, r);
+      const h = new CanvasTexture(o);
+      return h.colorSpace = SRGBColorSpace$1, h.anisotropy = 8, h.needsUpdate = true, new MeshDefaultMaterial({
+        colorNode: texture$1(h)
+      });
+    }
+    fitText(e, r, s, o, a, h, c, d = "left") {
+      e.font = h, e.fillStyle = c, e.textAlign = d, e.textBaseline = "middle";
+      const f = h.match(/(\d+(?:\.\d+)?)px/);
+      let p = f ? parseFloat(f[1]) : 16;
+      for (; e.measureText(r).width > a && p > 6; ) p -= 1, e.font = h.replace(/(\d+(?:\.\d+)?)px/, `${p}px`);
+      e.fillText(r, s, o);
+    }
+    roundRect(e, r, s, o, a, h, c) {
+      e.beginPath(), e.moveTo(r + h, s), e.arcTo(r + o, s, r + o, s + a, h), e.arcTo(r + o, s + a, r, s + a, h), e.arcTo(r, s + a, r, s, h), e.arcTo(r, s, r + o, s, h), e.closePath(), e.fillStyle = c, e.fill();
+    }
+    theLogo(e, r, s, o) {
+      const a = [
+        {
+          r: 1,
+          color: "#f2a63b"
+        },
+        {
+          r: 0.84,
+          color: "#e5484d"
+        },
+        {
+          r: 0.68,
+          color: "#c13a8f"
+        },
+        {
+          r: 0.52,
+          color: "#5b5bd6"
+        },
+        {
+          r: 0.36,
+          color: "#3aa8c1"
+        },
+        {
+          r: 0.2,
+          color: "#5cbf6a"
+        }
+      ];
+      e.lineWidth = Math.max(2, o * 0.13), e.lineJoin = "round";
+      for (const h of a) {
+        const c = o * h.r;
+        e.beginPath();
+        for (let d = 0; d < 6; d++) {
+          const f = d / 6 * Math.PI * 2 - Math.PI / 2, p = r + Math.cos(f) * c, m = s + Math.sin(f) * c;
+          d === 0 ? e.moveTo(p, m) : e.lineTo(p, m);
+        }
+        e.closePath(), e.strokeStyle = h.color, e.stroke();
+      }
+    }
+    drawRankingBoard(e, r, s) {
+      e.fillStyle = "#f7f7f5", e.fillRect(0, 0, r, s), e.strokeStyle = "#b9b6ae", e.lineWidth = r * 8e-3, e.strokeRect(e.lineWidth * 0.5, e.lineWidth * 0.5, r - e.lineWidth, s - e.lineWidth);
+      const o = r * 0.035, a = r * 0.56, h = s * 0.16;
+      this.theLogo(e, o + h, s * 0.24, h);
+      const c = o + h * 2 + r * 0.02;
+      this.fitText(e, "Times Higher Education", c, s * 0.17, a - (c - o) - o, `${Math.round(s * 0.085)}px sans-serif`, "#3d3d3f"), this.fitText(e, "Impact Rankings 2025", c, s * 0.32, a - (c - o) - o, `bold ${Math.round(s * 0.145)}px sans-serif`, "#17171a");
+      const d = s * 0.48, f = a - o * 2, p = e.createLinearGradient(o, 0, o + f, 0);
+      for (const [V, O] of [
+        [
+          0,
+          "#5cbf6a"
+        ],
+        [
+          0.2,
+          "#3aa8c1"
+        ],
+        [
+          0.4,
+          "#5b5bd6"
+        ],
+        [
+          0.6,
+          "#c13a8f"
+        ],
+        [
+          0.8,
+          "#e5484d"
+        ],
+        [
+          1,
+          "#f2a63b"
+        ]
+      ]) p.addColorStop(V, O);
+      e.fillStyle = p, e.fillRect(o, d, f, s * 0.035), this.fitText(e, "FPT UNIVERSITY", o, s * 0.75, f, `bold ${Math.round(s * 0.22)}px sans-serif`, "#17171a");
+      const m = a + r * 0.01, b = r - m - o, w = [
+        {
+          fill: "#1b1b1e",
+          big: "RANKED 301-400",
+          small: null
+        },
+        {
+          fill: "#d81b74",
+          big: "RANKED =80th",
+          small: "FOR SDG8: DECENT WORK AND ECONOMIC GROWTH"
+        },
+        {
+          fill: "#e0301e",
+          big: "RANKED 101-200",
+          small: "FOR SDG4: QUALITY EDUCATION"
+        }
+      ], M = s * 0.035, P = (s - o * 2 - M * 2) / 3;
+      w.forEach((V, O) => {
+        const z = o + O * (P + M);
+        this.roundRect(e, m, z, b, P, s * 0.035, V.fill);
+        const H = b * 0.05;
+        if (V.small) {
+          this.fitText(e, V.big, m + H, z + P * 0.35, b - H * 2, `bold ${Math.round(s * 0.115)}px sans-serif`, "#ffffff");
+          const q = V.small.split(" "), W = Math.ceil(q.length / 2);
+          this.fitText(e, q.slice(0, W).join(" "), m + H, z + P * 0.66, b - H * 2, `${Math.round(s * 0.052)}px sans-serif`, "#ffffff"), this.fitText(e, q.slice(W).join(" "), m + H, z + P * 0.84, b - H * 2, `${Math.round(s * 0.052)}px sans-serif`, "#ffffff");
+        } else this.fitText(e, V.big, m + H, z + P * 0.5, b - H * 2, `bold ${Math.round(s * 0.13)}px sans-serif`, "#ffffff");
+      });
+    }
+    setRankingSign() {
+      const { x: e, z: r, height: s, width: o } = RANKING_SIGN, a = 1.5, h = s + 0.9, c = o + 2.4;
+      this.box(a, h, c, e, this.y + h * 0.5, r, "#a8763f", {
+        physical: true
+      });
+      for (let b = 0; b < 7; b++) {
+        const w = (b + 0.5) / 7, M = r - c * 0.5 + w * c, P = this.y + 0.35 + b * 37 % 5 * 0.32;
+        this.box(a + 0.14, 0.42, c / 7 * 0.92, e, P, M, b % 2 ? "#9c6b37" : "#b3813f", {
+          castShadow: false
+        });
+      }
+      this.box(a + 0.3, 0.22, c + 0.3, e, this.y + h + 0.11, r, "#8d7f68"), this.box(a + 0.4, 0.3, c + 0.4, e, this.y + 0.15, r, "#7c6f5a");
+      const d = s, f = o, p = this.y + h * 0.52;
+      this.box(0.12, d + 0.16, f + 0.16, e + a * 0.5 + 0.02, p, r, "#d9d5cc");
+      const m = new Mesh$1(new PlaneGeometry(f, d), this.painted(1400, Math.round(1400 * d / f), (b, w, M) => this.drawRankingBoard(b, w, M)));
+      m.position.set(e + a * 0.5 + 0.1, p, r), m.rotation.y = Math.PI * 0.5, m.castShadow = false, m.receiveShadow = true, this.campus.group.add(m);
+      for (let b = 0; b < 14; b++) {
+        const w = (b + 0.5) / 14;
+        this.campus.canopy(e + a * 0.5 + 0.9, this.y + 0.2, r - c * 0.5 + w * c, 0.42);
+      }
+    }
+    laterite(e, r, s) {
+      e.fillStyle = "#a8763f", e.fillRect(0, 0, r, s);
+      const o = 9, a = s / o;
+      for (let h = 0; h < o; h++) {
+        const d = r / 7, f = h % 2 * d * 0.5;
+        for (let p = -1; p <= 7; p++) {
+          const m = h * 31 + p * 17, b = Math.sin(m) * 43758.5453 % 1, w = 0.86 + Math.abs(b) * 0.3, M = [
+            168,
+            118,
+            63
+          ];
+          e.fillStyle = `rgb(${Math.min(255, M[0] * w) | 0}, ${Math.min(255, M[1] * w) | 0}, ${Math.min(255, M[2] * w) | 0})`, e.fillRect(p * d + f + 1.5, h * a + 1.5, d - 3, a - 3);
+        }
+      }
+    }
+    fptLogo(e, r, s, o, a) {
+      const h = [
+        {
+          ch: "F",
+          color: "#0b57a4"
+        },
+        {
+          ch: "P",
+          color: "#f37021"
+        },
+        {
+          ch: "T",
+          color: "#00954c"
+        }
+      ], c = o / 3.35, d = c * 0.12, f = -0.26;
+      h.forEach((p, m) => {
+        const b = r + m * (c + d);
+        e.save(), e.transform(1, 0, f, 1, -f * (s + a), 0), e.fillStyle = p.color, this.roundRect(e, b, s, c, a, a * 0.1, p.color), e.fillStyle = "#ffffff", e.font = `bold ${Math.round(a * 0.78)}px sans-serif`, e.textAlign = "center", e.textBaseline = "middle", e.fillText(p.ch, b + c * 0.5, s + a * 0.54), e.restore();
+      });
+    }
+    goldStar(e, r, s, o) {
+      e.fillStyle = "#e8b53a", e.beginPath();
+      for (let a = 0; a < 16; a++) {
+        const h = a / 16 * Math.PI * 2 - Math.PI / 2, c = a % 2 === 0 ? o : o * 0.44, d = r + Math.cos(h) * c, f = s + Math.sin(h) * c;
+        a === 0 ? e.moveTo(d, f) : e.lineTo(d, f);
+      }
+      e.closePath(), e.fill();
+    }
+    drawGateBoard(e, r, s) {
+      this.laterite(e, r, s);
+      const o = r * 0.06;
+      this.fptLogo(e, o, s * 0.24, r * 0.3, s * 0.34), this.fitText(e, "Fpt University", o + r * 0.01, s * 0.74, r * 0.32, `${Math.round(s * 0.13)}px sans-serif`, "#f0ece2");
+      const a = r * 0.46, h = r * 0.48, c = s * 0.13, d = s * 0.74;
+      e.fillStyle = "#c9c4b6", e.fillRect(a - 4, c - 4, h + 8, d + 8), e.fillStyle = "#131313", e.fillRect(a, c, h, d);
+      const f = d * 0.2;
+      e.fillStyle = "#c9a227", this.roundRect(e, a + h * 0.06, c + d * 0.1, f, f, f * 0.16, "#c9a227"), e.fillStyle = "#131313", e.font = `bold ${Math.round(f * 0.5)}px serif`, e.textAlign = "center", e.textBaseline = "middle", e.fillText("QS", a + h * 0.06 + f * 0.5, c + d * 0.1 + f * 0.52), this.fitText(e, "STARS", a + h * 0.06 + f * 1.25, c + d * 0.21, h * 0.6, `bold ${Math.round(d * 0.27)}px serif`, "#f4f1e8"), e.letterSpacing = `${Math.round(d * 0.04)}px`, this.fitText(e, "RATED FOR EXCELLENCE", a + h * 0.06, c + d * 0.42, h * 0.88, `${Math.round(d * 0.13)}px serif`, "#efece2"), e.letterSpacing = "0px";
+      const p = c + d * 0.53;
+      e.fillStyle = "#e0aa2a", e.fillRect(a + h * 0.05, p, h * 0.9, d * 0.16), this.fitText(e, "2012", a + h * 0.5, p + d * 0.08, h * 0.5, `bold ${Math.round(d * 0.12)}px serif`, "#151515", "center");
+      const m = c + d * 0.83;
+      for (let b = 0; b < 3; b++) this.goldStar(e, a + h * (0.34 + b * 0.16), m, d * 0.11);
+    }
+    setGateSign() {
+      const e = GATE.x + 1.2, r = GATE.z + 9.9, s = 0.75, o = 2.5, a = 6.6;
+      this.box(s, o, a, e, this.y + o * 0.5, r, "#a8763f", {
+        physical: true
+      }), this.box(s + 0.22, 0.18, a + 0.22, e, this.y + o + 0.09, r, "#8d7f68"), this.box(s + 0.3, 0.24, a + 0.3, e, this.y + 0.12, r, "#7c6f5a");
+      const h = new Mesh$1(new PlaneGeometry(a * 0.94, o * 0.82), this.painted(1600, Math.round(1600 * (o * 0.82) / (a * 0.94)), (c, d, f) => this.drawGateBoard(c, d, f)));
+      h.position.set(e + s * 0.5 + 0.03, this.y + o * 0.52, r), h.rotation.y = Math.PI * 0.5, h.castShadow = false, h.receiveShadow = true, this.campus.group.add(h);
+      for (let c = 0; c < 16; c++) {
+        const d = (c + 0.5) / 16;
+        this.campus.canopy(e + s * 0.5 + 0.85, this.y + 0.2, r - a * 0.5 + d * a, 0.45);
+      }
+    }
+    drawPlinthText(e, r, s) {
+      e.fillStyle = "#f2f0ea", e.fillRect(0, 0, r, s), e.fillStyle = "#dcd8cf", e.fillRect(0, 0, r, s * 0.06), e.fillRect(0, s * 0.94, r, s * 0.06), e.textAlign = "center", e.textBaseline = "middle", e.fillStyle = "#4a4a4f", e.font = `bold ${Math.round(s * 0.42)}px sans-serif`, e.letterSpacing = `${Math.round(s * 0.12)}px`, e.fillText("CAMPUS HA NOI", r * 0.5, s * 0.54);
+    }
+    setSignPlinth() {
+      const r = 12.53 * SIGN.scale + 2.2, s = 0.92, o = 1.7, a = SIGN.x, h = SIGN.z, c = SIGN.rotationY, d = {
+        x: Math.cos(c),
+        z: -Math.sin(c)
+      }, f = {
+        x: Math.sin(c),
+        z: Math.cos(c)
+      }, p = Math.abs(d.x) * r + Math.abs(f.x) * o, m = Math.abs(d.z) * r + Math.abs(f.z) * o, b = Math.abs(d.x) * 0.24 + Math.abs(f.x) * 0.24, w = Math.abs(d.z) * 0.24 + Math.abs(f.z) * 0.24;
+      this.box(p, s, m, a, this.y + s * 0.5, h, "#f2f0ea", {
+        physical: true
+      }), this.box(p + b, 0.14, m + w, a, this.y + s + 0.07, h, "#e2ded4"), this.box(p + b * 1.4, 0.18, m + w * 1.4, a, this.y + 0.09, h, "#d6d2c8");
+      const M = new Mesh$1(new PlaneGeometry(r * 0.92, s * 0.62), this.painted(1600, Math.round(1600 * (s * 0.62) / (r * 0.92)), (P, V, O) => this.drawPlinthText(P, V, O)));
+      M.position.set(a + f.x * (o * 0.5 + 0.03), this.y + s * 0.52, h + f.z * (o * 0.5 + 0.03)), M.rotation.y = c, M.castShadow = false, M.receiveShadow = true, this.campus.group.add(M), this.plinthTop = this.y + s + 0.14;
     }
   }
   const isDarkCell = (l, e) => ((l * 73856093 ^ e * 19349663) >>> 0) % 100 < 46, hasFoliage = (l, e) => ((l * 83492791 ^ e * 29349643) >>> 0) % 100 < 40, GROUND_TOP = 0.04, SEA_FLOOR = -1.6, LAKE_FLOOR = -0.75, ISLAND_SHORE = 0.13, ISLAND_PALETTE = {
@@ -96167,7 +96577,7 @@ https://github.com/browserify/crypto-browserify`);
   };
   class FptuCampus {
     constructor() {
-      this.game = Game.getInstance(), this.group = new Group(), this.group.name = "fptuCampus", this.game.scene.add(this.group), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1, 8), this.materials = /* @__PURE__ */ new Map(), this.groundTop = GROUND_TOP, this.canopySpots = [], this.setIsland(), this.setBridge(), this.setGate(), this.setGround(), this.setRankingSign(), this.setAlpha(), this.setBuildings(), this.setDorms(), this.setLake(), this.setSports(), this.setCanteen(), this.setParking(), this.setPalms(), this.setTrees(), this.setSign(), this.setSwanLake(), this.pineHill = new FptuPineHill(this), this.swans = new FptuSwans(this), this.props = new FptuProps(this), this.people = new FptuPeople(this), this.leafClusters = new Foliage(this.canopySpots, uniform$1(color$1("#7fb43f")), uniform$1(color$1("#b4d150"))), this.quiz = new FptuQuiz(), this.setGateZone(), this.setQuestionBlocks();
+      this.game = Game.getInstance(), this.group = new Group(), this.group.name = "fptuCampus", this.game.scene.add(this.group), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1, 8), this.materials = /* @__PURE__ */ new Map(), this.groundTop = GROUND_TOP, this.canopySpots = [], this.setIsland(), this.setBridge(), this.setGate(), this.setGround(), this.setAlpha(), this.setBuildings(), this.setDorms(), this.setLake(), this.setSports(), this.setCanteen(), this.setParking(), this.setPalms(), this.setTrees(), this.setSwanLake(), this.pineHill = new FptuPineHill(this), this.swans = new FptuSwans(this), this.props = new FptuProps(this), this.people = new FptuPeople(this), this.lights = new FptuLights(this), this.signs = new FptuSigns(this), this.setSign(), this.leafClusters = new Foliage(this.canopySpots, uniform$1(color$1("#7fb43f")), uniform$1(color$1("#b4d150"))), this.quiz = new FptuQuiz(), this.setGateZone(), this.setQuestionBlocks();
     }
     getMaterial(e) {
       let r = this.materials.get(e);
@@ -96176,8 +96586,8 @@ https://github.com/browserify/crypto-browserify`);
       }), this.materials.set(e, r)), r;
     }
     box(e, r, s, o, a, h, c, { rotationX: d = 0, rotationY: f = 0, rotationZ: p = 0, physical: m = false, geometry: b = null, castShadow: w = true, receiveShadow: M = true } = {}) {
-      const R = new Mesh$1(b ?? this.boxGeometry, this.getMaterial(c));
-      if (R.scale.set(e, r, s), R.position.set(o, a, h), R.rotation.order = "YZX", R.rotation.x = d, R.rotation.y = f, R.rotation.z = p, R.castShadow = w, R.receiveShadow = M, this.group.add(R), m) {
+      const P = new Mesh$1(b ?? this.boxGeometry, this.getMaterial(c));
+      if (P.scale.set(e, r, s), P.position.set(o, a, h), P.rotation.order = "YZX", P.rotation.x = d, P.rotation.y = f, P.rotation.z = p, P.castShadow = w, P.receiveShadow = M, this.group.add(P), m) {
         const V = new Quaternion$1().setFromEuler(new Euler$1(d, f, p, "YZX"));
         this.game.objects.add(null, {
           type: "fixed",
@@ -96204,7 +96614,7 @@ https://github.com/browserify/crypto-browserify`);
           ]
         });
       }
-      return R;
+      return P;
     }
     slab(e, r, s, o, a, { layer: h = 0 } = {}) {
       const c = GROUND_TOP + 0.05 + h * 0.03;
@@ -96234,8 +96644,8 @@ https://github.com/browserify/crypto-browserify`);
       } else b = this.getMaterial(d);
       const w = new Mesh$1(p, b);
       w.position.set(e, 0, r), w.receiveShadow = true, w.castShadow = false, this.group.add(w);
-      const M = a + 1, R = h + 1, V = new Float32Array(M * R);
-      for (let O = 0; O < M; O++) for (let z = 0; z < R; z++) V[z + O * R] = c(e - s * 0.5 + O / a * s, r - o * 0.5 + z / h * o);
+      const M = a + 1, P = h + 1, V = new Float32Array(M * P);
+      for (let O = 0; O < M; O++) for (let z = 0; z < P; z++) V[z + O * P] = c(e - s * 0.5 + O / a * s, r - o * 0.5 + z / h * o);
       return this.game.objects.add(null, {
         type: "fixed",
         friction: 0.35,
@@ -96280,8 +96690,8 @@ https://github.com/browserify/crypto-browserify`);
         const f = d.radiusX ?? d.radius, p = d.radiusZ ?? d.radius, m = Math.hypot((e - d.x) / f, (r - d.z) / p);
         if (m >= 1) continue;
         const b = Math.min(6, Math.min(f, p) * 0.45) / Math.min(f, p), w = 1 - b, M = m <= w ? LAKE_FLOOR : LAKE_FLOOR + (GROUND_TOP - LAKE_FLOOR) * (() => {
-          const R = (m - w) / b;
-          return R * R * (3 - 2 * R);
+          const P = (m - w) / b;
+          return P * P * (3 - 2 * P);
         })();
         c = Math.min(c, M);
       }
@@ -96400,9 +96810,7 @@ https://github.com/browserify/crypto-browserify`);
       ].entries()) this.box(0.2, 0.34, 0.62, e + 0.42, 5.62, r + (o - 1) * 0.78, a, {
         castShadow: false
       });
-      this.box(0.5, 2, 4.6, e + 1.2, 1, r + s + 3.4, "#8d7f68", {
-        physical: true
-      }), this.box(0.18, 0.55, 1, e + 1.5, 1.55, r + s + 2.3, COLORS$1.orange), this.box(0.18, 0.55, 1, e + 1.5, 1.55, r + s + 3.4, COLORS$1.green), this.box(0.18, 0.55, 1, e + 1.5, 1.55, r + s + 4.5, COLORS$1.blue), this.box(2.4, 2.5, 2.4, e, 1.25, r - s - 2.6, COLORS$1.wall, {
+      this.box(2.4, 2.5, 2.4, e, 1.25, r - s - 2.6, COLORS$1.wall, {
         physical: true
       }), this.box(2.8, 0.25, 2.8, e, 2.62, r - s - 2.6, COLORS$1.roof);
     }
@@ -96429,18 +96837,6 @@ https://github.com/browserify/crypto-browserify`);
         layer: 2
       });
     }
-    setRankingSign() {
-      const { x: e, z: r, height: s, width: o } = RANKING_SIGN;
-      this.box(1.1, 0.35, o + 0.8, e, 0.17, r, "#7c6f5a", {
-        physical: true
-      }), this.box(0.7, s, o, e, s * 0.5 + 0.35, r, "#8d7f68", {
-        physical: true
-      }), this.box(0.14, 0.5, 0.9, e + 0.4, s - 0.2, r - 1, COLORS$1.orange), this.box(0.14, 0.5, 0.9, e + 0.4, s - 0.2, r, COLORS$1.green), this.box(0.14, 0.5, 0.9, e + 0.4, s - 0.2, r + 1, COLORS$1.blue);
-      for (let a = 0; a < 5; a++) this.box(0.12, 0.4, 0.4, e + 0.4, s - 1.1, r + (a - 2) * 0.85, "#f6c945", {
-        rotationZ: Math.PI * 0.25
-      });
-      this.box(0.14, 0.35, o - 0.6, e + 0.4, 0.62, r, COLORS$1.orange);
-    }
     setAlpha() {
       const e = ALPHA.columns.length * ALPHA.columnWidth, r = ALPHA.z - e * 0.5, s = [], o = [];
       ALPHA.columns.forEach((a, h) => {
@@ -96461,8 +96857,8 @@ https://github.com/browserify/crypto-browserify`);
         }), this.canopy(f - 1, c + 1.75, d - 1, 0.85));
         const m = 3, b = ALPHA.columnWidth / m;
         for (let w = 0; w < a.floors; w++) for (let M = 0; M < m; M++) {
-          const R = h * m + M;
-          if (!isDarkCell(w, R)) continue;
+          const P = h * m + M;
+          if (!isDarkCell(w, P)) continue;
           const V = d - ALPHA.columnWidth * 0.5 + (M + 0.5) * b, O = w * ALPHA.floorHeight + ALPHA.floorHeight * 0.5, z = f + ALPHA.depth * 0.5 + 0.06;
           p && O < ALPHA_LOBBY.height || (s.push({
             x: z,
@@ -96470,7 +96866,7 @@ https://github.com/browserify/crypto-browserify`);
             z: V,
             w: b * 0.8,
             h: ALPHA.floorHeight * 0.74
-          }), hasFoliage(w, R) && o.push({
+          }), hasFoliage(w, P) && o.push({
             x: z + 0.1,
             y: O - ALPHA.floorHeight * 0.2,
             z: V
@@ -96613,8 +97009,8 @@ https://github.com/browserify/crypto-browserify`);
         if (p * p + m * m > 0.9) continue;
         const b = LAKE.x + p * LAKE.radiusX - LAKE_ISLET.x, w = LAKE.z + m * LAKE.radiusZ - LAKE_ISLET.z;
         if (Math.hypot(b, w) < LAKE_ISLET.radius + 2) continue;
-        const M = LAKE.x + p * LAKE.radiusX, R = LAKE.z + m * LAKE.radiusZ, V = 0.85 + o() * 0.75;
-        this.box(V, 0.05, V, M, e + 0.025, R, c % 3 === 0 ? "#3f8f4a" : "#4f9e4a", {
+        const M = LAKE.x + p * LAKE.radiusX, P = LAKE.z + m * LAKE.radiusZ, V = 0.85 + o() * 0.75;
+        this.box(V, 0.05, V, M, e + 0.025, P, c % 3 === 0 ? "#3f8f4a" : "#4f9e4a", {
           castShadow: false,
           geometry: this.cylinderGeometry
         });
@@ -96754,8 +97150,8 @@ https://github.com/browserify/crypto-browserify`);
     palm(e, r, { scale: s = 1, lean: o = 0 } = {}) {
       const a = 4.6 * s, h = 8, c = 0.75 * s, d = Math.cos(o), f = Math.sin(o);
       for (let w = 0; w < h; w++) {
-        const M = (w + 0.5) / h, R = a / h, V = (0.29 - 0.12 * M) * s, O = c * M * M, z = Math.atan2(2 * c * M, a);
-        this.box(V * 2, R * 1.08, V * 2, e + d * O, a * M, r + f * O, w % 2 ? "#8a6a42" : "#7b5c39", {
+        const M = (w + 0.5) / h, P = a / h, V = (0.29 - 0.12 * M) * s, O = c * M * M, z = Math.atan2(2 * c * M, a);
+        this.box(V * 2, P * 1.08, V * 2, e + d * O, a * M, r + f * O, w % 2 ? "#8a6a42" : "#7b5c39", {
           rotationZ: -d * z,
           rotationX: f * z,
           geometry: this.cylinderGeometry,
@@ -96768,9 +97164,9 @@ https://github.com/browserify/crypto-browserify`);
       });
       const b = 11;
       for (let w = 0; w < b; w++) {
-        const M = w / b * Math.PI * 2 + o * 0.5, R = (1.35 + w * 7 % 5 * 0.16) * s, V = (2.15 + w * 3 % 4 * 0.14) * s, O = w % 3 === 0 ? "#4f8f34" : w % 3 === 1 ? "#5aa832" : "#448029";
+        const M = w / b * Math.PI * 2 + o * 0.5, P = (1.35 + w * 7 % 5 * 0.16) * s, V = (2.15 + w * 3 % 4 * 0.14) * s, O = w % 3 === 0 ? "#4f8f34" : w % 3 === 1 ? "#5aa832" : "#448029";
         for (let z = 0; z < 5; z++) {
-          const H = (z + 0.5) / 5, q = 0.12 * s + H * V, W = R * H * H, K = Math.atan2(2 * R * H, V);
+          const H = (z + 0.5) / 5, q = 0.12 * s + H * V, W = P * H * H, K = Math.atan2(2 * P * H, V);
           this.box(V / 5 * 1.15, 0.075 * s, (0.56 - 0.34 * H) * s, p + Math.cos(M) * q, a + 0.34 * s - W, m + Math.sin(M) * q, O, {
             rotationY: -M,
             rotationZ: -K,
@@ -96925,31 +97321,15 @@ https://github.com/browserify/crypto-browserify`);
     }
     setSign() {
       this.game.resourcesLoader.getLoader("gltf").load("fptu/sign.glb", (e) => {
+        var _a2;
         const r = new Group();
         r.name = "fptuSign";
         const s = this.getMaterial(COLORS$1.orange);
         e.scene.traverse((o) => {
           o.isMesh && (o.material = s, o.castShadow = true, o.receiveShadow = true);
-        }), r.add(e.scene), r.scale.setScalar(SIGN.scale), r.position.set(SIGN.x, SIGN.y + GROUND_TOP, SIGN.z), r.rotation.y = SIGN.rotationY, this.group.add(r), this.sign = r;
+        }), r.add(e.scene), r.scale.setScalar(SIGN.scale), r.position.set(SIGN.x, SIGN.y + (((_a2 = this.signs) == null ? void 0 : _a2.plinthTop) ?? GROUND_TOP), SIGN.z), r.rotation.y = SIGN.rotationY, this.group.add(r), this.sign = r;
       }, void 0, () => {
         console.warn("[FPTU] kh\xF4ng n\u1EA1p \u0111\u01B0\u1EE3c fptu/sign.glb \u2014 khu tr\u01B0\u1EDDng v\u1EABn ch\u1EA1y, ch\u1EC9 thi\u1EBFu h\xE0ng ch\u1EEF");
-      }), this.game.objects.add(null, {
-        type: "fixed",
-        position: {
-          x: SIGN.x,
-          y: 0.9,
-          z: SIGN.z
-        },
-        colliders: [
-          {
-            shape: "cuboid",
-            parameters: [
-              0.45,
-              0.9,
-              12.53 * SIGN.scale * 0.5
-            ]
-          }
-        ]
       });
     }
     setGateZone() {
@@ -98037,7 +98417,7 @@ https://github.com/browserify/crypto-browserify`);
         name: "x",
         condition: "<="
       }, ({ x: m }) => {
-        const b = vec2$1(m, p).toVar(), w = vec2$1(mod$1(a.add(b), r)).toVar(), M = vec2$1(hash$1(w)).toVar(), R = vec2$1(b.add(M.sub(h))).toVar(), V = float$1(length$1(R)).toVar();
+        const b = vec2$1(m, p).toVar(), w = vec2$1(mod$1(a.add(b), r)).toVar(), M = vec2$1(hash$1(w)).toVar(), P = vec2$1(b.add(M.sub(h))).toVar(), V = float$1(length$1(P)).toVar();
         If$1(V.lessThan(c), () => {
           d.assign(c), c.assign(V), f.assign(a.add(b));
         }).ElseIf(V.lessThan(d), () => {
@@ -98258,13 +98638,13 @@ https://github.com/browserify/crypto-browserify`);
         m.copy(p.body.translation());
         const b = m.clone().sub(e);
         b.y = 0;
-        const w = Math.hypot(b.x, b.z), M = remapClamp$2(w, 1, r, 1, 0), R = b.clone().setLength(0.5);
-        R.y = 1, R.normalize();
+        const w = Math.hypot(b.x, b.z), M = remapClamp$2(w, 1, r, 1, 0), P = b.clone().setLength(0.5);
+        P.y = 1, P.normalize();
         const V = M * s;
-        if (R.setLength(V * p.body.mass()), M > 0) {
+        if (P.setLength(V * p.body.mass()), M > 0) {
           const O = m;
           if (this.game.ticker.wait(1, () => {
-            p.body.applyImpulseAtPoint(R, O, true);
+            p.body.applyImpulseAtPoint(P, O, true);
           }), p === this.game.physicalVehicle.chassis.physical && V > a) return this.game.time.bulletTime.activate(), true;
         }
         return false;
@@ -98449,8 +98829,8 @@ https://github.com/browserify/crypto-browserify`);
       var w = e.isBuffer(this), M = e.isBuffer(f);
       if (w && M) return this.copy(f, p, m, b);
       if (!o && !w && !M && e.isView(this) && e.isView(f)) {
-        var R = m || b != null ? h.call(this, m, b) : this;
-        return f.set(R, p), R.length;
+        var P = m || b != null ? h.call(this, m, b) : this;
+        return f.set(P, p), P.length;
       } else return l.copy.call(this, f, p, m, b);
     }
     function h(f, p) {
@@ -98476,7 +98856,7 @@ https://github.com/browserify/crypto-browserify`);
   function requireBufferish() {
     return hasRequiredBufferish || (hasRequiredBufferish = 1, (function(l) {
       var e = l.global = requireBufferGlobal(), r = l.hasBuffer = e && !!e.isBuffer, s = l.hasArrayBuffer = typeof ArrayBuffer < "u", o = l.isArray = requireIsarray();
-      l.isArrayBuffer = s ? R : z;
+      l.isArrayBuffer = s ? P : z;
       var a = l.isBuffer = r ? e.isBuffer : z, h = l.isView = s ? ArrayBuffer.isView || H("ArrayBuffer", "buffer") : z;
       l.alloc = b, l.concat = w, l.from = m;
       var c = l.Array = requireBufferishArray(), d = l.Buffer = requireBufferishBuffer(), f = l.Uint8Array = requireBufferishUint8array(), p = l.prototype = requireBufferishProto();
@@ -98498,7 +98878,7 @@ https://github.com/browserify/crypto-browserify`);
         }
       }
       var M = H("ArrayBuffer");
-      function R(q) {
+      function P(q) {
         return q instanceof ArrayBuffer || M(q);
       }
       function V(q) {
@@ -98616,7 +98996,7 @@ https://github.com/browserify/crypto-browserify`);
         ], c = Array.isArray || K, d = 4294967296, f = 16777216, p;
         m("Uint64BE", true, true), m("Int64BE", true, false), m("Uint64LE", false, true), m("Int64LE", false, false);
         function m(J, ee, ie) {
-          var pe = ee ? 0 : 4, U = ee ? 4 : 0, v = ee ? 0 : 3, _ = ee ? 1 : 2, $ = ee ? 2 : 1, P = ee ? 3 : 0, F = ee ? z : q, k = ee ? H : W, G = L.prototype, D = "is" + J, x = "_" + D;
+          var pe = ee ? 0 : 4, U = ee ? 4 : 0, v = ee ? 0 : 3, _ = ee ? 1 : 2, $ = ee ? 2 : 1, R = ee ? 3 : 0, F = ee ? z : q, k = ee ? H : W, G = L.prototype, D = "is" + J, x = "_" + D;
           return G.buffer = void 0, G.offset = 0, G[x] = true, G.toNumber = me, G.toString = be, G.toJSON = me, G.toArray = b, s && (G.toBuffer = w), o && (G.toArrayBuffer = M), L[D] = j, e[J] = L, L;
           function L(fe, _e, xe, le) {
             return this instanceof L ? Y(this, fe, _e, xe, le) : new L(fe, _e, xe, le);
@@ -98629,11 +99009,11 @@ https://github.com/browserify/crypto-browserify`);
               fe.buffer = O(h, 0);
               return;
             }
-            if (!R(_e, xe)) {
+            if (!P(_e, xe)) {
               var Re = p || Array;
               Ce = xe, le = _e, xe = 0, _e = new Re(8);
             }
-            fe.buffer = _e, fe.offset = xe |= 0, r !== typeof le && (typeof le == "string" ? oe(_e, xe, le, Ce || 10) : R(le, Ce) ? V(_e, xe, le, Ce) : typeof Ce == "number" ? (Z(_e, xe + pe, le), Z(_e, xe + U, Ce)) : le > 0 ? F(_e, xe, le) : le < 0 ? k(_e, xe, le) : V(_e, xe, h, 0));
+            fe.buffer = _e, fe.offset = xe |= 0, r !== typeof le && (typeof le == "string" ? oe(_e, xe, le, Ce || 10) : P(le, Ce) ? V(_e, xe, le, Ce) : typeof Ce == "number" ? (Z(_e, xe + pe, le), Z(_e, xe + U, Ce)) : le > 0 ? F(_e, xe, le) : le < 0 ? k(_e, xe, le) : V(_e, xe, h, 0));
           }
           function oe(fe, _e, xe, le) {
             var Ce = 0, Re = xe.length, Be = 0, Ee = 0;
@@ -98658,10 +99038,10 @@ https://github.com/browserify/crypto-browserify`);
             return Be && (Re = "-" + Re), Re;
           }
           function Z(fe, _e, xe) {
-            fe[_e + P] = xe & 255, xe = xe >> 8, fe[_e + $] = xe & 255, xe = xe >> 8, fe[_e + _] = xe & 255, xe = xe >> 8, fe[_e + v] = xe & 255;
+            fe[_e + R] = xe & 255, xe = xe >> 8, fe[_e + $] = xe & 255, xe = xe >> 8, fe[_e + _] = xe & 255, xe = xe >> 8, fe[_e + v] = xe & 255;
           }
           function se(fe, _e) {
-            return fe[_e + v] * f + (fe[_e + _] << 16) + (fe[_e + $] << 8) + fe[_e + P];
+            return fe[_e + v] * f + (fe[_e + _] << 16) + (fe[_e + $] << 8) + fe[_e + R];
           }
         }
         function b(J) {
@@ -98680,7 +99060,7 @@ https://github.com/browserify/crypto-browserify`);
           var U = new o(8);
           return V(U, 0, ee, ie), U.buffer;
         }
-        function R(J, ee) {
+        function P(J, ee) {
           var ie = J && J.length;
           return ee |= 0, ie && ee + 8 <= ie && typeof J[ee] != "string";
         }
@@ -98725,10 +99105,10 @@ https://github.com/browserify/crypto-browserify`);
       }
       return (w ? -1 : 1) * h * Math.pow(2, a - s);
     }, ieee754.write = function(l, e, r, s, o, a) {
-      var h, c, d, f = a * 8 - o - 1, p = (1 << f) - 1, m = p >> 1, b = o === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0, w = s ? 0 : a - 1, M = s ? 1 : -1, R = e < 0 || e === 0 && 1 / e < 0 ? 1 : 0;
+      var h, c, d, f = a * 8 - o - 1, p = (1 << f) - 1, m = p >> 1, b = o === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0, w = s ? 0 : a - 1, M = s ? 1 : -1, P = e < 0 || e === 0 && 1 / e < 0 ? 1 : 0;
       for (e = Math.abs(e), isNaN(e) || e === 1 / 0 ? (c = isNaN(e) ? 1 : 0, h = p) : (h = Math.floor(Math.log(e) / Math.LN2), e * (d = Math.pow(2, -h)) < 1 && (h--, d *= 2), h + m >= 1 ? e += b / d : e += b * Math.pow(2, 1 - m), e * d >= 2 && (h++, d /= 2), h + m >= p ? (c = 0, h = p) : h + m >= 1 ? (c = (e * d - 1) * Math.pow(2, o), h = h + m) : (c = e * Math.pow(2, m - 1) * Math.pow(2, o), h = 0)); o >= 8; l[r + w] = c & 255, w += M, c /= 256, o -= 8) ;
       for (h = h << o | c, f += o; f > 0; l[r + w] = h & 255, w += M, h /= 256, f -= 8) ;
-      l[r + w - M] |= R * 128;
+      l[r + w - M] |= P * 128;
     }), ieee754;
   }
   var writeUint8 = {}, hasRequiredWriteUint8;
@@ -98759,7 +99139,7 @@ https://github.com/browserify/crypto-browserify`);
     }
     function b() {
       var K = o.slice();
-      return K[196] = M(196), K[197] = R(197), K[198] = V(198), K[199] = M(199), K[200] = R(200), K[201] = V(201), K[202] = O(202, 4, f.writeFloatBE || q, true), K[203] = O(203, 8, f.writeDoubleBE || W, true), K[204] = M(204), K[205] = R(205), K[206] = V(206), K[207] = O(207, 8, z), K[208] = M(208), K[209] = R(209), K[210] = V(210), K[211] = O(211, 8, H), K[217] = M(217), K[218] = R(218), K[219] = V(219), K[220] = R(220), K[221] = V(221), K[222] = R(222), K[223] = V(223), K;
+      return K[196] = M(196), K[197] = P(197), K[198] = V(198), K[199] = M(199), K[200] = P(200), K[201] = V(201), K[202] = O(202, 4, f.writeFloatBE || q, true), K[203] = O(203, 8, f.writeDoubleBE || W, true), K[204] = M(204), K[205] = P(205), K[206] = V(206), K[207] = O(207, 8, z), K[208] = M(208), K[209] = P(209), K[210] = V(210), K[211] = O(211, 8, H), K[217] = M(217), K[218] = P(218), K[219] = V(219), K[220] = P(220), K[221] = V(221), K[222] = P(222), K[223] = V(223), K;
     }
     function w() {
       var K = o.slice();
@@ -98771,7 +99151,7 @@ https://github.com/browserify/crypto-browserify`);
         pe[ie++] = K, pe[ie] = ee;
       };
     }
-    function R(K) {
+    function P(K) {
       return function(J, ee) {
         var ie = J.reserve(3), pe = J.buffer;
         pe[ie++] = K, pe[ie++] = ee >>> 8, pe[ie] = ee;
@@ -98810,14 +99190,14 @@ https://github.com/browserify/crypto-browserify`);
     var l = requireIsarray(), e = requireInt64Buffer(), r = e.Uint64BE, s = e.Int64BE, o = requireBufferish(), a = requireBufferishProto(), h = requireWriteToken(), c = requireWriteUint8().uint8, d = requireExtBuffer().ExtBuffer, f = typeof Uint8Array < "u", p = typeof Map < "u", m = [];
     m[1] = 212, m[2] = 213, m[4] = 214, m[8] = 215, m[16] = 216, writeType.getWriteType = b;
     function b(w) {
-      var M = h.getWriteToken(w), R = w && w.useraw, V = f && w && w.binarraybuffer, O = V ? o.isArrayBuffer : o.isBuffer, z = V ? G : k, H = p && w && w.usemap, q = H ? L : x, W = {
+      var M = h.getWriteToken(w), P = w && w.useraw, V = f && w && w.binarraybuffer, O = V ? o.isArrayBuffer : o.isBuffer, z = V ? G : k, H = p && w && w.usemap, q = H ? L : x, W = {
         boolean: K,
-        function: P,
+        function: R,
         number: J,
-        object: R ? $ : _,
-        string: v(R ? U : pe),
-        symbol: P,
-        undefined: P
+        object: P ? $ : _,
+        string: v(P ? U : pe),
+        symbol: R,
+        undefined: R
       };
       return W;
       function K(Y, oe) {
@@ -98863,7 +99243,7 @@ https://github.com/browserify/crypto-browserify`);
         }
       }
       function _(Y, oe) {
-        if (oe === null) return P(Y, oe);
+        if (oe === null) return R(Y, oe);
         if (O(oe)) return z(Y, oe);
         if (l(oe)) return F(Y, oe);
         if (r.isUint64BE(oe)) return ee(Y, oe);
@@ -98876,7 +99256,7 @@ https://github.com/browserify/crypto-browserify`);
         if (O(oe)) return j(Y, oe);
         _(Y, oe);
       }
-      function P(Y, oe) {
+      function R(Y, oe) {
         var me = 192;
         M[me](Y, oe);
       }
@@ -98998,16 +99378,16 @@ https://github.com/browserify/crypto-browserify`);
           M
         ]);
       }
-      function M(R) {
-        return p && (R = p(R)), new l(R, d);
+      function M(P) {
+        return p && (P = p(P)), new l(P, d);
       }
     }
     function c(d) {
       var f = this.extPackers || (this.extPackers = {}), p = d.constructor, m = p && p.name && f[p.name];
       if (m) return m;
       for (var b = this.extEncoderList || (this.extEncoderList = []), w = b.length, M = 0; M < w; M++) {
-        var R = b[M];
-        if (p === R[0]) return R[1];
+        var P = b[M];
+        if (p === P[0]) return P[1];
       }
     }
     return writeCore;
@@ -99029,7 +99409,7 @@ https://github.com/browserify/crypto-browserify`);
         bufferish: l,
         write: M,
         fetch: f,
-        flush: R,
+        flush: P,
         push: m,
         pull: b,
         read: p,
@@ -99043,7 +99423,7 @@ https://github.com/browserify/crypto-browserify`);
           O
         ]) : z : O, this.offset = 0;
       }
-      function R() {
+      function P() {
         for (; this.offset < this.buffer.length; ) {
           var O = this.offset, z;
           try {
@@ -99067,7 +99447,7 @@ https://github.com/browserify/crypto-browserify`);
         bufferish: l,
         write: d,
         fetch: M,
-        flush: R,
+        flush: P,
         push: m,
         pull: V,
         read: p,
@@ -99085,7 +99465,7 @@ https://github.com/browserify/crypto-browserify`);
           return l.prototype.slice.call(this.buffer, H, q);
         }
       }
-      function R() {
+      function P() {
         for (; this.start < this.offset; ) {
           var H = this.fetch();
           H && this.push(H);
@@ -99124,16 +99504,16 @@ https://github.com/browserify/crypto-browserify`);
       return M ? (this.flush(), this.pull()) : this.fetch();
     }
     function m(M) {
-      var R = this.buffers || (this.buffers = []);
-      R.push(M);
+      var P = this.buffers || (this.buffers = []);
+      P.push(M);
     }
     function b() {
       var M = this.buffers || (this.buffers = []);
       return M.shift();
     }
     function w(M) {
-      return R;
-      function R(V) {
+      return P;
+      function P(V) {
         for (var O in M) V[O] = M[O];
         return V;
       }
@@ -99271,57 +99651,57 @@ https://github.com/browserify/crypto-browserify`);
     readFormat.getReadFormat = d, readFormat.readUint8 = V;
     var o = requireBufferish(), a = requireBufferishProto(), h = typeof Map < "u", c = true;
     function d(_) {
-      var $ = o.hasArrayBuffer && _ && _.binarraybuffer, P = _ && _.int64, F = h && _ && _.usemap, k = {
+      var $ = o.hasArrayBuffer && _ && _.binarraybuffer, R = _ && _.int64, F = h && _ && _.usemap, k = {
         map: F ? p : f,
         array: m,
         str: b,
         bin: $ ? M : w,
-        ext: R,
+        ext: P,
         uint8: V,
         uint16: z,
         uint32: q,
-        uint64: K(8, P ? ie : J),
+        uint64: K(8, R ? ie : J),
         int8: O,
         int16: H,
         int32: W,
-        int64: K(8, P ? pe : ee),
+        int64: K(8, R ? pe : ee),
         float32: K(4, U),
         float64: K(8, v)
       };
       return k;
     }
     function f(_, $) {
-      var P = {}, F, k = new Array($), G = new Array($), D = _.codec.decode;
+      var R = {}, F, k = new Array($), G = new Array($), D = _.codec.decode;
       for (F = 0; F < $; F++) k[F] = D(_), G[F] = D(_);
-      for (F = 0; F < $; F++) P[k[F]] = G[F];
-      return P;
+      for (F = 0; F < $; F++) R[k[F]] = G[F];
+      return R;
     }
     function p(_, $) {
-      var P = /* @__PURE__ */ new Map(), F, k = new Array($), G = new Array($), D = _.codec.decode;
+      var R = /* @__PURE__ */ new Map(), F, k = new Array($), G = new Array($), D = _.codec.decode;
       for (F = 0; F < $; F++) k[F] = D(_), G[F] = D(_);
-      for (F = 0; F < $; F++) P.set(k[F], G[F]);
-      return P;
+      for (F = 0; F < $; F++) R.set(k[F], G[F]);
+      return R;
     }
     function m(_, $) {
-      for (var P = new Array($), F = _.codec.decode, k = 0; k < $; k++) P[k] = F(_);
-      return P;
+      for (var R = new Array($), F = _.codec.decode, k = 0; k < $; k++) R[k] = F(_);
+      return R;
     }
     function b(_, $) {
-      var P = _.reserve($), F = P + $;
-      return a.toString.call(_.buffer, "utf-8", P, F);
+      var R = _.reserve($), F = R + $;
+      return a.toString.call(_.buffer, "utf-8", R, F);
     }
     function w(_, $) {
-      var P = _.reserve($), F = P + $, k = a.slice.call(_.buffer, P, F);
+      var R = _.reserve($), F = R + $, k = a.slice.call(_.buffer, R, F);
       return o.from(k);
     }
     function M(_, $) {
-      var P = _.reserve($), F = P + $, k = a.slice.call(_.buffer, P, F);
+      var R = _.reserve($), F = R + $, k = a.slice.call(_.buffer, R, F);
       return o.Uint8Array.from(k).buffer;
     }
-    function R(_, $) {
-      var P = _.reserve($ + 1), F = _.buffer[P++], k = P + $, G = _.codec.getExtUnpacker(F);
+    function P(_, $) {
+      var R = _.reserve($ + 1), F = _.buffer[R++], k = R + $, G = _.codec.getExtUnpacker(F);
       if (!G) throw new Error("Invalid ext type: " + (F && "0x" + F.toString(16)));
-      var D = a.slice.call(_.buffer, P, k);
+      var D = a.slice.call(_.buffer, R, k);
       return G(D);
     }
     function V(_) {
@@ -99329,29 +99709,29 @@ https://github.com/browserify/crypto-browserify`);
       return _.buffer[$];
     }
     function O(_) {
-      var $ = _.reserve(1), P = _.buffer[$];
-      return P & 128 ? P - 256 : P;
+      var $ = _.reserve(1), R = _.buffer[$];
+      return R & 128 ? R - 256 : R;
     }
     function z(_) {
-      var $ = _.reserve(2), P = _.buffer;
-      return P[$++] << 8 | P[$];
+      var $ = _.reserve(2), R = _.buffer;
+      return R[$++] << 8 | R[$];
     }
     function H(_) {
-      var $ = _.reserve(2), P = _.buffer, F = P[$++] << 8 | P[$];
+      var $ = _.reserve(2), R = _.buffer, F = R[$++] << 8 | R[$];
       return F & 32768 ? F - 65536 : F;
     }
     function q(_) {
-      var $ = _.reserve(4), P = _.buffer;
-      return P[$++] * 16777216 + (P[$++] << 16) + (P[$++] << 8) + P[$];
+      var $ = _.reserve(4), R = _.buffer;
+      return R[$++] * 16777216 + (R[$++] << 16) + (R[$++] << 8) + R[$];
     }
     function W(_) {
-      var $ = _.reserve(4), P = _.buffer;
-      return P[$++] << 24 | P[$++] << 16 | P[$++] << 8 | P[$];
+      var $ = _.reserve(4), R = _.buffer;
+      return R[$++] << 24 | R[$++] << 16 | R[$++] << 8 | R[$];
     }
     function K(_, $) {
-      return function(P) {
-        var F = P.reserve(_);
-        return $.call(P.buffer, F, c);
+      return function(R) {
+        var F = R.reserve(_);
+        return $.call(R.buffer, F, c);
       };
     }
     function J(_) {
@@ -99517,21 +99897,21 @@ https://github.com/browserify/crypto-browserify`);
           if (!arguments.length) delete w[s];
           else if (b) {
             if (M = p(w, m, true), M) {
-              if (M = M.filter(R), !M.length) return d.call(w, m);
+              if (M = M.filter(P), !M.length) return d.call(w, m);
               w[s][m] = M;
             }
           } else if (M = w[s], M && (delete M[m], !Object.keys(M).length)) return d.call(w);
           return w;
-          function R(V) {
+          function P(V) {
             return V !== b && V.originalListener !== b;
           }
         }
         function f(m, b) {
           var w = this, M = p(w, m, true);
           if (!M) return false;
-          var R = arguments.length;
-          if (R === 1) M.forEach(O);
-          else if (R === 2) M.forEach(z);
+          var P = arguments.length;
+          if (P === 1) M.forEach(O);
+          else if (P === 2) M.forEach(z);
           else {
             var V = Array.prototype.slice.call(arguments, 1);
             M.forEach(H);
@@ -100023,10 +100403,10 @@ https://github.com/browserify/crypto-browserify`);
         s = 0, a = 0;
         const h = new Vector3$1(0, 1, 0), c = h.dot(this.sideward), d = h.dot(this.forward), f = h.dot(this.upward), p = Math.abs(c), m = Math.abs(d), b = Math.abs(f), w = new Vector3$1(0, 1, 0).multiplyScalar(this.flip.force * this.chassis.mass);
         if (this.chassis.physical.body.applyImpulse(w), b > p && b > m) {
-          const M = 0.8 * this.chassis.mass, R = new Vector3$1(M, 0, 0);
-          R.applyQuaternion(this.chassis.physical.body.rotation()), this.chassis.physical.body.applyTorqueImpulse(R);
+          const M = 0.8 * this.chassis.mass, P = new Vector3$1(M, 0, 0);
+          P.applyQuaternion(this.chassis.physical.body.rotation()), this.chassis.physical.body.applyTorqueImpulse(P);
         } else {
-          const M = c * 0.4 * this.chassis.mass, R = -d * 0.8 * this.chassis.mass, V = new Vector3$1(M, 0, R);
+          const M = c * 0.4 * this.chassis.mass, P = -d * 0.8 * this.chassis.mass, V = new Vector3$1(M, 0, P);
           V.applyQuaternion(this.chassis.physical.body.rotation()), this.chassis.physical.body.applyTorqueImpulse(V);
         }
       }, this.game.debug.active && this.debugPanel.addBinding(this.flip, "force", {
@@ -100166,8 +100546,8 @@ https://github.com/browserify/crypto-browserify`);
         If$1(this.inverted.greaterThan(0.5), () => {
           m.assign(m.oneMinus());
         }), this.progress.sub(m.mul(s)).mul(o).lessThan(p).discard();
-        const w = texture$1(this.game.noises.hash, viewportCoordinate.div(this.game.noises.resolution)).r.sub(0.5).mul(0.2), M = screenUV$1.length().add(w), R = mix$1(e, r, M);
-        return vec4$1(R, 1);
+        const w = texture$1(this.game.noises.hash, viewportCoordinate.div(this.game.noises.resolution)).r.sub(0.5).mul(0.2), M = screenUV$1.length().add(w), P = mix$1(e, r, M);
+        return vec4$1(P, 1);
       })(), h.vertexNode = vec4$1(positionGeometry$1.x, positionGeometry$1.y, 0, 1), this.mesh = new Mesh$1(a, h), this.mesh.frustumCulled = false, this.mesh.renderOrder = 99, this.mesh.visible = true, this.game.scene.add(this.mesh), this.game.debug.active) {
         const c = this.game.debug.panel.addFolder({
           title: "\u2B1B\uFE0F Overlay",
@@ -100407,8 +100787,8 @@ https://github.com/browserify/crypto-browserify`);
             if (m = parseFloat(m), b.ctx || p(), typeof m < "u" && m >= 0 && m <= 1) {
               if (b._volume = m, b._muted) return b;
               b.usingWebAudio && b.masterGain.gain.setValueAtTime(m, r.ctx.currentTime);
-              for (var w = 0; w < b._howls.length; w++) if (!b._howls[w]._webAudio) for (var M = b._howls[w]._getSoundIds(), R = 0; R < M.length; R++) {
-                var V = b._howls[w]._soundById(M[R]);
+              for (var w = 0; w < b._howls.length; w++) if (!b._howls[w]._webAudio) for (var M = b._howls[w]._getSoundIds(), P = 0; P < M.length; P++) {
+                var V = b._howls[w]._soundById(M[P]);
                 V && V._node && (V._node.volume = V._volume * m);
               }
               return b;
@@ -100418,8 +100798,8 @@ https://github.com/browserify/crypto-browserify`);
           mute: function(m) {
             var b = this || r;
             b.ctx || p(), b._muted = m, b.usingWebAudio && b.masterGain.gain.setValueAtTime(m ? 0 : b._volume, r.ctx.currentTime);
-            for (var w = 0; w < b._howls.length; w++) if (!b._howls[w]._webAudio) for (var M = b._howls[w]._getSoundIds(), R = 0; R < M.length; R++) {
-              var V = b._howls[w]._soundById(M[R]);
+            for (var w = 0; w < b._howls.length; w++) if (!b._howls[w]._webAudio) for (var M = b._howls[w]._getSoundIds(), P = 0; P < M.length; P++) {
+              var V = b._howls[w]._soundById(M[P]);
               V && V._node && (V._node.muted = m ? true : V._muted);
             }
             return b;
@@ -100459,7 +100839,7 @@ https://github.com/browserify/crypto-browserify`);
               return m;
             }
             if (!b || typeof b.canPlayType != "function") return m;
-            var w = b.canPlayType("audio/mpeg;").replace(/^no$/, ""), M = m._navigator ? m._navigator.userAgent : "", R = M.match(/OPR\/(\d+)/g), V = R && parseInt(R[0].split("/")[1], 10) < 33, O = M.indexOf("Safari") !== -1 && M.indexOf("Chrome") === -1, z = M.match(/Version\/(.*?) /), H = O && z && parseInt(z[1], 10) < 15;
+            var w = b.canPlayType("audio/mpeg;").replace(/^no$/, ""), M = m._navigator ? m._navigator.userAgent : "", P = M.match(/OPR\/(\d+)/g), V = P && parseInt(P[0].split("/")[1], 10) < 33, O = M.indexOf("Safari") !== -1 && M.indexOf("Chrome") === -1, z = M.match(/Version\/(.*?) /), H = O && z && parseInt(z[1], 10) < 15;
             return m._codecs = {
               mp3: !!(!V && (w || b.canPlayType("audio/mp3;").replace(/^no$/, ""))),
               mpeg: !!w,
@@ -100490,8 +100870,8 @@ https://github.com/browserify/crypto-browserify`);
                   m.noAudio = true;
                   break;
                 }
-                for (var R = 0; R < m._howls.length; R++) if (!m._howls[R]._webAudio) for (var V = m._howls[R]._getSoundIds(), O = 0; O < V.length; O++) {
-                  var z = m._howls[R]._soundById(V[O]);
+                for (var P = 0; P < m._howls.length; P++) if (!m._howls[P]._webAudio) for (var V = m._howls[P]._getSoundIds(), O = 0; O < V.length; O++) {
+                  var z = m._howls[P]._soundById(V[O]);
                   z && z._node && !z._node._unlocked && (z._node._unlocked = true, z._node.load());
                 }
                 m._autoResume();
@@ -100629,14 +101009,14 @@ https://github.com/browserify/crypto-browserify`);
               m._src
             ]);
             for (var w = 0; w < m._src.length; w++) {
-              var M, R;
+              var M, P;
               if (m._format && m._format[w]) M = m._format[w];
               else {
-                if (R = m._src[w], typeof R != "string") {
+                if (P = m._src[w], typeof P != "string") {
                   m._emit("loaderror", null, "Non-string found in selected audio sources - ignoring.");
                   continue;
                 }
-                M = /^data:audio\/([^;,]+);/i.exec(R), M || (M = /\.([^.]+)$/.exec(R.split("?", 1)[0])), M && (M = M[1].toLowerCase());
+                M = /^data:audio\/([^;,]+);/i.exec(P), M || (M = /\.([^.]+)$/.exec(P.split("?", 1)[0])), M && (M = M[1].toLowerCase());
               }
               if (M || console.warn('No file extension was found. Consider using the "format" property or specify an extension.'), M && r.codecs(M)) {
                 b = m._src[w];
@@ -100655,8 +101035,8 @@ https://github.com/browserify/crypto-browserify`);
             else {
               if (typeof m == "string" && w._state === "loaded" && !w._sprite[m]) return null;
               if (typeof m > "u" && (m = "__default", !w._playLock)) {
-                for (var R = 0, V = 0; V < w._sounds.length; V++) w._sounds[V]._paused && !w._sounds[V]._ended && (R++, M = w._sounds[V]._id);
-                R === 1 ? m = null : M = null;
+                for (var P = 0, V = 0; V < w._sounds.length; V++) w._sounds[V]._paused && !w._sounds[V]._ended && (P++, M = w._sounds[V]._id);
+                P === 1 ? m = null : M = null;
               }
             }
             var O = M ? w._soundById(M) : w._inactiveSound();
@@ -100708,8 +101088,8 @@ https://github.com/browserify/crypto-browserify`);
                   m !== "__default" || O._loop ? w._endTimers[O._id] = setTimeout(w._ended.bind(w, O), W) : (w._endTimers[O._id] = function() {
                     w._ended(O), ie.removeEventListener("ended", w._endTimers[O._id], false);
                   }, ie.addEventListener("ended", w._endTimers[O._id], false));
-                } catch (P) {
-                  w._emit("playerror", O._id, P);
+                } catch (R) {
+                  w._emit("playerror", O._id, R);
                 }
               };
               ie.src === "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" && (ie.src = w._src, ie.load());
@@ -100735,12 +101115,12 @@ https://github.com/browserify/crypto-browserify`);
             }), b;
             for (var w = b._getSoundIds(m), M = 0; M < w.length; M++) {
               b._clearTimer(w[M]);
-              var R = b._soundById(w[M]);
-              if (R && !R._paused && (R._seek = b.seek(w[M]), R._rateSeek = 0, R._paused = true, b._stopFade(w[M]), R._node)) if (b._webAudio) {
-                if (!R._node.bufferSource) continue;
-                typeof R._node.bufferSource.stop > "u" ? R._node.bufferSource.noteOff(0) : R._node.bufferSource.stop(0), b._cleanBuffer(R._node);
-              } else (!isNaN(R._node.duration) || R._node.duration === 1 / 0) && R._node.pause();
-              arguments[1] || b._emit("pause", R ? R._id : null);
+              var P = b._soundById(w[M]);
+              if (P && !P._paused && (P._seek = b.seek(w[M]), P._rateSeek = 0, P._paused = true, b._stopFade(w[M]), P._node)) if (b._webAudio) {
+                if (!P._node.bufferSource) continue;
+                typeof P._node.bufferSource.stop > "u" ? P._node.bufferSource.noteOff(0) : P._node.bufferSource.stop(0), b._cleanBuffer(P._node);
+              } else (!isNaN(P._node.duration) || P._node.duration === 1 / 0) && P._node.pause();
+              arguments[1] || b._emit("pause", P ? P._id : null);
             }
             return b;
           },
@@ -100752,10 +101132,10 @@ https://github.com/browserify/crypto-browserify`);
                 w.stop(m);
               }
             }), w;
-            for (var M = w._getSoundIds(m), R = 0; R < M.length; R++) {
-              w._clearTimer(M[R]);
-              var V = w._soundById(M[R]);
-              V && (V._seek = V._start || 0, V._rateSeek = 0, V._paused = true, V._ended = true, w._stopFade(M[R]), V._node && (w._webAudio ? V._node.bufferSource && (typeof V._node.bufferSource.stop > "u" ? V._node.bufferSource.noteOff(0) : V._node.bufferSource.stop(0), w._cleanBuffer(V._node)) : (!isNaN(V._node.duration) || V._node.duration === 1 / 0) && (V._node.currentTime = V._start || 0, V._node.pause(), V._node.duration === 1 / 0 && w._clearSound(V._node))), b || w._emit("stop", V._id));
+            for (var M = w._getSoundIds(m), P = 0; P < M.length; P++) {
+              w._clearTimer(M[P]);
+              var V = w._soundById(M[P]);
+              V && (V._seek = V._start || 0, V._rateSeek = 0, V._paused = true, V._ended = true, w._stopFade(M[P]), V._node && (w._webAudio ? V._node.bufferSource && (typeof V._node.bufferSource.stop > "u" ? V._node.bufferSource.noteOff(0) : V._node.bufferSource.stop(0), w._cleanBuffer(V._node)) : (!isNaN(V._node.duration) || V._node.duration === 1 / 0) && (V._node.currentTime = V._start || 0, V._node.pause(), V._node.duration === 1 / 0 && w._clearSound(V._node))), b || w._emit("stop", V._id));
             }
             return w;
           },
@@ -100769,8 +101149,8 @@ https://github.com/browserify/crypto-browserify`);
             }), w;
             if (typeof b > "u") if (typeof m == "boolean") w._muted = m;
             else return w._muted;
-            for (var M = w._getSoundIds(b), R = 0; R < M.length; R++) {
-              var V = w._soundById(M[R]);
+            for (var M = w._getSoundIds(b), P = 0; P < M.length; P++) {
+              var V = w._soundById(M[P]);
               V && (V._muted = m, V._interval && w._stopFade(V._id), w._webAudio && V._node ? V._node.gain.setValueAtTime(m ? 0 : V._volume, r.ctx.currentTime) : V._node && (V._node.muted = r._muted ? true : m), w._emit("mute", V._id));
             }
             return w;
@@ -100779,7 +101159,7 @@ https://github.com/browserify/crypto-browserify`);
             var m = this, b = arguments, w, M;
             if (b.length === 0) return m._volume;
             if (b.length === 1 || b.length === 2 && typeof b[1] > "u") {
-              var R = m._getSoundIds(), V = R.indexOf(b[0]);
+              var P = m._getSoundIds(), V = P.indexOf(b[0]);
               V >= 0 ? M = parseInt(b[0], 10) : w = parseFloat(b[0]);
             } else b.length >= 2 && (w = parseFloat(b[0]), M = parseInt(b[1], 10));
             var O;
@@ -100796,27 +101176,27 @@ https://github.com/browserify/crypto-browserify`);
             return m;
           },
           fade: function(m, b, w, M) {
-            var R = this;
-            if (R._state !== "loaded" || R._playLock) return R._queue.push({
+            var P = this;
+            if (P._state !== "loaded" || P._playLock) return P._queue.push({
               event: "fade",
               action: function() {
-                R.fade(m, b, w, M);
+                P.fade(m, b, w, M);
               }
-            }), R;
-            m = Math.min(Math.max(0, parseFloat(m)), 1), b = Math.min(Math.max(0, parseFloat(b)), 1), w = parseFloat(w), R.volume(m, M);
-            for (var V = R._getSoundIds(M), O = 0; O < V.length; O++) {
-              var z = R._soundById(V[O]);
+            }), P;
+            m = Math.min(Math.max(0, parseFloat(m)), 1), b = Math.min(Math.max(0, parseFloat(b)), 1), w = parseFloat(w), P.volume(m, M);
+            for (var V = P._getSoundIds(M), O = 0; O < V.length; O++) {
+              var z = P._soundById(V[O]);
               if (z) {
-                if (M || R._stopFade(V[O]), R._webAudio && !z._muted) {
+                if (M || P._stopFade(V[O]), P._webAudio && !z._muted) {
                   var H = r.ctx.currentTime, q = H + w / 1e3;
                   z._volume = m, z._node.gain.setValueAtTime(m, H), z._node.gain.linearRampToValueAtTime(b, q);
                 }
-                R._startFadeInterval(z, m, b, w, V[O], typeof M > "u");
+                P._startFadeInterval(z, m, b, w, V[O], typeof M > "u");
               }
             }
-            return R;
+            return P;
           },
-          _startFadeInterval: function(m, b, w, M, R, V) {
+          _startFadeInterval: function(m, b, w, M, P, V) {
             var O = this, z = b, H = w - b, q = Math.abs(H / 0.01), W = Math.max(4, q > 0 ? M / q : M), K = Date.now();
             m._fadeTo = w, m._interval = setInterval(function() {
               var J = (Date.now() - K) / M;
@@ -100828,19 +101208,19 @@ https://github.com/browserify/crypto-browserify`);
             return w && w._interval && (b._webAudio && w._node.gain.cancelScheduledValues(r.ctx.currentTime), clearInterval(w._interval), w._interval = null, b.volume(w._fadeTo, m), w._fadeTo = null, b._emit("fade", m)), b;
           },
           loop: function() {
-            var m = this, b = arguments, w, M, R;
+            var m = this, b = arguments, w, M, P;
             if (b.length === 0) return m._loop;
             if (b.length === 1) if (typeof b[0] == "boolean") w = b[0], m._loop = w;
-            else return R = m._soundById(parseInt(b[0], 10)), R ? R._loop : false;
+            else return P = m._soundById(parseInt(b[0], 10)), P ? P._loop : false;
             else b.length === 2 && (w = b[0], M = parseInt(b[1], 10));
-            for (var V = m._getSoundIds(M), O = 0; O < V.length; O++) R = m._soundById(V[O]), R && (R._loop = w, m._webAudio && R._node && R._node.bufferSource && (R._node.bufferSource.loop = w, w && (R._node.bufferSource.loopStart = R._start || 0, R._node.bufferSource.loopEnd = R._stop, m.playing(V[O]) && (m.pause(V[O], true), m.play(V[O], true)))));
+            for (var V = m._getSoundIds(M), O = 0; O < V.length; O++) P = m._soundById(V[O]), P && (P._loop = w, m._webAudio && P._node && P._node.bufferSource && (P._node.bufferSource.loop = w, w && (P._node.bufferSource.loopStart = P._start || 0, P._node.bufferSource.loopEnd = P._stop, m.playing(V[O]) && (m.pause(V[O], true), m.play(V[O], true)))));
             return m;
           },
           rate: function() {
             var m = this, b = arguments, w, M;
             if (b.length === 0) M = m._sounds[0]._id;
             else if (b.length === 1) {
-              var R = m._getSoundIds(), V = R.indexOf(b[0]);
+              var P = m._getSoundIds(), V = P.indexOf(b[0]);
               V >= 0 ? M = parseInt(b[0], 10) : w = parseFloat(b[0]);
             } else b.length === 2 && (w = parseFloat(b[0]), M = parseInt(b[1], 10));
             var O;
@@ -100864,7 +101244,7 @@ https://github.com/browserify/crypto-browserify`);
             var m = this, b = arguments, w, M;
             if (b.length === 0) m._sounds.length && (M = m._sounds[0]._id);
             else if (b.length === 1) {
-              var R = m._getSoundIds(), V = R.indexOf(b[0]);
+              var P = m._getSoundIds(), V = P.indexOf(b[0]);
               V >= 0 ? M = parseInt(b[0], 10) : m._sounds.length && (M = m._sounds[0]._id, w = parseFloat(b[0]));
             } else b.length === 2 && (w = parseFloat(b[0]), M = parseInt(b[1], 10));
             if (typeof M > "u") return 0;
@@ -100913,15 +101293,15 @@ https://github.com/browserify/crypto-browserify`);
             for (var m = this, b = m._sounds, w = 0; w < b.length; w++) b[w]._paused || m.stop(b[w]._id), m._webAudio || (m._clearSound(b[w]._node), b[w]._node.removeEventListener("error", b[w]._errorFn, false), b[w]._node.removeEventListener(r._canPlayEvent, b[w]._loadFn, false), b[w]._node.removeEventListener("ended", b[w]._endFn, false), r._releaseHtml5Audio(b[w]._node)), delete b[w]._node, m._clearTimer(b[w]._id);
             var M = r._howls.indexOf(m);
             M >= 0 && r._howls.splice(M, 1);
-            var R = true;
+            var P = true;
             for (w = 0; w < r._howls.length; w++) if (r._howls[w]._src === m._src || m._src.indexOf(r._howls[w]._src) >= 0) {
-              R = false;
+              P = false;
               break;
             }
-            return a && R && delete a[m._src], r.noAudio = false, m._state = "unloaded", m._sounds = [], m = null, null;
+            return a && P && delete a[m._src], r.noAudio = false, m._state = "unloaded", m._sounds = [], m = null, null;
           },
           on: function(m, b, w, M) {
-            var R = this, V = R["_on" + m];
+            var P = this, V = P["_on" + m];
             return typeof b == "function" && V.push(M ? {
               id: w,
               fn: b,
@@ -100929,14 +101309,14 @@ https://github.com/browserify/crypto-browserify`);
             } : {
               id: w,
               fn: b
-            }), R;
+            }), P;
           },
           off: function(m, b, w) {
-            var M = this, R = M["_on" + m], V = 0;
-            if (typeof b == "number" && (w = b, b = null), b || w) for (V = 0; V < R.length; V++) {
-              var O = w === R[V].id;
-              if (b === R[V].fn && O || !b && O) {
-                R.splice(V, 1);
+            var M = this, P = M["_on" + m], V = 0;
+            if (typeof b == "number" && (w = b, b = null), b || w) for (V = 0; V < P.length; V++) {
+              var O = w === P[V].id;
+              if (b === P[V].fn && O || !b && O) {
+                P.splice(V, 1);
                 break;
               }
             }
@@ -100952,9 +101332,9 @@ https://github.com/browserify/crypto-browserify`);
             return M.on(m, b, w, 1), M;
           },
           _emit: function(m, b, w) {
-            for (var M = this, R = M["_on" + m], V = R.length - 1; V >= 0; V--) (!R[V].id || R[V].id === b || m === "load") && (setTimeout((function(O) {
+            for (var M = this, P = M["_on" + m], V = P.length - 1; V >= 0; V--) (!P[V].id || P[V].id === b || m === "load") && (setTimeout((function(O) {
               O.call(this, b, w);
-            }).bind(M, R[V].fn), 0), R[V].once && M.off(m, R[V].fn, R[V].id));
+            }).bind(M, P[V].fn), 0), P[V].once && M.off(m, P[V].fn, P[V].id));
             return M._loadQueue(m), M;
           },
           _loadQueue: function(m) {
@@ -100971,8 +101351,8 @@ https://github.com/browserify/crypto-browserify`);
             var M = !!(m._loop || b._sprite[w][2]);
             if (b._emit("end", m._id), !b._webAudio && M && b.stop(m._id, true).play(m._id), b._webAudio && M) {
               b._emit("play", m._id), m._seek = m._start || 0, m._rateSeek = 0, m._playStart = r.ctx.currentTime;
-              var R = (m._stop - m._start) * 1e3 / Math.abs(m._rate);
-              b._endTimers[m._id] = setTimeout(b._ended.bind(b, m), R);
+              var P = (m._stop - m._start) * 1e3 / Math.abs(m._rate);
+              b._endTimers[m._id] = setTimeout(b._ended.bind(b, m), P);
             }
             return b._webAudio && !M && (m._paused = true, m._ended = true, m._seek = m._start || 0, m._rateSeek = 0, b._clearTimer(m._id), b._cleanBuffer(m._node), r._autoSuspend()), !b._webAudio && !M && b.stop(m._id, true), b;
           },
@@ -101076,7 +101456,7 @@ https://github.com/browserify/crypto-browserify`);
             return;
           }
           if (/^data:[^;]+;base64,/.test(b)) {
-            for (var w = atob(b.split(",")[1]), M = new Uint8Array(w.length), R = 0; R < w.length; ++R) M[R] = w.charCodeAt(R);
+            for (var w = atob(b.split(",")[1]), M = new Uint8Array(w.length), P = 0; P < w.length; ++P) M[P] = w.charCodeAt(P);
             d(M.buffer, m);
           } else {
             var V = new XMLHttpRequest();
@@ -101102,8 +101482,8 @@ https://github.com/browserify/crypto-browserify`);
         }, d = function(m, b) {
           var w = function() {
             b._emit("loaderror", null, "Decoding audio data failed.");
-          }, M = function(R) {
-            R && b._sounds.length > 0 ? (a[b._src] = R, f(b, R)) : w();
+          }, M = function(P) {
+            P && b._sounds.length > 0 ? (a[b._src] = P, f(b, P)) : w();
           };
           typeof Promise < "u" && r.ctx.decodeAudioData.length === 1 ? r.ctx.decodeAudioData(m).then(M).catch(w) : r.ctx.decodeAudioData(m, M, w);
         }, f = function(m, b) {
@@ -102813,8 +103193,8 @@ https://github.com/browserify/crypto-browserify`);
       return this.multiplyMatrices(e, this);
     }
     multiplyMatrices(e, r) {
-      const s = e.elements, o = r.elements, a = this.elements, h = s[0], c = s[3], d = s[6], f = s[1], p = s[4], m = s[7], b = s[2], w = s[5], M = s[8], R = o[0], V = o[3], O = o[6], z = o[1], H = o[4], q = o[7], W = o[2], K = o[5], J = o[8];
-      return a[0] = h * R + c * z + d * W, a[3] = h * V + c * H + d * K, a[6] = h * O + c * q + d * J, a[1] = f * R + p * z + m * W, a[4] = f * V + p * H + m * K, a[7] = f * O + p * q + m * J, a[2] = b * R + w * z + M * W, a[5] = b * V + w * H + M * K, a[8] = b * O + w * q + M * J, this;
+      const s = e.elements, o = r.elements, a = this.elements, h = s[0], c = s[3], d = s[6], f = s[1], p = s[4], m = s[7], b = s[2], w = s[5], M = s[8], P = o[0], V = o[3], O = o[6], z = o[1], H = o[4], q = o[7], W = o[2], K = o[5], J = o[8];
+      return a[0] = h * P + c * z + d * W, a[3] = h * V + c * H + d * K, a[6] = h * O + c * q + d * J, a[1] = f * P + p * z + m * W, a[4] = f * V + p * H + m * K, a[7] = f * O + p * q + m * J, a[2] = b * P + w * z + M * W, a[5] = b * V + w * H + M * K, a[8] = b * O + w * q + M * J, this;
     }
     multiplyScalar(e) {
       const r = this.elements;
@@ -102827,8 +103207,8 @@ https://github.com/browserify/crypto-browserify`);
     invert() {
       const e = this.elements, r = e[0], s = e[1], o = e[2], a = e[3], h = e[4], c = e[5], d = e[6], f = e[7], p = e[8], m = p * h - c * f, b = c * d - p * a, w = f * a - h * d, M = r * m + s * b + o * w;
       if (M === 0) return this.set(0, 0, 0, 0, 0, 0, 0, 0, 0);
-      const R = 1 / M;
-      return e[0] = m * R, e[1] = (o * f - p * s) * R, e[2] = (c * s - o * h) * R, e[3] = b * R, e[4] = (p * r - o * d) * R, e[5] = (o * a - c * r) * R, e[6] = w * R, e[7] = (s * d - f * r) * R, e[8] = (h * r - s * a) * R, this;
+      const P = 1 / M;
+      return e[0] = m * P, e[1] = (o * f - p * s) * P, e[2] = (c * s - o * h) * P, e[3] = b * P, e[4] = (p * r - o * d) * P, e[5] = (o * a - c * r) * P, e[6] = w * P, e[7] = (s * d - f * r) * P, e[8] = (h * r - s * a) * P, this;
     }
     transpose() {
       let e;
@@ -103340,16 +103720,16 @@ https://github.com/browserify/crypto-browserify`);
       this.isQuaternion = true, this._x = e, this._y = r, this._z = s, this._w = o;
     }
     static slerpFlat(e, r, s, o, a, h, c) {
-      let d = s[o + 0], f = s[o + 1], p = s[o + 2], m = s[o + 3], b = a[h + 0], w = a[h + 1], M = a[h + 2], R = a[h + 3];
-      if (m !== R || d !== b || f !== w || p !== M) {
-        let V = d * b + f * w + p * M + m * R;
-        V < 0 && (b = -b, w = -w, M = -M, R = -R, V = -V);
+      let d = s[o + 0], f = s[o + 1], p = s[o + 2], m = s[o + 3], b = a[h + 0], w = a[h + 1], M = a[h + 2], P = a[h + 3];
+      if (m !== P || d !== b || f !== w || p !== M) {
+        let V = d * b + f * w + p * M + m * P;
+        V < 0 && (b = -b, w = -w, M = -M, P = -P, V = -V);
         let O = 1 - c;
         if (V < 0.9995) {
           const z = Math.acos(V), H = Math.sin(z);
-          O = Math.sin(O * z) / H, c = Math.sin(c * z) / H, d = d * O + b * c, f = f * O + w * c, p = p * O + M * c, m = m * O + R * c;
+          O = Math.sin(O * z) / H, c = Math.sin(c * z) / H, d = d * O + b * c, f = f * O + w * c, p = p * O + M * c, m = m * O + P * c;
         } else {
-          d = d * O + b * c, f = f * O + w * c, p = p * O + M * c, m = m * O + R * c;
+          d = d * O + b * c, f = f * O + w * c, p = p * O + M * c, m = m * O + P * c;
           const z = 1 / Math.sqrt(d * d + f * f + p * p + m * m);
           d *= z, f *= z, p *= z, m *= z;
         }
@@ -103794,7 +104174,7 @@ https://github.com/browserify/crypto-browserify`);
   }
   const _vector$5 = new Vector3(), _quaternion$3 = new Quaternion();
   class Matrix4 {
-    constructor(e, r, s, o, a, h, c, d, f, p, m, b, w, M, R, V) {
+    constructor(e, r, s, o, a, h, c, d, f, p, m, b, w, M, P, V) {
       Matrix4.prototype.isMatrix4 = true, this.elements = [
         1,
         0,
@@ -103812,11 +104192,11 @@ https://github.com/browserify/crypto-browserify`);
         0,
         0,
         1
-      ], e !== void 0 && this.set(e, r, s, o, a, h, c, d, f, p, m, b, w, M, R, V);
+      ], e !== void 0 && this.set(e, r, s, o, a, h, c, d, f, p, m, b, w, M, P, V);
     }
-    set(e, r, s, o, a, h, c, d, f, p, m, b, w, M, R, V) {
+    set(e, r, s, o, a, h, c, d, f, p, m, b, w, M, P, V) {
       const O = this.elements;
-      return O[0] = e, O[4] = r, O[8] = s, O[12] = o, O[1] = a, O[5] = h, O[9] = c, O[13] = d, O[2] = f, O[6] = p, O[10] = m, O[14] = b, O[3] = w, O[7] = M, O[11] = R, O[15] = V, this;
+      return O[0] = e, O[4] = r, O[8] = s, O[12] = o, O[1] = a, O[5] = h, O[9] = c, O[13] = d, O[2] = f, O[6] = p, O[10] = m, O[14] = b, O[3] = w, O[7] = M, O[11] = P, O[15] = V, this;
     }
     identity() {
       return this.set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1), this;
@@ -103850,23 +104230,23 @@ https://github.com/browserify/crypto-browserify`);
     makeRotationFromEuler(e) {
       const r = this.elements, s = e.x, o = e.y, a = e.z, h = Math.cos(s), c = Math.sin(s), d = Math.cos(o), f = Math.sin(o), p = Math.cos(a), m = Math.sin(a);
       if (e.order === "XYZ") {
-        const b = h * p, w = h * m, M = c * p, R = c * m;
-        r[0] = d * p, r[4] = -d * m, r[8] = f, r[1] = w + M * f, r[5] = b - R * f, r[9] = -c * d, r[2] = R - b * f, r[6] = M + w * f, r[10] = h * d;
+        const b = h * p, w = h * m, M = c * p, P = c * m;
+        r[0] = d * p, r[4] = -d * m, r[8] = f, r[1] = w + M * f, r[5] = b - P * f, r[9] = -c * d, r[2] = P - b * f, r[6] = M + w * f, r[10] = h * d;
       } else if (e.order === "YXZ") {
-        const b = d * p, w = d * m, M = f * p, R = f * m;
-        r[0] = b + R * c, r[4] = M * c - w, r[8] = h * f, r[1] = h * m, r[5] = h * p, r[9] = -c, r[2] = w * c - M, r[6] = R + b * c, r[10] = h * d;
+        const b = d * p, w = d * m, M = f * p, P = f * m;
+        r[0] = b + P * c, r[4] = M * c - w, r[8] = h * f, r[1] = h * m, r[5] = h * p, r[9] = -c, r[2] = w * c - M, r[6] = P + b * c, r[10] = h * d;
       } else if (e.order === "ZXY") {
-        const b = d * p, w = d * m, M = f * p, R = f * m;
-        r[0] = b - R * c, r[4] = -h * m, r[8] = M + w * c, r[1] = w + M * c, r[5] = h * p, r[9] = R - b * c, r[2] = -h * f, r[6] = c, r[10] = h * d;
+        const b = d * p, w = d * m, M = f * p, P = f * m;
+        r[0] = b - P * c, r[4] = -h * m, r[8] = M + w * c, r[1] = w + M * c, r[5] = h * p, r[9] = P - b * c, r[2] = -h * f, r[6] = c, r[10] = h * d;
       } else if (e.order === "ZYX") {
-        const b = h * p, w = h * m, M = c * p, R = c * m;
-        r[0] = d * p, r[4] = M * f - w, r[8] = b * f + R, r[1] = d * m, r[5] = R * f + b, r[9] = w * f - M, r[2] = -f, r[6] = c * d, r[10] = h * d;
+        const b = h * p, w = h * m, M = c * p, P = c * m;
+        r[0] = d * p, r[4] = M * f - w, r[8] = b * f + P, r[1] = d * m, r[5] = P * f + b, r[9] = w * f - M, r[2] = -f, r[6] = c * d, r[10] = h * d;
       } else if (e.order === "YZX") {
-        const b = h * d, w = h * f, M = c * d, R = c * f;
-        r[0] = d * p, r[4] = R - b * m, r[8] = M * m + w, r[1] = m, r[5] = h * p, r[9] = -c * p, r[2] = -f * p, r[6] = w * m + M, r[10] = b - R * m;
+        const b = h * d, w = h * f, M = c * d, P = c * f;
+        r[0] = d * p, r[4] = P - b * m, r[8] = M * m + w, r[1] = m, r[5] = h * p, r[9] = -c * p, r[2] = -f * p, r[6] = w * m + M, r[10] = b - P * m;
       } else if (e.order === "XZY") {
-        const b = h * d, w = h * f, M = c * d, R = c * f;
-        r[0] = d * p, r[4] = -m, r[8] = f * p, r[1] = b * m + R, r[5] = h * p, r[9] = w * m - M, r[2] = M * m - w, r[6] = c * p, r[10] = R * m + b;
+        const b = h * d, w = h * f, M = c * d, P = c * f;
+        r[0] = d * p, r[4] = -m, r[8] = f * p, r[1] = b * m + P, r[5] = h * p, r[9] = w * m - M, r[2] = M * m - w, r[6] = c * p, r[10] = P * m + b;
       }
       return r[3] = 0, r[7] = 0, r[11] = 0, r[12] = 0, r[13] = 0, r[14] = 0, r[15] = 1, this;
     }
@@ -103884,16 +104264,16 @@ https://github.com/browserify/crypto-browserify`);
       return this.multiplyMatrices(e, this);
     }
     multiplyMatrices(e, r) {
-      const s = e.elements, o = r.elements, a = this.elements, h = s[0], c = s[4], d = s[8], f = s[12], p = s[1], m = s[5], b = s[9], w = s[13], M = s[2], R = s[6], V = s[10], O = s[14], z = s[3], H = s[7], q = s[11], W = s[15], K = o[0], J = o[4], ee = o[8], ie = o[12], pe = o[1], U = o[5], v = o[9], _ = o[13], $ = o[2], P = o[6], F = o[10], k = o[14], G = o[3], D = o[7], x = o[11], L = o[15];
-      return a[0] = h * K + c * pe + d * $ + f * G, a[4] = h * J + c * U + d * P + f * D, a[8] = h * ee + c * v + d * F + f * x, a[12] = h * ie + c * _ + d * k + f * L, a[1] = p * K + m * pe + b * $ + w * G, a[5] = p * J + m * U + b * P + w * D, a[9] = p * ee + m * v + b * F + w * x, a[13] = p * ie + m * _ + b * k + w * L, a[2] = M * K + R * pe + V * $ + O * G, a[6] = M * J + R * U + V * P + O * D, a[10] = M * ee + R * v + V * F + O * x, a[14] = M * ie + R * _ + V * k + O * L, a[3] = z * K + H * pe + q * $ + W * G, a[7] = z * J + H * U + q * P + W * D, a[11] = z * ee + H * v + q * F + W * x, a[15] = z * ie + H * _ + q * k + W * L, this;
+      const s = e.elements, o = r.elements, a = this.elements, h = s[0], c = s[4], d = s[8], f = s[12], p = s[1], m = s[5], b = s[9], w = s[13], M = s[2], P = s[6], V = s[10], O = s[14], z = s[3], H = s[7], q = s[11], W = s[15], K = o[0], J = o[4], ee = o[8], ie = o[12], pe = o[1], U = o[5], v = o[9], _ = o[13], $ = o[2], R = o[6], F = o[10], k = o[14], G = o[3], D = o[7], x = o[11], L = o[15];
+      return a[0] = h * K + c * pe + d * $ + f * G, a[4] = h * J + c * U + d * R + f * D, a[8] = h * ee + c * v + d * F + f * x, a[12] = h * ie + c * _ + d * k + f * L, a[1] = p * K + m * pe + b * $ + w * G, a[5] = p * J + m * U + b * R + w * D, a[9] = p * ee + m * v + b * F + w * x, a[13] = p * ie + m * _ + b * k + w * L, a[2] = M * K + P * pe + V * $ + O * G, a[6] = M * J + P * U + V * R + O * D, a[10] = M * ee + P * v + V * F + O * x, a[14] = M * ie + P * _ + V * k + O * L, a[3] = z * K + H * pe + q * $ + W * G, a[7] = z * J + H * U + q * R + W * D, a[11] = z * ee + H * v + q * F + W * x, a[15] = z * ie + H * _ + q * k + W * L, this;
     }
     multiplyScalar(e) {
       const r = this.elements;
       return r[0] *= e, r[4] *= e, r[8] *= e, r[12] *= e, r[1] *= e, r[5] *= e, r[9] *= e, r[13] *= e, r[2] *= e, r[6] *= e, r[10] *= e, r[14] *= e, r[3] *= e, r[7] *= e, r[11] *= e, r[15] *= e, this;
     }
     determinant() {
-      const e = this.elements, r = e[0], s = e[4], o = e[8], a = e[12], h = e[1], c = e[5], d = e[9], f = e[13], p = e[2], m = e[6], b = e[10], w = e[14], M = e[3], R = e[7], V = e[11], O = e[15], z = d * w - f * b, H = c * w - f * m, q = c * b - d * m, W = h * w - f * p, K = h * b - d * p, J = h * m - c * p;
-      return r * (R * z - V * H + O * q) - s * (M * z - V * W + O * K) + o * (M * H - R * W + O * J) - a * (M * q - R * K + V * J);
+      const e = this.elements, r = e[0], s = e[4], o = e[8], a = e[12], h = e[1], c = e[5], d = e[9], f = e[13], p = e[2], m = e[6], b = e[10], w = e[14], M = e[3], P = e[7], V = e[11], O = e[15], z = d * w - f * b, H = c * w - f * m, q = c * b - d * m, W = h * w - f * p, K = h * b - d * p, J = h * m - c * p;
+      return r * (P * z - V * H + O * q) - s * (M * z - V * W + O * K) + o * (M * H - P * W + O * J) - a * (M * q - P * K + V * J);
     }
     transpose() {
       const e = this.elements;
@@ -103905,10 +104285,10 @@ https://github.com/browserify/crypto-browserify`);
       return e.isVector3 ? (o[12] = e.x, o[13] = e.y, o[14] = e.z) : (o[12] = e, o[13] = r, o[14] = s), this;
     }
     invert() {
-      const e = this.elements, r = e[0], s = e[1], o = e[2], a = e[3], h = e[4], c = e[5], d = e[6], f = e[7], p = e[8], m = e[9], b = e[10], w = e[11], M = e[12], R = e[13], V = e[14], O = e[15], z = r * c - s * h, H = r * d - o * h, q = r * f - a * h, W = s * d - o * c, K = s * f - a * c, J = o * f - a * d, ee = p * R - m * M, ie = p * V - b * M, pe = p * O - w * M, U = m * V - b * R, v = m * O - w * R, _ = b * O - w * V, $ = z * _ - H * v + q * U + W * pe - K * ie + J * ee;
+      const e = this.elements, r = e[0], s = e[1], o = e[2], a = e[3], h = e[4], c = e[5], d = e[6], f = e[7], p = e[8], m = e[9], b = e[10], w = e[11], M = e[12], P = e[13], V = e[14], O = e[15], z = r * c - s * h, H = r * d - o * h, q = r * f - a * h, W = s * d - o * c, K = s * f - a * c, J = o * f - a * d, ee = p * P - m * M, ie = p * V - b * M, pe = p * O - w * M, U = m * V - b * P, v = m * O - w * P, _ = b * O - w * V, $ = z * _ - H * v + q * U + W * pe - K * ie + J * ee;
       if ($ === 0) return this.set(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-      const P = 1 / $;
-      return e[0] = (c * _ - d * v + f * U) * P, e[1] = (o * v - s * _ - a * U) * P, e[2] = (R * J - V * K + O * W) * P, e[3] = (b * K - m * J - w * W) * P, e[4] = (d * pe - h * _ - f * ie) * P, e[5] = (r * _ - o * pe + a * ie) * P, e[6] = (V * q - M * J - O * H) * P, e[7] = (p * J - b * q + w * H) * P, e[8] = (h * v - c * pe + f * ee) * P, e[9] = (s * pe - r * v - a * ee) * P, e[10] = (M * K - R * q + O * z) * P, e[11] = (m * q - p * K - w * z) * P, e[12] = (c * ie - h * U - d * ee) * P, e[13] = (r * U - s * ie + o * ee) * P, e[14] = (R * H - M * W - V * z) * P, e[15] = (p * W - m * H + b * z) * P, this;
+      const R = 1 / $;
+      return e[0] = (c * _ - d * v + f * U) * R, e[1] = (o * v - s * _ - a * U) * R, e[2] = (P * J - V * K + O * W) * R, e[3] = (b * K - m * J - w * W) * R, e[4] = (d * pe - h * _ - f * ie) * R, e[5] = (r * _ - o * pe + a * ie) * R, e[6] = (V * q - M * J - O * H) * R, e[7] = (p * J - b * q + w * H) * R, e[8] = (h * v - c * pe + f * ee) * R, e[9] = (s * pe - r * v - a * ee) * R, e[10] = (M * K - P * q + O * z) * R, e[11] = (m * q - p * K - w * z) * R, e[12] = (c * ie - h * U - d * ee) * R, e[13] = (r * U - s * ie + o * ee) * R, e[14] = (P * H - M * W - V * z) * R, e[15] = (p * W - m * H + b * z) * R, this;
     }
     scale(e) {
       const r = this.elements, s = e.x, o = e.y, a = e.z;
@@ -103944,8 +104324,8 @@ https://github.com/browserify/crypto-browserify`);
       return this.set(1, s, a, 0, e, 1, h, 0, r, o, 1, 0, 0, 0, 0, 1), this;
     }
     compose(e, r, s) {
-      const o = this.elements, a = r._x, h = r._y, c = r._z, d = r._w, f = a + a, p = h + h, m = c + c, b = a * f, w = a * p, M = a * m, R = h * p, V = h * m, O = c * m, z = d * f, H = d * p, q = d * m, W = s.x, K = s.y, J = s.z;
-      return o[0] = (1 - (R + O)) * W, o[1] = (w + q) * W, o[2] = (M - H) * W, o[3] = 0, o[4] = (w - q) * K, o[5] = (1 - (b + O)) * K, o[6] = (V + z) * K, o[7] = 0, o[8] = (M + H) * J, o[9] = (V - z) * J, o[10] = (1 - (b + R)) * J, o[11] = 0, o[12] = e.x, o[13] = e.y, o[14] = e.z, o[15] = 1, this;
+      const o = this.elements, a = r._x, h = r._y, c = r._z, d = r._w, f = a + a, p = h + h, m = c + c, b = a * f, w = a * p, M = a * m, P = h * p, V = h * m, O = c * m, z = d * f, H = d * p, q = d * m, W = s.x, K = s.y, J = s.z;
+      return o[0] = (1 - (P + O)) * W, o[1] = (w + q) * W, o[2] = (M - H) * W, o[3] = 0, o[4] = (w - q) * K, o[5] = (1 - (b + O)) * K, o[6] = (V + z) * K, o[7] = 0, o[8] = (M + H) * J, o[9] = (V - z) * J, o[10] = (1 - (b + P)) * J, o[11] = 0, o[12] = e.x, o[13] = e.y, o[14] = e.z, o[15] = 1, this;
     }
     decompose(e, r, s) {
       const o = this.elements;
@@ -103960,21 +104340,21 @@ https://github.com/browserify/crypto-browserify`);
     }
     makePerspective(e, r, s, o, a, h, c = WebGLCoordinateSystem, d = false) {
       const f = this.elements, p = 2 * a / (r - e), m = 2 * a / (s - o), b = (r + e) / (r - e), w = (s + o) / (s - o);
-      let M, R;
-      if (d) M = a / (h - a), R = h * a / (h - a);
-      else if (c === WebGLCoordinateSystem) M = -(h + a) / (h - a), R = -2 * h * a / (h - a);
-      else if (c === WebGPUCoordinateSystem) M = -h / (h - a), R = -h * a / (h - a);
+      let M, P;
+      if (d) M = a / (h - a), P = h * a / (h - a);
+      else if (c === WebGLCoordinateSystem) M = -(h + a) / (h - a), P = -2 * h * a / (h - a);
+      else if (c === WebGPUCoordinateSystem) M = -h / (h - a), P = -h * a / (h - a);
       else throw new Error("THREE.Matrix4.makePerspective(): Invalid coordinate system: " + c);
-      return f[0] = p, f[4] = 0, f[8] = b, f[12] = 0, f[1] = 0, f[5] = m, f[9] = w, f[13] = 0, f[2] = 0, f[6] = 0, f[10] = M, f[14] = R, f[3] = 0, f[7] = 0, f[11] = -1, f[15] = 0, this;
+      return f[0] = p, f[4] = 0, f[8] = b, f[12] = 0, f[1] = 0, f[5] = m, f[9] = w, f[13] = 0, f[2] = 0, f[6] = 0, f[10] = M, f[14] = P, f[3] = 0, f[7] = 0, f[11] = -1, f[15] = 0, this;
     }
     makeOrthographic(e, r, s, o, a, h, c = WebGLCoordinateSystem, d = false) {
       const f = this.elements, p = 2 / (r - e), m = 2 / (s - o), b = -(r + e) / (r - e), w = -(s + o) / (s - o);
-      let M, R;
-      if (d) M = 1 / (h - a), R = h / (h - a);
-      else if (c === WebGLCoordinateSystem) M = -2 / (h - a), R = -(h + a) / (h - a);
-      else if (c === WebGPUCoordinateSystem) M = -1 / (h - a), R = -a / (h - a);
+      let M, P;
+      if (d) M = 1 / (h - a), P = h / (h - a);
+      else if (c === WebGLCoordinateSystem) M = -2 / (h - a), P = -(h + a) / (h - a);
+      else if (c === WebGPUCoordinateSystem) M = -1 / (h - a), P = -a / (h - a);
       else throw new Error("THREE.Matrix4.makeOrthographic(): Invalid coordinate system: " + c);
-      return f[0] = p, f[4] = 0, f[8] = 0, f[12] = b, f[1] = 0, f[5] = m, f[9] = 0, f[13] = w, f[2] = 0, f[6] = 0, f[10] = M, f[14] = R, f[3] = 0, f[7] = 0, f[11] = 0, f[15] = 1, this;
+      return f[0] = p, f[4] = 0, f[8] = 0, f[12] = b, f[1] = 0, f[5] = m, f[9] = 0, f[13] = w, f[2] = 0, f[6] = 0, f[10] = M, f[14] = P, f[3] = 0, f[7] = 0, f[11] = 0, f[15] = 1, this;
     }
     equals(e) {
       const r = this.elements, s = e.elements;
@@ -104302,15 +104682,15 @@ https://github.com/browserify/crypto-browserify`);
     }
     setAxisAngleFromRotationMatrix(e) {
       let r, s, o, a;
-      const d = e.elements, f = d[0], p = d[4], m = d[8], b = d[1], w = d[5], M = d[9], R = d[2], V = d[6], O = d[10];
-      if (Math.abs(p - b) < 0.01 && Math.abs(m - R) < 0.01 && Math.abs(M - V) < 0.01) {
-        if (Math.abs(p + b) < 0.1 && Math.abs(m + R) < 0.1 && Math.abs(M + V) < 0.1 && Math.abs(f + w + O - 3) < 0.1) return this.set(1, 0, 0, 0), this;
+      const d = e.elements, f = d[0], p = d[4], m = d[8], b = d[1], w = d[5], M = d[9], P = d[2], V = d[6], O = d[10];
+      if (Math.abs(p - b) < 0.01 && Math.abs(m - P) < 0.01 && Math.abs(M - V) < 0.01) {
+        if (Math.abs(p + b) < 0.1 && Math.abs(m + P) < 0.1 && Math.abs(M + V) < 0.1 && Math.abs(f + w + O - 3) < 0.1) return this.set(1, 0, 0, 0), this;
         r = Math.PI;
-        const H = (f + 1) / 2, q = (w + 1) / 2, W = (O + 1) / 2, K = (p + b) / 4, J = (m + R) / 4, ee = (M + V) / 4;
+        const H = (f + 1) / 2, q = (w + 1) / 2, W = (O + 1) / 2, K = (p + b) / 4, J = (m + P) / 4, ee = (M + V) / 4;
         return H > q && H > W ? H < 0.01 ? (s = 0, o = 0.707106781, a = 0.707106781) : (s = Math.sqrt(H), o = K / s, a = J / s) : q > W ? q < 0.01 ? (s = 0.707106781, o = 0, a = 0.707106781) : (o = Math.sqrt(q), s = K / o, a = ee / o) : W < 0.01 ? (s = 0.707106781, o = 0.707106781, a = 0) : (a = Math.sqrt(W), s = J / a, o = ee / a), this.set(s, o, a, r), this;
       }
-      let z = Math.sqrt((V - M) * (V - M) + (m - R) * (m - R) + (b - p) * (b - p));
-      return Math.abs(z) < 1e-3 && (z = 1), this.x = (V - M) / z, this.y = (m - R) / z, this.z = (b - p) / z, this.w = Math.acos((f + w + O - 1) / 2), this;
+      let z = Math.sqrt((V - M) * (V - M) + (m - P) * (m - P) + (b - p) * (b - p));
+      return Math.abs(z) < 1e-3 && (z = 1), this.x = (V - M) / z, this.y = (m - P) / z, this.z = (b - p) / z, this.w = Math.acos((f + w + O - 1) / 2), this;
     }
     setFromMatrixPosition(e) {
       const r = e.elements;
@@ -104879,8 +105259,8 @@ ${r}`;
         }
         let m = p.getNodeType(e), b = e.getTypeLength(m), w;
         if (d + b > o && (error(`TSL: Length of '${s}()' data exceeds maximum length of output type.`, this.stackTrace), b = o - d, m = e.getTypeFromLength(b)), d += b, w = p.build(e, m), e.getComponentType(m) !== h) {
-          const R = e.getTypeFromLength(b, h);
-          w = e.format(w, m, R);
+          const P = e.getTypeFromLength(b, h);
+          w = e.format(w, m, P);
         }
         c.push(w);
       }
@@ -105176,11 +105556,11 @@ ${r}`;
         f = nodeObject(m.call(b));
       } else {
         const p = new Proxy(e, {
-          get: (R, V, O) => {
+          get: (P, V, O) => {
             let z;
             return Symbol.iterator === V ? z = function* () {
               yield void 0;
-            } : z = Reflect.get(R, V, O), z;
+            } : z = Reflect.get(P, V, O), z;
           }
         }), m = s ? getProxyParameters(s) : null, b = Array.isArray(s) ? s.length > 0 : s !== null, w = r.jsFunc, M = b || w.length > 1 ? w(m, p) : w(p);
         f = nodeObject(M);
@@ -105928,7 +106308,7 @@ ${r}`;
       o.nodeProperty = p;
       const m = a.build(e, "bool");
       if (e.context.uniformFlow && c !== null) {
-        const M = h.build(e, s), R = c.build(e, s), V = e.getTernary(m, M, R);
+        const M = h.build(e, s), P = c.build(e, s), V = e.getTernary(m, M, P);
         return e.format(V, s, r);
       }
       e.addFlowCode(`
@@ -106072,8 +106452,8 @@ ${e.tab}if ( ${m} ) {
       let M = w;
       if (d) if (h) M = c ? `const ${w}` : `let ${w}`;
       else {
-        const R = r.getArrayCount(e);
-        M = `const ${e.getVar(b.type, w, R)}`;
+        const P = r.getArrayCount(e);
+        M = `const ${e.getVar(b.type, w, P)}`;
       }
       return e.addLineFlowCode(`${M} = ${m}`, this), w;
     }
@@ -107771,7 +108151,7 @@ ${e.tab}if ( ${m} ) {
         const h = e.getDataFromNode(this), c = this.getNodeType(e);
         let d = h.propertyName;
         if (d === void 0) {
-          const { uvNode: p, levelNode: m, biasNode: b, compareNode: w, compareStepNode: M, depthNode: R, gradNode: V, offsetNode: O } = o, z = this.generateUV(e, p), H = m ? m.build(e, "float") : null, q = b ? b.build(e, "float") : null, W = R ? R.build(e, "int") : null, K = w ? w.build(e, "float") : null, J = M ? M.build(e, "float") : null, ee = V ? [
+          const { uvNode: p, levelNode: m, biasNode: b, compareNode: w, compareStepNode: M, depthNode: P, gradNode: V, offsetNode: O } = o, z = this.generateUV(e, p), H = m ? m.build(e, "float") : null, q = b ? b.build(e, "float") : null, W = P ? P.build(e, "int") : null, K = w ? w.build(e, "float") : null, J = M ? M.build(e, "float") : null, ee = V ? [
             V[0].build(e, "vec2"),
             V[1].build(e, "vec2")
           ] : null, ie = O ? this.generateOffset(e, O) : null, pe = e.getVarFromNode(this);
@@ -108640,7 +109020,7 @@ ${e.tab}if ( ${m} ) {
     setup(e) {
       this.batchingIdNode === null && (e.getDrawIndex() === null ? this.batchingIdNode = instanceIndex : this.batchingIdNode = drawIndex);
       const s = Fn(([M]) => {
-        const R = int(textureSize(textureLoad(this.batchMesh._indirectTexture), 0).x).toConst(), V = int(M).mod(R).toConst(), O = int(M).div(R).toConst();
+        const P = int(textureSize(textureLoad(this.batchMesh._indirectTexture), 0).x).toConst(), V = int(M).mod(P).toConst(), O = int(M).div(P).toConst();
         return textureLoad(this.batchMesh._indirectTexture, ivec2(V, O)).x;
       }).setLayout({
         name: "getIndirectIndex",
@@ -108653,7 +109033,7 @@ ${e.tab}if ( ${m} ) {
         ]
       })(int(this.batchingIdNode)), o = this.batchMesh._matricesTexture, a = int(textureSize(textureLoad(o), 0).x).toConst(), h = float(s).mul(4).toInt().toConst(), c = h.mod(a).toConst(), d = h.div(a).toConst(), f = mat4(textureLoad(o, ivec2(c, d)), textureLoad(o, ivec2(c.add(1), d)), textureLoad(o, ivec2(c.add(2), d)), textureLoad(o, ivec2(c.add(3), d))), p = this.batchMesh._colorsTexture;
       if (p !== null) {
-        const R = Fn(([V]) => {
+        const P = Fn(([V]) => {
           const O = int(textureSize(textureLoad(p), 0).x).toConst(), z = V, H = z.mod(O).toConst(), q = z.div(O).toConst();
           return textureLoad(p, ivec2(H, q)).rgb;
         }).setLayout({
@@ -108666,7 +109046,7 @@ ${e.tab}if ( ${m} ) {
             }
           ]
         })(s);
-        varyingProperty("vec3", "vBatchColor").assign(R);
+        varyingProperty("vec3", "vBatchColor").assign(P);
       }
       const m = mat3(f);
       positionLocal$1.assign(f.mul(positionLocal$1));
@@ -108759,8 +109139,8 @@ ${e.tab}if ( ${m} ) {
       const r = this.getProperties(e), s = this.params, o = r.stackNode;
       for (let h = 0, c = s.length - 1; h < c; h++) {
         const d = s[h];
-        let f = false, p = null, m = null, b = null, w = null, M = null, R = null;
-        d.isNode ? d.getNodeType(e) === "bool" ? (f = true, w = "bool", m = d.build(e, w)) : (w = "int", b = this.getVarName(h), p = "0", m = d.build(e, w), M = "<") : (w = d.type || "int", b = d.name || this.getVarName(h), p = d.start, m = d.end, M = d.condition, R = d.update, typeof p == "number" ? p = e.generateConst(w, p) : p && p.isNode && (p = p.build(e, w)), typeof m == "number" ? m = e.generateConst(w, m) : m && m.isNode && (m = m.build(e, w)), p !== void 0 && m === void 0 ? (p = p + " - 1", m = "0", M = ">=") : m !== void 0 && p === void 0 && (p = "0", M = "<"), M === void 0 && (Number(p) > Number(m) ? M = ">=" : M = "<"));
+        let f = false, p = null, m = null, b = null, w = null, M = null, P = null;
+        d.isNode ? d.getNodeType(e) === "bool" ? (f = true, w = "bool", m = d.build(e, w)) : (w = "int", b = this.getVarName(h), p = "0", m = d.build(e, w), M = "<") : (w = d.type || "int", b = d.name || this.getVarName(h), p = d.start, m = d.end, M = d.condition, P = d.update, typeof p == "number" ? p = e.generateConst(w, p) : p && p.isNode && (p = p.build(e, w)), typeof m == "number" ? m = e.generateConst(w, m) : m && m.isNode && (m = m.build(e, w)), p !== void 0 && m === void 0 ? (p = p + " - 1", m = "0", M = ">=") : m !== void 0 && p === void 0 && (p = "0", M = "<"), M === void 0 && (Number(p) > Number(m) ? M = ">=" : M = "<"));
         let V;
         if (f) V = `while ( ${m} )`;
         else {
@@ -108770,20 +109150,20 @@ ${e.tab}if ( ${m} ) {
           }, z = O.start, H = O.end;
           let q;
           const W = () => M.includes("<") ? "+=" : "-=";
-          if (R != null) switch (typeof R) {
+          if (P != null) switch (typeof P) {
             case "function":
               q = e.flowStagesNode(r.updateNode, "void").code.replace(/\t|;/g, "");
               break;
             case "number":
-              q = b + " " + W() + " " + e.generateConst(w, R);
+              q = b + " " + W() + " " + e.generateConst(w, P);
               break;
             case "string":
-              q = b + " " + R;
+              q = b + " " + P;
               break;
             default:
-              R.isNode ? q = b + " " + W() + " " + R.build(e) : (error("TSL: 'Loop( { update: ... } )' is not a function, string or number.", this.stackTrace), q = "break /* invalid update */");
+              P.isNode ? q = b + " " + W() + " " + P.build(e) : (error("TSL: 'Loop( { update: ... } )' is not a function, string or number.", this.stackTrace), q = "break /* invalid update */");
           }
-          else w === "int" || w === "uint" ? R = M.includes("<") ? "++" : "--" : R = W() + " 1.", q = b + " " + R;
+          else w === "int" || w === "uint" ? P = M.includes("<") ? "++" : "--" : P = W() + " 1.", q = b + " " + P;
           const K = e.getVar(w, b) + " = " + z, J = b + " " + M + " " + H;
           V = `for ( ${K}; ${J}; ${q} )`;
         }
@@ -108827,7 +109207,7 @@ ${e.tab}if ( ${m} ) {
     let h = _morphTextures.get(l);
     if (h === void 0 || h.count !== a) {
       let O = function() {
-        R.dispose(), _morphTextures.delete(l), l.removeEventListener("dispose", O);
+        P.dispose(), _morphTextures.delete(l), l.removeEventListener("dispose", O);
       };
       h !== void 0 && h.texture.dispose();
       const c = l.morphAttributes.position || [], d = l.morphAttributes.normal || [], f = l.morphAttributes.color || [];
@@ -108836,8 +109216,8 @@ ${e.tab}if ( ${m} ) {
       let m = l.attributes.position.count * p, b = 1;
       const w = 4096;
       m > w && (b = Math.ceil(m / w), m = w);
-      const M = new Float32Array(m * b * 4 * a), R = new DataArrayTexture(M, m, b, a);
-      R.type = FloatType, R.needsUpdate = true;
+      const M = new Float32Array(m * b * 4 * a), P = new DataArrayTexture(M, m, b, a);
+      P.type = FloatType, P.needsUpdate = true;
       const V = p * 4;
       for (let z = 0; z < a; z++) {
         const H = c[z], q = d[z], W = f[z], K = m * b * 4 * z;
@@ -108848,7 +109228,7 @@ ${e.tab}if ( ${m} ) {
       }
       h = {
         count: a,
-        texture: R,
+        texture: P,
         stride: p,
         size: new Vector2(m, b)
       }, _morphTextures.set(l, h), l.addEventListener("dispose", O);
@@ -109270,8 +109650,8 @@ ${e.tab}if ( ${m} ) {
         if (q === void 0) return delete p[z], false;
         if (H.id !== q.id || H.version !== q.version) return H.id = q.id, H.version = q.version, false;
       }
-      const w = a.index, M = d.indexId, R = d.indexVersion, V = w ? w.id : null, O = w ? w.version : null;
-      if (M !== V || R !== O) return d.indexId = V, d.indexVersion = O, false;
+      const w = a.index, M = d.indexId, P = d.indexVersion, V = w ? w.id : null, O = w ? w.version : null;
+      if (M !== V || P !== O) return d.indexId = V, d.indexVersion = O, false;
       if (d.drawRange.start !== a.drawRange.start || d.drawRange.count !== a.drawRange.count) return d.drawRange.start = a.drawRange.start, d.drawRange.count = a.drawRange.count, false;
       if (h.morphTargetInfluences) {
         let z = false;
@@ -110082,10 +110462,10 @@ ${e.tab}if ( ${m} ) {
       this.coordinateSystem !== e.coordinateSystem && (this.coordinateSystem = e.coordinateSystem, this.updateCoordinateSystem());
       const [a, h, c, d, f, p] = this.children, m = e.getRenderTarget(), b = e.getActiveCubeFace(), w = e.getActiveMipmapLevel(), M = e.xr.enabled;
       e.xr.enabled = false;
-      const R = s.texture.generateMipmaps;
+      const P = s.texture.generateMipmaps;
       s.texture.generateMipmaps = false;
       let V = false;
-      e.isWebGLRenderer === true ? V = e.state.buffers.depth.getReversed() : V = e.reversedDepthBuffer, e.setRenderTarget(s, 0, o), V && e.autoClear === false && e.clearDepth(), e.render(r, a), e.setRenderTarget(s, 1, o), V && e.autoClear === false && e.clearDepth(), e.render(r, h), e.setRenderTarget(s, 2, o), V && e.autoClear === false && e.clearDepth(), e.render(r, c), e.setRenderTarget(s, 3, o), V && e.autoClear === false && e.clearDepth(), e.render(r, d), e.setRenderTarget(s, 4, o), V && e.autoClear === false && e.clearDepth(), e.render(r, f), s.texture.generateMipmaps = R, e.setRenderTarget(s, 5, o), V && e.autoClear === false && e.clearDepth(), e.render(r, p), e.setRenderTarget(m, b, w), e.xr.enabled = M, s.texture.needsPMREMUpdate = true;
+      e.isWebGLRenderer === true ? V = e.state.buffers.depth.getReversed() : V = e.reversedDepthBuffer, e.setRenderTarget(s, 0, o), V && e.autoClear === false && e.clearDepth(), e.render(r, a), e.setRenderTarget(s, 1, o), V && e.autoClear === false && e.clearDepth(), e.render(r, h), e.setRenderTarget(s, 2, o), V && e.autoClear === false && e.clearDepth(), e.render(r, c), e.setRenderTarget(s, 3, o), V && e.autoClear === false && e.clearDepth(), e.render(r, d), e.setRenderTarget(s, 4, o), V && e.autoClear === false && e.clearDepth(), e.render(r, f), s.texture.generateMipmaps = P, e.setRenderTarget(s, 5, o), V && e.autoClear === false && e.clearDepth(), e.render(r, p), e.setRenderTarget(m, b, w), e.xr.enabled = M, s.texture.needsPMREMUpdate = true;
     }
   }
   let _id = 0;
@@ -110238,11 +110618,11 @@ ${e.tab}if ( ${m} ) {
       this.hasAttribute("tangent") === false && this.setAttribute("tangent", new BufferAttribute(new Float32Array(4 * s.count), 4));
       const h = this.getAttribute("tangent"), c = [], d = [];
       for (let ee = 0; ee < s.count; ee++) c[ee] = new Vector3(), d[ee] = new Vector3();
-      const f = new Vector3(), p = new Vector3(), m = new Vector3(), b = new Vector2(), w = new Vector2(), M = new Vector2(), R = new Vector3(), V = new Vector3();
+      const f = new Vector3(), p = new Vector3(), m = new Vector3(), b = new Vector2(), w = new Vector2(), M = new Vector2(), P = new Vector3(), V = new Vector3();
       function O(ee, ie, pe) {
         f.fromBufferAttribute(s, ee), p.fromBufferAttribute(s, ie), m.fromBufferAttribute(s, pe), b.fromBufferAttribute(a, ee), w.fromBufferAttribute(a, ie), M.fromBufferAttribute(a, pe), p.sub(f), m.sub(f), w.sub(b), M.sub(b);
         const U = 1 / (w.x * M.y - M.x * w.y);
-        isFinite(U) && (R.copy(p).multiplyScalar(M.y).addScaledVector(m, -w.y).multiplyScalar(U), V.copy(m).multiplyScalar(w.x).addScaledVector(p, -M.x).multiplyScalar(U), c[ee].add(R), c[ie].add(R), c[pe].add(R), d[ee].add(V), d[ie].add(V), d[pe].add(V));
+        isFinite(U) && (P.copy(p).multiplyScalar(M.y).addScaledVector(m, -w.y).multiplyScalar(U), V.copy(m).multiplyScalar(w.x).addScaledVector(p, -M.x).multiplyScalar(U), c[ee].add(P), c[ie].add(P), c[pe].add(P), d[ee].add(V), d[ie].add(V), d[pe].add(V));
       }
       let z = this.groups;
       z.length === 0 && (z = [
@@ -110276,8 +110656,8 @@ ${e.tab}if ( ${m} ) {
         else for (let b = 0, w = s.count; b < w; b++) s.setXYZ(b, 0, 0, 0);
         const o = new Vector3(), a = new Vector3(), h = new Vector3(), c = new Vector3(), d = new Vector3(), f = new Vector3(), p = new Vector3(), m = new Vector3();
         if (e) for (let b = 0, w = e.count; b < w; b += 3) {
-          const M = e.getX(b + 0), R = e.getX(b + 1), V = e.getX(b + 2);
-          o.fromBufferAttribute(r, M), a.fromBufferAttribute(r, R), h.fromBufferAttribute(r, V), p.subVectors(h, a), m.subVectors(o, a), p.cross(m), c.fromBufferAttribute(s, M), d.fromBufferAttribute(s, R), f.fromBufferAttribute(s, V), c.add(p), d.add(p), f.add(p), s.setXYZ(M, c.x, c.y, c.z), s.setXYZ(R, d.x, d.y, d.z), s.setXYZ(V, f.x, f.y, f.z);
+          const M = e.getX(b + 0), P = e.getX(b + 1), V = e.getX(b + 2);
+          o.fromBufferAttribute(r, M), a.fromBufferAttribute(r, P), h.fromBufferAttribute(r, V), p.subVectors(h, a), m.subVectors(o, a), p.cross(m), c.fromBufferAttribute(s, M), d.fromBufferAttribute(s, P), f.fromBufferAttribute(s, V), c.add(p), d.add(p), f.add(p), s.setXYZ(M, c.x, c.y, c.z), s.setXYZ(P, d.x, d.y, d.z), s.setXYZ(V, f.x, f.y, f.z);
         }
         else for (let b = 0, w = r.count; b < w; b += 3) o.fromBufferAttribute(r, b + 0), a.fromBufferAttribute(r, b + 1), h.fromBufferAttribute(r, b + 2), p.subVectors(h, a), m.subVectors(o, a), p.cross(m), s.setXYZ(b + 0, p.x, p.y, p.z), s.setXYZ(b + 1, p.x, p.y, p.z), s.setXYZ(b + 2, p.x, p.y, p.z);
         this.normalizeNormals(), s.needsUpdate = true;
@@ -110291,8 +110671,8 @@ ${e.tab}if ( ${m} ) {
       function e(c, d) {
         const f = c.array, p = c.itemSize, m = c.normalized, b = new f.constructor(d.length * p);
         let w = 0, M = 0;
-        for (let R = 0, V = d.length; R < V; R++) {
-          c.isInterleavedBufferAttribute ? w = d[R] * c.data.stride + c.offset : w = d[R] * p;
+        for (let P = 0, V = d.length; P < V; P++) {
+          c.isInterleavedBufferAttribute ? w = d[P] * c.data.stride + c.offset : w = d[P] * p;
           for (let O = 0; O < p; O++) b[M++] = f[w++];
         }
         return new BufferAttribute(b, p, m);
@@ -110414,19 +110794,19 @@ ${e.tab}if ( ${m} ) {
       const d = [], f = [], p = [], m = [];
       let b = 0, w = 0;
       M("z", "y", "x", -1, -1, s, r, e, h, a, 0), M("z", "y", "x", 1, -1, s, r, -e, h, a, 1), M("x", "z", "y", 1, 1, e, s, r, o, h, 2), M("x", "z", "y", 1, -1, e, s, -r, o, h, 3), M("x", "y", "z", 1, -1, e, r, s, o, a, 4), M("x", "y", "z", -1, -1, e, r, -s, o, a, 5), this.setIndex(d), this.setAttribute("position", new Float32BufferAttribute(f, 3)), this.setAttribute("normal", new Float32BufferAttribute(p, 3)), this.setAttribute("uv", new Float32BufferAttribute(m, 2));
-      function M(R, V, O, z, H, q, W, K, J, ee, ie) {
-        const pe = q / J, U = W / ee, v = q / 2, _ = W / 2, $ = K / 2, P = J + 1, F = ee + 1;
+      function M(P, V, O, z, H, q, W, K, J, ee, ie) {
+        const pe = q / J, U = W / ee, v = q / 2, _ = W / 2, $ = K / 2, R = J + 1, F = ee + 1;
         let k = 0, G = 0;
         const D = new Vector3();
         for (let x = 0; x < F; x++) {
           const L = x * U - _;
-          for (let j = 0; j < P; j++) {
+          for (let j = 0; j < R; j++) {
             const Y = j * pe - v;
-            D[R] = Y * z, D[V] = L * H, D[O] = $, f.push(D.x, D.y, D.z), D[R] = 0, D[V] = 0, D[O] = K > 0 ? 1 : -1, p.push(D.x, D.y, D.z), m.push(j / J), m.push(1 - x / ee), k += 1;
+            D[P] = Y * z, D[V] = L * H, D[O] = $, f.push(D.x, D.y, D.z), D[P] = 0, D[V] = 0, D[O] = K > 0 ? 1 : -1, p.push(D.x, D.y, D.z), m.push(j / J), m.push(1 - x / ee), k += 1;
           }
         }
         for (let x = 0; x < ee; x++) for (let L = 0; L < J; L++) {
-          const j = b + L + P * x, Y = b + L + P * (x + 1), oe = b + (L + 1) + P * (x + 1), me = b + (L + 1) + P * x;
+          const j = b + L + R * x, Y = b + L + R * (x + 1), oe = b + (L + 1) + R * (x + 1), me = b + (L + 1) + R * x;
           d.push(j, Y, me), d.push(Y, oe, me), G += 6;
         }
         c.addGroup(w, G, ie), w += G, b += k;
@@ -110476,8 +110856,8 @@ ${e.tab}if ( ${m} ) {
       const a = e.distanceTo(r) * 0.5, h = -this.direction.dot(_segDir), c = _diff.dot(this.direction), d = -_diff.dot(_segDir), f = _diff.lengthSq(), p = Math.abs(1 - h * h);
       let m, b, w, M;
       if (p > 0) if (m = h * d - c, b = h * c - d, M = a * p, m >= 0) if (b >= -M) if (b <= M) {
-        const R = 1 / p;
-        m *= R, b *= R, w = m * (m + h * b + 2 * c) + b * (h * m + b + 2 * d) + f;
+        const P = 1 / p;
+        m *= P, b *= P, w = m * (m + h * b + 2 * c) + b * (h * m + b + 2 * d) + f;
       } else b = a, m = Math.max(0, -(h * b + c)), w = -m * m + b * (b + 2 * d) + f;
       else b = -a, m = Math.max(0, -(h * b + c)), w = -m * m + b * (b + 2 * d) + f;
       else b <= -M ? (m = Math.max(0, -(-h * a + c)), b = m > 0 ? -a : Math.min(Math.max(-a, -d), a), w = -m * m + b * (b + 2 * d) + f) : b <= M ? (m = 0, b = Math.min(Math.max(-a, -d), a), w = b * (b + 2 * d) + f) : (m = Math.max(0, -(h * a + c)), b = m > 0 ? a : Math.min(Math.max(-a, -d), a), w = -m * m + b * (b + 2 * d) + f);
@@ -110627,12 +111007,12 @@ ${e.tab}if ( ${m} ) {
       _vcp.subVectors(e, a);
       const w = _vab.dot(_vcp), M = _vac.dot(_vcp);
       if (M >= 0 && w <= M) return r.copy(a);
-      const R = w * f - d * M;
-      if (R <= 0 && f >= 0 && M <= 0) return c = f / (f - M), r.copy(s).addScaledVector(_vac, c);
+      const P = w * f - d * M;
+      if (P <= 0 && f >= 0 && M <= 0) return c = f / (f - M), r.copy(s).addScaledVector(_vac, c);
       const V = p * M - w * m;
       if (V <= 0 && m - p >= 0 && w - M >= 0) return _vbc.subVectors(a, o), c = (m - p) / (m - p + (w - M)), r.copy(o).addScaledVector(_vbc, c);
-      const O = 1 / (V + R + b);
-      return h = R * O, c = b * O, r.copy(s).addScaledVector(_vab, h).addScaledVector(_vac, c);
+      const O = 1 / (V + P + b);
+      return h = P * O, c = b * O, r.copy(s).addScaledVector(_vab, h).addScaledVector(_vac, c);
     }
     equals(e) {
       return e.a.equals(this.a) && e.b.equals(this.b) && e.c.equals(this.c);
@@ -110688,7 +111068,7 @@ ${e.tab}if ( ${m} ) {
     _computeIntersections(e, r, s) {
       let o;
       const a = this.geometry, h = this.material, c = a.index, d = a.attributes.position, f = a.attributes.uv, p = a.attributes.uv1, m = a.attributes.normal, b = a.groups, w = a.drawRange;
-      if (c !== null) if (Array.isArray(h)) for (let M = 0, R = b.length; M < R; M++) {
+      if (c !== null) if (Array.isArray(h)) for (let M = 0, P = b.length; M < P; M++) {
         const V = b[M], O = h[V.materialIndex], z = Math.max(V.start, w.start), H = Math.min(c.count, Math.min(V.start + V.count, w.start + w.count));
         for (let q = z, W = H; q < W; q += 3) {
           const K = c.getX(q), J = c.getX(q + 1), ee = c.getX(q + 2);
@@ -110696,13 +111076,13 @@ ${e.tab}if ( ${m} ) {
         }
       }
       else {
-        const M = Math.max(0, w.start), R = Math.min(c.count, w.start + w.count);
-        for (let V = M, O = R; V < O; V += 3) {
+        const M = Math.max(0, w.start), P = Math.min(c.count, w.start + w.count);
+        for (let V = M, O = P; V < O; V += 3) {
           const z = c.getX(V), H = c.getX(V + 1), q = c.getX(V + 2);
           o = checkGeometryIntersection(this, h, e, s, f, p, m, z, H, q), o && (o.faceIndex = Math.floor(V / 3), r.push(o));
         }
       }
-      else if (d !== void 0) if (Array.isArray(h)) for (let M = 0, R = b.length; M < R; M++) {
+      else if (d !== void 0) if (Array.isArray(h)) for (let M = 0, P = b.length; M < P; M++) {
         const V = b[M], O = h[V.materialIndex], z = Math.max(V.start, w.start), H = Math.min(d.count, Math.min(V.start + V.count, w.start + w.count));
         for (let q = z, W = H; q < W; q += 3) {
           const K = q, J = q + 1, ee = q + 2;
@@ -110710,8 +111090,8 @@ ${e.tab}if ( ${m} ) {
         }
       }
       else {
-        const M = Math.max(0, w.start), R = Math.min(d.count, w.start + w.count);
-        for (let V = M, O = R; V < O; V += 3) {
+        const M = Math.max(0, w.start), P = Math.min(d.count, w.start + w.count);
+        for (let V = M, O = P; V < O; V += 3) {
           const z = V, H = V + 1, q = V + 2;
           o = checkGeometryIntersection(this, h, e, s, f, p, m, z, H, q), o && (o.faceIndex = Math.floor(V / 3), r.push(o));
         }
@@ -110804,11 +111184,16 @@ ${e.tab}if ( ${m} ) {
       });
     }
     setTime() {
-      const e = this.element.querySelector(".js-time-toggle"), r = e.querySelector("span"), s = this.game.dayCycles.preference, o = () => {
-        r.textContent = s.labels[s.current], e.classList.toggle("is-success", s.isForced());
+      const e = this.element.querySelector(".js-time-modes");
+      if (!e) return;
+      const r = this.game.dayCycles, s = [
+        ...e.querySelectorAll("button[data-mode]")
+      ], o = () => {
+        for (const a of s) a.classList.toggle("is-active", a.dataset.mode === r.preference.current);
       };
-      o(), this.game.dayCycles.events.on("preferenceChange", o), e.addEventListener("click", () => {
-        this.playClick(), s.next();
+      o(), this.game.dayCycles.events.on("preferenceChange", o);
+      for (const a of s) a.addEventListener("click", () => {
+        this.playClick(), r.preference.set(a.dataset.mode);
       });
     }
     setHeadlights() {
@@ -111131,7 +111516,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-Dx5PZ7EZ.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-hfLQ6JPE.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

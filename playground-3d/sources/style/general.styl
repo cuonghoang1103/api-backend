@@ -114,7 +114,20 @@ ol
         // &:last-child
         //     margin-right 0
         
-a.button
+a// Nhóm NÚT CHỌN — mấy lựa chọn bày ra cùng lúc thay vì một nút bấm xoay vòng.
+// Dùng cho mục Time trong bảng Cài đặt: người chơi thấy ngay có ba chế độ
+// (Auto / Day / Night) chứ không phải bấm ba lần mới biết.
+.segmented
+    position relative
+    display inline-flex
+    vertical-align top
+    gap 6px
+
+    .button.is-active
+        color #d5ff95
+        border-color alpha(#d5ff95, 0.9)
+
+.button
         display inline-block
 
 .button

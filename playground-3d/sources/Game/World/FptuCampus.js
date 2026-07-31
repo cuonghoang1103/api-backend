@@ -8,6 +8,8 @@ import { FptuPineHill } from './FptuPineHill.js'
 import { FptuSwans } from './FptuSwans.js'
 import { FptuProps } from './FptuProps.js'
 import { FptuPeople } from './FptuPeople.js'
+import { FptuLights } from './FptuLights.js'
+import { FptuSigns } from './FptuSigns.js'
 import { Trees } from './Trees.js'
 import { Foliage } from './Foliage.js'
 import { uniform } from 'three/tsl'
@@ -102,7 +104,6 @@ export class FptuCampus
         this.setBridge()
         this.setGate()
         this.setGround()
-        this.setRankingSign()
         this.setAlpha()
         this.setBuildings()
         this.setDorms()
@@ -112,7 +113,6 @@ export class FptuCampus
         this.setParking()
         this.setPalms()
         this.setTrees()
-        this.setSign()
 
         this.setSwanLake()
 
@@ -126,6 +126,17 @@ export class FptuCampus
         // Người phải dựng SAU đồ đạc: nó dùng chung `props.blocked()` để khỏi
         // đứng giữa lòng đường hay lọt vào trong tường
         this.people = new FptuPeople(this)
+
+        // Đèn dựng SAU cột đèn của props (nó cần danh sách mặt kính) và sau
+        // đồi/cù lao (đèn phải đứng đúng cao độ mặt đất đã đổi)
+        this.lights = new FptuLights(this)
+
+        // Biển xếp hạng + bệ kê hàng chữ. Dựng SAU `canopy()` gom mốc lá vì nó
+        // trồng thêm bụi hoa dưới chân biển, và TRƯỚC khi hệ lá chung dựng.
+        this.signs = new FptuSigns(this)
+
+        // Hàng chữ nạp SAU khi có bệ — nó đặt chữ lên `signs.plinthTop`
+        this.setSign()
 
         /**
          * Hệ lá chung — dựng SAU CÙNG để gom đủ mốc từ mọi nơi (kể cả hàng rào
@@ -536,11 +547,8 @@ export class FptuCampus
         for(const [ i, hex ] of [ COLORS.orange, COLORS.green, COLORS.blue ].entries())
             this.box(0.2, 0.34, 0.62, x + 0.42, 5.62, z + (i - 1) * 0.78, hex, { castShadow: false })
 
-        // Biển đá bên phải cổng + logo FPT ba khối màu
-        this.box(0.5, 2, 4.6, x + 1.2, 1, z + opening + 3.4, '#8d7f68', { physical: true })
-        this.box(0.18, 0.55, 1, x + 1.5, 1.55, z + opening + 2.3, COLORS.orange)
-        this.box(0.18, 0.55, 1, x + 1.5, 1.55, z + opening + 3.4, COLORS.green)
-        this.box(0.18, 0.55, 1, x + 1.5, 1.55, z + opening + 4.5, COLORS.blue)
+        // Biển đá bên phải cổng nay do `FptuSigns.setGateSign()` dựng — tường đá
+        // ong có logo FPT và bảng QS Stars vẽ thật, thay cho ba khối màu cũ
 
         // Bốt bảo vệ bên trái
         this.box(2.4, 2.5, 2.4, x, 1.25, z - opening - 2.6, COLORS.wall, { physical: true })
@@ -579,33 +587,6 @@ export class FptuCampus
 
         for(let i = 0; i < 12; i++)
             this.slab(2.4, 0.2, THROUGH_ROAD.fromX - 6 - i * 5, THROUGH_ROAD.z, '#e8e4da', { layer: 2 })
-    }
-
-    /**
-     * Biển "top xếp hạng đại học thế giới" giữa sảnh — như tấm biển đá STARS
-     * trong ảnh cổng trường. Xe vòng qua hai bên (sảnh rộng 30, biển chỉ 9).
-     */
-    setRankingSign()
-    {
-        const { x, z, height, width } = RANKING_SIGN
-
-        // Bệ + thân biển. Bản trước để biển cao 3,2 rộng 8,5 ĐỨNG GIỮA sảnh nên
-        // trông như bức tường chắn ngang; nay thu nhỏ còn ~60% và dời hẳn sang
-        // mép sảnh, đúng chỗ tấm biển đá ở cổng trường thật.
-        this.box(1.1, 0.35, width + 0.8, x, 0.17, z, '#7c6f5a', { physical: true })
-        this.box(0.7, height, width, x, height * 0.5 + 0.35, z, '#8d7f68', { physical: true })
-
-        // Logo FPT ba khối màu ở mặt hướng ra cổng (+X)
-        this.box(0.14, 0.5, 0.9, x + 0.4, height - 0.2, z - 1, COLORS.orange)
-        this.box(0.14, 0.5, 0.9, x + 0.4, height - 0.2, z, COLORS.green)
-        this.box(0.14, 0.5, 0.9, x + 0.4, height - 0.2, z + 1, COLORS.blue)
-
-        // Hàng năm sao — biển xếp hạng đại học
-        for(let i = 0; i < 5; i++)
-            this.box(0.12, 0.4, 0.4, x + 0.4, height - 1.1, z + (i - 2) * 0.85, '#f6c945', { rotationZ: Math.PI * 0.25 })
-
-        // Dải chân biển màu cam
-        this.box(0.14, 0.35, width - 0.6, x + 0.4, 0.62, z, COLORS.orange)
     }
 
     /**
@@ -1246,7 +1227,8 @@ export class FptuCampus
 
                 group.add(gltf.scene)
                 group.scale.setScalar(SIGN.scale)
-                group.position.set(SIGN.x, SIGN.y + GROUND_TOP, SIGN.z)
+                // Đứng trên mặt bệ, không phải trên cỏ
+                group.position.set(SIGN.x, SIGN.y + (this.signs?.plinthTop ?? GROUND_TOP), SIGN.z)
                 group.rotation.y = SIGN.rotationY
 
                 this.group.add(group)
@@ -1256,15 +1238,9 @@ export class FptuCampus
             () => { console.warn('[FPTU] không nạp được fptu/sign.glb — khu trường vẫn chạy, chỉ thiếu hàng chữ') }
         )
 
-        // Thân vật lý của hàng chữ: chữ gốc rộng 12,53 × cao 1,3 (đo lúc xuất)
-        this.game.objects.add(
-            null,
-            {
-                type: 'fixed',
-                position: { x: SIGN.x, y: 0.9, z: SIGN.z },
-                colliders: [ { shape: 'cuboid', parameters: [ 0.45, 0.9, 12.53 * SIGN.scale * 0.5 ] } ]
-            }
-        )
+        // Va chạm do chính cái BỆ lo (`FptuSigns.setSignPlinth`) — chữ đứng trên
+        // đó nên không cần thêm khối nào, và nhất là không còn khối nào vắt
+        // ngang lòng đường như bản trước.
     }
 
     /** Vùng tròn quanh cổng — lái vào là hiện hộp thoại hỏi sinh viên. */

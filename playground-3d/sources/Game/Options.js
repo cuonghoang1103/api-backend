@@ -53,26 +53,36 @@ export class Options
      * `DayCycles` dựng ở dòng 85 của `Game.js`, trước bảng Cài đặt (dòng 110),
      * nên ở đây chạm thẳng được — khác `Weather` (dòng 117) và đèn pha.
      */
+    /**
+     * Mục Time: BA NÚT CHỌN bày ra cùng lúc (Auto / Day / Night).
+     *
+     * Bản trước là một nút bấm xoay vòng, phải bấm ba lần mới biết có những chế
+     * độ nào — user hỏi thẳng "thêm chế độ tuỳ chọn ban ngày, ban đêm, tự động"
+     * chính vì không thấy chúng.
+     */
     setTime()
     {
-        const element = this.element.querySelector('.js-time-toggle')
-        const text = element.querySelector('span')
-        const preference = this.game.dayCycles.preference
+        const container = this.element.querySelector('.js-time-modes')
+        if(!container) return
+
+        const preference = this.game.dayCycles
+        const buttons = [ ...container.querySelectorAll('button[data-mode]') ]
 
         const update = () =>
         {
-            text.textContent = preference.labels[preference.current]
-            element.classList.toggle('is-success', preference.isForced())
+            for(const button of buttons)
+                button.classList.toggle('is-active', button.dataset.mode === preference.preference.current)
         }
 
         update()
         this.game.dayCycles.events.on('preferenceChange', update)
 
-        element.addEventListener('click', () =>
-        {
-            this.playClick()
-            preference.next()
-        })
+        for(const button of buttons)
+            button.addEventListener('click', () =>
+            {
+                this.playClick()
+                preference.preference.set(button.dataset.mode)
+            })
     }
 
     /**

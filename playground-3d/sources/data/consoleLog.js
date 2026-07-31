@@ -30,6 +30,13 @@ const text = `
 ║ Tac gia goc: Bruno Simon - Copyright (c) 2025, giay phep MIT.
 ║ Ma nguon goc => https://github.com/brunosimon/folio-2025
 ║ Trang cua tac gia => https://bruno-simon.com
+╠═ Mo hinh 3D ben thu ba ═╣
+║ Downtown City MegaKit — Quaternius, giay phep CC0 (mien ghi cong,
+║ van ghi o day cho phai phep) => https://quaternius.com
+║ "Tiger Russian Military Vehicle" (https://skfb.ly/pDrJS) by Gerhald
+║ is licensed under Creative Commons Attribution
+║ (http://creativecommons.org/licenses/by/4.0/).
+║ ^ CC BY BAT BUOC ghi cong — dung xoa dong tren.
 ╚═══════════════════════╝
 
 ╔═ Stack ═══════════════╗

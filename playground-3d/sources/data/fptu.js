@@ -30,54 +30,54 @@
  */
 
 /** Tâm mảnh đất riêng và kích thước nền. */
-export const ISLAND = { x: -152, z: 40, width: 104, depth: 84, y: 0 }
+export const ISLAND = { x: -162, z: 40, width: 150, depth: 116, y: 0 }
 
 /** Cầu nối từ rìa Tây đảo chính sang mảnh đất trường. */
-export const BRIDGE = { fromX: -86, toX: -100, z: 40, width: 9 }
+export const BRIDGE = { fromX: -84, toX: -94, z: 40, width: 9 }
 
 /** Cổng chính — ngay đầu cầu, trước khi vào con đường dọc trường. */
-export const GATE = { x: -108, z: 40 }
+export const GATE = { x: -100, z: 40 }
 
 /**
  * CON ĐƯỜNG chạy dọc mép Đông trường (bản đồ thật: đường chính mép Nam).
  * "Trước cái biển và sảnh đó là con đường" — đường này.
  */
-export const MAIN_ROAD = { x: -112, z: 40, length: 68, width: 7 }
+export const MAIN_ROAD = { x: -106, z: 40, length: 96, width: 8 }
 
 /** Trục lễ nghi từ cổng thẳng vào toà Alpha. */
-export const AXIS = { z: 40, halfWidth: 4.5, fromX: -104, toX: -132 }
+export const AXIS = { z: 40, halfWidth: 5, fromX: -96, toX: -146 }
 
 /**
  * CON ĐƯỜNG XUYÊN SẢNH — chui qua sảnh lớn giữa toà Alpha rồi chạy thẳng ra
  * tới cuối đảo (nét đen người dùng vẽ trên bản đồ). Vì đường này phải THÔNG
  * suốt, hồ sen đã được dời lệch xuống dải z nhỏ hơn để không chắn ngang.
  */
-export const THROUGH_ROAD = { z: 40, halfWidth: 5, fromX: -137, toX: -200 }
+export const THROUGH_ROAD = { z: 40, halfWidth: 5.5, fromX: -152, toX: -232 }
 
 /** Sảnh xuyên qua toà Alpha: bề rộng lối chui (theo trục z) và chiều cao. */
 export const ALPHA_LOBBY = { halfWidth: 5, height: 3.6 }
 
 /** Sảnh + biển top xếp hạng đại học thế giới — ngay sau con đường. */
-export const RANKING_PLAZA = { x: -119, z: 40, width: 8, depth: 26 }
-export const RANKING_SIGN = { x: -118, z: 50.5, height: 2.1, width: 5 }
+export const RANKING_PLAZA = { x: -116, z: 40, width: 10, depth: 30 }
+export const RANKING_SIGN = { x: -116, z: 52, height: 2.1, width: 5 }
 
 /** Hàng chữ FPT UNIVERSITY — mặt đường, ngay trước thảm cỏ dẫn vào Alpha. */
-export const SIGN = { x: -125.5, y: 0, z: 40, rotationY: Math.PI * 0.5, scale: 1.35 }
+export const SIGN = { x: -127, y: 0, z: 40, rotationY: Math.PI * 0.5, scale: 1.35 }
 
 /** Thảm cỏ + lối đi bộ + hai hàng cọ giữa hàng chữ và toà Alpha. */
-export const LAWN = { x: -130.5, z: 40, width: 8, depth: 30 }
+export const LAWN = { x: -137, z: 40, width: 14, depth: 34 }
 
 /** Sân trước chân toà Alpha. */
-export const FORECOURT = { x: -135.5, z: 40, width: 4, depth: 40 }
+export const FORECOURT = { x: -147, z: 40, width: 6, depth: 46 }
 
 /**
  * TOÀ ALPHA — giật cấp bậc thang 3-4-5-6-7-7-6-5-4-3, cong nhẹ ôm sân trước,
  * mặt tiền quay về phía cổng (+X). `bow` dương = cột nhô về phía trước.
  */
 export const ALPHA = {
-    x: -141,
+    x: -156,
     z: 40,
-    columnWidth: 4.6,
+    columnWidth: 4,
     depth: 7,
     floorHeight: 1.35,
     columns: [
@@ -98,13 +98,13 @@ export const ALPHA = {
  * HỒ SEN LỚN — sau lưng toà Alpha, đúng điểm nhận diện "toà nhà hình rồng soi
  * bóng xuống hồ". Kéo dài theo trục z như hồ thật.
  */
-export const LAKE = { x: -158, z: 22, radiusX: 12, radiusZ: 9 }
+export const LAKE = { x: -184, z: 8, radiusX: 17, radiusZ: 11 }
 
 /** Beta bên kia hồ (soi mặt với Alpha) · Delta, Gamma phía Bắc như bản đồ. */
 export const BUILDINGS = [
-    { name: 'Beta', x: -170, z: 60, width: 16, depth: 8, floors: 5 },
-    { name: 'Delta', x: -148, z: 12, width: 14, depth: 7, floors: 4 },
-    { name: 'Gamma', x: -170, z: 16, width: 12, depth: 7, floors: 4 },
+    { name: 'Beta', x: -200, z: 60, width: 18, depth: 9, floors: 5 },
+    { name: 'Delta', x: -126, z: 4, width: 16, depth: 8, floors: 4 },
+    { name: 'Gamma', x: -222, z: 26, width: 12, depth: 8, floors: 4 },
 ]
 
 /**
@@ -112,29 +112,29 @@ export const BUILDINGS = [
  * Tây, đều ở nửa Nam đảo, cách xa trục lễ nghi.
  */
 export const DORMS = [
-    { name: 'A', x: -138, z: 62 }, { name: 'B', x: -147, z: 62 },
-    { name: 'C', x: -138, z: 71 }, { name: 'D', x: -147, z: 71 },
-    { name: 'E', x: -186, z: 60 }, { name: 'F', x: -186, z: 70 },
-    { name: 'G', x: -196, z: 60 }, { name: 'H', x: -196, z: 70 },
+    { name: 'A', x: -128, z: 76 }, { name: 'B', x: -142, z: 76 },
+    { name: 'C', x: -128, z: 90 }, { name: 'D', x: -142, z: 90 },
+    { name: 'E', x: -172, z: 76 }, { name: 'F', x: -186, z: 76 },
+    { name: 'G', x: -172, z: 90 }, { name: 'H', x: -186, z: 90 },
 ]
 
 /** Tượng SELF MADE MAN — giữa vườn hai cụm ký túc xá, như ảnh thật. */
-export const STATUE = { x: -160, z: 68 }
+export const STATUE = { x: -157, z: 90 }
 
 /** Sân bóng đá giữa trường (bản đồ: 16, giữa khu). */
-export const FOOTBALL = { x: -124, z: 62, width: 12, depth: 18 }
+export const FOOTBALL = { x: -112, z: 74, width: 16, depth: 24 }
 
 /** Sân bóng rổ — góc Bắc cạnh con đường (bản đồ: 18, góc phải sát đường). */
-export const BASKETBALL = { x: -117, z: 16, width: 8, depth: 12 }
+export const BASKETBALL = { x: -104, z: -2, width: 10, depth: 14 }
 
 /** Sân võ nhỏ cạnh sân bóng (bản đồ: 15/17). */
-export const MARTIAL = { x: -133, z: 58, width: 6, depth: 9 }
+export const MARTIAL = { x: -206, z: 84, width: 9, depth: 12 }
 
 /** Nhà ăn (bản đồ: 5/6) — khối nhỏ gần cụm Dom giữa. */
-export const CANTEEN = { x: -136, z: 52, width: 7, depth: 5, floors: 2 }
+export const CANTEEN = { x: -157, z: 76, width: 10, depth: 6, floors: 2 }
 
 /** Bãi gửi xe dọc mép đường phía Bắc cổng (bản đồ: 19, mép phải). */
-export const PARKING = { x: -106.5, z: 24, width: 5, depth: 16 }
+export const PARKING = { x: -95, z: 22, width: 6, depth: 20 }
 
 /**
  * Điểm hồi sinh: đầu cầu phía trường, mũi xe quay vào cổng.
@@ -143,14 +143,14 @@ export const PARKING = { x: -106.5, z: 24, width: 5, depth: 16 }
  * Lần đo trước đó cho kết quả ngược là vì bị `respawn('landing')` bất đồng bộ
  * teleport đè lên `moveTo` — đừng tin phép đo nào chạy xen giữa một respawn.
  */
-export const RESPAWN = { x: -100, z: 40, rotation: Math.PI }
+export const RESPAWN = { x: -92, z: 40, rotation: Math.PI }
 
 /** Khối "?" — dọc con đường và trục lễ nghi, lệch khỏi tim đường. */
 export const QUESTION_BLOCKS = [
-    { x: -110, z: 30 }, { x: -114, z: 48 }, { x: -110, z: 20 },
-    { x: -114, z: 58 }, { x: -110, z: 66 }, { x: -113, z: 12 },
-    { x: -117, z: 36 }, { x: -121, z: 45 }, { x: -125, z: 34 },
-    { x: -129, z: 46 }, { x: -132, z: 35 }, { x: -134, z: 44 },
+    { x: -96, z: 34 }, { x: -103, z: 46 }, { x: -110, z: 33 },
+    { x: -118, z: 47 }, { x: -126, z: 33 }, { x: -134, z: 47 },
+    { x: -142, z: 34 }, { x: -160, z: 46 }, { x: -172, z: 33 },
+    { x: -186, z: 47 }, { x: -200, z: 34 }, { x: -216, z: 46 },
 ]
 
 /** Bảng màu — cam/xanh lá/xanh dương theo bộ nhận diện FPT. */

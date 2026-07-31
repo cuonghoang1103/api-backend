@@ -121,10 +121,26 @@ export class FptuCampus
         return mesh
     }
 
-    /** Tấm phẳng nằm trên mặt đảo (đường, sân, thảm cỏ) — không thân vật lý. */
-    slab(width, depth, x, z, hex, { y = GROUND_TOP + 0.02 } = {})
+    /**
+     * Tấm phẳng lát nền (đường, sân, thảm cỏ) — không thân vật lý.
+     *
+     * ⚠️ `layer` là BẮT BUỘC phải nghĩ tới. Mọi tấm để chung một cao độ thì
+     * depth buffer không phân biệt nổi tấm nào trên tấm nào, ra đúng hiện tượng
+     * người dùng gặp: mặt sân "giật giật như nhiễu sóng", sọc răng cưa chạy
+     * loạn khi máy quay nhúc nhích (z-fighting). Mỗi lớp cách nhau 0,03 đơn vị
+     * là đủ tách bạch mà mắt không thấy nó nổi lên.
+     *
+     *   layer 0 — mặt đường, mặt sân, thảm cỏ (lớp nền)
+     *   layer 1 — thứ lát ĐÈ LÊN lớp nền: lối đi bộ giữa thảm cỏ, sảnh trên sân
+     *   layer 2 — vạch kẻ, đường biên
+     *
+     * Đáy tấm cũng phải nằm CAO HƠN mặt nền đảo (y = 0,04), nếu không nó cắm
+     * vào nền và lại tranh chấp với chính mặt đất.
+     */
+    slab(width, depth, x, z, hex, { layer = 0 } = {})
     {
-        return this.box(width, 0.05, depth, x, y, z, hex, { castShadow: false })
+        const y = GROUND_TOP + 0.05 + layer * 0.03
+        return this.box(width, 0.04, depth, x, y, z, hex, { castShadow: false })
     }
 
     /**
@@ -133,8 +149,22 @@ export class FptuCampus
      */
     setIsland()
     {
-        // Viền cát — to hơn nền một vòng, mặt thấp hơn một bậc
-        this.box(ISLAND.width + 5, 1.1, ISLAND.depth + 5, ISLAND.x, GROUND_TOP - 0.78, ISLAND.z, '#d8b47e', { castShadow: false })
+        /**
+         * Viền cát quanh mép đảo — dựng thành BỐN DẢI VIỀN chứ không phải một
+         * tấm đặc trải khắp.
+         *
+         * Bản trước để tấm đặc: mặt trên của nó nằm ở y ≈ −0,19, tức CAO HƠN
+         * mặt biển (−0,3), nên nó BỊT KÍN cái lỗ vừa khoét làm hồ — nhìn xuống
+         * hồ chỉ thấy màu cát cam thay vì nước. Đúng chỗ người dùng chê "hồ sen
+         * xấu thế này".
+         */
+        const bandW = 3
+        const outerW = ISLAND.width + bandW * 2
+        for(const side of [ -1, 1 ])
+        {
+            this.box(outerW, 1.1, bandW, ISLAND.x, GROUND_TOP - 0.78, ISLAND.z + side * (ISLAND.depth * 0.5 + bandW * 0.5), '#d8b47e', { castShadow: false })
+            this.box(bandW, 1.1, ISLAND.depth, ISLAND.x + side * (ISLAND.width * 0.5 + bandW * 0.5), GROUND_TOP - 0.78, ISLAND.z, '#d8b47e', { castShadow: false })
+        }
 
         /**
          * Nền đảo dựng thành BỐN DẢI chừa một lỗ đúng chỗ hồ sen, thay vì một
@@ -149,28 +179,47 @@ export class FptuCampus
          */
         const halfW = ISLAND.width * 0.5
         const halfD = ISLAND.depth * 0.5
-        const hole = {
-            minX: LAKE.x - LAKE.radiusX, maxX: LAKE.x + LAKE.radiusX,
-            minZ: LAKE.z - LAKE.radiusZ, maxZ: LAKE.z + LAKE.radiusZ,
+
+        /**
+         * Miệng hồ khoét theo hình BẦU DỤC, không phải chữ nhật.
+         *
+         * Cách làm: chia dải đất nằm trong bề ngang của hồ thành nhiều CỘT dọc
+         * trục x; mỗi cột chừa ra một khoảng z đúng bằng nửa dây cung của hình
+         * bầu dục tại cột đó. Nhiều cột thì bờ càng mượt — 18 cột đã đủ để nhìn
+         * ra bờ cong tự nhiên như mấy hồ của bản đồ gốc, thay vì bốn góc vuông.
+         */
+        const columns = 18
+        const stripW = (LAKE.radiusX * 2) / columns
+
+        const ground = []
+
+        // Hai mảng lớn hai bên hồ
+        ground.push({ x0: ISLAND.x - halfW, x1: LAKE.x - LAKE.radiusX, z0: ISLAND.z - halfD, z1: ISLAND.z + halfD })
+        ground.push({ x0: LAKE.x + LAKE.radiusX, x1: ISLAND.x + halfW, z0: ISLAND.z - halfD, z1: ISLAND.z + halfD })
+
+        // Các cột trong bề ngang hồ: chừa dây cung bầu dục ở giữa
+        for(let i = 0; i < columns; i++)
+        {
+            const x0 = LAKE.x - LAKE.radiusX + i * stripW
+            const x1 = x0 + stripW
+
+            // Dùng mép NGOÀI của cột (điểm xa tâm nhất) để dây cung không ăn
+            // lẹm vào đất — thà bờ dày hơn một chút còn hơn thủng lỗ chỗ
+            const dx = Math.max(Math.abs(x0 - LAKE.x), Math.abs(x1 - LAKE.x)) / LAKE.radiusX
+            const halfChord = dx >= 1 ? 0 : LAKE.radiusZ * Math.sqrt(1 - dx * dx)
+
+            ground.push({ x0, x1, z0: ISLAND.z - halfD, z1: LAKE.z - halfChord })
+            ground.push({ x0, x1, z0: LAKE.z + halfChord, z1: ISLAND.z + halfD })
         }
 
-        const strips = [
-            // Tây và Đông của hồ — chạy trọn chiều sâu đảo
-            { x0: ISLAND.x - halfW, x1: hole.minX, z0: ISLAND.z - halfD, z1: ISLAND.z + halfD },
-            { x0: hole.maxX, x1: ISLAND.x + halfW, z0: ISLAND.z - halfD, z1: ISLAND.z + halfD },
-            // Bắc và Nam của hồ — chỉ trong khoảng ngang của hồ
-            { x0: hole.minX, x1: hole.maxX, z0: ISLAND.z - halfD, z1: hole.minZ },
-            { x0: hole.minX, x1: hole.maxX, z0: hole.maxZ, z1: ISLAND.z + halfD },
-        ]
-
-        for(const strip of strips)
+        for(const piece of ground)
         {
-            const width = strip.x1 - strip.x0
-            const depth = strip.z1 - strip.z0
-            if(width <= 0 || depth <= 0) continue
+            const width = piece.x1 - piece.x0
+            const depth = piece.z1 - piece.z0
+            if(width <= 0.01 || depth <= 0.01) continue
 
-            const cx = (strip.x0 + strip.x1) * 0.5
-            const cz = (strip.z0 + strip.z1) * 0.5
+            const cx = (piece.x0 + piece.x1) * 0.5
+            const cz = (piece.z0 + piece.z1) * 0.5
 
             this.box(width, 1.5, depth, cx, GROUND_TOP - 0.75, cz, COLORS.grass, { castShadow: false })
 
@@ -246,21 +295,21 @@ export class FptuCampus
 
         // Vạch kẻ tim đường cho ra dáng đường thật
         for(let i = 0; i < 8; i++)
-            this.slab(0.9, 0.18, MAIN_ROAD.x, MAIN_ROAD.z - MAIN_ROAD.length * 0.5 + 5 + i * 8.4, '#e8e4da', { y: GROUND_TOP + 0.045 })
+            this.slab(0.9, 0.18, MAIN_ROAD.x, MAIN_ROAD.z - MAIN_ROAD.length * 0.5 + 5 + i * 8.4, '#e8e4da', { layer: 2 })
 
         // Trục lễ nghi từ cổng vào
         const axisLength = Math.abs(AXIS.toX - AXIS.fromX)
-        this.slab(axisLength, AXIS.halfWidth * 2, (AXIS.fromX + AXIS.toX) * 0.5, AXIS.z, COLORS.road)
+        this.slab(axisLength, AXIS.halfWidth * 2, (AXIS.fromX + AXIS.toX) * 0.5, AXIS.z, COLORS.road, { layer: 1 })
 
         // Sảnh gạch đỏ quanh biển xếp hạng
-        this.slab(RANKING_PLAZA.width, RANKING_PLAZA.depth, RANKING_PLAZA.x, RANKING_PLAZA.z, COLORS.plazaBrick)
+        this.slab(RANKING_PLAZA.width, RANKING_PLAZA.depth, RANKING_PLAZA.x, RANKING_PLAZA.z, COLORS.plazaBrick, { layer: 2 })
 
         // Thảm cỏ giữa hàng chữ và toà Alpha, lối đi bộ lát gạch ở giữa
-        this.slab(LAWN.width, LAWN.depth, LAWN.x, LAWN.z, '#79a844')
-        this.slab(LAWN.width, 6.5, LAWN.x, LAWN.z, COLORS.plazaBrick)
+        this.slab(LAWN.width, LAWN.depth, LAWN.x, LAWN.z, '#79a844', { layer: 2 })
+        this.slab(LAWN.width, 6.5, LAWN.x, LAWN.z, COLORS.plazaBrick, { layer: 3 })
 
         // Sân trước chân toà Alpha
-        this.slab(FORECOURT.width, FORECOURT.depth, FORECOURT.x, FORECOURT.z, '#a8a294')
+        this.slab(FORECOURT.width, FORECOURT.depth, FORECOURT.x, FORECOURT.z, '#a8a294', { layer: 3 })
 
         // CON ĐƯỜNG XUYÊN SẢNH — chui qua gầm toà Alpha rồi chạy thẳng tới cuối
         // đảo (nét đen người dùng vẽ trên bản đồ)
@@ -268,7 +317,7 @@ export class FptuCampus
         this.slab(throughLength, THROUGH_ROAD.halfWidth * 2, (THROUGH_ROAD.fromX + THROUGH_ROAD.toX) * 0.5, THROUGH_ROAD.z, COLORS.road)
 
         for(let i = 0; i < 12; i++)
-            this.slab(2.4, 0.2, THROUGH_ROAD.fromX - 6 - i * 5, THROUGH_ROAD.z, '#e8e4da', { y: GROUND_TOP + 0.045 })
+            this.slab(2.4, 0.2, THROUGH_ROAD.fromX - 6 - i * 5, THROUGH_ROAD.z, '#e8e4da', { layer: 2 })
     }
 
     /**
@@ -482,25 +531,63 @@ export class FptuCampus
     {
         const waterY = this.game.water.surfaceElevation
 
-        // Bờ cát chạy quanh miệng hồ — bốn cạnh, hơi thụt xuống cho ra dáng mép nước
-        const bank = 1.6
-        for(const side of [ -1, 1 ])
+        /**
+         * Không đắp bờ hay đáy gì cả: miệng hồ đã khoét hình bầu dục ở
+         * `setIsland`, nên nhìn xuống là MẶT NƯỚC THẬT của game — cùng thứ nước
+         * làm nên mấy cái hồ đẹp của bản đồ gốc: có sóng lượn, loang màu theo
+         * trời, đóng băng khi lạnh.
+         *
+         * Việc ở đây chỉ là thả sen. Hồ sen của trường PHỦ KÍN lá (xem ảnh
+         * thật), nên rải dày theo CỤM chứ không lác đác: gom quanh vài tâm cụm,
+         * lệch nhau tất định, chừa khoảng nước trống ở giữa cho thấy mặt nước.
+         */
+        const clusters = [
+            { x: -0.45, z: -0.35, n: 14 }, { x: 0.35, z: -0.5, n: 12 },
+            { x: -0.6, z: 0.4, n: 12 }, { x: 0.5, z: 0.35, n: 14 },
+            { x: 0.05, z: 0.62, n: 10 }, { x: -0.15, z: -0.68, n: 10 },
+        ]
+
+        let seed = 0
+        const rand = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff }
+
+        for(const cluster of clusters)
         {
-            this.box(LAKE.radiusX * 2 + bank * 2, 0.5, bank, LAKE.x, GROUND_TOP - 0.22, LAKE.z + side * (LAKE.radiusZ + bank * 0.5), '#d8b47e', { castShadow: false })
-            this.box(bank, 0.5, LAKE.radiusZ * 2, LAKE.x + side * (LAKE.radiusX + bank * 0.5), GROUND_TOP - 0.22, LAKE.z, '#d8b47e', { castShadow: false })
+            for(let i = 0; i < cluster.n; i++)
+            {
+                const spreadX = (rand() - 0.5) * 0.42
+                const spreadZ = (rand() - 0.5) * 0.42
+                const nx = cluster.x + spreadX
+                const nz = cluster.z + spreadZ
+
+                // Bỏ lá rơi ra ngoài mép bầu dục
+                if(nx * nx + nz * nz > 0.9) continue
+
+                const x = LAKE.x + nx * LAKE.radiusX
+                const z = LAKE.z + nz * LAKE.radiusZ
+                const size = 0.85 + rand() * 0.75
+
+                // Lá sen — tấm tròn dẹt nổi sát mặt nước
+                this.box(size, 0.05, size, x, waterY + 0.025, z, i % 3 === 0 ? '#3f8f4a' : '#4f9e4a', { castShadow: false, geometry: this.cylinderGeometry })
+            }
         }
 
-        // Lá sen + hoa nổi TRÊN mặt nước thật
-        for(let i = 0; i < 30; i++)
-        {
-            const angle = i * 2.39996
-            const radius = 0.2 + (i % 8) / 10
-            const x = LAKE.x + Math.cos(angle) * (LAKE.radiusX - 1.5) * radius
-            const z = LAKE.z + Math.sin(angle) * (LAKE.radiusZ - 1.5) * radius
+        // Vài bông sen hồng nhô lên — cánh xoè quanh nhuỵ vàng
+        const blooms = [
+            [ -0.35, -0.3 ], [ 0.42, -0.42 ], [ -0.5, 0.45 ], [ 0.46, 0.3 ], [ 0.02, 0.6 ], [ -0.1, -0.6 ], [ 0.2, 0.02 ],
+        ]
 
-            this.box(1.15, 0.04, 1.15, x, waterY + 0.03, z, '#3f8f4a', { castShadow: false })
-            if(i % 4 === 0)
-                this.box(0.26, 0.36, 0.26, x, waterY + 0.2, z, '#ff8fb0')
+        for(const [ nx, nz ] of blooms)
+        {
+            const x = LAKE.x + nx * LAKE.radiusX
+            const z = LAKE.z + nz * LAKE.radiusZ
+
+            for(let i = 0; i < 6; i++)
+            {
+                const angle = i * Math.PI / 3
+                this.box(0.34, 0.1, 0.16, x + Math.cos(angle) * 0.17, waterY + 0.14, z + Math.sin(angle) * 0.17, '#ff9ec4', { rotationY: -angle, rotationZ: -0.5, castShadow: false })
+            }
+
+            this.box(0.16, 0.16, 0.16, x, waterY + 0.24, z, '#ffd76b', { castShadow: false })
         }
     }
 
@@ -508,7 +595,7 @@ export class FptuCampus
     setSports()
     {
         // Bóng rổ — mặt xanh dương như ảnh bản đồ
-        this.slab(BASKETBALL.width, BASKETBALL.depth, BASKETBALL.x, BASKETBALL.z, COLORS.court)
+        this.slab(BASKETBALL.width, BASKETBALL.depth, BASKETBALL.x, BASKETBALL.z, COLORS.court, { layer: 2 })
 
         for(const side of [ -1, 1 ])
         {
@@ -519,7 +606,7 @@ export class FptuCampus
 
         // Bóng đá — khung thành hai đầu
         this.slab(FOOTBALL.width, FOOTBALL.depth, FOOTBALL.x, FOOTBALL.z, COLORS.pitch)
-        this.slab(FOOTBALL.width - 1.6, 0.2, FOOTBALL.x, FOOTBALL.z, '#e8e4da', { y: GROUND_TOP + 0.045 })
+        this.slab(FOOTBALL.width - 1.6, 0.2, FOOTBALL.x, FOOTBALL.z, '#e8e4da', { layer: 1 })
 
         for(const side of [ -1, 1 ])
         {
@@ -550,7 +637,7 @@ export class FptuCampus
         this.slab(PARKING.width, PARKING.depth, PARKING.x, PARKING.z, '#7d7a72')
 
         for(let i = 0; i < 4; i++)
-            this.slab(PARKING.width - 1, 0.16, PARKING.x, PARKING.z - PARKING.depth * 0.5 + 2 + i * 4, '#e8e4da', { y: GROUND_TOP + 0.045 })
+            this.slab(PARKING.width - 1, 0.16, PARKING.x, PARKING.z - PARKING.depth * 0.5 + 2 + i * 4, '#e8e4da', { layer: 1 })
 
         this.box(1.6, 0.62, 0.85, PARKING.x, 0.35, PARKING.z - 4, '#c94f39')
         this.box(1.6, 0.62, 0.85, PARKING.x, 0.35, PARKING.z + 4.2, '#3a6fc9')

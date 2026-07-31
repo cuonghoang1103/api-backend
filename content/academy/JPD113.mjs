@@ -61,6 +61,40 @@ export default {
   <span class="lc-body"><span class="lc-title">Learn the kana on My Language</span><span class="lc-sub">Interactive hiragana/katakana with stroke order &amp; spaced repetition.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
+
+<h3>Course materials & flashcard decks</h3>
+<div class="lz-stack">
+</div>
+<a class="link-card dl" href="https://drive.google.com/file/d/1MLvq1RWvAXTsVs8m36yyN4lOaRkJu9L4/view?usp=sharing" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Dekiru Nihongo — Sơ cấp (PDF)</span><span class="lc-sub">Giáo trình chính của JPD113 · 67,8 MB</span></span>
+  <span class="lc-cta">TẢI VỀ →</span>
+</a>
+<a class="link-card dl" href="https://quizlet.com/vn/683127375/jpd113-bai-123-flash-cards/" target="_blank" rel="noopener">
+  <span class="lc-ico">🃏</span>
+  <span class="lc-body"><span class="lc-title">Quizlet — Từ vựng JPD113 (bài 1-2-3)</span><span class="lc-sub">Bộ thẻ học từ vựng đầy đủ</span></span>
+  <span class="lc-cta">MỞ QUIZLET →</span>
+</a>
+<a class="link-card dl" href="https://quizlet.com/vn/815088820/dekiru1_jpd113_v-flash-cards/" target="_blank" rel="noopener">
+  <span class="lc-ico">🃏</span>
+  <span class="lc-body"><span class="lc-title">Quizlet — Động từ Dekiru 1</span><span class="lc-sub">Bộ thẻ chia động từ</span></span>
+  <span class="lc-cta">MỞ QUIZLET →</span>
+</a>
+<a class="link-card dl" href="https://quizlet.com/vn/815088142/dekiru1_jpd113_tro-tu-flash-cards/" target="_blank" rel="noopener">
+  <span class="lc-ico">🃏</span>
+  <span class="lc-body"><span class="lc-title">Quizlet — Trợ từ Dekiru 1</span><span class="lc-sub">Bộ thẻ は・が・を・に・で・へ…</span></span>
+  <span class="lc-cta">MỞ QUIZLET →</span>
+</a>
+<a class="link-card dl" href="https://thepkz.github.io/minthep-portfolio/blog/textblog-1.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📝</span>
+  <span class="lc-body"><span class="lc-title">Blog tham khảo — Min Thep, JPD113</span><span class="lc-sub">Trang tra cứu số đếm & ngữ pháp một trang</span></span>
+  <span class="lc-cta">ĐỌC BLOG →</span>
+</a>
+<a class="link-card dl" href="https://www.duolingo.com/learn" target="_blank" rel="noopener">
+  <span class="lc-ico">🦉</span>
+  <span class="lc-body"><span class="lc-title">Duolingo — tiếng Nhật</span><span class="lc-sub">Luyện mỗi ngày 10 phút</span></span>
+  <span class="lc-cta">HỌC →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.1</span>
@@ -88,6 +122,40 @@ export default {
   <span class="lc-ico">🈴</span>
   <span class="lc-body"><span class="lc-title">Học kana trên My Language</span><span class="lc-sub">Hiragana/katakana tương tác kèm thứ tự nét &amp; lặp lại ngắt quãng.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+
+<h3>Tài liệu & bộ thẻ ghi nhớ</h3>
+<div class="lz-stack">
+</div>
+<a class="link-card dl" href="https://drive.google.com/file/d/1MLvq1RWvAXTsVs8m36yyN4lOaRkJu9L4/view?usp=sharing" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Dekiru Nihongo — Sơ cấp (PDF)</span><span class="lc-sub">Giáo trình chính của JPD113 · 67,8 MB</span></span>
+  <span class="lc-cta">TẢI VỀ →</span>
+</a>
+<a class="link-card dl" href="https://quizlet.com/vn/683127375/jpd113-bai-123-flash-cards/" target="_blank" rel="noopener">
+  <span class="lc-ico">🃏</span>
+  <span class="lc-body"><span class="lc-title">Quizlet — Từ vựng JPD113 (bài 1-2-3)</span><span class="lc-sub">Bộ thẻ học từ vựng đầy đủ</span></span>
+  <span class="lc-cta">MỞ QUIZLET →</span>
+</a>
+<a class="link-card dl" href="https://quizlet.com/vn/815088820/dekiru1_jpd113_v-flash-cards/" target="_blank" rel="noopener">
+  <span class="lc-ico">🃏</span>
+  <span class="lc-body"><span class="lc-title">Quizlet — Động từ Dekiru 1</span><span class="lc-sub">Bộ thẻ chia động từ</span></span>
+  <span class="lc-cta">MỞ QUIZLET →</span>
+</a>
+<a class="link-card dl" href="https://quizlet.com/vn/815088142/dekiru1_jpd113_tro-tu-flash-cards/" target="_blank" rel="noopener">
+  <span class="lc-ico">🃏</span>
+  <span class="lc-body"><span class="lc-title">Quizlet — Trợ từ Dekiru 1</span><span class="lc-sub">Bộ thẻ は・が・を・に・で・へ…</span></span>
+  <span class="lc-cta">MỞ QUIZLET →</span>
+</a>
+<a class="link-card dl" href="https://thepkz.github.io/minthep-portfolio/blog/textblog-1.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📝</span>
+  <span class="lc-body"><span class="lc-title">Blog tham khảo — Min Thep, JPD113</span><span class="lc-sub">Trang tra cứu số đếm & ngữ pháp một trang</span></span>
+  <span class="lc-cta">ĐỌC BLOG →</span>
+</a>
+<a class="link-card dl" href="https://www.duolingo.com/learn" target="_blank" rel="noopener">
+  <span class="lc-ico">🦉</span>
+  <span class="lc-body"><span class="lc-title">Duolingo — tiếng Nhật</span><span class="lc-sub">Luyện mỗi ngày 10 phút</span></span>
+  <span class="lc-cta">HỌC →</span>
 </a>
 </div>
 `,
@@ -208,6 +276,25 @@ export default {
   <span class="lc-body"><span class="lc-title">Practise hiragana with stroke order</span><span class="lc-sub">Trace each character &amp; drill with spaced repetition.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
+
+<h3>Practise hiragana now</h3>
+<div class="lz-stack">
+</div>
+<a class="link-card dl" href="https://www.realkana.com/hiragana" target="_blank" rel="noopener">
+  <span class="lc-ico">✍️</span>
+  <span class="lc-body"><span class="lc-title">RealKana — luyện nhận mặt chữ Hiragana</span><span class="lc-sub">Chọn hàng muốn luyện, gõ romaji, phản hồi tức thì</span></span>
+  <span class="lc-cta">LUYỆN →</span>
+</a>
+<a class="link-card dl" href="https://tudienjp.com/alphabet" target="_blank" rel="noopener">
+  <span class="lc-ico">🔤</span>
+  <span class="lc-body"><span class="lc-title">Tudienjp — bảng chữ cái có âm thanh</span><span class="lc-sub">Nghe phát âm từng chữ</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+<a class="link-card dl" href="https://thepkz.github.io/minthep-portfolio/blog/textblog-0.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📝</span>
+  <span class="lc-body"><span class="lc-title">Blog tham khảo — cách nhớ Hiragana/Katakana/Kanji</span><span class="lc-sub">Bài viết của Min Thep</span></span>
+  <span class="lc-cta">ĐỌC BLOG →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.1</span>
@@ -234,6 +321,25 @@ export default {
   <span class="lc-ico">✍️</span>
   <span class="lc-body"><span class="lc-title">Luyện hiragana theo thứ tự nét</span><span class="lc-sub">Tô từng chữ &amp; ôn bằng lặp lại ngắt quãng.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+
+<h3>Luyện hiragana ngay</h3>
+<div class="lz-stack">
+</div>
+<a class="link-card dl" href="https://www.realkana.com/hiragana" target="_blank" rel="noopener">
+  <span class="lc-ico">✍️</span>
+  <span class="lc-body"><span class="lc-title">RealKana — luyện nhận mặt chữ Hiragana</span><span class="lc-sub">Chọn hàng muốn luyện, gõ romaji, phản hồi tức thì</span></span>
+  <span class="lc-cta">LUYỆN →</span>
+</a>
+<a class="link-card dl" href="https://tudienjp.com/alphabet" target="_blank" rel="noopener">
+  <span class="lc-ico">🔤</span>
+  <span class="lc-body"><span class="lc-title">Tudienjp — bảng chữ cái có âm thanh</span><span class="lc-sub">Nghe phát âm từng chữ</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+<a class="link-card dl" href="https://thepkz.github.io/minthep-portfolio/blog/textblog-0.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📝</span>
+  <span class="lc-body"><span class="lc-title">Blog tham khảo — cách nhớ Hiragana/Katakana/Kanji</span><span class="lc-sub">Bài viết của Min Thep</span></span>
+  <span class="lc-cta">ĐỌC BLOG →</span>
 </a>
 </div>
 `,
@@ -404,6 +510,25 @@ export default {
   <span class="lc-body"><span class="lc-title">Practise katakana</span><span class="lc-sub">Stroke order &amp; spaced repetition on My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
+
+<h3>Practise katakana now</h3>
+<div class="lz-stack">
+</div>
+<a class="link-card dl" href="https://www.realkana.com/katakana" target="_blank" rel="noopener">
+  <span class="lc-ico">✍️</span>
+  <span class="lc-body"><span class="lc-title">RealKana — Katakana</span><span class="lc-sub">Luyện đúng 4 chữ hay nhầm シ ツ ソ ン</span></span>
+  <span class="lc-cta">LUYỆN →</span>
+</a>
+<a class="link-card dl" href="https://www.realkana.com/katakana/extended" target="_blank" rel="noopener">
+  <span class="lc-ico">➕</span>
+  <span class="lc-body"><span class="lc-title">RealKana — Katakana mở rộng</span><span class="lc-sub">ファ・ティ・ウィ… dùng cho từ ngoại lai</span></span>
+  <span class="lc-cta">LUYỆN →</span>
+</a>
+<a class="link-card dl" href="https://www.realkana.com/katakana/double" target="_blank" rel="noopener">
+  <span class="lc-ico">⏸️</span>
+  <span class="lc-body"><span class="lc-title">RealKana — âm ngắt & trường âm</span><span class="lc-sub">ッ và ー trong katakana</span></span>
+  <span class="lc-cta">LUYỆN →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.1</span>
@@ -440,6 +565,25 @@ export default {
   <span class="lc-ico">✍️</span>
   <span class="lc-body"><span class="lc-title">Luyện katakana</span><span class="lc-sub">Thứ tự nét &amp; lặp lại ngắt quãng trên My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+
+<h3>Luyện katakana ngay</h3>
+<div class="lz-stack">
+</div>
+<a class="link-card dl" href="https://www.realkana.com/katakana" target="_blank" rel="noopener">
+  <span class="lc-ico">✍️</span>
+  <span class="lc-body"><span class="lc-title">RealKana — Katakana</span><span class="lc-sub">Luyện đúng 4 chữ hay nhầm シ ツ ソ ン</span></span>
+  <span class="lc-cta">LUYỆN →</span>
+</a>
+<a class="link-card dl" href="https://www.realkana.com/katakana/extended" target="_blank" rel="noopener">
+  <span class="lc-ico">➕</span>
+  <span class="lc-body"><span class="lc-title">RealKana — Katakana mở rộng</span><span class="lc-sub">ファ・ティ・ウィ… dùng cho từ ngoại lai</span></span>
+  <span class="lc-cta">LUYỆN →</span>
+</a>
+<a class="link-card dl" href="https://www.realkana.com/katakana/double" target="_blank" rel="noopener">
+  <span class="lc-ico">⏸️</span>
+  <span class="lc-body"><span class="lc-title">RealKana — âm ngắt & trường âm</span><span class="lc-sub">ッ và ー trong katakana</span></span>
+  <span class="lc-cta">LUYỆN →</span>
 </a>
 </div>
 `,
@@ -596,6 +740,20 @@ Others are regular: 400 = よんひゃく, 500 = ごひゃく, 2,000 = にせん
   <span class="lc-body"><span class="lc-title">Drill numbers</span><span class="lc-sub">Vocabulary SRS on My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
+
+<h3>Number tables to look up</h3>
+<div class="lz-stack">
+</div>
+<a class="link-card dl" href="https://thepkz.github.io/minthep-portfolio/blog/textblog-1.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📝</span>
+  <span class="lc-body"><span class="lc-title">Blog tham khảo — bảng số 1 → 10 triệu</span><span class="lc-sub">Kèm rendaku 300 さんびゃく, 600 ろっぴゃく…</span></span>
+  <span class="lc-cta">TRA BẢNG →</span>
+</a>
+<a class="link-card dl" href="https://quizlet.com/vn/683127375/jpd113-bai-123-flash-cards/" target="_blank" rel="noopener">
+  <span class="lc-ico">🃏</span>
+  <span class="lc-body"><span class="lc-title">Quizlet — từ vựng JPD113</span><span class="lc-sub">Học số cùng bộ thẻ</span></span>
+  <span class="lc-cta">MỞ QUIZLET →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.2</span>
@@ -641,6 +799,20 @@ Còn lại đều: 400 = よんひゃく, 500 = ごひゃく, 2.000 = にせん,
   <span class="lc-ico">🔢</span>
   <span class="lc-body"><span class="lc-title">Luyện số đếm</span><span class="lc-sub">Từ vựng SRS trên My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+
+<h3>Bảng số để tra cứu</h3>
+<div class="lz-stack">
+</div>
+<a class="link-card dl" href="https://thepkz.github.io/minthep-portfolio/blog/textblog-1.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📝</span>
+  <span class="lc-body"><span class="lc-title">Blog tham khảo — bảng số 1 → 10 triệu</span><span class="lc-sub">Kèm rendaku 300 さんびゃく, 600 ろっぴゃく…</span></span>
+  <span class="lc-cta">TRA BẢNG →</span>
+</a>
+<a class="link-card dl" href="https://quizlet.com/vn/683127375/jpd113-bai-123-flash-cards/" target="_blank" rel="noopener">
+  <span class="lc-ico">🃏</span>
+  <span class="lc-body"><span class="lc-title">Quizlet — từ vựng JPD113</span><span class="lc-sub">Học số cùng bộ thẻ</span></span>
+  <span class="lc-cta">MỞ QUIZLET →</span>
 </a>
 </div>
 `,
@@ -761,6 +933,20 @@ From 11 on it is mostly regular + にち: 11日 = じゅういち<b>にち</b>. 
   <span class="lc-body"><span class="lc-title">Practise dates &amp; asking questions</span><span class="lc-sub">Interactive drills on My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
+
+<h3>Date & time references</h3>
+<div class="lz-stack">
+</div>
+<a class="link-card dl" href="https://www.tofugu.com/japanese-grammar/date-and-time/" target="_blank" rel="noopener">
+  <span class="lc-ico">🕐</span>
+  <span class="lc-body"><span class="lc-title">Tofugu — Date and time in Japanese</span><span class="lc-sub">Giải thích tường tận よじ・しちじ・くじ và 分</span></span>
+  <span class="lc-cta">ĐỌC →</span>
+</a>
+<a class="link-card dl" href="https://thepkz.github.io/minthep-portfolio/blog/textblog-1.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📝</span>
+  <span class="lc-body"><span class="lc-title">Blog tham khảo — đếm tháng/ngày/thứ/giờ/phút/tuổi/tầng</span><span class="lc-sub">Bảng tra đầy đủ một trang</span></span>
+  <span class="lc-cta">TRA BẢNG →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.4</span>
@@ -807,6 +993,20 @@ Từ 11 trở đi phần lớn đều + にち: 11日 = じゅういち<b>にち
   <span class="lc-ico">📅</span>
   <span class="lc-body"><span class="lc-title">Luyện ngày tháng &amp; cách hỏi</span><span class="lc-sub">Bài tập tương tác trên My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+
+<h3>Tài liệu tra ngày & giờ</h3>
+<div class="lz-stack">
+</div>
+<a class="link-card dl" href="https://www.tofugu.com/japanese-grammar/date-and-time/" target="_blank" rel="noopener">
+  <span class="lc-ico">🕐</span>
+  <span class="lc-body"><span class="lc-title">Tofugu — Date and time in Japanese</span><span class="lc-sub">Giải thích tường tận よじ・しちじ・くじ và 分</span></span>
+  <span class="lc-cta">ĐỌC →</span>
+</a>
+<a class="link-card dl" href="https://thepkz.github.io/minthep-portfolio/blog/textblog-1.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📝</span>
+  <span class="lc-body"><span class="lc-title">Blog tham khảo — đếm tháng/ngày/thứ/giờ/phút/tuổi/tầng</span><span class="lc-sub">Bảng tra đầy đủ một trang</span></span>
+  <span class="lc-cta">TRA BẢNG →</span>
 </a>
 </div>
 `,
@@ -1644,6 +1844,20 @@ Filled in: はじめまして。わたしはアンです。ベトナムじんで
   <span class="lc-body"><span class="lc-title">Places & shopping vocab</span><span class="lc-sub">JPD113 word list on My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
+
+<h3>Particle drill</h3>
+<div class="lz-stack">
+</div>
+<a class="link-card dl" href="https://quizlet.com/vn/815088142/dekiru1_jpd113_tro-tu-flash-cards/" target="_blank" rel="noopener">
+  <span class="lc-ico">🃏</span>
+  <span class="lc-body"><span class="lc-title">Quizlet — trợ từ Dekiru 1</span><span class="lc-sub">を・に・で・へ・と・から・まで</span></span>
+  <span class="lc-cta">MỞ QUIZLET →</span>
+</a>
+<a class="link-card dl" href="https://thepkz.github.io/minthep-portfolio/blog/textblog-1.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📝</span>
+  <span class="lc-body"><span class="lc-title">Blog tham khảo — ngữ pháp JPD113</span><span class="lc-sub">Mục "Đi đâu đó / bằng phương tiện / cùng ai"</span></span>
+  <span class="lc-cta">ĐỌC BLOG →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.4</span>
@@ -1674,6 +1888,20 @@ Filled in: はじめまして。わたしはアンです。ベトナムじんで
   <span class="lc-ico">🏢</span>
   <span class="lc-body"><span class="lc-title">Từ vựng nơi chốn & mua sắm</span><span class="lc-sub">Bộ từ JPD113 trên My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+
+<h3>Luyện trợ từ</h3>
+<div class="lz-stack">
+</div>
+<a class="link-card dl" href="https://quizlet.com/vn/815088142/dekiru1_jpd113_tro-tu-flash-cards/" target="_blank" rel="noopener">
+  <span class="lc-ico">🃏</span>
+  <span class="lc-body"><span class="lc-title">Quizlet — trợ từ Dekiru 1</span><span class="lc-sub">を・に・で・へ・と・から・まで</span></span>
+  <span class="lc-cta">MỞ QUIZLET →</span>
+</a>
+<a class="link-card dl" href="https://thepkz.github.io/minthep-portfolio/blog/textblog-1.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📝</span>
+  <span class="lc-body"><span class="lc-title">Blog tham khảo — ngữ pháp JPD113</span><span class="lc-sub">Mục "Đi đâu đó / bằng phương tiện / cùng ai"</span></span>
+  <span class="lc-cta">ĐỌC BLOG →</span>
 </a>
 </div>
 `,

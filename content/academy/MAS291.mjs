@@ -2216,6 +2216,551 @@ stats.<span class="tok-function">ttest_1samp</span>(data, 5)  <span class="tok-c
         },
       ],
     },
+    /* ══════════════════ ÔN TẬP TỔNG HỢP ══════════════════ */
+    {
+      title: 'Revision — the whole course on a few pages|||Ôn tập tổng hợp — cả môn trong vài trang',
+      description: 'Bộ công thức đầy đủ, cây quyết định chọn công thức, phần đếm & mở rộng phân phối, và đề FE mẫu có giải.',
+      lessons: [
+        {
+          title: 'R.1 — The complete formula sheet & decision tree|||R.1 — Bộ công thức đầy đủ & cây quyết định chọn công thức',
+          slug: 'mas291-bo-cong-thuc',
+          type: 'VIDEO',
+          description: 'Mọi công thức của môn gom một chỗ, kèm sơ đồ chọn đúng công thức trong 10 giây khi đọc đề.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Revision · Lesson R.1</span>
+<h2>Everything on one page — and how to pick the right line</h2>
+<p class="lead">Losing marks in this subject is almost never about arithmetic. It is about choosing the wrong formula at the first step. This lesson gives you the whole sheet, then the decision tree that selects from it.</p>
+
+<h3>1 · Probability</h3>
+<div class="formula"><span class="lbl">ADDITION</span>P(A ∪ B) = P(A) + P(B) − P(A ∩ B) &nbsp;·&nbsp; mutually exclusive ⟹ P(A ∩ B) = 0</div>
+<div class="formula"><span class="lbl">COMPLEMENT</span>P(A′) = 1 − P(A)</div>
+<div class="formula"><span class="lbl">CONDITIONAL</span>P(A | B) = P(A ∩ B) / P(B), &nbsp; P(B) &gt; 0</div>
+<div class="formula"><span class="lbl">MULTIPLICATION</span>P(A ∩ B) = P(B) · P(A | B) &nbsp;·&nbsp; independent ⟹ P(A ∩ B) = P(A)P(B)</div>
+<div class="formula"><span class="lbl">TOTAL PROBABILITY</span>P(B) = Σ P(Aᵢ) P(B | Aᵢ)</div>
+<div class="formula"><span class="lbl">BAYES</span>P(Aⱼ | B) = P(Aⱼ) P(B | Aⱼ) / Σ P(Aᵢ) P(B | Aᵢ)</div>
+
+<h3>2 · Counting</h3>
+<div class="formula"><span class="lbl">PERMUTATION</span>P(n, r) = n! / (n − r)! &nbsp;— order matters</div>
+<div class="formula"><span class="lbl">COMBINATION</span>C(n, r) = n! / [r!(n − r)!] &nbsp;— order does not matter</div>
+
+<h3>3 · Random variables</h3>
+<div class="formula"><span class="lbl">DISCRETE</span>E(X) = Σ x·p(x) &nbsp;·&nbsp; Var(X) = E(X²) − [E(X)]² = Σ x²p(x) − μ²</div>
+<div class="formula"><span class="lbl">CONTINUOUS</span>E(X) = ∫ x f(x) dx &nbsp;·&nbsp; F(x) = ∫₋∞ˣ f(t) dt &nbsp;·&nbsp; P(a &lt; X &lt; b) = F(b) − F(a)</div>
+<div class="formula"><span class="lbl">LINEAR RULES</span>E(aX + b) = aE(X) + b &nbsp;·&nbsp; Var(aX + b) = a²Var(X)</div>
+
+<h3>4 · The distributions</h3>
+<table><thead><tr><th>Distribution</th><th>Use when</th><th>P(X = x) or f(x)</th><th>E(X)</th><th>Var(X)</th></tr></thead><tbody>
+<tr><td>Binomial B(n,p)</td><td>n independent trials, fixed p, count successes</td><td>C(n,x) pˣ(1−p)ⁿ⁻ˣ</td><td>np</td><td>np(1−p)</td></tr>
+<tr><td>Poisson P(λ)</td><td>events per interval, rate λ</td><td>e⁻ᐩλ λˣ / x!</td><td>λ</td><td>λ</td></tr>
+<tr><td>Hypergeometric</td><td>draw n from N <b>without</b> replacement</td><td>C(K,x)C(N−K,n−x)/C(N,n)</td><td>n·K/N</td><td>n(K/N)(1−K/N)(N−n)/(N−1)</td></tr>
+<tr><td>Geometric</td><td>trials until the first success</td><td>(1−p)ˣ⁻¹ p</td><td>1/p</td><td>(1−p)/p²</td></tr>
+<tr><td>Uniform U(a,b)</td><td>every value in [a,b] equally likely</td><td>1/(b−a)</td><td>(a+b)/2</td><td>(b−a)²/12</td></tr>
+<tr><td>Exponential Exp(λ)</td><td>waiting time between Poisson events</td><td>λe⁻ᐩλˣ</td><td>1/λ</td><td>1/λ²</td></tr>
+<tr><td>Normal N(μ,σ²)</td><td>sums/averages, natural measurements</td><td>bell curve</td><td>μ</td><td>σ²</td></tr>
+</tbody></table>
+<div class="formula"><span class="lbl">STANDARDISE</span>z = (x − μ) / σ &nbsp;·&nbsp; for a mean: z = (x̄ − μ) / (σ/√n)</div>
+<div class="formula"><span class="lbl">EXPONENTIAL CDF</span>P(X ≤ x) = 1 − e⁻ᐩλˣ &nbsp;·&nbsp; memoryless: P(X &gt; s+t | X &gt; s) = P(X &gt; t)</div>
+
+<h3>5 · Descriptive statistics</h3>
+<div class="formula"><span class="lbl">CENTRE</span>x̄ = Σxᵢ / n &nbsp;·&nbsp; median = middle value &nbsp;·&nbsp; mode = most frequent</div>
+<div class="formula"><span class="lbl">SPREAD</span>s² = Σ(xᵢ − x̄)² / (n − 1) &nbsp;·&nbsp; s = √s² &nbsp;·&nbsp; CV = s/x̄ × 100%</div>
+<div class="formula"><span class="lbl">POSITION</span>IQR = Q3 − Q1 &nbsp;·&nbsp; outlier if x &lt; Q1 − 1.5·IQR or x &gt; Q3 + 1.5·IQR</div>
+
+<h3>6 · Sampling distributions</h3>
+<div class="formula"><span class="lbl">MEAN</span>E(x̄) = μ &nbsp;·&nbsp; SE(x̄) = σ/√n &nbsp;·&nbsp; CLT: x̄ ≈ N(μ, σ²/n) for n ≥ 30</div>
+<div class="formula"><span class="lbl">PROPORTION</span>E(p̂) = p &nbsp;·&nbsp; SE(p̂) = √[p(1−p)/n] &nbsp;·&nbsp; valid if np ≥ 5 and n(1−p) ≥ 5</div>
+<div class="formula"><span class="lbl">DIFFERENCE</span>SE(x̄₁ − x̄₂) = √(σ₁²/n₁ + σ₂²/n₂) &nbsp;·&nbsp; SE(p̂₁ − p̂₂) = √[p₁(1−p₁)/n₁ + p₂(1−p₂)/n₂]</div>
+
+<h3>7 · Confidence intervals</h3>
+<div class="formula"><span class="lbl">MEAN, σ KNOWN</span>x̄ ± z<sub>α/2</sub> · σ/√n</div>
+<div class="formula"><span class="lbl">MEAN, σ UNKNOWN</span>x̄ ± t<sub>α/2, n−1</sub> · s/√n</div>
+<div class="formula"><span class="lbl">PROPORTION</span>p̂ ± z<sub>α/2</sub> · √[p̂(1−p̂)/n]</div>
+<div class="formula"><span class="lbl">SAMPLE SIZE</span>n ≥ (z<sub>α/2</sub> σ / E)² &nbsp;·&nbsp; for a proportion: n ≥ p̂(1−p̂)(z<sub>α/2</sub>/E)²</div>
+
+<h3>8 · Hypothesis tests</h3>
+<div class="formula"><span class="lbl">ONE MEAN</span>z₀ = (x̄ − μ₀)/(σ/√n) &nbsp;or&nbsp; t₀ = (x̄ − μ₀)/(s/√n), df = n − 1</div>
+<div class="formula"><span class="lbl">ONE PROPORTION</span>z₀ = (p̂ − p₀) / √[p₀(1−p₀)/n]</div>
+<div class="formula"><span class="lbl">TWO MEANS (pooled)</span>t₀ = (x̄₁ − x̄₂)/(s<sub>p</sub>√(1/n₁ + 1/n₂)), &nbsp; s²<sub>p</sub> = [(n₁−1)s₁² + (n₂−1)s₂²]/(n₁+n₂−2), df = n₁+n₂−2</div>
+<div class="formula"><span class="lbl">PAIRED</span>t₀ = d̄ / (s<sub>d</sub>/√n), df = n − 1</div>
+<div class="formula"><span class="lbl">TWO PROPORTIONS</span>z₀ = (p̂₁ − p̂₂)/√[p̂(1−p̂)(1/n₁ + 1/n₂)], &nbsp; p̂ = (x₁+x₂)/(n₁+n₂)</div>
+
+<h3>9 · Regression</h3>
+<div class="formula"><span class="lbl">SLOPE &amp; INTERCEPT</span>β̂₁ = S<sub>xy</sub>/S<sub>xx</sub> &nbsp;·&nbsp; β̂₀ = ȳ − β̂₁x̄</div>
+<div class="formula"><span class="lbl">SUMS</span>S<sub>xx</sub> = Σ(x−x̄)² &nbsp;·&nbsp; S<sub>yy</sub> = Σ(y−ȳ)² &nbsp;·&nbsp; S<sub>xy</sub> = Σ(x−x̄)(y−ȳ)</div>
+<div class="formula"><span class="lbl">CORRELATION</span>r = S<sub>xy</sub>/√(S<sub>xx</sub>S<sub>yy</sub>) &nbsp;·&nbsp; R² = r² = SSR/SST</div>
+<div class="formula"><span class="lbl">TEST ON SLOPE</span>t₀ = β̂₁ / (s<sub>e</sub>/√S<sub>xx</sub>), df = n − 2</div>
+
+<h3>The decision tree — read the question, then follow it</h3>
+<div class="lz-flow">
+  <div class="lz-fitem"><b>Is it about ONE observation or a MEAN?</b><span>One observation → z = (x−μ)/σ. A sample mean → divide by σ/√n. Missing this is the most expensive single error in the paper.</span></div>
+  <div class="lz-fitem"><b>Estimating or deciding?</b><span>"Find an interval / estimate μ" → confidence interval. "Test / is there evidence / claim" → hypothesis test.</span></div>
+  <div class="lz-fitem"><b>Is σ given?</b><span>σ given → z. Only s given → t with df = n − 1 (unless n ≥ 30, where z is accepted).</span></div>
+  <div class="lz-fitem"><b>One sample or two?</b><span>Two samples from the SAME subjects (before/after) → paired. Two independent groups → two-sample.</span></div>
+  <div class="lz-fitem"><b>Counting or measuring?</b><span>Counts of successes → proportion formulas. Measurements → mean formulas.</span></div>
+  <div class="lz-fitem"><b>Which distribution?</b><span>Fixed n trials → binomial · events per interval → Poisson · without replacement → hypergeometric · waiting time → exponential · anything averaged → normal.</span></div>
+</div>
+
+<h3>Worked example — using the tree on a real question</h3>
+<div class="out"><b>"A factory claims its bulbs last 1000 hours on average. A sample of 20 bulbs gives x̄ = 970 with s = 60. At α = 0.05, is the claim supported?"</b><br>
+<b>Step 1:</b> it is about a <em>mean</em> → divide by √n.<br>
+<b>Step 2:</b> "is the claim supported" → <em>hypothesis test</em>, not an interval.<br>
+<b>Step 3:</b> only s is given and n = 20 &lt; 30 → <b>t</b>, df = 19.<br>
+<b>Step 4:</b> one sample. <b>Step 5:</b> a measurement, so mean formulas.<br>
+→ t₀ = (970 − 1000)/(60/√20) = −30/13.416 = <b>−2.236</b>; t<sub>0.025,19</sub> = 2.093 → |−2.236| &gt; 2.093 → <b>reject H₀</b>: evidence the true mean is not 1000 hours.<br>
+Total time to choose the formula: about ten seconds, and all four decisions were forced by words in the question.</div>
+
+<h3>The ten errors that cost the most marks</h3>
+<table><thead><tr><th>#</th><th>The error</th><th>The correct move</th></tr></thead><tbody>
+<tr><td>1</td><td>Using σ instead of σ/√n for a sample mean</td><td>Ask "one item or an average?" before writing z</td></tr>
+<tr><td>2</td><td>Dividing by n instead of n − 1 for a sample variance</td><td>n − 1 for a sample, n only for a whole population</td></tr>
+<tr><td>3</td><td>Var(X) = E(X²) − E(X)</td><td>Subtract the mean <b>squared</b>: E(X²) − μ²</td></tr>
+<tr><td>4</td><td>Using z when only s is given and n &lt; 30</td><td>t with df = n − 1</td></tr>
+<tr><td>5</td><td>Taking t<sub>0.025</sub> for a one-sided test</td><td>One-sided at 5% is the t<sub>0.05</sub> column</td></tr>
+<tr><td>6</td><td>Adding Φ values instead of subtracting them</td><td>P(a &lt; X &lt; b) = Φ(z₂) − Φ(z₁), always</td></tr>
+<tr><td>7</td><td>Rounding the sample size down</td><td>n always rounds <b>up</b>, even at 61.05</td></tr>
+<tr><td>8</td><td>Treating before/after data as two independent samples</td><td>Same subjects → paired, work with the differences</td></tr>
+<tr><td>9</td><td>Writing "accept H₀"</td><td>"Fail to reject H₀" — you never prove H₀</td></tr>
+<tr><td>10</td><td>Reading a high r as proof of causation</td><td>Correlation is association; state it as such</td></tr>
+</tbody></table>
+<p>Copy this table onto the back of your formula sheet. In a 60-minute paper, a two-minute check against these ten lines typically recovers one to two marks — more than any extra revision of theory would.</p>
+
+<div class="pitfall"><b>Var(aX + b) = a²Var(X), not a·Var(X) + b.</b> Adding a constant shifts the distribution without changing its spread, and multiplying scales the spread by |a| — so the variance, which is squared, scales by a². This one line appears in the FE almost every semester.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Every distribution in the table is related to the others.</b> Binomial → Poisson when n is large and p small (λ = np); binomial → normal when np ≥ 5 and n(1−p) ≥ 5; Poisson → normal for large λ; hypergeometric → binomial when the population is much larger than the sample (n/N &lt; 0.05, so removing an item barely changes p); and the exponential is the waiting time between Poisson events. Seeing the table as one family rather than seven separate formulas is what makes it memorable — and it explains why the normal appears everywhere: by the CLT it is the limit of almost anything you add up. <em>Beyond syllabus because the course teaches the distributions one chapter at a time and never draws the map.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Ôn tập · Bài R.1</span>
+<h2>Toàn bộ công thức trên một trang — và cách chọn đúng dòng</h2>
+<p class="lead">Mất điểm ở môn này hầu như không bao giờ vì tính sai. Mà vì chọn nhầm công thức ngay ở bước đầu. Bài này đưa bạn trọn bộ công thức, rồi tới cây quyết định để chọn ra đúng công thức trong đó.</p>
+
+<h3>1 · Xác suất</h3>
+<div class="formula"><span class="lbl">QUY TẮC CỘNG</span>P(A ∪ B) = P(A) + P(B) − P(A ∩ B) &nbsp;·&nbsp; xung khắc ⟹ P(A ∩ B) = 0</div>
+<div class="formula"><span class="lbl">BIẾN CỐ ĐỐI</span>P(A′) = 1 − P(A)</div>
+<div class="formula"><span class="lbl">XÁC SUẤT CÓ ĐIỀU KIỆN</span>P(A | B) = P(A ∩ B) / P(B), &nbsp; P(B) &gt; 0</div>
+<div class="formula"><span class="lbl">QUY TẮC NHÂN</span>P(A ∩ B) = P(B) · P(A | B) &nbsp;·&nbsp; độc lập ⟹ P(A ∩ B) = P(A)P(B)</div>
+<div class="formula"><span class="lbl">XÁC SUẤT TOÀN PHẦN</span>P(B) = Σ P(Aᵢ) P(B | Aᵢ)</div>
+<div class="formula"><span class="lbl">BAYES</span>P(Aⱼ | B) = P(Aⱼ) P(B | Aⱼ) / Σ P(Aᵢ) P(B | Aᵢ)</div>
+
+<h3>2 · Phép đếm</h3>
+<div class="formula"><span class="lbl">CHỈNH HỢP</span>P(n, r) = n! / (n − r)! &nbsp;— có phân biệt thứ tự</div>
+<div class="formula"><span class="lbl">TỔ HỢP</span>C(n, r) = n! / [r!(n − r)!] &nbsp;— không phân biệt thứ tự</div>
+
+<h3>3 · Biến ngẫu nhiên</h3>
+<div class="formula"><span class="lbl">RỜI RẠC</span>E(X) = Σ x·p(x) &nbsp;·&nbsp; Var(X) = E(X²) − [E(X)]² = Σ x²p(x) − μ²</div>
+<div class="formula"><span class="lbl">LIÊN TỤC</span>E(X) = ∫ x f(x) dx &nbsp;·&nbsp; F(x) = ∫₋∞ˣ f(t) dt &nbsp;·&nbsp; P(a &lt; X &lt; b) = F(b) − F(a)</div>
+<div class="formula"><span class="lbl">QUY TẮC TUYẾN TÍNH</span>E(aX + b) = aE(X) + b &nbsp;·&nbsp; Var(aX + b) = a²Var(X)</div>
+
+<h3>4 · Các phân phối</h3>
+<table><thead><tr><th>Phân phối</th><th>Dùng khi</th><th>P(X = x) hoặc f(x)</th><th>E(X)</th><th>Var(X)</th></tr></thead><tbody>
+<tr><td>Nhị thức B(n,p)</td><td>n phép thử độc lập, p cố định, đếm số lần thành công</td><td>C(n,x) pˣ(1−p)ⁿ⁻ˣ</td><td>np</td><td>np(1−p)</td></tr>
+<tr><td>Poisson P(λ)</td><td>số biến cố trong một khoảng, cường độ λ</td><td>e⁻ᐩλ λˣ / x!</td><td>λ</td><td>λ</td></tr>
+<tr><td>Siêu bội</td><td>lấy n từ N <b>không</b> hoàn lại</td><td>C(K,x)C(N−K,n−x)/C(N,n)</td><td>n·K/N</td><td>n(K/N)(1−K/N)(N−n)/(N−1)</td></tr>
+<tr><td>Hình học</td><td>số phép thử tới lần thành công đầu tiên</td><td>(1−p)ˣ⁻¹ p</td><td>1/p</td><td>(1−p)/p²</td></tr>
+<tr><td>Đều U(a,b)</td><td>mọi giá trị trong [a,b] khả năng như nhau</td><td>1/(b−a)</td><td>(a+b)/2</td><td>(b−a)²/12</td></tr>
+<tr><td>Mũ Exp(λ)</td><td>thời gian chờ giữa các biến cố Poisson</td><td>λe⁻ᐩλˣ</td><td>1/λ</td><td>1/λ²</td></tr>
+<tr><td>Chuẩn N(μ,σ²)</td><td>tổng/trung bình, các đại lượng đo tự nhiên</td><td>đường cong hình chuông</td><td>μ</td><td>σ²</td></tr>
+</tbody></table>
+<div class="formula"><span class="lbl">CHUẨN HOÁ</span>z = (x − μ) / σ &nbsp;·&nbsp; với trung bình mẫu: z = (x̄ − μ) / (σ/√n)</div>
+<div class="formula"><span class="lbl">HÀM PHÂN PHỐI MŨ</span>P(X ≤ x) = 1 − e⁻ᐩλˣ &nbsp;·&nbsp; không nhớ: P(X &gt; s+t | X &gt; s) = P(X &gt; t)</div>
+
+<h3>5 · Thống kê mô tả</h3>
+<div class="formula"><span class="lbl">ĐO TÂM</span>x̄ = Σxᵢ / n &nbsp;·&nbsp; trung vị = giá trị giữa &nbsp;·&nbsp; mốt = giá trị hay gặp nhất</div>
+<div class="formula"><span class="lbl">ĐO PHÂN TÁN</span>s² = Σ(xᵢ − x̄)² / (n − 1) &nbsp;·&nbsp; s = √s² &nbsp;·&nbsp; CV = s/x̄ × 100%</div>
+<div class="formula"><span class="lbl">ĐO VỊ TRÍ</span>IQR = Q3 − Q1 &nbsp;·&nbsp; ngoại lai nếu x &lt; Q1 − 1,5·IQR hoặc x &gt; Q3 + 1,5·IQR</div>
+
+<h3>6 · Phân phối mẫu</h3>
+<div class="formula"><span class="lbl">TRUNG BÌNH</span>E(x̄) = μ &nbsp;·&nbsp; SE(x̄) = σ/√n &nbsp;·&nbsp; CLT: x̄ ≈ N(μ, σ²/n) khi n ≥ 30</div>
+<div class="formula"><span class="lbl">TỈ LỆ</span>E(p̂) = p &nbsp;·&nbsp; SE(p̂) = √[p(1−p)/n] &nbsp;·&nbsp; dùng được nếu np ≥ 5 và n(1−p) ≥ 5</div>
+<div class="formula"><span class="lbl">HIỆU</span>SE(x̄₁ − x̄₂) = √(σ₁²/n₁ + σ₂²/n₂) &nbsp;·&nbsp; SE(p̂₁ − p̂₂) = √[p₁(1−p₁)/n₁ + p₂(1−p₂)/n₂]</div>
+
+<h3>7 · Khoảng tin cậy</h3>
+<div class="formula"><span class="lbl">TRUNG BÌNH, BIẾT σ</span>x̄ ± z<sub>α/2</sub> · σ/√n</div>
+<div class="formula"><span class="lbl">TRUNG BÌNH, CHƯA BIẾT σ</span>x̄ ± t<sub>α/2, n−1</sub> · s/√n</div>
+<div class="formula"><span class="lbl">TỈ LỆ</span>p̂ ± z<sub>α/2</sub> · √[p̂(1−p̂)/n]</div>
+<div class="formula"><span class="lbl">CỠ MẪU</span>n ≥ (z<sub>α/2</sub> σ / E)² &nbsp;·&nbsp; với tỉ lệ: n ≥ p̂(1−p̂)(z<sub>α/2</sub>/E)²</div>
+
+<h3>8 · Kiểm định giả thuyết</h3>
+<div class="formula"><span class="lbl">MỘT TRUNG BÌNH</span>z₀ = (x̄ − μ₀)/(σ/√n) &nbsp;hoặc&nbsp; t₀ = (x̄ − μ₀)/(s/√n), df = n − 1</div>
+<div class="formula"><span class="lbl">MỘT TỈ LỆ</span>z₀ = (p̂ − p₀) / √[p₀(1−p₀)/n]</div>
+<div class="formula"><span class="lbl">HAI TRUNG BÌNH (gộp)</span>t₀ = (x̄₁ − x̄₂)/(s<sub>p</sub>√(1/n₁ + 1/n₂)), &nbsp; s²<sub>p</sub> = [(n₁−1)s₁² + (n₂−1)s₂²]/(n₁+n₂−2), df = n₁+n₂−2</div>
+<div class="formula"><span class="lbl">MẪU CẶP</span>t₀ = d̄ / (s<sub>d</sub>/√n), df = n − 1</div>
+<div class="formula"><span class="lbl">HAI TỈ LỆ</span>z₀ = (p̂₁ − p̂₂)/√[p̂(1−p̂)(1/n₁ + 1/n₂)], &nbsp; p̂ = (x₁+x₂)/(n₁+n₂)</div>
+
+<h3>9 · Hồi quy</h3>
+<div class="formula"><span class="lbl">HỆ SỐ GÓC &amp; CHẶN</span>β̂₁ = S<sub>xy</sub>/S<sub>xx</sub> &nbsp;·&nbsp; β̂₀ = ȳ − β̂₁x̄</div>
+<div class="formula"><span class="lbl">CÁC TỔNG</span>S<sub>xx</sub> = Σ(x−x̄)² &nbsp;·&nbsp; S<sub>yy</sub> = Σ(y−ȳ)² &nbsp;·&nbsp; S<sub>xy</sub> = Σ(x−x̄)(y−ȳ)</div>
+<div class="formula"><span class="lbl">TƯƠNG QUAN</span>r = S<sub>xy</sub>/√(S<sub>xx</sub>S<sub>yy</sub>) &nbsp;·&nbsp; R² = r² = SSR/SST</div>
+<div class="formula"><span class="lbl">KIỂM ĐỊNH HỆ SỐ GÓC</span>t₀ = β̂₁ / (s<sub>e</sub>/√S<sub>xx</sub>), df = n − 2</div>
+
+<h3>Cây quyết định — đọc đề rồi đi theo</h3>
+<div class="lz-flow">
+  <div class="lz-fitem"><b>Đề hỏi về MỘT quan sát hay về TRUNG BÌNH?</b><span>Một quan sát → z = (x−μ)/σ. Trung bình mẫu → chia thêm cho σ/√n. Bỏ sót chỗ này là lỗi đắt giá nhất trong cả bài.</span></div>
+  <div class="lz-fitem"><b>Ước lượng hay ra quyết định?</b><span>"Tìm khoảng / ước lượng μ" → khoảng tin cậy. "Kiểm định / có bằng chứng không / lời tuyên bố" → kiểm định giả thuyết.</span></div>
+  <div class="lz-fitem"><b>Đề có cho σ không?</b><span>Cho σ → z. Chỉ cho s → t với df = n − 1 (trừ khi n ≥ 30 thì dùng z được).</span></div>
+  <div class="lz-fitem"><b>Một mẫu hay hai mẫu?</b><span>Hai lần đo trên CÙNG đối tượng (trước/sau) → mẫu cặp. Hai nhóm độc lập → hai mẫu.</span></div>
+  <div class="lz-fitem"><b>Đếm hay đo?</b><span>Đếm số lần thành công → công thức tỉ lệ. Đo đại lượng → công thức trung bình.</span></div>
+  <div class="lz-fitem"><b>Phân phối nào?</b><span>n phép thử cố định → nhị thức · số biến cố mỗi khoảng → Poisson · không hoàn lại → siêu bội · thời gian chờ → mũ · cái gì lấy trung bình → chuẩn.</span></div>
+</div>
+
+<h3>Ví dụ có lời giải — dùng cây quyết định trên một câu thật</h3>
+<div class="out"><b>"Một nhà máy tuyên bố bóng đèn của họ cháy sáng trung bình 1000 giờ. Mẫu 20 bóng cho x̄ = 970 với s = 60. Ở mức α = 0,05, tuyên bố đó có được ủng hộ không?"</b><br>
+<b>Bước 1:</b> đề nói về <em>trung bình</em> → phải chia thêm cho √n.<br>
+<b>Bước 2:</b> "tuyên bố có được ủng hộ không" → <em>kiểm định giả thuyết</em>, không phải khoảng tin cậy.<br>
+<b>Bước 3:</b> chỉ cho s và n = 20 &lt; 30 → dùng <b>t</b>, df = 19.<br>
+<b>Bước 4:</b> một mẫu. <b>Bước 5:</b> là đại lượng đo, nên dùng công thức trung bình.<br>
+→ t₀ = (970 − 1000)/(60/√20) = −30/13,416 = <b>−2,236</b>; t<sub>0,025;19</sub> = 2,093 → |−2,236| &gt; 2,093 → <b>bác bỏ H₀</b>: có bằng chứng cho thấy trung bình thật khác 1000 giờ.<br>
+Tổng thời gian để chọn công thức: khoảng mười giây, và cả bốn quyết định đều bị ép bởi chính chữ trong đề.</div>
+
+<h3>Mười lỗi làm mất nhiều điểm nhất</h3>
+<table><thead><tr><th>#</th><th>Lỗi</th><th>Cách làm đúng</th></tr></thead><tbody>
+<tr><td>1</td><td>Dùng σ thay vì σ/√n cho trung bình mẫu</td><td>Tự hỏi "một cá thể hay một trung bình?" trước khi viết z</td></tr>
+<tr><td>2</td><td>Chia cho n thay vì n − 1 khi tính phương sai mẫu</td><td>n − 1 cho mẫu, chỉ dùng n khi có cả tổng thể</td></tr>
+<tr><td>3</td><td>Viết Var(X) = E(X²) − E(X)</td><td>Phải trừ trung bình <b>bình phương</b>: E(X²) − μ²</td></tr>
+<tr><td>4</td><td>Dùng z khi chỉ có s và n &lt; 30</td><td>Dùng t với df = n − 1</td></tr>
+<tr><td>5</td><td>Lấy t<sub>0,025</sub> cho kiểm định một phía</td><td>Một phía ở mức 5% là cột t<sub>0,05</sub></td></tr>
+<tr><td>6</td><td>Cộng hai giá trị Φ thay vì trừ</td><td>P(a &lt; X &lt; b) = Φ(z₂) − Φ(z₁), luôn luôn</td></tr>
+<tr><td>7</td><td>Làm tròn cỡ mẫu xuống</td><td>n luôn làm tròn <b>lên</b>, kể cả khi ra 61,05</td></tr>
+<tr><td>8</td><td>Coi dữ liệu trước/sau là hai mẫu độc lập</td><td>Cùng đối tượng → mẫu cặp, làm việc với hiệu số</td></tr>
+<tr><td>9</td><td>Viết "chấp nhận H₀"</td><td>"Không bác bỏ được H₀" — không bao giờ chứng minh được H₀</td></tr>
+<tr><td>10</td><td>Đọc r cao thành bằng chứng nhân quả</td><td>Tương quan là sự liên hệ; hãy phát biểu đúng như vậy</td></tr>
+</tbody></table>
+<p>Hãy chép bảng này ra mặt sau tờ công thức. Trong bài thi 60 phút, hai phút rà lại theo mười dòng này thường cứu được một tới hai điểm — nhiều hơn bất kỳ khoảng thời gian ôn thêm lý thuyết nào.</p>
+
+<div class="pitfall"><b>Var(aX + b) = a²Var(X), không phải a·Var(X) + b.</b> Cộng một hằng số chỉ dịch chuyển phân phối mà không đổi độ phân tán, còn nhân thì kéo giãn độ phân tán theo |a| — nên phương sai, vốn là bình phương, giãn theo a². Đúng một dòng này gần như kỳ nào cũng xuất hiện trong đề FE.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Mọi phân phối trong bảng đều có họ hàng với nhau.</b> Nhị thức → Poisson khi n lớn và p nhỏ (λ = np); nhị thức → chuẩn khi np ≥ 5 và n(1−p) ≥ 5; Poisson → chuẩn khi λ lớn; siêu bội → nhị thức khi tổng thể lớn hơn hẳn mẫu (n/N &lt; 0,05, nên rút một phần tử ra gần như không đổi p); và phân phối mũ chính là thời gian chờ giữa các biến cố Poisson. Nhìn cả bảng như một gia đình thay vì bảy công thức rời rạc mới làm nó dễ nhớ — và cũng giải thích vì sao phân phối chuẩn có mặt ở khắp nơi: theo CLT, nó là giới hạn của hầu như mọi thứ được cộng dồn lại. <em>Ngoài giáo trình vì môn học dạy từng phân phối theo từng chương và không bao giờ vẽ ra tấm bản đồ này.</em></div>
+</div>
+`,
+        },
+        {
+          title: 'R.2 — Counting, and the distributions in full|||R.2 — Phép đếm & các phân phối chuyên sâu',
+          slug: 'mas291-dem-phan-phoi-mo-rong',
+          type: 'VIDEO',
+          description: 'Chỉnh hợp/tổ hợp áp vào bài xác suất, siêu bội, hình học, và các phép xấp xỉ giữa những phân phối.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Revision · Lesson R.2</span>
+<h2>The counting that probability questions hide, and the distributions the course skims</h2>
+<p class="lead">Half of chapter 2's questions are really counting questions in disguise, and chapter 3 lists distributions the lectures pass over quickly. Both show up in the FE.</p>
+
+<h3>Counting — three questions that decide the formula</h3>
+<div class="lz-flow">
+  <div class="lz-fitem"><b>1. Does order matter?</b><span>"Ranked 1st, 2nd, 3rd" → yes → permutation. "A committee of 3" → no → combination.</span></div>
+  <div class="lz-fitem"><b>2. Is repetition allowed?</b><span>A PIN can repeat digits → nʳ. Drawing cards cannot → n!/(n−r)!.</span></div>
+  <div class="lz-fitem"><b>3. Are the objects distinguishable?</b><span>Identical letters need the multinomial correction n!/(n₁!n₂!…).</span></div>
+</div>
+<div class="out"><b>Worked example a — a committee.</b> From 7 men and 5 women choose 4 people. P(exactly 2 women)?<br>
+Ways to choose 2 women from 5: C(5,2) = 10. Ways to choose 2 men from 7: C(7,2) = 21. Total favourable = 10 × 21 = 210.<br>
+Total ways: C(12,4) = 495. → <b>P = 210/495 = 14/33 ≈ 0.4242</b><br>
+<b>Worked example b — arrangements with repeats.</b> How many distinct arrangements of the letters in "STATISTICS"?<br>
+10 letters with S×3, T×3, A×1, I×2, C×1 → 10!/(3!·3!·2!) = 3,628,800/(6·6·2) = <b>50,400</b><br>
+<b>Worked example c — order matters.</b> Eight runners, how many ways to award gold, silver, bronze? P(8,3) = 8!/5! = 8×7×6 = <b>336</b>.</div>
+
+<h3>Hypergeometric — the "without replacement" distribution</h3>
+<div class="formula"><span class="lbl">HYPERGEOMETRIC</span>P(X = x) = C(K, x) · C(N−K, n−x) / C(N, n)</div>
+<div class="out"><b>Worked example.</b> A box of N = 20 items contains K = 5 defective. Draw n = 4 without replacement. Find P(exactly 1 defective).<br>
+P(X = 1) = C(5,1)·C(15,3)/C(20,4) = 5 × 455 / 4845 = 2275/4845 = <b>0.4696</b><br>
+E(X) = n·K/N = 4 × 5/20 = <b>1.0</b><br>
+<b>Compare with the binomial</b> (which would be wrong here): C(4,1)(0.25)¹(0.75)³ = 4 × 0.25 × 0.4219 = 0.4219. The difference of 5 percentage points comes entirely from the fact that removing an item changes the probability for the next draw.<br>
+<b>The rule of thumb:</b> if n/N &lt; 0.05, the difference is negligible and you may use the binomial. Here n/N = 4/20 = 0.20, far above the threshold — so hypergeometric it must be.</div>
+
+<h3>Geometric — waiting for the first success</h3>
+<div class="formula"><span class="lbl">GEOMETRIC</span>P(X = x) = (1−p)ˣ⁻¹ p &nbsp;·&nbsp; E(X) = 1/p &nbsp;·&nbsp; P(X &gt; k) = (1−p)ᵏ</div>
+<div class="out"><b>Worked example.</b> A machine produces a defective part with probability p = 0.1. Find (a) P(the first defect is the 5th part), (b) the expected number of parts until the first defect, (c) P(more than 10 parts with no defect).<br>
+(a) P(X = 5) = (0.9)⁴ × 0.1 = 0.6561 × 0.1 = <b>0.0656</b><br>
+(b) E(X) = 1/0.1 = <b>10 parts</b><br>
+(c) P(X &gt; 10) = (0.9)¹⁰ = <b>0.3487</b><br>
+<b>The memoryless property:</b> if 10 parts have already come out perfect, the expected wait for the first defect is <em>still</em> 10 more. The machine has no memory — a fact that feels wrong and is the reason gamblers lose money.</div>
+
+<h3>The approximations, and when each is allowed</h3>
+<table><thead><tr><th>From</th><th>To</th><th>Condition</th><th>Parameters</th></tr></thead><tbody>
+<tr><td>Hypergeometric</td><td>Binomial</td><td>n/N &lt; 0.05</td><td>p = K/N</td></tr>
+<tr><td>Binomial</td><td>Poisson</td><td>n ≥ 20 and p ≤ 0.05 (better: n ≥ 100, np ≤ 10)</td><td>λ = np</td></tr>
+<tr><td>Binomial</td><td>Normal</td><td>np ≥ 5 and n(1−p) ≥ 5</td><td>μ = np, σ = √(np(1−p))</td></tr>
+<tr><td>Poisson</td><td>Normal</td><td>λ ≥ 10</td><td>μ = λ, σ = √λ</td></tr>
+</tbody></table>
+<div class="out"><b>Worked example — normal approximation with the continuity correction.</b> X ~ B(100, 0.4). Find P(X ≤ 45).<br>
+Check: np = 40 ≥ 5 and n(1−p) = 60 ≥ 5 ✓ → approximate by N(40, 24), σ = √24 = 4.899<br>
+<b>Continuity correction:</b> a discrete "≤ 45" becomes a continuous "&lt; 45.5".<br>
+z = (45.5 − 40)/4.899 = <b>1.123</b> → P ≈ Φ(1.12) = <b>0.8686</b><br>
+Without the correction you would use 45 → z = 1.021 → 0.8463, an error of over 2 percentage points. On a "≤ k" or "= k" question the correction is worth a mark on its own.<br>
+<b>Which way to shift:</b> P(X ≤ k) → k + 0.5 · P(X &lt; k) → k − 0.5 · P(X ≥ k) → k − 0.5 · P(X = k) → between k − 0.5 and k + 0.5.</div>
+
+<div class="pitfall"><b>Binomial or hypergeometric — decide from the words "with/without replacement".</b> If the problem does not say, look at whether the population is large relative to the sample: drawing 5 people from a city is effectively with replacement; drawing 5 cards from a deck is not. Getting this wrong changes the answer by several percentage points, and the marker checks the choice, not just the number.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why the Poisson is the "law of rare events".</b> Take a binomial with n → ∞ and p → 0 while np = λ stays fixed: the limit is exactly e⁻ᐩλλˣ/x!. That is why the Poisson describes typing errors per page, calls per minute, accidents per year and radioactive decays — each is a huge number of opportunities each with a tiny probability. It also explains why E(X) = Var(X) = λ: the binomial's np(1−p) → np when p → 0. Recognising a situation as "many chances, each unlikely" tells you the distribution before you read the numbers. <em>Beyond syllabus because the course gives the formula without the limit that produces it.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Ôn tập · Bài R.2</span>
+<h2>Phép đếm mà câu xác suất giấu bên trong, và những phân phối môn học lướt qua</h2>
+<p class="lead">Một nửa số câu của chương 2 thực chất là câu đếm trá hình, còn chương 3 liệt kê những phân phối mà bài giảng lướt rất nhanh. Cả hai đều xuất hiện trong đề FE.</p>
+
+<h3>Phép đếm — ba câu hỏi quyết định công thức</h3>
+<div class="lz-flow">
+  <div class="lz-fitem"><b>1. Thứ tự có quan trọng không?</b><span>"Xếp hạng nhất, nhì, ba" → có → chỉnh hợp. "Một ban gồm 3 người" → không → tổ hợp.</span></div>
+  <div class="lz-fitem"><b>2. Có được lặp lại không?</b><span>Mã PIN được lặp chữ số → nʳ. Rút bài thì không → n!/(n−r)!.</span></div>
+  <div class="lz-fitem"><b>3. Các đối tượng có phân biệt được không?</b><span>Chữ cái trùng nhau cần chỉnh hệ số n!/(n₁!n₂!…).</span></div>
+</div>
+<div class="out"><b>Ví dụ a — chọn ban đại diện.</b> Từ 7 nam và 5 nữ chọn 4 người. Tính P(đúng 2 nữ).<br>
+Số cách chọn 2 nữ từ 5: C(5,2) = 10. Số cách chọn 2 nam từ 7: C(7,2) = 21. Tổng số cách thuận lợi = 10 × 21 = 210.<br>
+Tổng số cách: C(12,4) = 495. → <b>P = 210/495 = 14/33 ≈ 0,4242</b><br>
+<b>Ví dụ b — hoán vị có phần tử lặp.</b> Có bao nhiêu cách sắp xếp phân biệt các chữ cái của "STATISTICS"?<br>
+10 chữ với S×3, T×3, A×1, I×2, C×1 → 10!/(3!·3!·2!) = 3.628.800/(6·6·2) = <b>50.400</b><br>
+<b>Ví dụ c — có thứ tự.</b> Tám vận động viên, có bao nhiêu cách trao huy chương vàng, bạc, đồng? P(8,3) = 8!/5! = 8×7×6 = <b>336</b>.</div>
+
+<h3>Siêu bội — phân phối của việc "không hoàn lại"</h3>
+<div class="formula"><span class="lbl">SIÊU BỘI</span>P(X = x) = C(K, x) · C(N−K, n−x) / C(N, n)</div>
+<div class="out"><b>Ví dụ có lời giải.</b> Một hộp N = 20 sản phẩm có K = 5 phế phẩm. Lấy n = 4 sản phẩm không hoàn lại. Tính P(đúng 1 phế phẩm).<br>
+P(X = 1) = C(5,1)·C(15,3)/C(20,4) = 5 × 455 / 4845 = 2275/4845 = <b>0,4696</b><br>
+E(X) = n·K/N = 4 × 5/20 = <b>1,0</b><br>
+<b>So với nhị thức</b> (nếu dùng ở đây là sai): C(4,1)(0,25)¹(0,75)³ = 4 × 0,25 × 0,4219 = 0,4219. Chênh 5 điểm phần trăm hoàn toàn đến từ việc lấy một sản phẩm ra làm đổi xác suất cho lần lấy sau.<br>
+<b>Quy tắc kinh nghiệm:</b> nếu n/N &lt; 0,05 thì chênh lệch không đáng kể và dùng nhị thức được. Ở đây n/N = 4/20 = 0,20, cao hơn ngưỡng rất nhiều — nên bắt buộc phải dùng siêu bội.</div>
+
+<h3>Hình học — chờ tới lần thành công đầu tiên</h3>
+<div class="formula"><span class="lbl">HÌNH HỌC</span>P(X = x) = (1−p)ˣ⁻¹ p &nbsp;·&nbsp; E(X) = 1/p &nbsp;·&nbsp; P(X &gt; k) = (1−p)ᵏ</div>
+<div class="out"><b>Ví dụ có lời giải.</b> Một máy sinh ra sản phẩm lỗi với xác suất p = 0,1. Tính (a) P(sản phẩm lỗi đầu tiên là cái thứ 5), (b) số sản phẩm kỳ vọng cho tới khi gặp lỗi đầu tiên, (c) P(hơn 10 sản phẩm mà chưa có lỗi nào).<br>
+(a) P(X = 5) = (0,9)⁴ × 0,1 = 0,6561 × 0,1 = <b>0,0656</b><br>
+(b) E(X) = 1/0,1 = <b>10 sản phẩm</b><br>
+(c) P(X &gt; 10) = (0,9)¹⁰ = <b>0,3487</b><br>
+<b>Tính chất không nhớ:</b> nếu 10 sản phẩm vừa qua đều hoàn hảo thì kỳ vọng chờ tới lỗi đầu tiên <em>vẫn là</em> 10 cái nữa. Cái máy không có trí nhớ — sự thật nghe rất phản trực giác và là lý do người đánh bạc mất tiền.</div>
+
+<h3>Các phép xấp xỉ, và điều kiện được phép dùng</h3>
+<table><thead><tr><th>Từ</th><th>Sang</th><th>Điều kiện</th><th>Tham số</th></tr></thead><tbody>
+<tr><td>Siêu bội</td><td>Nhị thức</td><td>n/N &lt; 0,05</td><td>p = K/N</td></tr>
+<tr><td>Nhị thức</td><td>Poisson</td><td>n ≥ 20 và p ≤ 0,05 (tốt hơn: n ≥ 100, np ≤ 10)</td><td>λ = np</td></tr>
+<tr><td>Nhị thức</td><td>Chuẩn</td><td>np ≥ 5 và n(1−p) ≥ 5</td><td>μ = np, σ = √(np(1−p))</td></tr>
+<tr><td>Poisson</td><td>Chuẩn</td><td>λ ≥ 10</td><td>μ = λ, σ = √λ</td></tr>
+</tbody></table>
+<div class="out"><b>Ví dụ có lời giải — xấp xỉ chuẩn kèm hiệu chỉnh liên tục.</b> X ~ B(100; 0,4). Tính P(X ≤ 45).<br>
+Kiểm: np = 40 ≥ 5 và n(1−p) = 60 ≥ 5 ✓ → xấp xỉ bằng N(40; 24), σ = √24 = 4,899<br>
+<b>Hiệu chỉnh liên tục:</b> "≤ 45" rời rạc trở thành "&lt; 45,5" liên tục.<br>
+z = (45,5 − 40)/4,899 = <b>1,123</b> → P ≈ Φ(1,12) = <b>0,8686</b><br>
+Không hiệu chỉnh thì bạn lấy 45 → z = 1,021 → 0,8463, sai hơn 2 điểm phần trăm. Với câu dạng "≤ k" hay "= k", riêng phép hiệu chỉnh đã đáng một điểm.<br>
+<b>Dịch về phía nào:</b> P(X ≤ k) → k + 0,5 · P(X &lt; k) → k − 0,5 · P(X ≥ k) → k − 0,5 · P(X = k) → lấy khoảng từ k − 0,5 tới k + 0,5.</div>
+
+<div class="pitfall"><b>Nhị thức hay siêu bội — quyết định bằng chữ "có/không hoàn lại".</b> Nếu đề không nói rõ, hãy xem tổng thể có lớn hơn hẳn mẫu không: chọn 5 người từ một thành phố thì coi như có hoàn lại; rút 5 lá từ bộ bài thì không. Chọn sai làm đáp án lệch vài điểm phần trăm, và người chấm soi cái lựa chọn đó chứ không chỉ soi con số.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao Poisson được gọi là "luật của biến cố hiếm".</b> Lấy phân phối nhị thức với n → ∞ và p → 0 trong khi np = λ giữ nguyên: giới hạn đúng bằng e⁻ᐩλλˣ/x!. Vì thế Poisson mô tả số lỗi đánh máy mỗi trang, số cuộc gọi mỗi phút, số tai nạn mỗi năm và số phân rã phóng xạ — mỗi thứ đều là rất nhiều cơ hội, mỗi cơ hội có xác suất tí hon. Nó cũng giải thích vì sao E(X) = Var(X) = λ: đại lượng np(1−p) của nhị thức tiến về np khi p → 0. Nhận ra một tình huống là "nhiều lần thử, mỗi lần khó xảy ra" là biết ngay phân phối trước cả khi đọc số liệu. <em>Ngoài giáo trình vì môn học đưa công thức mà không đưa phép lấy giới hạn sinh ra nó.</em></div>
+</div>
+`,
+        },
+        {
+          title: 'R.4 — Word problems: from the sentence to the answer|||R.4 — Bài toán lời văn: từ câu chữ tới đáp án',
+          slug: 'mas291-bai-toan-loi-van',
+          type: 'VIDEO',
+          description: 'Sáu tình huống thực tế dài, giải trọn từ việc đọc đề → chọn mô hình → tính → phát biểu kết luận.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Revision · Lesson R.4</span>
+<h2>Six real scenarios, solved from the first sentence</h2>
+<p class="lead">Exam questions are paragraphs, not formulas. The hard part is turning the paragraph into a model. Each scenario below shows the translation explicitly: which words map to which symbol.</p>
+
+<h3>Scenario 1 — quality control (binomial + normal approximation)</h3>
+<div class="out"><b>"A supplier claims that at most 3% of its components are defective. A factory receives a batch of 500 and finds 22 defective. Assess the claim at α = 0.05."</b><br>
+<b>Reading the sentence:</b> "at most 3%" → H₀: p = 0.03, H₁: p &gt; 0.03 (one-sided, because the factory only cares if it is <em>worse</em>). "500 components, 22 defective" → n = 500, p̂ = 22/500 = 0.044. Counting successes → proportion test.<br>
+<b>Check the condition:</b> np₀ = 15 ≥ 5 and n(1−p₀) = 485 ≥ 5 ✓<br>
+<b>Compute:</b> z₀ = (0.044 − 0.03)/√[0.03(0.97)/500] = 0.014/√0.0000582 = 0.014/0.00763 = <b>1.835</b><br>
+<b>Decide:</b> one-sided critical value z<sub>0.05</sub> = 1.645. Since 1.835 &gt; 1.645 → <b>reject H₀</b>. p-value = 1 − Φ(1.835) ≈ 0.033.<br>
+<b>Conclusion in context:</b> at the 5% level there is evidence the defect rate exceeds the claimed 3%; the factory can justify rejecting the batch. Note that a <em>two-sided</em> test would give p ≈ 0.066 and the opposite verdict — which is why the direction in the wording is worth reading twice.</div>
+
+<h3>Scenario 2 — call centre staffing (Poisson)</h3>
+<div class="out"><b>"A call centre receives on average 12 calls per hour. Each operator can handle 5 calls per hour. How likely is it that 3 operators are not enough in a given hour?"</b><br>
+<b>Reading:</b> events per interval → Poisson with λ = 12. Three operators cover 15 calls → "not enough" means X &gt; 15, i.e. X ≥ 16.<br>
+<b>Compute:</b> P(X ≥ 16) = 1 − P(X ≤ 15). With λ = 12, the cumulative Poisson at 15 is ≈ 0.8444 → <b>P ≈ 0.156</b>.<br>
+<b>Interpretation:</b> roughly one hour in six is understaffed. If management wants that below 5%, solve for the k with P(X ≤ k) ≥ 0.95 → k = 18 → they need 4 operators (20 calls of capacity).<br>
+<b>Why Poisson and not binomial:</b> there is no fixed number of trials — calls can arrive at any instant. "Per hour / per page / per km" is the Poisson signature.</div>
+
+<h3>Scenario 3 — packaging weights (normal, both directions)</h3>
+<div class="out"><b>"A machine fills bags with μ = 500 g and σ = 8 g. A bag is rejected if it weighs under 490 g or over 515 g. (a) What fraction is rejected? (b) To what value must σ be reduced so that under 1% is rejected?"</b><br>
+<b>(a)</b> z₁ = (490 − 500)/8 = −1.25 → Φ = 0.1056 · z₂ = (515 − 500)/8 = 1.875 → Φ = 0.9696<br>
+P(reject) = 0.1056 + (1 − 0.9696) = 0.1056 + 0.0304 = <b>0.1360 ≈ 13.6%</b><br>
+<b>(b)</b> The binding side is the lower one (it is closer to the mean). For 0.5% in each tail we need z = 2.576 → 10/σ ≥ 2.576 → σ ≤ 10/2.576 = <b>3.88 g</b>.<br>
+<b>Engineering reading:</b> halving the standard deviation cuts scrap from 13.6% to about 1% — the pay-off from process improvement is highly non-linear, which is the entire argument for Six Sigma.</div>
+
+<h3>Scenario 4 — comparing two suppliers (two-sample t)</h3>
+<div class="out"><b>"Supplier A: 15 samples, mean lifetime 1050 h, s = 60. Supplier B: 12 samples, mean 1000 h, s = 70. Is A better at α = 0.05?"</b><br>
+<b>Reading:</b> two independent groups, both s given, small samples → pooled two-sample t, one-sided (H₁: μ<sub>A</sub> &gt; μ<sub>B</sub>).<br>
+s²<sub>p</sub> = [14(3600) + 11(4900)]/25 = (50400 + 53900)/25 = 104300/25 = <b>4172</b> → s<sub>p</sub> = 64.6<br>
+t₀ = (1050 − 1000)/(64.6 × √(1/15 + 1/12)) = 50/(64.6 × √0.15) = 50/(64.6 × 0.3873) = 50/25.02 = <b>1.998</b><br>
+df = 25 → one-sided t<sub>0.05,25</sub> = 1.708 → 1.998 &gt; 1.708 → <b>reject H₀</b>: evidence A lasts longer.<br>
+<b>But report the size too:</b> the difference is 50 hours on a 1000-hour product = 5%, with a 95% CI of roughly [−1.5, 101.5] hours. Statistically detectable, commercially marginal — say both things.</div>
+
+<h3>Scenario 5 — a training programme (paired t)</h3>
+<div class="out"><b>"Eight operators are timed on a task before and after training. Differences (before − after) in minutes: 4, 2, 5, 1, 3, 6, 2, 3. Did training help at α = 0.01?"</b><br>
+<b>Reading:</b> same people measured twice → <b>paired</b>. H₀: μ<sub>d</sub> = 0, H₁: μ<sub>d</sub> &gt; 0 (times went down).<br>
+d̄ = 26/8 = <b>3.25</b> · Σ(dᵢ − d̄)² = 0.5625 + 1.5625 + 3.0625 + 5.0625 + 0.0625 + 7.5625 + 1.5625 + 0.0625 = 19.5 → s²<sub>d</sub> = 19.5/7 = 2.786 → s<sub>d</sub> = <b>1.669</b><br>
+t₀ = 3.25/(1.669/√8) = 3.25/0.590 = <b>5.51</b>, df = 7 → t<sub>0.01,7</sub> = 2.998 → <b>reject H₀</b> comfortably.<br>
+<b>Conclusion:</b> training reduced the task time by an average of 3.25 minutes; the evidence is strong even at the 1% level. Treating this as two independent samples would have inflated the error term with the differences between operators and could easily have hidden the effect.</div>
+
+<h3>Scenario 6 — predicting from data (regression)</h3>
+<div class="out"><b>"For six machines, hours of use per week (x) and maintenance cost in millions (y): (10,2.1) (15,2.8) (20,3.4) (25,4.3) (30,4.8) (35,5.6). Fit a line, judge the fit, and predict the cost at 28 hours."</b><br>
+x̄ = 22.5, ȳ = 3.833<br>
+S<sub>xx</sub> = Σ(x−x̄)² = 156.25 + 56.25 + 6.25 + 6.25 + 56.25 + 156.25 = <b>437.5</b><br>
+S<sub>xy</sub> = (−12.5)(−1.733) + (−7.5)(−1.033) + (−2.5)(−0.433) + 2.5(0.467) + 7.5(0.967) + 12.5(1.767) = 21.67 + 7.75 + 1.08 + 1.17 + 7.25 + 22.09 = <b>61.01</b><br>
+S<sub>yy</sub> = 3.003 + 1.068 + 0.188 + 0.218 + 0.934 + 3.121 = <b>8.532</b><br>
+β̂₁ = 61.01/437.5 = <b>0.1394</b> · β̂₀ = 3.833 − 0.1394(22.5) = <b>0.7</b> → <b>ŷ = 0.70 + 0.1394x</b><br>
+r = 61.01/√(437.5 × 8.532) = 61.01/61.11 = <b>0.9984</b> → R² = <b>0.9967</b><br>
+<b>Prediction at x = 28:</b> ŷ = 0.70 + 0.1394(28) = <b>4.60 million</b>, and 28 lies inside the observed range 10–35, so this is interpolation and legitimate.<br>
+<b>Interpretation:</b> each extra hour of weekly use adds about 139,000 in maintenance cost, and 99.7% of the variation in cost is explained by usage. The intercept 0.70 is the fixed cost at zero hours — meaningful here because x = 0 is physically sensible, which is not always the case.</div>
+
+<div class="pitfall"><b>Three words decide half the marks: "at most / at least / exactly".</b> "At most 3%" → H₁ uses &gt;. "Differs from" → two-sided. "Improved" → one-sided. Circle these words before writing H₀ and H₁; a one-sided test wrongly run as two-sided doubles the p-value and can flip the conclusion, as scenario 1 shows.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Statistical significance is not the end of the report — the decision is.</b> In scenario 1 the factory now has to choose: reject the batch (cost: delay), accept it (cost: field failures), or test more units (cost: time). Statistics supplies the probability; the decision needs the cost of each error, which is what decision theory adds on top of hypothesis testing. That is why an industrial report always states the test <em>and</em> the recommended action <em>and</em> what it would take to change the recommendation. <em>Beyond syllabus because MAS291 stops at "reject H₀", while in a job that sentence is the middle of the memo, never the end.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Ôn tập · Bài R.4</span>
+<h2>Sáu tình huống thực tế, giải từ câu chữ đầu tiên</h2>
+<p class="lead">Câu hỏi thi là những đoạn văn, không phải công thức. Phần khó là biến đoạn văn đó thành một mô hình. Mỗi tình huống dưới đây trình bày rõ phép dịch: chữ nào ứng với ký hiệu nào.</p>
+
+<h3>Tình huống 1 — kiểm soát chất lượng (nhị thức + xấp xỉ chuẩn)</h3>
+<div class="out"><b>"Nhà cung cấp tuyên bố nhiều nhất 3% linh kiện của họ bị lỗi. Một nhà máy nhận lô 500 cái và phát hiện 22 cái lỗi. Hãy đánh giá tuyên bố đó ở mức α = 0,05."</b><br>
+<b>Đọc câu chữ:</b> "nhiều nhất 3%" → H₀: p = 0,03; H₁: p &gt; 0,03 (một phía, vì nhà máy chỉ quan tâm trường hợp <em>tệ hơn</em>). "500 linh kiện, 22 lỗi" → n = 500, p̂ = 22/500 = 0,044. Đếm số lần thành công → kiểm định tỉ lệ.<br>
+<b>Kiểm điều kiện:</b> np₀ = 15 ≥ 5 và n(1−p₀) = 485 ≥ 5 ✓<br>
+<b>Tính:</b> z₀ = (0,044 − 0,03)/√[0,03(0,97)/500] = 0,014/√0,0000582 = 0,014/0,00763 = <b>1,835</b><br>
+<b>Quyết định:</b> giá trị tới hạn một phía z<sub>0,05</sub> = 1,645. Vì 1,835 &gt; 1,645 → <b>bác bỏ H₀</b>. Giá trị p = 1 − Φ(1,835) ≈ 0,033.<br>
+<b>Kết luận theo ngữ cảnh:</b> ở mức 5% có bằng chứng tỉ lệ lỗi vượt mức 3% đã tuyên bố; nhà máy có cơ sở để từ chối lô hàng. Chú ý phép kiểm <em>hai phía</em> sẽ cho p ≈ 0,066 và phán quyết ngược lại — vì thế chiều của giả thuyết trong đề đáng đọc hai lần.</div>
+
+<h3>Tình huống 2 — bố trí nhân sự tổng đài (Poisson)</h3>
+<div class="out"><b>"Một tổng đài nhận trung bình 12 cuộc gọi mỗi giờ. Mỗi điện thoại viên xử lý được 5 cuộc mỗi giờ. Xác suất 3 điện thoại viên không đủ trong một giờ bất kỳ là bao nhiêu?"</b><br>
+<b>Đọc:</b> số biến cố trong một khoảng → Poisson với λ = 12. Ba người phủ được 15 cuộc → "không đủ" nghĩa là X &gt; 15, tức X ≥ 16.<br>
+<b>Tính:</b> P(X ≥ 16) = 1 − P(X ≤ 15). Với λ = 12, xác suất tích luỹ Poisson tại 15 xấp xỉ 0,8444 → <b>P ≈ 0,156</b>.<br>
+<b>Diễn giải:</b> khoảng một giờ trong sáu giờ là thiếu người. Nếu ban quản lý muốn hạ mức đó xuống dưới 5%, hãy tìm k sao cho P(X ≤ k) ≥ 0,95 → k = 18 → cần 4 điện thoại viên (năng lực 20 cuộc).<br>
+<b>Vì sao Poisson chứ không nhị thức:</b> không có số phép thử cố định — cuộc gọi có thể tới bất kỳ khoảnh khắc nào. "Mỗi giờ / mỗi trang / mỗi ki-lô-mét" là dấu hiệu nhận dạng của Poisson.</div>
+
+<h3>Tình huống 3 — trọng lượng đóng gói (chuẩn, cả hai phía)</h3>
+<div class="out"><b>"Một máy đóng gói với μ = 500 g và σ = 8 g. Túi bị loại nếu nặng dưới 490 g hoặc trên 515 g. (a) Bao nhiêu phần trăm bị loại? (b) Phải giảm σ xuống mức nào để tỉ lệ loại dưới 1%?"</b><br>
+<b>(a)</b> z₁ = (490 − 500)/8 = −1,25 → Φ = 0,1056 · z₂ = (515 − 500)/8 = 1,875 → Φ = 0,9696<br>
+P(loại) = 0,1056 + (1 − 0,9696) = 0,1056 + 0,0304 = <b>0,1360 ≈ 13,6%</b><br>
+<b>(b)</b> Phía ràng buộc là phía dưới (vì nó gần trung bình hơn). Muốn mỗi đuôi 0,5% thì cần z = 2,576 → 10/σ ≥ 2,576 → σ ≤ 10/2,576 = <b>3,88 g</b>.<br>
+<b>Đọc theo góc kỹ thuật:</b> giảm độ lệch chuẩn còn một nửa là cắt phế phẩm từ 13,6% xuống khoảng 1% — lợi ích của việc cải tiến quy trình rất phi tuyến, và đó là toàn bộ lập luận của Six Sigma.</div>
+
+<h3>Tình huống 4 — so sánh hai nhà cung cấp (t hai mẫu)</h3>
+<div class="out"><b>"Nhà cung cấp A: 15 mẫu, tuổi thọ trung bình 1050 h, s = 60. Nhà cung cấp B: 12 mẫu, trung bình 1000 h, s = 70. A có tốt hơn ở mức α = 0,05 không?"</b><br>
+<b>Đọc:</b> hai nhóm độc lập, đều cho s, mẫu nhỏ → t hai mẫu gộp phương sai, một phía (H₁: μ<sub>A</sub> &gt; μ<sub>B</sub>).<br>
+s²<sub>p</sub> = [14(3600) + 11(4900)]/25 = (50400 + 53900)/25 = 104300/25 = <b>4172</b> → s<sub>p</sub> = 64,6<br>
+t₀ = (1050 − 1000)/(64,6 × √(1/15 + 1/12)) = 50/(64,6 × √0,15) = 50/(64,6 × 0,3873) = 50/25,02 = <b>1,998</b><br>
+df = 25 → một phía t<sub>0,05;25</sub> = 1,708 → 1,998 &gt; 1,708 → <b>bác bỏ H₀</b>: có bằng chứng A bền hơn.<br>
+<b>Nhưng phải báo cả độ lớn:</b> chênh lệch 50 giờ trên sản phẩm 1000 giờ = 5%, với khoảng tin cậy 95% xấp xỉ [−1,5; 101,5] giờ. Phát hiện được về mặt thống kê nhưng biên giới về mặt thương mại — hãy nói cả hai điều.</div>
+
+<h3>Tình huống 5 — một chương trình đào tạo (t mẫu cặp)</h3>
+<div class="out"><b>"Tám công nhân được bấm giờ làm một thao tác trước và sau khi đào tạo. Hiệu số (trước − sau) tính bằng phút: 4, 2, 5, 1, 3, 6, 2, 3. Đào tạo có giúp ích ở mức α = 0,01 không?"</b><br>
+<b>Đọc:</b> cùng những người đó đo hai lần → <b>mẫu cặp</b>. H₀: μ<sub>d</sub> = 0; H₁: μ<sub>d</sub> &gt; 0 (thời gian giảm xuống).<br>
+d̄ = 26/8 = <b>3,25</b> · Σ(dᵢ − d̄)² = 0,5625 + 1,5625 + 3,0625 + 5,0625 + 0,0625 + 7,5625 + 1,5625 + 0,0625 = 19,5 → s²<sub>d</sub> = 19,5/7 = 2,786 → s<sub>d</sub> = <b>1,669</b><br>
+t₀ = 3,25/(1,669/√8) = 3,25/0,590 = <b>5,51</b>, df = 7 → t<sub>0,01;7</sub> = 2,998 → <b>bác bỏ H₀</b> một cách thoải mái.<br>
+<b>Kết luận:</b> đào tạo giảm thời gian thao tác trung bình 3,25 phút; bằng chứng mạnh ngay cả ở mức 1%. Nếu coi đây là hai mẫu độc lập thì phần chênh lệch giữa các công nhân sẽ bị đẩy vào sai số và rất dễ che mất hiệu ứng.</div>
+
+<h3>Tình huống 6 — dự đoán từ dữ liệu (hồi quy)</h3>
+<div class="out"><b>"Với sáu cỗ máy, số giờ chạy mỗi tuần (x) và chi phí bảo trì tính bằng triệu đồng (y): (10;2,1) (15;2,8) (20;3,4) (25;4,3) (30;4,8) (35;5,6). Hãy khớp đường hồi quy, đánh giá mức độ khớp, và dự đoán chi phí ở mức 28 giờ."</b><br>
+x̄ = 22,5; ȳ = 3,833<br>
+S<sub>xx</sub> = Σ(x−x̄)² = 156,25 + 56,25 + 6,25 + 6,25 + 56,25 + 156,25 = <b>437,5</b><br>
+S<sub>xy</sub> = (−12,5)(−1,733) + (−7,5)(−1,033) + (−2,5)(−0,433) + 2,5(0,467) + 7,5(0,967) + 12,5(1,767) = 21,67 + 7,75 + 1,08 + 1,17 + 7,25 + 22,09 = <b>61,01</b><br>
+S<sub>yy</sub> = 3,003 + 1,068 + 0,188 + 0,218 + 0,934 + 3,121 = <b>8,532</b><br>
+β̂₁ = 61,01/437,5 = <b>0,1394</b> · β̂₀ = 3,833 − 0,1394(22,5) = <b>0,70</b> → <b>ŷ = 0,70 + 0,1394x</b><br>
+r = 61,01/√(437,5 × 8,532) = 61,01/61,11 = <b>0,9984</b> → R² = <b>0,9967</b><br>
+<b>Dự đoán tại x = 28:</b> ŷ = 0,70 + 0,1394(28) = <b>4,60 triệu</b>, và 28 nằm trong khoảng quan sát 10–35 nên đây là nội suy, hoàn toàn hợp lệ.<br>
+<b>Diễn giải:</b> mỗi giờ chạy thêm mỗi tuần làm chi phí bảo trì tăng khoảng 139.000 đồng, và 99,7% biến thiên của chi phí được giải thích bởi số giờ sử dụng. Hệ số chặn 0,70 là chi phí cố định khi máy không chạy — ở đây có ý nghĩa vì x = 0 là tình huống có thật, điều không phải lúc nào cũng đúng.</div>
+
+<div class="pitfall"><b>Ba cụm từ quyết định một nửa số điểm: "nhiều nhất / ít nhất / đúng bằng".</b> "Nhiều nhất 3%" → H₁ dùng dấu &gt;. "Khác với" → hai phía. "Có cải thiện" → một phía. Hãy khoanh tròn những chữ này trước khi viết H₀ và H₁; một kiểm định một phía mà làm nhầm thành hai phía sẽ nhân đôi giá trị p và có thể lật ngược kết luận, như tình huống 1 cho thấy.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Có ý nghĩa thống kê chưa phải là kết thúc bản báo cáo — quyết định mới là.</b> Ở tình huống 1, nhà máy giờ phải chọn: từ chối lô hàng (giá phải trả: chậm tiến độ), nhận lô hàng (giá: hỏng hóc ngoài hiện trường), hay kiểm thêm mẫu (giá: thời gian). Thống kê cung cấp xác suất; quyết định cần thêm chi phí của mỗi loại sai lầm, và đó là phần mà lý thuyết quyết định bồi lên trên kiểm định giả thuyết. Vì thế một báo cáo công nghiệp luôn nêu cả phép kiểm, cả hành động khuyến nghị, và cả điều kiện nào sẽ làm đổi khuyến nghị đó. <em>Ngoài giáo trình vì MAS291 dừng ở "bác bỏ H₀", còn khi đi làm thì câu đó nằm ở giữa bản ghi nhớ, không bao giờ ở cuối.</em></div>
+</div>
+`,
+        },
+        {
+          title: 'R.3 — A full mock Final Exam (20 questions, solved)|||R.3 — Đề FE mẫu đầy đủ (20 câu, có lời giải)',
+          slug: 'mas291-de-fe-mau',
+          type: 'VIDEO',
+          description: 'Hai mươi câu trắc nghiệm đúng khung FE, kèm đáp án và lời giải ngắn cho từng câu.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Revision · Lesson R.3</span>
+<h2>Twenty questions in the FE format, with the reasoning for each</h2>
+<p class="lead">Give yourself 45 minutes and no notes. Then read the solutions — not to check the answer but to check the <em>route</em>.</p>
+
+<h3>Part A — probability (questions 1–6)</h3>
+<div class="out"><b>1.</b> Two dice are rolled. P(sum = 8)? → favourable pairs (2,6)(3,5)(4,4)(5,3)(6,2) = 5 of 36 → <b>5/36 ≈ 0.139</b><br>
+<b>2.</b> P(A) = 0.5, P(B) = 0.4, P(A ∩ B) = 0.2. Are A and B independent? → P(A)P(B) = 0.20 = P(A ∩ B) ✓ → <b>yes, independent</b>. (Note they are <em>not</em> mutually exclusive, since P(A ∩ B) ≠ 0 — the two concepts are unrelated.)<br>
+<b>3.</b> With the same values, P(A ∪ B)? → 0.5 + 0.4 − 0.2 = <b>0.7</b><br>
+<b>4.</b> P(A | B) with the same values? → 0.2/0.4 = <b>0.5</b> — equal to P(A), which is exactly what independence means.<br>
+<b>5.</b> A test is 95% accurate for a disease affecting 1% of people. A person tests positive. P(actually ill)? → P(pos) = 0.01(0.95) + 0.99(0.05) = 0.0095 + 0.0495 = 0.059 → P(ill | pos) = 0.0095/0.059 = <b>0.161</b>. Only 16% — the base rate dominates, which is why mass screening for rare diseases produces mostly false positives.<br>
+<b>6.</b> From 10 people choose a committee of 3. How many ways? → C(10,3) = <b>120</b></div>
+
+<h3>Part B — random variables (questions 7–11)</h3>
+<div class="out"><b>7.</b> X ~ B(8, 0.5). P(X = 4)? → C(8,4)(0.5)⁸ = 70/256 = <b>0.2734</b><br>
+<b>8.</b> Same X, Var(X)? → np(1−p) = 8(0.5)(0.5) = <b>2</b><br>
+<b>9.</b> X ~ Poisson(4). P(X = 0)? → e⁻⁴ = <b>0.0183</b><br>
+<b>10.</b> X ~ N(50, 100). P(X &gt; 65)? → σ = 10, z = 1.5 → 1 − 0.9332 = <b>0.0668</b><br>
+<b>11.</b> X ~ Exp(λ = 0.5). P(X &gt; 3)? → e⁻⁰·⁵ˣ³ = e⁻¹·⁵ = <b>0.2231</b></div>
+
+<h3>Part C — descriptive & sampling (questions 12–15)</h3>
+<div class="out"><b>12.</b> Data 4, 8, 6, 5, 3. Sample variance? → x̄ = 5.2; Σ(x−x̄)² = 1.44 + 7.84 + 0.64 + 0.04 + 4.84 = 14.8 → s² = 14.8/4 = <b>3.7</b><br>
+<b>13.</b> Same data, median? → sorted 3,4,5,6,8 → <b>5</b><br>
+<b>14.</b> μ = 60, σ = 12, n = 36. SE of the mean? → 12/√36 = <b>2</b><br>
+<b>15.</b> Same, P(x̄ &lt; 57)? → z = (57−60)/2 = −1.5 → <b>0.0668</b></div>
+
+<h3>Part D — inference (questions 16–20)</h3>
+<div class="out"><b>16.</b> n = 100, x̄ = 25, σ = 5. 95% CI for μ? → 25 ± 1.96(0.5) = <b>[24.02, 25.98]</b><br>
+<b>17.</b> Which is wider, a 99% CI or a 95% CI on the same data? → <b>99%</b>, because z rises from 1.96 to 2.576. More confidence costs precision — the trade-off is unavoidable.<br>
+<b>18.</b> n = 16, x̄ = 12, s = 2, test H₀: μ = 10 at α = 0.05. → t₀ = (12−10)/(2/4) = <b>4.0</b>; t<sub>0.025,15</sub> = 2.131 → <b>reject H₀</b><br>
+<b>19.</b> A p-value of 0.03 at α = 0.05 means… → p &lt; α → <b>reject H₀</b>. (A p-value is the probability of data this extreme <em>if H₀ were true</em> — not the probability that H₀ is true.)<br>
+<b>20.</b> r = −0.8 between hours of TV and exam score. Interpretation? → a <b>strong negative linear</b> association; R² = 0.64, so 64% of the variation in scores is associated with TV hours. It does <em>not</em> establish that TV causes lower scores — a third factor (time spent studying) may drive both.</div>
+
+<h3>Answer key</h3>
+<div class="out">1) 5/36 · 2) yes · 3) 0.7 · 4) 0.5 · 5) 0.161 · 6) 120 · 7) 0.2734 · 8) 2 · 9) 0.0183 · 10) 0.0668 · 11) 0.2231 · 12) 3.7 · 13) 5 · 14) 2 · 15) 0.0668 · 16) [24.02, 25.98] · 17) 99% · 18) reject · 19) reject · 20) strong negative, R² = 0.64, not causal.<br>
+<b>Scoring:</b> 18–20 ready · 14–17 revise the topics you missed · below 14 work through lessons R.1 and the PT self-tests again before attempting past papers.</div>
+
+<div class="pitfall"><b>Question 19 is the most misread sentence in statistics.</b> "p = 0.03" means: <em>if H₀ were true</em>, data this extreme would appear 3% of the time. It is <b>not</b> "there is a 3% chance H₀ is true", and it says nothing about the size of the effect. Every year the FE includes one item testing exactly this.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Question 5 is the most useful thing in the whole course.</b> A 95%-accurate test for a 1%-prevalent disease gives a positive predictive value of only 16% — a result that surprises most doctors when it is put to them. The reason is the base rate: 99% of the population is healthy, so even a small false-positive rate produces far more false alarms than true cases. The same arithmetic governs spam filters, fraud detection, airport screening and AI classifiers. If you remember one calculation from MAS291 in ten years, make it this one. <em>Beyond syllabus because the course treats Bayes as a formula, while its real content is a warning about how badly human intuition handles rare events.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Ôn tập · Bài R.3</span>
+<h2>Hai mươi câu đúng khung FE, kèm lập luận cho từng câu</h2>
+<p class="lead">Hãy tự cho mình 45 phút và không mở tài liệu. Sau đó đọc lời giải — không phải để dò đáp án mà để dò <em>cách đi</em>.</p>
+
+<h3>Phần A — xác suất (câu 1–6)</h3>
+<div class="out"><b>1.</b> Gieo hai con xúc xắc. P(tổng bằng 8)? → các cặp thuận lợi (2,6)(3,5)(4,4)(5,3)(6,2) = 5 trên 36 → <b>5/36 ≈ 0,139</b><br>
+<b>2.</b> P(A) = 0,5; P(B) = 0,4; P(A ∩ B) = 0,2. A và B có độc lập không? → P(A)P(B) = 0,20 = P(A ∩ B) ✓ → <b>có, độc lập</b>. (Lưu ý chúng <em>không</em> xung khắc, vì P(A ∩ B) ≠ 0 — hai khái niệm này không liên quan gì tới nhau.)<br>
+<b>3.</b> Vẫn số liệu đó, P(A ∪ B)? → 0,5 + 0,4 − 0,2 = <b>0,7</b><br>
+<b>4.</b> Vẫn số liệu đó, P(A | B)? → 0,2/0,4 = <b>0,5</b> — đúng bằng P(A), và đó chính là ý nghĩa của tính độc lập.<br>
+<b>5.</b> Một xét nghiệm chính xác 95% cho một bệnh mà 1% dân số mắc. Một người xét nghiệm dương tính. P(thật sự mắc bệnh)? → P(dương) = 0,01(0,95) + 0,99(0,05) = 0,0095 + 0,0495 = 0,059 → P(mắc | dương) = 0,0095/0,059 = <b>0,161</b>. Chỉ 16% — tỉ lệ nền áp đảo, và đó là lý do sàng lọc đại trà cho bệnh hiếm sinh ra chủ yếu là dương tính giả.<br>
+<b>6.</b> Từ 10 người chọn một ban 3 người. Bao nhiêu cách? → C(10,3) = <b>120</b></div>
+
+<h3>Phần B — biến ngẫu nhiên (câu 7–11)</h3>
+<div class="out"><b>7.</b> X ~ B(8; 0,5). P(X = 4)? → C(8,4)(0,5)⁸ = 70/256 = <b>0,2734</b><br>
+<b>8.</b> Vẫn X đó, Var(X)? → np(1−p) = 8(0,5)(0,5) = <b>2</b><br>
+<b>9.</b> X ~ Poisson(4). P(X = 0)? → e⁻⁴ = <b>0,0183</b><br>
+<b>10.</b> X ~ N(50; 100). P(X &gt; 65)? → σ = 10, z = 1,5 → 1 − 0,9332 = <b>0,0668</b><br>
+<b>11.</b> X ~ Exp(λ = 0,5). P(X &gt; 3)? → e⁻⁰·⁵ˣ³ = e⁻¹·⁵ = <b>0,2231</b></div>
+
+<h3>Phần C — mô tả & phân phối mẫu (câu 12–15)</h3>
+<div class="out"><b>12.</b> Dữ liệu 4, 8, 6, 5, 3. Phương sai mẫu? → x̄ = 5,2; Σ(x−x̄)² = 1,44 + 7,84 + 0,64 + 0,04 + 4,84 = 14,8 → s² = 14,8/4 = <b>3,7</b><br>
+<b>13.</b> Vẫn dữ liệu đó, trung vị? → sắp lại 3,4,5,6,8 → <b>5</b><br>
+<b>14.</b> μ = 60, σ = 12, n = 36. Sai số chuẩn của trung bình? → 12/√36 = <b>2</b><br>
+<b>15.</b> Vẫn thế, P(x̄ &lt; 57)? → z = (57−60)/2 = −1,5 → <b>0,0668</b></div>
+
+<h3>Phần D — suy luận thống kê (câu 16–20)</h3>
+<div class="out"><b>16.</b> n = 100, x̄ = 25, σ = 5. Khoảng tin cậy 95% cho μ? → 25 ± 1,96(0,5) = <b>[24,02; 25,98]</b><br>
+<b>17.</b> Trên cùng dữ liệu, khoảng 99% hay 95% rộng hơn? → <b>99%</b>, vì z tăng từ 1,96 lên 2,576. Muốn tin cậy hơn thì phải trả bằng độ chính xác — đánh đổi này không tránh được.<br>
+<b>18.</b> n = 16, x̄ = 12, s = 2, kiểm định H₀: μ = 10 ở α = 0,05. → t₀ = (12−10)/(2/4) = <b>4,0</b>; t<sub>0,025;15</sub> = 2,131 → <b>bác bỏ H₀</b><br>
+<b>19.</b> Giá trị p bằng 0,03 ở mức α = 0,05 nghĩa là… → p &lt; α → <b>bác bỏ H₀</b>. (Giá trị p là xác suất thu được dữ liệu cực đoan tới mức này <em>nếu H₀ đúng</em> — không phải xác suất H₀ đúng.)<br>
+<b>20.</b> r = −0,8 giữa số giờ xem TV và điểm thi. Diễn giải? → liên hệ <b>tuyến tính âm mạnh</b>; R² = 0,64, tức 64% biến thiên của điểm gắn với số giờ xem TV. Điều này <em>không</em> chứng minh xem TV gây ra điểm thấp — một yếu tố thứ ba (thời gian dành để học) có thể chi phối cả hai.</div>
+
+<h3>Bảng đáp án</h3>
+<div class="out">1) 5/36 · 2) có · 3) 0,7 · 4) 0,5 · 5) 0,161 · 6) 120 · 7) 0,2734 · 8) 2 · 9) 0,0183 · 10) 0,0668 · 11) 0,2231 · 12) 3,7 · 13) 5 · 14) 2 · 15) 0,0668 · 16) [24,02; 25,98] · 17) 99% · 18) bác bỏ · 19) bác bỏ · 20) âm mạnh, R² = 0,64, không phải quan hệ nhân quả.<br>
+<b>Thang tự chấm:</b> 18–20 sẵn sàng thi · 14–17 ôn lại đúng những chủ đề bị sai · dưới 14 hãy học lại bài R.1 và ba bộ tự kiểm tra PT trước khi đụng tới đề thi thật.</div>
+
+<div class="pitfall"><b>Câu 19 là câu bị hiểu sai nhiều nhất trong cả ngành thống kê.</b> "p = 0,03" nghĩa là: <em>nếu H₀ đúng</em> thì dữ liệu cực đoan tới mức này xuất hiện 3% số lần. Nó <b>không</b> phải "có 3% khả năng H₀ đúng", và nó không nói gì về độ lớn của hiệu ứng. Năm nào đề FE cũng có đúng một câu nhắm vào chỗ này.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Câu 5 là thứ hữu ích nhất của cả môn học.</b> Một xét nghiệm chính xác 95% cho bệnh có tỉ lệ mắc 1% chỉ cho giá trị tiên đoán dương 16% — kết quả làm phần lớn bác sĩ ngạc nhiên khi bị hỏi. Nguyên nhân là tỉ lệ nền: 99% dân số khoẻ mạnh, nên dù tỉ lệ dương tính giả rất nhỏ vẫn sinh ra nhiều báo động giả hơn hẳn số ca thật. Cùng phép tính đó chi phối bộ lọc thư rác, hệ phát hiện gian lận, máy soi an ninh sân bay và các bộ phân loại AI. Nếu mười năm nữa bạn chỉ còn nhớ một phép tính từ MAS291, hãy để nó là phép tính này. <em>Ngoài giáo trình vì môn học coi Bayes là một công thức, trong khi nội dung thật của nó là lời cảnh báo về việc trực giác con người xử lý biến cố hiếm tệ tới mức nào.</em></div>
+</div>
+`,
+        },
+      ],
+    },
+
+    /* (R.4 nằm trong chương Ôn tập tổng hợp phía trên) */
     /* ══════════════════ TỰ KIỂM TRA — LUYỆN ĐỀ PT ══════════════════ */
     {
       title: 'Self-test — worked PT papers|||Tự kiểm tra — luyện đề PT có lời giải',

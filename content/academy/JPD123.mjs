@@ -64,6 +64,30 @@ export default {
   <span class="lc-body"><span class="lc-title">Practise grammar &amp; vocab on My Language</span><span class="lc-sub">Japanese grammar patterns, vocabulary SRS and kanji.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
+
+<h3>Course materials & flashcard decks</h3>
+<div class="lz-stack">
+</div>
+<a class="link-card dl" href="https://quizlet.com/vn/952402606/tu-vung-jpd123-minthep-flash-cards/" target="_blank" rel="noopener">
+  <span class="lc-ico">🃏</span>
+  <span class="lc-body"><span class="lc-title">Quizlet — Từ vựng JPD123</span><span class="lc-sub">Bộ thẻ từ vựng cả học phần</span></span>
+  <span class="lc-cta">MỞ QUIZLET →</span>
+</a>
+<a class="link-card dl" href="https://quizlet.com/vn/956075868/kanji-jpd123-flash-cards/" target="_blank" rel="noopener">
+  <span class="lc-ico">🈶</span>
+  <span class="lc-body"><span class="lc-title">Quizlet — Kanji JPD123</span><span class="lc-sub">Bộ thẻ Hán tự của học phần</span></span>
+  <span class="lc-cta">MỞ QUIZLET →</span>
+</a>
+<a class="link-card dl" href="https://thepkz.github.io/minthep-portfolio/blog/textblog-2.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📝</span>
+  <span class="lc-body"><span class="lc-title">Blog tham khảo — Min Thep, JPD123</span><span class="lc-sub">Tính từ い/な, thể て và so sánh, một trang</span></span>
+  <span class="lc-cta">ĐỌC BLOG →</span>
+</a>
+<a class="link-card dl" href="https://drive.google.com/file/d/1MLvq1RWvAXTsVs8m36yyN4lOaRkJu9L4/view?usp=sharing" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Dekiru Nihongo — Sơ cấp (PDF)</span><span class="lc-sub">Giáo trình dùng chung với JPD113</span></span>
+  <span class="lc-cta">TẢI VỀ →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.1</span>
@@ -93,6 +117,30 @@ export default {
   <span class="lc-ico">🈴</span>
   <span class="lc-body"><span class="lc-title">Luyện ngữ pháp &amp; từ vựng trên My Language</span><span class="lc-sub">Mẫu ngữ pháp tiếng Nhật, từ vựng SRS và kanji.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+
+<h3>Tài liệu & bộ thẻ ghi nhớ</h3>
+<div class="lz-stack">
+</div>
+<a class="link-card dl" href="https://quizlet.com/vn/952402606/tu-vung-jpd123-minthep-flash-cards/" target="_blank" rel="noopener">
+  <span class="lc-ico">🃏</span>
+  <span class="lc-body"><span class="lc-title">Quizlet — Từ vựng JPD123</span><span class="lc-sub">Bộ thẻ từ vựng cả học phần</span></span>
+  <span class="lc-cta">MỞ QUIZLET →</span>
+</a>
+<a class="link-card dl" href="https://quizlet.com/vn/956075868/kanji-jpd123-flash-cards/" target="_blank" rel="noopener">
+  <span class="lc-ico">🈶</span>
+  <span class="lc-body"><span class="lc-title">Quizlet — Kanji JPD123</span><span class="lc-sub">Bộ thẻ Hán tự của học phần</span></span>
+  <span class="lc-cta">MỞ QUIZLET →</span>
+</a>
+<a class="link-card dl" href="https://thepkz.github.io/minthep-portfolio/blog/textblog-2.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📝</span>
+  <span class="lc-body"><span class="lc-title">Blog tham khảo — Min Thep, JPD123</span><span class="lc-sub">Tính từ い/な, thể て và so sánh, một trang</span></span>
+  <span class="lc-cta">ĐỌC BLOG →</span>
+</a>
+<a class="link-card dl" href="https://drive.google.com/file/d/1MLvq1RWvAXTsVs8m36yyN4lOaRkJu9L4/view?usp=sharing" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Dekiru Nihongo — Sơ cấp (PDF)</span><span class="lc-sub">Giáo trình dùng chung với JPD113</span></span>
+  <span class="lc-cta">TẢI VỀ →</span>
 </a>
 </div>
 `,

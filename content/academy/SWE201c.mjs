@@ -1567,6 +1567,432 @@ Notice Release 1 touches <em>every</em> activity — the reader can complete the
         },
       ],
     },
+    /* ══════════════════ ÔN TẬP TỔNG HỢP ══════════════════ */
+    {
+      title: 'Revision — the whole course on a few pages|||Ôn tập tổng hợp — cả môn trong vài trang',
+      description: 'Bảng so sánh 9 mô hình, toàn cảnh kiểm thử, và bộ từ vựng Anh–Việt cùng đề FE mẫu.',
+      lessons: [
+        {
+          title: 'R.1 — All nine models compared, and how to choose|||R.1 — So sánh cả chín mô hình & cách chọn',
+          slug: 'swe201c-so-sanh-9-mo-hinh',
+          type: 'VIDEO',
+          description: 'Sáu mô hình truyền thống và ba mô hình Agile trên một bảng, kèm tiêu chí chọn theo dự án, đội và khách hàng.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Revision · Lesson R.1</span>
+<h2>The nine models, side by side</h2>
+<p class="lead">The PE always asks you to <em>choose</em> a model and justify it. That is impossible unless you can compare all nine on the same axes. This is that table.</p>
+
+<h3>Group A — the six traditional models</h3>
+<table><thead><tr><th>Model</th><th>Core idea</th><th>Strength</th><th>Weakness</th><th>Use when</th></tr></thead><tbody>
+<tr><td><b>Waterfall</b></td><td>sequential phases, each signed off before the next</td><td>simple to manage, heavy documentation, clear milestones</td><td>a change late in the project is enormously expensive; the customer sees nothing until the end</td><td>requirements are fixed and well understood (payroll, a regulated migration)</td></tr>
+<tr><td><b>V-Model</b></td><td>Waterfall bent into a V — each build phase paired with a test level</td><td>testing planned from day one; excellent traceability</td><td>same rigidity as Waterfall</td><td>safety-critical systems: medical devices, avionics, railway signalling</td></tr>
+<tr><td><b>Incremental</b></td><td>deliver the product in slices, each adding functionality</td><td>working software early; risk spread over releases</td><td>needs a good architecture up front or the increments fight each other</td><td>a large product that can be split cleanly (an ERP, module by module)</td></tr>
+<tr><td><b>Iterative</b></td><td>build a rough whole, then refine it repeatedly</td><td>feedback each iteration; requirements may evolve</td><td>hard to estimate the end; may loop without converging</td><td>the concept is clear but the details are not (a new UI, an R&amp;D product)</td></tr>
+<tr><td><b>Spiral</b></td><td>iterations driven by risk analysis, with prototypes</td><td>risk handled explicitly; suits very large projects</td><td>expensive; needs experienced risk analysts</td><td>large, costly, high-risk systems (defence, aerospace)</td></tr>
+<tr><td><b>RAD</b></td><td>rapid prototypes plus heavy user involvement</td><td>very fast, high user satisfaction</td><td>needs skilled developers and constant user availability; scales badly</td><td>small business apps with an involved customer and a short deadline</td></tr>
+</tbody></table>
+
+<h3>Group B — the three Agile models</h3>
+<table><thead><tr><th>Model</th><th>Cadence</th><th>Distinctive practice</th><th>Best fit</th></tr></thead><tbody>
+<tr><td><b>Scrum</b></td><td>fixed sprints of 1–4 weeks</td><td>roles (PO, SM, Dev), five events, three artefacts; scope is fixed <em>within</em> a sprint</td><td>product development with a stable team and a deadline</td></tr>
+<tr><td><b>XP (Extreme Programming)</b></td><td>continuous, 1–2 week iterations</td><td>engineering practices: TDD, pair programming, continuous integration, collective ownership, simple design</td><td>teams where <em>code quality</em> is the main risk</td></tr>
+<tr><td><b>Kanban</b></td><td>continuous flow, no sprints</td><td>visualise the board, limit work in progress (WIP), measure lead time; pull instead of push</td><td>an unpredictable stream of work: support, maintenance, operations</td></tr>
+</tbody></table>
+<p><b>Lean</b> is not a fourth Agile method but the philosophy behind them: eliminate waste, amplify learning, decide as late as possible, deliver as fast as possible, build quality in, optimise the whole. Kanban is Lean applied to software flow.</p>
+
+<h3>The three-axis selection criteria the exam expects</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><b>1. Project characteristics.</b> Are the requirements stable? How big is it? How high is the risk? How hard is the deadline? Stable + regulated → Waterfall/V. Changing + deadline → Scrum. Unclear + risky + large → Spiral. Steady stream of small items → Kanban.</div>
+  <div class="lz-layer"><b>2. Team characteristics.</b> Size (Scrum wants 3–9), experience (XP and RAD need seniors; Waterfall tolerates juniors following a spec), and location (Agile assumes rich communication; distributed teams need more written artefacts).</div>
+  <div class="lz-layer"><b>3. Customer involvement.</b> Available weekly → Agile works. Available only at the start and the end → Waterfall is honest about that reality. A customer who cannot commit time is the single most common reason a Scrum adoption fails.</div>
+</div>
+
+<h3>Worked example — apply the criteria to four briefs</h3>
+<div class="out"><b>(a) "A bank must add a legally mandated report by 30 June; the specification is a 40-page government document."</b> → requirements fixed and externally defined, audit trail needed → <b>Waterfall</b> (or V-Model if the testing burden is heavy).<br>
+<b>(b) "A start-up wants an MVP for a food-delivery app; the founders change their minds weekly; 3 developers; launch in 3 months."</b> → volatile requirements, small team, hard deadline, engaged founders → <b>Scrum</b>, 1-week sprints so the founders' changes land at a boundary rather than mid-sprint.<br>
+<b>(c) "An in-house team maintains 40 internal systems; work arrives as tickets of wildly different size."</b> → no meaningful sprint scope, unpredictable arrival → <b>Kanban</b> with a WIP limit and lead-time measurement.<br>
+<b>(d) "A hospital is building an infusion-pump controller; a defect can kill a patient."</b> → safety-critical, regulator demands traceability from requirement to test → <b>V-Model</b>, with each requirement traceable to an acceptance test.<br>
+<b>The pattern:</b> nothing in these answers is about which model is "modern". The brief dictates the model, and saying so is what earns the marks.</div>
+
+<div class="pitfall"><b>"Agile means no documentation and no planning" is false and loses marks.</b> The manifesto says "working software <em>over</em> comprehensive documentation" — a preference, not a prohibition. Scrum plans continuously (sprint planning, backlog refinement, review, retrospective); it simply plans in shorter horizons. Any answer implying Agile teams do not plan is marked wrong.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Most real teams run a hybrid, and that is not a failure.</b> The common shape is "Water-Scrum-Fall": requirements and budget approved up front (the business demands a number), Scrum in development, then a formal release process with change-approval gates. Surveys put hybrids above 50% of teams. The professional skill is not choosing one label but knowing which practice solves which problem — sprints for feedback, WIP limits for flow, a V-model traceability matrix when a regulator asks for one. <em>Beyond syllabus because the course presents the models as exclusive choices, while industry mixes them deliberately.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Ôn tập · Bài R.1</span>
+<h2>Chín mô hình, đặt cạnh nhau</h2>
+<p class="lead">Đề PE luôn bắt bạn <em>chọn</em> một mô hình và biện minh. Việc đó bất khả nếu bạn không so được cả chín mô hình trên cùng những trục đánh giá. Đây chính là cái bảng đó.</p>
+
+<h3>Nhóm A — sáu mô hình truyền thống</h3>
+<table><thead><tr><th>Mô hình</th><th>Ý tưởng cốt lõi</th><th>Điểm mạnh</th><th>Điểm yếu</th><th>Dùng khi</th></tr></thead><tbody>
+<tr><td><b>Thác nước</b></td><td>các pha tuần tự, pha trước duyệt xong mới sang pha sau</td><td>dễ quản lý, tài liệu đầy đủ, mốc bàn giao rõ ràng</td><td>thay đổi ở giai đoạn muộn cực kỳ tốn kém; khách hàng không thấy gì cho tới lúc cuối</td><td>yêu cầu cố định và đã hiểu rõ (tính lương, một dự án di trú có quy định)</td></tr>
+<tr><td><b>Mô hình chữ V</b></td><td>thác nước bẻ thành chữ V — mỗi pha xây dựng ghép với một mức kiểm thử</td><td>kiểm thử được lên kế hoạch từ ngày đầu; truy vết rất tốt</td><td>cứng nhắc y như thác nước</td><td>hệ thống an toàn tính mạng: thiết bị y tế, hàng không, tín hiệu đường sắt</td></tr>
+<tr><td><b>Tăng dần</b></td><td>giao sản phẩm theo từng phần, phần sau thêm chức năng</td><td>có phần mềm chạy được sớm; rủi ro rải ra nhiều đợt</td><td>cần kiến trúc tốt ngay từ đầu, nếu không các phần đá nhau</td><td>sản phẩm lớn tách được gọn ghẽ (một hệ ERP, từng phân hệ một)</td></tr>
+<tr><td><b>Lặp</b></td><td>dựng một bản thô của toàn bộ rồi tinh chỉnh nhiều lần</td><td>có phản hồi sau mỗi vòng; yêu cầu được phép tiến hoá</td><td>khó ước lượng điểm kết thúc; có thể lặp mãi mà không hội tụ</td><td>ý tưởng đã rõ nhưng chi tiết thì chưa (một giao diện mới, sản phẩm R&amp;D)</td></tr>
+<tr><td><b>Xoắn ốc</b></td><td>các vòng lặp điều khiển bởi phân tích rủi ro, có tạo nguyên mẫu</td><td>xử lý rủi ro một cách tường minh; hợp dự án rất lớn</td><td>tốn kém; cần người phân tích rủi ro có kinh nghiệm</td><td>hệ thống lớn, đắt, rủi ro cao (quốc phòng, hàng không vũ trụ)</td></tr>
+<tr><td><b>RAD</b></td><td>nguyên mẫu nhanh cộng sự tham gia dày đặc của người dùng</td><td>rất nhanh, người dùng hài lòng cao</td><td>cần lập trình viên giỏi và người dùng luôn sẵn sàng; khó mở rộng quy mô</td><td>ứng dụng nghiệp vụ nhỏ, khách hàng gắn bó, hạn ngắn</td></tr>
+</tbody></table>
+
+<h3>Nhóm B — ba mô hình Agile</h3>
+<table><thead><tr><th>Mô hình</th><th>Nhịp</th><th>Thực hành đặc trưng</th><th>Hợp nhất với</th></tr></thead><tbody>
+<tr><td><b>Scrum</b></td><td>sprint cố định 1–4 tuần</td><td>ba vai trò (PO, SM, Dev), năm sự kiện, ba tạo tác; phạm vi cố định <em>bên trong</em> một sprint</td><td>phát triển sản phẩm với đội ổn định và có hạn chót</td></tr>
+<tr><td><b>XP (Lập trình cực hạn)</b></td><td>liên tục, vòng lặp 1–2 tuần</td><td>các thực hành kỹ thuật: TDD, lập trình cặp, tích hợp liên tục, sở hữu chung mã nguồn, thiết kế đơn giản</td><td>đội mà rủi ro chính là <em>chất lượng mã</em></td></tr>
+<tr><td><b>Kanban</b></td><td>dòng chảy liên tục, không có sprint</td><td>trực quan hoá bảng, giới hạn việc đang làm (WIP), đo thời gian chờ; kéo thay vì đẩy</td><td>dòng công việc khó đoán: hỗ trợ, bảo trì, vận hành</td></tr>
+</tbody></table>
+<p><b>Lean</b> không phải phương pháp Agile thứ tư mà là triết lý đứng sau chúng: loại bỏ lãng phí, khuếch đại việc học, quyết định muộn nhất có thể, giao hàng nhanh nhất có thể, xây chất lượng vào bên trong, tối ưu tổng thể. Kanban chính là Lean áp vào dòng chảy phần mềm.</p>
+
+<h3>Ba trục tiêu chí lựa chọn mà đề thi mong đợi</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><b>1. Đặc điểm dự án.</b> Yêu cầu có ổn định không? Quy mô bao lớn? Rủi ro cao không? Hạn chót cứng tới đâu? Ổn định + có quy định → Thác nước/chữ V. Hay đổi + có hạn chót → Scrum. Mơ hồ + rủi ro + lớn → Xoắn ốc. Dòng việc nhỏ đều đặn → Kanban.</div>
+  <div class="lz-layer"><b>2. Đặc điểm đội ngũ.</b> Quy mô (Scrum muốn 3–9 người), kinh nghiệm (XP và RAD cần người giỏi; Thác nước chịu được người mới làm theo đặc tả), và vị trí địa lý (Agile giả định giao tiếp dày đặc; đội phân tán cần nhiều tài liệu viết hơn).</div>
+  <div class="lz-layer"><b>3. Mức tham gia của khách hàng.</b> Rảnh hằng tuần → Agile chạy được. Chỉ gặp lúc đầu và lúc cuối → Thác nước trung thực với thực tế đó. Khách hàng không cam kết được thời gian là nguyên nhân số một khiến một lần áp dụng Scrum thất bại.</div>
+</div>
+
+<h3>Ví dụ có lời giải — áp tiêu chí vào bốn đề bài</h3>
+<div class="out"><b>(a) "Một ngân hàng phải bổ sung một báo cáo do luật yêu cầu trước 30/6; đặc tả là một văn bản nhà nước dài 40 trang."</b> → yêu cầu cố định và do bên ngoài định nghĩa, cần dấu vết kiểm toán → <b>Thác nước</b> (hoặc chữ V nếu khối lượng kiểm thử nặng).<br>
+<b>(b) "Một start-up muốn có MVP cho ứng dụng giao đồ ăn; các nhà sáng lập đổi ý hằng tuần; 3 lập trình viên; ra mắt sau 3 tháng."</b> → yêu cầu biến động, đội nhỏ, hạn cứng, sáng lập viên gắn bó → <b>Scrum</b>, sprint 1 tuần để các thay đổi của họ rơi vào ranh giới sprint chứ không rơi vào giữa sprint.<br>
+<b>(c) "Một đội nội bộ bảo trì 40 hệ thống; công việc tới dưới dạng phiếu với kích thước rất khác nhau."</b> → không có phạm vi sprint nào có ý nghĩa, việc tới bất chợt → <b>Kanban</b> với giới hạn WIP và đo thời gian chờ.<br>
+<b>(d) "Một bệnh viện làm bộ điều khiển bơm truyền dịch; một lỗi có thể giết bệnh nhân."</b> → an toàn tính mạng, cơ quan quản lý đòi truy vết từ yêu cầu tới ca kiểm thử → <b>Mô hình chữ V</b>, mỗi yêu cầu truy được về một ca kiểm thử chấp nhận.<br>
+<b>Quy luật chung:</b> không câu trả lời nào ở trên nói về việc mô hình nào "hiện đại" hơn. Chính đề bài quyết định mô hình, và nói ra điều đó mới là chỗ ăn điểm.</div>
+
+<div class="pitfall"><b>"Agile nghĩa là không tài liệu, không kế hoạch" là sai và bị trừ điểm.</b> Tuyên ngôn viết "phần mềm chạy được <em>hơn</em> tài liệu đầy đủ" — đó là một sự ưu tiên, không phải lệnh cấm. Scrum lập kế hoạch liên tục (sprint planning, làm mịn backlog, review, retrospective); nó chỉ lập kế hoạch trong tầm ngắn hơn. Mọi câu trả lời hàm ý đội Agile không lập kế hoạch đều bị chấm sai.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Phần lớn đội thật chạy mô hình lai, và đó không phải thất bại.</b> Dạng phổ biến là "Water-Scrum-Fall": yêu cầu và ngân sách được duyệt từ đầu (bên kinh doanh cần một con số), Scrum ở khâu phát triển, rồi một quy trình phát hành chính thức có cổng phê duyệt thay đổi. Các khảo sát cho thấy mô hình lai chiếm trên 50% số đội. Kỹ năng chuyên nghiệp không nằm ở việc chọn một cái nhãn mà ở việc biết thực hành nào giải quyết vấn đề nào — sprint để lấy phản hồi, giới hạn WIP để làm mượt dòng chảy, ma trận truy vết kiểu chữ V khi cơ quan quản lý đòi hỏi. <em>Ngoài giáo trình vì môn học trình bày các mô hình như những lựa chọn loại trừ nhau, còn ngành công nghiệp thì cố ý trộn chúng lại.</em></div>
+</div>
+`,
+        },
+        {
+          title: 'R.2 — Software testing in full|||R.2 — Toàn cảnh kiểm thử phần mềm',
+          slug: 'swe201c-kiem-thu-toan-canh',
+          type: 'VIDEO',
+          description: 'Bốn mức kiểm thử, kiểm thử phi chức năng, kiểm thử liên quan thay đổi, quy trình 5 bước và bảy nguyên tắc.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Revision · Lesson R.2</span>
+<h2>Everything the PE can ask about testing</h2>
+<p class="lead">Testing is worth about a fifth of the PE and appears again in SWT301. Four axes cover all of it: <em>level</em> (how much is assembled), <em>type</em> (what quality is examined), <em>change-related</em> (why you are re-running it), and <em>process</em> (the order of work).</p>
+
+<h3>Axis 1 — the four levels</h3>
+<table><thead><tr><th>Level</th><th>Scope</th><th>Who</th><th>Basis</th><th>Typical tools</th></tr></thead><tbody>
+<tr><td><b>Unit</b></td><td>one function/class, dependencies mocked</td><td>developer</td><td>the code and its detailed design</td><td>JUnit, pytest, Jest</td></tr>
+<tr><td><b>Integration</b></td><td>the interfaces between components</td><td>developer / tester</td><td>the architecture and interface specs</td><td>Spring Test, Postman, Testcontainers</td></tr>
+<tr><td><b>System</b></td><td>the complete assembled product</td><td>tester / QA</td><td>the requirement specification</td><td>Selenium, Cypress</td></tr>
+<tr><td><b>Acceptance</b></td><td>fitness for business use</td><td>customer / end user</td><td>business needs, user stories</td><td>manual, UAT scripts, beta programmes</td></tr>
+</tbody></table>
+<p><b>Two integration strategies:</b> <em>big-bang</em> assembles everything then tests (cheap to plan, terrible to debug — a failure could be anywhere) versus <em>incremental</em>, top-down with stubs or bottom-up with drivers (more setup, defects localised immediately). Exams ask for the trade-off, not just the names.</p>
+
+<h3>Axis 2 — functional versus non-functional types</h3>
+<table><thead><tr><th>Type</th><th>Question it answers</th><th>Example criterion</th></tr></thead><tbody>
+<tr><td>Functional</td><td>does it do the right thing?</td><td>a valid card completes payment; an invalid one shows the error</td></tr>
+<tr><td><b>Performance</b></td><td>how fast under normal load?</td><td>page loads &lt; 2 s at 500 concurrent users</td></tr>
+<tr><td><b>Load / stress</b></td><td>where does it break, and how?</td><td>at 5,000 users response degrades gracefully, no data loss</td></tr>
+<tr><td><b>Security</b></td><td>can it be misused?</td><td>SQL injection blocked; passwords hashed; no data leak via IDOR</td></tr>
+<tr><td><b>Usability</b></td><td>can a real person do the task?</td><td>a new user completes checkout in under 3 minutes unaided</td></tr>
+<tr><td><b>Compatibility</b></td><td>does it work everywhere?</td><td>Chrome/Safari/Firefox, Android 10+, screens from 320 px</td></tr>
+<tr><td><b>Reliability</b></td><td>does it keep working?</td><td>uptime 99.5%, mean time between failures &gt; 30 days</td></tr>
+<tr><td><b>Maintainability / portability</b></td><td>can we change or move it?</td><td>a new payment provider added in under 5 days; runs on Linux and Windows</td></tr>
+</tbody></table>
+
+<h3>Axis 3 — change-related testing</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><b>Confirmation testing (re-testing).</b> A defect was reported and fixed → re-run <em>that specific case</em> to confirm the fix works. Narrow and targeted.</div>
+  <div class="lz-layer"><b>Regression testing.</b> Something changed → re-run a broader suite to confirm nothing <em>else</em> broke. This is the suite you automate, because it runs on every commit.</div>
+  <div class="lz-layer"><b>Smoke testing.</b> A quick pass over the critical paths after a build: does the app start, can a user log in, does the main flow complete? If smoke fails, deeper testing is pointless.</div>
+</div>
+<p><b>The exam distinction:</b> confirmation asks "is the bug gone?", regression asks "did the fix break something else?". Answering them the other way round is the standard error.</p>
+
+<h3>Axis 4 — the test process, five steps</h3>
+<div class="lz-flow">
+  <div class="lz-fitem"><b>1 · Planning</b><span>scope, risks, resources, entry/exit criteria, schedule.</span></div>
+  <div class="lz-fitem"><b>2 · Analysis &amp; design</b><span>derive test conditions from the requirements; write cases with input, steps and expected result.</span></div>
+  <div class="lz-fitem"><b>3 · Implementation &amp; execution</b><span>prepare data and environment, run the cases, log actual results.</span></div>
+  <div class="lz-fitem"><b>4 · Evaluating exit criteria &amp; reporting</b><span>compare coverage and defect counts against the plan; report to stakeholders.</span></div>
+  <div class="lz-fitem"><b>5 · Closure</b><span>archive the assets, record lessons learned for the next release.</span></div>
+</div>
+
+<h3>A test case, written the way it is marked</h3>
+<div class="out"><b>TC-05 — Login with a wrong password</b><br>
+<b>Precondition:</b> a user account <span class="badge">an@fpt.edu.vn</span> exists and is active.<br>
+<b>Steps:</b> 1) open /login · 2) enter <span class="badge">an@fpt.edu.vn</span> · 3) enter <span class="badge">wrong123</span> · 4) click Sign in.<br>
+<b>Expected result:</b> the page stays on /login; the message "Email or password is incorrect" appears; the password field is cleared; no session cookie is set; after 5 failures the account is locked for 15 minutes.<br>
+<b>Priority:</b> High · <b>Type:</b> Functional, negative · <b>Requirement:</b> FR-03<br>
+<b>Why the detail matters:</b> a marker checks that the expected result is specific and observable. "It shows an error" is not a result; the exact message, the state of the field and the absence of a session are.</div>
+
+<h3>The seven testing principles (frequently examined)</h3>
+<div class="out"><b>1.</b> Testing shows the presence of defects, never their absence. <b>2.</b> Exhaustive testing is impossible — a form with 10 fields of 10 values each has 10¹⁰ combinations. <b>3.</b> Early testing saves time and money (a requirements defect costs 10–100× more once shipped). <b>4.</b> Defects cluster — a small number of modules contain most bugs. <b>5.</b> The pesticide paradox — repeating the same tests stops finding new defects, so the suite must evolve. <b>6.</b> Testing is context dependent — a game and a pacemaker are tested differently. <b>7.</b> Absence-of-errors is a fallacy — a bug-free product that solves the wrong problem is still a failure.</div>
+
+<h3>The defect life cycle, and the two words that are not synonyms</h3>
+<div class="diagram">NEW → ASSIGNED → OPEN (being fixed) → FIXED → RETEST
+                                                  ├─ pass → CLOSED
+                                                  └─ fail → REOPENED → OPEN
+Other terminal states: DEFERRED (fix in a later release) · REJECTED (not a defect)
+                       DUPLICATE (already reported)</div>
+<div class="out"><b>Severity versus priority — the pair the exam always tests.</b><br>
+<b>Severity</b> = how badly it damages the system. Set by the <em>tester</em>, from a technical view.<br>
+<b>Priority</b> = how soon it must be fixed. Set by the <em>product owner / manager</em>, from a business view.<br>
+They are independent, which is why all four combinations exist:
+<table><thead><tr><th></th><th>High priority</th><th>Low priority</th></tr></thead><tbody>
+<tr><td><b>High severity</b></td><td>payment fails for everyone — fix now, block the release</td><td>the app crashes on a device 0.1% of users own — serious but can wait</td></tr>
+<tr><td><b>Low severity</b></td><td>the company name is misspelt on the home page — trivial technically, embarrassing publicly, fix today</td><td>a tooltip is misaligned by 2 px on one screen — backlog</td></tr>
+</tbody></table>
+<b>The classic exam item is the bottom-left cell:</b> a cosmetic typo with high priority. If you answered "severity and priority always match", that question is designed to catch you.</div>
+
+<h3>A defect report that a developer can act on</h3>
+<div class="out"><b>ID:</b> BUG-142 · <b>Title:</b> Checkout fails with a 500 error when the discount code is applied twice<br>
+<b>Environment:</b> staging, Chrome 126, Windows 11, build 2.4.1<br>
+<b>Steps to reproduce:</b> 1) add any item to the basket · 2) apply code SAVE10 · 3) apply SAVE10 again · 4) click Pay<br>
+<b>Expected:</b> the message "This code has already been applied" and the basket stays intact.<br>
+<b>Actual:</b> HTTP 500, the basket is emptied, the order is not created. Reproduced 5 times out of 5.<br>
+<b>Severity:</b> High (data loss) · <b>Priority:</b> High (blocks a revenue path) · <b>Attachments:</b> screenshot, server log extract<br>
+<b>Why each field earns its place:</b> without the environment the developer cannot reproduce; without exact steps they debug the wrong path; without expected-versus-actual there is nothing to argue about; and "reproduced 5/5" separates a real defect from an intermittent one that needs different handling. A report missing any of these is bounced back, and the round trip costs a day.</div>
+
+<div class="pitfall"><b>"We have 100% test coverage, so the product is correct" is wrong twice.</b> Coverage measures which <em>lines were executed</em>, not whether the assertions check anything meaningful, and it says nothing about the requirements you never wrote a test for. Principle 1 is the formal version: testing can only ever prove that defects exist.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The test pyramid tells you how many of each to write.</b> Many fast unit tests at the base, fewer integration tests in the middle, very few slow end-to-end tests at the top. Invert it — mostly UI tests — and you get the "ice-cream cone": a suite that takes an hour, fails randomly, and gets ignored within a month. The economics are simple: a unit test runs in milliseconds and pinpoints the fault; an end-to-end test runs in seconds-to-minutes and only tells you that <em>something</em> in the chain broke. <em>Beyond syllabus because SWE201c teaches the levels but not their proportions, and the proportions are what makes a suite usable.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Ôn tập · Bài R.2</span>
+<h2>Mọi thứ đề PE có thể hỏi về kiểm thử</h2>
+<p class="lead">Kiểm thử chiếm khoảng một phần năm đề PE và còn quay lại ở SWT301. Bốn trục phủ hết: <em>mức</em> (lắp ráp tới đâu), <em>loại</em> (soi thuộc tính chất lượng nào), <em>liên quan thay đổi</em> (vì sao phải chạy lại), và <em>quy trình</em> (thứ tự công việc).</p>
+
+<h3>Trục 1 — bốn mức kiểm thử</h3>
+<table><thead><tr><th>Mức</th><th>Phạm vi</th><th>Ai làm</th><th>Căn cứ</th><th>Công cụ tiêu biểu</th></tr></thead><tbody>
+<tr><td><b>Đơn vị</b></td><td>một hàm/lớp, các phụ thuộc được giả lập</td><td>lập trình viên</td><td>mã nguồn và thiết kế chi tiết</td><td>JUnit, pytest, Jest</td></tr>
+<tr><td><b>Tích hợp</b></td><td>giao diện giữa các thành phần</td><td>lập trình viên / tester</td><td>kiến trúc và đặc tả giao diện</td><td>Spring Test, Postman, Testcontainers</td></tr>
+<tr><td><b>Hệ thống</b></td><td>toàn bộ sản phẩm đã lắp ráp</td><td>tester / QA</td><td>đặc tả yêu cầu</td><td>Selenium, Cypress</td></tr>
+<tr><td><b>Chấp nhận</b></td><td>có dùng được cho nghiệp vụ không</td><td>khách hàng / người dùng cuối</td><td>nhu cầu nghiệp vụ, user story</td><td>thủ công, kịch bản UAT, chương trình beta</td></tr>
+</tbody></table>
+<p><b>Hai chiến lược tích hợp:</b> <em>big-bang</em> ráp hết rồi mới kiểm (lên kế hoạch thì rẻ, gỡ lỗi thì kinh khủng — lỗi có thể ở bất cứ đâu) so với <em>tăng dần</em>, từ trên xuống dùng stub hoặc từ dưới lên dùng driver (chuẩn bị nhiều hơn nhưng khoanh vùng lỗi được ngay). Đề thi hỏi phần đánh đổi, không chỉ hỏi tên gọi.</p>
+
+<h3>Trục 2 — loại chức năng và phi chức năng</h3>
+<table><thead><tr><th>Loại</th><th>Trả lời câu hỏi</th><th>Ví dụ tiêu chí</th></tr></thead><tbody>
+<tr><td>Chức năng</td><td>nó có làm đúng việc không?</td><td>thẻ hợp lệ thì thanh toán xong; thẻ sai thì hiện lỗi</td></tr>
+<tr><td><b>Hiệu năng</b></td><td>nhanh cỡ nào ở tải bình thường?</td><td>trang tải &lt; 2 giây với 500 người dùng đồng thời</td></tr>
+<tr><td><b>Tải / căng thẳng</b></td><td>nó gãy ở đâu, và gãy thế nào?</td><td>ở 5.000 người dùng thì chậm dần chứ không sập, không mất dữ liệu</td></tr>
+<tr><td><b>An ninh</b></td><td>có bị lợi dụng được không?</td><td>chặn SQL injection; mật khẩu băm; không lộ dữ liệu qua IDOR</td></tr>
+<tr><td><b>Khả dụng</b></td><td>người thật có làm được việc không?</td><td>người dùng mới hoàn tất thanh toán dưới 3 phút mà không cần trợ giúp</td></tr>
+<tr><td><b>Tương thích</b></td><td>chạy được ở mọi nơi không?</td><td>Chrome/Safari/Firefox, Android 10+, màn hình từ 320 px</td></tr>
+<tr><td><b>Độ tin cậy</b></td><td>có chạy bền không?</td><td>thời gian sống 99,5%, thời gian trung bình giữa hai lần hỏng &gt; 30 ngày</td></tr>
+<tr><td><b>Bảo trì / khả chuyển</b></td><td>sửa hoặc chuyển đi được không?</td><td>thêm một cổng thanh toán mới trong dưới 5 ngày; chạy được cả Linux lẫn Windows</td></tr>
+</tbody></table>
+
+<h3>Trục 3 — kiểm thử liên quan tới thay đổi</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><b>Kiểm thử xác nhận (kiểm thử lại).</b> Một lỗi đã được báo và đã sửa → chạy lại <em>đúng ca kiểm thử đó</em> để xác nhận bản sửa có tác dụng. Hẹp và có mục tiêu.</div>
+  <div class="lz-layer"><b>Kiểm thử hồi quy.</b> Có thứ gì đó vừa thay đổi → chạy lại một bộ rộng hơn để xác nhận không có thứ <em>khác</em> bị hỏng theo. Đây chính là bộ mà bạn tự động hoá, vì nó chạy ở mọi lần commit.</div>
+  <div class="lz-layer"><b>Kiểm thử khói (smoke).</b> Một lượt nhanh qua các luồng then chốt sau khi build: ứng dụng có khởi động không, đăng nhập được không, luồng chính có chạy hết không? Smoke mà hỏng thì kiểm sâu hơn là vô nghĩa.</div>
+</div>
+<p><b>Điểm phân biệt trong đề thi:</b> kiểm thử xác nhận hỏi "lỗi đã hết chưa?", kiểm thử hồi quy hỏi "bản sửa có làm hỏng thứ khác không?". Trả lời ngược hai câu này là lỗi chuẩn mực.</p>
+
+<h3>Trục 4 — quy trình kiểm thử, năm bước</h3>
+<div class="lz-flow">
+  <div class="lz-fitem"><b>1 · Lập kế hoạch</b><span>phạm vi, rủi ro, nguồn lực, tiêu chí vào/ra, lịch trình.</span></div>
+  <div class="lz-fitem"><b>2 · Phân tích &amp; thiết kế</b><span>rút điều kiện kiểm thử từ yêu cầu; viết ca kiểm thử có đầu vào, các bước và kết quả mong đợi.</span></div>
+  <div class="lz-fitem"><b>3 · Hiện thực &amp; thực thi</b><span>chuẩn bị dữ liệu và môi trường, chạy các ca, ghi lại kết quả thực tế.</span></div>
+  <div class="lz-fitem"><b>4 · Đánh giá tiêu chí ra &amp; báo cáo</b><span>đối chiếu độ phủ và số lỗi với kế hoạch; báo cáo cho các bên liên quan.</span></div>
+  <div class="lz-fitem"><b>5 · Kết thúc</b><span>lưu trữ tài sản kiểm thử, ghi lại bài học cho bản phát hành sau.</span></div>
+</div>
+
+<h3>Một ca kiểm thử, viết đúng cách nó được chấm</h3>
+<div class="out"><b>TC-05 — Đăng nhập với mật khẩu sai</b><br>
+<b>Điều kiện tiên quyết:</b> tài khoản <span class="badge">an@fpt.edu.vn</span> tồn tại và đang hoạt động.<br>
+<b>Các bước:</b> 1) mở /login · 2) nhập <span class="badge">an@fpt.edu.vn</span> · 3) nhập <span class="badge">wrong123</span> · 4) bấm Đăng nhập.<br>
+<b>Kết quả mong đợi:</b> trang vẫn ở /login; hiện thông báo "Email hoặc mật khẩu không đúng"; ô mật khẩu bị xoá trắng; không có cookie phiên nào được đặt; sau 5 lần sai thì khoá tài khoản 15 phút.<br>
+<b>Độ ưu tiên:</b> Cao · <b>Loại:</b> Chức năng, ca âm · <b>Yêu cầu:</b> FR-03<br>
+<b>Vì sao chi tiết lại quan trọng:</b> người chấm soi xem kết quả mong đợi có cụ thể và quan sát được không. "Nó hiện lỗi" không phải là kết quả; đúng câu thông báo, trạng thái của ô nhập và việc không có phiên đăng nhập mới là kết quả.</div>
+
+<h3>Bảy nguyên tắc kiểm thử (hay bị hỏi)</h3>
+<div class="out"><b>1.</b> Kiểm thử chứng minh sự tồn tại của lỗi, không bao giờ chứng minh sự vắng mặt của lỗi. <b>2.</b> Kiểm thử vét cạn là bất khả — một biểu mẫu 10 trường, mỗi trường 10 giá trị đã có 10¹⁰ tổ hợp. <b>3.</b> Kiểm thử sớm tiết kiệm thời gian và tiền bạc (một lỗi ở khâu yêu cầu tốn gấp 10–100 lần khi đã phát hành). <b>4.</b> Lỗi tụ cụm — một số ít mô-đun chứa phần lớn lỗi. <b>5.</b> Nghịch lý thuốc trừ sâu — lặp mãi cùng bộ test thì thôi tìm ra lỗi mới, nên bộ test phải tiến hoá. <b>6.</b> Kiểm thử phụ thuộc ngữ cảnh — một trò chơi và một máy tạo nhịp tim được kiểm khác nhau. <b>7.</b> Ngộ nhận "không còn lỗi" — một sản phẩm sạch lỗi mà giải sai bài toán thì vẫn là thất bại.</div>
+
+<h3>Vòng đời một lỗi, và hai từ không đồng nghĩa</h3>
+<div class="diagram">MỚI → ĐÃ GÁN → ĐANG MỞ (đang sửa) → ĐÃ SỬA → KIỂM LẠI
+                                                  ├─ đạt → ĐÓNG
+                                                  └─ trượt → MỞ LẠI → ĐANG MỞ
+Các trạng thái kết thúc khác: HOÃN (sửa ở bản sau) · TỪ CHỐI (không phải lỗi)
+                              TRÙNG (đã có người báo)</div>
+<div class="out"><b>Mức nghiêm trọng với mức ưu tiên — cặp từ mà đề thi luôn hỏi.</b><br>
+<b>Nghiêm trọng (severity)</b> = lỗi phá hệ thống nặng tới đâu. Do <em>tester</em> đặt, theo góc nhìn kỹ thuật.<br>
+<b>Ưu tiên (priority)</b> = phải sửa sớm tới mức nào. Do <em>product owner / quản lý</em> đặt, theo góc nhìn kinh doanh.<br>
+Hai thứ này độc lập với nhau, nên tồn tại đủ bốn tổ hợp:
+<table><thead><tr><th></th><th>Ưu tiên cao</th><th>Ưu tiên thấp</th></tr></thead><tbody>
+<tr><td><b>Nghiêm trọng cao</b></td><td>thanh toán hỏng với mọi người — sửa ngay, chặn phát hành</td><td>ứng dụng sập trên dòng máy mà 0,1% người dùng sở hữu — nặng nhưng chờ được</td></tr>
+<tr><td><b>Nghiêm trọng thấp</b></td><td>viết sai tên công ty ngay trang chủ — kỹ thuật thì vặt, nhưng mất mặt, sửa trong ngày</td><td>một tooltip lệch 2 px trên một màn hình — cho vào backlog</td></tr>
+</tbody></table>
+<b>Câu hỏi thi kinh điển rơi đúng vào ô dưới bên trái:</b> một lỗi chính tả thuần hình thức nhưng ưu tiên cao. Nếu bạn trả lời "nghiêm trọng và ưu tiên luôn đi cùng nhau" thì câu đó sinh ra để bắt bạn.</div>
+
+<h3>Một phiếu báo lỗi mà lập trình viên xử lý được ngay</h3>
+<div class="out"><b>Mã:</b> BUG-142 · <b>Tiêu đề:</b> Thanh toán lỗi 500 khi áp mã giảm giá hai lần<br>
+<b>Môi trường:</b> staging, Chrome 126, Windows 11, bản dựng 2.4.1<br>
+<b>Các bước tái hiện:</b> 1) thêm một sản phẩm bất kỳ vào giỏ · 2) áp mã SAVE10 · 3) áp lại SAVE10 lần nữa · 4) bấm Thanh toán<br>
+<b>Mong đợi:</b> hiện thông báo "Mã này đã được áp dụng" và giỏ hàng giữ nguyên.<br>
+<b>Thực tế:</b> HTTP 500, giỏ hàng bị xoá trắng, đơn hàng không được tạo. Tái hiện 5/5 lần.<br>
+<b>Nghiêm trọng:</b> Cao (mất dữ liệu) · <b>Ưu tiên:</b> Cao (chặn đường doanh thu) · <b>Đính kèm:</b> ảnh màn hình, trích log máy chủ<br>
+<b>Vì sao từng trường đều đáng có:</b> thiếu môi trường thì lập trình viên không tái hiện được; thiếu các bước chính xác thì họ gỡ nhầm nhánh; thiếu cặp mong đợi–thực tế thì chẳng có gì để đối chiếu; và dòng "tái hiện 5/5" phân biệt một lỗi thật với một lỗi chập chờn vốn cần cách xử lý khác. Phiếu thiếu bất kỳ mục nào sẽ bị trả lại, và một vòng qua lại như vậy tốn mất một ngày.</div>
+
+<div class="pitfall"><b>"Chúng em phủ 100% test rồi nên sản phẩm đúng" sai ở hai chỗ.</b> Độ phủ đo <em>những dòng đã được thực thi</em>, không đo việc các phép khẳng định có kiểm thứ gì có ý nghĩa hay không, và nó chẳng nói gì về những yêu cầu mà bạn chưa từng viết test. Nguyên tắc 1 là phiên bản hình thức của điều đó: kiểm thử chỉ có thể chứng minh rằng lỗi tồn tại.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Kim tự tháp kiểm thử cho biết nên viết bao nhiêu ca ở mỗi mức.</b> Rất nhiều test đơn vị chạy nhanh ở đáy, ít test tích hợp ở giữa, rất ít test đầu-cuối chậm chạp ở đỉnh. Lật ngược nó — chủ yếu là test giao diện — là ra hình "cây kem ốc quế": một bộ test chạy cả tiếng, hỏng ngẫu nhiên, và bị bỏ mặc trong vòng một tháng. Kinh tế học ở đây rất đơn giản: một test đơn vị chạy trong vài mili-giây và chỉ đúng chỗ lỗi; một test đầu-cuối chạy vài giây tới vài phút và chỉ cho biết <em>có gì đó</em> trong chuỗi bị hỏng. <em>Ngoài giáo trình vì SWE201c dạy các mức mà không dạy tỉ lệ giữa chúng, trong khi chính tỉ lệ mới làm bộ test dùng được.</em></div>
+</div>
+`,
+        },
+        {
+          title: 'R.3 — English–Vietnamese glossary & a mock FE|||R.3 — Từ vựng Anh–Việt & đề FE mẫu',
+          slug: 'swe201c-tu-vung-de-fe',
+          type: 'VIDEO',
+          description: 'Bảng thuật ngữ Anh–Việt của cả môn (đề FE ra bằng tiếng Anh) kèm 20 câu trắc nghiệm mẫu có giải thích.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Revision · Lesson R.3</span>
+<h2>The vocabulary, then twenty questions</h2>
+<p class="lead">The FE is in English and computer-graded. Most lost marks are vocabulary, not concepts — a student who knows the ideas in Vietnamese can still miss "elicitation" or "traceability". Learn the table, then take the mock.</p>
+
+<h3>Glossary — process &amp; models</h3>
+<table><thead><tr><th>English</th><th>Tiếng Việt</th><th>Note</th></tr></thead><tbody>
+<tr><td>Software Development Life Cycle (SDLC)</td><td>vòng đời phát triển phần mềm</td><td>the umbrella term for all models</td></tr>
+<tr><td>Requirement elicitation</td><td>khơi gợi / thu thập yêu cầu</td><td>interviews, workshops, observation</td></tr>
+<tr><td>Feasibility study</td><td>nghiên cứu khả thi</td><td>technical, economic, operational</td></tr>
+<tr><td>Increment / iteration</td><td>phần gia tăng / vòng lặp</td><td>increment adds, iteration refines</td></tr>
+<tr><td>Prototype</td><td>bản mẫu</td><td>throwaway or evolutionary</td></tr>
+<tr><td>Stakeholder</td><td>bên liên quan</td><td>anyone affected by the system</td></tr>
+<tr><td>Scope creep</td><td>phình phạm vi</td><td>uncontrolled growth of requirements</td></tr>
+<tr><td>Traceability</td><td>khả năng truy vết</td><td>requirement → design → code → test</td></tr>
+<tr><td>Milestone / deliverable</td><td>cột mốc / sản phẩm bàn giao</td><td>a date versus an artefact</td></tr>
+<tr><td>Technical debt</td><td>nợ kỹ thuật</td><td>shortcuts that cost interest later</td></tr>
+</tbody></table>
+
+<h3>Glossary — Agile</h3>
+<table><thead><tr><th>English</th><th>Tiếng Việt</th><th>Note</th></tr></thead><tbody>
+<tr><td>Product Backlog</td><td>danh sách hạng mục sản phẩm</td><td>owned by the Product Owner, ordered by value</td></tr>
+<tr><td>Sprint Backlog</td><td>danh sách công việc của sprint</td><td>owned by the developers</td></tr>
+<tr><td>Definition of Done</td><td>định nghĩa hoàn thành</td><td>the shared quality bar</td></tr>
+<tr><td>Increment</td><td>phần gia tăng</td><td>the shippable result of a sprint</td></tr>
+<tr><td>Daily Scrum / stand-up</td><td>họp ngắn hằng ngày</td><td>15 minutes, for the developers</td></tr>
+<tr><td>Sprint Review / Retrospective</td><td>rà soát sprint / họp cải tiến</td><td>review = product, retrospective = process</td></tr>
+<tr><td>Velocity</td><td>tốc độ hoàn thành</td><td>story points per sprint; a forecast, not a score</td></tr>
+<tr><td>Burndown chart</td><td>biểu đồ giảm dần</td><td>remaining work over time</td></tr>
+<tr><td>Work in progress (WIP) limit</td><td>giới hạn việc đang làm</td><td>the core Kanban mechanism</td></tr>
+<tr><td>Impediment</td><td>trở ngại</td><td>what the Scrum Master removes</td></tr>
+</tbody></table>
+
+<h3>Glossary — quality &amp; testing</h3>
+<table><thead><tr><th>English</th><th>Tiếng Việt</th><th>Note</th></tr></thead><tbody>
+<tr><td>Verification / Validation</td><td>thẩm định / xác nhận</td><td>"building it right" vs "building the right thing"</td></tr>
+<tr><td>Defect / bug / failure</td><td>khiếm khuyết / lỗi / sự cố</td><td>defect in code → failure when it runs</td></tr>
+<tr><td>Test case / test suite</td><td>ca kiểm thử / bộ kiểm thử</td><td>a case has expected results</td></tr>
+<tr><td>Regression testing</td><td>kiểm thử hồi quy</td><td>did the change break anything else?</td></tr>
+<tr><td>Confirmation testing</td><td>kiểm thử xác nhận</td><td>is the reported bug fixed?</td></tr>
+<tr><td>Coverage</td><td>độ phủ</td><td>proportion of code executed</td></tr>
+<tr><td>Acceptance criteria</td><td>tiêu chí chấp nhận</td><td>attached to a user story</td></tr>
+<tr><td>Non-functional requirement</td><td>yêu cầu phi chức năng</td><td>must be measurable</td></tr>
+<tr><td>Continuous integration / delivery</td><td>tích hợp / phân phối liên tục</td><td>build and test on every commit</td></tr>
+<tr><td>Root cause analysis</td><td>phân tích nguyên nhân gốc</td><td>the "five whys"</td></tr>
+</tbody></table>
+
+<h3>Mock FE — 20 questions</h3>
+<div class="out"><b>1.</b> Which model is best when requirements are stable and a full audit trail is required? → <b>Waterfall / V-Model</b><br>
+<b>2.</b> In Scrum, who orders the Product Backlog? → <b>the Product Owner</b><br>
+<b>3.</b> Maximum recommended Scrum team size (developers)? → <b>9</b><br>
+<b>4.</b> Which event is about the <em>process</em> rather than the product? → <b>the Retrospective</b><br>
+<b>5.</b> "The system shall respond within 2 seconds" is a … requirement. → <b>non-functional</b><br>
+<b>6.</b> Who performs unit testing? → <b>the developer</b><br>
+<b>7.</b> Re-running tests to check that a fix did not break anything else is … → <b>regression testing</b><br>
+<b>8.</b> The Kanban mechanism that prevents overload is … → <b>the WIP limit</b><br>
+<b>9.</b> "As a &lt;role&gt;, I want &lt;goal&gt;, so that &lt;benefit&gt;" is the template for a … → <b>user story</b><br>
+<b>10.</b> Which model handles risk explicitly through repeated risk analysis? → <b>Spiral</b><br>
+<b>11.</b> Verification asks … → <b>are we building the product right?</b><br>
+<b>12.</b> A defect found during requirements costs roughly how much less than one found in production? → <b>10–100 times less</b><br>
+<b>13.</b> Which XP practice has two developers at one keyboard? → <b>pair programming</b><br>
+<b>14.</b> Which testing level is performed by the customer? → <b>acceptance testing (UAT)</b><br>
+<b>15.</b> The principle "testing shows the presence of defects, not their absence" implies … → <b>no amount of testing proves correctness</b><br>
+<b>16.</b> A burndown chart shows … → <b>remaining work against time</b><br>
+<b>17.</b> Which is NOT an Agile value from the manifesto? → <b>"comprehensive documentation over working software"</b> (it is the reverse)<br>
+<b>18.</b> Story mapping slices releases … → <b>horizontally, across the user journey</b><br>
+<b>19.</b> The Scrum Master's main job is … → <b>removing impediments and coaching the process</b>, not assigning tasks<br>
+<b>20.</b> Technical debt means … → <b>shortcuts taken now that make future change more expensive</b></div>
+
+<div class="pitfall"><b>Two English pairs that swap answers if you confuse them.</b> <em>Verification</em> (building it right — reviews, unit tests) versus <em>validation</em> (building the right thing — UAT). And <em>defect</em> (the flaw in the artefact) versus <em>failure</em> (what the user observes when the defect executes). The FE tests both pairs almost every semester.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Learn the vocabulary as pairs of opposites, not as a list.</b> Verification/validation, functional/non-functional, confirmation/regression, increment/iteration, push/pull, defect/failure, epic/story. Memory research is unambiguous that contrasted pairs are retained far better than isolated items, and multiple-choice questions are usually built from exactly these contrasts — the distractor is the other member of the pair. Revising in pairs therefore matches both how you remember and how you are tested. <em>Beyond syllabus because the course lists terms alphabetically, which is the least memorable possible order.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Ôn tập · Bài R.3</span>
+<h2>Từ vựng trước, rồi tới hai mươi câu</h2>
+<p class="lead">Đề FE ra bằng tiếng Anh và chấm bằng máy. Phần lớn điểm mất là do từ vựng chứ không phải do khái niệm — một sinh viên hiểu ý tưởng bằng tiếng Việt vẫn có thể trượt chữ "elicitation" hay "traceability". Hãy học bảng này rồi làm đề mẫu.</p>
+
+<h3>Từ vựng — quy trình &amp; mô hình</h3>
+<table><thead><tr><th>Tiếng Anh</th><th>Tiếng Việt</th><th>Ghi chú</th></tr></thead><tbody>
+<tr><td>Software Development Life Cycle (SDLC)</td><td>vòng đời phát triển phần mềm</td><td>thuật ngữ bao trùm mọi mô hình</td></tr>
+<tr><td>Requirement elicitation</td><td>khơi gợi / thu thập yêu cầu</td><td>phỏng vấn, hội thảo, quan sát</td></tr>
+<tr><td>Feasibility study</td><td>nghiên cứu khả thi</td><td>về kỹ thuật, kinh tế, vận hành</td></tr>
+<tr><td>Increment / iteration</td><td>phần gia tăng / vòng lặp</td><td>increment là thêm vào, iteration là tinh chỉnh</td></tr>
+<tr><td>Prototype</td><td>bản mẫu</td><td>loại vứt đi hoặc loại tiến hoá</td></tr>
+<tr><td>Stakeholder</td><td>bên liên quan</td><td>bất kỳ ai chịu ảnh hưởng của hệ thống</td></tr>
+<tr><td>Scope creep</td><td>phình phạm vi</td><td>yêu cầu phình ra mà không kiểm soát</td></tr>
+<tr><td>Traceability</td><td>khả năng truy vết</td><td>yêu cầu → thiết kế → mã → kiểm thử</td></tr>
+<tr><td>Milestone / deliverable</td><td>cột mốc / sản phẩm bàn giao</td><td>một cái là mốc thời gian, một cái là tạo tác</td></tr>
+<tr><td>Technical debt</td><td>nợ kỹ thuật</td><td>đường tắt hôm nay, trả lãi về sau</td></tr>
+</tbody></table>
+
+<h3>Từ vựng — Agile</h3>
+<table><thead><tr><th>Tiếng Anh</th><th>Tiếng Việt</th><th>Ghi chú</th></tr></thead><tbody>
+<tr><td>Product Backlog</td><td>danh sách hạng mục sản phẩm</td><td>do Product Owner sở hữu, sắp theo giá trị</td></tr>
+<tr><td>Sprint Backlog</td><td>danh sách công việc của sprint</td><td>do đội phát triển sở hữu</td></tr>
+<tr><td>Definition of Done</td><td>định nghĩa hoàn thành</td><td>chuẩn chất lượng dùng chung</td></tr>
+<tr><td>Increment</td><td>phần gia tăng</td><td>kết quả giao được của một sprint</td></tr>
+<tr><td>Daily Scrum / stand-up</td><td>họp ngắn hằng ngày</td><td>15 phút, dành cho đội phát triển</td></tr>
+<tr><td>Sprint Review / Retrospective</td><td>rà soát sprint / họp cải tiến</td><td>review xét sản phẩm, retrospective xét quy trình</td></tr>
+<tr><td>Velocity</td><td>tốc độ hoàn thành</td><td>story point mỗi sprint; là dự báo, không phải điểm số</td></tr>
+<tr><td>Burndown chart</td><td>biểu đồ giảm dần</td><td>khối lượng còn lại theo thời gian</td></tr>
+<tr><td>Work in progress (WIP) limit</td><td>giới hạn việc đang làm</td><td>cơ chế cốt lõi của Kanban</td></tr>
+<tr><td>Impediment</td><td>trở ngại</td><td>thứ mà Scrum Master gỡ bỏ</td></tr>
+</tbody></table>
+
+<h3>Từ vựng — chất lượng &amp; kiểm thử</h3>
+<table><thead><tr><th>Tiếng Anh</th><th>Tiếng Việt</th><th>Ghi chú</th></tr></thead><tbody>
+<tr><td>Verification / Validation</td><td>thẩm định / xác nhận</td><td>"làm đúng cách" so với "làm đúng thứ cần làm"</td></tr>
+<tr><td>Defect / bug / failure</td><td>khiếm khuyết / lỗi / sự cố</td><td>khiếm khuyết trong mã → sự cố khi chạy</td></tr>
+<tr><td>Test case / test suite</td><td>ca kiểm thử / bộ kiểm thử</td><td>một ca phải có kết quả mong đợi</td></tr>
+<tr><td>Regression testing</td><td>kiểm thử hồi quy</td><td>thay đổi có làm hỏng thứ khác không?</td></tr>
+<tr><td>Confirmation testing</td><td>kiểm thử xác nhận</td><td>lỗi đã báo đã được sửa chưa?</td></tr>
+<tr><td>Coverage</td><td>độ phủ</td><td>tỉ lệ mã được thực thi</td></tr>
+<tr><td>Acceptance criteria</td><td>tiêu chí chấp nhận</td><td>gắn kèm một user story</td></tr>
+<tr><td>Non-functional requirement</td><td>yêu cầu phi chức năng</td><td>bắt buộc phải đo được</td></tr>
+<tr><td>Continuous integration / delivery</td><td>tích hợp / phân phối liên tục</td><td>build và test ở mọi lần commit</td></tr>
+<tr><td>Root cause analysis</td><td>phân tích nguyên nhân gốc</td><td>kỹ thuật "năm lần hỏi vì sao"</td></tr>
+</tbody></table>
+
+<h3>Đề FE mẫu — 20 câu</h3>
+<div class="out"><b>1.</b> Mô hình nào tốt nhất khi yêu cầu ổn định và cần dấu vết kiểm toán đầy đủ? → <b>Thác nước / chữ V</b><br>
+<b>2.</b> Trong Scrum, ai sắp thứ tự Product Backlog? → <b>Product Owner</b><br>
+<b>3.</b> Quy mô đội Scrum tối đa được khuyến nghị (số lập trình viên)? → <b>9</b><br>
+<b>4.</b> Sự kiện nào bàn về <em>quy trình</em> chứ không phải sản phẩm? → <b>Retrospective</b><br>
+<b>5.</b> "Hệ thống phải phản hồi trong 2 giây" là yêu cầu … → <b>phi chức năng</b><br>
+<b>6.</b> Ai thực hiện kiểm thử đơn vị? → <b>lập trình viên</b><br>
+<b>7.</b> Chạy lại các test để kiểm bản sửa có làm hỏng thứ khác không, gọi là … → <b>kiểm thử hồi quy</b><br>
+<b>8.</b> Cơ chế của Kanban giúp tránh quá tải là … → <b>giới hạn WIP</b><br>
+<b>9.</b> "Là một &lt;vai trò&gt;, tôi muốn &lt;mục tiêu&gt;, để &lt;lợi ích&gt;" là khuôn của … → <b>user story</b><br>
+<b>10.</b> Mô hình nào xử lý rủi ro tường minh qua các vòng phân tích rủi ro lặp lại? → <b>Xoắn ốc</b><br>
+<b>11.</b> Verification hỏi … → <b>chúng ta có đang làm sản phẩm đúng cách không?</b><br>
+<b>12.</b> Một lỗi phát hiện ở khâu yêu cầu rẻ hơn khoảng bao nhiêu lần so với lỗi phát hiện khi đã chạy thật? → <b>10–100 lần</b><br>
+<b>13.</b> Thực hành nào của XP có hai lập trình viên dùng chung một bàn phím? → <b>lập trình cặp</b><br>
+<b>14.</b> Mức kiểm thử nào do khách hàng thực hiện? → <b>kiểm thử chấp nhận (UAT)</b><br>
+<b>15.</b> Nguyên tắc "kiểm thử cho thấy sự tồn tại của lỗi, không cho thấy sự vắng mặt" hàm ý … → <b>không lượng kiểm thử nào chứng minh được tính đúng đắn</b><br>
+<b>16.</b> Biểu đồ burndown cho thấy … → <b>khối lượng công việc còn lại theo thời gian</b><br>
+<b>17.</b> Điều nào KHÔNG phải giá trị Agile trong tuyên ngôn? → <b>"tài liệu đầy đủ hơn phần mềm chạy được"</b> (ngược lại mới đúng)<br>
+<b>18.</b> Story mapping cắt các bản phát hành theo chiều … → <b>ngang, xuyên qua hành trình người dùng</b><br>
+<b>19.</b> Nhiệm vụ chính của Scrum Master là … → <b>gỡ trở ngại và huấn luyện quy trình</b>, không phải phân công việc<br>
+<b>20.</b> Nợ kỹ thuật nghĩa là … → <b>những đường tắt làm hôm nay khiến thay đổi về sau tốn kém hơn</b></div>
+
+<div class="pitfall"><b>Hai cặp từ tiếng Anh mà nhầm là đảo đáp án.</b> <em>Verification</em> (làm đúng cách — rà soát, test đơn vị) so với <em>validation</em> (làm đúng thứ cần làm — UAT). Và <em>defect</em> (khiếm khuyết nằm trong tạo tác) so với <em>failure</em> (sự cố mà người dùng nhìn thấy khi khiếm khuyết được thực thi). Đề FE kỳ nào cũng hỏi cả hai cặp.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hãy học từ vựng theo cặp đối lập, đừng học theo danh sách.</b> Verification/validation, chức năng/phi chức năng, xác nhận/hồi quy, increment/iteration, đẩy/kéo, defect/failure, epic/story. Nghiên cứu về trí nhớ đã kết luận rõ ràng rằng các cặp tương phản được lưu giữ tốt hơn hẳn các mục rời rạc, và câu trắc nghiệm thường được dựng từ đúng những cặp tương phản đó — phương án nhiễu chính là thành viên còn lại của cặp. Vì thế ôn theo cặp vừa khớp cách bạn ghi nhớ, vừa khớp cách bạn bị kiểm tra. <em>Ngoài giáo trình vì môn học liệt kê thuật ngữ theo bảng chữ cái, thứ tự khó nhớ nhất có thể.</em></div>
+</div>
+`,
+        },
+      ],
+    },
+
     /* ══════════════════ LUYỆN THI PE & FE ══════════════════ */
     {
       title: 'Exam preparation — PE & FE|||Luyện thi — PE & FE',

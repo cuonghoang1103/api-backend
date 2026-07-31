@@ -11,8 +11,9 @@ import {
  *
  * Người dùng chê hai điều và mô-đun này trả lời điều thứ hai: "khu FPTU đang
  * trống trải, thêm chi tiết đi". Ở đây là cột đèn, ghế đá, thùng rác, giá xe
- * đạp cùng xe đạp, ô tô đậu trong bãi, cột cờ, bảng tin, hàng rào cây, bồn hoa,
- * bàn ăn ngoài trời, và sinh viên đi lại.
+ * đạp cùng xe đạp, ô tô đậu trong bãi, cột cờ, bảng tin, hàng rào cây, bồn hoa và
+ * bàn ăn ngoài trời. Người thì ở `FptuPeople.js` — nó dùng lại `blocked()` của
+ * đây nên phải dựng SAU mô-đun này.
  *
  * ─── VÌ SAO CÓ `blocked()` ───
  * Đợt trước đã dẫm đúng lỗi đặt đè: bộ kiểm `check-fptu-layout.mjs` chạy lần
@@ -52,7 +53,6 @@ export class FptuProps
         this.setBicycles()
         this.setParkedCars()
         this.setPicnicArea()
-        this.setStudents()
     }
 
     box(...args) { return this.campus.box(...args) }
@@ -335,10 +335,22 @@ export class FptuProps
         const cyl = this.campus.cylinderGeometry
         const FLAGS = [ '#da251d', '#f37021', '#00a3e0' ]
 
+        /**
+         * ⚠️ Cột cờ PHẢI qua `blocked()`.
+         *
+         * Bản đầu là chỗ DUY NHẤT trong file này tôi quên gọi nó, và hậu quả
+         * đúng như user báo ngày 31/7: một cột cao 7,2 cắm ngay giữa trục lễ
+         * nghi tại (−124, 40) — tức giữa lòng đường — nên lái tới là kẹt cứng.
+         * Đo bằng tia thẳng đứng thấy vật cứng cao 7,24 ngay tim đường.
+         *
+         * Nay xếp cột cờ dọc theo mép Bắc quảng trường, cách trục ≥ 10.
+         */
         for(let i = 0; i < 3; i++)
         {
-            const x = RANKING_PLAZA.x - 8
-            const z = RANKING_PLAZA.z - 5 + i * 5
+            const x = RANKING_PLAZA.x - 8 + i * 4
+            const z = RANKING_PLAZA.z - RANKING_PLAZA.depth * 0.5 - 4
+
+            if(this.blocked(x, z)) continue
             this.box(1.1, 0.3, 1.1, x, this.y + 0.15, z, '#9c968a', { geometry: cyl, castShadow: false })
             this.box(0.2, 7.2, 0.2, x, this.y + 3.6, z, '#d9d5cc', { geometry: cyl, physical: true })
             // Lá cờ bay về một phía
@@ -487,57 +499,5 @@ export class FptuProps
     {
         if(!this._cone) this._cone = new THREE.ConeGeometry(0.5, 1, 10)
         return this._cone
-    }
-
-    /**
-     * Sinh viên đi lại trong sân. Dựng đơn giản (thân, đầu, ba lô) nhưng đủ để
-     * khuôn viên có người — sân trường vắng tanh nhìn lạnh lẽo hơn hẳn.
-     */
-    setStudents()
-    {
-        const SHIRT = [ '#f0f2f5', '#f37021', '#2f6d9e', '#d04d6a', '#a6ce39', '#f2e05a', '#7a4a9e' ]
-        const SKIN = [ '#e8c39e', '#d9a877', '#c68a5e', '#8d5a3b' ]
-        const cyl = this.campus.cylinderGeometry
-
-        let made = 0
-        for(let i = 0; i < 260 && made < 70; i++)
-        {
-            // Rải quanh những chỗ người hay tụ: sảnh, thảm cỏ, ký túc xá, hồ
-            const anchors = [
-                { x: RANKING_PLAZA.x + 8, z: RANKING_PLAZA.z, r: 12 },
-                { x: LAWN.x, z: LAWN.z, r: 15 },
-                { x: CANTEEN.x + 8, z: CANTEEN.z, r: 12 },
-                { x: -135, z: 83, r: 12 },
-                { x: -179, z: 83, r: 12 },
-                { x: LAKE.x, z: LAKE.z, r: 34 },
-                { x: PINE_HILL.x, z: PINE_HILL.z, r: 20 },
-                { x: FOOTBALL.x, z: FOOTBALL.z, r: 16 },
-            ]
-            const a = anchors[i % anchors.length]
-            const ang = rand(i * 3 + 1) * Math.PI * 2
-            const rad = Math.sqrt(rand(i * 5 + 2)) * a.r
-            const x = a.x + Math.cos(ang) * rad
-            const z = a.z + Math.sin(ang) * rad
-
-            if(this.blocked(x, z)) continue
-
-            const facing = rand(i * 7 + 4) * Math.PI * 2
-            const tall = 0.9 + rand(i * 11 + 6) * 0.22
-            const shirt = SHIRT[Math.floor(rand(i * 13 + 8) * SHIRT.length)]
-            const skin = SKIN[Math.floor(rand(i * 17 + 9) * SKIN.length)]
-
-            // Chân, thân, đầu
-            this.box(0.34, 0.72 * tall, 0.3, x, this.y + 0.36 * tall, z, '#3a4250', { rotationY: -facing, castShadow: false })
-            this.box(0.46, 0.66 * tall, 0.34, x, this.y + (0.72 + 0.33) * tall, z, shirt, { rotationY: -facing })
-            this.box(0.3, 0.3, 0.3, x, this.y + (1.38 + 0.18) * tall, z, skin, { geometry: cyl, castShadow: false })
-            this.box(0.33, 0.14, 0.33, x, this.y + (1.38 + 0.3) * tall, z, '#2b2b30', { geometry: cyl, castShadow: false })
-
-            // Ba lô cho một nửa số người
-            if(rand(i * 19 + 12) > 0.5)
-                this.box(0.24, 0.5 * tall, 0.3, x - Math.cos(facing) * 0.28, this.y + 1.05 * tall, z - Math.sin(facing) * 0.28,
-                    [ '#c0392b', '#2f6d9e', '#3f7a34' ][i % 3], { rotationY: -facing, castShadow: false })
-
-            made++
-        }
     }
 }

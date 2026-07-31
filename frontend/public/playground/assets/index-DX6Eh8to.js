@@ -14191,7 +14191,7 @@ ${r}`;
   MathNode$1.REFRACT = "refract";
   MathNode$1.SMOOTHSTEP = "smoothstep";
   MathNode$1.FACEFORWARD = "faceforward";
-  const EPSILON$1 = float$2(1e-6), INFINITY = float$2(1e6), PI$2 = float$2(Math.PI), PI2$1 = float$2(Math.PI * 2), TWO_PI = float$2(Math.PI * 2), HALF_PI = float$2(Math.PI * 0.5), all$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ALL).setParameterLength(1), any$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ANY).setParameterLength(1), radians$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.RADIANS).setParameterLength(1), degrees$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.DEGREES).setParameterLength(1), exp$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.EXP).setParameterLength(1), exp2$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.EXP2).setParameterLength(1), log$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.LOG).setParameterLength(1), log2$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.LOG2).setParameterLength(1), sqrt$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.SQRT).setParameterLength(1), inverseSqrt$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.INVERSE_SQRT).setParameterLength(1), floor$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.FLOOR).setParameterLength(1), ceil$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.CEIL).setParameterLength(1), normalize$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.NORMALIZE).setParameterLength(1), fract$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.FRACT).setParameterLength(1), sin$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.SIN).setParameterLength(1), cos$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.COS).setParameterLength(1), tan$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TAN).setParameterLength(1), asin$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ASIN).setParameterLength(1), acos$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ACOS).setParameterLength(1), atan$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.ATAN).setParameterLength(1, 2), abs$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.ABS).setParameterLength(1), sign$4 = nodeProxyIntent$1(MathNode$1, MathNode$1.SIGN).setParameterLength(1), length$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.LENGTH).setParameterLength(1), negate$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.NEGATE).setParameterLength(1), oneMinus$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ONE_MINUS).setParameterLength(1), dFdx$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DFDX).setParameterLength(1), dFdy$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DFDY).setParameterLength(1), round$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.ROUND).setParameterLength(1), reciprocal$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.RECIPROCAL).setParameterLength(1), trunc$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRUNC).setParameterLength(1), fwidth$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.FWIDTH).setParameterLength(1), transpose$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRANSPOSE).setParameterLength(1), determinant$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DETERMINANT).setParameterLength(1), inverse$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.INVERSE).setParameterLength(1), min$1$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.MIN).setParameterLength(2, 1 / 0), max$1$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.MAX).setParameterLength(2, 1 / 0), step$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.STEP).setParameterLength(2), reflect$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.REFLECT).setParameterLength(2), distance$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DISTANCE).setParameterLength(2), difference$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DIFFERENCE).setParameterLength(2), dot$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.DOT).setParameterLength(2), cross$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.CROSS).setParameterLength(2), pow$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.POW).setParameterLength(2), pow2$1 = (l) => mul$2(l, l), pow3$1 = (l) => mul$2(l, l, l), pow4$1 = (l) => mul$2(l, l, l, l), transformDirection$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRANSFORM_DIRECTION).setParameterLength(2), cbrt$1 = (l) => mul$2(sign$4(l), pow$2(abs$3(l), 1 / 3)), lengthSq$1 = (l) => dot$2(l, l), mix$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.MIX).setParameterLength(3), clamp$6 = (l, e = 0, r = 1) => new MathNode$1(MathNode$1.CLAMP, nodeObject$2(l), nodeObject$2(e), nodeObject$2(r)), saturate$1 = (l) => clamp$6(l), refract$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.REFRACT).setParameterLength(3), smoothstep$4 = nodeProxyIntent$1(MathNode$1, MathNode$1.SMOOTHSTEP).setParameterLength(3), faceForward$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.FACEFORWARD).setParameterLength(3), rand$3 = Fn$2(([l]) => {
+  const EPSILON$1 = float$2(1e-6), INFINITY = float$2(1e6), PI$2 = float$2(Math.PI), PI2$1 = float$2(Math.PI * 2), TWO_PI = float$2(Math.PI * 2), HALF_PI = float$2(Math.PI * 0.5), all$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ALL).setParameterLength(1), any$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ANY).setParameterLength(1), radians$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.RADIANS).setParameterLength(1), degrees$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.DEGREES).setParameterLength(1), exp$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.EXP).setParameterLength(1), exp2$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.EXP2).setParameterLength(1), log$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.LOG).setParameterLength(1), log2$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.LOG2).setParameterLength(1), sqrt$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.SQRT).setParameterLength(1), inverseSqrt$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.INVERSE_SQRT).setParameterLength(1), floor$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.FLOOR).setParameterLength(1), ceil$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.CEIL).setParameterLength(1), normalize$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.NORMALIZE).setParameterLength(1), fract$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.FRACT).setParameterLength(1), sin$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.SIN).setParameterLength(1), cos$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.COS).setParameterLength(1), tan$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TAN).setParameterLength(1), asin$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ASIN).setParameterLength(1), acos$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ACOS).setParameterLength(1), atan$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.ATAN).setParameterLength(1, 2), abs$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.ABS).setParameterLength(1), sign$4 = nodeProxyIntent$1(MathNode$1, MathNode$1.SIGN).setParameterLength(1), length$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.LENGTH).setParameterLength(1), negate$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.NEGATE).setParameterLength(1), oneMinus$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ONE_MINUS).setParameterLength(1), dFdx$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DFDX).setParameterLength(1), dFdy$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DFDY).setParameterLength(1), round$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.ROUND).setParameterLength(1), reciprocal$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.RECIPROCAL).setParameterLength(1), trunc$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRUNC).setParameterLength(1), fwidth$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.FWIDTH).setParameterLength(1), transpose$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRANSPOSE).setParameterLength(1), determinant$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DETERMINANT).setParameterLength(1), inverse$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.INVERSE).setParameterLength(1), min$1$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.MIN).setParameterLength(2, 1 / 0), max$1$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.MAX).setParameterLength(2, 1 / 0), step$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.STEP).setParameterLength(2), reflect$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.REFLECT).setParameterLength(2), distance$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DISTANCE).setParameterLength(2), difference$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DIFFERENCE).setParameterLength(2), dot$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.DOT).setParameterLength(2), cross$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.CROSS).setParameterLength(2), pow$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.POW).setParameterLength(2), pow2$1 = (l) => mul$2(l, l), pow3$1 = (l) => mul$2(l, l, l), pow4$1 = (l) => mul$2(l, l, l, l), transformDirection$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRANSFORM_DIRECTION).setParameterLength(2), cbrt$1 = (l) => mul$2(sign$4(l), pow$2(abs$3(l), 1 / 3)), lengthSq$1 = (l) => dot$2(l, l), mix$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.MIX).setParameterLength(3), clamp$6 = (l, e = 0, r = 1) => new MathNode$1(MathNode$1.CLAMP, nodeObject$2(l), nodeObject$2(e), nodeObject$2(r)), saturate$1 = (l) => clamp$6(l), refract$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.REFRACT).setParameterLength(3), smoothstep$4 = nodeProxyIntent$1(MathNode$1, MathNode$1.SMOOTHSTEP).setParameterLength(3), faceForward$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.FACEFORWARD).setParameterLength(3), rand$4 = Fn$2(([l]) => {
     const s = 43758.5453, o = dot$2(l.xy, vec2$2(12.9898, 78.233)), a = mod$3(o, PI$2);
     return fract$2(sin$2(a).mul(s));
   }), mixElement$1 = (l, e, r) => mix$2(e, r, l), smoothstepElement$1 = (l, e, r) => smoothstep$4(e, r, l), stepElement$1 = (l, e) => step$2(e, l), faceforward = faceForward$1, inversesqrt = inverseSqrt$1;
@@ -14250,7 +14250,7 @@ ${r}`;
   addMethodChaining$1("transpose", transpose$1);
   addMethodChaining$1("determinant", determinant$1);
   addMethodChaining$1("inverse", inverse$1);
-  addMethodChaining$1("rand", rand$3);
+  addMethodChaining$1("rand", rand$4);
   let ConditionalNode$1 = class extends Node$1 {
     static get type() {
       return "ConditionalNode";
@@ -24395,7 +24395,7 @@ ${e.tab}if ( ${m} ) {
     quadSwapX,
     quadSwapY,
     radians: radians$1,
-    rand: rand$3,
+    rand: rand$4,
     range: range$1,
     rangeFogFactor: rangeFogFactor$1,
     reciprocal: reciprocal$1,
@@ -52817,7 +52817,7 @@ var<${s}> ${e} : ${h};`;
   const premultiplyAlpha$1 = TSL.premultiplyAlpha;
   TSL.property;
   TSL.radians;
-  const rand$2 = TSL.rand;
+  const rand$3 = TSL.rand;
   TSL.range;
   TSL.rangeFog;
   const rangeFogFactor = TSL.rangeFogFactor;
@@ -55791,7 +55791,7 @@ var<${s}> ${e} : ${h};`;
       end: s,
       type: "float"
     }, ({ i: d }) => {
-      const f = vec2$1(vec2$1(cos$1(degrees$1(d.div(s).mul(360))), sin$1(degrees$1(d.div(s).mul(360)))).mul(rand$2(vec2$1(d, h.x.add(h.y))).add(e))), p = vec2$1(h.add(f.mul(e)));
+      const f = vec2$1(vec2$1(cos$1(degrees$1(d.div(s).mul(360))), sin$1(degrees$1(d.div(s).mul(360)))).mul(rand$3(vec2$1(d, h.x.add(h.y))).add(e))), p = vec2$1(h.add(f.mul(e)));
       c.addAssign(a(p));
     }), c.divAssign(s), o ? unpremultiplyAlpha(c) : c;
   });
@@ -95446,13 +95446,13 @@ https://github.com/browserify/crypto-browserify`);
       return e + o * s;
     }
   }
-  const rand$1 = (l) => {
+  const rand$2 = (l) => {
     const e = Math.sin(l * 127.1 + 311.7) * 43758.5453;
     return e - Math.floor(e);
   };
   class FptuProps {
     constructor(e) {
-      this.game = Game.getInstance(), this.campus = e, this.y = e.groundTop, this.setBlockers(), this.setLampPosts(), this.setBenchesAndBins(), this.setHedges(), this.setFlowerBeds(), this.setFlagPoles(), this.setNoticeBoards(), this.setBicycles(), this.setParkedCars(), this.setPicnicArea(), this.setStudents();
+      this.game = Game.getInstance(), this.campus = e, this.y = e.groundTop, this.setBlockers(), this.setLampPosts(), this.setBenchesAndBins(), this.setHedges(), this.setFlowerBeds(), this.setFlagPoles(), this.setNoticeBoards(), this.setBicycles(), this.setParkedCars(), this.setPicnicArea();
     }
     box(...e) {
       return this.campus.box(...e);
@@ -95555,7 +95555,7 @@ https://github.com/browserify/crypto-browserify`);
       }), this.box(0.6, 0.08, 0.34, e + c * 1.45, this.y + 4.2 - 0.44, r + d * 1.45, "#ffe9b8", {
         rotationY: -s,
         castShadow: false
-      }), rand$1(o) > 0.55 && (this.box(0.42, 0.26, 0.42, e + c * 0.85, this.y + 4.2 - 0.95, r + d * 0.85, "#7a5b3a", {
+      }), rand$2(o) > 0.55 && (this.box(0.42, 0.26, 0.42, e + c * 0.85, this.y + 4.2 - 0.95, r + d * 0.85, "#7a5b3a", {
         geometry: h,
         castShadow: false
       }), this.box(0.52, 0.3, 0.52, e + c * 0.85, this.y + 4.2 - 0.74, r + d * 0.74, "#d04d6a", {
@@ -95626,7 +95626,7 @@ https://github.com/browserify/crypto-browserify`);
     }
     bin(e, r, s) {
       const o = this.campus.cylinderGeometry;
-      this.box(0.62, 0.86, 0.62, e, this.y + 0.43, r, rand$1(s) > 0.5 ? "#3f6f4a" : "#4a5560", {
+      this.box(0.62, 0.86, 0.62, e, this.y + 0.43, r, rand$2(s) > 0.5 ? "#3f6f4a" : "#4a5560", {
         geometry: o,
         physical: true
       }), this.box(0.7, 0.1, 0.7, e, this.y + 0.9, r, "#2f3a33", {
@@ -95678,7 +95678,7 @@ https://github.com/browserify/crypto-browserify`);
         for (let h = 0; h <= a; h++) {
           const c = h / a, d = s.x0 + (s.x1 - s.x0) * c, f = s.z0 + (s.z1 - s.z0) * c;
           if (this.blocked(d, f)) continue;
-          const p = 0.66 + rand$1(r * 31 + h) * 0.22;
+          const p = 0.66 + rand$2(r * 31 + h) * 0.22;
           this.box(1.2, p, 1.15, d, this.y + p * 0.5, f, h % 2 ? "#3f7a34" : "#48883a", {
             castShadow: false
           });
@@ -95738,7 +95738,7 @@ https://github.com/browserify/crypto-browserify`);
           castShadow: false
         });
         for (let h = 0; h < 16; h++) {
-          const c = h * 2.39996, d = 1.75 * Math.sqrt((h + 0.5) / 16), f = r[(o + h) % r.length], p = 0.34 + rand$1(o * 17 + h) * 0.2;
+          const c = h * 2.39996, d = 1.75 * Math.sqrt((h + 0.5) / 16), f = r[(o + h) % r.length], p = 0.34 + rand$2(o * 17 + h) * 0.2;
           this.box(p, p * 0.8, p, a.x + Math.cos(c) * d, this.y + 0.56, a.z + Math.sin(c) * d, f, {
             geometry: s,
             castShadow: false
@@ -95753,8 +95753,8 @@ https://github.com/browserify/crypto-browserify`);
         "#00a3e0"
       ];
       for (let s = 0; s < 3; s++) {
-        const o = RANKING_PLAZA.x - 8, a = RANKING_PLAZA.z - 5 + s * 5;
-        this.box(1.1, 0.3, 1.1, o, this.y + 0.15, a, "#9c968a", {
+        const o = RANKING_PLAZA.x - 8 + s * 4, a = RANKING_PLAZA.z - RANKING_PLAZA.depth * 0.5 - 4;
+        this.blocked(o, a) || (this.box(1.1, 0.3, 1.1, o, this.y + 0.15, a, "#9c968a", {
           geometry: e,
           castShadow: false
         }), this.box(0.2, 7.2, 0.2, o, this.y + 3.6, a, "#d9d5cc", {
@@ -95762,7 +95762,7 @@ https://github.com/browserify/crypto-browserify`);
           physical: true
         }), this.box(0.06, 1.1, 1.8, o + 0.06, this.y + 6.3, a + 0.95, r[s], {
           castShadow: false
-        });
+        }));
       }
     }
     setNoticeBoards() {
@@ -95856,7 +95856,7 @@ https://github.com/browserify/crypto-browserify`);
             geometry: r
           }), this.box(0.9, 0.1, 0.1, d + Math.cos(o.rot) * 0.4, this.y + 0.75, f + Math.sin(o.rot) * 0.4, "#7c8189", {
             rotationY: -o.rot
-          }), !(rand$1(s * 13 + c) < 0.35) && this.bicycle(d + Math.cos(o.rot) * 0.4, f + Math.sin(o.rot) * 0.4, o.rot, s * 13 + c);
+          }), !(rand$2(s * 13 + c) < 0.35) && this.bicycle(d + Math.cos(o.rot) * 0.4, f + Math.sin(o.rot) * 0.4, o.rot, s * 13 + c);
         }
       }
     }
@@ -95867,7 +95867,7 @@ https://github.com/browserify/crypto-browserify`);
         "#3f7a34",
         "#e0a52c",
         "#7a4a9e"
-      ][Math.floor(rand$1(o) * 5)], c = Math.cos(s), d = Math.sin(s);
+      ][Math.floor(rand$2(o) * 5)], c = Math.cos(s), d = Math.sin(s);
       for (const f of [
         -1,
         1
@@ -95897,7 +95897,7 @@ https://github.com/browserify/crypto-browserify`);
         "#d8b43a"
       ], r = Math.floor(PARKING.depth / 3.2);
       for (let s = 0; s < r; s++) {
-        if (rand$1(s * 9 + 3) < 0.22) continue;
+        if (rand$2(s * 9 + 3) < 0.22) continue;
         const o = PARKING.z - PARKING.depth * 0.5 + 1.9 + s * 3.2, a = PARKING.x, h = e[s % e.length];
         this.box(4.2, 0.72, 1.9, a, this.y + 0.5, o, h, {
           physical: true
@@ -95950,86 +95950,189 @@ https://github.com/browserify/crypto-browserify`);
     coneGeometry() {
       return this._cone || (this._cone = new ConeGeometry(0.5, 1, 10)), this._cone;
     }
-    setStudents() {
-      const e = [
-        "#f0f2f5",
-        "#f37021",
-        "#2f6d9e",
-        "#d04d6a",
-        "#a6ce39",
-        "#f2e05a",
-        "#7a4a9e"
-      ], r = [
-        "#e8c39e",
-        "#d9a877",
-        "#c68a5e",
-        "#8d5a3b"
-      ], s = this.campus.cylinderGeometry;
-      let o = 0;
-      for (let a = 0; a < 260 && o < 70; a++) {
-        const h = [
-          {
-            x: RANKING_PLAZA.x + 8,
-            z: RANKING_PLAZA.z,
-            r: 12
-          },
-          {
-            x: LAWN.x,
-            z: LAWN.z,
-            r: 15
-          },
-          {
-            x: CANTEEN.x + 8,
-            z: CANTEEN.z,
-            r: 12
-          },
-          {
-            x: -135,
-            z: 83,
-            r: 12
-          },
-          {
-            x: -179,
-            z: 83,
-            r: 12
-          },
-          {
-            x: LAKE.x,
-            z: LAKE.z,
-            r: 34
-          },
-          {
-            x: PINE_HILL.x,
-            z: PINE_HILL.z,
-            r: 20
-          },
-          {
-            x: FOOTBALL.x,
-            z: FOOTBALL.z,
-            r: 16
-          }
-        ], c = h[a % h.length], d = rand$1(a * 3 + 1) * Math.PI * 2, f = Math.sqrt(rand$1(a * 5 + 2)) * c.r, p = c.x + Math.cos(d) * f, m = c.z + Math.sin(d) * f;
-        if (this.blocked(p, m)) continue;
-        const b = rand$1(a * 7 + 4) * Math.PI * 2, w = 0.9 + rand$1(a * 11 + 6) * 0.22, M = e[Math.floor(rand$1(a * 13 + 8) * e.length)], R = r[Math.floor(rand$1(a * 17 + 9) * r.length)];
-        this.box(0.34, 0.72 * w, 0.3, p, this.y + 0.36 * w, m, "#3a4250", {
-          rotationY: -b,
-          castShadow: false
-        }), this.box(0.46, 0.66 * w, 0.34, p, this.y + (0.72 + 0.33) * w, m, M, {
-          rotationY: -b
-        }), this.box(0.3, 0.3, 0.3, p, this.y + (1.38 + 0.18) * w, m, R, {
-          geometry: s,
-          castShadow: false
-        }), this.box(0.33, 0.14, 0.33, p, this.y + (1.38 + 0.3) * w, m, "#2b2b30", {
-          geometry: s,
-          castShadow: false
-        }), rand$1(a * 19 + 12) > 0.5 && this.box(0.24, 0.5 * w, 0.3, p - Math.cos(b) * 0.28, this.y + 1.05 * w, m - Math.sin(b) * 0.28, [
+  }
+  const rand$1 = (l) => {
+    const e = Math.sin(l * 127.1 + 311.7) * 43758.5453;
+    return e - Math.floor(e);
+  }, SKIN = [
+    "#f0c9a4",
+    "#e0b183",
+    "#c98d5f",
+    "#a9683f",
+    "#7d4b2c"
+  ], HAIR = [
+    "#241a14",
+    "#3a2a1c",
+    "#0f0e10",
+    "#5b3a22",
+    "#7a6a52"
+  ], SHIRT = [
+    "#f2f4f7",
+    "#f37021",
+    "#2f6d9e",
+    "#d04d6a",
+    "#a6ce39",
+    "#e8c33a",
+    "#7a4a9e",
+    "#3aa88f",
+    "#e8e4d8"
+  ], PANTS = [
+    "#2f3a4a",
+    "#3d3f45",
+    "#4a5568",
+    "#6b5b45",
+    "#22272f"
+  ];
+  class FptuPeople {
+    constructor(e) {
+      this.game = Game.getInstance(), this.campus = e, this.y = e.groundTop, this.geometry = e.boxGeometry, this.headGeometry = new SphereGeometry(0.5, 8, 6), this.materials = /* @__PURE__ */ new Map(), this.people = [], this.group = new Group(), this.group.name = "fptuPeople", this.game.scene.add(this.group), this.spawn(), this.game.ticker.events.on("tick", () => this.update());
+    }
+    material(e) {
+      let r = this.materials.get(e);
+      return r || (r = new MeshDefaultMaterial({
+        colorNode: color$1(e)
+      }), this.materials.set(e, r)), r;
+    }
+    part(e, r, s, o, a, h, c, d, f = null) {
+      const p = new Mesh$1(f ?? this.geometry, this.material(d));
+      return p.scale.set(r, s, o), p.position.set(a, h, c), p.castShadow = true, p.receiveShadow = true, e.add(p), p;
+    }
+    makePerson(e) {
+      const r = SKIN[Math.floor(rand$1(e * 3 + 1) * SKIN.length)], s = HAIR[Math.floor(rand$1(e * 5 + 2) * HAIR.length)], o = SHIRT[Math.floor(rand$1(e * 7 + 3) * SHIRT.length)], a = PANTS[Math.floor(rand$1(e * 11 + 4) * PANTS.length)], h = 0.94 + rand$1(e * 13 + 5) * 0.16, c = new Group();
+      c.scale.setScalar(h);
+      const d = [];
+      for (const p of [
+        -1,
+        1
+      ]) {
+        const m = new Group();
+        m.position.set(p * 0.11, 0.86, 0), c.add(m), this.part(m, 0.21, 0.46, 0.23, 0, -0.23, 0, a);
+        const b = new Group();
+        b.position.set(0, -0.46, 0), m.add(b), this.part(b, 0.185, 0.44, 0.2, 0, -0.22, 0, a), this.part(b, 0.21, 0.12, 0.36, 0, -0.46, 0.06, "#2a2a30"), d.push({
+          hip: m,
+          knee: b
+        });
+      }
+      this.part(c, 0.4, 0.26, 0.25, 0, 0.99, 0, a), this.part(c, 0.46, 0.44, 0.27, 0, 1.34, 0, o), this.part(c, 0.54, 0.14, 0.28, 0, 1.56, 0, o);
+      const f = [];
+      for (const p of [
+        -1,
+        1
+      ]) {
+        const m = new Group();
+        m.position.set(p * 0.32, 1.54, 0), c.add(m), this.part(m, 0.15, 0.38, 0.17, 0, -0.19, 0, o);
+        const b = new Group();
+        b.position.set(0, -0.38, 0), m.add(b), this.part(b, 0.135, 0.34, 0.15, 0, -0.17, 0, r), this.part(b, 0.14, 0.14, 0.14, 0, -0.38, 0, r), f.push({
+          shoulder: m,
+          elbow: b
+        });
+      }
+      if (this.part(c, 0.13, 0.1, 0.13, 0, 1.66, 0, r), this.part(c, 0.29, 0.33, 0.28, 0, 1.85, 0, r, this.headGeometry), this.part(c, 0.31, 0.19, 0.3, 0, 1.93, -0.01, s, this.headGeometry), rand$1(e * 17 + 6) > 0.55 && this.part(c, 0.26, 0.3, 0.14, 0, 1.78, -0.13, s), rand$1(e * 19 + 7) > 0.45) {
+        const p = [
           "#c0392b",
           "#2f6d9e",
-          "#3f7a34"
-        ][a % 3], {
-          rotationY: -b,
-          castShadow: false
-        }), o++;
+          "#3f7a34",
+          "#4a4a55"
+        ][Math.floor(rand$1(e * 23 + 8) * 4)];
+        this.part(c, 0.3, 0.4, 0.16, 0, 1.32, -0.2, p);
+      }
+      return {
+        root: c,
+        legs: d,
+        arms: f
+      };
+    }
+    poseStand(e, r) {
+      const s = (rand$1(r) - 0.5) * 0.16;
+      e.legs[0].hip.rotation.x = s, e.legs[1].hip.rotation.x = -s * 0.6, e.arms[0].shoulder.rotation.x = 0.08 + s, e.arms[1].shoulder.rotation.x = 0.08 - s, e.arms[0].elbow.rotation.x = -0.18, e.arms[1].elbow.rotation.x = -0.24;
+    }
+    poseSit(e) {
+      for (const r of e.legs) r.hip.rotation.x = -Math.PI * 0.5, r.knee.rotation.x = Math.PI * 0.48;
+      e.arms[0].shoulder.rotation.x = 0.5, e.arms[1].shoulder.rotation.x = 0.42, e.arms[0].elbow.rotation.x = -0.7, e.arms[1].elbow.rotation.x = -0.6, e.root.position.y -= 0.42 * e.root.scale.x;
+    }
+    spawn() {
+      const e = this.campus.props, r = [
+        {
+          x: RANKING_PLAZA.x + 9,
+          z: RANKING_PLAZA.z,
+          r: 11,
+          n: 6
+        },
+        {
+          x: LAWN.x,
+          z: LAWN.z,
+          r: 13,
+          n: 6
+        },
+        {
+          x: CANTEEN.x + 9,
+          z: CANTEEN.z,
+          r: 10,
+          n: 6
+        },
+        {
+          x: -135,
+          z: 83,
+          r: 11,
+          n: 5
+        },
+        {
+          x: -179,
+          z: 83,
+          r: 11,
+          n: 5
+        },
+        {
+          x: LAKE.x,
+          z: LAKE.z + 26,
+          r: 12,
+          n: 5
+        },
+        {
+          x: PINE_HILL.x,
+          z: PINE_HILL.z + 19,
+          r: 10,
+          n: 4
+        },
+        {
+          x: FOOTBALL.x,
+          z: FOOTBALL.z,
+          r: 13,
+          n: 5
+        }
+      ];
+      let s = 1;
+      for (const o of r) {
+        let a = 0;
+        for (let h = 0; h < o.n * 8 && a < o.n; h++) {
+          s++;
+          const c = rand$1(s * 3) * Math.PI * 2, d = Math.sqrt(rand$1(s * 5)) * o.r, f = o.x + Math.cos(c) * d, p = o.z + Math.sin(c) * d;
+          if (e && e.blocked(f, p)) continue;
+          const m = this.makePerson(s);
+          m.root.position.set(f, this.y, p), m.root.rotation.y = rand$1(s * 7) * Math.PI * 2, this.group.add(m.root), rand$1(s * 11) > 0.66 ? (m.mode = "walk", m.heading = m.root.rotation.y, m.speed = 0.75 + rand$1(s * 13) * 0.5, m.phase = rand$1(s * 17) * Math.PI * 2, m.home = {
+            x: f,
+            z: p,
+            r: o.r
+          }) : (m.mode = "stand", this.poseStand(m, s * 19)), this.people.push(m), a++;
+        }
+      }
+      for (let o = 0; o < 6; o++) {
+        const a = o / 6 * Math.PI * 2 + 0.3, h = LAKE.x + Math.cos(a) * (LAKE.radiusX + 4.5), c = LAKE.z + Math.sin(a) * (LAKE.radiusZ + 4.5);
+        if (e && e.blocked(h, c)) continue;
+        s++;
+        const d = this.makePerson(s);
+        d.root.position.set(h, this.y + 0.48, c), d.root.rotation.y = -(a + Math.PI) + Math.PI * 0.5, this.poseSit(d), d.mode = "sit", this.group.add(d.root), this.people.push(d);
+      }
+    }
+    update() {
+      const e = Math.min(this.game.ticker.delta, 0.1), r = this.game.ticker.elapsed, s = this.campus.props;
+      for (const o of this.people) {
+        if (o.mode !== "walk") continue;
+        o.phase += e * o.speed * 5.2;
+        const a = Math.sin(o.phase), h = Math.sin(o.phase + Math.PI);
+        o.legs[0].hip.rotation.x = a * 0.62, o.legs[1].hip.rotation.x = h * 0.62, o.legs[0].knee.rotation.x = Math.max(0, -a) * 0.85, o.legs[1].knee.rotation.x = Math.max(0, -h) * 0.85, o.arms[0].shoulder.rotation.x = h * 0.5, o.arms[1].shoulder.rotation.x = a * 0.5, o.arms[0].elbow.rotation.x = -0.3 - Math.max(0, h) * 0.35, o.arms[1].elbow.rotation.x = -0.3 - Math.max(0, a) * 0.35, o.root.position.y = this.y + Math.abs(Math.sin(o.phase)) * 0.035 * o.root.scale.x;
+        const c = o.root.position.x + Math.sin(o.heading) * o.speed * e, d = o.root.position.z + Math.cos(o.heading) * o.speed * e, f = Math.hypot(c - o.home.x, d - o.home.z) > o.home.r, p = s && s.blocked(c, d);
+        f || p ? o.heading = Math.atan2(o.home.x - o.root.position.x, o.home.z - o.root.position.z) + (rand$1(Math.floor(r * 3) + o.speed * 100) - 0.5) * 1.1 : (o.root.position.x = c, o.root.position.z = d, o.heading += Math.sin(r * 0.6 + o.phase * 0.11) * e * 0.35), o.root.rotation.y = o.heading;
       }
     }
   }
@@ -96042,7 +96145,7 @@ https://github.com/browserify/crypto-browserify`);
   };
   class FptuCampus {
     constructor() {
-      this.game = Game.getInstance(), this.group = new Group(), this.group.name = "fptuCampus", this.game.scene.add(this.group), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1, 8), this.materials = /* @__PURE__ */ new Map(), this.groundTop = GROUND_TOP, this.setIsland(), this.setBridge(), this.setGate(), this.setGround(), this.setRankingSign(), this.setAlpha(), this.setBuildings(), this.setDorms(), this.setLake(), this.setSports(), this.setCanteen(), this.setParking(), this.setPalms(), this.setTrees(), this.setSign(), this.setSwanLake(), this.pineHill = new FptuPineHill(this), this.swans = new FptuSwans(this), this.props = new FptuProps(this), this.quiz = new FptuQuiz(), this.setGateZone(), this.setQuestionBlocks();
+      this.game = Game.getInstance(), this.group = new Group(), this.group.name = "fptuCampus", this.game.scene.add(this.group), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1, 8), this.materials = /* @__PURE__ */ new Map(), this.groundTop = GROUND_TOP, this.setIsland(), this.setBridge(), this.setGate(), this.setGround(), this.setRankingSign(), this.setAlpha(), this.setBuildings(), this.setDorms(), this.setLake(), this.setSports(), this.setCanteen(), this.setParking(), this.setPalms(), this.setTrees(), this.setSign(), this.setSwanLake(), this.pineHill = new FptuPineHill(this), this.swans = new FptuSwans(this), this.props = new FptuProps(this), this.people = new FptuPeople(this), this.quiz = new FptuQuiz(), this.setGateZone(), this.setQuestionBlocks();
     }
     getMaterial(e) {
       let r = this.materials.get(e);
@@ -96085,7 +96188,8 @@ https://github.com/browserify/crypto-browserify`);
       const c = GROUND_TOP + 0.05 + h * 0.03;
       return this.box(e, 0.04, r, s, c, o, a, {
         castShadow: false,
-        receiveShadow: false
+        receiveShadow: false,
+        physical: true
       });
     }
     heightPatch(e, r, s, o, a, h, c, d, f = null) {
@@ -96340,12 +96444,11 @@ https://github.com/browserify/crypto-browserify`);
     }
     addFoliage(e) {
       if (e.length === 0) return;
-      const r = new InstancedMesh(this.boxGeometry, this.getMaterial(COLORS$1.foliage), e.length);
-      r.castShadow = false, r.receiveShadow = true;
-      const s = new Object3D$1();
-      e.forEach((o, a) => {
-        s.position.set(o.x, o.y, o.z), s.scale.set(0.3, 0.4, 0.72), s.updateMatrix(), r.setMatrixAt(a, s.matrix);
-      }), r.instanceMatrix.needsUpdate = true, this.group.add(r);
+      const r = e.map((s) => {
+        const o = new Object3D$1();
+        return o.position.set(s.x, s.y, s.z), o.scale.setScalar(0.5 + Math.abs(Math.round(s.x * 7 + s.z * 13)) % 5 * 0.1), o.updateMatrix(), o.updateMatrixWorld(true), o;
+      });
+      this.terraceFoliage = new Foliage(r, uniform$1(color$1("#7fb43f")), uniform$1(color$1("#b4d150")));
     }
     setBuildings() {
       for (const e of BUILDINGS) {
@@ -96557,8 +96660,10 @@ https://github.com/browserify/crypto-browserify`);
           physical: true
         }), this.box(0.12, 0.9, 1.5, BASKETBALL.x, 3.2, r - e * 0.5, COLORS$1.wall);
       }
-      this.slab(FOOTBALL.width, FOOTBALL.depth, FOOTBALL.x, FOOTBALL.z, COLORS$1.pitch), this.slab(FOOTBALL.width - 1.6, 0.2, FOOTBALL.x, FOOTBALL.z, "#e8e4da", {
+      this.slab(FOOTBALL.width, FOOTBALL.depth, FOOTBALL.x, FOOTBALL.z, COLORS$1.pitch, {
         layer: 1
+      }), this.slab(FOOTBALL.width - 1.6, 0.2, FOOTBALL.x, FOOTBALL.z, "#e8e4da", {
+        layer: 2
       });
       for (const e of [
         -1,
@@ -110983,7 +111088,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-BPlGkz8z.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-j0wFlcre.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

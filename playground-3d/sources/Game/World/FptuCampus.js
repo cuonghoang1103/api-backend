@@ -7,6 +7,7 @@ import { FptuQuiz } from './FptuQuiz.js'
 import { FptuPineHill } from './FptuPineHill.js'
 import { FptuSwans } from './FptuSwans.js'
 import { FptuProps } from './FptuProps.js'
+import { FptuPeople } from './FptuPeople.js'
 import { Trees } from './Trees.js'
 import { Foliage } from './Foliage.js'
 import { uniform } from 'three/tsl'
@@ -114,6 +115,10 @@ export class FptuCampus
         // chính các công trình đó để tự tránh
         this.props = new FptuProps(this)
 
+        // Người phải dựng SAU đồ đạc: nó dùng chung `props.blocked()` để khỏi
+        // đứng giữa lòng đường hay lọt vào trong tường
+        this.people = new FptuPeople(this)
+
         this.quiz = new FptuQuiz()
         this.setGateZone()
         this.setQuestionBlocks()
@@ -183,12 +188,34 @@ export class FptuCampus
      */
     slab(width, depth, x, z, hex, { layer = 0 } = {})
     {
+        /**
+         * Tấm lát nay MỎNG và SÁT mặt đất.
+         *
+         * Bản trước để mặt tấm cao tới 0,11–0,20 trong khi mặt CỨNG mà bánh xe
+         * đứng vẫn là 0,04 — chênh 10–16 phân, nên xe trông như lún nửa bánh
+         * xuống sân. User báo đúng chỗ này ("đi đang bị lún"). Tấm lát không có
+         * thân vật lý nên cách rẻ nhất là hạ nó xuống sát mặt đất: chênh còn
+         * 1,5–5,7 phân, mắt không thấy nữa.
+         *
+         * Khoảng cách giữa các lớp giữ 1,4 phân — vẫn đủ tách bạch chiều sâu ở
+         * cỡ khung hình này (cặp gây nhiễu hôm nay là hai tấm cách nhau ĐÚNG 0,
+         * không phải do lớp quá sát).
+         */
         const y = GROUND_TOP + 0.05 + layer * 0.03
         // `receiveShadow: false` — mặt lát nằm sát ngay trên mặt đảo, cả hai
         // cùng nhận bóng thì bóng tính ở hai độ sâu chênh nhau vài phân, ra
         // đúng những vệt răng cưa chạy loạn (shadow acne). Nền đảo vẫn nhận
         // bóng nên bóng nhà đổ xuống sân vẫn còn.
-        return this.box(width, 0.04, depth, x, y, z, hex, { castShadow: false, receiveShadow: false })
+        /**
+         * Tấm lát nay CÓ THÂN VẬT LÝ.
+         *
+         * Đây mới là gốc của "đi đang bị lún": tấm lát chỉ là hình, mặt cứng mà
+         * bánh xe đứng vẫn là mặt đảo ở 0,04, nên xe chìm 10–16 phân dưới mặt
+         * sân. Hạ tấm xuống chỉ giấu bớt triệu chứng, mà lại làm các lớp sát
+         * nhau hơn. Cho tấm một thân vật lý là xe đứng ĐÚNG trên mặt sân, và
+         * mép sân thành cái bó vỉa cao 1–3 phân — xe leo qua không thấy gì.
+         */
+        return this.box(width, 0.04, depth, x, y, z, hex, { castShadow: false, receiveShadow: false, physical: true })
     }
 
     /**
@@ -637,27 +664,34 @@ export class FptuCampus
         this.group.add(mesh)
     }
 
-    /** Cây xanh thò ra từ các ô rỗng của mặt caro. */
+    /**
+     * CÂY trên các bậc toà Alpha — dùng ĐÚNG hệ `Foliage` của thế giới mẫu.
+     *
+     * Bản trước là những khối hộp 0,3×0,4×0,72 xếp vào ô caro, và user chê thẳng:
+     * "cây ở trên toà nhà và góc nhà hình vuông vuông giống trò chơi Minecraft
+     * vậy, tôi muốn nó tự nhiên chân thật như mẫu cơ mà". Đúng — thế giới gốc đã
+     * có sẵn hệ lá tử tế (`Foliage`: hàng chục phiến xoay, chuyển sắc, lay theo
+     * gió, luôn hơi quay về máy quay). Cùng thứ đang dùng cho bụi cây dưới đất,
+     * chỉ việc đưa lên bậc nhà.
+     *
+     * `Foliage` nhận một mảng Object3D làm mốc, đọc `position` và `scale.x`.
+     */
     addFoliage(cells)
     {
         if(cells.length === 0) return
 
-        const mesh = new THREE.InstancedMesh(this.boxGeometry, this.getMaterial(COLORS.foliage), cells.length)
-        mesh.castShadow = false
-        mesh.receiveShadow = true
-
-        const dummy = new THREE.Object3D()
-
-        cells.forEach((cell, index) =>
+        const spots = cells.map((cell) =>
         {
-            dummy.position.set(cell.x, cell.y, cell.z)
-            dummy.scale.set(0.3, 0.4, 0.72)
-            dummy.updateMatrix()
-            mesh.setMatrixAt(index, dummy.matrix)
+            const object = new THREE.Object3D()
+            object.position.set(cell.x, cell.y, cell.z)
+            // Bụi trên bậc nhỏ hơn bụi dưới đất, và mỗi bụi một cỡ
+            object.scale.setScalar(0.5 + ((Math.abs(Math.round(cell.x * 7 + cell.z * 13))) % 5) * 0.1)
+            object.updateMatrix()
+            object.updateMatrixWorld(true)
+            return object
         })
 
-        mesh.instanceMatrix.needsUpdate = true
-        this.group.add(mesh)
+        this.terraceFoliage = new Foliage(spots, uniform(color('#7fb43f')), uniform(color('#b4d150')))
     }
 
     /** Beta / Gamma / Delta — lùi hẳn khỏi trục, kiểu khối giảng đường mặt kính. */
@@ -890,8 +924,15 @@ export class FptuCampus
         }
 
         // Bóng đá — khung thành hai đầu
-        this.slab(FOOTBALL.width, FOOTBALL.depth, FOOTBALL.x, FOOTBALL.z, COLORS.pitch)
-        this.slab(FOOTBALL.width - 1.6, 0.2, FOOTBALL.x, FOOTBALL.z, '#e8e4da', { layer: 1 })
+        /**
+         * Mặt sân bóng ĐÈ LÊN mặt đường lớn một mảng 6×24 (đường rộng 8 tại
+         * x = −106, sân trải tới x = −104). Hai tấm cùng lớp 0 nên mặt trên
+         * trùng nhau ĐÚNG 0 phân — ra đúng cảnh "chập chờn bọ nhiễu" user chụp
+         * lại được. Đẩy sân lên một lớp là hết tranh chấp, và đường vẫn ở dưới
+         * đúng như ngoài đời (sân lấn ra vỉa hè, không phải đường lấn vào sân).
+         */
+        this.slab(FOOTBALL.width, FOOTBALL.depth, FOOTBALL.x, FOOTBALL.z, COLORS.pitch, { layer: 1 })
+        this.slab(FOOTBALL.width - 1.6, 0.2, FOOTBALL.x, FOOTBALL.z, '#e8e4da', { layer: 2 })
 
         for(const side of [ -1, 1 ])
         {

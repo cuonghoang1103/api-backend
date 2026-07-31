@@ -100,15 +100,8 @@ export class FptuCampus
          */
         this.canopySpots = []
 
-        /**
-         * Ghi lại danh sách đồ CỦA THẾ GIỚI MẪU ngay bây giờ — trước khi mình
-         * thêm bất cứ thứ gì — rồi mới dời chúng ở nhịp sau.
-         *
-         * Phải hoãn vì `Objects` gắn phần HÌNH vào cảnh muộn hơn lúc này: quét
-         * ngay trong hàm dựng thì mesh `blocks` chưa có mặt, đo lại thấy nó vẫn
-         * đứng nguyên chỗ cũ dù mã "đã chạy".
-         */
-        this.sampleObjectKeys = new Set(this.game.objects.list.keys())
+        // Dời chướng ngại vật của bản mẫu ra khỏi lối vào trường. Hoãn sang
+        // nhịp sau vì `Objects` dựng thân vật lý LƯỜI — trong hàm dựng nó chưa có.
         this.game.ticker.wait(2, () => this.relocateSampleObstacles())
 
         this.setIsland()
@@ -165,67 +158,53 @@ export class FptuCampus
     /**
      * DỜI cụm chướng ngại vật của thế giới mẫu ra khỏi lối vào trường.
      *
-     * Cụm `blocks` (khối bê tông + lốp xe) của bản gốc nằm ở (−77,5 · 31,1),
-     * đúng giữa hành lang từ bờ Tây đảo chính sang cầu — user chụp ảnh: "đường
-     * lớn đang bị chặn bởi các chướng ngại vật trước cổng".
+     * Cụm này là `bumpers001`: MỘT thân vật lý ở (−80,9 · 41) mang TÁM collider
+     * lệch ra quanh nó, trải x −83…−75, z 30…52 — đúng giữa hành lang từ bờ Tây
+     * đảo chính sang cầu. KHÔNG XOÁ (user dặn), dời sang đường xuyên sảnh sau
+     * toà Alpha.
      *
-     * KHÔNG XOÁ (user dặn) — dời nguyên cụm sang đường xuyên sảnh phía sau toà
-     * Alpha, một đoạn thẳng dài đang trống, chơi chướng ngại vật ở đó còn hợp
-     * hơn. Dời bằng MỘT độ lệch chung nên thế trận của cụm giữ nguyên.
+     * ⚠️ BA cách trước đều thất bại, mỗi lần một lý do khác — ghi lại để khỏi
+     * đi lại đường cũ:
+     *  1. Quét theo vị trí THÂN: trượt, vì thân ở (−80,9 · 41) còn collider
+     *     nằm rải xung quanh, và bản đó lại quét sai vùng.
+     *  2. Quét theo vị trí COLLIDER nhưng gom thân qua `sampleBodyHandles` chụp
+     *     trong hàm dựng: trượt, vì thân được dựng LƯỜI, lúc đó chưa tồn tại.
+     *  3. Sửa `child.position` trong `Scenery.js`: không ăn, vật này không đi
+     *     ra từ vị trí đó.
+     * Cách chạy được: đợi tới nhịp 2 rồi tìm ĐÍCH DANH THEO TÊN trong
+     * `objects.list`, dời THÂN (tám collider gắn vào thân nên đi theo) và dời
+     * HÌNH cùng một lượng, trong cùng một vòng lặp để hai thứ không thể lệch.
+     *
+     * Triệu chứng khi làm sai, user gọi đúng tên: "nó chỉ biến mất hình ảnh
+     * nhưng vẫn còn ở đấy".
      */
     relocateSampleObstacles()
     {
-        const inCorridor = (x, z) => x > -95 && x < -55 && z > 5 && z < 75
-        const OFFSET = { x: -107.5, z: 8.9 }   // (−77,5 · 31,1) → (−185 · 40)
+        const NAMES = /^(bumpers|blocks|tires|tyres|barriers)/i
+        const OFFSET = { x: -105.5, z: -1 }
 
         let moved = 0
 
-        /**
-         * Nhắm ĐÍCH DANH theo tên. Bản đầu lọc "chỉ nhóm cấp cao" nên bỏ sót
-         * chính cụm `blocks` (nó nằm lồng trong một nhóm), đo lại thấy nó vẫn
-         * đứng nguyên chỗ cũ. Còn quét theo vị trí mà không lọc tên thì rất dễ
-         * tóm nhầm mặt sàn — `Floor.mesh` bám theo máy quay nên vị trí của nó
-         * có lúc rơi đúng vào hành lang này.
-         */
-        const OBSTACLE_NAMES = /^(blocks|tires|tyres|barriers|obstacles)/i
-        const targets = []
-
-        this.game.scene.traverse((object) =>
+        for(const object of this.game.objects.list.values())
         {
-            if(!object.isMesh && !object.isGroup) return
-            if(!OBSTACLE_NAMES.test(object.name || '')) return
-            if(!inCorridor(object.position.x, object.position.z)) return
-            targets.push(object)
-        })
-
-        for(const object of targets)
-        {
-            object.position.x += OFFSET.x
-            object.position.z += OFFSET.z
-            object.updateMatrix()
-            object.updateMatrixWorld(true)
-            moved++
-        }
-
-        for(const [ key, object ] of this.game.objects.list)
-        {
-            // CHỈ đồ của thế giới mẫu — không đụng vào cầu, cổng, hàng rào mình
-            // vừa dựng (chúng cũng nằm trong hành lang này)
-            if(!this.sampleObjectKeys.has(key)) continue
-
+            const mesh = object?.visual?.object3D
             const body = object?.physical?.body
-            if(!body) continue
+            if(!mesh || !NAMES.test(mesh.name || '')) continue
 
-            const t = body.translation()
-            if(!inCorridor(t.x, t.z)) continue
+            // Chỉ dời cái đang nằm trong hành lang vào trường
+            const t = body ? body.translation() : mesh.position
+            if(t.x <= -95 || t.x >= -55 || t.z <= 5 || t.z >= 75) continue
 
-            body.setTranslation({ x: t.x + OFFSET.x, y: t.y, z: t.z + OFFSET.z }, true)
-            if(object.visual?.object3D)
-            {
-                object.visual.object3D.position.x += OFFSET.x
-                object.visual.object3D.position.z += OFFSET.z
-                object.visual.object3D.needsUpdate = true
-            }
+            if(body)
+                body.setTranslation({ x: t.x + OFFSET.x, y: t.y, z: t.z + OFFSET.z }, true)
+
+            mesh.position.x += OFFSET.x
+            mesh.position.z += OFFSET.z
+            mesh.updateMatrix()
+            mesh.updateMatrixWorld(true)
+            mesh.needsUpdate = true
+            if(object.visual) object.visual.needsUpdate = true
+
             moved++
         }
 
@@ -1150,10 +1129,15 @@ export class FptuCampus
     /** Bãi gửi xe dọc mép đường — vài ô kẻ trắng và hai xe đỗ sẵn. */
     setParking()
     {
-        this.slab(PARKING.width, PARKING.depth, PARKING.x, PARKING.z, '#7d7a72')
+        /**
+         * Nền bãi xe phải LỆCH LỚP với dải đường trước cổng: bãi xe (x −98…−92,
+         * z 46…66) nằm CHỒNG HẲN lên dải đường đó, hai tấm cùng lớp 0 là mặt
+         * trên trùng nhau đúng 0 phân — ra vệt nhiễu user chụp được ở bãi xe.
+         */
+        this.slab(PARKING.width, PARKING.depth, PARKING.x, PARKING.z, '#7d7a72', { layer: 1 })
 
         for(let i = 0; i < 4; i++)
-            this.slab(PARKING.width - 1, 0.16, PARKING.x, PARKING.z - PARKING.depth * 0.5 + 2 + i * 4, '#e8e4da', { layer: 1 })
+            this.slab(PARKING.width - 1, 0.16, PARKING.x, PARKING.z - PARKING.depth * 0.5 + 2 + i * 4, '#e8e4da', { layer: 2 })
 
         // Xe đậu do FptuProps dựng (dáng thật: capô, kính vát, bánh) — hai
         // cục hộp mộc từng nằm ở đây đã bị user chụp ảnh chê, bỏ hẳn

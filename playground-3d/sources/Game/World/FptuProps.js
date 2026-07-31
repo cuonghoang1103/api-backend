@@ -541,9 +541,11 @@ export class FptuProps
     {
         const COLORS_CAR = [ '#c0392b', '#2f6d9e', '#e8e4d8', '#3f4a55', '#4e8f3a', '#d8b43a' ]
         const count = Math.floor(PARKING.depth / 3.2)
+        const giua = Math.floor(count / 2)
 
         for(let i = 0; i < count; i++)
         {
+            if(i === giua) continue             // user chốt bỏ chiếc ở giữa
             if(rand(i * 9 + 3) < 0.22) continue // chừa vài ô trống cho thật
 
             const z = PARKING.z - PARKING.depth * 0.5 + 1.9 + i * 3.2

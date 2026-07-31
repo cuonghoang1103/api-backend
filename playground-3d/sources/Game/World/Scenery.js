@@ -11,6 +11,7 @@ export class Scenery
 
         this.references = new References()
         const model = [...this.game.resources.sceneryModel.scene.children]
+
         for(const child of model)
         {
             // Add

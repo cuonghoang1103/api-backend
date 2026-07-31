@@ -2,8 +2,10 @@ import * as THREE from 'three/webgpu'
 import { color } from 'three/tsl'
 import { Game } from '../Game.js'
 import { MeshDefaultMaterial } from '../Materials/MeshDefaultMaterial.js'
-import { ALPHA, ALPHA_LOBBY, AXIS, THROUGH_ROAD, BASKETBALL, BRIDGE, BUILDINGS, CANTEEN, COLORS, DORMS, FOOTBALL, FORECOURT, GATE, ISLAND, LAKE, LAWN, MAIN_ROAD, MARTIAL, PARKING, QUESTION_BLOCKS, RANKING_PLAZA, RANKING_SIGN, SIGN, STATUE } from '../../data/fptu.js'
+import { ALPHA, ALPHA_LOBBY, SWAN_LAKE, LAKE_ISLET, AXIS, THROUGH_ROAD, BASKETBALL, BRIDGE, BUILDINGS, CANTEEN, COLORS, DORMS, FOOTBALL, FORECOURT, GATE, ISLAND, LAKE, LAWN, MAIN_ROAD, MARTIAL, PARKING, QUESTION_BLOCKS, RANKING_PLAZA, RANKING_SIGN, SIGN, STATUE } from '../../data/fptu.js'
 import { FptuQuiz } from './FptuQuiz.js'
+import { FptuPineHill } from './FptuPineHill.js'
+import { FptuSwans } from './FptuSwans.js'
 import { Trees } from './Trees.js'
 import { Foliage } from './Foliage.js'
 import { uniform } from 'three/tsl'
@@ -64,7 +66,6 @@ export class FptuCampus
         this.setAlpha()
         this.setBuildings()
         this.setDorms()
-        this.setStatue()
         this.setLake()
         this.setSports()
         this.setCanteen()
@@ -72,6 +73,11 @@ export class FptuCampus
         this.setPalms()
         this.setTrees()
         this.setSign()
+
+        this.setSwanLake()
+
+        this.pineHill = new FptuPineHill(this)
+        this.swans = new FptuSwans(this)
 
         this.quiz = new FptuQuiz()
         this.setGateZone()
@@ -91,7 +97,7 @@ export class FptuCampus
         return material
     }
 
-    box(width, height, depth, x, y, z, hex, { rotationX = 0, rotationY = 0, rotationZ = 0, physical = false, geometry = null, castShadow = true } = {})
+    box(width, height, depth, x, y, z, hex, { rotationX = 0, rotationY = 0, rotationZ = 0, physical = false, geometry = null, castShadow = true, receiveShadow = true } = {})
     {
         const mesh = new THREE.Mesh(geometry ?? this.boxGeometry, this.getMaterial(hex))
         mesh.scale.set(width, height, depth)
@@ -101,7 +107,7 @@ export class FptuCampus
         mesh.rotation.y = rotationY
         mesh.rotation.z = rotationZ
         mesh.castShadow = castShadow
-        mesh.receiveShadow = true
+        mesh.receiveShadow = receiveShadow
         this.group.add(mesh)
 
         if(physical)
@@ -143,7 +149,11 @@ export class FptuCampus
     slab(width, depth, x, z, hex, { layer = 0 } = {})
     {
         const y = GROUND_TOP + 0.05 + layer * 0.03
-        return this.box(width, 0.04, depth, x, y, z, hex, { castShadow: false })
+        // `receiveShadow: false` — mặt lát nằm sát ngay trên mặt đảo, cả hai
+        // cùng nhận bóng thì bóng tính ở hai độ sâu chênh nhau vài phân, ra
+        // đúng những vệt răng cưa chạy loạn (shadow acne). Nền đảo vẫn nhận
+        // bóng nên bóng nhà đổ xuống sân vẫn còn.
+        return this.box(width, 0.04, depth, x, y, z, hex, { castShadow: false, receiveShadow: false })
     }
 
     /**
@@ -220,28 +230,46 @@ export class FptuCampus
          * bầu dục tại cột đó. Nhiều cột thì bờ càng mượt — 18 cột đã đủ để nhìn
          * ra bờ cong tự nhiên như mấy hồ của bản đồ gốc, thay vì bốn góc vuông.
          */
-        const columns = 18
-        const stripW = (LAKE.radiusX * 2) / columns
+        /**
+         * Nền đảo chia thành CỘT DỌC trục X. Mỗi cột bị hai cái hồ khoét thủng
+         * theo dây cung bầu dục, nên một cột có thể vỡ thành nhiều đoạn z rời
+         * nhau. Xử lý tổng quát: với mỗi cột, dựng danh sách "khoảng cấm" rồi
+         * lấy phần bù — thêm hồ thứ ba sau này cũng không phải viết lại.
+         */
+        const holes = [ LAKE, SWAN_LAKE ].map((lake) => ({
+            x: lake.x, z: lake.z,
+            rx: lake.radiusX ?? lake.radius,
+            rz: lake.radiusZ ?? lake.radius,
+        }))
 
+        const columnWidth = 3
+        const columnCount = Math.ceil(ISLAND.width / columnWidth)
         const ground = []
 
-        // Hai mảng lớn hai bên hồ
-        ground.push({ x0: ISLAND.x - halfW, x1: LAKE.x - LAKE.radiusX, z0: ISLAND.z - halfD, z1: ISLAND.z + halfD })
-        ground.push({ x0: LAKE.x + LAKE.radiusX, x1: ISLAND.x + halfW, z0: ISLAND.z - halfD, z1: ISLAND.z + halfD })
-
-        // Các cột trong bề ngang hồ: chừa dây cung bầu dục ở giữa
-        for(let i = 0; i < columns; i++)
+        for(let i = 0; i < columnCount; i++)
         {
-            const x0 = LAKE.x - LAKE.radiusX + i * stripW
-            const x1 = x0 + stripW
+            const x0 = ISLAND.x - halfW + i * columnWidth
+            const x1 = Math.min(x0 + columnWidth, ISLAND.x + halfW)
 
-            // Dùng mép NGOÀI của cột (điểm xa tâm nhất) để dây cung không ăn
-            // lẹm vào đất — thà bờ dày hơn một chút còn hơn thủng lỗ chỗ
-            const dx = Math.max(Math.abs(x0 - LAKE.x), Math.abs(x1 - LAKE.x)) / LAKE.radiusX
-            const halfChord = dx >= 1 ? 0 : LAKE.radiusZ * Math.sqrt(1 - dx * dx)
+            // Khoảng z bị hồ chiếm trong cột này
+            const bans = []
+            for(const hole of holes)
+            {
+                const dx = Math.max(Math.abs(x0 - hole.x), Math.abs(x1 - hole.x)) / hole.rx
+                if(dx >= 1) continue
+                const halfChord = hole.rz * Math.sqrt(1 - dx * dx)
+                bans.push([ hole.z - halfChord, hole.z + halfChord ])
+            }
 
-            ground.push({ x0, x1, z0: ISLAND.z - halfD, z1: LAKE.z - halfChord })
-            ground.push({ x0, x1, z0: LAKE.z + halfChord, z1: ISLAND.z + halfD })
+            bans.sort((a, b) => a[0] - b[0])
+
+            let cursor = ISLAND.z - halfD
+            for(const [ banStart, banEnd ] of bans)
+            {
+                if(banStart > cursor) ground.push({ x0, x1, z0: cursor, z1: banStart })
+                cursor = Math.max(cursor, banEnd)
+            }
+            if(cursor < ISLAND.z + halfD) ground.push({ x0, x1, z0: cursor, z1: ISLAND.z + halfD })
         }
 
         for(const piece of ground)
@@ -579,14 +607,20 @@ export class FptuCampus
          * −1,2 nên chẳng có gì mà bò lên.
          */
         const lakeFloorY = -0.75
-        this.box(LAKE.radiusX * 2 + 2, 0.6, LAKE.radiusZ * 2 + 2, LAKE.x, lakeFloorY - 0.3, LAKE.z, '#6f6a52', { castShadow: false })
+        // Màu ĐÁY hồ phải là màu nước, không phải màu bùn: mặt nước của game
+        // (`WaterSurface`) là tấm phẳng bám theo máy quay, bán kính chỉ chừng 29,
+        // nên phần hồ ở xa xe chưa được phủ nước và lộ nguyên đáy ra
+        this.box(LAKE.radiusX * 2 + 2, 0.6, LAKE.radiusZ * 2 + 2, LAKE.x, lakeFloorY - 0.3, LAKE.z, '#3d6f57', { castShadow: false })
         this.game.objects.add(null, {
             type: 'fixed', friction: 0.3, restitution: 0,
             position: { x: LAKE.x, y: lakeFloorY - 0.3, z: LAKE.z },
             colliders: [ { shape: 'cuboid', parameters: [ (LAKE.radiusX + 1), 0.3, (LAKE.radiusZ + 1) ] } ]
         })
 
-        const LAKE_RUN = 8
+        // Bề rộng dốc phải TỈ LỆ với bán kính nhỏ nhất của hồ. Để cứng 8 thì
+        // với hồ bề ngang 8 (hồ thiên nga) vành dốc lấp kín cả lòng hồ — thiên
+        // nga hoá ra đứng trên cạn.
+        const LAKE_RUN = Math.min(6, Math.min(LAKE.radiusX, LAKE.radiusZ) * 0.45)
         const LAKE_DROP = 1.35
         const lakeAngle = Math.atan2(LAKE_DROP, LAKE_RUN)
         const lakeRampLength = Math.hypot(LAKE_RUN, LAKE_DROP)
@@ -624,10 +658,14 @@ export class FptuCampus
          * thật), nên rải dày theo CỤM chứ không lác đác: gom quanh vài tâm cụm,
          * lệch nhau tất định, chừa khoảng nước trống ở giữa cho thấy mặt nước.
          */
+        // Hồ nay rất rộng nên rải sen theo NHIỀU cụm hơn, và chừa trống vùng
+        // cù lao ở giữa
         const clusters = [
-            { x: -0.45, z: -0.35, n: 14 }, { x: 0.35, z: -0.5, n: 12 },
-            { x: -0.6, z: 0.4, n: 12 }, { x: 0.5, z: 0.35, n: 14 },
-            { x: 0.05, z: 0.62, n: 10 }, { x: -0.15, z: -0.68, n: 10 },
+            { x: -0.62, z: -0.42, n: 16 }, { x: -0.34, z: -0.66, n: 14 },
+            { x: 0.38, z: -0.6, n: 16 }, { x: 0.66, z: -0.3, n: 14 },
+            { x: 0.66, z: 0.34, n: 16 }, { x: 0.3, z: 0.62, n: 14 },
+            { x: -0.36, z: 0.64, n: 16 }, { x: -0.68, z: 0.3, n: 14 },
+            { x: -0.5, z: 0.02, n: 12 }, { x: 0.52, z: 0.04, n: 12 },
         ]
 
         let seed = 0
@@ -642,8 +680,11 @@ export class FptuCampus
                 const nx = cluster.x + spreadX
                 const nz = cluster.z + spreadZ
 
-                // Bỏ lá rơi ra ngoài mép bầu dục
+                // Bỏ lá rơi ra ngoài mép bầu dục, hoặc rơi trúng cù lao
                 if(nx * nx + nz * nz > 0.9) continue
+                const dxIslet = LAKE.x + nx * LAKE.radiusX - LAKE_ISLET.x
+                const dzIslet = LAKE.z + nz * LAKE.radiusZ - LAKE_ISLET.z
+                if(Math.hypot(dxIslet, dzIslet) < LAKE_ISLET.radius + 2) continue
 
                 const x = LAKE.x + nx * LAKE.radiusX
                 const z = LAKE.z + nz * LAKE.radiusZ
@@ -654,9 +695,49 @@ export class FptuCampus
             }
         }
 
+        /**
+         * CÙ LAO GIỮA HỒ — mảng xanh nổi giữa mặt sen, đúng như ảnh thật.
+         * Dựng bằng đĩa chồng như đồi thông (leo lên được), trên trồng cây tán
+         * tròn cho rậm.
+         */
+        const tiers = 6
+        for(let i = 0; i < tiers; i++)
+        {
+            const ratio = i / tiers
+            const radius = LAKE_ISLET.radius * (1 - ratio * 0.55)
+            const tierHeight = (LAKE_ISLET.height + 0.9) / tiers
+            const y = -0.9 + tierHeight * i + tierHeight * 0.5
+
+            this.box(radius * 2, tierHeight * 1.06, radius * 2, LAKE_ISLET.x, y, LAKE_ISLET.z,
+                i === 0 ? '#c2a878' : '#5f9438', { geometry: this.cylinderGeometry, castShadow: i > 1 })
+
+            this.game.objects.add(null, {
+                type: 'fixed', friction: 0.3, restitution: 0,
+                position: { x: LAKE_ISLET.x, y, z: LAKE_ISLET.z },
+                colliders: [ { shape: 'cylinder', parameters: [ tierHeight * 0.53, radius ] } ]
+            })
+        }
+
+        // Cây um tùm trên cù lao
+        for(let i = 0; i < 9; i++)
+        {
+            const angle = i * 2.39996
+            const spread = Math.sqrt((i + 0.4) / 9)
+            const radius = LAKE_ISLET.radius * 0.55 * spread
+            const x = LAKE_ISLET.x + Math.cos(angle) * radius
+            const z = LAKE_ISLET.z + Math.sin(angle) * radius
+            const top = LAKE_ISLET.height * (1 - radius / LAKE_ISLET.radius * 0.7)
+            const scale = 0.9 + ((i * 31) % 7) / 12
+
+            this.box(0.3 * scale, 1.5 * scale, 0.3 * scale, x, top + 0.75 * scale, z, COLORS.trunk, { geometry: this.cylinderGeometry, castShadow: false })
+            this.box(1.7 * scale, 1.4 * scale, 1.7 * scale, x, top + 2 * scale, z, '#3f7f3a', { castShadow: false, geometry: this.cylinderGeometry })
+            this.box(1.15 * scale, 0.9 * scale, 1.15 * scale, x, top + 2.9 * scale, z, '#559a44', { castShadow: false, geometry: this.cylinderGeometry })
+        }
+
         // Vài bông sen hồng nhô lên — cánh xoè quanh nhuỵ vàng
         const blooms = [
-            [ -0.35, -0.3 ], [ 0.42, -0.42 ], [ -0.5, 0.45 ], [ 0.46, 0.3 ], [ 0.02, 0.6 ], [ -0.1, -0.6 ], [ 0.2, 0.02 ],
+            [ -0.6, -0.4 ], [ 0.4, -0.6 ], [ 0.66, -0.26 ], [ 0.62, 0.36 ],
+            [ 0.28, 0.64 ], [ -0.38, 0.62 ], [ -0.68, 0.28 ], [ -0.32, -0.68 ],
         ]
 
         for(const [ nx, nz ] of blooms)
@@ -671,6 +752,41 @@ export class FptuCampus
             }
 
             this.box(0.16, 0.16, 0.16, x, waterY + 0.24, z, '#ffd76b', { castShadow: false })
+        }
+    }
+
+    /**
+     * HỒ THIÊN NGA — cùng công thức đã kiểm ở hồ sen: lòng hồ là lỗ khoét trên
+     * nền đảo (làm trong `setIsland`), đáy nông để xe lội qua không kẹt, và
+     * vành dốc quanh mép để bò lên bờ. Chỉ khác là không thả sen — đàn thiên
+     * nga do `FptuSwans` lo.
+     */
+    setSwanLake()
+    {
+        const floorY = -0.75
+
+        this.box(SWAN_LAKE.radiusX * 2 + 2, 0.6, SWAN_LAKE.radiusZ * 2 + 2, SWAN_LAKE.x, floorY - 0.3, SWAN_LAKE.z, '#3f6f78', { castShadow: false })
+        this.game.objects.add(null, {
+            type: 'fixed', friction: 0.3, restitution: 0,
+            position: { x: SWAN_LAKE.x, y: floorY - 0.3, z: SWAN_LAKE.z },
+            colliders: [ { shape: 'cuboid', parameters: [ SWAN_LAKE.radiusX + 1, 0.3, SWAN_LAKE.radiusZ + 1 ] } ]
+        })
+
+        const RUN = Math.min(6, Math.min(SWAN_LAKE.radiusX, SWAN_LAKE.radiusZ) * 0.45)
+        const DROP = 1.35
+        const angle = Math.atan2(DROP, RUN)
+        const rampLength = Math.hypot(RUN, DROP)
+        const segments = 20
+
+        for(let i = 0; i < segments; i++)
+        {
+            const theta = (i / segments) * Math.PI * 2
+            const px = SWAN_LAKE.x + Math.cos(theta) * (SWAN_LAKE.radiusX - RUN * 0.5)
+            const pz = SWAN_LAKE.z + Math.sin(theta) * (SWAN_LAKE.radiusZ - RUN * 0.5)
+            const arc = (Math.PI * 2 * Math.max(SWAN_LAKE.radiusX, SWAN_LAKE.radiusZ)) / segments * 1.5
+
+            this.box(rampLength, 1.4, arc, px, GROUND_TOP - DROP * 0.5 - 0.7, pz, '#d8b47e',
+                { rotationY: -theta, rotationZ: angle, physical: true, castShadow: false })
         }
     }
 
@@ -724,26 +840,6 @@ export class FptuCampus
 
         this.box(1.6, 0.62, 0.85, PARKING.x, 0.35, PARKING.z - 4, '#c94f39')
         this.box(1.6, 0.62, 0.85, PARKING.x, 0.35, PARKING.z + 4.2, '#3a6fc9')
-    }
-
-    /**
-     * Tượng SELF MADE MAN — người tự đục đẽo nên chính mình, biểu tượng đặt
-     * giữa vườn ký túc xá của trường thật. Ghép khối: gò cỏ → bệ đá → tảng đá
-     * đang đục → thân nghiêng → tay giơ búa.
-     */
-    setStatue()
-    {
-        const { x, z } = STATUE
-
-        this.box(3.4, 0.55, 3.4, x, GROUND_TOP + 0.27, z, COLORS.grass, { geometry: this.cylinderGeometry, castShadow: false })
-        this.box(1.15, 1.3, 1.15, x, 1.2, z, COLORS.stone, { physical: true })
-        this.box(0.85, 0.75, 0.85, x + 0.12, 2.2, z, '#3f3428')
-        this.box(0.5, 1.05, 0.4, x, 2.85, z, COLORS.bronze, { rotationZ: 0.16 })
-        this.box(0.3, 0.3, 0.3, x + 0.08, 3.55, z, COLORS.bronze)
-        this.box(0.15, 0.85, 0.15, x - 0.12, 3.85, z + 0.16, COLORS.bronze, { rotationZ: -0.32 })
-        this.box(0.5, 0.1, 0.1, x - 0.36, 4.3, z + 0.16, '#6b4a2a')
-        this.box(0.16, 0.24, 0.24, x - 0.6, 4.3, z + 0.16, '#3a3a3a')
-        this.box(0.14, 0.6, 0.14, x + 0.34, 2.7, z - 0.08, COLORS.bronze, { rotationZ: 0.5 })
     }
 
     /**
@@ -818,11 +914,11 @@ export class FptuCampus
         ])
         const oak = make([
             [ -98, 28, 1.2 ], [ -114, 56, 1 ], [ -130, 60, 1.1 ], [ -146, 20, 1.2 ],
-            [ -164, 62, 1 ], [ -182, 56, 1.1 ], [ -206, 20, 1 ], [ -224, 56, 1.2 ],
+            [ -164, 62, 1 ], [ -182, 56, 1.1 ], [ -212, 58, 1 ], [ -224, 56, 1.2 ],
         ])
         const cherry = make([
             [ -120, 66, 1 ], [ -122, 24, 1.1 ], [ -140, 62, 1 ], [ -158, 24, 1.1 ],
-            [ -176, 62, 1 ], [ -200, 22, 1.1 ], [ -220, 66, 1 ],
+            [ -176, 62, 1 ], [ -206, 60, 1.1 ], [ -220, 66, 1 ],
         ])
 
         this.birchTrees = new Trees('FPTU Birch', this.game.resources.birchTreesVisualModel.scene, birch, '#ff4f2b', '#ff903f')

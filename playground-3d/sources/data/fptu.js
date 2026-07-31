@@ -30,7 +30,7 @@
  */
 
 /** Tâm mảnh đất riêng và kích thước nền. */
-export const ISLAND = { x: -162, z: 40, width: 150, depth: 116, y: 0 }
+export const ISLAND = { x: -162, z: 30, width: 160, depth: 148, y: 0 }
 
 /** Cầu nối từ rìa Tây đảo chính sang mảnh đất trường. */
 export const BRIDGE = { fromX: -84, toX: -94, z: 40, width: 9 }
@@ -98,13 +98,19 @@ export const ALPHA = {
  * HỒ SEN LỚN — sau lưng toà Alpha, đúng điểm nhận diện "toà nhà hình rồng soi
  * bóng xuống hồ". Kéo dài theo trục z như hồ thật.
  */
-export const LAKE = { x: -184, z: 8, radiusX: 17, radiusZ: 11 }
+export const LAKE = { x: -196, z: 6, radiusX: 30, radiusZ: 21 }
+
+/**
+ * CÙ LAO GIỮA HỒ SEN — gò đất nổi giữa lòng hồ, cây mọc um tùm, đúng như ảnh
+ * thật của hồ sen trường (một mảng xanh nổi giữa mặt sen).
+ */
+export const LAKE_ISLET = { x: -196, z: 6, radius: 9, height: 1.5 }
 
 /** Beta bên kia hồ (soi mặt với Alpha) · Delta, Gamma phía Bắc như bản đồ. */
 export const BUILDINGS = [
     { name: 'Beta', x: -200, z: 60, width: 18, depth: 9, floors: 5 },
-    { name: 'Delta', x: -126, z: 4, width: 16, depth: 8, floors: 4 },
-    { name: 'Gamma', x: -222, z: 26, width: 12, depth: 8, floors: 4 },
+    { name: 'Delta', x: -112, z: 4, width: 16, depth: 8, floors: 4 },
+    { name: 'Gamma', x: -226, z: 56, width: 12, depth: 8, floors: 4 },
 ]
 
 /**
@@ -119,13 +125,26 @@ export const DORMS = [
 ]
 
 /** Tượng SELF MADE MAN — giữa vườn hai cụm ký túc xá, như ảnh thật. */
-export const STATUE = { x: -157, z: 90 }
+/**
+ * ĐỒI THÔNG — gò đất cao trước toà Delta, trên đỉnh đặt tượng SELF MADE MAN.
+ * Trời tuyết thì thông phủ trắng và người tuyết hiện ra; trời thường thì xanh.
+ */
+export const PINE_HILL = { x: -116, z: -16, radius: 14, height: 5.5 }
+
+/** Tượng Self Made Man đứng trên đỉnh đồi thông. */
+export const STATUE = { x: PINE_HILL.x, z: PINE_HILL.z }
+
+/**
+ * HỒ THIÊN NGA — kế bên đồi thông. Không thả sen mà thả thiên nga biết bơi,
+ * biết né xe và bị tông thì bỏ chạy.
+ */
+export const SWAN_LAKE = { x: -146, z: -18, radiusX: 14, radiusZ: 9 }
 
 /** Sân bóng đá giữa trường (bản đồ: 16, giữa khu). */
 export const FOOTBALL = { x: -112, z: 74, width: 16, depth: 24 }
 
 /** Sân bóng rổ — góc Bắc cạnh con đường (bản đồ: 18, góc phải sát đường). */
-export const BASKETBALL = { x: -104, z: -2, width: 10, depth: 14 }
+export const BASKETBALL = { x: -96, z: 8, width: 10, depth: 14 }
 
 /** Sân võ nhỏ cạnh sân bóng (bản đồ: 15/17). */
 export const MARTIAL = { x: -206, z: 84, width: 9, depth: 12 }
@@ -134,7 +153,7 @@ export const MARTIAL = { x: -206, z: 84, width: 9, depth: 12 }
 export const CANTEEN = { x: -157, z: 76, width: 10, depth: 6, floors: 2 }
 
 /** Bãi gửi xe dọc mép đường phía Bắc cổng (bản đồ: 19, mép phải). */
-export const PARKING = { x: -95, z: 22, width: 6, depth: 20 }
+export const PARKING = { x: -95, z: 56, width: 6, depth: 20 }
 
 /**
  * Điểm hồi sinh: đầu cầu phía trường, mũi xe quay vào cổng.

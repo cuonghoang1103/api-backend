@@ -321,9 +321,70 @@ export const SURVIVAL_GUN = {
      */
     muzzleSide: 0.62,
     muzzleHeight: 1.24,
+    /** Khi đi bộ: súng trong tay, sát thân và thấp hơn nóc xe. */
+    walkerMuzzleSide: 0.3,
+    walkerMuzzleHeight: 1.15,
     /** Chớp nòng: bán kính và khoảng cách tính từ nòng. */
     flashScale: 0.16,
     flashDistance: 1.7,
+}
+
+/**
+ * ĐI BỘ — user chốt từ đầu: **"xe trước, đi bộ sau"**. Đây là phần "sau".
+ *
+ * Bấm **E** khi xe đang đứng để bước xuống, bấm **E** lần nữa khi đứng cạnh xe
+ * để leo lên lại. Đi bộ thì nhanh nhẹn hơn trong ngõ hẹp và nấp giỏi hơn (thân
+ * người nhỏ, không có đèn pha, không có tiếng động cơ) — nhưng mất luôn lớp vỏ
+ * thép: quái chạm vào là ăn đòn thẳng, và không húc được ai.
+ *
+ * ─── VÌ SAO KHÔNG DÙNG `KinematicCharacterController` CỦA RAPIER ────────────
+ * Nó giải quyết trượt tường, bậc thang, dốc — những thứ mà thế giới này gần như
+ * không có: mặt đất là MỘT hàm cao độ liên tục (xem
+ * `feedback_one_height_function_not_stitched_boxes`), nhà cửa thì là hộp bao.
+ * Bắn tia xuống để bám đất, cộng một phép kiểm độ dốc phía trước, là đủ — và
+ * không phải kéo thêm một hệ vật lý thứ hai vào vòng lặp.
+ */
+export const SURVIVAL_WALKER = {
+    /** Tốc độ đi và chạy (đơn vị/giây). Xe chạy 6–14, nên đi bộ chậm hơn hẳn. */
+    walkSpeed: 3.4,
+    runSpeed: 6.2,
+
+    /** Cao bao nhiêu — người trong thế giới này cao chừng 1,8 (xem `FptuPeople`). */
+    height: 1.8,
+    /** Bán kính thân, dùng cho khoảng cách quái chạm tới. */
+    radius: 0.42,
+
+    /**
+     * Dốc quá mức này thì không leo được (chênh cao độ trên mỗi đơn vị đi tới).
+     * Không có nó thì người đi bộ trèo thẳng lên vách núi và tường nhà.
+     */
+    maxSlope: 1.15,
+
+    /** Đứng gần xe trong bán kính này mới leo lên được. */
+    enterRadius: 3.2,
+    /** Bước xuống cách xe bao xa, để không kẹt trong thân xe. */
+    exitOffset: 2.1,
+    /** Xe phải chậm hơn mức này mới cho xuống — nhảy khỏi xe đang phóng thì thôi. */
+    exitMaxSpeed: 3,
+
+    /**
+     * NẤP GIỎI HƠN: tầm phát hiện nhân với hệ số này khi đi bộ. Không đèn pha,
+     * không tiếng động cơ, thân người nhỏ — đó là phần thưởng cho việc bỏ vỏ thép.
+     */
+    stealthFactor: 0.62,
+
+    /** Quái đánh người đi bộ đau hơn (không còn thép che). */
+    damageFactor: 1.6,
+
+    colors: {
+        skin: '#e0b183',
+        hair: '#241a14',
+        jacket: '#2f4a3d',
+        pants: '#2f3a4a',
+        boots: '#22272f',
+        vest: '#4a4a55',
+        gun: '#3a3f45',
+    },
 }
 
 /** Số của người chơi. */

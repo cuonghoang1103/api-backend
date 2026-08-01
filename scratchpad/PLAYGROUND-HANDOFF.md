@@ -14,7 +14,7 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
 
 **2/8**: **CHẾ ĐỘ SINH TỒN** (mục 0i) — quái + sóng + máu đen + tiền, cộng
 **cửa hàng nâng cấp** (7 món), **cơ chế NẤP**, **quái trùm dùng MODEL THẬT**,
-**súng máy phím F**. Gói `index-DKDLvuRC.js`
+**súng máy phím F**, **xuống xe đi bộ phím E**. Gói `index-E3SUrnV8.js`
 đã dựng và rsync sang `frontend/public/playground`. **CHƯA deploy, CHƯA push.**
 
 Đầu phiên sau, so gói prod với local; lệch thì chạy `bash deploy.sh` nền:
@@ -74,8 +74,8 @@ thì mọi chi tiết dồn về gốc mảnh.
 (tắt đèn, đứng yên, ra xa) · **quái trùm mỗi 5 sóng**.
 
 Còn treo cho bản sau (user đã biết, không phải việc bỏ sót):
-**xuống xe đi bộ** · **trực thăng** · quái trùm dùng `fatalis.glb` thay cho
-dáng "quái to xác" phóng to · nâng cấp giữ qua nhiều ván.
+**trực thăng** · nâng cấp giữ qua nhiều ván · **tiếng quái thật** (kho bản mẫu
+không có tiếng quái nào, đang mượn tạm — user đã ngỏ ý tìm file).
 
 ### 3. Ba khu còn lại trên đảo sân chơi
 
@@ -842,6 +842,43 @@ Chuỗi chẩn đoán này đáng chép lại nguyên vẹn:
 **Bài học**: khi ảnh và số liệu mâu thuẫn, đừng sửa mã theo phỏng đoán — **chiếu
 toạ độ lên NDC và so với một vật thể mình BIẾT là đang hiện**. Hai lần "sửa" ở
 bước 1–2 là sửa đúng chỗ không hỏng.
+
+### XUỐNG XE ĐI BỘ — `World/SurvivalWalker.js`, phím **E**
+
+Phần "sau" của lời hứa *"xe trước, đi bộ sau"*. Bấm **E** khi xe đang đứng
+(dưới 3 đơn vị/giây) để bước xuống; **W A S D** đi, **Shift** chạy, **F** vẫn
+bắn, **E** lên lại khi đứng trong 3,2 đơn vị, **R** là lối thoát khẩn về thẳng
+chỗ xe. Đi bộ ăn đòn nặng hơn **60%** (không còn vỏ thép) và không húc được ai,
+bù lại **nấp giỏi hơn hẳn**: tầm phát hiện chỉ còn 62% vì không đèn pha, không
+tiếng động cơ, thân người nhỏ (đo được 17 → **10,5**).
+
+**Ba chỗ móc vào bản mẫu, không sửa một dòng nào của nó:**
+
+1. **`inputs.filters`** — đúng cơ chế bản mẫu dùng để chuyển giữa lái xe và đua
+   (xem `CircuitArea`). Xuống xe thì `filters` chỉ còn `'walking'` nên mọi phím
+   lái bị nuốt và chiếc xe đứng im dù người chơi bấm W. **Thiếu bước này thì xe
+   bỏ chạy một mình trong lúc chủ đang đi bộ** — bộ kiểm canh đúng chuyện đó.
+2. **`view.focusPoint.trackedPosition`** — `Player` ghi vị trí xe vào đó ở nhịp
+   6, `View` đọc ở nhịp 7. Ghi đè ở **nhịp 6.5** là máy quay bám người mà không
+   phải sửa `View`. Sớm hơn thì `Player` ghi đè lại, muộn hơn thì trễ một khung.
+3. **`Survival.target`** — đàn quái vốn nhận mục tiêu qua tham số, nên chuyển
+   sang đuổi người chỉ là trỏ vào véc-tơ khác. Một dòng.
+
+⚠️ **`walker.reset()` PHẢI gọi trong `disable()`**: tắt chế độ Sinh tồn trong
+lúc đang đi bộ mà không trả `filters` về `'wandering'` thì người chơi **kẹt
+vĩnh viễn** — xe không nhúc nhích và không có phím nào cứu được.
+
+⚠️ **Kiểm độ dốc trước khi bước** (`maxSlope: 1.15`). Không có nó thì người đi
+bộ trèo thẳng lên vách núi và tường nhà: bắn tia xuống lúc nào cũng tìm được
+mặt đất ở đó, dù nó cao hơn đầu.
+
+⚠️ **Đi theo hướng MÁY QUAY, không theo hướng thân.** Bấm W là đi "lên phía trên
+màn hình" — đi theo hướng thân thì mỗi lần quay người là cả bộ phím đảo nghĩa.
+
+Cố ý KHÔNG dùng `KinematicCharacterController` của Rapier: nó giải quyết trượt
+tường / bậc thang / dốc, những thứ thế giới này gần như không có (mặt đất là MỘT
+hàm cao độ liên tục, nhà là hộp bao). Bắn tia xuống + một phép kiểm dốc là đủ,
+và không phải kéo thêm một hệ vật lý thứ hai vào vòng lặp.
 
 ### CỬA HÀNG — chỉ mở trong nhịp NGHỈ
 

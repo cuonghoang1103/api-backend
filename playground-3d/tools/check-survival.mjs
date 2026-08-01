@@ -663,6 +663,120 @@ const facts = {}
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
+//  6e. ĐI BỘ — xuống xe, phím lái bị nuốt, quái đổi mục tiêu, lên lại được
+// ═══════════════════════════════════════════════════════════════════════════
+{
+    const exit = await page.evaluate(() =>
+    {
+        const G = window.game
+        const s = G.world.survival
+        s.phase = 'hunting'
+        s.monsters.clear()
+        s.gun.clear()
+
+        const filtersBefore = [ ...G.inputs.filters ]
+        s.walker.exit()
+
+        return {
+            filtersBefore,
+            filtersAfter: [ ...G.inputs.filters ],
+            active: s.walker.active,
+            visible: s.walker.group.visible,
+            pos: [ s.walker.position.x, s.walker.position.y, s.walker.position.z ].map(n => +n.toFixed(1)),
+            vehicle: [ G.physicalVehicle.position.x, G.physicalVehicle.position.z ].map(n => +n.toFixed(1)),
+            ground: s.monsters.groundHeight(s.walker.position.x, s.walker.position.z),
+        }
+    })
+
+    const offGround = exit.ground === null ? null : exit.pos[1] - exit.ground
+    facts['6e. xuống xe'] = `filters ${exit.filtersBefore.join(',')} → ${exit.filtersAfter.join(',')} · `
+        + `đứng tại (${exit.pos[0]}, ${exit.pos[2]}) cách xe `
+        + `${Math.hypot(exit.pos[0] - exit.vehicle[0], exit.pos[2] - exit.vehicle[1]).toFixed(1)} · `
+        + `lệch đất ${offGround === null ? '(không có đất)' : offGround.toFixed(2)}`
+
+    if(!exit.active) problems.push('Bấm xuống xe mà `walker.active` vẫn false')
+    if(!exit.visible) problems.push('Xuống xe rồi mà không thấy nhân vật (group.visible = false)')
+    if(!exit.filtersAfter.includes('walking'))
+        problems.push(`Xuống xe rồi mà inputs.filters vẫn là [${exit.filtersAfter.join(',')}] — phím lái không bị nuốt, xe sẽ chạy một mình`)
+    if(exit.filtersAfter.includes('wandering'))
+        problems.push('Filter `wandering` còn nguyên khi đi bộ — bấm W là cả người lẫn xe cùng đi')
+    if(offGround !== null && Math.abs(offGround) > 0.4)
+        problems.push(`Nhân vật lệch mặt đất ${offGround.toFixed(2)} — lơ lửng hoặc lún`)
+
+    // ── Quái phải đổi sang đuổi NGƯỜI, không đuổi xe ─────────────────────────
+    const chase = await page.evaluate(() =>
+    {
+        const G = window.game
+        const s = G.world.survival
+        const w = s.walker.position
+
+        // Dời người đi bộ ra xa xe rồi thả quái quanh CHỖ NGƯỜI
+        s.walker.position.x += 22
+        const y = s.monsters.groundHeight(s.walker.position.x, s.walker.position.z)
+        if(y !== null) { s.walker.position.y = y; s.walker.groundY = y }
+
+        s.monsters.clear()
+        for(let i = 0; i < 3; i++) s.monsters.spawn('crawler', w.x, w.z)
+
+        return {
+            count: s.monsters.monsters.length,
+            toWalker: s.monsters.monsters.map(m => +Math.hypot(m.root.position.x - w.x, m.root.position.z - w.z).toFixed(1)),
+            toVehicle: s.monsters.monsters.map(m => +Math.hypot(m.root.position.x - G.physicalVehicle.position.x, m.root.position.z - G.physicalVehicle.position.z).toFixed(1)),
+        }
+    })
+
+    await run(2.5)
+
+    const chased = await page.evaluate(() =>
+    {
+        const G = window.game
+        const s = G.world.survival
+        const w = s.walker.position
+        return {
+            toWalker: s.monsters.monsters.map(m => +Math.hypot(m.root.position.x - w.x, m.root.position.z - w.z).toFixed(1)),
+            sight: +s.sightRange(G.physicalVehicle).toFixed(1),
+        }
+    })
+
+    const avgBefore = chase.toWalker.reduce((a, d) => a + d, 0) / (chase.toWalker.length || 1)
+    const avgAfter = chased.toWalker.reduce((a, d) => a + d, 0) / (chased.toWalker.length || 1)
+
+    facts['6e. quái đuổi người'] = `khoảng cách tới NGƯỜI ${avgBefore.toFixed(1)} → ${avgAfter.toFixed(1)} · tầm phát hiện khi đi bộ ${chased.sight}`
+
+    if(chase.count === 0) problems.push('Không sinh được con nào quanh người đi bộ')
+    else if(avgAfter >= avgBefore - 0.8)
+        problems.push(`Quái KHÔNG đuổi theo người đi bộ (${avgBefore.toFixed(1)} → ${avgAfter.toFixed(1)}) — mục tiêu chưa chuyển sang walker`)
+
+    // ── Lên lại xe ───────────────────────────────────────────────────────────
+    const back = await page.evaluate(() =>
+    {
+        const G = window.game
+        const s = G.world.survival
+
+        // Đứng xa thì KHÔNG được lên
+        const farRefused = (s.walker.enter(), s.walker.active)
+
+        // Phím R là lối thoát khẩn — lên được từ mọi khoảng cách
+        s.walker.enter(true)
+
+        return {
+            farRefused,
+            active: s.walker.active,
+            visible: s.walker.group.visible,
+            filters: [ ...G.inputs.filters ],
+        }
+    })
+
+    facts['6e. lên lại xe'] = `đứng xa bị từ chối=${back.farRefused} · sau khi về: active=${back.active} · filters ${back.filters.join(',')}`
+
+    if(!back.farRefused) problems.push('Đứng cách xe 22 đơn vị mà vẫn leo lên được — thiếu kiểm tra khoảng cách')
+    if(back.active) problems.push('Bấm lên xe mà vẫn còn ở chế độ đi bộ')
+    if(back.visible) problems.push('Lên xe rồi mà nhân vật vẫn hiện trong cảnh')
+    if(!back.filters.includes('wandering'))
+        problems.push(`Lên xe rồi mà filters vẫn là [${back.filters.join(',')}] — KẸT, xe sẽ không nhúc nhích`)
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 //  6c. CỬA HÀNG — giá, mua, tác dụng, và chỉ mở lúc nghỉ
 // ═══════════════════════════════════════════════════════════════════════════
 {

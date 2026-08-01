@@ -161,8 +161,12 @@ export class SurvivalGun
         const vehicle = this.game.physicalVehicle
         const monsters = this.survival.monsters.monsters
 
+        // Đi bộ thì súng nằm trong tay người, không trên nóc xe
+        const walker = this.survival.walker
+        const shooter = walker?.active ? walker.position : vehicle.position
+
         /**
-         * Hướng bắn tính từ TÂM XE, nhưng nòng đặt LỆCH SANG PHẢI.
+         * Hướng bắn tính từ TÂM người bắn, nhưng nòng đặt LỆCH SANG PHẢI.
          *
          * ⚠️ Đặt nòng ngay giữa trục nhìn là hỏng chế độ cabin: chớp nòng nằm
          * cách mắt chưa tới một mét nên nó nở ra choán gần nửa khung hình và
@@ -172,19 +176,27 @@ export class SurvivalGun
          * chính giữa cho người lái.
          */
         this.direction.set(
-            this.aim.x - vehicle.position.x,
+            this.aim.x - shooter.x,
             0,
-            this.aim.z - vehicle.position.z,
+            this.aim.z - shooter.z,
         )
         const aimDistance = this.direction.length()
         if(aimDistance < 0.001) return null
         this.direction.divideScalar(aimDistance)
 
+        // Người đi bộ cầm súng thấp hơn và sát thân hơn nóc xe
+        const side = walker?.active ? SURVIVAL_GUN.walkerMuzzleSide : SURVIVAL_GUN.muzzleSide
+        const height = walker?.active ? SURVIVAL_GUN.walkerMuzzleHeight : SURVIVAL_GUN.muzzleHeight
+
         this.muzzle.set(
-            vehicle.position.x - this.direction.z * SURVIVAL_GUN.muzzleSide,
-            vehicle.position.y + SURVIVAL_GUN.muzzleHeight,
-            vehicle.position.z + this.direction.x * SURVIVAL_GUN.muzzleSide,
+            shooter.x - this.direction.z * side,
+            shooter.y + height,
+            shooter.z + this.direction.x * side,
         )
+
+        // Quay người bắn về hướng ngắm — bắn ngang hông trông như lỗi
+        if(walker?.active)
+            walker.heading = Math.atan2(this.direction.x, this.direction.z)
 
         let best = null
         let bestAlong = Infinity

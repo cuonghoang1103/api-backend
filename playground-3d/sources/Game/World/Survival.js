@@ -4,7 +4,8 @@ import { Game } from '../Game.js'
 import { Events } from '../Events.js'
 import { SurvivalMonsters } from './SurvivalMonsters.js'
 import { SurvivalGun } from './SurvivalGun.js'
-import { SURVIVAL_LOOT, SURVIVAL_PLAYER, SURVIVAL_SHOP, SURVIVAL_STEALTH, SURVIVAL_WAVES } from '../../data/survival.js'
+import { SurvivalWalker } from './SurvivalWalker.js'
+import { SURVIVAL_LOOT, SURVIVAL_PLAYER, SURVIVAL_SHOP, SURVIVAL_STEALTH, SURVIVAL_WALKER, SURVIVAL_WAVES } from '../../data/survival.js'
 
 /**
  * ═══════════════════════════════════════════════════════════════════════════
@@ -78,6 +79,7 @@ export class Survival
 
         this.monsters = new SurvivalMonsters(this)
         this.gun = new SurvivalGun(this)
+        this.walker = new SurvivalWalker(this)
 
         this.setPreference()
         this.setSounds()
@@ -147,7 +149,7 @@ export class Survival
         this.startPreparing(4)
 
         this.game.notifications?.show(
-            /* html */`<div class="top"><p class="title">Chế độ Sinh tồn</p></div><div class="bottom"><p class="description">Trời sắp tối. Giữ <strong>F</strong> bắn súng máy · <strong>X</strong> bắn tên lửa nếu đã bật Rocket · húc thẳng cũng chết.</p></div>`,
+            /* html */`<div class="top"><p class="title">Chế độ Sinh tồn</p></div><div class="bottom"><p class="description">Trời sắp tối. Giữ <strong>F</strong> bắn · <strong>X</strong> bắn tên lửa nếu đã bật Rocket · húc thẳng cũng chết · <strong>E</strong> xuống xe đi bộ.</p></div>`,
             'is-achievement',
             6,
         )
@@ -159,6 +161,9 @@ export class Survival
 
         this.monsters.clear()
         this.gun.clear()
+        // PHẢI trả phím lái về trước khi tắt chế độ, không thì `inputs.filters`
+        // còn kẹt ở 'walking' và chiếc xe không nhúc nhích nữa
+        this.walker.reset()
         this.clearLoot()
         this.hudElement?.classList.remove('is-visible')
         this.shopElement?.classList.remove('is-visible')
@@ -444,7 +449,15 @@ export class Survival
 
         const delta = Math.min(this.game.ticker.delta, 0.1)
         const vehicle = this.game.physicalVehicle
-        const target = vehicle.position
+
+        /**
+         * MỤC TIÊU của cả chế độ: chiếc xe, hoặc người đi bộ nếu đã xuống xe.
+         *
+         * Một véc-tơ duy nhất này chảy vào đàn quái, vào phép nhặt tiền, vào
+         * tầm phát hiện. Nhờ vậy "xuống xe" không phải viết lại một nhánh logic
+         * thứ hai — chỉ là trỏ vào chỗ khác.
+         */
+        const target = this.walker.active ? this.walker.position : vehicle.position
 
         // ── Màn thua: đứng đếm ngược rồi bắt đầu lại ─────────────────────────
         if(this.phase === 'defeated')
@@ -545,6 +558,15 @@ export class Survival
      */
     sightRange(vehicle)
     {
+        /**
+         * ĐI BỘ THÌ NẤP GIỎI HƠN HẲN — không đèn pha, không tiếng động cơ, thân
+         * người nhỏ. Đây là phần thưởng cho việc bỏ lớp vỏ thép, và là lý do
+         * người chơi có lúc muốn xuống xe thật chứ không chỉ để xem cho vui.
+         */
+        if(this.walker.active)
+            return SURVIVAL_STEALTH.baseRange * SURVIVAL_WALKER.stealthFactor
+                + this.walker.speed * SURVIVAL_STEALTH.speedRange * 0.5
+
         let range = SURVIVAL_STEALTH.baseRange
 
         if(this.game.lighting?.headlights?.shouldBeOn())
@@ -555,9 +577,18 @@ export class Survival
         return range
     }
 
-    /** Một con bám được vào xe và gặm. */
+    /** Một con bám được vào xe (hoặc tóm được người đi bộ) và gặm. */
     onMonsterReach(monster, vehicle)
     {
+        // Đi bộ thì không có thép che — ăn đòn nặng hơn hẳn, và không có nhánh
+        // "đang phóng nhanh nên nó không bám được"
+        if(this.walker.active)
+        {
+            this.hurt(monster.spec.damage * 0.6 * SURVIVAL_WALKER.damageFactor)
+            this.sounds.bite?.play(monster.root.position)
+            return
+        }
+
         // Đang phóng nhanh thì nó không bám được — `updateRamming` lo con này
         if(vehicle.xzSpeed > SURVIVAL_PLAYER.rammingSpeed) return
 
@@ -574,6 +605,10 @@ export class Survival
      */
     updateRamming(delta, vehicle)
     {
+        // Đang đi bộ thì chiếc xe đứng im một chỗ — nó không được tự húc chết
+        // quái khi chủ nó đang ở tận đâu
+        if(this.walker.active) return
+
         const speed = vehicle.xzSpeed
         if(speed <= SURVIVAL_PLAYER.rammingSpeed) return
 
@@ -868,9 +903,10 @@ export class Survival
         const hunted = this.phase === 'hunting'
             && this.monsters.monsters.some(m => !m.dead && m.sees)
 
+        const onFoot = this.walker.active ? 'Đi bộ · ' : ''
         const state = this.phase === 'defeated'
             ? 'Gục'
-            : (this.phase === 'preparing'
+            : onFoot + (this.phase === 'preparing'
                 ? `Nghỉ ${Math.ceil(Math.max(0, this.phaseTimer))}s`
                 : (hunted ? 'Bị săn' : 'Đang nấp'))
         if(state !== this.lastState)

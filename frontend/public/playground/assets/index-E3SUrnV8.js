@@ -101855,8 +101855,29 @@ https://github.com/browserify/crypto-browserify`);
     muzzleColor: "#fff3c4",
     muzzleSide: 0.62,
     muzzleHeight: 1.24,
+    walkerMuzzleSide: 0.3,
+    walkerMuzzleHeight: 1.15,
     flashScale: 0.16,
     flashDistance: 1.7
+  }, SURVIVAL_WALKER = {
+    walkSpeed: 3.4,
+    runSpeed: 6.2,
+    height: 1.8,
+    maxSlope: 1.15,
+    enterRadius: 3.2,
+    exitOffset: 2.1,
+    exitMaxSpeed: 3,
+    stealthFactor: 0.62,
+    damageFactor: 1.6,
+    colors: {
+      skin: "#e0b183",
+      hair: "#241a14",
+      jacket: "#2f4a3d",
+      pants: "#2f3a4a",
+      boots: "#22272f",
+      vest: "#4a4a55",
+      gun: "#3a3f45"
+    }
   }, SURVIVAL_PLAYER = {
     maxHealth: 100,
     regenDelay: 6,
@@ -102439,22 +102460,24 @@ https://github.com/browserify/crypto-browserify`);
     }
     shoot() {
       var _a2;
-      const e = this.game.physicalVehicle, r = this.survival.monsters.monsters;
-      this.direction.set(this.aim.x - e.position.x, 0, this.aim.z - e.position.z);
-      const s = this.direction.length();
-      if (s < 1e-3) return null;
-      this.direction.divideScalar(s), this.muzzle.set(e.position.x - this.direction.z * SURVIVAL_GUN.muzzleSide, e.position.y + SURVIVAL_GUN.muzzleHeight, e.position.z + this.direction.x * SURVIVAL_GUN.muzzleSide);
-      let o = null, a = 1 / 0;
-      for (const c of r) {
-        if (c.dead) continue;
-        this.toMonster.set(c.root.position.x - this.muzzle.x, 0, c.root.position.z - this.muzzle.z);
-        const d = this.toMonster.dot(this.direction);
-        if (d < 0 || d > SURVIVAL_GUN.range) continue;
-        const f = this.toMonster.x - this.direction.x * d, p = this.toMonster.z - this.direction.z * d;
-        Math.hypot(f, p) > SURVIVAL_GUN.hitRadius + c.spec.radius * c.scale || d < a && (a = d, o = c);
+      const e = this.game.physicalVehicle, r = this.survival.monsters.monsters, s = this.survival.walker, o = (s == null ? void 0 : s.active) ? s.position : e.position;
+      this.direction.set(this.aim.x - o.x, 0, this.aim.z - o.z);
+      const a = this.direction.length();
+      if (a < 1e-3) return null;
+      this.direction.divideScalar(a);
+      const h = (s == null ? void 0 : s.active) ? SURVIVAL_GUN.walkerMuzzleSide : SURVIVAL_GUN.muzzleSide, c = (s == null ? void 0 : s.active) ? SURVIVAL_GUN.walkerMuzzleHeight : SURVIVAL_GUN.muzzleHeight;
+      this.muzzle.set(o.x - this.direction.z * h, o.y + c, o.z + this.direction.x * h), (s == null ? void 0 : s.active) && (s.heading = Math.atan2(this.direction.x, this.direction.z));
+      let d = null, f = 1 / 0;
+      for (const m of r) {
+        if (m.dead) continue;
+        this.toMonster.set(m.root.position.x - this.muzzle.x, 0, m.root.position.z - this.muzzle.z);
+        const b = this.toMonster.dot(this.direction);
+        if (b < 0 || b > SURVIVAL_GUN.range) continue;
+        const _ = this.toMonster.x - this.direction.x * b, M = this.toMonster.z - this.direction.z * b;
+        Math.hypot(_, M) > SURVIVAL_GUN.hitRadius + m.spec.radius * m.scale || b < f && (f = b, d = m);
       }
-      const h = o ? a : SURVIVAL_GUN.range;
-      return this.spawnTracer(h), (_a2 = this.sounds.shot) == null ? void 0 : _a2.play(this.muzzle), o && this.survival.monsters.hit(o, this.damage, this.muzzle.x, this.muzzle.z), o;
+      const p = d ? f : SURVIVAL_GUN.range;
+      return this.spawnTracer(p), (_a2 = this.sounds.shot) == null ? void 0 : _a2.play(this.muzzle), d && this.survival.monsters.hit(d, this.damage, this.muzzle.x, this.muzzle.z), d;
     }
     get damage() {
       return SURVIVAL_GUN.damage * (1 + this.survival.level("barrel") * 0.6);
@@ -102492,9 +102515,210 @@ https://github.com/browserify/crypto-browserify`);
       this.updateTracers(e), this.heat > 0 && (this.heat = Math.max(0, this.heat - SURVIVAL_GUN.coolRate * e)), this.jammed && this.heat <= SURVIVAL_GUN.resumeAt && (this.jammed = false), this.cooldown > 0 && (this.cooldown -= e), !(!this.firing || this.jammed || this.survival.phase !== "hunting") && (this.cooldown > 0 || this.updateAim() && (this.cooldown = 1 / SURVIVAL_GUN.fireRate, this.heat += this.heatPerShot, this.shoot(), this.heat >= 1 && (this.heat = 1, this.jammed = true, (_a2 = this.sounds.jam) == null ? void 0 : _a2.play(this.muzzle))));
     }
   }
+  class SurvivalWalker {
+    constructor(e) {
+      this.game = Game.getInstance(), this.survival = e, this.active = false, this.position = new Vector3$1(), this.heading = 0, this.phase = 0, this.speed = 0, this.groundY = 0, this.moves = {
+        forward: false,
+        backward: false,
+        left: false,
+        right: false,
+        run: false
+      }, this.materials = /* @__PURE__ */ new Map(), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.sphereGeometry = new SphereGeometry(0.5, 8, 6), this.group = new Group(), this.group.name = "survivalWalker", this.group.visible = false, this.game.scene.add(this.group), this.build(), this.setActions(), this.game.ticker.events.on("tick", () => this.update(), 6.5);
+    }
+    material(e) {
+      let r = this.materials.get(e);
+      return r || (r = new MeshDefaultMaterial({
+        colorNode: color$1(e)
+      }), this.materials.set(e, r)), r;
+    }
+    part(e, r, s, o, a, h, c, d, f = null) {
+      const p = new Mesh$1(f ?? this.boxGeometry, this.material(d));
+      return p.scale.set(r, s, o), p.position.set(a, h, c), p.castShadow = true, p.receiveShadow = true, e.add(p), p;
+    }
+    build() {
+      const e = SURVIVAL_WALKER.colors, r = new Group();
+      this.legs = [];
+      for (const o of [
+        -1,
+        1
+      ]) {
+        const a = new Group();
+        a.position.set(o * 0.12, 0.9, 0), r.add(a), this.part(a, 0.22, 0.48, 0.24, 0, -0.24, 0, e.pants);
+        const h = new Group();
+        h.position.set(0, -0.48, 0), a.add(h), this.part(h, 0.2, 0.44, 0.22, 0, -0.22, 0, e.pants), this.part(h, 0.23, 0.16, 0.38, 0, -0.46, 0.07, e.boots), this.legs.push({
+          hip: a,
+          knee: h
+        });
+      }
+      this.part(r, 0.42, 0.26, 0.26, 0, 1.02, 0, e.pants), this.part(r, 0.48, 0.46, 0.28, 0, 1.38, 0, e.jacket), this.part(r, 0.4, 0.34, 0.32, 0, 1.36, 0, e.vest), this.part(r, 0.56, 0.14, 0.29, 0, 1.6, 0, e.jacket), this.arms = [];
+      for (const o of [
+        -1,
+        1
+      ]) {
+        const a = new Group();
+        a.position.set(o * 0.33, 1.58, 0), r.add(a), this.part(a, 0.16, 0.4, 0.18, 0, -0.2, 0, e.jacket);
+        const h = new Group();
+        h.position.set(0, -0.4, 0), a.add(h), this.part(h, 0.14, 0.36, 0.16, 0, -0.18, 0, e.jacket), this.part(h, 0.15, 0.15, 0.15, 0, -0.4, 0, e.skin), this.arms.push({
+          shoulder: a,
+          elbow: h
+        });
+      }
+      this.part(r, 0.14, 0.1, 0.14, 0, 1.7, 0, e.skin), this.part(r, 0.3, 0.34, 0.29, 0, 1.89, 0, e.skin, this.sphereGeometry), this.part(r, 0.32, 0.2, 0.31, 0, 1.97, -0.01, e.hair, this.sphereGeometry), this.part(r, 0.3, 0.05, 0.18, 0, 1.94, 0.16, e.vest);
+      const s = this.arms[1].elbow;
+      this.gunMesh = this.part(s, 0.1, 0.1, 0.56, 0, -0.4, 0.22, e.gun), this.part(s, 0.08, 0.16, 0.12, 0, -0.46, 0.06, e.gun), r.scale.setScalar(SURVIVAL_WALKER.height / 1.95), this.group.add(r), this.root = r;
+    }
+    setActions() {
+      this.game.inputs.addActions([
+        {
+          name: "survivalRide",
+          categories: [
+            "wandering",
+            "walking"
+          ],
+          keys: [
+            "Keyboard.KeyE"
+          ]
+        },
+        {
+          name: "walkForward",
+          categories: [
+            "walking"
+          ],
+          keys: [
+            "Keyboard.KeyW",
+            "Keyboard.ArrowUp"
+          ]
+        },
+        {
+          name: "walkBackward",
+          categories: [
+            "walking"
+          ],
+          keys: [
+            "Keyboard.KeyS",
+            "Keyboard.ArrowDown"
+          ]
+        },
+        {
+          name: "walkLeft",
+          categories: [
+            "walking"
+          ],
+          keys: [
+            "Keyboard.KeyA",
+            "Keyboard.ArrowLeft"
+          ]
+        },
+        {
+          name: "walkRight",
+          categories: [
+            "walking"
+          ],
+          keys: [
+            "Keyboard.KeyD",
+            "Keyboard.ArrowRight"
+          ]
+        },
+        {
+          name: "walkRun",
+          categories: [
+            "walking"
+          ],
+          keys: [
+            "Keyboard.ShiftLeft",
+            "Keyboard.ShiftRight"
+          ]
+        },
+        {
+          name: "walkFire",
+          categories: [
+            "walking"
+          ],
+          keys: [
+            "Keyboard.KeyF"
+          ]
+        },
+        {
+          name: "walkRecall",
+          categories: [
+            "walking"
+          ],
+          keys: [
+            "Keyboard.KeyR"
+          ]
+        }
+      ]), this.game.inputs.events.on("survivalRide", (r) => {
+        r.active && this.toggleRide();
+      });
+      const e = (r, s) => this.game.inputs.events.on(r, (o) => {
+        this.moves[s] = o.active;
+      });
+      e("walkForward", "forward"), e("walkBackward", "backward"), e("walkLeft", "left"), e("walkRight", "right"), e("walkRun", "run"), this.game.inputs.events.on("walkFire", (r) => {
+        this.survival.gun.firing = r.active;
+      }), this.game.inputs.events.on("walkRecall", (r) => {
+        r.active && this.active && this.enter(true);
+      });
+    }
+    toggleRide() {
+      this.survival.enabled && (this.active ? this.enter() : this.exit());
+    }
+    exit() {
+      var _a2, _b;
+      const e = this.game.physicalVehicle;
+      if (e.xzSpeed > SURVIVAL_WALKER.exitMaxSpeed) {
+        (_a2 = this.game.notifications) == null ? void 0 : _a2.show('<div class="top"><p class="title">\u0110ang ch\u1EA1y nhanh qu\xE1</p></div><div class="bottom"><p class="description">D\u1EEBng l\u1EA1i r\u1ED3i b\u1EA5m E</p></div>', "", 2);
+        return;
+      }
+      const r = SURVIVAL_WALKER.exitOffset, s = Math.atan2(e.position.x, e.position.z);
+      let o = e.position.x + Math.cos(s) * r, a = e.position.z - Math.sin(s) * r;
+      const h = this.survival.monsters.groundHeight(o, a);
+      h === null && (o = e.position.x, a = e.position.z), this.position.set(o, h ?? e.position.y, a), this.groundY = this.position.y, this.heading = 0, this.active = true, this.group.visible = true, this.game.inputs.filters.clear(), this.game.inputs.filters.add("walking"), this.survival.events.trigger("rideChange"), (_b = this.game.notifications) == null ? void 0 : _b.show('<div class="top"><p class="title">\u0110\xE3 xu\u1ED1ng xe</p></div><div class="bottom"><p class="description">W A S D \u0111i \xB7 Shift ch\u1EA1y \xB7 F b\u1EAFn \xB7 <strong>E</strong> l\xEAn l\u1EA1i \xB7 R v\u1EC1 ch\u1ED7 xe</p></div>', "is-achievement", 5);
+    }
+    enter(e = false) {
+      var _a2;
+      const r = this.game.physicalVehicle, s = Math.hypot(this.position.x - r.position.x, this.position.z - r.position.z);
+      if (!e && s > SURVIVAL_WALKER.enterRadius) {
+        (_a2 = this.game.notifications) == null ? void 0 : _a2.show('<div class="top"><p class="title">Xe \u1EDF xa qu\xE1</p></div><div class="bottom"><p class="description">L\u1EA1i g\u1EA7n r\u1ED3i b\u1EA5m E \u2014 ho\u1EB7c b\u1EA5m R \u0111\u1EC3 v\u1EC1 th\u1EB3ng ch\u1ED7 xe</p></div>', "", 2.5);
+        return;
+      }
+      this.active = false, this.group.visible = false, this.survival.gun.firing = false, this.game.inputs.filters.clear(), this.game.inputs.filters.add("wandering"), this.survival.events.trigger("rideChange");
+    }
+    reset() {
+      this.active && (this.active = false, this.group.visible = false, this.game.inputs.filters.clear(), this.game.inputs.filters.add("wandering"));
+    }
+    update() {
+      if (!this.active || !this.survival.enabled) return;
+      const e = Math.min(this.game.ticker.delta, 0.1);
+      this.move(e), this.animate(e), this.game.view.focusPoint.trackedPosition.set(this.position.x, 0, this.position.z);
+    }
+    move(e) {
+      this.game.view.camera.getWorldDirection(this.forwardVector ?? (this.forwardVector = new Vector3$1()));
+      const s = this.forwardVector.x, o = this.forwardVector.z, a = Math.hypot(s, o) || 1, h = s / a, c = o / a, d = -c, f = h;
+      let p = 0, m = 0;
+      this.moves.forward && (p += h, m += c), this.moves.backward && (p -= h, m -= c), this.moves.right && (p += d, m += f), this.moves.left && (p -= d, m -= f);
+      const b = Math.hypot(p, m);
+      if (b < 1e-3) {
+        this.speed = 0, this.phase += e * 2;
+        return;
+      }
+      p /= b, m /= b, this.speed = this.moves.run ? SURVIVAL_WALKER.runSpeed : SURVIVAL_WALKER.walkSpeed;
+      const _ = this.speed * e, M = this.position.x + p * _, R = this.position.z + m * _, O = this.survival.monsters.groundHeight(M, R);
+      if (O === null || (O - this.groundY) / Math.max(_, 1e-3) > SURVIVAL_WALKER.maxSlope) return;
+      this.position.x = M, this.position.z = R, this.groundY = O, this.position.y = O, this.phase += e * this.speed * 2.6;
+      let q = Math.atan2(p, m) - this.heading;
+      for (; q > Math.PI; ) q -= Math.PI * 2;
+      for (; q < -Math.PI; ) q += Math.PI * 2;
+      this.heading += q * Math.min(1, e * 12);
+    }
+    animate(e) {
+      this.group.position.set(this.position.x, this.groundY, this.position.z), this.group.rotation.y = this.heading;
+      const r = this.speed > 0.01, s = r ? Math.sin(this.phase) : Math.sin(this.phase) * 0.12, o = r ? Math.sin(this.phase + Math.PI) : Math.sin(this.phase + Math.PI) * 0.12, a = r ? this.speed / SURVIVAL_WALKER.runSpeed : 0.25;
+      this.legs[0].hip.rotation.x = s * 0.66 * a, this.legs[1].hip.rotation.x = o * 0.66 * a, this.legs[0].knee.rotation.x = Math.max(0, -s) * 0.9 * a, this.legs[1].knee.rotation.x = Math.max(0, -o) * 0.9 * a, this.arms[0].shoulder.rotation.x = o * 0.5 * a, this.arms[0].elbow.rotation.x = -0.3 - Math.max(0, o) * 0.35 * a, this.arms[1].shoulder.rotation.x = -0.95 + s * 0.08 * a, this.arms[1].elbow.rotation.x = -0.25, this.group.position.y = this.groundY + (r ? Math.abs(Math.sin(this.phase)) * 0.04 : 0);
+    }
+  }
   class Survival {
     constructor() {
-      this.game = Game.getInstance(), this.events = new Events(), this.enabled = false, this.upgrades = {}, this.phase = "preparing", this.wave = 0, this.health = this.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.best = parseInt(localStorage.getItem("survivalBestWave") ?? "0") || 0, this.toSpawn = 0, this.spawnTimer = 0, this.phaseTimer = 0, this.safeFor = 0, this.loot = [], this.lootMaterials = /* @__PURE__ */ new Map(), this.lootGeometry = new BoxGeometry$1(1, 1, 1), this.monsters = new SurvivalMonsters(this), this.gun = new SurvivalGun(this), this.setPreference(), this.setSounds(), this.setHud(), this.setShop(), this.setSettingsButtons(), this.game.ticker.events.on("tick", () => this.update(), 12);
+      this.game = Game.getInstance(), this.events = new Events(), this.enabled = false, this.upgrades = {}, this.phase = "preparing", this.wave = 0, this.health = this.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.best = parseInt(localStorage.getItem("survivalBestWave") ?? "0") || 0, this.toSpawn = 0, this.spawnTimer = 0, this.phaseTimer = 0, this.safeFor = 0, this.loot = [], this.lootMaterials = /* @__PURE__ */ new Map(), this.lootGeometry = new BoxGeometry$1(1, 1, 1), this.monsters = new SurvivalMonsters(this), this.gun = new SurvivalGun(this), this.walker = new SurvivalWalker(this), this.setPreference(), this.setSounds(), this.setHud(), this.setShop(), this.setSettingsButtons(), this.game.ticker.events.on("tick", () => this.update(), 12);
     }
     setPreference() {
       this.preference = {}, this.preference.names = [
@@ -102509,11 +102733,11 @@ https://github.com/browserify/crypto-browserify`);
     }
     enable() {
       var _a2, _b;
-      this.enabled = true, this.previousTime = this.game.dayCycles.preference.current, this.upgrades = {}, this.wave = 0, this.health = this.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.safeFor = 0, (_a2 = this.hudElement) == null ? void 0 : _a2.classList.add("is-visible"), this.startPreparing(4), (_b = this.game.notifications) == null ? void 0 : _b.show('<div class="top"><p class="title">Ch\u1EBF \u0111\u1ED9 Sinh t\u1ED3n</p></div><div class="bottom"><p class="description">Tr\u1EDDi s\u1EAFp t\u1ED1i. Gi\u1EEF <strong>F</strong> b\u1EAFn s\xFAng m\xE1y \xB7 <strong>X</strong> b\u1EAFn t\xEAn l\u1EEDa n\u1EBFu \u0111\xE3 b\u1EADt Rocket \xB7 h\xFAc th\u1EB3ng c\u0169ng ch\u1EBFt.</p></div>', "is-achievement", 6);
+      this.enabled = true, this.previousTime = this.game.dayCycles.preference.current, this.upgrades = {}, this.wave = 0, this.health = this.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.safeFor = 0, (_a2 = this.hudElement) == null ? void 0 : _a2.classList.add("is-visible"), this.startPreparing(4), (_b = this.game.notifications) == null ? void 0 : _b.show('<div class="top"><p class="title">Ch\u1EBF \u0111\u1ED9 Sinh t\u1ED3n</p></div><div class="bottom"><p class="description">Tr\u1EDDi s\u1EAFp t\u1ED1i. Gi\u1EEF <strong>F</strong> b\u1EAFn \xB7 <strong>X</strong> b\u1EAFn t\xEAn l\u1EEDa n\u1EBFu \u0111\xE3 b\u1EADt Rocket \xB7 h\xFAc th\u1EB3ng c\u0169ng ch\u1EBFt \xB7 <strong>E</strong> xu\u1ED1ng xe \u0111i b\u1ED9.</p></div>', "is-achievement", 6);
     }
     disable() {
       var _a2, _b, _c;
-      this.enabled = false, this.monsters.clear(), this.gun.clear(), this.clearLoot(), (_a2 = this.hudElement) == null ? void 0 : _a2.classList.remove("is-visible"), (_b = this.shopElement) == null ? void 0 : _b.classList.remove("is-visible"), (_c = this.bossElement) == null ? void 0 : _c.classList.remove("is-visible"), this.boss = null, this.lastShopOpen = null, this.lastBossAlive = null, this.setDefeatedOverlay(false), this.previousTime && this.setTime(this.previousTime, 3);
+      this.enabled = false, this.monsters.clear(), this.gun.clear(), this.walker.reset(), this.clearLoot(), (_a2 = this.hudElement) == null ? void 0 : _a2.classList.remove("is-visible"), (_b = this.shopElement) == null ? void 0 : _b.classList.remove("is-visible"), (_c = this.bossElement) == null ? void 0 : _c.classList.remove("is-visible"), this.boss = null, this.lastShopOpen = null, this.lastBossAlive = null, this.setDefeatedOverlay(false), this.previousTime && this.setTime(this.previousTime, 3);
     }
     setTime(e, r) {
       const s = localStorage.getItem("dayCyclePreference");
@@ -102597,7 +102821,7 @@ https://github.com/browserify/crypto-browserify`);
     update() {
       var _a2;
       if (!this.enabled) return;
-      const e = Math.min(this.game.ticker.delta, 0.1), r = this.game.physicalVehicle, s = r.position;
+      const e = Math.min(this.game.ticker.delta, 0.1), r = this.game.physicalVehicle, s = this.walker.active ? this.walker.position : r.position;
       if (this.phase === "defeated") {
         this.phaseTimer -= e, this.monsters.update(e, s, () => {
         }), this.phaseTimer <= 0 && this.restart(), this.updateHud();
@@ -102619,15 +102843,21 @@ https://github.com/browserify/crypto-browserify`);
     }
     sightRange(e) {
       var _a2, _b;
+      if (this.walker.active) return SURVIVAL_STEALTH.baseRange * SURVIVAL_WALKER.stealthFactor + this.walker.speed * SURVIVAL_STEALTH.speedRange * 0.5;
       let r = SURVIVAL_STEALTH.baseRange;
       return ((_b = (_a2 = this.game.lighting) == null ? void 0 : _a2.headlights) == null ? void 0 : _b.shouldBeOn()) && (r *= SURVIVAL_STEALTH.headlightsFactor), r += e.xzSpeed * SURVIVAL_STEALTH.speedRange, r;
     }
     onMonsterReach(e, r) {
-      var _a2;
-      r.xzSpeed > SURVIVAL_PLAYER.rammingSpeed || (this.hurt(e.spec.damage * 0.6), (_a2 = this.sounds.bite) == null ? void 0 : _a2.play(e.root.position));
+      var _a2, _b;
+      if (this.walker.active) {
+        this.hurt(e.spec.damage * 0.6 * SURVIVAL_WALKER.damageFactor), (_a2 = this.sounds.bite) == null ? void 0 : _a2.play(e.root.position);
+        return;
+      }
+      r.xzSpeed > SURVIVAL_PLAYER.rammingSpeed || (this.hurt(e.spec.damage * 0.6), (_b = this.sounds.bite) == null ? void 0 : _b.play(e.root.position));
     }
     updateRamming(e, r) {
       var _a2;
+      if (this.walker.active) return;
       const s = r.xzSpeed;
       if (s <= SURVIVAL_PLAYER.rammingSpeed) return;
       const o = (s - SURVIVAL_PLAYER.rammingSpeed) * SURVIVAL_PLAYER.rammingPower * (1 + this.level("ram") * 0.45);
@@ -102739,16 +102969,16 @@ https://github.com/browserify/crypto-browserify`);
       e !== this.lastHealth && (this.lastHealth = e, this.hudParts.healthValue.textContent = e, this.hudParts.healthBar.style.transform = `scaleX(${e / this.maxHealth})`, this.hudElement.classList.toggle("is-critical", e <= 30)), this.wave !== this.lastWave && (this.lastWave = this.wave, this.hudParts.wave.textContent = this.wave);
       const r = this.phase === "hunting" ? this.toSpawn + this.monsters.aliveCount : 0;
       r !== this.lastLeft && (this.lastLeft = r, this.hudParts.left.textContent = r);
-      const s = this.phase === "hunting" && this.monsters.monsters.some((d) => !d.dead && d.sees), o = this.phase === "defeated" ? "G\u1EE5c" : this.phase === "preparing" ? `Ngh\u1EC9 ${Math.ceil(Math.max(0, this.phaseTimer))}s` : s ? "B\u1ECB s\u0103n" : "\u0110ang n\u1EA5p";
-      o !== this.lastState && (this.lastState = o, this.hudParts.state.textContent = o), this.money !== this.lastMoney && (this.lastMoney = this.money, this.hudParts.money.textContent = this.money), this.score !== this.lastScore && (this.lastScore = this.score, this.hudParts.score.textContent = this.score);
-      const a = Math.round(this.gun.heat * 100) / 100;
-      a !== this.lastHeat && (this.lastHeat = a, this.hudParts.heatBar.style.transform = `scaleX(${a})`), this.gun.jammed !== this.lastJammed && (this.lastJammed = this.gun.jammed, this.hudElement.classList.toggle("is-jammed", this.gun.jammed));
-      const h = this.phase === "preparing";
-      h !== this.lastShopOpen && (this.lastShopOpen = h, (_a2 = this.shopElement) == null ? void 0 : _a2.classList.toggle("is-visible", h), h && this.renderShop()), h && this.money !== this.lastShopMoney && (this.lastShopMoney = this.money, this.renderShop());
-      const c = !!(this.boss && !this.boss.dead);
-      if (c !== this.lastBossAlive && (this.lastBossAlive = c, (_b = this.bossElement) == null ? void 0 : _b.classList.toggle("is-visible", c)), c) {
-        const d = Math.max(0, this.boss.hp / this.boss.maxHp);
-        Math.abs(d - (this.lastBossRatio ?? -1)) > 5e-3 && (this.lastBossRatio = d, this.bossBarElement.style.transform = `scaleX(${d})`);
+      const s = this.phase === "hunting" && this.monsters.monsters.some((f) => !f.dead && f.sees), o = this.walker.active ? "\u0110i b\u1ED9 \xB7 " : "", a = this.phase === "defeated" ? "G\u1EE5c" : o + (this.phase === "preparing" ? `Ngh\u1EC9 ${Math.ceil(Math.max(0, this.phaseTimer))}s` : s ? "B\u1ECB s\u0103n" : "\u0110ang n\u1EA5p");
+      a !== this.lastState && (this.lastState = a, this.hudParts.state.textContent = a), this.money !== this.lastMoney && (this.lastMoney = this.money, this.hudParts.money.textContent = this.money), this.score !== this.lastScore && (this.lastScore = this.score, this.hudParts.score.textContent = this.score);
+      const h = Math.round(this.gun.heat * 100) / 100;
+      h !== this.lastHeat && (this.lastHeat = h, this.hudParts.heatBar.style.transform = `scaleX(${h})`), this.gun.jammed !== this.lastJammed && (this.lastJammed = this.gun.jammed, this.hudElement.classList.toggle("is-jammed", this.gun.jammed));
+      const c = this.phase === "preparing";
+      c !== this.lastShopOpen && (this.lastShopOpen = c, (_a2 = this.shopElement) == null ? void 0 : _a2.classList.toggle("is-visible", c), c && this.renderShop()), c && this.money !== this.lastShopMoney && (this.lastShopMoney = this.money, this.renderShop());
+      const d = !!(this.boss && !this.boss.dead);
+      if (d !== this.lastBossAlive && (this.lastBossAlive = d, (_b = this.bossElement) == null ? void 0 : _b.classList.toggle("is-visible", d)), d) {
+        const f = Math.max(0, this.boss.hp / this.boss.maxHp);
+        Math.abs(f - (this.lastBossRatio ?? -1)) > 5e-3 && (this.lastBossRatio = f, this.bossBarElement.style.transform = `scaleX(${f})`);
       }
     }
     setSettingsButtons() {
@@ -116932,7 +117162,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-BBiNT_lE.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-4R07STf7.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

@@ -98818,7 +98818,7 @@ https://github.com/browserify/crypto-browserify`);
     cable: "#c9ced6",
     deck: "#6e747c",
     plaza: "#b9a68c"
-  }, GROUND_TOP = 0.04, SEA_FLOOR = -1.6, ISLAND_SHORE = 0.13, PALETTE = {
+  }, GROUND_TOP = 0.04, SEA_FLOOR = -1.6, ISLAND_SHORE = 0.13, ROAD_LIFT = 0.05, DECAL_LIFT = 0.1, PALETTE = {
     grass: "#7a8471",
     sand: "#cbb392",
     shallow: "#4d8a86",
@@ -98827,7 +98827,7 @@ https://github.com/browserify/crypto-browserify`);
   };
   class CityIsland {
     constructor() {
-      this.game = Game.getInstance(), this.group = new Group(), this.group.name = "cityIsland", this.game.scene.add(this.group), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1, 10), this.materials = /* @__PURE__ */ new Map(), this.groundTop = GROUND_TOP, this.grid = CITY_GRID, this.indexPieces(), this.setIsland(), this.setBridge(), this.setStreets(), this.setRoadMarkings(), this.setBlocks(), this.setTowers(), this.setPlaza(), this.setStreetFurniture();
+      this.game = Game.getInstance(), this.group = new Group(), this.group.name = "cityIsland", this.game.scene.add(this.group), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1, 10), this.materials = /* @__PURE__ */ new Map(), this.groundTop = GROUND_TOP, this.grid = CITY_GRID, this.instances = /* @__PURE__ */ new Map(), this.indexPieces(), this.setIsland(), this.setBridge(), this.setStreets(), this.setRoadMarkings(), this.setBlocks(), this.setTowers(), this.setPlaza(), this.setStreetFurniture(), this.buildInstances();
     }
     indexPieces() {
       var _a2;
@@ -98845,43 +98845,58 @@ https://github.com/browserify/crypto-browserify`);
     place(e, r, s, o = 0, { y: a = GROUND_TOP, physical: h = null, scale: c = MODEL_SCALE } = {}) {
       const d = this.piece(e);
       if (!d) return console.warn(`[CityIsland] kh\xF4ng c\xF3 m\u1EA3nh "${e}"`), null;
-      const f = d.clone(true);
-      if (f.position.set(r, a, s), f.rotation.y = o, f.scale.setScalar(c), f.traverse((p) => {
-        p.isMesh && (p.castShadow = true, p.receiveShadow = true);
-      }), this.game.materials.updateObject(f), this.group.add(f), h === "box") {
-        const p = new Box3$1(), m = new Box3$1();
-        let b = false;
-        if (d.traverse((w) => {
-          !w.isMesh || !w.geometry || (w.geometry.boundingBox || w.geometry.computeBoundingBox(), m.copy(w.geometry.boundingBox), b ? p.union(m) : (p.copy(m), b = true));
-        }), b) {
-          const w = p.getSize(new Vector3$1()).multiplyScalar(c), M = p.getCenter(new Vector3$1()).multiplyScalar(c), P = new Vector2$1(M.x, M.z).rotateAround(new Vector2$1(), -o), O = new Quaternion$1().setFromEuler(new Euler$1(0, o, 0));
-          this.game.objects.add(null, {
-            type: "fixed",
-            position: {
-              x: r + P.x,
-              y: a + M.y,
-              z: s + P.y
-            },
-            rotation: {
-              x: O.x,
-              y: O.y,
-              z: O.z,
-              w: O.w
-            },
-            colliders: [
-              {
-                shape: "cuboid",
-                parameters: [
-                  w.x * 0.5,
-                  w.y * 0.5,
-                  w.z * 0.5
-                ]
-              }
-            ]
-          });
-        }
+      const f = new Matrix4$1().compose(new Vector3$1(r, a, s), new Quaternion$1().setFromEuler(new Euler$1(0, o, 0)), new Vector3$1(c, c, c));
+      let p = this.instances.get(e);
+      return p || (p = [], this.instances.set(e, p)), p.push(f), h === "box" && this.addBoxCollider(d, r, a, s, o, c), null;
+    }
+    buildInstances() {
+      let e = 0;
+      for (const [r, s] of this.instances) {
+        const o = this.piece(r);
+        !o || s.length === 0 || (this.game.materials.updateObject(o), o.updateWorldMatrix(true, true), o.traverse((a) => {
+          if (!a.isMesh) return;
+          const h = new Matrix4$1();
+          a.updateWorldMatrix(true, false), h.copy(o.matrixWorld).invert().multiply(a.matrixWorld);
+          const c = new InstancedMesh(a.geometry, a.material, s.length);
+          c.castShadow = true, c.receiveShadow = true;
+          const d = new Matrix4$1();
+          for (let f = 0; f < s.length; f++) d.copy(s[f]).multiply(h), c.setMatrixAt(f, d);
+          c.instanceMatrix.needsUpdate = true, c.computeBoundingSphere(), this.group.add(c), e++;
+        }));
       }
-      return f;
+      this.instancedCount = e;
+    }
+    addBoxCollider(e, r, s, o, a, h) {
+      const c = new Box3$1(), d = new Box3$1();
+      let f = false;
+      if (e.traverse((M) => {
+        !M.isMesh || !M.geometry || (M.geometry.boundingBox || M.geometry.computeBoundingBox(), d.copy(M.geometry.boundingBox), f ? c.union(d) : (c.copy(d), f = true));
+      }), !f) return;
+      const p = c.getSize(new Vector3$1()).multiplyScalar(h), m = c.getCenter(new Vector3$1()).multiplyScalar(h), b = new Vector2$1(m.x, m.z).rotateAround(new Vector2$1(), -a), w = new Quaternion$1().setFromEuler(new Euler$1(0, a, 0));
+      this.game.objects.add(null, {
+        type: "fixed",
+        position: {
+          x: r + b.x,
+          y: s + m.y,
+          z: o + b.y
+        },
+        rotation: {
+          x: w.x,
+          y: w.y,
+          z: w.z,
+          w: w.w
+        },
+        colliders: [
+          {
+            shape: "cuboid",
+            parameters: [
+              p.x * 0.5,
+              p.y * 0.5,
+              p.z * 0.5
+            ]
+          }
+        ]
+      });
     }
     getMaterial(e) {
       let r = this.materials.get(e);
@@ -99121,17 +99136,23 @@ https://github.com/browserify/crypto-browserify`);
         const b = CITY_GRID.z - c * 0.5;
         for (let w = a * 0.5; w < c; w += a) {
           const M = b + w;
-          p(m, M) || this.place("Street_4Lane", m, M, Math.PI * 0.5);
+          p(m, M) || this.place("Street_4Lane", m, M, Math.PI * 0.5, {
+            y: GROUND_TOP + ROAD_LIFT
+          });
         }
       }
       for (const m of f) {
         const b = CITY_GRID.x - h * 0.5;
         for (let w = a * 0.5; w < h; w += a) {
           const M = b + w;
-          p(M, m) || this.place("Street_4Lane", M, m, 0);
+          p(M, m) || this.place("Street_4Lane", M, m, 0, {
+            y: GROUND_TOP + ROAD_LIFT
+          });
         }
       }
-      for (const m of d) for (const b of f) this.place("Street_4WayIntersection", m, b, 0);
+      for (const m of d) for (const b of f) this.place("Street_4WayIntersection", m, b, 0, {
+        y: GROUND_TOP + ROAD_LIFT
+      });
       this.roadXs = d, this.roadZs = f, this.roadHalfWidth = o * 0.5;
     }
     setBlocks() {
@@ -99190,7 +99211,7 @@ https://github.com/browserify/crypto-browserify`);
       }
     }
     setRoadMarkings() {
-      const { cols: e, rows: r, blockSize: s, roadWidth: o } = CITY_GRID, a = 6 * MODEL_SCALE, h = e * s + (e + 1) * o, c = r * s + (r + 1) * o, d = GROUND_TOP + 0.06, f = (p, m) => {
+      const { cols: e, rows: r, blockSize: s, roadWidth: o } = CITY_GRID, a = 6 * MODEL_SCALE, h = e * s + (e + 1) * o, c = r * s + (r + 1) * o, d = GROUND_TOP + DECAL_LIFT, f = (p, m) => {
         for (const b of this.roadXs) for (const w of this.roadZs) if (Math.abs(p - b) < 7.5 && Math.abs(m - w) < 7.5) return true;
         return false;
       };
@@ -114198,7 +114219,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-DvcuOxJ1.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-CIP3pcMB.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

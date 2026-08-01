@@ -21,6 +21,20 @@ const GROUND_TOP = 0.04
 const SEA_FLOOR = -1.6
 const ISLAND_SHORE = 0.13
 
+/**
+ * ĐỘ CAO CỦA MẶT ĐƯỜNG SO VỚI NỀN ĐẢO — đừng hạ xuống.
+ *
+ * ⚠️ Mảnh đường của kit có mặt trên nằm ĐÚNG ở gốc toạ độ của nó, nên đặt mảnh
+ * ở `GROUND_TOP` là mặt đường trùng khít mặt nền: đo được đường ở 0,0403 và nền
+ * ở 0,0400 — **chênh 0,3 mm**. Depth buffer không phân biệt nổi, hai mặt tranh
+ * nhau từng điểm ảnh, và kết quả là user thấy "nhà bị nhiễu giật giật" mà lại
+ * KHÔNG thấy đường và vạch kẻ đâu cả.
+ *
+ * Ba lớp cách nhau 5 cm: nền đảo → mặt đường → vạch kẻ.
+ */
+const ROAD_LIFT = 0.05
+const DECAL_LIFT = 0.10
+
 const PALETTE = {
     grass: '#7a8471',      // cỏ đô thị, xám hơn hai đảo kia
     sand: '#cbb392',
@@ -47,6 +61,9 @@ export class CityIsland
         /** Số liệu lưới phơi ra cho bộ kiểm đọc — đừng gõ tay lại ở đó. */
         this.grid = CITY_GRID
 
+        /** Sổ instance: tên mảnh → danh sách ma trận. `place()` ghi vào đây. */
+        this.instances = new Map()
+
         this.indexPieces()
 
         this.setIsland()
@@ -57,6 +74,9 @@ export class CityIsland
         this.setTowers()
         this.setPlaza()
         this.setStreetFurniture()
+
+        // SAU CÙNG, khi sổ instance đã đầy — gọi sớm là mất trọn phần dựng sau đó
+        this.buildInstances()
     }
 
     /**
@@ -115,75 +135,122 @@ export class CityIsland
             return null
         }
 
-        const mesh = source.clone(true)
-
-        mesh.position.set(x, y, z)
-        mesh.rotation.y = rotationY
-        mesh.scale.setScalar(scale)
-        mesh.traverse((child) =>
-        {
-            if(child.isMesh)
-            {
-                child.castShadow = true
-                child.receiveShadow = true
-            }
-        })
-
         /**
-         * Ép vật liệu về hệ của game. `Materials.createFromMaterial()` nhận
-         * `MeshStandardMaterial` (thứ glTF sinh ra) và GIỮ NGUYÊN texture, chỉ
-         * đổi sang hệ TSL — nên mảnh vẫn giữ vẻ riêng mà ăn đúng ánh sáng,
-         * sương mù và bóng đổ của thế giới này.
+         * GOM VÀO SỔ INSTANCE thay vì clone ngay.
+         *
+         * ⚠️ Bản đầu clone thẳng mỗi mảnh ⇒ **3035 mesh riêng lẻ** chỉ riêng
+         * thành phố (tổng cả thế giới vọt lên 6759, gần gấp đôi), mỗi cái một
+         * draw call. User báo đúng: "game rất lag". Nay mọi bản sao của cùng
+         * một mảnh gộp thành `InstancedMesh` ở `buildInstances()`, chạy sau
+         * cùng — từ hàng nghìn draw call xuống vài chục.
+         *
+         * Va chạm vẫn tạo NGAY tại đây: nó không liên quan gì tới hình.
          */
-        this.game.materials.updateObject(mesh)
+        const matrix = new THREE.Matrix4().compose(
+            new THREE.Vector3(x, y, z),
+            new THREE.Quaternion().setFromEuler(new THREE.Euler(0, rotationY, 0)),
+            new THREE.Vector3(scale, scale, scale),
+        )
 
-        this.group.add(mesh)
-
-        if(physical === 'box')
+        let bucket = this.instances.get(name)
+        if(!bucket)
         {
-            /**
-             * ⚠️ Va chạm dùng HỘP BAO, KHÔNG trimesh. Trimesh nặng và mỗi khe
-             * giữa hai mảnh là một chỗ bánh xe kẹt — đúng bài học đắt nhất của
-             * khu FPTU. Hộp bao thì tệ nhất là xe đâm vào chỗ trống một chút,
-             * còn hơn kẹt cứng.
-             *
-             * ⚠️ Và phải đo bằng hộp bao CỤC BỘ nhân scale, KHÔNG dùng
-             * `Box3.setFromObject()`: trước khung hình đầu tiên `matrixWorld`
-             * còn là ma trận đơn vị nên nó trả về hộp 1×1×1 ở gốc toạ độ.
-             */
-            const box = new THREE.Box3()
-            const tmp = new THREE.Box3()
-            let has = false
-            source.traverse((child) =>
-            {
-                if(!child.isMesh || !child.geometry) return
-                if(!child.geometry.boundingBox) child.geometry.computeBoundingBox()
-                tmp.copy(child.geometry.boundingBox)
-                if(has) box.union(tmp)
-                else { box.copy(tmp); has = true }
-            })
-
-            if(has)
-            {
-                const size = box.getSize(new THREE.Vector3()).multiplyScalar(scale)
-                const centre = box.getCenter(new THREE.Vector3()).multiplyScalar(scale)
-                // Tâm hộp bao xoay theo cùng góc với hình
-                const offset = new THREE.Vector2(centre.x, centre.z).rotateAround(new THREE.Vector2(), -rotationY)
-                const quaternion = new THREE.Quaternion().setFromEuler(new THREE.Euler(0, rotationY, 0))
-
-                // Hộp bao chỉ xoay quanh Y nên bề rộng/sâu hoán đổi khi xoay 90°
-                this.game.objects.add(null, {
-                    type: 'fixed',
-                    position: { x: x + offset.x, y: y + centre.y, z: z + offset.y },
-                    rotation: { x: quaternion.x, y: quaternion.y, z: quaternion.z, w: quaternion.w },
-                    colliders: [ { shape: 'cuboid', parameters: [ size.x * 0.5, size.y * 0.5, size.z * 0.5 ] } ]
-                })
-            }
+            bucket = []
+            this.instances.set(name, bucket)
         }
+        bucket.push(matrix)
 
-        return mesh
+        if(physical === 'box') this.addBoxCollider(source, x, y, z, rotationY, scale)
+
+        return null
     }
 
+    /**
+     * Dựng `InstancedMesh` cho mọi mảnh đã gom. Gọi SAU CÙNG, khi sổ đã đầy.
+     *
+     * Mỗi mảnh của kit là một node có thể chứa nhiều mesh con (mỗi con một vật
+     * liệu), nên mỗi (mảnh × mesh con) thành một `InstancedMesh` riêng.
+     */
+    buildInstances()
+    {
+        let created = 0
+
+        for(const [ name, matrices ] of this.instances)
+        {
+            const source = this.piece(name)
+            if(!source || matrices.length === 0) continue
+
+            // Ép vật liệu MỘT LẦN trên bản gốc, mọi instance dùng chung
+            this.game.materials.updateObject(source)
+            source.updateWorldMatrix(true, true)
+
+            source.traverse((child) =>
+            {
+                if(!child.isMesh) return
+
+                /**
+                 * Mesh con có transform riêng trong node cha, nên ma trận cuối
+                 * của mỗi bản sao là `matrixThếGiớiCủaInstance × matrixCụcBộCủaCon`.
+                 * Bỏ vế sau thì mọi chi tiết dồn hết về gốc của mảnh.
+                 */
+                const local = new THREE.Matrix4()
+                child.updateWorldMatrix(true, false)
+                local.copy(source.matrixWorld).invert().multiply(child.matrixWorld)
+
+                const instanced = new THREE.InstancedMesh(child.geometry, child.material, matrices.length)
+                instanced.castShadow = true
+                instanced.receiveShadow = true
+
+                const composed = new THREE.Matrix4()
+                for(let i = 0; i < matrices.length; i++)
+                {
+                    composed.copy(matrices[i]).multiply(local)
+                    instanced.setMatrixAt(i, composed)
+                }
+                instanced.instanceMatrix.needsUpdate = true
+                instanced.computeBoundingSphere()
+
+                this.group.add(instanced)
+                created++
+            })
+        }
+
+        this.instancedCount = created
+    }
+
+    /** Hộp bao cho một mảnh — tách khỏi `place()` vì hình nay đi đường instance. */
+    addBoxCollider(source, x, y, z, rotationY, scale)
+    {
+        /**
+         * ⚠️ Đo bằng hộp bao CỤC BỘ của hình học nhân `scale`, KHÔNG dùng
+         * `Box3.setFromObject()`: trước khung hình đầu tiên `matrixWorld` còn
+         * là ma trận đơn vị nên nó trả về hộp 1×1×1 ở gốc toạ độ.
+         */
+        const box = new THREE.Box3()
+        const tmp = new THREE.Box3()
+        let has = false
+        source.traverse((child) =>
+        {
+            if(!child.isMesh || !child.geometry) return
+            if(!child.geometry.boundingBox) child.geometry.computeBoundingBox()
+            tmp.copy(child.geometry.boundingBox)
+            if(has) box.union(tmp)
+            else { box.copy(tmp); has = true }
+        })
+        if(!has) return
+
+        const size = box.getSize(new THREE.Vector3()).multiplyScalar(scale)
+        const centre = box.getCenter(new THREE.Vector3()).multiplyScalar(scale)
+        const offset = new THREE.Vector2(centre.x, centre.z).rotateAround(new THREE.Vector2(), -rotationY)
+        const quaternion = new THREE.Quaternion().setFromEuler(new THREE.Euler(0, rotationY, 0))
+
+        this.game.objects.add(null, {
+            type: 'fixed',
+            position: { x: x + offset.x, y: y + centre.y, z: z + offset.y },
+            rotation: { x: quaternion.x, y: quaternion.y, z: quaternion.z, w: quaternion.w },
+            colliders: [ { shape: 'cuboid', parameters: [ size.x * 0.5, size.y * 0.5, size.z * 0.5 ] } ]
+        })
+    }
     getMaterial(hex)
     {
         let material = this.materials.get(hex)
@@ -486,7 +553,7 @@ export class CityIsland
             {
                 const cz = from + d
                 if(nearCross(cx, cz)) continue
-                this.place('Street_4Lane', cx, cz, Math.PI * 0.5)
+                this.place('Street_4Lane', cx, cz, Math.PI * 0.5, { y: GROUND_TOP + ROAD_LIFT })
             }
         }
 
@@ -498,14 +565,14 @@ export class CityIsland
             {
                 const cx = from + d
                 if(nearCross(cx, cz)) continue
-                this.place('Street_4Lane', cx, cz, 0)
+                this.place('Street_4Lane', cx, cz, 0, { y: GROUND_TOP + ROAD_LIFT })
             }
         }
 
         // Ngã tư ở mọi giao điểm
         for(const cx of xs)
             for(const cz of zs)
-                this.place('Street_4WayIntersection', cx, cz, 0)
+                this.place('Street_4WayIntersection', cx, cz, 0, { y: GROUND_TOP + ROAD_LIFT })
 
         this.roadXs = xs
         this.roadZs = zs
@@ -585,7 +652,7 @@ export class CityIsland
         const pieceLength = 6 * MODEL_SCALE
         const spanX = cols * blockSize + (cols + 1) * roadWidth
         const spanZ = rows * blockSize + (rows + 1) * roadWidth
-        const y = GROUND_TOP + 0.06
+        const y = GROUND_TOP + DECAL_LIFT
 
         const nearCross = (x, z) =>
         {

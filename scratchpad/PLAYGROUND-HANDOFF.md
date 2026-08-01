@@ -7,8 +7,20 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
 
 # 0. TRẠNG THÁI
 
-- **Đã deploy prod** — `cuongthai.com/playground/`, gói `index-C86N3tsb.js`,
-  xác minh prod trỏ đúng bản local và `city/city.glb` phục vụ được (2,55 MB).
+## ⛔ VIỆC ĐẦU TIÊN CỦA PHIÊN SAU: CHẠY `bash deploy.sh`
+
+Prod đang chạy gói **`index-C86N3tsb.js`** (bản có nhiễu + lag). Hai commit sửa
+lỗi **đã build và commit nhưng CHƯA lên prod** — gói local là `index-B4vtlPVx.js`:
+
+- `83111c3` sửa z-fighting + gộp InstancedMesh (hết nhiễu, hết lag)
+- `89e6a4c` cầu dây văng thưa và mảnh hơn
+
+Chạy `bash deploy.sh` **ở chế độ nền** (mất >10 phút), rồi so gói prod với local
+để xác nhận. Lần deploy dở dang không hỏng gì — prod vẫn sống, chỉ là gói cũ.
+
+---
+
+- Prod: `cuongthai.com/playground/`, `city/city.glb` phục vụ được (2,55 MB).
 - Mục **0b** (phá huỷ + tên lửa) và **0c** (máy quay + âm thanh) xong 31/7.
 - Mục **0d** (đảo sân chơi + sân bóng đá lái xe) xong 1/8 — đã live, đã push.
 - Mục **0e** (đảo thành phố + nhà xe) xong 1/8 — **đã live**, commit `95b3582`.
@@ -25,6 +37,24 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
   nên chúng nằm trong cây làm việc lúc `deploy.sh` rsync cũng vô hại.)
 
 ## 🔜 VIỆC TIẾP THEO — user chốt 1/8, theo thứ tự này
+
+### 0. Hai bài học vừa trả giá ở thành phố (1/8) — áp cho MỌI khu sau
+
+**Z-FIGHTING**: mảnh model ngoài thường có mặt trên nằm đúng ở gốc toạ độ của
+nó. Đặt ở `GROUND_TOP` là trùng khít mặt nền — đo được **chênh 0,3 mm**, và
+triệu chứng user thấy là "nhà bị nhiễu giật giật" cộng với việc **đường và vạch
+kẻ biến mất khỏi ảnh**. Luôn nhấc lên: nền → đường (+0,05) → vạch kẻ (+0,10).
+
+**DRAW CALL**: clone thẳng từng mảnh kit ⇒ 3035 mesh riêng lẻ chỉ riêng thành
+phố, tổng cả thế giới vọt 3734 → 6759, và user báo "game rất lag". Dùng
+`InstancedMesh`: `place()` chỉ GOM ma trận, `buildInstances()` chạy sau cùng.
+Kết quả 3035 → 77 mesh + 59 instanced, tổng về 3860.
+⚠️ Ma trận mỗi bản sao = `matrixInstance × matrixCụcBộCủaMeshCon` — bỏ vế sau
+thì mọi chi tiết dồn về gốc mảnh.
+
+⚠️ `check-ghost-colliders.mjs` CÓ mục "mặt tranh nhau chiều sâu" — sinh ra đúng
+để bắt z-fighting — nhưng nó **chỉ soi khu FPTU** nên không thấy gì ở thành phố.
+**Nên mở rộng nó sang cả bốn đảo.**
 
 ### 1. Chế độ lái NGƯỜI THỨ NHẤT (ngồi trong cabin)
 

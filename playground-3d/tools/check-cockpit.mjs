@@ -56,10 +56,29 @@ const report = await page.evaluate(async () =>
 
     // ── 1. Buồng lái có dựng lên thật ───────────────────────────────────────
     {
+        /**
+         * ⚠️ ĐỪNG kiểm bằng ngưỡng cứng "ít nhất N mảnh".
+         * User tắt dần từng bộ phận cho gọn (xem `PARTS` trong `Cockpit.js`),
+         * nên con số ấy tụt theo ý người dùng chứ không phải theo lỗi. Kiểm
+         * đúng thứ đáng kiểm: **mục nào đang BẬT thì phải thật sự dựng lên**.
+         */
         facts.soMeshNoiThat = cockpit.group ? cockpit.group.children.length : 0
+        facts.bocPhanDangBat = Object.entries(cockpit.parts ?? {}).filter(([ , on ]) => on).map(([ name ]) => name).join(' · ') || '(không có gì)'
+
         if(!cockpit.group) problems.push('Buồng lái KHÔNG dựng được (group rỗng)')
-        else if(cockpit.group.children.length < 4)
-            problems.push(`Buồng lái chỉ có ${cockpit.group.children.length} mảnh, đáng lẽ ít nhất 4`)
+
+        const built = {
+            dashboard: !!cockpit.dashboard,
+            gauges: !!(cockpit.needles?.speed && cockpit.needles?.rev),
+            steeringWheel: !!cockpit.steeringRim,
+            windshield: !!cockpit.glass,
+        }
+        for(const [ name, on ] of Object.entries(cockpit.parts ?? {}))
+        {
+            if(!(name in built)) continue
+            if(on && !built[name]) problems.push(`PARTS.${name} đang BẬT nhưng không dựng lên`)
+            if(!on && built[name]) problems.push(`PARTS.${name} đang TẮT nhưng vẫn dựng lên`)
+        }
 
         if(!cockpit.bounds) problems.push('Không đo được hộp bao thân xe')
     }
@@ -320,6 +339,12 @@ const report = await page.evaluate(async () =>
     // ── 9. Đồng hồ quay mặt về phía người lái ───────────────────────────────
     // Đặt nhầm mặt táp lô hoặc nhầm dấu `rotation.y` thì đồng hồ vẫn dựng lên
     // nhưng quay ra đằng trước — chỉ người đi đường mới đọc được.
+    // Bỏ qua khi đồng hồ đang tắt (`PARTS.gauges`) — user cố ý, không phải lỗi
+    if(!cockpit.parts?.gauges)
+    {
+        facts.matSoQuayVeNguoiLai = '(đồng hồ đang tắt — bỏ qua)'
+    }
+    else
     {
         const dials = []
         cockpit.group.traverse((child) =>
@@ -367,8 +392,10 @@ const report = await page.evaluate(async () =>
         facts.doiXe = `${before} mảnh → oldschool ${afterOld} → về default ${afterBack}`
         facts.matTheoXe = `default (${round(beforeEye.x)} · ${round(beforeEye.y)}) → oldschool (${round(eyeOld.x)} · ${round(eyeOld.y)})`
 
-        if(afterOld < 6) problems.push(`Đổi sang oldschool làm mất nội thất (còn ${afterOld} mảnh)`)
-        if(afterBack < 6) problems.push(`Đổi ngược về default làm mất nội thất (còn ${afterBack} mảnh)`)
+        // So với chính số mảnh TRƯỚC khi đổi, không với ngưỡng cứng — số ấy phụ
+        // thuộc `PARTS`, mà `PARTS` thì user vặn theo ý
+        if(afterOld < before) problems.push(`Đổi sang oldschool làm mất nội thất (${before} → ${afterOld} mảnh)`)
+        if(afterBack < before) problems.push(`Đổi ngược về default làm mất nội thất (${before} → ${afterBack} mảnh)`)
         if(Math.abs(eyeOld.y - beforeEye.y) < 1e-6 && Math.abs(eyeOld.x - beforeEye.x) < 1e-6)
             problems.push('Chỗ ngồi KHÔNG đo lại theo xe mới — có phải đang gõ cứng số?')
 

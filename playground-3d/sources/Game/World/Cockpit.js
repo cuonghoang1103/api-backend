@@ -95,19 +95,25 @@ const EYE = {
 /**
  * Bộ phận nào của buồng lái được dựng.
  *
- * ⚠️ VÔ LĂNG và KHUNG KÍNH TẮT theo yêu cầu user (1/8): *"xoá cái vô lăng và
- * cái khung đen đen kia cho gọn"*. Cả hai đều là khối tối nằm chắn ngay giữa
- * và trên đỉnh khung hình — dựng thì "giống xe thật" hơn, nhưng ngồi lái thật
- * thì chúng ăn mất phần lớn tầm nhìn.
+ * ⚠️ USER ĐÃ TẮT GẦN HẾT, qua ba lượt thử trong cùng buổi 1/8:
+ *   · *"xoá cái vô lăng và cái khung đen đen kia cho gọn"* → vô lăng, khung kính
+ *   · *"xoá luôn đồng hồ và tay cầm đi kia cho gọn"*       → táp lô, đồng hồ, cần số
  *
- * Mã dựng vẫn giữ nguyên chứ không xoá: user đã đổi ý về máy quay cabin hai
- * lần trong cùng một buổi, nên bật lại chỉ tốn một chữ `true` ở đây.
+ * Bài học chung: mọi thứ dựng thêm trong cabin đều nằm RẤT GẦN mắt, nên dù nhỏ
+ * đến đâu nó cũng nở to trong khung hình và ăn mất tầm nhìn. Cái "giống xe thật"
+ * và cái "lái được" ở đây ngược nhau. Chỉ còn ghế — thứ duy nhất nằm SAU lưng,
+ * ngoài tầm nhìn thẳng, chỉ hiện khi ngoái lại.
+ *
+ * ⚠️ MÃ DỰNG GIỮ NGUYÊN HẾT, KHÔNG XOÁ. User đổi ý ba lần trong một buổi; bật
+ * lại bất cứ món nào chỉ tốn một chữ `true` ở đây, còn xoá đi thì viết lại từ
+ * đầu (riêng mặt số đồng hồ vẽ canvas đã tốn kha khá). `tools/check-cockpit.mjs`
+ * đọc chính bảng này nên nó tự bỏ qua những mục đang tắt.
  */
 const PARTS = {
-    dashboard: true,
-    gauges: true,
     seat: true,
-    gearStick: true,
+    dashboard: false,
+    gauges: false,
+    gearStick: false,
     steeringWheel: false,
     windshield: false,
 }
@@ -117,6 +123,10 @@ export class Cockpit
     constructor()
     {
         this.game = Game.getInstance()
+
+        // Phơi ra cho `tools/check-cockpit.mjs` biết mục nào đang bật mà bỏ qua
+        // đúng chỗ, thay vì báo lỗi oan cho những thứ user cố ý tắt
+        this.parts = PARTS
 
         this.visible = false
         this.bounds = null

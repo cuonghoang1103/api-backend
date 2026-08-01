@@ -12,7 +12,7 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
 Tính tới **1/8 chiều**: mọi thứ tới `3a73e26` ĐÃ LÊN PROD và ĐÃ PUSH
 (gói `index-B4vtlPVx.js`, `HEAD == origin/feat/playground-3d`, cây sạch).
 
-**CHƯA deploy**: chế độ lái người thứ nhất (mục 0f) — gói mới `index-wHt3V1wv.js`
+**CHƯA deploy**: chế độ lái người thứ nhất (mục 0f) — gói mới `index-CFF6nRDq.js`
 đã dựng và rsync sang `frontend/public/playground`, **chờ `bash deploy.sh`**.
 
 Đầu phiên sau, so gói prod với local; lệch thì chạy `bash deploy.sh` nền:
@@ -483,7 +483,7 @@ từ (−0,20 · 1,22) sang (−0,47 · 1,57).
    Phải `.rgb`. ⚠️ `FptuSigns.painted()` **đang có đúng lỗi này** — chưa lộ vì
    biển hiệu ở đảo xa, chưa bao giờ biên dịch shader trong lúc đo.
 
-## BA điều user bác khi thử thật (1/8) — sửa rồi
+## BỐN điều user bác khi thử thật (1/8) — sửa rồi
 
 - *"thấp thấp ngang ngang này rất khó nhìn đường"* → nâng `EYE.alongY`
   **1,15 → 1,38** (mắt cao hơn nóc 0,50) và thêm `View.cockpit.basePitch =
@@ -506,6 +506,18 @@ từ (−0,20 · 1,22) sang (−0,47 · 1,57).
   `needles`) trước khi dựng lại, không thì sau khi đổi xe `update()` còn quay
   kim của chiếc xe VỪA BỊ `destroy()` — mesh mồ côi, không lỗi nào.
   ⚠️ `check-cockpit.mjs` BỎ QUA mục vô lăng khi nó tắt, thay vì báo lỗi.
+- *"xoá luôn đồng hồ và tay cầm đi kia cho gọn"* → tắt nốt **táp lô**, **hai
+  đồng hồ** và **cần số**. `PARTS` giờ chỉ còn `seat: true` — cabin đúng 2 mảnh,
+  và ghế thì nằm SAU lưng nên không lọt vào tầm nhìn thẳng.
+
+  **Bài học chung của cả bốn lượt**: mọi thứ dựng thêm trong cabin đều nằm RẤT
+  GẦN mắt, nên dù nhỏ đến đâu nó cũng nở to trong khung và ăn mất tầm nhìn.
+  "Giống xe thật" và "lái được" ở đây ngược nhau — và user chọn lái được.
+
+  ⚠️ Bộ kiểm ĐỪNG canh bằng ngưỡng cứng "ít nhất N mảnh": con số ấy tụt theo ý
+  user chứ không theo lỗi. Nay `Cockpit` phơi ra `this.parts = PARTS` và bộ kiểm
+  đối chiếu **bật thì phải dựng, tắt thì phải không dựng**, còn mục "đổi xe" so
+  với chính số mảnh trước đó.
 
 ## Đáng nhớ về máy quay
 

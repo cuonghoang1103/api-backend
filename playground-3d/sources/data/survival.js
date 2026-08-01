@@ -190,6 +190,22 @@ export const SURVIVAL_SHOP = [
         max: 5,
     },
     {
+        key: 'barrel',
+        name: 'Nòng súng',
+        description: '+60% sát thương súng máy (phím F)',
+        price: 75,
+        step: 1.65,
+        max: 5,
+    },
+    {
+        key: 'cooler',
+        name: 'Tản nhiệt',
+        description: 'Nòng lâu nóng hơn, bắn được dài hơi',
+        price: 60,
+        step: 1.6,
+        max: 4,
+    },
+    {
         key: 'blast',
         name: 'Đầu đạn',
         description: '+50% sát thương nổ của pháo trên nóc',
@@ -238,6 +254,76 @@ export const SURVIVAL_WAVES = {
 
     /** Cứ ngần này sóng thì có một con trùm, sinh THÊM ngoài quân số. */
     bossEvery: 5,
+}
+
+/**
+ * SÚNG MÁY trên nóc xe — vũ khí CƠ BẢN của chế độ, giữ phím **F** để bắn.
+ *
+ * Pháo tên lửa (phím X) vẫn còn nguyên và vẫn mạnh hơn nhiều, nhưng nó bắn từng
+ * phát một, đạn bay vòng mấy giây mới tới. Bị cả một đàn vây thì thứ cần là một
+ * dòng đạn liên tục — đó là toàn bộ cảm giác "Alien Shooter" mà thiếu nó chế độ
+ * này chỉ là lái xe húc quái.
+ *
+ * ─── VÌ SAO BẮN TỨC THỜI, KHÔNG DỰNG ĐẠN BAY ────────────────────────────────
+ * Mười viên mỗi giây × mấy phút = hàng nghìn vật thể phải sinh, bay, kiểm va
+ * chạm rồi thu hồi. Ở nhịp bắn này mắt không đọc được đường đạn nữa — chỉ đọc
+ * VỆT SÁNG và cái chết ở đầu kia. Nên đạn tính bằng hình học (tìm con quái gần
+ * trục nòng nhất trong tầm), còn vệt sáng thì dựng một thanh mảnh sống 0,05
+ * giây. Rẻ hơn hàng trăm lần mà nhìn y hệt.
+ */
+export const SURVIVAL_GUN = {
+    /** Phát mỗi giây. */
+    fireRate: 9,
+    /** Sát thương mỗi viên — ba viên hạ một con bọ bò (máu 3). */
+    damage: 1,
+    /** Bắn xa bao nhiêu. */
+    range: 34,
+    /**
+     * Bán kính "trúng": viên đạn tính là trúng nếu con quái nằm trong hình trụ
+     * này quanh trục nòng. Rộng tay một chút vì ở góc máy quay trên cao, ngắm
+     * bằng chuột không thể chính xác từng phân.
+     */
+    hitRadius: 1.5,
+
+    /** Mỗi phát cộng bấy nhiêu nhiệt (1 = kịch kim). */
+    heatPerShot: 0.045,
+    /** Nguội bao nhiêu mỗi giây. */
+    coolRate: 0.35,
+    /** Quá nhiệt rồi phải nguội xuống dưới mức này mới bắn lại được. */
+    resumeAt: 0.35,
+
+    /** Vệt đạn sống bao lâu (giây) và dày bao nhiêu. */
+    tracerLife: 0.09,
+    tracerWidth: 0.17,
+
+    /**
+     * Vệt đạn VẼ DÀI TỐI ĐA bấy nhiêu, dù đạn bay xa 34.
+     *
+     * ⚠️ Con số này tồn tại vì một lỗi chỉ phép đo mới bắt được: vẽ nguyên
+     * chiều dài 34 thì TÂM vệt nằm cách xe 17 đơn vị về phía trước, mà máy quay
+     * có FOV **25°** — chiếu lên màn hình ra `ndc.y = 1,04`, tức **ngoài mép
+     * trên khung hình**. Bắn thì trúng, số liệu thì đúng, mà nhìn vào màn hình
+     * không thấy một tia nào. Ba lần chụp ảnh liền không đọc ra nổi cho tới khi
+     * chiếu toạ độ lên NDC.
+     *
+     * Vệt chỉ cần đủ dài để đọc ra "có tia phóng đi", không cần chạy hết tầm.
+     */
+    tracerMaxLength: 11,
+    tracerColor: '#ffe27a',
+    muzzleColor: '#fff3c4',
+
+    /**
+     * Nòng LỆCH SANG PHẢI bao nhiêu, và cao bao nhiêu so với tâm xe.
+     *
+     * ⚠️ Số này tồn tại vì chế độ cabin: nòng đặt ngay giữa trục nhìn thì chớp
+     * nòng nằm cách mắt chưa tới một mét, nở ra choán gần nửa khung hình và che
+     * sạch đường đi. Chụp ảnh mới thấy — số đo thì vẫn báo đúng hết.
+     */
+    muzzleSide: 0.62,
+    muzzleHeight: 1.24,
+    /** Chớp nòng: bán kính và khoảng cách tính từ nòng. */
+    flashScale: 0.16,
+    flashDistance: 1.7,
 }
 
 /** Số của người chơi. */

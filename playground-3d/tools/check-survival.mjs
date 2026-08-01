@@ -559,6 +559,110 @@ const facts = {}
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
+//  6bb. SÚNG MÁY — bắn trúng, chỉ trúng phía TRƯỚC, quá nhiệt thì kẹt
+// ═══════════════════════════════════════════════════════════════════════════
+{
+    const gun = await page.evaluate(() =>
+    {
+        const G = window.game
+        const s = G.world.survival
+        const v = G.physicalVehicle.position
+
+        s.phase = 'hunting'
+        s.monsters.clear()
+        s.gun.clear()
+        s.upgrades = {}
+
+        // Một con NGAY TRƯỚC nòng, một con NGAY SAU LƯNG cùng khoảng cách
+        const front = s.monsters.groundHeight(v.x + 10, v.z)
+        const back = s.monsters.groundHeight(v.x - 10, v.z)
+        const a = front === null ? null : s.monsters.add('brute', v.x + 10, front, v.z, v.x, v.z)
+        const b = back === null ? null : s.monsters.add('brute', v.x - 10, back, v.z, v.x, v.z)
+
+        // Ngắm thẳng vào con phía trước (bỏ qua con trỏ chuột)
+        s.gun.aim.set(v.x + 10, 0, v.z)
+        const aimOk = true
+
+        const hpBefore = { front: a?.hp, back: b?.hp }
+        const hit = s.gun.shoot()
+
+        return {
+            aimOk,
+            placed: !!(a && b),
+            hitType: hit ? (hit === a ? 'trước' : 'SAU LƯNG') : 'không trúng ai',
+            hpBefore,
+            hpAfter: { front: a?.hp, back: b?.hp },
+            tracers: s.gun.tracers.length,
+        }
+    })
+
+    facts['6bb. súng máy'] = `bắn trúng con ${gun.hitType} · máu trước ${gun.hpBefore.front}→${gun.hpAfter.front} · `
+        + `máu sau lưng ${gun.hpBefore.back}→${gun.hpAfter.back} · ${gun.tracers} vệt đạn`
+
+    if(!gun.placed) problems.push('Không đặt được hai con để thử súng máy')
+    if(gun.hitType === 'SAU LƯNG')
+        problems.push('Súng bắn trúng con ĐỨNG SAU LƯNG — phép chiếu lên trục nòng thiếu kiểm tra dấu (`along < 0`)')
+    if(gun.hitType === 'không trúng ai') problems.push('Bắn thẳng vào một con cách 10 đơn vị mà không trúng')
+    if(gun.hpAfter.back !== gun.hpBefore.back) problems.push('Con sau lưng bị mất máu dù súng chĩa về phía trước')
+    if(gun.tracers === 0) problems.push('Bắn mà không có vệt đạn nào')
+
+    // ── Quá nhiệt ────────────────────────────────────────────────────────────
+    const heat = await page.evaluate(() =>
+    {
+        const s = window.game.world.survival
+        s.gun.heat = 0
+        s.gun.jammed = false
+
+        // Bắn liên tục cho tới khi kẹt, tối đa 100 phát
+        let shots = 0
+        while(!s.gun.jammed && shots < 100)
+        {
+            s.gun.heat += s.gun.heatPerShot
+            shots++
+            if(s.gun.heat >= 1) { s.gun.heat = 1; s.gun.jammed = true }
+        }
+
+        const jammedAt = shots
+        // Có tản nhiệt thì phải bắn được nhiều hơn
+        s.upgrades.cooler = 3
+        s.gun.heat = 0
+        s.gun.jammed = false
+        let shots2 = 0
+        while(!s.gun.jammed && shots2 < 200)
+        {
+            s.gun.heat += s.gun.heatPerShot
+            shots2++
+            if(s.gun.heat >= 1) { s.gun.heat = 1; s.gun.jammed = true }
+        }
+
+        s.upgrades = {}
+        return { jammedAt, withCooler: shots2 }
+    })
+
+    facts['6bb. quá nhiệt'] = `kẹt sau ${heat.jammedAt} phát · có tản nhiệt 3 cấp: ${heat.withCooler} phát`
+
+    if(heat.jammedAt >= 100) problems.push('Bắn 100 phát liền mà nòng không bao giờ kẹt — quá nhiệt không chạy')
+    if(heat.jammedAt < 8) problems.push(`Kẹt chỉ sau ${heat.jammedAt} phát — súng gần như không dùng được`)
+    if(heat.withCooler <= heat.jammedAt) problems.push('Nâng cấp Tản nhiệt không kéo dài được loạt bắn')
+
+    // ── Không được bắn trong nhịp nghỉ ───────────────────────────────────────
+    const idle = await page.evaluate(() =>
+    {
+        const s = window.game.world.survival
+        s.gun.clear()
+        s.phase = 'preparing'
+        s.gun.firing = true
+        s.gun.update(0.5)
+        const shotWhileResting = s.gun.tracers.length > 0
+        s.gun.firing = false
+        s.phase = 'hunting'
+        return shotWhileResting
+    })
+
+    if(idle) problems.push('Súng bắn được trong nhịp NGHỈ — chỉ tổ làm nóng nòng để rồi vào sóng thì kẹt')
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 //  6c. CỬA HÀNG — giá, mua, tác dụng, và chỉ mở lúc nghỉ
 // ═══════════════════════════════════════════════════════════════════════════
 {

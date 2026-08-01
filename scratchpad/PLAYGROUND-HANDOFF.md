@@ -13,7 +13,8 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
 `index-DiwDiDLl.js`) — chế độ lái người thứ nhất, đảo quái vật, tàu sân bay.
 
 **2/8**: **CHẾ ĐỘ SINH TỒN** (mục 0i) — quái + sóng + máu đen + tiền, cộng
-**cửa hàng nâng cấp**, **cơ chế NẤP**, **quái trùm dùng MODEL THẬT**. Gói `index-DWVe15I0.js`
+**cửa hàng nâng cấp** (7 món), **cơ chế NẤP**, **quái trùm dùng MODEL THẬT**,
+**súng máy phím F**. Gói `index-DKDLvuRC.js`
 đã dựng và rsync sang `frontend/public/playground`. **CHƯA deploy, CHƯA push.**
 
 Đầu phiên sau, so gói prod với local; lệch thì chạy `bash deploy.sh` nền:
@@ -800,6 +801,47 @@ cho logic chạy được nửa giây của nó ⇒ mọi phép đo về chuyể
 kiểm nay cộng dồn chính `ticker.delta` và chờ theo con số đó (`run(giây game)`).
 
 ## Ba thứ thêm cùng ngày 2/8
+
+### SÚNG MÁY — `World/SurvivalGun.js`, giữ phím **F**
+
+Vũ khí CƠ BẢN của chế độ. 9 phát/giây, sát thương 1, tầm 34, nòng nóng dần và
+kịch kim thì kẹt (23 phát liên tục; có "Tản nhiệt" 3 cấp thì 53). Thanh **Nòng**
+trên HUD, kẹt thì thanh đỏ và nhấp nháy. Pháo tên lửa (X) vẫn nguyên — nó mạnh
+hơn nhiều nhưng bắn từng phát, đạn bay vòng mấy giây mới tới; bị cả đàn vây thì
+thứ cần là một dòng đạn liên tục.
+
+**Đạn tính bằng HÌNH HỌC, không dựng vật thể đạn.** Ở nhịp này mắt không đọc
+đường đạn nữa, chỉ đọc vệt sáng và cái chết ở đầu kia. Mỗi phát chiếu từng con
+quái lên trục nòng (`along = to · dir`), loại `along < 0` (nếu không thì bắn về
+trước cũng giết con sau lưng — bộ kiểm canh đúng chuyện này), rồi lấy con GẦN
+NHẤT trên đường đạn.
+
+⚠️ **Nòng phải LỆCH SANG PHẢI** (`muzzleSide: 0.62`). Đặt giữa trục nhìn thì
+trong cabin chớp nòng nằm cách mắt chưa tới một mét và **nở ra choán gần nửa
+khung hình** — lại đúng bài học của `Cockpit.js`. Chỉ ảnh mới nói ra.
+
+### ⚠️⚠️ VỆT ĐẠN "KHÔNG HIỆN" — ba lần chụp mới truy ra, và mã KHÔNG hề sai
+
+Chuỗi chẩn đoán này đáng chép lại nguyên vẹn:
+
+1. Chụp ở cabin: không thấy gì. Đoán là vệt nằm thấp → nâng nòng ngang tầm mắt.
+2. Vẫn không thấy. Đoán là quá mảnh → tăng bề dày gấp đôi. Vẫn không thấy.
+3. **Thôi đoán, chiếu toạ độ lên NDC**: `tracerNdc.y = 1,04` ⇒ **ngoài mép trên
+   khung hình**. Vệt dài 34 đơn vị nên TÂM của nó nằm cách xe 17 về phía trước,
+   mà máy quay FOV chỉ **25°**. Thêm `tracerMaxLength: 11` — vệt chỉ cần đủ dài
+   để đọc ra "có tia phóng đi", không cần chạy hết tầm.
+4. NDC vào khung (0,42) nhưng ảnh vẫn trống. Lần này vì **khung thông báo che
+   đúng chỗ đó** — xoá `.notification` trước khi chụp.
+5. Vẫn trống. So với một con quái đang hiện rõ: quái ở NDC `(0 · 0,42 · 0,9973)`
+   cách 53,6; vệt ở `(0,04 · 0,38 · 0,9969)` cách 48,7 — **cùng vùng màn hình,
+   cùng độ sâu**. Không bị cắt, không sai vật liệu. ⇒ Vệt chỉ **sống 0,09 giây
+   game**, mà headless render ~5 fps và `page.screenshot` chờ vài khung, nên đến
+   lúc bấm máy thì nó tắt từ lâu. Bắn liên tục bằng `setInterval` trong trang là
+   thấy ngay.
+
+**Bài học**: khi ảnh và số liệu mâu thuẫn, đừng sửa mã theo phỏng đoán — **chiếu
+toạ độ lên NDC và so với một vật thể mình BIẾT là đang hiện**. Hai lần "sửa" ở
+bước 1–2 là sửa đúng chỗ không hỏng.
 
 ### CỬA HÀNG — chỉ mở trong nhịp NGHỈ
 

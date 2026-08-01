@@ -74,6 +74,46 @@
             font-weight 700
             text-align right
 
+    /* Nhiệt của nòng súng — mảnh hơn thanh máu, để mắt không nhầm hai cái */
+    .survival-heat
+        display flex
+        align-items center
+        margin-bottom 9px
+
+        .survival-heat-label
+            margin-right 8px
+            color #b9a9c4
+            font-size 12px
+
+        .survival-heat-track
+            position relative
+            flex 1
+            height 5px
+            background #3a2f3d
+            overflow hidden
+
+        .survival-heat-bar
+            position absolute
+            top 0
+            left 0
+            width 100%
+            height 100%
+            background linear-gradient(90deg, #7ac7ff, #ffb03a)
+            transform-origin 0 50%
+            will-change transform
+            transition transform 0.12s linear
+
+    /* Nòng kẹt: thanh nhiệt đỏ rực và nhấp nháy — người chơi phải biết vì sao
+       bấm F mà không có gì xảy ra */
+    &.is-jammed
+        .survival-heat
+            .survival-heat-label
+                color #ff6a7c
+
+            .survival-heat-bar
+                background #ff2f48
+                animation survival-pulse 0.5s ease-in-out infinite
+
     .survival-stats
         display grid
         grid-template-columns 1fr 1fr
@@ -190,8 +230,8 @@
     left 50%
     bottom 20px
     z-index 3
-    width 560px
-    margin-left -280px
+    width 760px
+    margin-left -380px
     padding 12px 14px 10px
     background radial-gradient(ellipse at top left, #251f2b, #1a151e)
     border-top 2px solid #d5ff95
@@ -234,9 +274,11 @@
                 margin-left 2px
                 opacity 0.65
 
+    /* `auto-fit` chứ đừng gõ cứng số cột: cửa hàng sinh từ `SURVIVAL_SHOP`,
+       thêm một món là lưới tự xếp lại, không phải sửa CSS */
     .survival-shop-items
         display grid
-        grid-template-columns repeat(5, 1fr)
+        grid-template-columns repeat(auto-fit, minmax(96px, 1fr))
         gap 6px
 
         html.is-mode-touch &

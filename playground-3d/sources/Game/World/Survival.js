@@ -3,6 +3,7 @@ import { color } from 'three/tsl'
 import { Game } from '../Game.js'
 import { Events } from '../Events.js'
 import { SurvivalMonsters } from './SurvivalMonsters.js'
+import { SurvivalGun } from './SurvivalGun.js'
 import { SURVIVAL_LOOT, SURVIVAL_PLAYER, SURVIVAL_SHOP, SURVIVAL_STEALTH, SURVIVAL_WAVES } from '../../data/survival.js'
 
 /**
@@ -76,6 +77,7 @@ export class Survival
         this.lootGeometry = new THREE.BoxGeometry(1, 1, 1)
 
         this.monsters = new SurvivalMonsters(this)
+        this.gun = new SurvivalGun(this)
 
         this.setPreference()
         this.setSounds()
@@ -145,9 +147,9 @@ export class Survival
         this.startPreparing(4)
 
         this.game.notifications?.show(
-            /* html */`<div class="top"><p class="title">Chế độ Sinh tồn</p></div><div class="bottom"><p class="description">Trời sắp tối. Húc hoặc bắn — bấm <strong>X</strong> nếu đã bật Rocket.</p></div>`,
+            /* html */`<div class="top"><p class="title">Chế độ Sinh tồn</p></div><div class="bottom"><p class="description">Trời sắp tối. Giữ <strong>F</strong> bắn súng máy · <strong>X</strong> bắn tên lửa nếu đã bật Rocket · húc thẳng cũng chết.</p></div>`,
             'is-achievement',
-            5,
+            6,
         )
     }
 
@@ -156,6 +158,7 @@ export class Survival
         this.enabled = false
 
         this.monsters.clear()
+        this.gun.clear()
         this.clearLoot()
         this.hudElement?.classList.remove('is-visible')
         this.shopElement?.classList.remove('is-visible')
@@ -508,6 +511,9 @@ export class Survival
             this.sightRange(vehicle),
         )
 
+        // ── Súng máy ─────────────────────────────────────────────────────────
+        this.gun.update(delta)
+
         // ── Húc bằng xe ──────────────────────────────────────────────────────
         this.updateRamming(delta, vehicle)
 
@@ -797,6 +803,7 @@ export class Survival
             wave: this.hudElement.querySelector('.js-survival-wave'),
             state: this.hudElement.querySelector('.js-survival-state'),
             left: this.hudElement.querySelector('.js-survival-left'),
+            heatBar: this.hudElement.querySelector('.js-survival-heat-bar'),
             money: this.hudElement.querySelector('.js-survival-money'),
             score: this.hudElement.querySelector('.js-survival-score'),
         }
@@ -882,6 +889,25 @@ export class Survival
         {
             this.lastScore = this.score
             this.hudParts.score.textContent = this.score
+        }
+
+        /**
+         * ── Nhiệt của nòng súng ──────────────────────────────────────────────
+         * Làm tròn về 2 chữ số rồi mới so: nhiệt đổi liên tục theo `delta` nên
+         * so bằng `!==` là ghi DOM mỗi khung hình, đúng thứ `updateHud` sinh ra
+         * để tránh.
+         */
+        const heat = Math.round(this.gun.heat * 100) / 100
+        if(heat !== this.lastHeat)
+        {
+            this.lastHeat = heat
+            this.hudParts.heatBar.style.transform = `scaleX(${heat})`
+        }
+
+        if(this.gun.jammed !== this.lastJammed)
+        {
+            this.lastJammed = this.gun.jammed
+            this.hudElement.classList.toggle('is-jammed', this.gun.jammed)
         }
 
         // ── Cửa hàng: chỉ mở trong nhịp nghỉ ─────────────────────────────────

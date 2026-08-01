@@ -33,6 +33,7 @@ import { FptuCampus } from './FptuCampus.js'
 import { PlayIsland } from './PlayIsland.js'
 import { CityIsland } from './CityIsland.js'
 import { VehicleRocket } from './VehicleRocket.js'
+import { Garage } from './Garage.js'
 
 export class World
 {
@@ -97,6 +98,11 @@ export class World
             // Pháo tên lửa trên nóc xe. Dựng SAU `visualVehicle` vì nó gắn khẩu
             // pháo vào chính thân xe (`parts.chassis`).
             this.vehicleRocket = new VehicleRocket()
+
+            // Nhà xe — sinh nút đổi xe trong Cài đặt từ `data/garage.js`.
+            // Dựng SAU `vehicleRocket` vì đổi xe phải gắn lại khí tài trên nóc.
+            this.garage = new Garage()
+
             this.areas = new Areas()
         }
         else if(step === 2)

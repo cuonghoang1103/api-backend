@@ -659,6 +659,27 @@ export class VehicleRocket
             })
     }
 
+    /**
+     * GẮN LẠI khí tài sau khi đổi xe.
+     *
+     * ⚠️ `cannon` và `launcher` là con của `parts.chassis` thuộc chiếc xe CŨ.
+     * `Garage.select()` gọi `visualVehicle.destroy()` rồi dựng chiếc mới, nên
+     * cả hai khí tài theo chiếc cũ đi mất — không lỗi nào, chỉ là nóc xe trống
+     * trơn và bấm X không ra đạn. Dựng lại trên thân mới rồi áp lại lựa chọn.
+     */
+    reattach()
+    {
+        const chassis = this.game.world.visualVehicle?.parts?.chassis
+        if(!chassis) return
+
+        this.cannon = null
+        this.launcher = null
+
+        this.setCannon()
+        this.setLauncher(chassis)
+        this.apply()
+    }
+
     apply()
     {
         this.enabled = this.preference.current === 'on'

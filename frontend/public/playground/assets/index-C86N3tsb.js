@@ -99696,6 +99696,11 @@ https://github.com/browserify/crypto-browserify`);
         (_b = (_a2 = this.game.audio) == null ? void 0 : _a2.play) == null ? void 0 : _b.call(_a2, "uiClick"), this.weaponPreference.set(c.dataset.mode);
       });
     }
+    reattach() {
+      var _a2, _b;
+      const e = (_b = (_a2 = this.game.world.visualVehicle) == null ? void 0 : _a2.parts) == null ? void 0 : _b.chassis;
+      e && (this.cannon = null, this.launcher = null, this.setCannon(), this.setLauncher(e), this.apply());
+    }
     apply() {
       this.enabled = this.preference.current === "on";
       const e = this.weaponPreference.current === "missile";
@@ -99987,12 +99992,76 @@ https://github.com/browserify/crypto-browserify`);
       };
     }
   }
+  const VEHICLES = [
+    {
+      id: "default",
+      label: "M\u1EB7c \u0111\u1ECBnh",
+      path: "vehicle/default",
+      description: "Chi\u1EBFc xe g\u1ED1c c\u1EE7a b\u1EA3n m\u1EABu \u2014 nh\u1EB9 nh\u1EA5t (34 KB), \u0111\u1EE7 m\u1ECDi b\u1ED9 ph\u1EADn."
+    },
+    {
+      id: "antenna",
+      label: "\u0102ng-ten",
+      path: "vehicle/defaultAntenna",
+      description: "C\xF9ng th\xE2n xe nh\u01B0ng c\xF3 \u0103ng-ten tr\xEAn n\xF3c."
+    },
+    {
+      id: "oldschool",
+      label: "C\u1ED5 \u0111i\u1EC3n",
+      path: "vehicle/oldSchool",
+      description: "Xe c\u1ED5 \u2014 ch\xEDnh l\xE0 chi\u1EBFc m\xE0 m\xE3 Konami v\u1EABn \u0111\u1ED5i sang."
+    }
+  ], DEFAULT_VEHICLE = "default";
+  class Garage {
+    constructor() {
+      this.game = Game.getInstance(), this.currentId = DEFAULT_VEHICLE, this.switching = false, this.setButtons();
+    }
+    setButtons() {
+      if (this.container = this.game.domElement.querySelector(".js-vehicle-modes"), !!this.container) {
+        for (const e of [
+          ...this.container.children
+        ]) e.classList.contains("tooltip") || e.remove();
+        this.buttons = [];
+        for (const e of VEHICLES) {
+          const r = document.createElement("button");
+          r.className = "button is-small", r.dataset.mode = e.id, r.textContent = e.label, e.description && (r.title = e.description), r.addEventListener("click", () => this.select(e.id)), this.container.append(r), this.buttons.push(r);
+        }
+        this.refreshButtons();
+      }
+    }
+    refreshButtons() {
+      for (const e of this.buttons) e.classList.toggle("is-active", e.dataset.mode === this.currentId);
+    }
+    async select(e) {
+      var _a2, _b;
+      if (e === this.currentId || this.switching) return;
+      const r = VEHICLES.find((s) => s.id === e);
+      if (r) {
+        this.switching = true, this.currentId = e, this.refreshButtons();
+        try {
+          const o = await this.game.resourcesLoader.load([
+            [
+              "vehicle",
+              `${r.path}.glb?cb=${Date.now()}`,
+              "gltf"
+            ]
+          ]);
+          this.game.world.visualVehicle.destroy(), this.game.world.visualVehicle = new VisualVehicle(o.vehicle.scene), (_b = (_a2 = this.game.world.vehicleRocket) == null ? void 0 : _a2.reattach) == null ? void 0 : _b.call(_a2);
+          const a = this.game.audio.groups.get("click");
+          a && a.play(true);
+        } catch (s) {
+          console.warn("[Garage] kh\xF4ng \u0111\u1ED5i \u0111\u01B0\u1EE3c xe:", s);
+        }
+        this.switching = false;
+      }
+    }
+  }
   class World {
     constructor() {
       this.game = Game.getInstance(), this.step(0);
     }
     step(e) {
-      e === 0 ? (this.grid = new Grid(), this.intro = new Intro()) : e === 1 ? (this.visualVehicle = new VisualVehicle(this.game.resources.vehicle.scene), this.floor = new Floor(), this.waterSurface = new WaterSurface(), this.grass = new Grass(), this.windLines = new WindLines(), this.confetti = new Confetti(), this.leaves = new Leaves(), this.rain = new RainLines(), this.lightnings = new Lightnings(), this.fireballs = new Fireballs(), this.snow = new Snow(), this.rainbow = new Rainbow(), this.visualTornado = new VisualTornado(), this.bushes = new Bushes(), this.birchTrees = new Trees("Birch Tree", this.game.resources.birchTreesVisualModel.scene, this.game.resources.birchTreesReferencesModel.scene.children, "#ff4f2b", "#ff903f"), this.oakTrees = new Trees("Oak Tree", this.game.resources.oakTreesVisualModel.scene, this.game.resources.oakTreesReferencesModel.scene.children, "#b4b536", "#d8cf3b"), this.cherryTrees = new Trees("Cherry Tree", this.game.resources.cherryTreesVisualModel.scene, this.game.resources.cherryTreesReferencesModel.scene.children, "#ff6d6d", "#ff9990"), this.flowers = new Flowers(), this.bricks = new Bricks(), this.fences = new Fences(), this.benches = new Benches(), this.explosiveCrates = new ExplosiveCrates(), this.poleLights = new PoleLights(), this.lanterns = new Lanterns(), this.scenery = new Scenery(), this.fptuCampus = new FptuCampus(), this.playIsland = new PlayIsland(), this.cityIsland = new CityIsland(), this.vehicleRocket = new VehicleRocket(), this.areas = new Areas()) : e === 2 && (this.whispers = new Whispers());
+      e === 0 ? (this.grid = new Grid(), this.intro = new Intro()) : e === 1 ? (this.visualVehicle = new VisualVehicle(this.game.resources.vehicle.scene), this.floor = new Floor(), this.waterSurface = new WaterSurface(), this.grass = new Grass(), this.windLines = new WindLines(), this.confetti = new Confetti(), this.leaves = new Leaves(), this.rain = new RainLines(), this.lightnings = new Lightnings(), this.fireballs = new Fireballs(), this.snow = new Snow(), this.rainbow = new Rainbow(), this.visualTornado = new VisualTornado(), this.bushes = new Bushes(), this.birchTrees = new Trees("Birch Tree", this.game.resources.birchTreesVisualModel.scene, this.game.resources.birchTreesReferencesModel.scene.children, "#ff4f2b", "#ff903f"), this.oakTrees = new Trees("Oak Tree", this.game.resources.oakTreesVisualModel.scene, this.game.resources.oakTreesReferencesModel.scene.children, "#b4b536", "#d8cf3b"), this.cherryTrees = new Trees("Cherry Tree", this.game.resources.cherryTreesVisualModel.scene, this.game.resources.cherryTreesReferencesModel.scene.children, "#ff6d6d", "#ff9990"), this.flowers = new Flowers(), this.bricks = new Bricks(), this.fences = new Fences(), this.benches = new Benches(), this.explosiveCrates = new ExplosiveCrates(), this.poleLights = new PoleLights(), this.lanterns = new Lanterns(), this.scenery = new Scenery(), this.fptuCampus = new FptuCampus(), this.playIsland = new PlayIsland(), this.cityIsland = new CityIsland(), this.vehicleRocket = new VehicleRocket(), this.garage = new Garage(), this.areas = new Areas()) : e === 2 && (this.whispers = new Whispers());
     }
     setPhysicalFloor() {
       this.game.objects.add(null, {
@@ -114129,7 +114198,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-CWu-jsUe.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-DvcuOxJ1.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

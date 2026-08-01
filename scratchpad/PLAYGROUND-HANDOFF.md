@@ -9,7 +9,7 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
 
 ## Deploy — kiểm trước khi tin
 
-Tính tới **1/8 tối**: đảo quái vật ĐÃ LÊN PROD (`index-BCcIZc06.js`, smoke-test
+Tính tới **1/8 tối**: TẤT CẢ đã lên prod và ĐÃ PUSH (`de547bf`, gói `index-DiwDiDLl.js`) — chế độ lái người thứ nhất, đảo quái vật, tàu sân bay. Cây sạch, không còn gì tồn đọng.
 qua). Mọi thứ tới `3a73e26` cũng đã push. **CHƯA deploy**: tàu sân bay.
 
 Trước đó: mọi thứ tới `3a73e26` ĐÃ LÊN PROD và ĐÃ PUSH

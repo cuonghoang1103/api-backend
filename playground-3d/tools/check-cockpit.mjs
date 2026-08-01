@@ -58,8 +58,8 @@ const report = await page.evaluate(async () =>
     {
         facts.soMeshNoiThat = cockpit.group ? cockpit.group.children.length : 0
         if(!cockpit.group) problems.push('Buồng lái KHÔNG dựng được (group rỗng)')
-        else if(cockpit.group.children.length < 6)
-            problems.push(`Buồng lái chỉ có ${cockpit.group.children.length} mảnh, đáng lẽ ít nhất 6`)
+        else if(cockpit.group.children.length < 4)
+            problems.push(`Buồng lái chỉ có ${cockpit.group.children.length} mảnh, đáng lẽ ít nhất 4`)
 
         if(!cockpit.bounds) problems.push('Không đo được hộp bao thân xe')
     }
@@ -291,6 +291,13 @@ const report = await page.evaluate(async () =>
      * Gọi tay `cockpit.update()` là AN TOÀN vì nó không hề đụng tới Rapier —
      * khác hẳn `physicalVehicle.moveTo()`, thứ mà bàn giao cấm bơm bằng tay.
      */
+    // ⚠️ Vô lăng đang TẮT theo yêu cầu user (`PARTS.steeringWheel` trong
+    // `Cockpit.js`) — bỏ qua mục này thay vì báo lỗi. Bật lại là nó tự kiểm.
+    if(!cockpit.steeringRim)
+    {
+        facts.gocVoLang = '(vô lăng đang tắt — bỏ qua)'
+    }
+    else
     {
         const before = cockpit.steeringAngle
         G.player.steering = 1

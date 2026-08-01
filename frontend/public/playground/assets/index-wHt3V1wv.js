@@ -100173,7 +100173,10 @@ https://github.com/browserify/crypto-browserify`);
         dashX: r.min.x + 0.72 * r.size.x,
         wheelX: r.min.x + 0.65 * r.size.x,
         seatX: r.min.x + 0.3 * r.size.x
-      }, this.group = new Group(), this.group.visible = this.visible, this.group.userData.vehicleAttachment = true, e.add(this.group), this.setDashboard(), this.setWindshield(), this.setSteeringWheel(), this.setGauges(), this.setSeat(), this.setGearStick(), true;
+      }, this.group = new Group(), this.group.visible = this.visible, this.group.userData.vehicleAttachment = true, e.add(this.group), this.dashboard = null, this.gauges = null, this.glass = null, this.steeringWheel = null, this.steeringRim = null, this.needles = {
+        speed: null,
+        rev: null
+      }, this.setDashboard(), this.dashboard && this.setGauges(), this.setSeat(), this.setGearStick(), true;
     }
     reattach() {
       this.attach();
@@ -100221,6 +100224,7 @@ https://github.com/browserify/crypto-browserify`);
       this.dashboard = new Mesh$1(new BoxGeometry$1(s, o, r), this.materials.trim), this.dashboard.position.set(this.deck.dashX, this.deck.y + e.size.y * 0.03, e.center.z), this.dashboard.rotation.z = -0.24, this.add(this.dashboard);
     }
     setWindshield() {
+      if (!this.dashboard) return;
       const e = this.bounds, r = this.dashboard.position.x, s = this.dashboard.position.y + e.size.y * 0.05, o = this.deck.wheelX - e.size.x * 0.05, a = this.eye.y + e.size.y * 0.09, h = e.size.z * 0.42, c = Math.min(e.size.z * 0.024, e.size.y * 0.042), d = Math.hypot(o - r, a - s), f = Math.atan2(o - r, a - s);
       for (const m of [
         -1,
@@ -114529,7 +114533,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-DW_4V6qj.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-JahVoZ5z.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

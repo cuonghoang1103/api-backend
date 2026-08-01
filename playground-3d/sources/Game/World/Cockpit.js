@@ -92,6 +92,26 @@ const EYE = {
     alongZ: -0.12,
 }
 
+/**
+ * Bộ phận nào của buồng lái được dựng.
+ *
+ * ⚠️ VÔ LĂNG và KHUNG KÍNH TẮT theo yêu cầu user (1/8): *"xoá cái vô lăng và
+ * cái khung đen đen kia cho gọn"*. Cả hai đều là khối tối nằm chắn ngay giữa
+ * và trên đỉnh khung hình — dựng thì "giống xe thật" hơn, nhưng ngồi lái thật
+ * thì chúng ăn mất phần lớn tầm nhìn.
+ *
+ * Mã dựng vẫn giữ nguyên chứ không xoá: user đã đổi ý về máy quay cabin hai
+ * lần trong cùng một buổi, nên bật lại chỉ tốn một chữ `true` ở đây.
+ */
+const PARTS = {
+    dashboard: true,
+    gauges: true,
+    seat: true,
+    gearStick: true,
+    steeringWheel: false,
+    windshield: false,
+}
+
 export class Cockpit
 {
     constructor()
@@ -192,12 +212,22 @@ export class Cockpit
         this.group.userData.vehicleAttachment = true
         chassis.add(this.group)
 
-        this.setDashboard()
-        this.setWindshield()
-        this.setSteeringWheel()
-        this.setGauges()
-        this.setSeat()
-        this.setGearStick()
+        // Xoá sạch tham chiếu cũ trước khi dựng lại. Không làm thì sau khi đổi
+        // xe, `update()` vẫn quay kim của chiếc xe VỪA BỊ `destroy()` — mesh mồ
+        // côi ngoài scene, nên chẳng thấy gì mà cũng chẳng có lỗi nào.
+        this.dashboard = null
+        this.gauges = null
+        this.glass = null
+        this.steeringWheel = null
+        this.steeringRim = null
+        this.needles = { speed: null, rev: null }
+
+        if(PARTS.dashboard) this.setDashboard()
+        if(PARTS.windshield) this.setWindshield()
+        if(PARTS.steeringWheel) this.setSteeringWheel()
+        if(PARTS.gauges && this.dashboard) this.setGauges()
+        if(PARTS.seat) this.setSeat()
+        if(PARTS.gearStick) this.setGearStick()
 
         return true
     }
@@ -321,6 +351,8 @@ export class Cockpit
      */
     setWindshield()
     {
+        if(!this.dashboard) return   // chân khung kính neo vào mép táp lô
+
         const b = this.bounds
         /**
          * Mép trên khung kính phải nằm TRONG tầm nhìn, không thì công dựng ra

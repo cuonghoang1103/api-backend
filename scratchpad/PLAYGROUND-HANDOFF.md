@@ -12,7 +12,7 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
 Tính tới **1/8 chiều**: mọi thứ tới `3a73e26` ĐÃ LÊN PROD và ĐÃ PUSH
 (gói `index-B4vtlPVx.js`, `HEAD == origin/feat/playground-3d`, cây sạch).
 
-**CHƯA deploy**: chế độ lái người thứ nhất (mục 0f) — gói mới `index-C_mLxw9L.js`
+**CHƯA deploy**: chế độ lái người thứ nhất (mục 0f) — gói mới `index-wHt3V1wv.js`
 đã dựng và rsync sang `frontend/public/playground`, **chờ `bash deploy.sh`**.
 
 Đầu phiên sau, so gói prod với local; lệch thì chạy `bash deploy.sh` nền:
@@ -483,7 +483,7 @@ từ (−0,20 · 1,22) sang (−0,47 · 1,57).
    Phải `.rgb`. ⚠️ `FptuSigns.painted()` **đang có đúng lỗi này** — chưa lộ vì
    biển hiệu ở đảo xa, chưa bao giờ biên dịch shader trong lúc đo.
 
-## HAI điều user bác ngay lần thử đầu (1/8) — sửa rồi
+## BA điều user bác khi thử thật (1/8) — sửa rồi
 
 - *"thấp thấp ngang ngang này rất khó nhìn đường"* → nâng `EYE.alongY`
   **1,15 → 1,38** (mắt cao hơn nóc 0,50) và thêm `View.cockpit.basePitch =
@@ -495,6 +495,17 @@ từ (−0,20 · 1,22) sang (−0,47 · 1,57).
   `View.cockpit.lookLocked`, **mặc định BẬT**. Khoá thì luôn nhìn theo mũi xe;
   **GIỮ chuột** mới ngoái, thả ra đầu tự về (hằng số thời gian 0,25s).
   Chế độ `Free` giữ nguyên hành vi cũ (ngoái theo vị trí con trỏ).
+- *"xoá cái vô lăng và cái khung đen đen kia cho gọn"* → `PARTS` ở đầu
+  `Cockpit.js` tắt **vô lăng** và **khung kính** (trụ A + thanh nóc + kính).
+  Cả hai là khối tối nằm chắn giữa và trên đỉnh khung hình — dựng thì giống xe
+  thật hơn nhưng ngồi lái thì ăn mất phần lớn tầm nhìn. Nay chỉ còn táp lô với
+  hai đồng hồ, ghế và cần số (6 mảnh).
+  **Mã dựng GIỮ NGUYÊN, không xoá** — bật lại chỉ tốn một chữ `true`. User đã
+  đổi ý về máy quay cabin ba lần trong một buổi, đừng vứt mã đi.
+  ⚠️ `attach()` phải xoá sạch tham chiếu cũ (`dashboard`, `glass`, `steeringRim`,
+  `needles`) trước khi dựng lại, không thì sau khi đổi xe `update()` còn quay
+  kim của chiếc xe VỪA BỊ `destroy()` — mesh mồ côi, không lỗi nào.
+  ⚠️ `check-cockpit.mjs` BỎ QUA mục vô lăng khi nó tắt, thay vì báo lỗi.
 
 ## Đáng nhớ về máy quay
 

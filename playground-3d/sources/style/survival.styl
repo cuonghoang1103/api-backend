@@ -118,6 +118,182 @@
     100%
         transform translate(0, 0)
 
+/*
+ * Thanh máu quái trùm — trên cùng, giữa. Cố ý tách hẳn khỏi bảng số góc trái:
+ * đây là thứ phải nhìn liên tục trong lúc đánh nhau, để lẫn vào bảng kia thì
+ * mắt phải rời khỏi đường đi.
+ */
+.survival-boss
+    position absolute
+    /* Dưới vùng thông báo (`.notifications` ở top 20px, cao chừng 100px) — đặt
+       ngang nhau thì đúng lúc trùm xuất hiện là hai khối chồng khít lên nhau,
+       vì chính lúc đó cũng là lúc thông báo "Sóng N — QUÁI TRÙM" đang hiện */
+    top 132px
+    left 50%
+    z-index 2
+    width 320px
+    margin-left -160px
+    padding 8px 12px 10px
+    background radial-gradient(ellipse at top left, #2b1a33, #1d1021)
+    border-top 2px solid #b678ff
+    text-align center
+    opacity 0
+    transform translateY(-10px)
+    transition opacity 0.35s, transform 0.35s
+    pointer-events none
+
+    html.is-mode-touch &
+        width 220px
+        margin-left -110px
+
+    &.is-visible
+        opacity 1
+        transform translateY(0)
+
+    .survival-boss-name
+        margin 0 0 6px
+        color #d861a8
+        font-size 15px
+        font-weight 700
+        line-height 1em
+        letter-spacing 0.04em
+
+    .survival-boss-track
+        position relative
+        height 9px
+        background #3a2f3d
+        overflow hidden
+
+    .survival-boss-bar
+        position absolute
+        top 0
+        left 0
+        width 100%
+        height 100%
+        background linear-gradient(90deg, #b678ff, #ff5ad4)
+        transform-origin 0 50%
+        will-change transform
+        transition transform 0.2s linear
+
+/*
+ * Cửa hàng — giữa dưới, NGAY TRÊN bảng số. Chỉ hiện trong nhịp nghỉ, nên nó
+ * không bao giờ chắn tầm nhìn lúc đang bị vây.
+ */
+.survival-shop
+    position absolute
+    left 50%
+    bottom 20px
+    z-index 3
+    width 560px
+    margin-left -280px
+    padding 12px 14px 10px
+    background radial-gradient(ellipse at top left, #251f2b, #1a151e)
+    border-top 2px solid #d5ff95
+    opacity 0
+    transform translateY(14px)
+    transition opacity 0.3s, transform 0.3s
+    pointer-events none
+    -webkit-user-select none
+    -moz-user-select none
+    user-select none
+
+    html.is-mode-touch &
+        width @css{ min(560px, calc(100% - 24px)) }
+        left 12px
+        margin-left 0
+
+    &.is-visible
+        opacity 1
+        transform translateY(0)
+        pointer-events auto
+
+    .survival-shop-head
+        display flex
+        justify-content space-between
+        align-items baseline
+        margin-bottom 9px
+
+        .survival-shop-title
+            color #d5ff95
+            font-size 16px
+            font-weight 700
+
+        .survival-shop-money
+            color #ffd34a
+            font-size 16px
+            font-weight 700
+
+            &::after
+                content '$'
+                margin-left 2px
+                opacity 0.65
+
+    .survival-shop-items
+        display grid
+        grid-template-columns repeat(5, 1fr)
+        gap 6px
+
+        html.is-mode-touch &
+            grid-template-columns repeat(2, 1fr)
+
+    .survival-shop-item
+        display flex
+        flex-direction column
+        padding 8px 7px
+        background #302838
+        border none
+        color #ffffff
+        text-align left
+        cursor pointer
+        transition background 0.15s, opacity 0.15s
+        font-family inherit
+
+        &:hover
+            background #3d3347
+
+        /* Không đủ tiền hoặc đã kịch cấp — mờ đi chứ đừng giấu, người chơi cần
+           biết còn những gì để dành tiền */
+        &.is-locked
+            opacity 0.38
+            cursor default
+
+            &:hover
+                background #302838
+
+        .survival-shop-key
+            display inline-block
+            margin-bottom 4px
+            color #b9a9c4
+            font-size 11px
+
+        .survival-shop-name
+            margin-bottom 2px
+            font-size 14px
+            font-weight 700
+            line-height 1.1em
+
+        .survival-shop-desc
+            margin-bottom 6px
+            color #b9a9c4
+            font-size 11px
+            line-height 1.25em
+
+        .survival-shop-price
+            margin-top auto
+            color #ffd34a
+            font-size 13px
+            font-weight 700
+
+        .survival-shop-level
+            color #d5ff95
+            font-size 11px
+
+    .survival-shop-hint
+        margin 8px 0 0
+        color #b9a9c4
+        font-size 11px
+        text-align center
+
 .survival-defeated
     position absolute
     top 0

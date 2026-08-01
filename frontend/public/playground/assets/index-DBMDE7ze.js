@@ -101710,8 +101710,76 @@ https://github.com/browserify/crypto-browserify`);
         belly: "#c07a4a",
         eye: "#ffb03a"
       }
+    },
+    boss: {
+      name: "Qu\xE1i tr\xF9m",
+      hp: 130,
+      speed: 2.6,
+      damage: 40,
+      radius: 2,
+      hitHeight: 2.6,
+      scale: 2.7,
+      money: 260,
+      score: 600,
+      isBoss: true,
+      colors: {
+        body: "#3d1f4a",
+        limb: "#2a1435",
+        belly: "#7a3a8f",
+        eye: "#54ffc8"
+      }
     }
-  }, SURVIVAL_WAVES = {
+  }, SURVIVAL_STEALTH = {
+    baseRange: 17,
+    headlightsFactor: 1.9,
+    speedRange: 1.15,
+    alwaysSeeRange: 7,
+    memory: 9,
+    wanderSpeedFactor: 0.55,
+    wanderRadius: 9,
+    bossAlwaysSees: true
+  }, SURVIVAL_SHOP = [
+    {
+      key: "armor",
+      name: "Gi\xE1p",
+      description: "+25 m\xE1u t\u1ED1i \u0111a, v\xE0 v\xE1 \u0111\u1EA7y lu\xF4n",
+      price: 60,
+      step: 1.6,
+      max: 6
+    },
+    {
+      key: "regen",
+      name: "H\u1ED3i m\xE1u",
+      description: "+3 m\xE1u m\u1ED7i gi\xE2y khi kh\xF4ng b\u1ECB \u0111\xE1nh",
+      price: 55,
+      step: 1.7,
+      max: 5
+    },
+    {
+      key: "ram",
+      name: "C\u1EA3n h\xFAc",
+      description: "+45% s\xE1t th\u01B0\u01A1ng khi h\xFAc",
+      price: 70,
+      step: 1.6,
+      max: 5
+    },
+    {
+      key: "blast",
+      name: "\u0110\u1EA7u \u0111\u1EA1n",
+      description: "+50% s\xE1t th\u01B0\u01A1ng n\u1ED5 c\u1EE7a ph\xE1o tr\xEAn n\xF3c",
+      price: 95,
+      step: 1.7,
+      max: 5
+    },
+    {
+      key: "patch",
+      name: "V\xE1 m\xE1u",
+      description: "\u0110\u1EA7y m\xE1u ngay l\u1EADp t\u1EE9c",
+      price: 35,
+      step: 1.25,
+      max: 99
+    }
+  ], SURVIVAL_WAVES = {
     countFor: (l) => Math.min(30, 4 + l * 2),
     mix: [
       {
@@ -101753,7 +101821,8 @@ https://github.com/browserify/crypto-browserify`);
     ],
     breakDuration: 8,
     spawnInterval: 0.9,
-    maxAlive: 26
+    maxAlive: 26,
+    bossEvery: 5
   }, SURVIVAL_PLAYER = {
     maxHealth: 100,
     regenDelay: 6,
@@ -101973,7 +102042,7 @@ https://github.com/browserify/crypto-browserify`);
     }
     make(e, r) {
       const s = SURVIVAL_MONSTERS[e];
-      return e === "crawler" ? this.makeCrawler(s, r) : e === "brute" ? this.makeBrute(s, r) : this.makeStalker(s, r);
+      return e === "crawler" ? this.makeCrawler(s, r) : e === "brute" || e === "boss" ? this.makeBrute(s, r) : this.makeStalker(s, r);
     }
     groundHeight(e, r) {
       var _a2;
@@ -102013,28 +102082,32 @@ https://github.com/browserify/crypto-browserify`);
         const d = rand$1(this.seed * 3.1) * Math.PI * 2, f = o + rand$1(this.seed * 5.7) * (a - o), p = r + Math.cos(d) * f, m = s + Math.sin(d) * f, b = this.groundHeight(p, m);
         if (b === null) continue;
         const _ = ((_a2 = this.game.water) == null ? void 0 : _a2.surfaceElevation) ?? 0;
-        if (!(b <= _ + SURVIVAL_SPAWN.dryMargin)) return this.add(e, p, b, m);
+        if (!(b <= _ + SURVIVAL_SPAWN.dryMargin)) return this.add(e, p, b, m, r, s);
       }
       return null;
     }
-    add(e, r, s, o) {
-      const a = SURVIVAL_MONSTERS[e];
+    add(e, r, s, o, a = void 0, h = void 0) {
+      const c = SURVIVAL_MONSTERS[e];
       this.seed++;
-      const h = this.make(e, this.seed), c = a.scale * (0.9 + rand$1(this.seed * 7.3) * 0.2);
-      h.root.scale.setScalar(c), h.root.position.set(r, s, o), this.group.add(h.root);
-      const d = {
-        ...h,
+      const d = this.make(e, this.seed), f = c.scale * (0.9 + rand$1(this.seed * 7.3) * 0.2);
+      d.root.scale.setScalar(f), d.root.position.set(r, s, o), this.group.add(d.root);
+      const p = {
+        ...d,
         type: e,
-        spec: a,
-        scale: c,
-        hp: a.hp,
-        maxHp: a.hp,
+        spec: c,
+        scale: f,
+        hp: c.hp,
+        maxHp: c.hp,
         heading: rand$1(this.seed * 11.9) * Math.PI * 2,
         phase: rand$1(this.seed * 13.3) * Math.PI * 2,
         groundY: s,
         smoothY: s,
         dryX: r,
         dryZ: o,
+        lastSeenX: a,
+        lastSeenZ: h,
+        lostFor: 0,
+        sees: false,
         slice: this.monsters.length % GROUND_SLICES,
         dead: false,
         deathAge: 0,
@@ -102042,7 +102115,7 @@ https://github.com/browserify/crypto-browserify`);
         attackCooldown: 0,
         flash: 0
       };
-      return this.monsters.push(d), d;
+      return this.monsters.push(p), p;
     }
     get aliveCount() {
       let e = 0;
@@ -102128,50 +102201,58 @@ https://github.com/browserify/crypto-browserify`);
         s.mesh.scale.set(a, 0.02, a * 0.85);
       }
     }
-    update(e, r, s) {
+    update(e, r, s, o = 1 / 0) {
       var _a2;
       this.frame++, this.updateBlood(e);
-      const o = this.frame % GROUND_SLICES;
-      for (let a = this.monsters.length - 1; a >= 0; a--) {
-        const h = this.monsters[a];
-        if (h.dead) {
-          if (h.deathAge += e, h.deathAge > 3.2) {
-            this.group.remove(h.root), this.monsters.splice(a, 1);
+      const a = this.frame % GROUND_SLICES;
+      for (let h = this.monsters.length - 1; h >= 0; h--) {
+        const c = this.monsters[h];
+        if (c.dead) {
+          if (c.deathAge += e, c.deathAge > 3.2) {
+            this.group.remove(c.root), this.monsters.splice(h, 1);
             continue;
           }
-          const q = Math.min(1, h.deathAge / 0.55), H = 1 - q;
-          h.root.position.x += h.deathDriftX * e * H, h.root.position.z += h.deathDriftZ * e * H, h.root.rotation.x = q * Math.PI * 0.5, h.root.rotation.y = h.heading + h.deathSpin * q, h.root.position.y = h.groundY + Math.sin(q * Math.PI) * 0.4 * h.scale - q * 0.1, h.deathAge > 1.6 && (h.root.position.y -= (h.deathAge - 1.6) * 0.5);
+          const ee = Math.min(1, c.deathAge / 0.55), ie = 1 - ee;
+          c.root.position.x += c.deathDriftX * e * ie, c.root.position.z += c.deathDriftZ * e * ie, c.root.rotation.x = ee * Math.PI * 0.5, c.root.rotation.y = c.heading + c.deathSpin * ee, c.root.position.y = c.groundY + Math.sin(ee * Math.PI) * 0.4 * c.scale - ee * 0.1, c.deathAge > 1.6 && (c.root.position.y -= (c.deathAge - 1.6) * 0.5);
           continue;
         }
-        h.ramCooldown > 0 && (h.ramCooldown -= e), h.attackCooldown > 0 && (h.attackCooldown -= e), h.flash > 0 && (h.flash = Math.max(0, h.flash - e * 3));
-        const c = h.root.position, d = r.x - c.x, f = r.z - c.z, p = Math.hypot(d, f);
-        if (p > SURVIVAL_SPAWN.despawnDistance) {
-          this.group.remove(h.root), this.monsters.splice(a, 1), h.dead || this.survival.onMonsterEscaped();
+        c.ramCooldown > 0 && (c.ramCooldown -= e), c.attackCooldown > 0 && (c.attackCooldown -= e), c.flash > 0 && (c.flash = Math.max(0, c.flash - e * 3));
+        const d = c.root.position, f = r.x - d.x, p = r.z - d.z, m = Math.hypot(f, p);
+        if (m > SURVIVAL_SPAWN.despawnDistance) {
+          this.group.remove(c.root), this.monsters.splice(h, 1), c.dead || this.survival.onMonsterEscaped();
           continue;
         }
-        let m = d / (p || 1), b = f / (p || 1);
-        const _ = this.separationFor(h, a);
-        m += _.x, b += _.z;
-        const M = Math.hypot(m, b) || 1;
-        m /= M, b /= M;
-        const P = (h.spec.radius + 1.4) * h.scale, O = p < P;
-        if (O) h.attackCooldown <= 0 && (h.attackCooldown = 0.6, s(h));
-        else {
-          const q = h.spec.speed;
-          c.x += m * q * e, c.z += b * q * e, h.phase += e * q * (h.gait === "crawl" ? 4.2 : 2.9);
+        const b = this.updateSight(c, r, m, o, e), _ = b.x - d.x, M = b.z - d.z, P = Math.hypot(_, M);
+        let O = _ / (P || 1), L = M / (P || 1);
+        const U = this.separationFor(c, h);
+        O += U.x, L += U.z;
+        const q = Math.hypot(O, L) || 1;
+        O /= q, L /= q;
+        const H = (c.spec.radius + 1.4) * c.scale, W = c.sees && m < H;
+        if (W) c.attackCooldown <= 0 && (c.attackCooldown = 0.6, s(c));
+        else if (P > 0.6) {
+          const ee = c.spec.speed * (c.sees ? 1 : SURVIVAL_STEALTH.wanderSpeedFactor);
+          d.x += O * ee * e, d.z += L * ee * e, c.phase += e * ee * (c.gait === "crawl" ? 4.2 : 2.9);
         }
-        let U = Math.atan2(m, b) - h.heading;
-        for (; U > Math.PI; ) U -= Math.PI * 2;
-        for (; U < -Math.PI; ) U += Math.PI * 2;
-        if (h.heading += U * Math.min(1, e * 7), h.root.rotation.y = h.heading, h.slice === o) {
-          const q = this.groundHeight(c.x, c.z);
-          if (q !== null) {
-            const H = ((_a2 = this.game.water) == null ? void 0 : _a2.surfaceElevation) ?? 0;
-            q > H + SURVIVAL_SPAWN.dryMargin ? (h.groundY = q, h.dryX = c.x, h.dryZ = c.z) : h.dryX !== void 0 ? (c.x = h.dryX, c.z = h.dryZ, h.heading += Math.PI * 0.5) : h.groundY = q;
+        let J = Math.atan2(O, L) - c.heading;
+        for (; J > Math.PI; ) J -= Math.PI * 2;
+        for (; J < -Math.PI; ) J += Math.PI * 2;
+        if (c.heading += J * Math.min(1, e * 7), c.root.rotation.y = c.heading, c.slice === a) {
+          const ee = this.groundHeight(d.x, d.z);
+          if (ee !== null) {
+            const ie = ((_a2 = this.game.water) == null ? void 0 : _a2.surfaceElevation) ?? 0;
+            ee > ie + SURVIVAL_SPAWN.dryMargin ? (c.groundY = ee, c.dryX = d.x, c.dryZ = d.z) : c.dryX !== void 0 ? (d.x = c.dryX, d.z = c.dryZ, c.heading += Math.PI * 0.5) : c.groundY = ee;
           }
         }
-        h.smoothY += (h.groundY - h.smoothY) * Math.min(1, e * 9), c.y = h.smoothY, this.animate(h, O, e);
+        c.smoothY += (c.groundY - c.smoothY) * Math.min(1, e * 9), d.y = c.smoothY, this.animate(c, W, e);
       }
+    }
+    updateSight(e, r, s, o, a) {
+      const h = e.spec.isBoss && SURVIVAL_STEALTH.bossAlwaysSees ? 1 / 0 : Math.max(o, SURVIVAL_STEALTH.alwaysSeeRange);
+      if (e.sees = s <= h, e.sees) return e.lostFor = 0, e.lastSeenX = r.x, e.lastSeenZ = r.z, r;
+      e.lostFor = (e.lostFor ?? 0) + a, e.lastSeenX === void 0 && (e.lastSeenX = e.root.position.x, e.lastSeenZ = e.root.position.z);
+      const c = this.game.ticker.elapsed * 0.55 + e.phase, d = SURVIVAL_STEALTH.wanderRadius * (e.lostFor > SURVIVAL_STEALTH.memory ? 2.2 : 1);
+      return this.tmp.set(e.lastSeenX + Math.cos(c) * d, e.root.position.y, e.lastSeenZ + Math.sin(c) * d), this.tmp;
     }
     separationFor(e, r) {
       let s = 0, o = 0;
@@ -102192,45 +102273,50 @@ https://github.com/browserify/crypto-browserify`);
     animate(e, r, s) {
       const o = Math.sin(e.phase);
       if (Math.sin(e.phase + Math.PI), e.gait === "crawl") {
-        for (const a of e.legs) {
-          const h = Math.sin(e.phase + a.phase);
-          a.hip.rotation.y = h * 0.5, a.knee.rotation.z = Math.max(0, -h) * 0.6;
+        for (const h of e.legs) {
+          const c = Math.sin(e.phase + h.phase);
+          h.hip.rotation.y = c * 0.5, h.knee.rotation.z = Math.max(0, -c) * 0.6;
         }
         e.root.position.y += Math.abs(o) * 0.05 * e.scale;
       } else if (e.gait === "lumber") {
-        for (const a of e.legs) {
-          const h = Math.sin(e.phase + a.phase);
-          a.hip.rotation.x = h * 0.42, a.knee.rotation.x = Math.max(0, -h) * 0.5;
+        for (const h of e.legs) {
+          const c = Math.sin(e.phase + h.phase);
+          h.hip.rotation.x = c * 0.42, h.knee.rotation.x = Math.max(0, -c) * 0.5;
         }
-        for (const a of e.arms) {
-          const h = Math.sin(e.phase + a.phase);
-          a.shoulder.rotation.x = h * 0.3, a.elbow.rotation.x = -0.4 - Math.max(0, h) * 0.3;
+        for (const h of e.arms) {
+          const c = Math.sin(e.phase + h.phase);
+          h.shoulder.rotation.x = c * 0.3, h.elbow.rotation.x = -0.4 - Math.max(0, c) * 0.3;
         }
         e.torso.rotation.z = o * 0.12, e.root.position.y += Math.abs(o) * 0.06 * e.scale;
       } else {
-        for (const a of e.legs) {
-          const h = Math.sin(e.phase + a.phase);
-          a.hip.rotation.x = h * 0.72, a.knee.rotation.x = -Math.max(0, -h) * 0.9;
+        for (const h of e.legs) {
+          const c = Math.sin(e.phase + h.phase);
+          h.hip.rotation.x = c * 0.72, h.knee.rotation.x = -Math.max(0, -c) * 0.9;
         }
-        for (const a of e.arms) {
-          const h = Math.sin(e.phase + a.phase);
-          a.shoulder.rotation.x = h * 0.55, a.elbow.rotation.x = -0.35 - Math.max(0, h) * 0.4;
+        for (const h of e.arms) {
+          const c = Math.sin(e.phase + h.phase);
+          h.shoulder.rotation.x = c * 0.55, h.elbow.rotation.x = -0.35 - Math.max(0, c) * 0.4;
         }
         e.torso.rotation.z = o * 0.07, e.root.position.y += Math.abs(o) * 0.045 * e.scale;
       }
       if (r && e.arms) {
-        const a = Math.sin(this.game.ticker.elapsed * 11);
-        for (const h of e.arms) h.shoulder.rotation.x = -0.6 - a * 0.5, h.elbow.rotation.x = -0.2 + a * 0.4;
+        const h = Math.sin(this.game.ticker.elapsed * 11);
+        for (const c of e.arms) c.shoulder.rotation.x = -0.6 - h * 0.5, c.elbow.rotation.x = -0.2 + h * 0.4;
       }
       if (e.flash > 0) {
-        const a = Math.sin(this.game.ticker.elapsed * 40) > 0;
-        for (const h of e.eyes) h.visible = a;
-      } else if (e.eyes[0] && !e.eyes[0].visible) for (const a of e.eyes) a.visible = true;
+        const h = Math.sin(this.game.ticker.elapsed * 40) > 0;
+        for (const c of e.eyes) c.visible = h;
+      } else if (e.eyes[0] && !e.eyes[0].visible) for (const h of e.eyes) h.visible = true;
+      const a = e.sees === false ? 0.45 : 1;
+      if (e.eyeScale === void 0 && (e.eyeScale = 1), Math.abs(e.eyeScale - a) > 0.01) {
+        e.eyeScale += (a - e.eyeScale) * Math.min(1, s * 6);
+        for (const h of e.eyes) h.userData.baseScale || (h.userData.baseScale = h.scale.clone()), h.scale.copy(h.userData.baseScale).multiplyScalar(e.eyeScale);
+      }
     }
   }
   class Survival {
     constructor() {
-      this.game = Game.getInstance(), this.events = new Events(), this.enabled = false, this.phase = "preparing", this.wave = 0, this.health = SURVIVAL_PLAYER.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.best = parseInt(localStorage.getItem("survivalBestWave") ?? "0") || 0, this.toSpawn = 0, this.spawnTimer = 0, this.phaseTimer = 0, this.safeFor = 0, this.loot = [], this.lootMaterials = /* @__PURE__ */ new Map(), this.lootGeometry = new BoxGeometry$1(1, 1, 1), this.monsters = new SurvivalMonsters(this), this.setPreference(), this.setSounds(), this.setHud(), this.setSettingsButtons(), this.game.ticker.events.on("tick", () => this.update(), 12);
+      this.game = Game.getInstance(), this.events = new Events(), this.enabled = false, this.upgrades = {}, this.phase = "preparing", this.wave = 0, this.health = this.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.best = parseInt(localStorage.getItem("survivalBestWave") ?? "0") || 0, this.toSpawn = 0, this.spawnTimer = 0, this.phaseTimer = 0, this.safeFor = 0, this.loot = [], this.lootMaterials = /* @__PURE__ */ new Map(), this.lootGeometry = new BoxGeometry$1(1, 1, 1), this.monsters = new SurvivalMonsters(this), this.setPreference(), this.setSounds(), this.setHud(), this.setShop(), this.setSettingsButtons(), this.game.ticker.events.on("tick", () => this.update(), 12);
     }
     setPreference() {
       this.preference = {}, this.preference.names = [
@@ -102245,11 +102331,11 @@ https://github.com/browserify/crypto-browserify`);
     }
     enable() {
       var _a2, _b;
-      this.enabled = true, this.previousTime = this.game.dayCycles.preference.current, this.wave = 0, this.health = SURVIVAL_PLAYER.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.safeFor = 0, (_a2 = this.hudElement) == null ? void 0 : _a2.classList.add("is-visible"), this.startPreparing(4), (_b = this.game.notifications) == null ? void 0 : _b.show('<div class="top"><p class="title">Ch\u1EBF \u0111\u1ED9 Sinh t\u1ED3n</p></div><div class="bottom"><p class="description">Tr\u1EDDi s\u1EAFp t\u1ED1i. H\xFAc ho\u1EB7c b\u1EAFn \u2014 b\u1EA5m <strong>X</strong> n\u1EBFu \u0111\xE3 b\u1EADt Rocket.</p></div>', "is-achievement", 5);
+      this.enabled = true, this.previousTime = this.game.dayCycles.preference.current, this.upgrades = {}, this.wave = 0, this.health = this.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.safeFor = 0, (_a2 = this.hudElement) == null ? void 0 : _a2.classList.add("is-visible"), this.startPreparing(4), (_b = this.game.notifications) == null ? void 0 : _b.show('<div class="top"><p class="title">Ch\u1EBF \u0111\u1ED9 Sinh t\u1ED3n</p></div><div class="bottom"><p class="description">Tr\u1EDDi s\u1EAFp t\u1ED1i. H\xFAc ho\u1EB7c b\u1EAFn \u2014 b\u1EA5m <strong>X</strong> n\u1EBFu \u0111\xE3 b\u1EADt Rocket.</p></div>', "is-achievement", 5);
     }
     disable() {
-      var _a2;
-      this.enabled = false, this.monsters.clear(), this.clearLoot(), (_a2 = this.hudElement) == null ? void 0 : _a2.classList.remove("is-visible"), this.setDefeatedOverlay(false), this.previousTime && this.setTime(this.previousTime, 3);
+      var _a2, _b, _c;
+      this.enabled = false, this.monsters.clear(), this.clearLoot(), (_a2 = this.hudElement) == null ? void 0 : _a2.classList.remove("is-visible"), (_b = this.shopElement) == null ? void 0 : _b.classList.remove("is-visible"), (_c = this.bossElement) == null ? void 0 : _c.classList.remove("is-visible"), this.boss = null, this.lastShopOpen = null, this.lastBossAlive = null, this.setDefeatedOverlay(false), this.previousTime && this.setTime(this.previousTime, 3);
     }
     setTime(e, r) {
       const s = localStorage.getItem("dayCyclePreference");
@@ -102260,7 +102346,7 @@ https://github.com/browserify/crypto-browserify`);
     }
     startWave() {
       var _a2, _b;
-      this.wave++, this.phase = "hunting", this.toSpawn = SURVIVAL_WAVES.countFor(this.wave), this.spawnTimer = 0, this.setTime("night", 2.5), (_a2 = this.sounds.howl) == null ? void 0 : _a2.play(), (_b = this.game.notifications) == null ? void 0 : _b.show(`<div class="top"><p class="title">S\xF3ng ${this.wave}</p></div><div class="bottom"><p class="description">${this.toSpawn} con \u0111ang t\u1EDBi</p></div>`, "is-achievement", 3), this.events.trigger("waveChange");
+      this.wave++, this.phase = "hunting", this.toSpawn = SURVIVAL_WAVES.countFor(this.wave), this.spawnTimer = 0, this.bossPending = this.wave % SURVIVAL_WAVES.bossEvery === 0, this.boss = null, this.setTime("night", 2.5), (_a2 = this.sounds.howl) == null ? void 0 : _a2.play(), (_b = this.game.notifications) == null ? void 0 : _b.show(this.bossPending ? `<div class="top"><p class="title">S\xF3ng ${this.wave} \u2014 QU\xC1I TR\xD9M</p></div><div class="bottom"><p class="description">${this.toSpawn} con, v\xE0 m\u1ED9t th\u1EE9 kh\xF4ng n\u1EA5p n\u1ED5i</p></div>` : `<div class="top"><p class="title">S\xF3ng ${this.wave}</p></div><div class="bottom"><p class="description">${this.toSpawn} con \u0111ang t\u1EDBi</p></div>`, "is-achievement", this.bossPending ? 5 : 3), this.events.trigger("waveChange");
     }
     pickType() {
       let e = SURVIVAL_WAVES.mix[0];
@@ -102273,9 +102359,17 @@ https://github.com/browserify/crypto-browserify`);
       this.phase === "hunting" && this.toSpawn++;
     }
     onMonsterKilled(e) {
-      var _a2;
+      var _a2, _b;
       this.kills++, this.score += e.spec.score, (_a2 = this.sounds.death) == null ? void 0 : _a2.play(e.root.position);
       const r = e.root.position;
+      if (e.spec.isBoss) {
+        (_b = this.game.notifications) == null ? void 0 : _b.show(`<div class="top"><p class="title">H\u1EA1 \u0111\u01B0\u1EE3c qu\xE1i tr\xF9m</p></div><div class="bottom"><p class="description">+${e.spec.money}$ \xB7 +${e.spec.score} \u0111i\u1EC3m</p></div>`, "is-achievement", 4);
+        for (let s = 0; s < 6; s++) {
+          const o = s / 6 * Math.PI * 2;
+          this.dropLoot(r.x + Math.cos(o) * 2.4, e.groundY, r.z + Math.sin(o) * 2.4, s === 5 ? "health" : "money", s === 5 ? SURVIVAL_LOOT.healthAmount * 2 : Math.round(e.spec.money / 5));
+        }
+        return;
+      }
       Math.random() < SURVIVAL_LOOT.healthChance ? this.dropLoot(r.x, e.groundY, r.z, "health", SURVIVAL_LOOT.healthAmount) : this.dropLoot(r.x, e.groundY, r.z, "money", e.spec.money);
     }
     lootMaterial(e) {
@@ -102305,7 +102399,7 @@ https://github.com/browserify/crypto-browserify`);
           this.game.scene.remove(o.mesh), this.loot.splice(s, 1);
           continue;
         }
-        o.mesh.rotation.y += SURVIVAL_LOOT.spinSpeed * e, o.mesh.position.y = o.groundY + 0.6 + Math.sin(this.game.ticker.elapsed * SURVIVAL_LOOT.bobSpeed + o.phase) * SURVIVAL_LOOT.bobHeight, o.age > SURVIVAL_LOOT.life - 5 && (o.mesh.visible = Math.sin(o.age * 14) > -0.3), !(Math.hypot(o.mesh.position.x - r.x, o.mesh.position.z - r.z) > SURVIVAL_PLAYER.pickupRadius) && (o.kind === "health" ? this.health = Math.min(SURVIVAL_PLAYER.maxHealth, this.health + o.amount) : this.money += o.amount, (_a2 = this.sounds.pickup) == null ? void 0 : _a2.play(o.mesh.position), this.game.scene.remove(o.mesh), this.loot.splice(s, 1));
+        o.mesh.rotation.y += SURVIVAL_LOOT.spinSpeed * e, o.mesh.position.y = o.groundY + 0.6 + Math.sin(this.game.ticker.elapsed * SURVIVAL_LOOT.bobSpeed + o.phase) * SURVIVAL_LOOT.bobHeight, o.age > SURVIVAL_LOOT.life - 5 && (o.mesh.visible = Math.sin(o.age * 14) > -0.3), !(Math.hypot(o.mesh.position.x - r.x, o.mesh.position.z - r.z) > SURVIVAL_PLAYER.pickupRadius) && (o.kind === "health" ? this.health = Math.min(this.maxHealth, this.health + o.amount) : this.money += o.amount, (_a2 = this.sounds.pickup) == null ? void 0 : _a2.play(o.mesh.position), this.game.scene.remove(o.mesh), this.loot.splice(s, 1));
       }
     }
     hurt(e) {
@@ -102320,9 +102414,10 @@ https://github.com/browserify/crypto-browserify`);
       this.health = 0, this.phase = "defeated", this.phaseTimer = 5, this.wave > this.best && (this.best = this.wave, localStorage.setItem("survivalBestWave", String(this.best))), this.monsters.clear(), this.setDefeatedOverlay(true), (_a2 = this.sounds.death) == null ? void 0 : _a2.play(this.game.physicalVehicle.position);
     }
     restart() {
-      this.setDefeatedOverlay(false), this.clearLoot(), this.wave = 0, this.health = SURVIVAL_PLAYER.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.safeFor = 0, this.startPreparing(5);
+      this.setDefeatedOverlay(false), this.clearLoot(), this.upgrades = {}, this.wave = 0, this.health = this.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.safeFor = 0, this.startPreparing(5);
     }
     update() {
+      var _a2;
       if (!this.enabled) return;
       const e = Math.min(this.game.ticker.delta, 0.1), r = this.game.physicalVehicle, s = r.position;
       if (this.phase === "defeated") {
@@ -102330,7 +102425,24 @@ https://github.com/browserify/crypto-browserify`);
         }), this.phaseTimer <= 0 && this.restart(), this.updateHud();
         return;
       }
-      this.phase === "preparing" ? (this.phaseTimer -= e, this.phaseTimer <= 0 && this.startWave()) : this.toSpawn > 0 ? (this.spawnTimer -= e, this.spawnTimer <= 0 && this.monsters.aliveCount < SURVIVAL_WAVES.maxAlive && (this.spawnTimer = SURVIVAL_WAVES.spawnInterval, this.monsters.spawn(this.pickType(), s.x, s.z) && this.toSpawn--)) : this.monsters.aliveCount === 0 && (this.wave > this.best && (this.best = this.wave, localStorage.setItem("survivalBestWave", String(this.best))), this.startPreparing()), this.monsters.update(e, s, (o) => this.onMonsterReach(o, r)), this.updateRamming(e, r), this.updateLoot(e, s), this.safeFor += e, this.safeFor > SURVIVAL_PLAYER.regenDelay && this.health < SURVIVAL_PLAYER.maxHealth && (this.health = Math.min(SURVIVAL_PLAYER.maxHealth, this.health + SURVIVAL_PLAYER.regenRate * e)), this.updateHud();
+      if (this.phase === "preparing") this.phaseTimer -= e, this.phaseTimer <= 0 && this.startWave();
+      else {
+        if (this.bossPending && this.toSpawn <= 2) {
+          const o = this.monsters.spawn("boss", s.x, s.z);
+          o && (this.bossPending = false, this.boss = o, (_a2 = this.sounds.howl) == null ? void 0 : _a2.play());
+        }
+        this.toSpawn > 0 ? (this.spawnTimer -= e, this.spawnTimer <= 0 && this.monsters.aliveCount < SURVIVAL_WAVES.maxAlive && (this.spawnTimer = SURVIVAL_WAVES.spawnInterval, this.monsters.spawn(this.pickType(), s.x, s.z) && this.toSpawn--)) : this.monsters.aliveCount === 0 && !this.bossPending && (this.wave > this.best && (this.best = this.wave, localStorage.setItem("survivalBestWave", String(this.best))), this.startPreparing());
+      }
+      if (this.monsters.update(e, s, (o) => this.onMonsterReach(o, r), this.sightRange(r)), this.updateRamming(e, r), this.updateLoot(e, s), this.safeFor += e, this.safeFor > SURVIVAL_PLAYER.regenDelay && this.health < this.maxHealth) {
+        const o = SURVIVAL_PLAYER.regenRate + this.level("regen") * 3;
+        this.health = Math.min(this.maxHealth, this.health + o * e);
+      }
+      this.updateHud();
+    }
+    sightRange(e) {
+      var _a2, _b;
+      let r = SURVIVAL_STEALTH.baseRange;
+      return ((_b = (_a2 = this.game.lighting) == null ? void 0 : _a2.headlights) == null ? void 0 : _b.shouldBeOn()) && (r *= SURVIVAL_STEALTH.headlightsFactor), r += e.xzSpeed * SURVIVAL_STEALTH.speedRange, r;
     }
     onMonsterReach(e, r) {
       var _a2;
@@ -102340,7 +102452,7 @@ https://github.com/browserify/crypto-browserify`);
       var _a2;
       const s = r.xzSpeed;
       if (s <= SURVIVAL_PLAYER.rammingSpeed) return;
-      const o = (s - SURVIVAL_PLAYER.rammingSpeed) * SURVIVAL_PLAYER.rammingPower;
+      const o = (s - SURVIVAL_PLAYER.rammingSpeed) * SURVIVAL_PLAYER.rammingPower * (1 + this.level("ram") * 0.45);
       for (const a of this.monsters.monsters) {
         if (a.dead || a.ramCooldown > 0) continue;
         const h = a.root.position.x - r.position.x, c = a.root.position.z - r.position.z, d = 1.5 + a.spec.radius * a.scale;
@@ -102348,7 +102460,62 @@ https://github.com/browserify/crypto-browserify`);
       }
     }
     damageAround(e, r, s = 1) {
-      return this.enabled ? this.monsters.damageAround(e, r, s) : 0;
+      return this.enabled ? this.monsters.damageAround(e, r, s * (1 + this.level("blast") * 0.5)) : 0;
+    }
+    level(e) {
+      return this.upgrades[e] ?? 0;
+    }
+    priceOf(e) {
+      return Math.round(e.price * Math.pow(e.step, this.level(e.key)));
+    }
+    canBuy(e) {
+      return this.level(e.key) < e.max && this.money >= this.priceOf(e);
+    }
+    buy(e) {
+      var _a2;
+      return this.phase !== "preparing" || !this.canBuy(e) ? false : (this.money -= this.priceOf(e), this.upgrades[e.key] = this.level(e.key) + 1, (e.key === "armor" || e.key === "patch") && (this.health = this.maxHealth), (_a2 = this.sounds.pickup) == null ? void 0 : _a2.play(this.game.physicalVehicle.position), this.renderShop(), true);
+    }
+    get maxHealth() {
+      return SURVIVAL_PLAYER.maxHealth + this.level("armor") * 25;
+    }
+    setShop() {
+      this.shopElement = document.querySelector(".js-survival-shop"), this.shopElement && (this.shopItemsElement = this.shopElement.querySelector(".js-survival-shop-items"), this.shopMoneyElement = this.shopElement.querySelector(".js-survival-shop-money"), this.shopButtons = SURVIVAL_SHOP.map((e, r) => {
+        const s = document.createElement("button");
+        return s.className = "survival-shop-item", s.type = "button", s.innerHTML = `
+                <span class="survival-shop-key">${r + 1}</span>
+                <span class="survival-shop-name">${e.name}</span>
+                <span class="survival-shop-desc">${e.description}</span>
+                <span class="survival-shop-price"></span>
+                <span class="survival-shop-level"></span>
+            `, s.addEventListener("click", () => this.buy(e)), this.shopItemsElement.appendChild(s), {
+          item: e,
+          element: s,
+          priceElement: s.querySelector(".survival-shop-price"),
+          levelElement: s.querySelector(".survival-shop-level")
+        };
+      }), this.game.inputs.addActions(SURVIVAL_SHOP.map((e, r) => ({
+        name: `survivalBuy${r + 1}`,
+        categories: [
+          "wandering"
+        ],
+        keys: [
+          `Keyboard.Digit${r + 1}`,
+          `Keyboard.Numpad${r + 1}`
+        ]
+      }))), SURVIVAL_SHOP.forEach((e, r) => {
+        this.game.inputs.events.on(`survivalBuy${r + 1}`, (s) => {
+          s.active && this.enabled && this.buy(e);
+        });
+      }), this.renderShop());
+    }
+    renderShop() {
+      if (this.shopButtons) {
+        this.shopMoneyElement.textContent = this.money;
+        for (const { item: e, element: r, priceElement: s, levelElement: o } of this.shopButtons) {
+          const a = this.level(e.key), h = a >= e.max;
+          s.textContent = h ? "H\u1EBFt c\u1EA5p" : `${this.priceOf(e)}$`, o.textContent = e.max > 90 ? a > 0 ? `\u0111\xE3 mua ${a}` : "" : `c\u1EA5p ${a}/${e.max}`, r.classList.toggle("is-locked", h || !this.canBuy(e));
+        }
+      }
     }
     setSounds() {
       this.sounds = {};
@@ -102381,19 +102548,27 @@ https://github.com/browserify/crypto-browserify`);
         left: this.hudElement.querySelector(".js-survival-left"),
         money: this.hudElement.querySelector(".js-survival-money"),
         score: this.hudElement.querySelector(".js-survival-score")
-      }, this.defeatedElement = document.querySelector(".js-survival-defeated"), this.defeatedWaveElement = document.querySelector(".js-survival-defeated-wave"));
+      }, this.defeatedElement = document.querySelector(".js-survival-defeated"), this.defeatedWaveElement = document.querySelector(".js-survival-defeated-wave"), this.bossElement = document.querySelector(".js-survival-boss"), this.bossBarElement = document.querySelector(".js-survival-boss-bar"));
     }
     setDefeatedOverlay(e) {
       this.defeatedElement && (e && this.defeatedWaveElement && (this.defeatedWaveElement.textContent = `S\xF3ng ${this.wave} \xB7 ${this.kills} con \xB7 ${this.money}$`), this.defeatedElement.classList.toggle("is-visible", e));
     }
     updateHud() {
+      var _a2, _b;
       if (!this.hudParts) return;
       const e = Math.max(0, Math.round(this.health));
-      e !== this.lastHealth && (this.lastHealth = e, this.hudParts.healthValue.textContent = e, this.hudParts.healthBar.style.transform = `scaleX(${e / SURVIVAL_PLAYER.maxHealth})`, this.hudElement.classList.toggle("is-critical", e <= 30)), this.wave !== this.lastWave && (this.lastWave = this.wave, this.hudParts.wave.textContent = this.wave);
+      e !== this.lastHealth && (this.lastHealth = e, this.hudParts.healthValue.textContent = e, this.hudParts.healthBar.style.transform = `scaleX(${e / this.maxHealth})`, this.hudElement.classList.toggle("is-critical", e <= 30)), this.wave !== this.lastWave && (this.lastWave = this.wave, this.hudParts.wave.textContent = this.wave);
       const r = this.phase === "hunting" ? this.toSpawn + this.monsters.aliveCount : 0;
       r !== this.lastLeft && (this.lastLeft = r, this.hudParts.left.textContent = r);
-      const s = this.phase === "defeated" ? "G\u1EE5c" : this.phase === "preparing" ? `Ngh\u1EC9 ${Math.ceil(Math.max(0, this.phaseTimer))}s` : "S\u0103n";
-      s !== this.lastState && (this.lastState = s, this.hudParts.state.textContent = s), this.money !== this.lastMoney && (this.lastMoney = this.money, this.hudParts.money.textContent = this.money), this.score !== this.lastScore && (this.lastScore = this.score, this.hudParts.score.textContent = this.score);
+      const s = this.phase === "hunting" && this.monsters.monsters.some((c) => !c.dead && c.sees), o = this.phase === "defeated" ? "G\u1EE5c" : this.phase === "preparing" ? `Ngh\u1EC9 ${Math.ceil(Math.max(0, this.phaseTimer))}s` : s ? "B\u1ECB s\u0103n" : "\u0110ang n\u1EA5p";
+      o !== this.lastState && (this.lastState = o, this.hudParts.state.textContent = o), this.money !== this.lastMoney && (this.lastMoney = this.money, this.hudParts.money.textContent = this.money), this.score !== this.lastScore && (this.lastScore = this.score, this.hudParts.score.textContent = this.score);
+      const a = this.phase === "preparing";
+      a !== this.lastShopOpen && (this.lastShopOpen = a, (_a2 = this.shopElement) == null ? void 0 : _a2.classList.toggle("is-visible", a), a && this.renderShop()), a && this.money !== this.lastShopMoney && (this.lastShopMoney = this.money, this.renderShop());
+      const h = !!(this.boss && !this.boss.dead);
+      if (h !== this.lastBossAlive && (this.lastBossAlive = h, (_b = this.bossElement) == null ? void 0 : _b.classList.toggle("is-visible", h)), h) {
+        const c = Math.max(0, this.boss.hp / this.boss.maxHp);
+        Math.abs(c - (this.lastBossRatio ?? -1)) > 5e-3 && (this.lastBossRatio = c, this.bossBarElement.style.transform = `scaleX(${c})`);
+      }
     }
     setSettingsButtons() {
       const e = document.querySelector(".js-survival-modes");
@@ -116576,7 +116751,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-D4opYvgb.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-CgmfV5sE.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

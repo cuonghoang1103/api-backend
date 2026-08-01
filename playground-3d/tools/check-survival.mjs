@@ -284,6 +284,60 @@ const facts = {}
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
+//  3b. CHỐNG BẾ TẮC — quái sinh NGOÀI tầm phát hiện vẫn phải tiến về phía xe
+// ═══════════════════════════════════════════════════════════════════════════
+//
+// Đây là lỗi chết người mà số đo của mục 3 mới để lộ: quái sinh trên vành
+// 26–46 đơn vị, còn tầm phát hiện chỉ 17 khi tắt đèn. Nếu con mới sinh không
+// được cho biết chỗ xe thì nó lảng vảng tại chỗ VĨNH VIỄN, sóng không bao giờ
+// hết, và không có một dòng lỗi nào. Kiểm ở kịch bản xấu nhất: ĐÈN TẮT.
+{
+    const before = await page.evaluate(() =>
+    {
+        const G = window.game
+        const s = G.world.survival
+        const v = G.physicalVehicle.position
+
+        G.lighting.headlights.setMode('off')
+        s.monsters.clear()
+
+        for(let i = 0; i < 4; i++) s.monsters.spawn('crawler', v.x, v.z)
+
+        return {
+            count: s.monsters.monsters.length,
+            distances: s.monsters.monsters.map(m => Math.hypot(m.root.position.x - v.x, m.root.position.z - v.z)),
+            sightRange: s.sightRange(G.physicalVehicle),
+        }
+    })
+
+    await run(2.5)
+
+    const after = await page.evaluate(() =>
+    {
+        const G = window.game
+        const s = G.world.survival
+        const v = G.physicalVehicle.position
+        return s.monsters.monsters.map(m => Math.hypot(m.root.position.x - v.x, m.root.position.z - v.z))
+    })
+
+    const avgBefore = before.distances.reduce((a, d) => a + d, 0) / (before.distances.length || 1)
+    const avgAfter = after.reduce((a, d) => a + d, 0) / (after.length || 1)
+    const outside = before.distances.filter(d => d > before.sightRange).length
+
+    facts['3b. sinh ngoài tầm'] = `${outside}/${before.count} con sinh ngoài tầm ${before.sightRange.toFixed(0)} · `
+        + `khoảng cách ${avgBefore.toFixed(1)} → ${avgAfter.toFixed(1)} (đèn TẮT)`
+
+    if(before.count === 0)
+        problems.push('Không sinh được con nào cho phép kiểm chống bế tắc')
+    else if(avgAfter >= avgBefore - 0.8)
+        problems.push(`BẾ TẮC: quái sinh ngoài tầm KHÔNG tiến về phía xe `
+            + `(${avgBefore.toFixed(1)} → ${avgAfter.toFixed(1)} sau 2,5 giây game). Sóng sẽ không bao giờ kết thúc.`)
+
+    // Trả đèn về auto cho các mục sau
+    await page.evaluate(() => window.game.lighting.headlights.setMode('auto'))
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 //  4. GIẾT ĐƯỢC — bằng đòn trực tiếp và bằng nổ vùng, có máu đen + rơi tiền
 // ═══════════════════════════════════════════════════════════════════════════
 {
@@ -416,6 +470,238 @@ const facts = {}
     if(defeat.health !== 0) problems.push(`Thua rồi mà máu là ${defeat.health}, đáng lẽ 0`)
     if(!defeat.overlay) problems.push('Thua mà màn "Bạn đã gục" không hiện')
     if(defeat.monsters !== 0) problems.push(`Thua rồi mà còn ${defeat.monsters} con quái trong cảnh`)
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  6b. NẤP — tầm phát hiện theo đèn pha và tốc độ, quái mất dấu thì lảng
+// ═══════════════════════════════════════════════════════════════════════════
+{
+    // Hồi lại để không rơi vào nhánh "defeated" của mục 6
+    await page.evaluate(() =>
+    {
+        const s = window.game.world.survival
+        s.restart()
+        s.phase = 'hunting'
+    })
+
+    const ranges = await page.evaluate(() =>
+    {
+        const G = window.game
+        const s = G.world.survival
+        const v = G.physicalVehicle
+        const before = G.lighting.headlights.mode
+
+        G.lighting.headlights.setMode('off')
+        const off = s.sightRange(v)
+
+        G.lighting.headlights.setMode('on')
+        const on = s.sightRange(v)
+
+        G.lighting.headlights.setMode(before)
+        return { off, on, speed: v.xzSpeed }
+    })
+
+    facts['6b. tầm phát hiện'] = `đèn tắt ${ranges.off.toFixed(1)} → đèn bật ${ranges.on.toFixed(1)} (xe ${ranges.speed.toFixed(1)} đv/s)`
+
+    if(ranges.on <= ranges.off)
+        problems.push(`Bật đèn pha KHÔNG làm tăng tầm phát hiện (${ranges.off.toFixed(1)} → ${ranges.on.toFixed(1)}) — cơ chế nấp vô nghĩa`)
+
+    // Thả một con ở NGOÀI tầm rồi xem nó có tự nhận là mất dấu không
+    const sight = await page.evaluate(() =>
+    {
+        const G = window.game
+        const s = G.world.survival
+        const v = G.physicalVehicle.position
+        G.lighting.headlights.setMode('off')
+
+        s.monsters.clear()
+
+        // Đặt hai con: một sát nách, một ở rất xa
+        const near = s.monsters.groundHeight(v.x + 4, v.z)
+        const far = s.monsters.groundHeight(v.x + 40, v.z)
+        if(near !== null) s.monsters.add('crawler', v.x + 4, near, v.z)
+        if(far !== null) s.monsters.add('crawler', v.x + 40, far, v.z)
+
+        return { placed: s.monsters.monsters.length }
+    })
+
+    await run(0.6)
+
+    const seen = await page.evaluate(() =>
+    {
+        const G = window.game
+        const s = G.world.survival
+        const v = G.physicalVehicle.position
+
+        return s.monsters.monsters.map(m => ({
+            d: Math.hypot(m.root.position.x - v.x, m.root.position.z - v.z),
+            sees: m.sees,
+            eyeScale: m.eyeScale,
+        }))
+    })
+
+    facts['6b. thấy / mất dấu'] = seen.map(m => `${m.d.toFixed(0)}đv:${m.sees ? 'THẤY' : 'mất dấu'}`).join(' · ') || '(không đặt được con nào)'
+
+    if(sight.placed < 2)
+    {
+        problems.push('Không đặt được hai con để thử cơ chế nấp')
+    }
+    else
+    {
+        const near = seen.find(m => m.d < 12)
+        const far = seen.find(m => m.d > 25)
+
+        if(near && !near.sees) problems.push('Con đứng sát nách mà vẫn báo mất dấu')
+        if(far && far.sees) problems.push(`Con cách ${far.d.toFixed(0)} đơn vị mà vẫn thấy xe dù đèn đã tắt — tầm phát hiện không được áp dụng`)
+        if(far && !far.sees && !(far.eyeScale < 1))
+            problems.push('Mất dấu rồi mà mắt không nheo lại — người chơi không có cách nào biết mình đang nấp thành công')
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  6c. CỬA HÀNG — giá, mua, tác dụng, và chỉ mở lúc nghỉ
+// ═══════════════════════════════════════════════════════════════════════════
+{
+    const shop = await page.evaluate(() =>
+    {
+        const s = window.game.world.survival
+
+        // Thử mua trong lúc ĐANG SĂN — phải bị chặn
+        s.phase = 'hunting'
+        s.money = 10000
+        const boughtWhileHunting = s.buy(s.shopButtons[0].item)
+
+        // Giờ vào nhịp nghỉ và mua thật
+        s.phase = 'preparing'
+        const armor = s.shopButtons.find(b => b.item.key === 'armor').item
+        const maxBefore = s.maxHealth
+        const priceFirst = s.priceOf(armor)
+        const ok = s.buy(armor)
+        const priceSecond = s.priceOf(armor)
+
+        const ram = s.shopButtons.find(b => b.item.key === 'ram').item
+        s.buy(ram)
+
+        return {
+            boughtWhileHunting,
+            ok,
+            maxBefore,
+            maxAfter: s.maxHealth,
+            priceFirst,
+            priceSecond,
+            money: s.money,
+            armorLevel: s.level('armor'),
+            ramLevel: s.level('ram'),
+            items: s.shopButtons.length,
+            domItems: document.querySelectorAll('.js-survival-shop-items .survival-shop-item').length,
+        }
+    })
+
+    facts['6c. cửa hàng'] = `${shop.items} món (DOM ${shop.domItems}) · giáp ${shop.priceFirst}$ → ${shop.priceSecond}$ · máu tối đa ${shop.maxBefore} → ${shop.maxAfter}`
+
+    if(shop.boughtWhileHunting) problems.push('MUA ĐƯỢC trong lúc đang săn — cửa hàng phải chỉ mở giữa hai sóng')
+    if(!shop.ok) problems.push('Có đủ tiền mà không mua được món Giáp')
+    if(shop.domItems !== shop.items) problems.push(`Cửa hàng có ${shop.items} món nhưng DOM chỉ dựng ${shop.domItems} nút`)
+    if(shop.maxAfter <= shop.maxBefore) problems.push(`Mua Giáp mà máu tối đa không tăng (${shop.maxBefore} → ${shop.maxAfter})`)
+    if(shop.priceSecond <= shop.priceFirst) problems.push(`Giá không tăng sau khi mua (${shop.priceFirst} → ${shop.priceSecond})`)
+    if(shop.armorLevel !== 1 || shop.ramLevel !== 1) problems.push(`Cấp sau khi mua sai: giáp=${shop.armorLevel}, húc=${shop.ramLevel}, đáng lẽ 1 và 1`)
+
+    // Nâng cấp phải ăn vào sát thương thật
+    const power = await page.evaluate(() =>
+    {
+        const s = window.game.world.survival
+        const v = window.game.physicalVehicle.position
+
+        s.monsters.clear()
+        const y = s.monsters.groundHeight(v.x + 6, v.z)
+        if(y === null) return null
+        const target = s.monsters.add('brute', v.x + 6, y, v.z)
+
+        const before = target.hp
+        // Nổ với sức 1 — nâng cấp "Đầu đạn" phải nhân lên
+        s.upgrades.blast = 0
+        s.damageAround(target.root.position.clone(), 6, 1)
+        const plain = before - target.hp
+
+        target.hp = before
+        s.upgrades.blast = 2
+        s.damageAround(target.root.position.clone(), 6, 1)
+        const upgraded = before - target.hp
+
+        return { plain, upgraded }
+    })
+
+    if(power)
+    {
+        facts['6c. đầu đạn'] = `sát thương ${power.plain.toFixed(1)} → ${power.upgraded.toFixed(1)} (2 cấp)`
+        if(power.upgraded <= power.plain)
+            problems.push(`Nâng cấp Đầu đạn không ăn vào sát thương nổ (${power.plain.toFixed(1)} → ${power.upgraded.toFixed(1)})`)
+    }
+    else problems.push('Không đặt được con nào để thử nâng cấp Đầu đạn')
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  6d. QUÁI TRÙM — sinh mỗi 5 sóng, thanh máu riêng, không nấp khỏi nó được
+// ═══════════════════════════════════════════════════════════════════════════
+{
+    const boss = await page.evaluate(async () =>
+    {
+        const G = window.game
+        const s = G.world.survival
+
+        s.monsters.clear()
+        s.upgrades = {}
+        s.health = s.maxHealth
+
+        // Vào thẳng sóng 5
+        s.wave = 4
+        s.startWave()
+        const pendingAtWave5 = s.bossPending
+
+        const v = G.physicalVehicle.position
+        const y = s.monsters.groundHeight(v.x + 50, v.z)
+        const monster = y === null ? null : s.monsters.add('boss', v.x + 50, y, v.z)
+        s.boss = monster
+
+        return {
+            pendingAtWave5,
+            wave: s.wave,
+            placed: !!monster,
+            hp: monster?.hp,
+            scale: monster?.scale,
+            isBoss: monster?.spec?.isBoss === true,
+        }
+    })
+
+    await run(0.5)
+
+    const bossState = await page.evaluate(() =>
+    {
+        const s = window.game.world.survival
+        return {
+            sees: s.boss?.sees,
+            barVisible: document.querySelector('.js-survival-boss')?.classList.contains('is-visible'),
+            bar: document.querySelector('.js-survival-boss-bar')?.style.transform,
+        }
+    })
+
+    facts['6d. quái trùm'] = `sóng ${boss.wave} sinh trùm=${boss.pendingAtWave5} · máu ${boss.hp} · cỡ ${boss.scale?.toFixed(2)} · thanh máu ${bossState.barVisible ? 'hiện' : 'KHÔNG hiện'}`
+
+    if(!boss.pendingAtWave5) problems.push('Sóng 5 KHÔNG đặt lịch sinh quái trùm')
+    if(!boss.placed) problems.push('Không đặt được quái trùm')
+    if(!boss.isBoss) problems.push('Quái trùm thiếu cờ isBoss — luật "không nấp khỏi nó được" sẽ không chạy')
+    if(!bossState.sees) problems.push('Quái trùm ở xa 50 đơn vị mà KHÔNG thấy xe — bossAlwaysSees không chạy')
+    if(!bossState.barVisible) problems.push('Có quái trùm sống mà thanh máu riêng không hiện')
+
+    // Dọn để mục 7 kiểm việc tắt chế độ
+    await page.evaluate(() =>
+    {
+        const s = window.game.world.survival
+        s.monsters.clear()
+        s.boss = null
+        s.toSpawn = 0
+        s.bossPending = false
+    })
 }
 
 // ═══════════════════════════════════════════════════════════════════════════

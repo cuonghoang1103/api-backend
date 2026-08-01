@@ -79,7 +79,111 @@ export const SURVIVAL_MONSTERS = {
         score: 80,
         colors: { body: '#7a3a2e', limb: '#5b2a21', belly: '#c07a4a', eye: '#ffb03a' },
     },
+
+    /**
+     * QUÁI TRÙM — cứ 5 sóng một con, sinh THÊM ngoài quân số của sóng.
+     *
+     * Dùng lại đúng dáng "quái to xác" phóng to (xem `makeBrute`), khác ở số:
+     * dai gấp bảy, đau gấp đôi, và **không nấp khỏi nó được** (xem
+     * `SURVIVAL_STEALTH.bossAlwaysSees`). Nó là cái đồng hồ báo thức của chế độ:
+     * cứ tưởng đã quen tay thì nó tới.
+     */
+    boss: {
+        name: 'Quái trùm',
+        hp: 130,
+        speed: 2.6,
+        damage: 40,
+        radius: 2,
+        hitHeight: 2.6,
+        scale: 2.7,
+        money: 260,
+        score: 600,
+        isBoss: true,
+        colors: { body: '#3d1f4a', limb: '#2a1435', belly: '#7a3a8f', eye: '#54ffc8' },
+    },
 }
+
+/**
+ * NẤP — user chốt: *"nấp = lái xe núp sau nhà, tắt đèn"*.
+ *
+ * Quái không phải lúc nào cũng biết bạn ở đâu. Tầm phát hiện = tầm gốc, NHÂN
+ * lên khi đèn pha đang bật, CỘNG thêm theo tốc độ xe (tiếng động cơ). Ngoài tầm
+ * đó chúng chỉ biết chỗ **cuối cùng** từng thấy: kéo tới đó, lục lọi quanh quẩn,
+ * rồi tản ra. Tắt đèn (Cài đặt → Headlights → Off) và dừng lại sau một toà nhà
+ * là thật sự thoát được — đó là toàn bộ ý nghĩa của chữ "sinh tồn" ở đây.
+ */
+export const SURVIVAL_STEALTH = {
+    /** Tầm thấy khi đèn tắt và xe đứng im. */
+    baseRange: 17,
+    /** Đèn pha đang bật thì nhân tầm lên chừng này. */
+    headlightsFactor: 1.9,
+    /** Mỗi đơn vị tốc độ cộng thêm bấy nhiêu tầm — động cơ gầm là tự khai báo. */
+    speedRange: 1.15,
+    /** Sát đến mức này thì nấp kiểu gì cũng vô ích. */
+    alwaysSeeRange: 7,
+
+    /** Mất dấu rồi còn nhớ chỗ cũ bao lâu (giây) trước khi bỏ cuộc và tản ra. */
+    memory: 9,
+    /** Lảng vảng chậm hơn lúc đuổi. */
+    wanderSpeedFactor: 0.55,
+    /** Bán kính lục lọi quanh chỗ thấy lần cuối. */
+    wanderRadius: 9,
+
+    /** Quái trùm KHÔNG bị đánh lừa — nấp khỏi nó là không được. */
+    bossAlwaysSees: true,
+}
+
+/**
+ * CỬA HÀNG — tiêu tiền giữa hai sóng.
+ *
+ * Không có nó thì tiền chỉ là một con số đẹp trên HUD. Có nó thì vòng lặp mới
+ * khép: giết → tiền → mạnh hơn → dám ra xa hơn → giết được nhiều hơn.
+ *
+ * Chỉ mở trong nhịp NGHỈ, cố ý: dừng giữa lúc bị vây để mở bảng nâng cấp thì
+ * còn gì là sinh tồn. `price` là giá lần đầu, mỗi lần mua nhân với `step`.
+ */
+export const SURVIVAL_SHOP = [
+    {
+        key: 'armor',
+        name: 'Giáp',
+        description: '+25 máu tối đa, và vá đầy luôn',
+        price: 60,
+        step: 1.6,
+        max: 6,
+    },
+    {
+        key: 'regen',
+        name: 'Hồi máu',
+        description: '+3 máu mỗi giây khi không bị đánh',
+        price: 55,
+        step: 1.7,
+        max: 5,
+    },
+    {
+        key: 'ram',
+        name: 'Cản húc',
+        description: '+45% sát thương khi húc',
+        price: 70,
+        step: 1.6,
+        max: 5,
+    },
+    {
+        key: 'blast',
+        name: 'Đầu đạn',
+        description: '+50% sát thương nổ của pháo trên nóc',
+        price: 95,
+        step: 1.7,
+        max: 5,
+    },
+    {
+        key: 'patch',
+        name: 'Vá máu',
+        description: 'Đầy máu ngay lập tức',
+        price: 35,
+        step: 1.25,
+        max: 99,
+    },
+]
 
 /**
  * SÓNG.
@@ -109,6 +213,9 @@ export const SURVIVAL_WAVES = {
 
     /** Sống cùng lúc tối đa — chặn trên cho cả hiệu năng lẫn độ khó. */
     maxAlive: 26,
+
+    /** Cứ ngần này sóng thì có một con trùm, sinh THÊM ngoài quân số. */
+    bossEvery: 5,
 }
 
 /** Số của người chơi. */

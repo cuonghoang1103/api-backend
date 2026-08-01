@@ -12,8 +12,9 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
 **1/8 tối**: mọi thứ tới đó đã lên prod và ĐÃ PUSH (`de547bf`, gói
 `index-DiwDiDLl.js`) — chế độ lái người thứ nhất, đảo quái vật, tàu sân bay.
 
-**2/8**: **CHẾ ĐỘ SINH TỒN** (mục 0i) — gói mới `index-Ce1_CxE-.js` đã dựng và
-rsync sang `frontend/public/playground`. **CHƯA deploy, CHƯA push.**
+**2/8**: **CHẾ ĐỘ SINH TỒN** (mục 0i) — quái + sóng + máu đen + tiền, cộng
+**cửa hàng nâng cấp**, **cơ chế NẤP** và **quái trùm**. Gói `index-DBMDE7ze.js`
+đã dựng và rsync sang `frontend/public/playground`. **CHƯA deploy, CHƯA push.**
 
 Đầu phiên sau, so gói prod với local; lệch thì chạy `bash deploy.sh` nền:
 
@@ -66,11 +67,14 @@ thì mọi chi tiết dồn về gốc mảnh.
 
 ### 1. ✅ Chế độ lái NGƯỜI THỨ NHẤT — XONG 1/8, xem mục **0f**
 
-### 2. ✅ Chế độ SINH TỒN — bản chơi được XONG 2/8, xem mục **0i**
+### 2. ✅ Chế độ SINH TỒN — XONG 2/8, xem mục **0i**
+
+Đã có: quái + sóng + máu đen + tiền · **cửa hàng nâng cấp** · **cơ chế NẤP**
+(tắt đèn, đứng yên, ra xa) · **quái trùm mỗi 5 sóng**.
 
 Còn treo cho bản sau (user đã biết, không phải việc bỏ sót):
-**xuống xe đi bộ** · **trực thăng** · **cửa hàng tiêu tiền** · **quái mất dấu
-khi nấp/tắt đèn** · quái trùm dùng `fatalis.glb`.
+**xuống xe đi bộ** · **trực thăng** · quái trùm dùng `fatalis.glb` thay cho
+dáng "quái to xác" phóng to · nâng cấp giữ qua nhiều ván.
 
 ### 3. Ba khu còn lại trên đảo sân chơi
 
@@ -794,6 +798,63 @@ Cả hai đều ở **phép đo thời gian**, không ở luật chơi:
 `ticker.elapsed` là thời gian THẬT.** Chờ "3 giây" theo đồng hồ treo tường chỉ
 cho logic chạy được nửa giây của nó ⇒ mọi phép đo về chuyển động báo oan. Bộ
 kiểm nay cộng dồn chính `ticker.delta` và chờ theo con số đó (`run(giây game)`).
+
+## Ba thứ thêm cùng ngày 2/8
+
+### CỬA HÀNG — chỉ mở trong nhịp NGHỈ
+
+`SURVIVAL_SHOP` khai năm món (giáp · hồi máu · cản húc · đầu đạn · vá máu), mã
+tự sinh nút — **đừng gõ `<button>` vào `index.html`**. Phím 1–5 đi qua đúng hệ
+`inputs.actions` như `fireRocket`. Giá nhân `step` mỗi lần mua, nên tới cấp ba
+là phải CHỌN giữa giáp và đầu đạn chứ không mua được cả hai.
+
+⚠️ Nâng cấp "Đầu đạn" nhân vào `Survival.damageAround()`, **không** vào
+`VehicleRocket`: khẩu pháo dùng chung với chế độ thường, không được mạnh lên chỉ
+vì người chơi đã mua gì đó trong một ván Sinh tồn.
+
+⚠️ **Bẫy thứ tự khởi tạo**: getter `maxHealth` đọc `this.upgrades` qua `level()`,
+nên `this.upgrades = {}` PHẢI đứng trước `this.health = this.maxHealth` trong hàm
+dựng. Gán sau là `undefined['armor']` ném lỗi ngay trong hàm dựng — và một lỗi ở
+đó thì `World.step(1)` chết đứng từ đấy trở đi mà màn hình không báo gì.
+
+### NẤP — `Survival.sightRange()` + `SurvivalMonsters.updateSight()`
+
+Tầm phát hiện = 17 gốc, **×1,9 nếu đèn pha đang bật**, **+1,15 mỗi đơn vị tốc
+độ**. Ngoài tầm thì quái chỉ biết chỗ THẤY LẦN CUỐI: kéo tới đó rồi lục lọi
+quanh quẩn. Mắt **nheo lại còn 45%** khi mất dấu và dòng trạng thái đổi thành
+"Đang nấp" — một cơ chế không đọc được thì coi như không tồn tại.
+
+⚠️ Đọc `lighting.headlights.shouldBeOn()` chứ ĐỪNG đọc `mode`: ở `auto` đèn tự
+bật khi trời tối, mà chế độ này gần như lúc nào cũng tối — đọc `mode` thì "auto"
+bị tính là tắt và nấp trở nên quá dễ.
+
+### ⛔ BẾ TẮC LẶNG LẼ mà chính số đo của bộ kiểm mới để lộ
+
+Quái sinh trên vành **26–46** đơn vị, mà tầm phát hiện chỉ **17** khi tắt đèn ⇒
+**phần lớn số con sinh ra đã ở ngoài tầm**, chưa từng thấy xe lần nào, nên chúng
+lấy chỗ đang đứng làm mốc và lảng vảng tại chỗ **vĩnh viễn**. Sóng không bao giờ
+hết, người chơi ngồi đợi, **không một dòng lỗi nào**.
+
+Sửa: `spawn()` truyền chỗ xe vào làm "chỗ thấy lần cuối" — chúng kéo về phía đó,
+vào tầm là bám thật; người chơi đã bỏ đi và tắt đèn thì chúng mò quanh chỗ cũ.
+Nay có mục **3b** trong bộ kiểm canh đúng chuyện này, ở kịch bản xấu nhất (đèn
+TẮT): đo được 4/4 con sinh ngoài tầm vẫn tiến 39,0 → 35,0 sau 2,5 giây game.
+
+**Bài học chung**: bộ kiểm 0 lỗi mà SỐ ĐO của nó trông lạ thì phải đọc kỹ con
+số, đừng chỉ nhìn dòng "✅". Mục 3 báo khoảng cách chỉ giảm 34,6 → 31,9 (lần
+trước 26,8 → 16,1) — vẫn "pass", nhưng chính chỗ chênh đó là cái bế tắc.
+
+### QUÁI TRÙM — mỗi `SURVIVAL_WAVES.bossEvery = 5` sóng
+
+Dùng lại ĐÚNG dáng "quái to xác" phóng to 2,7 lần: cùng một dáng to gấp đôi thì
+người chơi đọc ra ngay "giống con kia nhưng to khủng khiếp", còn một hình thù lạ
+hoắc chỉ gây bối rối. Máu 130, **không nấp khỏi nó được** (`bossAlwaysSees`),
+thanh máu riêng trên đầu màn hình, chết thì rơi sáu đồng rải quanh xác.
+
+⚠️ Sinh khi `toSpawn <= 2` chứ không phải đầu sóng: vào sóng mà thấy nó lù lù
+trước mặt thì chỉ có chạy, để nó tới lúc đang bận đánh nhau mới là bất ngờ.
+⚠️ Thanh máu đặt `top: 132px`, DƯỚI vùng thông báo — đúng lúc trùm xuất hiện
+cũng là lúc thông báo "Sóng N — QUÁI TRÙM" đang hiện, đặt ngang nhau là chồng khít.
 
 ## Số đo bản đầu (đo 2/8, 0 lỗi)
 

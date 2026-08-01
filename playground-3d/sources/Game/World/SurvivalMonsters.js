@@ -2,7 +2,7 @@ import * as THREE from 'three/webgpu'
 import { color } from 'three/tsl'
 import { Game } from '../Game.js'
 import { MeshDefaultMaterial } from '../Materials/MeshDefaultMaterial.js'
-import { SURVIVAL_BLOOD, SURVIVAL_MONSTERS, SURVIVAL_SPAWN } from '../../data/survival.js'
+import { SURVIVAL_BLOOD, SURVIVAL_MONSTERS, SURVIVAL_SPAWN, SURVIVAL_STEALTH } from '../../data/survival.js'
 
 /**
  * ĐÀN QUÁI của chế độ Sinh tồn — dựng hình, đi lại, đuổi xe, ăn đòn, chết.
@@ -322,7 +322,16 @@ export class SurvivalMonsters
         const spec = SURVIVAL_MONSTERS[type]
 
         if(type === 'crawler') return this.makeCrawler(spec, seed)
-        if(type === 'brute') return this.makeBrute(spec, seed)
+
+        /**
+         * Quái trùm dùng lại ĐÚNG dáng "quái to xác", chỉ khác cỡ và màu.
+         *
+         * Cố ý không vẽ một con thứ tư: cùng một dáng phóng to gấp đôi thì
+         * người chơi ĐỌC RA ngay "cái này giống con kia nhưng to khủng khiếp",
+         * và đó là thứ làm nó đáng sợ. Một hình thù lạ hoắc chỉ gây bối rối.
+         */
+        if(type === 'brute' || type === 'boss') return this.makeBrute(spec, seed)
+
         return this.makeStalker(spec, seed)
     }
 
@@ -405,13 +414,28 @@ export class SurvivalMonsters
             const sea = this.game.water?.surfaceElevation ?? 0
             if(y <= sea + SURVIVAL_SPAWN.dryMargin) continue
 
-            return this.add(type, x, y, z)
+            /**
+             * ⚠️ Truyền chỗ xe vào làm "chỗ thấy lần cuối".
+             *
+             * Không có nó thì chế độ TỰ BẾ TẮC, và bế tắc lặng lẽ: quái sinh
+             * trên vành 26–46 đơn vị, mà tầm phát hiện chỉ 17 (đèn tắt) đến ~32
+             * (đèn bật) — nghĩa là phần lớn số con **sinh ra đã ở ngoài tầm**,
+             * chưa từng thấy xe lần nào, nên chúng lấy chỗ đang đứng làm mốc và
+             * lảng vảng tại chỗ **vĩnh viễn**. Sóng không bao giờ hết, người
+             * chơi ngồi đợi mà không hiểu vì sao.
+             *
+             * Đặt mốc là chỗ xe lúc sinh thì chúng kéo về phía đó — vào tầm là
+             * bám thật, còn nếu người chơi đã bỏ đi và tắt đèn thì chúng mò
+             * quanh chỗ cũ. Đúng cả luật chơi lẫn cảm giác: sóng mới nổi lên là
+             * chúng biết *đại khái* bạn ở đâu, chứ không phải biết chính xác.
+             */
+            return this.add(type, x, y, z, cx, cz)
         }
 
         return null
     }
 
-    add(type, x, y, z)
+    add(type, x, y, z, knownX = undefined, knownZ = undefined)
     {
         const spec = SURVIVAL_MONSTERS[type]
         this.seed++
@@ -443,6 +467,11 @@ export class SurvivalMonsters
              */
             dryX: x,
             dryZ: z,
+            /** Chỗ nó tưởng người chơi đang ở — xem chú thích trong `spawn()`. */
+            lastSeenX: knownX,
+            lastSeenZ: knownZ,
+            lostFor: 0,
+            sees: false,
             /** Lát bắn tia của con này (xem `GROUND_SLICES`). */
             slice: this.monsters.length % GROUND_SLICES,
             dead: false,
@@ -667,10 +696,12 @@ export class SurvivalMonsters
     // ═══════════════════════════════════════════════════════════════════════
 
     /**
-     * @param target vị trí xe
-     * @param onReach gọi khi một con chạm tới xe — `Survival` trừ máu ở đó
+     * @param target    vị trí xe
+     * @param onReach   gọi khi một con chạm tới xe — `Survival` trừ máu ở đó
+     * @param sightRange tầm phát hiện HIỆN TẠI, do `Survival` tính từ đèn pha và
+     *                   tốc độ xe. Xa hơn thế thì quái mất dấu — xem `updateSight`.
      */
-    update(delta, target, onReach)
+    update(delta, target, onReach, sightRange = Infinity)
     {
         this.frame++
         this.updateBlood(delta)
@@ -734,9 +765,15 @@ export class SurvivalMonsters
                 continue
             }
 
-            // ── Hướng đi: thẳng về phía xe, cộng lực đẩy khỏi hàng xóm ───────
-            let dirX = toX / (distance || 1)
-            let dirZ = toZ / (distance || 1)
+            // ── Có đang thấy xe không, và nếu không thì đi đâu ────────────────
+            const goal = this.updateSight(m, target, distance, sightRange, delta)
+
+            const goalX = goal.x - position.x
+            const goalZ = goal.z - position.z
+            const goalDistance = Math.hypot(goalX, goalZ)
+
+            let dirX = goalX / (goalDistance || 1)
+            let dirZ = goalZ / (goalDistance || 1)
 
             const separation = this.separationFor(m, i)
             dirX += separation.x
@@ -747,7 +784,9 @@ export class SurvivalMonsters
             dirZ /= length
 
             const reach = (m.spec.radius + 1.4) * m.scale
-            const arrived = distance < reach
+            // Chỉ CẮN được khi thật sự thấy xe — mò trúng chỗ tối mà vẫn đớp
+            // được thì cơ chế nấp thành vô nghĩa
+            const arrived = m.sees && distance < reach
 
             if(arrived)
             {
@@ -758,9 +797,9 @@ export class SurvivalMonsters
                     onReach(m)
                 }
             }
-            else
+            else if(goalDistance > 0.6)
             {
-                const speed = m.spec.speed
+                const speed = m.spec.speed * (m.sees ? 1 : SURVIVAL_STEALTH.wanderSpeedFactor)
                 position.x += dirX * speed * delta
                 position.z += dirZ * speed * delta
                 m.phase += delta * speed * (m.gait === 'crawl' ? 4.2 : 2.9)
@@ -829,6 +868,66 @@ export class SurvivalMonsters
 
             this.animate(m, arrived, delta)
         }
+    }
+
+    /**
+     * ═══════════════════════════════════════════════════════════════════════
+     *  THẤY / MẤT DẤU — trái tim của cơ chế NẤP
+     * ═══════════════════════════════════════════════════════════════════════
+     *
+     * Trả về ĐIỂM ĐÍCH mà con này đang đi tới:
+     *  - Đang thấy xe        → chính chiếc xe.
+     *  - Vừa mất dấu         → chỗ thấy lần cuối; tới nơi thì lục lọi quanh đó.
+     *  - Quá `memory` giây   → bỏ cuộc, tản đi lang thang.
+     *
+     * ⚠️ Ba chi tiết nhỏ mà thiếu là hỏng cả cơ chế:
+     *
+     * 1. **Nhớ chỗ CŨ, không nhớ hướng.** Nhớ hướng thì chúng đi thẳng mãi ra
+     *    khỏi bản đồ; nhớ một ĐIỂM thì chúng dồn về đó và tản ra quanh — đúng
+     *    dáng "mất dấu con mồi" mà mắt đọc được ngay từ trên cao.
+     * 2. **Điểm lục lọi phải ĐỔI theo thời gian**, không thì cả đàn đứng chết
+     *    một chỗ tại `lastSeen`. Ở đây quay quanh nó theo một pha riêng của
+     *    từng con.
+     * 3. **Có trễ khi bắt lại dấu** (`sees` bật ngay nhưng `lostFor` chỉ reset
+     *    khi thật sự thấy) — bật/tắt liên tục ngay rìa tầm thì cả đàn giật cục.
+     */
+    updateSight(monster, target, distance, sightRange, delta)
+    {
+        const range = (monster.spec.isBoss && SURVIVAL_STEALTH.bossAlwaysSees)
+            ? Infinity
+            : Math.max(sightRange, SURVIVAL_STEALTH.alwaysSeeRange)
+
+        monster.sees = distance <= range
+
+        if(monster.sees)
+        {
+            monster.lostFor = 0
+            monster.lastSeenX = target.x
+            monster.lastSeenZ = target.z
+            return target
+        }
+
+        monster.lostFor = (monster.lostFor ?? 0) + delta
+
+        // Chưa từng thấy lần nào (sinh ra lúc người chơi đã nấp sẵn) — lấy chỗ
+        // mình đang đứng làm mốc để khỏi bị kéo về gốc toạ độ
+        if(monster.lastSeenX === undefined)
+        {
+            monster.lastSeenX = monster.root.position.x
+            monster.lastSeenZ = monster.root.position.z
+        }
+
+        const wanderAngle = this.game.ticker.elapsed * 0.55 + monster.phase
+        const radius = SURVIVAL_STEALTH.wanderRadius
+            * (monster.lostFor > SURVIVAL_STEALTH.memory ? 2.2 : 1)
+
+        this.tmp.set(
+            monster.lastSeenX + Math.cos(wanderAngle) * radius,
+            monster.root.position.y,
+            monster.lastSeenZ + Math.sin(wanderAngle) * radius,
+        )
+
+        return this.tmp
     }
 
     /**
@@ -944,6 +1043,30 @@ export class SurvivalMonsters
         {
             for(const eye of monster.eyes)
                 eye.visible = true
+        }
+
+        /**
+         * ── MẮT NHEO LẠI KHI MẤT DẤU ─────────────────────────────────────────
+         *
+         * Người chơi phải ĐỌC ĐƯỢC là mình đang nấp thành công, nếu không thì
+         * tắt đèn xong chỉ biết ngồi đoán. Mắt là thứ duy nhất của con quái còn
+         * nhìn rõ trong đêm, nên nó cũng là chỗ duy nhất báo tin được.
+         *
+         * Thu nhỏ chứ không đổi màu: vật liệu mắt dùng CHUNG cho cả đàn theo mã
+         * màu (gom trong `Map` để đỡ biên dịch shader), đổi màu một con là đổi
+         * màu tất cả.
+         */
+        const wanted = monster.sees === false ? 0.45 : 1
+        if(monster.eyeScale === undefined) monster.eyeScale = 1
+        if(Math.abs(monster.eyeScale - wanted) > 0.01)
+        {
+            monster.eyeScale += (wanted - monster.eyeScale) * Math.min(1, delta * 6)
+            for(const eye of monster.eyes)
+            {
+                if(!eye.userData.baseScale)
+                    eye.userData.baseScale = eye.scale.clone()
+                eye.scale.copy(eye.userData.baseScale).multiplyScalar(monster.eyeScale)
+            }
         }
     }
 }

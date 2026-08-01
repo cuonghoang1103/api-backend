@@ -366,6 +366,30 @@
         <p class="js-survival-state survival-state">Nghỉ</p>
     </div>
 
+    <!--
+        Thanh máu QUÁI TRÙM — nép trên cùng, giữa. Chỉ hiện khi có trùm sống.
+    -->
+    <div class="js-survival-boss survival-boss">
+        <p class="survival-boss-name">Quái trùm</p>
+        <div class="survival-boss-track">
+            <div class="js-survival-boss-bar survival-boss-bar"></div>
+        </div>
+    </div>
+
+    <!--
+        ─── Cửa hàng nâng cấp ────────────────────────────────────────────────
+        Chỉ hiện trong nhịp NGHỈ giữa hai sóng. Các món do mã tự sinh từ
+        `data/survival.js` (SURVIVAL_SHOP) — đừng gõ thêm <button> vào đây.
+    -->
+    <div class="js-survival-shop survival-shop">
+        <div class="survival-shop-head">
+            <span class="survival-shop-title">Cửa hàng</span>
+            <span class="js-survival-shop-money survival-shop-money">0</span>
+        </div>
+        <div class="js-survival-shop-items survival-shop-items"></div>
+        <p class="survival-shop-hint">Bấm 1–5 hoặc bấm chuột · chỉ mở giữa hai sóng</p>
+    </div>
+
     <div class="js-survival-defeated survival-defeated" role="status">
         <div class="survival-defeated-panel">
             <h2 class="survival-defeated-title">Bạn đã gục</h2>

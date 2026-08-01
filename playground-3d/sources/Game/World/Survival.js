@@ -3,7 +3,7 @@ import { color } from 'three/tsl'
 import { Game } from '../Game.js'
 import { Events } from '../Events.js'
 import { SurvivalMonsters } from './SurvivalMonsters.js'
-import { SURVIVAL_LOOT, SURVIVAL_PLAYER, SURVIVAL_WAVES } from '../../data/survival.js'
+import { SURVIVAL_LOOT, SURVIVAL_PLAYER, SURVIVAL_SHOP, SURVIVAL_STEALTH, SURVIVAL_WAVES } from '../../data/survival.js'
 
 /**
  * ═══════════════════════════════════════════════════════════════════════════
@@ -43,10 +43,22 @@ export class Survival
 
         this.enabled = false
 
+        /**
+         * Số cấp đã mua của từng món trong cửa hàng, khoá theo `key`.
+         * Reset mỗi ván (`enable()` và `restart()`) — nâng cấp thuộc về VÁN,
+         * không thuộc về người chơi, nên mỗi lần chơi lại là làm lại từ đầu.
+         *
+         * ⚠️ PHẢI khai TRƯỚC dòng `this.health = this.maxHealth` ngay dưới:
+         * getter `maxHealth` đọc `this.upgrades` qua `level()`, gán sau là
+         * `undefined['armor']` — ném lỗi ngay trong hàm dựng, và một lỗi ở đây
+         * thì `World.step(1)` chết đứng từ đó trở đi mà màn hình không báo gì.
+         */
+        this.upgrades = {}
+
         /** `preparing` · `hunting` · `defeated` */
         this.phase = 'preparing'
         this.wave = 0
-        this.health = SURVIVAL_PLAYER.maxHealth
+        this.health = this.maxHealth
         this.score = 0
         this.money = 0
         this.kills = 0
@@ -68,6 +80,7 @@ export class Survival
         this.setPreference()
         this.setSounds()
         this.setHud()
+        this.setShop()
         this.setSettingsButtons()
 
         /**
@@ -117,8 +130,12 @@ export class Survival
         // Nhớ lựa chọn giờ của người chơi để trả lại nguyên vẹn khi tắt chế độ
         this.previousTime = this.game.dayCycles.preference.current
 
+        // Nâng cấp thuộc về VÁN — chơi lại là làm lại từ đầu. Đặt trước khi gán
+        // máu, vì `maxHealth` cộng theo số cấp giáp
+        this.upgrades = {}
+
         this.wave = 0
-        this.health = SURVIVAL_PLAYER.maxHealth
+        this.health = this.maxHealth
         this.score = 0
         this.money = 0
         this.kills = 0
@@ -141,6 +158,11 @@ export class Survival
         this.monsters.clear()
         this.clearLoot()
         this.hudElement?.classList.remove('is-visible')
+        this.shopElement?.classList.remove('is-visible')
+        this.bossElement?.classList.remove('is-visible')
+        this.boss = null
+        this.lastShopOpen = null
+        this.lastBossAlive = null
         this.setDefeatedOverlay(false)
 
         // Trả lại đúng lựa chọn giờ trước khi vào chế độ
@@ -187,13 +209,19 @@ export class Survival
         this.toSpawn = SURVIVAL_WAVES.countFor(this.wave)
         this.spawnTimer = 0
 
+        // Cứ 5 sóng một con trùm, sinh THÊM ngoài quân số
+        this.bossPending = this.wave % SURVIVAL_WAVES.bossEvery === 0
+        this.boss = null
+
         this.setTime('night', 2.5)
         this.sounds.howl?.play()
 
         this.game.notifications?.show(
-            /* html */`<div class="top"><p class="title">Sóng ${this.wave}</p></div><div class="bottom"><p class="description">${this.toSpawn} con đang tới</p></div>`,
+            this.bossPending
+                ? /* html */`<div class="top"><p class="title">Sóng ${this.wave} — QUÁI TRÙM</p></div><div class="bottom"><p class="description">${this.toSpawn} con, và một thứ không nấp nổi</p></div>`
+                : /* html */`<div class="top"><p class="title">Sóng ${this.wave}</p></div><div class="bottom"><p class="description">${this.toSpawn} con đang tới</p></div>`,
             'is-achievement',
-            3,
+            this.bossPending ? 5 : 3,
         )
 
         this.events.trigger('waveChange')
@@ -239,6 +267,32 @@ export class Survival
         this.sounds.death?.play(monster.root.position)
 
         const at = monster.root.position
+
+        // ── Quái trùm: rơi cả một đống chứ không một đồng ────────────────────
+        if(monster.spec.isBoss)
+        {
+            this.game.notifications?.show(
+                /* html */`<div class="top"><p class="title">Hạ được quái trùm</p></div><div class="bottom"><p class="description">+${monster.spec.money}$ · +${monster.spec.score} điểm</p></div>`,
+                'is-achievement',
+                4,
+            )
+
+            // Rải thành sáu đồng quanh xác — một đồng to thì nhặt một phát là
+            // xong, rải ra thì có mấy giây đi lượm, và đó là phần thưởng thật
+            for(let i = 0; i < 6; i++)
+            {
+                const angle = (i / 6) * Math.PI * 2
+                this.dropLoot(
+                    at.x + Math.cos(angle) * 2.4,
+                    monster.groundY,
+                    at.z + Math.sin(angle) * 2.4,
+                    i === 5 ? 'health' : 'money',
+                    i === 5 ? SURVIVAL_LOOT.healthAmount * 2 : Math.round(monster.spec.money / 5),
+                )
+            }
+            return
+        }
+
         if(Math.random() < SURVIVAL_LOOT.healthChance)
             this.dropLoot(at.x, monster.groundY, at.z, 'health', SURVIVAL_LOOT.healthAmount)
         else
@@ -310,7 +364,7 @@ export class Survival
 
             // ── Nhặt được ────────────────────────────────────────────────────
             if(item.kind === 'health')
-                this.health = Math.min(SURVIVAL_PLAYER.maxHealth, this.health + item.amount)
+                this.health = Math.min(this.maxHealth, this.health + item.amount)
             else
                 this.money += item.amount
 
@@ -363,8 +417,12 @@ export class Survival
         this.setDefeatedOverlay(false)
         this.clearLoot()
 
+        // Nâng cấp thuộc về VÁN — chơi lại là làm lại từ đầu. Đặt trước khi gán
+        // máu, vì `maxHealth` cộng theo số cấp giáp
+        this.upgrades = {}
+
         this.wave = 0
-        this.health = SURVIVAL_PLAYER.maxHealth
+        this.health = this.maxHealth
         this.score = 0
         this.money = 0
         this.kills = 0
@@ -404,6 +462,22 @@ export class Survival
         // ── Đang săn: sinh dần cho đủ số, giết sạch thì sang sóng sau ─────────
         else
         {
+            /**
+             * Con trùm sinh SAU khi đàn thường đã ra gần hết, không sinh ngay
+             * đầu sóng: vào sóng mà thấy nó lù lù trước mặt thì chỉ có chạy,
+             * còn để nó tới lúc đang bận đánh nhau mới đúng là một cú bất ngờ.
+             */
+            if(this.bossPending && this.toSpawn <= 2)
+            {
+                const boss = this.monsters.spawn('boss', target.x, target.z)
+                if(boss)
+                {
+                    this.bossPending = false
+                    this.boss = boss
+                    this.sounds.howl?.play()
+                }
+            }
+
             if(this.toSpawn > 0)
             {
                 this.spawnTimer -= delta
@@ -415,7 +489,7 @@ export class Survival
                         this.toSpawn--
                 }
             }
-            else if(this.monsters.aliveCount === 0)
+            else if(this.monsters.aliveCount === 0 && !this.bossPending)
             {
                 if(this.wave > this.best)
                 {
@@ -427,7 +501,12 @@ export class Survival
         }
 
         // ── Đàn quái ─────────────────────────────────────────────────────────
-        this.monsters.update(delta, target, (monster) => this.onMonsterReach(monster, vehicle))
+        this.monsters.update(
+            delta,
+            target,
+            (monster) => this.onMonsterReach(monster, vehicle),
+            this.sightRange(vehicle),
+        )
 
         // ── Húc bằng xe ──────────────────────────────────────────────────────
         this.updateRamming(delta, vehicle)
@@ -437,10 +516,37 @@ export class Survival
 
         // ── Tự hồi máu khi đã lâu không ăn đòn ───────────────────────────────
         this.safeFor += delta
-        if(this.safeFor > SURVIVAL_PLAYER.regenDelay && this.health < SURVIVAL_PLAYER.maxHealth)
-            this.health = Math.min(SURVIVAL_PLAYER.maxHealth, this.health + SURVIVAL_PLAYER.regenRate * delta)
+        if(this.safeFor > SURVIVAL_PLAYER.regenDelay && this.health < this.maxHealth)
+        {
+            const rate = SURVIVAL_PLAYER.regenRate + this.level('regen') * 3
+            this.health = Math.min(this.maxHealth, this.health + rate * delta)
+        }
 
         this.updateHud()
+    }
+
+    /**
+     * TẦM PHÁT HIỆN hiện tại — con số quyết định "nấp" có thật hay không.
+     *
+     * User chốt: *"nấp = lái xe núp sau nhà, tắt đèn"*. Nên hai thứ tự khai báo
+     * vị trí của người chơi phải là hai thứ vào công thức này:
+     *  - **Đèn pha** đang bật → nhân tầm lên gần gấp đôi.
+     *  - **Tốc độ** → mỗi đơn vị tốc độ cộng thêm tầm (động cơ gầm).
+     *
+     * Đọc `lighting.headlights.shouldBeOn()` chứ KHÔNG đọc `mode`: ở chế độ
+     * `auto` đèn tự bật khi trời tối, mà chế độ Sinh tồn thì gần như lúc nào
+     * cũng tối — đọc `mode` thì "auto" bị tính là tắt và nấp trở nên quá dễ.
+     */
+    sightRange(vehicle)
+    {
+        let range = SURVIVAL_STEALTH.baseRange
+
+        if(this.game.lighting?.headlights?.shouldBeOn())
+            range *= SURVIVAL_STEALTH.headlightsFactor
+
+        range += vehicle.xzSpeed * SURVIVAL_STEALTH.speedRange
+
+        return range
     }
 
     /** Một con bám được vào xe và gặm. */
@@ -465,7 +571,9 @@ export class Survival
         const speed = vehicle.xzSpeed
         if(speed <= SURVIVAL_PLAYER.rammingSpeed) return
 
-        const power = (speed - SURVIVAL_PLAYER.rammingSpeed) * SURVIVAL_PLAYER.rammingPower
+        const power = (speed - SURVIVAL_PLAYER.rammingSpeed)
+            * SURVIVAL_PLAYER.rammingPower
+            * (1 + this.level('ram') * 0.45)
 
         for(const monster of this.monsters.monsters)
         {
@@ -491,7 +599,143 @@ export class Survival
     damageAround(center, radius, power = 1)
     {
         if(!this.enabled) return 0
-        return this.monsters.damageAround(center, radius, power)
+
+        // Nâng cấp "Đầu đạn" ăn vào ĐÂY, không vào `VehicleRocket`: bản thân
+        // khẩu pháo là thứ dùng chung với chế độ thường, không được mạnh lên
+        // chỉ vì người chơi đã mua gì đó trong một ván Sinh tồn
+        return this.monsters.damageAround(center, radius, power * (1 + this.level('blast') * 0.5))
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    //  CỬA HÀNG
+    // ═══════════════════════════════════════════════════════════════════════
+
+    /** Số cấp đã mua của một món. */
+    level(key)
+    {
+        return this.upgrades[key] ?? 0
+    }
+
+    /**
+     * Giá HIỆN TẠI của một món — tăng theo cấp đã mua (`price × step^cấp`).
+     * Nhờ vậy hai món rẻ đầu ván không biến việc mua thành chuyện hiển nhiên:
+     * tới cấp ba thì phải chọn giữa giáp và đầu đạn chứ không mua được cả hai.
+     */
+    priceOf(item)
+    {
+        return Math.round(item.price * Math.pow(item.step, this.level(item.key)))
+    }
+
+    canBuy(item)
+    {
+        return this.level(item.key) < item.max && this.money >= this.priceOf(item)
+    }
+
+    buy(item)
+    {
+        // Chỉ mua được trong nhịp nghỉ — dừng giữa lúc bị vây để mở bảng nâng
+        // cấp thì còn gì là sinh tồn
+        if(this.phase !== 'preparing') return false
+        if(!this.canBuy(item)) return false
+
+        this.money -= this.priceOf(item)
+        this.upgrades[item.key] = this.level(item.key) + 1
+
+        // Hai món có tác dụng NGAY, ba món còn lại được đọc lúc dùng
+        if(item.key === 'armor' || item.key === 'patch')
+            this.health = this.maxHealth
+
+        this.sounds.pickup?.play(this.game.physicalVehicle.position)
+        this.renderShop()
+        return true
+    }
+
+    /** Máu tối đa sau khi cộng giáp. */
+    get maxHealth()
+    {
+        return SURVIVAL_PLAYER.maxHealth + this.level('armor') * 25
+    }
+
+    /**
+     * Dựng các món từ `SURVIVAL_SHOP` và nối phím 1–5.
+     *
+     * ⚠️ Phím đi qua ĐÚNG hệ `inputs.actions` như mọi phím khác của game. Tự
+     * nghe `keydown` là hỏng: màn chào chặn phím ở pha bắt, và gõ số trong lúc
+     * bảng Cài đặt đang mở mà vẫn mua hàng thì rất phiền.
+     */
+    setShop()
+    {
+        this.shopElement = document.querySelector('.js-survival-shop')
+        if(!this.shopElement) return
+
+        this.shopItemsElement = this.shopElement.querySelector('.js-survival-shop-items')
+        this.shopMoneyElement = this.shopElement.querySelector('.js-survival-shop-money')
+
+        this.shopButtons = SURVIVAL_SHOP.map((item, index) =>
+        {
+            const button = document.createElement('button')
+            button.className = 'survival-shop-item'
+            button.type = 'button'
+            button.innerHTML = /* html */`
+                <span class="survival-shop-key">${index + 1}</span>
+                <span class="survival-shop-name">${item.name}</span>
+                <span class="survival-shop-desc">${item.description}</span>
+                <span class="survival-shop-price"></span>
+                <span class="survival-shop-level"></span>
+            `
+            button.addEventListener('click', () => this.buy(item))
+            this.shopItemsElement.appendChild(button)
+
+            return {
+                item,
+                element: button,
+                priceElement: button.querySelector('.survival-shop-price'),
+                levelElement: button.querySelector('.survival-shop-level'),
+            }
+        })
+
+        this.game.inputs.addActions(
+            SURVIVAL_SHOP.map((item, index) => ({
+                name: `survivalBuy${index + 1}`,
+                categories: [ 'wandering' ],
+                keys: [ `Keyboard.Digit${index + 1}`, `Keyboard.Numpad${index + 1}` ],
+            })),
+        )
+
+        SURVIVAL_SHOP.forEach((item, index) =>
+        {
+            this.game.inputs.events.on(`survivalBuy${index + 1}`, (action) =>
+            {
+                if(action.active && this.enabled) this.buy(item)
+            })
+        })
+
+        this.renderShop()
+    }
+
+    /**
+     * ⚠️ Chỉ gọi khi có thứ ĐỔI (mua xong, nhặt tiền, đổi nhịp) — đây là năm
+     * lần ghi `textContent` cộng năm lần `classList.toggle`, chạy mỗi khung
+     * hình là đúng loại rò rỉ đã nói ở `updateHud()`.
+     */
+    renderShop()
+    {
+        if(!this.shopButtons) return
+
+        this.shopMoneyElement.textContent = this.money
+
+        for(const { item, element, priceElement, levelElement } of this.shopButtons)
+        {
+            const level = this.level(item.key)
+            const maxed = level >= item.max
+
+            priceElement.textContent = maxed ? 'Hết cấp' : `${this.priceOf(item)}$`
+            levelElement.textContent = item.max > 90
+                ? (level > 0 ? `đã mua ${level}` : '')
+                : `cấp ${level}/${item.max}`
+
+            element.classList.toggle('is-locked', maxed || !this.canBuy(item))
+        }
     }
 
     // ═══════════════════════════════════════════════════════════════════════
@@ -559,6 +803,9 @@ export class Survival
 
         this.defeatedElement = document.querySelector('.js-survival-defeated')
         this.defeatedWaveElement = document.querySelector('.js-survival-defeated-wave')
+
+        this.bossElement = document.querySelector('.js-survival-boss')
+        this.bossBarElement = document.querySelector('.js-survival-boss-bar')
     }
 
     setDefeatedOverlay(visible)
@@ -586,7 +833,7 @@ export class Survival
         {
             this.lastHealth = health
             this.hudParts.healthValue.textContent = health
-            this.hudParts.healthBar.style.transform = `scaleX(${health / SURVIVAL_PLAYER.maxHealth})`
+            this.hudParts.healthBar.style.transform = `scaleX(${health / this.maxHealth})`
             this.hudElement.classList.toggle('is-critical', health <= 30)
         }
 
@@ -605,9 +852,20 @@ export class Survival
             this.hudParts.left.textContent = left
         }
 
+        /**
+         * Dòng trạng thái phải nói được MỘT điều mà người chơi không tự thấy:
+         * đang có con nào bám được dấu mình không. Tắt đèn nấp sau nhà mà không
+         * có phản hồi thì chỉ còn ngồi đoán — và một cơ chế không đọc được thì
+         * coi như không tồn tại.
+         */
+        const hunted = this.phase === 'hunting'
+            && this.monsters.monsters.some(m => !m.dead && m.sees)
+
         const state = this.phase === 'defeated'
             ? 'Gục'
-            : (this.phase === 'preparing' ? `Nghỉ ${Math.ceil(Math.max(0, this.phaseTimer))}s` : 'Săn')
+            : (this.phase === 'preparing'
+                ? `Nghỉ ${Math.ceil(Math.max(0, this.phaseTimer))}s`
+                : (hunted ? 'Bị săn' : 'Đang nấp'))
         if(state !== this.lastState)
         {
             this.lastState = state
@@ -624,6 +882,40 @@ export class Survival
         {
             this.lastScore = this.score
             this.hudParts.score.textContent = this.score
+        }
+
+        // ── Cửa hàng: chỉ mở trong nhịp nghỉ ─────────────────────────────────
+        const shopOpen = this.phase === 'preparing'
+        if(shopOpen !== this.lastShopOpen)
+        {
+            this.lastShopOpen = shopOpen
+            this.shopElement?.classList.toggle('is-visible', shopOpen)
+            if(shopOpen) this.renderShop()
+        }
+
+        // Tiền đổi thì giá cả và món nào mua được cũng đổi theo
+        if(shopOpen && this.money !== this.lastShopMoney)
+        {
+            this.lastShopMoney = this.money
+            this.renderShop()
+        }
+
+        // ── Thanh máu quái trùm ──────────────────────────────────────────────
+        const bossAlive = !!(this.boss && !this.boss.dead)
+        if(bossAlive !== this.lastBossAlive)
+        {
+            this.lastBossAlive = bossAlive
+            this.bossElement?.classList.toggle('is-visible', bossAlive)
+        }
+
+        if(bossAlive)
+        {
+            const ratio = Math.max(0, this.boss.hp / this.boss.maxHp)
+            if(Math.abs(ratio - (this.lastBossRatio ?? -1)) > 0.005)
+            {
+                this.lastBossRatio = ratio
+                this.bossBarElement.style.transform = `scaleX(${ratio})`
+            }
         }
     }
 

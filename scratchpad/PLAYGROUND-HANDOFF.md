@@ -9,11 +9,12 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
 
 ## Deploy — kiểm trước khi tin
 
-**Hai lỗi user báo (nhiễu giật giật + lag) ĐÃ LÊN PROD** với commit `83111c3`
-(gói `index-2k3ll-nZ.js`) — xác minh bằng
-`git show '83111c3:frontend/public/playground/index.html'`.
+Tính tới **1/8 chiều**: mọi thứ tới `3a73e26` ĐÃ LÊN PROD và ĐÃ PUSH
+(gói `index-B4vtlPVx.js`, `HEAD == origin/feat/playground-3d`, cây sạch).
 
-Chỉ còn `89e6a4c` (cầu dây văng thưa hơn — thuần thẩm mỹ) đang deploy nốt.
+**CHƯA deploy**: chế độ lái người thứ nhất (mục 0f) — gói mới `index-C_mLxw9L.js`
+đã dựng và rsync sang `frontend/public/playground`, **chờ `bash deploy.sh`**.
+
 Đầu phiên sau, so gói prod với local; lệch thì chạy `bash deploy.sh` nền:
 
 ```bash
@@ -63,19 +64,7 @@ thì mọi chi tiết dồn về gốc mảnh.
 để bắt z-fighting — nhưng nó **chỉ soi khu FPTU** nên không thấy gì ở thành phố.
 **Nên mở rộng nó sang cả bốn đảo.**
 
-### 1. Chế độ lái NGƯỜI THỨ NHẤT (ngồi trong cabin)
-
-User: *"lái xe ở chế độ người lái 3D, ngồi trong xe ấy, sao cho chuyên nghiệp"*.
-
-Nền: `View` đã có `MODE_DEFAULT = 1` và `MODE_FREE = 2` (hằng số là **SỐ**,
-không phải chuỗi) — thêm `MODE_COCKPIT = 3` là đi đúng đường đã mở sẵn.
-Cần: gắn máy quay vào ghế lái theo thân xe, ngoái đầu bằng chuột có giới hạn
-góc, và cân nhắc lái theo hướng nhìn thay vì hướng xe.
-
-⚠️ Hai chỗ đã lường trước: **mặt trong vỏ xe bị cull** (nhìn từ trong ra sẽ
-xuyên qua thân — phải ẩn thân hoặc bật vẽ hai mặt cho cabin), và **xe có thể
-không có nội thất** (`default.glb` chỉ 237 KB, nhiều khả năng chỉ là vỏ ngoài;
-nếu vậy dựng vô lăng + táp lô bằng mã, hoặc lấy mảnh từ kit).
+### 1. ✅ Chế độ lái NGƯỜI THỨ NHẤT — XONG 1/8, xem mục **0f**
 
 ### 2. Chế độ SINH TỒN
 
@@ -439,22 +428,139 @@ Credits trong `sources/data/consoleLog.js`. CC BY của Tiger là **BẮT BUỘC
 
 ---
 
-# 1. NĂM BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
+# 0f. CHẾ ĐỘ LÁI NGƯỜI THỨ NHẤT — làm 1/8, CHƯA DEPLOY
+
+Cài đặt → **Camera → Cockpit**, hoặc phím **C**. Thêm mục **Cockpit look**
+ngay dưới: **Locked** (mặc định) · **Free**.
+Mã: `World/Cockpit.js` (MỚI) + `View.js` (`MODE_COCKPIT = 3`) + bốn chỗ móc vào
+`World.js` · `Garage.js` · `VehicleRocket.js` · `sources/index.html`.
+
+## Phát hiện quyết định: MẤY CHIẾC XE NÀY ĐẶC RUỘT
+
+Đo bằng cách bắn tia từ 121 điểm trong thân `default.glb` ra chín hướng: **mọi
+điểm nằm dưới nóc đều lọt trong khối hình**, không có khoang lái nào cả. Model
+chỉ có `bodyPainted` · `common` · `headlights` · `stopLights` · `blinker*` ·
+`cells*` · `energy` — không ghế, không vô lăng, không táp lô.
+
+⇒ Nên chỗ ngồi là kiểu **kart / buggy mui trần**: mắt ở TRÊN thành xe, còn vô
+lăng — táp lô — hai đồng hồ — khung kính đều **dựng bằng mã**, neo vào đỉnh thân.
+Đặt mắt thấp hơn cho "giống ngồi trong xe" là hỏng: vỏ xe chỉ vẽ mặt ngoài
+(`FrontSide`) nên nhìn từ trong ra là xuyên thẳng qua chính chiếc xe.
+
+## Mọi số đo là TỈ LỆ theo hộp bao thân xe, không gõ cứng
+
+`Cockpit.measureBody()` đo hộp bao rồi đặt mọi thứ theo tỉ lệ, nên thêm xe thứ
+tư vào `data/garage.js` là buồng lái tự vừa. Đã kiểm cả ba xe: `oldSchool` thân
+3,26 × 1,49 × 1,90 (khác hẳn `default` 2,99 × 1,32 × 1,89) và chỗ ngồi tự dời
+từ (−0,20 · 1,22) sang (−0,47 · 1,57).
+
+## SÁU chỗ đã sụp bẫy
+
+1. **Hộp bao thân xe nuốt luôn đồ gắn thêm.** `chassis` không chỉ chứa thân:
+   `VisualVehicle` clone 4 bánh vào đó, `VehicleRocket` treo khẩu pháo VÀ bệ
+   phóng, và chính buồng lái cũng nằm trong. Đo hết một lượt thì **đỉnh xe vống
+   từ 0,72 lên 1,805** và người lái ngồi lơ lửng trên nóc — KHÔNG một lỗi nào.
+   Chặn bằng hai lớp cố ý thừa: cờ `userData.vehicleAttachment` trên gốc mỗi
+   nhánh gắn thêm, VÀ dựng `Cockpit` **trước** `VehicleRocket` (cả trong
+   `World.js` lẫn trong `Garage.select()`).
+2. **`Box3.setFromObject()` vô dụng trong `world.step(1)`** — `matrixWorld` còn
+   là ma trận đơn vị. Phải nhân chuỗi `matrix` CỤC BỘ đi ngược lên chassis.
+   (Cùng bẫy với `FptuDestruction`, mục 0b.)
+3. **Dựng "lòng xe" để chống nhìn xuyên vỏ là THỪA và PHẢN TÁC DỤNG.** Vỏ xe
+   `FrontSide` vốn đã tự trong suốt khi nhìn từ trong. Mấy tấm `DoubleSide` đắp
+   thêm chỉ cách mắt 0,26 nên **bịt kín màn hình** — ảnh chụp ra một khối đen.
+4. **Cỡ vô lăng phải tính theo GÓC NHÌN, không theo cỡ xe.** Bán kính 0,29 ở
+   cách mắt 0,43 nghe rất hợp lý theo tỉ lệ xe, nhưng nó choán **68°** trong khi
+   cả khung hình dọc chỉ 62°. Cùng lý do với trụ A (đẩy ra 0,42 lần bề ngang
+   thân mới về được rìa khung) và thanh nóc (cách mắt 0,27 thì thanh dày 0,045
+   vẫn thành dải đen 9°).
+5. **Đồng hồ quay lưng về phía người lái.** Gắn nhầm mặt táp lô, và
+   `rotation.y = +π/2` là nhìn về +X tức RA TRƯỚC — phải **−π/2**. Không lỗi
+   nào; đồng hồ vẫn dựng lên, chỉ người đi đường mới đọc được.
+6. **`colorNode: textureNode(map)` làm bẩn console.** `MeshDefaultMaterial` kết
+   thúc bằng `vec4(outputColor, alphaNode)`; texture node là vec4 nên thành NĂM
+   thành phần → "Length of parameters exceeds maximum length of function vec4()".
+   Phải `.rgb`. ⚠️ `FptuSigns.painted()` **đang có đúng lỗi này** — chưa lộ vì
+   biển hiệu ở đảo xa, chưa bao giờ biên dịch shader trong lúc đo.
+
+## HAI điều user bác ngay lần thử đầu (1/8) — sửa rồi
+
+- *"thấp thấp ngang ngang này rất khó nhìn đường"* → nâng `EYE.alongY`
+  **1,15 → 1,38** (mắt cao hơn nóc 0,50) và thêm `View.cockpit.basePitch =
+  −0,21` rad (**−12°**) cho máy quay chúc xuống. Mặt đường trải ra giữa khung
+  thay vì thành một dải mỏng.
+  ⚠️ Nâng mắt xong PHẢI neo nội thất theo **thân xe** (`this.deck`) chứ không
+  theo `eye`, không thì táp lô với vô lăng bị nhấc lên lơ lửng theo.
+- *"có nút khoá camera lúc lái đi chứ nó cứ lệch cam khi chạm trúng chuột"* →
+  `View.cockpit.lookLocked`, **mặc định BẬT**. Khoá thì luôn nhìn theo mũi xe;
+  **GIỮ chuột** mới ngoái, thả ra đầu tự về (hằng số thời gian 0,25s).
+  Chế độ `Free` giữ nguyên hành vi cũ (ngoái theo vị trí con trỏ).
+
+## Đáng nhớ về máy quay
+
+- **Đọc vị trí từ `physicalVehicle`, KHÔNG phải `chassis`.** Thứ tự nhịp:
+  Player.pre(1) → PhysicsVehicle.pre(2) → Physics(3) → PhysicsVehicle.post(5) →
+  Player.post(6) → **View(7)** → VisualVehicle(8). Lúc `View.update()` chạy thì
+  `chassis` vẫn giữ vị trí khung TRƯỚC ⇒ bám vào nó là trễ một khung.
+- **FOV chỉ đổi trên `this.camera`, đừng động vào `defaultCamera`** —
+  `optimalArea.update()` mượn `defaultCamera` để tính vùng nhìn, mà vùng đó định
+  bề rộng tấm bóng đổ, `Fog.near/far` và halfExtent mặt nước.
+- **Xe hướng +X, máy quay three nhìn −Z** ⇒ `baseYaw = −π/2`. (Quay Y góc θ đưa
+  (0,0,−1) thành (−sinθ, 0, −cosθ); θ = −π/2 cho đúng (1,0,0).)
+- **Tắt `cheapDOF` khi vào cabin.** Nó không mờ theo chiều sâu mà theo vị trí
+  DỌC TRÊN MÀN HÌNH (`uv().y − 0,5`) — một tilt-shift giả cho máy quay treo cao;
+  trong cabin nó bôi mờ dải trời và cả táp lô. Đẩy `start` ra ngoài dải là tắt.
+  (`cheapDOFPass.strength` mà bản mẫu tween trong `cinematic` **KHÔNG TỒN TẠI**
+  trên node — dòng gsap đó xưa nay chạy không.)
+- Chốt tự lành NaN cho `smoothedYaw/Pitch/Fov`, cùng lý do với `zoom.smoothedRatio`.
+- `VehicleRocket` ở cabin **ngắm vào giữa khung hình** (ndc 0,0) thay vì theo con
+  trỏ — không thì rê chuột là mục tiêu chạy hai lần (đầu ngoái + tia đổi).
+
+## Bẫy khi VIẾT BỘ KIỂM cho phần này
+
+- **`player.steering` gán từ ngoài sống chưa hết một khung**:
+  `Player.updatePrePhysics()` đặt `this.steering = 0` ở dòng đầu mỗi khung. Bộ
+  kiểm bản đầu gán rồi `await` và **báo oan "vô lăng không quay"**. Cách đúng:
+  gán rồi gọi thẳng `cockpit.update()` mấy chục lần (JS một luồng, không nhịp
+  nào chen vào được). An toàn vì hàm đó không đụng Rapier.
+- **Chromium headless bóp `requestAnimationFrame` khi trang không có tương tác**
+  ⇒ chờ 1,5 giây có khi chỉ chạy vài khung. Phép kiểm "đầu tự quay về nhìn
+  thẳng" đo kiểu đó ra 0,781 và báo oan. Gọi thẳng `view.updateCockpitLook()`
+  cho tất định.
+- **Chụp ảnh phải chờ `reveal` chạy xong** (`reveal.distance.value > 1000`),
+  không thì `MeshDefaultMaterial.revealDiscardNodeBuilder` `discard()` sạch cả
+  thế giới lẫn nội thất và ảnh chỉ ra lưới intro. Và **đừng tự gọi
+  `reveal.updateStep(1)`** — nút `.js-welcome-play` đã gọi rồi, gọi lần hai thì
+  `world.intro` đã null và `hideLabel()` ném lỗi.
+
+---
+
+# 1. SÁU BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
 
 Cần dev server sống: `cd playground-3d && npm run dev` (xem mục 4).
 
 ```bash
-node tools/check-fptu-layout.mjs             # công trình đè nhau, đường bị chắn, thò ra biển
-URL=http://localhost:5173/ node tools/check-ghost-colliders.mjs   # VA CHẠM MỒ CÔI + MẶT TRANH NHAU CHIỀU SÂU
-node tools/check-play-island.mjs             # đảo sân chơi: 9 mục, có QUÉT HÀNH LANG XE
-node tools/check-arena-rules.mjs             # luật chơi sân bóng: 9 mục
-node tools/check-city-island.mjs             # đảo thành phố: nhà chắn đường, bậc cầu, quảng trường, SỐ NHÀ THỰC MỌC
+node tools/check-fptu-layout.mjs                                  # công trình đè nhau, đường bị chắn, thò ra biển
+URL=http://localhost:5174/ node tools/check-ghost-colliders.mjs    # VA CHẠM MỒ CÔI + MẶT TRANH NHAU CHIỀU SÂU
+PLAY_URL=http://localhost:5174 node tools/check-play-island.mjs    # đảo sân chơi: 9 mục, có QUÉT HÀNH LANG XE
+PLAY_URL=http://localhost:5174 node tools/check-arena-rules.mjs    # luật chơi sân bóng: 9 mục
+PLAY_URL=http://localhost:5174 node tools/check-city-island.mjs    # đảo thành phố: nhà chắn đường, bậc cầu, SỐ NHÀ THỰC MỌC
+PLAY_URL=http://localhost:5174 node tools/check-cockpit.mjs        # buồng lái: 11 mục, xem mục 0f
 ```
 
-⚠️ `check-ghost-colliders.mjs` mặc định gõ cứng cổng **5175** — truyền `URL=` cho
-đúng cổng Vite đang chạy, không thì nó chỉ báo `ERR_CONNECTION_REFUSED`.
+⚠️ **Vite NHẢY CỔNG** khi 5173 bận (rất hay gặp: phiên Claude khác cũng mở dev
+server trong đúng thư mục này — 1/8 nó chiếm 5173, mình phải chạy ở 5174). Đọc
+cổng THẬT ở `preview_logs` rồi truyền vào, không thì bộ kiểm chỉ báo
+`ERR_CONNECTION_REFUSED`. `check-ghost-colliders.mjs` dùng biến `URL=`, năm bộ
+còn lại dùng `PLAY_URL=` (`check-city-island.mjs` mới được sửa cho nhận biến,
+trước đó gõ cứng 5173). `check-fptu-layout.mjs` vẫn gõ cứng 5173.
 
-**Cả bốn hiện 0 lỗi.**
+⚠️ **`preview_start` báo một cổng nhưng Vite chạy ở cổng khác**, và Browser pane
+KHÔNG tới được cổng lạ đó. Cách vào được: `preview_start({url: 'http://localhost:<cổng thật>'})`.
+Nhưng **Browser pane không chạy vòng lặp game** (đo 1/8: `ticker.elapsed` đứng
+im dù đã `tabs_select`) ⇒ chụp ảnh bằng Playwright headless, đừng bằng pane.
+
+**Cả sáu hiện 0 lỗi.**
 
 `check-play-island.mjs` có mục **quét hành lang xe**: đẩy một khối hộp bằng đúng
 kích cỡ xe (rộng 1,9 · cao 1,4) dọc từng tuyến đường bằng
@@ -685,9 +791,13 @@ playground-3d/sources/
   Game/Options.js               ← nút trong bảng Cài đặt
   index.html                    ← màn chào, bảng Cài đặt, hộp thoại cổng
   style/general.styl            ← `.segmented`, `.fptu-gate-mute`
+    Cockpit.js                  ← MỚI: nội thất buồng lái (người thứ nhất)
+    Garage.js                   ← nhà xe, sinh nút đổi xe từ `data/garage.js`
+    CityIsland.js               ← đảo thành phố dựng từ city kit
 playground-3d/tools/
   check-fptu-layout.mjs · check-ghost-colliders.mjs
   check-play-island.mjs · check-arena-rules.mjs
+  check-city-island.mjs · check-cockpit.mjs
 frontend/public/playground/     ← GÓI ĐÃ DỰNG (nhớ commit!)
 ```
 

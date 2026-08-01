@@ -18,11 +18,16 @@ export class View
 {
     static MODE_DEFAULT = 1
     static MODE_FREE = 2
+    /**
+     * NGƯỜI THỨ NHẤT — máy quay ngồi vào ghế lái, ngoái đầu bằng chuột.
+     * Nội thất nhìn thấy được dựng ở `World/Cockpit.js`.
+     */
+    static MODE_COCKPIT = 3
 
     constructor(idealRatio = 1920 / 1080)
     {
         this.game = Game.getInstance()
-        
+
         this.mode = View.MODE_DEFAULT
         this.position = new THREE.Vector3()
         this.delta = new THREE.Vector3()
@@ -44,6 +49,7 @@ export class View
                     {
                         default: View.MODE_DEFAULT,
                         free: View.MODE_FREE,
+                        cockpit: View.MODE_COCKPIT,
                     }
                 }
             ).on('change', () => 
@@ -59,6 +65,7 @@ export class View
         this.setCameras()
         this.setOptimalArea()
         this.setFree()
+        this.setCockpit()
         this.setCinematic()
         this.setSpeedLines()
         this.setMapControls()
@@ -96,7 +103,15 @@ export class View
          * đua — đúng như bản mẫu để.
          */
         this.game.inputs.addActions([
-            { name: 'viewToggle', categories: [], keys: [ 'Keyboard.KeyV' ] }
+            { name: 'viewToggle', categories: [], keys: [ 'Keyboard.KeyV' ] },
+            /**
+             * NGƯỜI THỨ NHẤT — phím **C**. Cũng `categories: []` như V để bấm
+             * được ở mọi trạng thái. C chưa dùng ở đâu (W/A/S/D lái, Shift tăng
+             * tốc, B/Ctrl phanh, Space giảm xóc, R hồi sinh, H còi, E/F/Enter
+             * tương tác, T thì thầm, L tắt tiếng, V máy quay tự do, X bắn,
+             * J/K trò chơi khu Social).
+             */
+            { name: 'cockpitToggle', categories: [], keys: [ 'Keyboard.KeyC' ] },
         ])
 
         this.game.inputs.events.on('viewToggle', (action) =>
@@ -107,18 +122,26 @@ export class View
             }
         })
 
-        this.setFreeCameraButtons()
+        this.game.inputs.events.on('cockpitToggle', (action) =>
+        {
+            if(action.active)
+            {
+                this.setMode(this.mode === View.MODE_COCKPIT ? View.MODE_DEFAULT : View.MODE_COCKPIT)
+            }
+        })
+
+        this.setCameraButtons()
     }
 
     /**
-     * Hai nút Follow / Free trong bảng Cài đặt.
+     * Ba nút Follow / Cockpit / Free trong bảng Cài đặt.
      *
      * Nối từ CHÍNH `View` chứ không từ `Options`: `View` dựng ở `Game.js` dòng
      * ~140 còn `Options` ở dòng 110, nên `Options` chạy trước và lúc đó
      * `game.view` chưa tồn tại. (Cùng một bài học với `VehicleRocket`, chỉ khác
      * chiều.) Bảng Cài đặt là HTML tĩnh nên `querySelector` lúc nào cũng có.
      */
-    setFreeCameraButtons()
+    setCameraButtons()
     {
         const container = document.querySelector('.js-camera-modes')
         if(!container) return
@@ -127,18 +150,61 @@ export class View
 
         this.updateCameraButtons = () =>
         {
-            const current = this.mode === View.MODE_FREE ? 'free' : 'follow'
+            const current =
+                this.mode === View.MODE_FREE ? 'free'
+                : this.mode === View.MODE_COCKPIT ? 'cockpit'
+                : 'follow'
+
             for(const button of buttons)
                 button.classList.toggle('is-active', button.dataset.mode === current)
         }
 
         this.updateCameraButtons()
 
+        const modesByName = {
+            free: View.MODE_FREE,
+            cockpit: View.MODE_COCKPIT,
+            follow: View.MODE_DEFAULT,
+        }
+
         for(const button of buttons)
             button.addEventListener('click', () =>
             {
                 this.game.audio?.play?.('uiClick')
-                this.setMode(button.dataset.mode === 'free' ? View.MODE_FREE : View.MODE_DEFAULT)
+                this.setMode(modesByName[button.dataset.mode] ?? View.MODE_DEFAULT)
+            })
+
+        this.setLookButtons()
+    }
+
+    /**
+     * Hai nút Locked / Free cho hướng nhìn trong cabin.
+     *
+     * Tách riêng khỏi nhóm Follow/Cockpit/Free vì đây là chuyện KHÁC: một bên
+     * chọn kiểu máy quay, một bên chọn chuột có lái được hướng nhìn hay không.
+     */
+    setLookButtons()
+    {
+        const container = document.querySelector('.js-look-modes')
+        if(!container) return
+
+        const buttons = [ ...container.querySelectorAll('button[data-look]') ]
+
+        this.updateLookButtons = () =>
+        {
+            const current = this.cockpit.lookLocked ? 'locked' : 'free'
+            for(const button of buttons)
+                button.classList.toggle('is-active', button.dataset.look === current)
+        }
+
+        this.updateLookButtons()
+
+        for(const button of buttons)
+            button.addEventListener('click', () =>
+            {
+                this.game.audio?.play?.('uiClick')
+                this.cockpit.lookLocked = button.dataset.look === 'locked'
+                this.updateLookButtons()
             })
     }
 
@@ -149,6 +215,7 @@ export class View
 
     setMode(mode)
     {
+        const previous = this.mode
         this.mode = mode
 
         this.focusPoint.smoothedPosition.copy(this.focusPoint.position)
@@ -156,6 +223,11 @@ export class View
         this.freeMode.enabled = this.mode === View.MODE_FREE
         this.freeMode.setTarget(this.focusPoint.position.x, this.focusPoint.position.y, this.focusPoint.position.z)
         this.freeMode.setPosition(this.camera.position.x, this.camera.position.y, this.camera.position.z)
+
+        if(previous !== View.MODE_COCKPIT && this.mode === View.MODE_COCKPIT)
+            this.enterCockpit()
+        else if(previous === View.MODE_COCKPIT && this.mode !== View.MODE_COCKPIT)
+            this.leaveCockpit()
 
         this.updateCameraButtons?.()
     }
@@ -524,6 +596,273 @@ export class View
         this.freeMode.smoothTime = 0.075
         this.freeMode.draggingSmoothTime = 0.075
         this.freeMode.dollySpeed = 0.2
+    }
+
+    /**
+     * ─────────────────────────────────────────────────────────────────────────
+     * CHẾ ĐỘ NGƯỜI THỨ NHẤT
+     * ─────────────────────────────────────────────────────────────────────────
+     *
+     * Máy quay gắn cứng vào thân xe ở đúng chỗ ngồi người lái, ngoái đầu bằng
+     * chuột. Nội thất nhìn thấy được (táp lô, vô lăng, đồng hồ) dựng riêng ở
+     * `World/Cockpit.js` — file này chỉ lo cái máy quay.
+     *
+     * ⚠️ ĐỌC VỊ TRÍ TỪ `physicalVehicle`, KHÔNG PHẢI TỪ `chassis`.
+     * Thứ tự nhịp: Player.pre(1) → PhysicsVehicle.pre(2) → Physics(3) →
+     * PhysicsVehicle.post(5) → Player.post(6) → **View(7)** → VisualVehicle(8).
+     * Tức lúc `View.update()` chạy thì `visualVehicle.parts.chassis` VẪN GIỮ
+     * vị trí của khung hình TRƯỚC — bám vào nó là máy quay trễ đúng một khung,
+     * đủ để thành rung lắc thấy được khi chạy nhanh. `physicalVehicle` thì đã
+     * cập nhật ở nhịp 5.
+     *
+     * ⚠️ FOV CHỈ ĐỔI TRÊN `this.camera`, ĐỪNG ĐỘNG VÀO `defaultCamera`.
+     * `optimalArea.update()` mượn `defaultCamera` để bắn tia tính vùng nhìn, mà
+     * vùng đó lại định bề rộng tấm bóng đổ, `Fog.near/far` và halfExtent của
+     * mặt nước. Đổi FOV của nó là cả ba thứ kia lệch theo — trong khi vùng tối
+     * ưu vốn phải tính theo máy quay bám xe chứ không theo cái đang render.
+     */
+    setCockpit()
+    {
+        this.cockpit = {}
+
+        // Máy quay chính để 25° (kiểu tele, nhìn từ xa). Trong cabin thì phải
+        // rộng, không thì chỉ thấy đúng mảng táp lô trước mặt.
+        this.cockpit.fov = 62
+        // Nới thêm khi chạy nhanh — mẹo cũ để "thấy" tốc độ mà không đụng gì
+        // vào vật lý
+        this.cockpit.fovSpeedGain = 9
+        this.cockpit.fovSpeedEdge = 34
+        this.cockpit.smoothedFov = this.cockpit.fov
+
+        /**
+         * GÓC CHÚC MẶC ĐỊNH — máy quay hơi cúi xuống nhìn đường.
+         *
+         * User thử bản đầu (ngồi ngang mép thùng, ngắm thẳng) và bác ngay:
+         * *"thấp thấp ngang ngang này rất khó nhìn đường"*. Ngắm ngang thì mặt
+         * đường chỉ chiếm một dải mỏng ở giữa khung, nửa trên toàn trời. Kéo
+         * chỗ ngồi lên cao (xem `EYE.alongY` trong `Cockpit.js`) rồi cúi xuống
+         * chừng 12° là đường trải ra đúng giữa khung.
+         *
+         * Đây là góc NỀN, cộng thêm vào góc ngoái của người chơi — nên ngước
+         * lên nhìn trời vẫn được, chỉ là mặc định thì nhìn đường.
+         */
+        this.cockpit.basePitch = -0.21
+
+        /**
+         * KHOÁ HƯỚNG NHÌN — mặc định BẬT.
+         *
+         * User: *"có nút khoá camera lúc lái đi chứ nó cứ lệch cam khi chạm
+         * trúng chuột"*. Đúng: bản đầu ngoái đầu theo VỊ TRÍ con trỏ, mà lúc
+         * lái thì tay để trên bàn phím và con trỏ nằm đâu đó trên màn hình —
+         * chạm nhẹ vào chuột là hướng nhìn lệch đi, không cách nào lái thẳng.
+         *
+         *  · `locked` (mặc định) — luôn nhìn theo mũi xe. Muốn liếc thì GIỮ
+         *    CHUỘT, thả ra là đầu tự quay về trước.
+         *  · `free` — ngoái theo vị trí con trỏ, không cần giữ.
+         */
+        this.cockpit.lookLocked = true
+
+        // Ngoái đầu
+        this.cockpit.yaw = 0
+        this.cockpit.pitch = 0
+        this.cockpit.smoothedYaw = 0
+        this.cockpit.smoothedPitch = 0
+        this.cockpit.maxYaw = Math.PI * 0.60   // ~108°, đủ để liếc qua vai
+        this.cockpit.maxPitchUp = 0.44
+        this.cockpit.maxPitchDown = 0.38
+        /**
+         * Vùng chết giữa màn hình. Không có nó thì con trỏ đứng yên ở đâu cũng
+         * ép đầu ngoái sang đó, và người chơi không bao giờ nhìn thẳng được trừ
+         * khi giữ chuột đúng tâm màn hình.
+         */
+        this.cockpit.deadZone = 0.14
+        this.cockpit.hasPointer = false
+
+        // Rung theo tốc độ — biên độ tính bằng radian, cố ý rất nhỏ
+        this.cockpit.shake = 0.0075
+        this.cockpit.shakeSpeedEdge = 40
+
+        // Xe hướng +X còn máy quay three nhìn theo −Z cục bộ ⇒ phải quay −90°
+        // quanh Y để đường ngắm trùng mũi xe. (Kiểm: quay Y góc θ đưa (0,0,−1)
+        // thành (−sinθ, 0, −cosθ); θ = −π/2 cho ra đúng (1, 0, 0).)
+        this.cockpit.baseYaw = -Math.PI * 0.5
+
+        this.cockpit.dummy = new THREE.Object3D()
+        this.cockpit.eye = new THREE.Vector3()
+        // Dùng khi `world.cockpit` chưa dựng xong: nhích lên trên tâm chassis
+        this.cockpit.fallbackEye = new THREE.Vector3(0, 0.55, 0)
+        this.cockpit.savedDOF = null
+
+        if(this.game.debug.active)
+        {
+            const panel = this.debugPanel.addFolder({ title: 'Cockpit', expanded: false })
+            panel.addBinding(this.cockpit, 'fov', { min: 30, max: 100, step: 0.5 })
+            panel.addBinding(this.cockpit, 'maxYaw', { min: 0, max: Math.PI, step: 0.01 })
+            panel.addBinding(this.cockpit, 'shake', { min: 0, max: 0.05, step: 0.0005 })
+        }
+    }
+
+    enterCockpit()
+    {
+        this.game.world?.cockpit?.setVisible(true)
+
+        this.cockpit.smoothedYaw = 0
+        this.cockpit.smoothedPitch = 0
+        this.cockpit.smoothedFov = this.cockpit.fov
+        this.cockpit.hasPointer = false
+
+        /**
+         * TẮT LỚP MỜ MÉP KHUNG.
+         *
+         * `cheapDOF` không mờ theo chiều sâu mà theo VỊ TRÍ DỌC TRÊN MÀN HÌNH
+         * (`uv().y - 0.5`), tức một hiệu ứng tilt-shift giả để cảnh nhìn từ xa
+         * trông như mô hình thu nhỏ. Rất hợp máy quay treo cao; trong cabin thì
+         * nó bôi mờ dải trời phía trên và cả cái táp lô ngay trước mũi.
+         *
+         * Đẩy `start` ra ngoài dải giá trị có thể có của `|uv.y − 0,5|` (tối đa
+         * 0,5) là `smoothstep` trả về 0 ở mọi điểm ⇒ tắt sạch, không phải đụng
+         * vào chuỗi hậu kỳ. (`cheapDOFPass.strength` mà bản mẫu tween trong
+         * `cinematic` KHÔNG TỒN TẠI trên node — dòng gsap đó xưa nay chạy không.)
+         */
+        const dof = this.game.rendering?.cheapDOFPass
+        if(dof && this.cockpit.savedDOF === null)
+        {
+            this.cockpit.savedDOF = { start: dof.start.value, end: dof.end.value }
+            dof.start.value = 1
+            dof.end.value = 1.2
+        }
+    }
+
+    leaveCockpit()
+    {
+        this.game.world?.cockpit?.setVisible(false)
+
+        this.camera.fov = this.defaultCamera.fov
+        this.camera.updateProjectionMatrix()
+
+        const dof = this.game.rendering?.cheapDOFPass
+        if(dof && this.cockpit.savedDOF !== null)
+        {
+            dof.start.value = this.cockpit.savedDOF.start
+            dof.end.value = this.cockpit.savedDOF.end
+            this.cockpit.savedDOF = null
+        }
+    }
+
+    /** Ngoái đầu: chuột theo VỊ TRÍ con trỏ, cảm ứng theo kéo tay. */
+    updateCockpitLook()
+    {
+        const pointer = this.game.inputs.pointer
+        const viewport = this.game.viewport
+        const cockpit = this.cockpit
+
+        const deadZone = (value) =>
+        {
+            const sign = Math.sign(value)
+            const magnitude = Math.max(0, Math.abs(value) - cockpit.deadZone) / (1 - cockpit.deadZone)
+            return sign * magnitude
+        }
+
+        // Đang khoá mà KHÔNG giữ chuột ⇒ đầu tự quay về nhìn thẳng mũi xe
+        if(cockpit.lookLocked && !(pointer && pointer.isDown))
+        {
+            const settle = 1 - Math.min(1, this.game.ticker.delta * 4)
+            cockpit.yaw *= settle
+            cockpit.pitch *= settle
+        }
+        else if(pointer && pointer.mode === Pointer.MODE_TOUCH)
+        {
+            // Cảm ứng: kéo để ngoái, thả ra thì đầu tự quay về trước
+            if(pointer.isDown && pointer.touches.length === 1)
+            {
+                cockpit.yaw -= (pointer.delta.x / viewport.width) * Math.PI * 2
+                cockpit.pitch -= (pointer.delta.y / viewport.height) * Math.PI
+            }
+            else
+            {
+                cockpit.yaw *= 1 - Math.min(1, this.game.ticker.delta * 2)
+                cockpit.pitch *= 1 - Math.min(1, this.game.ticker.delta * 2)
+            }
+        }
+        else if(pointer)
+        {
+            /**
+             * `Pointer.current` khởi tạo ở (0, 0) — GÓC TRÊN BÊN TRÁI màn hình,
+             * không phải giữa. Chưa rê chuột lần nào mà đọc thẳng thì vừa vào
+             * cabin là đầu đã ngoái hết cỡ sang trái và ngước lên trời, trông
+             * hệt như máy quay hỏng.
+             */
+            if(pointer.current.x !== 0 || pointer.current.y !== 0)
+                cockpit.hasPointer = true
+
+            if(cockpit.hasPointer)
+            {
+                const nx = (pointer.current.x / viewport.width) * 2 - 1
+                const ny = (pointer.current.y / viewport.height) * 2 - 1
+                cockpit.yaw = -deadZone(clamp(nx, -1, 1)) * cockpit.maxYaw
+                cockpit.pitch = -deadZone(clamp(ny, -1, 1))
+            }
+            else
+            {
+                cockpit.yaw = 0
+                cockpit.pitch = 0
+            }
+        }
+
+        cockpit.yaw = clamp(cockpit.yaw, -cockpit.maxYaw, cockpit.maxYaw)
+        cockpit.pitch = clamp(cockpit.pitch, -cockpit.maxPitchDown, cockpit.maxPitchUp)
+
+        const easing = Math.min(1, this.game.ticker.delta * 11)
+        cockpit.smoothedYaw = lerp(cockpit.smoothedYaw, cockpit.yaw, easing)
+        cockpit.smoothedPitch = lerp(cockpit.smoothedPitch, cockpit.pitch, easing)
+
+        // Chốt tự lành, cùng lý do với `zoom.smoothedRatio`: một khung hình NaN
+        // lọt vào bộ lọc hồi tiếp là nó ở lại vĩnh viễn
+        if(!Number.isFinite(cockpit.smoothedYaw)) cockpit.smoothedYaw = 0
+        if(!Number.isFinite(cockpit.smoothedPitch)) cockpit.smoothedPitch = 0
+    }
+
+    updateCockpit()
+    {
+        const cockpit = this.cockpit
+        const vehicle = this.game.physicalVehicle
+        if(!vehicle) return
+
+        this.updateCockpitLook()
+
+        // Chỗ ngồi, trong hệ toạ độ thân xe
+        const seat = this.game.world?.cockpit?.eye ?? cockpit.fallbackEye
+        cockpit.eye.copy(seat).applyQuaternion(vehicle.quaternion).add(vehicle.position)
+
+        const dummy = cockpit.dummy
+        dummy.position.copy(cockpit.eye)
+        dummy.quaternion.copy(vehicle.quaternion)
+        dummy.rotateY(cockpit.baseYaw + cockpit.smoothedYaw)
+        dummy.rotateX(cockpit.basePitch + cockpit.smoothedPitch)
+
+        // Rung theo tốc độ: ba tần số lệch nhau để không ra nhịp máy móc
+        const speedRatio = clamp((vehicle.xzSpeed ?? 0) / cockpit.shakeSpeedEdge, 0, 1)
+        if(speedRatio > 0.001 && cockpit.shake > 0)
+        {
+            const time = this.game.ticker.elapsedScaled
+            const amount = cockpit.shake * speedRatio
+            dummy.rotateX(Math.sin(time * 23.7) * amount)
+            dummy.rotateY(Math.sin(time * 17.3 + 1.7) * amount * 0.7)
+            dummy.rotateZ(Math.sin(time * 13.1 + 3.4) * amount * 1.4)
+        }
+
+        this.camera.position.copy(dummy.position)
+        this.camera.quaternion.copy(dummy.quaternion)
+
+        const targetFov = cockpit.fov + cockpit.fovSpeedGain * clamp((vehicle.xzSpeed ?? 0) / cockpit.fovSpeedEdge, 0, 1)
+        cockpit.smoothedFov = lerp(cockpit.smoothedFov, targetFov, Math.min(1, this.game.ticker.delta * 4))
+        if(!Number.isFinite(cockpit.smoothedFov)) cockpit.smoothedFov = cockpit.fov
+
+        if(Math.abs(this.camera.fov - cockpit.smoothedFov) > 0.01)
+        {
+            this.camera.fov = cockpit.smoothedFov
+            this.camera.updateProjectionMatrix()
+        }
     }
 
     setCinematic()
@@ -895,6 +1234,10 @@ export class View
             this.freeMode.update(this.game.ticker.delta)
             this.camera.position.copy(this.freeCamera.position)
             this.camera.quaternion.copy(this.freeCamera.quaternion)
+        }
+        else if(this.mode === View.MODE_COCKPIT)
+        {
+            this.updateCockpit()
         }
 
         // Cameras matrices

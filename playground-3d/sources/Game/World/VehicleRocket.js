@@ -1,6 +1,7 @@
 import * as THREE from 'three/webgpu'
 import { color, texture as textureNode } from 'three/tsl'
 import { Game } from '../Game.js'
+import { View } from '../View.js'
 import { MeshDefaultMaterial } from '../Materials/MeshDefaultMaterial.js'
 import { Events } from '../Events.js'
 
@@ -332,6 +333,10 @@ export class VehicleRocket
         this.cannon = new THREE.Group()
         this.cannon.position.set(-0.05, 1.0, 0)
         this.cannon.visible = false
+        // Đánh dấu "đồ gắn thêm, không phải thân xe" — `Cockpit.measureBody()`
+        // đo hộp bao thân xe để đặt chỗ ngồi, tính cả khẩu pháo vào là đỉnh xe
+        // vống từ 0,72 lên 1,805 và người lái ngồi lơ lửng trên nóc
+        this.cannon.userData.vehicleAttachment = true
         chassis.add(this.cannon)
 
         const cyl = this.cylinderGeometry
@@ -417,6 +422,7 @@ export class VehicleRocket
         this.launcher = new THREE.Group()
         this.launcher.position.set(-0.05, 1.0, 0)
         this.launcher.visible = false
+        this.launcher.userData.vehicleAttachment = true   // xem chú thích ở `setCannon()`
         chassis.add(this.launcher)
 
         // ── Sàn bệ + bốn chân chống hạ xuống ────────────────────────────────
@@ -699,10 +705,22 @@ export class VehicleRocket
         const pointer = this.game.inputs.pointer
         if(!pointer) return false
 
-        this.ndc.set(
-            (pointer.current.x / this.game.viewport.width) * 2 - 1,
-            -((pointer.current.y / this.game.viewport.height) * 2 - 1),
-        )
+        /**
+         * TRONG CABIN THÌ NGẮM VÀO GIỮA KHUNG HÌNH, không theo con trỏ.
+         *
+         * Ở chế độ người thứ nhất chính con trỏ đã điều khiển hướng NHÌN. Nếu
+         * để nó điều khiển cả hướng NGẮM thì mỗi lần rê chuột mục tiêu chạy hai
+         * lần: một lần vì đầu ngoái, một lần vì tia đổi — ngắm gì cũng trượt.
+         * Nhìn đâu bắn đó là cách mọi trò bắn súng góc nhìn thứ nhất vẫn làm.
+         */
+        if(this.game.view?.mode === View.MODE_COCKPIT)
+            this.ndc.set(0, 0)
+        else
+            this.ndc.set(
+                (pointer.current.x / this.game.viewport.width) * 2 - 1,
+                -((pointer.current.y / this.game.viewport.height) * 2 - 1),
+            )
+
         this.raycaster.setFromCamera(this.ndc, this.game.view.camera)
 
         const point = this.raycaster.ray.intersectPlane(this.groundPlane, this.aim)

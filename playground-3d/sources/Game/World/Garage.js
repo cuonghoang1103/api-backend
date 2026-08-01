@@ -91,7 +91,15 @@ export class Garage
              * ⚠️ Pháo trên nóc gắn vào `parts.chassis` của chiếc xe CŨ — chiếc
              * vừa bị `destroy()`. Không dựng lại thì khẩu pháo biến mất mà
              * không báo lỗi gì, và bấm X không ra đạn.
+             *
+             * Nội thất buồng lái treo cùng chỗ nên dính đúng một bệnh: đổi xe
+             * xong mà đang ngồi trong cabin thì táp lô, vô lăng, đồng hồ biến
+             * sạch, chỉ còn khoảng không. Và vì nó ĐO LẠI hộp bao thân xe nên
+             * chỗ ngồi cũng tự chỉnh theo chiếc mới, không phải khai gì thêm.
              */
+            // ⚠️ Buồng lái TRƯỚC khẩu pháo, cùng lý do với thứ tự dựng trong
+            // `World.js`: nó đo hộp bao thân xe, mà pháo cũng treo trên chassis
+            this.game.world.cockpit?.reattach?.()
             this.game.world.vehicleRocket?.reattach?.()
 
             const sound = this.game.audio.groups.get('click')

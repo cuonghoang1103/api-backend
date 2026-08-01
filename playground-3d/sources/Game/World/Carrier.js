@@ -1,5 +1,5 @@
 import * as THREE from 'three/webgpu'
-import { color } from 'three/tsl'
+import { color, texture as textureNode } from 'three/tsl'
 import { Game } from '../Game.js'
 import { MeshDefaultMaterial } from '../Materials/MeshDefaultMaterial.js'
 import {
@@ -77,14 +77,19 @@ export class Carrier
         this.setRamp()
         this.setBowRamp()
         this.setEquipment()
+        this.setNavLights()
+        this.setSoftSprites()
 
-        // Chỉ dựng bằng mã những gì model KHÔNG có. Ba hàm `setHull`/`setIsland`/
-        // `setPlanes` giữ nguyên để bật lại được nếu sau này bỏ model.
-        if(!this.usingModel)
-        {
-            this.setIsland()
-            this.setPlanes()
-        }
+        /**
+         * Máy bay dựng bằng mã CHẠY CẢ KHI CÓ MODEL — boong của model trống
+         * trơn, không một chiếc nào. Đây đúng là thứ nên bù bằng mã: bảy chiếc
+         * xếp cánh gập, mỗi chiếc ~15 mesh nhỏ, rẻ hơn hẳn việc đi tìm model
+         * máy bay riêng.
+         */
+        this.setPlanes()
+
+        // Đảo chỉ huy thì model có sẵn (kèm cột radar) — chỉ dựng khi không model
+        if(!this.usingModel) this.setIsland()
 
         this.buildInstances()
 
@@ -652,11 +657,141 @@ export class Carrier
         }
     }
 
+    /**
+     * ĐÈN HÀNG HẢI — đỏ mạn trái, xanh mạn phải, trắng trên cột. Nhấp nháy.
+     *
+     * Đúng quy tắc đèn tàu thật, và là thứ khiến con tàu "sống" về đêm mà gần
+     * như không tốn gì: sáu khối nhỏ tự phát sáng, đổi độ sáng trong `update()`.
+     * ⚠️ Cả thế giới chỉ có MỘT nguồn sáng nên KHÔNG thả `PointLight` — thứ
+     * phát sáng phải tự phát sáng bằng vật liệu.
+     */
+    setNavLights()
+    {
+        const { x, z, length, width, deckY } = CARRIER
+        this.navLights = []
+
+        const lamps = [
+            { hex: '#ff2d2d', px: x - width * 0.5 - 0.3, pz: z + length * 0.34, phase: 0 },      // mạn trái
+            { hex: '#2dff6a', px: x + width * 0.5 + 0.3, pz: z + length * 0.34, phase: 0 },      // mạn phải
+            { hex: '#ffffff', px: x + 8.2, pz: z - 14, phase: 1.6, high: 14 },                   // đỉnh tháp
+            { hex: '#ffb03c', px: x, pz: z + length * 0.47, phase: 0.8 },                        // mũi
+            { hex: '#ffb03c', px: x, pz: z - length * 0.47, phase: 2.4 },                        // đuôi
+        ]
+
+        for(const lamp of lamps)
+        {
+            const mesh = new THREE.Mesh(this.boxGeometry, this.getGlowMaterial(lamp.hex))
+            mesh.scale.setScalar(0.55)
+            mesh.position.set(lamp.px, deckY + (lamp.high ?? 0.8), lamp.pz)
+            mesh.castShadow = false
+            mesh.receiveShadow = false
+            this.group.add(mesh)
+            this.navLights.push({ mesh, phase: lamp.phase, base: 0.55 })
+        }
+    }
+
+    /**
+     * KHÓI từ ống khói và VỆT SÓNG quanh mũi tàu.
+     *
+     * Cả hai là canvas radial gradient chứ không phải hạt: `colorNode = tex.rgb`,
+     * `opacityNode = tex.a`, `transparent`, `depthWrite: false` — đúng khuôn đã
+     * dùng cho khói tên lửa. Rẻ, và hợp tông low-poly hơn hệ hạt.
+     */
+    setSoftSprites()
+    {
+        const { x, z, length, width, deckY } = CARRIER
+
+        const softTexture = (hex) =>
+        {
+            const S = 128
+            const canvas = document.createElement('canvas')
+            canvas.width = canvas.height = S
+            const ctx = canvas.getContext('2d')
+            const gradient = ctx.createRadialGradient(S * 0.5, S * 0.5, 0, S * 0.5, S * 0.5, S * 0.5)
+            gradient.addColorStop(0, hex)
+            gradient.addColorStop(0.45, hex + '80')
+            gradient.addColorStop(1, hex + '00')
+            ctx.fillStyle = gradient
+            ctx.fillRect(0, 0, S, S)
+            const map = new THREE.CanvasTexture(canvas)
+            map.colorSpace = THREE.SRGBColorSpace
+            return map
+        }
+
+        const softMaterial = (hex) =>
+        {
+            const map = softTexture(hex)
+            return new MeshDefaultMaterial({
+                colorNode: textureNode(map).rgb,
+                alphaNode: textureNode(map).a,
+                transparent: true,
+                depthWrite: false,
+                alphaTest: 0,
+                hasCoreShadows: false,
+                hasDropShadows: false,
+                hasLightBounce: false,
+            })
+        }
+
+        // Khói ống khói — ba cụm bay lên, cuộn trong `update()`
+        this.smoke = []
+        const smokeMaterial = softMaterial('#8a8f96')
+        for(let i = 0; i < 6; i++)
+        {
+            const puff = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), smokeMaterial)
+            puff.position.set(x + 6.6, deckY + 9 + i * 2.2, z - 17)
+            puff.scale.setScalar(3 + i * 0.9)
+            puff.renderOrder = 6
+            this.group.add(puff)
+            this.smoke.push({ mesh: puff, offset: i * 0.9, baseY: deckY + 9 })
+        }
+
+        // Vệt sóng bạc quanh mũi và hai mạn — nằm sát mặt nước
+        const foamMaterial = softMaterial('#dff2ff')
+        for(const [ px, pz, sx, sz ] of [
+            [ x, z + length * 0.5 + 3, 16, 12 ],
+            [ x - width * 0.5 - 1.5, z, 7, length * 0.8 ],
+            [ x + width * 0.5 + 1.5, z, 7, length * 0.8 ],
+            [ x, z - length * 0.5 - 3, 14, 10 ],
+        ])
+        {
+            const foam = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), foamMaterial)
+            foam.rotation.x = -Math.PI * 0.5
+            foam.position.set(px, -0.24, pz)
+            foam.scale.set(sx, sz, 1)
+            foam.renderOrder = 3
+            this.group.add(foam)
+        }
+    }
+
     update()
     {
-        // Radar quay chậm — chi tiết động duy nhất của cả con tàu, và là thứ
+        const elapsed = this.game.ticker.elapsedScaled
+
+        // Radar quay chậm — chi tiết động duy nhất của phần tự dựng, và là thứ
         // khiến nó trông "đang hoạt động" chứ không phải mô hình chết
         if(this.radarDish)
             this.radarDish.rotation.y += this.game.ticker.deltaScaled * 0.6
+
+        // Đèn hàng hải nhấp nháy, mỗi cái lệch pha
+        if(this.navLights)
+            for(const lamp of this.navLights)
+            {
+                const pulse = 0.55 + 0.45 * Math.sin(elapsed * 2.2 + lamp.phase)
+                lamp.mesh.scale.setScalar(lamp.base * (0.7 + pulse * 0.5))
+            }
+
+        // Khói bay lên rồi lặp lại, luôn quay mặt về máy quay
+        if(this.smoke)
+        {
+            const camera = this.game.view.camera
+            for(const puff of this.smoke)
+            {
+                const t = ((elapsed * 0.35 + puff.offset) % 5.4)
+                puff.mesh.position.y = puff.baseY + t * 2.4
+                puff.mesh.scale.setScalar(3 + t * 1.4)
+                puff.mesh.quaternion.copy(camera.quaternion)
+            }
+        }
     }
 }

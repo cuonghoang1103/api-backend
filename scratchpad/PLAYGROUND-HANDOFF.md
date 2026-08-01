@@ -15,7 +15,7 @@ qua). Mọi thứ tới `3a73e26` cũng đã push. **CHƯA deploy**: tàu sân b
 Trước đó: mọi thứ tới `3a73e26` ĐÃ LÊN PROD và ĐÃ PUSH
 (gói `index-B4vtlPVx.js`, `HEAD == origin/feat/playground-3d`, cây sạch).
 
-**CHƯA deploy**: chế độ lái người thứ nhất (mục 0f) — gói mới `index-x1d70jgc.js`
+**CHƯA deploy**: chế độ lái người thứ nhất (mục 0f) — gói mới `index-BuGSFcRi.js`
 đã dựng và rsync sang `frontend/public/playground`, **chờ `bash deploy.sh`**.
 
 Đầu phiên sau, so gói prod với local; lệch thì chạy `bash deploy.sh` nền:

@@ -45,9 +45,9 @@ Aircraft carrier — anchored at sea beside the bridge to Monster Island.
     `usingModel` to false and setHull/setIsland/setPlanes take over.
 
     Files   : static/carrier/carrier.glb
-    Modified: kept only the 59 lightest meshes (<= 3,000 verts each) out of
-              133, dropping 74 heavy ones — 2,126,216 verts down to 43,288;
-              textures resized to 512 and re-encoded to WebP; Draco.
+    Modified: kept only the 80 lightest meshes (<= 8,000 verts each) out of
+              133, dropping 53 heavy ones — 2,126,216 verts down to 150,725;
+              textures resized to 1024 and re-encoded to WebP; Draco.
 
 Tiger Russian Military Vehicle — reserved for the Survival mode.
 

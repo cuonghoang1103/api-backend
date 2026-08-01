@@ -4,6 +4,7 @@ import { Game } from '../Game.js'
 import { MeshDefaultMaterial } from '../Materials/MeshDefaultMaterial.js'
 import { PLAY_ISLAND, PLAY_BRIDGE, PLAY_ROADS, PLAY_COLORS, PLOTS } from '../../data/playisland.js'
 import { FootballArena } from './FootballArena.js'
+import { PlayConcert } from './PlayConcert.js'
 import { Foliage } from './Foliage.js'
 
 /**
@@ -67,6 +68,13 @@ export class PlayIsland
         this.setRoads()
 
         this.arena = new FootballArena(this)
+
+        /**
+         * Sân khấu nhạc hội — khu thứ nhất trong ba ô đất chừa sẵn (`PLOTS`).
+         * Dựng TRƯỚC `setScenery()` để nó ghi mốc tán cây vào `canopySpots`
+         * kịp cho `Foliage` gom ở cuối hàm dựng.
+         */
+        this.concert = new PlayConcert(this)
 
         this.setScenery()
 

@@ -14,8 +14,8 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
 
 **2/8**: **CHẾ ĐỘ SINH TỒN** (mục 0i) — quái + sóng + máu đen + tiền, cộng
 **cửa hàng nâng cấp** (7 món), **cơ chế NẤP**, **quái trùm dùng MODEL THẬT**,
-**súng máy phím F**, **xuống xe đi bộ phím E**, **trực thăng**.
-Gói `index-DvKYOE9h.js`
+**súng máy phím F**, **xuống xe đi bộ phím E**, **trực thăng**, và
+**SÂN KHẤU NHẠC HỘI** trên đảo sân chơi. Gói `index-c6xb0N8V.js`
 đã dựng và rsync sang `frontend/public/playground`. **CHƯA deploy, CHƯA push.**
 
 Đầu phiên sau, so gói prod với local; lệch thì chạy `bash deploy.sh` nền:
@@ -1038,7 +1038,70 @@ dọn sạch · tắt chế độ trả cảnh về nguyên trạng (0 quái, 0 
 
 ---
 
-# 1. CHÍN BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
+# 0j. SÂN KHẤU NHẠC HỘI — khu thứ nhất trong ba ô đất chừa sẵn, làm 2/8
+
+`data/playisland.js` (`CONCERT` + `CONCERT_COLORS`) + `World/PlayConcert.js`.
+Nằm gọn trong `PLOTS.concert` (tâm 34 · 150, rộng 38 × sâu 34). Điểm hồi sinh
+`concert` (34 · 165), mục bản đồ "Nhạc hội". Bộ kiểm `check-concert.mjs`.
+
+Có: sân khấu 22 × 9 **lái xe lên được** (có dốc ở mặt trước) · phông nền 5 vệt
+sáng · **sàn nhảy 9 × 7 = 63 ô nhấp theo NHẠC THẬT** · hai cột loa 4 màng ·
+giàn đèn 6 chùm quét · khán đài 3 bậc hai bên · **5 bục đĩa than đổi bài**.
+
+## Sàn nhảy nghe nhạc THẬT, không nhấp theo đồng hồ
+
+`AnalyserNode` (fft 256) cắm vào `Howler.masterGain`; ô sàn nâng theo **dải
+trầm** (bin 1–8 ≈ 40–350 Hz, tức kick/bass), đèn sáng theo **dải cao** (bin
+30–70). Lên NHANH xuống CHẬM — đó là thứ biến một con số thành "cú đập".
+
+⚠️ **`Howler.ctx` chỉ tồn tại SAU khi bấm Play ở màn chào** (trình duyệt chặn
+âm thanh tự phát). `ensureAnalyser()` phải thử lại **mỗi khung hình** cho tới
+khi được; cắm một lần trong hàm dựng là sàn đứng im vĩnh viễn, không lỗi nào.
+
+⚠️ `masterGain → analyser` là **NHÁNH SONG SONG**. Đừng nối `analyser →
+destination`, nối là âm thanh đi hai đường và nghe to gấp đôi.
+
+⚠️ Không có nhạc (tắt tiếng / chưa bấm Play) thì rơi về nhịp giả theo đồng hồ —
+sàn đứng chết trông như khu bỏ hoang.
+
+## Bục đĩa than — `playlist.goTo(index)`
+
+⚠️ Hàm ĐÚNG là `goTo(index)`. `playlist.play()` không nhận tham số (phát lại bài
+hiện tại), `next()`/`previous()` thì nhảy tương đối — bục số 3 gọi `next()` ra
+bài nào tuỳ lúc đó đang ở đâu.
+
+⚠️ Nhớ bục VỪA CHẠM (`lastDeck`): không có nó thì đứng yên trên bục là gọi đổi
+bài mỗi khung hình, nhạc kêu tạch tạch rồi im. Rời khỏi mọi bục mới xoá nhớ.
+
+⚠️ Bục và ô sàn **KHÔNG có va chạm**. Cho chúng va chạm là xe leo lên mắc kẹt,
+và khi ô sàn nhấp lên thì xe bị hất tung — vui đúng một lần rồi thành phiền.
+
+## ⛔ LẦN THỨ BA dẫm đúng bẫy "công trình nằm trong lòng đường"
+
+Khán đài đặt ở `z = 152` dài 18 (trải **143…161**) trong khi đường ngang
+`z = 150` có `halfWidth 4.5` — tức chiếm dải **145,5…154,5** và chạy từ x = −4
+tới x = 56, xuyên qua toàn bộ khu. `check-play-island` bắt được **6 khối chặn
+hành lang xe**. Nay khán đài ở `z = 161` dài 11 (155,5…166,5).
+
+**Và bộ kiểm MỚI của khu này báo 0 lỗi trong lúc đó** — vì nó chỉ canh sân khấu
+với sàn nhảy, không canh khán đài. Bài học kép:
+1. Dựng bất cứ thứ gì trên đảo thì **đối chiếu `PLAY_ROADS` TRƯỚC**, đừng đợi
+   bộ kiểm. Đây là lần thứ ba (trước: đường xuyên lòng sân bóng, đường trục
+   xuyên tổ quái).
+2. **Một bộ kiểm chỉ canh những gì mình nhớ ra lúc viết.** Luôn chạy CẢ bộ kiểm
+   cũ của khu vực — `check-play-island` mới là thứ cứu vụ này.
+
+⚠️ **`player.respawn()` KHÔNG dùng được trong script chụp ảnh** — nó chỉ dời xe
+bên trong callback của `overlay.show()`, ảnh chụp ra vẫn ở chỗ cũ. Dùng máy quay
+tự do: `view.setMode(2)` + `view.freeMode.setTarget(x, y, z)` + `setPosition()`.
+
+⚠️ **`map.locations` chưa tồn tại cho tới khi mở bản đồ lần đầu** (`Map.init()`
+chạy lười). Bộ kiểm đọc thẳng `map.locations.items` báo oan "chưa thêm mục" —
+gọi `map.init()` trước.
+
+---
+
+# 1. MƯỜI BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
 
 Cần dev server sống: `cd playground-3d && npm run dev` (xem mục 4).
 
@@ -1051,7 +1114,8 @@ PLAY_URL=http://localhost:5174 node tools/check-city-island.mjs    # đảo thà
 PLAY_URL=http://localhost:5174 node tools/check-cockpit.mjs        # buồng lái: 11 mục, xem mục 0f
 PLAY_URL=http://localhost:5174 node tools/check-monster-island.mjs # đảo quái: 8 mục, có QUÉT HÀNH LANG XE
 PLAY_URL=http://localhost:5174 node tools/check-carrier.mjs        # tàu sân bay: 7 mục, quét cầu dẫn + đường băng
-PLAY_URL=http://localhost:5174 node tools/check-survival.mjs       # chế độ Sinh tồn: 8 mục, xem mục 0i
+PLAY_URL=http://localhost:5174 node tools/check-survival.mjs       # chế độ Sinh tồn: 23 mục, xem mục 0i
+PLAY_URL=http://localhost:5174 node tools/check-concert.mjs        # sân khấu nhạc hội: 7 mục, xem mục 0j
 ```
 
 ⏱️ `check-survival.mjs` chạy **3–4 phút** và đó là bình thường: nó chờ theo

@@ -120,11 +120,88 @@ export const ARENA = {
  */
 export const ARENA_STUNTS = { x: -29, z: 118 }
 
-/** Ba khu còn lại — mới CHỪA ĐẤT, chưa dựng. Ghi sẵn để khu sau khỏi đè nhau. */
+/** Ba khu chừa sẵn. `concert` ĐÃ DỰNG (2/8); hai khu kia còn là đất trống. */
 export const PLOTS = {
-    concert: { x: 34, z: 150, width: 38, depth: 34 },   // sân khấu nhạc hội
+    concert: { x: 34, z: 150, width: 38, depth: 34 },   // sân khấu nhạc hội — ĐÃ DỰNG
     village: { x: -30, z: 184, width: 36, depth: 26 },  // làng ngôn ngữ JA/EN/ZH
     harbour: { x: 34, z: 186, width: 40, depth: 28 },   // bến cảng + hải đăng
+}
+
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  SÂN KHẤU NHẠC HỘI — bố cục
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * Nằm gọn trong `PLOTS.concert` (tâm 34 · 150, rộng 38 × sâu 34). Mọi toạ độ ở
+ * đây là TUYỆT ĐỐI, không phải tương đối so với tâm — gõ tương đối rồi cộng
+ * trong lúc dựng là đúng chỗ để lệch một dấu.
+ *
+ * Bố cục nhìn từ trên: sân khấu ở mép BẮC (z nhỏ, phía đầu cầu đi vào), sàn
+ * nhảy chiếm giữa, khán đài ôm hai bên, năm bục đĩa than xếp cung tròn phía
+ * trước sân khấu.
+ *
+ * ⚠️ Lối vào phải chừa ở mép NAM (z lớn): đường trục của đảo chạy dọc x = 0 và
+ * ba đường ngang, khu này tiếp giáp đường ngang z = 150 ở cạnh Tây. Bịt kín
+ * bốn phía là lái xe vào không được — đúng lỗi đã mắc hai lần (đường xuyên tổ
+ * quái, đường xuyên sân bóng).
+ */
+export const CONCERT = {
+    /** Tâm khu, lấy thẳng từ `PLOTS.concert`. */
+    x: 34,
+    z: 150,
+
+    /** Sân khấu: bục nâng cao ở mép Bắc. */
+    stage: { x: 34, z: 138, width: 22, depth: 9, height: 1.5 },
+
+    /** Sàn nhảy: lưới ô vuông nhấp theo nhạc. */
+    floor: { x: 34, z: 152, cols: 9, rows: 7, tile: 2.4, gap: 0.25 },
+
+    /**
+     * Năm bục đĩa than — lái xe lên là đổi sang bài tương ứng.
+     * Xếp thành cung tròn ôm lấy sàn nhảy, bán kính 13 quanh tâm sân khấu.
+     */
+    decks: { x: 34, z: 152, radius: 13, count: 5, size: 2.6, height: 0.55 },
+
+    /** Hai cột loa hai bên sân khấu. */
+    speakers: { offsetX: 13, z: 139, width: 2.4, depth: 2.2, height: 6.5 },
+
+    /** Giàn đèn: dàn ngang trên sân khấu, đèn quét theo nhạc. */
+    rig: { z: 141, height: 9.5, span: 20, lights: 6 },
+
+    /**
+     * Khán đài — hai dãy ở phía NAM đường ngang, quay mặt lên sân khấu.
+     *
+     * ⚠️ **z = 161, KHÔNG phải 152.** Đường ngang `z = 150` có `halfWidth 4.5`
+     * nên nó chiếm dải **145,5…154,5** và chạy từ x = −4 tới x = 56, tức xuyên
+     * qua toàn bộ khu này. Bản đầu đặt khán đài ở z = 152 dài 18 (trải
+     * 143…161) và nó nằm CHÌNH ÌNH GIỮA LÒNG ĐƯỜNG — `check-play-island` bắt
+     * được 6 khối chặn hành lang xe.
+     *
+     * Đây là **lần thứ BA** dẫm đúng cái bẫy này (trước đó: đường ngang xuyên
+     * lòng sân bóng, đường trục xuyên tổ quái). Dựng bất cứ thứ gì trên đảo:
+     * đối chiếu với `PLAY_ROADS` TRƯỚC, đừng đợi bộ kiểm.
+     */
+    stands: { offsetX: 15.5, z: 161, rows: 3, length: 11 },
+
+    /** Điểm hồi sinh: mép Nam, mũi xe quay VÀO sân khấu (−Z). */
+    respawn: { x: 34, z: 165, rotation: Math.PI * 0.5 },
+}
+
+/** Bảng màu riêng của khu nhạc hội — tông đêm hội, tách hẳn tông thể thao. */
+export const CONCERT_COLORS = {
+    stage: '#2b2440',
+    stageTrim: '#6d3fff',
+    floorA: '#3a2f55',      // ô sàn nền
+    floorB: '#453766',      // ô sàn xen kẽ
+    deck: '#1f1a2e',
+    deckRim: '#ffb03a',
+    speaker: '#1b1726',
+    speakerCone: '#3d3357',
+    truss: '#4a4458',
+    stand: '#c9cfd8',
+    standSeat: '#3d3357',
+    /** Năm màu đèn, mỗi bục đĩa một màu — cũng là màu ô sàn khi bài đó đang chạy. */
+    beams: [ '#ff4fd8', '#4fd8ff', '#b6ff4f', '#ffb03a', '#8b5cff' ],
 }
 
 /**

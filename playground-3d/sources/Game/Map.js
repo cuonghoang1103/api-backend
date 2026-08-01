@@ -46,6 +46,8 @@ export class Map
             // địa hình gốc chỉ 96) nên `worldToMap` kẹp về 1 — pin đậu sát viền
             // dưới. Nhích lên một chút cho đỡ dính mép, y hệt cách đã làm với FPTU.
             { name: 'Sân bóng', respawnName: 'arena', offset: { x: 0, y: -0.03 } },
+            // Sân khấu nhạc hội — cùng đảo sân chơi, xa hơn về Nam-Đông một chút
+            { name: 'Nhạc hội', respawnName: 'concert', offset: { x: 0.05, y: -0.02 } },
             // Đảo thành phố ở x ≈ 154, cũng ngoài phạm vi ảnh bản đồ nên pin bị
             // kẹp sát viền phải — nhích vào cho đỡ dính mép
             { name: 'Thành phố', respawnName: 'city', offset: { x: -0.03, y: 0 } },

@@ -48,6 +48,27 @@ Monster Island.
               133, dropping 53 heavy ones — 2,126,216 verts down to 150,725;
               textures resized to 1024 and re-encoded to WebP; Draco.
 
+Alien creature — the Survival mode boss (one per five waves).
+
+    ⚠⚠ CREDIT INCOMPLETE — MUST BE FILLED IN BEFORE THIS SHIPS.
+
+    The file was downloaded as "alien_creature_take_3.glb" and its author,
+    source URL and licence are not recorded anywhere in the file. Every
+    other asset here carries a verbatim notice copied from its Sketchfab
+    "Copy credits" button; this one needs the same before the boss goes
+    live, because if it is CC BY then shipping it uncredited breaks the
+    licence.
+
+    To fill in: open the model's Sketchfab page, press "Copy credits",
+    paste the notice here AND into the Credits block in
+    sources/data/consoleLog.js.
+
+    Files   : static/monsters/boss.glb
+    Modified: textures resized to 1024 and re-encoded to WebP, geometry
+              Draco-compressed (18.7 MB down to 2.6 MB). Mesh NOT
+              simplified — it is skinned, and simplifying breaks the
+              skin weights.
+
 Tiger Russian Military Vehicle — reserved for the Survival mode.
 
     ⚠ CC BY REQUIRES CREDIT. This block is the credit — do not remove it,

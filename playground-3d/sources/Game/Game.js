@@ -155,6 +155,19 @@ export class Game
                  * và 1,0 MB, mà vẫn trải khắp con tàu nên vẫn ra dáng.
                  */
                 [ 'carrierModel',                          `carrier/carrier.glb${cb}`,                                                           'gltf' ],
+                /**
+                 * QUÁI TRÙM của chế độ Sinh tồn — model có xương (78 khớp) và
+                 * một clip hoạt ảnh. Xem `static/ATTRIBUTION.txt`.
+                 *
+                 * ⚠️ Cũng KHÔNG có `${compressedModelSuffix}` như `cityModel`:
+                 * đã nén sẵn một bản dùng cho cả dev lẫn production
+                 * (18,7 MB → 2,6 MB — texture WebP 1024 + Draco).
+                 *
+                 * ⚠️ **KHÔNG `--simplify`**: model có skinning, giản lược lưới
+                 * là phá trọng số xương và con quái méo mó khi cử động. 28.550
+                 * đỉnh cho MỘT con trùm là chấp nhận được (cả thế giới 804k).
+                 */
+                [ 'bossModel',                             `monsters/boss.glb${cb}`,                                                             'gltf' ],
                 [ 'fencesModel',                           `fences/fences${compressedModelSuffix}.glb${cb}`,                                     'gltf' ],
                 [ 'benchesModel',                          `benches/benches${compressedModelSuffix}.glb${cb}`,                                   'gltf' ],
                 [ 'explosiveCratesModel',                  `explosiveCrates/explosiveCrates${compressedModelSuffix}.glb${cb}`,                   'gltf' ],

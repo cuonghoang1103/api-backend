@@ -93,9 +93,31 @@ export const SURVIVAL_MONSTERS = {
         hp: 130,
         speed: 2.6,
         damage: 40,
-        radius: 2,
-        hitHeight: 2.6,
+
+        /**
+         * ⚠️ BA SỐ NÀY LÀ TỈ LỆ, KHÔNG PHẢI ĐƠN VỊ THẬT — mọi chỗ dùng chúng
+         * đều nhân với `scale`. Gõ thẳng số thật vào là con trùm phồng lên gấp
+         * `scale` lần: đặt `radius: 2` ra bán kính 5,4 và `hitHeight: 2,6` ra
+         * 7,0 trên một con chỉ cao 3,4.
+         */
+        radius: 0.5,       // → 1,35 đơn vị
+        hitHeight: 1.45,   // → 3,9 — ngang ngực, chỗ máu phun ra
         scale: 2.7,
+
+        /**
+         * Chiều cao THẬT sau khi nhân `scale`, dùng để co model.
+         *
+         * ⚠️ 6,2 chứ không phải 3,4 — và con số đó đến từ phép đo, không phải
+         * cảm tính. Model này có tỉ lệ rộng/cao **0,35** ngay ở bản gốc (rộng
+         * 1,20 · cao 3,47): nó vốn là một sinh vật gầy và dài. Co về ngang tầm
+         * hai con quái to xác thì nhìn từ máy quay trên cao nó ra đúng "một cái
+         * que đen" — chụp ảnh mới thấy, số đo thì vẫn báo đúng 3,45.
+         *
+         * Cao gấp đôi thì chính cái gầy ấy lại thành ưu điểm: nó vượt hẳn lên
+         * trên tầm mắt, đổ bóng dài, và đọc ra ngay là "thứ không nên lại gần".
+         */
+        modelHeight: 6.2,
+
         money: 260,
         score: 600,
         isBoss: true,

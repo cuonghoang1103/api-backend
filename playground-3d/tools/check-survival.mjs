@@ -685,6 +685,81 @@ const facts = {}
         }
     })
 
+    /**
+     * Trùm dựng từ MODEL THẬT — đo chiều cao thật trong cảnh.
+     *
+     * Đây là phép kiểm đáng giá nhất của mục này: `makeBossModel()` co model
+     * theo `modelHeight / spec.scale` vì `add()` còn nhân `spec.scale` lần nữa.
+     * Quên phép chia đó thì con trùm cao 9,2 thay vì 3,4 — thò đầu qua mái nhà,
+     * và KHÔNG có lỗi nào cả.
+     */
+    const shape = await page.evaluate(() =>
+    {
+        const s = window.game.world.survival
+        if(!s.boss) return null
+
+        /**
+         * ⚠️ KHÔNG `import('three/webgpu')` trong trang — trình duyệt không
+         * phân giải được tên gói trần (Vite chỉ viết lại import lúc dựng, còn
+         * `page.evaluate` chạy ngoài đồ thị module đó). Đo tay: 8 góc hộp bao
+         * hình học của từng lưới, nhân `matrixWorld`, lấy min/max theo Y.
+         */
+        s.boss.root.updateMatrixWorld(true)
+
+        let minY = Infinity
+        let maxY = -Infinity
+        let skinned = 0
+
+        s.boss.root.traverse((child) =>
+        {
+            if(child.isSkinnedMesh) skinned++
+            if(!child.geometry) return
+
+            if(!child.geometry.boundingBox) child.geometry.computeBoundingBox()
+            const bb = child.geometry.boundingBox
+            if(!bb) return
+
+            const m = child.matrixWorld.elements
+            for(const cx of [ bb.min.x, bb.max.x ])
+                for(const cy of [ bb.min.y, bb.max.y ])
+                    for(const cz of [ bb.min.z, bb.max.z ])
+                    {
+                        const y = m[1] * cx + m[5] * cy + m[9] * cz + m[13]
+                        minY = Math.min(minY, y)
+                        maxY = Math.max(maxY, y)
+                    }
+        })
+
+        return {
+            height: maxY - minY,
+            footY: minY,
+            groundY: s.boss.groundY,
+            skinned,
+            hasMixer: !!s.boss.mixer,
+            gait: s.boss.gait,
+            wanted: s.boss.spec.modelHeight,
+        }
+    })
+
+    if(shape)
+    {
+        facts['6d. hình trùm'] = `cao ${shape.height.toFixed(2)} (muốn ${shape.wanted}) · ${shape.skinned} lưới có xương · `
+            + `mixer ${shape.hasMixer ? 'có' : 'KHÔNG'} · chân lệch đất ${(shape.footY - shape.groundY).toFixed(2)}`
+
+        if(shape.gait !== 'model')
+            problems.push('Quái trùm KHÔNG dựng từ model (đã lùi về dáng dựng bằng mã) — kiểm `resources.bossModel`')
+        else
+        {
+            if(shape.skinned === 0) problems.push('Model trùm không có lưới nào gắn xương — clone hỏng skinning')
+            if(!shape.hasMixer) problems.push('Model trùm không có AnimationMixer — nó sẽ đứng đơ')
+            if(Math.abs(shape.height - shape.wanted) > shape.wanted * 0.25)
+                problems.push(`Trùm cao ${shape.height.toFixed(2)} trong khi muốn ${shape.wanted} — phép co model sai (nhớ CHIA cho spec.scale)`)
+            if(Math.abs(shape.footY - shape.groundY) > 0.5)
+                problems.push(`Chân trùm lệch mặt đất ${(shape.footY - shape.groundY).toFixed(2)} — nó đang lơ lửng hoặc lún`)
+        }
+    }
+    else problems.push('Không đo được hình dạng quái trùm')
+
     facts['6d. quái trùm'] = `sóng ${boss.wave} sinh trùm=${boss.pendingAtWave5} · máu ${boss.hp} · cỡ ${boss.scale?.toFixed(2)} · thanh máu ${bossState.barVisible ? 'hiện' : 'KHÔNG hiện'}`
 
     if(!boss.pendingAtWave5) problems.push('Sóng 5 KHÔNG đặt lịch sinh quái trùm')

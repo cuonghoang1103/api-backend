@@ -125,10 +125,16 @@
  */
 .survival-boss
     position absolute
-    /* Dưới vùng thông báo (`.notifications` ở top 20px, cao chừng 100px) — đặt
-       ngang nhau thì đúng lúc trùm xuất hiện là hai khối chồng khít lên nhau,
-       vì chính lúc đó cũng là lúc thông báo "Sóng N — QUÁI TRÙM" đang hiện */
-    top 132px
+    /*
+     * DƯỚI CÙNG, giữa — không phải trên đầu.
+     *
+     * Đã thử `top: 18px` rồi `top: 132px` và cả hai đều chồng lên khung thông
+     * báo: đúng lúc trùm xuất hiện cũng là lúc thông báo "Sóng N — QUÁI TRÙM"
+     * đang hiện, mà khung đó cao tới ~230px khi tiêu đề xuống hai dòng. Dưới
+     * cùng thì sạch: chỗ đó chỉ có cửa hàng, mà cửa hàng chỉ mở trong nhịp nghỉ
+     * — không bao giờ cùng lúc với một con trùm đang sống.
+     */
+    bottom 20px
     left 50%
     z-index 2
     width 320px

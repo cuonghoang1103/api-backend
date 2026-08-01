@@ -1,5 +1,6 @@
 import * as THREE from 'three/webgpu'
 import { color } from 'three/tsl'
+import { clone as cloneSkinned } from 'three/examples/jsm/utils/SkeletonUtils.js'
 import { Game } from '../Game.js'
 import { MeshDefaultMaterial } from '../Materials/MeshDefaultMaterial.js'
 import { SURVIVAL_BLOOD, SURVIVAL_MONSTERS, SURVIVAL_SPAWN, SURVIVAL_STEALTH } from '../../data/survival.js'
@@ -31,8 +32,16 @@ const rand = (seed) =>
     return x - Math.floor(x)
 }
 
-/** Bắn tia bám đất chia làm ngần này lát; mỗi khung hình chỉ một lát được bắn. */
-const GROUND_SLICES = 12
+/**
+ * Bắn tia bám đất chia làm ngần này lát; mỗi khung hình chỉ một lát được bắn.
+ *
+ * ⚠️ Đã hạ 12 → 6 sau khi thêm cơ chế NẤP. Trước đó quái đi THẲNG về phía xe,
+ * gần như luôn trên đường phẳng; giờ chúng lảng vảng theo vòng tròn nên hay đi
+ * vào bờ dốc và mép nước — 12 khung một lần đo là đủ để một con leo dốc mà cao
+ * độ vẫn giữ giá trị cũ (đo được lệch 0,68) hoặc lội xuống nước cả nửa giây
+ * trước khi bị kéo lại. Sáu lát là 26 con chia ra ~4,3 tia mỗi khung hình.
+ */
+const GROUND_SLICES = 6
 
 export class SurvivalMonsters
 {
@@ -317,20 +326,117 @@ export class SurvivalMonsters
         return { root, legs, arms, torso, head, eyes, gait: 'lumber' }
     }
 
+    /**
+     * QUÁI TRÙM DỰNG TỪ MODEL THẬT — chỗ duy nhất trong chế độ này dùng model.
+     *
+     * ─── VÌ SAO CHỈ TRÙM ────────────────────────────────────────────────────
+     * Model có xương phải `SkeletonUtils.clone` (clone thường dùng CHUNG bộ
+     * xương — mọi bản sao cử động y hệt nhau, dính cứng vào nhau) và mỗi con là
+     * một `AnimationMixer` cập nhật 78 khớp mỗi khung hình. Một con thì rẻ,
+     * hai mươi lăm con thì không. Đàn quái thường vẫn dựng bằng mã.
+     *
+     * ─── CLIP THẾ NÀO ───────────────────────────────────────────────────────
+     * Model chỉ có MỘT clip dài 15,5 giây kiểu trình diễn, không phải vòng lặp
+     * "đi bộ" sạch. Với con trùm đi chậm thì vẫn hợp — nó lừ đừ và cựa quậy,
+     * đúng thứ cần. `timeScale` kéo chậm còn 0,55 cho ra dáng nặng nề.
+     *
+     * ⚠️ Trả về `null` nếu model chưa nạp được — chỗ gọi phải tự lùi về dáng
+     * dựng bằng mã, không được để văng lỗi giữa lúc đang sinh quái.
+     */
+    makeBossModel(spec)
+    {
+        const source = this.game.resources?.bossModel
+        if(!source?.scene) return null
+
+        const root = new THREE.Group()
+        const model = cloneSkinned(source.scene)
+
+        /**
+         * Model cao bao nhiêu thì chưa biết — mỗi model một tỉ lệ. Đo hộp bao
+         * rồi co về đúng chiều cao mong muốn, thay vì gõ cứng một con số chỉ
+         * đúng với riêng file này.
+         */
+        const box = new THREE.Box3().setFromObject(model)
+        const height = Math.max(0.001, box.max.y - box.min.y)
+
+        /**
+         * ⚠️ CHIA cho `spec.scale`: `add()` sẽ nhân cả nhóm gốc lên `spec.scale`
+         * lần nữa. Co thẳng về `modelHeight` ở đây là con trùm ra cao 9,2 thay
+         * vì 3,4 — nó thò đầu qua cả mái nhà mà không báo lỗi gì.
+         */
+        const wanted = spec.modelHeight / spec.scale
+        const scale = wanted / height
+
+        model.scale.setScalar(scale)
+        // Kéo chân về đúng mặt đất: sau khi co, đáy hộp bao nằm ở `box.min.y × scale`
+        model.position.y = -box.min.y * scale
+        // Model quay mặt về +Z hay −Z là tuỳ người dựng; xoay nửa vòng cho khớp
+        // quy ước của đàn quái (mặt về +Z, xem `heading`)
+        model.rotation.y = Math.PI
+
+        model.traverse((child) =>
+        {
+            if(!child.isMesh && !child.isSkinnedMesh) return
+            child.castShadow = true
+            child.receiveShadow = true
+            // Bộ cắt theo hộp bao tính trên tư thế NGHỈ — con quái vung tay ra
+            // ngoài hộp đó là biến mất từng mảng giữa lúc đánh nhau
+            child.frustumCulled = false
+        })
+
+        // Giữ nguyên texture, chỉ chuyển sang hệ TSL — model tự ăn đúng ánh
+        // sáng, sương mù và bóng đổ của game (đúng như city kit và tàu sân bay)
+        this.game.materials.updateObject(model)
+        root.add(model)
+
+        const mixer = new THREE.AnimationMixer(model)
+        const clip = source.animations?.[0]
+        if(clip)
+        {
+            const action = mixer.clipAction(clip)
+            action.timeScale = 0.55
+            action.play()
+        }
+
+        /**
+         * Hai con mắt tự phát sáng gắn THÊM lên model.
+         *
+         * Model có mắt riêng của nó, nhưng mắt đó ăn ánh sáng cảnh nên tối om
+         * trong đêm — mà "cặp mắt sáng trong đêm" chính là ngôn ngữ đã dùng cho
+         * cả ba loại quái kia. Thiếu nó thì con trùm không cùng một họ.
+         */
+        const eyes = []
+        for(const side of [ -1, 1 ])
+        {
+            const eye = new THREE.Mesh(this.sphereGeometry, this.glowMaterial(spec.colors.eye))
+            eye.scale.setScalar(0.17)
+            eye.position.set(side * 0.16, wanted * 0.86, 0.42)
+            eye.castShadow = false
+            root.add(eye)
+            eyes.push(eye)
+        }
+
+        return { root, legs: [], arms: [], eyes, mixer, gait: 'model', model }
+    }
+
     make(type, seed)
     {
         const spec = SURVIVAL_MONSTERS[type]
 
         if(type === 'crawler') return this.makeCrawler(spec, seed)
 
-        /**
-         * Quái trùm dùng lại ĐÚNG dáng "quái to xác", chỉ khác cỡ và màu.
-         *
-         * Cố ý không vẽ một con thứ tư: cùng một dáng phóng to gấp đôi thì
-         * người chơi ĐỌC RA ngay "cái này giống con kia nhưng to khủng khiếp",
-         * và đó là thứ làm nó đáng sợ. Một hình thù lạ hoắc chỉ gây bối rối.
-         */
-        if(type === 'brute' || type === 'boss') return this.makeBrute(spec, seed)
+        if(type === 'boss')
+        {
+            // Model thật nếu nạp được; không thì lùi về dáng "quái to xác"
+            // phóng to — chơi vẫn được, chỉ kém hoành tráng
+            const built = this.makeBossModel(spec)
+            if(built) return built
+
+            console.warn('[Survival] không thấy `resources.bossModel` — quái trùm dựng bằng mã')
+            return this.makeBrute(spec, seed)
+        }
+
+        if(type === 'brute') return this.makeBrute(spec, seed)
 
         return this.makeStalker(spec, seed)
     }
@@ -863,7 +969,18 @@ export class SurvivalMonsters
              * hai thứ chồng lên nhau thì phép nội suy ăn mất nửa cái nhún và
              * dáng đi đờ ra.
              */
-            m.smoothY += (m.groundY - m.smoothY) * Math.min(1, delta * 9)
+            /**
+             * Chênh nhiều thì NHẢY THẲNG, chênh ít mới trượt dần.
+             *
+             * Chỉ trượt dần thôi là không đủ: xuống một bờ dốc, cao độ nền tụt
+             * cả mét một lúc, và phép nội suy mềm để con quái treo lơ lửng trên
+             * không suốt gần một giây. Mềm là để giấu chỗ nhảy cóc nhỏ giữa hai
+             * lần bắn tia, không phải để đuổi theo địa hình.
+             */
+            const gap = m.groundY - m.smoothY
+            if(Math.abs(gap) > 0.8) m.smoothY = m.groundY
+            else m.smoothY += gap * Math.min(1, delta * 12)
+
             position.y = m.smoothY
 
             this.animate(m, arrived, delta)
@@ -972,6 +1089,26 @@ export class SurvivalMonsters
         const swing = Math.sin(monster.phase)
         const swingB = Math.sin(monster.phase + Math.PI)
 
+        /**
+         * ── Dựng từ MODEL: hoạt ảnh do `AnimationMixer` lo ───────────────────
+         *
+         * Không có khớp nào để xoay ở đây — bộ xương 78 khớp đã được clip điều
+         * khiển. Việc duy nhất còn lại là cho mixer chạy, và chỉ chạy khi con
+         * quái CÒN SỐNG: chết rồi thì nhánh ngã đổ trong `update()` xoay cả
+         * nhóm gốc, mà mixer vẫn chạy thì nó vừa nằm vừa bước, trông như lỗi.
+         */
+        if(monster.gait === 'model')
+        {
+            monster.mixer?.update(delta)
+
+            // Nhún nhẹ theo bước để nó không trôi phẳng lì trên mặt đất
+            monster.root.position.y += Math.abs(swing) * 0.05 * monster.scale
+            monster.phase += delta * 1.6
+
+            this.updateEyes(monster, delta)
+            return
+        }
+
         if(monster.gait === 'crawl')
         {
             // Bò: bốn chân đạp lệch pha, thân nhấp nhô sát đất
@@ -1032,6 +1169,12 @@ export class SurvivalMonsters
             }
         }
 
+        this.updateEyes(monster, delta)
+    }
+
+    /** Mắt: nhấp nháy khi ăn đòn, nheo lại khi mất dấu. Dùng chung cho cả bốn loại. */
+    updateEyes(monster, delta)
+    {
         // ── Mắt nhấp nháy khi vừa ăn đòn ─────────────────────────────────────
         if(monster.flash > 0)
         {

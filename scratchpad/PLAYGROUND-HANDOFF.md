@@ -13,7 +13,7 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
 `index-DiwDiDLl.js`) — chế độ lái người thứ nhất, đảo quái vật, tàu sân bay.
 
 **2/8**: **CHẾ ĐỘ SINH TỒN** (mục 0i) — quái + sóng + máu đen + tiền, cộng
-**cửa hàng nâng cấp**, **cơ chế NẤP** và **quái trùm**. Gói `index-DBMDE7ze.js`
+**cửa hàng nâng cấp**, **cơ chế NẤP**, **quái trùm dùng MODEL THẬT**. Gói `index-DWVe15I0.js`
 đã dựng và rsync sang `frontend/public/playground`. **CHƯA deploy, CHƯA push.**
 
 Đầu phiên sau, so gói prod với local; lệch thì chạy `bash deploy.sh` nền:
@@ -844,12 +844,51 @@ TẮT): đo được 4/4 con sinh ngoài tầm vẫn tiến 39,0 → 35,0 sau 2,
 số, đừng chỉ nhìn dòng "✅". Mục 3 báo khoảng cách chỉ giảm 34,6 → 31,9 (lần
 trước 26,8 → 16,1) — vẫn "pass", nhưng chính chỗ chênh đó là cái bế tắc.
 
-### QUÁI TRÙM — mỗi `SURVIVAL_WAVES.bossEvery = 5` sóng
+### QUÁI TRÙM — mỗi `SURVIVAL_WAVES.bossEvery = 5` sóng, DÙNG MODEL THẬT
 
-Dùng lại ĐÚNG dáng "quái to xác" phóng to 2,7 lần: cùng một dáng to gấp đôi thì
-người chơi đọc ra ngay "giống con kia nhưng to khủng khiếp", còn một hình thù lạ
-hoắc chỉ gây bối rối. Máu 130, **không nấp khỏi nó được** (`bossAlwaysSees`),
-thanh máu riêng trên đầu màn hình, chết thì rơi sáu đồng rải quanh xác.
+`static/monsters/boss.glb` — model có xương (78 khớp, 5 lưới) + 1 clip, nạp qua
+`resources.bossModel`, dựng trong `SurvivalMonsters.makeBossModel()`. Máu 130,
+**không nấp khỏi nó được** (`bossAlwaysSees`), thanh máu riêng, chết rơi sáu
+đồng rải quanh xác. Không nạp được model thì tự lùi về dáng "quái to xác" dựng
+bằng mã — chơi vẫn được, chỉ kém hoành tráng.
+
+**Chỉ TRÙM mới dùng model, đàn quái thường vẫn dựng bằng mã.** Model có xương
+phải `SkeletonUtils.clone` (clone thường dùng CHUNG bộ xương — mọi bản sao cử
+động y hệt và dính cứng vào nhau) và mỗi con là một `AnimationMixer` cập nhật 78
+khớp mỗi khung hình. Một con thì rẻ, hai mươi lăm con thì không.
+
+⚠️ **PHẢI CHIA cho `spec.scale` khi co model**: `add()` còn nhân cả nhóm gốc lên
+`spec.scale` lần nữa. Co thẳng về `modelHeight` là con trùm ra cao 9,2 thay vì
+3,4 — thò đầu qua mái nhà, không một lỗi nào. Bộ kiểm nay đo chiều cao THẬT
+trong cảnh và so với `modelHeight`.
+
+⚠️ `frustumCulled = false` cho mọi lưới của model: bộ cắt theo hộp bao tính trên
+tư thế NGHỈ, con quái vung tay ra ngoài hộp đó là biến mất từng mảng giữa lúc
+đánh nhau.
+
+⚠️ **KHÔNG `--simplify` khi nén model có xương** — giản lược lưới phá trọng số
+skin và con quái méo mó khi cử động. 28.550 đỉnh cho MỘT con là chấp nhận được.
+
+### ⚠️ MODEL "ĐÚNG SỐ ĐO" VẪN CÓ THỂ XẤU — chỉ ẢNH mới nói ra
+
+Đặt `modelHeight: 3.4` (ngang tầm hai con quái to xác) thì **bộ kiểm báo 0 lỗi,
+chiều cao đo được 3,45 — đúng y yêu cầu** — nhưng ảnh chụp cho ra **một cái que
+đen** cạnh chiếc xe. Lý do đo được sau đó: model này có tỉ lệ **rộng/cao = 0,35
+ngay ở bản gốc** (rộng 1,20 · cao 3,47), tức nó vốn là sinh vật gầy và dài.
+
+Sửa bằng cách cho nó cao **6,2** — gấp đôi. Chính cái gầy ấy thành ưu điểm: nó
+vượt hẳn lên trên tầm mắt, đổ bóng dài, đọc ra ngay là "thứ không nên lại gần".
+
+**Bài học**: số đo trả lời được "có đúng kích thước không", KHÔNG trả lời được
+"nhìn có ra gì không". Với bất cứ model ngoài nào, **phải chụp ảnh mới biết** —
+và chụp ở cả camera bám xe (ban ngày, sau khi thông báo đã tắt) chứ không chỉ
+trong cabin.
+
+⚠️ **ĐỪNG ĐOÁN hướng nhìn của cabin để đặt vật thể vào khung.** Hai lần chụp
+liền đặt quái ở "+X" theo suy luận từ `baseYaw = −π/2` và cả hai lần khung hình
+trống trơn, trong khi số liệu chứng minh quái vẫn ở đó. Đọc thẳng
+`view.camera.getWorldDirection(v3)` rồi đặt dọc theo hướng đó (đo được hướng
+thật là `0,97 · 0,23`).
 
 ⚠️ Sinh khi `toSpawn <= 2` chứ không phải đầu sóng: vào sóng mà thấy nó lù lù
 trước mặt thì chỉ có chạy, để nó tới lúc đang bận đánh nhau mới là bất ngờ.

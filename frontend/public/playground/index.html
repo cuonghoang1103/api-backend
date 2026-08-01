@@ -255,8 +255,8 @@
             .fptu-gate-title{ font-size:1.25rem; }
         }
     </style>
-  <script type="module" crossorigin src="./assets/index-DiwDiDLl.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-Bj6Jhzfx.css">
+  <script type="module" crossorigin src="./assets/index-Ce1_CxE-.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-B-WURdOQ.css">
 </head>
 <body>
 
@@ -341,6 +341,38 @@
         <p class="js-fptu-quiz-explain vocab-example" hidden></p>
         <div class="js-fptu-quiz-choices vocab-choices"></div>
         <p class="vocab-hint">Bấm 1–6 hoặc bấm chuột</p>
+    </div>
+
+    <!--
+        ─── Chế độ Sinh tồn: bảng số + màn thua ──────────────────────────────
+        Logic ở Game/World/Survival.js. Bật ở Cài đặt → Survival.
+
+        Nép GÓC TRÁI DƯỚI, cố ý: góc phải là ba nút ☰ / bản đồ / thoát, giữa
+        màn hình là chỗ lái. Bảng này hiện suốt lúc chơi nên không được chắn
+        đường nhìn — xem style/survival.styl.
+    -->
+    <div class="js-survival-hud survival-hud" aria-live="polite">
+        <div class="survival-health">
+            <div class="survival-health-track">
+                <div class="js-survival-health-bar survival-health-bar"></div>
+            </div>
+            <span class="js-survival-health-value survival-health-value">100</span>
+        </div>
+        <div class="survival-stats">
+            <span class="survival-stat"><i>Sóng</i><b class="js-survival-wave">0</b></span>
+            <span class="survival-stat"><i>Còn</i><b class="js-survival-left">0</b></span>
+            <span class="survival-stat"><i>Tiền</i><b class="js-survival-money">0</b></span>
+            <span class="survival-stat"><i>Điểm</i><b class="js-survival-score">0</b></span>
+        </div>
+        <p class="js-survival-state survival-state">Nghỉ</p>
+    </div>
+
+    <div class="js-survival-defeated survival-defeated" role="status">
+        <div class="survival-defeated-panel">
+            <h2 class="survival-defeated-title">Bạn đã gục</h2>
+            <p class="js-survival-defeated-wave survival-defeated-wave"></p>
+            <p class="survival-defeated-hint">Đang dựng lại từ sóng 1…</p>
+        </div>
     </div>
 
     <div class="js-fonts-loader fonts-loader">
@@ -715,6 +747,18 @@
                                                     <button class="button is-small" data-mode="off">Off</button>
                                                     <button class="button is-small" data-mode="on">On</button>
                                                     <button class="button is-small" data-action="reset">Reset</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Survival
+                                            </td>
+                                            <td>
+                                                <div class="js-survival-modes segmented has-tooltip">
+                                                    <div class="tooltip">Night falls and alien monsters hunt you down, wave after wave. Ram them or shoot them — they bleed black and drop cash. Stay in the car</div>
+                                                    <button class="button is-small" data-mode="off">Off</button>
+                                                    <button class="button is-small" data-mode="on">On</button>
                                                 </div>
                                             </td>
                                         </tr>

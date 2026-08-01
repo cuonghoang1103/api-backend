@@ -14191,7 +14191,7 @@ ${r}`;
   MathNode$1.REFRACT = "refract";
   MathNode$1.SMOOTHSTEP = "smoothstep";
   MathNode$1.FACEFORWARD = "faceforward";
-  const EPSILON$1 = float$2(1e-6), INFINITY = float$2(1e6), PI$2 = float$2(Math.PI), PI2$1 = float$2(Math.PI * 2), TWO_PI = float$2(Math.PI * 2), HALF_PI = float$2(Math.PI * 0.5), all$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ALL).setParameterLength(1), any$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ANY).setParameterLength(1), radians$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.RADIANS).setParameterLength(1), degrees$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.DEGREES).setParameterLength(1), exp$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.EXP).setParameterLength(1), exp2$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.EXP2).setParameterLength(1), log$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.LOG).setParameterLength(1), log2$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.LOG2).setParameterLength(1), sqrt$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.SQRT).setParameterLength(1), inverseSqrt$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.INVERSE_SQRT).setParameterLength(1), floor$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.FLOOR).setParameterLength(1), ceil$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.CEIL).setParameterLength(1), normalize$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.NORMALIZE).setParameterLength(1), fract$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.FRACT).setParameterLength(1), sin$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.SIN).setParameterLength(1), cos$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.COS).setParameterLength(1), tan$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TAN).setParameterLength(1), asin$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ASIN).setParameterLength(1), acos$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ACOS).setParameterLength(1), atan$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.ATAN).setParameterLength(1, 2), abs$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.ABS).setParameterLength(1), sign$4 = nodeProxyIntent$1(MathNode$1, MathNode$1.SIGN).setParameterLength(1), length$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.LENGTH).setParameterLength(1), negate$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.NEGATE).setParameterLength(1), oneMinus$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ONE_MINUS).setParameterLength(1), dFdx$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DFDX).setParameterLength(1), dFdy$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DFDY).setParameterLength(1), round$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.ROUND).setParameterLength(1), reciprocal$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.RECIPROCAL).setParameterLength(1), trunc$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRUNC).setParameterLength(1), fwidth$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.FWIDTH).setParameterLength(1), transpose$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRANSPOSE).setParameterLength(1), determinant$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DETERMINANT).setParameterLength(1), inverse$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.INVERSE).setParameterLength(1), min$1$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.MIN).setParameterLength(2, 1 / 0), max$1$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.MAX).setParameterLength(2, 1 / 0), step$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.STEP).setParameterLength(2), reflect$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.REFLECT).setParameterLength(2), distance$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DISTANCE).setParameterLength(2), difference$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DIFFERENCE).setParameterLength(2), dot$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.DOT).setParameterLength(2), cross$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.CROSS).setParameterLength(2), pow$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.POW).setParameterLength(2), pow2$1 = (l) => mul$2(l, l), pow3$1 = (l) => mul$2(l, l, l), pow4$1 = (l) => mul$2(l, l, l, l), transformDirection$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRANSFORM_DIRECTION).setParameterLength(2), cbrt$1 = (l) => mul$2(sign$4(l), pow$2(abs$3(l), 1 / 3)), lengthSq$1 = (l) => dot$2(l, l), mix$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.MIX).setParameterLength(3), clamp$6 = (l, e = 0, r = 1) => new MathNode$1(MathNode$1.CLAMP, nodeObject$2(l), nodeObject$2(e), nodeObject$2(r)), saturate$1 = (l) => clamp$6(l), refract$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.REFRACT).setParameterLength(3), smoothstep$4 = nodeProxyIntent$1(MathNode$1, MathNode$1.SMOOTHSTEP).setParameterLength(3), faceForward$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.FACEFORWARD).setParameterLength(3), rand$5 = Fn$2(([l]) => {
+  const EPSILON$1 = float$2(1e-6), INFINITY = float$2(1e6), PI$2 = float$2(Math.PI), PI2$1 = float$2(Math.PI * 2), TWO_PI = float$2(Math.PI * 2), HALF_PI = float$2(Math.PI * 0.5), all$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ALL).setParameterLength(1), any$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ANY).setParameterLength(1), radians$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.RADIANS).setParameterLength(1), degrees$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.DEGREES).setParameterLength(1), exp$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.EXP).setParameterLength(1), exp2$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.EXP2).setParameterLength(1), log$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.LOG).setParameterLength(1), log2$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.LOG2).setParameterLength(1), sqrt$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.SQRT).setParameterLength(1), inverseSqrt$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.INVERSE_SQRT).setParameterLength(1), floor$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.FLOOR).setParameterLength(1), ceil$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.CEIL).setParameterLength(1), normalize$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.NORMALIZE).setParameterLength(1), fract$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.FRACT).setParameterLength(1), sin$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.SIN).setParameterLength(1), cos$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.COS).setParameterLength(1), tan$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TAN).setParameterLength(1), asin$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ASIN).setParameterLength(1), acos$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ACOS).setParameterLength(1), atan$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.ATAN).setParameterLength(1, 2), abs$3 = nodeProxyIntent$1(MathNode$1, MathNode$1.ABS).setParameterLength(1), sign$4 = nodeProxyIntent$1(MathNode$1, MathNode$1.SIGN).setParameterLength(1), length$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.LENGTH).setParameterLength(1), negate$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.NEGATE).setParameterLength(1), oneMinus$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.ONE_MINUS).setParameterLength(1), dFdx$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DFDX).setParameterLength(1), dFdy$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DFDY).setParameterLength(1), round$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.ROUND).setParameterLength(1), reciprocal$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.RECIPROCAL).setParameterLength(1), trunc$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRUNC).setParameterLength(1), fwidth$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.FWIDTH).setParameterLength(1), transpose$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRANSPOSE).setParameterLength(1), determinant$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DETERMINANT).setParameterLength(1), inverse$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.INVERSE).setParameterLength(1), min$1$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.MIN).setParameterLength(2, 1 / 0), max$1$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.MAX).setParameterLength(2, 1 / 0), step$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.STEP).setParameterLength(2), reflect$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.REFLECT).setParameterLength(2), distance$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DISTANCE).setParameterLength(2), difference$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.DIFFERENCE).setParameterLength(2), dot$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.DOT).setParameterLength(2), cross$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.CROSS).setParameterLength(2), pow$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.POW).setParameterLength(2), pow2$1 = (l) => mul$2(l, l), pow3$1 = (l) => mul$2(l, l, l), pow4$1 = (l) => mul$2(l, l, l, l), transformDirection$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.TRANSFORM_DIRECTION).setParameterLength(2), cbrt$1 = (l) => mul$2(sign$4(l), pow$2(abs$3(l), 1 / 3)), lengthSq$1 = (l) => dot$2(l, l), mix$2 = nodeProxyIntent$1(MathNode$1, MathNode$1.MIX).setParameterLength(3), clamp$6 = (l, e = 0, r = 1) => new MathNode$1(MathNode$1.CLAMP, nodeObject$2(l), nodeObject$2(e), nodeObject$2(r)), saturate$1 = (l) => clamp$6(l), refract$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.REFRACT).setParameterLength(3), smoothstep$4 = nodeProxyIntent$1(MathNode$1, MathNode$1.SMOOTHSTEP).setParameterLength(3), faceForward$1 = nodeProxyIntent$1(MathNode$1, MathNode$1.FACEFORWARD).setParameterLength(3), rand$6 = Fn$2(([l]) => {
     const s = 43758.5453, o = dot$2(l.xy, vec2$2(12.9898, 78.233)), a = mod$3(o, PI$2);
     return fract$2(sin$2(a).mul(s));
   }), mixElement$1 = (l, e, r) => mix$2(e, r, l), smoothstepElement$1 = (l, e, r) => smoothstep$4(e, r, l), stepElement$1 = (l, e) => step$2(e, l), faceforward = faceForward$1, inversesqrt = inverseSqrt$1;
@@ -14250,7 +14250,7 @@ ${r}`;
   addMethodChaining$1("transpose", transpose$1);
   addMethodChaining$1("determinant", determinant$1);
   addMethodChaining$1("inverse", inverse$1);
-  addMethodChaining$1("rand", rand$5);
+  addMethodChaining$1("rand", rand$6);
   let ConditionalNode$1 = class extends Node$1 {
     static get type() {
       return "ConditionalNode";
@@ -24395,7 +24395,7 @@ ${e.tab}if ( ${m} ) {
     quadSwapX,
     quadSwapY,
     radians: radians$1,
-    rand: rand$5,
+    rand: rand$6,
     range: range$1,
     rangeFogFactor: rangeFogFactor$1,
     reciprocal: reciprocal$1,
@@ -52817,7 +52817,7 @@ var<${s}> ${e} : ${h};`;
   const premultiplyAlpha$1 = TSL.premultiplyAlpha;
   TSL.property;
   TSL.radians;
-  const rand$4 = TSL.rand;
+  const rand$5 = TSL.rand;
   TSL.range;
   TSL.rangeFog;
   const rangeFogFactor = TSL.rangeFogFactor;
@@ -55791,7 +55791,7 @@ var<${s}> ${e} : ${h};`;
       end: s,
       type: "float"
     }, ({ i: d }) => {
-      const f = vec2$1(vec2$1(cos$1(degrees$1(d.div(s).mul(360))), sin$1(degrees$1(d.div(s).mul(360)))).mul(rand$4(vec2$1(d, h.x.add(h.y))).add(e))), p = vec2$1(h.add(f.mul(e)));
+      const f = vec2$1(vec2$1(cos$1(degrees$1(d.div(s).mul(360))), sin$1(degrees$1(d.div(s).mul(360)))).mul(rand$5(vec2$1(d, h.x.add(h.y))).add(e))), p = vec2$1(h.add(f.mul(e)));
       c.addAssign(a(p));
     }), c.divAssign(s), o ? unpremultiplyAlpha(c) : c;
   });
@@ -95659,7 +95659,7 @@ https://github.com/browserify/crypto-browserify`);
       return e + o * s;
     }
   }
-  const rand$3 = (l) => {
+  const rand$4 = (l) => {
     const e = Math.sin(l * 127.1 + 311.7) * 43758.5453;
     return e - Math.floor(e);
   };
@@ -95690,11 +95690,11 @@ https://github.com/browserify/crypto-browserify`);
           const p = f / d * 4;
           let m, b;
           p < 1 ? (m = s.x - a + p * a * 2, b = s.z - h) : p < 2 ? (m = s.x + a, b = s.z - h + (p - 1) * h * 2) : p < 3 ? (m = s.x + a - (p - 2) * a * 2, b = s.z + h) : (m = s.x - a, b = s.z + h - (p - 3) * h * 2);
-          const _ = (rand$3(r * 3) - 0.5) * 1.1, M = (rand$3(r * 5) - 0.5) * 1.1;
-          this.blocked(m + _, b + M) || (this.campus.canopy(m + _, this.y + 0.25, b + M, 0.55 + rand$3(r * 7) * 0.4), f % 4 === 0 && (this.box(0.26, 1.6, 0.26, m + _, this.y + 0.8, b + M, "#7a5b3a", {
+          const _ = (rand$4(r * 3) - 0.5) * 1.1, M = (rand$4(r * 5) - 0.5) * 1.1;
+          this.blocked(m + _, b + M) || (this.campus.canopy(m + _, this.y + 0.25, b + M, 0.55 + rand$4(r * 7) * 0.4), f % 4 === 0 && (this.box(0.26, 1.6, 0.26, m + _, this.y + 0.8, b + M, "#7a5b3a", {
             geometry: this.campus.cylinderGeometry,
             castShadow: false
-          }), this.campus.canopy(m + _, this.y + 2.2, b + M, 1.05 + rand$3(r * 11) * 0.3)));
+          }), this.campus.canopy(m + _, this.y + 2.2, b + M, 1.05 + rand$4(r * 11) * 0.3)));
         }
       }
     }
@@ -95813,7 +95813,7 @@ https://github.com/browserify/crypto-browserify`);
         mesh: f,
         x: e + c * 1.45,
         z: r + d * 1.45
-      }), rand$3(o) > 0.55 && (this.box(0.42, 0.26, 0.42, e + c * 0.85, this.y + 4.2 - 0.95, r + d * 0.85, "#7a5b3a", {
+      }), rand$4(o) > 0.55 && (this.box(0.42, 0.26, 0.42, e + c * 0.85, this.y + 4.2 - 0.95, r + d * 0.85, "#7a5b3a", {
         geometry: h,
         castShadow: false
       }), this.box(0.52, 0.3, 0.52, e + c * 0.85, this.y + 4.2 - 0.74, r + d * 0.74, "#d04d6a", {
@@ -95884,7 +95884,7 @@ https://github.com/browserify/crypto-browserify`);
     }
     bin(e, r, s) {
       const o = this.campus.cylinderGeometry;
-      this.box(0.62, 0.86, 0.62, e, this.y + 0.43, r, rand$3(s) > 0.5 ? "#3f6f4a" : "#4a5560", {
+      this.box(0.62, 0.86, 0.62, e, this.y + 0.43, r, rand$4(s) > 0.5 ? "#3f6f4a" : "#4a5560", {
         geometry: o,
         physical: true
       }), this.box(0.7, 0.1, 0.7, e, this.y + 0.9, r, "#2f3a33", {
@@ -95936,8 +95936,8 @@ https://github.com/browserify/crypto-browserify`);
         for (let h = 0; h <= a; h++) {
           const c = h / a, d = s.x0 + (s.x1 - s.x0) * c, f = s.z0 + (s.z1 - s.z0) * c;
           if (this.blocked(d, f)) continue;
-          const p = (rand$3(r * 47 + h) - 0.5) * 0.5, m = (rand$3(r * 53 + h) - 0.5) * 0.5;
-          this.campus.canopy(d + p, this.y + 0.3, f + m, 0.5 + rand$3(r * 31 + h) * 0.28);
+          const p = (rand$4(r * 47 + h) - 0.5) * 0.5, m = (rand$4(r * 53 + h) - 0.5) * 0.5;
+          this.campus.canopy(d + p, this.y + 0.3, f + m, 0.5 + rand$4(r * 31 + h) * 0.28);
         }
       }
     }
@@ -95994,7 +95994,7 @@ https://github.com/browserify/crypto-browserify`);
           castShadow: false
         });
         for (let h = 0; h < 16; h++) {
-          const c = h * 2.39996, d = 1.75 * Math.sqrt((h + 0.5) / 16), f = r[(o + h) % r.length], p = 0.34 + rand$3(o * 17 + h) * 0.2;
+          const c = h * 2.39996, d = 1.75 * Math.sqrt((h + 0.5) / 16), f = r[(o + h) % r.length], p = 0.34 + rand$4(o * 17 + h) * 0.2;
           this.box(p, p * 0.8, p, a.x + Math.cos(c) * d, this.y + 0.56, a.z + Math.sin(c) * d, f, {
             geometry: s,
             castShadow: false
@@ -96112,7 +96112,7 @@ https://github.com/browserify/crypto-browserify`);
             geometry: r
           }), this.box(0.9, 0.1, 0.1, d + Math.cos(o.rot) * 0.4, this.y + 0.75, f + Math.sin(o.rot) * 0.4, "#7c8189", {
             rotationY: -o.rot
-          }), !(rand$3(s * 13 + c) < 0.35) && this.bicycle(d + Math.cos(o.rot) * 0.4, f + Math.sin(o.rot) * 0.4, o.rot, s * 13 + c);
+          }), !(rand$4(s * 13 + c) < 0.35) && this.bicycle(d + Math.cos(o.rot) * 0.4, f + Math.sin(o.rot) * 0.4, o.rot, s * 13 + c);
         }
       }
     }
@@ -96123,7 +96123,7 @@ https://github.com/browserify/crypto-browserify`);
         "#3f7a34",
         "#e0a52c",
         "#7a4a9e"
-      ][Math.floor(rand$3(o) * 5)], c = Math.cos(s), d = Math.sin(s);
+      ][Math.floor(rand$4(o) * 5)], c = Math.cos(s), d = Math.sin(s);
       for (const f of [
         -1,
         1
@@ -96153,7 +96153,7 @@ https://github.com/browserify/crypto-browserify`);
         "#d8b43a"
       ], r = Math.floor(PARKING.depth / 3.2), s = Math.floor(r / 2);
       for (let o = 0; o < r; o++) {
-        if (o === s || rand$3(o * 9 + 3) < 0.22) continue;
+        if (o === s || rand$4(o * 9 + 3) < 0.22) continue;
         const a = PARKING.z - PARKING.depth * 0.5 + 1.9 + o * 3.2, h = PARKING.x, c = e[o % e.length];
         this.parkedCar(h, a, c);
       }
@@ -96268,7 +96268,7 @@ https://github.com/browserify/crypto-browserify`);
       return this._cone || (this._cone = new ConeGeometry(0.5, 1, 10)), this._cone;
     }
   }
-  const rand$2 = (l) => {
+  const rand$3 = (l) => {
     const e = Math.sin(l * 127.1 + 311.7) * 43758.5453;
     return e - Math.floor(e);
   }, SKIN = [
@@ -96315,7 +96315,7 @@ https://github.com/browserify/crypto-browserify`);
       return p.scale.set(r, s, o), p.position.set(a, h, c), p.castShadow = true, p.receiveShadow = true, e.add(p), p;
     }
     makePerson(e) {
-      const r = SKIN[Math.floor(rand$2(e * 3 + 1) * SKIN.length)], s = HAIR[Math.floor(rand$2(e * 5 + 2) * HAIR.length)], o = SHIRT[Math.floor(rand$2(e * 7 + 3) * SHIRT.length)], a = PANTS[Math.floor(rand$2(e * 11 + 4) * PANTS.length)], h = 0.94 + rand$2(e * 13 + 5) * 0.16, c = new Group();
+      const r = SKIN[Math.floor(rand$3(e * 3 + 1) * SKIN.length)], s = HAIR[Math.floor(rand$3(e * 5 + 2) * HAIR.length)], o = SHIRT[Math.floor(rand$3(e * 7 + 3) * SHIRT.length)], a = PANTS[Math.floor(rand$3(e * 11 + 4) * PANTS.length)], h = 0.94 + rand$3(e * 13 + 5) * 0.16, c = new Group();
       c.scale.setScalar(h);
       const d = [];
       for (const p of [
@@ -96344,13 +96344,13 @@ https://github.com/browserify/crypto-browserify`);
           elbow: b
         });
       }
-      if (this.part(c, 0.13, 0.1, 0.13, 0, 1.66, 0, r), this.part(c, 0.29, 0.33, 0.28, 0, 1.85, 0, r, this.headGeometry), this.part(c, 0.31, 0.19, 0.3, 0, 1.93, -0.01, s, this.headGeometry), rand$2(e * 17 + 6) > 0.55 && this.part(c, 0.26, 0.3, 0.14, 0, 1.78, -0.13, s), rand$2(e * 19 + 7) > 0.45) {
+      if (this.part(c, 0.13, 0.1, 0.13, 0, 1.66, 0, r), this.part(c, 0.29, 0.33, 0.28, 0, 1.85, 0, r, this.headGeometry), this.part(c, 0.31, 0.19, 0.3, 0, 1.93, -0.01, s, this.headGeometry), rand$3(e * 17 + 6) > 0.55 && this.part(c, 0.26, 0.3, 0.14, 0, 1.78, -0.13, s), rand$3(e * 19 + 7) > 0.45) {
         const p = [
           "#c0392b",
           "#2f6d9e",
           "#3f7a34",
           "#4a4a55"
-        ][Math.floor(rand$2(e * 23 + 8) * 4)];
+        ][Math.floor(rand$3(e * 23 + 8) * 4)];
         this.part(c, 0.3, 0.4, 0.16, 0, 1.32, -0.2, p);
       }
       return {
@@ -96360,7 +96360,7 @@ https://github.com/browserify/crypto-browserify`);
       };
     }
     poseStand(e, r) {
-      const s = (rand$2(r) - 0.5) * 0.16;
+      const s = (rand$3(r) - 0.5) * 0.16;
       e.legs[0].hip.rotation.x = s, e.legs[1].hip.rotation.x = -s * 0.6, e.arms[0].shoulder.rotation.x = 0.08 + s, e.arms[1].shoulder.rotation.x = 0.08 - s, e.arms[0].elbow.rotation.x = -0.18, e.arms[1].elbow.rotation.x = -0.24;
     }
     poseSit(e) {
@@ -96423,10 +96423,10 @@ https://github.com/browserify/crypto-browserify`);
         let a = 0;
         for (let h = 0; h < o.n * 8 && a < o.n; h++) {
           s++;
-          const c = rand$2(s * 3) * Math.PI * 2, d = Math.sqrt(rand$2(s * 5)) * o.r, f = o.x + Math.cos(c) * d, p = o.z + Math.sin(c) * d;
+          const c = rand$3(s * 3) * Math.PI * 2, d = Math.sqrt(rand$3(s * 5)) * o.r, f = o.x + Math.cos(c) * d, p = o.z + Math.sin(c) * d;
           if (e && e.blocked(f, p)) continue;
           const m = this.makePerson(s);
-          m.root.position.set(f, this.y, p), m.root.rotation.y = rand$2(s * 7) * Math.PI * 2, this.group.add(m.root), rand$2(s * 11) > 0.66 ? (m.mode = "walk", m.heading = m.root.rotation.y, m.speed = 0.75 + rand$2(s * 13) * 0.5, m.phase = rand$2(s * 17) * Math.PI * 2, m.home = {
+          m.root.position.set(f, this.y, p), m.root.rotation.y = rand$3(s * 7) * Math.PI * 2, this.group.add(m.root), rand$3(s * 11) > 0.66 ? (m.mode = "walk", m.heading = m.root.rotation.y, m.speed = 0.75 + rand$3(s * 13) * 0.5, m.phase = rand$3(s * 17) * Math.PI * 2, m.home = {
             x: f,
             z: p,
             r: o.r
@@ -96473,11 +96473,11 @@ https://github.com/browserify/crypto-browserify`);
         const a = Math.sin(o.phase), h = Math.sin(o.phase + Math.PI);
         o.legs[0].hip.rotation.x = a * 0.62, o.legs[1].hip.rotation.x = h * 0.62, o.legs[0].knee.rotation.x = Math.max(0, -a) * 0.85, o.legs[1].knee.rotation.x = Math.max(0, -h) * 0.85, o.arms[0].shoulder.rotation.x = h * 0.5, o.arms[1].shoulder.rotation.x = a * 0.5, o.arms[0].elbow.rotation.x = -0.3 - Math.max(0, h) * 0.35, o.arms[1].elbow.rotation.x = -0.3 - Math.max(0, a) * 0.35, o.root.position.y = this.y + Math.abs(Math.sin(o.phase)) * 0.035 * o.root.scale.x;
         const c = o.root.position.x + Math.sin(o.heading) * o.speed * e, d = o.root.position.z + Math.cos(o.heading) * o.speed * e, f = Math.hypot(c - o.home.x, d - o.home.z) > o.home.r, p = s && s.blocked(c, d);
-        f || p ? o.heading = Math.atan2(o.home.x - o.root.position.x, o.home.z - o.root.position.z) + (rand$2(Math.floor(r * 3) + o.speed * 100) - 0.5) * 1.1 : (o.root.position.x = c, o.root.position.z = d, o.heading += Math.sin(r * 0.6 + o.phase * 0.11) * e * 0.35), o.root.rotation.y = o.heading;
+        f || p ? o.heading = Math.atan2(o.home.x - o.root.position.x, o.home.z - o.root.position.z) + (rand$3(Math.floor(r * 3) + o.speed * 100) - 0.5) * 1.1 : (o.root.position.x = c, o.root.position.z = d, o.heading += Math.sin(r * 0.6 + o.phase * 0.11) * e * 0.35), o.root.rotation.y = o.heading;
       }
     }
   }
-  const rand$1 = (l) => {
+  const rand$2 = (l) => {
     const e = Math.sin(l * 127.1 + 311.7) * 43758.5453;
     return e - Math.floor(e);
   };
@@ -96552,7 +96552,7 @@ https://github.com/browserify/crypto-browserify`);
       this.game.materials.updateObject(r);
       const o = this.lanternSpots().map((a, h) => {
         const c = new Object3D$1();
-        return c.position.set(a.x, this.y + a.y, a.z), c.rotation.y = rand$1(h * 7) * Math.PI * 2, c.scale.setScalar(0.9 + rand$1(h * 11) * 0.35), c.needsUpdate = true, c;
+        return c.position.set(a.x, this.y + a.y, a.z), c.rotation.y = rand$2(h * 7) * Math.PI * 2, c.scale.setScalar(0.9 + rand$2(h * 11) * 0.35), c.needsUpdate = true, c;
       });
       this.lanterns = new InstancedGroup(o, r, false), this.lanternCount = o.length;
       for (const a of o) this.game.objects.add(null, {
@@ -101227,14 +101227,14 @@ https://github.com/browserify/crypto-browserify`);
       return s.set(e.to.x + Math.cos(r) * e.orbitRadius, e.apexY, e.to.z + Math.sin(r) * e.orbitRadius);
     }
     detonate(e) {
-      var _a2, _b, _c, _d, _e, _f;
+      var _a2, _b, _c, _d, _e, _f, _g;
       const r = e.spec, s = e.to.clone();
       if (s.y = Math.max(s.y, 0.2), (_a2 = this.game.world.fireballs) == null ? void 0 : _a2.create(s, r.fireRadius, r.blastRadius), (_b = this.game.explosions) == null ? void 0 : _b.explode(s, r.shockRadius, r.shockStrength), e.isMissile) {
         this.stopEngineSound();
         for (const o of this.sounds.explosions) o == null ? void 0 : o.play(s);
         (_c = this.sounds.missileBoom) == null ? void 0 : _c.play(s);
       } else (_d = this.sounds.explosions[Math.floor(this.game.ticker.elapsed * 7) % this.sounds.explosions.length]) == null ? void 0 : _d.play(s);
-      this.spawnBlast(s, r.blastScale), (_f = (_e = this.game.world.fptuCampus) == null ? void 0 : _e.destruction) == null ? void 0 : _f.damage(s, r.damageRadius, r.damagePower), this.game.scene.remove(e.group), this.game.scene.remove(e.shadow);
+      this.spawnBlast(s, r.blastScale), (_f = (_e = this.game.world.fptuCampus) == null ? void 0 : _e.destruction) == null ? void 0 : _f.damage(s, r.damageRadius, r.damagePower), (_g = this.game.world.survival) == null ? void 0 : _g.damageAround(s, r.damageRadius, r.damagePower), this.game.scene.remove(e.group), this.game.scene.remove(e.shadow);
       for (const o of e.trail) this.game.scene.remove(o);
     }
     spawnBlast(e, r = 1) {
@@ -101659,12 +101659,763 @@ https://github.com/browserify/crypto-browserify`);
       }
     }
   }
+  const SURVIVAL_MONSTERS = {
+    crawler: {
+      name: "B\u1ECD b\xF2",
+      hp: 3,
+      speed: 3.6,
+      damage: 7,
+      radius: 0.55,
+      hitHeight: 0.45,
+      scale: 0.62,
+      money: 5,
+      score: 10,
+      colors: {
+        body: "#4a6b3e",
+        limb: "#38512f",
+        belly: "#9ab86a",
+        eye: "#eaff7a"
+      }
+    },
+    stalker: {
+      name: "K\u1EBB r\xECnh",
+      hp: 6,
+      speed: 4.4,
+      damage: 12,
+      radius: 0.5,
+      hitHeight: 1.15,
+      scale: 1,
+      money: 12,
+      score: 25,
+      colors: {
+        body: "#5b3f6e",
+        limb: "#432f53",
+        belly: "#8f6fa6",
+        eye: "#ff5ad4"
+      }
+    },
+    brute: {
+      name: "Qu\xE1i to x\xE1c",
+      hp: 18,
+      speed: 2.3,
+      damage: 26,
+      radius: 1.15,
+      hitHeight: 1.5,
+      scale: 1.5,
+      money: 40,
+      score: 80,
+      colors: {
+        body: "#7a3a2e",
+        limb: "#5b2a21",
+        belly: "#c07a4a",
+        eye: "#ffb03a"
+      }
+    }
+  }, SURVIVAL_WAVES = {
+    countFor: (l) => Math.min(30, 4 + l * 2),
+    mix: [
+      {
+        from: 1,
+        crawler: 1,
+        stalker: 0,
+        brute: 0
+      },
+      {
+        from: 2,
+        crawler: 0.8,
+        stalker: 0.2,
+        brute: 0
+      },
+      {
+        from: 3,
+        crawler: 0.6,
+        stalker: 0.4,
+        brute: 0
+      },
+      {
+        from: 4,
+        crawler: 0.5,
+        stalker: 0.4,
+        brute: 0.1
+      },
+      {
+        from: 6,
+        crawler: 0.4,
+        stalker: 0.45,
+        brute: 0.15
+      },
+      {
+        from: 9,
+        crawler: 0.3,
+        stalker: 0.48,
+        brute: 0.22
+      }
+    ],
+    breakDuration: 8,
+    spawnInterval: 0.9,
+    maxAlive: 26
+  }, SURVIVAL_PLAYER = {
+    maxHealth: 100,
+    regenDelay: 6,
+    regenRate: 5,
+    rammingSpeed: 7,
+    rammingPower: 1.1,
+    rammingCooldown: 0.45,
+    pickupRadius: 2.2
+  }, SURVIVAL_SPAWN = {
+    minDistance: 26,
+    maxDistance: 46,
+    despawnDistance: 95,
+    attempts: 10,
+    dryMargin: 0.12
+  }, SURVIVAL_LOOT = {
+    life: 45,
+    spinSpeed: 2.4,
+    bobHeight: 0.18,
+    bobSpeed: 3,
+    color: "#ffd34a",
+    healthChance: 0.14,
+    healthColor: "#ff5a6a",
+    healthAmount: 22
+  }, SURVIVAL_BLOOD = {
+    color: "#140f14",
+    mistColor: "#2a1d2a",
+    hitDrops: 5,
+    deathDrops: 14,
+    life: 1.1,
+    poolLife: 9
+  }, rand$1 = (l) => {
+    const e = Math.sin(l * 127.1 + 311.7) * 43758.5453;
+    return e - Math.floor(e);
+  }, GROUND_SLICES = 12;
+  class SurvivalMonsters {
+    constructor(e) {
+      this.game = Game.getInstance(), this.survival = e, this.monsters = [], this.bloods = [], this.pools = [], this.materials = /* @__PURE__ */ new Map(), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.sphereGeometry = new SphereGeometry(0.5, 8, 6), this.coneGeometry = new ConeGeometry(0.5, 1, 7), this.group = new Group(), this.group.name = "survivalMonsters", this.game.scene.add(this.group), this.seed = 1, this.frame = 0, this.tmp = new Vector3$1();
+    }
+    material(e) {
+      let r = this.materials.get(e);
+      return r || (r = new MeshDefaultMaterial({
+        colorNode: color$1(e)
+      }), this.materials.set(e, r)), r;
+    }
+    glowMaterial(e) {
+      const r = `glow-${e}`;
+      let s = this.materials.get(r);
+      return s || (s = new MeshBasicNodeMaterial(), s.colorNode = color$1(e), s.toneMapped = false, this.materials.set(r, s)), s;
+    }
+    part(e, r, s, o, a, h, c, d, f = null, p = null) {
+      const m = typeof d == "string" ? this.material(d) : d, b = new Mesh$1(f ?? this.boxGeometry, m);
+      return b.scale.set(r, s, o), b.position.set(a, h, c), p && b.rotation.set(p.x ?? 0, p.y ?? 0, p.z ?? 0), b.castShadow = true, b.receiveShadow = true, e.add(b), b;
+    }
+    makeCrawler(e, r) {
+      const s = e.colors, o = new Group(), a = [];
+      this.part(o, 1.05, 0.42, 1.45, 0, 0.42, 0, s.body, this.sphereGeometry), this.part(o, 0.78, 0.3, 1, 0, 0.3, 0.05, s.belly, this.sphereGeometry), this.part(o, 0.34, 0.34, 0.6, 0, 0.36, -0.95, s.limb, this.coneGeometry, {
+        x: -Math.PI * 0.5
+      });
+      const h = new Group();
+      h.position.set(0, 0.44, 0.72), o.add(h), this.part(h, 0.62, 0.46, 0.6, 0, 0, 0, s.body, this.sphereGeometry);
+      const c = this.part(h, 0.34, 0.3, 0.24, 0, 0.06, 0.26, this.glowMaterial(s.eye), this.sphereGeometry);
+      for (const f of [
+        -1,
+        1
+      ]) this.part(h, 0.1, 0.1, 0.34, f * 0.16, -0.16, 0.3, s.limb, null, {
+        x: 0.5
+      });
+      let d = 0;
+      for (const f of [
+        1,
+        -1
+      ]) for (const p of [
+        -1,
+        1
+      ]) {
+        const m = new Group();
+        m.position.set(p * 0.42, 0.4, f * 0.42), o.add(m), this.part(m, 0.5, 0.12, 0.12, p * 0.25, 0.06, 0, s.limb);
+        const b = new Group();
+        b.position.set(p * 0.5, 0.06, 0), m.add(b), this.part(b, 0.11, 0.44, 0.11, 0, -0.22, 0, s.limb), a.push({
+          hip: m,
+          knee: b,
+          phase: (d % 2 === 0 ? 0 : Math.PI) + (f > 0 ? 0 : Math.PI)
+        }), d++;
+      }
+      return {
+        root: o,
+        legs: a,
+        eyes: [
+          c
+        ],
+        gait: "crawl"
+      };
+    }
+    makeStalker(e, r) {
+      const s = e.colors, o = new Group(), a = [], h = [];
+      for (const p of [
+        -1,
+        1
+      ]) {
+        const m = new Group();
+        m.position.set(p * 0.16, 1.1, 0), o.add(m), this.part(m, 0.2, 0.6, 0.2, 0, -0.3, 0, s.limb);
+        const b = new Group();
+        b.position.set(0, -0.6, 0), m.add(b), this.part(b, 0.16, 0.55, 0.16, 0, -0.27, 0, s.limb);
+        for (const _ of [
+          -1,
+          0,
+          1
+        ]) this.part(b, 0.07, 0.07, 0.26, _ * 0.08, -0.53, 0.1, s.limb);
+        a.push({
+          hip: m,
+          knee: b,
+          phase: p > 0 ? 0 : Math.PI
+        });
+      }
+      const c = new Group();
+      c.position.set(0, 1.12, 0), c.rotation.x = 0.16, o.add(c), this.part(c, 0.42, 0.34, 0.3, 0, 0.14, 0, s.body), this.part(c, 0.5, 0.42, 0.32, 0, 0.5, 0, s.body), this.part(c, 0.3, 0.36, 0.2, 0, 0.36, 0.14, s.belly);
+      for (let p = 0; p < 3; p++) this.part(c, 0.1, 0.24 - p * 0.05, 0.1, 0, 0.62 - p * 0.2, -0.17, s.limb, this.coneGeometry);
+      for (const p of [
+        -1,
+        1
+      ]) {
+        const m = new Group();
+        m.position.set(p * 0.3, 0.62, 0), c.add(m), this.part(m, 0.15, 0.46, 0.15, 0, -0.23, 0, s.limb);
+        const b = new Group();
+        b.position.set(0, -0.46, 0), m.add(b), this.part(b, 0.13, 0.44, 0.13, 0, -0.22, 0, s.limb);
+        for (const _ of [
+          -1,
+          0,
+          1
+        ]) this.part(b, 0.06, 0.2, 0.06, _ * 0.07, -0.5, 0, s.belly, this.coneGeometry, {
+          x: Math.PI
+        });
+        h.push({
+          shoulder: m,
+          elbow: b,
+          phase: p > 0 ? Math.PI : 0
+        });
+      }
+      const d = new Group();
+      d.position.set(0, 0.86, 0.06), c.add(d), this.part(d, 0.32, 0.34, 0.5, 0, 0, 0.06, s.body, this.sphereGeometry), this.part(d, 0.2, 0.16, 0.3, 0, -0.06, 0.28, s.belly, this.sphereGeometry);
+      const f = [];
+      for (const p of [
+        -1,
+        1
+      ]) f.push(this.part(d, 0.12, 0.14, 0.1, p * 0.1, 0.06, 0.2, this.glowMaterial(s.eye), this.sphereGeometry));
+      return {
+        root: o,
+        legs: a,
+        arms: h,
+        torso: c,
+        head: d,
+        eyes: f,
+        gait: "walk"
+      };
+    }
+    makeBrute(e, r) {
+      const s = e.colors, o = new Group(), a = [], h = [];
+      for (const p of [
+        -1,
+        1
+      ]) {
+        const m = new Group();
+        m.position.set(p * 0.34, 0.78, 0), o.add(m), this.part(m, 0.36, 0.44, 0.4, 0, -0.22, 0, s.limb);
+        const b = new Group();
+        b.position.set(0, -0.44, 0), m.add(b), this.part(b, 0.34, 0.38, 0.38, 0, -0.19, 0, s.limb), this.part(b, 0.42, 0.16, 0.56, 0, -0.4, 0.08, s.body), a.push({
+          hip: m,
+          knee: b,
+          phase: p > 0 ? 0 : Math.PI
+        });
+      }
+      const c = new Group();
+      c.position.set(0, 0.8, 0), c.rotation.x = 0.2, o.add(c), this.part(c, 0.72, 0.4, 0.56, 0, 0.18, 0, s.limb), this.part(c, 1.02, 0.62, 0.68, 0, 0.66, 0, s.body), this.part(c, 0.66, 0.44, 0.3, 0, 0.6, 0.28, s.belly);
+      for (const p of [
+        -1,
+        1
+      ]) this.part(c, 0.42, 0.36, 0.5, p * 0.5, 0.86, 0, s.limb, this.sphereGeometry);
+      for (const p of [
+        -1,
+        1
+      ]) {
+        const m = new Group();
+        m.position.set(p * 0.6, 0.82, 0), c.add(m), this.part(m, 0.28, 0.52, 0.28, 0, -0.26, 0, s.limb);
+        const b = new Group();
+        b.position.set(0, -0.52, 0), m.add(b), this.part(b, 0.3, 0.46, 0.3, 0, -0.23, 0, s.limb), this.part(b, 0.34, 0.3, 0.24, 0, -0.5, 0.1, s.body), this.part(b, 0.12, 0.16, 0.34, -0.1, -0.58, 0.26, s.belly, this.coneGeometry, {
+          x: Math.PI * 0.5
+        }), this.part(b, 0.12, 0.16, 0.34, 0.1, -0.5, 0.26, s.belly, this.coneGeometry, {
+          x: Math.PI * 0.5
+        }), h.push({
+          shoulder: m,
+          elbow: b,
+          phase: p > 0 ? Math.PI : 0
+        });
+      }
+      const d = new Group();
+      d.position.set(0, 1.06, 0.12), c.add(d), this.part(d, 0.56, 0.46, 0.56, 0, 0, 0, s.body, this.sphereGeometry), this.part(d, 0.42, 0.2, 0.3, 0, -0.14, 0.24, s.belly);
+      for (const p of [
+        -1,
+        1
+      ]) this.part(d, 0.14, 0.34, 0.14, p * 0.2, 0.24, -0.06, s.limb, this.coneGeometry, {
+        x: -0.4
+      });
+      const f = [];
+      for (const p of [
+        -1,
+        0,
+        1
+      ]) f.push(this.part(d, 0.13, 0.12, 0.1, p * 0.16, 0.08, 0.24, this.glowMaterial(s.eye), this.sphereGeometry));
+      return {
+        root: o,
+        legs: a,
+        arms: h,
+        torso: c,
+        head: d,
+        eyes: f,
+        gait: "lumber"
+      };
+    }
+    make(e, r) {
+      const s = SURVIVAL_MONSTERS[e];
+      return e === "crawler" ? this.makeCrawler(s, r) : e === "brute" ? this.makeBrute(s, r) : this.makeStalker(s, r);
+    }
+    groundHeight(e, r) {
+      var _a2;
+      const s = (_a2 = this.game.physics) == null ? void 0 : _a2.world, o = this.game.RAPIER;
+      if (!s || !o) return null;
+      const a = 80;
+      try {
+        this.ray ? (this.ray.origin.x = e, this.ray.origin.y = a, this.ray.origin.z = r) : this.ray = new o.Ray({
+          x: e,
+          y: a,
+          z: r
+        }, {
+          x: 0,
+          y: -1,
+          z: 0
+        });
+        const h = s.castRay(this.ray, a + 20, true);
+        if (!h) return null;
+        const c = h.timeOfImpact ?? h.toi;
+        return typeof c != "number" ? null : a - c;
+      } catch {
+        return null;
+      }
+    }
+    isDry(e, r) {
+      var _a2;
+      const s = this.groundHeight(e, r);
+      if (s === null) return false;
+      const o = ((_a2 = this.game.water) == null ? void 0 : _a2.surfaceElevation) ?? 0;
+      return s > o + SURVIVAL_SPAWN.dryMargin;
+    }
+    spawn(e, r, s) {
+      var _a2;
+      const { minDistance: o, maxDistance: a, attempts: h } = SURVIVAL_SPAWN;
+      for (let c = 0; c < h; c++) {
+        this.seed++;
+        const d = rand$1(this.seed * 3.1) * Math.PI * 2, f = o + rand$1(this.seed * 5.7) * (a - o), p = r + Math.cos(d) * f, m = s + Math.sin(d) * f, b = this.groundHeight(p, m);
+        if (b === null) continue;
+        const _ = ((_a2 = this.game.water) == null ? void 0 : _a2.surfaceElevation) ?? 0;
+        if (!(b <= _ + SURVIVAL_SPAWN.dryMargin)) return this.add(e, p, b, m);
+      }
+      return null;
+    }
+    add(e, r, s, o) {
+      const a = SURVIVAL_MONSTERS[e];
+      this.seed++;
+      const h = this.make(e, this.seed), c = a.scale * (0.9 + rand$1(this.seed * 7.3) * 0.2);
+      h.root.scale.setScalar(c), h.root.position.set(r, s, o), this.group.add(h.root);
+      const d = {
+        ...h,
+        type: e,
+        spec: a,
+        scale: c,
+        hp: a.hp,
+        maxHp: a.hp,
+        heading: rand$1(this.seed * 11.9) * Math.PI * 2,
+        phase: rand$1(this.seed * 13.3) * Math.PI * 2,
+        groundY: s,
+        smoothY: s,
+        dryX: r,
+        dryZ: o,
+        slice: this.monsters.length % GROUND_SLICES,
+        dead: false,
+        deathAge: 0,
+        ramCooldown: 0,
+        attackCooldown: 0,
+        flash: 0
+      };
+      return this.monsters.push(d), d;
+    }
+    get aliveCount() {
+      let e = 0;
+      for (const r of this.monsters) r.dead || e++;
+      return e;
+    }
+    clear() {
+      for (const e of this.monsters) this.group.remove(e.root);
+      this.monsters.length = 0;
+      for (const e of this.bloods) this.game.scene.remove(e.mesh);
+      this.bloods.length = 0;
+      for (const e of this.pools) this.game.scene.remove(e.mesh);
+      this.pools.length = 0;
+    }
+    hit(e, r, s = null, o = null) {
+      if (e.dead) return false;
+      e.hp -= r, e.flash = 1;
+      const a = e.root.position;
+      return this.spawnBlood(a.x, a.y + e.spec.hitHeight * e.scale, a.z, SURVIVAL_BLOOD.hitDrops, e.scale), e.hp > 0 ? false : (this.kill(e, s, o), true);
+    }
+    kill(e, r = null, s = null) {
+      if (e.dead) return;
+      e.dead = true, e.deathAge = 0;
+      const o = e.root.position, a = r === null || s === null ? e.heading : Math.atan2(o.x - r, o.z - s);
+      e.deathDriftX = Math.sin(a) * (1.6 + rand$1(this.seed++ * 3.7) * 2.4), e.deathDriftZ = Math.cos(a) * (1.6 + rand$1(this.seed++ * 5.1) * 2.4), e.deathSpin = (rand$1(this.seed++ * 7.9) - 0.5) * 3.4, this.spawnBlood(o.x, o.y + e.spec.hitHeight * e.scale, o.z, SURVIVAL_BLOOD.deathDrops, e.scale * 1.4), this.spawnPool(o.x, e.groundY, o.z, e.scale), this.survival.onMonsterKilled(e);
+    }
+    damageAround(e, r, s = 1) {
+      let o = 0;
+      for (const a of this.monsters) {
+        if (a.dead) continue;
+        const h = Math.hypot(a.root.position.x - e.x, a.root.position.z - e.z);
+        if (h > r) continue;
+        const c = 1 - h / r * 0.7;
+        this.hit(a, s * 3 * c, e.x, e.z) && o++;
+      }
+      return o;
+    }
+    spawnBlood(e, r, s, o, a = 1) {
+      for (let h = 0; h < o; h++) {
+        this.seed++;
+        const c = new Mesh$1(this.sphereGeometry, this.material(h % 4 === 0 ? SURVIVAL_BLOOD.mistColor : SURVIVAL_BLOOD.color)), d = (0.07 + rand$1(this.seed * 3.3) * 0.1) * a;
+        c.scale.setScalar(d), c.position.set(e, r, s), c.castShadow = false, c.receiveShadow = false, this.game.scene.add(c);
+        const f = rand$1(this.seed * 5.9) * Math.PI * 2, p = (1.4 + rand$1(this.seed * 7.1) * 3.4) * a;
+        this.bloods.push({
+          mesh: c,
+          vx: Math.cos(f) * p,
+          vz: Math.sin(f) * p,
+          vy: (2.2 + rand$1(this.seed * 9.3) * 3.2) * a,
+          age: 0,
+          life: SURVIVAL_BLOOD.life * (0.8 + rand$1(this.seed * 11.7) * 0.5),
+          baseScale: d
+        });
+      }
+    }
+    spawnPool(e, r, s, o) {
+      this.seed++;
+      const a = new Mesh$1(this.sphereGeometry, this.material(SURVIVAL_BLOOD.color)), h = (0.9 + rand$1(this.seed * 3.7) * 0.5) * o;
+      a.scale.set(h, 0.02, h * 0.85), a.position.set(e, r + 0.03, s), a.rotation.y = rand$1(this.seed * 5.3) * Math.PI, a.castShadow = false, a.receiveShadow = false, this.game.scene.add(a), this.pools.push({
+        mesh: a,
+        age: 0,
+        life: SURVIVAL_BLOOD.poolLife,
+        baseScale: h
+      });
+    }
+    updateBlood(e) {
+      for (let r = this.bloods.length - 1; r >= 0; r--) {
+        const s = this.bloods[r];
+        if (s.age += e, s.age >= s.life) {
+          this.game.scene.remove(s.mesh), this.bloods.splice(r, 1);
+          continue;
+        }
+        s.vy -= 14 * e, s.mesh.position.x += s.vx * e, s.mesh.position.y += s.vy * e, s.mesh.position.z += s.vz * e;
+        const o = s.age / s.life;
+        o > 0.5 && s.mesh.scale.setScalar(s.baseScale * (1 - (o - 0.5) * 2));
+      }
+      for (let r = this.pools.length - 1; r >= 0; r--) {
+        const s = this.pools[r];
+        if (s.age += e, s.age >= s.life) {
+          this.game.scene.remove(s.mesh), this.pools.splice(r, 1);
+          continue;
+        }
+        const o = s.age / s.life, a = s.baseScale * (1 + Math.min(1, o * 4) * 0.5);
+        s.mesh.scale.set(a, 0.02, a * 0.85);
+      }
+    }
+    update(e, r, s) {
+      var _a2;
+      this.frame++, this.updateBlood(e);
+      const o = this.frame % GROUND_SLICES;
+      for (let a = this.monsters.length - 1; a >= 0; a--) {
+        const h = this.monsters[a];
+        if (h.dead) {
+          if (h.deathAge += e, h.deathAge > 3.2) {
+            this.group.remove(h.root), this.monsters.splice(a, 1);
+            continue;
+          }
+          const q = Math.min(1, h.deathAge / 0.55), H = 1 - q;
+          h.root.position.x += h.deathDriftX * e * H, h.root.position.z += h.deathDriftZ * e * H, h.root.rotation.x = q * Math.PI * 0.5, h.root.rotation.y = h.heading + h.deathSpin * q, h.root.position.y = h.groundY + Math.sin(q * Math.PI) * 0.4 * h.scale - q * 0.1, h.deathAge > 1.6 && (h.root.position.y -= (h.deathAge - 1.6) * 0.5);
+          continue;
+        }
+        h.ramCooldown > 0 && (h.ramCooldown -= e), h.attackCooldown > 0 && (h.attackCooldown -= e), h.flash > 0 && (h.flash = Math.max(0, h.flash - e * 3));
+        const c = h.root.position, d = r.x - c.x, f = r.z - c.z, p = Math.hypot(d, f);
+        if (p > SURVIVAL_SPAWN.despawnDistance) {
+          this.group.remove(h.root), this.monsters.splice(a, 1), h.dead || this.survival.onMonsterEscaped();
+          continue;
+        }
+        let m = d / (p || 1), b = f / (p || 1);
+        const _ = this.separationFor(h, a);
+        m += _.x, b += _.z;
+        const M = Math.hypot(m, b) || 1;
+        m /= M, b /= M;
+        const P = (h.spec.radius + 1.4) * h.scale, O = p < P;
+        if (O) h.attackCooldown <= 0 && (h.attackCooldown = 0.6, s(h));
+        else {
+          const q = h.spec.speed;
+          c.x += m * q * e, c.z += b * q * e, h.phase += e * q * (h.gait === "crawl" ? 4.2 : 2.9);
+        }
+        let U = Math.atan2(m, b) - h.heading;
+        for (; U > Math.PI; ) U -= Math.PI * 2;
+        for (; U < -Math.PI; ) U += Math.PI * 2;
+        if (h.heading += U * Math.min(1, e * 7), h.root.rotation.y = h.heading, h.slice === o) {
+          const q = this.groundHeight(c.x, c.z);
+          if (q !== null) {
+            const H = ((_a2 = this.game.water) == null ? void 0 : _a2.surfaceElevation) ?? 0;
+            q > H + SURVIVAL_SPAWN.dryMargin ? (h.groundY = q, h.dryX = c.x, h.dryZ = c.z) : h.dryX !== void 0 ? (c.x = h.dryX, c.z = h.dryZ, h.heading += Math.PI * 0.5) : h.groundY = q;
+          }
+        }
+        h.smoothY += (h.groundY - h.smoothY) * Math.min(1, e * 9), c.y = h.smoothY, this.animate(h, O, e);
+      }
+    }
+    separationFor(e, r) {
+      let s = 0, o = 0;
+      const a = this.monsters.length;
+      for (let h = 1; h <= 4; h++) {
+        const c = this.monsters[(r + h * 3) % a];
+        if (!c || c === e || c.dead) continue;
+        const d = e.root.position.x - c.root.position.x, f = e.root.position.z - c.root.position.z, p = Math.hypot(d, f), m = (e.spec.radius * e.scale + c.spec.radius * c.scale) * 1.6;
+        if (p >= m || p === 0) continue;
+        const b = (m - p) / m;
+        s += d / p * b * 1.5, o += f / p * b * 1.5;
+      }
+      return {
+        x: s,
+        z: o
+      };
+    }
+    animate(e, r, s) {
+      const o = Math.sin(e.phase);
+      if (Math.sin(e.phase + Math.PI), e.gait === "crawl") {
+        for (const a of e.legs) {
+          const h = Math.sin(e.phase + a.phase);
+          a.hip.rotation.y = h * 0.5, a.knee.rotation.z = Math.max(0, -h) * 0.6;
+        }
+        e.root.position.y += Math.abs(o) * 0.05 * e.scale;
+      } else if (e.gait === "lumber") {
+        for (const a of e.legs) {
+          const h = Math.sin(e.phase + a.phase);
+          a.hip.rotation.x = h * 0.42, a.knee.rotation.x = Math.max(0, -h) * 0.5;
+        }
+        for (const a of e.arms) {
+          const h = Math.sin(e.phase + a.phase);
+          a.shoulder.rotation.x = h * 0.3, a.elbow.rotation.x = -0.4 - Math.max(0, h) * 0.3;
+        }
+        e.torso.rotation.z = o * 0.12, e.root.position.y += Math.abs(o) * 0.06 * e.scale;
+      } else {
+        for (const a of e.legs) {
+          const h = Math.sin(e.phase + a.phase);
+          a.hip.rotation.x = h * 0.72, a.knee.rotation.x = -Math.max(0, -h) * 0.9;
+        }
+        for (const a of e.arms) {
+          const h = Math.sin(e.phase + a.phase);
+          a.shoulder.rotation.x = h * 0.55, a.elbow.rotation.x = -0.35 - Math.max(0, h) * 0.4;
+        }
+        e.torso.rotation.z = o * 0.07, e.root.position.y += Math.abs(o) * 0.045 * e.scale;
+      }
+      if (r && e.arms) {
+        const a = Math.sin(this.game.ticker.elapsed * 11);
+        for (const h of e.arms) h.shoulder.rotation.x = -0.6 - a * 0.5, h.elbow.rotation.x = -0.2 + a * 0.4;
+      }
+      if (e.flash > 0) {
+        const a = Math.sin(this.game.ticker.elapsed * 40) > 0;
+        for (const h of e.eyes) h.visible = a;
+      } else if (e.eyes[0] && !e.eyes[0].visible) for (const a of e.eyes) a.visible = true;
+    }
+  }
+  class Survival {
+    constructor() {
+      this.game = Game.getInstance(), this.events = new Events(), this.enabled = false, this.phase = "preparing", this.wave = 0, this.health = SURVIVAL_PLAYER.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.best = parseInt(localStorage.getItem("survivalBestWave") ?? "0") || 0, this.toSpawn = 0, this.spawnTimer = 0, this.phaseTimer = 0, this.safeFor = 0, this.loot = [], this.lootMaterials = /* @__PURE__ */ new Map(), this.lootGeometry = new BoxGeometry$1(1, 1, 1), this.monsters = new SurvivalMonsters(this), this.setPreference(), this.setSounds(), this.setHud(), this.setSettingsButtons(), this.game.ticker.events.on("tick", () => this.update(), 12);
+    }
+    setPreference() {
+      this.preference = {}, this.preference.names = [
+        "off",
+        "on"
+      ], this.preference.labels = {
+        off: "Off",
+        on: "On"
+      }, this.preference.current = "off", this.preference.set = (e) => {
+        this.preference.names.includes(e) && this.preference.current !== e && (this.preference.current = e, e === "on" ? this.enable() : this.disable(), this.events.trigger("preferenceChange"));
+      };
+    }
+    enable() {
+      var _a2, _b;
+      this.enabled = true, this.previousTime = this.game.dayCycles.preference.current, this.wave = 0, this.health = SURVIVAL_PLAYER.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.safeFor = 0, (_a2 = this.hudElement) == null ? void 0 : _a2.classList.add("is-visible"), this.startPreparing(4), (_b = this.game.notifications) == null ? void 0 : _b.show('<div class="top"><p class="title">Ch\u1EBF \u0111\u1ED9 Sinh t\u1ED3n</p></div><div class="bottom"><p class="description">Tr\u1EDDi s\u1EAFp t\u1ED1i. H\xFAc ho\u1EB7c b\u1EAFn \u2014 b\u1EA5m <strong>X</strong> n\u1EBFu \u0111\xE3 b\u1EADt Rocket.</p></div>', "is-achievement", 5);
+    }
+    disable() {
+      var _a2;
+      this.enabled = false, this.monsters.clear(), this.clearLoot(), (_a2 = this.hudElement) == null ? void 0 : _a2.classList.remove("is-visible"), this.setDefeatedOverlay(false), this.previousTime && this.setTime(this.previousTime, 3);
+    }
+    setTime(e, r) {
+      const s = localStorage.getItem("dayCyclePreference");
+      this.game.dayCycles.preference.set(e, r), s === null ? localStorage.removeItem("dayCyclePreference") : localStorage.setItem("dayCyclePreference", s);
+    }
+    startPreparing(e = SURVIVAL_WAVES.breakDuration) {
+      this.phase = "preparing", this.phaseTimer = e, this.setTime("day", 3);
+    }
+    startWave() {
+      var _a2, _b;
+      this.wave++, this.phase = "hunting", this.toSpawn = SURVIVAL_WAVES.countFor(this.wave), this.spawnTimer = 0, this.setTime("night", 2.5), (_a2 = this.sounds.howl) == null ? void 0 : _a2.play(), (_b = this.game.notifications) == null ? void 0 : _b.show(`<div class="top"><p class="title">S\xF3ng ${this.wave}</p></div><div class="bottom"><p class="description">${this.toSpawn} con \u0111ang t\u1EDBi</p></div>`, "is-achievement", 3), this.events.trigger("waveChange");
+    }
+    pickType() {
+      let e = SURVIVAL_WAVES.mix[0];
+      for (const o of SURVIVAL_WAVES.mix) this.wave >= o.from && (e = o);
+      const r = e.crawler + e.stalker + e.brute;
+      let s = Math.random() * r;
+      return (s -= e.crawler) < 0 ? "crawler" : (s -= e.stalker) < 0 ? "stalker" : "brute";
+    }
+    onMonsterEscaped() {
+      this.phase === "hunting" && this.toSpawn++;
+    }
+    onMonsterKilled(e) {
+      var _a2;
+      this.kills++, this.score += e.spec.score, (_a2 = this.sounds.death) == null ? void 0 : _a2.play(e.root.position);
+      const r = e.root.position;
+      Math.random() < SURVIVAL_LOOT.healthChance ? this.dropLoot(r.x, e.groundY, r.z, "health", SURVIVAL_LOOT.healthAmount) : this.dropLoot(r.x, e.groundY, r.z, "money", e.spec.money);
+    }
+    lootMaterial(e) {
+      let r = this.lootMaterials.get(e);
+      return r || (r = new MeshBasicNodeMaterial(), r.colorNode = color$1(e), r.toneMapped = false, this.lootMaterials.set(e, r)), r;
+    }
+    dropLoot(e, r, s, o, a) {
+      const h = o === "health" ? SURVIVAL_LOOT.healthColor : SURVIVAL_LOOT.color, c = new Mesh$1(this.lootGeometry, this.lootMaterial(h));
+      c.scale.set(0.34, 0.34, 0.12), c.position.set(e, r + 0.6, s), c.castShadow = false, this.game.scene.add(c), this.loot.push({
+        mesh: c,
+        kind: o,
+        amount: a,
+        groundY: r,
+        age: 0,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+    clearLoot() {
+      for (const e of this.loot) this.game.scene.remove(e.mesh);
+      this.loot.length = 0;
+    }
+    updateLoot(e, r) {
+      var _a2;
+      for (let s = this.loot.length - 1; s >= 0; s--) {
+        const o = this.loot[s];
+        if (o.age += e, o.age >= SURVIVAL_LOOT.life) {
+          this.game.scene.remove(o.mesh), this.loot.splice(s, 1);
+          continue;
+        }
+        o.mesh.rotation.y += SURVIVAL_LOOT.spinSpeed * e, o.mesh.position.y = o.groundY + 0.6 + Math.sin(this.game.ticker.elapsed * SURVIVAL_LOOT.bobSpeed + o.phase) * SURVIVAL_LOOT.bobHeight, o.age > SURVIVAL_LOOT.life - 5 && (o.mesh.visible = Math.sin(o.age * 14) > -0.3), !(Math.hypot(o.mesh.position.x - r.x, o.mesh.position.z - r.z) > SURVIVAL_PLAYER.pickupRadius) && (o.kind === "health" ? this.health = Math.min(SURVIVAL_PLAYER.maxHealth, this.health + o.amount) : this.money += o.amount, (_a2 = this.sounds.pickup) == null ? void 0 : _a2.play(o.mesh.position), this.game.scene.remove(o.mesh), this.loot.splice(s, 1));
+      }
+    }
+    hurt(e) {
+      var _a2;
+      this.phase !== "defeated" && (this.health -= e, this.safeFor = 0, (_a2 = this.hudElement) == null ? void 0 : _a2.classList.add("is-hurt"), clearTimeout(this.hurtTimeout), this.hurtTimeout = setTimeout(() => {
+        var _a3;
+        return (_a3 = this.hudElement) == null ? void 0 : _a3.classList.remove("is-hurt");
+      }, 320), this.health <= 0 && this.defeat());
+    }
+    defeat() {
+      var _a2;
+      this.health = 0, this.phase = "defeated", this.phaseTimer = 5, this.wave > this.best && (this.best = this.wave, localStorage.setItem("survivalBestWave", String(this.best))), this.monsters.clear(), this.setDefeatedOverlay(true), (_a2 = this.sounds.death) == null ? void 0 : _a2.play(this.game.physicalVehicle.position);
+    }
+    restart() {
+      this.setDefeatedOverlay(false), this.clearLoot(), this.wave = 0, this.health = SURVIVAL_PLAYER.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.safeFor = 0, this.startPreparing(5);
+    }
+    update() {
+      if (!this.enabled) return;
+      const e = Math.min(this.game.ticker.delta, 0.1), r = this.game.physicalVehicle, s = r.position;
+      if (this.phase === "defeated") {
+        this.phaseTimer -= e, this.monsters.update(e, s, () => {
+        }), this.phaseTimer <= 0 && this.restart(), this.updateHud();
+        return;
+      }
+      this.phase === "preparing" ? (this.phaseTimer -= e, this.phaseTimer <= 0 && this.startWave()) : this.toSpawn > 0 ? (this.spawnTimer -= e, this.spawnTimer <= 0 && this.monsters.aliveCount < SURVIVAL_WAVES.maxAlive && (this.spawnTimer = SURVIVAL_WAVES.spawnInterval, this.monsters.spawn(this.pickType(), s.x, s.z) && this.toSpawn--)) : this.monsters.aliveCount === 0 && (this.wave > this.best && (this.best = this.wave, localStorage.setItem("survivalBestWave", String(this.best))), this.startPreparing()), this.monsters.update(e, s, (o) => this.onMonsterReach(o, r)), this.updateRamming(e, r), this.updateLoot(e, s), this.safeFor += e, this.safeFor > SURVIVAL_PLAYER.regenDelay && this.health < SURVIVAL_PLAYER.maxHealth && (this.health = Math.min(SURVIVAL_PLAYER.maxHealth, this.health + SURVIVAL_PLAYER.regenRate * e)), this.updateHud();
+    }
+    onMonsterReach(e, r) {
+      var _a2;
+      r.xzSpeed > SURVIVAL_PLAYER.rammingSpeed || (this.hurt(e.spec.damage * 0.6), (_a2 = this.sounds.bite) == null ? void 0 : _a2.play(e.root.position));
+    }
+    updateRamming(e, r) {
+      var _a2;
+      const s = r.xzSpeed;
+      if (s <= SURVIVAL_PLAYER.rammingSpeed) return;
+      const o = (s - SURVIVAL_PLAYER.rammingSpeed) * SURVIVAL_PLAYER.rammingPower;
+      for (const a of this.monsters.monsters) {
+        if (a.dead || a.ramCooldown > 0) continue;
+        const h = a.root.position.x - r.position.x, c = a.root.position.z - r.position.z, d = 1.5 + a.spec.radius * a.scale;
+        Math.hypot(h, c) > d || (a.ramCooldown = SURVIVAL_PLAYER.rammingCooldown, this.monsters.hit(a, o, r.position.x, r.position.z), (_a2 = this.sounds.impact) == null ? void 0 : _a2.play(a.root.position));
+      }
+    }
+    damageAround(e, r, s = 1) {
+      return this.enabled ? this.monsters.damageAround(e, r, s) : 0;
+    }
+    setSounds() {
+      this.sounds = {};
+      const e = (r, s, o) => this.game.audio.register({
+        path: r,
+        autoplay: false,
+        loop: false,
+        volume: s,
+        antiSpam: 0.12,
+        positions: new Vector3$1(),
+        distanceFade: o,
+        onPlay: (a, h) => {
+          h && a.positions[0].copy(h), a.volume = 1;
+        }
+      });
+      this.sounds.death = e("sounds/bell/Death Hit.mp3", 0.4, 40), this.sounds.bite = e("sounds/hits/defaults/Impact Soft 03.mp3", 0.5, 25), this.sounds.impact = e("sounds/hits/metal/Metal Clip Hit.mp3", 0.45, 30), this.sounds.pickup = e("sounds/ding/Cash Register 03.mp3", 0.35, 30), this.sounds.howl = this.game.audio.register({
+        path: "sounds/wolf/TimberWolvesGroupHowlingSomeWhimpering_S2h0E_04.mp3",
+        autoplay: false,
+        loop: false,
+        volume: 0.5,
+        antiSpam: 1
+      });
+    }
+    setHud() {
+      this.hudElement = document.querySelector(".js-survival-hud"), this.hudElement && (this.hudParts = {
+        healthBar: this.hudElement.querySelector(".js-survival-health-bar"),
+        healthValue: this.hudElement.querySelector(".js-survival-health-value"),
+        wave: this.hudElement.querySelector(".js-survival-wave"),
+        state: this.hudElement.querySelector(".js-survival-state"),
+        left: this.hudElement.querySelector(".js-survival-left"),
+        money: this.hudElement.querySelector(".js-survival-money"),
+        score: this.hudElement.querySelector(".js-survival-score")
+      }, this.defeatedElement = document.querySelector(".js-survival-defeated"), this.defeatedWaveElement = document.querySelector(".js-survival-defeated-wave"));
+    }
+    setDefeatedOverlay(e) {
+      this.defeatedElement && (e && this.defeatedWaveElement && (this.defeatedWaveElement.textContent = `S\xF3ng ${this.wave} \xB7 ${this.kills} con \xB7 ${this.money}$`), this.defeatedElement.classList.toggle("is-visible", e));
+    }
+    updateHud() {
+      if (!this.hudParts) return;
+      const e = Math.max(0, Math.round(this.health));
+      e !== this.lastHealth && (this.lastHealth = e, this.hudParts.healthValue.textContent = e, this.hudParts.healthBar.style.transform = `scaleX(${e / SURVIVAL_PLAYER.maxHealth})`, this.hudElement.classList.toggle("is-critical", e <= 30)), this.wave !== this.lastWave && (this.lastWave = this.wave, this.hudParts.wave.textContent = this.wave);
+      const r = this.phase === "hunting" ? this.toSpawn + this.monsters.aliveCount : 0;
+      r !== this.lastLeft && (this.lastLeft = r, this.hudParts.left.textContent = r);
+      const s = this.phase === "defeated" ? "G\u1EE5c" : this.phase === "preparing" ? `Ngh\u1EC9 ${Math.ceil(Math.max(0, this.phaseTimer))}s` : "S\u0103n";
+      s !== this.lastState && (this.lastState = s, this.hudParts.state.textContent = s), this.money !== this.lastMoney && (this.lastMoney = this.money, this.hudParts.money.textContent = this.money), this.score !== this.lastScore && (this.lastScore = this.score, this.hudParts.score.textContent = this.score);
+    }
+    setSettingsButtons() {
+      const e = document.querySelector(".js-survival-modes");
+      if (!e) return;
+      const r = [
+        ...e.querySelectorAll("button[data-mode]")
+      ], s = () => {
+        for (const o of r) o.classList.toggle("is-active", o.dataset.mode === this.preference.current);
+      };
+      s(), this.events.on("preferenceChange", s);
+      for (const o of r) o.addEventListener("click", () => {
+        var _a2;
+        (_a2 = this.game.audio.groups.get("click")) == null ? void 0 : _a2.play(true), this.preference.set(o.dataset.mode);
+      });
+    }
+  }
   class World {
     constructor() {
       this.game = Game.getInstance(), this.step(0);
     }
     step(e) {
-      e === 0 ? (this.grid = new Grid(), this.intro = new Intro()) : e === 1 ? (this.visualVehicle = new VisualVehicle(this.game.resources.vehicle.scene), this.floor = new Floor(), this.waterSurface = new WaterSurface(), this.grass = new Grass(), this.windLines = new WindLines(), this.confetti = new Confetti(), this.leaves = new Leaves(), this.rain = new RainLines(), this.lightnings = new Lightnings(), this.fireballs = new Fireballs(), this.snow = new Snow(), this.rainbow = new Rainbow(), this.visualTornado = new VisualTornado(), this.bushes = new Bushes(), this.birchTrees = new Trees("Birch Tree", this.game.resources.birchTreesVisualModel.scene, this.game.resources.birchTreesReferencesModel.scene.children, "#ff4f2b", "#ff903f"), this.oakTrees = new Trees("Oak Tree", this.game.resources.oakTreesVisualModel.scene, this.game.resources.oakTreesReferencesModel.scene.children, "#b4b536", "#d8cf3b"), this.cherryTrees = new Trees("Cherry Tree", this.game.resources.cherryTreesVisualModel.scene, this.game.resources.cherryTreesReferencesModel.scene.children, "#ff6d6d", "#ff9990"), this.flowers = new Flowers(), this.bricks = new Bricks(), this.fences = new Fences(), this.benches = new Benches(), this.explosiveCrates = new ExplosiveCrates(), this.poleLights = new PoleLights(), this.lanterns = new Lanterns(), this.scenery = new Scenery(), this.fptuCampus = new FptuCampus(), this.playIsland = new PlayIsland(), this.cityIsland = new CityIsland(), this.monsterIsland = new MonsterIsland(), this.carrier = new Carrier(), this.cockpit = new Cockpit(), this.vehicleRocket = new VehicleRocket(), this.garage = new Garage(), this.areas = new Areas()) : e === 2 && (this.whispers = new Whispers());
+      e === 0 ? (this.grid = new Grid(), this.intro = new Intro()) : e === 1 ? (this.visualVehicle = new VisualVehicle(this.game.resources.vehicle.scene), this.floor = new Floor(), this.waterSurface = new WaterSurface(), this.grass = new Grass(), this.windLines = new WindLines(), this.confetti = new Confetti(), this.leaves = new Leaves(), this.rain = new RainLines(), this.lightnings = new Lightnings(), this.fireballs = new Fireballs(), this.snow = new Snow(), this.rainbow = new Rainbow(), this.visualTornado = new VisualTornado(), this.bushes = new Bushes(), this.birchTrees = new Trees("Birch Tree", this.game.resources.birchTreesVisualModel.scene, this.game.resources.birchTreesReferencesModel.scene.children, "#ff4f2b", "#ff903f"), this.oakTrees = new Trees("Oak Tree", this.game.resources.oakTreesVisualModel.scene, this.game.resources.oakTreesReferencesModel.scene.children, "#b4b536", "#d8cf3b"), this.cherryTrees = new Trees("Cherry Tree", this.game.resources.cherryTreesVisualModel.scene, this.game.resources.cherryTreesReferencesModel.scene.children, "#ff6d6d", "#ff9990"), this.flowers = new Flowers(), this.bricks = new Bricks(), this.fences = new Fences(), this.benches = new Benches(), this.explosiveCrates = new ExplosiveCrates(), this.poleLights = new PoleLights(), this.lanterns = new Lanterns(), this.scenery = new Scenery(), this.fptuCampus = new FptuCampus(), this.playIsland = new PlayIsland(), this.cityIsland = new CityIsland(), this.monsterIsland = new MonsterIsland(), this.carrier = new Carrier(), this.cockpit = new Cockpit(), this.vehicleRocket = new VehicleRocket(), this.garage = new Garage(), this.survival = new Survival(), this.areas = new Areas()) : e === 2 && (this.whispers = new Whispers());
     }
     setPhysicalFloor() {
       this.game.objects.add(null, {
@@ -115825,7 +116576,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-D7tDyaJf.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-D4opYvgb.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

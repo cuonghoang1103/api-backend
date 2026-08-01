@@ -9,14 +9,11 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
 
 ## Deploy — kiểm trước khi tin
 
-Tính tới **1/8 tối**: TẤT CẢ đã lên prod và ĐÃ PUSH (`de547bf`, gói `index-DiwDiDLl.js`) — chế độ lái người thứ nhất, đảo quái vật, tàu sân bay. Cây sạch, không còn gì tồn đọng.
-qua). Mọi thứ tới `3a73e26` cũng đã push. **CHƯA deploy**: tàu sân bay.
+**1/8 tối**: mọi thứ tới đó đã lên prod và ĐÃ PUSH (`de547bf`, gói
+`index-DiwDiDLl.js`) — chế độ lái người thứ nhất, đảo quái vật, tàu sân bay.
 
-Trước đó: mọi thứ tới `3a73e26` ĐÃ LÊN PROD và ĐÃ PUSH
-(gói `index-B4vtlPVx.js`, `HEAD == origin/feat/playground-3d`, cây sạch).
-
-**CHƯA deploy**: chế độ lái người thứ nhất (mục 0f) — gói mới `index-DiwDiDLl.js`
-đã dựng và rsync sang `frontend/public/playground`, **chờ `bash deploy.sh`**.
+**2/8**: **CHẾ ĐỘ SINH TỒN** (mục 0i) — gói mới `index-Ce1_CxE-.js` đã dựng và
+rsync sang `frontend/public/playground`. **CHƯA deploy, CHƯA push.**
 
 Đầu phiên sau, so gói prod với local; lệch thì chạy `bash deploy.sh` nền:
 
@@ -69,9 +66,11 @@ thì mọi chi tiết dồn về gốc mảnh.
 
 ### 1. ✅ Chế độ lái NGƯỜI THỨ NHẤT — XONG 1/8, xem mục **0f**
 
-### 2. Chế độ SINH TỒN
+### 2. ✅ Chế độ SINH TỒN — bản chơi được XONG 2/8, xem mục **0i**
 
-Xem mục riêng bên dưới ("KẾ HOẠCH LỚN"). User chốt **xe trước, đi bộ sau**.
+Còn treo cho bản sau (user đã biết, không phải việc bỏ sót):
+**xuống xe đi bộ** · **trực thăng** · **cửa hàng tiêu tiền** · **quái mất dấu
+khi nấp/tắt đèn** · quái trùm dùng `fatalis.glb`.
 
 ### 3. Ba khu còn lại trên đảo sân chơi
 
@@ -719,7 +718,94 @@ không ai đi.
 
 ---
 
-# 1. TÁM BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
+# 0i. CHẾ ĐỘ SINH TỒN — bản chơi được đầu tiên, làm 2/8. CHƯA DEPLOY
+
+Cài đặt → **Survival** (Off · On). Bật xong: trời tối, quái ngoài hành tinh sinh
+quanh xe theo SÓNG và đi tìm người chơi. Húc bằng xe hoặc bắn bằng pháo trên
+nóc. Quái chết ra máu đen, rơi tiền / hộp máu. Hết máu là thua, tự dựng lại từ
+sóng 1.
+
+**File**: `data/survival.js` (mọi con số) · `World/SurvivalMonsters.js` (đàn
+quái) · `World/Survival.js` (luật chơi + HUD) · `style/survival.styl` ·
+khối HUD trong `sources/index.html` · một dòng trong `World.js` và một dòng
+trong `VehicleRocket.detonate()`. Bộ kiểm `tools/check-survival.mjs`.
+
+## Ba nhịp một vòng
+
+`preparing` (nghỉ 8s, **TRỜI SÁNG**) → `hunting` (**TRỜI TỐI**, sinh dần cho đủ
+số, giết sạch mới qua sóng sau) → `defeated` (5s rồi về sóng 1). Cặp sáng-ngắn /
+tối-dài chính là "đêm dài hơn ngày" user muốn, mà lại phục vụ luật chơi: lúc
+sáng là lúc nhặt tiền và thở.
+
+## Bảy quyết định đáng nhớ
+
+1. **Quái dựng BẰNG MÃ, không dùng model.** Kho asset CÓ `fatalis.glb` (4.513
+   đỉnh + 14 clip anim) dùng được ngay, nhưng nhân bản model có xương là một
+   `AnimationMixer` cho MỖI con — 25 con là 25 mixer mỗi khung hình. Cộng thêm
+   đúng bài học của `FptuPeople`: ở cỡ nhìn này thứ làm mắt tin là **cử động
+   đúng khớp**, không phải số tam giác. `fatalis.glb` để dành cho **quái trùm**
+   (một con, một mixer).
+2. **Sinh quanh XE, không quanh một cái tổ.** Bật ở đâu chơi được ở đó. Bắt
+   người ta lái ba mươi giây tới đảo quái mới được chơi thì lần thứ hai không ai
+   bật nữa. Đảo quái vật vẫn là chỗ có không khí nhất, nhưng là *lựa chọn*.
+3. **Mắt quái + đồng tiền dùng `MeshBasicNodeMaterial` + `toneMapped = false`.**
+   Đêm ở đây tối thật; vật liệu thường thì mắt tắt ngóm và đồng tiền chìm nghỉm.
+   Đây là hai thứ duy nhất còn đọc được trong đêm.
+4. **Húc gây sát thương theo TỐC ĐỘ VƯỢT NGƯỠNG** (`rammingSpeed = 7`), không
+   phải cứ chạm là chết — nếu không thì đứng yên rê xe cũng dọn sạch cả sóng.
+5. **Bắn tia bám đất chia 12 LÁT.** Mỗi con chỉ bắn lại ~5 lần/giây và lệch pha
+   theo chỉ số, thay vì 26 con × 90 khung/giây.
+6. **Chạy trốn là hoãn, không phải thắng.** Con nào bị thu hồi vì xa quá 95 thì
+   `onMonsterEscaped()` trả suất đó về hàng chờ. Không có nó thì lái vòng vòng
+   là xoá sạch sóng mà không cần giết con nào.
+7. **`Survival.setTime()` trả lại `localStorage` sau khi đổi giờ.**
+   `dayCycles.preference.set()` ghi thẳng vào `localStorage`; gọi thẳng nó thì
+   người chơi bật Sinh tồn rồi đóng tab, lần sau vào thấy trời tối vĩnh viễn mà
+   không hiểu vì sao. Chế độ này chỉ MƯỢN bầu trời.
+
+## Bốn bẫy đã sụp
+
+1. **Quái LỘI XUỐNG BIỂN.** Kiểm chỗ khô lúc SINH là chưa đủ — nó sinh trên bãi
+   rồi cứ nhắm thẳng hướng xe mà đi, gặp mép nước là lội ra. Nay mỗi lần bắn tia
+   bám đất, nếu chỗ đang đứng đã ướt thì kéo về **điểm khô cuối cùng** (`dryX`,
+   `dryZ`) và bẻ ngang hướng 90° — nó tự men theo bờ. Bẻ ngang chứ đừng quay đầu
+   hẳn: quay đầu thì nó chạy ra xa rồi lại vòng vào đúng chỗ cũ.
+2. **Nhịp nhún của bước chân và phép nội suy cao độ nền tranh nhau `position.y`**
+   ⇒ nội suy ăn mất nửa cái nhún, dáng đi đờ ra. Giữ cao độ nền riêng trong
+   `smoothY`, `animate()` mới cộng nhịp nhún lên trên.
+3. **Cả đàn CHỒNG KHÍT lên nhau thành một con** — tất cả cùng chạy về một điểm.
+   `separationFor()` chỉ so với **4 con lấy cách quãng trong danh sách**, không
+   so từng cặp (325 phép đo mỗi khung hình mà mắt không thấy khác gì).
+4. **HUD ghi `textContent` mỗi khung hình** = ép trình duyệt tính lại bố cục 90
+   lần/giây cho thứ mắt không theo kịp. `updateHud()` chỉ chạm DOM khi số ĐỔI.
+   Loại rò rỉ này không bao giờ hiện ra trong hồ sơ WebGL vì nó nằm ở phía CSS.
+
+## ⚠️ BỘ KIỂM TỰ BÁO OAN HAI LẦN trước khi tin được (lần thứ năm rồi)
+
+Cả hai đều ở **phép đo thời gian**, không ở luật chơi:
+
+1. Đo `ticker.elapsed` rồi gọi nó là "số nhịp". `Ticker` **KHÔNG có trường đếm
+   khung hình**. Bộ kiểm tự tuyên bố "MÔI TRƯỜNG HỎNG" trong khi game chạy ngon.
+2. Đếm nhịp thật ra ~5 nhịp/giây, trông y hệt "headless bóp rAF". **KHÔNG PHẢI**
+   — cảnh này quá nặng, headless chỉ dựng được chừng đó. Khung nhìn 1280×720 →
+   **480×320** là bộ kiểm nhanh gấp mấy lần.
+
+Điều thật sự quan trọng: **`Ticker.delta` bị chặn ở `maxDelta = 1/30`, còn
+`ticker.elapsed` là thời gian THẬT.** Chờ "3 giây" theo đồng hồ treo tường chỉ
+cho logic chạy được nửa giây của nó ⇒ mọi phép đo về chuyển động báo oan. Bộ
+kiểm nay cộng dồn chính `ticker.delta` và chờ theo con số đó (`run(giây game)`).
+
+## Số đo bản đầu (đo 2/8, 0 lỗi)
+
+Quái đuổi thật (khoảng cách trung bình 27,9 → 21,7 sau 3 giây game, xe đứng
+yên) · cặp gần nhau nhất 2,50 (không chồng) · giết được bằng cả húc lẫn nổ vùng
+· 57 giọt máu + 3 vũng cho 3 con · nhặt tiền chạy · HUD và thanh máu đúng · thua
+dọn sạch · tắt chế độ trả cảnh về nguyên trạng (0 quái, 0 mesh mồ côi, giờ về
+`auto`).
+
+---
+
+# 1. CHÍN BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
 
 Cần dev server sống: `cd playground-3d && npm run dev` (xem mục 4).
 
@@ -732,7 +818,13 @@ PLAY_URL=http://localhost:5174 node tools/check-city-island.mjs    # đảo thà
 PLAY_URL=http://localhost:5174 node tools/check-cockpit.mjs        # buồng lái: 11 mục, xem mục 0f
 PLAY_URL=http://localhost:5174 node tools/check-monster-island.mjs # đảo quái: 8 mục, có QUÉT HÀNH LANG XE
 PLAY_URL=http://localhost:5174 node tools/check-carrier.mjs        # tàu sân bay: 7 mục, quét cầu dẫn + đường băng
+PLAY_URL=http://localhost:5174 node tools/check-survival.mjs       # chế độ Sinh tồn: 8 mục, xem mục 0i
 ```
+
+⏱️ `check-survival.mjs` chạy **3–4 phút** và đó là bình thường: nó chờ theo
+ĐỒNG HỒ CỦA GAME, mà headless dựng cảnh này chỉ được ~0,05× thời gian thực.
+Đừng chạy nó song song với bộ kiểm khác — 2/8 chạy chung tám bộ một lượt thì
+`check-cockpit` hết giờ ngay ở nút Play, chạy lại một mình là 0 lỗi.
 
 ⚠️ **Vite NHẢY CỔNG** khi 5173 bận (rất hay gặp: phiên Claude khác cũng mở dev
 server trong đúng thư mục này — 1/8 nó chiếm 5173, mình phải chạy ở 5174). Đọc

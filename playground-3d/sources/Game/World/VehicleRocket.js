@@ -1048,6 +1048,10 @@ export class VehicleRocket
         // tra bật/tắt, nên ở đây cứ gọi thẳng.
         this.game.world.fptuCampus?.destruction?.damage(at, spec.damageRadius, spec.damagePower)
 
+        // CHẾ ĐỘ SINH TỒN — quái trong bán kính ăn đòn. Cũng tự kiểm tra
+        // bật/tắt, nên gọi thẳng đúng như trên.
+        this.game.world.survival?.damageAround(at, spec.damageRadius, spec.damagePower)
+
         this.game.scene.remove(rocket.group)
         this.game.scene.remove(rocket.shadow)
         for(const puff of rocket.trail) this.game.scene.remove(puff)

@@ -37,6 +37,7 @@ import { Carrier } from './Carrier.js'
 import { VehicleRocket } from './VehicleRocket.js'
 import { Cockpit } from './Cockpit.js'
 import { Garage } from './Garage.js'
+import { Survival } from './Survival.js'
 
 export class World
 {
@@ -126,6 +127,13 @@ export class World
             // Dựng SAU `cockpit` và `vehicleRocket` vì đổi xe phải gắn lại cả
             // nội thất lẫn khí tài trên nóc.
             this.garage = new Garage()
+
+            /**
+             * Chế độ Sinh tồn — đàn quái sinh quanh XE nên không phụ thuộc đảo
+             * nào cả, nhưng vẫn dựng SAU mọi thứ: nó bắn tia xuống đất để đặt
+             * quái, mà tia chỉ chạm được những gì đã có collider trong cảnh.
+             */
+            this.survival = new Survival()
 
             this.areas = new Areas()
         }

@@ -49,6 +49,9 @@ export class Map
             // Đảo thành phố ở x ≈ 154, cũng ngoài phạm vi ảnh bản đồ nên pin bị
             // kẹp sát viền phải — nhích vào cho đỡ dính mép
             { name: 'Thành phố', respawnName: 'city', offset: { x: -0.03, y: 0 } },
+            // Đảo quái vật ở z ≈ −212, xa nhất về phía Bắc và cũng ngoài phạm vi
+            // ảnh bản đồ — pin bị kẹp sát viền TRÊN, nhích xuống cho đỡ dính mép
+            { name: 'Đảo quái vật', respawnName: 'monster', offset: { x: 0, y: 0.03 } },
             { name: 'Altar', respawnName: 'altar', offset: { x: 0, y: -0.05 } },
             { name: 'Behind<br /> the scene', respawnName: 'behindTheScene', offset: { x: 0.01, y: 0 } },
             { name: 'Bowling', respawnName: 'bowling', offset: { x: -0.08, y: 0.03 } },

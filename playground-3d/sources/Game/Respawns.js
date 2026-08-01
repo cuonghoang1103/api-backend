@@ -3,6 +3,7 @@ import { Game } from './Game.js'
 import { RESPAWN } from '../data/fptu.js'
 import { PLAY_RESPAWN } from '../data/playisland.js'
 import { CITY_RESPAWN } from '../data/cityisland.js'
+import { MONSTER_RESPAWN } from '../data/monsterisland.js'
 
 export class Respawns
 {
@@ -66,6 +67,13 @@ export class Respawns
             name: 'city',
             position: new THREE.Vector3(CITY_RESPAWN.x, 4, CITY_RESPAWN.z),
             rotation: CITY_RESPAWN.rotation
+        })
+
+        /** Đảo quái vật phía Bắc — sân khấu chế độ Sinh tồn. Cùng lý do trên. */
+        this.items.set('monster', {
+            name: 'monster',
+            position: new THREE.Vector3(MONSTER_RESPAWN.x, 4, MONSTER_RESPAWN.z),
+            rotation: MONSTER_RESPAWN.rotation
         })
     }
 

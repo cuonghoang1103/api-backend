@@ -32,6 +32,7 @@ import { Scenery } from './Scenery.js'
 import { FptuCampus } from './FptuCampus.js'
 import { PlayIsland } from './PlayIsland.js'
 import { CityIsland } from './CityIsland.js'
+import { MonsterIsland } from './MonsterIsland.js'
 import { VehicleRocket } from './VehicleRocket.js'
 import { Cockpit } from './Cockpit.js'
 import { Garage } from './Garage.js'
@@ -95,6 +96,10 @@ export class World
             // Đảo thành phố phía Đông — khu đầu tiên dựng từ MODEL NGOÀI
             // (Downtown City MegaKit, CC0). Xem `data/cityisland.js`.
             this.cityIsland = new CityIsland()
+
+            // Đảo quái vật phía Bắc — sân khấu chế độ Sinh tồn. Dựng SAU
+            // `cityIsland` vì khu nhà đổ nát mượn lại chính model của phố.
+            this.monsterIsland = new MonsterIsland()
 
             /**
              * Nội thất buồng lái (chế độ máy quay người thứ nhất). Gắn vào

@@ -12,7 +12,7 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
 Tính tới **1/8 chiều**: mọi thứ tới `3a73e26` ĐÃ LÊN PROD và ĐÃ PUSH
 (gói `index-B4vtlPVx.js`, `HEAD == origin/feat/playground-3d`, cây sạch).
 
-**CHƯA deploy**: chế độ lái người thứ nhất (mục 0f) — gói mới `index-CFF6nRDq.js`
+**CHƯA deploy**: chế độ lái người thứ nhất (mục 0f) — gói mới `index-DOsXf1_4.js`
 đã dựng và rsync sang `frontend/public/playground`, **chờ `bash deploy.sh`**.
 
 Đầu phiên sau, so gói prod với local; lệch thì chạy `bash deploy.sh` nền:
@@ -558,7 +558,97 @@ từ (−0,20 · 1,22) sang (−0,47 · 1,57).
 
 ---
 
-# 1. SÁU BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
+# 0g. ĐẢO QUÁI VẬT — mảnh đất thứ NĂM, làm 1/8. NỀN XONG, CHƯA CÓ QUÁI
+
+Sân khấu cho chế độ Sinh tồn. `data/monsterisland.js` + `World/MonsterIsland.js`.
+
+| Thứ | Toạ độ |
+|---|---|
+| Đảo | x −120…120 · z −400…−200 (tâm 0 · −300, **240 × 200 — to nhất, gần gấp đôi thành phố**) |
+| Cầu | x = 0, z −84 → −200, **dài 116 ≈ 232 m — dài nhất thế giới này** |
+| Đường trục | x = 0, z −204 → −390 · Đường ngang z = −246 và z = −350 |
+| Tổ quái | ô Giữa-Tây, tâm −52 · −298 |
+| Khu nhà đổ | ô Giữa-Đông, tâm 62 · −292 (mượn lại `city.glb`, nhuộm tro) |
+| Bãi hố thiên thạch | ô Bắc-Đông · Bãi phế liệu ô Nam-Đông |
+| Điểm hồi sinh `monster` | (0 · −212), yaw −π/2 |
+
+**Vì sao đặt ở phía Bắc**: vùng z < −96 là chỗ DUY NHẤT còn trống ở mọi giá
+trị x (đảo chính z ≤ 96 · FPTU z −44…104 · sân chơi z 100…200 · thành phố
+z −56…96), mà vẫn chừa được 104 đơn vị mặt nước cho cây cầu.
+
+## NĂM chỗ đã sụp bẫy
+
+1. **Đường xuyên qua công trình — LẦN THỨ HAI.** Đặt tổ quái ở chính giữa đảo
+   (0 · −300) cho "dễ tìm" ⇒ đường trục x = 0 chạy **xuyên thẳng qua tổ**; khu
+   nhà đổ ở (−74 · −262) ⇒ đường ngang xuyên qua nó. Bộ kiểm hành lang xe bắt
+   được 4 + 8 chỗ bị chắn. Y hệt lỗi "đường ngang z = 150 xuyên lòng sân bóng"
+   ở đảo sân chơi. ⇒ **Vẽ đường xong thì XẾP ô đất vào giữa các ô lưới**, đừng
+   đặt theo cảm giác "chỗ này đẹp".
+2. **`camera.far` chỉ 200 và `Fog.far` chỉ ~90.** Chụp ảnh từ xa hơn thế là ra
+   một mảng gradient trời trơn, KHÔNG lỗi nào — mất ba lượt chụp mới nhận ra.
+   Hệ quả cho THIẾT KẾ: đảo 240 × 200 thì người chơi không bao giờ thấy toàn
+   cảnh, nên mỗi khu phải tự đủ hấp dẫn trong bán kính 90.
+3. **Fog bám theo CHIẾC XE, không theo máy quay.** Muốn chụp chỗ nào thì phải
+   dời xe tới đó trước. Và **đừng dùng `player.respawn()` trong script** — nó
+   chỉ dời xe bên trong callback của `overlay.show()`, mà overlay là hoạt ảnh
+   gsap không chạy tới nơi trong headless (chờ 3 giây xe vẫn nằm nguyên chỗ cũ).
+   Gọi thẳng `physicalVehicle.moveTo()`.
+4. **Mảnh thiên thạch giữa hố CÓ va chạm** nhưng ban đầu không kiểm `blocked()`
+   ⇒ hố nào đè lòng đường là có một hòn đá chặn xe giữa đường.
+5. **Cành cây thò vào lòng đường.** Kiểm `blocked()` cho gốc cây là chưa đủ —
+   cành toả ra tới 2,7 đơn vị. Bộ kiểm bắt 9 cái.
+
+## Đáng nhớ
+
+- **Cũ nát chỉ ở phần HÌNH.** Mặt cầu chia 14 đoạn xô lệch, lan can gãy khúc,
+  dây văng đứt, một tháp nghiêng — nhưng thân va chạm của mặt cầu là MỘT khối
+  liền từ đầu tới cuối. Cầu thủng thật thì đẹp đúng một lần rồi người chơi kẹt
+  vĩnh viễn giữa biển.
+- **Lưới địa hình 1,7 chứ không 1,1** như ba đảo kia. Đảo này to gần gấp đôi,
+  cùng mật độ là 111k tam giác chỉ riêng mặt đất.
+- **`place()` + `buildInstances()` cho mọi thứ lặp lại.** Trước khi gộp: 253
+  mesh đơn; sau: **62**. Vệt nứt (98 cái), dây văng, cọc và lan can cầu đều đi
+  qua đó.
+- **`charModel()` nhuộm tro model mượn từ khu phố.** `materials.updateObject()`
+  giữ nguyên texture nên nhà "đổ nát" hiện ra TRẮNG TINH như vừa xây. Nhân
+  texture với màu tro thay vì bỏ texture — giữ được nét cửa sổ.
+- **`onRoad()` tách khỏi `blocked()`**: "có chặn lối xe không" khác với "có
+  được rải cảnh quan ở đây không". Gai của tổ quái nằm trong ô đất của chính
+  tổ quái là ĐÚNG — dùng `blocked()` cho nó thì bộ kiểm báo oan 25 cái gai.
+
+## Kho asset user tải về — ĐÃ ĐO, đừng đo lại
+
+`/Users/admin/Downloads/Play Ground/` (1,3 GB). Đo bằng
+`scratchpad/survey-assets.mjs`. Ngưỡng: quái spawn hàng loạt ≤ 8k đỉnh · nhân
+vật/phương tiện 1 bản ≤ 40k · công trình tĩnh ≤ 60k (cả thế giới ~804k đỉnh).
+
+| ✅ Dùng ngay | đỉnh | anim |
+|---|---|---|
+| `Quái Vật/fatalis.glb` | 4.513 | **14 clip** + rig |
+| `Quái Vật/alien_soldier_wip.glb` | 2.788 | 1 + rig |
+| `Quái Vật/free_skeleton_man_axe.glb` | 7.973 | 1 + rig |
+
+🟡 1–vài bản: `battlefield_4_huang_hannah` 17,5k (không rig) ·
+`flins_rigged_free` 34k (có rig, KHÔNG anim) · `alien_creature_take_3` 28,5k ·
+súng 17–35k · `battlefield_pack` 19,4k.
+
+❌ **Không cứu được** (thử `--simplify-error 0.01` rồi `--ratio 0.04 --error 0.08`):
+- `super_portaviones` (tàu sân bay) **2.126.216 → 954.719 đỉnh**, vẫn hơn cả
+  thế giới. Muốn có tàu sân bay thì **dựng bằng mã**, như đã dựng tổ quái/cầu.
+- `ruined_city_free` 711k → 588k (giảm 17%). Dùng `city.glb` sẵn có thay thế —
+  đã làm cho khu nhà đổ và ra hình tốt.
+- `c-130j` 492k · `tank` 458k · `rigged_female_fashion` 268k ·
+  `update_dirt_road_through_forest` 424k.
+
+⚠️ Cùng bệnh xe Tiger: model bake từ high-poly, UV cắt vụn nên gần như mọi đỉnh
+là biên, `simplify` không gộp được. **Đo trước khi hứa.**
+
+⚠️ `Con người/alina_ip_realistic_asian_woman_animated.glb` (89 MB) KHÔNG ĐỌC
+ĐƯỢC bằng `@gltf-transform` — chưa rõ extension gì.
+
+---
+
+# 1. BẢY BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
 
 Cần dev server sống: `cd playground-3d && npm run dev` (xem mục 4).
 
@@ -569,6 +659,7 @@ PLAY_URL=http://localhost:5174 node tools/check-play-island.mjs    # đảo sân
 PLAY_URL=http://localhost:5174 node tools/check-arena-rules.mjs    # luật chơi sân bóng: 9 mục
 PLAY_URL=http://localhost:5174 node tools/check-city-island.mjs    # đảo thành phố: nhà chắn đường, bậc cầu, SỐ NHÀ THỰC MỌC
 PLAY_URL=http://localhost:5174 node tools/check-cockpit.mjs        # buồng lái: 11 mục, xem mục 0f
+PLAY_URL=http://localhost:5174 node tools/check-monster-island.mjs # đảo quái: 8 mục, có QUÉT HÀNH LANG XE
 ```
 
 ⚠️ **Vite NHẢY CỔNG** khi 5173 bận (rất hay gặp: phiên Claude khác cũng mở dev
@@ -583,7 +674,7 @@ KHÔNG tới được cổng lạ đó. Cách vào được: `preview_start({url
 Nhưng **Browser pane không chạy vòng lặp game** (đo 1/8: `ticker.elapsed` đứng
 im dù đã `tabs_select`) ⇒ chụp ảnh bằng Playwright headless, đừng bằng pane.
 
-**Cả sáu hiện 0 lỗi.**
+**Cả bảy hiện 0 lỗi.**
 
 `check-play-island.mjs` có mục **quét hành lang xe**: đẩy một khối hộp bằng đúng
 kích cỡ xe (rộng 1,9 · cao 1,4) dọc từng tuyến đường bằng
@@ -820,7 +911,7 @@ playground-3d/sources/
 playground-3d/tools/
   check-fptu-layout.mjs · check-ghost-colliders.mjs
   check-play-island.mjs · check-arena-rules.mjs
-  check-city-island.mjs · check-cockpit.mjs
+  check-city-island.mjs · check-cockpit.mjs · check-monster-island.mjs
 frontend/public/playground/     ← GÓI ĐÃ DỰNG (nhớ commit!)
 ```
 

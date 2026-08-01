@@ -30,6 +30,25 @@ Downtown City MegaKit — used for the city district on the Play Island.
     Files   : static/city/city.glb (30 modular pieces: streets, sidewalks,
               buildings, props — merged, simplified, WebP 1024, Draco)
 
+Aircraft carrier — anchored at sea beside the bridge to Monster Island.
+
+    ⚠ LICENCE NOT YET CONFIRMED — DO NOT SHIP TO PRODUCTION UNTIL IT IS.
+
+    The source file (super_portaviones.glb) was supplied by the project
+    owner from their own download folder. No licence file accompanied it,
+    and the filename alone does not identify author or terms.
+
+    Before this asset goes live, the owner must supply the source URL so
+    this block can be replaced with a proper credit (and so we can confirm
+    commercial use is permitted). If that cannot be established, swap in
+    the fully hand-built carrier that still lives in Carrier.js — set
+    `usingModel` to false and setHull/setIsland/setPlanes take over.
+
+    Files   : static/carrier/carrier.glb
+    Modified: kept only the 59 lightest meshes (<= 3,000 verts each) out of
+              133, dropping 74 heavy ones — 2,126,216 verts down to 43,288;
+              textures resized to 512 and re-encoded to WebP; Draco.
+
 Tiger Russian Military Vehicle — reserved for the Survival mode.
 
     ⚠ CC BY REQUIRES CREDIT. This block is the credit — do not remove it,

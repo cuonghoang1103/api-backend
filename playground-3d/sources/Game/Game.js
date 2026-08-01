@@ -148,6 +148,13 @@ export class Game
                  * đọc được WebP trong glTF qua `EXT_texture_webp`.
                  */
                 [ 'cityModel',                             `city/city.glb${cb}`,                                                                 'gltf' ],
+                /**
+                 * TÀU SÂN BAY — model gốc user tải về nặng 2.126.216 đỉnh (gấp
+                 * 2,6 lần cả thế giới). Đây là bản ĐÃ LỌC: giữ 59 mảnh nhẹ nhất
+                 * (≤ 3.000 đỉnh mỗi mảnh), bỏ 74 mảnh nặng — còn **43.288 đỉnh**
+                 * và 1,0 MB, mà vẫn trải khắp con tàu nên vẫn ra dáng.
+                 */
+                [ 'carrierModel',                          `carrier/carrier.glb${cb}`,                                                           'gltf' ],
                 [ 'fencesModel',                           `fences/fences${compressedModelSuffix}.glb${cb}`,                                     'gltf' ],
                 [ 'benchesModel',                          `benches/benches${compressedModelSuffix}.glb${cb}`,                                   'gltf' ],
                 [ 'explosiveCratesModel',                  `explosiveCrates/explosiveCrates${compressedModelSuffix}.glb${cb}`,                   'gltf' ],

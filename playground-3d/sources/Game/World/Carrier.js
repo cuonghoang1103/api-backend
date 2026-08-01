@@ -3,7 +3,7 @@ import { color } from 'three/tsl'
 import { Game } from '../Game.js'
 import { MeshDefaultMaterial } from '../Materials/MeshDefaultMaterial.js'
 import {
-    CARRIER, CARRIER_RAMP, CARRIER_ISLAND, CARRIER_PLANES, CARRIER_COLORS,
+    CARRIER, CARRIER_RAMP, CARRIER_ISLAND, CARRIER_PLANES, CARRIER_COLORS, CARRIER_MODEL, CARRIER_BOW_RAMP,
 } from '../../data/carrier.js'
 
 /**
@@ -45,13 +45,46 @@ export class Carrier
         this.materials = new Map()
         this.instanceBatches = new Map()
 
-        this.setHull()
+        /**
+         * MODEL THẬT LÀM PHẦN NHÌN, KHỐI TỰ DỰNG LÀM PHẦN VA CHẠM.
+         *
+         * User xem bản dựng-hoàn-toàn-bằng-mã và bác: *"sao tàu xấu quá vậy.
+         * Bạn không lấy được tàu mẫu trong file của tôi gửi sao? Lấy 1 ít cũng
+         * được hoặc dựa vào đấy chẳng hạn"*. Đúng — và lấy được thật:
+         *
+         * Model gốc 133 mesh / 2.126.216 đỉnh, trong đó hơn chục mảnh mỗi cái
+         * đúng 65.534 đỉnh (trần uint16 — mesh gốc bị chia nhỏ). Bỏ 74 mảnh
+         * nặng, giữ 59 mảnh ≤ 3.000 đỉnh: còn **43.288 đỉnh, 1,0 MB**, mà hộp
+         * bao vẫn là 83 × 74 × 334 — tức mấy mảnh nhẹ TRẢI KHẮP con tàu chứ
+         * không dồn một góc, nên vẫn ra dáng.
+         *
+         * ⚠️ Nhưng va chạm thì KHÔNG lấy từ model. Mặt boong phải là một khối
+         * phẳng liền tuyệt đối để xe chạy; model có vô số chi tiết nhỏ, dựng
+         * collider theo nó là đẻ ra hàng trăm mặt nghiêng bẫy xe. Nên: model lo
+         * cái nhìn, còn boong + cầu dẫn + hộp va chạm vẫn do mã dựng.
+         */
+        this.setModel()
+
+        /**
+         * ⚠️ Có model thì BỎ HẲN thân tự dựng. Mũi vát tự dựng trải tới
+         * z = −85,6, tức chồng lên đúng chỗ cầu dẫn mũi (z −80…−97) và che mất
+         * lối lên — thuần hình nên không chặn xe, nhưng nhìn thì tưởng cụt.
+         */
+        if(!this.usingModel) this.setHull()
+
         this.setDeck()
         this.setDeckMarkings()
         this.setRamp()
-        this.setIsland()
-        this.setPlanes()
+        this.setBowRamp()
         this.setEquipment()
+
+        // Chỉ dựng bằng mã những gì model KHÔNG có. Ba hàm `setHull`/`setIsland`/
+        // `setPlanes` giữ nguyên để bật lại được nếu sau này bỏ model.
+        if(!this.usingModel)
+        {
+            this.setIsland()
+            this.setPlanes()
+        }
 
         this.buildInstances()
 
@@ -164,10 +197,55 @@ export class Carrier
     }
 
     /**
+     * Đặt model tàu đã lọc vào đúng chỗ.
+     *
+     * Model dài 334 đơn vị theo Z; tàu trong game dài 92 ⇒ tỉ lệ **0,275**.
+     * Ở tỉ lệ đó bề ngang model (83) ra 22,8 — khớp gần đúng bề ngang 24 mà
+     * phần va chạm đang dùng, nên boong hình và boong cứng chồng khít nhau.
+     *
+     * ⚠️ `materials.updateObject()` GIỮ NGUYÊN texture của glTF, chỉ chuyển
+     * sang hệ TSL — nên model tự ăn đúng ánh sáng, sương mù và bóng đổ của
+     * game, không phải viết gì thêm. (Đúng như đã thấy với city kit.)
+     */
+    setModel()
+    {
+        const source = this.game.resources?.carrierModel?.scene
+        this.usingModel = !!source
+
+        if(!source)
+        {
+            console.warn('[Carrier] không thấy `resources.carrierModel` — dựng hoàn toàn bằng mã')
+            return
+        }
+
+        const { x, z, deckY } = CARRIER
+        const model = source.clone(true)
+
+        model.scale.setScalar(CARRIER_MODEL.scale)
+        model.rotation.y = CARRIER_MODEL.rotationY
+        model.position.set(x + CARRIER_MODEL.offsetX, deckY + CARRIER_MODEL.offsetY, z + CARRIER_MODEL.offsetZ)
+        model.updateMatrix()
+
+        model.traverse((child) =>
+        {
+            if(!child.isMesh) return
+            child.castShadow = true
+            child.receiveShadow = true
+        })
+
+        this.game.materials.updateObject(model)
+        this.group.add(model)
+        this.model = model
+    }
+
+    /**
      * Thân tàu: khối chính + mũi vát + mớn nước.
      *
      * Thuần HÌNH, không va chạm — mặt duy nhất xe đi được là boong bay. Cho
      * thân va chạm chỉ tổ đẻ ra những mặt nghiêng bẫy xe ở mạn tàu.
+     *
+     * ⚠️ Khi có model thật thì phần này CHÌM XUỐNG làm nền cho model (model
+     * thiếu mấy mảnh nặng nên thân có chỗ hở); chỉ dựng khối tối giản.
      */
     setHull()
     {
@@ -302,8 +380,20 @@ export class Carrier
         const length = Math.hypot(run, rise)
         const angle = Math.atan2(rise, run)
 
+        /**
+         * ⚠️ TÂM KHỐI PHẢI BÙ ĐỘ DÀY, không phải trung điểm hai đầu.
+         *
+         * Khối dày 0,5 nghiêng góc α thì mặt TRÊN của nó nằm cao hơn tâm
+         * `0,25 / cos α` theo phương thẳng đứng. Đặt tâm ở đúng trung điểm là
+         * mặt trên vống lên chừng ấy ở CẢ HAI ĐẦU — thành bậc 0,26 ở chân cầu
+         * và lệch 0,25 so với mép boong ở đầu kia. Bộ kiểm bắt được cả hai.
+         *
+         * Xe đi trên MẶT TRÊN, nên phải căn mặt trên chứ không phải tâm khối.
+         */
+        const centreY = (bridgeY + deckY) * 0.5 - 0.25 / Math.cos(angle)
+
         // Nghiêng quanh trục Z: khối dài theo X, cao dần khi x tăng
-        this.box(length, 0.5, width, (fromX + toX) * 0.5, (bridgeY + deckY) * 0.5, z, CARRIER_COLORS.deck, {
+        this.box(length, 0.5, width, (fromX + toX) * 0.5, centreY, z, CARRIER_COLORS.deck, {
             rotationZ: angle, physical: true, friction: 0.7, castShadow: false,
         })
 
@@ -327,6 +417,56 @@ export class Carrier
                 new THREE.Vector3(px, py, z),
                 new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, angle)),
                 new THREE.Vector3(1.8, 0.04, 0.6),
+            )
+        }
+    }
+
+    /**
+     * CẦU DẪN MŨI — từ bờ Bắc đảo chính lên mũi tàu.
+     *
+     * Cùng nguyên tắc với cầu dẫn kia: MỘT khối nghiêng duy nhất, không ghép
+     * đoạn. Đây là lối lên mà user thấy thiếu — nhìn từ bờ là thấy ngay, không
+     * phải đi vòng qua cây cầu dài.
+     */
+    setBowRamp()
+    {
+        const { x, fromZ, toZ, width } = CARRIER_BOW_RAMP
+        const groundY = 0.04
+        const deckY = CARRIER.deckY
+
+        const run = Math.abs(toZ - fromZ)
+        const rise = deckY - groundY
+        const length = Math.hypot(run, rise)
+        const angle = Math.atan2(rise, run)
+
+        // Tâm bù độ dày — xem chú thích ở `setRamp()`
+        const centreY = (groundY + deckY) * 0.5 - 0.25 / Math.cos(angle)
+
+        // Nghiêng quanh trục X: khối dài theo Z, cao dần khi z giảm
+        this.box(width, 0.5, length, x, centreY, (fromZ + toZ) * 0.5, CARRIER_COLORS.deck, {
+            rotationX: angle, physical: true, friction: 0.7, castShadow: false,
+        })
+
+        // Cột chống — thuần hình
+        for(let i = 1; i < 4; i++)
+        {
+            const t = i / 4
+            const pz = fromZ + (toZ - fromZ) * t
+            const py = groundY + rise * t
+            this.box(0.7, Math.max(0.4, py + 1.6), 0.7, x, (py - 1.6) * 0.5, pz, CARRIER_COLORS.steel, { castShadow: false })
+        }
+
+        // Vạch dẫn hướng vàng — nhìn từ bờ là biết đây là lối lên
+        for(let i = 0; i < 6; i++)
+        {
+            const t = (i + 0.5) / 6
+            const pz = fromZ + (toZ - fromZ) * t
+            const py = groundY + rise * t + 0.3
+            this.place(
+                'deckLine', this.boxGeometry, CARRIER_COLORS.deckWarn,
+                new THREE.Vector3(x, py, pz),
+                new THREE.Quaternion().setFromEuler(new THREE.Euler(angle, 0, 0)),
+                new THREE.Vector3(width * 0.55, 0.04, 1.6),
             )
         }
     }

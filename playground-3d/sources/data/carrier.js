@@ -66,6 +66,60 @@ export const CARRIER_RAMP = {
 }
 
 /**
+ * CĂN MODEL TÀU vào chỗ phần va chạm đang chiếm.
+ *
+ * Model đã lọc dài **334** đơn vị theo Z, rộng 83, cao 74 (`bbox-carrier.mjs`).
+ * Tàu trong game dài 92 ⇒ tỉ lệ **0,275**; ở tỉ lệ đó bề ngang ra 22,8, khớp
+ * gần đúng bề ngang 24 của khối va chạm, nên boong hình và boong cứng chồng
+ * khít nhau.
+ *
+ * ⚠️ `offsetY` là số chỉnh BẰNG MẮT: gốc toạ độ của model không nằm ở mặt
+ * boong, và không có cách nào biết trước nó ở đâu ngoài việc đặt thử rồi bắn
+ * tia so sánh. Cứ vặn cho tới khi mặt boong model trùng `deckY`.
+ */
+export const CARRIER_MODEL = {
+    scale: 0.275,
+    rotationY: 0,
+    offsetX: 0,
+    /**
+     * ⚠️ −6,2 là số ĐO ĐƯỢC, không phải ước lượng.
+     *
+     * Bắn tia xuống chỉ vào model: mặt boong của nó nằm ở y = **8,90**, trong
+     * khi boong va chạm ở 3,6 ⇒ để nguyên là xe chạy LƠ LỬNG dưới boong nhìn
+     * thấy 5,3 đơn vị. Hạ model 5,3 nữa (−0,9 − 5,3) thì hai mặt trùng khít;
+     * đáy tàu xuống −5,1, tức chìm dưới mực nước (−0,3) — đúng như tàu thật.
+     *
+     * Đo lại bằng `scratchpad/diag-deck-height.mjs` nếu đổi model hoặc tỉ lệ.
+     */
+    offsetY: -6.2,
+    offsetZ: 0,
+}
+
+/**
+ * CẦU DẪN THỨ HAI — từ bờ Bắc đảo chính lên MŨI tàu.
+ *
+ * User lái ra bờ, thấy con tàu ngay trước mặt mà không lên được, và bảo:
+ * *"ở chỗ này phải có nút lên tàu chứ"*. Đúng — cầu dẫn duy nhất lúc đó nằm ở
+ * z = −140, tức mãi giữa thân tàu, phải đi vòng qua cây cầu dài mới tới.
+ *
+ * Mũi tàu ở z ≈ −95; bờ đảo chính tại x = 46 ở z ≈ −84,3 (đảo tròn bán kính
+ * 96). Cầu dẫn từ z = −80 (chắc chắn trên đất) tới z = −97 (cắm vào boong):
+ * dài 17, chênh 3,56 ⇒ dốc **11,8°**. Xe leo thoải mái.
+ */
+export const CARRIER_BOW_RAMP = {
+    x: 46,
+    fromZ: -80,        // trên đất đảo chính
+    /**
+     * ⚠️ −94 chính là MÉP BOONG (`z + length/2` = −140 + 46). Bản đầu để −97
+     * cho "cắm sâu vào tàu", nhưng thế thì cầu dẫn mới đạt 2,97 lúc chạm mép
+     * boong ở 3,6 ⇒ **bậc 0,63**. Đo bằng cách bắn tia dọc tuyến (mỗi 2 đơn
+     * vị) là thấy ngay chỗ nhảy bậc.
+     */
+    toZ: -94,
+    width: 9,
+}
+
+/**
  * Đảo chỉ huy — khối tháp bên mạn PHẢI (x lớn), đúng như tàu sân bay thật.
  * Đặt lệch về đuôi để chừa đường băng thông suốt phía mũi.
  */

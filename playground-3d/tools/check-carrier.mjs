@@ -34,7 +34,8 @@ const report = await page.evaluate(() =>
     const round = (n) => Math.round(n * 1000) / 1000
 
     const SHIP = { x: 46, z: -140, length: 92, width: 24, deckY: 3.6 }
-    const RAMP = { z: -140, fromX: 5, toX: 34 }
+    const RAMP = { z: -140, fromX: 5, toX: 28.4 }
+    const BOW = { x: 46, fromZ: -80, toZ: -94 }
 
     const groundAt = (x, z, from = 40) =>
     {
@@ -131,6 +132,37 @@ const report = await page.evaluate(() =>
         sweep('duongBang', { x: SHIP.x - 1.5, z: SHIP.z - SHIP.length * 0.42 }, { x: SHIP.x - 1.5, z: SHIP.z + SHIP.length * 0.42 }, 50)
     }
 
+    // ── 3b. CẦU DẪN MŨI: từ bờ đảo chính lên mũi tàu ────────────────────────
+    // Đây là lối lên user thấy thiếu ("ở chỗ này phải có nút lên tàu chứ").
+    {
+        const CAR = { halfWidth: 0.95, halfHeight: 0.7 }
+        const shape = new R.Cuboid(CAR.halfWidth, CAR.halfHeight, 1.4)
+        const blockers = []
+        let maxStep = 0
+        let previous = null
+
+        for(let z = BOW.fromZ + 1; z >= BOW.toZ - 3; z -= 0.5)
+        {
+            const surface = groundAt(BOW.x, z, 30)
+            if(surface === null) { blockers.push(`không có mặt cứng tại z = ${round(z)}`); continue }
+            if(previous !== null) maxStep = Math.max(maxStep, Math.abs(surface - previous))
+            previous = surface
+
+            const hits = []
+            W.intersectionsWithShape(
+                { x: BOW.x, y: surface + CAR.halfHeight + 0.38, z }, { x: 0, y: 0, z: 0, w: 1 }, shape,
+                (collider) => { hits.push(collider); return hits.length < 4 },
+            )
+            if(hits.length) blockers.push(`vật cản tại z = ${round(z)}`)
+        }
+
+        facts.hanhLang_cauDanMui = blockers.length ? `${blockers.length} chỗ: ${blockers.slice(0, 3).join(' · ')}` : 'thông suốt'
+        facts.bacCaoNhatCauDanMui = round(maxStep)
+
+        if(blockers.length) problems.push(`Cầu dẫn MŨI bị chắn ở ${blockers.length} chỗ — ${blockers.slice(0, 2).join(' · ')}`)
+        if(maxStep > 0.35) problems.push(`Cầu dẫn mũi có bậc ${round(maxStep)} — bánh xe không leo nổi`)
+    }
+
     // ── 4. Mọi collider có nửa-cạnh DƯƠNG ───────────────────────────────────
     // Nửa-cạnh âm ⇒ Rapier trả NaN ⇒ vị trí xe NaN ⇒ âm lượng NaN ⇒
     // `setValueAtTime` ném lỗi giữa chuỗi tick ⇒ ĐỨNG KHUNG HÌNH. Đã xảy ra thật.
@@ -194,12 +226,15 @@ const report = await page.evaluate(() =>
         }
     }
 
-    // ── 7. Radar phải quay ──────────────────────────────────────────────────
+    // ── 7. Radar quay — CHỈ khi tàu dựng hoàn toàn bằng mã ──────────────────
+    // Dùng model thật thì cột radar đã nằm sẵn trong model, `setIsland()` không
+    // chạy nữa. Đòi radar tự dựng lúc đó là báo oan.
     {
         const carrier = G.world.carrier
-        facts.coRadar = carrier.radarDish ? 'có' : 'THIẾU'
-        if(!carrier.radarDish) problems.push('Thiếu chảo radar trên đảo chỉ huy')
-        else
+        facts.dungModelThat = carrier.usingModel ? 'có' : 'không (dựng bằng mã)'
+        facts.coRadar = carrier.radarDish ? 'có' : '(model tự có — bỏ qua)'
+        if(!carrier.radarDish && !carrier.usingModel) problems.push('Thiếu chảo radar trên đảo chỉ huy')
+        else if(carrier.radarDish)
         {
             const before = carrier.radarDish.rotation.y
             for(let i = 0; i < 20; i++) carrier.update()

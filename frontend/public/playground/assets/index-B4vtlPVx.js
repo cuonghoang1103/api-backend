@@ -99095,14 +99095,14 @@ https://github.com/browserify/crypto-browserify`);
         this.box(1.5, a, 1.5, p, f + a * 0.5, b - m * a * w * 0.5, CITY_COLORS.steel, {
           rotationX: m * w
         });
-        for (let M = 1; M <= 6; M++) {
-          const P = 4 + M * 4.2;
+        for (let M = 1; M <= 4; M++) {
+          const P = 7 + M * 5.5;
           for (const O of [
             -1,
             1
           ]) {
-            const k = f + a - M * 0.8, U = O * P, q = k - (f + 0.4), H = Math.hypot(U, q), W = Math.atan2(q, U);
-            this.box(H, 0.13, 0.13, p + U * 0.5, (k + f + 0.4) * 0.5, b, CITY_COLORS.cable, {
+            const k = f + a - M * 1.4, U = O * P, q = k - (f + 0.4), H = Math.hypot(U, q), W = Math.atan2(q, U);
+            this.box(H, 0.08, 0.08, p + U * 0.5, (k + f + 0.4) * 0.5, b, CITY_COLORS.cable, {
               rotationZ: -W + Math.PI,
               castShadow: false
             });
@@ -114219,7 +114219,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-CIP3pcMB.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-SzAwgqfQ.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

@@ -477,19 +477,27 @@ export class CityIsland
                 const lean = 0.09
                 this.box(1.5, towerHeight, 1.5, towerX, y + towerHeight * 0.5, baseZ - side * towerHeight * lean * 0.5, CITY_COLORS.steel, { rotationX: side * lean })
 
-                // Dây văng toả hình quạt về hai phía
-                for(let i = 1; i <= 6; i++)
+                /**
+                 * Dây văng toả hình quạt về hai phía.
+                 *
+                 * ⚠️ THƯA VÀ MẢNH THÔI. Bản đầu 6 cặp dày 0,13 mỗi cột — mà mỗi
+                 * tháp có hai cột hai bên cầu, hai tháp là 48 sợi. Nhìn từ bên
+                 * hông chúng cắt chéo nhau thành mạng lưới dày đặc che cả tầm
+                 * nhìn (thấy rõ trong ảnh user chụp từ prod). Nay 4 cặp, dày
+                 * 0,08, và bắt đầu xa hơn nên góc thoải hơn, ra dáng cầu thật.
+                 */
+                for(let i = 1; i <= 4; i++)
                 {
-                    const reach = 4 + i * 4.2
+                    const reach = 7 + i * 5.5
                     for(const dir of [ -1, 1 ])
                     {
-                        const topY = y + towerHeight - i * 0.8
+                        const topY = y + towerHeight - i * 1.4
                         const dx = dir * reach
                         const dy = topY - (y + 0.4)
                         const len = Math.hypot(dx, dy)
                         const angle = Math.atan2(dy, dx)
 
-                        this.box(len, 0.13, 0.13, towerX + dx * 0.5, (topY + y + 0.4) * 0.5, baseZ, CITY_COLORS.cable, { rotationZ: -angle + Math.PI, castShadow: false })
+                        this.box(len, 0.08, 0.08, towerX + dx * 0.5, (topY + y + 0.4) * 0.5, baseZ, CITY_COLORS.cable, { rotationZ: -angle + Math.PI, castShadow: false })
                     }
                 }
 

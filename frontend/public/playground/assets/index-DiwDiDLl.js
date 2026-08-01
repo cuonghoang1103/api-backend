@@ -115825,7 +115825,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-CSXbjiln.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-D7tDyaJf.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([
@@ -116153,7 +116153,10 @@ ${e.tab}if ( ${m} ) {
 \u2551 "Tiger Russian Military Vehicle" (https://skfb.ly/pDrJS) by Gerhald
 \u2551 is licensed under Creative Commons Attribution
 \u2551 (http://creativecommons.org/licenses/by/4.0/).
-\u2551 ^ CC BY BAT BUOC ghi cong \u2014 dung xoa dong tren.
+\u2551 "Super Portaviones" (https://skfb.ly/pLQ9A) by Ricardo3D
+\u2551 is licensed under Creative Commons Attribution
+\u2551 (http://creativecommons.org/licenses/by/4.0/).
+\u2551 ^ CC BY BAT BUOC ghi cong \u2014 dung xoa hai khoi tren.
 \u255A\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255D
 
 \u2554\u2550 Stack \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557

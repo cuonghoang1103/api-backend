@@ -36,7 +36,10 @@ const text = `
 ║ "Tiger Russian Military Vehicle" (https://skfb.ly/pDrJS) by Gerhald
 ║ is licensed under Creative Commons Attribution
 ║ (http://creativecommons.org/licenses/by/4.0/).
-║ ^ CC BY BAT BUOC ghi cong — dung xoa dong tren.
+║ "Super Portaviones" (https://skfb.ly/pLQ9A) by Ricardo3D
+║ is licensed under Creative Commons Attribution
+║ (http://creativecommons.org/licenses/by/4.0/).
+║ ^ CC BY BAT BUOC ghi cong — dung xoa hai khoi tren.
 ╚═══════════════════════╝
 
 ╔═ Stack ═══════════════╗

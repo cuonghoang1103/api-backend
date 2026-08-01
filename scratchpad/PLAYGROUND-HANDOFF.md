@@ -7,16 +7,23 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
 
 # 0. TRẠNG THÁI
 
-## ⛔ VIỆC ĐẦU TIÊN CỦA PHIÊN SAU: CHẠY `bash deploy.sh`
+## Deploy — kiểm trước khi tin
 
-Prod đang chạy gói **`index-C86N3tsb.js`** (bản có nhiễu + lag). Hai commit sửa
-lỗi **đã build và commit nhưng CHƯA lên prod** — gói local là `index-B4vtlPVx.js`:
+**Hai lỗi user báo (nhiễu giật giật + lag) ĐÃ LÊN PROD** với commit `83111c3`
+(gói `index-2k3ll-nZ.js`) — xác minh bằng
+`git show '83111c3:frontend/public/playground/index.html'`.
 
-- `83111c3` sửa z-fighting + gộp InstancedMesh (hết nhiễu, hết lag)
-- `89e6a4c` cầu dây văng thưa và mảnh hơn
+Chỉ còn `89e6a4c` (cầu dây văng thưa hơn — thuần thẩm mỹ) đang deploy nốt.
+Đầu phiên sau, so gói prod với local; lệch thì chạy `bash deploy.sh` nền:
 
-Chạy `bash deploy.sh` **ở chế độ nền** (mất >10 phút), rồi so gói prod với local
-để xác nhận. Lần deploy dở dang không hỏng gì — prod vẫn sống, chỉ là gói cũ.
+```bash
+curl -sL https://cuongthai.com/playground | grep -o 'assets/index-[A-Za-z0-9_-]*\.js' | head -1
+grep -o 'assets/index-[A-Za-z0-9_-]*\.js' frontend/public/playground/index.html | head -1
+```
+
+⚠️ **Mẹo tra gói nào thuộc commit nào** (rất hữu ích khi deploy chồng nhau):
+`git show '<sha>:frontend/public/playground/index.html' | grep -o 'assets/index-[^"]*\.js'`
+— phải QUOTE cả chuỗi, không thì zsh nuốt mất `:f` và git báo "ambiguous argument".
 
 ---
 

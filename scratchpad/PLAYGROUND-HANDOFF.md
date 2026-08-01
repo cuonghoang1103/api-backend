@@ -7,18 +7,46 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
 
 # 0. TRẠNG THÁI
 
-- **Đã deploy prod** — chạy tại `cuongthai.com/playground/`.
+- **Đã deploy prod** — `cuongthai.com/playground/`, gói `index-C86N3tsb.js`,
+  xác minh prod trỏ đúng bản local và `city/city.glb` phục vụ được (2,55 MB).
 - Mục **0b** (phá huỷ + tên lửa) và **0c** (máy quay + âm thanh) xong 31/7.
-- Mục **0d** (đảo sân chơi + sân bóng đá lái xe) xong 1/8, commit `44c4c0a` —
-  **CHỜ deploy + user test rồi mới push**.
+- Mục **0d** (đảo sân chơi + sân bóng đá lái xe) xong 1/8 — đã live, đã push.
+- Mục **0e** (đảo thành phố + nhà xe) xong 1/8 — **đã live**, commit `95b3582`.
+- ⚠️ **`deploy.sh` mất HƠN 10 PHÚT** khi gói đổi nhiều — chạy nền
+  (`run_in_background`), đừng để timeout cắt giữa chừng. Lần bị cắt ngày 1/8:
+  prod vẫn sống nguyên nhưng còn chạy gói CŨ; chạy lại là xong, không hỏng gì.
+- ⚠️ **Phiên Claude thứ hai PUSH CHUNG NHÁNH.** Ngày 1/8 họ push
+  `feat/playground-3d` và commit playground đi kèm luôn, dù mình chưa gọi
+  `git push`. Kiểm bằng `git reflog show origin/feat/playground-3d` trước khi
+  kết luận "chưa push".
 - ⚠️ **Có phiên Claude thứ hai làm chung cây repo** (đang sửa `content/academy/*`).
   ĐỪNG `git add -A` ở gốc. Chỉ add đúng thư mục của mình. (Đã kiểm: mấy file
   `content/academy/*.mjs` là dữ liệu seed CHẠY TAY, không có gì tự chạy chúng,
   nên chúng nằm trong cây làm việc lúc `deploy.sh` rsync cũng vô hại.)
 
-## Việc CÒN LẠI
+## 🔜 VIỆC TIẾP THEO — user chốt 1/8, theo thứ tự này
 
-Ba khu nữa trên **đảo sân chơi** (đất đã chừa sẵn trong `PLOTS`, xem mục 0d):
+### 1. Chế độ lái NGƯỜI THỨ NHẤT (ngồi trong cabin)
+
+User: *"lái xe ở chế độ người lái 3D, ngồi trong xe ấy, sao cho chuyên nghiệp"*.
+
+Nền: `View` đã có `MODE_DEFAULT = 1` và `MODE_FREE = 2` (hằng số là **SỐ**,
+không phải chuỗi) — thêm `MODE_COCKPIT = 3` là đi đúng đường đã mở sẵn.
+Cần: gắn máy quay vào ghế lái theo thân xe, ngoái đầu bằng chuột có giới hạn
+góc, và cân nhắc lái theo hướng nhìn thay vì hướng xe.
+
+⚠️ Hai chỗ đã lường trước: **mặt trong vỏ xe bị cull** (nhìn từ trong ra sẽ
+xuyên qua thân — phải ẩn thân hoặc bật vẽ hai mặt cho cabin), và **xe có thể
+không có nội thất** (`default.glb` chỉ 237 KB, nhiều khả năng chỉ là vỏ ngoài;
+nếu vậy dựng vô lăng + táp lô bằng mã, hoặc lấy mảnh từ kit).
+
+### 2. Chế độ SINH TỒN
+
+Xem mục riêng bên dưới ("KẾ HOẠCH LỚN"). User chốt **xe trước, đi bộ sau**.
+
+### 3. Ba khu còn lại trên đảo sân chơi
+
+Đất đã chừa sẵn trong `PLOTS` (xem mục 0d):
 
 1. **Sân khấu nhạc hội** (`PLOTS.concert`, tâm 34 · 150) — sàn nhảy nhấp theo
    nhạc thật (đọc biên độ từ Howler), lái xe lên 5 bục đĩa than để đổi bài,
@@ -290,7 +318,91 @@ bốn chỗ móc vào `World.js` · `Respawns.js` · `Map.js` · `Audio.js`.
 
 ---
 
-# 1. BỐN BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
+# 0e. ĐẢO THÀNH PHỐ + NHÀ XE — làm 1/8 (`3414092`, `95b3582`) — ĐÃ LIVE PROD
+
+Mảnh đất **thứ tư**, và là khu ĐẦU TIÊN dựng từ MODEL NGOÀI.
+Mã: `data/cityisland.js` · `data/garage.js` · `CityIsland.js` · `Garage.js`.
+
+## Số đo chốt
+
+| Thứ | Toạ độ |
+|---|---|
+| Đảo | x 146…318 · z −56…96 (tâm 232 · 20, **172 × 152 — rộng nhất**) |
+| Cầu dây văng | x 84 → 150 tại z = 20 (dài 66 ≈ 132 m). Tháp cao 22 ở x 104 và 130 |
+| Đường dọc | x 173,5 · 212,5 · 251,5 · 290,5 |
+| Đường ngang | z −38,5 · 0,5 · 39,5 · 78,5 |
+| Quảng trường | ô (1,1), tâm 232 · 20, 30 × 30, **để TRỐNG** |
+| Tháp cao tầng | 4 ô chéo (0,0) (2,0) (0,2) (2,2) — tâm (193·−19) (271·−19) (193·59) (271·59) |
+| Điểm hồi sinh `city` | (154 · 20), yaw π |
+
+`MODEL_SCALE = 0.5` — kit dựng theo MÉT, game 1 đơn vị ≈ 2 m. Kit theo lưới
+**2 m ngang × 3 m mỗi tầng**, gờ mái 1 m, `Decal_DoubleYellow_Straight` dài
+đúng 6 m = bằng một mảnh `Street_4Lane` nên rải cùng bước là khớp.
+
+## BỐN chỗ đã sụp bẫy
+
+1. **`GLTFLoader` XOÁ HẲN dấu chấm trong tên node.** `Building_Medium_2.001`
+   vào scene thành `Building_Medium_2001` ⇒ **11 trong 32 toà nhà lặng lẽ không
+   mọc lên, KHÔNG một lỗi nào**. Nay tra qua `CityIsland.piece()` chịu cả hai
+   dạng, và bộ kiểm có mục đếm số nhà thực mọc.
+2. **File kit là 153 SCENE RỜI**, `GLTFLoader` chỉ nạp scene mặc định ⇒ để
+   nguyên thì cả file chỉ ra đúng MỘT toà nhà. Đã gộp về một scene lúc chuẩn bị.
+3. **Tháp mọc xuyên qua nhà.** Bản đầu đặt tháp ở góc chéo quảng trường mà vẫn
+   để `setBlocks()` rải nhà ở đó ⇒ 3 trong 4 tháp đè nhà. **Bộ kiểm hành lang
+   xe KHÔNG bắt được** vì cả hai đều nằm giữa ô, cách xa đường — phải viết riêng
+   phép đo chồng lấn mới lộ. Nay bốn ô tháp khai trong `CITY_GRID.towerCells`.
+4. **Pháo trên nóc mất khi đổi xe.** `cannon`/`launcher` là con của
+   `parts.chassis` chiếc CŨ, mà `Garage.select()` gọi `visualVehicle.destroy()`
+   ⇒ nóc trống trơn, bấm X không ra đạn, không lỗi nào. Thêm
+   `VehicleRocket.reattach()`.
+
+## Nhà xe (mục "Vehicle" trong Cài đặt)
+
+Nút **SINH RA TỪ `data/garage.js`**, không gõ tay trong `index.html` — thêm xe
+mới = đặt `.glb` vào `static/vehicle/` + khai một dòng. Ba xe hiện có:
+`default` · `defaultAntenna` · `oldSchool` (đều đã nằm sẵn trong dự án từ trước).
+
+⚠️ `Garage` phải dựng TRONG `world.step(1)` và **tự nối nút lấy** — `Options`
+khởi tạo sớm hơn nội dung thế giới. Cùng bài học với `VehicleRocket`.
+
+⚠️ `VisualVehicle` tìm bộ phận theo TÊN NODE (`chassis`, `wheelContainer`,
+`blinkerLeft`, `stopLights`…). Xe ngoài không đặt tên theo quy ước đó sẽ dựng
+lên nhưng thiếu bánh quay, thiếu đèn — không lỗi, chỉ là xe đứng đờ.
+
+## Model ngoài — quy trình đã chạy thật
+
+```bash
+npx gltf-transform optimize IN OUT --compress draco --texture-compress webp \
+    --texture-size 1024 --simplify true --simplify-error 0.005
+```
+Rồi gộp scene bằng script `@gltf-transform/core` (gom `listChildren()` của mọi
+scene vào `scenes[0]`, `dispose()` các scene kia).
+
+| | Xe Tiger (Sketchfab, CC BY) | City kit (Quaternius, CC0) |
+|---|---|---|
+| Gốc | 65 MB | 91,7 MB (153 mảnh) |
+| Sau nén | 1,9 MB | **2,4 MB** |
+| Đỉnh | **469.000** | **156.869** |
+| So cả thế giới (804k đỉnh) | +58% | +19,5% |
+
+⚠️ **Xe Tiger: `simplify` KHÔNG giảm nổi dưới 469k** dù ép `--ratio 0.1` — model
+bake từ high-poly, UV cắt vụn nên gần như mọi đỉnh là biên. File nằm ở
+`/Users/admin/Downloads/Play Ground/`, **chưa đưa vào dự án**; chốt là chỉ dùng
+trong chế độ Sinh tồn, tải theo yêu cầu.
+
+⚠️ Đường dẫn model có KHOẢNG TRẮNG ("Play Ground") làm vỡ lệnh CLI — chép sang
+thư mục sạch trước.
+
+`materials.updateObject()` nhận `MeshStandardMaterial` của glTF và **GIỮ NGUYÊN
+texture**, chỉ đổi sang hệ TSL ⇒ model ngoài tự ăn đúng ánh sáng, sương mù,
+bóng đổ. Không phải viết gì thêm.
+
+**Ghi công**: `static/ATTRIBUTION.txt` mục "Third-party 3D assets" + khối
+Credits trong `sources/data/consoleLog.js`. CC BY của Tiger là **BẮT BUỘC**.
+
+---
+
+# 1. NĂM BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
 
 Cần dev server sống: `cd playground-3d && npm run dev` (xem mục 4).
 
@@ -299,6 +411,7 @@ node tools/check-fptu-layout.mjs             # công trình đè nhau, đường
 URL=http://localhost:5173/ node tools/check-ghost-colliders.mjs   # VA CHẠM MỒ CÔI + MẶT TRANH NHAU CHIỀU SÂU
 node tools/check-play-island.mjs             # đảo sân chơi: 9 mục, có QUÉT HÀNH LANG XE
 node tools/check-arena-rules.mjs             # luật chơi sân bóng: 9 mục
+node tools/check-city-island.mjs             # đảo thành phố: nhà chắn đường, bậc cầu, quảng trường, SỐ NHÀ THỰC MỌC
 ```
 
 ⚠️ `check-ghost-colliders.mjs` mặc định gõ cứng cổng **5175** — truyền `URL=` cho

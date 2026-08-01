@@ -99685,7 +99685,9 @@ https://github.com/browserify/crypto-browserify`);
     box(e, r, s, o, a, h, c, { rotationX: d = 0, rotationY: f = 0, rotationZ: p = 0, physical: m = false, geometry: b = null, castShadow: w = true, receiveShadow: M = true, friction: P = null, restitution: O = null, material: L = null } = {}) {
       const U = new Mesh$1(b ?? this.boxGeometry, L ?? this.getMaterial(c));
       if (U.scale.set(e, r, s), U.position.set(o, a, h), U.rotation.order = "YZX", U.rotation.x = d, U.rotation.y = f, U.rotation.z = p, U.castShadow = w, U.receiveShadow = M, this.group.add(U), m) {
-        const q = new Quaternion$1().setFromEuler(new Euler$1(d, f, p, "YZX")), H = {
+        const q = new Quaternion$1().setFromEuler(new Euler$1(d, f, p, "YZX"));
+        (!(e > 0) || !(r > 0) || !(s > 0)) && console.warn(`[MonsterIsland] k\xEDch th\u01B0\u1EDBc va ch\u1EA1m kh\xF4ng h\u1EE3p l\u1EC7 t\u1EA1i (${o} \xB7 ${a} \xB7 ${h}): ${e} \xD7 ${r} \xD7 ${s}`);
+        const H = {
           type: "fixed",
           position: {
             x: o,
@@ -99702,9 +99704,9 @@ https://github.com/browserify/crypto-browserify`);
             {
               shape: "cuboid",
               parameters: [
-                e * 0.5,
-                r * 0.5,
-                s * 0.5
+                Math.abs(e) * 0.5,
+                Math.abs(r) * 0.5,
+                Math.abs(s) * 0.5
               ]
             }
           ]
@@ -99984,9 +99986,9 @@ https://github.com/browserify/crypto-browserify`);
       this.place(e, this.boxGeometry, h, new Vector3$1(o, GROUND_TOP + 0.05 + c * 0.035, a), new Quaternion$1().setFromEuler(new Euler$1(0, d, 0)), new Vector3$1(r, 0.04, s));
     }
     setRoads() {
-      const { spine: e, cross: r } = MONSTER_ROADS, s = e.toZ - e.fromZ;
+      const { spine: e, cross: r } = MONSTER_ROADS, s = Math.abs(e.toZ - e.fromZ);
       this.slab(e.halfWidth * 2, s, e.x, (e.fromZ + e.toZ) * 0.5, MONSTER_COLORS.road);
-      for (const o of r) this.slab(o.toX - o.fromX, o.halfWidth * 2, (o.fromX + o.toX) * 0.5, o.z, MONSTER_COLORS.road);
+      for (const o of r) this.slab(Math.abs(o.toX - o.fromX), o.halfWidth * 2, (o.fromX + o.toX) * 0.5, o.z, MONSTER_COLORS.road);
       for (let o = 0; o < 46; o++) {
         const a = (o + 0.5) / 46, h = e.fromZ + s * a, c = Math.sin(o * 2.7) * e.halfWidth * 0.6;
         this.decal("crack", 0.3 + o % 3 * 0.25, 3 + o % 4 * 2.5, e.x + c, h, MONSTER_COLORS.crack, {
@@ -100104,7 +100106,7 @@ https://github.com/browserify/crypto-browserify`);
         const s = ((_a2 = r.material) == null ? void 0 : _a2.map) ?? null, o = s ? s.uuid ?? "map" : "flat";
         let a = this._charMaterials.get(o);
         a || (a = new MeshDefaultMaterial({
-          colorNode: s ? texture$1(s).rgb.mul(color$1(MONSTER_COLORS.ash)) : color$1(MONSTER_COLORS.groundDark)
+          colorNode: s ? color$1(MONSTER_COLORS.ash).mul(texture$1(s).rgb) : color$1(MONSTER_COLORS.groundDark)
         }), this._charMaterials.set(o, a)), r.material = a, r.castShadow = true, r.receiveShadow = true;
       });
     }
@@ -115224,7 +115226,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-DjGicZ0V.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-B6Zsr4IH.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

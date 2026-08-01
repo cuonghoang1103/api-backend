@@ -12,7 +12,7 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
 Tính tới **1/8 chiều**: mọi thứ tới `3a73e26` ĐÃ LÊN PROD và ĐÃ PUSH
 (gói `index-B4vtlPVx.js`, `HEAD == origin/feat/playground-3d`, cây sạch).
 
-**CHƯA deploy**: chế độ lái người thứ nhất (mục 0f) — gói mới `index-DOsXf1_4.js`
+**CHƯA deploy**: chế độ lái người thứ nhất (mục 0f) — gói mới `index-BCcIZc06.js`
 đã dựng và rsync sang `frontend/public/playground`, **chờ `bash deploy.sh`**.
 
 Đầu phiên sau, so gói prod với local; lệch thì chạy `bash deploy.sh` nền:
@@ -312,6 +312,39 @@ bốn chỗ móc vào `World.js` · `Respawns.js` · `Map.js` · `Audio.js`.
 | Sân bóng | tâm −30 · 150, lòng sân 34 × 26, tường cao 2,6 |
 | Sân tập | tâm −29 · 118, dàn theo X: vòng lật −50…−40 · dốc −38,5…−19,5 · bập bênh −20…−8 |
 | Điểm hồi sinh `arena` | (0 · 110), yaw −π/2 (quay vào đảo) |
+
+## ⛔ LỖI ĐÃ LÀM ĐỨNG KHUNG HÌNH — nửa-cạnh collider ÂM
+
+User báo: *"lái xe di chuyển nó mới bị, chứ đứng yên 1 chỗ không sao"*.
+
+**Một dòng duy nhất**: `spineLength = spine.toZ - spine.fromZ`. Đảo này nằm ở
+z ÂM và đường trục chạy từ −204 **xuống** −390, nên hiệu ra **−186**. Số âm đó
+đi thẳng vào `halfExtents` của Rapier: `(5,5 · 0,02 · −93)`.
+
+Chuỗi hỏng: cuboid nửa-cạnh âm ⇒ mọi va chạm với nó trả **NaN** ⇒ vị trí xe NaN
+⇒ âm lượng NaN ⇒ `setValueAtTime` **NÉM LỖI** giữa chuỗi tick ⇒ mọi handler sau
+đó, kể cả `Rendering.render` (nhịp **998**), không bao giờ chạy ⇒ **đứng khung
+hình mà xe vẫn di chuyển được** (vật lý ở nhịp 2–5, trước chỗ ném lỗi).
+
+⚠️ **Vì sao gần như không thể tìm ra bằng mắt:**
+- **HÌNH vẫn hiện bình thường** — mesh scale âm chỉ lật mặt, vẫn vẽ đủ.
+- Chỉ hỏng khi xe **CHẠM** vào collider đó ⇒ đứng yên thì không sao.
+- **Không tất định** — có lần lái qua vẫn êm.
+- Đảo sân chơi có **cùng dòng mã**, không lỗi, chỉ vì z ở đó TĂNG dần.
+
+⚠️ **Cách tìm ra** (ghi lại vì mất rất nhiều lượt đo sai trước đó):
+1. Headless **KHÔNG đo được hiệu năng** — nó bóp rAF khi trang không tương tác,
+   landing cũng ra 0,5 fps y như chỗ hỏng. Phải `headless: false`.
+2. Đo lúc **ĐỨNG YÊN** thì không thấy gì (đảo quái còn nhanh nhất: 110 fps,
+   draw 141). Phải **lái thật bằng phím** — trong cửa sổ thật thì lái được.
+3. Dấu hiệu quyết định: **draw call tụt còn 5** trong khi xe vẫn đi được 86 đơn
+   vị ⇒ chuỗi tick đứt giữa chừng, không phải máy yếu.
+4. Một khi NaN xuất hiện thì **dính luôn**; mọi phép đo sau đó trên cùng trang
+   đều vô nghĩa. Mỗi kịch bản phải một trang sạch.
+5. Chốt hạ: duyệt `forEachCollider` đọc `halfExtents()` — ra ngay số âm.
+
+Nay có ba lớp chặn: `Math.abs()` ở chỗ tính, cảnh báo `console.warn` + `Math.abs`
+trong `box()`, và **mục "nửa-cạnh âm/NaN" trong `check-monster-island.mjs`**.
 
 ## NĂM chỗ đã sụp bẫy
 

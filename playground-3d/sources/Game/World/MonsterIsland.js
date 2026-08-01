@@ -170,11 +170,26 @@ export class MonsterIsland
             // nghiêng mà chỉ lấy Y thì hình một đằng va chạm một nẻo
             const quaternion = new THREE.Quaternion().setFromEuler(new THREE.Euler(rotationX, rotationY, rotationZ, 'YZX'))
 
+            /**
+             * ⚠️ CHẶN KÍCH THƯỚC ÂM — đây là lỗi đã làm đứng hình cả game.
+             *
+             * Một chiều âm (do viết `toZ - fromZ` mà z giảm dần) đi thẳng vào
+             * `halfExtents` của Rapier, và cuboid nửa-cạnh âm thì mọi phép va
+             * chạm với nó trả về NaN: vị trí xe NaN → âm lượng NaN →
+             * `setValueAtTime` ném lỗi giữa chuỗi tick → render không bao giờ
+             * chạy. HÌNH thì vẫn hiện bình thường nên nhìn không ra.
+             *
+             * Lấy trị tuyệt đối để game vẫn chạy, nhưng KÊU TO — im lặng sửa hộ
+             * là lần sau lại mất một buổi đi tìm.
+             */
+            if(!(width > 0) || !(height > 0) || !(depth > 0))
+                console.warn(`[MonsterIsland] kích thước va chạm không hợp lệ tại (${x} · ${y} · ${z}): ${width} × ${height} × ${depth}`)
+
             const description = {
                 type: 'fixed',
                 position: { x, y, z },
                 rotation: { x: quaternion.x, y: quaternion.y, z: quaternion.z, w: quaternion.w },
-                colliders: [ { shape: 'cuboid', parameters: [ width * 0.5, height * 0.5, depth * 0.5 ] } ]
+                colliders: [ { shape: 'cuboid', parameters: [ Math.abs(width) * 0.5, Math.abs(height) * 0.5, Math.abs(depth) * 0.5 ] } ]
             }
             if(friction !== null) description.friction = friction
             if(restitution !== null) description.restitution = restitution
@@ -698,11 +713,28 @@ export class MonsterIsland
     {
         const { spine, cross } = MONSTER_ROADS
 
-        const spineLength = spine.toZ - spine.fromZ
+        /**
+         * ⚠️ `Math.abs` — ĐÂY LÀ CHỖ ĐÃ LÀM ĐƠ CẢ GAME.
+         *
+         * Đảo này nằm ở z ÂM và đường trục chạy từ −204 xuống −390, nên
+         * `toZ - fromZ` ra **−186**. Chiều dài âm đi thẳng vào collider thành
+         * `halfExtents = (5,5 · 0,02 · −93)`, và Rapier gặp cuboid nửa-cạnh âm
+         * thì tính ra NaN: vị trí xe NaN → âm lượng NaN → `setValueAtTime` NÉM
+         * LỖI giữa chuỗi tick → mọi handler sau đó (kể cả `Rendering.render` ở
+         * nhịp 998) không chạy → **đứng khung hình**.
+         *
+         * Ba thứ khiến nó khó tìm:
+         *  · HÌNH vẫn hiện bình thường (mesh scale âm chỉ lật mặt, vẫn vẽ)
+         *  · Chỉ hỏng khi xe CHẠM vào collider đó, nên đứng yên thì không sao
+         *  · Không tất định — có lần lái qua vẫn êm
+         *
+         * Đảo sân chơi có cùng dòng mã này mà không lỗi, chỉ vì z ở đó TĂNG dần.
+         */
+        const spineLength = Math.abs(spine.toZ - spine.fromZ)
         this.slab(spine.halfWidth * 2, spineLength, spine.x, (spine.fromZ + spine.toZ) * 0.5, MONSTER_COLORS.road)
 
         for(const road of cross)
-            this.slab(road.toX - road.fromX, road.halfWidth * 2, (road.fromX + road.toX) * 0.5, road.z, MONSTER_COLORS.road)
+            this.slab(Math.abs(road.toX - road.fromX), road.halfWidth * 2, (road.fromX + road.toX) * 0.5, road.z, MONSTER_COLORS.road)
 
         /**
          * Vệt nứt — tấm mảnh màu tối rải dọc lòng đường, layer 2 nên nằm TRÊN
@@ -944,9 +976,23 @@ export class MonsterIsland
 
             if(!material)
             {
+                /**
+                 * ⚠️ `.rgb`, và để `color()` đứng trước trong phép nhân — cả
+                 * hai đều để kết quả chắc chắn là vec3.
+                 *
+                 * `MeshDefaultMaterial` kết thúc bằng `vec4(outputColor, alpha)`,
+                 * nên `colorNode` mà là vec4 (texture node trần) thì thành NĂM
+                 * thành phần và three kêu "Length of parameters exceeds maximum
+                 * length of function vec4()". Đúng cái bẫy đã vấp ở
+                 * `Cockpit.paintedDial()`.
+                 *
+                 * (Đo 1/8: khu này KHÔNG sinh lỗi đó. Năm cảnh báo vec4 thấy
+                 * trong console là của các khu CŨ — khu FPTU +3, đảo sân chơi
+                 * +1, sân bóng +1 — chứ đảo quái +0.)
+                 */
                 material = new MeshDefaultMaterial({
                     colorNode: map
-                        ? textureNode(map).rgb.mul(color(MONSTER_COLORS.ash))
+                        ? color(MONSTER_COLORS.ash).mul(textureNode(map).rgb)
                         : color(MONSTER_COLORS.groundDark),
                 })
                 this._charMaterials.set(key, material)

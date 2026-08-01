@@ -135,6 +135,59 @@ const report = await page.evaluate(() =>
             problems.push(`Mặt cầu có bậc ${round(maxStep)} tại z = ${stepAt} — bánh xe không leo nổi`)
     }
 
+    // ── 3b. MỌI COLLIDER PHẢI CÓ NỬA-CẠNH DƯƠNG VÀ HỮU HẠN ─────────────────
+    /**
+     * ⚠️ MỤC QUAN TRỌNG NHẤT CỦA BỘ KIỂM NÀY — nó bắt đúng lỗi đã làm ĐỨNG
+     * KHUNG HÌNH cả game ngày 1/8.
+     *
+     * Viết `toZ - fromZ` cho một đảo nằm ở z ÂM (z giảm dần) ra chiều dài −186,
+     * và số âm đó đi thẳng vào `halfExtents` của Rapier. Cuboid nửa-cạnh âm thì
+     * mọi va chạm với nó trả về NaN: vị trí xe NaN → âm lượng NaN →
+     * `setValueAtTime` NÉM LỖI giữa chuỗi tick → mọi handler sau đó, kể cả
+     * `Rendering.render` (nhịp 998), không bao giờ chạy.
+     *
+     * Ba thứ khiến nó gần như không thể tìm ra bằng mắt:
+     *  · HÌNH vẫn hiện bình thường (mesh scale âm chỉ lật mặt)
+     *  · chỉ hỏng khi xe CHẠM vào, nên đứng yên thì không sao
+     *  · không tất định — có lần lái qua vẫn êm
+     */
+    {
+        const bad = []
+        const huge = []
+        let checked = 0
+
+        W.forEachCollider((collider) =>
+        {
+            const t = collider.translation()
+            if(Math.abs(t.x - ISLAND.x) > ISLAND.width) return
+            if(Math.abs(t.z - ISLAND.z) > ISLAND.depth) return
+            checked++
+
+            if(![ t.x, t.y, t.z ].every(Number.isFinite))
+            {
+                bad.push('vị trí NaN')
+                return
+            }
+
+            const he = collider.halfExtents?.()
+            if(!he) return
+
+            if(![ he.x, he.y, he.z ].every(Number.isFinite))
+                bad.push(`nửa-cạnh NaN tại (${round(t.x)} · ${round(t.z)})`)
+            else if(he.x <= 0 || he.y <= 0 || he.z <= 0)
+                bad.push(`nửa-cạnh ÂM/BẰNG 0 tại (${round(t.x)} · ${round(t.y)} · ${round(t.z)}): (${round(he.x)}, ${round(he.y)}, ${round(he.z)})`)
+            else if(he.x > 300 || he.y > 300 || he.z > 300)
+                huge.push(`(${round(t.x)} · ${round(t.z)}) = (${round(he.x)}, ${round(he.y)}, ${round(he.z)})`)
+        })
+
+        facts.colliderDaSoiKichThuoc = checked
+        facts.colliderKichThuocXau = bad.length ? bad.slice(0, 4).join(' · ') : 'không có'
+        if(huge.length) facts.colliderKhongLo = huge.slice(0, 3).join(' · ')
+
+        if(bad.length)
+            problems.push(`${bad.length} collider có nửa-cạnh âm/NaN — Rapier sẽ trả NaN khi xe chạm vào và ĐỨNG KHUNG HÌNH: ${bad.slice(0, 3).join(' · ')}`)
+    }
+
     // ── 4. Va chạm mồ côi (vật vô hình chặn xe) ─────────────────────────────
     /**
      * Gom hộp bao của MỌI hình trên đảo (kể cả từng bản sao của `InstancedMesh`),

@@ -70,6 +70,15 @@ export const CITY_GRID = {
     blockSize: 30,
     roadWidth: 9,
     squareCell: { col: 1, row: 1 },   // ô làm quảng trường
+    /**
+     * Bốn ô chéo dành cho THÁP CAO TẦNG ghép từ mảnh modular.
+     *
+     * ⚠️ `setBlocks()` phải BỎ QUA những ô này. Bản đầu đặt tháp ở góc chéo
+     * quảng trường mà vẫn để `setBlocks()` rải nhà ở đó ⇒ 3 trong 4 tháp mọc
+     * xuyên qua nhà. Bộ kiểm hành lang xe không bắt được vì cả hai đều nằm
+     * trong lòng ô, cách xa đường.
+     */
+    towerCells: [ { col: 0, row: 0 }, { col: 2, row: 0 }, { col: 0, row: 2 }, { col: 2, row: 2 } ],
 }
 
 /**

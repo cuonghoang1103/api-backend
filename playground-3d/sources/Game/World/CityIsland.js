@@ -52,8 +52,11 @@ export class CityIsland
         this.setIsland()
         this.setBridge()
         this.setStreets()
+        this.setRoadMarkings()
         this.setBlocks()
+        this.setTowers()
         this.setPlaza()
+        this.setStreetFurniture()
     }
 
     /**
@@ -532,7 +535,10 @@ export class CityIsland
         {
             for(let row = 0; row < rows; row++)
             {
+                // Bỏ qua ô quảng trường VÀ bốn ô dành cho tháp — quên vế sau
+                // thì tháp mọc xuyên qua nhà, mà không bộ kiểm nào bắt được
                 if(col === squareCell.col && row === squareCell.row) continue
+                if(CITY_GRID.towerCells.some(c => c.col === col && c.row === row)) continue
 
                 const centre = this.blockCentre(col, row)
                 const half = blockSize * 0.5
@@ -559,6 +565,232 @@ export class CityIsland
                     const z = centre.z + face.dz * (half - inset) + (face.dz === 0 ? along : 0)
 
                     this.place(kind.name, x, z, face.rot, { physical: 'box' })
+                }
+            }
+        }
+    }
+
+    /**
+     * VẠCH KẺ ĐƯỜNG — kit có sẵn 17 decal, dùng ba loại đáng giá nhất.
+     *
+     * `Decal_DoubleYellow_Straight` dài đúng 6 m, bằng CHÍNH một mảnh
+     * `Street_4Lane`, nên rải cùng bước là khớp tuyệt đối, khỏi phải căn.
+     *
+     * Decal dày 0 (chỉ là mặt phẳng) nên phải nhấc lên vài phân, không thì nó
+     * tranh chiều sâu với mặt đường và nhấp nháy khi máy quay nhúc nhích.
+     */
+    setRoadMarkings()
+    {
+        const { cols, rows, blockSize, roadWidth } = CITY_GRID
+        const pieceLength = 6 * MODEL_SCALE
+        const spanX = cols * blockSize + (cols + 1) * roadWidth
+        const spanZ = rows * blockSize + (rows + 1) * roadWidth
+        const y = GROUND_TOP + 0.06
+
+        const nearCross = (x, z) =>
+        {
+            for(const cx of this.roadXs) for(const cz of this.roadZs)
+                if(Math.abs(x - cx) < 7.5 && Math.abs(z - cz) < 7.5) return true
+            return false
+        }
+
+        // Tim đường vàng đôi, rải cùng bước với mảnh đường
+        for(const cx of this.roadXs)
+        {
+            const from = CITY_GRID.z - spanZ * 0.5
+            for(let d = pieceLength * 0.5; d < spanZ; d += pieceLength)
+            {
+                const cz = from + d
+                if(nearCross(cx, cz)) continue
+                this.place('Decal_DoubleYellow_Straight', cx, cz, Math.PI * 0.5, { y })
+            }
+        }
+        for(const cz of this.roadZs)
+        {
+            const from = CITY_GRID.x - spanX * 0.5
+            for(let d = pieceLength * 0.5; d < spanX; d += pieceLength)
+            {
+                const cx = from + d
+                if(nearCross(cx, cz)) continue
+                this.place('Decal_DoubleYellow_Straight', cx, cz, 0, { y })
+            }
+        }
+
+        // Vạch qua đường + mũi tên làn ở bốn hướng của mỗi ngã tư
+        for(const cx of this.roadXs)
+        {
+            for(const cz of this.roadZs)
+            {
+                const out = roadWidth * 0.5 + 1.6
+                this.place('Decal_Crosswalk', cx, cz - out, 0, { y })
+                this.place('Decal_Crosswalk', cx, cz + out, 0, { y })
+                this.place('Decal_Crosswalk', cx - out, cz, Math.PI * 0.5, { y })
+                this.place('Decal_Crosswalk', cx + out, cz, Math.PI * 0.5, { y })
+
+                const lane = roadWidth * 0.22
+                this.place('Decal_ArrowStraight', cx - lane, cz - out - 3, 0, { y })
+                this.place('Decal_ArrowStraight', cx + lane, cz + out + 3, Math.PI, { y })
+                this.place('Decal_ArrowStraight', cx - out - 3, cz + lane, -Math.PI * 0.5, { y })
+                this.place('Decal_ArrowStraight', cx + out + 3, cz - lane, Math.PI * 0.5, { y })
+            }
+        }
+    }
+
+    /**
+     * BỐN TOÀ THÁP quanh quảng trường — ghép từ mảnh modular, cao hơn hẳn nhà
+     * dựng sẵn (cao nhất 28 m) để phố có đường chân trời.
+     *
+     * Kit theo lưới **2 m ngang × 3 m mỗi tầng**, gờ mái 1 m. Nhà ghép là VỎ
+     * RỖNG bốn mặt, tường dày 0,2 m.
+     *
+     * ⚠️ Số mảnh bùng nổ rất nhanh: một toà 8 tầng, mặt tiền 4 mảnh, 4 mặt là
+     * 128 mảnh. Nên CHỈ ghép bốn toà làm điểm nhấn, phần còn lại của phố vẫn
+     * dùng ba mẫu nhà dựng sẵn. Ghép cả phố kiểu này là hàng nghìn draw call.
+     *
+     * Va chạm KHÔNG đặt theo từng mảnh tường — một hộp bao trọn toà là đủ, và
+     * tránh được cả trăm collider mỏng dính nhau (nguồn của mọi chỗ kẹt xe).
+     */
+    setTowers()
+    {
+        const { blockSize, squareCell } = CITY_GRID
+        const centre = this.blockCentre(squareCell.col, squareCell.row)
+        const half = blockSize * 0.5
+
+        const M = MODEL_SCALE
+        const bay = 2 * M          // bề rộng một mảnh tường  = 1 đơn vị
+        const floor = 3 * M        // chiều cao một tầng      = 1,5 đơn vị
+
+        const styles = [
+            { wall: 'Metal_Plain_3', window: 'Metal_FullWindow', ground: 'Metal_FirstFloor_Wall', cornice: 'Cornice_Metal_Center', floors: 9 },
+            { wall: 'Brick_Plain_3', window: 'Brick_Window_Square_Single', ground: 'Trim_FirstFloor_Wall', cornice: 'Cornice_Brick_Center', floors: 7 },
+            { wall: 'Metal_Plain_3', window: 'Metal_FullWindow', ground: 'Metal_FirstFloor_Wall', cornice: 'Cornice_Metal_Center', floors: 11 },
+            { wall: 'Brick_Plain_3', window: 'Brick_Window_Square_Single', ground: 'Trim_FirstFloor_Wall', cornice: 'Cornice_Brick_Center', floors: 8 },
+        ]
+
+        // Đứng GIỮA bốn ô chéo đã dành riêng — `setBlocks()` bỏ qua các ô này
+        const spots = CITY_GRID.towerCells.map(cell => this.blockCentre(cell.col, cell.row))
+
+        this.towers = []
+
+        spots.forEach((spot, index) =>
+        {
+            const style = styles[index]
+            const baysX = 5
+            const baysZ = 4
+            const width = baysX * bay
+            const depth = baysZ * bay
+            const height = style.floors * floor + 1 * M
+
+            for(let level = 0; level < style.floors; level++)
+            {
+                const y = GROUND_TOP + level * floor
+                const name = level === 0 ? style.ground : ((level % 3 === 1) ? style.window : style.wall)
+
+                // Hai mặt theo trục X
+                for(let i = 0; i < baysX; i++)
+                {
+                    const px = spot.x - width * 0.5 + (i + 0.5) * bay
+                    this.place(name, px, spot.z - depth * 0.5, 0, { y })
+                    this.place(name, px, spot.z + depth * 0.5, Math.PI, { y })
+                }
+                // Hai mặt theo trục Z
+                for(let i = 0; i < baysZ; i++)
+                {
+                    const pz = spot.z - depth * 0.5 + (i + 0.5) * bay
+                    this.place(name, spot.x - width * 0.5, pz, -Math.PI * 0.5, { y })
+                    this.place(name, spot.x + width * 0.5, pz, Math.PI * 0.5, { y })
+                }
+            }
+
+            // Gờ mái chạy quanh đỉnh
+            const capY = GROUND_TOP + style.floors * floor
+            for(let i = 0; i < baysX; i++)
+            {
+                const px = spot.x - width * 0.5 + (i + 0.5) * bay
+                this.place(style.cornice, px, spot.z - depth * 0.5, 0, { y: capY })
+                this.place(style.cornice, px, spot.z + depth * 0.5, Math.PI, { y: capY })
+            }
+            for(let i = 0; i < baysZ; i++)
+            {
+                const pz = spot.z - depth * 0.5 + (i + 0.5) * bay
+                this.place(style.cornice, spot.x - width * 0.5, pz, -Math.PI * 0.5, { y: capY })
+                this.place(style.cornice, spot.x + width * 0.5, pz, Math.PI * 0.5, { y: capY })
+            }
+
+            // Mái phẳng bịt nóc
+            for(let i = 0; i < baysX; i++)
+                for(let j = 0; j < baysZ; j++)
+                    this.place('Roof_2x2',
+                        spot.x - width * 0.5 + (i + 0.5) * bay,
+                        spot.z - depth * 0.5 + (j + 0.5) * bay,
+                        0, { y: capY })
+
+            // MỘT hộp bao cho cả toà — không đặt va chạm theo từng mảnh tường
+            this.game.objects.add(null, {
+                type: 'fixed',
+                position: { x: spot.x, y: GROUND_TOP + height * 0.5, z: spot.z },
+                colliders: [ { shape: 'cuboid', parameters: [ width * 0.5 + 0.2, height * 0.5, depth * 0.5 + 0.2 ] } ]
+            })
+
+            this.towers.push({ ...spot, width, depth, height })
+        })
+    }
+
+    /**
+     * ĐỒ VỈA HÈ — cột chắn, nắp cống, hố ga rải dọc hai bên đường.
+     *
+     * Chỉ `Prop_Bollard` mới có va chạm (nó là cột thật), còn nắp cống và hố ga
+     * nằm bẹp dưới đất nên để trần — cho va chạm chỉ tổ đẻ ra hàng trăm hộp
+     * mỏng dính đúng chỗ bánh xe đi qua.
+     */
+    setStreetFurniture()
+    {
+        const { cols, rows, blockSize, roadWidth } = CITY_GRID
+        const spanX = cols * blockSize + (cols + 1) * roadWidth
+        const spanZ = rows * blockSize + (rows + 1) * roadWidth
+        const edge = roadWidth * 0.5 + 0.9      // sát mép vỉa hè
+        const hash = (i) => { const h = Math.sin(i * 91.7) * 43758.5453; return h - Math.floor(h) }
+
+        let seed = 0
+        const nearCross = (x, z) =>
+        {
+            for(const cx of this.roadXs) for(const cz of this.roadZs)
+                if(Math.abs(x - cx) < 9 && Math.abs(z - cz) < 9) return true
+            return false
+        }
+
+        for(const cx of this.roadXs)
+        {
+            const from = CITY_GRID.z - spanZ * 0.5
+            for(let d = 4; d < spanZ; d += 4)
+            {
+                const cz = from + d
+                if(nearCross(cx, cz)) continue
+                for(const side of [ -1, 1 ])
+                {
+                    seed++
+                    const r = hash(seed)
+                    if(r < 0.42) this.place('Prop_Bollard', cx + side * edge, cz, 0)
+                    else if(r < 0.62) this.place('Prop_ManholeCover', cx + side * (edge - 2.2), cz, 0, { y: GROUND_TOP + 0.05 })
+                    else if(r < 0.74) this.place('Prop_Drain', cx + side * edge, cz, 0, { y: GROUND_TOP + 0.05 })
+                }
+            }
+        }
+
+        for(const cz of this.roadZs)
+        {
+            const from = CITY_GRID.x - spanX * 0.5
+            for(let d = 4; d < spanX; d += 4)
+            {
+                const cx = from + d
+                if(nearCross(cx, cz)) continue
+                for(const side of [ -1, 1 ])
+                {
+                    seed++
+                    const r = hash(seed)
+                    if(r < 0.42) this.place('Prop_Bollard', cx, cz + side * edge, 0)
+                    else if(r < 0.62) this.place('Prop_ManholeCover', cx, cz + side * (edge - 2.2), 0, { y: GROUND_TOP + 0.05 })
+                    else if(r < 0.74) this.place('Prop_Drain', cx, cz + side * edge, 0, { y: GROUND_TOP + 0.05 })
                 }
             }
         }

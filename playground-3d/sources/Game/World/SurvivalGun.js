@@ -2,7 +2,7 @@ import * as THREE from 'three/webgpu'
 import { color } from 'three/tsl'
 import { Game } from '../Game.js'
 import { View } from '../View.js'
-import { SURVIVAL_GUN } from '../../data/survival.js'
+import { SURVIVAL_GUN, SURVIVAL_HELI } from '../../data/survival.js'
 
 /**
  * SÚNG MÁY trên nóc xe — vũ khí cơ bản của chế độ Sinh tồn.
@@ -161,9 +161,12 @@ export class SurvivalGun
         const vehicle = this.game.physicalVehicle
         const monsters = this.survival.monsters.monsters
 
-        // Đi bộ thì súng nằm trong tay người, không trên nóc xe
+        // Súng đi theo NGƯỜI BẮN: trên trực thăng, trong tay người đi bộ, hay
+        // trên nóc xe — cùng một khẩu, ba chỗ gắn
         const walker = this.survival.walker
-        const shooter = walker?.active ? walker.position : vehicle.position
+        const heli = this.survival.heli
+        const shooter = heli?.active ? heli.position
+            : (walker?.active ? walker.position : vehicle.position)
 
         /**
          * Hướng bắn tính từ TÂM người bắn, nhưng nòng đặt LỆCH SANG PHẢI.
@@ -184,9 +187,10 @@ export class SurvivalGun
         if(aimDistance < 0.001) return null
         this.direction.divideScalar(aimDistance)
 
-        // Người đi bộ cầm súng thấp hơn và sát thân hơn nóc xe
-        const side = walker?.active ? SURVIVAL_GUN.walkerMuzzleSide : SURVIVAL_GUN.muzzleSide
-        const height = walker?.active ? SURVIVAL_GUN.walkerMuzzleHeight : SURVIVAL_GUN.muzzleHeight
+        // Người đi bộ cầm súng thấp hơn và sát thân hơn nóc xe; trên trực thăng
+        // thì nòng chĩa ra từ bụng máy bay
+        const side = heli?.active ? 0.9 : (walker?.active ? SURVIVAL_GUN.walkerMuzzleSide : SURVIVAL_GUN.muzzleSide)
+        const height = heli?.active ? -0.9 : (walker?.active ? SURVIVAL_GUN.walkerMuzzleHeight : SURVIVAL_GUN.muzzleHeight)
 
         this.muzzle.set(
             shooter.x - this.direction.z * side,
@@ -240,16 +244,22 @@ export class SurvivalGun
         return best
     }
 
-    /** Sát thương mỗi viên, đã cộng nâng cấp "Nòng súng" mua ở cửa hàng. */
+    /**
+     * Sát thương mỗi viên: cộng nâng cấp "Nòng súng", và nhân thêm khi bắn từ
+     * trực thăng — khẩu trên máy bay là loại khác hẳn, và đó là một phần của
+     * thứ người chơi trả 220$ để có.
+     */
     get damage()
     {
-        return SURVIVAL_GUN.damage * (1 + this.survival.level('barrel') * 0.6)
+        const upgraded = SURVIVAL_GUN.damage * (1 + this.survival.level('barrel') * 0.6)
+        return this.survival.heli?.active ? upgraded * SURVIVAL_HELI.gunDamageFactor : upgraded
     }
 
     /** Nhiệt cộng mỗi phát, đã trừ nâng cấp "Tản nhiệt". */
     get heatPerShot()
     {
-        return SURVIVAL_GUN.heatPerShot / (1 + this.survival.level('cooler') * 0.45)
+        const base = SURVIVAL_GUN.heatPerShot / (1 + this.survival.level('cooler') * 0.45)
+        return this.survival.heli?.active ? base * SURVIVAL_HELI.gunHeatFactor : base
     }
 
     /**

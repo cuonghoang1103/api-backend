@@ -225,9 +225,33 @@ export class SurvivalWalker
     //  XUỐNG / LÊN XE
     // ═══════════════════════════════════════════════════════════════════════
 
+    /**
+     * Phím **E** — một phím, ba việc, theo thứ tự ưu tiên:
+     *
+     *  1. Trực thăng đang ĐẬU và mình đứng gần nó → leo lên trực thăng.
+     *  2. Đang đi bộ → leo lên xe (nếu đủ gần).
+     *  3. Đang ngồi xe → bước xuống.
+     *
+     * Trực thăng phải đứng TRƯỚC trong thứ tự này: gọi nó về tốn 220$, mà nó
+     * hay đậu ngay cạnh xe, nên nếu xe được ưu tiên thì người chơi bấm E là leo
+     * nhầm lên xe và không hiểu vì sao.
+     */
     toggleRide()
     {
         if(!this.survival.enabled) return
+
+        const heli = this.survival.heli
+        if(heli.state === 'landed')
+        {
+            const from = this.active ? this.position : this.game.physicalVehicle.position
+            const distance = Math.hypot(heli.position.x - from.x, heli.position.z - from.z)
+
+            if(distance <= heli.enterRadiusValue)
+            {
+                heli.enter(from)
+                return
+            }
+        }
 
         if(this.active) this.enter()
         else this.exit()

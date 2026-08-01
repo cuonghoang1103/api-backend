@@ -859,6 +859,140 @@ const facts = {}
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
+//  6f. TRỰC THĂNG — gọi bằng tiền, bay tới, lên được, quái không với tới
+// ═══════════════════════════════════════════════════════════════════════════
+{
+    const call = await page.evaluate(() =>
+    {
+        const G = window.game
+        const s = G.world.survival
+        s.phase = 'preparing'
+        s.monsters.clear()
+        s.walker.reset()
+        s.heli.reset()
+
+        const item = s.shopButtons.find(b => b.item.action === 'heli')?.item
+        if(!item) return { missing: true }
+
+        // Không đủ tiền thì không gọi được
+        s.money = 10
+        const brokeRefused = !s.buy(item)
+
+        s.money = 5000
+        const price = s.priceOf(item)
+        const bought = s.buy(item)
+
+        return {
+            brokeRefused,
+            bought,
+            price,
+            moneyLeft: s.money,
+            state: s.heli.state,
+            visible: s.heli.group.visible,
+            distance: +Math.hypot(
+                s.heli.position.x - G.physicalVehicle.position.x,
+                s.heli.position.z - G.physicalVehicle.position.z,
+            ).toFixed(1),
+        }
+    })
+
+    if(call.missing)
+    {
+        problems.push('Cửa hàng thiếu món "Trực thăng"')
+    }
+    else
+    {
+        facts['6f. gọi trực thăng'] = `giá ${call.price}$ · mua=${call.bought} · trạng thái ${call.state} · `
+            + `xuất hiện cách xe ${call.distance}`
+
+        if(!call.brokeRefused) problems.push('Gọi được trực thăng dù chỉ có 10$')
+        if(!call.bought) problems.push('Có 5000$ mà không gọi được trực thăng')
+        if(call.state !== 'arriving') problems.push(`Gọi xong mà trạng thái là "${call.state}", đáng lẽ "arriving"`)
+        if(!call.visible) problems.push('Gọi xong mà trực thăng không hiện trong cảnh')
+        if(call.distance < 30) problems.push(`Trực thăng hiện ra ngay cạnh xe (${call.distance}) — đáng lẽ bay từ xa vào`)
+    }
+
+    // Chờ nó bay tới và hạ cánh
+    await run(5)
+
+    const landed = await page.evaluate(() =>
+    {
+        const G = window.game
+        const s = G.world.survival
+        return {
+            state: s.heli.state,
+            distance: +Math.hypot(
+                s.heli.position.x - G.physicalVehicle.position.x,
+                s.heli.position.z - G.physicalVehicle.position.z,
+            ).toFixed(1),
+            ground: s.monsters.groundHeight(s.heli.position.x, s.heli.position.z),
+            y: +s.heli.position.y.toFixed(2),
+        }
+    })
+
+    facts['6f. hạ cánh'] = `trạng thái ${landed.state} · cách xe ${landed.distance} · cao hơn đất `
+        + `${landed.ground === null ? '(không có đất)' : (landed.y - landed.ground).toFixed(2)}`
+
+    if(landed.state !== 'landed') problems.push(`Sau 5 giây game mà trực thăng vẫn ở trạng thái "${landed.state}"`)
+    if(landed.distance > 6) problems.push(`Hạ cánh cách xe ${landed.distance} — quá xa để leo lên`)
+
+    // ── Lên trực thăng và kiểm quái không với tới ────────────────────────────
+    const flying = await page.evaluate(() =>
+    {
+        const G = window.game
+        const s = G.world.survival
+
+        const entered = s.heli.enter(G.physicalVehicle.position)
+        const filters = [ ...G.inputs.filters ]
+
+        // Thả một con ngay dưới bụng trực thăng rồi ép nó "tới nơi"
+        s.monsters.clear()
+        const y = s.monsters.groundHeight(s.heli.position.x, s.heli.position.z)
+        const monster = y === null ? null : s.monsters.add('crawler', s.heli.position.x, y, s.heli.position.z, s.heli.position.x, s.heli.position.z)
+
+        const healthBefore = s.health
+        if(monster) s.onMonsterReach(monster, G.physicalVehicle)
+
+        return {
+            entered,
+            filters,
+            state: s.heli.state,
+            height: +s.heli.height.toFixed(1),
+            healthBefore,
+            healthAfter: s.health,
+            gunDamage: +s.gun.damage.toFixed(2),
+        }
+    })
+
+    facts['6f. đang bay'] = `lên=${flying.entered} · filters ${flying.filters.join(',')} · cao ${flying.height} · `
+        + `máu ${flying.healthBefore}→${flying.healthAfter} · sát thương súng ${flying.gunDamage}`
+
+    if(!flying.entered) problems.push('Đứng cạnh trực thăng đã đậu mà không leo lên được')
+    if(!flying.filters.includes('heli'))
+        problems.push(`Lên trực thăng rồi mà filters là [${flying.filters.join(',')}] — phím bay không ăn`)
+    if(flying.healthAfter < flying.healthBefore)
+        problems.push('Quái CẮN ĐƯỢC người chơi khi đang bay trên cao — phép "tới nơi" chỉ đo mặt phẳng ngang, thiếu nhánh chặn')
+    if(flying.gunDamage <= 1) problems.push(`Súng trên trực thăng không mạnh hơn (sát thương ${flying.gunDamage})`)
+
+    // ── Hết dầu thì tự hạ, và phím phải trả về ───────────────────────────────
+    const outOfFuel = await page.evaluate(() =>
+    {
+        const G = window.game
+        const s = G.world.survival
+        s.heli.fuel = 0.01
+        s.heli.update()
+        return { state: s.heli.state, filters: [ ...G.inputs.filters ], visible: s.heli.group.visible }
+    })
+
+    facts['6f. hết dầu'] = `trạng thái ${outOfFuel.state} · filters ${outOfFuel.filters.join(',')}`
+
+    if(outOfFuel.state === 'flying') problems.push('Hết dầu mà trực thăng vẫn bay')
+    if(!outOfFuel.filters.includes('wandering') && !outOfFuel.filters.includes('walking'))
+        problems.push(`Hạ cánh xong mà filters là [${outOfFuel.filters.join(',')}] — KẸT phím`)
+    if(outOfFuel.visible) problems.push('Hạ cánh xong mà trực thăng vẫn nằm trong cảnh')
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 //  6d. QUÁI TRÙM — sinh mỗi 5 sóng, thanh máu riêng, không nấp khỏi nó được
 // ═══════════════════════════════════════════════════════════════════════════
 {

@@ -5,7 +5,8 @@ import { Events } from '../Events.js'
 import { SurvivalMonsters } from './SurvivalMonsters.js'
 import { SurvivalGun } from './SurvivalGun.js'
 import { SurvivalWalker } from './SurvivalWalker.js'
-import { SURVIVAL_LOOT, SURVIVAL_PLAYER, SURVIVAL_SHOP, SURVIVAL_STEALTH, SURVIVAL_WALKER, SURVIVAL_WAVES } from '../../data/survival.js'
+import { SurvivalHeli } from './SurvivalHeli.js'
+import { SURVIVAL_HELI, SURVIVAL_LOOT, SURVIVAL_PLAYER, SURVIVAL_SHOP, SURVIVAL_STEALTH, SURVIVAL_WALKER, SURVIVAL_WAVES } from '../../data/survival.js'
 
 /**
  * ═══════════════════════════════════════════════════════════════════════════
@@ -80,6 +81,7 @@ export class Survival
         this.monsters = new SurvivalMonsters(this)
         this.gun = new SurvivalGun(this)
         this.walker = new SurvivalWalker(this)
+        this.heli = new SurvivalHeli(this)
 
         this.setPreference()
         this.setSounds()
@@ -162,7 +164,9 @@ export class Survival
         this.monsters.clear()
         this.gun.clear()
         // PHẢI trả phím lái về trước khi tắt chế độ, không thì `inputs.filters`
-        // còn kẹt ở 'walking' và chiếc xe không nhúc nhích nữa
+        // còn kẹt ở 'walking' / 'heli' và chiếc xe không nhúc nhích nữa.
+        // Trực thăng trước, vì `walker.reset()` không biết mình đang bay.
+        this.heli.reset()
         this.walker.reset()
         this.clearLoot()
         this.hudElement?.classList.remove('is-visible')
@@ -457,7 +461,8 @@ export class Survival
          * tầm phát hiện. Nhờ vậy "xuống xe" không phải viết lại một nhánh logic
          * thứ hai — chỉ là trỏ vào chỗ khác.
          */
-        const target = this.walker.active ? this.walker.position : vehicle.position
+        const target = this.heli.active ? this.heli.position
+            : (this.walker.active ? this.walker.position : vehicle.position)
 
         // ── Màn thua: đứng đếm ngược rồi bắt đầu lại ─────────────────────────
         if(this.phase === 'defeated')
@@ -580,6 +585,16 @@ export class Survival
     /** Một con bám được vào xe (hoặc tóm được người đi bộ) và gặm. */
     onMonsterReach(monster, vehicle)
     {
+        /**
+         * ĐANG BAY THÌ KHÔNG CON NÀO VỚI TỚI.
+         *
+         * ⚠️ Phép "tới nơi" của đàn quái đo bằng `hypot(x, z)` — CHỈ mặt phẳng
+         * ngang. Thiếu nhánh này thì bay cao ba chục đơn vị vẫn bị cắn, vì với
+         * chúng người chơi vẫn "ở ngay đây". Đó cũng chính là thứ đáng 220$:
+         * lên trời là an toàn tuyệt đối, đổi lại đồng hồ dầu đang chạy.
+         */
+        if(this.heli.active && this.heli.height > SURVIVAL_HELI.minHeight * 0.8) return
+
         // Đi bộ thì không có thép che — ăn đòn nặng hơn hẳn, và không có nhánh
         // "đang phóng nhanh nên nó không bám được"
         if(this.walker.active)
@@ -664,11 +679,17 @@ export class Survival
      */
     priceOf(item)
     {
+        // Trực thăng KHÔNG đếm bằng `upgrades` — số lần gọi do chính nó giữ
+        if(item.action === 'heli') return this.heli.price
+
         return Math.round(item.price * Math.pow(item.step, this.level(item.key)))
     }
 
     canBuy(item)
     {
+        if(item.action === 'heli')
+            return this.heli.available && this.money >= this.priceOf(item)
+
         return this.level(item.key) < item.max && this.money >= this.priceOf(item)
     }
 
@@ -678,6 +699,18 @@ export class Survival
         // cấp thì còn gì là sinh tồn
         if(this.phase !== 'preparing') return false
         if(!this.canBuy(item)) return false
+
+        // ── Trực thăng: mua là GỌI, không cộng cấp ───────────────────────────
+        if(item.action === 'heli')
+        {
+            const target = this.walker.active ? this.walker.position : this.game.physicalVehicle.position
+            if(!this.heli.call(target)) return false
+
+            this.money -= this.priceOf(item)
+            this.sounds.pickup?.play(target)
+            this.renderShop()
+            return true
+        }
 
         this.money -= this.priceOf(item)
         this.upgrades[item.key] = this.level(item.key) + 1
@@ -767,6 +800,17 @@ export class Survival
 
         for(const { item, element, priceElement, levelElement } of this.shopButtons)
         {
+            // Trực thăng đọc trạng thái từ chính nó, không từ bảng cấp
+            if(item.action === 'heli')
+            {
+                priceElement.textContent = `${this.priceOf(item)}$`
+                levelElement.textContent = this.heli.available
+                    ? (this.heli.calls > 0 ? `đã gọi ${this.heli.calls}` : '')
+                    : 'đang bay'
+                element.classList.toggle('is-locked', !this.canBuy(item))
+                continue
+            }
+
             const level = this.level(item.key)
             const maxed = level >= item.max
 
@@ -903,7 +947,9 @@ export class Survival
         const hunted = this.phase === 'hunting'
             && this.monsters.monsters.some(m => !m.dead && m.sees)
 
-        const onFoot = this.walker.active ? 'Đi bộ · ' : ''
+        const onFoot = this.heli.active
+            ? `Bay ${Math.ceil(this.heli.fuel)}s · `
+            : (this.walker.active ? 'Đi bộ · ' : '')
         const state = this.phase === 'defeated'
             ? 'Gục'
             : onFoot + (this.phase === 'preparing'

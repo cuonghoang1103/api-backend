@@ -101795,6 +101795,15 @@ https://github.com/browserify/crypto-browserify`);
       price: 35,
       step: 1.25,
       max: 99
+    },
+    {
+      key: "heli",
+      name: "Tr\u1EF1c th\u0103ng",
+      description: "G\u1ECDi tr\u1EF1c th\u0103ng t\u1EDBi \u2014 bay l\xEAn l\xE0 qu\xE1i h\u1EBFt v\u1EDBi t\u1EDBi",
+      action: "heli",
+      price: 220,
+      step: 1.5,
+      max: 99
     }
   ], SURVIVAL_WAVES = {
     countFor: (l) => Math.min(30, 4 + l * 2),
@@ -101877,6 +101886,31 @@ https://github.com/browserify/crypto-browserify`);
       boots: "#22272f",
       vest: "#4a4a55",
       gun: "#3a3f45"
+    }
+  }, SURVIVAL_HELI = {
+    price: 220,
+    priceStep: 1.5,
+    speed: 16,
+    liftSpeed: 7,
+    hoverHeight: 6,
+    minHeight: 2.5,
+    maxHeight: 8.5,
+    fuel: 70,
+    arriveDistance: 60,
+    arriveDuration: 4,
+    enterRadius: 5,
+    tiltMax: 0.34,
+    rotorSpeed: 26,
+    gunDamageFactor: 2.2,
+    gunHeatFactor: 0.55,
+    colors: {
+      body: "#2f3a4a",
+      cabin: "#1d2733",
+      glass: "#7ac7ff",
+      rotor: "#22272f",
+      skid: "#3d3f45",
+      stripe: "#ffb03a",
+      light: "#ff5a6a"
     }
   }, SURVIVAL_PLAYER = {
     maxHealth: 100,
@@ -102460,30 +102494,34 @@ https://github.com/browserify/crypto-browserify`);
     }
     shoot() {
       var _a2;
-      const e = this.game.physicalVehicle, r = this.survival.monsters.monsters, s = this.survival.walker, o = (s == null ? void 0 : s.active) ? s.position : e.position;
-      this.direction.set(this.aim.x - o.x, 0, this.aim.z - o.z);
-      const a = this.direction.length();
-      if (a < 1e-3) return null;
-      this.direction.divideScalar(a);
-      const h = (s == null ? void 0 : s.active) ? SURVIVAL_GUN.walkerMuzzleSide : SURVIVAL_GUN.muzzleSide, c = (s == null ? void 0 : s.active) ? SURVIVAL_GUN.walkerMuzzleHeight : SURVIVAL_GUN.muzzleHeight;
-      this.muzzle.set(o.x - this.direction.z * h, o.y + c, o.z + this.direction.x * h), (s == null ? void 0 : s.active) && (s.heading = Math.atan2(this.direction.x, this.direction.z));
-      let d = null, f = 1 / 0;
-      for (const m of r) {
-        if (m.dead) continue;
-        this.toMonster.set(m.root.position.x - this.muzzle.x, 0, m.root.position.z - this.muzzle.z);
-        const b = this.toMonster.dot(this.direction);
-        if (b < 0 || b > SURVIVAL_GUN.range) continue;
-        const _ = this.toMonster.x - this.direction.x * b, M = this.toMonster.z - this.direction.z * b;
-        Math.hypot(_, M) > SURVIVAL_GUN.hitRadius + m.spec.radius * m.scale || b < f && (f = b, d = m);
+      const e = this.game.physicalVehicle, r = this.survival.monsters.monsters, s = this.survival.walker, o = this.survival.heli, a = (o == null ? void 0 : o.active) ? o.position : (s == null ? void 0 : s.active) ? s.position : e.position;
+      this.direction.set(this.aim.x - a.x, 0, this.aim.z - a.z);
+      const h = this.direction.length();
+      if (h < 1e-3) return null;
+      this.direction.divideScalar(h);
+      const c = (o == null ? void 0 : o.active) ? 0.9 : (s == null ? void 0 : s.active) ? SURVIVAL_GUN.walkerMuzzleSide : SURVIVAL_GUN.muzzleSide, d = (o == null ? void 0 : o.active) ? -0.9 : (s == null ? void 0 : s.active) ? SURVIVAL_GUN.walkerMuzzleHeight : SURVIVAL_GUN.muzzleHeight;
+      this.muzzle.set(a.x - this.direction.z * c, a.y + d, a.z + this.direction.x * c), (s == null ? void 0 : s.active) && (s.heading = Math.atan2(this.direction.x, this.direction.z));
+      let f = null, p = 1 / 0;
+      for (const b of r) {
+        if (b.dead) continue;
+        this.toMonster.set(b.root.position.x - this.muzzle.x, 0, b.root.position.z - this.muzzle.z);
+        const _ = this.toMonster.dot(this.direction);
+        if (_ < 0 || _ > SURVIVAL_GUN.range) continue;
+        const M = this.toMonster.x - this.direction.x * _, R = this.toMonster.z - this.direction.z * _;
+        Math.hypot(M, R) > SURVIVAL_GUN.hitRadius + b.spec.radius * b.scale || _ < p && (p = _, f = b);
       }
-      const p = d ? f : SURVIVAL_GUN.range;
-      return this.spawnTracer(p), (_a2 = this.sounds.shot) == null ? void 0 : _a2.play(this.muzzle), d && this.survival.monsters.hit(d, this.damage, this.muzzle.x, this.muzzle.z), d;
+      const m = f ? p : SURVIVAL_GUN.range;
+      return this.spawnTracer(m), (_a2 = this.sounds.shot) == null ? void 0 : _a2.play(this.muzzle), f && this.survival.monsters.hit(f, this.damage, this.muzzle.x, this.muzzle.z), f;
     }
     get damage() {
-      return SURVIVAL_GUN.damage * (1 + this.survival.level("barrel") * 0.6);
+      var _a2;
+      const e = SURVIVAL_GUN.damage * (1 + this.survival.level("barrel") * 0.6);
+      return ((_a2 = this.survival.heli) == null ? void 0 : _a2.active) ? e * SURVIVAL_HELI.gunDamageFactor : e;
     }
     get heatPerShot() {
-      return SURVIVAL_GUN.heatPerShot / (1 + this.survival.level("cooler") * 0.45);
+      var _a2;
+      const e = SURVIVAL_GUN.heatPerShot / (1 + this.survival.level("cooler") * 0.45);
+      return ((_a2 = this.survival.heli) == null ? void 0 : _a2.active) ? e * SURVIVAL_HELI.gunHeatFactor : e;
     }
     spawnTracer(e) {
       const r = new Mesh$1(this.tracerGeometry, this.material(SURVIVAL_GUN.tracerColor)), s = Math.min(e, SURVIVAL_GUN.tracerMaxLength), o = s * 0.5;
@@ -102660,7 +102698,16 @@ https://github.com/browserify/crypto-browserify`);
       });
     }
     toggleRide() {
-      this.survival.enabled && (this.active ? this.enter() : this.exit());
+      if (!this.survival.enabled) return;
+      const e = this.survival.heli;
+      if (e.state === "landed") {
+        const r = this.active ? this.position : this.game.physicalVehicle.position;
+        if (Math.hypot(e.position.x - r.x, e.position.z - r.z) <= e.enterRadiusValue) {
+          e.enter(r);
+          return;
+        }
+      }
+      this.active ? this.enter() : this.exit();
     }
     exit() {
       var _a2, _b;
@@ -102716,9 +102763,241 @@ https://github.com/browserify/crypto-browserify`);
       this.legs[0].hip.rotation.x = s * 0.66 * a, this.legs[1].hip.rotation.x = o * 0.66 * a, this.legs[0].knee.rotation.x = Math.max(0, -s) * 0.9 * a, this.legs[1].knee.rotation.x = Math.max(0, -o) * 0.9 * a, this.arms[0].shoulder.rotation.x = o * 0.5 * a, this.arms[0].elbow.rotation.x = -0.3 - Math.max(0, o) * 0.35 * a, this.arms[1].shoulder.rotation.x = -0.95 + s * 0.08 * a, this.arms[1].elbow.rotation.x = -0.25, this.group.position.y = this.groundY + (r ? Math.abs(Math.sin(this.phase)) * 0.04 : 0);
     }
   }
+  class SurvivalHeli {
+    constructor(e) {
+      this.game = Game.getInstance(), this.survival = e, this.state = "idle", this.position = new Vector3$1(), this.heading = 0, this.height = SURVIVAL_HELI.hoverHeight, this.groundY = 0, this.fuel = 0, this.calls = 0, this.arriveAge = 0, this.tilt = 0, this.roll = 0, this.moves = {
+        forward: false,
+        backward: false,
+        left: false,
+        right: false,
+        up: false,
+        down: false
+      }, this.materials = /* @__PURE__ */ new Map(), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1, 8), this.sphereGeometry = new SphereGeometry(0.5, 8, 6), this.group = new Group(), this.group.name = "survivalHeli", this.group.visible = false, this.game.scene.add(this.group), this.build(), this.setActions(), this.game.ticker.events.on("tick", () => this.update(), 6.5);
+    }
+    material(e) {
+      let r = this.materials.get(e);
+      return r || (r = new MeshDefaultMaterial({
+        colorNode: color$1(e)
+      }), this.materials.set(e, r)), r;
+    }
+    glowMaterial(e) {
+      const r = `glow-${e}`;
+      let s = this.materials.get(r);
+      return s || (s = new MeshBasicNodeMaterial(), s.colorNode = color$1(e), s.toneMapped = false, this.materials.set(r, s)), s;
+    }
+    part(e, r, s, o, a, h, c, d, f = null, p = null) {
+      const m = typeof d == "string" ? this.material(d) : d, b = new Mesh$1(f ?? this.boxGeometry, m);
+      return b.scale.set(r, s, o), b.position.set(a, h, c), p && b.rotation.set(p.x ?? 0, p.y ?? 0, p.z ?? 0), b.castShadow = true, b.receiveShadow = true, e.add(b), b;
+    }
+    build() {
+      const e = SURVIVAL_HELI.colors, r = new Group();
+      this.part(r, 1.9, 1.5, 3.4, 0, 0, 0, e.body), this.part(r, 1.7, 1.2, 1.5, 0, 0.1, 1.3, e.cabin, this.sphereGeometry), this.part(r, 1.3, 0.85, 0.7, 0, 0.15, 2.05, this.glowMaterial(e.glass), this.sphereGeometry), this.part(r, 1.94, 0.16, 2.6, 0, 0.15, -0.2, e.stripe), this.part(r, 0.5, 0.42, 3.2, 0, 0.25, -3.1, e.body), this.part(r, 0.18, 1.15, 0.8, 0, 0.75, -4.4, e.body), this.part(r, 1, 0.14, 0.5, 0, 0.35, -4.1, e.body), this.part(r, 0.28, 0.5, 0.28, 0, 0.95, 0.2, e.skid, this.cylinderGeometry), this.mainRotor = new Group(), this.mainRotor.position.set(0, 1.22, 0.2), r.add(this.mainRotor);
+      for (const s of [
+        0,
+        Math.PI * 0.5
+      ]) {
+        const o = new Group();
+        o.rotation.y = s, this.mainRotor.add(o), this.part(o, 0.34, 0.05, 8.4, 0, 0, 0, e.rotor);
+      }
+      this.tailRotor = new Group(), this.tailRotor.position.set(0.3, 0.75, -4.4), r.add(this.tailRotor);
+      for (const s of [
+        0,
+        Math.PI * 0.5
+      ]) {
+        const o = new Group();
+        o.rotation.x = s, this.tailRotor.add(o), this.part(o, 0.05, 1.8, 0.16, 0, 0, 0, e.rotor);
+      }
+      for (const s of [
+        -1,
+        1
+      ]) this.part(r, 0.16, 0.16, 3, s * 0.85, -1.05, 0.1, e.skid), this.part(r, 0.14, 0.62, 0.14, s * 0.75, -0.75, 1.1, e.skid, null, {
+        z: s * 0.25
+      }), this.part(r, 0.14, 0.62, 0.14, s * 0.75, -0.75, -0.9, e.skid, null, {
+        z: s * 0.25
+      });
+      this.lights = [
+        this.part(r, 0.22, 0.22, 0.22, 0, -0.78, 1.4, this.glowMaterial(e.light), this.sphereGeometry),
+        this.part(r, 0.2, 0.2, 0.2, 0, 1.45, -4.4, this.glowMaterial(e.light), this.sphereGeometry)
+      ], this.group.add(r), this.root = r;
+    }
+    setActions() {
+      this.game.inputs.addActions([
+        {
+          name: "heliForward",
+          categories: [
+            "heli"
+          ],
+          keys: [
+            "Keyboard.KeyW",
+            "Keyboard.ArrowUp"
+          ]
+        },
+        {
+          name: "heliBackward",
+          categories: [
+            "heli"
+          ],
+          keys: [
+            "Keyboard.KeyS",
+            "Keyboard.ArrowDown"
+          ]
+        },
+        {
+          name: "heliLeft",
+          categories: [
+            "heli"
+          ],
+          keys: [
+            "Keyboard.KeyA",
+            "Keyboard.ArrowLeft"
+          ]
+        },
+        {
+          name: "heliRight",
+          categories: [
+            "heli"
+          ],
+          keys: [
+            "Keyboard.KeyD",
+            "Keyboard.ArrowRight"
+          ]
+        },
+        {
+          name: "heliUp",
+          categories: [
+            "heli"
+          ],
+          keys: [
+            "Keyboard.Space"
+          ]
+        },
+        {
+          name: "heliDown",
+          categories: [
+            "heli"
+          ],
+          keys: [
+            "Keyboard.ShiftLeft",
+            "Keyboard.ShiftRight"
+          ]
+        },
+        {
+          name: "heliFire",
+          categories: [
+            "heli"
+          ],
+          keys: [
+            "Keyboard.KeyF"
+          ]
+        },
+        {
+          name: "heliRide",
+          categories: [
+            "heli"
+          ],
+          keys: [
+            "Keyboard.KeyE"
+          ]
+        }
+      ]);
+      const e = (r, s) => this.game.inputs.events.on(r, (o) => {
+        this.moves[s] = o.active;
+      });
+      e("heliForward", "forward"), e("heliBackward", "backward"), e("heliLeft", "left"), e("heliRight", "right"), e("heliUp", "up"), e("heliDown", "down"), this.game.inputs.events.on("heliFire", (r) => {
+        this.survival.gun.firing = r.active;
+      }), this.game.inputs.events.on("heliRide", (r) => {
+        r.active && this.state === "flying" && this.land();
+      });
+    }
+    get price() {
+      return Math.round(SURVIVAL_HELI.price * Math.pow(SURVIVAL_HELI.priceStep, this.calls));
+    }
+    get available() {
+      return this.state === "idle";
+    }
+    get enterRadiusValue() {
+      return SURVIVAL_HELI.enterRadius;
+    }
+    call(e) {
+      var _a2;
+      if (this.state !== "idle") return false;
+      const r = Math.random() * Math.PI * 2;
+      return this.arriveFrom = {
+        x: e.x + Math.cos(r) * SURVIVAL_HELI.arriveDistance,
+        z: e.z + Math.sin(r) * SURVIVAL_HELI.arriveDistance
+      }, this.arriveTo = {
+        x: e.x,
+        z: e.z
+      }, this.position.set(this.arriveFrom.x, 0, this.arriveFrom.z), this.height = SURVIVAL_HELI.maxHeight, this.groundY = this.survival.monsters.groundHeight(this.position.x, this.position.z) ?? 0, this.arriveAge = 0, this.fuel = SURVIVAL_HELI.fuel, this.calls++, this.state = "arriving", this.group.visible = true, (_a2 = this.game.notifications) == null ? void 0 : _a2.show('<div class="top"><p class="title">Tr\u1EF1c th\u0103ng \u0111ang t\u1EDBi</p></div><div class="bottom"><p class="description">\u0110\u1EE3i n\xF3 h\u1EA1 xu\u1ED1ng r\u1ED3i b\u1EA5m <strong>E</strong> \u0111\u1EC3 l\xEAn</p></div>', "is-achievement", 4), true;
+    }
+    enter(e) {
+      var _a2, _b;
+      return this.state !== "landed" ? false : Math.hypot(this.position.x - e.x, this.position.z - e.z) > SURVIVAL_HELI.enterRadius ? ((_a2 = this.game.notifications) == null ? void 0 : _a2.show('<div class="top"><p class="title">Tr\u1EF1c th\u0103ng \u1EDF xa qu\xE1</p></div><div class="bottom"><p class="description">L\u1EA1i g\u1EA7n r\u1ED3i b\u1EA5m E</p></div>', "", 2), false) : (this.state = "flying", this.height = Math.max(SURVIVAL_HELI.minHeight, SURVIVAL_HELI.hoverHeight), this.survival.walker.group.visible = false, this.game.inputs.filters.clear(), this.game.inputs.filters.add("heli"), this.survival.events.trigger("rideChange"), (_b = this.game.notifications) == null ? void 0 : _b.show('<div class="top"><p class="title">\u0110\xE3 l\xEAn tr\u1EF1c th\u0103ng</p></div><div class="bottom"><p class="description">W A S D bay \xB7 <strong>Space</strong> l\xEAn \xB7 <strong>Shift</strong> xu\u1ED1ng \xB7 F b\u1EAFn \xB7 E h\u1EA1 c\xE1nh</p></div>', "is-achievement", 5), true);
+    }
+    land() {
+      if (this.state !== "flying") return;
+      this.state = "idle", this.group.visible = false, this.survival.gun.firing = false;
+      const e = this.survival.walker;
+      if (e.active) {
+        const r = this.survival.monsters.groundHeight(this.position.x, this.position.z);
+        e.position.set(this.position.x, r ?? this.groundY, this.position.z), e.groundY = e.position.y, e.group.visible = true;
+      }
+      this.game.inputs.filters.clear(), this.game.inputs.filters.add(e.active ? "walking" : "wandering"), this.survival.events.trigger("rideChange");
+    }
+    reset() {
+      const e = this.state === "flying";
+      this.state = "idle", this.group.visible = false, this.fuel = 0, this.calls = 0, e && (this.game.inputs.filters.clear(), this.game.inputs.filters.add("wandering"));
+    }
+    get active() {
+      return this.state === "flying";
+    }
+    update() {
+      if (this.state === "idle" || !this.survival.enabled) return;
+      const e = Math.min(this.game.ticker.delta, 0.1);
+      this.mainRotor.rotation.y += SURVIVAL_HELI.rotorSpeed * e, this.tailRotor.rotation.x += SURVIVAL_HELI.rotorSpeed * 1.6 * e;
+      const r = Math.sin(this.game.ticker.elapsed * 6) > 0;
+      for (const s of this.lights) s.visible = r;
+      this.state === "arriving" ? this.updateArriving(e) : this.state === "flying" && this.updateFlying(e), this.updateGround(), this.applyTransform(e), this.state === "flying" && this.game.view.focusPoint.trackedPosition.set(this.position.x, 0, this.position.z);
+    }
+    updateArriving(e) {
+      var _a2;
+      this.arriveAge += e;
+      const r = Math.min(1, this.arriveAge / SURVIVAL_HELI.arriveDuration), s = r * r * (3 - 2 * r);
+      this.position.x = this.arriveFrom.x + (this.arriveTo.x - this.arriveFrom.x) * s, this.position.z = this.arriveFrom.z + (this.arriveTo.z - this.arriveFrom.z) * s, this.height = SURVIVAL_HELI.maxHeight + (1.4 - SURVIVAL_HELI.maxHeight) * s;
+      const o = this.arriveTo.x - this.position.x, a = this.arriveTo.z - this.position.z;
+      Math.hypot(o, a) > 0.5 && (this.heading = Math.atan2(o, a)), this.tilt = (r < 0.7 ? -0.34 : SURVIVAL_HELI.tiltMax * 0.6) * (1 - r * 0.4), r >= 1 && (this.state = "landed", this.tilt = 0, (_a2 = this.game.notifications) == null ? void 0 : _a2.show('<div class="top"><p class="title">Tr\u1EF1c th\u0103ng \u0111\xE3 \u0111\u1EADu</p></div><div class="bottom"><p class="description">B\u1EA5m <strong>E</strong> khi \u0111\u1EE9ng c\u1EA1nh n\xF3</p></div>', "is-achievement", 4));
+    }
+    updateFlying(e) {
+      var _a2;
+      if (this.fuel -= e, this.fuel <= 0) {
+        this.fuel = 0, (_a2 = this.game.notifications) == null ? void 0 : _a2.show('<div class="top"><p class="title">H\u1EBFt d\u1EA7u</p></div><div class="bottom"><p class="description">Tr\u1EF1c th\u0103ng \u0111ang h\u1EA1 xu\u1ED1ng</p></div>', "", 3), this.land();
+        return;
+      }
+      this.game.view.camera.getWorldDirection(this.forwardVector ?? (this.forwardVector = new Vector3$1()));
+      const s = Math.hypot(this.forwardVector.x, this.forwardVector.z) || 1, o = this.forwardVector.x / s, a = this.forwardVector.z / s, h = -a, c = o;
+      let d = 0, f = 0;
+      this.moves.forward && (d += o, f += a), this.moves.backward && (d -= o, f -= a), this.moves.right && (d += h, f += c), this.moves.left && (d -= h, f -= c);
+      const p = Math.hypot(d, f);
+      if (p > 1e-3) {
+        d /= p, f /= p, this.position.x += d * SURVIVAL_HELI.speed * e, this.position.z += f * SURVIVAL_HELI.speed * e;
+        let b = Math.atan2(d, f) - this.heading;
+        for (; b > Math.PI; ) b -= Math.PI * 2;
+        for (; b < -Math.PI; ) b += Math.PI * 2;
+        this.heading += b * Math.min(1, e * 4), this.tilt += (-0.34 - this.tilt) * Math.min(1, e * 4), this.roll += (Math.max(-1, Math.min(1, b * 2)) * SURVIVAL_HELI.tiltMax - this.roll) * Math.min(1, e * 4);
+      } else this.tilt += (0 - this.tilt) * Math.min(1, e * 4), this.roll += (0 - this.roll) * Math.min(1, e * 4);
+      this.moves.up && (this.height += SURVIVAL_HELI.liftSpeed * e), this.moves.down && (this.height -= SURVIVAL_HELI.liftSpeed * e), this.height = Math.max(SURVIVAL_HELI.minHeight, Math.min(SURVIVAL_HELI.maxHeight, this.height));
+    }
+    updateGround() {
+      const e = this.survival.monsters.groundHeight(this.position.x, this.position.z);
+      e !== null && (this.groundY += (e - this.groundY) * 0.35), this.position.y = this.groundY + this.height;
+    }
+    applyTransform(e) {
+      this.group.position.copy(this.position), this.group.rotation.y = this.heading, this.group.rotation.x = this.tilt, this.group.rotation.z = this.roll, this.group.position.y += Math.sin(this.game.ticker.elapsed * 9) * 0.06;
+    }
+  }
   class Survival {
     constructor() {
-      this.game = Game.getInstance(), this.events = new Events(), this.enabled = false, this.upgrades = {}, this.phase = "preparing", this.wave = 0, this.health = this.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.best = parseInt(localStorage.getItem("survivalBestWave") ?? "0") || 0, this.toSpawn = 0, this.spawnTimer = 0, this.phaseTimer = 0, this.safeFor = 0, this.loot = [], this.lootMaterials = /* @__PURE__ */ new Map(), this.lootGeometry = new BoxGeometry$1(1, 1, 1), this.monsters = new SurvivalMonsters(this), this.gun = new SurvivalGun(this), this.walker = new SurvivalWalker(this), this.setPreference(), this.setSounds(), this.setHud(), this.setShop(), this.setSettingsButtons(), this.game.ticker.events.on("tick", () => this.update(), 12);
+      this.game = Game.getInstance(), this.events = new Events(), this.enabled = false, this.upgrades = {}, this.phase = "preparing", this.wave = 0, this.health = this.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.best = parseInt(localStorage.getItem("survivalBestWave") ?? "0") || 0, this.toSpawn = 0, this.spawnTimer = 0, this.phaseTimer = 0, this.safeFor = 0, this.loot = [], this.lootMaterials = /* @__PURE__ */ new Map(), this.lootGeometry = new BoxGeometry$1(1, 1, 1), this.monsters = new SurvivalMonsters(this), this.gun = new SurvivalGun(this), this.walker = new SurvivalWalker(this), this.heli = new SurvivalHeli(this), this.setPreference(), this.setSounds(), this.setHud(), this.setShop(), this.setSettingsButtons(), this.game.ticker.events.on("tick", () => this.update(), 12);
     }
     setPreference() {
       this.preference = {}, this.preference.names = [
@@ -102737,7 +103016,7 @@ https://github.com/browserify/crypto-browserify`);
     }
     disable() {
       var _a2, _b, _c;
-      this.enabled = false, this.monsters.clear(), this.gun.clear(), this.walker.reset(), this.clearLoot(), (_a2 = this.hudElement) == null ? void 0 : _a2.classList.remove("is-visible"), (_b = this.shopElement) == null ? void 0 : _b.classList.remove("is-visible"), (_c = this.bossElement) == null ? void 0 : _c.classList.remove("is-visible"), this.boss = null, this.lastShopOpen = null, this.lastBossAlive = null, this.setDefeatedOverlay(false), this.previousTime && this.setTime(this.previousTime, 3);
+      this.enabled = false, this.monsters.clear(), this.gun.clear(), this.heli.reset(), this.walker.reset(), this.clearLoot(), (_a2 = this.hudElement) == null ? void 0 : _a2.classList.remove("is-visible"), (_b = this.shopElement) == null ? void 0 : _b.classList.remove("is-visible"), (_c = this.bossElement) == null ? void 0 : _c.classList.remove("is-visible"), this.boss = null, this.lastShopOpen = null, this.lastBossAlive = null, this.setDefeatedOverlay(false), this.previousTime && this.setTime(this.previousTime, 3);
     }
     setTime(e, r) {
       const s = localStorage.getItem("dayCyclePreference");
@@ -102821,7 +103100,7 @@ https://github.com/browserify/crypto-browserify`);
     update() {
       var _a2;
       if (!this.enabled) return;
-      const e = Math.min(this.game.ticker.delta, 0.1), r = this.game.physicalVehicle, s = this.walker.active ? this.walker.position : r.position;
+      const e = Math.min(this.game.ticker.delta, 0.1), r = this.game.physicalVehicle, s = this.heli.active ? this.heli.position : this.walker.active ? this.walker.position : r.position;
       if (this.phase === "defeated") {
         this.phaseTimer -= e, this.monsters.update(e, s, () => {
         }), this.phaseTimer <= 0 && this.restart(), this.updateHud();
@@ -102849,11 +103128,13 @@ https://github.com/browserify/crypto-browserify`);
     }
     onMonsterReach(e, r) {
       var _a2, _b;
-      if (this.walker.active) {
-        this.hurt(e.spec.damage * 0.6 * SURVIVAL_WALKER.damageFactor), (_a2 = this.sounds.bite) == null ? void 0 : _a2.play(e.root.position);
-        return;
+      if (!(this.heli.active && this.heli.height > SURVIVAL_HELI.minHeight * 0.8)) {
+        if (this.walker.active) {
+          this.hurt(e.spec.damage * 0.6 * SURVIVAL_WALKER.damageFactor), (_a2 = this.sounds.bite) == null ? void 0 : _a2.play(e.root.position);
+          return;
+        }
+        r.xzSpeed > SURVIVAL_PLAYER.rammingSpeed || (this.hurt(e.spec.damage * 0.6), (_b = this.sounds.bite) == null ? void 0 : _b.play(e.root.position));
       }
-      r.xzSpeed > SURVIVAL_PLAYER.rammingSpeed || (this.hurt(e.spec.damage * 0.6), (_b = this.sounds.bite) == null ? void 0 : _b.play(e.root.position));
     }
     updateRamming(e, r) {
       var _a2;
@@ -102874,14 +103155,19 @@ https://github.com/browserify/crypto-browserify`);
       return this.upgrades[e] ?? 0;
     }
     priceOf(e) {
-      return Math.round(e.price * Math.pow(e.step, this.level(e.key)));
+      return e.action === "heli" ? this.heli.price : Math.round(e.price * Math.pow(e.step, this.level(e.key)));
     }
     canBuy(e) {
-      return this.level(e.key) < e.max && this.money >= this.priceOf(e);
+      return e.action === "heli" ? this.heli.available && this.money >= this.priceOf(e) : this.level(e.key) < e.max && this.money >= this.priceOf(e);
     }
     buy(e) {
-      var _a2;
-      return this.phase !== "preparing" || !this.canBuy(e) ? false : (this.money -= this.priceOf(e), this.upgrades[e.key] = this.level(e.key) + 1, (e.key === "armor" || e.key === "patch") && (this.health = this.maxHealth), (_a2 = this.sounds.pickup) == null ? void 0 : _a2.play(this.game.physicalVehicle.position), this.renderShop(), true);
+      var _a2, _b;
+      if (this.phase !== "preparing" || !this.canBuy(e)) return false;
+      if (e.action === "heli") {
+        const r = this.walker.active ? this.walker.position : this.game.physicalVehicle.position;
+        return this.heli.call(r) ? (this.money -= this.priceOf(e), (_a2 = this.sounds.pickup) == null ? void 0 : _a2.play(r), this.renderShop(), true) : false;
+      }
+      return this.money -= this.priceOf(e), this.upgrades[e.key] = this.level(e.key) + 1, (e.key === "armor" || e.key === "patch") && (this.health = this.maxHealth), (_b = this.sounds.pickup) == null ? void 0 : _b.play(this.game.physicalVehicle.position), this.renderShop(), true;
     }
     get maxHealth() {
       return SURVIVAL_PLAYER.maxHealth + this.level("armor") * 25;
@@ -102920,6 +103206,10 @@ https://github.com/browserify/crypto-browserify`);
       if (this.shopButtons) {
         this.shopMoneyElement.textContent = this.money;
         for (const { item: e, element: r, priceElement: s, levelElement: o } of this.shopButtons) {
+          if (e.action === "heli") {
+            s.textContent = `${this.priceOf(e)}$`, o.textContent = this.heli.available ? this.heli.calls > 0 ? `\u0111\xE3 g\u1ECDi ${this.heli.calls}` : "" : "\u0111ang bay", r.classList.toggle("is-locked", !this.canBuy(e));
+            continue;
+          }
           const a = this.level(e.key), h = a >= e.max;
           s.textContent = h ? "H\u1EBFt c\u1EA5p" : `${this.priceOf(e)}$`, o.textContent = e.max > 90 ? a > 0 ? `\u0111\xE3 mua ${a}` : "" : `c\u1EA5p ${a}/${e.max}`, r.classList.toggle("is-locked", h || !this.canBuy(e));
         }
@@ -102969,7 +103259,7 @@ https://github.com/browserify/crypto-browserify`);
       e !== this.lastHealth && (this.lastHealth = e, this.hudParts.healthValue.textContent = e, this.hudParts.healthBar.style.transform = `scaleX(${e / this.maxHealth})`, this.hudElement.classList.toggle("is-critical", e <= 30)), this.wave !== this.lastWave && (this.lastWave = this.wave, this.hudParts.wave.textContent = this.wave);
       const r = this.phase === "hunting" ? this.toSpawn + this.monsters.aliveCount : 0;
       r !== this.lastLeft && (this.lastLeft = r, this.hudParts.left.textContent = r);
-      const s = this.phase === "hunting" && this.monsters.monsters.some((f) => !f.dead && f.sees), o = this.walker.active ? "\u0110i b\u1ED9 \xB7 " : "", a = this.phase === "defeated" ? "G\u1EE5c" : o + (this.phase === "preparing" ? `Ngh\u1EC9 ${Math.ceil(Math.max(0, this.phaseTimer))}s` : s ? "B\u1ECB s\u0103n" : "\u0110ang n\u1EA5p");
+      const s = this.phase === "hunting" && this.monsters.monsters.some((f) => !f.dead && f.sees), o = this.heli.active ? `Bay ${Math.ceil(this.heli.fuel)}s \xB7 ` : this.walker.active ? "\u0110i b\u1ED9 \xB7 " : "", a = this.phase === "defeated" ? "G\u1EE5c" : o + (this.phase === "preparing" ? `Ngh\u1EC9 ${Math.ceil(Math.max(0, this.phaseTimer))}s` : s ? "B\u1ECB s\u0103n" : "\u0110ang n\u1EA5p");
       a !== this.lastState && (this.lastState = a, this.hudParts.state.textContent = a), this.money !== this.lastMoney && (this.lastMoney = this.money, this.hudParts.money.textContent = this.money), this.score !== this.lastScore && (this.lastScore = this.score, this.hudParts.score.textContent = this.score);
       const h = Math.round(this.gun.heat * 100) / 100;
       h !== this.lastHeat && (this.lastHeat = h, this.hudParts.heatBar.style.transform = `scaleX(${h})`), this.gun.jammed !== this.lastJammed && (this.lastJammed = this.gun.jammed, this.hudElement.classList.toggle("is-jammed", this.gun.jammed));
@@ -117162,7 +117452,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-4R07STf7.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-CXGeQGa3.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

@@ -14,7 +14,8 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
 
 **2/8**: **CHẾ ĐỘ SINH TỒN** (mục 0i) — quái + sóng + máu đen + tiền, cộng
 **cửa hàng nâng cấp** (7 món), **cơ chế NẤP**, **quái trùm dùng MODEL THẬT**,
-**súng máy phím F**, **xuống xe đi bộ phím E**. Gói `index-E3SUrnV8.js`
+**súng máy phím F**, **xuống xe đi bộ phím E**, **trực thăng**.
+Gói `index-DvKYOE9h.js`
 đã dựng và rsync sang `frontend/public/playground`. **CHƯA deploy, CHƯA push.**
 
 Đầu phiên sau, so gói prod với local; lệch thì chạy `bash deploy.sh` nền:
@@ -73,9 +74,12 @@ thì mọi chi tiết dồn về gốc mảnh.
 Đã có: quái + sóng + máu đen + tiền · **cửa hàng nâng cấp** · **cơ chế NẤP**
 (tắt đèn, đứng yên, ra xa) · **quái trùm mỗi 5 sóng**.
 
-Còn treo cho bản sau (user đã biết, không phải việc bỏ sót):
-**trực thăng** · nâng cấp giữ qua nhiều ván · **tiếng quái thật** (kho bản mẫu
-không có tiếng quái nào, đang mượn tạm — user đã ngỏ ý tìm file).
+**Kế hoạch Sinh tồn user chốt 1/8 nay ĐỦ CẢ**: đêm dài hơn ngày · quái nhiều
+loại chỉ ra ban đêm · máu đen + rơi tiền · vũ khí · nấp · **trực thăng** · đi bộ.
+
+Còn treo: nâng cấp giữ qua nhiều ván · **tiếng quái thật** (kho bản mẫu không có
+tiếng quái nào, đang mượn tạm — user đang tìm file, sẽ để ở
+`~/Downloads/Play Ground/Âm thanh/`) · credit Sketchfab cho model trùm.
 
 ### 3. Ba khu còn lại trên đảo sân chơi
 
@@ -879,6 +883,56 @@ Cố ý KHÔNG dùng `KinematicCharacterController` của Rapier: nó giải quy
 tường / bậc thang / dốc, những thứ thế giới này gần như không có (mặt đất là MỘT
 hàm cao độ liên tục, nhà là hộp bao). Bắn tia xuống + một phép kiểm dốc là đủ,
 và không phải kéo thêm một hệ vật lý thứ hai vào vòng lặp.
+
+### TRỰC THĂNG — `World/SurvivalHeli.js`, mua trong cửa hàng 220$
+
+Mảnh cuối của kế hoạch user chốt hôm 1/8 ("có vũ khí và trực thăng"). Mua
+**"Trực thăng"** ở cửa hàng → nó bay từ cách 60 đơn vị tới, hạ xuống cạnh người
+chơi → bấm **E** để lên → **W A S D** bay, **Space** lên, **Shift** xuống,
+**F** bắn, **E** hạ cánh. Nhiên liệu **70 giây**, hết thì tự hạ và bay đi. Mỗi
+lần gọi lại đắt thêm 50%.
+
+Bốn trạng thái: `idle` → `arriving` → `landed` → `flying`.
+
+**Vì sao nó đáng 220$**: trên trời thì **không con nào với tới** và súng mạnh
+**2,2 lần**, nòng nguội nhanh hơn. Đổi lại là đồng hồ dầu đang chạy.
+
+⚠️ **Phép "tới nơi" của đàn quái đo bằng `hypot(x, z)` — CHỈ mặt phẳng ngang.**
+Thiếu nhánh chặn trong `onMonsterReach` thì bay cao mấy vẫn bị cắn, vì với
+chúng người chơi vẫn "ở ngay đây". Bộ kiểm canh đúng chuyện đó (thả một con
+ngay dưới bụng rồi ép nó tới nơi, máu phải không đổi).
+
+⚠️ **Phím E làm BA việc theo thứ tự ưu tiên**: trực thăng đậu gần → lên trực
+thăng · đang đi bộ → lên xe · đang ngồi xe → xuống. Trực thăng phải đứng TRƯỚC:
+nó hay đậu ngay cạnh xe, mà gọi về tốn 220$.
+
+⚠️ **`heli.reset()` phải gọi TRƯỚC `walker.reset()`** trong `disable()` —
+`walker` không biết mình đang bay, gọi sau là `filters` kẹt ở `'heli'`.
+
+⚠️ Món "Trực thăng" là món DUY NHẤT trong `SURVIVAL_SHOP` không phải nâng cấp
+mà là **hành động** (`action: 'heli'`). `priceOf()`, `canBuy()`, `buy()` và
+`renderShop()` đều có nhánh riêng — thiếu một chỗ là giá hiện sai hoặc mua rồi
+mà chẳng có gì tới.
+
+### ⚠️⚠️ TRẦN BAY 8,5 — lại đúng cái bẫy FOV 25° đã làm vệt đạn tàng hình
+
+Bản đầu đặt trần **34**, và người chơi **không nhìn thấy chính chiếc trực thăng
+mình đang lái**: HUD báo "Bay 70s" mà khung hình trống trơn. Lần này KHÔNG đoán
+— chiếu thẳng lên NDC ở từng độ cao:
+
+| cao | ndc.y | | cao | ndc.y |
+|---|---|---|---|---|
+| 3 | 0,34 ✓ | | 12 | 1,20 ✗ |
+| 5 | 0,52 ✓ | | 16 | 1,64 ✗ |
+| 7 | 0,70 ✓ | | 22 | 2,42 ✗ |
+| 9 | 0,89 ✓ | | 34 | 4,50 ✗ |
+
+Máy quay bám nhân vật đứng ở cao **27,7**, FOV **25°**, và luôn ngắm xuống MẶT
+ĐẤT (`focusPoint` chỉ nhận x/z, y luôn 0). Nên mọi thứ bay cao đều trôi lên mép
+trên khung. Trần 8,5 vẫn cao hơn con trùm (6,2) nên "bay lên là thoát" vẫn đúng.
+
+**Đây là lần thứ HAI cùng một nguyên nhân** (lần đầu: vệt đạn). Bất cứ thứ gì
+đặt cao hơn mặt đất vài đơn vị đều phải chiếu NDC kiểm tra trước.
 
 ### CỬA HÀNG — chỉ mở trong nhịp NGHỈ
 

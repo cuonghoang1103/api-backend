@@ -221,6 +221,21 @@ export const SURVIVAL_SHOP = [
         step: 1.25,
         max: 99,
     },
+    {
+        key: 'heli',
+        name: 'Trực thăng',
+        description: 'Gọi trực thăng tới — bay lên là quái hết với tới',
+        /**
+         * ⚠️ Món DUY NHẤT không phải nâng cấp mà là HÀNH ĐỘNG: giá và số lần
+         * gọi do `SurvivalHeli` giữ, không do `upgrades`. `Survival.priceOf()`
+         * và `buy()` đều có nhánh riêng cho `key === 'heli'` — thiếu một trong
+         * hai là giá hiện sai hoặc mua rồi mà chẳng có gì tới.
+         */
+        action: 'heli',
+        price: 220,
+        step: 1.5,
+        max: 99,
+    },
 ]
 
 /**
@@ -384,6 +399,89 @@ export const SURVIVAL_WALKER = {
         boots: '#22272f',
         vest: '#4a4a55',
         gun: '#3a3f45',
+    },
+}
+
+/**
+ * TRỰC THĂNG — mảnh cuối của kế hoạch user chốt từ đầu ("có vũ khí và trực thăng").
+ *
+ * Mua **"Gọi trực thăng"** ở cửa hàng; nó bay từ ngoài bản đồ tới, hạ xuống
+ * cạnh người chơi. Bấm **E** để lên. Trên trời thì quái không với tới được và
+ * bắn xuống thì cả đàn phơi ra — nên nó phải ĐẮT và có **nhiên liệu đếm ngược**,
+ * không thì mua một lần là thắng vĩnh viễn.
+ *
+ * ─── VÌ SAO KHÔNG DÙNG VẬT LÝ THẬT ──────────────────────────────────────────
+ * Mô phỏng khí động học của cánh quạt là một dự án riêng, và cái người chơi
+ * muốn ở đây không phải "lái trực thăng cho đúng" mà là "bay lên khỏi tầm với
+ * của lũ quái rồi nã xuống". Nên nó bay **kinematic**: đi theo hướng máy quay
+ * đúng như người đi bộ, cộng một trục lên-xuống, cộng phép bám địa hình để
+ * không đâm vào sườn núi. Nghiêng thân theo hướng bay là đủ để mắt tin.
+ */
+export const SURVIVAL_HELI = {
+    /** Giá gọi. Đắt bằng cả một cấp giáp cộng một cấp nòng súng. */
+    price: 220,
+    /** Mỗi lần gọi lại đắt thêm. */
+    priceStep: 1.5,
+
+    /** Bay nhanh cỡ nào (đơn vị/giây) — nhanh hơn xe một chút. */
+    speed: 16,
+    /** Lên/xuống nhanh cỡ nào. */
+    liftSpeed: 7,
+
+    /**
+     * Bay cao bao nhiêu so với mặt đất, và giới hạn hai đầu.
+     *
+     * ⚠️ TRẦN BAY 8,5 KHÔNG PHẢI CON SỐ TUỲ HỨNG — nó đến từ phép đo. Máy quay
+     * bám nhân vật đứng ở cao **27,7** với FOV **25°** và luôn ngắm xuống MẶT
+     * ĐẤT (`focusPoint` chỉ nhận x/z, y luôn 0). Chiếu vị trí trực thăng lên
+     * NDC ở từng độ cao:
+     *
+     *     cao  3 → y 0,34 ✓      cao 12 → y 1,20 ✗ NGOÀI KHUNG
+     *     cao  5 → y 0,52 ✓      cao 16 → y 1,64 ✗
+     *     cao  7 → y 0,70 ✓      cao 22 → y 2,42 ✗
+     *     cao  9 → y 0,89 ✓      cao 34 → y 4,50 ✗
+     *
+     * Bản đầu đặt trần 34 và người chơi **không nhìn thấy chính chiếc trực
+     * thăng mình đang lái** — HUD báo "Bay 70s" mà khung hình trống trơn. Cùng
+     * một cái bẫy đã làm vệt đạn tàng hình: FOV 25° hẹp hơn trực giác rất nhiều.
+     *
+     * Vẫn cao hơn con trùm (6,2) nên "bay lên là thoát" vẫn đúng.
+     */
+    hoverHeight: 6,
+    minHeight: 2.5,
+    maxHeight: 8.5,
+
+    /** Bay được bao nhiêu giây trước khi hết dầu. */
+    fuel: 70,
+    /** Hết dầu thì hạ xuống với tốc độ này rồi biến mất. */
+    landSpeed: 5,
+
+    /** Bay tới từ xa chừng này, và mất bao lâu. */
+    arriveDistance: 60,
+    arriveDuration: 4,
+
+    /** Đứng trong bán kính này mới leo lên được. */
+    enterRadius: 5,
+
+    /** Nghiêng thân tối đa khi bay tới/nghiêng — chỉ để nhìn, không đụng đường bay. */
+    tiltMax: 0.34,
+
+    /** Cánh quạt quay bao nhanh (radian/giây). */
+    rotorSpeed: 26,
+
+    /** Súng trên trực thăng mạnh hơn hẳn — đó là phần thưởng cho 220$. */
+    gunDamageFactor: 2.2,
+    /** Và nòng nguội nhanh hơn. */
+    gunHeatFactor: 0.55,
+
+    colors: {
+        body: '#2f3a4a',
+        cabin: '#1d2733',
+        glass: '#7ac7ff',
+        rotor: '#22272f',
+        skid: '#3d3f45',
+        stripe: '#ffb03a',
+        light: '#ff5a6a',
     },
 }
 

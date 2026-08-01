@@ -9,10 +9,13 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
 
 ## Deploy — kiểm trước khi tin
 
-Tính tới **1/8 chiều**: mọi thứ tới `3a73e26` ĐÃ LÊN PROD và ĐÃ PUSH
+Tính tới **1/8 tối**: đảo quái vật ĐÃ LÊN PROD (`index-BCcIZc06.js`, smoke-test
+qua). Mọi thứ tới `3a73e26` cũng đã push. **CHƯA deploy**: tàu sân bay.
+
+Trước đó: mọi thứ tới `3a73e26` ĐÃ LÊN PROD và ĐÃ PUSH
 (gói `index-B4vtlPVx.js`, `HEAD == origin/feat/playground-3d`, cây sạch).
 
-**CHƯA deploy**: chế độ lái người thứ nhất (mục 0f) — gói mới `index-BCcIZc06.js`
+**CHƯA deploy**: chế độ lái người thứ nhất (mục 0f) — gói mới `index-x1d70jgc.js`
 đã dựng và rsync sang `frontend/public/playground`, **chờ `bash deploy.sh`**.
 
 Đầu phiên sau, so gói prod với local; lệch thì chạy `bash deploy.sh` nền:
@@ -681,7 +684,42 @@ là biên, `simplify` không gộp được. **Đo trước khi hứa.**
 
 ---
 
-# 1. BẢY BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
+# 0h. TÀU SÂN BAY — dựng BẰNG MÃ, neo giữa biển. Làm 1/8, CHƯA DEPLOY
+
+`data/carrier.js` + `World/Carrier.js`. Neo ở (46 · −140), thân **92 × 24**
+(≈184 × 48 m), boong ở y = 3,6. Nối vào cây cầu chính bằng **cầu dẫn** dốc 9°
+từ x = 5 lên x = 28,4. Điểm hồi sinh `carrier`, mục bản đồ "Tàu sân bay".
+
+Có: thân mũi vát, boong bay kẻ vạch tim/biên/số hiệu/vòng đỗ trực thăng, đảo
+chỉ huy ba tầng có buồng kính + hai ống khói + **radar quay**, bảy máy bay (loại
+gập cánh dựng đứng), hai thang máy boong, cần cẩu, 48 đèn mép boong.
+
+⚠️ **Vì sao không dùng model user tải về**: `super_portaviones.glb` **2.126.216
+đỉnh** — gấp 2,6 lần TOÀN BỘ thế giới (804k). Nén hết cỡ (`--ratio 0.04
+--error 0.08`) vẫn **954.719**. Cùng bệnh xe Tiger. Dựng bằng mã tốn vài nghìn
+đỉnh, 172 mesh + 3 instanced.
+
+## BỐN lỗi bộ kiểm bắt ngay lần chạy đầu
+
+1. **Cầu dẫn hụt 0,58 so với mép boong.** Cầu dẫn kết thúc ở x = 34 nhưng mảng
+   boong nhô ra mạn trái đã bắt đầu từ x = 28,4 (ở y = 3,6), nên tại chỗ gặp
+   nhau cầu mới cao 3,02. Sửa: `toX` = 28,4 cho khớp đúng mép boong.
+2. **Máy bay chắn ngang đường băng** — chiếc đặt ở dx = 0,5 (gần tim tàu).
+3. **Hai chiếc XOÈ CÁNH chạm rìa hành lang xe**: nửa sải 3,4 cộng góc xoay làm
+   chúng thò tới x = 43,4. Lùi ra dx = −8,4. (Chiếc gập cánh hẹp hơn nhiều nên
+   để gần được — đó là lý do tàu thật gập cánh khi đậu.)
+4. ⚠️ **BỘ KIỂM TỰ BÁO OAN 31 chỗ trên cầu dẫn.** Hộp quét thẳng đứng, mà cầu
+   dẫn thì nghiêng: ở mép hộp (cách tâm 0,95) mặt cầu đã cao hơn chỗ bắn tia
+   ~0,15, nên hộp **cắt vào chính cái dốc nó đang đứng**. Phải nâng hộp (tham
+   số `lift`) trên mọi tuyến dốc. Lại một lần nữa: **kiểm bộ kiểm trước khi tin nó.**
+
+Và: quét hành lang phải men theo **đúng vạch tim đường băng** (x − 1,5, chỗ
+`setDeckMarkings()` kẻ vạch), không phải tim tàu — lệch 0,5 là đo một hành lang
+không ai đi.
+
+---
+
+# 1. TÁM BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
 
 Cần dev server sống: `cd playground-3d && npm run dev` (xem mục 4).
 
@@ -693,6 +731,7 @@ PLAY_URL=http://localhost:5174 node tools/check-arena-rules.mjs    # luật chơ
 PLAY_URL=http://localhost:5174 node tools/check-city-island.mjs    # đảo thành phố: nhà chắn đường, bậc cầu, SỐ NHÀ THỰC MỌC
 PLAY_URL=http://localhost:5174 node tools/check-cockpit.mjs        # buồng lái: 11 mục, xem mục 0f
 PLAY_URL=http://localhost:5174 node tools/check-monster-island.mjs # đảo quái: 8 mục, có QUÉT HÀNH LANG XE
+PLAY_URL=http://localhost:5174 node tools/check-carrier.mjs        # tàu sân bay: 7 mục, quét cầu dẫn + đường băng
 ```
 
 ⚠️ **Vite NHẢY CỔNG** khi 5173 bận (rất hay gặp: phiên Claude khác cũng mở dev
@@ -707,7 +746,7 @@ KHÔNG tới được cổng lạ đó. Cách vào được: `preview_start({url
 Nhưng **Browser pane không chạy vòng lặp game** (đo 1/8: `ticker.elapsed` đứng
 im dù đã `tabs_select`) ⇒ chụp ảnh bằng Playwright headless, đừng bằng pane.
 
-**Cả bảy hiện 0 lỗi.**
+**Cả tám hiện 0 lỗi.**
 
 `check-play-island.mjs` có mục **quét hành lang xe**: đẩy một khối hộp bằng đúng
 kích cỡ xe (rộng 1,9 · cao 1,4) dọc từng tuyến đường bằng
@@ -945,6 +984,7 @@ playground-3d/tools/
   check-fptu-layout.mjs · check-ghost-colliders.mjs
   check-play-island.mjs · check-arena-rules.mjs
   check-city-island.mjs · check-cockpit.mjs · check-monster-island.mjs
+  check-carrier.mjs
 frontend/public/playground/     ← GÓI ĐÃ DỰNG (nhớ commit!)
 ```
 

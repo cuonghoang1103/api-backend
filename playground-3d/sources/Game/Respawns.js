@@ -4,6 +4,7 @@ import { RESPAWN } from '../data/fptu.js'
 import { PLAY_RESPAWN } from '../data/playisland.js'
 import { CITY_RESPAWN } from '../data/cityisland.js'
 import { MONSTER_RESPAWN } from '../data/monsterisland.js'
+import { CARRIER_RESPAWN, CARRIER } from '../data/carrier.js'
 
 export class Respawns
 {
@@ -74,6 +75,13 @@ export class Respawns
             name: 'monster',
             position: new THREE.Vector3(MONSTER_RESPAWN.x, 4, MONSTER_RESPAWN.z),
             rotation: MONSTER_RESPAWN.rotation
+        })
+
+        /** Tàu sân bay neo giữa biển — hồi sinh ngay trên boong. */
+        this.items.set('carrier', {
+            name: 'carrier',
+            position: new THREE.Vector3(CARRIER_RESPAWN.x, CARRIER.deckY + 2, CARRIER_RESPAWN.z),
+            rotation: CARRIER_RESPAWN.rotation
         })
     }
 

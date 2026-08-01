@@ -52,6 +52,9 @@ export class Map
             // Đảo quái vật ở z ≈ −212, xa nhất về phía Bắc và cũng ngoài phạm vi
             // ảnh bản đồ — pin bị kẹp sát viền TRÊN, nhích xuống cho đỡ dính mép
             { name: 'Đảo quái vật', respawnName: 'monster', offset: { x: 0, y: 0.03 } },
+            // Tàu sân bay neo giữa biển ở (46 · −140), cũng ngoài phạm vi ảnh
+            // bản đồ nên pin bị kẹp mép trên — nhích xuống cho đỡ dính viền
+            { name: 'Tàu sân bay', respawnName: 'carrier', offset: { x: 0.02, y: 0.05 } },
             { name: 'Altar', respawnName: 'altar', offset: { x: 0, y: -0.05 } },
             { name: 'Behind<br /> the scene', respawnName: 'behindTheScene', offset: { x: 0.01, y: 0 } },
             { name: 'Bowling', respawnName: 'bowling', offset: { x: -0.08, y: 0.03 } },

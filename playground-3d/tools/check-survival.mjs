@@ -336,6 +336,47 @@ const facts = {}
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
+//  1b. NHẠC NỀN RIÊNG — tự bật, tôn trọng nút tắt nhạc và thanh âm lượng
+// ═══════════════════════════════════════════════════════════════════════════
+{
+    const music = await page.evaluate(() =>
+    {
+        const G = window.game
+        const s = G.world.survival
+        const playlist = G.audio.playlist
+
+        const themeOn = !!s.sounds.theme?.__on
+        const themeVolume = s.sounds.theme?.howl?.volume?.() ?? null
+
+        // Kéo thanh âm lượng → nhạc chế độ phải đổi theo
+        const before = themeVolume
+        playlist?.setVolume?.(0.05)
+        G.audio.events.trigger('playlistChange')
+        const afterQuiet = s.sounds.theme?.howl?.volume?.() ?? null
+
+        playlist?.setVolume?.(0.5)
+        G.audio.events.trigger('playlistChange')
+        const afterLoud = s.sounds.theme?.howl?.volume?.() ?? null
+
+        return {
+            themeOn,
+            playlistPlaying: !!playlist?.current?.sound?.playing?.(),
+            before: before === null ? null : +before.toFixed(4),
+            afterQuiet: afterQuiet === null ? null : +afterQuiet.toFixed(4),
+            afterLoud: afterLoud === null ? null : +afterLoud.toFixed(4),
+        }
+    })
+
+    facts['1b. nhạc chế độ'] = `tự bật=${music.themeOn} · âm lượng theo thanh trượt `
+        + `${music.afterQuiet} → ${music.afterLoud}`
+
+    if(!music.themeOn) problems.push('Bật chế độ mà nhạc nền riêng không tự chạy')
+    if(music.playlistPlaying) problems.push('Nhạc thường vẫn chạy song song với nhạc chế độ — hai bài chồng nhau')
+    if(music.afterQuiet !== null && music.afterLoud !== null && music.afterLoud <= music.afterQuiet)
+        problems.push(`Kéo thanh âm lượng Music mà nhạc chế độ không đổi theo (${music.afterQuiet} → ${music.afterLoud})`)
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 //  2b. KHÔNG CON NÀO ĐƯỢC TO BẤT THƯỜNG — canh đúng lỗi user báo
 // ═══════════════════════════════════════════════════════════════════════════
 //

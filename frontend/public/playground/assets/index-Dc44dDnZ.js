@@ -104350,11 +104350,11 @@ https://github.com/browserify/crypto-browserify`);
     }
     enable() {
       var _a2, _b;
-      this.enabled = true, this.previousTime = this.game.dayCycles.preference.current, this.upgrades = {}, this.wave = 0, this.health = this.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.safeFor = 0, (_a2 = this.hudElement) == null ? void 0 : _a2.classList.add("is-visible"), this.startPreparing(4), (_b = this.game.notifications) == null ? void 0 : _b.show('<div class="top"><p class="title">Ch\u1EBF \u0111\u1ED9 Sinh t\u1ED3n</p></div><div class="bottom"><p class="description">Tr\u1EDDi s\u1EAFp t\u1ED1i. Gi\u1EEF <strong>F</strong> b\u1EAFn \xB7 <strong>X</strong> b\u1EAFn t\xEAn l\u1EEDa n\u1EBFu \u0111\xE3 b\u1EADt Rocket \xB7 h\xFAc th\u1EB3ng c\u0169ng ch\u1EBFt \xB7 <strong>E</strong> xu\u1ED1ng xe \u0111i b\u1ED9.</p></div>', "is-achievement", 6);
+      this.enabled = true, this.previousTime = this.game.dayCycles.preference.current, this.upgrades = {}, this.wave = 0, this.health = this.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.safeFor = 0, (_a2 = this.hudElement) == null ? void 0 : _a2.classList.add("is-visible"), this.setTheme(true), this.startPreparing(4), (_b = this.game.notifications) == null ? void 0 : _b.show('<div class="top"><p class="title">Ch\u1EBF \u0111\u1ED9 Sinh t\u1ED3n</p></div><div class="bottom"><p class="description">Tr\u1EDDi s\u1EAFp t\u1ED1i. Gi\u1EEF <strong>F</strong> b\u1EAFn \xB7 <strong>X</strong> b\u1EAFn t\xEAn l\u1EEDa n\u1EBFu \u0111\xE3 b\u1EADt Rocket \xB7 h\xFAc th\u1EB3ng c\u0169ng ch\u1EBFt \xB7 <strong>E</strong> xu\u1ED1ng xe \u0111i b\u1ED9.</p></div>', "is-achievement", 6);
     }
     disable() {
       var _a2, _b, _c;
-      this.enabled = false, this.monsters.clear(), this.gun.clear(), this.loopSound(this.sounds.nightWind, false), this.loopSound(this.sounds.heartbeat, false), this.heli.reset(), this.walker.reset(), this.clearLoot(), (_a2 = this.hudElement) == null ? void 0 : _a2.classList.remove("is-visible"), (_b = this.shopElement) == null ? void 0 : _b.classList.remove("is-visible"), (_c = this.bossElement) == null ? void 0 : _c.classList.remove("is-visible"), this.boss = null, this.lastShopOpen = null, this.lastBossAlive = null, this.setDefeatedOverlay(false), this.previousTime && this.setTime(this.previousTime, 3);
+      this.enabled = false, this.monsters.clear(), this.gun.clear(), this.loopSound(this.sounds.nightWind, false), this.loopSound(this.sounds.heartbeat, false), this.setTheme(false), this.heli.reset(), this.walker.reset(), this.clearLoot(), (_a2 = this.hudElement) == null ? void 0 : _a2.classList.remove("is-visible"), (_b = this.shopElement) == null ? void 0 : _b.classList.remove("is-visible"), (_c = this.bossElement) == null ? void 0 : _c.classList.remove("is-visible"), this.boss = null, this.lastShopOpen = null, this.lastBossAlive = null, this.setDefeatedOverlay(false), this.previousTime && this.setTime(this.previousTime, 3);
     }
     setTime(e, r) {
       const s = localStorage.getItem("dayCyclePreference");
@@ -104589,7 +104589,28 @@ https://github.com/browserify/crypto-browserify`);
         loop: true,
         volume: 0.28,
         antiSpam: 0
+      }), this.sounds.theme = this.game.audio.register({
+        path: "sounds/musics/survival-theme.mp3",
+        autoplay: false,
+        loop: true,
+        volume: 0.5,
+        antiSpam: 0
+      }), this.game.audio.events.on("playlistChange", () => {
+        var _a2, _b;
+        ((_a2 = this.sounds.theme) == null ? void 0 : _a2.__on) && (((_b = this.game.audio.playlist) == null ? void 0 : _b.enabled) === false ? this.setTheme(false) : this.applyThemeVolume());
       });
+    }
+    setTheme(e) {
+      var _a2, _b, _c, _d;
+      const r = (_a2 = this.sounds) == null ? void 0 : _a2.theme, s = (_b = this.game.audio) == null ? void 0 : _b.playlist;
+      (r == null ? void 0 : r.howl) && e !== !!r.__on && (e && s && !s.enabled || (r.__on = e, e ? ((_c = s == null ? void 0 : s.stop) == null ? void 0 : _c.call(s), this.applyThemeVolume(), r.play()) : (r.howl.stop(), (s == null ? void 0 : s.enabled) && ((_d = s.play) == null ? void 0 : _d.call(s)))));
+    }
+    applyThemeVolume() {
+      var _a2, _b;
+      const e = (_a2 = this.sounds) == null ? void 0 : _a2.theme, r = (_b = this.game.audio) == null ? void 0 : _b.playlist;
+      if (!(e == null ? void 0 : e.howl)) return;
+      const s = (r == null ? void 0 : r.getVolume) ? r.getVolume() : 0.15;
+      e.howl.volume(s * 1.25);
     }
     loopSound(e, r) {
       (e == null ? void 0 : e.howl) && r !== !!e.__on && (e.__on = r, r ? e.play() : e.howl.stop());
@@ -117865,7 +117886,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-DPvAuC6L.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-c8ljaSwa.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

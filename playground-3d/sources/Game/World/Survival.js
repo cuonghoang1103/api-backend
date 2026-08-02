@@ -148,6 +148,7 @@ export class Survival
         this.safeFor = 0
 
         this.hudElement?.classList.add('is-visible')
+        this.setTheme(true)
         this.startPreparing(4)
 
         this.game.notifications?.show(
@@ -166,6 +167,7 @@ export class Survival
         // Tiếng LẶP phải tắt bằng tay — chúng không tự hết
         this.loopSound(this.sounds.nightWind, false)
         this.loopSound(this.sounds.heartbeat, false)
+        this.setTheme(false)
         // PHẢI trả phím lái về trước khi tắt chế độ, không thì `inputs.filters`
         // còn kẹt ở 'walking' / 'heli' và chiếc xe không nhúc nhích nữa.
         // Trực thăng trước, vì `walker.reset()` không biết mình đang bay.
@@ -914,6 +916,83 @@ export class Survival
             path: 'sounds/survival/night-wind.mp3',
             autoplay: false, loop: true, volume: 0.28, antiSpam: 0,
         })
+
+        /**
+         * NHẠC NỀN RIÊNG của chế độ — bài user chọn ("Nhạc nền tổng").
+         *
+         * ⚠️ Đăng ký RIÊNG chứ không nhét vào `audio.playlist`: playlist là
+         * danh sách nhạc của cả sân chơi, thêm một bài chỉ hợp với chế độ Sinh
+         * tồn vào đó thì người chơi đang lái xe thong thả cũng bị nó nhảy vào.
+         *
+         * Âm lượng đọc từ chính thanh trượt Music của người chơi (xem
+         * `applyThemeVolume`), nên kéo nhỏ nhạc là nhỏ cả bài này.
+         */
+        this.sounds.theme = this.game.audio.register({
+            path: 'sounds/musics/survival-theme.mp3',
+            autoplay: false, loop: true, volume: 0.5, antiSpam: 0,
+        })
+
+        /**
+         * Kéo thanh âm lượng Music trong lúc đang chơi thì nhạc chế độ phải đổi
+         * theo NGAY. Không nối sự kiện này thì người chơi kéo nhỏ hết cỡ mà bài
+         * này vẫn gào — và họ sẽ tưởng thanh trượt hỏng.
+         *
+         * Và nếu họ bấm TẮT nhạc giữa chừng thì tắt luôn bài này.
+         */
+        this.game.audio.events.on('playlistChange', () =>
+        {
+            if(!this.sounds.theme?.__on) return
+
+            if(this.game.audio.playlist?.enabled === false) this.setTheme(false)
+            else this.applyThemeVolume()
+        })
+    }
+
+    /**
+     * Bật/tắt nhạc nền của chế độ, và tạm dừng playlist thường trong lúc đó.
+     *
+     * ⚠️ TÔN TRỌNG HAI LỰA CHỌN của người chơi:
+     *  - Đã **tắt nhạc** (`playlist.enabled === false`) thì KHÔNG tự bật lại.
+     *    Người ta tắt nhạc là có lý do; một chế độ chơi không được quyền cãi.
+     *  - **Âm lượng** lấy từ chính thanh trượt Music, không gõ cứng.
+     *
+     * ⚠️ Nhớ bài đang phát để trả lại đúng nó khi tắt chế độ — dừng playlist
+     * rồi gọi `play()` là nó phát lại từ bài hiện tại, nên chỉ cần bật lại.
+     */
+    setTheme(on)
+    {
+        const item = this.sounds?.theme
+        const playlist = this.game.audio?.playlist
+        if(!item?.howl) return
+        if(on === !!item.__on) return
+
+        // Người chơi đã tắt nhạc → im lặng, cả hai bên
+        if(on && playlist && !playlist.enabled) return
+
+        item.__on = on
+
+        if(on)
+        {
+            playlist?.stop?.()
+            this.applyThemeVolume()
+            item.play()
+        }
+        else
+        {
+            item.howl.stop()
+            if(playlist?.enabled) playlist.play?.()
+        }
+    }
+
+    /** Nhạc chế độ đi theo thanh trượt Music, hơi nhỏ hơn nhạc thường một chút. */
+    applyThemeVolume()
+    {
+        const item = this.sounds?.theme
+        const playlist = this.game.audio?.playlist
+        if(!item?.howl) return
+
+        const base = playlist?.getVolume ? playlist.getVolume() : 0.15
+        item.howl.volume(base * 1.25)
     }
 
     /**

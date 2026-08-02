@@ -284,6 +284,91 @@ const facts = {}
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
+//  2b. KHÔNG CON NÀO ĐƯỢC TO BẤT THƯỜNG — canh đúng lỗi user báo
+// ═══════════════════════════════════════════════════════════════════════════
+//
+// User bật chế độ và thấy "một vệt bay bay làm mờ khung hình che màn hình".
+// Đo ra: một mesh quái cỡ **212 × 212 × 212** — con `skeleton` bị co xuống ít
+// hơn mức cần 100 lần, vì `modelSourceHeight` lấy nhầm số từ VỊ TRÍ XƯƠNG
+// (3,13) thay vì từ `SkinnedMesh.computeBoundingBox()` (329,54).
+//
+// Không mục kiểm nào cũ bắt được: chúng đo chiều cao của riêng con TRÙM, còn
+// con này là quái thường. Nay quét MỌI mesh của chế độ.
+{
+    const oversized = await page.evaluate(() =>
+    {
+        const G = window.game
+        const out = []
+
+        for(const name of [ 'survivalMonsters', 'survivalGun', 'survivalWalker', 'survivalHeli' ])
+        {
+            const group = G.scene.getObjectByName(name)
+            if(!group) continue
+            group.updateMatrixWorld(true)
+
+            /**
+             * ⚠️ ĐO KÍCH THƯỚC HIỂN THỊ, KHÔNG ĐO TỈ LỆ TRONG MA TRẬN.
+             *
+             * Bản đầu của mục này lấy tỉ lệ tích luỹ từ `matrixWorld` và báo
+             * "9 mesh cỡ 225" trong khi những con quái đó hiển thị đúng 1–3
+             * đơn vị. Lý do: model có xương thường có bind matrix tỉ lệ rất lớn
+             * bù lại geometry rất nhỏ — hai vế triệt tiêu nhau khi vẽ, nên tỉ lệ
+             * một mình không nói lên điều gì.
+             *
+             * Cách đúng: `SkinnedMesh.computeBoundingBox()` (đã qua xương) rồi
+             * nhân tỉ lệ của NHÓM GỐC.
+             */
+            const rootScale = group === null ? 1 : 1
+
+            group.traverse((child) =>
+            {
+                let size = 0
+
+                if(child.isSkinnedMesh)
+                {
+                    child.computeBoundingBox()
+                    const bb = child.boundingBox
+                    if(!bb) return
+                    // Tìm nhóm gốc của con quái để lấy tỉ lệ đã áp
+                    let node = child
+                    let scale = 1
+                    while(node && node !== group)
+                    {
+                        if(node.parent === group) scale = node.scale.x
+                        node = node.parent
+                    }
+                    size = Math.max(bb.max.x - bb.min.x, bb.max.y - bb.min.y, bb.max.z - bb.min.z) * scale
+                }
+                else if(child.isMesh)
+                {
+                    const m = child.matrixWorld.elements
+                    size = Math.max(
+                        Math.hypot(m[0], m[1], m[2]),
+                        Math.hypot(m[4], m[5], m[6]),
+                        Math.hypot(m[8], m[9], m[10]),
+                    )
+                }
+                else return
+
+                // Vật to nhất hợp lệ là cánh quạt trực thăng (8,4) — 20 là
+                // ngưỡng rộng rãi, chỉ bắt những thứ sai bậc độ lớn
+                if(size > 20) out.push({ group: name, size: +size.toFixed(1) })
+            })
+        }
+
+        return out
+    })
+
+    facts['2b. vật quá khổ'] = oversized.length === 0
+        ? 'không có (ngưỡng 20 đơn vị)'
+        : oversized.map(o => `${o.group} cỡ ${o.size}`).join(' · ')
+
+    if(oversized.length)
+        problems.push(`${oversized.length} mesh TO BẤT THƯỜNG (lớn nhất ${Math.max(...oversized.map(o => o.size))} đơn vị) `
+            + '— đây là thứ che kín màn hình người chơi; kiểm `modelSourceHeight` của loại tương ứng')
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 //  3b. CHỐNG BẾ TẮC — quái sinh NGOÀI tầm phát hiện vẫn phải tiến về phía xe
 // ═══════════════════════════════════════════════════════════════════════════
 //

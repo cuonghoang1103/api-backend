@@ -61,9 +61,18 @@
  *   `SkinnedMesh.computeBoundingBox()` → đúng nhất, nhưng vẫn lệch ở model có
  *      bind matrix scale lớn (skeleton, bigboss)
  *
- * **Quy luật rút ra: chiều cao THẬT là số NHỎ HƠN giữa "skinning" và "xương".**
- * Số lớn luôn là hệ quả của quy ước bind, không phải kích thước thật. Bốn model
- * tải về từ bốn nguồn là bốn quy ước — gõ tay số đã đo là cách DUY NHẤT chắc.
+ * ⚠️⚠️ **QUY LUẬT ĐÚNG: LUÔN DÙNG CỘT "skinning"**
+ * (`SkinnedMesh.computeBoundingBox()`), vì đó chính là hộp bao mà three.js dựng
+ * ra trên màn hình.
+ *
+ * Có một lúc tôi rút ra quy luật SAI là "lấy số nhỏ hơn giữa skinning và
+ * xương", và nó đẻ ra đúng cái lỗi user báo: **một con quái cỡ 212 × 212 × 212
+ * che gần nửa khung hình**, mờ mờ như một vệt khói khổng lồ. Với `skeleton`,
+ * số xương là 3,13 còn số skinning là 329,54 — chọn 3,13 nghĩa là co model
+ * xuống 100 lần ÍT hơn mức cần.
+ *
+ * Bốn model từ bốn nguồn là bốn quy ước bind khác nhau; chỉ có phép đo skinning
+ * là nói cùng ngôn ngữ với thứ được vẽ ra.
  */
 export const SURVIVAL_MONSTERS = {
     /**
@@ -100,8 +109,8 @@ export const SURVIVAL_MONSTERS = {
         model: 'monsterSkeletonModel',
         /** ⚠️ Model này dùng đơn vị xăng-ti-mét: cao 492 trong file. */
         modelHeight: 2.1,
-        modelSourceHeight: 3.134,
-        modelSourceMinY: 0,
+        modelSourceHeight: 329.536,
+        modelSourceMinY: 0.865,
         hp: 6,
         speed: 4.4,
         damage: 12,
@@ -118,8 +127,8 @@ export const SURVIVAL_MONSTERS = {
         name: 'Quái to xác',
         model: 'bossModel',
         modelHeight: 3.6,
-        modelSourceHeight: 1.264,
-        modelSourceMinY: -1.194,
+        modelSourceHeight: 3.213,
+        modelSourceMinY: 0,
         hp: 18,
         speed: 2.3,
         damage: 26,
@@ -162,8 +171,8 @@ export const SURVIVAL_MONSTERS = {
          * vừa thêm thì phải đổi biến rồi chụp lại, đừng vội quy tội.
          */
         model: 'bossModel',
-        modelSourceHeight: 1.264,
-        modelSourceMinY: -1.194,
+        modelSourceHeight: 3.213,
+        modelSourceMinY: 0,
         hp: 130,
         speed: 2.6,
         damage: 40,

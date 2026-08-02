@@ -103,14 +103,22 @@ export const SURVIVAL_MONSTERS = {
         colors: { body: '#4a6b3e', limb: '#38512f', belly: '#9ab86a', eye: '#eaff7a' },
     },
 
-    /** BỘ XƯƠNG CẦM RÌU — nhanh hơn, dai hơn, và cầm vũ khí. */
+    /**
+     * KẺ RÌNH — cao lêu nghêu, hai chân dài. **DỰNG BẰNG MÃ, KHÔNG DÙNG MODEL.**
+     *
+     * ⛔ `free_skeleton_man_axe.glb` ĐÃ THỬ VÀ PHẢI BỎ. Model đó có **TƯ THẾ
+     * BIND BỊ VỠ**: đo qua 20 mốc của clip thì cỡ lớn nhất là **186,47 tại giây
+     * 0**, trong khi ba loại kia chỉ 1,9–7,4. Các mảnh (rìu, sọ) văng xa nhau ở
+     * tư thế bind và chỉ được clip kéo về — nên nó **chập chờn khổng lồ** đúng
+     * như user mô tả: *"con dơi bay bay khổng lồ che mất bằng cái cánh"*.
+     *
+     * Và mọi phép đo dựa trên bind đều vô nghĩa với nó: co theo bind thì lúc
+     * clip chạy con quái teo lại, co theo clip thì lúc bind nó che kín màn hình.
+     *
+     * Dáng dựng bằng mã (`makeStalker`) đọc rõ và tuyệt đối ổn định.
+     */
     stalker: {
-        name: 'Bộ xương cầm rìu',
-        model: 'monsterSkeletonModel',
-        /** ⚠️ Model này dùng đơn vị xăng-ti-mét: cao 492 trong file. */
-        modelHeight: 2.1,
-        modelSourceHeight: 329.536,
-        modelSourceMinY: 0.865,
+        name: 'Kẻ rình',
         hp: 6,
         speed: 4.4,
         damage: 12,
@@ -384,7 +392,7 @@ export const SURVIVAL_WAVES = {
  */
 export const SURVIVAL_GUN = {
     /** Phát mỗi giây. */
-    fireRate: 9,
+    fireRate: 7,
     /** Sát thương mỗi viên — ba viên hạ một con bọ bò (máu 3). */
     damage: 1,
     /** Bắn xa bao nhiêu. */
@@ -403,9 +411,17 @@ export const SURVIVAL_GUN = {
     /** Quá nhiệt rồi phải nguội xuống dưới mức này mới bắn lại được. */
     resumeAt: 0.35,
 
-    /** Vệt đạn sống bao lâu (giây) và dày bao nhiêu. */
+    /**
+     * ĐẠN VẠCH — chuỗi chấm sáng, KHÔNG phải một thanh dài.
+     *
+     * ⚠️ Bản đầu vẽ một khối hộp dài 11 đơn vị và user gọi thẳng tên nó ra:
+     * *"cứ bắn là một thanh ngang màu vàng rất xấu"*. Ở máy quay nhìn từ trên
+     * xuống, hình hộp dài nằm ngang chỉ là một cái gạch.
+     */
     tracerLife: 0.09,
-    tracerWidth: 0.17,
+    /** Mấy chấm mỗi phát, và chấm đầu to bao nhiêu. */
+    tracerDots: 4,
+    tracerDotSize: 0.13,
 
     /**
      * Vệt đạn VẼ DÀI TỐI ĐA bấy nhiêu, dù đạn bay xa 34.

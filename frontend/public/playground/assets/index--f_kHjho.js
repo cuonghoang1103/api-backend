@@ -102910,11 +102910,7 @@ https://github.com/browserify/crypto-browserify`);
       }
     },
     stalker: {
-      name: "B\u1ED9 x\u01B0\u01A1ng c\u1EA7m r\xECu",
-      model: "monsterSkeletonModel",
-      modelHeight: 2.1,
-      modelSourceHeight: 329.536,
-      modelSourceMinY: 0.865,
+      name: "K\u1EBB r\xECnh",
       hp: 6,
       speed: 4.4,
       damage: 12,
@@ -103093,7 +103089,7 @@ https://github.com/browserify/crypto-browserify`);
     maxAlive: 30,
     bossEvery: 5
   }, SURVIVAL_GUN = {
-    fireRate: 9,
+    fireRate: 7,
     damage: 1,
     range: 34,
     hitRadius: 1.5,
@@ -103101,7 +103097,8 @@ https://github.com/browserify/crypto-browserify`);
     coolRate: 0.35,
     resumeAt: 0.35,
     tracerLife: 0.09,
-    tracerWidth: 0.17,
+    tracerDots: 4,
+    tracerDotSize: 0.13,
     tracerMaxLength: 11,
     tracerColor: "#ffe27a",
     muzzleColor: "#fff3c4",
@@ -103730,7 +103727,7 @@ https://github.com/browserify/crypto-browserify`);
           c && h.positions[0].copy(c), h.volume = 1;
         }
       });
-      this.sounds.shot = e("sounds/clicks/Source Metal Clicks Delicate Light Sharp Clip Mid 07.mp3", 0.22, 26, 0.04), this.sounds.jam = e("sounds/hits/metal/Metal Clip Hit.mp3", 0.4, 20, 0.6);
+      this.sounds.shot = e("sounds/explosions/SmallImpactMediumE PE281202.mp3", 0.16, 28, 0.05), this.sounds.jam = e("sounds/hits/metal/Metal Clip Hit.mp3", 0.4, 20, 0.6);
     }
     updateAim() {
       var _a2;
@@ -103769,12 +103766,18 @@ https://github.com/browserify/crypto-browserify`);
       return ((_a2 = this.survival.heli) == null ? void 0 : _a2.active) ? e * SURVIVAL_HELI.gunHeatFactor : e;
     }
     spawnTracer(e) {
-      const r = new Mesh$1(this.tracerGeometry, this.material(SURVIVAL_GUN.tracerColor)), s = Math.min(e, SURVIVAL_GUN.tracerMaxLength), o = s * 0.5;
-      r.position.set(this.muzzle.x + this.direction.x * o, this.muzzle.y, this.muzzle.z + this.direction.z * o), r.scale.set(SURVIVAL_GUN.tracerWidth, SURVIVAL_GUN.tracerWidth, s), r.lookAt(this.aim.x, this.muzzle.y, this.aim.z), r.castShadow = false, this.group.add(r);
-      const a = new Mesh$1(this.flashGeometry, this.material(SURVIVAL_GUN.muzzleColor));
-      a.scale.setScalar(SURVIVAL_GUN.flashScale), a.position.set(this.muzzle.x + this.direction.x * SURVIVAL_GUN.flashDistance, this.muzzle.y, this.muzzle.z + this.direction.z * SURVIVAL_GUN.flashDistance), a.castShadow = false, this.group.add(a), this.tracers.push({
-        mesh: r,
-        flash: a,
+      const r = Math.min(e, SURVIVAL_GUN.tracerMaxLength), s = [];
+      for (let a = 0; a < SURVIVAL_GUN.tracerDots; a++) {
+        const h = (a + 0.6) / SURVIVAL_GUN.tracerDots, c = new Mesh$1(this.flashGeometry, this.material(SURVIVAL_GUN.tracerColor)), d = SURVIVAL_GUN.tracerDotSize * (1 - h * 0.55);
+        c.scale.setScalar(d), c.position.set(this.muzzle.x + this.direction.x * r * h, this.muzzle.y, this.muzzle.z + this.direction.z * r * h), c.castShadow = false, this.group.add(c), s.push({
+          mesh: c,
+          size: d
+        });
+      }
+      const o = new Mesh$1(this.flashGeometry, this.material(SURVIVAL_GUN.muzzleColor));
+      o.scale.setScalar(SURVIVAL_GUN.flashScale), o.position.set(this.muzzle.x + this.direction.x * SURVIVAL_GUN.flashDistance, this.muzzle.y, this.muzzle.z + this.direction.z * SURVIVAL_GUN.flashDistance), o.castShadow = false, this.group.add(o), this.tracers.push({
+        dots: s,
+        flash: o,
         age: 0
       });
     }
@@ -103782,11 +103785,13 @@ https://github.com/browserify/crypto-browserify`);
       for (let r = this.tracers.length - 1; r >= 0; r--) {
         const s = this.tracers[r];
         if (s.age += e, s.age >= SURVIVAL_GUN.tracerLife) {
-          this.group.remove(s.mesh), this.group.remove(s.flash), this.tracers.splice(r, 1);
+          for (const a of s.dots) this.group.remove(a.mesh);
+          this.group.remove(s.flash), this.tracers.splice(r, 1);
           continue;
         }
         const o = s.age / SURVIVAL_GUN.tracerLife;
         s.flash.scale.setScalar(SURVIVAL_GUN.flashScale * (1 - o));
+        for (const a of s.dots) a.mesh.scale.setScalar(a.size * (1 - o * 0.8));
       }
     }
     clear() {
@@ -117753,7 +117758,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-D97Fisx-.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-fZvbRIKV.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([
@@ -117813,11 +117818,6 @@ ${e.tab}if ( ${m} ) {
         [
           "monsterSoldierModel",
           `monsters/soldier.glb${o}`,
-          "gltf"
-        ],
-        [
-          "monsterSkeletonModel",
-          `monsters/skeleton.glb${o}`,
           "gltf"
         ],
         [

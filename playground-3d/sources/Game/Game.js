@@ -184,7 +184,11 @@ export class Game
                  * gần bằng cả gói JS của game, cho MỘT con quái.
                  */
                 [ 'monsterSoldierModel',                   `monsters/soldier.glb${cb}`,                                                          'gltf' ],
-                [ 'monsterSkeletonModel',                  `monsters/skeleton.glb${cb}`,                                                         'gltf' ],
+                /**
+                 * ⛔ `monsters/skeleton.glb` GỠ KHỎI ĐÂY — tư thế bind của nó
+                 * vỡ (cỡ 186 tại giây 0 của clip) nên con quái chập chờn khổng
+                 * lồ che kín màn hình. "Kẻ rình" quay về dựng bằng mã.
+                 */
                 /**
                  * ⚠️ `monsters/bigboss.glb` (103.412 đỉnh, 2,7 MB) CỐ Ý KHÔNG
                  * KHAI Ở ĐÂY. File vẫn nằm trong `static/` nhưng không nạp, nên

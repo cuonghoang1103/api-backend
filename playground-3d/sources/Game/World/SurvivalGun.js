@@ -112,15 +112,22 @@ export class SurvivalGun
         })
 
         /**
-         * Kho tiếng của bản mẫu không có tiếng súng nào. Tiếng va kim loại sắc
-         * gọn là thứ gần nhất — nghe ra "tách tách" chứ không ra "đoàng", nhưng
-         * ở nhịp 9 phát/giây thì chuỗi tiếng tách liên tục lại đúng cảm giác
-         * súng liên thanh hơn là một tiếng nổ đơn lặp lại.
+         * Kho tiếng của bản mẫu KHÔNG có tiếng súng nào — đây là thứ gần nhất.
          *
-         * ⚠️ `antiSpam` phải RẤT nhỏ (0,04): để mặc định 0,15 thì cứ ba phát
-         * mới nghe một tiếng, nghe như súng kẹt.
+         * ⚠️ Bản đầu dùng tiếng va kim loại sắc gọn (`clicks/…Metal Clicks…`) và
+         * user nghe ra đúng cái nó là: *"âm thanh tạch tạch nghe không giống
+         * tiếng súng"*. Tiếng va đập trầm (`explosions/SmallImpact…`) hạ âm
+         * lượng xuống thì ra "pặc pặc" — vẫn không phải tiếng súng thật, nhưng
+         * là thứ gần nhất kho này có.
+         *
+         * Tiếng súng THẬT phải chờ user tải file về (đã hẹn để ở
+         * `~/Downloads/Play Ground/Âm thanh/`); lúc đó chỉ cần đổi đường dẫn ở
+         * đúng dòng này.
+         *
+         * ⚠️ `antiSpam` phải nhỏ (0,05): để mặc định 0,15 thì cứ ba phát mới
+         * nghe một tiếng, nghe như súng kẹt.
          */
-        this.sounds.shot = register('sounds/clicks/Source Metal Clicks Delicate Light Sharp Clip Mid 07.mp3', 0.22, 26, 0.04)
+        this.sounds.shot = register('sounds/explosions/SmallImpactMediumE PE281202.mp3', 0.16, 28, 0.05)
         this.sounds.jam = register('sounds/hits/metal/Metal Clip Hit.mp3', 0.4, 20, 0.6)
     }
 
@@ -269,24 +276,42 @@ export class SurvivalGun
      * học mới mỗi phát — chín phát mỗi giây mà cấp phát hình học thì rác dồn
      * lên nhanh hơn bộ dọn rác kịp thu.
      */
+    /**
+     * ĐẠN VẠCH — một CHUỖI CHẤM SÁNG bay dọc đường đạn, không phải một thanh dài.
+     *
+     * ⚠️ Bản đầu dựng nguyên một khối hộp dài 11 đơn vị và user gọi đúng tên nó
+     * ra: *"cứ bắn là một thanh ngang màu vàng rất xấu"*. Ở máy quay nhìn từ
+     * trên xuống, một hình hộp dài nằm ngang chính là một cái gạch — không có
+     * gì gợi ra viên đạn.
+     *
+     * Cách này thì mỗi phát để lại bốn chấm nhỏ nối nhau, chấm càng xa càng mờ
+     * và càng bé. Mắt ghép chúng thành một tia lao đi, đúng thứ mọi game bắn
+     * súng vẫn làm — mà vẫn rẻ hơn một vật thể đạn thật.
+     */
     spawnTracer(distance)
     {
-        const mesh = new THREE.Mesh(this.tracerGeometry, this.material(SURVIVAL_GUN.tracerColor))
-
-        // Cắt ngắn cho vệt nằm gọn trong khung hình — xem `tracerMaxLength`
         const drawn = Math.min(distance, SURVIVAL_GUN.tracerMaxLength)
+        const dots = []
 
-        const half = drawn * 0.5
-        mesh.position.set(
-            this.muzzle.x + this.direction.x * half,
-            this.muzzle.y,
-            this.muzzle.z + this.direction.z * half,
-        )
-        mesh.scale.set(SURVIVAL_GUN.tracerWidth, SURVIVAL_GUN.tracerWidth, drawn)
-        mesh.lookAt(this.aim.x, this.muzzle.y, this.aim.z)
-        mesh.castShadow = false
-        this.group.add(mesh)
+        for(let i = 0; i < SURVIVAL_GUN.tracerDots; i++)
+        {
+            const t = (i + 0.6) / SURVIVAL_GUN.tracerDots
+            const dot = new THREE.Mesh(this.flashGeometry, this.material(SURVIVAL_GUN.tracerColor))
 
+            // Nhỏ dần về phía xa — đó là thứ tạo cảm giác chiều sâu
+            const size = SURVIVAL_GUN.tracerDotSize * (1 - t * 0.55)
+            dot.scale.setScalar(size)
+            dot.position.set(
+                this.muzzle.x + this.direction.x * drawn * t,
+                this.muzzle.y,
+                this.muzzle.z + this.direction.z * drawn * t,
+            )
+            dot.castShadow = false
+            this.group.add(dot)
+            dots.push({ mesh: dot, size })
+        }
+
+        // Chớp nòng: to hơn các chấm, tắt nhanh nhất
         const flash = new THREE.Mesh(this.flashGeometry, this.material(SURVIVAL_GUN.muzzleColor))
         flash.scale.setScalar(SURVIVAL_GUN.flashScale)
         flash.position.set(
@@ -297,7 +322,7 @@ export class SurvivalGun
         flash.castShadow = false
         this.group.add(flash)
 
-        this.tracers.push({ mesh, flash, age: 0 })
+        this.tracers.push({ dots, flash, age: 0 })
     }
 
     updateTracers(delta)
@@ -309,15 +334,17 @@ export class SurvivalGun
 
             if(tracer.age >= SURVIVAL_GUN.tracerLife)
             {
-                this.group.remove(tracer.mesh)
+                for(const dot of tracer.dots) this.group.remove(dot.mesh)
                 this.group.remove(tracer.flash)
                 this.tracers.splice(i, 1)
                 continue
             }
 
-            // Tắt dần trong nửa đời sau
+            // Cả chuỗi chấm lẫn chớp nòng cùng teo dần rồi tắt
             const t = tracer.age / SURVIVAL_GUN.tracerLife
             tracer.flash.scale.setScalar(SURVIVAL_GUN.flashScale * (1 - t))
+            for(const dot of tracer.dots)
+                dot.mesh.scale.setScalar(dot.size * (1 - t * 0.8))
         }
     }
 

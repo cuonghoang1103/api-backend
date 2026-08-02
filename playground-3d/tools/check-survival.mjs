@@ -369,6 +369,82 @@ const facts = {}
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
+//  2c. ĐO CỠ QUA TOÀN BỘ CLIP — bắt model có TƯ THẾ BIND VỠ
+// ═══════════════════════════════════════════════════════════════════════════
+//
+// Mục 2b đo MỘT thời điểm và vẫn báo 0 lỗi trong khi user thấy "con dơi khổng
+// lồ chập chờn che mất màn hình". Chữ "chập chờn" là manh mối: cỡ đổi theo thời
+// gian. Đo `free_skeleton_man_axe` qua 20 mốc của clip thì ra **186,47 ở giây
+// 0** — tư thế BIND của nó vỡ, các mảnh văng xa, chỉ khi clip chạy mới về chỗ.
+//
+// Model tải về từ nguồn lạ có thể vỡ theo kiểu này bất cứ lúc nào, nên phép
+// kiểm phải quét cả clip chứ không tin một khung hình.
+{
+    const perType = await page.evaluate(() =>
+    {
+        const G = window.game
+        const s = G.world.survival
+        const v = G.physicalVehicle.position
+        const out = []
+
+        for(const type of Object.keys(s.monsters.constructor === Object ? {} : { crawler: 1, stalker: 1, brute: 1, boss: 1 }))
+        {
+            s.monsters.clear()
+            const y = s.monsters.groundHeight(v.x + 8, v.z + 8)
+            if(y === null) continue
+
+            const m = s.monsters.add(type, v.x + 8, y, v.z + 8, v.x, v.z)
+            if(!m) continue
+
+            // Dựng bằng khối thì không có clip — bỏ qua, chúng luôn ổn định
+            if(!m.mixer) { out.push({ type, gait: m.gait, max: null }); continue }
+
+            const clip = m.mixer._actions?.[0]?._clip
+            const duration = clip?.duration ?? 1
+            let worst = 0
+            let worstAt = 0
+
+            for(let i = 0; i < 20; i++)
+            {
+                const t = (i / 20) * duration
+                m.mixer.setTime(t)
+                m.root.updateMatrixWorld(true)
+
+                let size = 0
+                m.root.traverse((c) =>
+                {
+                    if(!c.isSkinnedMesh) return
+                    c.computeBoundingBox()
+                    const bb = c.boundingBox
+                    if(!bb) return
+                    size = Math.max(size, bb.max.x - bb.min.x, bb.max.y - bb.min.y, bb.max.z - bb.min.z)
+                })
+                size *= m.root.scale.x
+
+                if(size > worst) { worst = size; worstAt = +t.toFixed(2) }
+            }
+
+            out.push({ type, gait: m.gait, max: +worst.toFixed(2), at: worstAt, duration: +duration.toFixed(1) })
+        }
+
+        s.monsters.clear()
+        return out
+    })
+
+    facts['2c. cỡ lớn nhất qua clip'] = perType
+        .map(p => `${p.type} ${p.max === null ? '(dựng bằng khối)' : p.max}`)
+        .join(' · ')
+
+    for(const p of perType)
+    {
+        if(p.max === null) continue
+        if(p.max > 20)
+            problems.push(`"${p.type}" phình tới ${p.max} đơn vị ở giây ${p.at} của clip (dài ${p.duration}s) `
+                + '— TƯ THẾ BIND VỠ, model này không dùng được, quay về dựng bằng khối')
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 //  3b. CHỐNG BẾ TẮC — quái sinh NGOÀI tầm phát hiện vẫn phải tiến về phía xe
 // ═══════════════════════════════════════════════════════════════════════════
 //

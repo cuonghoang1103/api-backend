@@ -277,6 +277,38 @@ export default function TechTrendsClient() {
           </motion.div>
         </header>
 
+        {/* ── Chuyên đề ghim: lộ trình ôn thi JPD113 ──────────────
+            Trang tĩnh, không nằm trong danh sách bài viết từ API,
+            nên ghim thẳng ở đây để tìm thấy được từ sảnh. */}
+        <Link
+          href="/tech-trends/on-thi-jpd113"
+          className="group block mb-8 rounded-2xl border border-neon-violet/30 bg-gradient-to-r from-neon-violet/[0.12] via-neon-fuchsia/[0.06] to-transparent p-5 sm:p-6 hover:border-neon-violet/50 transition-all"
+        >
+          <div className="flex items-start gap-4">
+            <span className="hidden sm:flex w-12 h-12 shrink-0 rounded-xl bg-neon-violet/15 items-center justify-center text-2xl">
+              🇯🇵
+            </span>
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide bg-neon-violet text-white">
+                  CHUYÊN ĐỀ
+                </span>
+                <span className="text-[11px] text-text-muted">Lộ trình ôn thi có checklist</span>
+              </div>
+              <h3 className="text-lg sm:text-xl font-heading font-bold text-text-primary group-hover:text-neon-violet transition-colors">
+                Ôn thi JPD113 — lộ trình 5 ngày từ số 0
+              </h3>
+              <p className="text-sm text-text-secondary mt-1 leading-relaxed">
+                Kana → số &amp; thời gian → trợ từ → kanji → thi nói. Kèm bảng tra cứu đầy đủ,
+                ngân hàng 13 bài đọc + 22 câu hỏi vấn đáp, và 35 đề luyện có sẵn.
+              </p>
+            </div>
+            <span className="hidden sm:block text-neon-violet text-xl shrink-0 group-hover:translate-x-1 transition-transform">
+              →
+            </span>
+          </div>
+        </Link>
+
         {/* ── Main grid + sidebar ────────────────────────────── */}
         <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
           {/* Main column (70% on desktop) */}

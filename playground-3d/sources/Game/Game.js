@@ -185,7 +185,14 @@ export class Game
                  */
                 [ 'monsterSoldierModel',                   `monsters/soldier.glb${cb}`,                                                          'gltf' ],
                 [ 'monsterSkeletonModel',                  `monsters/skeleton.glb${cb}`,                                                         'gltf' ],
-                [ 'monsterBigBossModel',                   `monsters/bigboss.glb${cb}`,                                                          'gltf' ],
+                /**
+                 * ⚠️ `monsters/bigboss.glb` (103.412 đỉnh, 2,7 MB) CỐ Ý KHÔNG
+                 * KHAI Ở ĐÂY. File vẫn nằm trong `static/` nhưng không nạp, nên
+                 * không tốn một byte nào của người chơi. Con trùm dùng
+                 * `bossModel` — thứ đã được chụp ảnh và xác nhận đẹp. Muốn thử
+                 * lại model to thì thêm một dòng ở đây và đổi `model` của
+                 * `boss` trong `data/survival.js`.
+                 */
                 [ 'fencesModel',                           `fences/fences${compressedModelSuffix}.glb${cb}`,                                     'gltf' ],
                 [ 'benchesModel',                          `benches/benches${compressedModelSuffix}.glb${cb}`,                                   'gltf' ],
                 [ 'explosiveCratesModel',                  `explosiveCrates/explosiveCrates${compressedModelSuffix}.glb${cb}`,                   'gltf' ],

@@ -48,7 +48,31 @@ Monster Island.
               133, dropping 53 heavy ones — 2,126,216 verts down to 150,725;
               textures resized to 1024 and re-encoded to WebP; Draco.
 
-Alien creature — the Survival mode boss (one per five waves).
+Survival mode monsters — all four types now use real rigged models.
+
+    ⚠⚠ CREDIT INCOMPLETE FOR ALL FOUR — MUST BE FILLED IN BEFORE SHIPPING.
+
+    Files and their downloaded names:
+      static/monsters/soldier.glb   <- alien_soldier_wip.glb      (common enemy)
+      static/monsters/skeleton.glb  <- free_skeleton_man_axe.glb  (mid enemy)
+      static/monsters/boss.glb      <- alien_creature_take_3.glb  (heavy enemy)
+      static/monsters/bigboss.glb   <- creature_monster_3d_by_oscar_creativo.glb
+                                                                  (wave boss)
+
+    All four were downloaded without their author, source URL or licence
+    recorded anywhere in the file. Every other asset here carries a verbatim
+    notice copied from its Sketchfab "Copy credits" button; these need the
+    same. If any of them is CC BY, shipping it uncredited breaks the licence.
+
+    To fill in: open each model's Sketchfab page, press "Copy credits", paste
+    the notice here AND into the Credits block in sources/data/consoleLog.js.
+
+    Modified: textures resized (512 for the three enemies, 256 for the boss —
+    its 62 source textures weighed 78 MB) and re-encoded to WebP, geometry
+    Draco-compressed. Meshes NOT simplified — they are skinned, and
+    simplifying breaks the skin weights.
+
+Alien creature — original note kept for the record.
 
     ⚠⚠ CREDIT INCOMPLETE — MUST BE FILLED IN BEFORE THIS SHIPS.
 

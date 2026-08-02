@@ -102934,8 +102934,8 @@ https://github.com/browserify/crypto-browserify`);
       name: "Qu\xE1i to x\xE1c",
       model: "bossModel",
       modelHeight: 3.6,
-      modelSourceHeight: 2.079,
-      modelSourceMinY: -1.077,
+      modelSourceHeight: 1.264,
+      modelSourceMinY: -1.194,
       hp: 18,
       speed: 2.3,
       damage: 26,
@@ -102953,9 +102953,9 @@ https://github.com/browserify/crypto-browserify`);
     },
     boss: {
       name: "Qu\xE1i tr\xF9m",
-      model: "monsterBigBossModel",
-      modelSourceHeight: 2.398,
-      modelSourceMinY: 0,
+      model: "bossModel",
+      modelSourceHeight: 1.264,
+      modelSourceMinY: -1.194,
       hp: 130,
       speed: 2.6,
       damage: 40,
@@ -117753,7 +117753,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-Dp85fAEA.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-2cAQ7Sr2.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([
@@ -117818,11 +117818,6 @@ ${e.tab}if ( ${m} ) {
         [
           "monsterSkeletonModel",
           `monsters/skeleton.glb${o}`,
-          "gltf"
-        ],
-        [
-          "monsterBigBossModel",
-          `monsters/bigboss.glb${o}`,
           "gltf"
         ],
         [

@@ -118,8 +118,8 @@ export const SURVIVAL_MONSTERS = {
         name: 'Quái to xác',
         model: 'bossModel',
         modelHeight: 3.6,
-        modelSourceHeight: 2.079,
-        modelSourceMinY: -1.077,
+        modelSourceHeight: 1.264,
+        modelSourceMinY: -1.194,
         hp: 18,
         speed: 2.3,
         damage: 26,
@@ -146,9 +146,24 @@ export const SURVIVAL_MONSTERS = {
          * mỗi ván nhiều nhất một con sống cùng lúc. Loại "quái to xác" đã nhận
          * lại model cũ (`bossModel`, 28.5k đỉnh).
          */
-        model: 'monsterBigBossModel',
-        modelSourceHeight: 2.398,
-        modelSourceMinY: 0,
+        /**
+         * ⚠️ DÙNG `bossModel` (alien_creature, 28.5k đỉnh), KHÔNG dùng model
+         * 103.412 đỉnh — nhưng KHÔNG phải vì model kia hỏng.
+         *
+         * Lý do thật: `bossModel` đã được chụp ảnh và xác nhận dựng đúng, đẹp,
+         * ở cả vai "quái to xác" lẫn vai trùm khi phóng to 2,7 lần. Model
+         * 103.412 đỉnh thì chưa bao giờ xác nhận được — và nó tốn thêm 2,7 MB
+         * tải về. Không đổi một thứ đã chứng minh lấy một thứ chưa chứng minh.
+         *
+         * ⚠️ ĐÍNH CHÍNH cho ai đọc lịch sử commit: có một lúc tôi kết luận model
+         * kia "vỡ thành sọ và kiếm rời rạc". **SAI.** Cái sọ và thanh kiếm trong
+         * ảnh là PROPS CÓ SẴN của cảnh — chúng vẫn nằm nguyên đó sau khi đã đổi
+         * model. Đây là bài học về việc đọc ảnh: thấy một thứ lạ cạnh vật mình
+         * vừa thêm thì phải đổi biến rồi chụp lại, đừng vội quy tội.
+         */
+        model: 'bossModel',
+        modelSourceHeight: 1.264,
+        modelSourceMinY: -1.194,
         hp: 130,
         speed: 2.6,
         damage: 40,

@@ -1053,8 +1053,14 @@ const facts = {}
         /**
          * ⚠️ KHÔNG `import('three/webgpu')` trong trang — trình duyệt không
          * phân giải được tên gói trần (Vite chỉ viết lại import lúc dựng, còn
-         * `page.evaluate` chạy ngoài đồ thị module đó). Đo tay: 8 góc hộp bao
-         * hình học của từng lưới, nhân `matrixWorld`, lấy min/max theo Y.
+         * `page.evaluate` chạy ngoài đồ thị module đó).
+         *
+         * ⚠️⚠️ VÀ PHẢI ĐO BẰNG `SkinnedMesh.computeBoundingBox()`, KHÔNG bằng
+         * `geometry.boundingBox`. Bản đầu của mục kiểm này dùng bbox hình học
+         * nhân `matrixWorld` và báo oan "trùm cao 11,54" trong khi con quái
+         * đứng đúng 6,5 — vì với lưới có xương, bbox hình học nằm ở không gian
+         * BIND, chưa qua xương. Đây là ĐÚNG phép đo mà `makeModelMonster()`
+         * dùng để tính tỉ lệ, nên hai bên nói cùng một ngôn ngữ.
          */
         s.boss.root.updateMatrixWorld(true)
 
@@ -1064,13 +1070,40 @@ const facts = {}
 
         s.boss.root.traverse((child) =>
         {
-            if(child.isSkinnedMesh) skinned++
-            if(!child.geometry) return
+            if(!child.isSkinnedMesh) return
+            skinned++
 
-            if(!child.geometry.boundingBox) child.geometry.computeBoundingBox()
-            const bb = child.geometry.boundingBox
+            child.computeBoundingBox()
+            const bb = child.boundingBox
             if(!bb) return
 
+            /**
+             * `computeBoundingBox()` của SkinnedMesh trả hộp trong không gian
+             * RIÊNG của lưới (đã qua xương, chưa qua tỉ lệ của cha).
+             *
+             * ⚠️ Phải nhân TỈ LỆ TÍCH LUỸ, không phải mỗi `root.scale`: cây là
+             * `root(spec.scale) → model(tỉ lệ co) → …`, bỏ vế giữa thì con số
+             * không đổi dù `modelSourceHeight` đổi — đúng triệu chứng đã gặp
+             * (sửa 2,079 → 1,264 mà bộ kiểm vẫn báo y hệt 3,77).
+             * Cột thứ hai của ma trận thế giới chính là tỉ lệ theo trục Y.
+             */
+            /**
+             * ⚠️ Biến đổi qua ĐỦ ma trận thế giới, cả tỉ lệ LẪN tịnh tiến.
+             *
+             * Chỉ nhân tỉ lệ (`bb.min.y * scaleY`) thì được chiều cao đúng
+             * nhưng VỊ TRÍ sai — `makeModelMonster()` nâng model lên bằng
+             * `model.position.y = -minY * scale`, và phần nâng đó nằm ở cột
+             * tịnh tiến. Bỏ nó là mọi phép đo "chân lệch mặt đất" đều lệch một
+             * hằng số, và sửa `modelSourceMinY` bao nhiêu cũng không thấy đổi.
+             */
+            /**
+             * ⚠️ TÁM GÓC, ĐỦ MA TRẬN. Hai lối tắt đã thử và cả hai đều sai:
+             *  - `bb.min.y * scaleY` → chiều cao đúng, vị trí sai (mất tịnh tiến)
+             *  - `m[5]*y + m[13]`    → chỉ đúng khi model không xoay quanh X/Z;
+             *                          model này xoay nên ra "cao 0,00"
+             * Biến đổi cả tám góc rồi lấy min/max là cách duy nhất không giả
+             * định gì về ma trận.
+             */
             const m = child.matrixWorld.elements
             for(const cx of [ bb.min.x, bb.max.x ])
                 for(const cy of [ bb.min.y, bb.max.y ])

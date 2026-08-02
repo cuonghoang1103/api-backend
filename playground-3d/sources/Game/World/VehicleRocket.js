@@ -546,11 +546,16 @@ export class VehicleRocket
             },
         })
 
+        /**
+         * Tiếng nổ THẬT — user tải về (2/8), thay cho hai tiếng va đập nhỏ mà
+         * bản mẫu có sẵn. Vẫn giữ HAI biến thể và xoay vòng: một tiếng nổ duy
+         * nhất lặp lại nghe ra ngay là băng ghi âm.
+         */
         for(const path of [
-            'sounds/explosions/SmallImpactMediumE PE281202.mp3',
-            'sounds/explosions/SmallImpactMediumE PE281203.mp3',
+            'sounds/survival/explosion-1.mp3',
+            'sounds/survival/explosion-2.mp3',
         ])
-            this.sounds.explosions.push(register(path, 0.5, 30))
+            this.sounds.explosions.push(register(path, 0.5, 40))
 
         // Tiếng phụt khi rời nòng — mượn tiếng va kim loại nhẹ có sẵn
         this.sounds.launch = register('sounds/clicks/Source Metal Clicks Delicate Light Sharp Clip Mid 07.mp3', 0.35, 20)
@@ -566,9 +571,9 @@ export class VehicleRocket
          *  - chạm đất: HAI tiếng nổ cùng lúc + một tiếng sấm gần làm phần trầm,
          *    nên quả này nghe nặng hẳn so với rocket
          */
-        this.sounds.missileLaunch = register('sounds/swoosh/Swoosh 02.mp3', 0.5, 34)
-        this.sounds.missileDive = register('sounds/swoosh/Swoosh 05.mp3', 0.6, 40)
-        this.sounds.missileBoom = register('sounds/thunder/near/THUNDER_GEN-HDF-23300.mp3', 0.55, 60)
+        this.sounds.missileLaunch = register('sounds/survival/rocket-launch.mp3', 0.5, 44)
+        this.sounds.missileDive = register('sounds/survival/rocket-fly.mp3', 0.6, 44)
+        this.sounds.missileBoom = register('sounds/survival/explosion-big.mp3', 0.6, 75)
         this.sounds.missileIgnite = register('sounds/fire/ignite-1.mp3', 0.6, 30)
 
         /**

@@ -58,6 +58,7 @@ export class SurvivalHeli
 
         this.build()
         this.setActions()
+        this.setSounds()
 
         // Nhịp 6.5 — cùng khe với người đi bộ, xem `SurvivalWalker`
         this.game.ticker.events.on('tick', () => this.update(), 6.5)
@@ -211,6 +212,49 @@ export class SurvivalHeli
         })
     }
 
+    /**
+     * Tiếng cánh quạt — LẶP và BÁM THEO TOẠ ĐỘ trực thăng.
+     *
+     * ⚠️ `distanceFade` để rất xa (90): người chơi phải nghe nó từ lúc nó còn
+     * là một chấm ở chân trời, đó là nửa cái hay của việc gọi trực thăng về.
+     *
+     * ⚠️ Tiếng lặp phải tắt bằng `item.howl.stop()` — `item` của `Audio` không
+     * có `stop()`, gọi `item.stop()` là im lặng không báo lỗi và cánh quạt kêu
+     * mãi tới hết phiên. Cùng bẫy đã gặp với gió đêm và nhịp tim.
+     */
+    setSounds()
+    {
+        this.sounds = {}
+
+        this.sounds.rotor = this.game.audio.register({
+            path: 'sounds/survival/heli-loop.mp3',
+            autoplay: false, loop: true, volume: 0.4, antiSpam: 0,
+            positions: new THREE.Vector3(), distanceFade: 90,
+            onPlay: (item, coordinates) => { if(coordinates) item.positions[0].copy(coordinates); item.volume = 1 },
+        })
+
+        const once = (path, volume, fade) => this.game.audio.register({
+            path, autoplay: false, loop: false, volume, antiSpam: 1,
+            positions: new THREE.Vector3(), distanceFade: fade,
+            onPlay: (item, coordinates) => { if(coordinates) item.positions[0].copy(coordinates); item.volume = 1 },
+        })
+
+        this.sounds.arrive = once('sounds/survival/heli-arrive.mp3', 0.5, 110)
+        this.sounds.land = once('sounds/survival/heli-land.mp3', 0.45, 70)
+    }
+
+    /** Bật/tắt tiếng cánh quạt — xem chú thích ở `setSounds()`. */
+    setRotorSound(on)
+    {
+        const item = this.sounds?.rotor
+        if(!item?.howl) return
+        if(on === !!item.__on) return
+
+        item.__on = on
+        if(on) item.play(this.position)
+        else item.howl.stop()
+    }
+
     // ═══════════════════════════════════════════════════════════════════════
     //  GỌI / LÊN / XUỐNG
     // ═══════════════════════════════════════════════════════════════════════
@@ -257,6 +301,8 @@ export class SurvivalHeli
 
         this.state = 'arriving'
         this.group.visible = true
+        this.sounds.arrive?.play(this.position)
+        this.setRotorSound(true)
 
         this.game.notifications?.show(
             /* html */`<div class="top"><p class="title">Trực thăng đang tới</p></div><div class="bottom"><p class="description">Đợi nó hạ xuống rồi bấm <strong>E</strong> để lên</p></div>`,
@@ -309,6 +355,9 @@ export class SurvivalHeli
     {
         if(this.state !== 'flying') return
 
+        this.sounds.land?.play(this.position)
+        this.setRotorSound(false)
+
         this.state = 'idle'
         this.group.visible = false
         this.survival.gun.firing = false
@@ -333,6 +382,8 @@ export class SurvivalHeli
     reset()
     {
         const wasFlying = this.state === 'flying'
+
+        this.setRotorSound(false)
 
         this.state = 'idle'
         this.group.visible = false
@@ -360,6 +411,10 @@ export class SurvivalHeli
         if(this.state === 'idle' || !this.survival.enabled) return
 
         const delta = Math.min(this.game.ticker.delta, 0.1)
+
+        // Tiếng cánh quạt bám theo trực thăng
+        if(this.sounds?.rotor?.__on && this.sounds.rotor.positions)
+            this.sounds.rotor.positions[0].copy(this.position)
 
         // Cánh quạt quay bất kể trạng thái nào — đứng đậu vẫn nổ máy
         this.mainRotor.rotation.y += SURVIVAL_HELI.rotorSpeed * delta

@@ -71,8 +71,59 @@ export class SurvivalMonsters
         this.seed = 1
         this.frame = 0
 
+        this.setSounds()
+
         /** Dùng lại một véc-tơ thay vì cấp phát mới mỗi khung hình. */
         this.tmp = new THREE.Vector3()
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    //  ÂM THANH
+    // ═══════════════════════════════════════════════════════════════════════
+
+    /**
+     * Tiếng của đàn quái — user tải về, đã cắt còn 0,45–2,2 giây mỗi tiếng.
+     *
+     * ⚠️ MỖI VAI CÓ NHIỀU BIẾN THỂ và chọn ngẫu nhiên. Một đàn ba mươi con mà
+     * dùng chung đúng một tiếng gầm thì tai nghe ra ngay là một băng ghi âm
+     * chạy vòng, và cảm giác "đàn quái" biến mất.
+     *
+     * ⚠️ `antiSpam` khác nhau theo vai: tiếng gầm để 0,45 (ba chục con cùng
+     * gầm là thành tiếng ù), tiếng trúng đòn để 0,06 (bắn liên thanh phải nghe
+     * từng phát trúng).
+     */
+    setSounds()
+    {
+        const register = (path, volume, fade, antiSpam) => this.game.audio.register({
+            path,
+            autoplay: false,
+            loop: false,
+            volume,
+            antiSpam,
+            positions: new THREE.Vector3(),
+            distanceFade: fade,
+            onPlay: (item, coordinates) =>
+            {
+                if(coordinates) item.positions[0].copy(coordinates)
+                item.volume = 1
+            },
+        })
+
+        this.sounds = {
+            growls: [ 1, 2, 3, 4 ].map(i => register(`sounds/survival/growl-${i}.mp3`, 0.35, 42, 0.45)),
+            screeches: [ 1, 2 ].map(i => register(`sounds/survival/screech-${i}.mp3`, 0.4, 48, 0.8)),
+            hits: [ 1, 2 ].map(i => register(`sounds/survival/hit-${i}.mp3`, 0.45, 28, 0.06)),
+            deaths: [ 1, 2 ].map(i => register(`sounds/survival/death-${i}.mp3`, 0.42, 40, 0.15)),
+            steps: [ 1, 2 ].map(i => register(`sounds/survival/step-${i}.mp3`, 0.16, 22, 0.05)),
+            stepBoss: register('sounds/survival/step-boss.mp3', 0.5, 55, 0.2),
+        }
+    }
+
+    /** Lấy ngẫu nhiên một biến thể rồi phát tại toạ độ. */
+    playRandom(list, at)
+    {
+        if(!list?.length) return
+        list[Math.floor(Math.random() * list.length)]?.play(at)
     }
 
     // ═══════════════════════════════════════════════════════════════════════
@@ -673,6 +724,7 @@ export class SurvivalMonsters
         monster.flash = 1
 
         const at = monster.root.position
+        this.playRandom(this.sounds.hits, at)
         this.spawnBlood(at.x, at.y + monster.spec.hitHeight * monster.scale, at.z, SURVIVAL_BLOOD.hitDrops, monster.scale)
 
         if(monster.hp > 0)
@@ -700,6 +752,7 @@ export class SurvivalMonsters
         monster.deathDriftZ = Math.cos(away) * (1.6 + rand(this.seed++ * 5.1) * 2.4)
         monster.deathSpin = (rand(this.seed++ * 7.9) - 0.5) * 3.4
 
+        this.playRandom(this.sounds.deaths, at)
         this.spawnBlood(at.x, at.y + monster.spec.hitHeight * monster.scale, at.z, SURVIVAL_BLOOD.deathDrops, monster.scale * 1.4)
         this.spawnPool(at.x, monster.groundY, at.z, monster.scale)
 
@@ -947,8 +1000,31 @@ export class SurvivalMonsters
                 const speed = m.spec.speed * (m.sees ? 1 : SURVIVAL_STEALTH.wanderSpeedFactor)
                 position.x += dirX * speed * delta
                 position.z += dirZ * speed * delta
+
+                const before = m.phase
                 m.phase += delta * speed * (m.gait === 'crawl' ? 4.2 : 2.9)
+
+                /**
+                 * BƯỚC CHÂN theo đúng nhịp chân — phát mỗi khi pha đi qua bội
+                 * số của π (một sải chân). Đếm theo pha chứ không theo đồng hồ:
+                 * con chạy nhanh thì bước dồn, con lảng vảng thì thưa, tự khớp.
+                 */
+                if(Math.floor(before / Math.PI) !== Math.floor(m.phase / Math.PI))
+                {
+                    if(m.spec.isBoss) this.sounds.stepBoss?.play(position)
+                    else this.playRandom(this.sounds.steps, position)
+                }
             }
+
+            /**
+             * GẦM GỪ trong lúc đuổi — thưa thớt và ngẫu nhiên.
+             *
+             * ⚠️ Xác suất phải RẤT nhỏ (0,25%/khung ≈ một tiếng mỗi 13 giây cho
+             * mỗi con). Ba mươi con mà con nào cũng gầm đều đặn thì thành một
+             * bức tường tiếng ồn liên tục, không còn dọa được ai.
+             */
+            if(m.sees && !m.dead && Math.random() < 0.0025)
+                this.playRandom(this.sounds.growls, position)
 
             // ── Xoay thân về hướng đi, xoay MỀM chứ không giật ───────────────
             const wanted = Math.atan2(dirX, dirZ)
@@ -1072,10 +1148,20 @@ export class SurvivalMonsters
             ? Infinity
             : Math.max(sightRange, SURVIVAL_STEALTH.alwaysSeeRange)
 
+        const sawBefore = monster.sees
         monster.sees = distance <= range
 
         if(monster.sees)
         {
+            /**
+             * VỪA BẮT ĐƯỢC DẤU → rít lên một tiếng.
+             *
+             * Đây là tiếng quan trọng nhất của cả chế độ: nó báo cho người chơi
+             * biết "mình vừa bị phát hiện" đúng vào khoảnh khắc điều đó xảy ra.
+             * Không có nó thì cơ chế nấp chỉ đọc được qua dòng chữ trên HUD.
+             */
+            if(!sawBefore) this.playRandom(this.sounds.screeches, monster.root.position)
+
             monster.lostFor = 0
             monster.lastSeenX = target.x
             monster.lastSeenZ = target.z

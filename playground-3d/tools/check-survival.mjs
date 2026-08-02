@@ -125,6 +125,58 @@ const facts = {}
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
+//  0b. MỌI TỆP ÂM THANH PHẢI TẢI ĐƯỢC
+// ═══════════════════════════════════════════════════════════════════════════
+//
+// Đường dẫn sai thì Howler chỉ in một dòng `console.error` rồi im — game vẫn
+// chạy, chỉ là tiếng đó không bao giờ kêu. Không có mục kiểm này thì phải ngồi
+// chơi và tự nhận ra "hình như thiếu tiếng gì đó".
+{
+    const audio = await page.evaluate(async () =>
+    {
+        const paths = [
+            'gun-shot-1', 'gun-shot-2', 'gun-shot-3',
+            'explosion-1', 'explosion-2', 'explosion-big',
+            'rocket-launch', 'rocket-fly',
+            'growl-1', 'growl-2', 'growl-3', 'growl-4',
+            'screech-1', 'screech-2', 'hit-1', 'hit-2',
+            'death-1', 'death-2', 'step-1', 'step-2', 'step-boss', 'step-walker',
+            'heli-loop', 'heli-arrive', 'heli-land',
+            'riser', 'wave-horn', 'boss-horn', 'wave-clear', 'game-over',
+            'heartbeat', 'night-wind',
+        ]
+
+        const missing = []
+        await Promise.all(paths.map(async (name) =>
+        {
+            try
+            {
+                const response = await fetch(`/sounds/survival/${name}.mp3`, { method: 'HEAD' })
+                if(!response.ok) missing.push(`${name} (${response.status})`)
+            }
+            catch(error) { missing.push(`${name} (không tải được)`) }
+        }))
+
+        // Nhạc nền riêng của chế độ
+        try
+        {
+            const r = await fetch('/sounds/musics/survival-theme.mp3', { method: 'HEAD' })
+            if(!r.ok) missing.push(`survival-theme (${r.status})`)
+        }
+        catch(error) { missing.push('survival-theme (không tải được)') }
+
+        return { total: paths.length + 1, missing }
+    })
+
+    facts['0b. tệp âm thanh'] = audio.missing.length === 0
+        ? `${audio.total}/${audio.total} tải được`
+        : `THIẾU ${audio.missing.length}/${audio.total}: ${audio.missing.join(', ')}`
+
+    if(audio.missing.length)
+        problems.push(`${audio.missing.length} tệp âm thanh KHÔNG tải được: ${audio.missing.slice(0, 6).join(', ')}`)
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 //  1. BẬT CHẾ ĐỘ
 // ═══════════════════════════════════════════════════════════════════════════
 {

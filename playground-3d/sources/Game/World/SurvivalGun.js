@@ -112,23 +112,34 @@ export class SurvivalGun
         })
 
         /**
-         * Kho tiếng của bản mẫu KHÔNG có tiếng súng nào — đây là thứ gần nhất.
+         * TIẾNG SÚNG THẬT — user tải về, đã cắt còn 0,26–0,39 giây mỗi phát.
          *
-         * ⚠️ Bản đầu dùng tiếng va kim loại sắc gọn (`clicks/…Metal Clicks…`) và
-         * user nghe ra đúng cái nó là: *"âm thanh tạch tạch nghe không giống
-         * tiếng súng"*. Tiếng va đập trầm (`explosions/SmallImpact…`) hạ âm
-         * lượng xuống thì ra "pặc pặc" — vẫn không phải tiếng súng thật, nhưng
-         * là thứ gần nhất kho này có.
-         *
-         * Tiếng súng THẬT phải chờ user tải file về (đã hẹn để ở
-         * `~/Downloads/Play Ground/Âm thanh/`); lúc đó chỉ cần đổi đường dẫn ở
-         * đúng dòng này.
+         * ⚠️ BA biến thể, phát luân phiên. Một tiếng duy nhất lặp 7 lần/giây
+         * nghe ra ngay là băng ghi âm chạy vòng; ba tiếng xen kẽ thì tai không
+         * bắt được chu kỳ nữa. Đây là mẹo cũ, `VehicleRocket` cũng dùng cho
+         * tiếng nổ.
          *
          * ⚠️ `antiSpam` phải nhỏ (0,05): để mặc định 0,15 thì cứ ba phát mới
          * nghe một tiếng, nghe như súng kẹt.
+         *
+         * Trước đây phải mượn tiếng va kim loại và user nghe ra đúng cái nó là:
+         * *"âm thanh tạch tạch nghe không giống tiếng súng"*.
          */
-        this.sounds.shot = register('sounds/explosions/SmallImpactMediumE PE281202.mp3', 0.16, 28, 0.05)
+        this.sounds.shots = [
+            register('sounds/survival/gun-shot-1.mp3', 0.3, 30, 0.05),
+            register('sounds/survival/gun-shot-2.mp3', 0.3, 30, 0.05),
+            register('sounds/survival/gun-shot-3.mp3', 0.26, 30, 0.05),
+        ]
+        this.shotIndex = 0
         this.sounds.jam = register('sounds/hits/metal/Metal Clip Hit.mp3', 0.4, 20, 0.6)
+    }
+
+    /** Một phát — xoay vòng ba biến thể, xem chú thích ở `setSounds()`. */
+    playShotSound(at)
+    {
+        const sound = this.sounds.shots?.[this.shotIndex]
+        this.shotIndex = (this.shotIndex + 1) % (this.sounds.shots?.length || 1)
+        sound?.play(at)
     }
 
     /**
@@ -243,7 +254,7 @@ export class SurvivalGun
 
         const hitDistance = best ? bestAlong : SURVIVAL_GUN.range
         this.spawnTracer(hitDistance)
-        this.sounds.shot?.play(this.muzzle)
+        this.playShotSound(this.muzzle)
 
         if(best)
             this.survival.monsters.hit(best, this.damage, this.muzzle.x, this.muzzle.z)

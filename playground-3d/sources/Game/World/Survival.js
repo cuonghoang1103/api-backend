@@ -163,6 +163,9 @@ export class Survival
 
         this.monsters.clear()
         this.gun.clear()
+        // Tiếng LẶP phải tắt bằng tay — chúng không tự hết
+        this.loopSound(this.sounds.nightWind, false)
+        this.loopSound(this.sounds.heartbeat, false)
         // PHẢI trả phím lái về trước khi tắt chế độ, không thì `inputs.filters`
         // còn kẹt ở 'walking' / 'heli' và chiếc xe không nhúc nhích nữa.
         // Trực thăng trước, vì `walker.reset()` không biết mình đang bay.
@@ -226,7 +229,13 @@ export class Survival
         this.boss = null
 
         this.setTime('night', 2.5)
-        this.sounds.howl?.play()
+
+        // Kèn riêng cho sóng có trùm — người chơi nghe là biết trước chuyện gì
+        if(this.bossPending) this.sounds.bossHorn?.play()
+        else this.sounds.waveHorn?.play()
+
+        // Gió đêm nổi lên suốt pha săn, tắt khi nghỉ
+        this.loopSound(this.sounds.nightWind, true)
 
         this.game.notifications?.show(
             this.bossPending
@@ -276,8 +285,7 @@ export class Survival
         this.kills++
         this.score += monster.spec.score
 
-        this.sounds.death?.play(monster.root.position)
-
+        // Tiếng quái gục do `SurvivalMonsters.kill()` phát (có 2 biến thể)
         const at = monster.root.position
 
         // ── Quái trùm: rơi cả một đống chứ không một đồng ────────────────────
@@ -420,7 +428,9 @@ export class Survival
 
         this.monsters.clear()
         this.setDefeatedOverlay(true)
-        this.sounds.death?.play(this.game.physicalVehicle.position)
+        this.sounds.gameOver?.play()
+        this.loopSound(this.sounds.heartbeat, false)
+        this.loopSound(this.sounds.nightWind, false)
     }
 
     /** Sau màn thua: dọn sạch, hồi máu, quay lại sóng 1. */
@@ -477,7 +487,18 @@ export class Survival
         // ── Nghỉ giữa hai sóng ───────────────────────────────────────────────
         if(this.phase === 'preparing')
         {
+            const before = this.phaseTimer
             this.phaseTimer -= delta
+
+            /**
+             * RISER ở ba giây cuối — tiếng dâng lên báo sóng sắp tới.
+             *
+             * Phát đúng MỘT lần, bắt bằng khoảnh khắc đồng hồ đi qua mốc 3,6
+             * giây (đúng độ dài của tệp) chứ không phải `phaseTimer < 3.6`, nếu
+             * không nó gọi lại mỗi khung hình trong suốt ba giây.
+             */
+            if(before > 3.6 && this.phaseTimer <= 3.6) this.sounds.riser?.play()
+
             if(this.phaseTimer <= 0) this.startWave()
         }
         // ── Đang săn: sinh dần cho đủ số, giết sạch thì sang sóng sau ─────────
@@ -495,7 +516,7 @@ export class Survival
                 {
                     this.bossPending = false
                     this.boss = boss
-                    this.sounds.howl?.play()
+                    this.sounds.bossHorn?.play()
                 }
             }
 
@@ -517,6 +538,8 @@ export class Survival
                     this.best = this.wave
                     localStorage.setItem('survivalBestWave', String(this.best))
                 }
+                this.sounds.waveClear?.play()
+                this.loopSound(this.sounds.nightWind, false)
                 this.startPreparing()
             }
         }
@@ -851,20 +874,66 @@ export class Survival
             },
         })
 
-        this.sounds.death = register('sounds/bell/Death Hit.mp3', 0.4, 40)
         this.sounds.bite = register('sounds/hits/defaults/Impact Soft 03.mp3', 0.5, 25)
-        this.sounds.impact = register('sounds/hits/metal/Metal Clip Hit.mp3', 0.45, 30)
+        this.sounds.impact = register('sounds/survival/hit-2.mp3', 0.5, 30)
         this.sounds.pickup = register('sounds/ding/Cash Register 03.mp3', 0.35, 30)
 
-        // Tiếng tru KHÔNG bám toạ độ — nó là hồi kèn báo sóng, phải nghe rõ dù
-        // đang đứng ở đâu
-        this.sounds.howl = this.game.audio.register({
-            path: 'sounds/wolf/TimberWolvesGroupHowlingSomeWhimpering_S2h0E_04.mp3',
-            autoplay: false,
-            loop: false,
-            volume: 0.5,
-            antiSpam: 1,
+        /**
+         * ─── TIẾNG THEO GIAI ĐOẠN ───────────────────────────────────────────
+         *
+         * Đây là nhóm biến "bắn quái" thành "gay cấn": người chơi nghe được
+         * mình đang ở đâu trong vòng lặp mà không cần nhìn HUD.
+         *
+         * ⚠️ Nhóm này KHÔNG bám toạ độ (không có `positions`/`distanceFade`) —
+         * chúng là tiếng của cả sân khấu, phải nghe rõ như nhau dù đang đứng ở
+         * đâu. Đăng ký kiểu bám toạ độ là hồi kèn vào sóng nhỏ dần theo khoảng
+         * cách tới… chính mình, tức không bao giờ nghe thấy.
+         */
+        const flat = (path, volume, antiSpam = 1) => this.game.audio.register({
+            path, autoplay: false, loop: false, volume, antiSpam,
         })
+
+        this.sounds.riser = flat('sounds/survival/riser.mp3', 0.45)
+        this.sounds.waveHorn = flat('sounds/survival/wave-horn.mp3', 0.5)
+        this.sounds.bossHorn = flat('sounds/survival/boss-horn.mp3', 0.55)
+        this.sounds.waveClear = flat('sounds/survival/wave-clear.mp3', 0.45)
+        this.sounds.gameOver = flat('sounds/survival/game-over.mp3', 0.5)
+
+        /**
+         * NHỊP TIM khi máu thấp — LẶP, và chỉ chạy khi máu dưới ngưỡng.
+         * `antiSpam: 0` vì nó không phải tiếng bắn từng phát mà là một dòng
+         * chảy liên tục; để 1 thì lần bật thứ hai bị nuốt.
+         */
+        this.sounds.heartbeat = this.game.audio.register({
+            path: 'sounds/survival/heartbeat.mp3',
+            autoplay: false, loop: true, volume: 0.5, antiSpam: 0,
+        })
+
+        /** Gió đêm — nền của cả chế độ, bật khi vào sóng và tắt khi nghỉ. */
+        this.sounds.nightWind = this.game.audio.register({
+            path: 'sounds/survival/night-wind.mp3',
+            autoplay: false, loop: true, volume: 0.28, antiSpam: 0,
+        })
+    }
+
+    /**
+     * Bật/tắt một tiếng LẶP (gió đêm, nhịp tim).
+     *
+     * ⚠️ `Audio.register()` trả về một `item` KHÔNG có `stop()` — chỉ
+     * `item.howl` (đối tượng Howl bên dưới) mới có. Gọi `item.stop()` là im
+     * lặng không báo lỗi, và tiếng lặp chạy mãi tới hết phiên.
+     *
+     * ⚠️ Giữ cờ RIÊNG (`__on`) chứ đừng đọc `item.playing`: `Audio` tự đặt cờ
+     * đó theo sự kiện `onend`, mà tiếng lặp thì không bao giờ `end`.
+     */
+    loopSound(item, on)
+    {
+        if(!item?.howl) return
+        if(on === !!item.__on) return
+
+        item.__on = on
+        if(on) item.play()
+        else item.howl.stop()
     }
 
     // ═══════════════════════════════════════════════════════════════════════

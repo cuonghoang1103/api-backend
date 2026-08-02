@@ -102251,10 +102251,10 @@ https://github.com/browserify/crypto-browserify`);
         }
       });
       for (const r of [
-        "sounds/explosions/SmallImpactMediumE PE281202.mp3",
-        "sounds/explosions/SmallImpactMediumE PE281203.mp3"
-      ]) this.sounds.explosions.push(e(r, 0.5, 30));
-      this.sounds.launch = e("sounds/clicks/Source Metal Clicks Delicate Light Sharp Clip Mid 07.mp3", 0.35, 20), this.sounds.missileLaunch = e("sounds/swoosh/Swoosh 02.mp3", 0.5, 34), this.sounds.missileDive = e("sounds/swoosh/Swoosh 05.mp3", 0.6, 40), this.sounds.missileBoom = e("sounds/thunder/near/THUNDER_GEN-HDF-23300.mp3", 0.55, 60), this.sounds.missileIgnite = e("sounds/fire/ignite-1.mp3", 0.6, 30), this.sounds.missileEngine = this.game.audio.register({
+        "sounds/survival/explosion-1.mp3",
+        "sounds/survival/explosion-2.mp3"
+      ]) this.sounds.explosions.push(e(r, 0.5, 40));
+      this.sounds.launch = e("sounds/clicks/Source Metal Clicks Delicate Light Sharp Clip Mid 07.mp3", 0.35, 20), this.sounds.missileLaunch = e("sounds/survival/rocket-launch.mp3", 0.5, 44), this.sounds.missileDive = e("sounds/survival/rocket-fly.mp3", 0.6, 44), this.sounds.missileBoom = e("sounds/survival/explosion-big.mp3", 0.6, 75), this.sounds.missileIgnite = e("sounds/fire/ignite-1.mp3", 0.6, 30), this.sounds.missileEngine = this.game.audio.register({
         path: "sounds/fire/Fire Burning.mp3",
         autoplay: false,
         loop: true,
@@ -103188,7 +103188,50 @@ https://github.com/browserify/crypto-browserify`);
   }, GROUND_SLICES = 4;
   class SurvivalMonsters {
     constructor(e) {
-      this.game = Game.getInstance(), this.survival = e, this.monsters = [], this.bloods = [], this.pools = [], this.materials = /* @__PURE__ */ new Map(), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.sphereGeometry = new SphereGeometry(0.5, 8, 6), this.coneGeometry = new ConeGeometry(0.5, 1, 7), this.group = new Group(), this.group.name = "survivalMonsters", this.game.scene.add(this.group), this.seed = 1, this.frame = 0, this.tmp = new Vector3$1();
+      this.game = Game.getInstance(), this.survival = e, this.monsters = [], this.bloods = [], this.pools = [], this.materials = /* @__PURE__ */ new Map(), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.sphereGeometry = new SphereGeometry(0.5, 8, 6), this.coneGeometry = new ConeGeometry(0.5, 1, 7), this.group = new Group(), this.group.name = "survivalMonsters", this.game.scene.add(this.group), this.seed = 1, this.frame = 0, this.setSounds(), this.tmp = new Vector3$1();
+    }
+    setSounds() {
+      const e = (r, s, o, a) => this.game.audio.register({
+        path: r,
+        autoplay: false,
+        loop: false,
+        volume: s,
+        antiSpam: a,
+        positions: new Vector3$1(),
+        distanceFade: o,
+        onPlay: (h, c) => {
+          c && h.positions[0].copy(c), h.volume = 1;
+        }
+      });
+      this.sounds = {
+        growls: [
+          1,
+          2,
+          3,
+          4
+        ].map((r) => e(`sounds/survival/growl-${r}.mp3`, 0.35, 42, 0.45)),
+        screeches: [
+          1,
+          2
+        ].map((r) => e(`sounds/survival/screech-${r}.mp3`, 0.4, 48, 0.8)),
+        hits: [
+          1,
+          2
+        ].map((r) => e(`sounds/survival/hit-${r}.mp3`, 0.45, 28, 0.06)),
+        deaths: [
+          1,
+          2
+        ].map((r) => e(`sounds/survival/death-${r}.mp3`, 0.42, 40, 0.15)),
+        steps: [
+          1,
+          2
+        ].map((r) => e(`sounds/survival/step-${r}.mp3`, 0.16, 22, 0.05)),
+        stepBoss: e("sounds/survival/step-boss.mp3", 0.5, 55, 0.2)
+      };
+    }
+    playRandom(e, r) {
+      var _a2;
+      (e == null ? void 0 : e.length) && ((_a2 = e[Math.floor(Math.random() * e.length)]) == null ? void 0 : _a2.play(r));
     }
     material(e) {
       let r = this.materials.get(e);
@@ -103501,13 +103544,13 @@ https://github.com/browserify/crypto-browserify`);
       if (e.dead) return false;
       e.hp -= r, e.flash = 1;
       const a = e.root.position;
-      return this.spawnBlood(a.x, a.y + e.spec.hitHeight * e.scale, a.z, SURVIVAL_BLOOD.hitDrops, e.scale), e.hp > 0 ? false : (this.kill(e, s, o), true);
+      return this.playRandom(this.sounds.hits, a), this.spawnBlood(a.x, a.y + e.spec.hitHeight * e.scale, a.z, SURVIVAL_BLOOD.hitDrops, e.scale), e.hp > 0 ? false : (this.kill(e, s, o), true);
     }
     kill(e, r = null, s = null) {
       if (e.dead) return;
       e.dead = true, e.deathAge = 0;
       const o = e.root.position, a = r === null || s === null ? e.heading : Math.atan2(o.x - r, o.z - s);
-      e.deathDriftX = Math.sin(a) * (1.6 + rand$1(this.seed++ * 3.7) * 2.4), e.deathDriftZ = Math.cos(a) * (1.6 + rand$1(this.seed++ * 5.1) * 2.4), e.deathSpin = (rand$1(this.seed++ * 7.9) - 0.5) * 3.4, this.spawnBlood(o.x, o.y + e.spec.hitHeight * e.scale, o.z, SURVIVAL_BLOOD.deathDrops, e.scale * 1.4), this.spawnPool(o.x, e.groundY, o.z, e.scale), this.survival.onMonsterKilled(e);
+      e.deathDriftX = Math.sin(a) * (1.6 + rand$1(this.seed++ * 3.7) * 2.4), e.deathDriftZ = Math.cos(a) * (1.6 + rand$1(this.seed++ * 5.1) * 2.4), e.deathSpin = (rand$1(this.seed++ * 7.9) - 0.5) * 3.4, this.playRandom(this.sounds.deaths, o), this.spawnBlood(o.x, o.y + e.spec.hitHeight * e.scale, o.z, SURVIVAL_BLOOD.deathDrops, e.scale * 1.4), this.spawnPool(o.x, e.groundY, o.z, e.scale), this.survival.onMonsterKilled(e);
     }
     damageAround(e, r, s = 1) {
       let o = 0;
@@ -103569,7 +103612,7 @@ https://github.com/browserify/crypto-browserify`);
       }
     }
     update(e, r, s, o = 1 / 0) {
-      var _a2;
+      var _a2, _b;
       this.frame++, this.updateBlood(e);
       const a = this.frame % GROUND_SLICES;
       for (let h = this.monsters.length - 1; h >= 0; h--) {
@@ -103599,15 +103642,18 @@ https://github.com/browserify/crypto-browserify`);
         if (W) c.attackCooldown <= 0 && (c.attackCooldown = 0.6, s(c));
         else if (R > 0.6) {
           const ee = c.spec.speed * (c.sees ? 1 : SURVIVAL_STEALTH.wanderSpeedFactor);
-          d.x += O * ee * e, d.z += L * ee * e, c.phase += e * ee * (c.gait === "crawl" ? 4.2 : 2.9);
+          d.x += O * ee * e, d.z += L * ee * e;
+          const fe = c.phase;
+          c.phase += e * ee * (c.gait === "crawl" ? 4.2 : 2.9), Math.floor(fe / Math.PI) !== Math.floor(c.phase / Math.PI) && (c.spec.isBoss ? (_a2 = this.sounds.stepBoss) == null ? void 0 : _a2.play(d) : this.playRandom(this.sounds.steps, d));
         }
+        c.sees && !c.dead && Math.random() < 25e-4 && this.playRandom(this.sounds.growls, d);
         let J = Math.atan2(O, L) - c.heading;
         for (; J > Math.PI; ) J -= Math.PI * 2;
         for (; J < -Math.PI; ) J += Math.PI * 2;
         if (c.heading += J * Math.min(1, e * 7), c.root.rotation.y = c.heading, c.waterCooldown > 0 && (c.waterCooldown -= e), c.slice === a || c.waterCooldown > 0) {
           const ee = this.groundHeight(d.x, d.z);
           if (ee !== null) {
-            const fe = ((_a2 = this.game.water) == null ? void 0 : _a2.surfaceElevation) ?? 0;
+            const fe = ((_b = this.game.water) == null ? void 0 : _b.surfaceElevation) ?? 0;
             ee > fe + SURVIVAL_SPAWN.dryMargin ? (c.groundY = ee, c.dryX = d.x, c.dryZ = d.z) : c.dryX !== void 0 ? (d.x = c.dryX - O * 1.6, d.z = c.dryZ - L * 1.6, c.heading += Math.PI * 0.5, c.waterCooldown = 2.5) : c.groundY = ee;
           }
         }
@@ -103616,11 +103662,11 @@ https://github.com/browserify/crypto-browserify`);
       }
     }
     updateSight(e, r, s, o, a) {
-      const h = e.spec.isBoss && SURVIVAL_STEALTH.bossAlwaysSees ? 1 / 0 : Math.max(o, SURVIVAL_STEALTH.alwaysSeeRange);
-      if (e.sees = s <= h, e.sees) return e.lostFor = 0, e.lastSeenX = r.x, e.lastSeenZ = r.z, r;
+      const h = e.spec.isBoss && SURVIVAL_STEALTH.bossAlwaysSees ? 1 / 0 : Math.max(o, SURVIVAL_STEALTH.alwaysSeeRange), c = e.sees;
+      if (e.sees = s <= h, e.sees) return c || this.playRandom(this.sounds.screeches, e.root.position), e.lostFor = 0, e.lastSeenX = r.x, e.lastSeenZ = r.z, r;
       e.lostFor = (e.lostFor ?? 0) + a, e.lastSeenX === void 0 && (e.lastSeenX = e.root.position.x, e.lastSeenZ = e.root.position.z);
-      const c = this.game.ticker.elapsed * 0.55 + e.phase, d = SURVIVAL_STEALTH.wanderRadius * (e.lostFor > SURVIVAL_STEALTH.memory ? 2.2 : 1);
-      return this.tmp.set(e.lastSeenX + Math.cos(c) * d, e.root.position.y, e.lastSeenZ + Math.sin(c) * d), this.tmp;
+      const d = this.game.ticker.elapsed * 0.55 + e.phase, f = SURVIVAL_STEALTH.wanderRadius * (e.lostFor > SURVIVAL_STEALTH.memory ? 2.2 : 1);
+      return this.tmp.set(e.lastSeenX + Math.cos(d) * f, e.root.position.y, e.lastSeenZ + Math.sin(d) * f), this.tmp;
     }
     separationFor(e, r) {
       let s = 0, o = 0;
@@ -103727,7 +103773,16 @@ https://github.com/browserify/crypto-browserify`);
           c && h.positions[0].copy(c), h.volume = 1;
         }
       });
-      this.sounds.shot = e("sounds/explosions/SmallImpactMediumE PE281202.mp3", 0.16, 28, 0.05), this.sounds.jam = e("sounds/hits/metal/Metal Clip Hit.mp3", 0.4, 20, 0.6);
+      this.sounds.shots = [
+        e("sounds/survival/gun-shot-1.mp3", 0.3, 30, 0.05),
+        e("sounds/survival/gun-shot-2.mp3", 0.3, 30, 0.05),
+        e("sounds/survival/gun-shot-3.mp3", 0.26, 30, 0.05)
+      ], this.shotIndex = 0, this.sounds.jam = e("sounds/hits/metal/Metal Clip Hit.mp3", 0.4, 20, 0.6);
+    }
+    playShotSound(e) {
+      var _a2, _b;
+      const r = (_a2 = this.sounds.shots) == null ? void 0 : _a2[this.shotIndex];
+      this.shotIndex = (this.shotIndex + 1) % (((_b = this.sounds.shots) == null ? void 0 : _b.length) || 1), r == null ? void 0 : r.play(e);
     }
     updateAim() {
       var _a2;
@@ -103735,7 +103790,6 @@ https://github.com/browserify/crypto-browserify`);
       return e ? (((_a2 = this.game.view) == null ? void 0 : _a2.mode) === View.MODE_COCKPIT ? this.ndc.set(0, 0) : this.ndc.set(e.current.x / this.game.viewport.width * 2 - 1, -(e.current.y / this.game.viewport.height * 2 - 1)), this.raycaster.setFromCamera(this.ndc, this.game.view.camera), !!this.raycaster.ray.intersectPlane(this.groundPlane, this.aim)) : false;
     }
     shoot() {
-      var _a2;
       const e = this.game.physicalVehicle, r = this.survival.monsters.monsters, s = this.survival.walker, o = this.survival.heli, a = (o == null ? void 0 : o.active) ? o.position : (s == null ? void 0 : s.active) ? s.position : e.position;
       this.direction.set(this.aim.x - a.x, 0, this.aim.z - a.z);
       const h = this.direction.length();
@@ -103753,7 +103807,7 @@ https://github.com/browserify/crypto-browserify`);
         Math.hypot(M, R) > SURVIVAL_GUN.hitRadius + b.spec.radius * b.scale || _ < p && (p = _, f = b);
       }
       const m = f ? p : SURVIVAL_GUN.range;
-      return this.spawnTracer(m), (_a2 = this.sounds.shot) == null ? void 0 : _a2.play(this.muzzle), f && this.survival.monsters.hit(f, this.damage, this.muzzle.x, this.muzzle.z), f;
+      return this.spawnTracer(m), this.playShotSound(this.muzzle), f && this.survival.monsters.hit(f, this.damage, this.muzzle.x, this.muzzle.z), f;
     }
     get damage() {
       var _a2;
@@ -104022,7 +104076,7 @@ https://github.com/browserify/crypto-browserify`);
         right: false,
         up: false,
         down: false
-      }, this.materials = /* @__PURE__ */ new Map(), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1, 8), this.sphereGeometry = new SphereGeometry(0.5, 8, 6), this.group = new Group(), this.group.name = "survivalHeli", this.group.visible = false, this.game.scene.add(this.group), this.build(), this.setActions(), this.game.ticker.events.on("tick", () => this.update(), 6.5);
+      }, this.materials = /* @__PURE__ */ new Map(), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1, 8), this.sphereGeometry = new SphereGeometry(0.5, 8, 6), this.group = new Group(), this.group.name = "survivalHeli", this.group.visible = false, this.game.scene.add(this.group), this.build(), this.setActions(), this.setSounds(), this.game.ticker.events.on("tick", () => this.update(), 6.5);
     }
     material(e) {
       let r = this.materials.get(e);
@@ -104159,6 +104213,38 @@ https://github.com/browserify/crypto-browserify`);
         r.active && this.state === "flying" && this.land();
       });
     }
+    setSounds() {
+      this.sounds = {}, this.sounds.rotor = this.game.audio.register({
+        path: "sounds/survival/heli-loop.mp3",
+        autoplay: false,
+        loop: true,
+        volume: 0.4,
+        antiSpam: 0,
+        positions: new Vector3$1(),
+        distanceFade: 90,
+        onPlay: (r, s) => {
+          s && r.positions[0].copy(s), r.volume = 1;
+        }
+      });
+      const e = (r, s, o) => this.game.audio.register({
+        path: r,
+        autoplay: false,
+        loop: false,
+        volume: s,
+        antiSpam: 1,
+        positions: new Vector3$1(),
+        distanceFade: o,
+        onPlay: (a, h) => {
+          h && a.positions[0].copy(h), a.volume = 1;
+        }
+      });
+      this.sounds.arrive = e("sounds/survival/heli-arrive.mp3", 0.5, 110), this.sounds.land = e("sounds/survival/heli-land.mp3", 0.45, 70);
+    }
+    setRotorSound(e) {
+      var _a2;
+      const r = (_a2 = this.sounds) == null ? void 0 : _a2.rotor;
+      (r == null ? void 0 : r.howl) && e !== !!r.__on && (r.__on = e, e ? r.play(this.position) : r.howl.stop());
+    }
     get price() {
       return Math.round(SURVIVAL_HELI.price * Math.pow(SURVIVAL_HELI.priceStep, this.calls));
     }
@@ -104169,7 +104255,7 @@ https://github.com/browserify/crypto-browserify`);
       return SURVIVAL_HELI.enterRadius;
     }
     call(e) {
-      var _a2;
+      var _a2, _b;
       if (this.state !== "idle") return false;
       const r = Math.random() * Math.PI * 2;
       return this.arriveFrom = {
@@ -104178,15 +104264,16 @@ https://github.com/browserify/crypto-browserify`);
       }, this.arriveTo = {
         x: e.x,
         z: e.z
-      }, this.position.set(this.arriveFrom.x, 0, this.arriveFrom.z), this.height = SURVIVAL_HELI.maxHeight, this.groundY = this.survival.monsters.groundHeight(this.position.x, this.position.z) ?? 0, this.arriveAge = 0, this.fuel = SURVIVAL_HELI.fuel, this.calls++, this.state = "arriving", this.group.visible = true, (_a2 = this.game.notifications) == null ? void 0 : _a2.show('<div class="top"><p class="title">Tr\u1EF1c th\u0103ng \u0111ang t\u1EDBi</p></div><div class="bottom"><p class="description">\u0110\u1EE3i n\xF3 h\u1EA1 xu\u1ED1ng r\u1ED3i b\u1EA5m <strong>E</strong> \u0111\u1EC3 l\xEAn</p></div>', "is-achievement", 4), true;
+      }, this.position.set(this.arriveFrom.x, 0, this.arriveFrom.z), this.height = SURVIVAL_HELI.maxHeight, this.groundY = this.survival.monsters.groundHeight(this.position.x, this.position.z) ?? 0, this.arriveAge = 0, this.fuel = SURVIVAL_HELI.fuel, this.calls++, this.state = "arriving", this.group.visible = true, (_a2 = this.sounds.arrive) == null ? void 0 : _a2.play(this.position), this.setRotorSound(true), (_b = this.game.notifications) == null ? void 0 : _b.show('<div class="top"><p class="title">Tr\u1EF1c th\u0103ng \u0111ang t\u1EDBi</p></div><div class="bottom"><p class="description">\u0110\u1EE3i n\xF3 h\u1EA1 xu\u1ED1ng r\u1ED3i b\u1EA5m <strong>E</strong> \u0111\u1EC3 l\xEAn</p></div>', "is-achievement", 4), true;
     }
     enter(e) {
       var _a2, _b;
       return this.state !== "landed" ? false : Math.hypot(this.position.x - e.x, this.position.z - e.z) > SURVIVAL_HELI.enterRadius ? ((_a2 = this.game.notifications) == null ? void 0 : _a2.show('<div class="top"><p class="title">Tr\u1EF1c th\u0103ng \u1EDF xa qu\xE1</p></div><div class="bottom"><p class="description">L\u1EA1i g\u1EA7n r\u1ED3i b\u1EA5m E</p></div>', "", 2), false) : (this.state = "flying", this.height = Math.max(SURVIVAL_HELI.minHeight, SURVIVAL_HELI.hoverHeight), this.survival.walker.group.visible = false, this.game.inputs.filters.clear(), this.game.inputs.filters.add("heli"), this.survival.events.trigger("rideChange"), (_b = this.game.notifications) == null ? void 0 : _b.show('<div class="top"><p class="title">\u0110\xE3 l\xEAn tr\u1EF1c th\u0103ng</p></div><div class="bottom"><p class="description">W A S D bay \xB7 <strong>Space</strong> l\xEAn \xB7 <strong>Shift</strong> xu\u1ED1ng \xB7 F b\u1EAFn \xB7 E h\u1EA1 c\xE1nh</p></div>', "is-achievement", 5), true);
     }
     land() {
+      var _a2;
       if (this.state !== "flying") return;
-      this.state = "idle", this.group.visible = false, this.survival.gun.firing = false;
+      (_a2 = this.sounds.land) == null ? void 0 : _a2.play(this.position), this.setRotorSound(false), this.state = "idle", this.group.visible = false, this.survival.gun.firing = false;
       const e = this.survival.walker;
       if (e.active) {
         const r = this.survival.monsters.groundHeight(this.position.x, this.position.z);
@@ -104196,15 +104283,16 @@ https://github.com/browserify/crypto-browserify`);
     }
     reset() {
       const e = this.state === "flying";
-      this.state = "idle", this.group.visible = false, this.fuel = 0, this.calls = 0, e && (this.game.inputs.filters.clear(), this.game.inputs.filters.add("wandering"));
+      this.setRotorSound(false), this.state = "idle", this.group.visible = false, this.fuel = 0, this.calls = 0, e && (this.game.inputs.filters.clear(), this.game.inputs.filters.add("wandering"));
     }
     get active() {
       return this.state === "flying";
     }
     update() {
+      var _a2, _b;
       if (this.state === "idle" || !this.survival.enabled) return;
       const e = Math.min(this.game.ticker.delta, 0.1);
-      this.mainRotor.rotation.y += SURVIVAL_HELI.rotorSpeed * e, this.tailRotor.rotation.x += SURVIVAL_HELI.rotorSpeed * 1.6 * e;
+      ((_b = (_a2 = this.sounds) == null ? void 0 : _a2.rotor) == null ? void 0 : _b.__on) && this.sounds.rotor.positions && this.sounds.rotor.positions[0].copy(this.position), this.mainRotor.rotation.y += SURVIVAL_HELI.rotorSpeed * e, this.tailRotor.rotation.x += SURVIVAL_HELI.rotorSpeed * 1.6 * e;
       const r = Math.sin(this.game.ticker.elapsed * 6) > 0;
       for (const s of this.lights) s.visible = r;
       this.state === "arriving" ? this.updateArriving(e) : this.state === "flying" && this.updateFlying(e), this.updateGround(), this.applyTransform(e), this.state === "flying" && this.game.view.focusPoint.trackedPosition.set(this.position.x, 0, this.position.z);
@@ -104266,7 +104354,7 @@ https://github.com/browserify/crypto-browserify`);
     }
     disable() {
       var _a2, _b, _c;
-      this.enabled = false, this.monsters.clear(), this.gun.clear(), this.heli.reset(), this.walker.reset(), this.clearLoot(), (_a2 = this.hudElement) == null ? void 0 : _a2.classList.remove("is-visible"), (_b = this.shopElement) == null ? void 0 : _b.classList.remove("is-visible"), (_c = this.bossElement) == null ? void 0 : _c.classList.remove("is-visible"), this.boss = null, this.lastShopOpen = null, this.lastBossAlive = null, this.setDefeatedOverlay(false), this.previousTime && this.setTime(this.previousTime, 3);
+      this.enabled = false, this.monsters.clear(), this.gun.clear(), this.loopSound(this.sounds.nightWind, false), this.loopSound(this.sounds.heartbeat, false), this.heli.reset(), this.walker.reset(), this.clearLoot(), (_a2 = this.hudElement) == null ? void 0 : _a2.classList.remove("is-visible"), (_b = this.shopElement) == null ? void 0 : _b.classList.remove("is-visible"), (_c = this.bossElement) == null ? void 0 : _c.classList.remove("is-visible"), this.boss = null, this.lastShopOpen = null, this.lastBossAlive = null, this.setDefeatedOverlay(false), this.previousTime && this.setTime(this.previousTime, 3);
     }
     setTime(e, r) {
       const s = localStorage.getItem("dayCyclePreference");
@@ -104276,8 +104364,8 @@ https://github.com/browserify/crypto-browserify`);
       this.phase = "preparing", this.phaseTimer = e, this.setTime("day", 3);
     }
     startWave() {
-      var _a2, _b;
-      this.wave++, this.phase = "hunting", this.toSpawn = SURVIVAL_WAVES.countFor(this.wave), this.spawnTimer = 0, this.bossPending = this.wave % SURVIVAL_WAVES.bossEvery === 0, this.boss = null, this.setTime("night", 2.5), (_a2 = this.sounds.howl) == null ? void 0 : _a2.play(), (_b = this.game.notifications) == null ? void 0 : _b.show(this.bossPending ? `<div class="top"><p class="title">S\xF3ng ${this.wave} \u2014 QU\xC1I TR\xD9M</p></div><div class="bottom"><p class="description">${this.toSpawn} con, v\xE0 m\u1ED9t th\u1EE9 kh\xF4ng n\u1EA5p n\u1ED5i</p></div>` : `<div class="top"><p class="title">S\xF3ng ${this.wave}</p></div><div class="bottom"><p class="description">${this.toSpawn} con \u0111ang t\u1EDBi</p></div>`, "is-achievement", this.bossPending ? 5 : 3), this.events.trigger("waveChange");
+      var _a2, _b, _c;
+      this.wave++, this.phase = "hunting", this.toSpawn = SURVIVAL_WAVES.countFor(this.wave), this.spawnTimer = 0, this.bossPending = this.wave % SURVIVAL_WAVES.bossEvery === 0, this.boss = null, this.setTime("night", 2.5), this.bossPending ? (_a2 = this.sounds.bossHorn) == null ? void 0 : _a2.play() : (_b = this.sounds.waveHorn) == null ? void 0 : _b.play(), this.loopSound(this.sounds.nightWind, true), (_c = this.game.notifications) == null ? void 0 : _c.show(this.bossPending ? `<div class="top"><p class="title">S\xF3ng ${this.wave} \u2014 QU\xC1I TR\xD9M</p></div><div class="bottom"><p class="description">${this.toSpawn} con, v\xE0 m\u1ED9t th\u1EE9 kh\xF4ng n\u1EA5p n\u1ED5i</p></div>` : `<div class="top"><p class="title">S\xF3ng ${this.wave}</p></div><div class="bottom"><p class="description">${this.toSpawn} con \u0111ang t\u1EDBi</p></div>`, "is-achievement", this.bossPending ? 5 : 3), this.events.trigger("waveChange");
     }
     pickType() {
       let e = SURVIVAL_WAVES.mix[0];
@@ -104290,11 +104378,11 @@ https://github.com/browserify/crypto-browserify`);
       this.phase === "hunting" && this.toSpawn++;
     }
     onMonsterKilled(e) {
-      var _a2, _b;
-      this.kills++, this.score += e.spec.score, (_a2 = this.sounds.death) == null ? void 0 : _a2.play(e.root.position);
+      var _a2;
+      this.kills++, this.score += e.spec.score;
       const r = e.root.position;
       if (e.spec.isBoss) {
-        (_b = this.game.notifications) == null ? void 0 : _b.show(`<div class="top"><p class="title">H\u1EA1 \u0111\u01B0\u1EE3c qu\xE1i tr\xF9m</p></div><div class="bottom"><p class="description">+${e.spec.money}$ \xB7 +${e.spec.score} \u0111i\u1EC3m</p></div>`, "is-achievement", 4);
+        (_a2 = this.game.notifications) == null ? void 0 : _a2.show(`<div class="top"><p class="title">H\u1EA1 \u0111\u01B0\u1EE3c qu\xE1i tr\xF9m</p></div><div class="bottom"><p class="description">+${e.spec.money}$ \xB7 +${e.spec.score} \u0111i\u1EC3m</p></div>`, "is-achievement", 4);
         for (let s = 0; s < 6; s++) {
           const o = s / 6 * Math.PI * 2;
           this.dropLoot(r.x + Math.cos(o) * 2.4, e.groundY, r.z + Math.sin(o) * 2.4, s === 5 ? "health" : "money", s === 5 ? SURVIVAL_LOOT.healthAmount * 2 : Math.round(e.spec.money / 5));
@@ -104342,13 +104430,13 @@ https://github.com/browserify/crypto-browserify`);
     }
     defeat() {
       var _a2;
-      this.health = 0, this.phase = "defeated", this.phaseTimer = 5, this.wave > this.best && (this.best = this.wave, localStorage.setItem("survivalBestWave", String(this.best))), this.monsters.clear(), this.setDefeatedOverlay(true), (_a2 = this.sounds.death) == null ? void 0 : _a2.play(this.game.physicalVehicle.position);
+      this.health = 0, this.phase = "defeated", this.phaseTimer = 5, this.wave > this.best && (this.best = this.wave, localStorage.setItem("survivalBestWave", String(this.best))), this.monsters.clear(), this.setDefeatedOverlay(true), (_a2 = this.sounds.gameOver) == null ? void 0 : _a2.play(), this.loopSound(this.sounds.heartbeat, false), this.loopSound(this.sounds.nightWind, false);
     }
     restart() {
       this.setDefeatedOverlay(false), this.clearLoot(), this.upgrades = {}, this.wave = 0, this.health = this.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.safeFor = 0, this.startPreparing(5);
     }
     update() {
-      var _a2;
+      var _a2, _b, _c;
       if (!this.enabled) return;
       const e = Math.min(this.game.ticker.delta, 0.1), r = this.game.physicalVehicle, s = this.heli.active ? this.heli.position : this.walker.active ? this.walker.position : r.position;
       if (this.phase === "defeated") {
@@ -104356,13 +104444,15 @@ https://github.com/browserify/crypto-browserify`);
         }), this.phaseTimer <= 0 && this.restart(), this.updateHud();
         return;
       }
-      if (this.phase === "preparing") this.phaseTimer -= e, this.phaseTimer <= 0 && this.startWave();
-      else {
+      if (this.phase === "preparing") {
+        const o = this.phaseTimer;
+        this.phaseTimer -= e, o > 3.6 && this.phaseTimer <= 3.6 && ((_a2 = this.sounds.riser) == null ? void 0 : _a2.play()), this.phaseTimer <= 0 && this.startWave();
+      } else {
         if (this.bossPending && this.toSpawn <= 2) {
           const o = this.monsters.spawn("boss", s.x, s.z);
-          o && (this.bossPending = false, this.boss = o, (_a2 = this.sounds.howl) == null ? void 0 : _a2.play());
+          o && (this.bossPending = false, this.boss = o, (_b = this.sounds.bossHorn) == null ? void 0 : _b.play());
         }
-        this.toSpawn > 0 ? (this.spawnTimer -= e, this.spawnTimer <= 0 && this.monsters.aliveCount < SURVIVAL_WAVES.maxAlive && (this.spawnTimer = SURVIVAL_WAVES.spawnInterval, this.monsters.spawn(this.pickType(), s.x, s.z) && this.toSpawn--)) : this.monsters.aliveCount === 0 && !this.bossPending && (this.wave > this.best && (this.best = this.wave, localStorage.setItem("survivalBestWave", String(this.best))), this.startPreparing());
+        this.toSpawn > 0 ? (this.spawnTimer -= e, this.spawnTimer <= 0 && this.monsters.aliveCount < SURVIVAL_WAVES.maxAlive && (this.spawnTimer = SURVIVAL_WAVES.spawnInterval, this.monsters.spawn(this.pickType(), s.x, s.z) && this.toSpawn--)) : this.monsters.aliveCount === 0 && !this.bossPending && (this.wave > this.best && (this.best = this.wave, localStorage.setItem("survivalBestWave", String(this.best))), (_c = this.sounds.waveClear) == null ? void 0 : _c.play(), this.loopSound(this.sounds.nightWind, false), this.startPreparing());
       }
       if (this.monsters.update(e, s, (o) => this.onMonsterReach(o, r), this.sightRange(r)), this.gun.update(e), this.updateRamming(e, r), this.updateLoot(e, s), this.safeFor += e, this.safeFor > SURVIVAL_PLAYER.regenDelay && this.health < this.maxHealth) {
         const o = SURVIVAL_PLAYER.regenRate + this.level("regen") * 3;
@@ -104467,25 +104557,42 @@ https://github.com/browserify/crypto-browserify`);
     }
     setSounds() {
       this.sounds = {};
-      const e = (r, s, o) => this.game.audio.register({
-        path: r,
+      const e = (s, o, a) => this.game.audio.register({
+        path: s,
         autoplay: false,
         loop: false,
-        volume: s,
+        volume: o,
         antiSpam: 0.12,
         positions: new Vector3$1(),
-        distanceFade: o,
-        onPlay: (a, h) => {
-          h && a.positions[0].copy(h), a.volume = 1;
+        distanceFade: a,
+        onPlay: (h, c) => {
+          c && h.positions[0].copy(c), h.volume = 1;
         }
       });
-      this.sounds.death = e("sounds/bell/Death Hit.mp3", 0.4, 40), this.sounds.bite = e("sounds/hits/defaults/Impact Soft 03.mp3", 0.5, 25), this.sounds.impact = e("sounds/hits/metal/Metal Clip Hit.mp3", 0.45, 30), this.sounds.pickup = e("sounds/ding/Cash Register 03.mp3", 0.35, 30), this.sounds.howl = this.game.audio.register({
-        path: "sounds/wolf/TimberWolvesGroupHowlingSomeWhimpering_S2h0E_04.mp3",
+      this.sounds.bite = e("sounds/hits/defaults/Impact Soft 03.mp3", 0.5, 25), this.sounds.impact = e("sounds/survival/hit-2.mp3", 0.5, 30), this.sounds.pickup = e("sounds/ding/Cash Register 03.mp3", 0.35, 30);
+      const r = (s, o, a = 1) => this.game.audio.register({
+        path: s,
         autoplay: false,
         loop: false,
-        volume: 0.5,
-        antiSpam: 1
+        volume: o,
+        antiSpam: a
       });
+      this.sounds.riser = r("sounds/survival/riser.mp3", 0.45), this.sounds.waveHorn = r("sounds/survival/wave-horn.mp3", 0.5), this.sounds.bossHorn = r("sounds/survival/boss-horn.mp3", 0.55), this.sounds.waveClear = r("sounds/survival/wave-clear.mp3", 0.45), this.sounds.gameOver = r("sounds/survival/game-over.mp3", 0.5), this.sounds.heartbeat = this.game.audio.register({
+        path: "sounds/survival/heartbeat.mp3",
+        autoplay: false,
+        loop: true,
+        volume: 0.5,
+        antiSpam: 0
+      }), this.sounds.nightWind = this.game.audio.register({
+        path: "sounds/survival/night-wind.mp3",
+        autoplay: false,
+        loop: true,
+        volume: 0.28,
+        antiSpam: 0
+      });
+    }
+    loopSound(e, r) {
+      (e == null ? void 0 : e.howl) && r !== !!e.__on && (e.__on = r, r ? e.play() : e.howl.stop());
     }
     setHud() {
       this.hudElement = document.querySelector(".js-survival-hud"), this.hudElement && (this.hudParts = {
@@ -117758,7 +117865,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-fZvbRIKV.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-DPvAuC6L.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

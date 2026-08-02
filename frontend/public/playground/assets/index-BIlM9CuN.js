@@ -104590,7 +104590,46 @@ https://github.com/browserify/crypto-browserify`);
             `Keyboard.Numpad${r + 1}`
           ]
         }))
-      ]), this.game.inputs.events.on("survivalShop", (e) => {
+      ]), this.game.inputs.addActions([
+        {
+          name: "survivalDebug",
+          categories: [
+            "wandering",
+            "walking",
+            "heli"
+          ],
+          keys: [
+            "Keyboard.KeyP"
+          ]
+        }
+      ]), this.game.inputs.events.on("survivalDebug", (e) => {
+        var _a2, _b, _c, _d, _e, _f, _g, _h, _i2;
+        if (!e.active) return;
+        const r = this.game, s = r.view.camera;
+        s.updateMatrixWorld(true);
+        const o = [];
+        for (const h of document.querySelectorAll("body *")) {
+          const c = h.getBoundingClientRect();
+          if (c.width < window.innerWidth * 0.5 || c.height < window.innerHeight * 0.4) continue;
+          const d = getComputedStyle(h);
+          d.display === "none" || d.visibility === "hidden" || parseFloat(d.opacity) < 0.02 || o.push(`${h.className || h.tagName} op=${d.opacity} bg=${d.backgroundColor}`);
+        }
+        const a = [];
+        r.scene.traverse((h) => {
+          var _a3;
+          if (!h.isMesh && !h.isSkinnedMesh || !h.visible) return;
+          h.updateMatrixWorld(true);
+          const c = h.matrixWorld.elements, d = Math.hypot(c[12] - s.position.x, c[13] - s.position.y, c[14] - s.position.z);
+          if (d > 40) return;
+          let f = 0;
+          if (h.isSkinnedMesh) {
+            h.computeBoundingBox();
+            const p = h.boundingBox;
+            p && (f = Math.max(p.max.x - p.min.x, p.max.y - p.min.y, p.max.z - p.min.z));
+          } else f = Math.max(Math.hypot(c[0], c[1], c[2]), Math.hypot(c[4], c[5], c[6]), Math.hypot(c[8], c[9], c[10]));
+          f / Math.max(d, 0.1) > 0.4 && a.push(`c\u1EE1 ${f.toFixed(1)} c\xE1ch ${d.toFixed(1)} cha=${((_a3 = h.parent) == null ? void 0 : _a3.name) || "(scene)"}`);
+        }), console.log("\u2550\u2550\u2550\u2550 SINH T\u1ED2N \u2014 CH\u1EA8N \u0110O\xC1N \u2550\u2550\u2550\u2550"), console.log("nh\u1ECBp:", this.phase, "\xB7 s\xF3ng:", this.wave, "\xB7 qu\xE1i s\u1ED1ng:", this.monsters.aliveCount), console.log("L\u1EDAP PH\u1EE6 DOM:", o.length ? o : "(kh\xF4ng c\xF3)"), console.log("V\u1EACT 3D CHO\xC1N M\xC0N H\xCCNH:", a.length ? a : "(kh\xF4ng c\xF3)"), console.log("reveal.distance:", (_b = (_a2 = r.reveal) == null ? void 0 : _a2.distance) == null ? void 0 : _b.value, "\xB7 fog:", (_e = (_d = (_c = r.fog) == null ? void 0 : _c.near) == null ? void 0 : _d.value) == null ? void 0 : _e.toFixed(1), "\u2192", (_h = (_g = (_f = r.fog) == null ? void 0 : _f.far) == null ? void 0 : _g.value) == null ? void 0 : _h.toFixed(1)), console.log("m\xE1y quay: ch\u1EBF \u0111\u1ED9", r.view.mode, "t\u1EA1i y =", s.position.y.toFixed(1)), console.log("\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550"), (_i2 = this.game.notifications) == null ? void 0 : _i2.show('<div class="top"><p class="title">\u0110\xE3 in ch\u1EA9n \u0111o\xE1n</p></div><div class="bottom"><p class="description">M\u1EDF Console (Cmd+Option+J) \u0111\u1EC3 xem v\xE0 ch\u1EE5p l\u1EA1i</p></div>', "is-achievement", 4);
+      }), this.game.inputs.events.on("survivalShop", (e) => {
         var _a2, _b;
         if (!(!e.active || !this.enabled)) {
           if (this.phase !== "preparing") {
@@ -117954,7 +117993,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-EwIbYXTa.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-BM9meD0P.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([

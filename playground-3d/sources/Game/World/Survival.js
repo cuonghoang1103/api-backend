@@ -817,6 +817,68 @@ export class Survival
             })),
         ])
 
+        /**
+         * PHÍM **P** — chụp trạng thái để gỡ lỗi "có gì che màn hình".
+         *
+         * User báo một mảng đen che màn hình mà tám lượt chẩn đoán từ xa không
+         * tái hiện được (headless chạy 0,05× thời gian thực nên không bao giờ
+         * tới được pha săn thật). Thay vì đoán tiếp, đưa thẳng công cụ cho
+         * người đang nhìn thấy nó: bấm P là mọi nghi phạm được in ra console.
+         */
+        this.game.inputs.addActions([
+            { name: 'survivalDebug', categories: [ 'wandering', 'walking', 'heli' ], keys: [ 'Keyboard.KeyP' ] },
+        ])
+
+        this.game.inputs.events.on('survivalDebug', (action) =>
+        {
+            if(!action.active) return
+
+            const G = this.game
+            const cam = G.view.camera
+            cam.updateMatrixWorld(true)
+
+            // 1. Lớp phủ DOM
+            const overlays = []
+            for(const el of document.querySelectorAll('body *'))
+            {
+                const r = el.getBoundingClientRect()
+                if(r.width < window.innerWidth * 0.5 || r.height < window.innerHeight * 0.4) continue
+                const st = getComputedStyle(el)
+                if(st.display === 'none' || st.visibility === 'hidden' || parseFloat(st.opacity) < 0.02) continue
+                overlays.push(`${el.className || el.tagName} op=${st.opacity} bg=${st.backgroundColor}`)
+            }
+
+            // 2. Vật thể 3D choán màn hình nhất
+            const near = []
+            G.scene.traverse((c) =>
+            {
+                if((!c.isMesh && !c.isSkinnedMesh) || !c.visible) return
+                c.updateMatrixWorld(true)
+                const m = c.matrixWorld.elements
+                const d = Math.hypot(m[12] - cam.position.x, m[13] - cam.position.y, m[14] - cam.position.z)
+                if(d > 40) return
+                let size = 0
+                if(c.isSkinnedMesh) { c.computeBoundingBox(); const bb = c.boundingBox
+                    if(bb) size = Math.max(bb.max.x - bb.min.x, bb.max.y - bb.min.y, bb.max.z - bb.min.z) }
+                else size = Math.max(Math.hypot(m[0],m[1],m[2]), Math.hypot(m[4],m[5],m[6]), Math.hypot(m[8],m[9],m[10]))
+                if(size / Math.max(d, 0.1) > 0.4)
+                    near.push(`cỡ ${size.toFixed(1)} cách ${d.toFixed(1)} cha=${c.parent?.name || '(scene)'}`)
+            })
+
+            console.log('════ SINH TỒN — CHẨN ĐOÁN ════')
+            console.log('nhịp:', this.phase, '· sóng:', this.wave, '· quái sống:', this.monsters.aliveCount)
+            console.log('LỚP PHỦ DOM:', overlays.length ? overlays : '(không có)')
+            console.log('VẬT 3D CHOÁN MÀN HÌNH:', near.length ? near : '(không có)')
+            console.log('reveal.distance:', G.reveal?.distance?.value, '· fog:', G.fog?.near?.value?.toFixed(1), '→', G.fog?.far?.value?.toFixed(1))
+            console.log('máy quay: chế độ', G.view.mode, 'tại y =', cam.position.y.toFixed(1))
+            console.log('════════════════════════════════')
+
+            this.game.notifications?.show(
+                /* html */`<div class="top"><p class="title">Đã in chẩn đoán</p></div><div class="bottom"><p class="description">Mở Console (Cmd+Option+J) để xem và chụp lại</p></div>`,
+                'is-achievement', 4,
+            )
+        })
+
         this.game.inputs.events.on('survivalShop', (action) =>
         {
             if(!action.active || !this.enabled) return

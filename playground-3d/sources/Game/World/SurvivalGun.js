@@ -123,6 +123,13 @@ export class SurvivalGun
          * ⚠️ `antiSpam` phải nhỏ (0,05): để mặc định 0,15 thì cứ ba phát mới
          * nghe một tiếng, nghe như súng kẹt.
          *
+         * ⚠️ TỆP PHẢI CÓ ĐUÔI TIẾNG, ĐỪNG CẮT CỤT. Bản đầu cắt còn 0,22–0,39
+         * giây và user nghe ra ngay: *"nghe nó như bị hụt hơi"*. Tiếng súng
+         * thật gồm cú nổ ĐẦU cộng phần vang TẮT DẦN; chặt mất phần vang là âm
+         * thanh bị ngắt giữa chừng. Nay 0,60–0,68 giây kèm `afade` tắt mượt
+         * 130–150 ms cuối, và nhịp bắn 7 phát/giây vẫn không chồng lên nhau vì
+         * phần vang đã nhỏ dần.
+         *
          * Trước đây phải mượn tiếng va kim loại và user nghe ra đúng cái nó là:
          * *"âm thanh tạch tạch nghe không giống tiếng súng"*.
          */

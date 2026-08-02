@@ -110,12 +110,23 @@ export class SurvivalMonsters
         })
 
         this.sounds = {
-            growls: [ 1, 2, 3, 4 ].map(i => register(`sounds/survival/growl-${i}.mp3`, 0.35, 42, 0.45)),
-            screeches: [ 1, 2 ].map(i => register(`sounds/survival/screech-${i}.mp3`, 0.4, 48, 0.8)),
-            hits: [ 1, 2 ].map(i => register(`sounds/survival/hit-${i}.mp3`, 0.45, 28, 0.06)),
-            deaths: [ 1, 2 ].map(i => register(`sounds/survival/death-${i}.mp3`, 0.42, 40, 0.15)),
-            steps: [ 1, 2 ].map(i => register(`sounds/survival/step-${i}.mp3`, 0.16, 22, 0.05)),
-            stepBoss: register('sounds/survival/step-boss.mp3', 0.5, 55, 0.2),
+            /**
+             * ⚠️ `distanceFade` PHẢI NHỎ. Bản đầu để 42–55 và user nghe đúng
+             * cái sai của nó: *"tiếng quái vật nghe liên hồi nhưng không thấy
+             * con quái vật nào"*. Quái sinh trên vành 26–46 đơn vị, tức chúng
+             * gầm ngay từ lúc còn ngoài tầm nhìn — tai bảo "chúng ở đây" mà mắt
+             * không thấy gì, và cảm giác duy nhất còn lại là khó chịu.
+             *
+             * Nay tầm nghe khớp với tầm THẤY: gầm 20, rít 26 (tiếng báo động,
+             * cho xa hơn một chút), bước chân 14. Con nào chưa vào tầm nhìn thì
+             * cũng chưa nghe được.
+             */
+            growls: [ 1, 2, 3, 4 ].map(i => register(`sounds/survival/growl-${i}.mp3`, 0.35, 20, 0.6)),
+            screeches: [ 1, 2 ].map(i => register(`sounds/survival/screech-${i}.mp3`, 0.4, 26, 0.9)),
+            hits: [ 1, 2 ].map(i => register(`sounds/survival/hit-${i}.mp3`, 0.45, 24, 0.06)),
+            deaths: [ 1, 2 ].map(i => register(`sounds/survival/death-${i}.mp3`, 0.42, 26, 0.15)),
+            steps: [ 1, 2 ].map(i => register(`sounds/survival/step-${i}.mp3`, 0.16, 14, 0.05)),
+            stepBoss: register('sounds/survival/step-boss.mp3', 0.5, 30, 0.2),
         }
     }
 
@@ -1009,7 +1020,7 @@ export class SurvivalMonsters
                  * số của π (một sải chân). Đếm theo pha chứ không theo đồng hồ:
                  * con chạy nhanh thì bước dồn, con lảng vảng thì thưa, tự khớp.
                  */
-                if(Math.floor(before / Math.PI) !== Math.floor(m.phase / Math.PI))
+                if(distance < 16 && Math.floor(before / Math.PI) !== Math.floor(m.phase / Math.PI))
                 {
                     if(m.spec.isBoss) this.sounds.stepBoss?.play(position)
                     else this.playRandom(this.sounds.steps, position)
@@ -1023,7 +1034,13 @@ export class SurvivalMonsters
              * mỗi con). Ba mươi con mà con nào cũng gầm đều đặn thì thành một
              * bức tường tiếng ồn liên tục, không còn dọa được ai.
              */
-            if(m.sees && !m.dead && Math.random() < 0.0025)
+            /**
+             * ⚠️ Chỉ gầm khi ĐÃ VÀO TẦM NHÌN CỦA MẮT (18 đơn vị). `distanceFade`
+             * chỉ làm nhỏ tiếng chứ không tắt hẳn, nên con ở 40 đơn vị vẫn nghe
+             * lí nhí — ba chục con lí nhí là một tiếng rì rầm liên tục không rõ
+             * từ đâu. Chặn thẳng ở đây thì tiếng nào cũng có một con để nhìn.
+             */
+            if(m.sees && !m.dead && distance < 18 && Math.random() < 0.0035)
                 this.playRandom(this.sounds.growls, position)
 
             // ── Xoay thân về hướng đi, xoay MỀM chứ không giật ───────────────
@@ -1160,7 +1177,8 @@ export class SurvivalMonsters
              * biết "mình vừa bị phát hiện" đúng vào khoảnh khắc điều đó xảy ra.
              * Không có nó thì cơ chế nấp chỉ đọc được qua dòng chữ trên HUD.
              */
-            if(!sawBefore) this.playRandom(this.sounds.screeches, monster.root.position)
+            if(!sawBefore && distance < 24)
+                this.playRandom(this.sounds.screeches, monster.root.position)
 
             monster.lostFor = 0
             monster.lastSeenX = target.x

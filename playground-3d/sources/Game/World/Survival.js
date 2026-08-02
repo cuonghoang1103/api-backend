@@ -152,7 +152,7 @@ export class Survival
         this.startPreparing(4)
 
         this.game.notifications?.show(
-            /* html */`<div class="top"><p class="title">Chế độ Sinh tồn</p></div><div class="bottom"><p class="description">Trời sắp tối. Giữ <strong>F</strong> bắn · <strong>X</strong> bắn tên lửa nếu đã bật Rocket · húc thẳng cũng chết · <strong>E</strong> xuống xe đi bộ.</p></div>`,
+            /* html */`<div class="top"><p class="title">Chế độ Sinh tồn</p></div><div class="bottom"><p class="description">Trời sắp tối. Giữ <strong>F</strong> bắn · <strong>X</strong> tên lửa · <strong>E</strong> xuống xe · <strong>B</strong> mở cửa hàng lúc nghỉ · húc thẳng cũng chết.</p></div>`,
             'is-achievement',
             6,
         )
@@ -178,6 +178,7 @@ export class Survival
         this.shopElement?.classList.remove('is-visible')
         this.bossElement?.classList.remove('is-visible')
         this.boss = null
+        this.shopOpen = false
         this.lastShopOpen = null
         this.lastBossAlive = null
         this.setDefeatedOverlay(false)
@@ -770,6 +771,9 @@ export class Survival
         this.shopItemsElement = this.shopElement.querySelector('.js-survival-shop-items')
         this.shopMoneyElement = this.shopElement.querySelector('.js-survival-shop-money')
 
+        /** Người chơi có đang MỞ cửa hàng không (phím B). Mặc định đóng. */
+        this.shopOpen = false
+
         this.shopButtons = SURVIVAL_SHOP.map((item, index) =>
         {
             const button = document.createElement('button')
@@ -793,13 +797,43 @@ export class Survival
             }
         })
 
-        this.game.inputs.addActions(
-            SURVIVAL_SHOP.map((item, index) => ({
+        /**
+         * ⚠️ CỬA HÀNG KHÔNG TỰ HIỆN NỮA — phải bấm **B**.
+         *
+         * Bản đầu tự bung ra mỗi nhịp nghỉ và tự biến mất mỗi lần vào sóng.
+         * User nhìn thấy đúng cái nó là: *"cái bóng đen đen to to bay khuất che
+         * màn hình"* — bảng rộng 760px nằm giữa màn hình, nhấp nháy theo chu kỳ
+         * sóng. Tôi đã đi tìm một con quái khổng lồ suốt năm lượt chẩn đoán
+         * trong khi thủ phạm là bảng giao diện của chính mình.
+         *
+         * Nay nó chỉ mở khi người chơi CHỦ ĐỘNG bấm.
+         */
+        this.game.inputs.addActions([
+            { name: 'survivalShop', categories: [ 'wandering', 'walking' ], keys: [ 'Keyboard.KeyB' ] },
+            ...SURVIVAL_SHOP.map((item, index) => ({
                 name: `survivalBuy${index + 1}`,
-                categories: [ 'wandering' ],
+                categories: [ 'wandering', 'walking' ],
                 keys: [ `Keyboard.Digit${index + 1}`, `Keyboard.Numpad${index + 1}` ],
             })),
-        )
+        ])
+
+        this.game.inputs.events.on('survivalShop', (action) =>
+        {
+            if(!action.active || !this.enabled) return
+
+            if(this.phase !== 'preparing')
+            {
+                this.game.notifications?.show(
+                    /* html */`<div class="top"><p class="title">Đang giữa sóng</p></div><div class="bottom"><p class="description">Cửa hàng chỉ mở lúc nghỉ</p></div>`,
+                    '', 1.6,
+                )
+                return
+            }
+
+            this.shopOpen = !this.shopOpen
+            this.game.audio.groups.get('click')?.play(this.shopOpen)
+            this.applyShopVisibility()
+        })
 
         SURVIVAL_SHOP.forEach((item, index) =>
         {
@@ -810,6 +844,14 @@ export class Survival
         })
 
         this.renderShop()
+    }
+
+    /** Hiện/ẩn bảng cửa hàng theo cờ `shopOpen` và nhịp hiện tại. */
+    applyShopVisibility()
+    {
+        const visible = this.shopOpen && this.phase === 'preparing'
+        this.shopElement?.classList.toggle('is-visible', visible)
+        if(visible) this.renderShop()
     }
 
     /**
@@ -1101,7 +1143,7 @@ export class Survival
         const state = this.phase === 'defeated'
             ? 'Gục'
             : onFoot + (this.phase === 'preparing'
-                ? `Nghỉ ${Math.ceil(Math.max(0, this.phaseTimer))}s`
+                ? `Nghỉ ${Math.ceil(Math.max(0, this.phaseTimer))}s · B mở cửa hàng`
                 : (hunted ? 'Bị săn' : 'Đang nấp'))
         if(state !== this.lastState)
         {
@@ -1140,17 +1182,19 @@ export class Survival
             this.hudElement.classList.toggle('is-jammed', this.gun.jammed)
         }
 
-        // ── Cửa hàng: chỉ mở trong nhịp nghỉ ─────────────────────────────────
-        const shopOpen = this.phase === 'preparing'
-        if(shopOpen !== this.lastShopOpen)
+        // ── Cửa hàng: người chơi tự mở bằng phím B, và chỉ trong nhịp nghỉ ───
+        // Vào sóng thì tự đóng — không để bảng che lúc đang bị vây
+        if(this.phase !== 'preparing' && this.shopOpen) this.shopOpen = false
+
+        const shopVisible = this.shopOpen && this.phase === 'preparing'
+        if(shopVisible !== this.lastShopOpen)
         {
-            this.lastShopOpen = shopOpen
-            this.shopElement?.classList.toggle('is-visible', shopOpen)
-            if(shopOpen) this.renderShop()
+            this.lastShopOpen = shopVisible
+            this.applyShopVisibility()
         }
 
         // Tiền đổi thì giá cả và món nào mua được cũng đổi theo
-        if(shopOpen && this.money !== this.lastShopMoney)
+        if(shopVisible && this.money !== this.lastShopMoney)
         {
             this.lastShopMoney = this.money
             this.renderShop()

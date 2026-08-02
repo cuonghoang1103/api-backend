@@ -33,6 +33,7 @@ export class SurvivalGun
         this.cooldown = 0
 
         this.tracers = []
+        this.impacts = []
         this.materials = new Map()
 
         this.raycaster = new THREE.Raycaster()
@@ -216,6 +217,26 @@ export class SurvivalGun
             shooter.z + this.direction.x * side,
         )
 
+        /**
+         * ⚠️ NẾU KHẨU PHÁO TRÊN NÓC ĐANG BẬT, ĐẠN PHẢI RA TỪ CHÍNH ĐẦU NÒNG NÓ.
+         *
+         * User bắt đúng chỗ này: *"đạn phải bay từ khẩu súng trên nóc ra chứ"*.
+         * Bản đầu luôn lấy một điểm lệch phải tâm xe, nên khi có khẩu pháo thì
+         * đạn phóng ra từ hư không cạnh nó — mắt thấy ngay là sai.
+         *
+         * `mount.pitch` là khớp ngẩng của bệ pháo, và `VehicleRocket` đã xoay
+         * sẵn nó theo con trỏ mỗi khung hình. Lấy vị trí thế giới của nó là ra
+         * đúng đầu nòng, tự khớp cả khi pháo đang ngẩng lên hay chúc xuống.
+         */
+        const rocket = this.game.world?.vehicleRocket
+        if(!heli?.active && !walker?.active && rocket?.enabled && rocket.mount?.pitch)
+        {
+            rocket.mount.pitch.getWorldPosition(this.muzzle)
+            // Nhích ra trước một chút cho khỏi lọt trong thân bệ pháo
+            this.muzzle.x += this.direction.x * 1.1
+            this.muzzle.z += this.direction.z * 1.1
+        }
+
         // Quay người bắn về hướng ngắm — bắn ngang hông trông như lỗi
         if(walker?.active)
             walker.heading = Math.atan2(this.direction.x, this.direction.z)
@@ -257,7 +278,17 @@ export class SurvivalGun
         this.playShotSound(this.muzzle)
 
         if(best)
+        {
+            // Dấu TRÚNG ĐÍCH ngay tại chỗ viên đạn chạm vào — user bắt đúng
+            // chỗ thiếu: *"viên đạn bay trúng không thấy khói bốc lên hay biểu
+            // tượng cho trúng mục tiêu cả"*
+            this.spawnImpact(
+                this.muzzle.x + this.direction.x * bestAlong,
+                best.root.position.y + best.spec.hitHeight * best.scale,
+                this.muzzle.z + this.direction.z * bestAlong,
+            )
             this.survival.monsters.hit(best, this.damage, this.muzzle.x, this.muzzle.z)
+        }
 
         return best
     }
@@ -336,6 +367,81 @@ export class SurvivalGun
         this.tracers.push({ dots, flash, age: 0 })
     }
 
+    /**
+     * DẤU TRÚNG ĐÍCH — chùm tia lửa bắn ngược lại phía người bắn.
+     *
+     * ⚠️ Bắn NGƯỢC hướng đạn, không bắn xuôi: tia lửa văng ra từ chỗ va chạm
+     * phải đi về phía viên đạn tới, đó là thứ mắt đọc ra "trúng rồi". Văng xuôi
+     * theo đường đạn thì trông như đạn xuyên qua và bay tiếp.
+     *
+     * Dùng lại `flashGeometry` và vật liệu có sẵn — mỗi phát trúng chỉ thêm
+     * năm khối nhỏ sống 0,18 giây, ở nhịp 7 phát/giây vẫn rẻ.
+     */
+    spawnImpact(x, y, z)
+    {
+        const sparks = []
+
+        for(let i = 0; i < SURVIVAL_GUN.impactSparks; i++)
+        {
+            const mesh = new THREE.Mesh(this.flashGeometry, this.material(SURVIVAL_GUN.impactColor))
+            const size = SURVIVAL_GUN.impactSize * (0.6 + Math.random() * 0.8)
+            mesh.scale.setScalar(size)
+            mesh.position.set(x, y, z)
+            mesh.castShadow = false
+            this.group.add(mesh)
+
+            // Nón văng ngược hướng đạn, mở chừng 60°
+            const spread = (Math.random() - 0.5) * 1.1
+            const speed = 3 + Math.random() * 4
+            sparks.push({
+                mesh,
+                size,
+                vx: (-this.direction.x * Math.cos(spread) - this.direction.z * Math.sin(spread)) * speed,
+                vy: 1.5 + Math.random() * 3,
+                vz: (-this.direction.z * Math.cos(spread) + this.direction.x * Math.sin(spread)) * speed,
+            })
+        }
+
+        // Một cụm sáng ở tâm va chạm, to hơn và tắt nhanh nhất
+        const core = new THREE.Mesh(this.flashGeometry, this.material(SURVIVAL_GUN.muzzleColor))
+        core.scale.setScalar(SURVIVAL_GUN.impactSize * 2.2)
+        core.position.set(x, y, z)
+        core.castShadow = false
+        this.group.add(core)
+
+        this.impacts.push({ sparks, core, age: 0 })
+    }
+
+    updateImpacts(delta)
+    {
+        for(let i = this.impacts.length - 1; i >= 0; i--)
+        {
+            const impact = this.impacts[i]
+            impact.age += delta
+
+            if(impact.age >= SURVIVAL_GUN.impactLife)
+            {
+                for(const s of impact.sparks) this.group.remove(s.mesh)
+                this.group.remove(impact.core)
+                this.impacts.splice(i, 1)
+                continue
+            }
+
+            const t = impact.age / SURVIVAL_GUN.impactLife
+
+            impact.core.scale.setScalar(SURVIVAL_GUN.impactSize * 2.2 * (1 - t))
+
+            for(const s of impact.sparks)
+            {
+                s.vy -= 12 * delta
+                s.mesh.position.x += s.vx * delta
+                s.mesh.position.y += s.vy * delta
+                s.mesh.position.z += s.vz * delta
+                s.mesh.scale.setScalar(s.size * (1 - t))
+            }
+        }
+    }
+
     updateTracers(delta)
     {
         for(let i = this.tracers.length - 1; i >= 0; i--)
@@ -378,6 +484,7 @@ export class SurvivalGun
     update(delta)
     {
         this.updateTracers(delta)
+        this.updateImpacts(delta)
 
         // ── Nguội dần ────────────────────────────────────────────────────────
         if(this.heat > 0)

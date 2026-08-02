@@ -424,6 +424,16 @@ export const SURVIVAL_GUN = {
     tracerDotSize: 0.13,
 
     /**
+     * DẤU TRÚNG ĐÍCH — user báo *"viên đạn bay trúng không thấy khói bốc lên
+     * hay biểu tượng cho trúng mục tiêu cả"*. Không có phản hồi này thì người
+     * chơi không biết mình bắn trúng hay trượt, và cả khẩu súng mất ý nghĩa.
+     */
+    impactSparks: 5,
+    impactSize: 0.11,
+    impactLife: 0.18,
+    impactColor: '#ffd166',
+
+    /**
      * Vệt đạn VẼ DÀI TỐI ĐA bấy nhiêu, dù đạn bay xa 34.
      *
      * ⚠️ Con số này tồn tại vì một lỗi chỉ phép đo mới bắt được: vẽ nguyên

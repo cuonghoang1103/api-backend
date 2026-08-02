@@ -35,13 +35,18 @@ const rand = (seed) =>
 /**
  * Bắn tia bám đất chia làm ngần này lát; mỗi khung hình chỉ một lát được bắn.
  *
- * ⚠️ Đã hạ 12 → 6 sau khi thêm cơ chế NẤP. Trước đó quái đi THẲNG về phía xe,
+ * ⚠️ Đã hạ 12 → 6 khi thêm cơ chế NẤP, rồi 6 → **4** khi nâng trần đàn quái lên
+ * 30 con: con nhanh nhất đi 4,4 đơn vị/giây, mỗi 6 khung là gần một đơn vị —
+ * đủ để lội qua mép nước rồi mới bị kéo lại, và bộ kiểm chụp đúng khoảnh khắc
+ * đó. Bốn lát với 30 con là ~7,5 tia mỗi khung hình, vẫn rẻ.
+ *
+ * Lý do hạ lần đầu: trước đó quái đi THẲNG về phía xe,
  * gần như luôn trên đường phẳng; giờ chúng lảng vảng theo vòng tròn nên hay đi
  * vào bờ dốc và mép nước — 12 khung một lần đo là đủ để một con leo dốc mà cao
  * độ vẫn giữ giá trị cũ (đo được lệch 0,68) hoặc lội xuống nước cả nửa giây
  * trước khi bị kéo lại. Sáu lát là 26 con chia ra ~4,3 tia mỗi khung hình.
  */
-const GROUND_SLICES = 6
+const GROUND_SLICES = 4
 
 export class SurvivalMonsters
 {
@@ -327,25 +332,35 @@ export class SurvivalMonsters
     }
 
     /**
-     * QUÁI TRÙM DỰNG TỪ MODEL THẬT — chỗ duy nhất trong chế độ này dùng model.
+     * DỰNG MỘT CON QUÁI TỪ MODEL THẬT — dùng chung cho cả bốn loại.
      *
-     * ─── VÌ SAO CHỈ TRÙM ────────────────────────────────────────────────────
+     * User xem bản dựng bằng khối rồi chê thẳng *"quái vật còn ít và ngoại hình
+     * xấu"*, nên nay mọi loại đều có `model` trỏ tới một resource glTF có xương.
+     * Mã dựng bằng khối vẫn giữ nguyên và vẫn chạy khi model chưa nạp được.
+     *
+     * ─── CÁI GIÁ PHẢI TRẢ, VÀ VÌ SAO VẪN TRẢ ────────────────────────────────
      * Model có xương phải `SkeletonUtils.clone` (clone thường dùng CHUNG bộ
-     * xương — mọi bản sao cử động y hệt nhau, dính cứng vào nhau) và mỗi con là
-     * một `AnimationMixer` cập nhật 78 khớp mỗi khung hình. Một con thì rẻ,
-     * hai mươi lăm con thì không. Đàn quái thường vẫn dựng bằng mã.
+     * xương — mọi bản sao cử động y hệt và dính cứng vào nhau), và mỗi con là
+     * một `AnimationMixer` cập nhật 82–126 khớp mỗi khung hình. Ba mươi con là
+     * chừng 2.500 phép biến đổi ma trận mỗi khung.
+     *
+     * Chịu được vì đã chọn model theo SỐ LƯỢNG sẽ thả ra: loại đông nhất dùng
+     * model 2.788 đỉnh, loại hiếm mới dùng model 28.500, và con 103.412 đỉnh
+     * thì mỗi ván nhiều nhất một con.
      *
      * ─── CLIP THẾ NÀO ───────────────────────────────────────────────────────
-     * Model chỉ có MỘT clip dài 15,5 giây kiểu trình diễn, không phải vòng lặp
-     * "đi bộ" sạch. Với con trùm đi chậm thì vẫn hợp — nó lừ đừ và cựa quậy,
-     * đúng thứ cần. `timeScale` kéo chậm còn 0,55 cho ra dáng nặng nề.
+     * Không model nào trong kho có vòng lặp "đi bộ" sạch — tất cả chỉ có MỘT
+     * chuỗi dài 15–17 giây kiểu trình diễn. Chấp nhận: ở cỡ nhìn này cái mắt
+     * đọc ra là "nó đang cựa quậy và tiến về phía mình", không phải "bước chân
+     * có đúng nhịp không". `timeScale` lệch nhau theo từng con để cả đàn không
+     * cử động y hệt như một khối.
      *
      * ⚠️ Trả về `null` nếu model chưa nạp được — chỗ gọi phải tự lùi về dáng
      * dựng bằng mã, không được để văng lỗi giữa lúc đang sinh quái.
      */
-    makeBossModel(spec)
+    makeModelMonster(spec)
     {
-        const source = this.game.resources?.bossModel
+        const source = this.game.resources?.[spec.model]
         if(!source?.scene) return null
 
         const root = new THREE.Group()
@@ -356,20 +371,27 @@ export class SurvivalMonsters
          * rồi co về đúng chiều cao mong muốn, thay vì gõ cứng một con số chỉ
          * đúng với riêng file này.
          */
-        const box = new THREE.Box3().setFromObject(model)
-        const height = Math.max(0.001, box.max.y - box.min.y)
-
         /**
+         * ⚠️ DÙNG SỐ ĐO TỪ FILE, KHÔNG ĐO LẠI TRONG CẢNH.
+         *
+         * Bản đầu gọi `new THREE.Box3().setFromObject(model)` ngay đây và nó
+         * cho ra số VÔ NGHĨA với model có xương — lưới nằm dưới hierarchy xương
+         * nên ma trận bị nhân hai lần. Hậu quả đo được: `skeleton` vỡ thành rìu
+         * và sọ rời rạc, `bigboss` dựng ra cao **1371** rồi bay khỏi khung hình.
+         * Xem bảng đối chiếu ở đầu `data/survival.js`.
+         *
          * ⚠️ CHIA cho `spec.scale`: `add()` sẽ nhân cả nhóm gốc lên `spec.scale`
-         * lần nữa. Co thẳng về `modelHeight` ở đây là con trùm ra cao 9,2 thay
-         * vì 3,4 — nó thò đầu qua cả mái nhà mà không báo lỗi gì.
+         * lần nữa. Quên phép chia là con trùm cao gấp `scale` lần mà không lỗi.
          */
+        const height = Math.max(0.001, spec.modelSourceHeight ?? 2)
+        const minY = spec.modelSourceMinY ?? 0
+
         const wanted = spec.modelHeight / spec.scale
         const scale = wanted / height
 
         model.scale.setScalar(scale)
-        // Kéo chân về đúng mặt đất: sau khi co, đáy hộp bao nằm ở `box.min.y × scale`
-        model.position.y = -box.min.y * scale
+        // Kéo chân về đúng mặt đất: sau khi co, đáy model nằm ở `minY × scale`
+        model.position.y = -minY * scale
         // Model quay mặt về +Z hay −Z là tuỳ người dựng; xoay nửa vòng cho khớp
         // quy ước của đàn quái (mặt về +Z, xem `heading`)
         model.rotation.y = Math.PI
@@ -394,7 +416,14 @@ export class SurvivalMonsters
         if(clip)
         {
             const action = mixer.clipAction(clip)
-            action.timeScale = 0.55
+            /**
+             * Nhịp lệch nhau theo từng con — không có nó thì cả đàn cựa quậy y
+             * hệt nhau cùng lúc, và mắt đọc ra ngay là "mấy bản sao", không
+             * phải "một đàn". `this.seed` tăng mỗi lần sinh nên mỗi con một số.
+             */
+            action.timeScale = 0.45 + rand(this.seed * 5.7) * 0.5
+            // Vào clip ở chỗ ngẫu nhiên, cùng lý do
+            action.time = rand(this.seed * 9.1) * (clip.duration || 1)
             action.play()
         }
 
@@ -409,8 +438,11 @@ export class SurvivalMonsters
         for(const side of [ -1, 1 ])
         {
             const eye = new THREE.Mesh(this.sphereGeometry, this.glowMaterial(spec.colors.eye))
-            eye.scale.setScalar(0.17)
-            eye.position.set(side * 0.16, wanted * 0.86, 0.42)
+            // MỌI số đo theo `wanted` — cùng một hàm dựng dùng cho model cao
+            // 1,85 lẫn model cao 6,2; gõ số tuyệt đối là mắt con nhỏ nằm ngoài
+            // đầu còn mắt con to thì lọt trong ngực
+            eye.scale.setScalar(wanted * 0.055)
+            eye.position.set(side * wanted * 0.052, wanted * 0.86, wanted * 0.135)
             eye.castShadow = false
             root.add(eye)
             eyes.push(eye)
@@ -419,25 +451,30 @@ export class SurvivalMonsters
         return { root, legs: [], arms: [], eyes, mixer, gait: 'model', model }
     }
 
+    /**
+     * Model thật nếu khai `spec.model` và nạp được; không thì lùi về dáng dựng
+     * bằng khối. Chơi vẫn được, chỉ kém đẹp — và đó là điều quan trọng: một
+     * file `.glb` 404 trên production không được phép làm chết cả chế độ chơi.
+     */
     make(type, seed)
     {
         const spec = SURVIVAL_MONSTERS[type]
 
-        if(type === 'crawler') return this.makeCrawler(spec, seed)
-
-        if(type === 'boss')
+        if(spec.model)
         {
-            // Model thật nếu nạp được; không thì lùi về dáng "quái to xác"
-            // phóng to — chơi vẫn được, chỉ kém hoành tráng
-            const built = this.makeBossModel(spec)
+            const built = this.makeModelMonster(spec)
             if(built) return built
 
-            console.warn('[Survival] không thấy `resources.bossModel` — quái trùm dựng bằng mã')
-            return this.makeBrute(spec, seed)
+            if(!this.warnedModels?.has(spec.model))
+            {
+                this.warnedModels ??= new Set()
+                this.warnedModels.add(spec.model)
+                console.warn(`[Survival] không thấy \`resources.${spec.model}\` — "${spec.name}" dựng bằng khối`)
+            }
         }
 
-        if(type === 'brute') return this.makeBrute(spec, seed)
-
+        if(type === 'crawler') return this.makeCrawler(spec, seed)
+        if(type === 'brute' || type === 'boss') return this.makeBrute(spec, seed)
         return this.makeStalker(spec, seed)
     }
 
@@ -573,6 +610,8 @@ export class SurvivalMonsters
              */
             dryX: x,
             dryZ: z,
+            /** > 0 nghĩa là vừa chạm nước — kiểm mặt đất mỗi khung, xem `update()`. */
+            waterCooldown: 0,
             /** Chỗ nó tưởng người chơi đang ở — xem chú thích trong `spawn()`. */
             lastSeenX: knownX,
             lastSeenZ: knownZ,
@@ -931,7 +970,18 @@ export class SurvivalMonsters
              * kéo về điểm khô cuối cùng và bẻ ngang hướng đi — nó tự men theo
              * bờ. Không tốn thêm một tia nào so với trước.
              */
-            if(m.slice === slice)
+            /**
+             * ⚠️ CON NÀO VỪA CHẠM NƯỚC THÌ KIỂM MỖI KHUNG, không đợi tới lượt.
+             *
+             * Chỉ chia lát đều thôi là chưa đủ: con nhanh nhất đi 4,4 đơn vị/
+             * giây, và ở mép nước thì bị kéo về rồi lại lao xuống ngay giữa hai
+             * lần đo — bộ kiểm bắt được 2–3 con ướt cùng lúc khi trần đàn lên
+             * 30. Cho riêng những con đang ở mép nước một "thẻ ưu tiên" trong
+             * 2,5 giây thì chỉ vài con tốn tia mỗi khung, chứ không phải cả đàn.
+             */
+            if(m.waterCooldown > 0) m.waterCooldown -= delta
+
+            if(m.slice === slice || m.waterCooldown > 0)
             {
                 const y = this.groundHeight(position.x, position.z)
 
@@ -947,11 +997,19 @@ export class SurvivalMonsters
                     }
                     else if(m.dryX !== undefined)
                     {
-                        position.x = m.dryX
-                        position.z = m.dryZ
+                        /**
+                         * Kéo về chỗ khô cuối cùng RỒI LÙI THÊM một quãng theo
+                         * hướng ngược hướng đang đi. Chỉ kéo về đúng điểm cũ là
+                         * chưa đủ — điểm đó thường chỉ cách mép nước vài phân,
+                         * nên bước sau nó lại lội xuống ngay.
+                         */
+                        position.x = m.dryX - dirX * 1.6
+                        position.z = m.dryZ - dirZ * 1.6
+
                         // Bẻ ngang chứ không quay đầu hẳn: quay đầu thì nó chạy
                         // ngược ra xa xe rồi lại vòng vào đúng chỗ cũ
                         m.heading += Math.PI * 0.5
+                        m.waterCooldown = 2.5
                     }
                     else
                     {

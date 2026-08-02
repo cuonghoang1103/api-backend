@@ -168,6 +168,24 @@ export class Game
                  * đỉnh cho MỘT con trùm là chấp nhận được (cả thế giới 804k).
                  */
                 [ 'bossModel',                             `monsters/boss.glb${cb}`,                                                             'gltf' ],
+                /**
+                 * BA MODEL QUÁI còn lại — user xem bản dựng bằng mã rồi chê
+                 * "quái còn ít và ngoại hình xấu", nên cả bốn loại nay đều là
+                 * model có xương thật. Cùng quy ước với `bossModel`: đã nén sẵn
+                 * một bản dùng cho cả dev lẫn production, KHÔNG `--simplify`
+                 * (skinned mesh, giản lược là phá trọng số xương).
+                 *
+                 *   soldier   2.788 đỉnh · 82 khớp  · 0,60 MB — loại đông nhất
+                 *   skeleton  7.973 đỉnh · 84 khớp  · 0,33 MB — loại giữa
+                 *   bigboss 103.412 đỉnh · 126 khớp · 2,72 MB — quái trùm
+                 *
+                 * ⚠️ `bigboss` nén texture xuống **256** chứ không phải 512:
+                 * model gốc có 62 texture nặng 78 MB, để 512 thì ra 5,6 MB —
+                 * gần bằng cả gói JS của game, cho MỘT con quái.
+                 */
+                [ 'monsterSoldierModel',                   `monsters/soldier.glb${cb}`,                                                          'gltf' ],
+                [ 'monsterSkeletonModel',                  `monsters/skeleton.glb${cb}`,                                                         'gltf' ],
+                [ 'monsterBigBossModel',                   `monsters/bigboss.glb${cb}`,                                                          'gltf' ],
                 [ 'fencesModel',                           `fences/fences${compressedModelSuffix}.glb${cb}`,                                     'gltf' ],
                 [ 'benchesModel',                          `benches/benches${compressedModelSuffix}.glb${cb}`,                                   'gltf' ],
                 [ 'explosiveCratesModel',                  `explosiveCrates/explosiveCrates${compressedModelSuffix}.glb${cb}`,                   'gltf' ],

@@ -102889,13 +102889,17 @@ https://github.com/browserify/crypto-browserify`);
   }
   const SURVIVAL_MONSTERS = {
     crawler: {
-      name: "B\u1ECD b\xF2",
+      name: "L\xEDnh ngo\xE0i h\xE0nh tinh",
+      model: "monsterSoldierModel",
+      modelHeight: 1.85,
+      modelSourceHeight: 1.332,
+      modelSourceMinY: -0.751,
       hp: 3,
       speed: 3.6,
       damage: 7,
       radius: 0.55,
-      hitHeight: 0.45,
-      scale: 0.62,
+      hitHeight: 0.75,
+      scale: 1,
       money: 5,
       score: 10,
       colors: {
@@ -102906,7 +102910,11 @@ https://github.com/browserify/crypto-browserify`);
       }
     },
     stalker: {
-      name: "K\u1EBB r\xECnh",
+      name: "B\u1ED9 x\u01B0\u01A1ng c\u1EA7m r\xECu",
+      model: "monsterSkeletonModel",
+      modelHeight: 2.1,
+      modelSourceHeight: 3.134,
+      modelSourceMinY: 0,
       hp: 6,
       speed: 4.4,
       damage: 12,
@@ -102924,6 +102932,10 @@ https://github.com/browserify/crypto-browserify`);
     },
     brute: {
       name: "Qu\xE1i to x\xE1c",
+      model: "bossModel",
+      modelHeight: 3.6,
+      modelSourceHeight: 2.079,
+      modelSourceMinY: -1.077,
       hp: 18,
       speed: 2.3,
       damage: 26,
@@ -102941,6 +102953,9 @@ https://github.com/browserify/crypto-browserify`);
     },
     boss: {
       name: "Qu\xE1i tr\xF9m",
+      model: "monsterBigBossModel",
+      modelSourceHeight: 2.398,
+      modelSourceMinY: 0,
       hp: 130,
       speed: 2.6,
       damage: 40,
@@ -103034,7 +103049,7 @@ https://github.com/browserify/crypto-browserify`);
       max: 99
     }
   ], SURVIVAL_WAVES = {
-    countFor: (l) => Math.min(30, 4 + l * 2),
+    countFor: (l) => Math.min(44, 6 + l * 3),
     mix: [
       {
         from: 1,
@@ -103074,8 +103089,8 @@ https://github.com/browserify/crypto-browserify`);
       }
     ],
     breakDuration: 8,
-    spawnInterval: 0.9,
-    maxAlive: 26,
+    spawnInterval: 0.55,
+    maxAlive: 30,
     bossEvery: 5
   }, SURVIVAL_GUN = {
     fireRate: 9,
@@ -103173,7 +103188,7 @@ https://github.com/browserify/crypto-browserify`);
   }, rand$1 = (l) => {
     const e = Math.sin(l * 127.1 + 311.7) * 43758.5453;
     return e - Math.floor(e);
-  }, GROUND_SLICES = 6;
+  }, GROUND_SLICES = 4;
   class SurvivalMonsters {
     constructor(e) {
       this.game = Game.getInstance(), this.survival = e, this.monsters = [], this.bloods = [], this.pools = [], this.materials = /* @__PURE__ */ new Map(), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.sphereGeometry = new SphereGeometry(0.5, 8, 6), this.coneGeometry = new ConeGeometry(0.5, 1, 7), this.group = new Group(), this.group.name = "survivalMonsters", this.game.scene.add(this.group), this.seed = 1, this.frame = 0, this.tmp = new Vector3$1();
@@ -103357,18 +103372,18 @@ https://github.com/browserify/crypto-browserify`);
         gait: "lumber"
       };
     }
-    makeBossModel(e) {
+    makeModelMonster(e) {
       var _a2, _b;
-      const r = (_a2 = this.game.resources) == null ? void 0 : _a2.bossModel;
+      const r = (_a2 = this.game.resources) == null ? void 0 : _a2[e.model];
       if (!(r == null ? void 0 : r.scene)) return null;
-      const s = new Group(), o = clone(r.scene), a = new Box3$1().setFromObject(o), h = Math.max(1e-3, a.max.y - a.min.y), c = e.modelHeight / e.scale, d = c / h;
-      o.scale.setScalar(d), o.position.y = -a.min.y * d, o.rotation.y = Math.PI, o.traverse((b) => {
+      const s = new Group(), o = clone(r.scene), a = Math.max(1e-3, e.modelSourceHeight ?? 2), h = e.modelSourceMinY ?? 0, c = e.modelHeight / e.scale, d = c / a;
+      o.scale.setScalar(d), o.position.y = -h * d, o.rotation.y = Math.PI, o.traverse((b) => {
         !b.isMesh && !b.isSkinnedMesh || (b.castShadow = true, b.receiveShadow = true, b.frustumCulled = false);
       }), this.game.materials.updateObject(o), s.add(o);
       const f = new AnimationMixer(o), p = (_b = r.animations) == null ? void 0 : _b[0];
       if (p) {
         const b = f.clipAction(p);
-        b.timeScale = 0.55, b.play();
+        b.timeScale = 0.45 + rand$1(this.seed * 5.7) * 0.5, b.time = rand$1(this.seed * 9.1) * (p.duration || 1), b.play();
       }
       const m = [];
       for (const b of [
@@ -103376,7 +103391,7 @@ https://github.com/browserify/crypto-browserify`);
         1
       ]) {
         const _ = new Mesh$1(this.sphereGeometry, this.glowMaterial(e.colors.eye));
-        _.scale.setScalar(0.17), _.position.set(b * 0.16, c * 0.86, 0.42), _.castShadow = false, s.add(_), m.push(_);
+        _.scale.setScalar(c * 0.055), _.position.set(b * c * 0.052, c * 0.86, c * 0.135), _.castShadow = false, s.add(_), m.push(_);
       }
       return {
         root: s,
@@ -103389,13 +103404,14 @@ https://github.com/browserify/crypto-browserify`);
       };
     }
     make(e, r) {
+      var _a2;
       const s = SURVIVAL_MONSTERS[e];
-      if (e === "crawler") return this.makeCrawler(s, r);
-      if (e === "boss") {
-        const o = this.makeBossModel(s);
-        return o || (console.warn("[Survival] kh\xF4ng th\u1EA5y `resources.bossModel` \u2014 qu\xE1i tr\xF9m d\u1EF1ng b\u1EB1ng m\xE3"), this.makeBrute(s, r));
+      if (s.model) {
+        const o = this.makeModelMonster(s);
+        if (o) return o;
+        ((_a2 = this.warnedModels) == null ? void 0 : _a2.has(s.model)) || (this.warnedModels ?? (this.warnedModels = /* @__PURE__ */ new Set()), this.warnedModels.add(s.model), console.warn(`[Survival] kh\xF4ng th\u1EA5y \`resources.${s.model}\` \u2014 "${s.name}" d\u1EF1ng b\u1EB1ng kh\u1ED1i`));
       }
-      return e === "brute" ? this.makeBrute(s, r) : this.makeStalker(s, r);
+      return e === "crawler" ? this.makeCrawler(s, r) : e === "brute" || e === "boss" ? this.makeBrute(s, r) : this.makeStalker(s, r);
     }
     groundHeight(e, r) {
       var _a2;
@@ -103457,6 +103473,7 @@ https://github.com/browserify/crypto-browserify`);
         smoothY: s,
         dryX: r,
         dryZ: o,
+        waterCooldown: 0,
         lastSeenX: a,
         lastSeenZ: h,
         lostFor: 0,
@@ -103590,11 +103607,11 @@ https://github.com/browserify/crypto-browserify`);
         let J = Math.atan2(O, L) - c.heading;
         for (; J > Math.PI; ) J -= Math.PI * 2;
         for (; J < -Math.PI; ) J += Math.PI * 2;
-        if (c.heading += J * Math.min(1, e * 7), c.root.rotation.y = c.heading, c.slice === a) {
+        if (c.heading += J * Math.min(1, e * 7), c.root.rotation.y = c.heading, c.waterCooldown > 0 && (c.waterCooldown -= e), c.slice === a || c.waterCooldown > 0) {
           const ee = this.groundHeight(d.x, d.z);
           if (ee !== null) {
             const fe = ((_a2 = this.game.water) == null ? void 0 : _a2.surfaceElevation) ?? 0;
-            ee > fe + SURVIVAL_SPAWN.dryMargin ? (c.groundY = ee, c.dryX = d.x, c.dryZ = d.z) : c.dryX !== void 0 ? (d.x = c.dryX, d.z = c.dryZ, c.heading += Math.PI * 0.5) : c.groundY = ee;
+            ee > fe + SURVIVAL_SPAWN.dryMargin ? (c.groundY = ee, c.dryX = d.x, c.dryZ = d.z) : c.dryX !== void 0 ? (d.x = c.dryX - O * 1.6, d.z = c.dryZ - L * 1.6, c.heading += Math.PI * 0.5, c.waterCooldown = 2.5) : c.groundY = ee;
           }
         }
         const ie = c.groundY - c.smoothY;
@@ -117736,7 +117753,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-xq74p64C.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-Dp85fAEA.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([
@@ -117791,6 +117808,21 @@ ${e.tab}if ( ${m} ) {
         [
           "bossModel",
           `monsters/boss.glb${o}`,
+          "gltf"
+        ],
+        [
+          "monsterSoldierModel",
+          `monsters/soldier.glb${o}`,
+          "gltf"
+        ],
+        [
+          "monsterSkeletonModel",
+          `monsters/skeleton.glb${o}`,
+          "gltf"
+        ],
+        [
+          "monsterBigBossModel",
+          `monsters/bigboss.glb${o}`,
           "gltf"
         ],
         [

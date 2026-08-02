@@ -34,10 +34,52 @@
  * đang lượn. KHÔNG con nào nhanh bằng xe chạy thẳng — chạy trốn phải luôn là
  * một lựa chọn thật.
  */
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  ⚠️ HỘP BAO THẬT CỦA TỪNG MODEL — ĐO TỪ FILE, ĐỪNG ĐO TRONG CẢNH
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * `modelSourceHeight` / `modelSourceMinY` dưới đây đọc từ min/max của accessor
+ * POSITION trong chính file `.glb` (script `scratchpad/diag-bbox.mjs`).
+ *
+ * Vì sao không để mã tự đo bằng `Box3.setFromObject()` như bản đầu: với model
+ * có xương, lưới nằm dưới hierarchy xương nên ma trận bị nhân hai lần và số ra
+ * VÔ NGHĨA. Đo được:
+ *
+ *   | model    | Box3 cảnh | POSITION file | vị trí xương | skinning | DÙNG  |
+ *   |----------|-----------|---------------|--------------|----------|-------|
+ *   | soldier  |      66,0 |          1,99 |       396,35 |    1,332 | 1,332 |
+ *   | skeleton |       3,66|        492,41 |         3,13 |   329,54 | 3,134 |
+ *   | boss     |       3,47|          2,86 |         2,46 |    2,079 | 2,079 |
+ *   | bigboss  |       2,48|         67,18 |         2,40 |   67,175 | 2,398 |
+ *
+ * BỐN phép đo, và không phép nào đúng cho cả bốn model:
+ *   `Box3.setFromObject` trong cảnh → ma trận nhân hai lần khi lưới nằm dưới
+ *      hierarchy xương (soldier ra 66, bigboss dựng ra **cao 1371** rồi bay mất)
+ *   min/max accessor POSITION từ file → đỉnh ở không gian BIND, chưa qua xương
+ *   vị trí xương → đúng cho xương, sai cho lưới (soldier ra 396)
+ *   `SkinnedMesh.computeBoundingBox()` → đúng nhất, nhưng vẫn lệch ở model có
+ *      bind matrix scale lớn (skeleton, bigboss)
+ *
+ * **Quy luật rút ra: chiều cao THẬT là số NHỎ HƠN giữa "skinning" và "xương".**
+ * Số lớn luôn là hệ quả của quy ước bind, không phải kích thước thật. Bốn model
+ * tải về từ bốn nguồn là bốn quy ước — gõ tay số đã đo là cách DUY NHẤT chắc.
+ */
 export const SURVIVAL_MONSTERS = {
-    /** BỌ BÒ — nhỏ, nhanh, yếu, đông nhất. Bốn chân, thân dẹt, một mắt. */
+    /**
+     * LÍNH NGOÀI HÀNH TINH — loại đông nhất. Model nhẹ nhất trong kho
+     * (2.788 đỉnh) nên là loại duy nhất dám thả hàng chục con cùng lúc.
+     *
+     * `model` trỏ tới tên resource khai trong `Game.js`; `modelHeight` là chiều
+     * cao THẬT sau khi nhân `scale` (xem `SurvivalMonsters.makeModelMonster`).
+     * Không nạp được model thì tự lùi về dáng dựng bằng mã — chơi vẫn được.
+     */
     crawler: {
-        name: 'Bọ bò',
+        name: 'Lính ngoài hành tinh',
+        model: 'monsterSoldierModel',
+        modelHeight: 1.85,
+        modelSourceHeight: 1.332,
+        modelSourceMinY: -0.751,
         hp: 3,
         speed: 3.6,
         /** Sát thương mỗi giây khi bám được vào xe. */
@@ -45,16 +87,21 @@ export const SURVIVAL_MONSTERS = {
         /** Bán kính thân — dùng cho va chạm và cho khoảng cách đứng cách nhau. */
         radius: 0.55,
         /** Cao độ mắt, để máu phun ra đúng chỗ chứ không phun dưới chân. */
-        hitHeight: 0.45,
-        scale: 0.62,
+        hitHeight: 0.75,
+        scale: 1,
         money: 5,
         score: 10,
         colors: { body: '#4a6b3e', limb: '#38512f', belly: '#9ab86a', eye: '#eaff7a' },
     },
 
-    /** KẺ RÌNH — cao lêu nghêu, hai chân dài, nhanh vừa, máu vừa. */
+    /** BỘ XƯƠNG CẦM RÌU — nhanh hơn, dai hơn, và cầm vũ khí. */
     stalker: {
-        name: 'Kẻ rình',
+        name: 'Bộ xương cầm rìu',
+        model: 'monsterSkeletonModel',
+        /** ⚠️ Model này dùng đơn vị xăng-ti-mét: cao 492 trong file. */
+        modelHeight: 2.1,
+        modelSourceHeight: 3.134,
+        modelSourceMinY: 0,
         hp: 6,
         speed: 4.4,
         damage: 12,
@@ -69,6 +116,10 @@ export const SURVIVAL_MONSTERS = {
     /** QUÁI TO XÁC — chậm, dai, đau. Hiếm, và là thứ ép người chơi phải chạy. */
     brute: {
         name: 'Quái to xác',
+        model: 'bossModel',
+        modelHeight: 3.6,
+        modelSourceHeight: 2.079,
+        modelSourceMinY: -1.077,
         hp: 18,
         speed: 2.3,
         damage: 26,
@@ -90,6 +141,14 @@ export const SURVIVAL_MONSTERS = {
      */
     boss: {
         name: 'Quái trùm',
+        /**
+         * Model NẶNG NHẤT trong kho (103.412 đỉnh, 126 khớp) — chỉ dám dùng vì
+         * mỗi ván nhiều nhất một con sống cùng lúc. Loại "quái to xác" đã nhận
+         * lại model cũ (`bossModel`, 28.5k đỉnh).
+         */
+        model: 'monsterBigBossModel',
+        modelSourceHeight: 2.398,
+        modelSourceMinY: 0,
         hp: 130,
         speed: 2.6,
         damage: 40,
@@ -245,8 +304,14 @@ export const SURVIVAL_SHOP = [
  * theo mốc: sóng ≥ `from` thì dùng dòng đó (dòng cuối khớp trước thắng).
  */
 export const SURVIVAL_WAVES = {
-    /** Số quái của sóng n. */
-    countFor: (wave) => Math.min(30, 4 + wave * 2),
+    /**
+     * Số quái của sóng n.
+     *
+     * ⚠️ Đã nâng từ `4 + wave·2` (trần 30) lên `6 + wave·3` (trần 44) sau khi
+     * user thử thật và chê **"quái vật còn ít"**. Sóng 1 nay 9 con thay vì 6,
+     * sóng 5 là 21 thay vì 14.
+     */
+    countFor: (wave) => Math.min(44, 6 + wave * 3),
 
     /** Tỉ lệ từng loại theo sóng. Cộng lại không cần bằng 1 — mã tự chuẩn hoá. */
     mix: [
@@ -262,10 +327,17 @@ export const SURVIVAL_WAVES = {
     breakDuration: 8,
 
     /** Sinh dần chứ không bung một lượt: mỗi lần sinh cách nhau chừng này giây. */
-    spawnInterval: 0.9,
+    spawnInterval: 0.55,
 
-    /** Sống cùng lúc tối đa — chặn trên cho cả hiệu năng lẫn độ khó. */
-    maxAlive: 26,
+    /**
+     * Sống cùng lúc tối đa — chặn trên cho cả hiệu năng lẫn độ khó.
+     *
+     * ⚠️ 30 chứ không hơn, và con số này giờ ĐẮT hơn trước nhiều: mỗi con là
+     * một model có xương với một `AnimationMixer` riêng cập nhật 82–126 khớp
+     * mỗi khung hình. Trước đây quái dựng bằng khối nên 26 con gần như miễn
+     * phí; nay nâng trần là phải đo lại số đỉnh và số lệnh vẽ.
+     */
+    maxAlive: 30,
 
     /** Cứ ngần này sóng thì có một con trùm, sinh THÊM ngoài quân số. */
     bossEvery: 5,

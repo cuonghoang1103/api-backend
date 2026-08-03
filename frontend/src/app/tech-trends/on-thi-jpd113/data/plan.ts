@@ -309,6 +309,17 @@ export const PLAN: StudyDay[] = [
             links: [{ label: 'Quiz 1 — Kana', href: lesson('jpd113-quiz-1') }],
           },
           {
+            id: 'd1-drill-kana',
+            title: 'Luyện gõ kana tới khi đạt 90%',
+            detail:
+              'Mở tab "Luyện gõ chữ" ngay trên trang này. Chạy bộ Hiragana cơ bản ở kiểu "Gõ romaji" ' +
+              'cho tới khi một vòng đạt từ 90% trở lên, rồi làm tiếp bộ Katakana. ' +
+              'Sai chữ nào thì bấm "Luyện lại chữ sai" chứ đừng chạy vòng mới — lặp đúng chỗ hổng mới nhanh.',
+            minutes: 30,
+            tier: 'core',
+            kind: 'kana',
+          },
+          {
             id: 'd1-check-blank',
             title: 'Viết cả 2 bảng kana ra giấy trắng',
             detail:
@@ -851,6 +862,17 @@ export const PLAN: StudyDay[] = [
               { label: 'Bài 7.2 — Kanji số & thời gian', href: lesson('jpd113-kanji-so-thoi-gian') },
               { label: 'Bài 7.3 — Kanji người & đời sống', href: lesson('jpd113-kanji-nguoi-truong-hoc') },
             ],
+          },
+          {
+            id: 'd4-drill-kanji',
+            title: 'Luyện 49 chữ Hán trên trang, cả hai chiều',
+            detail:
+              'Tab "Luyện gõ chữ" → bộ Chữ Hán. Chạy kiểu "Gõ romaji" (ứng với dạng đề đọc Hán tự → hiragana, ~11% đề) ' +
+              'rồi chạy kiểu "Chọn mặt chữ" (ứng với dạng chọn Hán tự đúng, ~11% đề nữa). ' +
+              'Hai kiểu này cộng lại là ~22% số điểm phần trắc nghiệm.',
+            minutes: 30,
+            tier: 'core',
+            kind: 'kanji',
           },
           {
             id: 'd4-kanji-onkun',

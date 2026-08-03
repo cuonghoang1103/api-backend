@@ -20,7 +20,10 @@ import {
   Trophy,
   Flame,
   ListChecks,
+  Keyboard,
 } from 'lucide-react';
+
+import DrillPanel from './DrillPanel';
 
 import {
   PLAN,
@@ -43,6 +46,8 @@ import {
   KATAKANA,
   DAKUTEN,
   YOUON,
+  KATAKANA_DAKUTEN,
+  KATAKANA_YOUON,
   SECTIONS,
   type KanaCell,
   type CheatTable,
@@ -72,10 +77,11 @@ import {
 
 const PROGRESS_KEY = 'jpd113:progress:v1';
 
-type TabId = 'plan' | 'cheat' | 'speak' | 'exam';
+type TabId = 'plan' | 'drill' | 'cheat' | 'speak' | 'exam';
 
 const TABS: { id: TabId; label: string; icon: typeof Target }[] = [
   { id: 'plan', label: 'Lộ trình 5 ngày', icon: CalendarDays },
+  { id: 'drill', label: 'Luyện gõ chữ', icon: Keyboard },
   { id: 'cheat', label: 'Bảng tra cứu', icon: BookOpen },
   { id: 'speak', label: 'Thi nói & đọc', icon: Mic },
   { id: 'exam', label: 'Đề thi & mục tiêu', icon: FileText },
@@ -268,7 +274,11 @@ export default function OnThiJPD113Client() {
         </header>
 
         {/* ═══════════════ TABS ═══════════════ */}
-        <nav className="flex flex-wrap gap-2 mb-8 sticky top-16 z-20 py-2 -mx-1 px-1 backdrop-blur-md">
+        {/* Thanh tab dính mép trên. Phải có nền ĐỤC: chỉ blur thôi thì nội
+            dung cuộn phía dưới vẫn lộ qua, đọc rất rối.
+            Lưu ý: opacity phải là bước có sẵn của Tailwind (…/95) — `/92`
+            không nằm trong scale nên class không được sinh ra chút nào. */}
+        <nav className="flex flex-wrap gap-2 mb-8 sticky top-16 z-20 py-2.5 -mx-2 px-2 rounded-b-xl bg-[#0a0a0f]/95 backdrop-blur-md">
           {TABS.map((t) => {
             const Icon = t.icon;
             const active = tab === t.id;
@@ -302,6 +312,7 @@ export default function OnThiJPD113Client() {
             onReset={resetProgress}
           />
         )}
+        {tab === 'drill' && <DrillPanel />}
         {tab === 'cheat' && <CheatTab />}
         {tab === 'speak' && <SpeakTab profile={profile} onProfile={persistProfile} mounted={mounted} />}
         {tab === 'exam' && <ExamTab />}
@@ -759,8 +770,10 @@ function CheatTab() {
         <div className="grid lg:grid-cols-2 gap-6">
           <KanaGrid title="Hiragana ひらがな — 46 âm gốc" rows={HIRAGANA} showRomaji={showRomaji} cols={5} />
           <KanaGrid title="Katakana カタカナ — 46 âm gốc" rows={KATAKANA} showRomaji={showRomaji} cols={5} />
-          <KanaGrid title="Âm đục & bán đục ゛゜" rows={DAKUTEN} showRomaji={showRomaji} cols={5} />
-          <KanaGrid title="Âm ghép (ゃ ゅ ょ)" rows={YOUON} showRomaji={showRomaji} cols={3} />
+          <KanaGrid title="Hiragana — âm đục & bán đục ゛゜" rows={DAKUTEN} showRomaji={showRomaji} cols={5} />
+          <KanaGrid title="Katakana — âm đục & bán đục" rows={KATAKANA_DAKUTEN} showRomaji={showRomaji} cols={5} />
+          <KanaGrid title="Hiragana — âm ghép (ゃ ゅ ょ)" rows={YOUON} showRomaji={showRomaji} cols={3} />
+          <KanaGrid title="Katakana — âm ghép (ャ ュ ョ)" rows={KATAKANA_YOUON} showRomaji={showRomaji} cols={3} />
         </div>
 
         <div className="mt-5 rounded-xl border border-neon-red/25 bg-neon-red/[0.05] p-4">

@@ -1761,8 +1761,8 @@ let __tla = (async () => {
       if (Math.abs(p - b) < 0.01 && Math.abs(m - R) < 0.01 && Math.abs(M - O) < 0.01) {
         if (Math.abs(p + b) < 0.1 && Math.abs(m + R) < 0.1 && Math.abs(M + O) < 0.1 && Math.abs(f + _ + L - 3) < 0.1) return this.set(1, 0, 0, 0), this;
         r = Math.PI;
-        const q = (f + 1) / 2, H = (_ + 1) / 2, W = (L + 1) / 2, K = (p + b) / 4, J = (m + R) / 4, ie = (M + O) / 4;
-        return q > H && q > W ? q < 0.01 ? (s = 0, o = 0.707106781, a = 0.707106781) : (s = Math.sqrt(q), o = K / s, a = J / s) : H > W ? H < 0.01 ? (s = 0.707106781, o = 0, a = 0.707106781) : (o = Math.sqrt(H), s = K / o, a = ie / o) : W < 0.01 ? (s = 0.707106781, o = 0.707106781, a = 0) : (a = Math.sqrt(W), s = J / a, o = ie / a), this.set(s, o, a, r), this;
+        const q = (f + 1) / 2, H = (_ + 1) / 2, W = (L + 1) / 2, K = (p + b) / 4, J = (m + R) / 4, ee = (M + O) / 4;
+        return q > H && q > W ? q < 0.01 ? (s = 0, o = 0.707106781, a = 0.707106781) : (s = Math.sqrt(q), o = K / s, a = J / s) : H > W ? H < 0.01 ? (s = 0.707106781, o = 0, a = 0.707106781) : (o = Math.sqrt(H), s = K / o, a = ee / o) : W < 0.01 ? (s = 0.707106781, o = 0.707106781, a = 0) : (a = Math.sqrt(W), s = J / a, o = ee / a), this.set(s, o, a, r), this;
       }
       let U = Math.sqrt((O - M) * (O - M) + (m - R) * (m - R) + (b - p) * (b - p));
       return Math.abs(U) < 1e-3 && (U = 1), this.x = (O - M) / U, this.y = (m - R) / U, this.z = (b - p) / U, this.w = Math.acos((f + _ + L - 1) / 2), this;
@@ -2048,8 +2048,8 @@ let __tla = (async () => {
       return this.multiplyMatrices(e, this);
     }
     multiplyMatrices(e, r) {
-      const s = e.elements, o = r.elements, a = this.elements, h = s[0], c = s[4], d = s[8], f = s[12], p = s[1], m = s[5], b = s[9], _ = s[13], M = s[2], R = s[6], O = s[10], L = s[14], U = s[3], q = s[7], H = s[11], W = s[15], K = o[0], J = o[4], ie = o[8], ee = o[12], fe = o[1], G = o[5], v = o[9], w = o[13], $ = o[2], P = o[6], F = o[10], V = o[14], z = o[3], D = o[7], x = o[11], k = o[15];
-      return a[0] = h * K + c * fe + d * $ + f * z, a[4] = h * J + c * G + d * P + f * D, a[8] = h * ie + c * v + d * F + f * x, a[12] = h * ee + c * w + d * V + f * k, a[1] = p * K + m * fe + b * $ + _ * z, a[5] = p * J + m * G + b * P + _ * D, a[9] = p * ie + m * v + b * F + _ * x, a[13] = p * ee + m * w + b * V + _ * k, a[2] = M * K + R * fe + O * $ + L * z, a[6] = M * J + R * G + O * P + L * D, a[10] = M * ie + R * v + O * F + L * x, a[14] = M * ee + R * w + O * V + L * k, a[3] = U * K + q * fe + H * $ + W * z, a[7] = U * J + q * G + H * P + W * D, a[11] = U * ie + q * v + H * F + W * x, a[15] = U * ee + q * w + H * V + W * k, this;
+      const s = e.elements, o = r.elements, a = this.elements, h = s[0], c = s[4], d = s[8], f = s[12], p = s[1], m = s[5], b = s[9], _ = s[13], M = s[2], R = s[6], O = s[10], L = s[14], U = s[3], q = s[7], H = s[11], W = s[15], K = o[0], J = o[4], ee = o[8], ie = o[12], fe = o[1], G = o[5], v = o[9], w = o[13], $ = o[2], P = o[6], F = o[10], V = o[14], z = o[3], D = o[7], x = o[11], k = o[15];
+      return a[0] = h * K + c * fe + d * $ + f * z, a[4] = h * J + c * G + d * P + f * D, a[8] = h * ee + c * v + d * F + f * x, a[12] = h * ie + c * w + d * V + f * k, a[1] = p * K + m * fe + b * $ + _ * z, a[5] = p * J + m * G + b * P + _ * D, a[9] = p * ee + m * v + b * F + _ * x, a[13] = p * ie + m * w + b * V + _ * k, a[2] = M * K + R * fe + O * $ + L * z, a[6] = M * J + R * G + O * P + L * D, a[10] = M * ee + R * v + O * F + L * x, a[14] = M * ie + R * w + O * V + L * k, a[3] = U * K + q * fe + H * $ + W * z, a[7] = U * J + q * G + H * P + W * D, a[11] = U * ee + q * v + H * F + W * x, a[15] = U * ie + q * w + H * V + W * k, this;
     }
     multiplyScalar(e) {
       const r = this.elements;
@@ -2069,10 +2069,10 @@ let __tla = (async () => {
       return e.isVector3 ? (o[12] = e.x, o[13] = e.y, o[14] = e.z) : (o[12] = e, o[13] = r, o[14] = s), this;
     }
     invert() {
-      const e = this.elements, r = e[0], s = e[1], o = e[2], a = e[3], h = e[4], c = e[5], d = e[6], f = e[7], p = e[8], m = e[9], b = e[10], _ = e[11], M = e[12], R = e[13], O = e[14], L = e[15], U = r * c - s * h, q = r * d - o * h, H = r * f - a * h, W = s * d - o * c, K = s * f - a * c, J = o * f - a * d, ie = p * R - m * M, ee = p * O - b * M, fe = p * L - _ * M, G = m * O - b * R, v = m * L - _ * R, w = b * L - _ * O, $ = U * w - q * v + H * G + W * fe - K * ee + J * ie;
+      const e = this.elements, r = e[0], s = e[1], o = e[2], a = e[3], h = e[4], c = e[5], d = e[6], f = e[7], p = e[8], m = e[9], b = e[10], _ = e[11], M = e[12], R = e[13], O = e[14], L = e[15], U = r * c - s * h, q = r * d - o * h, H = r * f - a * h, W = s * d - o * c, K = s * f - a * c, J = o * f - a * d, ee = p * R - m * M, ie = p * O - b * M, fe = p * L - _ * M, G = m * O - b * R, v = m * L - _ * R, w = b * L - _ * O, $ = U * w - q * v + H * G + W * fe - K * ie + J * ee;
       if ($ === 0) return this.set(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
       const P = 1 / $;
-      return e[0] = (c * w - d * v + f * G) * P, e[1] = (o * v - s * w - a * G) * P, e[2] = (R * J - O * K + L * W) * P, e[3] = (b * K - m * J - _ * W) * P, e[4] = (d * fe - h * w - f * ee) * P, e[5] = (r * w - o * fe + a * ee) * P, e[6] = (O * H - M * J - L * q) * P, e[7] = (p * J - b * H + _ * q) * P, e[8] = (h * v - c * fe + f * ie) * P, e[9] = (s * fe - r * v - a * ie) * P, e[10] = (M * K - R * H + L * U) * P, e[11] = (m * H - p * K - _ * U) * P, e[12] = (c * ee - h * G - d * ie) * P, e[13] = (r * G - s * ee + o * ie) * P, e[14] = (R * q - M * W - O * U) * P, e[15] = (p * W - m * q + b * U) * P, this;
+      return e[0] = (c * w - d * v + f * G) * P, e[1] = (o * v - s * w - a * G) * P, e[2] = (R * J - O * K + L * W) * P, e[3] = (b * K - m * J - _ * W) * P, e[4] = (d * fe - h * w - f * ie) * P, e[5] = (r * w - o * fe + a * ie) * P, e[6] = (O * H - M * J - L * q) * P, e[7] = (p * J - b * H + _ * q) * P, e[8] = (h * v - c * fe + f * ee) * P, e[9] = (s * fe - r * v - a * ee) * P, e[10] = (M * K - R * H + L * U) * P, e[11] = (m * H - p * K - _ * U) * P, e[12] = (c * ie - h * G - d * ee) * P, e[13] = (r * G - s * ie + o * ee) * P, e[14] = (R * q - M * W - O * U) * P, e[15] = (p * W - m * q + b * U) * P, this;
     }
     scale(e) {
       const r = this.elements, s = e.x, o = e.y, a = e.z;
@@ -3785,12 +3785,12 @@ let __tla = (async () => {
       const s = r.position, o = r.normal, a = r.uv;
       this.hasAttribute("tangent") === false && this.setAttribute("tangent", new BufferAttribute$1(new Float32Array(4 * s.count), 4));
       const h = this.getAttribute("tangent"), c = [], d = [];
-      for (let ie = 0; ie < s.count; ie++) c[ie] = new Vector3$1(), d[ie] = new Vector3$1();
+      for (let ee = 0; ee < s.count; ee++) c[ee] = new Vector3$1(), d[ee] = new Vector3$1();
       const f = new Vector3$1(), p = new Vector3$1(), m = new Vector3$1(), b = new Vector2$1(), _ = new Vector2$1(), M = new Vector2$1(), R = new Vector3$1(), O = new Vector3$1();
-      function L(ie, ee, fe) {
-        f.fromBufferAttribute(s, ie), p.fromBufferAttribute(s, ee), m.fromBufferAttribute(s, fe), b.fromBufferAttribute(a, ie), _.fromBufferAttribute(a, ee), M.fromBufferAttribute(a, fe), p.sub(f), m.sub(f), _.sub(b), M.sub(b);
+      function L(ee, ie, fe) {
+        f.fromBufferAttribute(s, ee), p.fromBufferAttribute(s, ie), m.fromBufferAttribute(s, fe), b.fromBufferAttribute(a, ee), _.fromBufferAttribute(a, ie), M.fromBufferAttribute(a, fe), p.sub(f), m.sub(f), _.sub(b), M.sub(b);
         const G = 1 / (_.x * M.y - M.x * _.y);
-        isFinite(G) && (R.copy(p).multiplyScalar(M.y).addScaledVector(m, -_.y).multiplyScalar(G), O.copy(m).multiplyScalar(_.x).addScaledVector(p, -M.x).multiplyScalar(G), c[ie].add(R), c[ee].add(R), c[fe].add(R), d[ie].add(O), d[ee].add(O), d[fe].add(O));
+        isFinite(G) && (R.copy(p).multiplyScalar(M.y).addScaledVector(m, -_.y).multiplyScalar(G), O.copy(m).multiplyScalar(_.x).addScaledVector(p, -M.x).multiplyScalar(G), c[ee].add(R), c[ie].add(R), c[fe].add(R), d[ee].add(O), d[ie].add(O), d[fe].add(O));
       }
       let U = this.groups;
       U.length === 0 && (U = [
@@ -3799,20 +3799,20 @@ let __tla = (async () => {
           count: e.count
         }
       ]);
-      for (let ie = 0, ee = U.length; ie < ee; ++ie) {
-        const fe = U[ie], G = fe.start, v = fe.count;
+      for (let ee = 0, ie = U.length; ee < ie; ++ee) {
+        const fe = U[ee], G = fe.start, v = fe.count;
         for (let w = G, $ = G + v; w < $; w += 3) L(e.getX(w + 0), e.getX(w + 1), e.getX(w + 2));
       }
       const q = new Vector3$1(), H = new Vector3$1(), W = new Vector3$1(), K = new Vector3$1();
-      function J(ie) {
-        W.fromBufferAttribute(o, ie), K.copy(W);
-        const ee = c[ie];
-        q.copy(ee), q.sub(W.multiplyScalar(W.dot(ee))).normalize(), H.crossVectors(K, ee);
-        const G = H.dot(d[ie]) < 0 ? -1 : 1;
-        h.setXYZW(ie, q.x, q.y, q.z, G);
+      function J(ee) {
+        W.fromBufferAttribute(o, ee), K.copy(W);
+        const ie = c[ee];
+        q.copy(ie), q.sub(W.multiplyScalar(W.dot(ie))).normalize(), H.crossVectors(K, ie);
+        const G = H.dot(d[ee]) < 0 ? -1 : 1;
+        h.setXYZW(ee, q.x, q.y, q.z, G);
       }
-      for (let ie = 0, ee = U.length; ie < ee; ++ie) {
-        const fe = U[ie], G = fe.start, v = fe.count;
+      for (let ee = 0, ie = U.length; ee < ie; ++ee) {
+        const fe = U[ee], G = fe.start, v = fe.count;
         for (let w = G, $ = G + v; w < $; w += 3) J(e.getX(w + 0)), J(e.getX(w + 1)), J(e.getX(w + 2));
       }
     }
@@ -4500,8 +4500,8 @@ let __tla = (async () => {
       if (c !== null) if (Array.isArray(h)) for (let M = 0, R = b.length; M < R; M++) {
         const O = b[M], L = h[O.materialIndex], U = Math.max(O.start, _.start), q = Math.min(c.count, Math.min(O.start + O.count, _.start + _.count));
         for (let H = U, W = q; H < W; H += 3) {
-          const K = c.getX(H), J = c.getX(H + 1), ie = c.getX(H + 2);
-          o = checkGeometryIntersection$1(this, L, e, s, f, p, m, K, J, ie), o && (o.faceIndex = Math.floor(H / 3), o.face.materialIndex = O.materialIndex, r.push(o));
+          const K = c.getX(H), J = c.getX(H + 1), ee = c.getX(H + 2);
+          o = checkGeometryIntersection$1(this, L, e, s, f, p, m, K, J, ee), o && (o.faceIndex = Math.floor(H / 3), o.face.materialIndex = O.materialIndex, r.push(o));
         }
       }
       else {
@@ -4514,8 +4514,8 @@ let __tla = (async () => {
       else if (d !== void 0) if (Array.isArray(h)) for (let M = 0, R = b.length; M < R; M++) {
         const O = b[M], L = h[O.materialIndex], U = Math.max(O.start, _.start), q = Math.min(d.count, Math.min(O.start + O.count, _.start + _.count));
         for (let H = U, W = q; H < W; H += 3) {
-          const K = H, J = H + 1, ie = H + 2;
-          o = checkGeometryIntersection$1(this, L, e, s, f, p, m, K, J, ie), o && (o.faceIndex = Math.floor(H / 3), o.face.materialIndex = O.materialIndex, r.push(o));
+          const K = H, J = H + 1, ee = H + 2;
+          o = checkGeometryIntersection$1(this, L, e, s, f, p, m, K, J, ee), o && (o.faceIndex = Math.floor(H / 3), o.face.materialIndex = O.materialIndex, r.push(o));
         }
       }
       else {
@@ -5327,8 +5327,8 @@ let __tla = (async () => {
           this.getMatrixAt(H, _matrix$1), this.getBoundingSphereAt(K, _sphere$2$1).applyMatrix4(_matrix$1);
           let J = false;
           if (_ && (J = !O.intersectsSphere(_sphere$2$1, s)), !J) {
-            const ie = b[K], ee = _temp.subVectors(_sphere$2$1.center, _vector$5$1).dot(_forward$1);
-            _renderList.push(ie.start, ie.count, ee, H);
+            const ee = b[K], ie = _temp.subVectors(_sphere$2$1.center, _vector$5$1).dot(_forward$1);
+            _renderList.push(ee.start, ee.count, ie, H);
           }
         }
         const U = _renderList.list, q = this.customSort;
@@ -5665,22 +5665,22 @@ let __tla = (async () => {
       const d = [], f = [], p = [], m = [];
       let b = 0, _ = 0;
       M("z", "y", "x", -1, -1, s, r, e, h, a, 0), M("z", "y", "x", 1, -1, s, r, -e, h, a, 1), M("x", "z", "y", 1, 1, e, s, r, o, h, 2), M("x", "z", "y", 1, -1, e, s, -r, o, h, 3), M("x", "y", "z", 1, -1, e, r, s, o, a, 4), M("x", "y", "z", -1, -1, e, r, -s, o, a, 5), this.setIndex(d), this.setAttribute("position", new Float32BufferAttribute$1(f, 3)), this.setAttribute("normal", new Float32BufferAttribute$1(p, 3)), this.setAttribute("uv", new Float32BufferAttribute$1(m, 2));
-      function M(R, O, L, U, q, H, W, K, J, ie, ee) {
-        const fe = H / J, G = W / ie, v = H / 2, w = W / 2, $ = K / 2, P = J + 1, F = ie + 1;
+      function M(R, O, L, U, q, H, W, K, J, ee, ie) {
+        const fe = H / J, G = W / ee, v = H / 2, w = W / 2, $ = K / 2, P = J + 1, F = ee + 1;
         let V = 0, z = 0;
         const D = new Vector3$1();
         for (let x = 0; x < F; x++) {
           const k = x * G - w;
           for (let j = 0; j < P; j++) {
             const Y = j * fe - v;
-            D[R] = Y * U, D[O] = k * q, D[L] = $, f.push(D.x, D.y, D.z), D[R] = 0, D[O] = 0, D[L] = K > 0 ? 1 : -1, p.push(D.x, D.y, D.z), m.push(j / J), m.push(1 - x / ie), V += 1;
+            D[R] = Y * U, D[O] = k * q, D[L] = $, f.push(D.x, D.y, D.z), D[R] = 0, D[O] = 0, D[L] = K > 0 ? 1 : -1, p.push(D.x, D.y, D.z), m.push(j / J), m.push(1 - x / ee), V += 1;
           }
         }
-        for (let x = 0; x < ie; x++) for (let k = 0; k < J; k++) {
+        for (let x = 0; x < ee; x++) for (let k = 0; k < J; k++) {
           const j = b + k + P * x, Y = b + k + P * (x + 1), oe = b + (k + 1) + P * (x + 1), me = b + (k + 1) + P * x;
           d.push(j, Y, me), d.push(Y, oe, me), z += 6;
         }
-        c.addGroup(_, z, ee), _ += z, b += V;
+        c.addGroup(_, z, ie), _ += z, b += V;
       }
     }
     copy(e) {
@@ -5703,26 +5703,26 @@ let __tla = (async () => {
       for (let U = 0; U <= M; U++) {
         let q = 0, H = 0, W = 0, K = 0;
         if (U <= s) {
-          const ee = U / s, fe = ee * Math.PI / 2;
-          H = -p - e * Math.cos(fe), W = e * Math.sin(fe), K = -e * Math.cos(fe), q = ee * m;
+          const ie = U / s, fe = ie * Math.PI / 2;
+          H = -p - e * Math.cos(fe), W = e * Math.sin(fe), K = -e * Math.cos(fe), q = ie * m;
         } else if (U <= s + a) {
-          const ee = (U - s) / a;
-          H = -p + ee * r, W = e, K = 0, q = m + ee * b;
+          const ie = (U - s) / a;
+          H = -p + ie * r, W = e, K = 0, q = m + ie * b;
         } else {
-          const ee = (U - s - a) / s, fe = ee * Math.PI / 2;
-          H = p + e * Math.sin(fe), W = e * Math.cos(fe), K = e * Math.sin(fe), q = m + b + ee * m;
+          const ie = (U - s - a) / s, fe = ie * Math.PI / 2;
+          H = p + e * Math.sin(fe), W = e * Math.cos(fe), K = e * Math.sin(fe), q = m + b + ie * m;
         }
         const J = Math.max(0, Math.min(1, q / _));
-        let ie = 0;
-        U === 0 ? ie = 0.5 / o : U === M && (ie = -0.5 / o);
-        for (let ee = 0; ee <= o; ee++) {
-          const fe = ee / o, G = fe * Math.PI * 2, v = Math.sin(G), w = Math.cos(G);
-          L.x = -W * w, L.y = H, L.z = W * v, c.push(L.x, L.y, L.z), O.set(-W * w, K, W * v), O.normalize(), d.push(O.x, O.y, O.z), f.push(fe + ie, J);
+        let ee = 0;
+        U === 0 ? ee = 0.5 / o : U === M && (ee = -0.5 / o);
+        for (let ie = 0; ie <= o; ie++) {
+          const fe = ie / o, G = fe * Math.PI * 2, v = Math.sin(G), w = Math.cos(G);
+          L.x = -W * w, L.y = H, L.z = W * v, c.push(L.x, L.y, L.z), O.set(-W * w, K, W * v), O.normalize(), d.push(O.x, O.y, O.z), f.push(fe + ee, J);
         }
         if (U > 0) {
-          const ee = (U - 1) * R;
+          const ie = (U - 1) * R;
           for (let fe = 0; fe < o; fe++) {
-            const G = ee + fe, v = ee + fe + 1, w = U * R + fe, $ = U * R + fe + 1;
+            const G = ie + fe, v = ie + fe + 1, w = U * R + fe, $ = U * R + fe + 1;
             h.push(G, v, w), h.push(v, $, w);
           }
         }
@@ -5783,35 +5783,35 @@ let __tla = (async () => {
         const H = new Vector3$1(), W = new Vector3$1();
         let K = 0;
         const J = (r - e) / s;
-        for (let ie = 0; ie <= a; ie++) {
-          const ee = [], fe = ie / a, G = fe * (r - e) + e;
+        for (let ee = 0; ee <= a; ee++) {
+          const ie = [], fe = ee / a, G = fe * (r - e) + e;
           for (let v = 0; v <= o; v++) {
             const w = v / o, $ = w * d + c, P = Math.sin($), F = Math.cos($);
-            W.x = G * P, W.y = -fe * s + O, W.z = G * F, m.push(W.x, W.y, W.z), H.set(P, J, F).normalize(), b.push(H.x, H.y, H.z), _.push(w, 1 - fe), ee.push(M++);
+            W.x = G * P, W.y = -fe * s + O, W.z = G * F, m.push(W.x, W.y, W.z), H.set(P, J, F).normalize(), b.push(H.x, H.y, H.z), _.push(w, 1 - fe), ie.push(M++);
           }
-          R.push(ee);
+          R.push(ie);
         }
-        for (let ie = 0; ie < o; ie++) for (let ee = 0; ee < a; ee++) {
-          const fe = R[ee][ie], G = R[ee + 1][ie], v = R[ee + 1][ie + 1], w = R[ee][ie + 1];
-          (e > 0 || ee !== 0) && (p.push(fe, G, w), K += 3), (r > 0 || ee !== a - 1) && (p.push(G, v, w), K += 3);
+        for (let ee = 0; ee < o; ee++) for (let ie = 0; ie < a; ie++) {
+          const fe = R[ie][ee], G = R[ie + 1][ee], v = R[ie + 1][ee + 1], w = R[ie][ee + 1];
+          (e > 0 || ie !== 0) && (p.push(fe, G, w), K += 3), (r > 0 || ie !== a - 1) && (p.push(G, v, w), K += 3);
         }
         f.addGroup(L, K, 0), L += K;
       }
       function q(H) {
         const W = M, K = new Vector2$1(), J = new Vector3$1();
-        let ie = 0;
-        const ee = H === true ? e : r, fe = H === true ? 1 : -1;
+        let ee = 0;
+        const ie = H === true ? e : r, fe = H === true ? 1 : -1;
         for (let v = 1; v <= o; v++) m.push(0, O * fe, 0), b.push(0, fe, 0), _.push(0.5, 0.5), M++;
         const G = M;
         for (let v = 0; v <= o; v++) {
           const $ = v / o * d + c, P = Math.cos($), F = Math.sin($);
-          J.x = ee * F, J.y = O * fe, J.z = ee * P, m.push(J.x, J.y, J.z), b.push(0, fe, 0), K.x = P * 0.5 + 0.5, K.y = F * 0.5 * fe + 0.5, _.push(K.x, K.y), M++;
+          J.x = ie * F, J.y = O * fe, J.z = ie * P, m.push(J.x, J.y, J.z), b.push(0, fe, 0), K.x = P * 0.5 + 0.5, K.y = F * 0.5 * fe + 0.5, _.push(K.x, K.y), M++;
         }
         for (let v = 0; v < o; v++) {
           const w = W + v, $ = G + v;
-          H === true ? p.push($, $ + 1, w) : p.push($ + 1, $, w), ie += 3;
+          H === true ? p.push($, $ + 1, w) : p.push($ + 1, $, w), ee += 3;
         }
-        f.addGroup(L, ie, H === true ? 1 : 2), L += ie;
+        f.addGroup(L, ee, H === true ? 1 : 2), L += ee;
       }
     }
     copy(e) {
@@ -5853,14 +5853,14 @@ let __tla = (async () => {
       }
       function d(U, q, H, W) {
         const K = W + 1, J = [];
-        for (let ie = 0; ie <= K; ie++) {
-          J[ie] = [];
-          const ee = U.clone().lerp(H, ie / K), fe = q.clone().lerp(H, ie / K), G = K - ie;
-          for (let v = 0; v <= G; v++) v === 0 && ie === K ? J[ie][v] = ee : J[ie][v] = ee.clone().lerp(fe, v / G);
+        for (let ee = 0; ee <= K; ee++) {
+          J[ee] = [];
+          const ie = U.clone().lerp(H, ee / K), fe = q.clone().lerp(H, ee / K), G = K - ee;
+          for (let v = 0; v <= G; v++) v === 0 && ee === K ? J[ee][v] = ie : J[ee][v] = ie.clone().lerp(fe, v / G);
         }
-        for (let ie = 0; ie < K; ie++) for (let ee = 0; ee < 2 * (K - ie) - 1; ee++) {
-          const fe = Math.floor(ee / 2);
-          ee % 2 === 0 ? (b(J[ie][fe + 1]), b(J[ie + 1][fe]), b(J[ie][fe])) : (b(J[ie][fe + 1]), b(J[ie + 1][fe + 1]), b(J[ie + 1][fe]));
+        for (let ee = 0; ee < K; ee++) for (let ie = 0; ie < 2 * (K - ee) - 1; ie++) {
+          const fe = Math.floor(ie / 2);
+          ie % 2 === 0 ? (b(J[ee][fe + 1]), b(J[ee + 1][fe]), b(J[ee][fe])) : (b(J[ee][fe + 1]), b(J[ee + 1][fe + 1]), b(J[ee + 1][fe]));
         }
       }
       function f(U) {
@@ -5890,11 +5890,11 @@ let __tla = (async () => {
         q.x = e[H + 0], q.y = e[H + 1], q.z = e[H + 2];
       }
       function M() {
-        const U = new Vector3$1(), q = new Vector3$1(), H = new Vector3$1(), W = new Vector3$1(), K = new Vector2$1(), J = new Vector2$1(), ie = new Vector2$1();
-        for (let ee = 0, fe = 0; ee < a.length; ee += 9, fe += 6) {
-          U.set(a[ee + 0], a[ee + 1], a[ee + 2]), q.set(a[ee + 3], a[ee + 4], a[ee + 5]), H.set(a[ee + 6], a[ee + 7], a[ee + 8]), K.set(h[fe + 0], h[fe + 1]), J.set(h[fe + 2], h[fe + 3]), ie.set(h[fe + 4], h[fe + 5]), W.copy(U).add(q).add(H).divideScalar(3);
+        const U = new Vector3$1(), q = new Vector3$1(), H = new Vector3$1(), W = new Vector3$1(), K = new Vector2$1(), J = new Vector2$1(), ee = new Vector2$1();
+        for (let ie = 0, fe = 0; ie < a.length; ie += 9, fe += 6) {
+          U.set(a[ie + 0], a[ie + 1], a[ie + 2]), q.set(a[ie + 3], a[ie + 4], a[ie + 5]), H.set(a[ie + 6], a[ie + 7], a[ie + 8]), K.set(h[fe + 0], h[fe + 1]), J.set(h[fe + 2], h[fe + 3]), ee.set(h[fe + 4], h[fe + 5]), W.copy(U).add(q).add(H).divideScalar(3);
           const G = O(W);
-          R(K, fe + 0, U, G), R(J, fe + 2, q, G), R(ie, fe + 4, H, G);
+          R(K, fe + 0, U, G), R(J, fe + 2, q, G), R(ee, fe + 4, H, G);
         }
       }
       function R(U, q, H, W) {
@@ -6116,8 +6116,8 @@ let __tla = (async () => {
           h ? (f[0] = h.getX(M), f[1] = h.getX(M + 1), f[2] = h.getX(M + 2)) : (f[0] = M, f[1] = M + 1, f[2] = M + 2);
           const { a: R, b: O, c: L } = _triangle;
           if (R.fromBufferAttribute(c, f[0]), O.fromBufferAttribute(c, f[1]), L.fromBufferAttribute(c, f[2]), _triangle.getNormal(_normal$2), m[0] = `${Math.round(R.x * o)},${Math.round(R.y * o)},${Math.round(R.z * o)}`, m[1] = `${Math.round(O.x * o)},${Math.round(O.y * o)},${Math.round(O.z * o)}`, m[2] = `${Math.round(L.x * o)},${Math.round(L.y * o)},${Math.round(L.z * o)}`, !(m[0] === m[1] || m[1] === m[2] || m[2] === m[0])) for (let U = 0; U < 3; U++) {
-            const q = (U + 1) % 3, H = m[U], W = m[q], K = _triangle[p[U]], J = _triangle[p[q]], ie = `${H}_${W}`, ee = `${W}_${H}`;
-            ee in b && b[ee] ? (_normal$2.dot(b[ee].normal) <= a && (_.push(K.x, K.y, K.z), _.push(J.x, J.y, J.z)), b[ee] = null) : ie in b || (b[ie] = {
+            const q = (U + 1) % 3, H = m[U], W = m[q], K = _triangle[p[U]], J = _triangle[p[q]], ee = `${H}_${W}`, ie = `${W}_${H}`;
+            ie in b && b[ie] ? (_normal$2.dot(b[ie].normal) <= a && (_.push(K.x, K.y, K.z), _.push(J.x, J.y, J.z)), b[ie] = null) : ee in b || (b[ee] = {
               index0: f[U],
               index1: f[q],
               normal: _normal$2.clone()
@@ -7068,16 +7068,16 @@ let __tla = (async () => {
         const d = [], f = r.curveSegments !== void 0 ? r.curveSegments : 12, p = r.steps !== void 0 ? r.steps : 1, m = r.depth !== void 0 ? r.depth : 1;
         let b = r.bevelEnabled !== void 0 ? r.bevelEnabled : true, _ = r.bevelThickness !== void 0 ? r.bevelThickness : 0.2, M = r.bevelSize !== void 0 ? r.bevelSize : _ - 0.1, R = r.bevelOffset !== void 0 ? r.bevelOffset : 0, O = r.bevelSegments !== void 0 ? r.bevelSegments : 3;
         const L = r.extrudePath, U = r.UVGenerator !== void 0 ? r.UVGenerator : WorldUVGenerator;
-        let q, H = false, W, K, J, ie;
+        let q, H = false, W, K, J, ee;
         if (L) {
           q = L.getSpacedPoints(p), H = true, b = false;
           const Pe = L.isCatmullRomCurve3 ? L.closed : false;
-          W = L.computeFrenetFrames(p, Pe), K = new Vector3$1(), J = new Vector3$1(), ie = new Vector3$1();
+          W = L.computeFrenetFrames(p, Pe), K = new Vector3$1(), J = new Vector3$1(), ee = new Vector3$1();
         }
         b || (O = 0, _ = 0, M = 0, R = 0);
-        const ee = c.extractPoints(f);
-        let fe = ee.shape;
-        const G = ee.holes;
+        const ie = c.extractPoints(f);
+        let fe = ie.shape;
+        const G = ie.holes;
         if (!ShapeUtils.isClockWise(fe)) {
           fe = fe.reverse();
           for (let Pe = 0, Be = G.length; Pe < Be; Pe++) {
@@ -7158,11 +7158,11 @@ let __tla = (async () => {
         const oe = Y.length, me = M + R;
         for (let Pe = 0; Pe < V; Pe++) {
           const Be = b ? F(fe[Pe], j[Pe], me) : fe[Pe];
-          H ? (J.copy(W.normals[0]).multiplyScalar(Be.x), K.copy(W.binormals[0]).multiplyScalar(Be.y), ie.copy(q[0]).add(J).add(K), pe(ie.x, ie.y, ie.z)) : pe(Be.x, Be.y, 0);
+          H ? (J.copy(W.normals[0]).multiplyScalar(Be.x), K.copy(W.binormals[0]).multiplyScalar(Be.y), ee.copy(q[0]).add(J).add(K), pe(ee.x, ee.y, ee.z)) : pe(Be.x, Be.y, 0);
         }
         for (let Pe = 1; Pe <= p; Pe++) for (let Be = 0; Be < V; Be++) {
           const Ee = b ? F(fe[Be], j[Be], me) : fe[Be];
-          H ? (J.copy(W.normals[Pe]).multiplyScalar(Ee.x), K.copy(W.binormals[Pe]).multiplyScalar(Ee.y), ie.copy(q[Pe]).add(J).add(K), pe(ie.x, ie.y, ie.z)) : pe(Ee.x, Ee.y, m / p * Pe);
+          H ? (J.copy(W.normals[Pe]).multiplyScalar(Ee.x), K.copy(W.binormals[Pe]).multiplyScalar(Ee.y), ee.copy(q[Pe]).add(J).add(K), pe(ee.x, ee.y, ee.z)) : pe(Ee.x, Ee.y, m / p * Pe);
         }
         for (let Pe = O - 1; Pe >= 0; Pe--) {
           const Be = Pe / O, Ee = _ * Math.cos(Be * Math.PI / 2), rt = M * Math.sin(Be * Math.PI / 2) + R;
@@ -7435,13 +7435,13 @@ let __tla = (async () => {
         const q = s + U * p * o, H = Math.sin(q), W = Math.cos(q);
         for (let K = 0; K <= e.length - 1; K++) {
           m.x = e[K].x * H, m.y = e[K].y, m.z = e[K].x * W, h.push(m.x, m.y, m.z), b.x = U / r, b.y = K / (e.length - 1), c.push(b.x, b.y);
-          const J = d[3 * K + 0] * H, ie = d[3 * K + 1], ee = d[3 * K + 0] * W;
-          f.push(J, ie, ee);
+          const J = d[3 * K + 0] * H, ee = d[3 * K + 1], ie = d[3 * K + 0] * W;
+          f.push(J, ee, ie);
         }
       }
       for (let U = 0; U < r; U++) for (let q = 0; q < e.length - 1; q++) {
-        const H = q + U * e.length, W = H, K = H + e.length, J = H + e.length + 1, ie = H + 1;
-        a.push(W, K, ie), a.push(J, ie, K);
+        const H = q + U * e.length, W = H, K = H + e.length, J = H + e.length + 1, ee = H + 1;
+        a.push(W, K, ee), a.push(J, ee, K);
       }
       this.setIndex(a), this.setAttribute("position", new Float32BufferAttribute$1(h, 3)), this.setAttribute("uv", new Float32BufferAttribute$1(c, 2)), this.setAttribute("normal", new Float32BufferAttribute$1(f, 3));
     }
@@ -7758,18 +7758,18 @@ let __tla = (async () => {
         const H = q / s * a * Math.PI * 2;
         U(H, a, h, e, _), U(H + 0.01, a, h, e, M), O.subVectors(M, _), L.addVectors(M, _), R.crossVectors(O, L), L.crossVectors(R, O), R.normalize(), L.normalize();
         for (let W = 0; W <= o; ++W) {
-          const K = W / o * Math.PI * 2, J = -r * Math.cos(K), ie = r * Math.sin(K);
-          m.x = _.x + (J * L.x + ie * R.x), m.y = _.y + (J * L.y + ie * R.y), m.z = _.z + (J * L.z + ie * R.z), d.push(m.x, m.y, m.z), b.subVectors(m, _).normalize(), f.push(b.x, b.y, b.z), p.push(q / s), p.push(W / o);
+          const K = W / o * Math.PI * 2, J = -r * Math.cos(K), ee = r * Math.sin(K);
+          m.x = _.x + (J * L.x + ee * R.x), m.y = _.y + (J * L.y + ee * R.y), m.z = _.z + (J * L.z + ee * R.z), d.push(m.x, m.y, m.z), b.subVectors(m, _).normalize(), f.push(b.x, b.y, b.z), p.push(q / s), p.push(W / o);
         }
       }
       for (let q = 1; q <= s; q++) for (let H = 1; H <= o; H++) {
-        const W = (o + 1) * (q - 1) + (H - 1), K = (o + 1) * q + (H - 1), J = (o + 1) * q + H, ie = (o + 1) * (q - 1) + H;
-        c.push(W, K, ie), c.push(K, J, ie);
+        const W = (o + 1) * (q - 1) + (H - 1), K = (o + 1) * q + (H - 1), J = (o + 1) * q + H, ee = (o + 1) * (q - 1) + H;
+        c.push(W, K, ee), c.push(K, J, ee);
       }
       this.setIndex(c), this.setAttribute("position", new Float32BufferAttribute$1(d, 3)), this.setAttribute("normal", new Float32BufferAttribute$1(f, 3)), this.setAttribute("uv", new Float32BufferAttribute$1(p, 2));
       function U(q, H, W, K, J) {
-        const ie = Math.cos(q), ee = Math.sin(q), fe = W / H * q, G = Math.cos(fe);
-        J.x = K * (2 + G) * 0.5 * ie, J.y = K * (2 + G) * ee * 0.5, J.z = K * Math.sin(fe) * 0.5;
+        const ee = Math.cos(q), ie = Math.sin(q), fe = W / H * q, G = Math.cos(fe);
+        J.x = K * (2 + G) * 0.5 * ee, J.y = K * (2 + G) * ie * 0.5, J.z = K * Math.sin(fe) * 0.5;
       }
     }
     copy(e) {
@@ -7802,14 +7802,14 @@ let __tla = (async () => {
         p = e.getPointAt(q / r, p);
         const H = h.normals[q], W = h.binormals[q];
         for (let K = 0; K <= o; K++) {
-          const J = K / o * Math.PI * 2, ie = Math.sin(J), ee = -Math.cos(J);
-          d.x = ee * H.x + ie * W.x, d.y = ee * H.y + ie * W.y, d.z = ee * H.z + ie * W.z, d.normalize(), b.push(d.x, d.y, d.z), c.x = p.x + s * d.x, c.y = p.y + s * d.y, c.z = p.z + s * d.z, m.push(c.x, c.y, c.z);
+          const J = K / o * Math.PI * 2, ee = Math.sin(J), ie = -Math.cos(J);
+          d.x = ie * H.x + ee * W.x, d.y = ie * H.y + ee * W.y, d.z = ie * H.z + ee * W.z, d.normalize(), b.push(d.x, d.y, d.z), c.x = p.x + s * d.x, c.y = p.y + s * d.y, c.z = p.z + s * d.z, m.push(c.x, c.y, c.z);
         }
       }
       function L() {
         for (let q = 1; q <= r; q++) for (let H = 1; H <= o; H++) {
-          const W = (o + 1) * (q - 1) + (H - 1), K = (o + 1) * q + (H - 1), J = (o + 1) * q + H, ie = (o + 1) * (q - 1) + H;
-          M.push(W, K, ie), M.push(K, J, ie);
+          const W = (o + 1) * (q - 1) + (H - 1), K = (o + 1) * q + (H - 1), J = (o + 1) * q + H, ee = (o + 1) * (q - 1) + H;
+          M.push(W, K, ee), M.push(K, J, ee);
         }
       }
       function U() {
@@ -8378,16 +8378,16 @@ let __tla = (async () => {
       const _ = c * 2, M = e - 1;
       for (let R = 0; R !== c; ++R) {
         const O = h[f + R], L = h[d + R], U = M * _ + R * 2, q = b[U], H = b[U + 1], W = e * _ + R * 2, K = m[W], J = m[W + 1];
-        let ie = (s - r) / (o - r), ee, fe, G, v, w;
+        let ee = (s - r) / (o - r), ie, fe, G, v, w;
         for (let $ = 0; $ < 8; $++) {
-          ee = ie * ie, fe = ee * ie, G = 1 - ie, v = G * G, w = v * G;
-          const F = w * r + 3 * v * ie * q + 3 * G * ee * K + fe * o - s;
+          ie = ee * ee, fe = ie * ee, G = 1 - ee, v = G * G, w = v * G;
+          const F = w * r + 3 * v * ee * q + 3 * G * ie * K + fe * o - s;
           if (Math.abs(F) < 1e-10) break;
-          const V = 3 * v * (q - r) + 6 * G * ie * (K - q) + 3 * ee * (o - K);
+          const V = 3 * v * (q - r) + 6 * G * ee * (K - q) + 3 * ie * (o - K);
           if (Math.abs(V) < 1e-10) break;
-          ie = ie - F / V, ie = Math.max(0, Math.min(1, ie));
+          ee = ee - F / V, ee = Math.max(0, Math.min(1, ee));
         }
-        a[R] = w * O + 3 * v * ie * H + 3 * G * ee * J + fe * L;
+        a[R] = w * O + 3 * v * ee * H + 3 * G * ie * J + fe * L;
       }
       return a;
     }
@@ -8924,8 +8924,8 @@ let __tla = (async () => {
                       total: _
                     });
                     for (let K = 0, J = p.length; K < J; K++) {
-                      const ie = p[K];
-                      ie.onProgress && ie.onProgress(W);
+                      const ee = p[K];
+                      ee.onProgress && ee.onProgress(W);
                     }
                     L.enqueue(H), U();
                   }
@@ -12279,20 +12279,20 @@ let __tla = (async () => {
         const q = U.length;
         let H = false;
         for (let W = q - 1, K = 0; K < q; W = K++) {
-          let J = U[W], ie = U[K], ee = ie.x - J.x, fe = ie.y - J.y;
+          let J = U[W], ee = U[K], ie = ee.x - J.x, fe = ee.y - J.y;
           if (Math.abs(fe) > Number.EPSILON) {
-            if (fe < 0 && (J = U[K], ee = -ee, ie = U[W], fe = -fe), L.y < J.y || L.y > ie.y) continue;
+            if (fe < 0 && (J = U[K], ie = -ie, ee = U[W], fe = -fe), L.y < J.y || L.y > ee.y) continue;
             if (L.y === J.y) {
               if (L.x === J.x) return true;
             } else {
-              const G = fe * (L.x - J.x) - ee * (L.y - J.y);
+              const G = fe * (L.x - J.x) - ie * (L.y - J.y);
               if (G === 0) return true;
               if (G < 0) continue;
               H = !H;
             }
           } else {
             if (L.y !== J.y) continue;
-            if (ie.x <= L.x && L.x <= J.x || J.x <= L.x && L.x <= ie.x) return true;
+            if (ee.x <= L.x && L.x <= J.x || J.x <= L.x && L.x <= ee.x) return true;
           }
         }
         return H;
@@ -12322,9 +12322,9 @@ let __tla = (async () => {
           const W = _[q];
           for (let K = 0; K < W.length; K++) {
             const J = W[K];
-            let ie = true;
-            for (let ee = 0; ee < b.length; ee++) s(J.p, b[ee].p) && (q !== ee && U++, ie ? (ie = false, m[ee].push(J)) : L = true);
-            ie && m[q].push(J);
+            let ee = true;
+            for (let ie = 0; ie < b.length; ie++) s(J.p, b[ie].p) && (q !== ie && U++, ee ? (ee = false, m[ie].push(J)) : L = true);
+            ee && m[q].push(J);
           }
         }
         U > 0 && L === false && (_ = m);
@@ -15114,12 +15114,12 @@ ${e.tab}if ( ${m} ) {
         const h = e.getDataFromNode(this), c = this.getNodeType(e);
         let d = h.propertyName;
         if (d === void 0) {
-          const { uvNode: p, levelNode: m, biasNode: b, compareNode: _, compareStepNode: M, depthNode: R, gradNode: O, offsetNode: L } = o, U = this.generateUV(e, p), q = m ? m.build(e, "float") : null, H = b ? b.build(e, "float") : null, W = R ? R.build(e, "int") : null, K = _ ? _.build(e, "float") : null, J = M ? M.build(e, "float") : null, ie = O ? [
+          const { uvNode: p, levelNode: m, biasNode: b, compareNode: _, compareStepNode: M, depthNode: R, gradNode: O, offsetNode: L } = o, U = this.generateUV(e, p), q = m ? m.build(e, "float") : null, H = b ? b.build(e, "float") : null, W = R ? R.build(e, "int") : null, K = _ ? _.build(e, "float") : null, J = M ? M.build(e, "float") : null, ee = O ? [
             O[0].build(e, "vec2"),
             O[1].build(e, "vec2")
-          ] : null, ee = L ? this.generateOffset(e, L) : null, fe = e.getVarFromNode(this);
+          ] : null, ie = L ? this.generateOffset(e, L) : null, fe = e.getVarFromNode(this);
           d = e.getPropertyName(fe);
-          let G = this.generateSnippet(e, a, U, q, H, W, K, ie, ee);
+          let G = this.generateSnippet(e, a, U, q, H, W, K, ee, ie);
           if (J !== null) {
             const v = s.compareFunction;
             v === GreaterCompare$1 || v === GreaterEqualCompare$1 ? G = step$2(expression$1(G, c), expression$1(J, "float")).build(e, c) : G = step$2(expression$1(J, "float"), expression$1(G, c)).build(e, c);
@@ -16237,8 +16237,8 @@ ${e.tab}if ( ${m} ) {
       for (let U = 0; U < a; U++) {
         const q = c[U], H = d[U], W = f[U], K = m * b * 4 * U;
         for (let J = 0; J < q.count; J++) {
-          const ie = J * O;
-          e === true && (_morphVec4$1.fromBufferAttribute(q, J), M[K + ie + 0] = _morphVec4$1.x, M[K + ie + 1] = _morphVec4$1.y, M[K + ie + 2] = _morphVec4$1.z, M[K + ie + 3] = 0), r === true && (_morphVec4$1.fromBufferAttribute(H, J), M[K + ie + 4] = _morphVec4$1.x, M[K + ie + 5] = _morphVec4$1.y, M[K + ie + 6] = _morphVec4$1.z, M[K + ie + 7] = 0), s === true && (_morphVec4$1.fromBufferAttribute(W, J), M[K + ie + 8] = _morphVec4$1.x, M[K + ie + 9] = _morphVec4$1.y, M[K + ie + 10] = _morphVec4$1.z, M[K + ie + 11] = W.itemSize === 4 ? _morphVec4$1.w : 1);
+          const ee = J * O;
+          e === true && (_morphVec4$1.fromBufferAttribute(q, J), M[K + ee + 0] = _morphVec4$1.x, M[K + ee + 1] = _morphVec4$1.y, M[K + ee + 2] = _morphVec4$1.z, M[K + ee + 3] = 0), r === true && (_morphVec4$1.fromBufferAttribute(H, J), M[K + ee + 4] = _morphVec4$1.x, M[K + ee + 5] = _morphVec4$1.y, M[K + ee + 6] = _morphVec4$1.z, M[K + ee + 7] = 0), s === true && (_morphVec4$1.fromBufferAttribute(W, J), M[K + ee + 8] = _morphVec4$1.x, M[K + ee + 9] = _morphVec4$1.y, M[K + ee + 10] = _morphVec4$1.z, M[K + ee + 11] = W.itemSize === 4 ? _morphVec4$1.w : 1);
         }
       }
       h = {
@@ -16865,9 +16865,9 @@ ${e.tab}if ( ${m} ) {
       this.vertexNode = Fn$2(() => {
         const f = attribute$2("instanceStart"), p = attribute$2("instanceEnd"), m = vec4$2(modelViewMatrix$2.mul(vec4$2(f, 1))).toVar("start"), b = vec4$2(modelViewMatrix$2.mul(vec4$2(p, 1))).toVar("end");
         if (a) {
-          const W = this.dashScaleNode ? float$2(this.dashScaleNode) : materialLineScale, K = this.offsetNode ? float$2(this.offsetNode) : materialLineDashOffset, J = attribute$2("instanceDistanceStart"), ie = attribute$2("instanceDistanceEnd");
-          let ee = positionGeometry$2.y.lessThan(0.5).select(W.mul(J), W.mul(ie));
-          ee = ee.add(K), varyingProperty$1("float", "lineDistance").assign(ee);
+          const W = this.dashScaleNode ? float$2(this.dashScaleNode) : materialLineScale, K = this.offsetNode ? float$2(this.offsetNode) : materialLineDashOffset, J = attribute$2("instanceDistanceStart"), ee = attribute$2("instanceDistanceEnd");
+          let ie = positionGeometry$2.y.lessThan(0.5).select(W.mul(J), W.mul(ee));
+          ie = ie.add(K), varyingProperty$1("float", "lineDistance").assign(ie);
         }
         h && (varyingProperty$1("vec3", "worldStart").assign(m.xyz), varyingProperty$1("vec3", "worldEnd").assign(b.xyz));
         const _ = viewport$1.z.div(viewport$1.w), M = cameraProjectionMatrix$2.element(2).element(3).equal(-1);
@@ -16888,12 +16888,12 @@ ${e.tab}if ( ${m} ) {
         q.x.assign(q.x.mul(_)), q.assign(q.normalize());
         const H = vec4$2().toVar();
         if (h) {
-          const W = b.xyz.sub(m.xyz).normalize(), K = mix$2(m.xyz, b.xyz, 0.5).normalize(), J = W.cross(K).normalize(), ie = W.cross(J), ee = varyingProperty$1("vec4", "worldPos");
-          ee.assign(positionGeometry$2.y.lessThan(0.5).select(m, b));
+          const W = b.xyz.sub(m.xyz).normalize(), K = mix$2(m.xyz, b.xyz, 0.5).normalize(), J = W.cross(K).normalize(), ee = W.cross(J), ie = varyingProperty$1("vec4", "worldPos");
+          ie.assign(positionGeometry$2.y.lessThan(0.5).select(m, b));
           const fe = materialLineWidth.mul(0.5);
-          ee.addAssign(vec4$2(positionGeometry$2.x.lessThan(0).select(J.mul(fe), J.mul(fe).negate()), 0)), a || (ee.addAssign(vec4$2(positionGeometry$2.y.lessThan(0.5).select(W.mul(fe).negate(), W.mul(fe)), 0)), ee.addAssign(vec4$2(ie.mul(fe), 0)), If$2(positionGeometry$2.y.greaterThan(1).or(positionGeometry$2.y.lessThan(0)), () => {
-            ee.subAssign(vec4$2(ie.mul(2).mul(fe), 0));
-          })), H.assign(cameraProjectionMatrix$2.mul(ee));
+          ie.addAssign(vec4$2(positionGeometry$2.x.lessThan(0).select(J.mul(fe), J.mul(fe).negate()), 0)), a || (ie.addAssign(vec4$2(positionGeometry$2.y.lessThan(0.5).select(W.mul(fe).negate(), W.mul(fe)), 0)), ie.addAssign(vec4$2(ee.mul(fe), 0)), If$2(positionGeometry$2.y.greaterThan(1).or(positionGeometry$2.y.lessThan(0)), () => {
+            ie.subAssign(vec4$2(ee.mul(2).mul(fe), 0));
+          })), H.assign(cameraProjectionMatrix$2.mul(ie));
           const G = vec3$2().toVar();
           G.assign(positionGeometry$2.y.lessThan(0.5).select(L, U)), H.z.assign(G.z.mul(H.w));
         } else {
@@ -16907,8 +16907,8 @@ ${e.tab}if ( ${m} ) {
         return H;
       })();
       const d = Fn$2(({ p1: f, p2: p, p3: m, p4: b }) => {
-        const _ = f.sub(m), M = b.sub(m), R = p.sub(f), O = _.dot(M), L = M.dot(R), U = _.dot(R), q = M.dot(M), W = R.dot(R).mul(q).sub(L.mul(L)), J = O.mul(L).sub(U.mul(q)).div(W).clamp(), ie = O.add(L.mul(J)).div(q).clamp();
-        return vec2$2(J, ie);
+        const _ = f.sub(m), M = b.sub(m), R = p.sub(f), O = _.dot(M), L = M.dot(R), U = _.dot(R), q = M.dot(M), W = R.dot(R).mul(q).sub(L.mul(L)), J = O.mul(L).sub(U.mul(q)).div(W).clamp(), ee = O.add(L.mul(J)).div(q).clamp();
+        return vec2$2(J, ee);
       });
       if (this.colorNode = Fn$2(() => {
         const f = uv$1$1();
@@ -18224,14 +18224,14 @@ ${e.tab}if ( ${m} ) {
         start: 0,
         end: 3
       }, ({ i: J }) => {
-        const ie = K.element(J), ee = getVolumeTransmissionRay(l, e, m, ie, c), fe = h.add(ee), G = f.mul(d.mul(vec4$2(fe, 1))), v = vec2$2(G.xy.div(G.w)).toVar();
+        const ee = K.element(J), ie = getVolumeTransmissionRay(l, e, m, ee, c), fe = h.add(ie), G = f.mul(d.mul(vec4$2(fe, 1))), v = vec2$2(G.xy.div(G.w)).toVar();
         v.addAssign(1), v.divAssign(2), v.assign(vec2$2(v.x, v.y.oneMinus()));
-        const w = getTransmissionSample(v, r, ie);
-        R.element(J).assign(w.element(J)), R.a.addAssign(w.a), O.element(J).assign(s.element(J).mul(volumeAttenuation(length$2(ee), b, _).element(J)));
+        const w = getTransmissionSample(v, r, ee);
+        R.element(J).assign(w.element(J)), R.a.addAssign(w.a), O.element(J).assign(s.element(J).mul(volumeAttenuation(length$2(ie), b, _).element(J)));
       }), R.a.divAssign(3);
     } else {
-      const W = getVolumeTransmissionRay(l, e, m, p, c), K = h.add(W), J = f.mul(d.mul(vec4$2(K, 1))), ie = vec2$2(J.xy.div(J.w)).toVar();
-      ie.addAssign(1), ie.divAssign(2), ie.assign(vec2$2(ie.x, ie.y.oneMinus())), R = getTransmissionSample(ie, r, p), O = s.mul(volumeAttenuation(length$2(W), b, _));
+      const W = getVolumeTransmissionRay(l, e, m, p, c), K = h.add(W), J = f.mul(d.mul(vec4$2(K, 1))), ee = vec2$2(J.xy.div(J.w)).toVar();
+      ee.addAssign(1), ee.divAssign(2), ee.assign(vec2$2(ee.x, ee.y.oneMinus())), R = getTransmissionSample(ee, r, p), O = s.mul(volumeAttenuation(length$2(W), b, _));
     }
     const L = O.rgb.mul(R.rgb), U = l.dot(e).clamp(), q = vec3$2(EnvironmentBRDF({
       dotNV: U,
@@ -18258,17 +18258,17 @@ ${e.tab}if ( ${m} ) {
       f0: R,
       f90: 1,
       dotVH: d
-    }), L = vec3$2(M.x.lessThan(a).select(Math.PI, 0), M.y.lessThan(a).select(Math.PI, 0), M.z.lessThan(a).select(Math.PI, 0)), U = a.mul(s, d, 2), q = vec3$2(_).add(L), H = p.mul(O).clamp(1e-5, 0.9999), W = H.sqrt(), K = m.pow2().mul(O).div(vec3$2(1).sub(H)), ie = p.add(K).toVar(), ee = K.sub(m).toVar();
+    }), L = vec3$2(M.x.lessThan(a).select(Math.PI, 0), M.y.lessThan(a).select(Math.PI, 0), M.z.lessThan(a).select(Math.PI, 0)), U = a.mul(s, d, 2), q = vec3$2(_).add(L), H = p.mul(O).clamp(1e-5, 0.9999), W = H.sqrt(), K = m.pow2().mul(O).div(vec3$2(1).sub(H)), ee = p.add(K).toVar(), ie = K.sub(m).toVar();
     return Loop$2({
       start: 1,
       end: 2,
       condition: "<=",
       name: "m"
     }, ({ m: fe }) => {
-      ee.mulAssign(W);
+      ie.mulAssign(W);
       const G = evalSensitivity(float$2(fe).mul(U), float$2(fe).mul(q)).mul(2);
-      ie.addAssign(ee.mul(G));
-    }), ie.max(vec3$2(0));
+      ee.addAssign(ie.mul(G));
+    }), ee.max(vec3$2(0));
   }).setLayout({
     name: "evalIridescence",
     type: "vec3",
@@ -18408,12 +18408,12 @@ ${e.tab}if ( ${m} ) {
           N: H,
           V: _,
           roughness: clearcoatRoughness
-        }), K = h.sample(W), J = c.sample(W), ie = mat3$2(vec3$2(K.x, 0, K.y), vec3$2(0, 1, 0), vec3$2(K.z, 0, K.w)), ee = clearcoatF0.mul(J.x).add(clearcoatF90.sub(clearcoatF0).mul(J.y));
-        this.clearcoatSpecularDirect.addAssign(e.mul(ee).mul(LTC_Evaluate({
+        }), K = h.sample(W), J = c.sample(W), ee = mat3$2(vec3$2(K.x, 0, K.y), vec3$2(0, 1, 0), vec3$2(K.z, 0, K.w)), ie = clearcoatF0.mul(J.x).add(clearcoatF90.sub(clearcoatF0).mul(J.y));
+        this.clearcoatSpecularDirect.addAssign(e.mul(ie).mul(LTC_Evaluate({
           N: H,
           V: _,
           P: M,
-          mInv: ie,
+          mInv: ee,
           p0: d,
           p1: f,
           p2: p,
@@ -18851,8 +18851,8 @@ ${e.tab}if ( ${m} ) {
       const L = [];
       let U = 0;
       for (let J = 0; J < MAX_SAMPLES; ++J) {
-        const ie = J / R, ee = Math.exp(-ie * ie / 2);
-        L.push(ee), J === 0 ? U += ee : J < O && (U += 2 * ee);
+        const ee = J / R, ie = Math.exp(-ee * ee / 2);
+        L.push(ie), J === 0 ? U += ie : J < O && (U += 2 * ie);
       }
       for (let J = 0; J < L.length; J++) L[J] = L[J] / U;
       e.texture.frame = (e.texture.frame || 0) + 1, b.envMap.value = e.texture, b.samples.value = O, b.weights.array = L, b.latitudinal.value = h === "latitudinal" ? 1 : 0, c && (b.poleAxis.value = c);
@@ -18886,27 +18886,27 @@ ${e.tab}if ( ${m} ) {
         m
       ], _ = 6, M = 6, R = 3, O = 2, L = 1, U = new Float32Array(R * M * _), q = new Float32Array(O * M * _), H = new Float32Array(L * M * _);
       for (let K = 0; K < _; K++) {
-        const J = K % 3 * 2 / 3 - 1, ie = K > 2 ? 0 : -1, ee = [
+        const J = K % 3 * 2 / 3 - 1, ee = K > 2 ? 0 : -1, ie = [
           J,
-          ie,
+          ee,
           0,
           J + 2 / 3,
-          ie,
+          ee,
           0,
           J + 2 / 3,
-          ie + 1,
+          ee + 1,
           0,
           J,
-          ie,
+          ee,
           0,
           J + 2 / 3,
-          ie + 1,
+          ee + 1,
           0,
           J,
-          ie + 1,
+          ee + 1,
           0
         ], fe = _faceLib[K];
-        U.set(ee, R * M * fe), q.set(b, O * M * fe);
+        U.set(ie, R * M * fe), q.set(b, O * M * fe);
         const G = [
           fe,
           fe,
@@ -22227,21 +22227,21 @@ ${e.tab}if ( ${m} ) {
         h.isArrayTexture && (H = H.depth(this.depthLayer));
         let W = texture$2(this.vsmShadowMapVertical.texture);
         h.isArrayTexture && (W = W.depth(this.depthLayer));
-        const K = reference$2("blurSamples", "float", a).setGroup(renderGroup$1), J = reference$2("radius", "float", a).setGroup(renderGroup$1), ie = reference$2("mapSize", "vec2", a).setGroup(renderGroup$1);
-        let ee = this.vsmMaterialVertical || (this.vsmMaterialVertical = new NodeMaterial$1());
-        ee.fragmentNode = VSMPassVertical({
+        const K = reference$2("blurSamples", "float", a).setGroup(renderGroup$1), J = reference$2("radius", "float", a).setGroup(renderGroup$1), ee = reference$2("mapSize", "vec2", a).setGroup(renderGroup$1);
+        let ie = this.vsmMaterialVertical || (this.vsmMaterialVertical = new NodeMaterial$1());
+        ie.fragmentNode = VSMPassVertical({
           samples: K,
           radius: J,
-          size: ie,
+          size: ee,
           shadowPass: H,
           depthLayer: this.depthLayer
-        }).context(e.getSharedContext()), ee.name = "VSMVertical", ee = this.vsmMaterialHorizontal || (this.vsmMaterialHorizontal = new NodeMaterial$1()), ee.fragmentNode = VSMPassHorizontal({
+        }).context(e.getSharedContext()), ie.name = "VSMVertical", ie = this.vsmMaterialHorizontal || (this.vsmMaterialHorizontal = new NodeMaterial$1()), ie.fragmentNode = VSMPassHorizontal({
           samples: K,
           radius: J,
-          size: ie,
+          size: ee,
           shadowPass: W,
           depthLayer: this.depthLayer
-        }).context(e.getSharedContext()), ee.name = "VSMHorizontal";
+        }).context(e.getSharedContext()), ie.name = "VSMHorizontal";
       }
       const p = reference$2("intensity", "float", a).setGroup(renderGroup$1), m = reference$2("normalBias", "float", a).setGroup(renderGroup$1), b = lightShadowMatrix(o).mul(shadowPositionWorld.add(normalWorld$2.mul(m))), _ = this.setupShadowCoord(e, b), M = a.filterNode || this.getShadowFilterFn(r.shadowMap.type) || null;
       if (M === null) throw new Error("THREE.WebGPURenderer: Shadow map type not supported yet.");
@@ -26758,15 +26758,15 @@ Reason: ${e.reason}`), error$1(r), this._isDeviceLost = true;
       R.viewportValue.copy(U).multiplyScalar(H).floor(), R.viewportValue.width >>= _, R.viewportValue.height >>= _, R.viewportValue.minDepth = W, R.viewportValue.maxDepth = K, R.viewport = R.viewportValue.equals(_screen) === false, R.scissorValue.copy(q).multiplyScalar(H).floor(), R.scissor = L._scissorTest && R.scissorValue.equals(_screen) === false, R.scissorValue.width >>= _, R.scissorValue.height >>= _, R.clippingContext || (R.clippingContext = new ClippingContext()), R.clippingContext.updateGlobal(p, r), p.onBeforeRender(this, e, r, M);
       const J = r.isArrayCamera ? _frustumArray : _frustum;
       r.isArrayCamera || (_projScreenMatrix.multiplyMatrices(r.projectionMatrix, r.matrixWorldInverse), J.setFromProjectionMatrix(_projScreenMatrix, r.coordinateSystem, r.reversedDepth));
-      const ie = this._renderLists.get(e, r);
-      if (ie.begin(), this._projectObject(e, r, 0, ie, R.clippingContext), ie.finish(), this.sortObjects === true && ie.sort(this._opaqueSort, this._transparentSort), M !== null) {
+      const ee = this._renderLists.get(e, r);
+      if (ee.begin(), this._projectObject(e, r, 0, ee, R.clippingContext), ee.finish(), this.sortObjects === true && ee.sort(this._opaqueSort, this._transparentSort), M !== null) {
         this._textures.updateRenderTarget(M, _);
         const $ = this._textures.get(M);
         R.textures = $.textures, R.depthTexture = $.depthTexture, R.width = $.width, R.height = $.height, R.renderTarget = M, R.depth = M.depthBuffer, R.stencil = M.stencilBuffer;
       } else R.textures = null, R.depthTexture = null, R.width = _drawingBufferSize.width, R.height = _drawingBufferSize.height, R.depth = this.depth, R.stencil = this.stencil;
-      R.width >>= _, R.height >>= _, R.activeCubeFace = b, R.activeMipmapLevel = _, R.occlusionQueryCount = ie.occlusionQueryCount, R.scissorValue.max(_vector4.set(0, 0, 0, 0)), R.scissorValue.x + R.scissorValue.width > R.width && (R.scissorValue.width = Math.max(R.width - R.scissorValue.x, 0)), R.scissorValue.y + R.scissorValue.height > R.height && (R.scissorValue.height = Math.max(R.height - R.scissorValue.y, 0)), this._background.update(p, ie, R), R.camera = r, this.backend.beginRender(R);
-      const { bundles: ee, lightsNode: fe, transparentDoublePass: G, transparent: v, opaque: w } = ie;
-      return ee.length > 0 && this._renderBundles(ee, p, fe), this.opaque === true && w.length > 0 && this._renderObjects(w, r, p, fe), this.transparent === true && v.length > 0 && this._renderTransparents(v, G, r, p, fe), this.backend.finishRender(R), a.renderId = h, this._currentRenderContext = c, this._currentRenderObjectFunction = d, this._handleObjectFunction = f, this._callDepth--, o !== null && (this.setRenderTarget(m, b, _), this._renderOutput(M)), p.onAfterRender(this, e, r, M), this.inspector.finishRender(this.backend.getTimestampUID(R)), R;
+      R.width >>= _, R.height >>= _, R.activeCubeFace = b, R.activeMipmapLevel = _, R.occlusionQueryCount = ee.occlusionQueryCount, R.scissorValue.max(_vector4.set(0, 0, 0, 0)), R.scissorValue.x + R.scissorValue.width > R.width && (R.scissorValue.width = Math.max(R.width - R.scissorValue.x, 0)), R.scissorValue.y + R.scissorValue.height > R.height && (R.scissorValue.height = Math.max(R.height - R.scissorValue.y, 0)), this._background.update(p, ee, R), R.camera = r, this.backend.beginRender(R);
+      const { bundles: ie, lightsNode: fe, transparentDoublePass: G, transparent: v, opaque: w } = ee;
+      return ie.length > 0 && this._renderBundles(ie, p, fe), this.opaque === true && w.length > 0 && this._renderObjects(w, r, p, fe), this.transparent === true && v.length > 0 && this._renderTransparents(v, G, r, p, fe), this.backend.finishRender(R), a.renderId = h, this._currentRenderContext = c, this._currentRenderObjectFunction = d, this._handleObjectFunction = f, this._callDepth--, o !== null && (this.setRenderTarget(m, b, _), this._renderOutput(M)), p.onAfterRender(this, e, r, M), this.inspector.finishRender(this.backend.getTimestampUID(R)), R;
     }
     _setXRLayerSize(e, r) {
       this._canvasTarget._width = e, this._canvasTarget._height = r, this.setViewport(0, 0, e, r);
@@ -28728,7 +28728,7 @@ void main() {
         M = Math.floor(J.width * P), R = Math.floor(J.height * P), e.isDataArrayTexture || e.isArrayTexture ? O = J.depth : e.isData3DTexture ? O = Math.floor(J.depth * P) : O = 1, L = 0, U = 0, q = 0;
       }
       o !== null ? (H = o.x, W = o.y, K = o.z) : (H = 0, W = 0, K = 0), c.pixelStorei(c.UNPACK_FLIP_Y_WEBGL, r.flipY), c.pixelStorei(c.UNPACK_PREMULTIPLY_ALPHA_WEBGL, r.premultiplyAlpha), c.pixelStorei(c.UNPACK_ALIGNMENT, r.unpackAlignment);
-      const ie = c.getParameter(c.UNPACK_ROW_LENGTH), ee = c.getParameter(c.UNPACK_IMAGE_HEIGHT), fe = c.getParameter(c.UNPACK_SKIP_PIXELS), G = c.getParameter(c.UNPACK_SKIP_ROWS), v = c.getParameter(c.UNPACK_SKIP_IMAGES);
+      const ee = c.getParameter(c.UNPACK_ROW_LENGTH), ie = c.getParameter(c.UNPACK_IMAGE_HEIGHT), fe = c.getParameter(c.UNPACK_SKIP_PIXELS), G = c.getParameter(c.UNPACK_SKIP_ROWS), v = c.getParameter(c.UNPACK_SKIP_IMAGES);
       c.pixelStorei(c.UNPACK_ROW_LENGTH, J.width), c.pixelStorei(c.UNPACK_IMAGE_HEIGHT, J.height), c.pixelStorei(c.UNPACK_SKIP_PIXELS, L), c.pixelStorei(c.UNPACK_SKIP_ROWS, U), c.pixelStorei(c.UNPACK_SKIP_IMAGES, q);
       const w = e.isDataArrayTexture || e.isData3DTexture || r.isArrayTexture, $ = r.isDataArrayTexture || r.isData3DTexture || r.isArrayTexture;
       if (e.isDepthTexture) {
@@ -28742,7 +28742,7 @@ void main() {
         for (let F = 0; F < O; F++) w ? c.framebufferTextureLayer(c.READ_FRAMEBUFFER, c.COLOR_ATTACHMENT0, P.textureGPU, a, q + F) : c.framebufferTexture2D(c.READ_FRAMEBUFFER, c.COLOR_ATTACHMENT0, c.TEXTURE_2D, P.textureGPU, a), $ ? c.framebufferTextureLayer(c.DRAW_FRAMEBUFFER, c.COLOR_ATTACHMENT0, p, h, K + F) : c.framebufferTexture2D(c.DRAW_FRAMEBUFFER, c.COLOR_ATTACHMENT0, c.TEXTURE_2D, p, h), a !== 0 ? c.blitFramebuffer(L, U, M, R, H, W, M, R, c.COLOR_BUFFER_BIT, c.NEAREST) : $ ? c.copyTexSubImage3D(m, h, H, W, K + F, L, U, M, R) : c.copyTexSubImage2D(m, h, H, W, L, U, M, R);
         f.bindFramebuffer(c.READ_FRAMEBUFFER, null), f.bindFramebuffer(c.DRAW_FRAMEBUFFER, null);
       } else $ ? e.isDataTexture || e.isData3DTexture ? c.texSubImage3D(m, h, H, W, K, M, R, O, _, b, J.data) : r.isCompressedArrayTexture ? c.compressedTexSubImage3D(m, h, H, W, K, M, R, O, _, J.data) : c.texSubImage3D(m, h, H, W, K, M, R, O, _, b, J) : e.isDataTexture ? c.texSubImage2D(c.TEXTURE_2D, h, H, W, M, R, _, b, J.data) : e.isCompressedTexture ? c.compressedTexSubImage2D(c.TEXTURE_2D, h, H, W, J.width, J.height, _, J.data) : c.texSubImage2D(c.TEXTURE_2D, h, H, W, M, R, _, b, J);
-      c.pixelStorei(c.UNPACK_ROW_LENGTH, ie), c.pixelStorei(c.UNPACK_IMAGE_HEIGHT, ee), c.pixelStorei(c.UNPACK_SKIP_PIXELS, fe), c.pixelStorei(c.UNPACK_SKIP_ROWS, G), c.pixelStorei(c.UNPACK_SKIP_IMAGES, v), h === 0 && r.generateMipmaps && c.generateMipmap(m), f.unbindTexture();
+      c.pixelStorei(c.UNPACK_ROW_LENGTH, ee), c.pixelStorei(c.UNPACK_IMAGE_HEIGHT, ie), c.pixelStorei(c.UNPACK_SKIP_PIXELS, fe), c.pixelStorei(c.UNPACK_SKIP_ROWS, G), c.pixelStorei(c.UNPACK_SKIP_IMAGES, v), h === 0 && r.generateMipmaps && c.generateMipmap(m), f.unbindTexture();
     }
     copyFramebufferToTexture(e, r, s) {
       const { gl: o } = this, { state: a } = this.backend, { textureGPU: h } = this.backend.get(e), { x: c, y: d, z: f, w: p } = s, m = e.isDepthTexture === true || r.renderTarget && r.renderTarget.samples > 0, b = r.renderTarget ? r.renderTarget.height : this.backend.getDrawingBufferSize().y;
@@ -29201,16 +29201,16 @@ void main() {
       const _ = e.getAttributes(), M = this.get(_);
       let R = M.vaoGPU;
       if (R === void 0) {
-        const ie = this._getVaoKey(_);
-        R = this.vaoCache[ie], R === void 0 && (R = this._createVao(_), this.vaoCache[ie] = R, M.vaoGPU = R);
+        const ee = this._getVaoKey(_);
+        R = this.vaoCache[ee], R === void 0 && (R = this._createVao(_), this.vaoCache[ee] = R, M.vaoGPU = R);
       }
       const O = e.getIndex(), L = O !== null ? this.get(O).bufferGPU : null;
       f.setVertexState(R, L);
       const U = p.lastOcclusionObject;
       if (U !== r && U !== void 0) {
         if (U !== null && U.occlusionTest === true && (d.endQuery(d.ANY_SAMPLES_PASSED), p.occlusionQueryIndex++), r.occlusionTest === true) {
-          const ie = d.createQuery();
-          d.beginQuery(d.ANY_SAMPLES_PASSED, ie), p.occlusionQueries[p.occlusionQueryIndex] = ie, p.occlusionQueryObjects[p.occlusionQueryIndex] = r;
+          const ee = d.createQuery();
+          d.beginQuery(d.ANY_SAMPLES_PASSED, ee), p.occlusionQueries[p.occlusionQueryIndex] = ee, p.occlusionQueryObjects[p.occlusionQueryIndex] = r;
         }
         p.lastOcclusionObject = r;
       }
@@ -29220,26 +29220,26 @@ void main() {
       let { firstVertex: K } = m;
       if (q.object = r, O !== null) {
         K *= O.array.BYTES_PER_ELEMENT;
-        const ie = this.get(O);
-        q.index = O.count, q.type = ie.type;
+        const ee = this.get(O);
+        q.index = O.count, q.type = ee.type;
       } else q.index = 0;
       const J = () => {
         r.isBatchedMesh ? r._multiDrawInstances !== null ? (warnOnce$1("WebGLBackend: renderMultiDrawInstances has been deprecated and will be removed in r184. Append to renderMultiDraw arguments and use indirection."), q.renderMultiDrawInstances(r._multiDrawStarts, r._multiDrawCounts, r._multiDrawCount, r._multiDrawInstances)) : this.hasFeature("WEBGL_multi_draw") ? q.renderMultiDraw(r._multiDrawStarts, r._multiDrawCounts, r._multiDrawCount) : warnOnce$1("WebGLBackend: WEBGL_multi_draw not supported.") : W > 1 ? q.renderInstances(K, H, W) : q.render(K, H);
       };
       if (e.camera.isArrayCamera === true && e.camera.cameras.length > 0 && e.camera.isMultiViewCamera === false) {
-        const ie = this.get(e.camera), ee = e.camera.cameras, fe = e.getBindingGroup("cameraIndex").bindings[0];
-        if (ie.indexesGPU === void 0 || ie.indexesGPU.length !== ee.length) {
+        const ee = this.get(e.camera), ie = e.camera.cameras, fe = e.getBindingGroup("cameraIndex").bindings[0];
+        if (ee.indexesGPU === void 0 || ee.indexesGPU.length !== ie.length) {
           const F = new Uint32Array([
             0,
             0,
             0,
             0
           ]), V = [];
-          for (let z = 0, D = ee.length; z < D; z++) {
+          for (let z = 0, D = ie.length; z < D; z++) {
             const x = d.createBuffer();
             F[0] = z, d.bindBuffer(d.UNIFORM_BUFFER, x), d.bufferData(d.UNIFORM_BUFFER, F, d.STATIC_DRAW), V.push(x);
           }
-          ie.indexesGPU = V;
+          ee.indexesGPU = V;
         }
         const G = this.get(fe), v = this.renderer.getPixelRatio(), w = this._currentContext.renderTarget, $ = this._isRenderCameraDepthArray(this._currentContext), P = this._currentContext.activeCubeFace;
         if ($) {
@@ -29247,12 +29247,12 @@ void main() {
           if (F.clearedRenderId !== this.renderer._nodes.nodeFrame.renderId) {
             F.clearedRenderId = this.renderer._nodes.nodeFrame.renderId;
             const { stencilBuffer: V } = w;
-            for (let z = 0, D = ee.length; z < D; z++) this.renderer._activeCubeFace = z, this._currentContext.activeCubeFace = z, this._setFramebuffer(this._currentContext), this.clear(false, true, V, this._currentContext, false, false);
+            for (let z = 0, D = ie.length; z < D; z++) this.renderer._activeCubeFace = z, this._currentContext.activeCubeFace = z, this._setFramebuffer(this._currentContext), this.clear(false, true, V, this._currentContext, false, false);
             this.renderer._activeCubeFace = P, this._currentContext.activeCubeFace = P;
           }
         }
-        for (let F = 0, V = ee.length; F < V; F++) {
-          const z = ee[F];
+        for (let F = 0, V = ie.length; F < V; F++) {
+          const z = ie[F];
           if (r.layers.test(z.layers)) {
             $ && (this.renderer._activeCubeFace = F, this._currentContext.activeCubeFace = F, this._setFramebuffer(this._currentContext));
             const D = z.viewport;
@@ -29260,7 +29260,7 @@ void main() {
               const x = D.x * v, k = D.y * v, j = D.width * v, Y = D.height * v;
               f.viewport(Math.floor(x), Math.floor(e.context.height - Y - k), Math.floor(j), Math.floor(Y));
             }
-            f.bindBufferBase(d.UNIFORM_BUFFER, G.index, ie.indexesGPU[F]), J();
+            f.bindBufferBase(d.UNIFORM_BUFFER, G.index, ee.indexesGPU[F]), J();
           }
           this._currentContext.activeCubeFace = P, this.renderer._activeCubeFace = P;
         }
@@ -29509,14 +29509,14 @@ void main() {}`
           const K = e.textures, J = [];
           if (p) {
             h.cubeFramebuffers[H] = W;
-            const { textureGPU: ee } = this.get(K[0]), fe = this.renderer._activeCubeFace, G = this.renderer._activeMipmapLevel;
-            r.framebufferTexture2D(r.FRAMEBUFFER, r.COLOR_ATTACHMENT0, r.TEXTURE_CUBE_MAP_POSITIVE_X + fe, ee, G);
+            const { textureGPU: ie } = this.get(K[0]), fe = this.renderer._activeCubeFace, G = this.renderer._activeMipmapLevel;
+            r.framebufferTexture2D(r.FRAMEBUFFER, r.COLOR_ATTACHMENT0, r.TEXTURE_CUBE_MAP_POSITIVE_X + fe, ie, G);
           } else {
             h.framebuffers[H] = W;
-            for (let ee = 0; ee < K.length; ee++) {
-              const fe = K[ee], G = this.get(fe);
+            for (let ie = 0; ie < K.length; ie++) {
+              const fe = K[ie], G = this.get(fe);
               G.renderTarget = e.renderTarget, G.cacheKey = H;
-              const v = r.COLOR_ATTACHMENT0 + ee;
+              const v = r.COLOR_ATTACHMENT0 + ie;
               if (a.multiview) U.framebufferTextureMultisampleMultiviewOVR(r.FRAMEBUFFER, v, G.textureGPU, 0, c, 0, 2);
               else if (m || b) {
                 const w = this.renderer._activeCubeFace, $ = this.renderer._activeMipmapLevel;
@@ -29528,41 +29528,41 @@ void main() {}`
               }
             }
           }
-          const ie = f ? r.DEPTH_STENCIL_ATTACHMENT : r.DEPTH_ATTACHMENT;
+          const ee = f ? r.DEPTH_STENCIL_ATTACHMENT : r.DEPTH_ATTACHMENT;
           if (a._autoAllocateDepthBuffer === true) {
-            const ee = r.createRenderbuffer();
-            this.textureUtils.setupRenderBufferStorage(ee, e, 0, q), h.xrDepthRenderbuffer = ee, J.push(f ? r.DEPTH_STENCIL_ATTACHMENT : r.DEPTH_ATTACHMENT), r.bindRenderbuffer(r.RENDERBUFFER, ee), r.framebufferRenderbuffer(r.FRAMEBUFFER, ie, r.RENDERBUFFER, ee);
+            const ie = r.createRenderbuffer();
+            this.textureUtils.setupRenderBufferStorage(ie, e, 0, q), h.xrDepthRenderbuffer = ie, J.push(f ? r.DEPTH_STENCIL_ATTACHMENT : r.DEPTH_ATTACHMENT), r.bindRenderbuffer(r.RENDERBUFFER, ie), r.framebufferRenderbuffer(r.FRAMEBUFFER, ee, r.RENDERBUFFER, ie);
           } else if (e.depthTexture !== null) {
             J.push(f ? r.DEPTH_STENCIL_ATTACHMENT : r.DEPTH_ATTACHMENT);
-            const ee = this.get(e.depthTexture);
-            if (ee.renderTarget = e.renderTarget, ee.cacheKey = H, a.multiview) U.framebufferTextureMultisampleMultiviewOVR(r.FRAMEBUFFER, ie, ee.textureGPU, 0, c, 0, 2);
-            else if (M && q) L.framebufferTexture2DMultisampleEXT(r.FRAMEBUFFER, ie, r.TEXTURE_2D, ee.textureGPU, 0, c);
+            const ie = this.get(e.depthTexture);
+            if (ie.renderTarget = e.renderTarget, ie.cacheKey = H, a.multiview) U.framebufferTextureMultisampleMultiviewOVR(r.FRAMEBUFFER, ee, ie.textureGPU, 0, c, 0, 2);
+            else if (M && q) L.framebufferTexture2DMultisampleEXT(r.FRAMEBUFFER, ee, r.TEXTURE_2D, ie.textureGPU, 0, c);
             else if (e.depthTexture.isArrayTexture) {
               const fe = this.renderer._activeCubeFace;
-              r.framebufferTextureLayer(r.FRAMEBUFFER, ie, ee.textureGPU, 0, fe);
+              r.framebufferTextureLayer(r.FRAMEBUFFER, ee, ie.textureGPU, 0, fe);
             } else if (e.depthTexture.isCubeTexture) {
               const fe = this.renderer._activeCubeFace;
-              r.framebufferTexture2D(r.FRAMEBUFFER, ie, r.TEXTURE_CUBE_MAP_POSITIVE_X + fe, ee.textureGPU, 0);
-            } else r.framebufferTexture2D(r.FRAMEBUFFER, ie, r.TEXTURE_2D, ee.textureGPU, 0);
+              r.framebufferTexture2D(r.FRAMEBUFFER, ee, r.TEXTURE_CUBE_MAP_POSITIVE_X + fe, ie.textureGPU, 0);
+            } else r.framebufferTexture2D(r.FRAMEBUFFER, ee, r.TEXTURE_2D, ie.textureGPU, 0);
           }
           h.depthInvalidationArray = J;
         } else {
           if (this._isRenderCameraDepthArray(e)) {
             s.bindFramebuffer(r.FRAMEBUFFER, W);
-            const J = this.renderer._activeCubeFace, ie = this.get(e.depthTexture), ee = f ? r.DEPTH_STENCIL_ATTACHMENT : r.DEPTH_ATTACHMENT;
-            r.framebufferTextureLayer(r.FRAMEBUFFER, ee, ie.textureGPU, 0, J);
+            const J = this.renderer._activeCubeFace, ee = this.get(e.depthTexture), ie = f ? r.DEPTH_STENCIL_ATTACHMENT : r.DEPTH_ATTACHMENT;
+            r.framebufferTextureLayer(r.FRAMEBUFFER, ie, ee.textureGPU, 0, J);
           }
           if ((_ || q || a.multiview) && a._isOpaqueFramebuffer !== true) {
             s.bindFramebuffer(r.FRAMEBUFFER, W);
             const J = this.get(e.textures[0]);
             a.multiview ? U.framebufferTextureMultisampleMultiviewOVR(r.FRAMEBUFFER, r.COLOR_ATTACHMENT0, J.textureGPU, 0, c, 0, 2) : q ? L.framebufferTexture2DMultisampleEXT(r.FRAMEBUFFER, r.COLOR_ATTACHMENT0, r.TEXTURE_2D, J.textureGPU, 0, c) : r.framebufferTexture2D(r.FRAMEBUFFER, r.COLOR_ATTACHMENT0, r.TEXTURE_2D, J.textureGPU, 0);
-            const ie = f ? r.DEPTH_STENCIL_ATTACHMENT : r.DEPTH_ATTACHMENT;
+            const ee = f ? r.DEPTH_STENCIL_ATTACHMENT : r.DEPTH_ATTACHMENT;
             if (a._autoAllocateDepthBuffer === true) {
-              const ee = h.xrDepthRenderbuffer;
-              r.bindRenderbuffer(r.RENDERBUFFER, ee), r.framebufferRenderbuffer(r.FRAMEBUFFER, ie, r.RENDERBUFFER, ee);
+              const ie = h.xrDepthRenderbuffer;
+              r.bindRenderbuffer(r.RENDERBUFFER, ie), r.framebufferRenderbuffer(r.FRAMEBUFFER, ee, r.RENDERBUFFER, ie);
             } else {
-              const ee = this.get(e.depthTexture);
-              a.multiview ? U.framebufferTextureMultisampleMultiviewOVR(r.FRAMEBUFFER, ie, ee.textureGPU, 0, c, 0, 2) : q ? L.framebufferTexture2DMultisampleEXT(r.FRAMEBUFFER, ie, r.TEXTURE_2D, ee.textureGPU, 0, c) : r.framebufferTexture2D(r.FRAMEBUFFER, ie, r.TEXTURE_2D, ee.textureGPU, 0);
+              const ie = this.get(e.depthTexture);
+              a.multiview ? U.framebufferTextureMultisampleMultiviewOVR(r.FRAMEBUFFER, ee, ie.textureGPU, 0, c, 0, 2) : q ? L.framebufferTexture2DMultisampleEXT(r.FRAMEBUFFER, ee, r.TEXTURE_2D, ie.textureGPU, 0, c) : r.framebufferTexture2D(r.FRAMEBUFFER, ee, r.TEXTURE_2D, ie.textureGPU, 0);
             }
           }
         }
@@ -29570,16 +29570,16 @@ void main() {}`
           if (R === void 0) {
             const K = [];
             R = r.createFramebuffer(), s.bindFramebuffer(r.FRAMEBUFFER, R);
-            const J = [], ie = e.textures;
-            for (let ee = 0; ee < ie.length; ee++) {
-              J[ee] = r.createRenderbuffer(), r.bindRenderbuffer(r.RENDERBUFFER, J[ee]), K.push(r.COLOR_ATTACHMENT0 + ee);
-              const fe = e.textures[ee], G = this.get(fe);
-              r.renderbufferStorageMultisample(r.RENDERBUFFER, c, G.glInternalFormat, e.width, e.height), r.framebufferRenderbuffer(r.FRAMEBUFFER, r.COLOR_ATTACHMENT0 + ee, r.RENDERBUFFER, J[ee]);
+            const J = [], ee = e.textures;
+            for (let ie = 0; ie < ee.length; ie++) {
+              J[ie] = r.createRenderbuffer(), r.bindRenderbuffer(r.RENDERBUFFER, J[ie]), K.push(r.COLOR_ATTACHMENT0 + ie);
+              const fe = e.textures[ie], G = this.get(fe);
+              r.renderbufferStorageMultisample(r.RENDERBUFFER, c, G.glInternalFormat, e.width, e.height), r.framebufferRenderbuffer(r.FRAMEBUFFER, r.COLOR_ATTACHMENT0 + ie, r.RENDERBUFFER, J[ie]);
             }
             if (r.bindRenderbuffer(r.RENDERBUFFER, null), h.msaaFrameBuffer = R, h.msaaRenderbuffers = J, d && O === void 0) {
               O = r.createRenderbuffer(), this.textureUtils.setupRenderBufferStorage(O, e, c), h.depthRenderbuffer = O;
-              const ee = f ? r.DEPTH_STENCIL_ATTACHMENT : r.DEPTH_ATTACHMENT;
-              K.push(ee);
+              const ie = f ? r.DEPTH_STENCIL_ATTACHMENT : r.DEPTH_ATTACHMENT;
+              K.push(ie);
             }
             h.invalidationArray = K;
           }
@@ -32212,7 +32212,7 @@ var<${s}> ${e} : ${h};`;
           writeMask: L
         });
       }
-      const q = f.get(c).module, H = f.get(d).module, W = this._getPrimitiveState(s, a, o), K = this._getDepthCompare(o), J = m.getCurrentDepthStencilFormat(e.context), ie = this._getSampleCount(e.context), ee = {
+      const q = f.get(c).module, H = f.get(d).module, W = this._getPrimitiveState(s, a, o), K = this._getDepthCompare(o), J = m.getCurrentDepthStencilFormat(e.context), ee = this._getSampleCount(e.context), ie = {
         label: `renderPipeline_${o.name || o.type}_${o.id}`,
         vertex: Object.assign({}, q, {
           buffers: M
@@ -32222,20 +32222,20 @@ var<${s}> ${e} : ${h};`;
         }),
         primitive: W,
         multisample: {
-          count: ie,
-          alphaToCoverageEnabled: o.alphaToCoverage && ie > 1
+          count: ee,
+          alphaToCoverageEnabled: o.alphaToCoverage && ee > 1
         },
         layout: p.createPipelineLayout({
           bindGroupLayouts: _
         })
       }, fe = {}, G = e.context.depth, v = e.context.stencil;
-      if ((G === true || v === true) && (G === true && (fe.format = J, fe.depthWriteEnabled = o.depthWrite, fe.depthCompare = K), v === true && (fe.stencilFront = O, fe.stencilBack = O, fe.stencilReadMask = o.stencilFuncMask, fe.stencilWriteMask = o.stencilWriteMask), o.polygonOffset === true && (fe.depthBias = o.polygonOffsetUnits, fe.depthBiasSlopeScale = o.polygonOffsetFactor, fe.depthBiasClamp = 0), ee.depthStencil = fe), p.pushErrorScope("validation"), r === null) b.pipeline = p.createRenderPipeline(ee), p.popErrorScope().then((w) => {
+      if ((G === true || v === true) && (G === true && (fe.format = J, fe.depthWriteEnabled = o.depthWrite, fe.depthCompare = K), v === true && (fe.stencilFront = O, fe.stencilBack = O, fe.stencilReadMask = o.stencilFuncMask, fe.stencilWriteMask = o.stencilWriteMask), o.polygonOffset === true && (fe.depthBias = o.polygonOffsetUnits, fe.depthBiasSlopeScale = o.polygonOffsetFactor, fe.depthBiasClamp = 0), ie.depthStencil = fe), p.pushErrorScope("validation"), r === null) b.pipeline = p.createRenderPipeline(ie), p.popErrorScope().then((w) => {
         w !== null && (b.error = true, error$1(w.message));
       });
       else {
         const w = new Promise(async ($) => {
           try {
-            b.pipeline = await p.createRenderPipelineAsync(ee);
+            b.pipeline = await p.createRenderPipelineAsync(ie);
           } catch {
           }
           const P = await p.popErrorScope();
@@ -33043,25 +33043,25 @@ var<${s}> ${e} : ${h};`;
           let K = b === true ? m.array.BYTES_PER_ELEMENT : 1;
           o.wireframe && (K = s.geometry.attributes.position.count > 65535 ? 4 : 2);
           for (let J = 0; J < H; J++) {
-            const ie = W ? W[J] : 1, ee = ie > 1 ? 0 : J;
-            b === true ? O.drawIndexed(q[J], ie, U[J] / K, 0, ee) : O.draw(q[J], ie, U[J], ee), r.update(s, q[J], ie);
+            const ee = W ? W[J] : 1, ie = ee > 1 ? 0 : J;
+            b === true ? O.drawIndexed(q[J], ee, U[J] / K, 0, ie) : O.draw(q[J], ee, U[J], ie), r.update(s, q[J], ee);
           }
         } else if (b === true) {
           const { vertexCount: U, instanceCount: q, firstVertex: H } = _, W = e.getIndirect();
           if (W !== null) {
-            const K = this.get(W).buffer, J = e.getIndirectOffset(), ie = Array.isArray(J) ? J : [
+            const K = this.get(W).buffer, J = e.getIndirectOffset(), ee = Array.isArray(J) ? J : [
               J
             ];
-            for (let ee = 0; ee < ie.length; ee++) O.drawIndexedIndirect(K, ie[ee]);
+            for (let ie = 0; ie < ee.length; ie++) O.drawIndexedIndirect(K, ee[ie]);
           } else O.drawIndexed(U, q, H, 0, 0);
           r.update(s, U, q);
         } else {
           const { vertexCount: U, instanceCount: q, firstVertex: H } = _, W = e.getIndirect();
           if (W !== null) {
-            const K = this.get(W).buffer, J = e.getIndirectOffset(), ie = Array.isArray(J) ? J : [
+            const K = this.get(W).buffer, J = e.getIndirectOffset(), ee = Array.isArray(J) ? J : [
               J
             ];
-            for (let ee = 0; ee < ie.length; ee++) O.drawIndirect(K, ie[ee]);
+            for (let ie = 0; ie < ee.length; ie++) O.drawIndirect(K, ee[ie]);
           } else O.draw(U, q, H, 0);
           r.update(s, U, q);
         }
@@ -33075,9 +33075,9 @@ var<${s}> ${e} : ${h};`;
             0,
             0
           ]);
-          for (let J = 0, ie = L.length; J < ie; J++) {
+          for (let J = 0, ee = L.length; J < ee; J++) {
             K[0] = J;
-            const { layoutGPU: ee } = H.layout, fe = this.bindingUtils.createBindGroupIndex(K, ee);
+            const { layoutGPU: ie } = H.layout, fe = this.bindingUtils.createBindGroupIndex(K, ie);
             W.push(fe);
           }
           O.indexesGPU = W;
@@ -33087,12 +33087,12 @@ var<${s}> ${e} : ${h};`;
           const K = L[H];
           if (s.layers.test(K.layers)) {
             const J = K.viewport;
-            let ie = d.currentPass, ee = d.currentSets;
+            let ee = d.currentPass, ie = d.currentSets;
             if (d.bundleEncoders) {
               const fe = d.bundleEncoders[H], G = d.bundleSets[H];
-              ie = fe, ee = G;
+              ee = fe, ie = G;
             }
-            J && ie.setViewport(Math.floor(J.x * q), Math.floor(J.y * q), Math.floor(J.width * q), Math.floor(J.height * q), a.viewportValue.minDepth, a.viewportValue.maxDepth), U && O.indexesGPU && (ie.setBindGroup(U.index, O.indexesGPU[H]), ee.bindingGroups[U.index] = U.id), R(ie, ee);
+            J && ee.setViewport(Math.floor(J.x * q), Math.floor(J.y * q), Math.floor(J.width * q), Math.floor(J.height * q), a.viewportValue.minDepth, a.viewportValue.maxDepth), U && O.indexesGPU && (ee.setBindGroup(U.index, O.indexesGPU[H]), ie.bindingGroups[U.index] = U.id), R(ee, ie);
           }
         }
       } else if (d.currentPass) {
@@ -53687,17 +53687,17 @@ var<${s}> ${e} : ${h};`;
       edges: 0.5,
       end: 1
     }[o] || 0 : !c && d && (p = o[0], m = o[1]), function(b, _, M) {
-      var R = (M || r).length, O = h[R], L, U, q, H, W, K, J, ie, ee;
+      var R = (M || r).length, O = h[R], L, U, q, H, W, K, J, ee, ie;
       if (!O) {
-        if (ee = r.grid === "auto" ? 0 : (r.grid || [
+        if (ie = r.grid === "auto" ? 0 : (r.grid || [
           1,
           _bigNum$1
-        ])[1], !ee) {
-          for (J = -_bigNum$1; J < (J = M[ee++].getBoundingClientRect().left) && ee < R; ) ;
-          ee < R && ee--;
+        ])[1], !ie) {
+          for (J = -_bigNum$1; J < (J = M[ie++].getBoundingClientRect().left) && ie < R; ) ;
+          ie < R && ie--;
         }
-        for (O = h[R] = [], L = d ? Math.min(ee, R) * p - 0.5 : o % ee, U = ee === _bigNum$1 ? 0 : d ? R * m / ee - 0.5 : o / ee | 0, J = 0, ie = _bigNum$1, K = 0; K < R; K++) q = K % ee - L, H = U - (K / ee | 0), O[K] = W = f ? Math.abs(f === "y" ? H : q) : _sqrt(q * q + H * H), W > J && (J = W), W < ie && (ie = W);
-        o === "random" && shuffle(O), O.max = J - ie, O.min = ie, O.v = R = (parseFloat(r.amount) || parseFloat(r.each) * (ee > R ? R - 1 : f ? f === "y" ? R / ee : ee : Math.max(ee, R / ee)) || 0) * (o === "edges" ? -1 : 1), O.b = R < 0 ? a - R : a, O.u = getUnit(r.amount || r.each) || 0, s = s && R < 0 ? _invertEase(s) : s;
+        for (O = h[R] = [], L = d ? Math.min(ie, R) * p - 0.5 : o % ie, U = ie === _bigNum$1 ? 0 : d ? R * m / ie - 0.5 : o / ie | 0, J = 0, ee = _bigNum$1, K = 0; K < R; K++) q = K % ie - L, H = U - (K / ie | 0), O[K] = W = f ? Math.abs(f === "y" ? H : q) : _sqrt(q * q + H * H), W > J && (J = W), W < ee && (ee = W);
+        o === "random" && shuffle(O), O.max = J - ee, O.min = ee, O.v = R = (parseFloat(r.amount) || parseFloat(r.each) * (ie > R ? R - 1 : f ? f === "y" ? R / ie : ie : Math.max(ie, R / ie)) || 0) * (o === "edges" ? -1 : 1), O.b = R < 0 ? a - R : a, O.u = getUnit(r.amount || r.each) || 0, s = s && R < 0 ? _invertEase(s) : s;
       }
       return R = (O[b] - O.min) / O.max || 0, _roundPrecise(O.b + (s ? s(R) : R) * O.v) + O.u;
     };
@@ -54255,9 +54255,9 @@ var<${s}> ${e} : ${h};`;
         if (c !== this._time && f && (p += this._time - c, o += this._time - c), b = p, H = this._start, q = this._ts, L = !q, m && (f || (c = this._zTime), (o || !a) && (this._zTime = o)), this._repeat) {
           if (K = this._yoyo, O = f + this._rDelay, this._repeat < -1 && o < 0) return this.totalTime(O * 100 + o, a, h);
           if (b = _roundPrecise(p % O), p === d ? (R = this._repeat, b = f) : (R = ~~(p / O), R && R === p / O && (b = f, R--), b > f && (b = f)), W = _animationCycle(this._tTime, O), !c && this._tTime && W !== R && this._tTime - W * O - this._dur <= 0 && (W = R), K && R & 1 && (b = f - b, J = 1), R !== W && !this._lock) {
-            var ie = K && W & 1, ee = ie === (K && R & 1);
-            if (R < W && (ie = !ie), c = ie ? 0 : p % f ? f : p, this._lock = 1, this.render(c || (J ? 0 : _roundPrecise(R * O)), a, !f)._lock = 0, this._tTime = p, !a && this.parent && _callback(this, "onRepeat"), this.vars.repeatRefresh && !J && (this.invalidate()._lock = 1), c && c !== this._time || L !== !this._ts || this.vars.onRepeat && !this.parent && !this._act) return this;
-            if (f = this._dur, d = this._tDur, ee && (this._lock = 2, c = ie ? f : -1e-4, this.render(c, true), this.vars.repeatRefresh && !J && this.invalidate()), this._lock = 0, !this._ts && !L) return this;
+            var ee = K && W & 1, ie = ee === (K && R & 1);
+            if (R < W && (ee = !ee), c = ee ? 0 : p % f ? f : p, this._lock = 1, this.render(c || (J ? 0 : _roundPrecise(R * O)), a, !f)._lock = 0, this._tTime = p, !a && this.parent && _callback(this, "onRepeat"), this.vars.repeatRefresh && !J && (this.invalidate()._lock = 1), c && c !== this._time || L !== !this._ts || this.vars.onRepeat && !this.parent && !this._act) return this;
+            if (f = this._dur, d = this._tDur, ie && (this._lock = 2, c = ee ? f : -1e-4, this.render(c, true), this.vars.repeatRefresh && !J && this.invalidate()), this._lock = 0, !this._ts && !L) return this;
             _propagateYoyoEase(this, J);
           }
         }
@@ -54422,7 +54422,7 @@ var<${s}> ${e} : ${h};`;
     if (_plugins[e] && (c = new _plugins[e]()).init(a, c.rawVars ? r[e] : _processVars(r[e], o, a, h, s), s, o, h) !== false && (s._pt = d = new PropTween(s._pt, a, e, 0, 1, c.render, c, 0, c.priority), s !== _quickTween)) for (f = s._ptLookup[s._targets.indexOf(a)], p = c._props.length; p--; ) f[c._props[p]] = d;
     return c;
   }, _overwritingTween, _forceAllPropTweens, _initTween = function l(e, r, s) {
-    var o = e.vars, a = o.ease, h = o.startAt, c = o.immediateRender, d = o.lazy, f = o.onUpdate, p = o.runBackwards, m = o.yoyoEase, b = o.keyframes, _ = o.autoRevert, M = e._dur, R = e._startAt, O = e._targets, L = e.parent, U = L && L.data === "nested" ? L.vars.targets : O, q = e._overwrite === "auto" && !_suppressOverwrites, H = e.timeline, W, K, J, ie, ee, fe, G, v, w, $, P, F, V;
+    var o = e.vars, a = o.ease, h = o.startAt, c = o.immediateRender, d = o.lazy, f = o.onUpdate, p = o.runBackwards, m = o.yoyoEase, b = o.keyframes, _ = o.autoRevert, M = e._dur, R = e._startAt, O = e._targets, L = e.parent, U = L && L.data === "nested" ? L.vars.targets : O, q = e._overwrite === "auto" && !_suppressOverwrites, H = e.timeline, W, K, J, ee, ie, fe, G, v, w, $, P, F, V;
     if (H && (!b || !a) && (a = "none"), e._ease = _parseEase(a, _defaults.ease), e._yEase = m ? _invertEase(_parseEase(m === true ? a : m, _defaults.ease)) : 0, m && e._yoyo && !e._repeat && (m = e._yEase, e._yEase = e._ease, e._ease = m), e._from = !H && !!o.runBackwards, !H || b && !o.stagger) {
       if (v = O[0] ? _getCache(O[0]).harness : 0, F = v && o[v.prop], W = _copyExcluding(o, _reservedProps), R && (R._zTime < 0 && R.progress(1), r < 0 && p && c && !_ ? R.render(-1, true) : R.revert(p && M ? _revertConfigNoKill : _startAtRevertConfig), R._lazy = 0), h) {
         if (_removeFromParent(e._startAt = Tween.set(O, _setDefaults({
@@ -54453,10 +54453,10 @@ var<${s}> ${e} : ${h};`;
         else if (!r) return;
       }
       for (e._pt = e._ptCache = 0, d = M && _isNotFalse(d) || d && !M, K = 0; K < O.length; K++) {
-        if (ee = O[K], G = ee._gsap || _harness(O)[K]._gsap, e._ptLookup[K] = $ = {}, _lazyLookup[G.id] && _lazyTweens.length && _lazyRender(), P = U === O ? K : U.indexOf(ee), v && (w = new v()).init(ee, F || W, e, P, U) !== false && (e._pt = ie = new PropTween(e._pt, ee, w.name, 0, 1, w.render, w, 0, w.priority), w._props.forEach(function(z) {
-          $[z] = ie;
-        }), w.priority && (fe = 1)), !v || F) for (J in W) _plugins[J] && (w = _checkPlugin(J, W, e, P, ee, U)) ? w.priority && (fe = 1) : $[J] = ie = _addPropTween.call(e, ee, J, "get", W[J], P, U, 0, o.stringFilter);
-        e._op && e._op[K] && e.kill(ee, e._op[K]), q && e._pt && (_overwritingTween = e, _globalTimeline.killTweensOf(ee, $, e.globalTime(r)), V = !e.parent, _overwritingTween = 0), e._pt && d && (_lazyLookup[G.id] = 1);
+        if (ie = O[K], G = ie._gsap || _harness(O)[K]._gsap, e._ptLookup[K] = $ = {}, _lazyLookup[G.id] && _lazyTweens.length && _lazyRender(), P = U === O ? K : U.indexOf(ie), v && (w = new v()).init(ie, F || W, e, P, U) !== false && (e._pt = ee = new PropTween(e._pt, ie, w.name, 0, 1, w.render, w, 0, w.priority), w._props.forEach(function(z) {
+          $[z] = ee;
+        }), w.priority && (fe = 1)), !v || F) for (J in W) _plugins[J] && (w = _checkPlugin(J, W, e, P, ie, U)) ? w.priority && (fe = 1) : $[J] = ee = _addPropTween.call(e, ie, J, "get", W[J], P, U, 0, o.stringFilter);
+        e._op && e._op[K] && e.kill(ie, e._op[K]), q && e._pt && (_overwritingTween = e, _globalTimeline.killTweensOf(ie, $, e.globalTime(r)), V = !e.parent, _overwritingTween = 0), e._pt && d && (_lazyLookup[G.id] = 1);
       }
       fe && _sortPropTweensByPriority(e), e._onInit && e._onInit(e);
     }
@@ -54502,15 +54502,15 @@ var<${s}> ${e} : ${h};`;
       typeof o == "number" && (a.duration = o, o = a, a = null), c = l.call(this, h ? o : _inheritDefaults(o)) || this;
       var d = c.vars, f = d.duration, p = d.delay, m = d.immediateRender, b = d.stagger, _ = d.overwrite, M = d.keyframes, R = d.defaults, O = d.scrollTrigger, L = d.yoyoEase, U = o.parent || _globalTimeline, q = (_isArray(s) || _isTypedArray(s) ? _isNumber(s[0]) : "length" in o) ? [
         s
-      ] : toArray(s), H, W, K, J, ie, ee, fe, G;
+      ] : toArray(s), H, W, K, J, ee, ie, fe, G;
       if (c._targets = q.length ? _harness(q) : _warn("GSAP target " + s + " not found. https://gsap.com", !_config.nullTargetWarn) || [], c._ptLookup = [], c._overwrite = _, M || b || _isFuncOrString(f) || _isFuncOrString(p)) {
         if (o = c.vars, H = c.timeline = new Timeline({
           data: "nested",
           defaults: R || {},
           targets: U && U.data === "nested" ? U.vars.targets : q
         }), H.kill(), H.parent = H._dp = _assertThisInitialized(c), H._start = 0, b || _isFuncOrString(f) || _isFuncOrString(p)) {
-          if (J = q.length, fe = b && distribute(b), _isObject(b)) for (ie in b) ~_staggerTweenProps.indexOf(ie) && (G || (G = {}), G[ie] = b[ie]);
-          for (W = 0; W < J; W++) K = _copyExcluding(o, _staggerPropsToSkip), K.stagger = 0, L && (K.yoyoEase = L), G && _merge(K, G), ee = q[W], K.duration = +_parseFuncOrString(f, _assertThisInitialized(c), W, ee, q), K.delay = (+_parseFuncOrString(p, _assertThisInitialized(c), W, ee, q) || 0) - c._delay, !b && J === 1 && K.delay && (c._delay = p = K.delay, c._start += p, K.delay = 0), H.to(ee, K, fe ? fe(W, ee, q) : 0), H._ease = _easeMap.none;
+          if (J = q.length, fe = b && distribute(b), _isObject(b)) for (ee in b) ~_staggerTweenProps.indexOf(ee) && (G || (G = {}), G[ee] = b[ee]);
+          for (W = 0; W < J; W++) K = _copyExcluding(o, _staggerPropsToSkip), K.stagger = 0, L && (K.yoyoEase = L), G && _merge(K, G), ie = q[W], K.duration = +_parseFuncOrString(f, _assertThisInitialized(c), W, ie, q), K.delay = (+_parseFuncOrString(p, _assertThisInitialized(c), W, ie, q) || 0) - c._delay, !b && J === 1 && K.delay && (c._delay = p = K.delay, c._start += p, K.delay = 0), H.to(ie, K, fe ? fe(W, ie, q) : 0), H._ease = _easeMap.none;
           H.duration() ? f = p = 0 : c.timeline = 0;
         } else if (M) {
           _inheritDefaults(_setDefaults(H.vars.defaults, {
@@ -54522,13 +54522,13 @@ var<${s}> ${e} : ${h};`;
           }), H.duration();
           else {
             K = {};
-            for (ie in M) ie === "ease" || ie === "easeEach" || _parseKeyframe(ie, M[ie], K, M.easeEach);
-            for (ie in K) for (w = K[ie].sort(function(F, V) {
+            for (ee in M) ee === "ease" || ee === "easeEach" || _parseKeyframe(ee, M[ee], K, M.easeEach);
+            for (ee in K) for (w = K[ee].sort(function(F, V) {
               return F.t - V.t;
             }), v = 0, W = 0; W < w.length; W++) $ = w[W], P = {
               ease: $.e,
               duration: ($.t - (W ? w[W - 1].t : 0)) / 100 * f
-            }, P[ie] = $.v, H.to(q, P, v), v += P.duration;
+            }, P[ee] = $.v, H.to(q, P, v), v += P.duration;
             H.duration() < f && H.to({}, {
               duration: f - H.duration()
             });
@@ -55190,13 +55190,13 @@ var<${s}> ${e} : ${h};`;
       a[13]
     ] : a);
   }, _applySVGOrigin = function(e, r, s, o, a, h) {
-    var c = e._gsap, d = a || _getMatrix(e, true), f = c.xOrigin || 0, p = c.yOrigin || 0, m = c.xOffset || 0, b = c.yOffset || 0, _ = d[0], M = d[1], R = d[2], O = d[3], L = d[4], U = d[5], q = r.split(" "), H = parseFloat(q[0]) || 0, W = parseFloat(q[1]) || 0, K, J, ie, ee;
-    s ? d !== _identity2DMatrix && (J = _ * O - M * R) && (ie = H * (O / J) + W * (-R / J) + (R * U - O * L) / J, ee = H * (-M / J) + W * (_ / J) - (_ * U - M * L) / J, H = ie, W = ee) : (K = _getBBox(e), H = K.x + (~q[0].indexOf("%") ? H / 100 * K.width : H), W = K.y + (~(q[1] || q[0]).indexOf("%") ? W / 100 * K.height : W)), o || o !== false && c.smooth ? (L = H - f, U = W - p, c.xOffset = m + (L * _ + U * R) - L, c.yOffset = b + (L * M + U * O) - U) : c.xOffset = c.yOffset = 0, c.xOrigin = H, c.yOrigin = W, c.smooth = !!o, c.origin = r, c.originIsAbsolute = !!s, e.style[_transformOriginProp] = "0px 0px", h && (_addNonTweeningPT(h, c, "xOrigin", f, H), _addNonTweeningPT(h, c, "yOrigin", p, W), _addNonTweeningPT(h, c, "xOffset", m, c.xOffset), _addNonTweeningPT(h, c, "yOffset", b, c.yOffset)), e.setAttribute("data-svg-origin", H + " " + W);
+    var c = e._gsap, d = a || _getMatrix(e, true), f = c.xOrigin || 0, p = c.yOrigin || 0, m = c.xOffset || 0, b = c.yOffset || 0, _ = d[0], M = d[1], R = d[2], O = d[3], L = d[4], U = d[5], q = r.split(" "), H = parseFloat(q[0]) || 0, W = parseFloat(q[1]) || 0, K, J, ee, ie;
+    s ? d !== _identity2DMatrix && (J = _ * O - M * R) && (ee = H * (O / J) + W * (-R / J) + (R * U - O * L) / J, ie = H * (-M / J) + W * (_ / J) - (_ * U - M * L) / J, H = ee, W = ie) : (K = _getBBox(e), H = K.x + (~q[0].indexOf("%") ? H / 100 * K.width : H), W = K.y + (~(q[1] || q[0]).indexOf("%") ? W / 100 * K.height : W)), o || o !== false && c.smooth ? (L = H - f, U = W - p, c.xOffset = m + (L * _ + U * R) - L, c.yOffset = b + (L * M + U * O) - U) : c.xOffset = c.yOffset = 0, c.xOrigin = H, c.yOrigin = W, c.smooth = !!o, c.origin = r, c.originIsAbsolute = !!s, e.style[_transformOriginProp] = "0px 0px", h && (_addNonTweeningPT(h, c, "xOrigin", f, H), _addNonTweeningPT(h, c, "yOrigin", p, W), _addNonTweeningPT(h, c, "xOffset", m, c.xOffset), _addNonTweeningPT(h, c, "yOffset", b, c.yOffset)), e.setAttribute("data-svg-origin", H + " " + W);
   }, _parseTransform = function(e, r) {
     var s = e._gsap || new GSCache(e);
     if ("x" in s && !r && !s.uncache) return s;
-    var o = e.style, a = s.scaleX < 0, h = "px", c = "deg", d = getComputedStyle(e), f = _getComputedProperty(e, _transformOriginProp) || "0", p, m, b, _, M, R, O, L, U, q, H, W, K, J, ie, ee, fe, G, v, w, $, P, F, V, z, D, x, k, j, Y, oe, me;
-    return p = m = b = R = O = L = U = q = H = 0, _ = M = 1, s.svg = !!(e.getCTM && _isSVG(e)), d.translate && ((d.translate !== "none" || d.scale !== "none" || d.rotate !== "none") && (o[_transformProp] = (d.translate !== "none" ? "translate3d(" + (d.translate + " 0 0").split(" ").slice(0, 3).join(", ") + ") " : "") + (d.rotate !== "none" ? "rotate(" + d.rotate + ") " : "") + (d.scale !== "none" ? "scale(" + d.scale.split(" ").join(",") + ") " : "") + (d[_transformProp] !== "none" ? d[_transformProp] : "")), o.scale = o.rotate = o.translate = "none"), J = _getMatrix(e, s.svg), s.svg && (s.uncache ? (z = e.getBBox(), f = s.xOrigin - z.x + "px " + (s.yOrigin - z.y) + "px", V = "") : V = !r && e.getAttribute("data-svg-origin"), _applySVGOrigin(e, V || f, !!V || s.originIsAbsolute, s.smooth !== false, J)), W = s.xOrigin || 0, K = s.yOrigin || 0, J !== _identity2DMatrix && (G = J[0], v = J[1], w = J[2], $ = J[3], p = P = J[4], m = F = J[5], J.length === 6 ? (_ = Math.sqrt(G * G + v * v), M = Math.sqrt($ * $ + w * w), R = G || v ? _atan2(v, G) * _RAD2DEG : 0, U = w || $ ? _atan2(w, $) * _RAD2DEG + R : 0, U && (M *= Math.abs(Math.cos(U * _DEG2RAD))), s.svg && (p -= W - (W * G + K * w), m -= K - (W * v + K * $))) : (me = J[6], Y = J[7], x = J[8], k = J[9], j = J[10], oe = J[11], p = J[12], m = J[13], b = J[14], ie = _atan2(me, j), O = ie * _RAD2DEG, ie && (ee = Math.cos(-ie), fe = Math.sin(-ie), V = P * ee + x * fe, z = F * ee + k * fe, D = me * ee + j * fe, x = P * -fe + x * ee, k = F * -fe + k * ee, j = me * -fe + j * ee, oe = Y * -fe + oe * ee, P = V, F = z, me = D), ie = _atan2(-w, j), L = ie * _RAD2DEG, ie && (ee = Math.cos(-ie), fe = Math.sin(-ie), V = G * ee - x * fe, z = v * ee - k * fe, D = w * ee - j * fe, oe = $ * fe + oe * ee, G = V, v = z, w = D), ie = _atan2(v, G), R = ie * _RAD2DEG, ie && (ee = Math.cos(ie), fe = Math.sin(ie), V = G * ee + v * fe, z = P * ee + F * fe, v = v * ee - G * fe, F = F * ee - P * fe, G = V, P = z), O && Math.abs(O) + Math.abs(R) > 359.9 && (O = R = 0, L = 180 - L), _ = _round(Math.sqrt(G * G + v * v + w * w)), M = _round(Math.sqrt(F * F + me * me)), ie = _atan2(P, F), U = Math.abs(ie) > 2e-4 ? ie * _RAD2DEG : 0, H = oe ? 1 / (oe < 0 ? -oe : oe) : 0), s.svg && (V = e.getAttribute("transform"), s.forceCSS = e.setAttribute("transform", "") || !_isNullTransform(_getComputedProperty(e, _transformProp)), V && e.setAttribute("transform", V))), Math.abs(U) > 90 && Math.abs(U) < 270 && (a ? (_ *= -1, U += R <= 0 ? 180 : -180, R += R <= 0 ? 180 : -180) : (M *= -1, U += U <= 0 ? 180 : -180)), r = r || s.uncache, s.x = p - ((s.xPercent = p && (!r && s.xPercent || (Math.round(e.offsetWidth / 2) === Math.round(-p) ? -50 : 0))) ? e.offsetWidth * s.xPercent / 100 : 0) + h, s.y = m - ((s.yPercent = m && (!r && s.yPercent || (Math.round(e.offsetHeight / 2) === Math.round(-m) ? -50 : 0))) ? e.offsetHeight * s.yPercent / 100 : 0) + h, s.z = b + h, s.scaleX = _round(_), s.scaleY = _round(M), s.rotation = _round(R) + c, s.rotationX = _round(O) + c, s.rotationY = _round(L) + c, s.skewX = U + c, s.skewY = q + c, s.transformPerspective = H + h, (s.zOrigin = parseFloat(f.split(" ")[2]) || !r && s.zOrigin || 0) && (o[_transformOriginProp] = _firstTwoOnly(f)), s.xOffset = s.yOffset = 0, s.force3D = _config.force3D, s.renderTransform = s.svg ? _renderSVGTransforms : _supports3D ? _renderCSSTransforms : _renderNon3DTransforms, s.uncache = 0, s;
+    var o = e.style, a = s.scaleX < 0, h = "px", c = "deg", d = getComputedStyle(e), f = _getComputedProperty(e, _transformOriginProp) || "0", p, m, b, _, M, R, O, L, U, q, H, W, K, J, ee, ie, fe, G, v, w, $, P, F, V, z, D, x, k, j, Y, oe, me;
+    return p = m = b = R = O = L = U = q = H = 0, _ = M = 1, s.svg = !!(e.getCTM && _isSVG(e)), d.translate && ((d.translate !== "none" || d.scale !== "none" || d.rotate !== "none") && (o[_transformProp] = (d.translate !== "none" ? "translate3d(" + (d.translate + " 0 0").split(" ").slice(0, 3).join(", ") + ") " : "") + (d.rotate !== "none" ? "rotate(" + d.rotate + ") " : "") + (d.scale !== "none" ? "scale(" + d.scale.split(" ").join(",") + ") " : "") + (d[_transformProp] !== "none" ? d[_transformProp] : "")), o.scale = o.rotate = o.translate = "none"), J = _getMatrix(e, s.svg), s.svg && (s.uncache ? (z = e.getBBox(), f = s.xOrigin - z.x + "px " + (s.yOrigin - z.y) + "px", V = "") : V = !r && e.getAttribute("data-svg-origin"), _applySVGOrigin(e, V || f, !!V || s.originIsAbsolute, s.smooth !== false, J)), W = s.xOrigin || 0, K = s.yOrigin || 0, J !== _identity2DMatrix && (G = J[0], v = J[1], w = J[2], $ = J[3], p = P = J[4], m = F = J[5], J.length === 6 ? (_ = Math.sqrt(G * G + v * v), M = Math.sqrt($ * $ + w * w), R = G || v ? _atan2(v, G) * _RAD2DEG : 0, U = w || $ ? _atan2(w, $) * _RAD2DEG + R : 0, U && (M *= Math.abs(Math.cos(U * _DEG2RAD))), s.svg && (p -= W - (W * G + K * w), m -= K - (W * v + K * $))) : (me = J[6], Y = J[7], x = J[8], k = J[9], j = J[10], oe = J[11], p = J[12], m = J[13], b = J[14], ee = _atan2(me, j), O = ee * _RAD2DEG, ee && (ie = Math.cos(-ee), fe = Math.sin(-ee), V = P * ie + x * fe, z = F * ie + k * fe, D = me * ie + j * fe, x = P * -fe + x * ie, k = F * -fe + k * ie, j = me * -fe + j * ie, oe = Y * -fe + oe * ie, P = V, F = z, me = D), ee = _atan2(-w, j), L = ee * _RAD2DEG, ee && (ie = Math.cos(-ee), fe = Math.sin(-ee), V = G * ie - x * fe, z = v * ie - k * fe, D = w * ie - j * fe, oe = $ * fe + oe * ie, G = V, v = z, w = D), ee = _atan2(v, G), R = ee * _RAD2DEG, ee && (ie = Math.cos(ee), fe = Math.sin(ee), V = G * ie + v * fe, z = P * ie + F * fe, v = v * ie - G * fe, F = F * ie - P * fe, G = V, P = z), O && Math.abs(O) + Math.abs(R) > 359.9 && (O = R = 0, L = 180 - L), _ = _round(Math.sqrt(G * G + v * v + w * w)), M = _round(Math.sqrt(F * F + me * me)), ee = _atan2(P, F), U = Math.abs(ee) > 2e-4 ? ee * _RAD2DEG : 0, H = oe ? 1 / (oe < 0 ? -oe : oe) : 0), s.svg && (V = e.getAttribute("transform"), s.forceCSS = e.setAttribute("transform", "") || !_isNullTransform(_getComputedProperty(e, _transformProp)), V && e.setAttribute("transform", V))), Math.abs(U) > 90 && Math.abs(U) < 270 && (a ? (_ *= -1, U += R <= 0 ? 180 : -180, R += R <= 0 ? 180 : -180) : (M *= -1, U += U <= 0 ? 180 : -180)), r = r || s.uncache, s.x = p - ((s.xPercent = p && (!r && s.xPercent || (Math.round(e.offsetWidth / 2) === Math.round(-p) ? -50 : 0))) ? e.offsetWidth * s.xPercent / 100 : 0) + h, s.y = m - ((s.yPercent = m && (!r && s.yPercent || (Math.round(e.offsetHeight / 2) === Math.round(-m) ? -50 : 0))) ? e.offsetHeight * s.yPercent / 100 : 0) + h, s.z = b + h, s.scaleX = _round(_), s.scaleY = _round(M), s.rotation = _round(R) + c, s.rotationX = _round(O) + c, s.rotationY = _round(L) + c, s.skewX = U + c, s.skewY = q + c, s.transformPerspective = H + h, (s.zOrigin = parseFloat(f.split(" ")[2]) || !r && s.zOrigin || 0) && (o[_transformOriginProp] = _firstTwoOnly(f)), s.xOffset = s.yOffset = 0, s.force3D = _config.force3D, s.renderTransform = s.svg ? _renderSVGTransforms : _supports3D ? _renderCSSTransforms : _renderNon3DTransforms, s.uncache = 0, s;
   }, _firstTwoOnly = function(e) {
     return (e = e.split(" "))[0] + " " + e[1];
   }, _addPxTranslate = function(e, r, s) {
@@ -55207,13 +55207,13 @@ var<${s}> ${e} : ${h};`;
   }, _zeroDeg = "0deg", _zeroPx = "0px", _endParenthesis = ") ", _renderCSSTransforms = function(e, r) {
     var s = r || this, o = s.xPercent, a = s.yPercent, h = s.x, c = s.y, d = s.z, f = s.rotation, p = s.rotationY, m = s.rotationX, b = s.skewX, _ = s.skewY, M = s.scaleX, R = s.scaleY, O = s.transformPerspective, L = s.force3D, U = s.target, q = s.zOrigin, H = "", W = L === "auto" && e && e !== 1 || L === true;
     if (q && (m !== _zeroDeg || p !== _zeroDeg)) {
-      var K = parseFloat(p) * _DEG2RAD, J = Math.sin(K), ie = Math.cos(K), ee;
-      K = parseFloat(m) * _DEG2RAD, ee = Math.cos(K), h = _addPxTranslate(U, h, J * ee * -q), c = _addPxTranslate(U, c, -Math.sin(K) * -q), d = _addPxTranslate(U, d, ie * ee * -q + q);
+      var K = parseFloat(p) * _DEG2RAD, J = Math.sin(K), ee = Math.cos(K), ie;
+      K = parseFloat(m) * _DEG2RAD, ie = Math.cos(K), h = _addPxTranslate(U, h, J * ie * -q), c = _addPxTranslate(U, c, -Math.sin(K) * -q), d = _addPxTranslate(U, d, ee * ie * -q + q);
     }
     O !== _zeroPx && (H += "perspective(" + O + _endParenthesis), (o || a) && (H += "translate(" + o + "%, " + a + "%) "), (W || h !== _zeroPx || c !== _zeroPx || d !== _zeroPx) && (H += d !== _zeroPx || W ? "translate3d(" + h + ", " + c + ", " + d + ") " : "translate(" + h + ", " + c + _endParenthesis), f !== _zeroDeg && (H += "rotate(" + f + _endParenthesis), p !== _zeroDeg && (H += "rotateY(" + p + _endParenthesis), m !== _zeroDeg && (H += "rotateX(" + m + _endParenthesis), (b !== _zeroDeg || _ !== _zeroDeg) && (H += "skew(" + b + ", " + _ + _endParenthesis), (M !== 1 || R !== 1) && (H += "scale(" + M + ", " + R + _endParenthesis), U.style[_transformProp] = H || "translate(0, 0)";
   }, _renderSVGTransforms = function(e, r) {
-    var s = r || this, o = s.xPercent, a = s.yPercent, h = s.x, c = s.y, d = s.rotation, f = s.skewX, p = s.skewY, m = s.scaleX, b = s.scaleY, _ = s.target, M = s.xOrigin, R = s.yOrigin, O = s.xOffset, L = s.yOffset, U = s.forceCSS, q = parseFloat(h), H = parseFloat(c), W, K, J, ie, ee;
-    d = parseFloat(d), f = parseFloat(f), p = parseFloat(p), p && (p = parseFloat(p), f += p, d += p), d || f ? (d *= _DEG2RAD, f *= _DEG2RAD, W = Math.cos(d) * m, K = Math.sin(d) * m, J = Math.sin(d - f) * -b, ie = Math.cos(d - f) * b, f && (p *= _DEG2RAD, ee = Math.tan(f - p), ee = Math.sqrt(1 + ee * ee), J *= ee, ie *= ee, p && (ee = Math.tan(p), ee = Math.sqrt(1 + ee * ee), W *= ee, K *= ee)), W = _round(W), K = _round(K), J = _round(J), ie = _round(ie)) : (W = m, ie = b, K = J = 0), (q && !~(h + "").indexOf("px") || H && !~(c + "").indexOf("px")) && (q = _convertToUnit(_, "x", h, "px"), H = _convertToUnit(_, "y", c, "px")), (M || R || O || L) && (q = _round(q + M - (M * W + R * J) + O), H = _round(H + R - (M * K + R * ie) + L)), (o || a) && (ee = _.getBBox(), q = _round(q + o / 100 * ee.width), H = _round(H + a / 100 * ee.height)), ee = "matrix(" + W + "," + K + "," + J + "," + ie + "," + q + "," + H + ")", _.setAttribute("transform", ee), U && (_.style[_transformProp] = ee);
+    var s = r || this, o = s.xPercent, a = s.yPercent, h = s.x, c = s.y, d = s.rotation, f = s.skewX, p = s.skewY, m = s.scaleX, b = s.scaleY, _ = s.target, M = s.xOrigin, R = s.yOrigin, O = s.xOffset, L = s.yOffset, U = s.forceCSS, q = parseFloat(h), H = parseFloat(c), W, K, J, ee, ie;
+    d = parseFloat(d), f = parseFloat(f), p = parseFloat(p), p && (p = parseFloat(p), f += p, d += p), d || f ? (d *= _DEG2RAD, f *= _DEG2RAD, W = Math.cos(d) * m, K = Math.sin(d) * m, J = Math.sin(d - f) * -b, ee = Math.cos(d - f) * b, f && (p *= _DEG2RAD, ie = Math.tan(f - p), ie = Math.sqrt(1 + ie * ie), J *= ie, ee *= ie, p && (ie = Math.tan(p), ie = Math.sqrt(1 + ie * ie), W *= ie, K *= ie)), W = _round(W), K = _round(K), J = _round(J), ee = _round(ee)) : (W = m, ee = b, K = J = 0), (q && !~(h + "").indexOf("px") || H && !~(c + "").indexOf("px")) && (q = _convertToUnit(_, "x", h, "px"), H = _convertToUnit(_, "y", c, "px")), (M || R || O || L) && (q = _round(q + M - (M * W + R * J) + O), H = _round(H + R - (M * K + R * ee) + L)), (o || a) && (ie = _.getBBox(), q = _round(q + o / 100 * ie.width), H = _round(H + a / 100 * ie.height)), ie = "matrix(" + W + "," + K + "," + J + "," + ee + "," + q + "," + H + ")", _.setAttribute("transform", ie), U && (_.style[_transformProp] = ie);
   }, _addRotationalPropTween = function(e, r, s, o, a) {
     var h = 360, c = _isString(a), d = parseFloat(a) * (c && ~a.indexOf("rad") ? _RAD2DEG : 1), f = d - o, p = o + f + "deg", m, b;
     return c && (m = a.split("_")[1], m === "short" && (f %= h, f !== f % (h / 2) && (f += f < 0 ? h : -h)), m === "cw" && f < 0 ? f = (f + h * _bigNum) % h - ~~(f / h) * h : m === "ccw" && f > 0 && (f = (f - h * _bigNum) % h - ~~(f / h) * h)), e._pt = b = new PropTween(e._pt, r, s, o, f, _renderPropWithEnd), b.e = p, b.u = "deg", e._props.push(s), b;
@@ -55257,16 +55257,16 @@ var<${s}> ${e} : ${h};`;
       return e.style && e.nodeType;
     },
     init: function(e, r, s, o, a) {
-      var h = this._props, c = e.style, d = s.vars.startAt, f, p, m, b, _, M, R, O, L, U, q, H, W, K, J, ie;
-      _pluginInitted || _initCore(), this.styles = this.styles || _getStyleSaver(e), ie = this.styles.props, this.tween = s;
+      var h = this._props, c = e.style, d = s.vars.startAt, f, p, m, b, _, M, R, O, L, U, q, H, W, K, J, ee;
+      _pluginInitted || _initCore(), this.styles = this.styles || _getStyleSaver(e), ee = this.styles.props, this.tween = s;
       for (R in r) if (R !== "autoRound" && (p = r[R], !(_plugins[R] && _checkPlugin(R, r, s, o, e, a)))) {
         if (_ = typeof p, M = _specialProps[R], _ === "function" && (p = p.call(s, o, e, a), _ = typeof p), _ === "string" && ~p.indexOf("random(") && (p = _replaceRandom(p)), M) M(this, e, R, p, s) && (J = 1);
-        else if (R.substr(0, 2) === "--") f = (getComputedStyle(e).getPropertyValue(R) + "").trim(), p += "", _colorExp.lastIndex = 0, _colorExp.test(f) || (O = getUnit(f), L = getUnit(p)), L ? O !== L && (f = _convertToUnit(e, R, f, L) + L) : O && (p += O), this.add(c, "setProperty", f, p, o, a, 0, 0, R), h.push(R), ie.push(R, 0, c[R]);
+        else if (R.substr(0, 2) === "--") f = (getComputedStyle(e).getPropertyValue(R) + "").trim(), p += "", _colorExp.lastIndex = 0, _colorExp.test(f) || (O = getUnit(f), L = getUnit(p)), L ? O !== L && (f = _convertToUnit(e, R, f, L) + L) : O && (p += O), this.add(c, "setProperty", f, p, o, a, 0, 0, R), h.push(R), ee.push(R, 0, c[R]);
         else if (_ !== "undefined") {
-          if (d && R in d ? (f = typeof d[R] == "function" ? d[R].call(s, o, e, a) : d[R], _isString(f) && ~f.indexOf("random(") && (f = _replaceRandom(f)), getUnit(f + "") || f === "auto" || (f += _config.units[R] || getUnit(_get(e, R)) || ""), (f + "").charAt(1) === "=" && (f = _get(e, R))) : f = _get(e, R), b = parseFloat(f), U = _ === "string" && p.charAt(1) === "=" && p.substr(0, 2), U && (p = p.substr(2)), m = parseFloat(p), R in _propertyAliases && (R === "autoAlpha" && (b === 1 && _get(e, "visibility") === "hidden" && m && (b = 0), ie.push("visibility", 0, c.visibility), _addNonTweeningPT(this, c, "visibility", b ? "inherit" : "hidden", m ? "inherit" : "hidden", !m)), R !== "scale" && R !== "transform" && (R = _propertyAliases[R], ~R.indexOf(",") && (R = R.split(",")[0]))), q = R in _transformProps, q) {
+          if (d && R in d ? (f = typeof d[R] == "function" ? d[R].call(s, o, e, a) : d[R], _isString(f) && ~f.indexOf("random(") && (f = _replaceRandom(f)), getUnit(f + "") || f === "auto" || (f += _config.units[R] || getUnit(_get(e, R)) || ""), (f + "").charAt(1) === "=" && (f = _get(e, R))) : f = _get(e, R), b = parseFloat(f), U = _ === "string" && p.charAt(1) === "=" && p.substr(0, 2), U && (p = p.substr(2)), m = parseFloat(p), R in _propertyAliases && (R === "autoAlpha" && (b === 1 && _get(e, "visibility") === "hidden" && m && (b = 0), ee.push("visibility", 0, c.visibility), _addNonTweeningPT(this, c, "visibility", b ? "inherit" : "hidden", m ? "inherit" : "hidden", !m)), R !== "scale" && R !== "transform" && (R = _propertyAliases[R], ~R.indexOf(",") && (R = R.split(",")[0]))), q = R in _transformProps, q) {
             if (this.styles.save(R), H || (W = e._gsap, W.renderTransform && !r.parseTransform || _parseTransform(e, r.parseTransform), K = r.smoothOrigin !== false && W.smooth, H = this._pt = new PropTween(this._pt, c, _transformProp, 0, 1, W.renderTransform, W, 0, -1), H.dep = 1), R === "scale") this._pt = new PropTween(this._pt, W, "scaleY", W.scaleY, (U ? _parseRelative(W.scaleY, U + m) : m) - W.scaleY || 0, _renderCSSProp), this._pt.u = 0, h.push("scaleY", R), R += "X";
             else if (R === "transformOrigin") {
-              ie.push(_transformOriginProp, 0, c[_transformOriginProp]), p = _convertKeywordsToPercentages(p), W.svg ? _applySVGOrigin(e, p, 0, K, 0, this) : (L = parseFloat(p.split(" ")[2]) || 0, L !== W.zOrigin && _addNonTweeningPT(this, W, "zOrigin", W.zOrigin, L), _addNonTweeningPT(this, c, R, _firstTwoOnly(f), _firstTwoOnly(p)));
+              ee.push(_transformOriginProp, 0, c[_transformOriginProp]), p = _convertKeywordsToPercentages(p), W.svg ? _applySVGOrigin(e, p, 0, K, 0, this) : (L = parseFloat(p.split(" ")[2]) || 0, L !== W.zOrigin && _addNonTweeningPT(this, W, "zOrigin", W.zOrigin, L), _addNonTweeningPT(this, c, R, _firstTwoOnly(f), _firstTwoOnly(p)));
               continue;
             } else if (R === "svgOrigin") {
               _applySVGOrigin(e, p, 1, K, 0, this);
@@ -55292,7 +55292,7 @@ var<${s}> ${e} : ${h};`;
             _missingPlugin(R, p);
             continue;
           }
-          q || (R in c ? ie.push(R, 0, c[R]) : ie.push(R, 1, f || e[R])), h.push(R);
+          q || (R in c ? ee.push(R, 0, c[R]) : ee.push(R, 1, f || e[R])), h.push(R);
         }
       }
       J && _sortPropTweensByPriority(this);
@@ -57784,10 +57784,10 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
         b.preventDefault();
         const _ = b.clientX, M = b.clientY, R = _ - a, O = M - h;
         let L = c + R, U = d + O;
-        const q = window.innerWidth, H = window.innerHeight, W = e.offsetWidth, K = e.offsetHeight, J = W / 2, ie = K / 2;
-        L + W > q + J && (L = q + J - W), L < -J && (L = -J), U + K > H + ie && (U = H + ie - K), U < -ie && (U = -ie), e.style.left = `${L}px`, e.style.top = `${U}px`;
-        const ee = this.panel.getBoundingClientRect();
-        _ >= ee.left && _ <= ee.right && M >= ee.top && M <= ee.bottom ? (e.style.opacity = "0.5", this.panel.style.outline = "2px solid var(--accent-color)") : (e.style.opacity = "", this.panel.style.outline = "");
+        const q = window.innerWidth, H = window.innerHeight, W = e.offsetWidth, K = e.offsetHeight, J = W / 2, ee = K / 2;
+        L + W > q + J && (L = q + J - W), L < -J && (L = -J), U + K > H + ee && (U = H + ee - K), U < -ee && (U = -ee), e.style.left = `${L}px`, e.style.top = `${U}px`;
+        const ie = this.panel.getBoundingClientRect();
+        _ >= ie.left && _ <= ie.right && M >= ie.top && M <= ie.bottom ? (e.style.opacity = "0.5", this.panel.style.outline = "2px solid var(--accent-color)") : (e.style.opacity = "", this.panel.style.outline = "");
       }, m = (b) => {
         if (!o) return;
         o = false, r.style.cursor = "", e.style.opacity = "", this.panel.style.outline = "";
@@ -57810,9 +57810,9 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
         }, H = (K) => {
           if (!b) return;
           K.preventDefault();
-          const J = K.clientX, ie = K.clientY, ee = J - _, fe = ie - M, G = window.innerWidth, v = window.innerHeight;
+          const J = K.clientX, ee = K.clientY, ie = J - _, fe = ee - M, G = window.innerWidth, v = window.innerHeight;
           if (m === "right" || m === "corner") {
-            const w = R + ee, $ = G - L;
+            const w = R + ie, $ = G - L;
             w >= 250 && w <= $ && (e.style.width = `${w}px`);
           }
           if (m === "bottom" || m === "corner") {
@@ -57820,9 +57820,9 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
             w >= 150 && w <= $ && (e.style.height = `${w}px`);
           }
           if (m === "left") {
-            const w = R - ee, $ = L + R - 250;
+            const w = R - ie, $ = L + R - 250;
             if (w >= 250) {
-              const P = L + ee;
+              const P = L + ie;
               P >= 0 && P <= $ && (e.style.width = `${w}px`, e.style.left = `${P}px`);
             }
           }
@@ -59542,8 +59542,8 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
     interpolate_(e, r, s, o) {
       const a = this.resultBuffer, h = this.sampleValues, c = this.valueSize, d = c * 2, f = c * 3, p = o - r, m = (s - r) / p, b = m * m, _ = b * m, M = e * f, R = M - f, O = -2 * _ + 3 * b, L = _ - b, U = 1 - O, q = L - b + m;
       for (let H = 0; H !== c; H++) {
-        const W = h[R + H + c], K = h[R + H + d] * p, J = h[M + H + c], ie = h[M + H] * p;
-        a[H] = U * W + q * K + O * J + L * ie;
+        const W = h[R + H + c], K = h[R + H + d] * p, J = h[M + H + c], ee = h[M + H] * p;
+        a[H] = U * W + q * K + O * J + L * ee;
       }
       return a;
     }
@@ -59908,9 +59908,9 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
         if (o.sparse !== void 0) {
           const L = WEBGL_TYPE_SIZES.SCALAR, U = WEBGL_COMPONENT_TYPES[o.sparse.indices.componentType], q = o.sparse.indices.byteOffset || 0, H = o.sparse.values.byteOffset || 0, W = new U(h[1], q, o.sparse.count * L), K = new f(h[2], H, o.sparse.count * d);
           c !== null && (O = new BufferAttribute$1(O.array.slice(), O.itemSize, O.normalized)), O.normalized = false;
-          for (let J = 0, ie = W.length; J < ie; J++) {
-            const ee = W[J];
-            if (O.setX(ee, K[J * d]), d >= 2 && O.setY(ee, K[J * d + 1]), d >= 3 && O.setZ(ee, K[J * d + 2]), d >= 4 && O.setW(ee, K[J * d + 3]), d >= 5) throw new Error("THREE.GLTFLoader: Unsupported itemSize in sparse BufferAttribute.");
+          for (let J = 0, ee = W.length; J < ee; J++) {
+            const ie = W[J];
+            if (O.setX(ie, K[J * d]), d >= 2 && O.setY(ie, K[J * d + 1]), d >= 3 && O.setZ(ie, K[J * d + 2]), d >= 4 && O.setW(ie, K[J * d + 3]), d >= 5) throw new Error("THREE.GLTFLoader: Unsupported itemSize in sparse BufferAttribute.");
           }
           O.normalized = M;
         }
@@ -60142,10 +60142,10 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       ]).then(function(m) {
         const b = m[0], _ = m[1], M = m[2], R = m[3], O = m[4], L = [];
         for (let q = 0, H = b.length; q < H; q++) {
-          const W = b[q], K = _[q], J = M[q], ie = R[q], ee = O[q];
+          const W = b[q], K = _[q], J = M[q], ee = R[q], ie = O[q];
           if (W === void 0) continue;
           W.updateMatrix && W.updateMatrix();
-          const fe = s._createAnimationTracks(W, K, J, ie, ee);
+          const fe = s._createAnimationTracks(W, K, J, ee, ie);
           if (fe) for (let G = 0; G < fe.length; G++) L.push(fe[G]);
         }
         const U = new AnimationClip(a, void 0, L);
@@ -60581,8 +60581,8 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       else {
         K = new p(q / p.BYTES_PER_ELEMENT);
         let J = 0;
-        for (let ie = 0, ee = W.length; ie < ee; ie++) {
-          for (let fe = 0; fe < _; fe++) K[J + fe] = W[ie * _ + fe];
+        for (let ee = 0, ie = W.length; ee < ie; ee++) {
+          for (let fe = 0; fe < _; fe++) K[J + fe] = W[ee * _ + fe];
           J += L;
         }
       }
@@ -60816,7 +60816,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       H._skip(k % 4 ? 4 - k % 4 : 0);
     }
     if (p <= 0) return r;
-    const W = new Ci(l, f, p, true), K = W._nextUint16(), J = W._nextUint16(), ie = W._nextUint32(), ee = W._nextUint32(), fe = W._nextUint32(), G = W._nextUint32(), v = [];
+    const W = new Ci(l, f, p, true), K = W._nextUint16(), J = W._nextUint16(), ee = W._nextUint32(), ie = W._nextUint32(), fe = W._nextUint32(), G = W._nextUint32(), v = [];
     for (let k = 0, j = Math.max(r.levelCount, 1); k < j; k++) v.push({
       imageFlags: W._nextUint32(),
       rgbSliceByteOffset: W._nextUint32(),
@@ -60824,7 +60824,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       alphaSliceByteOffset: W._nextUint32(),
       alphaSliceByteLength: W._nextUint32()
     });
-    const w = f + W._offset, $ = w + ie, P = $ + ee, F = P + fe, V = new Uint8Array(l.buffer, l.byteOffset + w, ie), z = new Uint8Array(l.buffer, l.byteOffset + $, ee), D = new Uint8Array(l.buffer, l.byteOffset + P, fe), x = new Uint8Array(l.buffer, l.byteOffset + F, G);
+    const w = f + W._offset, $ = w + ee, P = $ + ie, F = P + fe, V = new Uint8Array(l.buffer, l.byteOffset + w, ee), z = new Uint8Array(l.buffer, l.byteOffset + $, ie), D = new Uint8Array(l.buffer, l.byteOffset + P, fe), x = new Uint8Array(l.buffer, l.byteOffset + F, G);
     return r.globalData = {
       endpointCount: K,
       selectorCount: J,
@@ -61113,24 +61113,24 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       }
     }
     p.prototype._isBuffer = true;
-    function ie(ge, re, he) {
+    function ee(ge, re, he) {
       const we = ge[re];
       ge[re] = ge[he], ge[he] = we;
     }
     p.prototype.swap16 = function() {
       const re = this.length;
       if (re % 2 !== 0) throw new RangeError("Buffer size must be a multiple of 16-bits");
-      for (let he = 0; he < re; he += 2) ie(this, he, he + 1);
+      for (let he = 0; he < re; he += 2) ee(this, he, he + 1);
       return this;
     }, p.prototype.swap32 = function() {
       const re = this.length;
       if (re % 4 !== 0) throw new RangeError("Buffer size must be a multiple of 32-bits");
-      for (let he = 0; he < re; he += 4) ie(this, he, he + 3), ie(this, he + 1, he + 2);
+      for (let he = 0; he < re; he += 4) ee(this, he, he + 3), ee(this, he + 1, he + 2);
       return this;
     }, p.prototype.swap64 = function() {
       const re = this.length;
       if (re % 8 !== 0) throw new RangeError("Buffer size must be a multiple of 64-bits");
-      for (let he = 0; he < re; he += 8) ie(this, he, he + 7), ie(this, he + 1, he + 6), ie(this, he + 2, he + 5), ie(this, he + 3, he + 4);
+      for (let he = 0; he < re; he += 8) ee(this, he, he + 7), ee(this, he + 1, he + 6), ee(this, he + 2, he + 5), ee(this, he + 3, he + 4);
       return this;
     }, p.prototype.toString = function() {
       const re = this.length;
@@ -61157,7 +61157,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       }
       return Ne < ze ? -1 : ze < Ne ? 1 : 0;
     };
-    function ee(ge, re, he, we, Se) {
+    function ie(ge, re, he, we, Se) {
       if (ge.length === 0) return -1;
       if (typeof he == "string" ? (we = he, he = 0) : he > 2147483647 ? he = 2147483647 : he < -2147483648 && (he = -2147483648), he = +he, pt(he) && (he = Se ? 0 : ge.length - 1), he < 0 && (he = ge.length + he), he >= ge.length) {
         if (Se) return -1;
@@ -61198,9 +61198,9 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
     p.prototype.includes = function(re, he, we) {
       return this.indexOf(re, he, we) !== -1;
     }, p.prototype.indexOf = function(re, he, we) {
-      return ee(this, re, he, we, true);
+      return ie(this, re, he, we, true);
     }, p.prototype.lastIndexOf = function(re, he, we) {
-      return ee(this, re, he, we, false);
+      return ie(this, re, he, we, false);
     };
     function G(ge, re, he, we) {
       he = Number(he) || 0;
@@ -61933,7 +61933,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       else if (R.isETC1S()) L = h.ETC1S;
       else if (R.isHDR()) L = h.UASTC_HDR;
       else throw new Error("THREE.KTX2Loader: Unknown Basis encoding");
-      const U = R.getWidth(), q = R.getHeight(), H = R.getLayers() || 1, W = R.getLevels(), K = R.getFaces(), J = R.getHasAlpha(), ie = R.getDFDFlags(), { transcoderFormat: ee, engineFormat: fe, engineType: G } = m(L, U, q, J);
+      const U = R.getWidth(), q = R.getHeight(), H = R.getLayers() || 1, W = R.getLevels(), K = R.getFaces(), J = R.getHasAlpha(), ee = R.getDFDFlags(), { transcoderFormat: ie, engineFormat: fe, engineType: G } = m(L, U, q, J);
       if (!U || !q || !W) throw O(), new Error("THREE.KTX2Loader:	Invalid texture");
       if (!R.startTranscoding()) throw O(), new Error("THREE.KTX2Loader: .startTranscoding failed");
       const v = [], w = [];
@@ -61945,8 +61945,8 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
           for (let k = 0; k < H; k++) {
             const j = R.getImageLevelInfo(F, k, $);
             $ === 0 && F === 0 && k === 0 && (j.origWidth % 4 !== 0 || j.origHeight % 4 !== 0) && console.warn("THREE.KTX2Loader: ETC1S and UASTC textures should use multiple-of-four dimensions."), W > 1 ? (z = j.origWidth, D = j.origHeight) : (z = j.width, D = j.height);
-            let Y = new Uint8Array(R.getImageTranscodedSizeInBytes(F, k, 0, ee));
-            const oe = R.transcodeImage(Y, F, k, $, ee, 0, -1, -1);
+            let Y = new Uint8Array(R.getImageTranscodedSizeInBytes(F, k, 0, ie));
+            const oe = R.transcodeImage(Y, F, k, $, ie, 0, -1, -1);
             if (G === o.HalfFloatType && (Y = new Uint16Array(Y.buffer, Y.byteOffset, Y.byteLength / Uint16Array.BYTES_PER_ELEMENT)), !oe) throw O(), new Error("THREE.KTX2Loader: .transcodeImage failed.");
             V.push(Y);
           }
@@ -61971,7 +61971,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
         width: U,
         height: q,
         hasAlpha: J,
-        dfdFlags: ie,
+        dfdFlags: ee,
         format: fe,
         type: G
       };
@@ -63233,10 +63233,10 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       _ = _ / P * q, M = M / P * q, R = R / P * q;
     }
     p = l.x - _, m = l.y - M, b = l.z - R;
-    const K = (r.x + c * _) * a, J = (r.y + c * M) * a, ie = (r.z + c * R) * a;
-    r.x = (r.x - c * K) * f, r.y = (r.y - c * J) * f, r.z = (r.z - c * ie) * f, h.x = p + (_ + K) * f, h.y = m + (M + J) * f, h.z = b + (R + ie) * f;
-    const ee = O - l.x, fe = L - l.y, G = U - l.z, v = h.x - O, w = h.y - L, $ = h.z - U;
-    return ee * v + fe * w + G * $ > 0 && (h.x = O, h.y = L, h.z = U, r.x = (h.x - O) / a, r.y = (h.y - L) / a, r.z = (h.z - U) / a), h;
+    const K = (r.x + c * _) * a, J = (r.y + c * M) * a, ee = (r.z + c * R) * a;
+    r.x = (r.x - c * K) * f, r.y = (r.y - c * J) * f, r.z = (r.z - c * ee) * f, h.x = p + (_ + K) * f, h.y = m + (M + J) * f, h.z = b + (R + ee) * f;
+    const ie = O - l.x, fe = L - l.y, G = U - l.z, v = h.x - O, w = h.y - L, $ = h.z - U;
+    return ie * v + fe * w + G * $ > 0 && (h.x = O, h.y = L, h.z = U, r.x = (h.x - O) / a, r.y = (h.y - L) / a, r.z = (h.z - U) / a), h;
   }
   function extractClientCoordFromEvent(l, e) {
     e.set(0, 0), l.forEach((r) => {
@@ -63477,8 +63477,8 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
       const p = (L) => {
         if (!this._domElement || !this._enabled || this.mouseButtons.wheel === ACTION.NONE) return;
         if (this._interactiveArea.left !== 0 || this._interactiveArea.top !== 0 || this._interactiveArea.width !== 1 || this._interactiveArea.height !== 1) {
-          const J = this._domElement.getBoundingClientRect(), ie = L.clientX / J.width, ee = L.clientY / J.height;
-          if (ie < this._interactiveArea.left || ie > this._interactiveArea.right || ee < this._interactiveArea.top || ee > this._interactiveArea.bottom) return;
+          const J = this._domElement.getBoundingClientRect(), ee = L.clientX / J.width, ie = L.clientY / J.height;
+          if (ee < this._interactiveArea.left || ee > this._interactiveArea.right || ie < this._interactiveArea.top || ie > this._interactiveArea.bottom) return;
         }
         if (L.preventDefault(), this.dollyToCursor || this.mouseButtons.wheel === ACTION.ROTATE || this.mouseButtons.wheel === ACTION.TRUCK) {
           const J = performance.now();
@@ -63558,10 +63558,10 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
           (this._state & ACTION.DOLLY) === ACTION.DOLLY ? (this._dollyInternal(J * H * TOUCH_DOLLY_FACTOR, W, K), this._isUserControllingDolly = true) : (this._zoomInternal(J * H * TOUCH_DOLLY_FACTOR, W, K), this._isUserControllingZoom = true);
         }
         if ((this._state & ACTION.TOUCH_DOLLY) === ACTION.TOUCH_DOLLY || (this._state & ACTION.TOUCH_ZOOM) === ACTION.TOUCH_ZOOM || (this._state & ACTION.TOUCH_DOLLY_TRUCK) === ACTION.TOUCH_DOLLY_TRUCK || (this._state & ACTION.TOUCH_ZOOM_TRUCK) === ACTION.TOUCH_ZOOM_TRUCK || (this._state & ACTION.TOUCH_DOLLY_SCREEN_PAN) === ACTION.TOUCH_DOLLY_SCREEN_PAN || (this._state & ACTION.TOUCH_ZOOM_SCREEN_PAN) === ACTION.TOUCH_ZOOM_SCREEN_PAN || (this._state & ACTION.TOUCH_DOLLY_OFFSET) === ACTION.TOUCH_DOLLY_OFFSET || (this._state & ACTION.TOUCH_ZOOM_OFFSET) === ACTION.TOUCH_ZOOM_OFFSET || (this._state & ACTION.TOUCH_DOLLY_ROTATE) === ACTION.TOUCH_DOLLY_ROTATE || (this._state & ACTION.TOUCH_ZOOM_ROTATE) === ACTION.TOUCH_ZOOM_ROTATE) {
-          const W = _v2$3.x - this._activePointers[1].clientX, K = _v2$3.y - this._activePointers[1].clientY, J = Math.sqrt(W * W + K * K), ie = a.y - J;
+          const W = _v2$3.x - this._activePointers[1].clientX, K = _v2$3.y - this._activePointers[1].clientY, J = Math.sqrt(W * W + K * K), ee = a.y - J;
           a.set(0, J);
-          const ee = this.dollyToCursor ? (o.x - this._elementRect.x) / this._elementRect.width * 2 - 1 : 0, fe = this.dollyToCursor ? (o.y - this._elementRect.y) / this._elementRect.height * -2 + 1 : 0;
-          (this._state & ACTION.TOUCH_DOLLY) === ACTION.TOUCH_DOLLY || (this._state & ACTION.TOUCH_DOLLY_ROTATE) === ACTION.TOUCH_DOLLY_ROTATE || (this._state & ACTION.TOUCH_DOLLY_TRUCK) === ACTION.TOUCH_DOLLY_TRUCK || (this._state & ACTION.TOUCH_DOLLY_SCREEN_PAN) === ACTION.TOUCH_DOLLY_SCREEN_PAN || (this._state & ACTION.TOUCH_DOLLY_OFFSET) === ACTION.TOUCH_DOLLY_OFFSET ? (this._dollyInternal(ie * TOUCH_DOLLY_FACTOR, ee, fe), this._isUserControllingDolly = true) : (this._zoomInternal(ie * TOUCH_DOLLY_FACTOR, ee, fe), this._isUserControllingZoom = true);
+          const ie = this.dollyToCursor ? (o.x - this._elementRect.x) / this._elementRect.width * 2 - 1 : 0, fe = this.dollyToCursor ? (o.y - this._elementRect.y) / this._elementRect.height * -2 + 1 : 0;
+          (this._state & ACTION.TOUCH_DOLLY) === ACTION.TOUCH_DOLLY || (this._state & ACTION.TOUCH_DOLLY_ROTATE) === ACTION.TOUCH_DOLLY_ROTATE || (this._state & ACTION.TOUCH_DOLLY_TRUCK) === ACTION.TOUCH_DOLLY_TRUCK || (this._state & ACTION.TOUCH_DOLLY_SCREEN_PAN) === ACTION.TOUCH_DOLLY_SCREEN_PAN || (this._state & ACTION.TOUCH_DOLLY_OFFSET) === ACTION.TOUCH_DOLLY_OFFSET ? (this._dollyInternal(ee * TOUCH_DOLLY_FACTOR, ie, fe), this._isUserControllingDolly = true) : (this._zoomInternal(ee * TOUCH_DOLLY_FACTOR, ie, fe), this._isUserControllingZoom = true);
         }
         ((this._state & ACTION.TRUCK) === ACTION.TRUCK || (this._state & ACTION.TOUCH_TRUCK) === ACTION.TOUCH_TRUCK || (this._state & ACTION.TOUCH_DOLLY_TRUCK) === ACTION.TOUCH_DOLLY_TRUCK || (this._state & ACTION.TOUCH_ZOOM_TRUCK) === ACTION.TOUCH_ZOOM_TRUCK) && (this._truckInternal(q, H, false, false), this._isUserControllingTruck = true), ((this._state & ACTION.SCREEN_PAN) === ACTION.SCREEN_PAN || (this._state & ACTION.TOUCH_SCREEN_PAN) === ACTION.TOUCH_SCREEN_PAN || (this._state & ACTION.TOUCH_DOLLY_SCREEN_PAN) === ACTION.TOUCH_DOLLY_SCREEN_PAN || (this._state & ACTION.TOUCH_ZOOM_SCREEN_PAN) === ACTION.TOUCH_ZOOM_SCREEN_PAN) && (this._truckInternal(q, H, false, true), this._isUserControllingTruck = true), ((this._state & ACTION.OFFSET) === ACTION.OFFSET || (this._state & ACTION.TOUCH_OFFSET) === ACTION.TOUCH_OFFSET || (this._state & ACTION.TOUCH_DOLLY_OFFSET) === ACTION.TOUCH_DOLLY_OFFSET || (this._state & ACTION.TOUCH_ZOOM_OFFSET) === ACTION.TOUCH_ZOOM_OFFSET) && (this._truckInternal(q, H, true, false), this._isUserControllingOffset = true), this.dispatchEvent({
           type: "control"
@@ -63947,8 +63947,8 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
           const R = _v3B.crossVectors(M, _), O = this._sphericalEnd.radius * Math.tan(b.getEffectiveFOV() * DEG2RAD * 0.5), U = (this._sphericalEnd.radius - m - this._sphericalEnd.radius) / this._sphericalEnd.radius, q = _v3C.copy(this._targetEnd).add(M.multiplyScalar(this._dollyControlCoord.x * O * b.aspect)).add(R.multiplyScalar(this._dollyControlCoord.y * O)), H = _v3A.copy(this._targetEnd).lerp(q, U), W = this._lastDollyDirection === DOLLY_DIRECTION.IN && this._spherical.radius <= this.minDistance, K = this._lastDollyDirection === DOLLY_DIRECTION.OUT && this.maxDistance <= this._spherical.radius;
           if (this.infinityDolly && (W || K)) {
             this._sphericalEnd.radius -= m, this._spherical.radius -= m;
-            const ie = _v3B.copy(_).multiplyScalar(-m);
-            H.add(ie);
+            const ee = _v3B.copy(_).multiplyScalar(-m);
+            H.add(ee);
           }
           this._boundary.clampPoint(H, H);
           const J = _v3B.subVectors(H, this._targetEnd);
@@ -64497,9 +64497,9 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
         return (q + H) * 3 / 4 - H;
       }
       function b(U) {
-        var q, H = f(U), W = H[0], K = H[1], J = new a(m(U, W, K)), ie = 0, ee = K > 0 ? W - 4 : W, fe;
-        for (fe = 0; fe < ee; fe += 4) q = o[U.charCodeAt(fe)] << 18 | o[U.charCodeAt(fe + 1)] << 12 | o[U.charCodeAt(fe + 2)] << 6 | o[U.charCodeAt(fe + 3)], J[ie++] = q >> 16 & 255, J[ie++] = q >> 8 & 255, J[ie++] = q & 255;
-        return K === 2 && (q = o[U.charCodeAt(fe)] << 2 | o[U.charCodeAt(fe + 1)] >> 4, J[ie++] = q & 255), K === 1 && (q = o[U.charCodeAt(fe)] << 10 | o[U.charCodeAt(fe + 1)] << 4 | o[U.charCodeAt(fe + 2)] >> 2, J[ie++] = q >> 8 & 255, J[ie++] = q & 255), J;
+        var q, H = f(U), W = H[0], K = H[1], J = new a(m(U, W, K)), ee = 0, ie = K > 0 ? W - 4 : W, fe;
+        for (fe = 0; fe < ie; fe += 4) q = o[U.charCodeAt(fe)] << 18 | o[U.charCodeAt(fe + 1)] << 12 | o[U.charCodeAt(fe + 2)] << 6 | o[U.charCodeAt(fe + 3)], J[ee++] = q >> 16 & 255, J[ee++] = q >> 8 & 255, J[ee++] = q & 255;
+        return K === 2 && (q = o[U.charCodeAt(fe)] << 2 | o[U.charCodeAt(fe + 1)] >> 4, J[ee++] = q & 255), K === 1 && (q = o[U.charCodeAt(fe)] << 10 | o[U.charCodeAt(fe + 1)] << 4 | o[U.charCodeAt(fe + 2)] >> 2, J[ee++] = q >> 8 & 255, J[ee++] = q & 255), J;
       }
       function _(U) {
         return s[U >> 18 & 63] + s[U >> 12 & 63] + s[U >> 6 & 63] + s[U & 63];
@@ -64509,24 +64509,24 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
         return K.join("");
       }
       function R(U) {
-        for (var q, H = U.length, W = H % 3, K = [], J = 16383, ie = 0, ee = H - W; ie < ee; ie += J) K.push(M(U, ie, ie + J > ee ? ee : ie + J));
+        for (var q, H = U.length, W = H % 3, K = [], J = 16383, ee = 0, ie = H - W; ee < ie; ee += J) K.push(M(U, ee, ee + J > ie ? ie : ee + J));
         return W === 1 ? (q = U[H - 1], K.push(s[q >> 2] + s[q << 4 & 63] + "==")) : W === 2 && (q = (U[H - 2] << 8) + U[H - 1], K.push(s[q >> 10] + s[q >> 4 & 63] + s[q << 2 & 63] + "=")), K.join("");
       }
       var O = {};
       O.read = function(U, q, H, W, K) {
-        var J, ie, ee = K * 8 - W - 1, fe = (1 << ee) - 1, G = fe >> 1, v = -7, w = H ? K - 1 : 0, $ = H ? -1 : 1, P = U[q + w];
-        for (w += $, J = P & (1 << -v) - 1, P >>= -v, v += ee; v > 0; J = J * 256 + U[q + w], w += $, v -= 8) ;
-        for (ie = J & (1 << -v) - 1, J >>= -v, v += W; v > 0; ie = ie * 256 + U[q + w], w += $, v -= 8) ;
+        var J, ee, ie = K * 8 - W - 1, fe = (1 << ie) - 1, G = fe >> 1, v = -7, w = H ? K - 1 : 0, $ = H ? -1 : 1, P = U[q + w];
+        for (w += $, J = P & (1 << -v) - 1, P >>= -v, v += ie; v > 0; J = J * 256 + U[q + w], w += $, v -= 8) ;
+        for (ee = J & (1 << -v) - 1, J >>= -v, v += W; v > 0; ee = ee * 256 + U[q + w], w += $, v -= 8) ;
         if (J === 0) J = 1 - G;
         else {
-          if (J === fe) return ie ? NaN : (P ? -1 : 1) * (1 / 0);
-          ie = ie + Math.pow(2, W), J = J - G;
+          if (J === fe) return ee ? NaN : (P ? -1 : 1) * (1 / 0);
+          ee = ee + Math.pow(2, W), J = J - G;
         }
-        return (P ? -1 : 1) * ie * Math.pow(2, J - W);
+        return (P ? -1 : 1) * ee * Math.pow(2, J - W);
       }, O.write = function(U, q, H, W, K, J) {
-        var ie, ee, fe, G = J * 8 - K - 1, v = (1 << G) - 1, w = v >> 1, $ = K === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0, P = W ? 0 : J - 1, F = W ? 1 : -1, V = q < 0 || q === 0 && 1 / q < 0 ? 1 : 0;
-        for (q = Math.abs(q), isNaN(q) || q === 1 / 0 ? (ee = isNaN(q) ? 1 : 0, ie = v) : (ie = Math.floor(Math.log(q) / Math.LN2), q * (fe = Math.pow(2, -ie)) < 1 && (ie--, fe *= 2), ie + w >= 1 ? q += $ / fe : q += $ * Math.pow(2, 1 - w), q * fe >= 2 && (ie++, fe /= 2), ie + w >= v ? (ee = 0, ie = v) : ie + w >= 1 ? (ee = (q * fe - 1) * Math.pow(2, K), ie = ie + w) : (ee = q * Math.pow(2, w - 1) * Math.pow(2, K), ie = 0)); K >= 8; U[H + P] = ee & 255, P += F, ee /= 256, K -= 8) ;
-        for (ie = ie << K | ee, G += K; G > 0; U[H + P] = ie & 255, P += F, ie /= 256, G -= 8) ;
+        var ee, ie, fe, G = J * 8 - K - 1, v = (1 << G) - 1, w = v >> 1, $ = K === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0, P = W ? 0 : J - 1, F = W ? 1 : -1, V = q < 0 || q === 0 && 1 / q < 0 ? 1 : 0;
+        for (q = Math.abs(q), isNaN(q) || q === 1 / 0 ? (ie = isNaN(q) ? 1 : 0, ee = v) : (ee = Math.floor(Math.log(q) / Math.LN2), q * (fe = Math.pow(2, -ee)) < 1 && (ee--, fe *= 2), ee + w >= 1 ? q += $ / fe : q += $ * Math.pow(2, 1 - w), q * fe >= 2 && (ee++, fe /= 2), ee + w >= v ? (ie = 0, ee = v) : ee + w >= 1 ? (ie = (q * fe - 1) * Math.pow(2, K), ee = ee + w) : (ie = q * Math.pow(2, w - 1) * Math.pow(2, K), ee = 0)); K >= 8; U[H + P] = ie & 255, P += F, ie /= 256, K -= 8) ;
+        for (ee = ee << K | ie, G += K; G > 0; U[H + P] = ee & 255, P += F, ee /= 256, G -= 8) ;
         U[H + P - F] |= V * 128;
       };
       (function(U) {
@@ -64534,7 +64534,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
         U.Buffer = v, U.SlowBuffer = Y, U.INSPECT_MAX_BYTES = 50;
         const K = 2147483647;
         U.kMaxLength = K;
-        const { Uint8Array: J, ArrayBuffer: ie, SharedArrayBuffer: ee } = globalThis;
+        const { Uint8Array: J, ArrayBuffer: ee, SharedArrayBuffer: ie } = globalThis;
         v.TYPED_ARRAY_SUPPORT = fe(), !v.TYPED_ARRAY_SUPPORT && typeof console < "u" && typeof console.error == "function" && console.error("This browser lacks typed array (Uint8Array) support which is required by `buffer` v5.x. Use `buffer` v4.x if you require old browser support.");
         function fe() {
           try {
@@ -64574,9 +64574,9 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
         v.poolSize = 8192;
         function w(ve, se, ce) {
           if (typeof ve == "string") return V(ve, se);
-          if (ie.isView(ve)) return D(ve);
+          if (ee.isView(ve)) return D(ve);
           if (ve == null) throw new TypeError("The first argument must be one of type string, Buffer, ArrayBuffer, Array, or Array-like Object. Received type " + typeof ve);
-          if (ot(ve, ie) || ve && ot(ve.buffer, ie) || typeof ee < "u" && (ot(ve, ee) || ve && ot(ve.buffer, ee))) return x(ve, se, ce);
+          if (ot(ve, ee) || ve && ot(ve.buffer, ee) || typeof ie < "u" && (ot(ve, ie) || ve && ot(ve.buffer, ie))) return x(ve, se, ce);
           if (typeof ve == "number") throw new TypeError('The "value" argument must not be of type number. Received type number');
           const $e = ve.valueOf && ve.valueOf();
           if ($e != null && $e !== ve) return v.from($e, se, ce);
@@ -64692,7 +64692,7 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
         };
         function oe(ve, se) {
           if (v.isBuffer(ve)) return ve.length;
-          if (ie.isView(ve) || ot(ve, ie)) return ve.byteLength;
+          if (ee.isView(ve) || ot(ve, ee)) return ve.byteLength;
           if (typeof ve != "string") throw new TypeError('The "string" argument must be one of type string, Buffer, or ArrayBuffer. Received type ' + typeof ve);
           const ce = ve.length, $e = arguments.length > 2 && arguments[2] === true;
           if (!$e && ce === 0) return 0;
@@ -65447,31 +65447,31 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return d(this);
     }, a.prototype.emit = function(W) {
       for (var K = [], J = 1; J < arguments.length; J++) K.push(arguments[J]);
-      var ie = W === "error", ee = this._events;
-      if (ee !== void 0) ie = ie && ee.error === void 0;
-      else if (!ie) return false;
-      if (ie) {
+      var ee = W === "error", ie = this._events;
+      if (ie !== void 0) ee = ee && ie.error === void 0;
+      else if (!ee) return false;
+      if (ee) {
         var fe;
         if (K.length > 0 && (fe = K[0]), fe instanceof Error) throw fe;
         var G = new Error("Unhandled error." + (fe ? " (" + fe.message + ")" : ""));
         throw G.context = fe, G;
       }
-      var v = ee[W];
+      var v = ie[W];
       if (v === void 0) return false;
       if (typeof v == "function") e(v, this, K);
       else for (var w = v.length, $ = M(v, w), J = 0; J < w; ++J) e($[J], this, K);
       return true;
     };
     function f(H, W, K, J) {
-      var ie, ee, fe;
-      if (c(K), ee = H._events, ee === void 0 ? (ee = H._events = /* @__PURE__ */ Object.create(null), H._eventsCount = 0) : (ee.newListener !== void 0 && (H.emit("newListener", W, K.listener ? K.listener : K), ee = H._events), fe = ee[W]), fe === void 0) fe = ee[W] = K, ++H._eventsCount;
-      else if (typeof fe == "function" ? fe = ee[W] = J ? [
+      var ee, ie, fe;
+      if (c(K), ie = H._events, ie === void 0 ? (ie = H._events = /* @__PURE__ */ Object.create(null), H._eventsCount = 0) : (ie.newListener !== void 0 && (H.emit("newListener", W, K.listener ? K.listener : K), ie = H._events), fe = ie[W]), fe === void 0) fe = ie[W] = K, ++H._eventsCount;
+      else if (typeof fe == "function" ? fe = ie[W] = J ? [
         K,
         fe
       ] : [
         fe,
         K
-      ] : J ? fe.unshift(K) : fe.push(K), ie = d(H), ie > 0 && fe.length > ie && !fe.warned) {
+      ] : J ? fe.unshift(K) : fe.push(K), ee = d(H), ee > 0 && fe.length > ee && !fe.warned) {
         fe.warned = true;
         var G = new Error("Possible EventEmitter memory leak detected. " + fe.length + " " + String(W) + " listeners added. Use emitter.setMaxListeners() to increase limit");
         G.name = "MaxListenersExceededWarning", G.emitter = H, G.type = W, G.count = fe.length, s(G);
@@ -65493,49 +65493,49 @@ Use Chrome, Firefox or Internet Explorer 11`);
         target: H,
         type: W,
         listener: K
-      }, ie = p.bind(J);
-      return ie.listener = K, J.wrapFn = ie, ie;
+      }, ee = p.bind(J);
+      return ee.listener = K, J.wrapFn = ee, ee;
     }
     a.prototype.once = function(W, K) {
       return c(K), this.on(W, m(this, W, K)), this;
     }, a.prototype.prependOnceListener = function(W, K) {
       return c(K), this.prependListener(W, m(this, W, K)), this;
     }, a.prototype.removeListener = function(W, K) {
-      var J, ie, ee, fe, G;
-      if (c(K), ie = this._events, ie === void 0) return this;
-      if (J = ie[W], J === void 0) return this;
-      if (J === K || J.listener === K) --this._eventsCount === 0 ? this._events = /* @__PURE__ */ Object.create(null) : (delete ie[W], ie.removeListener && this.emit("removeListener", W, J.listener || K));
+      var J, ee, ie, fe, G;
+      if (c(K), ee = this._events, ee === void 0) return this;
+      if (J = ee[W], J === void 0) return this;
+      if (J === K || J.listener === K) --this._eventsCount === 0 ? this._events = /* @__PURE__ */ Object.create(null) : (delete ee[W], ee.removeListener && this.emit("removeListener", W, J.listener || K));
       else if (typeof J != "function") {
-        for (ee = -1, fe = J.length - 1; fe >= 0; fe--) if (J[fe] === K || J[fe].listener === K) {
-          G = J[fe].listener, ee = fe;
+        for (ie = -1, fe = J.length - 1; fe >= 0; fe--) if (J[fe] === K || J[fe].listener === K) {
+          G = J[fe].listener, ie = fe;
           break;
         }
-        if (ee < 0) return this;
-        ee === 0 ? J.shift() : R(J, ee), J.length === 1 && (ie[W] = J[0]), ie.removeListener !== void 0 && this.emit("removeListener", W, G || K);
+        if (ie < 0) return this;
+        ie === 0 ? J.shift() : R(J, ie), J.length === 1 && (ee[W] = J[0]), ee.removeListener !== void 0 && this.emit("removeListener", W, G || K);
       }
       return this;
     }, a.prototype.off = a.prototype.removeListener, a.prototype.removeAllListeners = function(W) {
-      var K, J, ie;
+      var K, J, ee;
       if (J = this._events, J === void 0) return this;
       if (J.removeListener === void 0) return arguments.length === 0 ? (this._events = /* @__PURE__ */ Object.create(null), this._eventsCount = 0) : J[W] !== void 0 && (--this._eventsCount === 0 ? this._events = /* @__PURE__ */ Object.create(null) : delete J[W]), this;
       if (arguments.length === 0) {
-        var ee = Object.keys(J), fe;
-        for (ie = 0; ie < ee.length; ++ie) fe = ee[ie], fe !== "removeListener" && this.removeAllListeners(fe);
+        var ie = Object.keys(J), fe;
+        for (ee = 0; ee < ie.length; ++ee) fe = ie[ee], fe !== "removeListener" && this.removeAllListeners(fe);
         return this.removeAllListeners("removeListener"), this._events = /* @__PURE__ */ Object.create(null), this._eventsCount = 0, this;
       }
       if (K = J[W], typeof K == "function") this.removeListener(W, K);
-      else if (K !== void 0) for (ie = K.length - 1; ie >= 0; ie--) this.removeListener(W, K[ie]);
+      else if (K !== void 0) for (ee = K.length - 1; ee >= 0; ee--) this.removeListener(W, K[ee]);
       return this;
     };
     function b(H, W, K) {
       var J = H._events;
       if (J === void 0) return [];
-      var ie = J[W];
-      return ie === void 0 ? [] : typeof ie == "function" ? K ? [
-        ie.listener || ie
+      var ee = J[W];
+      return ee === void 0 ? [] : typeof ee == "function" ? K ? [
+        ee.listener || ee
       ] : [
-        ie
-      ] : K ? O(ie) : M(ie, ie.length);
+        ee
+      ] : K ? O(ee) : M(ee, ee.length);
     }
     a.prototype.listeners = function(W) {
       return b(this, W, true);
@@ -65570,15 +65570,15 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }
     function L(H, W) {
       return new Promise(function(K, J) {
-        function ie(fe) {
-          H.removeListener(W, ee), J(fe);
+        function ee(fe) {
+          H.removeListener(W, ie), J(fe);
         }
-        function ee() {
-          typeof H.removeListener == "function" && H.removeListener("error", ie), K([].slice.call(arguments));
+        function ie() {
+          typeof H.removeListener == "function" && H.removeListener("error", ee), K([].slice.call(arguments));
         }
-        q(H, W, ee, {
+        q(H, W, ie, {
           once: true
-        }), W !== "error" && U(H, ie, {
+        }), W !== "error" && U(H, ee, {
           once: true
         });
       });
@@ -65588,8 +65588,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
     }
     function q(H, W, K, J) {
       if (typeof H.on == "function") J.once ? H.once(W, K) : H.on(W, K);
-      else if (typeof H.addEventListener == "function") H.addEventListener(W, function ie(ee) {
-        J.once && H.removeEventListener(W, ie), K(ee);
+      else if (typeof H.addEventListener == "function") H.addEventListener(W, function ee(ie) {
+        J.once && H.removeEventListener(W, ee), K(ie);
       });
       else throw new TypeError('The "emitter" argument must be of type EventEmitter. Received type ' + typeof H);
     }
@@ -65877,7 +65877,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
           return H;
         }
       }
-    })() : H, K = requireHasSymbols()(), J = requireGetProto(), ie = requireObject_getPrototypeOf(), ee = requireReflect_getPrototypeOf(), fe = requireFunctionApply(), G = requireFunctionCall(), v = {}, w = typeof Uint8Array > "u" || !J ? l : J(Uint8Array), $ = {
+    })() : H, K = requireHasSymbols()(), J = requireGetProto(), ee = requireObject_getPrototypeOf(), ie = requireReflect_getPrototypeOf(), fe = requireFunctionApply(), G = requireFunctionCall(), v = {}, w = typeof Uint8Array > "u" || !J ? l : J(Uint8Array), $ = {
       __proto__: null,
       "%AggregateError%": typeof AggregateError > "u" ? l : AggregateError,
       "%Array%": Array,
@@ -65950,7 +65950,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       "%Function.prototype.call%": G,
       "%Function.prototype.apply%": fe,
       "%Object.defineProperty%": q,
-      "%Object.getPrototypeOf%": ie,
+      "%Object.getPrototypeOf%": ee,
       "%Math.abs%": f,
       "%Math.floor%": p,
       "%Math.max%": m,
@@ -65958,7 +65958,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       "%Math.pow%": _,
       "%Math.round%": M,
       "%Math.sign%": R,
-      "%Reflect.getPrototypeOf%": ee
+      "%Reflect.getPrototypeOf%": ie
     };
     if (J) try {
       null.error;
@@ -66642,14 +66642,14 @@ Use Chrome, Firefox or Internet Explorer 11`);
         return s(Te) === "Int32Array";
       }
       l.isInt32Array = J;
-      function ie(Te) {
+      function ee(Te) {
         return s(Te) === "Float32Array";
       }
-      l.isFloat32Array = ie;
-      function ee(Te) {
+      l.isFloat32Array = ee;
+      function ie(Te) {
         return s(Te) === "Float64Array";
       }
-      l.isFloat64Array = ee;
+      l.isFloat64Array = ie;
       function fe(Te) {
         return s(Te) === "BigInt64Array";
       }
@@ -66848,7 +66848,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
           seen: [],
           stylize: f
         };
-        return arguments.length >= 3 && (me.depth = arguments[2]), arguments.length >= 4 && (me.colors = arguments[3]), U(oe) ? me.showHidden = oe : oe && l._extend(me, oe), ie(me.showHidden) && (me.showHidden = false), ie(me.depth) && (me.depth = 2), ie(me.colors) && (me.colors = false), ie(me.customInspect) && (me.customInspect = true), me.colors && (me.stylize = d), m(me, Y, me.depth);
+        return arguments.length >= 3 && (me.depth = arguments[2]), arguments.length >= 4 && (me.colors = arguments[3]), U(oe) ? me.showHidden = oe : oe && l._extend(me, oe), ee(me.showHidden) && (me.showHidden = false), ee(me.depth) && (me.depth = 2), ee(me.colors) && (me.colors = false), ee(me.customInspect) && (me.customInspect = true), me.colors && (me.stylize = d), m(me, Y, me.depth);
       }
       l.inspect = c, c.colors = {
         bold: [
@@ -66940,7 +66940,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
             var _e = oe.name ? ": " + oe.name : "";
             return Y.stylize("[Function" + _e + "]", "special");
           }
-          if (ee(oe)) return Y.stylize(RegExp.prototype.toString.call(oe), "regexp");
+          if (ie(oe)) return Y.stylize(RegExp.prototype.toString.call(oe), "regexp");
           if (G(oe)) return Y.stylize(Date.prototype.toString.call(oe), "date");
           if (v(oe)) return _(oe);
         }
@@ -66955,8 +66955,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           var Pe = oe.name ? ": " + oe.name : "";
           xe = " [Function" + Pe + "]";
         }
-        if (ee(oe) && (xe = " " + RegExp.prototype.toString.call(oe)), G(oe) && (xe = " " + Date.prototype.toUTCString.call(oe)), v(oe) && (xe = " " + _(oe)), ne.length === 0 && (!le || oe.length == 0)) return Ce[0] + xe + Ce[1];
-        if (me < 0) return ee(oe) ? Y.stylize(RegExp.prototype.toString.call(oe), "regexp") : Y.stylize("[Object]", "special");
+        if (ie(oe) && (xe = " " + RegExp.prototype.toString.call(oe)), G(oe) && (xe = " " + Date.prototype.toUTCString.call(oe)), v(oe) && (xe = " " + _(oe)), ne.length === 0 && (!le || oe.length == 0)) return Ce[0] + xe + Ce[1];
+        if (me < 0) return ie(oe) ? Y.stylize(RegExp.prototype.toString.call(oe), "regexp") : Y.stylize("[Object]", "special");
         Y.seen.push(oe);
         var Be;
         return le ? Be = M(Y, oe, me, pe, ne) : Be = ne.map(function(Ee) {
@@ -66964,7 +66964,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }), Y.seen.pop(), O(Be, xe, Ce);
       }
       function b(Y, oe) {
-        if (ie(oe)) return Y.stylize("undefined", "undefined");
+        if (ee(oe)) return Y.stylize("undefined", "undefined");
         if (K(oe)) {
           var me = "'" + JSON.stringify(oe).replace(/^"|"$/g, "").replace(/'/g, "\\'").replace(/\\"/g, '"') + "'";
           return Y.stylize(me, "string");
@@ -66996,7 +66996,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
 `).map(function(le) {
           return "   " + le;
         }).join(`
-`))) : _e = Y.stylize("[Circular]", "special")), ie(pe)) {
+`))) : _e = Y.stylize("[Circular]", "special")), ee(pe)) {
           if (ne && Z.match(/^\d+$/)) return _e;
           pe = JSON.stringify("" + Z), pe.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/) ? (pe = pe.slice(1, -1), pe = Y.stylize(pe, "name")) : (pe = pe.replace(/'/g, "\\'").replace(/\\"/g, '"').replace(/(^"|"$)/g, "'"), pe = Y.stylize(pe, "string"));
         }
@@ -67040,14 +67040,14 @@ Use Chrome, Firefox or Internet Explorer 11`);
         return typeof Y == "symbol";
       }
       l.isSymbol = J;
-      function ie(Y) {
+      function ee(Y) {
         return Y === void 0;
       }
-      l.isUndefined = ie;
-      function ee(Y) {
+      l.isUndefined = ee;
+      function ie(Y) {
         return fe(Y) && P(Y) === "[object RegExp]";
       }
-      l.isRegExp = ee, l.types.isRegExp = ee;
+      l.isRegExp = ie, l.types.isRegExp = ie;
       function fe(Y) {
         return typeof Y == "object" && Y !== null;
       }
@@ -67491,7 +67491,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
   var _stream_writable$2, hasRequired_stream_writable$2;
   function require_stream_writable$2() {
     if (hasRequired_stream_writable$2) return _stream_writable$2;
-    hasRequired_stream_writable$2 = 1, _stream_writable$2 = ie;
+    hasRequired_stream_writable$2 = 1, _stream_writable$2 = ee;
     function l(be) {
       var Z = this;
       this.next = null, this.entry = null, this.finish = function() {
@@ -67499,7 +67499,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       };
     }
     var e;
-    ie.WritableState = K;
+    ee.WritableState = K;
     var r = {
       deprecate: requireBrowser$b()
     }, s = requireStreamBrowser$2(), o = requireDist().Buffer, a = (typeof commonjsGlobal < "u" ? commonjsGlobal : typeof window < "u" ? window : typeof self < "u" ? self : {}).Uint8Array || function() {
@@ -67511,7 +67511,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return o.isBuffer(be) || be instanceof a;
     }
     var d = requireDestroy$2(), f = requireState(), p = f.getHighWaterMark, m = requireErrorsBrowser().codes, b = m.ERR_INVALID_ARG_TYPE, _ = m.ERR_METHOD_NOT_IMPLEMENTED, M = m.ERR_MULTIPLE_CALLBACK, R = m.ERR_STREAM_CANNOT_PIPE, O = m.ERR_STREAM_DESTROYED, L = m.ERR_STREAM_NULL_VALUES, U = m.ERR_STREAM_WRITE_AFTER_END, q = m.ERR_UNKNOWN_ENCODING, H = d.errorOrDestroy;
-    requireInherits_browser()(ie, s);
+    requireInherits_browser()(ee, s);
     function W() {
     }
     function K(be, Z, ne) {
@@ -67535,23 +67535,23 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
     })();
     var J;
-    typeof Symbol == "function" && Symbol.hasInstance && typeof Function.prototype[Symbol.hasInstance] == "function" ? (J = Function.prototype[Symbol.hasInstance], Object.defineProperty(ie, Symbol.hasInstance, {
+    typeof Symbol == "function" && Symbol.hasInstance && typeof Function.prototype[Symbol.hasInstance] == "function" ? (J = Function.prototype[Symbol.hasInstance], Object.defineProperty(ee, Symbol.hasInstance, {
       value: function(Z) {
-        return J.call(this, Z) ? true : this !== ie ? false : Z && Z._writableState instanceof K;
+        return J.call(this, Z) ? true : this !== ee ? false : Z && Z._writableState instanceof K;
       }
     })) : J = function(Z) {
       return Z instanceof this;
     };
-    function ie(be) {
+    function ee(be) {
       e = e || require_stream_duplex$2();
       var Z = this instanceof e;
-      if (!Z && !J.call(ie, this)) return new ie(be);
+      if (!Z && !J.call(ee, this)) return new ee(be);
       this._writableState = new K(be, this, Z), this.writable = true, be && (typeof be.write == "function" && (this._write = be.write), typeof be.writev == "function" && (this._writev = be.writev), typeof be.destroy == "function" && (this._destroy = be.destroy), typeof be.final == "function" && (this._final = be.final)), s.call(this);
     }
-    ie.prototype.pipe = function() {
+    ee.prototype.pipe = function() {
       H(this, new R());
     };
-    function ee(be, Z) {
+    function ie(be, Z) {
       var ne = new U();
       H(be, ne), process$1.nextTick(Z, ne);
     }
@@ -67562,15 +67562,15 @@ Use Chrome, Firefox or Internet Explorer 11`);
         "Buffer"
       ], ne)), _e ? (H(be, _e), process$1.nextTick(pe, _e), false) : true;
     }
-    ie.prototype.write = function(be, Z, ne) {
+    ee.prototype.write = function(be, Z, ne) {
       var pe = this._writableState, _e = false, xe = !pe.objectMode && c(be);
-      return xe && !o.isBuffer(be) && (be = h(be)), typeof Z == "function" && (ne = Z, Z = null), xe ? Z = "buffer" : Z || (Z = pe.defaultEncoding), typeof ne != "function" && (ne = W), pe.ending ? ee(this, ne) : (xe || fe(this, pe, be, ne)) && (pe.pendingcb++, _e = v(this, pe, xe, be, Z, ne)), _e;
-    }, ie.prototype.cork = function() {
+      return xe && !o.isBuffer(be) && (be = h(be)), typeof Z == "function" && (ne = Z, Z = null), xe ? Z = "buffer" : Z || (Z = pe.defaultEncoding), typeof ne != "function" && (ne = W), pe.ending ? ie(this, ne) : (xe || fe(this, pe, be, ne)) && (pe.pendingcb++, _e = v(this, pe, xe, be, Z, ne)), _e;
+    }, ee.prototype.cork = function() {
       this._writableState.corked++;
-    }, ie.prototype.uncork = function() {
+    }, ee.prototype.uncork = function() {
       var be = this._writableState;
       be.corked && (be.corked--, !be.writing && !be.corked && !be.bufferProcessing && be.bufferedRequest && D(this, be));
-    }, ie.prototype.setDefaultEncoding = function(Z) {
+    }, ee.prototype.setDefaultEncoding = function(Z) {
       if (typeof Z == "string" && (Z = Z.toLowerCase()), !([
         "hex",
         "utf8",
@@ -67585,7 +67585,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         "raw"
       ].indexOf((Z + "").toLowerCase()) > -1)) throw new q(Z);
       return this._writableState.defaultEncoding = Z, this;
-    }, Object.defineProperty(ie.prototype, "writableBuffer", {
+    }, Object.defineProperty(ee.prototype, "writableBuffer", {
       enumerable: false,
       get: function() {
         return this._writableState && this._writableState.getBuffer();
@@ -67594,7 +67594,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function G(be, Z, ne) {
       return !be.objectMode && be.decodeStrings !== false && typeof Z == "string" && (Z = o.from(Z, ne)), Z;
     }
-    Object.defineProperty(ie.prototype, "writableHighWaterMark", {
+    Object.defineProperty(ee.prototype, "writableHighWaterMark", {
       enumerable: false,
       get: function() {
         return this._writableState.highWaterMark;
@@ -67661,12 +67661,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       Z.bufferedRequest = ne, Z.bufferProcessing = false;
     }
-    ie.prototype._write = function(be, Z, ne) {
+    ee.prototype._write = function(be, Z, ne) {
       ne(new _("_write()"));
-    }, ie.prototype._writev = null, ie.prototype.end = function(be, Z, ne) {
+    }, ee.prototype._writev = null, ee.prototype.end = function(be, Z, ne) {
       var pe = this._writableState;
       return typeof be == "function" ? (ne = be, be = null, Z = null) : typeof Z == "function" && (ne = Z, Z = null), be != null && this.write(be, Z), pe.corked && (pe.corked = 1, this.uncork()), pe.ending || oe(this, pe, ne), this;
-    }, Object.defineProperty(ie.prototype, "writableLength", {
+    }, Object.defineProperty(ee.prototype, "writableLength", {
       enumerable: false,
       get: function() {
         return this._writableState.length;
@@ -67702,7 +67702,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       Z.corkedRequestsFree.next = be;
     }
-    return Object.defineProperty(ie.prototype, "destroyed", {
+    return Object.defineProperty(ee.prototype, "destroyed", {
       enumerable: false,
       get: function() {
         return this._writableState === void 0 ? false : this._writableState.destroyed;
@@ -67710,7 +67710,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       set: function(Z) {
         this._writableState && (this._writableState.destroyed = Z);
       }
-    }), ie.prototype.destroy = d.destroy, ie.prototype._undestroy = d.undestroy, ie.prototype._destroy = function(be, Z) {
+    }), ee.prototype.destroy = d.destroy, ee.prototype._undestroy = d.undestroy, ee.prototype._destroy = function(be, Z) {
       Z(be);
     }, _stream_writable$2;
   }
@@ -68024,16 +68024,16 @@ Use Chrome, Firefox or Internet Explorer 11`);
         var H = this, W = this[c];
         if (W !== null) return Promise.reject(W);
         if (this[d]) return Promise.resolve(b(void 0, true));
-        if (this[m].destroyed) return new Promise(function(ee, fe) {
+        if (this[m].destroyed) return new Promise(function(ie, fe) {
           process$1.nextTick(function() {
-            H[c] ? fe(H[c]) : ee(b(void 0, true));
+            H[c] ? fe(H[c]) : ie(b(void 0, true));
           });
         });
         var K = this[f], J;
         if (K) J = new Promise(R(K, this));
         else {
-          var ie = this[m].read();
-          if (ie !== null) return Promise.resolve(b(ie, false));
+          var ee = this[m].read();
+          if (ee !== null) return Promise.resolve(b(ee, false));
           J = new Promise(this[p]);
         }
         return this[f] = J, J;
@@ -68068,20 +68068,20 @@ Use Chrome, Firefox or Internet Explorer 11`);
         value: H._readableState.endEmitted,
         writable: true
       }), e(W, p, {
-        value: function(ie, ee) {
+        value: function(ee, ie) {
           var fe = K[m].read();
-          fe ? (K[f] = null, K[a] = null, K[h] = null, ie(b(fe, false))) : (K[a] = ie, K[h] = ee);
+          fe ? (K[f] = null, K[a] = null, K[h] = null, ee(b(fe, false))) : (K[a] = ee, K[h] = ie);
         },
         writable: true
       }), W));
       return K[f] = null, o(H, function(J) {
         if (J && J.code !== "ERR_STREAM_PREMATURE_CLOSE") {
-          var ie = K[h];
-          ie !== null && (K[f] = null, K[a] = null, K[h] = null, ie(J)), K[c] = J;
+          var ee = K[h];
+          ee !== null && (K[f] = null, K[a] = null, K[h] = null, ee(J)), K[c] = J;
           return;
         }
-        var ee = K[a];
-        ee !== null && (K[f] = null, K[a] = null, K[h] = null, ee(b(void 0, true))), K[d] = true;
+        var ie = K[a];
+        ie !== null && (K[f] = null, K[a] = null, K[h] = null, ie(b(void 0, true))), K[d] = true;
       }), H.on("readable", M.bind(null, K)), K;
     };
     return async_iterator = U, async_iterator;
@@ -68095,9 +68095,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
   var _stream_readable$2, hasRequired_stream_readable$2;
   function require_stream_readable$2() {
     if (hasRequired_stream_readable$2) return _stream_readable$2;
-    hasRequired_stream_readable$2 = 1, _stream_readable$2 = ee;
+    hasRequired_stream_readable$2 = 1, _stream_readable$2 = ie;
     var l;
-    ee.ReadableState = ie, requireEvents().EventEmitter;
+    ie.ReadableState = ee, requireEvents().EventEmitter;
     var e = function(le, Ce) {
       return le.listeners(Ce).length;
     }, r = requireStreamBrowser$2(), s = requireDist().Buffer, o = (typeof commonjsGlobal < "u" ? commonjsGlobal : typeof window < "u" ? window : typeof self < "u" ? self : {}).Uint8Array || function() {
@@ -68112,7 +68112,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     c && c.debuglog ? d = c.debuglog("stream") : d = function() {
     };
     var f = requireBuffer_list(), p = requireDestroy$2(), m = requireState(), b = m.getHighWaterMark, _ = requireErrorsBrowser().codes, M = _.ERR_INVALID_ARG_TYPE, R = _.ERR_STREAM_PUSH_AFTER_EOF, O = _.ERR_METHOD_NOT_IMPLEMENTED, L = _.ERR_STREAM_UNSHIFT_AFTER_END_EVENT, U, q, H;
-    requireInherits_browser()(ee, r);
+    requireInherits_browser()(ie, r);
     var W = p.errorOrDestroy, K = [
       "error",
       "close",
@@ -68127,15 +68127,15 @@ Use Chrome, Firefox or Internet Explorer 11`);
         xe._events[le]
       ];
     }
-    function ie(xe, le, Ce) {
+    function ee(xe, le, Ce) {
       l = l || require_stream_duplex$2(), xe = xe || {}, typeof Ce != "boolean" && (Ce = le instanceof l), this.objectMode = !!xe.objectMode, Ce && (this.objectMode = this.objectMode || !!xe.readableObjectMode), this.highWaterMark = b(this, xe, "readableHighWaterMark", Ce), this.buffer = new f(), this.length = 0, this.pipes = null, this.pipesCount = 0, this.flowing = null, this.ended = false, this.endEmitted = false, this.reading = false, this.sync = true, this.needReadable = false, this.emittedReadable = false, this.readableListening = false, this.resumeScheduled = false, this.paused = true, this.emitClose = xe.emitClose !== false, this.autoDestroy = !!xe.autoDestroy, this.destroyed = false, this.defaultEncoding = xe.defaultEncoding || "utf8", this.awaitDrain = 0, this.readingMore = false, this.decoder = null, this.encoding = null, xe.encoding && (U || (U = requireString_decoder().StringDecoder), this.decoder = new U(xe.encoding), this.encoding = xe.encoding);
     }
-    function ee(xe) {
-      if (l = l || require_stream_duplex$2(), !(this instanceof ee)) return new ee(xe);
+    function ie(xe) {
+      if (l = l || require_stream_duplex$2(), !(this instanceof ie)) return new ie(xe);
       var le = this instanceof l;
-      this._readableState = new ie(xe, this, le), this.readable = true, xe && (typeof xe.read == "function" && (this._read = xe.read), typeof xe.destroy == "function" && (this._destroy = xe.destroy)), r.call(this);
+      this._readableState = new ee(xe, this, le), this.readable = true, xe && (typeof xe.read == "function" && (this._read = xe.read), typeof xe.destroy == "function" && (this._destroy = xe.destroy)), r.call(this);
     }
-    Object.defineProperty(ee.prototype, "destroyed", {
+    Object.defineProperty(ie.prototype, "destroyed", {
       enumerable: false,
       get: function() {
         return this._readableState === void 0 ? false : this._readableState.destroyed;
@@ -68143,12 +68143,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
       set: function(le) {
         this._readableState && (this._readableState.destroyed = le);
       }
-    }), ee.prototype.destroy = p.destroy, ee.prototype._undestroy = p.undestroy, ee.prototype._destroy = function(xe, le) {
+    }), ie.prototype.destroy = p.destroy, ie.prototype._undestroy = p.undestroy, ie.prototype._destroy = function(xe, le) {
       le(xe);
-    }, ee.prototype.push = function(xe, le) {
+    }, ie.prototype.push = function(xe, le) {
       var Ce = this._readableState, Pe;
       return Ce.objectMode ? Pe = true : typeof xe == "string" && (le = le || Ce.defaultEncoding, le !== Ce.encoding && (xe = s.from(xe, le), le = ""), Pe = true), fe(this, xe, le, false, Pe);
-    }, ee.prototype.unshift = function(xe) {
+    }, ie.prototype.unshift = function(xe) {
       return fe(this, xe, null, true, false);
     };
     function fe(xe, le, Ce, Pe, Be) {
@@ -68179,9 +68179,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
         "Uint8Array"
       ], le)), Ce;
     }
-    ee.prototype.isPaused = function() {
+    ie.prototype.isPaused = function() {
       return this._readableState.flowing === false;
-    }, ee.prototype.setEncoding = function(xe) {
+    }, ie.prototype.setEncoding = function(xe) {
       U || (U = requireString_decoder().StringDecoder);
       var le = new U(xe);
       this._readableState.decoder = le, this._readableState.encoding = this._readableState.decoder.encoding;
@@ -68195,7 +68195,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function P(xe, le) {
       return xe <= 0 || le.length === 0 && le.ended ? 0 : le.objectMode ? 1 : xe !== xe ? le.flowing && le.length ? le.buffer.head.data.length : le.length : (xe > le.highWaterMark && (le.highWaterMark = $(xe)), xe <= le.length ? xe : le.ended ? le.length : (le.needReadable = true, 0));
     }
-    ee.prototype.read = function(xe) {
+    ie.prototype.read = function(xe) {
       d("read", xe), xe = parseInt(xe, 10);
       var le = this._readableState, Ce = xe;
       if (xe !== 0 && (le.emittedReadable = false), xe === 0 && le.needReadable && ((le.highWaterMark !== 0 ? le.length >= le.highWaterMark : le.length > 0) || le.ended)) return d("read: emitReadable", le.length, le.ended), le.length === 0 && le.ended ? ne(this) : V(this), null;
@@ -68232,9 +68232,9 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       le.readingMore = false;
     }
-    ee.prototype._read = function(xe) {
+    ie.prototype._read = function(xe) {
       W(this, new O("_read()"));
-    }, ee.prototype.pipe = function(xe, le) {
+    }, ie.prototype.pipe = function(xe, le) {
       var Ce = this, Pe = this._readableState;
       switch (Pe.pipesCount) {
         case 0:
@@ -68294,7 +68294,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         d("pipeOnDrain", Ce.awaitDrain), Ce.awaitDrain && Ce.awaitDrain--, Ce.awaitDrain === 0 && e(xe, "data") && (Ce.flowing = true, be(xe));
       };
     }
-    ee.prototype.unpipe = function(xe) {
+    ie.prototype.unpipe = function(xe) {
       var le = this._readableState, Ce = {
         hasUnpiped: false
       };
@@ -68310,13 +68310,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       var rt = _e(le.pipes, xe);
       return rt === -1 ? this : (le.pipes.splice(rt, 1), le.pipesCount -= 1, le.pipesCount === 1 && (le.pipes = le.pipes[0]), xe.emit("unpipe", this, Ce), this);
-    }, ee.prototype.on = function(xe, le) {
+    }, ie.prototype.on = function(xe, le) {
       var Ce = r.prototype.on.call(this, xe, le), Pe = this._readableState;
       return xe === "data" ? (Pe.readableListening = this.listenerCount("readable") > 0, Pe.flowing !== false && this.resume()) : xe === "readable" && !Pe.endEmitted && !Pe.readableListening && (Pe.readableListening = Pe.needReadable = true, Pe.flowing = false, Pe.emittedReadable = false, d("on readable", Pe.length, Pe.reading), Pe.length ? V(this) : Pe.reading || process$1.nextTick(Y, this)), Ce;
-    }, ee.prototype.addListener = ee.prototype.on, ee.prototype.removeListener = function(xe, le) {
+    }, ie.prototype.addListener = ie.prototype.on, ie.prototype.removeListener = function(xe, le) {
       var Ce = r.prototype.removeListener.call(this, xe, le);
       return xe === "readable" && process$1.nextTick(j, this), Ce;
-    }, ee.prototype.removeAllListeners = function(xe) {
+    }, ie.prototype.removeAllListeners = function(xe) {
       var le = r.prototype.removeAllListeners.apply(this, arguments);
       return (xe === "readable" || xe === void 0) && process$1.nextTick(j, this), le;
     };
@@ -68327,7 +68327,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function Y(xe) {
       d("readable nexttick read 0"), xe.read(0);
     }
-    ee.prototype.resume = function() {
+    ie.prototype.resume = function() {
       var xe = this._readableState;
       return xe.flowing || (d("resume"), xe.flowing = !xe.readableListening, oe(this, xe)), xe.paused = false, this;
     };
@@ -68337,14 +68337,14 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function me(xe, le) {
       d("resume", le.reading), le.reading || xe.read(0), le.resumeScheduled = false, xe.emit("resume"), be(xe), le.flowing && !le.reading && xe.read(0);
     }
-    ee.prototype.pause = function() {
+    ie.prototype.pause = function() {
       return d("call pause flowing=%j", this._readableState.flowing), this._readableState.flowing !== false && (d("pause"), this._readableState.flowing = false, this.emit("pause")), this._readableState.paused = true, this;
     };
     function be(xe) {
       var le = xe._readableState;
       for (d("flow", le.flowing); le.flowing && xe.read() !== null; ) ;
     }
-    ee.prototype.wrap = function(xe) {
+    ie.prototype.wrap = function(xe) {
       var le = this, Ce = this._readableState, Pe = false;
       xe.on("end", function() {
         if (d("wrapped end"), Ce.decoder && !Ce.ended) {
@@ -68367,19 +68367,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return this._read = function(rt) {
         d("wrapped _read", rt), Pe && (Pe = false, xe.resume());
       }, this;
-    }, typeof Symbol == "function" && (ee.prototype[Symbol.asyncIterator] = function() {
+    }, typeof Symbol == "function" && (ie.prototype[Symbol.asyncIterator] = function() {
       return q === void 0 && (q = requireAsync_iterator()), q(this);
-    }), Object.defineProperty(ee.prototype, "readableHighWaterMark", {
+    }), Object.defineProperty(ie.prototype, "readableHighWaterMark", {
       enumerable: false,
       get: function() {
         return this._readableState.highWaterMark;
       }
-    }), Object.defineProperty(ee.prototype, "readableBuffer", {
+    }), Object.defineProperty(ie.prototype, "readableBuffer", {
       enumerable: false,
       get: function() {
         return this._readableState && this._readableState.buffer;
       }
-    }), Object.defineProperty(ee.prototype, "readableFlowing", {
+    }), Object.defineProperty(ie.prototype, "readableFlowing", {
       enumerable: false,
       get: function() {
         return this._readableState.flowing;
@@ -68387,7 +68387,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       set: function(le) {
         this._readableState && (this._readableState.flowing = le);
       }
-    }), ee._fromList = Z, Object.defineProperty(ee.prototype, "readableLength", {
+    }), ie._fromList = Z, Object.defineProperty(ie.prototype, "readableLength", {
       enumerable: false,
       get: function() {
         return this._readableState.length;
@@ -68408,8 +68408,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
         (!Ce || Ce.autoDestroy && Ce.finished) && le.destroy();
       }
     }
-    typeof Symbol == "function" && (ee.from = function(xe, le) {
-      return H === void 0 && (H = requireFromBrowser()), H(ee, xe, le);
+    typeof Symbol == "function" && (ie.from = function(xe, le) {
+      return H === void 0 && (H = requireFromBrowser()), H(ie, xe, le);
     });
     function _e(xe, le) {
       for (var Ce = 0, Pe = xe.length; Ce < Pe; Ce++) if (xe[Ce] === le) return Ce;
@@ -69115,13 +69115,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
       if (K(D), z) W(V, D, x, z, k);
       else {
         var j = G(D);
-        !j && !D.corked && !D.bufferProcessing && D.bufferedRequest && fe(V, D), x ? r(ie, V, D, j, k) : ie(V, D, j, k);
+        !j && !D.corked && !D.bufferProcessing && D.bufferedRequest && fe(V, D), x ? r(ee, V, D, j, k) : ee(V, D, j, k);
       }
     }
-    function ie(V, z, D, x) {
-      D || ee(V, z), z.pendingcb--, x(), $(V, z);
+    function ee(V, z, D, x) {
+      D || ie(V, z), z.pendingcb--, x(), $(V, z);
     }
-    function ee(V, z) {
+    function ie(V, z) {
       z.length === 0 && z.needDrain && (z.needDrain = false, V.emit("drain"));
     }
     function fe(V, z) {
@@ -69319,19 +69319,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return M || (M = requireString_decoder().StringDecoder), this._readableState.decoder = new M(Z), this._readableState.encoding = Z, this;
     };
     var J = 8388608;
-    function ie(Z) {
+    function ee(Z) {
       return Z >= J ? Z = J : (Z--, Z |= Z >>> 1, Z |= Z >>> 2, Z |= Z >>> 4, Z |= Z >>> 8, Z |= Z >>> 16, Z++), Z;
     }
-    function ee(Z, ne) {
-      return Z <= 0 || ne.length === 0 && ne.ended ? 0 : ne.objectMode ? 1 : Z !== Z ? ne.flowing && ne.length ? ne.buffer.head.data.length : ne.length : (Z > ne.highWaterMark && (ne.highWaterMark = ie(Z)), Z <= ne.length ? Z : ne.ended ? ne.length : (ne.needReadable = true, 0));
+    function ie(Z, ne) {
+      return Z <= 0 || ne.length === 0 && ne.ended ? 0 : ne.objectMode ? 1 : Z !== Z ? ne.flowing && ne.length ? ne.buffer.head.data.length : ne.length : (Z > ne.highWaterMark && (ne.highWaterMark = ee(Z)), Z <= ne.length ? Z : ne.ended ? ne.length : (ne.needReadable = true, 0));
     }
     U.prototype.read = function(Z) {
       m("read", Z), Z = parseInt(Z, 10);
       var ne = this._readableState, pe = Z;
       if (Z !== 0 && (ne.emittedReadable = false), Z === 0 && ne.needReadable && (ne.length >= ne.highWaterMark || ne.ended)) return m("read: emitReadable", ne.length, ne.ended), ne.length === 0 && ne.ended ? oe(this) : G(this), null;
-      if (Z = ee(Z, ne), Z === 0 && ne.ended) return ne.length === 0 && oe(this), null;
+      if (Z = ie(Z, ne), Z === 0 && ne.ended) return ne.length === 0 && oe(this), null;
       var _e = ne.needReadable;
-      m("need readable", _e), (ne.length === 0 || ne.length - Z < ne.highWaterMark) && (_e = true, m("length less than watermark", _e)), ne.ended || ne.reading ? (_e = false, m("reading or ended", _e)) : _e && (m("do read"), ne.reading = true, ne.sync = true, ne.length === 0 && (ne.needReadable = true), this._read(ne.highWaterMark), ne.sync = false, ne.reading || (Z = ee(pe, ne)));
+      m("need readable", _e), (ne.length === 0 || ne.length - Z < ne.highWaterMark) && (_e = true, m("length less than watermark", _e)), ne.ended || ne.reading ? (_e = false, m("reading or ended", _e)) : _e && (m("do read"), ne.reading = true, ne.sync = true, ne.length === 0 && (ne.needReadable = true), this._read(ne.highWaterMark), ne.sync = false, ne.reading || (Z = ie(pe, ne)));
       var xe;
       return Z > 0 ? xe = x(Z, ne) : xe = null, xe === null ? (ne.needReadable = true, Z = 0) : ne.length -= Z, ne.length === 0 && (ne.ended || (ne.needReadable = true), pe !== Z && ne.ended && oe(this)), xe !== null && this.emit("data", xe), xe;
     };
@@ -70016,32 +70016,32 @@ Use Chrome, Firefox or Internet Explorer 11`);
     function p(L, U) {
       return L << U | L >>> 32 - U;
     }
-    function m(L, U, q, H, W, K, J, ie) {
-      return p(L + (U ^ q ^ H) + K + J | 0, ie) + W | 0;
+    function m(L, U, q, H, W, K, J, ee) {
+      return p(L + (U ^ q ^ H) + K + J | 0, ee) + W | 0;
     }
-    function b(L, U, q, H, W, K, J, ie) {
-      return p(L + (U & q | ~U & H) + K + J | 0, ie) + W | 0;
+    function b(L, U, q, H, W, K, J, ee) {
+      return p(L + (U & q | ~U & H) + K + J | 0, ee) + W | 0;
     }
-    function _(L, U, q, H, W, K, J, ie) {
-      return p(L + ((U | ~q) ^ H) + K + J | 0, ie) + W | 0;
+    function _(L, U, q, H, W, K, J, ee) {
+      return p(L + ((U | ~q) ^ H) + K + J | 0, ee) + W | 0;
     }
-    function M(L, U, q, H, W, K, J, ie) {
-      return p(L + (U & H | q & ~H) + K + J | 0, ie) + W | 0;
+    function M(L, U, q, H, W, K, J, ee) {
+      return p(L + (U & H | q & ~H) + K + J | 0, ee) + W | 0;
     }
-    function R(L, U, q, H, W, K, J, ie) {
-      return p(L + (U ^ (q | ~H)) + K + J | 0, ie) + W | 0;
+    function R(L, U, q, H, W, K, J, ee) {
+      return p(L + (U ^ (q | ~H)) + K + J | 0, ee) + W | 0;
     }
     function O() {
       r.call(this, 64), this._a = 1732584193, this._b = 4023233417, this._c = 2562383102, this._d = 271733878, this._e = 3285377520;
     }
     return e(O, r), O.prototype._update = function() {
       for (var L = s, U = 0; U < 16; ++U) L[U] = this._block.readInt32LE(U * 4);
-      for (var q = this._a | 0, H = this._b | 0, W = this._c | 0, K = this._d | 0, J = this._e | 0, ie = this._a | 0, ee = this._b | 0, fe = this._c | 0, G = this._d | 0, v = this._e | 0, w = 0; w < 80; w += 1) {
+      for (var q = this._a | 0, H = this._b | 0, W = this._c | 0, K = this._d | 0, J = this._e | 0, ee = this._a | 0, ie = this._b | 0, fe = this._c | 0, G = this._d | 0, v = this._e | 0, w = 0; w < 80; w += 1) {
         var $, P;
-        w < 16 ? ($ = m(q, H, W, K, J, L[o[w]], d[0], h[w]), P = R(ie, ee, fe, G, v, L[a[w]], f[0], c[w])) : w < 32 ? ($ = b(q, H, W, K, J, L[o[w]], d[1], h[w]), P = M(ie, ee, fe, G, v, L[a[w]], f[1], c[w])) : w < 48 ? ($ = _(q, H, W, K, J, L[o[w]], d[2], h[w]), P = _(ie, ee, fe, G, v, L[a[w]], f[2], c[w])) : w < 64 ? ($ = M(q, H, W, K, J, L[o[w]], d[3], h[w]), P = b(ie, ee, fe, G, v, L[a[w]], f[3], c[w])) : ($ = R(q, H, W, K, J, L[o[w]], d[4], h[w]), P = m(ie, ee, fe, G, v, L[a[w]], f[4], c[w])), q = J, J = K, K = p(W, 10), W = H, H = $, ie = v, v = G, G = p(fe, 10), fe = ee, ee = P;
+        w < 16 ? ($ = m(q, H, W, K, J, L[o[w]], d[0], h[w]), P = R(ee, ie, fe, G, v, L[a[w]], f[0], c[w])) : w < 32 ? ($ = b(q, H, W, K, J, L[o[w]], d[1], h[w]), P = M(ee, ie, fe, G, v, L[a[w]], f[1], c[w])) : w < 48 ? ($ = _(q, H, W, K, J, L[o[w]], d[2], h[w]), P = _(ee, ie, fe, G, v, L[a[w]], f[2], c[w])) : w < 64 ? ($ = M(q, H, W, K, J, L[o[w]], d[3], h[w]), P = b(ee, ie, fe, G, v, L[a[w]], f[3], c[w])) : ($ = R(q, H, W, K, J, L[o[w]], d[4], h[w]), P = m(ee, ie, fe, G, v, L[a[w]], f[4], c[w])), q = J, J = K, K = p(W, 10), W = H, H = $, ee = v, v = G, G = p(fe, 10), fe = ie, ie = P;
       }
       var F = this._b + W + G | 0;
-      this._b = this._c + K + v | 0, this._c = this._d + J + ie | 0, this._d = this._e + q + ee | 0, this._e = this._a + H + fe | 0, this._a = F;
+      this._b = this._c + K + v | 0, this._c = this._d + J + ee | 0, this._d = this._e + q + ie | 0, this._e = this._a + H + fe | 0, this._a = F;
     }, O.prototype._digest = function() {
       this._block[this._blockOffset] = 128, this._blockOffset += 1, this._blockOffset > 56 && (this._block.fill(0, this._blockOffset, 64), this._update(), this._blockOffset = 0), this._block.fill(0, this._blockOffset, 56), this._block.writeUInt32LE(this._length[0], 56), this._block.writeUInt32LE(this._length[1], 60), this._update();
       var L = l.alloc ? l.alloc(20) : new l(20);
@@ -70258,8 +70258,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
       for (var _ = this._w, M = this._a | 0, R = this._b | 0, O = this._c | 0, L = this._d | 0, U = this._e | 0, q = this._f | 0, H = this._g | 0, W = this._h | 0, K = 0; K < 16; ++K) _[K] = b.readInt32BE(K * 4);
       for (; K < 64; ++K) _[K] = m(_[K - 2]) + _[K - 7] + p(_[K - 15]) + _[K - 16] | 0;
       for (var J = 0; J < 64; ++J) {
-        var ie = W + f(U) + h(U, q, H) + s[J] + _[J] | 0, ee = d(M) + c(M, R, O) | 0;
-        W = H, H = q, q = U, U = L + ie | 0, L = O, O = R, R = M, M = ie + ee | 0;
+        var ee = W + f(U) + h(U, q, H) + s[J] + _[J] | 0, ie = d(M) + c(M, R, O) | 0;
+        W = H, H = q, q = U, U = L + ee | 0, L = O, O = R, R = M, M = ee + ie | 0;
       }
       this._a = M + this._a | 0, this._b = R + this._b | 0, this._c = O + this._c | 0, this._d = L + this._d | 0, this._e = U + this._e | 0, this._f = q + this._f | 0, this._g = H + this._g | 0, this._h = W + this._h | 0;
     }, a.prototype._hash = function() {
@@ -70482,7 +70482,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return R >>> 0 < O >>> 0 ? 1 : 0;
     }
     return a.prototype._update = function(R) {
-      for (var O = this._w, L = this._ah | 0, U = this._bh | 0, q = this._ch | 0, H = this._dh | 0, W = this._eh | 0, K = this._fh | 0, J = this._gh | 0, ie = this._hh | 0, ee = this._al | 0, fe = this._bl | 0, G = this._cl | 0, v = this._dl | 0, w = this._el | 0, $ = this._fl | 0, P = this._gl | 0, F = this._hl | 0, V = 0; V < 32; V += 2) O[V] = R.readInt32BE(V * 4), O[V + 1] = R.readInt32BE(V * 4 + 4);
+      for (var O = this._w, L = this._ah | 0, U = this._bh | 0, q = this._ch | 0, H = this._dh | 0, W = this._eh | 0, K = this._fh | 0, J = this._gh | 0, ee = this._hh | 0, ie = this._al | 0, fe = this._bl | 0, G = this._cl | 0, v = this._dl | 0, w = this._el | 0, $ = this._fl | 0, P = this._gl | 0, F = this._hl | 0, V = 0; V < 32; V += 2) O[V] = R.readInt32BE(V * 4), O[V + 1] = R.readInt32BE(V * 4 + 4);
       for (; V < 160; V += 2) {
         var z = O[V - 30], D = O[V - 30 + 1], x = p(z, D), k = m(D, z);
         z = O[V - 4], D = O[V - 4 + 1];
@@ -70491,12 +70491,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       for (var _e = 0; _e < 160; _e += 2) {
         pe = O[_e], ne = O[_e + 1];
-        var xe = c(L, U, q), le = c(ee, fe, G), Ce = d(L, ee), Pe = d(ee, L), Be = f(W, w), Ee = f(w, W), rt = s[_e], Re = s[_e + 1], Te = h(W, K, J), ct = h(w, $, P), De = F + Ee | 0, Fe = ie + Be + M(De, F) | 0;
+        var xe = c(L, U, q), le = c(ie, fe, G), Ce = d(L, ie), Pe = d(ie, L), Be = f(W, w), Ee = f(w, W), rt = s[_e], Re = s[_e + 1], Te = h(W, K, J), ct = h(w, $, P), De = F + Ee | 0, Fe = ee + Be + M(De, F) | 0;
         De = De + ct | 0, Fe = Fe + Te + M(De, ct) | 0, De = De + Re | 0, Fe = Fe + rt + M(De, Re) | 0, De = De + ne | 0, Fe = Fe + pe + M(De, ne) | 0;
         var ut = Pe + le | 0, Le = Ce + xe + M(ut, Pe) | 0;
-        ie = J, F = P, J = K, P = $, K = W, $ = w, w = v + De | 0, W = H + Fe + M(w, v) | 0, H = q, v = G, q = U, G = fe, U = L, fe = ee, ee = De + ut | 0, L = Fe + Le + M(ee, De) | 0;
+        ee = J, F = P, J = K, P = $, K = W, $ = w, w = v + De | 0, W = H + Fe + M(w, v) | 0, H = q, v = G, q = U, G = fe, U = L, fe = ie, ie = De + ut | 0, L = Fe + Le + M(ie, De) | 0;
       }
-      this._al = this._al + ee | 0, this._bl = this._bl + fe | 0, this._cl = this._cl + G | 0, this._dl = this._dl + v | 0, this._el = this._el + w | 0, this._fl = this._fl + $ | 0, this._gl = this._gl + P | 0, this._hl = this._hl + F | 0, this._ah = this._ah + L + M(this._al, ee) | 0, this._bh = this._bh + U + M(this._bl, fe) | 0, this._ch = this._ch + q + M(this._cl, G) | 0, this._dh = this._dh + H + M(this._dl, v) | 0, this._eh = this._eh + W + M(this._el, w) | 0, this._fh = this._fh + K + M(this._fl, $) | 0, this._gh = this._gh + J + M(this._gl, P) | 0, this._hh = this._hh + ie + M(this._hl, F) | 0;
+      this._al = this._al + ie | 0, this._bl = this._bl + fe | 0, this._cl = this._cl + G | 0, this._dl = this._dl + v | 0, this._el = this._el + w | 0, this._fl = this._fl + $ | 0, this._gl = this._gl + P | 0, this._hl = this._hl + F | 0, this._ah = this._ah + L + M(this._al, ie) | 0, this._bh = this._bh + U + M(this._bl, fe) | 0, this._ch = this._ch + q + M(this._cl, G) | 0, this._dh = this._dh + H + M(this._dl, v) | 0, this._eh = this._eh + W + M(this._el, w) | 0, this._fh = this._fh + K + M(this._fl, $) | 0, this._gh = this._gh + J + M(this._gl, P) | 0, this._hh = this._hh + ee + M(this._hl, F) | 0;
     }, a.prototype._hash = function() {
       var R = r.allocUnsafe(64);
       function O(L, U, q) {
@@ -70896,15 +70896,15 @@ Use Chrome, Firefox or Internet Explorer 11`);
       o(O, L), M = h(M, a, "Password"), R = h(R, a, "Salt");
       var q = (U || "sha1").toLowerCase(), H = f[q] || q, W = d[H];
       if (typeof W != "number" || !W) throw new TypeError("Digest algorithm not supported: " + U);
-      var K = new b(H, M, R.length), J = s.allocUnsafe(L), ie = s.allocUnsafe(R.length + 4);
-      R.copy(ie, 0, 0, R.length);
-      for (var ee = 0, fe = W, G = Math.ceil(L / fe), v = 1; v <= G; v++) {
-        ie.writeUInt32BE(v, R.length);
-        for (var w = K.run(ie, K.ipad1), $ = w, P = 1; P < O; P++) {
+      var K = new b(H, M, R.length), J = s.allocUnsafe(L), ee = s.allocUnsafe(R.length + 4);
+      R.copy(ee, 0, 0, R.length);
+      for (var ie = 0, fe = W, G = Math.ceil(L / fe), v = 1; v <= G; v++) {
+        ee.writeUInt32BE(v, R.length);
+        for (var w = K.run(ee, K.ipad1), $ = w, P = 1; P < O; P++) {
           $ = K.run($, K.ipad2);
           for (var F = 0; F < fe; F++) w[F] ^= $[F];
         }
-        w.copy(J, ee), ee += fe;
+        w.copy(J, ie), ie += fe;
       }
       return J;
     }
@@ -72289,8 +72289,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
       for (var d = 0; d < c.length; c++) c[d] = 0;
     }
     function s(c, d, f, p, m) {
-      for (var b = f[0], _ = f[1], M = f[2], R = f[3], O = c[0] ^ d[0], L = c[1] ^ d[1], U = c[2] ^ d[2], q = c[3] ^ d[3], H, W, K, J, ie = 4, ee = 1; ee < m; ee++) H = b[O >>> 24] ^ _[L >>> 16 & 255] ^ M[U >>> 8 & 255] ^ R[q & 255] ^ d[ie++], W = b[L >>> 24] ^ _[U >>> 16 & 255] ^ M[q >>> 8 & 255] ^ R[O & 255] ^ d[ie++], K = b[U >>> 24] ^ _[q >>> 16 & 255] ^ M[O >>> 8 & 255] ^ R[L & 255] ^ d[ie++], J = b[q >>> 24] ^ _[O >>> 16 & 255] ^ M[L >>> 8 & 255] ^ R[U & 255] ^ d[ie++], O = H, L = W, U = K, q = J;
-      return H = (p[O >>> 24] << 24 | p[L >>> 16 & 255] << 16 | p[U >>> 8 & 255] << 8 | p[q & 255]) ^ d[ie++], W = (p[L >>> 24] << 24 | p[U >>> 16 & 255] << 16 | p[q >>> 8 & 255] << 8 | p[O & 255]) ^ d[ie++], K = (p[U >>> 24] << 24 | p[q >>> 16 & 255] << 16 | p[O >>> 8 & 255] << 8 | p[L & 255]) ^ d[ie++], J = (p[q >>> 24] << 24 | p[O >>> 16 & 255] << 16 | p[L >>> 8 & 255] << 8 | p[U & 255]) ^ d[ie++], H = H >>> 0, W = W >>> 0, K = K >>> 0, J = J >>> 0, [
+      for (var b = f[0], _ = f[1], M = f[2], R = f[3], O = c[0] ^ d[0], L = c[1] ^ d[1], U = c[2] ^ d[2], q = c[3] ^ d[3], H, W, K, J, ee = 4, ie = 1; ie < m; ie++) H = b[O >>> 24] ^ _[L >>> 16 & 255] ^ M[U >>> 8 & 255] ^ R[q & 255] ^ d[ee++], W = b[L >>> 24] ^ _[U >>> 16 & 255] ^ M[q >>> 8 & 255] ^ R[O & 255] ^ d[ee++], K = b[U >>> 24] ^ _[q >>> 16 & 255] ^ M[O >>> 8 & 255] ^ R[L & 255] ^ d[ee++], J = b[q >>> 24] ^ _[O >>> 16 & 255] ^ M[L >>> 8 & 255] ^ R[U & 255] ^ d[ee++], O = H, L = W, U = K, q = J;
+      return H = (p[O >>> 24] << 24 | p[L >>> 16 & 255] << 16 | p[U >>> 8 & 255] << 8 | p[q & 255]) ^ d[ee++], W = (p[L >>> 24] << 24 | p[U >>> 16 & 255] << 16 | p[q >>> 8 & 255] << 8 | p[O & 255]) ^ d[ee++], K = (p[U >>> 24] << 24 | p[q >>> 16 & 255] << 16 | p[O >>> 8 & 255] << 8 | p[L & 255]) ^ d[ee++], J = (p[q >>> 24] << 24 | p[O >>> 16 & 255] << 16 | p[L >>> 8 & 255] << 8 | p[U & 255]) ^ d[ee++], H = H >>> 0, W = W >>> 0, K = K >>> 0, J = J >>> 0, [
         H,
         W,
         K,
@@ -73535,7 +73535,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.eq = function(v) {
           return this.cmp(v) === 0;
         }, a.red = function(v) {
-          return new ee(v);
+          return new ie(v);
         }, a.prototype.toRed = function(v) {
           return s(!this.red, "Already a number in reduction context"), s(this.negative === 0, "red works only with positives"), v.convertTo(this)._forceRed(v);
         }, a.prototype.fromRed = function() {
@@ -73626,10 +73626,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
           H.call(this, "p192", "ffffffff ffffffff ffffffff fffffffe ffffffff ffffffff");
         }
         o(J, H);
-        function ie() {
+        function ee() {
           H.call(this, "25519", "7fffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffed");
         }
-        o(ie, H), ie.prototype.imulK = function(v) {
+        o(ee, H), ee.prototype.imulK = function(v) {
           for (var w = 0, $ = 0; $ < v.length; $++) {
             var P = (v.words[$] | 0) * 19 + w, F = P & 67108863;
             P >>>= 26, v.words[$] = F, w = P;
@@ -73641,51 +73641,51 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (v === "k256") w = new W();
           else if (v === "p224") w = new K();
           else if (v === "p192") w = new J();
-          else if (v === "p25519") w = new ie();
+          else if (v === "p25519") w = new ee();
           else throw new Error("Unknown prime " + v);
           return q[v] = w, w;
         };
-        function ee(G) {
+        function ie(G) {
           if (typeof G == "string") {
             var v = a._prime(G);
             this.m = v.p, this.prime = v;
           } else s(G.gtn(1), "modulus must be greater than 1"), this.m = G, this.prime = null;
         }
-        ee.prototype._verify1 = function(v) {
+        ie.prototype._verify1 = function(v) {
           s(v.negative === 0, "red works only with positives"), s(v.red, "red works only with red numbers");
-        }, ee.prototype._verify2 = function(v, w) {
+        }, ie.prototype._verify2 = function(v, w) {
           s((v.negative | w.negative) === 0, "red works only with positives"), s(v.red && v.red === w.red, "red works only with red numbers");
-        }, ee.prototype.imod = function(v) {
+        }, ie.prototype.imod = function(v) {
           return this.prime ? this.prime.ireduce(v)._forceRed(this) : v.umod(this.m)._forceRed(this);
-        }, ee.prototype.neg = function(v) {
+        }, ie.prototype.neg = function(v) {
           return v.isZero() ? v.clone() : this.m.sub(v)._forceRed(this);
-        }, ee.prototype.add = function(v, w) {
+        }, ie.prototype.add = function(v, w) {
           this._verify2(v, w);
           var $ = v.add(w);
           return $.cmp(this.m) >= 0 && $.isub(this.m), $._forceRed(this);
-        }, ee.prototype.iadd = function(v, w) {
+        }, ie.prototype.iadd = function(v, w) {
           this._verify2(v, w);
           var $ = v.iadd(w);
           return $.cmp(this.m) >= 0 && $.isub(this.m), $;
-        }, ee.prototype.sub = function(v, w) {
+        }, ie.prototype.sub = function(v, w) {
           this._verify2(v, w);
           var $ = v.sub(w);
           return $.cmpn(0) < 0 && $.iadd(this.m), $._forceRed(this);
-        }, ee.prototype.isub = function(v, w) {
+        }, ie.prototype.isub = function(v, w) {
           this._verify2(v, w);
           var $ = v.isub(w);
           return $.cmpn(0) < 0 && $.iadd(this.m), $;
-        }, ee.prototype.shl = function(v, w) {
+        }, ie.prototype.shl = function(v, w) {
           return this._verify1(v), this.imod(v.ushln(w));
-        }, ee.prototype.imul = function(v, w) {
+        }, ie.prototype.imul = function(v, w) {
           return this._verify2(v, w), this.imod(v.imul(w));
-        }, ee.prototype.mul = function(v, w) {
+        }, ie.prototype.mul = function(v, w) {
           return this._verify2(v, w), this.imod(v.mul(w));
-        }, ee.prototype.isqr = function(v) {
+        }, ie.prototype.isqr = function(v) {
           return this.imul(v, v.clone());
-        }, ee.prototype.sqr = function(v) {
+        }, ie.prototype.sqr = function(v) {
           return this.mul(v, v);
-        }, ee.prototype.sqrt = function(v) {
+        }, ie.prototype.sqrt = function(v) {
           if (v.isZero()) return v.clone();
           var w = this.m.andln(3);
           if (s(w % 2 === 1), w === 3) {
@@ -73703,10 +73703,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
             j = j.redMul(Z), k = Z.redSqr(), Y = Y.redMul(k), oe = be;
           }
           return j;
-        }, ee.prototype.invm = function(v) {
+        }, ie.prototype.invm = function(v) {
           var w = v._invmp(this.m);
           return w.negative !== 0 ? (w.negative = 0, this.imod(w).redNeg()) : this.imod(w);
-        }, ee.prototype.pow = function(v, w) {
+        }, ie.prototype.pow = function(v, w) {
           if (w.isZero()) return new a(1).toRed(this);
           if (w.cmpn(1) === 0) return v.clone();
           var $ = 4, P = new Array(1 << $);
@@ -73725,19 +73725,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
             x = 26;
           }
           return V;
-        }, ee.prototype.convertTo = function(v) {
+        }, ie.prototype.convertTo = function(v) {
           var w = v.umod(this.m);
           return w === v ? w.clone() : w;
-        }, ee.prototype.convertFrom = function(v) {
+        }, ie.prototype.convertFrom = function(v) {
           var w = v.clone();
           return w.red = null, w;
         }, a.mont = function(v) {
           return new fe(v);
         };
         function fe(G) {
-          ee.call(this, G), this.shift = this.m.bitLength(), this.shift % 26 !== 0 && (this.shift += 26 - this.shift % 26), this.r = new a(1).iushln(this.shift), this.r2 = this.imod(this.r.sqr()), this.rinv = this.r._invmp(this.m), this.minv = this.rinv.mul(this.r).isubn(1).div(this.m), this.minv = this.minv.umod(this.r), this.minv = this.r.sub(this.minv);
+          ie.call(this, G), this.shift = this.m.bitLength(), this.shift % 26 !== 0 && (this.shift += 26 - this.shift % 26), this.r = new a(1).iushln(this.shift), this.r2 = this.imod(this.r.sqr()), this.rinv = this.r._invmp(this.m), this.minv = this.rinv.mul(this.r).isubn(1).div(this.m), this.minv = this.minv.umod(this.r), this.minv = this.r.sub(this.minv);
         }
-        o(fe, ee), fe.prototype.convertTo = function(v) {
+        o(fe, ie), fe.prototype.convertTo = function(v) {
           return this.imod(v.ushln(this.shift));
         }, fe.prototype.convertFrom = function(v) {
           var w = this.imod(v.mul(this.rinv));
@@ -74574,7 +74574,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.eq = function(v) {
           return this.cmp(v) === 0;
         }, a.red = function(v) {
-          return new ee(v);
+          return new ie(v);
         }, a.prototype.toRed = function(v) {
           return s(!this.red, "Already a number in reduction context"), s(this.negative === 0, "red works only with positives"), v.convertTo(this)._forceRed(v);
         }, a.prototype.fromRed = function() {
@@ -74665,10 +74665,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
           H.call(this, "p192", "ffffffff ffffffff ffffffff fffffffe ffffffff ffffffff");
         }
         o(J, H);
-        function ie() {
+        function ee() {
           H.call(this, "25519", "7fffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffed");
         }
-        o(ie, H), ie.prototype.imulK = function(v) {
+        o(ee, H), ee.prototype.imulK = function(v) {
           for (var w = 0, $ = 0; $ < v.length; $++) {
             var P = (v.words[$] | 0) * 19 + w, F = P & 67108863;
             P >>>= 26, v.words[$] = F, w = P;
@@ -74680,51 +74680,51 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (v === "k256") w = new W();
           else if (v === "p224") w = new K();
           else if (v === "p192") w = new J();
-          else if (v === "p25519") w = new ie();
+          else if (v === "p25519") w = new ee();
           else throw new Error("Unknown prime " + v);
           return q[v] = w, w;
         };
-        function ee(G) {
+        function ie(G) {
           if (typeof G == "string") {
             var v = a._prime(G);
             this.m = v.p, this.prime = v;
           } else s(G.gtn(1), "modulus must be greater than 1"), this.m = G, this.prime = null;
         }
-        ee.prototype._verify1 = function(v) {
+        ie.prototype._verify1 = function(v) {
           s(v.negative === 0, "red works only with positives"), s(v.red, "red works only with red numbers");
-        }, ee.prototype._verify2 = function(v, w) {
+        }, ie.prototype._verify2 = function(v, w) {
           s((v.negative | w.negative) === 0, "red works only with positives"), s(v.red && v.red === w.red, "red works only with red numbers");
-        }, ee.prototype.imod = function(v) {
+        }, ie.prototype.imod = function(v) {
           return this.prime ? this.prime.ireduce(v)._forceRed(this) : v.umod(this.m)._forceRed(this);
-        }, ee.prototype.neg = function(v) {
+        }, ie.prototype.neg = function(v) {
           return v.isZero() ? v.clone() : this.m.sub(v)._forceRed(this);
-        }, ee.prototype.add = function(v, w) {
+        }, ie.prototype.add = function(v, w) {
           this._verify2(v, w);
           var $ = v.add(w);
           return $.cmp(this.m) >= 0 && $.isub(this.m), $._forceRed(this);
-        }, ee.prototype.iadd = function(v, w) {
+        }, ie.prototype.iadd = function(v, w) {
           this._verify2(v, w);
           var $ = v.iadd(w);
           return $.cmp(this.m) >= 0 && $.isub(this.m), $;
-        }, ee.prototype.sub = function(v, w) {
+        }, ie.prototype.sub = function(v, w) {
           this._verify2(v, w);
           var $ = v.sub(w);
           return $.cmpn(0) < 0 && $.iadd(this.m), $._forceRed(this);
-        }, ee.prototype.isub = function(v, w) {
+        }, ie.prototype.isub = function(v, w) {
           this._verify2(v, w);
           var $ = v.isub(w);
           return $.cmpn(0) < 0 && $.iadd(this.m), $;
-        }, ee.prototype.shl = function(v, w) {
+        }, ie.prototype.shl = function(v, w) {
           return this._verify1(v), this.imod(v.ushln(w));
-        }, ee.prototype.imul = function(v, w) {
+        }, ie.prototype.imul = function(v, w) {
           return this._verify2(v, w), this.imod(v.imul(w));
-        }, ee.prototype.mul = function(v, w) {
+        }, ie.prototype.mul = function(v, w) {
           return this._verify2(v, w), this.imod(v.mul(w));
-        }, ee.prototype.isqr = function(v) {
+        }, ie.prototype.isqr = function(v) {
           return this.imul(v, v.clone());
-        }, ee.prototype.sqr = function(v) {
+        }, ie.prototype.sqr = function(v) {
           return this.mul(v, v);
-        }, ee.prototype.sqrt = function(v) {
+        }, ie.prototype.sqrt = function(v) {
           if (v.isZero()) return v.clone();
           var w = this.m.andln(3);
           if (s(w % 2 === 1), w === 3) {
@@ -74742,10 +74742,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
             j = j.redMul(Z), k = Z.redSqr(), Y = Y.redMul(k), oe = be;
           }
           return j;
-        }, ee.prototype.invm = function(v) {
+        }, ie.prototype.invm = function(v) {
           var w = v._invmp(this.m);
           return w.negative !== 0 ? (w.negative = 0, this.imod(w).redNeg()) : this.imod(w);
-        }, ee.prototype.pow = function(v, w) {
+        }, ie.prototype.pow = function(v, w) {
           if (w.isZero()) return new a(1).toRed(this);
           if (w.cmpn(1) === 0) return v.clone();
           var $ = 4, P = new Array(1 << $);
@@ -74764,19 +74764,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
             x = 26;
           }
           return V;
-        }, ee.prototype.convertTo = function(v) {
+        }, ie.prototype.convertTo = function(v) {
           var w = v.umod(this.m);
           return w === v ? w.clone() : w;
-        }, ee.prototype.convertFrom = function(v) {
+        }, ie.prototype.convertFrom = function(v) {
           var w = v.clone();
           return w.red = null, w;
         }, a.mont = function(v) {
           return new fe(v);
         };
         function fe(G) {
-          ee.call(this, G), this.shift = this.m.bitLength(), this.shift % 26 !== 0 && (this.shift += 26 - this.shift % 26), this.r = new a(1).iushln(this.shift), this.r2 = this.imod(this.r.sqr()), this.rinv = this.r._invmp(this.m), this.minv = this.rinv.mul(this.r).isubn(1).div(this.m), this.minv = this.minv.umod(this.r), this.minv = this.r.sub(this.minv);
+          ie.call(this, G), this.shift = this.m.bitLength(), this.shift % 26 !== 0 && (this.shift += 26 - this.shift % 26), this.r = new a(1).iushln(this.shift), this.r2 = this.imod(this.r.sqr()), this.rinv = this.r._invmp(this.m), this.minv = this.rinv.mul(this.r).isubn(1).div(this.m), this.minv = this.minv.umod(this.r), this.minv = this.r.sub(this.minv);
         }
-        o(fe, ee), fe.prototype.convertTo = function(v) {
+        o(fe, ie), fe.prototype.convertTo = function(v) {
           return this.imod(v.ushln(this.shift));
         }, fe.prototype.convertFrom = function(v) {
           var w = this.imod(v.mul(this.rinv));
@@ -75324,13 +75324,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
       if (K(D), z) W(V, D, x, z, k);
       else {
         var j = G(D);
-        !j && !D.corked && !D.bufferProcessing && D.bufferedRequest && fe(V, D), x ? r(ie, V, D, j, k) : ie(V, D, j, k);
+        !j && !D.corked && !D.bufferProcessing && D.bufferedRequest && fe(V, D), x ? r(ee, V, D, j, k) : ee(V, D, j, k);
       }
     }
-    function ie(V, z, D, x) {
-      D || ee(V, z), z.pendingcb--, x(), $(V, z);
+    function ee(V, z, D, x) {
+      D || ie(V, z), z.pendingcb--, x(), $(V, z);
     }
-    function ee(V, z) {
+    function ie(V, z) {
       z.length === 0 && z.needDrain && (z.needDrain = false, V.emit("drain"));
     }
     function fe(V, z) {
@@ -75528,19 +75528,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return M || (M = requireString_decoder().StringDecoder), this._readableState.decoder = new M(Z), this._readableState.encoding = Z, this;
     };
     var J = 8388608;
-    function ie(Z) {
+    function ee(Z) {
       return Z >= J ? Z = J : (Z--, Z |= Z >>> 1, Z |= Z >>> 2, Z |= Z >>> 4, Z |= Z >>> 8, Z |= Z >>> 16, Z++), Z;
     }
-    function ee(Z, ne) {
-      return Z <= 0 || ne.length === 0 && ne.ended ? 0 : ne.objectMode ? 1 : Z !== Z ? ne.flowing && ne.length ? ne.buffer.head.data.length : ne.length : (Z > ne.highWaterMark && (ne.highWaterMark = ie(Z)), Z <= ne.length ? Z : ne.ended ? ne.length : (ne.needReadable = true, 0));
+    function ie(Z, ne) {
+      return Z <= 0 || ne.length === 0 && ne.ended ? 0 : ne.objectMode ? 1 : Z !== Z ? ne.flowing && ne.length ? ne.buffer.head.data.length : ne.length : (Z > ne.highWaterMark && (ne.highWaterMark = ee(Z)), Z <= ne.length ? Z : ne.ended ? ne.length : (ne.needReadable = true, 0));
     }
     U.prototype.read = function(Z) {
       m("read", Z), Z = parseInt(Z, 10);
       var ne = this._readableState, pe = Z;
       if (Z !== 0 && (ne.emittedReadable = false), Z === 0 && ne.needReadable && (ne.length >= ne.highWaterMark || ne.ended)) return m("read: emitReadable", ne.length, ne.ended), ne.length === 0 && ne.ended ? oe(this) : G(this), null;
-      if (Z = ee(Z, ne), Z === 0 && ne.ended) return ne.length === 0 && oe(this), null;
+      if (Z = ie(Z, ne), Z === 0 && ne.ended) return ne.length === 0 && oe(this), null;
       var _e = ne.needReadable;
-      m("need readable", _e), (ne.length === 0 || ne.length - Z < ne.highWaterMark) && (_e = true, m("length less than watermark", _e)), ne.ended || ne.reading ? (_e = false, m("reading or ended", _e)) : _e && (m("do read"), ne.reading = true, ne.sync = true, ne.length === 0 && (ne.needReadable = true), this._read(ne.highWaterMark), ne.sync = false, ne.reading || (Z = ee(pe, ne)));
+      m("need readable", _e), (ne.length === 0 || ne.length - Z < ne.highWaterMark) && (_e = true, m("length less than watermark", _e)), ne.ended || ne.reading ? (_e = false, m("reading or ended", _e)) : _e && (m("do read"), ne.reading = true, ne.sync = true, ne.length === 0 && (ne.needReadable = true), this._read(ne.highWaterMark), ne.sync = false, ne.reading || (Z = ie(pe, ne)));
       var xe;
       return Z > 0 ? xe = x(Z, ne) : xe = null, xe === null ? (ne.needReadable = true, Z = 0) : ne.length -= Z, ne.length === 0 && (ne.ended || (ne.needReadable = true), pe !== Z && ne.ended && oe(this)), xe !== null && this.emit("data", xe), xe;
     };
@@ -76712,14 +76712,14 @@ Use Chrome, Firefox or Internet Explorer 11`);
           }
           return $.words[$.length - 1] === 0 && ($.length--, $.words[$.length - 1] === 0 && $.length--), $;
         };
-        function ie() {
+        function ee() {
           K.call(this, "p224", "ffffffff ffffffff ffffffff ffffffff 00000000 00000000 00000001");
         }
-        o(ie, K);
-        function ee() {
+        o(ee, K);
+        function ie() {
           K.call(this, "p192", "ffffffff ffffffff ffffffff fffffffe ffffffff ffffffff");
         }
-        o(ee, K);
+        o(ie, K);
         function fe() {
           K.call(this, "25519", "7fffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffed");
         }
@@ -76733,8 +76733,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (W[$]) return W[$];
           var P;
           if ($ === "k256") P = new J();
-          else if ($ === "p224") P = new ie();
-          else if ($ === "p192") P = new ee();
+          else if ($ === "p224") P = new ee();
+          else if ($ === "p192") P = new ie();
           else if ($ === "p25519") P = new fe();
           else throw new Error("Unknown prime " + $);
           return W[$] = P, P;
@@ -77697,7 +77697,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.eq = function(v) {
           return this.cmp(v) === 0;
         }, a.red = function(v) {
-          return new ee(v);
+          return new ie(v);
         }, a.prototype.toRed = function(v) {
           return s(!this.red, "Already a number in reduction context"), s(this.negative === 0, "red works only with positives"), v.convertTo(this)._forceRed(v);
         }, a.prototype.fromRed = function() {
@@ -77788,10 +77788,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
           H.call(this, "p192", "ffffffff ffffffff ffffffff fffffffe ffffffff ffffffff");
         }
         o(J, H);
-        function ie() {
+        function ee() {
           H.call(this, "25519", "7fffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffed");
         }
-        o(ie, H), ie.prototype.imulK = function(v) {
+        o(ee, H), ee.prototype.imulK = function(v) {
           for (var w = 0, $ = 0; $ < v.length; $++) {
             var P = (v.words[$] | 0) * 19 + w, F = P & 67108863;
             P >>>= 26, v.words[$] = F, w = P;
@@ -77803,51 +77803,51 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (v === "k256") w = new W();
           else if (v === "p224") w = new K();
           else if (v === "p192") w = new J();
-          else if (v === "p25519") w = new ie();
+          else if (v === "p25519") w = new ee();
           else throw new Error("Unknown prime " + v);
           return q[v] = w, w;
         };
-        function ee(G) {
+        function ie(G) {
           if (typeof G == "string") {
             var v = a._prime(G);
             this.m = v.p, this.prime = v;
           } else s(G.gtn(1), "modulus must be greater than 1"), this.m = G, this.prime = null;
         }
-        ee.prototype._verify1 = function(v) {
+        ie.prototype._verify1 = function(v) {
           s(v.negative === 0, "red works only with positives"), s(v.red, "red works only with red numbers");
-        }, ee.prototype._verify2 = function(v, w) {
+        }, ie.prototype._verify2 = function(v, w) {
           s((v.negative | w.negative) === 0, "red works only with positives"), s(v.red && v.red === w.red, "red works only with red numbers");
-        }, ee.prototype.imod = function(v) {
+        }, ie.prototype.imod = function(v) {
           return this.prime ? this.prime.ireduce(v)._forceRed(this) : v.umod(this.m)._forceRed(this);
-        }, ee.prototype.neg = function(v) {
+        }, ie.prototype.neg = function(v) {
           return v.isZero() ? v.clone() : this.m.sub(v)._forceRed(this);
-        }, ee.prototype.add = function(v, w) {
+        }, ie.prototype.add = function(v, w) {
           this._verify2(v, w);
           var $ = v.add(w);
           return $.cmp(this.m) >= 0 && $.isub(this.m), $._forceRed(this);
-        }, ee.prototype.iadd = function(v, w) {
+        }, ie.prototype.iadd = function(v, w) {
           this._verify2(v, w);
           var $ = v.iadd(w);
           return $.cmp(this.m) >= 0 && $.isub(this.m), $;
-        }, ee.prototype.sub = function(v, w) {
+        }, ie.prototype.sub = function(v, w) {
           this._verify2(v, w);
           var $ = v.sub(w);
           return $.cmpn(0) < 0 && $.iadd(this.m), $._forceRed(this);
-        }, ee.prototype.isub = function(v, w) {
+        }, ie.prototype.isub = function(v, w) {
           this._verify2(v, w);
           var $ = v.isub(w);
           return $.cmpn(0) < 0 && $.iadd(this.m), $;
-        }, ee.prototype.shl = function(v, w) {
+        }, ie.prototype.shl = function(v, w) {
           return this._verify1(v), this.imod(v.ushln(w));
-        }, ee.prototype.imul = function(v, w) {
+        }, ie.prototype.imul = function(v, w) {
           return this._verify2(v, w), this.imod(v.imul(w));
-        }, ee.prototype.mul = function(v, w) {
+        }, ie.prototype.mul = function(v, w) {
           return this._verify2(v, w), this.imod(v.mul(w));
-        }, ee.prototype.isqr = function(v) {
+        }, ie.prototype.isqr = function(v) {
           return this.imul(v, v.clone());
-        }, ee.prototype.sqr = function(v) {
+        }, ie.prototype.sqr = function(v) {
           return this.mul(v, v);
-        }, ee.prototype.sqrt = function(v) {
+        }, ie.prototype.sqrt = function(v) {
           if (v.isZero()) return v.clone();
           var w = this.m.andln(3);
           if (s(w % 2 === 1), w === 3) {
@@ -77865,10 +77865,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
             j = j.redMul(Z), k = Z.redSqr(), Y = Y.redMul(k), oe = be;
           }
           return j;
-        }, ee.prototype.invm = function(v) {
+        }, ie.prototype.invm = function(v) {
           var w = v._invmp(this.m);
           return w.negative !== 0 ? (w.negative = 0, this.imod(w).redNeg()) : this.imod(w);
-        }, ee.prototype.pow = function(v, w) {
+        }, ie.prototype.pow = function(v, w) {
           if (w.isZero()) return new a(1).toRed(this);
           if (w.cmpn(1) === 0) return v.clone();
           var $ = 4, P = new Array(1 << $);
@@ -77887,19 +77887,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
             x = 26;
           }
           return V;
-        }, ee.prototype.convertTo = function(v) {
+        }, ie.prototype.convertTo = function(v) {
           var w = v.umod(this.m);
           return w === v ? w.clone() : w;
-        }, ee.prototype.convertFrom = function(v) {
+        }, ie.prototype.convertFrom = function(v) {
           var w = v.clone();
           return w.red = null, w;
         }, a.mont = function(v) {
           return new fe(v);
         };
         function fe(G) {
-          ee.call(this, G), this.shift = this.m.bitLength(), this.shift % 26 !== 0 && (this.shift += 26 - this.shift % 26), this.r = new a(1).iushln(this.shift), this.r2 = this.imod(this.r.sqr()), this.rinv = this.r._invmp(this.m), this.minv = this.rinv.mul(this.r).isubn(1).div(this.m), this.minv = this.minv.umod(this.r), this.minv = this.r.sub(this.minv);
+          ie.call(this, G), this.shift = this.m.bitLength(), this.shift % 26 !== 0 && (this.shift += 26 - this.shift % 26), this.r = new a(1).iushln(this.shift), this.r2 = this.imod(this.r.sqr()), this.rinv = this.r._invmp(this.m), this.minv = this.rinv.mul(this.r).isubn(1).div(this.m), this.minv = this.minv.umod(this.r), this.minv = this.r.sub(this.minv);
         }
-        o(fe, ee), fe.prototype.convertTo = function(v) {
+        o(fe, ie), fe.prototype.convertTo = function(v) {
           return this.imod(v.ushln(this.shift));
         }, fe.prototype.convertFrom = function(v) {
           var w = this.imod(v.mul(this.rinv));
@@ -78063,7 +78063,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
           f[K]
         ];
         f[W].y.cmp(f[K].y) === 0 ? (J[1] = f[W].add(f[K]), J[2] = f[W].toJ().mixedAdd(f[K].neg())) : f[W].y.cmp(f[K].y.redNeg()) === 0 ? (J[1] = f[W].toJ().mixedAdd(f[K]), J[2] = f[W].add(f[K].neg())) : (J[1] = f[W].toJ().mixedAdd(f[K]), J[2] = f[W].toJ().mixedAdd(f[K].neg()));
-        var ie = [
+        var ee = [
           -3,
           -1,
           -5,
@@ -78073,10 +78073,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
           5,
           1,
           3
-        ], ee = s(p[W], p[K]);
-        for (O = Math.max(ee[0].length, O), R[W] = new Array(O), R[K] = new Array(O), U = 0; U < O; U++) {
-          var fe = ee[0][U] | 0, G = ee[1][U] | 0;
-          R[W][U] = ie[(fe + 1) * 3 + (G + 1)], R[K][U] = 0, M[W] = J;
+        ], ie = s(p[W], p[K]);
+        for (O = Math.max(ie[0].length, O), R[W] = new Array(O), R[K] = new Array(O), U = 0; U < O; U++) {
+          var fe = ie[0][U] | 0, G = ie[1][U] | 0;
+          R[W][U] = ee[(fe + 1) * 3 + (G + 1)], R[K][U] = 0, M[W] = J;
         }
       }
       var v = this.jpoint(null, null, null), w = this._wnafT4;
@@ -78203,15 +78203,15 @@ Use Chrome, Firefox or Internet Explorer 11`);
         R
       ];
     }, a.prototype._getEndoBasis = function(f) {
-      for (var p = this.n.ushrn(Math.floor(this.n.bitLength() / 2)), m = f, b = this.n.clone(), _ = new e(1), M = new e(0), R = new e(0), O = new e(1), L, U, q, H, W, K, J, ie = 0, ee, fe; m.cmpn(0) !== 0; ) {
+      for (var p = this.n.ushrn(Math.floor(this.n.bitLength() / 2)), m = f, b = this.n.clone(), _ = new e(1), M = new e(0), R = new e(0), O = new e(1), L, U, q, H, W, K, J, ee = 0, ie, fe; m.cmpn(0) !== 0; ) {
         var G = b.div(m);
-        ee = b.sub(G.mul(m)), fe = R.sub(G.mul(_));
+        ie = b.sub(G.mul(m)), fe = R.sub(G.mul(_));
         var v = O.sub(G.mul(M));
-        if (!q && ee.cmp(p) < 0) L = J.neg(), U = _, q = ee.neg(), H = fe;
-        else if (q && ++ie === 2) break;
-        J = ee, b = m, m = ee, R = _, _ = fe, O = M, M = v;
+        if (!q && ie.cmp(p) < 0) L = J.neg(), U = _, q = ie.neg(), H = fe;
+        else if (q && ++ee === 2) break;
+        J = ie, b = m, m = ie, R = _, _ = fe, O = M, M = v;
       }
-      W = ee.neg(), K = fe;
+      W = ie.neg(), K = fe;
       var w = q.sqr().add(H.sqr()), $ = W.sqr().add(K.sqr());
       return $.cmp(w) >= 0 && (W = L, K = U), q.negative && (q = q.neg(), H = H.neg()), W.negative && (W = W.neg(), K = K.neg()), [
         {
@@ -78429,10 +78429,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
       }
       var b = this.curve.a, _ = this.curve.tinv, M = this.x, R = this.y, O = this.z, L = O.redSqr().redSqr(), U = R.redAdd(R);
       for (p = 0; p < f; p++) {
-        var q = M.redSqr(), H = U.redSqr(), W = H.redSqr(), K = q.redAdd(q).redIAdd(q).redIAdd(b.redMul(L)), J = M.redMul(H), ie = K.redSqr().redISub(J.redAdd(J)), ee = J.redISub(ie), fe = K.redMul(ee);
+        var q = M.redSqr(), H = U.redSqr(), W = H.redSqr(), K = q.redAdd(q).redIAdd(q).redIAdd(b.redMul(L)), J = M.redMul(H), ee = K.redSqr().redISub(J.redAdd(J)), ie = J.redISub(ee), fe = K.redMul(ie);
         fe = fe.redIAdd(fe).redISub(W);
         var G = U.redMul(O);
-        p + 1 < f && (L = L.redMul(W)), M = ie, O = G, U = fe;
+        p + 1 < f && (L = L.redMul(W)), M = ee, O = G, U = fe;
       }
       return this.curve.jpoint(M, U.redMul(_), O);
     }, c.prototype.dbl = function() {
@@ -78447,8 +78447,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
       } else {
         var q = this.x.redSqr(), H = this.y.redSqr(), W = H.redSqr(), K = this.x.redAdd(H).redSqr().redISub(q).redISub(W);
         K = K.redIAdd(K);
-        var J = q.redAdd(q).redIAdd(q), ie = J.redSqr(), ee = W.redIAdd(W);
-        ee = ee.redIAdd(ee), ee = ee.redIAdd(ee), f = ie.redISub(K).redISub(K), p = J.redMul(K.redISub(f)).redISub(ee), m = this.y.redMul(this.z), m = m.redIAdd(m);
+        var J = q.redAdd(q).redIAdd(q), ee = J.redSqr(), ie = W.redIAdd(W);
+        ie = ie.redIAdd(ie), ie = ie.redIAdd(ie), f = ee.redISub(K).redISub(K), p = J.redMul(K.redISub(f)).redISub(ie), m = this.y.redMul(this.z), m = m.redIAdd(m);
       }
       return this.curve.jpoint(f, p, m);
     }, c.prototype._threeDbl = function() {
@@ -78465,10 +78465,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
         K = K.redAdd(K).redIAdd(K);
         var J = W.redIAdd(W);
         J = J.redIAdd(J);
-        var ie = J.redAdd(J);
-        f = K.redSqr().redISub(ie), m = this.y.redAdd(this.z).redSqr().redISub(H).redISub(q);
-        var ee = H.redSqr();
-        ee = ee.redIAdd(ee), ee = ee.redIAdd(ee), ee = ee.redIAdd(ee), p = K.redMul(J.redISub(f)).redISub(ee);
+        var ee = J.redAdd(J);
+        f = K.redSqr().redISub(ee), m = this.y.redAdd(this.z).redSqr().redISub(H).redISub(q);
+        var ie = H.redSqr();
+        ie = ie.redIAdd(ie), ie = ie.redIAdd(ie), ie = ie.redIAdd(ie), p = K.redMul(J.redISub(f)).redISub(ie);
       }
       return this.curve.jpoint(f, p, m);
     }, c.prototype._dbl = function() {
@@ -78816,16 +78816,16 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return j >>> 0;
     }
     utils.sum64_5_lo = J;
-    function ie(v, w, $) {
+    function ee(v, w, $) {
       var P = w << 32 - $ | v >>> $;
       return P >>> 0;
     }
-    utils.rotr64_hi = ie;
-    function ee(v, w, $) {
+    utils.rotr64_hi = ee;
+    function ie(v, w, $) {
       var P = v << 32 - $ | w >>> $;
       return P >>> 0;
     }
-    utils.rotr64_lo = ee;
+    utils.rotr64_lo = ie;
     function fe(v, w, $) {
       return v >>> $;
     }
@@ -79024,12 +79024,12 @@ Use Chrome, Firefox or Internet Explorer 11`);
     return l.inherits(R, _), _256 = R, R.blockSize = 512, R.outSize = 256, R.hmacStrength = 192, R.padLength = 64, R.prototype._update = function(L, U) {
       for (var q = this.W, H = 0; H < 16; H++) q[H] = L[U + H];
       for (; H < q.length; H++) q[H] = a(b(q[H - 2]), q[H - 7], m(q[H - 15]), q[H - 16]);
-      var W = this.h[0], K = this.h[1], J = this.h[2], ie = this.h[3], ee = this.h[4], fe = this.h[5], G = this.h[6], v = this.h[7];
+      var W = this.h[0], K = this.h[1], J = this.h[2], ee = this.h[3], ie = this.h[4], fe = this.h[5], G = this.h[6], v = this.h[7];
       for (s(this.k.length === q.length), H = 0; H < q.length; H++) {
-        var w = h(v, p(ee), c(ee, fe, G), this.k[H], q[H]), $ = o(f(W), d(W, K, J));
-        v = G, G = fe, fe = ee, ee = o(ie, w), ie = J, J = K, K = W, W = o(w, $);
+        var w = h(v, p(ie), c(ie, fe, G), this.k[H], q[H]), $ = o(f(W), d(W, K, J));
+        v = G, G = fe, fe = ie, ie = o(ee, w), ee = J, J = K, K = W, W = o(w, $);
       }
-      this.h[0] = o(this.h[0], W), this.h[1] = o(this.h[1], K), this.h[2] = o(this.h[2], J), this.h[3] = o(this.h[3], ie), this.h[4] = o(this.h[4], ee), this.h[5] = o(this.h[5], fe), this.h[6] = o(this.h[6], G), this.h[7] = o(this.h[7], v);
+      this.h[0] = o(this.h[0], W), this.h[1] = o(this.h[1], K), this.h[2] = o(this.h[2], J), this.h[3] = o(this.h[3], ee), this.h[4] = o(this.h[4], ie), this.h[5] = o(this.h[5], fe), this.h[6] = o(this.h[6], G), this.h[7] = o(this.h[7], v);
     }, R.prototype._digest = function(L) {
       return L === "hex" ? l.toHex32(this.h, "big") : l.split32(this.h, "big");
     }, _256;
@@ -79246,7 +79246,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
     l.inherits(O, M), _512 = O, O.blockSize = 1024, O.outSize = 512, O.hmacStrength = 192, O.padLength = 128, O.prototype._prepareBlock = function($, P) {
       for (var F = this.W, V = 0; V < 32; V++) F[V] = $[P + V];
       for (; V < F.length; V += 2) {
-        var z = G(F[V - 4], F[V - 3]), D = v(F[V - 4], F[V - 3]), x = F[V - 14], k = F[V - 13], j = ee(F[V - 30], F[V - 29]), Y = fe(F[V - 30], F[V - 29]), oe = F[V - 32], me = F[V - 31];
+        var z = G(F[V - 4], F[V - 3]), D = v(F[V - 4], F[V - 3]), x = F[V - 14], k = F[V - 13], j = ie(F[V - 30], F[V - 29]), Y = fe(F[V - 30], F[V - 29]), oe = F[V - 32], me = F[V - 31];
         F[V] = p(z, D, x, k, j, Y, oe, me), F[V + 1] = m(z, D, x, k, j, Y, oe, me);
       }
     }, O.prototype._update = function($, P) {
@@ -79254,7 +79254,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
       var F = this.W, V = this.h[0], z = this.h[1], D = this.h[2], x = this.h[3], k = this.h[4], j = this.h[5], Y = this.h[6], oe = this.h[7], me = this.h[8], be = this.h[9], Z = this.h[10], ne = this.h[11], pe = this.h[12], _e = this.h[13], xe = this.h[14], le = this.h[15];
       r(this.k.length === F.length);
       for (var Ce = 0; Ce < F.length; Ce += 2) {
-        var Pe = xe, Be = le, Ee = J(me, be), rt = ie(me, be), Re = L(me, be, Z, ne, pe), Te = U(me, be, Z, ne, pe, _e), ct = this.k[Ce], De = this.k[Ce + 1], Fe = F[Ce], ut = F[Ce + 1], Le = b(Pe, Be, Ee, rt, Re, Te, ct, De, Fe, ut), Ue = _(Pe, Be, Ee, rt, Re, Te, ct, De, Fe, ut);
+        var Pe = xe, Be = le, Ee = J(me, be), rt = ee(me, be), Re = L(me, be, Z, ne, pe), Te = U(me, be, Z, ne, pe, _e), ct = this.k[Ce], De = this.k[Ce + 1], Fe = F[Ce], ut = F[Ce + 1], Le = b(Pe, Be, Ee, rt, Re, Te, ct, De, Fe, ut), Ue = _(Pe, Be, Ee, rt, Re, Te, ct, De, Fe, ut);
         Pe = W(V, z), Be = K(V, z), Ee = q(V, z, D, x, k), rt = H(V, z, D, x, k, j);
         var pt = d(Pe, Be, Ee, rt), Ke = f(Pe, Be, Ee, rt);
         xe = pe, le = _e, pe = Z, _e = ne, Z = me, ne = be, me = d(Y, oe, Le, Ue), be = f(oe, oe, Le, Ue), Y = k, oe = j, k = D, j = x, D = V, x = z, V = d(Le, Ue, pt, Ke), z = f(Le, Ue, pt, Ke);
@@ -79291,11 +79291,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
       var P = s(w, $, 14), F = s(w, $, 18), V = s($, w, 9), z = P ^ F ^ V;
       return z < 0 && (z += 4294967296), z;
     }
-    function ie(w, $) {
+    function ee(w, $) {
       var P = o(w, $, 14), F = o(w, $, 18), V = o($, w, 9), z = P ^ F ^ V;
       return z < 0 && (z += 4294967296), z;
     }
-    function ee(w, $) {
+    function ie(w, $) {
       var P = s(w, $, 1), F = s(w, $, 8), V = a(w, $, 7), z = P ^ F ^ V;
       return z < 0 && (z += 4294967296), z;
     }
@@ -79363,11 +79363,11 @@ Use Chrome, Firefox or Internet Explorer 11`);
       ], this.endian = "little";
     }
     l.inherits(c, h), ripemd.ripemd160 = c, c.blockSize = 512, c.outSize = 160, c.hmacStrength = 192, c.padLength = 64, c.prototype._update = function(O, L) {
-      for (var U = this.h[0], q = this.h[1], H = this.h[2], W = this.h[3], K = this.h[4], J = U, ie = q, ee = H, fe = W, G = K, v = 0; v < 80; v++) {
+      for (var U = this.h[0], q = this.h[1], H = this.h[2], W = this.h[3], K = this.h[4], J = U, ee = q, ie = H, fe = W, G = K, v = 0; v < 80; v++) {
         var w = s(r(a(U, d(v, q, H, W), O[m[v] + L], f(v)), _[v]), K);
-        U = K, K = W, W = r(H, 10), H = q, q = w, w = s(r(a(J, d(79 - v, ie, ee, fe), O[b[v] + L], p(v)), M[v]), G), J = G, G = fe, fe = r(ee, 10), ee = ie, ie = w;
+        U = K, K = W, W = r(H, 10), H = q, q = w, w = s(r(a(J, d(79 - v, ee, ie, fe), O[b[v] + L], p(v)), M[v]), G), J = G, G = fe, fe = r(ie, 10), ie = ee, ee = w;
       }
-      w = o(this.h[1], H, fe), this.h[1] = o(this.h[2], W, G), this.h[2] = o(this.h[3], K, J), this.h[3] = o(this.h[4], U, ie), this.h[4] = o(this.h[0], q, ee), this.h[0] = w;
+      w = o(this.h[1], H, fe), this.h[1] = o(this.h[2], W, G), this.h[2] = o(this.h[3], K, J), this.h[3] = o(this.h[4], U, ee), this.h[4] = o(this.h[0], q, ie), this.h[0] = w;
     }, c.prototype._digest = function(O) {
       return O === "hex" ? l.toHex32(this.h, "little") : l.split32(this.h, "little");
     };
@@ -80888,14 +80888,14 @@ Use Chrome, Firefox or Internet Explorer 11`);
         if (W = this._truncateToN(W, true), !(W.cmpn(1) <= 0 || W.cmp(q) >= 0)) {
           var K = this.g.mul(W);
           if (!K.isInfinity()) {
-            var J = K.getX(), ie = J.umod(this.n);
-            if (ie.cmpn(0) !== 0) {
-              var ee = W.invm(this.n).mul(ie.mul(m.getPrivate()).iadd(p));
-              if (ee = ee.umod(this.n), ee.cmpn(0) !== 0) {
-                var fe = (K.getY().isOdd() ? 1 : 0) | (J.cmp(ie) !== 0 ? 2 : 0);
-                return _.canonical && ee.cmp(this.nh) > 0 && (ee = this.n.sub(ee), fe ^= 1), new c({
-                  r: ie,
-                  s: ee,
+            var J = K.getX(), ee = J.umod(this.n);
+            if (ee.cmpn(0) !== 0) {
+              var ie = W.invm(this.n).mul(ee.mul(m.getPrivate()).iadd(p));
+              if (ie = ie.umod(this.n), ie.cmpn(0) !== 0) {
+                var fe = (K.getY().isOdd() ? 1 : 0) | (J.cmp(ee) !== 0 ? 2 : 0);
+                return _.canonical && ie.cmp(this.nh) > 0 && (ie = this.n.sub(ie), fe ^= 1), new c({
+                  r: ee,
+                  s: ie,
                   recoveryParam: fe
                 });
               }
@@ -81865,7 +81865,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.eq = function(v) {
           return this.cmp(v) === 0;
         }, a.red = function(v) {
-          return new ee(v);
+          return new ie(v);
         }, a.prototype.toRed = function(v) {
           return s(!this.red, "Already a number in reduction context"), s(this.negative === 0, "red works only with positives"), v.convertTo(this)._forceRed(v);
         }, a.prototype.fromRed = function() {
@@ -81956,10 +81956,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
           H.call(this, "p192", "ffffffff ffffffff ffffffff fffffffe ffffffff ffffffff");
         }
         o(J, H);
-        function ie() {
+        function ee() {
           H.call(this, "25519", "7fffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffed");
         }
-        o(ie, H), ie.prototype.imulK = function(v) {
+        o(ee, H), ee.prototype.imulK = function(v) {
           for (var w = 0, $ = 0; $ < v.length; $++) {
             var P = (v.words[$] | 0) * 19 + w, F = P & 67108863;
             P >>>= 26, v.words[$] = F, w = P;
@@ -81971,51 +81971,51 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (v === "k256") w = new W();
           else if (v === "p224") w = new K();
           else if (v === "p192") w = new J();
-          else if (v === "p25519") w = new ie();
+          else if (v === "p25519") w = new ee();
           else throw new Error("Unknown prime " + v);
           return q[v] = w, w;
         };
-        function ee(G) {
+        function ie(G) {
           if (typeof G == "string") {
             var v = a._prime(G);
             this.m = v.p, this.prime = v;
           } else s(G.gtn(1), "modulus must be greater than 1"), this.m = G, this.prime = null;
         }
-        ee.prototype._verify1 = function(v) {
+        ie.prototype._verify1 = function(v) {
           s(v.negative === 0, "red works only with positives"), s(v.red, "red works only with red numbers");
-        }, ee.prototype._verify2 = function(v, w) {
+        }, ie.prototype._verify2 = function(v, w) {
           s((v.negative | w.negative) === 0, "red works only with positives"), s(v.red && v.red === w.red, "red works only with red numbers");
-        }, ee.prototype.imod = function(v) {
+        }, ie.prototype.imod = function(v) {
           return this.prime ? this.prime.ireduce(v)._forceRed(this) : v.umod(this.m)._forceRed(this);
-        }, ee.prototype.neg = function(v) {
+        }, ie.prototype.neg = function(v) {
           return v.isZero() ? v.clone() : this.m.sub(v)._forceRed(this);
-        }, ee.prototype.add = function(v, w) {
+        }, ie.prototype.add = function(v, w) {
           this._verify2(v, w);
           var $ = v.add(w);
           return $.cmp(this.m) >= 0 && $.isub(this.m), $._forceRed(this);
-        }, ee.prototype.iadd = function(v, w) {
+        }, ie.prototype.iadd = function(v, w) {
           this._verify2(v, w);
           var $ = v.iadd(w);
           return $.cmp(this.m) >= 0 && $.isub(this.m), $;
-        }, ee.prototype.sub = function(v, w) {
+        }, ie.prototype.sub = function(v, w) {
           this._verify2(v, w);
           var $ = v.sub(w);
           return $.cmpn(0) < 0 && $.iadd(this.m), $._forceRed(this);
-        }, ee.prototype.isub = function(v, w) {
+        }, ie.prototype.isub = function(v, w) {
           this._verify2(v, w);
           var $ = v.isub(w);
           return $.cmpn(0) < 0 && $.iadd(this.m), $;
-        }, ee.prototype.shl = function(v, w) {
+        }, ie.prototype.shl = function(v, w) {
           return this._verify1(v), this.imod(v.ushln(w));
-        }, ee.prototype.imul = function(v, w) {
+        }, ie.prototype.imul = function(v, w) {
           return this._verify2(v, w), this.imod(v.imul(w));
-        }, ee.prototype.mul = function(v, w) {
+        }, ie.prototype.mul = function(v, w) {
           return this._verify2(v, w), this.imod(v.mul(w));
-        }, ee.prototype.isqr = function(v) {
+        }, ie.prototype.isqr = function(v) {
           return this.imul(v, v.clone());
-        }, ee.prototype.sqr = function(v) {
+        }, ie.prototype.sqr = function(v) {
           return this.mul(v, v);
-        }, ee.prototype.sqrt = function(v) {
+        }, ie.prototype.sqrt = function(v) {
           if (v.isZero()) return v.clone();
           var w = this.m.andln(3);
           if (s(w % 2 === 1), w === 3) {
@@ -82033,10 +82033,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
             j = j.redMul(Z), k = Z.redSqr(), Y = Y.redMul(k), oe = be;
           }
           return j;
-        }, ee.prototype.invm = function(v) {
+        }, ie.prototype.invm = function(v) {
           var w = v._invmp(this.m);
           return w.negative !== 0 ? (w.negative = 0, this.imod(w).redNeg()) : this.imod(w);
-        }, ee.prototype.pow = function(v, w) {
+        }, ie.prototype.pow = function(v, w) {
           if (w.isZero()) return new a(1).toRed(this);
           if (w.cmpn(1) === 0) return v.clone();
           var $ = 4, P = new Array(1 << $);
@@ -82055,19 +82055,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
             x = 26;
           }
           return V;
-        }, ee.prototype.convertTo = function(v) {
+        }, ie.prototype.convertTo = function(v) {
           var w = v.umod(this.m);
           return w === v ? w.clone() : w;
-        }, ee.prototype.convertFrom = function(v) {
+        }, ie.prototype.convertFrom = function(v) {
           var w = v.clone();
           return w.red = null, w;
         }, a.mont = function(v) {
           return new fe(v);
         };
         function fe(G) {
-          ee.call(this, G), this.shift = this.m.bitLength(), this.shift % 26 !== 0 && (this.shift += 26 - this.shift % 26), this.r = new a(1).iushln(this.shift), this.r2 = this.imod(this.r.sqr()), this.rinv = this.r._invmp(this.m), this.minv = this.rinv.mul(this.r).isubn(1).div(this.m), this.minv = this.minv.umod(this.r), this.minv = this.r.sub(this.minv);
+          ie.call(this, G), this.shift = this.m.bitLength(), this.shift % 26 !== 0 && (this.shift += 26 - this.shift % 26), this.r = new a(1).iushln(this.shift), this.r2 = this.imod(this.r.sqr()), this.rinv = this.r._invmp(this.m), this.minv = this.rinv.mul(this.r).isubn(1).div(this.m), this.minv = this.minv.umod(this.r), this.minv = this.r.sub(this.minv);
         }
-        o(fe, ee), fe.prototype.convertTo = function(v) {
+        o(fe, ie), fe.prototype.convertTo = function(v) {
           return this.imod(v.ushln(this.shift));
         }, fe.prototype.convertFrom = function(v) {
           var w = this.imod(v.mul(this.rinv));
@@ -82541,8 +82541,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
           b.any ? _ = p.raw(L) : p = W;
         }
         if (m && m.track && b.tag !== null && m.track(p.path(), H, p.length, "tagged"), m && m.track && b.tag !== null && m.track(p.path(), p.offset, p.length, "content"), b.any ? _ = _ : b.choice === null ? _ = this._decodeGeneric(b.tag, p, m) : _ = this._decodeChoice(p, m), p.isError(_)) return _;
-        if (!b.any && b.choice === null && b.children !== null && b.children.forEach(function(ie) {
-          ie._decode(p, m);
+        if (!b.any && b.choice === null && b.children !== null && b.children.forEach(function(ee) {
+          ee._decode(p, m);
         }), b.contains && (b.tag === "octstr" || b.tag === "bitstr")) {
           var K = new r(_);
           _ = this._getUse(b.contains, p._reporterState.obj)._decode(K, m);
@@ -83249,13 +83249,13 @@ Use Chrome, Firefox or Internet Explorer 11`);
         W,
         L
       ]);
-      for (var J = K.modulus.byteLength(), ie = [
+      for (var J = K.modulus.byteLength(), ee = [
         0,
         1
-      ]; L.length + ie.length + 1 < J; ) ie.push(255);
-      ie.push(0);
-      for (var ee = -1; ++ee < L.length; ) ie.push(L[ee]);
-      var fe = r(ie, K);
+      ]; L.length + ee.length + 1 < J; ) ee.push(255);
+      ee.push(0);
+      for (var ie = -1; ++ie < L.length; ) ee.push(L[ie]);
+      var fe = r(ee, K);
       return fe;
     }
     function f(L, U) {
@@ -83265,8 +83265,8 @@ Use Chrome, Firefox or Internet Explorer 11`);
       return l.from(K.toDER());
     }
     function p(L, U, q) {
-      for (var H = U.params.priv_key, W = U.params.p, K = U.params.q, J = U.params.g, ie = new o(0), ee, fe = _(L, K).mod(K), G = false, v = b(H, K, L, q); G === false; ) ee = R(K, v, q), ie = O(J, ee, W, K), G = ee.invm(K).imul(fe.add(H.mul(ie))).mod(K), G.cmpn(0) === 0 && (G = false, ie = new o(0));
-      return m(ie, G);
+      for (var H = U.params.priv_key, W = U.params.p, K = U.params.q, J = U.params.g, ee = new o(0), ie, fe = _(L, K).mod(K), G = false, v = b(H, K, L, q); G === false; ) ie = R(K, v, q), ee = O(J, ie, W, K), G = ie.invm(K).imul(fe.add(H.mul(ee))).mod(K), G.cmpn(0) === 0 && (G = false, ee = new o(0));
+      return m(ee, G);
     }
     function m(L, U) {
       L = L.toArray(), U = U.toArray(), L[0] & 128 && (L = [
@@ -83293,16 +83293,16 @@ Use Chrome, Firefox or Internet Explorer 11`);
           L
         ]);
       }
-      var K = q.length, J = M(q, U), ie = l.alloc(K);
-      ie.fill(1);
-      var ee = l.alloc(K);
-      return ee = e(H, ee).update(ie).update(l.from([
+      var K = q.length, J = M(q, U), ee = l.alloc(K);
+      ee.fill(1);
+      var ie = l.alloc(K);
+      return ie = e(H, ie).update(ee).update(l.from([
         0
-      ])).update(L).update(J).digest(), ie = e(H, ee).update(ie).digest(), ee = e(H, ee).update(ie).update(l.from([
+      ])).update(L).update(J).digest(), ee = e(H, ie).update(ee).digest(), ie = e(H, ie).update(ee).update(l.from([
         1
-      ])).update(L).update(J).digest(), ie = e(H, ee).update(ie).digest(), {
-        k: ee,
-        v: ie
+      ])).update(L).update(J).digest(), ee = e(H, ie).update(ee).digest(), {
+        k: ie,
+        v: ee
       };
     }
     function _(L, U) {
@@ -84257,7 +84257,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.eq = function(v) {
           return this.cmp(v) === 0;
         }, a.red = function(v) {
-          return new ee(v);
+          return new ie(v);
         }, a.prototype.toRed = function(v) {
           return s(!this.red, "Already a number in reduction context"), s(this.negative === 0, "red works only with positives"), v.convertTo(this)._forceRed(v);
         }, a.prototype.fromRed = function() {
@@ -84348,10 +84348,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
           H.call(this, "p192", "ffffffff ffffffff ffffffff fffffffe ffffffff ffffffff");
         }
         o(J, H);
-        function ie() {
+        function ee() {
           H.call(this, "25519", "7fffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffed");
         }
-        o(ie, H), ie.prototype.imulK = function(v) {
+        o(ee, H), ee.prototype.imulK = function(v) {
           for (var w = 0, $ = 0; $ < v.length; $++) {
             var P = (v.words[$] | 0) * 19 + w, F = P & 67108863;
             P >>>= 26, v.words[$] = F, w = P;
@@ -84363,51 +84363,51 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (v === "k256") w = new W();
           else if (v === "p224") w = new K();
           else if (v === "p192") w = new J();
-          else if (v === "p25519") w = new ie();
+          else if (v === "p25519") w = new ee();
           else throw new Error("Unknown prime " + v);
           return q[v] = w, w;
         };
-        function ee(G) {
+        function ie(G) {
           if (typeof G == "string") {
             var v = a._prime(G);
             this.m = v.p, this.prime = v;
           } else s(G.gtn(1), "modulus must be greater than 1"), this.m = G, this.prime = null;
         }
-        ee.prototype._verify1 = function(v) {
+        ie.prototype._verify1 = function(v) {
           s(v.negative === 0, "red works only with positives"), s(v.red, "red works only with red numbers");
-        }, ee.prototype._verify2 = function(v, w) {
+        }, ie.prototype._verify2 = function(v, w) {
           s((v.negative | w.negative) === 0, "red works only with positives"), s(v.red && v.red === w.red, "red works only with red numbers");
-        }, ee.prototype.imod = function(v) {
+        }, ie.prototype.imod = function(v) {
           return this.prime ? this.prime.ireduce(v)._forceRed(this) : v.umod(this.m)._forceRed(this);
-        }, ee.prototype.neg = function(v) {
+        }, ie.prototype.neg = function(v) {
           return v.isZero() ? v.clone() : this.m.sub(v)._forceRed(this);
-        }, ee.prototype.add = function(v, w) {
+        }, ie.prototype.add = function(v, w) {
           this._verify2(v, w);
           var $ = v.add(w);
           return $.cmp(this.m) >= 0 && $.isub(this.m), $._forceRed(this);
-        }, ee.prototype.iadd = function(v, w) {
+        }, ie.prototype.iadd = function(v, w) {
           this._verify2(v, w);
           var $ = v.iadd(w);
           return $.cmp(this.m) >= 0 && $.isub(this.m), $;
-        }, ee.prototype.sub = function(v, w) {
+        }, ie.prototype.sub = function(v, w) {
           this._verify2(v, w);
           var $ = v.sub(w);
           return $.cmpn(0) < 0 && $.iadd(this.m), $._forceRed(this);
-        }, ee.prototype.isub = function(v, w) {
+        }, ie.prototype.isub = function(v, w) {
           this._verify2(v, w);
           var $ = v.isub(w);
           return $.cmpn(0) < 0 && $.iadd(this.m), $;
-        }, ee.prototype.shl = function(v, w) {
+        }, ie.prototype.shl = function(v, w) {
           return this._verify1(v), this.imod(v.ushln(w));
-        }, ee.prototype.imul = function(v, w) {
+        }, ie.prototype.imul = function(v, w) {
           return this._verify2(v, w), this.imod(v.imul(w));
-        }, ee.prototype.mul = function(v, w) {
+        }, ie.prototype.mul = function(v, w) {
           return this._verify2(v, w), this.imod(v.mul(w));
-        }, ee.prototype.isqr = function(v) {
+        }, ie.prototype.isqr = function(v) {
           return this.imul(v, v.clone());
-        }, ee.prototype.sqr = function(v) {
+        }, ie.prototype.sqr = function(v) {
           return this.mul(v, v);
-        }, ee.prototype.sqrt = function(v) {
+        }, ie.prototype.sqrt = function(v) {
           if (v.isZero()) return v.clone();
           var w = this.m.andln(3);
           if (s(w % 2 === 1), w === 3) {
@@ -84425,10 +84425,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
             j = j.redMul(Z), k = Z.redSqr(), Y = Y.redMul(k), oe = be;
           }
           return j;
-        }, ee.prototype.invm = function(v) {
+        }, ie.prototype.invm = function(v) {
           var w = v._invmp(this.m);
           return w.negative !== 0 ? (w.negative = 0, this.imod(w).redNeg()) : this.imod(w);
-        }, ee.prototype.pow = function(v, w) {
+        }, ie.prototype.pow = function(v, w) {
           if (w.isZero()) return new a(1).toRed(this);
           if (w.cmpn(1) === 0) return v.clone();
           var $ = 4, P = new Array(1 << $);
@@ -84447,19 +84447,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
             x = 26;
           }
           return V;
-        }, ee.prototype.convertTo = function(v) {
+        }, ie.prototype.convertTo = function(v) {
           var w = v.umod(this.m);
           return w === v ? w.clone() : w;
-        }, ee.prototype.convertFrom = function(v) {
+        }, ie.prototype.convertFrom = function(v) {
           var w = v.clone();
           return w.red = null, w;
         }, a.mont = function(v) {
           return new fe(v);
         };
         function fe(G) {
-          ee.call(this, G), this.shift = this.m.bitLength(), this.shift % 26 !== 0 && (this.shift += 26 - this.shift % 26), this.r = new a(1).iushln(this.shift), this.r2 = this.imod(this.r.sqr()), this.rinv = this.r._invmp(this.m), this.minv = this.rinv.mul(this.r).isubn(1).div(this.m), this.minv = this.minv.umod(this.r), this.minv = this.r.sub(this.minv);
+          ie.call(this, G), this.shift = this.m.bitLength(), this.shift % 26 !== 0 && (this.shift += 26 - this.shift % 26), this.r = new a(1).iushln(this.shift), this.r2 = this.imod(this.r.sqr()), this.rinv = this.r._invmp(this.m), this.minv = this.rinv.mul(this.r).isubn(1).div(this.m), this.minv = this.minv.umod(this.r), this.minv = this.r.sub(this.minv);
         }
-        o(fe, ee), fe.prototype.convertTo = function(v) {
+        o(fe, ie), fe.prototype.convertTo = function(v) {
           return this.imod(v.ushln(this.shift));
         }, fe.prototype.convertFrom = function(v) {
           var w = this.imod(v.mul(this.rinv));
@@ -85397,7 +85397,7 @@ Use Chrome, Firefox or Internet Explorer 11`);
         }, a.prototype.eq = function(v) {
           return this.cmp(v) === 0;
         }, a.red = function(v) {
-          return new ee(v);
+          return new ie(v);
         }, a.prototype.toRed = function(v) {
           return s(!this.red, "Already a number in reduction context"), s(this.negative === 0, "red works only with positives"), v.convertTo(this)._forceRed(v);
         }, a.prototype.fromRed = function() {
@@ -85488,10 +85488,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
           H.call(this, "p192", "ffffffff ffffffff ffffffff fffffffe ffffffff ffffffff");
         }
         o(J, H);
-        function ie() {
+        function ee() {
           H.call(this, "25519", "7fffffffffffffff ffffffffffffffff ffffffffffffffff ffffffffffffffed");
         }
-        o(ie, H), ie.prototype.imulK = function(v) {
+        o(ee, H), ee.prototype.imulK = function(v) {
           for (var w = 0, $ = 0; $ < v.length; $++) {
             var P = (v.words[$] | 0) * 19 + w, F = P & 67108863;
             P >>>= 26, v.words[$] = F, w = P;
@@ -85503,51 +85503,51 @@ Use Chrome, Firefox or Internet Explorer 11`);
           if (v === "k256") w = new W();
           else if (v === "p224") w = new K();
           else if (v === "p192") w = new J();
-          else if (v === "p25519") w = new ie();
+          else if (v === "p25519") w = new ee();
           else throw new Error("Unknown prime " + v);
           return q[v] = w, w;
         };
-        function ee(G) {
+        function ie(G) {
           if (typeof G == "string") {
             var v = a._prime(G);
             this.m = v.p, this.prime = v;
           } else s(G.gtn(1), "modulus must be greater than 1"), this.m = G, this.prime = null;
         }
-        ee.prototype._verify1 = function(v) {
+        ie.prototype._verify1 = function(v) {
           s(v.negative === 0, "red works only with positives"), s(v.red, "red works only with red numbers");
-        }, ee.prototype._verify2 = function(v, w) {
+        }, ie.prototype._verify2 = function(v, w) {
           s((v.negative | w.negative) === 0, "red works only with positives"), s(v.red && v.red === w.red, "red works only with red numbers");
-        }, ee.prototype.imod = function(v) {
+        }, ie.prototype.imod = function(v) {
           return this.prime ? this.prime.ireduce(v)._forceRed(this) : v.umod(this.m)._forceRed(this);
-        }, ee.prototype.neg = function(v) {
+        }, ie.prototype.neg = function(v) {
           return v.isZero() ? v.clone() : this.m.sub(v)._forceRed(this);
-        }, ee.prototype.add = function(v, w) {
+        }, ie.prototype.add = function(v, w) {
           this._verify2(v, w);
           var $ = v.add(w);
           return $.cmp(this.m) >= 0 && $.isub(this.m), $._forceRed(this);
-        }, ee.prototype.iadd = function(v, w) {
+        }, ie.prototype.iadd = function(v, w) {
           this._verify2(v, w);
           var $ = v.iadd(w);
           return $.cmp(this.m) >= 0 && $.isub(this.m), $;
-        }, ee.prototype.sub = function(v, w) {
+        }, ie.prototype.sub = function(v, w) {
           this._verify2(v, w);
           var $ = v.sub(w);
           return $.cmpn(0) < 0 && $.iadd(this.m), $._forceRed(this);
-        }, ee.prototype.isub = function(v, w) {
+        }, ie.prototype.isub = function(v, w) {
           this._verify2(v, w);
           var $ = v.isub(w);
           return $.cmpn(0) < 0 && $.iadd(this.m), $;
-        }, ee.prototype.shl = function(v, w) {
+        }, ie.prototype.shl = function(v, w) {
           return this._verify1(v), this.imod(v.ushln(w));
-        }, ee.prototype.imul = function(v, w) {
+        }, ie.prototype.imul = function(v, w) {
           return this._verify2(v, w), this.imod(v.imul(w));
-        }, ee.prototype.mul = function(v, w) {
+        }, ie.prototype.mul = function(v, w) {
           return this._verify2(v, w), this.imod(v.mul(w));
-        }, ee.prototype.isqr = function(v) {
+        }, ie.prototype.isqr = function(v) {
           return this.imul(v, v.clone());
-        }, ee.prototype.sqr = function(v) {
+        }, ie.prototype.sqr = function(v) {
           return this.mul(v, v);
-        }, ee.prototype.sqrt = function(v) {
+        }, ie.prototype.sqrt = function(v) {
           if (v.isZero()) return v.clone();
           var w = this.m.andln(3);
           if (s(w % 2 === 1), w === 3) {
@@ -85565,10 +85565,10 @@ Use Chrome, Firefox or Internet Explorer 11`);
             j = j.redMul(Z), k = Z.redSqr(), Y = Y.redMul(k), oe = be;
           }
           return j;
-        }, ee.prototype.invm = function(v) {
+        }, ie.prototype.invm = function(v) {
           var w = v._invmp(this.m);
           return w.negative !== 0 ? (w.negative = 0, this.imod(w).redNeg()) : this.imod(w);
-        }, ee.prototype.pow = function(v, w) {
+        }, ie.prototype.pow = function(v, w) {
           if (w.isZero()) return new a(1).toRed(this);
           if (w.cmpn(1) === 0) return v.clone();
           var $ = 4, P = new Array(1 << $);
@@ -85587,19 +85587,19 @@ Use Chrome, Firefox or Internet Explorer 11`);
             x = 26;
           }
           return V;
-        }, ee.prototype.convertTo = function(v) {
+        }, ie.prototype.convertTo = function(v) {
           var w = v.umod(this.m);
           return w === v ? w.clone() : w;
-        }, ee.prototype.convertFrom = function(v) {
+        }, ie.prototype.convertFrom = function(v) {
           var w = v.clone();
           return w.red = null, w;
         }, a.mont = function(v) {
           return new fe(v);
         };
         function fe(G) {
-          ee.call(this, G), this.shift = this.m.bitLength(), this.shift % 26 !== 0 && (this.shift += 26 - this.shift % 26), this.r = new a(1).iushln(this.shift), this.r2 = this.imod(this.r.sqr()), this.rinv = this.r._invmp(this.m), this.minv = this.rinv.mul(this.r).isubn(1).div(this.m), this.minv = this.minv.umod(this.r), this.minv = this.r.sub(this.minv);
+          ie.call(this, G), this.shift = this.m.bitLength(), this.shift % 26 !== 0 && (this.shift += 26 - this.shift % 26), this.r = new a(1).iushln(this.shift), this.r2 = this.imod(this.r.sqr()), this.rinv = this.r._invmp(this.m), this.minv = this.rinv.mul(this.r).isubn(1).div(this.m), this.minv = this.minv.umod(this.r), this.minv = this.r.sub(this.minv);
         }
-        o(fe, ee), fe.prototype.convertTo = function(v) {
+        o(fe, ie), fe.prototype.convertTo = function(v) {
           return this.imod(v.ushln(this.shift));
         }, fe.prototype.convertFrom = function(v) {
           var w = this.imod(v.mul(this.rinv));
@@ -85851,30 +85851,30 @@ https://github.com/browserify/crypto-browserify`);
           W = W == true ? {
             entropy: true
           } : W || {};
-          var ie = L(O(W.entropy ? [
+          var ee = L(O(W.entropy ? [
             H,
             q(r)
-          ] : H ?? U(), 3), J), ee = new M(J), fe = function() {
-            for (var G = ee.g(a), v = d, w = 0; G < f; ) G = (G + w) * o, v *= o, w = ee.g(1);
+          ] : H ?? U(), 3), J), ie = new M(J), fe = function() {
+            for (var G = ie.g(a), v = d, w = 0; G < f; ) G = (G + w) * o, v *= o, w = ie.g(1);
             for (; G >= p; ) G /= 2, v /= 2, w >>>= 1;
             return (G + w) / v;
           };
           return fe.int32 = function() {
-            return ee.g(4) | 0;
+            return ie.g(4) | 0;
           }, fe.quick = function() {
-            return ee.g(4) / 4294967296;
-          }, fe.double = fe, L(q(ee.S), r), (W.pass || K || function(G, v, w, $) {
-            return $ && ($.S && R($, ee), G.state = function() {
-              return R(ee, {});
+            return ie.g(4) / 4294967296;
+          }, fe.double = fe, L(q(ie.S), r), (W.pass || K || function(G, v, w, $) {
+            return $ && ($.S && R($, ie), G.state = function() {
+              return R(ie, {});
             }), w ? (s[c] = G, v) : G;
-          })(fe, ie, "global" in W ? W.global : this == s, W.state);
+          })(fe, ee, "global" in W ? W.global : this == s, W.state);
         }
         function M(H) {
-          var W, K = H.length, J = this, ie = 0, ee = J.i = J.j = 0, fe = J.S = [];
+          var W, K = H.length, J = this, ee = 0, ie = J.i = J.j = 0, fe = J.S = [];
           for (K || (H = [
             K++
-          ]); ie < o; ) fe[ie] = ie++;
-          for (ie = 0; ie < o; ie++) fe[ie] = fe[ee = m & ee + H[ie % K] + (W = fe[ie])], fe[ee] = W;
+          ]); ee < o; ) fe[ee] = ee++;
+          for (ee = 0; ee < o; ee++) fe[ee] = fe[ie = m & ie + H[ee % K] + (W = fe[ee])], fe[ie] = W;
           (J.g = function(G) {
             for (var v, w = 0, $ = J.i, P = J.j, F = J.S; G--; ) v = F[$ = m & $ + 1], w = w * o + F[m & (F[$] = F[P = m & P + v]) + (F[P] = v)];
             return J.i = $, J.j = P, w;
@@ -85884,15 +85884,15 @@ https://github.com/browserify/crypto-browserify`);
           return W.i = H.i, W.j = H.j, W.S = H.S.slice(), W;
         }
         function O(H, W) {
-          var K = [], J = typeof H, ie;
-          if (W && J == "object") for (ie in H) try {
-            K.push(O(H[ie], W - 1));
+          var K = [], J = typeof H, ee;
+          if (W && J == "object") for (ee in H) try {
+            K.push(O(H[ee], W - 1));
           } catch {
           }
           return K.length ? K : J == "string" ? H : H + "\0";
         }
         function L(H, W) {
-          for (var K = H + "", J, ie = 0; ie < K.length; ) W[m & ie] = m & (J ^= W[m & ie] * 19) + K.charCodeAt(ie++);
+          for (var K = H + "", J, ee = 0; ee < K.length; ) W[m & ee] = m & (J ^= W[m & ee] * 19) + K.charCodeAt(ee++);
           return q(W);
         }
         function U() {
@@ -87092,8 +87092,8 @@ https://github.com/browserify/crypto-browserify`);
         U.assign(U.sub(H).mod(1));
         const W = O.g.remapClamp(p, m, 0, 1), K = f.mul(W);
         U.assign(U.step(K).oneMinus());
-        const ie = hash$4(O.b.mul(654321)).add(L).mod(1);
-        return ie.assign(this.splashesRatio.step(ie)), U.assign(U.mul(ie)), U;
+        const ee = hash$4(O.b.mul(654321)).add(L).mod(1);
+        return ee.assign(this.splashesRatio.step(ee)), U.assign(U.mul(ee)), U;
       });
       this.game.debug.active && (this.splashesDebugPanel.addBinding(c, "value", {
         label: "splashesNoiseFrequency",
@@ -87597,21 +87597,21 @@ https://github.com/browserify/crypto-browserify`);
         const V = this.game.fog.strength.mix(this.backColor, this.game.fog.color), z = mix$1(V, this.frontColor, F);
         return vec4$1(vec3$1(z), 1);
       })();
-      const ie = new Mesh$1(this.geometries.label, K);
-      ie.renderOrder = 6, ie.scale.x = 0.75 * H / b, ie.scale.y = 0.75, ie.position.z = -0.01, ie.position.x = s === _InteractivePoints.ALIGN_LEFT ? 0 : -ie.scale.x, ie.visible = false, p.add(ie);
-      const ee = new MeshLambertNodeMaterial({
+      const ee = new Mesh$1(this.geometries.label, K);
+      ee.renderOrder = 6, ee.scale.x = 0.75 * H / b, ee.scale.y = 0.75, ee.position.z = -0.01, ee.position.x = s === _InteractivePoints.ALIGN_LEFT ? 0 : -ee.scale.x, ee.visible = false, p.add(ee);
+      const ie = new MeshLambertNodeMaterial({
         transparent: true,
         depthTest: true
       });
-      m.push(ee);
+      m.push(ie);
       const fe = uniform$1(0), G = uniform$1(0.15), v = uniform$1(0.175);
-      ee.outputNode = Fn$1(() => {
+      ie.outputNode = Fn$1(() => {
         const P = uv$2(), F = max$2(P.x.sub(0.5).abs(), P.y.sub(0.5).abs()).mul(2), V = fe.sub(F).sub(v).abs(), z = step$1(V, G.mul(0.5));
         F.greaterThan(fe).discard();
         const D = this.game.fog.strength.mix(this.backColor, this.game.fog.color), x = mix$1(D, this.frontColor, z);
         return vec4$1(vec3$1(x), 1);
       })();
-      const w = new Mesh$1(this.geometries.plane, ee);
+      const w = new Mesh$1(this.geometries.plane, ie);
       w.renderOrder = 7, w.rotation.z = Math.PI * 0.25, w.visible = false, p.add(w);
       const $ = {};
       return $.position = new Vector2$1(e.x, e.z), $.interactCallback = a, $.revealCallback = h, $.concealCallback = c, $.hideCallback = d, $.isIn = false, $.state = this.temporaryHidden ? _InteractivePoints.STATE_HIDDEN : o, $.recoveryState = o, $.materials = m, this.items.push($), $.intersect = this.game.rayCursor.addIntersect({
@@ -87643,7 +87643,7 @@ https://github.com/browserify/crypto-browserify`);
           duration: 0.6,
           overwrite: true,
           onComplete: () => {
-            w.visible = false, ie.visible = false;
+            w.visible = false, ee.visible = false;
           }
         }), gsapWithCSS.to(this.keyIcon.scale, {
           x: 0,
@@ -87663,7 +87663,7 @@ https://github.com/browserify/crypto-browserify`);
         }), this.activeItem && this.activeItem === $ && (this.activeItem = null), typeof $.hideCallback == "function" && $.hideCallback());
       }, $.reveal = () => {
         if ($.state !== _InteractivePoints.STATE_OPEN) {
-          $.state = _InteractivePoints.STATE_OPEN, $.intersect.active = true, w.visible = true, ie.visible = true, p.add(this.keyIcon), gsapWithCSS.to(fe, {
+          $.state = _InteractivePoints.STATE_OPEN, $.intersect.active = true, w.visible = true, ee.visible = true, p.add(this.keyIcon), gsapWithCSS.to(fe, {
             value: 0.5,
             ease: "elastic.out(1.3,0.4)",
             duration: 1.5,
@@ -87720,7 +87720,7 @@ https://github.com/browserify/crypto-browserify`);
           delay: 0.2,
           overwrite: true,
           onComplete: () => {
-            ie.visible = false;
+            ee.visible = false;
             for (const V of $.materials) V.depthTest = true, V.needsUpdate = true;
           }
         }), this.activeItem === $ && gsapWithCSS.to(this.keyIcon.scale, {
@@ -88060,7 +88060,7 @@ https://github.com/browserify/crypto-browserify`);
             const O = c[R], L = O.geometry;
             if (a && ((_a3 = L.attributes) == null ? void 0 : _a3.uv)) {
               const W = a.getX(0), K = a.getY(0), J = L.attributes.uv;
-              for (let ie = 0; ie < J.count; ie++) J.setXY(ie, W, K);
+              for (let ee = 0; ee < J.count; ee++) J.setXY(ee, W, K);
               J.needsUpdate = true;
             }
             const U = new Mesh$1(L, o);
@@ -88091,8 +88091,8 @@ https://github.com/browserify/crypto-browserify`);
                   }
                 ],
                 contactThreshold: 5,
-                onCollision: (J, ie) => {
-                  this.game.audio.groups.get("hitBrick").playRandomNext(J, ie);
+                onCollision: (J, ee) => {
+                  this.game.audio.groups.get("hitBrick").playRandomNext(J, ee);
                 }
               });
               (K == null ? void 0 : K.body) && m.push({
@@ -92942,8 +92942,8 @@ https://github.com/browserify/crypto-browserify`);
       })().compute(this.count);
       this.game.rendering.renderer.computeAsync(_);
       const M = Fn$1(() => {
-        const R = this.positionBuffer.element(instanceIndex$1), O = this.velocityBuffer.element(instanceIndex$1), L = h.element(instanceIndex$1), U = this.game.terrain.terrainNode(R.xz), q = R.sub(this.vehiclePosition), H = vec3$1(q.x, 0, q.z).normalize().mul(this.pushSidewaysMultiplier), W = vec3$1(this.vehicleVelocity.x, 0, this.vehicleVelocity.z).mul(this.pushMultiplier), J = q.length().remapClamp(0.5, 2, 1, 0), ie = this.vehicleVelocity.length(), ee = W.add(H).mul(ie).mul(J);
-        O.addAssign(ee);
+        const R = this.positionBuffer.element(instanceIndex$1), O = this.velocityBuffer.element(instanceIndex$1), L = h.element(instanceIndex$1), U = this.game.terrain.terrainNode(R.xz), q = R.sub(this.vehiclePosition), H = vec3$1(q.x, 0, q.z).normalize().mul(this.pushSidewaysMultiplier), W = vec3$1(this.vehicleVelocity.x, 0, this.vehicleVelocity.z).mul(this.pushMultiplier), J = q.length().remapClamp(0.5, 2, 1, 0), ee = this.vehicleVelocity.length(), ie = W.add(H).mul(ee).mul(J);
+        O.addAssign(ie);
         const fe = R.xz.mul(this.windFrequency).add(this.game.wind.direction.mul(this.game.wind.localTime)).xy, G = texture$1(this.game.noises.perlin, fe).r, v = this.game.wind.strength.sub(G).mul(L).mul(this.windMultiplier).max(0);
         O.x.addAssign(this.game.wind.direction.x.mul(v)), O.z.addAssign(this.game.wind.direction.y.mul(v));
         const w = R.xz.sub(this.explosion.xy), P = w.length().remapClamp(this.explosion.z.mul(0.5), this.explosion.z.mul(1), 0.2, 0), V = vec2$1(w.x, w.y).mul(P).mul(this.explosion.a);
@@ -93154,10 +93154,10 @@ https://github.com/browserify/crypto-browserify`);
       if (this.arc.vertexNode = Fn$1(([d]) => {
         const f = attribute$1("ratio"), p = step$1(f, 0.01), m = this.game.ticker.elapsedScaledUniform.sub(d), b = min$2(m.div(this.arc.duration), 1), _ = positionGeometry$1.toVar();
         _.xz.mulAssign(b.oneMinus().pow(h).oneMinus().mul(p.oneMinus()).mul(c).add(1));
-        const M = modelWorldMatrix$1.mul(vec4$1(_, 1)), R = M.xyz.sub(cameraPosition).normalize(), O = positionGeometry$1.add(attribute$1("direction")), U = modelWorldMatrix$1.mul(vec4$1(O, 1)).xyz.sub(M.xyz).normalize(), q = cross$1(U, R).normalize(), H = f.mul(10).min(1), W = b.oneMinus(), K = mul$1(a, H, W), J = floor$2(vertexIndex$1.toFloat().mul(3).sub(2).div(3).mod(2)).sub(0.5), ie = q.mul(J.mul(K));
-        M.addAssign(vec4$1(ie, 0));
-        const ee = cameraViewMatrix$1.mul(M);
-        return cameraProjectionMatrix$1.mul(ee);
+        const M = modelWorldMatrix$1.mul(vec4$1(_, 1)), R = M.xyz.sub(cameraPosition).normalize(), O = positionGeometry$1.add(attribute$1("direction")), U = modelWorldMatrix$1.mul(vec4$1(O, 1)).xyz.sub(M.xyz).normalize(), q = cross$1(U, R).normalize(), H = f.mul(10).min(1), W = b.oneMinus(), K = mul$1(a, H, W), J = floor$2(vertexIndex$1.toFloat().mul(3).sub(2).div(3).mod(2)).sub(0.5), ee = q.mul(J.mul(K));
+        M.addAssign(vec4$1(ee, 0));
+        const ie = cameraViewMatrix$1.mul(M);
+        return cameraProjectionMatrix$1.mul(ie);
       }), this.arc.create = (d, f) => {
         const p = uniform$1(this.game.ticker.elapsedScaled), m = new MeshBasicNodeMaterial({
           transparent: true
@@ -94224,9 +94224,9 @@ https://github.com/browserify/crypto-browserify`);
         q.assign(skewedUv(q, vec2$1(-1, 0)).mul(vec2$1(3, 0.4)));
         const H = texture$1(this.game.noises.perlin, q, 1).r.remap(0.45, 0.7), W = uv$2().add(vec2$1(f.mul(0.66), f.mul(0.66))).add(vec2$1(0.5));
         W.assign(skewedUv(W, vec2$1(-1, 0)).mul(vec2$1(8, 2)));
-        const K = texture$1(this.game.noises.perlin, W, 1).r.remap(0.45, 0.7), J = H.mul(K).add(m).add(b), ie = step$1(0.2, J), ee = this.game.fog.strength.mix(vec3$1(0), this.game.fog.color), fe = max$2(L, ie);
+        const K = texture$1(this.game.noises.perlin, W, 1).r.remap(0.45, 0.7), J = H.mul(K).add(m).add(b), ee = step$1(0.2, J), ie = this.game.fog.strength.mix(vec3$1(0), this.game.fog.color), fe = max$2(L, ee);
         fe.lessThan(1e-3).discard();
-        const G = mix$1(U, ee, ie);
+        const G = mix$1(U, ie, ee);
         return vec4$1(vec3$1(G), fe);
       })(), this.mesh = new Mesh$1(c, d), this.mesh.position.x = 30, this.mesh.position.y = 0.5, this.mesh.position.z = -13, this.mesh.scale.set(8, 8, 8), this.game.scene.add(this.mesh), this.game.debug.active && (this.debugPanel.addBinding(this.visibility, "value", {
         label: "visibility",
@@ -98975,52 +98975,52 @@ https://github.com/browserify/crypto-browserify`);
             _._webAudio && r._autoResume();
             var q = Math.max(0, L._seek > 0 ? L._seek : _._sprite[m][0] / 1e3), H = Math.max(0, (_._sprite[m][0] + _._sprite[m][1]) / 1e3 - q), W = H * 1e3 / Math.abs(L._rate), K = _._sprite[m][0] / 1e3, J = (_._sprite[m][0] + _._sprite[m][1]) / 1e3;
             L._sprite = m, L._ended = false;
-            var ie = function() {
+            var ee = function() {
               L._paused = false, L._seek = q, L._start = K, L._stop = J, L._loop = !!(L._loop || _._sprite[m][2]);
             };
             if (q >= J) {
               _._ended(L);
               return;
             }
-            var ee = L._node;
+            var ie = L._node;
             if (_._webAudio) {
               var fe = function() {
-                _._playLock = false, ie(), _._refreshBuffer(L);
+                _._playLock = false, ee(), _._refreshBuffer(L);
                 var $ = L._muted || _._muted ? 0 : L._volume;
-                ee.gain.setValueAtTime($, r.ctx.currentTime), L._playStart = r.ctx.currentTime, typeof ee.bufferSource.start > "u" ? L._loop ? ee.bufferSource.noteGrainOn(0, q, 86400) : ee.bufferSource.noteGrainOn(0, q, H) : L._loop ? ee.bufferSource.start(0, q, 86400) : ee.bufferSource.start(0, q, H), W !== 1 / 0 && (_._endTimers[L._id] = setTimeout(_._ended.bind(_, L), W)), b || setTimeout(function() {
+                ie.gain.setValueAtTime($, r.ctx.currentTime), L._playStart = r.ctx.currentTime, typeof ie.bufferSource.start > "u" ? L._loop ? ie.bufferSource.noteGrainOn(0, q, 86400) : ie.bufferSource.noteGrainOn(0, q, H) : L._loop ? ie.bufferSource.start(0, q, 86400) : ie.bufferSource.start(0, q, H), W !== 1 / 0 && (_._endTimers[L._id] = setTimeout(_._ended.bind(_, L), W)), b || setTimeout(function() {
                   _._emit("play", L._id), _._loadQueue();
                 }, 0);
               };
               r.state === "running" && r.ctx.state !== "interrupted" ? fe() : (_._playLock = true, _.once("resume", fe), _._clearTimer(L._id));
             } else {
               var G = function() {
-                ee.currentTime = q, ee.muted = L._muted || _._muted || r._muted || ee.muted, ee.volume = L._volume * r.volume(), ee.playbackRate = L._rate;
+                ie.currentTime = q, ie.muted = L._muted || _._muted || r._muted || ie.muted, ie.volume = L._volume * r.volume(), ie.playbackRate = L._rate;
                 try {
-                  var $ = ee.play();
-                  if ($ && typeof Promise < "u" && ($ instanceof Promise || typeof $.then == "function") ? (_._playLock = true, ie(), $.then(function() {
-                    _._playLock = false, ee._unlocked = true, b ? _._loadQueue() : _._emit("play", L._id);
+                  var $ = ie.play();
+                  if ($ && typeof Promise < "u" && ($ instanceof Promise || typeof $.then == "function") ? (_._playLock = true, ee(), $.then(function() {
+                    _._playLock = false, ie._unlocked = true, b ? _._loadQueue() : _._emit("play", L._id);
                   }).catch(function() {
                     _._playLock = false, _._emit("playerror", L._id, "Playback was unable to start. This is most commonly an issue on mobile devices and Chrome where playback was not within a user interaction."), L._ended = true, L._paused = true;
-                  })) : b || (_._playLock = false, ie(), _._emit("play", L._id)), ee.playbackRate = L._rate, ee.paused) {
+                  })) : b || (_._playLock = false, ee(), _._emit("play", L._id)), ie.playbackRate = L._rate, ie.paused) {
                     _._emit("playerror", L._id, "Playback was unable to start. This is most commonly an issue on mobile devices and Chrome where playback was not within a user interaction.");
                     return;
                   }
                   m !== "__default" || L._loop ? _._endTimers[L._id] = setTimeout(_._ended.bind(_, L), W) : (_._endTimers[L._id] = function() {
-                    _._ended(L), ee.removeEventListener("ended", _._endTimers[L._id], false);
-                  }, ee.addEventListener("ended", _._endTimers[L._id], false));
+                    _._ended(L), ie.removeEventListener("ended", _._endTimers[L._id], false);
+                  }, ie.addEventListener("ended", _._endTimers[L._id], false));
                 } catch (P) {
                   _._emit("playerror", L._id, P);
                 }
               };
-              ee.src === "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" && (ee.src = _._src, ee.load());
-              var v = window && window.ejecta || !ee.readyState && r._navigator.isCocoonJS;
-              if (ee.readyState >= 3 || v) G();
+              ie.src === "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" && (ie.src = _._src, ie.load());
+              var v = window && window.ejecta || !ie.readyState && r._navigator.isCocoonJS;
+              if (ie.readyState >= 3 || v) G();
               else {
                 _._playLock = true, _._state = "loading";
                 var w = function() {
-                  _._state = "loaded", G(), ee.removeEventListener(r._canPlayEvent, w, false);
+                  _._state = "loaded", G(), ie.removeEventListener(r._canPlayEvent, w, false);
                 };
-                ee.addEventListener(r._canPlayEvent, w, false), _._clearTimer(L._id);
+                ie.addEventListener(r._canPlayEvent, w, false), _._clearTimer(L._id);
               }
             }
             return L._id;
@@ -101176,12 +101176,12 @@ https://github.com/browserify/crypto-browserify`);
         ]) {
           const H = (U + b * 2 + (q > 0 ? 1 : 0)) % 4 === 0, W = c * 0.42 * (U / L), K = m + q * W;
           if (Math.abs(K - d) > c * 0.5) continue;
-          const J = f + R * 0.88, ie = H ? 0.45 : 1, ee = m + (K - m) * ie, fe = H ? J - R * 0.42 : f + 0.4;
+          const J = f + R * 0.88, ee = H ? 0.45 : 1, ie = m + (K - m) * ee, fe = H ? J - R * 0.42 : f + 0.4;
           for (const G of [
             -1,
             1
           ]) {
-            const v = new Vector3$1(e + G * o * 0.42, J, m), w = new Vector3$1(e + G * o * 0.46, fe, ee);
+            const v = new Vector3$1(e + G * o * 0.42, J, m), w = new Vector3$1(e + G * o * 0.46, fe, ie);
             this.strut(v, w, 0.16, MONSTER_COLORS.cable, "cable");
           }
         }
@@ -102890,10 +102890,9 @@ https://github.com/browserify/crypto-browserify`);
   const SURVIVAL_MONSTERS = {
     crawler: {
       name: "L\xEDnh ngo\xE0i h\xE0nh tinh",
-      model: "monsterSoldierModel",
+      model: "bossModel",
       modelHeight: 1.85,
-      modelSourceHeight: 1.332,
-      modelSourceMinY: -0.751,
+      modelTimeScale: 1.9,
       hp: 3,
       speed: 3.6,
       damage: 7,
@@ -102930,8 +102929,6 @@ https://github.com/browserify/crypto-browserify`);
       name: "Qu\xE1i to x\xE1c",
       model: "bossModel",
       modelHeight: 3.6,
-      modelSourceHeight: 3.213,
-      modelSourceMinY: 0,
       hp: 18,
       speed: 2.3,
       damage: 26,
@@ -102950,8 +102947,6 @@ https://github.com/browserify/crypto-browserify`);
     boss: {
       name: "Qu\xE1i tr\xF9m",
       model: "bossModel",
-      modelSourceHeight: 3.213,
-      modelSourceMinY: 0,
       hp: 130,
       speed: 2.6,
       damage: 40,
@@ -103192,7 +103187,7 @@ https://github.com/browserify/crypto-browserify`);
   }, GROUND_SLICES = 4;
   class SurvivalMonsters {
     constructor(e) {
-      this.game = Game.getInstance(), this.survival = e, this.monsters = [], this.bloods = [], this.pools = [], this.materials = /* @__PURE__ */ new Map(), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.sphereGeometry = new SphereGeometry(0.5, 8, 6), this.coneGeometry = new ConeGeometry(0.5, 1, 7), this.group = new Group(), this.group.name = "survivalMonsters", this.game.scene.add(this.group), this.seed = 1, this.frame = 0, this.setSounds(), this.tmp = new Vector3$1();
+      this.game = Game.getInstance(), this.survival = e, this.monsters = [], this.bloods = [], this.pools = [], this.generation = 0, this.materials = /* @__PURE__ */ new Map(), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.sphereGeometry = new SphereGeometry(0.5, 8, 6), this.coneGeometry = new ConeGeometry(0.5, 1, 7), this.group = new Group(), this.group.name = "survivalMonsters", this.game.scene.add(this.group), this.seed = 1, this.frame = 0, this.setSounds(), this.tmp = new Vector3$1();
     }
     setSounds() {
       const e = (r, s, o, a) => this.game.audio.register({
@@ -103416,33 +103411,64 @@ https://github.com/browserify/crypto-browserify`);
         gait: "lumber"
       };
     }
+    measureSkinned(e, r) {
+      var _a2;
+      this.measured ?? (this.measured = /* @__PURE__ */ new Map());
+      const s = this.measured.get(e);
+      if (s) return s;
+      const o = clone(r.scene), a = (_a2 = r.animations) == null ? void 0 : _a2[0], h = a ? new AnimationMixer(o) : null;
+      h && h.clipAction(a).play();
+      const c = new Vector3$1();
+      let d = 1 / 0, f = -1 / 0;
+      const p = a ? 6 : 1;
+      for (let b = 0; b < p; b++) h && h.setTime(b / p * a.duration), o.updateMatrixWorld(true), o.traverse((_) => {
+        var _a3, _b;
+        const M = (_b = (_a3 = _.geometry) == null ? void 0 : _a3.attributes) == null ? void 0 : _b.position;
+        if (!M) return;
+        const R = Math.max(1, Math.floor(M.count / 120));
+        for (let O = 0; O < M.count; O += R) c.fromBufferAttribute(M, O), _.isSkinnedMesh && _.applyBoneTransform && _.applyBoneTransform(O, c), c.applyMatrix4(_.matrixWorld), c.y < d && (d = c.y), c.y > f && (f = c.y);
+      });
+      h == null ? void 0 : h.stopAllAction();
+      const m = Number.isFinite(d) && f > d ? {
+        height: f - d,
+        minY: d
+      } : {
+        height: 2,
+        minY: 0
+      };
+      return this.measured.set(e, m), m;
+    }
     makeModelMonster(e) {
       var _a2, _b;
       const r = (_a2 = this.game.resources) == null ? void 0 : _a2[e.model];
       if (!(r == null ? void 0 : r.scene)) return null;
-      const s = new Group(), o = clone(r.scene), a = Math.max(1e-3, e.modelSourceHeight ?? 2), h = e.modelSourceMinY ?? 0, c = e.modelHeight / e.scale, d = c / a;
-      o.scale.setScalar(d), o.position.y = -h * d, o.rotation.y = Math.PI, o.traverse((b) => {
-        !b.isMesh && !b.isSkinnedMesh || (b.castShadow = true, b.receiveShadow = true, b.frustumCulled = false);
-      }), this.game.materials.updateObject(o), s.add(o);
-      const f = new AnimationMixer(o), p = (_b = r.animations) == null ? void 0 : _b[0];
-      if (p) {
-        const b = f.clipAction(p);
-        b.timeScale = 0.45 + rand$1(this.seed * 5.7) * 0.5, b.time = rand$1(this.seed * 9.1) * (p.duration || 1), b.play();
+      const s = new Group(), o = clone(r.scene), { height: a, minY: h } = this.measureSkinned(e.model, r), c = e.modelHeight / e.scale, d = c / a;
+      o.scale.setScalar(d), o.position.y = -h * d, o.rotation.y = Math.PI, o.traverse((_) => {
+        !_.isMesh && !_.isSkinnedMesh || (_.castShadow = true, _.receiveShadow = true, _.frustumCulled = false);
+      }), this.game.materials.updateObject(o);
+      const f = new Color$1(e.colors.body);
+      o.traverse((_) => {
+        !_.material || !_.material.color || (_.material = _.material.clone(), _.material.color.multiply(f).multiplyScalar(1.9));
+      }), s.add(o);
+      const p = new AnimationMixer(o), m = (_b = r.animations) == null ? void 0 : _b[0];
+      if (m) {
+        const _ = p.clipAction(m);
+        _.timeScale = (0.45 + rand$1(this.seed * 5.7) * 0.5) * (e.modelTimeScale ?? 1), _.time = rand$1(this.seed * 9.1) * (m.duration || 1), _.play();
       }
-      const m = [];
-      for (const b of [
+      const b = [];
+      for (const _ of [
         -1,
         1
       ]) {
-        const _ = new Mesh$1(this.sphereGeometry, this.glowMaterial(e.colors.eye));
-        _.scale.setScalar(c * 0.055), _.position.set(b * c * 0.052, c * 0.86, c * 0.135), _.castShadow = false, s.add(_), m.push(_);
+        const M = new Mesh$1(this.sphereGeometry, this.glowMaterial(e.colors.eye));
+        M.scale.setScalar(c * 0.055), M.position.set(_ * c * 0.052, c * 0.86, c * 0.135), M.castShadow = false, s.add(M), b.push(M);
       }
       return {
         root: s,
         legs: [],
         arms: [],
-        eyes: m,
-        mixer: f,
+        eyes: b,
+        mixer: p,
         gait: "model",
         model: o
       };
@@ -103537,6 +103563,7 @@ https://github.com/browserify/crypto-browserify`);
       return e;
     }
     clear() {
+      this.generation++;
       for (const e of this.monsters) this.group.remove(e.root);
       this.monsters.length = 0;
       for (const e of this.bloods) this.game.scene.remove(e.mesh);
@@ -103618,51 +103645,53 @@ https://github.com/browserify/crypto-browserify`);
     update(e, r, s, o = 1 / 0) {
       var _a2, _b;
       this.frame++, this.updateBlood(e);
-      const a = this.frame % GROUND_SLICES;
-      for (let h = this.monsters.length - 1; h >= 0; h--) {
-        const c = this.monsters[h];
-        if (c.dead) {
-          if (c.deathAge += e, c.deathAge > 3.2) {
-            this.group.remove(c.root), this.monsters.splice(h, 1);
+      const a = this.frame % GROUND_SLICES, h = this.generation;
+      for (let c = this.monsters.length - 1; c >= 0; c--) {
+        const d = this.monsters[c];
+        if (!d) break;
+        if (d.dead) {
+          if (d.deathAge += e, d.deathAge > 3.2) {
+            this.group.remove(d.root), this.monsters.splice(c, 1);
             continue;
           }
-          const ee = Math.min(1, c.deathAge / 0.55), fe = 1 - ee;
-          c.root.position.x += c.deathDriftX * e * fe, c.root.position.z += c.deathDriftZ * e * fe, c.root.rotation.x = ee * Math.PI * 0.5, c.root.rotation.y = c.heading + c.deathSpin * ee, c.root.position.y = c.groundY + Math.sin(ee * Math.PI) * 0.4 * c.scale - ee * 0.1, c.deathAge > 1.6 && (c.root.position.y -= (c.deathAge - 1.6) * 0.5);
+          const fe = Math.min(1, d.deathAge / 0.55), G = 1 - fe;
+          d.root.position.x += d.deathDriftX * e * G, d.root.position.z += d.deathDriftZ * e * G, d.root.rotation.x = fe * Math.PI * 0.5, d.root.rotation.y = d.heading + d.deathSpin * fe, d.root.position.y = d.groundY + Math.sin(fe * Math.PI) * 0.4 * d.scale - fe * 0.1, d.deathAge > 1.6 && (d.root.position.y -= (d.deathAge - 1.6) * 0.5);
           continue;
         }
-        c.ramCooldown > 0 && (c.ramCooldown -= e), c.attackCooldown > 0 && (c.attackCooldown -= e), c.flash > 0 && (c.flash = Math.max(0, c.flash - e * 3));
-        const d = c.root.position, f = r.x - d.x, p = r.z - d.z, m = Math.hypot(f, p);
-        if (m > SURVIVAL_SPAWN.despawnDistance) {
-          this.group.remove(c.root), this.monsters.splice(h, 1), c.dead || this.survival.onMonsterEscaped();
+        d.ramCooldown > 0 && (d.ramCooldown -= e), d.attackCooldown > 0 && (d.attackCooldown -= e), d.flash > 0 && (d.flash = Math.max(0, d.flash - e * 3));
+        const f = d.root.position, p = r.x - f.x, m = r.z - f.z, b = Math.hypot(p, m);
+        if (b > SURVIVAL_SPAWN.despawnDistance) {
+          if (this.group.remove(d.root), this.monsters.splice(c, 1), d.dead || this.survival.onMonsterEscaped(), h !== this.generation) return;
           continue;
         }
-        const b = this.updateSight(c, r, m, o, e), _ = b.x - d.x, M = b.z - d.z, R = Math.hypot(_, M);
-        let O = _ / (R || 1), L = M / (R || 1);
-        const U = this.separationFor(c, h);
-        O += U.x, L += U.z;
-        const q = Math.hypot(O, L) || 1;
-        O /= q, L /= q;
-        const H = (c.spec.radius + 1.4) * c.scale, W = c.sees && m < H;
-        if (W) c.attackCooldown <= 0 && (c.attackCooldown = 0.6, s(c));
-        else if (R > 0.6) {
-          const ee = c.spec.speed * (c.sees ? 1 : SURVIVAL_STEALTH.wanderSpeedFactor);
-          d.x += O * ee * e, d.z += L * ee * e;
-          const fe = c.phase;
-          c.phase += e * ee * (c.gait === "crawl" ? 4.2 : 2.9), m < 16 && Math.floor(fe / Math.PI) !== Math.floor(c.phase / Math.PI) && (c.spec.isBoss ? (_a2 = this.sounds.stepBoss) == null ? void 0 : _a2.play(d) : this.playRandom(this.sounds.steps, d));
+        const _ = this.updateSight(d, r, b, o, e), M = _.x - f.x, R = _.z - f.z, O = Math.hypot(M, R);
+        let L = M / (O || 1), U = R / (O || 1);
+        const q = this.separationFor(d, c);
+        L += q.x, U += q.z;
+        const H = Math.hypot(L, U) || 1;
+        L /= H, U /= H;
+        const W = (d.spec.radius + 1.4) * d.scale, K = d.sees && b < W;
+        if (K) {
+          if (d.attackCooldown <= 0 && (d.attackCooldown = 0.6, s(d), h !== this.generation)) return;
+        } else if (O > 0.6) {
+          const fe = d.spec.speed * (d.sees ? 1 : SURVIVAL_STEALTH.wanderSpeedFactor);
+          f.x += L * fe * e, f.z += U * fe * e;
+          const G = d.phase;
+          d.phase += e * fe * (d.gait === "crawl" ? 4.2 : 2.9), b < 16 && Math.floor(G / Math.PI) !== Math.floor(d.phase / Math.PI) && (d.spec.isBoss ? (_a2 = this.sounds.stepBoss) == null ? void 0 : _a2.play(f) : this.playRandom(this.sounds.steps, f));
         }
-        c.sees && !c.dead && m < 18 && Math.random() < 35e-4 && this.playRandom(this.sounds.growls, d);
-        let J = Math.atan2(O, L) - c.heading;
-        for (; J > Math.PI; ) J -= Math.PI * 2;
-        for (; J < -Math.PI; ) J += Math.PI * 2;
-        if (c.heading += J * Math.min(1, e * 7), c.root.rotation.y = c.heading, c.waterCooldown > 0 && (c.waterCooldown -= e), c.slice === a || c.waterCooldown > 0) {
-          const ee = this.groundHeight(d.x, d.z);
-          if (ee !== null) {
-            const fe = ((_b = this.game.water) == null ? void 0 : _b.surfaceElevation) ?? 0;
-            ee > fe + SURVIVAL_SPAWN.dryMargin ? (c.groundY = ee, c.dryX = d.x, c.dryZ = d.z) : c.dryX !== void 0 ? (d.x = c.dryX - O * 1.6, d.z = c.dryZ - L * 1.6, c.heading += Math.PI * 0.5, c.waterCooldown = 2.5) : c.groundY = ee;
+        d.sees && !d.dead && b < 18 && Math.random() < 35e-4 && this.playRandom(this.sounds.growls, f);
+        let ee = Math.atan2(L, U) - d.heading;
+        for (; ee > Math.PI; ) ee -= Math.PI * 2;
+        for (; ee < -Math.PI; ) ee += Math.PI * 2;
+        if (d.heading += ee * Math.min(1, e * 7), d.root.rotation.y = d.heading, d.waterCooldown > 0 && (d.waterCooldown -= e), d.slice === a || d.waterCooldown > 0) {
+          const fe = this.groundHeight(f.x, f.z);
+          if (fe !== null) {
+            const G = ((_b = this.game.water) == null ? void 0 : _b.surfaceElevation) ?? 0;
+            fe > G + SURVIVAL_SPAWN.dryMargin ? (d.groundY = fe, d.dryX = f.x, d.dryZ = f.z) : d.dryX !== void 0 ? (f.x = d.dryX - L * 1.6, f.z = d.dryZ - U * 1.6, d.heading += Math.PI * 0.5, d.waterCooldown = 2.5) : d.groundY = fe;
           }
         }
-        const ie = c.groundY - c.smoothY;
-        Math.abs(ie) > 0.8 ? c.smoothY = c.groundY : c.smoothY += ie * Math.min(1, e * 12), d.y = c.smoothY, this.animate(c, W, e);
+        const ie = d.groundY - d.smoothY;
+        Math.abs(ie) > 0.8 ? d.smoothY = d.groundY : d.smoothY += ie * Math.min(1, e * 12), f.y = d.smoothY, this.animate(d, K, e);
       }
     }
     updateSight(e, r, s, o, a) {
@@ -104608,27 +104637,36 @@ https://github.com/browserify/crypto-browserify`);
         const r = this.game, s = r.view.camera;
         s.updateMatrixWorld(true);
         const o = [];
-        for (const h of document.querySelectorAll("body *")) {
-          const c = h.getBoundingClientRect();
-          if (c.width < window.innerWidth * 0.5 || c.height < window.innerHeight * 0.4) continue;
-          const d = getComputedStyle(h);
-          d.display === "none" || d.visibility === "hidden" || parseFloat(d.opacity) < 0.02 || o.push(`${h.className || h.tagName} op=${d.opacity} bg=${d.backgroundColor}`);
+        for (const d of document.querySelectorAll("body *")) {
+          const f = d.getBoundingClientRect();
+          if (f.width < window.innerWidth * 0.5 || f.height < window.innerHeight * 0.4) continue;
+          const p = getComputedStyle(d);
+          p.display === "none" || p.visibility === "hidden" || parseFloat(p.opacity) < 0.02 || o.push(`${d.className || d.tagName} op=${p.opacity} bg=${p.backgroundColor}`);
         }
-        const a = [];
-        r.scene.traverse((h) => {
-          var _a3;
-          if (!h.isMesh && !h.isSkinnedMesh || !h.visible) return;
-          h.updateMatrixWorld(true);
-          const c = h.matrixWorld.elements, d = Math.hypot(c[12] - s.position.x, c[13] - s.position.y, c[14] - s.position.z);
-          if (d > 40) return;
-          let f = 0;
-          if (h.isSkinnedMesh) {
-            h.computeBoundingBox();
-            const p = h.boundingBox;
-            p && (f = Math.max(p.max.x - p.min.x, p.max.y - p.min.y, p.max.z - p.min.z));
-          } else f = Math.max(Math.hypot(c[0], c[1], c[2]), Math.hypot(c[4], c[5], c[6]), Math.hypot(c[8], c[9], c[10]));
-          f / Math.max(d, 0.1) > 0.4 && a.push(`c\u1EE1 ${f.toFixed(1)} c\xE1ch ${d.toFixed(1)} cha=${((_a3 = h.parent) == null ? void 0 : _a3.name) || "(scene)"}`);
-        }), console.log("\u2550\u2550\u2550\u2550 SINH T\u1ED2N \u2014 CH\u1EA8N \u0110O\xC1N \u2550\u2550\u2550\u2550"), console.log("nh\u1ECBp:", this.phase, "\xB7 s\xF3ng:", this.wave, "\xB7 qu\xE1i s\u1ED1ng:", this.monsters.aliveCount), console.log("L\u1EDAP PH\u1EE6 DOM:", o.length ? o : "(kh\xF4ng c\xF3)"), console.log("V\u1EACT 3D CHO\xC1N M\xC0N H\xCCNH:", a.length ? a : "(kh\xF4ng c\xF3)"), console.log("reveal.distance:", (_b = (_a2 = r.reveal) == null ? void 0 : _a2.distance) == null ? void 0 : _b.value, "\xB7 fog:", (_e = (_d = (_c = r.fog) == null ? void 0 : _c.near) == null ? void 0 : _d.value) == null ? void 0 : _e.toFixed(1), "\u2192", (_h = (_g = (_f = r.fog) == null ? void 0 : _f.far) == null ? void 0 : _g.value) == null ? void 0 : _h.toFixed(1)), console.log("m\xE1y quay: ch\u1EBF \u0111\u1ED9", r.view.mode, "t\u1EA1i y =", s.position.y.toFixed(1)), console.log("\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550"), (_i2 = this.game.notifications) == null ? void 0 : _i2.show('<div class="top"><p class="title">\u0110\xE3 in ch\u1EA9n \u0111o\xE1n</p></div><div class="bottom"><p class="description">M\u1EDF Console (Cmd+Option+J) \u0111\u1EC3 xem v\xE0 ch\u1EE5p l\u1EA1i</p></div>', "is-achievement", 4);
+        const a = [], h = new Vector3$1(), c = new Vector3$1();
+        r.scene.traverse((d) => {
+          var _a3, _b2, _c3, _d3, _e2;
+          if (!d.isMesh && !d.isSkinnedMesh || !d.visible) return;
+          const f = (_b2 = (_a3 = d.geometry) == null ? void 0 : _a3.attributes) == null ? void 0 : _b2.position;
+          if (!f) return;
+          d.updateMatrixWorld(true);
+          let p = 1 / 0, m = 1 / 0, b = -1 / 0, _ = -1 / 0, M = 1 / 0, R = -1 / 0, O = false;
+          const L = Math.max(1, Math.floor(f.count / 80));
+          for (let J = 0; J < f.count; J += L) h.fromBufferAttribute(f, J), d.isSkinnedMesh && d.applyBoneTransform && d.applyBoneTransform(J, h), h.applyMatrix4(d.matrixWorld), h.y < M && (M = h.y), h.y > R && (R = h.y), c.copy(h).applyMatrix4(s.matrixWorldInverse), c.z < 0 && (O = true), h.project(s), p = Math.min(p, h.x), b = Math.max(b, h.x), m = Math.min(m, h.y), _ = Math.max(_, h.y);
+          if (!O) return;
+          const U = Math.min(b, 1) - Math.max(p, -1), q = Math.min(_, 1) - Math.max(m, -1);
+          if (U <= 0 || q <= 0) return;
+          const H = U * q / 4;
+          if (H < 0.25) return;
+          d.getWorldPosition(h);
+          const W = h.distanceTo(s.position), K = [];
+          for (let J = d; J && K.length < 5; J = J.parent) K.push(J.name || J.type);
+          a.push(`  ${(H * 100).toFixed(0)}% m\xE0n h\xECnh \xB7 cao ${(R - M).toFixed(2)} \xB7 "${d.name || "(kh\xF4ng t\xEAn)"}" \xB7 c\xE1ch ${W.toFixed(1)} \xB7 m\xE0u ${((_e2 = (_d3 = (_c3 = d.material) == null ? void 0 : _c3.color) == null ? void 0 : _d3.getHexString) == null ? void 0 : _e2.call(_d3)) ?? "?"} \xB7 thu\u1ED9c: ${K.join(" \u2190 ")}`);
+        }), console.log("\u2550\u2550\u2550\u2550 SINH T\u1ED2N \u2014 CH\u1EA8N \u0110O\xC1N \u2550\u2550\u2550\u2550"), console.log("nh\u1ECBp:", this.phase, "\xB7 s\xF3ng:", this.wave, "\xB7 qu\xE1i s\u1ED1ng:", this.monsters.aliveCount), console.log(`L\u1EDAP PH\u1EE6 DOM:
+` + (o.length ? o.map((d) => "  " + d).join(`
+`) : "  (kh\xF4ng c\xF3)")), console.log(`V\u1EACT 3D CHO\xC1N M\xC0N H\xCCNH:
+` + (a.length ? a.join(`
+`) : "  (kh\xF4ng c\xF3)")), console.log("reveal.distance:", (_b = (_a2 = r.reveal) == null ? void 0 : _a2.distance) == null ? void 0 : _b.value, "\xB7 fog:", (_e = (_d = (_c = r.fog) == null ? void 0 : _c.near) == null ? void 0 : _d.value) == null ? void 0 : _e.toFixed(1), "\u2192", (_h = (_g = (_f = r.fog) == null ? void 0 : _f.far) == null ? void 0 : _g.value) == null ? void 0 : _h.toFixed(1)), console.log("m\xE1y quay: ch\u1EBF \u0111\u1ED9", r.view.mode, "t\u1EA1i y =", s.position.y.toFixed(1)), console.log("\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550"), (_i2 = this.game.notifications) == null ? void 0 : _i2.show('<div class="top"><p class="title">\u0110\xE3 in ch\u1EA9n \u0111o\xE1n</p></div><div class="bottom"><p class="description">M\u1EDF Console (Cmd+Option+J) \u0111\u1EC3 xem v\xE0 ch\u1EE5p l\u1EA1i</p></div>', "is-achievement", 4);
       }), this.game.inputs.events.on("survivalShop", (e) => {
         var _a2, _b;
         if (!(!e.active || !this.enabled)) {
@@ -106240,14 +106278,14 @@ https://github.com/browserify/crypto-browserify`);
         return L(this).alloc(H);
       }
       function _(H, W) {
-        W || (W = 0, Array.prototype.forEach.call(H, ee));
-        var K = this !== l && this || H[0], J = b.call(K, W), ie = 0;
+        W || (W = 0, Array.prototype.forEach.call(H, ie));
+        var K = this !== l && this || H[0], J = b.call(K, W), ee = 0;
         return Array.prototype.forEach.call(H, fe), J;
-        function ee(G) {
+        function ie(G) {
           W += G.length;
         }
         function fe(G) {
-          ie += p.copy.call(G, J, ie);
+          ee += p.copy.call(G, J, ee);
         }
       }
       var M = q("ArrayBuffer");
@@ -106368,8 +106406,8 @@ https://github.com/browserify/crypto-browserify`);
           0
         ], c = Array.isArray || K, d = 4294967296, f = 16777216, p;
         m("Uint64BE", true, true), m("Int64BE", true, false), m("Uint64LE", false, true), m("Int64LE", false, false);
-        function m(J, ie, ee) {
-          var fe = ie ? 0 : 4, G = ie ? 4 : 0, v = ie ? 0 : 3, w = ie ? 1 : 2, $ = ie ? 2 : 1, P = ie ? 3 : 0, F = ie ? U : H, V = ie ? q : W, z = k.prototype, D = "is" + J, x = "_" + D;
+        function m(J, ee, ie) {
+          var fe = ee ? 0 : 4, G = ee ? 4 : 0, v = ee ? 0 : 3, w = ee ? 1 : 2, $ = ee ? 2 : 1, P = ee ? 3 : 0, F = ee ? U : H, V = ee ? q : W, z = k.prototype, D = "is" + J, x = "_" + D;
           return z.buffer = void 0, z.offset = 0, z[x] = true, z.toNumber = me, z.toString = be, z.toJSON = me, z.toArray = b, s && (z.toBuffer = _), o && (z.toArrayBuffer = M), k[D] = j, e[J] = k, k;
           function k(pe, _e, xe, le) {
             return this instanceof k ? Y(this, pe, _e, xe, le) : new k(pe, _e, xe, le);
@@ -106400,10 +106438,10 @@ https://github.com/browserify/crypto-browserify`);
           }
           function me() {
             var pe = this.buffer, _e = this.offset, xe = ne(pe, _e + fe), le = ne(pe, _e + G);
-            return ee || (xe |= 0), xe ? xe * d + le : le;
+            return ie || (xe |= 0), xe ? xe * d + le : le;
           }
           function be(pe) {
-            var _e = this.buffer, xe = this.offset, le = ne(_e, xe + fe), Ce = ne(_e, xe + G), Pe = "", Be = !ee && le & 2147483648;
+            var _e = this.buffer, xe = this.offset, le = ne(_e, xe + fe), Ce = ne(_e, xe + G), Pe = "", Be = !ie && le & 2147483648;
             for (Be && (le = ~le, Ce = d - Ce), pe = pe || 10; ; ) {
               var Ee = le % pe * d + Ce;
               if (le = Math.floor(le / pe), Ce = Math.floor(Ee / pe), Pe = (Ee % pe).toString(pe) + Pe, !le && !Ce) break;
@@ -106418,45 +106456,45 @@ https://github.com/browserify/crypto-browserify`);
           }
         }
         function b(J) {
-          var ie = this.buffer, ee = this.offset;
-          return p = null, J !== false && ee === 0 && ie.length === 8 && c(ie) ? ie : L(ie, ee);
+          var ee = this.buffer, ie = this.offset;
+          return p = null, J !== false && ie === 0 && ee.length === 8 && c(ee) ? ee : L(ee, ie);
         }
         function _(J) {
-          var ie = this.buffer, ee = this.offset;
-          if (p = s, J !== false && ee === 0 && ie.length === 8 && Buffer.isBuffer(ie)) return ie;
+          var ee = this.buffer, ie = this.offset;
+          if (p = s, J !== false && ie === 0 && ee.length === 8 && Buffer.isBuffer(ee)) return ee;
           var fe = new s(8);
-          return O(fe, 0, ie, ee), fe;
+          return O(fe, 0, ee, ie), fe;
         }
         function M(J) {
-          var ie = this.buffer, ee = this.offset, fe = ie.buffer;
-          if (p = o, J !== false && ee === 0 && fe instanceof a && fe.byteLength === 8) return fe;
+          var ee = this.buffer, ie = this.offset, fe = ee.buffer;
+          if (p = o, J !== false && ie === 0 && fe instanceof a && fe.byteLength === 8) return fe;
           var G = new o(8);
-          return O(G, 0, ie, ee), G.buffer;
+          return O(G, 0, ee, ie), G.buffer;
         }
-        function R(J, ie) {
-          var ee = J && J.length;
-          return ie |= 0, ee && ie + 8 <= ee && typeof J[ie] != "string";
+        function R(J, ee) {
+          var ie = J && J.length;
+          return ee |= 0, ie && ee + 8 <= ie && typeof J[ee] != "string";
         }
-        function O(J, ie, ee, fe) {
-          ie |= 0, fe |= 0;
-          for (var G = 0; G < 8; G++) J[ie++] = ee[fe++] & 255;
+        function O(J, ee, ie, fe) {
+          ee |= 0, fe |= 0;
+          for (var G = 0; G < 8; G++) J[ee++] = ie[fe++] & 255;
         }
-        function L(J, ie) {
-          return Array.prototype.slice.call(J, ie, ie + 8);
+        function L(J, ee) {
+          return Array.prototype.slice.call(J, ee, ee + 8);
         }
-        function U(J, ie, ee) {
-          for (var fe = ie + 8; fe > ie; ) J[--fe] = ee & 255, ee /= 256;
+        function U(J, ee, ie) {
+          for (var fe = ee + 8; fe > ee; ) J[--fe] = ie & 255, ie /= 256;
         }
-        function q(J, ie, ee) {
-          var fe = ie + 8;
-          for (ee++; fe > ie; ) J[--fe] = -ee & 255 ^ 255, ee /= 256;
+        function q(J, ee, ie) {
+          var fe = ee + 8;
+          for (ie++; fe > ee; ) J[--fe] = -ie & 255 ^ 255, ie /= 256;
         }
-        function H(J, ie, ee) {
-          for (var fe = ie + 8; ie < fe; ) J[ie++] = ee & 255, ee /= 256;
+        function H(J, ee, ie) {
+          for (var fe = ee + 8; ee < fe; ) J[ee++] = ie & 255, ie /= 256;
         }
-        function W(J, ie, ee) {
-          var fe = ie + 8;
-          for (ee++; ie < fe; ) J[ie++] = -ee & 255 ^ 255, ee /= 256;
+        function W(J, ee, ie) {
+          var fe = ee + 8;
+          for (ie++; ee < fe; ) J[ee++] = -ie & 255 ^ 255, ie /= 256;
         }
         function K(J) {
           return !!J && Object.prototype.toString.call(J) == "[object Array]";
@@ -106519,27 +106557,27 @@ https://github.com/browserify/crypto-browserify`);
       return K[196] = L(196, 1, h.prototype.writeUInt8), K[197] = L(197, 2, h.prototype.writeUInt16BE), K[198] = L(198, 4, h.prototype.writeUInt32BE), K[199] = L(199, 1, h.prototype.writeUInt8), K[200] = L(200, 2, h.prototype.writeUInt16BE), K[201] = L(201, 4, h.prototype.writeUInt32BE), K[202] = L(202, 4, h.prototype.writeFloatBE), K[203] = L(203, 8, h.prototype.writeDoubleBE), K[204] = L(204, 1, h.prototype.writeUInt8), K[205] = L(205, 2, h.prototype.writeUInt16BE), K[206] = L(206, 4, h.prototype.writeUInt32BE), K[207] = L(207, 8, U), K[208] = L(208, 1, h.prototype.writeInt8), K[209] = L(209, 2, h.prototype.writeInt16BE), K[210] = L(210, 4, h.prototype.writeInt32BE), K[211] = L(211, 8, q), K[217] = L(217, 1, h.prototype.writeUInt8), K[218] = L(218, 2, h.prototype.writeUInt16BE), K[219] = L(219, 4, h.prototype.writeUInt32BE), K[220] = L(220, 2, h.prototype.writeUInt16BE), K[221] = L(221, 4, h.prototype.writeUInt32BE), K[222] = L(222, 2, h.prototype.writeUInt16BE), K[223] = L(223, 4, h.prototype.writeUInt32BE), K;
     }
     function M(K) {
-      return function(J, ie) {
-        var ee = J.reserve(2), fe = J.buffer;
-        fe[ee++] = K, fe[ee] = ie;
+      return function(J, ee) {
+        var ie = J.reserve(2), fe = J.buffer;
+        fe[ie++] = K, fe[ie] = ee;
       };
     }
     function R(K) {
-      return function(J, ie) {
-        var ee = J.reserve(3), fe = J.buffer;
-        fe[ee++] = K, fe[ee++] = ie >>> 8, fe[ee] = ie;
+      return function(J, ee) {
+        var ie = J.reserve(3), fe = J.buffer;
+        fe[ie++] = K, fe[ie++] = ee >>> 8, fe[ie] = ee;
       };
     }
     function O(K) {
-      return function(J, ie) {
-        var ee = J.reserve(5), fe = J.buffer;
-        fe[ee++] = K, fe[ee++] = ie >>> 24, fe[ee++] = ie >>> 16, fe[ee++] = ie >>> 8, fe[ee] = ie;
+      return function(J, ee) {
+        var ie = J.reserve(5), fe = J.buffer;
+        fe[ie++] = K, fe[ie++] = ee >>> 24, fe[ie++] = ee >>> 16, fe[ie++] = ee >>> 8, fe[ie] = ee;
       };
     }
-    function L(K, J, ie, ee) {
+    function L(K, J, ee, ie) {
       return function(fe, G) {
         var v = fe.reserve(J + 1);
-        fe.buffer[v++] = K, ie.call(fe.buffer, G, v, ee);
+        fe.buffer[v++] = K, ee.call(fe.buffer, G, v, ie);
       };
     }
     function U(K, J) {
@@ -106585,11 +106623,11 @@ https://github.com/browserify/crypto-browserify`);
         } else -32 <= me && me <= 127 ? be = me & 255 : 0 <= me ? be = me <= 255 ? 204 : me <= 65535 ? 205 : 206 : be = -128 <= me ? 208 : -32768 <= me ? 209 : 210;
         M[be](Y, me);
       }
-      function ie(Y, oe) {
+      function ee(Y, oe) {
         var me = 207;
         M[me](Y, oe.toArray());
       }
-      function ee(Y, oe) {
+      function ie(Y, oe) {
         var me = 211;
         M[me](Y, oe.toArray());
       }
@@ -106619,8 +106657,8 @@ https://github.com/browserify/crypto-browserify`);
         if (oe === null) return P(Y, oe);
         if (L(oe)) return U(Y, oe);
         if (l(oe)) return F(Y, oe);
-        if (r.isUint64BE(oe)) return ie(Y, oe);
-        if (s.isInt64BE(oe)) return ee(Y, oe);
+        if (r.isUint64BE(oe)) return ee(Y, oe);
+        if (s.isInt64BE(oe)) return ie(Y, oe);
         var me = Y.codec.getExtPacker(oe);
         if (me && (oe = me(oe)), oe instanceof d) return D(Y, oe);
         H(Y, oe);
@@ -107033,11 +107071,11 @@ https://github.com/browserify/crypto-browserify`);
         uint8: O,
         uint16: U,
         uint32: H,
-        uint64: K(8, P ? ee : J),
+        uint64: K(8, P ? ie : J),
         int8: L,
         int16: q,
         int32: W,
-        int64: K(8, P ? fe : ie),
+        int64: K(8, P ? fe : ee),
         float32: K(4, G),
         float64: K(8, v)
       };
@@ -107110,10 +107148,10 @@ https://github.com/browserify/crypto-browserify`);
     function J(w) {
       return new r(this, w).toNumber();
     }
-    function ie(w) {
+    function ee(w) {
       return new s(this, w).toNumber();
     }
-    function ee(w) {
+    function ie(w) {
       return new r(this, w);
     }
     function fe(w) {
@@ -110701,8 +110739,8 @@ https://github.com/browserify/crypto-browserify`);
       return this.multiplyMatrices(e, this);
     }
     multiplyMatrices(e, r) {
-      const s = e.elements, o = r.elements, a = this.elements, h = s[0], c = s[4], d = s[8], f = s[12], p = s[1], m = s[5], b = s[9], _ = s[13], M = s[2], R = s[6], O = s[10], L = s[14], U = s[3], q = s[7], H = s[11], W = s[15], K = o[0], J = o[4], ie = o[8], ee = o[12], fe = o[1], G = o[5], v = o[9], w = o[13], $ = o[2], P = o[6], F = o[10], V = o[14], z = o[3], D = o[7], x = o[11], k = o[15];
-      return a[0] = h * K + c * fe + d * $ + f * z, a[4] = h * J + c * G + d * P + f * D, a[8] = h * ie + c * v + d * F + f * x, a[12] = h * ee + c * w + d * V + f * k, a[1] = p * K + m * fe + b * $ + _ * z, a[5] = p * J + m * G + b * P + _ * D, a[9] = p * ie + m * v + b * F + _ * x, a[13] = p * ee + m * w + b * V + _ * k, a[2] = M * K + R * fe + O * $ + L * z, a[6] = M * J + R * G + O * P + L * D, a[10] = M * ie + R * v + O * F + L * x, a[14] = M * ee + R * w + O * V + L * k, a[3] = U * K + q * fe + H * $ + W * z, a[7] = U * J + q * G + H * P + W * D, a[11] = U * ie + q * v + H * F + W * x, a[15] = U * ee + q * w + H * V + W * k, this;
+      const s = e.elements, o = r.elements, a = this.elements, h = s[0], c = s[4], d = s[8], f = s[12], p = s[1], m = s[5], b = s[9], _ = s[13], M = s[2], R = s[6], O = s[10], L = s[14], U = s[3], q = s[7], H = s[11], W = s[15], K = o[0], J = o[4], ee = o[8], ie = o[12], fe = o[1], G = o[5], v = o[9], w = o[13], $ = o[2], P = o[6], F = o[10], V = o[14], z = o[3], D = o[7], x = o[11], k = o[15];
+      return a[0] = h * K + c * fe + d * $ + f * z, a[4] = h * J + c * G + d * P + f * D, a[8] = h * ee + c * v + d * F + f * x, a[12] = h * ie + c * w + d * V + f * k, a[1] = p * K + m * fe + b * $ + _ * z, a[5] = p * J + m * G + b * P + _ * D, a[9] = p * ee + m * v + b * F + _ * x, a[13] = p * ie + m * w + b * V + _ * k, a[2] = M * K + R * fe + O * $ + L * z, a[6] = M * J + R * G + O * P + L * D, a[10] = M * ee + R * v + O * F + L * x, a[14] = M * ie + R * w + O * V + L * k, a[3] = U * K + q * fe + H * $ + W * z, a[7] = U * J + q * G + H * P + W * D, a[11] = U * ee + q * v + H * F + W * x, a[15] = U * ie + q * w + H * V + W * k, this;
     }
     multiplyScalar(e) {
       const r = this.elements;
@@ -110722,10 +110760,10 @@ https://github.com/browserify/crypto-browserify`);
       return e.isVector3 ? (o[12] = e.x, o[13] = e.y, o[14] = e.z) : (o[12] = e, o[13] = r, o[14] = s), this;
     }
     invert() {
-      const e = this.elements, r = e[0], s = e[1], o = e[2], a = e[3], h = e[4], c = e[5], d = e[6], f = e[7], p = e[8], m = e[9], b = e[10], _ = e[11], M = e[12], R = e[13], O = e[14], L = e[15], U = r * c - s * h, q = r * d - o * h, H = r * f - a * h, W = s * d - o * c, K = s * f - a * c, J = o * f - a * d, ie = p * R - m * M, ee = p * O - b * M, fe = p * L - _ * M, G = m * O - b * R, v = m * L - _ * R, w = b * L - _ * O, $ = U * w - q * v + H * G + W * fe - K * ee + J * ie;
+      const e = this.elements, r = e[0], s = e[1], o = e[2], a = e[3], h = e[4], c = e[5], d = e[6], f = e[7], p = e[8], m = e[9], b = e[10], _ = e[11], M = e[12], R = e[13], O = e[14], L = e[15], U = r * c - s * h, q = r * d - o * h, H = r * f - a * h, W = s * d - o * c, K = s * f - a * c, J = o * f - a * d, ee = p * R - m * M, ie = p * O - b * M, fe = p * L - _ * M, G = m * O - b * R, v = m * L - _ * R, w = b * L - _ * O, $ = U * w - q * v + H * G + W * fe - K * ie + J * ee;
       if ($ === 0) return this.set(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
       const P = 1 / $;
-      return e[0] = (c * w - d * v + f * G) * P, e[1] = (o * v - s * w - a * G) * P, e[2] = (R * J - O * K + L * W) * P, e[3] = (b * K - m * J - _ * W) * P, e[4] = (d * fe - h * w - f * ee) * P, e[5] = (r * w - o * fe + a * ee) * P, e[6] = (O * H - M * J - L * q) * P, e[7] = (p * J - b * H + _ * q) * P, e[8] = (h * v - c * fe + f * ie) * P, e[9] = (s * fe - r * v - a * ie) * P, e[10] = (M * K - R * H + L * U) * P, e[11] = (m * H - p * K - _ * U) * P, e[12] = (c * ee - h * G - d * ie) * P, e[13] = (r * G - s * ee + o * ie) * P, e[14] = (R * q - M * W - O * U) * P, e[15] = (p * W - m * q + b * U) * P, this;
+      return e[0] = (c * w - d * v + f * G) * P, e[1] = (o * v - s * w - a * G) * P, e[2] = (R * J - O * K + L * W) * P, e[3] = (b * K - m * J - _ * W) * P, e[4] = (d * fe - h * w - f * ie) * P, e[5] = (r * w - o * fe + a * ie) * P, e[6] = (O * H - M * J - L * q) * P, e[7] = (p * J - b * H + _ * q) * P, e[8] = (h * v - c * fe + f * ee) * P, e[9] = (s * fe - r * v - a * ee) * P, e[10] = (M * K - R * H + L * U) * P, e[11] = (m * H - p * K - _ * U) * P, e[12] = (c * ie - h * G - d * ee) * P, e[13] = (r * G - s * ie + o * ee) * P, e[14] = (R * q - M * W - O * U) * P, e[15] = (p * W - m * q + b * U) * P, this;
     }
     scale(e) {
       const r = this.elements, s = e.x, o = e.y, a = e.z;
@@ -111123,8 +111161,8 @@ https://github.com/browserify/crypto-browserify`);
       if (Math.abs(p - b) < 0.01 && Math.abs(m - R) < 0.01 && Math.abs(M - O) < 0.01) {
         if (Math.abs(p + b) < 0.1 && Math.abs(m + R) < 0.1 && Math.abs(M + O) < 0.1 && Math.abs(f + _ + L - 3) < 0.1) return this.set(1, 0, 0, 0), this;
         r = Math.PI;
-        const q = (f + 1) / 2, H = (_ + 1) / 2, W = (L + 1) / 2, K = (p + b) / 4, J = (m + R) / 4, ie = (M + O) / 4;
-        return q > H && q > W ? q < 0.01 ? (s = 0, o = 0.707106781, a = 0.707106781) : (s = Math.sqrt(q), o = K / s, a = J / s) : H > W ? H < 0.01 ? (s = 0.707106781, o = 0, a = 0.707106781) : (o = Math.sqrt(H), s = K / o, a = ie / o) : W < 0.01 ? (s = 0.707106781, o = 0.707106781, a = 0) : (a = Math.sqrt(W), s = J / a, o = ie / a), this.set(s, o, a, r), this;
+        const q = (f + 1) / 2, H = (_ + 1) / 2, W = (L + 1) / 2, K = (p + b) / 4, J = (m + R) / 4, ee = (M + O) / 4;
+        return q > H && q > W ? q < 0.01 ? (s = 0, o = 0.707106781, a = 0.707106781) : (s = Math.sqrt(q), o = K / s, a = J / s) : H > W ? H < 0.01 ? (s = 0.707106781, o = 0, a = 0.707106781) : (o = Math.sqrt(H), s = K / o, a = ee / o) : W < 0.01 ? (s = 0.707106781, o = 0.707106781, a = 0) : (a = Math.sqrt(W), s = J / a, o = ee / a), this.set(s, o, a, r), this;
       }
       let U = Math.sqrt((O - M) * (O - M) + (m - R) * (m - R) + (b - p) * (b - p));
       return Math.abs(U) < 1e-3 && (U = 1), this.x = (O - M) / U, this.y = (m - R) / U, this.z = (b - p) / U, this.w = Math.acos((f + _ + L - 1) / 2), this;
@@ -114588,12 +114626,12 @@ ${e.tab}if ( ${m} ) {
         const h = e.getDataFromNode(this), c = this.getNodeType(e);
         let d = h.propertyName;
         if (d === void 0) {
-          const { uvNode: p, levelNode: m, biasNode: b, compareNode: _, compareStepNode: M, depthNode: R, gradNode: O, offsetNode: L } = o, U = this.generateUV(e, p), q = m ? m.build(e, "float") : null, H = b ? b.build(e, "float") : null, W = R ? R.build(e, "int") : null, K = _ ? _.build(e, "float") : null, J = M ? M.build(e, "float") : null, ie = O ? [
+          const { uvNode: p, levelNode: m, biasNode: b, compareNode: _, compareStepNode: M, depthNode: R, gradNode: O, offsetNode: L } = o, U = this.generateUV(e, p), q = m ? m.build(e, "float") : null, H = b ? b.build(e, "float") : null, W = R ? R.build(e, "int") : null, K = _ ? _.build(e, "float") : null, J = M ? M.build(e, "float") : null, ee = O ? [
             O[0].build(e, "vec2"),
             O[1].build(e, "vec2")
-          ] : null, ee = L ? this.generateOffset(e, L) : null, fe = e.getVarFromNode(this);
+          ] : null, ie = L ? this.generateOffset(e, L) : null, fe = e.getVarFromNode(this);
           d = e.getPropertyName(fe);
-          let G = this.generateSnippet(e, a, U, q, H, W, K, ie, ee);
+          let G = this.generateSnippet(e, a, U, q, H, W, K, ee, ie);
           if (J !== null) {
             const v = s.compareFunction;
             v === GreaterCompare || v === GreaterEqualCompare ? G = step(expression(G, c), expression(J, "float")).build(e, c) : G = step(expression(J, "float"), expression(G, c)).build(e, c);
@@ -115659,8 +115697,8 @@ ${e.tab}if ( ${m} ) {
       for (let U = 0; U < a; U++) {
         const q = c[U], H = d[U], W = f[U], K = m * b * 4 * U;
         for (let J = 0; J < q.count; J++) {
-          const ie = J * O;
-          e === true && (_morphVec4.fromBufferAttribute(q, J), M[K + ie + 0] = _morphVec4.x, M[K + ie + 1] = _morphVec4.y, M[K + ie + 2] = _morphVec4.z, M[K + ie + 3] = 0), r === true && (_morphVec4.fromBufferAttribute(H, J), M[K + ie + 4] = _morphVec4.x, M[K + ie + 5] = _morphVec4.y, M[K + ie + 6] = _morphVec4.z, M[K + ie + 7] = 0), s === true && (_morphVec4.fromBufferAttribute(W, J), M[K + ie + 8] = _morphVec4.x, M[K + ie + 9] = _morphVec4.y, M[K + ie + 10] = _morphVec4.z, M[K + ie + 11] = W.itemSize === 4 ? _morphVec4.w : 1);
+          const ee = J * O;
+          e === true && (_morphVec4.fromBufferAttribute(q, J), M[K + ee + 0] = _morphVec4.x, M[K + ee + 1] = _morphVec4.y, M[K + ee + 2] = _morphVec4.z, M[K + ee + 3] = 0), r === true && (_morphVec4.fromBufferAttribute(H, J), M[K + ee + 4] = _morphVec4.x, M[K + ee + 5] = _morphVec4.y, M[K + ee + 6] = _morphVec4.z, M[K + ee + 7] = 0), s === true && (_morphVec4.fromBufferAttribute(W, J), M[K + ee + 8] = _morphVec4.x, M[K + ee + 9] = _morphVec4.y, M[K + ee + 10] = _morphVec4.z, M[K + ee + 11] = W.itemSize === 4 ? _morphVec4.w : 1);
         }
       }
       h = {
@@ -117054,12 +117092,12 @@ ${e.tab}if ( ${m} ) {
       const s = r.position, o = r.normal, a = r.uv;
       this.hasAttribute("tangent") === false && this.setAttribute("tangent", new BufferAttribute(new Float32Array(4 * s.count), 4));
       const h = this.getAttribute("tangent"), c = [], d = [];
-      for (let ie = 0; ie < s.count; ie++) c[ie] = new Vector3(), d[ie] = new Vector3();
+      for (let ee = 0; ee < s.count; ee++) c[ee] = new Vector3(), d[ee] = new Vector3();
       const f = new Vector3(), p = new Vector3(), m = new Vector3(), b = new Vector2(), _ = new Vector2(), M = new Vector2(), R = new Vector3(), O = new Vector3();
-      function L(ie, ee, fe) {
-        f.fromBufferAttribute(s, ie), p.fromBufferAttribute(s, ee), m.fromBufferAttribute(s, fe), b.fromBufferAttribute(a, ie), _.fromBufferAttribute(a, ee), M.fromBufferAttribute(a, fe), p.sub(f), m.sub(f), _.sub(b), M.sub(b);
+      function L(ee, ie, fe) {
+        f.fromBufferAttribute(s, ee), p.fromBufferAttribute(s, ie), m.fromBufferAttribute(s, fe), b.fromBufferAttribute(a, ee), _.fromBufferAttribute(a, ie), M.fromBufferAttribute(a, fe), p.sub(f), m.sub(f), _.sub(b), M.sub(b);
         const G = 1 / (_.x * M.y - M.x * _.y);
-        isFinite(G) && (R.copy(p).multiplyScalar(M.y).addScaledVector(m, -_.y).multiplyScalar(G), O.copy(m).multiplyScalar(_.x).addScaledVector(p, -M.x).multiplyScalar(G), c[ie].add(R), c[ee].add(R), c[fe].add(R), d[ie].add(O), d[ee].add(O), d[fe].add(O));
+        isFinite(G) && (R.copy(p).multiplyScalar(M.y).addScaledVector(m, -_.y).multiplyScalar(G), O.copy(m).multiplyScalar(_.x).addScaledVector(p, -M.x).multiplyScalar(G), c[ee].add(R), c[ie].add(R), c[fe].add(R), d[ee].add(O), d[ie].add(O), d[fe].add(O));
       }
       let U = this.groups;
       U.length === 0 && (U = [
@@ -117068,20 +117106,20 @@ ${e.tab}if ( ${m} ) {
           count: e.count
         }
       ]);
-      for (let ie = 0, ee = U.length; ie < ee; ++ie) {
-        const fe = U[ie], G = fe.start, v = fe.count;
+      for (let ee = 0, ie = U.length; ee < ie; ++ee) {
+        const fe = U[ee], G = fe.start, v = fe.count;
         for (let w = G, $ = G + v; w < $; w += 3) L(e.getX(w + 0), e.getX(w + 1), e.getX(w + 2));
       }
       const q = new Vector3(), H = new Vector3(), W = new Vector3(), K = new Vector3();
-      function J(ie) {
-        W.fromBufferAttribute(o, ie), K.copy(W);
-        const ee = c[ie];
-        q.copy(ee), q.sub(W.multiplyScalar(W.dot(ee))).normalize(), H.crossVectors(K, ee);
-        const G = H.dot(d[ie]) < 0 ? -1 : 1;
-        h.setXYZW(ie, q.x, q.y, q.z, G);
+      function J(ee) {
+        W.fromBufferAttribute(o, ee), K.copy(W);
+        const ie = c[ee];
+        q.copy(ie), q.sub(W.multiplyScalar(W.dot(ie))).normalize(), H.crossVectors(K, ie);
+        const G = H.dot(d[ee]) < 0 ? -1 : 1;
+        h.setXYZW(ee, q.x, q.y, q.z, G);
       }
-      for (let ie = 0, ee = U.length; ie < ee; ++ie) {
-        const fe = U[ie], G = fe.start, v = fe.count;
+      for (let ee = 0, ie = U.length; ee < ie; ++ee) {
+        const fe = U[ee], G = fe.start, v = fe.count;
         for (let w = G, $ = G + v; w < $; w += 3) J(e.getX(w + 0)), J(e.getX(w + 1)), J(e.getX(w + 2));
       }
     }
@@ -117231,22 +117269,22 @@ ${e.tab}if ( ${m} ) {
       const d = [], f = [], p = [], m = [];
       let b = 0, _ = 0;
       M("z", "y", "x", -1, -1, s, r, e, h, a, 0), M("z", "y", "x", 1, -1, s, r, -e, h, a, 1), M("x", "z", "y", 1, 1, e, s, r, o, h, 2), M("x", "z", "y", 1, -1, e, s, -r, o, h, 3), M("x", "y", "z", 1, -1, e, r, s, o, a, 4), M("x", "y", "z", -1, -1, e, r, -s, o, a, 5), this.setIndex(d), this.setAttribute("position", new Float32BufferAttribute(f, 3)), this.setAttribute("normal", new Float32BufferAttribute(p, 3)), this.setAttribute("uv", new Float32BufferAttribute(m, 2));
-      function M(R, O, L, U, q, H, W, K, J, ie, ee) {
-        const fe = H / J, G = W / ie, v = H / 2, w = W / 2, $ = K / 2, P = J + 1, F = ie + 1;
+      function M(R, O, L, U, q, H, W, K, J, ee, ie) {
+        const fe = H / J, G = W / ee, v = H / 2, w = W / 2, $ = K / 2, P = J + 1, F = ee + 1;
         let V = 0, z = 0;
         const D = new Vector3();
         for (let x = 0; x < F; x++) {
           const k = x * G - w;
           for (let j = 0; j < P; j++) {
             const Y = j * fe - v;
-            D[R] = Y * U, D[O] = k * q, D[L] = $, f.push(D.x, D.y, D.z), D[R] = 0, D[O] = 0, D[L] = K > 0 ? 1 : -1, p.push(D.x, D.y, D.z), m.push(j / J), m.push(1 - x / ie), V += 1;
+            D[R] = Y * U, D[O] = k * q, D[L] = $, f.push(D.x, D.y, D.z), D[R] = 0, D[O] = 0, D[L] = K > 0 ? 1 : -1, p.push(D.x, D.y, D.z), m.push(j / J), m.push(1 - x / ee), V += 1;
           }
         }
-        for (let x = 0; x < ie; x++) for (let k = 0; k < J; k++) {
+        for (let x = 0; x < ee; x++) for (let k = 0; k < J; k++) {
           const j = b + k + P * x, Y = b + k + P * (x + 1), oe = b + (k + 1) + P * (x + 1), me = b + (k + 1) + P * x;
           d.push(j, Y, me), d.push(Y, oe, me), z += 6;
         }
-        c.addGroup(_, z, ee), _ += z, b += V;
+        c.addGroup(_, z, ie), _ += z, b += V;
       }
     }
     copy(e) {
@@ -117508,8 +117546,8 @@ ${e.tab}if ( ${m} ) {
       if (c !== null) if (Array.isArray(h)) for (let M = 0, R = b.length; M < R; M++) {
         const O = b[M], L = h[O.materialIndex], U = Math.max(O.start, _.start), q = Math.min(c.count, Math.min(O.start + O.count, _.start + _.count));
         for (let H = U, W = q; H < W; H += 3) {
-          const K = c.getX(H), J = c.getX(H + 1), ie = c.getX(H + 2);
-          o = checkGeometryIntersection(this, L, e, s, f, p, m, K, J, ie), o && (o.faceIndex = Math.floor(H / 3), o.face.materialIndex = O.materialIndex, r.push(o));
+          const K = c.getX(H), J = c.getX(H + 1), ee = c.getX(H + 2);
+          o = checkGeometryIntersection(this, L, e, s, f, p, m, K, J, ee), o && (o.faceIndex = Math.floor(H / 3), o.face.materialIndex = O.materialIndex, r.push(o));
         }
       }
       else {
@@ -117522,8 +117560,8 @@ ${e.tab}if ( ${m} ) {
       else if (d !== void 0) if (Array.isArray(h)) for (let M = 0, R = b.length; M < R; M++) {
         const O = b[M], L = h[O.materialIndex], U = Math.max(O.start, _.start), q = Math.min(d.count, Math.min(O.start + O.count, _.start + _.count));
         for (let H = U, W = q; H < W; H += 3) {
-          const K = H, J = H + 1, ie = H + 2;
-          o = checkGeometryIntersection(this, L, e, s, f, p, m, K, J, ie), o && (o.faceIndex = Math.floor(H / 3), o.face.materialIndex = O.materialIndex, r.push(o));
+          const K = H, J = H + 1, ee = H + 2;
+          o = checkGeometryIntersection(this, L, e, s, f, p, m, K, J, ee), o && (o.faceIndex = Math.floor(H / 3), o.face.materialIndex = O.materialIndex, r.push(o));
         }
       }
       else {
@@ -117993,7 +118031,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-BM9meD0P.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-Cxydgahv.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([
@@ -118048,11 +118086,6 @@ ${e.tab}if ( ${m} ) {
         [
           "bossModel",
           `monsters/boss.glb${o}`,
-          "gltf"
-        ],
-        [
-          "monsterSoldierModel",
-          `monsters/soldier.glb${o}`,
           "gltf"
         ],
         [

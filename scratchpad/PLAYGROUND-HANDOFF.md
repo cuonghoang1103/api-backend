@@ -15,8 +15,31 @@ Nhánh `feat/playground-3d`. **Đọc hết mục 1 và 2 trước khi sửa b�
 **2/8**: **CHẾ ĐỘ SINH TỒN** (mục 0i) — quái + sóng + máu đen + tiền, cộng
 **cửa hàng nâng cấp** (7 món), **cơ chế NẤP**, **quái trùm dùng MODEL THẬT**,
 **súng máy phím F**, **xuống xe đi bộ phím E**, **trực thăng**, và
-**SÂN KHẤU NHẠC HỘI** trên đảo sân chơi. Gói `index-c6xb0N8V.js`
-đã dựng và rsync sang `frontend/public/playground`. **CHƯA deploy, CHƯA push.**
+**SÂN KHẤU NHẠC HỘI** trên đảo sân chơi.
+
+**3/8 — VÁ LỖI "BÓNG ĐEN CHE MÀN HÌNH"**, thứ user báo BA LẦN và tôi trượt tám
+lượt chẩn đoán. Gói `index-BzvckPYU.js`, đã rsync. **CHƯA deploy, CHƯA push.**
+
+Thủ phạm: model `soldier.glb` của quái crawler có **tư thế bind vỡ** — hộp bao
+hình học khai 1,33 trong khi lưới GPU vẽ ra **cao 283 và vọt tới 427** giữa chu
+kỳ đi. Ba việc đã làm:
+
+1. **Bỏ hẳn `soldier.glb`.** Crawler nay dùng chung `bossModel` (con lành duy
+   nhất trong kho), nhỏ hơn + nhịp cử động nhanh gấp 1,9 + nhuộm sắc riêng.
+2. **`SurvivalMonsters.measureSkinned()`** tự đo chiều cao bằng
+   `applyBoneTransform()` rồi nhớ theo tên resource. Bảng hằng số đo tay trong
+   `data/survival.js` đã xoá — chính nó đẻ ra lỗi này.
+3. **Sửa CRASH mỗi khung hình**: quái cắn chết người chơi → `defeat()` →
+   `monsters.clear()` gọi từ GIỮA vòng lặp `update()` → `this.monsters[i]` thành
+   `undefined`. Vá bằng bộ đếm thế hệ. Crash này ném ra giữa `Ticker.update` nên
+   nó chặn cả phần cập nhật phía sau.
+
+Và hai bộ kiểm bị vá vì chúng đã che lỗi này:
+- Mọi mục đo cỡ quái đều gọi `SkinnedMesh.computeBoundingBox()` — hàm **KHÔNG
+  chạy skinning**. Nay đo qua `applyBoneTransform`.
+- `run(giây)` có hạn chót **cứng 60 giây thật** và **âm thầm bỏ cuộc**, khiến 6
+  mục trực thăng báo oan. Nay hạn chót suy từ tốc độ đo được, và mỗi lần không
+  kịp thì ghi thẳng là lỗi MÔI TRƯỜNG.
 
 Đầu phiên sau, so gói prod với local; lệch thì chạy `bash deploy.sh` nền:
 
@@ -666,11 +689,21 @@ z −56…96), mà vẫn chừa được 104 đơn vị mặt nước cho cây c
 `scratchpad/survey-assets.mjs`. Ngưỡng: quái spawn hàng loạt ≤ 8k đỉnh · nhân
 vật/phương tiện 1 bản ≤ 40k · công trình tĩnh ≤ 60k (cả thế giới ~804k đỉnh).
 
-| ✅ Dùng ngay | đỉnh | anim |
-|---|---|---|
-| `Quái Vật/fatalis.glb` | 4.513 | **14 clip** + rig |
-| `Quái Vật/alien_soldier_wip.glb` | 2.788 | 1 + rig |
-| `Quái Vật/free_skeleton_man_axe.glb` | 7.973 | 1 + rig |
+⚠️⚠️ **BẢNG "DÙNG NGAY" DƯỚI ĐÂY CHỈ ĐẾM ĐỈNH — NÓ KHÔNG BIẾT MODEL CÓ HỎNG
+KHÔNG.** Đếm đỉnh nhẹ không có nghĩa là dùng được. Ba trong số model quái ở kho
+có **tư thế bind vỡ**: lưới mà GPU vẽ ra không liên quan gì tới hộp bao hình
+học, nên con quái phình lên che kín màn hình. `alien_soldier_wip` đã lọt qua
+bảng này, được nén, ghi công, lắp vào game và **che màn hình người chơi suốt ba
+phiên**. Sàng bằng `playground-3d/tools/screen-monster-models.mjs` TRƯỚC.
+
+| model quái | đỉnh | anim | SÀNG BIND POSE |
+|---|---|---|---|
+| `Quái Vật/alien_creature_take_3.glb` | 28.500 | 1 + rig | ✅ nhịp 0,84 — **đang dùng cho cả 3 loại** |
+| `Quái Vật/fatalis.glb` | 4.513 | **14 clip** + rig | ✅ 2,53→2,57 nhưng ⛔ **IP Capcom, không dùng** |
+| `Quái Vật/alien_soldier_wip.glb` | 2.788 | 1 + rig | ❌ khai 1,99 · **thật 283→427** |
+| `Quái Vật/free_skeleton_man_axe.glb` | 7.973 | 1 + rig | ❌ thật 186 |
+| `Quái Vật/creature_monster_3d_by_oscar_creativo.glb` | 103.412 | 1 + rig | ❌ khai 67,2 · thật 1,79 |
+| `Quái Vật/tribal_mutant_bug_2_rig.glb` | — | **0 clip** | không dùng được cho quái biết đi |
 
 🟡 1–vài bản: `battlefield_4_huang_hannah` 17,5k (không rig) ·
 `flins_rigged_free` 34k (có rig, KHÔNG anim) · `alien_creature_take_3` 28,5k ·

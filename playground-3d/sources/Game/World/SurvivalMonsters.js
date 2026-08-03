@@ -59,6 +59,12 @@ export class SurvivalMonsters
         this.bloods = []
         this.pools = []
 
+        /**
+         * Tăng mỗi lần `clear()` xoá sạch đàn quái. `update()` chụp lại giá trị
+         * này lúc bắt đầu và đối chiếu sau mỗi lần gọi ra ngoài — xem `clear()`.
+         */
+        this.generation = 0
+
         this.materials = new Map()
         this.boxGeometry = new THREE.BoxGeometry(1, 1, 1)
         this.sphereGeometry = new THREE.SphereGeometry(0.5, 8, 6)
@@ -420,6 +426,84 @@ export class SurvivalMonsters
      * ⚠️ Trả về `null` nếu model chưa nạp được — chỗ gọi phải tự lùi về dáng
      * dựng bằng mã, không được để văng lỗi giữa lúc đang sinh quái.
      */
+    /**
+     * CHIỀU CAO THẬT của một model có xương, đo một lần rồi nhớ.
+     *
+     * ═══ VÌ SAO PHẢI CÓ HÀM NÀY ═══
+     *
+     * Lưới bọc xương KHÔNG nằm ở chỗ buffer `position` nói. Buffer giữ tư thế
+     * NGHỈ; cái được vẽ ra là tư thế sau khi xương kéo từng đỉnh đi. Ba phép đo
+     * quen thuộc đều đọc tư thế nghỉ nên đều mù:
+     *
+     *   · `Box3.setFromObject`     — còn nhân ma trận hai lần với lưới nằm dưới
+     *                                xương; từng cho ra con trùm cao 1371
+     *   · min/max của accessor      — chính là tư thế nghỉ
+     *   · `geometry.boundingBox`    — cũng vậy
+     *
+     * `alien_soldier_wip.glb` khai 1,99 và đo hộp bao ra 1,332, nhưng lưới thật
+     * lúc chạy cao **283** và vọt tới **427** giữa chu kỳ đi. Con quái crawler
+     * phình ra che trọn khung nhìn — người chơi tả là "bóng đen to bay chập
+     * chờn". Ba phiên không tìm ra vì mọi bộ kiểm đều đo lại đúng cái hộp bao
+     * đã sai. Model đó nay đã bỏ.
+     *
+     * `applyBoneTransform()` là API DUY NHẤT nói được sự thật: nó áp đúng ma
+     * trận xương mà GPU sẽ áp. Lấy mẫu vài tư thế rải khắp clip rồi lấy bao
+     * ngoài của tất cả, nên số ra đúng cả với model biến dạng mạnh khi cử động.
+     *
+     * @returns {{ height: number, minY: number }} theo đơn vị gốc của model
+     */
+    measureSkinned(key, source)
+    {
+        this.measured ??= new Map()
+        const cached = this.measured.get(key)
+        if(cached) return cached
+
+        const probe = cloneSkinned(source.scene)
+        const clip = source.animations?.[0]
+        const mixer = clip ? new THREE.AnimationMixer(probe) : null
+        if(mixer) mixer.clipAction(clip).play()
+
+        const v = new THREE.Vector3()
+        let lo = Infinity
+        let hi = -Infinity
+
+        // Rải 6 mốc khắp clip: con quái vươn chi ở giữa nhịp chứ không phải lúc
+        // đứng yên, và chính chỗ vươn đó mới quyết định nó có lòi ra ngoài không
+        const samples = clip ? 6 : 1
+        for(let s = 0; s < samples; s++)
+        {
+            if(mixer) mixer.setTime((s / samples) * clip.duration)
+            probe.updateMatrixWorld(true)
+
+            probe.traverse((child) =>
+            {
+                const position = child.geometry?.attributes?.position
+                if(!position) return
+
+                // Lấy mẫu thưa: cần bao ngoài, không cần từng đỉnh. 120 điểm đủ
+                // bắt đầu-ngón-đuôi mà vẫn xong trong một phần nghìn giây
+                const step = Math.max(1, Math.floor(position.count / 120))
+                for(let i = 0; i < position.count; i += step)
+                {
+                    v.fromBufferAttribute(position, i)
+                    if(child.isSkinnedMesh && child.applyBoneTransform) child.applyBoneTransform(i, v)
+                    v.applyMatrix4(child.matrixWorld)
+                    if(v.y < lo) lo = v.y
+                    if(v.y > hi) hi = v.y
+                }
+            })
+        }
+
+        mixer?.stopAllAction()
+
+        const result = Number.isFinite(lo) && hi > lo
+            ? { height: hi - lo, minY: lo }
+            : { height: 2, minY: 0 }
+
+        this.measured.set(key, result)
+        return result
+    }
+
     makeModelMonster(spec)
     {
         const source = this.game.resources?.[spec.model]
@@ -445,8 +529,7 @@ export class SurvivalMonsters
          * ⚠️ CHIA cho `spec.scale`: `add()` sẽ nhân cả nhóm gốc lên `spec.scale`
          * lần nữa. Quên phép chia là con trùm cao gấp `scale` lần mà không lỗi.
          */
-        const height = Math.max(0.001, spec.modelSourceHeight ?? 2)
-        const minY = spec.modelSourceMinY ?? 0
+        const { height, minY } = this.measureSkinned(spec.model, source)
 
         const wanted = spec.modelHeight / spec.scale
         const scale = wanted / height
@@ -471,6 +554,26 @@ export class SurvivalMonsters
         // Giữ nguyên texture, chỉ chuyển sang hệ TSL — model tự ăn đúng ánh
         // sáng, sương mù và bóng đổ của game (đúng như city kit và tàu sân bay)
         this.game.materials.updateObject(model)
+
+        /**
+         * NHUỘM THEO LOÀI.
+         *
+         * Ba loại quái dùng chung một model (con lành duy nhất trong kho), nên
+         * nếu không nhuộm thì đàn quái đọc ra là "một con ở ba cỡ". Nhân màu
+         * gốc với `colors.body` giữ nguyên mọi chi tiết texture mà vẫn cho mỗi
+         * loài một sắc riêng — crawler xanh bệnh, brute nâu gỉ, trùm tím sẫm.
+         *
+         * Nhân bản material trước: chúng dùng chung instance với model gốc, tô
+         * thẳng là nhuộm luôn cả những con đã sinh ra trước đó.
+         */
+        const tint = new THREE.Color(spec.colors.body)
+        model.traverse((child) =>
+        {
+            if(!child.material || !child.material.color) return
+            child.material = child.material.clone()
+            child.material.color.multiply(tint).multiplyScalar(1.9)
+        })
+
         root.add(model)
 
         const mixer = new THREE.AnimationMixer(model)
@@ -483,7 +586,7 @@ export class SurvivalMonsters
              * hệt nhau cùng lúc, và mắt đọc ra ngay là "mấy bản sao", không
              * phải "một đàn". `this.seed` tăng mỗi lần sinh nên mỗi con một số.
              */
-            action.timeScale = 0.45 + rand(this.seed * 5.7) * 0.5
+            action.timeScale = (0.45 + rand(this.seed * 5.7) * 0.5) * (spec.modelTimeScale ?? 1)
             // Vào clip ở chỗ ngẫu nhiên, cùng lý do
             action.time = rand(this.seed * 9.1) * (clip.duration || 1)
             action.play()
@@ -702,9 +805,18 @@ export class SurvivalMonsters
         return n
     }
 
-    /** Dọn sạch — tắt chế độ, thua, hoặc bấm Reset. */
+    /**
+     * Dọn sạch — tắt chế độ, thua, hoặc bấm Reset.
+     *
+     * ⚠ Hàm này HAY ĐƯỢC GỌI TỪ GIỮA `update()`: quái cắn trúng → `onReach()` →
+     * `Survival.hurt()` → máu về 0 → `defeat()` → `clear()`. Lúc đó vòng lặp
+     * trong `update()` vẫn đang chạy dở và mọi chỉ số của nó vừa trở thành rác.
+     * Tăng `generation` để vòng lặp đó nhận ra mà thoát ngay.
+     */
     clear()
     {
+        this.generation++
+
         for(const m of this.monsters)
             this.group.remove(m.root)
         this.monsters.length = 0
@@ -917,9 +1029,13 @@ export class SurvivalMonsters
 
         const slice = this.frame % GROUND_SLICES
 
+        // Đàn quái có thể bị xoá sạch TỪ BÊN TRONG vòng lặp dưới đây — xem `clear()`
+        const generation = this.generation
+
         for(let i = this.monsters.length - 1; i >= 0; i--)
         {
             const m = this.monsters[i]
+            if(!m) break
 
             // ── Đã chết: ngã đổ rồi chìm xuống đất và biến mất ──────────────
             if(m.dead)
@@ -971,6 +1087,7 @@ export class SurvivalMonsters
                 this.group.remove(m.root)
                 this.monsters.splice(i, 1)
                 if(!m.dead) this.survival.onMonsterEscaped()
+                if(generation !== this.generation) return
                 continue
             }
 
@@ -1004,6 +1121,10 @@ export class SurvivalMonsters
                 {
                     m.attackCooldown = 0.6
                     onReach(m)
+
+                    // Cú cắn đó có thể vừa hạ gục người chơi, và `defeat()` đã
+                    // gọi `clear()` — mảng rỗng, `i` thành rác. Thoát ngay.
+                    if(generation !== this.generation) return
                 }
             }
             else if(goalDistance > 0.6)

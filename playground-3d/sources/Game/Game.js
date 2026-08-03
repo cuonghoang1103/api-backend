@@ -169,25 +169,21 @@ export class Game
                  */
                 [ 'bossModel',                             `monsters/boss.glb${cb}`,                                                             'gltf' ],
                 /**
-                 * BA MODEL QUÁI còn lại — user xem bản dựng bằng mã rồi chê
-                 * "quái còn ít và ngoại hình xấu", nên cả bốn loại nay đều là
-                 * model có xương thật. Cùng quy ước với `bossModel`: đã nén sẵn
-                 * một bản dùng cho cả dev lẫn production, KHÔNG `--simplify`
-                 * (skinned mesh, giản lược là phá trọng số xương).
+                 * ⛔ BA MODEL QUÁI KHÁC ĐÃ GỠ KHỎI ĐÂY. Cả ba đều có **TƯ THẾ
+                 * BIND VỠ** — hộp bao hình học nói một đằng, lưới mà GPU vẽ ra
+                 * nằm một nẻo, và con quái phình lên che kín màn hình:
                  *
-                 *   soldier   2.788 đỉnh · 82 khớp  · 0,60 MB — loại đông nhất
-                 *   skeleton  7.973 đỉnh · 84 khớp  · 0,33 MB — loại giữa
-                 *   bigboss 103.412 đỉnh · 126 khớp · 2,72 MB — quái trùm
+                 *   soldier.glb   (alien_soldier_wip)  khai 1,99 · thật 283→427
+                 *   skeleton.glb  (free_skeleton_man_axe)          thật 186
+                 *   bigboss.glb   (creature_monster…)  khai 67,2 · thật 1,79
                  *
-                 * ⚠️ `bigboss` nén texture xuống **256** chứ không phải 512:
-                 * model gốc có 62 texture nặng 78 MB, để 512 thì ra 5,6 MB —
-                 * gần bằng cả gói JS của game, cho MỘT con quái.
-                 */
-                [ 'monsterSoldierModel',                   `monsters/soldier.glb${cb}`,                                                          'gltf' ],
-                /**
-                 * ⛔ `monsters/skeleton.glb` GỠ KHỎI ĐÂY — tư thế bind của nó
-                 * vỡ (cỡ 186 tại giây 0 của clip) nên con quái chập chờn khổng
-                 * lồ che kín màn hình. "Kẻ rình" quay về dựng bằng mã.
+                 * `soldier` là con đã che màn hình người chơi suốt ba phiên. Nay
+                 * cả bốn loại quái dùng chung `bossModel` (khác cỡ, khác nhịp
+                 * cử động, khác sắc thân) trừ "kẻ rình" dựng bằng mã.
+                 *
+                 * Model mới phải qua `tools/screen-monster-models.mjs` TRƯỚC KHI
+                 * nén và ghi công — bộ đó đo bằng `applyBoneTransform()`, thứ
+                 * duy nhất nói được lưới bọc xương thật sự nằm ở đâu.
                  */
                 /**
                  * ⚠️ `monsters/bigboss.glb` (103.412 đỉnh, 2,7 MB) CỐ Ý KHÔNG

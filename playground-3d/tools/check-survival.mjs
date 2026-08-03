@@ -77,12 +77,26 @@ await page.evaluate(() =>
     })
 })
 
+const problems = []
+const facts = {}
+
 /**
- * Cho game chạy đủ `seconds` giây THEO ĐỒNG HỒ CỦA GAME.
- * Trả về số nhịp đã chạy (0 nghĩa là vòng lặp đứng hẳn).
+ * ⚠️ HẠN CHÓT PHẢI TỰ CO GIÃN THEO TỐC ĐỘ MÁY, VÀ IM LẶNG LÀ CẤM.
+ *
+ * Bản đầu để hạn chót CỨNG 60 giây thật. Cảnh này dựng ở 0,04× thời gian thực
+ * nên `run(5)` cần 125 giây — nó bỏ cuộc ở 60 giây, TRẢ VỀ BÌNH THƯỜNG, và
+ * phần kiểm sau đó tố cáo 6 lỗi trực thăng không hề có. Đo lại mới thấy trực
+ * thăng chạy đúng 3,16 trên 4 giây nó cần: bộ kiểm cắt ngắn thời gian rồi trách
+ * mã nguồn.
+ *
+ * Nay hạn chót suy từ tốc độ ĐO ĐƯỢC ở mục 0, và mỗi lần vẫn không kịp thì ghi
+ * thẳng vào `problems` là lỗi MÔI TRƯỜNG — không bao giờ để nó trôi qua lặng lẽ.
  */
-const run = async (seconds, timeoutMs = 60000) =>
+let gameRate = null
+
+const run = async (seconds, timeoutMs = null) =>
 {
+    const budget = timeoutMs ?? (gameRate ? Math.max(20000, (seconds / gameRate) * 1000 * 1.6) : 60000)
     const start = await page.evaluate(() => ({ ticks: window.__tickCount, time: window.__gameTime }))
     const startedAt = Date.now()
 
@@ -93,13 +107,18 @@ const run = async (seconds, timeoutMs = 60000) =>
         await page.waitForTimeout(120)
 
         const now = await page.evaluate(() => ({ ticks: window.__tickCount, time: window.__gameTime }))
-        if(now.time - start.time >= seconds) return now.ticks - start.ticks
-        if(Date.now() - startedAt > timeoutMs) return now.ticks - start.ticks
+        const delivered = now.time - start.time
+        if(delivered >= seconds) return now.ticks - start.ticks
+
+        if(Date.now() - startedAt > budget)
+        {
+            problems.push(`MÔI TRƯỜNG: xin ${seconds}s game, chỉ chạy được ${delivered.toFixed(2)}s trong `
+                + `${((Date.now() - startedAt) / 1000).toFixed(0)}s thật — mọi mục kiểm phía sau ĐỀU CÓ THỂ BÁO OAN. `
+                + 'Đóng bớt ứng dụng nặng rồi chạy lại.')
+            return now.ticks - start.ticks
+        }
     }
 }
-
-const problems = []
-const facts = {}
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  0. KIỂM BỘ KIỂM — vòng lặp game có thật sự chạy không
@@ -109,8 +128,11 @@ const facts = {}
     const ticks = await run(1, 30000)
     const wallSeconds = (Date.now() - started) / 1000
 
+    // Mọi hạn chót sau đây suy từ con số này — xem chú thích của `run()`
+    gameRate = 1 / wallSeconds
+
     facts['0. một giây GAME'] = `${ticks} nhịp, mất ${wallSeconds.toFixed(1)}s thật `
-        + `(${(1 / wallSeconds).toFixed(2)}× thời gian thực)`
+        + `(${gameRate.toFixed(2)}× thời gian thực)`
 
     // Một giây game với `maxDelta = 1/30` là ÍT NHẤT 30 nhịp. Ít hơn nhiều
     // nghĩa là vòng lặp đứng, không phải máy chậm.
@@ -380,17 +402,27 @@ const facts = {}
 //  2b. KHÔNG CON NÀO ĐƯỢC TO BẤT THƯỜNG — canh đúng lỗi user báo
 // ═══════════════════════════════════════════════════════════════════════════
 //
-// User bật chế độ và thấy "một vệt bay bay làm mờ khung hình che màn hình".
-// Đo ra: một mesh quái cỡ **212 × 212 × 212** — con `skeleton` bị co xuống ít
-// hơn mức cần 100 lần, vì `modelSourceHeight` lấy nhầm số từ VỊ TRÍ XƯƠNG
-// (3,13) thay vì từ `SkinnedMesh.computeBoundingBox()` (329,54).
+// User bật chế độ và thấy "bóng đen to bay chập chờn che màn hình". HAI lần.
 //
-// Không mục kiểm nào cũ bắt được: chúng đo chiều cao của riêng con TRÙM, còn
-// con này là quái thường. Nay quét MỌI mesh của chế độ.
+// Lần đầu: con `skeleton` cỡ 212 × 212 × 212.
+// Lần hai: con `crawler` cao **382**, và mục kiểm này KHÔNG THẤY GÌ.
+//
+// ⚠️⚠️ VÌ SAO NÓ MÙ, và vì sao bản này đo khác hẳn:
+//
+// Bản trước dùng `SkinnedMesh.computeBoundingBox()`. Nghe thì đúng, nhưng hàm
+// đó dựng hộp từ hình học ở TƯ THẾ NGHỈ — nó KHÔNG chạy skinning. Với
+// `soldier.glb` nó trả 1,332 trong khi lưới GPU vẽ ra cao 283 và vọt tới 427
+// giữa chu kỳ đi. Bộ kiểm báo sạch suốt ba phiên trong lúc người chơi nhìn
+// thẳng vào con quái che kín màn hình.
+//
+// `applyBoneTransform()` là API DUY NHẤT áp đúng ma trận xương mà GPU sẽ áp.
+// Chậm hơn, nhưng đây là thứ duy nhất nói thật.
 {
     const oversized = await page.evaluate(() =>
     {
         const G = window.game
+        const Vector3 = G.view.camera.position.constructor
+        const v = new Vector3()
         const out = []
 
         for(const name of [ 'survivalMonsters', 'survivalGun', 'survivalWalker', 'survivalHeli' ])
@@ -399,53 +431,32 @@ const facts = {}
             if(!group) continue
             group.updateMatrixWorld(true)
 
-            /**
-             * ⚠️ ĐO KÍCH THƯỚC HIỂN THỊ, KHÔNG ĐO TỈ LỆ TRONG MA TRẬN.
-             *
-             * Bản đầu của mục này lấy tỉ lệ tích luỹ từ `matrixWorld` và báo
-             * "9 mesh cỡ 225" trong khi những con quái đó hiển thị đúng 1–3
-             * đơn vị. Lý do: model có xương thường có bind matrix tỉ lệ rất lớn
-             * bù lại geometry rất nhỏ — hai vế triệt tiêu nhau khi vẽ, nên tỉ lệ
-             * một mình không nói lên điều gì.
-             *
-             * Cách đúng: `SkinnedMesh.computeBoundingBox()` (đã qua xương) rồi
-             * nhân tỉ lệ của NHÓM GỐC.
-             */
-            const rootScale = group === null ? 1 : 1
-
             group.traverse((child) =>
             {
-                let size = 0
+                const position = child.geometry?.attributes?.position
+                if(!position) return
 
-                if(child.isSkinnedMesh)
+                let loX = Infinity, hiX = -Infinity
+                let loY = Infinity, hiY = -Infinity
+                let loZ = Infinity, hiZ = -Infinity
+
+                // Lấy mẫu thưa: cần bao ngoài, không cần từng đỉnh
+                const step = Math.max(1, Math.floor(position.count / 100))
+                for(let i = 0; i < position.count; i += step)
                 {
-                    child.computeBoundingBox()
-                    const bb = child.boundingBox
-                    if(!bb) return
-                    // Tìm nhóm gốc của con quái để lấy tỉ lệ đã áp
-                    let node = child
-                    let scale = 1
-                    while(node && node !== group)
-                    {
-                        if(node.parent === group) scale = node.scale.x
-                        node = node.parent
-                    }
-                    size = Math.max(bb.max.x - bb.min.x, bb.max.y - bb.min.y, bb.max.z - bb.min.z) * scale
+                    v.fromBufferAttribute(position, i)
+                    if(child.isSkinnedMesh && child.applyBoneTransform) child.applyBoneTransform(i, v)
+                    v.applyMatrix4(child.matrixWorld)
+                    if(v.x < loX) loX = v.x; if(v.x > hiX) hiX = v.x
+                    if(v.y < loY) loY = v.y; if(v.y > hiY) hiY = v.y
+                    if(v.z < loZ) loZ = v.z; if(v.z > hiZ) hiZ = v.z
                 }
-                else if(child.isMesh)
-                {
-                    const m = child.matrixWorld.elements
-                    size = Math.max(
-                        Math.hypot(m[0], m[1], m[2]),
-                        Math.hypot(m[4], m[5], m[6]),
-                        Math.hypot(m[8], m[9], m[10]),
-                    )
-                }
-                else return
+
+                const size = Math.max(hiX - loX, hiY - loY, hiZ - loZ)
 
                 // Vật to nhất hợp lệ là cánh quạt trực thăng (8,4) — 20 là
                 // ngưỡng rộng rãi, chỉ bắt những thứ sai bậc độ lớn
-                if(size > 20) out.push({ group: name, size: +size.toFixed(1) })
+                if(size > 20) out.push({ group: name, name: child.name || '(không tên)', size: +size.toFixed(1) })
             })
         }
 
@@ -453,12 +464,13 @@ const facts = {}
     })
 
     facts['2b. vật quá khổ'] = oversized.length === 0
-        ? 'không có (ngưỡng 20 đơn vị)'
-        : oversized.map(o => `${o.group} cỡ ${o.size}`).join(' · ')
+        ? 'không có (đo qua xương, ngưỡng 20 đơn vị)'
+        : oversized.map(o => `${o.group}/${o.name} cỡ ${o.size}`).join(' · ')
 
     if(oversized.length)
         problems.push(`${oversized.length} mesh TO BẤT THƯỜNG (lớn nhất ${Math.max(...oversized.map(o => o.size))} đơn vị) `
-            + '— đây là thứ che kín màn hình người chơi; kiểm `modelSourceHeight` của loại tương ứng')
+            + '— đây là thứ che kín màn hình người chơi. Model đó có TƯ THẾ BIND VỠ: '
+            + 'bỏ nó đi, và sàng model thay thế bằng `tools/screen-monster-models.mjs`')
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -503,16 +515,29 @@ const facts = {}
                 m.mixer.setTime(t)
                 m.root.updateMatrixWorld(true)
 
+                /**
+                 * ⚠️ ĐO QUA XƯƠNG. `computeBoundingBox()` của SkinnedMesh dựng
+                 * hộp từ hình học ở TƯ THẾ NGHỈ — nó không chạy skinning, nên
+                 * nó trả 1,33 cho con quái đang cao 382. Xem mục 2b.
+                 */
                 let size = 0
+                const vec = new (G.view.camera.position.constructor)()
                 m.root.traverse((c) =>
                 {
-                    if(!c.isSkinnedMesh) return
-                    c.computeBoundingBox()
-                    const bb = c.boundingBox
-                    if(!bb) return
-                    size = Math.max(size, bb.max.x - bb.min.x, bb.max.y - bb.min.y, bb.max.z - bb.min.z)
+                    const pos = c.geometry?.attributes?.position
+                    if(!pos) return
+                    let lo = Infinity, hi = -Infinity
+                    const step = Math.max(1, Math.floor(pos.count / 100))
+                    for(let k = 0; k < pos.count; k += step)
+                    {
+                        vec.fromBufferAttribute(pos, k)
+                        if(c.isSkinnedMesh && c.applyBoneTransform) c.applyBoneTransform(k, vec)
+                        vec.applyMatrix4(c.matrixWorld)
+                        if(vec.y < lo) lo = vec.y
+                        if(vec.y > hi) hi = vec.y
+                    }
+                    size = Math.max(size, hi - lo)
                 })
-                size *= m.root.scale.x
 
                 if(size > worst) { worst = size; worstAt = +t.toFixed(2) }
             }
@@ -1322,14 +1347,36 @@ const facts = {}
         let maxY = -Infinity
         let skinned = 0
 
+        const vec = new (window.game.view.camera.position.constructor)()
+
         s.boss.root.traverse((child) =>
         {
-            if(!child.isSkinnedMesh) return
-            skinned++
+            const pos = child.geometry?.attributes?.position
+            if(!pos) return
+            if(child.isSkinnedMesh) skinned++
 
-            child.computeBoundingBox()
-            const bb = child.boundingBox
-            if(!bb) return
+            /**
+             * ⚠️ ĐÍNH CHÍNH BA TẦNG CHÚ THÍCH BÊN DƯỚI.
+             *
+             * Chúng dặn phải dùng `SkinnedMesh.computeBoundingBox()` và gọi đó
+             * là "đúng phép đo mà `makeModelMonster()` dùng". Cả hai vế nay đều
+             * SAI: hàm đó dựng hộp từ hình học ở TƯ THẾ NGHỈ, không chạy
+             * skinning, và đã trả 1,33 cho con quái cao 382 che kín màn hình
+             * người chơi. `makeModelMonster()` nay đo bằng `measureSkinned()`.
+             *
+             * Giữ lại mấy chú thích cũ vì hai bài học TỊNH TIẾN và TÁM GÓC ở
+             * dưới vẫn đúng và vẫn đắt — chỉ có nguồn toạ độ là đổi.
+             */
+            const step = Math.max(1, Math.floor(pos.count / 100))
+            for(let k = 0; k < pos.count; k += step)
+            {
+                vec.fromBufferAttribute(pos, k)
+                if(child.isSkinnedMesh && child.applyBoneTransform) child.applyBoneTransform(k, vec)
+                vec.applyMatrix4(child.matrixWorld)
+                minY = Math.min(minY, vec.y)
+                maxY = Math.max(maxY, vec.y)
+            }
+            return
 
             /**
              * `computeBoundingBox()` của SkinnedMesh trả hộp trong không gian

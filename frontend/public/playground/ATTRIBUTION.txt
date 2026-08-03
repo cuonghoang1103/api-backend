@@ -48,29 +48,39 @@ Monster Island.
               133, dropping 53 heavy ones — 2,126,216 verts down to 150,725;
               textures resized to 1024 and re-encoded to WebP; Draco.
 
-Survival mode monsters — all four types now use real rigged models.
+Survival mode monsters — ONE rigged model ships, at three sizes.
 
-    ⚠⚠ CREDIT INCOMPLETE FOR ALL FOUR — MUST BE FILLED IN BEFORE SHIPPING.
+    ⚠⚠ CREDIT INCOMPLETE — MUST BE FILLED IN BEFORE THIS SHIPS.
 
-    Files and their downloaded names:
-      static/monsters/soldier.glb   <- alien_soldier_wip.glb      (common enemy)
-      static/monsters/skeleton.glb  <- free_skeleton_man_axe.glb  (mid enemy)
-      static/monsters/boss.glb      <- alien_creature_take_3.glb  (heavy enemy)
-      static/monsters/bigboss.glb   <- creature_monster_3d_by_oscar_creativo.glb
-                                                                  (wave boss)
+    Ships:
+      static/monsters/boss.glb  <- alien_creature_take_3.glb
+                                   (used by all three model-backed monster
+                                    types: common, heavy and wave boss)
 
-    All four were downloaded without their author, source URL or licence
-    recorded anywhere in the file. Every other asset here carries a verbatim
-    notice copied from its Sketchfab "Copy credits" button; these need the
-    same. If any of them is CC BY, shipping it uncredited breaks the licence.
+    It was downloaded without its author, source URL or licence recorded
+    anywhere in the file. Every other asset here carries a verbatim notice
+    copied from its Sketchfab "Copy credits" button; this one needs the same.
+    If it is CC BY, shipping it uncredited breaks the licence.
 
-    To fill in: open each model's Sketchfab page, press "Copy credits", paste
+    To fill in: open the model's Sketchfab page, press "Copy credits", paste
     the notice here AND into the Credits block in sources/data/consoleLog.js.
 
-    Modified: textures resized (512 for the three enemies, 256 for the boss —
-    its 62 source textures weighed 78 MB) and re-encoded to WebP, geometry
+    Modified: textures resized to 512 and re-encoded to WebP, geometry
     Draco-compressed. Meshes NOT simplified — they are skinned, and
     simplifying breaks the skin weights.
+
+    Three other candidates were tested and DROPPED — all had broken bind
+    poses, i.e. the mesh the GPU actually draws bore no relation to the
+    geometry bounding box, so the creature ballooned across the screen:
+      alien_soldier_wip.glb                      declared 1.99, real 283→427
+      free_skeleton_man_axe.glb                  real 186
+      creature_monster_3d_by_oscar_creativo.glb  declared 67.2, real 1.79
+    None of these three ship. Screen new candidates with
+    tools/screen-monster-models.mjs before compressing or crediting them.
+
+    fatalis.glb also passed the technical screen but is NOT used: it is the
+    Fatalis dragon from Capcom's Monster Hunter. That is a licensing issue, not
+    a technical one, and this site is public.
 
 Alien creature — original note kept for the record.
 

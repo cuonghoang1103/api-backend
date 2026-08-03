@@ -23,7 +23,12 @@
  *    có một dáng.
  *  - Không phải nén, không phải đặt thêm file vào `static/`, không phải ghi
  *    công, không tăng dung lượng tải.
- * `fatalis.glb` để dành cho **quái trùm** ở bản sau — chỉ một con, một mixer.
+ *
+ * ⛔ `fatalis.glb` từng được để dành cho quái trùm. **KHÔNG DÙNG NỮA**: nó lành
+ * về kỹ thuật (đã sàng, cao 2,53 → 2,57 suốt clip) nhưng là con rồng Fatalis
+ * của Monster Hunter — tài sản trí tuệ của Capcom. Trang này chạy công khai ở
+ * cuongthai.com nên asset moi từ game thương mại là chuyện bản quyền, không
+ * phải chuyện kỹ thuật.
  */
 
 /**
@@ -36,59 +41,55 @@
  */
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- *  ⚠️ HỘP BAO THẬT CỦA TỪNG MODEL — ĐO TỪ FILE, ĐỪNG ĐO TRONG CẢNH
+ *  ⚠️ ĐỪNG GÕ TAY CHIỀU CAO MODEL NỮA — MÃ TỰ ĐO
  * ═══════════════════════════════════════════════════════════════════════════
  *
- * `modelSourceHeight` / `modelSourceMinY` dưới đây đọc từ min/max của accessor
- * POSITION trong chính file `.glb` (script `scratchpad/diag-bbox.mjs`).
+ * Chỗ này từng có bảng `modelSourceHeight` đo tay cho từng model, kèm cả một
+ * "quy luật" tôi rút ra sau bốn phép đo. Bảng đó SAI, và cái sai đã sống ba
+ * phiên:
  *
- * Vì sao không để mã tự đo bằng `Box3.setFromObject()` như bản đầu: với model
- * có xương, lưới nằm dưới hierarchy xương nên ma trận bị nhân hai lần và số ra
- * VÔ NGHĨA. Đo được:
+ *   `alien_soldier_wip.glb` được ghi 1,332. Lưới bọc xương của nó lúc chạy thật
+ *   cao **283**, và vọt lên **427** giữa chu kỳ đi. Con crawler vì thế phình ra
+ *   che TRỌN khung nhìn — người chơi tả là "bóng đen to bay chập chờn". Không
+ *   bộ kiểm nào bắt được, vì mọi bộ kiểm đều đo lại đúng cái hộp bao đã sai.
  *
- *   | model    | Box3 cảnh | POSITION file | vị trí xương | skinning | DÙNG  |
- *   |----------|-----------|---------------|--------------|----------|-------|
- *   | soldier  |      66,0 |          1,99 |       396,35 |    1,332 | 1,332 |
- *   | skeleton |       3,66|        492,41 |         3,13 |   329,54 | 3,134 |
- *   | boss     |       3,47|          2,86 |         2,46 |    2,079 | 2,079 |
- *   | bigboss  |       2,48|         67,18 |         2,40 |   67,175 | 2,398 |
+ * Gốc của sai lầm: hộp bao hình học là TƯ THẾ NGHỈ. Thứ GPU vẽ ra là tư thế sau
+ * khi xương kéo từng đỉnh. Với model bind pose hỏng, hai thứ đó lệch nhau 200
+ * lần mà không có lỗi nào được ném ra.
  *
- * BỐN phép đo, và không phép nào đúng cho cả bốn model:
- *   `Box3.setFromObject` trong cảnh → ma trận nhân hai lần khi lưới nằm dưới
- *      hierarchy xương (soldier ra 66, bigboss dựng ra **cao 1371** rồi bay mất)
- *   min/max accessor POSITION từ file → đỉnh ở không gian BIND, chưa qua xương
- *   vị trí xương → đúng cho xương, sai cho lưới (soldier ra 396)
- *   `SkinnedMesh.computeBoundingBox()` → đúng nhất, nhưng vẫn lệch ở model có
- *      bind matrix scale lớn (skeleton, bigboss)
+ * Nay `SurvivalMonsters.measureSkinned()` tự đo bằng `applyBoneTransform()` —
+ * API duy nhất áp đúng ma trận xương mà GPU sẽ áp — lấy mẫu 6 tư thế rải khắp
+ * clip. Ở đây chỉ còn khai `modelHeight`: con quái CAO BAO NHIÊU TRONG GAME.
  *
- * ⚠️⚠️ **QUY LUẬT ĐÚNG: LUÔN DÙNG CỘT "skinning"**
- * (`SkinnedMesh.computeBoundingBox()`), vì đó chính là hộp bao mà three.js dựng
- * ra trên màn hình.
- *
- * Có một lúc tôi rút ra quy luật SAI là "lấy số nhỏ hơn giữa skinning và
- * xương", và nó đẻ ra đúng cái lỗi user báo: **một con quái cỡ 212 × 212 × 212
- * che gần nửa khung hình**, mờ mờ như một vệt khói khổng lồ. Với `skeleton`,
- * số xương là 3,13 còn số skinning là 329,54 — chọn 3,13 nghĩa là co model
- * xuống 100 lần ÍT hơn mức cần.
- *
- * Bốn model từ bốn nguồn là bốn quy ước bind khác nhau; chỉ có phép đo skinning
- * là nói cùng ngôn ngữ với thứ được vẽ ra.
+ * Sàng model mới bằng `tools/screen-monster-models.mjs` TRƯỚC KHI nén và ghi
+ * công. Model lành thì (cao bọc xương)/(cao khai trong accessor) ≈ 1 và không
+ * đổi quá 10% suốt clip. Đã sàng: `alien_creature_take_3` ✅ · `fatalis` ✅
+ * (nhưng là IP của Capcom, KHÔNG dùng) · `alien_soldier_wip` ❌ ·
+ * `creature_monster_3d_by_oscar_creativo` ❌ · `tribal_mutant_bug_2_rig` không
+ * có hoạt ảnh nào.
  */
 export const SURVIVAL_MONSTERS = {
     /**
-     * LÍNH NGOÀI HÀNH TINH — loại đông nhất. Model nhẹ nhất trong kho
-     * (2.788 đỉnh) nên là loại duy nhất dám thả hàng chục con cùng lúc.
+     * LÍNH NGOÀI HÀNH TINH — loại đông nhất, con non của cùng giống loài với
+     * brute và trùm. Dùng CHUNG model với chúng, chỉ nhỏ hơn và nhanh hơn.
+     *
+     * Trước nó có model riêng (`alien_soldier_wip.glb`) và đó chính là con quái
+     * đã che màn hình người chơi — bind pose hỏng sẵn trong file, xem ghi chú ở
+     * đầu tệp này. Model đó đã bỏ hẳn khỏi dự án.
      *
      * `model` trỏ tới tên resource khai trong `Game.js`; `modelHeight` là chiều
-     * cao THẬT sau khi nhân `scale` (xem `SurvivalMonsters.makeModelMonster`).
-     * Không nạp được model thì tự lùi về dáng dựng bằng mã — chơi vẫn được.
+     * cao THẬT trong game, mã tự co model về đúng cỡ đó. Không nạp được model
+     * thì tự lùi về dáng dựng bằng mã — chơi vẫn được.
      */
     crawler: {
         name: 'Lính ngoài hành tinh',
-        model: 'monsterSoldierModel',
+        model: 'bossModel',
         modelHeight: 1.85,
-        modelSourceHeight: 1.332,
-        modelSourceMinY: -0.751,
+        /**
+         * Nhanh hơn hẳn hai đàn anh — cùng một hình hài, nhưng con nhỏ chạy
+         * lắt nhắt thì mắt đọc ra ngay là loài khác, không phải "bản thu nhỏ".
+         */
+        modelTimeScale: 1.9,
         hp: 3,
         speed: 3.6,
         /** Sát thương mỗi giây khi bám được vào xe. */
@@ -135,8 +136,6 @@ export const SURVIVAL_MONSTERS = {
         name: 'Quái to xác',
         model: 'bossModel',
         modelHeight: 3.6,
-        modelSourceHeight: 3.213,
-        modelSourceMinY: 0,
         hp: 18,
         speed: 2.3,
         damage: 26,
@@ -179,8 +178,6 @@ export const SURVIVAL_MONSTERS = {
          * vừa thêm thì phải đổi biến rồi chụp lại, đừng vội quy tội.
          */
         model: 'bossModel',
-        modelSourceHeight: 3.213,
-        modelSourceMinY: 0,
         hp: 130,
         speed: 2.6,
         damage: 40,

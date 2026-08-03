@@ -848,27 +848,82 @@ export class Survival
                 overlays.push(`${el.className || el.tagName} op=${st.opacity} bg=${st.backgroundColor}`)
             }
 
-            // 2. Vật thể 3D choán màn hình nhất
+            /**
+             * 2. Vật thể 3D choán màn hình
+             *
+             * ⚠️ ĐO ĐỈNH ĐÃ QUA XƯƠNG, KHÔNG ĐO HỘP BAO.
+             *
+             * Bản trước của chính máy dò này chiếu 8 góc hộp bao hình học lên
+             * khung nhìn. Nó đã BỎ SÓT đúng con quái đang che màn hình người
+             * chơi: hộp bao của `soldier.glb` khai 1,33 trong khi lưới GPU vẽ
+             * ra cao 283. Hộp bao là tư thế NGHỈ; thứ nhìn thấy được là tư thế
+             * sau khi xương kéo từng đỉnh. `applyBoneTransform()` là API duy
+             * nhất bắc được cầu giữa hai thứ đó.
+             */
             const near = []
+            const vertex = new THREE.Vector3()
+            const inCamera = new THREE.Vector3()
+
             G.scene.traverse((c) =>
             {
                 if((!c.isMesh && !c.isSkinnedMesh) || !c.visible) return
+                const position = c.geometry?.attributes?.position
+                if(!position) return
+
                 c.updateMatrixWorld(true)
-                const m = c.matrixWorld.elements
-                const d = Math.hypot(m[12] - cam.position.x, m[13] - cam.position.y, m[14] - cam.position.z)
-                if(d > 40) return
-                let size = 0
-                if(c.isSkinnedMesh) { c.computeBoundingBox(); const bb = c.boundingBox
-                    if(bb) size = Math.max(bb.max.x - bb.min.x, bb.max.y - bb.min.y, bb.max.z - bb.min.z) }
-                else size = Math.max(Math.hypot(m[0],m[1],m[2]), Math.hypot(m[4],m[5],m[6]), Math.hypot(m[8],m[9],m[10]))
-                if(size / Math.max(d, 0.1) > 0.4)
-                    near.push(`cỡ ${size.toFixed(1)} cách ${d.toFixed(1)} cha=${c.parent?.name || '(scene)'}`)
+
+                let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity
+                let lo = Infinity, hi = -Infinity
+                let anyFront = false
+
+                const step = Math.max(1, Math.floor(position.count / 80))
+                for(let i = 0; i < position.count; i += step)
+                {
+                    vertex.fromBufferAttribute(position, i)
+                    if(c.isSkinnedMesh && c.applyBoneTransform) c.applyBoneTransform(i, vertex)
+                    vertex.applyMatrix4(c.matrixWorld)
+
+                    if(vertex.y < lo) lo = vertex.y
+                    if(vertex.y > hi) hi = vertex.y
+
+                    // Trước hay sau máy quay — điểm sau lưng chiếu ra sẽ LẬT NGƯỢC
+                    inCamera.copy(vertex).applyMatrix4(cam.matrixWorldInverse)
+                    if(inCamera.z < 0) anyFront = true
+
+                    vertex.project(cam)
+                    minX = Math.min(minX, vertex.x); maxX = Math.max(maxX, vertex.x)
+                    minY = Math.min(minY, vertex.y); maxY = Math.max(maxY, vertex.y)
+                }
+
+                if(!anyFront) return
+
+                // Phần diện tích khung nhìn (NDC chạy −1..1 nên cả khung rộng 2×2)
+                const w = Math.min(maxX, 1) - Math.max(minX, -1)
+                const h = Math.min(maxY, 1) - Math.max(minY, -1)
+                if(w <= 0 || h <= 0) return
+
+                const coverage = (w * h) / 4
+                if(coverage < 0.25) return
+
+                c.getWorldPosition(vertex)
+                const d = vertex.distanceTo(cam.position)
+
+                // Chuỗi cha — biết nó thuộc về hệ thống nào
+                const chain = []
+                for(let p = c; p && chain.length < 5; p = p.parent) chain.push(p.name || p.type)
+
+                near.push(
+                    `  ${(coverage * 100).toFixed(0)}% màn hình · cao ${(hi - lo).toFixed(2)}`
+                    + ` · "${c.name || '(không tên)'}" · cách ${d.toFixed(1)}`
+                    + ` · màu ${c.material?.color?.getHexString?.() ?? '?'}`
+                    + ` · thuộc: ${chain.join(' ← ')}`,
+                )
             })
 
             console.log('════ SINH TỒN — CHẨN ĐOÁN ════')
             console.log('nhịp:', this.phase, '· sóng:', this.wave, '· quái sống:', this.monsters.aliveCount)
-            console.log('LỚP PHỦ DOM:', overlays.length ? overlays : '(không có)')
-            console.log('VẬT 3D CHOÁN MÀN HÌNH:', near.length ? near : '(không có)')
+            console.log('LỚP PHỦ DOM:\n' + (overlays.length ? overlays.map(o => '  ' + o).join('\n') : '  (không có)'))
+            console.log('VẬT 3D CHOÁN MÀN HÌNH:\n' + (near.length ? near.join('\n') : '  (không có)'))
             console.log('reveal.distance:', G.reveal?.distance?.value, '· fog:', G.fog?.near?.value?.toFixed(1), '→', G.fog?.far?.value?.toFixed(1))
             console.log('máy quay: chế độ', G.view.mode, 'tại y =', cam.position.y.toFixed(1))
             console.log('════════════════════════════════')

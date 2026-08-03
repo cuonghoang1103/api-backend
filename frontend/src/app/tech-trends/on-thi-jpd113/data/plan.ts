@@ -500,6 +500,17 @@ export const PLAN: StudyDay[] = [
             kind: 'review',
           },
           {
+            id: 'd2-vocab-time',
+            title: 'Từ vựng: Thời gian & Nơi chốn (51 từ)',
+            detail:
+              'Tab "Từ vựng" → lọc chủ đề ⏰ Thời gian, Thứ & Lịch trình (24 từ) rồi 🏢 Nơi chốn công cộng & Mua sắm (27 từ). ' +
+              'Đọc ở chế độ Tra cứu, đánh dấu từ đã thuộc, rồi làm Kiểm tra để tự chấm. ' +
+              'Hai chủ đề này ăn khớp trực tiếp với phần số/giờ vừa học sáng nay.',
+            minutes: 30,
+            tier: 'core',
+            kind: 'vocab',
+          },
+          {
             id: 'd2-exam-quiz',
             title: 'Quiz 2 — Số, tiền & ngày tháng',
             detail: 'Kiểm lại đúng phần vừa học hôm nay, trước khi đi ngủ.',
@@ -704,6 +715,17 @@ export const PLAN: StudyDay[] = [
             tier: 'core',
             kind: 'exam',
             links: [{ label: 'Phòng thi — 14 đề FE thật', href: EXAM_FE }],
+          },
+          {
+            id: 'd3-vocab-daily',
+            title: 'Từ vựng: Ăn uống, Đồ vật & Động từ (72 từ)',
+            detail:
+              'Tab "Từ vựng" → 🍱 Ăn uống (36 từ, chủ đề lớn nhất), 🎒 Đồ vật cá nhân (22), 🏃 Động từ ます (14). ' +
+              'Chạy chế độ Kiểm tra cả hai chiều: Nhật→Việt rồi Việt→Nhật. Chiều Việt→Nhật khó hơn nhiều ' +
+              'và chính là thứ đề điền chỗ trống đòi hỏi.',
+            minutes: 35,
+            tier: 'core',
+            kind: 'vocab',
           },
           {
             id: 'd3-exam-log',

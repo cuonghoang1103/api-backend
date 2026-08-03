@@ -21,9 +21,11 @@ import {
   Flame,
   ListChecks,
   Keyboard,
+  Layers,
 } from 'lucide-react';
 
 import DrillPanel from './DrillPanel';
+import VocabPanel from './VocabPanel';
 
 import {
   PLAN,
@@ -77,11 +79,12 @@ import {
 
 const PROGRESS_KEY = 'jpd113:progress:v1';
 
-type TabId = 'plan' | 'drill' | 'cheat' | 'speak' | 'exam';
+type TabId = 'plan' | 'drill' | 'vocab' | 'cheat' | 'speak' | 'exam';
 
 const TABS: { id: TabId; label: string; icon: typeof Target }[] = [
   { id: 'plan', label: 'Lộ trình 5 ngày', icon: CalendarDays },
   { id: 'drill', label: 'Luyện gõ chữ', icon: Keyboard },
+  { id: 'vocab', label: 'Từ vựng', icon: Layers },
   { id: 'cheat', label: 'Bảng tra cứu', icon: BookOpen },
   { id: 'speak', label: 'Thi nói & đọc', icon: Mic },
   { id: 'exam', label: 'Đề thi & mục tiêu', icon: FileText },
@@ -313,6 +316,7 @@ export default function OnThiJPD113Client() {
           />
         )}
         {tab === 'drill' && <DrillPanel />}
+        {tab === 'vocab' && <VocabPanel />}
         {tab === 'cheat' && <CheatTab />}
         {tab === 'speak' && <SpeakTab profile={profile} onProfile={persistProfile} mounted={mounted} />}
         {tab === 'exam' && <ExamTab />}

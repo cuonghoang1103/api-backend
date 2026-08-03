@@ -854,11 +854,12 @@ export const SECTIONS: CheatSection[] = [
   /* ─────────── TỪ VỰNG ─────────── */
   {
     id: 'vocab',
-    title: 'Từ vựng lõi',
+    title: 'Từ vựng lõi (bản rút gọn)',
     icon: '📚',
     summary:
       'Dạng điền chỗ trống (~70% đề) phần lớn kiểm tra collocation từ vựng chứ không phải logic ngữ pháp. ' +
-      'Đây là ~130 từ theo chủ đề có mặt dày nhất trong các đề thật.',
+      'Đây là bản RÚT GỌN ~130 từ để đọc lướt nhanh trong ngày thi — bộ đầy đủ 231 từ, có câu ví dụ, ' +
+      'tìm kiếm, thẻ lật và bài kiểm tra nằm ở tab “Từ vựng”.',
     tables: [
       {
         id: 'vocab-people',

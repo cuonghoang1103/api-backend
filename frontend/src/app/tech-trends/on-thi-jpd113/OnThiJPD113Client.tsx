@@ -22,6 +22,7 @@ import {
   ListChecks,
   Keyboard,
   Layers,
+  Search,
 } from 'lucide-react';
 
 import DrillPanel from './DrillPanel';
@@ -54,6 +55,12 @@ import {
   type KanaCell,
   type CheatTable,
 } from './data/cheatsheet';
+import {
+  NAME_RULES,
+  NAME_TABLE,
+  SURNAME_TABLE,
+  HANVIET_TABLE,
+} from './data/names';
 import {
   PROFILE_FIELDS,
   PROFILE_STORAGE_KEY,
@@ -813,6 +820,9 @@ function CheatTab() {
 
             {open && (
               <div className="px-5 sm:px-6 pb-6 space-y-6">
+                {/* Lợi thế riêng của người Việt — đặt TRƯỚC các bảng cách đọc,
+                    vì đoán được nghĩa rồi thì học cách đọc nhẹ hơn hẳn. */}
+                {s.id === 'kanji' && <HanVietBlock />}
                 {s.tables.map((t) => (
                   <DataTable key={t.id} table={t} />
                 ))}
@@ -827,6 +837,59 @@ function CheatTab() {
           </section>
         );
       })}
+    </div>
+  );
+}
+
+/**
+ * Hán-Việt: lợi thế mà chỉ người học Việt Nam có.
+ * Người Âu-Mỹ phải học thuộc nghĩa từng từ ghép kanji; người Việt thì
+ * phần lớn đã có sẵn từ tương ứng trong tiếng mẹ đẻ.
+ */
+function HanVietBlock() {
+  return (
+    <div className="rounded-xl border border-neon-green/25 bg-neon-green/[0.05] p-4 sm:p-5">
+      <div className="text-sm font-bold text-neon-green mb-1.5">
+        ★ Lợi thế của người Việt — đoán nghĩa qua từ Hán-Việt
+      </div>
+      <p className="text-[13px] text-slate-300 leading-relaxed mb-4">
+        Kanji vào tiếng Nhật và từ Hán-Việt vào tiếng Việt đều mượn từ cùng một gốc chữ Hán, nên
+        rất nhiều từ ghép trong môn này <b className="text-white">bạn đã biết nghĩa từ trước mà
+        không nhận ra</b>. Bạn chỉ còn phải nhớ cách đọc — nhẹ hơn hẳn so với người học phương Tây
+        phải học cả nghĩa lẫn âm.
+      </p>
+      <div className="overflow-x-auto rounded-lg border border-white/10">
+        <table className="w-full text-sm min-w-[420px]">
+          <thead>
+            <tr className="bg-white/[0.04]">
+              {['Chữ Hán', 'Cách đọc', 'Hán-Việt bạn đã biết', 'Nghĩa'].map((h, i) => (
+                <th
+                  key={`${h}-${i}`}
+                  className="text-left px-3 py-2.5 text-[11px] font-bold tracking-wide text-slate-400 uppercase"
+                >
+                  {h}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {HANVIET_TABLE.map((h) => (
+              <tr key={h.kanji} className="border-t border-white/[0.06]">
+                <td className="px-3 py-2.5 text-lg text-white">{h.kanji}</td>
+                <td className="px-3 py-2.5 text-neon-cyan">{h.kana}</td>
+                <td className="px-3 py-2.5 text-neon-green font-semibold">{h.hanviet}</td>
+                <td className="px-3 py-2.5 text-slate-400">{h.meaning}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="text-[12px] text-slate-500 leading-relaxed mt-3">
+        Vài từ lệch nghĩa so với Hán-Việt nên đừng suy bừa: <b className="text-slate-300">勉強</b>{' '}
+        (べんきょう) là “MIỄN CƯỠNG” nhưng nghĩa tiếng Nhật là <b className="text-slate-300">học
+        tập</b>, còn <b className="text-slate-300">料理</b> (りょうり) “LIỆU LÝ” nghĩa là{' '}
+        <b className="text-slate-300">món ăn</b>. Hán-Việt là mẹo đoán, không phải luật.
+      </p>
     </div>
   );
 }
@@ -968,6 +1031,9 @@ function SpeakTab({
           </p>
         </div>
       </section>
+
+      {/* Tên bằng katakana — câu 1 giám thị hỏi */}
+      <NameSection />
 
       {/* Hồ sơ cá nhân */}
       <section className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6">
@@ -1223,6 +1289,143 @@ function SpeakTab({
         </Link>
       </div>
     </div>
+  );
+}
+
+/**
+ * Viết tên tiếng Việt bằng katakana.
+ *
+ * Câu đầu tiên giám thị hỏi là おなまえは？ nên đây là thứ đầu tiên người
+ * học cần, mà giáo trình lại không dạy — ai cũng tự mò.
+ */
+function NameSection() {
+  const [q, setQ] = useState('');
+
+  const hits = useMemo(() => {
+    const s = q.trim().toLowerCase();
+    if (!s) return [];
+    const norm = (v: string) =>
+      v
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+        .replace(/đ/g, 'd');
+    return [...NAME_TABLE, ...SURNAME_TABLE].filter(
+      (n) => norm(n.vi).includes(norm(s)) || n.kata.includes(q.trim()),
+    );
+  }, [q]);
+
+  return (
+    <section className="rounded-2xl border border-neon-cyan/25 bg-neon-cyan/[0.05] p-5 sm:p-6">
+      <h2 className="text-lg font-heading font-bold text-white mb-1">
+        Tên bạn viết bằng katakana thế nào?
+      </h2>
+      <p className="text-sm text-slate-300 leading-relaxed mb-5">
+        Câu <b className="text-white">đầu tiên</b> giám thị hỏi là{' '}
+        <b className="text-white">おなまえは？</b> — nên đây là thứ phải chắc nhất.
+        Giám thị KHÔNG chấm chính tả katakana của tên bạn, nhưng nói theo âm Nhật thì họ nghe ra
+        dễ hơn nhiều.
+      </p>
+
+      <div className="relative mb-4">
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+        <input
+          type="text"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Gõ tên bạn (không cần dấu): cuong, linh, nguyen…"
+          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-neon-cyan/50 transition-colors"
+        />
+      </div>
+
+      {q.trim() && (
+        <div className="mb-5">
+          {hits.length > 0 ? (
+            <div className="space-y-2">
+              {hits.slice(0, 8).map((n) => (
+                <div
+                  key={n.vi + n.kata}
+                  className="flex flex-wrap items-center gap-x-4 gap-y-1 rounded-xl border border-neon-cyan/25 bg-neon-cyan/[0.06] px-4 py-3"
+                >
+                  <span className="text-sm text-slate-300 w-28">{n.vi}</span>
+                  <span className="text-2xl text-white">{n.kata}</span>
+                  <span className="text-xs text-slate-500">{n.romaji}</span>
+                  <span className="text-[13px] text-neon-green ml-auto">
+                    わたしの なまえは {n.kata} です。
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-[13px] text-slate-400 leading-relaxed rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3">
+              Không có trong bảng — ghép theo quy tắc bên dưới. Bỏ hết dấu thanh, đổi âm cuối
+              n/ng/nh thành ン, rồi đọc từng âm một.
+            </p>
+          )}
+        </div>
+      )}
+
+      <details className="group">
+        <summary className="cursor-pointer text-sm font-semibold text-white mb-3 list-none flex items-center gap-2">
+          <ChevronDown className="w-4 h-4 text-slate-500 group-open:rotate-180 transition-transform" />
+          Vì sao tên bị đổi dạng — 7 quy tắc
+        </summary>
+        <div className="overflow-x-auto rounded-xl border border-white/10 mb-4">
+          <table className="w-full text-sm min-w-[520px]">
+            <thead>
+              <tr className="bg-white/[0.04]">
+                {['Trường hợp', 'Ví dụ tiếng Việt', 'Thành', 'Vì sao'].map((h, i) => (
+                  <th
+                    key={`${h}-${i}`}
+                    className="text-left px-3 py-2.5 text-[11px] font-bold tracking-wide text-slate-400 uppercase"
+                  >
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {NAME_RULES.map((r) => (
+                <tr key={r.pattern} className="border-t border-white/[0.06]">
+                  <td className="px-3 py-2.5 text-white font-medium">{r.pattern}</td>
+                  <td className="px-3 py-2.5 text-slate-400">{r.vi}</td>
+                  <td className="px-3 py-2.5 text-neon-cyan text-base">{r.kata}</td>
+                  <td className="px-3 py-2.5 text-slate-400 text-[13px] leading-relaxed">{r.note}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="text-sm font-semibold text-white mb-2.5">
+          Tên thường gặp ({NAME_TABLE.length})
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 mb-4">
+          {NAME_TABLE.map((n) => (
+            <div
+              key={n.vi}
+              className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2"
+            >
+              <div className="text-[11px] text-slate-500">{n.vi}</div>
+              <div className="text-base text-white leading-tight">{n.kata}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="text-sm font-semibold text-white mb-2.5">Họ thường gặp</div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+          {SURNAME_TABLE.map((n) => (
+            <div
+              key={n.vi}
+              className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2"
+            >
+              <div className="text-[11px] text-slate-500">{n.vi}</div>
+              <div className="text-base text-white leading-tight">{n.kata}</div>
+            </div>
+          ))}
+        </div>
+      </details>
+    </section>
   );
 }
 

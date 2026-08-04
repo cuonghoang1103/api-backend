@@ -10,7 +10,7 @@ import {
   Sparkles, FileCode2, LogOut, User, Settings,
   GraduationCap, ShoppingBag, Layers, ChevronRight,
   Github, Menu, X, NotebookPen, Languages, Wallet,
-  TrendingUp, Gamepad2, Users, PlayCircle, Megaphone, Briefcase, Crown,
+  Gamepad2, Users, PlayCircle, Megaphone, Briefcase, Crown,
   FileText, Newspaper, Radio, Code2, Binary, Map as MapIcon, ClipboardCheck,
   Waypoints,
 } from 'lucide-react';
@@ -71,11 +71,14 @@ const ALL_DOCK_ITEMS: DockItem[] = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, section: 'navigate' },
   // Social
   { href: '/feed', label: 'Feed', icon: Newspaper, section: 'social' },
-  { href: '/tech-trends', label: 'Tech Trends', icon: TrendingUp, section: 'social' },
+  // One blog, one entry. /blog used to sit here too — it held 2
+  // announcements while every real article lived under "Tech Trends", so
+  // readers clicking the word "Blog" landed on the empty one. Merged
+  // 2026-08-05; /blog now 301s here (see next.config.js).
+  { href: '/tech-trends', label: 'Blog', icon: BookOpen, section: 'social' },
   { href: '/forum', label: 'Diễn đàn', icon: Megaphone, section: 'social' },
   { href: '/voice', label: 'Voice', icon: Radio, section: 'social' },
   { href: '/friends', label: 'Friends', icon: Users, section: 'social' },
-  { href: '/blog', label: 'Blog', icon: BookOpen, section: 'social' },
   { href: '/messages', label: 'Messenger', icon: MessagesSquare, section: 'social', showUnread: true },
   // Code & Build
   { href: '/code-lab', label: 'Code Lab', icon: Code2, section: 'code' },

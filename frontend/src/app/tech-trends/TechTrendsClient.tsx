@@ -5,28 +5,50 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { sanitizeHtml } from '@/lib/sanitizeHtml';
-import { Bookmark, Share2, Clock, TrendingUp, Search, Sparkles, Code2, AlertTriangle, CheckCircle2, X } from 'lucide-react';
+import { Bookmark, Share2, Clock, TrendingUp, Search, Sparkles, Code2, AlertTriangle, CheckCircle2, X, Download, MessageSquare, Archive, Package } from 'lucide-react';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { techTrendsApi } from '@/lib/api';
+import { techTrendsApi, blogApi } from '@/lib/api';
+import ParticleGridBackground from '@/components/blog/ParticleGridBackground';
+import type { Post } from '@/types';
 import {
   CATEGORY_TABS,
   QUICK_TIPS,
   CATEGORY_DEFAULT_EMOJI,
+  CATEGORY_LABEL_VI,
   type Article,
   type Category,
+  type TabId,
+  type Resource,
+  type FeedItem,
   type TrendingTag,
   type TopAuthor,
   type CodeBlock,
 } from './types';
 
 /**
- * Tech Trends & Insights — public page
+ * Blog — the site's single writing surface (public page).
  *
- * Data source: `techTrendsApi.list()` (read-only, no auth).
- * The page hydrates once on mount and does all subsequent
- * filtering / searching client-side. With the current page
- * size cap of 100 this is fine; if the dataset ever crosses
- * ~500 articles we should switch to server-side paging.
+ * ─── WHY ONE PAGE ──────────────────────────────────────────────
+ * Until 2026-08-05 the site had TWO blogs: /blog (2 posts, both
+ * announcements whose body was the literal string "FPTU") and
+ * /tech-trends (28 real articles). Both sat in the nav, and the one
+ * called "Blog" — the word readers actually look for — was the empty
+ * one. They are merged here.
+ *
+ * Data sources, deliberately two:
+ *   - `techTrendsApi.list()`  → hand-written articles + the AI news
+ *                                bulletin (`tech_trend_articles`)
+ *   - `blogApi.getPosts()`    → legacy source-code drops and course
+ *                                announcements (`posts`), surfaced
+ *                                under the "Source & Thông báo" tab
+ *
+ * Merging in the UI rather than migrating rows keeps the download
+ * counter, the existing comment threads, and the admin CRUD for both
+ * systems working untouched. The reader sees one blog either way.
+ *
+ * The page hydrates once on mount and does all subsequent filtering /
+ * searching client-side. With the current page size cap of 100 this is
+ * fine; past ~500 articles, switch to server-side paging.
  *
  * Layout: bento grid (main, 70%) + sticky sidebar (30%).
  * Featured articles span 2 columns; normal articles span 1.
@@ -36,8 +58,10 @@ import {
  * render agree (no hydration mismatch).
  */
 export default function TechTrendsClient() {
-  const [category, setCategory] = useState<'All' | Category>('All');
+  const [category, setCategory] = useState<TabId>('All');
   const [query, setQuery] = useState('');
+  // Archive filter — null = every year. Set from the sidebar archive.
+  const [year, setYear] = useState<number | null>(null);
   const [bookmarks, setBookmarks] = useState<Set<number>>(new Set());
   const [mounted, setMounted] = useState(false);
   const [expandedId, setExpandedId] = useState<number | null>(null);
@@ -46,6 +70,7 @@ export default function TechTrendsClient() {
   // raw PublicTechTrendArticle (id is number, not string),
   // which is what the rest of the page wants.
   const [articles, setArticles] = useState<Article[]>([]);
+  const [resources, setResources] = useState<Resource[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -67,22 +92,33 @@ export default function TechTrendsClient() {
     if (!mounted) return;
     let cancelled = false;
     (async () => {
-      try {
-        setLoading(true);
-        const res = await techTrendsApi.list({ size: 100 });
-        if (cancelled) return;
+      // Two independent backends. `allSettled`, not `all`: the legacy
+      // blog table is a side dish, and losing it must not blank out the
+      // 28 articles that are the point of the page.
+      setLoading(true);
+      const [articlesRes, resourcesRes] = await Promise.allSettled([
+        techTrendsApi.list({ size: 100 }),
+        blogApi.getPosts({ page: 1, size: 50 }),
+      ]);
+      if (cancelled) return;
+
+      if (articlesRes.status === 'fulfilled') {
         // The public serializer is already in the right
         // shape — we just narrow the type for the rest
         // of the page.
-        setArticles(res.data.data as unknown as Article[]);
+        setArticles(articlesRes.value.data.data as unknown as Article[]);
         setLoadError(null);
-      } catch (err) {
-        if (cancelled) return;
-        const msg = err instanceof Error ? err.message : 'Failed to load articles';
-        setLoadError(msg);
-      } finally {
-        if (!cancelled) setLoading(false);
+      } else {
+        const err = articlesRes.reason;
+        setLoadError(err instanceof Error ? err.message : 'Failed to load articles');
       }
+
+      if (resourcesRes.status === 'fulfilled') {
+        const rows = resourcesRes.value.data?.data;
+        setResources(Array.isArray(rows) ? (rows as Post[]).map(toResource) : []);
+      }
+
+      setLoading(false);
     })();
     // Hydrate bookmarks from localStorage
     try {
@@ -116,19 +152,59 @@ export default function TechTrendsClient() {
     });
   }, []);
 
+  // One chronological feed out of the two tables. Built once per data
+  // change so every downstream view (grid, counts, archive) agrees on
+  // what "a post" is.
+  const feed = useMemo<FeedItem[]>(() => {
+    const items: FeedItem[] = [
+      ...articles.map((a): FeedItem => ({
+        type: 'article',
+        date: a.publishedAt || a.createdAt,
+        article: a,
+      })),
+      ...resources.map((r): FeedItem => ({
+        type: 'resource',
+        date: r.publishedAt || r.createdAt,
+        resource: r,
+      })),
+    ];
+    return items.sort((a, b) => +new Date(b.date) - +new Date(a.date));
+  }, [articles, resources]);
+
   // Filter + search (client-side, against the loaded set)
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return articles.filter((a) => {
-      if (category !== 'All' && a.category !== category) return false;
+    return feed.filter((item) => {
+      if (category !== 'All' && itemCategory(item) !== category) return false;
+      if (year !== null && yearOf(item.date) !== year) return false;
       if (!q) return true;
-      return (
-        a.title.toLowerCase().includes(q) ||
-        a.summary.toLowerCase().includes(q) ||
-        a.tags.some((t) => t.toLowerCase().includes(q))
-      );
+      return itemHaystack(item).includes(q);
     });
-  }, [articles, category, query]);
+  }, [feed, category, year, query]);
+
+  // Per-tab counts. Shown on the tabs themselves so an empty category
+  // is visible BEFORE the click, not after an empty state.
+  const counts = useMemo(() => {
+    const map = new Map<TabId, number>();
+    for (const item of feed) {
+      if (year !== null && yearOf(item.date) !== year) continue;
+      map.set(itemCategory(item), (map.get(itemCategory(item)) ?? 0) + 1);
+      map.set('All', (map.get('All') ?? 0) + 1);
+    }
+    return map;
+  }, [feed, year]);
+
+  // Archive by year, newest first — the one piece of furniture a blog
+  // needs to stop looking like a 9-card grid and start looking like a
+  // body of work.
+  const archive = useMemo(() => {
+    const byYear = new Map<number, number>();
+    for (const item of feed) {
+      const y = yearOf(item.date);
+      if (y) byYear.set(y, (byYear.get(y) ?? 0) + 1);
+    }
+    return [...byYear.entries()].sort((a, b) => b[0] - a[0]);
+  }, [feed]);
 
   // Sidebar data — computed from the full article set, not
   // the filtered slice, so the sidebar stays stable as the
@@ -140,11 +216,16 @@ export default function TechTrendsClient() {
         tagScores.set(t, (tagScores.get(t) ?? 0) + (a.trendingScore || 1));
       }
     }
+    // Resource tags (fptu, swp, kì5…) count too — they are the tags the
+    // audience that actually shows up here searches for.
+    for (const r of resources) {
+      for (const t of r.tags) tagScores.set(t, (tagScores.get(t) ?? 0) + 1);
+    }
     return [...tagScores.entries()]
       .sort((a, b) => b[1] - a[1])
       .slice(0, 8)
       .map(([tag, score]) => ({ tag, score }));
-  }, [articles]);
+  }, [articles, resources]);
 
   const topAuthors = useMemo<TopAuthor[]>(() => {
     const authorScores = new Map<number, number>();
@@ -166,6 +247,11 @@ export default function TechTrendsClient() {
 
   return (
     <div className="min-h-screen pt-24 pb-20 bg-darkbg" style={{ background: '#0a0a0f' }}>
+      {/* Particle grid — carried over from the old /blog page, the one
+          part of it worth keeping. Canvas-based and pointer-events-none,
+          so it sits behind everything without touching interaction. */}
+      <ParticleGridBackground />
+
       {/* Decorative background — soft glow blobs to add depth
           without competing with the content. */}
       <div className="pointer-events-none fixed inset-0 -z-0 overflow-hidden">
@@ -181,10 +267,11 @@ export default function TechTrendsClient() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: [0.32, 0.94, 0.6, 1] }}
-            className="flex items-center gap-2 text-xs text-neon-violet font-medium mb-3"
+            className="inline-flex items-center gap-2 rounded-full border border-neon-violet/25 bg-neon-violet/10 px-4 py-1.5 text-xs font-medium text-neon-violet mb-4"
           >
+            <span className="h-1.5 w-1.5 rounded-full bg-neon-violet animate-pulse" />
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Curated by humans, scored by community</span>
+            <span>Nhật ký kỹ thuật · viết từ việc thật, không viết lại tài liệu</span>
           </motion.div>
 
           <motion.h1
@@ -193,9 +280,9 @@ export default function TechTrendsClient() {
             transition={{ duration: 0.45, delay: 0.05, ease: [0.32, 0.94, 0.6, 1] }}
             className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-text-primary tracking-tight leading-[1.1]"
           >
-            Tech Trends{' '}
+            Blog{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-indigo via-neon-violet to-neon-fuchsia">
-              &amp; Insights
+              CuongThai
             </span>
           </motion.h1>
 
@@ -205,8 +292,8 @@ export default function TechTrendsClient() {
             transition={{ duration: 0.45, delay: 0.1, ease: [0.32, 0.94, 0.6, 1] }}
             className="mt-4 text-base sm:text-lg text-text-secondary max-w-2xl leading-relaxed"
           >
-            Long-form bug post-mortems, interview prep, architecture deep-dives, and the
-            news that actually matters — picked weekly, no clickbait.
+            Sự cố production có thật, bài mổ lỗi, hướng dẫn chuyên sâu, kinh nghiệm ôn thi
+            &amp; phỏng vấn — cùng source code và thông báo khoá học. Tất cả ở một chỗ.
           </motion.p>
 
           {/* Search bar */}
@@ -221,7 +308,7 @@ export default function TechTrendsClient() {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search by title, tag, or keyword..."
+              placeholder="Tìm theo tiêu đề, thẻ hoặc từ khoá..."
               className="w-full pl-11 pr-4 py-3.5 bg-darkcard/80 backdrop-blur-sm
                 border border-darkborder rounded-2xl text-sm text-text-primary
                 placeholder:text-text-muted
@@ -237,10 +324,11 @@ export default function TechTrendsClient() {
             transition={{ duration: 0.45, delay: 0.2, ease: [0.32, 0.94, 0.6, 1] }}
             className="mt-6 flex flex-wrap items-center gap-2"
             role="tablist"
-            aria-label="Category filter"
+            aria-label="Lọc theo mục"
           >
             {CATEGORY_TABS.map((tab) => {
               const isActive = category === tab.id;
+              const n = counts.get(tab.id) ?? 0;
               return (
                 <button
                   key={tab.id}
@@ -252,7 +340,9 @@ export default function TechTrendsClient() {
                     'transition-all duration-200 active:scale-95',
                     isActive
                       ? 'text-white shadow-neon'
-                      : 'text-text-secondary hover:text-text-primary hover:bg-white/[0.04]',
+                      : n === 0
+                        ? 'text-text-muted/60 hover:text-text-secondary'
+                        : 'text-text-secondary hover:text-text-primary hover:bg-white/[0.04]',
                   ].join(' ')}
                 >
                   {isActive && (
@@ -265,14 +355,35 @@ export default function TechTrendsClient() {
                   <span className="relative z-10 flex items-center gap-1.5">
                     <span>{tab.emoji}</span>
                     <span>{tab.label}</span>
+                    {/* Count per tab: an empty category should be visible
+                        before the click, not after an empty state. */}
+                    <span
+                      className={[
+                        'ml-0.5 rounded-md px-1.5 py-px text-[10px] tabular-nums',
+                        isActive ? 'bg-white/20 text-white' : 'bg-white/[0.06] text-text-muted',
+                      ].join(' ')}
+                    >
+                      {n}
+                    </span>
                   </span>
                 </button>
               );
             })}
 
-            <div className="ml-auto text-xs text-text-muted">
-              <span className="text-text-secondary font-medium">{filtered.length}</span>
-              {' '}of {articles.length} posts
+            <div className="ml-auto flex items-center gap-2 text-xs text-text-muted">
+              {year !== null && (
+                <button
+                  onClick={() => setYear(null)}
+                  className="inline-flex items-center gap-1 rounded-lg border border-neon-violet/30 bg-neon-violet/10 px-2 py-1 text-neon-violet transition-colors hover:bg-neon-violet/20"
+                >
+                  Năm {year}
+                  <X className="h-3 w-3" />
+                </button>
+              )}
+              <span>
+                <span className="text-text-secondary font-medium">{filtered.length}</span>
+                {' '}/ {feed.length} bài
+              </span>
             </div>
           </motion.div>
         </header>
@@ -387,7 +498,7 @@ export default function TechTrendsClient() {
                     key="empty"
                     query={query}
                     category={category}
-                    onReset={() => { setQuery(''); setCategory('All'); }}
+                    onReset={() => { setQuery(''); setCategory('All'); setYear(null); }}
                   />
                 ) : (
                   <motion.div
@@ -395,20 +506,29 @@ export default function TechTrendsClient() {
                     layout
                     className="grid grid-cols-1 md:grid-cols-2 gap-5"
                   >
-                    {filtered.map((article, idx) => (
-                      <ArticleCard
-                        key={article.id}
-                        article={article}
-                        index={idx}
-                        bookmarked={mounted && bookmarks.has(article.id)}
-                        onToggleBookmark={() => toggleBookmark(article.id)}
-                        isExpanded={expandedId === article.id}
-                        onToggleExpand={() =>
-                          setExpandedId((cur) => (cur === article.id ? null : article.id))
-                        }
-                        onSelectTag={(t) => setQuery(t)}
-                      />
-                    ))}
+                    {filtered.map((item, idx) =>
+                      item.type === 'article' ? (
+                        <ArticleCard
+                          key={`a-${item.article.id}`}
+                          article={item.article}
+                          index={idx}
+                          bookmarked={mounted && bookmarks.has(item.article.id)}
+                          onToggleBookmark={() => toggleBookmark(item.article.id)}
+                          isExpanded={expandedId === item.article.id}
+                          onToggleExpand={() =>
+                            setExpandedId((cur) => (cur === item.article.id ? null : item.article.id))
+                          }
+                          onSelectTag={(t) => setQuery(t)}
+                        />
+                      ) : (
+                        <ResourceCard
+                          key={`r-${item.resource.id}`}
+                          resource={item.resource}
+                          index={idx}
+                          onSelectTag={(t) => setQuery(t)}
+                        />
+                      ),
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -418,6 +538,11 @@ export default function TechTrendsClient() {
           {/* Sidebar (30% on desktop, hidden on mobile/tablet) */}
           <aside className="hidden lg:block lg:col-span-3">
             <div className="sticky top-24 space-y-5">
+              <ArchiveCard
+                items={archive}
+                activeYear={year}
+                onSelect={(y) => setYear((cur) => (cur === y ? null : y))}
+              />
               <TrendingTagsCard tags={trendingTags} onSelect={(t) => setQuery(t)} />
               <QuickTipsCard tips={QUICK_TIPS} />
               <TopAuthorsCard items={topAuthors} />
@@ -571,7 +696,7 @@ function ArticleCard({
               ].join(' ')}
             >
               <span>{style.emoji}</span>
-              <span>#{article.category}</span>
+              <span>{CATEGORY_LABEL_VI[article.category] ?? article.category}</span>
             </span>
             {article.trendingScore >= 90 && (
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-neon-orange/10 text-neon-orange border border-neon-orange/20 backdrop-blur-md">
@@ -591,7 +716,7 @@ function ArticleCard({
                 ? 'bg-neon-violet/20 text-neon-violet border-neon-violet/30'
                 : 'bg-black/30 text-white border-white/10 hover:bg-black/50',
             ].join(' ')}
-            aria-label={bookmarked ? 'Remove bookmark' : 'Add bookmark'}
+            aria-label={bookmarked ? 'Bỏ lưu bài' : 'Lưu bài'}
           >
             <Bookmark className={['w-4 h-4', bookmarked ? 'fill-current' : ''].join(' ')} />
           </button>
@@ -705,7 +830,7 @@ function ArticleCard({
                   <span>{formatDate(article.publishedAt || article.createdAt)}</span>
                   <span>·</span>
                   <Clock className="w-3 h-3" />
-                  <span>{article.readTimeMin} min read</span>
+                  <span>{article.readTimeMin} phút đọc</span>
                 </div>
               </div>
             </div>
@@ -718,7 +843,7 @@ function ArticleCard({
                   hover:bg-neon-violet/15 hover:text-neon-violet
                   transition-colors active:scale-95"
               >
-                {isExpanded ? 'Hide' : 'Read'}
+                {isExpanded ? 'Thu gọn' : 'Đọc nhanh'}
               </button>
               <Link
                 href={permalink}
@@ -738,6 +863,151 @@ function ArticleCard({
               >
                 <Share2 className="w-3.5 h-3.5" />
               </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.article>
+  );
+}
+
+// ── Resource Card (source drops + announcements) ─────────────────
+//
+// Replaces the old /blog terminal window (mac traffic lights, "TECHNICAL
+// EXCHANGE" sidebar). Those posts have no body worth reading — the payload
+// is the GitHub link — so the card leads with the download, not with a
+// fake code editor.
+
+function ResourceCard({ resource, index, onSelectTag }: {
+  resource: Resource;
+  index: number;
+  onSelectTag: (tag: string) => void;
+}) {
+  const [downloading, setDownloading] = useState(false);
+  const permalink = `/blog/${resource.slug}`;
+
+  const handleGetSource = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!resource.sourceUrl || downloading) return;
+    setDownloading(true);
+    // Count the download server-side, then open. If the counter call
+    // fails the reader still gets the link — the counter is telemetry,
+    // not a gate.
+    try {
+      const res = await blogApi.recordDownload(resource.id);
+      const url = res.data?.data?.url || resource.sourceUrl;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } catch {
+      window.open(resource.sourceUrl, '_blank', 'noopener,noreferrer');
+    } finally {
+      setDownloading(false);
+    }
+  };
+
+  return (
+    <motion.article
+      layout
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -8 }}
+      transition={{ duration: 0.35, delay: Math.min(index * 0.04, 0.2), ease: [0.32, 0.94, 0.6, 1] }}
+      whileHover={{ y: -4, transition: { duration: 0.2, ease: [0.32, 0.94, 0.6, 1] } }}
+      className="group relative md:col-span-1"
+    >
+      <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-darkborder bg-gradient-to-b from-darksurface/80 to-darkcard/80 backdrop-blur-sm transition-all duration-300 hover:border-neon-violet/40 hover:shadow-[0_8px_32px_-8px_rgba(139,92,246,0.4)]">
+        {/* Cover */}
+        <div className="relative aspect-[2/1] w-full overflow-hidden bg-darkcard">
+          {resource.thumbnailUrl ? (
+            <>
+              <img
+                src={resource.thumbnailUrl}
+                alt={resource.title}
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-darkcard via-darkcard/40 to-transparent" />
+            </>
+          ) : (
+            <>
+              <div className="absolute inset-0 bg-gradient-to-br from-darksurface via-darkcard to-darksurface" />
+              <div className="absolute inset-0 bg-gradient-to-br from-neon-violet/10 via-transparent to-neon-fuchsia/10" />
+              <div className="absolute inset-0 flex items-center justify-center text-7xl select-none sm:text-8xl">
+                <span className="transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">📦</span>
+              </div>
+            </>
+          )}
+          <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full border border-neon-violet/20 bg-neon-violet/10 px-2.5 py-1 text-xs font-medium text-neon-violet backdrop-blur-md">
+            <Package className="h-3 w-3" />
+            <span>{CATEGORY_LABEL_VI.Resources}</span>
+          </span>
+        </div>
+
+        {/* Body */}
+        <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">
+          <h2 className="font-heading text-lg font-semibold leading-relaxed tracking-tight text-text-primary sm:text-xl">
+            <Link href={permalink} className="transition-colors hover:text-neon-violet">
+              {resource.title}
+            </Link>
+          </h2>
+
+          {resource.excerpt && (
+            <p className="text-sm leading-relaxed text-text-secondary sm:text-[0.95rem]">
+              {resource.excerpt}
+            </p>
+          )}
+
+          {resource.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {resource.tags.map((t) => (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); onSelectTag(t); }}
+                  className="cursor-pointer rounded-md border border-white/[0.04] bg-white/[0.04] px-2 py-0.5 text-[11px] font-medium text-text-muted transition-colors hover:border-neon-violet/30 hover:text-text-primary"
+                >
+                  #{t}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Meta + actions — pinned to the bottom so cards of different
+              text lengths still line their buttons up. */}
+          <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-darkborder pt-3">
+            <div className="flex items-center gap-3 text-[11px] text-text-muted">
+              <span>{formatDate(resource.publishedAt || resource.createdAt)}</span>
+              {resource.downloadCount > 0 && (
+                <span className="inline-flex items-center gap-1">
+                  <Download className="h-3 w-3" />
+                  {resource.downloadCount}
+                </span>
+              )}
+              {resource.commentCount > 0 && (
+                <span className="inline-flex items-center gap-1">
+                  <MessageSquare className="h-3 w-3" />
+                  {resource.commentCount}
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-center gap-1.5">
+              <Link
+                href={permalink}
+                className="rounded-lg bg-white/[0.04] px-2.5 py-1 text-[11px] font-medium text-text-secondary transition-colors hover:bg-neon-violet/15 hover:text-neon-violet active:scale-95"
+              >
+                Mở
+              </Link>
+              {resource.sourceUrl && (
+                <button
+                  onClick={handleGetSource}
+                  disabled={downloading}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-neon-violet to-neon-fuchsia px-3 py-1 text-[11px] font-semibold text-white transition-all active:scale-95 disabled:opacity-50"
+                >
+                  <Download className="h-3 w-3" />
+                  {downloading ? 'Đang mở…' : 'Lấy source'}
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -802,10 +1072,62 @@ function CodeComparison({ before, after, takeaway }: {
 
 // ── Sidebar widgets ──────────────────────────────────────────────
 
+// Archive by year. Borrowed straight from taniarascia.com, and the
+// cheapest upgrade on this page: "2026 — 30 bài" reads as a body of
+// work in a way a grid of nine cards never does.
+function ArchiveCard({ items, activeYear, onSelect }: {
+  items: [number, number][];
+  activeYear: number | null;
+  onSelect: (year: number) => void;
+}) {
+  if (items.length === 0) return null;
+  const max = Math.max(...items.map(([, n]) => n));
+  return (
+    <Widget title="Lưu trữ theo năm" icon={<Archive className="h-4 w-4" />}>
+      <ul className="space-y-1.5">
+        {items.map(([y, n]) => {
+          const isActive = activeYear === y;
+          return (
+            <li key={y}>
+              <button
+                onClick={() => onSelect(y)}
+                aria-pressed={isActive}
+                className={[
+                  'group flex w-full items-center gap-3 rounded-lg px-2 py-1.5 text-left transition-colors',
+                  isActive ? 'bg-neon-violet/15' : 'hover:bg-white/[0.04]',
+                ].join(' ')}
+              >
+                <span className={[
+                  'w-11 shrink-0 text-sm font-semibold tabular-nums',
+                  isActive ? 'text-neon-violet' : 'text-text-primary',
+                ].join(' ')}>
+                  {y}
+                </span>
+                {/* Bar length is relative to the busiest year, so the
+                    shape of the archive is readable at a glance. */}
+                <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/[0.06]">
+                  <span
+                    className={[
+                      'block h-full rounded-full transition-all',
+                      isActive ? 'bg-neon-violet' : 'bg-neon-violet/40 group-hover:bg-neon-violet/70',
+                    ].join(' ')}
+                    style={{ width: `${Math.max(8, Math.round((n / max) * 100))}%` }}
+                  />
+                </span>
+                <span className="shrink-0 text-[11px] tabular-nums text-text-muted">{n} bài</span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </Widget>
+  );
+}
+
 function TrendingTagsCard({ tags, onSelect }: { tags: TrendingTag[]; onSelect: (t: string) => void }) {
   if (tags.length === 0) return null;
   return (
-    <Widget title="Trending Tags" icon={<TrendingUp className="w-4 h-4" />}>
+    <Widget title="Thẻ nổi bật" icon={<TrendingUp className="w-4 h-4" />}>
       <div className="flex flex-wrap gap-1.5">
         {tags.map(({ tag, score }, i) => (
           <button
@@ -830,7 +1152,7 @@ function TrendingTagsCard({ tags, onSelect }: { tags: TrendingTag[]; onSelect: (
 
 function QuickTipsCard({ tips }: { tips: typeof QUICK_TIPS }) {
   return (
-    <Widget title="Quick Coding Tips" icon={<Sparkles className="w-4 h-4" />}>
+    <Widget title="Mẹo nhanh khi code" icon={<Sparkles className="w-4 h-4" />}>
       <ol className="space-y-3">
         {tips.map((tip, i) => (
           <li key={i} className="flex gap-3">
@@ -851,7 +1173,7 @@ function QuickTipsCard({ tips }: { tips: typeof QUICK_TIPS }) {
 function TopAuthorsCard({ items }: { items: TopAuthor[] }) {
   if (items.length === 0) return null;
   return (
-    <Widget title="Top Authors" icon={<Sparkles className="w-4 h-4" />}>
+    <Widget title="Tác giả" icon={<Sparkles className="w-4 h-4" />}>
       <ul className="space-y-3">
         {items.map(({ author, score }, i) => (
           <li key={author.id} className="flex items-start gap-3">
@@ -877,7 +1199,7 @@ function TopAuthorsCard({ items }: { items: TopAuthor[] }) {
                 <p className="text-xs font-semibold text-text-primary truncate">
                   {authorDisplayName(author)}
                 </p>
-                <span className="text-[9px] text-text-muted tabular-nums shrink-0">{score} pts</span>
+                <span className="text-[9px] text-text-muted tabular-nums shrink-0">{score} điểm</span>
               </div>
               <p className="text-[10px] text-text-muted truncate">@{author.username}</p>
               {author.bio && (
@@ -950,7 +1272,7 @@ function ErrorState({ message }: { message: string }) {
         <AlertTriangle className="w-7 h-7 text-red-400" />
       </div>
       <h3 className="text-xl font-heading font-semibold text-text-primary mb-2">
-        Couldn’t load articles
+        Không tải được bài viết
       </h3>
       <p className="text-sm text-text-secondary max-w-md mx-auto leading-relaxed">
         {message}
@@ -962,7 +1284,8 @@ function ErrorState({ message }: { message: string }) {
   );
 }
 
-function EmptyState({ query, category, onReset }: { query: string; category: string; onReset: () => void }) {
+function EmptyState({ query, category, onReset }: { query: string; category: TabId; onReset: () => void }) {
+  const label = category === 'All' ? 'Tất cả' : (CATEGORY_LABEL_VI[category] ?? category);
   return (
     <motion.div
       initial={{ opacity: 0, y: 18 }}
@@ -975,12 +1298,12 @@ function EmptyState({ query, category, onReset }: { query: string; category: str
         <Search className="w-7 h-7 text-neon-violet" />
       </div>
       <h3 className="text-xl font-heading font-semibold text-text-primary mb-2">
-        No posts found
+        Chưa có bài nào
       </h3>
       <p className="text-sm text-text-secondary max-w-md mx-auto leading-relaxed">
         {query
-          ? <>Nothing matches <span className="text-text-primary font-medium">“{query}”</span> in <span className="text-text-primary font-medium">#{category}</span>.</>
-          : <>No posts in <span className="text-text-primary font-medium">#{category}</span> yet.</>}
+          ? <>Không có kết quả cho <span className="text-text-primary font-medium">“{query}”</span> trong mục <span className="text-text-primary font-medium">{label}</span>.</>
+          : <>Mục <span className="text-text-primary font-medium">{label}</span> chưa có bài viết.</>}
       </p>
       <button
         onClick={onReset}
@@ -989,7 +1312,7 @@ function EmptyState({ query, category, onReset }: { query: string; category: str
           hover:text-text-primary hover:border-neon-violet/30 transition-all active:scale-95"
       >
         <X className="w-3.5 h-3.5" />
-        Clear filters
+        Bỏ bộ lọc
       </button>
     </motion.div>
   );
@@ -997,10 +1320,48 @@ function EmptyState({ query, category, onReset }: { query: string; category: str
 
 // ── Helpers ─────────────────────────────────────────────────────
 
+// Legacy blog `Post` → `Resource`. Normalising here means the rest of
+// the page never has to care which table a card came from.
+function toResource(p: Post): Resource {
+  return {
+    id: p.id,
+    title: p.title,
+    slug: p.slug,
+    excerpt: (p.excerpt || '').trim(),
+    thumbnailUrl: p.thumbnailUrl || null,
+    sourceUrl: p.sourceUrl || null,
+    downloadCount: p.downloadCount ?? 0,
+    commentCount: p.commentCount ?? 0,
+    viewCount: p.viewCount ?? 0,
+    tags: p.tagNames ?? [],
+    publishedAt: p.publishedAt || null,
+    createdAt: p.createdAt,
+  };
+}
+
+function itemCategory(item: FeedItem): TabId {
+  return item.type === 'article' ? item.article.category : 'Resources';
+}
+
+function yearOf(iso: string): number | null {
+  const y = new Date(iso).getFullYear();
+  return Number.isFinite(y) ? y : null;
+}
+
+// Everything a search should match, lowercased once per item.
+function itemHaystack(item: FeedItem): string {
+  if (item.type === 'article') {
+    const a = item.article;
+    return `${a.title} ${a.summary} ${a.tags.join(' ')}`.toLowerCase();
+  }
+  const r = item.resource;
+  return `${r.title} ${r.excerpt} ${r.tags.join(' ')}`.toLowerCase();
+}
+
 function formatDate(iso: string) {
   try {
-    return new Date(iso).toLocaleDateString('en-US', {
-      month: 'short', day: 'numeric', year: 'numeric',
+    return new Date(iso).toLocaleDateString('vi-VN', {
+      day: 'numeric', month: 'short', year: 'numeric',
     });
   } catch {
     return iso;

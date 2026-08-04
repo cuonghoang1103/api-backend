@@ -4,3 +4,6 @@ node_modules
 .env
 .env.local
 .env.*.local
+
+# Parallel/isolated build output (see `distDir` in next.config.js)
+.next-*/

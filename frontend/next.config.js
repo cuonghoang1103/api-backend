@@ -4,6 +4,18 @@ const { withSentryConfig } = require('@sentry/nextjs');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
+  // Build output directory. Defaults to `.next` — production (Dockerfile,
+  // deploy.sh) never sets NEXT_DIST_DIR, so nothing changes there.
+  //
+  // The override exists for local work: when two builds run at once (two
+  // Claude Code sessions on the same repo, which happens often here), the
+  // second one deletes `.next` from under the first and it dies mid-way with
+  // `PageNotFoundError: Cannot find module for page: /_document` or a rename
+  // ENOENT — a compile that actually succeeded, reported as a failure. Give a
+  // parallel build its own directory instead:
+  //
+  //   NEXT_DIST_DIR=.next-verify npm run build
+  distDir: process.env.NEXT_DIST_DIR || '.next',
   // Serialize static-page generation to ONE worker during `next build`.
   // Default is (CPU count - 1) workers, each loading the app and each
   // inheriting NODE_OPTIONS heap — on the 6GB VPS their combined peak during
@@ -308,6 +320,20 @@ const nextConfig = {
       {
         source: '/social/post/:id',
         destination: '/?post=:id',
+        permanent: true,
+      },
+      // 2026-08-05 — the site had two blogs. /blog held 2 announcements and
+      // sat in the nav under the word readers actually look for; /tech-trends
+      // held all 28 real articles. They are merged onto /tech-trends, which
+      // keeps every published permalink, the RSS feed, the sitemap and the
+      // admin editor working untouched.
+      //
+      // EXACT match only: `/blog/:slug` still resolves to the resource-post
+      // page (source drops + their existing comment threads), so those shared
+      // links keep working. Do not widen this to `/blog/:path*`.
+      {
+        source: '/blog',
+        destination: '/tech-trends',
         permanent: true,
       },
     ];

@@ -97,7 +97,7 @@ export default function SocialSidebar({
   ];
 
   const explore = [
-    { href: '/blog', label: 'Blog', icon: Sparkles },
+    { href: '/tech-trends', label: 'Blog', icon: Sparkles },
     { href: '/projects', label: 'Projects', icon: Code2 },
     // /music only when the viewer is granted access (3-tier, realtime).
     ...(hasMusicAccess ? [{ href: '/music', label: 'Music', icon: Music }] : []),

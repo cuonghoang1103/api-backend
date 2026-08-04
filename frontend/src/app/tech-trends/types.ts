@@ -79,6 +79,32 @@ export type Article = {
   updatedAt: string;
 };
 
+// ─── Resources (merged in from the old /blog) ───────────────────
+// The legacy blog `Post` rows are source-code drops and course
+// announcements, not essays: the payload is the GitHub link, not the
+// body. They get their own card shape rather than being crammed into
+// `Article`, but they share the feed so the reader sees one blog.
+export type Resource = {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  thumbnailUrl: string | null;
+  sourceUrl: string | null;
+  downloadCount: number;
+  commentCount: number;
+  viewCount: number;
+  tags: string[];
+  publishedAt: string | null;
+  createdAt: string;
+};
+
+// One list, two sources. Sorted by date so the merged feed reads
+// chronologically no matter which table a card came from.
+export type FeedItem =
+  | { type: 'article'; date: string; article: Article }
+  | { type: 'resource'; date: string; resource: Resource };
+
 // Sidebar widget data — computed from the article list on
 // the client (small dataset, no need to round-trip the
 // server for the right column).
@@ -86,13 +112,36 @@ export type TrendingTag = { tag: string; score: number };
 export type QuickTip = { title: string; body: string };
 export type TopAuthor = { author: Required<NonNullable<ArticleAuthor>>; score: number };
 
-export const CATEGORY_TABS: { id: 'All' | Category; label: string; emoji: string; accent: string }[] = [
-  { id: 'All',         label: 'All',         emoji: '✨', accent: 'from-neon-indigo to-neon-violet' },
-  { id: 'TechNews',    label: '#TechNews',   emoji: '📰', accent: 'from-neon-emerald to-neon-green'  },
-  { id: 'FixBug',      label: '#FixBug',     emoji: '🐛', accent: 'from-neon-red to-neon-pink'       },
-  { id: 'Experience',  label: '#Experience', emoji: '💼', accent: 'from-neon-cyan to-neon-blue'      },
-  { id: 'Interviews',  label: '#Interviews', emoji: '🎯', accent: 'from-neon-fuchsia to-neon-violet' },
-  { id: 'DeepDive',    label: '#DeepDive',   emoji: '📖', accent: 'from-neon-orange to-neon-red'     },
+// 'Resources' is a UI-only pseudo-category. It is NOT a valid `Category` on the
+// backend — it surfaces the legacy blog `Post` table (source-code drops and
+// course announcements) inside the same page, so the site has one blog instead
+// of two half-empty ones. Keeping it out of `Category` is deliberate: the admin
+// editor builds its dropdown from `Category`, and offering a value the backend
+// rejects would break publishing.
+export type TabId = 'All' | Category | 'Resources';
+
+// Vietnamese labels. The audience is Vietnamese, and `#DeepDive` told a reader
+// nothing about what was inside. Used by BOTH the tab bar and the pill on each
+// card so a card and its filter always read the same.
+export const CATEGORY_LABEL_VI: Record<Category | 'Resources', string> = {
+  Experience: 'Kinh nghiệm',
+  FixBug: 'Sửa lỗi',
+  DeepDive: 'Chuyên sâu',
+  Interviews: 'Phỏng vấn',
+  TechNews: 'Bản tin',
+  Resources: 'Source & Thông báo',
+};
+
+// Order is editorial, not alphabetical: what Cuong writes himself comes first,
+// the auto-assembled bulletin last.
+export const CATEGORY_TABS: { id: TabId; label: string; emoji: string; accent: string }[] = [
+  { id: 'All',         label: 'Tất cả',              emoji: '✨', accent: 'from-neon-indigo to-neon-violet' },
+  { id: 'Experience',  label: 'Kinh nghiệm',         emoji: '💼', accent: 'from-neon-cyan to-neon-blue'      },
+  { id: 'FixBug',      label: 'Sửa lỗi',             emoji: '🐛', accent: 'from-neon-red to-neon-pink'       },
+  { id: 'DeepDive',    label: 'Chuyên sâu',          emoji: '📖', accent: 'from-neon-orange to-neon-red'     },
+  { id: 'Interviews',  label: 'Phỏng vấn',           emoji: '🎯', accent: 'from-neon-fuchsia to-neon-violet' },
+  { id: 'Resources',   label: 'Source & Thông báo',  emoji: '📦', accent: 'from-neon-violet to-neon-fuchsia' },
+  { id: 'TechNews',    label: 'Bản tin',             emoji: '📰', accent: 'from-neon-emerald to-neon-green'  },
 ];
 
 // Default cover emoji per category — used when an article

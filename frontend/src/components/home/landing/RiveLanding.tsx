@@ -91,7 +91,7 @@ const RAILS: Rail[] = [
     blurb: 'Rehearse under pressure, then go somewhere that has nothing to do with work.',
     items: [
       { name: 'Interview', href: '/interview', note: 'Mock interviews, graded out loud' },
-      { name: 'Tech Trends', href: '/tech-trends', note: 'What actually shipped this week' },
+      { name: 'Blog', href: '/tech-trends', note: 'Sự cố production, bài mổ lỗi, hướng dẫn sâu' },
       { name: 'Forum', href: '/forum', note: 'Ask, argue, help' },
       { name: 'Games', href: '/games', note: 'Short games, real leaderboards' },
       { name: 'Music', href: '/music', note: 'Listen together' },

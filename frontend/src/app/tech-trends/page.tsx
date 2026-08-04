@@ -5,15 +5,14 @@ import TechTrendsClient from './TechTrendsClient';
 // discover the long-form content and credit the site as a
 // source of original tech writing.
 export const metadata: Metadata = {
-  title: 'Tech Trends & Insights',
+  title: 'Blog',
   description:
-    'A curated feed of tech news, bug-fix deep dives, ' +
-    'coding interview experiences, and architecture tutorials. ' +
-    'Hand-picked by Cuong Hoang.',
+    'Sự cố production có thật, bài mổ lỗi, hướng dẫn chuyên sâu, kinh nghiệm ' +
+    'ôn thi & phỏng vấn, cùng source code và thông báo khoá học — blog của Cuong Hoang.',
   openGraph: {
-    title: 'Tech Trends & Insights | CuongThai',
+    title: 'Blog | CuongThai',
     description:
-      'Tech news, bug-fix guides, interview experiences, and architecture tutorials.',
+      'Sự cố production có thật, bài mổ lỗi, hướng dẫn chuyên sâu, kinh nghiệm ôn thi & phỏng vấn.',
     url: 'https://cuongthai.com/tech-trends',
     type: 'website',
     // Re-declare: this block replaces the root openGraph (incl. images).

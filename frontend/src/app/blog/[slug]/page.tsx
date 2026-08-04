@@ -1,37 +1,56 @@
 import type { Metadata } from 'next';
-import { headers } from 'next/headers';
+import Link from 'next/link';
+import { cache } from 'react';
+import { notFound } from 'next/navigation';
+import { Calendar, Eye, Download, Clock, Package } from 'lucide-react';
 import { getServerApiBaseUrl } from '@/lib/server-api';
-import BlogPostPageClient from './BlogPostPageClient';
+import type { Post } from '@/types';
+import PostActions from './PostActions';
+import PostBody from './PostBody';
+import PostComments from './PostComments';
 
-// SEO / social-share metadata is rendered SERVER-side here; the interactive
-// article (comments, share buttons, related posts) stays in the client
-// component, which fetches its own data exactly as before. `force-dynamic`
-// keeps generateMetadata out of the production build — the backend isn't
-// running during `npm run build`, so a build-time fetch would just fail.
+/**
+ * Resource post detail — source-code drops and course announcements.
+ *
+ * ─── WHAT CHANGED (2026-08-05) ─────────────────────────────────────
+ * This used to be an 823-line client component that drew a fake macOS
+ * terminal window: traffic-light dots, a "TECHNICAL EXCHANGE" rail for
+ * comments, monospace chrome around a post whose entire body was the
+ * word "FPTU". It looked busy and said nothing. It is now a plain
+ * article page that matches /tech-trends/[slug], server-rendered, with
+ * three small client islands (download, markdown body, comments).
+ *
+ * The post LIST for these lives on the merged blog at /tech-trends
+ * under the "Source & Thông báo" tab — /blog now redirects there. This
+ * route stays because these permalinks are already shared and already
+ * carry comment threads.
+ *
+ * `force-dynamic`: the backend isn't running during `npm run build`, so
+ * a build-time fetch would fail. `cache()` dedupes generateMetadata and
+ * the page render into one backend call — which matters here because
+ * the by-slug endpoint increments viewCount as a side effect.
+ */
 export const dynamic = 'force-dynamic';
 
-const CACHE_TTL_SECONDS = 300;
+const SITE_URL = 'https://cuongthai.com';
 
 interface PageProps {
   params: { slug: string };
 }
 
-async function getPost(slug: string) {
+const getPost = cache(async (slug: string): Promise<Post | null> => {
   try {
     const res = await fetch(
       `${getServerApiBaseUrl()}/api/v1/blog/posts/by-slug/${encodeURIComponent(slug)}`,
-      {
-        headers: { cookie: headers().get('cookie') ?? '', accept: 'application/json' },
-        next: { revalidate: CACHE_TTL_SECONDS },
-      },
+      { headers: { accept: 'application/json' }, cache: 'no-store' },
     );
     if (!res.ok) return null;
     const json = await res.json();
-    return json?.data ?? null;
+    return (json?.data as Post) ?? null;
   } catch {
     return null;
   }
-}
+});
 
 // Strip markdown/html to a plain-text meta description.
 const toText = (s?: string, n = 200) =>
@@ -42,30 +61,47 @@ const toText = (s?: string, n = 200) =>
     .trim()
     .slice(0, n);
 
+function formatDate(iso?: string | null): string {
+  if (!iso) return '';
+  try {
+    return new Date(iso).toLocaleDateString('vi-VN', { day: 'numeric', month: 'long', year: 'numeric' });
+  } catch {
+    return iso;
+  }
+}
+
+function readingMinutes(content?: string): number {
+  if (!content) return 1;
+  const words = content.replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(words / 200));
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const post = await getPost(params.slug);
-  if (!post) return { title: 'Bài viết | CuongThai' };
+  if (!post) return { title: 'Bài viết | Blog | CuongThai' };
 
-  const rawTitle: string = post.title || post.name || 'Bài viết';
-  const title = `${rawTitle} | Blog | CuongThai`;
-  const description = toText(post.excerpt || post.summary || post.content) || 'Bài viết trên CuongThai.';
-  const image: string | undefined = post.thumbnailUrl || post.coverImage || post.thumbnail || undefined;
-  const url = `https://cuongthai.com/blog/${params.slug}`;
+  const description = toText(post.excerpt || post.content) || 'Bài viết trên CuongThai.';
+  const image = post.thumbnailUrl || undefined;
+  const url = `${SITE_URL}/blog/${params.slug}`;
 
   return {
-    title,
+    title: `${post.title} | Blog | CuongThai`,
     description,
+    keywords: post.tagNames?.length ? post.tagNames : undefined,
     alternates: { canonical: url },
     openGraph: {
-      title: rawTitle,
+      title: post.title,
       description,
       url,
       type: 'article',
-      images: image ? [image] : undefined,
+      publishedTime: post.publishedAt || undefined,
+      modifiedTime: post.updatedAt || undefined,
+      tags: post.tagNames,
+      images: image ? [image] : ['/opengraph-image'],
     },
     twitter: {
       card: image ? 'summary_large_image' : 'summary',
-      title: rawTitle,
+      title: post.title,
       description,
       images: image ? [image] : undefined,
     },
@@ -74,31 +110,142 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function BlogPostPage({ params }: PageProps) {
   const post = await getPost(params.slug);
+  if (!post) notFound();
 
-  const jsonLd = post
-    ? {
-        '@context': 'https://schema.org',
-        '@type': 'BlogPosting',
-        headline: post.title || post.name,
-        description: toText(post.excerpt || post.summary || post.content),
-        image: post.thumbnailUrl || post.coverImage || post.thumbnail || undefined,
-        datePublished: post.publishedAt || post.createdAt || undefined,
-        dateModified: post.updatedAt || undefined,
-        author: post.authorName ? { '@type': 'Person', name: post.authorName } : undefined,
-        mainEntityOfPage: `https://cuongthai.com/blog/${params.slug}`,
-      }
-    : null;
+  const url = `${SITE_URL}/blog/${params.slug}`;
+  const publishedAt = post.publishedAt || post.createdAt;
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: toText(post.excerpt || post.content),
+    image: post.thumbnailUrl || undefined,
+    datePublished: publishedAt || undefined,
+    dateModified: post.updatedAt || undefined,
+    author: { '@type': 'Person', name: post.authorName || 'CuongThai' },
+    keywords: post.tagNames?.join(', ') || undefined,
+    mainEntityOfPage: url,
+  };
 
   return (
-    <>
-      {jsonLd && (
-        <script
-          type="application/ld+json"
-          // Escape `<` so a title containing `</script>` can't break out.
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
-        />
-      )}
-      <BlogPostPageClient />
-    </>
+    <div className="min-h-screen pb-24 pt-24" style={{ background: '#0a0a0f' }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
+      />
+
+      {/* Decorative glow — same aesthetic as the article pages. */}
+      <div className="pointer-events-none fixed inset-0 -z-0 overflow-hidden">
+        <div className="absolute -left-32 -top-32 h-96 w-96 rounded-full bg-neon-indigo/10 blur-3xl" />
+        <div className="absolute -right-32 top-1/3 h-96 w-96 rounded-full bg-neon-fuchsia/10 blur-3xl" />
+      </div>
+
+      <article className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+        {/* Breadcrumb */}
+        <nav className="mb-6 flex items-center gap-1.5 text-sm text-text-muted">
+          <Link href="/tech-trends" className="transition-colors hover:text-neon-violet">
+            Blog
+          </Link>
+          <span>/</span>
+          <span className="text-text-secondary">Source &amp; Thông báo</span>
+        </nav>
+
+        {/* Cover */}
+        <div className="relative mb-8 aspect-[3/1] w-full overflow-hidden rounded-2xl border border-darkborder">
+          {post.thumbnailUrl ? (
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={post.thumbnailUrl} alt={post.title} className="absolute inset-0 h-full w-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-[#0a0a0f]/30 to-transparent" />
+            </>
+          ) : (
+            <>
+              <div className="absolute inset-0 bg-gradient-to-br from-darksurface via-darkcard to-darksurface" />
+              <div className="absolute inset-0 bg-gradient-to-br from-neon-violet/10 via-transparent to-neon-fuchsia/10" />
+              <div className="absolute inset-0 flex select-none items-center justify-center text-8xl">📦</div>
+            </>
+          )}
+          <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-black/40 px-3 py-1 text-xs font-medium text-white backdrop-blur-md">
+            <Package className="h-3.5 w-3.5" />
+            Source &amp; Thông báo
+          </span>
+        </div>
+
+        {/* Title + meta */}
+        <header className="mb-8">
+          <h1 className="font-heading text-3xl font-bold leading-[1.15] tracking-tight text-text-primary sm:text-4xl">
+            {post.title}
+          </h1>
+
+          {post.excerpt && (
+            <p className="mt-4 text-lg leading-relaxed text-text-secondary">{post.excerpt}</p>
+          )}
+
+          <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-text-muted">
+            <span className="inline-flex items-center gap-1.5">
+              <Calendar className="h-3.5 w-3.5" />
+              {formatDate(publishedAt)}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <Eye className="h-3.5 w-3.5" />
+              {(post.viewCount ?? 0).toLocaleString('vi-VN')} lượt xem
+            </span>
+            {!!post.downloadCount && post.downloadCount > 0 && (
+              <span className="inline-flex items-center gap-1.5 text-amber-400">
+                <Download className="h-3.5 w-3.5" />
+                {post.downloadCount.toLocaleString('vi-VN')} lượt tải
+              </span>
+            )}
+            <span className="inline-flex items-center gap-1.5">
+              <Clock className="h-3.5 w-3.5" />
+              {readingMinutes(post.content)} phút đọc
+            </span>
+          </div>
+
+          <div className="mt-6">
+            <PostActions
+              postId={post.id}
+              sourceUrl={post.sourceUrl ?? null}
+              title={post.title}
+              url={url}
+            />
+          </div>
+        </header>
+
+        {/* Body */}
+        {post.content?.trim() ? (
+          <PostBody markdown={post.content} />
+        ) : (
+          <p className="text-text-muted">Bài này không có nội dung — phần chính là link source ở trên.</p>
+        )}
+
+        {/* Tags */}
+        {post.tagNames && post.tagNames.length > 0 && (
+          <div className="mt-10 flex flex-wrap gap-2 border-t border-darkborder pt-6">
+            {post.tagNames.map((t) => (
+              <Link
+                key={t}
+                href={`/tech-trends?q=${encodeURIComponent(t)}`}
+                className="rounded-lg border border-white/[0.06] bg-white/[0.04] px-3 py-1 text-xs font-medium text-text-secondary transition-colors hover:border-neon-violet/30 hover:text-neon-violet"
+              >
+                #{t}
+              </Link>
+            ))}
+          </div>
+        )}
+
+        <PostComments postId={post.id} initial={post.comments ?? []} />
+
+        <div className="mt-14 border-t border-darkborder pt-8">
+          <Link
+            href="/tech-trends"
+            className="inline-flex items-center gap-2 rounded-xl border border-darkborder bg-white/[0.04] px-4 py-2.5 text-sm text-text-secondary transition-all hover:border-neon-violet/30 hover:text-text-primary"
+          >
+            ← Xem tất cả bài viết
+          </Link>
+        </div>
+      </article>
+    </div>
   );
 }

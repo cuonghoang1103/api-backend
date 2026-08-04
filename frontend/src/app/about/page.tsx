@@ -739,7 +739,7 @@ export default function AboutPage() {
               </div>
               <div className="text-center mt-6">
                 <Link
-                  href="/blog"
+                  href="/tech-trends"
                   className="inline-flex items-center gap-2 px-6 py-3 bg-darkcard border border-darkborder text-text-primary font-medium rounded-xl hover:border-neon-violet hover:text-neon-violet transition-all duration-300 group"
                 >
                   {t('viewAllArticles')}
@@ -880,7 +880,7 @@ export default function AboutPage() {
           {featuredPosts.length > 0 && (
             <div className="text-center mt-10">
               <Link
-                href="/blog"
+                href="/tech-trends"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-darkcard border border-darkborder text-text-primary font-medium rounded-xl hover:border-neon-fuchsia hover:text-neon-fuchsia transition-all duration-300 group"
               >
                 Xem tất cả bài viết

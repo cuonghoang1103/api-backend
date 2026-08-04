@@ -69,7 +69,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // /shop only listed while the shop is enabled (lib/featureFlags.ts)
     ...(SHOP_ENABLED ? [{ url: `${SITE_URL}/shop`, lastModified: now, changeFrequency: 'daily' as const, priority: 0.9 }] : []),
     { url: `${SITE_URL}/music`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    // `/blog` is not listed: it 301s to /tech-trends since the two blogs were
+    // merged (2026-08-05). A redirecting URL in a sitemap is a soft error.
+    // Individual `/blog/<slug>` resource posts DO still resolve and are
+    // emitted below.
     { url: `${SITE_URL}/repos`, lastModified: now, changeFrequency: 'weekly', priority: 0.6 },
     { url: `${SITE_URL}/projects`, lastModified: now, changeFrequency: 'weekly', priority: 0.6 },
     { url: `${SITE_URL}/games`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
@@ -94,7 +97,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const [courses, posts, products, projects, techTrends, games] = await Promise.all([
     safeFetch<CourseItem>('/courses?limit=100'),
-    safeFetch<BlogItem>('/blog/posts?limit=100'),
+    // `size`, not `limit` — the blog list endpoint ignores `limit` and falls
+    // back to its default of 10, which would silently truncate the sitemap
+    // once there are more than ten resource posts.
+    safeFetch<BlogItem>('/blog/posts?size=100'),
     safeFetch<ShopItem>('/shop/products?limit=100'),
     safeFetch<ProjectItem>('/projects?limit=100'),
     safeFetch<TechTrendItem>('/tech-trends/articles?size=100'),

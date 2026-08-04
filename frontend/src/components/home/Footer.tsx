@@ -15,7 +15,7 @@ export default function Footer() {
   // hidden (lib/featureFlags.ts).
   const navigation: FooterLink[] = [
     { label: String(t('common.home')), href: '/' },
-    { label: String(t('common.blog')), href: '/blog' },
+    { label: String(t('common.blog')), href: '/tech-trends' },
     { label: String(t('common.projects')), href: '/projects' },
     ...(CONTACT_ENABLED ? [{ label: String(t('contact.title')), href: '/#contact' }] : []),
   ];

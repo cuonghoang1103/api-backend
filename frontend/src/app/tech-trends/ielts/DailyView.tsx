@@ -18,7 +18,8 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Flame, RotateCcw, Check, X, Lightbulb, CalendarDays, Sparkles } from 'lucide-react';
-import { ALL_WORDS, ALL_EXERCISES, LIFE_EXERCISES } from './data/stage1';
+import { LIFE_EXERCISES } from './data/stage1';
+import { STAGES } from './data/bundles';
 import type { Exercise } from './data/types';
 import { isCorrect } from './check';
 
@@ -106,13 +107,21 @@ export default function DailyView() {
     }
   }, []);
 
-  /** 15 câu của hôm nay: 6 từ vựng + 6 ngữ pháp + 3 đời sống. */
+  /**
+   * 15 câu của hôm nay: 6 từ vựng + 6 ngữ pháp + 3 đời sống.
+   *
+   * Gộp từ MỌI chặng đã soạn, không chỉ chặng đang xem. Lý do: mục đích của
+   * tab này là giữ nhịp và chống quên, mà thứ dễ quên nhất lại chính là nội
+   * dung chặng cũ — nếu chỉ ôn chặng hiện tại thì chặng 1 rơi rụng dần.
+   */
   const items = useMemo<Exercise[]>(() => {
     if (!today) return [];
     const rnd = seeded(`${today}#${variant}`);
+    const words = STAGES.flatMap((s) => s.allWords);
+    const exercises = STAGES.flatMap((s) => s.allExercises);
     return [
-      ...pickSome(ALL_WORDS, 6, rnd).map(wordToExercise),
-      ...pickSome(ALL_EXERCISES, 6, rnd),
+      ...pickSome(words, 6, rnd).map(wordToExercise),
+      ...pickSome(exercises, 6, rnd),
       ...pickSome(LIFE_EXERCISES, 3, rnd),
     ];
   }, [today, variant]);

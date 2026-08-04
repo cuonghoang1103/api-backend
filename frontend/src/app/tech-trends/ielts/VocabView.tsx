@@ -13,7 +13,7 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Volume2, RotateCcw, Check, X, Shuffle, List, Layers, ClipboardCheck } from 'lucide-react';
-import { VOCAB_TOPICS, ALL_WORDS, KEYS } from './data/stage1';
+import type { StageBundle } from './data/bundles';
 import type { VocabWord } from './data/types';
 
 type Mode = 'list' | 'flash' | 'quiz';
@@ -28,8 +28,9 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 export default function VocabView({
-  speak, current, supported,
+  d, speak, current, supported,
 }: {
+  d: StageBundle;
   speak: (t: string) => void;
   current: string | null;
   supported: boolean;
@@ -48,20 +49,30 @@ export default function VocabView({
   const [picked, setPicked] = useState<string | null>(null);
   const [score, setScore] = useState(0);
 
+  const VOCAB_TOPICS = d.vocabTopics;
+  const ALL_WORDS = d.allWords;
+
+  // Đổi chặng thì về "Tất cả", vì id chủ đề của chặng cũ không tồn tại ở chặng mới.
+  const [owner, setOwner] = useState(d.id);
+  if (owner !== d.id) {
+    setOwner(d.id);
+    setTopicId('all');
+  }
+
   const words = useMemo(
     () => (topicId === 'all' ? ALL_WORDS : (VOCAB_TOPICS.find((t) => t.id === topicId)?.words ?? ALL_WORDS)),
-    [topicId],
+    [topicId, ALL_WORDS, VOCAB_TOPICS],
   );
 
   useEffect(() => {
     setHydrated(true);
     try {
-      const raw = localStorage.getItem(KEYS.vocabKnown);
-      if (raw) setKnown(JSON.parse(raw));
+      const raw = localStorage.getItem(d.keys.vocabKnown);
+      setKnown(raw ? JSON.parse(raw) : {});
     } catch {
       /* bỏ qua */
     }
-  }, []);
+  }, [d.keys.vocabKnown]);
 
   // Đổi chủ đề thì trộn lại cỗ thẻ và xoá bài kiểm tra cũ.
   useEffect(() => {
@@ -78,13 +89,13 @@ export default function VocabView({
     setKnown((prev) => {
       const next = { ...prev, [en]: !prev[en] };
       try {
-        localStorage.setItem(KEYS.vocabKnown, JSON.stringify(next));
+        localStorage.setItem(d.keys.vocabKnown, JSON.stringify(next));
       } catch {
         /* bỏ qua */
       }
       return next;
     });
-  }, []);
+  }, [d.keys.vocabKnown]);
 
   const knownCount = hydrated ? words.filter((w) => known[w.en]).length : 0;
 

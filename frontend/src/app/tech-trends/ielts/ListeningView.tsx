@@ -14,7 +14,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Play, Square, Check, X, RotateCcw, Lightbulb, Headphones, Youtube, Gauge, Eye, EyeOff,
 } from 'lucide-react';
-import { LISTENINGS, LISTENING_SOURCES } from './data/stage1';
+import type { StageBundle } from './data/bundles';
 import { isCorrect } from './check';
 
 /** Tốc độ đọc — chặng 1 mặc định chậm hơn tốc độ thi thật. */
@@ -24,7 +24,9 @@ const RATES = [
   { label: 'Như thi', value: 1 },
 ];
 
-export default function ListeningView({ supported }: { supported: boolean }) {
+export default function ListeningView({ d, supported }: { d: StageBundle; supported: boolean }) {
+  const LISTENINGS = d.listenings;
+  const LISTENING_SOURCES = d.sources;
   const [id, setId] = useState(LISTENINGS[0].id);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [graded, setGraded] = useState(false);
@@ -108,6 +110,14 @@ export default function ListeningView({ supported }: { supported: boolean }) {
   }, [ex.lines, rate]);
 
   const correctCount = ex.questions.filter((q, i) => isCorrect(answers[i] ?? '', q.answer, q.alt)).length;
+
+
+  // Đổi chặng thì về mục đầu — id của chặng cũ không tồn tại ở chặng mới.
+  const [owner, setOwner] = useState(d.id);
+  if (owner !== d.id) {
+    setOwner(d.id);
+    setId(LISTENINGS[0].id); setAnswers({}); setGraded(false); setShowScript(false);
+  }
 
   return (
     <div>

@@ -12,17 +12,28 @@
  */
 import { useState } from 'react';
 import { Volume2, Mic, Lightbulb, ThumbsDown, ThumbsUp } from 'lucide-react';
-import { SPEAKINGS, SPEAKING_RULES } from './data/stage1';
+import type { StageBundle } from './data/bundles';
 
 export default function SpeakingView({
-  speak, current, supported,
+  d, speak, current, supported,
 }: {
+  d: StageBundle;
   speak: (t: string) => void;
   current: string | null;
   supported: boolean;
 }) {
+  const SPEAKINGS = d.speakings;
+  const SPEAKING_RULES = d.speakingRules;
   const [id, setId] = useState(SPEAKINGS[0].id);
   const topic = SPEAKINGS.find((t) => t.id === id) ?? SPEAKINGS[0];
+
+
+  // Đổi chặng thì về mục đầu — id của chặng cũ không tồn tại ở chặng mới.
+  const [owner, setOwner] = useState(d.id);
+  if (owner !== d.id) {
+    setOwner(d.id);
+    setId(SPEAKINGS[0].id);
+  }
 
   return (
     <div>

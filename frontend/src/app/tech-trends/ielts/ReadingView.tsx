@@ -15,10 +15,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Timer, Check, X, Eye, EyeOff, RotateCcw, Lightbulb, BookOpen, Languages,
 } from 'lucide-react';
-import { READINGS } from './data/stage1';
+import type { StageBundle } from './data/bundles';
 import { isCorrect } from './check';
 
-export default function ReadingView() {
+export default function ReadingView({ d }: { d: StageBundle }) {
+  const READINGS = d.readings;
   const [id, setId] = useState(READINGS[0].id);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [graded, setGraded] = useState(false);
@@ -67,6 +68,14 @@ export default function ReadingView() {
 
   const mmss = (s: number): string =>
     `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+
+
+  // Đổi chặng thì về mục đầu — id của chặng cũ không tồn tại ở chặng mới.
+  const [owner, setOwner] = useState(d.id);
+  if (owner !== d.id) {
+    setOwner(d.id);
+    setId(READINGS[0].id); setAnswers({}); setGraded(false); setShowTranslation(false); setSecondsLeft(null);
+  }
 
   return (
     <div>

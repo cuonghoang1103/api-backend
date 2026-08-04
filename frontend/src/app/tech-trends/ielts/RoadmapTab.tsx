@@ -9,9 +9,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { CheckCircle2, Circle, AlertTriangle, Target, Flag, ArrowRight } from 'lucide-react';
 import { BAND_STAGES, IELTS_STATS } from './data/roadmap';
-import { KEYS, STAGE1_STATS } from './data/stage1';
+import { STAGES } from './data/bundles';
 
-export default function RoadmapTab({ onGoToLessons }: { onGoToLessons: () => void }) {
+const CHECKPOINT_KEY = 'ielts:checkpoints:v1';
+
+export default function RoadmapTab({ onGoToStage }: { onGoToStage: (stageIdx: number) => void }) {
   const [open, setOpen] = useState<string>(BAND_STAGES[0].id);
   const [done, setDone] = useState<Record<string, boolean>>({});
   const [hydrated, setHydrated] = useState(false);
@@ -19,7 +21,7 @@ export default function RoadmapTab({ onGoToLessons }: { onGoToLessons: () => voi
   useEffect(() => {
     setHydrated(true);
     try {
-      const raw = localStorage.getItem(KEYS.checkpoints);
+      const raw = localStorage.getItem(CHECKPOINT_KEY);
       if (raw) setDone(JSON.parse(raw));
     } catch {
       /* localStorage bị chặn — vẫn xem được, chỉ không nhớ tiến độ */
@@ -30,7 +32,7 @@ export default function RoadmapTab({ onGoToLessons }: { onGoToLessons: () => voi
     setDone((prev) => {
       const next = { ...prev, [key]: !prev[key] };
       try {
-        localStorage.setItem(KEYS.checkpoints, JSON.stringify(next));
+        localStorage.setItem(CHECKPOINT_KEY, JSON.stringify(next));
       } catch {
         /* bỏ qua */
       }
@@ -66,7 +68,9 @@ export default function RoadmapTab({ onGoToLessons }: { onGoToLessons: () => voi
             ? stage.checkpoints.filter((_, i) => done[`${stage.id}:${i}`]).length
             : 0;
           const allDone = stageDone === stage.checkpoints.length;
-          const hasContent = si === 0; // hiện mới soạn xong chặng 1
+          // Số chặng đã soạn nội dung — nới ra khi thêm chặng 3, 4.
+          const hasContent = si < STAGES.length;
+          const bundle = hasContent ? STAGES[si] : null;
           return (
             <div
               key={stage.id}
@@ -113,18 +117,19 @@ export default function RoadmapTab({ onGoToLessons }: { onGoToLessons: () => voi
 
               {isOpen && (
                 <div className="px-4 sm:px-5 pb-5 space-y-5">
-                  {hasContent && (
+                  {hasContent && bundle && (
                     <button
                       type="button"
-                      onClick={onGoToLessons}
+                      onClick={() => onGoToStage(si)}
                       className="w-full flex items-center justify-between gap-3 rounded-xl border border-emerald-400/30 bg-emerald-500/10 p-4 text-left hover:bg-emerald-500/15 transition-colors"
                     >
                       <div>
                         <p className="text-emerald-200 font-semibold text-sm">Nội dung học chặng này đã sẵn sàng</p>
                         <p className="text-slate-300 text-xs mt-1 leading-relaxed">
-                          {STAGE1_STATS.lessons} bài học · {STAGE1_STATS.words} từ vựng ·{' '}
-                          {STAGE1_STATS.readings} bài đọc · {STAGE1_STATS.listenings} bài nghe ·{' '}
-                          {STAGE1_STATS.writings} đề viết · {STAGE1_STATS.speakingQuestions} câu nói
+                          {bundle!.stats.lessons} bài học · {bundle!.stats.words} từ vựng ·{' '}
+                          {bundle!.stats.readings} bài đọc · {bundle!.stats.listenings} bài nghe ·{' '}
+                          {bundle!.stats.writings} đề viết · {bundle!.stats.gradedTotal} câu chấm điểm
+                          {bundle!.questionTypes ? ` · ${bundle!.questionTypes.length} dạng câu hỏi` : ''}
                         </p>
                       </div>
                       <ArrowRight className="w-5 h-5 text-emerald-300 shrink-0" />

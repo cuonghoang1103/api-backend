@@ -13,42 +13,54 @@ import { useCallback, useEffect, useState } from 'react';
 import {
   CheckCircle2, Circle, Target, AlertTriangle, Volume2, ListChecks, BookMarked,
 } from 'lucide-react';
-import { UNITS, KEYS, EXERCISES_BY_LESSON } from './data/stage1';
+import type { StageBundle } from './data/bundles';
 import ExercisePanel from './ExercisePanel';
 
 export default function LessonsView({
-  speak, current, supported,
+  d, speak, current, supported,
 }: {
+  d: StageBundle;
   speak: (t: string) => void;
   current: string | null;
   supported: boolean;
 }) {
+  const UNITS = d.units;
+  const total = UNITS.reduce((n, u) => n + u.lessons.length, 0);
   const [unitId, setUnitId] = useState(UNITS[0].id);
   const [lessonId, setLessonId] = useState(UNITS[0].lessons[0].id);
   const [done, setDone] = useState<Record<string, boolean>>({});
   const [hydrated, setHydrated] = useState(false);
 
+  // Đổi chặng thì nhảy về bài đầu, nếu không id bài của chặng cũ sẽ không tồn tại.
+  const [owner, setOwner] = useState(d.id);
+  if (owner !== d.id) {
+    setOwner(d.id);
+    setUnitId(UNITS[0].id);
+    setLessonId(UNITS[0].lessons[0].id);
+  }
+
   useEffect(() => {
     setHydrated(true);
     try {
-      const raw = localStorage.getItem(KEYS.lessonDone);
+      const raw = localStorage.getItem(d.keys.lessonDone);
       if (raw) setDone(JSON.parse(raw));
+      else setDone({});
     } catch {
       /* localStorage bị chặn — vẫn học được, chỉ không nhớ tiến độ */
     }
-  }, []);
+  }, [d.keys.lessonDone]);
 
   const toggleDone = useCallback((id: string) => {
     setDone((prev) => {
       const next = { ...prev, [id]: !prev[id] };
       try {
-        localStorage.setItem(KEYS.lessonDone, JSON.stringify(next));
+        localStorage.setItem(d.keys.lessonDone, JSON.stringify(next));
       } catch {
         /* bỏ qua */
       }
       return next;
     });
-  }, []);
+  }, [d.keys.lessonDone]);
 
   const unit = UNITS.find((u) => u.id === unitId) ?? UNITS[0];
   const lesson = unit.lessons.find((l) => l.id === lessonId) ?? unit.lessons[0];
@@ -63,12 +75,12 @@ export default function LessonsView({
         <div className="mb-5">
           <div className="flex items-center justify-between text-xs text-slate-400 mb-1.5">
             <span>Bài đã học</span>
-            <span>{doneCount}/40</span>
+            <span>{doneCount}/{total}</span>
           </div>
           <div className="h-2 rounded-full bg-white/10 overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-sky-500 to-emerald-500 transition-all duration-500"
-              style={{ width: `${(doneCount / 40) * 100}%` }}
+              style={{ width: `${(doneCount / total) * 100}%` }}
             />
           </div>
         </div>
@@ -137,7 +149,7 @@ export default function LessonsView({
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <div>
             <span className="text-xs font-bold px-2 py-0.5 rounded bg-sky-500/20 text-sky-300">
-              Bài {lesson.n}/40
+              Bài {lesson.n}/{total}
             </span>
             <h3 className="text-xl font-bold text-white mt-2">{lesson.title}</h3>
           </div>
@@ -251,12 +263,12 @@ export default function LessonsView({
         )}
 
         {/* Bài tập chấm ngay — học xong luyện liền */}
-        {EXERCISES_BY_LESSON[lesson.id] && (
+        {d.exercisesByLesson[lesson.id] && (
           <div className="mt-5">
             <ExercisePanel
-              items={EXERCISES_BY_LESSON[lesson.id]}
+              items={d.exercisesByLesson[lesson.id]}
               title={`Bài tập bài ${lesson.n}`}
-              storageKeyHint={lesson.id}
+              storageKeyHint={`${d.id}:${lesson.id}`}
             />
           </div>
         )}

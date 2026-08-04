@@ -113,6 +113,35 @@ export interface ExerciseSet {
   items: Exercise[];
 }
 
+/* ─────────────────────  DẠNG CÂU HỎI (chặng 2)  ───────────────────── */
+
+/**
+ * Hướng dẫn từng DẠNG câu hỏi của đề thi thật.
+ *
+ * Đây là phần lõi của chặng 2, đúng theo `keyFocus` trong lộ trình: không biết
+ * dạng thì làm bao nhiêu đề cũng sai y như cũ, vì mỗi dạng có cách làm và bẫy
+ * riêng. Người học chặng 2 nên đọc hết một lượt rồi mỗi tuần luyện kỹ MỘT dạng.
+ */
+export interface QuestionTypeGuide {
+  id: string;
+  skill: 'Nghe' | 'Đọc';
+  /** Tên tiếng Anh — chính là tên ghi trong đề thật. */
+  name: string;
+  nameVi: string;
+  /** Đề trông như thế nào, để nhận ra ngay khi mở đề. */
+  looks: string;
+  /** Thường xuất hiện bao nhiêu câu, ở phần nào. */
+  frequency: string;
+  /** Độ khó với người ở chặng 2: 1 dễ, 2 vừa, 3 khó. */
+  hard: 1 | 2 | 3;
+  /** Các bước làm, ĐÚNG THỨ TỰ. Làm sai thứ tự là mất thời gian. */
+  steps: string[];
+  /** Bẫy riêng của dạng này. */
+  traps: string[];
+  /** Ví dụ minh hoạ ngắn — tự viết, không lấy từ đề thật. */
+  example?: { q: string; answer: string; why: string };
+}
+
 /* ─────────────────────  ĐỜI SỐNG & VIỆC LÀM  ───────────────────── */
 
 /**
@@ -157,10 +186,11 @@ export interface ExamBlock {
 /* ─────────────────────────  ĐỌC  ───────────────────────── */
 
 export type ReadingQuestionKind =
-  | 'TFNG'          // True / False / Not Given
+  | 'TFNG'          // True / False / Not Given — hỏi THÔNG TIN
+  | 'YNNG'          // Yes / No / Not Given — hỏi QUAN ĐIỂM tác giả (từ chặng 2)
   | 'MCQ'           // Trắc nghiệm 1 đáp án
   | 'GAP'           // Điền từ lấy từ bài (Sentence / Summary Completion)
-  | 'MATCH'         // Nối thông tin với đoạn
+  | 'MATCH'         // Nối thông tin với đoạn, hoặc nối phát biểu với người
   | 'HEADING';      // Chọn tiêu đề cho đoạn
 
 export interface ReadingQuestion {

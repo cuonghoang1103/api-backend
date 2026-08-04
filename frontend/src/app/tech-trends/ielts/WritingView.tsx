@@ -15,7 +15,7 @@ import { useMemo, useState } from 'react';
 import {
   PenLine, Eye, EyeOff, AlertTriangle, ListOrdered, Quote, FileText, Trash2,
 } from 'lucide-react';
-import { WRITINGS } from './data/stage1';
+import type { StageBundle } from './data/bundles';
 
 function countWords(s: string): number {
   const t = s.trim();
@@ -23,7 +23,8 @@ function countWords(s: string): number {
   return t.split(/\s+/).length;
 }
 
-export default function WritingView() {
+export default function WritingView({ d }: { d: StageBundle }) {
+  const WRITINGS = d.writings;
   const [id, setId] = useState(WRITINGS[0].id);
   const [showSample, setShowSample] = useState(false);
   const [draft, setDraft] = useState('');
@@ -31,6 +32,14 @@ export default function WritingView() {
   const task = WRITINGS.find((w) => w.id === id) ?? WRITINGS[0];
   const words = useMemo(() => countWords(draft), [draft]);
   const enough = words >= task.minWords;
+
+
+  // Đổi chặng thì về mục đầu — id của chặng cũ không tồn tại ở chặng mới.
+  const [owner, setOwner] = useState(d.id);
+  if (owner !== d.id) {
+    setOwner(d.id);
+    setId(WRITINGS[0].id); setShowSample(false); setDraft('');
+  }
 
   return (
     <div>

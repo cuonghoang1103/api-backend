@@ -18,6 +18,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowLeft, Target, GraduationCap, BookOpen, Headphones, FileText, PenLine, Mic,
+  Flame, Briefcase, ClipboardList,
 } from 'lucide-react';
 import { IELTS_STATS } from './data/roadmap';
 import { STAGE1_STATS } from './data/stage1';
@@ -31,17 +32,30 @@ import ListeningView from './ListeningView';
 import ReadingView from './ReadingView';
 import WritingView from './WritingView';
 import SpeakingView from './SpeakingView';
+import DailyView from './DailyView';
+import LifeView from './LifeView';
+import ExamView from './ExamView';
 
-type TabId = 'roadmap' | 'lessons' | 'vocab' | 'listening' | 'reading' | 'writing' | 'speaking';
+type TabId =
+  | 'roadmap' | 'daily' | 'lessons' | 'vocab' | 'listening'
+  | 'reading' | 'writing' | 'speaking' | 'life' | 'exam';
 
+/**
+ * Con số trên tab tính TỪ DỮ LIỆU, không gõ tay. Gõ tay thì thêm nội dung xong
+ * quên sửa số — đã dính đúng lỗi đó một lần: badge ghi 10 trong khi có 11 tình
+ * huống.
+ */
 const TABS: { id: TabId; label: string; icon: typeof Target; badge?: string }[] = [
   { id: 'roadmap', label: 'Lộ trình', icon: Target },
-  { id: 'lessons', label: 'Bài học', icon: GraduationCap, badge: '40' },
-  { id: 'vocab', label: 'Từ vựng', icon: BookOpen, badge: '300' },
-  { id: 'listening', label: 'Nghe', icon: Headphones, badge: '6' },
-  { id: 'reading', label: 'Đọc', icon: FileText, badge: '5' },
-  { id: 'writing', label: 'Viết', icon: PenLine, badge: '6' },
-  { id: 'speaking', label: 'Nói', icon: Mic, badge: '5' },
+  { id: 'daily', label: 'Luyện mỗi ngày', icon: Flame, badge: '15' },
+  { id: 'lessons', label: 'Bài học', icon: GraduationCap, badge: String(STAGE1_STATS.lessons) },
+  { id: 'vocab', label: 'Từ vựng', icon: BookOpen, badge: String(STAGE1_STATS.words) },
+  { id: 'listening', label: 'Nghe', icon: Headphones, badge: String(STAGE1_STATS.listenings) },
+  { id: 'reading', label: 'Đọc', icon: FileText, badge: String(STAGE1_STATS.readings) },
+  { id: 'writing', label: 'Viết', icon: PenLine, badge: String(STAGE1_STATS.writings) },
+  { id: 'speaking', label: 'Nói', icon: Mic, badge: String(STAGE1_STATS.speakingTopics) },
+  { id: 'life', label: 'Đời sống & Việc làm', icon: Briefcase, badge: String(STAGE1_STATS.situations) },
+  { id: 'exam', label: 'Cẩm nang thi', icon: ClipboardList },
 ];
 
 export default function IeltsClient() {
@@ -69,7 +83,8 @@ export default function IeltsClient() {
           <p className="text-slate-400 mt-3 max-w-3xl leading-relaxed">
             Lộ trình chia bốn chặng band: mỗi chặng ghi rõ bạn đang ở đâu, mỗi ngày làm gì cho từng kỹ
             năng, và khi nào đủ điều kiện lên chặng sau. <b className="text-slate-200">Chặng 1 (0 → 4.0)</b>{' '}
-            nay đã có đầy đủ nội dung học: bài giảng, từ vựng, và bài luyện có chấm điểm cho cả bốn kỹ năng.
+            nay đã có đầy đủ: bài giảng, từ vựng, bài luyện chấm điểm cho cả bốn kỹ năng, tiếng Anh dùng
+            thật ngoài đời, và một buổi luyện 15 câu mỗi ngày để giữ nhịp.
           </p>
 
           <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm">
@@ -77,8 +92,9 @@ export default function IeltsClient() {
             <span className="text-slate-300"><b className="text-white">{STAGE1_STATS.lessons}</b> bài học</span>
             <span className="text-slate-300"><b className="text-white">{STAGE1_STATS.words}</b> từ vựng</span>
             <span className="text-slate-300">
-              <b className="text-white">{STAGE1_STATS.readingQuestions + STAGE1_STATS.listeningQuestions}</b> câu luyện có giải thích
+              <b className="text-white">{STAGE1_STATS.gradedTotal}</b> câu chấm điểm có giải thích
             </span>
+            <span className="text-slate-300"><b className="text-white">{STAGE1_STATS.situations}</b> tình huống đời sống &amp; việc làm</span>
             <span className="text-slate-300"><b className="text-white">{STAGE1_STATS.writings}</b> đề viết có bài mẫu</span>
           </div>
         </header>
@@ -120,12 +136,15 @@ export default function IeltsClient() {
         )}
 
         {tab === 'roadmap' && <RoadmapTab onGoToLessons={() => setTab('lessons')} />}
+        {tab === 'daily' && <DailyView />}
         {tab === 'lessons' && <LessonsView speak={speak} current={current} supported={supported} />}
         {tab === 'vocab' && <VocabView speak={speak} current={current} supported={supported} />}
         {tab === 'listening' && <ListeningView supported={supported} />}
         {tab === 'reading' && <ReadingView />}
         {tab === 'writing' && <WritingView />}
         {tab === 'speaking' && <SpeakingView speak={speak} current={current} supported={supported} />}
+        {tab === 'life' && <LifeView speak={speak} current={current} supported={supported} />}
+        {tab === 'exam' && <ExamView />}
 
         {/* Chặng tiếp theo */}
         <div className="mt-10 rounded-2xl border border-white/10 bg-white/[0.02] p-5">

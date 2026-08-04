@@ -13,7 +13,8 @@ import { useCallback, useEffect, useState } from 'react';
 import {
   CheckCircle2, Circle, Target, AlertTriangle, Volume2, ListChecks, BookMarked,
 } from 'lucide-react';
-import { UNITS, KEYS } from './data/stage1';
+import { UNITS, KEYS, EXERCISES_BY_LESSON } from './data/stage1';
+import ExercisePanel from './ExercisePanel';
 
 export default function LessonsView({
   speak, current, supported,
@@ -249,11 +250,22 @@ export default function LessonsView({
           </div>
         )}
 
+        {/* Bài tập chấm ngay — học xong luyện liền */}
+        {EXERCISES_BY_LESSON[lesson.id] && (
+          <div className="mt-5">
+            <ExercisePanel
+              items={EXERCISES_BY_LESSON[lesson.id]}
+              title={`Bài tập bài ${lesson.n}`}
+              storageKeyHint={lesson.id}
+            />
+          </div>
+        )}
+
         {/* Tự luyện */}
         <div className="mt-5 rounded-xl border border-amber-500/25 bg-amber-500/[0.07] p-4">
           <p className="flex items-center gap-2 text-amber-300 text-sm font-semibold mb-2">
             <ListChecks className="w-4 h-4" />
-            Tự luyện sau bài
+            Tự luyện ngoài trang này
           </p>
           <ul className="space-y-1.5">
             {lesson.practice.map((p, i) => (

@@ -79,6 +79,81 @@ export interface LessonUnit {
   lessons: Lesson[];
 }
 
+/* ─────────────────────────  BÀI TẬP  ───────────────────────── */
+
+/**
+ * Năm dạng bài tập, xếp theo mức khó tăng dần.
+ *
+ * `fix` (sửa lỗi) là dạng quan trọng nhất và cố ý chiếm tỉ lệ cao: người học
+ * NHẬN RA lỗi trong câu người khác dễ hơn nhiều so với nhận ra lỗi trong câu
+ * mình vừa viết, mà nhận ra được rồi thì mới tự soát bài được. `translate`
+ * (dịch Việt → Anh) đặt cuối vì nó bắt bật ra câu từ con số 0 — đúng thứ phải
+ * làm khi nói và viết thật.
+ */
+export type ExerciseKind = 'choice' | 'gap' | 'fix' | 'order' | 'translate';
+
+export interface Exercise {
+  kind: ExerciseKind;
+  /** Đề bài. Với `order` là các từ đã xáo trộn, ngăn bằng " / ". */
+  q: string;
+  /** Gợi ý tiếng Việt — với `translate` chính là câu cần dịch. */
+  hint?: string;
+  /** Chỉ dạng `choice`. */
+  options?: string[];
+  answer: string;
+  /** Cách viết khác cũng được tính đúng. Khai tường minh, không đoán. */
+  alt?: string[];
+  /** Vì sao đáp án đúng — luôn nối về điểm ngữ pháp của bài. */
+  why: string;
+}
+
+/** Bộ bài tập gắn với MỘT bài học, hiện ngay dưới bài đó. */
+export interface ExerciseSet {
+  lessonId: string;
+  items: Exercise[];
+}
+
+/* ─────────────────────  ĐỜI SỐNG & VIỆC LÀM  ───────────────────── */
+
+/**
+ * Tình huống dùng tiếng Anh THẬT, ngoài phòng thi.
+ *
+ * Có mục này vì phần lớn người học bỏ cuộc do không thấy tiếng Anh dùng được
+ * vào đâu — học mãi chỉ để thi thì rất khó duy trì. Mỗi tình huống ở đây đều
+ * là việc có thể gặp trong tháng tới, và từ vựng dùng lại được cho kỳ thi.
+ */
+export interface LifeSituation {
+  id: string;
+  /** Nhóm để lọc: đời sống hằng ngày, công việc, hay riêng cho lập trình viên. */
+  group: 'Đời sống' | 'Công việc' | 'Lập trình viên';
+  title: string;
+  titleVi: string;
+  icon: string;
+  /** Khi nào bạn thật sự cần tới tình huống này. */
+  when: string;
+  /** Phần này liên quan gì tới kỳ thi — để người học thấy không phải học lệch. */
+  examLink: string;
+  dialogue: { who: string; en: string; vi: string }[];
+  phrases: { en: string; vi: string; note?: string }[];
+  items: Exercise[];
+  tips: string[];
+}
+
+/* ─────────────────────────  CẨM NANG THI  ───────────────────────── */
+
+export interface ExamBlock {
+  id: string;
+  title: string;
+  icon: string;
+  /** Phần giải thích chính. */
+  body: string;
+  /** Bảng hai cột (cấu trúc đề, quy đổi điểm…). */
+  rows?: { k: string; v: string }[];
+  bullets?: string[];
+  /** Cảnh báo quan trọng, hiện nền đỏ. */
+  warn?: string;
+}
+
 /* ─────────────────────────  ĐỌC  ───────────────────────── */
 
 export type ReadingQuestionKind =

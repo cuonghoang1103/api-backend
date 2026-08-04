@@ -34,6 +34,11 @@
  * still run unit tests that don't touch the image path.
  */
 import sharp from 'sharp';
+// sharp 0.35.2+ chuyển sang ESM type defs (`dist/index.d.mts`) và bỏ
+// namespace `sharp.*`, nên `sharp.Metadata` / `sharp.OutputInfo` không
+// còn phân giải được. Kiểu giờ là named export — chỉ là import type,
+// không đổi gì lúc chạy.
+import type { Metadata, OutputInfo } from 'sharp';
 
 const MAX_WIDTH = 1200;
 const WEBP_QUALITY = 80;
@@ -140,7 +145,7 @@ export async function optimizeImage(
   // `limitInputPixels` is the bomb guard (see MAX_INPUT_PIXELS above);
   // reading metadata only parses the header, so this is cheap.
   let pipeline = sharp(input, { failOn: 'none', limitInputPixels: MAX_INPUT_PIXELS });
-  let metadata: sharp.Metadata;
+  let metadata: Metadata;
   try {
     metadata = await pipeline.metadata();
   } catch (err: any) {
@@ -200,7 +205,7 @@ export async function optimizeImage(
   // the concurrency gate — a burst of uploads queues instead of each
   // multiplying peak RSS.
   await acquireDecodeSlot();
-  let out: { data: Buffer; info: sharp.OutputInfo };
+  let out: { data: Buffer; info: OutputInfo };
   try {
     out = await pipeline
       .webp({ quality: WEBP_QUALITY, effort: 4 })

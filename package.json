@@ -135,6 +135,9 @@
   "engines": {
     "node": ">=20.0.0"
   },
+  "overrides": {
+    "ws": "^8.21.2"
+  },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   }

@@ -277,6 +277,39 @@ export default function TechTrendsClient() {
           </motion.div>
         </header>
 
+        {/* ── Chuyên đề ghim: Tiếng Anh Giao Tiếp ──────────────────
+            Cùng lý do với JPD113 bên dưới: trang tĩnh, không do API trả về,
+            nên phải ghim tay ở sảnh mới tìm thấy được. */}
+        <Link
+          href="/tech-trends/tieng-anh-giao-tiep"
+          className="group block mb-4 rounded-2xl border border-emerald-400/30 bg-gradient-to-r from-emerald-400/[0.12] via-sky-400/[0.06] to-transparent p-5 sm:p-6 hover:border-emerald-400/50 transition-all"
+        >
+          <div className="flex items-start gap-4">
+            <span className="hidden sm:flex w-12 h-12 shrink-0 rounded-xl bg-emerald-400/15 items-center justify-center text-2xl">
+              🗣️
+            </span>
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide bg-emerald-500 text-white">
+                  CHUYÊN ĐỀ
+                </span>
+                <span className="text-[11px] text-text-muted">Khoá 20 ngày · có nút nghe từng câu</span>
+              </div>
+              <h3 className="text-lg sm:text-xl font-heading font-bold text-text-primary group-hover:text-emerald-400 transition-colors">
+                Tiếng Anh Giao Tiếp — 20 ngày từ câu chào tới kể chuyện
+              </h3>
+              <p className="text-sm text-text-secondary mt-1 leading-relaxed">
+                Câu dùng hằng ngày trước (chào hỏi, hôm nay làm gì, ăn gì, hẹn giờ), rồi tới tiếng Anh
+                công việc. Mỗi ngày có hỏi–đáp nhiều cách trả lời, hội thoại mẫu, từ vựng có phiên âm,
+                ngữ pháp và một âm khó để luyện.
+              </p>
+            </div>
+            <span className="hidden sm:block text-emerald-400 text-xl shrink-0 group-hover:translate-x-1 transition-transform">
+              →
+            </span>
+          </div>
+        </Link>
+
         {/* ── Chuyên đề ghim: lộ trình ôn thi JPD113 ──────────────
             Trang tĩnh, không nằm trong danh sách bài viết từ API,
             nên ghim thẳng ở đây để tìm thấy được từ sảnh. */}

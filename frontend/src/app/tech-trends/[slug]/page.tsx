@@ -64,12 +64,14 @@ async function getRelated(id: number): Promise<RelatedTechTrendArticle[]> {
   }
 }
 
+// Vietnamese labels, matching the tab bar on the index. A card that says
+// "Chuyên sâu" must not lead to a page whose breadcrumb says "#DeepDive".
 const CATEGORY_LABEL: Record<string, { emoji: string; label: string }> = {
-  TechNews: { emoji: '📰', label: '#TechNews' },
-  FixBug: { emoji: '🐛', label: '#FixBug' },
-  Experience: { emoji: '💼', label: '#Experience' },
-  Interviews: { emoji: '🎯', label: '#Interviews' },
-  DeepDive: { emoji: '📖', label: '#DeepDive' },
+  TechNews: { emoji: '📰', label: 'Bản tin' },
+  FixBug: { emoji: '🐛', label: 'Sửa lỗi' },
+  Experience: { emoji: '💼', label: 'Kinh nghiệm' },
+  Interviews: { emoji: '🎯', label: 'Phỏng vấn' },
+  DeepDive: { emoji: '📖', label: 'Chuyên sâu' },
 };
 
 function authorName(a: PublicTechTrendArticle['author']): string {
@@ -88,9 +90,12 @@ function formatDate(iso: string | null): string {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const article = await getArticle(params.slug);
-  if (!article) return { title: 'Bài viết | Tech Trends | CuongThai' };
+  if (!article) return { title: 'Bài viết | Blog' };
 
-  const title = `${article.title} | Tech Trends | CuongThai`;
+  // The root layout declares `template: '%s | CuongThai'`, so appending
+  // "| CuongThai" here too produced "… | Tech Trends | CuongThai | CuongThai"
+  // in the browser tab. Let the template do its job.
+  const title = `${article.title} | Blog`;
   const description = (article.summary || '').slice(0, 200);
   const url = `${SITE_URL}/tech-trends/${params.slug}`;
   const image = article.coverImageUrl || undefined;
@@ -163,7 +168,7 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
         {/* Breadcrumb / back */}
         <nav className="mb-6 text-sm text-text-muted flex items-center gap-1.5">
           <Link href="/tech-trends" className="hover:text-neon-violet transition-colors">
-            Tech Trends
+            Blog
           </Link>
           <span>/</span>
           <span className="text-text-secondary">{cat.label}</span>

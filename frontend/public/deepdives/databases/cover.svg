@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 344" width="700" height="344" role="img" aria-label="Phép chia SQL và NoSQL chia theo ngôn ngữ truy vấn, trong đó NoSQL chỉ nghĩa là không phải cái kia; phép chia dùng được là chia theo mô hình dữ liệu, gồm quan hệ, tài liệu, khoá-giá trị, cột rộng, đồ thị, chuỗi thời gian, tìm kiếm, vector và cột">
+  <rect width="700" height="344" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="343" rx="12" fill="none" stroke="#1e293b"/>
+
+  <!-- ── Hàng trên: phép chia hay dùng ────────────────────────────── -->
+  <text x="24" y="34" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" font-weight="600" fill="#f43f5e" letter-spacing="1.2">CHIA THEO NGÔN NGỮ TRUY VẤN</text>
+
+  <rect x="24" y="46" width="150" height="52" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="99" y="70" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="15" fill="#94a3b8">SQL</text>
+  <text x="99" y="88" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="10.5" fill="#475569">một ngôn ngữ</text>
+
+  <rect x="186" y="46" width="240" height="52" rx="6" fill="#0a1120" stroke="#f43f5e"/>
+  <text x="306" y="70" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="15" fill="#94a3b8">NoSQL</text>
+  <text x="306" y="88" text-anchor="middle" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="10.5" fill="#f43f5e">nghĩa đen: “không phải cái bên trái”</text>
+
+  <text x="444" y="66" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#64748b">Cassandra nói CQL — gần như SQL.</text>
+  <text x="444" y="84" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#64748b">Postgres lưu JSON tốt hơn nhiều</text>
+  <text x="444" y="99" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#64748b">“document database”.</text>
+
+  <line x1="24" y1="118" x2="676" y2="118" stroke="#1e293b"/>
+
+  <!-- ── Hàng dưới: phép chia dùng được ───────────────────────────── -->
+  <text x="24" y="144" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" font-weight="600" fill="#34d399" letter-spacing="1.2">CHIA THEO MÔ HÌNH DỮ LIỆU</text>
+  <text x="255" y="144" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#475569">— quyết định câu hỏi nào rẻ, câu hỏi nào đắt</text>
+
+  <!-- hàng chip 1 -->
+  <rect x="24" y="158" width="152" height="56" rx="6" fill="#0a1120" stroke="#34d399"/>
+  <text x="36" y="180" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#e2e8f0">Quan hệ</text>
+  <text x="36" y="199" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="10.5" fill="#64748b">JOIN · ràng buộc · ACID</text>
+
+  <rect x="188" y="158" width="152" height="56" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="200" y="180" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#e2e8f0">Tài liệu</text>
+  <text x="200" y="199" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="10.5" fill="#64748b">nhúng thay vì nối</text>
+
+  <rect x="352" y="158" width="152" height="56" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="364" y="180" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#e2e8f0">Khoá–giá trị</text>
+  <text x="364" y="199" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="10.5" fill="#64748b">chỉ tra được bằng khoá</text>
+
+  <rect x="516" y="158" width="160" height="56" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="528" y="180" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#e2e8f0">Cột rộng</text>
+  <text x="528" y="199" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="10.5" fill="#64748b">ghi triệu dòng mỗi giây</text>
+
+  <!-- hàng chip 2 -->
+  <rect x="24" y="224" width="152" height="56" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="36" y="246" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#e2e8f0">Đồ thị</text>
+  <text x="36" y="265" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="10.5" fill="#64748b">đi sâu 4 bậc quan hệ</text>
+
+  <rect x="188" y="224" width="152" height="56" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="200" y="246" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#e2e8f0">Chuỗi thời gian</text>
+  <text x="200" y="265" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="10.5" fill="#64748b">nén 10–20× · tự hết hạn</text>
+
+  <rect x="352" y="224" width="152" height="56" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="364" y="246" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#e2e8f0">Vector</text>
+  <text x="364" y="265" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="10.5" fill="#64748b">10 đoạn gần nghĩa nhất</text>
+
+  <rect x="516" y="224" width="160" height="56" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="528" y="246" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" font-weight="600" fill="#e2e8f0">Cột (OLAP)</text>
+  <text x="528" y="265" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="10.5" fill="#64748b">quét 100 triệu dòng</text>
+
+  <!-- chân trang -->
+  <rect x="24" y="294" width="652" height="30" rx="6" fill="#0a1120" stroke="#1e293b"/>
+  <text x="38" y="313" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#94a3b8">Còn tìm kiếm toàn văn, object storage, đa mô hình — và <tspan fill="#34d399" font-weight="600">một Postgres làm được bốn cái trong số này</tspan>.</text>
+</svg>

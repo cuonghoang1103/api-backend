@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import {
   Search,
   Check,
@@ -13,14 +13,19 @@ import {
   Trophy,
   ArrowLeftRight,
   Volume2,
+  PenLine,
+  Keyboard,
+  HelpCircle,
 } from 'lucide-react';
 
 import {
   VOCAB_CATEGORIES,
   VOCAB_WORDS,
   VOCAB_STORAGE_KEY,
+  VOCAB_MISS_KEY,
   type VocabWord,
 } from './data/vocab';
+import { checkVi, checkJa } from './data/vocabCheck';
 
 /**
  * Tab Từ vựng — 231 từ của JPD113.
@@ -38,7 +43,7 @@ import {
  * chế độ thẻ và kiểm tra đều bỏ qua từ đã thuộc để không phí thời gian.
  */
 
-type ViewMode = 'list' | 'card' | 'quiz';
+type ViewMode = 'list' | 'card' | 'quiz' | 'write';
 type QuizDir = 'jp2vi' | 'vi2jp';
 
 const QUIZ_SIZE = 15;
@@ -127,11 +132,12 @@ export default function VocabPanel() {
       </section>
 
       {/* Chế độ */}
-      <div className="grid sm:grid-cols-3 gap-2.5">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
         {[
           { id: 'list' as const, label: 'Tra cứu', sub: 'đọc & đánh dấu đã thuộc', icon: List },
           { id: 'card' as const, label: 'Lật thẻ', sub: 'ôn nhanh, tự chấm', icon: Layers },
-          { id: 'quiz' as const, label: 'Kiểm tra', sub: 'trắc nghiệm hai chiều', icon: Trophy },
+          { id: 'quiz' as const, label: 'Trắc nghiệm', sub: 'chọn 1 trong 4', icon: Trophy },
+          { id: 'write' as const, label: 'Viết đáp án', sub: 'tự gõ, khó hơn hẳn', icon: PenLine },
         ].map((m) => {
           const Icon = m.icon;
           return (
@@ -192,6 +198,7 @@ export default function VocabPanel() {
         <CardView words={filtered} known={known} mounted={mounted} onToggle={toggleKnown} />
       )}
       {view === 'quiz' && <QuizView words={filtered} known={known} mounted={mounted} />}
+      {view === 'write' && <WriteView words={filtered} known={known} mounted={mounted} />}
     </div>
   );
 }
@@ -461,6 +468,353 @@ function CardView({
         >
           Chưa thuộc, thẻ tiếp →
         </button>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════ CHẾ ĐỘ VIẾT ĐÁP ÁN ══════════════════ */
+
+/**
+ * Tự gõ đáp án, không chọn sẵn.
+ *
+ * Khó hơn trắc nghiệm rất nhiều và cũng đúng thứ đề thi đòi: trắc nghiệm
+ * chỉ cần NHẬN RA đáp án giữa 4 lựa chọn, còn ở đây phải TỰ NHỚ ra từ.
+ *
+ * Chấm khoan dung (xem data/vocabCheck.ts): chiều Việt→Nhật nhận cả
+ * kanji, kana lẫn romaji; chiều Nhật→Việt nhận mọi cách diễn đạt nghĩa
+ * và cả khi gõ thiếu dấu.
+ */
+function WriteView({
+  words,
+  known,
+  mounted,
+}: {
+  words: VocabWord[];
+  known: Record<string, boolean>;
+  mounted: boolean;
+}) {
+  const [dir, setDir] = useState<QuizDir>('jp2vi');
+  const [queue, setQueue] = useState<VocabWord[]>([]);
+  const [idx, setIdx] = useState(0);
+  const [input, setInput] = useState('');
+  const [result, setResult] = useState<'right' | 'wrong' | null>(null);
+  const [wrong, setWrong] = useState<{ word: VocabWord; given: string }[]>([]);
+  const [right, setRight] = useState(0);
+  const [missIds, setMissIds] = useState<string[]>([]);
+  const [onlyMiss, setOnlyMiss] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(VOCAB_MISS_KEY);
+      if (raw) setMissIds(JSON.parse(raw));
+    } catch {
+      /* dữ liệu hỏng — coi như chưa có từ sai nào */
+    }
+  }, []);
+
+  const persistMiss = useCallback((next: string[]) => {
+    setMissIds(next);
+    try {
+      localStorage.setItem(VOCAB_MISS_KEY, JSON.stringify(next));
+    } catch {
+      /* hết quota */
+    }
+  }, []);
+
+  const pool = useMemo(() => {
+    if (!mounted) return words;
+    if (onlyMiss) {
+      const set = new Set(missIds);
+      const only = words.filter((w) => set.has(w.word));
+      if (only.length) return only;
+    }
+    const un = words.filter((w) => !known[w.word]);
+    return un.length ? un : words;
+  }, [words, known, mounted, onlyMiss, missIds]);
+
+  const build = useCallback(() => {
+    const shuffled = [...pool];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    setQueue(shuffled.slice(0, Math.min(QUIZ_SIZE, shuffled.length)));
+    setIdx(0);
+    setInput('');
+    setResult(null);
+    setWrong([]);
+    setRight(0);
+    setTimeout(() => inputRef.current?.focus(), 60);
+  }, [pool]);
+
+  useEffect(() => {
+    if (mounted) build();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mounted, dir, words, onlyMiss]);
+
+  if (!mounted) {
+    return <div className="h-56 flex items-center justify-center text-sm text-slate-500">Đang tải…</div>;
+  }
+  if (queue.length === 0) {
+    return (
+      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-10 text-center text-sm text-slate-400">
+        Nhóm này chưa có từ nào để kiểm tra — chọn chủ đề khác hoặc “Tất cả”.
+      </div>
+    );
+  }
+
+  const finished = idx >= queue.length;
+  const q = queue[idx];
+
+  const submit = () => {
+    if (result || !q) return;
+    const ok = dir === 'jp2vi' ? checkVi(input, q) : checkJa(input, q);
+    setResult(ok ? 'right' : 'wrong');
+    if (ok) {
+      setRight((v) => v + 1);
+      // Trả lời được rồi thì bỏ khỏi danh sách từ hay sai
+      if (missIds.includes(q.word)) persistMiss(missIds.filter((m) => m !== q.word));
+    } else {
+      setWrong((v) => [...v, { word: q, given: input }]);
+      if (!missIds.includes(q.word)) persistMiss([...missIds, q.word]);
+    }
+  };
+
+  const giveUp = () => {
+    if (result || !q) return;
+    setResult('wrong');
+    setWrong((v) => [...v, { word: q, given: '' }]);
+    if (!missIds.includes(q.word)) persistMiss([...missIds, q.word]);
+  };
+
+  const next = () => {
+    setResult(null);
+    setInput('');
+    setIdx((v) => v + 1);
+    setTimeout(() => inputRef.current?.focus(), 60);
+  };
+
+  if (finished) {
+    const acc = Math.round((right / queue.length) * 100);
+    return (
+      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:p-8">
+        <div className="text-center mb-7">
+          <div
+            className={`w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center ${
+              acc >= 80 ? 'bg-neon-green/15' : 'bg-neon-orange/15'
+            }`}
+          >
+            <Trophy className={`w-8 h-8 ${acc >= 80 ? 'text-neon-green' : 'text-neon-orange'}`} />
+          </div>
+          <div className="text-4xl font-heading font-bold text-white mb-1">
+            {right}/{queue.length}
+          </div>
+          <div className={`text-sm font-semibold ${acc >= 80 ? 'text-neon-green' : 'text-neon-orange'}`}>
+            Chính xác {acc}% · {dir === 'jp2vi' ? 'Nhật → Việt' : 'Việt → Nhật'}
+          </div>
+        </div>
+
+        {wrong.length > 0 && (
+          <div className="mb-6">
+            <div className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2.5">
+              {wrong.length} từ cần học lại
+            </div>
+            <div className="space-y-2">
+              {wrong.map((x, i) => (
+                <div
+                  key={`${x.word.word}-${i}`}
+                  className="rounded-xl border border-neon-red/25 bg-neon-red/[0.05] px-4 py-3"
+                >
+                  <div className="flex flex-wrap items-baseline gap-x-3">
+                    <span className="text-xl text-white">{x.word.word}</span>
+                    {x.word.kana !== x.word.word && (
+                      <span className="text-sm text-neon-cyan">{x.word.kana}</span>
+                    )}
+                    <span className="text-sm text-slate-300">— {x.word.meaning}</span>
+                    {x.given && (
+                      <span className="text-[11px] text-neon-red ml-auto">bạn viết: {x.given}</span>
+                    )}
+                  </div>
+                  {x.word.ex && (
+                    <div className="text-[12px] text-slate-500 mt-1 leading-relaxed">
+                      {x.word.ex} — {x.word.exVi}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="flex flex-wrap gap-3 justify-center">
+          <button
+            onClick={build}
+            className="px-5 py-2.5 rounded-xl bg-neon-green/15 border border-neon-green/40 text-sm font-medium text-white hover:bg-neon-green/25 transition-colors active:scale-95"
+          >
+            Bộ mới
+          </button>
+          <button
+            onClick={() => setDir(dir === 'jp2vi' ? 'vi2jp' : 'jp2vi')}
+            className="px-5 py-2.5 rounded-xl bg-white/[0.05] border border-white/15 text-sm font-medium text-white hover:border-neon-violet/40 transition-colors active:scale-95"
+          >
+            <ArrowLeftRight className="w-4 h-4 inline mr-1.5" />
+            Đổi sang {dir === 'jp2vi' ? 'Việt → Nhật' : 'Nhật → Việt'}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-4 text-xs">
+          <span className="text-slate-400">
+            Câu <b className="text-white">{idx + 1}</b>/{queue.length}
+          </span>
+          <span className="text-slate-400">
+            Đúng <b className="text-neon-green">{right}</b>
+          </span>
+          {missIds.length > 0 && (
+            <button
+              onClick={() => setOnlyMiss(!onlyMiss)}
+              className={`text-xs transition-colors ${
+                onlyMiss ? 'text-neon-red font-semibold' : 'text-slate-500 hover:text-white'
+              }`}
+            >
+              {onlyMiss ? `● chỉ ${missIds.length} từ hay sai` : `luyện ${missIds.length} từ hay sai`}
+            </button>
+          )}
+        </div>
+        <button
+          onClick={() => setDir(dir === 'jp2vi' ? 'vi2jp' : 'jp2vi')}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-white/[0.04] border border-white/10 text-slate-300 hover:text-white transition-colors"
+        >
+          <ArrowLeftRight className="w-3.5 h-3.5" />
+          {dir === 'jp2vi' ? 'Nhật → Việt' : 'Việt → Nhật'}
+        </button>
+      </div>
+
+      <div className="h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-neon-violet to-neon-green transition-all duration-300"
+          style={{ width: `${(idx / queue.length) * 100}%` }}
+        />
+      </div>
+
+      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:p-8">
+        <div className="text-center mb-6">
+          <div className="text-[10px] font-bold tracking-wider text-slate-500 mb-3">
+            {dir === 'jp2vi' ? 'TỪ NÀY NGHĨA LÀ GÌ?' : 'TỪ NÀY TIẾNG NHẬT VIẾT THẾ NÀO?'}
+          </div>
+          {dir === 'jp2vi' ? (
+            <>
+              <div className="text-4xl sm:text-5xl text-white leading-tight mb-2">{q.word}</div>
+              {q.kana !== q.word && <div className="text-base text-neon-cyan">{q.kana}</div>}
+            </>
+          ) : (
+            <div className="text-2xl sm:text-3xl text-white leading-snug">{q.meaning}</div>
+          )}
+        </div>
+
+        <input
+          ref={inputRef}
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key !== 'Enter') return;
+            // Bộ gõ tiếng Nhật dùng Enter để chốt chữ đang chuyển đổi —
+            // chốt xong mới được tính là nộp bài, nếu không câu trả lời
+            // bị nộp khi người ta mới gõ dở.
+            if (e.nativeEvent.isComposing) return;
+            if (result) next();
+            else submit();
+          }}
+          autoComplete="off"
+          autoCapitalize="off"
+          autoCorrect="off"
+          spellCheck={false}
+          disabled={!!result}
+          placeholder={
+            dir === 'jp2vi' ? 'Gõ nghĩa tiếng Việt rồi Enter…' : 'Gõ kana / kanji rồi Enter…'
+          }
+          className={`w-full px-4 py-3.5 rounded-xl bg-white/[0.04] border text-center text-lg text-white placeholder:text-slate-600 focus:outline-none transition-colors ${
+            result === 'right'
+              ? 'border-neon-green'
+              : result === 'wrong'
+                ? 'border-neon-red'
+                : 'border-white/15 focus:border-neon-violet/60'
+          }`}
+        />
+
+        {dir === 'vi2jp' && !result && (
+          <p className="text-center text-[11px] text-slate-500 mt-2 inline-flex items-center gap-1.5 w-full justify-center">
+            <Keyboard className="w-3.5 h-3.5" />
+            Chuyển bàn phím sang “Japanese — Romaji”. Chưa quen thì gõ romaji (watashi) cũng được tính đúng.
+          </p>
+        )}
+
+        {!result ? (
+          <div className="grid grid-cols-2 gap-2.5 mt-4">
+            <button
+              onClick={submit}
+              className="px-4 py-2.5 rounded-xl bg-neon-violet/15 border border-neon-violet/40 text-sm font-medium text-white hover:bg-neon-violet/25 transition-colors active:scale-95"
+            >
+              Kiểm tra (Enter)
+            </button>
+            <button
+              onClick={giveUp}
+              className="px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/15 text-sm font-medium text-slate-400 hover:text-white transition-colors active:scale-95"
+            >
+              <HelpCircle className="w-4 h-4 inline mr-1.5" />
+              Chưa nhớ, xem đáp án
+            </button>
+          </div>
+        ) : (
+          <div className="mt-5">
+            <div
+              className={`rounded-xl border p-4 mb-3 ${
+                result === 'right'
+                  ? 'border-neon-green/30 bg-neon-green/[0.07]'
+                  : 'border-neon-red/30 bg-neon-red/[0.07]'
+              }`}
+            >
+              <div className="flex items-center gap-2 mb-2">
+                {result === 'right' ? (
+                  <>
+                    <Check className="w-4 h-4 text-neon-green" strokeWidth={3} />
+                    <span className="text-sm font-bold text-neon-green">Đúng</span>
+                  </>
+                ) : (
+                  <>
+                    <X className="w-4 h-4 text-neon-red" strokeWidth={3} />
+                    <span className="text-sm font-bold text-neon-red">Chưa đúng</span>
+                  </>
+                )}
+              </div>
+              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <span className="text-2xl text-white">{q.word}</span>
+                {q.kana !== q.word && <span className="text-base text-neon-cyan">{q.kana}</span>}
+                <span className="text-sm text-slate-300">— {q.meaning}</span>
+              </div>
+              {q.ex && (
+                <p className="text-[13px] text-slate-400 leading-relaxed mt-2">
+                  <Volume2 className="w-3.5 h-3.5 inline mr-1 text-slate-600" />
+                  {q.ex} <span className="text-slate-600">— {q.exVi}</span>
+                </p>
+              )}
+            </div>
+            <button
+              onClick={next}
+              className="w-full px-4 py-2.5 rounded-xl bg-white/[0.05] border border-white/15 text-sm font-medium text-white hover:border-neon-green/40 transition-colors active:scale-95"
+            >
+              Từ tiếp theo (Enter)
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

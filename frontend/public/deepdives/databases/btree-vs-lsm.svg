@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 344" width="700" height="344" role="img" aria-label="Đường đi của một lần ghi: B-tree phải tìm đúng trang, đọc lên, sửa rồi ghi đè xuống chỗ cũ nên là ghi ngẫu nhiên; LSM-tree ghi vào bộ nhớ trước rồi đổ xuống đĩa thành file mới nên là ghi tuần tự, đổi lại một lần đọc phải tra nhiều tầng và phải chạy nén gộp ở nền">
+  <rect width="700" height="344" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="343" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="30" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">Cùng một lệnh <tspan font-family="ui-monospace, Menlo, monospace" fill="#e2e8f0">UPDATE</tspan>. Hai đường đi xuống đĩa hoàn toàn khác nhau.</text>
+
+  <line x1="350" y1="48" x2="350" y2="316" stroke="#1e293b"/>
+
+  <!-- ── TRÁI: B-tree ────────────────────────────────────────────── -->
+  <text x="24" y="66" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#60a5fa" letter-spacing="0.8">B-TREE — sửa tại chỗ</text>
+  <text x="24" y="83" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="10.5" fill="#475569">PostgreSQL · MySQL · SQLite</text>
+
+  <rect x="24" y="96" width="302" height="30" rx="5" fill="#0a1120" stroke="#334155"/>
+  <text x="38" y="115" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#94a3b8">1 · tìm đúng trang chứa dòng cần sửa</text>
+
+  <rect x="24" y="132" width="302" height="30" rx="5" fill="#0a1120" stroke="#334155"/>
+  <text x="38" y="151" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#94a3b8">2 · đọc trang đó từ đĩa lên</text>
+
+  <rect x="24" y="168" width="302" height="30" rx="5" fill="#0a1120" stroke="#334155"/>
+  <text x="38" y="187" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#94a3b8">3 · sửa trong bộ nhớ</text>
+
+  <rect x="24" y="204" width="302" height="30" rx="5" fill="#0a1120" stroke="#60a5fa"/>
+  <text x="38" y="223" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#e2e8f0">4 · ghi đè xuống <tspan fill="#60a5fa">đúng chỗ cũ</tspan></text>
+
+  <text x="24" y="256" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#f59e0b">→ ghi NGẪU NHIÊN, mỗi lần một chỗ khác</text>
+  <text x="24" y="276" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#34d399">→ đọc nhanh và ổn định: vài lần nhảy đĩa</text>
+  <text x="24" y="296" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#34d399">→ không có việc nền nào ăn CPU bất chợt</text>
+
+  <!-- ── PHẢI: LSM-tree ──────────────────────────────────────────── -->
+  <text x="374" y="66" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#c084fc" letter-spacing="0.8">LSM-TREE — chỉ ghi thêm</text>
+  <text x="374" y="83" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="10.5" fill="#475569">Cassandra · RocksDB · LevelDB · ScyllaDB · HBase</text>
+
+  <rect x="374" y="96" width="302" height="30" rx="5" fill="#0a1120" stroke="#c084fc"/>
+  <text x="388" y="115" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#e2e8f0">1 · ghi vào <tspan fill="#c084fc">bộ nhớ</tspan> — xong, trả về ngay</text>
+
+  <rect x="374" y="132" width="302" height="30" rx="5" fill="#0a1120" stroke="#334155"/>
+  <text x="388" y="151" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#94a3b8">2 · đầy thì đổ xuống đĩa thành FILE MỚI</text>
+
+  <rect x="374" y="168" width="302" height="30" rx="5" fill="#0a1120" stroke="#334155"/>
+  <text x="388" y="187" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#94a3b8">3 · file cũ <tspan fill="#64748b">không bị đụng tới</tspan></text>
+
+  <rect x="374" y="204" width="302" height="30" rx="5" fill="#0a1120" stroke="#f59e0b"/>
+  <text x="388" y="223" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#e2e8f0">4 · <tspan fill="#f59e0b">nén gộp</tspan> ở nền dồn các file lại</text>
+
+  <text x="374" y="256" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#34d399">→ ghi TUẦN TỰ, nhanh hơn nhiều</text>
+  <text x="374" y="276" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#f59e0b">→ một lần đọc có thể phải tra nhiều tầng</text>
+  <text x="374" y="296" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11.5" fill="#f59e0b">→ nén gộp ăn đĩa và CPU lúc không hẹn trước</text>
+
+  <text x="24" y="330" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="11" fill="#64748b">Câu “ghi nhanh gấp 10 lần Postgres” gần như luôn là dòng đầu tiên của bảng này — kèm ba dòng còn lại mà quảng cáo bỏ qua.</text>
+</svg>

@@ -27,6 +27,8 @@ export interface VocabWord {
 }
 
 export const VOCAB_STORAGE_KEY = 'jpd113:vocab:v1';
+/** Danh sách từ từng gõ sai ở chế độ Viết đáp án — để luyện lại đúng chỗ hổng */
+export const VOCAB_MISS_KEY = 'jpd113:vocab-miss:v1';
 
 export const VOCAB_CATEGORIES: VocabCategory[] = [
   { key: 'self_country', name: 'Bản thân, Quốc gia & Ngôn ngữ', icon: '🌍' },

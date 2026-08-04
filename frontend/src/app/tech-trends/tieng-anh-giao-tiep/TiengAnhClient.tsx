@@ -15,21 +15,24 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowLeft, BookOpen, CheckCircle2, Circle, MessageSquare,
-  Mic, Volume2, GraduationCap, Lightbulb, Target, ListChecks, Code2,
+  Mic, Volume2, GraduationCap, Lightbulb, Target, ListChecks, Code2, Search,
 } from 'lucide-react';
 import {
   WEEKS, ALL_DAYS, STATS, PROGRESS_KEY, TECH_VOCAB, DEV_SECTIONS, DEV_PLAN,
   type DayLesson,
 } from './data';
 import { useSpeak } from './useSpeak';
+import RoadmapView from './RoadmapView';
+import SearchView from './SearchView';
 
-type TabId = 'days' | 'vocab' | 'sounds' | 'dev';
+type TabId = 'days' | 'vocab' | 'sounds' | 'dev' | 'search';
 
 const TABS: { id: TabId; label: string; icon: typeof Target }[] = [
   { id: 'days', label: 'Lộ trình 20 ngày', icon: Target },
   { id: 'vocab', label: 'Từ vựng', icon: BookOpen },
   { id: 'sounds', label: 'Phát âm', icon: Mic },
   { id: 'dev', label: 'Cho Dev', icon: Code2 },
+  { id: 'search', label: 'Tra cứu', icon: Search },
 ];
 
 /** Nút loa — bấm là đọc câu tiếng Anh. */
@@ -322,6 +325,7 @@ function DayView({
 export default function TiengAnhClient() {
   const [tab, setTab] = useState<TabId>('days');
   const [activeDay, setActiveDay] = useState(1);
+  const [query, setQuery] = useState('');
   const [done, setDone] = useState<Record<number, boolean>>({});
   const [hydrated, setHydrated] = useState(false);
   const { speak, current, supported } = useSpeak();
@@ -457,47 +461,15 @@ export default function TiengAnhClient() {
         {/* ── Tab: Lộ trình 20 ngày ── */}
         {tab === 'days' && (
           <div>
-            {/* Chọn ngày theo tuần */}
-            <div className="space-y-4 mb-8">
-              {WEEKS.map((w) => (
-                <div key={w.week}>
-                  <div className="mb-2">
-                    <p className="text-sm font-semibold text-white">
-                      Tuần {w.week} — {w.title}
-                    </p>
-                    <p className="text-xs text-slate-500">{w.subtitle}</p>
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                    {w.days.map((d) => {
-                      const on = d.day === activeDay;
-                      const ok = hydrated && done[d.day];
-                      return (
-                        <button
-                          key={d.day}
-                          type="button"
-                          onClick={() => setActiveDay(d.day)}
-                          className={`text-left rounded-xl border p-3 transition-all active:scale-95 ${
-                            on
-                              ? 'bg-violet-500/20 border-violet-400/40'
-                              : 'bg-white/[0.03] border-white/10 hover:border-white/20'
-                          }`}
-                        >
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-lg">{d.icon}</span>
-                            {ok && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
-                          </div>
-                          <p className={`text-xs font-medium ${on ? 'text-white' : 'text-slate-400'}`}>
-                            Ngày {d.day}
-                          </p>
-                          <p className={`text-xs leading-snug mt-0.5 ${on ? 'text-slate-200' : 'text-slate-500'}`}>
-                            {d.title}
-                          </p>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
+            {/* Sơ đồ lộ trình — thay lưới nút phẳng, xem được mình đang ở đâu */}
+            <div className="mb-8">
+              <RoadmapView
+                weeks={WEEKS}
+                activeDay={activeDay}
+                done={done}
+                hydrated={hydrated}
+                onPick={setActiveDay}
+              />
             </div>
 
             {/* Nội dung ngày đang chọn */}
@@ -617,6 +589,18 @@ export default function TiengAnhClient() {
               ))}
             </div>
           </div>
+        )}
+
+        {/* ── Tab: Tra cứu ── */}
+        {tab === 'search' && (
+          <SearchView
+            query={query}
+            onQuery={setQuery}
+            speak={speak}
+            current={current}
+            supported={supported}
+            onGoDay={(d) => { setActiveDay(d); setTab('days'); }}
+          />
         )}
 
         {/* ── Tab: Cho Dev ── */}

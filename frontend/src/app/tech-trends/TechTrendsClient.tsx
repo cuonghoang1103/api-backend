@@ -277,6 +277,36 @@ export default function TechTrendsClient() {
           </motion.div>
         </header>
 
+        {/* ── Chuyên đề ghim: Lộ trình IELTS ─────────────────────── */}
+        <Link
+          href="/tech-trends/ielts"
+          className="group block mb-4 rounded-2xl border border-sky-400/30 bg-gradient-to-r from-sky-400/[0.12] via-indigo-400/[0.06] to-transparent p-5 sm:p-6 hover:border-sky-400/50 transition-all"
+        >
+          <div className="flex items-start gap-4">
+            <span className="hidden sm:flex w-12 h-12 shrink-0 rounded-xl bg-sky-400/15 items-center justify-center text-2xl">
+              🎓
+            </span>
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide bg-sky-500 text-white">
+                  CHUYÊN ĐỀ
+                </span>
+                <span className="text-[11px] text-text-muted">4 chặng band · có mốc tự tick</span>
+              </div>
+              <h3 className="text-lg sm:text-xl font-heading font-bold text-text-primary group-hover:text-sky-400 transition-colors">
+                Lộ trình IELTS 0 → 7.5 — đủ 4 kỹ năng
+              </h3>
+              <p className="text-sm text-text-secondary mt-1 leading-relaxed">
+                Mỗi chặng ghi rõ mỗi ngày làm gì cho Nghe, Đọc, Viết, Nói; mốc phải đạt để lên chặng
+                sau; và những sai lầm hay mắc ở đúng chặng đó — phần khiến nhiều người kẹt hàng tháng.
+              </p>
+            </div>
+            <span className="hidden sm:block text-sky-400 text-xl shrink-0 group-hover:translate-x-1 transition-transform">
+              →
+            </span>
+          </div>
+        </Link>
+
         {/* ── Chuyên đề ghim: Tiếng Anh Giao Tiếp ──────────────────
             Cùng lý do với JPD113 bên dưới: trang tĩnh, không do API trả về,
             nên phải ghim tay ở sảnh mới tìm thấy được. */}

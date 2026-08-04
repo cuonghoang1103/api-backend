@@ -1,0 +1,218 @@
+/**
+ * Kiểu dữ liệu cho phần NỘI DUNG HỌC của khoá IELTS (tách khỏi `roadmap.ts`,
+ * file đó chỉ mô tả lộ trình 4 chặng).
+ *
+ * Nguyên tắc soạn, áp cho cả bốn chặng band về sau:
+ *
+ *  1. **Không chép đề Cambridge / British Council.** Mọi bài đọc, transcript
+ *     nghe, đề viết ở đây đều TỰ VIẾT theo đúng DẠNG đề. Chép đề thật là vi
+ *     phạm bản quyền; mà tự viết còn cho phép giải thích tường tận từng đáp
+ *     án — thứ đề thật không có.
+ *
+ *  2. **Mỗi câu hỏi phải có lời giải thích vì sao đúng VÀ vì sao các phương
+ *     án kia sai.** Người học sai mà chỉ được xem đáp án thì lần sau sai lại
+ *     y hệt.
+ *
+ *  3. **Bài nghe dùng transcript tự viết + giọng đọc của trình duyệt** thay
+ *     vì nhúng video có sẵn. Lý do: nhúng video thì không thể tự viết câu hỏi
+ *     bám đúng nội dung (phải bịa), lại còn chết link theo thời gian. Video
+ *     nhúng vẫn có, nhưng nằm ở mục "nguồn nghe mở rộng" và mọi ID đều đã
+ *     kiểm bằng oembed trước khi đưa vào — xem `listening.ts`.
+ */
+
+/* ─────────────────────────  TỪ VỰNG  ───────────────────────── */
+
+export interface VocabWord {
+  en: string;
+  ipa: string;
+  vi: string;
+  /** Từ loại: n, v, adj, adv, prep, phr… */
+  pos?: string;
+  /** Câu ví dụ — bắt buộc, vì học từ trơ không dùng được khi viết. */
+  ex: string;
+  exVi: string;
+}
+
+export interface VocabTopic {
+  id: string;
+  title: string;
+  icon: string;
+  /** Vì sao chủ đề này cần cho IELTS ở chặng đang xét. */
+  why: string;
+  words: VocabWord[];
+}
+
+/* ─────────────────────────  BÀI HỌC  ───────────────────────── */
+
+/** Một điểm ngữ pháp trong bài học. */
+export interface GrammarBlock {
+  /** Công thức viết gọn, ví dụ: "S + am/is/are + N/Adj". */
+  formula?: string;
+  /** Giảng bằng tiếng Việt, thẳng vào cách dùng chứ không định nghĩa hàn lâm. */
+  explain: string;
+  examples: { en: string; vi: string }[];
+  /** Lỗi người Việt hay mắc ở đúng điểm này — phần đáng giá nhất của bài. */
+  mistake?: { wrong: string; right: string; why: string };
+}
+
+/** Một bài học nhỏ. 40 bài của chặng 1 chia thành 8 chủ điểm. */
+export interface Lesson {
+  id: string;
+  /** Số thứ tự 1–40, hiện trên thẻ bài. */
+  n: number;
+  title: string;
+  /** Học xong bài này thì LÀM ĐƯỢC gì — viết bằng động từ, không nói chung chung. */
+  goal: string;
+  /** Phần giảng chính. */
+  blocks: GrammarBlock[];
+  /** Từ/cụm cần thuộc ngay trong bài. */
+  keyWords?: { en: string; ipa: string; vi: string }[];
+  /** Việc tự làm sau bài — phải kiểm được, không phải "ôn lại bài". */
+  practice: string[];
+}
+
+export interface LessonUnit {
+  id: string;
+  title: string;
+  subtitle: string;
+  icon: string;
+  lessons: Lesson[];
+}
+
+/* ─────────────────────────  ĐỌC  ───────────────────────── */
+
+export type ReadingQuestionKind =
+  | 'TFNG'          // True / False / Not Given
+  | 'MCQ'           // Trắc nghiệm 1 đáp án
+  | 'GAP'           // Điền từ lấy từ bài (Sentence / Summary Completion)
+  | 'MATCH'         // Nối thông tin với đoạn
+  | 'HEADING';      // Chọn tiêu đề cho đoạn
+
+export interface ReadingQuestion {
+  kind: ReadingQuestionKind;
+  /** Đề bài của câu hỏi. */
+  q: string;
+  /** Các lựa chọn. Với GAP thì bỏ trống, người học tự gõ. */
+  options?: string[];
+  /** Đáp án đúng — với GAP là chuỗi cần gõ (so khớp không phân biệt hoa thường). */
+  answer: string;
+  /** Chấp nhận thêm các cách viết khác cho dạng GAP. */
+  alt?: string[];
+  /** Vì sao đáp án này đúng — trích đúng chỗ trong bài. */
+  why: string;
+  /** Vì sao các phương án còn lại sai (dạng có lựa chọn). */
+  whyNot?: string;
+}
+
+export interface ReadingPassage {
+  id: string;
+  title: string;
+  titleVi: string;
+  /** Mức độ — ở chặng 1 là A2/B1 chứ chưa phải độ khó đề thật. */
+  level: string;
+  /** Số từ, để người học tự canh tốc độ đọc. */
+  words: number;
+  /** Thời gian nên đặt đồng hồ. */
+  minutes: number;
+  /** Bài đọc, tách sẵn theo đoạn; nhãn A, B, C… dùng cho dạng nối đoạn. */
+  paragraphs: { label: string; text: string }[];
+  /** Từ khó trong bài, giải nghĩa sẵn để không phải rời trang đi tra. */
+  glossary: { en: string; ipa: string; vi: string }[];
+  questions: ReadingQuestion[];
+  /** Mẹo làm đúng dạng câu hỏi có trong bài này. */
+  strategy: string[];
+  /** Bản dịch tiếng Việt — bật ra xem SAU khi đã làm xong câu hỏi. */
+  translation: string;
+}
+
+/* ─────────────────────────  NGHE  ───────────────────────── */
+
+export interface ListeningQuestion {
+  /** Câu hỏi hoặc dòng cần điền, ví dụ "Name: ______". */
+  q: string;
+  answer: string;
+  alt?: string[];
+  why: string;
+}
+
+export interface ListeningExercise {
+  id: string;
+  title: string;
+  titleVi: string;
+  /** Dạng đề tương ứng trong bài thi thật. */
+  kind: string;
+  level: string;
+  /** Bối cảnh cho người học biết sắp nghe gì — đề thật cũng đọc phần này. */
+  context: string;
+  /**
+   * Transcript TỰ VIẾT. Trình duyệt đọc từng dòng bằng speechSynthesis nên
+   * người học nghe được ngay mà không cần file âm thanh nào.
+   */
+  lines: { who: string; text: string }[];
+  questions: ListeningQuestion[];
+  /** Từ khoá cần bắt được khi nghe. */
+  listenFor: string[];
+  tips: string[];
+}
+
+/** Nguồn nghe ngoài — ID đã kiểm bằng oembed, kênh chính chủ. */
+export interface ListeningSource {
+  /** Tên nguồn. */
+  name: string;
+  channel: string;
+  /** 'playlist' hoặc 'video' — quyết định URL nhúng. */
+  kind: 'playlist' | 'video';
+  /** ID playlist (PL…) hoặc ID video. */
+  ytId: string;
+  level: string;
+  /** Dùng nguồn này ở chặng 1 như thế nào cho đúng. */
+  how: string;
+}
+
+/* ─────────────────────────  VIẾT  ───────────────────────── */
+
+export interface WritingTask {
+  id: string;
+  /** 'Task 1' | 'Task 2' | 'Nền tảng' — chặng 1 có cả bài tập viết câu. */
+  task: string;
+  title: string;
+  /** Đề bài. */
+  prompt: string;
+  promptVi: string;
+  minWords: number;
+  minutes: number;
+  /** Dàn ý từng đoạn. */
+  outline: { part: string; what: string }[];
+  /** Cụm từ dùng được ngay cho dạng đề này. */
+  phrases: { en: string; vi: string }[];
+  /** Bài mẫu mức đang nhắm tới ở chặng này. */
+  sample: { band: string; text: string; note: string };
+  /** Bài mẫu KÉM để đối chiếu — nhìn cái sai mới nhớ cái đúng. */
+  weakSample?: { band: string; text: string; problems: string[] };
+  /** Lỗi người Việt hay mắc ở đúng đề này. */
+  mistakes: { wrong: string; right: string; why: string }[];
+}
+
+/* ─────────────────────────  NÓI  ───────────────────────── */
+
+export interface SpeakingQuestion {
+  q: string;
+  qVi: string;
+  /** Câu trả lời cụt — mức band 4, để thấy vì sao bị điểm thấp. */
+  weak: string;
+  /** Câu trả lời đủ ý — mức đang nhắm tới. */
+  good: string;
+  goodVi: string;
+  /** Vì sao câu sau được điểm cao hơn. */
+  why: string;
+}
+
+export interface SpeakingTopic {
+  id: string;
+  part: string;
+  title: string;
+  titleVi: string;
+  questions: SpeakingQuestion[];
+  /** Cụm nối câu dùng chung cho cả chủ đề. */
+  phrases?: { en: string; vi: string }[];
+}

@@ -1,0 +1,223 @@
+/**
+ * Từ vựng nền chặng 1 — phần B (5 chủ đề sau, 150 từ).
+ *
+ * Ba chủ đề cuối (số & đo lường, chỉ đường, mô tả xu hướng) cố ý CHƯA có
+ * trong sách vỡ lòng thông thường, nhưng phải đưa vào ngay từ chặng 1 vì:
+ *  - Số và cách đánh vần là thứ Listening Section 1 hỏi nhiều nhất, mất điểm
+ *    ở đây là mất oan chứ không phải do trình độ.
+ *  - Bộ từ mô tả xu hướng (increase/decrease/…) là xương sống của Writing
+ *    Task 1; học sớm thì lên chặng 2 chỉ việc dùng, không phải học lại từ đầu.
+ */
+import type { VocabTopic } from '../types';
+
+export const VOCAB_B: VocabTopic[] = [
+  /* ══════════════════ 6. ĂN UỐNG & SỨC KHOẺ ══════════════════ */
+  {
+    id: 'food-health',
+    title: 'Ăn uống & sức khoẻ',
+    icon: '🥗',
+    why:
+      'Đề Speaking Part 1 về đồ ăn gần như chắc chắn gặp, và Writing Task 2 chặng sau rất hay hỏi '
+      + 'về đồ ăn nhanh, sức khoẻ cộng đồng. Học sớm để sau chỉ việc nâng cấp từ.',
+    words: [
+      { en: 'meal', ipa: '/miːl/', vi: 'bữa ăn', pos: 'n', ex: 'Dinner is my main meal.', exVi: 'Bữa tối là bữa chính của tôi.' },
+      { en: 'cook', ipa: '/kʊk/', vi: 'nấu ăn', pos: 'v', ex: 'My mother cooks every evening.', exVi: 'Mẹ tôi nấu ăn mỗi tối.' },
+      { en: 'recipe', ipa: '/ˈresəpi/', vi: 'công thức nấu ăn', pos: 'n', ex: 'I found the recipe online.', exVi: 'Tôi tìm công thức trên mạng.' },
+      { en: 'ingredient', ipa: '/ɪnˈɡriːdiənt/', vi: 'nguyên liệu', pos: 'n', ex: 'Fresh ingredients matter most.', exVi: 'Nguyên liệu tươi là quan trọng nhất.' },
+      { en: 'vegetable', ipa: '/ˈvedʒtəbl/', vi: 'rau củ', pos: 'n', ex: 'I eat vegetables every day.', exVi: 'Tôi ăn rau mỗi ngày.' },
+      { en: 'fruit', ipa: '/fruːt/', vi: 'trái cây', pos: 'n', ex: 'Fruit is cheap in summer.', exVi: 'Trái cây rẻ vào mùa hè.' },
+      { en: 'meat', ipa: '/miːt/', vi: 'thịt', pos: 'n', ex: 'I do not eat much meat.', exVi: 'Tôi không ăn nhiều thịt.' },
+      { en: 'seafood', ipa: '/ˈsiːfuːd/', vi: 'hải sản', pos: 'n', ex: 'Seafood is fresh in coastal cities.', exVi: 'Hải sản tươi ở các thành phố ven biển.' },
+      { en: 'taste', ipa: '/teɪst/', vi: 'vị; nếm', pos: 'n/v', ex: 'This soup tastes salty.', exVi: 'Món canh này mặn.' },
+      { en: 'delicious', ipa: '/dɪˈlɪʃəs/', vi: 'ngon', pos: 'adj', ex: 'The noodles were delicious.', exVi: 'Món mì rất ngon.' },
+      { en: 'spicy', ipa: '/ˈspaɪsi/', vi: 'cay', pos: 'adj', ex: 'I love spicy food.', exVi: 'Tôi thích đồ ăn cay.' },
+      { en: 'healthy', ipa: '/ˈhelθi/', vi: 'lành mạnh, khoẻ', pos: 'adj', ex: 'A healthy diet is important.', exVi: 'Chế độ ăn lành mạnh rất quan trọng.' },
+      { en: 'diet', ipa: '/ˈdaɪət/', vi: 'chế độ ăn', pos: 'n', ex: 'She is on a strict diet.', exVi: 'Cô ấy đang ăn kiêng nghiêm ngặt.' },
+      { en: 'fast food', ipa: '/ˌfɑːst ˈfuːd/', vi: 'đồ ăn nhanh', pos: 'n', ex: 'Fast food is convenient but unhealthy.', exVi: 'Đồ ăn nhanh tiện nhưng không tốt.' },
+      { en: 'restaurant', ipa: '/ˈrestrɒnt/', vi: 'nhà hàng', pos: 'n', ex: 'We booked a table at a restaurant.', exVi: 'Chúng tôi đặt bàn ở nhà hàng.' },
+      { en: 'order', ipa: '/ˈɔːdə(r)/', vi: 'gọi món; đơn hàng', pos: 'v/n', ex: 'I ordered rice and chicken.', exVi: 'Tôi gọi cơm và gà.' },
+      { en: 'exercise', ipa: '/ˈeksəsaɪz/', vi: 'tập thể dục', pos: 'v/n', ex: 'I exercise three times a week.', exVi: 'Tôi tập thể dục ba lần mỗi tuần.' },
+      { en: 'keep fit', ipa: '/kiːp fɪt/', vi: 'giữ dáng, giữ sức khoẻ', pos: 'phr', ex: 'Running helps me keep fit.', exVi: 'Chạy bộ giúp tôi giữ sức khoẻ.' },
+      { en: 'sleep', ipa: '/sliːp/', vi: 'ngủ', pos: 'v/n', ex: 'I sleep seven hours a night.', exVi: 'Tôi ngủ bảy tiếng mỗi đêm.' },
+      { en: 'tired', ipa: '/ˈtaɪəd/', vi: 'mệt', pos: 'adj', ex: 'I feel tired after work.', exVi: 'Tôi thấy mệt sau giờ làm.' },
+      { en: 'stress', ipa: '/stres/', vi: 'căng thẳng', pos: 'n', ex: 'Exams cause a lot of stress.', exVi: 'Thi cử gây nhiều căng thẳng.' },
+      { en: 'illness', ipa: '/ˈɪlnəs/', vi: 'bệnh tật', pos: 'n', ex: 'He recovered from a short illness.', exVi: 'Anh ấy hồi phục sau một trận ốm ngắn.' },
+      { en: 'headache', ipa: '/ˈhedeɪk/', vi: 'đau đầu', pos: 'n', ex: 'I have a bad headache.', exVi: 'Tôi bị đau đầu nặng.' },
+      { en: 'doctor', ipa: '/ˈdɒktə(r)/', vi: 'bác sĩ', pos: 'n', ex: 'I saw a doctor yesterday.', exVi: 'Hôm qua tôi đi khám bác sĩ.' },
+      { en: 'medicine', ipa: '/ˈmedsn/', vi: 'thuốc', pos: 'n', ex: 'Take this medicine twice a day.', exVi: 'Uống thuốc này hai lần mỗi ngày.' },
+      { en: 'appointment', ipa: '/əˈpɔɪntmənt/', vi: 'lịch hẹn', pos: 'n', ex: 'I made an appointment for Friday.', exVi: 'Tôi đặt lịch hẹn vào thứ Sáu.' },
+      { en: 'thirsty', ipa: '/ˈθɜːsti/', vi: 'khát', pos: 'adj', ex: 'I am thirsty after running.', exVi: 'Tôi khát sau khi chạy.' },
+      { en: 'hungry', ipa: '/ˈhʌŋɡri/', vi: 'đói', pos: 'adj', ex: 'I get hungry at ten.', exVi: 'Tôi đói lúc mười giờ.' },
+      { en: 'give up', ipa: '/ɡɪv ʌp/', vi: 'từ bỏ', pos: 'phr v', ex: 'He gave up smoking last year.', exVi: 'Anh ấy bỏ thuốc năm ngoái.' },
+      { en: 'habit', ipa: '/ˈhæbɪt/', vi: 'thói quen', pos: 'n', ex: 'Reading is a good habit.', exVi: 'Đọc sách là thói quen tốt.' },
+    ],
+  },
+
+  /* ══════════════════ 7. SỞ THÍCH & GIẢI TRÍ ══════════════════ */
+  {
+    id: 'hobbies',
+    title: 'Sở thích & giải trí',
+    icon: '🎬',
+    why:
+      'Nhóm từ giúp bạn nói DÀI hơn. Người mới trả lời "I like music." rồi hết; có bộ từ này thì '
+      + 'nói tiếp được lý do và ví dụ — đúng thứ giám khảo chấm ở Fluency.',
+    words: [
+      { en: 'hobby', ipa: '/ˈhɒbi/', vi: 'sở thích', pos: 'n', ex: 'My main hobby is photography.', exVi: 'Sở thích chính của tôi là chụp ảnh.' },
+      { en: 'enjoy', ipa: '/ɪnˈdʒɔɪ/', vi: 'thích, tận hưởng', pos: 'v', ex: 'I enjoy reading novels.', exVi: 'Tôi thích đọc tiểu thuyết.' },
+      { en: 'be interested in', ipa: '/bi ˈɪntrəstɪd ɪn/', vi: 'hứng thú với', pos: 'phr', ex: 'I am interested in history.', exVi: 'Tôi hứng thú với lịch sử.' },
+      { en: 'be keen on', ipa: '/bi kiːn ɒn/', vi: 'mê, thích', pos: 'phr', ex: 'She is keen on badminton.', exVi: 'Cô ấy mê cầu lông.' },
+      { en: 'prefer', ipa: '/prɪˈfɜː(r)/', vi: 'thích hơn', pos: 'v', ex: 'I prefer tea to coffee.', exVi: 'Tôi thích trà hơn cà phê.' },
+      { en: 'film', ipa: '/fɪlm/', vi: 'phim', pos: 'n', ex: 'We watched a French film.', exVi: 'Chúng tôi xem một bộ phim Pháp.' },
+      { en: 'novel', ipa: '/ˈnɒvl/', vi: 'tiểu thuyết', pos: 'n', ex: 'I finished the novel in a week.', exVi: 'Tôi đọc xong tiểu thuyết trong một tuần.' },
+      { en: 'magazine', ipa: '/ˌmæɡəˈziːn/', vi: 'tạp chí', pos: 'n', ex: 'She reads a travel magazine.', exVi: 'Cô ấy đọc tạp chí du lịch.' },
+      { en: 'music', ipa: '/ˈmjuːzɪk/', vi: 'âm nhạc', pos: 'n', ex: 'I listen to music while studying.', exVi: 'Tôi nghe nhạc khi học.' },
+      { en: 'instrument', ipa: '/ˈɪnstrəmənt/', vi: 'nhạc cụ', pos: 'n', ex: 'I play one instrument, the guitar.', exVi: 'Tôi chơi một nhạc cụ là ghi-ta.' },
+      { en: 'concert', ipa: '/ˈkɒnsət/', vi: 'buổi hoà nhạc', pos: 'n', ex: 'The concert starts at eight.', exVi: 'Buổi hoà nhạc bắt đầu lúc tám giờ.' },
+      { en: 'photography', ipa: '/fəˈtɒɡrəfi/', vi: 'nhiếp ảnh', pos: 'n', ex: 'Photography is an expensive hobby.', exVi: 'Nhiếp ảnh là sở thích tốn kém.' },
+      { en: 'draw', ipa: '/drɔː/', vi: 'vẽ', pos: 'v', ex: 'I draw in my notebook.', exVi: 'Tôi vẽ trong sổ tay.' },
+      { en: 'collect', ipa: '/kəˈlekt/', vi: 'sưu tầm', pos: 'v', ex: 'He collects old coins.', exVi: 'Anh ấy sưu tầm tiền xu cũ.' },
+      { en: 'sport', ipa: '/spɔːt/', vi: 'thể thao', pos: 'n', ex: 'Football is a popular sport here.', exVi: 'Bóng đá là môn thể thao phổ biến ở đây.' },
+      { en: 'team', ipa: '/tiːm/', vi: 'đội', pos: 'n', ex: 'I play for the school team.', exVi: 'Tôi chơi cho đội của trường.' },
+      { en: 'match', ipa: '/mætʃ/', vi: 'trận đấu', pos: 'n', ex: 'The match lasted ninety minutes.', exVi: 'Trận đấu kéo dài chín mươi phút.' },
+      { en: 'win', ipa: '/wɪn/', vi: 'thắng', pos: 'v', ex: 'Our team won the final.', exVi: 'Đội tôi thắng trận chung kết.' },
+      { en: 'lose', ipa: '/luːz/', vi: 'thua', pos: 'v', ex: 'We lost by one goal.', exVi: 'Chúng tôi thua một bàn.' },
+      { en: 'travel', ipa: '/ˈtrævl/', vi: 'du lịch', pos: 'v/n', ex: 'I travel during the summer.', exVi: 'Tôi đi du lịch vào mùa hè.' },
+      { en: 'trip', ipa: '/trɪp/', vi: 'chuyến đi', pos: 'n', ex: 'We took a trip to Sapa.', exVi: 'Chúng tôi đi một chuyến tới Sa Pa.' },
+      { en: 'beach', ipa: '/biːtʃ/', vi: 'bãi biển', pos: 'n', ex: 'The beach was almost empty.', exVi: 'Bãi biển gần như vắng người.' },
+      { en: 'mountain', ipa: '/ˈmaʊntən/', vi: 'núi', pos: 'n', ex: 'We climbed a small mountain.', exVi: 'Chúng tôi leo một ngọn núi nhỏ.' },
+      { en: 'take photos', ipa: '/teɪk ˈfəʊtəʊz/', vi: 'chụp ảnh', pos: 'phr', ex: 'I took photos of the sunset.', exVi: 'Tôi chụp ảnh hoàng hôn.' },
+      { en: 'hang out', ipa: '/hæŋ aʊt/', vi: 'đi chơi', pos: 'phr v', ex: 'I hang out with friends on Sunday.', exVi: 'Tôi đi chơi với bạn vào Chủ nhật.' },
+      { en: 'social media', ipa: '/ˌsəʊʃl ˈmiːdiə/', vi: 'mạng xã hội', pos: 'n', ex: 'I spend an hour on social media.', exVi: 'Tôi dùng mạng xã hội một tiếng.' },
+      { en: 'game', ipa: '/ɡeɪm/', vi: 'trò chơi', pos: 'n', ex: 'Online games are addictive.', exVi: 'Trò chơi trực tuyến gây nghiện.' },
+      { en: 'boring', ipa: '/ˈbɔːrɪŋ/', vi: 'nhàm chán', pos: 'adj', ex: 'The film was boring.', exVi: 'Bộ phim nhàm chán.' },
+      { en: 'exciting', ipa: '/ɪkˈsaɪtɪŋ/', vi: 'thú vị, hào hứng', pos: 'adj', ex: 'It was an exciting match.', exVi: 'Đó là một trận đấu hào hứng.' },
+      { en: 'relaxing', ipa: '/rɪˈlæksɪŋ/', vi: 'thư thái', pos: 'adj', ex: 'Fishing is very relaxing.', exVi: 'Câu cá rất thư thái.' },
+    ],
+  },
+
+  /* ══════════════════ 8. SỐ, NGÀY THÁNG & ĐO LƯỜNG ══════════════════ */
+  {
+    id: 'numbers',
+    title: 'Số, ngày tháng & đo lường',
+    icon: '🔢',
+    why:
+      'MẤT ĐIỂM OAN NHIỀU NHẤT nằm ở đây. Listening Section 1 hỏi số điện thoại, ngày tháng, giá '
+      + 'tiền — nghe hiểu hết nhưng viết sai định dạng vẫn 0 điểm. Học kỹ ngay chặng 1.',
+    words: [
+      { en: 'thirteen', ipa: '/ˌθɜːˈtiːn/', vi: 'mười ba', pos: 'num', ex: 'She is thirteen years old.', exVi: 'Cô bé mười ba tuổi.' },
+      { en: 'thirty', ipa: '/ˈθɜːti/', vi: 'ba mươi', pos: 'num', ex: 'The room costs thirty dollars.', exVi: 'Căn phòng giá ba mươi đô.' },
+      { en: 'fifteen', ipa: '/ˌfɪfˈtiːn/', vi: 'mười lăm', pos: 'num', ex: 'The class starts in fifteen minutes.', exVi: 'Lớp bắt đầu sau mười lăm phút.' },
+      { en: 'fifty', ipa: '/ˈfɪfti/', vi: 'năm mươi', pos: 'num', ex: 'There are fifty students.', exVi: 'Có năm mươi sinh viên.' },
+      { en: 'hundred', ipa: '/ˈhʌndrəd/', vi: 'trăm', pos: 'num', ex: 'Two hundred people attended.', exVi: 'Hai trăm người tham dự.' },
+      { en: 'thousand', ipa: '/ˈθaʊznd/', vi: 'nghìn', pos: 'num', ex: 'The trip cost five thousand.', exVi: 'Chuyến đi tốn năm nghìn.' },
+      { en: 'million', ipa: '/ˈmɪljən/', vi: 'triệu', pos: 'num', ex: 'The city has eight million people.', exVi: 'Thành phố có tám triệu dân.' },
+      { en: 'first', ipa: '/fɜːst/', vi: 'thứ nhất', pos: 'ord', ex: 'The first lesson is free.', exVi: 'Bài đầu tiên miễn phí.' },
+      { en: 'second', ipa: '/ˈsekənd/', vi: 'thứ hai', pos: 'ord', ex: 'Take the second turning.', exVi: 'Rẽ ở ngã rẽ thứ hai.' },
+      { en: 'third', ipa: '/θɜːd/', vi: 'thứ ba', pos: 'ord', ex: 'My office is on the third floor.', exVi: 'Văn phòng tôi ở tầng ba.' },
+      { en: 'twelfth', ipa: '/twelfθ/', vi: 'thứ mười hai', pos: 'ord', ex: 'The course ends on the twelfth.', exVi: 'Khoá học kết thúc ngày mười hai.' },
+      { en: 'twentieth', ipa: '/ˈtwentiəθ/', vi: 'thứ hai mươi', pos: 'ord', ex: 'We met on the twentieth of May.', exVi: 'Chúng tôi gặp nhau ngày hai mươi tháng Năm.' },
+      { en: 'January', ipa: '/ˈdʒænjuəri/', vi: 'tháng Một', pos: 'n', ex: 'The term starts in January.', exVi: 'Học kỳ bắt đầu vào tháng Một.' },
+      { en: 'February', ipa: '/ˈfebruəri/', vi: 'tháng Hai', pos: 'n', ex: 'February is the shortest month.', exVi: 'Tháng Hai là tháng ngắn nhất.' },
+      { en: 'August', ipa: '/ˈɔːɡəst/', vi: 'tháng Tám', pos: 'n', ex: 'I was born in August.', exVi: 'Tôi sinh vào tháng Tám.' },
+      { en: 'Wednesday', ipa: '/ˈwenzdeɪ/', vi: 'thứ Tư', pos: 'n', ex: 'The class is on Wednesday.', exVi: 'Lớp học vào thứ Tư.' },
+      { en: 'quarter past', ipa: '/ˈkwɔːtə pɑːst/', vi: 'hơn mười lăm phút', pos: 'phr', ex: 'It is quarter past three.', exVi: 'Bây giờ là ba giờ mười lăm.' },
+      { en: 'half past', ipa: '/hɑːf pɑːst/', vi: 'rưỡi', pos: 'phr', ex: 'We leave at half past six.', exVi: 'Chúng tôi đi lúc sáu rưỡi.' },
+      { en: 'double', ipa: '/ˈdʌbl/', vi: 'hai lần, kép (đọc số)', pos: 'adj', ex: 'The code is double four, seven.', exVi: 'Mã là bốn bốn, bảy.' },
+      { en: 'per cent', ipa: '/pə ˈsent/', vi: 'phần trăm', pos: 'n', ex: 'Twenty per cent of students agreed.', exVi: 'Hai mươi phần trăm sinh viên đồng ý.' },
+      { en: 'metre', ipa: '/ˈmiːtə(r)/', vi: 'mét', pos: 'n', ex: 'The room is four metres wide.', exVi: 'Phòng rộng bốn mét.' },
+      { en: 'kilogram', ipa: '/ˈkɪləɡræm/', vi: 'ki-lô-gam', pos: 'n', ex: 'The bag weighs two kilograms.', exVi: 'Túi nặng hai ki-lô-gam.' },
+      { en: 'kilometre', ipa: '/kɪˈlɒmɪtə(r)/', vi: 'ki-lô-mét', pos: 'n', ex: 'The station is two kilometres away.', exVi: 'Nhà ga cách đây hai ki-lô-mét.' },
+      { en: 'degree', ipa: '/dɪˈɡriː/', vi: 'độ (nhiệt)', pos: 'n', ex: 'It is thirty degrees today.', exVi: 'Hôm nay ba mươi độ.' },
+      { en: 'amount', ipa: '/əˈmaʊnt/', vi: 'lượng (không đếm được)', pos: 'n', ex: 'A large amount of water is wasted.', exVi: 'Một lượng lớn nước bị lãng phí.' },
+      { en: 'number of', ipa: '/ˈnʌmbə(r) əv/', vi: 'số lượng (đếm được)', pos: 'phr', ex: 'The number of cars has risen.', exVi: 'Số lượng ô tô đã tăng.' },
+      { en: 'total', ipa: '/ˈtəʊtl/', vi: 'tổng cộng', pos: 'n/adj', ex: 'The total is fifty dollars.', exVi: 'Tổng cộng là năm mươi đô.' },
+      { en: 'average', ipa: '/ˈævərɪdʒ/', vi: 'trung bình', pos: 'n/adj', ex: 'The average age is twenty-two.', exVi: 'Tuổi trung bình là hai mươi hai.' },
+      { en: 'cost', ipa: '/kɒst/', vi: 'giá, tốn', pos: 'v/n', ex: 'The ticket costs ten pounds.', exVi: 'Vé giá mười bảng.' },
+      { en: 'free of charge', ipa: '/friː əv tʃɑːdʒ/', vi: 'miễn phí', pos: 'phr', ex: 'The first lesson is free of charge.', exVi: 'Buổi học đầu miễn phí.' },
+    ],
+  },
+
+  /* ══════════════════ 9. NƠI CHỐN & CHỈ ĐƯỜNG ══════════════════ */
+  {
+    id: 'places',
+    title: 'Nơi chốn & chỉ đường',
+    icon: '🗺️',
+    why:
+      'Listening Section 2 luôn có dạng Map Labelling — nghe chỉ đường rồi điền tên vị trí lên bản '
+      + 'đồ. Không thuộc bộ giới từ chỉ hướng thì nghe hiểu vẫn không điền được.',
+    words: [
+      { en: 'opposite', ipa: '/ˈɒpəzɪt/', vi: 'đối diện', pos: 'prep', ex: 'The bank is opposite the post office.', exVi: 'Ngân hàng đối diện bưu điện.' },
+      { en: 'next to', ipa: '/nekst tuː/', vi: 'bên cạnh', pos: 'prep', ex: 'The café is next to the library.', exVi: 'Quán cà phê bên cạnh thư viện.' },
+      { en: 'between', ipa: '/bɪˈtwiːn/', vi: 'ở giữa (hai)', pos: 'prep', ex: 'The shop is between the two banks.', exVi: 'Cửa hàng nằm giữa hai ngân hàng.' },
+      { en: 'behind', ipa: '/bɪˈhaɪnd/', vi: 'phía sau', pos: 'prep', ex: 'The car park is behind the hotel.', exVi: 'Bãi đỗ xe ở phía sau khách sạn.' },
+      { en: 'in front of', ipa: '/ɪn frʌnt əv/', vi: 'phía trước', pos: 'prep', ex: 'Wait in front of the gate.', exVi: 'Đợi ở phía trước cổng.' },
+      { en: 'at the end of', ipa: '/ət ði end əv/', vi: 'ở cuối', pos: 'phr', ex: 'The room is at the end of the corridor.', exVi: 'Phòng ở cuối hành lang.' },
+      { en: 'on the corner', ipa: '/ɒn ðə ˈkɔːnə(r)/', vi: 'ở góc phố', pos: 'phr', ex: 'There is a shop on the corner.', exVi: 'Có một cửa hàng ở góc phố.' },
+      { en: 'turn left', ipa: '/tɜːn left/', vi: 'rẽ trái', pos: 'phr', ex: 'Turn left at the traffic lights.', exVi: 'Rẽ trái ở đèn giao thông.' },
+      { en: 'go straight', ipa: '/ɡəʊ streɪt/', vi: 'đi thẳng', pos: 'phr', ex: 'Go straight for two blocks.', exVi: 'Đi thẳng hai dãy nhà.' },
+      { en: 'cross', ipa: '/krɒs/', vi: 'băng qua', pos: 'v', ex: 'Cross the road at the lights.', exVi: 'Băng qua đường ở đèn tín hiệu.' },
+      { en: 'roundabout', ipa: '/ˈraʊndəbaʊt/', vi: 'vòng xuyến', pos: 'n', ex: 'Take the second exit at the roundabout.', exVi: 'Rẽ lối thứ hai ở vòng xuyến.' },
+      { en: 'entrance', ipa: '/ˈentrəns/', vi: 'lối vào', pos: 'n', ex: 'The main entrance is on this side.', exVi: 'Lối vào chính ở phía này.' },
+      { en: 'exit', ipa: '/ˈeksɪt/', vi: 'lối ra', pos: 'n', ex: 'Use the side exit.', exVi: 'Dùng lối ra bên hông.' },
+      { en: 'corridor', ipa: '/ˈkɒrɪdɔː(r)/', vi: 'hành lang', pos: 'n', ex: 'Do not run in the corridor.', exVi: 'Không chạy trong hành lang.' },
+      { en: 'car park', ipa: '/ˈkɑː pɑːk/', vi: 'bãi đỗ xe', pos: 'n', ex: 'The car park is free.', exVi: 'Bãi đỗ xe miễn phí.' },
+      { en: 'station', ipa: '/ˈsteɪʃn/', vi: 'nhà ga, bến', pos: 'n', ex: 'The bus station is nearby.', exVi: 'Bến xe buýt ở gần.' },
+      { en: 'bus stop', ipa: '/ˈbʌs stɒp/', vi: 'điểm dừng xe buýt', pos: 'n', ex: 'Get off at the third bus stop.', exVi: 'Xuống ở điểm dừng thứ ba.' },
+      { en: 'traffic', ipa: '/ˈtræfɪk/', vi: 'giao thông', pos: 'n', ex: 'Traffic is heavy at seven.', exVi: 'Giao thông đông lúc bảy giờ.' },
+      { en: 'public transport', ipa: '/ˌpʌblɪk ˈtrænspɔːt/', vi: 'giao thông công cộng', pos: 'n', ex: 'I use public transport daily.', exVi: 'Tôi đi phương tiện công cộng hằng ngày.' },
+      { en: 'nearby', ipa: '/ˌnɪəˈbaɪ/', vi: 'gần đây', pos: 'adj/adv', ex: 'There is a market nearby.', exVi: 'Có một cái chợ gần đây.' },
+      { en: 'far from', ipa: '/fɑː frɒm/', vi: 'xa', pos: 'phr', ex: 'My school is far from home.', exVi: 'Trường tôi xa nhà.' },
+      { en: 'within walking distance', ipa: '/wɪˈðɪn ˈwɔːkɪŋ ˈdɪstəns/', vi: 'đi bộ được', pos: 'phr', ex: 'The shop is within walking distance.', exVi: 'Cửa hàng đi bộ tới được.' },
+      { en: 'building', ipa: '/ˈbɪldɪŋ/', vi: 'toà nhà', pos: 'n', ex: 'It is the tallest building here.', exVi: 'Đó là toà nhà cao nhất ở đây.' },
+      { en: 'bridge', ipa: '/brɪdʒ/', vi: 'cây cầu', pos: 'n', ex: 'Cross the bridge and turn right.', exVi: 'Qua cầu rồi rẽ phải.' },
+      { en: 'park', ipa: '/pɑːk/', vi: 'công viên', pos: 'n', ex: 'We walk in the park every evening.', exVi: 'Chúng tôi đi bộ ở công viên mỗi tối.' },
+      { en: 'market', ipa: '/ˈmɑːkɪt/', vi: 'chợ', pos: 'n', ex: 'The market opens at five.', exVi: 'Chợ mở lúc năm giờ.' },
+      { en: 'supermarket', ipa: '/ˈsuːpəmɑːkɪt/', vi: 'siêu thị', pos: 'n', ex: 'I shop at the supermarket weekly.', exVi: 'Tôi mua sắm ở siêu thị hằng tuần.' },
+      { en: 'hospital', ipa: '/ˈhɒspɪtl/', vi: 'bệnh viện', pos: 'n', ex: 'The hospital is on the main road.', exVi: 'Bệnh viện nằm trên đường chính.' },
+      { en: 'get lost', ipa: '/ɡet lɒst/', vi: 'bị lạc', pos: 'phr', ex: 'I got lost on my first day.', exVi: 'Tôi bị lạc trong ngày đầu tiên.' },
+      { en: 'direction', ipa: '/dəˈrekʃn/', vi: 'phương hướng', pos: 'n', ex: 'She gave me clear directions.', exVi: 'Cô ấy chỉ đường rõ ràng cho tôi.' },
+    ],
+  },
+
+  /* ══════════════════ 10. MÔ TẢ XU HƯỚNG (nền Task 1) ══════════════════ */
+  {
+    id: 'trend',
+    title: 'Mô tả xu hướng — nền Writing Task 1',
+    icon: '📈',
+    why:
+      'Bộ từ này là XƯƠNG SỐNG của Writing Task 1 ở mọi band. Học ngay chặng 1 dù chưa viết Task 1 '
+      + 'hoàn chỉnh: lên chặng 2 bạn chỉ việc lắp vào, không phải học lại từ đầu.',
+    words: [
+      { en: 'increase', ipa: '/ɪnˈkriːs/', vi: 'tăng', pos: 'v/n', ex: 'Sales increased in 2020.', exVi: 'Doanh số tăng vào năm 2020.' },
+      { en: 'rise', ipa: '/raɪz/', vi: 'tăng lên', pos: 'v/n', ex: 'The number rose to fifty.', exVi: 'Con số tăng lên năm mươi.' },
+      { en: 'grow', ipa: '/ɡrəʊ/', vi: 'tăng trưởng', pos: 'v', ex: 'The population grew slowly.', exVi: 'Dân số tăng chậm.' },
+      { en: 'decrease', ipa: '/dɪˈkriːs/', vi: 'giảm', pos: 'v/n', ex: 'Prices decreased last year.', exVi: 'Giá giảm năm ngoái.' },
+      { en: 'fall', ipa: '/fɔːl/', vi: 'giảm xuống', pos: 'v/n', ex: 'The figure fell to ten.', exVi: 'Con số giảm xuống mười.' },
+      { en: 'drop', ipa: '/drɒp/', vi: 'rơi, giảm mạnh', pos: 'v/n', ex: 'Sales dropped sharply in May.', exVi: 'Doanh số giảm mạnh vào tháng Năm.' },
+      { en: 'decline', ipa: '/dɪˈklaɪn/', vi: 'suy giảm', pos: 'v/n', ex: 'There was a steady decline.', exVi: 'Có một sự suy giảm đều đặn.' },
+      { en: 'peak', ipa: '/piːk/', vi: 'đạt đỉnh', pos: 'v/n', ex: 'Numbers peaked in July.', exVi: 'Con số đạt đỉnh vào tháng Bảy.' },
+      { en: 'remain stable', ipa: '/rɪˈmeɪn ˈsteɪbl/', vi: 'giữ ổn định', pos: 'phr', ex: 'The figure remained stable.', exVi: 'Con số giữ ổn định.' },
+      { en: 'fluctuate', ipa: '/ˈflʌktʃueɪt/', vi: 'dao động', pos: 'v', ex: 'Prices fluctuated all year.', exVi: 'Giá dao động cả năm.' },
+      { en: 'sharply', ipa: '/ˈʃɑːpli/', vi: 'mạnh, đột ngột', pos: 'adv', ex: 'It rose sharply after 2010.', exVi: 'Nó tăng mạnh sau năm 2010.' },
+      { en: 'gradually', ipa: '/ˈɡrædʒuəli/', vi: 'dần dần', pos: 'adv', ex: 'The number gradually fell.', exVi: 'Con số giảm dần.' },
+      { en: 'slightly', ipa: '/ˈslaɪtli/', vi: 'nhẹ, một chút', pos: 'adv', ex: 'It increased slightly in June.', exVi: 'Nó tăng nhẹ vào tháng Sáu.' },
+      { en: 'significantly', ipa: '/sɪɡˈnɪfɪkəntli/', vi: 'đáng kể', pos: 'adv', ex: 'Costs rose significantly.', exVi: 'Chi phí tăng đáng kể.' },
+      { en: 'steadily', ipa: '/ˈstedɪli/', vi: 'đều đặn', pos: 'adv', ex: 'It grew steadily for ten years.', exVi: 'Nó tăng đều trong mười năm.' },
+      { en: 'roughly', ipa: '/ˈrʌfli/', vi: 'khoảng chừng', pos: 'adv', ex: 'Roughly half of them agreed.', exVi: 'Khoảng một nửa trong số họ đồng ý.' },
+      { en: 'approximately', ipa: '/əˈprɒksɪmətli/', vi: 'xấp xỉ', pos: 'adv', ex: 'Approximately 40% were female.', exVi: 'Xấp xỉ 40% là nữ.' },
+      { en: 'the highest', ipa: '/ðə ˈhaɪɪst/', vi: 'cao nhất', pos: 'phr', ex: 'China had the highest figure.', exVi: 'Trung Quốc có con số cao nhất.' },
+      { en: 'the lowest', ipa: '/ðə ˈləʊɪst/', vi: 'thấp nhất', pos: 'phr', ex: 'Japan recorded the lowest rate.', exVi: 'Nhật ghi nhận tỷ lệ thấp nhất.' },
+      { en: 'twice as many', ipa: '/twaɪs əz ˈmeni/', vi: 'nhiều gấp đôi', pos: 'phr', ex: 'Twice as many men as women applied.', exVi: 'Số nam nộp đơn gấp đôi nữ.' },
+      { en: 'compared with', ipa: '/kəmˈpeəd wɪð/', vi: 'so với', pos: 'phr', ex: 'Compared with 2010, sales doubled.', exVi: 'So với năm 2010, doanh số tăng gấp đôi.' },
+      { en: 'whereas', ipa: '/ˌweərˈæz/', vi: 'trong khi (đối lập)', pos: 'conj', ex: 'Boys chose sport, whereas girls chose art.', exVi: 'Nam chọn thể thao, trong khi nữ chọn nghệ thuật.' },
+      { en: 'overall', ipa: '/ˌəʊvərˈɔːl/', vi: 'nhìn chung', pos: 'adv', ex: 'Overall, the trend was upward.', exVi: 'Nhìn chung, xu hướng là đi lên.' },
+      { en: 'period', ipa: '/ˈpɪəriəd/', vi: 'giai đoạn', pos: 'n', ex: 'Over the whole period, it rose.', exVi: 'Trong cả giai đoạn, nó tăng.' },
+      { en: 'figure', ipa: '/ˈfɪɡə(r)/', vi: 'con số', pos: 'n', ex: 'The figure for France was 20%.', exVi: 'Con số của Pháp là 20%.' },
+      { en: 'proportion', ipa: '/prəˈpɔːʃn/', vi: 'tỷ lệ', pos: 'n', ex: 'A small proportion walked to work.', exVi: 'Một tỷ lệ nhỏ đi bộ đi làm.' },
+      { en: 'category', ipa: '/ˈkætəɡəri/', vi: 'hạng mục', pos: 'n', ex: 'Food was the largest category.', exVi: 'Thực phẩm là hạng mục lớn nhất.' },
+      { en: 'chart', ipa: '/tʃɑːt/', vi: 'biểu đồ', pos: 'n', ex: 'The bar chart shows four countries.', exVi: 'Biểu đồ cột thể hiện bốn quốc gia.' },
+      { en: 'table', ipa: '/ˈteɪbl/', vi: 'bảng số liệu', pos: 'n', ex: 'The table compares five cities.', exVi: 'Bảng so sánh năm thành phố.' },
+      { en: 'trend', ipa: '/trend/', vi: 'xu hướng', pos: 'n', ex: 'The overall trend was downward.', exVi: 'Xu hướng chung là đi xuống.' },
+    ],
+  },
+];

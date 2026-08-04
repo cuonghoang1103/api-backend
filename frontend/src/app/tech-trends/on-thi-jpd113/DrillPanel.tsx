@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { Check, X, RotateCcw, Keyboard, ListChecks, Shuffle, Trophy, Zap } from 'lucide-react';
+import { Check, X, RotateCcw, Keyboard, ListChecks, Shuffle, Trophy, Zap, BookOpen } from 'lucide-react';
+
+import TypingPassagePanel from './TypingPassagePanel';
 
 import {
   DRILL_SETS,
@@ -43,6 +45,44 @@ interface Answered {
 }
 
 export default function DrillPanel() {
+  // Hai kiểu luyện rất khác nhau nên tách bằng nút chuyển ở đây thay vì
+  // thêm tab thứ 7 trên thanh chính (đã 6 tab, thêm nữa là quá tải).
+  const [area, setArea] = useState<'char' | 'passage'>('char');
+
+  return (
+    <div className="space-y-6">
+      <div className="grid sm:grid-cols-2 gap-2.5">
+        {[
+          { id: 'char' as const, label: 'Luyện từng chữ', sub: 'kana & kanji rời, vòng 20 chữ', icon: Keyboard },
+          { id: 'passage' as const, label: 'Gõ cả đoạn văn', sub: '20 bài trong giáo trình, dễ → khó', icon: BookOpen },
+        ].map((a) => {
+          const Icon = a.icon;
+          return (
+            <button
+              key={a.id}
+              onClick={() => setArea(a.id)}
+              className={`flex items-start gap-2.5 text-left px-4 py-3.5 rounded-xl border transition-all active:scale-95 ${
+                area === a.id
+                  ? 'bg-neon-violet/15 border-neon-violet/45 text-white'
+                  : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white hover:border-white/25'
+              }`}
+            >
+              <Icon className="w-4 h-4 mt-0.5 shrink-0" />
+              <span>
+                <span className="block text-sm font-semibold">{a.label}</span>
+                <span className="block text-[11px] text-slate-500 mt-0.5">{a.sub}</span>
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {area === 'passage' ? <TypingPassagePanel /> : <CharDrill />}
+    </div>
+  );
+}
+
+function CharDrill() {
   const [setId, setSetId] = useState<DrillSetId>('hira-base');
   const [mode, setMode] = useState<Mode>('type');
   const [stats, setStats] = useState<Record<string, DrillStat>>({});

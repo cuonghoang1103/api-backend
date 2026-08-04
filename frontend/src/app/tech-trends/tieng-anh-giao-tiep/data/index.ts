@@ -9,11 +9,22 @@ import { WEEK_1 } from './week1';
 import { WEEK_2 } from './week2';
 import { WEEK_3 } from './week3';
 import { WEEK_4 } from './week4';
+import { WEEK_5 } from './week5';
+import { WEEK_6 } from './week6';
 
 export * from './types';
 export * from './dev';
 
-export const WEEKS: WeekBlock[] = [WEEK_1, WEEK_2, WEEK_3, WEEK_4];
+/**
+ * Tuần 1–4 là phần CƠ BẢN (nói được), tuần 5 trở đi là NÂNG CAO (nói có
+ * trọng lượng). Thêm tuần mới chỉ cần viết `weekN.ts` theo cùng interface rồi
+ * nối vào mảng này — mọi số liệu, sơ đồ lộ trình, tra cứu và bài kiểm tra tự
+ * nhận ngày mới.
+ */
+export const WEEKS: WeekBlock[] = [WEEK_1, WEEK_2, WEEK_3, WEEK_4, WEEK_5, WEEK_6];
+
+/** Mốc chia hai phần — dùng để hiện nhãn "Nâng cao" trên sơ đồ. */
+export const BASIC_WEEKS = 4;
 
 export const ALL_DAYS: DayLesson[] = WEEKS.flatMap((w) => w.days);
 

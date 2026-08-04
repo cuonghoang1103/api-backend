@@ -16,6 +16,7 @@ import Link from 'next/link';
 import {
   ArrowLeft, BookOpen, CheckCircle2, Circle, MessageSquare,
   Mic, Volume2, GraduationCap, Lightbulb, Target, ListChecks, Code2, Search,
+  ClipboardCheck,
 } from 'lucide-react';
 import {
   WEEKS, ALL_DAYS, STATS, PROGRESS_KEY, TECH_VOCAB, DEV_SECTIONS, DEV_PLAN,
@@ -24,12 +25,15 @@ import {
 import { useSpeak } from './useSpeak';
 import RoadmapView from './RoadmapView';
 import SearchView from './SearchView';
+import VocabPanel from './VocabPanel';
+import WeeklyTest from './WeeklyTest';
 
-type TabId = 'days' | 'vocab' | 'sounds' | 'dev' | 'search';
+type TabId = 'days' | 'vocab' | 'test' | 'sounds' | 'dev' | 'search';
 
 const TABS: { id: TabId; label: string; icon: typeof Target }[] = [
-  { id: 'days', label: 'Lộ trình 20 ngày', icon: Target },
+  { id: 'days', label: 'Lộ trình', icon: Target },
   { id: 'vocab', label: 'Từ vựng', icon: BookOpen },
+  { id: 'test', label: 'Kiểm tra tuần', icon: ClipboardCheck },
   { id: 'sounds', label: 'Phát âm', icon: Mic },
   { id: 'dev', label: 'Cho Dev', icon: Code2 },
   { id: 'search', label: 'Tra cứu', icon: Search },
@@ -393,7 +397,7 @@ export default function TiengAnhClient() {
         {/* Tiêu đề */}
         <header className="mb-8">
           <p className="text-violet-400 text-sm font-medium tracking-wide uppercase mb-2">
-            Khoá giao tiếp · 20 ngày
+            Khoá giao tiếp · {STATS.days} ngày
           </p>
           <h1 className="text-3xl sm:text-4xl font-bold text-white leading-tight">
             Tiếng Anh Giao Tiếp
@@ -526,25 +530,9 @@ export default function TiengAnhClient() {
           <div>
             <p className="text-slate-400 text-sm mb-5">
               Toàn bộ <b className="text-white">{allVocab.length}</b> từ và cụm của khoá học, đã gộp trùng.
-              Bấm loa để nghe.
+              Ba chế độ: xem danh sách, lật thẻ để tự kiểm tra, hoặc làm bài trắc nghiệm 10 câu.
             </p>
-            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              {allVocab.map((v, i) => (
-                <div key={i} className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
-                  <div className="flex items-start gap-2">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-semibold text-white text-sm">{v.en}</span>
-                        {v.pos && <span className="text-[10px] text-slate-500 border border-white/10 px-1.5 rounded">{v.pos}</span>}
-                      </div>
-                      <p className="text-violet-300/70 text-[11px] font-mono mt-0.5">{v.ipa}</p>
-                      <p className="text-slate-300 text-sm mt-1">{v.vi}</p>
-                    </div>
-                    <SpeakBtn text={v.en} onSpeak={speak} active={current === v.en} supported={supported} />
-                  </div>
-                </div>
-              ))}
-            </div>
+            <VocabPanel words={allVocab} speak={speak} current={current} supported={supported} />
           </div>
         )}
 
@@ -588,6 +576,18 @@ export default function TiengAnhClient() {
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* ── Tab: Kiểm tra tuần ── */}
+        {tab === 'test' && (
+          <div>
+            <p className="text-slate-400 text-sm mb-5">
+              Học xong mỗi tuần thì làm bài này để biết mình thật sự nói được chưa.
+              Phần tự nói cố ý để bạn <b className="text-white">tự chấm</b> — không có cách nào
+              chấm phát âm bằng trắc nghiệm, và mục tiêu là mở miệng nói ra thành tiếng.
+            </p>
+            <WeeklyTest weeks={WEEKS} speak={speak} current={current} supported={supported} />
           </div>
         )}
 

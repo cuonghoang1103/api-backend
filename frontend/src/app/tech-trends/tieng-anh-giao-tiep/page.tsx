@@ -11,13 +11,13 @@ import TiengAnhClient from './TiengAnhClient';
  */
 
 export const metadata: Metadata = {
-  title: 'Tiếng Anh Giao Tiếp — Lộ trình 20 ngày từ câu chào tới kể chuyện',
+  title: 'Tiếng Anh Giao Tiếp — Lộ trình 30 ngày từ câu chào tới đàm phán',
   description:
-    'Học nói tiếng Anh trong 20 ngày: những câu dùng hằng ngày (chào hỏi, hôm nay làm gì, ăn gì, '
+    'Học nói tiếng Anh trong 30 ngày: những câu dùng hằng ngày (chào hỏi, hôm nay làm gì, ăn gì, '
     + 'hẹn giờ) rồi tới tiếng Anh công việc. Mỗi ngày có câu hỏi kèm nhiều cách trả lời, hội thoại '
     + 'mẫu, từ vựng có phiên âm, ngữ pháp và một âm khó để luyện. Có nút đọc to từng câu.',
   openGraph: {
-    title: 'Tiếng Anh Giao Tiếp — Lộ trình 20 ngày | CuongThai',
+    title: 'Tiếng Anh Giao Tiếp — Lộ trình 30 ngày | CuongThai',
     description:
       'Câu giao tiếp hằng ngày → tiếng Anh công việc. Hỏi–đáp, hội thoại, từ vựng, ngữ pháp, '
       + 'phát âm và nút nghe cho từng câu.',

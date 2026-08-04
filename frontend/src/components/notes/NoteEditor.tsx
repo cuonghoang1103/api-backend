@@ -51,6 +51,8 @@ interface NoteEditorProps {
 }
 
 const AUTOSAVE_MS = 900;
+/** Quá số ký tự này sau "/" thì coi như người dùng đang viết chữ, không gọi lệnh. */
+const SLASH_MAX_QUERY = 24;
 
 export default function NoteEditor({ note, onSave }: NoteEditorProps) {
   const [title, setTitle] = useState(note.title);
@@ -60,6 +62,8 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const slashRef = useRef<SlashMenuRef>(null);
+  /** Vị trí dấu "/" mà người dùng đã bấm Esc để bỏ qua (xem handleSlashTrigger). */
+  const slashDismissedAt = useRef<number | null>(null);
   // Track the note id so switching notes resets local state instead
   // of bleeding one note's title/content into another.
   const noteIdRef = useRef(note.id);
@@ -107,36 +111,61 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
     }
   }, []);
 
-  // ─── Slash menu (open on "/" at the start of a line) ────────
-  // We listen on every transaction: if the new doc starts the just-
-  // typed character with "/" at the head of an empty paragraph,
-  // position the menu under the caret.
+  // ─── Slash menu (gõ "/" để chèn khối) ───────────────────────
+  // Chạy sau mỗi transaction VÀ mỗi lần con trỏ dời chỗ. Bản cũ chỉ
+  // nhận đúng một trạng thái ("/" là ký tự duy nhất của đoạn) nên gõ
+  // thêm chữ là trigger tắt và bảng không bao giờ nhận được chuỗi lọc.
+  // Giờ ta tìm dấu "/" gần con trỏ nhất, lấy phần chữ đứng sau nó làm
+  // query, và trả về cả `range` để SlashMenu xoá sạch "/query" khi chèn.
   const handleSlashTrigger = useCallback((editorInstance: Editor) => {
+    // Bỏ trigger hiện tại. `forget` xoá luôn ghi nhớ "đã bấm Esc" vì lúc
+    // này con trỏ đã rời khỏi dấu "/" cũ — lần sau gõ "/" phải mở lại.
+    const close = (forget = true) => {
+      slashRef.current?.close();
+      if (forget) slashDismissedAt.current = null;
+    };
     const { selection, doc } = editorInstance.state;
-    const { $from } = selection;
-    // Only trigger when the caret is at the end of an empty paragraph
-    // that just received "/" as its first character.
-    if ($from.parent.type.name !== 'paragraph') return;
-    if ($from.parent.textContent !== '/') return;
-    if (doc.textBetween($from.before() + 1, $from.pos, '\n', '\n') !== '/') return;
-    // Get the caret rect for positioning. coordsAtPos gives us the
-    // line bounds (top/bottom are the line edges); width is implied
-    // by left/right.
-    const coords = editorInstance.view.coordsAtPos($from.pos);
-    const h = Math.max(20, coords.bottom - coords.top);
-    const fakeRect: DOMRect = {
+    const { $from, empty } = selection;
+    // Bôi đen hoặc đứng ngoài đoạn văn → không phải ngữ cảnh chèn khối.
+    if (!empty || $from.parent.type.name !== 'paragraph') { close(); return; }
+
+    const blockStart = $from.before() + 1;
+    const before = doc.textBetween(blockStart, $from.pos, '\n', '\n');
+    const slashIdx = before.lastIndexOf('/');
+    if (slashIdx === -1) { close(); return; }
+    // "/" phải mở đầu một token: đầu dòng hoặc ngay sau khoảng trắng.
+    // Nhờ vậy "a/b", đường dẫn "src/lib" hay "và/hoặc" không bật bảng.
+    if (slashIdx > 0 && !/\s/.test(before[slashIdx - 1])) { close(); return; }
+
+    const query = before.slice(slashIdx + 1);
+    // Gõ khoảng trắng ngay sau "/" là ý viết chữ, không phải chọn khối.
+    // Và quá dài thì chắc chắn không còn là lệnh nữa.
+    if (query.startsWith(' ') || query.length > SLASH_MAX_QUERY) { close(); return; }
+
+    const from = blockStart + slashIdx;
+    const to = $from.pos;
+    // Đúng dấu "/" mà người dùng đã bấm Esc → im lặng, đừng bật lại.
+    if (slashDismissedAt.current === from) { close(false); return; }
+    // Neo bảng vào chính dấu "/" (không phải con trỏ) — kéo bảng hay
+    // cuộn trang thì SlashMenu còn tính lại toạ độ từ `range.from`.
+    const coords = editorInstance.view.coordsAtPos(from);
+    const rect: DOMRect = {
       top: coords.top,
       bottom: coords.bottom,
       left: coords.left,
       right: coords.right,
       width: coords.right - coords.left,
-      height: h,
+      height: Math.max(20, coords.bottom - coords.top),
       x: coords.left,
       y: coords.top,
       toJSON: () => ({}),
     } as DOMRect;
-    slashRef.current?.open(fakeRect);
+    slashRef.current?.open(rect, query, { from, to });
   }, []);
+
+  // ─── Chèn ảnh từ slash menu ─────────────────────────────────
+  // Dùng lại đúng luồng upload R2 của paste/drop, chỉ khác đường vào.
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -266,6 +295,10 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
       // checks both the trigger and whether the menu is already open.
       handleSlashTrigger(editor);
     },
+    // Con trỏ dời chỗ (click, mũi tên, chọn khối khác) cũng phải xét
+    // lại trigger — nếu không, bấm ra chỗ khác mà bảng vẫn treo lơ lửng
+    // và Enter tiếp theo sẽ chèn nhầm khối.
+    onSelectionUpdate({ editor }) { handleSlashTrigger(editor); },
     // Close slash menu when the user clicks outside the editor.
     onBlur() { slashRef.current?.close(); },
   });
@@ -293,24 +326,13 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
 
   useEffect(() => () => { if (saveTimer.current) clearTimeout(saveTimer.current); }, []);
 
-  // Keyboard shortcuts for Undo/Redo
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Undo: Ctrl+Z (Windows/Linux) or Cmd+Z (Mac)
-      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
-        e.preventDefault();
-        editor?.chain().focus().undo().run();
-      }
-      // Redo: Ctrl+Shift+Z or Cmd+Shift+Z (Mac)
-      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && e.shiftKey) {
-        e.preventDefault();
-        editor?.chain().focus().redo().run();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [editor]);
+  // Undo/Redo bằng bàn phím do StarterKit (extension History) lo sẵn:
+  // Mod-z / Shift-Mod-z đã có keymap ngay trên DOM của editor.
+  //
+  // Ở đây TRƯỚC ĐÂY còn một listener trên `document` làm đúng việc đó
+  // lần nữa. ProseMirror xử lý phím rồi để sự kiện nổi bọt tiếp, nên
+  // listener kia chạy thêm một lần: MỖI Ctrl+Z hoàn tác HAI bước.
+  // Đã gỡ. Hai nút Hoàn tác/Làm lại bên dưới vẫn gọi lệnh trực tiếp.
 
   return (
     <div className="mx-auto w-full max-w-[760px] px-4 sm:px-6 py-6">
@@ -467,9 +489,30 @@ export default function NoteEditor({ note, onSave }: NoteEditorProps) {
         </BubbleMenu>
       )}
 
-      {/* Slash menu — positioned absolutely; ref-driven so we don't
-          re-render on every keystroke. */}
-      <SlashMenu ref={slashRef} editor={editor} />
+      {/* Slash menu — tự đặt chỗ (lật lên khi hết chỗ dưới) và kéo
+          được; ref-driven nên không re-render mỗi phím gõ. */}
+      <SlashMenu
+        ref={slashRef}
+        editor={editor}
+        onPickImage={() => imageInputRef.current?.click()}
+        onDismiss={(range) => { slashDismissedAt.current = range.from; }}
+      />
+
+      {/* Đầu vào ảnh cho mục "Ảnh" trong slash menu. Ẩn hoàn toàn —
+          chỉ mở bằng .click() từ menu. */}
+      <input
+        ref={imageInputRef}
+        type="file"
+        accept="image/*"
+        multiple
+        hidden
+        onChange={(e) => {
+          const files = Array.from(e.target.files ?? []);
+          if (editor) files.forEach((f) => void uploadAndInsert(editor, f));
+          // Xoá value để chọn lại đúng tệp vừa rồi vẫn kích hoạt onChange.
+          e.target.value = '';
+        }}
+      />
     </div>
   );
 }

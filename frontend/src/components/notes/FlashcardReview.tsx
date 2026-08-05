@@ -78,6 +78,12 @@ export default function FlashcardReview({ noteId, onClose }: Props) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (loading || !current || busy) return;
+      // Phím tắt bắt ở window, nên phải nhường lại khi người dùng đang GÕ:
+      // bộ gõ CJK dùng Space để chọn chữ và Enter để chốt (watashi → 私), còn
+      // trong ô nhập thì '1'/'2' là ký tự chứ không phải lệnh chấm điểm.
+      if (e.isComposing) return;
+      const t = e.target as HTMLElement | null;
+      if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
       if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); setFlipped((f) => !f); }
       else if (e.key === 'ArrowLeft') { goPrev(); }
       else if (e.key === 'ArrowRight') { goNext(); }

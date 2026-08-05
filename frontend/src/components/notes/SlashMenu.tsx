@@ -363,6 +363,12 @@ const SlashMenu = forwardRef<SlashMenuRef, Props>(({ editor, onPickImage, onDism
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
+      // Bộ gõ CJK đang dựng chữ: TẤT CẢ phím dưới đây thuộc về bộ gõ, không
+      // phải về bảng lệnh. Enter/Tab chốt chữ, ↑↓ chọn trong danh sách chữ
+      // gợi ý, Escape huỷ chữ đang gõ. Bảng chạy ở pha capture nên nếu không
+      // nhường ở đây thì nó cướp trước cả bộ gõ — gõ tiếng Nhật thành ra
+      // không chốt được chữ nào.
+      if (e.isComposing) return;
       if (e.key === 'Escape') {
         e.preventDefault(); e.stopPropagation();
         if (rangeRef.current) onDismiss?.(rangeRef.current);

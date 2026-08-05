@@ -318,6 +318,9 @@ function CodeBlockView({ node, updateAttributes, editor, getPos }: NodeViewProps
     if (!node) return;
     const onKey = (e: KeyboardEvent) => {
       if (!isEditing) return;
+      // Bộ gõ CJK dựng chữ dở: Escape là để huỷ chữ đó, không phải để thoát
+      // khỏi ô code (viết chú thích tiếng Nhật trong code là chuyện thường)
+      if (e.isComposing) return;
       if (e.key === 'Escape') {
         e.preventDefault();
         e.stopPropagation();
@@ -352,6 +355,7 @@ function CodeBlockView({ node, updateAttributes, editor, getPos }: NodeViewProps
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       if (!isEditing) return;
+      if (e.nativeEvent.isComposing) return;   // nhường Escape cho bộ gõ CJK
       // Escape exits edit mode (Tiptap preserves the content
       // because NodeViewContent owns the DOM).
       if (e.key === 'Escape') {

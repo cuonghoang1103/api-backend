@@ -811,6 +811,11 @@ function Row({
           onClick={(e) => e.stopPropagation()}
           onKeyDown={(e) => {
             e.stopPropagation();
+            // Bộ gõ tiếng Nhật/Trung/Hàn đang dựng chữ: Enter lúc này là để
+            // CHỐT chữ (watashi → わたし → 私), Escape là để HUỶ chữ đang gõ —
+            // cả hai đều thuộc về bộ gõ, không phải lệnh cho ô đổi tên. Cướp
+            // mất là người dùng gõ được nửa chữ thì ô tự đóng.
+            if (e.nativeEvent.isComposing) return;
             if (e.key === 'Enter') commit();
             if (e.key === 'Escape') { setEditing(false); setVal(label); }
           }}

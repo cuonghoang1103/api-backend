@@ -148,7 +148,9 @@ export default function NoteResourcePanel({ parent, attachments, links, onChange
             <input
               value={linkLabel}
               onChange={(e) => setLinkLabel(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') void submitLink(); }}
+              // isComposing: Enter đang là phím chốt chữ của bộ gõ CJK,
+              // gửi link lúc đó thì nhãn bị cắt giữa chừng
+              onKeyDown={(e) => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) void submitLink(); }}
               placeholder="Nhãn (tuỳ chọn)"
               className="min-w-0 flex-1 rounded-md bg-slate-100 dark:bg-slate-800/60 px-2 py-1.5 text-[13px] text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:ring-1 focus:ring-teal-500/40"
             />

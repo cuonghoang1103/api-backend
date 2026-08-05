@@ -51,7 +51,9 @@ export default function NotesSearch({ open, onClose, subjects, onJump }: Props) 
   // Esc to close.
   useEffect(() => {
     if (!open) return;
-    const h = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    // isComposing: Escape khi bộ gõ CJK đang dựng chữ là để HUỶ chữ đó, không
+    // phải để đóng ô tìm kiếm — đóng luôn thì mất cả câu đang gõ dở
+    const h = (e: KeyboardEvent) => { if (e.key === 'Escape' && !e.isComposing) onClose(); };
     window.addEventListener('keydown', h);
     return () => window.removeEventListener('keydown', h);
   }, [open, onClose]);

@@ -593,6 +593,123 @@ export const SECTIONS: CheatSection[] = [
     ],
   },
 
+  /* ─────────── NGỮ PHÁP THI NÓI ─────────── */
+  {
+    id: 'speak-grammar',
+    title: 'Ngữ pháp cần cho bài thi NÓI',
+    icon: '🗣️',
+    summary:
+      'Phần Nói chiếm 30/45 điểm bài thi cuối kỳ — nặng GẤP ĐÔI phần trắc nghiệm. Nhưng nó chỉ dùng ' +
+      'đúng chừng này mẫu câu, và mẫu nào cũng ngắn. Học hết bảng dưới là đủ trả lời mọi câu trong ' +
+      'ngân hàng 22 câu hỏi và 6 bộ tranh.',
+    tables: [
+      {
+        id: 'sg-core',
+        title: 'Bộ khung — 6 mẫu trả lời được gần hết ngân hàng câu hỏi',
+        note: 'Thuộc 6 mẫu này là bạn dựng được câu trả lời cho bất kỳ câu nào giám thị hỏi về bản thân.',
+        headers: ['Mẫu', 'Dùng khi', 'Ví dụ trả lời'],
+        rows: [
+          ['N は N です', 'Giới thiệu, khẳng định', 'わたしの なまえは クオン です。'],
+          ['N は N じゃ ありません', 'Phủ định', 'にほんじん じゃ ありません。'],
+          ['N の N', 'Của ai / thuộc về gì', 'わたしの しゅみは おんがくです。'],
+          ['N も', 'Cũng', 'わたしも がくせいです。'],
+          ['～から ～まで', 'Từ… đến… (giờ, thứ)', '9じから 5じまで はたらきます。'],
+          ['とても + tính từ', 'Nêu cảm nhận', 'とても おいしいです。'],
+        ],
+      },
+      {
+        id: 'sg-particle',
+        title: 'Bốn trợ từ quyết định câu trả lời đúng hay sai',
+        note: 'Giám thị nghe ra ngay nếu bạn dùng nhầm — đây là chỗ mất điểm dễ nhất phần Nói.',
+        headers: ['Trợ từ', 'Nghĩa', 'Câu trả lời mẫu'],
+        rows: [
+          ['に', 'MỐC GIỜ cụ thể', 'ろくじはん に おきます。'],
+          ['で', 'NƠI làm việc gì / PHƯƠNG TIỆN', 'がっこう で べんきょうします。バス で 行きます。'],
+          ['へ / に', 'ĐÍCH ĐẾN', 'こうえん へ 行きます。'],
+          ['を', 'Tân ngữ (ăn gì, uống gì, xem gì)', 'パン を たべます。'],
+        ],
+        dangerRows: [0, 1, 2, 3],
+      },
+      {
+        id: 'sg-question',
+        title: 'Giám thị hỏi thế nào → bạn trả lời thế nào',
+        note: 'Nghe được TỪ ĐỂ HỎI là biết phải trả lời cái gì. Nhầm từ để hỏi là mất điểm dù tiếng Nhật đúng.',
+        headers: ['Câu hỏi', 'Hỏi về', 'Khung trả lời'],
+        rows: [
+          ['おなまえは？', 'tên', 'わたしの なまえは ○○ です。'],
+          ['おくには どちらですか。', 'quốc gia', 'ベトナム です。'],
+          ['おしごとは？', 'nghề nghiệp', 'わたしの しごとは がくせい です。'],
+          ['たんじょうびは いつですか。', 'ngày tháng', '○がつ ○にち です。'],
+          ['しゅみは なんですか。', 'sở thích', 'わたしの しゅみは ○○ です。'],
+          ['なんじに おきますか。', 'mốc giờ', '○じ に おきます。'],
+          ['なんじから なんじまで…', 'khoảng giờ', '○じから ○じまで …ます。'],
+          ['なにを たべますか。', 'vật (tân ngữ)', '○○ を たべます。'],
+          ['どこに 行きますか。', 'nơi chốn', '○○ へ 行きます。'],
+          ['なんで 行きますか。', 'PHƯƠNG TIỆN, không phải “tại sao”', 'バス で 行きます。'],
+          ['～は どうですか。', 'cảm nhận', 'とても おいしいです。'],
+          ['「A」は えいごで なんですか。', 'dịch từ', '「A」は えいごで「B」です。'],
+        ],
+        dangerRows: [9],
+      },
+      {
+        id: 'sg-picture',
+        title: 'Sáu khuôn câu hỏi của phần TRANH',
+        note:
+          'Cả 37 câu hỏi tranh chỉ xoay quanh sáu khuôn này. LUÔN trả lời bằng câu đủ kết thúc です — ' +
+          'trả lời cụt một từ là cách mất điểm âm thầm phổ biến nhất.',
+        headers: ['Câu hỏi', 'Nghĩa', 'Trả lời mẫu'],
+        rows: [
+          ['これは なんですか。', 'Đây là gì?', 'これは カメラ です。'],
+          ['だれの ですか。', 'Của ai?', '○○さんの もの です。'],
+          ['なんの ですか。', 'Hãng gì / loại gì?', 'キヤノンの カメラ です。'],
+          ['いくら ですか。', 'Bao nhiêu tiền?', 'ろっぴゃくはちじゅう ドル です。'],
+          ['どこ ですか。', 'Ở đâu / tầng mấy?', 'さんがい です。'],
+          ['いつ やすみ ですか。', 'Nghỉ ngày nào?', 'げつようび です。'],
+          ['なんさい ですか。', 'Bao nhiêu tuổi?', '26さい です。'],
+          ['～ですか。 (có/không)', 'Xác nhận', 'はい、がくせい です。 (đừng chỉ nói はい)'],
+        ],
+        dangerRows: [7],
+      },
+      {
+        id: 'sg-read-only',
+        title: 'Ngữ pháp chỉ cần ĐỌC được, không cần dùng',
+        note:
+          'Mấy mẫu này xuất hiện trong 13 bài đọc nhưng thuộc trình độ cao hơn. Bạn chỉ phải đọc to đúng, ' +
+          'KHÔNG cần hiểu sâu hay tự nói ra.',
+        headers: ['Mẫu', 'Gặp ở đâu', 'Hiểu nôm na'],
+        rows: [
+          ['～ています', 'Bài đọc 2, 3, 4', 'đang làm gì đó'],
+          ['～ので', 'Bài đọc 1', 'vì… nên…'],
+          ['ではありません', 'Bài đọc 9', 'dạng trang trọng của じゃありません'],
+          ['～や ～など', 'Bài đọc 9', 'liệt kê ví dụ, “và những thứ khác”'],
+          ['いらっしゃいませ / かしこまりました', 'Bài đọc 7', 'kính ngữ nhà hàng — học như khối âm thanh'],
+          ['～たり～たりします', 'Bộ tranh 6', 'làm việc này việc kia — cứ đáp đơn giản bằng します'],
+        ],
+      },
+    ],
+    tips: [
+      {
+        title: 'Bốn câu chốt 10 điểm PRESENTING',
+        body:
+          'しつれいします (khi vào) → よろしくおねがいします (đầu buổi) → ありがとうございました (cuối buổi) → ' +
+          'しつれいしました (khi ra). Không cần tiếng Nhật giỏi, chỉ cần nói rõ, ngồi thẳng và nhìn giám thị.',
+      },
+      {
+        title: 'Không nghe rõ câu hỏi',
+        body:
+          'もういちど おねがいします — “xin nhắc lại một lần nữa”. Hỏi lại KHÔNG bị trừ điểm; đoán bừa rồi ' +
+          'trả lời lạc đề mới mất.',
+      },
+      {
+        title: 'Chiến thuật tiết kiệm công sức nhất',
+        body:
+          'Đừng học 22 câu trả lời rời rạc. Thuộc MỘT câu thật về bản thân cho mỗi nhóm — tên, quốc tịch, ' +
+          'nghề, sinh nhật, sở thích, giờ dậy, phương tiện đi học, một hoạt động cuối tuần — rồi tái sử dụng. ' +
+          'Tám thông tin đó trả lời được gần hết ngân hàng.',
+      },
+    ],
+  },
+
   /* ─────────── SỐ & THỜI GIAN ─────────── */
   {
     id: 'number',

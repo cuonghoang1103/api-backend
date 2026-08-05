@@ -26,6 +26,11 @@ import {
   type VocabWord,
 } from './data/vocab';
 import { checkVi, checkJa } from './data/vocabCheck';
+import { VOCAB_FREQ, HOT_RANK } from './data/vocabRank';
+
+/** Từ này có nằm trong nhóm hay ra đề nhất không */
+const isHot = (word: string) => (VOCAB_FREQ[word]?.rank ?? 999) <= HOT_RANK;
+const freqOf = (word: string) => VOCAB_FREQ[word]?.freq ?? 0;
 
 /**
  * Tab Từ vựng — 231 từ của JPD113.
@@ -55,6 +60,8 @@ export default function VocabPanel() {
   const [query, setQuery] = useState('');
   const [known, setKnown] = useState<Record<string, boolean>>({});
   const [showMeaning, setShowMeaning] = useState(true);
+  /** Chỉ hiện nhóm từ hay ra đề nhất — dành cho người còn ít thời gian */
+  const [hotOnly, setHotOnly] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -86,10 +93,11 @@ export default function VocabPanel() {
     [known, persistKnown],
   );
 
-  /** Danh sách sau khi lọc chủ đề + tìm kiếm */
+  /** Danh sách sau khi lọc chủ đề + tìm kiếm + lọc "hay ra đề" */
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return VOCAB_WORDS.filter((w) => {
+    const rows = VOCAB_WORDS.filter((w) => {
+      if (hotOnly && !isHot(w.word)) return false;
       if (cat !== 'all' && w.cat !== cat) return false;
       if (!q) return true;
       return (
@@ -98,7 +106,11 @@ export default function VocabPanel() {
         w.meaning.toLowerCase().includes(q)
       );
     });
-  }, [cat, query]);
+    // Khi lọc "hay ra đề" thì xếp theo thứ hạng để học từ trên xuống
+    return hotOnly
+      ? [...rows].sort((a, b) => (VOCAB_FREQ[a.word]?.rank ?? 999) - (VOCAB_FREQ[b.word]?.rank ?? 999))
+      : rows;
+  }, [cat, query, hotOnly]);
 
   const knownCount = mounted ? Object.keys(known).length : 0;
   const pct = Math.round((knownCount / VOCAB_WORDS.length) * 100);
@@ -159,6 +171,24 @@ export default function VocabPanel() {
           );
         })}
       </div>
+
+      {/* Lọc "hay ra đề" — cứu cánh cho người còn ít giờ */}
+      <button
+        onClick={() => setHotOnly(!hotOnly)}
+        className={`w-full text-left rounded-xl border px-4 py-3 transition-all active:scale-[0.99] ${
+          hotOnly
+            ? 'bg-neon-orange/15 border-neon-orange/45'
+            : 'bg-white/[0.03] border-white/10 hover:border-white/25'
+        }`}
+      >
+        <span className={`block text-sm font-semibold ${hotOnly ? 'text-white' : 'text-slate-300'}`}>
+          🔥 {hotOnly ? 'Đang hiện: 60 từ hay ra đề nhất' : 'Chỉ học 60 từ hay ra đề nhất'}
+        </span>
+        <span className="block text-[11px] text-slate-500 mt-0.5">
+          Xếp theo số lần xuất hiện thật trong 14 đề FE + 16 đề đọc + ngân hàng thi nói. Còn ít giờ
+          thì học đúng nhóm này, bỏ 171 từ còn lại.
+        </span>
+      </button>
 
       {/* Lọc chủ đề */}
       <div>
@@ -338,6 +368,14 @@ function VocabRow({
             <span className="text-xl text-white leading-tight">{word.word}</span>
             {word.kana !== word.word && (
               <span className="text-sm text-neon-cyan">{word.kana}</span>
+            )}
+            {isHot(word.word) && (
+              <span
+                className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-neon-orange/15 text-neon-orange shrink-0"
+                title={`Xuất hiện ~${freqOf(word.word)} lần trong kho đề thi`}
+              >
+                🔥 {freqOf(word.word)}
+              </span>
             )}
             {visible ? (
               <span className="text-sm text-slate-300">— {word.meaning}</span>

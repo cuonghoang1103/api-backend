@@ -1,6 +1,9 @@
 node_modules
 frontend/node_modules
-frontend/.next
+# `.next*` chứ không phải `.next`: NEXT_DIST_DIR cho phép đổi thư mục build
+# (`.next-verify`, `.next-dev-isolated`), và một thư mục dev bỏ quên sẽ chui
+# thẳng vào build context qua `COPY . .` — 245 MB image phình vô ích.
+frontend/.next*
 bin
 .git
 *.log

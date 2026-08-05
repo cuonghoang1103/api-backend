@@ -141,13 +141,25 @@ if [ "$MODE" = "local" ]; then
     # --delete-excluded, no less) meant the folder never reached the VPS, the
     # Docker build had nothing to COPY, and the feature 500'd on prod while
     # working perfectly on this machine.
+    #
+    # `frontend/.next*` (có dấu sao), KHÔNG phải `frontend/.next/`: next.config.js
+    # cho đổi thư mục build qua NEXT_DIST_DIR và các phiên làm việc song song vẫn
+    # dùng nó (`.next-verify`, `.next-dev-isolated` — xem .claude/launch.json).
+    # Luật cũ chỉ khớp đúng `.next/`, nên 05/08/2026 rsync đã đẩy 245 MB thư mục
+    # dev `.next-dev-isolated` lên VPS rồi từ đó vào cả build context của Docker.
+    # Không làm hỏng gì (prod luôn build vào `.next`) nhưng phình image và ăn
+    # đĩa — mà VPS này đã một lần đầy đĩa làm chết Postgres.
+    #
+    # ⚠️ KHÔNG chèn dòng `#` vào giữa các dòng nối bằng `\` bên dưới: dấu `\`
+    # nối các dòng thành MỘT lệnh, nên `#` sẽ biến mọi tham số phía sau thành
+    # chú thích — kể cả `--exclude='.env'`, tức là bí mật bị đẩy lên VPS.
     rsync -azP \
         --delete \
         --delete-excluded \
         --exclude='.git/' \
         --exclude='node_modules/' \
         --exclude='dist/' \
-        --exclude='frontend/.next/' \
+        --exclude='frontend/.next*' \
         --exclude='frontend/node_modules/' \
         --exclude='.env' \
         --exclude='.env.*' \

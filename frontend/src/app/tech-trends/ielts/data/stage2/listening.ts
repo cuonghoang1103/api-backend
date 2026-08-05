@@ -214,6 +214,31 @@ export const LISTENINGS2: ListeningExercise[] = [
         why: '"Lockers are free, but you need a one-pound coin." Thông tin nằm ở đoạn "One last thing" — đừng buông tai sớm.',
       },
     ],
+    figure: {
+      kind: 'map',
+      title: 'Sports Centre — điền tên vào các ô có viền đứt',
+      note: 'Vừa nghe vừa DI NGÓN TAY theo lời chỉ dẫn. Bắt đầu từ Main entrance.',
+      map: {
+        cols: 12,
+        rows: 8,
+        paths: [
+          { x: 1, y: 3, w: 6, h: 1.2, label: 'corridor' },
+        ],
+        boxes: [
+          { x: 4.5, y: 6.4, w: 3, h: 1.4, label: 'Main entrance' },
+          { x: 4.5, y: 4.6, w: 3, h: 1.4, label: 'Reception' },
+          { x: 4.5, y: 0.4, w: 3, h: 1.6, blank: 'A' },
+          { x: 1.2, y: 1.4, w: 2.4, h: 1.4, blank: 'B' },
+          { x: 0.3, y: 3.1, w: 0.8, h: 1.2, label: 'store' },
+          { x: 8.4, y: 4.6, w: 2.4, h: 1.4, blank: 'C' },
+          { x: 8.4, y: 2.6, w: 2.4, h: 1.4, blank: 'D' },
+          { x: 4.5, y: 2.6, w: 3, h: 1.4, blank: 'E' },
+        ],
+        pins: [
+          { x: 6, y: 7.9, label: 'You are here' },
+        ],
+      },
+    },
     listenFor: ['opposite / left / right / between / behind / above', 'second door (không phải first)', 'weekdays vs weekends', 'One last thing'],
     tips: [
       'Map Labelling: DI NGÓN TAY theo lời chỉ dẫn. Chỉ ghi chữ thôi thì rất dễ rối.',

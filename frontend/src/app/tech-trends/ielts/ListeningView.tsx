@@ -15,6 +15,7 @@ import {
   Play, Square, Check, X, RotateCcw, Lightbulb, Headphones, Youtube, Gauge, Eye, EyeOff,
 } from 'lucide-react';
 import type { StageBundle } from './data/bundles';
+import FigureView from './FigureView';
 import { isCorrect } from './check';
 
 /** Tốc độ đọc — chặng 1 mặc định chậm hơn tốc độ thi thật. */
@@ -157,6 +158,13 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
         <p className="mt-3 text-slate-300 text-sm leading-relaxed rounded-xl border border-white/10 bg-white/[0.03] p-3">
           {ex.context}
         </p>
+
+        {/* Bản đồ cho dạng Map Labelling — nghe mà không có hình thì không luyện được dạng này */}
+        {ex.figure && (
+          <div className="mt-4">
+            <FigureView figure={ex.figure} />
+          </div>
+        )}
 
         {/* Điều khiển phát */}
         <div className="mt-4 flex flex-wrap items-center gap-2">

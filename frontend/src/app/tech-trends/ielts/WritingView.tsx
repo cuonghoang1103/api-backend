@@ -16,6 +16,7 @@ import {
   PenLine, Eye, EyeOff, AlertTriangle, ListOrdered, Quote, FileText, Trash2,
 } from 'lucide-react';
 import type { StageBundle } from './data/bundles';
+import FigureView from './FigureView';
 
 function countWords(s: string): number {
   const t = s.trim();
@@ -70,6 +71,13 @@ export default function WritingView({ d }: { d: StageBundle }) {
           <span className="text-xs text-slate-500">· {task.minutes} phút</span>
         </div>
         <h3 className="text-xl font-bold text-white mt-2">{task.title}</h3>
+
+        {/* Biểu đồ của đề — Task 1 thật luôn có hình, không phải bảng chữ */}
+        {task.figure && (
+          <div className="mt-4">
+            <FigureView figure={task.figure} />
+          </div>
+        )}
 
         <div className="mt-3 rounded-xl border border-white/10 bg-white/[0.04] p-4">
           <p className="text-white text-sm leading-relaxed whitespace-pre-line font-mono">{task.prompt}</p>

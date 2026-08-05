@@ -262,6 +262,19 @@ export const WRITINGS: WritingTask[] = [
     id: 'w4',
     task: 'Task 1 (Academic)',
     title: 'Mô tả bảng số liệu đơn giản',
+    figure: {
+      kind: 'table',
+      title: 'Means of transport used by students to reach campus (2015 vs 2025)',
+      note: 'Số liệu tự đặt cho bài luyện, không lấy từ đề thi thật.',
+      unit: '%',
+      categories: ['2015', '2025'],
+      series: [
+        { name: 'Motorbike', values: [62, 40] },
+        { name: 'Bus', values: [20, 27] },
+        { name: 'Bicycle', values: [8, 21] },
+        { name: 'Car', values: [10, 12] },
+      ],
+    },
     prompt:
       'The table below shows how students at one university travelled to campus in 2015 and 2025.\n\n'
       + '| Means of transport | 2015 | 2025 |\n'

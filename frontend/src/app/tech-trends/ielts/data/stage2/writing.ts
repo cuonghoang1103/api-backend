@@ -17,6 +17,18 @@ export const WRITINGS2: WritingTask[] = [
     id: 's2w1',
     task: 'Task 1 (Academic)',
     title: 'Biểu đồ đường — số người dùng ba phương tiện',
+    figure: {
+      kind: 'line',
+      title: 'Number of people using three types of transport, 1990–2020',
+      note: 'Số liệu tự đặt cho bài luyện. Đơn vị: triệu người.',
+      unit: 'triệu người',
+      categories: ['1990', '2000', '2010', '2020'],
+      series: [
+        { name: 'Bus', values: [12, 9.5, 7, 6.5] },
+        { name: 'Train', values: [4, 5, 7.5, 11] },
+        { name: 'Private car', values: [8, 14, 19, 18] },
+      ],
+    },
     prompt:
       'The line graph below shows the number of people (in millions) using three types of transport in one '
       + 'country between 1990 and 2020.\n\n'

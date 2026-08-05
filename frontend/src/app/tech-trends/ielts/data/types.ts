@@ -255,6 +255,8 @@ export interface ListeningExercise {
    */
   lines: { who: string; text: string }[];
   questions: ListeningQuestion[];
+  /** Bản đồ / sơ đồ cho dạng Map Labelling. */
+  figure?: Figure;
   /** Từ khoá cần bắt được khi nghe. */
   listenFor: string[];
   tips: string[];
@@ -274,10 +276,70 @@ export interface ListeningSource {
   how: string;
 }
 
+/* ─────────────────────────  HÌNH ẢNH  ───────────────────────── */
+
+/**
+ * Hình cho đề Writing Task 1 và cho bài nghe Map Labelling.
+ *
+ * Vẽ bằng SVG NỘI TUYẾN, không tải ảnh từ đâu cả. Ba lý do:
+ *  1. CSP của trang chỉ cho `img-src` từ self và R2 — ảnh ngoài bị chặn.
+ *  2. Đề Task 1 thật là biểu đồ; mô tả biểu đồ bằng chữ thì người học đọc số
+ *     có sẵn chứ không tập được kỹ năng ĐỌC BIỂU ĐỒ, mà đó mới là việc khó.
+ *  3. SVG nội tuyến co giãn theo màn hình và tự đổi màu theo nền tối.
+ *
+ * Dữ liệu tách khỏi cách vẽ: cùng một `values` có thể vẽ cột hay đường, và
+ * số trong hình luôn khớp số trong bài mẫu vì cả hai đọc chung một nguồn.
+ */
+export type FigureKind = 'bar' | 'line' | 'pie' | 'table' | 'process' | 'map';
+
+export interface FigureSeries {
+  name: string;
+  values: number[];
+  /** Mã màu; bỏ trống thì lấy theo bảng màu mặc định. */
+  color?: string;
+}
+
+/** Bản đồ đơn giản cho Map Labelling — khối chữ nhật + lối đi + vị trí trống. */
+export interface MapSpec {
+  /** Kích thước lưới, toạ độ mọi thứ tính theo ô lưới này. */
+  cols: number;
+  rows: number;
+  /** Khối: phòng, toà nhà, khu vực. `blank` là nhãn cần điền (A, B, C…). */
+  boxes: {
+    x: number; y: number; w: number; h: number;
+    label?: string;
+    blank?: string;
+  }[];
+  /** Lối đi / đường — vẽ thành dải mờ. */
+  paths?: { x: number; y: number; w: number; h: number; label?: string }[];
+  /** Mốc: lối vào, chỗ đứng. */
+  pins?: { x: number; y: number; label: string }[];
+}
+
+export interface Figure {
+  kind: FigureKind;
+  title: string;
+  /** Nguồn số liệu — luôn ghi rõ là số liệu tự đặt cho bài luyện. */
+  note?: string;
+  /** Nhãn trục ngang (năm, hạng mục). */
+  categories?: string[];
+  series?: FigureSeries[];
+  /** Đơn vị hiện ở trục dọc. */
+  unit?: string;
+  /** Cho kind 'pie'. */
+  slices?: { label: string; value: number; color?: string }[];
+  /** Cho kind 'process'. */
+  steps?: { label: string; note?: string }[];
+  /** Cho kind 'map'. */
+  map?: MapSpec;
+}
+
 /* ─────────────────────────  VIẾT  ───────────────────────── */
 
 export interface WritingTask {
   id: string;
+  /** Biểu đồ của đề — Task 1 Academic gần như luôn có. */
+  figure?: Figure;
   /** 'Task 1' | 'Task 2' | 'Nền tảng' — chặng 1 có cả bài tập viết câu. */
   task: string;
   title: string;

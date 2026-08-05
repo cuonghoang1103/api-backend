@@ -18,10 +18,11 @@ import { useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowLeft, Target, GraduationCap, BookOpen, Headphones, FileText, PenLine, Mic,
-  Flame, Briefcase, ClipboardList, ListChecks,
+  Flame, Briefcase, ClipboardList, ListChecks, Keyboard,
 } from 'lucide-react';
 import { IELTS_STATS } from './data/roadmap';
 import { STAGES, TOTAL_STATS, type StageBundle } from './data/bundles';
+import { TYPING_PASSAGES } from './data/typing';
 // Hook dùng chung với khoá Tiếng Anh Giao Tiếp — chỉ đọc to một câu bằng
 // giọng en-US của trình duyệt, không kéo theo phần nào của luồng phỏng vấn.
 import { useSpeak } from '../tieng-anh-giao-tiep/useSpeak';
@@ -36,10 +37,11 @@ import DailyView from './DailyView';
 import LifeView from './LifeView';
 import ExamView from './ExamView';
 import QuestionTypesView from './QuestionTypesView';
+import TypingPanel from './TypingPanel';
 
 type TabId =
   | 'roadmap' | 'daily' | 'qtypes' | 'lessons' | 'vocab' | 'listening'
-  | 'reading' | 'writing' | 'speaking' | 'life' | 'exam';
+  | 'reading' | 'writing' | 'speaking' | 'typing' | 'life' | 'exam';
 
 /**
  * Con số trên tab tính TỪ DỮ LIỆU của chặng đang xem, không gõ tay. Gõ tay thì
@@ -48,6 +50,12 @@ type TabId =
  *
  * Tab "Dạng câu hỏi" chỉ hiện khi chặng đó có dữ liệu (từ chặng 2 trở đi).
  */
+/** Số đoạn gõ của một chặng — chặng chưa có đoạn riêng thì dùng toàn bộ. */
+function typingCountFor(stageId: string): number {
+  const own = TYPING_PASSAGES.filter((p) => p.stage === stageId).length;
+  return own || TYPING_PASSAGES.length;
+}
+
 function tabsFor(d: StageBundle): { id: TabId; label: string; icon: typeof Target; badge?: string }[] {
   return [
     { id: 'roadmap', label: 'Lộ trình', icon: Target },
@@ -61,6 +69,7 @@ function tabsFor(d: StageBundle): { id: TabId; label: string; icon: typeof Targe
     { id: 'reading', label: 'Đọc', icon: FileText, badge: String(d.stats.readings) },
     { id: 'writing', label: 'Viết', icon: PenLine, badge: String(d.stats.writings) },
     { id: 'speaking', label: 'Nói', icon: Mic, badge: String(d.stats.speakingTopics) },
+    { id: 'typing', label: 'Gõ đoạn văn', icon: Keyboard, badge: String(typingCountFor(d.id)) },
     { id: 'life', label: 'Đời sống & Việc làm', icon: Briefcase, badge: '11' },
     { id: 'exam', label: 'Cẩm nang thi', icon: ClipboardList },
   ];
@@ -89,7 +98,7 @@ export default function IeltsClient() {
 
         <header className="mb-6">
           <p className="text-sky-400 text-sm font-medium tracking-wide uppercase mb-2">
-            Luyện thi · 4 chặng band · chặng 1 và 2 đã có nội dung học
+            Luyện thi · 4 chặng band · trọn giáo trình 0 → 7.5
           </p>
           <h1 className="text-3xl sm:text-4xl font-bold text-white leading-tight">
             Lộ trình IELTS 0 → 7.5
@@ -97,16 +106,17 @@ export default function IeltsClient() {
           <p className="text-slate-400 mt-3 max-w-3xl leading-relaxed">
             Lộ trình chia bốn chặng band: mỗi chặng ghi rõ bạn đang ở đâu, mỗi ngày làm gì cho từng kỹ
             năng, và khi nào đủ điều kiện lên chặng sau. <b className="text-slate-200">Chặng 1 (0 → 4.0)</b>{' '}
-            xây nền từ con số không; <b className="text-slate-200">chặng 2 (4.0 → 5.5)</b> bắt đầu vào đề
-            thi thật với cẩm nang {TOTAL_STATS.questionTypes} dạng câu hỏi.
+            xây nền từ con số không · <b className="text-slate-200">chặng 2</b> vào đề thi thật với cẩm nang
+            {' '}{TOTAL_STATS.questionTypes} dạng câu hỏi · <b className="text-slate-200">chặng 3</b> phá vòng lặp
+            &quot;viết nhiều mà không lên điểm&quot; · <b className="text-slate-200">chặng 4</b> giảm lỗi để chạm 7.5.
           </p>
 
           <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm">
             <span className="text-slate-300"><b className="text-white">{IELTS_STATS.stages}</b> chặng</span>
             <span className="text-slate-300"><b className="text-white">{TOTAL_STATS.lessons}</b> bài học</span>
             <span className="text-slate-300"><b className="text-white">{TOTAL_STATS.words}</b> từ vựng</span>
-            <span className="text-slate-300"><b className="text-white">{TOTAL_STATS.questionTypes}</b> dạng câu hỏi</span>
             <span className="text-slate-300"><b className="text-white">{TOTAL_STATS.readings + TOTAL_STATS.listenings}</b> bài đọc &amp; nghe</span>
+            <span className="text-slate-300"><b className="text-white">{TOTAL_STATS.graded}</b> câu chấm điểm</span>
             <span className="text-slate-300"><b className="text-white">{TOTAL_STATS.writings}</b> đề viết có bài mẫu</span>
           </div>
         </header>
@@ -187,15 +197,17 @@ export default function IeltsClient() {
         {activeTab === 'reading' && <ReadingView d={d} />}
         {activeTab === 'writing' && <WritingView d={d} />}
         {activeTab === 'speaking' && <SpeakingView d={d} speak={speak} current={current} supported={supported} />}
+        {activeTab === 'typing' && <TypingPanel stageId={d.id} />}
         {activeTab === 'life' && <LifeView speak={speak} current={current} supported={supported} />}
         {activeTab === 'exam' && <ExamView />}
 
-        {/* Chặng tiếp theo */}
+        {/* Ghi chú cuối trang */}
         <div className="mt-10 rounded-2xl border border-white/10 bg-white/[0.02] p-5">
           <p className="text-sm text-slate-300 leading-relaxed">
-            <b className="text-white">Đang soạn tiếp:</b> nội dung học cho chặng 2 (band 4.0 → 5.5) — bắt đầu
-            vào dạng đề IELTS thật, đủ các dạng câu hỏi Listening và Reading, Task 1 và Task 2 hoàn chỉnh.
-            Trong lúc chờ, phần giao tiếp hằng ngày và luyện phát âm có ở{' '}
+            <b className="text-white">Trọn lộ trình đã có nội dung.</b> Bài đọc, transcript bài nghe và đề viết
+            đều do khoá này tự soạn theo đúng dạng đề thật — không chép đề có bản quyền — nên mỗi câu đều có
+            lời giải thích vì sao đúng và vì sao sai. Biểu đồ Task 1 và bản đồ Listening vẽ bằng SVG ngay
+            trong trang. Phần giao tiếp hằng ngày và luyện phát âm có thêm ở{' '}
             <Link href="/tech-trends/tieng-anh-giao-tiep" className="text-emerald-400 hover:underline">
               khoá Tiếng Anh Giao Tiếp
             </Link>.

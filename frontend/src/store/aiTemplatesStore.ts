@@ -15,16 +15,36 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { ssrSafeStorage } from './ssrSafeStorage';
-import type { StackItem } from '@/lib/ai-templates/types';
+import type { StackItem, TypeSlug } from '@/lib/ai-templates/types';
+
+/**
+ * Một component đã mở gần đây.
+ *
+ * Đây là phần thay cho trang "Trending" của bản gốc — trang đó xếp hạng theo
+ * `downloads`, mà TOÀN BỘ 1.877 bản ghi đều có `downloads: 0`, nên nó kẹt vĩnh
+ * viễn ở "Loading trending data…". Sao chép một tính năng hỏng thì vô nghĩa;
+ * lịch sử xem của chính người dùng là dữ liệu CÓ THẬT và, trong một danh mục
+ * gần hai nghìn mục, hữu ích hơn hẳn.
+ */
+export interface RecentItem {
+  t: TypeSlug;
+  p: string;
+  c: string;
+  n: string;
+}
 
 /** Khoá định danh duy nhất một component trong toàn kho. */
 export function itemKey(type: string, path: string): string {
   return `${type}:${path}`;
 }
 
+/** Giữ bao nhiêu mục trong lịch sử xem. Quá số này thì thành một danh sách nữa. */
+const RECENT_MAX = 12;
+
 interface AiTemplatesState {
   stack: StackItem[];
   favorites: string[];
+  recent: RecentItem[];
   isStackOpen: boolean;
 
   addToStack: (item: StackItem) => void;
@@ -35,6 +55,9 @@ interface AiTemplatesState {
 
   toggleFavorite: (key: string) => void;
   isFavorite: (key: string) => boolean;
+
+  pushRecent: (item: RecentItem) => void;
+  clearRecent: () => void;
 
   openStack: () => void;
   closeStack: () => void;
@@ -49,6 +72,7 @@ export const useAiTemplatesStore = create<AiTemplatesState>()(
     (set, get) => ({
       stack: [],
       favorites: [],
+      recent: [],
       isStackOpen: false,
 
       addToStack: (item) => {
@@ -82,6 +106,17 @@ export const useAiTemplatesStore = create<AiTemplatesState>()(
 
       isFavorite: (key) => get().favorites.includes(key),
 
+      pushRecent: (item) =>
+        set({
+          // Xem lại một mục đã có thì nó nhảy lên đầu chứ không nhân đôi.
+          recent: [item, ...get().recent.filter((r) => !(r.t === item.t && r.p === item.p))].slice(
+            0,
+            RECENT_MAX,
+          ),
+        }),
+
+      clearRecent: () => set({ recent: [] }),
+
       openStack: () => set({ isStackOpen: true }),
       closeStack: () => set({ isStackOpen: false }),
       toggleStackPanel: () => set({ isStackOpen: !get().isStackOpen }),
@@ -91,7 +126,7 @@ export const useAiTemplatesStore = create<AiTemplatesState>()(
       storage: createJSONStorage(() => ssrSafeStorage),
       // `isStackOpen` cố ý KHÔNG lưu: mở lại tab mà panel tự bung ra thì phiền,
       // và nó không phải dữ liệu của người dùng.
-      partialize: (s) => ({ stack: s.stack, favorites: s.favorites }),
+      partialize: (s) => ({ stack: s.stack, favorites: s.favorites, recent: s.recent }),
     },
   ),
 );

@@ -18,13 +18,16 @@
  * `components/markdown/Markdown.tsx`).
  */
 
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import ReactMarkdown, { type Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import { Code2, FileText, ExternalLink } from 'lucide-react';
 import { slugify } from '@/lib/ai-templates/headings';
+import type { FrontmatterEntry } from '@/lib/ai-templates/frontmatter';
 import CopyButton from './CopyButton';
+import FrontmatterPanel from './FrontmatterPanel';
+import ContentSearch from './ContentSearch';
 
 export default function ContentViewer({
   text,
@@ -38,12 +41,15 @@ export default function ContentViewer({
   text: string;
   /** Markdown đã bỏ frontmatter — chế độ "Đọc" dùng cái này. */
   body: string;
-  frontmatter: [string, string][];
+  frontmatter: FrontmatterEntry[];
   format: 'md' | 'json';
   url: string;
   truncated: boolean;
 }) {
   const [mode, setMode] = useState<'read' | 'raw'>(format === 'md' ? 'read' : 'raw');
+  // Vùng để ContentSearch tô sáng và cuộn tới. Bọc CẢ bảng khai báo lẫn thân
+  // bài: người tìm "WCAG" không quan tâm chữ đó nằm ở frontmatter hay ở thân.
+  const bodyRef = useRef<HTMLDivElement>(null);
 
   const components = useMemo<Components>(() => {
     // Bộ đếm phải sống cùng vòng đời với `text`: dựng lại ở đây thì mỗi lần đổi
@@ -191,6 +197,8 @@ export default function ContentViewer({
           </div>
         )}
 
+        <ContentSearch source={text} containerRef={bodyRef} />
+
         <CopyButton value={text} label="Chép toàn bộ" />
 
         <a
@@ -204,50 +212,36 @@ export default function ContentViewer({
         </a>
       </div>
 
-      {/* Frontmatter hiện thành bảng khai báo thay vì để markdown nuốt: đây là
-          phần Claude Code THẬT SỰ đọc để quyết định khi nào kích hoạt skill,
-          nên nó đáng được đọc rõ ràng chứ không phải giấu trong mã thô. */}
-      {mode === 'read' && frontmatter.length > 0 && (
-        <dl className="mb-3 grid gap-x-4 gap-y-1.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-4 sm:grid-cols-[auto_minmax(0,1fr)]">
-          {frontmatter.map(([k, v]) => (
-            <div key={k} className="contents">
-              <dt className="font-mono text-[11.5px] uppercase tracking-wide text-[var(--text-muted)]">
-                {k}
-              </dt>
-              <dd className="mb-2 text-[12.5px] leading-relaxed text-[var(--text-secondary)] sm:mb-0">
-                {v}
-              </dd>
+      <div ref={bodyRef}>
+        {mode === 'read' && <FrontmatterPanel entries={frontmatter} />}
+
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-5">
+          {mode === 'read' && format === 'md' ? (
+            <div className="ai-tmpl-prose">
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeHighlight]}
+                components={components}
+              >
+                {body}
+              </ReactMarkdown>
             </div>
-          ))}
-        </dl>
-      )}
+          ) : (
+            <pre className="overflow-x-auto font-mono text-[12.5px] leading-relaxed text-[var(--text-secondary)]">
+              {text}
+            </pre>
+          )}
 
-      <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-5">
-        {mode === 'read' && format === 'md' ? (
-          <div className="ai-tmpl-prose">
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              rehypePlugins={[rehypeHighlight]}
-              components={components}
-            >
-              {body}
-            </ReactMarkdown>
-          </div>
-        ) : (
-          <pre className="overflow-x-auto font-mono text-[12.5px] leading-relaxed text-[var(--text-secondary)]">
-            {text}
-          </pre>
-        )}
-
-        {truncated && (
-          <p className="mt-4 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-[12.5px] text-amber-600">
-            Tệp quá dài nên đã cắt bớt phần cuối.{' '}
-            <a href={url} target="_blank" rel="noopener noreferrer" className="underline">
-              Xem đầy đủ trên GitHub
-            </a>
-            .
-          </p>
-        )}
+          {truncated && (
+            <p className="mt-4 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-[12.5px] text-amber-600">
+              Tệp quá dài nên đã cắt bớt phần cuối.{' '}
+              <a href={url} target="_blank" rel="noopener noreferrer" className="underline">
+                Xem đầy đủ trên GitHub
+              </a>
+              .
+            </p>
+          )}
+        </div>
       </div>
     </section>
   );

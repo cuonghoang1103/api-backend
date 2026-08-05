@@ -62,6 +62,32 @@ function clean(input) {
   return s.replace(/\s+/g, ' ').trim().replace(/[ ,;:-]+$/, '');
 }
 
+/**
+ * Làm phẳng `contains` của plugin thành bảng `tên → số`.
+ *
+ * 11/33 plugin khai lồng một tầng: `{plugins: 255, components: {agents: 23,
+ * skills: 40, …}}`. Để nguyên thì giao diện nhận phải một OBJECT ở chỗ nó chờ
+ * một con số, và React ném thẳng "Objects are not valid as a React child" —
+ * trang chi tiết của đúng 11 plugin đó trắng bóc. Kiểu TS khai là
+ * `Record<string, number>` nhưng JSON được nạp bằng `as ComponentRecord[]`,
+ * nên phép ép kiểu đã che lỗi này cho tới khi chạy thật.
+ *
+ * Chuẩn hoá ngay ở đây, chỗ dữ liệu vào, để kiểu khai báo nói đúng sự thật.
+ */
+function flattenContains(raw) {
+  const out = {};
+  for (const [k, v] of Object.entries(raw || {})) {
+    if (typeof v === 'number') {
+      out[k] = (out[k] || 0) + v;
+    } else if (v && typeof v === 'object') {
+      for (const [k2, v2] of Object.entries(v)) {
+        if (typeof v2 === 'number') out[k2] = (out[k2] || 0) + v2;
+      }
+    }
+  }
+  return out;
+}
+
 async function getJson(path) {
   const res = await fetch(`${BASE}${path}`, {
     headers: { 'User-Agent': 'cuongthai-ai-templates-refresh/1.0' },
@@ -136,7 +162,7 @@ async function main() {
       keywords: x.tags || [],
       stars: x.stars || 0,
       website: x.website || '',
-      contains: x.contains || {},
+      contains: flattenContains(x.contains),
       highlights: (x.highlights || []).slice(0, 4),
     }))
     .sort((a, b) => b.stars - a.stars);

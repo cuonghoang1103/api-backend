@@ -12,6 +12,7 @@ import ComponentBrowser from '@/components/ai-templates/ComponentBrowser';
 import TypeNav from '@/components/ai-templates/TypeNav';
 import TypeIcon from '@/components/ai-templates/TypeIcon';
 import QuickStart from '@/components/ai-templates/QuickStart';
+import RecentlyViewed from '@/components/ai-templates/RecentlyViewed';
 
 const SITE_URL = 'https://cuongthai.com';
 
@@ -143,6 +144,8 @@ export default function TypeListPage({ params }: PageProps) {
       <div className="mb-5">
         <TypeNav active={meta.slug} counts={counts} />
       </div>
+
+      <RecentlyViewed exclude={meta.slug} />
 
       <QuickStart />
 

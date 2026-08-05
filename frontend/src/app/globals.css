@@ -3375,3 +3375,18 @@ html.theme-dark .ai-tmpl-prose .hljs-regexp { color: #fde68a; }
 .ai-tmpl-scroll-x::-webkit-scrollbar {
   display: none;
 }
+
+/* Tô sáng kết quả tìm trong nội dung — xem `ContentSearch.tsx`.
+   Dùng CSS Custom Highlight API: tô bằng Range, KHÔNG chèn thẻ <mark> vào DOM
+   mà React đang quản (chèn thẻ thì lần render kế tiếp React sẽ dọn sạch, hoặc
+   ném "removeChild on a node which is not a child").
+   Trình duyệt chưa hỗ trợ thì phần này im lặng không áp dụng — số đếm và nút
+   ‹ › vẫn chạy, chỉ mất màu nền. */
+::highlight(ai-tmpl-find) {
+  background-color: rgba(250, 204, 21, 0.32);
+  color: inherit;
+}
+::highlight(ai-tmpl-find-active) {
+  background-color: #facc15;
+  color: #1c1917;
+}

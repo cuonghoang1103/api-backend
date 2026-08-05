@@ -397,6 +397,202 @@ export const YOUON: KanaCell[][] = [
 /* ══════════════════ CÁC MỤC TRA CỨU ══════════════════ */
 
 export const SECTIONS: CheatSection[] = [
+  /* ─────────── ÂM NGẮT & TRƯỜNG ÂM ─────────── */
+  {
+    id: 'rhythm',
+    title: 'Âm ngắt っ & trường âm',
+    icon: '🎵',
+    summary:
+      'Hai thứ quyết định bạn đọc to ĐÚNG hay SAI, và cũng là hai thứ đề trắc nghiệm hỏi cách đọc ' +
+      'nhiều nhất. Mọi từ dưới đây đều lấy từ chính bộ từ vựng và 13 bài đọc của môn — không có từ nào thừa.',
+    tables: [
+      {
+        id: 'rh-sokuon-rule',
+        title: 'っ là một khoảng NÍN, không phải một âm',
+        note:
+          'っ là chữ つ viết nhỏ. Nó không đọc thành tiếng — bạn ngậm miệng đúng một nhịp rồi bật phụ âm sau ' +
+          'mạnh hơn. Giống chỗ hai phụ âm dính nhau trong tiếng Anh: bookkeeper, hot topic.',
+        headers: ['Viết', 'Đọc', 'Bỏ っ thì thành', 'Nhịp'],
+        rows: [
+          ['学校 がっこう', 'gak—koo', 'がこう (sai)', '4'],
+          ['切手 きって', 'kit—te', 'きて = “hãy đến” — KHÁC NGHĨA', '3'],
+          ['サッカー', 'sak—kaa', 'サカー (sai)', '4'],
+          ['きっさてん (quán cà phê)', 'kis—sa-ten', 'きさてん (sai)', '5'],
+          ['いらっしゃいませ', 'i-ras—shai-ma-se', '—', '8'],
+          ['ちょっと', 'chot—to', 'ちょと (sai)', '4'],
+          ['いっしょに (cùng nhau)', 'is—sho-ni', 'いしょに (sai)', '5'],
+          ['インターネット', 'in-taa-net—to', '—', '8'],
+        ],
+        dangerRows: [1],
+      },
+      {
+        id: 'rh-sokuon-number',
+        title: 'っ trong SỐ ĐẾM — nhóm ra đề nhiều nhất',
+        note:
+          'Đây là chỗ っ xuất hiện dày đặc nhất trong đề thi. Học thuộc bảng này là xử được cả câu đọc số ' +
+          'lẫn chỗ vấp khi đọc to.',
+        headers: ['Phút 分', 'Trăm/Nghìn', 'Tuổi 才', 'Tầng 階'],
+        rows: [
+          ['1分 いっぷん', '600 ろっぴゃく', '1才 いっさい', '1階 いっかい'],
+          ['6分 ろっぷん', '800 はっぴゃく', '8才 はっさい', '6階 ろっかい'],
+          ['8分 はっぷん', '8000 はっせん', '10才 じゅっさい', '8階 はっかい'],
+          ['10分 じゅっぷん', '—', '20才 はたち ⚠', '10階 じゅっかい'],
+        ],
+        dangerRows: [0, 1, 2, 3],
+      },
+      {
+        id: 'rh-sokuon-counter',
+        title: 'っ trong cách đếm vật ～つ',
+        headers: ['Số', 'Viết', 'Đọc', 'Số', 'Viết', 'Đọc'],
+        rows: [
+          ['1', 'ひとつ', 'hi-to-tsu', '6', 'むっつ', 'mut—tsu'],
+          ['2', 'ふたつ', 'fu-ta-tsu', '7', 'ななつ', 'na-na-tsu'],
+          ['3', 'みっつ', 'mit—tsu', '8', 'やっつ', 'yat—tsu'],
+          ['4', 'よっつ', 'yot—tsu', '9', 'ここのつ', 'ko-ko-no-tsu'],
+          ['5', 'いつつ', 'i-tsu-tsu', '10', 'とお', 'too'],
+        ],
+        dangerRows: [2, 3, 5, 7],
+      },
+      {
+        id: 'rh-choon-rule',
+        title: 'Trường âm hiragana — 5 hàng, 2 cái là BẪY',
+        note:
+          'Hiragana không có dấu kéo dài; nó thêm một nguyên âm. Ba hàng đầu dễ đoán, hai hàng cuối thì KHÔNG ' +
+          'đọc như mặt chữ — đây là lỗi phát âm phổ biến nhất của người mới.',
+        headers: ['Hàng', 'Kéo dài bằng', 'Ví dụ', 'Đọc THẬT'],
+        rows: [
+          ['あ', '+ あ', 'おかあさん (mẹ)', 'o-kaa-san'],
+          ['い', '+ い', 'おにいさん (anh)', 'o-nii-san'],
+          ['う', '+ う', 'ちゅうごく (Trung Quốc)', 'chuu-goku'],
+          ['え', '+ い  ← KHÔNG phải え', 'せんせい (giáo viên)', 'sen-SEE, không phải sen-sei'],
+          ['お', '+ う  ← KHÔNG phải お', 'がっこう (trường)', 'gak-KOO, không phải gak-kou'],
+        ],
+        dangerRows: [3, 4],
+      },
+      {
+        id: 'rh-ou',
+        title: 'Nhóm おう — đọc “oo”, có 29 từ trong bộ từ vựng của môn',
+        note: 'Cứ thấy chữ hàng お + う là kéo dài, KHÔNG đọc tách thành “ô-u”.',
+        headers: ['Từ', 'Đọc', 'Từ', 'Đọc'],
+        rows: [
+          ['がっこう (trường)', 'gak-koo', 'げつようび (thứ Hai)', 'ge-tsu-yoo-bi'],
+          ['こうこう (cấp 3)', 'koo-koo', 'かようび (thứ Ba)', 'ka-yoo-bi'],
+          ['べんきょうします (học)', 'ben-kyoo-shi-mas', 'すいようび (thứ Tư)', 'sui-yoo-bi'],
+          ['じゅぎょう (tiết học)', 'ju-gyoo', 'もくようび (thứ Năm)', 'mo-ku-yoo-bi'],
+          ['りょこう (du lịch)', 'ryo-koo', 'きんようび (thứ Sáu)', 'kin-yoo-bi'],
+          ['ぎんこう (ngân hàng)', 'gin-koo', 'どようび (thứ Bảy)', 'do-yoo-bi'],
+          ['びょういん (bệnh viện)', 'byoo-in', 'にちようび (Chủ Nhật)', 'ni-chi-yoo-bi'],
+          ['こうえん (công viên)', 'koo-en', 'なんようび (thứ mấy)', 'nan-yoo-bi'],
+          ['りょうり (món ăn)', 'ryoo-ri', 'たんじょうび (sinh nhật)', 'tan-joo-bi'],
+          ['こうちゃ (hồng trà)', 'koo-cha', 'きょうし (giáo viên)', 'kyoo-shi'],
+          ['おべんとう (cơm hộp)', 'o-ben-too', 'こうむいん (công chức)', 'koo-mu-in'],
+          ['どうぞ', 'doo-zo', 'そうですか', 'soo-des-ka'],
+          ['ありがとうございます', 'a-ri-ga-too go-za-i-mas', 'よろしくおねがいします', '…o-ne-gai-shi-mas'],
+        ],
+      },
+      {
+        id: 'rh-ei-uu',
+        title: 'Nhóm えい (đọc “ee”) và うう',
+        headers: ['えい → “ee”', 'Đọc', 'うう', 'Đọc'],
+        rows: [
+          ['がくせい (học sinh)', 'ga-ku-see', 'ちゅうごく (Trung Quốc)', 'chuu-go-ku'],
+          ['せんせい (giáo viên)', 'sen-see', 'しゅうまつ (cuối tuần)', 'shuu-ma-tsu'],
+          ['とけい (đồng hồ)', 'to-kee', '～しゅうかん (~tuần)', 'shuu-kan'],
+          ['けいたいでんわ (di động)', 'kee-tai-den-wa', 'ゆうびんきょく (bưu điện)', 'yuu-bin-kyo-ku'],
+          ['えいご (tiếng Anh)', 'ee-go', 'ちゅうもん (gọi món)', 'chuu-mon'],
+          ['えいが (phim)', 'ee-ga', 'ぎゅうにく / ぎゅうにゅう', 'gyuu-ni-ku / gyuu-nyuu'],
+        ],
+      },
+      {
+        id: 'rh-oo-exception',
+        title: 'Ngoại lệ おお — vài từ kéo dài bằng お chứ không phải う',
+        note: 'Số lượng ít, nhưng nếu không biết thì viết sai chính tả và đọc cũng dễ sai.',
+        headers: ['Từ', 'Đọc', 'Nghĩa'],
+        rows: [
+          ['十日 とおか', 'too-ka', 'ngày mùng 10'],
+          ['十 とお', 'too', 'mười (đếm vật)'],
+          ['大きい おおきい', 'oo-kii', 'to, lớn'],
+          ['多い おおい', 'oo-i', 'nhiều'],
+          ['遠い とおい', 'too-i', 'xa'],
+        ],
+        dangerRows: [0, 1, 2, 3, 4],
+      },
+      {
+        id: 'rh-kata',
+        title: 'Katakana — dễ nhất, cứ thấy gạch ー là kéo dài',
+        note: 'Không có ngoại lệ nào. 29 từ katakana trong bộ từ vựng của môn có dấu này.',
+        headers: ['Từ', 'Đọc', 'Từ', 'Đọc'],
+        rows: [
+          ['コーヒー', 'koo-hii', 'スーパー', 'suu-paa'],
+          ['ビール', 'bii-ru', 'ケーキ', 'kee-ki'],
+          ['サッカー', 'sak-kaa', 'カレー', 'ka-ree'],
+          ['スポーツ', 'spoo-tsu', 'ジュース', 'juu-su'],
+          ['オーストラリア', 'oo-su-to-ra-ri-a', 'チーズ', 'chii-zu'],
+          ['エレベーター', 'e-re-bee-taa', 'スープ', 'suu-pu'],
+          ['エスカレーター', 'e-su-ka-ree-taa', 'ハンバーグ', 'han-baa-gu'],
+          ['インターネット', 'in-taa-net-to', 'パーティー', 'paa-tii'],
+          ['ティーシャツ', 'tii-sha-tsu', 'スキー', 'su-kii'],
+          ['ゴールデンウィーク', 'goo-ru-den-wii-ku', 'バーベキュー', 'baa-be-kyuu'],
+        ],
+      },
+      {
+        id: 'rh-pairs',
+        title: 'Đọc sai một nhịp là ra từ khác — các cặp phải phân biệt',
+        note: 'Đây là lý do giám thị trừ điểm khi bạn đọc lướt. Ngắn và dài là HAI TỪ khác nhau.',
+        headers: ['Ngắn', 'Nghĩa', 'Dài', 'Nghĩa'],
+        rows: [
+          ['ビル', 'toà nhà', 'ビール', 'bia'],
+          ['おばさん', 'cô, dì', 'おばあさん', 'bà'],
+          ['おじさん', 'chú, bác', 'おじいさん', 'ông'],
+          ['ゆき', 'tuyết', 'ゆうき', 'dũng khí'],
+          ['ここ', 'ở đây', 'こうこう', 'trường cấp 3'],
+          ['きて', 'hãy đến', 'きって', 'con tem'],
+          ['おと', 'âm thanh', 'おっと', 'chồng'],
+        ],
+        dangerRows: [0, 1, 2, 3, 4, 5, 6],
+      },
+      {
+        id: 'rh-mora',
+        title: 'Đếm nhịp — mẹo trị dứt cả hai lỗi',
+        note:
+          'Quy tắc duy nhất: MỖI ký tự kana = đúng 1 nhịp, kể cả っ, ー và ん. Riêng âm ghép (きゃ・しゅ・ちょ) ' +
+          'tính là 1 nhịp vì chữ nhỏ dính vào chữ trước. Vừa đọc vừa gõ tay mỗi nhịp — 15 phút là hết vấp.',
+        headers: ['Từ', 'Tách nhịp', 'Số nhịp'],
+        rows: [
+          ['がっこう', 'が・っ・こ・う', '4'],
+          ['せんせい', 'せ・ん・せ・い', '4'],
+          ['コーヒー', 'コ・ー・ヒ・ー', '4'],
+          ['べんきょう', 'べ・ん・きょ・う', '4'],
+          ['サッカー', 'サ・ッ・カ・ー', '4'],
+          ['にほんご', 'に・ほ・ん・ご', '4'],
+          ['たんじょうび', 'た・ん・じょ・う・び', '5'],
+          ['いらっしゃいませ', 'い・ら・っ・しゃ・い・ま・せ', '7'],
+        ],
+      },
+    ],
+    tips: [
+      {
+        title: 'Trong 30 giây chuẩn bị trước khi đọc to',
+        body:
+          'Quét bài và khoanh đúng hai thứ: mọi chữ っ nhỏ, và mọi chỗ có ー hoặc えい/おう. Đó là toàn bộ ' +
+          'các điểm bạn có thể vấp. Số và katakana đã nằm sẵn trong hai nhóm này.',
+      },
+      {
+        title: 'Lỡ đọc sai giữa chừng thì làm gì',
+        body:
+          'Đọc lại từ đó cho đúng rồi đi tiếp — phần READING chấm độ chính xác chứ không chấm tốc độ. ' +
+          'Giám thị trừ điểm khi bạn đọc sai mà KHÔNG nhận ra, không phải khi bạn tự sửa. Đây cũng là lý do ' +
+          'phải đọc chậm: đọc chậm thì kịp nhìn thấy っ và kịp kéo dài chỗ cần kéo.',
+      },
+      {
+        title: 'Ba từ dài nhất trong ngân hàng bài đọc',
+        body:
+          'いらっしゃいませ (7 nhịp, có っ) · しょうしょうおまちください (có 2 âm ghép しょ liền nhau + trường âm) · ' +
+          'かしこまりました. Cả ba nằm ở bài đọc số 7. Học chúng như một khối âm thanh, đừng phân tích từng chữ.',
+      },
+    ],
+  },
+
   /* ─────────── SỐ & THỜI GIAN ─────────── */
   {
     id: 'number',

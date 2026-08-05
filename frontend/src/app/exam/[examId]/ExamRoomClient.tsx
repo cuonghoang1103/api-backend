@@ -63,6 +63,17 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
   const [genPrompts, setGenPrompts] = useState<Record<number, { text: string; imageUrl?: string }[]>>({});
 
   const submittedRef = useRef(false);
+  // Tự nộp khi hết giờ chỉ được phép chạy ĐÚNG MỘT LẦN cho cả phiên thi.
+  //
+  // Vì sao cần ref riêng thay vì dùng lại submittedRef: khi nộp lỗi, catch
+  // phải gỡ submittedRef để nút "Nộp bài" tay còn bấm được — nhưng lúc đó
+  // effect hết giờ lại thấy đủ điều kiện cũ (phase 'taking' + remaining<=0 +
+  // guard đã gỡ) nên gọi lại ngay, hỏng lại, gỡ lại… thành vòng lặp vô hạn
+  // chạy nhanh hết mức mạng cho phép. Sự cố 06/08/2026: một tab thi nói bắn
+  // 18.297 POST submit-speak trong 10 phút (mỗi lần upload lại toàn bộ file
+  // ghi âm), đốt sạch rate limit 2000/15min và làm TOÀN BỘ API trả 429 cho
+  // IP đó — nhìn hệt như sập database.
+  const autoSubmitTriedRef = useRef(false);
 
   // ── Load exam ────────────────────────────────────────────────────────
   useEffect(() => {
@@ -147,13 +158,31 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
     } catch (e) {
       submittedRef.current = false;
       setPhase('taking');
-      toast.error((e as { response?: { data?: { message?: string } } })?.response?.data?.message || (isVi ? 'Nộp bài thất bại' : 'Submit failed'));
+      const msg = (e as { response?: { data?: { message?: string } } })?.response?.data?.message
+        || (isVi ? 'Nộp bài thất bại' : 'Submit failed');
+      // Lần tự nộp đã dùng hết — nói rõ để người học biết phải bấm tay,
+      // vì sẽ KHÔNG có lần tự nộp thứ hai (chống vòng lặp, xem autoSubmitTriedRef).
+      toast.error(
+        auto
+          ? `${msg} — ${isVi ? 'hãy bấm "Nộp bài" để thử lại' : 'press "Submit" to retry'}`
+          : msg,
+      );
     }
   }, [exam, attemptId, answers, codeAnswers, essays, zipFile, recordings, genPrompts, router, isVi]);
 
-  // Auto-submit on timeout
+  // Auto-submit on timeout — CHỈ MỘT LẦN, kể cả khi lần đó hỏng.
+  // Hỏng thì người học tự bấm "Nộp bài" (catch đã gỡ submittedRef nên nút
+  // vẫn dùng được); tuyệt đối không để effect tự gọi lại — xem chú thích ở
+  // autoSubmitTriedRef.
   useEffect(() => {
-    if (phase === 'taking' && expiresAt && remaining <= 0 && !submittedRef.current) {
+    if (
+      phase === 'taking' &&
+      expiresAt &&
+      remaining <= 0 &&
+      !submittedRef.current &&
+      !autoSubmitTriedRef.current
+    ) {
+      autoSubmitTriedRef.current = true;
       toast(isVi ? 'Hết giờ — tự động nộp bài' : "Time's up — auto-submitting");
       void doSubmit(true);
     }

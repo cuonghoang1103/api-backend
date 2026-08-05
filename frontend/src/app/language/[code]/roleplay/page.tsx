@@ -252,7 +252,9 @@ export default function RolePlayPage() {
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitMsg(); } }}
+                // Hội thoại bằng tiếng Nhật: Enter khi bộ gõ đang dựng chữ là
+                // phím chốt chữ, gửi lúc đó thì câu trả lời đứt giữa chừng
+                onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) { e.preventDefault(); submitMsg(); } }}
                 placeholder="Nhập câu trả lời…"
                 rows={1}
                 className="max-h-32 min-h-[40px] flex-1 resize-none rounded-2xl border border-[var(--border-color)] bg-[var(--bg-primary)] px-3.5 py-2.5 text-sm text-text-primary outline-none focus:border-neon-violet/60"

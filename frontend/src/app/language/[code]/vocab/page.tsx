@@ -1385,6 +1385,9 @@ function CollectionSheet({
             value={name}
             onChange={(e) => setName(e.target.value)}
             onKeyDown={(e) => {
+              // Đây là trang học tiếng Nhật/Trung — Enter lúc bộ gõ đang dựng
+              // chữ là để chốt chữ, tạo bộ sưu tập lúc đó thì tên bị cắt dở
+              if (e.nativeEvent.isComposing) return;
               if (e.key === 'Enter') void create();
             }}
             placeholder="Tên bộ sưu tập mới… (vd: Từ khó, Ôn thi N5)"

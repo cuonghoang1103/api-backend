@@ -450,6 +450,7 @@ export default function ChatModal({ onClose }: ChatModalProps) {
   }, [setStreaming]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.nativeEvent.isComposing) return;   // Enter đang chốt chữ cho bộ gõ CJK
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSend(input);

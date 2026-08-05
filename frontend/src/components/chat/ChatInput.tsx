@@ -190,6 +190,7 @@ export default function ChatInput({ onSend, isStreaming, onStop, disabled }: Cha
   }, [value, images, docs, isDisabled, processing, onSend]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.nativeEvent.isComposing) return;   // Enter đang chốt chữ cho bộ gõ CJK
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSubmit();

@@ -227,7 +227,8 @@ function CommentItem({
             <input
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') onReply(replyText, comment.id, () => { setReplyText(''); setReplying(false); }); }}
+              // isComposing: nhường Enter cho bộ gõ CJK đang chốt chữ
+              onKeyDown={(e) => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) onReply(replyText, comment.id, () => { setReplyText(''); setReplying(false); }); }}
               placeholder={`Trả lời ${name(comment.author)}…`}
               className="flex-1 min-w-0 px-3 py-2 bg-darkcard border border-darkborder rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
             />

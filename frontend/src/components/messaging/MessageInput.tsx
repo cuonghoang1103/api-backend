@@ -188,6 +188,10 @@ export default function MessageInput({ disabled = false }: { disabled?: boolean 
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // Bộ gõ tiếng Nhật/Trung/Hàn đang dựng chữ thì Enter là phím CHỐT chữ
+    // (watashi → わたし → 私), không phải lệnh gửi. Gửi lúc đó là tin nhắn
+    // đứt giữa chừng, mất đúng chữ vừa gõ.
+    if (e.nativeEvent.isComposing) return;
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSend();

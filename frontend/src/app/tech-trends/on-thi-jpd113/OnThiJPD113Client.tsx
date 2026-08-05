@@ -23,11 +23,14 @@ import {
   Keyboard,
   Layers,
   Search,
+  GraduationCap,
 } from 'lucide-react';
 
 import DrillPanel from './DrillPanel';
 import VocabPanel from './VocabPanel';
 import KanjiCardPanel from './KanjiCardPanel';
+import LessonPanel from './LessonPanel';
+import { LESSONS } from './data/lessons';
 
 import {
   PLAN,
@@ -612,6 +615,11 @@ function TaskRow({
   onToggle: () => void;
 }) {
   const meta = KIND_META[task.kind];
+  // Việc nào đã soạn bài giảng thì mở học ngay tại chỗ, không phải đi tìm
+  // nguồn khác. Việc chưa có bài thì đơn giản là không hiện nút.
+  const lesson = LESSONS[task.id];
+  const [openLesson, setOpenLesson] = useState(false);
+
   return (
     <div
       className={`rounded-xl border p-3.5 transition-all ${
@@ -659,9 +667,22 @@ function TaskRow({
             {task.detail}
           </p>
 
-          {task.links && task.links.length > 0 && (
+          {(lesson || (task.links && task.links.length > 0)) && (
             <div className="flex flex-wrap gap-2 mt-2.5">
-              {task.links.map((l) => (
+              {lesson && (
+                <button
+                  onClick={() => setOpenLesson((v) => !v)}
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition-colors ${
+                    openLesson
+                      ? 'bg-neon-cyan/20 border-neon-cyan/50 text-white'
+                      : 'bg-neon-cyan/10 border-neon-cyan/30 text-neon-cyan hover:bg-neon-cyan/20'
+                  }`}
+                >
+                  <GraduationCap className="w-3.5 h-3.5" />
+                  {openLesson ? 'Đóng bài học' : 'Học ngay tại đây'}
+                </button>
+              )}
+              {task.links?.map((l) => (
                 <Link
                   key={l.href + l.label}
                   href={l.href}
@@ -673,6 +694,8 @@ function TaskRow({
               ))}
             </div>
           )}
+
+          {lesson && openLesson && <LessonPanel lesson={lesson} />}
         </div>
       </div>
     </div>
@@ -909,6 +932,31 @@ function CheatTab() {
                 {s.tables.map((t) => (
                   <DataTable key={t.id} table={t} />
                 ))}
+                {s.examples && s.examples.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-bold text-white mb-2.5">
+                      {s.examplesTitle ?? 'Câu ví dụ'}
+                    </h3>
+                    <div className="space-y-2">
+                      {s.examples.map((ex, i) => (
+                        <div
+                          key={i}
+                          className="rounded-lg border border-white/[0.08] bg-white/[0.02] px-3 py-2.5"
+                        >
+                          <div className="text-base text-white leading-snug">{ex.jp}</div>
+                          {ex.read && ex.read !== ex.jp && (
+                            <div className="text-[13px] text-neon-cyan mt-0.5">{ex.read}</div>
+                          )}
+                          {ex.romaji && <div className="text-[12px] text-slate-500 mt-0.5">{ex.romaji}</div>}
+                          <div className="text-[13px] text-slate-300 mt-1">{ex.vi}</div>
+                          {ex.note && (
+                            <div className="text-[12px] text-slate-500 leading-relaxed mt-1.5">{ex.note}</div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 {s.tips?.map((tip) => (
                   <div key={tip.title} className="rounded-xl border border-neon-cyan/20 bg-neon-cyan/[0.04] p-4">
                     <div className="text-xs font-bold text-neon-cyan mb-1.5">★ {tip.title}</div>

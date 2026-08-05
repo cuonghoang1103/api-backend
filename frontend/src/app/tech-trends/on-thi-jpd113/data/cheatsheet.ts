@@ -31,6 +31,23 @@ export interface CheatTip {
   body: string;
 }
 
+/**
+ * Câu ví dụ có dịch, đặt sau các bảng của một mục.
+ *
+ * Vì sao cần dù bảng đã có cột "Ví dụ": trong bảng, ví dụ bị nén thành một ô
+ * và KHÔNG có bản dịch — người học đọc được chữ mà vẫn không biết câu đó nghĩa
+ * gì, nên không tự đặt được câu tương tự. Ở đây mỗi câu có đủ ba tầng:
+ * mặt chữ → cách đọc → nghĩa, cộng ghi chú vì sao câu đó đáng nhớ.
+ */
+export interface CheatExample {
+  jp: string;
+  /** Cách đọc toàn kana — bỏ trống nếu `jp` đã không có kanji */
+  read?: string;
+  romaji?: string;
+  vi: string;
+  note?: string;
+}
+
 export interface CheatSection {
   id: string;
   title: string;
@@ -38,6 +55,10 @@ export interface CheatSection {
   summary: string;
   tables: CheatTable[];
   tips?: CheatTip[];
+  /** Câu ví dụ có dịch — render sau bảng, trước tips */
+  examples?: CheatExample[];
+  /** Tiêu đề cho khối ví dụ, mặc định "Câu ví dụ" */
+  examplesTitle?: string;
 }
 
 /* ══════════════════ KANA ══════════════════ */
@@ -971,6 +992,92 @@ export const SECTIONS: CheatSection[] = [
         dangerRows: [7],
       },
     ],
+    examplesTitle: '12 câu mẫu — mỗi trợ từ một câu, đọc to cả câu',
+    examples: [
+      {
+        jp: '私は ベトナム人です。',
+        read: 'わたしは ベトナムじんです',
+        romaji: 'watashi WA betonamujin desu',
+        vi: 'Tôi là người Việt Nam.',
+        note: 'は viết chữ ha, đọc "wa". Câu này bạn sẽ dùng khi thi nói.',
+      },
+      {
+        jp: 'これは 日本語の 本です。',
+        read: 'これは にほんごの ほんです',
+        romaji: 'kore wa nihongo NO hon desu',
+        vi: 'Cái này là sách tiếng Nhật.',
+        note: 'の nối hai danh từ, thứ tự ngược tiếng Việt: "tiếng Nhật CỦA sách".',
+      },
+      {
+        jp: '田中さんも 学生です。',
+        read: 'たなかさんも がくせいです',
+        romaji: 'Tanaka-san MO gakusei desu',
+        vi: 'Anh Tanaka cũng là sinh viên.',
+        note: 'も đứng vào đúng chỗ của は — không bao giờ viết はも.',
+      },
+      {
+        jp: 'あなたは 会社員ですか。',
+        read: 'あなたは かいしゃいんですか',
+        romaji: 'anata wa kaishain desu KA',
+        vi: 'Bạn là nhân viên công ty phải không?',
+        note: 'か ở cuối biến câu kể thành câu hỏi, không cần đảo trật tự.',
+      },
+      {
+        jp: '毎朝 パンを 食べます。',
+        read: 'まいあさ パンを たべます',
+        romaji: 'maiasa pan O tabemasu',
+        vi: 'Mỗi sáng tôi ăn bánh mì.',
+        note: 'を đánh dấu vật bị ăn. 毎朝 là thời gian tương đối nên KHÔNG có に.',
+      },
+      {
+        jp: '七時に 起きます。',
+        read: 'しちじに おきます',
+        romaji: 'shichi-ji NI okimasu',
+        vi: 'Tôi dậy lúc 7 giờ.',
+        note: 'に đi với mốc giờ cụ thể.',
+      },
+      {
+        jp: '図書館で 本を 読みます。',
+        read: 'としょかんで ほんを よみます',
+        romaji: 'toshokan DE hon o yomimasu',
+        vi: 'Tôi đọc sách ở thư viện.',
+        note: 'で = nơi hành động diễn ra. So với に: 図書館に行きます là ĐI TỚI thư viện.',
+      },
+      {
+        jp: 'バスで 学校へ 行きます。',
+        read: 'バスで がっこうへ いきます',
+        romaji: 'basu DE gakkou E ikimasu',
+        vi: 'Tôi đi đến trường bằng xe buýt.',
+        note: 'Một câu có cả で (phương tiện) lẫn へ (hướng) — mẫu ra đề rất nhiều.',
+      },
+      {
+        jp: '友達と いっしょに 帰ります。',
+        read: 'ともだちと いっしょに かえります',
+        romaji: 'tomodachi TO issho ni kaerimasu',
+        vi: 'Tôi về cùng với bạn.',
+      },
+      {
+        jp: '教室に つくえや いすなどが あります。',
+        read: 'きょうしつに つくえや いすなどが あります',
+        romaji: 'kyoushitsu ni tsukue YA isu NADO ga arimasu',
+        vi: 'Trong lớp có bàn, ghế v.v.',
+        note: 'や luôn đi cặp với など. Nếu chỉ có đúng hai thứ đó thì dùng と.',
+      },
+      {
+        jp: '授業は 九時から 四時までです。',
+        read: 'じゅぎょうは くじから よじまでです',
+        romaji: 'jugyou wa ku-ji KARA yo-ji MADE desu',
+        vi: 'Tiết học từ 9 giờ đến 4 giờ.',
+        note: 'Để ý 九時 = くじ và 四時 = よじ — hai giờ bất quy tắc nằm ngay trong một câu.',
+      },
+      {
+        jp: '音楽が 好きです。',
+        read: 'おんがくが すきです',
+        romaji: 'ongaku GA suki desu',
+        vi: 'Tôi thích âm nhạc.',
+        note: '好きです đi với が chứ không phải を — cùng nhóm với あります・います・分かります.',
+      },
+    ],
     tips: [
       {
         title: 'Mẹo làm nhanh dạng điền trợ từ',
@@ -1051,6 +1158,58 @@ export const SECTIONS: CheatSection[] = [
           'là tên người → だれ; là địa điểm → どこ; là ngày → いつ. Nhanh hơn nhiều so với dịch cả đoạn hội thoại.',
       },
     ],
+    examplesTitle: 'Cặp hỏi–đáp mẫu — học cả câu hỏi lẫn câu trả lời',
+    examples: [
+      {
+        jp: 'これは 何ですか。→ 本です。',
+        read: 'これは なんですか → ほんです',
+        romaji: 'kore wa NAN desu ka → hon desu',
+        vi: 'Cái này là gì? → Là quyển sách.',
+        note: '何 đứng trước です đọc なん, không đọc なに.',
+      },
+      {
+        jp: 'この かばんは だれのですか。→ 私のです。',
+        read: 'この かばんは だれのですか → わたしのです',
+        romaji: 'kono kaban wa dare NO desu ka → watashi no desu',
+        vi: 'Cái cặp này của ai? → Của tôi.',
+        note: 'の cuối câu thay cho cả cụm "cái của tôi" — không cần lặp lại 私のかばん.',
+      },
+      {
+        jp: 'トイレは どこですか。→ あそこです。',
+        read: 'トイレは どこですか → あそこです',
+        romaji: 'toire wa doko desu ka → asoko desu',
+        vi: 'Nhà vệ sinh ở đâu? → Ở đằng kia.',
+        note: 'Câu hỏi thực dụng nhất cả môn — nhớ kèm luôn câu trả lời.',
+      },
+      {
+        jp: 'お国は どちらですか。→ ベトナムです。',
+        read: 'おくには どちらですか → ベトナムです',
+        romaji: 'o-kuni wa dochira desu ka → betonamu desu',
+        vi: 'Bạn từ nước nào? → Việt Nam.',
+        note: 'どちら ở đây hỏi NƯỚC chứ không hỏi phương hướng. Giám thị chắc chắn hỏi câu này.',
+      },
+      {
+        jp: 'あの 人は 誰ですか。→ 田中さんです。',
+        read: 'あの ひとは だれですか → たなかさんです',
+        romaji: 'ano hito wa dare desu ka → Tanaka-san desu',
+        vi: 'Người kia là ai? → Là anh Tanaka.',
+        note: 'あの phải có danh từ 人 theo sau; nếu nói trống không thì dùng あれ.',
+      },
+      {
+        jp: '誕生日は いつですか。→ 四月八日です。',
+        read: 'たんじょうびは いつですか → しがつ ようかです',
+        romaji: 'tanjoubi wa itsu desu ka → shi-gatsu youka desu',
+        vi: 'Sinh nhật bạn khi nào? → Ngày 8 tháng 4.',
+        note: 'Tháng trước, ngày sau — ngược thứ tự tiếng Việt. 4月 = しがつ, 8日 = ようか.',
+      },
+      {
+        jp: 'この 本は いくらですか。→ 六百円です。',
+        read: 'この ほんは いくらですか → ろっぴゃくえんです',
+        romaji: 'kono hon wa ikura desu ka → roppyaku-en desu',
+        vi: 'Quyển sách này bao nhiêu tiền? → 600 yên.',
+        note: '600 = ろっぴゃく, một trong ba chỗ biến âm của hàng trăm.',
+      },
+    ],
   },
 
   /* ─────────── ĐỘNG TỪ & MẪU CÂU ─────────── */
@@ -1122,6 +1281,72 @@ export const SECTIONS: CheatSection[] = [
           ['まいにち', 'mỗi ngày', 'まいあさ', 'mỗi sáng'],
           ['まいばん', 'mỗi tối', 'いま', 'bây giờ'],
         ],
+      },
+    ],
+    examplesTitle: 'Câu mẫu — bốn dạng động từ và các mẫu câu hay ra đề',
+    examples: [
+      {
+        jp: '毎日 日本語を 勉強します。',
+        read: 'まいにち にほんごを べんきょうします',
+        romaji: 'mainichi nihongo o benkyou shimasu',
+        vi: 'Mỗi ngày tôi học tiếng Nhật.',
+        note: 'Dạng hiện tại khẳng định. 毎日 không có に.',
+      },
+      {
+        jp: '肉を 食べません。',
+        read: 'にくを たべません',
+        romaji: 'niku o tabemasen',
+        vi: 'Tôi không ăn thịt.',
+        note: 'Phủ định: ます → ません.',
+      },
+      {
+        jp: '昨日 学校へ 行きました。',
+        read: 'きのう がっこうへ いきました',
+        romaji: 'kinou gakkou e ikimashita',
+        vi: 'Hôm qua tôi đã đến trường.',
+        note: 'Quá khứ: ます → ました.',
+      },
+      {
+        jp: '昨日は 何も しませんでした。',
+        read: 'きのうは なにも しませんでした',
+        romaji: 'kinou wa nani mo shimasen deshita',
+        vi: 'Hôm qua tôi đã không làm gì cả.',
+        note: 'Quá khứ phủ định + mẫu 何も…ません (không… gì cả).',
+      },
+      {
+        jp: '私は 学生じゃありません。',
+        read: 'わたしは がくせいじゃありません',
+        romaji: 'watashi wa gakusei ja arimasen',
+        vi: 'Tôi không phải là sinh viên.',
+        note: 'Danh từ phủ định dùng じゃありません chứ không dùng ません.',
+      },
+      {
+        jp: '机の 上に 本が あります。',
+        read: 'つくえの うえに ほんが あります',
+        romaji: 'tsukue no ue ni hon ga arimasu',
+        vi: 'Trên bàn có quyển sách.',
+        note: 'あります cho vật vô tri, đi với が. Công thức vị trí: 〈A〉の〈vị trí〉に.',
+      },
+      {
+        jp: '教室に 先生が います。',
+        read: 'きょうしつに せんせいが います',
+        romaji: 'kyoushitsu ni sensei ga imasu',
+        vi: 'Trong lớp có thầy giáo.',
+        note: 'います cho người và động vật — cùng nghĩa "có" nhưng không được dùng lẫn với あります.',
+      },
+      {
+        jp: '日本語は 難しいですが、おもしろいです。',
+        read: 'にほんごは むずかしいですが、おもしろいです',
+        romaji: 'nihongo wa muzukashii desu ga, omoshiroi desu',
+        vi: 'Tiếng Nhật khó nhưng thú vị.',
+        note: 'Mẫu 〜ですが、〜です (… nhưng …) làm câu trả lời thi nói dài và tự nhiên hơn hẳn.',
+      },
+      {
+        jp: 'この 部屋は あまり 大きくないです。',
+        read: 'この へやは あまり おおきくないです',
+        romaji: 'kono heya wa amari ookiku nai desu',
+        vi: 'Căn phòng này không to lắm.',
+        note: 'あまり luôn đi với phủ định. Tính từ đuôi い phủ định: 大きい → 大きくない.',
       },
     ],
   },

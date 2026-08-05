@@ -686,10 +686,14 @@ function ChatWindow({
               value={w.draft}
               onChange={(e) => onUpdateDraft(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  // Form onSubmit already handles Enter; nothing extra
-                  // needed here. We keep this handler as a placeholder
-                  // for future shortcuts (e.g. Shift+Enter for newline).
+                // Ô này là <input> nằm trong <form>, nên Enter tự submit —
+                // tiện, trừ khi bộ gõ tiếng Nhật/Trung/Hàn đang dựng chữ:
+                // lúc đó Enter là phím CHỐT chữ, để form submit thì tin nhắn
+                // bị gửi khi chữ còn dở. Chặn hành vi mặc định ở đúng ca đó,
+                // bộ gõ vẫn nhận phím bình thường.
+                if (e.key === 'Enter' && e.nativeEvent.isComposing) {
+                  e.preventDefault();
+                  e.stopPropagation();
                 }
               }}
               placeholder={

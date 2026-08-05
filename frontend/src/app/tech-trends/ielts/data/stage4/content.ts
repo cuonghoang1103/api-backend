@@ -187,8 +187,8 @@ export const READINGS4: ReadingPassage[] = [
     title: 'The Limits of Measuring What Matters',
     titleVi: 'Giới hạn của việc đo lường',
     level: 'C1 — độ khó passage 3 của đề thật',
-    words: 498,
-    minutes: 20,
+    words: 359,
+    minutes: 13,
     paragraphs: [
       { label: 'A', text: 'Organisations measure what they can, and then behave as though what they have measured is what matters. The distinction sounds pedantic until one considers the consequences, which are visible in almost every institution that has adopted performance targets over the past forty years.' },
       { label: 'B', text: 'The mechanism is well documented. Once a measure becomes a target, the people being measured optimise for the measure rather than for the underlying purpose. Hospitals judged on waiting times find ways to reclassify waiting. Schools judged on pass rates concentrate resources on students near the borderline, since moving a candidate from a near-pass to a pass improves the statistic while helping a struggling student does not.' },

@@ -240,7 +240,7 @@ function PieChart({ f }: { f: Figure }) {
           <rect width={14} height={14} rx={3} fill={s.color ?? PALETTE[i % PALETTE.length]} />
           <text x={22} y={12} fontSize={13} fill={TEXT}>
             {s.label} — {s.value}
-            {f.unit ?? '%'}
+            {unitSuffix(f.unit ?? '%')}
           </text>
         </g>
       ))}
@@ -249,6 +249,17 @@ function PieChart({ f }: { f: Figure }) {
 }
 
 /* ────────────────────────── BẢNG SỐ LIỆU ────────────────────────── */
+
+/**
+ * Đơn vị dán ngay sau số hay tách bằng khoảng trắng?
+ *
+ * Ký hiệu (%, °) viết dính: "38%". Đơn vị là CHỮ thì phải tách, nếu không ra
+ * "186phút" — đúng lỗi đã thấy ở bảng thời gian trong ngày của chặng 4.
+ */
+function unitSuffix(unit?: string): string {
+  if (!unit) return '';
+  return /^[%°$£€]/.test(unit) ? unit : ` ${unit}`;
+}
 
 function TableFigure({ f }: { f: Figure }) {
   const cats = f.categories ?? [];
@@ -279,7 +290,7 @@ function TableFigure({ f }: { f: Figure }) {
               {s.values.map((v, i) => (
                 <td key={i} className="text-right px-3 py-2 border-b border-white/10 text-slate-300 tabular-nums">
                   {v}
-                  {f.unit ?? ''}
+                  {unitSuffix(f.unit)}
                 </td>
               ))}
             </tr>

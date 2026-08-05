@@ -1,15 +1,30 @@
-/** Gom nội dung chặng 4 (band 6.5 → 7.5), cùng hình dạng với ba chặng trước. */
+/**
+ * Gom nội dung chặng 4 (band 6.5 → 7.5), cùng hình dạng với ba chặng trước.
+ *
+ * Như chặng 3, nội dung nằm ở hai file: `content.ts` (đợt đầu, gồm cả từ vựng
+ * và bài tập) và `content-b.ts` (đợt bổ sung: đọc, nghe, viết, nói). File này
+ * gộp lại để bundle chỉ thấy một mảng cho mỗi kỹ năng.
+ */
 export { UNITS4 } from './lessons';
 export {
-  VOCAB4, EXERCISES4, READINGS4, LISTENINGS4, LISTENING_SOURCES4,
-  WRITINGS4, SPEAKINGS4, SPEAKING_RULES4,
+  VOCAB4, EXERCISES4, LISTENING_SOURCES4, SPEAKING_RULES4,
 } from './content';
 
 import type { Exercise as ExerciseType } from '../types';
 import { UNITS4 } from './lessons';
 import {
-  VOCAB4, EXERCISES4, READINGS4, LISTENINGS4, LISTENING_SOURCES4, WRITINGS4, SPEAKINGS4,
+  VOCAB4, EXERCISES4, LISTENING_SOURCES4,
+  READINGS4 as READINGS4_A, LISTENINGS4 as LISTENINGS4_A,
+  WRITINGS4 as WRITINGS4_A, SPEAKINGS4 as SPEAKINGS4_A,
 } from './content';
+import {
+  READINGS4B, LISTENINGS4B, WRITINGS4B, SPEAKINGS4B,
+} from './content-b';
+
+export const READINGS4 = [...READINGS4_A, ...READINGS4B];
+export const LISTENINGS4 = [...LISTENINGS4_A, ...LISTENINGS4B];
+export const WRITINGS4 = [...WRITINGS4_A, ...WRITINGS4B];
+export const SPEAKINGS4 = [...SPEAKINGS4_A, ...SPEAKINGS4B];
 
 export const ALL_WORDS4 = VOCAB4.flatMap((t) => t.words);
 export const ALL_LESSONS4 = UNITS4.flatMap((u) => u.lessons);

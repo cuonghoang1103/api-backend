@@ -148,6 +148,29 @@ export const TYPING_PASSAGES: TypingPassage[] = [
       + 'room reduces the anxiety commonly experienced in the first term, which in turn improves attendance.',
     watch: ['residence', 'privately', 'guaranteed', 'anxiety'],
   },
+  {
+    id: 't13',
+    title: 'Mô tả biểu đồ tròn — Task 1',
+    stage: 'stage3',
+    why: 'Ngôn ngữ tỷ trọng của biểu đồ tròn: accounted for, taken together, the remaining. Gõ tới khi bật ra không cần nghĩ.',
+    text:
+      'A timetable that fits around work was by far the most common reason, accounting for 38% of respondents, '
+      + 'and lower cost came second at 24%. Taken together, these two practical considerations were given by 62% '
+      + 'of learners, which is close to two thirds of the sample. The remaining three categories were much less '
+      + 'prominent.',
+    watch: ['accounting for', 'Taken together', 'two thirds', 'remaining', 'prominent'],
+  },
+  {
+    id: 't14',
+    title: 'Trình bày hai quan điểm — Task 2',
+    stage: 'stage3',
+    why: 'Khung câu cho dạng Discuss both views: nêu phía kia cho công bằng rồi mới chuyển sang phía mình.',
+    text:
+      'Those who favour a compulsory scheme point out that voluntary participation is never evenly spread. The '
+      + 'opposing view rests on what compulsion does to the work itself. My own view is closer to the second '
+      + 'position, though with one qualification, and it concerns who ends up paying for the time that is given away.',
+    watch: ['compulsory', 'voluntary', 'evenly', 'compulsion', 'qualification'],
+  },
 
   /* ═════════════ CHẶNG 4 ═════════════ */
   {
@@ -174,5 +197,29 @@ export const TYPING_PASSAGES: TypingPassage[] = [
       + 'perceived as a tax on the poorest drivers rather than a genuine attempt to reduce congestion, and '
       + 'public support would be unlikely to last.',
     watch: ['outweigh', 'provided that', 'perceived', 'genuine'],
+  },
+  {
+    id: 't15',
+    title: 'Mô tả bảng số liệu — Task 1 band 7.5',
+    stage: 'stage4',
+    why: 'Động từ mô tả quan hệ giữa các con số (peaked, collapsing, almost tripled) — thứ phân biệt 6.5 với 7.5 ở Task 1.',
+    text:
+      'Paid work rose steeply from 186 minutes among 16 to 24 year olds to a peak of 312 minutes in the 25 to 44 '
+      + 'group, before falling back to 268 minutes and then collapsing to just 34 minutes after the age of 65. '
+      + 'Housework and care moved in a narrower band, though it almost tripled between the youngest group and '
+      + 'those aged 25 to 44.',
+    watch: ['steeply', 'collapsing', 'narrower', 'almost tripled'],
+  },
+  {
+    id: 't16',
+    title: 'Nhượng bộ rồi phản biện — Task 2 band 7.5',
+    stage: 'stage4',
+    why: 'Khuôn nhượng bộ MẠNH rồi mới phản biện. Nhượng bộ cho có lệ bị chấm là bài một chiều; khuôn này là dấu hiệu rõ nhất của band 7.5.',
+    text:
+      'There is a good deal of force in the employment argument, and it deserves better than the dismissal it '
+      + 'usually receives. The difficulty is one of timescale. Employers ask for the skills that are scarce this '
+      + 'year, and universities that respond directly to those requests produce graduates trained for a labour '
+      + 'market that has since moved.',
+    watch: ['a good deal of force', 'dismissal', 'timescale', 'scarce', 'since moved'],
   },
 ];

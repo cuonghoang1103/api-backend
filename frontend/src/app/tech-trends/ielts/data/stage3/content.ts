@@ -18,8 +18,8 @@ export const READINGS3: ReadingPassage[] = [
     title: 'The Quiet Decline of the Office Telephone',
     titleVi: 'Sự lụi tàn lặng lẽ của điện thoại bàn',
     level: 'B2 — độ khó gần đề thật, paraphrase dày',
-    words: 512,
-    minutes: 20,
+    words: 354,
+    minutes: 12,
     paragraphs: [
       { label: 'A', text: 'For most of the twentieth century the telephone sat at the centre of office life. A desk without one was not really a desk. Yet in many organisations the handset has now been removed altogether, and its disappearance says more about how work has changed than about the technology itself.' },
       { label: 'B', text: 'The first pressure came from email, which offered something the telephone could not: a written record. A colleague who agreed to something by phone could later remember it differently, whereas an email settled the question. This advantage mattered most in large organisations, where decisions pass through many hands and nobody can recall every conversation.' },
@@ -78,7 +78,7 @@ export const LISTENINGS3: ListeningExercise[] = [
       'Ba người: giảng viên và hai sinh viên. Section 3 ở độ khó này có nhiều lần đảo ý và ý kiến trái chiều. '
       + 'Quy tắc: đáp án là quyết định CUỐI CÙNG, và phải theo được AI nói câu chốt.',
     lines: [
-      { who: 'Giảng viên', text: 'Right, you two have had a week to think. Where have you got to?' },
+      { who: 'Giảng viên', text: 'Right, you two have had a week to think. Priya, where have you got to?' },
       { who: 'Priya', text: 'We started with social media and political opinion, but the literature is enormous.' },
       { who: 'Tom', text: 'And most of it is American, which does not transfer well to our context.' },
       { who: 'Giảng viên', text: 'That is a fair objection. What is the alternative?' },
@@ -94,7 +94,7 @@ export const LISTENINGS3: ListeningExercise[] = [
       { who: 'Tom', text: 'And I will do the archive work and the statistics.' },
       { who: 'Priya', text: 'Although actually, Tom, you are better with people than I am. Perhaps we should swap.' },
       { who: 'Tom', text: 'Honestly I would rather not — I find interviews exhausting. Let us keep it as it was.' },
-      { who: 'Giảng viên', text: 'Fine. Send me a two-page proposal by the end of the month — the thirtieth at the latest.' },
+      { who: 'Giảng viên', text: 'Fine — Priya on the interviews and Tom on the archive, then. Send me a two-page proposal by the end of the month, the thirtieth at the latest.' },
     ],
     questions: [
       { q: 'What was their original topic?', answer: 'social media and political opinion', alt: ['social media', 'social media and politics'], why: '"We started with social media and political opinion" — nhưng bị bỏ vì tài liệu quá nhiều và chủ yếu là của Mỹ.' },
@@ -102,8 +102,8 @@ export const LISTENINGS3: ListeningExercise[] = [
       { q: 'What is their final topic?', answer: 'local news deserts', alt: ['news deserts', 'towns that have lost their only newspaper'], why: 'Priya đề xuất và giảng viên xác nhận "genuinely under-researched".' },
       { q: 'How many interviews will they finally do?', answer: '12', alt: ['twelve'], why: 'Ban đầu Tom nói 30, giảng viên bảo quá sức, Priya đề xuất 12 sâu hơn, Tom chốt "Twelve it is". Bẫy: 30 được nói TRƯỚC.' },
       { q: 'What quantitative data will they add?', answer: 'circulation figures', alt: ['circulation figures from the archive', 'circulation data'], why: '"we could combine that with circulation figures from the archive" — giảng viên khen vì cho thêm phần định lượng.' },
-      { q: 'Who will do the interviews?', answer: 'Priya', why: 'Priya nhận vì đã làm điền dã. Có đề xuất ĐỔI nhưng Tom từ chối, nên phân công GIỮ NGUYÊN — đây là bẫy chính của bài.' },
-      { q: 'Who will do the statistics?', answer: 'Tom', why: 'Tom nhận phần lưu trữ và thống kê, và giữ nguyên sau khi từ chối đổi.' },
+      { q: 'Who will do the interviews?', answer: 'Priya', why: 'Priya nhận vì đã làm điền dã. Có đề xuất ĐỔI nhưng Tom từ chối, nên phân công GIỮ NGUYÊN, và giảng viên chốt lại bằng tên ở câu cuối: "Priya on the interviews and Tom on the archive" — đây là bẫy chính của bài.' },
+      { q: 'Who will do the statistics?', answer: 'Tom', why: 'Tom nhận phần lưu trữ và thống kê, giữ nguyên sau khi từ chối đổi, và được giảng viên xác nhận ở câu chốt.' },
       { q: 'The proposal is due on the ____________.', answer: '30th', alt: ['thirtieth', '30'], why: '"by the end of the month — the thirtieth at the latest".' },
     ],
     listenFor: ['Although actually / I would rather not (đề xuất đổi RỒI BỊ TỪ CHỐI)', 'Twelve it is (câu chốt)', 'con số nói trước không phải đáp án', 'Let us keep it as it was'],

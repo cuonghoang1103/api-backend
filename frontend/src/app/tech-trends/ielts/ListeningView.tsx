@@ -1,7 +1,10 @@
 'use client';
 
 /**
- * Tab Nghe — 6 bài tự soạn (trình duyệt đọc transcript) + nguồn ngoài đã kiểm.
+ * Tab Nghe — các bài tự soạn của chặng đang xem (trình duyệt đọc transcript)
+ * + nguồn ngoài đã kiểm. Số bài khác nhau theo chặng nên MỌI con số hiện ra
+ * đều phải tính từ `d.listenings`, không gõ tay — đã dính một lần: chú thích
+ * ghi cứng "6 bài" trong khi chặng 3 có 4.
  *
  * Cách phát: đọc TỪNG DÒNG bằng speechSynthesis, dòng này xong mới sang dòng
  * kia. Không nối cả bài thành một chuỗi dài vì hai lý do: Chrome cắt ngang khi
@@ -382,7 +385,8 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
         </h3>
         <p className="text-sm text-slate-400 mb-4 leading-relaxed">
           Toàn bộ là kênh CHÍNH CHỦ của BBC Learning English, British Council và VOA — đã kiểm từng link
-          trước khi đưa lên. Dùng để nghe thêm mỗi ngày; phần bài tập có chấm điểm thì dùng 6 bài ở trên.
+          trước khi đưa lên. Dùng để nghe thêm mỗi ngày; phần bài tập có chấm điểm thì dùng{' '}
+          {d.listenings.length} bài ở trên.
         </p>
         <div className="grid gap-4 lg:grid-cols-2">
           {LISTENING_SOURCES.map((s) => (

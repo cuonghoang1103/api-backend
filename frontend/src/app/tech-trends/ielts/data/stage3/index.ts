@@ -1,16 +1,33 @@
-/** Gom nội dung chặng 3 (band 5.5 → 6.5), cùng hình dạng với stage1 và stage2. */
+/**
+ * Gom nội dung chặng 3 (band 5.5 → 6.5), cùng hình dạng với stage1 và stage2.
+ *
+ * Nội dung nằm ở HAI file: `content.ts` (đợt đầu) và `content-b.ts` (đợt bổ
+ * sung). File này gộp chúng lại nên `bundles.ts` và mọi view không cần biết
+ * có bao nhiêu file — chúng chỉ thấy một mảng `READINGS3` duy nhất.
+ * Thứ tự gộp là đợt đầu trước, bổ sung sau, để id bài cũ giữ nguyên vị trí
+ * (người học đang làm dở bài nào thì vẫn thấy nó ở đúng chỗ đó).
+ */
 export { UNITS3 } from './lessons';
 export { VOCAB3 } from './vocab';
 export { EXERCISES3 } from './exercises';
-export {
-  READINGS3, LISTENINGS3, LISTENING_SOURCES3, WRITINGS3, SPEAKINGS3, SPEAKING_RULES3,
-} from './content';
+export { LISTENING_SOURCES3, SPEAKING_RULES3 } from './content';
 
 import type { Exercise as ExerciseType } from '../types';
 import { UNITS3 } from './lessons';
 import { VOCAB3 } from './vocab';
 import { EXERCISES3 } from './exercises';
-import { READINGS3, LISTENINGS3, LISTENING_SOURCES3, WRITINGS3, SPEAKINGS3 } from './content';
+import {
+  READINGS3 as READINGS3_A, LISTENINGS3 as LISTENINGS3_A, LISTENING_SOURCES3,
+  WRITINGS3 as WRITINGS3_A, SPEAKINGS3 as SPEAKINGS3_A,
+} from './content';
+import {
+  READINGS3B, LISTENINGS3B, WRITINGS3B, SPEAKINGS3B,
+} from './content-b';
+
+export const READINGS3 = [...READINGS3_A, ...READINGS3B];
+export const LISTENINGS3 = [...LISTENINGS3_A, ...LISTENINGS3B];
+export const WRITINGS3 = [...WRITINGS3_A, ...WRITINGS3B];
+export const SPEAKINGS3 = [...SPEAKINGS3_A, ...SPEAKINGS3B];
 
 export const VOCAB3_TOPICS = VOCAB3;
 export const ALL_WORDS3 = VOCAB3.flatMap((t) => t.words);

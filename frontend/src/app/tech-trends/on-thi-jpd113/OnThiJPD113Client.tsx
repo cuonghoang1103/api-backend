@@ -27,6 +27,7 @@ import {
 
 import DrillPanel from './DrillPanel';
 import VocabPanel from './VocabPanel';
+import KanjiCardPanel from './KanjiCardPanel';
 
 import {
   PLAN,
@@ -756,7 +757,12 @@ function VerdictCard({ tone, title, body }: { tone: 'green' | 'cyan' | 'orange';
 
 function CheatTab() {
   const [showRomaji, setShowRomaji] = useState(true);
-  const [openSection, setOpenSection] = useState<string | null>('number');
+  /**
+   * Mặc định ĐÓNG HẾT. Bảng tra cứu có 10 mục, mỗi mục vài nghìn pixel —
+   * mở sẵn bất cứ mục nào là đẩy các mục còn lại xuống quá tầm nhìn và
+   * người dùng tưởng chúng không tồn tại.
+   */
+  const [openSection, setOpenSection] = useState<string | null>(null);
 
   /**
    * Mở một mục rồi cuộn tới nó.
@@ -781,8 +787,12 @@ function CheatTab() {
         </div>
         <div className="flex flex-wrap gap-2">
           <button
-            onClick={() => document.getElementById('cheat-kana')?.scrollIntoView({ block: 'start', behavior: 'smooth' })}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-white/[0.04] border border-white/10 text-slate-300 hover:text-white hover:border-neon-violet/40 transition-colors"
+            onClick={() => jumpTo('kana')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+              openSection === 'kana'
+                ? 'bg-neon-violet/15 border-neon-violet/45 text-white'
+                : 'bg-white/[0.04] border-white/10 text-slate-300 hover:text-white hover:border-neon-violet/40'
+            }`}
           >
             🔤 Bảng chữ cái
           </button>
@@ -802,15 +812,36 @@ function CheatTab() {
         </div>
       </div>
 
-      {/* Kana */}
-      <section id="cheat-kana" className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6 scroll-mt-32">
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-          <div>
-            <h2 className="text-lg font-heading font-bold text-white">Bảng chữ cái</h2>
-            <p className="text-sm text-slate-400 mt-0.5">
-              Tắt romaji khi bạn đã thuộc — đọc thẳng kana ra âm là mục tiêu cuối cùng.
+      {/* Kana — GẤP LẠI ĐƯỢC như mọi mục khác.
+          Trước đây mục này luôn mở và cao ~3.800px, đẩy 9 mục còn lại
+          xuống dưới 7 màn hình điện thoại; người dùng cuộn mãi chỉ thấy
+          kana và tưởng bảng tra cứu không có gì khác. */}
+      <section
+        id="cheat-kana"
+        className="rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden scroll-mt-32"
+      >
+        <button
+          onClick={() => setOpenSection(openSection === 'kana' ? null : 'kana')}
+          className="w-full text-left p-5 sm:p-6 flex items-start gap-4"
+        >
+          <span className="text-2xl leading-none shrink-0">🔤</span>
+          <div className="flex-1 min-w-0">
+            <h2 className="text-lg font-heading font-bold text-white mb-1">Bảng chữ cái</h2>
+            <p className="text-sm text-slate-400 leading-relaxed">
+              Hiragana &amp; katakana đầy đủ, cả âm đục và âm ghép. Tắt romaji khi đã thuộc —
+              đọc thẳng kana ra âm là mục tiêu cuối cùng.
             </p>
           </div>
+          <ChevronDown
+            className={`w-5 h-5 text-slate-500 shrink-0 transition-transform ${
+              openSection === 'kana' ? 'rotate-180' : ''
+            }`}
+          />
+        </button>
+
+        {openSection === 'kana' && (
+        <div className="px-5 sm:px-6 pb-6">
+        <div className="flex justify-end mb-4">
           <button
             onClick={() => setShowRomaji(!showRomaji)}
             className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-medium bg-white/[0.04] border border-white/10 text-slate-300 hover:text-white transition-colors"
@@ -839,6 +870,8 @@ function CheatTab() {
             Ngoài ra: っ (tsu nhỏ) là một nhịp NGHỈ — がっこう đọc &ldquo;gak-kou&rdquo;.
           </p>
         </div>
+        </div>
+        )}
       </section>
 
       {/* Các mục tra cứu */}
@@ -866,6 +899,10 @@ function CheatTab() {
 
             {open && (
               <div className="px-5 sm:px-6 pb-6 space-y-6">
+                {/* Khu lật thẻ đứng ĐẦU mục: bảng thì để tra, còn thứ thật sự
+                    làm nhớ được mặt chữ là lật thẻ. Đặt sau các bảng thì phải
+                    cuộn qua vài nghìn pixel mới thấy — đúng lỗi đã mắc một lần. */}
+                {s.id === 'kanji' && <KanjiCardPanel />}
                 {/* Lợi thế riêng của người Việt — đặt TRƯỚC các bảng cách đọc,
                     vì đoán được nghĩa rồi thì học cách đọc nhẹ hơn hẳn. */}
                 {s.id === 'kanji' && <HanVietBlock />}

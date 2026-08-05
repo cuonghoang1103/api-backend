@@ -720,6 +720,43 @@ export const SECTIONS: CheatSection[] = [
       'Mọi hàng tô đỏ đều phải học vẹt — không có quy tắc nào suy ra được.',
     tables: [
       {
+        id: 'num-matrix',
+        title: '⭐ BẢNG TỔNG — một bảng thay cho tất cả',
+        note:
+          'Cùng một chữ số, ghép với trợ số từ khác nhau thì đọc khác nhau: 一時 いちじ nhưng 一日 ついたち, ' +
+          '一人 ひとり, 一つ ひとつ. Nên đừng học “chữ 一 đọc là ichi” — hãy học nguyên cụm. Ô in đậm là chỗ ' +
+          'bất quy tắc, phải học vẹt; cột 日 thì CẢ CỘT đều bất quy tắc.',
+        headers: ['Số', '時 giờ', '分 phút', '日 ngày', '月 tháng', '人 người', '～つ cái'],
+        rows: [
+          ['1', 'いちじ', 'いっぷん', 'ついたち', 'いちがつ', 'ひとり', 'ひとつ'],
+          ['2', 'にじ', 'にふん', 'ふつか', 'にがつ', 'ふたり', 'ふたつ'],
+          ['3', 'さんじ', 'さんぷん', 'みっか', 'さんがつ', 'さんにん', 'みっつ'],
+          ['4', 'よじ', 'よんぷん', 'よっか', 'しがつ', 'よにん', 'よっつ'],
+          ['5', 'ごじ', 'ごふん', 'いつか', 'ごがつ', 'ごにん', 'いつつ'],
+          ['6', 'ろくじ', 'ろっぷん', 'むいか', 'ろくがつ', 'ろくにん', 'むっつ'],
+          ['7', 'しちじ', 'ななふん', 'なのか', 'しちがつ', 'しちにん', 'ななつ'],
+          ['8', 'はちじ', 'はっぷん', 'ようか', 'はちがつ', 'はちにん', 'やっつ'],
+          ['9', 'くじ', 'きゅうふん', 'ここのか', 'くがつ', 'きゅうにん', 'ここのつ'],
+          ['10', 'じゅうじ', 'じゅっぷん', 'とおか', 'じゅうがつ', 'じゅうにん', 'とお'],
+        ],
+        dangerRows: [0, 3, 6, 8, 9],
+      },
+      {
+        id: 'num-kanji-digit',
+        title: 'Số viết bằng kanji hay bằng chữ số — ĐỌC GIỐNG HỆT NHAU',
+        note:
+          'Chỉ khác cách in. Bài đọc số 9 (khó nhất ngân hàng) viết TOÀN bằng kanji — đó là lý do duy ' +
+          'nhất khiến nó khó, chứ ngữ pháp thì dễ.',
+        headers: ['Kiểu chữ số', 'Kiểu kanji', 'Đều đọc'],
+        rows: [
+          ['3時', '三時', 'さんじ'],
+          ['8月4日', '八月四日', 'はちがつ よっか'],
+          ['600円', '六百円', 'ろっぴゃくえん'],
+          ['20歳', '二十歳', 'はたち'],
+          ['9時から4時まで', '九時から四時まで', 'くじから よじまで'],
+        ],
+      },
+      {
         id: 'num-1-10',
         title: 'Số đếm 1 → 10',
         note: '4, 7, 9 có hai cách đọc. Khi đếm rời rạc dùng よん・なな・きゅう; khi ghép với tháng/giờ thì thường dùng âm On (し・しち・く).',
@@ -1096,7 +1133,8 @@ export const SECTIONS: CheatSection[] = [
     icon: '🈶',
     summary:
       'Toàn bộ 13 bài đọc thi nói chỉ có 38 chữ Hán khác nhau, và 10 chữ đầu đã phủ ~70% số lần xuất hiện. ' +
-      'Đừng học chữ rời — học theo TỪ, vì trong bài kanji luôn nằm trong những từ lặp đi lặp lại.',
+      'Đừng học chữ rời — học theo TỪ, vì trong bài kanji luôn nằm trong những từ lặp đi lặp lại. ' +
+      'Mở mục này ra là gặp ngay khu LẬT THẺ: mặt chữ → cách đọc → nghĩa, kèm trắc nghiệm hai chiều.',
     tables: [
       {
         id: 'kanji-20-words',

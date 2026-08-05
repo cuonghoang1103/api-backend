@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { getServerApiBaseUrl } from '@/lib/server-api'
 import { SHOP_ENABLED } from '@/lib/featureFlags'
+import { TYPES as AI_TEMPLATE_TYPES } from '@/lib/ai-templates/catalog'
 
 /**
  * sitemap.xml — auto-generated at build time + ISR'd by Next.
@@ -81,6 +82,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/voice`, lastModified: now, changeFrequency: 'daily', priority: 0.6 },
     { url: `${SITE_URL}/forum`, lastModified: now, changeFrequency: 'daily', priority: 0.5 },
     // (`/social` removed — that route 404s; the public feed lives at `/`.)
+
+    // Kho AI Templates: liệt kê 10 trang DANH SÁCH, không liệt kê 1.877 trang
+    // chi tiết. Trang chi tiết render lúc chạy và nội dung lấy từ GitHub — đẩy
+    // cả ngần ấy URL vào sitemap là mời Googlebot nện VPS bằng 1.877 lượt
+    // render kèm 1.877 lượt fetch ra ngoài. Trang danh sách đã liên kết tới tất
+    // cả, nên bot vẫn bò tới được, chỉ là theo nhịp của nó.
+    // (`/ai-templates` không có ở đây: nó 307 sang /ai-templates/skills.)
+    ...AI_TEMPLATE_TYPES.map((t) => ({
+      url: `${SITE_URL}/ai-templates/${t.slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    })),
   ]
 
   // ── Dynamic URLs — fetched in PARALLEL (Promise.all) so the total wait is

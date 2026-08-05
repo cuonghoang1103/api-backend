@@ -3291,3 +3291,87 @@ html.sim-bare .app-main {
    chính là để cảnh báo người dùng máy yếu. */
 @keyframes pg-fade { from { opacity: 0 } to { opacity: 1 } }
 @keyframes pg-rise { from { opacity: 0; transform: translateY(12px) } to { opacity: 1; transform: none } }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Kho AI Templates — tô màu cú pháp cho nội dung SKILL.md
+   ═══════════════════════════════════════════════════════════════════════════
+   `ContentViewer` vẽ markdown bằng react-markdown + rehype-highlight, thứ chỉ
+   GẮN CLASS `hljs-*` chứ không kèm màu — không có bảng màu thì mọi khối mã ra
+   một màu xám phẳng.
+
+   Bảng dưới đây khác `.case-study-body` ở chỗ nó THEO THEME: nền khối mã lấy
+   từ `--bg-surface` và bộ màu token đảo lại ở `html.theme-dark`. Trang case
+   study khoá cứng nền #0d1117 vì nó luôn tối; kho này thì sống ở cả hai theme,
+   dùng màu sáng của github-dark trên nền trắng sẽ mờ tịt (đo được: #86efac
+   trên #fff chỉ đạt 1.6:1).
+
+   Phạm vi bọc trong `.ai-tmpl-prose` để không đụng vào bất kỳ khối mã nào khác
+   trên site. */
+.ai-tmpl-prose pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: inherit;
+}
+
+/* Theme SÁNG — bộ màu github-light, đều ≥ 4.5:1 trên nền --bg-surface (#f0f2f5) */
+.ai-tmpl-prose .hljs-comment,
+.ai-tmpl-prose .hljs-quote { color: #57606a; font-style: italic; }
+.ai-tmpl-prose .hljs-keyword,
+.ai-tmpl-prose .hljs-selector-tag,
+.ai-tmpl-prose .hljs-built_in,
+.ai-tmpl-prose .hljs-meta { color: #a626a4; }
+.ai-tmpl-prose .hljs-string,
+.ai-tmpl-prose .hljs-attr,
+.ai-tmpl-prose .hljs-symbol { color: #0a7d33; }
+.ai-tmpl-prose .hljs-number,
+.ai-tmpl-prose .hljs-literal { color: #b35900; }
+.ai-tmpl-prose .hljs-title,
+.ai-tmpl-prose .hljs-section,
+.ai-tmpl-prose .hljs-name { color: #0550ae; }
+.ai-tmpl-prose .hljs-type,
+.ai-tmpl-prose .hljs-class .hljs-title { color: #0d7d8c; }
+.ai-tmpl-prose .hljs-tag,
+.ai-tmpl-prose .hljs-attribute { color: #a3246b; }
+.ai-tmpl-prose .hljs-variable,
+.ai-tmpl-prose .hljs-template-variable { color: #b3372b; }
+.ai-tmpl-prose .hljs-regexp { color: #8a6100; }
+
+/* Theme TỐI — github-dark */
+html.theme-dark .ai-tmpl-prose .hljs-comment,
+html.theme-dark .ai-tmpl-prose .hljs-quote { color: #8b949e; }
+html.theme-dark .ai-tmpl-prose .hljs-keyword,
+html.theme-dark .ai-tmpl-prose .hljs-selector-tag,
+html.theme-dark .ai-tmpl-prose .hljs-built_in,
+html.theme-dark .ai-tmpl-prose .hljs-meta { color: #d2a8ff; }
+html.theme-dark .ai-tmpl-prose .hljs-string,
+html.theme-dark .ai-tmpl-prose .hljs-attr,
+html.theme-dark .ai-tmpl-prose .hljs-symbol { color: #a5d6ff; }
+html.theme-dark .ai-tmpl-prose .hljs-number,
+html.theme-dark .ai-tmpl-prose .hljs-literal { color: #79c0ff; }
+html.theme-dark .ai-tmpl-prose .hljs-title,
+html.theme-dark .ai-tmpl-prose .hljs-section,
+html.theme-dark .ai-tmpl-prose .hljs-name { color: #7ee787; }
+html.theme-dark .ai-tmpl-prose .hljs-type,
+html.theme-dark .ai-tmpl-prose .hljs-class .hljs-title { color: #ffa657; }
+html.theme-dark .ai-tmpl-prose .hljs-tag,
+html.theme-dark .ai-tmpl-prose .hljs-attribute { color: #f2cc60; }
+html.theme-dark .ai-tmpl-prose .hljs-variable,
+html.theme-dark .ai-tmpl-prose .hljs-template-variable { color: #ffa198; }
+html.theme-dark .ai-tmpl-prose .hljs-regexp { color: #fde68a; }
+
+.ai-tmpl-prose .hljs-deletion { background: rgba(239, 68, 68, 0.18); }
+.ai-tmpl-prose .hljs-addition { background: rgba(34, 197, 94, 0.18); }
+
+/* Dải chọn loại của kho AI Templates cuộn ngang được nhưng KHÔNG hiện thanh
+   cuộn: thanh cuộn tuỳ biến của site khá dày (xem `::-webkit-scrollbar` ở
+   trên) và vẽ ra một vệt màu chạy hết bề ngang ngay dưới hàng nút, trông như
+   một thanh tiến trình đang chạy chứ không phải thanh cuộn. Vuốt/lăn ngang
+   vẫn hoạt động bình thường. */
+.ai-tmpl-scroll-x {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.ai-tmpl-scroll-x::-webkit-scrollbar {
+  display: none;
+}

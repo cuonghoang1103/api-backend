@@ -30,6 +30,8 @@ import DrillPanel from './DrillPanel';
 import VocabPanel from './VocabPanel';
 import KanjiCardPanel from './KanjiCardPanel';
 import LessonPanel from './LessonPanel';
+import FeBankPanel from './FeBankPanel';
+import PersonalQAPanel from './PersonalQAPanel';
 import { LESSONS } from './data/lessons';
 
 import {
@@ -1125,7 +1127,7 @@ function SpeakTab({
   onProfile: (p: Record<string, string>) => void;
   mounted: boolean;
 }) {
-  const [sub, setSub] = useState<'read' | 'talk' | 'picture'>('read');
+  const [sub, setSub] = useState<'read' | 'talk' | 'picture' | 'personal'>('read');
   const [showRomaji, setShowRomaji] = useState(true);
   const [showVi, setShowVi] = useState(true);
   const [openReading, setOpenReading] = useState<number | null>(1);
@@ -1197,6 +1199,7 @@ function SpeakTab({
           { id: 'read' as const, label: `13 bài đọc (READING 30đ)` },
           { id: 'talk' as const, label: `22 câu hỏi (TALKING)` },
           { id: 'picture' as const, label: `6 bộ tranh (37 câu)` },
+          { id: 'personal' as const, label: `⭐ Hỏi về CHÍNH BẠN + đúng/sai` },
         ].map((s) => (
           <button
             key={s.id}
@@ -1402,6 +1405,8 @@ function SpeakTab({
           ))}
         </section>
       )}
+
+      {sub === 'personal' && <PersonalQAPanel profile={profile} />}
 
       <div className="flex flex-wrap gap-3">
         <Link
@@ -1669,6 +1674,8 @@ function ExamTab() {
           </ul>
         </div>
       </section>
+
+      <FeBankPanel />
 
       <section className="rounded-2xl border border-neon-green/25 bg-neon-green/[0.05] p-5 sm:p-6">
         <h2 className="text-lg font-heading font-bold text-white mb-3">Mục tiêu điểm theo từng phần</h2>

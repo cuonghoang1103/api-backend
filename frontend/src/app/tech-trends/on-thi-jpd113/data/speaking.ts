@@ -37,10 +37,46 @@ export const PROFILE_FIELDS: ProfileField[] = [
     hint: 'ベトナム = Việt Nam. Câu trả lời đầy đủ sẽ là ベトナムです。',
   },
   {
+    key: 'city',
+    label: 'Đang sống ở đâu',
+    fallback: 'ハノイ',
+    hint: 'ハノイ = Hà Nội · ホーチミン = TP.HCM · ダナン = Đà Nẵng · ハイフォン = Hải Phòng.',
+  },
+  {
     key: 'job',
     label: 'Nghề nghiệp',
     fallback: 'がくせい',
     hint: 'がくせい = sinh viên · かいしゃいん = nhân viên công ty · せんせい = giáo viên.',
+  },
+  {
+    key: 'school',
+    label: 'Tên trường',
+    fallback: 'FPTだいがく',
+    hint: 'FPT đọc là エフピーティー. Đại học = だいがく. Ví dụ: FPTだいがく.',
+  },
+  {
+    key: 'grade',
+    label: 'Năm thứ mấy',
+    fallback: '2',
+    hint: 'Chỉ nhập SỐ. Đọc: 1 いち · 2 に · 3 さん · 4 よ (よねんせい, KHÔNG phải しねんせい).',
+  },
+  {
+    key: 'major',
+    label: 'Ngành học',
+    fallback: 'IT',
+    hint: 'IT đọc アイティー · けいざい = kinh tế · にほんご = tiếng Nhật · ビジネス = kinh doanh.',
+  },
+  {
+    key: 'age',
+    label: 'Tuổi',
+    fallback: 'はたち',
+    hint: '⚠ 20 tuổi = はたち (KHÔNG phải にじゅっさい). 21 = にじゅういっさい · 19 = じゅうきゅうさい · 22 = にじゅうにさい.',
+  },
+  {
+    key: 'birthyear',
+    label: 'Năm sinh',
+    fallback: 'にせんろく',
+    hint: '2004 = にせんよん · 2005 = にせんご · 2006 = にせんろく · 2007 = にせんなな. Trang sẽ tự thêm ねん.',
   },
   {
     key: 'birthday',

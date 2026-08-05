@@ -1092,12 +1092,57 @@ export const SECTIONS: CheatSection[] = [
   /* ─────────── KANJI ─────────── */
   {
     id: 'kanji',
-    title: 'Kanji 35 chữ',
+    title: 'Chữ Hán — 20 từ là đủ đọc hết bài',
     icon: '🈶',
     summary:
-      'Xếp theo SỐ LẦN XUẤT HIỆN THẬT trong 420 câu đề FE, không theo thứ tự giáo trình. ' +
-      'Nếu chỉ còn thời gian học 10 chữ, hãy học 10 chữ đầu bảng.',
+      'Toàn bộ 13 bài đọc thi nói chỉ có 38 chữ Hán khác nhau, và 10 chữ đầu đã phủ ~70% số lần xuất hiện. ' +
+      'Đừng học chữ rời — học theo TỪ, vì trong bài kanji luôn nằm trong những từ lặp đi lặp lại.',
     tables: [
+      {
+        id: 'kanji-20-words',
+        title: '20 từ này phủ gần hết 38 chữ Hán của 13 bài đọc',
+        note:
+          'Học đúng bằng này là đọc được bài. Để ý: 一二三四七九十 và 月火水木金土日 đã nằm sẵn trong đám từ ' +
+          'dưới đây — bạn KHÔNG phải học chúng riêng.',
+        headers: ['Từ', 'Cách đọc', 'Nghĩa'],
+        rows: [
+          ['私', 'わたし', 'tôi — chữ ra đề nhiều nhất'],
+          ['日本語', 'にほんご', 'tiếng Nhật'],
+          ['学校', 'がっこう', 'trường học'],
+          ['学生', 'がくせい', 'học sinh, sinh viên'],
+          ['先生', 'せんせい', 'giáo viên'],
+          ['大学', 'だいがく', 'đại học'],
+          ['会社', 'かいしゃ', 'công ty'],
+          ['会社員', 'かいしゃいん', 'nhân viên công ty'],
+          ['月曜日 … 日曜日', 'げつようび … にちようび', '7 thứ trong tuần'],
+          ['何時', 'なんじ', 'mấy giờ'],
+          ['一時 / 四時 / 七時 / 九時', 'いちじ / よじ / しちじ / くじ', 'các giờ — 3 cái sau bất quy tắc'],
+          ['半', 'はん', 'rưỡi'],
+          ['毎日', 'まいにち', 'mỗi ngày'],
+          ['勉強', 'べんきょう', 'học tập (Hán-Việt “miễn cưỡng” nhưng nghĩa khác)'],
+          ['時間', 'じかん', 'thời gian'],
+          ['二十歳', 'はたち', '20 tuổi — bất quy tắc hoàn toàn'],
+          ['中国', 'ちゅうごく', 'Trung Quốc'],
+          ['行きます', 'いきます', 'đi'],
+          ['働きます', 'はたらきます', 'làm việc'],
+          ['三つ / 三時間', 'みっつ / さんじかん', 'ba cái / ba tiếng'],
+        ],
+        dangerRows: [10, 15],
+      },
+      {
+        id: 'kanji-fe-extra',
+        title: '5 chữ thêm cho phần TRẮC NGHIỆM — ít gặp trong bài đọc nhưng hay ra đề',
+        note: 'Học 5 chữ này mất 10 phút và phủ nốt phần kanji của đề FE.',
+        headers: ['Chữ', 'Đọc', 'Nghĩa', 'Từ ghép hay gặp'],
+        rows: [
+          ['才 / 歳', 'さい', 'tuổi', '18才 = じゅうはっさい'],
+          ['円', 'えん', 'yên (tiền)', '1000円 = せんえん'],
+          ['食', 'しょく / た-', 'ăn', '食べます · 食堂'],
+          ['誕生日', 'たんじょうび', 'sinh nhật', '誕生日は いつですか'],
+          ['英語', 'えいご', 'tiếng Anh', 'KHÔNG phải イギリスご'],
+        ],
+        dangerRows: [4],
+      },
       {
         id: 'kanji-top',
         title: 'Xếp theo tần suất trong đề thật',

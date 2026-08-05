@@ -758,10 +758,52 @@ function CheatTab() {
   const [showRomaji, setShowRomaji] = useState(true);
   const [openSection, setOpenSection] = useState<string | null>('number');
 
+  /**
+   * Mở một mục rồi cuộn tới nó.
+   *
+   * Bảng tra cứu đã có 9 mục và các mục đóng sẵn, nên mục nằm cuối
+   * (Kanji, Từ vựng) dễ bị tưởng là không tồn tại. Hàng chip này cho
+   * thấy TOÀN BỘ mục ngay từ đầu tab.
+   */
+  const jumpTo = (id: string) => {
+    setOpenSection(id);
+    setTimeout(() => {
+      document.getElementById(`cheat-${id}`)?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }, 60);
+  };
+
   return (
     <div className="space-y-6">
+      {/* Mục lục nhanh */}
+      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
+        <div className="text-[11px] font-bold uppercase tracking-wide text-slate-400 mb-2.5">
+          Bảng tra cứu có {SECTIONS.length + 1} mục — bấm để nhảy tới
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => document.getElementById('cheat-kana')?.scrollIntoView({ block: 'start', behavior: 'smooth' })}
+            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-white/[0.04] border border-white/10 text-slate-300 hover:text-white hover:border-neon-violet/40 transition-colors"
+          >
+            🔤 Bảng chữ cái
+          </button>
+          {SECTIONS.map((s) => (
+            <button
+              key={s.id}
+              onClick={() => jumpTo(s.id)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                openSection === s.id
+                  ? 'bg-neon-violet/15 border-neon-violet/45 text-white'
+                  : 'bg-white/[0.04] border-white/10 text-slate-300 hover:text-white hover:border-neon-violet/40'
+              }`}
+            >
+              {s.icon} {s.title}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Kana */}
-      <section className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6">
+      <section id="cheat-kana" className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6 scroll-mt-32">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
           <div>
             <h2 className="text-lg font-heading font-bold text-white">Bảng chữ cái</h2>
@@ -803,7 +845,11 @@ function CheatTab() {
       {SECTIONS.map((s) => {
         const open = openSection === s.id;
         return (
-          <section key={s.id} className="rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden">
+          <section
+            key={s.id}
+            id={`cheat-${s.id}`}
+            className="rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden scroll-mt-32"
+          >
             <button
               onClick={() => setOpenSection(open ? null : s.id)}
               className="w-full text-left p-5 sm:p-6 flex items-start gap-4"

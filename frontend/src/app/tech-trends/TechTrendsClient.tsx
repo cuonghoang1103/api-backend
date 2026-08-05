@@ -388,6 +388,77 @@ export default function TechTrendsClient() {
           </motion.div>
         </header>
 
+        {/* ── Chuyên đề ghim: Việc làm Claude Code ─────────────────
+            Cùng lý do với các trang ghim khác bên dưới: route tĩnh, không do
+            API bài viết trả về, nên phải ghim tay ở sảnh mới tìm thấy được. */}
+        <Link
+          href="/tech-trends/viec-lam-claude-code"
+          className="group block mb-4 rounded-2xl border border-amber-400/30 bg-gradient-to-r from-amber-400/[0.12] via-emerald-400/[0.06] to-transparent p-5 sm:p-6 hover:border-amber-400/50 transition-all"
+        >
+          <div className="flex items-start gap-4">
+            <span className="hidden sm:flex w-12 h-12 shrink-0 rounded-xl bg-amber-400/15 items-center justify-center text-2xl">
+              💼
+            </span>
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide bg-amber-500 text-white">
+                  CHUYÊN ĐỀ
+                </span>
+                <span className="text-[11px] text-text-muted">
+                  108 tin đã kiểm chứng · lộ trình 20 tuần · 8 dự án
+                </span>
+              </div>
+              <h3 className="text-lg sm:text-xl font-heading font-bold text-text-primary group-hover:text-amber-400 transition-colors">
+                Việc làm Claude Code — học gì để apply được
+              </h3>
+              <p className="text-sm text-text-secondary mt-1 leading-relaxed">
+                Bấm lại từng link để kiểm: 106/108 tin còn sống, nhưng chỉ 12 tin người ở Việt Nam
+                nộp được ngay. Kèm 48 kỹ năng đo từ toàn văn mô tả công việc, lộ trình 7 chặng và 8
+                dự án thật nâng cấp chính hệ thống đang chạy.
+              </p>
+            </div>
+            <span className="hidden sm:block text-amber-400 text-xl shrink-0 group-hover:translate-x-1 transition-transform">
+              →
+            </span>
+          </div>
+        </Link>
+
+        {/* ── Chuyên đề ghim: Học SQL từ số 0 ─────────────────────
+            Đặt đầu tiên vì đây là chuyên đề LẬP TRÌNH duy nhất trong nhóm
+            ghim — đúng thứ người vào blog này tìm — còn ba cái dưới là ngoại
+            ngữ. Trang tĩnh nên không do API trả về, phải ghim tay. */}
+        <Link
+          href="/tech-trends/hoc-sql"
+          className="group mb-4 block rounded-2xl border border-violet-400/30 bg-gradient-to-r from-violet-400/[0.12] via-fuchsia-400/[0.06] to-transparent p-5 transition-all hover:border-violet-400/50 sm:p-6"
+        >
+          <div className="flex items-start gap-4">
+            <span className="hidden h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-violet-400/15 text-2xl sm:flex">
+              🗄️
+            </span>
+            <div className="min-w-0 flex-1">
+              <div className="mb-1.5 flex flex-wrap items-center gap-2">
+                <span className="rounded-full bg-violet-500 px-2 py-0.5 text-[10px] font-bold tracking-wide text-white">
+                  CHUYÊN ĐỀ
+                </span>
+                <span className="text-[11px] text-text-muted">
+                  21 chương · 210 bài tập chạy trên PostgreSQL thật
+                </span>
+              </div>
+              <h3 className="font-heading text-lg font-bold text-text-primary transition-colors group-hover:text-violet-400 sm:text-xl">
+                Học SQL &amp; Database từ số 0 — kèm đối chiếu SQL Server
+              </h3>
+              <p className="mt-1 text-sm leading-relaxed text-text-secondary">
+                Bắt đầu từ &quot;database là cái gì&quot;, đi qua SELECT, WHERE, GROUP BY, JOIN, CTE,
+                transaction tới index và B+Tree. Có sơ đồ giải thích, hình bấm được để tự thử, câu hỏi
+                kiểm tra sau mỗi phần, và bảng tra cứu cho ai học SQL Server ở trường nhưng làm web bằng PostgreSQL.
+              </p>
+            </div>
+            <span className="hidden shrink-0 text-xl text-violet-400 transition-transform group-hover:translate-x-1 sm:block">
+              →
+            </span>
+          </div>
+        </Link>
+
         {/* ── Chuyên đề ghim: Lộ trình IELTS ─────────────────────── */}
         <Link
           href="/tech-trends/ielts"

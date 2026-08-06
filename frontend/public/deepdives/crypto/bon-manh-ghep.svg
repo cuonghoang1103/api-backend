@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 380" width="700" height="380" role="img" aria-label="Bốn mảnh ghép khoá, IV, chế độ và nơi cất khoá — mỗi mảnh làm sai đều dẫn tới một vụ sập bảo mật có thật: Debian, WEP và PlayStation 3, Adobe và Zoom, và các khoá bị lộ trên GitHub">
+  <rect width="700" height="380" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="379" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="28" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">Thuật toán AES/RSA <tspan fill="#e2e8f0">chưa từng bị phá</tspan>. Mọi vụ sập đều do ráp sai một trong bốn mảnh này.</text>
+
+  <!-- 1 KEY -->
+  <rect x="24" y="44" width="652" height="78" rx="8" fill="#0a1120" stroke="#22d3ee"/>
+  <text x="38" y="64" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#22d3ee">① KHOÁ</text>
+  <text x="112" y="64" font-family="ui-sans-serif, sans-serif" font-size="11.5" fill="#94a3b8">32 byte entropy thật — không dùng mật khẩu trực tiếp, phải qua KDF + salt</text>
+  <rect x="38" y="72" width="624" height="42" rx="5" fill="#1a1220" stroke="#f43f5e"/>
+  <text x="50" y="86" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#f43f5e">SẬP · Debian OpenSSL (2006–2008)</text>
+  <text x="50" y="99" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#94a3b8">Xoá 2 dòng code cho hết cảnh báo → bộ sinh ngẫu nhiên chỉ còn 32.767 khả năng.</text>
+  <text x="50" y="111" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#94a3b8">Mọi khoá SSH/SSL sinh ra trong 2 năm đều dò được trong vài phút.</text>
+
+  <!-- 2 IV -->
+  <rect x="24" y="130" width="652" height="80" rx="8" fill="#0a1120" stroke="#fcd34d"/>
+  <text x="38" y="150" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fcd34d">② IV / NONCE</text>
+  <text x="164" y="150" font-family="ui-sans-serif, sans-serif" font-size="11.5" fill="#94a3b8">ngẫu nhiên MỚI mỗi lần — tái dùng cùng một khoá là án tử</text>
+  <rect x="38" y="158" width="308" height="44" rx="5" fill="#1a1220" stroke="#f43f5e"/>
+  <text x="50" y="172" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#f43f5e">SẬP · WEP — WiFi (2001)</text>
+  <text x="50" y="185" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#94a3b8">IV chỉ 24 bit, mạng bận là lặp lại sau vài giờ.</text>
+  <text x="50" y="197" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#94a3b8">Phá khoá WiFi trong vài phút. Cả chuẩn bị khai tử.</text>
+
+  <rect x="354" y="158" width="308" height="44" rx="5" fill="#1a1220" stroke="#f43f5e"/>
+  <text x="366" y="172" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#f43f5e">SẬP · Sony PlayStation 3 (2010)</text>
+  <text x="366" y="185" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#94a3b8">Dùng CÙNG một số ngẫu nhiên cho mọi chữ ký.</text>
+  <text x="366" y="197" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#94a3b8">Lộ khoá ký chủ từ 2 chữ ký — không vá được.</text>
+
+  <!-- 3 MODE -->
+  <rect x="24" y="218" width="652" height="80" rx="8" fill="#0a1120" stroke="#fb923c"/>
+  <text x="38" y="238" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fb923c">③ CHẾ ĐỘ</text>
+  <text x="132" y="238" font-family="ui-sans-serif, sans-serif" font-size="11.5" fill="#94a3b8">phải có xác thực (GCM) — ECB lộ hình mẫu, CBC trần không chống sửa trộm</text>
+  <rect x="38" y="246" width="308" height="44" rx="5" fill="#1a1220" stroke="#f43f5e"/>
+  <text x="50" y="260" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#f43f5e">SẬP · Adobe (2013) — 153 triệu tài khoản</text>
+  <text x="50" y="273" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#94a3b8">MÃ HOÁ mật khẩu bằng 3DES-ECB thay vì BĂM.</text>
+  <text x="50" y="285" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#94a3b8">Cộng đồng giải ra mật khẩu mà KHÔNG cần khoá.</text>
+
+  <rect x="354" y="246" width="308" height="44" rx="5" fill="#1a1220" stroke="#f43f5e"/>
+  <text x="366" y="260" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#f43f5e">SẬP · Zoom (2020)</text>
+  <text x="366" y="273" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#94a3b8">Quảng cáo "mã hoá đầu cuối" nhưng dùng AES-ECB.</text>
+  <text x="366" y="285" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#94a3b8">Bị FTC xử lý vì quảng cáo sai sự thật.</text>
+
+  <!-- 4 KEY STORAGE -->
+  <rect x="24" y="306" width="652" height="58" rx="8" fill="#0a1120" stroke="#a78bfa"/>
+  <text x="38" y="326" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#a78bfa">④ NƠI CẤT KHOÁ</text>
+  <text x="178" y="326" font-family="ui-sans-serif, sans-serif" font-size="11.5" fill="#94a3b8">biến môi trường / KMS — không hardcode, không commit lên Git</text>
+  <text x="38" y="344" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#fca5a5">Hàng chục nghìn khoá AWS/Stripe/Firebase bị quét thấy trên GitHub công khai mỗi năm.</text>
+  <text x="38" y="357" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#fca5a5">Bot quét repo mới chỉ trong vài giây sau khi push — khoá lộ thì mã hoá mạnh cỡ nào cũng vô nghĩa.</text>
+</svg>

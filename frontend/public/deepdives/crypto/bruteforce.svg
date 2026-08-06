@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 396" width="700" height="396" role="img" aria-label="Dò hết khoá AES-256 cần thử 1,16 nhân 10 mũ 77 khả năng — huy động cả nhân loại vẫn mất gấp 3 nhân 10 mũ 28 lần tuổi vũ trụ, và chỉ riêng năng lượng để đếm đã gấp nghìn tỉ lần toàn bộ năng lượng cả đời Mặt Trời">
+  <rect width="700" height="396" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="395" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="28" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">VÌ SAO KHÔNG DÒ ĐƯỢC KHOÁ — đây là giới hạn của <tspan fill="#e2e8f0">vật lý</tspan>, không phải của kỹ năng.</text>
+
+  <!-- the number -->
+  <rect x="24" y="44" width="652" height="76" rx="8" fill="#0a1120" stroke="#a78bfa"/>
+  <text x="38" y="64" font-family="ui-monospace, Menlo, monospace" font-size="11.5" fill="#a78bfa">số khoá AES-256 phải thử = 2^256 =</text>
+  <text x="662" y="64" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#a78bfa">≈ 1,16 × 10⁷⁷</text>
+  <text x="38" y="88" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">115.792.089.237.316.195.423.570.985.008.687.907.853.</text>
+  <text x="38" y="108" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">269.984.665.640.564.039.457.584.007.913.129.639.936</text>
+
+  <!-- scenario rows -->
+  <rect x="24" y="128" width="652" height="42" rx="6" fill="#111c30" stroke="#22d3ee"/>
+  <text x="38" y="146" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#22d3ee">① một siêu máy tính</text>
+  <text x="38" y="163" font-family="ui-sans-serif, sans-serif" font-size="11" fill="#64748b">thử 1 tỉ tỉ khoá mỗi giây</text>
+  <text x="664" y="155" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">2,7 × 10⁴¹ lần tuổi vũ trụ</text>
+
+  <rect x="24" y="178" width="652" height="42" rx="6" fill="#111c30" stroke="#fb923c"/>
+  <text x="38" y="196" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#fb923c">② TOÀN BỘ nhân loại</text>
+  <text x="38" y="213" font-family="ui-sans-serif, sans-serif" font-size="11" fill="#64748b">8 tỉ người × 1 tỉ siêu máy tính/người × 1 nghìn tỉ khoá/giây</text>
+  <text x="664" y="205" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#e2e8f0">3,3 × 10²⁸ lần tuổi vũ trụ</text>
+
+  <rect x="24" y="228" width="652" height="56" rx="6" fill="#111c30" stroke="#f43f5e"/>
+  <text x="38" y="248" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#f43f5e">③ chặn trên của VẬT LÝ — giới hạn Landauer</text>
+  <text x="38" y="265" font-family="ui-sans-serif, sans-serif" font-size="11" fill="#64748b">Năng lượng tối thiểu để CHỈ ĐẾM hết 2²⁵⁶ (chưa tính mã hoá): 3,3 × 10⁵⁶ J</text>
+  <text x="38" y="278" font-family="ui-sans-serif, sans-serif" font-size="11" fill="#64748b">Toàn bộ năng lượng Mặt Trời phát ra cả đời (10 tỉ năm): 1,2 × 10⁴⁴ J</text>
+  <text x="664" y="258" text-anchor="end" font-family="ui-monospace, Menlo, monospace" font-size="12.5" fill="#fca5a5">cần 2,7 nghìn tỉ lần</text>
+  <text x="664" y="275" text-anchor="end" font-family="ui-sans-serif, sans-serif" font-size="11" fill="#64748b">năng lượng cả đời Mặt Trời</text>
+
+  <!-- progress bar that never moves -->
+  <text x="24" y="310" font-family="ui-monospace, Menlo, monospace" font-size="11.5" fill="#94a3b8">tiến độ dò khoá của kịch bản ②, tua nhanh:</text>
+  <rect x="24" y="318" width="652" height="20" rx="5" fill="#0a1120" stroke="#334155"/>
+  <rect x="26" y="320" width="2" height="16" rx="3" fill="#4ade80">
+    <animate attributeName="width" values="0.4;2.4;0.4" dur="6s" repeatCount="indefinite"/>
+  </rect>
+  <text x="350" y="332" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#64748b">0,000000000000000000000000000 %</text>
+
+  <text x="24" y="362" font-family="ui-sans-serif, sans-serif" font-size="12" fill="#94a3b8">Không phải “rất khó”. Là <tspan fill="#e2e8f0">không thể</tspan> — vũ trụ hết năng lượng trước khi đếm xong.</text>
+  <text x="24" y="382" font-family="ui-sans-serif, sans-serif" font-size="11.5" fill="#64748b">Nên mọi vụ sập bảo mật đều đến từ <tspan fill="#fcd34d">khoá bị lộ</tspan> hoặc <tspan fill="#fcd34d">ráp sai</tspan>, chưa bao giờ từ việc dò ra khoá.</text>
+</svg>

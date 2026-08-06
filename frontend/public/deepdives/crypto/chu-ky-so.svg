@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 320" width="700" height="320" role="img" aria-label="Chữ ký số: người gửi băm văn bản rồi ký bằng khoá riêng, người nhận băm lại và xác minh bằng khoá công khai; sửa một chữ số là chữ ký lập tức vô hiệu">
+  <rect width="700" height="320" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="319" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="28" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">CHỮ KÝ SỐ — đảo ngược vai trò cặp khoá: <tspan fill="#e2e8f0">ký bằng khoá riêng</tspan>, ai cũng <tspan fill="#e2e8f0">xác minh bằng khoá công khai</tspan>.</text>
+
+  <!-- SIGN side -->
+  <rect x="24" y="46" width="316" height="150" rx="8" fill="#0a1120" stroke="#fcd34d"/>
+  <text x="38" y="66" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#fcd34d">BÊN KÝ — giữ khoá riêng</text>
+
+  <rect x="38" y="76" width="288" height="26" rx="4" fill="#111c30" stroke="#334155"/>
+  <text x="48" y="93" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#e2e8f0">"Chuyển 50.000.000 VND cho TK 0912345678"</text>
+
+  <path d="M182 104 L182 116" stroke="#334155" stroke-width="1.5" marker-end="url(#a1)"/>
+  <rect x="38" y="118" width="288" height="24" rx="4" fill="#111c30" stroke="#334155"/>
+  <text x="48" y="134" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#94a3b8">SHA-256 → 32 byte "vân tay"</text>
+
+  <path d="M182 144 L182 156" stroke="#334155" stroke-width="1.5" marker-end="url(#a1)"/>
+  <rect x="38" y="158" width="288" height="26" rx="4" fill="#1a1630" stroke="#a78bfa"/>
+  <text x="48" y="175" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#a78bfa">ký bằng KHOÁ RIÊNG → chữ ký 256 byte</text>
+
+  <!-- transport -->
+  <path d="M348 120 L358 120" stroke="#334155" stroke-width="1.5"/>
+  <text x="350" y="112" text-anchor="middle" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#64748b">gửi đi</text>
+  <path d="M340 120 L360 120" stroke="#334155" stroke-width="1.5" marker-end="url(#a1)"/>
+
+  <!-- VERIFY side -->
+  <rect x="360" y="46" width="316" height="150" rx="8" fill="#0a1120" stroke="#4ade80"/>
+  <text x="374" y="66" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#4ade80">BÊN XÁC MINH — chỉ cần khoá công khai</text>
+
+  <rect x="374" y="76" width="288" height="26" rx="4" fill="#111c30" stroke="#334155"/>
+  <text x="384" y="93" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#e2e8f0">văn bản nhận được + chữ ký</text>
+
+  <path d="M518 104 L518 116" stroke="#334155" stroke-width="1.5" marker-end="url(#a1)"/>
+  <rect x="374" y="118" width="288" height="24" rx="4" fill="#111c30" stroke="#334155"/>
+  <text x="384" y="134" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#94a3b8">băm lại → so với chữ ký đã mở</text>
+
+  <path d="M518 144 L518 156" stroke="#334155" stroke-width="1.5" marker-end="url(#a1)"/>
+  <rect x="374" y="158" width="288" height="26" rx="4" fill="#0f2a1d" stroke="#4ade80"/>
+  <text x="384" y="175" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#4ade80">khớp → HỢP LỆ · lệch → GIẢ MẠO</text>
+
+  <!-- real run -->
+  <rect x="24" y="208" width="652" height="46" rx="6" fill="#0a1120" stroke="#334155"/>
+  <text x="38" y="228" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#fcd34d">chạy thật</text>
+  <text x="108" y="228" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="11.5" fill="#94a3b8">bản gốc "…50.000.000…"</text>
+  <text x="420" y="228" font-family="ui-monospace, Menlo, monospace" font-size="11.5" fill="#4ade80">✅ HỢP LỆ</text>
+  <text x="108" y="246" xml:space="preserve" font-family="ui-monospace, Menlo, monospace" font-size="11.5" fill="#94a3b8">sửa thành "…90.000.000…"</text>
+  <text x="420" y="246" font-family="ui-monospace, Menlo, monospace" font-size="11.5" fill="#f43f5e">❌ GIẢ MẠO — đổi 1 chữ số là lộ</text>
+
+  <!-- three guarantees -->
+  <rect x="24" y="264" width="208" height="40" rx="6" fill="#111c30" stroke="#22d3ee"/>
+  <text x="128" y="280" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11.5" fill="#22d3ee">XÁC THỰC</text>
+  <text x="128" y="296" text-anchor="middle" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#64748b">đúng người giữ khoá riêng ký</text>
+
+  <rect x="246" y="264" width="208" height="40" rx="6" fill="#111c30" stroke="#4ade80"/>
+  <text x="350" y="280" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11.5" fill="#4ade80">TOÀN VẸN</text>
+  <text x="350" y="296" text-anchor="middle" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#64748b">không sửa được dù 1 ký tự</text>
+
+  <rect x="468" y="264" width="208" height="40" rx="6" fill="#111c30" stroke="#fb923c"/>
+  <text x="572" y="280" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11.5" fill="#fb923c">CHỐNG CHỐI BỎ</text>
+  <text x="572" y="296" text-anchor="middle" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#64748b">người ký không thể chối</text>
+
+  <defs>
+    <marker id="a1" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 z" fill="#334155"/></marker>
+  </defs>
+</svg>

@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 340" width="700" height="340" role="img" aria-label="HTTPS dùng cả hai loại mã hoá: RSA hoặc ECDHE để trao khoá phiên lúc bắt tay, rồi AES chở toàn bộ dữ liệu sau đó">
+  <rect width="700" height="340" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="339" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="28" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="13" fill="#64748b">HTTPS dùng <tspan fill="#e2e8f0">CẢ HAI</tspan>. Bất đối xứng giữ cửa, đối xứng chở hàng.</text>
+
+  <!-- actors -->
+  <rect x="24" y="52" width="130" height="46" rx="8" fill="#111c30" stroke="#22d3ee"/>
+  <text x="89" y="80" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#22d3ee">Trình duyệt</text>
+
+  <rect x="546" y="52" width="130" height="46" rx="8" fill="#111c30" stroke="#4ade80"/>
+  <text x="611" y="80" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#4ade80">Máy chủ</text>
+
+  <line x1="89" y1="104" x2="89" y2="286" stroke="#1e293b" stroke-width="1.5"/>
+  <line x1="611" y1="104" x2="611" y2="286" stroke="#1e293b" stroke-width="1.5"/>
+
+  <!-- step 1: cert with public key -->
+  <path d="M600 128 L100 128" stroke="#a78bfa" stroke-width="1.5" fill="none" marker-end="url(#pv)"/>
+  <text x="350" y="120" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11.5" fill="#a78bfa">① chứng chỉ + KHOÁ CÔNG KHAI</text>
+  <circle r="4.5" fill="#a78bfa">
+    <animateMotion dur="4s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.25;1" calcMode="linear" path="M600 128 L104 128"/>
+  </circle>
+
+  <!-- step 2: encrypted session key -->
+  <path d="M100 176 L600 176" stroke="#fcd34d" stroke-width="1.5" fill="none" marker-end="url(#yv)"/>
+  <text x="350" y="168" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11.5" fill="#fcd34d">② khoá phiên AES, khoá bằng khoá công khai</text>
+  <circle r="4.5" fill="#fcd34d">
+    <animateMotion dur="4s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;0.28;0.5;1" calcMode="linear" path="M104 176 L596 176"/>
+  </circle>
+  <text x="350" y="194" text-anchor="middle" font-family="ui-sans-serif, sans-serif" font-size="11" fill="#64748b">chỉ khoá riêng của máy chủ mở được — kẻ nghe lén bó tay</text>
+
+  <!-- step 3: AES data both ways -->
+  <path d="M100 236 L600 236" stroke="#4ade80" stroke-width="1.5" fill="none" marker-end="url(#gv)"/>
+  <path d="M600 262 L100 262" stroke="#4ade80" stroke-width="1.5" fill="none" marker-end="url(#gv2)"/>
+  <text x="350" y="228" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11.5" fill="#4ade80">③ từ đây trở đi: TOÀN BỘ dữ liệu chở bằng AES</text>
+
+  <circle r="4" fill="#4ade80">
+    <animateMotion dur="4s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;0.55;0.78;1" calcMode="linear" path="M104 236 L596 236"/>
+  </circle>
+  <circle r="4" fill="#4ade80">
+    <animateMotion dur="4s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;0.72;0.95;1" calcMode="linear" path="M596 262 L104 262"/>
+  </circle>
+
+  <text x="350" y="282" text-anchor="middle" font-family="ui-sans-serif, sans-serif" font-size="11" fill="#64748b">nhanh gấp ~1.520 lần, không giới hạn kích thước</text>
+
+  <!-- summary -->
+  <rect x="24" y="298" width="322" height="30" rx="6" fill="#0a1120" stroke="#a78bfa"/>
+  <text x="185" y="318" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11.5" fill="#a78bfa">RSA / ECDHE — người giữ cửa</text>
+
+  <rect x="354" y="298" width="322" height="30" rx="6" fill="#0a1120" stroke="#4ade80"/>
+  <text x="515" y="318" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11.5" fill="#4ade80">AES-GCM — người vận chuyển</text>
+
+  <defs>
+    <marker id="pv" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 z" fill="#a78bfa"/></marker>
+    <marker id="yv" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 z" fill="#fcd34d"/></marker>
+    <marker id="gv" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 z" fill="#4ade80"/></marker>
+    <marker id="gv2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 z" fill="#4ade80"/></marker>
+  </defs>
+</svg>

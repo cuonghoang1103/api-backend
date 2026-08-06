@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 344" width="700" height="344" role="img" aria-label="Một file bài thi đã mã hoá có entropy 7,99 trên 8 — gần như ngẫu nhiên tuyệt đối; bên cạnh là ba mảnh của bức tranh mật mã ứng dụng: AES chở dữ liệu, RSA giữ cửa, và bốn mảnh ghép dễ làm sai">
+  <rect width="700" height="344" rx="12" fill="#0d1424"/>
+  <rect x="0.5" y="0.5" width="699" height="343" rx="12" fill="none" stroke="#1e293b"/>
+
+  <text x="24" y="34" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="14" fill="#e2e8f0">Một file bài thi không ai mở được — và vì sao đó là chuyện tốt</text>
+  <text x="24" y="54" font-family="ui-sans-serif, -apple-system, Segoe UI, sans-serif" font-size="12" fill="#64748b">cuonghnhe176322.dat · 23.744 byte · toàn bộ đã mã hoá</text>
+
+  <!-- hex dump of the real encrypted file -->
+  <rect x="24" y="68" width="392" height="120" rx="8" fill="#0a1120" stroke="#334155"/>
+  <text x="38" y="88" font-family="ui-monospace, Menlo, monospace" font-size="10.5" fill="#475569">00000000</text>
+  <text x="106" y="88" font-family="ui-monospace, Menlo, monospace" font-size="10.5" fill="#94a3b8">d9ae a8b5 16e0 56f7 48b8 8693 9886 b979</text>
+  <text x="38" y="104" font-family="ui-monospace, Menlo, monospace" font-size="10.5" fill="#475569">00000010</text>
+  <text x="106" y="104" font-family="ui-monospace, Menlo, monospace" font-size="10.5" fill="#94a3b8">9807 cf3a 8c5a a35a c03c cf94 69a5 37aa</text>
+  <text x="38" y="120" font-family="ui-monospace, Menlo, monospace" font-size="10.5" fill="#475569">00000020</text>
+  <text x="106" y="120" font-family="ui-monospace, Menlo, monospace" font-size="10.5" fill="#94a3b8">aab1 204a a70a a446 dde4 360d 5446 4bff</text>
+  <text x="38" y="136" font-family="ui-monospace, Menlo, monospace" font-size="10.5" fill="#475569">00000030</text>
+  <text x="106" y="136" font-family="ui-monospace, Menlo, monospace" font-size="10.5" fill="#94a3b8">fbe7 bf78 715c 0b8a b182 cc27 c90b 49f6</text>
+  <text x="38" y="152" font-family="ui-monospace, Menlo, monospace" font-size="10.5" fill="#475569">00000040</text>
+  <text x="106" y="152" font-family="ui-monospace, Menlo, monospace" font-size="10.5" fill="#94a3b8">c8f2 af50 1a08 d82a 16b3 3a94 697c 30c0</text>
+  <text x="38" y="174" font-family="ui-monospace, Menlo, monospace" font-size="10.5" fill="#475569">…không một chuỗi nào đọc được trong 23.744 byte</text>
+
+  <!-- entropy gauge -->
+  <rect x="432" y="68" width="244" height="120" rx="8" fill="#0a1120" stroke="#a78bfa"/>
+  <text x="446" y="88" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#a78bfa">entropy đo được</text>
+  <text x="554" y="126" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="32" fill="#e2e8f0">7.9918</text>
+  <text x="554" y="146" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#64748b">trên 8.0 tối đa</text>
+  <rect x="446" y="158" width="216" height="8" rx="4" fill="#1b2740"/>
+  <rect x="446" y="158" width="215" height="8" rx="4" fill="#a78bfa"/>
+  <text x="446" y="180" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#94a3b8">gần như ngẫu nhiên tuyệt đối ⇒ mã hoá thật</text>
+
+  <!-- three pillars -->
+  <rect x="24" y="200" width="208" height="60" rx="8" fill="#111c30" stroke="#4ade80"/>
+  <text x="128" y="222" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#4ade80">AES</text>
+  <text x="128" y="240" text-anchor="middle" font-family="ui-sans-serif, sans-serif" font-size="11" fill="#94a3b8">người vận chuyển</text>
+  <text x="128" y="254" text-anchor="middle" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#64748b">nhanh hơn RSA ~1.520 lần</text>
+
+  <rect x="246" y="200" width="208" height="60" rx="8" fill="#111c30" stroke="#a78bfa"/>
+  <text x="350" y="222" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#a78bfa">RSA</text>
+  <text x="350" y="240" text-anchor="middle" font-family="ui-sans-serif, sans-serif" font-size="11" fill="#94a3b8">người giữ cửa</text>
+  <text x="350" y="254" text-anchor="middle" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#64748b">trao khoá + chữ ký số</text>
+
+  <rect x="468" y="200" width="208" height="60" rx="8" fill="#111c30" stroke="#f43f5e"/>
+  <text x="572" y="222" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="13" fill="#f43f5e">4 MẢNH GHÉP</text>
+  <text x="572" y="240" text-anchor="middle" font-family="ui-sans-serif, sans-serif" font-size="11" fill="#94a3b8">nơi mọi vụ sập xảy ra</text>
+  <text x="572" y="254" text-anchor="middle" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#64748b">WEP · PS3 · Adobe · Zoom</text>
+
+  <!-- bottom line -->
+  <rect x="24" y="272" width="652" height="48" rx="8" fill="#0a1120" stroke="#334155"/>
+  <text x="38" y="292" font-family="ui-sans-serif, sans-serif" font-size="12" fill="#94a3b8">Dò hết khoá AES-256 cần nhiều năng lượng hơn <tspan fill="#e2e8f0">2,7 nghìn tỉ lần</tspan> toàn bộ năng lượng cả đời Mặt Trời.</text>
+  <text x="38" y="310" font-family="ui-sans-serif, sans-serif" font-size="12" fill="#64748b">Nên chưa từng có vụ sập nào do dò ra khoá — tất cả đều do <tspan fill="#fcd34d">khoá bị lộ</tspan> hoặc <tspan fill="#fcd34d">ráp sai</tspan>.</text>
+</svg>

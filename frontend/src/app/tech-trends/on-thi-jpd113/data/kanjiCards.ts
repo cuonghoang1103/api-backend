@@ -28,6 +28,18 @@ export interface KanjiCard {
   meaning: string;
   /** Mặt sau dòng 3 — từ Hán-Việt tương ứng, dùng làm mấu nhớ */
   hanviet?: string;
+  /**
+   * Từ TIẾNG VIỆT người học đã biết sẵn chứa đúng âm Hán-Việt đó.
+   *
+   * Vì sao cần dù đã có `hanviet`: "NHẬT" trơ trọi vẫn là một âm lạ phải
+   * học thuộc, còn "nhật ký · Nhật Bản" thì người Việt đã dùng cả đời —
+   * chỉ cần NỐI vào chứ không phải nhớ mới. Đây là lợi thế riêng của
+   * người Việt học tiếng Nhật, tận dụng được thì 41 chữ trong 13 bài đọc
+   * gần như không phải học thuộc chữ nào.
+   */
+  viWord?: string;
+  /** Mẹo nhìn HÌNH — dùng cho chữ không có Hán-Việt quen thuộc để bám */
+  shape?: string;
   /** Bẫy hay sai, hiện dưới cùng khi lật */
   note?: string;
   /** true = cách đọc bất quy tắc, không suy ra được — tô đỏ */
@@ -206,9 +218,65 @@ const KATAKANA_CARDS: KanjiCard[] = VOCAB_WORDS.filter((w) => KATA_RE.test(w.wor
   .slice(0, 24)
   .map(({ word, kana, meaning }) => ({ word, kana, meaning }));
 
+/* ══════════════ TỪNG CHỮ MỘT — 41 CHỮ CỦA 13 BÀI ĐỌC ══════════════
+ *
+ * Bộ 'reading' ở trên dạy theo CỤM (日本語 → にほんご) — đó là cách đọc
+ * nhanh, và là cách nên dùng khi thi. Nhưng người học chặn ở mức thấp hơn:
+ * nhìn một chữ lạ đứng riêng là đứng hình, không có gì để bám.
+ *
+ * Bộ này đi xuống mức TỪNG CHỮ, và mấu bám là Hán-Việt + một từ tiếng Việt
+ * đã dùng cả đời. Đếm từ chính 13 bài đọc: đúng 41 chữ khác nhau / 273 lượt
+ * xuất hiện. Bảy chữ đầu (日 本 曜 時 語 何 人) cộng 5 chữ người học thường
+ * đã biết (私 学 校 生 先) phủ 77% số lượt — nên thứ tự dưới đây xếp THEO
+ * TẦN SUẤT TRONG BÀI ĐỌC, không xếp theo nét hay theo bảng chữ.
+ */
+
+const PASSAGE_CHARS: KanjiCard[] = [
+  { word: '日', kana: 'にち・ひ・び・か', meaning: 'mặt trời · ngày', hanviet: 'NHẬT', viWord: 'Nhật Bản · nhật ký · nhật báo', shape: 'Ô cửa sổ có vạch giữa = mặt trời', danger: true, note: 'Chữ nhiều nhất bài đọc (52 lượt) và có 4 cách đọc: 日本=に · 月曜日=び · 毎日=にち · 三日=か · 休みの日=ひ. Nhìn chữ ĐỨNG CẠNH rồi mới quyết cách đọc.' },
+  { word: '本', kana: 'ほん', meaning: 'gốc · sách · cây (đếm vật dài)', hanviet: 'BẢN', viWord: 'Nhật Bản · cơ bản · bản gốc', shape: '木 (cây) + một vạch ở GỐC = gốc cây' },
+  { word: '曜', kana: 'よう', meaning: 'ngày trong tuần', hanviet: 'DIỆU', viWord: '(chỉ dùng cho thứ)', shape: '日 + lông vũ + con chim = ngày có chim bay', note: 'Không cần nhớ chữ này riêng — nhớ CỤM 〜曜日 = 〜ようび là đủ cho cả 22 lượt.' },
+  { word: '時', kana: 'じ・とき', meaning: 'giờ · lúc', hanviet: 'THỜI', viWord: 'thời gian · thời khoá biểu · thời tiết', shape: '日 (mặt trời) + 寺 (chùa) = xem mặt trời trên nóc chùa để biết giờ' },
+  { word: '私', kana: 'わたし', meaning: 'tôi', hanviet: 'TƯ', viWord: 'tư nhân · tư hữu (của riêng mình)', shape: '禾 (bông lúa) + 厶 (khoanh tay giữ) = lúa của RIÊNG tôi' },
+  { word: '語', kana: 'ご', meaning: 'tiếng, ngôn ngữ', hanviet: 'NGỮ', viWord: 'ngôn ngữ · Anh ngữ · Nhật ngữ', shape: '言 (lời nói) + 五 (5) + 口 (miệng) = năm cái miệng cùng nói' },
+  { word: '学', kana: 'がく', meaning: 'học', hanviet: 'HỌC', viWord: 'học sinh · đại học · khoa học', shape: 'Đứa trẻ 子 đội mái trường' },
+  { word: '何', kana: 'なに・なん', meaning: 'cái gì · mấy', hanviet: 'HÀ', viWord: '(hà cớ gì = vì sao)', shape: '亻(người) + 可 = người đang ngờ vực hỏi "gì?"', note: 'Đứng trước trợ số từ thì đọc なん: 何時 なんじ · 何分 なんぷん · 何曜日 なんようび. Đứng riêng đọc なに.' },
+  { word: '人', kana: 'じん・にん・ひと', meaning: 'người', hanviet: 'NHÂN', viWord: 'nhân dân · cá nhân · nhân loại', shape: 'Đúng hình hai chân người đang đứng', danger: true, note: 'Ghép sau tên nước = quốc tịch, đọc じん (日本人 にほんじん). Đếm người đọc にん (三人 さんにん) — trừ 一人 ひとり và 二人 ふたり.' },
+  { word: '校', kana: 'こう', meaning: 'trường', hanviet: 'HIỆU', viWord: 'học hiệu · hiệu trưởng', shape: '木 (gỗ) + 交 (giao nhau) = dãy nhà gỗ nơi người ta gặp nhau' },
+  { word: '生', kana: 'せい', meaning: 'sinh, sống', hanviet: 'SINH', viWord: 'học sinh · sinh viên · sinh nhật', shape: 'Mầm cây nhú lên khỏi mặt đất' },
+  { word: '月', kana: 'げつ・がつ', meaning: 'mặt trăng · tháng', hanviet: 'NGUYỆT', viWord: 'nguyệt thực · tuần trăng', shape: 'Vành trăng khuyết', note: 'Thứ Hai đọc げつ (月曜日), tháng đọc がつ (一月 いちがつ). Cùng chữ, khác hẳn âm.' },
+  { word: '金', kana: 'きん', meaning: 'vàng · tiền · thứ Sáu', hanviet: 'KIM', viWord: 'kim loại · kim cương · hiện kim', shape: 'Mái nhà che hai hạt vàng chôn dưới đất' },
+  { word: '会', kana: 'かい', meaning: 'gặp gỡ, hội họp', hanviet: 'HỘI', viWord: 'hội họp · hội trường · xã hội', shape: 'Mái nhà che đám người tụ lại' },
+  { word: '社', kana: 'しゃ', meaning: 'công ty · đền thờ', hanviet: 'XÃ', viWord: 'xã hội · công xã', shape: '礻(thần linh) + 土 (đất) = đền thờ thổ thần', note: '会社 = HỘI XÃ = công ty. Ghép hai chữ Hán-Việt lại là ra nghĩa.' },
+  { word: '土', kana: 'ど', meaning: 'đất · thứ Bảy', hanviet: 'THỔ', viWord: 'thổ địa · lãnh thổ · thổ nhưỡng', shape: 'Mầm cây cắm xuống mặt đất' },
+  { word: '行', kana: 'い(きます)・こう', meaning: 'đi', hanviet: 'HÀNH', viWord: 'hành động · ngân hàng · lữ hành', shape: 'Hình ngã tư đường — chỗ để ĐI' },
+  { word: '大', kana: 'だい・おお', meaning: 'to, lớn', hanviet: 'ĐẠI', viWord: 'đại học · vĩ đại · đại dương', shape: 'Người dang RỘNG hai tay hai chân' },
+  { word: '先', kana: 'せん', meaning: 'trước, đi đầu', hanviet: 'TIÊN', viWord: 'tiên phong · ưu tiên · tổ tiên', shape: 'Bàn chân bước lên TRƯỚC', note: '先生 = TIÊN SINH = người sinh ra trước = thầy cô.' },
+  { word: '勉', kana: 'べん', meaning: 'gắng sức', hanviet: 'MIỄN', viWord: 'miễn cưỡng', shape: '免 (thoát) + 力 (sức) = dồn sức thoát ra' },
+  { word: '強', kana: 'きょう', meaning: 'mạnh', hanviet: 'CƯỜNG', viWord: 'cường quốc · kiên cường — và chính TÊN BẠN', shape: '弓 (cây cung) + con bọ khoẻ', note: '勉強 = MIỄN CƯỜNG = べんきょう = học bài. Chữ 強 chính là tên Cường — khó quên nhất bộ này.' },
+  { word: '毎', kana: 'まい', meaning: 'mỗi', hanviet: 'MỖI', viWord: 'mỗi ngày, mỗi tháng', shape: '母 (mẹ) đội mũ = ngày nào mẹ cũng lo', note: '毎日 まいにち (mỗi ngày) · 毎朝 まいあさ (mỗi sáng) · 毎月 まいつき (mỗi tháng).' },
+  { word: '半', kana: 'はん', meaning: 'một nửa, rưỡi', hanviet: 'BÁN', viWord: 'bán nguyệt · bán cầu · bán kính', shape: 'Vật bị cắt đôi đối xứng', note: '9時半 = くじはん = 9 giờ rưỡi. Rất hay ra ở bài đọc giờ giấc.' },
+  { word: '間', kana: 'かん', meaning: 'khoảng, giữa', hanviet: 'GIAN', viWord: 'thời gian · không gian · nhân gian', shape: '門 (cánh cửa) + 日 = nắng lọt qua KHE cửa', note: '時間 = THỜI GIAN — ghép đúng chữ tiếng Việt bạn dùng hằng ngày.' },
+  { word: '休', kana: 'やす(み)', meaning: 'nghỉ', hanviet: 'HƯU', viWord: 'nghỉ hưu · hưu trí', shape: '亻(người) + 木 (cây) = NGƯỜI DỰA GỐC CÂY', note: 'Mẹo hình kinh điển, nhớ một lần là không quên.' },
+  { word: '働', kana: 'はたら(きます)', meaning: 'làm việc', hanviet: 'ĐỘNG', viWord: 'lao động · hoạt động', shape: '亻(người) + 動 (chuyển động) = người đang chuyển động' },
+  { word: '飲', kana: 'の(みます)', meaning: 'uống', hanviet: 'ẨM', viWord: 'ẩm thực', shape: '食 (ăn) + 欠 (há miệng ngửa cổ) = ngửa cổ nuốt' },
+  { word: '今', kana: 'いま・こん', meaning: 'bây giờ', hanviet: 'KIM', viWord: 'kim thời (hiện nay) · cổ kim', shape: 'Mái nhà úp xuống ngay lúc này' },
+  { word: '中', kana: 'ちゅう・なか', meaning: 'giữa, trong', hanviet: 'TRUNG', viWord: 'trung tâm · Trung Quốc · tập trung', shape: 'Mũi tên xuyên đúng GIỮA tấm bia' },
+  { word: '国', kana: 'こく・くに', meaning: 'nước, quốc gia', hanviet: 'QUỐC', viWord: 'quốc gia · Trung Quốc · quốc tế', shape: '口 (hàng rào) bao quanh 玉 (ngọc) = lãnh thổ có báu vật' },
+  { word: '水', kana: 'すい・みず', meaning: 'nước · thứ Tư', hanviet: 'THỦY', viWord: 'thủy sản · thủy triều · phong thủy', shape: 'Dòng nước chảy toé sang hai bên' },
+  { word: '木', kana: 'もく・き', meaning: 'cây, gỗ · thứ Năm', hanviet: 'MỘC', viWord: 'thảo mộc · mộc mạc · thổ mộc', shape: 'Thân cây có cành và rễ' },
+  { word: '歳', kana: 'さい', meaning: 'tuổi', hanviet: 'TUẾ', viWord: 'vạn tuế · niên tuế', shape: 'Chữ khó — nhớ rằng nó BẰNG chữ 才 dễ hơn nhiều', danger: true, note: '20歳 = はたち, hoàn toàn bất quy tắc. Đề FE hay viết 才 (TÀI) thay cho 歳 vì ít nét hơn — HAI CHỮ CÙNG NGHĨA "tuổi".' },
+];
+
 /* ══════════════ BỘ THẺ ══════════════ */
 
 export const KANJI_DECKS: KanjiDeck[] = [
+  {
+    id: 'mnemonic',
+    name: 'Mẹo nhớ chữ bài đọc',
+    icon: '🧠',
+    desc: '33 chữ — TỪNG CHỮ MỘT, xếp theo tần suất trong 13 bài đọc, mỗi chữ có Hán-Việt + từ tiếng Việt bạn đã biết + mẹo nhìn hình. (8 chữ số 一二三四七九十才 nằm ở khu Số chữ Hán riêng.) Bắt đầu ở đây nếu bạn thấy chữ Hán khó nhớ.',
+    cards: PASSAGE_CHARS,
+  },
   {
     id: 'reading',
     name: 'Từ đọc bài',

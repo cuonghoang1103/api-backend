@@ -29,6 +29,7 @@ import {
 import DrillPanel from './DrillPanel';
 import VocabPanel from './VocabPanel';
 import KanjiCardPanel from './KanjiCardPanel';
+import KanjiNumberPanel from './KanjiNumberPanel';
 import LessonPanel from './LessonPanel';
 import FeBankPanel from './FeBankPanel';
 import PersonalQAPanel from './PersonalQAPanel';
@@ -931,6 +932,10 @@ function CheatTab() {
                 {/* Lợi thế riêng của người Việt — đặt TRƯỚC các bảng cách đọc,
                     vì đoán được nghĩa rồi thì học cách đọc nhẹ hơn hẳn. */}
                 {s.id === 'kanji' && <HanVietBlock />}
+                {/* Số bằng chữ Hán đứng ĐẦU mục Số: bảng bên dưới tra cách đọc
+                    khi đã biết con số, còn khu này dạy chiều ngược lại (nhìn
+                    二万四千八百 ra 24.800) — đúng chiều đề FE hỏi. */}
+                {s.id === 'number' && <KanjiNumberPanel />}
                 {s.tables.map((t) => (
                   <DataTable key={t.id} table={t} />
                 ))}

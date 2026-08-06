@@ -308,6 +308,25 @@ function FlipView({
                 {card.hanviet}
               </div>
             )}
+            {/* Hai mấu nhớ dành cho người Việt: từ tiếng Việt đã biết sẵn
+                (mạnh nhất — chỉ cần NỐI vào, không phải nhớ mới), rồi mới
+                tới mẹo nhìn hình cho chữ nào không có Hán-Việt để bám. */}
+            {card.viWord && (
+              <div className="mt-3 mx-auto max-w-sm rounded-xl border border-neon-green/25 bg-neon-green/[0.06] px-3.5 py-2">
+                <div className="text-[10px] font-bold text-neon-green/80 uppercase tracking-wide mb-0.5">
+                  Tiếng Việt bạn đã biết
+                </div>
+                <div className="text-[13px] text-white leading-relaxed">{card.viWord}</div>
+              </div>
+            )}
+            {card.shape && (
+              <div className="mt-2 mx-auto max-w-sm rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2">
+                <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">
+                  Mẹo nhìn hình
+                </div>
+                <div className="text-[13px] text-slate-300 leading-relaxed">{card.shape}</div>
+              </div>
+            )}
             {card.note && (
               <p className="text-[12px] text-slate-400 leading-relaxed mt-4 max-w-md mx-auto">
                 {card.danger && <AlertTriangle className="w-3.5 h-3.5 inline mr-1 -mt-0.5 text-neon-red" />}

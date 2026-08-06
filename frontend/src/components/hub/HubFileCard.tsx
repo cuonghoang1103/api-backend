@@ -1,14 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-  FileText, FileCode, Image, Film, Music, Archive, File,
-  MoreVertical, Hash, Globe2, Share2, Users, Info,
+  FileText, FileCode, Image, Film, Music, Archive,
+  MoreVertical, Hash, Globe2, Info,
 } from 'lucide-react';
 
 import type { HubFile } from '@/lib/api';
 import { cn } from '@/lib/utils';
+import HubFileActionMenu from './HubFileActionMenu';
 
 interface HubFileCardProps {
   file: HubFile;
@@ -75,6 +76,7 @@ function formatBytes(bytes: number): string {
 
 export default function HubFileCard({ file, onClick, onDelete, onViewDetail, onShare, onManageShares, sharedCount }: HubFileCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
   const category = getFileCategory(file.mimeType);
   const Icon = CATEGORY_ICON[category];
   const color = CATEGORY_COLOR[category];
@@ -171,52 +173,27 @@ export default function HubFileCard({ file, onClick, onDelete, onViewDetail, onS
           </button>
           <div className="relative">
             <button
+              ref={buttonRef}
               onClick={(e) => { e.stopPropagation(); setMenuOpen(v => !v); }}
               className="rounded p-1 text-text-muted transition-colors hover:bg-white/5 hover:text-text-primary"
+              title="Them"
             >
               <MoreVertical className="h-3.5 w-3.5" />
             </button>
-            {menuOpen && (
-              <>
-                <div
-                  className="fixed inset-0 z-10"
-                  onClick={() => setMenuOpen(false)}
-                />
-                <div className="absolute right-0 top-full z-20 mt-1 w-36 overflow-hidden rounded-xl border border-darkborder bg-[#0d0f18]/95 shadow-2xl backdrop-blur-xl">
-                  <button
-                    onClick={() => {
-                      setMenuOpen(false);
-                      if (confirm(`Xoa file "${file.name}"?`)) onDelete(file.id);
-                    }}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-red-400 transition-colors hover:bg-red-500/10"
-                  >
-                    Xoa
-                  </button>
-                  {onShare && (
-                    <button
-                      onClick={() => { setMenuOpen(false); onShare(file); }}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
-                    >
-                      <Share2 className="h-3 w-3" /> Chia se
-                    </button>
-                  )}
-                  {onManageShares && (
-                    <button
-                      onClick={() => { setMenuOpen(false); onManageShares(file); }}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-text-secondary transition-colors hover:bg-white/5 hover:text-text-primary"
-                    >
-                      <Users className="h-3 w-3" />
-                      <span className="flex-1">Quan ly chia se</span>
-                      {typeof sharedCount === 'number' && sharedCount > 0 && (
-                        <span className="rounded-full bg-neon-violet/20 px-1.5 py-0.5 text-[10px] font-semibold text-neon-violet">
-                          {sharedCount}
-                        </span>
-                      )}
-                    </button>
-                  )}
-                </div>
-              </>
-            )}
+            {/* Portal menu — the card itself is `overflow-hidden`,
+                so an absolutely-positioned dropdown gets clipped
+                by the card border. */}
+            <HubFileActionMenu
+              file={file}
+              open={menuOpen}
+              anchorRef={buttonRef}
+              onClose={() => setMenuOpen(false)}
+              onDelete={onDelete}
+              onViewDetail={onViewDetail}
+              onShare={onShare}
+              onManageShares={onManageShares}
+              sharedCount={sharedCount}
+            />
           </div>
         </div>
       </div>

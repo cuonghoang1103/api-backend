@@ -27,6 +27,9 @@
     --shadow-xl: 0 4px 8px rgba(0, 0, 0, 0.15);
 
     --font-nunito: 'Nunito';
+    /* Chữ có chân của trang chủ. Tên họ do @fontsource-variable đặt, PHẢI có
+       chữ "Variable" — thiếu là im lặng rơi về Georgia. Xem layout.tsx. */
+    --font-fraunces: 'Fraunces Variable';
 
     /* ── My Language — bảng màu theo kỹ năng ──────────────────────────
        Mỗi kỹ năng một họ màu, để người học nhận ra thẻ bằng MÀU trước khi
@@ -3389,4 +3392,152 @@ html.theme-dark .ai-tmpl-prose .hljs-regexp { color: #fde68a; }
 ::highlight(ai-tmpl-find-active) {
   background-color: #facc15;
   color: #1c1917;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TRANG CHỦ "/" — lớp màu riêng  (Hallmark · genre: editorial · theme: custom
+   tuned · paper-band: dark-ink / light-warm · display: geometric-sans ·
+   accent-hue: warm-amber)
+
+   VÌ SAO CÓ KHỐI NÀY (07/08/2026)
+   Token toàn site là bảng màu kiểu Facebook: `#18191a` nền, `#e4e6eb` chữ,
+   `#3e4042` viền — CHROMA BẰNG 0 ở cả ba. Bảng đó đúng cho Feed/Messenger
+   (nội dung là ảnh và avatar, giao diện phải lùi lại), nhưng đặt lên trang chủ
+   thì thành xám chết: không có chiều sâu, chữ trắng không "nổi" vì nền không
+   có hướng ánh sáng nào để nổi lên khỏi. User chê đúng chỗ đó.
+
+   Cách chữa KHÔNG phải tăng độ sáng chữ (đã 91% rồi, tăng nữa thì chói).
+   Cách chữa là cho nền MỘT CHÚT SẮC ĐỘ và ĐẨY XA hai đầu:
+     · nền tối đi và ngả xanh mực (hue 265) → sâu hơn, ra chất giấy in
+     · chữ sáng lên và gần trắng ngà → tương phản ~15:1 thay vì ~11:1
+     · viền ngả cùng hue với nền → hết cảm giác "kẻ ô xám dán lên"
+     · nhấn đổi từ xanh Facebook sang HỔ PHÁCH ẤM — bổ sung cho nền xanh mực,
+       và tách trang chủ ra khỏi phần còn lại của site một cách có chủ ý
+
+   Theme SÁNG cũng đổi: `#f0f2f5` là xám lạnh của khung chat. Trang chủ dùng
+   giấy ngả ấm `oklch(98.2% .005 85)` — đọc như giấy in chứ không như cửa sổ ứng dụng.
+
+   PHẠM VI: chỉ áp trong `.landing-root`. Phần còn lại của site KHÔNG đổi một
+   pixel nào. Vẫn theo cơ chế sáng/tối cũ (`html.theme-dark`), nên nút đổi
+   theme vẫn chạy đúng.
+
+   ĐỪNG gán mã màu thẳng vào component trang chủ — thêm biến vào đây rồi dùng
+   `var(...)`. Đó là điều kiện để còn đổi theme được.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.landing-root {
+  /* ── SÁNG: giấy ngả ấm ──────────────────────────────────────────────── */
+  --bg-primary: oklch(98.2% 0.005 85);
+  --bg-card: oklch(100% 0 0);
+  --bg-surface: oklch(96.4% 0.006 85);
+  --bg-surface-hover: oklch(95% 0.009 82);
+  --border-color: oklch(89.5% 0.009 80);
+  --text-primary: oklch(21% 0.015 265);
+  --text-secondary: oklch(46% 0.013 262);
+  /* 54.5% chứ không phải 58.5%: `--text-muted` trên trang chủ KHÔNG phải chữ
+     trang trí — nó là phần mô tả của mỗi mục trong ba dải, blurb của Deep Dives
+     và cả chân trang, tức là chữ thật để đọc. Đo thực tế: 58.5% chỉ đạt 3.98:1
+     trên nền giấy → trượt WCAG AA. 54.5% cho 4.70:1 trên nền trang và 4.96:1
+     trên nền thẻ. Hạ thêm nữa thì hết phân biệt với `--text-secondary`.
+     (Bảng token toàn site để `#8a8d91` — chỉ 2.9:1 — nhưng đó là chuyện của
+     phần còn lại của site, không sửa ở đây.) */
+  --text-muted: oklch(54.5% 0.013 262);
+  --accent-color: oklch(52% 0.13 62);
+
+  /* Biến riêng của trang chủ (không có trong bảng token toàn site) */
+  --landing-grain: 0.032;          /* độ đậm lớp hạt nhiễu */
+  --landing-rule-soft: oklch(93% 0.008 80);   /* kẻ dọc "khổ chữ" — nhạt hơn viền */
+}
+
+html.theme-dark .landing-root {
+  /* ── TỐI: mực xanh sâu ──────────────────────────────────────────────── */
+  --bg-primary: oklch(16.5% 0.015 265);
+  --bg-card: oklch(21% 0.017 265);
+  --bg-surface: oklch(24% 0.018 265);
+  --bg-surface-hover: oklch(27.5% 0.02 265);
+  --border-color: oklch(29% 0.016 265);
+  --text-primary: oklch(96.5% 0.004 250);
+  --text-secondary: oklch(77% 0.012 255);
+  --text-muted: oklch(61.5% 0.015 258);
+  --accent-color: oklch(81% 0.13 76);
+
+  --landing-grain: 0.05;
+  --landing-rule-soft: oklch(25% 0.014 265);
+}
+
+/* ── Lớp hạt nhiễu ──────────────────────────────────────────────────────
+   Cái làm nền tối "đắt" lên không phải thêm màu mà là thêm HẠT. Nền phẳng
+   tuyệt đối là thứ chỉ màn hình mới có; mắt đọc nó ra "trống", không ra "sâu".
+   Một lớp nhiễu ~4% khiến cùng một mã màu đó trông như mực in.
+
+   Nhiễu sinh bằng feTurbulence NHÚNG THẲNG dạng data-URI: CSP của site đặt
+   `img-src 'self' data:` nên ảnh ngoài bị chặn, và đây cũng là 0 request mạng.
+   `saturate 0` để nhiễu ra xám — feTurbulence mặc định sinh nhiễu MÀU, không
+   khử thì nền lấm tấm đỏ/lục nhìn như màn hình lỗi.
+
+   `position: fixed` để hạt ĐỨNG YÊN khi cuộn — hạt trôi theo trang thì thành
+   hiệu ứng, hạt đứng yên thì thành chất liệu. */
+.landing-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: var(--landing-grain);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/* ── Hai kẻ dọc theo khổ chữ ────────────────────────────────────────────
+   Chạy suốt chiều cao trang, đúng mép của `max-w-5xl`. Đây là thứ biến mặt
+   phẳng trống thành LƯỚI CÓ CHỦ Ý: nó cho mắt biết trang này có một khổ chữ,
+   và mọi thứ đều được đặt so với khổ đó. Giao với các đường `border-y` ngang
+   của từng dải thành một mạng lưới — ngôn ngữ của mục lục sách, đúng họ với
+   phần còn lại của trang.
+
+   Chỉ hiện từ 1280px trở lên: hẹp hơn thì kẻ dính vào lề, thành khung viền. */
+.landing-measure {
+  position: fixed;
+  inset-block: 0;
+  left: 50%;
+  z-index: 1;
+  width: 64rem; /* = max-w-5xl */
+  transform: translateX(-50%);
+  pointer-events: none;
+  border-inline: 1px solid var(--landing-rule-soft);
+}
+
+/* ── Gạch chân nhấn cho một cụm từ trong tiêu đề ────────────────────────
+   Thay cho chữ gradient (một dấu hiệu AI có tên).
+
+   ⚠️ ĐỪNG quay lại cách vẽ bằng `background-image` + `background-position: 0 88%`
+   (bản đầu 07/08 làm thế, đã chụp màn hình và bỏ). Ở cỡ chữ tiêu đề 68px, 88%
+   chiều cao DÒNG rơi xuống tận dưới nét thả, và `background-size: .32em` dày
+   21px — ra một thanh nâu trôi lơ lửng dưới câu chứ không ra gạch chân. Cách đó
+   còn hỏng thêm khi cụm từ bị xuống dòng: mỗi mảnh tự vẽ nền riêng, hở ở chỗ nối.
+
+   `text-decoration` neo theo ĐƯỜNG CHÂN CHỮ nên đúng ở mọi cỡ, và trình duyệt
+   tự nối liền khi xuống dòng. Đơn vị `em` để nét gạch dày lên theo cỡ chữ.
+   `skip-ink: none` giữ nét liền — offset .14em đã đủ né nét thả của g/y/p. */
+/* ── Ghim optical size cho tiêu đề lớn nhất ────────────────────────────
+   Mặc định trình duyệt nội suy trục `opsz` theo đúng `font-size` (68px → opsz
+   68). Ghim tay lên 110 để đẩy tương phản nét thanh/nét đậm cao hơn một bậc —
+   ở cỡ tuyên ngôn thì đó là ranh giới giữa "chữ thân bài phóng to" và "chữ
+   dựng riêng cho tiêu đề". Chỉ đặt cho h1; các h2 để trình duyệt tự nội suy vì
+   chúng nhỏ hơn và cần giữ nét đủ dày để đọc thoải mái.
+
+   CHỈ ghim từ 1024px trở lên. Dưới đó tiêu đề chỉ còn ~34px; ghim opsz 110 ở cỡ
+   đó làm nét thanh mảnh tới mức trên màn hình mật độ thấp nó đứt quãng. Không
+   ghim thì trình duyệt tự lấy opsz ≈ cỡ chữ — nét dày lại vừa đủ, đúng công
+   dụng ban đầu của trục này. */
+@media (min-width: 1024px) {
+  .landing-display {
+    font-variation-settings: 'opsz' 110;
+  }
+}
+
+.landing-mark {
+  text-decoration-line: underline;
+  text-decoration-color: var(--accent-color);
+  text-decoration-thickness: 0.055em;
+  text-underline-offset: 0.14em;
+  text-decoration-skip-ink: none;
 }

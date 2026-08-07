@@ -29,6 +29,17 @@ import '@fontsource/nunito/700.css'
 import '@fontsource/nunito/800.css'
 import '@fontsource/jetbrains-mono/400.css'
 import '@fontsource/jetbrains-mono/500.css'
+// Fraunces: chữ CÓ CHÂN tương phản cao — CHỈ dùng cho tiêu đề lớn của trang chủ
+// "/" (class `font-editorial`, xem `.landing-root` trong globals.css). Không đặt
+// làm font tiêu đề mặc định: đổi typography toàn site vì một trang là cái giá
+// quá đắt — cùng lý do với Nunito ở trên.
+// Lấy bản `opsz.css` chứ không phải `index.css`: nó mang thêm trục OPTICAL SIZE
+// (9→144). Chữ có chân thật sự sẽ tăng độ tương phản nét thanh/nét đậm khi cỡ
+// chữ lớn lên — đó chính là thứ làm tiêu đề 68px trông "sang" thay vì trông như
+// chữ thân bài bị phóng to. Trình duyệt tự nội suy theo `font-size`
+// (`font-optical-sizing: auto` là mặc định), tiêu đề h1 ghim tay ở 110.
+// File có subset `vietnamese` riêng kèm unicode-range nên tiếng Việt vẫn đúng dấu.
+import '@fontsource-variable/fraunces/opsz.css'
 import dynamic from 'next/dynamic'
 import Navbar from '@/components/layout/Navbar'
 import DockLayout from '@/components/layout/DockLayout'

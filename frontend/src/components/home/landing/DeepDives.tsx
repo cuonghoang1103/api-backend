@@ -26,29 +26,33 @@ import { DEEP_DIVES } from './deepDivesData';
 export default function DeepDives() {
   return (
     <section className="border-b border-[var(--border-color)]">
-      <div className="mx-auto max-w-5xl px-5 py-14 sm:px-8">
+      <div className="mx-auto max-w-5xl px-5 py-16 sm:px-8">
         <div className="max-w-2xl">
-          <p className="flex items-baseline gap-3 font-mono text-[11px] uppercase tracking-[0.22em]">
+          {/* Dòng chỉ mục cùng khuôn với ba dải 01/02/03 trong `RiveLanding.tsx`
+              — số đếm lấy thẳng từ mảng, không gõ tay (luật 4). */}
+          <p className="flex flex-wrap items-baseline gap-x-3 font-mono text-[11px] uppercase tracking-[0.22em]">
             <span className="text-[var(--accent-color)]">00</span>
             <span className="text-[var(--text-muted)]">Deep dives</span>
+            <span aria-hidden className="text-[var(--border-color)]">/</span>
+            <span className="text-[var(--text-muted)]">{DEEP_DIVES.length} entries</span>
           </p>
-          <h2 className="mt-3 font-heading text-2xl font-bold leading-[1.12] tracking-tight sm:text-[2rem]">
+          <h2 className="mt-3.5 text-balance font-editorial text-[1.65rem] font-semibold leading-[1.14] tracking-[-0.01em] sm:text-[2.2rem]">
             The long ones, worth sitting down for
           </h2>
-          <p className="mt-3 text-[var(--text-secondary)]">
+          <p className="mt-3.5 max-w-[58ch] leading-relaxed text-[var(--text-secondary)]">
             Full walkthroughs on one topic at a time — the kind you finish with something working,
             not a summary you have to go and research properly afterwards.
           </p>
         </div>
 
-        <ul className="mt-9 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {DEEP_DIVES.map((d) => {
             const to = d.article ? `/tech-trends/${d.article}` : d.href!;
             return (
               <li key={d.title}>
                 <Link
                   href={to}
-                  className="group flex h-full gap-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-4 transition-colors duration-200 hover:border-[var(--accent-color)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-color)]"
+                  className="group flex h-full gap-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] p-[1.15rem] transition-colors duration-200 hover:border-[var(--accent-color)] hover:bg-[var(--bg-surface)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent-color)]"
                 >
                   {/* Logo giữ nguyên màu thương hiệu — KHÔNG nhuộm lại, không
                       bọc trong ô vuông nhuộm màu (ô icon nhuộm màu lặp lại là
@@ -62,10 +66,10 @@ export default function DeepDives() {
                     className="mt-0.5 h-8 w-8 shrink-0"
                   />
                   <div className="min-w-0">
-                    <h3 className="font-heading text-[15px] font-semibold leading-snug text-[var(--text-primary)]">
+                    <h3 className="font-heading text-[15px] font-semibold leading-snug tracking-[-0.01em] text-[var(--text-primary)] transition-colors group-hover:text-[var(--accent-color)]">
                       {d.title}
                     </h3>
-                    <p className="mt-1.5 text-[13px] leading-relaxed text-[var(--text-muted)]">
+                    <p className="mt-2 text-[13px] leading-relaxed text-[var(--text-muted)]">
                       {d.blurb}
                     </p>
                     {/* Nhãn cho biết thẻ dẫn sang phần khác của site chứ không

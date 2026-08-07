@@ -105,6 +105,11 @@ const config: Config = {
         mono: ["var(--font-jetbrains-mono)", "JetBrains Mono", "monospace"],
         // Chữ tròn cho My Language — tiêu đề, XP, streak. Xem layout.tsx.
         round: ["var(--font-nunito)", "Nunito", "var(--font-poppins)", "system-ui", "sans-serif"],
+        // Chữ CÓ CHÂN, CHỈ dùng cho tiêu đề lớn của trang chủ "/". Dự phòng là
+        // Georgia — cũng chữ có chân, sẵn trên mọi máy — để lúc font chưa về
+        // (`font-display: swap`) trang không nhảy sang chữ không chân rồi nhảy
+        // ngược lại. Xem layout.tsx và khối `.landing-root` trong globals.css.
+        editorial: ["var(--font-fraunces)", "Fraunces Variable", "Georgia", "Times New Roman", "serif"],
       },
  animation: {
  "fade-in": "fadeIn 0.3s ease-out",

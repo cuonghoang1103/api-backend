@@ -10,7 +10,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { ArrowLeft as ArrowLeftIcon, CheckCircle2 as CheckCircleIcon, XCircle as XCircleIcon, Clock as ClockIcon, RotateCw as ArrowPathIcon, Bookmark as BookmarkIcon } from 'lucide-react';
+import { ArrowLeft as ArrowLeftIcon, CheckCircle2 as CheckCircleIcon, XCircle as XCircleIcon, Clock as ClockIcon, RotateCw as ArrowPathIcon, Bookmark as BookmarkIcon, Eye as EyeIcon, EyeOff as EyeOffIcon } from 'lucide-react';
 import { examApi } from '@/lib/api';
 import { pickLang } from '@/lib/utils';
 import ExamRichContent from '../../ExamRichContent';
@@ -149,7 +149,7 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
                   </button>
                 </div>
                 <div className="text-[15px] leading-relaxed mb-3"><ExamRichContent html={q.prompt} L={L} /></div>
-                {q.imageUrl && <img src={q.imageUrl} alt="" className="max-w-full rounded-lg border border-[var(--border-color)] mb-3" />}
+                {q.imageUrl && <QuestionImageToggle url={q.imageUrl} isVi={isVi} />}
 
                 {/* FE options */}
                 {q.kind === 'MCQ' && (
@@ -247,6 +247,25 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
           })}
         </div>
       </div>
+    </div>
+  );
+}
+
+// The original question scan, collapsed by default — the prompt above already
+// has everything transcribed, so showing both at once is redundant clutter.
+function QuestionImageToggle({ url, isVi }: { url: string; isVi: boolean }) {
+  const [show, setShow] = useState(false);
+  return (
+    <div className="mb-3">
+      <button
+        type="button"
+        onClick={() => setShow((s) => !s)}
+        className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-[var(--border-color)] hover:border-[var(--exam-accent)] text-text-secondary"
+      >
+        {show ? <EyeOffIcon className="w-3.5 h-3.5" /> : <EyeIcon className="w-3.5 h-3.5" />}
+        {show ? (isVi ? 'Ẩn ảnh đề gốc' : 'Hide original image') : (isVi ? 'Xem ảnh đề gốc' : 'Show original image')}
+      </button>
+      {show && <img src={url} alt="" className="max-w-full rounded-lg border border-[var(--border-color)] mt-2.5" />}
     </div>
   );
 }

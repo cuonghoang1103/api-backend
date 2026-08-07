@@ -18,6 +18,7 @@ import {
   ArrowLeft as ArrowLeftIcon, ArrowRight as ArrowRightIcon,
   Upload as ArrowUpTrayIcon, Download as ArrowDownTrayIcon,
   Mic as MicrophoneIcon, Square as StopIcon, FileText as DocumentTextIcon,
+  Eye as EyeIcon, EyeOff as EyeOffIcon,
 } from 'lucide-react';
 import { examApi, type ExamHeader, type ExamTakingQuestion } from '@/lib/api';
 import { pickLang, sanitizeHtml, stripInlineColors } from '@/lib/utils';
@@ -423,6 +424,32 @@ function Prompt({ html, L }: { html: string; L: 'en' | 'vi' }) {
   return <ExamRichContent html={html} L={L} />;
 }
 
+// Question scan images (the original screenshot) are reference material, not
+// the primary reading surface — the prompt text above already has everything
+// transcribed. Shown collapsed by default so image + transcribed text don't
+// compete for attention; `resetKey` (the question id) re-collapses it when the
+// learner moves to a different question, so a leftover "expanded" image never
+// bleeds into the next one.
+function QuestionImageToggle({ url, isVi, resetKey, className = 'mb-5' }: {
+  url: string; isVi: boolean; resetKey?: string | number; className?: string;
+}) {
+  const [show, setShow] = useState(false);
+  useEffect(() => { setShow(false); }, [resetKey]);
+  return (
+    <div className={className}>
+      <button
+        type="button"
+        onClick={() => setShow((s) => !s)}
+        className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-[var(--border-color)] hover:border-[var(--exam-accent)] text-text-secondary"
+      >
+        {show ? <EyeOffIcon className="w-3.5 h-3.5" /> : <EyeIcon className="w-3.5 h-3.5" />}
+        {show ? (isVi ? 'Ẩn ảnh đề gốc' : 'Hide original image') : (isVi ? 'Xem ảnh đề gốc' : 'Show original image')}
+      </button>
+      {show && <img src={url} alt="" className="max-w-full rounded-lg border border-[var(--border-color)] mt-2.5" />}
+    </div>
+  );
+}
+
 function McqQuestion({ q, idx, total, L, isVi, selected, flagged, onSelect, onFlag }: {
   q: ExamTakingQuestion; idx: number; total: number; L: 'en' | 'vi'; isVi: boolean;
   selected: number[]; flagged: boolean; onSelect: (i: number) => void; onFlag: () => void;
@@ -439,7 +466,7 @@ function McqQuestion({ q, idx, total, L, isVi, selected, flagged, onSelect, onFl
         </button>
       </div>
       <div className="mb-5 text-[15px] leading-relaxed"><Prompt html={q.prompt} L={L} /></div>
-      {q.imageUrl && <img src={q.imageUrl} alt="" className="max-w-full rounded-lg border border-[var(--border-color)] mb-5" />}
+      {q.imageUrl && <QuestionImageToggle url={q.imageUrl} isVi={isVi} resetKey={q.id} />}
       <div className="space-y-2.5">
         {(q.options || []).map((o, i) => {
           const sel = selected.includes(i);
@@ -472,7 +499,7 @@ function CodeRunner({ exam, L, isVi, zipFile, setZipFile }: {
         <div key={q.id} className="exam-card p-5">
           <div className="text-sm font-semibold text-text-secondary mb-2">{isVi ? 'Câu' : 'Question'} {i + 1} · {q.points}đ{q.language ? ` · ${q.language}` : ''}</div>
           <div className="text-[15px] leading-relaxed"><Prompt html={q.prompt} L={L} /></div>
-          {q.imageUrl && <img src={q.imageUrl} alt="" className="max-w-full rounded-lg border border-[var(--border-color)] my-3" />}
+          {q.imageUrl && <QuestionImageToggle url={q.imageUrl} isVi={isVi} resetKey={q.id} className="my-3" />}
           {q.starterCode && (<div className="mt-3"><div className="text-xs text-text-muted mb-1">{isVi ? 'Mã cho sẵn' : 'Starter'}</div><pre className="exam-terminal">{q.starterCode}</pre></div>)}
           {q.expectedOutput && (<div className="mt-3"><div className="text-xs text-text-muted mb-1">{isVi ? 'Ví dụ / kết quả mong đợi' : 'Example / expected output'}</div><pre className="exam-terminal">{q.expectedOutput}</pre></div>)}
         </div>

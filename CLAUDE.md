@@ -157,7 +157,15 @@ gh run list --limit 8 --branch main   # what really fired on the last pushes
 - `deploy-ghcr.yml` "Deploy via GHCR (fast path)" — build images → GHCR → deploy backend → Prisma migrations on VPS
 - `backend-vps.yml` "Deploy Backend to VPS"
 
-**Known-red CI step (not your change):** `Backend Type Check → CV critique fabrication test` fails with `anthropic HTTP 403` when the repo secret `ANTHROPIC_API_KEY` is stale (it was rotated after a key leak). TypeScript type-check and both golden-set evals pass. Only the user can update GitHub secrets — report it, don't try to work around it. Before blaming a red CI on your own diff, check **which step** failed and whether your commit even touches that side of the tree (`git show --stat`).
+**`CV critique fabrication test` is deliberately dormant (07/08/2026 — do NOT "fix" it).** The repo secret `ANTHROPIC_API_KEY` was **removed on purpose**: the Anthropic account ran out of credit, so re-adding a key would only trade `HTTP 403` for an out-of-credit error and leave CI red either way. With the secret gone the step SKIPs and exits 0, so **CI is green**. Do not suggest re-adding the key unless the user says the account has been topped up.
+
+What that costs: nothing watches for the AI inventing metrics in CV critiques any more (feed a metric-less CV, fail if a `suggestedFix` asserts a number without `needsUserInput`). Run it by hand with `npm run eval:cv-fabrication` — needs an AI key in the local `.env`, which is currently absent, so today it just prints SKIPPED.
+
+To re-arm it later: create a repo secret named exactly `ANTHROPIC_API_KEY`. No code or workflow edit — `ci-lint.yml` still references it and GitHub substitutes an empty string while it's missing. The gate is `keyForProvider()` in `src/services/cv/llm/index.ts`, which reads only `ANTHROPIC_API_KEY` (or `OPENAI_COMPAT_API_KEY`, which CI never passes) — so that one secret is the whole switch; the leftover `LLM_BASE_URL` / `LLM_MODEL_REPORT` secrets are inert on their own.
+
+⛔ **Never delete `VPS_HOST` / `VPS_USER` / `VPS_SSH_PRIVATE_KEY`** — 10 workflows use them, and `vps-cleanup-weekly.yml` runs on a **weekly cron** to reclaim VPS disk (the guard against the disk-full outage that killed Postgres once). Deleting them kills that job silently.
+
+**When CI does go red, check *which step* failed and whether your commit even touches that side of the tree (`git show --stat`) before blaming your own diff.**
 
 **When adding a new environment variable:**
 1. Add to local `.env` / `frontend/.env.local`

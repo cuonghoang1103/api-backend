@@ -7,7 +7,7 @@ Full-stack application:
 - **Frontend**: Next.js (in `frontend/`)
 - **Database**: PostgreSQL with Prisma ORM
 - **Storage**: Cloudflare R2
-- **Deployment**: Docker containers on VPS via GitHub Actions (push to `main` = deploy to production)
+- **Deployment**: Docker containers on VPS, deployed by running `bash deploy.sh` from the local machine. A push to `main` does NOT deploy — see "Docker & Deploy" below
 
 ## Environment
 
@@ -25,7 +25,7 @@ Full-stack application:
 - **NEVER** run `npx prisma migrate reset` — it wipes ALL data
 - **NEVER** run `npx prisma db push` against production/VPS — bypasses migration history
 - **NEVER** run `git push --force` or `--force-with-lease` to `main`
-- **NEVER** push to `main` without completing the pre-push checklist below. Since push = production deploy, ask the user for confirmation before pushing
+- **NEVER** push to `main` without completing the pre-push checklist below, and always ask the user for confirmation first. (A push no longer deploys — `deploy.sh` does — but `main` is still the shared trunk, so it stays a confirm-first action)
 - **NEVER** auto-resolve failed migrations (`prisma migrate resolve`) — see Migration Failure Protocol
 - **NEVER** commit `.env`, `.env.local`, secrets, API keys, or credentials
 - **NEVER** SSH into VPS to modify database or containers directly, unless user explicitly asks
@@ -143,13 +143,21 @@ Rationale: auto-resolving partially-applied migrations can silently corrupt sche
 4. **Wait for the user to test production and confirm the fix works**
 5. Only THEN `git push` to origin (with user confirmation, per Forbidden Actions). At this point the push is just syncing GitHub with what prod already runs
 
-Why not push-to-deploy: a push to `main` triggers BOTH `deploy-ghcr.yml` and `backend-vps` workflows, which have raced each other and caused real outages (2026-07-03: feed 500 while schema lagged the image; 2026-07-06: backend recreate race → `Exited(137)` + orphan containers, recovered via `docker start cuonghoangdev_backend`). After a step-5 push, the Actions re-deploy of identical code is normally harmless, but verify the site stays up (`docker ps` symptoms above) once the workflows finish.
+Why not push-to-deploy: `deploy-ghcr.yml` and `backend-vps` once ran on every push to `main` and raced each other into real outages (2026-07-03: feed 500 while schema lagged the image; 2026-07-06: backend recreate race → `Exited(137)` + orphan containers, recovered via `docker start cuonghoangdev_backend`). `deploy.sh` stays the only deploy path regardless — it is the one that rsyncs the working tree, builds sequentially, swaps with zero downtime and smoke-tests.
 
-**Deploy workflow (`deploy-ghcr.yml`) on push to `main`:**
-1. CI — Lint & Type Check (must pass)
-2. Build Docker images → push to GHCR
-3. Deploy backend to VPS
-4. Run Prisma migrations on VPS
+**What a push to `main` actually triggers (verified 2026-08-07):** only `ci-lint.yml` — "CI - Lint & Type Check". **Both deploy workflows are now `on: workflow_dispatch:` only**, i.e. manual-run, so a push cannot start a deploy and cannot re-run the race above. Don't re-add a `push:` trigger to either without a plan for the concurrency problem.
+
+Verify before trusting this line — the trigger is one grep, and the whole outage story above came from it being wrong:
+```bash
+/usr/bin/grep -A4 '^on:' .github/workflows/deploy-ghcr.yml .github/workflows/backend-vps.yml
+gh run list --limit 8 --branch main   # what really fired on the last pushes
+```
+
+**Deploy workflows (manual dispatch only — `gh workflow run <name>`):**
+- `deploy-ghcr.yml` "Deploy via GHCR (fast path)" — build images → GHCR → deploy backend → Prisma migrations on VPS
+- `backend-vps.yml` "Deploy Backend to VPS"
+
+**Known-red CI step (not your change):** `Backend Type Check → CV critique fabrication test` fails with `anthropic HTTP 403` when the repo secret `ANTHROPIC_API_KEY` is stale (it was rotated after a key leak). TypeScript type-check and both golden-set evals pass. Only the user can update GitHub secrets — report it, don't try to work around it. Before blaming a red CI on your own diff, check **which step** failed and whether your commit even touches that side of the tree (`git show --stat`).
 
 **When adding a new environment variable:**
 1. Add to local `.env` / `frontend/.env.local`

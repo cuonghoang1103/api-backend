@@ -1,5 +1,32 @@
 'use client';
 
+/**
+ * Trang /about — giữ NGUYÊN giao diện cyberpunk cũ (yêu cầu của user 08/08/2026:
+ * "giữ nguyên như cũ, bạn chỉ bổ sung vào thôi"). Thay đổi là ở DỮ LIỆU và ở
+ * phần thêm mới, không ở hình thức.
+ *
+ * ─── VÌ SAO ĐỘNG VÀO ─────────────────────────────────────────────────────────
+ * Mọi con số trên trang này từng được gõ cứng, và kiểm lại thì không con nào
+ * đứng vững:
+ *   · "Supabase DB · 14ms"        — dự án KHÔNG dùng Supabase, Postgres tự host
+ *   · "Uptime 99.97%" / "CDN Edge 47" / "AI Tokens Today 4.2M" — không đo gì
+ *   · "SonarQube A+ · Maintainability 99%" — KHÔNG có SonarQube nào trong repo
+ *   · "3+ Năm Kinh Nghiệm" đứng cạnh "~ 6 yrs" ở chân khung terminal
+ *   · "20+ dự án · 50+ khách hàng"  — không đếm từ đâu cả
+ * Số bịa trên trang giới thiệu bản thân là thứ người đọc bắt được nhanh nhất,
+ * và nó phá đúng thứ trang này định xây.
+ *
+ * ─── LUẬT MỚI CHO FILE NÀY ───────────────────────────────────────────────────
+ * Mọi con số phải ĐẾM ĐƯỢC, từ đúng hai nguồn:
+ *   · nội dung  → `useAboutStats()`  ⟶ GET /api/v1/about/stats (đếm từ DB)
+ *   · mã nguồn  → `codebaseStats.json`, sinh bởi scripts/gen-codebase-stats.mjs
+ *                 mỗi lần deploy (container không đếm được: `.git` bị loại khỏi
+ *                 cả .dockerignore lẫn rsync)
+ * Đếm không được ⇒ ẨN mục đó. Không bịa, không thay bằng 0.
+ *
+ * Phần trăm kỹ năng ở cuối trang là TỰ ĐÁNH GIÁ của chủ site, không phải số đo
+ * — giữ nguyên theo yêu cầu, nhưng đừng nhầm nó với các con số đếm được ở trên.
+ */
 import Link from 'next/link';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
@@ -15,10 +42,22 @@ import StatsSection from '@/components/home/StatsSection';
 import HomeBackground from '@/components/home/HomeBackground';
 import { formatNumber } from '@/lib/utils';
 import { SHOP_ENABLED, CONTACT_ENABLED } from '@/lib/featureFlags';
-import { ArrowRight, Sparkles, Code2, Terminal, Zap, Brain, Gem, Search, ChevronRight } from 'lucide-react';
+import { ArrowRight, Sparkles, Code2, Terminal, Zap, Brain, Gem, Search, ChevronRight, Download, GitCommit, ShieldAlert } from 'lucide-react';
+import { useAboutStats, usePublicCv, fmt } from '@/components/about/useAboutData';
+import codebase from '@/data/codebaseStats.json';
 
 export default function AboutPage() {
   const { t, locale } = useTranslation();
+  const lang: 'vi' | 'en' = locale === 'en' ? 'en' : 'vi';
+  /** Song ngữ cho phần bổ sung. Bản cũ trộn `t()` với chữ Việt gõ thẳng
+   *  ("Bài viết mới nhất", "Đọc tiếp"…) nên người xem bản EN vẫn thấy tiếng
+   *  Việt; hàm này dọn luôn chỗ đó. */
+  const L = (vi: string, en: string): string => (lang === 'en' ? en : vi);
+
+  // Số liệu THẬT — xem ghi chú đầu file.
+  const stats = useAboutStats();
+  const cv = usePublicCv();
+  const n = (v: number | null | undefined): string => fmt(v, lang);
   const [featuredPosts, setFeaturedPosts] = useState<Post[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   // Project store binding is kept ready for the future
@@ -93,7 +132,12 @@ export default function AboutPage() {
     {
       icon: Brain,
       titleKey: 'benefits.aiPowered.title',
-      desc: 'RAG + Gemini + Spring Boot — AI that actually works.',
+      // Bản cũ ghi "RAG + Gemini + Spring Boot". Site này chạy Node + Express,
+      // không có Spring Boot ở đâu cả.
+      desc: L(
+        'RAG + LLM + Node — chấm phỏng vấn, mổ CV, gia sư ngôn ngữ.',
+        'RAG + LLM + Node — interview grading, CV critique, language tutoring.',
+      ),
       color: 'violet',
       colSpan: 'col-span-1',
       accent: '#8b5cf6',
@@ -101,7 +145,13 @@ export default function AboutPage() {
     {
       icon: Gem,
       titleKey: 'benefits.highQuality.title',
-      desc: 'SonarQube A+, 99% maintainability, clean architecture.',
+      // Bản cũ ghi "SonarQube A+, 99% maintainability" — KHÔNG có SonarQube nào
+      // trong repo. Thay bằng hai thứ kiểm được: kiểm kiểu chặn deploy, và
+      // deploy tự kiểm route lõi rồi mới coi là xong.
+      desc: L(
+        'Kiểm kiểu chặn deploy, deploy tự kiểm route lõi trước khi coi là xong.',
+        'Type checks gate every deploy, which then smoke-tests the core routes before it counts as done.',
+      ),
       color: 'fuchsia',
       colSpan: 'col-span-1',
       accent: '#d946ef',
@@ -122,23 +172,125 @@ export default function AboutPage() {
   }, [mouseX, mouseY]);
 
   // --- Floating tech tags ---
+  // ⚠️ Toạ độ đã dời khỏi DẢI TRÊN CÙNG. Bản cũ đặt 'Next.js' ở (12%, 8%) và
+  // 'Gemini AI' ở (50%, 0%) — cả hai nằm chồng lên hai huy hiệu `top-4` gắn
+  // trên ảnh và che mất chữ ("…perience" là tất cả những gì còn đọc được).
+  // Giữ y ≥ 22% thì thẻ nổi và huy hiệu không tranh chỗ nữa.
   const techTags = [
-    { label: 'Next.js', color: 'bg-gray-800 border-gray-600 text-gray-200', x: '12%', y: '8%', delay: 0, float: '-8px' },
-    { label: 'Spring Boot', color: 'bg-green-900/60 border-green-600 text-green-300', x: '80%', y: '15%', delay: 0.4, float: '-12px' },
-    { label: 'TypeScript', color: 'bg-blue-900/60 border-blue-500 text-blue-300', x: '85%', y: '65%', delay: 0.8, float: '-6px' },
-    { label: 'PostgreSQL', color: 'bg-indigo-900/60 border-indigo-500 text-indigo-300', x: '5%', y: '70%', delay: 1.2, float: '-10px' },
-    { label: 'Gemini AI', color: 'bg-purple-900/60 border-purple-500 text-purple-300', x: '50%', y: '0%', delay: 1.6, float: '-7px' },
-    { label: 'Docker', color: 'bg-cyan-900/60 border-cyan-600 text-cyan-300', x: '70%', y: '85%', delay: 2.0, float: '-9px' },
+    { label: 'Next.js', color: 'bg-gray-800 border-gray-600 text-gray-200', x: '6%', y: '24%', delay: 0, float: '-8px' },
+    { label: 'Express', color: 'bg-green-900/60 border-green-600 text-green-300', x: '78%', y: '30%', delay: 0.4, float: '-12px' },
+    { label: 'TypeScript', color: 'bg-blue-900/60 border-blue-500 text-blue-300', x: '82%', y: '62%', delay: 0.8, float: '-6px' },
+    { label: 'PostgreSQL', color: 'bg-indigo-900/60 border-indigo-500 text-indigo-300', x: '4%', y: '70%', delay: 1.2, float: '-10px' },
+    { label: 'Prisma', color: 'bg-purple-900/60 border-purple-500 text-purple-300', x: '44%', y: '22%', delay: 1.6, float: '-7px' },
+    { label: 'Docker', color: 'bg-cyan-900/60 border-cyan-600 text-cyan-300', x: '66%', y: '86%', delay: 2.0, float: '-9px' },
   ];
 
   // --- System status ticker ---
+  // Bản cũ chạy sáu chỉ số gõ cứng, trong đó "Supabase DB · 14ms" còn nói sai
+  // cả công nghệ đang dùng. Nay mỗi mục là một phép đếm thật; mục nào chưa đếm
+  // được thì BIẾN MẤT khỏi băng chạy chứ không hiện 0.
   const systemStats = [
-    { label: 'Supabase DB', status: 'Operational', latency: '14ms', ok: true },
-    { label: 'Gemini API', status: 'Connected', latency: '82ms', ok: true },
-    { label: 'Active Projects', status: '12', latency: '', ok: true },
-    { label: 'AI Tokens Today', status: '4.2M', latency: '', ok: true },
-    { label: 'Uptime', status: '99.97%', latency: '', ok: true },
-    { label: 'CDN', status: 'Edge 47', latency: '8ms', ok: true },
+    { label: L('Bài tập', 'Exercises'), value: stats?.exercises },
+    { label: L('Câu hỏi thi', 'Exam questions'), value: stats?.examQuestions },
+    { label: L('Từ vựng', 'Vocabulary'), value: stats?.vocabWords },
+    { label: L('Chữ Hán & Kanji', 'Kanji & hanzi'), value: stats?.hanziChars },
+    { label: L('Mốc lộ trình', 'Roadmap nodes'), value: stats?.roadmapNodes },
+    { label: L('Câu hỏi phỏng vấn', 'Interview questions'), value: stats?.interviewQuestions },
+    { label: L('Môn & khoá học', 'Subjects & courses'), value: stats?.courses },
+    { label: L('Kho mã tuyển chọn', 'Curated repos'), value: stats?.curatedRepos },
+    { label: L('Trang web', 'Web pages'), value: codebase.pages },
+    { label: L('Router API', 'API routers'), value: codebase.apiRouters },
+    { label: L('Bảng dữ liệu', 'DB tables'), value: codebase.prismaModels },
+    { label: L('Lượt commit', 'Commits'), value: codebase.commits },
+  ].filter((s) => typeof s.value === 'number' && s.value > 0);
+
+  // --- Bốn ô thống kê lớn (thay 4 số bịa của bản cũ) ---
+  // Thứ tự cố ý: hai ô đầu là nội dung do chính mình soạn, hai ô sau là quy mô
+  // hệ thống. Ô nào chưa đếm được thì rụng khỏi hàng.
+  const statCards = [
+    { icon: Code2, value: stats?.exercises, suffix: '', label: L('Bài tập chấm tự động', 'Graded exercises'), glowColor: '#818cf8' },
+    { icon: Gem, value: stats?.examQuestions, suffix: '', label: L('Câu hỏi thi', 'Exam questions'), glowColor: '#a855f7' },
+    { icon: Terminal, value: codebase.pages, suffix: '', label: L('Trang trên site', 'Pages on the site'), glowColor: '#d946ef' },
+    { icon: GitCommit, value: codebase.commits, suffix: '', label: L('Lượt commit', 'Commits'), glowColor: '#22d3ee' },
+  ].filter((s): s is typeof s & { value: number } => typeof s.value === 'number' && s.value > 0);
+
+  // --- Quy mô mã nguồn (bổ sung) ---
+  // Đếm thẳng từ kho mã lúc deploy. `null` ⇒ ẩn ô.
+  const codeCounts = [
+    { label: L('Lượt commit', 'Commits'), value: codebase.commits },
+    { label: L('Ngày xây dựng', 'Days building'), value: codebase.daysBuilding },
+    { label: L('Trang web', 'Web pages'), value: codebase.pages },
+    { label: L('Router API', 'API routers'), value: codebase.apiRouters },
+    { label: L('Bảng dữ liệu', 'Database tables'), value: codebase.prismaModels },
+    { label: L('Lần đổi lược đồ', 'Schema migrations'), value: codebase.migrations },
+    { label: L('Tệp mã nguồn', 'Source files'), value: codebase.sourceFiles },
+    { label: L('Dòng mã', 'Lines of code'), value: codebase.sourceLines },
+  ].filter((s) => typeof s.value === 'number' && s.value > 0);
+
+  // --- Sự cố production đã xử lý (bổ sung) ---
+  // Lấy từ nhật ký sự cố có thật trong kho mã, không thêm thắt. Đây là phần
+  // nhà tuyển dụng kỹ thuật đọc kỹ nhất — ai cũng liệt kê được công nghệ.
+  const incidents = [
+    {
+      accent: '#6366f1',
+      symptom: L(
+        'Bộ chọn ảnh GIF chết, và các cuộc trò chuyện “biến mất” — đăng nhập lại không ăn thua.',
+        'The GIF picker died and chats “disappeared” — re-logging in did nothing.',
+      ),
+      cause: L(
+        'Một lần deploy chỉ đồng bộ mã mà KHÔNG dựng lại image: container vẫn chạy bản dựng cũ chưa hề gắn route GIF. Chat thì chưa từng mất — chỉ bị lọc bởi cờ xoá-riêng-mình.',
+        'A deploy that synced code but did NOT rebuild: the container kept serving an old build that never mounted the GIF route. The chats were never lost — a per-viewer delete flag filtered them out.',
+      ),
+      fix: L(
+        'Chẩn đoán route bằng `curl` không kèm token: 401 là đã gắn, 404 là bản dựng cũ. Deploy nay luôn dựng lại và tự kiểm route lõi.',
+        'Diagnose routes with an unauthenticated `curl`: 401 means mounted, 404 means stale build. Deploys now always rebuild and smoke-test the core routes.',
+      ),
+    },
+    {
+      accent: '#8b5cf6',
+      symptom: L(
+        'Bật chế độ tối toàn site làm hỏng bộ chuyển ba giao diện riêng của trang ghi chú.',
+        'Turning on the site-wide dark theme broke the Notes module’s own three-theme switcher.',
+      ),
+      cause: L(
+        'Lớp `dark` bị gắn lên thẻ `<html>`, kích hoạt cưỡng bức mọi biến thể `dark:` của Tailwind nằm bên trong — kể cả những chỗ có bảng màu riêng.',
+        'The `dark` class landed on `<html>`, force-activating every Tailwind `dark:` variant nested inside — including areas with their own palette.',
+      ),
+      fix: L(
+        'Lớp tối toàn site đổi sang tên riêng, `dark:` được giữ độc quyền cho vùng ghi chú, phần còn lại dùng biến CSS theo giao diện.',
+        'The global dark class got its own name, `dark:` is reserved for the Notes wrapper, and everything else uses theme CSS variables.',
+      ),
+    },
+    {
+      accent: '#d946ef',
+      symptom: L(
+        'Phiên đăng nhập chết im lặng sau đúng 24 giờ. Cookie vẫn còn, nhưng mọi lệnh gọi cần đăng nhập đều bị từ chối.',
+        'Sessions died silently after exactly 24 hours. The cookie was still there, but every authenticated call was rejected.',
+      ),
+      cause: L(
+        'Token hết hạn sau 24 giờ trong khi cookie sống 7 ngày, và đường làm mới token thì gọi tới một endpoint không tồn tại.',
+        'The token expired in 24h while the cookie lived 7 days — and the refresh path called an endpoint that did not exist.',
+      ),
+      fix: L(
+        'Thêm endpoint làm mới thật, cộng lớp chặn tự làm mới đúng một lần rồi gọi lại. Phiên tự lành, không phải đổi cấu hình.',
+        'A real refresh endpoint plus an interceptor that refreshes once and retries. Sessions self-heal; no config change needed.',
+      ),
+    },
+    {
+      accent: '#22d3ee',
+      symptom: L(
+        'Sân chơi 3D kẹt mãi ở màn hình tải suốt hai phiên làm việc, không một lỗi nào hiện ra.',
+        'The 3D playground hung on its loading screen across two sessions, with no error anywhere.',
+      ),
+      cause: L(
+        'Next.js chốt danh sách tệp tĩnh ngay lúc server khởi động. Dựng lại sân chơi làm gói JS đổi tên theo mã băm nội dung, server đang chạy trả 404 cho tệp có thật trên đĩa — không JS nào chạy nên cũng không có lỗi để thấy.',
+        'Next.js fixes its static-file list at server start. Rebuilding renamed the JS bundles by content hash, so the running server 404’d files that existed on disk — no JS ran, so nothing surfaced an error.',
+      ),
+      fix: L(
+        'Đổi tệp tĩnh thì phải khởi động lại server, và diệt tiến trình THEO CỔNG (Node đổi tên tiến trình nên diệt theo tên là trượt). Production không dính vì mỗi deploy là một container mới.',
+        'Changing static files means restarting the server, and killing it BY PORT (Node renames its process, so killing by name misses). Production was never affected — each deploy is a fresh container.',
+      ),
+    },
   ];
 
   return (
@@ -261,8 +413,9 @@ export default function AboutPage() {
 
                     {card.titleKey === 'benefits.aiPowered.title' && (
                       <div className="mb-2 flex items-center gap-1.5">
-                        {['Gemini', 'RAG', 'Spring'].map((n, i) => (
-                          <div key={n} className="relative flex items-center">
+                        {/* 'Spring' → 'Node': site này chạy Node + Express. */}
+                        {['LLM', 'RAG', 'Node'].map((chip, i) => (
+                          <div key={chip} className="relative flex items-center">
                             <motion.div
                               className="w-5 h-5 rounded-full border flex items-center justify-center text-[8px] font-mono font-bold"
                               style={{
@@ -274,7 +427,7 @@ export default function AboutPage() {
                               animate={{ y: [-2, 2, -2] }}
                               transition={{ duration: 2, repeat: Infinity, delay: i * 0.4 }}
                             >
-                              {n[0]}
+                              {chip[0]}
                             </motion.div>
                             {i < 2 && (
                               <div className="absolute -right-2 w-2 h-[1px] bg-darkborder" style={{ zIndex: 2 }} />
@@ -284,15 +437,17 @@ export default function AboutPage() {
                       </div>
                     )}
 
+                    {/* Hai dòng số ĐẾM ĐƯỢC, thay cho "SonarQube A+ / 99%"
+                        vốn không có gì chống lưng. Cùng bố cục, cùng cỡ chữ. */}
                     {card.titleKey === 'benefits.highQuality.title' && (
                       <div className="space-y-1 mb-1">
                         <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-mono text-text-muted">SonarQube</span>
-                          <span className="text-[10px] font-mono font-bold text-emerald-400">A+</span>
+                          <span className="text-[10px] font-mono text-text-muted">{L('Bảng dữ liệu', 'DB tables')}</span>
+                          <span className="text-[10px] font-mono font-bold text-emerald-400">{n(codebase.prismaModels)}</span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-mono text-text-muted">Maintainability</span>
-                          <span className="text-[10px] font-mono font-bold text-emerald-400">99%</span>
+                          <span className="text-[10px] font-mono text-text-muted">{L('Migration', 'Migrations')}</span>
+                          <span className="text-[10px] font-mono font-bold text-emerald-400">{n(codebase.migrations)}</span>
                         </div>
                       </div>
                     )}
@@ -377,7 +532,51 @@ export default function AboutPage() {
                     {t('hero.chatWithAI')}
                   </span>
                 </Link>
+
+                {/* Tải CV — CHỈ hiện khi endpoint công khai xác nhận có CV thật
+                    để trả về (bật ở /admin/cv). Thà không có nút còn hơn có nút
+                    dẫn tới 404 hoặc tới một file trắng. */}
+                {cv?.available && (
+                  <a
+                    href="/api/v1/cv/public/download/pdf"
+                    className="group px-8 py-4 bg-darkcard border-2 border-emerald-500/40 text-text-primary font-semibold rounded-2xl hover:border-emerald-400 hover:bg-emerald-500/5 transition-all duration-300"
+                  >
+                    <span className="flex items-center justify-center gap-2">
+                      <Download className="w-5 h-5 text-emerald-400 group-hover:translate-y-0.5 transition-transform" />
+                      {L('Tải CV', 'Download CV')}
+                      <span className="text-[11px] font-mono text-text-muted">PDF</span>
+                    </span>
+                  </a>
+                )}
               </motion.div>
+
+              {/* Dòng phụ dưới nút tải: ngày cập nhật + các định dạng khác. */}
+              {cv?.available && (
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.7 }}
+                  className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] text-text-muted"
+                >
+                  {cv.updatedAt && (
+                    <span className="font-mono">
+                      {L('Cập nhật', 'Updated')}{' '}
+                      {new Date(cv.updatedAt).toLocaleDateString(lang === 'en' ? 'en-GB' : 'vi-VN')}
+                    </span>
+                  )}
+                  <span className="text-text-muted/40">|</span>
+                  <span>{L('Định dạng khác:', 'Other formats:')}</span>
+                  {cv.formats.filter((f) => f !== 'pdf').map((f) => (
+                    <a
+                      key={f}
+                      href={`/api/v1/cv/public/download/${f}`}
+                      className="font-mono underline underline-offset-4 hover:text-neon-violet transition-colors"
+                    >
+                      {f.toUpperCase()}
+                    </a>
+                  ))}
+                </motion.p>
+              )}
             </div>
 
             {/* Right - Cyberpunk Dev Sandbox */}
@@ -466,7 +665,12 @@ export default function AboutPage() {
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
                       </span>
-                      <span className="text-xs font-mono text-emerald-400">{t('hero.experience')}</span>
+                      {/* Bản cũ: "3+ Năm Kinh Nghiệm" — không kiểm được, và tự
+                          mâu thuẫn với "~ 6 yrs" ở chân khung ngay dưới. Thay
+                          bằng một con số đếm từ kho mã. */}
+                      <span className="text-xs font-mono text-emerald-400">
+                        {n(codebase.commits)} commits
+                      </span>
                     </motion.div>
 
                     <motion.div
@@ -475,8 +679,12 @@ export default function AboutPage() {
                       transition={{ delay: 1.0 }}
                       className="absolute top-4 right-4 flex items-center gap-2 px-3 py-2 bg-black/70 backdrop-blur-md border border-yellow-500/30 rounded-xl"
                     >
-                      <span className="text-yellow-400 text-xs font-mono">★★★★★</span>
-                      <span className="text-xs font-mono text-yellow-400">{t('hero.happyClients')}</span>
+                      {/* Bản cũ: "★★★★★ 50+ Khách Hàng" — con số không đếm từ
+                          đâu cả. Thay bằng số trang thật của site. */}
+                      <Code2 className="w-3.5 h-3.5 text-yellow-400" strokeWidth={1.5} />
+                      <span className="text-xs font-mono text-yellow-400">
+                        {n(codebase.pages)} {L('trang', 'pages')}
+                      </span>
                     </motion.div>
 
                     {/* Floating tech tags */}
@@ -515,7 +723,11 @@ export default function AboutPage() {
                     </span>
                     <span className="flex-1 h-[1px] border-b border-dashed border-white/10" />
                     <span className="text-[11px] font-mono text-neon-indigo">Cuong Hoang Dev</span>
-                    <span className="text-[11px] font-mono text-emerald-400">~ 6 yrs</span>
+                    {/* "~ 6 yrs" đã bỏ: nó mâu thuẫn ngay với huy hiệu phía
+                        trên và không có gì chống lưng. */}
+                    <span className="text-[11px] font-mono text-emerald-400">
+                      {n(codebase.daysBuilding)} {L('ngày', 'days')}
+                    </span>
                   </div>
                 </div>
 
@@ -547,13 +759,12 @@ export default function AboutPage() {
                 {[...systemStats, ...systemStats].map((stat, i) => (
                   <div key={i} className="inline-flex items-center gap-2 px-4">
                     <span className="relative flex h-1.5 w-1.5">
-                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${stat.ok ? 'bg-emerald-400' : 'bg-red-400'} opacity-75`}
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"
                         style={{ animationDuration: '2s' }} />
-                      <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${stat.ok ? 'bg-emerald-400' : 'bg-red-400'}`} />
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
                     </span>
                     <span className="text-[11px] font-mono text-text-muted">{stat.label}:</span>
-                    <span className={`text-[11px] font-mono font-medium ${stat.ok ? 'text-emerald-400' : 'text-red-400'}`}>{stat.status}</span>
-                    {stat.latency && <span className="text-[11px] font-mono text-text-muted">({stat.latency})</span>}
+                    <span className="text-[11px] font-mono font-medium text-emerald-400">{n(stat.value)}</span>
                     <span className="text-text-muted/30 mx-2">|</span>
                   </div>
                 ))}
@@ -590,8 +801,9 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Stats Section - Upgraded */}
-      <StatsSection />
+      {/* Stats Section — bốn ô lớn. Giao diện y hệt bản cũ; chỉ khác là bốn con
+          số nay ĐẾM ĐƯỢC, và ô nào chưa đếm được thì không xuất hiện. */}
+      {statCards.length > 0 && <StatsSection items={statCards} />}
 
       {/* Featured Projects (homepage) — temporarily hidden.
           Will be replaced by an admin-managed carousel (admin/home/featured-projects)
@@ -647,6 +859,71 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* ── BỔ SUNG: Quy mô mã nguồn ────────────────────────────────────────
+          Số đếm thẳng từ kho mã lúc deploy (scripts/gen-codebase-stats.mjs).
+          Đây là thứ trang giới thiệu một lập trình viên nên có mà bản cũ
+          không có: bằng chứng kiểm được, thay cho tính từ. */}
+      {codeCounts.length > 0 && (
+        <section className="py-20 border-y border-darkborder/60 relative overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.07] pointer-events-none" style={{
+            backgroundImage: `linear-gradient(rgba(99,102,241,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.5) 1px, transparent 1px)`,
+            backgroundSize: '48px 48px',
+          }} />
+          <div className="max-w-6xl mx-auto px-4 relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="mb-10"
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <GitCommit className="w-4 h-4 text-neon-indigo" />
+                <span className="text-xs font-mono text-neon-indigo tracking-widest uppercase">
+                  {L('Đếm từ chính kho mã', 'Counted from the repository')}
+                </span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-text-primary">
+                {L('Quy mô', 'Size of the')} <span className="text-neon-indigo">{L('mã nguồn', 'codebase')}</span>
+              </h2>
+              <p className="text-text-secondary text-sm mt-2 max-w-2xl">
+                {L(
+                  'Không con số nào ở đây gõ tay — một script đếm lại toàn bộ kho mã trước mỗi lần triển khai.',
+                  'Not one of these is typed by hand — a script recounts the whole repository before every deploy.',
+                )}
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {codeCounts.map((c, i) => (
+                <motion.div
+                  key={c.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.05 }}
+                  className="relative group p-4 rounded-2xl border border-darkborder/60 bg-darkcard/60 backdrop-blur-sm overflow-hidden"
+                >
+                  <div className="absolute top-0 left-0 right-0 h-[2px] opacity-50 group-hover:opacity-100 transition-opacity"
+                    style={{ background: 'linear-gradient(90deg, transparent, #6366f1, transparent)' }} />
+                  <div className="text-2xl md:text-3xl font-heading font-bold text-text-primary tabular-nums">
+                    {n(c.value)}
+                  </div>
+                  <div className="text-[11px] font-mono text-text-muted uppercase tracking-wider mt-1 leading-tight">
+                    {c.label}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            <p className="mt-6 text-[11px] font-mono text-text-muted/70">
+              {L('Làm mới mỗi lần triển khai', 'Refreshed on every deploy')} ·{' '}
+              {new Date(codebase.generatedAt).toLocaleDateString(lang === 'en' ? 'en-GB' : 'vi-VN')}
+            </p>
+          </div>
+        </section>
+      )}
 
       {/* Latest Articles — AI Knowledge Stream */}
       <section className="py-24 bg-gradient-to-b from-darkbg to-darkcard">
@@ -795,10 +1072,10 @@ export default function AboutPage() {
               {t('blogCategories') || 'Blog'}
             </span>
             <h2 className="text-4xl font-heading font-bold text-text-primary mb-4">
-              Bài viết <span className="text-neon-fuchsia">mới nhất</span>
+              {L('Bài viết', 'Latest')} <span className="text-neon-fuchsia">{L('mới nhất', 'articles')}</span>
             </h2>
             <p className="text-text-secondary text-lg max-w-2xl mx-auto">
-              Những bài viết mới nhất được đăng tải lên hệ thống.
+              {L('Những bài viết mới nhất được đăng tải lên hệ thống.', 'The most recent articles published on the site.')}
             </p>
           </motion.div>
 
@@ -862,7 +1139,7 @@ export default function AboutPage() {
                           </p>
                         )}
                         <div className="mt-4 flex items-center gap-2 text-xs text-text-muted group-hover:text-neon-violet transition-colors">
-                          <span>Đọc tiếp</span>
+                          <span>{L('Đọc tiếp', 'Read on')}</span>
                           <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                         </div>
                       </div>
@@ -873,7 +1150,7 @@ export default function AboutPage() {
             </div>
           ) : (
             <div className="text-center py-12">
-              <p className="text-text-muted text-lg">Chưa có bài viết nào</p>
+              <p className="text-text-muted text-lg">{L('Chưa có bài viết nào', 'No articles yet')}</p>
             </div>
           )}
 
@@ -883,7 +1160,7 @@ export default function AboutPage() {
                 href="/tech-trends"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-darkcard border border-darkborder text-text-primary font-medium rounded-xl hover:border-neon-fuchsia hover:text-neon-fuchsia transition-all duration-300 group"
               >
-                Xem tất cả bài viết
+                {L('Xem tất cả bài viết', 'View all articles')}
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
@@ -946,6 +1223,70 @@ export default function AboutPage() {
                     className={`h-full bg-gradient-to-r ${skill.color} rounded-full transition-all duration-1000`}
                     style={{ width: `${skill.level}%` }}
                   />
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── BỔ SUNG: Sự cố production đã xử lý ──────────────────────────────
+          Ai cũng liệt kê được công nghệ; phần khó kể hơn là mình đã sai ở đâu.
+          Bốn ca dưới đây lấy từ nhật ký sự cố có thật trong kho mã. */}
+      <section className="py-24 bg-gradient-to-b from-darkcard to-darkbg">
+        <div className="max-w-6xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-12"
+          >
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-neon-violet/10 border border-neon-violet/20 rounded-full text-sm text-neon-violet font-medium mb-4">
+              <ShieldAlert className="w-3.5 h-3.5" />
+              {L('Nhật ký sự cố', 'Incident log')}
+            </span>
+            <h2 className="text-4xl font-heading font-bold text-text-primary mb-4">
+              {incidents.length} {L('lần làm hỏng', 'times I broke')}{' '}
+              <span className="text-neon-violet">production</span>
+              {L(', và cách chữa', ', and how each got fixed')}
+            </h2>
+            <p className="text-text-secondary text-lg max-w-2xl mx-auto">
+              {L(
+                'Ai cũng liệt kê được công nghệ. Phần khó kể hơn là mình đã sai ở đâu và học được gì.',
+                'Anyone can list technologies. The harder thing to write down is where you got it wrong.',
+              )}
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            {incidents.map((inc, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.08 }}
+                className="relative group p-5 rounded-2xl border border-darkborder/60 bg-darkcard/70 backdrop-blur-sm overflow-hidden"
+              >
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                  style={{ background: `radial-gradient(ellipse at top left, ${inc.accent}12 0%, transparent 70%)` }} />
+                <div className="absolute top-0 left-0 right-0 h-[2px] opacity-60 group-hover:opacity-100 transition-opacity"
+                  style={{ background: `linear-gradient(90deg, transparent, ${inc.accent}, transparent)` }} />
+
+                <div className="relative space-y-3">
+                  {([
+                    [L('Triệu chứng', 'Symptom'), inc.symptom, '#f87171'],
+                    [L('Nguyên nhân', 'Cause'), inc.cause, '#fbbf24'],
+                    [L('Cách chữa', 'Fix'), inc.fix, '#34d399'],
+                  ] as const).map(([label, text, color]) => (
+                    <div key={label}>
+                      <div className="text-[10px] font-mono uppercase tracking-[0.16em] mb-1" style={{ color }}>
+                        {label}
+                      </div>
+                      <p className="text-[13.5px] text-text-secondary leading-relaxed">{text}</p>
+                    </div>
+                  ))}
                 </div>
               </motion.div>
             ))}

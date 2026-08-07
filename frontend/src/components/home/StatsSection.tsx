@@ -2,24 +2,25 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Code2, FolderOpen, Cpu, Users } from 'lucide-react';
-import { useTranslation } from '@/hooks/useTranslation';
+import { Code2 } from 'lucide-react';
 
-interface StatItem {
+/**
+ * ⚠️ Bốn con số ở đây từng được GÕ CỨNG: "3+ năm kinh nghiệm", "20+ dự án",
+ * "15+ công nghệ", "50+ khách hàng" — không con nào đếm từ đâu cả, và "3+ năm"
+ * còn mâu thuẫn với "~ 6 yrs" hiển thị ngay phía trên cùng trang.
+ *
+ * Nay component chỉ VẼ, không còn giữ dữ liệu: nơi gọi truyền `items` vào và
+ * chịu trách nhiệm rằng mỗi con số đều đếm được. Giao diện giữ nguyên 100%
+ * (thẻ kính viền sáng, chip icon, số đếm dần, nền telemetry, quầng theo chuột).
+ */
+export interface StatItem {
   icon: typeof Code2;
   value: number;
+  /** Hậu tố sau số ("+", "%"…). Để rỗng khi con số là phép đếm chính xác. */
   suffix: string;
-  labelKey: string;
-  color: string;
+  label: string;
   glowColor: string;
 }
-
-const stats: StatItem[] = [
-  { icon: Code2, value: 3, suffix: '+', labelKey: 'stats.yearsExperience', color: 'neon-indigo', glowColor: '#818cf8' },
-  { icon: FolderOpen, value: 20, suffix: '+', labelKey: 'stats.projectsDelivered', color: 'neon-violet', glowColor: '#a855f7' },
-  { icon: Cpu, value: 15, suffix: '+', labelKey: 'stats.technologiesUsed', color: 'neon-fuchsia', glowColor: '#d946ef' },
-  { icon: Users, value: 50, suffix: '+', labelKey: 'stats.happyClients', color: 'neon-cyan', glowColor: '#22d3ee' },
-];
 
 // ── Animated count-up ─────────────────────────────────────────────────────────
 interface AnimatedCounterProps {
@@ -50,9 +51,11 @@ function AnimatedCounter({ value, suffix, inView }: AnimatedCounterProps) {
     return () => clearInterval(timer);
   }, [inView, value]);
 
+  // Số nay là phép đếm thật (12.549 chứ không phải 20) nên PHẢI có dấu phân
+  // cách hàng nghìn — "12549" đọc ra thành một chuỗi ký tự, không ra con số.
   return (
     <span className="tabular-nums">
-      {displayValue}{suffix}
+      {displayValue.toLocaleString()}{suffix}
     </span>
   );
 }
@@ -217,7 +220,6 @@ interface StatCardProps {
 }
 
 function StatCard({ stat, index, inView, isMounted }: StatCardProps) {
-  const { t } = useTranslation();
   const cardRef = useRef<HTMLDivElement>(null);
   const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
   const [isHovered, setIsHovered] = useState(false);
@@ -331,13 +333,13 @@ function StatCard({ stat, index, inView, isMounted }: StatCardProps) {
         ) : (
           /* SSR / hydration guard: render same dimensions but without gradient */
           <div className="text-5xl md:text-5xl font-heading font-bold mb-3 tracking-tight text-text-muted/40 tabular-nums">
-            {stat.value}{stat.suffix}
+            {stat.value.toLocaleString()}{stat.suffix}
           </div>
         )}
 
         {/* Label */}
         <p className="relative text-sm text-text-muted leading-relaxed">
-          {t(stat.labelKey)}
+          {stat.label}
         </p>
 
         {/* Bottom scan line accent */}
@@ -357,7 +359,7 @@ function StatCard({ stat, index, inView, isMounted }: StatCardProps) {
 }
 
 // ── Section ────────────────────────────────────────────────────────────────────
-export default function StatsSection() {
+export default function StatsSection({ items }: { items: StatItem[] }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-80px' });
   const [isMounted, setIsMounted] = useState(false);
@@ -373,9 +375,9 @@ export default function StatsSection() {
 
       <div ref={ref} className="max-w-6xl mx-auto px-4 relative z-10">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-          {stats.map((stat, index) => (
+          {items.map((stat, index) => (
             <StatCard
-              key={stat.labelKey}
+              key={stat.label}
               stat={stat}
               index={index}
               inView={isInView}

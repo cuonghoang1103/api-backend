@@ -141,8 +141,26 @@ export interface CvAdminUsage {
   byTask: { task: string; provider: string; model: string; success: boolean; calls: number; inputTokens: number; outputTokens: number; costUsd: number }[];
 }
 export interface CvRuleOverrides { strongVerbs: string[]; weakVerbs: string[]; bannedOpeners: string[]; buzzwords: string[] }
+/**
+ * CV công khai của chủ site — bật thì trang /about mới hiện nút "Tải CV".
+ * TẮT mặc định; xem `src/services/cv/publicCv.service.ts` (backend) để biết
+ * các rào an toàn.
+ */
+export interface PublicCvConfig {
+  enabled: boolean;
+  userId: number | null;
+  displayName: string;
+  headline: string;
+  template: string;
+  market: 'VN' | 'INTERNATIONAL';
+  /** Ẩn số điện thoại + địa chỉ khỏi bản tải công khai. */
+  redactContact: boolean;
+}
+
 export const cvAdminApi = {
   overview: (): Res<Record<string, number>> => api.get('/admin/cv/overview'),
+  getPublicCv: (): Res<PublicCvConfig> => api.get('/admin/cv/public'),
+  setPublicCv: (body: PublicCvConfig): Res<PublicCvConfig> => api.put('/admin/cv/public', body),
   usage: (): Res<CvAdminUsage> => api.get('/admin/cv/usage'),
   getRules: (): Res<CvRuleOverrides> => api.get('/admin/cv/rules'),
   setRules: (body: CvRuleOverrides): Res<CvRuleOverrides> => api.put('/admin/cv/rules', body),

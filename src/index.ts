@@ -162,6 +162,11 @@ const proAdminRoutes = proModule.adminRouter;
 const cvModule = await import(path.join(__dirname, 'routes', 'cvBuilder.routes.js'));
 const cvRoutes = cvModule.default;
 const cvAdminRoutes = cvModule.adminRouter;
+const cvPublicRoutes = cvModule.publicRouter;
+// About page — public real counts (replaces the hard-coded numbers that page
+// used to ship). See services/aboutStats.service.ts.
+const aboutModule = await import(path.join(__dirname, 'routes', 'about.routes.js'));
+const aboutRoutes = aboutModule.default;
 // Landing page — public promo marquee feed + admin CRUD
 const landingModule = await import(path.join(__dirname, 'routes', 'landing.routes.js'));
 const landingRoutes = landingModule.default;
@@ -564,8 +569,13 @@ app.use('/api/v1/interview', interviewRoutes);
 app.use('/api/v1/admin/interview', interviewAdminRoutes);
 app.use('/api/v1/pro', proRoutes);
 app.use('/api/v1/admin/pro', proAdminRoutes);
+// Public CV router FIRST — the main cv router applies `authenticate` to
+// everything under it, so the two opt-in public paths must be matched before
+// it. Off by default; see services/cv/publicCv.service.ts.
+app.use('/api/v1/cv', cvPublicRoutes);
 app.use('/api/v1/cv', cvRoutes);
 app.use('/api/v1/admin/cv', cvAdminRoutes);
+app.use('/api/v1/about', aboutRoutes);
 app.use('/api/v1/landing', landingRoutes);
 app.use('/api/v1/admin/landing', landingAdminRoutes);
 app.use('/api/v1/finance', financeRoutes);

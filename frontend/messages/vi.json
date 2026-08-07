@@ -22,7 +22,7 @@
     "name": "CuongHoang",
     "tagline": "Full-Stack Developer",
     "tagline2": "AI Builder",
-    "description": "Mình chuyên xây dựng website hiện đại với Next.js, Spring Boot và tích hợp giải pháp AI như Gemini, RAG để tạo ra sản phẩm thông minh, tối ưu trải nghiệm người dùng.",
+    "description": "Mình xây web hiện đại bằng Next.js, Node/Express và TypeScript trên PostgreSQL, kèm các tính năng AI thật — chấm phỏng vấn, mổ CV, gia sư ngôn ngữ. Cả nền tảng này là sản phẩm mình tự dựng và tự vận hành.",
     "viewProjects": "Xem Dự Án",
     "chatWithAI": "Trò Chuyện AI",
     "experience": "3+ Năm Kinh Nghiệm",
@@ -171,8 +171,8 @@
   "about": {
     "title": "Giới thiệu",
     "subtitle": "về mình",
-    "description1": "CuongHoang là một Full Stack Developer đam mê xây dựng những giải pháp sáng tạo và hiệu quả cho các vấn đề phức tạp. Với kinh nghiệm phát triển web hiện đại, mình chuyên về React, Next.js, Spring Boot và tích hợp AI.",
-    "description2": "Khi không code, mình thích chia sẻ kiến thức qua blog và đóng góp các dự án mã nguồn mở."
+    "description1": "CuongHoang là Full-Stack Developer thích tự dựng thứ mình cần thay vì đi tìm. Toàn bộ nền tảng này — từ lược đồ dữ liệu, các router API, tới quy trình triển khai không gián đoạn — là do mình viết và tự vận hành trên VPS riêng.",
+    "description2": "Ngoài lúc code, mình viết lại những sự cố production đã gặp và cách chữa — vì đó là phần hiếm ai chép được, và cũng là phần học được nhiều nhất."
   },
   "featuredWork": "Sản Phẩm",
   "latestArticles": "Bài viết mới",

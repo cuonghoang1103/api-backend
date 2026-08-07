@@ -330,5 +330,50 @@ adminRouter.get('/analytics', h(async () => {
   };
 }));
 
+// Public CV of the site owner — opt-in, off by default. See
+// services/cv/publicCv.service.ts for the safety rules.
+adminRouter.get('/public', h(async () => {
+  const { getConfig } = await import('../services/cv/publicCv.service.js');
+  return getConfig();
+}));
+adminRouter.put('/public', h(async (req) => {
+  const { setConfig } = await import('../services/cv/publicCv.service.js');
+  return setConfig(req.body ?? {});
+}));
+
+// ═══════════════════════ PUBLIC ROUTER ══════════════════════════
+// Mounted on the SAME /api/v1/cv prefix but BEFORE the authenticated router, so
+// these two paths — and only these two — are reachable without a token. Every
+// other CV path still hits `router.use(authenticate)`.
+//
+// Both return 404 when the feature is off, when no profile is configured, or
+// when the configured profile is too empty to be worth serving. 404 (not 403)
+// on purpose: an unconfigured site should look like it has no such endpoint.
+const publicRouter = Router();
+
+publicRouter.get('/public', h(async () => {
+  const { getPublicCvMeta } = await import('../services/cv/publicCv.service.js');
+  return getPublicCvMeta();
+}));
+
+publicRouter.get('/public/download/:format', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const { getPublicCvFile, isPublicCvFormat } = await import('../services/cv/publicCv.service.js');
+    const format = String(req.params.format).toLowerCase();
+    if (!isPublicCvFormat(format)) {
+      res.status(400).json({ success: false, message: 'Định dạng không hỗ trợ' });
+      return;
+    }
+    const file = await getPublicCvFile(format);
+    if (!file) { res.status(404).json({ success: false, message: 'Không tìm thấy' }); return; }
+    res.setHeader('Content-Type', file.mime);
+    res.setHeader('Content-Disposition', `attachment; filename="${file.filename}"`);
+    // Bản dựng được nhớ tạm phía server theo thời điểm sửa hồ sơ; cho CDN/trình
+    // duyệt giữ ngắn thôi để sửa CV xong là thấy bản mới.
+    res.setHeader('Cache-Control', 'public, max-age=300');
+    res.send(file.buffer);
+  } catch (err) { next(err); }
+});
+
 export default router;
-export { adminRouter };
+export { adminRouter, publicRouter };

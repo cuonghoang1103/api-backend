@@ -127,6 +127,22 @@ if [ "$MODE" = "local" ]; then
         fi
     fi
 
+    # ── Pre-flight: số liệu mã nguồn cho trang /about ─────────────
+    # PHẢI chạy TRƯỚC rsync. Trang /about khoe số commit / số trang / số bảng
+    # dữ liệu, mà container KHÔNG tự đếm được: `.dockerignore` loại `.git` và
+    # rsync bên dưới cũng `--exclude='.git/'`. Sinh ở đây thì mỗi lần deploy số
+    # tự tươi lại, không ai phải nhớ sửa.
+    # Hỏng thì CẢNH BÁO chứ không chặn: trang about tự ẩn ô nào thiếu số, không
+    # đáng để một phép đếm làm hỏng cả lần deploy.
+    if [ -f "${REPO_DIR}/scripts/gen-codebase-stats.mjs" ] && command -v node &>/dev/null; then
+        info "Generating codebase stats for /about..."
+        if node "${REPO_DIR}/scripts/gen-codebase-stats.mjs"; then
+            ok "codebaseStats.json refreshed"
+        else
+            warn "gen-codebase-stats thất bại — /about sẽ dùng số liệu của lần deploy trước"
+        fi
+    fi
+
     # Ensure VPS deploy dir exists
     ssh -i "$VPS_SSH_KEY" \
         -o StrictHostKeyChecking=accept-new \
@@ -681,6 +697,8 @@ for route in \
     maker-lab/projects \
     maker-lab/meta \
     repos \
+    about/stats \
+    cv/public \
     cyber/profile; do
     code=$(docker exec cuonghoangdev_backend \
         sh -c "curl -s -o /dev/null -w '%{http_code}' http://localhost:3001/api/v1/${route}" 2>/dev/null)

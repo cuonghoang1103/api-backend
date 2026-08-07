@@ -22,7 +22,7 @@
     "name": "CuongHoang",
     "tagline": "Full-Stack Developer",
     "tagline2": "AI Builder",
-    "description": "I specialize in building modern websites with Next.js, Spring Boot and integrating AI solutions like Gemini, RAG to create intelligent products that optimize user experience.",
+    "description": "I build modern web apps with Next.js, Node/Express and TypeScript on PostgreSQL, with AI features that actually ship — interview grading, CV critique, language tutoring. This whole platform is something I built and run myself.",
     "viewProjects": "View Projects",
     "chatWithAI": "Chat with AI",
     "experience": "3+ Years Experience",
@@ -171,8 +171,8 @@
   "about": {
     "title": "About",
     "subtitle": "Me",
-    "description1": "CuongHoang is a passionate Full Stack Developer who loves building creative and efficient solutions for complex problems. With experience in modern web development, he specializes in React, Next.js, Spring Boot, and AI integration.",
-    "description2": "When not coding, he enjoys sharing knowledge through blog posts and contributing to open source projects."
+    "description1": "CuongHoang is a full-stack developer who would rather build the thing than go looking for it. This entire platform — the data schema, the API routers, the zero-downtime deploy pipeline — is written and operated by him on his own VPS.",
+    "description2": "Outside of coding, he writes up the production incidents he has hit and how each was fixed — the part nobody can copy, and the part he learns most from."
   },
   "featuredWork": "My Work",
   "latestArticles": "Latest",

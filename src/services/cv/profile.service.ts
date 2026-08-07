@@ -138,6 +138,18 @@ const fullInclude = {
   languageSkills: { orderBy: { sortOrder: 'asc' } as const },
 } satisfies Prisma.CvProfileInclude;
 
+/**
+ * READ-ONLY variant of getOrCreateProfile — returns `null` instead of creating.
+ *
+ * The public CV endpoint (publicCv.service.ts) needs this: it is reachable
+ * without auth, so it must never write anything. getOrCreateProfile would
+ * upsert an empty cv_profiles row for whatever userId the config names — a
+ * typo in the admin form would then quietly create junk rows on every hit.
+ */
+export async function findProfile(userId: number) {
+  return prisma.cvProfile.findUnique({ where: { userId }, include: fullInclude });
+}
+
 /** Get the user's master profile, creating an empty one on first access. */
 export async function getOrCreateProfile(userId: number) {
   const existing = await prisma.cvProfile.findUnique({

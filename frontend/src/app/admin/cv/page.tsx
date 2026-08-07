@@ -7,8 +7,8 @@
  */
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { Loader2, DollarSign, FileText, Cpu, ShieldAlert, CheckCircle2, AlertCircle, BookOpen, Save } from 'lucide-react';
-import { cvAdminApi, type CvAdminUsage, type CvRuleOverrides } from '@/lib/cv-api';
+import { Loader2, DollarSign, FileText, Cpu, ShieldAlert, CheckCircle2, AlertCircle, BookOpen, Save, Globe } from 'lucide-react';
+import { cvAdminApi, type CvAdminUsage, type CvRuleOverrides, type PublicCvConfig } from '@/lib/cv-api';
 
 export default function AdminCvPage() {
   const [overview, setOverview] = useState<Record<string, number> | null>(null);
@@ -28,14 +28,29 @@ export default function AdminCvPage() {
     } catch { toast.error('Lưu thất bại'); } finally { setSavingRules(false); }
   };
 
+  // CV công khai trên /about — bật/tắt tại đây (mặc định TẮT).
+  const [publicCv, setPublicCv] = useState<PublicCvConfig | null>(null);
+  const [savingPublicCv, setSavingPublicCv] = useState(false);
+  const savePublicCv = async () => {
+    if (!publicCv) return;
+    if (publicCv.enabled && !publicCv.userId) { toast.error('Cần nhập user id trước khi bật'); return; }
+    setSavingPublicCv(true);
+    try {
+      const res = await cvAdminApi.setPublicCv(publicCv);
+      setPublicCv(res.data.data);
+      toast.success(res.data.data.enabled ? 'Đã bật — nút "Tải CV" sẽ hiện trên /about' : 'Đã tắt — nút "Tải CV" ẩn khỏi /about');
+    } catch { toast.error('Lưu thất bại'); } finally { setSavingPublicCv(false); }
+  };
+
   useEffect(() => {
-    Promise.all([cvAdminApi.overview(), cvAdminApi.usage(), cvAdminApi.analytics(), cvAdminApi.getRules().catch(() => null)])
-      .then(([o, u, a, r]) => {
+    Promise.all([cvAdminApi.overview(), cvAdminApi.usage(), cvAdminApi.analytics(), cvAdminApi.getRules().catch(() => null), cvAdminApi.getPublicCv().catch(() => null)])
+      .then(([o, u, a, r, p]) => {
         setOverview(o.data.data); setUsage(u.data.data); setAnalytics(a.data.data);
         if (r) {
           const d = r.data.data;
           setRules({ strongVerbs: d.strongVerbs.join(', '), weakVerbs: d.weakVerbs.join(', '), bannedOpeners: d.bannedOpeners.join('\n'), buzzwords: d.buzzwords.join('\n') });
         }
+        if (p) setPublicCv(p.data.data);
       })
       .catch(() => toast.error('Không tải được dữ liệu admin'))
       .finally(() => setLoading(false));
@@ -176,6 +191,99 @@ export default function AdminCvPage() {
                 );
               })()}
             </ul>
+          </div>
+        </div>
+      )}
+
+      {/* ── CV công khai (08/08/2026) ─────────────────────────────────────
+          Bật thì trang /about mới hiện nút "Tải CV"; tắt thì endpoint công
+          khai trả 404 và nút tự biến mất. Đây là NGOẠI LỆ có chủ đích với
+          nguyên tắc "admin không xem CV của ai": nó không HIỆN CV nào cả, chỉ
+          bật/tắt CV của CHÍNH chủ site theo user id do chính admin nhập. */}
+      {publicCv && (
+        <div className="mt-6 rounded-xl border border-white/10 bg-white/[0.03] p-5">
+          <div className="flex items-center gap-2 text-sm font-semibold">
+            <Globe className="h-4 w-4" /> CV công khai trên trang /about
+          </div>
+          <p className="mt-1 text-xs text-slate-400">
+            Bật để khách tải CV của bạn mà không cần đăng nhập. Chỉ phục vụ đúng user id dưới đây —
+            hồ sơ chưa có tên hoặc chưa có nội dung thì nút vẫn ẩn.
+          </p>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={publicCv.enabled}
+                onChange={(e) => setPublicCv({ ...publicCv, enabled: e.target.checked })}
+                className="h-4 w-4 accent-emerald-500"
+              />
+              Bật tải CV công khai
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={publicCv.redactContact}
+                onChange={(e) => setPublicCv({ ...publicCv, redactContact: e.target.checked })}
+                className="h-4 w-4 accent-emerald-500"
+              />
+              Ẩn số điện thoại &amp; địa chỉ (khuyến nghị)
+            </label>
+
+            <label className="text-xs text-slate-400">
+              User id của bạn
+              <input
+                type="number"
+                min={1}
+                value={publicCv.userId ?? ''}
+                onChange={(e) => setPublicCv({ ...publicCv, userId: e.target.value ? Number(e.target.value) : null })}
+                className="mt-1 w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-slate-100"
+                placeholder="ví dụ 1"
+              />
+            </label>
+            <label className="text-xs text-slate-400">
+              Mẫu CV
+              <select
+                value={publicCv.template}
+                onChange={(e) => setPublicCv({ ...publicCv, template: e.target.value })}
+                className="mt-1 w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-slate-100"
+              >
+                {['technical', 'ats', 'vietnam', 'senior'].map((t) => (
+                  <option key={t} value={t}>{t}</option>
+                ))}
+              </select>
+            </label>
+            <label className="text-xs text-slate-400">
+              Thị trường
+              <select
+                value={publicCv.market}
+                onChange={(e) => setPublicCv({ ...publicCv, market: e.target.value === 'INTERNATIONAL' ? 'INTERNATIONAL' : 'VN' })}
+                className="mt-1 w-full rounded-lg border border-white/10 bg-black/30 px-3 py-2 text-sm text-slate-100"
+              >
+                <option value="VN">VN</option>
+                <option value="INTERNATIONAL">INTERNATIONAL</option>
+              </select>
+            </label>
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <button
+              onClick={savePublicCv}
+              disabled={savingPublicCv}
+              className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
+            >
+              {savingPublicCv ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />} Lưu
+            </button>
+            {publicCv.enabled && (
+              <a
+                href="/api/v1/cv/public/download/pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-slate-300 underline underline-offset-4 hover:text-white"
+              >
+                Thử tải bản công khai →
+              </a>
+            )}
           </div>
         </div>
       )}

@@ -42,7 +42,8 @@
     "db:seed:finance:demo": "tsx prisma/seed.finance.demo.ts",
     "eval:cv-linter": "tsx src/services/cv/rules/__eval__/run.ts",
     "eval:cv-fabrication": "tsx src/services/cv/rules/__eval__/run-fabrication.ts",
-    "eval:cv-ai": "tsx src/services/cv/rules/__eval__/run-ai-eval.ts"
+    "eval:cv-ai": "tsx src/services/cv/rules/__eval__/run-ai-eval.ts",
+    "gen:codebase-stats": "node scripts/gen-codebase-stats.mjs"
   },
   "keywords": [
     "portfolio",

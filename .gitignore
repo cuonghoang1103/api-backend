@@ -131,3 +131,6 @@ _render*/
 # Firmware secrets (device keys, WiFi passwords) — never commit
 firmware/**/src/secrets.h
 .pio/
+
+# STL sinh ra được — chạy `node gen-stl.mjs ./stl` để tạo lại
+firmware/**/shell/stl/

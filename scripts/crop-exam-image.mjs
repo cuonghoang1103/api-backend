@@ -4,10 +4,25 @@
  *   1. paint over the "FUOVERFLOW.COM" watermark (bottom-left corner, fixed
  *      position across the whole batch)
  *   2. trim the huge white margin down to a tight box around the real
- *      content — done in TWO passes (banner strip, then body) because the
- *      "MULTIPLE CHOICE" banner spans the full 1920px width and would
- *      otherwise stop the trim algorithm from cropping the width at all
- *   3. re-stack a width-matched banner + trimmed body
+ *      content
+ *
+ * Two known source layouts, auto-detected per image (sampling a pixel just
+ * below the top edge, away from the left accent bar):
+ *   - "banner" layout (blue "MULTIPLE CHOICE" bar spans the full width) —
+ *     trimming the whole image in one pass would keep the full width
+ *     because of that bar, so the banner strip is trimmed separately from
+ *     the body below it, then the two are re-stacked at the body's width.
+ *   - "plain" layout (e.g. two-column "Question: N" sidebar, no banner) —
+ *     trimmed directly as a single region.
+ * Auto-detection matters: hard-coding the banner-layout logic for every
+ * image previously truncated the RIGHT edge of "plain" layout questions
+ * (their content isn't bounded by a full-width bar, so the banner-split
+ * math silently cut into real text — caught 07/08 on Đề 5 FA25-RE).
+ *
+ * Also fixed: the body crop now uses the TRIMMED buffer directly instead of
+ * re-extracting from the original at left:0 — re-extracting assumed trim()
+ * never shifts the left edge, which cut off the right edge by however much
+ * got trimmed on the left whenever that assumption was wrong.
  *
  *   node scripts/crop-exam-image.mjs --dir <thư mục qN.png> [--out <thư mục ra, mặc định ghi đè>]
  */
@@ -22,9 +37,77 @@ const OUT_DIR = val('--out') || DIR;
 if (!DIR) { console.error('cần --dir <thư mục chứa qN.png>'); process.exit(1); }
 fs.mkdirSync(OUT_DIR, { recursive: true });
 
-const BANNER_HEIGHT = 34;
 const WATERMARK_W = 200;
 const WATERMARK_H = 100;
+const WHITE = { r: 255, g: 255, b: 255, alpha: 1 };
+
+async function whiteOutWatermark(img, height) {
+  const rect = await sharp({ create: { width: WATERMARK_W, height: WATERMARK_H, channels: 4, background: WHITE } }).png().toBuffer();
+  return img.composite([{ input: rect, left: 0, top: Math.max(0, height - WATERMARK_H) }]).png().toBuffer();
+}
+
+async function maskAccentLine(buf, width, height) {
+  // Some "plain" layouts (e.g. Đề 5 FA25-RE) have thin decorative divider/
+  // border lines (a colored accent bar, a gray margin rule, ...) running the
+  // FULL height of the source image. sharp's trim() finds the bounding box
+  // of all non-background pixels, so a line alone forces the box to span
+  // the entire height even when real content ends far sooner — leaving a
+  // huge dead white area below the question. Detect any column that is
+  // almost entirely non-white top-to-bottom (a solid rule) — real text/
+  // content columns never come close to that, since most rows in a column
+  // of text are blank space between glyphs/lines — and paint those columns
+  // white before computing the trim box (the box is then re-applied to the
+  // ORIGINAL unmasked buffer so the lines still render, just within the
+  // tight crop).
+  const { data, info } = await sharp(buf).raw().toBuffer({ resolveWithObject: true });
+  const channels = info.channels;
+  const isWhiteish = (i) => data[i] > 245 && data[i + 1] > 245 && data[i + 2] > 245;
+  const lineCols = [];
+  for (let x = 0; x < width; x++) {
+    let nonWhite = 0;
+    for (let y = 0; y < height; y++) {
+      if (!isWhiteish((y * width + x) * channels)) nonWhite++;
+    }
+    if (nonWhite / height > 0.9) lineCols.push(x);
+  }
+  if (!lineCols.length) return buf;
+  const out = Buffer.from(data);
+  for (const x of lineCols) {
+    for (let y = 0; y < height; y++) {
+      const i = (y * width + x) * channels;
+      out[i] = 255; out[i + 1] = 255; out[i + 2] = 255;
+    }
+  }
+  return sharp(out, { raw: { width, height, channels } }).png().toBuffer();
+}
+
+async function detectBannerHeight(buf, width) {
+  // Some "plain" layouts have a thin (~1-2px) full-width top border rule
+  // that isn't a banner at all — sampling a single pixel at y=10 (too close
+  // to that border) misread it as a tiny banner, which then routed the
+  // image through the banner-split branch instead of plain-trim (caught
+  // 07/08 on Đề 5 FA25-RE q26: false bannerHeight=11 left the image
+  // essentially uncropped). Use ROW COVERAGE instead of a single pixel, and
+  // sample at y=15 to sit past that thin border: a genuine full-width
+  // colored banner is still >50% covered well past y=10, while a plain
+  // layout's border has already ended by y=15.
+  const { data, info } = await sharp(buf).raw().toBuffer({ resolveWithObject: true });
+  const channels = info.channels;
+  const rowCoverage = (y) => {
+    let nonWhite = 0;
+    for (let x = 0; x < width; x++) {
+      const i = (y * width + x) * channels;
+      if (!(data[i] > 245 && data[i + 1] > 245 && data[i + 2] > 245)) nonWhite++;
+    }
+    return nonWhite / width;
+  };
+  if (rowCoverage(15) < 0.5) return 0; // no banner — plain layout
+  // banner present: walk down until the row is no longer mostly-covered
+  for (let y = 15; y < 60; y++) {
+    if (rowCoverage(y) < 0.5) return y;
+  }
+  return 34; // fallback to the known constant if detection is inconclusive
+}
 
 const files = fs.readdirSync(DIR).filter((f) => f.endsWith('.png'));
 let done = 0;
@@ -33,38 +116,69 @@ for (const f of files) {
   const img = sharp(src);
   const meta = await img.metadata();
 
-  // 1. paint white over the watermark box (bottom-left)
-  const whiteRect = await sharp({
-    create: { width: WATERMARK_W, height: WATERMARK_H, channels: 4, background: { r: 255, g: 255, b: 255, alpha: 1 } },
-  }).png().toBuffer();
-  const whited = sharp(await img
-    .composite([{ input: whiteRect, left: 0, top: Math.max(0, meta.height - WATERMARK_H) }])
-    .png()
-    .toBuffer());
+  const whited = await whiteOutWatermark(sharp(src), meta.height);
+  const bannerHeight = await detectBannerHeight(whited, meta.width);
 
-  // 2a. trim the BODY (below the banner) to get the real content width/height
-  const bodyBuf = await whited.clone().extract({ left: 0, top: BANNER_HEIGHT, width: meta.width, height: meta.height - BANNER_HEIGHT }).png().toBuffer();
-  const trimmedBody = sharp(bodyBuf).trim({ background: '#ffffff', threshold: 10 });
-  const trimmedBodyBuf = await trimmedBody.png().toBuffer();
-  const bodyMeta = await sharp(trimmedBodyBuf).metadata();
-  const contentWidth = Math.min(meta.width, bodyMeta.width + 20); // a little breathing room
+  let finalBuf;
+  if (bannerHeight > 0) {
+    // banner layout: trim banner strip and body separately, re-stack at
+    // the body's trimmed width so the banner doesn't force full width.
+    const bannerBuf = await sharp(whited).extract({ left: 0, top: 0, width: meta.width, height: bannerHeight }).png().toBuffer();
+    const bodyRegion = await sharp(whited).extract({ left: 0, top: bannerHeight, width: meta.width, height: meta.height - bannerHeight }).png().toBuffer();
+    const bodyHeight = meta.height - bannerHeight;
+    // Mask any full-height accent/divider line in the body before computing
+    // the trim box (same reasoning as the plain-layout branch below), then
+    // apply the box to the ORIGINAL unmasked body so the line still renders.
+    const bodyMasked = await maskAccentLine(bodyRegion, meta.width, bodyHeight);
+    const { info: bodyTinfo } = await sharp(bodyMasked)
+      .trim({ background: '#ffffff', threshold: 10 })
+      .toBuffer({ resolveWithObject: true });
+    // sharp reports trimOffsetLeft/Top as <= 0 (the negative of the actual
+    // offset removed) — Math.abs, NOT Math.max(0, ...), or every extract
+    // silently starts at 0 regardless of the real trim box (verified
+    // against a synthetic image: a 40x40 square placed at left:20,top:30
+    // trims to trimOffsetLeft:-20, trimOffsetTop:-30).
+    const bodyLeft = Math.abs(bodyTinfo.trimOffsetLeft);
+    const bodyTop = Math.abs(bodyTinfo.trimOffsetTop);
+    const trimmedBodyData = await sharp(bodyRegion)
+      .extract({ left: bodyLeft, top: bodyTop, width: Math.min(bodyTinfo.width, meta.width - bodyLeft), height: Math.min(bodyTinfo.height, bodyHeight - bodyTop) })
+      .toBuffer();
+    const bodyInfo = { width: Math.min(bodyTinfo.width, meta.width - bodyLeft), height: Math.min(bodyTinfo.height, bodyHeight - bodyTop) };
+    const contentWidth = Math.min(meta.width, bodyInfo.width + 20);
+    const bannerFinal = await sharp(bannerBuf).extract({ left: 0, top: 0, width: contentWidth, height: bannerHeight }).png().toBuffer();
+    // pad the already-trimmed body buffer up to contentWidth on the right
+    // instead of re-extracting from the pre-trim image (that re-extraction
+    // is exactly what caused the right-edge truncation bug).
+    const bodyFinal = await sharp(trimmedBodyData)
+      .extend({ top: 0, bottom: 0, left: 0, right: Math.max(0, contentWidth - bodyInfo.width), background: WHITE })
+      .png()
+      .toBuffer();
+    finalBuf = await sharp({
+      create: { width: contentWidth, height: bannerHeight + bodyInfo.height, channels: 4, background: WHITE },
+    }).composite([
+      { input: bannerFinal, left: 0, top: 0 },
+      { input: bodyFinal, left: 0, top: bannerHeight },
+    ]).png().toBuffer();
+  } else {
+    // plain layout: compute the trim box on a copy with any full-height
+    // accent line masked out (see maskAccentLine), then apply that same
+    // box to the real (unmasked) image so decorative lines don't block
+    // vertical trimming but still render in the final crop.
+    const masked = await maskAccentLine(whited, meta.width, meta.height);
+    const { info: tinfo } = await sharp(masked)
+      .trim({ background: '#ffffff', threshold: 10 })
+      .toBuffer({ resolveWithObject: true });
+    // see the trimOffset note in the banner branch above — must be Math.abs
+    const left = Math.abs(tinfo.trimOffsetLeft);
+    const top = Math.abs(tinfo.trimOffsetTop);
+    finalBuf = await sharp(whited)
+      .extract({ left, top, width: Math.min(tinfo.width, meta.width - left), height: Math.min(tinfo.height, meta.height - top) })
+      .png()
+      .toBuffer();
+  }
 
-  // 2b. crop the banner strip to the same content width
-  const bannerBuf = await whited.clone().extract({ left: 0, top: 0, width: contentWidth, height: BANNER_HEIGHT }).png().toBuffer();
-
-  // 2c. re-crop the body at the final content width (trim's left offset may differ from 0)
-  const bodyFinalBuf = await sharp(bodyBuf).extract({ left: 0, top: 0, width: contentWidth, height: bodyMeta.height }).png().toBuffer();
-
-  // 3. stack banner + body, then pad
-  const combined = sharp({
-    create: { width: contentWidth, height: BANNER_HEIGHT + bodyMeta.height, channels: 4, background: { r: 255, g: 255, b: 255, alpha: 1 } },
-  }).composite([
-    { input: bannerBuf, left: 0, top: 0 },
-    { input: bodyFinalBuf, left: 0, top: BANNER_HEIGHT },
-  ]);
-
-  await combined
-    .extend({ top: 0, bottom: 14, left: 10, right: 14, background: { r: 255, g: 255, b: 255, alpha: 1 } })
+  await sharp(finalBuf)
+    .extend({ top: 10, bottom: 14, left: 10, right: 14, background: WHITE })
     .png()
     .toFile(path.join(OUT_DIR, f));
 

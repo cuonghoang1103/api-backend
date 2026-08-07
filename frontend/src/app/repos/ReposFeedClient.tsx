@@ -85,6 +85,29 @@ export default function ReposFeedClient({
     fetchRepos(filters);
   }, [filters, fetchRepos]);
 
+  // Fallback for the sidebar aggregations. page.tsx fetches tags +
+  // languages during SSR with a 4s per-endpoint timeout and tolerates
+  // failure — but nothing was picking the pieces up afterwards, so a
+  // single slow response left the whole filter rail reading "no data"
+  // until a full reload. Only runs when SSR came back empty, so the
+  // happy path still costs zero extra requests.
+  useEffect(() => {
+    if (initialTags.length > 0 && initialLanguages.length > 0) return;
+    let alive = true;
+    (async () => {
+      const [t, l] = await Promise.allSettled([
+        initialTags.length ? Promise.resolve(null) : githubApi.tags(),
+        initialLanguages.length ? Promise.resolve(null) : githubApi.languages(),
+      ]);
+      if (!alive) return;
+      if (t.status === 'fulfilled' && t.value) setTags(t.value.data.data);
+      if (l.status === 'fulfilled' && l.value) setLanguages(l.value.data.data);
+    })();
+    return () => {
+      alive = false;
+    };
+  }, [initialTags, initialLanguages]);
+
   // Debounce keyword search.
   useEffect(() => {
     const id = setTimeout(() => {

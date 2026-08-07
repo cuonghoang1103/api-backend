@@ -1,0 +1,562 @@
+{
+  "_source": "github.com HTML + shields.io top-language, doi chieu REST api.github.com",
+  "_fetchedAt": "2026-08-07",
+  "_note": "So sao la anh chup tai ngay tren. Admin bam Sync all o /admin/repos de cap nhat.",
+  "repos": {
+    "anthropics/claude-code": {
+      "stars": 140540,
+      "language": "Python",
+      "description": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands."
+    },
+    "anthropics/anthropic-sdk-typescript": {
+      "stars": 2072,
+      "language": "TypeScript",
+      "description": "Access to Anthropic's safety-first language model APIs in TypeScript"
+    },
+    "anthropics/claude-cookbooks": {
+      "stars": 51079,
+      "language": "Jupyter Notebook",
+      "description": "A collection of notebooks/recipes showcasing some fun and effective ways of using Claude. - anthropics/claude-cookbooks"
+    },
+    "anthropics/courses": {
+      "stars": 22547,
+      "language": "Jupyter Notebook",
+      "description": "Anthropic's educational courses."
+    },
+    "modelcontextprotocol/servers": {
+      "stars": 89305,
+      "language": "TypeScript",
+      "description": "Model Context Protocol Servers."
+    },
+    "punkpeye/awesome-mcp-servers": {
+      "stars": 91917,
+      "language": null,
+      "description": "A collection of MCP servers."
+    },
+    "vercel/ai": {
+      "stars": 26059,
+      "language": "TypeScript",
+      "description": "The AI Toolkit for TypeScript. From the creators of Next.js, the AI SDK is a free open-source library for building AI-powered applications and agents  - GitHub - vercel/ai: The AI Toolkit for TypeScript. From the creators of Next.js, the AI SDK is a free open-source library for building AI-powered applications and agents"
+    },
+    "langchain-ai/langchainjs": {
+      "stars": 18017,
+      "language": "TypeScript",
+      "description": "The agent engineering platform."
+    },
+    "ollama/ollama": {
+      "stars": 177968,
+      "language": "Go",
+      "description": "Get up and running with Kimi-K2.6, GLM-5.2, MiniMax, DeepSeek, gpt-oss, Qwen, Gemma and other models."
+    },
+    "open-webui/open-webui": {
+      "stars": 148109,
+      "language": "Python",
+      "description": "User-friendly AI Interface (Supports Ollama, OpenAI API, ...)"
+    },
+    "n8n-io/n8n": {
+      "stars": 199656,
+      "language": "TypeScript",
+      "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations."
+    },
+    "pgvector/pgvector": {
+      "stars": 22522,
+      "language": "C",
+      "description": "Open-source vector similarity search for Postgres."
+    },
+    "microsoft/generative-ai-for-beginners": {
+      "stars": 116864,
+      "language": null,
+      "description": "21 Lessons, Get Started Building with Generative AI  - GitHub - microsoft/generative-ai-for-beginners: 21 Lessons, Get Started Building with Generative AI"
+    },
+    "f/prompts.chat": {
+      "stars": 166840,
+      "language": "HTML",
+      "description": "f.k.a. Awesome ChatGPT Prompts. Share, discover, and collect prompts from the community. Free and open source — self-host for your organization with complete privacy. - f/prompts.chat"
+    },
+    "huggingface/transformers": {
+      "stars": 163431,
+      "language": "Python",
+      "description": "🤗 Transformers: the model-definition framework for state-of-the-art machine learning models in text, vision, audio, and multimodal models, for both inference and training.  - GitHub - huggingface/transformers: 🤗 Transformers: the model-definition framework for state-of-the-art machine learning models in text, vision, audio, and multimodal models, for both inference and training."
+    },
+    "mem0ai/mem0": {
+      "stars": 62744,
+      "language": "Python",
+      "description": "Universal memory layer for AI Agents."
+    },
+    "browser-use/browser-use": {
+      "stars": 108136,
+      "language": "Python",
+      "description": "🌐 Make websites accessible for AI agents. Automate tasks online with ease."
+    },
+    "shadcn-ui/ui": {
+      "stars": 120732,
+      "language": "TypeScript",
+      "description": "A set of beautifully-designed, accessible components and a code distribution platform. Works with your favorite frameworks. Open Source. Open Code."
+    },
+    "TanStack/query": {
+      "stars": 50081,
+      "language": "TypeScript",
+      "description": "🤖 Powerful asynchronous state management, server-state utilities and data fetching for the web. TS/JS, React Query, Solid Query, Svelte Query and Vue Query."
+    },
+    "TanStack/table": {
+      "stars": 28283,
+      "language": "TypeScript",
+      "description": "🤖 Headless UI for building powerful tables & datagrids for TS/JS -  React-Table, Vue-Table, Solid-Table, Svelte-Table"
+    },
+    "colinhacks/zod": {
+      "stars": 43415,
+      "language": "TypeScript",
+      "description": "TypeScript-first schema validation with static type inference"
+    },
+    "pmndrs/zustand": {
+      "stars": 58534,
+      "language": "TypeScript",
+      "description": "🐻 Bear necessities for state management in React."
+    },
+    "react-hook-form/react-hook-form": {
+      "stars": 44818,
+      "language": "TypeScript",
+      "description": "📋 React Hooks for form state management and validation (Web + React Native)"
+    },
+    "motiondivision/motion": {
+      "stars": 33130,
+      "language": "TypeScript",
+      "description": "A modern animation library for React and JavaScript"
+    },
+    "socketio/socket.io": {
+      "stars": 63188,
+      "language": "TypeScript",
+      "description": "Bidirectional and low-latency communication for every platform"
+    },
+    "expressjs/express": {
+      "stars": 69351,
+      "language": "JavaScript",
+      "description": "Fast, unopinionated, minimalist web framework for node."
+    },
+    "fastify/fastify": {
+      "stars": 36978,
+      "language": "JavaScript",
+      "description": "Fast and low overhead web framework, for Node.js."
+    },
+    "nestjs/nest": {
+      "stars": 76363,
+      "language": "TypeScript",
+      "description": "A progressive Node.js framework for building efficient, scalable, and enterprise-grade server-side applications with TypeScript/JavaScript 🚀"
+    },
+    "drizzle-team/drizzle-orm": {
+      "stars": 35384,
+      "language": "TypeScript",
+      "description": "ORM."
+    },
+    "lucide-icons/lucide": {
+      "stars": 23834,
+      "language": "TypeScript",
+      "description": "Beautiful & consistent icon toolkit made by the community. Open-source project and a fork of Feather Icons."
+    },
+    "tailwindlabs/headlessui": {
+      "stars": 28702,
+      "language": "TypeScript",
+      "description": "Completely unstyled, fully accessible UI components, designed to integrate beautifully with Tailwind CSS."
+    },
+    "date-fns/date-fns": {
+      "stars": 36620,
+      "language": "TypeScript",
+      "description": "⏳ Modern JavaScript date utility library ⌛️."
+    },
+    "axios/axios": {
+      "stars": 109225,
+      "language": "JavaScript",
+      "description": "Promise based HTTP client for the browser and node.js"
+    },
+    "vitejs/vite": {
+      "stars": 82244,
+      "language": "TypeScript",
+      "description": "Next generation frontend tooling. It's fast!"
+    },
+    "trpc/trpc": {
+      "stars": 40498,
+      "language": "TypeScript",
+      "description": "🧙‍♀️  Move Fast and Break Nothing. End-to-end typesafe APIs made easy.  - GitHub - trpc/trpc: 🧙‍♀️  Move Fast and Break Nothing. End-to-end typesafe APIs made easy."
+    },
+    "ueberdosis/tiptap": {
+      "stars": 37949,
+      "language": "TypeScript",
+      "description": "The headless rich text editor framework for web artisans."
+    },
+    "hoppscotch/hoppscotch": {
+      "stars": 79989,
+      "language": "TypeScript",
+      "description": "Open-Source API Development Ecosystem • https://hoppscotch.io • Offline, On-Prem & Cloud • Web, Desktop & CLI • Open-Source Alternative to Postman, Insomnia"
+    },
+    "typicode/json-server": {
+      "stars": 75694,
+      "language": "JavaScript",
+      "description": "Get a full fake REST API with zero coding in less than 30 seconds (seriously)"
+    },
+    "remix-run/react-router": {
+      "stars": 56545,
+      "language": "TypeScript",
+      "description": "Declarative routing for React."
+    },
+    "sindresorhus/awesome": {
+      "stars": 493216,
+      "language": null,
+      "description": "😎 Awesome lists about all kinds of interesting topics"
+    },
+    "docker/awesome-compose": {
+      "stars": 45999,
+      "language": "HTML",
+      "description": "Awesome Docker Compose samples."
+    },
+    "traefik/traefik": {
+      "stars": 64320,
+      "language": "Go",
+      "description": "The Cloud Native Application Proxy."
+    },
+    "caddyserver/caddy": {
+      "stars": 74729,
+      "language": "Go",
+      "description": "Fast and extensible multi-platform HTTP/1-2-3 web server with automatic HTTPS"
+    },
+    "coollabsio/coolify": {
+      "stars": 60195,
+      "language": "PHP",
+      "description": "An open-source, self-hostable PaaS alternative to Vercel, Heroku & Netlify that lets you easily deploy static sites, databases, full-stack applications and 280+ one-click services on your own servers."
+    },
+    "netdata/netdata": {
+      "stars": 80060,
+      "language": "Go",
+      "description": "The fastest path to AI-powered full stack observability, even for lean teams."
+    },
+    "grafana/grafana": {
+      "stars": 76142,
+      "language": "TypeScript",
+      "description": "The open and composable observability and data visualization platform. Visualize metrics, logs, and traces from multiple sources like Prometheus, Loki, Elasticsearch, InfluxDB, Postgres and many more.  - GitHub - grafana/grafana: The open and composable observability and data visualization platform. Visualize metrics, logs, and traces from multiple sources like Prometheus, Loki, Elasticsearch, InfluxDB, Postgres and many more."
+    },
+    "dani-garcia/vaultwarden": {
+      "stars": 65065,
+      "language": "Rust",
+      "description": "Unofficial Bitwarden compatible server written in Rust, formerly known as bitwarden_rs"
+    },
+    "restic/restic": {
+      "stars": 35388,
+      "language": "Go",
+      "description": "Fast, secure, efficient backup program."
+    },
+    "OWASP/CheatSheetSeries": {
+      "stars": 32836,
+      "language": "Python",
+      "description": "The OWASP Cheat Sheet Series was created to provide a concise collection of high value information on specific application security topics."
+    },
+    "github/gitignore": {
+      "stars": 175175,
+      "language": null,
+      "description": "A collection of useful .gitignore templates."
+    },
+    "bregman-arie/devops-exercises": {
+      "stars": 83654,
+      "language": "Python",
+      "description": "Linux, Jenkins, AWS, SRE, Prometheus, Docker, Python, Ansible, Git, Kubernetes, Terraform, OpenStack, SQL, NoSQL, Azure, GCP, DNS, Elastic, Network, Virtualization. DevOps Interview Questions"
+    },
+    "jesseduffield/lazydocker": {
+      "stars": 52339,
+      "language": "Go",
+      "description": "The lazier way to manage everything docker."
+    },
+    "trimstray/the-book-of-secret-knowledge": {
+      "stars": 237104,
+      "language": null,
+      "description": "A collection of inspiring lists, manuals, cheatsheets, blogs, hacks, one-liners, cli/web tools and more."
+    },
+    "wagoodman/dive": {
+      "stars": 54423,
+      "language": "Go",
+      "description": "A tool for exploring each layer in a docker image."
+    },
+    "aquasecurity/trivy": {
+      "stars": 37291,
+      "language": "Go",
+      "description": "Find vulnerabilities, misconfigurations, secrets, SBOM in containers, Kubernetes, code repositories, clouds and more"
+    },
+    "nilbuild/developer-roadmap": {
+      "stars": 363830,
+      "language": "TypeScript",
+      "description": "Interactive roadmaps, guides and other educational content to help developers grow in their careers. - nilbuild/developer-roadmap"
+    },
+    "donnemartin/system-design-primer": {
+      "stars": 362142,
+      "language": "Python",
+      "description": "Learn how to design large-scale systems. Prep for the system design interview.  Includes Anki flashcards."
+    },
+    "ByteByteGoHq/system-design-101": {
+      "stars": 86735,
+      "language": null,
+      "description": "Explain complex systems using visuals and simple terms. Help you prepare for system design interviews."
+    },
+    "trekhleb/javascript-algorithms": {
+      "stars": 196413,
+      "language": "JavaScript",
+      "description": "📝 Algorithms and data structures implemented in JavaScript with explanations and links to further readings"
+    },
+    "codecrafters-io/build-your-own-x": {
+      "stars": 537106,
+      "language": "Markdown",
+      "description": "Master programming by recreating your favorite technologies from scratch."
+    },
+    "practical-tutorials/project-based-learning": {
+      "stars": 277053,
+      "language": "Python",
+      "description": "Curated list of project-based tutorials."
+    },
+    "freeCodeCamp/freeCodeCamp": {
+      "stars": 453631,
+      "language": "TypeScript",
+      "description": "freeCodeCamp.org's open-source codebase and curriculum. Learn math, programming, and computer science for free."
+    },
+    "jwasham/coding-interview-university": {
+      "stars": 358071,
+      "language": null,
+      "description": "A complete computer science study plan to become a software engineer."
+    },
+    "yangshun/tech-interview-handbook": {
+      "stars": 141660,
+      "language": "TypeScript",
+      "description": "Curated coding interview preparation materials for busy software engineers"
+    },
+    "goldbergyoni/nodebestpractices": {
+      "stars": 105489,
+      "language": "Dockerfile",
+      "description": "✅ The Node.js best practices list (July 2026)."
+    },
+    "ryanmcdermott/clean-code-javascript": {
+      "stars": 94752,
+      "language": "JavaScript",
+      "description": "Clean Code concepts adapted for JavaScript."
+    },
+    "airbnb/javascript": {
+      "stars": 148114,
+      "language": "JavaScript",
+      "description": "JavaScript Style Guide."
+    },
+    "TheAlgorithms/Python": {
+      "stars": 223549,
+      "language": "Python",
+      "description": "All Algorithms implemented in Python."
+    },
+    "ossu/computer-science": {
+      "stars": 207724,
+      "language": "HTML",
+      "description": "🎓 Path to a free self-taught education in Computer Science!"
+    },
+    "sudheerj/reactjs-interview-questions": {
+      "stars": 44724,
+      "language": "JavaScript",
+      "description": "List of top 500 ReactJS Interview Questions & Answers....Coding exercise questions are coming soon!!"
+    },
+    "Ebazhanov/linkedin-skill-assessments-quizzes": {
+      "stars": 28807,
+      "language": "Python",
+      "description": "Full reference of LinkedIn answers 2024 for skill assessments (aws-lambda, rest-api, javascript, react, git, html, jquery, mongodb, java, Go, python, machine-learning, power-point) linkedin excel test lösungen, linkedin machine learning test LinkedIn test questions and answers  - GitHub - Ebazhanov/linkedin-skill-assessments-quizzes: Full reference of LinkedIn answers 2024 for skill assessments (aws-lambda, rest-api, javascript, react, git, html, jquery, mongodb, java, Go, python, machine-learning, power-point) linkedin excel test lösungen, linkedin machine learning test LinkedIn test questions and answers"
+    },
+    "iluwatar/java-design-patterns": {
+      "stars": 94556,
+      "language": "Java",
+      "description": "Design patterns implemented in Java."
+    },
+    "DovAmir/awesome-design-patterns": {
+      "stars": 48478,
+      "language": null,
+      "description": "A curated list of software and architecture related design patterns."
+    },
+    "nilbuild/design-patterns-for-humans": {
+      "stars": 48418,
+      "language": null,
+      "description": "An ultra-simplified explanation to design patterns"
+    },
+    "faif/python-patterns": {
+      "stars": 42915,
+      "language": "Python",
+      "description": "A collection of design patterns/idioms in Python."
+    },
+    "Sairyss/domain-driven-hexagon": {
+      "stars": 14847,
+      "language": "TypeScript",
+      "description": "Learn Domain-Driven Design, software architecture, design patterns, best practices. Code examples included"
+    },
+    "Sairyss/backend-best-practices": {
+      "stars": 2357,
+      "language": null,
+      "description": "Best practices, tools and guidelines for backend development. Code examples in TypeScript + NodeJS"
+    },
+    "torokmark/design_patterns_in_typescript": {
+      "stars": 5433,
+      "language": "TypeScript",
+      "description": ":triangular_ruler: Design pattern implementations in TypeScript"
+    },
+    "ucatal/awesome-ielts": {
+      "stars": 991,
+      "language": null,
+      "description": "An awesome list for students who prepare for IELTS in public domains (on-going)"
+    },
+    "shah0150/awesome-IELTS": {
+      "stars": 1450,
+      "language": null,
+      "description": "IELTS materials."
+    },
+    "awesome-english/awesome-english": {
+      "stars": 104,
+      "language": null,
+      "description": "🇬🇧 A collection of useful resources for learning English"
+    },
+    "dwyl/english-words": {
+      "stars": 12235,
+      "language": "Python",
+      "description": ":memo: A text file containing 479k English words for all your dictionary/word-based projects e.g: auto-completion / autosuggestion"
+    },
+    "first20hours/google-10000-english": {
+      "stars": 4447,
+      "language": null,
+      "description": "This repo contains a list of the 10,000 most common English words in order of frequency, as determined by n-gram frequency analysis of the Google's Trillion Word Corpus."
+    },
+    "davidluzgouveia/kanji-data": {
+      "stars": 230,
+      "language": "Python",
+      "description": "A JSON kanji dataset with updated JLPT levels and WaniKani information"
+    },
+    "tristcoil/hanabira.org": {
+      "stars": 411,
+      "language": "TypeScript",
+      "description": "Free Open-Source Japanese and Korean language learning portal. Allows for Self-Hosting. MIT License."
+    },
+    "n0shake/Public-APIs": {
+      "stars": 23719,
+      "language": null,
+      "description": "📚 A public list of APIs from round the web."
+    },
+    "thanglequoc/vietnamese-provinces-database": {
+      "stars": 1746,
+      "language": "PLpgSQL",
+      "description": "Comprehensive SQL and GIS datasets for Vietnamese administrative units, including provinces, districts, wards, and geospatial boundaries."
+    },
+    "hongquan/vn-open-api-provinces": {
+      "stars": 121,
+      "language": "Python",
+      "description": "Open API to list Viet Nam administrative divisions"
+    },
+    "faker-js/faker": {
+      "stars": 15444,
+      "language": "TypeScript",
+      "description": "Generate massive amounts of fake data in the browser and node.js"
+    },
+    "Kong/insomnia": {
+      "stars": 39935,
+      "language": "TypeScript",
+      "description": "The open-source, cross-platform API client for GraphQL, REST, WebSockets, SSE and gRPC. With Cloud, Local and Git storage."
+    },
+    "catamphetamine/libphonenumber-js": {
+      "stars": 2990,
+      "language": "JavaScript",
+      "description": "A simpler (and smaller) rewrite of Google Android's libphonenumber library in javascript"
+    },
+    "typicode/jsonplaceholder": {
+      "stars": 5241,
+      "language": "HTML",
+      "description": "A simple online fake REST API server."
+    },
+    "BurntSushi/ripgrep": {
+      "stars": 67081,
+      "language": "Rust",
+      "description": "ripgrep recursively searches directories for a regex pattern while respecting your gitignore"
+    },
+    "junegunn/fzf": {
+      "stars": 82419,
+      "language": "Go",
+      "description": ":cherry_blossom: A command-line fuzzy finder."
+    },
+    "jesseduffield/lazygit": {
+      "stars": 81108,
+      "language": "Go",
+      "description": "simple terminal UI for git commands."
+    },
+    "sharkdp/bat": {
+      "stars": 60132,
+      "language": "Rust",
+      "description": "A cat(1) clone with wings."
+    },
+    "sharkdp/fd": {
+      "stars": 43994,
+      "language": "Rust",
+      "description": "A simple, fast and user-friendly alternative to 'find'"
+    },
+    "ajeetdsouza/zoxide": {
+      "stars": 38532,
+      "language": "Rust",
+      "description": "A smarter cd command. Supports all major shells."
+    },
+    "ohmyzsh/ohmyzsh": {
+      "stars": 189074,
+      "language": "Shell",
+      "description": "🙃   A delightful community-driven (with 2,500+ contributors) framework for managing your zsh configuration. Includes 300+ optional plugins (rails, git, macOS, hub, docker, homebrew, node, php, python, etc), 140+ themes to spice up your morning, and an auto-update tool that makes it easy to keep up with the latest updates from the community."
+    },
+    "tldr-pages/tldr": {
+      "stars": 63319,
+      "language": "Markdown",
+      "description": "Collaborative cheatsheets for console commands 📚."
+    },
+    "eza-community/eza": {
+      "stars": 22859,
+      "language": "Rust",
+      "description": "A modern alternative to ls."
+    },
+    "charmbracelet/gum": {
+      "stars": 24175,
+      "language": "Go",
+      "description": "A tool for glamorous shell scripts 🎀."
+    },
+    "mrdoob/three.js": {
+      "stars": 114334,
+      "language": "JavaScript",
+      "description": "JavaScript 3D Library."
+    },
+    "pmndrs/react-three-fiber": {
+      "stars": 31669,
+      "language": "TypeScript",
+      "description": "🇨🇭 A React renderer for Three.js."
+    },
+    "pmndrs/drei": {
+      "stars": 9794,
+      "language": "JavaScript",
+      "description": "🥉 useful helpers for react-three-fiber."
+    },
+    "dimforge/rapier.js": {
+      "stars": 696,
+      "language": "TypeScript",
+      "description": "Official JavaScript bindings for the Rapier physics engine ⚠️ MIGRATED TO https://github.com/dimforge/rapier/tree/master/typescript ⚠️"
+    },
+    "google/model-viewer": {
+      "stars": 8187,
+      "language": "TypeScript",
+      "description": "Easily display interactive 3D models on the web and in AR!  - GitHub - google/model-viewer: Easily display interactive 3D models on the web and in AR!"
+    },
+    "KhronosGroup/glTF-Sample-Models": {
+      "stars": 3615,
+      "language": "Mathematica",
+      "description": "glTF Sample Models."
+    },
+    "excalidraw/excalidraw": {
+      "stars": 129096,
+      "language": "TypeScript",
+      "description": "Virtual whiteboard for sketching hand-drawn like diagrams"
+    },
+    "konvajs/konva": {
+      "stars": 14662,
+      "language": "TypeScript",
+      "description": "Konva.js is an HTML5 Canvas JavaScript framework that extends the 2d context by enabling canvas interactivity for desktop and mobile applications."
+    },
+    "pixijs/pixijs": {
+      "stars": 47969,
+      "language": "TypeScript",
+      "description": "The HTML5 Creation Engine: Create beautiful digital content with the fastest, most flexible 2D WebGL renderer."
+    }
+  }
+}

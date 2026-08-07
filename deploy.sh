@@ -552,6 +552,27 @@ PROJECT_SEED_OUT_RC="$(printf '%s\n' "$PROJECT_SEED_OUT" | sed -n 's/^__SEED_RC_
 PROJECT_SEED_OUT="$(printf '%s\n' "$PROJECT_SEED_OUT" | grep -v '^__SEED_RC__=')"
 report_seed "Project seed" "seed-projects" "$PROJECT_SEED_OUT" "${PROJECT_SEED_OUT_RC:-0}" || true
 
+# ── Step 3.17: GitHub Repo Hub — kho repo tuyển chọn (idempotent) ──
+# content/repos/curated.mjs (slug + tag + review do người viết) ghép với
+# content/repos/meta.json (số sao / ngôn ngữ / mô tả do máy fetch) → upsert
+# `github_repos` theo `url`.
+# Ba thứ seeder KHÔNG đụng vào, để một lần deploy không xoá công sức chỉnh
+# tay trong /admin/repos: review đã có nội dung khác file, metadata của repo
+# đã tồn tại (nút "Sync all" mới là nguồn chân lý cho số sao), và tag admin
+# tự gắn thêm. Xem đầu scripts/repos-seed.mjs.
+info "Running GitHub Repo Hub seed..."
+REPOS_SEED_OUT=$($DC exec -T backend sh -c '
+  if [ ! -f content/repos/curated.mjs ]; then
+    echo "no repo content files"
+  else
+    node scripts/repos-seed.mjs --apply 2>&1
+  fi
+  echo "__SEED_RC__=$?"
+') || true
+REPOS_SEED_OUT_RC="$(printf '%s\n' "$REPOS_SEED_OUT" | sed -n 's/^__SEED_RC__=//p' | tail -1)"
+REPOS_SEED_OUT="$(printf '%s\n' "$REPOS_SEED_OUT" | grep -v '^__SEED_RC__=')"
+report_seed "Repo Hub seed" "seed-repos" "$REPOS_SEED_OUT" "${REPOS_SEED_OUT_RC:-0}" || true
+
 # ── Step 4: Health checks ─────────────────────────────────────────
 info "Waiting for backend to be healthy..."
 backend_ok=false
@@ -652,6 +673,7 @@ for route in \
     exams \
     maker-lab/projects \
     maker-lab/meta \
+    repos \
     cyber/profile; do
     code=$(docker exec cuonghoangdev_backend \
         sh -c "curl -s -o /dev/null -w '%{http_code}' http://localhost:3001/api/v1/${route}" 2>/dev/null)

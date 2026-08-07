@@ -311,6 +311,12 @@ model User {
   langLessonProgress   LangLessonProgress[]
   roadmapDone          RoadmapDone[]
 
+  // ─── Maker Lab — hardware/embedded projects & physical devices ───
+  // A device is a real board (robot, sensor node) owned by this user;
+  // commands are the control actions this user issued to any device.
+  makerDevices  MakerDevice[]
+  makerCommands MakerCommand[]
+
   @@index([email], name: "idx_users_email")
   @@map("users")
 }
@@ -6977,4 +6983,321 @@ model RoadmapDone {
   @@unique([userId, nodeId], map: "uk_roadmap_done")
   @@index([userId], name: "idx_roadmap_done_user")
   @@map("roadmap_done")
+}
+
+// ════════════════════════════════════════════════════════════════
+// MAKER LAB — hardware / embedded project hub
+// ════════════════════════════════════════════════════════════════
+//
+// One hub for every physical build: robots, IoT nodes, drones,
+// whatever board they run on. A MakerProject is the *design*
+// (bill of materials, wiring, firmware plan); a MakerDevice is a
+// *physical unit* someone actually built and powered on.
+//
+// Devices talk to the backend over a dedicated binary WebSocket
+// (`/device-ws`, see src/socket/device.gateway.ts) — NOT socket.io,
+// because firmware libraries on microcontrollers speak plain
+// WebSocket and we stream raw audio frames both ways. The browser
+// console keeps using socket.io as everywhere else on the site.
+// ════════════════════════════════════════════════════════════════
+
+enum MakerPlatform {
+  ESP32
+  ESP32_S3
+  ESP8266
+  RP2040
+  STM32
+  ARDUINO
+  RASPBERRY_PI
+  JETSON
+  OTHER
+}
+
+enum MakerProjectStatus {
+  PLANNING // still on paper
+  SOURCING // buying parts
+  BUILDING // assembling
+  TESTING // works, being tuned
+  LIVE // finished and running
+  ARCHIVED
+}
+
+enum MakerComponentCategory {
+  MCU // brain: dev boards, SoMs
+  AUDIO_IN // microphones
+  AUDIO_OUT // amplifiers, speakers
+  DISPLAY // screens, LEDs
+  MOTION // motors, servos, wheels
+  DRIVER // motor drivers, level shifters
+  SENSOR // IMU, distance, touch, camera
+  POWER // cells, BMS, regulators, capacitors
+  MECHANICAL // chassis, screws, standoffs
+  CONNECTIVITY // antennas, extra radios
+  TOOL // soldering iron, multimeter — not part of the build
+  MISC
+}
+
+enum MakerDeviceStatus {
+  OFFLINE
+  ONLINE
+  ERROR
+  UPDATING
+}
+
+enum MakerCommandStatus {
+  PENDING // queued, device not connected yet
+  SENT // pushed over the socket
+  ACKED // device confirmed
+  FAILED
+  EXPIRED // device never came back in time
+}
+
+/// A hardware build: the design, not the physical unit.
+model MakerProject {
+  id       Int                @id @default(autoincrement())
+  slug     String             @unique(map: "uk_maker_project_slug") @db.VarChar(150)
+  name     String             @db.VarChar(150)
+  tagline  String?            @db.VarChar(255)
+  platform MakerPlatform      @default(ESP32_S3)
+  status   MakerProjectStatus @default(PLANNING)
+
+  summary     String? @db.Text // markdown intro
+  difficulty  Int     @default(3) // 1..5
+  estHours    Int?    @map("est_hours")
+  estCostVnd  Int?    @map("est_cost_vnd")
+  coverImage  String? @map("cover_image") @db.VarChar(500)
+  accentColor String? @map("accent_color") @db.VarChar(20)
+
+  /// [{ title, detail, done }] — what this build is trying to achieve.
+  goals Json?
+
+  /// [{ title, detail, difficulty, status, dependsOn[] }] — the upgrade
+  /// backlog shown on the Overview tab.
+  features Json?
+
+  /// { nodes: [...], edges: [...] } — data behind the system flow diagram.
+  architecture Json?
+
+  /// [{ group, from, fromPin, to, toPin, wireColor, note }] — pin map
+  /// rendered as both a table and the wiring diagram.
+  wiring Json?
+
+  /// [{ name, file, purpose, status, notes, code }] — firmware roadmap.
+  firmwareModules Json? @map("firmware_modules")
+
+  /// [{ date, title, body, mediaUrl }] — build diary.
+  buildLog Json? @map("build_log")
+
+  /// { reference, dimensions, bays[], parts[], assembly[] } — the
+  /// physical shell: how big it is, which printed piece is which, and
+  /// crucially WHERE each component sits inside. Separate from
+  /// `wiring` because "does the battery fit behind the speaker" is a
+  /// different question from "which pin does the speaker use", and
+  /// the answer to the first one decides whether the build is
+  /// possible at all.
+  enclosure Json?
+
+  featured  Boolean  @default(false)
+  published Boolean  @default(true)
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  components MakerComponent[]
+  devices    MakerDevice[]
+  firmwares  MakerFirmware[]
+  persona    MakerPersona?
+
+  @@index([published, sortOrder], name: "idx_maker_project_pub_order")
+  @@index([platform], name: "idx_maker_project_platform")
+  @@map("maker_projects")
+}
+
+/// One line of the bill of materials.
+model MakerComponent {
+  id        Int                    @id @default(autoincrement())
+  projectId Int                    @map("project_id")
+  category  MakerComponentCategory @default(MISC)
+
+  name         String  @db.VarChar(200)
+  partNumber   String? @map("part_number") @db.VarChar(120)
+  qty          Int     @default(1)
+  unitPriceVnd Int?    @map("unit_price_vnd")
+
+  vendorName String? @map("vendor_name") @db.VarChar(120)
+  vendorUrl  String? @map("vendor_url") @db.VarChar(500)
+
+  /// Key into the hand-drawn SVG library on the frontend
+  /// (components/maker-lab/PartIcon.tsx). Falls back to a generic
+  /// icon per category when unknown.
+  svgKey String? @map("svg_key") @db.VarChar(60)
+
+  /// Real photo, uploaded to R2 later. When set it wins over svgKey.
+  imageUrl String? @map("image_url") @db.VarChar(500)
+
+  /// { voltage: "3.3V", interface: "I2S", ... } — free-form spec sheet.
+  specs Json?
+
+  /// The part that actually makes this page useful: why THIS part and
+  /// not the obvious cheaper one.
+  whyThisPart String? @map("why_this_part") @db.Text
+
+  /// [{ name, note, priceVnd }] — acceptable substitutes.
+  alternatives Json?
+
+  required  Boolean @default(true)
+  /// Shopping checklist — flipped from the BOM tab once bought.
+  acquired  Boolean @default(false)
+  notes     String? @db.Text
+  sortOrder Int     @default(0) @map("sort_order")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  project MakerProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, sortOrder], name: "idx_maker_component_project_order")
+  @@index([projectId, category], name: "idx_maker_component_project_cat")
+  @@map("maker_components")
+}
+
+/// A physical board that connects to the gateway.
+model MakerDevice {
+  id        Int    @id @default(autoincrement())
+  projectId Int    @map("project_id")
+  ownerId   Int    @map("owner_id")
+  name      String @db.VarChar(120)
+
+  /// Public identifier the firmware sends on connect.
+  deviceKey String @unique(map: "uk_maker_device_key") @map("device_key") @db.VarChar(64)
+
+  /// bcrypt hash of the shared secret. The plaintext is shown to the
+  /// user exactly once, at registration — same rule as an API token.
+  secretHash String @map("secret_hash") @db.VarChar(120)
+
+  status          MakerDeviceStatus @default(OFFLINE)
+  lastSeenAt      DateTime?         @map("last_seen_at")
+  firmwareVersion String?           @map("firmware_version") @db.VarChar(40)
+  ipAddress       String?           @map("ip_address") @db.VarChar(64)
+  rssi            Int? // WiFi signal, dBm
+  batteryPct      Int?              @map("battery_pct")
+  uptimeSec       Int?              @map("uptime_sec")
+
+  /// Anything else the firmware wants to report about itself.
+  meta Json?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  project   MakerProject     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  owner     User             @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  telemetry MakerTelemetry[]
+  commands  MakerCommand[]
+  logs      MakerDeviceLog[]
+
+  @@index([ownerId], name: "idx_maker_device_owner")
+  @@index([projectId], name: "idx_maker_device_project")
+  @@map("maker_devices")
+}
+
+/// Sensor readings. High volume — pruned by a cron job (30 days).
+model MakerTelemetry {
+  id         Int      @id @default(autoincrement())
+  deviceId   Int      @map("device_id")
+  /// { battery: 87, rssi: -54, distanceMm: 320, pitch: 1.2, ... }
+  payload    Json
+  recordedAt DateTime @default(now()) @map("recorded_at")
+
+  device MakerDevice @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  @@index([deviceId, recordedAt], name: "idx_maker_telemetry_device_time")
+  @@map("maker_telemetry")
+}
+
+/// A control action sent down to a device.
+model MakerCommand {
+  id         Int                @id @default(autoincrement())
+  deviceId   Int                @map("device_id")
+  issuedById Int?               @map("issued_by_id")
+  type       String             @db.VarChar(40) // move | stop | say | face | reboot | ota | config
+  payload    Json?
+  status     MakerCommandStatus @default(PENDING)
+  error      String?            @db.Text
+  sentAt     DateTime?          @map("sent_at")
+  ackedAt    DateTime?          @map("acked_at")
+  createdAt  DateTime           @default(now()) @map("created_at")
+
+  device   MakerDevice @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  issuedBy User?       @relation(fields: [issuedById], references: [id], onDelete: SetNull)
+
+  @@index([deviceId, createdAt], name: "idx_maker_command_device_time")
+  @@index([status], name: "idx_maker_command_status")
+  @@map("maker_commands")
+}
+
+/// A firmware build available for over-the-air update.
+model MakerFirmware {
+  id           Int      @id @default(autoincrement())
+  projectId    Int      @map("project_id")
+  version      String   @db.VarChar(40) // semver
+  r2Key        String   @map("r2_key") @db.VarChar(500)
+  sha256       String   @db.VarChar(64)
+  sizeBytes    Int      @map("size_bytes")
+  releaseNotes String?  @map("release_notes") @db.Text
+  isLatest     Boolean  @default(false) @map("is_latest")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  project MakerProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, version], map: "uk_maker_firmware_project_version")
+  @@index([projectId, isLatest], name: "idx_maker_firmware_latest")
+  @@map("maker_firmwares")
+}
+
+/// Serial-style log lines pushed up by the device.
+model MakerDeviceLog {
+  id        Int      @id @default(autoincrement())
+  deviceId  Int      @map("device_id")
+  level     String   @default("info") @db.VarChar(8) // debug|info|warn|error
+  message   String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  device MakerDevice @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  @@index([deviceId, createdAt], name: "idx_maker_devicelog_device_time")
+  @@map("maker_device_logs")
+}
+
+/// How the robot talks — the personality layer, editable from the web.
+model MakerPersona {
+  id        Int    @id @default(autoincrement())
+  projectId Int    @unique(map: "uk_maker_persona_project") @map("project_id")
+  name      String @default("Assistant") @db.VarChar(80)
+
+  /// The system prompt. This is what makes the robot sound like YOU.
+  systemPrompt String @map("system_prompt") @db.Text
+
+  /// TTS routing. Swapping to a cloned voice later = change these two
+  /// fields, no code change (see src/services/makerlab/tts.ts).
+  voiceProvider String  @default("edge") @map("voice_provider") @db.VarChar(24)
+  voiceId       String? @map("voice_id") @db.VarChar(120)
+  language      String  @default("vi-VN") @db.VarChar(12)
+
+  /// { humor: 4, formality: 2, verbosity: 2, catchphrases: [...] }
+  traits Json?
+
+  /// [{ user, bot }] — few-shot examples that pin down the voice far
+  /// better than adjectives in the prompt do.
+  sampleDialogues Json? @map("sample_dialogues")
+
+  wakeWord    String? @map("wake_word") @db.VarChar(60)
+  temperature Float   @default(0.8)
+  maxTokens   Int     @default(220) @map("max_tokens")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  project MakerProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("maker_personas")
 }

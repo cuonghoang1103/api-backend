@@ -428,6 +428,16 @@ INTERVIEW_SEED_OUT=$($DC exec -T backend sh -c \
  "npx tsx prisma/seed.interview.ts" 2>&1) || true
 report_seed "Interview seed" "seed-interview" "$INTERVIEW_SEED_OUT" "${INTERVIEW_SEED_OUT_RC:-0}" || true
 
+# ── Step 3.11b: Maker Lab — hardware project + BOM (idempotent) ─
+# Project upserted by slug; BOM reconciled by name so re-running never
+# duplicates a part and never resets the `acquired` checkbox ticked
+# while shopping. Persona is create-only — a redeploy must not wipe
+# the personality you tuned in the UI.
+info "Running Maker Lab seed (mini-me-robot BOM)..."
+MAKERLAB_SEED_OUT=$($DC exec -T backend sh -c \
+ "npx tsx prisma/seed.maker-lab.ts" 2>&1) || true
+report_seed "Maker Lab seed" "seed-maker-lab" "$MAKERLAB_SEED_OUT" "${MAKERLAB_SEED_OUT_RC:-0}" || true
+
 # ── Step 3.12: Academy FPTU course content seed (idempotent) ────
 # One .mjs spec per subject under content/academy/. The seeder is
 # idempotent (semester by code, course by courseCode, section by
@@ -640,6 +650,8 @@ for route in \
     code-lab/groups \
     roadmaps \
     exams \
+    maker-lab/projects \
+    maker-lab/meta \
     cyber/profile; do
     code=$(docker exec cuonghoangdev_backend \
         sh -c "curl -s -o /dev/null -w '%{http_code}' http://localhost:3001/api/v1/${route}" 2>/dev/null)

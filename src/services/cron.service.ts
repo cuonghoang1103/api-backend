@@ -298,6 +298,28 @@ export function startCronJobs(): void {
     }
   }, { timezone: 'UTC' });
 
+  // ─── Maker Lab housekeeping (hourly) ───
+  // Telemetry is the only table on the site that grows purely with
+  // wall-clock time (one row per device per 10s), and the VPS disk is
+  // already at 77%. Also reconciles devices whose socket died without
+  // a clean close, so the console doesn't show a dead robot as ONLINE.
+  cron.schedule('7 * * * *', async () => {
+    try {
+      const svc = await import('./makerlab/makerLab.service.js');
+      const days = Number(process.env.MAKERLAB_TELEMETRY_RETENTION_DAYS) || 30;
+      const [deleted, offline, expired] = await Promise.all([
+        svc.pruneTelemetry(days),
+        svc.reconcileStaleDevices(),
+        svc.expireStaleCommands(),
+      ]);
+      if (deleted || offline || expired) {
+        logger.info('cron maker-lab housekeeping', { deleted, offline, expired });
+      }
+    } catch (err) {
+      logger.error('cron maker-lab housekeeping failed', { error: (err as Error).message });
+    }
+  }, { timezone: 'UTC' });
+
   // ─── Startup recovery ───
   void recoverPendingJobs();
 
@@ -310,6 +332,7 @@ export function startCronJobs(): void {
   `Dashboard archive daily @ 04:00 Vietnam (archive ${archiveDays}d, purge ${purgeDays}d, completed-expiry ${COMPLETED_TASK_RETENTION_DAYS}d)`,
   'Orphaned upload cleanup every 4 hours (24h TTL, 50/batch)',
   'Tech news ingest every 2h; bulletin 07:30 VN; scheduled-publish sweep every 5 min',
+  'Maker Lab housekeeping hourly (telemetry prune, stale devices, expired commands)',
   ],
   });
 }

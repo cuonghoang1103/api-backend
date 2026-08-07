@@ -15,3 +15,7 @@ uploads
 # offline fallback when npm registry / GitHub are blocked.
 # MUST be included in build context.
 # !host-cache
+
+# Firmware sources are not part of the server image
+firmware/
+tools/

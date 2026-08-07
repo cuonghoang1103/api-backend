@@ -129,6 +129,11 @@ const notesRoutes = (await import(path.join(__dirname, 'routes', 'notes.routes.j
 const notesShareRoutes = (await import(path.join(__dirname, 'routes', 'notesShare.routes.js'))).default;
 const mobileRoutes = (await import(path.join(__dirname, 'routes', 'mobile.routes.js'))).default;
 const { initSocketServer } = await import(path.join(__dirname, 'socket', 'messaging.socket.js'));
+// Maker Lab — hardware/embedded hub + raw-WebSocket gateway for physical devices
+const makerLabModule = await import(path.join(__dirname, 'routes', 'makerLab.routes.js'));
+const makerLabRoutes = makerLabModule.default;
+const makerLabAdminRoutes = makerLabModule.adminRouter;
+const { initDeviceGateway } = await import(path.join(__dirname, 'socket', 'device.gateway.js'));
 // EXP_Hub — Code Snippet Library
 const snippetRoutes = (await import(path.join(__dirname, 'routes', 'snippets.routes.js'))).default;
 // Code Lab — coding-practice + learning-roadmap module
@@ -564,6 +569,8 @@ app.use('/api/v1/admin/cv', cvAdminRoutes);
 app.use('/api/v1/landing', landingRoutes);
 app.use('/api/v1/admin/landing', landingAdminRoutes);
 app.use('/api/v1/finance', financeRoutes);
+app.use('/api/v1/maker-lab', makerLabRoutes);
+app.use('/api/v1/admin/maker-lab', makerLabAdminRoutes);
 app.use('/api/v1/messages', messagesRoutes);
 app.use('/api/v1/gifs', gifsRoutes);
 app.use('/api/v1/simulation', simulationRoutes);
@@ -580,6 +587,12 @@ app.use('/api/v1/mobile', mobileRoutes);
 // cookie / CORS configuration applies. Idempotent — safe to call
 // from a hot-reload wrapper.
 initSocketServer(server);
+
+// ─── 9c. Maker Lab device gateway (raw WebSocket) ─────
+// Shares the same HTTP server but claims only /device-ws. Must be
+// initialised AFTER socket.io so both 'upgrade' listeners coexist —
+// each ignores paths it doesn't own (see device.gateway.ts).
+initDeviceGateway(server);
 
 // ─── 10. Health Check ───────────────────────────────────────
 // Render.com và Docker healthcheck gọi endpoint này

@@ -294,9 +294,16 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
           {/* TOC sidebar */}
           {article.toc.length > 0 && (
             <aside className="hidden lg:block lg:col-span-4">
-              <div className="sticky top-24">
-                <p className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-3">Mục lục</p>
-                <nav className="space-y-1 border-l border-darkborder">
+              {/*
+                A sticky box with no height cap silently truncates: a
+                long article's TOC runs past the bottom of the viewport
+                and those entries become unreachable — the list looks
+                "stuck". Cap it to the space actually available below
+                the navbar and let it scroll on its own.
+              */}
+              <div className="sticky top-24 flex max-h-[calc(100vh-8rem)] flex-col">
+                <p className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-3 shrink-0">Mục lục</p>
+                <nav className="space-y-1 border-l border-darkborder overflow-y-auto overscroll-contain pr-1 [scrollbar-width:thin]">
                   {article.toc.map((item, i) => (
                     <a
                       key={`${item.id}-${i}`}

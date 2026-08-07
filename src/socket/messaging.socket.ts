@@ -413,6 +413,29 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
       if (typeof threadId === 'number') socket.leave(`thread:${threadId}`);
     });
 
+    // ─── Maker Lab device console rooms ───
+    // The device gateway (src/socket/device.gateway.ts) fans telemetry,
+    // logs and transcripts into `maker:device:<id>`. Ownership is
+    // re-checked here rather than trusted from the client: a room name
+    // is not a capability, and telemetry can reveal when someone is home.
+    socket.on('maker:device:join', async (deviceId: number) => {
+      if (!Number.isInteger(deviceId) || deviceId <= 0) return;
+      try {
+        const device = await prisma.makerDevice.findUnique({
+          where: { id: deviceId },
+          select: { ownerId: true },
+        });
+        if (!device || device.ownerId !== user.id) return;
+        socket.join(`maker:device:${deviceId}`);
+      } catch {
+        /* transient DB error — the client will retry on reconnect */
+      }
+    });
+
+    socket.on('maker:device:leave', (deviceId: number) => {
+      if (typeof deviceId === 'number') socket.leave(`maker:device:${deviceId}`);
+    });
+
     // Per-post reaction rooms. The feed subscribes to the posts it has
     // loaded so it receives `post:reacted` only for those — instead of
     // the old global broadcast to every socket. Accepts one id or an

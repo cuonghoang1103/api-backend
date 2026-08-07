@@ -127,3 +127,7 @@ _render/
 # Mọi thư mục dựng video tạm (_render_lessons, _render_all…). Trước đây chỉ
 # ignore '_render/' nên '_render10/' suýt bị commit — 11 MB mp4 vào lịch sử git.
 _render*/
+
+# Firmware secrets (device keys, WiFi passwords) — never commit
+firmware/**/src/secrets.h
+.pio/

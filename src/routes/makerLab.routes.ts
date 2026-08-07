@@ -1,0 +1,481 @@
+/**
+ * ============================================================
+ * Maker Lab — REST API
+ * ============================================================
+ *
+ * Public (no auth):
+ *   GET  /projects                       list, filter by platform/status
+ *   GET  /projects/:slug                 full project + BOM + firmware
+ *   GET  /meta                           enums + command catalogue for the UI
+ *   GET  /firmware/:slug/latest          OTA manifest the board polls
+ *
+ * Authenticated (device owner):
+ *   GET    /devices                      my boards
+ *   POST   /devices                      register → secret shown ONCE
+ *   GET    /devices/:id                  one board
+ *   PATCH  /devices/:id                  rename
+ *   DELETE /devices/:id
+ *   POST   /devices/:id/rotate-secret
+ *   POST   /devices/:id/commands         { type, payload }
+ *   GET    /devices/:id/commands
+ *   GET    /devices/:id/telemetry?hours=
+ *   GET    /devices/:id/logs
+ *   POST   /devices/:id/say              { text }  speak a line
+ *   POST   /devices/:id/chat             { text }  full think+speak turn
+ *   PATCH  /projects/:slug/components/:id/acquired   shopping checklist
+ *
+ * Admin (/api/v1/admin/maker-lab):
+ *   full CRUD over projects, components, persona, firmware.
+ */
+
+import { Router, type Request, type Response } from 'express';
+import { authenticate, requireRole } from '../middleware/auth.js';
+import type { ApiResponse } from '../types/index.js';
+import { prisma } from '../config/database.js';
+import * as svc from '../services/makerlab/makerLab.service.js';
+import { COMMAND_CATALOG, COMMAND_TYPES } from '../services/makerlab/commands.js';
+import { cloneVoiceHowTo } from '../services/makerlab/tts.js';
+
+const router = Router();
+const adminRouter = Router();
+
+function toId(req: Request, key = 'id'): number {
+  const id = Number(req.params[key]);
+  if (!Number.isInteger(id) || id <= 0)
+    throw Object.assign(new Error('id không hợp lệ'), { statusCode: 400 });
+  return id;
+}
+
+function userId(req: Request): number {
+  const id = req.userId;
+  if (!id) throw Object.assign(new Error('Chưa đăng nhập'), { statusCode: 401 });
+  return id;
+}
+
+// ════════════════════════════════════════════════════════════
+// Public
+// ════════════════════════════════════════════════════════════
+
+router.get('/projects', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await svc.listProjects({
+      platform: typeof req.query.platform === 'string' ? req.query.platform : undefined,
+      status: typeof req.query.status === 'string' ? req.query.status : undefined,
+    });
+    res.json({ success: true, data });
+  } catch (e) {
+    next(e);
+  }
+});
+
+/** Enum values + command catalogue, so the frontend never hardcodes them. */
+router.get('/meta', (_req, res: Response<ApiResponse>) => {
+  res.json({
+    success: true,
+    data: {
+      platforms: [
+        { value: 'ESP32', label: 'ESP32' },
+        { value: 'ESP32_S3', label: 'ESP32-S3' },
+        { value: 'ESP8266', label: 'ESP8266' },
+        { value: 'RP2040', label: 'RP2040 / Pico' },
+        { value: 'STM32', label: 'STM32' },
+        { value: 'ARDUINO', label: 'Arduino' },
+        { value: 'RASPBERRY_PI', label: 'Raspberry Pi' },
+        { value: 'JETSON', label: 'Jetson' },
+        { value: 'OTHER', label: 'Khác' },
+      ],
+      statuses: [
+        { value: 'PLANNING', label: 'Lên ý tưởng' },
+        { value: 'SOURCING', label: 'Đang gom linh kiện' },
+        { value: 'BUILDING', label: 'Đang lắp' },
+        { value: 'TESTING', label: 'Đang chỉnh' },
+        { value: 'LIVE', label: 'Đang chạy' },
+        { value: 'ARCHIVED', label: 'Cất kho' },
+      ],
+      categories: [
+        { value: 'MCU', label: 'Não / vi điều khiển' },
+        { value: 'AUDIO_IN', label: 'Nghe' },
+        { value: 'AUDIO_OUT', label: 'Nói' },
+        { value: 'DISPLAY', label: 'Hiển thị' },
+        { value: 'MOTION', label: 'Chuyển động' },
+        { value: 'DRIVER', label: 'Mạch điều khiển' },
+        { value: 'SENSOR', label: 'Cảm biến' },
+        { value: 'POWER', label: 'Nguồn' },
+        { value: 'MECHANICAL', label: 'Cơ khí' },
+        { value: 'CONNECTIVITY', label: 'Kết nối' },
+        { value: 'TOOL', label: 'Dụng cụ' },
+        { value: 'MISC', label: 'Khác' },
+      ],
+      commands: COMMAND_CATALOG,
+      commandTypes: COMMAND_TYPES,
+      voiceCloning: cloneVoiceHowTo,
+      wsPath: '/device-ws',
+    },
+  });
+});
+
+router.get('/projects/:slug', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await svc.getProjectBySlug(String(req.params.slug));
+    if (!data) {
+      res.status(404).json({ success: false, message: 'Không tìm thấy dự án' });
+      return;
+    }
+    res.json({ success: true, data });
+  } catch (e) {
+    next(e);
+  }
+});
+
+/**
+ * OTA manifest. Unauthenticated on purpose: the payload is only a
+ * version string and a URL, and making a booting ESP32 do a signed
+ * request before it can even update itself is how bricked devices
+ * happen. The binary itself sits behind the R2 signed URL.
+ */
+router.get('/firmware/:slug/latest', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const fw = await svc.getLatestFirmware(String(req.params.slug));
+    if (!fw) {
+      res.status(404).json({ success: false, message: 'Chưa có firmware nào' });
+      return;
+    }
+    res.json({
+      success: true,
+      data: {
+        version: fw.version,
+        sha256: fw.sha256,
+        sizeBytes: fw.sizeBytes,
+        url: `${process.env.R2_PUBLIC_URL ?? ''}/${fw.r2Key}`,
+        releaseNotes: fw.releaseNotes,
+      },
+    });
+  } catch (e) {
+    next(e);
+  }
+});
+
+// ════════════════════════════════════════════════════════════
+// Authenticated — devices
+// ════════════════════════════════════════════════════════════
+
+router.get('/devices', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.listDevices(userId(req)) });
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.post('/devices', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { projectId, name } = req.body ?? {};
+    if (!Number.isInteger(projectId) || !name) {
+      res.status(400).json({ success: false, message: 'Cần projectId và name' });
+      return;
+    }
+    const out = await svc.registerDevice({
+      ownerId: userId(req),
+      projectId,
+      name: String(name),
+    });
+    res.status(201).json({
+      success: true,
+      data: out,
+      // The plaintext secret is never retrievable again — say so loudly.
+      message: 'Lưu secret ngay bây giờ. Nó sẽ KHÔNG hiện lại lần nữa.',
+    });
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.get('/devices/:id', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.getDevice(toId(req), userId(req)) });
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.patch('/devices/:id', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const name = String(req.body?.name ?? '').trim();
+    if (!name) {
+      res.status(400).json({ success: false, message: 'Cần name' });
+      return;
+    }
+    res.json({ success: true, data: await svc.renameDevice(toId(req), userId(req), name) });
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.delete('/devices/:id', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    await svc.deleteDevice(toId(req), userId(req));
+    res.json({ success: true, message: 'Đã xoá thiết bị' });
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.post(
+  '/devices/:id/rotate-secret',
+  authenticate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try {
+      const out = await svc.rotateDeviceSecret(toId(req), userId(req));
+      res.json({
+        success: true,
+        data: out,
+        message: 'Secret cũ đã vô hiệu. Nạp secret mới vào firmware.',
+      });
+    } catch (e) {
+      next(e);
+    }
+  },
+);
+
+router.post('/devices/:id/commands', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { type, payload } = req.body ?? {};
+    const out = await svc.sendCommand({
+      deviceId: toId(req),
+      ownerId: userId(req),
+      type: String(type ?? ''),
+      payload,
+    });
+    res.json({
+      success: true,
+      data: out,
+      message: out.delivered ? 'Đã gửi tới thiết bị' : 'Thiết bị offline — lệnh đã xếp hàng chờ',
+    });
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.get('/devices/:id/commands', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.listCommands(toId(req), userId(req)) });
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.get('/devices/:id/telemetry', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await svc.getTelemetry(toId(req), userId(req), {
+      hours: Number(req.query.hours) || undefined,
+      limit: Number(req.query.limit) || undefined,
+    });
+    res.json({ success: true, data });
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.get('/devices/:id/logs', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.getDeviceLogs(toId(req), userId(req)) });
+  } catch (e) {
+    next(e);
+  }
+});
+
+/** Speak a line verbatim — no LLM in the path. */
+router.post('/devices/:id/say', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const deviceId = toId(req);
+    const text = String(req.body?.text ?? '').trim();
+    if (!text) {
+      res.status(400).json({ success: false, message: 'Cần text' });
+      return;
+    }
+    const device = await svc.getDevice(deviceId, userId(req));
+    if (!device.connected) {
+      res.status(409).json({ success: false, message: 'Thiết bị đang offline' });
+      return;
+    }
+
+    const persona = await prisma.makerPersona.findUnique({
+      where: { projectId: device.projectId },
+    });
+    const { synthesizeSpeech } = await import('../services/makerlab/tts.js');
+    const { speakOnDevice } = await import('../socket/device.gateway.js');
+    const tts = await synthesizeSpeech(text.slice(0, 500), {
+      provider: (persona?.voiceProvider as never) ?? undefined,
+      voice: persona?.voiceId ?? undefined,
+      language: persona?.language ?? 'vi-VN',
+    });
+    const ok = speakOnDevice(deviceId, tts.audio, { mime: tts.mime, text });
+    res.json({ success: ok, data: { provider: tts.provider, bytes: tts.audio.length } });
+  } catch (e) {
+    next(e);
+  }
+});
+
+/** Full turn from the web console: think in persona, then speak. */
+router.post('/devices/:id/chat', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const deviceId = toId(req);
+    const text = String(req.body?.text ?? '').trim();
+    if (!text) {
+      res.status(400).json({ success: false, message: 'Cần text' });
+      return;
+    }
+    const device = await svc.getDevice(deviceId, userId(req));
+    const { runVoiceTurn } = await import('../services/makerlab/voiceLoop.js');
+    const out = await runVoiceTurn({
+      deviceId,
+      projectId: device.projectId,
+      text: text.slice(0, 1000),
+      // Only push audio to the speaker when the board is actually there.
+      speak: device.connected && req.body?.speak !== false,
+    });
+    res.json({ success: true, data: out });
+  } catch (e) {
+    next(e);
+  }
+});
+
+/** Shopping checklist: tick a BOM line once you've bought it. */
+router.patch(
+  '/components/:id/acquired',
+  authenticate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try {
+      const acquired = req.body?.acquired !== false;
+      const data = await prisma.makerComponent.update({
+        where: { id: toId(req) },
+        data: { acquired },
+      });
+      res.json({ success: true, data });
+    } catch (e) {
+      next(e);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════
+// Admin
+// ════════════════════════════════════════════════════════════
+
+adminRouter.use(authenticate, requireRole('ADMIN'));
+
+adminRouter.get('/projects', async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.listProjects({ includeUnpublished: true }) });
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.post('/projects', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await prisma.makerProject.create({ data: req.body });
+    res.status(201).json({ success: true, data });
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.put('/projects/:id', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await prisma.makerProject.update({ where: { id: toId(req) }, data: req.body });
+    res.json({ success: true, data });
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.delete('/projects/:id', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    await prisma.makerProject.delete({ where: { id: toId(req) } });
+    res.json({ success: true, message: 'Đã xoá' });
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.post('/projects/:id/components', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await prisma.makerComponent.create({
+      data: { ...req.body, projectId: toId(req) },
+    });
+    res.status(201).json({ success: true, data });
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.put('/components/:id', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await prisma.makerComponent.update({ where: { id: toId(req) }, data: req.body });
+    res.json({ success: true, data });
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.delete('/components/:id', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    await prisma.makerComponent.delete({ where: { id: toId(req) } });
+    res.json({ success: true, message: 'Đã xoá' });
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.put('/projects/:id/persona', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await svc.upsertPersona(toId(req), req.body ?? {}) });
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.post('/projects/:id/firmware', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { version, r2Key, sha256, sizeBytes, releaseNotes } = req.body ?? {};
+    if (!version || !r2Key || !sha256 || !Number.isInteger(sizeBytes)) {
+      res
+        .status(400)
+        .json({ success: false, message: 'Cần version, r2Key, sha256, sizeBytes' });
+      return;
+    }
+    const data = await svc.publishFirmware({
+      projectId: toId(req),
+      version: String(version),
+      r2Key: String(r2Key),
+      sha256: String(sha256),
+      sizeBytes,
+      releaseNotes: releaseNotes ? String(releaseNotes) : undefined,
+    });
+    res.status(201).json({ success: true, data });
+  } catch (e) {
+    next(e);
+  }
+});
+
+/** Manual housekeeping trigger — the cron calls the same functions. */
+adminRouter.post('/maintenance', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const days = Number(req.body?.days) || 30;
+    const [telemetry, devices, commands] = await Promise.all([
+      svc.pruneTelemetry(days),
+      svc.reconcileStaleDevices(),
+      svc.expireStaleCommands(),
+    ]);
+    res.json({
+      success: true,
+      data: { telemetryDeleted: telemetry, devicesMarkedOffline: devices, commandsExpired: commands },
+    });
+  } catch (e) {
+    next(e);
+  }
+});
+
+export { adminRouter };
+export default router;

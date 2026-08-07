@@ -268,3 +268,72 @@ export function onNowPlaying(
   socket?.on('nowplaying:update', cb);
   return () => { socket?.off('nowplaying:update', cb); };
 }
+
+// ── Maker Lab: live device console ────────────────────────────
+// The device gateway (`/device-ws`) fans every board event into the
+// socket.io room `maker:device:<id>`; the backend re-checks ownership
+// on join, so a room name alone grants nothing.
+
+export interface MakerTelemetryEvent {
+  deviceId: number;
+  payload: Record<string, number | string | boolean>;
+  recordedAt: string;
+}
+export interface MakerLogEvent {
+  deviceId: number;
+  level: string;
+  message: string;
+  at: string;
+}
+export interface MakerStatusEvent {
+  deviceId: number;
+  status: 'ONLINE' | 'OFFLINE' | 'ERROR' | 'UPDATING';
+  firmwareVersion?: string;
+  ipAddress?: string;
+  rssi?: number;
+  batteryPct?: number;
+}
+export interface MakerTranscriptEvent {
+  deviceId: number;
+  role: 'user' | 'bot';
+  text: string;
+  at: string;
+}
+export interface MakerCommandEvent {
+  id: number;
+  status: 'SENT' | 'ACKED' | 'FAILED';
+}
+
+/** Join a device room. Queues on the next connect, like joinThread. */
+export function joinDeviceRoom(deviceId: number) {
+  if (!socket) return;
+  if (socket.connected) {
+    socket.emit('maker:device:join', deviceId);
+    return;
+  }
+  const s = socket as Socket;
+  s.once('connect', () => s.emit('maker:device:join', deviceId));
+}
+
+export function leaveDeviceRoom(deviceId: number) {
+  socket?.emit('maker:device:leave', deviceId);
+}
+
+/** One subscription helper per event; each returns its own unsubscribe. */
+function onMaker<T>(event: string, cb: (p: T) => void): () => void {
+  socket?.on(event, cb as (...args: unknown[]) => void);
+  return () => {
+    socket?.off(event, cb as (...args: unknown[]) => void);
+  };
+}
+
+export const onDeviceTelemetry = (cb: (p: MakerTelemetryEvent) => void) =>
+  onMaker<MakerTelemetryEvent>('maker:device:telemetry', cb);
+export const onDeviceLog = (cb: (p: MakerLogEvent) => void) =>
+  onMaker<MakerLogEvent>('maker:device:log', cb);
+export const onDeviceStatus = (cb: (p: MakerStatusEvent) => void) =>
+  onMaker<MakerStatusEvent>('maker:device:status', cb);
+export const onDeviceTranscript = (cb: (p: MakerTranscriptEvent) => void) =>
+  onMaker<MakerTranscriptEvent>('maker:device:transcript', cb);
+export const onDeviceCommand = (cb: (p: MakerCommandEvent) => void) =>
+  onMaker<MakerCommandEvent>('maker:command:update', cb);

@@ -253,7 +253,12 @@ const nextConfig = {
               // playback, even though the network fetch itself
               // returns HTTP 200. The R2 S3 endpoint is kept as a
               // fallback for any leftover direct-to-bucket links.
-              "img-src 'self' data: blob: https://api.cuongthai.com https://media.cuongthai.com https://images.unsplash.com https://api.dicebear.com https://*.amazonaws.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://cuongthai-media-storage.e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev https://i.ytimg.com https://yt3.ggpht.com https://i9.ytimg.com https://*.giphy.com",
+              // github.com + avatars.githubusercontent.com: ảnh đại diện chủ
+              // repo trên /repos. `github.com/<owner>.png` trả 302 sang
+              // avatars.githubusercontent.com, và CSP kiểm CẢ đích của
+              // redirect — thiếu một trong hai là ảnh bị chặn. Trước đây thiếu
+              // cả hai, nên mọi ô avatar đều rỗng dù ảnh trả HTTP 200.
+              "img-src 'self' data: blob: https://api.cuongthai.com https://media.cuongthai.com https://images.unsplash.com https://api.dicebear.com https://*.amazonaws.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://cuongthai-media-storage.e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev https://i.ytimg.com https://yt3.ggpht.com https://i9.ytimg.com https://*.giphy.com https://github.com https://avatars.githubusercontent.com",
               "font-src 'self' data:",
               // blob: BẮT BUỘC cho sân chơi 3D. Các file .glb nhúng texture bên
               // trong; GLTFLoader bóc ra thành blob: URL rồi nạp bằng

@@ -2692,6 +2692,10 @@ export interface GithubRepo {
   owner: string;
   url: string;
   stars: number;
+  forks: number;
+  openIssues: number;
+  /** ISO timestamp of the newest commit; null until the repo has been synced. */
+  pushedAt: string | null;
   language: string | null;
   description: string | null;
   myReview: string;
@@ -2716,13 +2720,20 @@ export const githubApi = {
     page?: number;
     pageSize?: number;
     tagId?: number;
+    /** Multi-tag filter — ANDed server-side. Serialised as `?tagIds=1,2`. */
+    tagIds?: number[];
     tagSlug?: string;
     language?: string;
     keyword?: string;
     includeDrafts?: boolean;
     sort?: 'newest' | 'oldest' | 'most-stars' | 'least-stars' | 'name-asc' | 'name-desc';
   }) {
-    return api.get<GithubRepoListResponse>('/repos', { params });
+    // axios mặc định tuần tự hoá mảng thành `tagIds[]=1&tagIds[]=2`; backend
+    // đọc `tagIds` (lặp hoặc CSV), nên gộp thành CSV cho khỏi lệch tên tham số.
+    const { tagIds, ...rest } = params ?? {};
+    return api.get<GithubRepoListResponse>('/repos', {
+      params: { ...rest, ...(tagIds?.length ? { tagIds: tagIds.join(',') } : {}) },
+    });
   },
 
   detail(id: string) {

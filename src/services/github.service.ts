@@ -34,6 +34,8 @@ export interface GithubRepoMetadata {
   description: string | null;
   forks?: number;
   openIssues?: number;
+  /** Newest commit timestamp — the "is this repo still maintained?" signal. */
+  pushedAt?: Date | null;
 }
 
 /** A small projection used by the auto-draft list. */
@@ -118,6 +120,42 @@ export function parseRepoUrl(input: string): { owner: string; repoName: string; 
 
 function stripGitSuffix(name: string): string {
   return name.replace(/\.git$/, '');
+}
+
+// ─── Search normalisation ─────────────────────────────────────────────────
+
+/**
+ * Lower-case and strip diacritics so a query typed without accents still
+ * matches accented text. Postgres can only do this with the `unaccent`
+ * extension, which needs superuser to install — so we normalise on the way
+ * IN (into `searchBlob`) and on the way OUT (the query term) instead.
+ *
+ * Also folds đ/Đ, which NFD does NOT decompose: "dong bo" must find "đồng bộ".
+ */
+export function normalizeSearchText(input: string): string {
+  return (input || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * The haystack a keyword search runs against. Includes `myReview` — without
+ * it the 100+ Vietnamese write-ups on /repos are invisible to search, which
+ * is most of the page's actual content.
+ */
+function buildSearchBlob(parts: {
+  repoName: string;
+  owner: string;
+  description?: string | null;
+  myReview?: string | null;
+}): string {
+  return normalizeSearchText(
+    [parts.repoName, parts.owner, parts.description ?? '', parts.myReview ?? ''].join(' '),
+  );
 }
 
 // ─── GitHub API call (with retry) ──────────────────────────────────
@@ -229,6 +267,7 @@ export async function fetchRepoMetadata(
       description?: string | null;
       forks_count?: number;
       open_issues_count?: number;
+      pushed_at?: string | null;
       owner?: { login?: string };
       name?: string;
     };
@@ -242,6 +281,7 @@ export async function fetchRepoMetadata(
       description: body.description ?? null,
       forks: body.forks_count ?? 0,
       openIssues: body.open_issues_count ?? 0,
+      pushedAt: body.pushed_at ? new Date(body.pushed_at) : null,
     };
   }, { label: `repo:${owner}/${repoName}` });
 }
@@ -366,9 +406,18 @@ export async function createOrUpdateRepoFromUrl(params: {
       owner: meta.owner,
       url: meta.url,
       stars: meta.stars,
+      forks: meta.forks ?? 0,
+      openIssues: meta.openIssues ?? 0,
+      pushedAt: meta.pushedAt ?? null,
       language: meta.language,
       description: meta.description,
       myReview: (myReview || '').trim(),
+      searchBlob: buildSearchBlob({
+        repoName: meta.repoName,
+        owner: meta.owner,
+        description: meta.description,
+        myReview,
+      }),
       status,
       tags: tagIdList.length > 0
         ? { create: tagIdList.map((tagId) => ({ tagId })) }
@@ -378,9 +427,18 @@ export async function createOrUpdateRepoFromUrl(params: {
       repoName: meta.repoName,
       owner: meta.owner,
       stars: meta.stars,
+      forks: meta.forks ?? 0,
+      openIssues: meta.openIssues ?? 0,
+      pushedAt: meta.pushedAt ?? null,
       language: meta.language,
       description: meta.description,
       myReview: (myReview || '').trim(),
+      searchBlob: buildSearchBlob({
+        repoName: meta.repoName,
+        owner: meta.owner,
+        description: meta.description,
+        myReview,
+      }),
       status,
     },
   });
@@ -427,6 +485,8 @@ export async function createOrUpdateRepoFromUrl(params: {
 export async function listRepos(params: {
   status?: GithubRepoStatus;
   tagId?: number;
+  /** Multi-tag filter, ANDed together. Takes precedence over `tagId`/`tagSlug`. */
+  tagIds?: number[];
   tagSlug?: string;
   language?: string;
   keyword?: string;
@@ -449,12 +509,26 @@ export async function listRepos(params: {
   const where: Prisma.GithubRepoWhereInput = { status };
   if (language) where.language = { equals: language, mode: 'insensitive' };
   if (keyword) {
+    // Search the normalised blob (name + owner + description + review, lower-
+    // cased and accent-stripped) so "mau thiet ke" finds "mẫu thiết kế".
+    // repoName/description stay in the OR as a fallback for rows seeded
+    // before searchBlob existed — they'd otherwise be unsearchable until the
+    // next write.
+    const needle = normalizeSearchText(keyword);
     where.OR = [
+      { searchBlob: { contains: needle } },
       { repoName: { contains: keyword, mode: 'insensitive' } },
       { description: { contains: keyword, mode: 'insensitive' } },
     ];
   }
-  if (tagId) {
+
+  // Tag filtering. `tagIds` (plural) narrows with AND — a repo must carry
+  // EVERY selected tag — because that's what picking two filters means to a
+  // user. The single `tagId`/`tagSlug` params are kept for old links.
+  const tagIdList = (params.tagIds ?? []).filter((n) => Number.isFinite(n));
+  if (tagIdList.length > 0) {
+    where.AND = tagIdList.map((id) => ({ tags: { some: { tagId: id } } }));
+  } else if (tagId) {
     where.tags = { some: { tagId } };
   } else if (tagSlug) {
     where.tags = { some: { tag: { slug: tagSlug } } };
@@ -578,7 +652,17 @@ export async function updateRepoReview(params: {
   await prisma.$transaction([
     prisma.githubRepo.update({
       where: { id: params.id },
-      data: { myReview: (params.myReview || '').trim() },
+      data: {
+        myReview: (params.myReview || '').trim(),
+        // Keep the search haystack in step with the review — otherwise an
+        // edited review stays findable only by its OLD wording.
+        searchBlob: buildSearchBlob({
+          repoName: exists.repoName,
+          owner: exists.owner,
+          description: exists.description,
+          myReview: params.myReview,
+        }),
+      },
     }),
     prisma.githubRepoTag.deleteMany({
       where: { repoId: params.id, tagId: { notIn: tagIdList } },
@@ -614,7 +698,12 @@ export async function syncAllRepoMetadata(): Promise<{
   failed: Array<{ id: string; url: string; error: string }>;
 }> {
   const repos = await prisma.githubRepo.findMany({
-    select: { id: true, owner: true, repoName: true, url: true, stars: true },
+    // description + myReview come along so the search blob can be rebuilt
+    // from the freshly-fetched description without a second round trip.
+    select: {
+      id: true, owner: true, repoName: true, url: true, stars: true,
+      forks: true, description: true, myReview: true,
+    },
   });
 
   let updated = 0;
@@ -631,16 +720,32 @@ export async function syncAllRepoMetadata(): Promise<{
         failed.push({ id: repo.id, url: repo.url, error: 'Repo 404 tren GitHub' });
         return;
       }
-      if (meta.stars === repo.stars && meta.language && meta.description) {
-        // No change — skip the DB write to avoid useless churn.
+      // The old skip-if-unchanged check only compared stars, so a repo whose
+      // fork count or last-commit date moved would never be written. Compare
+      // everything we actually store instead.
+      if (
+        meta.stars === repo.stars &&
+        (meta.forks ?? 0) === repo.forks &&
+        meta.language &&
+        meta.description === repo.description
+      ) {
         return;
       }
       await prisma.githubRepo.update({
         where: { id: repo.id },
         data: {
           stars: meta.stars,
+          forks: meta.forks ?? 0,
+          openIssues: meta.openIssues ?? 0,
+          pushedAt: meta.pushedAt ?? null,
           language: meta.language,
           description: meta.description,
+          searchBlob: buildSearchBlob({
+            repoName: repo.repoName,
+            owner: repo.owner,
+            description: meta.description,
+            myReview: repo.myReview,
+          }),
         },
       });
       updated += 1;
@@ -796,6 +901,9 @@ function serializeRepo(repo: {
   owner: string;
   url: string;
   stars: number;
+  forks?: number;
+  openIssues?: number;
+  pushedAt?: Date | null;
   language: string | null;
   description: string | null;
   myReview: string;
@@ -810,6 +918,9 @@ function serializeRepo(repo: {
     owner: repo.owner,
     url: repo.url,
     stars: repo.stars,
+    forks: repo.forks ?? 0,
+    openIssues: repo.openIssues ?? 0,
+    pushedAt: repo.pushedAt ?? null,
     language: repo.language,
     description: repo.description,
     myReview: repo.myReview,

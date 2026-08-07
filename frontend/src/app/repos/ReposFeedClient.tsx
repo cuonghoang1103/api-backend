@@ -41,7 +41,9 @@ export default function ReposFeedClient({
   const [languages, setLanguages] = useState<{ name: string; count: number }[]>(initialLanguages);
   const [filters, setFilters] = useState({
     keyword: '',
-    tagId: null as number | null,
+    // Nhiều tag cùng lúc, giao nhau (AND): chọn "AI" + "TypeScript" là
+    // thu hẹp còn repo mang CẢ hai — đúng nghĩa người dùng bấm hai bộ lọc.
+    tagIds: [] as number[],
     language: null as string | null,
     page: 1,
   });
@@ -62,7 +64,7 @@ export default function ReposFeedClient({
       const res = await githubApi.list({
         page: current.page,
         pageSize: 12,
-        tagId: current.tagId || undefined,
+        tagIds: current.tagIds.length ? current.tagIds : undefined,
         language: current.language || undefined,
         keyword: current.keyword || undefined,
       });
@@ -140,11 +142,11 @@ export default function ReposFeedClient({
     }
   }, [repos, sort]);
 
-  const activeFilterCount = (filters.tagId ? 1 : 0) + (filters.language ? 1 : 0) + (filters.keyword ? 1 : 0);
+  const activeFilterCount = filters.tagIds.length + (filters.language ? 1 : 0) + (filters.keyword ? 1 : 0);
 
   const clearAll = () => {
     setSearchInput('');
-    setFilters({ keyword: '', tagId: null, language: null, page: 1 });
+    setFilters({ keyword: '', tagIds: [], language: null, page: 1 });
   };
 
   return (
@@ -227,7 +229,7 @@ export default function ReposFeedClient({
                 <input
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
-                  placeholder="Tim theo ten hoac mo ta..."
+                  placeholder="Tim trong ten, mo ta va bai danh gia (go co dau hay khong deu duoc)..."
                   className="w-full rounded-xl border border-darkborder bg-darkbg/60 py-2.5 pl-9 pr-3 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none focus:ring-1 focus:ring-neon-violet/30"
                 />
                 {searchInput && (
@@ -250,11 +252,17 @@ export default function ReposFeedClient({
             >
               <div className="flex flex-wrap gap-2">
                 {tags.map((t) => {
-                  const active = filters.tagId === t.id;
+                  const active = filters.tagIds.includes(t.id);
                   return (
                     <button
                       key={t.id}
-                      onClick={() => setFilters((p) => ({ ...p, tagId: active ? null : t.id, page: 1 }))}
+                      onClick={() =>
+                        setFilters((p) => ({
+                          ...p,
+                          tagIds: active ? p.tagIds.filter((id) => id !== t.id) : [...p.tagIds, t.id],
+                          page: 1,
+                        }))
+                      }
                       className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs transition-all ${
                         active
                           ? 'border-neon-violet bg-neon-violet/20 text-text-primary shadow-[0_0_12px_rgba(167,139,250,0.25)]'

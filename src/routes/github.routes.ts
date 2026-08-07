@@ -53,6 +53,13 @@ router.get('/', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
     const page = parseInt(String(req.query.page || '1'), 10);
     const pageSize = parseInt(String(req.query.pageSize || '12'), 10);
     const tagId = req.query.tagId ? parseInt(String(req.query.tagId), 10) : undefined;
+    // `tagIds` accepts either repeated params (?tagIds=1&tagIds=2) or a CSV
+    // (?tagIds=1,2). Multiple tags narrow with AND — see listRepos.
+    const rawTagIds = req.query.tagIds;
+    const tagIds = (Array.isArray(rawTagIds) ? rawTagIds : rawTagIds ? [rawTagIds] : [])
+      .flatMap((v) => String(v).split(','))
+      .map((v) => parseInt(v.trim(), 10))
+      .filter(Number.isFinite);
     const tagSlug = req.query.tagSlug ? String(req.query.tagSlug) : undefined;
     const language = req.query.language ? String(req.query.language) : undefined;
     const keyword = req.query.keyword ? String(req.query.keyword) : undefined;
@@ -84,6 +91,7 @@ router.get('/', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
     const result = await listRepos({
       status,
       tagId,
+      tagIds,
       tagSlug,
       language,
       keyword,
@@ -174,6 +182,9 @@ router.get('/:id', optionalAuth, async (req, res: Response<ApiResponse>, next) =
         owner: repo.owner,
         url: repo.url,
         stars: repo.stars,
+        forks: repo.forks,
+        openIssues: repo.openIssues,
+        pushedAt: repo.pushedAt,
         language: repo.language,
         description: repo.description,
         myReview: repo.myReview,

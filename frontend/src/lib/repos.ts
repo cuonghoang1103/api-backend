@@ -38,6 +38,47 @@ export function languageBadgeClasses(lang: string | null | undefined): string {
   return LANGUAGE_COLORS[lang] || DEFAULT_LANG_BADGE;
 }
 
+// ─── Repo activity ("is this still maintained?") ──────────────────
+//
+// A star count says how popular a repo WAS; the last commit says whether
+// anyone is still home. That matters more when you're deciding whether to
+// depend on something — which is exactly what /repos is for.
+
+/** Months elapsed since `iso`, or null when the timestamp is missing/bad. */
+function monthsSince(iso: string | null | undefined): number | null {
+  if (!iso) return null;
+  const then = new Date(iso).getTime();
+  if (Number.isNaN(then)) return null;
+  return (Date.now() - then) / (1000 * 60 * 60 * 24 * 30.44);
+}
+
+/** Short Vietnamese phrase for how recently the repo was committed to. */
+export function describeActivity(iso: string | null | undefined): string {
+  const months = monthsSince(iso);
+  if (months === null) return '';
+  const days = months * 30.44;
+  if (days < 1) return 'Commit hom nay';
+  if (days < 7) return `Commit ${Math.round(days)} ngay truoc`;
+  if (days < 30) return `Commit ${Math.max(1, Math.round(days / 7))} tuan truoc`;
+  if (months < 12) return `Commit ${Math.max(1, Math.round(months))} thang truoc`;
+  const years = months / 12;
+  return `Commit ${years < 2 ? 'hon 1' : Math.floor(years)} nam truoc`;
+}
+
+/**
+ * Colour the activity badge by staleness. The thresholds are deliberately
+ * generous: a stable, finished library legitimately sits untouched for a
+ * year, so only 24+ months reads as a warning colour.
+ */
+export function activityBadgeClasses(iso: string | null | undefined): string {
+  const months = monthsSince(iso);
+  if (months === null) return 'border-darkborder bg-darkbg/60 text-text-muted';
+  if (months < 3) return 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300';
+  if (months < 12) return 'border-darkborder bg-darkbg/60 text-text-secondary';
+  if (months < 24) return 'border-amber-500/30 bg-amber-500/10 text-amber-300';
+  return 'border-rose-500/30 bg-rose-500/10 text-rose-300';
+}
+
 // Compact star count formatter. 1234 → "1.2k", 1500000 → "1.5M".
 export function formatStars(n: number | null | undefined): string {
   if (n == null) return '0';

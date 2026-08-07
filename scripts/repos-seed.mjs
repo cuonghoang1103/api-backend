@@ -35,6 +35,11 @@ const prisma = new PrismaClient();
 const args = process.argv.slice(2);
 const APPLY = args.includes('--apply');
 const FORCE_REVIEW = args.includes('--force-review');
+// Metadata is create-only by default (rule 2 above). This flag pushes the
+// snapshot in meta.json onto rows that already exist — needed when the
+// snapshot gains a NEW field (forks / open issues / last-commit date), which
+// no amount of re-running the default path would ever fill in.
+const REFRESH_META = args.includes('--refresh-meta');
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CURATED = path.join(ROOT, 'content/repos/curated.mjs');
@@ -48,6 +53,25 @@ function slugifyTag(s) {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
     .slice(0, 50);
+}
+
+/**
+ * Cùng thuật toán với `normalizeSearchText` ở src/services/github.service.ts:
+ * thường hoá + bỏ dấu + gập đ→d. Hai nơi PHẢI khớp nhau, nếu không câu truy
+ * vấn (chuẩn hoá bởi backend) sẽ không khớp được blob (chuẩn hoá bởi seeder).
+ */
+function normalizeSearchText(input) {
+  return (input || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function buildSearchBlob(repoName, owner, description, review) {
+  return normalizeSearchText([repoName, owner, description || '', review || ''].join(' '));
 }
 
 async function main() {
@@ -116,6 +140,8 @@ async function main() {
   let reviewFilled = 0;
   let skippedReview = 0;
   let tagsAdded = 0;
+  let metaRefreshed = 0;
+  let blobFilled = 0;
   let unchanged = 0;
 
   for (const r of curated) {
@@ -138,9 +164,13 @@ async function main() {
             owner,
             url,
             stars: m.stars ?? 0,
+            forks: m.forks ?? 0,
+            openIssues: m.openIssues ?? 0,
+            pushedAt: m.lastCommitAt ? new Date(m.lastCommitAt) : null,
             language: m.language ?? null,
             description: m.description ?? null,
             myReview: r.review.trim(),
+            searchBlob: buildSearchBlob(repoName, owner, m.description, r.review),
             status: 'PUBLISHED',
             tags: wantTagIds.length ? { create: wantTagIds.map((tagId) => ({ tagId })) } : undefined,
           },
@@ -160,12 +190,70 @@ async function main() {
         reviewFilled += 1;
         touched = true;
         if (APPLY) {
-          await prisma.githubRepo.update({ where: { id: existing.id }, data: { myReview: fileReview } });
+          await prisma.githubRepo.update({
+            where: { id: existing.id },
+            data: {
+              myReview: fileReview,
+              searchBlob: buildSearchBlob(repoName, owner, existing.description, fileReview),
+            },
+          });
         }
         console.log(`  ~ ${r.slug}: cập nhật review${dbReview ? ' (ép theo file)' : ' (DB đang rỗng)'}`);
       } else {
         skippedReview += 1;
         console.log(`  ! ${r.slug}: review trong DB khác file — GIỮ NGUYÊN (dùng --force-review để ép)`);
+      }
+    }
+
+    // ── Metadata: chỉ khi được yêu cầu rõ (--refresh-meta) ─────────────
+    // Mặc định vẫn là create-only, vì số sao trong file cũ dần và "Sync all"
+    // mới là nguồn chân lý. Nhưng khi ảnh chụp có THÊM TRƯỜNG MỚI (fork,
+    // issue, ngày commit cuối) thì không đường nào khác để lấp vào các dòng
+    // đã tồn tại.
+    if (REFRESH_META) {
+      const metaChanged =
+        existing.stars !== (m.stars ?? 0) ||
+        existing.forks !== (m.forks ?? 0) ||
+        existing.openIssues !== (m.openIssues ?? 0) ||
+        (existing.pushedAt?.toISOString() ?? null) !== (m.lastCommitAt ?? null);
+      if (metaChanged) {
+        metaRefreshed += 1;
+        touched = true;
+        if (APPLY) {
+          await prisma.githubRepo.update({
+            where: { id: existing.id },
+            data: {
+              stars: m.stars ?? 0,
+              forks: m.forks ?? 0,
+              openIssues: m.openIssues ?? 0,
+              pushedAt: m.lastCommitAt ? new Date(m.lastCommitAt) : null,
+              language: m.language ?? existing.language,
+              description: m.description ?? existing.description,
+            },
+          });
+        }
+        console.log(`  ~ ${r.slug}: metadata ★${m.stars} · ${m.forks} fork · commit ${(m.lastCommitAt || '').slice(0, 10)}`);
+      }
+    }
+
+    // ── Chuỗi tìm kiếm: LUÔN giữ đồng bộ ───────────────────────────────
+    // Đây là dữ liệu DẪN XUẤT từ chính các cột trong DB, không phải nội dung
+    // do người viết, nên cập nhật nó không phá gì. Bắt buộc phải làm: 111
+    // repo đã seed trước khi có cột này đều mang searchBlob rỗng, và nếu
+    // không lấp thì ô tìm kiếm không thấy bài đánh giá nào.
+    {
+      const wantBlob = buildSearchBlob(
+        existing.repoName,
+        existing.owner,
+        REFRESH_META ? (m.description ?? existing.description) : existing.description,
+        FORCE_REVIEW || !dbReview ? fileReview : existing.myReview,
+      );
+      if ((existing.searchBlob || '') !== wantBlob) {
+        blobFilled += 1;
+        touched = true;
+        if (APPLY) {
+          await prisma.githubRepo.update({ where: { id: existing.id }, data: { searchBlob: wantBlob } });
+        }
       }
     }
 
@@ -191,7 +279,8 @@ async function main() {
 
   console.log(
     `\n${APPLY ? 'Đã ghi' : 'Sẽ ghi (dry-run)'}: repo mới +${created} · review +${reviewFilled} · ` +
-      `tag mới +${tagsCreated} · gắn thêm tag +${tagsAdded} · giữ nguyên ${unchanged}` +
+      `tag mới +${tagsCreated} · gắn thêm tag +${tagsAdded} · metadata ~${metaRefreshed} · ` +
+      `chuỗi tìm kiếm ~${blobFilled} · giữ nguyên ${unchanged}` +
       (skippedReview ? ` · bỏ qua review đã sửa tay ${skippedReview}` : ''),
   );
   if (APPLY) console.log(`Tổng trong DB: ${total} repo (${published} đã xuất bản).`);

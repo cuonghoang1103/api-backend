@@ -2818,6 +2818,24 @@ model GithubRepo {
   myReview    String           @db.Text
   status      GithubRepoStatus @default(DRAFT)
 
+  // Cached fork / open-issue counts from GitHub. The detail page used to
+  // hardcode "0 fork", which meant every repo — three.js included — claimed
+  // zero forks. The metadata fetch always returned these; they just had
+  // nowhere to land until now.
+  forks      Int       @default(0)
+  openIssues Int       @default(0) @map("open_issues")
+  // Timestamp of the newest commit. This is the "is this repo still alive?"
+  // signal — far more useful than a star count when deciding whether to
+  // depend on a library. Nullable: unknown until the first sync.
+  pushedAt   DateTime? @map("pushed_at")
+
+  // Lower-cased, accent-stripped haystack of repoName + owner + description
+  // + myReview, maintained by the service layer on every write. Postgres
+  // can't strip Vietnamese accents without the `unaccent` extension (which
+  // needs superuser to install), so we precompute instead: searching "mau
+  // thiet ke" has to find a review that says "mẫu thiết kế".
+  searchBlob String? @map("search_blob") @db.Text
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 

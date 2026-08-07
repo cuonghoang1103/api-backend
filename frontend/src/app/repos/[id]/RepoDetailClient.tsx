@@ -5,11 +5,11 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
   ArrowLeft, ExternalLink, Github, Star, Calendar, Code2, Tag as TagIcon,
-  Share2, Copy, Check, Sparkles, GitFork, Eye, Clock, GitBranch,
+  Share2, Copy, Check, Sparkles, GitFork, Eye, Clock, GitBranch, CircleDot,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import ParticleBackground from '@/components/repos/ParticleBackground';
-import { languageBadgeClasses, formatStars } from '@/lib/repos';
+import { languageBadgeClasses, formatStars, describeActivity, activityBadgeClasses } from '@/lib/repos';
 import { renderReview } from '@/lib/markdown';
 import type { GithubRepo } from '@/lib/api';
 
@@ -166,14 +166,29 @@ export default function RepoDetailClient({ repo, related }: Props) {
                 <span className="text-text-muted">stars</span>
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-darkborder bg-darkbg/60 px-3 py-1 text-xs text-text-muted">
-                <GitBranch className="h-3 w-3" />
-                <span className="font-mono font-semibold text-text-secondary">{formatStars(0)}</span>
+                <GitFork className="h-3 w-3" />
+                <span className="font-mono font-semibold text-text-secondary">{formatStars(repo.forks)}</span>
                 <span>fork</span>
               </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-darkborder bg-darkbg/60 px-3 py-1 text-xs text-text-muted">
-                <GitFork className="h-3 w-3" />
-                <span className="font-mono font-semibold text-text-secondary">v0.1</span>
-              </span>
+              {repo.openIssues > 0 && (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-darkborder bg-darkbg/60 px-3 py-1 text-xs text-text-muted">
+                  <CircleDot className="h-3 w-3" />
+                  <span className="font-mono font-semibold text-text-secondary">{formatStars(repo.openIssues)}</span>
+                  <span>issue mo</span>
+                </span>
+              )}
+              {/* "Repo con song khong?" — huu ich hon so sao khi chon thu vien.
+                  An han khi chua sync: khong co du lieu thi khong hien, thay vi
+                  bia mot con so nhu chip "0 fork" / "v0.1" truoc day. */}
+              {repo.pushedAt && (
+                <span
+                  className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs ${activityBadgeClasses(repo.pushedAt)}`}
+                  title={`Commit moi nhat: ${formatDate(repo.pushedAt)}`}
+                >
+                  <GitBranch className="h-3 w-3" />
+                  {describeActivity(repo.pushedAt)}
+                </span>
+              )}
               {repo.createdAt && (
                 <span
                   className="inline-flex items-center gap-1.5 rounded-full border border-darkborder bg-darkbg/60 px-3 py-1 text-xs text-text-muted"
@@ -205,13 +220,16 @@ export default function RepoDetailClient({ repo, related }: Props) {
             {repo.tags && repo.tags.length > 0 && (
               <div className="mt-5 flex flex-wrap items-center gap-2">
                 <TagIcon className="h-3.5 w-3.5 text-text-muted" />
+                {/* Tag dan sang trang rieng cua no: vua de nguoi doc xem cac
+                    repo cung chu de, vua tao lien ket noi bo cho Google. */}
                 {repo.tags.map((t) => (
-                  <span
+                  <Link
                     key={t.id}
-                    className="rounded-full border border-darkborder bg-darkbg/60 px-2.5 py-0.5 text-[10px] uppercase tracking-wider text-text-muted"
+                    href={`/repos/tag/${t.slug}`}
+                    className="rounded-full border border-darkborder bg-darkbg/60 px-2.5 py-0.5 text-[10px] uppercase tracking-wider text-text-muted transition-colors hover:border-neon-violet/40 hover:text-neon-violet"
                   >
                     #{t.name}
-                  </span>
+                  </Link>
                 ))}
               </div>
             )}

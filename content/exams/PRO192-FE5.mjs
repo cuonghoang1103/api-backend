@@ -21,7 +21,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Which is a valid keyword in Java?</p>|||<p>Đâu là một keyword (từ khoá) hợp lệ trong Java?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q1.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q1.png",
           "options": [
             {
               "text": "interface|||interface"
@@ -45,7 +45,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Which of the following statements is used to compile the program.java file?</p>|||<p>Câu lệnh nào sau đây được dùng để biên dịch (compile) file program.java?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q2.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q2.png",
           "options": [
             {
               "text": "javac  program.java|||javac  program.java"
@@ -69,7 +69,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Which of the following are components of the Java platform?</p>|||<p>Những thành phần nào sau đây là các thành phần (components) của nền tảng Java (Java platform)?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q3.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q3.png",
           "options": [
             {
               "text": "JVM(Java Virtual Machine), the java application programming interface (API)|||JVM (Java Virtual Machine — Máy ảo Java), Java application programming interface (API — giao diện lập trình ứng dụng Java)"
@@ -93,7 +93,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Which of the following concepts does not belong to object-oriented programming features?</p>|||<p>Khái niệm nào sau đây KHÔNG thuộc về các đặc trưng của lập trình hướng đối tượng (OOP)?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q4.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q4.png",
           "options": [
             {
               "text": "Cross-platform|||Cross-platform (Đa nền tảng)"
@@ -117,7 +117,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What is the purpose of a Java Virtual Machine(JVM)?</p>|||<p>Mục đích của Máy ảo Java (JVM — Java Virtual Machine) là gì?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q5.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q5.png",
           "options": [
             {
               "text": "It is used to interpret and execute Java bytecode|||Nó được dùng để thông dịch và thực thi bytecode của Java"
@@ -141,7 +141,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Choose the correct statement about the “instanceof “ operator.</p>|||<p>Hãy chọn phát biểu ĐÚNG về toán tử “instanceof”.</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q6.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q6.png",
           "options": [
             {
               "text": "It can be used to test if an object is of a specified type.|||Nó có thể được dùng để kiểm tra xem một object có thuộc một kiểu (type) xác định hay không."
@@ -165,7 +165,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Which of the following is NOT a Java feature?</p>|||<p>Điều nào sau đây KHÔNG phải là một đặc điểm (feature) của Java?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q7.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q7.png",
           "options": [
             {
               "text": "Use of pointers.|||Sử dụng con trỏ (pointers)."
@@ -189,7 +189,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Which of the following is the entry point of the Java program?</p>|||<p>Đâu là điểm bắt đầu (entry point) của một chương trình Java?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q8.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q8.png",
           "options": [
             {
               "text": "main method|||main method (phương thức main)"
@@ -213,7 +213,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What is the default value of the data type double in Java?</p>|||<p>Giá trị mặc định của kiểu dữ liệu double trong Java là gì?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q9.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q9.png",
           "options": [
             {
               "text": "0.0|||0.0"
@@ -243,7 +243,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What is the output of the following code snippet?</p><pre><code class=\"language-java\"><span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">main</span><span class=\"hljs-params\">(String[] args)</span> {\n  <span class=\"hljs-type\">int</span>[][] arr={ {<span class=\"hljs-number\">1</span>,<span class=\"hljs-number\">2</span>,<span class=\"hljs-number\">3</span>}, {<span class=\"hljs-number\">4</span>,<span class=\"hljs-number\">5</span>,<span class=\"hljs-number\">6</span>,<span class=\"hljs-number\">6</span>}, {<span class=\"hljs-number\">6</span>,<span class=\"hljs-number\">7</span>,<span class=\"hljs-number\">8</span>}};\n  <span class=\"hljs-type\">int</span> [] copy={<span class=\"hljs-number\">9</span>,<span class=\"hljs-number\">10</span>,<span class=\"hljs-number\">11</span>,<span class=\"hljs-number\">12</span>};\n  arr[<span class=\"hljs-number\">2</span>]=copy;\n  System.out.println(arr[<span class=\"hljs-number\">2</span>][<span class=\"hljs-number\">2</span>]);\n}</code></pre>|||<p>Đầu ra (output) của đoạn code sau là gì?</p><pre><code class=\"language-java\"><span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">main</span><span class=\"hljs-params\">(String[] args)</span> {\n  <span class=\"hljs-type\">int</span>[][] arr={ {<span class=\"hljs-number\">1</span>,<span class=\"hljs-number\">2</span>,<span class=\"hljs-number\">3</span>}, {<span class=\"hljs-number\">4</span>,<span class=\"hljs-number\">5</span>,<span class=\"hljs-number\">6</span>,<span class=\"hljs-number\">6</span>}, {<span class=\"hljs-number\">6</span>,<span class=\"hljs-number\">7</span>,<span class=\"hljs-number\">8</span>}};\n  <span class=\"hljs-type\">int</span> [] copy={<span class=\"hljs-number\">9</span>,<span class=\"hljs-number\">10</span>,<span class=\"hljs-number\">11</span>,<span class=\"hljs-number\">12</span>};\n  arr[<span class=\"hljs-number\">2</span>]=copy;\n  System.out.println(arr[<span class=\"hljs-number\">2</span>][<span class=\"hljs-number\">2</span>]);\n}</code></pre>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q10.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q10.png",
           "options": [
             {
               "text": "11|||11"
@@ -267,7 +267,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What will be the output of the following code?</p><pre><code class=\"language-java\"><span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Test10</span> {\n<span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">main</span><span class=\"hljs-params\">(String[] args)</span> {\n    <span class=\"hljs-type\">Integer</span> <span class=\"hljs-variable\">x</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">Integer</span>(<span class=\"hljs-number\">5</span>);\n    Integer y=  <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">Integer</span>(<span class=\"hljs-number\">10</span>);\n    System.out.println((String)(x+y));\n  }}</code></pre>|||<p>Đoạn code sau sẽ cho kết quả (output) là gì?</p><pre><code class=\"language-java\"><span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Test10</span> {\n<span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">main</span><span class=\"hljs-params\">(String[] args)</span> {\n    <span class=\"hljs-type\">Integer</span> <span class=\"hljs-variable\">x</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">Integer</span>(<span class=\"hljs-number\">5</span>);\n    Integer y=  <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">Integer</span>(<span class=\"hljs-number\">10</span>);\n    System.out.println((String)(x+y));\n  }}</code></pre>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q11.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q11.png",
           "options": [
             {
               "text": "15|||15"
@@ -291,7 +291,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>The nextLine() method belongs to which of the following classes?</p>|||<p>Phương thức nextLine() thuộc về lớp nào trong các lớp sau?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q12.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q12.png",
           "options": [
             {
               "text": "Scanner|||Scanner"
@@ -315,7 +315,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What is a checked exception in Java?</p>|||<p>Checked exception trong Java là gì?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q13.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q13.png",
           "options": [
             {
               "text": "Checked exceptions are the ones that are checked during compilation time|||Checked exception là những ngoại lệ được kiểm tra tại thời điểm biên dịch (compilation time)"
@@ -339,7 +339,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What is the way to instantiate a Scanner object to read data from a file &quot;data.txt&quot; with UTF-8 character encoding?</p>|||<p>Cách nào là cách khởi tạo một đối tượng Scanner để đọc dữ liệu từ file &quot;data.txt&quot; với bảng mã ký tự UTF-8?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q14.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q14.png",
           "options": [
             {
               "text": "Scanner in = new Scanner(Path.of(\"data.txt\"), StandardCharsets.UTF_8);|||Scanner in = new Scanner(Path.of(\"data.txt\"), StandardCharsets.UTF_8);"
@@ -363,7 +363,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Which of the following access modifiers in Java provides the strongest form of encapsulation?</p>|||<p>Access modifier nào sau đây trong Java cung cấp mức đóng gói (encapsulation) mạnh nhất?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q15.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q15.png",
           "options": [
             {
               "text": "public|||public"
@@ -387,7 +387,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What is the purpose of the &quot;this&quot; keyword in Java?</p>|||<p>Từ khoá &quot;this&quot; trong Java dùng để làm gì?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q16.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q16.png",
           "options": [
             {
               "text": "It refers to the current class|||Nó tham chiếu tới lớp hiện tại (current class)"
@@ -417,7 +417,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What is the difference between a class and an object?</p>|||<p>Sự khác nhau giữa class (lớp) và object (đối tượng) là gì?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q17.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q17.png",
           "options": [
             {
               "text": "A class is a blueprint to make an object|||Class là bản thiết kế (blueprint) để tạo ra object"
@@ -441,7 +441,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What operator is used to access the member (field or method) of the object?</p>|||<p>Toán tử nào được dùng để truy cập thành viên (field hoặc method) của một object?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q18.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q18.png",
           "options": [
             {
               "text": ".|||."
@@ -465,7 +465,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What is the output of the following code snippet?</p><pre><code class=\"language-java\"><span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Person</span> {\n   <span class=\"hljs-keyword\">protected</span> <span class=\"hljs-type\">String</span> <span class=\"hljs-variable\">id</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-string\">&quot;New Id&quot;</span>;\n   <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">main</span><span class=\"hljs-params\">(String[] args)</span> {\n     <span class=\"hljs-type\">Person</span> <span class=\"hljs-variable\">p</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">Person</span>();\n     p.id  = <span class=\"hljs-string\">&quot;FPTU&quot;</span>;\n     System.out.println(p.id);\n     }\n}</code></pre>|||<p>Đoạn code sau in ra kết quả gì?</p><pre><code class=\"language-java\"><span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Person</span> {\n   <span class=\"hljs-keyword\">protected</span> <span class=\"hljs-type\">String</span> <span class=\"hljs-variable\">id</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-string\">&quot;New Id&quot;</span>;\n   <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">main</span><span class=\"hljs-params\">(String[] args)</span> {\n     <span class=\"hljs-type\">Person</span> <span class=\"hljs-variable\">p</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">Person</span>();\n     p.id  = <span class=\"hljs-string\">&quot;FPTU&quot;</span>;\n     System.out.println(p.id);\n     }\n}</code></pre>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q19.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q19.png",
           "options": [
             {
               "text": "FPTU|||FPTU"
@@ -489,7 +489,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What is the output of the following code snippet?</p><pre><code class=\"language-java\"><span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Person</span> {\n   <span class=\"hljs-keyword\">protected</span> String id;\n   <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">calPerson</span><span class=\"hljs-params\">(Person p)</span>{\n      p.id = <span class=\"hljs-string\">&quot;HCM&quot;</span>;\n      System.out.print(p.id);\n   }\n   <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">main</span><span class=\"hljs-params\">(String[] args)</span> {\n     <span class=\"hljs-type\">Person</span> <span class=\"hljs-variable\">p</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">Person</span>();\n     p.id = <span class=\"hljs-string\">&quot;FPT&quot;</span>;\n     p.calPerson(p);\n   }\n}</code></pre>|||<p>Đoạn code sau in ra kết quả gì?</p><pre><code class=\"language-java\"><span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Person</span> {\n   <span class=\"hljs-keyword\">protected</span> String id;\n   <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">calPerson</span><span class=\"hljs-params\">(Person p)</span>{\n      p.id = <span class=\"hljs-string\">&quot;HCM&quot;</span>;\n      System.out.print(p.id);\n   }\n   <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">main</span><span class=\"hljs-params\">(String[] args)</span> {\n     <span class=\"hljs-type\">Person</span> <span class=\"hljs-variable\">p</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">Person</span>();\n     p.id = <span class=\"hljs-string\">&quot;FPT&quot;</span>;\n     p.calPerson(p);\n   }\n}</code></pre>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q20.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q20.png",
           "options": [
             {
               "text": "HCM|||HCM"
@@ -513,7 +513,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What is the output of the following code snippet?</p><pre><code class=\"language-java\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Test</span>{\n  <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">method</span><span class=\"hljs-params\">(<span class=\"hljs-type\">int</span> x)</span>{\n    System.out.print(x*x);\n  }\n  <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">method</span><span class=\"hljs-params\">(<span class=\"hljs-type\">int</span>...a)</span>{\n    System.out.print(a.length);\n  }\n  <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">main</span><span class=\"hljs-params\">(String[] args)</span>{\n    <span class=\"hljs-type\">Test</span> <span class=\"hljs-variable\">t</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">Test</span>();\n    t.method();\n    t.method(<span class=\"hljs-number\">2</span>);\n    t.method(<span class=\"hljs-number\">3</span>, <span class=\"hljs-number\">4</span>);\n  }\n}</code></pre>|||<p>Kết quả xuất ra của đoạn mã sau là gì?</p><pre><code class=\"language-java\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Test</span>{\n  <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">method</span><span class=\"hljs-params\">(<span class=\"hljs-type\">int</span> x)</span>{\n    System.out.print(x*x);\n  }\n  <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">method</span><span class=\"hljs-params\">(<span class=\"hljs-type\">int</span>...a)</span>{\n    System.out.print(a.length);\n  }\n  <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">main</span><span class=\"hljs-params\">(String[] args)</span>{\n    <span class=\"hljs-type\">Test</span> <span class=\"hljs-variable\">t</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">Test</span>();\n    t.method();\n    t.method(<span class=\"hljs-number\">2</span>);\n    t.method(<span class=\"hljs-number\">3</span>, <span class=\"hljs-number\">4</span>);\n  }\n}</code></pre>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q21.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q21.png",
           "options": [
             {
               "text": "042|||042"
@@ -537,7 +537,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What is the output of the following Java program?</p><pre><code class=\"language-java\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">A</span> {\n    <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">displayMessage</span><span class=\"hljs-params\">()</span> {\n        System.out.println(<span class=\"hljs-string\">&quot;A Display&quot;</span>);\n    }\n}\n<span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">B</span> <span class=\"hljs-keyword\">extends</span> <span class=\"hljs-title class_\">A</span> {\n    <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">displayMessage</span><span class=\"hljs-params\">()</span> {\n        System.out.println(<span class=\"hljs-string\">&quot;B Display&quot;</span>);\n    }\n}\n<span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Main</span> {\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">main</span><span class=\"hljs-params\">(String[] args)</span> {\n        <span class=\"hljs-type\">A</span> <span class=\"hljs-variable\">objA</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">B</span>();\n        objA.displayMessage();\n    }\n}</code></pre>|||<p>Kết quả xuất ra của chương trình Java sau là gì?</p><pre><code class=\"language-java\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">A</span> {\n    <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">displayMessage</span><span class=\"hljs-params\">()</span> {\n        System.out.println(<span class=\"hljs-string\">&quot;A Display&quot;</span>);\n    }\n}\n<span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">B</span> <span class=\"hljs-keyword\">extends</span> <span class=\"hljs-title class_\">A</span> {\n    <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">displayMessage</span><span class=\"hljs-params\">()</span> {\n        System.out.println(<span class=\"hljs-string\">&quot;B Display&quot;</span>);\n    }\n}\n<span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Main</span> {\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">main</span><span class=\"hljs-params\">(String[] args)</span> {\n        <span class=\"hljs-type\">A</span> <span class=\"hljs-variable\">objA</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">B</span>();\n        objA.displayMessage();\n    }\n}</code></pre>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q22.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q22.png",
           "options": [
             {
               "text": "A Display|||A Display"
@@ -561,7 +561,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Choose the correct statement about the &quot;this&quot; keyword.</p>|||<p>Hãy chọn phát biểu ĐÚNG về từ khoá &quot;this&quot;.</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q23.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q23.png",
           "options": [
             {
               "text": "It can be used to refer to the current object in a method or constructor|||Nó được dùng để tham chiếu tới đối tượng hiện tại bên trong một phương thức hoặc hàm khởi tạo (constructor)"
@@ -585,7 +585,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What is a subclass in Java inheritance?</p>|||<p>Lớp con (subclass) trong kế thừa Java là gì?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q24.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q24.png",
           "options": [
             {
               "text": "The class that inherits from another class|||Lớp kế thừa từ một lớp khác"
@@ -609,7 +609,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Choose multiple correct answers. (Choose 2 answers)</p>|||<p>Chọn nhiều đáp án đúng. (Chọn 2 đáp án)</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q25.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q25.png",
           "options": [
             {
               "text": "private access modifier should be used for a variable or method to only be accessed within the same class|||Nên dùng access modifier private cho biến hoặc phương thức chỉ được truy cập bên trong chính lớp đó"
@@ -634,7 +634,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Which of the following statements is true about superclass and subclass relationships in Java?</p>|||<p>Phát biểu nào sau đây là ĐÚNG về quan hệ giữa lớp cha (superclass) và lớp con (subclass) trong Java?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q26.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q26.png",
           "options": [
             {
               "text": "A subclass can access private members of its superclass.|||Lớp con có thể truy cập các thành viên private của lớp cha."
@@ -664,7 +664,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What is the &quot;instanceof&quot; operator used for?</p>|||<p>Toán tử &quot;instanceof&quot; được dùng để làm gì?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q27.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q27.png",
           "options": [
             {
               "text": "To check whether an object is an instance of a particular class or not|||Để kiểm tra xem một đối tượng có phải là thể hiện của một lớp cụ thể hay không"
@@ -688,7 +688,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What is the result of overriding the toString() method in a subclass?</p>|||<p>Việc ghi đè (override) phương thức toString() trong lớp con dẫn tới kết quả gì?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q28.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q28.png",
           "options": [
             {
               "text": "The subclass objects will provide a custom string representation.|||Các đối tượng của lớp con sẽ cung cấp một chuỗi biểu diễn tuỳ chỉnh."
@@ -712,7 +712,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What will be the output of the following Java code?</p><pre><code class=\"language-java\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">A</span> {\n    <span class=\"hljs-type\">int</span> <span class=\"hljs-variable\">a</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-number\">5</span>;\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-type\">int</span> <span class=\"hljs-title function_\">getA</span><span class=\"hljs-params\">()</span> {\n        <span class=\"hljs-keyword\">return</span> a;\n    }\n} <span class=\"hljs-comment\">//class A</span>\n<span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">B</span> <span class=\"hljs-keyword\">extends</span> <span class=\"hljs-title class_\">A</span> {\n    <span class=\"hljs-keyword\">private</span> <span class=\"hljs-type\">int</span> <span class=\"hljs-variable\">a</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-number\">6</span>;\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">rollBackA</span><span class=\"hljs-params\">()</span> {\n        a++;\n        a = <span class=\"hljs-built_in\">super</span>.getA();\n    }\n} <span class=\"hljs-comment\">//class B</span>\n<span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Main</span> {\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">main</span><span class=\"hljs-params\">(String[] args)</span> {\n        <span class=\"hljs-type\">A</span> <span class=\"hljs-variable\">objA</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">A</span>();\n        <span class=\"hljs-type\">B</span> <span class=\"hljs-variable\">objB</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">B</span>();\n        objB.rollBackA();\n        System.out.format(<span class=\"hljs-string\">&quot;%d , %d%n&quot;</span>,objA.getA(),objB.getA());\n    }\n}</code></pre>|||<p>Kết quả xuất ra của đoạn mã Java sau là gì?</p><pre><code class=\"language-java\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">A</span> {\n    <span class=\"hljs-type\">int</span> <span class=\"hljs-variable\">a</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-number\">5</span>;\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-type\">int</span> <span class=\"hljs-title function_\">getA</span><span class=\"hljs-params\">()</span> {\n        <span class=\"hljs-keyword\">return</span> a;\n    }\n} <span class=\"hljs-comment\">//class A</span>\n<span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">B</span> <span class=\"hljs-keyword\">extends</span> <span class=\"hljs-title class_\">A</span> {\n    <span class=\"hljs-keyword\">private</span> <span class=\"hljs-type\">int</span> <span class=\"hljs-variable\">a</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-number\">6</span>;\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">rollBackA</span><span class=\"hljs-params\">()</span> {\n        a++;\n        a = <span class=\"hljs-built_in\">super</span>.getA();\n    }\n} <span class=\"hljs-comment\">//class B</span>\n<span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Main</span> {\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">main</span><span class=\"hljs-params\">(String[] args)</span> {\n        <span class=\"hljs-type\">A</span> <span class=\"hljs-variable\">objA</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">A</span>();\n        <span class=\"hljs-type\">B</span> <span class=\"hljs-variable\">objB</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">B</span>();\n        objB.rollBackA();\n        System.out.format(<span class=\"hljs-string\">&quot;%d , %d%n&quot;</span>,objA.getA(),objB.getA());\n    }\n}</code></pre>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q29.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q29.png",
           "options": [
             {
               "text": "5 , 5|||5 , 5"
@@ -736,7 +736,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What is the output of the following Java program?</p><pre><code class=\"language-java\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">A</span> {\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-title function_\">A</span><span class=\"hljs-params\">()</span> {\n        System.out.print(<span class=\"hljs-string\">&quot;A,&quot;</span>);\n    }\n}\n<span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">B</span> <span class=\"hljs-keyword\">extends</span> <span class=\"hljs-title class_\">A</span> {\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-title function_\">B</span><span class=\"hljs-params\">()</span> {\n        System.out.print(<span class=\"hljs-string\">&quot;B,&quot;</span>);\n    }\n}\n<span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">C</span> <span class=\"hljs-keyword\">extends</span> <span class=\"hljs-title class_\">B</span> {\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-title function_\">C</span><span class=\"hljs-params\">()</span> {\n        System.out. println(<span class=\"hljs-string\">&quot;C&quot;</span>);\n    }\n}\n<span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Test</span> {\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">main</span><span class=\"hljs-params\">(String[] args)</span> {\n        <span class=\"hljs-type\">C</span> <span class=\"hljs-variable\">c</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">C</span>();\n    }\n}</code></pre>|||<p>Kết quả xuất ra của chương trình Java sau là gì?</p><pre><code class=\"language-java\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">A</span> {\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-title function_\">A</span><span class=\"hljs-params\">()</span> {\n        System.out.print(<span class=\"hljs-string\">&quot;A,&quot;</span>);\n    }\n}\n<span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">B</span> <span class=\"hljs-keyword\">extends</span> <span class=\"hljs-title class_\">A</span> {\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-title function_\">B</span><span class=\"hljs-params\">()</span> {\n        System.out.print(<span class=\"hljs-string\">&quot;B,&quot;</span>);\n    }\n}\n<span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">C</span> <span class=\"hljs-keyword\">extends</span> <span class=\"hljs-title class_\">B</span> {\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-title function_\">C</span><span class=\"hljs-params\">()</span> {\n        System.out. println(<span class=\"hljs-string\">&quot;C&quot;</span>);\n    }\n}\n<span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Test</span> {\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">main</span><span class=\"hljs-params\">(String[] args)</span> {\n        <span class=\"hljs-type\">C</span> <span class=\"hljs-variable\">c</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">C</span>();\n    }\n}</code></pre>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q30.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q30.png",
           "options": [
             {
               "text": "A,B,C|||A,B,C"
@@ -760,7 +760,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Choose multiple correct answers. (Choose 2 answers) — Which statements about interfaces in Java are correct?</p>|||<p>Chọn nhiều đáp án đúng. (Chọn 2 đáp án) — Những phát biểu nào sau đây về interface trong Java là đúng?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q31.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q31.png",
           "options": [
             {
               "text": "The purpose of an interface in Java is to provide a blueprint for a class|||Mục đích của interface trong Java là cung cấp một bản thiết kế (blueprint) cho class"
@@ -785,7 +785,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What is the output of the following Java program?</p><pre><code class=\"language-java\"><span class=\"hljs-keyword\">abstract</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">A</span> {\n    <span class=\"hljs-keyword\">private</span> <span class=\"hljs-type\">String</span> <span class=\"hljs-variable\">my_name</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-literal\">null</span>;\n    <span class=\"hljs-keyword\">public</span> String <span class=\"hljs-title function_\">myName</span><span class=\"hljs-params\">()</span> {\n        my_name = <span class=\"hljs-string\">&quot;test&quot;</span>;\n        <span class=\"hljs-keyword\">return</span> my_name;\n    }\n    <span class=\"hljs-keyword\">abstract</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">display</span><span class=\"hljs-params\">()</span>;\n}\n<span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Main</span> <span class=\"hljs-keyword\">extends</span> <span class=\"hljs-title class_\">A</span> {\n    <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">display</span><span class=\"hljs-params\">()</span> {\n        <span class=\"hljs-type\">String</span> <span class=\"hljs-variable\">n</span> <span class=\"hljs-operator\">=</span> myName();\n        System.out.println(n);\n    }\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">main</span><span class=\"hljs-params\">(String args[])</span> {\n        <span class=\"hljs-type\">A</span> <span class=\"hljs-variable\">obj</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">Main</span>();\n        obj.display();\n    }\n}</code></pre>|||<p>Kết quả (output) của chương trình Java sau là gì?</p><pre><code class=\"language-java\"><span class=\"hljs-keyword\">abstract</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">A</span> {\n    <span class=\"hljs-keyword\">private</span> <span class=\"hljs-type\">String</span> <span class=\"hljs-variable\">my_name</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-literal\">null</span>;\n    <span class=\"hljs-keyword\">public</span> String <span class=\"hljs-title function_\">myName</span><span class=\"hljs-params\">()</span> {\n        my_name = <span class=\"hljs-string\">&quot;test&quot;</span>;\n        <span class=\"hljs-keyword\">return</span> my_name;\n    }\n    <span class=\"hljs-keyword\">abstract</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">display</span><span class=\"hljs-params\">()</span>;\n}\n<span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Main</span> <span class=\"hljs-keyword\">extends</span> <span class=\"hljs-title class_\">A</span> {\n    <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">display</span><span class=\"hljs-params\">()</span> {\n        <span class=\"hljs-type\">String</span> <span class=\"hljs-variable\">n</span> <span class=\"hljs-operator\">=</span> myName();\n        System.out.println(n);\n    }\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">main</span><span class=\"hljs-params\">(String args[])</span> {\n        <span class=\"hljs-type\">A</span> <span class=\"hljs-variable\">obj</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">Main</span>();\n        obj.display();\n    }\n}</code></pre>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q32.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q32.png",
           "options": [
             {
               "text": "test|||test"
@@ -809,7 +809,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Choose multiple correct answers. (Choose 2 answers) — Which statements about inheritance in Java are correct?</p>|||<p>Chọn nhiều đáp án đúng. (Chọn 2 đáp án) — Những phát biểu nào sau đây về kế thừa (inheritance) trong Java là đúng?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q33.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q33.png",
           "options": [
             {
               "text": "Inheritance allows a class to inherit the properties and methods of another class|||Kế thừa cho phép một lớp thừa hưởng các thuộc tính và phương thức của một lớp khác"
@@ -834,7 +834,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What is the output of the following Java program?</p><pre><code class=\"language-java\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">A</span>{\n    <span class=\"hljs-type\">int</span> <span class=\"hljs-variable\">i</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-number\">100</span>;\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">printValue</span><span class=\"hljs-params\">()</span>{\n        System.out.print(<span class=\"hljs-string\">&quot;A&quot;</span>);\n    }\n}\n<span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">B</span> <span class=\"hljs-keyword\">extends</span> <span class=\"hljs-title class_\">A</span>{\n    <span class=\"hljs-type\">int</span> <span class=\"hljs-variable\">i</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-number\">120</span>;\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">printValue</span><span class=\"hljs-params\">()</span>{\n        System.out.print(<span class=\"hljs-string\">&quot;B&quot;</span>);\n    }\n}\n<span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Main</span>{\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">main</span><span class=\"hljs-params\">(String args[])</span>{\n        <span class=\"hljs-type\">A</span> <span class=\"hljs-variable\">a</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">B</span>();\n        a.printValue();\n        System.out.print(a.i);\n    }\n}</code></pre>|||<p>Kết quả (output) của chương trình Java sau là gì?</p><pre><code class=\"language-java\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">A</span>{\n    <span class=\"hljs-type\">int</span> <span class=\"hljs-variable\">i</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-number\">100</span>;\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">printValue</span><span class=\"hljs-params\">()</span>{\n        System.out.print(<span class=\"hljs-string\">&quot;A&quot;</span>);\n    }\n}\n<span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">B</span> <span class=\"hljs-keyword\">extends</span> <span class=\"hljs-title class_\">A</span>{\n    <span class=\"hljs-type\">int</span> <span class=\"hljs-variable\">i</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-number\">120</span>;\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">printValue</span><span class=\"hljs-params\">()</span>{\n        System.out.print(<span class=\"hljs-string\">&quot;B&quot;</span>);\n    }\n}\n<span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-title class_\">Main</span>{\n    <span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">static</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title function_\">main</span><span class=\"hljs-params\">(String args[])</span>{\n        <span class=\"hljs-type\">A</span> <span class=\"hljs-variable\">a</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">B</span>();\n        a.printValue();\n        System.out.print(a.i);\n    }\n}</code></pre>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q34.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q34.png",
           "options": [
             {
               "text": "B100|||B100"
@@ -858,7 +858,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Which method is used to compare two arrays for equality in Java?</p>|||<p>Phương thức nào được dùng để so sánh hai mảng xem có bằng nhau không trong Java?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q35.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q35.png",
           "options": [
             {
               "text": "Arrays.equals()|||Arrays.equals()"
@@ -882,7 +882,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What happens when you try to assign an array to another array in Java?</p>|||<p>Điều gì xảy ra khi bạn gán một mảng cho một mảng khác trong Java?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q36.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q36.png",
           "options": [
             {
               "text": "Both arrays reference to the same memory location.|||Cả hai mảng cùng trỏ tới một vùng nhớ."
@@ -906,7 +906,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Which method is used to convert an array to a List in Java?</p>|||<p>Phương thức nào được dùng để chuyển một mảng thành một List trong Java?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q37.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q37.png",
           "options": [
             {
               "text": "Arrays.asList()|||Arrays.asList()"
@@ -930,7 +930,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What is the output of the following code snippet:</p><pre><code class=\"language-java\"><span class=\"hljs-type\">int</span> i=<span class=\"hljs-number\">0</span>;\n<span class=\"hljs-type\">int</span>[] list={<span class=\"hljs-number\">1</span>,<span class=\"hljs-number\">2</span>,<span class=\"hljs-number\">3</span>,<span class=\"hljs-number\">4</span>,<span class=\"hljs-number\">5</span>};\n<span class=\"hljs-keyword\">do</span>{\n    list[i]+=++i;\n}<span class=\"hljs-keyword\">while</span>(i&lt;<span class=\"hljs-number\">4</span>);\nSystem.out.println(list[<span class=\"hljs-number\">0</span>]+ list[list.length]);</code></pre>|||<p>Kết quả của đoạn mã sau là gì:</p><pre><code class=\"language-java\"><span class=\"hljs-type\">int</span> i=<span class=\"hljs-number\">0</span>;\n<span class=\"hljs-type\">int</span>[] list={<span class=\"hljs-number\">1</span>,<span class=\"hljs-number\">2</span>,<span class=\"hljs-number\">3</span>,<span class=\"hljs-number\">4</span>,<span class=\"hljs-number\">5</span>};\n<span class=\"hljs-keyword\">do</span>{\n    list[i]+=++i;\n}<span class=\"hljs-keyword\">while</span>(i&lt;<span class=\"hljs-number\">4</span>);\nSystem.out.println(list[<span class=\"hljs-number\">0</span>]+ list[list.length]);</code></pre>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q38.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q38.png",
           "options": [
             {
               "text": "The program will raise an exception.|||Chương trình sẽ ném ra một ngoại lệ (exception)."
@@ -954,7 +954,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Which OOP concept allows a class to inherit attributes and behaviors from another class?</p>|||<p>Khái niệm OOP nào cho phép một lớp thừa hưởng thuộc tính và hành vi từ một lớp khác?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q39.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q39.png",
           "options": [
             {
               "text": "Abstraction|||Abstraction (Trừu tượng hoá)"
@@ -984,7 +984,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Which method is used to find the maximum element in a collection of the Collections class?</p>|||<p>Phương thức nào của lớp Collections được dùng để tìm phần tử lớn nhất trong một collection?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q40.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q40.png",
           "options": [
             {
               "text": "max()|||max()"
@@ -1008,7 +1008,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Which of the following statements related to removing an element in an ArrayList is true?</p>|||<p>Phát biểu nào sau đây về việc xoá một phần tử khỏi ArrayList là ĐÚNG?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q41.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q41.png",
           "options": [
             {
               "text": "The remove method will return the deleted value for the user.|||Phương thức remove sẽ trả về giá trị vừa bị xoá cho người dùng."
@@ -1032,7 +1032,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What is the output of the following code snippet?</p><pre><code class=\"language-java\">Set&lt;Integer&gt; set = <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">HashSet</span>();\nset.add(<span class=\"hljs-number\">1</span>); set.add(<span class=\"hljs-number\">2</span>); set.add(<span class=\"hljs-number\">3</span>); set.add(<span class=\"hljs-number\">1</span>);\nSystem.out.println(set.size());</code></pre>|||<p>Đoạn code sau in ra kết quả gì?</p><pre><code class=\"language-java\">Set&lt;Integer&gt; set = <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">HashSet</span>();\nset.add(<span class=\"hljs-number\">1</span>); set.add(<span class=\"hljs-number\">2</span>); set.add(<span class=\"hljs-number\">3</span>); set.add(<span class=\"hljs-number\">1</span>);\nSystem.out.println(set.size());</code></pre>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q42.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q42.png",
           "options": [
             {
               "text": "3|||3"
@@ -1056,7 +1056,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Which method is used to check if an element is present in an ArrayList?</p>|||<p>Phương thức nào được dùng để kiểm tra một phần tử có tồn tại trong ArrayList hay không?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q43.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q43.png",
           "options": [
             {
               "text": "contains()|||contains()"
@@ -1080,7 +1080,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>What is the output of the following code snippet?</p><pre><code class=\"language-java\">Map&lt;Character, Integer&gt; map = <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">HashMap</span>();\n<span class=\"hljs-type\">String</span> <span class=\"hljs-variable\">data</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-string\">&quot;heLLo&quot;</span>;\n<span class=\"hljs-keyword\">for</span> (Character c : data.toCharArray()) {\n    <span class=\"hljs-keyword\">if</span> (map.containsKey(c)) {\n        map.put(c, map.get(c) + <span class=\"hljs-number\">1</span>);\n    } <span class=\"hljs-keyword\">else</span> {\n        map.put(c, <span class=\"hljs-number\">0</span>);\n    }\n}\nSystem.out.println(map.get(<span class=\"hljs-string\">&#x27;L&#x27;</span>));</code></pre>|||<p>Đoạn code sau in ra kết quả gì?</p><pre><code class=\"language-java\">Map&lt;Character, Integer&gt; map = <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">HashMap</span>();\n<span class=\"hljs-type\">String</span> <span class=\"hljs-variable\">data</span> <span class=\"hljs-operator\">=</span> <span class=\"hljs-string\">&quot;heLLo&quot;</span>;\n<span class=\"hljs-keyword\">for</span> (Character c : data.toCharArray()) {\n    <span class=\"hljs-keyword\">if</span> (map.containsKey(c)) {\n        map.put(c, map.get(c) + <span class=\"hljs-number\">1</span>);\n    } <span class=\"hljs-keyword\">else</span> {\n        map.put(c, <span class=\"hljs-number\">0</span>);\n    }\n}\nSystem.out.println(map.get(<span class=\"hljs-string\">&#x27;L&#x27;</span>));</code></pre>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q44.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q44.png",
           "options": [
             {
               "text": "1|||1"
@@ -1104,7 +1104,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>In the object stream, which of the following members of an object won&#39;t be serialized?</p>|||<p>Trong luồng đối tượng (object stream), thành phần nào sau đây của một đối tượng sẽ KHÔNG được tuần tự hoá (serialize)?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q45.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q45.png",
           "options": [
             {
               "text": "transient variables|||biến transient"
@@ -1128,7 +1128,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Which of the following methods of the FileOutputStream class is used to write bytes to a target stream?</p>|||<p>Phương thức nào sau đây của lớp FileOutputStream được dùng để ghi các byte ra luồng đích?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q46.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q46.png",
           "options": [
             {
               "text": "write()|||write()"
@@ -1152,7 +1152,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>How does the try-catch-finally statement work?</p>|||<p>Câu lệnh try-catch-finally hoạt động như thế nào?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q47.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q47.png",
           "options": [
             {
               "text": "The code inside the try block is executed, and if an exception occurs, it is caught and handled by the catch block. The code inside the finally block is executed regardless of whether an exception occurred or not.|||Code trong khối try được thực thi, nếu có exception xảy ra thì nó được bắt và xử lý bởi khối catch. Code trong khối finally luôn được thực thi, bất kể có exception hay không."
@@ -1176,7 +1176,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Which of the following classes is the superclass of the PrintWriter and FileWriter classes?</p>|||<p>Lớp nào sau đây là lớp cha (superclass) của các lớp PrintWriter và FileWriter?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q48.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q48.png",
           "options": [
             {
               "text": "Writer class|||Lớp Writer"
@@ -1200,7 +1200,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>Which of the following methods of File class is used to check a file already exists?</p>|||<p>Phương thức nào sau đây của lớp File được dùng để kiểm tra một tệp đã tồn tại hay chưa?</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q49.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q49.png",
           "options": [
             {
               "text": "exists()|||exists()"
@@ -1224,7 +1224,7 @@ export default {
           "kind": "MCQ",
           "points": 0.2,
           "prompt": "<p>You are developing a contact management system, and you need to quickly find a contact by their phone number. Explain how you would use Java collections to efficiently search for a contact based on a specific criterion.</p>|||<p>Bạn đang phát triển một hệ thống quản lý danh bạ và cần tìm nhanh một liên hệ theo số điện thoại của họ. Hãy giải thích cách bạn dùng Java collections để tìm kiếm hiệu quả một liên hệ dựa trên một tiêu chí cụ thể.</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v2/q50.png",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE5-v3/q50.png",
           "options": [
             {
               "text": "Use a HashMap with phone numbers as keys for O(1) lookup.|||Dùng HashMap với số điện thoại làm khoá (key) để tra cứu với độ phức tạp O(1)."

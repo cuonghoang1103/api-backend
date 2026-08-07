@@ -46,6 +46,40 @@ async function whiteOutWatermark(img, height) {
   return img.composite([{ input: rect, left: 0, top: Math.max(0, height - WATERMARK_H) }]).png().toBuffer();
 }
 
+async function whiteOutGhostWatermark(buf, width, height) {
+  // Đề 6-10 use a different source (the "Kizspy | Question: N" / plain
+  // "fuoverflow" header style) whose watermark is a big faint gray shield
+  // logo + "FUOVERFLOW.COM" text placed centrally in the left column —
+  // NOT confined to the fixed bottom-left rectangle whiteOutWatermark()
+  // targets, so that rectangle alone misses it entirely. It renders at a
+  // narrow, distinctly light gray band (empirically 196-254 — its faintest
+  // strokes sit just ONE unit below pure white and were still invisible to
+  // a naive raw-value skim but clearly visible when rendered/zoomed, since
+  // it's a large contiguous shape rather than isolated noise; real text's
+  // solid core is 0-10 and true background is exactly 255), so any near-gray
+  // pixel short of pure white is safe to whiten: real glyph anti-aliasing
+  // only contributes ~0.5% of pixels in this band and just gets a touch
+  // crisper, not erased (checked against a known-good Đề 1 sample).
+  //
+  // Grayness threshold must be TIGHT (<=3, not <10): the ghost watermark's
+  // pixels are true achromatic gray (r≈g≈b, max-min diff 0-2 — e.g.
+  // 252,251,252). A threshold of 10 also matched Đề 1's banner background
+  // tint (238,246,255 — pairwise diffs 8/9/17), which erased the ENTIRE
+  // banner and broke bannerHeight detection (caught 07/08: banner branch
+  // stopped triggering, image came out ~4x too wide). 3 excludes any real
+  // tinted UI background while still catching genuine grayscale ghosting.
+  const { data, info } = await sharp(buf).raw().toBuffer({ resolveWithObject: true });
+  const channels = info.channels;
+  const out = Buffer.from(data);
+  for (let i = 0; i < out.length; i += channels) {
+    const r = out[i], g = out[i + 1], b = out[i + 2];
+    if (r > 180 && r < 255 && Math.abs(r - g) <= 3 && Math.abs(g - b) <= 3 && Math.abs(r - b) <= 3) {
+      out[i] = 255; out[i + 1] = 255; out[i + 2] = 255;
+    }
+  }
+  return sharp(out, { raw: { width, height, channels } }).png().toBuffer();
+}
+
 async function maskAccentLine(buf, width, height) {
   // Some "plain" layouts (e.g. Đề 5 FA25-RE) have thin decorative divider/
   // border lines (a colored accent bar, a gray margin rule, ...) running the
@@ -116,7 +150,8 @@ for (const f of files) {
   const img = sharp(src);
   const meta = await img.metadata();
 
-  const whited = await whiteOutWatermark(sharp(src), meta.height);
+  const whitedRect = await whiteOutWatermark(sharp(src), meta.height);
+  const whited = await whiteOutGhostWatermark(whitedRect, meta.width, meta.height);
   const bannerHeight = await detectBannerHeight(whited, meta.width);
 
   let finalBuf;

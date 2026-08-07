@@ -143,6 +143,29 @@ export interface MakerComponent {
   acquired: boolean;
   notes: string | null;
   sortOrder: number;
+  /** Tài liệu kỹ thuật đầy đủ — xem components/maker-lab/PartDatasheet.tsx */
+  docs: MakerPartDocs | null;
+}
+
+export interface MakerPinDoc {
+  pin: string;
+  name: string;
+  type: 'power' | 'gnd' | 'in' | 'out' | 'io' | 'analog' | 'nc';
+  desc: string;
+  /** Nối vào đâu trong dự án này. */
+  to?: string;
+}
+
+export interface MakerPartDocs {
+  overview: string;
+  howItWorks: string;
+  pinout?: MakerPinDoc[];
+  usage: string;
+  code?: { lang: string; caption: string; body: string };
+  gotchas: string[];
+  datasheetUrl?: string;
+  /** Khoá mô phỏng tương tác — xem PartSimulation.tsx */
+  sim?: string;
 }
 
 export interface MakerFirmwareBuild {

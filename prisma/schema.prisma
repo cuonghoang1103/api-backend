@@ -7142,6 +7142,14 @@ model MakerComponent {
   /// not the obvious cheaper one.
   whyThisPart String? @map("why_this_part") @db.Text
 
+  /// Full technical write-up:
+  /// { overview, howItWorks, pinout[], usage, code{}, gotchas[],
+  ///   datasheetUrl, sim } — everything you'd otherwise go hunting
+  /// through a PDF and four forum threads for. `sim` names an
+  /// interactive simulation the frontend renders for this part
+  /// (see components/maker-lab/PartSimulation.tsx).
+  docs Json?
+
   /// [{ name, note, priceVnd }] — acceptable substitutes.
   alternatives Json?
 

@@ -14,6 +14,7 @@
  * a design.
  */
 import { PrismaClient, MakerComponentCategory as C } from '@prisma/client';
+import { PART_DOCS } from './data/maker-parts-docs.js';
 
 const prisma = new PrismaClient();
 
@@ -891,6 +892,7 @@ async function main() {
       svgKey: p.svgKey,
       specs: p.specs ?? undefined,
       whyThisPart: p.whyThisPart,
+      docs: (PART_DOCS[p.svgKey] ?? undefined) as any,
       alternatives: p.alternatives ?? undefined,
       required: p.required ?? true,
       sortOrder: i,

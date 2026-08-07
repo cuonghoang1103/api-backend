@@ -12,9 +12,10 @@
  */
 
 import { useMemo, useState } from 'react';
-import { Check, ChevronDown, ExternalLink, Info, ShoppingCart } from 'lucide-react';
+import { BookOpen, Check, ChevronDown, ExternalLink, Info, ShoppingCart, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { PartIcon } from './PartIcon';
+import { PartDatasheet } from './PartDatasheet';
 import { setComponentAcquired } from '@/lib/maker-lab-api';
 import type { MakerComponent, MakerComponentCategory } from '@/types/maker-lab';
 
@@ -64,6 +65,8 @@ export function BomTable({
   const [open, setOpen] = useState<number | null>(null);
   const [hideTools, setHideTools] = useState(false);
   const [saving, setSaving] = useState<number | null>(null);
+  /** Linh kiện đang mở tài liệu chi tiết. */
+  const [sheet, setSheet] = useState<MakerComponent | null>(null);
 
   const visible = useMemo(
     () => (hideTools ? rows.filter((r) => r.category !== 'TOOL') : rows),
@@ -124,6 +127,37 @@ export function BomTable({
 
   return (
     <div className="space-y-5">
+      {/*
+        Datasheet mở dạng lớp phủ chứ không phải mở rộng tại chỗ: nội
+        dung dài (bảng chân + mô phỏng + code) sẽ đẩy toàn bộ danh sách
+        xuống và làm mất chỗ đang đọc.
+      */}
+      {sheet && (
+        <div
+          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4 sm:p-8"
+          style={{ background: 'rgba(0,0,0,0.6)' }}
+          onClick={() => setSheet(null)}
+        >
+          <div
+            className="my-auto w-full max-w-3xl rounded-2xl border p-5 shadow-2xl"
+            style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="mb-3 flex justify-end">
+              <button
+                onClick={() => setSheet(null)}
+                className="rounded-lg p-1.5"
+                style={{ background: 'var(--bg-surface)', color: 'var(--text-secondary)' }}
+                aria-label="Đóng"
+              >
+                <X size={16} />
+              </button>
+            </div>
+            <PartDatasheet component={sheet} />
+          </div>
+        </div>
+      )}
+
       {/* ── Cost summary ── */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label="Chi phí bắt buộc" value={vnd(stats.total)} accent="#22d3ee" />
@@ -257,21 +291,33 @@ export function BomTable({
                           {vnd(row.unitPriceVnd)}/cái
                         </p>
                       )}
-                      {(row.whyThisPart || row.alternatives?.length) && (
-                        <button
-                          onClick={() => setOpen(isOpen ? null : row.id)}
-                          className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-medium"
-                          style={{ color: 'var(--accent-color)' }}
-                        >
-                          <Info size={11} />
-                          Vì sao chọn
-                          <ChevronDown
-                            size={11}
-                            className="transition-transform"
-                            style={{ transform: isOpen ? 'rotate(180deg)' : undefined }}
-                          />
-                        </button>
-                      )}
+                      <div className="mt-1.5 flex flex-col items-end gap-1">
+                        {row.docs ? (
+                          <button
+                            onClick={() => setSheet(row)}
+                            className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-semibold"
+                            style={{ background: 'rgba(34,211,238,0.14)', color: '#0891b2' }}
+                          >
+                            <BookOpen size={11} />
+                            Tài liệu
+                          </button>
+                        ) : null}
+                        {(row.whyThisPart || row.alternatives?.length) && (
+                          <button
+                            onClick={() => setOpen(isOpen ? null : row.id)}
+                            className="inline-flex items-center gap-1 text-[11px] font-medium"
+                            style={{ color: 'var(--accent-color)' }}
+                          >
+                            <Info size={11} />
+                            Vì sao chọn
+                            <ChevronDown
+                              size={11}
+                              className="transition-transform"
+                              style={{ transform: isOpen ? 'rotate(180deg)' : undefined }}
+                            />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
 

@@ -560,6 +560,13 @@ report_seed "Project seed" "seed-projects" "$PROJECT_SEED_OUT" "${PROJECT_SEED_O
 # tay trong /admin/repos: review đã có nội dung khác file, metadata của repo
 # đã tồn tại (nút "Sync all" mới là nguồn chân lý cho số sao), và tag admin
 # tự gắn thêm. Xem đầu scripts/repos-seed.mjs.
+#
+# CỐ Ý KHÔNG truyền --refresh-meta ở đây. Seeder tự lấp các cột đang TRỐNG
+# (fork / issue / ngày commit cuối — vừa thêm vào schema nên rỗng ở mọi dòng
+# cũ), nhưng không ghi đè cột đã có số. Thêm cờ vào đây thì mỗi lần deploy,
+# ảnh chụp trong file sẽ đè lên số sao mà "Sync all" vừa làm mới — càng
+# deploy dữ liệu càng cũ đi. Muốn ép theo file thì chạy tay:
+#   docker compose -p cuonghoangdev exec backend node scripts/repos-seed.mjs --apply --refresh-meta
 info "Running GitHub Repo Hub seed..."
 REPOS_SEED_OUT=$($DC exec -T backend sh -c '
   if [ ! -f content/repos/curated.mjs ]; then

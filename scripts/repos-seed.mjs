@@ -205,35 +205,47 @@ async function main() {
       }
     }
 
-    // ── Metadata: chỉ khi được yêu cầu rõ (--refresh-meta) ─────────────
-    // Mặc định vẫn là create-only, vì số sao trong file cũ dần và "Sync all"
-    // mới là nguồn chân lý. Nhưng khi ảnh chụp có THÊM TRƯỜNG MỚI (fork,
-    // issue, ngày commit cuối) thì không đường nào khác để lấp vào các dòng
-    // đã tồn tại.
-    if (REFRESH_META) {
-      const metaChanged =
-        existing.stars !== (m.stars ?? 0) ||
-        existing.forks !== (m.forks ?? 0) ||
-        existing.openIssues !== (m.openIssues ?? 0) ||
-        (existing.pushedAt?.toISOString() ?? null) !== (m.lastCommitAt ?? null);
-      if (metaChanged) {
-        metaRefreshed += 1;
-        touched = true;
-        if (APPLY) {
-          await prisma.githubRepo.update({
-            where: { id: existing.id },
-            data: {
-              stars: m.stars ?? 0,
-              forks: m.forks ?? 0,
-              openIssues: m.openIssues ?? 0,
-              pushedAt: m.lastCommitAt ? new Date(m.lastCommitAt) : null,
-              language: m.language ?? existing.language,
-              description: m.description ?? existing.description,
-            },
-          });
-        }
-        console.log(`  ~ ${r.slug}: metadata ★${m.stars} · ${m.forks} fork · commit ${(m.lastCommitAt || '').slice(0, 10)}`);
+    // ── Metadata: hai chế độ khác hẳn nhau ─────────────────────────────
+    //
+    // LẤP CHỖ TRỐNG (mặc định, chạy ở mọi lần deploy): chỉ ghi vào cột đang
+    //   rỗng. Cần có, vì một cột vừa thêm vào schema sẽ rỗng ở TẤT CẢ dòng cũ
+    //   và trang sẽ thiếu dữ liệu vô thời hạn nếu ngồi chờ ai đó chạy tay.
+    //   Tuyệt đối KHÔNG đụng vào cột đã có số — nhất là `stars`, thứ mà nút
+    //   "Sync all" vừa làm mới và ảnh chụp trong file thì mỗi ngày một cũ.
+    //
+    // ÉP THEO FILE (--refresh-meta, chạy tay): ghi đè tất cả bằng ảnh chụp.
+    //   Dùng khi vừa fetch lại meta.json và muốn nó thắng.
+    const fillOnly = {};
+    if (existing.pushedAt === null && m.lastCommitAt) fillOnly.pushedAt = new Date(m.lastCommitAt);
+    if (existing.forks === 0 && (m.forks ?? 0) > 0) fillOnly.forks = m.forks;
+    if (existing.openIssues === 0 && (m.openIssues ?? 0) > 0) fillOnly.openIssues = m.openIssues;
+
+    const overwrite = REFRESH_META && (
+      existing.stars !== (m.stars ?? 0) ||
+      existing.forks !== (m.forks ?? 0) ||
+      existing.openIssues !== (m.openIssues ?? 0) ||
+      (existing.pushedAt?.toISOString() ?? null) !== (m.lastCommitAt ?? null)
+    );
+
+    if (overwrite || Object.keys(fillOnly).length > 0) {
+      const data = overwrite
+        ? {
+            stars: m.stars ?? 0,
+            forks: m.forks ?? 0,
+            openIssues: m.openIssues ?? 0,
+            pushedAt: m.lastCommitAt ? new Date(m.lastCommitAt) : null,
+            language: m.language ?? existing.language,
+            description: m.description ?? existing.description,
+          }
+        : fillOnly;
+      metaRefreshed += 1;
+      touched = true;
+      if (APPLY) {
+        await prisma.githubRepo.update({ where: { id: existing.id }, data });
       }
+      console.log(
+        `  ~ ${r.slug}: metadata ${overwrite ? 'ép theo file' : 'lấp chỗ trống'} (${Object.keys(data).join(', ')})`,
+      );
     }
 
     // ── Chuỗi tìm kiếm: LUÔN giữ đồng bộ ───────────────────────────────

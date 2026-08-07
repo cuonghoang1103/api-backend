@@ -220,23 +220,73 @@ export function RobotBlueprint({ data }: { data: EnclosureData | null }) {
               2× GC9A01 ⌀32,4 mm trong ống ⌀40 mm
             </text>
 
-            {/* arms */}
-            {[-1, 1].map((s) => (
-              <g key={s}>
-                <rect
-                  x={s < 0 ? -2 * S : (w + 2 - 8) * S}
-                  y={(h - 62 - 78) * S}
-                  width={8 * S}
-                  height={54 * S}
-                  rx={3 * S}
-                  fill="#94a3b8"
-                  fillOpacity="0.35"
-                  stroke="#94a3b8"
-                  strokeWidth="1.4"
-                />
-                <circle cx={s < 0 ? 2 * S : w * S} cy={(h - 62 - 78) * S} r={4.5 * S} fill="#f0b429" fillOpacity="0.5" stroke="#f0b429" />
-              </g>
-            ))}
+            {/*
+              Two-jointed arms, drawn in the pose the servos default to:
+              upper arm straight down from the shoulder, forearm folded
+              slightly in at the elbow. Showing the fold is the point —
+              a single straight bar reads as one joint and hides the
+              thing that makes the gestures work.
+            */}
+            {[-1, 1].map((s) => {
+              const shoulderX = s < 0 ? 2 : w - 2;
+              const shoulderY = h - 62 - 78;
+              const elbowY = shoulderY + 34;
+              const handX = shoulderX + s * -7;
+              const handY = elbowY + 28;
+              return (
+                <g key={s}>
+                  {/* upper arm */}
+                  <rect
+                    x={(shoulderX - 4) * S}
+                    y={shoulderY * S}
+                    width={8 * S}
+                    height={34 * S}
+                    rx={3 * S}
+                    fill="#94a3b8"
+                    fillOpacity="0.35"
+                    stroke="#94a3b8"
+                    strokeWidth="1.4"
+                  />
+                  {/* forearm, angled in at the elbow */}
+                  <rect
+                    x={(handX - 3.5) * S}
+                    y={elbowY * S}
+                    width={7 * S}
+                    height={28 * S}
+                    rx={3 * S}
+                    fill="#94a3b8"
+                    fillOpacity="0.28"
+                    stroke="#94a3b8"
+                    strokeWidth="1.3"
+                    transform={`rotate(${s * 14} ${shoulderX * S} ${elbowY * S})`}
+                  />
+                  {/* shoulder joint */}
+                  <circle cx={shoulderX * S} cy={shoulderY * S} r={4.5 * S} fill="#f0b429" fillOpacity="0.55" stroke="#f0b429" strokeWidth="1.4" />
+                  {/* elbow joint — the new one */}
+                  <circle cx={shoulderX * S} cy={elbowY * S} r={3.6 * S} fill="#22d3ee" fillOpacity="0.5" stroke="#22d3ee" strokeWidth="1.4" />
+                  <text
+                    x={(shoulderX + s * 11) * S}
+                    y={(elbowY + 2) * S}
+                    fontSize={7.5}
+                    textAnchor="middle"
+                    fill="#22d3ee"
+                  >
+                    khuỷu
+                  </text>
+                  <text
+                    x={(shoulderX + s * 11) * S}
+                    y={(shoulderY + 2) * S}
+                    fontSize={7.5}
+                    textAnchor="middle"
+                    fill="#f0b429"
+                  >
+                    vai
+                  </text>
+                  {/* hand */}
+                  <rect x={(handX - 4) * S} y={handY * S} width={8 * S} height={7 * S} rx={2 * S} fill="#94a3b8" fillOpacity="0.4" stroke="#94a3b8" />
+                </g>
+              );
+            })}
 
             {frontBays.map((b) => (
               <BayRect key={b.id} bay={b} hover={hover} setHover={setHover} />

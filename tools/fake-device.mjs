@@ -257,6 +257,19 @@ function handleCommand(msg) {
       detail = `cổ pan=${p.pan}° tilt=${p.tilt}°`;
       break;
 
+    case 'arm': {
+      // Mirror the firmware's mechanical clamp so the simulator refuses
+      // exactly what the real robot would refuse.
+      const elbow = Math.max(-120, Math.min(0, p.elbow ?? 0));
+      const shoulder = Math.max(-90, Math.min(90, p.shoulder ?? 0));
+      state.arms = state.arms ?? {};
+      const sides = p.side === 'both' ? ['left', 'right'] : [p.side ?? 'left'];
+      for (const s of sides) state.arms[s] = { shoulder, elbow };
+      detail = `tay ${sides.join('+')} vai=${shoulder}° khuỷu=${elbow}°`;
+      if ((p.elbow ?? 0) > 0) detail += ' (đã chặn: khuỷu chỉ gập một chiều)';
+      break;
+    }
+
     case 'dance':
       detail = `nhảy "${p.name}"`;
       break;

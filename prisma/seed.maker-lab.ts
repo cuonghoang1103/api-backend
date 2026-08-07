@@ -206,15 +206,19 @@ const PARTS: Part[] = [
       'Bánh răng KIM LOẠI, không phải nhựa như SG90. Cái cổ phải giữ nguyên cả cụm đầu — hai màn hình, hai ống, hai micro, khoảng 180 g — treo lơ lửng phía trước trục, và nó đỡ tải đó suốt ngày. Bánh răng nhựa SG90 sẽ mòn trọc răng sau vài trăm lần gật, rồi đầu robot gục xuống và không ngẩng lên được nữa.',
   },
   {
-    name: 'Servo SG90 (hai cánh tay)',
+    name: 'Servo SG90 (tay: 2 khớp mỗi bên — vai + khuỷu)',
     partNumber: 'SG90',
     category: C.MOTION,
-    qty: 2,
+    qty: 4,
     unitPriceVnd: 35_000,
     svgKey: 'servo',
-    specs: { 'Mô-men': '1.8 kg·cm', 'Góc': '180°', 'Áp': '5 V' },
+    specs: { 'Mô-men': '1.8 kg·cm', 'Góc': '180°', 'Áp': '5 V', 'Bố trí': '2 vai + 2 khuỷu' },
     whyThisPart:
-      'Tay chỉ vẫy, không nâng gì, nên SG90 nhựa là đủ và nhẹ hơn — mà tay càng nhẹ thì mô-men xoắn đè lên khung càng nhỏ. Đây là thứ rẻ nhất trong danh sách mang lại nhiều "hồn" nhất: một cái vẫy tay khi chào đọc được từ xa hơn mọi biểu cảm trên màn hình 1,28 inch.',
+      'Hai khớp mỗi tay thay vì một, đúng như WALL-E gốc. Một khớp thì tay chỉ quạt qua quạt lại như cần gạt nước; thêm khuỷu là có ngay chỉ trỏ, khoanh tay, giơ tay chào, đưa tay ra mời — những cử chỉ người ta đọc được ngay mà không cần giải thích. Tay chỉ vẫy chứ không nâng gì nên SG90 bánh răng nhựa là đủ, và nhẹ mới quan trọng: mô-men đè lên khớp vai tỉ lệ thuận với khối lượng nhân chiều dài cánh tay, nên mỗi gram ở cẳng tay đắt gấp đôi ở vai.',
+    alternatives: [
+      { name: 'MG90S cho khớp vai', note: 'bánh răng kim loại — chỉ cần nếu bạn làm cánh tay dài hơn 100 mm', priceVnd: 65_000 },
+      { name: '2× SG90 (1 khớp mỗi tay)', note: 'rẻ hơn 70k, tay chỉ vẫy được — mất hết cử chỉ có nghĩa', priceVnd: 70_000 },
+    ],
   },
   {
     name: 'Mạch điều khiển servo PCA9685 16 kênh',
@@ -225,7 +229,7 @@ const PARTS: Part[] = [
     svgKey: 'pca9685',
     specs: { 'Số kênh': '16', 'Giao tiếp': 'I2C (0x40)', 'Độ phân giải': '12-bit', 'Tần số': '24–1526 Hz' },
     whyThisPart:
-      'Bốn servo điều khiển thẳng từ ESP32 sẽ giật — mỗi lần WiFi hoặc I2S xen vào là xung PWM lệch vài chục micro giây, và mắt thường thấy rõ cái giật đó ở cổ. PCA9685 tự phát xung bằng phần cứng riêng nên tuyệt đối đều, lại chỉ tốn 2 chân I2C dùng chung với cảm biến thay vì 4 chân GPIO. Còn dư 12 kênh cho lần nâng cấp sau.',
+      'Sáu servo (2 cổ + 4 tay) điều khiển thẳng từ ESP32 sẽ giật — mỗi lần WiFi hoặc I2S xen vào là xung PWM lệch vài chục micro giây, và mắt thường thấy rõ cái giật đó, nhất là khi tay đang giơ giữa chừng. PCA9685 tự phát xung bằng phần cứng riêng nên tuyệt đối đều, lại chỉ tốn 2 chân I2C dùng chung với cảm biến thay vì 6 chân GPIO — mà ESP32-S3 bản R8 chỉ còn ~25 chân dùng được sau khi trừ flash và PSRAM, nên 6 chân là nhiều. Còn dư 10 kênh cho lần nâng cấp sau.',
   },
 
   // ─── Mạch điều khiển ───────────────────────────────────
@@ -492,8 +496,20 @@ const WIRING = [
   { group: 'Phụ trợ', from: 'TCRT5000 trái', fromPin: 'OUT', to: 'ESP32-S3', toPin: 'GPIO1', wireColor: 'nâu' },
   { group: 'Phụ trợ', from: 'TCRT5000 phải', fromPin: 'OUT', to: 'ESP32-S3', toPin: 'GPIO2', wireColor: 'nâu' },
   { group: 'Phụ trợ', from: 'Chia áp pin (100k/100k)', fromPin: 'giữa', to: 'ESP32-S3', toPin: 'GPIO3 (ADC1_CH2)', wireColor: 'vàng', note: 'chia đôi 8.4V → 4.2V, vẫn quá 3.3V: dùng 100k/47k thay vì 100k/100k' },
-  { group: 'Phụ trợ', from: 'Servo pan', fromPin: 'PWM', to: 'ESP32-S3', toPin: 'GPIO38', wireColor: 'cam' },
-  { group: 'Phụ trợ', from: 'Servo tilt', fromPin: 'PWM', to: 'ESP32-S3', toPin: 'GPIO45', wireColor: 'cam', note: 'chân strapping — servo có điện trở kéo xuống nên an toàn lúc boot' },
+  // Six servos now (2 neck + 4 arm). They all hang off the PCA9685
+  // instead of GPIO: hardware PWM means no twitching when WiFi or I2S
+  // steals a few microseconds, and it gives back 6 pins on a board
+  // that only has ~25 usable ones.
+  { group: 'Servo (qua PCA9685)', from: 'PCA9685', fromPin: 'SDA', to: 'ESP32-S3', toPin: 'GPIO8', wireColor: 'trắng', note: 'chung bus I2C với MPU6050 + VL53L0X, địa chỉ 0x40' },
+  { group: 'Servo (qua PCA9685)', from: 'PCA9685', fromPin: 'SCL', to: 'ESP32-S3', toPin: 'GPIO18', wireColor: 'xám' },
+  { group: 'Servo (qua PCA9685)', from: 'PCA9685', fromPin: 'V+', to: '5V (buck)', toPin: '—', wireColor: 'đỏ', note: 'nguồn servo LẤY RIÊNG từ buck, KHÔNG lấy 5V của ESP32 — 6 servo khởi động cùng lúc rút vài ampe' },
+  { group: 'Servo (qua PCA9685)', from: 'Servo cổ xoay (MG90S)', fromPin: 'tín hiệu', to: 'PCA9685', toPin: 'kênh 0', wireColor: 'cam' },
+  { group: 'Servo (qua PCA9685)', from: 'Servo cổ gật (MG90S)', fromPin: 'tín hiệu', to: 'PCA9685', toPin: 'kênh 1', wireColor: 'cam' },
+  { group: 'Servo (qua PCA9685)', from: 'Vai trái (SG90)', fromPin: 'tín hiệu', to: 'PCA9685', toPin: 'kênh 2', wireColor: 'vàng' },
+  { group: 'Servo (qua PCA9685)', from: 'Khuỷu trái (SG90)', fromPin: 'tín hiệu', to: 'PCA9685', toPin: 'kênh 3', wireColor: 'vàng', note: 'dây đi DỌC cánh tay trên, chừa vòng dư ở khớp vai' },
+  { group: 'Servo (qua PCA9685)', from: 'Vai phải (SG90)', fromPin: 'tín hiệu', to: 'PCA9685', toPin: 'kênh 4', wireColor: 'xanh lá' },
+  { group: 'Servo (qua PCA9685)', from: 'Khuỷu phải (SG90)', fromPin: 'tín hiệu', to: 'PCA9685', toPin: 'kênh 5', wireColor: 'xanh lá', note: 'giống bên trái — vòng dư ở vai là thứ quyết định dây có đứt hay không' },
+  { group: 'Servo (qua PCA9685)', from: '(GPIO38, GPIO45)', fromPin: '—', to: 'CÒN TRỐNG', toPin: '—', wireColor: '—', note: 'hai chân này trước dành cho servo, giờ PCA9685 lo hết — để dành cho nâng cấp sau' },
 ];
 
 // ════════════════════════════════════════════════════════════
@@ -760,7 +776,8 @@ const ENCLOSURE = {
     { id: 'chest', name: 'Tấm ngực', method: 'In 3D', sizeMm: '96 × 60 × 3', note: 'Lưới loa + lỗ ⌀8 cho laser' },
     { id: 'head', name: 'Khối đầu', method: 'In 3D', sizeMm: '105 × 52 × 60', note: 'Hở sau để luồn cáp qua cổ' },
     { id: 'barrel', name: 'Ống mắt ×2', method: 'In 3D', sizeMm: '⌀48 ngoài / ⌀42 trong × 45', note: 'Gờ chặn bên trong giữ PCB màn hình' },
-    { id: 'arm', name: 'Cánh tay ×2', method: 'In 3D', sizeMm: '18 × 90 × 12', note: 'Lỗ trục servo ở vai' },
+    { id: 'upperarm', name: 'Cánh tay trên ×2', method: 'In 3D', sizeMm: '18 × 52 × 14', note: 'Ổ servo vai một đầu, ổ servo khuỷu đầu kia; rãnh luồn dây khuỷu chạy dọc bên trong' },
+    { id: 'forearm', name: 'Cẳng tay + bàn ×2', method: 'In 3D', sizeMm: '16 × 46 × 12', note: 'In rỗng — mỗi gram ở đây đè lên khớp vai gấp đôi ở khuỷu' },
     { id: 'trackcover', name: 'Ốp xích ×2', method: 'In 3D', sizeMm: '150 × 62 × 6', note: 'Che trục, làm dày dáng xích' },
     { id: 'neck', name: 'Giá cổ', method: 'In 3D hoặc nhôm 2 mm', sizeMm: '40 × 35 × 30', note: 'Ôm 2 servo MG90S vuông góc nhau' },
   ],
@@ -773,7 +790,9 @@ const ENCLOSURE = {
     { step: 5, title: 'Truyền động', detail: 'Động cơ + DRV8833 + xích. Chạy thử tiến/lùi/xoay khi robot còn chưa có đầu, kê hổng bánh khỏi bàn.' },
     { step: 6, title: 'Não và loa', detail: 'ESP32 lên giá giữa thân, cổng USB quay về phía nắp sau. Loa áp vào tấm ngực, chèn xốp quanh mép để bịt rò khí.' },
     { step: 7, title: 'Đầu và cổ, nối cáp cuối cùng', detail: 'Luồn cáp qua cổ TRƯỚC khi bắt vít đầu. Chừa dư 3 cm mỗi sợi cho cổ xoay — dây căng là dây đứt sau vài trăm lần quay.' },
-    { step: 8, title: 'Tay, rồi cân chỉnh', detail: 'Đặt servo về 90° bằng phần mềm rồi mới gắn cần tay vào, nếu không tay sẽ lệch và bạn phải tháo ra làm lại.' },
+    { step: 8, title: 'Tay hai khớp — lắp từ ngoài vào trong', detail: 'Ráp cẳng tay vào servo khuỷu TRƯỚC, luồn dây khuỷu qua rãnh trong cánh tay trên, rồi mới lắp cụm đó vào servo vai. Làm ngược lại thì không còn đường luồn dây khuỷu qua khớp vai nữa.' },
+    { step: 9, title: 'Cân servo trước khi gắn cần', detail: 'Đưa cả sáu servo về vị trí gốc bằng phần mềm (vai 0°, khuỷu 0° = tay duỗi thẳng xuống) RỒI mới gắn cần vào trục. Gắn trước là tay lệch, và cách sửa duy nhất là tháo ra làm lại.' },
+    { step: 10, title: 'Kiểm giới hạn khuỷu bằng tay', detail: 'Gập thử hết tầm và xem cẳng tay có đụng cánh tay trên không. Nếu đụng, hạ giới hạn dưới trong lệnh `arm` từ −120° lên −100°: servo bị chặn cơ khí sẽ kêu è è rồi cháy trong khoảng một phút.' },
   ],
 
   warnings: [
@@ -783,6 +802,8 @@ const ENCLOSURE = {
     'Xích ăn dòng gấp đôi bánh tròn khi xoay tại chỗ vì nó phải trượt ngang trên sàn. Không có tụ 1000 µF sát chân DRV8833 thì ESP32 reset mỗi lần robot quay đầu.',
     'Cửa bảo trì duy nhất là nắp sau. Đừng dán keo bất cứ mảnh nào cho tới khi robot đã chạy đúng ít nhất một tuần.',
     'Sơn trước khi lắp linh kiện. Sơn xịt bám vào ống kính màn hình là hỏng cả cái mắt 135 nghìn.',
+    'Dây servo khuỷu phải chừa một vòng dư ở khớp vai. Nó đi xuyên qua một khớp đang quay — kéo căng cho gọn nghĩa là đứt ngầm trong lòng vỏ sau vài trăm lần vẫy tay, và lúc đó bạn phải tháo cả cánh tay ra mới tìm được chỗ đứt.',
+    'Sáu servo lấy nguồn RIÊNG từ buck 5 V, không lấy chung với ESP32. Khi cả sáu khởi động cùng lúc (ví dụ robot chào bằng cả hai tay) dòng đỉnh vượt 2 A — chung nguồn là ESP32 reset ngay giữa câu.',
   ],
 };
 

@@ -63,8 +63,34 @@
 #define PIN_CLIFF_L      1
 #define PIN_CLIFF_R      2
 #define PIN_BATTERY_ADC  3      // qua chia áp 100k/47k
-#define PIN_SERVO_PAN    38
-#define PIN_SERVO_TILT   45
+// GPIO38 và GPIO45 CÒN TRỐNG — servo đã chuyển hết sang PCA9685.
+
+// ─── Servo qua PCA9685 (I2C 0x40) ─────────────────────────
+// Sáu servo: 2 cổ + 4 tay (mỗi tay vai + khuỷu). Điều thẳng từ GPIO
+// thì xung PWM lệch mỗi khi WiFi/I2S chen vào — mắt thường thấy rõ
+// cái giật, nhất là lúc tay đang giơ giữa chừng. PCA9685 phát xung
+// bằng phần cứng riêng nên đều tuyệt đối, và trả lại 6 chân GPIO.
+#define PCA9685_ADDR     0x40
+#define SERVO_FREQ_HZ    50
+
+#define CH_NECK_PAN      0
+#define CH_NECK_TILT     1
+#define CH_ARM_L_SHOULDER 2
+#define CH_ARM_L_ELBOW   3
+#define CH_ARM_R_SHOULDER 4
+#define CH_ARM_R_ELBOW   5
+
+// Giới hạn cơ khí. Khuỷu chỉ gập MỘT chiều — cho nó vượt 0° là đẩy
+// cẳng tay vào cánh tay trên, servo kẹt cứng rồi cháy trong ~1 phút.
+// Nếu lắp xong thấy đụng sớm hơn, nới ELBOW_MIN lên -100.
+#define NECK_PAN_MIN     -90
+#define NECK_PAN_MAX      90
+#define NECK_TILT_MIN    -35
+#define NECK_TILT_MAX     35
+#define SHOULDER_MIN     -90
+#define SHOULDER_MAX      90
+#define ELBOW_MIN       -120
+#define ELBOW_MAX          0
 
 // ─── Điện ─────────────────────────────────────────────────
 // Chia áp 100k/47k: 8.4V → 2.68V, nằm gọn dưới trần 3.3V của ADC.

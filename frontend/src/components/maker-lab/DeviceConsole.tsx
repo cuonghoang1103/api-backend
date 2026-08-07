@@ -69,6 +69,20 @@ const EMOTIONS = [
 
 const SPEED = 180;
 
+/**
+ * Arm poses worth a one-click button. Elbow is always ≤ 0 — it only
+ * folds one way, and a positive value would drive the forearm into the
+ * upper arm and stall the servo. The same clamp exists server-side in
+ * commands.ts; this is just so the buttons never generate one.
+ */
+const ARM_POSES: Array<{ label: string; hint: string; payload: Record<string, unknown> }> = [
+  { label: '👋 Chào', hint: 'Giơ tay phải lên, khuỷu gập', payload: { side: 'right', shoulder: 70, elbow: -80 } },
+  { label: '👉 Chỉ', hint: 'Duỗi thẳng tay phải ra trước', payload: { side: 'right', shoulder: 45, elbow: 0 } },
+  { label: '🤗 Mời', hint: 'Dang cả hai tay ra', payload: { side: 'both', shoulder: 60, elbow: -30 } },
+  { label: '🙅 Khoanh', hint: 'Gập cả hai khuỷu vào trước ngực', payload: { side: 'both', shoulder: 15, elbow: -110 } },
+  { label: '⬇️ Hạ', hint: 'Về tư thế nghỉ, tay duỗi xuống', payload: { side: 'both', shoulder: 0, elbow: 0 } },
+];
+
 export function DeviceConsole({
   projectId,
   projectSlug,
@@ -411,6 +425,25 @@ export function DeviceConsole({
                       style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
                     >
                       {e.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <p className="mb-2 text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
+                  Tay (vai + khuỷu)
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {ARM_POSES.map((p) => (
+                    <button
+                      key={p.label}
+                      onClick={() => cmd('arm', p.payload)}
+                      title={p.hint}
+                      className="rounded-lg border px-2.5 py-1.5 text-xs transition-colors"
+                      style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
+                    >
+                      {p.label}
                     </button>
                   ))}
                 </div>

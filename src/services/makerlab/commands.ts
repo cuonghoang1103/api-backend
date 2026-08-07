@@ -63,10 +63,22 @@ export const commandSchemas = {
     b: z.number().int().min(0).max(255),
     effect: z.enum(['solid', 'breathe', 'spin', 'blink', 'off']).default('solid'),
   }),
-  /** Head servo, if fitted. */
+  /** Head servos: pan (turn) + tilt (nod). */
   head: z.object({
     pan: z.number().int().min(-90).max(90).default(0),
     tilt: z.number().int().min(-35).max(35).default(0),
+  }),
+  /**
+   * Arms, two joints each. `elbow` is capped at 0 on the positive side
+   * because an elbow only folds one way — letting it go positive would
+   * drive the servo into the upper arm and stall it there, which burns
+   * the servo out in about a minute.
+   */
+  arm: z.object({
+    side: z.enum(['left', 'right', 'both']),
+    shoulder: z.number().int().min(-90).max(90).default(0),
+    elbow: z.number().int().min(-120).max(0).default(0),
+    ms: z.number().int().min(0).max(5000).default(400),
   }),
   /** Canned motion sequence stored in firmware. */
   dance: z.object({
@@ -103,6 +115,7 @@ export const LLM_ALLOWED_COMMANDS: CommandType[] = [
   'look',
   'led',
   'head',
+  'arm',
   'dance',
 ];
 
@@ -143,6 +156,7 @@ export function commandCheatSheet(): string {
     'look {x,y}            — hướng mắt, -1..1',
     'led {r,g,b,effect}    — effect: solid|breathe|spin|blink|off',
     'head {pan,tilt}       — pan -90..90, tilt -35..35',
+    'arm {side,shoulder,elbow,ms} — side: left|right|both · vai -90..90 · khuỷu -120..0 (chỉ gập vào)',
     'dance {name}          — spin|wiggle|nod|shake|celebrate',
   ].join('\n');
 }
@@ -161,6 +175,7 @@ export const COMMAND_CATALOG: Array<{
   { type: 'look', label: 'Nhìn', description: 'Đảo con ngươi về một hướng', llmAllowed: true },
   { type: 'led', label: 'Đèn', description: 'Màu và hiệu ứng vòng LED', llmAllowed: true },
   { type: 'head', label: 'Cổ', description: 'Xoay/gật đầu bằng servo', llmAllowed: true },
+  { type: 'arm', label: 'Tay', description: 'Vai + khuỷu, hai khớp mỗi bên — vẫy, chỉ trỏ, ôm', llmAllowed: true },
   { type: 'dance', label: 'Nhảy', description: 'Chuỗi động tác dựng sẵn trong firmware', llmAllowed: true },
   { type: 'say', label: 'Nói', description: 'Đọc một câu bất kỳ qua loa', llmAllowed: false },
   { type: 'config', label: 'Cấu hình', description: 'Chỉnh âm lượng, độ nhạy mic, tốc độ tối đa…', llmAllowed: false },

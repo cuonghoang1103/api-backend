@@ -716,6 +716,7 @@ for route in \
     maker-lab/projects \
     maker-lab/meta \
     repos \
+    projects \
     about/stats \
     cv/public \
     cyber/profile; do

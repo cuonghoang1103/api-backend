@@ -23,6 +23,7 @@ import s14 from './nextjs/s14-state-management.mjs';
 import s15 from './nextjs/s15-auth-middleware.mjs';
 import s16 from './nextjs/s16-forms-upload.mjs';
 import s17 from './nextjs/s17-rendering-seo.mjs';
+import s18 from './nextjs/s18-performance.mjs';
 
 export default {
   category: { slug: 'frontend', name: 'Frontend', icon: 'Layout', sortOrder: 2 },
@@ -64,5 +65,6 @@ export default {
     s15,
     s16,
     s17,
+    s18,
   ],
 };

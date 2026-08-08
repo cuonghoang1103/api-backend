@@ -138,3 +138,7 @@ firmware/**/shell/stl/
 # Ảnh bìa dự án sinh bằng scripts/gen-project-covers.mjs — sinh lại được,
 # và bản thật đã nằm trên R2 (media.cuongthai.com/images/projects/).
 .covers/
+
+# Thẻ bài học sinh bằng scripts/gen-lesson-card.mjs — sinh lại được từ
+# content/lesson-cards/*.mjs, không cần lưu ảnh vào git.
+.cards/

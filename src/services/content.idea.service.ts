@@ -19,7 +19,7 @@
  * non-existent project id (or vice versa). We do them
  * in a single `prisma.$transaction`.
  */
-import { Prisma } from '@prisma/client';
+import { Prisma, ContentType } from '@prisma/client';
 import { prisma } from '../config/database.js';
 
 /** Input shape for `createIdea`. Mirrors the model's
@@ -31,14 +31,10 @@ export type CreateIdeaInput = {
  hook?: string | null;
  notes?: string | null;
  score?: number | null;
- suggestedType?:
- | 'VLOG'
- | 'AFFILIATE'
- | 'CODE'
- | 'REVIEW'
- | 'IDEA'
- | 'OTHER'
- | null;
+ // Derived from the Prisma enum rather than re-listed here: the
+ // hand-written copy of this union had drifted ('CODE' vs the
+ // frontend's 'CODE_REVIEW') and silently rejected valid types.
+ suggestedType?: ContentType | null;
  tags?: string[];
 };
 

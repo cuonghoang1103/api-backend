@@ -4167,6 +4167,7 @@ export const hubShareApi = {
 // shared admin cookie auth (axios sends `withCredentials`,
 // see the instance config above).
 import type {
+ AcademyRefs,
  ContentIdea,
  ContentIdeaCreate,
  ContentIdeaUpdate,
@@ -4174,10 +4175,13 @@ import type {
  ContentProjectCreate,
  ContentProjectSummary,
  ContentProjectUpdate,
+ ContentScriptVersion,
  ContentStatus,
  ContentType,
  IdeaListParams,
  IdeaStatus,
+ ScriptTemplate,
+ ScriptVersionOrigin,
 } from '@/types';
 
 export interface ContentListParams {
@@ -4266,6 +4270,85 @@ export const contentApi = {
  message: string;
  }>(`/admin/content/ideas/${id}/promote`),
  },
+
+ // ── Script history ──────────────────────────────────────────
+ // Explicit snapshots of `project.script`. The editor's autosave
+ // never touches these — see content.script.service.ts.
+ scriptVersions: {
+ /** List, newest first. Bodies are omitted from this payload. */
+ list: (projectId: number) =>
+ api.get<{ data: ContentScriptVersion[] }>(
+ `/admin/content/projects/${projectId}/script-versions`,
+ ),
+
+ /** Snapshot now. `script` lets the editor capture what is on
+  * screen even if the debounce has not flushed yet; `data` comes
+  * back null when the script is empty (nothing worth saving). */
+ create: (
+ projectId: number,
+ payload: { label?: string | null; origin?: ScriptVersionOrigin; script?: string | null },
+ ) =>
+ api.post<{ data: ContentScriptVersion | null; message?: string }>(
+ `/admin/content/projects/${projectId}/script-versions`,
+ payload,
+ ),
+
+ /** Fetch one version WITH its body — used by preview + restore. */
+ get: (projectId: number, versionId: number) =>
+ api.get<{ data: Required<ContentScriptVersion> }>(
+ `/admin/content/projects/${projectId}/script-versions/${versionId}`,
+ ),
+
+ /** Overwrite the live script. The server snapshots the current
+  * text first, so this is itself undoable. */
+ restore: (projectId: number, versionId: number) =>
+ api.post<{
+ data: { project: { id: number; script: string | null; updatedAt: string }; restoredFrom: number };
+ }>(`/admin/content/projects/${projectId}/script-versions/${versionId}/restore`),
+
+ remove: (projectId: number, versionId: number) =>
+ api.delete<{ message: string }>(
+ `/admin/content/projects/${projectId}/script-versions/${versionId}`,
+ ),
+ },
+
+ // ── User-saved script templates ─────────────────────────────
+ // Built-in templates ship in lib/studio-templates.ts and are
+ // merged client-side; this endpoint only returns the user's own.
+ scriptTemplates: {
+ list: (type?: ContentType) =>
+ api.get<{ data: ScriptTemplate[] }>('/admin/content/script-templates', {
+ params: type ? { type } : undefined,
+ }),
+
+ create: (payload: {
+ name: string;
+ nameEn?: string | null;
+ description?: string | null;
+ descriptionEn?: string | null;
+ body: string;
+ bodyEn?: string | null;
+ contentType?: ContentType | null;
+ tags?: string[];
+ }) => api.post<{ data: ScriptTemplate }>('/admin/content/script-templates', payload),
+
+ update: (id: number, payload: Partial<ScriptTemplate>) =>
+ api.patch<{ data: ScriptTemplate }>(`/admin/content/script-templates/${id}`, payload),
+
+ remove: (id: number) =>
+ api.delete<{ message: string }>(`/admin/content/script-templates/${id}`),
+
+ /** Bump the use counter so the picker can sort by what the user
+  * actually reaches for. Best-effort — callers ignore failures. */
+ markUsed: (id: number) =>
+ api.post<{ data: { id: number; useCount: number } }>(
+ `/admin/content/script-templates/${id}/use`,
+ ),
+ },
+
+ /** GET /admin/content/academy-refs — published courses + their
+  * exams, for the "what is this video about?" pickers. */
+ academyRefs: () => api.get<{ data: AcademyRefs }>('/admin/content/academy-refs'),
 };
 
 

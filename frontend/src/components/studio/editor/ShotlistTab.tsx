@@ -47,6 +47,7 @@ import {
  SHOT_TYPE_META,
  SCENE_TYPE_META,
 } from '@/lib/studio-meta';
+import { pick, useStudioT } from '@/lib/studio-i18n';
 import type {
  ContentProductionDay,
  ContentScene,
@@ -78,6 +79,7 @@ export default function ShotlistTab({
  onChange,
  onFocusScene,
 }: ShotlistTabProps) {
+ const { t, lang } = useStudioT();
  // Flatten days + scenes into a single ordered list.
  // The order is the user's canonical shot order —
  // we sort by day.dayNumber then scene.sceneNumber
@@ -175,10 +177,10 @@ export default function ShotlistTab({
  <Film className="w-7 h-7 text-studio-400/60" />
  </div>
  <h3 className="text-base font-semibold text-text-primary">
- No scenes yet
+ {t('slNoScenes')}
  </h3>
  <p className="mt-1 text-sm text-text-secondary max-w-sm mx-auto">
- Add scenes in the Storyboard tab and they'll show up here as your shot list.
+ {t('slNoScenesHint')}
  </p>
  </div>
  );
@@ -190,22 +192,22 @@ export default function ShotlistTab({
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
  <StatPill
  icon={Hash}
- label="Scenes"
+ label={t('slScenes')}
  value={stats.totalScenes.toString()}
  />
  <StatPill
  icon={Clock}
- label="Total length"
+ label={t('slTotalLength')}
  value={formatDuration(stats.totalSeconds)}
  />
  <StatPill
  icon={Aperture}
- label="Unique props"
+ label={t('slUniqueProps')}
  value={stats.propCount.toString()}
  />
  <StatPill
  icon={Camera}
- label="Camera angles"
+ label={t('slCameraAngles')}
  value={stats.angleCount.toString()}
  />
  </div>
@@ -238,7 +240,7 @@ export default function ShotlistTab({
  </span>
  </div>
  <div className="text-[10px] text-text-muted text-center">
- {sceneMeta?.label ?? scene.sceneType}
+ {sceneMeta ? pick(sceneMeta.label, lang) : scene.sceneType}
  </div>
  </div>
 
@@ -248,7 +250,7 @@ export default function ShotlistTab({
  {shotMeta && (
  <span className="inline-flex items-center gap-1 px-2 h-5 rounded-md bg-bg-elevated/60 ring-1 ring-studio-500/20 text-text-secondary text-[10px] font-semibold uppercase tracking-wider">
  {shotMeta.icon && <span className="text-studio-300">{shotMeta.icon}</span>}
- {shotMeta.label}
+ {pick(shotMeta.label, lang)}
  </span>
  )}
  {day.location && (
@@ -271,7 +273,7 @@ export default function ShotlistTab({
  className="inline-flex items-center gap-1 h-6 px-2 rounded-md text-[10px] text-text-muted hover:text-studio-300 hover:bg-studio-500/10"
  >
  <Pencil className="w-3 h-3" />
- Edit
+ {t('edit')}
  </button>
  )}
  </div>
@@ -279,10 +281,10 @@ export default function ShotlistTab({
  {/* Per-scene fields (compact view + inline edit) */}
  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1.5 text-[12px]">
  {scene.cameraAngle && (
- <FieldRow icon={Camera} label="Camera" value={scene.cameraAngle} />
+ <FieldRow icon={Camera} label={t('scCamera')} value={scene.cameraAngle} />
  )}
  {scene.props && (
- <FieldRow icon={Aperture} label="Props" value={scene.props} />
+ <FieldRow icon={Aperture} label={t('scProps')} value={scene.props} />
  )}
  </div>
 
@@ -290,17 +292,17 @@ export default function ShotlistTab({
  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
  <InlineNote
  icon={ImageIcon}
- label="B-roll notes"
+ label={t('scBrollNotes')}
  value={scene.brollNotes}
  onSave={(v) => updateScene(dayIndex, sceneIndex, { brollNotes: v })}
- placeholder="What B-roll to drop in here…"
+ placeholder={t('scBrollNotesPh')}
  />
  <InlineNote
  icon={StickyNote}
- label="Editing notes"
+ label={t('scEditingNotes')}
  value={scene.editingNotes}
  onSave={(v) => updateScene(dayIndex, sceneIndex, { editingNotes: v })}
- placeholder="Cut, transition, music, SFX…"
+ placeholder={t('scEditingNotesPh')}
  />
  </div>
  </div>

@@ -38,9 +38,11 @@ import KanbanColumn from './KanbanColumn';
 import StatusPill from '@/components/studio/StatusPill';
 import { useContentProjects, useUpdateContentStatus } from '@/hooks/useContentQueries';
 import { STATUS_ORDER, CONTENT_STATUS_META } from '@/lib/studio-meta';
+import { useStudioT } from '@/lib/studio-i18n';
 import type { ContentProjectSummary, ContentStatus } from '@/types';
 
 export default function PipelineBoard() {
+ const { t } = useStudioT();
  const { data: projects = [], isLoading } = useContentProjects();
  const updateStatus = useUpdateContentStatus();
  const [activeId, setActiveId] = useState<number | null>(null);
@@ -166,7 +168,7 @@ export default function PipelineBoard() {
  type="text"
  value={query}
  onChange={(e) => setQuery(e.target.value)}
- placeholder="Search title or #tag…"
+ placeholder={t('searchTitleOrTag')}
  className="w-full pl-9 pr-3 h-9 rounded-lg bg-darkcard/60 border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-studio-500/50 focus:ring-2 focus:ring-studio-500/20"
  />
  </div>

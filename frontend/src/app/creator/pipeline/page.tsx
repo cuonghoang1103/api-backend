@@ -9,8 +9,10 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import { KanbanSquare } from 'lucide-react';
 import PipelineBoard from '@/components/studio/kanban/PipelineBoard';
+import { useStudioT } from '@/lib/studio-i18n';
 
 function PipelineContent() {
+ const { t } = useStudioT();
  const search = useSearchParams();
  const focus = search.get('status');
  return (
@@ -23,7 +25,7 @@ function PipelineContent() {
  </div>
  <div>
  <h1 className="font-heading text-2xl font-bold text-text-primary">
- Pipeline
+ {t('pipelineTitle')}
  </h1>
  <p className="text-xs text-text-muted">
  {focus
@@ -40,6 +42,7 @@ function PipelineContent() {
 }
 
 export default function PipelinePage() {
+ const { t } = useStudioT();
  // useSearchParams in a client component requires a
  // Suspense boundary (Next.js 14 requirement for static
  // rendering). The fallback just shows the same shell.
@@ -51,8 +54,8 @@ export default function PipelinePage() {
  <KanbanSquare className="w-5 h-5 text-studio-400" />
  </div>
  <div>
- <h1 className="font-heading text-2xl font-bold text-text-primary">Pipeline</h1>
- <p className="text-xs text-text-muted">Loading…</p>
+ <h1 className="font-heading text-2xl font-bold text-text-primary">{t('pipelineTitle')}</h1>
+ <p className="text-xs text-text-muted">{t('loading')}</p>
  </div>
  </div>
  </div>

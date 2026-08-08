@@ -54,6 +54,19 @@ import {
  promoteIdea,
  updateIdea,
 } from '../services/content.idea.service.js';
+import {
+ bumpTemplateUse,
+ createScriptTemplate,
+ createScriptVersion,
+ deleteScriptTemplate,
+ deleteScriptVersion,
+ getScriptVersion,
+ listAcademyRefs,
+ listScriptTemplates,
+ listScriptVersions,
+ restoreScriptVersion,
+ updateScriptTemplate,
+} from '../services/content.script.service.js';
 import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
@@ -79,6 +92,18 @@ function str(value: unknown): string | null {
  if (typeof value !== 'string') return null;
  const trimmed = value.trim();
  return trimmed === '' ? null : trimmed;
+}
+
+/** Coerce to a positive integer, or null.
+ * Used for the optional numeric bindings (examId, episodeNumber,
+ * targetDurationSec). Accepts the string form too, because a
+ * number <input> hands back '' when cleared and '12' otherwise.
+ * Zero and negatives collapse to null — an "episode 0" or a
+ * 0-second target is never meaningful here. */
+function posIntOrNull(value: unknown): number | null {
+ if (value == null || value === '') return null;
+ const n = typeof value === 'number' ? value : parseInt(String(value), 10);
+ return Number.isFinite(n) && n > 0 ? Math.trunc(n) : null;
 }
 
 async function assertProject(id: number) {
@@ -166,6 +191,30 @@ function buildProjectPatch(body: Record<string, unknown>, existing: { title: str
  if (!j.ok) throw new AppError(`referenceLinks: ${j.reason}`, 400, 'INVALID_JSON');
  out.referenceLinks = j.value === null ? Prisma.JsonNull : (j.value as Prisma.InputJsonValue);
  }
+
+ // ── Academy binding + series/pacing ──────────────────────────
+ // Same "undefined = leave alone, null = clear" contract as the
+ // fields above. `str()` also maps '' → null so clearing a
+ // picker doesn't store an empty string.
+ if (body.courseSlug !== undefined) out.courseSlug = str(body.courseSlug);
+ if (body.courseTitle !== undefined) out.courseTitle = str(body.courseTitle);
+ if (body.examTitle !== undefined) out.examTitle = str(body.examTitle);
+ if (body.lessonRef !== undefined) out.lessonRef = str(body.lessonRef);
+ if (body.projectSlug !== undefined) out.projectSlug = str(body.projectSlug);
+ if (body.seriesName !== undefined) out.seriesName = str(body.seriesName);
+ if (body.examId !== undefined) out.examId = posIntOrNull(body.examId);
+ if (body.episodeNumber !== undefined) out.episodeNumber = posIntOrNull(body.episodeNumber);
+ if (body.targetDurationSec !== undefined) {
+ out.targetDurationSec = posIntOrNull(body.targetDurationSec);
+ }
+ if (body.scriptLang !== undefined) {
+ // Only two recording languages exist; anything else falls back
+ // to VI rather than 400-ing, because this field rides along on
+ // every autosave and must never be the reason an otherwise
+ // valid save is rejected.
+ out.scriptLang = body.scriptLang === 'EN' ? 'EN' : 'VI';
+ }
+
  // Ensure title default for slug derivation.
  if (out.title === undefined) out.title = existing.title;
  return out as { title: string } & Record<string, unknown>;
@@ -238,7 +287,15 @@ router.get('/projects', async (req, res: Response<ApiResponse>, next) => {
 // ─── POST /projects ────────────────────────────────────────────────────────
 router.post('/projects', async (req, res: Response<ApiResponse>, next) => {
  try {
- const { title, type, status, concept, script, mainHook, thumbnailUrl, ideaDate, filmDate, publishDate, tags, referenceLinks } = req.body ?? {};
+ const {
+ title, type, status, concept, script, mainHook, thumbnailUrl,
+ ideaDate, filmDate, publishDate, tags, referenceLinks,
+ // Academy binding — set straight from the create modal so a
+ // "record chapter 3 of PRO192" project arrives already bound
+ // instead of needing a second edit pass.
+ courseSlug, courseTitle, examId, examTitle, lessonRef, projectSlug,
+ seriesName, episodeNumber, targetDurationSec, scriptLang,
+ } = req.body ?? {};
  if (typeof title !== 'string' || !title.trim()) {
  throw new AppError('Title is required', 400, 'TITLE_REQUIRED');
  }
@@ -266,6 +323,16 @@ router.post('/projects', async (req, res: Response<ApiResponse>, next) => {
  publishDate: toDateOrNull(publishDate),
  tags: Array.isArray(tags) ? (tags as unknown[]).filter((t): t is string => typeof t === 'string') : [],
  referenceLinks: json === undefined ? Prisma.JsonNull : json,
+ courseSlug: str(courseSlug),
+ courseTitle: str(courseTitle),
+ examId: posIntOrNull(examId),
+ examTitle: str(examTitle),
+ lessonRef: str(lessonRef),
+ projectSlug: str(projectSlug),
+ seriesName: str(seriesName),
+ episodeNumber: posIntOrNull(episodeNumber),
+ targetDurationSec: posIntOrNull(targetDurationSec),
+ scriptLang: scriptLang === 'EN' ? 'EN' : 'VI',
  // Phase 7: seed a default empty performance row so the
  // editor's Performance tab has something to bind to.
  performance: { create: {} },
@@ -760,6 +827,125 @@ router.post('/ideas/:id/promote', async (req, res: Response<ApiResponse>, next) 
  // to the new project without a second roundtrip.
  message: `redirectTo=/creator/projects/${result.project.id}`,
  });
+ } catch (error) { next(error); }
+});
+
+// ============================================================
+// Script history
+// ------------------------------------------------------------
+// Explicit, immutable snapshots of `ContentProject.script`.
+// See src/services/content.script.service.ts for why the live
+// column alone is not enough (autosave overwrites it every
+// ~1.2s).
+//
+// ── GET    /projects/:id/script-versions          — list (no bodies)
+// ── POST   /projects/:id/script-versions          — snapshot now
+// ── GET    /projects/:id/script-versions/:vid     — one, with body
+// ── POST   /projects/:id/script-versions/:vid/restore
+// ── DELETE /projects/:id/script-versions/:vid
+// ============================================================
+
+router.get('/projects/:id/script-versions', async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ await assertProject(id);
+ res.json({ success: true, data: await listScriptVersions(id) });
+ } catch (error) { next(error); }
+});
+
+router.post('/projects/:id/script-versions', async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ const { label, origin, script } = req.body ?? {};
+ const created = await createScriptVersion(id, { label, origin, script });
+ if (!created) {
+ // Empty script — nothing worth snapshotting. 200 with a
+ // null payload rather than an error: the user pressing
+ // "save version" on a blank script made a harmless
+ // mistake, not a failed request.
+ res.json({ success: true, data: null, message: 'Script is empty — nothing to snapshot' });
+ return;
+ }
+ res.status(201).json({ success: true, data: created });
+ } catch (error) { next(error); }
+});
+
+router.get('/projects/:id/script-versions/:vid', async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ const vid = parseId(req.params.vid, 'version id');
+ res.json({ success: true, data: await getScriptVersion(id, vid) });
+ } catch (error) { next(error); }
+});
+
+router.post('/projects/:id/script-versions/:vid/restore', async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ const vid = parseId(req.params.vid, 'version id');
+ res.json({ success: true, data: await restoreScriptVersion(id, vid) });
+ } catch (error) { next(error); }
+});
+
+router.delete('/projects/:id/script-versions/:vid', async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ const vid = parseId(req.params.vid, 'version id');
+ await deleteScriptVersion(id, vid);
+ res.json({ success: true, message: 'Script version deleted' });
+ } catch (error) { next(error); }
+});
+
+// ============================================================
+// Script templates (user-saved)
+// ------------------------------------------------------------
+// Built-in templates ship in the frontend bundle
+// (lib/studio-templates.ts) and are merged client-side; this
+// table only holds what the user saved from their own scripts.
+// ============================================================
+
+router.get('/script-templates', async (req, res: Response<ApiResponse>, next) => {
+ try {
+ res.json({ success: true, data: await listScriptTemplates(req.query.type) });
+ } catch (error) { next(error); }
+});
+
+router.post('/script-templates', async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const created = await createScriptTemplate(req.body ?? {});
+ res.status(201).json({ success: true, data: created });
+ } catch (error) { next(error); }
+});
+
+router.patch('/script-templates/:id', async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ res.json({ success: true, data: await updateScriptTemplate(id, req.body ?? {}) });
+ } catch (error) { next(error); }
+});
+
+router.delete('/script-templates/:id', async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ await deleteScriptTemplate(id);
+ res.json({ success: true, message: 'Template deleted' });
+ } catch (error) { next(error); }
+});
+
+router.post('/script-templates/:id/use', async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const id = parseId(req.params.id);
+ res.json({ success: true, data: await bumpTemplateUse(id) });
+ } catch (error) { next(error); }
+});
+
+// ─── GET /academy-refs ───────────────────────────────────────
+// Picker source for "what is this video about?" — published
+// courses + their exams in one call. Param-less unauth GET
+// returns 401 (admin-gated), so it is safe to add to the
+// deploy smoke-test list.
+router.get('/academy-refs', async (_req, res: Response<ApiResponse>, next) => {
+ try {
+ res.json({ success: true, data: await listAcademyRefs() });
  } catch (error) { next(error); }
 });
 

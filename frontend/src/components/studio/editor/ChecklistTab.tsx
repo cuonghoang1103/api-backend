@@ -18,6 +18,7 @@ import { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
  Plus,
+ Sparkles,
  Trash2,
  CheckCircle2,
  CircleDashed,
@@ -44,10 +45,19 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { CHECKLIST_PHASE_META } from '@/lib/studio-meta';
-import type { ChecklistPhase, ContentChecklistItem } from '@/types';
+import { checklistPresetFor } from '@/lib/studio-templates';
+import { pick, useStudioT } from '@/lib/studio-i18n';
+import type { ChecklistPhase, ContentChecklistItem, ContentType, ScriptLang } from '@/types';
 
 interface ChecklistTabProps {
  items: ContentChecklistItem[];
+ /** Decides which preset to offer — the teaching formats get the
+  *  lecture-specific tasks on top of the shared production ones. */
+ contentType: ContentType;
+ /** Preset labels are inserted in the language the video is
+  *  RECORDED in, not the interface language: these become real
+  *  checklist rows the user reads on set. */
+ scriptLang: ScriptLang;
  onChange: (next: ContentChecklistItem[]) => void;
 }
 
@@ -60,8 +70,11 @@ const PHASE_ORDER: ChecklistPhase[] = [
 
 export default function ChecklistTab({
  items,
+ contentType,
+ scriptLang,
  onChange,
 }: ChecklistTabProps) {
+ const { t, lang } = useStudioT();
  // Track which lanes are collapsed. Default: all
  // expanded. State is session-only — no need to
  // persist.
@@ -111,7 +124,7 @@ export default function ChecklistTab({
  : 0;
  onChange([
  ...items,
- { phase, label: 'New item', done: false, order: nextOrder },
+ { phase, label: t('clNewItem'), done: false, order: nextOrder },
  ]);
  };
 
@@ -178,6 +191,48 @@ export default function ChecklistTab({
  }
  };
 
+ /**
+  * Append the preset tasks for this content type.
+  *
+  * Additive: rows whose label already exists are skipped, so
+  * pressing this twice does not duplicate the list and anything
+  * already ticked is untouched.
+  */
+ const [presetToast, setPresetToast] = useState<string | null>(null);
+
+ const loadPreset = () => {
+ const seen = new Set(items.map((i) => i.label.trim().toLowerCase()));
+ const bodyLang: 'vi' | 'en' = scriptLang === 'EN' ? 'en' : 'vi';
+ const additions: ContentChecklistItem[] = [];
+
+ for (const preset of checklistPresetFor(contentType)) {
+ const label = preset.label[bodyLang];
+ const key = label.trim().toLowerCase();
+ if (seen.has(key)) continue;
+ seen.add(key);
+ const inPhase = [
+ ...items.filter((i) => i.phase === preset.phase),
+ ...additions.filter((i) => i.phase === preset.phase),
+ ];
+ additions.push({
+ phase: preset.phase,
+ label,
+ done: false,
+ order: inPhase.length > 0 ? Math.max(...inPhase.map((i) => i.order)) + 1 : 0,
+ });
+ }
+ // Nothing new to add is a legitimate outcome (the preset was
+ // already loaded), and saying so beats a button that appears
+ // broken.
+ if (additions.length === 0) {
+ setPresetToast(t('checklistPresetApplied', { n: 0 }));
+ } else {
+ onChange([...items, ...additions]);
+ setPresetToast(t('checklistPresetApplied', { n: additions.length }));
+ }
+ window.setTimeout(() => setPresetToast(null), 2200);
+ };
+
  return (
  <div className="space-y-4">
  {/* Progress bar */}
@@ -186,7 +241,7 @@ export default function ChecklistTab({
  <div className="flex items-center gap-2">
  <ListChecks className="w-4 h-4 text-studio-400" />
  <span className="text-sm font-semibold text-text-primary">
- Project readiness
+ {t('clReadiness')}
  </span>
  </div>
  <span className="text-xs text-text-secondary">
@@ -200,6 +255,23 @@ export default function ChecklistTab({
  animate={{ width: `${progress.pct}%` }}
  transition={{ duration: 0.4, ease: 'easeOut' }}
  />
+ </div>
+
+ {/* Preset loader. Additive by design — it never removes or
+     reorders what is already there, so pressing it twice is
+     safe, and so is pressing it late in production. */}
+ <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-studio-500/10">
+ <button
+ type="button"
+ onClick={loadPreset}
+ className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg bg-studio-500/15 text-studio-300 text-xs font-semibold hover:bg-studio-500/25 transition-colors"
+ >
+ <Sparkles className="w-3.5 h-3.5" />
+ {t('checklistPreset')}
+ </button>
+ <p className="text-[11px] text-text-muted flex-1 min-w-[200px] leading-snug">
+ {t('checklistPresetHint')}
+ </p>
  </div>
  </div>
 
@@ -235,7 +307,7 @@ export default function ChecklistTab({
  className="text-xs font-semibold uppercase tracking-wider"
  style={{ color: meta.color }}
  >
- {meta.label}
+ {pick(meta.label, lang)}
  </span>
  <span className="text-[10px] text-text-muted">
  {laneDone}/{lane.length}
@@ -266,7 +338,7 @@ export default function ChecklistTab({
  </AnimatePresence>
  {lane.length === 0 && (
  <div className="text-center text-[11px] text-text-muted py-3 italic">
- No items
+ {t('clNoItems')}
  </div>
  )}
  </div>
@@ -277,7 +349,7 @@ export default function ChecklistTab({
  className="mt-2 w-full inline-flex items-center justify-center gap-1 h-7 rounded-md bg-studio-500/10 hover:bg-studio-500/20 text-studio-300 text-[11px] font-semibold transition-colors"
  >
  <Plus className="w-3 h-3" />
- Add to {meta.label}
+ {t('add')} · {pick(meta.label, lang)}
  </button>
  </div>
  )}
@@ -300,6 +372,7 @@ function SortableItem({
  onUpdate: (patch: Partial<ContentChecklistItem>) => void;
  onDelete: () => void;
 }) {
+ const { t, lang } = useStudioT();
  const {
  attributes,
  listeners,
@@ -335,7 +408,7 @@ function SortableItem({
  type="button"
  {...attributes}
  {...listeners}
- aria-label="Drag to reorder"
+ aria-label={t('dragReorder')}
  className="text-text-muted hover:text-text-primary cursor-grab active:cursor-grabbing"
  >
  <GripVertical className="w-3 h-3" />
@@ -360,7 +433,7 @@ function SortableItem({
  type="text"
  value={item.label}
  onChange={(e) => onUpdate({ label: e.target.value })}
- placeholder="Item label…"
+ placeholder={t('clItemPh')}
  className={`flex-1 min-w-0 bg-transparent text-[13px] focus:outline-none ${
  item.done
  ? 'line-through text-text-muted'
@@ -372,7 +445,7 @@ function SortableItem({
  <button
  type="button"
  onClick={onDelete}
- aria-label="Delete"
+ aria-label={t('delete')}
  className="opacity-0 group-hover:opacity-100 transition-opacity text-rose-400/70 hover:text-rose-400"
  >
  <Trash2 className="w-3 h-3" />

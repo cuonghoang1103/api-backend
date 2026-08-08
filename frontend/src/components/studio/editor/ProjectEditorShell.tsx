@@ -9,11 +9,11 @@
 // • the 8-tab navigation
 // • the "Back to pipeline" link
 //
-// Phase 4 only ships 3 tabs (Overview / Storyboard /
-// Teleprompter). The other 5 are stubs that Phase 5–7
-// will fill in. The stub tabs are visible (so the user
-// can see the structure of the full editor) but show a
-// "coming in Phase N" panel.
+// All 8 tabs are implemented. (The old `phase?: number`
+// field on TabDef and its "Arriving in Phase N" stub were
+// left over from the staged build-out; no tab has carried a
+// phase number since Phase 7 shipped, so the stub was
+// unreachable and has been removed rather than translated.)
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -30,10 +30,8 @@ import {
  LayoutDashboard,
  Megaphone,
  Mic,
- Package,
  Pencil,
  Save,
- ShoppingBag,
  Sparkles,
  Trash2,
 } from 'lucide-react';
@@ -54,6 +52,7 @@ import PlatformsTab from './PlatformsTab';
 import ChecklistTab from './ChecklistTab';
 import PerformanceTab from './PerformanceTab';
 import { CONTENT_STATUS_META, STATUS_ORDER } from '@/lib/studio-meta';
+import { pick, useStudioT, type StudioKey, type StudioLang } from '@/lib/studio-i18n';
 import type {
  ContentAffiliateProduct,
  ContentChecklistItem,
@@ -66,20 +65,21 @@ import type {
 
 interface TabDef {
  id: string;
- label: string;
+ /** i18n key, resolved at render — not a literal, so the tab
+  *  strip follows the language switch like everything else. */
+ labelKey: StudioKey;
  icon: React.ComponentType<{ className?: string }>;
- phase?: number; // which phase builds this tab
 }
 
 const TABS: TabDef[] = [
- { id: 'overview', label: 'Overview', icon: LayoutDashboard },
- { id: 'storyboard', label: 'Storyboard', icon: Film },
- { id: 'teleprompter', label: 'Teleprompter', icon: Mic },
- { id: 'script', label: 'Script', icon: Pencil },
- { id: 'shotlist', label: 'Shot list', icon: ImageIcon },
- { id: 'platforms', label: 'Platforms', icon: Megaphone },
- { id: 'checklist', label: 'Checklist', icon: CheckSquare },
- { id: 'performance', label: 'Performance', icon: Sparkles },
+ { id: 'overview', labelKey: 'tabOverview', icon: LayoutDashboard },
+ { id: 'storyboard', labelKey: 'tabStoryboard', icon: Film },
+ { id: 'teleprompter', labelKey: 'tabTeleprompter', icon: Mic },
+ { id: 'script', labelKey: 'tabScript', icon: Pencil },
+ { id: 'shotlist', labelKey: 'tabShotlist', icon: ImageIcon },
+ { id: 'platforms', labelKey: 'tabPlatforms', icon: Megaphone },
+ { id: 'checklist', labelKey: 'tabChecklist', icon: CheckSquare },
+ { id: 'performance', labelKey: 'tabPerformance', icon: Sparkles },
 ];
 
 interface ProjectEditorShellProps {
@@ -88,6 +88,7 @@ interface ProjectEditorShellProps {
 
 export default function ProjectEditorShell({ projectId }: ProjectEditorShellProps) {
  const router = useRouter();
+ const { t, lang } = useStudioT();
  const { data: project, isLoading, error } = useContentProject(projectId);
  const deleteProject = useDeleteContentProject();
 
@@ -163,7 +164,7 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
 
  const handleDelete = async () => {
  if (!form) return;
- if (!confirm(`Delete "${form.title}"? This cannot be undone.`)) return;
+ if (!confirm(t('confirmDeleteProject', { title: form.title }))) return;
  await flushNow();
  await deleteProject.mutateAsync(projectId);
  router.push('/creator/pipeline');
@@ -173,7 +174,7 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
  return (
  <div className="flex items-center justify-center h-64 text-text-muted text-sm">
  <Clapperboard className="w-4 h-4 mr-2 animate-pulse" />
- Loading project…
+ {t('loadingProject')}
  </div>
  );
  }
@@ -184,16 +185,16 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
  <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-red-500/15 ring-1 ring-red-500/30 mb-4">
  <Trash2 className="w-7 h-7 text-red-300" />
  </div>
- <h1 className="font-heading text-2xl font-bold text-text-primary">Project not found</h1>
- <p className="text-text-secondary text-sm mt-2">
- The project may have been deleted or you don't have access.
- </p>
+ <h1 className="font-heading text-2xl font-bold text-text-primary">
+ {t('projectNotFound')}
+ </h1>
+ <p className="text-text-secondary text-sm mt-2">{t('projectNotFoundHint')}</p>
  <Link
  href="/creator/pipeline"
  className="mt-6 inline-flex items-center gap-1.5 px-4 h-10 rounded-xl border border-studio-500/30 text-studio-300 text-sm font-semibold"
  >
  <ArrowLeft className="w-4 h-4" />
- Back to pipeline
+ {t('backToPipeline')}
  </Link>
  </div>
  );
@@ -208,7 +209,7 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
  <Link
  href="/creator/pipeline"
  className="p-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-white/5 transition-colors"
- aria-label="Back to pipeline"
+ aria-label={t('backToPipeline')}
  >
  <ArrowLeft className="w-4 h-4" />
  </Link>
@@ -216,6 +217,8 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
  <div className="flex items-center gap-2 flex-wrap">
  <StatusQuickPicker
  current={form.status}
+ lang={lang}
+ title={t('fieldStatus')}
  onChange={(s) =>
  setForm((prev) => (prev ? { ...prev, status: s } : prev))
  }
@@ -247,22 +250,18 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
  void flushNow();
  }}
  disabled={status === 'saving' || !isDirty}
- title={
- !isDirty
- ? 'Nothing to save — already up to date'
- : 'Save now (autosave runs 1.2s after the last edit)'
- }
+ title={!isDirty ? t('saved') : t('save')}
  className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg bg-studio-500/15 text-studio-200 ring-1 ring-studio-500/30 hover:bg-studio-500/25 hover:ring-studio-500/50 text-xs font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-studio-500/15"
  >
  <Save className="w-3.5 h-3.5" />
- {status === 'saving' ? 'Saving…' : 'Save now'}
+ {status === 'saving' ? t('saving') : t('save')}
  </button>
  <button
  type="button"
  onClick={handleDelete}
  className="p-2 rounded-lg text-text-muted hover:text-red-300 hover:bg-red-500/10 transition-colors"
- aria-label="Delete project"
- title="Delete project"
+ aria-label={t('delete')}
+ title={t('delete')}
  >
  <Trash2 className="w-4 h-4" />
  </button>
@@ -273,7 +272,6 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
  <nav className="flex items-center gap-1 min-w-max">
  {TABS.map((tab) => {
  const isActive = activeTab === tab.id;
- const isFuture = typeof tab.phase === 'number' && tab.phase > 4;
  const Icon = tab.icon;
  return (
  <button
@@ -287,12 +285,7 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
  }`}
  >
  <Icon className={`w-4 h-4 ${isActive ? 'text-studio-400' : 'text-text-muted'}`} />
- {tab.label}
- {isFuture && (
- <span className="ml-1 text-[9px] uppercase tracking-wider text-text-muted/70 bg-darkcard/60 border border-darkborder rounded-full px-1.5 h-4 inline-flex items-center">
- Phase {tab.phase}
- </span>
- )}
+ {t(tab.labelKey)}
  </button>
  );
  })}
@@ -325,7 +318,7 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
  {activeTab === 'teleprompter' && <TeleprompterTab project={form} />}
  {activeTab === 'script' && (
  <ScriptTab
- script={form.script ?? null}
+ project={form}
  onChange={(script) => setForm((prev) => (prev ? { ...prev, script } : prev))}
  />
  )}
@@ -346,6 +339,8 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
  {activeTab === 'checklist' && (
  <ChecklistTab
  items={form.checklistItems}
+ contentType={form.type}
+ scriptLang={form.scriptLang}
  onChange={(checklistItems) =>
  setForm((prev) => (prev ? { ...prev, checklistItems } : prev))
  }
@@ -357,20 +352,6 @@ export default function ProjectEditorShell({ projectId }: ProjectEditorShellProp
  onChange={(performance) =>
  setForm((prev) => (prev ? { ...prev, performance } : prev))
  }
- />
- )}
- {activeTab !== 'overview' &&
- activeTab !== 'storyboard' &&
- activeTab !== 'teleprompter' &&
- activeTab !== 'script' &&
- activeTab !== 'shotlist' &&
- activeTab !== 'platforms' &&
- activeTab !== 'checklist' &&
- activeTab !== 'performance' && (
- <ComingSoonTab
- tabId={activeTab}
- tabLabel={TABS.find((t) => t.id === activeTab)?.label ?? ''}
- phase={TABS.find((t) => t.id === activeTab)?.phase ?? 7}
  />
  )}
  </motion.div>
@@ -406,6 +387,20 @@ function buildPayload(form: ContentProject) {
  // undefined-or-array, so we normalise to [] on the way
  // out — easier than fighting null in every consumer.
  referenceLinks: form.referenceLinks ?? [],
+ // Academy binding + pacing. These must ride along on every
+ // autosave: the Overview tab edits them in the same `form`
+ // object, and a payload that omits them would let the server's
+ // "undefined = leave alone" rule silently discard the edit.
+ courseSlug: form.courseSlug,
+ courseTitle: form.courseTitle,
+ examId: form.examId,
+ examTitle: form.examTitle,
+ lessonRef: form.lessonRef,
+ projectSlug: form.projectSlug,
+ seriesName: form.seriesName,
+ episodeNumber: form.episodeNumber,
+ targetDurationSec: form.targetDurationSec,
+ scriptLang: form.scriptLang,
  days: form.days.map((d: ContentProductionDay) => ({
  id: d.id,
  dayNumber: d.dayNumber,
@@ -461,46 +456,6 @@ function buildPayload(form: ContentProject) {
  };
 }
 
-// ─── Coming-soon tab stub ───────────────────────────────────────
-
-function ComingSoonTab({
- tabId,
- tabLabel,
- phase,
-}: {
- tabId: string;
- tabLabel: string;
- phase: number;
-}) {
- const icon =
- tabId === 'script' ? Pencil
- : tabId === 'shotlist' ? ImageIcon
- : tabId === 'platforms' ? Megaphone
- : tabId === 'checklist' ? CheckSquare
- : tabId === 'performance' ? Sparkles
- : Package;
- const Icon = icon;
- return (
- <div className="rounded-2xl border border-dashed border-darkborder bg-darkcard/30 p-10 text-center">
- <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-studio-500/15 ring-1 ring-studio-500/30 mb-4">
- <Icon className="w-7 h-7 text-studio-400" />
- </div>
- <h2 className="font-heading text-xl font-semibold text-text-primary mb-1">
- {tabLabel}
- </h2>
- <p className="text-text-secondary text-sm max-w-md mx-auto">
- This tab ships in Phase {phase}. For now, the 3 active
- tabs (Overview · Storyboard · Teleprompter) cover the
- core planning + scripting workflow.
- </p>
- <div className="mt-5 inline-flex items-center gap-2 px-3 h-8 rounded-full bg-studio-500/10 text-studio-300 text-xs font-semibold uppercase tracking-wider">
- <Package className="w-3.5 h-3.5" />
- Arriving in Phase {phase}
- </div>
- </div>
- );
-}
-
 // ─── Status quick-picker (topbar) ─────────────────────────────
 // A clickable status pill that opens a dropdown of all 6
 // statuses. Same shape as StatusPill but acts like a
@@ -509,9 +464,13 @@ function ComingSoonTab({
 // other places), so we wrap it in a small picker.
 function StatusQuickPicker({
  current,
+ lang,
+ title,
  onChange,
 }: {
  current: ContentStatus;
+ lang: StudioLang;
+ title: string;
  onChange: (s: ContentStatus) => void;
 }) {
  const [open, setOpen] = useState(false);
@@ -544,7 +503,7 @@ function StatusQuickPicker({
  className="inline-flex items-center gap-1 group"
  aria-haspopup="listbox"
  aria-expanded={open}
- title="Change status"
+ title={title}
  >
  <StatusPill status={current} size="sm" />
  <ChevronDown className="w-3 h-3 text-text-muted group-hover:text-studio-300 transition-colors" />
@@ -582,7 +541,7 @@ function StatusQuickPicker({
  className="w-1.5 h-1.5 rounded-full"
  style={{ background: meta.color }}
  />
- {meta.label}
+ {pick(meta.label, lang)}
  {active && (
  <Check className="w-3 h-3 ml-auto text-studio-400" />
  )}

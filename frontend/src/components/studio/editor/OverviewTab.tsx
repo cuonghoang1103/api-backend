@@ -13,7 +13,9 @@
 import { useEffect, useState } from 'react';
 import { Calendar, Hash, Link2, Sparkles, Tag as TagIcon, Type } from 'lucide-react';
 import ThumbnailUploader from '@/components/admin/ThumbnailUploader';
-import { CONTENT_STATUS_META, CONTENT_TYPE_META } from '@/lib/studio-meta';
+import AcademyBindingFields from '@/components/studio/AcademyBindingFields';
+import { CONTENT_STATUS_META, CONTENT_TYPE_META, TYPE_ORDER } from '@/lib/studio-meta';
+import { pick, useStudioT } from '@/lib/studio-i18n';
 import type {
  ContentProject,
  ContentReferenceLink,
@@ -27,6 +29,7 @@ interface OverviewTabProps {
 }
 
 export default function OverviewTab({ project, onChange }: OverviewTabProps) {
+ const { t, lang } = useStudioT();
  const [tagDraft, setTagDraft] = useState('');
  const [linkDraft, setLinkDraft] = useState<{ label: string; url: string }>({
  label: '',
@@ -45,7 +48,10 @@ export default function OverviewTab({ project, onChange }: OverviewTabProps) {
  };
 
  const setStatus = (s: ContentStatus) => update('status', s);
- const setType = (t: ContentType) => update('type', t);
+ // Param is `ct`, not `t`: `t` is the translator in this scope and
+ // shadowing it here is how a future edit ends up calling the enum
+ // value as a function.
+ const setType = (ct: ContentType) => update('type', ct);
 
  const addTag = () => {
  const t = tagDraft.trim().toLowerCase();
@@ -78,7 +84,7 @@ export default function OverviewTab({ project, onChange }: OverviewTabProps) {
  <div className="flex items-center gap-2 mb-3">
  <Type className="w-4 h-4 text-studio-400" />
  <h2 className="font-heading text-sm font-semibold text-text-primary uppercase tracking-wider">
- Identity
+ {t('ovIdentity')}
  </h2>
  </div>
 
@@ -89,34 +95,35 @@ export default function OverviewTab({ project, onChange }: OverviewTabProps) {
  value={project.title}
  onChange={(e) => update('title', e.target.value)}
  className="mt-1 w-full px-3 py-2 rounded-lg bg-darkbg border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-studio-500/50 focus:ring-2 focus:ring-studio-500/20"
- placeholder="Vlog hậu trường AI: tôi build production tool 30 ngày"
+ placeholder={t('fieldTitlePlaceholder')}
  />
  </label>
 
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
  <div>
- <span className="text-xs text-text-muted block mb-1.5">Type</span>
+ <span className="text-xs text-text-muted block mb-1.5">{t('fieldType')}</span>
  <div className="flex flex-wrap gap-1.5">
- {(Object.keys(CONTENT_TYPE_META) as ContentType[]).map((t) => (
+ {TYPE_ORDER.map((ct) => (
  <button
- key={t}
+ key={ct}
  type="button"
- onClick={() => setType(t)}
+ onClick={() => setType(ct)}
+ title={pick(CONTENT_TYPE_META[ct].hint, lang)}
  className={`inline-flex items-center gap-1 px-2.5 h-8 rounded-lg text-xs font-medium transition-colors ${
- project.type === t
+ project.type === ct
  ? 'bg-studio-500/20 text-studio-300 ring-1 ring-studio-500/40'
  : 'bg-darkcard/60 text-text-secondary border border-darkborder hover:border-studio-500/30'
  }`}
  >
- <span>{CONTENT_TYPE_META[t].emoji}</span>
- {CONTENT_TYPE_META[t].label}
+ <span>{CONTENT_TYPE_META[ct].emoji}</span>
+ {pick(CONTENT_TYPE_META[ct].label, lang)}
  </button>
  ))}
  </div>
  </div>
 
  <div>
- <span className="text-xs text-text-muted block mb-1.5">Status</span>
+ <span className="text-xs text-text-muted block mb-1.5">{t('fieldStatus')}</span>
  <div className="flex flex-wrap gap-1.5">
  {(Object.keys(CONTENT_STATUS_META) as ContentStatus[]).map((s) => (
  <button
@@ -133,7 +140,7 @@ export default function OverviewTab({ project, onChange }: OverviewTabProps) {
  className="w-1.5 h-1.5 rounded-full"
  style={{ background: CONTENT_STATUS_META[s].color }}
  />
- {CONTENT_STATUS_META[s].label}
+ {pick(CONTENT_STATUS_META[s].label, lang)}
  </button>
  ))}
  </div>
@@ -146,7 +153,7 @@ export default function OverviewTab({ project, onChange }: OverviewTabProps) {
  <div className="flex items-center gap-2 mb-3">
  <Sparkles className="w-4 h-4 text-studio-400" />
  <h2 className="font-heading text-sm font-semibold text-text-primary uppercase tracking-wider">
- The Pitch
+ {t('ovPitch')}
  </h2>
  </div>
 
@@ -157,7 +164,7 @@ export default function OverviewTab({ project, onChange }: OverviewTabProps) {
  value={project.mainHook ?? ''}
  onChange={(e) => update('mainHook', e.target.value)}
  className="mt-1 w-full px-3 py-2 rounded-lg bg-darkbg border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-studio-500/50 focus:ring-2 focus:ring-studio-500/20"
- placeholder="Bạn có thấy việc build production tool chán không?"
+ placeholder={t('fieldHookPlaceholder')}
  />
  </label>
 
@@ -178,28 +185,39 @@ export default function OverviewTab({ project, onChange }: OverviewTabProps) {
  <div className="flex items-center gap-2 mb-3">
  <Calendar className="w-4 h-4 text-studio-400" />
  <h2 className="font-heading text-sm font-semibold text-text-primary uppercase tracking-wider">
- Timeline
+ {t('ovTimeline')}
  </h2>
  </div>
 
  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
  <DateField
- label="Idea date"
+ label={t('fieldIdeaDate')}
  value={project.ideaDate}
  onChange={(v) => setDate('ideaDate', v)}
  />
  <DateField
- label="Film date"
+ label={t('fieldFilmDate')}
  value={project.filmDate}
  onChange={(v) => setDate('filmDate', v)}
  />
  <DateField
- label="Publish date"
+ label={t('fieldPublishDate')}
  value={project.publishDate}
  onChange={(v) => setDate('publishDate', v)}
  />
  </div>
  </section>
+
+ {/* Section: Academy binding + pacing.
+     Placed straight after the dates because it answers the same
+     kind of question ("when / what / how long"), and because the
+     target duration set here is what the Script tab's word budget
+     reads. */}
+ <AcademyBindingFields
+ value={project}
+ contentType={project.type}
+ onChange={(patch) => onChange(patch)}
+ />
 
  {/* Section: tags + thumbnail + refs */}
  <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -207,7 +225,7 @@ export default function OverviewTab({ project, onChange }: OverviewTabProps) {
  <div className="flex items-center gap-2 mb-3">
  <Hash className="w-4 h-4 text-studio-400" />
  <h2 className="font-heading text-sm font-semibold text-text-primary uppercase tracking-wider">
- Tags
+ {t('fieldTags')}
  </h2>
  </div>
  <div className="flex flex-wrap gap-1.5 mb-2">
@@ -243,7 +261,7 @@ export default function OverviewTab({ project, onChange }: OverviewTabProps) {
  addTag();
  }
  }}
- placeholder="Add tag…"
+ placeholder={t('ovAddTag')}
  className="flex-1 px-3 h-9 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-studio-500/50"
  />
  <button
@@ -260,13 +278,13 @@ export default function OverviewTab({ project, onChange }: OverviewTabProps) {
  <div className="flex items-center gap-2 mb-3">
  <TagIcon className="w-4 h-4 text-studio-400" />
  <h2 className="font-heading text-sm font-semibold text-text-primary uppercase tracking-wider">
- Thumbnail
+ {t('ovThumbnail')}
  </h2>
  </div>
  <ThumbnailUploader
  value={project.thumbnailUrl ?? ''}
  onChange={(url) => update('thumbnailUrl', url)}
- label="Project thumbnail"
+ label={t('ovProjectThumb')}
  />
  </div>
  </section>
@@ -276,7 +294,7 @@ export default function OverviewTab({ project, onChange }: OverviewTabProps) {
  <div className="flex items-center gap-2 mb-3">
  <Link2 className="w-4 h-4 text-studio-400" />
  <h2 className="font-heading text-sm font-semibold text-text-primary uppercase tracking-wider">
- Reference links
+ {t('ovRefLinks')}
  </h2>
  </div>
 
@@ -304,7 +322,7 @@ export default function OverviewTab({ project, onChange }: OverviewTabProps) {
  type="button"
  onClick={() => setLinks(links.filter((_, j) => j !== i))}
  className="text-red-400/70 hover:text-red-300 text-xs"
- aria-label="Remove link"
+ aria-label={t('ovRemoveLink')}
  >
  ×
  </button>
@@ -318,7 +336,7 @@ export default function OverviewTab({ project, onChange }: OverviewTabProps) {
  type="text"
  value={linkDraft.label}
  onChange={(e) => setLinkDraft({ ...linkDraft, label: e.target.value })}
- placeholder="Label"
+ placeholder={t('ovLabel')}
  className="px-3 h-9 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-studio-500/50"
  />
  <input

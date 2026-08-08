@@ -18,6 +18,7 @@ import { motion } from 'framer-motion';
 import {
  ArrowLeft,
  Clapperboard,
+ Languages,
  Plus,
  Shield,
  Film,
@@ -28,22 +29,24 @@ import {
  ListChecks,
 } from 'lucide-react';
 import { useStudioStore } from '@/store/studioStore';
+import { useStudioT, type StudioKey } from '@/lib/studio-i18n';
 
 interface CreatorNavItem {
- label: string;
+ labelKey: StudioKey;
  href: string;
  icon: React.ComponentType<{ className?: string }>;
 }
 
 const CREATOR_NAV: CreatorNavItem[] = [
- { label: 'Dashboard', href: '/creator', icon: LayoutDashboard },
- { label: 'Idea Bank', href: '/creator/ideas', icon: Lightbulb },
- { label: 'Pipeline', href: '/creator/pipeline', icon: KanbanSquare },
- { label: 'Calendar', href: '/creator/calendar', icon: CalendarRange },
- { label: 'List', href: '/creator/list', icon: ListChecks },
+ { labelKey: 'navDashboard', href: '/creator', icon: LayoutDashboard },
+ { labelKey: 'navIdeas', href: '/creator/ideas', icon: Lightbulb },
+ { labelKey: 'navPipeline', href: '/creator/pipeline', icon: KanbanSquare },
+ { labelKey: 'navCalendar', href: '/creator/calendar', icon: CalendarRange },
+ { labelKey: 'navList', href: '/creator/list', icon: ListChecks },
  ];
 
 export default function StudioTopbar() {
+ const { t, lang, setLang } = useStudioT();
  const pathname = usePathname();
  const router = useRouter();
  const openCreateModal = useStudioStore((s) => s.openCreateModal);
@@ -94,7 +97,7 @@ export default function StudioTopbar() {
  </div>
  <div className="hidden sm:flex flex-col leading-tight">
  <span className="font-heading font-bold text-sm text-text-primary">
- Content Studio
+ {t('studioName')}
  </span>
  <span className="text-[10px] uppercase tracking-[0.18em] text-studio-400">
  cuonghoang.dev / creator
@@ -125,7 +128,7 @@ export default function StudioTopbar() {
  isActive ? 'text-studio-400' : 'text-text-muted group-hover:text-text-secondary'
  }`}
  />
- <span className="hidden md:inline whitespace-nowrap">{item.label}</span>
+ <span className="hidden md:inline whitespace-nowrap">{t(item.labelKey)}</span>
  </Link>
  );
  })}
@@ -138,7 +141,7 @@ export default function StudioTopbar() {
  className="hidden sm:flex items-center gap-1.5 px-2.5 h-9 rounded-lg text-xs text-text-muted hover:text-text-primary hover:bg-white/5 transition-colors"
  >
  <ArrowLeft className="w-3.5 h-3.5" />
- <span>Admin</span>
+ <span>{t('backToAdmin')}</span>
  </Link>
 
  {/* New project CTA — primary amber. Opens the global
@@ -151,7 +154,21 @@ export default function StudioTopbar() {
  className="flex items-center gap-1.5 px-3 h-9 rounded-lg bg-studio-gradient text-studio-950 font-semibold text-sm shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:shadow-[0_0_28px_rgba(245,158,11,0.45)] transition-shadow"
  >
  <Plus className="w-4 h-4" strokeWidth={2.6} />
- <span className="hidden sm:inline">New project</span>
+ <span className="hidden sm:inline">{t('newProject')}</span>
+ </button>
+
+ {/* Language toggle. Writes the SITE locale, not a
+     studio-only flag — switching here and then navigating
+     to /admin should keep the language you chose. */}
+ <button
+ type="button"
+ onClick={() => setLang(lang === 'vi' ? 'en' : 'vi')}
+ title={t('languageLabel')}
+ aria-label={t(lang === 'vi' ? 'switchToEn' : 'switchToVi')}
+ className="inline-flex items-center gap-1 h-9 px-2.5 rounded-lg border border-darkborder text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-white/5 transition-colors"
+ >
+ <Languages className="w-3.5 h-3.5 text-studio-400" />
+ <span className="uppercase tracking-wider">{lang}</span>
  </button>
 
  {/* Role pill — only shows on >=md. */}

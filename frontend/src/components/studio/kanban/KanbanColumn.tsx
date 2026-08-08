@@ -10,6 +10,7 @@ import { useDroppable } from '@dnd-kit/core';
 import { motion } from 'framer-motion';
 import { Plus } from 'lucide-react';
 import { CONTENT_STATUS_META } from '@/lib/studio-meta';
+import { pick, useStudioT } from '@/lib/studio-i18n';
 import { useStudioStore } from '@/store/studioStore';
 import { cn } from '@/lib/utils';
 import type { ContentStatus } from '@/types';
@@ -25,7 +26,9 @@ export default function KanbanColumn({ status, count, children }: KanbanColumnPr
  id: `column-${status}`,
  data: { type: 'column', status },
  });
+ const { t, lang } = useStudioT();
  const meta = CONTENT_STATUS_META[status];
+ const label = pick(meta.label, lang);
  const openCreateModal = useStudioStore((s) => s.openCreateModal);
 
  // New projects always start in the IDEA column, so
@@ -52,7 +55,7 @@ export default function KanbanColumn({ status, count, children }: KanbanColumnPr
  style={{ background: meta.color }}
  />
  <h3 className="font-heading text-sm font-semibold text-text-primary">
- {meta.label}
+ {label}
  </h3>
  </div>
  <div className="flex items-center gap-1.5">
@@ -61,8 +64,8 @@ export default function KanbanColumn({ status, count, children }: KanbanColumnPr
  <button
  type="button"
  onClick={() => openCreateModal()}
- aria-label={`Add project to ${meta.label}`}
- title={`Add project to ${meta.label}`}
+ aria-label={`${t('newProject')} — ${label}`}
+ title={`${t('newProject')} — ${label}`}
  className="inline-flex items-center justify-center w-6 h-6 rounded-md text-text-muted hover:text-studio-300 hover:bg-studio-500/15 transition-colors"
  >
  <Plus className="w-3.5 h-3.5" />
@@ -81,15 +84,17 @@ export default function KanbanColumn({ status, count, children }: KanbanColumnPr
  animate={{ opacity: 1 }}
  className="text-[11px] text-text-muted italic text-center py-6 px-2"
  >
- Drop a card here to set status to{' '}
- <span style={{ color: meta.color }}>{meta.label}</span>
+ {t('dropHere')} —{' '}
+ <span style={{ color: meta.color }}>{label}</span>
  </motion.p>
  )}
  </div>
 
  {/* Footer — small description of what lives in this stage */}
  <div className="px-3 py-2 border-t border-darkborder">
- <p className="text-[10px] text-text-muted leading-relaxed">{meta.description}</p>
+ <p className="text-[10px] text-text-muted leading-relaxed">
+ {pick(meta.description, lang)}
+ </p>
  </div>
  </div>
  );

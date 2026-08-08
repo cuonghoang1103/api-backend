@@ -849,13 +849,90 @@ export interface PlaylistSummary {
 // many call sites — a one-stop import is easier to keep
 // consistent.
 
+// Mirrors the Prisma `content_type` enum exactly. The teaching
+// formats exist because the studio's day job is recording Academy
+// material — each one carries its own script template and
+// checklist preset, so they are enum values, not tags.
 export type ContentType =
  | 'VLOG'
  | 'AFFILIATE'
  | 'CODE_REVIEW'
  | 'REVIEW'
  | 'IDEA'
+ | 'LECTURE'
+ | 'EXAM_SOLVING'
+ | 'EXERCISE'
+ | 'PROJECT_BUILD'
+ | 'TUTORIAL'
+ | 'SHORTS'
+ | 'LIVESTREAM'
  | 'OTHER';
+
+/** Language a video is RECORDED in. Independent of the studio's
+ *  interface language — an English lecture can be scripted while
+ *  reading a Vietnamese UI. */
+export type ScriptLang = 'VI' | 'EN';
+
+/** How a script snapshot came to exist. See
+ *  src/services/content.script.service.ts. */
+export type ScriptVersionOrigin = 'MANUAL' | 'TEMPLATE' | 'RESTORE' | 'AUTO';
+
+/** History row. `script` is absent from list responses (the
+ *  sidebar only needs metadata) and present when a single version
+ *  is fetched for preview or restore. */
+export interface ContentScriptVersion {
+ id: number;
+ version: number;
+ label: string | null;
+ wordCount: number;
+ origin: ScriptVersionOrigin;
+ createdAt: string;
+ script?: string;
+}
+
+/** A reusable script skeleton the user saved from their own work.
+ *  Built-in templates are NOT of this shape — they live in
+ *  lib/studio-templates.ts and carry no id. */
+export interface ScriptTemplate {
+ id: number;
+ name: string;
+ nameEn: string | null;
+ description: string | null;
+ descriptionEn: string | null;
+ body: string;
+ bodyEn: string | null;
+ contentType: ContentType | null;
+ tags: string[];
+ useCount: number;
+ order: number;
+ createdAt: string;
+ updatedAt: string;
+}
+
+/** Picker source for the "what is this video about?" panel. */
+export interface AcademyCourseRef {
+ id: number;
+ slug: string;
+ title: string;
+ courseCode: string | null;
+ academyType: string;
+ semesterId: number | null;
+}
+
+export interface AcademyExamRef {
+ id: number;
+ courseId: number;
+ kind: string;
+ peType: string | null;
+ code: string | null;
+ titleEn: string;
+ titleVi: string;
+}
+
+export interface AcademyRefs {
+ courses: AcademyCourseRef[];
+ exams: AcademyExamRef[];
+}
 
 export type ContentStatus =
  | 'IDEA'
@@ -975,8 +1052,36 @@ export interface ContentReferenceLink {
  url: string;
 }
 
+/**
+ * What an Academy-bound video is *about*, plus how it is paced.
+ *
+ * Shared by the full project, the list summary and the create
+ * payload so the three can never disagree about the field names —
+ * the create modal writes exactly what the list renders.
+ *
+ * These are plain scalars server-side, not foreign keys: deleting
+ * a course must not delete the video that teaches it. The `*Title`
+ * fields are denormalised snapshots so a card stays readable
+ * without a JOIN, and after the source row is renamed or removed.
+ */
+export interface ContentAcademyBinding {
+ courseSlug: string | null;
+ courseTitle: string | null;
+ examId: number | null;
+ examTitle: string | null;
+ /** Free-form "which part" — "Chương 3 · Bài 2", "Lab 4", "Slot 7". */
+ lessonRef: string | null;
+ /** Slug of a /projects case study this video builds. */
+ projectSlug: string | null;
+ seriesName: string | null;
+ episodeNumber: number | null;
+ /** Planned runtime in seconds — drives the script word budget. */
+ targetDurationSec: number | null;
+ scriptLang: ScriptLang;
+}
+
  /** Full project shape returned by GET /admin/content/projects/:id. */
-export interface ContentProject {
+export interface ContentProject extends ContentAcademyBinding {
  id: number;
  slug: string;
  title: string;
@@ -1006,7 +1111,7 @@ export interface ContentProject {
 }
 
 /** Light list-row shape returned by GET /admin/content/projects. */
-export interface ContentProjectSummary {
+export interface ContentProjectSummary extends ContentAcademyBinding {
  id: number;
  slug: string;
  title: string;
@@ -1026,8 +1131,11 @@ export interface ContentProjectSummary {
  };
 }
 
-/** Payload shape for POST /admin/content/projects. */
-export interface ContentProjectCreate {
+/** Payload shape for POST /admin/content/projects.
+ *  The Academy binding is Partial: the create modal sets whatever
+ *  the user picked and omits the rest, and the server treats an
+ *  absent key as "leave alone". */
+export interface ContentProjectCreate extends Partial<ContentAcademyBinding> {
  title: string;
  type?: ContentType;
  status?: ContentStatus;

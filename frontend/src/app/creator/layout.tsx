@@ -15,8 +15,10 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Clapperboard } from 'lucide-react';
 import StudioShell from '@/components/studio/StudioShell';
 import CreateProjectModal from '@/components/studio/CreateProjectModal';
+import { useStudioT } from '@/lib/studio-i18n';
 
 export default function CreatorLayout({ children }: { children: React.ReactNode }) {
+ const { t } = useStudioT();
  const router = useRouter();
  const pathname = usePathname();
  const [authChecked, setAuthChecked] = useState(false);
@@ -55,8 +57,8 @@ export default function CreatorLayout({ children }: { children: React.ReactNode 
  <Clapperboard className="w-6 h-6 text-studio-950" strokeWidth={2.4} />
  </div>
  <div className="flex flex-col items-center gap-1">
- <p className="text-text-primary font-heading text-sm">Content Studio</p>
- <p className="text-text-muted text-xs">Checking access…</p>
+ <p className="text-text-primary font-heading text-sm">{t('studioName')}</p>
+ <p className="text-text-muted text-xs">{t('checkingAccess')}</p>
  </div>
  <div className="w-32 h-1 bg-darkcard rounded-full overflow-hidden">
  <div

@@ -40,17 +40,26 @@ import {
  useUpdateContentIdea,
 } from '@/hooks/useContentQueries';
 import { IDEA_STATUS_META } from '@/lib/studio-meta';
+import { pick, useStudioT, type StudioLang, type StudioTFn } from '@/lib/studio-i18n';
 import { toCsv, downloadCsv, type CsvColumn } from '@/lib/csv';
 import type { ContentIdea, IdeaStatus } from '@/types';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 
-const STATUS_TABS: Array<{ value: IdeaStatus | 'ALL'; label: string }> = [
- { value: 'ALL', label: 'All' },
- { value: 'CAPTURED', label: IDEA_STATUS_META.CAPTURED.label },
- { value: 'REFINED', label: IDEA_STATUS_META.REFINED.label },
- { value: 'PROMOTED', label: IDEA_STATUS_META.PROMOTED.label },
- { value: 'ARCHIVED', label: IDEA_STATUS_META.ARCHIVED.label },
-];
+// Built per-render rather than as a module constant: the labels
+// come from the bilingual meta, and a constant would freeze
+// whichever language happened to be active on first import.
+function statusTabs(
+ t: StudioTFn,
+ lang: StudioLang,
+): Array<{ value: IdeaStatus | 'ALL'; label: string }> {
+ return [
+ { value: 'ALL', label: t('all') },
+ { value: 'CAPTURED', label: pick(IDEA_STATUS_META.CAPTURED.label, lang) },
+ { value: 'REFINED', label: pick(IDEA_STATUS_META.REFINED.label, lang) },
+ { value: 'PROMOTED', label: pick(IDEA_STATUS_META.PROMOTED.label, lang) },
+ { value: 'ARCHIVED', label: pick(IDEA_STATUS_META.ARCHIVED.label, lang) },
+ ];
+}
 
 // ─── Capture form ─────────────────────────────────────────────────
 // A simple "type and go" capture box. Press Enter or
@@ -58,6 +67,7 @@ const STATUS_TABS: Array<{ value: IdeaStatus | 'ALL'; label: string }> = [
 // fields minimal (title + optional hook) — full notes
 // and score are set on the card detail later.
 function CaptureForm() {
+ const { t } = useStudioT();
  const [title, setTitle] = useState('');
  const [hook, setHook] = useState('');
  const create = useCreateContentIdea();
@@ -91,7 +101,7 @@ function CaptureForm() {
  type="text"
  value={title}
  onChange={(e) => setTitle(e.target.value)}
- placeholder="Tóm tắt ý tưởng trong 1 câu..."
+ placeholder={t('ideaTitlePlaceholder')}
  maxLength={140}
  className="w-full bg-transparent text-base sm:text-lg font-medium text-text-primary placeholder:text-text-muted focus:outline-none"
  />
@@ -99,13 +109,13 @@ function CaptureForm() {
  type="text"
  value={hook}
  onChange={(e) => setHook(e.target.value)}
- placeholder="Hook (tuỳ chọn) — câu mở đầu khi lên video"
+ placeholder={t('ideaHookPlaceholder')}
  maxLength={280}
  className="w-full bg-transparent text-sm text-text-secondary placeholder:text-text-muted focus:outline-none"
  />
  <div className="flex items-center justify-between pt-1">
  <span className="text-xs text-text-muted">
- {title.length}/140 · {hook.length}/280
+ {t('ideaCharCount', { a: title.length, b: hook.length })}
  </span>
  <button
  type="submit"
@@ -117,7 +127,7 @@ function CaptureForm() {
  ) : (
  <Plus className="w-4 h-4" />
  )}
- Capture
+ {t('ideaCapture')}
  </button>
  </div>
  </div>
@@ -150,6 +160,7 @@ function IdeaCard({
  onRate: (score: number) => void;
  isPromoting: boolean;
 }) {
+ const { t, lang } = useStudioT();
  const meta = IDEA_STATUS_META[idea.status];
  const created = new Date(idea.createdAt);
  const days = Math.max(
@@ -176,7 +187,7 @@ function IdeaCard({
  className="w-1.5 h-1.5 rounded-full"
  style={{ backgroundColor: meta.color }}
  />
- {meta.label}
+ {pick(meta.label, lang)}
  </span>
  <ScoreStars score={idea.score} onRate={onRate} />
  </div>
@@ -193,7 +204,7 @@ function IdeaCard({
  )}
  {idea.notes && (
  <p className="mt-2 text-xs text-text-muted line-clamp-2 italic">
- "{idea.notes}"
+ &ldquo;{idea.notes}&rdquo;
  </p>
  )}
  </div>
@@ -221,7 +232,7 @@ function IdeaCard({
  {/* Footer: meta + actions */}
  <div className="mt-auto pt-3 border-t border-studio-500/10 flex items-center justify-between gap-2">
  <span className="text-[11px] text-text-muted">
- {days === 0 ? 'Today' : `${days}d ago`}
+ {days === 0 ? t('today') : t('daysAgoShort', { n: days })}
  </span>
  <div className="flex items-center gap-1">
  {/* Promote (or "open project" if already promoted) */}
@@ -231,7 +242,7 @@ function IdeaCard({
  className="inline-flex items-center gap-1 h-7 px-2.5 rounded-md bg-emerald-500/15 text-emerald-300 text-xs font-semibold hover:bg-emerald-500/25 transition-colors"
  >
  <ArrowUpRight className="w-3 h-3" />
- Open project
+ {t('ideaOpenProject')}
  </Link>
  ) : (
  <button
@@ -245,7 +256,7 @@ function IdeaCard({
  ) : (
  <Sparkles className="w-3 h-3" />
  )}
- Promote
+ {t('ideaPromote')}
  </button>
  )}
 
@@ -253,15 +264,15 @@ function IdeaCard({
  <IconButton
  icon={ArchiveRestore}
  onClick={onUnarchive}
- label="Restore"
+ label={t('restore')}
  />
  ) : (
- <IconButton icon={Archive} onClick={onArchive} label="Archive" />
+ <IconButton icon={Archive} onClick={onArchive} label={t('ideaArchive')} />
  )}
  <IconButton
  icon={Trash2}
  onClick={onDelete}
- label="Delete"
+ label={t('delete')}
  danger
  />
  </div>
@@ -279,6 +290,7 @@ function ScoreStars({
  score: number | null;
  onRate: (score: number) => void;
 }) {
+ const { t } = useStudioT();
  const value = score ?? 0;
  return (
  <div className="inline-flex items-center gap-0.5">
@@ -288,7 +300,7 @@ function ScoreStars({
  type="button"
  onClick={() => onRate(value === n ? 0 : n)}
  className="text-studio-400/60 hover:text-studio-400 transition-colors"
- aria-label={`Rate ${n}`}
+ aria-label={t('ideaRate', { n })}
  >
  <Star
  className="w-3.5 h-3.5"
@@ -346,10 +358,11 @@ function FilterBar({
  search: string;
  onSearch: (v: string) => void;
 }) {
+ const { t, lang } = useStudioT();
  return (
  <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
  <div className="inline-flex items-center gap-1 p-1 rounded-xl bg-bg-elevated/60 ring-1 ring-studio-500/15 overflow-x-auto">
- {STATUS_TABS.map((tab) => {
+ {statusTabs(t, lang).map((tab) => {
  const count = counts[tab.value] ?? 0;
  const isActive = active === tab.value;
  return (
@@ -383,14 +396,14 @@ function FilterBar({
  type="text"
  value={search}
  onChange={(e) => onSearch(e.target.value)}
- placeholder="Search ideas..."
+ placeholder={t('ideaSearchPlaceholder')}
  className="w-full h-10 pl-9 pr-9 rounded-xl bg-bg-elevated/60 ring-1 ring-studio-500/15 focus:ring-studio-500/40 focus:outline-none text-sm text-text-primary placeholder:text-text-muted"
  />
  {search && (
  <button
  type="button"
  onClick={() => onSearch('')}
- aria-label="Clear search"
+ aria-label={t('clearSearch')}
  className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 rounded-md text-text-muted hover:text-text-primary hover:bg-studio-500/15 inline-flex items-center justify-center"
  >
  <X className="w-3.5 h-3.5" />
@@ -403,18 +416,17 @@ function FilterBar({
 
 // ─── Empty state ───────────────────────────────────────────────────
 function EmptyState({ filtered }: { filtered: boolean }) {
+ const { t } = useStudioT();
  return (
  <div className="text-center py-16">
  <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-studio-500/10 ring-1 ring-studio-500/20 mb-4">
  <Lightbulb className="w-7 h-7 text-studio-400/60" />
  </div>
  <h3 className="text-base font-semibold text-text-primary">
- {filtered ? 'No ideas match' : 'Your idea bank is empty'}
+ {filtered ? t('ideaNoMatch') : t('ideaBankEmpty')}
  </h3>
  <p className="mt-1 text-sm text-text-secondary max-w-sm mx-auto">
- {filtered
- ? 'Try a different status filter or clear the search box.'
- : 'Drop a title in the capture form above. Refine later, promote when ready.'}
+ {filtered ? t('ideaNoMatchHint') : t('ideaNoneHint')}
  </p>
  </div>
  );
@@ -423,6 +435,7 @@ function EmptyState({ filtered }: { filtered: boolean }) {
 // ─── Page ──────────────────────────────────────────────────────────
 export default function IdeasPage() {
  const router = useRouter();
+ const { t } = useStudioT();
  const [statusFilter, setStatusFilter] = useState<IdeaStatus | 'ALL'>('ALL');
  const [rawSearch, setRawSearch] = useState('');
  const debouncedSearch = useDebouncedValue(rawSearch, 250);
@@ -475,17 +488,17 @@ export default function IdeasPage() {
  const exportIdeasCsv = () => {
  if (items.length === 0) return;
  const cols: CsvColumn<ContentIdea>[] = [
- { label: 'Title', value: (i) => i.title },
- { label: 'Hook', value: (i) => i.hook },
- { label: 'Notes', value: (i) => i.notes },
- { label: 'Status', value: (i) => i.status },
- { label: 'Score', value: (i) => i.score ?? 0 },
- { label: 'Suggested type', value: (i) => i.suggestedType ?? '' },
- { label: 'Tags', value: (i) => i.tags },
- { label: 'Promoted to project', value: (i) => i.promotedToProjectId ?? '' },
- { label: 'Promoted at', value: (i) => i.promotedAt ?? '' },
- { label: 'Created at', value: (i) => i.createdAt },
- { label: 'Updated at', value: (i) => i.updatedAt },
+ { label: t('fieldTitle'), value: (i) => i.title },
+ { label: t('fieldHook'), value: (i) => i.hook },
+ { label: t('ideaNotes'), value: (i) => i.notes },
+ { label: t('fieldStatus'), value: (i) => i.status },
+ { label: t('ideaScore'), value: (i) => i.score ?? 0 },
+ { label: t('ideaSuggestedType'), value: (i) => i.suggestedType ?? '' },
+ { label: t('fieldTags'), value: (i) => i.tags },
+ { label: t('ideaPromotedTo'), value: (i) => i.promotedToProjectId ?? '' },
+ { label: t('ideaPromotedAt'), value: (i) => i.promotedAt ?? '' },
+ { label: t('ideaCreatedAt'), value: (i) => i.createdAt },
+ { label: t('ideaUpdatedAt'), value: (i) => i.updatedAt },
  ];
  const csv = toCsv(items, cols);
  const stamp = new Date().toISOString().slice(0, 10);
@@ -503,7 +516,7 @@ export default function IdeasPage() {
  payload: { status: idea.hook ? 'REFINED' : 'CAPTURED' },
  });
  const handleDelete = (idea: ContentIdea) => {
- if (!confirm(`Delete idea "${idea.title}"? This cannot be undone.`)) return;
+ if (!confirm(t('confirmDeleteIdea', { title: idea.title }))) return;
  remove.mutate(idea.id);
  };
  const handleRate = (idea: ContentIdea, score: number) =>
@@ -522,26 +535,26 @@ export default function IdeasPage() {
  <div className="flex items-end justify-between gap-4">
  <div>
  <h1 className="font-heading text-2xl sm:text-3xl font-bold text-text-primary">
- Idea Bank
+ {t('ideasTitle')}
  </h1>
  <p className="mt-1 text-sm text-text-secondary">
- Capture sparks. Promote to a project when ready.
+ {t('ideasSubtitle')}
  </p>
  </div>
  <div className="hidden sm:flex items-center gap-3">
  <div className="flex items-center gap-2 text-xs text-text-muted">
  <Filter className="w-3.5 h-3.5" />
- {counts.ALL} idea{counts.ALL === 1 ? '' : 's'} total
+ {t('ideasTotal', { n: counts.ALL })}
  </div>
  <button
  type="button"
  onClick={exportIdeasCsv}
  disabled={items.length === 0}
- title="Export filtered ideas as CSV"
+ title={t('ideaExportCsv')}
  className="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg bg-bg-elevated/40 hover:bg-bg-elevated/70 text-text-primary text-xs font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
  >
  <Download className="w-3.5 h-3.5" />
- Export CSV
+ {t('listExportCsv')}
  </button>
  </div>
  </div>
@@ -595,12 +608,12 @@ export default function IdeasPage() {
  {counts.PROMOTED > 0 && (
  <div className="flex items-center gap-2 text-xs text-text-muted pt-2">
  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
- {counts.PROMOTED} idea{counts.PROMOTED === 1 ? '' : 's'} promoted to a project.{' '}
+ {t('ideasPromotedFooter', { n: counts.PROMOTED })}{' '}
  <Link
  href="/creator/pipeline"
  className="text-studio-400 hover:text-studio-300 underline-offset-2 hover:underline"
  >
- See pipeline →
+ {t('seePipeline')} →
  </Link>
  </div>
  )}

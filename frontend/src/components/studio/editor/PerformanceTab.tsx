@@ -32,6 +32,7 @@ import {
  Plus,
 } from 'lucide-react';
 import type { ContentPerformance } from '@/types';
+import { pick, useStudioT } from '@/lib/studio-i18n';
 
 interface PerformanceTabProps {
  performance: ContentPerformance | null;
@@ -42,6 +43,7 @@ export default function PerformanceTab({
  performance,
  onChange,
 }: PerformanceTabProps) {
+ const { t, lang } = useStudioT();
  // Local state for the platform-metrics JSON editor
  // (avoids a roundtrip on every keystroke).
  const [platformText, setPlatformText] = useState(() =>
@@ -84,11 +86,10 @@ export default function PerformanceTab({
  <Sparkles className="w-6 h-6 text-studio-400" />
  </div>
  <h3 className="text-sm font-semibold text-text-primary mb-1">
- No metrics yet
+ {t('pfNoMetrics')}
  </h3>
  <p className="text-xs text-text-secondary mb-4 max-w-sm mx-auto">
- Once you publish this project, come back here to log
- view counts, watch time, and lessons learned.
+ {t('pfNoMetricsHint')}
  </p>
  <button
  type="button"
@@ -111,7 +112,7 @@ export default function PerformanceTab({
  className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg bg-studio-500 text-bg-base text-xs font-semibold hover:bg-studio-400 transition-colors"
  >
  <Plus className="w-3.5 h-3.5" />
- Start tracking
+ {t('pfStartTracking')}
  </button>
  </div>
  );
@@ -136,28 +137,28 @@ export default function PerformanceTab({
  <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
  <StatTile
  icon={<Eye className="w-3.5 h-3.5" />}
- label="Views"
+ label={t('pfViews')}
  value={performance.totalViews}
  onChange={(v) => update({ totalViews: clampInt(v) })}
  tint="#60a5fa"
  />
  <StatTile
  icon={<Heart className="w-3.5 h-3.5" />}
- label="Likes"
+ label={t('pfLikes')}
  value={performance.totalLikes}
  onChange={(v) => update({ totalLikes: clampInt(v) })}
  tint="#f43f5e"
  />
  <StatTile
  icon={<MessageCircle className="w-3.5 h-3.5" />}
- label="Comments"
+ label={t('pfComments')}
  value={performance.totalComments}
  onChange={(v) => update({ totalComments: clampInt(v) })}
  tint="#a855f7"
  />
  <StatTile
  icon={<Share2 className="w-3.5 h-3.5" />}
- label="Shares"
+ label={t('pfShares')}
  value={performance.totalShares}
  onChange={(v) => update({ totalShares: clampInt(v) })}
  tint="#22d3ee"
@@ -170,7 +171,7 @@ export default function PerformanceTab({
  <div className="flex items-center gap-1.5 mb-2">
  <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
  <span className="text-xs font-semibold text-text-primary">
- Engagement rate
+ {t('pfEngagement')}
  </span>
  </div>
  <div className="text-2xl font-bold text-text-primary tabular-nums">
@@ -186,7 +187,7 @@ export default function PerformanceTab({
  <div className="flex items-center gap-1.5 mb-2">
  <Clock className="w-3.5 h-3.5 text-studio-400" />
  <span className="text-xs font-semibold text-text-primary">
- Avg watch time
+ {t('pfWatchTime')}
  </span>
  </div>
  <div className="flex items-center gap-2">
@@ -241,10 +242,10 @@ export default function PerformanceTab({
  <div className="flex items-center gap-1.5 mb-2">
  <FileText className="w-3.5 h-3.5 text-studio-400" />
  <span className="text-xs font-semibold text-text-primary">
- Lessons learned
+ {t('pfLessons')}
  </span>
  <span className="text-[10px] text-text-muted ml-1">
- what worked, what didn't
+ {t('pfLessonsHint')}
  </span>
  </div>
  <textarea
@@ -252,7 +253,7 @@ export default function PerformanceTab({
  onChange={(e) =>
  update({ lessonsLearned: e.target.value || null })
  }
- placeholder="The first 3 seconds carried the entire video…"
+ placeholder={t('pfLessonsPh')}
  rows={4}
  className="w-full bg-bg-elevated/40 rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-1 focus:ring-studio-500/40 resize-y placeholder:text-text-muted/60"
  />
@@ -263,7 +264,7 @@ export default function PerformanceTab({
  <summary className="cursor-pointer list-none p-4 flex items-center gap-1.5">
  <Sparkles className="w-3.5 h-3.5 text-text-muted" />
  <span className="text-xs font-semibold text-text-primary">
- Per-platform breakdown
+ {t('pfPerPlatform')}
  </span>
  <span className="text-[10px] text-text-muted ml-1">
  (read-only JSON, edit via API)
@@ -303,8 +304,7 @@ export default function PerformanceTab({
  spellCheck={false}
  />
  <div className="text-[10px] text-text-muted mt-1">
- Save with Ctrl/Cmd+S or by clicking away. Invalid
- JSON is reverted.
+ {t('pfJsonHint')}
  </div>
  </div>
  </details>

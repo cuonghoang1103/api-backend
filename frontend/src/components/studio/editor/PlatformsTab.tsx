@@ -48,6 +48,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { PLATFORM_META } from '@/lib/studio-meta';
+import { pick, useStudioT } from '@/lib/studio-i18n';
 import type {
  ContentPlatform,
  ContentPlatformPost,
@@ -73,6 +74,7 @@ export default function PlatformsTab({
  platforms,
  onChange,
 }: PlatformsTabProps) {
+ const { t, lang } = useStudioT();
  // Active filter — defaults to "all" so the user
  // sees every platform at once.
  const [activeFilter, setActiveFilter] = useState<
@@ -149,7 +151,7 @@ export default function PlatformsTab({
  <div className="flex items-center gap-2 overflow-x-auto pb-1">
  <FilterChip
  active={activeFilter === 'ALL'}
- label="All"
+ label={t('all')}
  count={platforms.length}
  onClick={() => setActiveFilter('ALL')}
  />
@@ -160,7 +162,7 @@ export default function PlatformsTab({
  <FilterChip
  key={p}
  active={activeFilter === p}
- label={meta.label}
+ label={pick(meta.label, lang)}
  color={meta.color}
  count={count}
  onClick={() => setActiveFilter(p)}
@@ -179,7 +181,7 @@ export default function PlatformsTab({
  No {activeFilter === 'ALL' ? 'posts' : PLATFORM_META[activeFilter].label + ' posts'} yet
  </h3>
  <p className="mt-1 text-sm text-text-secondary max-w-sm mx-auto">
- Add a row below to schedule a caption + publish time for this platform.
+ {t('plEmptyHint')}
  </p>
  </div>
  ) : (
@@ -218,7 +220,7 @@ export default function PlatformsTab({
  {/* Add row — one button per platform */}
  <div className="pt-3 border-t border-studio-500/10">
  <div className="text-[10px] uppercase tracking-wider text-text-muted mb-2">
- Add a new post:
+ {t('plAddPost')}
  </div>
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
  {ALL_PLATFORMS.map((p) => {
@@ -231,7 +233,7 @@ export default function PlatformsTab({
  className="inline-flex items-center justify-center gap-1.5 h-9 rounded-lg bg-studio-500/10 hover:bg-studio-500/20 text-studio-300 text-xs font-semibold transition-colors"
  >
  <Plus className="w-3.5 h-3.5" />
- {meta.label}
+ {pick(meta.label, lang)}
  </button>
  );
  })}
@@ -251,6 +253,7 @@ function SortablePostRow({
  onUpdate: (patch: Partial<ContentPlatformPost>) => void;
  onDelete: () => void;
 }) {
+ const { t, lang } = useStudioT();
  const {
  attributes,
  listeners,
@@ -301,7 +304,7 @@ function SortablePostRow({
  type="button"
  {...attributes}
  {...listeners}
- aria-label="Drag to reorder"
+ aria-label={t('dragReorder')}
  className="hidden sm:inline-flex items-center justify-center w-7 h-7 rounded-md text-text-muted hover:text-text-primary hover:bg-studio-500/15 cursor-grab active:cursor-grabbing shrink-0 mt-1"
  >
  <GripVertical className="w-3.5 h-3.5" />
@@ -323,7 +326,7 @@ function SortablePostRow({
  className="inline-flex items-center gap-1 px-2 h-5 rounded-md text-[10px] font-semibold uppercase tracking-wider"
  style={{ backgroundColor: `${meta.color}25`, color: meta.color }}
  >
- {meta.label}
+ {pick(meta.label, lang)}
  </span>
  <PublishToggle
  published={post.isPublished}
@@ -333,7 +336,7 @@ function SortablePostRow({
  <button
  type="button"
  onClick={onDelete}
- aria-label="Delete"
+ aria-label={t('delete')}
  className="inline-flex items-center justify-center w-7 h-7 rounded-md text-rose-400/70 hover:text-rose-400 hover:bg-rose-500/10"
  >
  <Trash2 className="w-3.5 h-3.5" />
@@ -344,7 +347,7 @@ function SortablePostRow({
  <textarea
  value={post.caption ?? ''}
  onChange={(e) => onUpdate({ caption: e.target.value || null })}
- placeholder="Caption for this platform…"
+ placeholder={t('plCaptionPh')}
  rows={3}
  className="w-full px-3 py-2 rounded-lg bg-bg-elevated/40 ring-1 ring-studio-500/10 focus:ring-studio-500/40 focus:outline-none text-sm text-text-primary placeholder:text-text-muted resize-none"
  />
@@ -353,7 +356,7 @@ function SortablePostRow({
  <div>
  <div className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-text-muted mb-1">
  <Hash className="w-3 h-3" />
- Hashtags
+ {t('plHashtags')}
  </div>
  <div className="flex flex-wrap items-center gap-1.5">
  {post.hashtags.map((tag) => (
@@ -382,7 +385,7 @@ function SortablePostRow({
  addTag();
  }
  }}
- placeholder="add tag…"
+ placeholder={t('plAddTag')}
  className="inline-block w-24 h-6 px-2 bg-transparent text-[11px] text-text-primary placeholder:text-text-muted focus:outline-none border-b border-dashed border-studio-500/20 focus:border-studio-500/40"
  />
  </div>
@@ -417,7 +420,7 @@ function SortablePostRow({
  onChange={(e) =>
  onUpdate({ postUrl: e.target.value || null })
  }
- placeholder="Post URL (after publish)"
+ placeholder={t('plPostUrl')}
  className="w-full bg-transparent text-sm text-text-primary placeholder:text-text-muted focus:outline-none"
  />
  {post.postUrl && (

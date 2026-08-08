@@ -53,6 +53,7 @@ import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import { useContentProjects } from '@/hooks/useContentQueries';
 import { CONTENT_STATUS_META, CONTENT_TYPE_META } from '@/lib/studio-meta';
+import { pick, useStudioT } from '@/lib/studio-i18n';
 import StatusPill from '@/components/studio/StatusPill';
 import TypePill from '@/components/studio/TypePill';
 import { useStudioStore } from '@/store/studioStore';
@@ -93,14 +94,24 @@ function projectsToEvents(projects: ContentProjectSummary[]): CalEvent[] {
  return events.sort((a, b) => a.date.getTime() - b.date.getTime());
 }
 
+// Labels are i18n KEYS, not text: this is a module constant, so a
+// resolved string would freeze whichever language was active when
+// the module first loaded.
 const KIND_META = {
- film: { label: 'Filming', color: '#F59E0B', tint: 'rgba(245, 158, 11, 0.15)' },
- publish: { label: 'Publishing', color: '#10b981', tint: 'rgba(16, 185, 129, 0.15)' },
+ film: { labelKey: 'calFilming' as const, color: '#F59E0B', tint: 'rgba(245, 158, 11, 0.15)' },
+ publish: { labelKey: 'calPublishing' as const, color: '#10b981', tint: 'rgba(16, 185, 129, 0.15)' },
 } as const;
 
+// Placeholder swapped into the footer sentence so the link can sit
+// wherever each language needs it — Vietnamese puts it in a
+// different position than English, which a fixed prefix/suffix
+// split cannot express. Uses a character that cannot occur in real
+// copy so the split is unambiguous.
+const LINK_SLOT = '\u241F';
+
 const VIEW_MODES = [
- { value: 'month' as const, label: 'Month', icon: CalendarIcon },
- { value: 'agenda' as const, label: 'Agenda', icon: ListFilter },
+ { value: 'month' as const, labelKey: 'calViewMonth' as const, icon: CalendarIcon },
+ { value: 'agenda' as const, labelKey: 'calViewAgenda' as const, icon: ListFilter },
 ];
 
 // ─── Project chip ───────────────────────────────────────────────
@@ -114,6 +125,7 @@ function ProjectChip({
  kind: 'film' | 'publish';
  compact?: boolean;
 }) {
+ const { t, lang } = useStudioT();
  const k = KIND_META[kind];
  return (
  <Link
@@ -123,7 +135,7 @@ function ProjectChip({
  <span
  className="inline-block w-2 h-2 rounded-full shrink-0"
  style={{ backgroundColor: k.color }}
- title={k.label}
+ title={t(k.labelKey)}
  />
  <div className="flex-1 min-w-0">
  <div className="text-sm font-medium text-text-primary line-clamp-1 group-hover:text-studio-300 transition-colors">
@@ -133,7 +145,7 @@ function ProjectChip({
  <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-text-muted">
  <TypePill type={project.type} size="xs" />
  <span>·</span>
- <span className="capitalize">{CONTENT_TYPE_META[project.type]?.label ?? project.type}</span>
+ <span className="capitalize">{CONTENT_TYPE_META[project.type] ? pick(CONTENT_TYPE_META[project.type].label, lang) : project.type}</span>
  </div>
  )}
  </div>
@@ -179,6 +191,7 @@ function AgendaView({
  monthStart: Date;
  monthEnd: Date;
 }) {
+ const { t, lang } = useStudioT();
  // Group events by week. We start at the first
  // week's Monday before `monthStart` and walk
  // forward in 7-day jumps.
@@ -193,7 +206,10 @@ function AgendaView({
  if (weekEvents.length > 0) {
  groups.push({
  key: cursor.toISOString(),
- label: `Week of ${format(cursor, 'MMM d')} – ${format(weekEnd, 'MMM d')}`,
+ label: t('calWeekOf', {
+ from: format(cursor, 'MMM d'),
+ to: format(weekEnd, 'MMM d'),
+ }),
  events: weekEvents,
  });
  }
@@ -207,9 +223,9 @@ function AgendaView({
  <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-studio-500/10 ring-1 ring-studio-500/20 mb-4">
  <CalendarDays className="w-7 h-7 text-studio-400/60" />
  </div>
- <h3 className="text-base font-semibold text-text-primary">No events in this window</h3>
+ <h3 className="text-base font-semibold text-text-primary">{t('calNoEventsWindow')}</h3>
  <p className="mt-1 text-sm text-text-secondary max-w-sm mx-auto">
- Pick a different month or set a film / publish date on a project.
+ {t('calNothingHint')}
  </p>
  </div>
  );
@@ -225,7 +241,7 @@ function AgendaView({
  </span>
  <span className="flex-1 h-px bg-studio-500/10" />
  <span className="text-[10px] text-text-muted">
- {g.events.length} event{g.events.length === 1 ? '' : 's'}
+ {g.events.length}
  </span>
  </div>
  <div className="space-y-2">
@@ -247,7 +263,7 @@ function AgendaView({
  </div>
  <div className="flex-1 min-w-0">
  <div className="text-[11px] uppercase tracking-wider mb-1" style={{ color: KIND_META[e.kind].color }}>
- {KIND_META[e.kind].label}
+ {t(KIND_META[e.kind].labelKey)}
  </div>
  <ProjectChip project={e.project} kind={e.kind} />
  </div>
@@ -272,6 +288,7 @@ function DayDetailPanel({
  onClose: () => void;
  onPlanProject: (date: Date, kind: 'film' | 'publish') => void;
 }) {
+ const { t, lang } = useStudioT();
  if (!date) return null;
  const dayEvents = events
  .filter((e) => isSameDay(e.date, date))
@@ -298,7 +315,7 @@ function DayDetailPanel({
  <button
  type="button"
  onClick={onClose}
- aria-label="Close"
+ aria-label={t('close')}
  className="w-7 h-7 rounded-md inline-flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-studio-500/15"
  >
  <X className="w-3.5 h-3.5" />
@@ -307,7 +324,7 @@ function DayDetailPanel({
  {dayEvents.length === 0 ? (
  <div className="py-3 text-center space-y-3">
  <p className="text-sm text-text-muted">
- Nothing scheduled on this day.
+ {t('calNothingOnDay')}
  </p>
  <div className="flex flex-wrap items-center justify-center gap-2">
  <button
@@ -316,7 +333,7 @@ function DayDetailPanel({
  className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg bg-studio-500/15 text-studio-200 ring-1 ring-studio-500/30 hover:bg-studio-500/25 text-xs font-semibold transition-colors"
  >
  <Film className="w-3.5 h-3.5" />
- Plan filming
+ {t('calPlanFilming')}
  </button>
  <button
  type="button"
@@ -324,7 +341,7 @@ function DayDetailPanel({
  className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg bg-emerald-500/15 text-emerald-200 ring-1 ring-emerald-500/30 hover:bg-emerald-500/25 text-xs font-semibold transition-colors"
  >
  <Send className="w-3.5 h-3.5" />
- Plan publish
+ {t('calPlanPublish')}
  </button>
  </div>
  </div>
@@ -341,7 +358,7 @@ function DayDetailPanel({
  />
  <div className="flex-1">
  <div className="text-[11px] uppercase tracking-wider mb-1" style={{ color: KIND_META[e.kind].color }}>
- {KIND_META[e.kind].label}
+ {t(KIND_META[e.kind].labelKey)}
  </div>
  <ProjectChip project={e.project} kind={e.kind} />
  </div>
@@ -356,6 +373,7 @@ function DayDetailPanel({
 
 // ─── Page ───────────────────────────────────────────────────────
 export default function CalendarPage() {
+ const { t, lang } = useStudioT();
  const [view, setView] = useState<'month' | 'agenda'>('month');
  const [month, setMonth] = useState<Date>(new Date());
  const [selected, setSelected] = useState<Date | undefined>(new Date());
@@ -434,7 +452,7 @@ export default function CalendarPage() {
  return (
  <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-6xl mx-auto">
  <h1 className="font-heading text-2xl sm:text-3xl font-bold text-text-primary mb-4">
- Calendar
+ {t('calendarTitle')}
  </h1>
  <div className="flex items-center justify-center py-16 text-text-muted text-sm">
  <motion.div
@@ -457,7 +475,7 @@ export default function CalendarPage() {
  Calendar
  </h1>
  <p className="mt-1 text-sm text-text-secondary">
- See every film date and publish date at a glance.
+ {t('calendarSubtitle')}
  </p>
  </div>
  <div className="flex items-center gap-2">
@@ -478,7 +496,7 @@ export default function CalendarPage() {
  }`}
  >
  <Icon className="w-3.5 h-3.5" />
- {m.label}
+ {t(m.labelKey)}
  </button>
  );
  })}
@@ -514,19 +532,19 @@ export default function CalendarPage() {
  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
  <StatPill
  icon={Film}
- label="Filming events"
+ label={t('calFilmingEvents')}
  value={stats.totalFilm}
  color={KIND_META.film.color}
  />
  <StatPill
  icon={Send}
- label="Publish events"
+ label={t('calPublishEvents')}
  value={stats.totalPublish}
  color={KIND_META.publish.color}
  />
  <StatPill
  icon={CalendarRange}
- label="Upcoming"
+ label={t('calUpcoming')}
  value={stats.upcoming.length}
  color="#F59E0B"
  subtle
@@ -587,18 +605,18 @@ export default function CalendarPage() {
  className="inline-block w-2 h-2 rounded-full"
  style={{ backgroundColor: KIND_META.film.color }}
  />
- Filming
+ {t('calFilming')}
  </span>
  <span className="inline-flex items-center gap-1.5">
  <span
  className="inline-block w-2 h-2 rounded-full"
  style={{ backgroundColor: KIND_META.publish.color }}
  />
- Publishing
+ {t('calPublishing')}
  </span>
  <span className="inline-flex items-center gap-1.5">
  <span className="inline-block w-2 h-2 rounded-full ring-1 ring-studio-500/40" />
- Today
+ {t('calThisMonth')}
  </span>
  </div>
  </div>
@@ -615,7 +633,7 @@ export default function CalendarPage() {
  <div className="studio-glass rounded-2xl p-4 sm:p-5 shadow-studio-card">
  <h3 className="text-sm font-semibold text-text-primary mb-3 flex items-center gap-1.5">
  <CalendarDays className="w-4 h-4 text-studio-400" />
- Up next
+ {t('calUpNext')}
  </h3>
  <div className="space-y-2">
  {stats.upcoming.map((e) => (
@@ -638,7 +656,7 @@ export default function CalendarPage() {
  type="button"
  onClick={() => setMonth((m) => subMonths(m, 1))}
  className="inline-flex items-center justify-center w-8 h-8 rounded-md text-text-muted hover:text-text-primary hover:bg-studio-500/15"
- aria-label="Previous month"
+ aria-label={t('calPrevMonth')}
  >
  <ChevronLeft className="w-4 h-4" />
  </button>
@@ -649,7 +667,7 @@ export default function CalendarPage() {
  type="button"
  onClick={() => setMonth((m) => addMonths(m, 1))}
  className="inline-flex items-center justify-center w-8 h-8 rounded-md text-text-muted hover:text-text-primary hover:bg-studio-500/15"
- aria-label="Next month"
+ aria-label={t('calNextMonth')}
  >
  <ChevronRight className="w-4 h-4" />
  </button>
@@ -664,12 +682,26 @@ export default function CalendarPage() {
 
  {/* Footer hint */}
  <div className="flex flex-wrap items-center gap-2 text-xs text-text-muted pt-2">
+ {/* Split on a sentinel so the sentence can be reordered per
+     language — Vietnamese puts the link in a different place
+     than English, which a hardcoded prefix/suffix cannot do. */}
  <span>
- Set a project's film or publish date in the{' '}
- <Link href="/creator/list" className="text-studio-400 hover:text-studio-300 underline-offset-2 hover:underline">
- project list
- </Link>
- , or click any day to plan a new one.
+ {t('calFooterHint', { link: LINK_SLOT })
+ .split(LINK_SLOT)
+ .flatMap((part, i) =>
+ i === 0
+ ? [<span key="pre">{part}</span>]
+ : [
+ <Link
+ key="link"
+ href="/creator/list"
+ className="text-studio-400 hover:text-studio-300 underline-offset-2 hover:underline"
+ >
+ {t('calProjectList')}
+ </Link>,
+ <span key={`post-${i}`}>{part}</span>,
+ ],
+ )}
  </span>
  <button
  type="button"
@@ -677,7 +709,7 @@ export default function CalendarPage() {
  className="ml-auto inline-flex items-center gap-1 h-7 px-2.5 rounded-md bg-studio-500/15 text-studio-200 ring-1 ring-studio-500/30 hover:bg-studio-500/25 text-xs font-semibold transition-colors"
  >
  <Plus className="w-3 h-3" />
- New project
+ {t('newProject')}
  </button>
  </div>
  </div>

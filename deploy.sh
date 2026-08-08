@@ -722,6 +722,8 @@ for route in \
     users/me/preferences \
     profile/deletion-request \
     admin/deletion-requests \
+    admin/content/academy-refs \
+    admin/content/script-templates \
     cyber/profile; do
     code=$(docker exec cuonghoangdev_backend \
         sh -c "curl -s -o /dev/null -w '%{http_code}' http://localhost:3001/api/v1/${route}" 2>/dev/null)

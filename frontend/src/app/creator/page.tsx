@@ -26,7 +26,8 @@ import {
  Users,
 } from 'lucide-react';
 import { useContentProjects } from '@/hooks/useContentQueries';
-import { CONTENT_STATUS_META, STATUS_ORDER } from '@/lib/studio-meta';
+import { CONTENT_STATUS_META } from '@/lib/studio-meta';
+import { useStudioT, type StudioKey, type StudioLang, type StudioTFn } from '@/lib/studio-i18n';
 import StatusPill from '@/components/studio/StatusPill';
 import TypePill from '@/components/studio/TypePill';
 import { useStudioStore } from '@/store/studioStore';
@@ -39,10 +40,14 @@ function dayDiff(iso: string | null): number | null {
  return Math.round((target - now) / 86_400_000);
 }
 
-function fmtDay(iso: string | null): string {
+function fmtDay(iso: string | null, lang: StudioLang): string {
  if (!iso) return '—';
  const d = new Date(iso);
- return d.toLocaleDateString('vi-VN', { weekday: 'short', day: '2-digit', month: 'short' });
+ return d.toLocaleDateString(lang === 'vi' ? 'vi-VN' : 'en-GB', {
+ weekday: 'short',
+ day: '2-digit',
+ month: 'short',
+ });
 }
 
 export default function CreatorDashboardPage() {
@@ -60,6 +65,7 @@ export default function CreatorDashboardPage() {
 function CreatorDashboardInner() {
  const router = useRouter();
  const search = useSearchParams();
+ const { t, lang } = useStudioT();
  const openCreateModal = useStudioStore((s) => s.openCreateModal);
  const { data: projects = [], isLoading } = useContentProjects();
 
@@ -124,21 +130,20 @@ function CreatorDashboardInner() {
  <div className="flex items-center gap-2 mb-3">
  <span className="inline-flex items-center gap-1.5 px-2.5 h-6 rounded-full bg-studio-500/15 text-studio-300 text-xs font-semibold uppercase tracking-wider">
  <Sparkles className="w-3 h-3" />
- Content Studio
+ {t('studioName')}
  </span>
  <span className="text-text-muted text-xs">
- {isLoading ? 'Loading…' : `${projects.length} project${projects.length === 1 ? '' : 's'}`}
+ {isLoading ? t('loading') : t('projectsCount', { n: projects.length })}
  </span>
  </div>
  <h1 className="font-heading text-3xl sm:text-4xl font-bold text-text-primary leading-tight">
- Studio{' '}
+ {t('dashTitleAccent')}{' '}
  <span className="bg-studio-gradient bg-clip-text text-transparent">
- Dashboard
+ {t('dashTitle')}
  </span>
  </h1>
  <p className="mt-2 text-text-secondary max-w-xl text-sm sm:text-base">
- Plan, script, film, ship. One workspace for every video
- you ship across TikTok, YouTube, Facebook and Instagram.
+ {t('dashSubtitle')}
  </p>
  </div>
  <div className="flex items-center gap-3">
@@ -147,14 +152,14 @@ function CreatorDashboardInner() {
  className="flex items-center gap-1.5 px-4 h-10 rounded-xl border border-studio-500/30 text-studio-300 hover:bg-studio-500/10 text-sm font-semibold transition-colors"
  >
  <Film className="w-4 h-4" />
- Open pipeline
+ {t('openPipeline')}
  </Link>
  <button
  onClick={() => openCreateModal()}
  className="flex items-center gap-1.5 px-4 h-10 rounded-xl bg-studio-gradient text-studio-950 font-semibold text-sm shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:shadow-[0_0_28px_rgba(245,158,11,0.45)] transition-shadow"
  >
  <Plus className="w-4 h-4" />
- New project
+ {t('newProject')}
  </button>
  </div>
  </div>
@@ -163,32 +168,32 @@ function CreatorDashboardInner() {
  {/* Stat cards */}
  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
  <StatCard
- label="Ideas"
+ label={t('statIdeas')}
  value={counts.IDEA}
  meta={CONTENT_STATUS_META.IDEA}
  icon={Lightbulb}
  delay={0.05}
  />
  <StatCard
- label="In progress"
+ label={t('statInProgress')}
  value={inProgress}
  meta={CONTENT_STATUS_META.FILMING}
  icon={Film}
- sub={`${counts.SCRIPTING} script · ${counts.FILMING} film · ${counts.EDITING} cut`}
+ sub={t('statInProgressSub', { a: counts.SCRIPTING, b: counts.FILMING, c: counts.EDITING })}
  delay={0.1}
  />
  <StatCard
- label="Scheduled + Live"
+ label={t('statLive')}
  value={live}
  meta={CONTENT_STATUS_META.PUBLISHED}
  icon={Rocket}
- sub={`${counts.SCHEDULED} queued · ${counts.PUBLISHED} out`}
+ sub={t('statLiveSub', { a: counts.SCHEDULED, b: counts.PUBLISHED })}
  delay={0.15}
  />
  <StatCard
- label="Total"
+ label={t('statTotal')}
  value={projects.length}
- meta={{ color: '#a3a3a3', label: 'Total' } as { color: string; label: string }}
+ meta={{ color: '#a3a3a3' }}
  icon={TrendingUp}
  delay={0.2}
  />
@@ -206,18 +211,17 @@ function CreatorDashboardInner() {
  <Film className="w-7 h-7 text-studio-400" />
  </div>
  <h2 className="font-heading text-xl font-semibold text-text-primary mb-1">
- No projects yet
+ {t('emptyNoProjects')}
  </h2>
  <p className="text-text-secondary text-sm mb-5 max-w-md mx-auto">
- Capture your first spark. The Studio will turn it into
- a project with days, scenes, scripts and a publish plan.
+ {t('emptyNoProjectsHint')}
  </p>
  <button
  onClick={() => openCreateModal()}
  className="inline-flex items-center gap-1.5 px-4 h-10 rounded-xl bg-studio-gradient text-studio-950 font-semibold text-sm"
  >
  <Plus className="w-4 h-4" />
- Create your first project
+ {t('createFirstProject')}
  </button>
  </motion.div>
  )}
@@ -227,13 +231,13 @@ function CreatorDashboardInner() {
  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
  {/* Next to film */}
  <AgendaCard
- title="Next 14 days"
- subtitle={nextToFilm.length > 0 ? `${nextToFilm.length} project${nextToFilm.length === 1 ? '' : 's'} scheduled` : 'Nothing scheduled'}
+ title={t('next14Days')}
+ subtitle={nextToFilm.length > 0 ? t('nScheduled', { n: nextToFilm.length }) : t('nothingScheduled')}
  icon={CalendarIcon}
  accent="studio"
  >
  {nextToFilm.length === 0 ? (
- <EmptyHint text="Drop a film date on a project card to see it here." />
+ <EmptyHint text={t('dropFilmDateHint')} />
  ) : (
  <ul className="space-y-1.5">
  {nextToFilm.map((p) => {
@@ -246,9 +250,9 @@ function CreatorDashboardInner() {
  >
  <div className="w-12 shrink-0 text-center">
  <div className="font-heading text-base text-studio-300 leading-none">
- {d === 0 ? 'Today' : d === 1 ? 'Tmrw' : `+${d}d`}
+ {d === 0 ? t('today') : d === 1 ? t('tomorrow') : `+${d}d`}
  </div>
- <div className="text-[10px] text-text-muted mt-0.5">{fmtDay(p.filmDate)}</div>
+ <div className="text-[10px] text-text-muted mt-0.5">{fmtDay(p.filmDate, lang)}</div>
  </div>
  <div className="min-w-0 flex-1">
  <p className="text-sm text-text-primary font-medium truncate group-hover:text-studio-300 transition-colors">
@@ -270,13 +274,13 @@ function CreatorDashboardInner() {
 
  {/* Recently updated */}
  <AgendaCard
- title="Recently updated"
- subtitle={`${recent.length} of ${projects.length}`}
+ title={t('recentlyUpdated')}
+ subtitle={t('nOfTotal', { n: recent.length, total: projects.length })}
  icon={Clock}
  accent="studio"
  >
  {recent.length === 0 ? (
- <EmptyHint text="No projects yet." />
+ <EmptyHint text={t('emptyNoProjects')} />
  ) : (
  <ul className="space-y-1.5">
  {recent.map((p) => (
@@ -295,7 +299,7 @@ function CreatorDashboardInner() {
  </div>
  </div>
  <div className="text-[10px] text-text-muted text-right shrink-0">
- {fmtRelative(p.updatedAt)}
+ {fmtRelative(p.updatedAt, t, lang)}
  </div>
  </Link>
  </li>
@@ -321,10 +325,10 @@ function CreatorDashboardInner() {
  </div>
  <div>
  <h2 className="font-heading text-sm font-semibold text-text-primary">
- Scripting queue
+ {t('scriptingQueue')}
  </h2>
  <p className="text-xs text-text-muted">
- {scripting.length} project{scripting.length === 1 ? '' : 's'} waiting for a script
+ {t('scriptingQueueSub', { n: scripting.length })}
  </p>
  </div>
  </div>
@@ -332,7 +336,7 @@ function CreatorDashboardInner() {
  href="/creator/pipeline?status=SCRIPTING"
  className="text-xs text-blue-300 hover:text-blue-200 font-medium"
  >
- View all →
+ {t('viewAll')} →
  </Link>
  </div>
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
@@ -345,7 +349,7 @@ function CreatorDashboardInner() {
  <div className="min-w-0 flex-1">
  <p className="text-sm text-text-primary font-medium truncate">{p.title}</p>
  <div className="text-[10px] text-text-muted mt-0.5">
- {p.filmDate ? `Film ${fmtDay(p.filmDate)}` : 'No film date'}
+ {p.filmDate ? t('filmOn', { date: fmtDay(p.filmDate, lang) }) : t('noFilmDate')}
  </div>
  </div>
  <TypePill type={p.type} size="xs" />
@@ -363,7 +367,11 @@ function CreatorDashboardInner() {
 interface StatCardProps {
  label: string;
  value: number;
- meta: { color: string; label: string };
+ /** Only the accent colour is read here — the card's own `label`
+  *  prop is already translated by the caller, so passing a whole
+  *  status meta object just to reach `.color` would drag a second,
+  *  unused label into the tree. */
+ meta: { color: string };
  icon: React.ComponentType<{ className?: string }>;
  sub?: string;
  delay: number;
@@ -436,14 +444,17 @@ function EmptyHint({ text }: { text: string }) {
  );
 }
 
-function fmtRelative(iso: string): string {
+function fmtRelative(iso: string, t: StudioTFn, lang: StudioLang): string {
  const diff = Date.now() - new Date(iso).getTime();
  const mins = Math.floor(diff / 60_000);
- if (mins < 1) return 'just now';
- if (mins < 60) return `${mins}m ago`;
+ if (mins < 1) return t('justNow');
+ if (mins < 60) return t('minsAgo', { n: mins });
  const hrs = Math.floor(mins / 60);
- if (hrs < 24) return `${hrs}h ago`;
+ if (hrs < 24) return t('hoursAgo', { n: hrs });
  const days = Math.floor(hrs / 24);
- if (days < 30) return `${days}d ago`;
- return new Date(iso).toLocaleDateString('vi-VN', { day: '2-digit', month: 'short' });
+ if (days < 30) return t('daysAgo', { n: days });
+ return new Date(iso).toLocaleDateString(lang === 'vi' ? 'vi-VN' : 'en-GB', {
+ day: '2-digit',
+ month: 'short',
+ });
 }

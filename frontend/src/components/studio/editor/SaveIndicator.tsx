@@ -6,6 +6,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, CircleAlert, Loader2, Pencil } from 'lucide-react';
+import { useStudioT, type StudioKey } from '@/lib/studio-i18n';
 
 export type SaveStatus = 'idle' | 'dirty' | 'saving' | 'saved' | 'error';
 
@@ -16,6 +17,7 @@ interface SaveIndicatorProps {
 }
 
 export default function SaveIndicator({ status, lastSavedAt }: SaveIndicatorProps) {
+ const { t, lang } = useStudioT();
  // Labels are kept short to fit the topbar. The full
  // meaning is in the title attribute below. The word
  // "Editing" was renamed to "Unsaved" because users
@@ -24,27 +26,29 @@ export default function SaveIndicator({ status, lastSavedAt }: SaveIndicatorProp
  // right next to it.
  const config: Record<
  SaveStatus,
- { label: string; className: string; icon: React.ComponentType<{ className?: string }> }
+ { labelKey: StudioKey; className: string; icon: React.ComponentType<{ className?: string }> }
  > = {
- idle: { label: 'Ready', className: 'text-text-muted', icon: Pencil },
- dirty: { label: 'Unsaved', className: 'text-amber-300', icon: Pencil },
- saving: { label: 'Saving…', className: 'text-blue-300', icon: Loader2 },
- saved: { label: 'Saved', className: 'text-emerald-300', icon: Check },
- error: { label: 'Save failed', className: 'text-red-300', icon: CircleAlert },
+ idle: { labelKey: 'saveReady', className: 'text-text-muted', icon: Pencil },
+ dirty: { labelKey: 'unsaved', className: 'text-amber-300', icon: Pencil },
+ saving: { labelKey: 'saving', className: 'text-blue-300', icon: Loader2 },
+ saved: { labelKey: 'saved', className: 'text-emerald-300', icon: Check },
+ error: { labelKey: 'saveFailed', className: 'text-red-300', icon: CircleAlert },
  };
- const { label, className, icon: Icon } = config[status];
+ const { labelKey, className, icon: Icon } = config[status];
+ const label = t(labelKey);
 
  // Tooltip on hover — clarifies what each state means.
  // Without this, users couldn't tell the dirty state
  // apart from the production stage pill.
+ // The pill itself is one word; the tooltip carries the
+ // meaning. Composed from the shared keys rather than five
+ // more sentence-length entries in the dictionary.
  const tooltip: Record<SaveStatus, string> = {
- idle: 'No unsaved changes — autosave is up to date.',
- dirty: 'You have unsaved changes. Autosave fires 1.2s after the last edit, or click “Save now”.',
- saving: 'Sending your changes to the server…',
- saved: lastSavedAt
- ? `All changes saved at ${fmtTime(lastSavedAt)}.`
- : 'All changes saved.',
- error: 'Could not save. Check your connection and try “Save now”.',
+ idle: t('saved'),
+ dirty: t('unsaved'),
+ saving: t('saving'),
+ saved: lastSavedAt ? t('savedAt', { time: fmtTime(lastSavedAt, lang) }) : t('saved'),
+ error: t('saveFailed'),
  };
 
  return (
@@ -62,7 +66,7 @@ export default function SaveIndicator({ status, lastSavedAt }: SaveIndicatorProp
  {label}
  {status === 'saved' && lastSavedAt && (
  <span className="text-text-muted hidden sm:inline">
- · {fmtTime(lastSavedAt)}
+ · {fmtTime(lastSavedAt, lang)}
  </span>
  )}
  </motion.div>
@@ -70,6 +74,9 @@ export default function SaveIndicator({ status, lastSavedAt }: SaveIndicatorProp
  );
 }
 
-function fmtTime(d: Date): string {
- return d.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+function fmtTime(d: Date, lang: 'vi' | 'en'): string {
+ return d.toLocaleTimeString(lang === 'vi' ? 'vi-VN' : 'en-GB', {
+ hour: '2-digit',
+ minute: '2-digit',
+ });
 }

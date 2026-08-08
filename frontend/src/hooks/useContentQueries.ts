@@ -27,7 +27,9 @@ import type {
  ContentProjectSummary,
  ContentProjectUpdate,
  ContentStatus,
+ ContentType,
  IdeaListParams,
+ ScriptVersionOrigin,
 } from '@/types';
 
 // ─── Query Keys ─────────────────────────────────────────────────────────────
@@ -283,5 +285,130 @@ export function usePromoteContentIdea() {
  qc.invalidateQueries({ queryKey: ideaKeys.all, refetchType: 'all' });
  qc.invalidateQueries({ queryKey: contentKeys.all, refetchType: 'all' });
  },
+ });
+}
+
+// ============================================================
+// Script history + templates + Academy refs
+// ============================================================
+// Separate key namespaces so a version save never invalidates
+// the project detail (which would yank the textarea's value out
+// from under the cursor mid-typing).
+
+export const scriptKeys = {
+ versions: (projectId: number) => ['content-script-versions', projectId] as const,
+ templates: (type?: string) => ['content-script-templates', type ?? 'all'] as const,
+ academyRefs: ['content-academy-refs'] as const,
+};
+
+export function useScriptVersions(projectId: number | null) {
+ return useQuery({
+ queryKey: scriptKeys.versions(projectId ?? -1),
+ queryFn: () => contentApi.scriptVersions.list(projectId as number).then((r) => r.data.data),
+ enabled: projectId != null && projectId > 0,
+ staleTime: 30_000,
+ });
+}
+
+/**
+ * Snapshot the script.
+ *
+ * Invalidates only the version list. The project detail is
+ * deliberately left alone: the user is typing in the editor while
+ * this fires, and refetching the detail would replace the live
+ * textarea value with the server's echo.
+ */
+export function useCreateScriptVersion() {
+ const qc = useQueryClient();
+ return useMutation({
+ mutationFn: ({
+ projectId,
+ ...payload
+ }: {
+ projectId: number;
+ label?: string | null;
+ origin?: ScriptVersionOrigin;
+ script?: string | null;
+ }) => contentApi.scriptVersions.create(projectId, payload),
+ onSuccess: (_res, vars) => {
+ qc.invalidateQueries({ queryKey: scriptKeys.versions(vars.projectId) });
+ },
+ });
+}
+
+/**
+ * Restore an older version.
+ *
+ * Here we DO invalidate the project detail — the server has just
+ * rewritten `script`, so the editor must pick up the restored text
+ * rather than keep showing (and re-saving) the old one.
+ */
+export function useRestoreScriptVersion() {
+ const qc = useQueryClient();
+ return useMutation({
+ mutationFn: ({ projectId, versionId }: { projectId: number; versionId: number }) =>
+ contentApi.scriptVersions.restore(projectId, versionId),
+ onSuccess: (_res, vars) => {
+ qc.invalidateQueries({ queryKey: scriptKeys.versions(vars.projectId) });
+ qc.invalidateQueries({ queryKey: contentKeys.detail(vars.projectId) });
+ },
+ });
+}
+
+export function useDeleteScriptVersion() {
+ const qc = useQueryClient();
+ return useMutation({
+ mutationFn: ({ projectId, versionId }: { projectId: number; versionId: number }) =>
+ contentApi.scriptVersions.remove(projectId, versionId),
+ onSuccess: (_res, vars) => {
+ qc.invalidateQueries({ queryKey: scriptKeys.versions(vars.projectId) });
+ },
+ });
+}
+
+export function useScriptTemplates(type?: ContentType) {
+ return useQuery({
+ queryKey: scriptKeys.templates(type),
+ queryFn: () => contentApi.scriptTemplates.list(type).then((r) => r.data.data),
+ // Templates change rarely — the user saves one every few weeks.
+ staleTime: 5 * 60_000,
+ });
+}
+
+export function useCreateScriptTemplate() {
+ const qc = useQueryClient();
+ return useMutation({
+ mutationFn: (payload: Parameters<typeof contentApi.scriptTemplates.create>[0]) =>
+ contentApi.scriptTemplates.create(payload),
+ onSuccess: () => {
+ qc.invalidateQueries({ queryKey: ['content-script-templates'], refetchType: 'all' });
+ },
+ });
+}
+
+export function useDeleteScriptTemplate() {
+ const qc = useQueryClient();
+ return useMutation({
+ mutationFn: (id: number) => contentApi.scriptTemplates.remove(id),
+ onSuccess: () => {
+ qc.invalidateQueries({ queryKey: ['content-script-templates'], refetchType: 'all' });
+ },
+ });
+}
+
+/**
+ * Published courses + their exams for the Academy pickers.
+ *
+ * The catalogue barely moves within a session, so this is cached
+ * for an hour — the picker opens instantly on every subsequent
+ * project instead of spinning.
+ */
+export function useAcademyRefs(enabled = true) {
+ return useQuery({
+ queryKey: scriptKeys.academyRefs,
+ queryFn: () => contentApi.academyRefs().then((r) => r.data.data),
+ enabled,
+ staleTime: 60 * 60_000,
+ gcTime: 60 * 60_000,
  });
 }

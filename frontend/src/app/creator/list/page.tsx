@@ -51,6 +51,7 @@ import {
  CONTENT_STATUS_META,
  CONTENT_TYPE_META,
 } from '@/lib/studio-meta';
+import { pick, useStudioT } from '@/lib/studio-i18n';
 import { toCsv, downloadCsv, type CsvColumn } from '@/lib/csv';
 import type {
  ContentProjectSummary,
@@ -86,6 +87,7 @@ const TYPES: ContentType[] = [
 ];
 
 export default function CreatorListPage() {
+ const { t, lang } = useStudioT();
  const openCreateModal = useStudioStore((s) => s.openCreateModal);
  const [statusFilter, setStatusFilter] = useState<ContentStatus | 'ALL'>(
  'ALL',
@@ -192,20 +194,20 @@ export default function CreatorListPage() {
  const exportCsv = () => {
  if (rows.length === 0) return;
  const cols: CsvColumn<ContentProjectSummary>[] = [
- { label: 'Title', value: (p) => p.title },
- { label: 'Slug', value: (p) => p.slug },
- { label: 'Type', value: (p) => p.type },
- { label: 'Status', value: (p) => p.status },
- { label: 'Idea date', value: (p) => p.ideaDate },
- { label: 'Film date', value: (p) => p.filmDate },
- { label: 'Publish date', value: (p) => p.publishDate },
- { label: 'Tags', value: (p) => p.tags },
- { label: 'Thumbnail URL', value: (p) => p.thumbnailUrl },
- { label: 'Production days', value: (p) => p._count?.days ?? 0 },
- { label: 'Affiliate products', value: (p) => p._count?.affiliateProducts ?? 0 },
- { label: 'Platform posts', value: (p) => p._count?.platformPosts ?? 0 },
- { label: 'Checklist items', value: (p) => p._count?.checklistItems ?? 0 },
- { label: 'Updated at', value: (p) => p.updatedAt },
+ { label: t('colTitle'), value: (p) => p.title },
+ { label: t('colSlug'), value: (p) => p.slug },
+ { label: t('colType'), value: (p) => p.type },
+ { label: t('colStatus'), value: (p) => p.status },
+ { label: t('colIdeaDate'), value: (p) => p.ideaDate },
+ { label: t('colFilm'), value: (p) => p.filmDate },
+ { label: t('colPublish'), value: (p) => p.publishDate },
+ { label: t('fieldTags'), value: (p) => p.tags },
+ { label: t('colThumbnail'), value: (p) => p.thumbnailUrl },
+ { label: t('colDays'), value: (p) => p._count?.days ?? 0 },
+ { label: t('colProducts'), value: (p) => p._count?.affiliateProducts ?? 0 },
+ { label: t('colPosts'), value: (p) => p._count?.platformPosts ?? 0 },
+ { label: t('colChecklist'), value: (p) => p._count?.checklistItems ?? 0 },
+ { label: t('colUpdated'), value: (p) => p.updatedAt },
  ];
  const csv = toCsv(rows, cols);
  const stamp = new Date().toISOString().slice(0, 10);
@@ -218,7 +220,7 @@ export default function CreatorListPage() {
  <div className="flex flex-col sm:flex-row sm:items-end gap-3">
  <div className="flex-1 min-w-0">
  <h1 className="text-2xl font-bold text-text-primary tracking-tight">
- All projects
+ {t('listTitle')}
  </h1>
  <p className="text-xs text-text-secondary mt-0.5">
  {rows.length}
@@ -239,24 +241,24 @@ export default function CreatorListPage() {
  className="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg bg-bg-elevated/40 hover:bg-bg-elevated/70 text-text-primary text-xs font-semibold transition-colors"
  >
  <ListChecks className="w-3.5 h-3.5" />
- Pipeline
+ {t('navPipeline')}
  </Link>
  <Link
  href="/creator/calendar"
  className="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg bg-bg-elevated/40 hover:bg-bg-elevated/70 text-text-primary text-xs font-semibold transition-colors"
  >
  <Calendar className="w-3.5 h-3.5" />
- Calendar
+ {t('navCalendar')}
  </Link>
  <button
  type="button"
  onClick={exportCsv}
  disabled={rows.length === 0}
- title="Export filtered projects as CSV"
+ title={t('listExportTitle')}
  className="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg bg-bg-elevated/40 hover:bg-bg-elevated/70 text-text-primary text-xs font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
  >
  <Download className="w-3.5 h-3.5" />
- Export CSV
+ {t('listExportCsv')}
  </button>
  <button
  type="button"
@@ -264,7 +266,7 @@ export default function CreatorListPage() {
  className="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg bg-studio-500 text-bg-base text-xs font-semibold hover:bg-studio-400 transition-colors"
  >
  <Plus className="w-3.5 h-3.5" />
- New project
+ {t('newProject')}
  </button>
  </div>
  </div>
@@ -278,7 +280,7 @@ export default function CreatorListPage() {
  type="text"
  value={search}
  onChange={(e) => setSearch(e.target.value)}
- placeholder="Search by title…"
+ placeholder={t('listSearchTitle')}
  className="w-full bg-bg-elevated/40 rounded-lg pl-8 pr-3 h-9 text-sm text-text-primary focus:outline-none focus:ring-1 focus:ring-studio-500/40 placeholder:text-text-muted/60"
  />
  {search && (
@@ -294,7 +296,7 @@ export default function CreatorListPage() {
 
  {/* Status filter */}
  <FilterRow
- label="Status"
+ label={t('colStatus')}
  value={statusFilter}
  options={['ALL', ...STATUSES]}
  onChange={(v) => setStatusFilter(v as ContentStatus | 'ALL')}
@@ -304,7 +306,7 @@ export default function CreatorListPage() {
  />
  {/* Type filter */}
  <FilterRow
- label="Type"
+ label={t('colType')}
  value={typeFilter}
  options={['ALL', ...TYPES]}
  onChange={(v) => setTypeFilter(v as ContentType | 'ALL')}
@@ -332,7 +334,7 @@ export default function CreatorListPage() {
  />
  </th>
  <SortHeader
- label="Title"
+ label={t('colTitle')}
  k="title"
  current={sortKey}
  dir={sortDir}
@@ -353,28 +355,28 @@ export default function CreatorListPage() {
  onClick={() => onSort('status')}
  />
  <SortHeader
- label="Idea"
+ label={t('statIdeas')}
  k="ideaDate"
  current={sortKey}
  dir={sortDir}
  onClick={() => onSort('ideaDate')}
  />
  <SortHeader
- label="Film"
+ label={t('colFilm')}
  k="filmDate"
  current={sortKey}
  dir={sortDir}
  onClick={() => onSort('filmDate')}
  />
  <SortHeader
- label="Publish"
+ label={t('colPublish')}
  k="publishDate"
  current={sortKey}
  dir={sortDir}
  onClick={() => onSort('publishDate')}
  />
  <SortHeader
- label="Updated"
+ label={t('colUpdated')}
  k="updatedAt"
  current={sortKey}
  dir={sortDir}
@@ -422,7 +424,7 @@ export default function CreatorListPage() {
  className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg bg-studio-500 text-bg-base text-xs font-semibold hover:bg-studio-400 transition-colors"
  >
  <Plus className="w-3.5 h-3.5" />
- Capture an idea
+ {t('listCaptureIdea')}
  </Link>
  )}
  </td>
@@ -466,11 +468,11 @@ export default function CreatorListPage() {
  defaultValue=""
  >
  <option value="" disabled>
- Set status…
+ {t('listSetStatus')}
  </option>
  {STATUSES.map((s) => (
  <option key={s} value={s}>
- {CONTENT_STATUS_META[s].label}
+ {pick(CONTENT_STATUS_META[s].label, lang)}
  </option>
  ))}
  </select>
@@ -480,13 +482,13 @@ export default function CreatorListPage() {
  className="inline-flex items-center gap-1 h-7 px-2.5 rounded text-[11px] font-semibold text-rose-300 hover:bg-rose-500/15 transition-colors"
  >
  <Trash2 className="w-3 h-3" />
- Delete
+ {t('delete')}
  </button>
  <button
  type="button"
  onClick={() => setSelected(new Set())}
  className="text-text-muted hover:text-text-primary p-1"
- aria-label="Clear selection"
+ aria-label={t('listClearSelection')}
  >
  <X className="w-3.5 h-3.5" />
  </button>
@@ -599,6 +601,7 @@ function ProjectRow({
  selected: boolean;
  onToggle: () => void;
 }) {
+ const { t, lang } = useStudioT();
  return (
  <motion.tr
  layout
@@ -675,24 +678,25 @@ function ProjectRow({
 }
 
 function Counts({ project }: { project: ContentProjectSummary }) {
+ const { t, lang } = useStudioT();
  const c = project._count;
  if (!c) return <span className="text-text-muted text-[10px]">—</span>;
  return (
  <div className="inline-flex items-center gap-2 text-[10px] text-text-muted">
  {c.days > 0 && (
- <span title="Production days">
+ <span title={t('colDays')}>
  <Film className="w-3 h-3 inline -mt-0.5 mr-0.5" />
  {c.days}
  </span>
  )}
  {c.platformPosts > 0 && (
- <span title="Platform posts">
+ <span title={t('colPosts')}>
  <Youtube className="w-3 h-3 inline -mt-0.5 mr-0.5" />
  {c.platformPosts}
  </span>
  )}
  {c.checklistItems > 0 && (
- <span title="Checklist items">
+ <span title={t('colChecklist')}>
  <ListChecks className="w-3 h-3 inline -mt-0.5 mr-0.5" />
  {c.checklistItems}
  </span>

@@ -3526,12 +3526,32 @@ model Friendship {
 // ============================================================
 
 // ─── Enums ─────────────────────────────────────────────────────
+// NOTE (2026-08-08): the value was `CODE` here while the whole
+// frontend (`types/index.ts`, `studio-meta.ts`, the List filter)
+// spoke `CODE_REVIEW`. Creating that type 400'd on INVALID_TYPE
+// and any pre-existing `CODE` row rendered `undefined` meta. The
+// migration renames the value in place (ALTER TYPE ... RENAME
+// VALUE) so existing rows keep their data.
+//
+// The teaching-oriented values below exist because the studio's
+// primary job is recording Academy material: one lecture per
+// course chapter, worked exam solutions, exercise walkthroughs
+// and project build-alongs. Each one gets its own script
+// template + checklist preset, so they must be first-class
+// enum values, not tags.
 enum ContentType {
   VLOG
   AFFILIATE
-  CODE
+  CODE_REVIEW
   REVIEW
   IDEA
+  LECTURE // bài giảng một chương/bài trong Academy
+  EXAM_SOLVING // chữa đề thi (FE/PE)
+  EXERCISE // chữa bài tập / lab
+  PROJECT_BUILD // làm dự án từ đầu đến cuối
+  TUTORIAL // hướng dẫn dùng một công cụ/kỹ thuật
+  SHORTS // video dọc ngắn (<60s)
+  LIVESTREAM
   OTHER
 
   @@map("content_type")
@@ -3613,18 +3633,60 @@ model ContentProject {
   // [{label: string, url: string}] — inspiration / competitor
   // links, kept schema-free in JSONB.
   referenceLinks Json          @default("[]") @map("reference_links")
-  createdAt      DateTime      @default(now()) @map("created_at")
-  updatedAt      DateTime      @updatedAt @map("updated_at")
+
+  // ── Academy binding (2026-08-08) ────────────────────────────
+  // A lecture/exam/exercise/project video is *about* something
+  // that already lives in this database. These columns are plain
+  // scalars, NOT foreign keys, on purpose:
+  //   • Deleting a Course or Exam must never cascade-delete the
+  //     video project that documents it (the recording still
+  //     exists on YouTube).
+  //   • Course/Exam are two of the most-referenced models in the
+  //     schema; adding back-relations there would force every
+  //     admin query that includes them to think about a content
+  //     relation it does not care about.
+  // The `*Title` columns are denormalised snapshots so a pipeline
+  // card stays readable without a JOIN — and still reads correctly
+  // after the source row is renamed or removed.
+  courseSlug  String? @map("course_slug") @db.VarChar(255)
+  courseTitle String? @map("course_title") @db.VarChar(255)
+  examId      Int?    @map("exam_id")
+  examTitle   String? @map("exam_title") @db.VarChar(255)
+  // Free-form "which part of the course" — e.g. "Chương 3 · Bài 2",
+  // "Lab 4", "Slot 7". Deliberately a string: Academy content is
+  // organised differently per course and a rigid FK would break
+  // on the first course that doesn't fit.
+  lessonRef   String? @map("lesson_ref") @db.VarChar(255)
+  // Slug of a /projects case study this video builds.
+  projectSlug String? @map("project_slug") @db.VarChar(255)
+
+  // ── Series / pacing ─────────────────────────────────────────
+  // A course playlist is a series: "PRO192 · Kỳ 1" ep. 1..N.
+  seriesName        String? @map("series_name") @db.VarChar(200)
+  episodeNumber     Int?    @map("episode_number")
+  // Planned runtime in seconds. Drives the script's word-budget
+  // readout (~150 spoken words/min) and the teleprompter pacing.
+  targetDurationSec Int?    @map("target_duration_sec")
+  // Language the video is RECORDED in ('VI' | 'EN'). Independent
+  // of the studio UI language — the user may script an English
+  // lecture while reading a Vietnamese interface.
+  scriptLang        String  @default("VI") @map("script_lang") @db.VarChar(5)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   days              ProductionDay[]
   affiliateProducts AffiliateProduct[]
   platformPosts     PlatformPost[]
   checklistItems    ChecklistItem[]
   performance       ContentPerformance?
+  scriptVersions    ContentScriptVersion[]
   // Reverse side: ideas that were promoted into this project.
   // Nullable, indexed so we can list "which ideas became this?".
   promotedFromIdeas ContentIdea[]
 
+  @@index([courseSlug], map: "idx_content_projects_course_slug")
+  @@index([seriesName, episodeNumber], map: "idx_content_projects_series")
   @@index([status, type], map: "idx_content_projects_status_type")
   @@index([filmDate], map: "idx_content_projects_film_date")
   @@index([publishDate], map: "idx_content_projects_publish_date")
@@ -3816,6 +3878,79 @@ model ContentIdea {
   @@index([score], map: "idx_content_ideas_score")
   @@index([createdAt(sort: Desc)], map: "idx_content_ideas_created_at")
   @@map("content_ideas")
+}
+
+// ─── ContentScriptVersion (script history) ──────────────────────
+// `ContentProject.script` holds the LIVE script and is overwritten
+// by the editor's debounced autosave every ~1.2s. That is exactly
+// the behaviour you want while writing and exactly the behaviour
+// that loses work when you delete three paragraphs and then change
+// your mind an hour later.
+//
+// A version is an explicit, immutable snapshot. It is never written
+// by autosave — only by:
+//   MANUAL   the user pressed "Lưu phiên bản"
+//   TEMPLATE a template was applied over an existing script
+//   RESTORE  taken automatically *before* restoring an older
+//            version, so restoring is itself undoable
+//
+// Versions are numbered per project starting at 1 and never reused,
+// so "v7" means the same thing forever even after older versions
+// are pruned.
+model ContentScriptVersion {
+  id               Int      @id @default(autoincrement())
+  contentProjectId Int      @map("content_project_id")
+  version          Int
+  // Optional user label, e.g. "trước khi cắt phần lý thuyết".
+  label            String?  @db.VarChar(160)
+  script           String   @db.Text
+  // Denormalised so the history list renders without loading
+  // every full script body (these get long — a 20-minute lecture
+  // script is ~3000 words).
+  wordCount        Int      @default(0) @map("word_count")
+  origin           String   @default("MANUAL") @db.VarChar(16)
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  contentProject ContentProject @relation(fields: [contentProjectId], references: [id], onDelete: Cascade)
+
+  @@unique([contentProjectId, version], map: "uk_script_version_project_version")
+  @@index([contentProjectId, createdAt(sort: Desc)], map: "idx_script_versions_project_created")
+  @@map("content_script_versions")
+}
+
+// ─── ScriptTemplate (reusable skeletons) ────────────────────────
+// The studio ships built-in templates in code (see
+// frontend/src/lib/studio-templates.ts) — those are versioned with
+// the app and need no DB row. THIS table is for templates the user
+// saves from their own scripts ("save this lecture structure so
+// every PRO192 episode starts the same way").
+//
+// Bodies are bilingual: `body` is the Vietnamese skeleton, `bodyEn`
+// the English one. `bodyEn` is nullable because a user-saved
+// template usually starts life in one language only; the picker
+// falls back to `body` when the EN side is absent.
+model ScriptTemplate {
+  id            Int          @id @default(autoincrement())
+  name          String       @db.VarChar(160)
+  nameEn        String?      @map("name_en") @db.VarChar(160)
+  description   String?      @db.VarChar(500)
+  descriptionEn String?      @map("description_en") @db.VarChar(500)
+  body          String       @db.Text
+  bodyEn        String?      @map("body_en") @db.Text
+  // Which content type this template is meant for. Null = generic,
+  // shown for every type.
+  contentType   ContentType? @map("content_type")
+  tags          String[]     @default([])
+  // Incremented on apply — lets the picker sort by "what I actually
+  // reach for" instead of alphabetically.
+  useCount      Int          @default(0) @map("use_count")
+  order         Int          @default(0)
+  createdAt     DateTime     @default(now()) @map("created_at")
+  updatedAt     DateTime     @updatedAt @map("updated_at")
+
+  @@index([contentType], map: "idx_script_templates_type")
+  @@index([useCount(sort: Desc)], map: "idx_script_templates_use_count")
+  @@map("script_templates")
 }
 
 // ════════════════════════════════════════════════════════════

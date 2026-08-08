@@ -11,20 +11,22 @@
 // Next 14, so we destructure directly.
 
 import ProjectEditorShell from '@/components/studio/editor/ProjectEditorShell';
+import { useStudioT } from '@/lib/studio-i18n';
 
 interface PageProps {
  params: { id: string };
 }
 
 export default function CreatorProjectEditorPage({ params }: PageProps) {
+ const { t } = useStudioT();
  const { id } = params;
  const projectId = parseInt(id, 10);
  if (!Number.isFinite(projectId) || projectId <= 0) {
  return (
  <div className="px-4 sm:px-6 lg:px-8 py-12 text-center">
- <h1 className="font-heading text-2xl font-bold text-text-primary">Invalid project id</h1>
+ <h1 className="font-heading text-2xl font-bold text-text-primary">{t('projectNotFound')}</h1>
  <p className="text-text-secondary text-sm mt-2">
- The link you followed doesn't point at a real project.
+ {t('badProjectLink')}
  </p>
  </div>
  );

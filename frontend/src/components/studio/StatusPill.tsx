@@ -8,6 +8,7 @@
 
 import type { ContentStatus } from '@/types';
 import { CONTENT_STATUS_META } from '@/lib/studio-meta';
+import { pick, useStudioT } from '@/lib/studio-i18n';
 
 interface StatusPillProps {
  status: ContentStatus;
@@ -23,6 +24,7 @@ export default function StatusPill({
  bare = false,
  className = '',
 }: StatusPillProps) {
+ const { lang } = useStudioT();
  const meta = CONTENT_STATUS_META[status];
  const sizeClass =
  size === 'xs'
@@ -45,7 +47,7 @@ export default function StatusPill({
  className="w-1.5 h-1.5 rounded-full"
  style={{ background: meta.color }}
  />
- {meta.label}
+ {pick(meta.label, lang)}
  </span>
  );
 }

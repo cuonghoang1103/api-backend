@@ -43,6 +43,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { SCENE_TYPE_META, SHOT_TYPE_META } from '@/lib/studio-meta';
+import { pick, useStudioT } from '@/lib/studio-i18n';
 import type {
  ContentProductionDay,
  ContentScene,
@@ -56,6 +57,7 @@ interface StoryboardTabProps {
 }
 
 export default function StoryboardTab({ days, onChange }: StoryboardTabProps) {
+ const { t, lang } = useStudioT();
  return (
  <div className="space-y-3">
  <div className="flex items-center justify-between">
@@ -82,7 +84,7 @@ export default function StoryboardTab({ days, onChange }: StoryboardTabProps) {
  className="inline-flex items-center gap-1.5 px-3 h-8 rounded-lg bg-studio-500/15 text-studio-300 text-xs font-medium hover:bg-studio-500/25 transition-colors"
  >
  <Plus className="w-3.5 h-3.5" />
- Add filming day
+ {t('sbAddDay')}
  </button>
  </div>
 
@@ -93,9 +95,7 @@ export default function StoryboardTab({ days, onChange }: StoryboardTabProps) {
  </div>
  <p className="text-sm text-text-primary font-medium">No filming days yet</p>
  <p className="text-xs text-text-muted mt-1 max-w-md mx-auto">
- Add a day to start planning your shot list. Each day
- can hold any number of scenes with dialogue, voiceover,
- camera direction and duration.
+ {t('sbEmptyHint')}
  </p>
  </div>
  ) : (
@@ -204,6 +204,7 @@ function SortableDay({
  onUpdateScene: (idx: number, patch: Partial<ContentScene>) => void;
  onRemoveScene: (idx: number) => void;
 }) {
+ const { t, lang } = useStudioT();
  const [expanded, setExpanded] = useState(true);
  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
  id: dKey(day),
@@ -227,7 +228,7 @@ function SortableDay({
  {...attributes}
  {...listeners}
  className="p-1 rounded text-text-muted hover:text-text-primary cursor-grab active:cursor-grabbing touch-none"
- aria-label="Drag to reorder day"
+ aria-label={t('sbDragDay')}
  >
  <GripVertical className="w-4 h-4" />
  </button>
@@ -239,7 +240,7 @@ function SortableDay({
  type="text"
  value={day.location ?? ''}
  onChange={(e) => onUpdate({ location: e.target.value })}
- placeholder="Location (e.g. Home studio, Quán cafe, …)"
+ placeholder={t('sbLocation')}
  className="w-full bg-transparent text-sm text-text-primary placeholder:text-text-muted focus:outline-none"
  />
  </div>
@@ -264,7 +265,7 @@ function SortableDay({
  type="button"
  onClick={onRemove}
  className="p-1 rounded text-text-muted hover:text-red-300"
- aria-label="Remove day"
+ aria-label={t('sbRemoveDay')}
  >
  <Trash2 className="w-3.5 h-3.5" />
  </button>
@@ -287,7 +288,7 @@ function SortableDay({
  value={day.notes ?? ''}
  onChange={(e) => onUpdate({ notes: e.target.value })}
  rows={1}
- placeholder="Day notes (lighting, talent, props to bring…)"
+ placeholder={t('sbDayNotes')}
  className="flex-1 bg-transparent text-xs text-text-secondary placeholder:text-text-muted focus:outline-none resize-none"
  />
  </label>
@@ -297,7 +298,7 @@ function SortableDay({
  <ul className="p-3 space-y-2">
  {day.scenes.length === 0 ? (
  <li className="text-[11px] text-text-muted italic text-center py-3">
- No scenes yet. Add one to start the shot list.
+ {t('sbNoScenes')}
  </li>
  ) : (
  day.scenes.map((scene, idx) => (
@@ -319,7 +320,7 @@ function SortableDay({
  className="w-full inline-flex items-center justify-center gap-1.5 px-3 h-8 rounded-lg border border-dashed border-darkborder bg-darkbg/30 text-text-secondary hover:text-studio-300 hover:border-studio-500/40 text-xs font-medium transition-colors"
  >
  <Plus className="w-3.5 h-3.5" />
- Add scene
+ {t('sbAddScene')}
  </button>
  </div>
  </motion.div>
@@ -342,6 +343,7 @@ function SceneRow({
  onUpdate: (patch: Partial<ContentScene>) => void;
  onRemove: () => void;
 }) {
+ const { t, lang } = useStudioT();
  const meta = SCENE_TYPE_META[scene.sceneType];
  return (
  <li className="rounded-xl border border-darkborder bg-darkcard/40 p-3">
@@ -349,7 +351,7 @@ function SceneRow({
  <div
  className="w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-bold text-white shrink-0"
  style={{ background: meta.color }}
- title={meta.label}
+ title={pick(meta.label, lang)}
  >
  {meta.short}
  </div>
@@ -363,7 +365,7 @@ function SceneRow({
  >
  {(Object.keys(SCENE_TYPE_META) as SceneType[]).map((s) => (
  <option key={s} value={s}>
- {SCENE_TYPE_META[s].label}
+ {pick(SCENE_TYPE_META[s].label, lang)}
  </option>
  ))}
  </select>
@@ -375,7 +377,7 @@ function SceneRow({
  <option value="">— shot —</option>
  {(Object.keys(SHOT_TYPE_META) as ShotType[]).map((s) => (
  <option key={s} value={s}>
- {SHOT_TYPE_META[s].icon} {SHOT_TYPE_META[s].label}
+ {SHOT_TYPE_META[s].icon} {pick(SHOT_TYPE_META[s].label, lang)}
  </option>
  ))}
  </select>
@@ -386,14 +388,14 @@ function SceneRow({
  onChange={(e) =>
  onUpdate({ durationSeconds: e.target.value === '' ? null : Number(e.target.value) })
  }
- placeholder="sec"
+ placeholder={t('secondsShort')}
  className="w-16 px-2 h-7 rounded-md bg-darkbg border border-darkborder text-xs text-text-primary focus:outline-none focus:border-studio-500/40"
  />
  <button
  type="button"
  onClick={onRemove}
  className="ml-auto p-1 rounded text-text-muted hover:text-red-300"
- aria-label="Remove scene"
+ aria-label={t('sbRemoveScene')}
  >
  <X className="w-3.5 h-3.5" />
  </button>
@@ -401,37 +403,37 @@ function SceneRow({
 
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
  <SceneField
- label="Dialogue"
+ label={t('scDialogue')}
  value={scene.dialogue}
  onChange={(v) => onUpdate({ dialogue: v })}
- placeholder="On-screen dialogue (lời thoại)…"
+ placeholder={t('scDialoguePh')}
  />
  <SceneField
- label="Voiceover"
+ label={t('scVoiceover')}
  value={scene.voiceover}
  onChange={(v) => onUpdate({ voiceover: v })}
- placeholder="Voiceover narration…"
+ placeholder={t('scVoiceoverPh')}
  />
  <SceneField
- label="Action / camera"
+ label={t('scAction')}
  value={scene.action}
  onChange={(v) => onUpdate({ action: v })}
- placeholder="What happens + camera direction…"
+ placeholder={t('scActionPh')}
  />
  <SceneField
- label="B-roll / editing"
+ label={t('scBroll')}
  value={scene.brollNotes}
  onChange={(v) => onUpdate({ brollNotes: v })}
- placeholder="B-roll inserts + editing notes…"
+ placeholder={t('scBrollPh')}
  />
  </div>
 
  <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-2 mt-2">
  <SceneField
- label="Props"
+ label={t('scProps')}
  value={scene.props}
  onChange={(v) => onUpdate({ props: v })}
- placeholder="Props (comma-separated, e.g. mic, ring light, phone)"
+ placeholder={t('scPropsPh')}
  compact
  />
  <div className="flex items-center gap-1 self-end pb-1.5">

@@ -10,9 +10,10 @@ import Link from 'next/link';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { motion } from 'framer-motion';
-import { Calendar, GripVertical } from 'lucide-react';
+import { Calendar, GraduationCap, GripVertical } from 'lucide-react';
 import StatusPill from '@/components/studio/StatusPill';
 import TypePill from '@/components/studio/TypePill';
+import { useStudioT } from '@/lib/studio-i18n';
 import type { ContentProjectSummary } from '@/types';
 
 interface KanbanCardProps {
@@ -36,6 +37,7 @@ function dayDiff(iso: string | null): number | null {
 }
 
 export default function KanbanCard({ project, index = 0 }: KanbanCardProps) {
+ const { t } = useStudioT();
  const {
  attributes,
  listeners,
@@ -74,9 +76,28 @@ export default function KanbanCard({ project, index = 0 }: KanbanCardProps) {
  href={`/creator/projects/${project.id}`}
  className="block p-3 pr-8"
  >
+ {/* Course / series line, above the title.
+     Reads from the denormalised `courseTitle` snapshot, so it
+     stays correct even after the source course is renamed or
+     unpublished. Episode number is only meaningful next to a
+     series name, so they render together or not at all. */}
+ {(project.courseTitle || project.seriesName) && (
+ <div className="flex items-center gap-1 mb-1 text-[10px] text-studio-400/90">
+ <GraduationCap className="w-3 h-3 shrink-0" />
+ <span className="truncate">
+ {project.seriesName || project.courseTitle}
+ {project.episodeNumber != null &&
+ (project.seriesName || project.courseTitle) &&
+ ` · ${t('episodeShort', { n: project.episodeNumber })}`}
+ </span>
+ </div>
+ )}
  <p className="text-sm font-medium text-text-primary line-clamp-2 leading-snug group-hover:text-studio-300 transition-colors">
  {project.title}
  </p>
+ {project.lessonRef && (
+ <p className="text-[10px] text-text-muted mt-0.5 truncate">{project.lessonRef}</p>
+ )}
  <div className="flex items-center gap-1.5 mt-2 flex-wrap">
  <TypePill type={project.type} size="xs" />
  {project.tags.slice(0, 1).map((t) => (
@@ -91,7 +112,7 @@ export default function KanbanCard({ project, index = 0 }: KanbanCardProps) {
  {filmDay && (
  <div className="flex items-center gap-1 mt-2 text-[10px] text-text-muted">
  <Calendar className="w-3 h-3" />
- <span>Film {filmDay}</span>
+ <span>{t('filmOn', { date: filmDay })}</span>
  {filmDiff !== null && (
  <span
  className={
@@ -102,7 +123,7 @@ export default function KanbanCard({ project, index = 0 }: KanbanCardProps) {
  : 'text-text-muted'
  }
  >
- {filmDiff === 0 ? '· today' : filmDiff < 0 ? `· ${Math.abs(filmDiff)}d overdue` : `· +${filmDiff}d`}
+ {filmDiff === 0 ? `· ${t('today')}` : filmDiff < 0 ? `· -${Math.abs(filmDiff)}d` : `· +${filmDiff}d`}
  </span>
  )}
  </div>
@@ -115,7 +136,7 @@ export default function KanbanCard({ project, index = 0 }: KanbanCardProps) {
  type="button"
  {...attributes}
  {...listeners}
- aria-label="Drag to reorder or move between columns"
+ aria-label={t('dragCardHint')}
  className="absolute right-1.5 top-1.5 p-1 rounded text-text-muted hover:text-text-primary hover:bg-white/5 cursor-grab active:cursor-grabbing touch-none"
  >
  <GripVertical className="w-3.5 h-3.5" />

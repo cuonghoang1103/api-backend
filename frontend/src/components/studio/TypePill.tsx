@@ -6,6 +6,7 @@
 
 import type { ContentType } from '@/types';
 import { CONTENT_TYPE_META } from '@/lib/studio-meta';
+import { pick, useStudioT } from '@/lib/studio-i18n';
 
 interface TypePillProps {
  type: ContentType;
@@ -14,6 +15,7 @@ interface TypePillProps {
 }
 
 export default function TypePill({ type, size = 'sm', className = '' }: TypePillProps) {
+ const { lang } = useStudioT();
  const meta = CONTENT_TYPE_META[type];
  const sizeClass =
  size === 'xs'
@@ -27,7 +29,7 @@ export default function TypePill({ type, size = 'sm', className = '' }: TypePill
  className={`inline-flex items-center gap-1 rounded-full font-semibold uppercase tracking-wider border border-darkborder bg-darkcard/60 text-text-secondary ${sizeClass} ${className}`}
  >
  <span className="text-[11px] leading-none">{meta.emoji}</span>
- {meta.label}
+ {pick(meta.label, lang)}
  </span>
  );
 }

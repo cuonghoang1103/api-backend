@@ -44,20 +44,21 @@ import { toast } from 'sonner';
 
 import { useCreateContentProject } from '@/hooks/useContentQueries';
 import { useStudioStore } from '@/store/studioStore';
-import { CONTENT_TYPE_META } from '@/lib/studio-meta';
-import type { ContentProjectCreate, ContentType } from '@/types';
+import { CONTENT_TYPE_META, TYPE_ORDER } from '@/lib/studio-meta';
+import AcademyBindingFields from '@/components/studio/AcademyBindingFields';
+import { pick, useStudioT } from '@/lib/studio-i18n';
+import type { ContentAcademyBinding, ContentProjectCreate, ContentType } from '@/types';
 import { cn } from '@/lib/utils';
 
-const TYPE_OPTIONS: ContentType[] = [
- 'VLOG',
- 'AFFILIATE',
- 'CODE_REVIEW',
- 'REVIEW',
- 'IDEA',
- 'OTHER',
-];
+// Was a hand-maintained subset that predated the teaching formats,
+// so LECTURE / EXAM_SOLVING / EXERCISE / PROJECT_BUILD — the four
+// this studio exists for — could not be chosen at creation time at
+// all. Use the shared order instead; adding a type to the enum now
+// surfaces it here automatically.
+const TYPE_OPTIONS: ContentType[] = TYPE_ORDER;
 
 export default function CreateProjectModal() {
+ const { t, lang } = useStudioT();
  const isOpen = useStudioStore((s) => s.isCreateModalOpen);
  const preFill = useStudioStore((s) => s.preFill);
  const close = useStudioStore((s) => s.closeCreateModal);
@@ -78,6 +79,10 @@ export default function CreateProjectModal() {
  const [publishDate, setPublishDate] = useState('');
  const [tagsInput, setTagsInput] = useState('');
  const [tags, setTags] = useState<string[]>([]);
+ // Academy binding, collected at creation time so a "record
+ // chapter 3 of PRO192" project arrives already bound instead of
+ // needing a second pass through the editor.
+ const [binding, setBinding] = useState<Partial<ContentAcademyBinding>>({ scriptLang: 'VI' });
 
  // Reset form on open. We use a small effect + a
  // `lastOpen` ref so the reset only runs on transitions
@@ -93,6 +98,7 @@ export default function CreateProjectModal() {
  setPublishDate(preFill?.publishDate ?? '');
  setTagsInput('');
  setTags([]);
+ setBinding({ scriptLang: 'VI' });
  // We intentionally exclude `preFill` from the deps
  // array — pre-fill is only read on the open transition.
  // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -148,6 +154,9 @@ export default function CreateProjectModal() {
  filmDate: filmDate || null,
  publishDate: publishDate || null,
  tags: tags.length > 0 ? tags : undefined,
+ // Spread last: these keys don't overlap the ones above, and
+ // the server treats an absent key as "leave alone".
+ ...binding,
  };
 
  try {
@@ -165,7 +174,7 @@ export default function CreateProjectModal() {
  const msg =
  err?.response?.data?.message ??
  err?.message ??
- 'Could not create project';
+ t('titleRequired');
  toast.error(msg);
  }
  };
@@ -210,10 +219,10 @@ export default function CreateProjectModal() {
  id="new-project-title"
  className="text-sm font-semibold text-text-primary"
  >
- New project
+ {t('createTitle')}
  </h2>
  <p className="text-[11px] text-text-muted">
- Start a new video project. You can flesh it out in the editor.
+ {t('createSubtitle')}
  </p>
  </div>
  </div>
@@ -221,7 +230,7 @@ export default function CreateProjectModal() {
  type="button"
  onClick={() => !create.isPending && close()}
  disabled={create.isPending}
- aria-label="Close"
+ aria-label={t('close')}
  className="w-7 h-7 rounded-md inline-flex items-center justify-center text-text-muted hover:text-text-primary hover:bg-white/5 disabled:opacity-40"
  >
  <X className="w-3.5 h-3.5" />
@@ -247,7 +256,7 @@ export default function CreateProjectModal() {
  type="text"
  value={title}
  onChange={(e) => setTitle(e.target.value)}
- placeholder="e.g. 5 chiêu Vue 3 mà tôi ước mình biết sớm hơn"
+ placeholder={t('fieldTitlePlaceholder')}
  disabled={create.isPending}
  autoFocus
  className="w-full h-10 px-3 rounded-lg bg-bg-elevated/60 ring-1 ring-studio-500/15 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-studio-500/40 disabled:opacity-50"
@@ -257,18 +266,19 @@ export default function CreateProjectModal() {
  {/* Type picker */}
  <div>
  <label className="block text-[11px] uppercase tracking-wider text-text-muted mb-1.5 flex items-center gap-1">
- <TypeIcon className="w-3 h-3" /> Type
+ <TypeIcon className="w-3 h-3" /> {t('fieldType')}
  </label>
  <div className="flex flex-wrap gap-1.5">
- {TYPE_OPTIONS.map((t) => {
- const meta = CONTENT_TYPE_META[t];
- const active = t === type;
+ {TYPE_OPTIONS.map((ct) => {
+ const meta = CONTENT_TYPE_META[ct];
+ const active = ct === type;
  return (
  <button
- key={t}
+ key={ct}
  type="button"
- onClick={() => setType(t)}
+ onClick={() => setType(ct)}
  disabled={create.isPending}
+ title={pick(meta.hint, lang)}
  className={cn(
  'inline-flex items-center gap-1.5 h-8 px-3 rounded-lg text-xs font-semibold transition-all',
  'disabled:opacity-50',
@@ -278,7 +288,7 @@ export default function CreateProjectModal() {
  )}
  >
  <span className="text-sm leading-none">{meta.emoji}</span>
- {meta.label}
+ {pick(meta.label, lang)}
  </button>
  );
  })}
@@ -298,7 +308,7 @@ export default function CreateProjectModal() {
  type="text"
  value={mainHook}
  onChange={(e) => setMainHook(e.target.value)}
- placeholder="Why would someone click? e.g. Most devs pick the wrong state manager."
+ placeholder={t('fieldHookPlaceholder')}
  disabled={create.isPending}
  className="w-full h-9 px-3 rounded-lg bg-bg-elevated/60 ring-1 ring-studio-500/15 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-studio-500/40 disabled:opacity-50"
  />
@@ -310,13 +320,13 @@ export default function CreateProjectModal() {
  htmlFor="cp-concept"
  className="block text-[11px] uppercase tracking-wider text-text-muted mb-1.5"
  >
- Concept (longer description)
+ {t('fieldConceptLong')}
  </label>
  <textarea
  id="cp-concept"
  value={concept}
  onChange={(e) => setConcept(e.target.value)}
- placeholder="What is the video about? What's the angle?"
+ placeholder={t('fieldConceptPlaceholder')}
  rows={3}
  disabled={create.isPending}
  className="w-full px-3 py-2 rounded-lg bg-bg-elevated/60 ring-1 ring-studio-500/15 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-studio-500/40 resize-y disabled:opacity-50"
@@ -327,7 +337,7 @@ export default function CreateProjectModal() {
  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
  <DateField
  id="cp-idea"
- label="Idea date"
+ label={t('fieldIdeaDate')}
  icon={CalendarIcon}
  value={ideaDate}
  onChange={setIdeaDate}
@@ -335,7 +345,7 @@ export default function CreateProjectModal() {
  />
  <DateField
  id="cp-film"
- label="Film date"
+ label={t('fieldFilmDate')}
  icon={Film}
  value={filmDate}
  onChange={setFilmDate}
@@ -343,11 +353,29 @@ export default function CreateProjectModal() {
  />
  <DateField
  id="cp-publish"
- label="Publish date"
+ label={t('fieldPublishDate')}
  icon={Send}
  value={publishDate}
  onChange={setPublishDate}
  disabled={create.isPending}
+ />
+ </div>
+
+ {/* Academy binding — collapsed into the same form rather
+     than a second step, so a lecture project is one dialog
+     away from being fully described. */}
+ <div className="rounded-xl border border-darkborder bg-bg-elevated/30 p-3">
+ <p className="text-[11px] uppercase tracking-wider text-text-muted mb-0.5">
+ {t('academySection')}
+ </p>
+ <p className="text-[11px] text-text-muted mb-2.5 leading-relaxed">
+ {t('academyHint')}
+ </p>
+ <AcademyBindingFields
+ compact
+ value={binding}
+ contentType={type}
+ onChange={(patch) => setBinding((b) => ({ ...b, ...patch }))}
  />
  </div>
 
@@ -357,7 +385,7 @@ export default function CreateProjectModal() {
  htmlFor="cp-tags"
  className="block text-[11px] uppercase tracking-wider text-text-muted mb-1.5"
  >
- Tags
+ {t('fieldTags')}
  </label>
  <div className="flex flex-wrap items-center gap-1.5 px-2 py-1.5 min-h-[2.5rem] rounded-lg bg-bg-elevated/60 ring-1 ring-studio-500/15 focus-within:ring-2 focus-within:ring-studio-500/40">
  {tags.map((t) => (
@@ -401,7 +429,7 @@ export default function CreateProjectModal() {
  />
  </div>
  <p className="mt-1 text-[10px] text-text-muted">
- Press Enter or comma to add a tag.
+ {t('tagEnterHint')}
  </p>
  </div>
  </div>
@@ -418,7 +446,7 @@ export default function CreateProjectModal() {
  disabled={create.isPending}
  className="h-9 px-3 rounded-lg text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-white/5 disabled:opacity-40"
  >
- Cancel
+ {t('cancel')}
  </button>
  <button
  type="submit"
@@ -433,7 +461,7 @@ export default function CreateProjectModal() {
  ) : (
  <>
  <Plus className="w-3.5 h-3.5" strokeWidth={2.6} />
- Create project
+ {t('createCta')}
  </>
  )}
  </button>

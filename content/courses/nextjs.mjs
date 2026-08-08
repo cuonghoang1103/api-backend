@@ -10,6 +10,9 @@ import s01 from './nextjs/s01-jsx.mjs';
 import s02 from './nextjs/s02-components-props.mjs';
 import s03 from './nextjs/s03-state.mjs';
 import s04 from './nextjs/s04-events-forms.mjs';
+import s05 from './nextjs/s05-effects.mjs';
+import s06 from './nextjs/s06-hooks-toolbox.mjs';
+import s07 from './nextjs/s07-lists-keys-perf.mjs';
 
 export default {
   category: { slug: 'frontend', name: 'Frontend', icon: 'Layout', sortOrder: 2 },
@@ -38,5 +41,8 @@ export default {
     s02,
     s03,
     s04,
+    s05,
+    s06,
+    s07,
   ],
 };

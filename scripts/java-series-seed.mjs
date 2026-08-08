@@ -4,6 +4,7 @@
  * ─────────────────────────────────────────────────────────────────────────────
  *   node scripts/java-series-seed.mjs --file ./content/feed-series/100-ngay-java/day-01.mjs
  *   node scripts/java-series-seed.mjs --file ... --apply
+ *   node scripts/java-series-seed.mjs --file ... --apply --skip-card   # trong container
  *
  * IDEMPOTENT: chạy lại cùng một ngày thì CẬP NHẬT bài cũ chứ không đẻ bài mới
  * (khớp theo hashtag ngày, xem `dayTag`). Nhờ vậy sửa nội dung xong chạy lại
@@ -25,15 +26,19 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { PrismaClient } from '@prisma/client';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-import sharp from 'sharp';
 import 'dotenv/config';
+
+/* `sharp` và AWS SDK chỉ cần ở PHA DỰNG ẢNH nên nạp động — pha ghi bài chạy
+   TRONG CONTAINER backend, nơi không có Playwright để dựng thẻ. */
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
 const val = (f) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] : undefined; };
 const FILE = val('--file');
 const APPLY = args.includes('--apply');
+/* --skip-card: BỎ pha dựng ảnh, chỉ ghi bài. Dùng khi chạy TRONG container
+   lúc deploy — ở đó không có Playwright. Ảnh phải đã nằm sẵn trên CDN. */
+const SKIP_CARD = args.includes('--skip-card');
 const AUTHOR_EMAIL = val('--author') || 'cuongthaihnhe176322@gmail.com';
 if (!FILE) { console.error('cần --file ./content/feed-series/100-ngay-java/day-XX.mjs'); process.exit(1); }
 
@@ -75,34 +80,56 @@ if (!category) {
 
 /* ── 3. Ảnh thẻ: dựng → nén WebP → R2 ─────────────────────────────────────── */
 const cardSpec = path.join(ROOT, 'content/lesson-cards', `${day.card}.mjs`);
-if (!fs.existsSync(cardSpec)) { console.error(`✗ không thấy file thẻ ${path.relative(ROOT, cardSpec)}`); process.exit(1); }
+if (!SKIP_CARD && !fs.existsSync(cardSpec)) {
+  console.error(`✗ không thấy file thẻ ${path.relative(ROOT, cardSpec)}`); process.exit(1);
+}
 
-const pngPath = path.join(ROOT, '.cards', `${day.card}.png`);
-console.log('   dựng ảnh thẻ (biên dịch + chạy Java để kiểm nội dung)…');
-execFileSync('node', [path.join(ROOT, 'scripts/gen-lesson-card.mjs'), '--file', cardSpec], { stdio: 'pipe' });
-
-const webpPath = pngPath.replace(/\.png$/, '.webp');
-const meta = await sharp(pngPath).webp({ quality: 88, effort: 6 }).toFile(webpPath);
 const key = `images/lessons/100-ngay-java/${day.card}.webp`;
-const url = `${(process.env.R2_PUBLIC_URL || '').replace(/\/$/, '')}/${key}`;
-console.log(`   ảnh: ${meta.width}×${meta.height} · ${(fs.statSync(webpPath).size / 1024).toFixed(0)}KB → ${url}`);
+const PUBLIC_BASE = (process.env.R2_PUBLIC_URL || 'https://media.cuongthai.com').replace(/\/$/, '');
+const url = `${PUBLIC_BASE}/${key}`;
+let meta = { width: 1080, height: 1900 };
 
-if (APPLY) {
-  const s3 = new S3Client({
-    region: process.env.R2_REGION || 'auto',
-    endpoint: process.env.R2_ENDPOINT_URL,
-    credentials: {
-      accessKeyId: process.env.R2_ACCESS_KEY_ID,
-      secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
-    },
-  });
-  await s3.send(new PutObjectCommand({
-    Bucket: process.env.R2_BUCKET_NAME,
-    Key: key,
-    Body: fs.readFileSync(webpPath),
-    ContentType: 'image/webp',
-    CacheControl: 'public, max-age=2592000',
-  }));
+if (SKIP_CARD) {
+  /* Pha GHI BÀI (chạy trong container lúc deploy). Ảnh phải đã có sẵn trên
+     CDN từ pha dựng ở máy local — kiểm bằng GET thật, thiếu là DỪNG. Nếu bỏ
+     qua phép kiểm này thì bài lên prod với ảnh 404 và không ai biết. */
+  const probe = await fetch(url, { method: 'GET' }).catch(() => null);
+  if (!probe || !probe.ok) {
+    console.error(`✗ ảnh thẻ chưa có trên CDN (${probe ? probe.status : 'không nối được'}): ${url}`);
+    console.error('  → chạy ở máy local KHÔNG kèm --skip-card để dựng và upload trước.');
+    process.exit(1);
+  }
+  console.log(`   ảnh: đã có trên CDN (${probe.status}) → ${url}`);
+} else {
+  /* Pha DỰNG ẢNH (chạy ở máy local, cần Playwright + sharp). */
+  const sharp = (await import('sharp')).default;
+  const { S3Client, PutObjectCommand } = await import('@aws-sdk/client-s3');
+
+  const pngPath = path.join(ROOT, '.cards', `${day.card}.png`);
+  console.log('   dựng ảnh thẻ (biên dịch + chạy Java để kiểm nội dung)…');
+  execFileSync('node', [path.join(ROOT, 'scripts/gen-lesson-card.mjs'), '--file', cardSpec], { stdio: 'pipe' });
+
+  const webpPath = pngPath.replace(/\.png$/, '.webp');
+  meta = await sharp(pngPath).webp({ quality: 88, effort: 6 }).toFile(webpPath);
+  console.log(`   ảnh: ${meta.width}×${meta.height} · ${(fs.statSync(webpPath).size / 1024).toFixed(0)}KB → ${url}`);
+
+  if (APPLY) {
+    const s3 = new S3Client({
+      region: process.env.R2_REGION || 'auto',
+      endpoint: process.env.R2_ENDPOINT_URL,
+      credentials: {
+        accessKeyId: process.env.R2_ACCESS_KEY_ID,
+        secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
+      },
+    });
+    await s3.send(new PutObjectCommand({
+      Bucket: process.env.R2_BUCKET_NAME,
+      Key: key,
+      Body: fs.readFileSync(webpPath),
+      ContentType: 'image/webp',
+      CacheControl: 'public, max-age=2592000',
+    }));
+  }
 }
 
 /* ── 4. Bài đăng ──────────────────────────────────────────────────────────── */

@@ -568,6 +568,32 @@ PROJECT_SEED_OUT_RC="$(printf '%s\n' "$PROJECT_SEED_OUT" | sed -n 's/^__SEED_RC_
 PROJECT_SEED_OUT="$(printf '%s\n' "$PROJECT_SEED_OUT" | grep -v '^__SEED_RC__=')"
 report_seed "Project seed" "seed-projects" "$PROJECT_SEED_OUT" "${PROJECT_SEED_OUT_RC:-0}" || true
 
+# ── Step 3.16c: "100 Ngày Java" feed series (idempotent) ───────
+# One .mjs per day under content/feed-series/100-ngay-java/ → upsert the
+# SocialPost + its card image, keyed by the day hashtag (#100NgayJava-DayNNN).
+#
+# WHY THIS STEP HAS TO EXIST: deploy.sh ships CODE, not DATA. Seeding the
+# series only on a laptop leaves production without the posts even though the
+# repo has them — which is exactly what happened on 2026-08-08.
+#
+# --skip-card because the card renderer needs Playwright, which the backend
+# image does not carry. Cards are rendered + uploaded to R2 from the dev
+# machine; this step only writes the rows and VERIFIES the image already
+# answers 200 on the CDN, failing loudly if it does not.
+info "Running 100 Ngay Java feed-series seed..."
+JAVA_SERIES_OUT=$($DC exec -T backend sh -c '
+  rc=0
+  for f in content/feed-series/100-ngay-java/*.mjs; do
+    [ -e "$f" ] || { echo "no java series files"; break; }
+    echo "── $f"
+    node scripts/java-series-seed.mjs --file "$f" --apply --skip-card 2>&1 || rc=1
+  done
+  echo "__SEED_RC__=$rc"
+') || true
+JAVA_SERIES_OUT_RC="$(printf '%s\n' "$JAVA_SERIES_OUT" | sed -n 's/^__SEED_RC__=//p' | tail -1)"
+JAVA_SERIES_OUT="$(printf '%s\n' "$JAVA_SERIES_OUT" | grep -v '^__SEED_RC__=')"
+report_seed "Java series seed" "seed-java-series" "$JAVA_SERIES_OUT" "${JAVA_SERIES_OUT_RC:-0}" || true
+
 # ── Step 3.16b: retire two superseded case-studies (one-shot, idempotent) ──
 # `cuongthaicom` duplicated `cuonghoang-dev-portal` (same site, 18KB stub vs
 # the 105KB case-study), and `esp32aivoice` was an editor test row that still

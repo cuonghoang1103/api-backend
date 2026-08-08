@@ -1362,6 +1362,106 @@ Bảy module dùng Socket.IO thật (Messenger, Presence, Feed, Notifications, A
 
 AI Chat là ngoại lệ duy nhất dùng Server-Sent Events thay vì Socket.IO — vì đó là luồng một chiều (server → client, token LLM đổ về liên tục) không cần độ phức tạp hai chiều của WebSocket. Điểm kỹ thuật đáng nhớ nhất ở đây là header `X-Accel-Buffering: no`: thiếu nó, Nginx đệm toàn bộ response lại rồi mới trả một cục — người dùng nhìn thấy chatbot "đứng hình" rồi trả lời tức thì, đúng ngược lại hiệu ứng streaming cần có.
 
+## Kiểm thử & đánh giá chất lượng
+
+Bức tranh trung thực: dự án **không** có độ phủ kiểm thử cao, và đó là một lựa chọn có thể tranh luận — nhưng chỗ nó chọn để kiểm thử thì không ngẫu nhiên.
+
+**34 test case, 4 file, chạy bằng test runner có sẵn của Node** (`tsx --test`, không Jest, không Vitest — bớt một phụ thuộc nặng):
+
+| File | Test case | Kiểm cái gì | Vì sao đúng chỗ này |
+|---|---|---|---|
+| `src/services/finance/money.test.ts` | 4 | Số học tiền tệ, làm tròn HALF_UP, kỳ cuối hấp thụ sai số | Hàm **thuần**, không chạm DB — sai một xu là người dùng phát hiện ngay |
+| `src/services/payment/vnpay.test.ts` | 3 | Ký và xác minh chữ ký VNPay | Sai chữ ký = thanh toán hỏng hoặc lỗ hổng giả mạo |
+| `src/services/cv/cv.test.ts` | 13 | Bộ luật chấm bullet CV (tất định) | Luật cộng-trừ điểm phải ổn định qua mọi lần sửa |
+| `src/utils/crypto.test.ts` | 14 | HMAC, presigned URL, băm | Sai thầm lặng, không lộ ra qua thao tác tay |
+
+Nguyên tắc chọn rút ra được: **kiểm thử tập trung vào phần tất định, thuần, và sai-thì-im-lặng.** Một hàm tính lãi suất sai không ném lỗi — nó chỉ trả về con số hơi lệch, và không ai phát hiện cho tới khi khách hàng đối chiếu. Ngược lại, một route CRUD hỏng thì lộ ra ngay lần bấm đầu tiên. Với một người làm trong 50 ngày, đầu tư kiểm thử vào nhóm thứ nhất cho tỉ lệ hoàn vốn cao hơn hẳn.
+
+:::warning[Một lỗ hổng quy trình thật, tìm ra khi viết mục này]
+`package.json` khai `"test": "tsx --test src/services/finance/money.test.ts src/services/payment/vnpay.test.ts src/services/cv/cv.test.ts"` — **liệt kê tường minh từng file**, và `src/utils/crypto.test.ts` (14 test case, nhiều nhất trong bốn file) **không có trong danh sách**. Nghĩa là CI chưa bao giờ chạy nó. Đây là hệ quả của việc liệt kê file bằng tay thay vì dùng mẫu glob: thêm file test mới mà quên sửa `package.json` thì nó tồn tại nhưng không ai chạy. Cách sửa đúng là đổi sang `tsx --test "src/**/*.test.ts"`.
+:::
+
+**Ba bộ đánh giá AI chạy trong CI** — đây mới là phần đặc sắc, vì kiểm thử phần mềm thường và đánh giá đầu ra mô hình là hai bài toán khác nhau. `ci-lint.yml` chạy tuần tự: `npx tsc --noEmit` → `npm run eval:grader` → `npm run eval:cv-linter` → `npm run eval:cv-fabrication` → `npm test` → `npm run lint` (không chặn).
+
+`eval:cv-fabrication` là bộ đáng nói nhất: nạp một CV **cố tình không có con số nào**, rồi bắt lỗi nếu AI trả về `suggestedFix` chứa một con số mà không đặt `needsUserInput`. Nói cách khác, đây là **một bài kiểm tra tự động cho việc AI có bịa hay không** — đúng loại rủi ro mà kiểm thử phần mềm truyền thống không chạm tới. (Bộ này hiện đang ngủ trong CI vì secret khoá API đã bị gỡ có chủ đích — xem mục Nợ kỹ thuật.)
+
+**Còn thiếu, nói thẳng:** không có kiểm thử tích hợp chạm database thật, không có kiểm thử end-to-end cho luồng thanh toán (dù `playwright` có trong devDependencies và được dùng cho việc dựng video mô phỏng), và không đo độ phủ. Với một hệ thống có tiền đi qua, đây là khoản nợ đứng đầu danh sách nếu có người thứ hai tham gia.
+
+## Sao lưu & khôi phục
+
+`scripts/backup-cron.sh` chạy **2 giờ sáng mỗi ngày** (crontab do `backend-vps.yml` cài đặt, không phải thao tác tay):
+
+```bash
+D=$(date +%Y%m%d_%H%M%S)
+F="/opt/cuonghoangdev/backups/${D}_backup.sql.gz"
+docker exec cuonghoangdev_postgres pg_dump -U postgres cuonghoangdev_db | gzip > "$F"
+```
+
+Nhưng phần đáng học nằm ở bước thứ hai — **bản sao ngoài máy chủ**, và cách nó xử lý thông tin xác thực:
+
+```bash
+# Đọc R2_BACKUP_* từ file env của VPS rồi TIÊM vào một lệnh docker exec DÙNG MỘT LẦN.
+# Container backend chạy thường trực KHÔNG BAO GIỜ mang khoá ghi backup.
+docker exec -e R2_BACKUP_BUCKET="$BK_BUCKET" \
+            -e R2_BACKUP_ACCESS_KEY_ID="$BK_AK" \
+            -e R2_BACKUP_SECRET_ACCESS_KEY="$BK_SK" \
+            cuonghoangdev_backend node /app/backup-r2-upload.mjs ...
+```
+
+Ba quyết định trong sáu dòng đó, mỗi cái chống một rủi ro cụ thể:
+
+- **Đặc quyền tối thiểu.** Khoá có quyền **ghi** vào bucket sao lưu không nằm trong biến môi trường của container thường trực. Nếu ứng dụng bị chiếm quyền, kẻ tấn công không có sẵn khoá để **xoá hoặc mã hoá chính bản sao lưu** — đây là kịch bản mà phần lớn hệ thống bị ransomware thất thủ.
+- **Bucket sao lưu tách khỏi bucket media.** Hai bộ khoá khác nhau, hai phạm vi khác nhau.
+- **Thất bại ở bước tải lên KHÔNG làm hỏng bản sao lưu cục bộ.** Lệnh bọc trong `|| echo WARN` — mất mạng tới R2 thì vẫn còn bản trên đĩa VPS, thay vì mất cả hai.
+
+:::note[Đính chính một nhận định trong chính bài này]
+Phần mở đầu bài viết nói rằng "một vài chi tiết vận hành trên VPS thật (crontab, tường lửa) không nằm trong repo nên không thể xác minh từ đây". Với **crontab sao lưu thì điều đó không còn đúng**: `backend-vps.yml` cài đặt crontab một cách tường minh và `scripts/backup-cron.sh` nằm ngay trong repo. Nhận định gốc đúng vào thời điểm viết nhưng đã lạc hậu — và việc đính chính nó ngay tại đây, thay vì lặng lẽ sửa dòng cũ, là đúng tinh thần "ghi lại cái sai" của toàn bài.
+:::
+
+**Chỗ vẫn còn hở:** không có bằng chứng nào trong repo cho thấy bản sao lưu **từng được khôi phục thử**. Một bản sao lưu chưa bao giờ phục hồi thử thì chưa phải bản sao lưu — nó chỉ là một file `.gz` mà người ta hy vọng là đúng. Phép kiểm tối thiểu nên có: mỗi tháng lấy bản mới nhất, `gunzip | psql` vào một database trống, rồi đếm số bảng và số dòng ở vài bảng lõi.
+
+## Chỉ mục & hiệu năng truy vấn
+
+`prisma/schema.prisma` khai **411 `@@index`** và **77 `@@unique`** trên 248 model — trung bình gần 2 chỉ mục mỗi bảng, con số cho thấy chỉ mục được đặt lúc thiết kế model chứ không phải vá sau khi có sự cố chậm.
+
+Ba mẫu hình đặt chỉ mục lặp lại xuyên suốt, đáng học vì mỗi cái ứng với một dạng truy vấn:
+
+```prisma
+// 1. Chỉ mục KÉP theo (khoá ngoại, cột sắp xếp) — cho "lấy con của cha này, đúng thứ tự"
+@@index([projectId, order], name: "idx_project_milestones_project_order")
+
+// 2. Chỉ mục BA CỘT khi có thêm cột lọc — thứ tự cột PHẢI khớp thứ tự dùng trong WHERE
+@@index([projectId, kind, order], name: "idx_project_list_items_project_kind_order")
+
+// 3. @@unique làm RÀNG BUỘC NGHIỆP VỤ, không chỉ để tăng tốc
+@@unique([userId, courseId])                    // chống ghi danh trùng
+@@unique([userId, itemType, itemId])            // một tiến độ cho một mục
+@@unique([messageId, userId, emoji])            // một người một emoji một lần
+```
+
+Nhóm thứ ba là điểm đáng nhớ nhất và cũng là sợi chỉ xuyên suốt cả case-study: **nhiều `@@unique` trong schema này không tồn tại vì hiệu năng mà vì tính đúng đắn.** Ràng buộc `@@unique([messageId, userId, emoji])` chính là thứ khiến cơ chế bật/tắt reaction hoạt động đúng khi có hai request đồng thời — logic ứng dụng không cần khoá gì cả, database từ chối bản ghi thứ hai. Cùng nguyên tắc với `updateMany({ where: { status: 'AVAILABLE' } })` ở phần Shop: **đẩy điều kiện xuống nơi có tính nguyên tử**.
+
+**Chỗ chưa làm, nói thẳng:** không có bằng chứng trong repo về việc chạy `EXPLAIN ANALYZE` một cách hệ thống, không có ngưỡng cảnh báo truy vấn chậm, và không có số đo độ trễ theo phân vị (p95/p99) cho bất kỳ endpoint nào. Với 63 router, nhiều khả năng có truy vấn N+1 chưa ai phát hiện — cách rẻ nhất để tìm là bật ghi nhật ký truy vấn của Prisma ở dev rồi mở vài trang danh sách và **đếm**.
+
+## Nếu bị hỏi trong phỏng vấn — dự án này trả lời được câu nào
+
+Một hệ thống 248 model không tự động thành câu chuyện phỏng vấn tốt. Cái làm nên câu trả lời hay là **một quyết định cụ thể, lý do đằng sau, và cái giá đã trả**. Dưới đây là những cặp câu hỏi–chỗ trả lời trong chính bài này:
+
+| Câu hỏi thường gặp | Trả lời bằng phần nào | Điểm mấu chốt nên nói |
+|---|---|---|
+| "Kể về một sự cố production và cách bạn xử lý" | Hạ tầng & triển khai | Deploy báo "healthy" trong khi route 404 vì ảnh cũ ⇒ thêm smoke-test 29 route, `404` chặn hẳn deploy |
+| "Bạn xử lý đồng thời thế nào?" | Shop — pool key | `updateMany({where:{status:'AVAILABLE'}})` là so sánh-và-đổi nguyên tử; kẻ thua nhận `count=0` và thử key kế tiếp |
+| "Idempotency là gì, bạn dùng ở đâu?" | Shop — chống double-fulfill | Webhook có thể tới hai lần hoặc không bao giờ tới ⇒ `updateMany` PENDING→PAID + đối soát chủ động, cả hai nhánh gọi cùng một hàm |
+| "Vì sao không dùng float cho tiền?" | Finance | IEEE-754, `Prisma.Decimal`, làm tròn HALF_UP sau **mỗi bước**, kỳ cuối hấp thụ sai số |
+| "Thiết kế hệ thống realtime thế nào?" | Presence | Audience = bạn bè ∪ peer thread, không `io.emit()` toàn cục — bản cũ gây "O(N²) storm during deploy reconnects" |
+| "Bạn bảo mật API ra sao?" | Bảo mật & xác thực | `authenticate` truy DB lại mỗi request (token sống 7 ngày, khoá tài khoản phải có tác dụng ngay), rate-limit `failOpen`, chống XFF giả mạo |
+| "Dùng AI trong sản phẩm thật thế nào?" | Tầng AI + Interview + CV | Lõi deterministic chạy được khi tắt LLM; evidence-gating chống bịa; circuit breaker chia theo giỏ sau sự cố 1.840 lời gọi |
+| "Bạn đánh đổi cái gì và vì sao?" | Code Lab | Không có sandbox thật, biết rõ, ghi ra, và giải thích được vì sao chấp nhận được ở ngữ cảnh này mà không chấp nhận được nếu tự động chấm bài |
+| "Bạn kiểm thử thế nào?" | Kiểm thử & đánh giá | Kiểm thử tập trung vào phần tất định và sai-thì-im-lặng; và thừa nhận thẳng chỗ còn thiếu |
+| "Nếu làm lại, bạn làm khác gì?" | Nợ kỹ thuật + Lộ trình | Sáu giai đoạn, và lý do mỗi lớp phòng thủ trong `deploy.sh` ra đời sau một sự cố cụ thể |
+
+Một lưu ý về cách kể: **câu trả lời mạnh nhất trong bảng trên đều có một con số hoặc một sự cố thật đứng sau.** "Tôi dùng Redis để cache" là câu ai cũng nói được; "một job nền hỏng 1.840 lời gọi từng kéo sập chat của người dùng đang online, nên circuit breaker phải chia theo giỏ tính năng chứ không dùng bộ đếm chung" thì không.
+
 ## Nợ kỹ thuật — nói thẳng, không giấu
 
 Một case-study trung thực phải liệt kê cả phần chưa xong. Đây là những gì đang biết rõ và đang xếp hàng:

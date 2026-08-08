@@ -17,6 +17,7 @@ import s08 from './nextjs/s08-app-router.mjs';
 import s09 from './nextjs/s09-server-client.mjs';
 import s10 from './nextjs/s10-data-fetching.mjs';
 import s11 from './nextjs/s11-advanced-routing.mjs';
+import s12 from './nextjs/s12-server-actions.mjs';
 
 export default {
   category: { slug: 'frontend', name: 'Frontend', icon: 'Layout', sortOrder: 2 },
@@ -52,5 +53,6 @@ export default {
     s09,
     s10,
     s11,
+    s12,
   ],
 };

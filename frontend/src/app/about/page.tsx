@@ -42,9 +42,20 @@ import StatsSection from '@/components/home/StatsSection';
 import HomeBackground from '@/components/home/HomeBackground';
 import { formatNumber } from '@/lib/utils';
 import { SHOP_ENABLED, CONTACT_ENABLED } from '@/lib/featureFlags';
-import { ArrowRight, Sparkles, Code2, Terminal, Zap, Brain, Gem, Search, ChevronRight, Download, GitCommit, ShieldAlert } from 'lucide-react';
+import { ArrowRight, Sparkles, Code2, Terminal, Zap, Brain, Gem, Search, ChevronRight, Download, GitCommit, ShieldAlert, Eye, Layers, Check, Copy } from 'lucide-react';
 import { useAboutStats, usePublicCv, fmt } from '@/components/about/useAboutData';
 import codebase from '@/data/codebaseStats.json';
+
+// ─── Liên hệ ───────────────────────────────────────────────────────────────
+// Cùng bộ hồ sơ đang dùng ở Footer và trong khối JSON-LD của layout — đổi thì
+// phải đổi cả ba chỗ, vì `sameAs` trỏ sai người là khai báo danh tính sai.
+const CONTACT_EMAIL = 'cuongthaihnhe176322@gmail.com';
+const SOCIALS: { label: string; href: string }[] = [
+  { label: 'GitHub', href: 'https://github.com/cuonghoang1103' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/cuong-hoang-843a37258/' },
+  { label: 'X', href: 'https://x.com/Hncuong311' },
+  { label: 'Facebook', href: 'https://www.facebook.com/CuongHoangswit/' },
+];
 
 export default function AboutPage() {
   const { t, locale } = useTranslation();
@@ -58,6 +69,20 @@ export default function AboutPage() {
   const stats = useAboutStats();
   const cv = usePublicCv();
   const n = (v: number | null | undefined): string => fmt(v, lang);
+
+  // Sao chép email. `navigator.clipboard` chỉ tồn tại ở ngữ cảnh bảo mật và có
+  // thể bị chính sách quyền chặn — hỏng thì rơi về `mailto:` chứ không im lặng
+  // để người dùng bấm vào khoảng không.
+  const [copied, setCopied] = useState(false);
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(CONTACT_EMAIL);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      window.location.href = `mailto:${CONTACT_EMAIL}`;
+    }
+  };
   const [featuredPosts, setFeaturedPosts] = useState<Post[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   // Project store binding is kept ready for the future
@@ -227,6 +252,54 @@ export default function AboutPage() {
     { label: L('Dòng mã', 'Lines of code'), value: codebase.sourceLines },
   ].filter((s) => typeof s.value === 'number' && s.value > 0);
 
+  // --- Stack đầy đủ (bổ sung) ---
+  // Danh sách 15 thanh phần trăm phía dưới là TỰ ĐÁNH GIÁ và chỉ có 15 mục —
+  // nó bỏ sót gần hết những gì thực sự đang chạy. Khối này liệt kê đủ, KHÔNG
+  // chấm điểm, và mọi mục đều đối chiếu được với `package.json` / cây thư mục
+  // của repo. Đừng thêm gì vào đây mà repo không có.
+  const techStack: { group: string; accent: string; items: string[] }[] = [
+    {
+      group: L('Backend', 'Backend'),
+      accent: '#6366f1',
+      items: ['Node.js', 'Express', 'TypeScript', 'Prisma', 'Zod', 'JWT + bcrypt', 'Helmet', 'express-rate-limit', 'Multer', 'node-cron'],
+    },
+    {
+      group: L('Frontend', 'Frontend'),
+      accent: '#8b5cf6',
+      items: ['Next.js (App Router)', 'React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Zustand', 'TanStack Query', 'TipTap', 'Monaco Editor', 'Recharts', 'Mermaid'],
+    },
+    {
+      group: L('Dữ liệu', 'Data'),
+      accent: '#d946ef',
+      items: ['PostgreSQL', 'Prisma ORM', 'Redis (ioredis)', 'pgvector', L('Migration có phiên bản', 'Versioned migrations')],
+    },
+    {
+      group: L('Hạ tầng', 'Infrastructure'),
+      accent: '#22d3ee',
+      items: ['Docker', 'Nginx', L('VPS tự quản', 'Self-managed VPS'), 'GitHub Actions', 'Cloudflare R2 (S3 API)', 'Sentry'],
+    },
+    {
+      group: L('AI', 'AI'),
+      accent: '#34d399',
+      items: ['LLM adapter (Anthropic / OpenAI-compatible)', 'RAG + pgvector', 'Transformers.js embeddings', L('Chặn prompt injection', 'Prompt-injection screening'), L('Cổng lọc dữ liệu cá nhân', 'PII gate'), L('Cầu dao nhà cung cấp', 'Provider circuit breaker')],
+    },
+    {
+      group: L('Thời gian thực', 'Real-time'),
+      accent: '#fbbf24',
+      items: ['Socket.IO', L('WebSocket thuần (/device-ws)', 'Raw WebSocket (/device-ws)'), 'Redis adapter'],
+    },
+    {
+      group: L('Media & tài liệu', 'Media & documents'),
+      accent: '#f472b6',
+      items: ['Sharp', 'FFmpeg', 'pdfkit', 'docx', 'mammoth', 'unpdf', 'music-metadata'],
+    },
+    {
+      group: L('Khác', 'Other'),
+      accent: '#a78bfa',
+      items: ['Three.js / WebGL', 'ESP32-S3 firmware', 'VNPay', 'Resend', 'Java', 'Spring Boot'],
+    },
+  ];
+
   // --- Sự cố production đã xử lý (bổ sung) ---
   // Lấy từ nhật ký sự cố có thật trong kho mã, không thêm thắt. Đây là phần
   // nhà tuyển dụng kỹ thuật đọc kỹ nhất — ai cũng liệt kê được công nghệ.
@@ -289,6 +362,66 @@ export default function AboutPage() {
       fix: L(
         'Đổi tệp tĩnh thì phải khởi động lại server, và diệt tiến trình THEO CỔNG (Node đổi tên tiến trình nên diệt theo tên là trượt). Production không dính vì mỗi deploy là một container mới.',
         'Changing static files means restarting the server, and killing it BY PORT (Node renames its process, so killing by name misses). Production was never affected — each deploy is a fresh container.',
+      ),
+    },
+    {
+      accent: '#f87171',
+      symptom: L(
+        '“Sập database, chỉ còn frontend sống.” Nhưng Postgres và backend đều báo healthy, và người dùng khác vẫn vào bình thường.',
+        '“The database is down, only the frontend works.” Yet Postgres and the backend both reported healthy, and other users were fine.',
+      ),
+      cause: L(
+        'Không phải sập — là giới hạn tần suất theo IP. Một trang thi bắn 18.297 request trong 10 phút (~32 mỗi giây), mỗi lần tải lên lại toàn bộ file ghi âm. Gốc là một vòng lặp tự nuôi: hết giờ thì effect tự nộp bài; nộp hỏng thì khối catch BUỘC phải gỡ cờ “đã nộp” để nút bấm tay còn dùng được; gỡ xong thì effect lại thấy đúng điều kiện cũ và nộp tiếp — nhanh hết mức đường truyền cho phép. Cái khoá tự mở ra ngay tại điều kiện đã kích hoạt nó.',
+        'Not an outage — a per-IP rate limit. One exam page fired 18,297 requests in 10 minutes (~32/s), re-uploading the whole audio recording each time. The root cause was a self-feeding loop: on timeout an effect auto-submits; when the submit fails the catch block MUST clear the “submitted” flag so the manual button still works; once cleared, the effect sees the same condition again and re-submits — as fast as the network allows. The latch released itself at exactly the condition that had tripped it.',
+      ),
+      fix: L(
+        'Một cờ RIÊNG “đã thử tự nộp” không bao giờ được gỡ, tách khỏi cờ của đường bấm tay. Luật rút ra: mọi effect tự hành động dựa trên điều kiện KHÔNG tự biến mất (hết giờ, lỗi mạng, cờ trạng thái) phải có cờ “đã thử” riêng. Truy thủ phạm bằng cách quét khoá rate-limit trong Redis xem cạn quota là một IP hay toàn cục, rồi đếm endpoint trong log nginx của đúng IP đó.',
+        'A separate “already attempted” flag that is never cleared, split from the manual path’s flag. The rule: any effect that acts on a condition which does NOT clear itself (a timeout, a network error, a status flag) needs its own attempt latch. Trace it by scanning the Redis rate-limit keys to see whether one IP or the whole bucket is drained, then counting endpoints in that IP’s nginx log lines.',
+      ),
+    },
+    {
+      accent: '#fb923c',
+      symptom: L(
+        'Giới hạn tần suất trông như đang chạy, nhưng một client cố ý có thể gọi API không giới hạn.',
+        'Rate limiting looked like it was working, yet a deliberate client could call the API without limit.',
+      ),
+      cause: L(
+        'Hàm sinh khoá lấy phần tử ĐẦU của header X-Forwarded-For. Phần tử đầu là do client gửi lên, nên chỉ cần đổi header mỗi lần gọi là mỗi lần lại được một xô đếm mới — đã chứng minh bằng curl. Trang này cũng không nằm sau Cloudflare, nên tin vào CF-Connecting-IP còn tệ hơn: header đó ai cũng đặt được.',
+        'The key generator read the FIRST entry of the X-Forwarded-For header. That entry is client-supplied, so changing it on each call yields a fresh counter bucket every time — proven with curl. The site also does not sit behind Cloudflare, so trusting CF-Connecting-IP would be worse still: anyone can set that header.',
+      ),
+      fix: L(
+        'Đổi sang phần tử CUỐI của X-Forwarded-For — phần tử do chính nginx nối thêm, client không chạm tới được — cho cả bộ giới hạn chung lẫn bộ giới hạn đăng nhập. Kiểm hồi quy bằng curl kèm header giả: sau khi vá thì vẫn phải rơi vào CÙNG một xô; nhận xô mới nghĩa là lỗ hổng quay lại.',
+        'Switch to the LAST X-Forwarded-For entry — the one nginx appends itself, which the client cannot touch — for both the general and the auth limiter. Regression check: curl with a forged header must still land in the SAME bucket after the fix; a fresh bucket means the hole is back.',
+      ),
+    },
+    {
+      accent: '#facc15',
+      symptom: L(
+        'Deploy hỏng với “no space left on device”, và mọi endpoint chạm cơ sở dữ liệu trả 500 — trong khi trang chủ vẫn 200 nên nhìn qua tưởng site khoẻ.',
+        'A deploy failed with “no space left on device”, and every database-backed endpoint returned 500 — while the home page still returned 200, so at a glance the site looked fine.',
+      ),
+      cause: L(
+        'Đĩa đầy 100%. Postgres không ghi nổi nhật ký ghi-trước nên kẹt trong trạng thái phục hồi: “database system is not yet accepting connections”. Chỗ chiếm đĩa cũng không nằm ở nơi ai cũng nhìn — máy này dùng containerd-snapshotter, nên image thật nằm ở /var/lib/containerd còn /var/lib/docker trông bé tí và đánh lừa.',
+        'The disk hit 100%. Postgres could not write its write-ahead log and got stuck in recovery: “database system is not yet accepting connections”. The space was not where you would look either — this host uses the containerd snapshotter, so the real images live under /var/lib/containerd while /var/lib/docker looks deceptively small.',
+      ),
+      fix: L(
+        'Thu hồi bằng chính docker (KHÔNG xoá tay trong containerd, và KHÔNG kèm --volumes vì đó là dữ liệu Postgres), khởi động lại Postgres là nó phục hồi xong trong dưới một phút. Về lâu dài: dọn bộ nhớ đệm dựng ảnh sau mỗi lần deploy, cộng một tác vụ định kỳ hàng tuần thu hồi đĩa. Bài học chẩn đoán: trang tĩnh trả 200 KHÔNG chứng minh được gì — phải gọi một endpoint có chạm cơ sở dữ liệu.',
+        'Reclaim through docker itself (never hand-delete inside containerd, and never pass --volumes — that is the Postgres data), then restart Postgres and it finishes recovery in under a minute. Long term: prune the build cache after every deploy, plus a weekly job that reclaims disk. The diagnostic lesson: a static page returning 200 proves nothing — call an endpoint that actually touches the database.',
+      ),
+    },
+    {
+      accent: '#38bdf8',
+      symptom: L(
+        'Deploy dừng ở P3009: “migration failed to apply”. Không migration nào chạy được nữa, kể cả cái hoàn toàn mới và vô hại.',
+        'The deploy stopped at P3009: “migration failed to apply”. No migration could run any more, not even a genuinely new and harmless one.',
+      ),
+      cause: L(
+        'Cơ sở dữ liệu đã lệch khỏi lịch sử migration: sáu migration cũ đã áp cấu trúc bảng vào production nhưng KHÔNG được ghi nhận trong bảng lịch sử — có dòng bỏ dở giữa chừng, có dòng chưa từng được chèn. Prisma thấy lịch sử dở dang nên chặn hết, đúng như nó nên làm.',
+        'The database had drifted from the migration history: six older migrations had their DDL applied to production but were NOT recorded in the history table — some rows left half-finished, some never inserted at all. Prisma saw a broken history and blocked everything, exactly as it should.',
+      ),
+      fix: L(
+        'Với TỪNG migration, mở psql xác nhận bảng và cột nó tạo ra đã thực sự tồn tại, rồi mới đánh dấu là đã áp; sau đó chạy tiếp migration mới. Đánh dấu nhầm một migration còn thiếu sẽ bỏ qua luôn phần cấu trúc cần thiết và làm hỏng dữ liệu trong im lặng — nên từ đó thành quy tắc: migration hỏng thì DỪNG và báo cáo, không bao giờ tự chữa, và tuyệt đối không vá bằng mấy mẹo ép cho chạy qua.',
+        'For EACH migration, confirm in psql that the tables and columns it creates really exist, and only then mark it applied; after that the genuinely new migration runs. Wrongly marking a truly-missing migration skips the DDL you needed and corrupts data silently — which is why the rule is now: a failed migration stops and reports, never auto-resolves, and never gets patched with tricks that force it through.',
       ),
     },
   ];
@@ -511,11 +644,14 @@ export default function AboutPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.6 }}
-                className="flex flex-col sm:flex-row items-start gap-4"
+                // Bốn nút (thêm Xem CV + Tải CV) không còn vừa một hàng ở cột
+                // hẹp của lưới 2 cột — `flex-wrap` cho xuống dòng, và
+                // `whitespace-nowrap` ở từng nút chặn kiểu vỡ chữ "Xem / Dự / Án".
+                className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-start gap-3"
               >
                 <Link
                   href="/projects"
-                  className="group relative px-8 py-4 bg-gradient-to-r from-neon-indigo via-neon-violet to-neon-fuchsia text-white font-semibold rounded-2xl overflow-hidden"
+                  className="group relative px-6 py-3.5 bg-gradient-to-r from-neon-indigo via-neon-violet to-neon-fuchsia text-white font-semibold rounded-2xl overflow-hidden whitespace-nowrap"
                 >
                   <span className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                   <span className="relative flex items-center justify-center gap-2">
@@ -525,7 +661,7 @@ export default function AboutPage() {
                 </Link>
                 <Link
                   href="/chat"
-                  className="group px-8 py-4 bg-darkcard border-2 border-darkborder text-text-primary font-semibold rounded-2xl hover:border-neon-violet hover:bg-darkcard/80 transition-all duration-300"
+                  className="group px-6 py-3.5 bg-darkcard border-2 border-darkborder text-text-primary font-semibold rounded-2xl hover:border-neon-violet hover:bg-darkcard/80 transition-all duration-300 whitespace-nowrap"
                 >
                   <span className="flex items-center justify-center gap-2">
                     <Sparkles className="w-5 h-5 text-neon-fuchsia" />
@@ -536,17 +672,31 @@ export default function AboutPage() {
                 {/* Tải CV — CHỈ hiện khi endpoint công khai xác nhận có CV thật
                     để trả về (bật ở /admin/cv). Thà không có nút còn hơn có nút
                     dẫn tới 404 hoặc tới một file trắng. */}
+                {/* XEM trước, TẢI sau — người đọc CV đầu tiên thường là nhà
+                    tuyển dụng đang lướt điện thoại; bắt họ tải file về máy chỉ
+                    để liếc 20 giây là mất người. */}
                 {cv?.available && (
-                  <a
-                    href="/api/v1/cv/public/download/pdf"
-                    className="group px-8 py-4 bg-darkcard border-2 border-emerald-500/40 text-text-primary font-semibold rounded-2xl hover:border-emerald-400 hover:bg-emerald-500/5 transition-all duration-300"
-                  >
-                    <span className="flex items-center justify-center gap-2">
-                      <Download className="w-5 h-5 text-emerald-400 group-hover:translate-y-0.5 transition-transform" />
-                      {L('Tải CV', 'Download CV')}
-                      <span className="text-[11px] font-mono text-text-muted">PDF</span>
-                    </span>
-                  </a>
+                  <>
+                    <Link
+                      href="/cv/xem"
+                      className="group px-6 py-3.5 bg-darkcard border-2 border-emerald-500/40 text-text-primary font-semibold rounded-2xl hover:border-emerald-400 hover:bg-emerald-500/5 transition-all duration-300 whitespace-nowrap"
+                    >
+                      <span className="flex items-center justify-center gap-2">
+                        <Eye className="w-5 h-5 text-emerald-400" />
+                        {L('Xem CV', 'View CV')}
+                      </span>
+                    </Link>
+                    <a
+                      href="/api/v1/cv/public/download/pdf"
+                      className="group px-6 py-3.5 bg-darkcard border-2 border-darkborder text-text-primary font-semibold rounded-2xl hover:border-emerald-400/60 hover:bg-emerald-500/5 transition-all duration-300 whitespace-nowrap"
+                    >
+                      <span className="flex items-center justify-center gap-2">
+                        <Download className="w-5 h-5 text-emerald-400 group-hover:translate-y-0.5 transition-transform" />
+                        {L('Tải CV', 'Download CV')}
+                        <span className="text-[11px] font-mono text-text-muted">PDF</span>
+                      </span>
+                    </a>
+                  </>
                 )}
               </motion.div>
 
@@ -1230,6 +1380,72 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* ── BỔ SUNG: Stack đầy đủ ───────────────────────────────────────────
+          Mười lăm thanh phần trăm phía trên là tự đánh giá và bỏ sót gần hết
+          những gì thực sự đang chạy. Khối này liệt kê đủ, không chấm điểm. */}
+      <section className="py-24 border-t border-darkborder/50">
+        <div className="max-w-6xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-12"
+          >
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-neon-indigo/10 border border-neon-indigo/20 rounded-full text-sm text-neon-indigo font-medium mb-4">
+              <Layers className="w-3.5 h-3.5" />
+              {L('Stack đầy đủ', 'Full stack')}
+            </span>
+            <h2 className="text-4xl font-heading font-bold text-text-primary mb-4">
+              {L('Mọi thứ', 'Everything')}{' '}
+              <span className="text-neon-indigo">{L('đang chạy trên site này', 'running on this site')}</span>
+            </h2>
+            <p className="text-text-secondary text-lg max-w-2xl mx-auto">
+              {L(
+                'Không chấm phần trăm. Mỗi mục dưới đây đều đối chiếu được với package.json hoặc cây thư mục của kho mã.',
+                'No percentages. Every entry below can be checked against package.json or the repository tree.',
+              )}
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {techStack.map((g, i) => (
+              <motion.div
+                key={g.group}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.05 }}
+                className="relative group p-5 rounded-2xl border border-darkborder/60 bg-darkcard/60 backdrop-blur-sm overflow-hidden"
+              >
+                <div className="absolute top-0 left-0 right-0 h-[2px] opacity-50 group-hover:opacity-100 transition-opacity"
+                  style={{ background: `linear-gradient(90deg, transparent, ${g.accent}, transparent)` }} />
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                  style={{ background: `radial-gradient(ellipse at top left, ${g.accent}12 0%, transparent 70%)` }} />
+
+                <div className="relative">
+                  <div className="flex items-baseline justify-between mb-3">
+                    <h3 className="text-sm font-heading font-bold" style={{ color: g.accent }}>{g.group}</h3>
+                    {/* Đếm từ chính mảng đang vẽ — không gõ tay, không lệch khi thêm bớt. */}
+                    <span className="text-[10px] font-mono text-text-muted">{g.items.length}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {g.items.map((it) => (
+                      <span
+                        key={it}
+                        className="px-2.5 py-1 rounded-lg border border-darkborder/70 bg-darkbg/60 text-[12px] text-text-secondary"
+                      >
+                        {it}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── BỔ SUNG: Sự cố production đã xử lý ──────────────────────────────
           Ai cũng liệt kê được công nghệ; phần khó kể hơn là mình đã sai ở đâu.
           Bốn ca dưới đây lấy từ nhật ký sự cố có thật trong kho mã. */}
@@ -1300,6 +1516,79 @@ export default function AboutPage() {
       {/* Contact Section — hidden while the public contact form is disabled
           (lib/featureFlags.ts) */}
       {CONTACT_ENABLED && <ContactSection />}
+
+      {/* ── BỔ SUNG: Liên hệ trực tiếp ──────────────────────────────────────
+          Biểu mẫu liên hệ đang TẮT bằng feature flag, nên trước khối này cả
+          trang giới thiệu không có một chỗ liên hệ nào ngoài chân trang —
+          người vừa đọc xong CV muốn nhắn một câu thì phải đi tìm. */}
+      <section className="py-20 border-t border-darkborder/50">
+        <div className="max-w-6xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="rounded-3xl border border-darkborder/60 bg-darkcard/60 backdrop-blur-sm p-8 sm:p-10 relative overflow-hidden"
+          >
+            <div className="absolute top-0 left-0 right-0 h-[2px]"
+              style={{ background: 'linear-gradient(90deg, transparent, #8b5cf6, transparent)' }} />
+
+            <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+              <div>
+                <h2 className="text-3xl font-heading font-bold text-text-primary">
+                  {L('Liên hệ', 'Get in touch')}
+                </h2>
+                <p className="mt-2 text-text-secondary max-w-xl">
+                  {L(
+                    'Mở với cơ hội công việc, cộng tác, hoặc chỉ là một câu hỏi về thứ gì đó trên site.',
+                    'Open to work, collaboration, or just a question about something on this site.',
+                  )}
+                </p>
+
+                <div className="mt-5 flex flex-wrap items-center gap-2.5">
+                  <a
+                    href={`mailto:${CONTACT_EMAIL}`}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-darkborder bg-darkbg/60 font-mono text-sm text-text-primary hover:border-neon-violet hover:text-neon-violet transition-colors"
+                  >
+                    {CONTACT_EMAIL}
+                  </a>
+                  <button
+                    onClick={copyEmail}
+                    aria-label={L('Sao chép địa chỉ email', 'Copy email address')}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-darkborder bg-darkbg/60 text-sm text-text-secondary hover:border-emerald-400/60 hover:text-emerald-400 transition-colors"
+                  >
+                    {copied
+                      ? <><Check className="w-4 h-4 text-emerald-400" /> {L('Đã sao chép', 'Copied')}</>
+                      : <><Copy className="w-4 h-4" /> {L('Sao chép', 'Copy')}</>}
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-2.5 lg:justify-end">
+                {SOCIALS.map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2.5 rounded-xl border border-darkborder bg-darkbg/60 text-sm font-medium text-text-secondary hover:border-neon-violet hover:text-neon-violet transition-colors"
+                  >
+                    {s.label}
+                  </a>
+                ))}
+                {cv?.available && (
+                  <Link
+                    href="/cv/xem"
+                    className="px-4 py-2.5 rounded-xl border-2 border-emerald-500/40 bg-darkbg/60 text-sm font-semibold text-text-primary hover:border-emerald-400 transition-colors"
+                  >
+                    {L('Xem CV', 'View CV')}
+                  </Link>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
       {/* Footer */}
       <Footer />

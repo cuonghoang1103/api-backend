@@ -23,6 +23,7 @@
 import { prisma } from '../../config/database.js';
 import { findProfile } from './profile.service.js';
 import { exportCvData, type ExportFormat } from './export.service.js';
+import { toRenderCv, type RenderCv } from './export/cvData.js';
 
 const KEY = 'public_cv';
 
@@ -142,6 +143,46 @@ export async function getPublicCvMeta(): Promise<PublicCvMeta> {
   }
 }
 
+/**
+ * Bản CV để XEM trên web (trang /cv/xem), khác với bản tải về.
+ *
+ * Đi qua ĐÚNG cùng một chỗ lược PII với đường tải file — `redactedProfile()`
+ * bên dưới. Nếu tách hai đường thì sớm muộn một đường sẽ quên xoá số điện
+ * thoại, và cái quên đó không ai thấy cho tới lúc đã lộ.
+ */
+export interface PublicCvView {
+  cv: RenderCv;
+  updatedAt: string;
+  formats: readonly PublicCvFormat[];
+}
+
+/** Bản sao hồ sơ đã lược PII. MỘT chỗ duy nhất quyết định giấu gì. */
+function redactedProfile<T extends { phone: string | null; location: string | null }>(
+  profile: T,
+  redact: boolean,
+): T {
+  return redact ? { ...profile, phone: null, location: null } : profile;
+}
+
+/**
+ * Dữ liệu CV cho trang xem online, hoặc `null` khi chưa bật / hồ sơ chưa đủ.
+ * Trả `RenderCv` — đúng cấu trúc mà bộ render PDF/DOCX dùng — nên trang web và
+ * file tải về không bao giờ lệch nội dung.
+ */
+export async function getPublicCvView(): Promise<PublicCvView | null> {
+  const cfg = await getConfig();
+  if (!cfg.enabled || !cfg.userId) return null;
+
+  const profile = await findProfile(cfg.userId);
+  if (!profile || !isServeable(profile)) return null;
+
+  const cv = toRenderCv(redactedProfile(profile, cfg.redactContact));
+  // Ngày sinh chỉ có trong mẫu thị trường VN, và trang xem công khai thì không
+  // có lý do gì phải khoe — đây là dữ liệu dùng để giả mạo danh tính.
+  cv.dateOfBirth = null;
+  return { cv, updatedAt: profile.updatedAt.toISOString(), formats: ALLOWED_FORMATS };
+}
+
 export interface PublicCvFile {
   buffer: Buffer;
   mime: string;
@@ -170,10 +211,9 @@ export async function getPublicCvFile(format: PublicCvFormat): Promise<PublicCvF
   if (cache && cache.key === key && Date.now() - cache.at < cacheTtlMs) return cache.file;
 
   // Bản công khai là một BẢN SAO đã lược PII, không phải hồ sơ gốc. Xoá ở đây,
-  // trước khi render, nên không định dạng nào (pdf/docx/txt) rò ra được.
-  const publicProfile = cfg.redactContact
-    ? { ...profile, phone: null, location: null }
-    : profile;
+  // trước khi render, nên không định dạng nào (pdf/docx/txt) rò ra được. Dùng
+  // chung hàm với trang xem online để hai đường không thể lệch nhau.
+  const publicProfile = redactedProfile(profile, cfg.redactContact);
 
   const { buffer, mime, filename } = await exportCvData(cfg.userId, publicProfile, format as ExportFormat, {
     template: cfg.template,

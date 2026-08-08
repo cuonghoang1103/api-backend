@@ -356,6 +356,17 @@ publicRouter.get('/public', h(async () => {
   return getPublicCvMeta();
 }));
 
+// Full CV content for the public web view (/cv/xem). Same redaction path as the
+// file download, so the page and the PDF can never disagree.
+publicRouter.get('/public/data', async (_req: Request, res: Response<ApiResponse>, next: NextFunction): Promise<void> => {
+  try {
+    const { getPublicCvView } = await import('../services/cv/publicCv.service.js');
+    const data = await getPublicCvView();
+    if (!data) { res.status(404).json({ success: false, message: 'Không tìm thấy' }); return; }
+    res.json({ success: true, data });
+  } catch (err) { next(err); }
+});
+
 publicRouter.get('/public/download/:format', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const { getPublicCvFile, isPublicCvFormat } = await import('../services/cv/publicCv.service.js');

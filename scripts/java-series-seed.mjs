@@ -106,6 +106,28 @@ if (APPLY) {
 }
 
 /* ── 4. Bài đăng ──────────────────────────────────────────────────────────── */
+
+/* Khối "luyện tập chuyên sâu" được GHÉP TỰ ĐỘNG chứ không viết tay trong từng
+   bài — để 100 ngày không có ngày nào quên, và đổi cách trình bày thì sửa một
+   chỗ. Link đã được kiểm trả 200 trước khi đưa vào (đường chết trong 100 bài
+   là thứ không ai phát hiện cho tới khi có người bấm). */
+if (day.codeLab) {
+  const { track, slug, title } = day.codeLab;
+  if (!track || !slug) { console.error('✗ `codeLab` phải có cả `track` lẫn `slug`'); process.exit(1); }
+  const href = `https://cuongthai.com/code-lab/${track}/${slug}`;
+  const res = await fetch(href, { method: 'GET' }).catch(() => null);
+  if (!res || !res.ok) {
+    console.error(`✗ link Code Lab chết (${res ? res.status : 'không nối được'}): ${href}`);
+    process.exit(1);
+  }
+  console.log(`   Code Lab: ${res.status} ${href}`);
+  day.content += `\n\n━━━━━━━━━━━━━━━━━━━━\n\n`
+    + `💻 LUYỆN TẬP CHUYÊN SÂU\n\n`
+    + `Đọc xong rồi thì phải gõ mới nhớ. Bài thực hành chấm tự động cho đúng phần hôm nay:\n\n`
+    + `👉 ${title}\n${href}\n\n`
+    + `Toàn bộ lộ trình Java Core (16 chương · 160 bài): https://cuongthai.com/code-lab/java-core`;
+}
+
 const content = `${day.content}\n\n#${dayTag}`;   // thẻ ngày để nhận lại bài khi chạy lại
 const existing = await prisma.socialPost.findFirst({
   where: { authorId: author.id, content: { contains: `#${dayTag}` } },

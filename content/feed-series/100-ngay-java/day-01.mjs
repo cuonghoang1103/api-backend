@@ -15,6 +15,14 @@ export default {
   category: 'Java',             // pill trên feed — script tự tạo nếu chưa có
   hashtags: ['100NgayJava', 'Java', 'HocLapTrinh'],
 
+  /* Bài thực hành chấm tự động cho đúng phần hôm nay. Seeder tự ghép khối
+     "Luyện tập chuyên sâu" vào cuối bài và KIỂM link trả 200 trước khi đăng. */
+  codeLab: {
+    track: 'java-core',
+    slug: 'compile-and-run-java-from-terminal',
+    title: 'Biên dịch & chạy Java từ Terminal',
+  },
+
   content: `🚀 100 NGÀY JAVA VỚI CUONGTHAI — NGÀY 1: HELLO, JAVA!
 
 Chào mừng đến ngày đầu tiên của hành trình 100 ngày! Trước khi viết dòng code nào, phải trả lời một câu mà rất nhiều người học Java vài tháng vẫn ấp úng: khi bạn gõ "java HelloJava", thứ gì thực sự đang chạy? Hôm nay ta đi từ một file văn bản thuần cho tới lúc máy in ra chữ — và hiểu từng mắt xích ở giữa.

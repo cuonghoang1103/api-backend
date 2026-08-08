@@ -55,6 +55,31 @@ npx prisma format
 npx prisma generate
 npx prisma migrate dev --name descriptive_name   # verify migration file is created
 npx tsc --noEmit                                  # schema changes affect backend types
+npm run typecheck:seed                            # tsconfig excludes prisma/** from the line above
+npx prisma db seed                                # the ONLY way to catch runtime-only seed breakage
+```
+
+⚠️ **`npx tsc --noEmit` does NOT check the seed scripts.** The main
+tsconfig has `rootDir: "./src"`, so `prisma/**` cannot live in its
+`include` — it sat in `exclude` instead, and nothing type-checked it.
+On 2026-08-08 renaming the `ContentType` enum value `CODE` →
+`CODE_REVIEW` passed the entire checklist and still broke the seed on
+**production**, because `seed.ts` carried its own hand-written copy of
+the union and type-checked against itself. `tsconfig.seed.json` +
+`npm run typecheck:seed` exist to close that hole — run both lines
+above whenever an enum or model changes.
+
+⚠️ **`npx prisma migrate dev` is broken in this repo** (pre-existing,
+not worth fixing): migration `20260706130000_add_music_and_profile`
+adds a UNIQUE constraint named `post_music_post_id_key` and then a
+plain index with the *same name*, so it can never replay on the shadow
+database → `P3006`. It is already deployed, so per the rules above it
+must not be edited. **To add a migration: hand-write the SQL under
+`prisma/migrations/<timestamp>_<name>/migration.sql` and apply with
+`npx prisma migrate deploy`** (no shadow DB). Verify with:
+```bash
+npx prisma migrate diff --from-schema-datasource prisma/schema.prisma \
+  --to-schema-datamodel prisma/schema.prisma --script   # empty = no drift
 ```
 
 ### If Dockerfile / docker-compose / CI workflow changed:
@@ -232,6 +257,7 @@ Condensed log of past failures — do not repeat:
 | 2026-07-02 | Landscape feed videos letterboxed with huge black bars top/bottom: the all-video carousel (`PostCard.tsx` MediaGrid) forced a FIXED tall TikTok frame `min(88vh, 880px)` + `object-contain` regardless of orientation | Measure the video's real ratio (`loadedmetadata` → `videoWidth/videoHeight`, thumbnail `naturalWidth/Height`, or server `width/height` metadata) and size the frame to the video's own `aspectRatio` when landscape/square; the tall frame is ONLY for portrait |
 | 2026-07-02 | Shared notes: clicking a note inside a shared-subject view did nothing, and switching note 1 → note 2 kept showing note 1's body. Two causes: render ternary checked list view (`sharedSubject`) BEFORE detail view (`sharedSelectedNote`), and `SharedNoteViewer` had no `key` — TipTap `useEditor` only loads `content` on mount | Detail view must come before list view in the render chain (opening detail doesn't clear the list state — that's what makes "back" work). Any read-only TipTap viewer must get `key={note.id}` so it remounts per note |
 | 2026-07-30 | Sân chơi 3D `/playground` "kẹt mãi ở màn hình tải, không lỗi nào" suốt hai phiên. Thủ phạm: **Next.js chốt danh sách file trong `public/` ngay lúc SERVER KHỞI ĐỘNG**. Dựng lại sân chơi ⇒ gói JS đổi tên (mã băm nội dung) ⇒ server đang chạy trả **404** dù file có thật trên đĩa ⇒ không có JS nào chạy ⇒ màn hình tải (HTML/CSS thuần) quay mãi và **không có lỗi nào để thấy**. Preload `.ktx` vẫn 200 (tên không đổi) nên nhìn Network lại tưởng ổn | Đổi bất cứ thứ gì trong `frontend/public/**` thì **PHẢI khởi động lại Next**. Và **diệt server theo CỔNG** (`lsof -ti:3000 \| xargs -r kill -9`) — `pkill -f "next start"` và `pkill -f "standalone/server.js"` đều KHÔNG khớp vì Node đổi tên tiến trình thành `next-server`; server mới chết vì `EADDRINUSE` còn server cũ vẫn sống, làm lỗi trông như bất trị. **Production không dính** (Dockerfile `COPY . .` rồi mới `next build`, mỗi deploy là container mới) |
+| 2026-08-08 | Đổi tên giá trị enum `ContentType.CODE` → `CODE_REVIEW` (để khớp frontend vốn đã nói `CODE_REVIEW`). Qua sạch toàn bộ pre-push checklist, vẫn **vỡ seed trên production**: `prisma/seed.ts` tự chép lại union `'VLOG' \| ... \| 'CODE' \| ...` nên nó tự kiểm với chính nó, và `tsconfig.json` lại **exclude `prisma/seed.ts`** | Union enum chép tay là mầm trôi dạt — import thẳng từ `@prisma/client`. Và `tsc --noEmit` KHÔNG đụng tới `prisma/**`: thêm `npm run typecheck:seed` + `npx prisma db seed` vào checklist khi đổi schema. Chạy thật mới biết, đọc không ra |
 | 2026-07-30 | Chốt kiểm frontend trong `deploy.sh` gọi `wget` bên trong container frontend — image đó **không cài wget lẫn curl** (Dockerfile cố ý bỏ, healthcheck của compose dùng module http của node). Lệnh luôn thất bại ⇒ vòng lặp quay đủ 6 lần, tốn không ~25s mỗi deploy và không kiểm được gì | Mọi phép kiểm HTTP **bên trong container frontend** phải dùng `node -e` + `require('http')`. Container backend thì có `curl`. Kiểm bộ kiểm trước khi tin nó — xem [[feedback_verify_the_checker_before_the_content]] |
 
 ---

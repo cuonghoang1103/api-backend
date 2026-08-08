@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, ContentType } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { renderProjectMarkdown } from '../src/services/projectMarkdown.service.js';
 import { seedGames } from './seed.games.js';
@@ -15,7 +15,10 @@ async function main() {
     create: { name: 'ROLE_ADMIN' },
   });
 
-  const roleUser = await prisma.role.upsert({
+  // Not bound to a variable: only the upsert's side effect matters
+  // (ROLE_USER must exist), and an unused binding trips
+  // `noUnusedLocals` now that tsconfig.seed.json type-checks this file.
+  await prisma.role.upsert({
     where: { name: 'ROLE_USER' },
     update: {},
     create: { name: 'ROLE_USER' },
@@ -660,7 +663,12 @@ async function seedContentIdeas() {
  hook: string | null;
  notes: string | null;
  score: number | null;
- suggestedType: 'VLOG' | 'AFFILIATE' | 'CODE' | 'REVIEW' | 'IDEA' | 'OTHER' | null;
+ // Derived from the Prisma enum, not re-listed by hand. The
+ // hand-written copy that used to live here had drifted to
+ // 'CODE' and kept compiling (it type-checked against itself,
+ // not against the enum), so the seed only failed at runtime on
+ // production — after the value was renamed to 'CODE_REVIEW'.
+ suggestedType: ContentType | null;
  status: 'CAPTURED' | 'REFINED' | 'PROMOTED' | 'ARCHIVED';
  tags: string[];
  promotedToProjectId?: number;
@@ -693,7 +701,7 @@ async function seedContentIdeas() {
  hook: 'Pick 3 repos trending trên GitHub, đi qua 1 file then chốt mỗi cái.',
  notes: 'Series idea. Mỗi tập 5-7 phút. Có thể bắt đầu bằng Perplexity-style wrappers.',
  score: 4,
- suggestedType: 'CODE',
+ suggestedType: 'CODE_REVIEW',
  status: 'CAPTURED',
  tags: ['code-review', 'open-source', 'ai'],
  },

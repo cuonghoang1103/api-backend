@@ -8,6 +8,7 @@
     "dev": "tsx watch src/index.ts",
     "dev:debug": "tsx watch --inspect src/index.ts",
     "build": "tsc",
+    "typecheck:seed": "tsc -p tsconfig.seed.json",
     "start": "node dist/index.js",
     "start:prod": "node dist/index.js",
     "db:generate": "prisma generate",

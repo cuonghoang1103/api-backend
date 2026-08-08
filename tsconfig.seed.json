@@ -1,0 +1,32 @@
+{
+  // Type-check-only config for the Prisma seed scripts.
+  //
+  // Why this file exists
+  // ────────────────────
+  // The main tsconfig sets `rootDir: "./src"` and emits to ./dist,
+  // so `prisma/**` cannot simply be added to its `include` — tsc
+  // would reject every seed file as "not under rootDir" and break
+  // the build. It was therefore left in `exclude`, which meant
+  // `npx tsc --noEmit` never looked at the seed scripts at all.
+  //
+  // That gap had teeth: on 2026-08-08 the ContentType enum value
+  // `CODE` was renamed to `CODE_REVIEW`. seed.ts carried its own
+  // hand-written copy of the union (`'VLOG' | ... | 'CODE' | ...`),
+  // so it type-checked happily against itself, passed the whole
+  // pre-push checklist, and only failed at RUNTIME — on production,
+  // during the deploy's seed step.
+  //
+  // This config has noEmit, so it can include prisma/** freely and
+  // catch that class of drift before it ships. Run it with
+  // `npm run typecheck:seed`.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": ".",
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false
+  },
+  "include": ["prisma/**/*.ts", "src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

@@ -36,6 +36,7 @@ export default {
   status: 'PLANNING',
   category: 'Mobile',
   difficulty: 'INTERMEDIATE',
+  thumbnailUrl: 'https://media.cuongthai.com/images/projects/ios-native-app-swift.webp',
   projectUrl: null,
   githubUrl: null,
   startDate: null,

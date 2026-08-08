@@ -37,6 +37,7 @@ export default {
   status: 'PLANNING',
   category: 'Web',
   difficulty: 'ADVANCED',
+  thumbnailUrl: 'https://media.cuongthai.com/images/projects/video-streaming-platform-netflix-like.webp',
   projectUrl: null,
   githubUrl: null,
   startDate: null,

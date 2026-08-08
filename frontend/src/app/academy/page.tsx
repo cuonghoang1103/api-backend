@@ -169,7 +169,15 @@ export default function AcademyPage() {
         </div>
 
         <section className="grid gap-6 lg:grid-cols-[320px_1fr]">
-          <aside className="rounded-2xl border border-darkborder bg-darkcard p-4 h-fit lg:sticky lg:top-24">
+          {/* A sticky column MUST cap its own height and scroll internally.
+              With 9 semesters (2 auto-expanded) this aside is ~1450px tall
+              while a laptop viewport is ~900px: once `position: sticky` pins
+              it at top-24 the bottom ~640px sits below the fold forever —
+              the page keeps scrolling but the navigator sits frozen, so the
+              lower semesters are unreachable. max-height + overflow-y makes
+              the sidebar scroll on its own; `overscroll-contain` stops that
+              scroll from chaining into the page when it hits the end. */}
+          <aside className="thin-scroll rounded-2xl border border-darkborder bg-darkcard p-4 h-fit lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto overscroll-contain">
             <div className="flex items-center gap-3 mb-4">
               <Layers3 className="w-5 h-5 text-neon-violet" />
               <h2 className="text-lg font-semibold text-text-primary">Semester navigator</h2>

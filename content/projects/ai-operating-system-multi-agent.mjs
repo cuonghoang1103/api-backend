@@ -36,6 +36,7 @@ export default {
   status: 'PLANNING',
   category: 'AI',
   difficulty: 'EXPERT',
+  thumbnailUrl: 'https://media.cuongthai.com/images/projects/ai-operating-system-multi-agent.webp',
   projectUrl: null,
   githubUrl: null,
   startDate: null,

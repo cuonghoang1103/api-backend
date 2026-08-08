@@ -36,6 +36,7 @@ export default {
   status: 'PLANNING',
   category: 'Backend',
   difficulty: 'EXPERT',
+  thumbnailUrl: 'https://media.cuongthai.com/images/projects/cloud-storage-system-s3-like.webp',
   projectUrl: null,
   githubUrl: null,
   startDate: null,

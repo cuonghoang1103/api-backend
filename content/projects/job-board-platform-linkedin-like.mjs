@@ -36,6 +36,7 @@ export default {
   status: 'PLANNING',
   category: 'Web',
   difficulty: 'INTERMEDIATE',
+  thumbnailUrl: 'https://media.cuongthai.com/images/projects/job-board-platform-linkedin-like.webp',
   projectUrl: null,
   githubUrl: null,
   startDate: null,

@@ -124,3 +124,52 @@ export function labelOf(
   if (!entry) return key;
   return lang === 'en' ? entry.en : entry.vi;
 }
+
+/**
+ * Nhóm công nghệ để lọc dự án theo ngôn ngữ / nền tảng.
+ *
+ * Vì sao phải gom nhóm chứ không dùng thẳng `technologies`: 41 dự án sinh ra
+ * gần 200 chuỗi khác nhau ("Spring Boot 3", "Spring Boot 3.4", "Java 17",
+ * "Java 21", ".NET 9"…). Hiện 200 con chip là không ai lọc nổi, và người dùng
+ * hỏi "dự án nào viết bằng Spring Boot" chứ không hỏi "Spring Boot 3.4".
+ *
+ * `match` cố ý khớp lỏng trên chuỗi đã hạ chữ thường, và MỘT dự án được phép
+ * thuộc NHIỀU nhóm — một app Expo đúng là vừa React Native vừa Node.js ở phía
+ * máy chủ, nên ép nó vào một nhóm duy nhất chỉ làm kết quả lọc bị thiếu.
+ */
+export const TECH_GROUPS: {
+  id: string;
+  label: string;
+  match: RegExp;
+}[] = [
+  { id: 'typescript', label: 'TypeScript',   match: /typescript/ },
+  { id: 'node',       label: 'Node.js',      match: /node\.?js|express|nestjs|socket\.io|bullmq/ },
+  { id: 'react',      label: 'React / Next', match: /(^|[^a-z])react(?!\s*native)|next\.js/ },
+  { id: 'java',       label: 'Java',         match: /(^|[^a-z])java(\s|$|\d)|jvm|netty|hibernate/ },
+  { id: 'spring',     label: 'Spring Boot',  match: /spring/ },
+  { id: 'python',     label: 'Python',       match: /python|fastapi|django|flask|pytorch|httpx/ },
+  { id: 'dotnet',     label: '.NET / C#',    match: /\.net|c#|asp\.net|entity framework/ },
+  { id: 'go',         label: 'Go',           match: /(^|[^a-z])go($|[^a-z])|golang|gin(\s|$)/ },
+  { id: 'rust',       label: 'Rust',         match: /rust|tokio|axum/ },
+  { id: 'kotlin',     label: 'Kotlin',       match: /kotlin|jetpack compose|room(\s|$)/ },
+  { id: 'swift',      label: 'Swift',        match: /swift/ },
+  { id: 'flutter',    label: 'Flutter/Dart', match: /flutter|dart|riverpod/ },
+  { id: 'rn',         label: 'React Native', match: /react native|expo/ },
+  { id: 'postgres',   label: 'PostgreSQL',   match: /postgres|prisma|pgvector|btree_gist/ },
+  { id: 'redis',      label: 'Redis',        match: /redis/ },
+  { id: 'kafka',      label: 'Kafka',        match: /kafka/ },
+  { id: 'docker',     label: 'Docker',       match: /docker/ },
+  { id: 'k8s',        label: 'Kubernetes',   match: /kubernetes|k8s|helm|terraform/ },
+  { id: 'llm',        label: 'LLM / AI',     match: /llm|openai|embedding|pgvector|pytorch|nccl|tree-sitter|anthropic/ },
+];
+
+/** Dự án có thuộc nhóm công nghệ này không. Rỗng ⇒ không lọc gì. */
+export function matchesTechGroup(
+  technologies: string[] | null | undefined,
+  groupId: string,
+): boolean {
+  if (!groupId) return true;
+  const group = TECH_GROUPS.find((g) => g.id === groupId);
+  if (!group) return true;
+  return (technologies ?? []).some((t) => group.match.test(t.toLowerCase()));
+}

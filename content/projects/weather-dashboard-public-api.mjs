@@ -41,6 +41,7 @@ export default {
   status: 'PLANNING',
   category: 'Web',
   difficulty: 'BEGINNER',
+  thumbnailUrl: 'https://media.cuongthai.com/images/projects/weather-dashboard-public-api.webp',
   projectUrl: null,
   githubUrl: null,
   startDate: null,

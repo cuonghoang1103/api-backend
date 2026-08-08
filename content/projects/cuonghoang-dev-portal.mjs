@@ -43,6 +43,7 @@ export default {
   status: 'IN_PROGRESS',
   category: 'Web',
   difficulty: 'ADVANCED',
+  thumbnailUrl: 'https://media.cuongthai.com/images/projects/cuonghoang-dev-portal.webp',
   projectUrl: 'https://cuongthai.com',
   githubUrl: 'https://github.com/cuonghoang/cuonghoang-dev-portal',
   startDate: '2026-06-08',

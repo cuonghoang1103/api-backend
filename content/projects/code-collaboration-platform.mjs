@@ -36,6 +36,7 @@ export default {
   status: 'PLANNING',
   category: 'Web',
   difficulty: 'ADVANCED',
+  thumbnailUrl: 'https://media.cuongthai.com/images/projects/code-collaboration-platform.webp',
   projectUrl: null,
   githubUrl: null,
   startDate: null,

@@ -36,6 +36,7 @@ export default {
   status: 'PLANNING',
   category: 'Backend',
   difficulty: 'EXPERT',
+  thumbnailUrl: 'https://media.cuongthai.com/images/projects/distributed-message-broker-kafka-like.webp',
   projectUrl: null,
   githubUrl: null,
   startDate: null,

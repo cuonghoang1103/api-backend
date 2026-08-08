@@ -42,6 +42,7 @@ export default {
   status: 'PLANNING',
   category: 'Web',
   difficulty: 'BEGINNER',
+  thumbnailUrl: 'https://media.cuongthai.com/images/projects/todo-list-app-full-stack.webp',
   projectUrl: null,
   githubUrl: null,
   startDate: null,

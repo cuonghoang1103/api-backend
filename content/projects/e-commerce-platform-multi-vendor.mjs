@@ -42,6 +42,7 @@ export default {
   status: 'PLANNING',
   category: 'Web',
   difficulty: 'INTERMEDIATE',
+  thumbnailUrl: 'https://media.cuongthai.com/images/projects/e-commerce-platform-multi-vendor.webp',
   projectUrl: null,
   githubUrl: null,
   startDate: null,

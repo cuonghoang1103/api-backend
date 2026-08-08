@@ -36,6 +36,7 @@ export default {
   status: 'PLANNING',
   category: 'Web',
   difficulty: 'INTERMEDIATE',
+  thumbnailUrl: 'https://media.cuongthai.com/images/projects/learning-management-system.webp',
   projectUrl: null,
   githubUrl: null,
   startDate: null,

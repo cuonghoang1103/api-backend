@@ -12,11 +12,14 @@ import ProjectsSkeleton from '@/components/projects/ProjectsSkeleton';
 import ProjectsEmpty from '@/components/projects/ProjectsEmpty';
 import ProjectsHero from './ProjectsHero';
 import ProjectLangToggle from '@/components/projects/ProjectLangToggle';
-import { useProjectLang, CATEGORY_LABELS_I18N, labelOf } from '@/lib/projectI18n';
+import { useProjectLang, CATEGORY_LABELS_I18N, labelOf, TECH_GROUPS, matchesTechGroup } from '@/lib/projectI18n';
 
 // Filter constants from admin editor. Values stay in English (they are the
 // API's enum values); only the labels are translated, at render time.
-const CATEGORIES = ['Web', 'Mobile', 'AI', 'DevOps', 'Game', 'IoT', 'Data', 'Tooling'] as const;
+// 'Backend' và 'Systems' bị thiếu ở đây cho tới 08/08/2026, nên 9 dự án
+// backend-only (Homestay API, Helpdesk API, Kafka-like, S3-like…) không có
+// cách nào lọc ra được dù chúng vẫn hiện trong danh sách.
+const CATEGORIES = ['Web', 'Backend', 'Mobile', 'AI', 'DevOps', 'Data', 'Systems', 'Tooling', 'Game', 'IoT'] as const;
 const LEVELS = [
   { value: '', vi: 'Tất cả', en: 'All' },
   { value: 'BEGINNER', vi: 'Cơ bản', en: 'Beginner' },
@@ -104,6 +107,7 @@ export default function ProjectsClient() {
   const [searchInput, setSearchInput] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
+  const [techFilter, setTechFilter] = useState('');
   const [levelFilter, setLevelFilter] = useState<LevelValue>('');
   const [statusFilter, setStatusFilter] = useState<StatusValue>('');
   const [sortBy, setSortBy] = useState<SortValue>('newest');
@@ -148,9 +152,21 @@ export default function ProjectsClient() {
     return Array.from(set).sort();
   }, [projects]);
 
+  // Chỉ hiện nhóm công nghệ nào THẬT SỰ có dự án khớp — một con chip lọc ra
+  // 0 kết quả là lời hứa suông, và danh sách công nghệ đổi theo thời gian.
+  const techGroupsInUse = useMemo(
+    () =>
+      TECH_GROUPS.map((g) => ({
+        ...g,
+        count: projects.filter((p) => matchesTechGroup(p.technologies, g.id)).length,
+      })).filter((g) => g.count > 0),
+    [projects],
+  );
+
   // Active filters count
   const activeFiltersCount = [
     categoryFilter,
+    techFilter,
     levelFilter,
     statusFilter,
     searchKeyword,
@@ -182,6 +198,11 @@ export default function ProjectsClient() {
       result = result.filter((p) => p.category === categoryFilter);
     }
 
+    // Tech / language filter — gom nhóm, xem TECH_GROUPS trong projectI18n
+    if (techFilter) {
+      result = result.filter((p) => matchesTechGroup(p.technologies, techFilter));
+    }
+
     // Level filter (difficulty)
     if (levelFilter) {
       result = result.filter((p) => p.difficulty === levelFilter);
@@ -209,13 +230,14 @@ export default function ProjectsClient() {
     }
 
     return result;
-  }, [projects, searchKeyword, categoryFilter, levelFilter, statusFilter, sortBy]);
+  }, [projects, searchKeyword, categoryFilter, techFilter, levelFilter, statusFilter, sortBy]);
 
   // Clear all filters
   const clearAllFilters = useCallback(() => {
     setSearchKeyword('');
     setSearchInput('');
     setCategoryFilter('');
+    setTechFilter('');
     setLevelFilter('');
     setStatusFilter('');
     setSortBy('newest');
@@ -352,6 +374,32 @@ export default function ProjectsClient() {
                   </div>
                 </div>
 
+                {/* Tech / language filter — nhóm lại, xem TECH_GROUPS.
+                    Chiếm cả hàng vì có ~19 chip, nhiều hơn hẳn ba nhóm kia. */}
+                <div className="space-y-1.5 w-full order-last">
+                  <span className="text-[10px] uppercase tracking-wider text-text-muted font-medium">
+                    {L('Công nghệ / ngôn ngữ', 'Tech / language')}
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {techGroupsInUse.map((tech) => (
+                      <button
+                        key={tech.id}
+                        onClick={() => setTechFilter(techFilter === tech.id ? '' : tech.id)}
+                        className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all inline-flex items-center gap-1.5 ${
+                          techFilter === tech.id
+                            ? 'bg-neon-cyan/20 border-neon-cyan text-neon-cyan'
+                            : 'bg-darkcard border-darkborder/60 text-text-secondary hover:border-neon-cyan/30 hover:text-text-primary'
+                        }`}
+                      >
+                        {tech.label}
+                        <span className={techFilter === tech.id ? 'text-neon-cyan/70' : 'text-text-muted'}>
+                          {tech.count}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 {/* Level filter */}
                 <div className="space-y-1.5">
                   <span className="text-[10px] uppercase tracking-wider text-text-muted font-medium">{L('Mức độ', 'Level')}</span>
@@ -398,7 +446,7 @@ export default function ProjectsClient() {
       </section>
 
       {/* Active filters + results count */}
-      {(searchKeyword || categoryFilter || levelFilter || statusFilter) && (
+      {(searchKeyword || categoryFilter || techFilter || levelFilter || statusFilter) && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-2 mb-4">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-xs text-text-muted">
@@ -422,7 +470,7 @@ export default function ProjectsClient() {
         ) : filtered.length === 0 ? (
           <ProjectsEmpty
             onClearFilters={clearAllFilters}
-            hasFilters={Boolean(searchKeyword || categoryFilter || levelFilter || statusFilter)}
+            hasFilters={Boolean(searchKeyword || categoryFilter || techFilter || levelFilter || statusFilter)}
           />
         ) : (
           <motion.div

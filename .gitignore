@@ -134,3 +134,7 @@ firmware/**/src/secrets.h
 
 # STL sinh ra được — chạy `node gen-stl.mjs ./stl` để tạo lại
 firmware/**/shell/stl/
+
+# Ảnh bìa dự án sinh bằng scripts/gen-project-covers.mjs — sinh lại được,
+# và bản thật đã nằm trên R2 (media.cuongthai.com/images/projects/).
+.covers/

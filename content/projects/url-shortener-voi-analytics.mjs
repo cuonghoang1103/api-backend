@@ -38,6 +38,7 @@ export default {
   status: 'PLANNING',
   category: 'Web',
   difficulty: 'BEGINNER',
+  thumbnailUrl: 'https://media.cuongthai.com/images/projects/url-shortener-voi-analytics.webp',
   projectUrl: null,
   githubUrl: null,
   startDate: null,

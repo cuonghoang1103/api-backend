@@ -36,6 +36,7 @@ export default {
   status: 'PLANNING',
   category: 'AI',
   difficulty: 'ADVANCED',
+  thumbnailUrl: 'https://media.cuongthai.com/images/projects/ai-chatbot-platform-multi-tenant.webp',
   projectUrl: null,
   githubUrl: null,
   startDate: null,

@@ -35,6 +35,7 @@ export default {
   status: 'PLANNING',
   category: 'Web',
   difficulty: 'INTERMEDIATE',
+  thumbnailUrl: 'https://media.cuongthai.com/images/projects/social-media-platform-twitter-like.webp',
   projectUrl: null,
   githubUrl: null,
   startDate: null,

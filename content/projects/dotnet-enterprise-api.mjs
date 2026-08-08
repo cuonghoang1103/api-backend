@@ -36,6 +36,7 @@ export default {
   status: 'PLANNING',
   category: 'Backend',
   difficulty: 'INTERMEDIATE',
+  thumbnailUrl: 'https://media.cuongthai.com/images/projects/dotnet-enterprise-api.webp',
   projectUrl: null,
   githubUrl: null,
   startDate: null,

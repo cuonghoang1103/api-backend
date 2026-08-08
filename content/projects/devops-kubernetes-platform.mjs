@@ -36,6 +36,7 @@ export default {
   status: 'PLANNING',
   category: 'DevOps',
   difficulty: 'ADVANCED',
+  thumbnailUrl: 'https://media.cuongthai.com/images/projects/devops-kubernetes-platform.webp',
   projectUrl: null,
   githubUrl: null,
   startDate: null,

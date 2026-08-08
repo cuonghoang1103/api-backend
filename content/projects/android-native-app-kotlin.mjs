@@ -36,6 +36,7 @@ export default {
   status: 'PLANNING',
   category: 'Mobile',
   difficulty: 'INTERMEDIATE',
+  thumbnailUrl: 'https://media.cuongthai.com/images/projects/android-native-app-kotlin.webp',
   projectUrl: null,
   githubUrl: null,
   startDate: null,

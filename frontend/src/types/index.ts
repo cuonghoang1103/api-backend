@@ -119,13 +119,27 @@ export interface Project {
  updatedAt?: string;
  // Case-study fields (Phase 2)
  category?: string;
- difficulty?: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
+ // EXPERT covers roadmap levels 4–5 (distributed systems, world-class
+ // infrastructure) — a genuinely different tier from ADVANCED.
+ difficulty?: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | 'EXPERT';
  bodyMdx?: string;
  bodyHtml?: string;
  schemaCode?: string;
  schemaLang?: string;
  likeCount?: number;
  isPublished?: boolean;
+ // English translation (Phase 3). Every field is optional:
+ // the API sends both languages in one payload so the VI/EN
+ // switch flips without a refetch, and anything missing falls
+ // back to the Vietnamese field via pickLang() in
+ // lib/projectI18n.ts. bodyMdxEn is never sent to the client
+ // (same as bodyMdx) — bodyHtmlEn is what gets rendered.
+ titleEn?: string | null;
+ descriptionEn?: string | null;
+ roleEn?: string | null;
+ durationEn?: string | null;
+ bodyHtmlEn?: string | null;
+ schemaCodeEn?: string | null;
  // Child relations — populated by the public detail route
  // when the project is loaded. Components should treat all
  // of these as optional and gracefully degrade to empty
@@ -151,6 +165,9 @@ export interface ProjectMilestone {
  // reuse the same set of supported languages.
  codeBlock?: string;
  codeLang?: string;
+ // EN siblings — code itself is language-neutral and shared.
+ titleEn?: string | null;
+ descriptionEn?: string | null;
  order?: number;
  createdAt?: string;
 }
@@ -163,6 +180,8 @@ export interface ProjectFeature {
  title: string;
  description?: string;
  status: ProjectFeatureStatus;
+ titleEn?: string | null;
+ descriptionEn?: string | null;
  order?: number;
  createdAt?: string;
 }
@@ -197,6 +216,9 @@ export interface ProjectResource {
  type: ProjectResourceType;
  fileSize?: number;
  description?: string;
+ // EN siblings — `url` is shared.
+ titleEn?: string | null;
+ descriptionEn?: string | null;
  order?: number;
  createdAt?: string;
 }
@@ -217,6 +239,7 @@ export interface ProjectListItem {
  projectId?: number;
  kind: ProjectListKind;
  content: string;
+ contentEn?: string | null;
  order?: number;
  createdAt?: string;
 }

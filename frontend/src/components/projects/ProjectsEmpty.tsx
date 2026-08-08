@@ -10,6 +10,7 @@
 
 import { motion } from 'framer-motion';
 import { SearchX, Sparkles } from 'lucide-react';
+import { useProjectLang } from '@/lib/projectI18n';
 
 interface ProjectsEmptyProps {
  onClearFilters: () => void;
@@ -17,6 +18,7 @@ interface ProjectsEmptyProps {
 }
 
 export default function ProjectsEmpty({ onClearFilters, hasFilters }: ProjectsEmptyProps) {
+ const { L } = useProjectLang();
  return (
  <motion.div
  initial={{ opacity: 0, y: 12 }}
@@ -54,12 +56,14 @@ export default function ProjectsEmpty({ onClearFilters, hasFilters }: ProjectsEm
  </div>
 
  <h3 className="font-heading text-2xl font-semibold text-text-primary mb-2">
- {hasFilters ? 'No projects match those filters' : 'No projects yet'}
+ {hasFilters
+ ? L('Không có dự án nào khớp bộ lọc', 'No projects match those filters')
+ : L('Chưa có dự án nào', 'No projects yet')}
  </h3>
  <p className="text-text-secondary text-sm leading-relaxed mb-6">
  {hasFilters
- ? 'Try a different keyword or relax the status / tech filters.'
- : 'Once published, your projects will appear here in a grid.'}
+ ? L('Thử từ khoá khác, hoặc bỏ bớt bộ lọc mức độ / trạng thái.', 'Try a different keyword or relax the status / tech filters.')
+ : L('Khi được đăng, các dự án sẽ hiện ở đây.', 'Once published, your projects will appear here in a grid.')}
  </p>
 
  {hasFilters && (
@@ -72,7 +76,7 @@ export default function ProjectsEmpty({ onClearFilters, hasFilters }: ProjectsEm
  className="magnetic-press inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-violet-200 glass-frost gradient-border-violet"
  >
  <Sparkles className="w-4 h-4" />
- Clear filters
+ {L('Xoá bộ lọc', 'Clear filters')}
  </motion.button>
  )}
  </motion.div>

@@ -10,6 +10,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
+import { useProjectLang } from '@/lib/projectI18n';
 
 interface ProjectsHeroProps {
   projectCount: number;
@@ -19,6 +20,7 @@ interface ProjectsHeroProps {
 
 export default function ProjectsHero({ projectCount, techCount, featuredCount }: ProjectsHeroProps) {
   const prefersReducedMotion = useReducedMotion();
+  const { L } = useProjectLang();
 
   return (
     <section className="relative py-8 overflow-hidden">
@@ -48,14 +50,14 @@ export default function ProjectsHero({ projectCount, techCount, featuredCount }:
               className="font-heading font-bold text-text-primary"
               style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', letterSpacing: '-0.02em' }}
             >
-              My{' '}
+              {L('Dự án của', 'My')}{' '}
               <span
                 className="text-transparent bg-clip-text"
                 style={{
                   backgroundImage: 'linear-gradient(120deg, #8b5cf6 0%, #6366f1 40%, #a855f7 70%, #d946ef 100%)',
                 }}
               >
-                Projects
+                {L('tôi', 'Projects')}
               </span>
             </motion.h1>
 
@@ -66,7 +68,10 @@ export default function ProjectsHero({ projectCount, techCount, featuredCount }:
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-sm text-text-secondary mt-1 max-w-xl"
             >
-              Products I have built throughout my learning and development journey.
+              {L(
+                'Lộ trình dự án từ cơ bản tới world-class — mỗi bài là một case-study đủ chi tiết để tự dựng lại.',
+                'A project roadmap from beginner to world-class — each one a case study detailed enough to rebuild from.',
+              )}
             </motion.p>
           </div>
 
@@ -77,11 +82,11 @@ export default function ProjectsHero({ projectCount, techCount, featuredCount }:
             transition={{ duration: 0.5, delay: 0.3 }}
             className="flex items-center gap-6"
           >
-            <StatItem value={projectCount} label="Projects" />
+            <StatItem value={projectCount} label={L('Dự án', 'Projects')} />
             <StatDivider />
-            <StatItem value={techCount} label="Techs" />
+            <StatItem value={techCount} label={L('Công nghệ', 'Techs')} />
             <StatDivider />
-            <StatItem value={featuredCount} label="Featured" />
+            <StatItem value={featuredCount} label={L('Nổi bật', 'Featured')} />
           </motion.div>
         </div>
       </div>

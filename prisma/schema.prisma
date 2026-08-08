@@ -609,23 +609,23 @@ model Skill {
 }
 
 model Project {
-  id           Int       @id @default(autoincrement())
-  title        String    @db.VarChar(255)
-  slug         String    @unique(map: "uk_project_slug") @db.VarChar(255)
-  description  String?   @db.Text
-  content      String?   @db.Text
-  thumbnailUrl String?   @map("thumbnail_url") @db.VarChar(500)
-  images       String?   @db.Text
-  projectUrl   String?   @map("project_url") @db.VarChar(500)
-  videoUrl     String?   @map("video_url") @db.VarChar(500)
-  githubUrl    String?   @map("github_url") @db.VarChar(500)
-  techStack    String?   @map("tech_stack") @db.Text
-  role         String?   @db.VarChar(100)
-  duration     String?   @db.VarChar(100)
-  status       String    @default("COMPLETED") @db.VarChar(20)
-  isFeatured   Boolean   @default(false) @map("is_featured")
-  startDate    DateTime? @map("start_date") @db.Date
-  endDate      DateTime? @map("end_date") @db.Date
+  id            Int       @id @default(autoincrement())
+  title         String    @db.VarChar(255)
+  slug          String    @unique(map: "uk_project_slug") @db.VarChar(255)
+  description   String?   @db.Text
+  content       String?   @db.Text
+  thumbnailUrl  String?   @map("thumbnail_url") @db.VarChar(500)
+  images        String?   @db.Text
+  projectUrl    String?   @map("project_url") @db.VarChar(500)
+  videoUrl      String?   @map("video_url") @db.VarChar(500)
+  githubUrl     String?   @map("github_url") @db.VarChar(500)
+  techStack     String?   @map("tech_stack") @db.Text
+  role          String?   @db.VarChar(100)
+  duration      String?   @db.VarChar(100)
+  status        String    @default("COMPLETED") @db.VarChar(20)
+  isFeatured    Boolean   @default(false) @map("is_featured")
+  startDate     DateTime? @map("start_date") @db.Date
+  endDate       DateTime? @map("end_date") @db.Date
   // ─── Case study / build log fields (Phase 2, additive) ───
   // category — free-form string ("Web", "AI", "DevOps"…).
   // difficulty — BEGINNER | INTERMEDIATE | ADVANCED.
@@ -641,17 +641,37 @@ model Project {
   // isPublished — admin can flip to false to hide a project
   // without deleting it; defaults to true so existing
   // projects stay public.
-  category     String?   @db.VarChar(80)
-  difficulty   String?   @db.VarChar(20)
-  bodyMdx      String?   @map("body_mdx") @db.Text
-  bodyHtml     String?   @map("body_html") @db.Text
-  schemaCode   String?   @map("schema_code") @db.Text
-  schemaLang   String?   @map("schema_lang") @db.VarChar(40)
-  viewCount    Int       @default(0) @map("view_count")
-  likeCount    Int       @default(0) @map("like_count")
-  isPublished  Boolean   @default(true) @map("is_published")
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @updatedAt @map("updated_at")
+  category      String?   @db.VarChar(80)
+  difficulty    String?   @db.VarChar(20)
+  bodyMdx       String?   @map("body_mdx") @db.Text
+  bodyHtml      String?   @map("body_html") @db.Text
+  schemaCode    String?   @map("schema_code") @db.Text
+  schemaLang    String?   @map("schema_lang") @db.VarChar(40)
+  viewCount     Int       @default(0) @map("view_count")
+  likeCount     Int       @default(0) @map("like_count")
+  isPublished   Boolean   @default(true) @map("is_published")
+  // ─── English translation columns (Phase 3, additive) ───
+  // The site ships a VI/EN switch that flips content live
+  // (cookie `locale` + `locale-changed` event, no reload).
+  // Translations live in sibling columns instead of a
+  // separate `project_translations` table on purpose: every
+  // project has at most two languages, the public read is a
+  // single row fetch on the hot path, and a join per read
+  // would buy nothing. NULL means "not translated yet" —
+  // the API falls back to the Vietnamese column so a
+  // half-translated project still renders, never blank.
+  //
+  // bodyHtmlEn mirrors bodyHtml: a server-rendered cache of
+  // bodyMdxEn, backfilled lazily on first read when empty.
+  titleEn       String?   @map("title_en") @db.VarChar(255)
+  descriptionEn String?   @map("description_en") @db.Text
+  roleEn        String?   @map("role_en") @db.VarChar(100)
+  durationEn    String?   @map("duration_en") @db.VarChar(100)
+  bodyMdxEn     String?   @map("body_mdx_en") @db.Text
+  bodyHtmlEn    String?   @map("body_html_en") @db.Text
+  schemaCodeEn  String?   @map("schema_code_en") @db.Text
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
 
   skills     ProjectSkill[]
   milestones ProjectMilestone[]
@@ -669,23 +689,28 @@ model Project {
 }
 
 model ProjectMilestone {
-  id          Int       @id @default(autoincrement())
-  projectId   Int       @map("project_id")
-  phase       String    @db.VarChar(40)
-  title       String    @db.VarChar(255)
-  description String?   @db.Text
-  date        DateTime? @db.Date
-  imageUrl    String?   @map("image_url") @db.VarChar(500)
+  id            Int       @id @default(autoincrement())
+  projectId     Int       @map("project_id")
+  phase         String    @db.VarChar(40)
+  title         String    @db.VarChar(255)
+  description   String?   @db.Text
+  date          DateTime? @db.Date
+  imageUrl      String?   @map("image_url") @db.VarChar(500)
   // codeBlock / codeLang — optional VSCode-style code review
   // snippet shown below the milestone description. The
   // content is plain text (no syntax tree in DB); highlighting
   // is rendered client-side via Shiki / highlight.js based on
   // codeLang. Free-form VARCHAR(40) to keep the same set of
   // languages as project.schemaLang.
-  codeBlock   String?   @map("code_block") @db.Text
-  codeLang    String?   @map("code_lang") @db.VarChar(40)
-  order       Int       @default(0)
-  createdAt   DateTime  @default(now()) @map("created_at")
+  codeBlock     String?   @map("code_block") @db.Text
+  codeLang      String?   @map("code_lang") @db.VarChar(40)
+  // EN siblings — see the note on Project. codeBlock itself
+  // is not duplicated (code is language-neutral); only the
+  // prose around it is translated.
+  titleEn       String?   @map("title_en") @db.VarChar(255)
+  descriptionEn String?   @map("description_en") @db.Text
+  order         Int       @default(0)
+  createdAt     DateTime  @default(now()) @map("created_at")
 
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
@@ -694,13 +719,16 @@ model ProjectMilestone {
 }
 
 model ProjectFeature {
-  id          Int      @id @default(autoincrement())
-  projectId   Int      @map("project_id")
-  title       String   @db.VarChar(255)
-  description String?  @db.Text
-  status      String   @default("PLANNED") @db.VarChar(20)
-  order       Int      @default(0)
-  createdAt   DateTime @default(now()) @map("created_at")
+  id            Int      @id @default(autoincrement())
+  projectId     Int      @map("project_id")
+  title         String   @db.VarChar(255)
+  description   String?  @db.Text
+  status        String   @default("PLANNED") @db.VarChar(20)
+  // EN siblings — see the note on Project.
+  titleEn       String?  @map("title_en") @db.VarChar(255)
+  descriptionEn String?  @map("description_en") @db.Text
+  order         Int      @default(0)
+  createdAt     DateTime @default(now()) @map("created_at")
 
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
@@ -710,15 +738,18 @@ model ProjectFeature {
 }
 
 model ProjectResource {
-  id          Int      @id @default(autoincrement())
-  projectId   Int      @map("project_id")
-  title       String   @db.VarChar(255)
-  url         String   @db.VarChar(1000)
-  type        String   @default("LINK") @db.VarChar(20)
-  fileSize    Int?     @map("file_size")
-  description String?  @db.Text
-  order       Int      @default(0)
-  createdAt   DateTime @default(now()) @map("created_at")
+  id            Int      @id @default(autoincrement())
+  projectId     Int      @map("project_id")
+  title         String   @db.VarChar(255)
+  url           String   @db.VarChar(1000)
+  type          String   @default("LINK") @db.VarChar(20)
+  fileSize      Int?     @map("file_size")
+  description   String?  @db.Text
+  // EN siblings — see the note on Project. `url` is shared.
+  titleEn       String?  @map("title_en") @db.VarChar(255)
+  descriptionEn String?  @map("description_en") @db.Text
+  order         Int      @default(0)
+  createdAt     DateTime @default(now()) @map("created_at")
 
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
@@ -746,6 +777,8 @@ model ProjectListItem {
   // and the public page renders. VARCHAR(500) so titles like
   // "NextAuth.js v5 flow (JWT, sessions)" fit comfortably.
   content   String          @db.VarChar(500)
+  // EN sibling — see the note on Project.
+  contentEn String?         @map("content_en") @db.VarChar(500)
   order     Int             @default(0)
   createdAt DateTime        @default(now()) @map("created_at")
 

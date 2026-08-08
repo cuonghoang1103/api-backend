@@ -931,6 +931,10 @@ router.post('/projects', authenticate, requireAdmin('ROLE_ADMIN'), async (req: a
  featured, startDate, endDate, role, duration,
  // Phase 2: case study fields
  category, difficulty, bodyMdx, schemaCode, schemaLang, isPublished,
+ // Phase 3: English translation fields. All optional — a
+ // project with none of them has no EN version, and the
+ // public page keeps showing Vietnamese.
+ titleEn, descriptionEn, roleEn, durationEn, bodyMdxEn, schemaCodeEn,
  } = req.body;
  if (!title?.trim()) throw new AppError('Title is required', 400);
 
@@ -947,6 +951,7 @@ router.post('/projects', authenticate, requireAdmin('ROLE_ADMIN'), async (req: a
  // Auto-render bodyHtml from bodyMdx on insert so the
  // public detail page doesn't pay the cost on first read.
  const bodyHtml = bodyMdx ? await safeRender(bodyMdx) : null;
+ const bodyHtmlEn = bodyMdxEn ? await safeRender(bodyMdxEn) : null;
 
  const project = await prisma.project.create({
  data: {
@@ -973,6 +978,13 @@ router.post('/projects', authenticate, requireAdmin('ROLE_ADMIN'), async (req: a
  schemaCode: schemaCode || null,
  schemaLang: schemaLang || null,
  isPublished: isPublished !== undefined ? Boolean(isPublished) : true,
+ titleEn: titleEn || null,
+ descriptionEn: descriptionEn || null,
+ roleEn: roleEn || null,
+ durationEn: durationEn || null,
+ bodyMdxEn: bodyMdxEn || null,
+ bodyHtmlEn,
+ schemaCodeEn: schemaCodeEn || null,
  },
  include: { skills: { include: { skill: true } } },
  });
@@ -993,6 +1005,7 @@ router.put('/projects/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req
  projectUrl, videoUrl, githubUrl, techStack, status,
  featured, startDate, endDate, role, duration,
  category, difficulty, bodyMdx, schemaCode, schemaLang, isPublished,
+ titleEn, descriptionEn, roleEn, durationEn, bodyMdxEn, schemaCodeEn,
  } = req.body;
 
  let slug = existing.slug;
@@ -1025,6 +1038,19 @@ router.put('/projects/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req
  }
  }
 
+ // Same rule for the English body, kept as a separate pass
+ // so editing one language never invalidates the other's
+ // rendered cache.
+ let bodyHtmlEnUpdate: string | null | undefined = undefined;
+ if (bodyMdxEn !== undefined) {
+ if (bodyMdxEn === null || bodyMdxEn.trim() === '') {
+ bodyHtmlEnUpdate = null;
+ } else if (bodyMdxEn !== existing.bodyMdxEn || !existing.bodyHtmlEn) {
+ bodyHtmlEnUpdate = await safeRender(bodyMdxEn);
+ if (bodyHtmlEnUpdate === null) bodyHtmlEnUpdate = existing.bodyHtmlEn;
+ }
+ }
+
  const project = await prisma.project.update({
  where: { id },
  data: {
@@ -1051,6 +1077,13 @@ router.put('/projects/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req
  schemaCode: schemaCode !== undefined ? schemaCode : existing.schemaCode,
  schemaLang: schemaLang !== undefined ? schemaLang : existing.schemaLang,
  isPublished: isPublished !== undefined ? Boolean(isPublished) : existing.isPublished,
+ titleEn: titleEn !== undefined ? titleEn : existing.titleEn,
+ descriptionEn: descriptionEn !== undefined ? descriptionEn : existing.descriptionEn,
+ roleEn: roleEn !== undefined ? roleEn : existing.roleEn,
+ durationEn: durationEn !== undefined ? durationEn : existing.durationEn,
+ bodyMdxEn: bodyMdxEn !== undefined ? bodyMdxEn : existing.bodyMdxEn,
+ ...(bodyHtmlEnUpdate !== undefined ? { bodyHtmlEn: bodyHtmlEnUpdate } : {}),
+ schemaCodeEn: schemaCodeEn !== undefined ? schemaCodeEn : existing.schemaCodeEn,
  },
  include: { skills: { include: { skill: true } } },
  });
@@ -1155,7 +1188,7 @@ router.post('/projects/:id/milestones', authenticate, requireAdmin('ROLE_ADMIN')
  try {
  const id = parseId(req.params.id);
  await assertProject(id);
- const { phase, title, description, date, imageUrl, order, codeBlock, codeLang } = req.body;
+ const { phase, title, description, date, imageUrl, order, codeBlock, codeLang, titleEn, descriptionEn } = req.body;
  if (!phase?.trim()) throw new AppError('phase is required', 400);
  if (!title?.trim()) throw new AppError('title is required', 400);
  const created = await prisma.projectMilestone.create({
@@ -1168,6 +1201,8 @@ router.post('/projects/:id/milestones', authenticate, requireAdmin('ROLE_ADMIN')
  imageUrl: imageUrl || null,
  codeBlock: codeBlock ?? null,
  codeLang: codeLang ?? null,
+ titleEn: titleEn || null,
+ descriptionEn: descriptionEn || null,
  order: typeof order === 'number' ? order : 0,
  },
  });
@@ -1181,7 +1216,7 @@ router.put('/projects/:id/milestones/:mid', authenticate, requireAdmin('ROLE_ADM
  const mid = parseId(req.params.mid);
  const existing = await prisma.projectMilestone.findUnique({ where: { id: mid } });
  if (!existing || existing.projectId !== id) throw new AppError('Milestone not found', 404);
- const { phase, title, description, date, imageUrl, order, codeBlock, codeLang } = req.body;
+ const { phase, title, description, date, imageUrl, order, codeBlock, codeLang, titleEn, descriptionEn } = req.body;
  const updated = await prisma.projectMilestone.update({
  where: { id: mid },
  data: {
@@ -1190,6 +1225,8 @@ router.put('/projects/:id/milestones/:mid', authenticate, requireAdmin('ROLE_ADM
  description: description !== undefined ? description : existing.description,
  date: date !== undefined ? (date ? new Date(date) : null) : existing.date,
  imageUrl: imageUrl !== undefined ? imageUrl : existing.imageUrl,
+ titleEn: titleEn !== undefined ? titleEn : existing.titleEn,
+ descriptionEn: descriptionEn !== undefined ? descriptionEn : existing.descriptionEn,
  // codeBlock / codeLang: only overwrite when the client
  // actually sent the field. Sending `null` clears it,
  // `undefined` (missing key) leaves the previous value.
@@ -1230,7 +1267,7 @@ router.post('/projects/:id/features', authenticate, requireAdmin('ROLE_ADMIN'), 
  try {
  const id = parseId(req.params.id);
  await assertProject(id);
- const { title, description, status, order } = req.body;
+ const { title, description, status, order, titleEn, descriptionEn } = req.body;
  if (!title?.trim()) throw new AppError('title is required', 400);
  const created = await prisma.projectFeature.create({
  data: {
@@ -1238,6 +1275,8 @@ router.post('/projects/:id/features', authenticate, requireAdmin('ROLE_ADMIN'), 
  title: title.trim(),
  description: description || null,
  status: status || 'PLANNED',
+ titleEn: titleEn || null,
+ descriptionEn: descriptionEn || null,
  order: typeof order === 'number' ? order : 0,
  },
  });
@@ -1251,13 +1290,15 @@ router.put('/projects/:id/features/:fid', authenticate, requireAdmin('ROLE_ADMIN
  const fid = parseId(req.params.fid);
  const existing = await prisma.projectFeature.findUnique({ where: { id: fid } });
  if (!existing || existing.projectId !== id) throw new AppError('Feature not found', 404);
- const { title, description, status, order } = req.body;
+ const { title, description, status, order, titleEn, descriptionEn } = req.body;
  const updated = await prisma.projectFeature.update({
  where: { id: fid },
  data: {
  title: title ?? existing.title,
  description: description !== undefined ? description : existing.description,
  status: status ?? existing.status,
+ titleEn: titleEn !== undefined ? titleEn : existing.titleEn,
+ descriptionEn: descriptionEn !== undefined ? descriptionEn : existing.descriptionEn,
  order: typeof order === 'number' ? order : existing.order,
  },
  });
@@ -1293,7 +1334,7 @@ router.post('/projects/:id/resources', authenticate, requireAdmin('ROLE_ADMIN'),
  try {
  const id = parseId(req.params.id);
  await assertProject(id);
- const { title, url, type, fileSize, description, order } = req.body;
+ const { title, url, type, fileSize, description, order, titleEn, descriptionEn } = req.body;
  if (!title?.trim()) throw new AppError('title is required', 400);
  if (!url?.trim()) throw new AppError('url is required', 400);
  const created = await prisma.projectResource.create({
@@ -1304,6 +1345,8 @@ router.post('/projects/:id/resources', authenticate, requireAdmin('ROLE_ADMIN'),
  type: type || 'LINK',
  fileSize: typeof fileSize === 'number' ? fileSize : null,
  description: description || null,
+ titleEn: titleEn || null,
+ descriptionEn: descriptionEn || null,
  order: typeof order === 'number' ? order : 0,
  },
  });
@@ -1317,7 +1360,7 @@ router.put('/projects/:id/resources/:rid', authenticate, requireAdmin('ROLE_ADMI
  const rid = parseId(req.params.rid);
  const existing = await prisma.projectResource.findUnique({ where: { id: rid } });
  if (!existing || existing.projectId !== id) throw new AppError('Resource not found', 404);
- const { title, url, type, fileSize, description, order } = req.body;
+ const { title, url, type, fileSize, description, order, titleEn, descriptionEn } = req.body;
  const updated = await prisma.projectResource.update({
  where: { id: rid },
  data: {
@@ -1326,6 +1369,8 @@ router.put('/projects/:id/resources/:rid', authenticate, requireAdmin('ROLE_ADMI
  type: type ?? existing.type,
  fileSize: fileSize !== undefined ? (typeof fileSize === 'number' ? fileSize : null) : existing.fileSize,
  description: description !== undefined ? description : existing.description,
+ titleEn: titleEn !== undefined ? titleEn : existing.titleEn,
+ descriptionEn: descriptionEn !== undefined ? descriptionEn : existing.descriptionEn,
  order: typeof order === 'number' ? order : existing.order,
  },
  });
@@ -1382,15 +1427,17 @@ router.post('/projects/:id/list-items', authenticate, requireAdmin('ROLE_ADMIN')
  try {
  const id = parseId(req.params.id);
  await assertProject(id);
- const { kind, content, order } = req.body;
+ const { kind, content, order, contentEn } = req.body;
  assertListKind(kind);
  if (!content?.trim()) throw new AppError('content is required', 400);
  if (content.length > 500) throw new AppError('content exceeds 500 characters', 400);
+ if (contentEn && contentEn.length > 500) throw new AppError('contentEn exceeds 500 characters', 400);
  const created = await prisma.projectListItem.create({
  data: {
  projectId: id,
  kind,
  content: content.trim(),
+ contentEn: contentEn?.trim() || null,
  order: typeof order === 'number' ? order : 0,
  },
  });
@@ -1404,12 +1451,14 @@ router.put('/projects/:id/list-items/:lid', authenticate, requireAdmin('ROLE_ADM
  const lid = parseId(req.params.lid);
  const existing = await prisma.projectListItem.findUnique({ where: { id: lid } });
  if (!existing || existing.projectId !== id) throw new AppError('List item not found', 404);
- const { content, order } = req.body;
+ const { content, order, contentEn } = req.body;
  if (content !== undefined && content.length > 500) throw new AppError('content exceeds 500 characters', 400);
+ if (contentEn && contentEn.length > 500) throw new AppError('contentEn exceeds 500 characters', 400);
  const updated = await prisma.projectListItem.update({
  where: { id: lid },
  data: {
  content: content !== undefined ? content.trim() : existing.content,
+ contentEn: contentEn !== undefined ? (contentEn?.trim() || null) : existing.contentEn,
  order: typeof order === 'number' ? order : existing.order,
  },
  });

@@ -26,13 +26,16 @@ import { useRouter } from 'next/navigation';
 import { ExternalLink, Github, Play, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Project } from '@/types';
 import { SafeImage } from '@/components/ui/SafeImage';
+import { useProjectLang, LEVEL_LABELS_I18N, CATEGORY_LABELS_I18N, labelOf } from '@/lib/projectI18n';
 
-const STATUS_LABELS: Record<string, string> = {
-  COMPLETED: 'Done',
-  IN_PROGRESS: 'Building',
-  PLANNING: 'Planned',
-  MAINTENANCE: 'Maint.',
-  ON_HOLD: 'Paused',
+// Short overlay pills on the image — deliberately terser than the
+// full labels in projectI18n so they fit the badge.
+const STATUS_LABELS_SHORT: Record<string, { vi: string; en: string }> = {
+  COMPLETED: { vi: 'Xong', en: 'Done' },
+  IN_PROGRESS: { vi: 'Đang làm', en: 'Building' },
+  PLANNING: { vi: 'Kế hoạch', en: 'Planned' },
+  MAINTENANCE: { vi: 'Bảo trì', en: 'Maint.' },
+  ON_HOLD: { vi: 'Tạm dừng', en: 'Paused' },
 };
 
 const STATUS_COLORS: Record<string, { fg: string; border: string }> = {
@@ -43,17 +46,11 @@ const STATUS_COLORS: Record<string, { fg: string; border: string }> = {
   ON_HOLD: { fg: '#94a3b8', border: 'rgba(148, 163, 184, 0.45)' },
 };
 
-// Level badges
-const LEVEL_LABELS: Record<string, string> = {
-  BEGINNER: 'Cơ bản',
-  INTERMEDIATE: 'Trung bình',
-  ADVANCED: 'Nâng cao',
-};
-
 const LEVEL_COLORS: Record<string, { bg: string; text: string }> = {
   BEGINNER: { bg: 'rgba(52, 211, 153, 0.15)', text: '#34d399' },
   INTERMEDIATE: { bg: 'rgba(251, 191, 36, 0.15)', text: '#fbbf24' },
   ADVANCED: { bg: 'rgba(248, 113, 113, 0.15)', text: '#f87171' },
+  EXPERT: { bg: 'rgba(217, 70, 239, 0.15)', text: '#e879f9' },
 };
 
 const CATEGORY_COLORS: Record<string, { bg: string; text: string }> = {
@@ -65,6 +62,8 @@ const CATEGORY_COLORS: Record<string, { bg: string; text: string }> = {
   IoT: { bg: 'rgba(74, 222, 128, 0.15)', text: '#4ade80' },
   Data: { bg: 'rgba(56, 189, 248, 0.15)', text: '#38bdf8' },
   Tooling: { bg: 'rgba(161, 161, 170, 0.15)', text: '#a1a1aa' },
+  Systems: { bg: 'rgba(45, 212, 191, 0.15)', text: '#2dd4bf' },
+  Backend: { bg: 'rgba(129, 140, 248, 0.15)', text: '#818cf8' },
 };
 
 // ─── Carousel (preserved from legacy card) ───────────────
@@ -76,6 +75,7 @@ function CardCarousel({
  onVideoClick?: (url: string) => void;
 }) {
  const [current, setCurrent] = useState(0);
+ const { lang, pick } = useProjectLang();
 
  const allImages = useMemo(
  () =>
@@ -103,13 +103,13 @@ function CardCarousel({
  }}
  >
  <div className="text-violet-300/40 font-mono text-xs tracking-widest uppercase">
- {project.title.slice(0, 18)}
+ {pick(project.title, project.titleEn).slice(0, 18)}
  </div>
  </div>
  ) : (
  <>
  {/* Crossfade between images. */}
- <AnimatePresenceImg current={current} images={allImages} title={project.title} />
+ <AnimatePresenceImg current={current} images={allImages} title={pick(project.title, project.titleEn)} />
 
  {/* Bottom gradient for legibility. */}
  <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent pointer-events-none" />
@@ -155,7 +155,7 @@ function CardCarousel({
  className="w-1.5 h-1.5 rounded-full"
  style={{ background: 'currentColor', boxShadow: `0 0 6px currentColor` }}
  />
- {STATUS_LABELS[project.status] ?? project.status}
+ {labelOf(STATUS_LABELS_SHORT, project.status, lang)}
  </div>
  )}
 
@@ -338,6 +338,7 @@ export default function ProjectCardPremium({
  const router = useRouter();
  const cardRef = useRef<HTMLDivElement>(null);
  const prefersReducedMotion = useReducedMotion();
+ const { lang, L, pick } = useProjectLang();
 
  // 3D tilt: rotateX / rotateY driven by the cursor position
  // over the card. The values are clamped to ±6 degrees so
@@ -424,7 +425,7 @@ export default function ProjectCardPremium({
  className="text-base font-heading font-bold text-text-primary line-clamp-1 group-hover:text-violet-200 transition-colors"
  style={{ letterSpacing: '-0.01em' }}
  >
- {project.title}
+ {pick(project.title, project.titleEn)}
  </h3>
  {year && (
  <span className="font-mono text-[10px] text-text-muted shrink-0 mt-1 tracking-wider">
@@ -435,7 +436,7 @@ export default function ProjectCardPremium({
 
   {/* Description — line-clamp 2. */}
   <p className="text-sm text-text-secondary line-clamp-2 leading-relaxed">
-  {project.description}
+  {pick(project.description, project.descriptionEn)}
   </p>
 
   {/* Level + Category badges */}
@@ -450,7 +451,7 @@ export default function ProjectCardPremium({
             borderColor: LEVEL_COLORS[project.difficulty].text + '30',
           }}
         >
-          {LEVEL_LABELS[project.difficulty] || project.difficulty}
+          {labelOf(LEVEL_LABELS_I18N, project.difficulty, lang)}
         </span>
       )}
       {project.category && CATEGORY_COLORS[project.category] && (
@@ -462,7 +463,7 @@ export default function ProjectCardPremium({
             borderColor: CATEGORY_COLORS[project.category].text + '30',
           }}
         >
-          {project.category}
+          {labelOf(CATEGORY_LABELS_I18N, project.category, lang)}
         </span>
       )}
     </div>
@@ -501,7 +502,7 @@ export default function ProjectCardPremium({
  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%)',
  }}
  >
- View
+ {L('Xem chi tiết', 'View')}
  <span className="text-base leading-none">→</span>
  </MagneticButton>
 

@@ -32,14 +32,15 @@ import ResourcesList from '@/components/projects/ResourcesList';
 import ProjectLikeButton from '@/components/projects/ProjectLikeButton';
 import ProjectPdfExport from '@/components/projects/ProjectPdfExport';
 import CodeBlock from '@/components/projects/CodeBlock';
-
-const STATUS_LABELS: Record<string, string> = {
- COMPLETED: 'Hoàn thành',
- IN_PROGRESS: 'Đang phát triển',
- PLANNING: 'Lên kế hoạch',
- MAINTENANCE: 'Bảo trì',
- ON_HOLD: 'Tạm dừng',
-};
+import ProjectLangToggle from '@/components/projects/ProjectLangToggle';
+import {
+ useProjectLang,
+ LEVEL_LABELS_I18N,
+ STATUS_LABELS_I18N,
+ CATEGORY_LABELS_I18N,
+ labelOf,
+ type Lang,
+} from '@/lib/projectI18n';
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
  COMPLETED: { bg: 'bg-emerald-500/15', text: 'text-emerald-400' },
@@ -49,16 +50,11 @@ const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
  ON_HOLD: { bg: 'bg-gray-500/15', text: 'text-gray-400' },
 };
 
-const DIFFICULTY_LABELS: Record<string, string> = {
- BEGINNER: 'Cơ bản',
- INTERMEDIATE: 'Trung bình',
- ADVANCED: 'Nâng cao',
-};
-
 const DIFFICULTY_COLORS: Record<string, { bg: string; text: string }> = {
  BEGINNER: { bg: 'bg-emerald-500/15', text: 'text-emerald-300' },
  INTERMEDIATE: { bg: 'bg-yellow-500/15', text: 'text-yellow-300' },
  ADVANCED: { bg: 'bg-rose-500/15', text: 'text-rose-300' },
+ EXPERT: { bg: 'bg-fuchsia-500/15', text: 'text-fuchsia-300' },
 };
 
 function extractYouTubeId(url: string): string | null {
@@ -72,10 +68,10 @@ function extractYouTubeId(url: string): string | null {
  return null;
 }
 
-function formatDate(dateStr?: string) {
+function formatDate(dateStr: string | undefined, lang: Lang) {
  if (!dateStr) return null;
  try {
- return new Date(dateStr).toLocaleDateString('vi-VN', { month: 'long', year: 'numeric' });
+ return new Date(dateStr).toLocaleDateString(lang === 'en' ? 'en-GB' : 'vi-VN', { month: 'long', year: 'numeric' });
  } catch {
  return dateStr;
  }
@@ -121,6 +117,7 @@ export default function ProjectDetailPage() {
  const params = useParams();
  const router = useRouter();
  const { getProjectBySlug, projects: storeProjects } = useProjectStore();
+ const { lang, L, pick } = useProjectLang();
 
  const [project, setProject] = useState<Project | null>(null);
  const [loading, setLoading] = useState(true);
@@ -195,10 +192,27 @@ export default function ProjectDetailPage() {
  [project],
  );
 
+ /** The article body actually shown — English when the reader
+  * picked EN *and* a translation exists, Vietnamese otherwise.
+  * Both arrive in the same payload, so switching is a re-render,
+  * never a refetch. */
+ const activeBodyHtml = useMemo<string | undefined>(() => {
+ if (!project) return undefined;
+ if (lang === 'en' && project.bodyHtmlEn?.trim()) return project.bodyHtmlEn;
+ return project.bodyHtml ?? undefined;
+ }, [project, lang]);
+
+ /** True when the reader is on EN but this project has no EN body —
+  * the page then shows Vietnamese prose and says so, rather than
+  * pretending the translation exists. */
+ const showingViFallback = Boolean(
+ lang === 'en' && project && !project.bodyHtmlEn?.trim() && (project.bodyHtml || project.content),
+ );
+
  const readingMinutes = useMemo(() => {
  if (!project) return 0;
- return computeReadingTime(project.bodyHtml, project.content);
- }, [project]);
+ return computeReadingTime(activeBodyHtml, project.content);
+ }, [project, activeBodyHtml]);
 
  // Filter list-of-strings items by kind. We keep them as
  // three separate lists (memoized) so each public section
@@ -222,7 +236,7 @@ export default function ProjectDetailPage() {
  <div className="min-h-screen bg-darkbg pt-24 pb-16 px-4 sm:px-6 flex items-center justify-center">
  <div className="text-center">
  <div className="w-12 h-12 border-2 border-neon-violet border-t-transparent rounded-full animate-spin mx-auto mb-4" />
- <p className="text-text-muted">Đang tải...</p>
+ <p className="text-text-muted">{L('Đang tải...', 'Loading…')}</p>
  </div>
  </div>
  );
@@ -233,8 +247,13 @@ export default function ProjectDetailPage() {
  const statusMeta = STATUS_COLORS[project.status] ?? STATUS_COLORS.PLANNING;
  const difficultyMeta = project.difficulty ? DIFFICULTY_COLORS[project.difficulty] ?? null : null;
  const videoId = project.videoUrl ? extractYouTubeId(project.videoUrl) : null;
- const hasBody = Boolean(project.bodyHtml || project.bodyMdx || project.content);
- const hasSchema = Boolean(project.schemaCode && project.schemaCode.trim());
+ const hasBody = Boolean(activeBodyHtml || project.bodyMdx || project.content);
+ // schemaCodeEn exists so the comments inside the schema block can be
+ // translated; the code itself is normally identical.
+ const activeSchemaCode = (lang === 'en' && project.schemaCodeEn?.trim())
+ ? project.schemaCodeEn
+ : project.schemaCode;
+ const hasSchema = Boolean(activeSchemaCode && activeSchemaCode.trim());
 
  return (
  <div className="min-h-screen bg-darkbg">
@@ -250,7 +269,7 @@ export default function ProjectDetailPage() {
  className="flex items-center gap-2 text-text-muted hover:text-text-primary transition-colors mb-8 group"
  >
  <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
- <span className="text-sm">Quay lại dự án</span>
+ <span className="text-sm">{L('Quay lại dự án', 'Back to projects')}</span>
  </motion.button>
 
  {/* Hero */}
@@ -264,66 +283,71 @@ export default function ProjectDetailPage() {
  <div className="flex-1 min-w-0">
  <div className="flex flex-wrap items-center gap-2 mb-3">
  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${statusMeta.bg} ${statusMeta.text}`}>
- {STATUS_LABELS[project.status] ?? project.status}
+ {labelOf(STATUS_LABELS_I18N, project.status, lang)}
  </span>
  {project.featured && (
  <span className="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-400/15 text-yellow-300">
- Nổi bật
+ {L('Nổi bật', 'Featured')}
  </span>
  )}
  {difficultyMeta && (
  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${difficultyMeta.bg} ${difficultyMeta.text}`}>
- {DIFFICULTY_LABELS[project.difficulty!] ?? project.difficulty}
+ {labelOf(LEVEL_LABELS_I18N, project.difficulty, lang)}
  </span>
  )}
  {project.category && (
  <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#22d3ee]/10 text-[#22d3ee]">
- {project.category}
+ {labelOf(CATEGORY_LABELS_I18N, project.category, lang)}
  </span>
  )}
+ {/* Language switch sits with the badges: this is the page
+     where having both languages actually matters. */}
+ <ProjectLangToggle variant="compact" className="ml-auto" />
  </div>
 
  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-text-primary mb-3 leading-tight">
- {project.title}
+ {pick(project.title, project.titleEn)}
  </h1>
 
- {project.description && (
+ {(project.description || project.descriptionEn) && (
  <p className="text-base sm:text-lg text-text-secondary leading-relaxed mb-4 max-w-3xl">
- {project.description}
+ {pick(project.description, project.descriptionEn)}
  </p>
  )}
 
  <div className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-text-muted">
- {project.role && (
+ {(project.role || project.roleEn) && (
  <span className="inline-flex items-center gap-1.5">
  <Code2 className="w-3.5 h-3.5" style={{ color: C.primary }} />
- {project.role}
+ {pick(project.role, project.roleEn)}
  </span>
  )}
- {project.duration && (
+ {(project.duration || project.durationEn) && (
  <span className="inline-flex items-center gap-1.5">
  <Clock className="w-3.5 h-3.5" style={{ color: C.primary }} />
- {project.duration}
+ {pick(project.duration, project.durationEn)}
  </span>
  )}
  {hasBody && (
  <span className="inline-flex items-center gap-1.5">
  <BookOpen className="w-3.5 h-3.5" style={{ color: C.primary }} />
- {readingMinutes} phút đọc
+ {L(`${readingMinutes} phút đọc`, `${readingMinutes} min read`)}
  </span>
  )}
  {typeof project.viewCount === 'number' && (
  <span className="inline-flex items-center gap-1.5">
  <Sparkles className="w-3.5 h-3.5" style={{ color: C.primary }} />
- {formatNumber(project.viewCount)} lượt xem
+ {L(`${formatNumber(project.viewCount)} lượt xem`, `${formatNumber(project.viewCount)} views`)}
  </span>
  )}
  {(project.startDate || project.endDate) && (
  <span className="inline-flex items-center gap-1.5">
  <Calendar className="w-3.5 h-3.5" style={{ color: C.primary }} />
- {formatDate(project.startDate)}
+ {formatDate(project.startDate, lang)}
  {project.startDate && project.endDate && <ChevronRight className="w-3 h-3" />}
- {project.endDate ? formatDate(project.endDate) : <span className="text-neon-violet">— Hiện tại</span>}
+ {project.endDate
+ ? formatDate(project.endDate, lang)
+ : <span className="text-neon-violet">{L('— Hiện tại', '— Present')}</span>}
  </span>
  )}
  </div>
@@ -339,7 +363,7 @@ export default function ProjectDetailPage() {
  style={{ background: 'linear-gradient(135deg, #FF0000 0%, #CC0000 100%)', boxShadow: '0 4px 20px rgba(255,0,0,0.3)' }}
  >
  <PlayIcon />
- Xem Demo
+ {L('Xem Demo', 'Watch demo')}
  </button>
  )}
  {project.projectUrl && (
@@ -351,7 +375,7 @@ export default function ProjectDetailPage() {
  style={{ boxShadow: `0 4px 20px ${C.primary}40` }}
  >
  <ExternalLink className="w-4 h-4" />
- Xem trực tuyến
+ {L('Xem trực tuyến', 'View live')}
  </a>
  )}
  {project.githubUrl && (
@@ -362,7 +386,7 @@ export default function ProjectDetailPage() {
  className="inline-flex items-center gap-2 px-5 py-2.5 bg-darkcard border border-darkborder text-text-primary text-sm font-medium rounded-xl hover:border-neon-indigo/30 transition-colors"
  >
  <Github className="w-4 h-4" />
- Mã nguồn
+ {L('Mã nguồn', 'Source code')}
  </a>
  )}
  <ProjectLikeButton slug={project.slug} initialCount={project.likeCount ?? 0} />
@@ -381,7 +405,7 @@ export default function ProjectDetailPage() {
  <ImageCarousel
  images={project.images ?? []}
  thumbnailUrl={project.thumbnailUrl}
- title={project.title}
+ title={pick(project.title, project.titleEn)}
  videoUrl={project.videoUrl}
  onVideoClick={(url) => {
  const id = extractYouTubeId(url);
@@ -403,7 +427,7 @@ export default function ProjectDetailPage() {
  >
  <h2 className="text-lg font-heading font-bold text-text-primary mb-4 flex items-center gap-2">
  <Code2 className="w-5 h-5" style={{ color: C.primary }} />
- Công nghệ sử dụng
+ {L('Công nghệ sử dụng', 'Tech stack')}
  </h2>
  <div className="flex flex-wrap gap-2">
  {techs.map((tech, i) => (
@@ -441,7 +465,14 @@ export default function ProjectDetailPage() {
  >
  <h2 className="text-lg font-heading font-bold text-text-primary mb-4 flex items-center gap-2">
  <BookOpen className="w-5 h-5" style={{ color: C.primary }} />
- Case Study
+ {L('Bài viết chi tiết', 'Case study')}
+ {/* An EN reader on an untranslated project gets told why the
+     text below is Vietnamese, instead of quietly wondering. */}
+ {showingViFallback && (
+ <span className="ml-2 px-2 py-0.5 rounded-md text-[10px] font-medium bg-amber-400/10 text-amber-300 border border-amber-400/25">
+ Vietnamese only — English translation not available yet
+ </span>
+ )}
  </h2>
  <div
  className="grid grid-cols-1 lg:grid-cols-[200px_minmax(0,1fr)] gap-8 lg:gap-10"
@@ -458,8 +489,12 @@ export default function ProjectDetailPage() {
  className="min-w-0 max-w-3xl mx-auto w-full rounded-2xl p-6 sm:p-8 border"
  style={{ background: C.surface, borderColor: C.border }}
  >
+ {/* key={lang} force-remounts the renderer on a language
+     switch. Without it the mermaid runtime keeps the SVGs it
+     already drew for the previous language's diagrams. */}
  <MarkdownRenderer
- html={project.bodyHtml}
+ key={lang}
+ html={activeBodyHtml}
  mdx={project.bodyMdx || project.content}
  openLinksInNewTab
  />
@@ -485,10 +520,10 @@ export default function ProjectDetailPage() {
  >
  <h2 className="text-lg font-heading font-bold text-text-primary mb-4 flex items-center gap-2">
  <Code2 className="w-5 h-5" style={{ color: C.primary }} />
- Database Schema
+ {L('Lược đồ cơ sở dữ liệu', 'Database schema')}
  </h2>
  <CodeBlock
- code={project.schemaCode!}
+ code={activeSchemaCode!}
  language={project.schemaLang ?? 'prisma'}
  fileName="schema"
  />
@@ -503,25 +538,40 @@ export default function ProjectDetailPage() {
  is rendered with framer-motion stagger for a polished
  reveal as the user scrolls past the timeline. */}
  <ListItemsSection
- title="Kiến thức cần học vững"
- subtitle="Những kiến thức nền tảng cần nắm vững khi bắt tay vào dự án"
+ title={L('Kiến thức cần học vững', 'Core knowledge to master')}
+ subtitle={L(
+ 'Những kiến thức nền tảng cần nắm vững khi bắt tay vào dự án',
+ 'The fundamentals worth having before you start building',
+ )}
  icon={GraduationCap}
  accent="text-cyan-400"
  items={coreKnowledge}
+ lang={lang}
+ countLabel={L('mục', 'items')}
  />
  <ListItemsSection
- title="Điểm cộng cho portfolio"
- subtitle="Những thứ khiến dự án nổi bật hơn khi ứng tuyển hoặc chia sẻ"
+ title={L('Điểm cộng cho portfolio', 'Portfolio bonus')}
+ subtitle={L(
+ 'Những thứ khiến dự án nổi bật hơn khi ứng tuyển hoặc chia sẻ',
+ 'What makes this project stand out in an application or a share',
+ )}
  icon={Trophy}
  accent="text-yellow-400"
  items={portfolioBonus}
+ lang={lang}
+ countLabel={L('mục', 'items')}
  />
  <ListItemsSection
- title="Đánh giá sau khi hoàn thành"
- subtitle="Những gì bạn sẽ 'biết cách làm' sau khi đưa dự án lên production"
+ title={L('Đánh giá sau khi hoàn thành', 'What you can do after finishing')}
+ subtitle={L(
+ "Những gì bạn sẽ 'biết cách làm' sau khi đưa dự án lên production",
+ 'The skills you will actually own once this is running in production',
+ )}
  icon={Target}
  accent="text-emerald-400"
  items={completionOutcome}
+ lang={lang}
+ countLabel={L('mục', 'items')}
  />
 
  {/* Related projects */}
@@ -535,7 +585,7 @@ export default function ProjectDetailPage() {
  >
  <h2 className="text-xl font-heading font-bold text-text-primary mb-6 flex items-center gap-2">
  <Sparkles className="w-5 h-5" style={{ color: C.primary }} />
- Dự án liên quan
+ {L('Dự án liên quan', 'Related projects')}
  </h2>
  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
  {relatedProjects.map((rp) => (
@@ -548,16 +598,16 @@ export default function ProjectDetailPage() {
  <div className="relative h-32 -mx-5 -mt-5 mb-4 overflow-hidden rounded-t-2xl">
  <img
  src={rp.thumbnailUrl}
- alt={rp.title}
+ alt={pick(rp.title, rp.titleEn)}
  className="w-full h-full object-cover transition-transform group-hover:scale-105"
  />
  </div>
  )}
  <h3 className="font-medium text-text-primary group-hover:text-neon-violet transition-colors line-clamp-1">
- {rp.title}
+ {pick(rp.title, rp.titleEn)}
  </h3>
- {rp.description && (
- <p className="text-sm text-text-muted mt-1 line-clamp-2">{rp.description}</p>
+ {(rp.description || rp.descriptionEn) && (
+ <p className="text-sm text-text-muted mt-1 line-clamp-2">{pick(rp.description, rp.descriptionEn)}</p>
  )}
  <div className="flex flex-wrap gap-1 mt-3">
  {(Array.isArray(rp.technologies) ? rp.technologies.slice(0, 3) : []).map((t) => (
@@ -590,10 +640,10 @@ export default function ProjectDetailPage() {
  >
  <span className="text-xs text-text-muted inline-flex items-center gap-1 mb-1">
  <ArrowLeft className="w-3 h-3" />
- Dự án trước
+ {L('Dự án trước', 'Previous project')}
  </span>
  <p className="text-sm font-medium text-text-primary group-hover:text-neon-violet transition-colors line-clamp-1">
- {prevProject.title}
+ {pick(prevProject.title, prevProject.titleEn)}
  </p>
  </button>
  ) : <div />}
@@ -604,11 +654,11 @@ export default function ProjectDetailPage() {
  className="text-right p-5 rounded-2xl border border-darkborder bg-darkcard hover:border-neon-violet/30 transition-all group sm:col-start-2"
  >
  <span className="text-xs text-text-muted inline-flex items-center gap-1 mb-1">
- Dự án tiếp theo
+ {L('Dự án tiếp theo', 'Next project')}
  <ArrowRight className="w-3 h-3" />
  </span>
  <p className="text-sm font-medium text-text-primary group-hover:text-neon-violet transition-colors line-clamp-1">
- {nextProject.title}
+ {pick(nextProject.title, nextProject.titleEn)}
  </p>
  </button>
  )}
@@ -630,7 +680,7 @@ export default function ProjectDetailPage() {
  onClick={() => setShowVideo(false)}
  className="absolute -top-10 right-0 text-white/70 hover:text-white text-sm font-medium"
  >
- Đóng
+ {L('Đóng', 'Close')}
  </button>
  <div style={{ aspectRatio: '16/9' }}>
  <iframe
@@ -671,12 +721,16 @@ function ListItemsSection({
  icon: Icon,
  accent,
  items,
+ lang,
+ countLabel,
 }: {
  title: string;
  subtitle: string;
  icon: typeof CheckCircle2;
  accent: string;
  items: ProjectListItem[];
+ lang: Lang;
+ countLabel: string;
 }) {
  if (!items || items.length === 0) return null;
  return (
@@ -690,7 +744,7 @@ function ListItemsSection({
  <div className="flex items-center gap-2 mb-1">
  <Icon className={`w-5 h-5 ${accent}`} />
  <h2 className="text-lg font-heading font-bold text-text-primary">{title}</h2>
- <span className="ml-auto text-xs text-text-muted">{items.length} mục</span>
+ <span className="ml-auto text-xs text-text-muted">{items.length} {countLabel}</span>
  </div>
  <p className="text-sm text-text-muted mb-4">{subtitle}</p>
  <ul className="space-y-2">
@@ -704,7 +758,9 @@ function ListItemsSection({
  className="flex items-start gap-2 bg-darkcard border border-darkborder rounded-xl px-4 py-3"
  >
  <CheckCircle2 className={`w-4 h-4 mt-0.5 flex-shrink-0 ${accent}`} />
- <span className="text-sm text-text-primary leading-relaxed">{it.content}</span>
+ <span className="text-sm text-text-primary leading-relaxed">
+ {lang === 'en' && it.contentEn?.trim() ? it.contentEn : it.content}
+ </span>
  </motion.li>
  ))}
  </ul>

@@ -356,16 +356,13 @@ export default {
           "explanation": "'new Employee()' uses the default constructor, so the field id keeps the default value of a String reference: null (only salary is set, to 1000.0). In the if condition, '&&' is short-circuit and evaluates LEFT to RIGHT: e.getSalary() > 500 → 1000.0 > 500 → true, so the right operand IS evaluated. e.getId() returns null, and calling .equals(\"NV001\") on null throws a NullPointerException. NPE is a RuntimeException, caught by 'catch (Exception ex)', printing \"Some error occurred!\".\n\nWhy each option is wrong:\n- A. \"This is a manager\" — the if condition never completes; it blows up on null.equals(...).\n- B. \"Some error occurred!\" — CORRECT.\n- C. The code doesn't compile — everything is legal Java.\n- D. Nothing printed — would happen only if the condition evaluated to false WITHOUT throwing.|||'new Employee()' dùng constructor mặc định, nên trường id giữ giá trị mặc định của tham chiếu String là null (chỉ salary được gán 1000.0). Trong điều kiện if, toán tử '&&' là short-circuit và tính từ TRÁI sang PHẢI: e.getSalary() > 500 → 1000.0 > 500 → true, nên vế phải VẪN ĐƯỢC tính. e.getId() trả về null, gọi .equals(\"NV001\") trên null ném NullPointerException. NPE là RuntimeException, bị 'catch (Exception ex)' bắt, in \"Some error occurred!\".\n\nVì sao từng đáp án sai:\n- A. \"This is a manager\" — điều kiện if không bao giờ chạy xong; nó nổ ngay tại null.equals(...).\n- B. \"Some error occurred!\" — ĐÚNG.\n- C. Code không biên dịch được — mọi thứ đều hợp lệ.\n- D. Không in gì — chỉ xảy ra nếu điều kiện cho false mà KHÔNG ném ngoại lệ."
         },
         {
-          "kind": "MCQ",
-          "points": 0.2,
-          "prompt": "<p>Given this declaration, what is the value of car immediately after declaration?</p><pre><code class=\"language-java\">Car car;</code></pre>|||<p>Cho khai báo sau, giá trị của car ngay sau khi khai báo là gì?</p><pre><code class=\"language-java\">Car car;</code></pre>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE1-v2/q15.png",
+          "prompt": "<p>Given this declaration, what is the value of car immediately after declaration?</p><pre><code>Car car;</code></pre>|||<p>Với khai báo sau, giá trị của car ngay sau khi khai báo là gì?</p><pre><code>Car car;</code></pre>",
           "options": [
             {
-              "text": "Undefined|||Không xác định (Undefined)"
+              "text": "Undefined|||Undefined (không xác định)"
             },
             {
-              "text": "A new Car object|||Một đối tượng Car mới"
+              "text": "A new Car object|||Một object Car mới"
             },
             {
               "text": "0|||0"
@@ -377,7 +374,10 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "'Car car;' only DECLARES a reference variable of type Car — no object is created (no 'new'). A reference that has not been made to point at any object holds null, the default value for every reference type in Java.\n\nWhy each option is wrong:\n- A. Undefined — 'undefined' is a JavaScript concept, not Java.\n- B. A new Car object — an object exists only after 'new Car()'.\n- C. 0 — 0 is the default of numeric primitives, not of reference types.\n- D. null — CORRECT.|||'Car car;' chỉ KHAI BÁO một biến tham chiếu kiểu Car — chưa có đối tượng nào được tạo. Một tham chiếu chưa trỏ tới đối tượng nào thì mang giá trị null, là giá trị mặc định của mọi kiểu tham chiếu trong Java.\n\nVì sao từng đáp án sai:\n- A. Undefined — 'undefined' là khái niệm của JavaScript, không có trong Java.\n- B. Một đối tượng Car mới — đối tượng chỉ tồn tại sau 'new Car()'.\n- C. 0 — 0 là mặc định của các kiểu số nguyên thuỷ, không phải của kiểu tham chiếu.\n- D. null — ĐÚNG. [[UNCERTAIN — CẦN RÀ LẠI: Đề không cho biết 'Car car;' là biến cục bộ hay field. Nếu là field thì chắc chắn null. Nếu là biến cục bộ thì theo JLS nó không có giá trị mặc định và không được đọc trước khi gán. Ngân hàng đề Java kiểu này gần như luôn lấy đáp án 'null', nên tôi chọn D, nhưng nên đối chiếu lại nếu có đáp án chính thức.]]"
+          "explanation": "In Java, declaring a reference-type variable (like <code>Car car;</code>) only creates the reference itself — no object is constructed until you use <code>new</code>. As an instance/class field, the JVM auto-initializes reference types to <code>null</code>. Why the others are wrong: (A) Java has no concept of an \"undefined\" value like JavaScript — every field gets a defined default. (B) No <code>Car</code> object is created just by declaring the variable; that requires an explicit <code>new Car(...)</code> call. (C) <code>0</code> is the default for numeric primitives (<code>int</code>, <code>double</code>, ...), not for object references.|||Trong Java, khai báo một biến kiểu tham chiếu (như <code>Car car;</code>) chỉ tạo ra biến tham chiếu — chưa có object nào được tạo cho tới khi dùng <code>new</code>. Với field của class/instance, JVM tự gán giá trị mặc định <code>null</code> cho kiểu tham chiếu. Vì sao các đáp án khác sai: (A) Java không có khái niệm giá trị \"undefined\" như JavaScript — mọi field đều có giá trị mặc định xác định. (B) Chỉ khai báo biến thì chưa có object <code>Car</code> nào được tạo, phải gọi <code>new Car(...)</code> tường minh. (C) <code>0</code> là giá trị mặc định của kiểu số nguyên thuỷ (<code>int</code>, <code>double</code>...), không phải của kiểu tham chiếu.",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE1-v2/q15.png",
+          "kind": "MCQ",
+          "points": 0.2
         },
         {
           "kind": "MCQ",

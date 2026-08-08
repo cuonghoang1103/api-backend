@@ -58,13 +58,20 @@ function normalizeProject(project: Record<string, unknown>) {
  // page renders a "Database Schema" section using them, so
  // stripping them here would leave a permanent empty
  // section on the visitor's screen.
+ //
+ // `bodyMdxEn` is stripped for the same reason as `bodyMdx`;
+ // `bodyHtmlEn` and the other *En columns stay on the wire —
+ // the VI/EN switch flips content client-side with no refetch,
+ // so both languages have to arrive in the same payload.
  const {
  isPublished: _omitPublished,
  bodyMdx: _omitBodyMdx,
+ bodyMdxEn: _omitBodyMdxEn,
  ...rest
  } = project as Record<string, unknown> & {
  isPublished?: boolean;
  bodyMdx?: string | null;
+ bodyMdxEn?: string | null;
  };
 
  return {
@@ -84,11 +91,18 @@ function normalizeProject(project: Record<string, unknown>) {
 // projects that pre-date Phase 2 still work without
 // forcing the admin to open and re-save each one.
 
-async function ensureBodyHtml(project: {
+// `lang` selects which pair of columns to backfill so the
+// English body gets the same treatment as the Vietnamese one
+// — an EN translation added straight through the admin editor
+// (bodyMdxEn only) still renders on the first visit.
+async function ensureBodyHtml(
+ project: {
  id: number;
  bodyMdx: string | null;
  bodyHtml: string | null;
-}): Promise<string | null> {
+ },
+ lang: 'vi' | 'en' = 'vi',
+): Promise<string | null> {
  if (!project.bodyMdx || !project.bodyMdx.trim()) return null;
  if (project.bodyHtml && project.bodyHtml.trim()) return project.bodyHtml;
 
@@ -96,13 +110,13 @@ async function ensureBodyHtml(project: {
  const html = await renderProjectMarkdown(project.bodyMdx);
  await prisma.project.update({
  where: { id: project.id },
- data: { bodyHtml: html },
+ data: lang === 'en' ? { bodyHtmlEn: html } : { bodyHtml: html },
  });
  return html;
  } catch (err) {
  // Rendering failure shouldn't fail the read — return the
  // raw mdx so the client can try its fallback renderer.
- console.error('[projects] lazy backfill failed for', project.id, err);
+ console.error(`[projects] lazy backfill (${lang}) failed for`, project.id, err);
  return null;
  }
 }
@@ -116,9 +130,14 @@ router.get('/', async (req, res: Response<ApiResponse>, next) => {
  const skip = (pageNum - 1) * sizeNum;
  const where: Record<string, unknown> = { isPublished: true };
  if (keyword) {
+ // Search both languages regardless of the reader's current
+ // locale: someone browsing in English still expects a
+ // Vietnamese-titled project to be findable, and vice versa.
  where.OR = [
  { title: { contains: String(keyword), mode: 'insensitive' } },
  { description: { contains: String(keyword), mode: 'insensitive' } },
+ { titleEn: { contains: String(keyword), mode: 'insensitive' } },
+ { descriptionEn: { contains: String(keyword), mode: 'insensitive' } },
  ];
  }
  if (status) where.status = String(status);
@@ -307,13 +326,27 @@ router.get('/:slug', async (req, res: Response<ApiResponse>, next) => {
  // Lazy backfill BEFORE returning so the first visitor
  // already gets the rendered HTML. This is a tiny render
  // (sub-millisecond for typical posts) so we await it.
- const bodyHtml = await ensureBodyHtml({
+ // Both languages are backfilled on the same read: the page
+ // ships VI and EN together and flips between them without a
+ // second request, so rendering only the active one would
+ // leave the switch showing a blank article.
+ const [bodyHtml, bodyHtmlEn] = await Promise.all([
+ ensureBodyHtml({
  id: project.id,
  bodyMdx: project.bodyMdx,
  bodyHtml: project.bodyHtml,
- });
+ }),
+ ensureBodyHtml({
+ id: project.id,
+ bodyMdx: project.bodyMdxEn,
+ bodyHtml: project.bodyHtmlEn,
+ }, 'en'),
+ ]);
  if (bodyHtml) {
  (project as Record<string, unknown>).bodyHtml = bodyHtml;
+ }
+ if (bodyHtmlEn) {
+ (project as Record<string, unknown>).bodyHtmlEn = bodyHtmlEn;
  }
 
  // Fire-and-forget view counter. Not awaited; we don't
@@ -394,21 +427,32 @@ router.post('/:slug/like', async (req: Request, res: Response<ApiResponse>, next
 // Admin-only: force a re-render of bodyHtml from bodyMdx.
 // Use after editing markdown directly in the DB, or to
 // recover from a corrupted cache.
+//
+// Re-renders BOTH languages when the project has an English
+// body. Rendering only Vietnamese would leave the EN cache
+// stale after a renderer change — the exact failure this
+// endpoint exists to fix.
 router.post('/:slug/render', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
  try {
  const project = await prisma.project.findUnique({
  where: { slug: req.params.slug },
- select: { id: true, bodyMdx: true },
+ select: { id: true, bodyMdx: true, bodyMdxEn: true },
  });
  if (!project) throw new AppError('Project not found', 404);
  if (!project.bodyMdx) throw new AppError('Project has no bodyMdx to render', 400);
 
  const html = await renderProjectMarkdown(project.bodyMdx);
+ const htmlEn = project.bodyMdxEn?.trim()
+ ? await renderProjectMarkdown(project.bodyMdxEn)
+ : null;
  await prisma.project.update({
  where: { id: project.id },
- data: { bodyHtml: html },
+ data: {
+ bodyHtml: html,
+ ...(htmlEn !== null ? { bodyHtmlEn: htmlEn } : {}),
+ },
  });
- res.json({ success: true, data: { bodyHtml: html } });
+ res.json({ success: true, data: { bodyHtml: html, bodyHtmlEn: htmlEn } });
  } catch (error) { next(error); }
 });
 

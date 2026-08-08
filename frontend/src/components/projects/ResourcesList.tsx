@@ -3,21 +3,23 @@
 import { motion } from 'framer-motion';
 import { FileText, FileCode2, Github, ExternalLink, Download } from 'lucide-react';
 import type { ProjectResource, ProjectResourceType } from '@/types';
+import { useProjectLang } from '@/lib/projectI18n';
 
 interface ResourcesListProps {
  resources: ProjectResource[];
 }
 
 const TYPE_META: Record<ProjectResourceType, {
- label: string;
+ vi: string;
+ en: string;
  icon: typeof FileText;
  color: string;
 }> = {
- PDF: { label: 'PDF', icon: FileText, color: 'text-rose-400' },
- DOC: { label: 'Tài liệu', icon: FileText, color: 'text-blue-400' },
- REPO: { label: 'Repository', icon: Github, color: 'text-text-primary' },
- LINK: { label: 'Liên kết', icon: ExternalLink, color: 'text-neon-violet' },
- OTHER: { label: 'Khác', icon: FileCode2, color: 'text-text-muted' },
+ PDF: { vi: 'PDF', en: 'PDF', icon: FileText, color: 'text-rose-400' },
+ DOC: { vi: 'Tài liệu', en: 'Document', icon: FileText, color: 'text-blue-400' },
+ REPO: { vi: 'Mã nguồn', en: 'Repository', icon: Github, color: 'text-text-primary' },
+ LINK: { vi: 'Liên kết', en: 'Link', icon: ExternalLink, color: 'text-neon-violet' },
+ OTHER: { vi: 'Khác', en: 'Other', icon: FileCode2, color: 'text-text-muted' },
 };
 
 function formatSize(bytes?: number): string {
@@ -40,6 +42,7 @@ function formatSize(bytes?: number): string {
  * stagger is via framer-motion.
  */
 export default function ResourcesList({ resources }: ResourcesListProps) {
+ const { lang, L, pick } = useProjectLang();
  if (!resources || resources.length === 0) return null;
 
  const sorted = [...resources].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
@@ -48,7 +51,7 @@ export default function ResourcesList({ resources }: ResourcesListProps) {
  <section className="mt-12">
  <h2 className="text-lg font-heading font-bold text-text-primary mb-6 flex items-center gap-2">
  <Download className="w-5 h-5 text-neon-violet" />
- Tài nguyên tham khảo
+ {L('Tài nguyên tham khảo', 'Reference material')}
  </h2>
  <ul className="space-y-3">
  {sorted.map((r, i) => {
@@ -78,14 +81,14 @@ export default function ResourcesList({ resources }: ResourcesListProps) {
  <div className="flex-1 min-w-0">
  <div className="flex items-center gap-2 flex-wrap">
  <span className="font-medium text-text-primary group-hover:text-neon-violet transition-colors line-clamp-1">
- {r.title}
+ {pick(r.title, r.titleEn)}
  </span>
  <span className={`text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded ${meta.color} bg-current/10`}>
- {meta.label}
+ {lang === 'en' ? meta.en : meta.vi}
  </span>
  </div>
- {r.description && (
- <p className="text-xs text-text-muted mt-0.5 line-clamp-2">{r.description}</p>
+ {(r.description || r.descriptionEn) && (
+ <p className="text-xs text-text-muted mt-0.5 line-clamp-2">{pick(r.description, r.descriptionEn)}</p>
  )}
  </div>
  {formatSize(r.fileSize) && (

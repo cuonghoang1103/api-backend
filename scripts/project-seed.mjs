@@ -37,6 +37,25 @@
  *     coreKnowledge: ['…'], portfolioBonus: ['…'], completionOutcomes: ['…'],
  *   }
  *
+ * BILINGUAL (VI/EN) — every field below is optional, and a spec with none of
+ * them seeds exactly as before:
+ *   titleEn, descriptionEn, roleEn, durationEn, schemaCodeEn,
+ *   bodyMdxEn: `# heading …`,          → rendered to bodyHtmlEn with the SAME
+ *                                        renderer, so both languages get
+ *                                        identical callout/mermaid/heading-id
+ *                                        treatment
+ *   milestones: [{ …, titleEn, descriptionEn }]   // codeBlock is shared
+ *   features:   [{ …, titleEn, descriptionEn }]
+ *   resources:  [{ …, titleEn, descriptionEn }]   // url is shared
+ *   coreKnowledge: ['chỉ tiếng Việt', { vi: '…', en: '…' }]
+ *                                      → list entries take either a plain
+ *                                        string (VI only) or a {vi,en} pair.
+ *                                        Two parallel arrays would silently
+ *                                        mis-pair on any edit that inserts a
+ *                                        line in one language only.
+ * A missing EN value is NULL in the DB, and the API falls back to Vietnamese —
+ * a half-translated project renders, it never goes blank.
+ *
  * WHY THE RENDERER COMES FROM dist/
  * The public page reads the cached `bodyHtml` column and nothing else — no
  * markdown parser runs on a read. So the seeder has to produce byte-identical
@@ -107,6 +126,9 @@ varchar('title', spec.title, 255);
 varchar('slug', slug, 255);
 varchar('role', spec.role, 100);
 varchar('duration', spec.duration, 100);
+varchar('titleEn', spec.titleEn, 255);
+varchar('roleEn', spec.roleEn, 100);
+varchar('durationEn', spec.durationEn, 100);
 varchar('category', spec.category, 80);
 varchar('status', spec.status, 20);
 varchar('difficulty', spec.difficulty, 20);
@@ -114,7 +136,11 @@ varchar('schemaLang', spec.schemaLang, 40);
 varchar('projectUrl', spec.projectUrl, 500);
 varchar('githubUrl', spec.githubUrl, 500);
 
-const DIFFICULTIES = ['BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
+/* EXPERT was added for the 5-level roadmap (Beginner → World-Class): levels 4
+   and 5 are genuinely a different tier from "advanced web app", and collapsing
+   them into ADVANCED made the hardest projects indistinguishable from the
+   mid-tier ones on the listing page. */
+const DIFFICULTIES = ['BEGINNER', 'INTERMEDIATE', 'ADVANCED', 'EXPERT'];
 if (spec.difficulty && !DIFFICULTIES.includes(spec.difficulty)) {
   problems.push(`difficulty "${spec.difficulty}" không thuộc ${DIFFICULTIES.join(', ')}`);
 }
@@ -126,6 +152,8 @@ if (description.length > 400) {
 }
 
 const bodyMdx = String(spec.bodyMdx ?? '');
+const bodyMdxEn = spec.bodyMdxEn != null ? String(spec.bodyMdxEn) : '';
+const descriptionEn = spec.descriptionEn != null ? String(spec.descriptionEn) : '';
 
 /* ── Children ──────────────────────────────────────────────────────────────
    Validated against exactly what the UI can render. A status the checklist has
@@ -140,6 +168,7 @@ milestones.forEach((m, i) => {
   if (!m?.title) problems.push(`milestones[${i}] thiếu \`title\``);
   varchar(`milestones[${i}].phase`, m?.phase, 40);
   varchar(`milestones[${i}].title`, m?.title, 255);
+  varchar(`milestones[${i}].titleEn`, m?.titleEn, 255);
   varchar(`milestones[${i}].codeLang`, m?.codeLang, 40);
   if (m?.date && Number.isNaN(Date.parse(m.date))) problems.push(`milestones[${i}].date "${m.date}" không phải ngày hợp lệ`);
   if (m?.codeBlock && !m?.codeLang) warnings.push(`milestones[${i}] có codeBlock nhưng thiếu codeLang → không tô màu cú pháp`);
@@ -149,6 +178,7 @@ const features = Array.isArray(spec.features) ? spec.features : [];
 features.forEach((f, i) => {
   if (!f?.title) problems.push(`features[${i}] thiếu \`title\``);
   varchar(`features[${i}].title`, f?.title, 255);
+  varchar(`features[${i}].titleEn`, f?.titleEn, 255);
   const st = f?.status ?? 'PLANNED';
   if (!FEATURE_STATUS.includes(st)) problems.push(`features[${i}].status "${st}" không thuộc ${FEATURE_STATUS.join('/')}`);
 });
@@ -158,6 +188,7 @@ resources.forEach((r, i) => {
   if (!r?.title) problems.push(`resources[${i}] thiếu \`title\``);
   if (!r?.url) problems.push(`resources[${i}] thiếu \`url\``);
   varchar(`resources[${i}].title`, r?.title, 255);
+  varchar(`resources[${i}].titleEn`, r?.titleEn, 255);
   varchar(`resources[${i}].url`, r?.url, 1000);
   const ty = r?.type ?? 'LINK';
   if (!RESOURCE_TYPES.includes(ty)) problems.push(`resources[${i}].type "${ty}" không thuộc ${RESOURCE_TYPES.join('/')}`);
@@ -171,17 +202,45 @@ const LIST_KINDS = [
 const listItems = [];
 for (const [specKey, kind] of LIST_KINDS) {
   const arr = Array.isArray(spec[specKey]) ? spec[specKey] : [];
-  arr.forEach((content, i) => {
-    const s = String(content ?? '');
+  arr.forEach((entry, i) => {
+    /* A list entry is either a plain string (Vietnamese only) or a {vi,en}
+       pair. Accepting both keeps older specs valid and, more importantly,
+       keeps a translation glued to its own line — parallel VI/EN arrays go
+       out of sync the first time someone inserts a bullet in one of them. */
+    const isPair = entry && typeof entry === 'object' && !Array.isArray(entry);
+    const s = String((isPair ? entry.vi : entry) ?? '');
+    const sEn = isPair && entry.en != null ? String(entry.en) : '';
     if (!s.trim()) { problems.push(`${specKey}[${i}] rỗng`); return; }
     if (s.length > 500) problems.push(`${specKey}[${i}] ${s.length} ký tự > 500 (giới hạn cột)`);
-    listItems.push({ kind, content: s, order: i });
+    if (sEn.length > 500) problems.push(`${specKey}[${i}].en ${sEn.length} ký tự > 500 (giới hạn cột)`);
+    listItems.push({ kind, content: s, contentEn: sEn.trim() || null, order: i });
   });
 }
 
 /* ── Render, then look at what came out ────────────────────────────────────*/
 const html = await renderProjectMarkdown(bodyMdx);
 if (bodyMdx.trim() && !html.trim()) problems.push('render ra HTML rỗng — sanitizer đã ăn hết nội dung?');
+
+/* The English body goes through the identical renderer, not a second pipeline:
+   same callout syntax, same heading ids, same mermaid handling. A separate path
+   would drift, and the drift would only show up on the EN half of the page. */
+const htmlEn = bodyMdxEn.trim() ? await renderProjectMarkdown(bodyMdxEn) : '';
+if (bodyMdxEn.trim() && !htmlEn.trim()) problems.push('bodyMdxEn render ra HTML rỗng');
+
+/* A translated article that is a fraction of the original is nearly always a
+   truncated paste, not a terser language. Warn rather than block — some specs
+   legitimately ship a short EN summary first. */
+if (bodyMdxEn.trim()) {
+  const ratio = bodyMdxEn.length / Math.max(bodyMdx.length, 1);
+  if (ratio < 0.5) {
+    warnings.push(`bodyMdxEn chỉ bằng ${(ratio * 100).toFixed(0)}% độ dài bản VI — bản dịch có bị cắt cụt không?`);
+  }
+  const enHeadingIds = [...htmlEn.matchAll(/<h[1-4][^>]*\bid="([^"]+)"/g)].map((m) => m[1]);
+  const enDupes = enHeadingIds.filter((id, i) => enHeadingIds.indexOf(id) !== i);
+  if (enDupes.length) {
+    warnings.push(`bản EN có heading trùng id: ${[...new Set(enDupes)].join(', ')} — mục lục EN sẽ nhảy sai chỗ`);
+  }
+}
 
 /* The sidebar TOC is built from h1-h4 ids the renderer injects. No ids means a
    long article with no way to navigate it. */
@@ -220,9 +279,21 @@ const words = bodyMdx.replace(/```[\s\S]*?```/g, ' ').split(/\s+/).filter(Boolea
 const codeFences = (bodyMdx.match(/^```/gm) ?? []).length / 2;
 const diagrams = (bodyMdx.match(/^```mermaid\b/gm) ?? []).length;
 
+const wordsEn = bodyMdxEn.replace(/```[\s\S]*?```/g, ' ').split(/\s+/).filter(Boolean).length;
+const enTranslated = {
+  title: Boolean(spec.titleEn), description: Boolean(descriptionEn), body: Boolean(bodyMdxEn.trim()),
+  milestones: milestones.filter((m) => m?.titleEn).length,
+  features: features.filter((f) => f?.titleEn).length,
+  resources: resources.filter((r) => r?.titleEn).length,
+  listItems: listItems.filter((li) => li.contentEn).length,
+};
+
 console.log(`── project-seed ${slug || '(no slug)'} : ${APPLY ? 'APPLY' : 'DRY'} ──`);
 console.log(`   ${words.toLocaleString('en-US')} từ (không tính code) · ${codeFences} khối code (${diagrams} sơ đồ mermaid) · ${headingIds.length} heading · bodyMdx ${(bodyMdx.length / 1024).toFixed(1)}KB · đọc ~${computeReadingTime(bodyMdx)}′`);
 console.log(`   ${milestones.length} mốc · ${features.length} tính năng · ${resources.length} tài nguyên · ${listItems.length} mục danh sách`);
+console.log(bodyMdxEn.trim()
+  ? `   EN: ${wordsEn.toLocaleString('en-US')} từ · bodyMdxEn ${(bodyMdxEn.length / 1024).toFixed(1)}KB · mốc ${enTranslated.milestones}/${milestones.length} · tính năng ${enTranslated.features}/${features.length} · tài nguyên ${enTranslated.resources}/${resources.length} · danh sách ${enTranslated.listItems}/${listItems.length}`
+  : '   EN: (chưa dịch — trang sẽ hiện tiếng Việt khi người xem bật EN)');
 console.log(`   link nội bộ: ${internalLinks.length ? internalLinks.join(', ') : '(không có)'}`);
 
 for (const w of warnings) console.warn(`  ⚠ ${w}`);
@@ -266,6 +337,13 @@ const data = {
   videoUrl: spec.videoUrl ?? null,
   schemaCode: spec.schemaCode ?? null,
   schemaLang: spec.schemaLang ?? null,
+  titleEn: spec.titleEn ?? null,
+  descriptionEn: descriptionEn || null,
+  roleEn: spec.roleEn ?? null,
+  durationEn: spec.durationEn ?? null,
+  bodyMdxEn: bodyMdxEn || null,
+  bodyHtmlEn: htmlEn || null,
+  schemaCodeEn: spec.schemaCodeEn ?? null,
   startDate: spec.startDate ? new Date(spec.startDate) : null,
   endDate: spec.endDate ? new Date(spec.endDate) : null,
   isFeatured: spec.isFeatured !== undefined ? Boolean(spec.isFeatured) : true,
@@ -297,6 +375,8 @@ const projectId = await prisma.$transaction(async (tx) => {
         imageUrl: m.imageUrl ?? null,
         codeBlock: m.codeBlock ?? null,
         codeLang: m.codeLang ?? null,
+        titleEn: m.titleEn ?? null,
+        descriptionEn: m.descriptionEn ?? null,
         order: i,
       })),
     });
@@ -308,6 +388,8 @@ const projectId = await prisma.$transaction(async (tx) => {
         title: String(f.title).slice(0, 255),
         description: f.description ?? null,
         status: f.status ?? 'PLANNED',
+        titleEn: f.titleEn ?? null,
+        descriptionEn: f.descriptionEn ?? null,
         order: i,
       })),
     });
@@ -321,6 +403,8 @@ const projectId = await prisma.$transaction(async (tx) => {
         type: r.type ?? 'LINK',
         fileSize: Number.isFinite(r.fileSize) ? Number(r.fileSize) : null,
         description: r.description ?? null,
+        titleEn: r.titleEn ?? null,
+        descriptionEn: r.descriptionEn ?? null,
         order: i,
       })),
     });
@@ -339,13 +423,23 @@ const projectId = await prisma.$transaction(async (tx) => {
 const check = await prisma.project.findUnique({
   where: { id: projectId },
   select: {
-    slug: true, isPublished: true, bodyHtml: true, viewCount: true, likeCount: true,
+    slug: true, isPublished: true, bodyHtml: true, bodyHtmlEn: true, titleEn: true,
+    viewCount: true, likeCount: true,
     _count: { select: { milestones: true, features: true, resources: true, listItems: true } },
   },
 });
 const htmlLen = check?.bodyHtml?.length ?? 0;
 if (htmlLen < 500) {
   console.error(`  ✗ đọc lại thấy sai: bodyHtml chỉ ${htmlLen} ký tự`);
+  await prisma.$disconnect();
+  process.exit(1);
+}
+/* The EN column is checked the same way: a spec that carries a translation but
+   lands an empty column is the one failure this script exists to catch, and it
+   is invisible from the success log otherwise. */
+const htmlEnLen = check?.bodyHtmlEn?.length ?? 0;
+if (bodyMdxEn.trim() && htmlEnLen < 500) {
+  console.error(`  ✗ đọc lại thấy sai: bodyHtmlEn chỉ ${htmlEnLen} ký tự (spec CÓ bodyMdxEn ${(bodyMdxEn.length / 1024).toFixed(1)}KB)`);
   await prisma.$disconnect();
   process.exit(1);
 }
@@ -358,6 +452,9 @@ if (c.milestones !== milestones.length || c.features !== features.length
 }
 
 console.log(`  ✓ ${existing ? 'cập nhật' : 'tạo'} dự án #${projectId} · ${check.isPublished ? 'PUBLISHED' : 'ẨN'} · bodyHtml ${(htmlLen / 1024).toFixed(1)}KB · ${c.milestones} mốc · ${c.features} tính năng · ${c.resources} tài nguyên · ${c.listItems} mục`);
+console.log(htmlEnLen
+  ? `    EN: bodyHtmlEn ${(htmlEnLen / 1024).toFixed(1)}KB · tiêu đề "${check.titleEn ?? '(chưa có)'}"`
+  : '    EN: (không có bản dịch)');
 console.log(`    giữ nguyên: ${check.viewCount} lượt xem · ${check.likeCount} lượt thích`);
 console.log(`    /projects/${check.slug}`);
 console.log('Done.');

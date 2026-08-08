@@ -11,32 +11,36 @@ import ProjectCardPremium from '@/components/projects/ProjectCardPremium';
 import ProjectsSkeleton from '@/components/projects/ProjectsSkeleton';
 import ProjectsEmpty from '@/components/projects/ProjectsEmpty';
 import ProjectsHero from './ProjectsHero';
+import ProjectLangToggle from '@/components/projects/ProjectLangToggle';
+import { useProjectLang, CATEGORY_LABELS_I18N, labelOf } from '@/lib/projectI18n';
 
-// Filter constants from admin editor
+// Filter constants from admin editor. Values stay in English (they are the
+// API's enum values); only the labels are translated, at render time.
 const CATEGORIES = ['Web', 'Mobile', 'AI', 'DevOps', 'Game', 'IoT', 'Data', 'Tooling'] as const;
 const LEVELS = [
-  { value: '', label: 'Tất cả' },
-  { value: 'BEGINNER', label: 'Cơ bản' },
-  { value: 'INTERMEDIATE', label: 'Trung bình' },
-  { value: 'ADVANCED', label: 'Nâng cao' },
+  { value: '', vi: 'Tất cả', en: 'All' },
+  { value: 'BEGINNER', vi: 'Cơ bản', en: 'Beginner' },
+  { value: 'INTERMEDIATE', vi: 'Trung bình', en: 'Intermediate' },
+  { value: 'ADVANCED', vi: 'Nâng cao', en: 'Advanced' },
+  { value: 'EXPERT', vi: 'Chuyên sâu', en: 'Expert' },
 ] as const;
 const STATUSES = [
-  { value: '', label: 'Tất cả' },
-  { value: 'COMPLETED', label: 'Completed' },
-  { value: 'IN_PROGRESS', label: 'In Progress' },
-  { value: 'PLANNING', label: 'Planning' },
-  { value: 'MAINTENANCE', label: 'Maintenance' },
-  { value: 'ON_HOLD', label: 'On Hold' },
+  { value: '', vi: 'Tất cả', en: 'All' },
+  { value: 'COMPLETED', vi: 'Hoàn thành', en: 'Completed' },
+  { value: 'IN_PROGRESS', vi: 'Đang làm', en: 'In progress' },
+  { value: 'PLANNING', vi: 'Lên kế hoạch', en: 'Planning' },
+  { value: 'MAINTENANCE', vi: 'Bảo trì', en: 'Maintenance' },
+  { value: 'ON_HOLD', vi: 'Tạm dừng', en: 'On hold' },
 ] as const;
 const SORT_OPTIONS = [
-  { value: 'newest', label: 'Mới nhất' },
-  { value: 'oldest', label: 'Cũ nhất' },
-  { value: 'level-asc', label: 'Cơ bản → Nâng cao' },
-  { value: 'level-desc', label: 'Nâng cao → Cơ bản' },
+  { value: 'newest', vi: 'Mới nhất', en: 'Newest' },
+  { value: 'oldest', vi: 'Cũ nhất', en: 'Oldest' },
+  { value: 'level-asc', vi: 'Cơ bản → Nâng cao', en: 'Easiest → Hardest' },
+  { value: 'level-desc', vi: 'Nâng cao → Cơ bản', en: 'Hardest → Easiest' },
 ] as const;
 
 type SortValue = 'newest' | 'oldest' | 'level-asc' | 'level-desc';
-type LevelValue = '' | 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
+type LevelValue = '' | 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | 'EXPERT';
 type StatusValue = string;
 
 // Level badge colors
@@ -74,6 +78,7 @@ const LEVEL_ORDER: Record<string, number> = {
   BEGINNER: 1,
   INTERMEDIATE: 2,
   ADVANCED: 3,
+  EXPERT: 4,
   '': 0,
 };
 
@@ -91,6 +96,7 @@ function extractYouTubeId(url: string): string | null {
 // ─── Main Component ──────────────────────────────────────────────────────────────
 export default function ProjectsClient() {
   const router = useRouter();
+  const { lang, L } = useProjectLang();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -154,13 +160,18 @@ export default function ProjectsClient() {
   const filtered = useMemo(() => {
     let result = [...projects];
 
-    // Search (title, description, category, tech tags) - case insensitive
+    // Search (title, description, category, tech tags) - case insensitive.
+    // Both languages are searched no matter which one is displayed: typing
+    // "chat" should find a project whose Vietnamese title says "Trò chuyện",
+    // and typing "thi" should find it back from the English view.
     if (searchKeyword) {
       const q = searchKeyword.toLowerCase().trim();
       result = result.filter(
         (p) =>
           p.title.toLowerCase().includes(q) ||
+          (p.titleEn || '').toLowerCase().includes(q) ||
           (p.description || '').toLowerCase().includes(q) ||
+          (p.descriptionEn || '').toLowerCase().includes(q) ||
           (p.category || '').toLowerCase().includes(q) ||
           (p.technologies ?? []).some((t) => t.toLowerCase().includes(q))
       );
@@ -238,7 +249,7 @@ export default function ProjectsClient() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted pointer-events-none" />
             <input
               type="text"
-              placeholder="Tìm kiếm dự án..."
+              placeholder={L('Tìm kiếm dự án...', 'Search projects...')}
               value={searchInput}
               onChange={(e) => handleSearchChange(e.target.value)}
               className="w-full pl-12 pr-4 py-3 rounded-xl bg-darkcard border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
@@ -261,7 +272,7 @@ export default function ProjectsClient() {
               className="appearance-none pl-4 pr-10 py-3 rounded-xl bg-darkcard border border-darkborder text-text-secondary text-sm focus:outline-none focus:border-neon-violet/50 cursor-pointer"
             >
               {SORT_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                <option key={opt.value} value={opt.value}>{lang === 'en' ? opt.en : opt.vi}</option>
               ))}
             </select>
             <ArrowUpDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted pointer-events-none" />
@@ -277,7 +288,7 @@ export default function ProjectsClient() {
             }`}
           >
             <SlidersHorizontal className="w-4 h-4" />
-            Bộ lọc
+            {L('Bộ lọc', 'Filters')}
             {activeFiltersCount > 0 && (
               <span className="w-5 h-5 rounded-full bg-neon-violet text-white text-[10px] font-bold flex items-center justify-center">
                 {activeFiltersCount}
@@ -291,7 +302,7 @@ export default function ProjectsClient() {
             className="px-4 py-3 rounded-xl border border-darkborder text-text-secondary hover:border-neon-violet/50 hover:text-white transition-colors text-sm inline-flex items-center gap-1.5"
           >
             <FileSearch className="w-4 h-4" />
-            <span className="hidden sm:inline">Tìm nâng cao</span>
+            <span className="hidden sm:inline">{L('Tìm nâng cao', 'Advanced search')}</span>
           </Link>
 
           {/* RSS */}
@@ -304,6 +315,10 @@ export default function ProjectsClient() {
           >
             <Rss className="w-4 h-4" />
           </a>
+
+          {/* VI / EN — same cookie as the navbar switcher, so flipping here
+              re-renders the whole site's language without navigating. */}
+          <ProjectLangToggle className="self-stretch" />
         </div>
 
         {/* Expandable filters */}
@@ -319,7 +334,7 @@ export default function ProjectsClient() {
               <div className="flex flex-wrap gap-4 p-4 rounded-xl bg-darkcard/50 border border-darkborder">
                 {/* Category filter */}
                 <div className="space-y-1.5">
-                  <span className="text-[10px] uppercase tracking-wider text-text-muted font-medium">Danh mục</span>
+                  <span className="text-[10px] uppercase tracking-wider text-text-muted font-medium">{L('Danh mục', 'Category')}</span>
                   <div className="flex flex-wrap gap-2">
                     {CATEGORIES.map((cat) => (
                       <button
@@ -331,7 +346,7 @@ export default function ProjectsClient() {
                             : 'bg-darkcard border-darkborder/60 text-text-secondary hover:border-neon-violet/30 hover:text-text-primary'
                         }`}
                       >
-                        {cat}
+                        {labelOf(CATEGORY_LABELS_I18N, cat, lang)}
                       </button>
                     ))}
                   </div>
@@ -339,7 +354,7 @@ export default function ProjectsClient() {
 
                 {/* Level filter */}
                 <div className="space-y-1.5">
-                  <span className="text-[10px] uppercase tracking-wider text-text-muted font-medium">Mức độ</span>
+                  <span className="text-[10px] uppercase tracking-wider text-text-muted font-medium">{L('Mức độ', 'Level')}</span>
                   <div className="flex flex-wrap gap-2">
                     {LEVELS.map((level) => (
                       <button
@@ -351,7 +366,7 @@ export default function ProjectsClient() {
                             : 'bg-darkcard border-darkborder/60 text-text-secondary hover:border-neon-violet/30 hover:text-text-primary'
                         }`}
                       >
-                        {level.label}
+                        {lang === 'en' ? level.en : level.vi}
                       </button>
                     ))}
                   </div>
@@ -359,7 +374,7 @@ export default function ProjectsClient() {
 
                 {/* Status filter */}
                 <div className="space-y-1.5">
-                  <span className="text-[10px] uppercase tracking-wider text-text-muted font-medium">Trạng thái</span>
+                  <span className="text-[10px] uppercase tracking-wider text-text-muted font-medium">{L('Trạng thái', 'Status')}</span>
                   <div className="flex flex-wrap gap-2">
                     {STATUSES.map((status) => (
                       <button
@@ -371,7 +386,7 @@ export default function ProjectsClient() {
                             : 'bg-darkcard border-darkborder/60 text-text-secondary hover:border-neon-violet/30 hover:text-text-primary'
                         }`}
                       >
-                        {status.label}
+                        {lang === 'en' ? status.en : status.vi}
                       </button>
                     ))}
                   </div>
@@ -387,14 +402,14 @@ export default function ProjectsClient() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-2 mb-4">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-xs text-text-muted">
-              {filtered.length} kết quả
+              {L(`${filtered.length} kết quả`, `${filtered.length} result${filtered.length === 1 ? '' : 's'}`)}
             </span>
             <button
               onClick={clearAllFilters}
               className="px-2 py-1 rounded text-xs text-neon-violet hover:bg-neon-violet/10 transition-colors flex items-center gap-1"
             >
               <X className="w-3 h-3" />
-              Xóa bộ lọc
+              {L('Xóa bộ lọc', 'Clear filters')}
             </button>
           </div>
         </div>
@@ -443,7 +458,7 @@ export default function ProjectsClient() {
               onClick={() => setVideoModalUrl(null)}
               className="absolute -top-10 right-0 text-white/70 hover:text-white text-sm font-medium"
             >
-              Đóng
+              {L('Đóng', 'Close')}
             </button>
             <div style={{ aspectRatio: '16/9' }}>
               <iframe

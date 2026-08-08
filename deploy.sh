@@ -568,6 +568,25 @@ PROJECT_SEED_OUT_RC="$(printf '%s\n' "$PROJECT_SEED_OUT" | sed -n 's/^__SEED_RC_
 PROJECT_SEED_OUT="$(printf '%s\n' "$PROJECT_SEED_OUT" | grep -v '^__SEED_RC__=')"
 report_seed "Project seed" "seed-projects" "$PROJECT_SEED_OUT" "${PROJECT_SEED_OUT_RC:-0}" || true
 
+# ── Step 3.16b: retire two superseded case-studies (one-shot, idempotent) ──
+# `cuongthaicom` duplicated `cuonghoang-dev-portal` (same site, 18KB stub vs
+# the 105KB case-study), and `esp32aivoice` was an editor test row that still
+# carried "test desc after save" as its public description. Both were removed
+# on the owner's request (08/08/2026).
+#
+# Left in place rather than run once by hand because prod is only reachable
+# from here: the first deploy deletes the rows, every later deploy prints
+# "không có trong DB, bỏ qua" and exits 0. Safe to delete this block once the
+# rows are confirmed gone on production.
+info "Retiring superseded project case-studies..."
+PROJECT_DEL_OUT=$($DC exec -T backend sh -c '
+  node scripts/project-delete.mjs --slug cuongthaicom --slug esp32aivoice --apply 2>&1
+  echo "__SEED_RC__=$?"
+') || true
+PROJECT_DEL_RC="$(printf '%s\n' "$PROJECT_DEL_OUT" | sed -n 's/^__SEED_RC__=//p' | tail -1)"
+PROJECT_DEL_OUT="$(printf '%s\n' "$PROJECT_DEL_OUT" | grep -v '^__SEED_RC__=')"
+report_seed "Project retire" "retire-projects" "$PROJECT_DEL_OUT" "${PROJECT_DEL_RC:-0}" || true
+
 # ── Step 3.17: GitHub Repo Hub — kho repo tuyển chọn (idempotent) ──
 # content/repos/curated.mjs (slug + tag + review do người viết) ghép với
 # content/repos/meta.json (số sao / ngôn ngữ / mô tả do máy fetch) → upsert

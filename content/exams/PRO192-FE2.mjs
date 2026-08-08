@@ -733,28 +733,28 @@ export default {
           "explanation": "Wrappers store value in private final field set once, class is final, API exposes only read/convert methods, no setters at all.\nWhy others are wrong: (A) opposite - no setters exist; (B) Object confers no immutability; (D) synchronization is a different concept from immutability.|||Wrapper lưu giá trị trong field private final gán một lần, class là final, API chỉ có phương thức đọc/chuyển đổi, không hề có setter.\nVì sao các đáp án khác sai: (A) ngược lại - không có setter nào; (B) Object không truyền tính bất biến; (D) đồng bộ hoá là khái niệm khác với bất biến."
         },
         {
-          "kind": "MCQ",
-          "points": 0.2,
-          "prompt": "<p>Choose the correct statement about abstract class in Java:</p>|||<p>Chọn phát biểu đúng về abstract class (lớp trừu tượng) trong Java:</p>",
-          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE2/q30.png",
+          "prompt": "<p>Choose the correct statement about abstract class in Java:</p>|||<p>Chọn phát biểu đúng về abstract class trong Java:</p>",
           "options": [
             {
-              "text": "An abstract class must have many abstract methods.|||Một abstract class phải có NHIỀU phương thức abstract."
+              "text": "An abstract class must have many abstract methods.|||Một abstract class phải có nhiều abstract method."
             },
             {
-              "text": "An abstract class must define all abstract methods.|||Một abstract class phải định nghĩa (cài đặt) tất cả các phương thức abstract."
+              "text": "An abstract class must define all abstract methods.|||Một abstract class phải định nghĩa đầy đủ mọi abstract method."
             },
             {
-              "text": "An abstract class can also be marked as final.|||Một abstract class cũng có thể được đánh dấu là final."
+              "text": "An abstract class can also be marked as final.|||Một abstract class cũng có thể được đánh dấu final."
             },
             {
-              "text": "An abstract class must have abstract methods.|||Một abstract class phải có phương thức abstract."
+              "text": "An abstract class must have abstract methods.|||Một abstract class phải có abstract method."
             }
           ],
           "correctIndexes": [
             3
           ],
-          "explanation": "Keyed answer D by elimination. (A) wrong: one abstract method is enough. (B) wrong: abstract class is exactly what may LEAVE methods undefined. (C) wrong and a compile error: abstract and final are mutually exclusive modifiers. (D) is the intended answer contrasting with A, though strictly a class can be abstract with zero abstract methods too.|||Đáp án theo key là D, chọn bằng loại trừ. (A) sai: một phương thức abstract là đủ. (B) sai: abstract class chính là loại được phép ĐỂ TRỐNG cài đặt. (C) sai và là lỗi biên dịch: abstract và final loại trừ nhau. (D) là đáp án nhắm tới đối lập với A, dù chặt chẽ thì một class vẫn có thể abstract mà không có phương thức abstract nào. [[UNCERTAIN — CẦN RÀ LẠI: Câu ra đề có vấn đề: xét chặt theo Java, tất cả 4 phương án đều không hoàn toàn đúng. D được chọn vì là 'ít sai nhất' và khớp mẫu cặp đối lập A/D quen thuộc của đề FPT.]]"
+          "explanation": "[[UNCERTAIN — CẦN RÀ LẠI: strictly per the Java Language Spec, NONE of these 4 options is 100% true — a class can be declared abstract with ZERO abstract methods, so (D) is technically false too, but it is the option most commonly taught/tested as \"true\" in intro courses and closest to the source bank's likely intended answer, hence picked as best guess. Please cross-check against the official answer key if available.]] The most defensible pick given the choices: (D) is the closest to a commonly-quoted (if imprecise) classroom rule linking abstract classes to abstract methods. Why the others are more clearly wrong: (A) \"must have MANY\" is false — the Java spec does not set any minimum count, a class can be abstract with zero, one, or many abstract methods. (B) \"must define all abstract methods\" is self-contradictory — if it defined every abstract method it declared, none would remain abstract, defeating the purpose of the class being abstract. (C) is flatly illegal Java: <code>abstract</code> and <code>final</code> are mutually exclusive modifiers on a class — the compiler rejects <code>abstract final class</code>.|||[[UNCERTAIN — CẦN RÀ LẠI: theo đúng đặc tả ngôn ngữ Java, KHÔNG đáp án nào trong 4 đáp án này đúng 100% — một class vẫn có thể khai báo abstract dù có 0 abstract method, nên (D) về mặt kỹ thuật cũng sai, nhưng đây là phát biểu hay được dạy/kiểm tra là \"đúng\" trong các khoá nhập môn và gần với đáp án ý định của ngân hàng câu hỏi gốc nhất nên được chọn làm phỏng đoán tốt nhất. Vui lòng đối chiếu đáp án chính thức nếu có.]] Lựa chọn hợp lý nhất trong các đáp án đã cho: (D) gần nhất với quy tắc hay được dạy trên lớp (dù không chính xác tuyệt đối) liên kết abstract class với abstract method. Vì sao các đáp án khác rõ ràng sai hơn: (A) \"phải có NHIỀU\" là sai — đặc tả Java không quy định số lượng tối thiểu, một class có thể là abstract dù có 0, 1 hay nhiều abstract method. (B) \"phải định nghĩa đầy đủ mọi abstract method\" tự mâu thuẫn — nếu định nghĩa hết mọi abstract method đã khai báo thì sẽ không còn method nào abstract nữa, mất đi ý nghĩa của việc class đó là abstract. (C) là cú pháp Java KHÔNG hợp lệ: <code>abstract</code> và <code>final</code> là 2 modifier loại trừ lẫn nhau trên class — trình biên dịch từ chối <code>abstract final class</code>.",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE2/q30.png",
+          "kind": "MCQ",
+          "points": 0.2
         },
         {
           "kind": "MCQ",

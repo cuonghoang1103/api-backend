@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import type { ProjectMilestone } from '@/types';
 import CodeBlock from './CodeBlock';
+import { useProjectLang, PHASE_LABELS_I18N, labelOf } from '@/lib/projectI18n';
 
 interface MilestoneTimelineProps {
  milestones: ProjectMilestone[];
@@ -33,10 +34,10 @@ function pickIcon(phase: string) {
  return Cog;
 }
 
-function formatDate(d?: string) {
+function formatDate(d: string | undefined, lang: 'vi' | 'en') {
  if (!d) return null;
  try {
- return new Date(d).toLocaleDateString('vi-VN', { month: 'short', year: 'numeric' });
+ return new Date(d).toLocaleDateString(lang === 'en' ? 'en-GB' : 'vi-VN', { month: 'short', year: 'numeric' });
  } catch {
  return d;
  }
@@ -50,6 +51,8 @@ function formatDate(d?: string) {
  * via framer-motion.
  */
 export default function MilestoneTimeline({ milestones }: MilestoneTimelineProps) {
+ // Hooks must run before the early return, so the language is read first.
+ const { lang, L, pick } = useProjectLang();
  if (!milestones || milestones.length === 0) return null;
 
  const sorted = [...milestones].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
@@ -58,7 +61,7 @@ export default function MilestoneTimeline({ milestones }: MilestoneTimelineProps
  <section className="mt-12">
  <h2 className="text-lg font-heading font-bold text-text-primary mb-6 flex items-center gap-2">
  <Cog className="w-5 h-5 text-neon-violet" />
- Lộ trình phát triển
+ {L('Lộ trình phát triển', 'Build roadmap')}
  </h2>
  <div className="relative pl-6 sm:pl-10">
  {/* vertical gradient line */}
@@ -91,26 +94,26 @@ export default function MilestoneTimeline({ milestones }: MilestoneTimelineProps
  </div>
  <div className="bg-darkcard border border-darkborder rounded-xl p-4 sm:p-5">
  <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
- <h3 className="font-semibold text-text-primary">{m.title}</h3>
+ <h3 className="font-semibold text-text-primary">{pick(m.title, m.titleEn)}</h3>
  <div className="flex items-center gap-2 text-xs text-text-muted">
  <span className="px-2 py-0.5 bg-neon-violet/10 text-neon-violet rounded-full uppercase tracking-wider">
- {m.phase}
+ {labelOf(PHASE_LABELS_I18N, m.phase, lang)}
  </span>
  {m.date && (
  <span className="inline-flex items-center gap-1">
  <Calendar className="w-3 h-3" />
- {formatDate(m.date)}
+ {formatDate(m.date, lang)}
  </span>
  )}
  </div>
  </div>
- {m.description && (
- <p className="text-sm text-text-secondary leading-relaxed">{m.description}</p>
+ {(m.description || m.descriptionEn) && (
+ <p className="text-sm text-text-secondary leading-relaxed">{pick(m.description, m.descriptionEn)}</p>
  )}
  {m.imageUrl && (
  <div className="mt-3 rounded-lg overflow-hidden border border-darkborder">
  {/* eslint-disable-next-line @next/next/no-img-element */}
- <img src={m.imageUrl} alt={m.title} className="w-full h-auto" />
+ <img src={m.imageUrl} alt={pick(m.title, m.titleEn)} className="w-full h-auto" />
  </div>
  )}
  {/*

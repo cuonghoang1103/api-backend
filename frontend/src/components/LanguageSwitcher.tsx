@@ -24,14 +24,25 @@ export default function LanguageSwitcher({ variant = 'navbar' }: LanguageSwitche
   const [locale, setLocaleState] = useState<'vi' | 'en'>('en');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Load saved locale from cookie on mount — default to 'en'
+  // Load saved locale from cookie on mount — default to 'en' — and keep it in
+  // sync afterwards.
+  //
+  // The listener is not optional: other surfaces change the locale too (the
+  // VI/EN toggle on /projects writes the same cookie and fires the same
+  // event). Without it this button kept showing the language the page had
+  // when it mounted, so the navbar said EN while the article was already in
+  // Vietnamese — the control and the content disagreeing on screen.
   useEffect(() => {
-    const match = document.cookie.match(/locale=(\w+)/);
-    if (match && (match[1] === 'vi' || match[1] === 'en')) {
-      setLocaleState(match[1]);
-    } else {
-      setLocaleState('en');
-    }
+    const read = (): 'vi' | 'en' => {
+      const match = document.cookie.match(/locale=(\w+)/);
+      return match && (match[1] === 'vi' || match[1] === 'en') ? match[1] : 'en';
+    };
+
+    setLocaleState(read());
+
+    const onLocaleChanged = () => setLocaleState(read());
+    window.addEventListener('locale-changed', onLocaleChanged);
+    return () => window.removeEventListener('locale-changed', onLocaleChanged);
   }, []);
 
   // Close dropdown when clicking outside

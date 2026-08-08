@@ -3,28 +3,33 @@
 import { motion } from 'framer-motion';
 import { CheckCircle2, Hammer, CircleDashed } from 'lucide-react';
 import type { ProjectFeature, ProjectFeatureStatus } from '@/types';
+import { useProjectLang } from '@/lib/projectI18n';
 
 interface FeatureChecklistProps {
  features: ProjectFeature[];
 }
 
 const STATUS_META: Record<ProjectFeatureStatus, {
- label: string;
+ vi: string;
+ en: string;
  pill: string;
  icon: typeof CheckCircle2;
 }> = {
  DONE: {
- label: 'Hoàn thành',
+ vi: 'Hoàn thành',
+ en: 'Done',
  pill: 'bg-emerald-500/15 text-emerald-400',
  icon: CheckCircle2,
  },
  IN_PROGRESS: {
- label: 'Đang làm',
+ vi: 'Đang làm',
+ en: 'In progress',
  pill: 'bg-yellow-500/15 text-yellow-400',
  icon: Hammer,
  },
  PLANNED: {
- label: 'Kế hoạch',
+ vi: 'Kế hoạch',
+ en: 'Planned',
  pill: 'bg-blue-500/15 text-blue-400',
  icon: CircleDashed,
  },
@@ -38,6 +43,7 @@ const STATUS_META: Record<ProjectFeatureStatus, {
  * without relying on colour alone.
  */
 export default function FeatureChecklist({ features }: FeatureChecklistProps) {
+ const { lang, L, pick } = useProjectLang();
  if (!features || features.length === 0) return null;
 
  const grouped: Record<ProjectFeatureStatus, ProjectFeature[]> = {
@@ -59,9 +65,9 @@ export default function FeatureChecklist({ features }: FeatureChecklistProps) {
  <div className="flex items-baseline justify-between mb-6">
  <h2 className="text-lg font-heading font-bold text-text-primary flex items-center gap-2">
  <CheckCircle2 className="w-5 h-5 text-neon-violet" />
- Tính năng chính
+ {L('Tính năng chính', 'Core features')}
  </h2>
- <span className="text-xs text-text-muted">{total} mục</span>
+ <span className="text-xs text-text-muted">{L(`${total} mục`, `${total} items`)}</span>
  </div>
  {/* items-start: without it, CSS Grid's default stretch makes
  every column match the TALLEST one — a lopsided status split
@@ -80,12 +86,12 @@ export default function FeatureChecklist({ features }: FeatureChecklistProps) {
  >
  <div className="flex items-center justify-between mb-4">
  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${meta.pill}`}>
- {meta.label}
+ {lang === 'en' ? meta.en : meta.vi}
  </span>
  <span className="text-xs text-text-muted">{items.length}</span>
  </div>
  {items.length === 0 ? (
- <p className="text-xs text-text-muted italic">Chưa có mục nào.</p>
+ <p className="text-xs text-text-muted italic">{L('Chưa có mục nào.', 'Nothing here yet.')}</p>
  ) : (
  <ul className="space-y-2.5">
  {items.map((f, i) => (
@@ -99,9 +105,9 @@ export default function FeatureChecklist({ features }: FeatureChecklistProps) {
  >
  <Icon className="w-4 h-4 mt-0.5 flex-shrink-0" />
  <div className="min-w-0">
- <p className="leading-relaxed">{f.title}</p>
- {f.description && (
- <p className="text-xs text-text-muted mt-0.5">{f.description}</p>
+ <p className="leading-relaxed">{pick(f.title, f.titleEn)}</p>
+ {(f.description || f.descriptionEn) && (
+ <p className="text-xs text-text-muted mt-0.5">{pick(f.description, f.descriptionEn)}</p>
  )}
  </div>
  </motion.li>

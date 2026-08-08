@@ -216,7 +216,12 @@ function LoginForm() {
   };
 
   return (
-    <div suppressHydrationWarning className="min-h-screen bg-darkbg flex items-center justify-center px-4 py-12">
+    // `dark-surface` pins the theme CSS variables to their dark values for
+    // this subtree. The background here is a fixed dark hero (bg-darkbg) in
+    // BOTH themes, but the text uses `text-text-*` utilities that map to
+    // theme variables — under the light theme those resolved to near-black
+    // on near-black and the form became unreadable. See globals.css.
+    <div suppressHydrationWarning className="dark-surface min-h-screen bg-darkbg flex items-center justify-center px-4 py-12">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-neon-indigo/10 rounded-full blur-[150px]" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-neon-violet/10 rounded-full blur-[150px]" />

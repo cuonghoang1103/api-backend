@@ -150,14 +150,14 @@ export default function RegisterPage() {
       router.replace(`/verify-otp?email=${encodeURIComponent(registeredEmail)}&resend=1`);
     }
     return (
-      <div className="min-h-screen bg-darkbg flex items-center justify-center">
+      <div className="dark-surface min-h-screen bg-darkbg flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-neon-violet animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-darkbg flex items-center justify-center px-4 py-12">
+    <div className="dark-surface min-h-screen bg-darkbg flex items-center justify-center px-4 py-12">
       {/* Background Effects */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-neon-indigo/10 rounded-full blur-[150px]" />

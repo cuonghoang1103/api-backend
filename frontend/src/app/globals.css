@@ -328,6 +328,144 @@
   @media (prefers-reduced-motion: reduce) {
     .skeleton-shimmer::after { animation: none; }
   }
+  /* ── Dark-surface islands ─────────────────────────────────────────
+     THE INVARIANT: if an element forces a dark BACKGROUND regardless of
+     theme, the text palette inside it must be dark-theme too.
+
+     The bug this fixes (found 2026-08-08): large parts of the site paint
+     a fixed dark surface with `bg-darkbg` / `bg-darkcard` /
+     `bg-darksurface` (hardcoded #18191a / #242526 / #303031 from the
+     Tailwind config) but write their text with `text-text-primary` &co,
+     which Tailwind maps to `var(--text-primary)` — a THEME-dependent
+     value. Under the light theme that resolves to #050505, so the text
+     rendered near-black on near-black.
+
+     Measured before the fix, /repos in light theme: the "Kho repo được
+     bình chọn" heading was rgb(5,5,5) on rgb(24,25,26) — a contrast
+     ratio of 1.16, against a WCAG AA minimum of 4.5. The login form was
+     the same story ("Welcome Back", the Username/Password labels), which
+     is how it was noticed. 142 files / 622 usages were affected.
+
+     Why re-declare the variables instead of editing those 142 files:
+       * It is self-enforcing. Any future `bg-darkbg` gets a readable
+         palette automatically — there is no rule for the next person to
+         remember and no 143rd file to miss.
+       * The blast radius on what works today is ZERO. Under the dark
+         theme `html.theme-dark` already sets these exact values, so
+         re-declaring them changes nothing. The ONLY behavioural
+         difference is in the light theme, where these regions are
+         currently unreadable.
+
+     `dark-surface` is the explicit opt-in for a dark region whose
+     background comes from something other than these tokens.
+     Values copied verbatim from `html.theme-dark` above. */
+  .dark-surface,
+  .bg-darkbg,
+  .bg-darkcard,
+  .bg-darksurface,
+  /* Arbitrary-value dark backgrounds (`bg-[#0d1117]` &co). Unlike the four
+     tokens above this list is NOT self-enforcing — it is the set of dark
+     hexes present in the codebase on 2026-08-08, computed by relative
+     luminance (every one of them puts the light theme's #050505 text below
+     a 1.5:1 contrast ratio, i.e. invisible). A NEW arbitrary hex will not
+     be covered: add `dark-surface` to that element instead of extending
+     this list, or better, use `bg-darkbg` / `bg-darkcard`. */
+  .bg-\[\#020110\],
+  .bg-\[\#02020a\],
+  .bg-\[\#04050a\],
+  .bg-\[\#05060c\],
+  .bg-\[\#070b16\],
+  .bg-\[\#08160f\],
+  .bg-\[\#0a0a0a\],
+  .bg-\[\#0a0a0f\],
+  .bg-\[\#0a0a14\],
+  .bg-\[\#0a0c14\],
+  .bg-\[\#0a0e14\],
+  .bg-\[\#0a0f1e\],
+  .bg-\[\#0b0b12\],
+  .bg-\[\#0c0c14\],
+  .bg-\[\#0c0f14\],
+  .bg-\[\#0c2318\],
+  .bg-\[\#0d0d1a\],
+  .bg-\[\#0d0f18\],
+  .bg-\[\#0d1117\],
+  .bg-\[\#0d1424\],
+  .bg-\[\#0d1426\],
+  .bg-\[\#0d1a2e\],
+  .bg-\[\#0e1218\],
+  .bg-\[\#0f0a1e\],
+  .bg-\[\#0f0f16\],
+  .bg-\[\#0f1019\],
+  .bg-\[\#0f111a\],
+  .bg-\[\#0f1a30\],
+  .bg-\[\#100f1a\],
+  .bg-\[\#10151c\],
+  .bg-\[\#101c33\],
+  .bg-\[\#12121a\],
+  .bg-\[\#12161d\],
+  .bg-\[\#131a2e\],
+  .bg-\[\#131c2e\],
+  .bg-\[\#131f38\],
+  .bg-\[\#141522\],
+  .bg-\[\#161b22\],
+  .bg-\[\#1a1503\],
+  .bg-\[\#1a1a24\],
+  .bg-\[\#1a1b26\],
+  .bg-\[\#1a1f27\],
+  .bg-\[\#1b1030\],
+  .bg-\[\#1b2440\],
+  .bg-\[\#1c2f52\],
+  .bg-\[\#1d0c0c\],
+  .bg-\[\#1e1e1e\],
+  .bg-\[\#1e2530\],
+  .bg-\[\#20212e\],
+  .bg-\[\#252526\],
+  .bg-\[\#2a0d0d\] {
+    color-scheme: dark;
+    --bg-primary: #18191a;
+    --bg-card: #242526;
+    --bg-surface: #303031;
+    --bg-surface-hover: rgba(255, 255, 255, 0.08);
+    --bg-surface-active: rgba(255, 255, 255, 0.12);
+    --bg-overlay: rgba(36, 37, 38, 0.98);
+    --bg-glass: rgba(36, 37, 38, 0.95);
+    --border-color: #3e4042;
+    --border-light: rgba(255, 255, 255, 0.1);
+    --border-light-hover: rgba(255, 255, 255, 0.15);
+    --text-primary: #e4e6eb;
+    --text-secondary: #b0b3b8;
+    --text-muted: #8a8d91;
+
+    /* Re-declaring the variables alone is NOT enough, and this line is why.
+       `color` INHERITS. Elements with no colour class of their own inherit
+       the value <body> computed — and <body> resolved `var(--text-primary)`
+       up at :root, in the LIGHT context, long before reaching this element.
+       Pinning the variable here only helps descendants that re-read it.
+       Measured on /tech-trends: `--text-primary` was correctly #e4e6eb all
+       the way down the chain while the category buttons still rendered at
+       rgb(5,5,5), because they simply inherit from <body>.
+
+       Setting `color` here re-resolves it against the pinned variable and
+       lets the correct value inherit down. Still a no-op in the dark theme:
+       <body> is already #e4e6eb there. Any descendant with its own text
+       colour continues to win — this is the weakest possible source. */
+    color: var(--text-primary);
+  }
+
+  /* In-app equivalent, toggled from /settings/appearance. Some users want
+     motion damped on this site without changing an OS-wide setting (and on
+     Windows the OS switch is buried). `html.reduce-motion` is set by
+     preferencesStore.setReduceMotion. Kept to a near-zero duration rather
+     than `none` so transition-end handlers still fire — killing them
+     outright leaves components that await `transitionend` stuck. */
+  html.reduce-motion *,
+  html.reduce-motion *::before,
+  html.reduce-motion *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 
   .animate-delay-100 { animation-delay: 100ms; }
   .animate-delay-200 { animation-delay: 200ms; }

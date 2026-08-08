@@ -15,7 +15,10 @@ export default {
       slug: 'nodejs-0-1-gioi-thieu',
       type: 'VIDEO',
       isFreePreview: true,
-      description: 'Khoá học dạy gì, khác gì tutorial trên mạng, và bản đồ 18 chương từ zero đến production.',
+      // Video lịch sử: "Ryan Dahl: Original Node.js presentation" (JSConf 2009) —
+      // chính buổi ra mắt Node.js của người sáng lập.
+      video: { url: 'https://youtu.be/ztspvPYybIY', durationSeconds: 0 },
+      description: 'Node.js là gì, ai tạo ra và vì sao, nó thay thế cái gì, dùng ở đâu trong công việc — và bản đồ 18 chương.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.1</span>
@@ -42,6 +45,16 @@ export default {
   <li>Background jobs, caching, scheduled tasks.</li>
   <li>A tested, containerised service you can deploy to a server you own.</li>
 </ul>
+
+<h3>What is Node.js, who made it, and what did it replace?</h3>
+<p>Before 2009, JavaScript ran in <em>one</em> place: the browser. If you wanted to write the server — the program that holds the database and answers requests — you used PHP, Java, Ruby or Python. In 2009 an engineer named <strong>Ryan Dahl</strong> took Google Chrome's JavaScript engine (V8) and wrapped it so JavaScript could run <em>outside</em> the browser, on a server. That is <strong>Node.js</strong>, and he presented it at JSConf EU 2009 — the talk in the video above, the actual birth of the thing you're learning.</p>
+<p>The second idea was the important one. Older servers handled each request on its own thread, which is heavy; Node instead uses a single-threaded, <strong>non-blocking event loop</strong> (Chapter 2), so one Node process can juggle thousands of connections cheaply — perfect for the I/O-heavy work of a web API. What it replaced, for many teams: the "one thread per request" model, and — huge in practice — the split brain of writing the frontend in JavaScript and the backend in a totally different language. With Node, <strong>one language runs the whole stack.</strong></p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Who &amp; when</span><span class="v">Ryan Dahl, 2009. Now stewarded by the OpenJS Foundation and a large community.</span></div>
+  <div class="kv"><span class="k">Built on</span><span class="v">V8 (Chrome's JS engine) + libuv (the event loop &amp; async I/O) — Chapter 2 pulls this apart.</span></div>
+  <div class="kv"><span class="k">Where it's used</span><span class="v">APIs, realtime apps, CLIs, build tools. Netflix, PayPal, LinkedIn, Uber and this site run Node backends.</span></div>
+  <div class="kv"><span class="k">Why learn it</span><span class="v">"Node.js" and "Express" are among the most-requested backend skills; and it pairs with the React/Next frontend course so you own the whole stack.</span></div>
+</div>
 
 <h3>The roadmap — 6 stages, 18 chapters</h3>
 <p>Each stage assumes the one before it. Do not skip ahead: chapter 8 (auth) is unreadable if chapter 2 (async) never clicked.</p>
@@ -80,6 +93,15 @@ export default {
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Practice track: Node.js (Express) on Code Lab</span><span class="lc-sub">16 modules · 160 hands-on exercises with solutions — the companion practice for this course.</span></span>
 </a>
+<h3>📚 Learn deeper</h3>
+<a class="link-card dl" href="https://nodejs.org/en/docs" target="_blank" rel="noopener">
+  <span class="lc-ico">🟢</span>
+  <span class="lc-body"><span class="lc-title">nodejs.org — the official Node.js docs</span><span class="lc-sub">The API reference and guides. The "Learn" section is a solid beginner path.</span></span>
+</a>
+<a class="link-card dl" href="https://expressjs.com/" target="_blank" rel="noopener">
+  <span class="lc-ico">🚂</span>
+  <span class="lc-body"><span class="lc-title">expressjs.com — the Express framework</span><span class="lc-sub">The web framework this course builds on, from Chapter 5 onward.</span></span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -107,6 +129,16 @@ export default {
   <li>Tác vụ nền, cache, công việc chạy theo lịch.</li>
   <li>Một dịch vụ đã có test, đóng gói Docker, deploy được lên server của chính bạn.</li>
 </ul>
+
+<h3>Node.js là gì, ai tạo ra, và nó thay thế cái gì?</h3>
+<p>Trước 2009, JavaScript chạy ở <em>một</em> nơi: trình duyệt. Muốn viết server — chương trình giữ database và trả lời request — bạn dùng PHP, Java, Ruby hay Python. Năm 2009 một kỹ sư tên <strong>Ryan Dahl</strong> lấy engine JavaScript của Google Chrome (V8) và bọc nó lại để JavaScript chạy được <em>bên ngoài</em> trình duyệt, trên một server. Đó là <strong>Node.js</strong>, và ông trình bày nó tại JSConf EU 2009 — bài talk trong video phía trên, chính là khoảnh khắc khai sinh thứ bạn đang học.</p>
+<p>Ý tưởng thứ hai mới là ý quan trọng. Server đời cũ xử lý mỗi request trên một luồng riêng, rất nặng; Node thay vào đó dùng một <strong>vòng lặp sự kiện đơn luồng, không chặn</strong> (Chương 2), nên một tiến trình Node có thể tung hứng hàng nghìn kết nối một cách rẻ tiền — hoàn hảo cho công việc nặng I/O của một web API. Nó thay thế, với nhiều nhóm: mô hình "mỗi request một luồng", và — cực lớn trên thực tế — cảnh "đầu óc bị chẻ đôi" khi viết frontend bằng JavaScript còn backend bằng một ngôn ngữ hoàn toàn khác. Với Node, <strong>một ngôn ngữ chạy cả stack.</strong></p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Ai &amp; khi nào</span><span class="v">Ryan Dahl, 2009. Nay do OpenJS Foundation và một cộng đồng lớn dẫn dắt.</span></div>
+  <div class="kv"><span class="k">Dựng trên</span><span class="v">V8 (engine JS của Chrome) + libuv (vòng lặp sự kiện &amp; I/O bất đồng bộ) — Chương 2 mổ xẻ.</span></div>
+  <div class="kv"><span class="k">Dùng ở đâu</span><span class="v">API, app realtime, CLI, công cụ build. Netflix, PayPal, LinkedIn, Uber và chính site này chạy backend Node.</span></div>
+  <div class="kv"><span class="k">Vì sao học</span><span class="v">"Node.js" và "Express" thuộc nhóm kỹ năng backend được tuyển nhiều nhất; và nó ghép với khoá frontend React/Next để bạn làm chủ cả stack.</span></div>
+</div>
 
 <h3>Bản đồ khoá học — 6 giai đoạn, 18 chương</h3>
 <p>Mỗi giai đoạn dựa trên giai đoạn trước. Đừng nhảy cóc: chương 8 (xác thực) sẽ không đọc nổi nếu chương 2 (bất đồng bộ) chưa thông.</p>
@@ -144,6 +176,15 @@ export default {
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Track luyện tập: Node.js (Express) trên Code Lab</span><span class="lc-sub">16 module · 160 bài tập có lời giải — phần thực hành đi kèm khoá học này.</span></span>
+</a>
+<h3>📚 Học sâu thêm</h3>
+<a class="link-card dl" href="https://nodejs.org/en/docs" target="_blank" rel="noopener">
+  <span class="lc-ico">🟢</span>
+  <span class="lc-body"><span class="lc-title">nodejs.org — tài liệu Node.js chính thức</span><span class="lc-sub">Tham chiếu API và hướng dẫn. Mục "Learn" là lộ trình nhập môn chắc chắn.</span></span>
+</a>
+<a class="link-card dl" href="https://expressjs.com/" target="_blank" rel="noopener">
+  <span class="lc-ico">🚂</span>
+  <span class="lc-body"><span class="lc-title">expressjs.com — framework Express</span><span class="lc-sub">Web framework khoá này dựng lên từ Chương 5 trở đi.</span></span>
 </a>
 </div>
 `,
@@ -279,6 +320,8 @@ export default {
       slug: 'nodejs-0-3-cai-dat',
       type: 'VIDEO',
       isFreePreview: true,
+      // Video: Fireship "Node.js Ultimate Beginner's Guide" — tổng quan Node cho người mới.
+      video: { url: 'https://youtu.be/ENrzD9HAZK4', durationSeconds: 0 },
       description: 'Cài Node bằng trình quản lý phiên bản, kiểm tra máy đã sẵn sàng, và chạy chương trình Node đầu tiên.',
       content: `
 <div class="ml-en">

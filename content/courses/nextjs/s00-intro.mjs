@@ -15,7 +15,9 @@ export default {
       slug: 'nextjs-0-1-gioi-thieu',
       type: 'VIDEO',
       isFreePreview: true,
-      description: 'Khoá học dạy gì, khác gì tutorial trên mạng, và bản đồ 20 chương từ zero đến production với App Router.',
+      // Video mở đầu: "React in 100 Seconds" (Fireship) — 100 giây nắm React là gì.
+      video: { url: 'https://youtu.be/Tn6-PIqc4UM', durationSeconds: 0 },
+      description: 'React & Next.js là gì, sinh ra để giải quyết vấn đề gì, thay thế cái gì, dùng ở đâu trong công việc — và bản đồ 20 chương.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.1</span>
@@ -42,6 +44,19 @@ export default {
   <li>Auth with cookies and middleware, forms with validation, file uploads, realtime UI.</li>
   <li>A themed, accessible, fast design system in Tailwind — and a build you can ship in Docker to a server you own.</li>
 </ul>
+
+<h3>Why does React even exist? What did it replace?</h3>
+<p>For a beginner this is the missing piece: <em>why was this invented, and what was so painful before it?</em> In the 2000s, a web page's data and its HTML were kept in sync <strong>by hand</strong> — with jQuery or raw DOM calls, you found an element and mutated it every time something changed (Chapter 1 shows this code). On a page with hundreds of moving parts, humans forget a spot, the screen drifts out of sync with the data, and bugs multiply. React's founding idea, from Facebook in 2011, was to end that: <strong>you describe what the UI should look like for the current data, and React updates the DOM for you.</strong> It replaced manual DOM manipulation and the tangle of jQuery/Backbone/Angular-1 "keep it in sync yourself" code.</p>
+<p><strong>And Next.js?</strong> Plain React runs entirely in the browser, which means a slow first paint and a page search engines see as empty. Next.js (from Vercel, 2015) wraps React with a server, file-based routing and a build system so pages render on the server — fast, SEO-friendly — while staying interactive. The full history and the people behind both is the next lesson.</p>
+
+<h3>Where you actually use this at work</h3>
+<p>React is the most widely used way to build user interfaces on the web, and Next.js is the most popular React framework — together they are the default frontend stack at a huge share of companies, from startups to Netflix, TikTok and Notion. Learning them is not academic:</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">The job market</span><span class="v">"React developer" and "Next.js" are among the most-requested frontend skills in job listings worldwide and in Vietnam.</span></div>
+  <div class="kv"><span class="k">What you build with it</span><span class="v">Dashboards, social apps, e-commerce, admin panels, marketing sites, SaaS products — anything with a screen a user clicks.</span></div>
+  <div class="kv"><span class="k">It transfers</span><span class="v">React Native (mobile apps) uses the same components and hooks. Learn React once, ship to web and phone.</span></div>
+  <div class="kv"><span class="k">This very site</span><span class="v">cuongthai.com — the app you are reading — is a Next.js + React frontend. This course is a tour of how it really works.</span></div>
+</div>
 
 <h3>The roadmap — 5 stages, 20 chapters</h3>
 <p>Each stage assumes the one before it. Do not skip ahead: chapter 9 (Server vs Client Components) is unreadable if chapter 3 (state &amp; re-renders) never clicked, and chapter 12 (Server Actions) needs chapter 5 (effects) so you know what you are <em>not</em> doing anymore.</p>
@@ -76,6 +91,21 @@ export default {
 <div class="callout ok">
 <p><strong>By the end</strong> you will not just "know React". You will be able to open the source of cuongthai.com — a real Next.js App Router codebase — read any page, and know why it renders the way it does. That is the bar.</p>
 </div>
+
+<h3>📚 Learn deeper</h3>
+<p>The 100-second video above is the fastest possible overview. To go further, these are the primary sources — bookmark them, this course sends you back to them often:</p>
+<a class="link-card dl" href="https://react.dev/learn" target="_blank" rel="noopener">
+  <span class="lc-ico">⚛️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — the official React docs</span><span class="lc-sub">Rewritten in 2023 and genuinely excellent; the "Learn React" path is the canonical tutorial.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs" target="_blank" rel="noopener">
+  <span class="lc-ico">▲</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org/docs — the official Next.js docs</span><span class="lc-sub">The App Router reference. Make sure any tutorial you follow uses the App Router, not the old Pages Router.</span></span>
+</a>
+<a class="link-card dl" href="https://roadmap.sh/react" target="_blank" rel="noopener">
+  <span class="lc-ico">🗺️</span>
+  <span class="lc-body"><span class="lc-title">roadmap.sh/react — the React learning roadmap</span><span class="lc-sub">A visual map of everything a React developer learns, and in what order. Good for seeing the whole forest.</span></span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -103,6 +133,19 @@ export default {
   <li>Xác thực bằng cookie và middleware, form có validation, upload file, UI realtime.</li>
   <li>Một hệ thiết kế Tailwind có theme, dễ tiếp cận, nhanh — và một bản build bạn ship bằng Docker lên máy chủ của chính mình.</li>
 </ul>
+
+<h3>Vì sao React ra đời? Nó thay thế cái gì?</h3>
+<p>Với người mới, đây là mảnh còn thiếu: <em>vì sao người ta phát minh ra nó, và trước đó khổ ở chỗ nào?</em> Những năm 2000, dữ liệu của một trang web và HTML của nó được giữ đồng bộ <strong>bằng tay</strong> — với jQuery hay lệnh DOM trần, bạn tìm một phần tử rồi tự sửa nó mỗi khi có gì thay đổi (Chương 1 cho bạn xem đoạn code đó). Trên một trang có hàng trăm bộ phận động, con người quên một chỗ, màn hình trôi lệch khỏi dữ liệu, và bug nhân lên. Ý tưởng khai sinh React, từ Facebook năm 2011, là chấm dứt điều đó: <strong>bạn mô tả giao diện NÊN trông thế nào với dữ liệu hiện tại, còn React tự cập nhật DOM hộ bạn.</strong> Nó thay thế việc thao tác DOM bằng tay và mớ code "tự đi mà giữ đồng bộ" của jQuery/Backbone/Angular-1.</p>
+<p><strong>Còn Next.js?</strong> React thuần chạy hoàn toàn trong trình duyệt, nghĩa là first paint chậm và một trang mà công cụ tìm kiếm nhìn thấy trống rỗng. Next.js (từ Vercel, 2015) bọc React bằng một server, định tuyến theo file và một hệ thống build để trang render trên server — nhanh, thân thiện SEO — mà vẫn tương tác được. Toàn bộ lịch sử và những con người đứng sau cả hai là bài học ngay sau đây.</p>
+
+<h3>Bạn dùng thứ này ở đâu trong công việc</h3>
+<p>React là cách được dùng rộng rãi nhất để dựng giao diện người dùng trên web, và Next.js là framework React phổ biến nhất — cùng nhau chúng là bộ frontend mặc định ở một lượng lớn công ty, từ startup tới Netflix, TikTok và Notion. Học chúng không phải chuyện hàn lâm:</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Thị trường việc làm</span><span class="v">"React developer" và "Next.js" thuộc nhóm kỹ năng frontend được tuyển nhiều nhất trên thế giới lẫn ở Việt Nam.</span></div>
+  <div class="kv"><span class="k">Bạn xây gì với nó</span><span class="v">Dashboard, ứng dụng xã hội, thương mại điện tử, trang quản trị, trang marketing, sản phẩm SaaS — bất cứ thứ gì có màn hình để người dùng bấm.</span></div>
+  <div class="kv"><span class="k">Nó chuyển giao được</span><span class="v">React Native (app di động) dùng cùng component và hooks. Học React một lần, ship cho cả web lẫn điện thoại.</span></div>
+  <div class="kv"><span class="k">Chính trang này</span><span class="v">cuongthai.com — ứng dụng bạn đang đọc — là một frontend Next.js + React. Khoá này là chuyến tham quan cách nó thật sự hoạt động.</span></div>
+</div>
 
 <h3>Bản đồ — 5 giai đoạn, 20 chương</h3>
 <p>Mỗi giai đoạn giả định bạn đã qua giai đoạn trước. Đừng nhảy cóc: chương 9 (Server vs Client Component) không đọc nổi nếu chương 3 (state &amp; re-render) chưa thông, và chương 12 (Server Actions) cần chương 5 (effect) để bạn biết mình <em>không còn</em> phải làm gì nữa.</p>
@@ -137,6 +180,21 @@ export default {
 <div class="callout ok">
 <p><strong>Học xong</strong> bạn sẽ không chỉ "biết React". Bạn sẽ mở được mã nguồn cuongthai.com — một codebase Next.js App Router thật — đọc bất kỳ trang nào, và biết vì sao nó render theo cách nó render. Đó là cái chuẩn.</p>
 </div>
+
+<h3>📚 Học sâu thêm</h3>
+<p>Video 100 giây phía trên là bản tổng quan nhanh nhất có thể. Muốn đi xa hơn, đây là các nguồn gốc — hãy lưu lại, khoá này sẽ gửi bạn quay về chúng thường xuyên:</p>
+<a class="link-card dl" href="https://react.dev/learn" target="_blank" rel="noopener">
+  <span class="lc-ico">⚛️</span>
+  <span class="lc-body"><span class="lc-title">react.dev — tài liệu React chính thức</span><span class="lc-sub">Viết lại năm 2023 và thật sự xuất sắc; lộ trình "Learn React" là tutorial chuẩn mực.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs" target="_blank" rel="noopener">
+  <span class="lc-ico">▲</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org/docs — tài liệu Next.js chính thức</span><span class="lc-sub">Tham chiếu App Router. Hãy chắc mọi tutorial bạn theo dùng App Router, không phải Pages Router cũ.</span></span>
+</a>
+<a class="link-card dl" href="https://roadmap.sh/react" target="_blank" rel="noopener">
+  <span class="lc-ico">🗺️</span>
+  <span class="lc-body"><span class="lc-title">roadmap.sh/react — lộ trình học React</span><span class="lc-sub">Bản đồ trực quan mọi thứ một React developer học, và theo thứ tự nào. Tốt để thấy toàn cảnh khu rừng.</span></span>
+</a>
 </div>
 `,
     },
@@ -147,12 +205,25 @@ export default {
       slug: 'nextjs-0-2-react-vs-nextjs',
       type: 'VIDEO',
       isFreePreview: true,
-      description: 'React là thư viện dựng giao diện; Next.js là framework bọc quanh React lo router, server, build. Vì sao cần cả hai.',
+      // Video lịch sử: Pete Hunt "React: Rethinking best practices" — JSConf EU 2013,
+      // chính talk giới thiệu React ra thế giới lần đầu.
+      video: { url: 'https://youtu.be/x7cQ3mrcKaY', durationSeconds: 0 },
+      description: 'React là thư viện; Next.js là framework bọc quanh nó. Ai tạo ra chúng, năm nào, vì sao — và vì sao cần cả hai.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.2</span>
 <h2>React is a library. Next.js is a framework.</h2>
 <p class="lead">People say "React or Next.js?" as if they compete. They don't. React is the engine that turns your data into a user interface. Next.js is the car built around that engine — it adds the routing, the server, the build system and the deployment story that React deliberately leaves out.</p>
+
+<h3>A short history: who built these, and why</h3>
+<p><strong>React — Facebook, 2011 → open-sourced 2013.</strong> A Facebook engineer named <strong>Jordan Walke</strong> built the first version (an internal prototype called "FaxJS") to tame Facebook's increasingly complex UI — the News Feed and ads interfaces were becoming impossible to keep in sync by hand. Facebook used it internally from 2011, then <strong>open-sourced React in May 2013</strong>. The developer world was sceptical at first: putting HTML-like markup inside JavaScript looked wrong. The talk that changed minds — <strong>Pete Hunt's "React: Rethinking best practices" at JSConf EU 2013</strong>, the video at the top of this lesson — argued that separating "markup" from "logic" was the wrong separation, and that a component (markup + logic together) was the right unit. React is maintained today by <strong>Meta</strong> and a large open-source community.</p>
+<p><strong>Next.js — Vercel, 2015.</strong> React solved the UI, but every team re-invented the same things around it: routing, server rendering, bundling. <strong>Guillermo Rauch</strong> and his company (then ZEIT, now <strong>Vercel</strong>) released <strong>Next.js in October 2015</strong> to package those decisions into one framework. Its big leap came in 2020–2023 with the App Router and React Server Components — the model this course teaches.</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">2011</span><span class="v">Jordan Walke builds React inside Facebook.</span></div>
+  <div class="kv"><span class="k">May 2013</span><span class="v">React open-sourced; Pete Hunt's JSConf talk introduces it to the world.</span></div>
+  <div class="kv"><span class="k">Oct 2015</span><span class="v">Guillermo Rauch releases Next.js at ZEIT/Vercel.</span></div>
+  <div class="kv"><span class="k">2022–23</span><span class="v">Next.js App Router + React Server Components — the modern model.</span></div>
+</div>
 
 <h3>What React gives you, and what it doesn't</h3>
 <p>React answers exactly one question: <em>given this data, what should the UI look like?</em> You write components; React renders them, and re-renders them efficiently when the data changes. That is the whole job.</p>
@@ -179,12 +250,32 @@ export default {
 <div class="note-ct">
 <p><strong>How cuongthai.com is built</strong> — this site is a Next.js App Router app in the <code>frontend/</code> folder, talking to a separate Node.js + Express API in the project root. The frontend renders pages (some on the server, some in the browser); the backend owns the database, auth and file storage. Chapters 8–20 are essentially a guided tour of how the <code>frontend/</code> folder actually works.</p>
 </div>
+
+<h3>📚 Learn deeper</h3>
+<a class="link-card dl" href="https://github.com/facebook/react/releases" target="_blank" rel="noopener">
+  <span class="lc-ico">🐙</span>
+  <span class="lc-body"><span class="lc-title">github.com/facebook/react — the source &amp; release history</span><span class="lc-sub">Every version since 2013. Reading the release notes is the truest history of the library.</span></span>
+</a>
+<a class="link-card dl" href="https://github.com/vercel/next.js/releases" target="_blank" rel="noopener">
+  <span class="lc-ico">🐙</span>
+  <span class="lc-body"><span class="lc-title">github.com/vercel/next.js — the Next.js source &amp; releases</span><span class="lc-sub">See how the App Router landed and how the framework evolved release by release.</span></span>
+</a>
 </div>
 
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.2</span>
 <h2>React là một THƯ VIỆN. Next.js là một FRAMEWORK.</h2>
 <p class="lead">Người ta hay hỏi "React hay Next.js?" như thể chúng cạnh tranh nhau. Không hề. React là cỗ máy biến dữ liệu của bạn thành giao diện. Next.js là chiếc xe dựng quanh cỗ máy đó — nó bổ sung router, server, hệ thống build và câu chuyện triển khai mà React cố tình để trống.</p>
+
+<h3>Một chút lịch sử: ai tạo ra chúng, và vì sao</h3>
+<p><strong>React — Facebook, 2011 → mã nguồn mở 2013.</strong> Một kỹ sư Facebook tên <strong>Jordan Walke</strong> dựng phiên bản đầu tiên (một bản thử nghiệm nội bộ tên "FaxJS") để thuần hoá giao diện ngày càng phức tạp của Facebook — News Feed và các giao diện quảng cáo trở nên bất khả thi để giữ đồng bộ bằng tay. Facebook dùng nội bộ từ 2011, rồi <strong>mở mã nguồn React vào tháng 5/2013</strong>. Giới lập trình ban đầu hoài nghi: nhét markup giống HTML vào trong JavaScript trông thật sai. Bài talk làm đổi suy nghĩ — <strong>"React: Rethinking best practices" của Pete Hunt tại JSConf EU 2013</strong>, chính video đầu bài này — lập luận rằng tách "markup" khỏi "logic" là kiểu tách SAI, và một component (markup + logic đi cùng nhau) mới là đơn vị đúng. React ngày nay được <strong>Meta</strong> và một cộng đồng mã nguồn mở lớn duy trì.</p>
+<p><strong>Next.js — Vercel, 2015.</strong> React giải quyết phần giao diện, nhưng mỗi nhóm lại tự phát minh lại cùng những thứ quanh nó: định tuyến, render trên server, đóng gói. <strong>Guillermo Rauch</strong> và công ty của ông (khi đó là ZEIT, nay là <strong>Vercel</strong>) ra mắt <strong>Next.js vào tháng 10/2015</strong> để gói những quyết định đó vào một framework. Bước nhảy lớn của nó đến vào 2020–2023 với App Router và React Server Components — mô hình khoá này dạy.</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">2011</span><span class="v">Jordan Walke dựng React bên trong Facebook.</span></div>
+  <div class="kv"><span class="k">5/2013</span><span class="v">React mở mã nguồn; talk JSConf của Pete Hunt giới thiệu nó ra thế giới.</span></div>
+  <div class="kv"><span class="k">10/2015</span><span class="v">Guillermo Rauch ra mắt Next.js tại ZEIT/Vercel.</span></div>
+  <div class="kv"><span class="k">2022–23</span><span class="v">Next.js App Router + React Server Components — mô hình hiện đại.</span></div>
+</div>
 
 <h3>React cho bạn gì, và KHÔNG cho gì</h3>
 <p>React trả lời đúng một câu hỏi: <em>với dữ liệu này, giao diện nên trông thế nào?</em> Bạn viết component; React render chúng, và render lại một cách hiệu quả khi dữ liệu đổi. Đó là toàn bộ nhiệm vụ của nó.</p>
@@ -211,6 +302,16 @@ export default {
 <div class="note-ct">
 <p><strong>cuongthai.com được dựng thế nào</strong> — site này là một app Next.js App Router trong thư mục <code>frontend/</code>, nói chuyện với một API Node.js + Express riêng ở gốc dự án. Frontend render các trang (một số trên server, một số trong trình duyệt); backend nắm database, xác thực và lưu trữ file. Chương 8–20 về cơ bản là một chuyến tham quan có hướng dẫn xem thư mục <code>frontend/</code> thật sự hoạt động ra sao.</p>
 </div>
+
+<h3>📚 Học sâu thêm</h3>
+<a class="link-card dl" href="https://github.com/facebook/react/releases" target="_blank" rel="noopener">
+  <span class="lc-ico">🐙</span>
+  <span class="lc-body"><span class="lc-title">github.com/facebook/react — mã nguồn &amp; lịch sử phát hành</span><span class="lc-sub">Mọi phiên bản từ 2013. Đọc release notes là cách xem lịch sử thật nhất của thư viện.</span></span>
+</a>
+<a class="link-card dl" href="https://github.com/vercel/next.js/releases" target="_blank" rel="noopener">
+  <span class="lc-ico">🐙</span>
+  <span class="lc-body"><span class="lc-title">github.com/vercel/next.js — mã nguồn &amp; phát hành Next.js</span><span class="lc-sub">Xem App Router ra đời thế nào và framework tiến hoá qua từng bản phát hành.</span></span>
+</a>
 </div>
 `,
     },
@@ -221,6 +322,8 @@ export default {
       slug: 'nextjs-0-3-cai-dat',
       type: 'VIDEO',
       isFreePreview: true,
+      // Video: "Next.js in 100 Seconds" (Fireship) — xem một app Next dựng ra sao.
+      video: { url: 'https://youtu.be/Sklc_fQBmcs', durationSeconds: 0 },
       description: 'Cài Node 22, tạo app bằng create-next-app, hiểu ba lệnh dev/build/start và cây thư mục.',
       content: `
 <div class="ml-en">
@@ -269,6 +372,20 @@ npm run dev
   package.json
   tsconfig.json</code></pre>
 <p>The rule you will use a hundred times: <strong>a folder under <code>app/</code> is a URL segment, and a <code>page.tsx</code> inside it is the page shown at that URL.</strong> We unpack this fully in Chapter 8.</p>
+
+<h3>📚 Learn deeper</h3>
+<a class="link-card dl" href="https://nodejs.org/en/download" target="_blank" rel="noopener">
+  <span class="lc-ico">⬇️</span>
+  <span class="lc-body"><span class="lc-title">nodejs.org — download Node.js 22 LTS</span><span class="lc-sub">The official installer for macOS, Windows and Linux. Pick the LTS build.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/cli/create-next-app" target="_blank" rel="noopener">
+  <span class="lc-ico">🚀</span>
+  <span class="lc-body"><span class="lc-title">create-next-app — the official scaffolding docs</span><span class="lc-sub">Every question the setup wizard asks, explained, and all the flags.</span></span>
+</a>
+<a class="link-card dl" href="https://code.visualstudio.com/" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">VS Code — the editor most React devs use</span><span class="lc-sub">Free. Add the "ES7+ React" and "Tailwind CSS IntelliSense" extensions and you're set.</span></span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -317,6 +434,20 @@ npm run dev
   package.json
   tsconfig.json</code></pre>
 <p>Quy tắc bạn sẽ dùng cả trăm lần: <strong>một thư mục dưới <code>app/</code> là một đoạn URL, và một <code>page.tsx</code> bên trong nó là trang hiện ở URL đó.</strong> Chương 8 sẽ mổ xẻ trọn vẹn điều này.</p>
+
+<h3>📚 Học sâu thêm</h3>
+<a class="link-card dl" href="https://nodejs.org/en/download" target="_blank" rel="noopener">
+  <span class="lc-ico">⬇️</span>
+  <span class="lc-body"><span class="lc-title">nodejs.org — tải Node.js 22 LTS</span><span class="lc-sub">Bộ cài chính thức cho macOS, Windows và Linux. Chọn bản LTS.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/docs/app/api-reference/cli/create-next-app" target="_blank" rel="noopener">
+  <span class="lc-ico">🚀</span>
+  <span class="lc-body"><span class="lc-title">create-next-app — tài liệu dựng khung chính thức</span><span class="lc-sub">Mọi câu hỏi trình cài đặt hỏi, giải thích rõ, và tất cả các cờ.</span></span>
+</a>
+<a class="link-card dl" href="https://code.visualstudio.com/" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">VS Code — trình soạn thảo hầu hết React dev dùng</span><span class="lc-sub">Miễn phí. Thêm extension "ES7+ React" và "Tailwind CSS IntelliSense" là xong.</span></span>
+</a>
 </div>
 `,
     },
@@ -358,6 +489,21 @@ npm run dev
 <p><strong>A word about asking an AI to write your React.</strong> An AI will happily produce a component that renders correctly and is quietly wrong — an effect with a missing dependency, an index used as a key, a <code>'use client'</code> at the top of a file that pulls half the app into the browser. It compiles, it runs, the bug ships. The whole point of this course is to give you the judgement the AI doesn't have. Use it to go faster on things you already understand; do not use it to skip understanding. Chapter 5 alone will show you three AI-favourite effects that are bugs.</p>
 </div>
 
+<h3>📚 Keep these open while you study</h3>
+<p>You do not need to read these cover to cover — use them the way a working developer does: to look something up the moment you need it.</p>
+<a class="link-card dl" href="https://react.dev/reference/react" target="_blank" rel="noopener">
+  <span class="lc-ico">📖</span>
+  <span class="lc-body"><span class="lc-title">react.dev/reference — the hooks &amp; API reference</span><span class="lc-sub">When you forget exactly what useEffect or useMemo does, this is the page to open.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/learn" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org/learn — the official interactive Next.js course</span><span class="lc-sub">A free, hands-on companion straight from the Next.js team. Great to do alongside our Stage 3.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web" target="_blank" rel="noopener">
+  <span class="lc-ico">🌐</span>
+  <span class="lc-body"><span class="lc-title">MDN Web Docs — the web platform itself</span><span class="lc-sub">HTML, CSS, JavaScript, the DOM, fetch. React sits on top of all of this; MDN is the ground truth.</span></span>
+</a>
+
 <div class="callout ok">
 <p><strong>Ready?</strong> Chapter 1 starts where every React app starts: with JSX, and the single most important idea in the whole framework — that you <em>describe</em> the UI you want, and React figures out how to get the screen there.</p>
 </div>
@@ -391,6 +537,21 @@ npm run dev
 <div class="pitfall">
 <p><strong>Một lời về việc nhờ AI viết React hộ.</strong> AI sẽ vui vẻ đẻ ra một component render đúng mà sai một cách âm thầm — một effect thiếu phụ thuộc, một chỉ số dùng làm key, một <code>'use client'</code> đặt đầu file kéo nửa ứng dụng xuống trình duyệt. Nó biên dịch được, chạy được, và bug lên production. Toàn bộ mục đích khoá này là cho bạn cái phán đoán mà AI không có. Dùng nó để đi nhanh hơn ở những chỗ bạn đã hiểu; đừng dùng nó để nhảy qua phần hiểu. Riêng Chương 5 sẽ cho bạn xem ba effect AI-hay-viết mà đều là bug.</p>
 </div>
+
+<h3>📚 Hãy mở sẵn những thứ này khi học</h3>
+<p>Bạn không cần đọc hết từ đầu tới cuối — hãy dùng chúng như một lập trình viên đang làm việc: tra cứu đúng lúc cần.</p>
+<a class="link-card dl" href="https://react.dev/reference/react" target="_blank" rel="noopener">
+  <span class="lc-ico">📖</span>
+  <span class="lc-body"><span class="lc-title">react.dev/reference — tra cứu hooks &amp; API</span><span class="lc-sub">Khi bạn quên chính xác useEffect hay useMemo làm gì, đây là trang cần mở.</span></span>
+</a>
+<a class="link-card dl" href="https://nextjs.org/learn" target="_blank" rel="noopener">
+  <span class="lc-ico">🎓</span>
+  <span class="lc-body"><span class="lc-title">nextjs.org/learn — khoá Next.js tương tác chính thức</span><span class="lc-sub">Một người bạn đồng hành thực hành miễn phí thẳng từ đội Next.js. Rất hợp làm song song với Giai đoạn 3 của ta.</span></span>
+</a>
+<a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web" target="_blank" rel="noopener">
+  <span class="lc-ico">🌐</span>
+  <span class="lc-body"><span class="lc-title">MDN Web Docs — chính nền tảng web</span><span class="lc-sub">HTML, CSS, JavaScript, DOM, fetch. React nằm trên tất cả những thứ này; MDN là nguồn sự thật gốc.</span></span>
+</a>
 
 <div class="callout ok">
 <p><strong>Sẵn sàng chưa?</strong> Chương 1 bắt đầu ở nơi mọi app React bắt đầu: với JSX, và ý tưởng quan trọng nhất của cả framework — rằng bạn <em>mô tả</em> giao diện mình muốn, còn React tự lo cách đưa màn hình tới đó.</p>

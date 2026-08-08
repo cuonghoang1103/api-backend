@@ -1,0 +1,874 @@
+/**
+ * build-pro192-pe-adv2.mjs — sinh content/exams/PRO192-PE-ADV2.mjs.
+ *
+ * KHÁC các đề PE khác trong repo: đây KHÔNG phải đề thi thật được số hoá lại
+ * (source: 'SAMPLE'). Đề này do chúng ta TỰ SOẠN, chủ đề Comparable /
+ * Comparator / sắp xếp collection, sâu về OOP hơn 11 đề PE thật đang có,
+ * nhằm bắc cầu sang LAB211 (kỳ 3) — nơi Comparator, Collections.sort, thiết kế
+ * entity nhiều lớp và validate có thông báo rõ ràng là yêu cầu bắt buộc.
+ *
+ * Vì KHÔNG có đề gốc để đối chiếu, cách kiểm chứng ở đây khắt khe hơn: mọi
+ * harness Main.java + mọi lời giải tham chiếu đều được `javac --release 8` rồi
+ * `java Main` với stdin thật, và expectedOutput bên dưới là stdout THẬT đã bắt
+ * được — KHÔNG phải kết quả suy luận từ việc đọc code.
+ *
+ * Các bẫy Java đã KIỂM BẰNG CÁCH CHẠY THẬT (không phải suy đoán), xem
+ * explanation từng câu:
+ *   - (int)(a.price - b.price) với 100.25 vs 100.50 → 0 (sai); Double.compare → -1
+ *   - "Laptop".compareTo("keyboard") → -1 nhưng compareToIgnoreCase → +1 (ngược dấu)
+ *   - String.format("%.2f", 100.5) dưới locale vi_VN in "100,50" (dấu phẩy!);
+ *     String.format(Locale.US, "%.2f", 100.5) luôn in "100.50"
+ *   - Collections.sort ỔN ĐỊNH (stable): đã dựng test case có giá trùng và xác
+ *     nhận thứ tự chèn ban đầu được giữ nguyên trong nhóm bằng nhau
+ *   - topN với n == size, n > size, n = 0 đều chạy thật, không crash
+ *
+ * Given materials đóng gói từ scaffold NetBeans sạch (Q1..Q4), chỉ chứa
+ * Main.class (+ Main$1/$2.class cho comparator ẩn danh) và Product.class —
+ * KHÔNG có file .java nào. Đã kiểm: chép lời giải .java vào từng Qn/src rồi
+ * javac + java Main chạy đúng, sau đó xoá trước khi nén. Upload R2, GET 200.
+ *
+ * Seed: node scripts/academy-seed-exam.mjs --file ./content/exams/PRO192-PE-ADV2.mjs --apply
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+
+const OUT = path.resolve(import.meta.dirname, '../content/exams/PRO192-PE-ADV2.mjs');
+
+const B = (en, vi) => `${en}|||${vi}`;
+const ML = (en, vi) => `<div class="ml-en">${en}</div><div class="ml-vi">${vi}</div>`;
+
+const ATTACHMENT_URL = 'https://media.cuongthai.com/files/exam-attachments/PRO192/PE-ADV2-Given.zip';
+
+function table(rows) {
+  return `<table class="uml-table"><tbody>${rows.map((r) => `<tr><td>${r}</td></tr>`).join('')}</tbody></table>`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Lời giải tham chiếu — inline (KHÔNG đọc từ scratchpad /private/tmp vì thư mục
+// đó bị dọn). Đây đúng là các file đã biên dịch + chạy để lấy expectedOutput.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const SOL_PRODUCT = `import java.util.Locale;
+
+public class Product implements Comparable<Product> {
+
+    private String code;
+    private String name;
+    private double price;
+    private int quantity;
+
+    public Product(String code, String name, double price, int quantity) {
+        this.code = code;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public double getTotalValue() {
+        return price * quantity;
+    }
+
+    @Override
+    public String toString() {
+        return code + "," + name + "," + String.format(Locale.US, "%.2f", price) + "," + quantity;
+    }
+
+    @Override
+    public int compareTo(Product o) {
+        // Natural order: price DESCENDING, then name ASCENDING (case-insensitive).
+        int c = Double.compare(o.price, this.price);
+        if (c != 0) {
+            return c;
+        }
+        return this.name.compareToIgnoreCase(o.name);
+    }
+}`;
+
+const SOL_NAME_CMP = `import java.util.Comparator;
+
+public class NameComparator implements Comparator<Product> {
+
+    @Override
+    public int compare(Product a, Product b) {
+        // name ASCENDING, case-insensitive; tie-break: code ASCENDING (case-sensitive)
+        int c = a.getName().compareToIgnoreCase(b.getName());
+        if (c != 0) {
+            return c;
+        }
+        return a.getCode().compareTo(b.getCode());
+    }
+}`;
+
+const SOL_VALUE_CMP = `import java.util.Comparator;
+
+public class ValueComparator implements Comparator<Product> {
+
+    @Override
+    public int compare(Product a, Product b) {
+        // total value DESCENDING; tie-break 1: quantity ASCENDING; tie-break 2: code ASCENDING
+        int c = Double.compare(b.getTotalValue(), a.getTotalValue());
+        if (c != 0) {
+            return c;
+        }
+        c = Integer.compare(a.getQuantity(), b.getQuantity());
+        if (c != 0) {
+            return c;
+        }
+        return a.getCode().compareTo(b.getCode());
+    }
+}`;
+
+const SOL_MANAGER = `import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+public class ProductManager {
+
+    private List<Product> list;
+
+    public ProductManager() {
+        list = new ArrayList<Product>();
+    }
+
+    public void add(Product p) {
+        list.add(p);
+    }
+
+    public List<Product> getAll() {
+        return list;
+    }
+
+    public int size() {
+        return list.size();
+    }
+
+    public void sort(Comparator<Product> cmp) {
+        Collections.sort(list, cmp);
+    }
+
+    public Product max(Comparator<Product> cmp) {
+        if (list.isEmpty()) {
+            return null;
+        }
+        Product best = list.get(0);
+        for (int i = 1; i < list.size(); i++) {
+            // strict > keeps the FIRST element on a tie
+            if (cmp.compare(list.get(i), best) > 0) {
+                best = list.get(i);
+            }
+        }
+        return best;
+    }
+
+    public Product min(Comparator<Product> cmp) {
+        if (list.isEmpty()) {
+            return null;
+        }
+        Product best = list.get(0);
+        for (int i = 1; i < list.size(); i++) {
+            // strict < keeps the FIRST element on a tie
+            if (cmp.compare(list.get(i), best) < 0) {
+                best = list.get(i);
+            }
+        }
+        return best;
+    }
+
+    public List<List<Product>> partitionByPrice(double threshold) {
+        List<Product> high = new ArrayList<Product>();
+        List<Product> low = new ArrayList<Product>();
+        for (Product p : list) {
+            if (p.getPrice() >= threshold) {
+                high.add(p);
+            } else {
+                low.add(p);
+            }
+        }
+        List<List<Product>> result = new ArrayList<List<Product>>();
+        result.add(high);
+        result.add(low);
+        return result;
+    }
+}`;
+
+const SOL_TOP = `import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+public class TopSelector {
+
+    public static List<Product> topN(List<Product> list, Comparator<Product> cmp, int n) {
+        List<Product> result = new ArrayList<Product>();
+        if (list == null || cmp == null || n <= 0) {
+            return result;
+        }
+        // Work on a COPY so the caller's list is never re-ordered.
+        List<Product> copy = new ArrayList<Product>(list);
+        Collections.sort(copy, cmp);
+        int limit = Math.min(n, copy.size());
+        for (int i = 0; i < limit; i++) {
+            result.add(copy.get(i));
+        }
+        return result;
+    }
+}`;
+
+// API của Product hiển thị cho Q2/Q3/Q4 (Product.class là given, đã biên dịch).
+const PRODUCT_API = `public class Product implements Comparable&lt;Product&gt; {
+    public Product(String code, String name, double price, int quantity)
+    public String getCode()
+    public String getName()
+    public double getPrice()
+    public int getQuantity()
+    public double getTotalValue()      // price * quantity
+    public String toString()           // "code,name,price(2 decimals),quantity"
+    public int compareTo(Product o)    // natural order: price DESC, tie -&gt; name ASC (case-insensitive)
+}`;
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+const instructions = ML(
+  `<p><strong>PRO192 PE INSTRUCTIONS</strong> — <strong>self-authored advanced practice paper</strong>, not an official FPTU exam paper. Treat it exactly like the real thing while you practise: same 4-question / 10-mark format, same NetBeans given-materials workflow.</p>
+   <ol>
+     <li>Software required: NetBeans 13 or later, JDK 8, Notepad, Command Prompt, WinRAR/WinZip. In the real PE you are ONLY allowed to use your own study materials stored on your own computer.</li>
+     <li>Create a folder to save the given projects (e.g. PRO_given), download the given materials into it. Open NetBeans, open the given Qx project, then complete it according to the requirements. Do NOT delete or edit given files, or create a java file with the same name as a given file. In this paper <code>Product.class</code> is <strong>given already compiled</strong> in Q2, Q3 and Q4 — you only write the class(es) the question asks for.</li>
+     <li>Before submission: run "Clean and Build Project" (Shift+F11); for each question create two sub-folders <strong>run</strong> and <strong>src</strong>, copy the built <code>Qx.jar</code> into <strong>run</strong> and the entire project source into <strong>src</strong>.</li>
+     <li>Do NOT use accented Vietnamese in code comments. Do NOT change the names of the folders/files specified, or the marking software cannot find the executable (.jar) to grade. All .java source files use the NetBeans default package.</li>
+     <li>Why this paper is harder than the standard PE set: every question is about <strong>ordering objects</strong> — <code>Comparable</code>, <code>Comparator</code>, <code>Collections.sort</code>, stable ordering and tie-breaks. That is exactly the machinery LAB211 (semester 3) assumes you already own. Rushing a one-line <code>Integer.compare</code> will not pass these test cases; each ordering has a deliberate multi-field tie-break.</li>
+   </ol>
+   <p>This exam room cannot run NetBeans/JDK in the browser, so you type each class directly into the code box below and it is graded by AI against the rubric — but the "given materials" download above is a REAL NetBeans given project (with the compiled <code>Main.class</code> harness) so you can build &amp; run it for real on your own machine exactly like an actual PE, and cross-check your output against the samples shown. Every sample output below was produced by compiling the reference solution against that exact harness and capturing real stdout.</p>`,
+  `<p><strong>HƯỚNG DẪN PE PRO192</strong> — <strong>đề luyện tập nâng cao do chúng tôi tự soạn</strong>, KHÔNG phải đề thi chính thức của FPTU. Khi luyện hãy coi nó y như đề thật: vẫn 4 câu / 10 điểm, vẫn quy trình given materials NetBeans.</p>
+   <ol>
+     <li>Yêu cầu phần mềm: NetBeans 13 trở lên, JDK 8, Notepad, Command Prompt, WinRAR/WinZip. Trong kỳ thi PE thật, sinh viên CHỈ được dùng tài liệu học tập lưu trên máy của mình.</li>
+     <li>Tạo một thư mục chứa các project given (vd PRO_given), tải given materials vào đó. Mở NetBeans, mở project Qx tương ứng, hoàn thành theo yêu cầu. KHÔNG xoá/sửa file given, KHÔNG tạo file java trùng tên file given. Trong đề này <code>Product.class</code> được <strong>cho sẵn đã biên dịch</strong> ở Q2, Q3 và Q4 — bạn chỉ viết đúng (các) lớp mà câu hỏi yêu cầu.</li>
+     <li>Trước khi nộp: chạy "Clean and Build Project" (Shift+F11); với mỗi câu tạo 2 thư mục con <strong>run</strong> và <strong>src</strong>, chép <code>Qx.jar</code> đã build vào <strong>run</strong>, chép toàn bộ mã nguồn vào <strong>src</strong>.</li>
+     <li>KHÔNG gõ tiếng Việt có dấu trong comment code. KHÔNG đổi tên thư mục/file đã quy định, nếu không phần mềm chấm sẽ không tìm thấy file .jar để chấm. Mọi file .java dùng package mặc định của NetBeans.</li>
+     <li>Vì sao đề này khó hơn bộ PE chuẩn: cả 4 câu đều xoay quanh <strong>sắp thứ tự đối tượng</strong> — <code>Comparable</code>, <code>Comparator</code>, <code>Collections.sort</code>, tính ổn định và quy tắc phá hoà (tie-break). Đó đúng là bộ công cụ mà LAB211 (kỳ 3) mặc định bạn đã thành thạo. Viết vội một dòng <code>Integer.compare</code> sẽ KHÔNG qua được các test case ở đây; mỗi thứ tự đều cố tình có tie-break nhiều trường.</li>
+   </ol>
+   <p>Phòng thi web không chạy được NetBeans/JDK trên trình duyệt, nên bạn gõ thẳng từng lớp vào ô mã bên dưới và được AI chấm theo tiêu chí — nhưng file "given materials" tải ở trên là project NetBeans THẬT (kèm harness <code>Main.class</code> đã biên dịch) để bạn build &amp; chạy thật trên máy mình y hệt bài PE thật, và tự đối chiếu với các mẫu bên dưới. Mọi output mẫu bên dưới đều được tạo bằng cách biên dịch lời giải tham chiếu cùng đúng harness đó rồi bắt stdout THẬT.</p>`,
+);
+
+// ── Q1 (2 marks): Product implements Comparable<Product> ─────────────────────
+const q1PromptEn = `<p><strong>(2 marks)</strong> A small electronics shop keeps its stock as <strong>Product</strong> objects. Write a class <strong>Product</strong> (in the default package) that <strong>implements Comparable&lt;Product&gt;</strong>:</p>
+${table([
+  '-code: String<br/>-name: String<br/>-price: double<br/>-quantity: int',
+  '+Product(code: String, name: String, price: double, quantity: int)<br/>+getCode(): String<br/>+getName(): String<br/>+getPrice(): double<br/>+getQuantity(): int<br/>+getTotalValue(): double<br/>+toString(): String<br/>+compareTo(o: Product): int',
+])}
+<p>Where:</p>
+<ul>
+  <li><code>Product(...)</code> — constructor, sets values to code, name, price and quantity.</li>
+  <li>The four getters return the corresponding field.</li>
+  <li><code>getTotalValue(): double</code> — return <code>price * quantity</code>.</li>
+  <li><code>toString(): String</code> — return <strong>code,name,price,quantity</strong>. The price is formatted with exactly <strong>two decimal places</strong> and a <strong>dot</strong> as the decimal separator. <strong>Note</strong>: do not use spaces to separate the values.</li>
+  <li><code>compareTo(o: Product): int</code> — define the <strong>natural ordering</strong> of a Product as:
+    <ol>
+      <li><strong>price DESCENDING</strong> (the more expensive product comes first);</li>
+      <li>if the two prices are <strong>equal</strong>, then <strong>name ASCENDING, ignoring case</strong> ("apple" and "Apple" are considered the same name).</li>
+    </ol>
+  </li>
+</ul>
+<p>The test harness prints only the <em>sign</em> of <code>compareTo</code> (<code>-1</code>, <code>0</code> or <code>1</code>), so the magnitude of your return value does not matter — but the sign must be right for every case, including when two prices differ by less than 1.00.</p>`;
+
+const q1PromptVi = `<p><strong>(2 điểm)</strong> Một cửa hàng điện tử nhỏ quản lý kho bằng các đối tượng <strong>Product</strong>. Viết lớp <strong>Product</strong> (trong package mặc định) <strong>implements Comparable&lt;Product&gt;</strong>:</p>
+${table([
+  '-code: String<br/>-name: String<br/>-price: double<br/>-quantity: int',
+  '+Product(code: String, name: String, price: double, quantity: int)<br/>+getCode(): String<br/>+getName(): String<br/>+getPrice(): double<br/>+getQuantity(): int<br/>+getTotalValue(): double<br/>+toString(): String<br/>+compareTo(o: Product): int',
+])}
+<p>Trong đó:</p>
+<ul>
+  <li><code>Product(...)</code> — constructor, gán giá trị cho code, name, price và quantity.</li>
+  <li>Bốn getter trả về field tương ứng.</li>
+  <li><code>getTotalValue(): double</code> — trả về <code>price * quantity</code>.</li>
+  <li><code>toString(): String</code> — trả về <strong>code,name,price,quantity</strong>. Price định dạng đúng <strong>2 chữ số thập phân</strong> và dùng <strong>dấu chấm</strong> làm dấu thập phân. <strong>Lưu ý</strong>: không dùng khoảng trắng để phân tách các giá trị.</li>
+  <li><code>compareTo(o: Product): int</code> — định nghĩa <strong>thứ tự tự nhiên</strong> của Product:
+    <ol>
+      <li><strong>price GIẢM DẦN</strong> (sản phẩm đắt hơn đứng trước);</li>
+      <li>nếu hai price <strong>bằng nhau</strong> thì xét <strong>name TĂNG DẦN, không phân biệt hoa/thường</strong> ("apple" và "Apple" coi như cùng một tên).</li>
+    </ol>
+  </li>
+</ul>
+<p>Harness chỉ in <em>dấu</em> của <code>compareTo</code> (<code>-1</code>, <code>0</code> hoặc <code>1</code>), nên độ lớn giá trị trả về không quan trọng — nhưng dấu phải đúng trong MỌI trường hợp, kể cả khi hai price chênh nhau chưa tới 1.00.</p>`;
+
+const q1ExplainEn = `<p><strong>Why <code>Comparable</code> at all?</strong> A class implements <code>Comparable&lt;T&gt;</code> to declare its <em>one</em> natural ordering — the ordering that is intrinsic to the type and that <code>Collections.sort(list)</code>, <code>TreeSet</code> and <code>TreeMap</code> use with no extra argument. Any <em>other</em> ordering (Q2) belongs in an external <code>Comparator</code>, precisely because a class can only have one natural order.</p>
+<p><strong>Trap 1 — subtraction instead of <code>Double.compare</code>.</strong> The classic wrong body is <code>return (int)(o.price - this.price);</code>. Compiled and run for real: with prices 100.50 and 100.25 that expression yields <code>(int)(-0.25)</code> = <strong>0</strong> — the two products look "equal" and the tie-break silently fires on the wrong pair. <code>Double.compare(100.25, 100.50)</code> returns <code>-1</code>, which is correct. Never subtract to compare; always use <code>Double.compare</code> / <code>Integer.compare</code>.</p>
+<p><strong>Trap 2 — <code>compareTo</code> on Strings is case-sensitive.</strong> It orders by Unicode code point, and every uppercase ASCII letter sorts before every lowercase one. Run for real: <code>"Laptop".compareTo("keyboard")</code> is <strong>negative</strong> (L = 76 &lt; k = 107) but <code>"Laptop".compareToIgnoreCase("keyboard")</code> is <strong>positive</strong>. Opposite answers. The spec says "ignoring case", so <code>compareToIgnoreCase</code> is the only correct choice — and sample run 3 below is built exactly to catch the wrong one.</p>
+<p><strong>Trap 3 — locale and <code>String.format</code>.</strong> <code>String.format("%.2f", 100.5)</code> honours the JVM default locale. Run under <code>-Duser.language=vi -Duser.country=VN</code> it prints <strong>100,50</strong> — a comma, which breaks the "code,name,price,quantity" format entirely. <code>String.format(Locale.US, "%.2f", 100.5)</code> always prints <code>100.50</code>. This is a real LAB211-grade defect: it passes on your machine and fails on the grader's.</p>
+<p><strong>Trap 4 — a "0" tie makes the sort fall back to stability.</strong> In sample run 4 the names "alpha" and "ALPHA" are equal ignoring case AND the prices are equal, so <code>compareTo</code> returns 0. <code>Collections.sort</code> is documented as <em>stable</em>, so the two keep their original insertion order (C001 before C003) — verified by running, not assumed.</p>
+<p>All four sample runs below are real captured stdout from <code>java Main</code> against the given <code>Main.class</code>:</p>
+<pre>products: C001/Laptop/100.50/2, C002/Mouse/100.25/5, C003/keyboard/100.50/1
+TC 3 → p1.compareTo(p2) = -1   (100.50 &gt; 100.25, price descending)
+       p1.compareTo(p3) = 1    (equal price; "Laptop" after "keyboard" ignoring case)</pre>`;
+
+const q1ExplainVi = `<p><strong>Vì sao cần <code>Comparable</code>?</strong> Một lớp implements <code>Comparable&lt;T&gt;</code> để khai báo <em>một</em> thứ tự tự nhiên duy nhất — thứ tự gắn liền với kiểu dữ liệu, được <code>Collections.sort(list)</code>, <code>TreeSet</code>, <code>TreeMap</code> dùng mà không cần tham số nào thêm. Mọi thứ tự <em>khác</em> (câu 2) phải nằm trong <code>Comparator</code> bên ngoài, chính vì mỗi lớp chỉ có được MỘT thứ tự tự nhiên.</p>
+<p><strong>Bẫy 1 — trừ thay vì <code>Double.compare</code>.</strong> Cách viết sai kinh điển: <code>return (int)(o.price - this.price);</code>. Đã biên dịch và chạy thật: với price 100.50 và 100.25, biểu thức cho <code>(int)(-0.25)</code> = <strong>0</strong> — hai sản phẩm bị coi là "bằng nhau" và tie-break lặng lẽ kích hoạt sai chỗ. <code>Double.compare(100.25, 100.50)</code> trả về <code>-1</code>, mới đúng. Đừng bao giờ dùng phép trừ để so sánh; luôn dùng <code>Double.compare</code> / <code>Integer.compare</code>.</p>
+<p><strong>Bẫy 2 — <code>compareTo</code> của String phân biệt hoa/thường.</strong> Nó so theo mã Unicode, mọi chữ HOA ASCII đều đứng trước mọi chữ thường. Chạy thật: <code>"Laptop".compareTo("keyboard")</code> ra <strong>âm</strong> (L = 76 &lt; k = 107) nhưng <code>"Laptop".compareToIgnoreCase("keyboard")</code> ra <strong>dương</strong>. Ngược dấu hoàn toàn. Đề yêu cầu "không phân biệt hoa/thường" nên chỉ <code>compareToIgnoreCase</code> là đúng — và mẫu chạy 3 bên dưới được dựng đúng để bắt lỗi này.</p>
+<p><strong>Bẫy 3 — locale và <code>String.format</code>.</strong> <code>String.format("%.2f", 100.5)</code> theo locale mặc định của JVM. Chạy với <code>-Duser.language=vi -Duser.country=VN</code> nó in <strong>100,50</strong> — dấu phẩy, phá vỡ hoàn toàn định dạng "code,name,price,quantity". <code>String.format(Locale.US, "%.2f", 100.5)</code> luôn in <code>100.50</code>. Đây là lỗi đúng tầm LAB211: chạy đúng trên máy bạn, sai trên máy chấm.</p>
+<p><strong>Bẫy 4 — trả về 0 thì thứ tự do tính ổn định quyết định.</strong> Ở mẫu chạy 4, "alpha" và "ALPHA" bằng nhau khi bỏ qua hoa/thường VÀ price bằng nhau, nên <code>compareTo</code> trả 0. <code>Collections.sort</code> được đặc tả là <em>ổn định (stable)</em> nên hai phần tử giữ nguyên thứ tự chèn ban đầu (C001 trước C003) — điều này đã kiểm bằng cách chạy, không phải đoán.</p>
+<p>Cả 4 mẫu chạy bên dưới đều là stdout THẬT bắt được từ <code>java Main</code> cùng <code>Main.class</code> given:</p>
+<pre>products: C001/Laptop/100.50/2, C002/Mouse/100.25/5, C003/keyboard/100.50/1
+TC 3 → p1.compareTo(p2) = -1   (100.50 &gt; 100.25, price giảm dần)
+       p1.compareTo(p3) = 1    (price bằng nhau; "Laptop" sau "keyboard" khi bỏ hoa/thường)</pre>`;
+
+const q1 = {
+  kind: 'CODE', points: 2, language: 'java',
+  prompt: B(q1PromptEn, q1PromptVi),
+  starterCode: `import java.util.Locale;
+
+public class Product implements Comparable<Product> {
+
+    private String code;
+    private String name;
+    private double price;
+    private int quantity;
+
+    public Product(String code, String name, double price, int quantity) {
+        // TODO
+    }
+
+    // TODO: getCode(), getName(), getPrice(), getQuantity()
+
+    public double getTotalValue() {
+        // TODO: price * quantity
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        // TODO: "code,name,price(2 decimals, dot),quantity" - no spaces
+        return null;
+    }
+
+    @Override
+    public int compareTo(Product o) {
+        // TODO: price DESCENDING, tie -> name ASCENDING (case-insensitive)
+        return 0;
+    }
+}`,
+  sampleSolution: SOL_PRODUCT,
+  expectedOutput:
+`Sample run 1 (TC 1 - toString; products C001/Laptop/100.50/2, C002/Mouse/100.25/5, C003/keyboard/100.50/1):
+OUTPUT:
+C001,Laptop,100.50,2
+C002,Mouse,100.25,5
+C003,keyboard,100.50,1
+
+Sample run 2 (TC 2 - getTotalValue; same three products):
+OUTPUT:
+201.00
+501.25
+100.50
+
+Sample run 3 (TC 3 - compareTo; same three products):
+OUTPUT:
+p1.compareTo(p2)=-1
+p1.compareTo(p3)=1
+SORTED:
+C003,keyboard,100.50,1
+C001,Laptop,100.50,2
+C002,Mouse,100.25,5
+
+Sample run 4 (TC 3 - compareTo; products C001/alpha/10.75/1, C002/beta/10.25/1, C003/ALPHA/10.75/1):
+OUTPUT:
+p1.compareTo(p2)=-1
+p1.compareTo(p3)=0
+SORTED:
+C001,alpha,10.75,1
+C003,ALPHA,10.75,1
+C002,beta,10.25,1`,
+  explanation: B(q1ExplainEn, q1ExplainVi),
+  rubric: [
+    { id: 'basics', criterion: B('Constructor, the four getters and getTotalValue() (price * quantity) are correct.', 'Constructor, 4 getter và getTotalValue() (price * quantity) đúng.'), weight: 1, maxScore: 0.4 },
+    { id: 'toString', criterion: B('toString() returns "code,name,price,quantity" with exactly 2 decimal places, a dot separator and no spaces.', 'toString() trả về "code,name,price,quantity" đúng 2 chữ số thập phân, dấu chấm, không khoảng trắng.'), weight: 1, maxScore: 0.5 },
+    { id: 'compare_price', criterion: B('compareTo() orders by price DESCENDING using Double.compare (not subtraction/cast), so a difference smaller than 1.00 still gives the right sign.', 'compareTo() sắp price GIẢM DẦN bằng Double.compare (không dùng phép trừ/ép kiểu), nên chênh lệch nhỏ hơn 1.00 vẫn ra đúng dấu.'), weight: 2, maxScore: 0.7 },
+    { id: 'compare_tie', criterion: B('On equal price, compareTo() falls back to name ASCENDING case-insensitively (compareToIgnoreCase), returning 0 when the names match ignoring case.', 'Khi price bằng nhau, compareTo() xét name TĂNG DẦN không phân biệt hoa/thường (compareToIgnoreCase), trả 0 khi tên trùng nếu bỏ hoa/thường.'), weight: 2, maxScore: 0.4 },
+  ],
+};
+
+// ── Q2 (3 marks): two Comparators ────────────────────────────────────────────
+const q2PromptEn = `<p><strong>(3 marks)</strong> The class <strong>Product</strong> from Q1 is already compiled and given in byte-code format (<code>Product.class</code>), so you can use it without creating <code>Product.java</code>:</p>
+<pre>${PRODUCT_API}</pre>
+<p>The shop needs to display the same stock list in <strong>two other orders</strong> that are NOT the natural order. Because a class can only declare one natural ordering, write two <strong>separate</strong> classes, each implementing <code>java.util.Comparator&lt;Product&gt;</code>:</p>
+${table([
+  '<strong>NameComparator</strong> implements Comparator&lt;Product&gt;<br/>+compare(a: Product, b: Product): int',
+  '<strong>ValueComparator</strong> implements Comparator&lt;Product&gt;<br/>+compare(a: Product, b: Product): int',
+])}
+<p>Where:</p>
+<ul>
+  <li><strong>NameComparator</strong> — order by <strong>name ASCENDING, ignoring case</strong>. If two names are equal ignoring case, break the tie by <strong>code ASCENDING</strong> (ordinary case-sensitive String order).</li>
+  <li><strong>ValueComparator</strong> — order by <strong>total value (price × quantity) DESCENDING</strong>. If two total values are equal, break the tie by <strong>quantity ASCENDING</strong>; if the quantities are also equal, break it by <strong>code ASCENDING</strong>.</li>
+</ul>
+<p>The harness sorts one and the same list with each comparator and prints both results, so a comparator that merely repeats the natural order (or repeats the other comparator) is immediately visible.</p>`;
+
+const q2PromptVi = `<p><strong>(3 điểm)</strong> Lớp <strong>Product</strong> ở câu 1 đã được biên dịch sẵn dạng byte code (<code>Product.class</code>), bạn dùng thẳng, không cần tạo <code>Product.java</code>:</p>
+<pre>${PRODUCT_API}</pre>
+<p>Cửa hàng cần hiển thị cùng một danh sách kho theo <strong>hai thứ tự khác</strong>, KHÔNG phải thứ tự tự nhiên. Vì mỗi lớp chỉ khai báo được một thứ tự tự nhiên, hãy viết hai lớp <strong>riêng biệt</strong>, mỗi lớp implements <code>java.util.Comparator&lt;Product&gt;</code>:</p>
+${table([
+  '<strong>NameComparator</strong> implements Comparator&lt;Product&gt;<br/>+compare(a: Product, b: Product): int',
+  '<strong>ValueComparator</strong> implements Comparator&lt;Product&gt;<br/>+compare(a: Product, b: Product): int',
+])}
+<p>Trong đó:</p>
+<ul>
+  <li><strong>NameComparator</strong> — sắp theo <strong>name TĂNG DẦN, không phân biệt hoa/thường</strong>. Nếu hai name bằng nhau khi bỏ hoa/thường thì phá hoà bằng <strong>code TĂNG DẦN</strong> (so sánh String thông thường, có phân biệt hoa/thường).</li>
+  <li><strong>ValueComparator</strong> — sắp theo <strong>tổng giá trị (price × quantity) GIẢM DẦN</strong>. Nếu hai tổng giá trị bằng nhau thì phá hoà bằng <strong>quantity TĂNG DẦN</strong>; nếu quantity cũng bằng nhau thì phá hoà bằng <strong>code TĂNG DẦN</strong>.</li>
+</ul>
+<p>Harness sắp cùng MỘT danh sách bằng từng comparator rồi in cả hai kết quả, nên comparator nào chỉ lặp lại thứ tự tự nhiên (hoặc lặp lại comparator kia) sẽ lộ ra ngay.</p>`;
+
+const q2ExplainEn = `<p><strong><code>Comparable</code> vs <code>Comparator</code>.</strong> <code>Comparable</code> lives <em>inside</em> the class and answers "how do Products order themselves?" — one answer per type, forever. <code>Comparator</code> lives <em>outside</em> and answers "how do I want to order Products <em>this time</em>?" — as many answers as you need, and you can write one for a class whose source you cannot touch (here <code>Product.class</code> is given as byte code — you literally cannot edit it). That is the whole reason both mechanisms exist.</p>
+<p><strong>Chained tie-breaks are the point of this question.</strong> Both comparators use the same shape: compute the primary key, <code>if (c != 0) return c;</code>, then fall through to the next key. Returning the first key's result unconditionally is the naive bug; falling through only when the previous key is exactly 0 is what makes the ordering a <em>total</em> order.</p>
+<p><strong>The data set is designed so all three orderings differ.</strong> With the five products below, the natural order (price descending) is C001, C002, C004, C005, C003 — verified by running <code>Collections.sort(list)</code>. NameComparator gives C002, C003, C005, C001, C004 and ValueComparator gives C005, C001, C002, C004, C003. Three genuinely different sequences, so you cannot pass by aliasing.</p>
+<p><strong>Read the two tie-breaks in the captured output.</strong> "Adapter" (C002) and "adapter" (C003) are equal ignoring case, so the code tie-break puts C002 first. C001 and C002 both have total value 201.00 (100.50 × 2 and 67.00 × 3), so the quantity tie-break puts C001 (quantity 2) before C002 (quantity 3). C003 and C004 both have total value 45.00 (15.00 × 3 and 45.00 × 1), so C004 (quantity 1) comes before C003 (quantity 3) — note this pair is in the <em>opposite</em> order to how they appear in the list, which proves the tie-break really ran.</p>
+<p><strong>On floating point:</strong> the prices here were chosen so every product of price × quantity is exact in binary (100.5 × 2, 67 × 3, 30 × 9, 15 × 3, 45 × 1) — checked by running <code>100.5 * 2 == 201.0</code> and friends, all true. In real LAB211 data you cannot count on that, which is another reason to compare with <code>Double.compare</code> rather than <code>==</code>.</p>`;
+
+const q2ExplainVi = `<p><strong><code>Comparable</code> khác <code>Comparator</code> ở đâu.</strong> <code>Comparable</code> nằm <em>bên trong</em> lớp, trả lời câu hỏi "Product tự sắp thứ tự thế nào?" — mỗi kiểu chỉ một câu trả lời, cố định. <code>Comparator</code> nằm <em>bên ngoài</em>, trả lời "lần này tôi muốn sắp Product thế nào?" — bao nhiêu câu trả lời cũng được, và viết được cho cả lớp mà bạn không có mã nguồn (ở đây <code>Product.class</code> được cho dưới dạng byte code — bạn không sửa được nó). Đó chính là lý do tồn tại của cả hai cơ chế.</p>
+<p><strong>Trọng tâm câu này là chuỗi tie-break.</strong> Cả hai comparator dùng chung một khuôn: tính khoá chính, <code>if (c != 0) return c;</code>, rồi mới rơi xuống khoá kế tiếp. Trả về kết quả khoá đầu một cách vô điều kiện là lỗi ngây thơ; chỉ rơi xuống khi khoá trước đúng bằng 0 mới làm thứ tự trở thành thứ tự <em>toàn phần</em>.</p>
+<p><strong>Bộ dữ liệu được thiết kế để cả ba thứ tự đều khác nhau.</strong> Với 5 sản phẩm bên dưới, thứ tự tự nhiên (price giảm dần) là C001, C002, C004, C005, C003 — đã kiểm bằng cách chạy <code>Collections.sort(list)</code>. NameComparator cho C002, C003, C005, C001, C004 và ValueComparator cho C005, C001, C002, C004, C003. Ba dãy khác nhau thật sự, nên không thể "ăn may" bằng cách chép lại thứ tự khác.</p>
+<p><strong>Đọc hai tie-break ngay trong output đã bắt được.</strong> "Adapter" (C002) và "adapter" (C003) bằng nhau khi bỏ hoa/thường, nên tie-break theo code đưa C002 lên trước. C001 và C002 cùng tổng giá trị 201.00 (100.50 × 2 và 67.00 × 3), nên tie-break theo quantity đưa C001 (quantity 2) trước C002 (quantity 3). C003 và C004 cùng tổng giá trị 45.00 (15.00 × 3 và 45.00 × 1), nên C004 (quantity 1) đứng trước C003 (quantity 3) — chú ý cặp này ĐẢO so với thứ tự chúng xuất hiện trong danh sách, chứng tỏ tie-break thật sự đã chạy.</p>
+<p><strong>Về số thực:</strong> các price ở đây được chọn sao cho mọi tích price × quantity đều biểu diễn chính xác trong nhị phân (100.5 × 2, 67 × 3, 30 × 9, 15 × 3, 45 × 1) — đã kiểm bằng cách chạy <code>100.5 * 2 == 201.0</code> và các phép tương tự, đều true. Dữ liệu LAB211 thật thì không được phép trông chờ điều đó, thêm một lý do nữa để so sánh bằng <code>Double.compare</code> chứ không dùng <code>==</code>.</p>`;
+
+const q2 = {
+  kind: 'CODE', points: 3, language: 'java',
+  prompt: B(q2PromptEn, q2PromptVi),
+  starterCode: `import java.util.Comparator;
+
+// Product.class is GIVEN (already compiled). Do not write Product again.
+
+public class NameComparator implements Comparator<Product> {
+
+    @Override
+    public int compare(Product a, Product b) {
+        // TODO: name ASC ignoring case; tie -> code ASC
+        return 0;
+    }
+}
+
+class ValueComparator implements Comparator<Product> {
+
+    @Override
+    public int compare(Product a, Product b) {
+        // TODO: total value DESC; tie -> quantity ASC; tie -> code ASC
+        return 0;
+    }
+}`,
+  sampleSolution: `${SOL_NAME_CMP}\n\n${SOL_VALUE_CMP}`,
+  expectedOutput:
+`List used in every run (entered in this order):
+C001,laptop,100.50,2      total value 201.00
+C002,Adapter,67.00,3      total value 201.00
+C003,adapter,15.00,3      total value  45.00
+C004,Mouse,45.00,1        total value  45.00
+C005,keyboard,30.00,9     total value 270.00
+
+Sample run 1 (TC 1 - NameComparator):
+OUTPUT:
+BY NAME:
+C002,Adapter,67.00,3
+C003,adapter,15.00,3
+C005,keyboard,30.00,9
+C001,laptop,100.50,2
+C004,Mouse,45.00,1
+
+Sample run 2 (TC 2 - ValueComparator):
+OUTPUT:
+BY VALUE:
+C005,keyboard,30.00,9
+C001,laptop,100.50,2
+C002,Adapter,67.00,3
+C004,Mouse,45.00,1
+C003,adapter,15.00,3
+
+Sample run 3 (TC 3 - both comparators on the same list):
+OUTPUT:
+BY NAME:
+C002,Adapter,67.00,3
+C003,adapter,15.00,3
+C005,keyboard,30.00,9
+C001,laptop,100.50,2
+C004,Mouse,45.00,1
+BY VALUE:
+C005,keyboard,30.00,9
+C001,laptop,100.50,2
+C002,Adapter,67.00,3
+C004,Mouse,45.00,1
+C003,adapter,15.00,3
+
+For reference, the natural order (Collections.sort with no comparator) of the same
+list is C001, C002, C004, C005, C003 - different from both comparators above.`,
+  explanation: B(q2ExplainEn, q2ExplainVi),
+  rubric: [
+    { id: 'name_cmp', criterion: B('NameComparator implements Comparator<Product> and orders by name ascending case-insensitively.', 'NameComparator implements Comparator<Product> và sắp theo name tăng dần không phân biệt hoa/thường.'), weight: 2, maxScore: 0.9 },
+    { id: 'name_tie', criterion: B('NameComparator breaks a case-insensitive name tie by code ascending (so "Adapter"/C002 precedes "adapter"/C003).', 'NameComparator phá hoà tên (khi bỏ hoa/thường) bằng code tăng dần (nên "Adapter"/C002 đứng trước "adapter"/C003).'), weight: 2, maxScore: 0.6 },
+    { id: 'value_cmp', criterion: B('ValueComparator orders by price * quantity DESCENDING using Double.compare, not by price alone.', 'ValueComparator sắp theo price * quantity GIẢM DẦN bằng Double.compare, không phải chỉ theo price.'), weight: 2, maxScore: 0.9 },
+    { id: 'value_tie', criterion: B('ValueComparator chains the tie-breaks: quantity ascending, then code ascending, and only falls through when the previous key is exactly 0.', 'ValueComparator nối chuỗi tie-break: quantity tăng dần, rồi code tăng dần, và chỉ rơi xuống khi khoá trước đúng bằng 0.'), weight: 2, maxScore: 0.6 },
+  ],
+};
+
+// ── Q3 (3 marks): ProductManager ─────────────────────────────────────────────
+const q3PromptEn = `<p><strong>(3 marks)</strong> The class <strong>Product</strong> is again given already compiled (<code>Product.class</code>, same API as in Q2). Write a class <strong>ProductManager</strong> that holds the stock in a <code>List&lt;Product&gt;</code>:</p>
+${table([
+  '-list: List&lt;Product&gt;',
+  '+ProductManager()<br/>+add(p: Product): void<br/>+getAll(): List&lt;Product&gt;<br/>+size(): int<br/>+sort(cmp: Comparator&lt;Product&gt;): void<br/>+max(cmp: Comparator&lt;Product&gt;): Product<br/>+min(cmp: Comparator&lt;Product&gt;): Product<br/>+partitionByPrice(threshold: double): List&lt;List&lt;Product&gt;&gt;',
+])}
+<p>Where:</p>
+<ul>
+  <li><code>ProductManager()</code> — constructor, creates an empty list.</li>
+  <li><code>add(p: Product): void</code> — append p to the list.</li>
+  <li><code>getAll(): List&lt;Product&gt;</code> — return the list.</li>
+  <li><code>size(): int</code> — return the number of products.</li>
+  <li><code>sort(cmp: Comparator&lt;Product&gt;): void</code> — sort the list <strong>in place</strong> using <code>Collections.sort(list, cmp)</code>.</li>
+  <li><code>max(cmp: Comparator&lt;Product&gt;): Product</code> — return the greatest element according to <code>cmp</code>, found by <strong>iterating the list yourself</strong>. You must NOT call <code>Collections.max</code>. Return <code>null</code> if the list is empty. If several elements tie for greatest, return the <strong>first</strong> one in list order.</li>
+  <li><code>min(cmp: Comparator&lt;Product&gt;): Product</code> — same, for the smallest element (<code>Collections.min</code> is likewise forbidden). Return <code>null</code> if empty; on a tie return the <strong>first</strong>.</li>
+  <li><code>partitionByPrice(threshold: double): List&lt;List&lt;Product&gt;&gt;</code> — split the list into exactly two groups and return them as a list of two lists:
+    <ul>
+      <li>index <strong>0</strong> = every product whose <code>price &gt;= threshold</code>;</li>
+      <li>index <strong>1</strong> = every product whose <code>price &lt; threshold</code>.</li>
+    </ul>
+    Inside each group the products must keep <strong>the same relative order they had in the original list</strong> (a stable partition). Either group may be empty; still return two lists, never <code>null</code>.
+  </li>
+</ul>`;
+
+const q3PromptVi = `<p><strong>(3 điểm)</strong> Lớp <strong>Product</strong> lại được cho sẵn đã biên dịch (<code>Product.class</code>, API giống câu 2). Viết lớp <strong>ProductManager</strong> quản lý kho trong một <code>List&lt;Product&gt;</code>:</p>
+${table([
+  '-list: List&lt;Product&gt;',
+  '+ProductManager()<br/>+add(p: Product): void<br/>+getAll(): List&lt;Product&gt;<br/>+size(): int<br/>+sort(cmp: Comparator&lt;Product&gt;): void<br/>+max(cmp: Comparator&lt;Product&gt;): Product<br/>+min(cmp: Comparator&lt;Product&gt;): Product<br/>+partitionByPrice(threshold: double): List&lt;List&lt;Product&gt;&gt;',
+])}
+<p>Trong đó:</p>
+<ul>
+  <li><code>ProductManager()</code> — constructor, tạo danh sách rỗng.</li>
+  <li><code>add(p: Product): void</code> — thêm p vào cuối danh sách.</li>
+  <li><code>getAll(): List&lt;Product&gt;</code> — trả về danh sách.</li>
+  <li><code>size(): int</code> — trả về số sản phẩm.</li>
+  <li><code>sort(cmp: Comparator&lt;Product&gt;): void</code> — sắp xếp danh sách <strong>tại chỗ</strong> bằng <code>Collections.sort(list, cmp)</code>.</li>
+  <li><code>max(cmp: Comparator&lt;Product&gt;): Product</code> — trả về phần tử lớn nhất theo <code>cmp</code>, tìm bằng cách <strong>tự duyệt danh sách</strong>. KHÔNG được gọi <code>Collections.max</code>. Trả <code>null</code> nếu danh sách rỗng. Nếu nhiều phần tử cùng lớn nhất, trả về phần tử <strong>đầu tiên</strong> theo thứ tự danh sách.</li>
+  <li><code>min(cmp: Comparator&lt;Product&gt;): Product</code> — tương tự, cho phần tử nhỏ nhất (cũng cấm <code>Collections.min</code>). Trả <code>null</code> nếu rỗng; nếu hoà, trả phần tử <strong>đầu tiên</strong>.</li>
+  <li><code>partitionByPrice(threshold: double): List&lt;List&lt;Product&gt;&gt;</code> — chia danh sách thành đúng hai nhóm, trả về dưới dạng list gồm hai list:
+    <ul>
+      <li>chỉ số <strong>0</strong> = mọi sản phẩm có <code>price &gt;= threshold</code>;</li>
+      <li>chỉ số <strong>1</strong> = mọi sản phẩm có <code>price &lt; threshold</code>.</li>
+    </ul>
+    Bên trong mỗi nhóm, các sản phẩm phải giữ <strong>đúng thứ tự tương đối như trong danh sách gốc</strong> (phân hoạch ổn định). Nhóm nào cũng có thể rỗng; vẫn phải trả về hai list, không được trả <code>null</code>.
+  </li>
+</ul>`;
+
+const q3ExplainEn = `<p><strong>Why <code>sort</code> takes a <code>Comparator</code> parameter.</strong> The manager does not decide the ordering — the caller does. That inversion is the layered-entity design LAB211 keeps asking for: the collection class knows about <em>storage</em>, the comparator knows about <em>ordering</em>, and neither has to change when the other does. The harness here passes in two comparators of its own (by price, by quantity) that your code has never seen, which only works because the parameter is an interface type.</p>
+<p><strong><code>Collections.sort</code> is stable, and sample run 1 proves it.</strong> The comparator the harness passes compares <em>price only</em>. Two products cost 20.00 (C002 entered 2nd, C004 entered 4th) and two cost 45.00 (C001 entered 1st, C003 entered 3rd). The real captured output is C002, C004, C001, C003, C005 — inside each equal-price block the original insertion order survives. That guarantee is documented for <code>Collections.sort</code> (it is a merge sort), and it is what makes "sort by price, then re-sort by name" a usable technique rather than a lottery.</p>
+<p><strong>Why you are forbidden from calling <code>Collections.max</code>.</strong> Writing the loop forces you to confront the tie rule. Use a strict comparison — <code>if (cmp.compare(list.get(i), best) &gt; 0) best = list.get(i);</code> — and the <em>first</em> of several equal elements wins, because a later equal element compares 0, not &gt; 0. Change that to <code>&gt;=</code> and the <em>last</em> one wins instead. Sample run 2 is built to expose the difference: <code>min</code> by price ties between C002 (20.00) and C004 (20.00) and correctly returns C002; <code>min</code> by quantity ties between C002 (quantity 1) and C005 (quantity 1) and again returns C002. Also note both methods return <code>null</code> on an empty list — the harness prints <code>null</code> for all four calls when zero products are entered, which is the fourth sample run.</p>
+<p><strong>The stable partition.</strong> The correct implementation is one single pass, appending each product to whichever of the two result lists it belongs to. A single forward pass automatically preserves relative order — you do not need to sort anything. The common wrong approaches are sorting first (destroys the original order) or iterating the list twice with different logic (easy to drop or duplicate the boundary element). Note the boundary is <code>&gt;=</code>: with threshold 45.00 the two products priced exactly 45.00 land in group A, as the captured output shows.</p>
+<p>All outputs below are real captured stdout from the given <code>Main.class</code>.</p>`;
+
+const q3ExplainVi = `<p><strong>Vì sao <code>sort</code> nhận tham số <code>Comparator</code>.</strong> Lớp quản lý KHÔNG quyết định thứ tự — người gọi mới quyết định. Sự đảo ngược đó chính là thiết kế entity phân lớp mà LAB211 luôn đòi hỏi: lớp collection lo <em>lưu trữ</em>, comparator lo <em>thứ tự</em>, và bên này đổi thì bên kia không phải sửa. Harness ở đây truyền vào hai comparator của riêng nó (theo price, theo quantity) mà code của bạn chưa từng thấy — chạy được chỉ vì tham số là kiểu interface.</p>
+<p><strong><code>Collections.sort</code> ổn định, và mẫu chạy 1 chứng minh điều đó.</strong> Comparator mà harness truyền vào chỉ so <em>price</em>. Có hai sản phẩm giá 20.00 (C002 nhập thứ 2, C004 nhập thứ 4) và hai sản phẩm giá 45.00 (C001 nhập thứ 1, C003 nhập thứ 3). Output THẬT bắt được là C002, C004, C001, C003, C005 — trong từng cụm giá bằng nhau, thứ tự nhập ban đầu được giữ nguyên. Bảo đảm này được đặc tả cho <code>Collections.sort</code> (nó là merge sort), và chính nó làm cho kỹ thuật "sắp theo price rồi sắp lại theo name" trở nên dùng được thay vì hên xui.</p>
+<p><strong>Vì sao cấm gọi <code>Collections.max</code>.</strong> Tự viết vòng lặp buộc bạn phải đối diện với quy tắc phá hoà. Dùng so sánh chặt — <code>if (cmp.compare(list.get(i), best) &gt; 0) best = list.get(i);</code> — thì phần tử <em>đầu tiên</em> trong nhóm bằng nhau thắng, vì phần tử bằng nhau xuất hiện sau cho kết quả 0 chứ không &gt; 0. Đổi thành <code>&gt;=</code> thì phần tử <em>cuối cùng</em> mới thắng. Mẫu chạy 2 dựng ra đúng để lộ khác biệt: <code>min</code> theo price hoà giữa C002 (20.00) và C004 (20.00), trả đúng C002; <code>min</code> theo quantity hoà giữa C002 (quantity 1) và C005 (quantity 1), lại trả C002. Cũng lưu ý cả hai hàm trả <code>null</code> khi danh sách rỗng — harness in <code>null</code> cho cả 4 lời gọi khi nhập 0 sản phẩm, đó là mẫu chạy thứ tư.</p>
+<p><strong>Phân hoạch ổn định.</strong> Cách làm đúng là MỘT lượt duyệt duy nhất, mỗi sản phẩm được nối vào đúng một trong hai list kết quả. Một lượt duyệt xuôi tự động giữ nguyên thứ tự tương đối — không cần sắp xếp gì cả. Các cách sai phổ biến: sắp xếp trước (phá thứ tự gốc), hoặc duyệt danh sách hai lần với hai logic khác nhau (rất dễ bỏ sót hoặc nhân đôi phần tử ở ranh giới). Chú ý ranh giới là <code>&gt;=</code>: với threshold 45.00, hai sản phẩm giá đúng 45.00 rơi vào nhóm A, như output đã bắt được cho thấy.</p>
+<p>Mọi output bên dưới đều là stdout THẬT bắt từ <code>Main.class</code> given.</p>`;
+
+const q3 = {
+  kind: 'CODE', points: 3, language: 'java',
+  prompt: B(q3PromptEn, q3PromptVi),
+  starterCode: `import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+// Product.class is GIVEN (already compiled). Do not write Product again.
+
+public class ProductManager {
+
+    private List<Product> list;
+
+    public ProductManager() {
+        // TODO
+    }
+
+    public void add(Product p) {
+        // TODO
+    }
+
+    public List<Product> getAll() {
+        // TODO
+        return null;
+    }
+
+    public int size() {
+        // TODO
+        return 0;
+    }
+
+    public void sort(Comparator<Product> cmp) {
+        // TODO: Collections.sort(list, cmp)
+    }
+
+    public Product max(Comparator<Product> cmp) {
+        // TODO: manual loop, NOT Collections.max. null if empty, first wins on tie
+        return null;
+    }
+
+    public Product min(Comparator<Product> cmp) {
+        // TODO: manual loop, NOT Collections.min. null if empty, first wins on tie
+        return null;
+    }
+
+    public List<List<Product>> partitionByPrice(double threshold) {
+        // TODO: [0] = price >= threshold, [1] = price < threshold,
+        //       each group keeping the original relative order
+        return null;
+    }
+}`,
+  sampleSolution: SOL_MANAGER,
+  expectedOutput:
+`List used in runs 1-3 (entered in this order):
+C001,alpha,45.00,2
+C002,beta,20.00,1
+C003,gamma,45.00,7
+C004,delta,20.00,3
+C005,epsilon,80.00,1
+
+Sample run 1 (TC 1 - sort with a price-only comparator; note the stable order inside each equal-price block):
+OUTPUT:
+C002,beta,20.00,1
+C004,delta,20.00,3
+C001,alpha,45.00,2
+C003,gamma,45.00,7
+C005,epsilon,80.00,1
+
+Sample run 2 (TC 2 - max()/min() by price and by quantity; both minima are ties resolved to the FIRST element):
+OUTPUT:
+MAX price: C005,epsilon,80.00,1
+MIN price: C002,beta,20.00,1
+MAX quantity: C003,gamma,45.00,7
+MIN quantity: C002,beta,20.00,1
+
+Sample run 3 (TC 3 - partitionByPrice(45.00); the two products priced exactly 45.00 go to group A):
+OUTPUT:
+A:3
+C001,alpha,45.00,2
+C003,gamma,45.00,7
+C005,epsilon,80.00,1
+B:2
+C002,beta,20.00,1
+C004,delta,20.00,3
+
+Sample run 4 (TC 3 - partitionByPrice(100.00); group A is empty but still a list):
+OUTPUT:
+A:0
+B:5
+C001,alpha,45.00,2
+C002,beta,20.00,1
+C003,gamma,45.00,7
+C004,delta,20.00,3
+C005,epsilon,80.00,1
+
+Sample run 5 (TC 2 - with ZERO products entered):
+OUTPUT:
+MAX price: null
+MIN price: null
+MAX quantity: null
+MIN quantity: null`,
+  explanation: B(q3ExplainEn, q3ExplainVi),
+  rubric: [
+    { id: 'skeleton', criterion: B('Constructor creates an empty List<Product>; add(), getAll() and size() work.', 'Constructor tạo List<Product> rỗng; add(), getAll() và size() hoạt động đúng.'), weight: 1, maxScore: 0.4 },
+    { id: 'sort', criterion: B('sort(Comparator) re-orders the stored list in place via Collections.sort(list, cmp) and accepts any comparator supplied by the caller.', 'sort(Comparator) sắp lại danh sách đang lưu tại chỗ bằng Collections.sort(list, cmp) và nhận được comparator bất kỳ do người gọi truyền vào.'), weight: 1, maxScore: 0.6 },
+    { id: 'maxmin', criterion: B('max()/min() iterate manually (no Collections.max/min), return null on an empty list, and return the FIRST element on a tie (strict > / < comparison).', 'max()/min() tự duyệt (không dùng Collections.max/min), trả null khi danh sách rỗng, và trả về phần tử ĐẦU TIÊN khi hoà (so sánh chặt > / <).'), weight: 3, maxScore: 1.0 },
+    { id: 'partition', criterion: B('partitionByPrice() returns two lists, index 0 for price >= threshold and index 1 for price < threshold, each preserving the original relative order, with empty groups returned as empty lists rather than null.', 'partitionByPrice() trả về hai list, chỉ số 0 cho price >= threshold và chỉ số 1 cho price < threshold, mỗi nhóm giữ nguyên thứ tự tương đối gốc, nhóm rỗng trả về list rỗng chứ không phải null.'), weight: 3, maxScore: 1.0 },
+  ],
+};
+
+// ── Q4 (2 marks): TopSelector.topN ───────────────────────────────────────────
+const q4PromptEn = `<p><strong>(2 marks)</strong> The class <strong>Product</strong> is given already compiled (<code>Product.class</code>, same API as before). Write a class <strong>TopSelector</strong> with a single <strong>static</strong> method that answers "give me the top N products in a given order":</p>
+${table([
+  '<strong>TopSelector</strong>',
+  '+topN(list: List&lt;Product&gt;, cmp: Comparator&lt;Product&gt;, n: int): List&lt;Product&gt;   <em>(static)</em>',
+])}
+<p><code>topN</code> returns a <strong>new</strong> list containing the first <code>n</code> products of <code>list</code> when <code>list</code> is ordered by <code>cmp</code>. Rules, all of which are tested:</p>
+<ul>
+  <li>The method must <strong>not modify or re-order the caller's list</strong> — sort a copy. The harness prints the caller's list again afterwards to check this.</li>
+  <li>If <code>n</code> is <strong>greater than or equal to</strong> the size of the list, return <strong>all</strong> the products (still ordered by <code>cmp</code>) — do NOT crash with <code>IndexOutOfBoundsException</code>.</li>
+  <li>If <code>n &lt;= 0</code>, or <code>list</code> is <code>null</code>, or <code>cmp</code> is <code>null</code>, return an <strong>empty list</strong> (never <code>null</code>).</li>
+  <li><strong>Tie-breaking rule at the boundary</strong>: when several products compare equal under <code>cmp</code> and only some of them fit inside the top N, the one that appears <strong>earlier in the original list</strong> is kept. Implement this by sorting a copy with <code>Collections.sort</code>, which is stable, and then taking the first <code>min(n, size)</code> elements.</li>
+</ul>`;
+
+const q4PromptVi = `<p><strong>(2 điểm)</strong> Lớp <strong>Product</strong> được cho sẵn đã biên dịch (<code>Product.class</code>, API như trên). Viết lớp <strong>TopSelector</strong> với đúng một phương thức <strong>static</strong> trả lời câu hỏi "cho tôi N sản phẩm dẫn đầu theo một thứ tự cho trước":</p>
+${table([
+  '<strong>TopSelector</strong>',
+  '+topN(list: List&lt;Product&gt;, cmp: Comparator&lt;Product&gt;, n: int): List&lt;Product&gt;   <em>(static)</em>',
+])}
+<p><code>topN</code> trả về một list <strong>MỚI</strong> chứa <code>n</code> sản phẩm đầu tiên của <code>list</code> khi <code>list</code> được sắp theo <code>cmp</code>. Các quy tắc, đều được kiểm tra:</p>
+<ul>
+  <li>Phương thức KHÔNG được <strong>sửa hay sắp lại danh sách của người gọi</strong> — hãy sắp trên một bản sao. Harness sẽ in lại danh sách của người gọi sau đó để kiểm tra điều này.</li>
+  <li>Nếu <code>n</code> <strong>lớn hơn hoặc bằng</strong> kích thước danh sách, trả về <strong>toàn bộ</strong> sản phẩm (vẫn theo thứ tự <code>cmp</code>) — KHÔNG được ném <code>IndexOutOfBoundsException</code>.</li>
+  <li>Nếu <code>n &lt;= 0</code>, hoặc <code>list</code> là <code>null</code>, hoặc <code>cmp</code> là <code>null</code>, trả về <strong>list rỗng</strong> (không bao giờ trả <code>null</code>).</li>
+  <li><strong>Quy tắc phá hoà tại ranh giới</strong>: khi nhiều sản phẩm so sánh bằng nhau theo <code>cmp</code> mà chỉ một phần trong số đó lọt vào top N, sản phẩm <strong>xuất hiện sớm hơn trong danh sách gốc</strong> được giữ lại. Hãy cài đặt bằng cách sắp một bản sao với <code>Collections.sort</code> (vốn ổn định) rồi lấy <code>min(n, size)</code> phần tử đầu.</li>
+</ul>`;
+
+const q4ExplainEn = `<p><strong>Everything from Q1-Q3 pays off here.</strong> <code>topN</code> is four lines of real logic: copy, sort with the caller's comparator, clamp <code>n</code>, take a prefix. The marks are in the edge cases, and every one of them below was executed for real rather than reasoned about.</p>
+<p><strong>Off-by-one and <code>n &gt; size</code>.</strong> The only safe bound is <code>Math.min(n, copy.size())</code>. Writing <code>for (int i = 0; i &lt; n; i++) result.add(copy.get(i));</code> is the classic failure: with 5 products and n = 10 it throws <code>IndexOutOfBoundsException</code> on the sixth iteration. Sample runs 2 and 3 cover <code>n &gt; size</code> (10) and <code>n == size</code> (5) separately, because a wrong bound written as <code>&lt;=</code> passes the first and fails the second, or vice versa. Both were run; both return all 5 products in comparator order.</p>
+<p><strong>The boundary tie is the interesting case.</strong> In sample run 1 three products all cost 50.00 — C001 (entered 1st), C003 (3rd) and C005 (5th) — and the top 3 by price descending has exactly one slot left after C004 (90.00) and C002 (70.00). The captured output keeps <strong>C001</strong>. That is not luck: <code>Collections.sort</code> is stable, so equal elements stay in insertion order, and taking a prefix therefore keeps the earliest. If you implemented <code>topN</code> with a selection loop that removes the maximum repeatedly, or with a comparator that returns <code>&gt;=</code>-style results, you would get C003 or C005 instead and silently fail this case. A documented tie rule plus a stable sort is what makes a top-N query <em>reproducible</em>, which is exactly what a grader or a report needs.</p>
+<p><strong>Do not mutate the caller's list.</strong> <code>Collections.sort(list, cmp)</code> on the parameter itself would re-order the caller's data as a side effect — a bug that only shows up later, when the caller prints "its own" list and finds it shuffled. Copy first: <code>new ArrayList&lt;Product&gt;(list)</code>. Every sample run below prints the caller's list under <code>ORIGINAL:</code> after the call, and it is still in insertion order in all of them.</p>
+<p><strong>Note also that the two comparators give different winners.</strong> By price descending the top 3 is C004, C002, C001; by total value descending it is C003, C002, C005 — C003 has the lowest-but-one price yet the highest total value (50.00 x 4 = 200.00). Sorting by the wrong key is a whole-question error, not a rounding error.</p>`;
+
+const q4ExplainVi = `<p><strong>Mọi thứ từ câu 1-3 đều được dùng lại ở đây.</strong> <code>topN</code> chỉ có 4 dòng logic thật: sao chép, sắp bằng comparator của người gọi, chặn <code>n</code>, lấy phần đầu. Điểm nằm ở các trường hợp biên, và tất cả các trường hợp bên dưới đều được CHẠY THẬT chứ không phải suy luận.</p>
+<p><strong>Lệch một đơn vị và <code>n &gt; size</code>.</strong> Cận an toàn duy nhất là <code>Math.min(n, copy.size())</code>. Viết <code>for (int i = 0; i &lt; n; i++) result.add(copy.get(i));</code> là lỗi kinh điển: với 5 sản phẩm và n = 10 nó ném <code>IndexOutOfBoundsException</code> ngay vòng lặp thứ sáu. Mẫu chạy 2 và 3 tách riêng <code>n &gt; size</code> (10) và <code>n == size</code> (5), vì một cận sai viết kiểu <code>&lt;=</code> có thể qua được cái này mà trượt cái kia hoặc ngược lại. Cả hai đều đã chạy; cả hai đều trả về đủ 5 sản phẩm theo thứ tự comparator.</p>
+<p><strong>Hoà tại ranh giới mới là chỗ thú vị.</strong> Ở mẫu chạy 1 có ba sản phẩm cùng giá 50.00 — C001 (nhập thứ 1), C003 (thứ 3) và C005 (thứ 5) — và top 3 theo price giảm dần chỉ còn đúng một chỗ sau C004 (90.00) và C002 (70.00). Output bắt được giữ lại <strong>C001</strong>. Đó không phải may mắn: <code>Collections.sort</code> ổn định nên các phần tử bằng nhau giữ nguyên thứ tự chèn, do đó lấy phần đầu sẽ giữ phần tử sớm nhất. Nếu bạn cài <code>topN</code> bằng vòng lặp chọn-rồi-xoá phần tử lớn nhất, hoặc bằng comparator kiểu <code>&gt;=</code>, bạn sẽ ra C003 hoặc C005 và lặng lẽ sai ca này. Một quy tắc phá hoà được ghi rõ cộng với một thuật toán sắp ổn định là thứ làm cho truy vấn top-N <em>tái lập được</em> — đúng thứ mà người chấm hay một báo cáo cần.</p>
+<p><strong>Đừng làm thay đổi danh sách của người gọi.</strong> Gọi <code>Collections.sort(list, cmp)</code> thẳng trên tham số sẽ sắp lại dữ liệu của người gọi như một tác dụng phụ — lỗi này chỉ lộ ra về sau, khi người gọi in "danh sách của mình" và thấy nó đã bị xáo. Hãy sao chép trước: <code>new ArrayList&lt;Product&gt;(list)</code>. Mọi mẫu chạy bên dưới đều in lại danh sách người gọi dưới nhãn <code>ORIGINAL:</code> sau lời gọi, và trong tất cả các lần nó vẫn nguyên thứ tự chèn.</p>
+<p><strong>Cũng chú ý hai comparator cho hai người thắng khác nhau.</strong> Theo price giảm dần, top 3 là C004, C002, C001; theo tổng giá trị giảm dần lại là C003, C002, C005 — C003 có giá gần thấp nhất nhưng tổng giá trị cao nhất (50.00 x 4 = 200.00). Sắp nhầm khoá là sai cả câu, không phải sai làm tròn.</p>`;
+
+const q4 = {
+  kind: 'CODE', points: 2, language: 'java',
+  prompt: B(q4PromptEn, q4PromptVi),
+  starterCode: `import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+// Product.class is GIVEN (already compiled). Do not write Product again.
+
+public class TopSelector {
+
+    public static List<Product> topN(List<Product> list, Comparator<Product> cmp, int n) {
+        // TODO:
+        //  - return an EMPTY list when n <= 0 or list/cmp is null
+        //  - sort a COPY of list with cmp (never re-order the caller's list)
+        //  - take the first Math.min(n, size) elements
+        return null;
+    }
+}`,
+  sampleSolution: SOL_TOP,
+  expectedOutput:
+`List used in every run (entered in this order):
+C001,alpha,50.00,1      total value  50.00
+C002,beta,70.00,2       total value 140.00
+C003,gamma,50.00,4      total value 200.00
+C004,delta,90.00,1      total value  90.00
+C005,epsilon,50.00,2    total value 100.00
+
+Sample run 1 (TC 1 - topN by price DESC, n = 3; three products tie at 50.00 and only one slot is left, the earliest in the original list wins):
+OUTPUT:
+SIZE:3
+C004,delta,90.00,1
+C002,beta,70.00,2
+C001,alpha,50.00,1
+ORIGINAL:
+C001,alpha,50.00,1
+C002,beta,70.00,2
+C003,gamma,50.00,4
+C004,delta,90.00,1
+C005,epsilon,50.00,2
+
+Sample run 2 (TC 1 - topN by price DESC, n = 10, i.e. n > size; returns all 5, no exception):
+OUTPUT:
+SIZE:5
+C004,delta,90.00,1
+C002,beta,70.00,2
+C001,alpha,50.00,1
+C003,gamma,50.00,4
+C005,epsilon,50.00,2
+ORIGINAL:
+C001,alpha,50.00,1
+C002,beta,70.00,2
+C003,gamma,50.00,4
+C004,delta,90.00,1
+C005,epsilon,50.00,2
+
+Sample run 3 (TC 1 - topN by price DESC, n = 5, i.e. n == size exactly):
+OUTPUT:
+SIZE:5
+C004,delta,90.00,1
+C002,beta,70.00,2
+C001,alpha,50.00,1
+C003,gamma,50.00,4
+C005,epsilon,50.00,2
+ORIGINAL:
+C001,alpha,50.00,1
+C002,beta,70.00,2
+C003,gamma,50.00,4
+C004,delta,90.00,1
+C005,epsilon,50.00,2
+
+Sample run 4 (TC 1 - topN by price DESC, n = 0; empty result, original untouched):
+OUTPUT:
+SIZE:0
+ORIGINAL:
+C001,alpha,50.00,1
+C002,beta,70.00,2
+C003,gamma,50.00,4
+C004,delta,90.00,1
+C005,epsilon,50.00,2
+
+Sample run 5 (TC 2 - topN by TOTAL VALUE DESC, n = 3; a different winner set from run 1):
+OUTPUT:
+SIZE:3
+C003,gamma,50.00,4
+C002,beta,70.00,2
+C005,epsilon,50.00,2
+ORIGINAL:
+C001,alpha,50.00,1
+C002,beta,70.00,2
+C003,gamma,50.00,4
+C004,delta,90.00,1
+C005,epsilon,50.00,2`,
+  explanation: B(q4ExplainEn, q4ExplainVi),
+  rubric: [
+    { id: 'core', criterion: B('topN() sorts by the supplied comparator and returns the first n products in that order as a new List<Product>.', 'topN() sắp theo comparator được truyền vào và trả về n sản phẩm đầu tiên theo thứ tự đó trong một List<Product> mới.'), weight: 2, maxScore: 0.8 },
+    { id: 'edges', criterion: B('Handles n >= list size by returning all elements (no IndexOutOfBoundsException) and n <= 0 / null arguments by returning an empty list, never null.', 'Xử lý n >= kích thước danh sách bằng cách trả về toàn bộ (không ném IndexOutOfBoundsException) và n <= 0 / tham số null bằng cách trả về list rỗng, không bao giờ trả null.'), weight: 2, maxScore: 0.6 },
+    { id: 'nomutate_tie', criterion: B("Sorts a copy so the caller's list keeps its original order, and resolves a boundary tie in favour of the product appearing earlier in the original list (stable Collections.sort + prefix).", 'Sắp trên bản sao để danh sách của người gọi giữ nguyên thứ tự gốc, và phá hoà tại ranh giới theo hướng ưu tiên sản phẩm xuất hiện sớm hơn trong danh sách gốc (Collections.sort ổn định + lấy phần đầu).'), weight: 2, maxScore: 0.6 },
+  ],
+};
+
+const spec = {
+  course: { courseCode: 'PRO192' },
+  exams: [
+    {
+      kind: 'PE', peType: 'CODE',
+      code: 'PE-ADV2',
+      title: B(
+        'PRO192 — Advanced Practice 2: Comparable, Comparator & Sorting (Nâng cao)',
+        'PRO192 — Luyện tập Nâng cao 2: Comparable, Comparator & Sắp xếp',
+      ),
+      description: B(
+        'Self-authored supplementary practice paper (NOT a real school exam) in the standard PE format: 4 questions, 10 marks, real NetBeans given materials. Every question goes deeper into OOP than the standard PRO192 papers, all four built around one theme — implementing Comparable, writing external Comparators, sorting collections with Collections.sort, stable ordering, multi-field tie-breaks and top-N queries. Aimed at bridging into LAB211 (semester 3), whose labs assume you can already order domain objects confidently. Every sample output was produced by compiling the reference solution against the given Main.class harness and capturing real stdout.',
+        'Đề luyện tập bổ sung do chúng tôi tự soạn (KHÔNG phải đề thi thật của trường), theo đúng khuôn khổ PE: 4 câu, 10 điểm, given materials NetBeans thật. Mỗi câu đều sâu về OOP hơn các đề PRO192 chuẩn, cả bốn câu xoay quanh một chủ đề — cài đặt Comparable, viết Comparator bên ngoài, sắp xếp collection bằng Collections.sort, tính ổn định của thuật toán sắp, phá hoà nhiều trường và truy vấn top-N. Mục tiêu là bắc cầu sang LAB211 (kỳ 3), nơi các bài lab mặc định bạn đã sắp xếp thành thạo đối tượng nghiệp vụ. Mọi output mẫu đều được tạo bằng cách biên dịch lời giải tham chiếu cùng harness Main.class given rồi bắt stdout THẬT.',
+      ),
+      durationMinutes: 120,
+      totalPoints: 10,
+      passMark: 5,
+      source: 'SAMPLE',
+      isPublished: true,
+      instructions,
+      attachmentUrl: ATTACHMENT_URL,
+      attachmentName: B(
+        'Download given materials (Q1-Q4, NetBeans projects with the compiled Main.class harness)',
+        'Tải given materials (Q1-Q4, project NetBeans kèm harness Main.class đã biên dịch)',
+      ),
+      questions: [q1, q2, q3, q4],
+    },
+  ],
+};
+
+const total = spec.exams[0].questions.reduce((s, q) => s + q.points, 0);
+if (total !== spec.exams[0].totalPoints) {
+  throw new Error(`points mismatch: questions sum to ${total}, totalPoints is ${spec.exams[0].totalPoints}`);
+}
+
+fs.writeFileSync(
+  OUT,
+  `// AUTO-GENERATED by scripts/build-pro192-pe-adv2.mjs — do not hand-edit, re-run the builder instead.\nexport default ${JSON.stringify(spec, null, 2)};\n`,
+  'utf8',
+);
+console.log(`✓ wrote ${path.relative(process.cwd(), OUT)} (${spec.exams[0].questions.length} questions, ${total} points)`);

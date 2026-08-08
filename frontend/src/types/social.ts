@@ -221,9 +221,15 @@ export type NotificationType =
   // Sharing notifications (added 2026-07-02)
   | 'NOTE_SHARE'   // Note subject (folder) was shared with you
   | 'HUB_SHARE'    // Hub folder/file/link was shared with you
-  // Admin announcement (added 2026-07-09). Synthetic client-side type
-  // built from the `admin:announcement` socket event; entityId = the
-  // announcement id, payload.title = its title. Deep-links to /forum/:id.
+  // Admin announcement (added 2026-07-09, made a real server-side type on
+  // 2026-08-08). entityId = the announcement id, payload.title = its
+  // title. Deep-links to /forum/:id.
+  //
+  // This used to be a purely CLIENT-SIDE fiction: the socket handler built
+  // a row with a negative id that the server had never stored, so it
+  // vanished on reload and left the unread badge one ahead of the truth.
+  // The backend now writes a real per-user row (fanoutAnnouncement) before
+  // it broadcasts.
   | 'ADMIN_ANNOUNCEMENT';
 
 export interface SocialNotification {

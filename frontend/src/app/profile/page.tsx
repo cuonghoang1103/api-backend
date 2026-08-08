@@ -12,10 +12,14 @@
  * user's posts (with the same infinite-scroll, optimistic
  * likes, and post composers the home feed uses).
  *
- * The legacy editing features (display name, password change,
- * notification preferences, account deletion) have been
- * preserved at /settings/profile so the user can still reach
- * them. The navbar / Sidebar links point to /settings/profile.
+ * The legacy editing features live under /settings, split by concern:
+ * display name + bio in /settings/profile, password in
+ * /settings/security, notification preferences in
+ * /settings/notifications, and data export + account erasure in
+ * /settings/account. The navbar and dock link to the /settings hub.
+ *
+ * (Until 2026-08-08 this comment pointed at a /settings/profile route
+ * that had never been created — the link 404'd.)
  */
 
 import { useEffect } from 'react';

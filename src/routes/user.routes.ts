@@ -27,6 +27,10 @@ import { authenticate, optionalAuth } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { prisma } from '../config/database.js';
 import {
+  getPreferences as getUserPreferences,
+  updatePreferences as updateUserPreferences,
+} from '../services/userPreferences.service.js';
+import {
   toggleFollow,
   getEnhancedPublicProfile,
   getFollowStatus,
@@ -638,6 +642,11 @@ router.get('/:id/liked', authenticate, async (req: any, res: Response<ApiRespons
 
 // ════════════════════════════════════════════════════════════════
 // PATCH /api/v1/users/me/preferences — Update user preferences
+//
+// Body: { theme?: 'dark'|'light', preferences?: <partial prefs> }
+// `preferences` is deep-merged per section (see userPreferences.service),
+// so the appearance page can save `ui` without wiping `sound`. Only the
+// `theme` key existed before 2026-08-08; that shape still works unchanged.
 // ════════════════════════════════════════════════════════════════
 router.patch(
   '/me/preferences',
@@ -645,26 +654,11 @@ router.patch(
   async (req: any, res: Response<any>, next) => {
     try {
       const userId = req.user.userId!;
-      const { theme } = req.body;
-
-      const updateData: Record<string, any> = {};
-      if (theme !== undefined) {
-        if (!['dark', 'light'].includes(theme)) {
-          throw new AppError('Invalid theme value. Must be "dark" or "light"', 400, 'INVALID_THEME');
-        }
-        updateData.theme = theme;
-      }
-
-      if (Object.keys(updateData).length === 0) {
-        throw new AppError('No preferences provided', 400, 'NO_PREFERENCES');
-      }
-
-      await prisma.user.update({
-        where: { id: userId },
-        data: updateData,
+      const result = await updateUserPreferences(userId, {
+        theme: req.body?.theme,
+        preferences: req.body?.preferences,
       });
-
-      res.json({ success: true, data: { theme }, message: 'Preferences updated' });
+      res.json({ success: true, data: result, message: 'Preferences updated' });
     } catch (err) {
       next(err);
     }
@@ -673,6 +667,10 @@ router.patch(
 
 // ════════════════════════════════════════════════════════════════
 // GET /api/v1/users/me/preferences — Get user preferences
+//
+// Always returns a COMPLETE preferences object (defaults filled in for
+// rows written before the column existed), so the client never has to
+// null-check an individual toggle.
 // ════════════════════════════════════════════════════════════════
 router.get(
   '/me/preferences',
@@ -680,11 +678,8 @@ router.get(
   async (req: any, res: Response<any>, next) => {
     try {
       const userId = req.user.userId!;
-      const user = await prisma.user.findUnique({
-        where: { id: userId },
-        select: { theme: true },
-      });
-      res.json({ success: true, data: { theme: user?.theme ?? 'dark' } });
+      const result = await getUserPreferences(userId);
+      res.json({ success: true, data: result });
     } catch (err) {
       next(err);
     }

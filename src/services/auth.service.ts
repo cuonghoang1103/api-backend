@@ -558,6 +558,14 @@ export class AuthService {
       role: user.roles[0]?.role.name || 'ROLE_USER',
       roleVersion: Number(user.roleVersion),
       lastLoginAt: user.lastLoginAt,
+      // Last-login device fingerprint (added 2026-08-08 for
+      // /settings/security). These are the user's OWN login records, and
+      // this endpoint is already scoped to the authenticated user, so
+      // there's no cross-user exposure. Surfacing them is the cheapest
+      // "was this you?" signal we can give without a full session table.
+      lastLoginIp: user.lastLoginIp,
+      lastLoginUserAgent: user.lastLoginUserAgent,
+      emailVerifiedAt: user.emailVerifiedAt,
       createdAt: user.createdAt,
     };
   }

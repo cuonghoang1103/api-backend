@@ -672,15 +672,17 @@ export default function NavigationDock() {
                         onHover={() => setHoveredHref('/profile')}
                         onLeave={() => setHoveredHref(null)}
                       />
-                      {/* Settings */}
+                      {/* Settings — the hub, so every section is reachable.
+                          `startsWith` keeps the item highlighted while the
+                          user is on any /settings/* sub-page. */}
                       <DockRowLink
-                        href="/settings/notifications"
+                        href="/settings"
                         Icon={Settings}
-                        label="Settings"
-                        isActive={pathname === '/settings/notifications'}
-                        isHovered={hoveredHref === '/settings/notifications'}
+                        label="Cài đặt"
+                        isActive={pathname?.startsWith('/settings') ?? false}
+                        isHovered={hoveredHref === '/settings'}
                         scale={1}
-                        onHover={() => setHoveredHref('/settings/notifications')}
+                        onHover={() => setHoveredHref('/settings')}
                         onLeave={() => setHoveredHref(null)}
                       />
                       {/* Logout - only for authenticated */}

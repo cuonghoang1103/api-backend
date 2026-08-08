@@ -41,11 +41,23 @@ interface NotificationState {
   loadInitial: () => Promise<void>;
   loadMore: () => Promise<void>;
   markAllRead: () => Promise<void>;
+  /** Mark ONE notification as read, server included. The dropdown used
+   *  to flip `isRead` in local state only, so the row came back unread
+   *  on the next page load and the badge counted it again. */
+  markOneRead: (id: number) => Promise<void>;
   /** Inject a single new notification (e.g. from a socket push). */
   prepend: (n: SocialNotification) => void;
   /** Optimistically decrement the unread badge (e.g. when the
    *  user opens the dropdown and we mark everything read). */
   setUnreadCount: (n: number) => void;
+  /** Pull the authoritative unread count from the server. Cheap
+   *  (a single COUNT) — safe to call on mount, on tab focus and on
+   *  socket reconnect. */
+  syncUnreadCount: () => Promise<void>;
+  /** Re-read the newest page, replacing the head of the list. Used when
+   *  something happened that we can't reconstruct locally (an admin
+   *  broadcast) or after the tab was asleep. */
+  refresh: () => Promise<void>;
   reset: () => void;
 }
 
@@ -128,6 +140,24 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
     }
   },
 
+  markOneRead: async (id) => {
+    const before = get().items;
+    const unreadBefore = get().unreadCount;
+    const target = before.find((n) => n.id === id);
+    if (!target || target.isRead) return;
+
+    set({
+      items: before.map((n) => (n.id === id ? { ...n, isRead: true } : n)),
+      unreadCount: Math.max(0, unreadBefore - 1),
+    });
+    try {
+      await notificationApi.markRead({ ids: [id] });
+    } catch {
+      // Roll back so the badge doesn't silently under-count.
+      set({ items: before, unreadCount: unreadBefore });
+    }
+  },
+
   prepend: (n) =>
     set((s) => ({
       // De-dupe — if the item already exists (e.g. socket push
@@ -137,6 +167,35 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
     })),
 
   setUnreadCount: (n) => set({ unreadCount: Math.max(0, n) }),
+
+  syncUnreadCount: async () => {
+    try {
+      const res = await notificationApi.unreadCount();
+      const c = (res.data as any)?.data?.unreadCount;
+      // The SERVER is authoritative here, in both directions. An earlier
+      // version only ever raised the badge, so a notification read on
+      // another device left this tab showing a phantom count forever.
+      if (typeof c === 'number') set({ unreadCount: Math.max(0, c) });
+    } catch {
+      // Offline / 401 — leave the last known value in place.
+    }
+  },
+
+  refresh: async () => {
+    try {
+      const res = await notificationApi.list({ limit: 20 });
+      const data = (res.data as any).data as NotificationListResponse;
+      set({
+        items: data.items,
+        cursor: data.pagination.nextCursor,
+        hasNextPage: data.pagination.hasNextPage,
+        unreadCount: data.unreadCount,
+        error: null,
+      });
+    } catch {
+      /* keep whatever we had */
+    }
+  },
 
   reset: () =>
     set({

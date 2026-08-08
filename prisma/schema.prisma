@@ -92,6 +92,17 @@ model User {
   lastLoginUserAgent String?   @map("last_login_user_agent") @db.VarChar(500)
   // Theme preference: dark or light
   theme              String?   @default("dark") @map("theme") @db.VarChar(10)
+  // Cross-device settings blob (added 2026-08-08). Everything the user
+  // configures in /settings that isn't already its own column lives here:
+  //   { sound: { masterEnabled, volume, enabled: {kind: bool} },
+  //     ui:    { locale, reduceMotion },
+  //     notify:{ types: {NEW_REACTION: bool, ...}, browserPush } }
+  // JSON (not columns) because the shape grows every time a new
+  // notification kind or toggle is added — a column per toggle would
+  // mean a migration per toggle. Null = "never touched, use defaults".
+  // The uploaded MP3 blobs stay in the browser's IndexedDB; only the
+  // names/toggles round-trip here.
+  preferences        Json?     @map("preferences")
 
   provider   String? @db.VarChar(50)
   providerId String? @map("provider_id") @db.VarChar(255)
@@ -317,8 +328,59 @@ model User {
   makerDevices  MakerDevice[]
   makerCommands MakerCommand[]
 
+  // ─── Account erasure requests (added 2026-08-08) ─────────────────
+  // Two distinct relations to the same model, so each needs its own
+  // @relation name: rows this user FILED, and rows this user REVIEWED
+  // as an admin.
+  deletionRequests AccountDeletionRequest[] @relation("DeletionRequester")
+  deletionReviews  AccountDeletionRequest[] @relation("DeletionReviewer")
+
   @@index([email], name: "idx_users_email")
   @@map("users")
+}
+
+/// Account erasure request (Nghị định 13/2023 — quyền xoá dữ liệu).
+///
+/// Erasure is no longer self-service: the user FILES a request and an
+/// admin approves it before `anonymizeAccount()` runs. Rationale — the
+/// anonymisation is irreversible (it nulls the password, rotates the
+/// email/username and bumps roleVersion), so a misclick or a hijacked
+/// session used to be able to destroy an account with no recourse.
+///
+/// One PENDING row per user at a time; the partial-unique behaviour is
+/// enforced in the service layer (Postgres partial indexes aren't
+/// expressible in the Prisma schema) — see accountDeletion.service.ts.
+model AccountDeletionRequest {
+  id     Int @id @default(autoincrement())
+  userId Int @map("user_id")
+
+  /// Why the user wants out. Optional, shown to the reviewing admin.
+  reason String? @db.VarChar(500)
+
+  /// PENDING → APPROVED (account anonymised) | REJECTED | CANCELLED
+  /// (withdrawn by the user before review).
+  status String @default("PENDING") @db.VarChar(20)
+
+  /// Snapshot of the identity at request time. After APPROVED the user
+  /// row is anonymised, so without this the admin log would lose all
+  /// trace of WHOSE account was erased.
+  usernameAtRequest String? @map("username_at_request") @db.VarChar(50)
+  emailAtRequest    String? @map("email_at_request") @db.VarChar(100)
+
+  /// Admin decision trail.
+  reviewedById Int?      @map("reviewed_by_id")
+  reviewedAt   DateTime? @map("reviewed_at")
+  adminNote    String?   @map("admin_note") @db.VarChar(500)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user       User  @relation("DeletionRequester", fields: [userId], references: [id], onDelete: Cascade)
+  reviewedBy User? @relation("DeletionReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+
+  @@index([userId], name: "idx_deletion_req_user")
+  @@index([status], name: "idx_deletion_req_status")
+  @@map("account_deletion_requests")
 }
 
 model UserRole {

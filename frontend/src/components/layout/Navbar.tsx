@@ -588,7 +588,11 @@ export default function Navbar() {
                           {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
                           {theme === 'dark' ? 'Chế độ sáng' : 'Chế độ tối'}
                         </button>
-                        <Link href="/settings/notifications" onClick={() => setUserMenuOpen(false)}
+                        {/* Points at the settings HUB, not straight at the
+                            notification-sounds page. That deep link was the
+                            only way into /settings, which is why
+                            /settings/account shipped unreachable. */}
+                        <Link href="/settings" onClick={() => setUserMenuOpen(false)}
                           className="flex items-center gap-2 px-4 py-2.5 text-sm transition-colors"
                           style={{ color: 'var(--text-secondary)' }}
                           onMouseEnter={(e) => {
@@ -600,7 +604,7 @@ export default function Navbar() {
                             e.currentTarget.style.background = 'transparent';
                           }}
                         >
-                          <Settings className="w-4 h-4" />Notification sounds
+                          <Settings className="w-4 h-4" />Cài đặt
                         </Link>
                         <button
                           onClick={() => {

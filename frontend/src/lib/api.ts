@@ -199,11 +199,32 @@ export const authApi = {
     birthYear?: number | null;
     phone?: string | null;
     socialLinks?: Record<string, string> | null;
+    /** Privacy switch enforced in messages.service.ts. The backend has
+     *  always accepted it on PUT /profile; it was just missing from this
+     *  type, so nothing could set it without a cast. */
+    allowMessagesFromStrangers?: boolean;
   }) => api.put('/profile', data),
 
   // Data-subject rights (Nghị định 13/2023).
   exportData: () => api.get('/profile/export-data'),
-  deleteAccount: () => api.post('/profile/delete-account'),
+
+  // ─── Account erasure — admin-reviewed since 2026-08-08 ───
+  // These do NOT delete anything. They file / read / withdraw a request;
+  // an admin approving it in /admin/deletion-requests is what actually
+  // anonymises the account.
+  getDeletionRequest: () =>
+    api.get<{ success: true; data: { request: AccountDeletionRequest | null } }>(
+      '/profile/deletion-request',
+    ),
+  requestDeletion: (reason?: string) =>
+    api.post<{ success: true; data: { request: AccountDeletionRequest; created: boolean } }>(
+      '/profile/deletion-request',
+      { reason },
+    ),
+  cancelDeletionRequest: () =>
+    api.delete<{ success: true; data: { request: AccountDeletionRequest } }>(
+      '/profile/deletion-request',
+    ),
 
   changePassword: (data: {
     currentPassword: string;
@@ -2019,6 +2040,117 @@ export const notificationApi = {
     api.patch<{ success: true; data: { updated: number } }>(
       '/social/notifications',
       body,
+    ),
+};
+
+// ─── Settings: cross-device preferences (added 2026-08-08) ──────────────────
+
+/** Sound slots. Mirrors SoundKind in lib/soundStorage.ts and
+ *  SOUND_KINDS in the backend's userPreferences.service.ts. */
+export type PrefSoundKind =
+  | 'message' | 'notification' | 'admin-notification' | 'login' | 'post' | 'like';
+
+/** Bell categories the user can mute individually. */
+export type PrefNotifyType =
+  | 'NEW_POST' | 'NEW_REACTION' | 'NEW_COMMENT' | 'NEW_REPLY' | 'NEW_MENTION'
+  | 'NEW_MESSAGE' | 'FRIEND_REQUEST' | 'FRIEND_ACCEPT' | 'NEW_FOLLOW'
+  | 'NOTE_SHARE' | 'HUB_SHARE' | 'ADMIN_ANNOUNCEMENT';
+
+export interface ServerPreferences {
+  sound: {
+    masterEnabled: boolean;
+    volume: number;
+    enabled: Record<PrefSoundKind, boolean>;
+    customFileName: Record<PrefSoundKind, string>;
+  };
+  notify: {
+    types: Record<PrefNotifyType, boolean>;
+    browserPush: boolean;
+  };
+  ui: {
+    locale: 'vi' | 'en';
+    reduceMotion: boolean;
+  };
+  updatedAt: string | null;
+}
+
+/** Deep-partial: every section of a PATCH is optional, and the server
+ *  merges per section rather than replacing the whole blob. */
+export type ServerPreferencesPatch = {
+  sound?: Partial<Omit<ServerPreferences['sound'], 'enabled' | 'customFileName'>> & {
+    enabled?: Partial<Record<PrefSoundKind, boolean>>;
+    customFileName?: Partial<Record<PrefSoundKind, string>>;
+  };
+  notify?: {
+    types?: Partial<Record<PrefNotifyType, boolean>>;
+    browserPush?: boolean;
+  };
+  ui?: Partial<ServerPreferences['ui']>;
+};
+
+export const preferencesApi = {
+  get: () =>
+    api.get<{ success: true; data: { theme: 'dark' | 'light'; preferences: ServerPreferences } }>(
+      '/users/me/preferences',
+    ),
+  update: (body: { theme?: 'dark' | 'light'; preferences?: ServerPreferencesPatch }) =>
+    api.patch<{ success: true; data: { theme: 'dark' | 'light'; preferences: ServerPreferences } }>(
+      '/users/me/preferences',
+      body,
+    ),
+};
+
+// ─── Settings: account erasure requests (added 2026-08-08) ──────────────────
+
+export type DeletionRequestStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
+
+export interface AccountDeletionRequest {
+  id: number;
+  userId: number;
+  reason: string | null;
+  status: DeletionRequestStatus;
+  usernameAtRequest: string | null;
+  emailAtRequest: string | null;
+  reviewedById: number | null;
+  reviewedAt: string | null;
+  adminNote: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AdminDeletionRequest extends AccountDeletionRequest {
+  user: {
+    id: number; username: string; email: string; fullName: string | null;
+    displayName: string | null; avatarUrl: string | null;
+    createdAt: string; enabled: boolean;
+  } | null;
+  reviewedBy: { id: number; username: string; displayName: string | null } | null;
+}
+
+export const adminDeletionRequestsApi = {
+  list: (params?: { status?: DeletionRequestStatus; cursor?: number; take?: number }) =>
+    api.get<{
+      success: true;
+      data: {
+        items: AdminDeletionRequest[];
+        pagination: { nextCursor: number | null; hasNextPage: boolean; limit: number };
+      };
+    }>('/admin/deletion-requests', { params }),
+
+  stats: () =>
+    api.get<{
+      success: true;
+      data: { pending: number; approved: number; rejected: number; cancelled: number };
+    }>('/admin/deletion-requests/stats'),
+
+  approve: (id: number, note?: string) =>
+    api.post<{ success: true; data: { request: AccountDeletionRequest } }>(
+      `/admin/deletion-requests/${id}/approve`, { note },
+    ),
+
+  reject: (id: number, note?: string) =>
+    api.post<{ success: true; data: { request: AccountDeletionRequest } }>(
+      `/admin/deletion-requests/${id}/reject`, { note },
     ),
 };
 

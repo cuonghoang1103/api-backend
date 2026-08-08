@@ -49,6 +49,13 @@ export const NOTIFICATION_TYPES = [
   // ─── Sharing notifications (added 2026-07-02) ─────────────
   'NOTE_SHARE',   // Note subject (folder) was shared with recipient
   'HUB_SHARE',    // Hub folder/file/link was shared with recipient
+  // ─── Admin announcement (added 2026-08-08) ────────────────
+  // Was previously socket-only: the client fabricated a bell entry with a
+  // NEGATIVE id and bumped its own unread counter. That entry vanished on
+  // reload and left the badge permanently out of step with the server
+  // (the server had never heard of it). Now it's a real row per user.
+  // 18 chars — fits the VARCHAR(20) `type` column.
+  'ADMIN_ANNOUNCEMENT',
 ] as const;
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
 
@@ -275,6 +282,66 @@ export async function notifyHubShare(
     entityId: hubFolderId,
     payload: { folderName, permission },
   });
+}
+
+/* ─── Admin announcement fan-out (added 2026-08-08) ─────────── */
+
+/**
+ * Write one persisted bell notification per user for a new admin
+ * announcement, so it survives a reload and the unread badge matches the
+ * server. The realtime `admin:announcement` broadcast stays as-is — the
+ * client reacts to it by re-fetching, which picks these rows up.
+ *
+ * Deliberately NOT transactional with the announcement itself: an
+ * announcement must never fail to publish because the fan-out hiccuped.
+ * Callers should not await-and-throw on this — see announcement.routes.ts.
+ *
+ * Batched at 500 rows to keep a single INSERT from growing unbounded as
+ * the user table does.
+ */
+export async function fanoutAnnouncement(args: {
+  announcementId: number;
+  title: string;
+  authorId: number | null;
+}): Promise<number> {
+  // senderId is NOT NULL with an FK to users — without a real author we
+  // have nobody to attribute the row to, so skip the fan-out entirely
+  // (the socket broadcast still fires and the /forum page still shows it).
+  if (!args.authorId) return 0;
+
+  const recipients = await prisma.user.findMany({
+    where: { enabled: true, id: { not: args.authorId } },
+    select: { id: true },
+  });
+  if (recipients.length === 0) return 0;
+
+  const payload = { title: args.title.slice(0, 200) };
+  let written = 0;
+
+  for (let i = 0; i < recipients.length; i += 500) {
+    const chunk = recipients.slice(i, i + 500);
+    try {
+      const result = await prisma.socialNotification.createMany({
+        data: chunk.map((r) => ({
+          receiverId: r.id,
+          senderId: args.authorId as number,
+          type: 'ADMIN_ANNOUNCEMENT',
+          entityId: args.announcementId,
+          payload,
+        })),
+        skipDuplicates: true,
+      });
+      written += result.count;
+    } catch (err) {
+      logger.warn('fanoutAnnouncement chunk failed', {
+        error: (err as Error).message,
+        announcementId: args.announcementId,
+        from: i,
+      });
+    }
+  }
+
+  return written;
 }
 
 /* ─── Email-only admin alerts (unchanged contract) ─────────── */

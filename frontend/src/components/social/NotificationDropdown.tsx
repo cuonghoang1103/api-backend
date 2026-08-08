@@ -196,7 +196,7 @@ function targetUrl(n: SocialNotification): string {
 }
 
 export default function NotificationDropdown({ anchor, open, onClose }: NotificationDropdownProps) {
-  const { items, unreadCount, isLoading, isLoadingMore, hasNextPage, loadInitial, loadMore, markAllRead } =
+  const { items, unreadCount, isLoading, isLoadingMore, hasNextPage, loadInitial, loadMore, markAllRead, markOneRead } =
     useNotificationStore();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
@@ -297,15 +297,11 @@ export default function NotificationDropdown({ anchor, open, onClose }: Notifica
               <Link
                 href={targetUrl(n)}
                 onClick={() => {
-                  if (!n.isRead) {
-                    // Optimistic: mark this single row as read.
-                    // (The bulk markAllRead is exposed via the
-                    // dedicated button at the top.)
-                    useNotificationStore.setState((s) => ({
-                      items: s.items.map((it) => (it.id === n.id ? { ...it, isRead: true } : it)),
-                      unreadCount: Math.max(0, s.unreadCount - 1),
-                    }));
-                  }
+                  // Persist the read state. This used to flip `isRead` in
+                  // local component state ONLY — the server never heard
+                  // about it, so the row came back unread on the next page
+                  // load and the badge counted it all over again.
+                  if (!n.isRead) void markOneRead(n.id);
                   onClose();
                 }}
                 className={cn(
@@ -410,9 +406,13 @@ export default function NotificationDropdown({ anchor, open, onClose }: Notifica
           {content}
         </div>
 
-        {/* Footer — load more */}
-        {hasNextPage && items.length > 0 && (
-          <div className="border-t border-white/[0.08] px-4 py-2">
+        {/* Footer — load more + escape hatch to the full page.
+            The "Xem tất cả" link matters: the dropdown is capped at
+            520px, so without it anything older than a screenful was
+            unreachable (there was no /notifications route at all before
+            2026-08-08). */}
+        <div className="border-t border-white/[0.08] px-4 py-2 space-y-1">
+          {hasNextPage && items.length > 0 && (
             <button
               type="button"
               onClick={() => loadMore()}
@@ -428,8 +428,15 @@ export default function NotificationDropdown({ anchor, open, onClose }: Notifica
                 'Xem thêm thông báo cũ hơn'
               )}
             </button>
-          </div>
-        )}
+          )}
+          <Link
+            href="/notifications"
+            onClick={onClose}
+            className="w-full text-xs font-medium text-violet-300 hover:text-violet-200 py-1.5 rounded-md hover:bg-white/5 inline-flex items-center justify-center gap-1.5"
+          >
+            Xem tất cả thông báo
+          </Link>
+        </div>
       </motion.div>
     </AnimatePresence>,
     document.body,

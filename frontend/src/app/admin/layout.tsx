@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
-  LayoutDashboard, FileText, Users, Code2, Sparkles,
+  LayoutDashboard, FileText, Users, UserX, Code2, Sparkles,
   LogOut, Menu, X, ChevronRight, Shield,
   MessageSquare, BarChart3, BookOpen, ShoppingBag, Tag, Receipt, Music, GraduationCap, Database, Zap,
  CreditCard, Github, Search, TrendingUp, AlertTriangle, Gamepad2,
@@ -50,6 +50,7 @@ const adminNav = [
  { label: 'AI Chat Analytics', href: '/admin/ai-analytics', icon: MessageSquare },
  { label: 'Quản lý Nhãn dán', href: '/admin/stickers', icon: Sticker },
  { label: 'Báo cáo vi phạm', href: '/admin/reports', icon: AlertTriangle },
+ { label: 'Yêu cầu xoá tài khoản', href: '/admin/deletion-requests', icon: UserX },
  { label: 'Embed Queue', href: '/admin/embed-jobs', icon: Zap },
  { label: 'SEO Tools', href: '/admin/seo', icon: Search },
  { label: 'Tech Trends', href: '/admin/tech-trends', icon: TrendingUp },

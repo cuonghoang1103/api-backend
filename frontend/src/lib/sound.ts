@@ -38,11 +38,30 @@ import { getSound, type SoundKind } from './soundStorage';
 const DEFAULT_URLS: Record<SoundKind, string> = {
   message: '/sounds/default-message.mp3',
   notification: '/sounds/default-notification.mp3',
-  login: '/sounds/default-notification.mp3', // unused — kept for type completeness
+  // Login intentionally reuses the generic notification chime — there is no
+  // dedicated default-login.mp3 in public/sounds. (The old "unused" comment
+  // here was wrong: authStore does call playSound('login') after a
+  // successful sign-in.)
+  login: '/sounds/default-notification.mp3',
   post: '/sounds/default-post.mp3',
   like: '/sounds/default-like.mp3',
   'admin-notification': '/sounds/default-admin-notification.mp3',
 };
+
+/**
+ * Bare file name of each bundled default, for display in
+ * /settings/notifications ("Mặc định: default-message.mp3").
+ *
+ * DERIVED from DEFAULT_URLS on purpose. The settings page used to keep its
+ * own hand-written list, which had drifted: it showed
+ * `shikabukiste_yatta.mp3` for the admin sound and
+ * `tin_nhan_moi_chua_doc.mp3` for messages — names of files that are not
+ * what actually plays. Deriving it means the label can never disagree with
+ * the audio again.
+ */
+export const DEFAULT_SOUND_FILES: Record<SoundKind, string> = Object.fromEntries(
+  (Object.keys(DEFAULT_URLS) as SoundKind[]).map((k) => [k, DEFAULT_URLS[k].split('/').pop() ?? '']),
+) as Record<SoundKind, string>;
 
 // ── AudioContext singleton (used for both default and custom) ────────────
 let ctx: AudioContext | null = null;
@@ -83,9 +102,24 @@ type Source = 'default' | `custom:${SoundKind}`;
 interface CachedAudio {
   element: HTMLAudioElement;
   source: Source;
+  /** Object URL backing `element.src`, when source is a custom blob.
+   *  Tracked so we can revoke exactly once — see the leak note below. */
+  objectUrl?: string;
 }
 
 const cache: Partial<Record<SoundKind, CachedAudio>> = {};
+
+/**
+ * Per-kind memo of "does IndexedDB hold a custom sound for this kind?".
+ *
+ * undefined = not looked up yet, true/false = known. Without this, EVERY
+ * notification paid for an IndexedDB open + transaction + get before any
+ * audio started — an await on the critical path of a sound that is
+ * supposed to feel instant, and for most users the answer is always "no".
+ * Invalidated alongside the audio cache whenever the user uploads or
+ * resets a sound, so a fresh upload is still picked up immediately.
+ */
+const customPresence: Partial<Record<SoundKind, boolean>> = {};
 
 function buildAudioElement(src: string): HTMLAudioElement {
   const audio = new Audio(src);
@@ -93,32 +127,64 @@ function buildAudioElement(src: string): HTMLAudioElement {
   return audio;
 }
 
-function getOrBuildAudio(kind: SoundKind, src: string, source: Source): HTMLAudioElement {
+function getOrBuildAudio(
+  kind: SoundKind,
+  src: string,
+  source: Source,
+  objectUrl?: string,
+): HTMLAudioElement {
   const cached = cache[kind];
-  if (cached && cached.source === source) return cached.element;
+  if (cached && cached.source === source) {
+    // Caller minted a fresh object URL but we're reusing the cached
+    // element — release it right here. Previously this URL was simply
+    // dropped on the floor, and because an object URL pins its Blob for
+    // the lifetime of the document, every single notification leaked the
+    // whole audio file into memory.
+    if (objectUrl && objectUrl !== cached.objectUrl) URL.revokeObjectURL(objectUrl);
+    return cached.element;
+  }
   if (cached) {
     try { cached.element.pause(); } catch { /* ignore */ }
+    if (cached.objectUrl) {
+      try { URL.revokeObjectURL(cached.objectUrl); } catch { /* ignore */ }
+    }
   }
   const el = buildAudioElement(src);
-  cache[kind] = { element: el, source };
+  cache[kind] = { element: el, source, objectUrl };
   return el;
 }
 
 // ── Custom (user-uploaded) playback ──────────────────────────────────────
 async function playCustom(kind: SoundKind, volume: number): Promise<boolean> {
+  // Fast path 1: we already built the element for this kind's custom
+  // blob. Replay it without touching IndexedDB at all.
+  const cached = cache[kind];
+  if (cached && cached.source === `custom:${kind}`) {
+    return startPlayback(cached.element, volume);
+  }
+
+  // Fast path 2: we've already learned this kind has no custom sound.
+  if (customPresence[kind] === false) return false;
+
   const rec = await getSound(kind);
+  customPresence[kind] = !!rec;
   if (!rec) return false;
+
   const url = URL.createObjectURL(rec.blob);
-  const audio = getOrBuildAudio(kind, url, `custom:${kind}`);
+  const audio = getOrBuildAudio(kind, url, `custom:${kind}`, url);
+  return startPlayback(audio, volume);
+}
+
+/** Shared play mechanics for both custom and default sources. */
+function startPlayback(audio: HTMLAudioElement, volume: number): Promise<boolean> {
   audio.volume = Math.max(0, Math.min(1, volume));
   // currentTime=0 so a rapid-fire sequence of the same sound starts
   // from the beginning each time instead of resuming mid-play.
   try { audio.currentTime = 0; } catch { /* ignore */ }
   try {
-    await audio.play();
-    return true;
+    return audio.play().then(() => true).catch(() => false);
   } catch {
-    return false;
+    return Promise.resolve(false);
   }
 }
 
@@ -128,16 +194,10 @@ function playDefault(kind: SoundKind, volume: number): boolean {
   const url = DEFAULT_URLS[kind];
   if (!url) return false;
   const audio = getOrBuildAudio(kind, url, 'default');
-  audio.volume = Math.max(0, Math.min(1, volume));
-  try { audio.currentTime = 0; } catch { /* ignore */ }
-  try {
-    // play() returns a promise; we don't await it because we want
-    // playSound() to be fire-and-forget from the caller's view.
-    void audio.play();
-    return true;
-  } catch {
-    return false;
-  }
+  // Fire-and-forget from the caller's view: startPlayback returns a
+  // promise but playDefault's contract is "did we have a source to try".
+  void startPlayback(audio, volume);
+  return true;
 }
 
 // ── Public API ───────────────────────────────────────────────────────────
@@ -214,26 +274,30 @@ export async function testSound(kind: SoundKind, volume = 0.7): Promise<boolean>
  *  blob from IndexedDB. Call this after a user replaces or deletes
  *  their custom sound. */
 export function invalidateCustomSoundCache(kind?: SoundKind): void {
-  if (kind) {
-    const c = cache[kind];
-    if (c && c.source === `custom:${kind}`) {
+  const drop = (k: SoundKind) => {
+    const c = cache[k];
+    if (c && c.source === `custom:${k}`) {
       try { c.element.pause(); } catch { /* ignore */ }
-      try { URL.revokeObjectURL(c.element.src); } catch { /* ignore */ }
-      delete cache[kind];
+      // Revoke the tracked object URL, not `element.src`: the browser
+      // normalises `src` to an absolute URL, so revoking that string was
+      // a silent no-op and the blob stayed pinned.
+      if (c.objectUrl) {
+        try { URL.revokeObjectURL(c.objectUrl); } catch { /* ignore */ }
+      }
+      delete cache[k];
     }
+    // Force the next play() to re-check IndexedDB for this kind — the
+    // user just uploaded or reset a file, so our memo is stale.
+    delete customPresence[k];
+  };
+
+  if (kind) {
+    drop(kind);
   } else {
-    for (const k of Object.keys(cache) as SoundKind[]) {
-      const c = cache[k];
-      if (c && c.source.startsWith('custom:')) {
-        try { c.element.pause(); } catch { /* ignore */ }
-        try { URL.revokeObjectURL(c.element.src); } catch { /* ignore */ }
-      }
-    }
-    for (const k of Object.keys(cache)) {
-      if (cache[k as SoundKind]?.source.startsWith('custom:')) {
-        delete cache[k as SoundKind];
-      }
-    }
+    for (const k of Object.keys(cache) as SoundKind[]) drop(k);
+    // A kind may have a stale "no custom sound" memo without ever having
+    // been cached (it was never played), so clear the memo wholesale too.
+    for (const k of Object.keys(customPresence) as SoundKind[]) delete customPresence[k];
   }
 }
 

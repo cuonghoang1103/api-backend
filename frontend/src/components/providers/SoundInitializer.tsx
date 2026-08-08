@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { playSound } from '@/lib/sound';
 import { usePreferencesStore } from '@/store/preferencesStore';
+import { useAuthStore } from '@/store/authStore';
 
 /**
  * SoundInitializer — unlocks the AudioContext on the user's first
@@ -53,6 +54,38 @@ export default function SoundInitializer() {
       window.removeEventListener('keydown', unlock, true);
       window.removeEventListener('touchstart', unlock, true);
     };
+  }, []);
+
+  // Reconcile the browser-local settings against the account copy once
+  // the user is authenticated (added 2026-08-08). Guests are skipped —
+  // /users/me/preferences 401s for them, and this provider wraps every
+  // page including anonymous ones.
+  //
+  // This lives here rather than in the settings page on purpose: the
+  // sound settings affect the whole app, so they must follow the account
+  // from the first page load, not only once the user happens to open
+  // /settings/notifications.
+  useEffect(() => {
+    let pulled = false;
+    const pull = () => {
+      if (pulled) return;
+      pulled = true;
+      void usePreferencesStore.getState().pullFromServer();
+    };
+
+    if (useAuthStore.getState().isAuthenticated) {
+      pull();
+      return;
+    }
+    // The auth store hydrates asynchronously, so subscribe rather than
+    // checking once (same pattern ThemeContext uses).
+    const unsub = useAuthStore.subscribe((s) => {
+      if (s.isAuthenticated) {
+        pull();
+        unsub();
+      }
+    });
+    return () => unsub();
   }, []);
 
   return null;

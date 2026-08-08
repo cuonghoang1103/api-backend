@@ -10,6 +10,7 @@ import {
   updateAnnouncement,
   deleteAnnouncement,
 } from '../services/announcement.service.js';
+import { fanoutAnnouncement } from '../services/notification.service.js';
 
 /**
  * Announcements — site-wide broadcast notices.
@@ -71,15 +72,37 @@ router.post('/', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Resp
       isPinned,
     });
 
-    // Global broadcast to every connected socket so clients can
-    // surface the new announcement in real time.
-    const io = getIO();
-    io?.emit('admin:announcement', {
-      id: a.id,
-      title: a.title,
-      category: a.category,
-      createdAt: a.createdAt,
-    });
+    // Persist one bell notification per user BEFORE broadcasting, so a
+    // client that reacts to the socket event by re-fetching its list
+    // already finds the row. Fire-and-forget with a caught rejection:
+    // publishing an announcement must never fail because the fan-out did.
+    void fanoutAnnouncement({
+      announcementId: a.id,
+      title: String(a.title ?? ''),
+      authorId: req.userId ?? null,
+    })
+      .then(() => {
+        // Broadcast only after the rows exist. Clients treat this as
+        // "something changed, go re-read" — see useNotificationSocket.
+        const io = getIO();
+        io?.emit('admin:announcement', {
+          id: a.id,
+          title: a.title,
+          category: a.category,
+          createdAt: a.createdAt,
+        });
+      })
+      .catch(() => {
+        // Fan-out failed entirely — still broadcast so the realtime popup
+        // and the /forum page behave exactly as they did before this change.
+        const io = getIO();
+        io?.emit('admin:announcement', {
+          id: a.id,
+          title: a.title,
+          category: a.category,
+          createdAt: a.createdAt,
+        });
+      });
 
     res.status(201).json({ success: true, data: a });
   } catch (error) {

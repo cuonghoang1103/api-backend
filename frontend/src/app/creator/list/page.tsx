@@ -37,6 +37,7 @@ import {
  Sparkles,
  Plus,
  Image as ImageIcon,
+ GraduationCap,
 } from 'lucide-react';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 import {
@@ -50,6 +51,7 @@ import { useStudioStore } from '@/store/studioStore';
 import {
  CONTENT_STATUS_META,
  CONTENT_TYPE_META,
+ TYPE_ORDER,
 } from '@/lib/studio-meta';
 import { pick, useStudioT } from '@/lib/studio-i18n';
 import { toCsv, downloadCsv, type CsvColumn } from '@/lib/csv';
@@ -63,6 +65,7 @@ type SortKey =
  | 'title'
  | 'type'
  | 'status'
+ | 'courseTitle'
  | 'ideaDate'
  | 'filmDate'
  | 'publishDate'
@@ -77,14 +80,11 @@ const STATUSES: ContentStatus[] = [
  'SCHEDULED',
  'PUBLISHED',
 ];
-const TYPES: ContentType[] = [
- 'VLOG',
- 'AFFILIATE',
- 'CODE_REVIEW',
- 'REVIEW',
- 'IDEA',
- 'OTHER',
-];
+// Was a hand-maintained subset that predated the teaching formats, so
+// the filter could not select LECTURE / EXAM_SOLVING / EXERCISE /
+// PROJECT_BUILD at all. Use the shared order — adding an enum value now
+// shows up here on its own.
+const TYPES: ContentType[] = TYPE_ORDER;
 
 export default function CreatorListPage() {
  const { t, lang } = useStudioT();
@@ -93,6 +93,8 @@ export default function CreatorListPage() {
  'ALL',
  );
  const [typeFilter, setTypeFilter] = useState<ContentType | 'ALL'>('ALL');
+ // '' = mọi môn; '__none__' = chỉ những dự án chưa gắn môn nào.
+ const [courseFilter, setCourseFilter] = useState<string>('');
  const [search, setSearch] = useState('');
  const debouncedSearch = useDebouncedValue(search, 250);
 
@@ -106,19 +108,42 @@ export default function CreatorListPage() {
  // Reset selection when filter changes.
  useEffect(() => {
  setSelected(new Set());
- }, [statusFilter, typeFilter, debouncedSearch]);
+ }, [statusFilter, typeFilter, courseFilter, debouncedSearch]);
 
  const updateProject = useUpdateContentStatus();
  const deleteProject = useDeleteContentProject();
+
+ // Courses that actually appear in the data — derived from the rows
+ // rather than fetched from /academy-refs, so the dropdown only ever
+ // offers filters that can return something.
+ const courseOptions = useMemo(() => {
+ const seen = new Map<string, string>();
+ for (const p of projects) {
+ if (p.courseSlug) seen.set(p.courseSlug, p.courseTitle || p.courseSlug);
+ }
+ return [...seen.entries()]
+ .map(([slug, title]) => ({ slug, title }))
+ .sort((a, b) => a.title.localeCompare(b.title));
+ }, [projects]);
 
  // Filtered + sorted view.
  const rows = useMemo(() => {
  let r = projects;
  if (statusFilter !== 'ALL') r = r.filter((p) => p.status === statusFilter);
  if (typeFilter !== 'ALL') r = r.filter((p) => p.type === typeFilter);
+ if (courseFilter === '__none__') r = r.filter((p) => !p.courseSlug);
+ else if (courseFilter) r = r.filter((p) => p.courseSlug === courseFilter);
  if (debouncedSearch.trim()) {
  const q = debouncedSearch.toLowerCase();
- r = r.filter((p) => p.title.toLowerCase().includes(q));
+ // Search covers the Academy binding too — typing "PRO192" should
+ // find its episodes even when the code is not in the title.
+ r = r.filter(
+ (p) =>
+ p.title.toLowerCase().includes(q) ||
+ (p.courseTitle ?? '').toLowerCase().includes(q) ||
+ (p.lessonRef ?? '').toLowerCase().includes(q) ||
+ (p.seriesName ?? '').toLowerCase().includes(q),
+ );
  }
  const dir = sortDir === 'asc' ? 1 : -1;
  return [...r].sort((a, b) => {
@@ -128,14 +153,17 @@ export default function CreatorListPage() {
  if (av > bv) return 1 * dir;
  return 0;
  });
- }, [projects, statusFilter, typeFilter, debouncedSearch, sortKey, sortDir]);
+ }, [projects, statusFilter, typeFilter, courseFilter, debouncedSearch, sortKey, sortDir]);
 
  const onSort = (key: SortKey) => {
  if (key === sortKey) {
  setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
  } else {
  setSortKey(key);
- setSortDir(key === 'title' || key === 'type' || key === 'status' ? 'asc' : 'desc');
+ // Text columns read naturally A→Z; date columns read newest-first.
+ const isTextCol =
+ key === 'title' || key === 'type' || key === 'status' || key === 'courseTitle';
+ setSortDir(isTextCol ? 'asc' : 'desc');
  }
  };
 
@@ -198,6 +226,13 @@ export default function CreatorListPage() {
  { label: t('colSlug'), value: (p) => p.slug },
  { label: t('colType'), value: (p) => p.type },
  { label: t('colStatus'), value: (p) => p.status },
+ // Academy binding. Exported as separate columns rather than one
+ // joined string so the CSV can be pivoted by course in a
+ // spreadsheet — the whole point of exporting a lecture backlog.
+ { label: t('colCourse'), value: (p) => p.courseTitle },
+ { label: t('fieldLessonRef'), value: (p) => p.lessonRef },
+ { label: t('fieldSeries'), value: (p) => p.seriesName },
+ { label: t('fieldEpisode'), value: (p) => p.episodeNumber ?? '' },
  { label: t('colIdeaDate'), value: (p) => p.ideaDate },
  { label: t('colFilm'), value: (p) => p.filmDate },
  { label: t('colPublish'), value: (p) => p.publishDate },
@@ -303,6 +338,11 @@ export default function CreatorListPage() {
  colorMap={(v) =>
  v === 'ALL' ? null : (CONTENT_STATUS_META[v as ContentStatus]?.color ?? null)
  }
+ labelMap={(v) =>
+ v === 'ALL'
+ ? t('all')
+ : pick(CONTENT_STATUS_META[v as ContentStatus].label, lang)
+ }
  />
  {/* Type filter */}
  <FilterRow
@@ -313,7 +353,37 @@ export default function CreatorListPage() {
  colorMap={(v) =>
  v === 'ALL' ? null : (CONTENT_TYPE_META[v as ContentType]?.color ?? null)
  }
+ labelMap={(v) =>
+ v === 'ALL' ? t('all') : pick(CONTENT_TYPE_META[v as ContentType].label, lang)
+ }
  />
+ {/* Course filter. A <select>, not chips: the number of courses
+     grows with the Academy and would overflow the bar. Hidden
+     entirely until at least one project is bound to a course, so
+     it never shows an empty control. */}
+ {courseOptions.length > 0 && (
+ <div className="flex items-center gap-2 flex-wrap">
+ <div className="flex items-center gap-1 text-text-muted shrink-0 w-16">
+ <GraduationCap className="w-3 h-3" />
+ <span className="text-[10px] uppercase tracking-wider font-semibold">
+ {t('filterCourse')}
+ </span>
+ </div>
+ <select
+ value={courseFilter}
+ onChange={(e) => setCourseFilter(e.target.value)}
+ className="h-6 px-2 rounded-full bg-bg-elevated/40 text-[10px] font-semibold text-text-secondary hover:bg-bg-elevated/70 focus:outline-none focus:ring-1 focus:ring-studio-500/40"
+ >
+ <option value="">{t('all')}</option>
+ {courseOptions.map((c) => (
+ <option key={c.slug} value={c.slug}>
+ {c.title}
+ </option>
+ ))}
+ <option value="__none__">{t('courseUnbound')}</option>
+ </select>
+ </div>
+ )}
  </div>
 
  {/* Table */}
@@ -341,18 +411,25 @@ export default function CreatorListPage() {
  onClick={() => onSort('title')}
  />
  <SortHeader
- label="Type"
+ label={t('colType')}
  k="type"
  current={sortKey}
  dir={sortDir}
  onClick={() => onSort('type')}
  />
  <SortHeader
- label="Status"
+ label={t('colStatus')}
  k="status"
  current={sortKey}
  dir={sortDir}
  onClick={() => onSort('status')}
+ />
+ <SortHeader
+ label={t('colCourse')}
+ k="courseTitle"
+ current={sortKey}
+ dir={sortDir}
+ onClick={() => onSort('courseTitle')}
  />
  <SortHeader
  label={t('statIdeas')}
@@ -382,7 +459,7 @@ export default function CreatorListPage() {
  dir={sortDir}
  onClick={() => onSort('updatedAt')}
  />
- <th className="px-3 py-2 text-right">Counts</th>
+ <th className="px-3 py-2 text-right">{t('colCounts')}</th>
  <th className="w-8" />
  </tr>
  </thead>
@@ -390,7 +467,7 @@ export default function CreatorListPage() {
  {isLoading && (
  <tr>
  <td
- colSpan={10}
+ colSpan={11}
  className="px-3 py-12 text-center text-text-muted"
  >
  <motion.div
@@ -398,20 +475,20 @@ export default function CreatorListPage() {
  transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
  className="inline-block w-4 h-4 border-2 border-studio-500 border-t-transparent rounded-full"
  />
- <span className="ml-2 text-xs">Loading projects…</span>
+ <span className="ml-2 text-xs">{t('loadingProjects')}</span>
  </td>
  </tr>
  )}
  {!isLoading && rows.length === 0 && (
  <tr>
- <td colSpan={10} className="px-3 py-12 text-center">
+ <td colSpan={11} className="px-3 py-12 text-center">
  <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-studio-500/10 mb-2">
  <Sparkles className="w-5 h-5 text-studio-400" />
  </div>
  <p className="text-sm text-text-primary font-semibold mb-1">
  {projects.length === 0
- ? 'No projects yet'
- : 'No projects match these filters'}
+ ? t('emptyNoProjects')
+ : t('listNoProjectsFilter')}
  </p>
  <p className="text-xs text-text-secondary mb-3">
  {projects.length === 0
@@ -545,12 +622,16 @@ function FilterRow<T extends string>({
  options,
  onChange,
  colorMap,
+ labelMap,
 }: {
  label: string;
  value: T;
  options: readonly T[];
  onChange: (v: T) => void;
  colorMap: (v: T) => string | null;
+ /** Chip text. Without it the chips printed the raw enum value
+  *  ("EXAM_SOLVING"), which is neither translated nor readable. */
+ labelMap: (v: T) => string;
 }) {
  return (
  <div className="flex items-center gap-2 flex-wrap">
@@ -650,6 +731,32 @@ function ProjectRow({
  <td className="px-3 py-2">
  <StatusPill status={project.status} size="xs" bare />
  </td>
+ {/* Môn học. Đọc từ ảnh chụp `courseTitle` nên vẫn hiển thị
+     đúng sau khi môn bị đổi tên hoặc gỡ khỏi Academy. Dòng
+     phụ là chương/bài hoặc tập trong loạt — thứ phân biệt hai
+     video cùng một môn. */}
+ <td className="px-3 py-2 max-w-[190px]">
+ {project.courseTitle || project.courseSlug ? (
+ <div className="min-w-0">
+ <div className="flex items-center gap-1 text-text-secondary truncate">
+ <GraduationCap className="w-3 h-3 shrink-0 text-studio-400/80" />
+ <span className="truncate">
+ {project.courseTitle || project.courseSlug}
+ </span>
+ </div>
+ {(project.lessonRef || project.episodeNumber != null) && (
+ <div className="text-[10px] text-text-muted truncate mt-0.5 pl-4">
+ {project.lessonRef}
+ {project.lessonRef && project.episodeNumber != null && ' · '}
+ {project.episodeNumber != null &&
+ t('episodeShort', { n: project.episodeNumber })}
+ </div>
+ )}
+ </div>
+ ) : (
+ <span className="text-text-muted/60">—</span>
+ )}
+ </td>
  <td className="px-3 py-2 text-text-secondary tabular-nums">
  {formatDate(project.ideaDate)}
  </td>
@@ -678,7 +785,7 @@ function ProjectRow({
 }
 
 function Counts({ project }: { project: ContentProjectSummary }) {
- const { t, lang } = useStudioT();
+ const { t } = useStudioT();
  const c = project._count;
  if (!c) return <span className="text-text-muted text-[10px]">—</span>;
  return (

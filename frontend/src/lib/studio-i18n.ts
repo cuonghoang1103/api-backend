@@ -435,6 +435,19 @@ const S = {
   colFilm: { vi: 'Quay', en: 'Film' },
   colPublish: { vi: 'Đăng', en: 'Publish' },
   colUpdated: { vi: 'Cập nhật', en: 'Updated' },
+  colCourse: { vi: 'Môn học', en: 'Course' },
+  confirmBulkDelete: {
+    vi: 'Xoá {n} dự án? Không thể hoàn tác.',
+    en: 'Delete {n} project? This cannot be undone.|Delete {n} projects? This cannot be undone.',
+  },
+  colCounts: { vi: 'Số lượng', en: 'Counts' },
+  filterCourse: { vi: 'Môn học', en: 'Course' },
+  courseUnbound: { vi: 'Chưa gắn môn', en: 'No course' },
+  loadingProjects: { vi: 'Đang tải dự án…', en: 'Loading projects…' },
+  listNoProjectsFilter: {
+    vi: 'Không có dự án nào khớp bộ lọc',
+    en: 'No projects match these filters',
+  },
 
   // ─── Checklist presets ──────────────────────────────────────
   checklistPreset: { vi: 'Dùng bộ việc mẫu', en: 'Load a checklist preset' },

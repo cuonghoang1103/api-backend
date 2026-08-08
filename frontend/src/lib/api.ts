@@ -1693,6 +1693,13 @@ export const socialApi = {
   /** Per-content-type counts for the feed tab badges. */
   getFeedCounts: () => api.get('/social/posts/counts'),
 
+  /**
+   * Mục lục một loạt bài nhiều kỳ (vd. `100-ngay-java`): [{day, postId,
+   * title}]. Nhẹ có chủ đích — server chỉ trả tiêu đề, không trả thân bài
+   * — để thanh nhảy-theo-ngày không phải tải cả trăm bài về.
+   */
+  getSeriesIndex: (slug: string) => api.get(`/social/series/${slug}`),
+
   getPost: (id: number) => api.get(`/social/posts/${id}`),
   createPost: (data: {
     content: string;

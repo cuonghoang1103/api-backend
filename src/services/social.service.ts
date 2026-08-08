@@ -2260,3 +2260,86 @@ export async function listSavedPostsInCollection(
     nextCursor: hasMore ? sliced[sliced.length - 1].id : null,
   };
 }
+
+// ─── Mục lục loạt bài nhiều kỳ ("100 Ngày Java") ─────────────────
+//
+// Một loạt 100 kỳ không thể duyệt bằng cách cuộn feed: muốn đọc lại Ngày 1
+// khi đang ở Ngày 100 thì phải kéo qua 99 bài. Hàm này trả một MỤC LỤC nhẹ
+// (ngày → id bài → tên bài) để giao diện nhảy thẳng tới một ngày bất kỳ.
+//
+// Vì sao không gọi thẳng `/social/posts?limit=100`: mỗi bài dài ~5KB kèm
+// media, tác giả, số lượt thích — gần 1MB tải về chỉ để dựng một thanh
+// điều hướng. Ở đây Postgres cắt sẵn hai đầu chuỗi, phần thân bài không
+// bao giờ rời khỏi DB.
+//
+// Danh sách loạt bài KHOÁ CỨNG trong mã nguồn chứ không nhận slug tuỳ ý từ
+// client: một tham số tự do ở đây là một endpoint quét `LIKE '%…%'` trên
+// toàn bảng bài viết theo yêu cầu của người lạ.
+const POST_SERIES: Record<string, { tag: string; label: string; total: number }> = {
+  '100-ngay-java': {
+    tag: '100NgayJava', // mỗi bài kết thúc bằng #100NgayJava-Day007
+    label: '100 Ngày Java với CuongThai',
+    total: 100,
+  },
+};
+
+export interface PostSeriesIndex {
+  slug: string;
+  label: string;
+  total: number;
+  items: Array<{ day: number; postId: number; title: string }>;
+}
+
+// Mục lục chỉ đổi khi có bài mới (một lần mỗi ngày) nhưng lại được hỏi ở
+// mỗi lần mở feed → nhớ tạm 60 giây là đủ để DB không phải trả lời lặp.
+const seriesCache = new Map<string, { at: number; data: PostSeriesIndex }>();
+const SERIES_CACHE_TTL_MS = 60_000;
+
+export async function getPostSeriesIndex(slug: string): Promise<PostSeriesIndex | null> {
+  const def = POST_SERIES[slug];
+  if (!def) return null;
+
+  const cached = seriesCache.get(slug);
+  if (cached && Date.now() - cached.at < SERIES_CACHE_TTL_MS) return cached.data;
+
+  // `head` = tiêu đề bài, `tail` = hashtag ngày (seeder nối vào cuối).
+  // Cắt ngay trong SQL nên 100 bài chỉ tốn ~40KB thay vì ~500KB.
+  const rows = await prisma.$queryRaw<Array<{ id: number; head: string; tail: string }>>`
+    SELECT id,
+           left(content, 220)  AS head,
+           right(content, 220) AS tail
+      FROM social_posts
+     WHERE visibility = 'PUBLIC'
+       AND status = 'PUBLISHED'
+       AND content LIKE ${`%#${def.tag}-Day%`}
+     ORDER BY id ASC
+  `;
+
+  const dayRe = new RegExp(`#${def.tag}-Day(\\d{1,3})`, 'i');
+  const byDay = new Map<number, { day: number; postId: number; title: string }>();
+
+  for (const row of rows) {
+    const m = dayRe.exec(row.tail) ?? dayRe.exec(row.head);
+    const day = m ? parseInt(m[1], 10) : NaN;
+    if (!Number.isFinite(day) || day < 1) continue;
+
+    // "📮 100 NGÀY JAVA — NGÀY 10: METHOD & PASS-BY-VALUE" → phần sau dấu
+    // hai chấm. Không có dấu hai chấm thì lấy nguyên dòng đầu.
+    const firstLine = (row.head.split('\n')[0] ?? '').trim();
+    const colon = firstLine.indexOf(':');
+    const title = (colon >= 0 ? firstLine.slice(colon + 1) : firstLine).trim();
+
+    // Chạy lại seeder chỉ CẬP NHẬT bài cũ, nhưng nếu vì lý do nào đó có hai
+    // bài cùng ngày thì bài mới nhất (id lớn hơn) là bài đang hiển thị.
+    byDay.set(day, { day, postId: row.id, title: title || `Ngày ${day}` });
+  }
+
+  const data: PostSeriesIndex = {
+    slug,
+    label: def.label,
+    total: def.total,
+    items: [...byDay.values()].sort((a, b) => a.day - b.day),
+  };
+  seriesCache.set(slug, { at: Date.now(), data });
+  return data;
+}

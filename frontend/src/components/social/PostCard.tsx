@@ -58,6 +58,30 @@ const REACTION_KEYS: ReactionType[] = ['LIKE', 'LOVE', 'HAHA', 'SAD', 'ANGRY'];
 
 const MAX_PREVIEW_LENGTH = 600;
 
+/**
+ * Cắt phần xem trước của một bài dài.
+ *
+ * Cắt thẳng ở ký tự thứ 600 có thể rơi vào GIỮA một khối ```code```, và
+ * khi đó ba dấu huyền mở không còn dấu đóng: bộ tách khối code không nhận
+ * ra nó nữa nên người đọc thấy nguyên chuỗi "```java" nằm giữa bài. Ở đây
+ * ta kéo dài tới dấu đóng nếu nó ở gần (khối code ngắn — xem trọn vẹn còn
+ * hay hơn), còn không thì lùi về trước dấu mở.
+ */
+function previewOf(text: string): string {
+  let end = MAX_PREVIEW_LENGTH;
+  const openFences = (text.slice(0, end).match(/```/g) || []).length;
+  if (openFences % 2 === 1) {
+    const close = text.indexOf('```', end);
+    if (close >= 0 && close - end <= 400) {
+      end = close + 3;
+    } else {
+      const open = text.lastIndexOf('```', end);
+      if (open > 0) end = open;
+    }
+  }
+  return text.slice(0, end).trimEnd() + '…';
+}
+
 // Matches the `activeColor` previously passed to ActionButton for
 // the save state. Centralised here so the new bookmark button and
 // the popover use exactly the same amber.
@@ -279,10 +303,12 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
   const safeSavesCount = typeof post.savesCount === 'number' ? post.savesCount : 0;
   const safeIsLiked = !!post.isLiked;
   const safeIsSaved = !!post.isSaved;
-  const contentLong = safeContent.length > MAX_PREVIEW_LENGTH;
-  const visibleContent = expanded || !contentLong
-    ? safeContent
-    : safeContent.slice(0, MAX_PREVIEW_LENGTH).trimEnd() + '…';
+  // Ở chế độ chi tiết (modal bình luận / deep-link) người đọc đã chủ động
+  // mở đúng bài này — cắt ngang rồi bắt bấm "Xem thêm" là một bước thừa,
+  // và với bài dài của loạt "100 Ngày Java" thì mốc 600 ký tự còn rơi vào
+  // giữa một khối code.
+  const contentLong = !detailMode && safeContent.length > MAX_PREVIEW_LENGTH;
+  const visibleContent = expanded || !contentLong ? safeContent : previewOf(safeContent);
 
   // Cleanup the long-press timer on unmount so we don't leak
   useEffect(() => {
@@ -1267,7 +1293,7 @@ function PostCardImpl({ post, onToggleLike, onToggleSave, onDelete, onOpenTheate
 
         {/* Content with "See more" */}
         <div className="mt-3">
-          <RenderContentWithCode content={visibleContent} />
+          <RenderContentWithCode content={visibleContent} structureFrom={safeContent} />
           {contentLong && (
             <button
               onClick={() => setExpanded(!expanded)}

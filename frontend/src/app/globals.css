@@ -296,6 +296,22 @@
   html.theme-dark .theme-dark-only { display: block; }
   .text-violet-theme { color: #6d28d9; }
   html.theme-dark .text-violet-theme { color: #c4b5fd; }
+  /* `code` giữa dòng trong bài viết feed (RenderContentWithCode). Đặt cả
+     màu chữ chứ không chỉ nền — nền cố định + chữ theo theme là đúng công
+     thức ra chữ đen trên nền đen. */
+  .inline-code-chip {
+    background: rgba(139, 92, 246, 0.12);
+    color: #7c3aed;
+    border-radius: 5px;
+    padding: 0.5px 5px;
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-size: 0.88em;
+    white-space: nowrap;
+  }
+  html.theme-dark .inline-code-chip {
+    background: rgba(139, 92, 246, 0.22);
+    color: #ddd6fe;
+  }
   .shadow-theme { box-shadow: var(--shadow-md); }
   .shadow-theme-lg { box-shadow: var(--shadow-lg); }
 }

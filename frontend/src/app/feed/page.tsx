@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useRef, useCallback, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useSocialStore } from '@/store/socialStore';
 import { useShallow } from 'zustand/react/shallow';
@@ -28,6 +28,7 @@ import FeedTypeTabs, {
 import FeedFileList from '@/components/social/FeedFileList';
 import FeedVideoGrid from '@/components/social/FeedVideoGrid';
 import FeedHasNewBanner from '@/components/social/FeedHasNewBanner';
+import SeriesDayNav from '@/components/social/SeriesDayNav';
 import { useFeedHasNew } from '@/hooks/useFeedHasNew';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, Loader2, Search, Sparkles, Users, X, RotateCw } from 'lucide-react';
@@ -36,6 +37,12 @@ import TheaterMode from '@/components/social/TheaterMode';
 import MiniChatDock from '@/components/social/MiniChatDock';
 import { isScrollLocked } from '@/lib/scrollLock';
 import { playPop } from '@/lib/uiSound';
+
+// Mục feed nào đang là một loạt bài nhiều kỳ. Khoá theo TÊN mục viết
+// thường — id do DB cấp nên khác nhau giữa máy local và production.
+const SERIES_BY_CATEGORY: Record<string, { slug: string; icon: string }> = {
+  java: { slug: '100-ngay-java', icon: '☕' },
+};
 
 export default function SocialPage() {
   // Subscribe only to the fields this page renders (with a shallow compare)
@@ -101,6 +108,14 @@ export default function SocialPage() {
       .catch(() => { /* non-fatal */ });
     return () => { cancelled = true; };
   }, []);
+
+  // Mục feed ↔ loạt bài nhiều kỳ. Khoá theo TÊN mục (không phải id) vì id
+  // do DB cấp, khác nhau giữa máy local và production.
+  const activeSeries = useMemo(() => {
+    if (videoCategoryId == null) return null;
+    const name = videoCategories.find((c) => c.id === videoCategoryId)?.name?.trim().toLowerCase();
+    return name ? SERIES_BY_CATEGORY[name] ?? null : null;
+  }, [videoCategoryId, videoCategories]);
 
   const onVideoCategoryChange = useCallback((next: number | null) => {
     setVideoCategoryId(next);
@@ -764,6 +779,11 @@ export default function SocialPage() {
                 })}
               </div>
             )}
+
+            {/* Mục nào là một LOẠT BÀI NHIỀU KỲ thì kèm thanh nhảy-theo-ngày:
+                cuộn feed là cách duyệt tệ nhất khi loạt đã dài tới ba chữ số.
+                Chỉ hiện đúng lúc mục đó đang được chọn. */}
+            {activeSeries && <SeriesDayNav slug={activeSeries.slug} icon={activeSeries.icon} />}
 
             {/* Phase 5 home upgrade: "X bài viết mới" banner — drops in
                 above the list whenever a follower posts. Clicking it

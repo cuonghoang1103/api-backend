@@ -69,6 +69,7 @@ import {
   savePostToCollections,
   getPostSaveContext,
   listSavedPostsInCollection,
+  getPostSeriesIndex,
 } from '../services/social.service.js';
 import {
   notifyPostReaction,
@@ -283,6 +284,28 @@ router.get(
       // the tab badges cheap without going stale for long.
       res.set('Cache-Control', 'private, max-age=30, stale-while-revalidate=60');
       res.json({ success: true, data: counts });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ════════════════════════════════════════════════════════════════
+// GET /api/v1/social/series/:slug — Mục lục một loạt bài nhiều kỳ
+//
+// Trả [{ day, postId, title }] để giao diện nhảy thẳng tới một kỳ bất kỳ
+// mà không phải cuộn hết feed. Công khai (bài của loạt đều là PUBLIC) và
+// `slug` chỉ nhận các giá trị đã khoá cứng trong service.
+// ════════════════════════════════════════════════════════════════
+router.get(
+  '/series/:slug',
+  async (req: any, res: any, next) => {
+    try {
+      const data = await getPostSeriesIndex(String(req.params.slug));
+      if (!data) throw new AppError('Không tìm thấy loạt bài này', 404, 'SERIES_NOT_FOUND');
+      // Mục lục đổi mỗi ngày một lần — cache được ở cả CDN lẫn trình duyệt.
+      res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+      res.json({ success: true, data });
     } catch (error) {
       next(error);
     }

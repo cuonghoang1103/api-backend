@@ -84,7 +84,16 @@ if (!SKIP_CARD && !fs.existsSync(cardSpec)) {
   console.error(`✗ không thấy file thẻ ${path.relative(ROOT, cardSpec)}`); process.exit(1);
 }
 
-const key = `images/lessons/100-ngay-java/${day.card}.webp`;
+/* Tên file ảnh có thể mang số phiên bản: `cardRev: 2` → `…-v2.webp`.
+   Hai lý do, cả hai đều đã cắn một lần:
+   • CDN cache theo URL với max-age 30 ngày, nên sửa lại thẻ của một ngày
+     cũ mà giữ nguyên tên file thì người đọc vẫn thấy ảnh cũ cả tháng.
+   • Cloudflare cũng cache cả phản hồi 404. Nếu có ai lỡ gọi URL trước khi
+     ảnh kịp upload (Ngày 11 dính đúng chuyện này, 404 cache hơn một giờ)
+     thì URL đó coi như hỏng cho tới khi hết TTL — không xoá được từ đây.
+     Tăng `cardRev` là URL mới tinh, không cần chờ ai. */
+const cardFile = day.cardRev && day.cardRev > 1 ? `${day.card}-v${day.cardRev}` : day.card;
+const key = `images/lessons/100-ngay-java/${cardFile}.webp`;
 const PUBLIC_BASE = (process.env.R2_PUBLIC_URL || 'https://media.cuongthai.com').replace(/\/$/, '');
 const url = `${PUBLIC_BASE}/${key}`;
 let meta = { width: 1080, height: 1900 };
@@ -92,11 +101,28 @@ let meta = { width: 1080, height: 1900 };
 if (SKIP_CARD) {
   /* Pha GHI BÀI (chạy trong container lúc deploy). Ảnh phải đã có sẵn trên
      CDN từ pha dựng ở máy local — kiểm bằng GET thật, thiếu là DỪNG. Nếu bỏ
-     qua phép kiểm này thì bài lên prod với ảnh 404 và không ai biết. */
-  const probe = await fetch(url, { method: 'GET' }).catch(() => null);
+     qua phép kiểm này thì bài lên prod với ảnh 404 và không ai biết.
+
+     THỬ LẠI vài lần thay vì bỏ cuộc ngay: Cloudflare cache phản hồi 404
+     khoảng ba phút, nên một lần gọi lỡ nhịp ngay sau khi upload đủ để cả
+     deploy fail dù ảnh đã nằm trên R2. Lần cuối cùng gọi kèm tham số
+     cache-busting để phân biệt "CDN đang giữ 404 cũ" với "ảnh thật sự
+     chưa upload" — và nói thẳng điều đó ra thay vì báo một lỗi sai. */
+  let probe = null;
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    probe = await fetch(url, { method: 'GET' }).catch(() => null);
+    if (probe && probe.ok) break;
+    if (attempt < 3) await new Promise((r) => setTimeout(r, 20_000));
+  }
   if (!probe || !probe.ok) {
-    console.error(`✗ ảnh thẻ chưa có trên CDN (${probe ? probe.status : 'không nối được'}): ${url}`);
-    console.error('  → chạy ở máy local KHÔNG kèm --skip-card để dựng và upload trước.');
+    const fresh = await fetch(`${url}?cb=${Date.now()}`, { method: 'GET' }).catch(() => null);
+    if (fresh && fresh.ok) {
+      console.error(`✗ ảnh CÓ trên R2 nhưng CDN đang giữ bản 404 đã cache: ${url}`);
+      console.error('  → chờ hết TTL (Cloudflare cache 404 ~3 phút) rồi chạy lại, đừng upload lại.');
+    } else {
+      console.error(`✗ ảnh thẻ chưa có trên CDN (${probe ? probe.status : 'không nối được'}): ${url}`);
+      console.error('  → chạy ở máy local KHÔNG kèm --skip-card để dựng và upload trước.');
+    }
     process.exit(1);
   }
   console.log(`   ảnh: đã có trên CDN (${probe.status}) → ${url}`);
@@ -129,6 +155,18 @@ if (SKIP_CARD) {
       ContentType: 'image/webp',
       CacheControl: 'public, max-age=2592000',
     }));
+
+    /* Kiểm ảnh đã lên chưa — nhưng gọi qua URL CÓ THAM SỐ cache-busting.
+       Gọi thẳng URL thật ngay sau khi upload là tự bắn vào chân mình: nếu
+       lỡ nhịp một khoảnh khắc thì Cloudflare cache lại đúng cái 404 đó
+       khoảng ba phút, và đến lượt deploy (pha --skip-card) sẽ dừng vì
+       "ảnh chưa có trên CDN" trong khi ảnh nằm sẵn trên R2. */
+    const check = await fetch(`${url}?cb=${Date.now()}`, { method: 'GET' }).catch(() => null);
+    if (!check || !check.ok) {
+      console.error(`✗ upload xong nhưng đọc lại không được (${check ? check.status : 'không nối được'}): ${key}`);
+      process.exit(1);
+    }
+    console.log(`   ảnh: đã lên R2 và đọc lại được (${check.status})`);
   }
 }
 
@@ -187,7 +225,7 @@ if (APPLY) {
       width: meta.width,
       height: meta.height,
       mimeType: 'image/webp',
-      fileName: `${day.card}.webp`,
+      fileName: `${cardFile}.webp`,
       alt: `Thẻ tóm tắt ${day.card}`,
       sortOrder: 0,
     },

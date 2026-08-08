@@ -1,5 +1,5 @@
 /**
- * Thẻ bài học "99 Ngày Java" — Ngày 11: Classes & Objects.
+ * Thẻ bài học "100 Ngày Java" — Ngày 11: Classes & Objects.
  *
  * Đây là file DỮ LIỆU: mỗi ngày mới chỉ cần một file như thế này, không phải
  * đụng vào scripts/gen-lesson-card.mjs.
@@ -13,9 +13,9 @@
  * Mã nguồn kiểm chứng cho ngày này: xem `verify` ở cuối file.
  */
 export default {
-  series: '99 NGÀY JAVA',
+  series: '100 NGÀY JAVA',
   day: 11,
-  total: 99,
+  total: 100,
   titleLead: 'Java Day 11:',
   titleAccent: 'Classes & Objects',
   subtitle: 'Khuôn đúc, new, heap & this — OOP bắt đầu! 🏠',

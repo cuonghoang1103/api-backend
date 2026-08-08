@@ -159,6 +159,19 @@ export default function StudioTopbar() {
  <span className="hidden sm:inline">{t('newProject')}</span>
  </button>
 
+ {/* Series generator — the bulk sibling of "New project".
+     Sits next to it because the two answer the same question
+     at different scales: one video, or a whole subject. */}
+ <button
+ type="button"
+ onClick={() => openSeriesModal()}
+ title={t('seriesGenTitle')}
+ className="flex items-center gap-1.5 px-3 h-9 rounded-lg border border-studio-500/40 text-studio-300 hover:bg-studio-500/10 hover:border-studio-500/60 font-semibold text-sm transition-colors"
+ >
+ <Wand2 className="w-4 h-4" />
+ <span className="hidden md:inline whitespace-nowrap">{t('seriesGen')}</span>
+ </button>
+
  {/* Language toggle. Writes the SITE locale, not a
      studio-only flag — switching here and then navigating
      to /admin should keep the language you chose. */}

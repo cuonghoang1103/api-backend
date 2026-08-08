@@ -87,6 +87,10 @@ export default function CreatorLayout({ children }: { children: React.ReactNode 
  (not a page) so the topbar CTA can open it from any
  /creator/* route, including the per-project editor. */}
  <CreateProjectModal />
+ {/* Second global dialog, same reasoning as the create modal:
+     it lives in the layout so the topbar button can open it
+     from any /creator/* route, including the editor. */}
+ <SeriesGeneratorGlobal />
  </StudioShell>
  );
 }

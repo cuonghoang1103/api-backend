@@ -142,3 +142,7 @@ firmware/**/shell/stl/
 # Thẻ bài học sinh bằng scripts/gen-lesson-card.mjs — sinh lại được từ
 # content/lesson-cards/*.mjs, không cần lưu ảnh vào git.
 .cards/
+
+# Sơ đồ sinh bằng scripts/gen-diagram.mjs — sinh lại được từ
+# content/diagrams/*.mjs, không cần lưu ảnh vào git.
+.diagrams/

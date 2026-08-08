@@ -934,6 +934,40 @@ export interface AcademyRefs {
  exams: AcademyExamRef[];
 }
 
+/** One row of a source's outline — a course lesson or a project
+ *  milestone, normalised to the same shape so the series generator
+ *  does not branch on source type. */
+export interface OutlineItem {
+ key: string;
+ /** Chapter title (course) or phase (project). */
+ groupEn: string;
+ groupVi: string;
+ titleEn: string;
+ titleVi: string;
+ /** 1-based position across the WHOLE outline — becomes the
+  *  episode number, so it is continuous across groups. */
+ ordinal: number;
+ /** VIDEO / QUIZ / MILESTONE — the picker hides quizzes by default. */
+ kind: string;
+}
+
+export interface Outline {
+ sourceType: 'course' | 'project';
+ sourceSlug: string;
+ sourceTitleEn: string;
+ sourceTitleVi: string;
+ suggestedSeries: string;
+ items: OutlineItem[];
+}
+
+export interface BulkCreateResult {
+ created: Array<{ id: number; title: string; episodeNumber: number | null }>;
+ /** Titles left alone because they already exist in this series —
+  *  re-running the generator to pick up newly added lessons is a
+  *  normal thing to do, so it reports rather than fails. */
+ skipped: string[];
+}
+
 export type ContentStatus =
  | 'IDEA'
  | 'SCRIPTING'

@@ -4168,6 +4168,9 @@ export const hubShareApi = {
 // see the instance config above).
 import type {
  AcademyRefs,
+ BulkCreateResult,
+ Outline,
+ ScriptLang,
  ContentIdea,
  ContentIdeaCreate,
  ContentIdeaUpdate,
@@ -4349,6 +4352,29 @@ export const contentApi = {
  /** GET /admin/content/academy-refs — published courses + their
   * exams, for the "what is this video about?" pickers. */
  academyRefs: () => api.get<{ data: AcademyRefs }>('/admin/content/academy-refs'),
+
+ // ── Series generator ────────────────────────────────────────
+ /** Read an outline that already exists — a course's
+  *  sections→lessons, or a project's milestones — to generate one
+  *  project per item from. */
+ outline: (params: { courseSlug?: string; projectSlug?: string }) =>
+ api.get<{ data: Outline }>('/admin/content/outline', { params }),
+
+ /** Create one project per selected outline item. Items whose title
+  *  already exists in the series are skipped, not duplicated, so
+  *  re-running to pick up newly added lessons is safe. */
+ bulkCreate: (payload: {
+ items: Array<{ title: string; lessonRef?: string | null; episodeNumber?: number | null }>;
+ type?: ContentType;
+ status?: ContentStatus;
+ seriesName?: string | null;
+ courseSlug?: string | null;
+ courseTitle?: string | null;
+ projectSlug?: string | null;
+ targetDurationSec?: number | null;
+ scriptLang?: ScriptLang;
+ scriptTemplate?: string | null;
+ }) => api.post<{ data: BulkCreateResult }>('/admin/content/projects/bulk', payload),
 };
 
 

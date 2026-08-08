@@ -67,6 +67,11 @@ import {
  restoreScriptVersion,
  updateScriptTemplate,
 } from '../services/content.script.service.js';
+import {
+ bulkCreateProjects,
+ getCourseOutline,
+ getProjectOutline,
+} from '../services/content.series.service.js';
 import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
@@ -935,6 +940,43 @@ router.post('/script-templates/:id/use', async (req, res: Response<ApiResponse>,
  try {
  const id = parseId(req.params.id);
  res.json({ success: true, data: await bumpTemplateUse(id) });
+ } catch (error) { next(error); }
+});
+
+// ============================================================
+// Series generator
+// ------------------------------------------------------------
+// Reads an outline that already exists in the database (a
+// course's sections → lessons, or a project's milestones) and
+// mints one ContentProject per item. Recording a subject means
+// one video per lesson; CEA201 alone is ~50 of them.
+//
+// ── GET  /outline?courseSlug=… | ?projectSlug=…
+// ── POST /projects/bulk
+// ============================================================
+
+router.get('/outline', async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const courseSlug = typeof req.query.courseSlug === 'string' ? req.query.courseSlug.trim() : '';
+ const projectSlug = typeof req.query.projectSlug === 'string' ? req.query.projectSlug.trim() : '';
+ if (!courseSlug && !projectSlug) {
+ throw new AppError('courseSlug or projectSlug is required', 400, 'BAD_REQUEST');
+ }
+ const outline = courseSlug
+ ? await getCourseOutline(courseSlug)
+ : await getProjectOutline(projectSlug);
+ res.json({ success: true, data: outline });
+ } catch (error) { next(error); }
+});
+
+router.post('/projects/bulk', async (req, res: Response<ApiResponse>, next) => {
+ try {
+ const result = await bulkCreateProjects(req.body ?? {});
+ res.status(201).json({
+ success: true,
+ data: result,
+ message: `created=${result.created.length} skipped=${result.skipped.length}`,
+ });
  } catch (error) { next(error); }
 });
 

@@ -403,6 +403,33 @@ export function useDeleteScriptTemplate() {
  * for an hour — the picker opens instantly on every subsequent
  * project instead of spinning.
  */
+/**
+ * Outline of one course or project.
+ *
+ * Not cached long: the generator is opened right after someone
+ * edits a course's lessons, and a stale outline would silently
+ * miss the lesson they just added.
+ */
+export function useOutline(params: { courseSlug?: string; projectSlug?: string } | null) {
+ return useQuery({
+ queryKey: ['content-outline', params?.courseSlug ?? '', params?.projectSlug ?? ''],
+ queryFn: () => contentApi.outline(params!).then((r) => r.data.data),
+ enabled: Boolean(params?.courseSlug || params?.projectSlug),
+ staleTime: 30_000,
+ });
+}
+
+export function useBulkCreateProjects() {
+ const qc = useQueryClient();
+ return useMutation({
+ mutationFn: (payload: Parameters<typeof contentApi.bulkCreate>[0]) =>
+ contentApi.bulkCreate(payload),
+ onSuccess: () => {
+ qc.invalidateQueries({ queryKey: contentKeys.all, refetchType: 'all' });
+ },
+ });
+}
+
 export function useAcademyRefs(enabled = true) {
  return useQuery({
  queryKey: scriptKeys.academyRefs,

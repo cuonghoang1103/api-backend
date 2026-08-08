@@ -19,6 +19,7 @@ import {
  ArrowLeft,
  Clapperboard,
  Languages,
+ Wand2,
  Plus,
  Shield,
  Film,
@@ -50,6 +51,7 @@ export default function StudioTopbar() {
  const pathname = usePathname();
  const router = useRouter();
  const openCreateModal = useStudioStore((s) => s.openCreateModal);
+ const openSeriesModal = useStudioStore((s) => s.openSeriesModal);
  const [user, setUser] = useState<{ name: string } | null>(null);
 
  // We don't need a hard auth gate here — middleware + the

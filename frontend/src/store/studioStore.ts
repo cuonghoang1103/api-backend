@@ -40,19 +40,27 @@ export interface PreFillPayload {
 
 interface StudioState {
  isCreateModalOpen: boolean;
+ /** Series generator — a second global dialog, opened from the
+  *  topbar so it works from any /creator route. */
+ isSeriesModalOpen: boolean;
  /** When set, the modal pre-fills these fields (used by Calendar). */
  preFill: PreFillPayload | null;
 
  openCreateModal: (preFill?: PreFillPayload) => void;
+ openSeriesModal: () => void;
+ closeSeriesModal: () => void;
  closeCreateModal: () => void;
 }
 
 export const useStudioStore = create<StudioState>((set) => ({
  isCreateModalOpen: false,
+ isSeriesModalOpen: false,
  preFill: null,
 
  openCreateModal: (preFill) =>
  set({ isCreateModalOpen: true, preFill: preFill ?? null }),
+ openSeriesModal: () => set({ isSeriesModalOpen: true }),
+ closeSeriesModal: () => set({ isSeriesModalOpen: false }),
  closeCreateModal: () =>
  set({ isCreateModalOpen: false, preFill: null }),
 }));

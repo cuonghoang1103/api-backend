@@ -15,7 +15,15 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Clapperboard } from 'lucide-react';
 import StudioShell from '@/components/studio/StudioShell';
 import CreateProjectModal from '@/components/studio/CreateProjectModal';
+import SeriesGeneratorModal from '@/components/studio/SeriesGeneratorModal';
 import { useStudioT } from '@/lib/studio-i18n';
+import { useStudioStore } from '@/store/studioStore';
+
+function SeriesGeneratorGlobal() {
+ const open = useStudioStore((s) => s.isSeriesModalOpen);
+ const close = useStudioStore((s) => s.closeSeriesModal);
+ return <SeriesGeneratorModal open={open} onClose={close} />;
+}
 
 export default function CreatorLayout({ children }: { children: React.ReactNode }) {
  const { t } = useStudioT();

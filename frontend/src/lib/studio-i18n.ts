@@ -436,6 +436,48 @@ const S = {
   colPublish: { vi: 'Đăng', en: 'Publish' },
   colUpdated: { vi: 'Cập nhật', en: 'Updated' },
   colCourse: { vi: 'Môn học', en: 'Course' },
+
+  // ─── Series generator ───────────────────────────────────────
+  seriesGen: { vi: 'Tạo loạt bài', en: 'Generate series' },
+  seriesGenTitle: { vi: 'Tạo loạt bài từ môn học / dự án', en: 'Generate a series from a course or project' },
+  seriesGenSubtitle: {
+    vi: 'Đọc dàn bài đã có sẵn rồi sinh mỗi bài một dự án quay, gắn sẵn môn và đánh số tập. Chỉ việc mở ra viết ruột.',
+    en: 'Reads an outline you already have and mints one recording project per item, pre-bound and numbered. You just fill in the body.',
+  },
+  seriesSource: { vi: 'Nguồn', en: 'Source' },
+  seriesSourceCourse: { vi: 'Môn học / khoá học', en: 'Course' },
+  seriesSourceProject: { vi: 'Dự án', en: 'Project' },
+  seriesPickCourse: { vi: 'Chọn một môn…', en: 'Pick a course…' },
+  seriesPickProject: { vi: 'Nhập slug dự án…', en: 'Enter a project slug…' },
+  seriesLoadingOutline: { vi: 'Đang đọc dàn bài…', en: 'Reading the outline…' },
+  seriesNoOutline: {
+    vi: 'Môn này chưa có chương/bài nào để sinh. Thêm bài trong Academy trước đã.',
+    en: 'This source has no items yet. Add lessons in Academy first.',
+  },
+  seriesItemsFound: { vi: 'Tìm thấy {n} mục', en: 'Found {n} item|Found {n} items' },
+  seriesSelected: { vi: 'Đã chọn {n}', en: '{n} selected' },
+  seriesSelectAll: { vi: 'Chọn hết', en: 'Select all' },
+  seriesSelectNone: { vi: 'Bỏ chọn hết', en: 'Select none' },
+  seriesHideQuiz: { vi: 'Ẩn bài quiz', en: 'Hide quizzes' },
+  seriesOptions: { vi: 'Tuỳ chọn cho cả loạt', en: 'Settings for the whole series' },
+  seriesApplyTemplate: { vi: 'Áp khung kịch bản', en: 'Apply a script skeleton' },
+  seriesApplyTemplateHint: {
+    vi: 'Mỗi dự án sinh ra sẽ có sẵn khung này trong tab Kịch bản.',
+    en: 'Every generated project starts with this skeleton in its Script tab.',
+  },
+  seriesNoTemplate: { vi: 'Để trống kịch bản', en: 'Leave the script empty' },
+  seriesCreate: { vi: 'Tạo {n} dự án', en: 'Create {n} project|Create {n} projects' },
+  seriesCreating: { vi: 'Đang tạo…', en: 'Creating…' },
+  seriesDoneCreated: { vi: 'Đã tạo {n} dự án.', en: 'Created {n} project.|Created {n} projects.' },
+  seriesDoneSkipped: {
+    vi: 'Bỏ qua {n} mục đã có sẵn trong loạt này.',
+    en: 'Skipped {n} item that already exists in this series.|Skipped {n} items that already exist in this series.',
+  },
+  seriesDedupeHint: {
+    vi: 'Chạy lại an toàn: mục nào đã có trong loạt sẽ được bỏ qua, không nhân đôi.',
+    en: 'Safe to re-run: items already in the series are skipped, never duplicated.',
+  },
+  seriesTitlePreview: { vi: 'Tên dự án sẽ tạo', en: 'Project titles to create' },
   confirmBulkDelete: {
     vi: 'Xoá {n} dự án? Không thể hoàn tác.',
     en: 'Delete {n} project? This cannot be undone.|Delete {n} projects? This cannot be undone.',

@@ -15,6 +15,7 @@ import s06 from './nextjs/s06-hooks-toolbox.mjs';
 import s07 from './nextjs/s07-lists-keys-perf.mjs';
 import s08 from './nextjs/s08-app-router.mjs';
 import s09 from './nextjs/s09-server-client.mjs';
+import s10 from './nextjs/s10-data-fetching.mjs';
 
 export default {
   category: { slug: 'frontend', name: 'Frontend', icon: 'Layout', sortOrder: 2 },
@@ -48,5 +49,6 @@ export default {
     s07,
     s08,
     s09,
+    s10,
   ],
 };

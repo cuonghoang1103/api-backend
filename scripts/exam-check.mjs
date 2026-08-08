@@ -192,7 +192,7 @@ async function checkFile(file) {
 const args = process.argv.slice(2);
 const files = args.length
   ? args.map((f) => path.resolve(ROOT, f))
-  : readdirSync(EXAM_DIR).filter((f) => /^NODEJS-.*\.mjs$/.test(f)).sort().map((f) => path.join(EXAM_DIR, f));
+  : readdirSync(EXAM_DIR).filter((f) => /^(NODEJS|NEXTJS)-.*\.mjs$/.test(f)).sort().map((f) => path.join(EXAM_DIR, f));
 
 if (!files.length) {
   console.log('Không tìm thấy file đề nào để kiểm.');

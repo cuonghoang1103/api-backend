@@ -19,6 +19,7 @@ import s10 from './nextjs/s10-data-fetching.mjs';
 import s11 from './nextjs/s11-advanced-routing.mjs';
 import s12 from './nextjs/s12-server-actions.mjs';
 import s13 from './nextjs/s13-styling-tailwind.mjs';
+import s14 from './nextjs/s14-state-management.mjs';
 
 export default {
   category: { slug: 'frontend', name: 'Frontend', icon: 'Layout', sortOrder: 2 },
@@ -56,5 +57,6 @@ export default {
     s11,
     s12,
     s13,
+    s14,
   ],
 };

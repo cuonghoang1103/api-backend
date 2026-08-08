@@ -250,7 +250,22 @@ function CreatorDashboardInner() {
  >
  <div className="w-12 shrink-0 text-center">
  <div className="font-heading text-base text-studio-300 leading-none">
- {d === 0 ? t('today') : d === 1 ? t('tomorrow') : `+${d}d`}
+ {/* `d` chỉ null khi filmDate rỗng, mà danh sách này đã
+     lọc theo filmDate — nhưng TS không biết, và nhánh
+     null cũng là thứ nên hiển thị tử tế thay vì "null".
+     Ngày quay đã qua VẪN hiện ở đây (đó là việc đang
+     TRỄ, không phải việc nên giấu) nhưng phải đọc ra là
+     trễ: trước đây nó rơi vào `+${d}d` với d âm nên in
+     ra "+-40d". */}
+ {d == null
+ ? '—'
+ : d === 0
+ ? t('today')
+ : d === 1
+ ? t('tomorrow')
+ : d < 0
+ ? t('overdueDays', { n: Math.abs(d) })
+ : t('inDays', { n: d })}
  </div>
  <div className="text-[10px] text-text-muted mt-0.5">{fmtDay(p.filmDate, lang)}</div>
  </div>

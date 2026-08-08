@@ -86,8 +86,13 @@ const S = {
   languageLabel: { vi: 'Ngôn ngữ giao diện', en: 'Interface language' },
 
   // ─── Dashboard ──────────────────────────────────────────────
-  dashTitle: { vi: 'Bảng điều khiển', en: 'Studio Dashboard' },
-  dashTitleAccent: { vi: 'Xưởng', en: 'Dashboard' },
+  // Tiêu đề trang bị CẮT LÀM ĐÔI khi render: `dashTitleAccent` là
+  // phần chữ thường đứng trước, `dashTitle` là phần bôi gradient.
+  // Ghép lại phải ra đúng một cụm — trước đây map nhầm thành
+  // 'Dashboard' + 'Studio Dashboard' nên trang hiện
+  // "Dashboard Studio Dashboard".
+  dashTitleAccent: { vi: 'Bảng', en: 'Studio' },
+  dashTitle: { vi: 'điều khiển', en: 'Dashboard' },
   dashSubtitle: {
     vi: 'Lên ý tưởng, viết kịch bản, quay, xuất bản. Một nơi duy nhất cho mọi video bạn đăng lên TikTok, YouTube, Facebook và Instagram.',
     en: 'Plan, script, film, ship. One workspace for every video you publish across TikTok, YouTube, Facebook and Instagram.',
@@ -125,6 +130,8 @@ const S = {
   },
   filmOn: { vi: 'Quay {date}', en: 'Film {date}' },
   noFilmDate: { vi: 'Chưa có ngày quay', en: 'No film date' },
+  overdueDays: { vi: 'Trễ {n} ngày', en: '{n}d late' },
+  inDays: { vi: 'Còn {n} ngày', en: 'in {n}d' },
 
   // ─── Create project modal ───────────────────────────────────
   createTitle: { vi: 'Tạo dự án mới', en: 'Create a new project' },

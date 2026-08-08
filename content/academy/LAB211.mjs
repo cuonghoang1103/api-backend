@@ -1845,5 +1845,653 @@ students.<span class="tok-function">sort</span>(
         }
       ]
     },
+
+    /* ══════════════════ PHẦN 8 — THỰC HÀNH ĐẦY ĐỦ: 54 BÀI LAB211 ══════════════════ */
+    {
+      title: 'Part 8 — Full practice catalog: all 54 Lab211 exercises|||Phần 8 — Thực hành đầy đủ: 54 bài Lab211',
+      description: 'Toàn bộ 54 bài tập của track Lab211 trên CodeLab, chia theo độ khó (13 Dễ · 22 Trung bình · 19 Khó). Mỗi thẻ có tóm tắt bài và dẫn sâu tới đề bài đầy đủ, lời giải tham khảo, sơ đồ, và ô video hướng dẫn (hiện để trống, sẽ được thêm sau) trên CodeLab.',
+      lessons: [
+        {
+          title: '8.1 — Easy warm-ups (13 exercises)|||8.1 — Khởi động Dễ (13 bài)',
+          slug: 'lab211-thuc-hanh-de',
+          type: 'VIDEO',
+          description: '13 bài độ khó Dễ của track Lab211 — điểm khởi đầu trước khi vào các bài khó hơn.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Part 8 · Lesson 8.1</span>
+<h2>Easy warm-ups — 13 exercises</h2>
+<p class="lead">These are the 13 EASY-difficulty exercises from the Lab211 CodeLab track, a good place to start before moving on to harder OOP with Java labs. Each card below opens the exercise's full brief, a reference solution and a diagram on CodeLab.</p>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0060-calculate-the-total-amount-spent-by-a-user-through-the-bills?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">01 · Calculate the total amount spent by a user through the bills</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~25p</span> Build a Person and Wallet pair of classes that read in a list of bills and the amount currently in the wallet. Implement calcTotal to sum the bills and payMoney to compare that total against the wallet balance, printing whether the purchase can go through.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0063-input-and-display-person-info?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">02 · Input and display Person Info</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~30p</span> Collect name, address and salary for three people, validating that salary is a positive number and re-prompting on bad input. Implement bubble sort (sortBySalary) to order the entered people ascending by salary, then display each one's info in that order.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0062-create-a-program-to-analyze-file-path?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">03 · Create a program to analyze file path</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~31p</span> Take a Windows-style file path as input and break it apart into its disk drive, folder path, file name and extension using String methods like lastIndexOf, indexOf, substring and split. Five methods (getDisk, getPath, getFileName, getExtension, getFolders) each return one piece of that breakdown.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0064-check-data-format?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">04 · Check data format</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~36p</span> Validate three kinds of user input with regex and date parsing: a 10-digit phone number, a standard email address, and a date in dd/MM/yyyy format via SimpleDateFormat. checkPhone, checkEmail and checkDate each return an error message (or empty string when the input is valid) so the caller can loop until the input is correct.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0069-input-sort-and-display-student-information?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">05 · Input, sort and display student information</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~39p</span> Despite the title, this brief is about file I/O: ask the user whether to write to a file, prompt for a path and content, then write it with FileWriter/BufferedWriter. Implement writeFile to save the content and readFile to load it back with FileReader, printing the file's content on screen.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0068-input-sort-and-display-student-information?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">06 · Input, sort and display student information</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~44p</span> Collect a list of students (name, class, mark), re-prompting while the mark isn't a valid number, then use a custom Comparator with Collections.sort() to order them by name A to Z. Implement sortStudent to return the sorted list and display to print every student's details.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0067-analyze-the-user-input-string?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">07 · Analyze the user input string</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~46p</span> Parse an arbitrary input string with regex and Character helpers to separate its digits (all numbers, even numbers, odd numbers, perfect squares) from its letters (uppercase, lowercase) and symbols (special characters). getNumber returns the numeric groupings and getCharacter returns the character groupings, both printed to the screen.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0001-bubble-sort-algorithm?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">08 · Bubble sort algorithm</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~48p</span> Ask the user for an array size, fill it with random integers, then implement classic bubble sort: repeatedly compare adjacent pairs and swap out-of-order ones until no swaps remain. Print the array both before and after sorting so the effect is visible.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0002-selection-sort-algorithm?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">09 · Selection sort algorithm</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~48p</span> Same random-array setup as the bubble sort exercise, but implement selection sort instead: repeatedly scan the unsorted part of the array for its minimum element and move it to the end of the sorted part. Print the array before and after sorting to compare.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0003-insertion-sort-algorithm?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">10 · Insertion sort algorithm</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~48p</span> Same random-array setup again, this time implementing insertion sort: keep a sorted prefix and, for each new element, shift it into its correct position within that prefix. Print the array before and after sorting.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0083-stacks?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">11 · Stacks</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~48p</span> Build a MyStack class backed by an array or ArrayList with push, pop and get (peek) methods that follow LIFO order — last in, first out. Wrap it in a menu-driven demo (push/pop/peek/display) and make sure pop/get on an empty stack fail gracefully instead of crashing.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0053-sort-one-dimensional-array-with-bubble-sort-algorithm?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">12 · Sort one-dimensional array with bubble sort algorithm</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~50p</span> Build a menu-driven program (input array / sort ascending / sort descending / exit) where checkIn validates that entered array length and values are positive integers before storing them. sortAscending and sortDescending both use bubble sort to reorder the array in the requested direction.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0061-create-a-program-to-calculate-perimeter-and-area?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">13 · Create a program to calculate perimeter and area</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~50p</span> Design an abstract Shape class with getPerimeter, getArea and printResult, then extend it with Circle, Rectangle and Triangle subclasses that store their own dimensions. Rectangle and Circle use straightforward geometry formulas while Triangle computes its area with Heron's formula via Math.sqrt().</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<div class="note-ct">Each exercise page has a "Video tutorial" slot that is currently empty and will be filled in later — no action is needed from you.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Part 8 · Lesson 8.1</span>
+<h2>Khởi động Dễ — 13 bài</h2>
+<p class="lead">Đây là 13 bài tập độ khó DỄ thuộc track Lab211 trên CodeLab, điểm khởi đầu phù hợp trước khi chuyển sang các bài OOP with Java khó hơn. Mỗi thẻ bên dưới mở đề bài đầy đủ, lời giải tham khảo và sơ đồ minh hoạ trên CodeLab.</p>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0060-calculate-the-total-amount-spent-by-a-user-through-the-bills?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">01 · Calculate the total amount spent by a user through the bills</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~25p</span> Xây dựng cặp lớp Person và Wallet đọc vào danh sách hoá đơn cùng số tiền hiện có trong ví. Cài đặt calcTotal để cộng tổng hoá đơn và payMoney để so sánh tổng đó với số dư trong ví, in ra việc thanh toán có thực hiện được hay không.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0063-input-and-display-person-info?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">02 · Input and display Person Info</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~30p</span> Thu thập tên, địa chỉ và lương của ba người, kiểm tra lương phải là số dương và yêu cầu nhập lại nếu sai. Cài đặt sắp xếp nổi bọt (sortBySalary) để xếp những người vừa nhập theo lương tăng dần, sau đó hiển thị thông tin từng người theo thứ tự đó.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0062-create-a-program-to-analyze-file-path?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">03 · Create a program to analyze file path</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~31p</span> Nhận vào một đường dẫn kiểu Windows và tách nó thành ổ đĩa, đường dẫn thư mục, tên tệp và phần mở rộng bằng các phương thức của String như lastIndexOf, indexOf, substring và split. Năm phương thức (getDisk, getPath, getFileName, getExtension, getFolders) mỗi phương thức trả về một phần của kết quả tách đó.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0064-check-data-format?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">04 · Check data format</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~36p</span> Kiểm tra ba loại dữ liệu người dùng nhập bằng regex và phân tích ngày tháng: số điện thoại đủ 10 chữ số, địa chỉ email đúng chuẩn, và ngày theo định dạng dd/MM/yyyy dùng SimpleDateFormat. checkPhone, checkEmail và checkDate mỗi hàm trả về thông báo lỗi (hoặc chuỗi rỗng nếu hợp lệ) để chương trình lặp lại đến khi nhập đúng.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0069-input-sort-and-display-student-information?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">05 · Input, sort and display student information</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~39p</span> Dù tiêu đề nhắc tới sinh viên, bài này thực chất là về đọc/ghi tệp: hỏi người dùng có muốn ghi tệp không, yêu cầu nhập đường dẫn và nội dung rồi ghi bằng FileWriter/BufferedWriter. Cài đặt writeFile để lưu nội dung và readFile để đọc lại bằng FileReader, in nội dung tệp ra màn hình.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0068-input-sort-and-display-student-information?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">06 · Input, sort and display student information</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~44p</span> Thu thập danh sách sinh viên (tên, lớp, điểm), yêu cầu nhập lại nếu điểm không phải số hợp lệ, sau đó dùng Comparator tuỳ chỉnh với Collections.sort() để sắp xếp theo tên từ A đến Z. Cài đặt sortStudent để trả về danh sách đã sắp xếp và display để in thông tin từng sinh viên.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0067-analyze-the-user-input-string?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">07 · Analyze the user input string</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~46p</span> Phân tích một chuỗi nhập bất kỳ bằng regex và các hàm hỗ trợ của Character để tách các chữ số (tất cả các số, số chẵn, số lẻ, số chính phương) khỏi các chữ cái (in hoa, in thường) và ký tự đặc biệt. getNumber trả về các nhóm số và getCharacter trả về các nhóm ký tự, tất cả được in ra màn hình.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0001-bubble-sort-algorithm?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">08 · Bubble sort algorithm</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~48p</span> Hỏi người dùng kích thước mảng, sinh ngẫu nhiên các số nguyên để lấp đầy, rồi cài đặt sắp xếp nổi bọt cổ điển: liên tục so sánh từng cặp phần tử liền kề và hoán đổi nếu sai thứ tự cho tới khi không còn hoán đổi nào. In mảng cả trước và sau khi sắp xếp để thấy rõ hiệu quả.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0002-selection-sort-algorithm?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">09 · Selection sort algorithm</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~48p</span> Cùng cách sinh mảng ngẫu nhiên như bài sắp xếp nổi bọt, nhưng lần này cài đặt sắp xếp chọn: liên tục quét phần chưa sắp xếp của mảng để tìm phần tử nhỏ nhất và chuyển nó vào cuối phần đã sắp xếp. In mảng trước và sau khi sắp xếp để so sánh.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0003-insertion-sort-algorithm?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">10 · Insertion sort algorithm</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~48p</span> Vẫn cách sinh mảng ngẫu nhiên như hai bài trước, nhưng lần này cài đặt sắp xếp chèn: giữ một đoạn đầu đã sắp xếp và với mỗi phần tử mới, dịch chuyển nó vào đúng vị trí trong đoạn đó. In mảng trước và sau khi sắp xếp.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0083-stacks?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">11 · Stacks</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~48p</span> Xây dựng lớp MyStack dùng mảng hoặc ArrayList làm nơi lưu trữ, với các phương thức push, pop và get (xem đỉnh) tuân theo nguyên tắc LIFO — vào sau ra trước. Bọc nó trong một demo có menu (push/pop/peek/hiển thị) và đảm bảo pop/get trên ngăn xếp rỗng không làm crash chương trình.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0053-sort-one-dimensional-array-with-bubble-sort-algorithm?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">12 · Sort one-dimensional array with bubble sort algorithm</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~50p</span> Xây dựng chương trình có menu (nhập mảng / sắp xếp tăng dần / sắp xếp giảm dần / thoát), trong đó checkIn kiểm tra độ dài mảng và giá trị nhập vào phải là số nguyên dương trước khi lưu. sortAscending và sortDescending đều dùng sắp xếp nổi bọt để sắp lại mảng theo chiều được yêu cầu.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0061-create-a-program-to-calculate-perimeter-and-area?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">13 · Create a program to calculate perimeter and area</span><span class="lc-sub"><span class="badge">EASY</span> <span class="badge">~50p</span> Thiết kế lớp trừu tượng Shape với getPerimeter, getArea và printResult, sau đó kế thừa thành các lớp con Circle, Rectangle và Triangle tự lưu kích thước riêng. Rectangle và Circle dùng công thức hình học thông thường, còn Triangle tính diện tích bằng công thức Heron thông qua Math.sqrt().</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<div class="note-ct">Mỗi trang bài tập có một ô "Video hướng dẫn" hiện đang để trống và sẽ được bổ sung sau — bạn không cần làm gì thêm.</div>
+</div>
+`,
+        },
+        {
+          title: '8.2 — Medium practice (22 exercises)|||8.2 — Thực hành Trung bình (22 bài)',
+          slug: 'lab211-thuc-hanh-trung-binh',
+          type: 'VIDEO',
+          description: '22 bài độ khó Trung bình — xương sống của track Lab211: file I/O, collections, validation, kế thừa/đa hình.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Part 8 · Lesson 8.2</span>
+<h2>Medium practice — 22 exercises</h2>
+<p class="lead">These are the 22 MEDIUM-difficulty exercises from the Lab211 CodeLab track — the backbone of this course, covering file I/O, collections, validation, sorting/searching and inheritance/polymorphism. Each card below opens the exercise's full brief, a reference solution, and a diagram on CodeLab.</p>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0058-write-program-dictionary?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">01 · Write program dictionary</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~62p</span> Build a simple English–Vietnamese dictionary that stores word pairs in a HashMap and persists them to a file on disk. The console menu lets the user add a new pair, delete a pair by its English word, or translate an English word to Vietnamese, loading existing data on startup and rewriting the file after every change.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0008-letter-and-character-count?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">02 · Letter and character count</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~65p</span> Read a line of text from the user and count how many letters and how many characters it contains. A good chance to practice tokenizing a string with StringTokenizer from java.util.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0009-fibonacci?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">03 · Fibonacci</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~65p</span> Compute and print the first 45 terms of the Fibonacci sequence using a recursive method. A classic first exercise in recursion, following the textbook definition where each term is the sum of the two before it.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0010-linear-search?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">04 · Linear search</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~65p</span> Fill an array with random integers in a user-given range, then search it for a value the user enters using linear search. The program prints the generated array and the index where the search value was found.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0057-user-management-system?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">05 · User management system</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~72p</span> Build a two-option menu program that creates new accounts and logs users in against a user.dat file. New accounts are validated (username at least 5 characters and unique, password at least 6 characters, no spaces) before being appended to the file and loaded into a collection for login lookups.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0082-playing-cards?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">06 · Playing cards</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~78p</span> Design an immutable Card class (rank + suit, with a readable toString) and a Deck class that builds all 52 rank–suit combinations with two nested loops. A short test program then creates a deck and prints all of its cards, practicing encapsulation and object composition.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0084-large-number?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">07 · Large number</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~78p</span> Multiply two numbers that are too large for int or long by reading them as strings, converting each to a digit array, and reproducing schoolbook long multiplication with carries. The result array (sized to the sum of both lengths) is printed after stripping leading zeros — no BigInteger allowed.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0051-develop-a-computer-program?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">08 · Develop a computer program</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~79p</span> Build a menu-driven calculator that supports +, -, *, /, ^ with a running memory value until the user enters '=', plus a second mode that computes BMI from weight and height and classifies the result (Under-standard, Standard, Overweight, Fat, Very fat). Both modes validate numeric input and handle invalid operators or division by zero.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0066-car-showroom?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">09 · Car showroom</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~81p</span> Check whether a customer's requested car (name, color, price, day) matches what the showroom actually sells, using enums for the three car models (Audi, Mercedes, BMW) with their fixed colors, prices and sale days. An unpainted car ('no color') gets a $100 discount, and any mismatch on name, color, price or day throws a custom ExceptionCar with the reason.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0054-develop-the-contact-management-program?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">10 · Develop the Contact Management Program</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~83p</span> Manage a contact list (add, display, delete) where each contact gets an auto-incrementing ID and its first/last name split from a single entered name. Adding a contact validates the phone number against several accepted formats (plain digits, dashes, dots, spaces, extensions), and deleting requires a valid existing ID.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0052-write-a-program-to-manage-the-geographic?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">11 · Write a program to manage the geographic</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~89p</span> Model countries with a base Country class (code, name, area) and an EastAsiaCountries subclass adding terrain, using inheritance and overridden display(). The menu lets the user enter data for East Asian countries, list what was entered, search by name, and print the list sorted alphabetically.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0004-quick-sort-algorithm?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">12 · Quick sort algorithm</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~91p</span> Generate an array of random integers in a user-given range and sort it in place with the quicksort algorithm (pivot selection, partitioning, recursive divide-and-conquer). The program prints both the unsorted and the sorted array.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0005-merge-sort-algorithm?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">13 · Merge sort algorithm</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~91p</span> Generate an array of random integers and sort it using merge sort — splitting the array into single-element sublists and repeatedly merging sorted sublists until one sorted list remains. The program displays the array before and after sorting.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0006-binary-search-algorithm?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">14 · Binary search algorithm</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~91p</span> Generate an array of random integers, sort it, then search it for a user-given value using binary search (repeatedly halving the search range by comparing against the middle element). The program prints the sorted array and the index of the found value, or reports that it is absent.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0007-undirected-graphs-representation?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">15 · Undirected graphs representation</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~91p</span> Build a Graph class that represents an undirected graph using an adjacency matrix. The program prompts the user for pairs of vertices and records whether each pair forms an edge, filling in the corresponding symmetric cells of the matrix.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0056-program-to-manage-worker-information?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">16 · Program to manage worker information</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~91p</span> Manage workers with a menu to add a worker (validating a unique code, age 18–50, salary greater than 0), increase or decrease a worker's salary by a given amount, and list every salary adjustment recorded with its date and up/down status. Each salary change is validated (existing code, positive amount) and appended to a salary history.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0065-check-data-format?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">17 · Check data format</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~91p</span> Collect students with their name, class and three subject marks (Math, Physics, Chemistry, 1–10 each, with input re-prompted until valid), compute each student's average, and classify it into type A/B/C/D by fixed mark thresholds. The program then prints every student's info and the percentage of students in each type.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0050-solving-the-equation-find-the-square-numbers-even-numbers-and-odd-numbers?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">18 · Solving the equation, find the square numbers, even numbers, and odd numbers</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~93p</span> Solve either a linear equation (ax + b = 0) or a quadratic equation (ax squared + bx + c = 0) from user-entered coefficients, validating that each input is numeric. After solving, the program scans the input coefficients (and, for the quadratic case, the roots) to report which of them are odd, even or perfect squares.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0055-doctor-management-program?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">19 · Doctor management program</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~94p</span> Manage a list of doctors (code, name, specialization, availability) through add, update, delete and search-by-text operations built on a HashMap. Adding rejects duplicate codes, updating and deleting require an existing code, and updating leaves a field unchanged if the corresponding input is left blank.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0059-the-program-handles-files?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">20 · The program handles files</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~94p</span> Read a semicolon-separated text file of people (name, address, salary — defaulting a missing or invalid salary to zero) and list everyone whose salary meets a user-given minimum, along with who has the least and the most. A second option reads a text file and writes every distinct word it contains, once each, into a new file.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0080-shapes?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">21 · Shapes</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~117p</span> Design an abstract Shape hierarchy (TwoDimensionalShape / ThreeDimensionalShape, with concrete Circle, Square, Triangle, Sphere, Cube and Tetrahedron) where each class overrides getArea() — and getVolume() for the 3D shapes — using its own formula. A test program stores one instance of each concrete class in a Shape array and prints its area, and volume if applicable, through polymorphism.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0081-bees?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">22 · Bees</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~117p</span> Model a Bee hierarchy (Worker, Queen, Drone) where every bee starts at 100% health, exposes a read-only health/dead status, and has a Damage(percent) method that reduces health by a percentage of its current value — each subclass dies at its own threshold (70%, 20%, 50%). A console menu creates a colony of 30 bees (10 of each kind) and applies one round of random damage to all of them, reprinting each bee's updated health and alive/dead status.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<div class="note-ct">Each exercise page has a "Video tutorial" slot that is currently empty and will be filled in later — no action is needed from you.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Part 8 · Lesson 8.2</span>
+<h2>Thực hành Trung bình — 22 bài</h2>
+<p class="lead">Đây là 22 bài tập mức TRUNG BÌNH từ track Lab211 trên CodeLab — phần xương sống của khoá học này, bao phủ file I/O, collections, kiểm tra dữ liệu (validation), sắp xếp/tìm kiếm và kế thừa/đa hình. Mỗi thẻ bên dưới sẽ mở đề bài đầy đủ, bài giải tham khảo và sơ đồ trên CodeLab.</p>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0058-write-program-dictionary?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">01 · Write program dictionary</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~62p</span> Xây dựng một từ điển Anh–Việt đơn giản, lưu các cặp từ trong HashMap và ghi xuống file trên đĩa. Menu console cho phép người dùng thêm một cặp từ mới, xoá một cặp theo từ tiếng Anh, hoặc dịch một từ tiếng Anh sang tiếng Việt — dữ liệu được nạp lại khi khởi động và file được ghi đè sau mỗi thay đổi.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0008-letter-and-character-count?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">02 · Letter and character count</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~65p</span> Đọc một chuỗi văn bản người dùng nhập và đếm số chữ cái cũng như số ký tự trong đó. Bài tập tốt để luyện tách chuỗi bằng StringTokenizer trong gói java.util.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0009-fibonacci?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">03 · Fibonacci</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~65p</span> Tính và in ra 45 số hạng đầu tiên của dãy Fibonacci bằng phương thức đệ quy. Đây là bài luyện đệ quy kinh điển, theo đúng định nghĩa toán học: mỗi số hạng bằng tổng hai số hạng liền trước.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0010-linear-search?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">04 · Linear search</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~65p</span> Sinh một mảng số nguyên ngẫu nhiên trong khoảng người dùng nhập, sau đó tìm một giá trị người dùng nhập bằng thuật toán tìm kiếm tuyến tính. Chương trình in ra mảng đã sinh và vị trí (chỉ số) tìm thấy giá trị cần tìm.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0057-user-management-system?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">05 · User management system</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~72p</span> Xây dựng chương trình menu hai lựa chọn: tạo tài khoản mới và đăng nhập dựa trên file user.dat. Tài khoản mới được kiểm tra hợp lệ (tên đăng nhập tối thiểu 5 ký tự và không trùng, mật khẩu tối thiểu 6 ký tự, không chứa khoảng trắng) trước khi được ghi thêm vào file và nạp vào collection để tra cứu khi đăng nhập.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0082-playing-cards?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">06 · Playing cards</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~78p</span> Thiết kế lớp Card bất biến (rank + suit, có toString dễ đọc) và lớp Deck dựng đủ 52 tổ hợp rank–suit bằng hai vòng lặp lồng nhau. Một chương trình test nhỏ sẽ tạo một bộ bài và in ra toàn bộ 52 lá, luyện tập tính đóng gói (encapsulation) và kết hợp đối tượng (object composition).</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0084-large-number?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">07 · Large number</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~78p</span> Nhân hai số quá lớn để chứa trong int hay long bằng cách đọc chúng dưới dạng chuỗi, chuyển mỗi số thành mảng chữ số, rồi thực hiện phép nhân dài kiểu thủ công có nhớ (carry). Mảng kết quả (kích thước bằng tổng độ dài hai số) được in ra sau khi bỏ các số 0 ở đầu — không được dùng BigInteger.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0051-develop-a-computer-program?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">08 · Develop a computer program</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~79p</span> Xây dựng máy tính theo menu hỗ trợ +, -, *, /, ^ với một giá trị bộ nhớ chạy liên tục cho tới khi người dùng nhập '=', cùng chế độ thứ hai tính chỉ số BMI từ cân nặng và chiều cao rồi phân loại kết quả (Dưới chuẩn, Chuẩn, Thừa cân, Béo, Rất béo). Cả hai chế độ đều kiểm tra dữ liệu số hợp lệ và xử lý toán tử sai hoặc chia cho 0.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0066-car-showroom?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">09 · Car showroom</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~81p</span> Kiểm tra xem yêu cầu mua xe của khách (tên xe, màu, giá, ngày) có khớp với những gì showroom thực sự bán hay không, dùng enum cho ba hãng xe (Audi, Mercedes, BMW) với màu, giá và ngày bán cố định. Xe không sơn ('no color') được giảm 100 đô, và bất kỳ sai lệch nào về tên, màu, giá hay ngày sẽ ném ra ngoại lệ ExceptionCar tự định nghĩa kèm lý do.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0054-develop-the-contact-management-program?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">10 · Develop the Contact Management Program</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~83p</span> Quản lý danh bạ liên hệ (thêm, hiển thị, xoá), mỗi liên hệ được cấp ID tự tăng và tên/họ được tách tự động từ tên nhập vào. Khi thêm liên hệ, số điện thoại được kiểm tra theo nhiều định dạng chấp nhận (số thuần, có gạch ngang, dấu chấm, khoảng trắng, số máy lẻ), còn xoá liên hệ đòi hỏi ID hợp lệ đang tồn tại.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0052-write-a-program-to-manage-the-geographic?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">11 · Write a program to manage the geographic</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~89p</span> Mô hình hoá các quốc gia với lớp cơ sở Country (mã, tên, diện tích) và lớp con EastAsiaCountries thêm thuộc tính địa hình, sử dụng kế thừa và ghi đè display(). Menu cho phép nhập dữ liệu các nước Đông Á, hiển thị danh sách đã nhập, tìm theo tên, và in danh sách đã sắp xếp theo tên.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0004-quick-sort-algorithm?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">12 · Quick sort algorithm</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~91p</span> Sinh một mảng số nguyên ngẫu nhiên trong khoảng người dùng nhập và sắp xếp tại chỗ bằng thuật toán quicksort (chọn pivot, phân hoạch, chia để trị đệ quy). Chương trình in ra cả mảng trước và sau khi sắp xếp.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0005-merge-sort-algorithm?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">13 · Merge sort algorithm</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~91p</span> Sinh một mảng số nguyên ngẫu nhiên và sắp xếp bằng merge sort — chia mảng thành các mảng con một phần tử rồi lần lượt trộn các mảng con đã sắp xếp cho tới khi còn một danh sách duy nhất. Chương trình hiển thị mảng trước và sau khi sắp xếp.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0006-binary-search-algorithm?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">14 · Binary search algorithm</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~91p</span> Sinh một mảng số nguyên ngẫu nhiên, sắp xếp nó, rồi tìm một giá trị người dùng nhập bằng tìm kiếm nhị phân (liên tục chia đôi phạm vi tìm kiếm dựa vào phần tử giữa). Chương trình in ra mảng đã sắp xếp và chỉ số của giá trị tìm được, hoặc báo giá trị không tồn tại.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0007-undirected-graphs-representation?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">15 · Undirected graphs representation</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~91p</span> Xây dựng lớp Graph biểu diễn đồ thị vô hướng bằng ma trận kề. Chương trình yêu cầu người dùng nhập từng cặp đỉnh và ghi nhận cặp đó có tạo thành cạnh hay không, điền vào các ô đối xứng tương ứng trong ma trận.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0056-program-to-manage-worker-information?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">16 · Program to manage worker information</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~91p</span> Quản lý nhân viên với menu thêm nhân viên (kiểm tra mã không trùng, tuổi 18–50, lương lớn hơn 0), tăng hoặc giảm lương theo một số tiền nhập vào, và liệt kê toàn bộ lịch sử điều chỉnh lương kèm ngày và trạng thái tăng/giảm. Mỗi lần đổi lương đều được kiểm tra hợp lệ (mã tồn tại, số tiền dương) và ghi vào lịch sử lương.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0065-check-data-format?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">17 · Check data format</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~91p</span> Thu thập thông tin sinh viên gồm tên, lớp và ba điểm môn (Toán, Lý, Hoá, mỗi điểm 1–10, nhập lại tới khi hợp lệ), tính điểm trung bình và phân loại theo A/B/C/D dựa trên các ngưỡng điểm cố định. Chương trình sau đó in thông tin từng sinh viên và tỷ lệ phần trăm sinh viên ở mỗi loại.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0050-solving-the-equation-find-the-square-numbers-even-numbers-and-odd-numbers?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">18 · Solving the equation, find the square numbers, even numbers, and odd numbers</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~93p</span> Giải phương trình bậc nhất (ax + b = 0) hoặc phương trình bậc hai (ax bình phương + bx + c = 0) từ các hệ số người dùng nhập, kiểm tra dữ liệu nhập phải là số. Sau khi giải, chương trình quét các hệ số đầu vào (và với phương trình bậc hai, cả nghiệm) để báo giá trị nào là số lẻ, số chẵn hay số chính phương.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0055-doctor-management-program?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">19 · Doctor management program</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~94p</span> Quản lý danh sách bác sĩ (mã, tên, chuyên khoa, số chỗ trống) qua các thao tác thêm, sửa, xoá và tìm theo văn bản, xây trên nền HashMap. Thêm mới sẽ từ chối mã trùng, sửa/xoá đòi hỏi mã đã tồn tại, và khi sửa nếu bỏ trống trường nào thì giữ nguyên giá trị cũ của trường đó.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0059-the-program-handles-files?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">20 · The program handles files</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~94p</span> Đọc một file văn bản chứa danh sách người (tên, địa chỉ, lương — nếu lương thiếu hoặc sai định dạng thì mặc định về 0) và liệt kê những người có lương từ một mức tối thiểu nhập vào trở lên, kèm ai có lương thấp nhất và cao nhất. Lựa chọn thứ hai đọc một file văn bản và ghi mọi từ khác nhau xuất hiện trong đó (mỗi từ một lần) vào một file mới.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0080-shapes?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">21 · Shapes</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~117p</span> Thiết kế cây phân cấp trừu tượng Shape (TwoDimensionalShape / ThreeDimensionalShape, với các lớp cụ thể Circle, Square, Triangle, Sphere, Cube và Tetrahedron), mỗi lớp ghi đè getArea() — và getVolume() với hình khối 3D — theo công thức riêng. Một chương trình test lưu mỗi lớp cụ thể một đối tượng trong mảng Shape rồi in diện tích, và thể tích nếu có, thông qua tính đa hình.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0081-bees?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">22 · Bees</span><span class="lc-sub"><span class="badge">MEDIUM</span> <span class="badge">~117p</span> Mô hình hoá cây phân cấp Bee (Worker, Queen, Drone), mỗi con ong bắt đầu ở 100% sức khoẻ, có trạng thái sức khoẻ/chết chỉ đọc, và phương thức Damage(percent) giảm sức khoẻ theo phần trăm giá trị hiện tại — mỗi loại con chết ở ngưỡng riêng (70%, 20%, 50%). Menu console tạo một đàn 30 con ong (10 con mỗi loại) và thực hiện một đợt tấn công ngẫu nhiên lên tất cả, in lại sức khoẻ cập nhật và trạng thái sống/chết của từng con.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<div class="note-ct">Mỗi trang bài tập có một mục "Video hướng dẫn" hiện đang để trống và sẽ được bổ sung sau — bạn không cần làm gì thêm.</div>
+</div>
+`,
+        },
+        {
+          title: '8.3 — Hard practice (19 exercises)|||8.3 — Thực hành Khó (19 bài)',
+          slug: 'lab211-thuc-hanh-kho',
+          type: 'VIDEO',
+          description: '19 bài độ khó Khó — dự án OOP nhiều file, tiện ích xử lý file, mức độ ngang đề thi thực hành.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Part 8 · Lesson 8.3</span>
+<h2>Hard practice — 19 exercises</h2>
+<p class="lead">These are the 19 HARD-difficulty exercises from the Lab211 CodeLab practice track — multi-file OOP projects, file I/O utilities, and exam-level console programs. Each card opens the full problem brief on CodeLab, complete with a reference solution and a solution diagram.</p>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0011-change-base-number-system-16-10-2-program?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">01 · Change base number system (16, 10, 2) program</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~140p</span> Loops so the user repeatedly picks an input number base and an output base — binary, decimal or hex — types a value, and the program prints the converted result until the program is closed.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0073-program-to-manage-expense-name-handy-expense?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">02 · Program to manage expense, name Handy Expense</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~140p</span> A file-backed expense tracker named Handy Expense: add an expense with an auto-incrementing ID, date, amount and content; list all expenses with a running total; and delete an expense by ID, reporting failure if the ID does not exist.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0074-write-a-calculator-program-from-dcps-s-project?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">03 · Write a calculator program (from DCPS’s project)</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~140p</span> A menu-driven matrix calculator: the user enters the row/column size and values of two matrices, and the program performs addition, subtraction or multiplication on them, warning the user if an entered value is not numeric.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0075-handle-file-program-extraction-from-cbdt-project?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">04 · Handle file program (extraction from CBDT project)</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~140p</span> A five-option file utility extracted from the CBDT project: check whether a path exists and whether it is a file or a directory, list every .java file in a folder, find files above a given size, append typed content to a file, and count the words in a text file — each option wrapped in exception handling for a missing path.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0076-building-module-csv-file-format?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">05 · Building module csv file format</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~140p</span> Imports a CSV of ID/Name/Email/Phone/Address records, cleans up the Name field (collapsing extra whitespace and capitalizing each word) and the Address field (collapsing extra whitespace), then exports the cleaned data back out to a new CSV file.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0077-writing-module-to-list-and-search-file-by-content-cbdt-project?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">06 · Writing module to list and search file by content (CBDT project)</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~140p</span> Two file-search features from the CBDT project: count how many times a chosen word occurs inside a given text file, and list the names of every file in a folder whose content contains a chosen word.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0078-create-a-program-to-copy-file?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">07 · Create a program to copy file</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~140p</span> Reads a config.properties file describing a source folder, a list of file types and a destination path; if the config file is missing, it prompts the user to enter and save one, validates that the source folder and destination are usable, and then copies the matching files from source to destination.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0079-create-a-program-to-zip-and-unzip-file-project-cbdt?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">08 · Create a program to zip and unzip file (project CBDT)</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~182p</span> A zip/unzip utility from the CBDT project built on java.util.zip: compress the files in a chosen source folder into a named zip archive, or extract a chosen zip archive into a chosen destination folder.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0070-login-system-of-the-tien-phong-bank-s-ebank?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">09 · Login system of the Tien Phong Bank’s Ebank</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~210p</span> A bilingual Vietnamese/English login screen for Tien Phong Bank’s Ebank, extracted from the real project: it validates a 10-digit account number, a password of 8-31 alphanumeric characters, and a randomly generated captcha the user must re-type correctly, re-prompting with a localized error message on each invalid entry.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0071-task-management-program-of-ccrm-project?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">10 · Task management program of CCRM project</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~210p</span> A task manager for the CCRM project built around 4 fixed task types (Code/Test/Design/Review): add a task with an auto-incrementing ID, validating the task type, the date format, and that the planned start/end time falls in half-hour steps between 8:00 and 17:30; delete a task by ID; and list all tasks ordered by ID.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0072-write-a-login-function-uses-md5-encryption-for-passwords-separate-from-fpt-webmail-software-project?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">11 · Write a login function uses MD5 encryption for passwords (separate from FPT Webmail software Project</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~210p</span> An account system extracted from an FPT Webmail project, storing username, password, name, phone, email, address and date of birth with field validation (10-11 digit phone, valid email format, dd/MM/yyyy date), hashing the password with MD5 before storing it, and a login option that checks the stored hash and prints a personalized greeting.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0085-employee-management-system?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">12 · Employee management system</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~210p</span> A full CRUD console app over Employee records (ID, first/last name, phone, email, address, DOB, sex, salary, agency): add an employee while rejecting a duplicate ID, update or remove an employee found by ID, search employees by a partial name match, and sort the employee list by salary with a Comparator.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-l-p0015-asset-management-upgrade?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">13 · Asset Management- Upgrade</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~280p</span> The employee side of a two-program company asset-borrowing system (assets, employees, requests and borrows are stored in .dat files): after login, an employee can search assets by name, submit a borrow request, cancel a pending request, or return a borrowed asset, which updates the asset’s stock quantity. The brief calls for classes, abstract classes and interfaces with polymorphism.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-l-p0021-create-a-java-console-program-to-manage-students?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">14 · Create a Java console program to manage students</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~525p</span> An OOP console app that stores students (ID, name, semester, one of 3 fixed courses: Java, .Net, C/C++) in an ArrayList: create students in batches (asking whether to continue after every 10), find and sort students by name, update or delete a student located by ID, and print a report that groups each student’s total course count.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-l-p0022-create-a-java-console-program-to-manage-candidates-of-company?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">15 · Create a Java console program to manage Candidates of company</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~525p</span> Three candidate subtypes — Experience, Fresher, Intern — extend a shared Candidate class (ID, name, DOB, address, phone, email) and add their own fields (years of experience, graduation rank, internship semester); the program validates DOB, phone, email, years of experience and graduation rank formats, then supports creating each candidate type and searching candidates by first/last name plus type.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-l-p0023-create-a-java-console-program-to-manage-a-fruit-shop-product-and-shopping?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">16 · Create a Java console program to manage a Fruit Shop (Product and Shopping)</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~525p</span> A two-sided Fruit Shop console app: the shop owner creates Fruit records (ID, name, price, quantity, origin) stored in an ArrayList, while a buyer browses the fruit list, picks an item and quantity, confirms the order and enters their name; each customer’s order is kept in a HashTable and can be reviewed on a view-orders screen listing quantity, price and amount per item.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-l-p0025-create-a-java-console-program-to-normalize-text?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">17 · Create a Java console program to normalize text</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~675p</span> Reads input.txt and rewrites it to output.txt applying a fixed set of text-cleanup rules: a single space between words, one space after commas/periods/colons with correct capitalization, no stray spaces around quoted phrases or before punctuation, a capitalized first word, no blank lines, and a trailing period — all wrapped in exception handling for file read/write errors.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-l-p0013-the-vehicle-management?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">18 · The Vehicle Management</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~750p</span> An OOP showroom app for two vehicle subtypes, Car and Motorbike (each with its own extra fields; Motorbike also overrides a makeSound method), loading and saving vehicles.txt and supporting add, update, delete, search by name (descending) or by ID, plus listing all vehicles either as stored or sorted descending by price.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-l-p0014-asset-management?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">19 · Asset Management</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~750p</span> The manager side of the same two-program asset system (asset.dat / employee.dat / request.dat / borrow.dat): after login, the manager can search assets by name, create or update an asset record, approve an employee’s borrow request — checking stock, moving the record from request.dat into borrow.dat and adjusting the quantity — and view the list of currently borrowed assets.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<div class="note-ct">Each exercise page above has a Video tutorial slot that is currently empty — it will be filled in later. No action is needed from you now; just work from the written brief, the reference solution, and the diagram already linked on each page.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Part 8 · Lesson 8.3</span>
+<h2>Thực hành Khó — 19 bài</h2>
+<p class="lead">Đây là 19 bài tập độ khó Khó (HARD) trong track thực hành Lab211 trên CodeLab — gồm các dự án OOP nhiều file, tiện ích xử lý file (File I/O) và các chương trình console mức độ ngang đề thi. Mỗi thẻ mở đề bài đầy đủ trên CodeLab, kèm lời giải tham khảo và sơ đồ lời giải.</p>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0011-change-base-number-system-16-10-2-program?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">01 · Change base number system (16, 10, 2) program</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~140p</span> Chương trình lặp lại nhiều lần: người dùng chọn hệ cơ số đầu vào và đầu ra (nhị phân, thập phân hoặc hex), nhập một giá trị, chương trình in ra kết quả đã chuyển đổi, cho đến khi người dùng đóng chương trình.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0073-program-to-manage-expense-name-handy-expense?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">02 · Program to manage expense, name Handy Expense</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~140p</span> Ứng dụng quản lý chi tiêu lưu vào file, tên Handy Expense: thêm một khoản chi với ID tự tăng, ngày, số tiền và nội dung; hiển thị toàn bộ danh sách chi tiêu kèm tổng cộng; và xoá một khoản chi theo ID, báo lỗi nếu ID không tồn tại.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0074-write-a-calculator-program-from-dcps-s-project?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">03 · Write a calculator program (from DCPS’s project)</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~140p</span> Máy tính ma trận theo dạng menu: người dùng nhập số hàng/cột và giá trị của hai ma trận, chương trình thực hiện phép cộng, trừ hoặc nhân trên hai ma trận đó, và cảnh báo nếu giá trị nhập vào không phải là số.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0075-handle-file-program-extraction-from-cbdt-project?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">04 · Handle file program (extraction from CBDT project)</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~140p</span> Tiện ích xử lý file gồm 5 lựa chọn, trích từ dự án CBDT: kiểm tra một đường dẫn có tồn tại hay không và là file hay thư mục, liệt kê mọi file .java trong một thư mục, tìm các file có kích thước lớn hơn một ngưỡng cho trước, thêm nội dung gõ từ bàn phím vào cuối một file, và đếm số từ trong một file văn bản — mỗi lựa chọn đều có xử lý ngoại lệ khi đường dẫn không tồn tại.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0076-building-module-csv-file-format?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">05 · Building module csv file format</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~140p</span> Nhập một file CSV gồm các trường ID/Name/Email/Phone/Address, chuẩn hoá trường Name (gộp khoảng trắng thừa và viết hoa chữ cái đầu mỗi từ) và trường Address (gộp khoảng trắng thừa), sau đó xuất dữ liệu đã chuẩn hoá ra một file CSV mới.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0077-writing-module-to-list-and-search-file-by-content-cbdt-project?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">06 · Writing module to list and search file by content (CBDT project)</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~140p</span> Hai chức năng tìm kiếm theo nội dung file, trích từ dự án CBDT: đếm số lần một từ xuất hiện trong một file văn bản cho trước, và liệt kê tên tất cả các file trong một thư mục có nội dung chứa một từ cho trước.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0078-create-a-program-to-copy-file?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">07 · Create a program to copy file</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~140p</span> Đọc một file config.properties mô tả thư mục nguồn, danh sách loại file cần lấy và đường dẫn đích; nếu file cấu hình chưa có, chương trình yêu cầu người dùng nhập và lưu lại, kiểm tra thư mục nguồn và đích hợp lệ, rồi sao chép các file phù hợp từ nguồn sang đích.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0079-create-a-program-to-zip-and-unzip-file-project-cbdt?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">08 · Create a program to zip and unzip file (project CBDT)</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~182p</span> Tiện ích nén/giải nén dùng gói java.util.zip, trích từ dự án CBDT: nén các file trong một thư mục nguồn thành một file zip có tên do người dùng đặt, hoặc giải nén một file zip vào một thư mục đích do người dùng chọn.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0070-login-system-of-the-tien-phong-bank-s-ebank?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">09 · Login system of the Tien Phong Bank’s Ebank</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~210p</span> Màn hình đăng nhập song ngữ Việt/Anh cho Ebank của Tiên Phong Bank, trích từ dự án thật: kiểm tra số tài khoản đủ 10 chữ số, mật khẩu dài 8-31 ký tự có cả chữ và số, và mã captcha sinh ngẫu nhiên mà người dùng phải gõ lại đúng, mỗi lần nhập sai sẽ hiện lại thông báo lỗi theo đúng ngôn ngữ đã chọn.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0071-task-management-program-of-ccrm-project?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">10 · Task management program of CCRM project</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~210p</span> Trình quản lý công việc cho dự án CCRM, xoay quanh 4 loại task cố định (Code/Test/Design/Review): thêm một task với ID tự tăng, kiểm tra loại task, định dạng ngày, và thời gian bắt đầu/kết thúc dự kiến phải rơi vào các mốc nửa giờ trong khoảng 8:00-17:30; xoá một task theo ID; và liệt kê toàn bộ task theo thứ tự ID.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0072-write-a-login-function-uses-md5-encryption-for-passwords-separate-from-fpt-webmail-software-project?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">11 · Write a login function uses MD5 encryption for passwords (separate from FPT Webmail software Project</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~210p</span> Hệ thống tài khoản trích từ một dự án FPT Webmail, lưu username, password, tên, số điện thoại, email, địa chỉ và ngày sinh với kiểm tra hợp lệ từng trường (điện thoại 10-11 số, email đúng định dạng, ngày theo dd/MM/yyyy), mã hoá mật khẩu bằng MD5 trước khi lưu, và một chức năng đăng nhập kiểm tra hash đã lưu rồi in lời chào theo tên đăng nhập.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0085-employee-management-system?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">12 · Employee management system</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~210p</span> Ứng dụng console CRUD đầy đủ trên bản ghi Employee (ID, họ tên, điện thoại, email, địa chỉ, ngày sinh, giới tính, lương, phòng ban): thêm nhân viên và từ chối ID trùng, cập nhật hoặc xoá nhân viên theo ID, tìm nhân viên theo một phần tên, và sắp xếp danh sách nhân viên theo lương bằng Comparator.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-l-p0015-asset-management-upgrade?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">13 · Asset Management- Upgrade</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~280p</span> Phía nhân viên của hệ thống mượn tài sản công ty gồm hai chương trình (tài sản, nhân viên, yêu cầu mượn và phiếu mượn được lưu trong các file .dat): sau khi đăng nhập, nhân viên có thể tìm tài sản theo tên, gửi yêu cầu mượn, huỷ một yêu cầu đang chờ, hoặc trả một tài sản đã mượn (cập nhật lại số lượng tồn kho). Đề bài yêu cầu dùng class, abstract class và interface có tính đa hình (polymorphism).</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-l-p0021-create-a-java-console-program-to-manage-students?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">14 · Create a Java console program to manage students</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~525p</span> Ứng dụng console theo hướng OOP lưu sinh viên (ID, tên, học kỳ, một trong 3 khoá học cố định: Java, .Net, C/C++) trong một ArrayList: tạo sinh viên theo từng đợt (hỏi có tiếp tục hay không sau mỗi 10 sinh viên), tìm và sắp xếp sinh viên theo tên, cập nhật hoặc xoá một sinh viên tìm theo ID, và in báo cáo gộp tổng số khoá học theo từng sinh viên.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-l-p0022-create-a-java-console-program-to-manage-candidates-of-company?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">15 · Create a Java console program to manage Candidates of company</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~525p</span> Ba loại ứng viên — Experience, Fresher, Intern — kế thừa từ một lớp Candidate chung (ID, tên, ngày sinh, địa chỉ, điện thoại, email) và có thêm trường riêng (số năm kinh nghiệm, xếp loại tốt nghiệp, học kỳ thực tập); chương trình kiểm tra định dạng ngày sinh, điện thoại, email, số năm kinh nghiệm và xếp loại tốt nghiệp, sau đó cho phép tạo từng loại ứng viên và tìm kiếm theo họ/tên cùng loại ứng viên.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-l-p0023-create-a-java-console-program-to-manage-a-fruit-shop-product-and-shopping?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">16 · Create a Java console program to manage a Fruit Shop (Product and Shopping)</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~525p</span> A two-sided Fruit Shop console app: the shop owner creates Fruit records (ID, name, price, quantity, origin) stored in an ArrayList, while a buyer browses the fruit list, picks an item and quantity, confirms the order and enters their name; each customer’s order is kept in a HashTable and can be reviewed on a view-orders screen listing quantity, price and amount per item.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-l-p0025-create-a-java-console-program-to-normalize-text?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">17 · Create a Java console program to normalize text</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~675p</span> Đọc file input.txt và ghi lại thành output.txt theo một bộ quy tắc chuẩn hoá văn bản cố định: chỉ một khoảng trắng giữa các từ, một khoảng trắng sau dấu phẩy/dấu chấm/dấu hai chấm kèm viết hoa đúng chỗ, không có khoảng trắng thừa quanh cụm trong ngoặc kép hay trước dấu câu, viết hoa chữ đầu tiên, không có dòng trống, và có dấu chấm kết thúc văn bản — tất cả đều có xử lý ngoại lệ khi đọc/ghi file.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-l-p0013-the-vehicle-management?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">18 · The Vehicle Management</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~750p</span> Ứng dụng showroom theo hướng OOP cho hai loại phương tiện, Car và Motorbike (mỗi loại có thêm trường riêng; Motorbike còn có hàm makeSound riêng), đọc/ghi file vehicles.txt và hỗ trợ thêm, sửa, xoá, tìm theo tên (giảm dần) hoặc theo ID, cùng với hiển thị toàn bộ danh sách phương tiện theo thứ tự gốc hoặc sắp xếp giảm dần theo giá.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-l-p0014-asset-management?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+  <span class="lc-ico">🧩</span>
+  <span class="lc-body"><span class="lc-title">19 · Asset Management</span><span class="lc-sub"><span class="badge">HARD</span> <span class="badge">~750p</span> Phía quản lý của cùng hệ thống tài sản gồm hai chương trình (asset.dat / employee.dat / request.dat / borrow.dat): sau khi đăng nhập, quản lý có thể tìm tài sản theo tên, tạo hoặc cập nhật một bản ghi tài sản, duyệt yêu cầu mượn của nhân viên — kiểm tra tồn kho, chuyển bản ghi từ request.dat sang borrow.dat và cập nhật số lượng — và xem danh sách các tài sản đang được mượn.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+
+<div class="note-ct">Mỗi trang bài tập ở trên có một chỗ dành cho Video hướng dẫn hiện đang để trống — sẽ được bổ sung sau. Bạn không cần làm gì thêm; cứ dựa vào đề bài, lời giải tham khảo và sơ đồ đã có sẵn trên từng trang.</div>
+</div>
+`,
+        },
+      ],
+    },
   ],
 };

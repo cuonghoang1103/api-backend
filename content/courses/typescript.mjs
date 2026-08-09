@@ -6,6 +6,7 @@
  * Seed: node scripts/course-seed.mjs --file ./content/courses/typescript.mjs --apply
  */
 import s00 from './typescript/s00-intro.mjs';
+import s01 from './typescript/s01-vi-sao.mjs';
 
 export default {
   category: { slug: 'languages', name: 'Ngôn ngữ lập trình', icon: 'Code2', sortOrder: 0 },
@@ -27,5 +28,6 @@ export default {
   },
   sections: [
     s00,
+    s01,
   ],
 };

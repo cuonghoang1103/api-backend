@@ -7,6 +7,7 @@
  * Kiểm:  node scripts/course-content-check.mjs ./content/courses/web-foundations.mjs
  */
 import s00 from './web-foundations/s00-intro.mjs';
+import s01 from './web-foundations/s01-tools.mjs';
 
 export default {
   category: { slug: 'frontend', name: 'Frontend', icon: 'Layout', sortOrder: 2 },
@@ -29,5 +30,6 @@ export default {
   },
   sections: [
     s00,
+    s01,
   ],
 };

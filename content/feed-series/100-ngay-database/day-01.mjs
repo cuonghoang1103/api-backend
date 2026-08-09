@@ -8,6 +8,10 @@
 export default {
   day: 1,
   card: 'db-day-01',
+  // Cloudflare đã cache bản 404 cho db-day-01.webp (lần kiểm GET trước khi ảnh
+  // kịp lên R2). Bump sang URL mới db-day-01-v2.webp để né 404-cache. Xem
+  // [[feedback_cdn_caches_404_too]].
+  cardRev: 2,
   category: 'Database',
   hashtags: ['100NgayDatabase', 'Database', 'PostgreSQL', 'SQL'],
   codeLab: {

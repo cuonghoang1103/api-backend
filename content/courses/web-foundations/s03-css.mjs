@@ -484,8 +484,12 @@ grid-template-columns: 240px 1fr;             /* thanh bên cố định + nội
       isFreePreview: false,
       description: 'Mười câu về bộ chọn và cascade, box model, Flexbox, Grid và thiết kế responsive.',
       content: `
-<div class="ml-en"><p class="lead">Ten questions on Chapter 3: selectors and the cascade, the box model and box-sizing, Flexbox axes, CSS Grid, relative units and media queries.</p></div>
-<div class="ml-vi"><p class="lead">Mười câu cho Chương 3: bộ chọn và cascade, box model và box-sizing, các trục Flexbox, CSS Grid, đơn vị tương đối và media query.</p></div>
+<div class="ml-en"><p class="lead">Ten questions on Chapter 3: selectors and the cascade, the box model and box-sizing, Flexbox axes, CSS Grid, relative units and media queries.</p>
+<p class="note-ct"><strong>Now practice by doing.</strong> CSS layout only clicks once you push pixels yourself. On Code Lab, style and lay out real elements — box model, Flexbox, Grid and responsive — with instant feedback.</p>
+<div class="link-card"><a href="/code-lab/html-css">Practice on Code Lab → HTML &amp; CSS track</a></div></div>
+<div class="ml-vi"><p class="lead">Mười câu cho Chương 3: bộ chọn và cascade, box model và box-sizing, các trục Flexbox, CSS Grid, đơn vị tương đối và media query.</p>
+<p class="note-ct"><strong>Giờ luyện bằng cách làm.</strong> Bố cục CSS chỉ thật sự thông khi bạn tự tay đẩy từng pixel. Trên Code Lab, hãy tạo kiểu và dàn các phần tử thật — box model, Flexbox, Grid và responsive — với phản hồi tức thì.</p>
+<div class="link-card"><a href="/code-lab/html-css">Luyện tập ở Code Lab → track HTML &amp; CSS</a></div></div>
 `,
       quiz: {
         timeLimitSeconds: 720,

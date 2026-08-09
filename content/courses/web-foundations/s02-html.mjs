@@ -536,8 +536,12 @@ export default {
       isFreePreview: false,
       description: 'Mười câu về phần tử và thuộc tính, tiêu đề và liên kết, HTML ngữ nghĩa, biểu mẫu, bảng và khả năng tiếp cận.',
       content: `
-<div class="ml-en"><p class="lead">Ten questions on Chapter 2: element anatomy and attributes, headings and links, semantic structure, forms and inputs, tables, and accessibility.</p></div>
-<div class="ml-vi"><p class="lead">Mười câu cho Chương 2: giải phẫu phần tử và thuộc tính, tiêu đề và liên kết, cấu trúc ngữ nghĩa, biểu mẫu và input, bảng, và khả năng tiếp cận.</p></div>
+<div class="ml-en"><p class="lead">Ten questions on Chapter 2: element anatomy and attributes, headings and links, semantic structure, forms and inputs, tables, and accessibility.</p>
+<p class="note-ct"><strong>Now practice by doing.</strong> Reading HTML is not the same as writing it. Head to Code Lab and build real markup — the exercises check your solution automatically.</p>
+<div class="link-card"><a href="/code-lab/html-css">Practice on Code Lab → HTML &amp; CSS track</a></div></div>
+<div class="ml-vi"><p class="lead">Mười câu cho Chương 2: giải phẫu phần tử và thuộc tính, tiêu đề và liên kết, cấu trúc ngữ nghĩa, biểu mẫu và input, bảng, và khả năng tiếp cận.</p>
+<p class="note-ct"><strong>Giờ luyện bằng cách làm.</strong> Đọc HTML không giống viết HTML. Hãy sang Code Lab để tự tay dựng mã thật — các bài tập tự động chấm lời giải của bạn.</p>
+<div class="link-card"><a href="/code-lab/html-css">Luyện tập ở Code Lab → track HTML &amp; CSS</a></div></div>
 `,
       quiz: {
         timeLimitSeconds: 720,

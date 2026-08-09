@@ -428,8 +428,14 @@ npm install              # cài tất cả những gì liệt kê trong package.
       isFreePreview: false,
       description: 'Mười câu về terminal, đường dẫn, VS Code, Git, GitHub và npm.',
       content: `
-<div class="ml-en"><p class="lead">Ten questions on Chapter 1: terminal navigation, absolute vs relative paths, VS Code, the Git snapshot model, GitHub remotes, and npm/package.json.</p></div>
-<div class="ml-vi"><p class="lead">Mười câu cho Chương 1: di chuyển terminal, đường dẫn tuyệt đối vs tương đối, VS Code, mô hình ảnh chụp của Git, remote GitHub, và npm/package.json.</p></div>
+<div class="ml-en"><p class="lead">Ten questions on Chapter 1: terminal navigation, absolute vs relative paths, VS Code, the Git snapshot model, GitHub remotes, and npm/package.json.</p>
+<p class="note-ct"><strong>Now practice by doing.</strong> These tools stick only through repetition. Drill real terminal and Git commands on Code Lab until they are muscle memory.</p>
+<div class="link-card"><a href="/code-lab/git">Practice on Code Lab → Git track</a></div>
+<div class="link-card"><a href="/code-lab/linux-bash">Practice on Code Lab → Linux &amp; Bash (terminal) track</a></div></div>
+<div class="ml-vi"><p class="lead">Mười câu cho Chương 1: di chuyển terminal, đường dẫn tuyệt đối vs tương đối, VS Code, mô hình ảnh chụp của Git, remote GitHub, và npm/package.json.</p>
+<p class="note-ct"><strong>Giờ luyện bằng cách làm.</strong> Mấy công cụ này chỉ thấm qua lặp lại. Hãy luyện lệnh terminal và Git thật ở Code Lab tới khi thành phản xạ.</p>
+<div class="link-card"><a href="/code-lab/git">Luyện tập ở Code Lab → track Git</a></div>
+<div class="link-card"><a href="/code-lab/linux-bash">Luyện tập ở Code Lab → track Linux &amp; Bash (terminal)</a></div></div>
 `,
       quiz: {
         timeLimitSeconds: 720,

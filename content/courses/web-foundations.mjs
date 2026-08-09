@@ -13,6 +13,10 @@ import s03 from './web-foundations/s03-css.mjs';
 import s04 from './web-foundations/s04-js.mjs';
 import s05 from './web-foundations/s05-js-async.mjs';
 import s06 from './web-foundations/s06-http-api.mjs';
+import s07 from './web-foundations/s07-auth.mjs';
+import s08 from './web-foundations/s08-data-sql.mjs';
+import s09 from './web-foundations/s09-typescript.mjs';
+import s10 from './web-foundations/s10-thinking-debugging.mjs';
 
 export default {
   category: { slug: 'frontend', name: 'Frontend', icon: 'Layout', sortOrder: 2 },
@@ -41,5 +45,9 @@ export default {
     s04,
     s05,
     s06,
+    s07,
+    s08,
+    s09,
+    s10,
   ],
 };

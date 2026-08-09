@@ -284,7 +284,10 @@ const emptyItemForm = (kind: CvItemKind) => ({
   gpa: '',
   context: '',
 });
-type ItemForm = ReturnType<typeof emptyItemForm>;
+// Named ...Values, not ItemForm: the component below is already called
+// ItemForm, and a type sharing a value's name trips ESLint's no-redeclare
+// (TypeScript itself allows it — the two live in different namespaces).
+type ItemFormValues = ReturnType<typeof emptyItemForm>;
 
 function ItemsSection({ profile, onChanged }: { profile: CvProfile; onChanged: () => Promise<void> }) {
   const [adding, setAdding] = useState<CvItemKind | null>(null);
@@ -341,7 +344,7 @@ function ItemsSection({ profile, onChanged }: { profile: CvProfile; onChanged: (
   );
 }
 
-function toItemPayload(data: ItemForm) {
+function toItemPayload(data: ItemFormValues) {
   return {
     kind: data.kind,
     title: data.title,
@@ -358,13 +361,13 @@ function toItemPayload(data: ItemForm) {
 }
 
 function ItemForm({ initial, onSubmit, onCancel }: {
-  initial: ItemForm;
+  initial: ItemFormValues;
   onSubmit: (data: ReturnType<typeof toItemPayload>) => Promise<void>;
   onCancel: () => void;
 }) {
-  const [f, setF] = useState<ItemForm>(initial);
+  const [f, setF] = useState<ItemFormValues>(initial);
   const [busy, setBusy] = useState(false);
-  const set = (k: keyof ItemForm) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+  const set = (k: keyof ItemFormValues) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setF((s) => ({ ...s, [k]: e.target.type === 'checkbox' ? (e.target as HTMLInputElement).checked : e.target.value }));
 
   const submit = async () => {

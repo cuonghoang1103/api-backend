@@ -495,6 +495,26 @@ COURSES_SEED_OUT_RC="$(printf '%s\n' "$COURSES_SEED_OUT" | sed -n 's/^__SEED_RC_
 COURSES_SEED_OUT="$(printf '%s\n' "$COURSES_SEED_OUT" | grep -v '^__SEED_RC__=')"
 report_seed "CuongThai course seed" "seed-courses" "$COURSES_SEED_OUT" "${COURSES_SEED_OUT_RC:-0}" || true
 
+# ── Step 3.12c: curated YouTube video track per lesson (idempotent) ──
+# One map file per course under content/course-videos/ → patches ONLY the
+# video columns of lesson_details (the VN / EN / YT switcher on the learn
+# page). Must run AFTER 3.12b: it matches lessons by slug, so the lessons
+# have to exist first. Link rot is checked separately, by hand:
+#   node scripts/verify-youtube-videos.mjs --all
+info "Running course video-track seed..."
+CVIDEO_SEED_OUT=$($DC exec -T backend sh -c '
+  rc=0
+  for f in content/course-videos/*.mjs; do
+    [ -e "$f" ] || { echo "no course-video map files"; break; }
+    echo "── $f"
+    node scripts/course-video-seed.mjs --file "$f" --apply 2>&1 || rc=1
+  done
+  echo "__SEED_RC__=$rc"
+') || true
+CVIDEO_SEED_RC="$(printf '%s\n' "$CVIDEO_SEED_OUT" | sed -n 's/^__SEED_RC__=//p' | tail -1)"
+CVIDEO_SEED_OUT="$(printf '%s\n' "$CVIDEO_SEED_OUT" | grep -v '^__SEED_RC__=')"
+report_seed "Course video-track seed" "seed-course-videos" "$CVIDEO_SEED_OUT" "${CVIDEO_SEED_RC:-0}" || true
+
 # ── Step 3.13: Exp Hub setup guides (per-subject, idempotent) ───
 # One .mjs per subject under content/exphub/ → upsert SnippetCategory +
 # Snippet (guide) by slug. Academy courses link "Cài đặt" cards to

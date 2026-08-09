@@ -8,6 +8,7 @@ import type { Semester, Course } from '@/types';
 import RichTextEditor from '@/components/admin/RichTextEditor';
 import LessonDocumentsManager from '@/components/admin/LessonDocumentsManager';
 import LessonVideoManager from '@/components/admin/LessonVideoManager';
+import LessonVideoTracks, { emptyVideoTracks, type VideoTracksValue } from '@/components/admin/LessonVideoTracks';
 import { toast } from 'sonner';
 
 interface LessonInfo {
@@ -18,6 +19,14 @@ interface LessonInfo {
   lessonType: string;
   videoPlatform: string;
   videoUrl: string;
+  // VN / EN / YT recordings + which one the learn page opens on.
+  videoUrlVi: string;
+  videoPlatformVi: string;
+  videoUrlEn: string;
+  videoPlatformEn: string;
+  videoUrlYt: string;
+  videoYtCredit: string;
+  defaultVideoTrack: VideoTracksValue['defaultVideoTrack'];
   sourceCodeUrl: string;
   teachingNotes: string;
   videoDurationSeconds: number;
@@ -35,6 +44,24 @@ interface LessonInfo {
   }>;
 }
 
+/** Read the VN / EN / YT slots off an API lesson (admin payload carries the
+ *  raw `details` row). Missing → empty, which the backend re-derives from the
+ *  legacy `videoUrl`. */
+function tracksFromLesson(lesson: any): VideoTracksValue {
+  const d = lesson?.details ?? lesson?.detail ?? {};
+  const str = (v: unknown) => (typeof v === 'string' ? v : '');
+  const def = str(d.defaultVideoTrack).toUpperCase();
+  return {
+    videoUrlVi: str(d.videoUrlVi),
+    videoPlatformVi: str(d.videoPlatformVi) || 'EMBED',
+    videoUrlEn: str(d.videoUrlEn),
+    videoPlatformEn: str(d.videoPlatformEn) || 'EMBED',
+    videoUrlYt: str(d.videoUrlYt),
+    videoYtCredit: str(d.videoYtCredit),
+    defaultVideoTrack: def === 'VI' || def === 'EN' ? def : 'YT',
+  };
+}
+
 const emptyLesson: LessonInfo = {
   id: 0,
   title: '',
@@ -43,6 +70,7 @@ const emptyLesson: LessonInfo = {
   lessonType: 'VIDEO',
   videoPlatform: 'EMBED',
   videoUrl: '',
+  ...emptyVideoTracks,
   sourceCodeUrl: '',
   teachingNotes: '',
   videoDurationSeconds: 0,
@@ -106,6 +134,7 @@ export default function AdminLessonsPage() {
           lessonType: lesson.lessonType || 'VIDEO',
           videoPlatform: lesson.videoPlatform || 'EMBED',
           videoUrl: lesson.videoUrl || '',
+          ...tracksFromLesson(lesson),
           sourceCodeUrl: lesson.sourceCodeUrl || '',
           teachingNotes: lesson.teachingNotes || lesson.content || '',
           videoDurationSeconds: lesson.videoDurationSeconds || 0,
@@ -137,6 +166,13 @@ export default function AdminLessonsPage() {
         adminCoursesApi.updateLessonDetail(selectedLessonId, {
           videoPlatform: form.videoPlatform,
           videoUrl: form.videoUrl,
+          videoUrlVi: form.videoUrlVi,
+          videoPlatformVi: form.videoPlatformVi,
+          videoUrlEn: form.videoUrlEn,
+          videoPlatformEn: form.videoPlatformEn,
+          videoUrlYt: form.videoUrlYt,
+          videoYtCredit: form.videoYtCredit,
+          defaultVideoTrack: form.defaultVideoTrack,
           sourceCodeUrl: form.sourceCodeUrl,
           teachingNotes: form.teachingNotes,
         }),
@@ -267,53 +303,71 @@ export default function AdminLessonsPage() {
                 </div>
               </div>
 
-              <div className="grid gap-4 lg:grid-cols-2">
-                <div>
-                  <label className="block text-sm font-medium text-text-secondary mb-1.5">
-                    <Video className="w-4 h-4 inline mr-1" /> Nền tảng video
-                  </label>
-                  <select
-                    value={form.videoPlatform}
-                    onChange={(e) => setForm((p) => ({ ...p, videoPlatform: e.target.value }))}
-                    className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary"
-                  >
-                    <option value="EMBED">Embed trên web</option>
-                    <option value="YOUTUBE_TAB">Mở tab YouTube</option>
-                    <option value="DIRECT">Direct video URL</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-text-secondary mb-1.5">
-                    <PlayCircle className="w-4 h-4 inline mr-1" /> Video URL
-                  </label>
-                  <input
-                    value={form.videoUrl}
-                    onChange={(e) => setForm((p) => ({ ...p, videoUrl: e.target.value }))}
-                    placeholder={form.videoPlatform === 'DIRECT' ? 'Link .mp4 bên ngoài — hoặc tải video lên R2 bên dưới' : 'YouTube URL hoặc video embed URL'}
-                    className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary"
-                  />
-                </div>
-              </div>
+              {/* Three parallel recordings (VN / EN / YT) + the default one.
+                  DIRECT tracks upload straight to R2 (private, ≤2GB) and are
+                  played through a short-lived signed URL. */}
+              <LessonVideoTracks
+                lessonId={selectedLessonId}
+                value={{
+                  videoUrlVi: form.videoUrlVi,
+                  videoPlatformVi: form.videoPlatformVi,
+                  videoUrlEn: form.videoUrlEn,
+                  videoPlatformEn: form.videoPlatformEn,
+                  videoUrlYt: form.videoUrlYt,
+                  videoYtCredit: form.videoYtCredit,
+                  defaultVideoTrack: form.defaultVideoTrack,
+                }}
+                onChange={(patch) => setForm((p) => ({ ...p, ...patch }))}
+              />
 
-              {/* DIRECT: upload the video straight to R2 (private, ≤2GB).
-                  Students get a short-lived signed URL at play time — the
-                  raw object URL is never exposed. External .mp4 links can
-                  still be pasted in the field above instead. */}
-              {form.videoPlatform === 'DIRECT' && (
-                <div className="mt-4">
-                  <LessonVideoManager
-                    lessonId={selectedLessonId}
-                    videoUrl={form.videoUrl}
-                    onSaved={(data) => setForm((p) => ({
-                      ...p,
-                      videoPlatform: 'DIRECT',
-                      videoUrl: data.videoUrl,
-                      videoDurationSeconds: data.videoDurationSeconds ?? p.videoDurationSeconds,
-                    }))}
-                    onDeleted={() => setForm((p) => ({ ...p, videoUrl: '' }))}
-                  />
+              {/* Legacy single-video slot — kept so an existing lesson edited
+                  before the tracks existed can still be fixed by hand. The
+                  backend re-points it at the default track on every track save. */}
+              <details className="mt-4 group">
+                <summary className="cursor-pointer text-xs text-text-muted hover:text-text-secondary select-none">
+                  <Video className="w-3.5 h-3.5 inline mr-1" /> Ô video cũ (một video, không phân luồng)
+                </summary>
+                <div className="grid gap-4 lg:grid-cols-2 mt-3">
+                  <div>
+                    <label className="block text-sm font-medium text-text-secondary mb-1.5">Nền tảng video</label>
+                    <select
+                      value={form.videoPlatform}
+                      onChange={(e) => setForm((p) => ({ ...p, videoPlatform: e.target.value }))}
+                      className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary"
+                    >
+                      <option value="EMBED">Embed trên web</option>
+                      <option value="YOUTUBE_TAB">Mở tab YouTube</option>
+                      <option value="DIRECT">Direct video URL</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-text-secondary mb-1.5">
+                      <PlayCircle className="w-4 h-4 inline mr-1" /> Video URL
+                    </label>
+                    <input
+                      value={form.videoUrl}
+                      onChange={(e) => setForm((p) => ({ ...p, videoUrl: e.target.value }))}
+                      placeholder={form.videoPlatform === 'DIRECT' ? 'Link .mp4 bên ngoài — hoặc tải video lên R2 bên dưới' : 'YouTube URL hoặc video embed URL'}
+                      className="w-full px-4 py-3 rounded-xl bg-darkbg border border-darkborder text-text-primary"
+                    />
+                  </div>
                 </div>
-              )}
+                {form.videoPlatform === 'DIRECT' && (
+                  <div className="mt-4">
+                    <LessonVideoManager
+                      lessonId={selectedLessonId}
+                      videoUrl={form.videoUrl}
+                      onSaved={(data) => setForm((p) => ({
+                        ...p,
+                        videoPlatform: 'DIRECT',
+                        videoUrl: data.videoUrl,
+                        videoDurationSeconds: data.videoDurationSeconds ?? p.videoDurationSeconds,
+                      }))}
+                      onDeleted={() => setForm((p) => ({ ...p, videoUrl: '' }))}
+                    />
+                  </div>
+                )}
+              </details>
             </div>
 
             {/* Source code */}

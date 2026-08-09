@@ -33,7 +33,10 @@ import { ChangePasswordModal } from '@/components/auth/ChangePasswordModal';
 // this exact order — Home · About · Feed · Notes · Messenger · Music · AI Chat.
 // Everything else (Code Lab, Roadmap, Tech Trends, Academy, Shop, …) lives in
 // the full vertical NavigationDock (the ☰ sidebar), grouped by theme.
-interface TopNavLink {
+// Named ...Item, not TopNavLink: the component below is already called
+// TopNavLink, and a type sharing a value's name trips ESLint's no-redeclare
+// (TypeScript itself allows it — the two live in different namespaces).
+interface TopNavLinkItem {
  href: string;
  label: string;
  icon: React.ElementType;
@@ -41,7 +44,7 @@ interface TopNavLink {
  adminOnly?: boolean;
 }
 
-const TOP_NAV_LINKS: TopNavLink[] = [
+const TOP_NAV_LINKS: TopNavLinkItem[] = [
  { href: '/', label: 'Home', icon: Home },
  { href: '/about', label: 'About', icon: User },
  { href: '/feed', label: 'Feed', icon: Newspaper },
@@ -677,7 +680,7 @@ export default function Navbar() {
         <div className="flex items-center justify-around px-2 py-2">
           {MOBILE_TAB_HREFS
             .map((href) => TOP_NAV_LINKS.find((l) => l.href === href))
-            .filter((l): l is TopNavLink => {
+            .filter((l): l is TopNavLinkItem => {
               if (!l) return false;
               if (l.adminOnly) return isAdmin;
               if (l.authOnly) return isAuthenticated;

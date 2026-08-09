@@ -1028,10 +1028,41 @@ model Lesson {
 }
 
 model LessonDetail {
-  id            Int      @id @default(autoincrement())
-  lessonId      Int      @unique(map: "uk_lesson_detail_lesson") @map("lesson_id")
-  videoPlatform String   @default("EMBED") @map("video_platform") @db.VarChar(30)
-  videoUrl      String?  @map("video_url") @db.VarChar(500)
+  id       Int @id @default(autoincrement())
+  lessonId Int @unique(map: "uk_lesson_detail_lesson") @map("lesson_id")
+
+  // ── The lesson's video, in up to THREE parallel tracks ──────────────────
+  // A lesson can carry the instructor's own Vietnamese recording, an English
+  // recording, and a curated third-party YouTube lecture at the same time;
+  // the learn page shows a VN / EN / YT switcher and opens on
+  // `defaultVideoTrack`. Every track is optional — a lesson with only the YT
+  // link (the normal state until the courses are re-recorded) shows a single
+  // pill, and a lesson with none shows no player at all.
+  //
+  // `videoPlatform` / `videoUrl` below are the ORIGINAL single-video columns.
+  // They stay as the legacy fallback (and are kept in sync with the default
+  // track on write) so every older reader — course cards, the Academy
+  // curriculum, the R2 signing helpers — keeps working untouched.
+  videoPlatform String  @default("EMBED") @map("video_platform") @db.VarChar(30)
+  videoUrl      String? @map("video_url") @db.VarChar(500)
+
+  // VI / EN: normally the instructor's own recording. EMBED = YouTube,
+  // DIRECT = a private R2 object played through a short-lived signed URL.
+  videoUrlVi      String? @map("video_url_vi") @db.VarChar(500)
+  videoPlatformVi String? @map("video_platform_vi") @db.VarChar(30)
+  videoUrlEn      String? @map("video_url_en") @db.VarChar(500)
+  videoPlatformEn String? @map("video_platform_en") @db.VarChar(30)
+
+  // YT: a curated third-party lecture. Always an EMBED (YouTube), and always
+  // credited — `videoYtCredit` holds "Channel — Video title" so the player
+  // can name the source instead of passing someone else's work off as ours.
+  videoUrlYt    String? @map("video_url_yt") @db.VarChar(500)
+  videoYtCredit String? @map("video_yt_credit") @db.VarChar(255)
+
+  // 'VI' | 'EN' | 'YT' — which pill is selected when the lesson opens. Falls
+  // back at read time to the first track that actually has a URL.
+  defaultVideoTrack String @default("YT") @map("default_video_track") @db.VarChar(8)
+
   sourceCodeUrl String?  @map("source_code_url") @db.VarChar(500)
   teachingNotes String?  @map("teaching_notes") @db.Text
   // Quiz (lessonType=QUIZ): { timeLimitSeconds, questions: [{ id, question,

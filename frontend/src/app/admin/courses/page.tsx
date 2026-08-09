@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import {
   Plus, Search, Pencil, Trash2, X, ChevronLeft, ChevronRight,
   CheckCircle, Clock, AlertCircle, Eye, EyeOff, Loader2,
-  ChevronDown, ChevronUp, BookOpen, Play, FileText, Link, Video, Image, FolderTree
+  ChevronDown, ChevronUp, BookOpen, Play, FileText, Link, Image, FolderTree
 } from 'lucide-react';
 import { adminCoursesApi, courseCategoryApi } from '@/lib/api';
 import { toast } from 'sonner';
@@ -12,7 +12,7 @@ import type { Course, CourseCategory, CourseSection as CCSection, LessonDto } fr
 import ImageUpload from '@/components/admin/ImageUpload';
 import RichTextEditor from '@/components/admin/RichTextEditor';
 import LessonDocumentsManager from '@/components/admin/LessonDocumentsManager';
-import LessonVideoManager from '@/components/admin/LessonVideoManager';
+import LessonVideoTracks, { emptyVideoTracks, type VideoTracksValue } from '@/components/admin/LessonVideoTracks';
 import LessonQuizBuilder, { type QuizData } from '@/components/admin/LessonQuizBuilder';
 
 const LEVELS = ['BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
@@ -57,6 +57,16 @@ interface LessonForm {
   lessonType: string;
   videoUrl: string;
   videoPlatform: 'EMBED' | 'YOUTUBE_TAB' | 'DIRECT';
+  // The VN / EN / YT recordings of this lesson + which one opens by default.
+  // `videoUrl` above stays the legacy single-video slot; the backend keeps it
+  // pointing at whichever track is the default.
+  videoUrlVi: string;
+  videoPlatformVi: string;
+  videoUrlEn: string;
+  videoPlatformEn: string;
+  videoUrlYt: string;
+  videoYtCredit: string;
+  defaultVideoTrack: VideoTracksValue['defaultVideoTrack'];
   sourceCodeUrl: string;
   teachingNotes: string;
   quizData?: QuizData | null;
@@ -78,6 +88,25 @@ interface LessonForm {
 
 // Bold the part of `text` that matches `query` (case-insensitive) so
 // suggestions visibly narrow as the admin types.
+/** Pull the VN / EN / YT slots out of an API lesson. The admin view returns
+ *  the raw `details` row, so the columns are read straight off it; a payload
+ *  without them (older cache) falls back to the empty set, which the backend
+ *  then re-derives from the legacy `videoUrl` anyway. */
+function tracksFromLesson(l: LessonDto): VideoTracksValue {
+  const d = (l.details ?? l.detail ?? {}) as Record<string, unknown>;
+  const str = (v: unknown) => (typeof v === 'string' ? v : '');
+  const def = str(d.defaultVideoTrack).toUpperCase();
+  return {
+    videoUrlVi: str(d.videoUrlVi),
+    videoPlatformVi: str(d.videoPlatformVi) || 'EMBED',
+    videoUrlEn: str(d.videoUrlEn),
+    videoPlatformEn: str(d.videoPlatformEn) || 'EMBED',
+    videoUrlYt: str(d.videoUrlYt),
+    videoYtCredit: str(d.videoYtCredit),
+    defaultVideoTrack: def === 'VI' || def === 'EN' ? def : 'YT',
+  };
+}
+
 function highlightMatch(text: string, query: string) {
   const q = query.trim();
   if (!q) return text;
@@ -235,6 +264,7 @@ export default function AdminCoursesPage() {
             lessonType: l.lessonType || 'VIDEO',
             videoUrl: l.videoUrl || '',
             videoPlatform: (l.videoPlatform as 'EMBED' | 'YOUTUBE_TAB' | 'DIRECT') || 'EMBED',
+            ...tracksFromLesson(l),
             sourceCodeUrl: l.sourceCodeUrl || '',
             teachingNotes: l.teachingNotes || '',
             quizData: (l as unknown as { quizData?: QuizData; detail?: { quizData?: QuizData } }).quizData
@@ -296,6 +326,7 @@ export default function AdminCoursesPage() {
           lessonType: 'VIDEO',
           videoUrl: '',
           videoPlatform: 'EMBED' as const,
+          ...emptyVideoTracks,
           sourceCodeUrl: '',
           teachingNotes: '',
           quizData: null,
@@ -460,6 +491,13 @@ export default function AdminCoursesPage() {
             lessonType: lesson.lessonType,
             videoUrl: lesson.videoUrl,
             videoPlatform: lesson.videoPlatform,
+            videoUrlVi: lesson.videoUrlVi,
+            videoPlatformVi: lesson.videoPlatformVi,
+            videoUrlEn: lesson.videoUrlEn,
+            videoPlatformEn: lesson.videoPlatformEn,
+            videoUrlYt: lesson.videoUrlYt,
+            videoYtCredit: lesson.videoYtCredit,
+            defaultVideoTrack: lesson.defaultVideoTrack,
             sourceCodeUrl: lesson.sourceCodeUrl,
             teachingNotes: lesson.teachingNotes,
             quizData: lesson.lessonType === 'QUIZ' ? (lesson.quizData ?? null) : null,
@@ -1105,29 +1143,19 @@ export default function AdminCoursesPage() {
 
                               {lesson.lessonType === 'VIDEO' && (
                                 <>
-                                  <div className="grid gap-3 lg:grid-cols-3">
-                                    <label className="rounded-lg border border-darkborder bg-darkbg px-4 py-2.5 text-sm text-text-secondary flex items-center gap-2"><Video className="w-4 h-4 text-neon-violet shrink-0" />
-                                      <select value={lesson.videoPlatform} onChange={e => updateLesson(sIdx, lIdx, { videoPlatform: e.target.value as LessonForm['videoPlatform'] })} className="bg-transparent text-text-primary outline-none w-full cursor-pointer">
-                                        <option value="EMBED">Embed trên web</option>
-                                        <option value="YOUTUBE_TAB">Mở tab YouTube</option>
-                                        <option value="DIRECT">Direct video</option>
-                                      </select>
-                                    </label>
-                                    <input value={lesson.videoUrl} onChange={e => updateLesson(sIdx, lIdx, { videoUrl: e.target.value })} placeholder={lesson.videoPlatform === 'DIRECT' ? 'Link .mp4 ngoài — hoặc tải video lên bên dưới' : 'Video URL / YouTube URL'} className="px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 lg:col-span-2" />
-                                  </div>
-
-                                  {lesson.videoPlatform === 'DIRECT' && (
-                                    <LessonVideoManager
-                                      lessonId={lesson.id}
-                                      videoUrl={lesson.videoUrl}
-                                      onSaved={data => updateLesson(sIdx, lIdx, {
-                                        videoPlatform: 'DIRECT',
-                                        videoUrl: data.videoUrl,
-                                        ...(data.videoDurationSeconds ? { videoDurationSeconds: data.videoDurationSeconds } : {}),
-                                      })}
-                                      onDeleted={() => updateLesson(sIdx, lIdx, { videoUrl: '' })}
-                                    />
-                                  )}
+                                  <LessonVideoTracks
+                                    lessonId={lesson.id}
+                                    value={{
+                                      videoUrlVi: lesson.videoUrlVi,
+                                      videoPlatformVi: lesson.videoPlatformVi,
+                                      videoUrlEn: lesson.videoUrlEn,
+                                      videoPlatformEn: lesson.videoPlatformEn,
+                                      videoUrlYt: lesson.videoUrlYt,
+                                      videoYtCredit: lesson.videoYtCredit,
+                                      defaultVideoTrack: lesson.defaultVideoTrack,
+                                    }}
+                                    onChange={patch => updateLesson(sIdx, lIdx, patch)}
+                                  />
 
                                   <div className="grid gap-3 md:grid-cols-2">
                                     <input value={lesson.sourceCodeUrl} onChange={e => updateLesson(sIdx, lIdx, { sourceCodeUrl: e.target.value })} placeholder="GitHub / source code URL" className="px-4 py-2.5 rounded-lg bg-darkbg border border-darkborder text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />

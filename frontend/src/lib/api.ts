@@ -1319,11 +1319,14 @@ export const coursesApi = {
   // Direct-to-R2 video upload for a lesson (up to 2GB): presign → PUT to R2 →
   // register. The object is PRIVATE; students receive a signed URL at play
   // time. `durationSeconds` (probed client-side) keeps course totals accurate.
+  // `track` ('VI' | 'EN') files the upload under one of the lesson's parallel
+  // recordings; omit it for the legacy single-video slot.
   uploadLessonVideoDirect: async (
     lessonId: number,
     file: File,
     onProgress?: (fraction: number) => void,
     durationSeconds?: number,
+    track?: 'VI' | 'EN',
   ) => {
     const presign = await api.post(`/courses/lessons/${lessonId}/video/presign`, {
       filename: file.name,
@@ -1351,16 +1354,19 @@ export const coursesApi = {
     return api.post(`/courses/lessons/${lessonId}/video/register`, {
       key,
       ...(durationSeconds && durationSeconds > 0 ? { durationSeconds: Math.round(durationSeconds) } : {}),
+      ...(track ? { track } : {}),
     });
   },
 
   // Admin: short signed URL to preview a lesson's saved DIRECT video.
-  getLessonVideoPreview: (lessonId: number) =>
-    api.get<{ data: { videoPlatform: string; videoUrl: string | null } }>(`/courses/lessons/${lessonId}/video-preview`),
+  getLessonVideoPreview: (lessonId: number, track?: 'VI' | 'EN' | 'YT') =>
+    api.get<{ data: { videoPlatform: string; videoUrl: string | null } }>(
+      `/courses/lessons/${lessonId}/video-preview${track ? `?track=${track}` : ''}`,
+    ),
 
   // Admin: remove a lesson's video (clears lesson + deletes the R2 object).
-  deleteLessonVideo: (lessonId: number) =>
-    api.delete(`/courses/lessons/${lessonId}/video`),
+  deleteLessonVideo: (lessonId: number, track?: 'VI' | 'EN' | 'YT') =>
+    api.delete(`/courses/lessons/${lessonId}/video${track ? `?track=${track}` : ''}`),
 
   // ── Course-LEVEL documents (the fixed "Tài liệu" area) ──
   getCourseDocuments: (courseId: number) => api.get(`/courses/${courseId}/documents`),
@@ -1580,6 +1586,15 @@ export const adminCoursesApi = {
   updateLessonDetail: (lessonId: number, data: {
     videoPlatform?: string;
     videoUrl?: string;
+    // VN / EN / YT tracks. Sent only when the caller edits them — the backend
+    // patches whatever is present and leaves the rest alone.
+    videoUrlVi?: string;
+    videoPlatformVi?: string;
+    videoUrlEn?: string;
+    videoPlatformEn?: string;
+    videoUrlYt?: string;
+    videoYtCredit?: string;
+    defaultVideoTrack?: 'VI' | 'EN' | 'YT';
     sourceCodeUrl?: string;
     teachingNotes?: string;
   }) => api.put(`/courses/lessons/${lessonId}/detail`, data),

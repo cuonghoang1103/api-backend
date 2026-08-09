@@ -20,7 +20,10 @@ const loginSchema = z.object({
   password: z.string().min(1, 'Password is required'),
 });
 
-type LoginForm = z.infer<typeof loginSchema>;
+// Named ...Values, not LoginForm: the component below is already called
+// LoginForm, and a type sharing a value's name trips ESLint's no-redeclare
+// (TypeScript itself allows it — the two live in different namespaces).
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 function isAdminRole(roles: string[]): boolean {
   if (!roles || roles.length === 0) return false;
@@ -47,7 +50,7 @@ function LoginForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginForm>({
+  } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: { username: '', password: '' },
   });
@@ -94,7 +97,7 @@ function LoginForm() {
   // already show is enough — no need to lock the submit button forever.
   const captchaReady = true;
 
-  const onSubmit = async (data: LoginForm) => {
+  const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true);
     setBackendError('');
 

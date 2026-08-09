@@ -488,11 +488,34 @@ export interface Assignment {
   mySubmission?: AssignmentSubmission;
 }
 
+/** Which recording of a lesson is playing: the instructor's Vietnamese
+ *  version, the English one, or the curated third-party YouTube lecture. */
+export type VideoTrackKey = 'VI' | 'EN' | 'YT';
+
+export interface LessonVideoTrack {
+  track: VideoTrackKey;
+  /** null when the track exists but its URL was withheld (private R2) — the
+   *  single-lesson endpoint returns a signed URL at play time. */
+  url: string | null;
+  videoPlatform?: string;
+  platform: 'EMBED' | 'YOUTUBE_TAB' | 'DIRECT' | string;
+  /** "Channel — Video title" for a borrowed YouTube lecture. */
+  credit?: string | null;
+  locked?: boolean;
+}
+
 export interface LessonDetail {
   id: number;
   lessonId?: number;
   videoPlatform?: 'EMBED' | 'YOUTUBE_TAB' | 'DIRECT' | string;
   videoUrl?: string;
+  videoUrlVi?: string | null;
+  videoPlatformVi?: string | null;
+  videoUrlEn?: string | null;
+  videoPlatformEn?: string | null;
+  videoUrlYt?: string | null;
+  videoYtCredit?: string | null;
+  defaultVideoTrack?: VideoTrackKey | string;
   sourceCodeUrl?: string;
   teachingNotes?: string;
 }
@@ -512,9 +535,14 @@ export interface LessonDto {
   isPublished: boolean;
   sortOrder: number;
   videoPlatform?: 'EMBED' | 'YOUTUBE_TAB' | 'DIRECT' | string;
+  /** VN / EN / YT recordings of this lesson. Empty when the lesson has none.
+   *  `videoUrl` above stays in sync with whichever track is the default. */
+  videoTracks?: LessonVideoTrack[];
+  defaultVideoTrack?: VideoTrackKey | null;
   sourceCodeUrl?: string;
   teachingNotes?: string;
   detail?: LessonDetail;
+  details?: LessonDetail;
   documents?: CourseDocument[];
   assignments?: Assignment[];
 }

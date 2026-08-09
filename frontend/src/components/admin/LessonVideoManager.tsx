@@ -20,11 +20,15 @@ import { toast } from 'sonner';
 export default function LessonVideoManager({
   lessonId,
   videoUrl,
+  track,
   onSaved,
   onDeleted,
 }: {
   lessonId?: number;
   videoUrl?: string;
+  /** Which parallel recording this manager owns ('VI' | 'EN'). Omitted =
+   *  the legacy single-video slot. */
+  track?: 'VI' | 'EN';
   onSaved: (data: { videoUrl: string; videoDurationSeconds?: number }) => void;
   onDeleted: () => void;
 }) {
@@ -50,12 +54,12 @@ export default function LessonVideoManager({
     if (!hasSaved || file) { setPreviewUrl(''); return; }
     let cancelled = false;
     setLoadingPreview(true);
-    coursesApi.getLessonVideoPreview(lessonId!)
+    coursesApi.getLessonVideoPreview(lessonId!, track)
       .then((res) => { if (!cancelled) setPreviewUrl(res.data?.data?.videoUrl || ''); })
       .catch(() => { if (!cancelled) setPreviewUrl(''); })
       .finally(() => { if (!cancelled) setLoadingPreview(false); });
     return () => { cancelled = true; };
-  }, [hasSaved, lessonId, videoUrl, file]);
+  }, [hasSaved, lessonId, videoUrl, file, track]);
 
   const probeDuration = (f: File): Promise<number> =>
     new Promise((resolve) => {
@@ -95,7 +99,7 @@ export default function LessonVideoManager({
     setPct(0);
     try {
       const duration = await probeDuration(file);
-      const res = await coursesApi.uploadLessonVideoDirect(lessonId, file, (frac) => setPct(Math.round(frac * 100)), duration);
+      const res = await coursesApi.uploadLessonVideoDirect(lessonId, file, (frac) => setPct(Math.round(frac * 100)), duration, track);
       const data = res.data?.data as { videoUrl?: string; videoDurationSeconds?: number } | undefined;
       onSaved({ videoUrl: data?.videoUrl || '', videoDurationSeconds: data?.videoDurationSeconds ?? (duration ? Math.round(duration) : undefined) });
       cancelPending();
@@ -112,7 +116,7 @@ export default function LessonVideoManager({
     if (!confirm('Xoá video này khỏi bài học và khỏi bộ nhớ R2?')) return;
     setDeleting(true);
     try {
-      await coursesApi.deleteLessonVideo(lessonId);
+      await coursesApi.deleteLessonVideo(lessonId, track);
       setPreviewUrl('');
       onDeleted();
       toast.success('Đã xoá video (kể cả trên R2)');

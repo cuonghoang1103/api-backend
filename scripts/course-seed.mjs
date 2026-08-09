@@ -211,13 +211,51 @@ if (course) {
           }
         : null;
 
+      /* ── The THREE tracks (VN / EN / YT) ─────────────────────────────────
+           videos: {
+             vi: { url, platform?, durationSeconds? },   // own recording, VI
+             en: { url, platform? },                     // own recording, EN
+             yt: { url, credit? },                       // borrowed lecture
+           },
+           defaultVideoTrack: 'VI' | 'EN' | 'YT'
+         A bare `video:` (above) still works and lands on the track its URL
+         implies — YouTube → YT, anything else → VI — so nothing authored
+         before this existed has to change. */
+      const vids = l.videos || {};
+      const legacyTrack = video ? (isYouTube(video.url) ? 'yt' : 'vi') : null;
+      const track = {
+        vi: vids.vi?.url ? vids.vi : (legacyTrack === 'vi' ? { url: video.url, platform: video.platform } : null),
+        en: vids.en?.url ? vids.en : null,
+        yt: vids.yt?.url ? vids.yt : (legacyTrack === 'yt' ? { url: video.url } : null),
+      };
+      const trackPatch = {
+        ...(track.vi ? { videoUrlVi: track.vi.url, videoPlatformVi: track.vi.platform ?? (isYouTube(track.vi.url) ? 'EMBED' : 'DIRECT') } : {}),
+        ...(track.en ? { videoUrlEn: track.en.url, videoPlatformEn: track.en.platform ?? (isYouTube(track.en.url) ? 'EMBED' : 'DIRECT') } : {}),
+        ...(track.yt ? { videoUrlYt: track.yt.url, ...(track.yt.credit ? { videoYtCredit: track.yt.credit } : {}) } : {}),
+      };
+      // Explicit wins; otherwise open on our own recording when there is one.
+      const defaultTrack = l.defaultVideoTrack
+        ? String(l.defaultVideoTrack).toUpperCase()
+        : track.vi ? 'VI' : track.en ? 'EN' : track.yt ? 'YT' : null;
+      if (defaultTrack) trackPatch.defaultVideoTrack = defaultTrack;
+      // The lesson's headline video (legacy columns + card totals) follows
+      // whichever track is the default.
+      const headline = defaultTrack === 'EN' ? track.en : defaultTrack === 'YT' ? track.yt : track.vi;
+      const headlineVideo = headline?.url
+        ? {
+            url: headline.url,
+            platform: headline.platform ?? (isYouTube(headline.url) ? 'EMBED' : 'DIRECT'),
+            durationSeconds: Math.max(0, Math.round(headline.durationSeconds ?? video?.durationSeconds ?? 0)),
+          }
+        : video;
+
       const lessonCore = {
         title: l.title, description: l.description ?? null,
         content: withSimulation(l.content ?? null, { ...l, slug: lslug }, cslug),
         lessonType: normType(l.type), isFreePreview: l.isFreePreview ?? false, isPublished: l.isPublished ?? true,
         // Only set when present: re-seeding a lesson whose video has not been
         // rendered yet must NOT wipe a video attached in an earlier pass.
-        ...(video ? { videoUrl: video.url, videoDurationSeconds: video.durationSeconds } : {}),
+        ...(headlineVideo ? { videoUrl: headlineVideo.url, videoDurationSeconds: headlineVideo.durationSeconds } : {}),
       };
       // LessonDetail carries the teaching notes (the on-camera script), the
       // quiz payload and the video pointer. All optional and patched, never
@@ -225,7 +263,8 @@ if (course) {
       const detailPatch = {
         ...(quizData ? { quizData } : {}),
         ...(l.teachingNotes ? { teachingNotes: l.teachingNotes } : {}),
-        ...(video ? { videoUrl: video.url, videoPlatform: video.platform } : {}),
+        ...(headlineVideo ? { videoUrl: headlineVideo.url, videoPlatform: headlineVideo.platform } : {}),
+        ...trackPatch,
       };
 
       const existing = section ? await prisma.lesson.findFirst({ where: { sectionId: section.id, slug: lslug } }) : null;

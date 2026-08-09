@@ -18,7 +18,7 @@ import { useTranslation } from '@/context/LocaleContext';
 import { loadYouTubeAPI, isYouTubeUrl } from '@/lib/youtube-player';
 import LessonQuizPlayer, { type QuizData } from './LessonQuizPlayer';
 import LessonPdfViewer from './LessonPdfViewer';
-import type { Course, LessonDto, LessonProgress, LessonDetail } from '@/types';
+import type { Course, LessonDto, LessonProgress, LessonDetail, LessonVideoTrack, VideoTrackKey } from '@/types';
 
 function formatDuration(seconds: number): string {
   if (!seconds) return '0:00';
@@ -54,6 +54,35 @@ interface FlatLesson {
   sectionTitle: string;
   sectionLocked: boolean;
   lesson: LessonDto;
+}
+
+/* ── Video tracks: VN / EN / YT ────────────────────────────────────────────
+   A lesson can carry up to three recordings of the same material: the
+   instructor's Vietnamese one, the English one, and a curated third-party
+   YouTube lecture. Until the first two are recorded, YT is the only one
+   present — the switcher still shows all three so the learner can see what
+   is coming, with the empty ones greyed out. */
+const VIDEO_TRACK_ORDER: VideoTrackKey[] = ['VI', 'EN', 'YT'];
+const TRACK_LABEL: Record<VideoTrackKey, string> = { VI: 'VN', EN: 'EN', YT: 'YT' };
+const TRACK_HINT: Record<VideoTrackKey, { vi: string; en: string }> = {
+  VI: { vi: 'Bài giảng tiếng Việt', en: 'Vietnamese lecture' },
+  EN: { vi: 'Bài giảng tiếng Anh', en: 'English lecture' },
+  YT: { vi: 'Video tuyển chọn trên YouTube', en: 'Hand-picked YouTube lecture' },
+};
+// Where the learner's last choice is remembered, so someone who prefers the
+// English track doesn't re-click it on every lesson.
+const TRACK_PREF_KEY = 'cuongthai.courseVideoTrack';
+
+/** Tracks the API gave us, falling back to the legacy single `videoUrl` for
+ *  payloads served before the multi-track columns existed. */
+function getVideoTracks(lesson: LessonDto | null, detail?: LessonDetail): LessonVideoTrack[] {
+  if (!lesson) return [];
+  if (lesson.videoTracks?.length) return lesson.videoTracks;
+  const url = detail?.videoUrl || lesson.videoUrl || '';
+  if (!url) return [];
+  const platform = detail?.videoPlatform || lesson.videoPlatform || 'EMBED';
+  const { isYT } = isYouTubeUrl(url);
+  return [{ track: isYT ? 'YT' : 'VI', url, platform }];
 }
 
 // Backend (NestJS + Prisma) returns the nested detail object under
@@ -109,6 +138,11 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [expandedSections, setExpandedSections] = useState<Set<number>>(new Set());
   const [videoKey, setVideoKey] = useState(0);
+  // Which of VN / EN / YT is playing. null = "not chosen yet on this lesson",
+  // which makes the effect below pick the learner's sticky preference or the
+  // lesson's own default.
+  const [videoTrack, setVideoTrack] = useState<VideoTrackKey | null>(null);
+  const trackPrefRef = useRef<VideoTrackKey | null>(null);
   // Only the setter is used now (we reset it on lesson change / completion);
   // the value itself is no longer read since we dropped the YouTube auto-mark.
   const [, setVideoCompleted] = useState(false);
@@ -282,6 +316,9 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
     if (sec) setExpandedSections(prev => new Set(prev).add(sec.id));
     setVideoKey(k => k + 1);
     setVideoCompleted(false);
+    // Let the new lesson re-resolve its own track (a lesson may not have the
+    // one that was playing before).
+    setVideoTrack(null);
     try {
       const res = await coursesApi.getLesson(course.id, lesson.id);
       const detail = res?.data?.data;
@@ -418,6 +455,37 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
   const resumeAt = currentLesson
     ? (progress.find(p => p.lessonId === currentLesson.id && !p.isCompleted)?.lastPositionSeconds || 0)
     : 0;
+
+  // ── VN / EN / YT tracks for the lesson on screen ───────────────────────
+  const videoTracks = getVideoTracks(currentLesson, currentLesson ? getLessonDetail(currentLesson) : undefined);
+  const activeTrack: VideoTrackKey | null =
+    (videoTrack && videoTracks.some(t => t.track === videoTrack) ? videoTrack : null)
+    ?? (trackPrefRef.current && videoTracks.some(t => t.track === trackPrefRef.current) ? trackPrefRef.current : null)
+    ?? (currentLesson?.defaultVideoTrack && videoTracks.some(t => t.track === currentLesson.defaultVideoTrack)
+      ? (currentLesson.defaultVideoTrack as VideoTrackKey)
+      : null)
+    ?? videoTracks[0]?.track
+    ?? null;
+  const activeVideo = videoTracks.find(t => t.track === activeTrack) ?? null;
+
+  // Restore the learner's sticky track preference once, on mount.
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem(TRACK_PREF_KEY);
+      if (saved === 'VI' || saved === 'EN' || saved === 'YT') trackPrefRef.current = saved;
+    } catch { /* private mode / storage disabled — just use the lesson default */ }
+  }, []);
+
+  const chooseTrack = (track: VideoTrackKey) => {
+    if (track === activeTrack) return;
+    trackPrefRef.current = track;
+    try { window.localStorage.setItem(TRACK_PREF_KEY, track); } catch { /* ignore */ }
+    setVideoTrack(track);
+    // Remount the player: swapping the source on a live YouTube iframe or a
+    // <video> element leaves the old buffer and the old duration behind.
+    setVideoKey(k => k + 1);
+    setVideoCompleted(false);
+  };
 
   const toggleSection = (id: number) => {
     setExpandedSections(prev => {
@@ -807,72 +875,141 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                 );
               })()}
 
-              {/* Video — supports YouTube embed + direct file (mp4/webm)
-                  based on videoPlatform. Falls back to a clickable
-                  thumbnail if we don't have a playble URL at all. */}
-              {(lessonDetail?.videoUrl || currentLesson.videoUrl) && (
-                <div className="aspect-video bg-black rounded-2xl overflow-hidden mb-6">
-                  {(() => {
-                    const platform = lessonDetail?.videoPlatform || currentLesson.videoPlatform || 'EMBED';
-                    const url = lessonDetail?.videoUrl || currentLesson.videoUrl || '';
-                    if (platform === 'DIRECT' || /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url) || url.startsWith('blob:')) {
+              {/* Video — up to three recordings of the same lesson (VN / EN /
+                  YT), each either a YouTube embed or a direct file (mp4/webm)
+                  depending on its platform. The switcher above the frame is
+                  shown whenever the lesson has ANY video, with the tracks that
+                  are not recorded yet greyed out as "sắp có". */}
+              {videoTracks.length > 0 && (
+                <div className="mb-6">
+                  <div className="flex items-center justify-between gap-3 flex-wrap mb-2">
+                    <div
+                      role="tablist"
+                      aria-label={locale === 'en' ? 'Video language' : 'Ngôn ngữ video'}
+                      className="inline-flex items-center gap-1 p-1 rounded-xl bg-darkcard border border-darkborder"
+                    >
+                      {VIDEO_TRACK_ORDER.map((key) => {
+                        const has = videoTracks.some(t => t.track === key);
+                        const on = activeTrack === key;
+                        const hint = TRACK_HINT[key][locale === 'en' ? 'en' : 'vi'];
+                        return (
+                          <button
+                            key={key}
+                            role="tab"
+                            aria-selected={on}
+                            disabled={!has}
+                            onClick={() => chooseTrack(key)}
+                            title={has ? hint : (locale === 'en' ? `${hint} — coming soon` : `${hint} — sắp có`)}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition-all ${
+                              on
+                                ? 'bg-neon-violet/20 text-neon-violet ring-1 ring-neon-violet/40'
+                                : has
+                                  ? 'text-text-secondary hover:text-text-primary hover:bg-white/5'
+                                  : 'text-text-muted/50 cursor-not-allowed'
+                            }`}
+                          >
+                            {TRACK_LABEL[key]}
+                            {!has && <span className="ml-1.5 font-normal opacity-70">{locale === 'en' ? 'soon' : 'sắp có'}</span>}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {activeVideo?.credit && (
+                      <p className="text-xs text-text-muted">
+                        {locale === 'en' ? 'Source: ' : 'Nguồn: '}
+                        <span className="text-text-secondary">{activeVideo.credit}</span>
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="aspect-video bg-black rounded-2xl overflow-hidden">
+                    {(() => {
+                      const platform = activeVideo?.platform || 'EMBED';
+                      const url = activeVideo?.url || '';
+                      const frameKey = `${videoKey}-${activeTrack}`;
+                      if (!url) {
+                        // Track exists but its URL was withheld (private R2 in a
+                        // curriculum payload) — the single-lesson fetch fills it in.
+                        return (
+                          <div className="w-full h-full flex items-center justify-center text-sm text-text-muted">
+                            <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                            {locale === 'en' ? 'Loading video…' : 'Đang tải video…'}
+                          </div>
+                        );
+                      }
+                      if (platform === 'DIRECT' || /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url) || url.startsWith('blob:')) {
+                        return (
+                          <CourseVideoPlayer
+                            key={frameKey}
+                            src={url}
+                            startAt={resumeAt}
+                            onProgressTick={savePosition}
+                            onDuration={(secs) => { if (lessonDuration(currentLesson) === 0) reportDuration(currentLesson.id, secs); }}
+                            onEnded={() => {
+                              // Native video fires a real 'ended' — this is
+                              // genuine completion (unlike the old YouTube
+                              // 1.5s-after-load hack we removed).
+                              if (!isCompleted(currentLesson.id)) markComplete();
+                              // Professional touch: auto-advance to the next
+                              // lesson so a binge session flows hands-free.
+                              if (nextLesson) {
+                                toast.info('Chuyển sang bài tiếp theo…');
+                                window.setTimeout(() => selectLesson(nextLesson), 1500);
+                              }
+                            }}
+                          />
+                        );
+                      }
+                      // YouTube — use the IFrame API player so we can read the
+                      // real duration (fills in "0 min") AND detect genuine
+                      // completion via the ENDED state (no more load-hack).
+                      const { isYT, videoId } = isYouTubeUrl(url);
+                      if (isYT && videoId) {
+                        return (
+                          <LessonYouTubePlayer
+                            key={frameKey}
+                            videoId={videoId}
+                            title={currentLesson.title}
+                            onDuration={(secs) => { if (lessonDuration(currentLesson) === 0) reportDuration(currentLesson.id, secs); }}
+                            onEnded={() => {
+                              if (!isCompleted(currentLesson.id)) markComplete();
+                              if (nextLesson) {
+                                toast.info('Chuyển sang bài tiếp theo…');
+                                window.setTimeout(() => selectLesson(nextLesson), 1500);
+                              }
+                            }}
+                          />
+                        );
+                      }
+                      // Non-YouTube embed fallback — plain iframe (no duration
+                      // / ended signals available; manual "Mark as Complete").
+                      const embedUrl = toEmbedUrl(url);
                       return (
-                        <CourseVideoPlayer
-                          key={videoKey}
-                          src={url}
-                          startAt={resumeAt}
-                          onProgressTick={savePosition}
-                          onDuration={(secs) => { if (lessonDuration(currentLesson) === 0) reportDuration(currentLesson.id, secs); }}
-                          onEnded={() => {
-                            // Native video fires a real 'ended' — this is
-                            // genuine completion (unlike the old YouTube
-                            // 1.5s-after-load hack we removed).
-                            if (!isCompleted(currentLesson.id)) markComplete();
-                            // Professional touch: auto-advance to the next
-                            // lesson so a binge session flows hands-free.
-                            if (nextLesson) {
-                              toast.info('Chuyển sang bài tiếp theo…');
-                              window.setTimeout(() => selectLesson(nextLesson), 1500);
-                            }
-                          }}
-                        />
-                      );
-                    }
-                    // YouTube — use the IFrame API player so we can read the
-                    // real duration (fills in "0 min") AND detect genuine
-                    // completion via the ENDED state (no more load-hack).
-                    const { isYT, videoId } = isYouTubeUrl(url);
-                    if (isYT && videoId) {
-                      return (
-                        <LessonYouTubePlayer
-                          key={videoKey}
-                          videoId={videoId}
+                        <iframe
+                          key={frameKey}
+                          src={embedUrl}
                           title={currentLesson.title}
-                          onDuration={(secs) => { if (lessonDuration(currentLesson) === 0) reportDuration(currentLesson.id, secs); }}
-                          onEnded={() => {
-                            if (!isCompleted(currentLesson.id)) markComplete();
-                            if (nextLesson) {
-                              toast.info('Chuyển sang bài tiếp theo…');
-                              window.setTimeout(() => selectLesson(nextLesson), 1500);
-                            }
-                          }}
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          allowFullScreen
+                          className="w-full h-full"
                         />
                       );
-                    }
-                    // Non-YouTube embed fallback — plain iframe (no duration
-                    // / ended signals available; manual "Mark as Complete").
-                    const embedUrl = toEmbedUrl(url);
-                    return (
-                      <iframe
-                        key={videoKey}
-                        src={embedUrl}
-                        title={currentLesson.title}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowFullScreen
-                        className="w-full h-full"
-                      />
-                    );
-                  })()}
+                    })()}
+                  </div>
+
+                  {/* A borrowed lecture always gets a way out to its own page —
+                      credit the author, and let the learner subscribe there. */}
+                  {activeTrack === 'YT' && activeVideo?.url && (
+                    <a
+                      href={activeVideo.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 mt-2 text-xs text-text-muted hover:text-neon-violet transition-colors"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      {locale === 'en' ? 'Watch on YouTube' : 'Xem trên YouTube'}
+                    </a>
+                  )}
                 </div>
               )}
 

@@ -311,6 +311,158 @@ async function signDirectVideoUrl(videoPlatform: string | undefined, videoUrl: s
   }
 }
 
+/* ── Video tracks (VI / EN / YT) ────────────────────────────────────────────
+   A lesson can carry the instructor's own Vietnamese recording, an English
+   recording, and a curated third-party YouTube lecture at once. The learn
+   page renders one pill per track that actually has a URL and opens on
+   `defaultVideoTrack`.
+
+   `lesson_details.video_url` / `video_platform` remain the legacy single-video
+   columns: they are the fallback source for whichever track matches (YouTube →
+   YT, anything else → VI), which is what keeps every lesson seeded before this
+   feature playing without a data migration on the content side. */
+export type VideoTrackKey = 'VI' | 'EN' | 'YT';
+const VIDEO_TRACK_KEYS: VideoTrackKey[] = ['VI', 'EN', 'YT'];
+
+const isYouTubeUrl = (url: string | null | undefined): boolean =>
+  !!url && /(?:youtube\.com|youtube-nocookie\.com|youtu\.be)/i.test(url);
+
+function normalizeVideoTrack(raw: unknown): VideoTrackKey {
+  const v = String(raw ?? '').trim().toUpperCase();
+  // 'VN' is what the UI labels the Vietnamese pill; accept it as an alias so
+  // an admin (or a seed file) typing the visible label still lands on VI.
+  if (v === 'VN') return 'VI';
+  return (VIDEO_TRACK_KEYS as string[]).includes(v) ? (v as VideoTrackKey) : 'YT';
+}
+
+type LessonDetailVideoFields = {
+  videoPlatform?: string | null;
+  videoUrl?: string | null;
+  videoUrlVi?: string | null;
+  videoPlatformVi?: string | null;
+  videoUrlEn?: string | null;
+  videoPlatformEn?: string | null;
+  videoUrlYt?: string | null;
+  videoYtCredit?: string | null;
+  defaultVideoTrack?: string | null;
+};
+
+export type SerializedVideoTrack = {
+  track: VideoTrackKey;
+  url: string | null;
+  platform: string;
+  credit?: string | null;
+  /** true when the URL was withheld (private R2) rather than absent. */
+  locked?: boolean;
+};
+
+/** Raw (unredacted) tracks, legacy column folded in as the fallback. */
+function resolveVideoTracks(
+  detail: LessonDetailVideoFields | null | undefined,
+  lessonVideoUrl?: string | null,
+): Array<{ track: VideoTrackKey; url: string; platform: string; credit?: string | null }> {
+  const legacyUrl = detail?.videoUrl ?? lessonVideoUrl ?? null;
+  const legacyPlatform = detail?.videoPlatform ?? (isYouTubeUrl(legacyUrl) ? 'EMBED' : 'DIRECT');
+  const legacyIsYouTube = isYouTubeUrl(legacyUrl);
+
+  const vi = detail?.videoUrlVi ?? (legacyUrl && !legacyIsYouTube ? legacyUrl : null);
+  const viPlatform = detail?.videoUrlVi
+    ? (detail.videoPlatformVi ?? (isYouTubeUrl(detail.videoUrlVi) ? 'EMBED' : 'DIRECT'))
+    : legacyPlatform;
+  const en = detail?.videoUrlEn ?? null;
+  const enPlatform = detail?.videoPlatformEn ?? (isYouTubeUrl(en) ? 'EMBED' : 'DIRECT');
+  const yt = detail?.videoUrlYt ?? (legacyIsYouTube ? legacyUrl : null);
+
+  const out: Array<{ track: VideoTrackKey; url: string; platform: string; credit?: string | null }> = [];
+  if (vi) out.push({ track: 'VI', url: vi, platform: viPlatform });
+  if (en) out.push({ track: 'EN', url: en, platform: enPlatform });
+  if (yt) out.push({ track: 'YT', url: yt, platform: 'EMBED', credit: detail?.videoYtCredit ?? null });
+  return out;
+}
+
+/** The track the player should open on: the stored default when it has a
+ *  URL, otherwise the first track that does. */
+function resolveDefaultVideoTrack(
+  tracks: Array<{ track: VideoTrackKey }>,
+  detail: LessonDetailVideoFields | null | undefined,
+): VideoTrackKey | null {
+  if (!tracks.length) return null;
+  const wanted = normalizeVideoTrack(detail?.defaultVideoTrack);
+  return tracks.some((t) => t.track === wanted) ? wanted : tracks[0].track;
+}
+
+/** Curriculum/list payloads: private R2 URLs are withheld (marked `locked`)
+ *  so the JSON can't be scraped; the single-lesson endpoint signs them. */
+function serializeVideoTracks(
+  detail: LessonDetailVideoFields | null | undefined,
+  lessonVideoUrl?: string | null,
+  opts?: { raw?: boolean },
+): SerializedVideoTrack[] {
+  return resolveVideoTracks(detail, lessonVideoUrl).map((t) => {
+    const priv = isPrivateDirectVideo(t.platform, t.url);
+    return {
+      track: t.track,
+      url: opts?.raw || !priv ? t.url : null,
+      platform: t.platform,
+      ...(t.credit ? { credit: t.credit } : {}),
+      ...(priv && !opts?.raw ? { locked: true } : {}),
+    };
+  });
+}
+
+/** Play-time: same list, private R2 URLs replaced by short-lived signed ones. */
+async function signVideoTracks(
+  detail: LessonDetailVideoFields | null | undefined,
+  lessonVideoUrl?: string | null,
+): Promise<SerializedVideoTrack[]> {
+  const tracks = resolveVideoTracks(detail, lessonVideoUrl);
+  return Promise.all(
+    tracks.map(async (t) => ({
+      track: t.track,
+      url: await signDirectVideoUrl(t.platform, t.url),
+      platform: t.platform,
+      ...(t.credit ? { credit: t.credit } : {}),
+    })),
+  );
+}
+
+/** Build the LessonDetail write payload for whichever track fields the
+ *  request actually sent (PATCH semantics — an absent field is left alone).
+ *  The legacy `videoUrl`/`videoPlatform` pair is kept pointing at the default
+ *  track so older readers still resolve to the same video. */
+function videoTrackWritePatch(body: Record<string, unknown>): Record<string, unknown> {
+  const patch: Record<string, unknown> = {};
+  const sent = (k: string) => body[k] !== undefined;
+
+  if (sent('videoUrlVi')) patch.videoUrlVi = toNullableString(body.videoUrlVi);
+  if (sent('videoPlatformVi')) patch.videoPlatformVi = body.videoPlatformVi ? normalizeVideoPlatform(body.videoPlatformVi) : null;
+  if (sent('videoUrlEn')) patch.videoUrlEn = toNullableString(body.videoUrlEn);
+  if (sent('videoPlatformEn')) patch.videoPlatformEn = body.videoPlatformEn ? normalizeVideoPlatform(body.videoPlatformEn) : null;
+  if (sent('videoUrlYt')) patch.videoUrlYt = toNullableString(body.videoUrlYt);
+  if (sent('videoYtCredit')) patch.videoYtCredit = toNullableString(body.videoYtCredit);
+  if (sent('defaultVideoTrack')) patch.defaultVideoTrack = normalizeVideoTrack(body.defaultVideoTrack);
+  return patch;
+}
+
+/** After a track write, re-point the legacy columns at the default track so
+ *  course cards / older clients keep resolving to the right video. */
+async function syncLegacyVideoColumns(lessonId: number): Promise<void> {
+  const detail = await prisma.lessonDetail.findUnique({ where: { lessonId } });
+  if (!detail) return;
+  const tracks = resolveVideoTracks(detail);
+  const def = resolveDefaultVideoTrack(tracks, detail);
+  const chosen = tracks.find((t) => t.track === def) ?? null;
+  if (!chosen) return;
+  if (detail.videoUrl === chosen.url && detail.videoPlatform === chosen.platform) return;
+  await prisma.lessonDetail.update({
+    where: { lessonId },
+    data: { videoUrl: chosen.url, videoPlatform: chosen.platform },
+  });
+  // The Lesson row mirrors the URL for course-card totals and the older
+  // curriculum readers; keep it on the same video.
+  await prisma.lesson.update({ where: { id: lessonId }, data: { videoUrl: chosen.url } }).catch(() => undefined);
+}
+
 function normalizePublishedAt(status: string, currentPublishedAt?: Date | null): Date | null {
   if (status === 'PUBLISHED') {
     return currentPublishedAt ?? new Date();
@@ -556,11 +708,14 @@ async function serializeCourse(
           // learn page fetches a signed URL from the single-lesson
           // endpoint at play time.
           const platform = lesson.details?.videoPlatform ?? 'EMBED';
+          const tracks = serializeVideoTracks(lesson.details, lesson.videoUrl, { raw: isAdminView });
           return {
             ...base,
             content: lesson.content,
             videoUrl: isAdminView ? lesson.videoUrl : redactDirectVideoUrl(platform, lesson.videoUrl),
             videoPlatform: platform,
+            videoTracks: tracks,
+            defaultVideoTrack: resolveDefaultVideoTrack(tracks, lesson.details),
             sourceCodeUrl: lesson.details?.sourceCodeUrl,
             teachingNotes: lesson.details?.teachingNotes,
             details: lesson.details
@@ -577,11 +732,14 @@ async function serializeCourse(
         // attacker hit /documents/:id/download if they could
         // guess it.
         if (lesson.isFreePreview) {
+          const previewTracks = serializeVideoTracks(lesson.details, lesson.videoUrl);
           return {
             ...base,
             content: lesson.content,
             videoUrl: redactDirectVideoUrl(lesson.details?.videoPlatform, lesson.videoUrl),
             videoPlatform: lesson.details?.videoPlatform ?? 'EMBED',
+            videoTracks: previewTracks,
+            defaultVideoTrack: resolveDefaultVideoTrack(previewTracks, lesson.details),
             sourceCodeUrl: lesson.details?.sourceCodeUrl,
             teachingNotes: undefined,
             details: undefined,
@@ -991,6 +1149,7 @@ router.post('/lessons', authenticate, requireAdmin('ROLE_ADMIN'), async (req, re
             videoUrl: toNullableString(req.body.videoUrl),
             sourceCodeUrl: toNullableString(req.body.sourceCodeUrl),
             teachingNotes: toNullableString(req.body.teachingNotes),
+            ...videoTrackWritePatch(req.body),
             ...(req.body.quizData !== undefined ? { quizData: req.body.quizData ?? undefined } : {}),
           },
         },
@@ -1002,12 +1161,16 @@ router.post('/lessons', authenticate, requireAdmin('ROLE_ADMIN'), async (req, re
       },
     });
 
+    await syncLegacyVideoColumns(created.id);
+
     const courseId = (await prisma.courseSection.findUnique({ where: { id: sectionId }, select: { courseId: true } }))?.courseId;
     if (courseId) await syncCourseStats(courseId);
 
     res.status(201).json({ success: true, data: {
       ...created,
       videoPlatform: created.details?.videoPlatform ?? 'EMBED',
+      videoTracks: serializeVideoTracks(created.details, created.videoUrl, { raw: true }),
+      defaultVideoTrack: normalizeVideoTrack(created.details?.defaultVideoTrack),
       sourceCodeUrl: created.details?.sourceCodeUrl,
       teachingNotes: created.details?.teachingNotes,
       documents: (created.documents || []).map(serializeDocument),
@@ -1049,11 +1212,13 @@ router.put('/lessons/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req,
       },
     });
 
+    const trackPatch = videoTrackWritePatch(req.body);
     if (
       req.body.videoPlatform !== undefined ||
       req.body.videoUrl !== undefined ||
       req.body.sourceCodeUrl !== undefined ||
-      req.body.teachingNotes !== undefined
+      req.body.teachingNotes !== undefined ||
+      Object.keys(trackPatch).length > 0
     ) {
       await prisma.lessonDetail.upsert({
         where: { lessonId: id },
@@ -1063,6 +1228,7 @@ router.put('/lessons/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req,
           videoUrl: toNullableString(req.body.videoUrl),
           sourceCodeUrl: toNullableString(req.body.sourceCodeUrl),
           teachingNotes: toNullableString(req.body.teachingNotes),
+          ...trackPatch,
           ...(req.body.quizData !== undefined ? { quizData: req.body.quizData ?? undefined } : {}),
         },
         update: {
@@ -1070,9 +1236,13 @@ router.put('/lessons/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req,
           ...(req.body.videoUrl !== undefined ? { videoUrl: toNullableString(req.body.videoUrl) } : {}),
           ...(req.body.sourceCodeUrl !== undefined ? { sourceCodeUrl: toNullableString(req.body.sourceCodeUrl) } : {}),
           ...(req.body.teachingNotes !== undefined ? { teachingNotes: toNullableString(req.body.teachingNotes) } : {}),
+          ...trackPatch,
           ...(req.body.quizData !== undefined ? { quizData: req.body.quizData ?? undefined } : {}),
         },
       });
+      // Only re-point the legacy columns when a TRACK changed: a plain
+      // `videoUrl` edit (the old single-video form) must stay authoritative.
+      if (Object.keys(trackPatch).length > 0) await syncLegacyVideoColumns(id);
     }
 
     const courseId = (await prisma.courseSection.findUnique({ where: { id: updated.sectionId }, select: { courseId: true } }))?.courseId;
@@ -1090,6 +1260,8 @@ router.put('/lessons/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req,
     res.json({ success: true, data: {
       ...refreshed,
       videoPlatform: refreshed?.details?.videoPlatform ?? 'EMBED',
+      videoTracks: serializeVideoTracks(refreshed?.details, refreshed?.videoUrl, { raw: true }),
+      defaultVideoTrack: normalizeVideoTrack(refreshed?.details?.defaultVideoTrack),
       sourceCodeUrl: refreshed?.details?.sourceCodeUrl,
       teachingNotes: refreshed?.details?.teachingNotes,
       // CourseDocument.fileSizeBytes is a BigInt in Prisma. Express'
@@ -1117,7 +1289,8 @@ router.delete('/lessons/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (r
 router.put('/lessons/:lessonId/detail', authenticate, requireAdmin('ROLE_ADMIN'), async (req, res: Response<ApiResponse>, next) => {
   try {
     const lessonId = parseInt(req.params.lessonId, 10);
-    const detail = await prisma.lessonDetail.upsert({
+    const trackPatch = videoTrackWritePatch(req.body);
+    await prisma.lessonDetail.upsert({
       where: { lessonId },
       create: {
         lessonId,
@@ -1125,6 +1298,7 @@ router.put('/lessons/:lessonId/detail', authenticate, requireAdmin('ROLE_ADMIN')
         videoUrl: toNullableString(req.body.videoUrl),
         sourceCodeUrl: toNullableString(req.body.sourceCodeUrl),
         teachingNotes: toNullableString(req.body.teachingNotes),
+        ...trackPatch,
         ...(req.body.quizData !== undefined ? { quizData: req.body.quizData ?? undefined } : {}),
       },
       update: {
@@ -1132,10 +1306,17 @@ router.put('/lessons/:lessonId/detail', authenticate, requireAdmin('ROLE_ADMIN')
         ...(req.body.videoUrl !== undefined ? { videoUrl: toNullableString(req.body.videoUrl) } : {}),
         ...(req.body.sourceCodeUrl !== undefined ? { sourceCodeUrl: toNullableString(req.body.sourceCodeUrl) } : {}),
         ...(req.body.teachingNotes !== undefined ? { teachingNotes: toNullableString(req.body.teachingNotes) } : {}),
+        ...trackPatch,
         ...(req.body.quizData !== undefined ? { quizData: req.body.quizData ?? undefined } : {}),
       },
     });
-    res.json({ success: true, data: detail });
+    if (Object.keys(trackPatch).length > 0) await syncLegacyVideoColumns(lessonId);
+    const detail = await prisma.lessonDetail.findUnique({ where: { lessonId } });
+    res.json({ success: true, data: {
+      ...detail,
+      videoTracks: serializeVideoTracks(detail, null, { raw: true }),
+      defaultVideoTrack: normalizeVideoTrack(detail?.defaultVideoTrack),
+    } });
   } catch (error) { next(error); }
 });
 
@@ -1244,6 +1425,12 @@ router.get('/:courseId/lessons/:lessonId', optionalAuth, async (req, res: Respon
         // GET URL the browser can stream; for YouTube/embed/external it
         // passes the URL through unchanged.
         videoUrl: showFull ? await signDirectVideoUrl(lesson.details?.videoPlatform, lesson.videoUrl) : undefined,
+        // Same treatment per track, so the VN / EN / YT switcher can play a
+        // private R2 recording without the raw object URL ever being public.
+        videoTracks: showFull ? await signVideoTracks(lesson.details, lesson.videoUrl) : undefined,
+        defaultVideoTrack: showFull
+          ? resolveDefaultVideoTrack(resolveVideoTracks(lesson.details, lesson.videoUrl), lesson.details)
+          : undefined,
         // Lesson body text is paid content too. Even a free
         // preview gets the marketing copy via description, but
         // `content` (the full article) is gated.
@@ -1628,6 +1815,8 @@ router.get('/:id/curriculum', optionalAuth, async (req, res: Response<ApiRespons
               sortOrder: lesson.sortOrder,
               videoUrl: redactDirectVideoUrl(lesson.details?.videoPlatform, lesson.videoUrl),
               videoPlatform: lesson.details?.videoPlatform ?? 'EMBED',
+              videoTracks: serializeVideoTracks(lesson.details, lesson.videoUrl),
+              defaultVideoTrack: resolveDefaultVideoTrack(resolveVideoTracks(lesson.details, lesson.videoUrl), lesson.details),
               sourceCodeUrl: lesson.details?.sourceCodeUrl,
               teachingNotes: lesson.details?.teachingNotes,
             };
@@ -1645,6 +1834,8 @@ router.get('/:id/curriculum', optionalAuth, async (req, res: Response<ApiRespons
             sortOrder: lesson.sortOrder,
             videoUrl: redactDirectVideoUrl(lesson.details?.videoPlatform, lesson.videoUrl),
             videoPlatform: lesson.details?.videoPlatform ?? 'EMBED',
+            videoTracks: serializeVideoTracks(lesson.details, lesson.videoUrl),
+            defaultVideoTrack: resolveDefaultVideoTrack(resolveVideoTracks(lesson.details, lesson.videoUrl), lesson.details),
             // We deliberately omit teachingNotes + sourceCodeUrl
             // for preview lessons — those are bonus materials
             // only for paying students.
@@ -2129,13 +2320,20 @@ router.post(
       }
       const lessonId = parseInt(req.params.lessonId, 10);
       if (isNaN(lessonId)) throw new AppError('Invalid lesson ID', 400, 'INVALID_ID');
-      const { key, durationSeconds } = req.body ?? {};
+      const { key, durationSeconds, track: rawTrack } = req.body ?? {};
       if (!key || typeof key !== 'string' || !VIDEO_KEY_RE.test(key) || key.includes('..')) {
         throw new AppError('Invalid object key', 400, 'INVALID_KEY');
       }
+      // Which track this upload fills. Absent → legacy single-video
+      // behaviour. YT is a curated third-party link, never an R2 upload.
+      const track: 'VI' | 'EN' | null = rawTrack === undefined ? null : (normalizeVideoTrack(rawTrack) as VideoTrackKey) === 'EN' ? 'EN' : 'VI';
       const lesson = await prisma.lesson.findUnique({
         where: { id: lessonId },
-        select: { id: true, videoUrl: true, details: { select: { videoPlatform: true } } },
+        select: {
+          id: true,
+          videoUrl: true,
+          details: { select: { videoPlatform: true, videoUrlVi: true, videoPlatformVi: true, videoUrlEn: true, videoPlatformEn: true } },
+        },
       });
       if (!lesson) throw new AppError('Lesson not found', 404, 'LESSON_NOT_FOUND');
 
@@ -2149,22 +2347,40 @@ router.post(
 
       // Remember the OLD DIRECT video so we can delete it from R2 after we
       // swap in the new one — no orphaned/duplicated objects on replace.
-      const oldUrl = lesson.videoUrl;
-      const oldWasPrivateDirect = isPrivateDirectVideo(lesson.details?.videoPlatform, oldUrl) && oldUrl !== publicUrl;
+      const oldUrl = track === 'EN'
+        ? lesson.details?.videoUrlEn ?? null
+        : track === 'VI'
+          ? lesson.details?.videoUrlVi ?? null
+          : lesson.videoUrl;
+      const oldPlatform = track === 'EN'
+        ? lesson.details?.videoPlatformEn
+        : track === 'VI'
+          ? lesson.details?.videoPlatformVi
+          : lesson.details?.videoPlatform;
+      const oldWasPrivateDirect = isPrivateDirectVideo(oldPlatform ?? undefined, oldUrl) && oldUrl !== publicUrl;
+
+      const trackData = track === 'EN'
+        ? { videoUrlEn: publicUrl, videoPlatformEn: 'DIRECT' }
+        : track === 'VI'
+          ? { videoUrlVi: publicUrl, videoPlatformVi: 'DIRECT' }
+          : { videoPlatform: 'DIRECT', videoUrl: publicUrl };
 
       await prisma.lesson.update({
         where: { id: lessonId },
         data: {
-          videoUrl: publicUrl,
+          // A track upload leaves the lesson-level URL to syncLegacyVideoColumns,
+          // which points it at whichever track is the default.
+          ...(track ? {} : { videoUrl: publicUrl }),
           ...(hasDur ? { videoDurationSeconds: Math.round(dur) } : {}),
           details: {
             upsert: {
-              create: { videoPlatform: 'DIRECT', videoUrl: publicUrl },
-              update: { videoPlatform: 'DIRECT', videoUrl: publicUrl },
+              create: { videoPlatform: 'DIRECT', ...(track ? {} : { videoUrl: publicUrl }), ...trackData },
+              update: trackData,
             },
           },
         },
       });
+      if (track) await syncLegacyVideoColumns(lessonId);
 
       // Fire-and-forget delete of the previous R2 object (never block the
       // response; a failed delete just leaves one object the sweep can catch).
@@ -2186,6 +2402,7 @@ router.post(
         success: true,
         data: {
           lessonId,
+          ...(track ? { track } : {}),
           videoPlatform: 'DIRECT',
           videoUrl: publicUrl,
           ...(hasDur ? { videoDurationSeconds: Math.round(dur) } : {}),
@@ -2209,9 +2426,17 @@ router.get(
       if (isNaN(lessonId)) throw new AppError('Invalid lesson ID', 400, 'INVALID_ID');
       const lesson = await prisma.lesson.findUnique({
         where: { id: lessonId },
-        select: { videoUrl: true, details: { select: { videoPlatform: true } } },
+        select: { videoUrl: true, details: true },
       });
       if (!lesson) throw new AppError('Lesson not found', 404, 'LESSON_NOT_FOUND');
+      // `?track=VI|EN|YT` previews one track; without it, the legacy single video.
+      if (req.query.track !== undefined) {
+        const want = normalizeVideoTrack(req.query.track);
+        const found = resolveVideoTracks(lesson.details, lesson.videoUrl).find((t) => t.track === want);
+        const signed = found ? await signDirectVideoUrl(found.platform, found.url) : null;
+        res.json({ success: true, data: { track: want, videoPlatform: found?.platform ?? 'EMBED', videoUrl: signed } });
+        return;
+      }
       const platform = lesson.details?.videoPlatform ?? 'EMBED';
       const url = await signDirectVideoUrl(platform, lesson.videoUrl);
       res.json({ success: true, data: { videoPlatform: platform, videoUrl: url } });
@@ -2231,9 +2456,37 @@ router.delete(
       if (isNaN(lessonId)) throw new AppError('Invalid lesson ID', 400, 'INVALID_ID');
       const lesson = await prisma.lesson.findUnique({
         where: { id: lessonId },
-        select: { id: true, videoUrl: true, details: { select: { videoPlatform: true } } },
+        select: { id: true, videoUrl: true, details: true },
       });
       if (!lesson) throw new AppError('Lesson not found', 404, 'LESSON_NOT_FOUND');
+
+      // `?track=VI|EN|YT` clears just that track and re-points the legacy
+      // columns; without it, the legacy single-video clear (unchanged).
+      if (req.query.track !== undefined) {
+        const want = normalizeVideoTrack(req.query.track);
+        const found = resolveVideoTracks(lesson.details, lesson.videoUrl).find((t) => t.track === want);
+        const clear = want === 'EN'
+          ? { videoUrlEn: null, videoPlatformEn: null }
+          : want === 'VI'
+            ? { videoUrlVi: null, videoPlatformVi: null }
+            : { videoUrlYt: null, videoYtCredit: null };
+        await prisma.lessonDetail.upsert({
+          where: { lessonId },
+          create: { lessonId, videoPlatform: 'EMBED', ...clear },
+          update: clear,
+        });
+        // The legacy pair may still be pointing at the track we just cleared.
+        if (found && (lesson.details?.videoUrl === found.url || lesson.videoUrl === found.url)) {
+          await prisma.lessonDetail.update({ where: { lessonId }, data: { videoUrl: null } });
+          await prisma.lesson.update({ where: { id: lessonId }, data: { videoUrl: null } });
+        }
+        await syncLegacyVideoColumns(lessonId);
+        if (found && isPrivateDirectVideo(found.platform, found.url)) {
+          deleteByUrl(found.url).catch((err) => logger.warn(`[video] delete failed: ${err?.message || err}`));
+        }
+        res.json({ success: true, data: { lessonId, track: want }, message: 'Video removed' });
+        return;
+      }
 
       const wasPrivateDirect = isPrivateDirectVideo(lesson.details?.videoPlatform, lesson.videoUrl);
       const oldUrl = lesson.videoUrl;

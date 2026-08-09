@@ -9,6 +9,7 @@
 import s00 from './postgresql/s00-intro.mjs';
 import s01 from './postgresql/s01-vi-sao.mjs';
 import s02 from './postgresql/s02-kieu-du-lieu.mjs';
+import s03 from './postgresql/s03-bang-rang-buoc.mjs';
 
 export default {
   category: { slug: 'databases', name: 'Cơ sở dữ liệu', icon: 'Database', sortOrder: 3 },
@@ -32,5 +33,6 @@ export default {
     s00,
     s01,
     s02,
+    s03,
   ],
 };

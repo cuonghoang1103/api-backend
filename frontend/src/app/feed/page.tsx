@@ -42,6 +42,7 @@ import { playPop } from '@/lib/uiSound';
 // thường — id do DB cấp nên khác nhau giữa máy local và production.
 const SERIES_BY_CATEGORY: Record<string, { slug: string; icon: string }> = {
   java: { slug: '100-ngay-java', icon: '☕' },
+  database: { slug: '100-ngay-database', icon: '🗄️' },
 };
 
 export default function SocialPage() {

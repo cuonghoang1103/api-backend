@@ -2281,6 +2281,11 @@ const POST_SERIES: Record<string, { tag: string; label: string; total: number }>
     label: '100 Ngày Java với CuongThai',
     total: 100,
   },
+  '100-ngay-database': {
+    tag: '100NgayDatabase', // mỗi bài kết thúc bằng #100NgayDatabase-Day007
+    label: '100 Ngày Database với CuongThai',
+    total: 100,
+  },
 };
 
 export interface PostSeriesIndex {

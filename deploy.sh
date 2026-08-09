@@ -614,6 +614,26 @@ JAVA_SERIES_OUT_RC="$(printf '%s\n' "$JAVA_SERIES_OUT" | sed -n 's/^__SEED_RC__=
 JAVA_SERIES_OUT="$(printf '%s\n' "$JAVA_SERIES_OUT" | grep -v '^__SEED_RC__=')"
 report_seed "Java series seed" "seed-java-series" "$JAVA_SERIES_OUT" "${JAVA_SERIES_OUT_RC:-0}" || true
 
+# ── Step 3.16d: "100 Ngày Database" feed series (idempotent) ───────
+# Song sinh Step 3.16c: một .mjs mỗi ngày dưới content/feed-series/100-ngay-database/
+# → upsert SocialPost + ảnh thẻ, khoá theo hashtag ngày (#100NgayDatabase-DayNNN).
+# --skip-card: ảnh thẻ được dựng + upload R2 từ máy dev (backend image không có
+# Playwright); bước này chỉ ghi row và KIỂM ảnh đã trả 200 trên CDN.
+# Xem java-series-seed / [[feedback_deploy_ships_code_not_data]].
+info "Running 100 Ngay Database feed-series seed..."
+DB_SERIES_OUT=$($DC exec -T backend sh -c '
+  rc=0
+  for f in content/feed-series/100-ngay-database/*.mjs; do
+    [ -e "$f" ] || { echo "no database series files"; break; }
+    echo "── $f"
+    node scripts/database-series-seed.mjs --file "$f" --apply --skip-card 2>&1 || rc=1
+  done
+  echo "__SEED_RC__=$rc"
+') || true
+DB_SERIES_OUT_RC="$(printf '%s\n' "$DB_SERIES_OUT" | sed -n 's/^__SEED_RC__=//p' | tail -1)"
+DB_SERIES_OUT="$(printf '%s\n' "$DB_SERIES_OUT" | grep -v '^__SEED_RC__=')"
+report_seed "Database series seed" "seed-database-series" "$DB_SERIES_OUT" "${DB_SERIES_OUT_RC:-0}" || true
+
 # ── Step 3.16b: retire two superseded case-studies (one-shot, idempotent) ──
 # `cuongthaicom` duplicated `cuonghoang-dev-portal` (same site, 18KB stub vs
 # the 105KB case-study), and `esp32aivoice` was an editor test row that still
@@ -771,6 +791,7 @@ for route in \
     admin/content/academy-refs \
     admin/content/script-templates \
     social/series/100-ngay-java \
+    social/series/100-ngay-database \
     cyber/profile; do
     code=$(docker exec cuonghoangdev_backend \
         sh -c "curl -s -o /dev/null -w '%{http_code}' http://localhost:3001/api/v1/${route}" 2>/dev/null)

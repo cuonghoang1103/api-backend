@@ -17,6 +17,7 @@ import s08 from './typescript/s08-utility-types.mjs';
 import s09 from './typescript/s09-tsconfig-compiler.mjs';
 import s10 from './typescript/s10-modules-declarations.mjs';
 import s11 from './typescript/s11-typing-node-express.mjs';
+import s12 from './typescript/s12-typing-react.mjs';
 
 export default {
   category: { slug: 'languages', name: 'Ngôn ngữ lập trình', icon: 'Code2', sortOrder: 0 },
@@ -49,5 +50,6 @@ export default {
     s09,
     s10,
     s11,
+    s12,
   ],
 };

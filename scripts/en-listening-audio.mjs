@@ -23,7 +23,9 @@ const args = process.argv.slice(2);
 const APPLY = args.includes('--apply');
 const FORCE = args.includes('--force');
 
-const items = (await import(pathToFileURL(path.join(ROOT, 'content/my-language/en-listening.mjs')).href)).default;
+const allItems = (await import(pathToFileURL(path.join(ROOT, 'content/my-language/en-listening.mjs')).href)).default;
+// Chỉ item TTS (có `slug`) mới sinh audio; item YouTube (có `youtubeUrl`) bỏ qua.
+const items = allItems.filter((it) => it.slug);
 
 const PUBLIC_BASE = (process.env.R2_PUBLIC_URL || 'https://media.cuongthai.com').replace(/\/$/, '');
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';

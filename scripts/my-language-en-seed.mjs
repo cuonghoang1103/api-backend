@@ -76,38 +76,57 @@ for (const r of readings) {
 /* ── 3. Bài nghe (audio đã upload ở PHA 1) ────────────────────────────────── */
 ord = await nextOrder('langListeningItem');
 for (const it of listenings) {
-  const key = `audio/my-language/en/${it.slug}.mp3`;
-  const audioUrl = `${PUBLIC_BASE}/${key}`;
+  const isYoutube = !!it.youtubeUrl;
+  let data;
 
-  if (!SKIP_AUDIO_CHECK) {
-    let okAudio = false;
-    for (let attempt = 1; attempt <= 3; attempt += 1) {
-      const res = await fetch(audioUrl, { method: 'GET' }).catch(() => null);
-      if (res && res.ok) { okAudio = true; break; }
-      if (attempt < 3) await new Promise((r) => setTimeout(r, 15_000));
+  if (isYoutube) {
+    // Nghe B1+ giọng thật: video YouTube tuyển (đã kiểm oEmbed). KHÔNG bịa
+    // transcript video thật → để null (như item Podcast cũ). Câu hỏi là gợi ý
+    // nghe chủ động, dùng được cho mọi tập.
+    data = {
+      languageId,
+      level: it.level ?? null,
+      title: it.title,
+      sourceType: 'YOUTUBE',
+      audioUrl: null,
+      youtubeUrl: it.youtubeUrl,
+      transcript: it.transcript ?? null,
+      translation: it.translation ?? null,
+      questions: it.questions ?? [],
+    };
+  } else {
+    const key = `audio/my-language/en/${it.slug}.mp3`;
+    const audioUrl = `${PUBLIC_BASE}/${key}`;
+    if (!SKIP_AUDIO_CHECK) {
+      let okAudio = false;
+      for (let attempt = 1; attempt <= 3; attempt += 1) {
+        const res = await fetch(audioUrl, { method: 'GET' }).catch(() => null);
+        if (res && res.ok) { okAudio = true; break; }
+        if (attempt < 3) await new Promise((r) => setTimeout(r, 15_000));
+      }
+      if (!okAudio) {
+        console.error(`   ✗ audio chưa có trên R2: ${audioUrl}`);
+        console.error('     → chạy PHA 1 trước: node scripts/en-listening-audio.mjs --apply (ở local)');
+        process.exit(1);
+      }
     }
-    if (!okAudio) {
-      console.error(`   ✗ audio chưa có trên R2: ${audioUrl}`);
-      console.error('     → chạy PHA 1 trước: node scripts/en-listening-audio.mjs --apply (ở local)');
-      process.exit(1);
-    }
+    data = {
+      languageId,
+      level: it.level ?? null,
+      title: it.title,
+      sourceType: 'UPLOAD',
+      audioUrl,
+      youtubeUrl: null,
+      transcript: it.transcript,
+      translation: it.translation ?? null,
+      questions: it.questions ?? [],
+    };
   }
 
   const existing = languageId > 0
     ? await prisma.langListeningItem.findFirst({ where: { languageId, title: it.title }, select: { id: true } })
     : null;
-  const data = {
-    languageId,
-    level: it.level ?? null,
-    title: it.title,
-    sourceType: 'UPLOAD',
-    audioUrl,
-    youtubeUrl: null,
-    transcript: it.transcript,
-    translation: it.translation ?? null,
-    questions: it.questions ?? [],
-  };
-  console.log(`   nghe "${it.title}" [${it.level}]: ${existing ? `CẬP NHẬT #${existing.id}` : 'TẠO MỚI'} · audio ${SKIP_AUDIO_CHECK ? '(bỏ kiểm)' : 'OK'}`);
+  console.log(`   nghe "${it.title}" [${it.level}] (${isYoutube ? 'YOUTUBE' : 'audio ' + (SKIP_AUDIO_CHECK ? '(bỏ kiểm)' : 'OK')}): ${existing ? `CẬP NHẬT #${existing.id}` : 'TẠO MỚI'}`);
   if (APPLY && languageId > 0) {
     if (existing) await prisma.langListeningItem.update({ where: { id: existing.id }, data });
     else await prisma.langListeningItem.create({ data: { ...data, order: ord++ } });

@@ -45,4 +45,73 @@ export default [
       { question: 'What time does the speaker go to bed?', answer: 'At ten o’clock. (Lúc mười giờ.)' },
     ],
   },
+  {
+    slug: 'en-a2-a-trip-to-the-market',
+    level: 'A2',
+    title: 'A Trip to the Market',
+    transcript: `Every Sunday morning, I go to the local market with my mother. The market is always busy and full of colors. We buy fresh vegetables, fruit, and fish. My mother likes to talk to the sellers and ask about the prices. Sometimes she asks for a lower price, and the seller agrees with a smile. I usually carry the heavy bags. My favorite part is buying fruit, because we can taste it first. After shopping, we stop at a small shop and eat a bowl of noodles. I really enjoy these Sunday mornings with my mother.`,
+    translation: `Mỗi sáng Chủ nhật, tôi đi chợ gần nhà cùng mẹ. Chợ lúc nào cũng đông và đầy màu sắc. Chúng tôi mua rau tươi, trái cây và cá. Mẹ tôi thích trò chuyện với người bán và hỏi giá. Thỉnh thoảng mẹ trả giá thấp hơn, và người bán vui vẻ đồng ý. Tôi thường là người xách mấy túi nặng. Phần tôi thích nhất là mua trái cây, vì được nếm thử trước. Sau khi mua sắm, chúng tôi ghé một quán nhỏ ăn một tô mì. Tôi thật sự thích những sáng Chủ nhật như thế bên mẹ.`,
+    questions: [
+      { question: 'When does the speaker go to the market?', answer: 'Every Sunday morning. (Mỗi sáng Chủ nhật.)' },
+      { question: 'Who does the speaker go with?', answer: 'Their mother. (Với mẹ.)' },
+      { question: 'What is the speaker’s favorite part?', answer: 'Buying fruit, because they can taste it first.' },
+      { question: 'What do they do after shopping?', answer: 'They eat a bowl of noodles at a small shop.' },
+    ],
+  },
+  {
+    slug: 'en-b1-how-i-learn-english',
+    level: 'B1',
+    title: 'How I Learn English',
+    transcript: `People often ask me how I learn English, so let me share a few things that work for me. First, I listen every day, even for just ten minutes. I listen to podcasts and songs, and I try to repeat what I hear out loud. Second, I don't try to be perfect. I make many mistakes, but mistakes help me learn faster. Third, I learn new words in real sentences, not alone, because it is easier to remember them that way. Finally, I use English in my daily life. I changed my phone to English, I write short notes, and sometimes I talk to myself in the mirror. Learning a language takes time, but if you practice a little every day, you will improve. So be patient, and don't give up.`,
+    translation: `Mọi người hay hỏi tôi học tiếng Anh thế nào, nên tôi xin chia sẻ vài điều hiệu quả với tôi. Thứ nhất, tôi nghe mỗi ngày, dù chỉ mười phút. Tôi nghe podcast và bài hát, rồi cố nói to lặp lại những gì nghe được. Thứ hai, tôi không cố hoàn hảo. Tôi mắc nhiều lỗi, nhưng lỗi giúp tôi học nhanh hơn. Thứ ba, tôi học từ mới trong câu thật, không học từ lẻ, vì như vậy dễ nhớ hơn. Cuối cùng, tôi dùng tiếng Anh trong đời sống hằng ngày. Tôi đổi điện thoại sang tiếng Anh, viết những ghi chú ngắn, và thỉnh thoảng tự nói chuyện trước gương. Học một ngôn ngữ cần thời gian, nhưng nếu bạn luyện một chút mỗi ngày, bạn sẽ tiến bộ. Vậy nên hãy kiên nhẫn, và đừng bỏ cuộc.`,
+    questions: [
+      { question: 'How much does the speaker listen each day?', answer: 'At least ten minutes every day. (Ít nhất mười phút mỗi ngày.)' },
+      { question: 'Why does the speaker not try to be perfect?', answer: 'Because mistakes help them learn faster.' },
+      { question: 'How does the speaker learn new words?', answer: 'In real sentences, not alone.' },
+      { question: 'Name one way the speaker uses English daily.', answer: 'Changing the phone to English / writing short notes / talking to themselves in the mirror.' },
+    ],
+  },
+
+  // ─── Nghe B1+ giọng thật (YouTube tuyển, đã kiểm oEmbed = BBC Learning English) ───
+  // KHÔNG bịa transcript video thật (để null như item Podcast). Câu hỏi là gợi ý
+  // NGHE CHỦ ĐỘNG, dùng được cho mọi tập 6 Minute English.
+  {
+    youtubeUrl: 'https://www.youtube.com/watch?v=fcN0BXzK8bg',
+    level: 'B1-B2',
+    title: 'BBC 6 Minute English — All About Language',
+    transcript: null,
+    translation: null,
+    questions: [
+      { question: 'What is the main topic the hosts introduce at the beginning?', answer: 'Listen for the topic in the first minute. (Nghe chủ đề trong phút đầu.)' },
+      { question: 'The hosts ask a quiz question near the start — what is your guess?', answer: 'Guess first, then check the answer near the end. (Đoán trước, kiểm lại ở cuối.)' },
+      { question: 'Write down 3 new words or phrases you hear, with meanings.', answer: 'No fixed answer — the goal is to collect new vocabulary. (Không có đáp án cố định — gom từ mới.)' },
+      { question: 'Summarize the episode in 2–3 sentences in your own words.', answer: 'Say the main idea in your own words. (Tự tóm tắt ý chính.)' },
+    ],
+  },
+  {
+    youtubeUrl: 'https://www.youtube.com/watch?v=gEdPVA-6rVs',
+    level: 'B1-B2',
+    title: 'BBC 6 Minute English — Food & Drink',
+    transcript: null,
+    translation: null,
+    questions: [
+      { question: 'What is the main topic the hosts introduce at the beginning?', answer: 'Listen for the topic in the first minute. (Nghe chủ đề trong phút đầu.)' },
+      { question: 'The hosts ask a quiz question near the start — what is your guess?', answer: 'Guess first, then check the answer near the end. (Đoán trước, kiểm lại ở cuối.)' },
+      { question: 'Write down 3 food-related words or phrases you hear, with meanings.', answer: 'No fixed answer — collect the new vocabulary. (Gom từ mới về đồ ăn.)' },
+      { question: 'Summarize the episode in 2–3 sentences in your own words.', answer: 'Say the main idea in your own words. (Tự tóm tắt ý chính.)' },
+    ],
+  },
+  {
+    youtubeUrl: 'https://www.youtube.com/watch?v=xnnTR_T7SQ4',
+    level: 'B1-B2',
+    title: 'BBC 6 Minute English — Psychology',
+    transcript: null,
+    translation: null,
+    questions: [
+      { question: 'What is the main topic the hosts introduce at the beginning?', answer: 'Listen for the topic in the first minute. (Nghe chủ đề trong phút đầu.)' },
+      { question: 'The hosts ask a quiz question near the start — what is your guess?', answer: 'Guess first, then check the answer near the end. (Đoán trước, kiểm lại ở cuối.)' },
+      { question: 'Write down 3 new words or phrases you hear, with meanings.', answer: 'No fixed answer — collect the new vocabulary. (Gom từ mới.)' },
+      { question: 'Summarize the episode in 2–3 sentences in your own words.', answer: 'Say the main idea in your own words. (Tự tóm tắt ý chính.)' },
+    ],
+  },
 ];

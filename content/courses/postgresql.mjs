@@ -7,6 +7,7 @@
  * Seed: node scripts/course-seed.mjs --file ./content/courses/postgresql.mjs --apply
  */
 import s00 from './postgresql/s00-intro.mjs';
+import s01 from './postgresql/s01-vi-sao.mjs';
 
 export default {
   category: { slug: 'databases', name: 'Cơ sở dữ liệu', icon: 'Database', sortOrder: 3 },
@@ -28,5 +29,6 @@ export default {
   },
   sections: [
     s00,
+    s01,
   ],
 };

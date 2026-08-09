@@ -17,6 +17,8 @@ import { pickLang } from '@/lib/utils';
 import { toast } from 'sonner';
 import { sanitizeHtml } from '@/lib/utils';
 import { SafeImage } from '@/components/ui/SafeImage';
+import { getPrerequisites, hasAcknowledgedPrereq, acknowledgePrereq } from '@/lib/coursePrerequisites';
+import { PrerequisiteModal, PrerequisiteBanner } from '@/components/courses/PrerequisiteGate';
 import type { Course, CourseReview } from '@/types';
 
 function formatDuration(seconds: number): string {
@@ -331,6 +333,18 @@ export default function CourseDetailPage() {
   const [reviewContent, setReviewContent] = useState('');
   const [submittingReview, setSubmittingReview] = useState(false);
 
+  // ── Soft prerequisite gate. If this course assumes a foundation the learner
+  // has not acknowledged yet, show the self-assessment modal once. Read
+  // localStorage only after mount (do NOT gate on an auth-hydration flag).
+  const [showPrereqModal, setShowPrereqModal] = useState(false);
+  useEffect(() => {
+    if (!mounted || !course?.slug) return;
+    const prereqs = getPrerequisites(course.slug);
+    if (prereqs.length > 0 && !hasAcknowledgedPrereq(course.slug)) {
+      setShowPrereqModal(true);
+    }
+  }, [mounted, course?.slug]);
+
   // ── Render-storm tripwire. Counter updates on every render (via ref
   // so it doesn't itself trigger a re-render). If we ever exceed 50
   // renders in 3 seconds the page is almost certainly stuck in a
@@ -540,6 +554,20 @@ export default function CourseDetailPage() {
 
   return (
     <div className="min-h-screen bg-darkbg">
+      {showPrereqModal && (
+        <PrerequisiteModal
+          courseTitle={course.title}
+          prerequisites={getPrerequisites(course.slug)}
+          onProceed={() => {
+            acknowledgePrereq(course.slug);
+            setShowPrereqModal(false);
+          }}
+          onGoToFoundation={(foundationSlug) => {
+            acknowledgePrereq(course.slug);
+            router.push(`/courses/${foundationSlug}`);
+          }}
+        />
+      )}
       {/* Hero */}
       <section className="relative py-16 overflow-hidden bg-gradient-to-b from-neon-indigo/10 to-darkbg">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -593,6 +621,8 @@ export default function CourseDetailPage() {
                   {pickLang(course.shortDescription, locale)}
                 </p>
               )}
+
+              <PrerequisiteBanner prerequisites={getPrerequisites(course.slug)} />
 
               {/* Instructor */}
               <div className="flex items-center gap-3 mb-6">

@@ -1,0 +1,413 @@
+{
+  "trackSlug": "git",
+  "moduleSlug": "getting-started",
+  "exercises": [
+    {
+      "title": "Initialize a Repository and Inspect the Three Areas",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "git init",
+        "the working directory",
+        "the staging area",
+        "the repository",
+        "git status basics"
+      ],
+      "prerequisites": [
+        "basic command line navigation",
+        "what a file and folder are"
+      ],
+      "tags": [
+        "git",
+        "init",
+        "three-areas",
+        "beginner",
+        "status"
+      ],
+      "problemHtml": "<p>Every project that uses Git starts the same way: a folder full of ordinary files that Git knows nothing about. Without version control, the only history of a project is whatever the author remembers, and the only way to undo a mistake is to hope for a backup. Git fixes this by tracking every change to every file, but it can only do that once a folder is explicitly turned into a repository &mdash; and understanding the three places a file can live inside that repository is the single idea the rest of Git builds on.</p><p>Git organizes a tracked project into three areas: the <strong>working directory</strong>, which is the plain files you edit on disk; the <strong>staging area</strong> (also called the index), a holding zone where you build up exactly what the next snapshot will contain; and the <strong>repository</strong>, the permanent history stored inside the hidden <code>.git</code> folder. A file moves working directory to staging area to repository one step at a time, and nothing is ever recorded permanently until it reaches the repository.</p><ul><li>1. Move into the given project folder <code>recipe-app</code>.</li><li>2. Turn the folder into a Git repository so Git begins tracking it.</li><li>3. Ask Git to report the current state of the working directory and staging area.</li></ul><p>You are given a scaffold with the two Git commands replaced by <code>TODO</code> comments; the <code>cd</code> is already written for you.</p>",
+      "inputSpec": "A project folder recipe-app/ that already exists on disk with three files created by a text editor but not yet under version control: index.html, style.css, README.md. There is no .git directory anywhere yet. The terminal's current directory is the parent of recipe-app/.",
+      "outputSpec": "After git init, a .git/ subdirectory exists inside recipe-app/. git status then reports \"On branch main\", \"No commits yet\", and an Untracked files section listing exactly index.html, style.css, and README.md, with a note to use git add to track them.",
+      "constraints": "Do not run git add or git commit in this exercise - only initialize and inspect. Do not delete or move any of the three given files. Run git init only once inside recipe-app/.",
+      "examplesJson": [
+        {
+          "input": "git init   (run inside an empty folder named blog/)",
+          "output": "Initialized empty Git repository in /home/user/blog/.git/",
+          "explanation": "git init always announces the exact path of the .git folder it just created. Nothing else on disk changes - no files are added, moved, or renamed."
+        },
+        {
+          "input": "git status   (run right after git init in a folder containing only notes.txt)",
+          "output": "On branch main\n\nNo commits yet\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tnotes.txt\n\nnothing added to commit but untracked files present (use \"git add\" to track)",
+          "explanation": "With zero commits, Git has nothing to compare the file against, so it falls into the broadest category it has: untracked. This is the starting state of every file in every fresh repository."
+        },
+        {
+          "input": "git status   (run in recipe-app/ before git init has ever been executed there)",
+          "output": "fatal: not a git repository (or any of the parent directories): .git",
+          "explanation": "Every other Git command depends on a .git folder existing somewhere at or above the current directory; git init is always the first command in any new project's history."
+        }
+      ],
+      "hintsJson": [
+        "A brand new folder full of files is not a Git repository until you tell Git to start tracking it - that one command creates a hidden database folder inside the project.",
+        "Git divides your project into three areas: the working directory (files on disk, like index.html right now), the staging area (a holding zone for the next commit), and the repository (the permanent history stored inside .git). Right now nothing has moved past area one.",
+        "The command that turns a plain folder into a Git repository is git init, run once inside the project's root folder - it must run before git status or any other Git command will work here.",
+        "After git init, run git status with no arguments; because no commit has been made yet, all three existing files will show up together under an Untracked files heading."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "commands.sh",
+          "language": "bash",
+          "code": "# Given: a project folder named recipe-app/ already exists on disk with three files\n# already created by a text editor but NOT yet under version control:\n#   recipe-app/index.html\n#   recipe-app/style.css\n#   recipe-app/README.md\n# There is no .git directory yet anywhere in recipe-app/.\n# Your terminal's current directory is the parent of recipe-app/.\n\ncd recipe-app\n\n# TODO: turn this plain folder into a Git repository (creates the hidden .git database)\n\n\n# TODO: ask Git what state the working directory is in right now\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "commands.sh",
+          "language": "bash",
+          "code": "# Given: a project folder named recipe-app/ already exists on disk with three files\n# already created by a text editor but NOT yet under version control:\n#   recipe-app/index.html\n#   recipe-app/style.css\n#   recipe-app/README.md\n# There is no .git directory yet anywhere in recipe-app/.\n# Your terminal's current directory is the parent of recipe-app/.\n\ncd recipe-app\n\ngit init\n\ngit status\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>git init does not touch any of the three existing files - it only creates the hidden <code>.git</code> folder, which is the actual database Git uses to store history, staged snapshots, and configuration. Nothing about index.html, style.css, or README.md changes on disk; they simply become visible to a tool that was not watching them before.</p><p>The <code>git status</code> output that follows is the whole point of doing this: because no commit has ever been made, Git reports <code>No commits yet</code> and puts every file straight into <code>Untracked files</code> - a file starts in the working directory and stays untracked until the first <code>git add</code> moves it into the staging area, no matter how long ago it was created. A common beginner trap is expecting <code>git init</code> to automatically start tracking existing files; it only prepares the repository, it never stages or commits anything by itself.</p>",
+      "diagramMermaid": "flowchart TD\n  wd[Working Directory]\n  sa[Staging Area]\n  repo[Repository]\n  wd -->|git add| sa\n  sa -->|git commit| repo"
+    },
+    {
+      "title": "Stage and Commit the First Snapshot of a Project",
+      "difficulty": "EASY",
+      "estimatedMinutes": 20,
+      "points": 10,
+      "concepts": [
+        "git add",
+        "git commit -m",
+        "staging area vs repository",
+        "commit message conventions",
+        "verifying a commit with git log"
+      ],
+      "prerequisites": [
+        "git init",
+        "the three areas (working, staging, repository)",
+        "git status"
+      ],
+      "tags": [
+        "git",
+        "staging",
+        "commit",
+        "add",
+        "beginner"
+      ],
+      "problemHtml": "<p>A Git repository with nothing committed has no history at all - it is just a promise of tracking, not an actual record. The staging area exists so a commit can be built deliberately: you choose precisely which changes belong together in one snapshot, review that choice, and only then make it permanent with a message explaining why. Skipping straight from editing a file to committing, without ever looking at what got staged, is how unrelated changes end up mixed into the same commit, making history hard to read or undo later.</p><p>You will take the first three files of a brand-new project from untracked all the way into a real, permanent snapshot.</p><ul><li>1. Run <code>git status</code> to confirm all three given files (<code>index.html</code>, <code>style.css</code>, <code>README.md</code>) are currently untracked.</li><li>2. Stage all three files together in a single <code>git add</code> command.</li><li>3. Run <code>git status</code> again to confirm they now appear under <code>Changes to be committed</code>.</li><li>4. Commit the staged snapshot with <code>git commit -m</code> and a descriptive, imperative-mood message.</li><li>5. Run <code>git log</code> to confirm the commit now exists with your message.</li></ul><p>The given repository already has <code>git init</code> run, so <code>.git</code> exists but there are zero commits yet; the scaffold marks each of the five steps with a <code>TODO</code> comment.</p>",
+      "inputSpec": "recipe-app/ is already an initialized Git repository (git init has been run). git status currently reports \"No commits yet\" and three untracked files: index.html, style.css, README.md. The terminal's current directory is recipe-app/.",
+      "outputSpec": "One commit exists in the repository containing all three files, with a descriptive message. git log shows the commit with an author, date, and the exact message used. A final git status would report a clean working tree.",
+      "constraints": "Stage and commit all three files in a single commit - do not create three separate commits. The commit message must be descriptive (not \"update\" or \"fix\"), written in the imperative mood. Do not use git commit -a - there is no previous commit to amend the tracked set from, so an explicit git add is required. Do not run git push - this repository is local only.",
+      "examplesJson": [
+        {
+          "input": "git add index.html style.css README.md\ngit status",
+          "output": "On branch main\n\nNo commits yet\n\nChanges to be committed:\n  (use \"git rm --cached <file>...\" to unstage)\n\tnew file:   README.md\n\tnew file:   index.html\n\tnew file:   style.css",
+          "explanation": "Once files are staged, git status moves them out of \"Untracked files\" and into \"Changes to be committed\" - this section is exactly what the next commit will contain."
+        },
+        {
+          "input": "git commit -m \"Add initial project files\"",
+          "output": "[main (root-commit) a1b2c3d] Add initial project files\n 3 files changed, 42 insertions(+)\n create mode 100644 README.md\n create mode 100644 index.html\n create mode 100644 style.css",
+          "explanation": "(root-commit) marks this as the very first commit in the repository's history. The summary line lists exactly which files were included and how many lines were added."
+        },
+        {
+          "input": "git log   (after the commit above)",
+          "output": "commit a1b2c3d9e8f7061524334455667788990aabbcc\nAuthor: Jane Doe <jane@example.com>\nDate:   Sun Aug 9 10:15:00 2026 +0000\n\n    Add initial project files",
+          "explanation": "git log prints every commit newest-first with its full hash, author, date, and message - this is the permanent record git commit just created."
+        }
+      ],
+      "hintsJson": [
+        "Editing a file never creates history by itself - a change only becomes permanent once it is staged with git add and then committed with git commit.",
+        "git add moves a file's current content into the staging area; running git status again right after is the cheap way to double-check exactly what will be included before it becomes permanent.",
+        "git commit -m \"message\" writes whatever is currently staged into the repository's history as one snapshot - files left untracked or unstaged are not included.",
+        "Stage all three files in one git add command, verify with git status, then run git commit -m with a message that says what was added, and confirm with git log."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "commands.sh",
+          "language": "bash",
+          "code": "# Given: recipe-app/ is already a Git repository (git init has been run).\n# git status currently reports \"No commits yet\" and three untracked files:\n#   index.html, style.css, README.md\n# Your terminal's current directory is recipe-app/.\n\n# TODO: confirm the three files are untracked\n\n\n# TODO: stage all three files in a single command\n\n\n# TODO: confirm the three files now show as staged (Changes to be committed)\n\n\n# TODO: commit the staged snapshot with a descriptive message\n\n\n# TODO: confirm the commit now exists\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "commands.sh",
+          "language": "bash",
+          "code": "# Given: recipe-app/ is already a Git repository (git init has been run).\n# git status currently reports \"No commits yet\" and three untracked files:\n#   index.html, style.css, README.md\n# Your terminal's current directory is recipe-app/.\n\ngit status\n\ngit add index.html style.css README.md\n\ngit status\n\ngit commit -m \"Initial commit: add homepage skeleton and styles\"\n\ngit log\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Staging and committing are two separate steps for a reason: <code>git add</code> builds up exactly what the next snapshot will contain, letting you review the result with a second <code>git status</code> before it becomes permanent, while <code>git commit -m</code> is the step that actually writes that snapshot into the repository's history with a message explaining why. Running <code>git add index.html style.css README.md</code> moves all three files into the staging area at once; the second <code>git status</code> call is what confirms nothing was missed and nothing extra slipped in before committing.</p><p>The most common beginner trap here is committing before staging everything intended, then having to make a second cleanup commit for the forgotten file. A close second is writing a non-descriptive message like <code>update</code> - a commit message is read later by someone, often the same author, with no memory of the change, so <code>Initial commit: add homepage skeleton and styles</code> earns its length by saying exactly what happened.</p>"
+    },
+    {
+      "title": "Inspect Uncommitted Changes with git status, git diff, and git log",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 30,
+      "points": 15,
+      "concepts": [
+        "git status categories",
+        "git diff (unstaged changes)",
+        "git diff --staged",
+        "git log --oneline",
+        "reading unified diff output"
+      ],
+      "prerequisites": [
+        "git add",
+        "git commit -m",
+        "staging area vs repository"
+      ],
+      "tags": [
+        "git",
+        "status",
+        "diff",
+        "log",
+        "inspecting"
+      ],
+      "problemHtml": "<p>Once a project has real history, the everyday work is not creating commits - it is figuring out what changed before deciding what to do about it. A modified file with no visible diff is a guess; a diff with no idea whether it is staged or not is a guess about what a commit will actually contain. Reading <code>git status</code>, <code>git diff</code>, and <code>git log</code> together, in the right order, turns that guessing into certainty before anything gets committed.</p><p>You are picking up a project mid-work: one tracked file has an unstaged edit, one new file exists but must be left alone, and one commit already exists in history.</p><ul><li>1. Run <code>git status</code> and identify which file is modified and which is untracked.</li><li>2. Run <code>git diff style.css</code> to see the exact unstaged line change before touching anything.</li><li>3. Stage only <code>style.css</code> - leave the untracked file alone.</li><li>4. Run <code>git diff --staged</code> to confirm the same change now shows as staged rather than unstaged.</li><li>5. Commit the staged change with a message describing the CSS change specifically.</li><li>6. Run <code>git log --oneline</code> to see both commits condensed to one line each.</li></ul><p>The scaffold shows the given state as comments; <code>about.html</code> must remain completely untouched by the end.</p>",
+      "inputSpec": "recipe-app/ has one existing commit: \"Initial commit: add homepage skeleton and styles\". Since that commit, style.css has an unstaged modification (a background-color change), about.html is a new untracked file that must not be touched, and index.html is unchanged. The terminal's current directory is recipe-app/.",
+      "outputSpec": "A second commit exists describing the style.css change specifically. git log --oneline lists two commits, newest first. about.html remains untracked throughout and after.",
+      "constraints": "about.html must remain untracked/unstaged throughout this exercise - do not add or commit it. Use git diff, not git status, to view the actual line changes. Use git diff --staged (or --cached) after staging, not plain git diff, to confirm what will be committed. The new commit message must describe the CSS change specifically, not be generic.",
+      "examplesJson": [
+        {
+          "input": "git diff style.css   (before staging)",
+          "output": "diff --git a/style.css b/style.css\nindex 3a2f1e0..9c4b7aa 100644\n--- a/style.css\n+++ b/style.css\n@@ -1,5 +1,5 @@\n .site-header {\n-  background-color: #ffffff;\n+  background-color: #f5f5f5;\n   padding: 16px;\n }",
+          "explanation": "A line starting with - is the old content, a line starting with + is the new content. Unchanged context lines have no prefix. This is the unified diff format Git uses everywhere."
+        },
+        {
+          "input": "git diff --staged   (run right after git add style.css, before committing)",
+          "output": "diff --git a/style.css b/style.css\nindex 3a2f1e0..9c4b7aa 100644\n--- a/style.css\n+++ b/style.css\n@@ -1,5 +1,5 @@\n .site-header {\n-  background-color: #ffffff;\n+  background-color: #f5f5f5;\n   padding: 16px;\n }",
+          "explanation": "The content looks identical to plain git diff here only because nothing changed between staging and now - but the comparison being made is different: this compares the staging area against the last commit, not the working directory against the staging area."
+        },
+        {
+          "input": "git log --oneline   (after two commits)",
+          "output": "b2d4f9a Update header background color in style.css\na1b2c3d Initial commit: add homepage skeleton and styles",
+          "explanation": "Each line is a 7-character abbreviated hash followed by the first line of that commit's message, newest commit on top - the condensed format for scanning history quickly."
+        }
+      ],
+      "hintsJson": [
+        "git status only tells you which category a file falls into (modified, untracked, staged); it never shows the actual lines that changed - that is git diff's job.",
+        "Plain git diff compares the working directory to the staging area. As soon as you git add a file, that same content moves into the staging area, so plain git diff on that file goes quiet - the change did not vanish, it just moved.",
+        "git diff --staged (or the equivalent git diff --cached) compares the staging area against the last commit instead, which is the only way to see a change once it has been added.",
+        "Work in this order: git status to see what changed, git diff to read the change, git add to stage it, git diff --staged to confirm what will be committed, then commit and check git log --oneline."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "commands.sh",
+          "language": "bash",
+          "code": "# Given: recipe-app/ has one existing commit: \"Initial commit: add homepage skeleton and styles\"\n# Since that commit:\n#   - style.css has an unstaged modification (the .site-header background color changed)\n#   - about.html is a new, untracked file (leave it completely alone in this exercise)\n#   - index.html is unchanged\n# Your terminal's current directory is recipe-app/.\n\n# TODO: see which files changed and how (modified vs untracked)\n\n\n# TODO: view the exact unstaged line change in style.css\n\n\n# TODO: stage only style.css\n\n\n# TODO: confirm the change now shows as staged, not unstaged\n\n\n# TODO: commit the staged change with a message describing the CSS change specifically\n\n\n# TODO: view both commits condensed to one line each\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "commands.sh",
+          "language": "bash",
+          "code": "# Given: recipe-app/ has one existing commit: \"Initial commit: add homepage skeleton and styles\"\n# Since that commit:\n#   - style.css has an unstaged modification (the .site-header background color changed)\n#   - about.html is a new, untracked file (leave it completely alone in this exercise)\n#   - index.html is unchanged\n# Your terminal's current directory is recipe-app/.\n\ngit status\n\ngit diff style.css\n\ngit add style.css\n\ngit diff --staged\n\ngit commit -m \"Update header background color in style.css\"\n\ngit log --oneline\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>git diff and git status answer different questions. git status only reports which files changed category (untracked, modified, staged); git diff shows the actual line-by-line content of that change. Running plain <code>git diff</code> before staging compares the working directory against the staging area, which currently mirrors the last commit, so it shows every unstaged edit. After <code>git add style.css</code>, that same content moves into the staging area, and <code>git diff --staged</code> now compares the staging area against the last commit (HEAD) instead - the lines look identical here only because nothing changed between staging and now.</p><p>The trap most learners fall into is running plain <code>git diff</code> after staging and seeing no output, then assuming the change vanished - it did not, it just moved to the other side of the comparison, and <code>--staged</code> is required to see it there. <code>git log --oneline</code> closes the loop by confirming the commit now exists in permanent history, condensed to one line per commit for quick scanning.</p>"
+    },
+    {
+      "title": "Keep Generated Files and Secrets Out of Version Control with .gitignore",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 35,
+      "points": 15,
+      "concepts": [
+        ".gitignore syntax",
+        "ignoring a directory vs a file",
+        "wildcard patterns",
+        "why secrets and generated files should never be committed",
+        "verifying ignore rules with git status"
+      ],
+      "prerequisites": [
+        "git init",
+        "git add",
+        "git status"
+      ],
+      "tags": [
+        "git",
+        "gitignore",
+        "secrets",
+        "ignore-patterns",
+        "medium"
+      ],
+      "problemHtml": "<p>Every real project generates files it should never version: installed dependencies that can be reinstalled from a lockfile, build output that can be regenerated from source, and local secrets like API keys or database passwords that must never leave a developer's own machine. Committing any of these bloats the repository, makes diffs unreadable, and in the case of a secret, creates a security incident the moment it is pushed anywhere - even deleting it in a later commit does not remove it from history. <code>.gitignore</code> is the single file that prevents all of this, but only if it exists before the first <code>git add</code>.</p><p>You are given a fresh, uncommitted project with exactly this mix of files.</p><ul><li>1. Create a <code>.gitignore</code> file in the project root.</li><li>2. Add a pattern ignoring the entire <code>node_modules/</code> directory.</li><li>3. Add a pattern ignoring the entire <code>dist/</code> directory.</li><li>4. Add a pattern ignoring the exact file <code>.env</code>.</li><li>5. Add a pattern ignoring any file matching <code>*.log</code>.</li><li>6. Run <code>git status</code> and confirm only <code>server.js</code>, <code>package.json</code>, and <code>.gitignore</code> remain untracked.</li><li>7. Stage and commit those three files together with a descriptive message.</li></ul><p>The given working directory already contains all six files/folders listed above; none of it is tracked or committed yet.</p>",
+      "inputSpec": "api-service/ is an initialized Git repository (git init done) with no commits yet. On disk: server.js, package.json (source files to track), .env (a real database password - must never be committed), npm-debug.log (a leftover debug log), node_modules/ (many installed dependency files), and dist/bundle.js (a generated build file). The terminal's current directory is api-service/.",
+      "outputSpec": "A .gitignore file exists containing patterns for node_modules/, dist/, .env, and *.log. git status shows only server.js, package.json, and .gitignore as untracked before staging. One commit exists containing exactly those three files - node_modules/, dist/, .env, and npm-debug.log are never staged or committed.",
+      "constraints": "Never commit .env - it holds a real secret. Ignore node_modules/ and dist/ as whole directories using a trailing slash, not by listing individual files inside them. .gitignore itself must be tracked and committed - it is not itself ignored. Do not run git add . before .gitignore exists and is correctly filled in, or the secret and generated files will be staged.",
+      "examplesJson": [
+        {
+          "input": ".gitignore containing:\nnode_modules/\n.env\n\nthen: git status   (folder also has server.js)",
+          "output": "On branch main\n\nNo commits yet\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tserver.js\n\nnothing added to commit but untracked files present (use \"git add\" to track)",
+          "explanation": "node_modules/ and .env vanish from the untracked list entirely once a matching pattern exists in .gitignore, even though the files are still physically on disk."
+        },
+        {
+          "input": ".gitignore pattern *.log   (folder contains app.log and errors/debug.log)",
+          "output": "Both app.log and errors/debug.log are ignored.",
+          "explanation": "The * wildcard matches any filename ending in .log at any depth by default, not only files directly in the project root."
+        },
+        {
+          "input": "node_modules/   vs   node_modules   (no trailing slash) as .gitignore patterns",
+          "output": "Both ignore a folder named node_modules, but node_modules/ (with the slash) only ever matches a directory, while node_modules without it could also match a plain file with that exact name.",
+          "explanation": "A trailing slash restricts a pattern to directories only - the safer and more explicit choice when the intent is always to ignore a whole folder, as with node_modules/ and dist/ here."
+        }
+      ],
+      "hintsJson": [
+        ".gitignore does not delete or hide files from disk - it only tells Git which paths to leave out of untracked-file listings and out of a bare git add.",
+        "A pattern ending in a slash, like node_modules/, matches an entire directory; a plain filename like .env matches that exact file anywhere it appears at the same relative path.",
+        "*.log is a wildcard pattern - the asterisk matches any characters before .log, so it catches every log file without listing each one by name.",
+        ".gitignore must exist and contain all four patterns before you ever run git add - create it first, verify with git status that only the three intended files remain untracked, then stage and commit those three together."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "commands.sh",
+          "language": "bash",
+          "code": "# Given: api-service/ is an initialized Git repository (git init done) with no commits yet.\n# The working directory on disk contains:\n#   server.js, package.json           (source files to track)\n#   .env                              (a real database password - must never be committed)\n#   npm-debug.log                     (a leftover debug log file)\n#   node_modules/ (many files)        (installed dependencies, regenerable via npm install)\n#   dist/bundle.js                    (a generated build file, regenerable via a build step)\n# Your terminal's current directory is api-service/.\n\n# TODO: create an empty .gitignore file\n\n\n# TODO: add a pattern to .gitignore that ignores the whole node_modules/ directory\n\n\n# TODO: add a pattern to .gitignore that ignores the whole dist/ directory\n\n\n# TODO: add a pattern to .gitignore that ignores the exact file .env\n\n\n# TODO: add a pattern to .gitignore that ignores any file ending in .log\n\n\n# TODO: check that node_modules/, dist/, .env, and npm-debug.log no longer show as untracked\n\n\n# TODO: stage only server.js, package.json, and .gitignore\n\n\n# TODO: commit the staged snapshot with a descriptive message\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "commands.sh",
+          "language": "bash",
+          "code": "# Given: api-service/ is an initialized Git repository (git init done) with no commits yet.\n# The working directory on disk contains:\n#   server.js, package.json           (source files to track)\n#   .env                              (a real database password - must never be committed)\n#   npm-debug.log                     (a leftover debug log file)\n#   node_modules/ (many files)        (installed dependencies, regenerable via npm install)\n#   dist/bundle.js                    (a generated build file, regenerable via a build step)\n# Your terminal's current directory is api-service/.\n\ntouch .gitignore\n\necho \"node_modules/\" >> .gitignore\necho \"dist/\" >> .gitignore\necho \".env\" >> .gitignore\necho \"*.log\" >> .gitignore\n\ngit status\n\ngit add server.js package.json .gitignore\n\ngit commit -m \"Add server skeleton and ignore secrets and generated files\"\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>.gitignore does not delete or hide files from the filesystem - it only tells Git which paths to skip when reporting untracked files or accepting a bare <code>git add .</code>. Before .gitignore exists, node_modules/, dist/, .env, and npm-debug.log would all show up as untracked and could accidentally be staged; once the patterns are in place, git status stops listing them entirely, even though they are still sitting on disk exactly as before.</p><p>The trailing slash matters: <code>node_modules/</code> and <code>dist/</code> only match directories, which is correct here since both are entire dependency/build trees rather than single files. The single most damaging beginner trap in real projects is committing a <code>.env</code> file that holds a real password or API key before .gitignore exists to stop it - once a secret is committed, it remains recoverable from history even after being deleted in a later commit, so the ignore pattern has to be written before the first <code>git add</code>, not after.</p>"
+    },
+    {
+      "title": "Undo Working Directory Edits and Accidental Staging with git restore",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 40,
+      "points": 20,
+      "concepts": [
+        "git restore (discard working directory changes)",
+        "git restore --staged (unstage without losing content)",
+        "discarding vs unstaging",
+        "reading git status hints",
+        "irreversible operations"
+      ],
+      "prerequisites": [
+        "git add",
+        "git commit -m",
+        "git status",
+        "git diff"
+      ],
+      "tags": [
+        "git",
+        "restore",
+        "undo",
+        "staging",
+        "medium"
+      ],
+      "problemHtml": "<p>Not every mistake needs the same fix. An experimental edit that broke a page should be thrown away entirely, back to the last known-good version - but a file that was accidentally staged too early should just go back to waiting, not be deleted. Confusing the two is how new Git users either lose work they meant to keep, or delete a file they only meant to unstage. <code>git restore</code> and <code>git restore --staged</code> are two different tools for these two different situations, and choosing the right one for each file is the actual skill being tested here.</p><p>You are handed a working directory with both problems present at once.</p><ul><li>1. Run <code>git status</code> and identify which file is modified-and-unstaged versus staged-as-new.</li><li>2. Discard the unwanted edit in <code>style.css</code> completely, restoring it to the version from the last commit.</li><li>3. Unstage <code>secrets.txt</code> without deleting it, returning it to untracked while keeping its content on disk.</li><li>4. Run <code>git status</code> once more and confirm <code>style.css</code> shows no changes and <code>secrets.txt</code> is untracked again.</li></ul><p>The scaffold marks the given broken state in comments; only the two restore commands and the two status checks are missing.</p>",
+      "inputSpec": "recipe-app/ has 2 commits already, most recently \"Update header background color in style.css\". Since that commit, style.css has an unstaged, unwanted experimental edit that broke the layout, and secrets.txt is a new file that was accidentally staged with git add. The terminal's current directory is recipe-app/.",
+      "outputSpec": "style.css is byte-for-byte identical to its last committed version and shows no changes in git status. secrets.txt still exists on disk with its original content but is listed under Untracked files, not Changes to be committed.",
+      "constraints": "Do not delete secrets.txt from disk - only remove it from the staging area. Use the modern git restore commands only, not git checkout --. Discarding style.css's edit is permanent and cannot be undone once run - do not run it on any file you still want to keep changes in. Do not commit anything in this exercise.",
+      "examplesJson": [
+        {
+          "input": "git restore style.css   (run while style.css has an unstaged edit)",
+          "output": "(no terminal output - style.css on disk is silently overwritten with the version from the last commit)",
+          "explanation": "git restore with no --staged flag rewrites the working directory copy from HEAD and prints nothing on success, which is exactly why it is worth checking git diff or git status before running it - the previous content is gone."
+        },
+        {
+          "input": "git status   (after git add secrets.txt, before restoring anything)",
+          "output": "Changes to be committed:\n  (use \"git restore --staged <file>...\" to unstage)\n\tnew file:   secrets.txt\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   style.css",
+          "explanation": "Git prints the exact restore command needed for each category right inside git status: a new staged file needs git restore --staged, a modified unstaged file needs a plain git restore."
+        },
+        {
+          "input": "git restore --staged secrets.txt   then   git status",
+          "output": "secrets.txt now appears under Untracked files, not Changes to be committed. Its content on disk is unchanged.",
+          "explanation": "git restore --staged only moves a file backward from the staging area to the working directory - it never touches the file's actual content, unlike a plain git restore."
+        }
+      ],
+      "hintsJson": [
+        "A file can be broken in two different ways at once: modified-but-unstaged (style.css) needs its content thrown away, while staged-too-early (secrets.txt) just needs to be un-staged, not deleted.",
+        "git restore <file> with no flag replaces the working directory copy with the version from the last commit - permanent, and the right tool only when you truly want to discard the edit.",
+        "git restore --staged <file> only moves a file out of the staging area back to the working directory or untracked state - it never rewrites the file's content, which is why it is safe for secrets.txt.",
+        "Read git status literally: it prints the exact restore command needed under each section (Changes to be committed vs Changes not staged) - use the plain form for style.css and the --staged form for secrets.txt."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "commands.sh",
+          "language": "bash",
+          "code": "# Given: recipe-app/ has 2 commits already, most recently\n#   \"Update header background color in style.css\".\n# Since that commit, two uncommitted things exist in the working directory:\n#   - style.css has an unstaged, unwanted experimental edit that broke the layout\n#   - secrets.txt is a NEW file that was accidentally staged with git add\n# Your terminal's current directory is recipe-app/.\n\n# TODO: see both problems at once (modified-unstaged vs staged-new)\n\n\n# TODO: throw away the unwanted style.css edit entirely, back to the last commit's version\n\n\n# TODO: unstage secrets.txt without deleting it - it should return to being untracked\n\n\n# TODO: confirm style.css is clean and secrets.txt is untracked again\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "commands.sh",
+          "language": "bash",
+          "code": "# Given: recipe-app/ has 2 commits already, most recently\n#   \"Update header background color in style.css\".\n# Since that commit, two uncommitted things exist in the working directory:\n#   - style.css has an unstaged, unwanted experimental edit that broke the layout\n#   - secrets.txt is a NEW file that was accidentally staged with git add\n# Your terminal's current directory is recipe-app/.\n\ngit status\n\ngit restore style.css\n\ngit restore --staged secrets.txt\n\ngit status\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>git restore and git restore --staged answer opposite problems that look similar in git status but need different fixes. A <strong>modified, unstaged</strong> file like style.css sits between the last commit and the working directory; <code>git restore style.css</code> overwrites the working directory copy with the last committed version, permanently discarding the unwanted edit. A <strong>staged new file</strong> like secrets.txt needs the opposite: <code>git restore --staged secrets.txt</code> only removes it from the staging area, returning it to untracked, while leaving its content completely untouched on disk.</p><p>The trap is using the wrong one: running <code>git restore secrets.txt</code> instead of the <code>--staged</code> form on a new file does nothing useful for unstaging it, since a new file has no committed version to restore to, and running <code>git restore --staged style.css</code> alone would leave the unwanted edit sitting in the working directory, still modified. git status prints the exact restore command needed for each file's category, which is worth reading literally rather than guessing.</p>"
+    },
+    {
+      "title": "Capstone: Build the Complete Version History of a New Portfolio Site from Scratch",
+      "difficulty": "HARD",
+      "estimatedMinutes": 50,
+      "points": 25,
+      "concepts": [
+        "git init",
+        ".gitignore ordering before the first git add",
+        "git add and git commit across multiple commits",
+        "git diff for reviewing changes before staging",
+        "git log --oneline for reviewing history",
+        "keeping secrets and generated files untracked"
+      ],
+      "prerequisites": [
+        "git init",
+        "git add / git commit -m",
+        ".gitignore",
+        "git status, git diff, git log"
+      ],
+      "tags": [
+        "git",
+        "capstone",
+        "workflow",
+        "gitignore",
+        "commit-history",
+        "hard"
+      ],
+      "problemHtml": "<p>A real first project is never one commit - it is a sequence of small, reviewable snapshots, each one safe to look back at individually, built on top of a <code>.gitignore</code> that was written before anything sensitive or generated ever touched the staging area. Getting the order wrong even once, staging before ignoring or committing before reviewing a diff, is exactly how a real API key ends up permanently recorded in a repository's history. This capstone puts every earlier skill - init, gitignore, add, commit, diff, status, log - into the order a working developer actually uses them.</p><p>You are starting a brand-new portfolio site from an empty, <code>.git</code>-less folder and must produce exactly four commits.</p><ul><li>1. Initialize the folder as a Git repository.</li><li>2. Create <code>.gitignore</code> ignoring <code>node_modules/</code> and <code>.env</code> before staging anything else.</li><li>3. Confirm with <code>git status</code> that only <code>index.html</code>, <code>style.css</code>, and <code>.gitignore</code> are untracked.</li><li>4. Commit those three files as commit 1 with a message describing the initial skeleton.</li><li>5. Review the given About-section edit to <code>index.html</code> with <code>git diff</code>, then commit it as commit 2.</li><li>6. Commit the given new file <code>contact.html</code> as commit 3.</li><li>7. Review the given navbar bug fix to <code>style.css</code> with <code>git diff</code>, then commit it as commit 4.</li><li>8. Run <code>git log --oneline</code> to view all four commits, most recent first.</li><li>9. Run a final <code>git status</code> confirming a clean working tree with <code>node_modules/</code> and <code>.env</code> never having been tracked.</li></ul><p>Each later edit (About section, contact page, bug fix) is described as already present in the working directory when its step begins; the scaffold's TODO comments mark exactly where each command belongs.</p>",
+      "inputSpec": "A brand-new folder portfolio-site/ exists on disk with no .git yet, containing: index.html (a basic homepage, no About section), style.css (contains a navbar bug: an incorrect margin value), node_modules/ (already-installed dependencies), and .env (a real contact-form API key that must never be committed). No git history exists. Later steps describe further given edits to index.html (an About section added) and style.css (the navbar bug fixed), plus a new file contact.html appearing on disk. The terminal's current directory is portfolio-site/.",
+      "outputSpec": "Exactly 4 commits exist, each with a message describing its specific change, in this order: initial skeleton, About section, contact page, navbar fix. git log --oneline lists all four newest-first. A final git status reports a clean working tree. node_modules/ and .env were never staged or committed at any point.",
+      "constraints": ".gitignore must be created and committed before the first git add of any other file, so node_modules/ and .env are never staged even for a moment. Exactly 4 commits, each committing one logical change - do not squash multiple steps into one commit or split one logical change across two commits. Every commit message must describe that specific change, not reuse a generic message like \"update\" or \"wip\". Never run git add . blindly - list files explicitly or verify with git status first, since node_modules/ and .env exist on disk throughout. Do not run git push - everything stays local.",
+      "examplesJson": [
+        {
+          "input": "git log --oneline   (after all 4 commits)",
+          "output": "d4e5f6a Fix navbar alignment bug caused by incorrect margin value\nc3d4e5f Add contact page\nb2c3d4e Add About section to homepage\na1b2c3d Initial commit: add homepage skeleton and styles",
+          "explanation": "Four commits, newest first, each summarizing exactly one logical change - this is what makes the history useful to scan later without opening every diff."
+        },
+        {
+          "input": "git status   (run as the very last command of the workflow)",
+          "output": "On branch main\nnothing to commit, working tree clean",
+          "explanation": "node_modules/ and .env exist on disk the entire time but never appear here, because .gitignore excluded them from every git add and git status check from the very first commit onward."
+        },
+        {
+          "input": "git diff style.css   (run before staging the navbar fix)",
+          "output": "diff --git a/style.css b/style.css\nindex 7f3a2b1..d8e9c0a 100644\n--- a/style.css\n+++ b/style.css\n@@ -10,7 +10,7 @@\n .navbar {\n   display: flex;\n-  margin-left: 250px;\n+  margin-left: 0;\n }",
+          "explanation": "Reviewing this diff before staging confirms the fix is exactly the intended one-line margin change, and nothing else in style.css was accidentally modified along with it."
+        }
+      ],
+      "hintsJson": [
+        ".gitignore has to exist and already contain both patterns before the very first git add - reordering that even once means node_modules/ or .env could be staged before anything stops them.",
+        "Each of the four commits should map to exactly one logical change: skeleton, About section, contact page, navbar fix - resist the urge to combine the About section and the contact page into one commit just because they touch related files.",
+        "Before staging the About-section edit and the navbar fix, run git diff on the affected file first - reviewing before staging is what catches an accidental unrelated edit before it becomes permanent history.",
+        "Finish with git log --oneline to confirm exactly 4 commits in the right order, then a final git status - a clean working tree with node_modules/ and .env absent from every step is the proof the whole workflow succeeded."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "commands.sh",
+          "language": "bash",
+          "code": "# Given: a brand-new folder portfolio-site/ exists on disk with NO .git yet:\n#   index.html          (a basic homepage, no About section yet)\n#   style.css           (contains a navbar bug: incorrect margin value)\n#   node_modules/        (already-installed dependencies, e.g. node_modules/lite-server/index.js)\n#   .env                 (holds a real contact-form API key - must never be committed)\n# Your terminal's current directory is portfolio-site/.\n#\n# You will build a clean history of exactly 4 commits. Work through the TODOs in order;\n# each numbered TODO corresponds to one step of the requirements.\n\n# TODO 1: initialize this folder as a Git repository\n\n\n# TODO 2: create .gitignore ignoring node_modules/ and .env - do this BEFORE any git add\n\n\n# TODO 3: confirm only index.html, style.css, and .gitignore show as untracked\n\n\n# TODO 4: stage and commit index.html, style.css, and .gitignore as the first commit\n\n\n# --- Given: index.html has since been edited in the working directory to add an About\n#     section (a new section with a heading and one paragraph). Nothing is staged yet. ---\n\n# TODO 5: review the exact change to index.html before staging it\n\n\n# TODO 6: stage and commit the About section as the second commit\n\n\n# --- Given: a new file contact.html now exists on disk, untracked. ---\n\n# TODO 7: stage and commit contact.html as the third commit\n\n\n# --- Given: style.css has since been edited in the working directory to fix the navbar\n#     margin bug. Nothing is staged yet. ---\n\n# TODO 8: review the exact change to style.css before staging it\n\n\n# TODO 9: stage and commit the navbar fix as the fourth commit\n\n\n# TODO 10: view all 4 commits condensed to one line each, most recent first\n\n\n# TODO 11: confirm the working tree is clean and node_modules/ / .env were never tracked\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "commands.sh",
+          "language": "bash",
+          "code": "# Given: a brand-new folder portfolio-site/ exists on disk with NO .git yet:\n#   index.html          (a basic homepage, no About section yet)\n#   style.css           (contains a navbar bug: incorrect margin value)\n#   node_modules/        (already-installed dependencies, e.g. node_modules/lite-server/index.js)\n#   .env                 (holds a real contact-form API key - must never be committed)\n# Your terminal's current directory is portfolio-site/.\n\ngit init\n\necho \"node_modules/\" >> .gitignore\necho \".env\" >> .gitignore\n\ngit status\n\ngit add index.html style.css .gitignore\ngit commit -m \"Initial commit: add homepage skeleton and styles\"\n\ngit diff index.html\n\ngit add index.html\ngit commit -m \"Add About section to homepage\"\n\ngit add contact.html\ngit commit -m \"Add contact page\"\n\ngit diff style.css\n\ngit add style.css\ngit commit -m \"Fix navbar alignment bug caused by incorrect margin value\"\n\ngit log --oneline\n\ngit status\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The order of operations is what makes this workflow safe: .gitignore is created and populated before the very first <code>git add</code>, so node_modules/ and .env are never staged even for one command, let alone committed - reordering those two steps is the single most damaging mistake a new contributor can make on a real project. Each of the four commits captures exactly one logical change (skeleton, About section, contact page, bug fix), which is what makes <code>git log --oneline</code> genuinely useful later: a teammate, or the same author in six months, can scan one line per change instead of reading a diff to figure out what happened.</p><p>Reviewing with <code>git diff</code> before every stage-and-commit pair (for the About section and the navbar fix) is what catches an accidental extra edit before it becomes permanent history; skipping that check and going straight to <code>git add</code> is the other common trap, since a staged change is much easier to review than one already sealed inside a commit. The final clean <code>git status</code> is the proof the whole workflow succeeded: nothing untracked, nothing modified, and no secret or generated file ever touched.</p>",
+      "diagramMermaid": "flowchart TD\n  c1[Commit 1 Initial skeleton]\n  c2[Commit 2 Add About section]\n  c3[Commit 3 Add contact page]\n  c4[Commit 4 Fix navbar bug]\n  c1 --> c2\n  c2 --> c3\n  c3 --> c4"
+    }
+  ]
+}

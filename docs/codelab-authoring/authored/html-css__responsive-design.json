@@ -1,0 +1,474 @@
+{
+  "trackSlug": "html-css",
+  "moduleSlug": "responsive-design",
+  "exercises": [
+    {
+      "title": "Fix Mobile Zoom-Out with the Viewport Meta Tag",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "the viewport meta tag",
+        "device-width vs the 980px desktop-layout assumption",
+        "initial-scale",
+        "universal box-sizing reset",
+        "the rem baseline via html font-size"
+      ],
+      "prerequisites": [
+        "HTML document skeleton",
+        "linking a stylesheet with link rel=stylesheet"
+      ],
+      "tags": [
+        "css",
+        "responsive",
+        "viewport",
+        "meta-tag",
+        "beginner"
+      ],
+      "problemHtml": "<p>Open a page with no viewport meta tag on a phone and the browser does something surprising: it renders the page as if the screen were 980px wide, a desktop-era assumption baked in since the first iPhone, then shrinks the whole result down to fit. Text that looks like 16px in your CSS ends up rendered at a fraction of that size, and the user has to pinch-zoom just to read a sentence. This has nothing to do with your CSS being wrong &mdash; the browser never even gets the chance to lay the page out at the phone's real width.</p><p>You are given a page that exhibits exactly this problem. Fix the head and lay a responsive foundation in the stylesheet.</p><ul><li>1. In <code>index.html</code>, add <code>&lt;meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"&gt;</code> inside <code>&lt;head&gt;</code>, positioned after the existing <code>&lt;meta charset=\"utf-8\"&gt;</code> and before <code>&lt;title&gt;</code>.</li><li>2. In <code>styles.css</code>, add a universal box-sizing reset: <code>* { box-sizing: border-box; }</code>.</li><li>3. In <code>styles.css</code>, remove the default body margin with <code>body { margin: 0; }</code>.</li><li>4. In <code>styles.css</code>, set <code>html { font-size: 100%; }</code> so <code>1rem</code> reliably equals the browser's default 16px baseline for every exercise that follows.</li><li>5. Do not add any other CSS rule and do not touch any other part of the HTML.</li></ul><p>The scaffold's <code>index.html</code> is missing the viewport meta tag, and <code>styles.css</code> has <code>/* TODO */</code> markers for the three rules above.</p>",
+      "inputSpec": "index.html: a complete page with a heading and two paragraphs, meta charset present but no viewport meta tag. styles.css: a nearly-empty file with three TODO comments marking where the box-sizing reset, the body margin reset, and the html font-size baseline belong.",
+      "outputSpec": "Viewed on a 375px-wide phone, the page renders at its true width immediately (no shrunk-to-980px layout, no pinch-zoom needed). The viewport meta tag's content attribute is exactly \"width=device-width, initial-scale=1\". Every element uses border-box sizing and the body has no default margin.",
+      "constraints": "The viewport meta tag's content value must be exactly \"width=device-width, initial-scale=1\" (no maximum-scale, no user-scalable=no — locking zoom out is an accessibility violation). It must sit inside head, after the charset meta. Do not add a second viewport meta tag. No JavaScript. No CSS rules beyond the three listed.",
+      "examplesJson": [
+        {
+          "input": "<head>\n  <meta charset=\"utf-8\">\n  <title>Shop</title>\n</head>",
+          "output": "On a phone, the page renders as a shrunken desktop layout (about 980px wide) and the user must pinch-zoom to read normal-sized text.",
+          "explanation": "With no viewport meta tag, the mobile browser assumes the page was built for a 980px-wide desktop viewport and scales the whole render down to fit the physical screen, shrinking every font and image proportionally."
+        },
+        {
+          "input": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
+          "output": "On the same phone, the page now lays out at the device's real CSS pixel width (for example 375px) and text renders at its true declared size.",
+          "explanation": "width=device-width tells the browser to use the device's actual width as the layout viewport instead of assuming 980px; initial-scale=1 sets the initial zoom level to 1:1 so nothing is pre-shrunk."
+        },
+        {
+          "input": "* { box-sizing: content-box; } (the browser default)",
+          "output": "A box declared width: 100%; padding: 1rem; border: 1px solid; renders wider than its container, because padding and border add on top of the 100% width.",
+          "explanation": "border-box makes width include padding and border instead of adding to it, which is what every later exercise in this module assumes when it sets max-width or 100% widths on containers."
+        }
+      ],
+      "hintsJson": [
+        "The tag you need is a <meta> element, not a <link> or a CSS rule — it lives in <head>, right where the other meta tags are.",
+        "The two values that matter are width (set it to the special keyword device-width, not a number) and initial-scale (set it to 1).",
+        "box-sizing: border-box on the universal selector * is what every other exercise in this module assumes; add it now even though this page has no padding yet to show it off.",
+        "Your three CSS rules, in any order: * { box-sizing: border-box; }, body { margin: 0; }, html { font-size: 100%; }."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <!-- TODO: add the viewport meta tag here, after charset and before title -->\n  <title>Local Coffee Roasters</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <h1>Local Coffee Roasters</h1>\n  <p>Small-batch beans, roasted every Tuesday and shipped the same week.</p>\n  <p>Subscribe below to get a fresh bag delivered every month.</p>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* TODO: universal box-sizing reset -> * { box-sizing: border-box; } */\n\n/* TODO: remove the default body margin -> body { margin: 0; } */\n\n/* TODO: set the rem baseline -> html { font-size: 100%; } */\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Local Coffee Roasters</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <h1>Local Coffee Roasters</h1>\n  <p>Small-batch beans, roasted every Tuesday and shipped the same week.</p>\n  <p>Subscribe below to get a fresh bag delivered every month.</p>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "* {\n  box-sizing: border-box;\n}\n\nbody {\n  margin: 0;\n}\n\nhtml {\n  font-size: 100%;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The viewport meta tag is not decoration; it changes what value the browser uses as the CSS layout viewport before anything else is drawn. <code>width=device-width</code> swaps the historical 980px desktop assumption for the device's actual width, and <code>initial-scale=1</code> makes the very first paint 1:1 instead of pre-zoomed out. Every exercise after this one assumes the tag is present &mdash; without it, media queries still technically work, but they trigger against the fake 980px viewport instead of the real one, so a <code>min-width: 600px</code> query could stay active on a 375px phone.</p><p>The <code>box-sizing: border-box</code> reset is the second half of the foundation: with the browser default (<code>content-box</code>), padding and border add to a declared width instead of being included in it, so a <code>width: 100%</code> element with any padding overflows its parent by exactly that padding amount. The common trap here is treating the viewport tag as optional \"boilerplate\" copy-paste and forgetting it on a new page &mdash; the page then looks fine in a desktop browser (which does not apply the 980px fallback) and only breaks once tested on an actual phone.</p>"
+    },
+    {
+      "title": "Convert a Fixed-Pixel Card from px to rem, %, and vh",
+      "difficulty": "EASY",
+      "estimatedMinutes": 20,
+      "points": 10,
+      "concepts": [
+        "rem relative to the html root font-size",
+        "percentage widths relative to the parent element",
+        "vh relative to the viewport height",
+        "why fixed px breaks a user's browser font-size setting",
+        "px-to-rem conversion at a 16px baseline"
+      ],
+      "prerequisites": [
+        "the viewport meta tag",
+        "box-sizing: border-box",
+        "basic CSS selectors and the box model"
+      ],
+      "tags": [
+        "css",
+        "units",
+        "rem",
+        "viewport-units",
+        "responsive",
+        "beginner"
+      ],
+      "problemHtml": "<p>A stylesheet written entirely in <code>px</code> looks precise, but it is precise about the wrong thing: every value is locked to an exact pixel count regardless of the screen it lands on or the font size the visitor set in their own browser. A user who bumps their default font size up for readability gets no benefit on a page sized entirely in <code>px</code>, because <code>px</code> never reads that setting. <code>rem</code> is relative to the root <code>&lt;html&gt;</code> font-size, so it grows and shrinks with the user's preference; percentages are relative to the parent's size, so a container can flex with the screen instead of overflowing it; <code>vh</code> is relative to the viewport's height, useful for anything that should scale with how tall the screen actually is.</p><p>You are given a promo card built entirely with fixed <code>px</code> values. Convert every value below to the matching relative unit, at a 16px-per-rem baseline (so <code>16px = 1rem</code>).</p><ul><li>1. <code>.card h2</code> font-size: <code>24px</code> &rarr; <code>1.5rem</code>.</li><li>2. <code>.card p</code> font-size: <code>16px</code> &rarr; <code>1rem</code>.</li><li>3. <code>.card .badge</code> font-size: <code>14px</code> &rarr; <code>0.875rem</code>.</li><li>4. <code>.card</code> padding: <code>24px</code> &rarr; <code>1.5rem</code> (all four sides).</li><li>5. <code>.card</code> width: currently a fixed <code>600px</code> &rarr; change to <code>width: 100%;</code> plus <code>max-width: 37.5rem;</code> so the card fills a narrow screen but never grows past the 600px-equivalent cap on a wide one.</li><li>6. <code>.card .banner</code> height: currently a fixed <code>400px</code> &rarr; change to <code>height: 50vh;</code> so the banner scales with the viewport's height instead of staying a fixed pixel block.</li><li>7. Do not convert any value to <code>vw</code>, and do not change any color, border, or property not listed above.</li></ul><p>The scaffold's <code>styles.css</code> has the six rules above written in fixed <code>px</code>, each marked with a <code>/* TODO */</code> comment giving the target value.</p>",
+      "inputSpec": "index.html: a static promo card (a heading, a paragraph, a small badge span, and a banner div) — unchanged by this exercise. styles.css: the .card, .card h2, .card p, .card .badge, and .card .banner rules, every size value in fixed px, with a TODO comment above each line naming its target relative-unit value.",
+      "outputSpec": "Resized between a 320px-wide phone and a 1200px-wide desktop, the card's width fills the available space up to a 600px-equivalent cap, the banner height changes proportionally with viewport height, and every font size and padding value is expressed in rem so it scales if the user's browser font-size preference changes.",
+      "constraints": "Use rem for every font-size and for the padding — not em, not px. Use vh only for the banner height. Do not use vw anywhere (vw-based font-size can shrink text below a readable minimum on narrow screens with no lower bound). Keep the 16px-per-rem conversion exact: values must match the ones listed in the requirements.",
+      "examplesJson": [
+        {
+          "input": "font-size: 24px; (with html { font-size: 100%; } already set from the previous exercise)",
+          "output": "font-size: 1.5rem;",
+          "explanation": "At the default 16px root font-size, 1rem equals 16px, so 24px converts to 24 / 16 = 1.5rem. rem always multiplies against the root's font-size, not the element's own or its parent's, which is what keeps nested components predictable."
+        },
+        {
+          "input": ".card { width: 600px; } viewed on a 320px-wide phone",
+          "output": "Horizontal overflow: the card is wider than the screen, forcing the whole page to scroll sideways.",
+          "explanation": "A fixed pixel width never shrinks below its declared value no matter how narrow the viewport is. Switching to width: 100%; max-width: 37.5rem; lets the card shrink to fit a 320px phone while still capping out at 600px-equivalent on a wide desktop screen."
+        },
+        {
+          "input": ".card .banner { height: 50vh; } viewed on a 700px-tall phone vs. a 1000px-tall laptop screen",
+          "output": "350px tall on the phone, 500px tall on the laptop.",
+          "explanation": "vh is a percentage of the current viewport height, recalculated live — 50vh is always exactly half the visible viewport height, so the banner scales with the device instead of overflowing a short screen or looking tiny on a tall one."
+        }
+      ],
+      "hintsJson": [
+        "Every rem conversion at this baseline is the px value divided by 16 — 24 / 16 = 1.5, 16 / 16 = 1, 14 / 16 = 0.875.",
+        "Padding is a size property just like font-size, so it converts the same way: 24px of padding becomes 1.5rem of padding on every side.",
+        "A fixed width never shrinks; pairing width: 100% with a max-width in rem gives you both a fluid minimum and a fixed-feeling cap at once.",
+        "vh is exactly like a percentage but measured against the viewport's height instead of a parent element's — 50vh is always half the visible screen height, recalculated as the window resizes."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Summer Sale</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"card\">\n    <div class=\"banner\"></div>\n    <span class=\"badge\">Limited time</span>\n    <h2>Summer Sale: 30% Off</h2>\n    <p>Use code SUN30 at checkout. Ends this Sunday at midnight.</p>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "* {\n  box-sizing: border-box;\n}\n\nbody {\n  margin: 0;\n  font-family: sans-serif;\n}\n\n.card {\n  /* TODO: replace the fixed width below with width: 100%; and max-width: 37.5rem; */\n  width: 600px;\n  margin: 2rem auto;\n  /* TODO: convert 24px padding to 1.5rem */\n  padding: 24px;\n  border: 1px solid #ddd;\n  border-radius: 8px;\n}\n\n.card .banner {\n  /* TODO: convert the fixed 400px height to 50vh */\n  height: 400px;\n  background: #f0a500;\n  border-radius: 6px;\n  margin-bottom: 1rem;\n}\n\n.card .badge {\n  display: inline-block;\n  /* TODO: convert 14px font-size to 0.875rem */\n  font-size: 14px;\n  color: #b34700;\n  font-weight: bold;\n}\n\n.card h2 {\n  /* TODO: convert 24px font-size to 1.5rem */\n  font-size: 24px;\n  margin: 0.5rem 0;\n}\n\n.card p {\n  /* TODO: convert 16px font-size to 1rem */\n  font-size: 16px;\n  color: #444;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Summer Sale</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"card\">\n    <div class=\"banner\"></div>\n    <span class=\"badge\">Limited time</span>\n    <h2>Summer Sale: 30% Off</h2>\n    <p>Use code SUN30 at checkout. Ends this Sunday at midnight.</p>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "* {\n  box-sizing: border-box;\n}\n\nbody {\n  margin: 0;\n  font-family: sans-serif;\n}\n\n.card {\n  width: 100%;\n  max-width: 37.5rem;\n  margin: 2rem auto;\n  padding: 1.5rem;\n  border: 1px solid #ddd;\n  border-radius: 8px;\n}\n\n.card .banner {\n  height: 50vh;\n  background: #f0a500;\n  border-radius: 6px;\n  margin-bottom: 1rem;\n}\n\n.card .badge {\n  display: inline-block;\n  font-size: 0.875rem;\n  color: #b34700;\n  font-weight: bold;\n}\n\n.card h2 {\n  font-size: 1.5rem;\n  margin: 0.5rem 0;\n}\n\n.card p {\n  font-size: 1rem;\n  color: #444;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every rem value here is the original px value divided by the 16px root baseline, so the visual result on a first load is identical to the px version &mdash; the difference only shows up when the root font-size changes, either because the user set a browser preference or because a later exercise scales <code>html</code> itself at a breakpoint. <code>width: 100%; max-width: 37.5rem;</code> is the key pattern for the card: <code>100%</code> lets it shrink to fit any parent narrower than 600px, while <code>max-width</code> stops it from stretching into an uncomfortably wide single column on a large desktop screen. That combination, not a single property, is what \"fluid but capped\" means.</p><p>The common trap is reaching for <code>vw</code> on font-size because it feels like the most \"responsive\" unit — a heading set in <code>vw</code> keeps shrinking as the viewport narrows with no lower bound, and on a small phone it can become smaller than the body text around it. <code>rem</code> is the right default for typography precisely because it stays fixed relative to the root unless you deliberately change the root, giving you control over exactly when text resizes instead of a value that drifts continuously with every pixel of window width.</p>"
+    },
+    {
+      "title": "Stop Horizontal Overflow with Fluid Images and a Capped Gallery Container",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 30,
+      "points": 15,
+      "concepts": [
+        "img max-width: 100% + height: auto pattern",
+        "fixed pixel widths causing horizontal overflow",
+        "max-width vs width on a container",
+        "display: block on replaced elements",
+        "preserving intrinsic aspect ratio without explicit width/height math"
+      ],
+      "prerequisites": [
+        "relative units (rem, %, vh)",
+        "box-sizing: border-box",
+        "the box model"
+      ],
+      "tags": [
+        "css",
+        "images",
+        "fluid-layout",
+        "max-width",
+        "overflow",
+        "responsive"
+      ],
+      "problemHtml": "<p>An <code>&lt;img&gt;</code> given an explicit fixed <code>width</code> in CSS never shrinks below that value, no matter how narrow the browser window gets. On a 375px phone, a single 800px-wide photo forces the entire page into horizontal scroll &mdash; not just the image, the whole layout, because the image's box is wider than its ancestors allow. The fix is one of the most repeated patterns in responsive CSS: give every image <code>max-width: 100%</code> so it can never exceed its container, and <code>height: auto</code> so the browser recalculates the height to preserve the image's original aspect ratio instead of stretching or squashing it.</p><p>You are given a photo gallery where every image overflows a phone-width viewport. Fix the images and give the gallery container a sensible fluid-but-capped width.</p><ul><li>1. In <code>styles.css</code>, replace the rule that sets a fixed <code>width: 800px;</code> on <code>.gallery img</code> with <code>max-width: 100%;</code> and <code>height: auto;</code>.</li><li>2. Add <code>display: block;</code> to <code>.gallery img</code> &mdash; images are <code>inline</code> by default, which leaves a few pixels of baseline whitespace under each one inside the grid.</li><li>3. On <code>.gallery</code>, replace the fixed <code>width: 900px;</code> with <code>width: 100%;</code> and <code>max-width: 60rem;</code>, matching the fluid-but-capped pattern from the previous exercise.</li><li>4. Keep <code>.gallery</code>'s existing <code>padding: 1rem;</code> and its <code>display: grid;</code> with three equal columns unchanged &mdash; only the width-related properties change.</li><li>5. Do not add <code>object-fit</code>, do not hardcode any image's intrinsic pixel dimensions, and do not remove the grid layout.</li></ul><p>The scaffold's <code>styles.css</code> has the two fixed-width rules marked with <code>/* TODO */</code>; three sample images with different natural aspect ratios are already wired into the markup.</p>",
+      "inputSpec": "index.html: a .gallery div containing three img elements with different real aspect ratios (landscape, portrait, square), each pointing at a photo — unchanged by this exercise. styles.css: .gallery with a fixed width: 900px, and .gallery img with a fixed width: 800px, each marked with a TODO describing its replacement.",
+      "outputSpec": "On a 320px-wide viewport, no element causes horizontal scroll: every image shrinks to fit its grid cell and the gallery container shrinks to fit the screen. On a 1400px-wide viewport, the gallery stops growing at its 60rem cap and centers on the page. Each image keeps its own original aspect ratio at every width — no stretching, no cropping.",
+      "constraints": "Every img inside .gallery must use max-width: 100% (never a fixed width in px). height must be auto, never a fixed px value, so the browser derives it from the image's own aspect ratio. .gallery must use width: 100% with a max-width cap, never a bare fixed-px width. No object-fit, no JavaScript.",
+      "examplesJson": [
+        {
+          "input": ".gallery img { width: 800px; } on a 375px-wide phone",
+          "output": "The image renders at a fixed 800px, more than double the screen width, and the whole page scrolls horizontally to show the rest of it.",
+          "explanation": "A fixed px width on an img is an absolute floor as well as a ceiling — the browser never shrinks it to fit a narrower parent, so any image wider than the viewport forces the page itself to overflow."
+        },
+        {
+          "input": ".gallery img { max-width: 100%; height: auto; } on the same 375px phone, for a 1600x900 landscape photo",
+          "output": "The image renders at 343px wide by about 193px tall (accounting for the gallery's 1rem padding on each side), preserving its original 16:9 ratio.",
+          "explanation": "max-width: 100% caps the image at its container's available width instead of its natural pixel size, and height: auto lets the browser scale the height proportionally so the photo never looks stretched or squashed."
+        },
+        {
+          "input": ".gallery { width: 100%; max-width: 60rem; } viewed on a 2000px-wide monitor",
+          "output": "The gallery stops growing at 960px (60rem at the 16px baseline) and is centered by its existing margin, instead of stretching edge-to-edge across the whole monitor.",
+          "explanation": "Without a max-width cap, a width: 100% container keeps growing with the viewport indefinitely, which on a very wide screen produces uncomfortably long grid rows; the cap keeps the layout readable no matter how wide the browser window is."
+        }
+      ],
+      "hintsJson": [
+        "The image fix is always the same two declarations together: max-width: 100% (never a plain width) and height: auto — using one without the other still leaves a fixed or distorted dimension.",
+        "display: block matters because img is an inline element by default, and inline elements leave a small gap below them for descenders in text, which shows up as unwanted space under each grid image.",
+        "The gallery container follows the exact fluid-but-capped pattern from the units exercise: width: 100% lets it shrink on narrow screens, max-width stops it from growing forever on wide ones.",
+        "Do not touch the grid-template-columns rule or the padding — this exercise is only about the two width-related properties on .gallery and the three properties on .gallery img."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Trail Photos</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <h1>Trail Photos</h1>\n  <div class=\"gallery\">\n    <img src=\"ridge-landscape.jpg\" alt=\"A wide ridge trail at sunset, photographed in landscape orientation.\">\n    <img src=\"waterfall-portrait.jpg\" alt=\"A tall waterfall shot in portrait orientation.\">\n    <img src=\"trail-marker-square.jpg\" alt=\"A square close-up of a wooden trail marker post.\">\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "* {\n  box-sizing: border-box;\n}\n\nbody {\n  margin: 0;\n  font-family: sans-serif;\n}\n\n.gallery {\n  /* TODO: replace the fixed width below with width: 100%; and max-width: 60rem; */\n  width: 900px;\n  margin: 0 auto;\n  padding: 1rem;\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 1rem;\n}\n\n.gallery img {\n  /* TODO: replace width: 800px with max-width: 100%; height: auto; and add display: block; */\n  width: 800px;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Trail Photos</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <h1>Trail Photos</h1>\n  <div class=\"gallery\">\n    <img src=\"ridge-landscape.jpg\" alt=\"A wide ridge trail at sunset, photographed in landscape orientation.\">\n    <img src=\"waterfall-portrait.jpg\" alt=\"A tall waterfall shot in portrait orientation.\">\n    <img src=\"trail-marker-square.jpg\" alt=\"A square close-up of a wooden trail marker post.\">\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "* {\n  box-sizing: border-box;\n}\n\nbody {\n  margin: 0;\n  font-family: sans-serif;\n}\n\n.gallery {\n  width: 100%;\n  max-width: 60rem;\n  margin: 0 auto;\n  padding: 1rem;\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 1rem;\n}\n\n.gallery img {\n  max-width: 100%;\n  height: auto;\n  display: block;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The pair <code>max-width: 100%; height: auto;</code> is doing two separate jobs. <code>max-width: 100%</code> stops the image from ever exceeding its grid cell's width, shrinking on demand as the cell shrinks; <code>height: auto</code> tells the browser to recompute the height from the image's own intrinsic aspect ratio rather than a value you specified, which is exactly why the landscape, portrait, and square photos in this gallery all stay correctly proportioned at every screen size without three different sets of hand-picked dimensions. <code>display: block</code> removes the small inline whitespace gap that would otherwise appear under each image inside the grid cell, since <code>img</code> is inline by default and inline elements reserve space for text descenders.</p><p>The common trap is fixing only the image and leaving the container at a fixed pixel width, or the reverse &mdash; both still overflow a narrow screen because either box alone can force horizontal scroll. The gallery's <code>width: 100%; max-width: 60rem;</code> pairing mirrors the same fluid-but-capped idea applied one level up: it shrinks freely down to a 320px phone and stops growing past 960px on a very wide monitor, so the grid never stretches into uncomfortably wide rows.</p>"
+    },
+    {
+      "title": "Build a Mobile-First Card Grid with min-width Breakpoints",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 40,
+      "points": 15,
+      "concepts": [
+        "mobile-first CSS strategy",
+        "min-width media queries",
+        "choosing breakpoints from content, not device models",
+        "CSS Grid grid-template-columns",
+        "base styles apply everywhere unless overridden"
+      ],
+      "prerequisites": [
+        "fluid images and max-width containers",
+        "relative units",
+        "CSS Grid basics (display: grid, gap)"
+      ],
+      "tags": [
+        "css",
+        "media-queries",
+        "breakpoints",
+        "mobile-first",
+        "grid",
+        "responsive"
+      ],
+      "problemHtml": "<p>Mobile-first means writing the base, unqualified CSS for the smallest, simplest layout first, then using <code>min-width</code> media queries to layer on enhancements as the viewport grows &mdash; the opposite of writing a desktop layout and using <code>max-width</code> queries to squeeze it down. The mobile-first order matters for more than style: it means a phone downloads and applies the simplest rule set with no overridden properties to undo, and every breakpoint you add is strictly additive. Breakpoints themselves should come from where your own content starts to look cramped or sparse, not from a fixed list of device widths &mdash; a three-card row that looks fine at 900px might look fine at 850px too, and hardcoding \"iPhone width\" numbers just chases a moving target as new devices ship.</p><p>You are given a card grid with three cards and no CSS layout rules at all. Build it mobile-first.</p><ul><li>1. As the base (unqualified) rule, make <code>.cards</code> a <code>display: grid;</code> with <code>grid-template-columns: 1fr;</code> (a single column) and <code>gap: 1rem;</code> &mdash; this is what every phone gets with no media query involved.</li><li>2. Add a <code>@media (min-width: 600px)</code> block that changes <code>.cards</code> to <code>grid-template-columns: repeat(2, 1fr);</code> (two equal columns).</li><li>3. Add a <code>@media (min-width: 900px)</code> block that changes <code>.cards</code> to <code>grid-template-columns: repeat(3, 1fr);</code> (three equal columns).</li><li>4. Give <code>.card</code> a base <code>padding: 1rem;</code> and a <code>border: 1px solid #ddd;</code>, unchanged at every breakpoint.</li><li>5. Use exactly two <code>@media</code> blocks, both using <code>min-width</code> (never <code>max-width</code>), and keep the base rule with no media query wrapping it.</li></ul><p>The scaffold's <code>styles.css</code> has the <code>.card</code> padding/border already written; the <code>.cards</code> grid rule and the two <code>@media</code> blocks are marked with <code>/* TODO */</code>.</p>",
+      "inputSpec": "index.html: a .cards container with three .card divs, each holding a short title and one sentence — unchanged by this exercise. styles.css: .card already styled with padding and a border; three TODO comments mark the base .cards grid rule and the two min-width media query blocks.",
+      "outputSpec": "Below 600px: the three cards stack in a single column. From 600px up to 899px: two columns (three cards wrap to a 2-then-1 layout). From 900px up: three equal columns in one row. Resizing the browser window live transitions between these three layouts at exactly 600px and 900px with no layout jump in between.",
+      "constraints": "Mobile-first only: the single-column rule must be the base, unqualified .cards rule with no media query. Use min-width in both media queries — max-width is banned in this exercise. Exactly two @media blocks, at 600px and 900px. No fixed px widths on .cards or .card.",
+      "examplesJson": [
+        {
+          "input": ".cards { grid-template-columns: 1fr; } with no media query, viewed at 375px",
+          "output": "Three cards stacked vertically, each filling the full available width.",
+          "explanation": "The base rule has no media query attached, so it applies at every viewport width by default; at 375px neither the 600px nor the 900px query has started matching yet, so this is the only rule affecting the layout."
+        },
+        {
+          "input": "@media (min-width: 600px) { .cards { grid-template-columns: repeat(2, 1fr); } } viewed at 700px",
+          "output": "Two columns: the first two cards sit side by side, the third card wraps to a second row alone.",
+          "explanation": "700px satisfies min-width: 600px but not min-width: 900px, so only the 600px query's rule is active, overriding the base single-column rule for grid-template-columns specifically (every other .cards or .card property still comes from the base rule)."
+        },
+        {
+          "input": "@media (min-width: 900px) { .cards { grid-template-columns: repeat(3, 1fr); } } viewed at 1024px",
+          "output": "Three equal columns in a single row.",
+          "explanation": "At 1024px both the 600px and 900px queries match, but later rules in the cascade win when specificity is equal, so the 900px block (written after the 600px block) is the one that ends up applied."
+        }
+      ],
+      "hintsJson": [
+        "Write the base .cards rule with no @media wrapper at all — that is what makes this mobile-first: the smallest layout is the default, not an override.",
+        "Each @media block only needs to change the one property that differs at that breakpoint — grid-template-columns — not repeat padding or border, which the base .card rule already covers at every width.",
+        "min-width: 600px means \"apply this when the viewport is at least 600px,\" so it naturally stays active at 900px and above too — that is exactly why the 900px block must come after the 600px block in the file, so it can override it at the wider width.",
+        "Your two blocks: @media (min-width: 600px) { .cards { grid-template-columns: repeat(2, 1fr); } } and @media (min-width: 900px) { .cards { grid-template-columns: repeat(3, 1fr); } }, in that order, after the base .cards rule."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Workshop Topics</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <h1>Upcoming Workshops</h1>\n  <div class=\"cards\">\n    <div class=\"card\">\n      <h2>CSS Grid Basics</h2>\n      <p>A hands-on session building layouts with grid-template-columns.</p>\n    </div>\n    <div class=\"card\">\n      <h2>Accessible Forms</h2>\n      <p>Labels, validation, and screen-reader-friendly error messages.</p>\n    </div>\n    <div class=\"card\">\n      <h2>Responsive Images</h2>\n      <p>max-width, srcset, and picking the right breakpoints.</p>\n    </div>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "* {\n  box-sizing: border-box;\n}\n\nbody {\n  margin: 0;\n  font-family: sans-serif;\n  padding: 1rem;\n}\n\n/* TODO: base mobile-first rule -> .cards { display: grid; grid-template-columns: 1fr; gap: 1rem; } */\n\n.card {\n  padding: 1rem;\n  border: 1px solid #ddd;\n  border-radius: 6px;\n}\n\n/* TODO: @media (min-width: 600px) { .cards { grid-template-columns: repeat(2, 1fr); } } */\n\n/* TODO: @media (min-width: 900px) { .cards { grid-template-columns: repeat(3, 1fr); } } */\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Workshop Topics</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <h1>Upcoming Workshops</h1>\n  <div class=\"cards\">\n    <div class=\"card\">\n      <h2>CSS Grid Basics</h2>\n      <p>A hands-on session building layouts with grid-template-columns.</p>\n    </div>\n    <div class=\"card\">\n      <h2>Accessible Forms</h2>\n      <p>Labels, validation, and screen-reader-friendly error messages.</p>\n    </div>\n    <div class=\"card\">\n      <h2>Responsive Images</h2>\n      <p>max-width, srcset, and picking the right breakpoints.</p>\n    </div>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "* {\n  box-sizing: border-box;\n}\n\nbody {\n  margin: 0;\n  font-family: sans-serif;\n  padding: 1rem;\n}\n\n.cards {\n  display: grid;\n  grid-template-columns: 1fr;\n  gap: 1rem;\n}\n\n.card {\n  padding: 1rem;\n  border: 1px solid #ddd;\n  border-radius: 6px;\n}\n\n@media (min-width: 600px) {\n  .cards {\n    grid-template-columns: repeat(2, 1fr);\n  }\n}\n\n@media (min-width: 900px) {\n  .cards {\n    grid-template-columns: repeat(3, 1fr);\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The base <code>.cards</code> rule carries no media query at all, which is the entire definition of mobile-first: the simplest, single-column layout is the default every browser gets, and each <code>min-width</code> query only adds a more specific override once the viewport is proven wide enough to support it. Because both queries target <code>grid-template-columns</code> on the same selector, and <code>min-width: 600px</code> stays true all the way up past 900px, the two blocks stack rather than replace each other outright &mdash; at 1024px both technically match, and the 900px block wins only because it is written later in the file with equal specificity, which is why block order matters here.</p><p>The most common trap when converting from a desktop-first mindset is reaching for <code>max-width</code> queries instead, which forces you to write the full three-column layout as the default and then subtract columns for smaller screens &mdash; every phone then has to download and immediately override rules meant for a screen it will never be. Picking round numbers like 600px and 900px here is a stand-in for the real rule: choose a breakpoint at the exact width where your own content starts to look cramped, not at a specific phone or tablet's screen size, since device dimensions change every year and your breakpoints should not have to chase them.</p>",
+      "diagramMermaid": "flowchart TD\n  base[Base rule no media query, one column]\n  bp1[min-width 600px, two columns]\n  bp2[min-width 900px, three columns]\n  base --> bp1\n  bp1 --> bp2"
+    },
+    {
+      "title": "Build a Navigation Bar That Stacks on Mobile and Rows on Desktop",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 55,
+      "points": 20,
+      "concepts": [
+        "flexbox flex-direction as a responsive layout switch",
+        "nav ul styled as a link bar",
+        "mobile-first base nav styles vs a min-width enhancement",
+        "justify-content and align-items at the row breakpoint",
+        "avoiding fixed widths on nav links so they wrap correctly"
+      ],
+      "prerequisites": [
+        "mobile-first strategy and min-width media queries",
+        "flexbox basics (display: flex, flex-direction)",
+        "relative units"
+      ],
+      "tags": [
+        "css",
+        "navigation",
+        "flexbox",
+        "media-queries",
+        "mobile-first",
+        "responsive"
+      ],
+      "problemHtml": "<p>A site's navigation is the one component present on every single page, so getting its responsive behavior wrong is the most visible way to break a layout. On a narrow phone screen, a row of five links either wraps unpredictably mid-word or forces horizontal scrolling; stacking the links into a full-width vertical list instead gives each one a large, easy tap target. On a desktop screen, the same vertical stack would waste enormous amounts of vertical space above the fold, so the links should lay out in a single horizontal row instead. Flexbox makes this a single-property switch: <code>flex-direction: column</code> for the stacked mobile version, <code>flex-direction: row</code> for the desktop version, changed by exactly one <code>min-width</code> media query.</p><p>You are given a nav with five links and no responsive layout at all. Build it mobile-first, no JavaScript.</p><ul><li>1. As the base rule (no media query), style <code>nav ul</code> as <code>display: flex; flex-direction: column; list-style: none; margin: 0; padding: 1rem; gap: 0.75rem;</code>.</li><li>2. As the base rule, style <code>nav a</code> as <code>display: block; text-decoration: none; padding: 0.5rem 0;</code> so each stacked link is a large full-width tap target.</li><li>3. Add a <code>@media (min-width: 700px)</code> block that changes <code>nav ul</code> to <code>flex-direction: row; justify-content: space-between; align-items: center; padding: 1rem 1.5rem;</code>.</li><li>4. In the same <code>@media (min-width: 700px)</code> block, change <code>nav a</code>'s padding to <code>0.5rem 1rem;</code> so links have breathing room in the row layout instead of touching edge to edge.</li><li>5. Do not give any link a fixed pixel width, and do not add a hamburger button, a toggle checkbox, or any JavaScript &mdash; the layout switch must come entirely from the one media query.</li></ul><p>The scaffold's <code>index.html</code> already has the five-link <code>&lt;nav&gt;&lt;ul&gt;</code> markup; <code>styles.css</code> marks the base rules and the media query block with <code>/* TODO */</code>.</p>",
+      "inputSpec": "index.html: a nav element containing a ul of five li/a links (Home, Shop, About, Blog, Contact) — unchanged by this exercise. styles.css: nav ul and nav a selectors with TODO comments describing the base mobile styles, plus a TODO for the single min-width: 700px media query block.",
+      "outputSpec": "Below 700px: the five links stack in a full-width vertical column, each a large block-level tap target with visible vertical spacing between them. From 700px up: the links lay out in a single horizontal row, evenly spaced from edge to edge of the nav bar, vertically centered.",
+      "constraints": "Exactly one media query, at min-width: 700px — no max-width queries, no second breakpoint. No JavaScript, no checkbox/hamburger toggle of any kind; the row-vs-column switch must come purely from flex-direction inside the media query. No fixed px width on nav, ul, li, or a.",
+      "examplesJson": [
+        {
+          "input": "nav ul { display: flex; flex-direction: column; gap: 0.75rem; } viewed at 375px",
+          "output": "Five links stacked vertically, each on its own full-width row, with 0.75rem of vertical space between them.",
+          "explanation": "flex-direction: column stacks flex items top to bottom instead of left to right; gap adds consistent spacing between them without needing margin on every individual li, and without a margin-collapsing edge case on the first or last item."
+        },
+        {
+          "input": "@media (min-width: 700px) { nav ul { flex-direction: row; justify-content: space-between; } } viewed at 1024px",
+          "output": "Five links in a single horizontal row, with the first link flush to the nav's left edge, the last flush to the right edge, and even gaps between the ones in between.",
+          "explanation": "flex-direction: row switches the same flex container to a horizontal layout with no change to the HTML; justify-content: space-between distributes the leftover horizontal space evenly between the links rather than bunching them all to one side."
+        },
+        {
+          "input": "viewed at exactly 699px vs exactly 700px",
+          "output": "699px: five stacked links (column). 700px: five links in a row.",
+          "explanation": "min-width: 700px matches when the viewport is 700px or wider, so the switch happens at exactly that boundary — one pixel below it, the base column rule is still the only one in effect."
+        }
+      ],
+      "hintsJson": [
+        "The base rules (no media query) should describe the mobile stacked version — that is what makes this mobile-first, exactly like the card grid exercise.",
+        "flex-direction is the one property doing the heavy lifting: column stacks items vertically, row lays them out horizontally, with no other markup change required.",
+        "justify-content: space-between only does something useful once the items are in a row — it distributes leftover horizontal space between them, which is meaningless while they are still stacked in a column.",
+        "Your media query: @media (min-width: 700px) { nav ul { flex-direction: row; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; } nav a { padding: 0.5rem 1rem; } }."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Riverside Books</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <nav>\n    <ul>\n      <li><a href=\"/\">Home</a></li>\n      <li><a href=\"/shop\">Shop</a></li>\n      <li><a href=\"/about\">About</a></li>\n      <li><a href=\"/blog\">Blog</a></li>\n      <li><a href=\"/contact\">Contact</a></li>\n    </ul>\n  </nav>\n  <main>\n    <h1>Riverside Books</h1>\n    <p>An independent bookstore open seven days a week.</p>\n  </main>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "* {\n  box-sizing: border-box;\n}\n\nbody {\n  margin: 0;\n  font-family: sans-serif;\n}\n\nnav {\n  background: #1b1b1b;\n}\n\n/* TODO: base mobile nav ul -> display: flex; flex-direction: column; list-style: none; margin: 0; padding: 1rem; gap: 0.75rem; */\n\n/* TODO: base mobile nav a -> display: block; text-decoration: none; color: #fff; padding: 0.5rem 0; */\n\nmain {\n  padding: 1.5rem;\n}\n\n/* TODO: @media (min-width: 700px) block switching nav ul to a row (flex-direction: row; justify-content: space-between; align-items: center; padding: 1rem 1.5rem;) and giving nav a horizontal padding (0.5rem 1rem) */\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Riverside Books</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <nav>\n    <ul>\n      <li><a href=\"/\">Home</a></li>\n      <li><a href=\"/shop\">Shop</a></li>\n      <li><a href=\"/about\">About</a></li>\n      <li><a href=\"/blog\">Blog</a></li>\n      <li><a href=\"/contact\">Contact</a></li>\n    </ul>\n  </nav>\n  <main>\n    <h1>Riverside Books</h1>\n    <p>An independent bookstore open seven days a week.</p>\n  </main>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "* {\n  box-sizing: border-box;\n}\n\nbody {\n  margin: 0;\n  font-family: sans-serif;\n}\n\nnav {\n  background: #1b1b1b;\n}\n\nnav ul {\n  display: flex;\n  flex-direction: column;\n  list-style: none;\n  margin: 0;\n  padding: 1rem;\n  gap: 0.75rem;\n}\n\nnav a {\n  display: block;\n  text-decoration: none;\n  color: #fff;\n  padding: 0.5rem 0;\n}\n\nmain {\n  padding: 1.5rem;\n}\n\n@media (min-width: 700px) {\n  nav ul {\n    flex-direction: row;\n    justify-content: space-between;\n    align-items: center;\n    padding: 1rem 1.5rem;\n  }\n\n  nav a {\n    padding: 0.5rem 1rem;\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The base <code>nav ul</code> rule is written for the mobile case with no media query, so a phone gets a full-width vertical stack of large, easy-to-tap links by default. The desktop enhancement is a single property change &mdash; <code>flex-direction: row</code> &mdash; inside one <code>min-width: 700px</code> query, which is the whole reason flexbox is the right tool here: the same <code>display: flex</code> container reflows its children from top-to-bottom to left-to-right with no change to the markup and no JavaScript measuring anything. <code>justify-content: space-between</code> only becomes meaningful once the items are in a row; while they are stacked in a column it has no visible effect, which is why it lives inside the media query rather than the base rule.</p><p>The common trap is reaching for a hamburger-menu checkbox toggle by habit, even when the whole nav is only five short links that comfortably fit as a vertical list without ever needing to be hidden. A hamburger pattern adds real complexity &mdash; a checkbox or button, an aria-expanded state, and extra CSS to show and hide the menu &mdash; that this nav simply does not need; reaching for it here would be solving a problem the five-link case does not have. The other trap is giving <code>nav a</code> a fixed pixel width to \"align\" the links: that removes the flexibility that makes different link-text lengths (\"Home\" vs. \"Contact\") lay out cleanly in both the stacked and row versions.</p>"
+    },
+    {
+      "title": "Capstone: Build a Fully Responsive Landing Page Hero Section",
+      "difficulty": "HARD",
+      "estimatedMinutes": 75,
+      "points": 25,
+      "concepts": [
+        "combining the viewport meta tag, relative units, fluid images, and mobile-first media queries in one page",
+        "a mobile-first responsive navigation bar",
+        "a hero section that stacks on mobile and becomes a two-column grid on desktop",
+        "a features card grid with its own breakpoint",
+        "layering multiple min-width breakpoints on different components without conflicts"
+      ],
+      "prerequisites": [
+        "relative units and fluid images with max-width",
+        "mobile-first media queries and breakpoints",
+        "a responsive navigation bar"
+      ],
+      "tags": [
+        "css",
+        "responsive",
+        "capstone",
+        "mobile-first",
+        "media-queries",
+        "landing-page"
+      ],
+      "problemHtml": "<p>A real landing page never applies just one responsive technique in isolation &mdash; the nav stacks and unstacks, the hero image stays fluid while its text column reflows from stacked to side-by-side, and a features grid changes its column count independently, all driven by the same handful of <code>min-width</code> breakpoints working together without stepping on each other. This capstone combines every technique from the module into a single page: a hero section with a heading, copy, and an image, plus a three-item features grid below it, fronted by the same stacking nav pattern you already built.</p><p>You are given a complete but entirely unstyled-for-responsiveness page. Build it mobile-first end to end.</p><ul><li>1. Keep the given <code>&lt;meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"&gt;</code> in <code>&lt;head&gt;</code> &mdash; do not remove or alter it.</li><li>2. Base styles: <code>* { box-sizing: border-box; }</code>, <code>body { margin: 0; }</code>, and <code>html { font-size: 100%; }</code>.</li><li>3. Nav, mobile-first: base <code>nav ul</code> is a <code>flex</code> column (<code>list-style: none; margin: 0; padding: 1rem; gap: 0.75rem;</code>); at <code>@media (min-width: 700px)</code> it becomes <code>flex-direction: row; justify-content: space-between; align-items: center;</code>.</li><li>4. Hero, mobile-first: <code>.hero</code> is <code>display: grid; grid-template-columns: 1fr; gap: 1.5rem; padding: 1.5rem;</code> (text above image, stacked). At <code>@media (min-width: 900px)</code>, <code>.hero</code> becomes <code>grid-template-columns: 1fr 1fr; align-items: center;</code> (side by side).</li><li>5. The hero image: <code>max-width: 100%; height: auto; display: block;</code> at every width, never a fixed pixel size.</li><li>6. Hero heading and copy use <code>rem</code> only: <code>.hero h1</code> is <code>2rem</code>, <code>.hero p</code> is <code>1rem</code>. Never <code>px</code>, never <code>vw</code>, on either.</li><li>7. Features grid, mobile-first: base <code>.features</code> is <code>display: grid; grid-template-columns: 1fr; gap: 1rem;</code> (one column). At <code>@media (min-width: 600px)</code>, it becomes <code>grid-template-columns: repeat(3, 1fr);</code> (three columns) &mdash; this breakpoint is intentionally lower than the hero's, since three short feature cards fit at 600px even though the two-column hero text/image split needs the full 900px.</li><li>8. Every container that needs a width cap (<code>.hero</code>, <code>.features</code>) uses <code>width: 100%; max-width: 60rem; margin: 0 auto;</code>, never a bare fixed px width.</li><li>9. Use only <code>min-width</code> queries; never <code>max-width</code>. Use exactly three <code>@media</code> blocks total across the whole file: the nav's 700px, the hero's 900px, and the features' 600px.</li></ul><p>The scaffold has the full markup already in place (nav, hero with heading/copy/image, and a three-item features grid) with every responsive rule in <code>styles.css</code> marked <code>/* TODO */</code>.</p>",
+      "inputSpec": "index.html: a complete page — nav with 4 links, a .hero section with an h1, a p, and an img, and a .features div with 3 .feature-card children — the viewport meta tag already present and correct. styles.css: base reset rules plus nav, .hero, .hero img, .hero h1/p, and .features rules, each marked with a TODO describing its mobile-first base value and, where relevant, its media query enhancement.",
+      "outputSpec": "Below 600px: nav stacked in a column, hero text stacked above a fluid full-width image, features in one column. From 600px to 899px: nav still stacked (700px not yet reached), hero still stacked (900px not yet reached), but features now show 3 columns. From 700px to 899px: nav becomes a horizontal row while the hero is still stacked. From 900px up: nav is a row, hero is a 2-column side-by-side grid with the image never exceeding its column's width, and features remain 3 columns.",
+      "constraints": "Exactly three @media blocks in the whole file, all min-width: 600px, 700px, and 900px. No max-width queries anywhere. No fixed px width on .hero, .features, or the hero image. Hero and body typography in rem only — no px, no vw. The viewport meta tag must remain exactly as given. No JavaScript.",
+      "examplesJson": [
+        {
+          "input": "viewport at 650px wide (above the features' 600px breakpoint but below the nav's 700px and the hero's 900px)",
+          "output": "Nav still stacked in a column, hero still stacked (text above image), but the features grid already shows 3 columns.",
+          "explanation": "Each component's media query is independent — 650px satisfies min-width: 600px but not min-width: 700px or min-width: 900px, so only the features rule has switched over while nav and hero are still on their base mobile styles. This is exactly why the breakpoints were chosen per-component instead of one single global breakpoint for the whole page."
+        },
+        {
+          "input": "viewport at 900px wide",
+          "output": "Nav is a horizontal row, the hero is a two-column grid with the heading and paragraph in the left column and the image filling the right column at its own natural aspect ratio, and features remain 3 columns.",
+          "explanation": "900px satisfies all three min-width queries at once (600px, 700px, and 900px), so every enhancement is active simultaneously — this is the full desktop layout the mobile-first base styles were building up to."
+        },
+        {
+          "input": ".hero img with a 1200x800 source, hero right column measuring 420px wide at 1024px viewport width",
+          "output": "The image renders at 420px wide by 280px tall, filling its grid column exactly while preserving its 3:2 aspect ratio.",
+          "explanation": "max-width: 100% caps the image at its grid column's width (not the whole viewport), and height: auto derives the height from the original 1200x800 ratio, so the same fluid-image pattern from the gallery exercise still applies correctly inside a grid column instead of a plain block container."
+        }
+      ],
+      "hintsJson": [
+        "Build outward from what you already have: the nav pattern is identical to the standalone nav exercise, and the image rule is identical to the gallery exercise — reuse both without changing them.",
+        "The hero's mobile-first base is a single-column grid with the heading and paragraph naturally stacking above the image in source order; the min-width: 900px query only needs to change grid-template-columns to 1fr 1fr plus align-items: center.",
+        "Each component keeps its own breakpoint instead of sharing one — the features grid switching to 3 columns at 600px while the nav is still stacked and the hero is still stacked is correct, not a bug, because three narrow feature cards fit long before a two-column hero split does.",
+        "Count your @media blocks before finishing: exactly three in the whole file (600px for .features, 700px for nav ul, 900px for .hero), all min-width, none nested inside each other."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Nimbus Weather App</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <nav>\n    <ul>\n      <li><a href=\"/\">Home</a></li>\n      <li><a href=\"/features\">Features</a></li>\n      <li><a href=\"/pricing\">Pricing</a></li>\n      <li><a href=\"/download\">Download</a></li>\n    </ul>\n  </nav>\n\n  <section class=\"hero\">\n    <div class=\"hero-text\">\n      <h1>Weather forecasts you can actually trust</h1>\n      <p>Nimbus combines three independent forecast models into one accurate, minute-by-minute prediction for your exact location.</p>\n    </div>\n    <img src=\"app-screenshot.png\" alt=\"A screenshot of the Nimbus app showing an hourly rain forecast for the next six hours.\">\n  </section>\n\n  <div class=\"features\">\n    <div class=\"feature-card\">\n      <h2>Minute-by-minute rain</h2>\n      <p>Know exactly when a shower starts and stops near you.</p>\n    </div>\n    <div class=\"feature-card\">\n      <h2>Severe weather alerts</h2>\n      <p>Push notifications before storms reach your area.</p>\n    </div>\n    <div class=\"feature-card\">\n      <h2>7-day outlook</h2>\n      <p>Plan ahead with a detailed week-long forecast.</p>\n    </div>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* TODO: * { box-sizing: border-box; } */\n\n/* TODO: body { margin: 0; font-family: sans-serif; } */\n\n/* TODO: html { font-size: 100%; } */\n\nnav {\n  background: #0b3d91;\n}\n\n/* TODO: base mobile nav ul -> display: flex; flex-direction: column; list-style: none; margin: 0; padding: 1rem; gap: 0.75rem; */\n\nnav a {\n  color: #fff;\n  text-decoration: none;\n  display: block;\n  padding: 0.5rem 0;\n}\n\n/* TODO: @media (min-width: 700px) { nav ul { flex-direction: row; justify-content: space-between; align-items: center; } } */\n\n/* TODO: .hero base -> width: 100%; max-width: 60rem; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 1.5rem; padding: 1.5rem; */\n\n/* TODO: .hero h1 -> font-size: 2rem; margin: 0 0 0.75rem; */\n\n/* TODO: .hero p -> font-size: 1rem; color: #444; */\n\n/* TODO: .hero img -> max-width: 100%; height: auto; display: block; */\n\n/* TODO: @media (min-width: 900px) { .hero { grid-template-columns: 1fr 1fr; align-items: center; } } */\n\n/* TODO: .features base -> width: 100%; max-width: 60rem; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 1rem; padding: 0 1.5rem 1.5rem; */\n\n.feature-card {\n  padding: 1rem;\n  border: 1px solid #ddd;\n  border-radius: 6px;\n}\n\n/* TODO: @media (min-width: 600px) { .features { grid-template-columns: repeat(3, 1fr); } } */\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Nimbus Weather App</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <nav>\n    <ul>\n      <li><a href=\"/\">Home</a></li>\n      <li><a href=\"/features\">Features</a></li>\n      <li><a href=\"/pricing\">Pricing</a></li>\n      <li><a href=\"/download\">Download</a></li>\n    </ul>\n  </nav>\n\n  <section class=\"hero\">\n    <div class=\"hero-text\">\n      <h1>Weather forecasts you can actually trust</h1>\n      <p>Nimbus combines three independent forecast models into one accurate, minute-by-minute prediction for your exact location.</p>\n    </div>\n    <img src=\"app-screenshot.png\" alt=\"A screenshot of the Nimbus app showing an hourly rain forecast for the next six hours.\">\n  </section>\n\n  <div class=\"features\">\n    <div class=\"feature-card\">\n      <h2>Minute-by-minute rain</h2>\n      <p>Know exactly when a shower starts and stops near you.</p>\n    </div>\n    <div class=\"feature-card\">\n      <h2>Severe weather alerts</h2>\n      <p>Push notifications before storms reach your area.</p>\n    </div>\n    <div class=\"feature-card\">\n      <h2>7-day outlook</h2>\n      <p>Plan ahead with a detailed week-long forecast.</p>\n    </div>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "* {\n  box-sizing: border-box;\n}\n\nbody {\n  margin: 0;\n  font-family: sans-serif;\n}\n\nhtml {\n  font-size: 100%;\n}\n\nnav {\n  background: #0b3d91;\n}\n\nnav ul {\n  display: flex;\n  flex-direction: column;\n  list-style: none;\n  margin: 0;\n  padding: 1rem;\n  gap: 0.75rem;\n}\n\nnav a {\n  color: #fff;\n  text-decoration: none;\n  display: block;\n  padding: 0.5rem 0;\n}\n\n@media (min-width: 700px) {\n  nav ul {\n    flex-direction: row;\n    justify-content: space-between;\n    align-items: center;\n  }\n}\n\n.hero {\n  width: 100%;\n  max-width: 60rem;\n  margin: 0 auto;\n  display: grid;\n  grid-template-columns: 1fr;\n  gap: 1.5rem;\n  padding: 1.5rem;\n}\n\n.hero h1 {\n  font-size: 2rem;\n  margin: 0 0 0.75rem;\n}\n\n.hero p {\n  font-size: 1rem;\n  color: #444;\n}\n\n.hero img {\n  max-width: 100%;\n  height: auto;\n  display: block;\n}\n\n@media (min-width: 900px) {\n  .hero {\n    grid-template-columns: 1fr 1fr;\n    align-items: center;\n  }\n}\n\n.features {\n  width: 100%;\n  max-width: 60rem;\n  margin: 0 auto;\n  display: grid;\n  grid-template-columns: 1fr;\n  gap: 1rem;\n  padding: 0 1.5rem 1.5rem;\n}\n\n.feature-card {\n  padding: 1rem;\n  border: 1px solid #ddd;\n  border-radius: 6px;\n}\n\n@media (min-width: 600px) {\n  .features {\n    grid-template-columns: repeat(3, 1fr);\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every technique in the module shows up here doing the same job it did in isolation, now layered on one page: the viewport meta tag makes the phone lay out at its real width in the first place; the box-sizing reset keeps every padded container's width predictable; rem keeps the hero typography tied to the root font-size instead of a fixed pixel count; max-width: 100%/height: auto keeps the hero image fluid inside whichever grid column it lands in; and three independent min-width queries &mdash; 600px for the features grid, 700px for the nav, 900px for the hero &mdash; each flip exactly one component from its mobile-first base to its enhanced layout. Because the breakpoints are chosen per component instead of shared, the page passes through several real in-between states, such as a 650px viewport showing a 3-column feature grid while the nav is still stacked and the hero is still one column &mdash; each rule change is driven only by whether its own component genuinely has room, not by a single arbitrary global breakpoint.</p><p>The trap this capstone is built to catch is a desktop-first instinct creeping back in once a page gets more complex: writing the 2-column hero grid as the base rule and trying to unstack it with a max-width query, which forces every phone to download and override rules meant for a wide screen it will never render. The other common trap is picking one breakpoint and reusing it everywhere out of convenience &mdash; here the nav reasonably switches earlier (700px) than the hero (900px) because a row of four short links fits at a narrower width than a legible two-column heading-and-image split does; treating breakpoints as global constants instead of per-component decisions is what produces the cramped or prematurely-split layouts real responsive sites are built to avoid.</p>",
+      "diagramMermaid": "flowchart TD\n  base[Mobile base, nav column, hero one column, features one column]\n  f600[600px, features become three columns]\n  n700[700px, nav becomes a row]\n  h900[900px, hero becomes two columns]\n  base --> f600\n  f600 --> n700\n  n700 --> h900"
+    }
+  ]
+}

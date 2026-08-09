@@ -1,0 +1,455 @@
+{
+  "trackSlug": "html-css",
+  "moduleSlug": "css-fundamentals",
+  "exercises": [
+    {
+      "title": "Style a Bio Page Using Element, Class, and ID Selectors",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "type (element) selectors",
+        "class selectors",
+        "id selectors",
+        "the color and font-family properties",
+        "linking an external stylesheet"
+      ],
+      "prerequisites": [
+        "basic HTML document structure",
+        "CSS rule syntax (selector, property, value)"
+      ],
+      "tags": [
+        "css",
+        "selectors",
+        "beginner",
+        "colors",
+        "typography"
+      ],
+      "problemHtml": "<p>Every real stylesheet starts with the same decision: which selector reaches which element. A <code>&lt;h1&gt;</code> tag selector touches every heading of that level on the page, a class like <code>.highlight</code> can be reused on any number of unrelated elements, and an id like <code>#tagline</code> is a promise that only one element on the page will ever carry it. Mixing these up is one of the most common beginner mistakes: writing a class selector to do an id selector's job invites duplicate ids later, and reaching for an id when a reusable class was the right tool creates a stylesheet full of one-off rules that cannot be reused anywhere else on the site.</p><p>You are given a short bio page with a heading, three paragraphs (two sharing a class, one carrying a unique id), and an empty stylesheet with TODO markers for each selector type. Complete the CSS so it satisfies exactly these requirements.</p><ul><li>1. Every <code>&lt;h1&gt;</code> element is styled with a type selector: color <code>#1a1a1a</code> and <code>font-family: Georgia, serif</code>.</li><li>2. Every <code>&lt;p&gt;</code> element is styled with a type selector: color <code>#333333</code>, <code>font-family: Arial, sans-serif</code>, and <code>line-height: 1.5</code>.</li><li>3. Both paragraphs carrying <code>class=\"highlight\"</code> get <code>background-color: #fff3cd</code> and <code>font-weight: bold</code> from a single shared class selector, not two separate rules.</li><li>4. Only the paragraph carrying <code>id=\"tagline\"</code> gets <code>font-style: italic</code> and <code>color: #0066cc</code>, from a single id selector.</li><li>5. No inline <code>style</code> attribute may be added to the HTML.</li></ul><p>The HTML file is complete and must not be edited; only <code>styles.css</code> has TODO comments for you to fill in, one per selector type.</p>",
+      "inputSpec": "A complete index.html with an <h1>, a plain <p>, two <p class=\"highlight\"> paragraphs, and one <p id=\"tagline\"> paragraph, linked to an empty styles.css that has four TODO comments, one per selector.",
+      "outputSpec": "styles.css defines exactly four rules — a type selector for h1, a type selector for p, a class selector for .highlight, and an id selector for #tagline — producing the colors, fonts, weights, and background described in the requirements, with no inline styles anywhere.",
+      "constraints": "Do not edit index.html. Do not add inline style attributes. Do not write two separate rules for the two .highlight paragraphs — one class selector must cover both. Do not use an id selector for anything except #tagline. Do not use !important.",
+      "examplesJson": [
+        {
+          "input": "class=\"highlight\" applied to two unrelated paragraphs",
+          "output": "Both paragraphs render with a pale yellow background (#fff3cd) and bold text, from one .highlight rule.",
+          "explanation": "A class selector matches every element carrying that class, however many there are on the page, so one rule is enough — writing it twice would be redundant."
+        },
+        {
+          "input": "id=\"tagline\" used on a single paragraph",
+          "output": "Only that one paragraph renders italic in blue (#0066cc); the other paragraphs keep the default p color and are not italic.",
+          "explanation": "Ids are meant to be unique per page — reusing the same id on two elements is invalid HTML — so an id selector always targets at most one real match."
+        },
+        {
+          "input": "the h1 type selector",
+          "output": "The single <h1> renders in Georgia serif at #1a1a1a; no <p> is affected by this rule since it only matches h1 elements.",
+          "explanation": "A type selector matches every element of that tag name and nothing else, which is why it is the right tool for a page-wide default like heading color."
+        }
+      ],
+      "hintsJson": [
+        "Start with the two type selectors — h1 and p — since they set the baseline every other rule builds on top of.",
+        "A class selector starts with a dot and can match many elements at once; write .highlight { } exactly once, not once per element.",
+        "An id selector starts with a hash and should only ever match the single element that carries that id; write #tagline { } for the italic blue line.",
+        "Check your final file has exactly four rules: h1, p, .highlight, #tagline — no more, no fewer, and no inline style attributes in the HTML."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bio Page</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <h1>Mai Tran</h1>\n  <p>Frontend developer based in Da Nang.</p>\n  <p class=\"highlight\">Available for freelance work.</p>\n  <p id=\"tagline\">Building fast, accessible websites.</p>\n  <p class=\"highlight\">Loves hiking and photography.</p>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* TODO: style every h1 element (type selector): color #1a1a1a, font-family Georgia, serif */\n\n/* TODO: style every p element (type selector): color #333333, font-family Arial, sans-serif, line-height 1.5 */\n\n/* TODO: style every element with class \"highlight\" (class selector, ONE rule for both paragraphs): background-color #fff3cd, font-weight bold */\n\n/* TODO: style the element with id \"tagline\" (id selector): font-style italic, color #0066cc */\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bio Page</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <h1>Mai Tran</h1>\n  <p>Frontend developer based in Da Nang.</p>\n  <p class=\"highlight\">Available for freelance work.</p>\n  <p id=\"tagline\">Building fast, accessible websites.</p>\n  <p class=\"highlight\">Loves hiking and photography.</p>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "h1 {\n  color: #1a1a1a;\n  font-family: Georgia, serif;\n}\n\np {\n  color: #333333;\n  font-family: Arial, sans-serif;\n  line-height: 1.5;\n}\n\n.highlight {\n  background-color: #fff3cd;\n  font-weight: bold;\n}\n\n#tagline {\n  font-style: italic;\n  color: #0066cc;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The two type selectors, <code>h1</code> and <code>p</code>, set the baseline every paragraph and heading inherits before anything more specific is applied. The class selector <code>.highlight</code> then layers a background and bold weight on top of that baseline for both paragraphs that carry the class, without touching their color or font — which is why they still read in the same dark gray as every other paragraph. The id selector <code>#tagline</code> does the same layering for exactly one element.</p><p>The common trap here is reaching for two separate rules to style the two <code>.highlight</code> paragraphs, usually by accident when a learner treats CSS like inline styling applied one element at a time. A single class selector already matches every element with that class on the page, so writing it twice is redundant and, if the two copies ever drift apart, becomes a real bug. The same discipline applies to <code>#tagline</code>: because ids are meant to be unique, there is never a reason to write an id selector more than once per id.</p>"
+    },
+    {
+      "title": "Style a Navigation Menu with Descendant Selectors and Hover States",
+      "difficulty": "EASY",
+      "estimatedMinutes": 20,
+      "points": 10,
+      "concepts": [
+        "descendant combinator",
+        "the :hover pseudo-class",
+        "scoping selectors to avoid unwanted matches",
+        "list-style and display: inline-block",
+        "text-decoration"
+      ],
+      "prerequisites": [
+        "element, class, and id selectors",
+        "basic CSS rule syntax"
+      ],
+      "tags": [
+        "css",
+        "selectors",
+        "descendant-selector",
+        "hover",
+        "navigation"
+      ],
+      "problemHtml": "<p>Navigation links almost never live alone on a page — they sit inside a <code>&lt;nav&gt;</code> next to a footer link, a sidebar link, or article links that must look completely different. A bare <code>a { }</code> type selector cannot tell those apart; it repaints every link on the page the same way, which is exactly why real stylesheets scope link styles with a descendant selector like <code>.main-nav a</code> instead. The same scoping problem applies to removing bullet markers: <code>ul { list-style: none; }</code> would strip bullets from every list on the page, including ones that were never meant to look like a menu.</p><p>You are given a page with a <code>&lt;nav class=\"main-nav\"&gt;</code> containing a three-item link list, and a separate <code>&lt;footer&gt;</code> with its own unrelated link. Style only the navigation menu.</p><ul><li>1. Remove the bullet markers and default spacing from the list inside the nav using the descendant selector <code>.main-nav ul</code>, setting <code>list-style: none</code>, <code>margin: 0</code>, and <code>padding: 0</code>.</li><li>2. Make the list items inside the nav sit in a horizontal row using <code>.main-nav li</code> with <code>display: inline-block</code> and <code>margin-right: 4px</code>.</li><li>3. Style every link inside the nav using the descendant selector <code>.main-nav a</code>: <code>text-decoration: none</code>, <code>color: #222222</code>, <code>display: inline-block</code>, and <code>padding: 8px 12px</code>.</li><li>4. Add a hover state using <code>.main-nav a:hover</code> that switches to <code>text-decoration: underline</code> and <code>color: #0066cc</code>.</li><li>5. The footer's link must keep the browser's default blue, underlined appearance — do not write a bare <code>a</code> selector anywhere in the file, since that would repaint the footer link too.</li></ul><p>The scaffold's HTML is complete; <code>styles.css</code> has one TODO comment per rule described above.</p>",
+      "inputSpec": "A complete index.html with <nav class=\"main-nav\"> wrapping a <ul> of 3 links, and a separate <footer> with one unrelated <a>. styles.css is empty except for TODO comments marking the four rules to write.",
+      "outputSpec": "styles.css contains four rules, all scoped under .main-nav (.main-nav ul, .main-nav li, .main-nav a, .main-nav a:hover), producing a horizontal, unbulleted menu whose links underline and turn blue on hover, while the footer link keeps its default browser styling untouched.",
+      "constraints": "Do not write a bare a, ul, or li type selector anywhere — every rule must be scoped with the .main-nav descendant selector. No JavaScript. No inline style attributes. Do not add, remove, or reorder any HTML elements.",
+      "examplesJson": [
+        {
+          "input": ".main-nav a:hover applied while pointing at one of the three menu links",
+          "output": "That link underlines and turns #0066cc; the other two nav links and the footer link are unaffected.",
+          "explanation": "A descendant selector combined with :hover only matches an anchor nested inside .main-nav while the cursor is directly over it."
+        },
+        {
+          "input": "a bare a { color: red; } rule added anywhere in the file",
+          "output": "The footer's Privacy Policy link would also turn red, which the requirements forbid.",
+          "explanation": "A type selector with no scoping class matches every anchor on the page, including ones outside the intended component."
+        },
+        {
+          "input": ".main-nav ul { list-style: none; }",
+          "output": "Only the <ul> inside .main-nav loses its bullets; any other list elsewhere on the site keeps its default markers.",
+          "explanation": "Scoping the selector to .main-nav is what prevents the rule from leaking to unrelated lists on the same page."
+        }
+      ],
+      "hintsJson": [
+        "A descendant selector is just two selectors separated by a space — .main-nav a means any a anywhere inside an element with class main-nav, however deeply nested.",
+        "Scope every rule the same way: .main-nav ul, .main-nav li, .main-nav a — never write the bare tag alone, or the footer link inherits it too.",
+        ":hover is a pseudo-class attached directly to a selector with no space: .main-nav a:hover, not .main-nav a :hover.",
+        "Finish with: .main-nav ul { list-style: none; margin: 0; padding: 0; } .main-nav li { display: inline-block; margin-right: 4px; } .main-nav a { text-decoration: none; color: #222222; padding: 8px 12px; display: inline-block; } .main-nav a:hover { text-decoration: underline; color: #0066cc; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Site Navigation</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <nav class=\"main-nav\">\n    <ul>\n      <li><a href=\"/\">Home</a></li>\n      <li><a href=\"/shop\">Shop</a></li>\n      <li><a href=\"/contact\">Contact</a></li>\n    </ul>\n  </nav>\n  <footer>\n    <a href=\"/privacy\">Privacy Policy</a>\n  </footer>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* TODO: .main-nav ul - remove bullets and default spacing: list-style none, margin 0, padding 0 */\n\n/* TODO: .main-nav li - lay items out horizontally: display inline-block, margin-right 4px */\n\n/* TODO: .main-nav a - text-decoration none, color #222222, display inline-block, padding 8px 12px */\n\n/* TODO: .main-nav a:hover - text-decoration underline, color #0066cc */\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Site Navigation</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <nav class=\"main-nav\">\n    <ul>\n      <li><a href=\"/\">Home</a></li>\n      <li><a href=\"/shop\">Shop</a></li>\n      <li><a href=\"/contact\">Contact</a></li>\n    </ul>\n  </nav>\n  <footer>\n    <a href=\"/privacy\">Privacy Policy</a>\n  </footer>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": ".main-nav ul {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\n\n.main-nav li {\n  display: inline-block;\n  margin-right: 4px;\n}\n\n.main-nav a {\n  text-decoration: none;\n  color: #222222;\n  display: inline-block;\n  padding: 8px 12px;\n}\n\n.main-nav a:hover {\n  text-decoration: underline;\n  color: #0066cc;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every rule is scoped with the descendant selector <code>.main-nav ...</code> so it can only ever match elements nested inside the nav, which is what keeps the footer's link completely untouched even though both are <code>&lt;a&gt;</code> tags. <code>.main-nav li { display: inline-block; }</code> is what turns three stacked list items into a horizontal row, and <code>.main-nav a { display: inline-block; }</code> is what lets <code>padding</code> actually add clickable space around each link instead of being partially ignored the way it would be on a plain inline element.</p><p>The common trap is writing a bare <code>a { }</code> or <code>ul { }</code> rule out of habit, which silently repaints every link and list on the page — invisible here with only one footer link, but a real bug the moment the page grows a sidebar or article links. <code>:hover</code> must also be attached directly to the selector with no space (<code>.main-nav a:hover</code>), since a space before it would make it a separate, non-matching descendant selector instead of a pseudo-class on the anchor itself.</p>"
+    },
+    {
+      "title": "Resolve a Style Conflict Using the Cascade and Specificity",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 35,
+      "points": 15,
+      "concepts": [
+        "specificity scoring (id, class, type)",
+        "the cascade and source order",
+        "combining an id selector with a class selector",
+        "why to avoid !important"
+      ],
+      "prerequisites": [
+        "element, class, and id selectors",
+        "descendant selectors"
+      ],
+      "tags": [
+        "css",
+        "cascade",
+        "specificity",
+        "conflicts",
+        "debugging"
+      ],
+      "problemHtml": "<p>When two CSS rules target the same element and set the same property, the browser does not average them or apply both — exactly one wins, decided by a fixed set of rules called the cascade. Source order is the simplest of those rules: the rule written later in the file wins when specificity is tied. Specificity is the more powerful rule: it scores every selector by how many ids, classes, and type selectors it contains, and the higher score wins regardless of source order. Understanding this is what separates a developer who can predict what a stylesheet will render from one who reaches for <code>!important</code> the moment two rules disagree, which only postpones the same problem to the next conflict.</p><p>You are given a stylesheet with three existing rules that already conflict on the <code>color</code> property for one paragraph, plus one plain paragraph with no class or id. Add exactly one new rule that wins the conflict without editing the existing rules and without using <code>!important</code>.</p><ul><li>1. Do not edit or remove the existing <code>p</code>, <code>.message</code>, or <code>#notice</code> rules already present in <code>styles.css</code>.</li><li>2. Do not use <code>!important</code> anywhere in the file.</li><li>3. Do not introduce a second id selector.</li><li>4. Add exactly one new rule, placed after the existing rules, whose selector combines the id <code>notice</code> with the class <code>warning</code> (for example <code>#notice.warning</code>) so it outscores the existing <code>#notice</code> rule.</li><li>5. That new rule sets <code>color: #ffffff</code> and <code>background-color: #b30000</code> on the element with <code>id=\"notice\"</code>.</li><li>6. The plain paragraph with no class or id must still render using only the existing <code>p</code> rule — color <code>#333333</code>, no background — completely unaffected by your new rule.</li></ul><p>The scaffold's HTML and the three existing CSS rules are complete and must not change; only the final TODO rule is yours to write.</p>",
+      "inputSpec": "index.html has two paragraphs: a plain <p> and <p id=\"notice\" class=\"warning message\">. styles.css already contains three complete rules — p, .message, #notice — that conflict on color, plus one TODO comment where your new rule goes.",
+      "outputSpec": "The notice paragraph renders with white text (#ffffff) on a dark red background (#b30000); the plain paragraph is unaffected and still shows the existing p rule's color (#333333) with no background.",
+      "constraints": "Do not edit the three existing rules. No !important anywhere. No second id selector. The new selector must combine #notice with a class to outrank #notice alone. Exactly one new rule, placed after the existing ones.",
+      "examplesJson": [
+        {
+          "input": "only the three existing rules p, .message, #notice are present (no new rule yet)",
+          "output": "The notice paragraph renders green (#006600) from the #notice rule, since an id selector outranks both the type selector p and the class selector .message.",
+          "explanation": "Specificity compares ids first, then classes, then type selectors — one id already beats any number of type or class selectors alone."
+        },
+        {
+          "input": "#notice.warning { color: #ffffff; background-color: #b30000; } added after #notice",
+          "output": "The notice paragraph now renders white text on a dark red background, overriding the plain #notice rule's green.",
+          "explanation": "#notice.warning still counts one id, but also counts one class, so column by column it scores higher than #notice alone, even though both target the same id."
+        },
+        {
+          "input": "two class selectors of equal specificity, .message and .warning, both setting color, with no id involved",
+          "output": "Whichever one is written later in the stylesheet wins, since their specificity scores are tied.",
+          "explanation": "Source order is only the tiebreaker used when specificity is exactly equal — it never overrides a real specificity difference."
+        }
+      ],
+      "hintsJson": [
+        "Specificity is scored as three counts: id selectors, class or pseudo-class selectors, and type selectors — compare them in that order, left to right, before ever guessing.",
+        "#notice alone scores one id and nothing else; to beat it without adding another id, add a class to the same selector so it scores one id and one class.",
+        "#notice.warning has no space between the id and the class, meaning both must be true on the same element — the notice paragraph already carries both, so it matches.",
+        "Write #notice.warning { color: #ffffff; background-color: #b30000; } after the three existing rules; do not touch p, .message, or #notice."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Shipping Notice</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <p>Standard shipping takes 3-5 business days.</p>\n  <p id=\"notice\" class=\"warning message\">This item is low in stock.</p>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "p {\n  color: #333333;\n  font-family: Arial, sans-serif;\n}\n\n.message {\n  color: #cc0000;\n  padding: 12px;\n}\n\n#notice {\n  color: #006600;\n}\n\n/* TODO: add ONE rule below, more specific than #notice alone (combine the id with a class, no second id, no !important), that sets color #ffffff and background-color #b30000 on the notice paragraph */\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Shipping Notice</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <p>Standard shipping takes 3-5 business days.</p>\n  <p id=\"notice\" class=\"warning message\">This item is low in stock.</p>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "p {\n  color: #333333;\n  font-family: Arial, sans-serif;\n}\n\n.message {\n  color: #cc0000;\n  padding: 12px;\n}\n\n#notice {\n  color: #006600;\n}\n\n#notice.warning {\n  color: #ffffff;\n  background-color: #b30000;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Specificity is compared as three separate counts — ids, then classes or pseudo-classes, then type selectors — read left to right like digits, never added together into one score. <code>#notice</code> alone scores one id, which already beats <code>p</code> (one type) and <code>.message</code> (one class) regardless of where those three rules sit in the file. Adding <code>!important</code> would work but is a trap: it does not fix the underlying conflict, it just adds a new, harder-to-override layer that causes worse conflicts later.</p><p>The fix is <code>#notice.warning</code>, which still counts as one id, but now also counts one class, so column by column it outranks <code>#notice</code> alone even though both selectors target the same id. This is the key idea: specificity is not \"ids always win no matter what\" — a more specific selector referencing the same id always beats a less specific one referencing it, with zero source-order ambiguity and zero <code>!important</code>. The plain paragraph never matches any of the class or id rules, so it is untouched by the whole conflict.</p>",
+      "diagramMermaid": "flowchart TD\n  Type[Type selector p scores zero zero one]\n  Class[Class selector dot message scores zero one zero]\n  Id[Id selector hash notice scores one zero zero]\n  Combo[Id plus class hash notice dot warning scores one one zero]\n  Type --> Class\n  Class --> Id\n  Id --> Combo\n  Combo --> Winner[Highest specificity wins the conflict]"
+    },
+    {
+      "title": "Style an Article's Typography with Relative Units and Hex Colors",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 45,
+      "points": 15,
+      "concepts": [
+        "rem versus px font sizing",
+        "font-weight, font-style, and line-height",
+        "letter-spacing and text-transform",
+        "hex color values",
+        "border width as a fixed (non-scaling) unit"
+      ],
+      "prerequisites": [
+        "element and class selectors",
+        "the cascade and specificity basics"
+      ],
+      "tags": [
+        "css",
+        "typography",
+        "units",
+        "rem",
+        "colors"
+      ],
+      "problemHtml": "<p>Font sizes set in fixed pixels ignore a reader's own browser settings entirely — someone who increased their default text size because of low vision gets no benefit from a page built entirely in <code>px</code>, because <code>16px</code> always renders as sixteen actual pixels no matter what. A size set in <code>rem</code> is relative to the root element's font size instead, so it scales automatically with the reader's preferences, which is why real stylesheets use <code>rem</code> for font sizes and reserve <code>px</code> for things that should never scale, like a hairline border.</p><p>You are given a complete article page — a title, a byline, two paragraphs, and a pull quote — and an empty stylesheet with one TODO comment per element group. Style its typography using relative units and hex colors throughout.</p><ul><li>1. <code>body</code>: <code>font-family: Georgia, 'Times New Roman', serif</code> and <code>color: #222222</code>.</li><li>2. <code>h1</code>: <code>font-size: 2.5rem</code>, <code>font-weight: 700</code>, <code>line-height: 1.2</code>, <code>color: #111111</code>.</li><li>3. <code>p</code> (the type selector, covering both body paragraphs): <code>font-size: 1rem</code> and <code>line-height: 1.6</code>.</li><li>4. <code>.byline</code>: <code>font-size: 0.875rem</code>, <code>color: #767676</code>, <code>letter-spacing: 0.02em</code>, <code>text-transform: uppercase</code>.</li><li>5. <code>blockquote</code>: <code>font-size: 1.25rem</code>, <code>font-style: italic</code>, <code>color: #444444</code>, <code>border-left: 4px solid #cccccc</code>, <code>padding-left: 1rem</code>.</li><li>6. Every <code>font-size</code> declaration must use <code>rem</code>, never <code>px</code> — the one exception is the blockquote's 4px border width, which stays in <code>px</code> because a border should not scale with text.</li><li>7. Every color value must be a 6-digit hex code, never a named color like <code>gray</code> or <code>black</code>.</li></ul><p>The HTML is complete and unedited; only <code>styles.css</code>'s five TODO comments are yours to fill in.</p>",
+      "inputSpec": "A complete index.html article with h1, p.byline, two plain p paragraphs, and one blockquote, linked to an empty styles.css with five TODO comments, one per element or class group.",
+      "outputSpec": "styles.css defines five rules (body, h1, p, .byline, blockquote) using rem for every font-size and hex codes for every color, matching the exact values in the requirements.",
+      "constraints": "No font-size in px. No named colors (e.g. gray, black, red) — hex only. Do not edit index.html. No inline style attributes. The blockquote's border-left width stays in px.",
+      "examplesJson": [
+        {
+          "input": "root font-size is the browser default of 16px, and h1 { font-size: 2.5rem; }",
+          "output": "The h1 renders at 40px, since 2.5rem is always 2.5 times the root element's font-size.",
+          "explanation": "rem is relative to the root <html> element's font-size, not the parent element's, which is what makes it predictable no matter how deeply an element is nested."
+        },
+        {
+          "input": "a reader increases their browser's default text size from 16px to 20px",
+          "output": "Every rem-based size on the page grows proportionally, including the heading and body text, while a px-based size would have stayed frozen at its original pixel value.",
+          "explanation": "This is the core reason rem is preferred for font sizes in real stylesheets: it respects the reader's own accessibility settings automatically."
+        }
+      ],
+      "hintsJson": [
+        "Start from the outside in: body sets the shared font-family and base text color every other rule inherits from.",
+        "rem always scales from the root <html> element's font-size, never from a parent element — that is what makes it predictable across nested content.",
+        "letter-spacing and text-transform are what make .byline read as a small, spaced-out label instead of a normal sentence.",
+        "Finish blockquote with a 4px solid left border in a light gray hex color, 1rem of left padding to separate the border from the text, and italic 1.25rem text in a darker gray than the border."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>The Quiet Cost of Notifications</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <article>\n    <h1>The Quiet Cost of Notifications</h1>\n    <p class=\"byline\">By Lan Pham - 6 min read</p>\n    <p>Every notification interrupts a train of thought, and the brain needs real time to recover focus after each one.</p>\n    <blockquote>Attention is the rarest and purest form of generosity.</blockquote>\n    <p>Turning off non-essential alerts is a small change that compounds into hours of deep work each week.</p>\n  </article>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* TODO: body - font-family Georgia, 'Times New Roman', serif; color #222222 */\n\n/* TODO: h1 - font-size 2.5rem, font-weight 700, line-height 1.2, color #111111 */\n\n/* TODO: p (type selector) - font-size 1rem, line-height 1.6 */\n\n/* TODO: .byline - font-size 0.875rem, color #767676, letter-spacing 0.02em, text-transform uppercase */\n\n/* TODO: blockquote - font-size 1.25rem, font-style italic, color #444444, border-left 4px solid #cccccc, padding-left 1rem */\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>The Quiet Cost of Notifications</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <article>\n    <h1>The Quiet Cost of Notifications</h1>\n    <p class=\"byline\">By Lan Pham - 6 min read</p>\n    <p>Every notification interrupts a train of thought, and the brain needs real time to recover focus after each one.</p>\n    <blockquote>Attention is the rarest and purest form of generosity.</blockquote>\n    <p>Turning off non-essential alerts is a small change that compounds into hours of deep work each week.</p>\n  </article>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "body {\n  font-family: Georgia, 'Times New Roman', serif;\n  color: #222222;\n}\n\nh1 {\n  font-size: 2.5rem;\n  font-weight: 700;\n  line-height: 1.2;\n  color: #111111;\n}\n\np {\n  font-size: 1rem;\n  line-height: 1.6;\n}\n\n.byline {\n  font-size: 0.875rem;\n  color: #767676;\n  letter-spacing: 0.02em;\n  text-transform: uppercase;\n}\n\nblockquote {\n  font-size: 1.25rem;\n  font-style: italic;\n  color: #444444;\n  border-left: 4px solid #cccccc;\n  padding-left: 1rem;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every <code>font-size</code> in the solution is written in <code>rem</code>, which is always relative to the root <code>&lt;html&gt;</code> element's font-size rather than to whatever element it happens to be nested inside — that is what makes a <code>2.5rem</code> heading resize predictably if a reader changes their browser's default text size, something a <code>40px</code> heading would never do. The blockquote's <code>4px</code> border is the deliberate exception: a border is a fixed visual line, not body text, so it should stay a constant pixel width regardless of font scaling.</p><p>The common trap is mixing named colors like <code>gray</code> into an otherwise hex-based stylesheet; named colors are imprecise (there is no easy way to tell <code>gray</code> from <code>darkgray</code> at a glance) and make a codebase harder to search. Hex codes like <code>#767676</code> are exact and greppable across a whole project. <code>.byline</code>'s <code>text-transform: uppercase</code> paired with a small positive <code>letter-spacing</code> is the standard pattern for a muted metadata label — uppercase alone often reads as visually cramped without the added spacing.</p>"
+    },
+    {
+      "title": "Build a Three-Card Stack Using the Box Model and box-sizing: border-box",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 55,
+      "points": 20,
+      "concepts": [
+        "the box model (content, padding, border, margin)",
+        "box-sizing: border-box versus the content-box default",
+        "percentage width inside a fixed-width container",
+        "margin collapsing between block siblings"
+      ],
+      "prerequisites": [
+        "class selectors",
+        "colors and units"
+      ],
+      "tags": [
+        "css",
+        "box-model",
+        "box-sizing",
+        "layout",
+        "beginner"
+      ],
+      "problemHtml": "<p>A width declared in CSS does not automatically include a box's padding or border — by default, <code>width: 100%</code> plus <code>16px</code> of padding and a <code>1px</code> border on every side renders wider than the containing box, because padding and border are added on top of the declared width, not absorbed into it. Inside a fixed-width column this overflow is exactly why a card can visually poke out past its container even though every number in the stylesheet looks correct. The fix is <code>box-sizing: border-box</code>, which redefines <code>width</code> to mean the box's full outer size, padding and border included.</p><p>You are given a narrow <code>320px</code> column holding three stacked plan cards, each with a heading and a paragraph, and an empty stylesheet with TODO markers. Style it so every card fits the column exactly, with consistent spacing.</p><ul><li>1. <code>.card-list</code>: <code>width: 320px</code>, <code>background-color: #f2f2f2</code>, <code>padding: 10px</code>.</li><li>2. Every <code>.card</code>: <code>box-sizing: border-box</code>, <code>width: 100%</code>, <code>padding: 16px</code>, <code>border: 1px solid #cccccc</code>, <code>border-radius: 4px</code>, <code>background-color: #ffffff</code>, <code>margin-bottom: 12px</code>.</li><li>3. Every <code>.card h3</code>: <code>margin: 0 0 8px 0</code>, <code>color: #111111</code>.</li><li>4. Every <code>.card p</code>: <code>margin: 0</code>, <code>color: #555555</code>, <code>line-height: 1.4</code>.</li><li>5. The <code>box-sizing: border-box</code> declaration on <code>.card</code> is mandatory, not optional: without it, a card with <code>width: 100%</code> plus <code>16px</code> of padding and a <code>1px</code> border on each side would render wider than <code>.card-list</code>'s content area and visually overflow past the column's edge.</li><li>6. Do not set a fixed pixel width on <code>.card</code> — it must stay <code>100%</code> so it always matches whatever width <code>.card-list</code> happens to have.</li></ul><p>The HTML is a complete, unedited three-card list; <code>styles.css</code> has four TODO comments, one per selector group above.</p>",
+      "inputSpec": "index.html has a .card-list div containing three .card divs, each with an h3 and a p, fully written with real plan names and descriptions. styles.css is empty except for four TODO comments.",
+      "outputSpec": "Three cards, each exactly matching .card-list's 320px width including padding and border (thanks to box-sizing: border-box), stacked with 12px of gap between them inside a light gray 320px column, matching the exact colors, padding, and border values in the requirements.",
+      "constraints": "Do not set a fixed px width on .card — it must be 100%. box-sizing: border-box is required on .card. Do not edit index.html. No inline style attributes.",
+      "examplesJson": [
+        {
+          "input": "content-box default (no box-sizing rule), card with width 100% plus 16px padding plus 1px border",
+          "output": "The card renders wider than .card-list's content box and visually overflows past its rounded corners.",
+          "explanation": "The default box-sizing: content-box adds padding and border on top of the declared width instead of including them inside it."
+        },
+        {
+          "input": "box-sizing: border-box added to the same card",
+          "output": "The card's total rendered width becomes exactly 100% of .card-list's content area, padding and border included, with no overflow.",
+          "explanation": "border-box redefines width to mean the full outer box, so padding and border are subtracted from the available space instead of added on top."
+        }
+      ],
+      "hintsJson": [
+        "Style the outer column first — .card-list's fixed width and light gray background give you a visual container to check the cards against.",
+        "By default, width only covers the content area; padding and border are added outside of it. box-sizing: border-box changes width to mean the full box instead.",
+        "Give every .card box-sizing: border-box, width: 100%, and its padding/border/radius/background together — the order inside the rule does not matter, but all of them are required.",
+        "Finish with margin-bottom: 12px on .card for spacing between cards, and margin: 0 on .card h3/.card p so the browser's default heading and paragraph margins do not add extra unpredictable gaps inside each card."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Card Stack</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"card-list\">\n    <div class=\"card\">\n      <h3>Starter Plan</h3>\n      <p>Best for individuals just getting started.</p>\n    </div>\n    <div class=\"card\">\n      <h3>Growth Plan</h3>\n      <p>For small teams that need more room to grow.</p>\n    </div>\n    <div class=\"card\">\n      <h3>Scale Plan</h3>\n      <p>Built for larger teams with advanced needs.</p>\n    </div>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* TODO: .card-list - width 320px, background-color #f2f2f2, padding 10px */\n\n/* TODO: .card - box-sizing border-box, width 100%, padding 16px, border 1px solid #cccccc, border-radius 4px, background-color #ffffff, margin-bottom 12px */\n\n/* TODO: .card h3 - margin 0 0 8px 0, color #111111 */\n\n/* TODO: .card p - margin 0, color #555555, line-height 1.4 */\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Card Stack</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"card-list\">\n    <div class=\"card\">\n      <h3>Starter Plan</h3>\n      <p>Best for individuals just getting started.</p>\n    </div>\n    <div class=\"card\">\n      <h3>Growth Plan</h3>\n      <p>For small teams that need more room to grow.</p>\n    </div>\n    <div class=\"card\">\n      <h3>Scale Plan</h3>\n      <p>Built for larger teams with advanced needs.</p>\n    </div>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": ".card-list {\n  width: 320px;\n  background-color: #f2f2f2;\n  padding: 10px;\n}\n\n.card {\n  box-sizing: border-box;\n  width: 100%;\n  padding: 16px;\n  border: 1px solid #cccccc;\n  border-radius: 4px;\n  background-color: #ffffff;\n  margin-bottom: 12px;\n}\n\n.card h3 {\n  margin: 0 0 8px 0;\n  color: #111111;\n}\n\n.card p {\n  margin: 0;\n  color: #555555;\n  line-height: 1.4;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The key decision is <code>box-sizing: border-box</code> on <code>.card</code>. Without it, the browser's default <code>content-box</code> model treats <code>width: 100%</code> as the size of the content area alone, then adds <code>16px</code> of padding and <code>1px</code> of border on every side on top of that — a card that looks like it should fit its <code>320px</code> column instead renders wider and visually overflows. With <code>border-box</code>, <code>width: 100%</code> means the padding and border are subtracted from the available space instead of added to it, so the rendered box always matches its container exactly.</p><p>The other common trap is leaving the browser's default heading and paragraph margins in place inside each card — <code>&lt;h3&gt;</code> and <code>&lt;p&gt;</code> both carry built-in top and bottom margins that would add inconsistent extra space above the heading and around the paragraph, on top of the card's own <code>16px</code> padding. Resetting them with <code>margin: 0</code> (and a small deliberate <code>8px</code> bottom margin on the heading) keeps the internal spacing entirely predictable and controlled by the stylesheet, not by browser defaults.</p>",
+      "diagramMermaid": "flowchart TD\n  Content[Content area text and heading]\n  Padding[Padding sixteen pixels inside the border]\n  Border[Border one pixel solid gray]\n  Margin[Margin twelve pixels below outside the border]\n  BorderBox[box-sizing border-box makes width include padding and border]\n  Content --> Padding\n  Padding --> Border\n  Border --> Margin\n  BorderBox --> Content"
+    },
+    {
+      "title": "Capstone: Style a Complete Profile Card with the Box Model and a Positioned Status Badge",
+      "difficulty": "HARD",
+      "estimatedMinutes": 75,
+      "points": 25,
+      "concepts": [
+        "combining class selectors across a whole component",
+        "box-sizing: border-box on multiple elements",
+        "position: relative and position: absolute together",
+        "border-radius for circles",
+        "hover states without layout shift"
+      ],
+      "prerequisites": [
+        "element, class, and id selectors",
+        "the box model and box-sizing",
+        "colors, units, and text styling",
+        "the cascade and specificity"
+      ],
+      "tags": [
+        "css",
+        "capstone",
+        "box-model",
+        "positioning",
+        "component",
+        "hover"
+      ],
+      "problemHtml": "<p>A profile card is one of the most common real components on the web, and building one correctly means combining nearly everything from this module at once: class selectors to scope every rule to the card, the box model with <code>box-sizing: border-box</code> so the card and its button never overflow their declared sizes, and <code>position: relative</code> paired with <code>position: absolute</code> to pin a small status dot to the exact corner of a circular avatar without it drifting away when the layout changes. Each piece depends on the one before it: the badge only stays glued to the avatar's corner because the avatar's wrapper establishes the positioning context it is measured against.</p><p>You are given a complete profile card — an avatar with a status dot, a name, a title, a bio, and a follow button — and an empty stylesheet with one TODO comment per group of related elements. Style the whole component.</p><ul><li>1. <code>.profile-card</code>: <code>box-sizing: border-box</code>, <code>width: 280px</code>, <code>padding: 24px</code>, <code>border: 1px solid #e0e0e0</code>, <code>border-radius: 12px</code>, <code>background-color: #ffffff</code>, <code>text-align: center</code>, <code>margin: 0 auto</code>.</li><li>2. <code>.avatar-wrap</code>: <code>position: relative</code>, <code>width: 80px</code>, <code>height: 80px</code>, <code>margin: 0 auto 16px</code>.</li><li>3. <code>.avatar</code> image: fills its wrapper (<code>width: 100%</code>, <code>height: 100%</code>), circular via <code>border-radius: 50%</code>, <code>object-fit: cover</code>, <code>display: block</code>.</li><li>4. <code>.status-dot</code>: <code>position: absolute</code>, pinned <code>bottom: 2px; right: 2px</code> against the avatar's corner, <code>width: 14px</code>, <code>height: 14px</code>, <code>background-color: #2ecc71</code>, a <code>2px solid #ffffff</code> border, <code>border-radius: 50%</code>.</li><li>5. <code>.name</code>: <code>margin: 0 0 4px 0</code>, <code>font-size: 1.25rem</code>, <code>color: #111111</code>.</li><li>6. <code>.title</code>: <code>margin: 0 0 12px 0</code>, <code>font-size: 0.875rem</code>, <code>color: #767676</code>, <code>text-transform: uppercase</code>, <code>letter-spacing: 0.03em</code>.</li><li>7. <code>.bio</code>: <code>margin: 0 0 20px 0</code>, <code>font-size: 0.9375rem</code>, <code>color: #444444</code>, <code>line-height: 1.5</code>.</li><li>8. <code>.follow-btn</code>: <code>box-sizing: border-box</code>, <code>padding: 10px 24px</code>, <code>border: none</code>, <code>border-radius: 6px</code>, <code>background-color: #111111</code>, <code>color: #ffffff</code>, <code>font-weight: 600</code>, <code>cursor: pointer</code>.</li><li>9. <code>.follow-btn:hover</code>: <code>background-color: #333333</code>, with no other property changed, so the button never shifts size on hover.</li><li>10. Only class selectors may be used — no bare <code>button</code>, <code>img</code>, or <code>h2</code> type selectors anywhere in the file.</li></ul><p>The HTML is complete and unedited; <code>styles.css</code> has eight TODO comments, one per rule group above.</p>",
+      "inputSpec": "A complete index.html with .profile-card wrapping .avatar-wrap (containing .avatar img and .status-dot span), .name h2, .title p, .bio p, and .follow-btn button. styles.css is empty except for eight TODO comments.",
+      "outputSpec": "A centered 280px card with rounded corners and a border, a circular 80px avatar with a small green status dot pinned to its bottom-right corner, centered name/title/bio text, and a dark rounded follow button that darkens on hover without changing size — matching every value in the requirements exactly.",
+      "constraints": "Use only class selectors — no bare button, img, or h2 type selectors. box-sizing: border-box required on .profile-card and .follow-btn. The hover state may only change background-color, nothing else. Do not edit index.html. No inline style attributes, no JavaScript.",
+      "examplesJson": [
+        {
+          "input": ".avatar-wrap written without position: relative",
+          "output": "The .status-dot, being position: absolute, positions itself against the nearest positioned ancestor instead — typically the whole page — and drifts away from the avatar entirely.",
+          "explanation": "Absolute positioning always measures its offsets from the nearest ancestor that has a position other than static; forgetting to set one is a silent bug, not an error."
+        },
+        {
+          "input": ".follow-btn:hover changing padding instead of only background-color",
+          "output": "The button visibly grows or shrinks on hover, shifting the layout of anything positioned near it.",
+          "explanation": "Hover states should avoid changing box-model properties like padding, border, or width, since that causes a visible layout shift every time the cursor moves over the element."
+        },
+        {
+          "input": "the finished card",
+          "output": "An 80px circular avatar with a small white-bordered green dot glued to its bottom-right corner, centered name, title, and bio text, and a dark Follow button that only darkens on hover.",
+          "explanation": "Every piece — box model, centering, circular avatar, absolute-positioned badge, and hover state — combines into one coherent, reusable component."
+        }
+      ],
+      "hintsJson": [
+        "Build outer to inner: .profile-card's box model and centering first, then .avatar-wrap, then the avatar image and status dot inside it, then the text block, then the button.",
+        "position: absolute always measures its bottom/right/top/left against the nearest ancestor that is not position: static — that is exactly why .avatar-wrap needs position: relative even though it has no offset of its own.",
+        "A circle from a square box only needs one property: border-radius: 50% — apply it to both .avatar and .status-dot, and add object-fit: cover on the avatar so a non-square photo does not distort.",
+        "Finish .follow-btn and its :hover state together: the base rule sets every box-model and color property, and the hover rule changes only background-color — nothing else — so the button never resizes when the user points at it."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Profile Card</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"profile-card\">\n    <div class=\"avatar-wrap\">\n      <img class=\"avatar\" src=\"avatar.jpg\" alt=\"Profile photo of Minh Le\">\n      <span class=\"status-dot\"></span>\n    </div>\n    <h2 class=\"name\">Minh Le</h2>\n    <p class=\"title\">Product Designer</p>\n    <p class=\"bio\">Designs simple, usable interfaces for small business tools.</p>\n    <button class=\"follow-btn\" type=\"button\">Follow</button>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* TODO: .profile-card - box-sizing border-box, width 280px, padding 24px, border 1px solid #e0e0e0, border-radius 12px, background-color #ffffff, text-align center, margin 0 auto */\n\n/* TODO: .avatar-wrap - position relative, width 80px, height 80px, margin 0 auto 16px */\n\n/* TODO: .avatar - width 100%, height 100%, border-radius 50%, object-fit cover, display block */\n\n/* TODO: .status-dot - position absolute, bottom 2px, right 2px, width 14px, height 14px, background-color #2ecc71, border 2px solid #ffffff, border-radius 50% */\n\n/* TODO: .name - margin 0 0 4px 0, font-size 1.25rem, color #111111 */\n\n/* TODO: .title - margin 0 0 12px 0, font-size 0.875rem, color #767676, text-transform uppercase, letter-spacing 0.03em */\n\n/* TODO: .bio - margin 0 0 20px 0, font-size 0.9375rem, color #444444, line-height 1.5 */\n\n/* TODO: .follow-btn - box-sizing border-box, padding 10px 24px, border none, border-radius 6px, background-color #111111, color #ffffff, font-weight 600, cursor pointer; plus a :hover state that only changes background-color to #333333 */\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Profile Card</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"profile-card\">\n    <div class=\"avatar-wrap\">\n      <img class=\"avatar\" src=\"avatar.jpg\" alt=\"Profile photo of Minh Le\">\n      <span class=\"status-dot\"></span>\n    </div>\n    <h2 class=\"name\">Minh Le</h2>\n    <p class=\"title\">Product Designer</p>\n    <p class=\"bio\">Designs simple, usable interfaces for small business tools.</p>\n    <button class=\"follow-btn\" type=\"button\">Follow</button>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": ".profile-card {\n  box-sizing: border-box;\n  width: 280px;\n  padding: 24px;\n  border: 1px solid #e0e0e0;\n  border-radius: 12px;\n  background-color: #ffffff;\n  text-align: center;\n  margin: 0 auto;\n}\n\n.avatar-wrap {\n  position: relative;\n  width: 80px;\n  height: 80px;\n  margin: 0 auto 16px;\n}\n\n.avatar {\n  width: 100%;\n  height: 100%;\n  border-radius: 50%;\n  object-fit: cover;\n  display: block;\n}\n\n.status-dot {\n  position: absolute;\n  bottom: 2px;\n  right: 2px;\n  width: 14px;\n  height: 14px;\n  background-color: #2ecc71;\n  border: 2px solid #ffffff;\n  border-radius: 50%;\n}\n\n.name {\n  margin: 0 0 4px 0;\n  font-size: 1.25rem;\n  color: #111111;\n}\n\n.title {\n  margin: 0 0 12px 0;\n  font-size: 0.875rem;\n  color: #767676;\n  text-transform: uppercase;\n  letter-spacing: 0.03em;\n}\n\n.bio {\n  margin: 0 0 20px 0;\n  font-size: 0.9375rem;\n  color: #444444;\n  line-height: 1.5;\n}\n\n.follow-btn {\n  box-sizing: border-box;\n  padding: 10px 24px;\n  border: none;\n  border-radius: 6px;\n  background-color: #111111;\n  color: #ffffff;\n  font-weight: 600;\n  cursor: pointer;\n}\n\n.follow-btn:hover {\n  background-color: #333333;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The status dot's position depends entirely on one earlier decision: <code>.avatar-wrap</code> has <code>position: relative</code>, which makes it the positioning context that <code>.status-dot</code>'s <code>position: absolute</code> offsets are measured against. Without that one line, the dot would still be absolutely positioned, but relative to the nearest positioned ancestor above it in the whole document — typically nothing, which means the page itself — and it would jump toward the corner of the browser window instead of the corner of the avatar. This is the single most common trap with absolute positioning: it always works relative to <em>something</em>, and forgetting to declare that something is a silent bug, not an error.</p><p>Two <code>box-sizing: border-box</code> declarations, on <code>.profile-card</code> and <code>.follow-btn</code>, exist for the same reason as in the earlier box-model exercise: both elements combine an explicit size with padding and a border, and without <code>border-box</code> both would render larger than their declared dimensions. The hover state deliberately changes only <code>background-color</code> — changing padding or border on hover is a common beginner shortcut that causes the whole button, and anything below it, to visibly shift position every time the cursor moves over it.</p>"
+    }
+  ]
+}

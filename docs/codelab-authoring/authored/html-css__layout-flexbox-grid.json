@@ -1,0 +1,470 @@
+{
+  "trackSlug": "html-css",
+  "moduleSlug": "layout-flexbox-grid",
+  "exercises": [
+    {
+      "title": "Arrange a Site Navbar in a Row with Flexbox Alignment",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "display: flex",
+        "flex-direction",
+        "justify-content",
+        "align-items",
+        "gap on flex containers"
+      ],
+      "prerequisites": [
+        "basic CSS selectors",
+        "the CSS box model"
+      ],
+      "tags": [
+        "css",
+        "flexbox",
+        "navbar",
+        "alignment",
+        "beginner",
+        "layout"
+      ],
+      "problemHtml": "<p>Before Flexbox, lining up a logo on the left and a row of links on the right of a navbar meant floating elements and then clearing the float afterward, or switching everything to <code>inline-block</code> and fighting the stray whitespace gaps that appear between inline-block elements in the markup. Flexbox turns both problems into two or three CSS declarations: one to say <code>display: flex</code>, and one or two more to say how the items should spread out and align.</p><p>You are given a navbar with a brand link and a list of navigation links marked up exactly as they should stay; your job is only to add the CSS that arranges them.</p><ul><li>1. Make <code>.navbar</code> a flex container with <code>display: flex</code>.</li><li>2. On <code>.navbar</code>, use <code>justify-content: space-between</code> so <code>.brand</code> sits at the far left and <code>.nav-links</code> sits at the far right, with the leftover space pushed between them.</li><li>3. On <code>.navbar</code>, use <code>align-items: center</code> so the brand text and the link list line up on the same vertical center, regardless of their different font sizes.</li><li>4. Make <code>.nav-links</code> itself a flex container with <code>display: flex</code> so its <code>&lt;li&gt;</code> items sit in a row instead of stacking.</li><li>5. On <code>.nav-links</code>, add <code>gap: 24px</code> so there is even spacing between links; do not use margins on the individual <code>&lt;li&gt;</code> items to create that spacing.</li><li>6. On <code>.nav-links</code>, remove the default list bullet and the browser's default list margin and padding.</li></ul><p>The scaffold's HTML is complete and must not change; only fill in the <code>/* TODO */</code> markers in <code>styles.css</code>.</p>",
+      "inputSpec": "A complete index.html with a <nav class=\"navbar\"> containing an <a class=\"brand\"> and a <ul class=\"nav-links\"> of 4 <li><a> links, linked to a styles.css that has selectors for .navbar and .nav-links with /* TODO */ comments marking each missing declaration.",
+      "outputSpec": "A navbar rendered as a single horizontal row: the brand at the far left, the 4 nav links at the far right also in a row, all vertically centered, with 24px of gap between the links and no visible list bullets.",
+      "constraints": "Do not edit index.html. Use Flexbox only — no float, no inline-block, no position:absolute for the layout. Use the gap property for spacing between links, not margin on individual li elements. Do not hardcode pixel widths on .navbar or .nav-links.",
+      "examplesJson": [
+        {
+          "input": "<nav class=\"navbar\"><a class=\"brand\">Aperture</a><ul class=\"nav-links\">4 li items</ul></nav>  /* .navbar has no display:flex yet */",
+          "output": "Brand and the nav-links list stack as two full-width blocks, one above the other, because block-level elements default to stacking vertically.",
+          "explanation": "Without display:flex, .navbar's children are ordinary block boxes and each takes the full width available, so they stack instead of sitting side by side."
+        },
+        {
+          "input": ".navbar { display: flex; }  /* justify-content and align-items still missing */",
+          "output": "Brand and nav-links sit side by side pushed to the left, both starting at the top of the navbar, since flex defaults to justify-content: flex-start and align-items: stretch.",
+          "explanation": "display:flex alone only puts children in a row; without justify-content: space-between the browser packs them at the start, and without align-items: center they default to stretching to the container's full height."
+        },
+        {
+          "input": ".nav-links li { margin-right: 24px; }  /* used instead of gap */",
+          "output": "Same visual spacing as gap, but the last li keeps an unwanted 24px of trailing margin, and removing one link leaves inconsistent gaps.",
+          "explanation": "gap only inserts space between items, never after the last one, and it is defined once on the container instead of duplicated across every child — the reason gap is preferred over margin-based spacing hacks."
+        }
+      ],
+      "hintsJson": [
+        "Flexbox needs only display: flex on the parent to switch its children from stacking blocks into a row.",
+        "justify-content controls spacing along the main axis (left-to-right in a row); align-items controls alignment along the cross axis (top-to-bottom in a row).",
+        "space-between pushes the first and last flex item to the two ends of the container and distributes any remaining space evenly between the items in the middle — with exactly two items, that just pushes them to opposite ends.",
+        "Apply display: flex and gap: 24px to .nav-links too — a ul can be a flex container in its own right, independent of its parent .navbar being one."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Navbar</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <nav class=\"navbar\">\n    <a class=\"brand\" href=\"#\">Aperture</a>\n    <ul class=\"nav-links\">\n      <li><a href=\"#\">Home</a></li>\n      <li><a href=\"#\">Gallery</a></li>\n      <li><a href=\"#\">About</a></li>\n      <li><a href=\"#\">Contact</a></li>\n    </ul>\n  </nav>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": ".navbar {\n  /* TODO: make this a flex container */\n  /* TODO: push .brand to the left and .nav-links to the right */\n  /* TODO: vertically center the brand and the links on the cross axis */\n  padding: 16px 32px;\n  background: #1f2937;\n  color: #fff;\n}\n\n.brand {\n  color: #fff;\n  text-decoration: none;\n  font-weight: bold;\n  font-size: 20px;\n}\n\n.nav-links {\n  /* TODO: lay the list items out in a row */\n  /* TODO: put 24px of space between each link using gap, not margin */\n  /* TODO: remove default list bullet and list padding/margin */\n}\n\n.nav-links a {\n  color: #fff;\n  text-decoration: none;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Navbar</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <nav class=\"navbar\">\n    <a class=\"brand\" href=\"#\">Aperture</a>\n    <ul class=\"nav-links\">\n      <li><a href=\"#\">Home</a></li>\n      <li><a href=\"#\">Gallery</a></li>\n      <li><a href=\"#\">About</a></li>\n      <li><a href=\"#\">Contact</a></li>\n    </ul>\n  </nav>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": ".navbar {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 16px 32px;\n  background: #1f2937;\n  color: #fff;\n}\n\n.brand {\n  color: #fff;\n  text-decoration: none;\n  font-weight: bold;\n  font-size: 20px;\n}\n\n.nav-links {\n  display: flex;\n  gap: 24px;\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\n\n.nav-links a {\n  color: #fff;\n  text-decoration: none;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Flexbox operates on two axes at once: the main axis, which follows <code>flex-direction</code> (row by default), and the cross axis, perpendicular to it. <code>justify-content</code> only ever controls the main axis, and <code>align-items</code> only ever controls the cross axis — in a default row layout that means justify-content is horizontal spacing and align-items is vertical alignment, which is the opposite of what a beginner instinctively guesses from the property names alone.</p><p>The most common trap is applying <code>display: flex</code> only to <code>.navbar</code> and expecting the <code>&lt;li&gt;</code> items inside <code>.nav-links</code> to line up in a row automatically — a flex container only changes how its own direct children lay out, so <code>.nav-links</code> needs its own <code>display: flex</code> to turn its <code>li</code> children into a row. Using <code>gap</code> instead of margin on the links also avoids the classic \"extra trailing space after the last item\" bug that margin-based spacing always produces.</p>",
+      "diagramMermaid": "flowchart TD\n  navbar[navbar flex row]\n  brand[brand]\n  navlinks[nav-links flex row]\n  li1[Home]\n  li2[Gallery]\n  li3[About]\n  li4[Contact]\n  navbar --> brand\n  navbar --> navlinks\n  navlinks --> li1\n  navlinks --> li2\n  navlinks --> li3\n  navlinks --> li4"
+    },
+    {
+      "title": "Combine a Fixed-Width Sidebar with a Fluid Content Area Using Flex Sizing",
+      "difficulty": "EASY",
+      "estimatedMinutes": 20,
+      "points": 10,
+      "concepts": [
+        "flex-direction: row (default)",
+        "flex: 0 0 <basis> for a fixed-size item",
+        "flex: 1 for a fluid item",
+        "min-height: 100vh",
+        "flex-shrink"
+      ],
+      "prerequisites": [
+        "display: flex, justify-content, and align-items basics"
+      ],
+      "tags": [
+        "css",
+        "flexbox",
+        "sidebar",
+        "flex-sizing",
+        "layout",
+        "two-column"
+      ],
+      "problemHtml": "<p>A dashboard shell almost always needs a sidebar that stays a fixed width no matter the screen size, next to a content area that fills whatever space is left. Using percentage widths for both columns is fragile: the moment you add padding or a border, the two percentages plus their box-model extras add up to more than 100% and the layout wraps unexpectedly. Flex sizing solves this cleanly by giving one item a fixed basis and telling the other to absorb all remaining space.</p><p>You are given a two-column shell with a sidebar and a content area; your job is to size them correctly with Flexbox.</p><ul><li>1. Make <code>.layout</code> a flex container with <code>display: flex</code>.</li><li>2. Give <code>.layout</code> a minimum height of the full viewport with <code>min-height: 100vh</code>.</li><li>3. Give <code>.sidebar</code> a fixed size of exactly 240px that never grows and never shrinks, using the shorthand <code>flex: 0 0 240px</code>.</li><li>4. Give <code>.content</code> <code>flex: 1</code> so it stretches to fill every pixel of width left over after the sidebar, at any viewport width.</li><li>5. Do not set an explicit <code>width</code> on either <code>.sidebar</code> or <code>.content</code> — sizing must come entirely from the <code>flex</code> shorthand.</li><li>6. Keep <code>.sidebar</code> and <code>.content</code> both stretched to the same full height as <code>.layout</code>, which is the default cross-axis behavior and requires no extra declaration.</li></ul><p>The scaffold's HTML is complete; only fill in the <code>/* TODO */</code> markers in <code>styles.css</code>.</p>",
+      "inputSpec": "A complete index.html with a <div class=\"layout\"> containing <aside class=\"sidebar\"> and <main class=\"content\">, linked to styles.css with /* TODO */ markers on .layout, .sidebar, and .content.",
+      "outputSpec": "A two-column shell at least 100vh tall: a 240px sidebar that never changes width, and a content column that fills all remaining horizontal space, both columns stretching to the same height.",
+      "constraints": "Do not edit index.html. Do not use width or max-width to size the columns — use only the flex shorthand. Do not use CSS Grid for this exercise. The sidebar must not shrink below 240px even if the viewport is narrow.",
+      "examplesJson": [
+        {
+          "input": ".sidebar { width: 240px; } .content { width: 100%; }",
+          "output": "The content column overflows the viewport and causes horizontal scrolling, because 240px plus 100% is wider than the available space.",
+          "explanation": "Percentage widths are calculated against the parent's full width, not the space left after siblings, so a 100%-wide content column next to a 240px sidebar always overflows by 240px."
+        },
+        {
+          "input": ".sidebar { flex: 0 0 240px; } .content { flex: 0 0 auto; }",
+          "output": "The content area only grows to fit its own text content and leaves a large empty gap on the right of the layout on a wide screen.",
+          "explanation": "flex: 0 0 auto sets flex-grow to 0, so .content never claims the leftover space; only flex-grow: 1 (as in flex: 1, which expands to 1 1 0%) tells an item to absorb all remaining room."
+        },
+        {
+          "input": "viewport width 1440px, .sidebar { flex: 0 0 240px; }, .content { flex: 1; }",
+          "output": "Sidebar renders at exactly 240px; content renders at 1200px.",
+          "explanation": "flex: 0 0 240px fixes the sidebar's basis at 240px with no grow and no shrink, so the remaining 1440 - 240 = 1200px is entirely claimed by .content's flex: 1."
+        }
+      ],
+      "hintsJson": [
+        "flex is shorthand for three values: flex-grow, flex-shrink, and flex-basis — flex: 0 0 240px means never grow, never shrink, start at 240px.",
+        "flex: 1 is shorthand for flex: 1 1 0%, meaning the item starts from nothing and grows to absorb all available leftover space.",
+        "min-height: 100vh on the flex container is what gives both columns something tall to stretch to — without it the layout would only be as tall as its content.",
+        "Set .layout { display: flex; min-height: 100vh; }, .sidebar { flex: 0 0 240px; }, and .content { flex: 1; } — no width property anywhere."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Dashboard Shell</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"layout\">\n    <aside class=\"sidebar\">\n      <h2>Menu</h2>\n      <p>Overview</p>\n      <p>Reports</p>\n      <p>Settings</p>\n    </aside>\n    <main class=\"content\">\n      <h1>Dashboard</h1>\n      <p>Welcome back. Here is a summary of today's activity.</p>\n    </main>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": ".layout {\n  /* TODO: make this a flex container */\n  /* TODO: give it a minimum height of the full viewport */\n}\n\n.sidebar {\n  /* TODO: fixed size of exactly 240px, no grow, no shrink */\n  background: #111827;\n  color: #f9fafb;\n  padding: 24px;\n}\n\n.content {\n  /* TODO: fill all remaining horizontal space */\n  padding: 24px;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Dashboard Shell</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"layout\">\n    <aside class=\"sidebar\">\n      <h2>Menu</h2>\n      <p>Overview</p>\n      <p>Reports</p>\n      <p>Settings</p>\n    </aside>\n    <main class=\"content\">\n      <h1>Dashboard</h1>\n      <p>Welcome back. Here is a summary of today's activity.</p>\n    </main>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": ".layout {\n  display: flex;\n  min-height: 100vh;\n}\n\n.sidebar {\n  flex: 0 0 240px;\n  background: #111827;\n  color: #f9fafb;\n  padding: 24px;\n}\n\n.content {\n  flex: 1;\n  padding: 24px;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The <code>flex</code> shorthand packs three numbers into one declaration: grow, shrink, and basis. <code>.sidebar</code> uses <code>flex: 0 0 240px</code> so it starts at 240px and both grow and shrink are locked at zero — no amount of extra space in the container makes it wider, and no amount of squeezing makes it narrower. <code>.content</code> uses the shorthand <code>flex: 1</code>, which expands to <code>flex: 1 1 0%</code>: it starts from nothing and grows to soak up every pixel the sidebar did not take.</p><p>The common trap is reaching for <code>width</code> instead, which forces the two columns to add up correctly by hand and breaks the moment padding, a border, or a different viewport width changes the math. The second trap is giving <code>.content</code> <code>flex: 0 0 auto</code> instead of <code>flex: 1</code> — that fixes its basis to its own content size and grow to zero, so it never expands into the leftover space even though visually it looks similar to flex: 1 until you resize the window.</p>"
+    },
+    {
+      "title": "Perfectly Center a Modal Card Over the Viewport with Flexbox",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 30,
+      "points": 15,
+      "concepts": [
+        "display:flex on a full-viewport overlay",
+        "justify-content: center",
+        "align-items: center",
+        "auto-sized flex items vs the stretch default",
+        "min-height:100vh for a page-covering container"
+      ],
+      "prerequisites": [
+        "display: flex, justify-content, and align-items basics",
+        "the CSS box model"
+      ],
+      "tags": [
+        "css",
+        "flexbox",
+        "centering",
+        "modal",
+        "overlay",
+        "layout"
+      ],
+      "problemHtml": "<p>Centering a box both horizontally and vertically used to require table-display hacks or a combination of absolute positioning with negative margins calculated from a hardcoded height. Flexbox reduces true two-axis centering to the exact same two declarations used for any other flex alignment: <code>justify-content</code> for one axis and <code>align-items</code> for the other, applied to a container that already spans the full space you want to center within.</p><p>You are given a full-screen overlay with a single modal card inside; your job is to center that card and make sure it does not stretch to fill the overlay.</p><ul><li>1. Make <code>.overlay</code> a flex container with <code>display: flex</code>.</li><li>2. Set <code>.overlay</code> to <code>min-height: 100vh</code> so it always spans the full viewport height, even when the card's content is short.</li><li>3. Center the <code>.modal-card</code> on the main axis with <code>justify-content: center</code>.</li><li>4. Center the <code>.modal-card</code> on the cross axis with <code>align-items: center</code>.</li><li>5. Do not let <code>.modal-card</code> stretch to the overlay's full height or width — it must size itself to its own content plus its declared <code>max-width</code>, which only happens once <code>align-items</code> is no longer the flex default of <code>stretch</code>.</li><li>6. Keep <code>.overlay</code>'s given <code>background: rgba(15, 23, 42, 0.6)</code> and <code>.modal-card</code>'s given <code>max-width: 400px</code> unchanged.</li></ul><p>The scaffold's HTML and the box-model styling of <code>.modal-card</code> are already complete; only fill in the <code>/* TODO */</code> markers that control the flex layout of <code>.overlay</code>.</p>",
+      "inputSpec": "A complete index.html with a <div class=\"overlay\"> containing one <div class=\"modal-card\"> (heading, paragraph, button), linked to styles.css. .modal-card already has its background, padding, border-radius, box-shadow, and max-width: 400px set. /* TODO */ markers sit only on .overlay.",
+      "outputSpec": "The modal card renders as a fixed-width box (up to 400px, sized to its own content) centered both horizontally and vertically within a full-viewport-height overlay, at any window size.",
+      "constraints": "Do not edit index.html or the box-model declarations already present on .modal-card. Center using Flexbox only — no position:absolute with negative margins, no margin:auto text-align hacks, no CSS Grid. Do not set a fixed width on .overlay.",
+      "examplesJson": [
+        {
+          "input": ".overlay { display: flex; }  /* no min-height set */",
+          "output": "The overlay only becomes as tall as the modal card itself, so on a page with little other content the card sits at the top of a short colored strip instead of the vertical center of the screen.",
+          "explanation": "A flex container's height still comes from its content or an explicit height/min-height; display:flex alone does not make an element span the viewport, which is why min-height: 100vh is required before vertical centering means anything."
+        },
+        {
+          "input": ".overlay { display: flex; min-height: 100vh; justify-content: center; }  /* align-items missing */",
+          "output": "The card is centered horizontally but stretches to the full height of the overlay instead of sizing to its own content, because align-items defaults to stretch.",
+          "explanation": "Every flex item stretches to fill the cross axis unless align-items (or an item's own align-self) says otherwise; centering on only one axis while leaving the other at the default stretch is the single most common mistake when centering with Flexbox."
+        },
+        {
+          "input": ".overlay { display: flex; min-height: 100vh; justify-content: center; align-items: center; }",
+          "output": "The modal card sits centered both horizontally and vertically, sized to its own content up to its 400px max-width, regardless of viewport size.",
+          "explanation": "With both axes explicitly aligned to center and align-items no longer defaulting to stretch, the card takes only the size its content and max-width require and floats in the exact middle of the overlay."
+        }
+      ],
+      "hintsJson": [
+        "True centering needs both axes handled: one property for the main axis, one for the cross axis — a flex row's main axis is horizontal and its cross axis is vertical.",
+        "A flex container only spans as much height as its content unless you give it an explicit height or min-height — for a full-page overlay that means min-height: 100vh.",
+        "align-items defaults to stretch, not center — if you only set justify-content: center and forget align-items, the item centers on one axis but balloons to fill the other.",
+        "The full fix is .overlay { display: flex; min-height: 100vh; justify-content: center; align-items: center; } with no changes needed on .modal-card at all."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Confirm Action</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"overlay\">\n    <div class=\"modal-card\">\n      <h2>Delete this file?</h2>\n      <p>This action cannot be undone.</p>\n      <button type=\"button\">Confirm Delete</button>\n    </div>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": ".overlay {\n  /* TODO: make this a flex container */\n  /* TODO: span the full viewport height */\n  /* TODO: center the modal card on the main axis */\n  /* TODO: center the modal card on the cross axis */\n  background: rgba(15, 23, 42, 0.6);\n}\n\n.modal-card {\n  max-width: 400px;\n  background: #ffffff;\n  padding: 24px;\n  border-radius: 8px;\n  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Confirm Action</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"overlay\">\n    <div class=\"modal-card\">\n      <h2>Delete this file?</h2>\n      <p>This action cannot be undone.</p>\n      <button type=\"button\">Confirm Delete</button>\n    </div>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": ".overlay {\n  display: flex;\n  min-height: 100vh;\n  justify-content: center;\n  align-items: center;\n  background: rgba(15, 23, 42, 0.6);\n}\n\n.modal-card {\n  max-width: 400px;\n  background: #ffffff;\n  padding: 24px;\n  border-radius: 8px;\n  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Two-axis centering with Flexbox is really two independent one-axis decisions stacked together: <code>justify-content: center</code> handles the main axis (horizontal, since the default <code>flex-direction</code> is row) and <code>align-items: center</code> handles the cross axis (vertical). Neither property alone centers on both axes, and forgetting either one leaves the card centered on only one dimension.</p><p>The trap most learners hit is forgetting that <code>align-items</code> defaults to <code>stretch</code>, not <code>flex-start</code> — so a container with only <code>justify-content: center</code> set will center the card horizontally but stretch it to the container's full height, producing a card that can look centered by accident on one window size and obviously broken the moment the window gets taller. The other easy miss is skipping <code>min-height: 100vh</code>: without it, <code>.overlay</code> is only as tall as <code>.modal-card</code>, so there is no extra vertical space to center within at all.</p>"
+    },
+    {
+      "title": "Build a Fixed Three-Column Image Gallery with CSS Grid",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 40,
+      "points": 15,
+      "concepts": [
+        "display: grid",
+        "grid-template-columns",
+        "the fr unit",
+        "repeat()",
+        "gap on grid containers"
+      ],
+      "prerequisites": [
+        "the CSS box model",
+        "basic Flexbox (display:flex, justify-content, align-items)"
+      ],
+      "tags": [
+        "css",
+        "grid",
+        "gallery",
+        "fr-unit",
+        "repeat",
+        "layout"
+      ],
+      "problemHtml": "<p>Flexbox lays items out along one axis at a time, so building an even grid of photos with Flexbox means either fighting <code>flex-wrap</code> and manual percentage widths, or accepting that the last row will not line up unless the item count divides evenly by the column count. CSS Grid is built for exactly this two-dimensional case: you declare the column tracks once on the container, and every item automatically snaps into the grid without any per-item width math.</p><p>You are given a gallery of 9 photo tiles; your job is to arrange them into an even 3-column grid.</p><ul><li>1. Make <code>.gallery</code> a grid container with <code>display: grid</code>.</li><li>2. Define exactly 3 equal-width columns using <code>grid-template-columns: repeat(3, 1fr)</code>.</li><li>3. Add <code>gap: 16px</code> on <code>.gallery</code> so both the row gap and column gap between tiles are 16px, using the shorthand rather than two separate declarations.</li><li>4. Make every <code>.gallery img</code> exactly fill its grid cell with <code>width: 100%</code> and <code>height: 100%</code>.</li><li>5. Give every <code>.gallery img</code> a square shape with <code>aspect-ratio: 1 / 1</code> and crop overflowing image content with <code>object-fit: cover</code> so photos of different original proportions all display as clean squares.</li><li>6. Do not use <code>float</code>, <code>display: inline-block</code>, or fixed pixel widths anywhere in this layout — sizing must come entirely from the grid's <code>fr</code> columns.</li></ul><p>The scaffold's HTML has all 9 <code>&lt;img&gt;</code> tiles already in place inside <code>.gallery</code>; only fill in the <code>/* TODO */</code> markers in <code>styles.css</code>.</p>",
+      "inputSpec": "A complete index.html with a <div class=\"gallery\"> containing 9 <img> tiles (placeholder src values, all with alt text), linked to styles.css with /* TODO */ markers on .gallery and .gallery img.",
+      "outputSpec": "A 3-column, 3-row grid of 9 square image tiles with 16px of even spacing between every tile in both directions, where every column is exactly the same width regardless of viewport size.",
+      "constraints": "Do not edit index.html. Use CSS Grid only for the column layout — no float, no inline-block, no fixed pixel widths on .gallery or its columns. Use the repeat() function rather than writing 1fr three times by hand. Use the gap shorthand rather than row-gap and column-gap separately.",
+      "examplesJson": [
+        {
+          "input": "9 images, .gallery { display: grid; grid-template-columns: repeat(3, 1fr); }",
+          "output": "The 9 images arrange into exactly 3 rows of 3 columns, each column occupying one third of the gallery's width, with no gap between tiles yet.",
+          "explanation": "repeat(3, 1fr) is shorthand for writing 1fr 1fr 1fr: three equal-width flexible tracks. Because the container has no gap declared yet, the tiles touch edge to edge."
+        },
+        {
+          "input": ".gallery { grid-template-columns: 1fr 1fr 1fr; gap: 16px; }  /* img has no aspect-ratio or object-fit */",
+          "output": "Each grid cell is evenly spaced 16px apart, but the images inside render at their own varying original heights, so the bottom edge of each row is jagged instead of aligned.",
+          "explanation": "Grid controls the size of the cell, not automatically the size of content inside it. Without width:100%/height:100%/aspect-ratio:1/1/object-fit:cover on the img itself, each photo keeps its natural aspect ratio and the row heights end up mismatched."
+        },
+        {
+          "input": "grid-template-columns: repeat(3, 1fr); gap: 16px; img { width:100%; height:100%; aspect-ratio: 1/1; object-fit: cover; }",
+          "output": "9 clean square tiles in a perfectly even 3x3 grid, each 16px apart, every tile the same size regardless of the original photo's proportions.",
+          "explanation": "aspect-ratio locks every tile to a 1:1 square regardless of the source image's real dimensions, and object-fit: cover crops the photo to fill that square without distorting it, which is what makes a photo gallery grid look uniform even with mismatched source photos."
+        }
+      ],
+      "hintsJson": [
+        "display: grid turns direct children into grid items automatically — you do not need any grid-column or grid-row on the images themselves for a simple uniform grid.",
+        "The fr unit means a fraction of the remaining space in the grid container, so repeat(3, 1fr) creates 3 tracks that always split the available width evenly, no matter how wide the gallery is.",
+        "gap is one shorthand property that sets both row-gap and column-gap at once — you do not need to write them separately unless you want different spacing in each direction.",
+        "Set .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; } and on .gallery img set width: 100%; height: 100%; aspect-ratio: 1 / 1; object-fit: cover;."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Photo Gallery</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"gallery\">\n    <img src=\"photo-1.jpg\" alt=\"Mountain lake at sunrise\">\n    <img src=\"photo-2.jpg\" alt=\"City skyline at night\">\n    <img src=\"photo-3.jpg\" alt=\"Close-up of a red tulip\">\n    <img src=\"photo-4.jpg\" alt=\"Desert dunes at sunset\">\n    <img src=\"photo-5.jpg\" alt=\"Waves breaking on a rocky shore\">\n    <img src=\"photo-6.jpg\" alt=\"Forest path in autumn\">\n    <img src=\"photo-7.jpg\" alt=\"Snow-covered mountain peak\">\n    <img src=\"photo-8.jpg\" alt=\"Street market with colorful stalls\">\n    <img src=\"photo-9.jpg\" alt=\"Northern lights over a cabin\">\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": ".gallery {\n  /* TODO: make this a grid container */\n  /* TODO: exactly 3 equal-width columns using repeat() and the fr unit */\n  /* TODO: 16px gap between every tile, both directions, using one shorthand */\n}\n\n.gallery img {\n  /* TODO: fill the grid cell completely */\n  /* TODO: force a square shape and crop instead of distort */\n  display: block;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Photo Gallery</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"gallery\">\n    <img src=\"photo-1.jpg\" alt=\"Mountain lake at sunrise\">\n    <img src=\"photo-2.jpg\" alt=\"City skyline at night\">\n    <img src=\"photo-3.jpg\" alt=\"Close-up of a red tulip\">\n    <img src=\"photo-4.jpg\" alt=\"Desert dunes at sunset\">\n    <img src=\"photo-5.jpg\" alt=\"Waves breaking on a rocky shore\">\n    <img src=\"photo-6.jpg\" alt=\"Forest path in autumn\">\n    <img src=\"photo-7.jpg\" alt=\"Snow-covered mountain peak\">\n    <img src=\"photo-8.jpg\" alt=\"Street market with colorful stalls\">\n    <img src=\"photo-9.jpg\" alt=\"Northern lights over a cabin\">\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": ".gallery {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 16px;\n}\n\n.gallery img {\n  width: 100%;\n  height: 100%;\n  aspect-ratio: 1 / 1;\n  object-fit: cover;\n  display: block;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Grid needs only one declaration on the container to define the entire column structure: <code>grid-template-columns: repeat(3, 1fr)</code> creates 3 tracks, each claiming an equal fraction of the remaining space after gaps are subtracted, so the columns stay perfectly even at any gallery width without a single pixel value. This is the core difference from Flexbox for a photo grid: Flexbox items wrap row by row based on available width and can leave the last row uneven, while Grid's tracks are declared once for the whole container and every item snaps into them.</p><p>The most common trap is stopping at the container and assuming the grid alone makes every tile square — Grid controls the size of each cell, not the natural size of an <code>&lt;img&gt;</code> inside it, so without <code>aspect-ratio: 1 / 1</code> and <code>object-fit: cover</code> on the images themselves, photos with different original proportions produce mismatched row heights even though the grid cells are perfectly even.</p>"
+    },
+    {
+      "title": "Build a Self-Wrapping Responsive Product Card Grid with auto-fit and minmax",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 55,
+      "points": 20,
+      "concepts": [
+        "repeat(auto-fit, minmax())",
+        "the minmax() function",
+        "responsive grid without media queries",
+        "gap on grid containers",
+        "the difference between auto-fit and a fixed column count"
+      ],
+      "prerequisites": [
+        "display:grid, grid-template-columns, repeat(), the fr unit",
+        "gap shorthand"
+      ],
+      "tags": [
+        "css",
+        "grid",
+        "responsive",
+        "auto-fit",
+        "minmax",
+        "product-grid"
+      ],
+      "problemHtml": "<p>A fixed <code>repeat(3, 1fr)</code> grid looks fine on a laptop and cramped or empty on a phone; the traditional fix is writing an <code>@media</code> query per breakpoint that hardcodes a different column count for each screen width you happen to have tested. <code>repeat(auto-fit, minmax(min, max))</code> lets the grid decide the column count itself: it fits as many columns as will comfortably hold at least <code>min</code> width each, and stretches them to share any leftover space, recalculating automatically on every resize with zero media queries.</p><p>You are given 6 product cards; your job is to lay them out in a grid that reflows on its own.</p><ul><li>1. Make <code>.product-grid</code> a grid container with <code>display: grid</code>.</li><li>2. Set <code>grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))</code> so the browser fits as many 220px-minimum columns as the container's width allows, and stretches them evenly to fill any remaining space.</li><li>3. Add <code>gap: 24px</code> between cards, both directions.</li><li>4. Do not write a single <code>@media</code> query anywhere in <code>styles.css</code> &mdash; the reflow must come entirely from <code>auto-fit</code> and <code>minmax()</code>.</li><li>5. Do not set any fixed pixel width on <code>.product-grid</code> itself or hardcode a column count &mdash; the grid must decide the number of columns on its own at every width.</li><li>6. Each <code>.product-card</code> keeps its own internal padding and text styling already provided; do not change <code>.product-card</code>'s box-model rules.</li></ul><p>The scaffold's HTML has all 6 product cards already in place; only fill in the <code>/* TODO */</code> marker on <code>.product-grid</code> in <code>styles.css</code>.</p>",
+      "inputSpec": "A complete index.html with a <div class=\"product-grid\"> containing 6 <div class=\"product-card\"> items (each with an image placeholder, a title, and a price), linked to styles.css. .product-card already has its padding, border, and text styles set. One /* TODO */ marker sits on .product-grid.",
+      "outputSpec": "A grid where every card is at least 220px wide: on a wide viewport several cards share each row and stretch evenly to fill it, and as the viewport narrows the column count drops on its own — down to a single column on a narrow phone width — entirely without any @media query.",
+      "constraints": "Do not edit index.html or .product-card's existing rules. No @media queries anywhere in styles.css. No fixed or hardcoded column count (do not use repeat(3, ...) or similar). No fixed pixel width on .product-grid.",
+      "examplesJson": [
+        {
+          "input": "container width 1000px, minmax(220px, 1fr), gap 24px",
+          "output": "4 columns of about 231px each fit the row (4 x 220px + 3 x 24px gaps = 952px, comfortably under 1000px; a 5th 220px column plus its gap would exceed 1000px), and auto-fit stretches all 4 to share the leftover space evenly.",
+          "explanation": "auto-fit computes how many minmax minimums plus gaps fit in the container, places that many columns, then lets the 1fr maximum stretch them to consume any width left over — so columns are rarely exactly 220px, they are 220px or wider."
+        },
+        {
+          "input": "container width 375px (a phone), minmax(220px, 1fr), gap 24px",
+          "output": "Only 1 column fits, so every card renders full-width, stacked vertically, one per row.",
+          "explanation": "375px is not enough room for two 220px columns plus a 24px gap between them (220 + 24 + 220 = 464px > 375px), so auto-fit falls back to a single column that stretches to fill the full width — the same rule that produced 4 columns at 1000px produces 1 column here with no separate breakpoint written."
+        },
+        {
+          "input": "grid-template-columns: repeat(3, 1fr);  /* a fixed column count instead */",
+          "output": "On a narrow phone, 3 cramped columns each render far under 220px wide, squeezing card text and images instead of reflowing to fewer columns.",
+          "explanation": "A fixed repeat(3, 1fr) always creates exactly 3 columns regardless of available width, so it cannot express minimum-width or self-adjusting column counts — this is precisely the gap that auto-fit combined with minmax() closes."
+        }
+      ],
+      "hintsJson": [
+        "auto-fit tells the grid to compute the column count itself instead of you specifying a fixed number like repeat(3, ...).",
+        "minmax(220px, 1fr) gives every column a floor and a ceiling in one value: never smaller than 220px, but stretch up to share leftover space as a fraction when there is room.",
+        "The browser recalculates how many 220px-plus-gap columns fit in the current container width on every resize — that recalculation is what replaces a hand-written @media breakpoint.",
+        "The whole fix is one line: .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; } — nothing else changes."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Product Catalog</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"product-grid\">\n    <div class=\"product-card\">\n      <img src=\"product-1.jpg\" alt=\"Wireless over-ear headphones\">\n      <h3>Wireless Headphones</h3>\n      <p>$79.00</p>\n    </div>\n    <div class=\"product-card\">\n      <img src=\"product-2.jpg\" alt=\"Stainless steel water bottle\">\n      <h3>Steel Water Bottle</h3>\n      <p>$18.00</p>\n    </div>\n    <div class=\"product-card\">\n      <img src=\"product-3.jpg\" alt=\"Mechanical keyboard with backlit keys\">\n      <h3>Mechanical Keyboard</h3>\n      <p>$95.00</p>\n    </div>\n    <div class=\"product-card\">\n      <img src=\"product-4.jpg\" alt=\"Canvas backpack\">\n      <h3>Canvas Backpack</h3>\n      <p>$54.00</p>\n    </div>\n    <div class=\"product-card\">\n      <img src=\"product-5.jpg\" alt=\"Desk lamp with adjustable arm\">\n      <h3>Desk Lamp</h3>\n      <p>$32.00</p>\n    </div>\n    <div class=\"product-card\">\n      <img src=\"product-6.jpg\" alt=\"Ceramic coffee mug\">\n      <h3>Ceramic Mug</h3>\n      <p>$12.00</p>\n    </div>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": ".product-grid {\n  /* TODO: make this a grid container */\n  /* TODO: self-adjusting columns, each at least 220px, sharing leftover space, no media query, no hardcoded column count */\n}\n\n.product-card {\n  border: 1px solid #e5e7eb;\n  border-radius: 8px;\n  padding: 16px;\n}\n\n.product-card img {\n  width: 100%;\n  height: 140px;\n  object-fit: cover;\n  border-radius: 4px;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Product Catalog</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"product-grid\">\n    <div class=\"product-card\">\n      <img src=\"product-1.jpg\" alt=\"Wireless over-ear headphones\">\n      <h3>Wireless Headphones</h3>\n      <p>$79.00</p>\n    </div>\n    <div class=\"product-card\">\n      <img src=\"product-2.jpg\" alt=\"Stainless steel water bottle\">\n      <h3>Steel Water Bottle</h3>\n      <p>$18.00</p>\n    </div>\n    <div class=\"product-card\">\n      <img src=\"product-3.jpg\" alt=\"Mechanical keyboard with backlit keys\">\n      <h3>Mechanical Keyboard</h3>\n      <p>$95.00</p>\n    </div>\n    <div class=\"product-card\">\n      <img src=\"product-4.jpg\" alt=\"Canvas backpack\">\n      <h3>Canvas Backpack</h3>\n      <p>$54.00</p>\n    </div>\n    <div class=\"product-card\">\n      <img src=\"product-5.jpg\" alt=\"Desk lamp with adjustable arm\">\n      <h3>Desk Lamp</h3>\n      <p>$32.00</p>\n    </div>\n    <div class=\"product-card\">\n      <img src=\"product-6.jpg\" alt=\"Ceramic coffee mug\">\n      <h3>Ceramic Mug</h3>\n      <p>$12.00</p>\n    </div>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": ".product-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\n  gap: 24px;\n}\n\n.product-card {\n  border: 1px solid #e5e7eb;\n  border-radius: 8px;\n  padding: 16px;\n}\n\n.product-card img {\n  width: 100%;\n  height: 140px;\n  object-fit: cover;\n  border-radius: 4px;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>repeat(auto-fit, minmax(220px, 1fr))</code> packs two ideas into one line. <code>minmax(220px, 1fr)</code> defines a single column track's range: never smaller than 220px, and up to a full <code>1fr</code> share of leftover space. <code>auto-fit</code> then repeats that track definition as many times as fit in the container's current width, so the browser recomputes the column count on every resize instead of you writing one fixed number.</p><p>The common trap is confusing this with a fixed <code>repeat(3, 1fr)</code>, which always creates exactly 3 columns and simply shrinks them below any usable width on a narrow screen instead of reducing the column count — <code>auto-fit</code> with <code>minmax</code> is what actually changes the number of columns. A second, subtler trap is swapping in <code>auto-fill</code> instead of <code>auto-fit</code>: with fewer items than would fill a row, <code>auto-fill</code> leaves invisible empty tracks reserving space, so the real cards stay pinned to their minimum width instead of stretching to fill the row the way <code>auto-fit</code> collapses those empty tracks and lets <code>1fr</code> do so.</p>"
+    },
+    {
+      "title": "Capstone: Build a Holy-Grail Page Layout by Combining CSS Grid and Flexbox",
+      "difficulty": "HARD",
+      "estimatedMinutes": 75,
+      "points": 25,
+      "concepts": [
+        "grid-template-areas for a page skeleton",
+        "grid-template-columns/rows sized with fr and a fixed track",
+        "Flexbox nested inside grid areas",
+        "min-height:100vh page shells",
+        "combining Grid for macro layout with Flexbox for micro layout"
+      ],
+      "prerequisites": [
+        "display:grid, grid-template-columns, repeat(), the fr unit, gap",
+        "display:flex, flex-direction, justify-content, align-items, gap",
+        "flex: 0 0 <basis> and flex: 1 sizing"
+      ],
+      "tags": [
+        "css",
+        "grid",
+        "flexbox",
+        "holy-grail",
+        "page-layout",
+        "capstone"
+      ],
+      "problemHtml": "<p>Real application shells almost never use only Grid or only Flexbox &mdash; they use Grid for the page's overall skeleton, because Grid can define rows and columns together in one place, and Flexbox inside individual regions, because most components are really just \"a row or column of things with some spacing,\" which is exactly what Flexbox is for. This capstone combines both into one classic \"holy grail\" shell: a full-width header, a fixed sidebar, a fluid main area, and a full-width footer, with Flexbox arranging the contents of each region.</p><p>You are given the full page markup; your job is to write every layout rule in <code>styles.css</code>.</p><ul><li>1. Make <code>.page</code> a grid container with <code>display: grid</code> and <code>min-height: 100vh</code>.</li><li>2. Define the page skeleton with named areas using <code>grid-template-areas</code> across 3 rows: <code>\"header header\"</code>, <code>\"sidebar main\"</code>, and <code>\"footer footer\"</code>.</li><li>3. Size the columns with <code>grid-template-columns: 220px 1fr</code> so the sidebar column is a fixed 220px and the main column fills the rest.</li><li>4. Size the rows with <code>grid-template-rows: auto 1fr auto</code> so the header and footer only take the height their content needs, and <code>main</code> absorbs any remaining vertical space.</li><li>5. Assign <code>grid-area: header</code>, <code>grid-area: sidebar</code>, <code>grid-area: main</code>, and <code>grid-area: footer</code> to the 4 matching elements.</li><li>6. Inside <code>.site-header</code>, use Flexbox (<code>display: flex</code>, <code>justify-content: space-between</code>, <code>align-items: center</code>) to place the logo on the left and the top-level nav on the right.</li><li>7. Inside <code>.sidebar-nav</code>, use Flexbox with <code>flex-direction: column</code> and <code>gap: 12px</code> to stack the sidebar links vertically with even spacing instead of relying on link margins.</li><li>8. Inside <code>.card-row</code> (in the main area), use Flexbox with <code>flex-wrap: wrap</code> and <code>gap: 16px</code> so the summary cards wrap onto new lines on a narrow viewport instead of overflowing.</li><li>9. Inside <code>.site-footer</code>, use Flexbox with <code>justify-content: space-between</code> and <code>align-items: center</code> to place the copyright text on the left and the footer links on the right.</li><li>10. Do not use <code>float</code>, <code>position: absolute</code>, or any fixed pixel width anywhere except the sidebar's 220px column track.</li></ul><p>The scaffold's HTML has every element and class name already in place; only fill in the <code>/* TODO */</code> markers in <code>styles.css</code>.</p>",
+      "inputSpec": "A complete index.html with .page containing header.site-header, aside.sidebar (with nav.sidebar-nav), main.main-content (with a div.card-row of 4 summary cards), and footer.site-footer, linked to styles.css with /* TODO */ markers on .page and on the 4 flex regions.",
+      "outputSpec": "A full-height page: a header spanning the full width with a logo left and nav right, a 220px sidebar with a vertically stacked nav below the header, a fluid main area with summary cards that wrap in a row, and a full-width footer with copyright left and links right — the sidebar column staying exactly 220px at any viewport width.",
+      "constraints": "Do not edit index.html. Use grid-template-areas for the page skeleton, not grid-column/grid-row line numbers. Use Flexbox, not Grid, for the header, sidebar-nav, card-row, and footer regions. No float, no position:absolute, no fixed pixel width anywhere except the 220px sidebar column.",
+      "examplesJson": [
+        {
+          "input": "grid-template-areas: \"header header\" \"sidebar main\" \"footer footer\"; grid-template-columns: 220px 1fr;",
+          "output": "The header and footer rows each span both the sidebar and main columns edge to edge, while the middle row splits into a 220px sidebar and a fluid main column.",
+          "explanation": "Repeating the same area name across a row in grid-template-areas is what makes an element span multiple columns — header appearing twice in one quoted row means the header element occupies both column tracks in that row."
+        },
+        {
+          "input": ".site-footer { display: flex; }  /* justify-content missing */",
+          "output": "The copyright text and the footer links sit next to each other packed at the left edge of the footer instead of spread to opposite ends.",
+          "explanation": "display:flex alone only arranges children in a row starting from the container's edge; without justify-content: space-between there is no rule pushing the two footer children apart to the two ends."
+        },
+        {
+          "input": ".sidebar-nav { display: flex; gap: 12px; }  /* flex-direction missing */",
+          "output": "The sidebar links render in a horizontal row squeezed into the 220px-wide sidebar instead of stacking one per line.",
+          "explanation": "Flexbox's default flex-direction is row, so a flex container without an explicit flex-direction: column always lays its children out side by side first, which is wrong for a vertical sidebar menu."
+        }
+      ],
+      "hintsJson": [
+        "Solve this top-down: first get the 4-region page skeleton right with Grid, then treat each region as its own small Flexbox problem, independent of the others.",
+        "grid-template-areas reads like an ASCII picture of the page — write it as quoted strings, one per row, repeating a name to make that region span multiple columns in that row.",
+        "Every one of the 4 inner Flexbox regions reuses a pattern from an earlier exercise: header and footer both need justify-content: space-between plus align-items: center; sidebar-nav needs flex-direction: column with gap; card-row needs flex-wrap: wrap with gap.",
+        "Full skeleton: .page { display: grid; min-height: 100vh; grid-template-areas: \"header header\" \"sidebar main\" \"footer footer\"; grid-template-columns: 220px 1fr; grid-template-rows: auto 1fr auto; } then grid-area: header/sidebar/main/footer on the 4 regions, each with its own Flexbox rules inside."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Team Dashboard</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"page\">\n    <header class=\"site-header\">\n      <a class=\"logo\" href=\"#\">TeamHub</a>\n      <nav>\n        <ul class=\"top-nav\">\n          <li><a href=\"#\">Dashboard</a></li>\n          <li><a href=\"#\">Projects</a></li>\n          <li><a href=\"#\">Settings</a></li>\n        </ul>\n      </nav>\n    </header>\n\n    <aside class=\"sidebar\">\n      <nav class=\"sidebar-nav\">\n        <a href=\"#\">Overview</a>\n        <a href=\"#\">Tasks</a>\n        <a href=\"#\">Reports</a>\n        <a href=\"#\">Team</a>\n      </nav>\n    </aside>\n\n    <main class=\"main-content\">\n      <h1>Overview</h1>\n      <div class=\"card-row\">\n        <div class=\"summary-card\">\n          <h3>Open Tasks</h3>\n          <p>14</p>\n        </div>\n        <div class=\"summary-card\">\n          <h3>In Review</h3>\n          <p>6</p>\n        </div>\n        <div class=\"summary-card\">\n          <h3>Completed</h3>\n          <p>52</p>\n        </div>\n        <div class=\"summary-card\">\n          <h3>Overdue</h3>\n          <p>2</p>\n        </div>\n      </div>\n    </main>\n\n    <footer class=\"site-footer\">\n      <p>&copy; 2026 TeamHub Inc.</p>\n      <nav>\n        <ul class=\"footer-links\">\n          <li><a href=\"#\">Privacy</a></li>\n          <li><a href=\"#\">Terms</a></li>\n        </ul>\n      </nav>\n    </footer>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": ".page {\n  /* TODO: make this a grid container */\n  /* TODO: give it a minimum height spanning the full viewport */\n  /* TODO: define grid-template-areas for header/sidebar/main/footer across 3 rows */\n  /* TODO: grid-template-columns: 220px fixed sidebar, 1fr fluid main */\n  /* TODO: grid-template-rows: auto header, 1fr main, auto footer */\n}\n\n.site-header {\n  /* TODO: place this in the \"header\" grid area */\n  /* TODO: flex row, logo left / nav right, vertically centered */\n  background: #1f2937;\n  color: #fff;\n  padding: 16px 32px;\n}\n\n.logo {\n  color: #fff;\n  text-decoration: none;\n  font-weight: bold;\n  font-size: 20px;\n}\n\n.top-nav {\n  display: flex;\n  gap: 20px;\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\n\n.top-nav a {\n  color: #fff;\n  text-decoration: none;\n}\n\n.sidebar {\n  /* TODO: place this in the \"sidebar\" grid area */\n  background: #f3f4f6;\n  padding: 24px;\n}\n\n.sidebar-nav {\n  /* TODO: flex column, 12px gap, links stacked vertically */\n}\n\n.sidebar-nav a {\n  text-decoration: none;\n  color: #1f2937;\n}\n\n.main-content {\n  /* TODO: place this in the \"main\" grid area */\n  padding: 24px;\n}\n\n.card-row {\n  /* TODO: flex row that wraps onto new lines, 16px gap */\n}\n\n.summary-card {\n  flex: 1 1 160px;\n  border: 1px solid #e5e7eb;\n  border-radius: 8px;\n  padding: 16px;\n}\n\n.site-footer {\n  /* TODO: place this in the \"footer\" grid area */\n  /* TODO: flex row, copyright left / footer links right, vertically centered */\n  background: #1f2937;\n  color: #fff;\n  padding: 16px 32px;\n}\n\n.footer-links {\n  display: flex;\n  gap: 16px;\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\n\n.footer-links a {\n  color: #fff;\n  text-decoration: none;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Team Dashboard</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"page\">\n    <header class=\"site-header\">\n      <a class=\"logo\" href=\"#\">TeamHub</a>\n      <nav>\n        <ul class=\"top-nav\">\n          <li><a href=\"#\">Dashboard</a></li>\n          <li><a href=\"#\">Projects</a></li>\n          <li><a href=\"#\">Settings</a></li>\n        </ul>\n      </nav>\n    </header>\n\n    <aside class=\"sidebar\">\n      <nav class=\"sidebar-nav\">\n        <a href=\"#\">Overview</a>\n        <a href=\"#\">Tasks</a>\n        <a href=\"#\">Reports</a>\n        <a href=\"#\">Team</a>\n      </nav>\n    </aside>\n\n    <main class=\"main-content\">\n      <h1>Overview</h1>\n      <div class=\"card-row\">\n        <div class=\"summary-card\">\n          <h3>Open Tasks</h3>\n          <p>14</p>\n        </div>\n        <div class=\"summary-card\">\n          <h3>In Review</h3>\n          <p>6</p>\n        </div>\n        <div class=\"summary-card\">\n          <h3>Completed</h3>\n          <p>52</p>\n        </div>\n        <div class=\"summary-card\">\n          <h3>Overdue</h3>\n          <p>2</p>\n        </div>\n      </div>\n    </main>\n\n    <footer class=\"site-footer\">\n      <p>&copy; 2026 TeamHub Inc.</p>\n      <nav>\n        <ul class=\"footer-links\">\n          <li><a href=\"#\">Privacy</a></li>\n          <li><a href=\"#\">Terms</a></li>\n        </ul>\n      </nav>\n    </footer>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": ".page {\n  display: grid;\n  min-height: 100vh;\n  grid-template-areas:\n    \"header header\"\n    \"sidebar main\"\n    \"footer footer\";\n  grid-template-columns: 220px 1fr;\n  grid-template-rows: auto 1fr auto;\n}\n\n.site-header {\n  grid-area: header;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  background: #1f2937;\n  color: #fff;\n  padding: 16px 32px;\n}\n\n.logo {\n  color: #fff;\n  text-decoration: none;\n  font-weight: bold;\n  font-size: 20px;\n}\n\n.top-nav {\n  display: flex;\n  gap: 20px;\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\n\n.top-nav a {\n  color: #fff;\n  text-decoration: none;\n}\n\n.sidebar {\n  grid-area: sidebar;\n  background: #f3f4f6;\n  padding: 24px;\n}\n\n.sidebar-nav {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n}\n\n.sidebar-nav a {\n  text-decoration: none;\n  color: #1f2937;\n}\n\n.main-content {\n  grid-area: main;\n  padding: 24px;\n}\n\n.card-row {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 16px;\n}\n\n.summary-card {\n  flex: 1 1 160px;\n  border: 1px solid #e5e7eb;\n  border-radius: 8px;\n  padding: 16px;\n}\n\n.site-footer {\n  grid-area: footer;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  background: #1f2937;\n  color: #fff;\n  padding: 16px 32px;\n}\n\n.footer-links {\n  display: flex;\n  gap: 16px;\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\n\n.footer-links a {\n  color: #fff;\n  text-decoration: none;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The page skeleton is written once as an ASCII picture with <code>grid-template-areas</code>: two quoted rows both repeating <code>header</code> and <code>footer</code> make those regions span the full width, while the middle row splits into <code>sidebar</code> and <code>main</code>. <code>grid-template-columns: 220px 1fr</code> and <code>grid-template-rows: auto 1fr auto</code> then say exactly how much space each track gets &mdash; the sidebar is always 220px, the header and footer only take the height their own content needs, and <code>main</code> absorbs whatever vertical space is left, which is what keeps the footer pinned to the bottom of the viewport even on a page with very little main content.</p><p>Every region inside that skeleton is then a separate, self-contained Flexbox problem: the header and footer both reuse <code>justify-content: space-between</code> to push their two children to opposite ends, the sidebar nav reuses <code>flex-direction: column</code> with <code>gap</code> instead of link margins, and the card row reuses <code>flex-wrap: wrap</code> so cards move to a new line instead of shrinking indefinitely on a narrow screen. The trap most learners hit at this scale is trying to solve the whole page with one technique &mdash; either forcing Grid into every component, which fights against Flexbox's natural one-axis wrapping for the card row, or forcing Flexbox into the page skeleton, which cannot define a fixed sidebar column and a fluid row height in one declaration the way <code>grid-template-columns</code>/<code>grid-template-rows</code> can.</p>",
+      "diagramMermaid": "flowchart TD\n  page[page grid]\n  header[header grid area]\n  sidebar[sidebar grid area]\n  main[main grid area]\n  footer[footer grid area]\n  page --> header\n  page --> sidebar\n  page --> main\n  page --> footer\n  header --> logo[logo]\n  header --> topnav[top nav flex row]\n  sidebar --> sidebarnav[sidebar nav flex column]\n  main --> cardrow[card row flex wrap]\n  footer --> copyright[copyright text]\n  footer --> footerlinks[footer links flex row]"
+    }
+  ]
+}

@@ -1,0 +1,407 @@
+{
+  "trackSlug": "javascript",
+  "moduleSlug": "basics-syntax",
+  "exercises": [
+    {
+      "title": "Declare Typed Variables with let and const and Report Their Types",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "variable declarations with let and const",
+        "primitive data types: string, number, boolean",
+        "the typeof operator",
+        "object literals",
+        "JSON.stringify for checkable output"
+      ],
+      "prerequisites": [
+        "writing and calling a JavaScript function",
+        "using console.log"
+      ],
+      "tags": [
+        "javascript",
+        "variables",
+        "data-types",
+        "typeof",
+        "beginner"
+      ],
+      "problemHtml": "<p>Every value in JavaScript has a type, and the keyword you use to declare a variable is a promise about whether that variable's binding can change later. <code>const</code> means the variable can never be reassigned after its first value; <code>let</code> means it can. Picking the wrong one is not just a style choice &mdash; using <code>const</code> for something that must change throws a hard <code>TypeError: Assignment to constant variable.</code> at runtime, and using <code>let</code> everywhere hides which values in your code are actually meant to stay fixed.</p><p>You will build a small profile object for a person named Ada, using the correct declaration keyword for each variable, and report the runtime type of each value using the <code>typeof</code> operator.</p><ul><li>1. Declare <code>name</code> as a <code>const</code> holding the string <code>\"Ada\"</code>.</li><li>2. Declare <code>age</code> as a <code>let</code> starting at <code>28</code>, because it must be reassigned in the next step (declaring it with <code>const</code> would crash the program).</li><li>3. Reassign <code>age</code> to <code>age + 1</code>, representing Ada's birthday.</li><li>4. Declare <code>isStudent</code> as a <code>const</code> holding the boolean <code>false</code>.</li><li>5. Declare <code>skills</code> as a <code>const</code> holding the array <code>[\"JS\", \"HTML\", \"CSS\"]</code>.</li><li>6. Return an object with the five values <code>name</code>, <code>age</code>, <code>isStudent</code>, <code>skills</code>, and a nested <code>types</code> object whose four keys hold the result of <code>typeof</code> on each of the first four values.</li></ul><p>The scaffold provides the function signature and a <code>console.log</code> line that prints your returned object as JSON so you can check it exactly.</p>",
+      "inputSpec": "buildProfile() takes no parameters.",
+      "outputSpec": "buildProfile() must return { name: \"Ada\", age: 29, isStudent: false, skills: [\"JS\",\"HTML\",\"CSS\"], types: { name: \"string\", age: \"number\", isStudent: \"boolean\", skills: \"object\" } }. The harness prints console.log(JSON.stringify(buildProfile())), which must output exactly: {\"name\":\"Ada\",\"age\":29,\"isStudent\":false,\"skills\":[\"JS\",\"HTML\",\"CSS\"],\"types\":{\"name\":\"string\",\"age\":\"number\",\"isStudent\":\"boolean\",\"skills\":\"object\"}}",
+      "constraints": "Use const for every value that is never reassigned; use let only for age. Do not hardcode the types object's values as string literals — compute each one with the typeof operator applied to the actual variable. Do not change the order of keys in the returned object or in the nested types object. No third-party libraries.",
+      "examplesJson": [
+        {
+          "input": "const city = \"Paris\";\ntypeof city",
+          "output": "\"string\"",
+          "explanation": "typeof always returns one of a fixed set of type-name strings. A string literal, no matter its content, reports as \"string\" — the same rule you apply to name and isStudent in the profile object."
+        },
+        {
+          "input": "let count = 5;\nconst countConst = 5;\ncount = count + 1;    // fine\ncountConst = countConst + 1; // TypeError: Assignment to constant variable.",
+          "output": "TypeError: Assignment to constant variable.",
+          "explanation": "let allows reassignment, const does not. This is exactly why age must be declared with let: the very next step reassigns it for the birthday, and const would crash the program at that line."
+        },
+        {
+          "input": "typeof [1, 2, 3]",
+          "output": "\"object\"",
+          "explanation": "Arrays are not a separate primitive type in JavaScript — typeof reports any array as \"object\", the same as a plain object literal. This is exactly why types.skills must equal \"object\", not \"array\"."
+        }
+      ],
+      "hintsJson": [
+        "const locks a binding after its first assignment; let allows reassignment. Look at which of the five values in the profile actually changes after it is first set — that is the only one that needs let.",
+        "typeof is applied to a value at runtime, not written by hand as a string — typeof name evaluates to the string \"string\", so you must call it, not guess the answer.",
+        "Arrays are a special case: typeof on an array returns \"object\", not \"array\" — there is no separate array type in JavaScript's type system.",
+        "Do the birthday step first (age = age + 1) since it must happen before you read age into the returned object, then return one object literal with name, age, isStudent, skills, and a nested types object built the same way."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// buildProfile: no parameters.\n// Declare the required variables using the correct declaration keyword\n// (const for values that never change, let for the one that must be\n// reassigned), then return the profile object described in the problem.\nfunction buildProfile() {\n  // TODO: declare name as a const string \"Ada\"\n  // TODO: declare age as a let starting at 28\n  // TODO: reassign age to age + 1 (Ada just had a birthday)\n  // TODO: declare isStudent as a const boolean false\n  // TODO: declare skills as a const array [\"JS\", \"HTML\", \"CSS\"]\n  // TODO: return the object described in the problem, including the \"types\" sub-object\n}\n\nconsole.log(JSON.stringify(buildProfile()));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "function buildProfile() {\n  const name = \"Ada\";\n  let age = 28;\n  age = age + 1;\n  const isStudent = false;\n  const skills = [\"JS\", \"HTML\", \"CSS\"];\n\n  return {\n    name: name,\n    age: age,\n    isStudent: isStudent,\n    skills: skills,\n    types: {\n      name: typeof name,\n      age: typeof age,\n      isStudent: typeof isStudent,\n      skills: typeof skills\n    }\n  };\n}\n\nconsole.log(JSON.stringify(buildProfile()));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>let age = 28;</code> followed by <code>age = age + 1;</code> is the only reassignment in this exercise, which is exactly why it is the only variable declared with <code>let</code> — every other value is set once and never touched again, so <code>const</code> documents that intent and would catch an accidental second assignment as an error instead of a silent bug.</p><p>The nested <code>types</code> object is built by calling <code>typeof</code> on each variable rather than writing the type names as string literals; the most common beginner trap here is assuming an array has its own type, when <code>typeof skills</code> actually reports <code>\"object\"</code> &mdash; arrays are a special kind of object in JavaScript, not a distinct primitive, and only <code>Array.isArray()</code> or checking a prototype can tell them apart from a plain object at runtime.</p>"
+    },
+    {
+      "title": "Format a Personalized Cart Greeting with Template Literals and String Methods",
+      "difficulty": "EASY",
+      "estimatedMinutes": 20,
+      "points": 10,
+      "concepts": [
+        "template literals",
+        "String.prototype.trim",
+        "string case conversion (toUpperCase/toLowerCase)",
+        "charAt and slice for substrings",
+        "the string length property"
+      ],
+      "prerequisites": [
+        "declaring variables with let/const",
+        "calling built-in methods on a string"
+      ],
+      "tags": [
+        "javascript",
+        "strings",
+        "template-literals",
+        "string-methods",
+        "beginner"
+      ],
+      "problemHtml": "<p>User input almost never arrives clean. A name typed into a form field can carry stray leading or trailing spaces from a careless paste, and it can be typed in any mix of upper and lower case. Concatenating that raw value straight into a greeting produces messages like <code>\"Hello,   ADA  !\"</code> with visible gaps and shouty capitals, which looks unpolished even though the underlying logic is correct. Cleaning the value first, with <code>String.prototype.trim()</code> and case-conversion methods, is what turns raw input into presentable text.</p><p>Write a function that formats a cart greeting message from a raw name and an item count.</p><ul><li>1. Trim leading and trailing whitespace from <code>name</code> first; every later step must use the trimmed value, never the raw one.</li><li>2. Build a \"nice\" version of the name: its first character uppercase, followed by the rest of the trimmed name lowercase (for example, <code>\"MARIA\"</code> becomes <code>\"Maria\"</code>).</li><li>3. Build a \"shout\" version: the trimmed name fully uppercase.</li><li>4. Compute the trimmed name's character count using its <code>.length</code> property.</li><li>5. Return, using a single template literal, exactly the string: <code>Hello, &lt;nice&gt;! You have &lt;itemCount&gt; item(s) in your cart. Your name has &lt;length&gt; characters. Order confirmed for &lt;shout&gt;.</code> with each <code>&lt;...&gt;</code> replaced by the computed value.</li></ul><p>The scaffold provides the function signature, and a sample call is already wired into a <code>console.log</code> so you can see your output as you build it.</p>",
+      "inputSpec": "formatGreeting(name, itemCount): name is a string that may have surrounding whitespace and any letter casing; itemCount is a non-negative integer.",
+      "outputSpec": "A single string built from a template literal in the exact form: `Hello, ${nice}! You have ${itemCount} item(s) in your cart. Your name has ${trimmedLength} characters. Order confirmed for ${shout}.` where nice is the trimmed name with only its first letter capitalized, shout is the trimmed name fully uppercase, and trimmedLength is the trimmed name's .length.",
+      "constraints": "Always trim before computing nice, shout, or the length — never operate on the raw, untrimmed name. Build the nice version with charAt(0).toUpperCase() plus slice(1).toLowerCase(), not a hardcoded string. Use a template literal for the final return, not string concatenation with +. No external libraries.",
+      "examplesJson": [
+        {
+          "input": "formatGreeting(\"  ada  \", 3)",
+          "output": "Hello, Ada! You have 3 item(s) in your cart. Your name has 3 characters. Order confirmed for ADA.",
+          "explanation": "The two spaces on each side of \"ada\" are removed by trim() before anything else runs, so the length is 3 (not 7), nice capitalizes only the first letter, and shout uppercases the trimmed 3-character name."
+        },
+        {
+          "input": "formatGreeting(\"MARIA\", 1)",
+          "output": "Hello, Maria! You have 1 item(s) in your cart. Your name has 5 characters. Order confirmed for MARIA.",
+          "explanation": "Even though the input arrives fully uppercase, nice still lowercases everything after the first letter, producing \"Maria\" rather than leaving \"ARIA\" shouting inside a mostly-capitalized name."
+        },
+        {
+          "input": "formatGreeting(\" liam\", 0)",
+          "output": "Hello, Liam! You have 0 item(s) in your cart. Your name has 4 characters. Order confirmed for LIAM.",
+          "explanation": "itemCount can be 0 and is interpolated as-is; only one leading space needed trimming here, leaving a 4-character trimmed name."
+        }
+      ],
+      "hintsJson": [
+        "Start by trimming: const trimmed = name.trim(); every later computed value (nice, shout, length) must be derived from trimmed, not from the original parameter.",
+        "To capitalize only the first letter: trimmed.charAt(0).toUpperCase() gives the first letter uppercase, and trimmed.slice(1).toLowerCase() gives everything after it lowercase — concatenate the two.",
+        "trimmed.toUpperCase() gives the shout version in one call; trimmed.length gives the character count directly, no loop needed.",
+        "The final return is one template literal: `Hello, ${nice}! You have ${itemCount} item(s) in your cart. Your name has ${trimmedLength} characters. Order confirmed for ${shout}.` — match the punctuation and spacing exactly."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// formatGreeting(name, itemCount)\n// name may have surrounding whitespace and any letter casing.\nfunction formatGreeting(name, itemCount) {\n  // TODO: trim the name\n  // TODO: build \"nice\" — first letter uppercase, rest lowercase\n  // TODO: build \"shout\" — the trimmed name fully uppercase\n  // TODO: get the trimmed name's character count\n  // TODO: return the exact template literal described in the problem\n}\n\nconsole.log(formatGreeting(\"  ada  \", 3));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "function formatGreeting(name, itemCount) {\n  const trimmed = name.trim();\n  const nice = trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();\n  const shout = trimmed.toUpperCase();\n  const trimmedLength = trimmed.length;\n  return `Hello, ${nice}! You have ${itemCount} item(s) in your cart. Your name has ${trimmedLength} characters. Order confirmed for ${shout}.`;\n}\n\nconsole.log(formatGreeting(\"  ada  \", 3));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Trimming first is what makes every later step correct: if <code>trim()</code> ran after building <code>nice</code> or <code>shout</code>, the capitalized or uppercased string would still carry the original whitespace inside it, since string methods do not look ahead to later transformations. Capitalizing only the first letter combines two calls &mdash; <code>charAt(0).toUpperCase()</code> for the first character and <code>slice(1).toLowerCase()</code> for the rest &mdash; rather than calling <code>.toUpperCase()</code> on the whole string, which is the trap that would produce <code>\"ADA\"</code> instead of <code>\"Ada\"</code> for the nice version.</p><p>The template literal keeps the return statement readable and correct: interpolating <code>itemCount</code> directly avoids the common beginner mistake of building the string with repeated <code>+</code> concatenation, where forgetting a space or a period is easy to miss across several separate string pieces but obvious inside one continuous template.</p>"
+    },
+    {
+      "title": "Compute an Order Total Without Falling Into the Plus-Operator Coercion Trap",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 30,
+      "points": 15,
+      "concepts": [
+        "explicit numeric conversion with Number()",
+        "the + operator's string-concatenation coercion",
+        "arithmetic operators * and +",
+        "Math.round for 2-decimal rounding",
+        "floating-point-safe money math"
+      ],
+      "prerequisites": [
+        "template literals",
+        "the typeof operator",
+        "basic arithmetic in JavaScript"
+      ],
+      "tags": [
+        "javascript",
+        "numbers",
+        "type-coercion",
+        "arithmetic",
+        "math-round"
+      ],
+      "problemHtml": "<p>Values coming from a web form, a URL query string, or JSON parsed from text are frequently strings even when they represent numbers &mdash; an input field's <code>.value</code> is always a string, never a number, no matter what the user typed. JavaScript's <code>+</code> operator makes this dangerous: if either side of a <code>+</code> is a string, the whole expression concatenates instead of adding, so <code>\"2\" + 2</code> evaluates to the three-character string <code>\"22\"</code>, not the number <code>4</code>. A price field that arrives as <code>\"19.99\"</code> and gets combined directly with <code>+</code> later in a calculation can produce a silently wrong total with no error thrown anywhere.</p><p>Write a function that computes an order's total while converting its string inputs explicitly, before any arithmetic happens.</p><ul><li>1. Convert <code>priceInput</code> to a number using <code>Number(...)</code>, even if it already looks numeric.</li><li>2. Convert <code>quantityInput</code> to a number the same way.</li><li>3. Compute <code>subtotal = price * quantity</code>.</li><li>4. Compute <code>tax = subtotal * taxRate</code>.</li><li>5. Compute <code>total = subtotal + tax</code> using the already-converted numbers, never the raw string inputs.</li><li>6. Round the total to 2 decimal places with <code>Math.round(total * 100) / 100</code> and return that rounded number.</li></ul><p>The scaffold's function signature already names the three parameters; fill in the conversion and arithmetic steps marked with <code>// TODO</code>.</p>",
+      "inputSpec": "calculateOrderTotal(priceInput, quantityInput, taxRate): priceInput and quantityInput may be numbers or numeric strings (e.g. \"19.99\"); taxRate is always a plain number between 0 and 1 (e.g. 0.08 for 8%).",
+      "outputSpec": "A single number: the order total after tax, rounded to exactly 2 decimal places using Math.round(total * 100) / 100.",
+      "constraints": "Convert priceInput and quantityInput with Number(...) before any arithmetic — never pass the raw parameters into * or +. Do not use the + operator to combine a string and a number anywhere. Round only once, at the very end, using Math.round(total * 100) / 100 — do not round intermediate values. Return a number, not a string.",
+      "examplesJson": [
+        {
+          "input": "calculateOrderTotal(\"19.99\", \"3\", 0.08)",
+          "output": "64.77",
+          "explanation": "price 19.99, quantity 3 -> subtotal 59.97; tax = 59.97 * 0.08 = 4.7976; total = 59.97 + 4.7976 = 64.7676, which rounds to 64.77."
+        },
+        {
+          "input": "calculateOrderTotal(5, \"2\", 0)",
+          "output": "10",
+          "explanation": "price is already a number and quantity is a numeric string; subtotal = 5 * 2 = 10, and a 0 tax rate leaves the total unchanged at 10."
+        },
+        {
+          "input": "\"2\" + 2",
+          "output": "\"22\"",
+          "explanation": "This is the trap the function must avoid: + concatenates the moment either operand is a string, producing the three-character string \"22\" instead of the number 4. This is exactly why priceInput and quantityInput are converted with Number(...) before any + or * touches them."
+        }
+      ],
+      "hintsJson": [
+        "Whenever a value might have arrived from a form field, a URL, or a JSON string, it may be text even when it looks numeric — check with typeof before you trust it, and convert with Number(...) before doing arithmetic on it.",
+        "The + operator is the dangerous one: if either operand is a string, + concatenates instead of adding. \"2\" + 2 is the three-character string \"22\", not the number 4. Multiplication with * does not have this problem, but do not rely on that inconsistency — convert explicitly regardless of which operator you plan to use.",
+        "Convert priceInput and quantityInput to numbers as the very first two lines of the function, before computing subtotal, tax, or total from them.",
+        "Round only the final total, once: Math.round(total * 100) / 100 — rounding subtotal or tax first and then combining them can produce a total that is off by a cent from rounding twice."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// calculateOrderTotal(priceInput, quantityInput, taxRate)\n// priceInput and quantityInput may already be numbers, or they may be\n// numeric strings like \"19.99\" (as if read from a form field).\nfunction calculateOrderTotal(priceInput, quantityInput, taxRate) {\n  // TODO: convert priceInput to a number\n  // TODO: convert quantityInput to a number\n  // TODO: compute subtotal = price * quantity\n  // TODO: compute tax = subtotal * taxRate\n  // TODO: compute total = subtotal + tax\n  // TODO: round total to 2 decimals and return it\n}\n\nconsole.log(calculateOrderTotal(\"19.99\", \"3\", 0.08));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "function calculateOrderTotal(priceInput, quantityInput, taxRate) {\n  const price = Number(priceInput);\n  const quantity = Number(quantityInput);\n  const subtotal = price * quantity;\n  const tax = subtotal * taxRate;\n  const total = subtotal + tax;\n  return Math.round(total * 100) / 100;\n}\n\nconsole.log(calculateOrderTotal(\"19.99\", \"3\", 0.08));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Converting <code>priceInput</code> and <code>quantityInput</code> with <code>Number(...)</code> before any arithmetic removes all ambiguity about what <code>+</code> and <code>*</code> will do to them. The trap this guards against is real and silent: <code>\"2\" + 2</code> evaluates to the string <code>\"22\"</code> because <code>+</code> concatenates the moment either side is a string, while <code>\"2\" * 2</code> evaluates to the number <code>4</code> because <code>*</code> always coerces both sides to numbers first &mdash; the two operators behave inconsistently, and code that happens to only use <code>*</code> can look correct in testing yet break the instant a later <code>+</code> step is added without re-checking the types involved.</p><p>Rounding is deliberately done exactly once, at the very end, with <code>Math.round(total * 100) / 100</code>. Rounding <code>subtotal</code> and <code>tax</code> separately before adding them can shift the final cent by a fraction, a classic source of off-by-a-cent bugs in real billing code.</p>",
+      "diagramMermaid": "flowchart TD\n  Price[priceInput string or number]\n  Qty[quantityInput string or number]\n  Conv[Convert both with Number]\n  Sub[Compute subtotal price times quantity]\n  Tax[Compute tax subtotal times taxRate]\n  Tot[Compute total subtotal plus tax]\n  Round[Round total to 2 decimals]\n  Price --> Conv\n  Qty --> Conv\n  Conv --> Sub\n  Sub --> Tax\n  Sub --> Tot\n  Tax --> Tot\n  Tot --> Round"
+    },
+    {
+      "title": "Gate Checkout Access with Strict Equality Checks",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 35,
+      "points": 15,
+      "concepts": [
+        "strict equality === versus loose equality ==",
+        "boolean logic with &&",
+        "typeof for defensive type checks",
+        "truthy/falsy pitfalls of ==",
+        "returning an object of computed booleans"
+      ],
+      "prerequisites": [
+        "the typeof operator",
+        "the boolean data type",
+        "comparison operators"
+      ],
+      "tags": [
+        "javascript",
+        "booleans",
+        "strict-equality",
+        "comparison",
+        "beginner"
+      ],
+      "problemHtml": "<p>JavaScript's <code>==</code> operator does not compare a boolean directly against another value the way a beginner expects &mdash; it first tries to coerce both sides toward a common type, which produces surprising results like <code>0 == false</code> and <code>\"\" == false</code> both being <code>true</code>. Relying on <code>==</code>, or on a value's plain truthiness (<code>if (isLoggedIn)</code>), for a check like \"is this user actually logged in\" can let a value that merely looks correct &mdash; the non-empty string <code>\"true\"</code> instead of the boolean <code>true</code> &mdash; slip past the check, since a non-empty string is truthy regardless of what it contains. <code>===</code> compares both type and value with no coercion at all, which is why it is the only safe choice here.</p><p>Write a function that decides whether a shopping cart can proceed to checkout, using strict comparisons throughout.</p><ul><li>1. <code>canCheckout</code> is <code>true</code> only when all three of these hold: <code>isLoggedIn</code> is strictly the boolean <code>true</code> (checked with <code>===</code>, not truthiness); <code>cartItemCount</code> is strictly of type <code>\"number\"</code> (checked with <code>typeof</code>); and <code>cartItemCount</code> is strictly greater than <code>0</code>.</li><li>2. <code>promoApplied</code> is <code>true</code> only when <code>promoCode</code> is strictly equal (<code>===</code>) to the exact string <code>\"SAVE10\"</code>; any other value, including a different case like <code>\"save10\"</code>, must produce <code>false</code>.</li><li>3. Return an object <code>{ canCheckout, promoApplied }</code> with exactly those two keys in that order.</li><li>4. Do not use <code>==</code> anywhere in your solution &mdash; every comparison must use <code>===</code> or <code>typeof</code>.</li></ul><p>The scaffold provides the function signature with all three parameters already named.</p>",
+      "inputSpec": "evaluateCheckout(cartItemCount, isLoggedIn, promoCode): cartItemCount is meant to be a number but may arrive as any type; isLoggedIn is meant to be a boolean but may arrive as any type (including the string \"true\" or \"false\"); promoCode is a string or undefined.",
+      "outputSpec": "An object { canCheckout: boolean, promoApplied: boolean } computed exactly as described in the requirements, using only strict comparisons.",
+      "constraints": "Use === (or typeof) for every comparison — no ==. isLoggedIn must be checked against the literal boolean true with ===, not treated as truthy. promoCode must be compared with === against the exact string \"SAVE10\" — case-sensitive, no normalization. Do not add extra keys to the returned object.",
+      "examplesJson": [
+        {
+          "input": "evaluateCheckout(2, true, \"SAVE10\")",
+          "output": "{\"canCheckout\":true,\"promoApplied\":true}",
+          "explanation": "isLoggedIn is strictly true, cartItemCount is a number greater than 0, and promoCode strictly matches \"SAVE10\" — every condition passes."
+        },
+        {
+          "input": "evaluateCheckout(2, \"true\", \"SAVE10\")",
+          "output": "{\"canCheckout\":false,\"promoApplied\":true}",
+          "explanation": "isLoggedIn here is the string \"true\", not the boolean true. isLoggedIn === true is false for a string no matter its content, so canCheckout is false even though cartItemCount and promoCode are both fine — this is exactly the trap the exercise targets."
+        },
+        {
+          "input": "evaluateCheckout(0, true, \"save10\")",
+          "output": "{\"canCheckout\":false,\"promoApplied\":false}",
+          "explanation": "cartItemCount is 0, which fails the > 0 check, so canCheckout is false. promoCode is lowercase \"save10\", which does not strictly equal \"SAVE10\", so promoApplied is also false."
+        }
+      ],
+      "hintsJson": [
+        "isLoggedIn might not actually be a boolean — a value coming from storage or a network response can be the string \"true\", which is truthy but not the boolean true. Compare it with === true to catch the difference.",
+        "typeof cartItemCount === \"number\" filters out any non-number value before you even check whether it is greater than 0 — checking cartItemCount > 0 alone would let other coercible values through, since > also coerces its operands.",
+        "promoCode comparison is case-sensitive by design: \"save10\" and \"SAVE10\" must not be treated as the same code, so a plain === against the exact string is correct — do not lowercase either side first.",
+        "Combine the three canCheckout conditions with && so all three must hold, and build the return object literal last: { canCheckout, promoApplied }."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// evaluateCheckout(cartItemCount, isLoggedIn, promoCode)\nfunction evaluateCheckout(cartItemCount, isLoggedIn, promoCode) {\n  // TODO: canCheckout — isLoggedIn strictly true, cartItemCount strictly a number, and > 0\n  // TODO: promoApplied — promoCode strictly equal to \"SAVE10\"\n  // TODO: return { canCheckout, promoApplied }\n}\n\nconsole.log(JSON.stringify(evaluateCheckout(2, true, \"SAVE10\")));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "function evaluateCheckout(cartItemCount, isLoggedIn, promoCode) {\n  const canCheckout = (isLoggedIn === true) && (typeof cartItemCount === \"number\") && (cartItemCount > 0);\n  const promoApplied = (promoCode === \"SAVE10\");\n  return { canCheckout: canCheckout, promoApplied: promoApplied };\n}\n\nconsole.log(JSON.stringify(evaluateCheckout(2, true, \"SAVE10\")));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The core idea is that <code>===</code> never coerces, so it is the only operator that can reliably distinguish the boolean <code>true</code> from the string <code>\"true\"</code>. Relying on plain truthiness instead (<code>if (isLoggedIn)</code>) is the real trap: the non-empty string <code>\"true\"</code> is truthy, so a check that only tests for truthiness would incorrectly let it pass as if it were the actual boolean <code>true</code>, even though it represents completely different data (arbitrary text versus a real login flag).</p><p>Checking <code>typeof cartItemCount === \"number\"</code> before comparing it with <code>&gt; 0</code> guards against another coercion path: the <code>&gt;</code> operator also coerces its operands when they are not already numbers, so a value that is not truly numeric could otherwise pass a bare <code>cartItemCount &gt; 0</code> check and silently reach later arithmetic that assumes a real number.</p>"
+    },
+    {
+      "title": "Compose Small Pure Functions to Classify and Describe a Temperature",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 45,
+      "points": 20,
+      "concepts": [
+        "function declarations with parameters and return values",
+        "calling one function from inside another",
+        "multi-branch if/else if return logic",
+        "template literals with computed values",
+        "pure functions with no side effects"
+      ],
+      "prerequisites": [
+        "template literals",
+        "basic arithmetic",
+        "boolean comparisons"
+      ],
+      "tags": [
+        "javascript",
+        "functions",
+        "return-values",
+        "composition",
+        "control-flow"
+      ],
+      "problemHtml": "<p>A function's job is to take input and return an output, with nothing else changing outside the function &mdash; no logging, no editing a variable declared outside it, no other side effects. Functions like this, called pure functions, are easy to test in isolation and easy to combine: once <code>celsiusToFahrenheit</code> is written and verified once, any other function can call it and trust its result completely, rather than re-implementing the conversion formula inline every place it is needed.</p><p>Write three small functions that build on each other to describe a temperature reading in both units and in plain words.</p><ul><li>1. <code>celsiusToFahrenheit(celsius)</code> returns the Fahrenheit equivalent using the formula <code>celsius * 9 / 5 + 32</code>.</li><li>2. <code>classifyTemperature(celsiusValue)</code> returns one of exactly four strings based on <code>celsiusValue</code>: <code>\"Freezing\"</code> when the value is <code>&lt;= 0</code>, <code>\"Cold\"</code> when it is <code>&lt;= 15</code>, <code>\"Mild\"</code> when it is <code>&lt;= 25</code>, and <code>\"Hot\"</code> otherwise. Check the ranges in that order, coldest first.</li><li>3. <code>describeWeather(celsiusValue)</code> calls both functions above (it must not reimplement their logic) and returns the exact template-literal string: <code>&lt;celsiusValue&gt;C (&lt;fahrenheit&gt;F) is classified as &lt;category&gt;.</code></li></ul><p>None of the three functions may print anything, mutate a parameter, or read or write any variable declared outside their own body &mdash; each must be a pure function that only depends on its own arguments.</p><p>The scaffold declares all three function signatures with <code>// TODO</code> bodies; <code>describeWeather</code> is the one exercised by the sample <code>console.log</code> call.</p>",
+      "inputSpec": "describeWeather(celsiusValue): celsiusValue is a plain number, positive, negative, or zero, always a multiple of 5 in the grading examples.",
+      "outputSpec": "The string `${celsiusValue}C (${fahrenheit}F) is classified as ${category}.` where fahrenheit = celsiusToFahrenheit(celsiusValue) and category = classifyTemperature(celsiusValue).",
+      "constraints": "describeWeather must call celsiusToFahrenheit and classifyTemperature rather than recomputing their formulas inline. classifyTemperature must check <= 0, then <= 15, then <= 25, in that order, falling through to \"Hot\" only when none of the earlier conditions matched. No function may use console.log or modify anything outside its own local variables and return value.",
+      "examplesJson": [
+        {
+          "input": "describeWeather(-5)",
+          "output": "-5C (23F) is classified as Freezing.",
+          "explanation": "celsiusToFahrenheit(-5) = -5 * 9 / 5 + 32 = -9 + 32 = 23. classifyTemperature(-5) checks -5 <= 0 first and matches immediately, returning \"Freezing\"."
+        },
+        {
+          "input": "describeWeather(10)",
+          "output": "10C (50F) is classified as Cold.",
+          "explanation": "celsiusToFahrenheit(10) = 10 * 9 / 5 + 32 = 18 + 32 = 50. classifyTemperature(10) fails the <= 0 check but matches <= 15, returning \"Cold\"."
+        },
+        {
+          "input": "describeWeather(25)",
+          "output": "25C (77F) is classified as Mild.",
+          "explanation": "celsiusToFahrenheit(25) = 25 * 9 / 5 + 32 = 45 + 32 = 77. classifyTemperature(25) fails both <= 0 and <= 15 but matches <= 25 exactly at the boundary, returning \"Mild\" rather than \"Hot\"."
+        }
+      ],
+      "hintsJson": [
+        "celsiusToFahrenheit is the simplest of the three — just apply the formula and return it, nothing else.",
+        "classifyTemperature needs its conditions checked in order from coldest to hottest, with each one an early return — once a condition matches, the function is done and never reaches the later checks.",
+        "describeWeather should call the other two functions to get fahrenheit and category, rather than repeating either formula — that reuse is the entire point of writing them as separate pure functions.",
+        "The final line is one template literal: `${celsiusValue}C (${fahrenheit}F) is classified as ${category}.` — check the boundary at 25 carefully, since 25 itself must be Mild, not Hot."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// celsiusToFahrenheit(celsius) -> number\nfunction celsiusToFahrenheit(celsius) {\n  // TODO: return celsius converted to Fahrenheit\n}\n\n// classifyTemperature(celsiusValue) -> \"Freezing\" | \"Cold\" | \"Mild\" | \"Hot\"\nfunction classifyTemperature(celsiusValue) {\n  // TODO: return the correct category, checking coldest to hottest\n}\n\n// describeWeather(celsiusValue) -> string\nfunction describeWeather(celsiusValue) {\n  // TODO: call celsiusToFahrenheit and classifyTemperature, then return the template literal\n}\n\nconsole.log(describeWeather(-5));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "function celsiusToFahrenheit(celsius) {\n  return celsius * 9 / 5 + 32;\n}\n\nfunction classifyTemperature(celsiusValue) {\n  if (celsiusValue <= 0) return \"Freezing\";\n  if (celsiusValue <= 15) return \"Cold\";\n  if (celsiusValue <= 25) return \"Mild\";\n  return \"Hot\";\n}\n\nfunction describeWeather(celsiusValue) {\n  const fahrenheit = celsiusToFahrenheit(celsiusValue);\n  const category = classifyTemperature(celsiusValue);\n  return `${celsiusValue}C (${fahrenheit}F) is classified as ${category}.`;\n}\n\nconsole.log(describeWeather(-5));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Splitting the problem into three functions means each one has exactly one job: <code>celsiusToFahrenheit</code> only converts, <code>classifyTemperature</code> only categorizes, and <code>describeWeather</code> only formats a message by combining results it gets from the other two. This composition is why <code>describeWeather</code> never repeats the conversion formula or the threshold checks &mdash; it calls the functions that already own that logic and trusts their return values, which is what makes each piece independently testable and reusable elsewhere in a real codebase.</p><p>The common beginner trap in <code>classifyTemperature</code> is ordering the conditions wrong: checking <code>&lt;= 25</code> before <code>&lt;= 15</code> would make every cold temperature incorrectly report as <code>\"Mild\"</code>, since the first matching branch wins and returns immediately. Checking coldest-to-hottest with <code>&lt;=</code> at each step, and letting the final <code>\"Hot\"</code> fall through with no condition at all, is what keeps every boundary value, including exactly 0, 15, and 25, classified correctly.</p>",
+      "diagramMermaid": "flowchart TD\n  Start[describeWeather receives celsiusValue]\n  Conv[celsiusToFahrenheit computes fahrenheit]\n  Class[classifyTemperature computes category]\n  Fmt[Build the template literal string]\n  End[Return the formatted string]\n  Start --> Conv\n  Start --> Class\n  Conv --> Fmt\n  Class --> Fmt\n  Fmt --> End"
+    },
+    {
+      "title": "Capstone: Build a Shopping Cart Receipt Formatter with a Discount and Tax",
+      "difficulty": "HARD",
+      "estimatedMinutes": 60,
+      "points": 25,
+      "concepts": [
+        "combining variables, strings, numbers, and functions in one solution",
+        "explicit Number() conversion before arithmetic",
+        "strict equality for a discount code check",
+        "template literals for formatted output lines",
+        "floating-point-safe rounding for money",
+        "array iteration with for...of"
+      ],
+      "prerequisites": [
+        "template literals and string methods",
+        "Number() conversion and the + coercion trap",
+        "strict equality ===",
+        "writing functions that return a value"
+      ],
+      "tags": [
+        "javascript",
+        "capstone",
+        "functions",
+        "numbers",
+        "strings",
+        "money-formatting"
+      ],
+      "problemHtml": "<p>A real shopping cart receipt needs everything covered so far working together: form-like string inputs that must be converted to numbers before any math, a discount code that must be matched with strict equality, formatted output built with template literals, and money math that is safe from floating-point drift. Skipping any one of these produces a receipt that looks right for some carts and silently wrong for others &mdash; the kind of bug that is easy to miss in a demo and expensive in production.</p><p>Write a function that turns a cart array into a full receipt breakdown.</p><ul><li>1. <code>items</code> is an array of <code>{ name, priceInput, quantityInput }</code>, where <code>priceInput</code> and <code>quantityInput</code> may be numbers or numeric strings. Convert both with <code>Number(...)</code> for every item before multiplying.</li><li>2. For each item, compute its line total as <code>price * quantity</code>, rounded to 2 decimals, and build a line string: <code>- &lt;name&gt;: &lt;quantity&gt; x $&lt;price to 2 decimals&gt; = $&lt;lineTotal to 2 decimals&gt;</code> (use <code>.toFixed(2)</code> for both dollar amounts). Collect all lines into an array called <code>lines</code>, in the same order as <code>items</code>.</li><li>3. Sum all rounded line totals into <code>subtotal</code>, rounded to 2 decimals.</li><li>4. If <code>discountCode</code> is strictly equal (<code>===</code>) to <code>\"SAVE10\"</code>, set <code>discountAmount</code> to 10% of <code>subtotal</code>, rounded to 2 decimals; otherwise <code>discountAmount</code> is <code>0</code>.</li><li>5. Compute <code>discountedSubtotal = subtotal - discountAmount</code>, rounded to 2 decimals.</li><li>6. Compute <code>tax = discountedSubtotal * taxRate</code>, rounded to 2 decimals.</li><li>7. Compute <code>total = discountedSubtotal + tax</code>, rounded to 2 decimals.</li><li>8. Return <code>{ lines, subtotal, discountAmount, tax, total }</code>, exactly those five keys in that order.</li><li>9. Round every monetary computation with <code>Math.round(value * 100) / 100</code> &mdash; raw floating-point addition of decimal amounts like <code>0.1 + 0.2</code> can produce results like <code>0.30000000000000004</code>, and this rounding step is what keeps every returned value clean.</li></ul><p>The scaffold provides the function signature and a three-item sample cart already wired into a <code>console.log</code> call.</p>",
+      "inputSpec": "formatReceipt(items, taxRate, discountCode): items is an array of objects { name: string, priceInput: number|string, quantityInput: number|string }; taxRate is a number between 0 and 1; discountCode is a string or undefined.",
+      "outputSpec": "An object { lines: string[], subtotal: number, discountAmount: number, tax: number, total: number } computed exactly as described in the requirements, with every monetary number rounded to 2 decimals.",
+      "constraints": "Convert priceInput and quantityInput with Number(...) inside the loop, never operate on the raw values. Compare discountCode with === against the exact string \"SAVE10\" — no case-insensitivity, no truthy check. Round every monetary value (each line total, subtotal, discountAmount, discountedSubtotal, tax, total) with Math.round(x * 100) / 100. Return exactly the five keys listed, in that order. No external libraries.",
+      "examplesJson": [
+        {
+          "input": "formatReceipt([\n  { name: \"Notebook\", priceInput: \"4.5\", quantityInput: \"2\" },\n  { name: \"Pen\", priceInput: \"1.25\", quantityInput: 4 },\n  { name: \"Backpack\", priceInput: \"29.99\", quantityInput: \"1\" }\n], 0.08, \"SAVE10\")",
+          "output": "{\"lines\":[\"- Notebook: 2 x $4.50 = $9.00\",\"- Pen: 4 x $1.25 = $5.00\",\"- Backpack: 1 x $29.99 = $29.99\"],\"subtotal\":43.99,\"discountAmount\":4.4,\"tax\":3.17,\"total\":42.76}",
+          "explanation": "Line totals are 9.00, 5.00, and 29.99, summing to subtotal 43.99. discountCode strictly matches \"SAVE10\", so discountAmount = round(43.99 * 0.10) = 4.4, giving discountedSubtotal 39.59. tax = round(39.59 * 0.08) = 3.17, and total = round(39.59 + 3.17) = 42.76."
+        },
+        {
+          "input": "formatReceipt([\n  { name: \"Notebook\", priceInput: \"4.5\", quantityInput: \"2\" },\n  { name: \"Pen\", priceInput: \"1.25\", quantityInput: 4 },\n  { name: \"Backpack\", priceInput: \"29.99\", quantityInput: \"1\" }\n], 0.08, undefined)",
+          "output": "{\"lines\":[\"- Notebook: 2 x $4.50 = $9.00\",\"- Pen: 4 x $1.25 = $5.00\",\"- Backpack: 1 x $29.99 = $29.99\"],\"subtotal\":43.99,\"discountAmount\":0,\"tax\":3.52,\"total\":47.51}",
+          "explanation": "Same cart, but discountCode is undefined, which does not strictly equal \"SAVE10\", so discountAmount is 0 and discountedSubtotal stays 43.99. tax = round(43.99 * 0.08) = 3.52, and total = round(43.99 + 3.52) = 47.51 — noticeably higher than the discounted receipt."
+        }
+      ],
+      "hintsJson": [
+        "Process items with a loop (for...of works well): for each item convert priceInput and quantityInput with Number(...), compute and round its line total, and push a formatted line string — keep a running raw sum of the rounded line totals as you go.",
+        "Round subtotal once from that raw sum, then decide discountAmount from a strict === check against \"SAVE10\": 10% of subtotal when it matches, 0 otherwise — round the discount too.",
+        "discountedSubtotal, tax, and total each build directly on the previous rounded value: discountedSubtotal = subtotal - discountAmount, tax = discountedSubtotal * taxRate, total = discountedSubtotal + tax — round every one of these three the same way.",
+        "A small round2(value) helper — return Math.round(value * 100) / 100 — used at every monetary step avoids repeating the same rounding expression six times and keeps floating-point noise from ever reaching the returned object."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// formatReceipt(items, taxRate, discountCode)\n// items: array of { name, priceInput, quantityInput } where priceInput and\n// quantityInput may be numbers or numeric strings, exactly like real form input.\nfunction formatReceipt(items, taxRate, discountCode) {\n  // TODO: write a round2(value) helper: Math.round(value * 100) / 100\n  // TODO: loop over items — convert priceInput/quantityInput with Number(),\n  //       compute each rounded line total, push a formatted line string,\n  //       and accumulate a running raw subtotal\n  // TODO: round the accumulated subtotal\n  // TODO: compute discountAmount — 10% of subtotal if discountCode === \"SAVE10\", else 0 — rounded\n  // TODO: compute discountedSubtotal = subtotal - discountAmount, rounded\n  // TODO: compute tax = discountedSubtotal * taxRate, rounded\n  // TODO: compute total = discountedSubtotal + tax, rounded\n  // TODO: return { lines, subtotal, discountAmount, tax, total }\n}\n\nconst cart = [\n  { name: \"Notebook\", priceInput: \"4.5\", quantityInput: \"2\" },\n  { name: \"Pen\", priceInput: \"1.25\", quantityInput: 4 },\n  { name: \"Backpack\", priceInput: \"29.99\", quantityInput: \"1\" }\n];\n\nconsole.log(JSON.stringify(formatReceipt(cart, 0.08, \"SAVE10\")));\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "function round2(value) {\n  return Math.round(value * 100) / 100;\n}\n\nfunction formatReceipt(items, taxRate, discountCode) {\n  const lines = [];\n  let rawSubtotal = 0;\n\n  for (const item of items) {\n    const price = Number(item.priceInput);\n    const quantity = Number(item.quantityInput);\n    const lineTotal = round2(price * quantity);\n    lines.push(`- ${item.name}: ${quantity} x $${price.toFixed(2)} = $${lineTotal.toFixed(2)}`);\n    rawSubtotal += lineTotal;\n  }\n\n  const subtotal = round2(rawSubtotal);\n  const discountAmount = discountCode === \"SAVE10\" ? round2(subtotal * 0.10) : 0;\n  const discountedSubtotal = round2(subtotal - discountAmount);\n  const tax = round2(discountedSubtotal * taxRate);\n  const total = round2(discountedSubtotal + tax);\n\n  return { lines, subtotal, discountAmount, tax, total };\n}\n\nconst cart = [\n  { name: \"Notebook\", priceInput: \"4.5\", quantityInput: \"2\" },\n  { name: \"Pen\", priceInput: \"1.25\", quantityInput: 4 },\n  { name: \"Backpack\", priceInput: \"29.99\", quantityInput: \"1\" }\n];\n\nconsole.log(JSON.stringify(formatReceipt(cart, 0.08, \"SAVE10\")));\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The <code>round2</code> helper is used at every single monetary step, not just at the end, because each computed value (a line total, the subtotal, the discount, the discounted subtotal, the tax) can carry tiny floating-point error from the previous step's multiplication or subtraction; rounding immediately after each one keeps that error from compounding into a visibly wrong final total. Skipping intermediate rounding and only rounding the very last value is the common trap here &mdash; unlike the single-total calculation earlier in this module, chaining several dependent monetary steps means unrounded drift from an early step can survive all the way to the end.</p><p>The discount check uses <code>discountCode === \"SAVE10\"</code> specifically because a promo code is exactly the kind of value that should never match loosely: a typo, wrong case, or an unrelated truthy string must never accidentally grant a discount, which is why the strict-equality rule from the booleans exercise applies here too, not just to explicit true/false checks.</p>",
+      "diagramMermaid": "flowchart TD\n  Items[items array of name priceInput quantityInput]\n  Loop[For each item convert price and quantity with Number]\n  Lines[Build formatted line and add to lines]\n  Sum[Sum rounded line totals into subtotal]\n  Discount[Check discountCode strictly equals SAVE10]\n  Tax[Compute tax on discounted subtotal]\n  Total[Compute total and return the receipt object]\n  Items --> Loop\n  Loop --> Lines\n  Lines --> Sum\n  Sum --> Discount\n  Discount --> Tax\n  Tax --> Total"
+    }
+  ]
+}

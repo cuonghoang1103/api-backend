@@ -1,0 +1,387 @@
+{
+  "trackSlug": "html-css",
+  "moduleSlug": "html-basics",
+  "exercises": [
+    {
+      "title": "Build a Minimal Valid HTML Document Skeleton",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "HTML document structure",
+        "the DOCTYPE declaration",
+        "html/head/body elements",
+        "meta charset and viewport",
+        "elements vs tags vs attributes",
+        "basic nav with a list of links"
+      ],
+      "prerequisites": [
+        "knowing what a tag looks like",
+        "knowing what an attribute is"
+      ],
+      "tags": [
+        "html",
+        "skeleton",
+        "document-structure",
+        "beginner",
+        "head-and-body",
+        "navigation"
+      ],
+      "problemHtml": "<p>Every HTML page a browser renders starts from the same handful of structural elements. Before a browser can show a single word of your content, it needs to know which version of HTML it is parsing, what character encoding the bytes use, how to size the page on a phone screen, what human language the text is written in, and what title to put in the browser tab. Get any of this wrong and you risk garbled accented characters, a page that renders shrunk to desktop width on mobile, broken screen-reader announcements, or a blank tab label &mdash; problems that are invisible in the raw text but obvious the moment a real user opens the page.</p><p>Your job is to complete a bare scaffold into a fully valid HTML5 document skeleton with a small amount of visible content: a heading, a short navigation list, and an intro paragraph.</p><ul><li>1. The very first line of the file must be <code>&lt;!DOCTYPE html&gt;</code>.</li><li>2. The root element must be <code>&lt;html&gt;</code> carrying a <code>lang=\"en\"</code> attribute.</li><li>3. Inside <code>&lt;head&gt;</code>, include <code>&lt;meta charset=\"utf-8\"&gt;</code> as the first child, then <code>&lt;meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"&gt;</code>, then a <code>&lt;title&gt;</code> whose text is exactly <code>My First Page</code>.</li><li>4. Inside <code>&lt;body&gt;</code>, include exactly one <code>&lt;h1&gt;</code> whose text is exactly <code>My First Page</code>.</li><li>5. Directly after the <code>&lt;h1&gt;</code>, include a <code>&lt;nav&gt;</code> containing a <code>&lt;ul&gt;</code> of exactly 2 <code>&lt;li&gt;</code> items, each holding one link: the first with visible text <code>Home</code> and <code>href=\"index.html\"</code>, the second with visible text <code>About</code> and <code>href=\"about.html\"</code>.</li><li>6. Directly after the <code>&lt;nav&gt;</code>, include exactly one <code>&lt;p&gt;</code> whose text is exactly <code>This is my first HTML page.</code></li><li>7. Every element must be properly closed and correctly nested; do not add any element beyond the ones listed above.</li></ul><p>You are given a scaffold file with <code>&lt;!-- TODO --&gt;</code> comments marking exactly where each missing piece belongs.</p>",
+      "inputSpec": "A single scaffold file index.html. It already has an <html> tag with a <head> and a <body>, but is missing the <!DOCTYPE html> line, the lang attribute on <html>, both meta tags, the title, and every body element listed in the requirements. <!-- TODO --> comments mark each spot you must fill in.",
+      "outputSpec": "A single valid HTML5 file whose first line is <!DOCTYPE html>, whose <html> tag carries lang=\"en\", whose <head> contains <meta charset=\"utf-8\"> (first child), then <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">, then <title>My First Page</title>, and whose <body> contains, in order: <h1>My First Page</h1>, a <nav> with a <ul> of exactly 2 links (Home -> index.html, About -> about.html), and <p>This is my first HTML page.</p> — nothing more, nothing less.",
+      "constraints": "Use lowercase tag and attribute names. Do not add any element not explicitly listed (no extra divs, no extra paragraphs, no favicon link). The nav's links must be inside a ul/li list, not bare <a> tags. No inline style attributes. No CSS or JavaScript. Remove the TODO comments from the final file.",
+      "examplesJson": [
+        {
+          "input": "<html>\n<!-- TODO: head content -->\n<!-- TODO: body content -->\n</html>",
+          "output": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>About Cats</title>\n</head>\n<body>\n  <h1>About Cats</h1>\n  <nav>\n    <ul>\n      <li><a href=\"home.html\">Home</a></li>\n      <li><a href=\"breeds.html\">Breeds</a></li>\n    </ul>\n  </nav>\n  <p>Cats are wonderful pets.</p>\n</body>\n</html>",
+          "explanation": "This is the same skeleton pattern applied to a different site: doctype first, lang on html, both meta tags before the title, then a heading, a two-link nav list, and an intro paragraph. Your file must follow the identical shape but with the exact text required in the task (title and h1 both \"My First Page\", links Home/About)."
+        },
+        {
+          "input": "<head>\n  <title>Shop</title>\n</head>",
+          "output": "Renders as mojibake for any non-ASCII byte, e.g. an accented word like café can display as garbled characters.",
+          "explanation": "This head is missing <meta charset=\"utf-8\">, so the browser has to guess the encoding of the bytes it downloaded. That guess can be wrong, corrupting any non-ASCII character on the page. Declaring the charset first removes the guesswork entirely, which is why it must be the first child of head."
+        },
+        {
+          "input": "<head>\n  <meta charset=\"utf-8\">\n  <title>Shop</title>\n</head>",
+          "output": "On a phone, the page renders as a shrunken desktop layout (about 980px wide) and the user must pinch-zoom to read normal text.",
+          "explanation": "This head has a charset but no viewport meta, so mobile browsers assume the page was built for a wide desktop screen and scale the whole layout down to fit. Adding <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"> tells the browser to render at the device's real width instead."
+        }
+      ],
+      "hintsJson": [
+        "Think about what a browser needs before it can safely parse and size a page: a doctype announcing HTML5, then the root html element, then instructions in head for encoding, mobile sizing, and a title.",
+        "The <head> holds machine information (encoding, responsive sizing, title) the browser needs before rendering; the <body> holds what the user actually sees and can click.",
+        "Character encoding must be declared with <meta charset=\"utf-8\"> first, then a <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"> so mobile browsers render the page at its real width instead of a shrunken desktop layout.",
+        "Your finished body should read, in order: <h1>My First Page</h1>, a <nav><ul><li><a href=\"index.html\">Home</a></li><li><a href=\"about.html\">About</a></li></ul></nav>, then <p>This is my first HTML page.</p>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!-- TODO: this file is missing <!DOCTYPE html> as its very first line -->\n<html>\n<!-- TODO: add lang=\"en\" to the html tag above -->\n<head>\n  <!-- TODO: add <meta charset=\"utf-8\"> as the first child of head -->\n  <!-- TODO: add <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"> right after it -->\n  <!-- TODO: add <title>My First Page</title> after that -->\n</head>\n<body>\n  <!-- TODO: add <h1>My First Page</h1> -->\n  <!-- TODO: add a <nav> with a <ul> of 2 links: Home (index.html) and About (about.html) -->\n  <!-- TODO: add <p>This is my first HTML page.</p> directly after the nav -->\n</body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>My First Page</title>\n</head>\n<body>\n  <h1>My First Page</h1>\n  <nav>\n    <ul>\n      <li><a href=\"index.html\">Home</a></li>\n      <li><a href=\"about.html\">About</a></li>\n    </ul>\n  </nav>\n  <p>This is my first HTML page.</p>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The <code>&lt;!DOCTYPE html&gt;</code> line still comes first because it is not itself an element &mdash; it is an instruction that tells the browser to use the modern standards-compliant rendering engine instead of a legacy quirks mode. The <code>lang=\"en\"</code> attribute on <code>&lt;html&gt;</code> is read by screen readers to choose the correct pronunciation and by translation tools to decide whether translation is even needed. The new <code>&lt;meta name=\"viewport\"...&gt;</code> tag matters just as much on a phone: without it, mobile browsers render the page as if it were a full desktop layout and then shrink it to fit the screen, forcing the user to pinch-zoom just to read normal-sized text.</p><p>The body now shows a real page skeleton, not just a heading and a paragraph: <code>&lt;nav&gt;</code> wraps a <code>&lt;ul&gt;</code> of links because a list is what a screen reader announces as \"list of 2 items,\" giving a non-visual sense of how much navigation exists before entering it. The most common trap here is treating <code>&lt;nav&gt;</code> as a bare wrapper around loose <code>&lt;a&gt;</code> tags instead of a proper list, or remembering the charset meta but forgetting the viewport meta right after it.</p>",
+      "diagramMermaid": "flowchart TD\n  html[html]\n  head[head]\n  body[body]\n  metac[meta charset]\n  metav[meta viewport]\n  title[title]\n  h1[h1]\n  nav[nav]\n  ul[ul]\n  li1[li Home]\n  li2[li About]\n  p[p]\n  html --> head\n  html --> body\n  head --> metac\n  head --> metav\n  head --> title\n  body --> h1\n  body --> nav\n  nav --> ul\n  ul --> li1\n  ul --> li2\n  body --> p"
+    },
+    {
+      "title": "Author a Personal Profile Page with Headings, Lists, Links, and an Image",
+      "difficulty": "EASY",
+      "estimatedMinutes": 20,
+      "points": 10,
+      "concepts": [
+        "heading hierarchy h1-h6",
+        "paragraphs",
+        "ordered and unordered lists",
+        "relative vs absolute links",
+        "link target and rel attributes",
+        "images with meaningful alt text"
+      ],
+      "prerequisites": [
+        "HTML document skeleton",
+        "elements and attributes"
+      ],
+      "tags": [
+        "html",
+        "headings",
+        "lists",
+        "links",
+        "images",
+        "alt-text"
+      ],
+      "problemHtml": "<p>A real page mixes headings, prose, lists, links to other pages, and images, and each of these has correctness rules that go beyond \"does it look right.\" Heading levels are how a screen reader user jumps around a page without reading it top to bottom; alt text is the only description a non-visual user gets of an image; and a link that opens in a new tab without <code>rel=\"noopener noreferrer\"</code> lets the page it opens run code that can redirect your original tab, a real security issue called reverse tabnabbing.</p><p>You will build a simple personal profile page that exercises all of these at once.</p><ul><li>1. Exactly one <code>&lt;h1&gt;</code> with the text <code>Cuong Hoang</code>, the page's only top-level heading.</li><li>2. An <code>&lt;h2&gt;</code> with text <code>About Me</code> followed by exactly one <code>&lt;p&gt;</code> containing a real introductory sentence.</li><li>3. An <code>&lt;h2&gt;</code> with text <code>Skills</code> followed by an unordered list of exactly 3 <code>&lt;li&gt;</code> skill items.</li><li>4. An <code>&lt;h2&gt;</code> with text <code>Timeline</code> followed by an ordered list of exactly 3 <code>&lt;li&gt;</code> items describing a chronological sequence.</li><li>5. An <code>&lt;h2&gt;</code> with text <code>Links</code> followed by a <code>&lt;p&gt;</code> containing two links: a relative link to <code>projects.html</code> with the visible text <code>My Projects</code>, and an absolute link to <code>https://github.com</code> with visible text <code>GitHub</code> that opens in a new tab safely.</li><li>6. One <code>&lt;img&gt;</code> anywhere on the page with <code>src=\"photo.jpg\"</code> and a non-empty, descriptive <code>alt</code> attribute that is not the filename and not the word \"image\".</li></ul><p>The scaffold already has the document skeleton and four empty section stubs marked with <code>&lt;!-- TODO --&gt;</code> comments for you to fill in.</p>",
+      "inputSpec": "A scaffold file index.html with a complete <head> and an empty <body> containing four TODO comments, one for each of About Me / Skills / Timeline / Links, plus a fifth TODO marking where the profile image belongs.",
+      "outputSpec": "A full page body with one h1, then the four h2 sections in order (About Me, Skills, Timeline, Links) each followed by their required paragraph or list, plus one img with a descriptive alt attribute — matching the exact heading text, list-item counts, link hrefs, and link attributes given in the requirements.",
+      "constraints": "Exactly one h1 on the page. Do not skip heading levels (no jumping from h1 to h3). Any link using target=\"_blank\" must also carry rel=\"noopener noreferrer\". alt text must describe the image content, never repeat the filename or say just \"image\" or \"photo\". No inline style, no CSS.",
+      "examplesJson": [
+        {
+          "input": "<h2>Favorite Books</h2>\n<!-- TODO: add an ordered list of 3 -->",
+          "output": "<h2>Favorite Books</h2>\n<ol>\n  <li>Dune</li>\n  <li>The Hobbit</li>\n  <li>1984</li>\n</ol>",
+          "explanation": "An ordered list is the right choice whenever the sequence or ranking of items matters; <ol> renders numbered markers automatically and a screen reader announces both the item count and each item's position, e.g. \"item 2 of 3\"."
+        },
+        {
+          "input": "<a href=\"https://example.com\" target=\"_blank\">Visit</a>",
+          "output": "<a href=\"https://example.com\" target=\"_blank\" rel=\"noopener noreferrer\">Visit</a>",
+          "explanation": "Without rel=\"noopener noreferrer\", the newly opened page gets a live JavaScript reference to the original tab via window.opener and could silently redirect it to a phishing page — a real attack technique, not a style nitpick. Any external link opened with target=\"_blank\" needs this attribute."
+        }
+      ],
+      "hintsJson": [
+        "Work top to bottom: one h1 for the page, then four h2 sections each introducing one block of content (a paragraph or a list).",
+        "Choose <ul> when the order of items does not matter (skills) and <ol> when it does (a timeline is inherently chronological).",
+        "A relative href like \"projects.html\" resolves against the current page's location; an absolute href like \"https://github.com\" always points at the same place no matter where the linking page lives.",
+        "Finish the Links paragraph as: <a href=\"projects.html\">My Projects</a> and <a href=\"https://github.com\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub</a>, and give the img a full sentence of alt text describing who and what is shown."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Cuong Hoang</title>\n</head>\n<body>\n  <h1>Cuong Hoang</h1>\n\n  <!-- TODO: add an h2 \"About Me\" and one paragraph introducing yourself -->\n\n  <!-- TODO: add an h2 \"Skills\" and a ul of 3 li skills -->\n\n  <!-- TODO: add an h2 \"Timeline\" and an ol of 3 li milestones -->\n\n  <!-- TODO: add an h2 \"Links\" and a paragraph with the two required links -->\n\n  <!-- TODO: add an img with src=\"photo.jpg\" and a descriptive alt -->\n</body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Cuong Hoang</title>\n</head>\n<body>\n  <h1>Cuong Hoang</h1>\n\n  <h2>About Me</h2>\n  <p>I am a front-end developer who enjoys building accessible, fast websites for small businesses.</p>\n\n  <h2>Skills</h2>\n  <ul>\n    <li>HTML5 and semantic markup</li>\n    <li>Responsive CSS layouts</li>\n    <li>Basic JavaScript for interactivity</li>\n  </ul>\n\n  <h2>Timeline</h2>\n  <ol>\n    <li>2021 - Started learning web development</li>\n    <li>2022 - Built first freelance website</li>\n    <li>2023 - Joined a local web agency</li>\n  </ol>\n\n  <h2>Links</h2>\n  <p>\n    <a href=\"projects.html\">My Projects</a>\n    <a href=\"https://github.com\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub</a>\n  </p>\n\n  <img src=\"photo.jpg\" alt=\"Cuong Hoang smiling in a blue collared shirt, headshot for a personal profile page.\">\n</body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each section follows the same shape: a heading that names the block, then the content it introduces, which is what lets a screen reader user request \"list all headings\" and jump straight to Skills or Links without reading About Me first. <code>Skills</code> uses <code>&lt;ul&gt;</code> because the three items have no inherent order, while <code>Timeline</code> uses <code>&lt;ol&gt;</code> because the events are chronological and the numbering itself carries meaning.</p><p>The two links demonstrate the two link types every page needs: a relative link (<code>projects.html</code>) that stays inside the same site, and an absolute link (<code>https://github.com</code>) that leaves it. Because the GitHub link opens in a new tab, it must carry <code>rel=\"noopener noreferrer\"</code> &mdash; the most common beginner trap is adding <code>target=\"_blank\"</code> for convenience and forgetting this attribute, which leaves a real security hole. The image's alt text describes what a sighted user sees rather than repeating the filename, which is the other common trap.</p>"
+    },
+    {
+      "title": "Convert a Div-Soup Layout into Semantic Landmarks",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 30,
+      "points": 15,
+      "concepts": [
+        "semantic landmark elements",
+        "header, nav, main, article, aside, footer",
+        "strong vs em for real emphasis",
+        "why semantics matter for accessibility and SEO"
+      ],
+      "prerequisites": [
+        "headings and paragraphs",
+        "basic document skeleton"
+      ],
+      "tags": [
+        "html",
+        "semantics",
+        "landmarks",
+        "accessibility",
+        "refactoring"
+      ],
+      "problemHtml": "<p>Screen readers and browser reader modes rely on landmark elements to let a user jump straight to the navigation, the main content, or the footer without listening to the whole page. A page built entirely from <code>&lt;div&gt;</code> elements with class names gives none of that for free &mdash; the browser has no way to know which div is navigation and which is the article body, even though a sighted user can tell instantly from the layout.</p><p>You are given a complete page built only from divs and must refactor it into semantic HTML without changing a single word of visible text.</p><ul><li>1. Replace the <code>&lt;div class=\"site-header\"&gt;</code> wrapper with <code>&lt;header&gt;</code>, keeping its <code>&lt;h1&gt;</code> unchanged.</li><li>2. Replace the <code>&lt;div class=\"site-nav\"&gt;</code> wrapper with <code>&lt;nav&gt;</code>, keeping its <code>&lt;ul&gt;</code> of 3 links unchanged.</li><li>3. Replace the <code>&lt;div class=\"content\"&gt;</code> wrapper with <code>&lt;main&gt;</code> &mdash; the final page must contain exactly one <code>&lt;main&gt;</code>.</li><li>4. Replace the <code>&lt;div class=\"post\"&gt;</code> wrapper with <code>&lt;article&gt;</code>, keeping its <code>&lt;h2&gt;</code> and <code>&lt;p&gt;</code> unchanged.</li><li>5. Replace <code>&lt;div class=\"bold\"&gt;Limited quantities available each morning.&lt;/div&gt;</code> with a real paragraph carrying inline strong emphasis: <code>&lt;p&gt;&lt;strong&gt;Limited quantities available each morning.&lt;/strong&gt;&lt;/p&gt;</code>.</li><li>6. Replace the <code>&lt;div class=\"sidebar\"&gt;</code> wrapper with <code>&lt;aside&gt;</code>, keeping its <code>&lt;h2&gt;</code> and <code>&lt;ul&gt;</code> of 3 links unchanged.</li><li>7. Replace <code>&lt;div class=\"italic\"&gt;note: prices may change&lt;/div&gt;</code> with <code>&lt;p&gt;&lt;em&gt;note: prices may change&lt;/em&gt;&lt;/p&gt;</code>.</li><li>8. Replace the <code>&lt;div class=\"site-footer\"&gt;</code> wrapper with <code>&lt;footer&gt;</code>, keeping its <code>&lt;p&gt;</code> unchanged.</li><li>9. Do not change any visible text; only change which element wraps it. The final page must have exactly one <code>&lt;h1&gt;</code> and exactly one <code>&lt;main&gt;</code>.</li></ul><p>The scaffold is the complete div-only page; you edit tag names and wrapper elements only.</p>",
+      "inputSpec": "A complete scaffold file index.html built entirely from divs with class names (site-header, site-nav, content, post, bold, sidebar, italic, site-footer) and no semantic elements at all.",
+      "outputSpec": "The same visible text in the same order, but every wrapper div listed in the requirements replaced by its correct semantic element (header, nav, main, article, aside, footer, strong, em), with exactly one h1 and exactly one main in the result.",
+      "constraints": "Do not change any visible text content. Do not add or remove any links, paragraphs, or headings beyond swapping wrapper tags as specified. Do not leave any div for a header, nav, main, article, aside, or footer region in the final version. Exactly one main and exactly one h1.",
+      "examplesJson": [
+        {
+          "input": "<div class=\"page-footer\">\n  <p>&copy; 2026 Example Store.</p>\n</div>",
+          "output": "<footer>\n  <p>&copy; 2026 Example Store.</p>\n</footer>",
+          "explanation": "The wrapper tag changes from div to footer but the paragraph inside is untouched. footer is a landmark a screen reader can jump to directly with a single keyboard shortcut, something a div with a class name can never provide."
+        },
+        {
+          "input": "<div class=\"warning\">Backup your files before continuing.</div>",
+          "output": "<p><strong>Backup your files before continuing.</strong></p>",
+          "explanation": "strong marks real importance, not just bold styling — assistive technology can announce strong text with added emphasis. em is the equivalent for words that would be spoken with vocal stress, such as \"do not turn off the power.\" Neither is a visual-only choice; both change what gets announced."
+        }
+      ],
+      "hintsJson": [
+        "Landmarks come in two families: ones that repeat across pages (header, nav, footer) and ones unique to this page's content (main, article, aside). Match each div to the family it belongs to.",
+        "A page should have exactly one main wrapping the primary content, and exactly one h1 naming the whole page — everything else nests inside those.",
+        "strong and em are not \"bold\" and \"italic\" in disguise; they mark real importance and real vocal stress, which is why the bold/italic marker divs become inline strong/em wrapped in a paragraph, not styled divs.",
+        "Work outside-in: site-header becomes header, site-nav inside it becomes nav, content becomes main, post inside main becomes article, sidebar becomes aside, site-footer becomes footer — then fix the two inline emphasis divs last."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Coastal Bakery</title>\n</head>\n<body>\n  <!-- TODO: this whole page is built from divs. Replace each wrapper below with the correct semantic element per the requirements; do not change any visible text. -->\n  <div class=\"site-header\">\n    <h1>Coastal Bakery</h1>\n    <div class=\"site-nav\">\n      <ul>\n        <li><a href=\"index.html\">Home</a></li>\n        <li><a href=\"menu.html\">Menu</a></li>\n        <li><a href=\"contact.html\">Contact</a></li>\n      </ul>\n    </div>\n  </div>\n  <div class=\"content\">\n    <div class=\"post\">\n      <h2>Our Sourdough Process</h2>\n      <p>Every loaf starts with a starter that's been alive for over ten years, fed daily by hand.</p>\n      <div class=\"bold\">Limited quantities available each morning.</div>\n    </div>\n    <div class=\"sidebar\">\n      <h2>Related</h2>\n      <ul>\n        <li><a href=\"specials.html\">Weekly Specials</a></li>\n        <li><a href=\"classes.html\">Baking Classes</a></li>\n        <li><a href=\"wholesale.html\">Wholesale Orders</a></li>\n      </ul>\n      <div class=\"italic\">note: prices may change</div>\n    </div>\n  </div>\n  <div class=\"site-footer\">\n    <p>&copy; 2026 Coastal Bakery. All rights reserved.</p>\n  </div>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Coastal Bakery</title>\n</head>\n<body>\n  <header>\n    <h1>Coastal Bakery</h1>\n    <nav>\n      <ul>\n        <li><a href=\"index.html\">Home</a></li>\n        <li><a href=\"menu.html\">Menu</a></li>\n        <li><a href=\"contact.html\">Contact</a></li>\n      </ul>\n    </nav>\n  </header>\n  <main>\n    <article>\n      <h2>Our Sourdough Process</h2>\n      <p>Every loaf starts with a starter that's been alive for over ten years, fed daily by hand.</p>\n      <p><strong>Limited quantities available each morning.</strong></p>\n    </article>\n    <aside>\n      <h2>Related</h2>\n      <ul>\n        <li><a href=\"specials.html\">Weekly Specials</a></li>\n        <li><a href=\"classes.html\">Baking Classes</a></li>\n        <li><a href=\"wholesale.html\">Wholesale Orders</a></li>\n      </ul>\n      <p><em>note: prices may change</em></p>\n    </aside>\n  </main>\n  <footer>\n    <p>&copy; 2026 Coastal Bakery. All rights reserved.</p>\n  </footer>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every wrapper swap keeps the same visible text but gives assistive technology a name for the region: <code>&lt;header&gt;</code> and <code>&lt;footer&gt;</code> mark the repeating top and bottom, <code>&lt;nav&gt;</code> marks the link list a user might want to skip past, <code>&lt;main&gt;</code> marks the one region unique to this page, and <code>&lt;article&gt;</code>/<code>&lt;aside&gt;</code> split that region into the primary post and the tangential related-links block.</p><p>The most common trap is stopping at the block-level landmarks and leaving the bold/italic divs as visual-only styling. <code>&lt;strong&gt;</code> and <code>&lt;em&gt;</code> are semantic, not decorative &mdash; a screen reader can render them with real vocal emphasis, while a styled div is silently skipped. Wrapping each in a <code>&lt;p&gt;</code> also fixes a structural issue: a bare block of text with no paragraph is invalid content for inline elements like strong and em to sit directly inside body.</p>",
+      "diagramMermaid": "flowchart TD\n  html[html]\n  header[header]\n  nav[nav]\n  main[main]\n  article[article]\n  aside[aside]\n  footer[footer]\n  html --> header\n  html --> main\n  html --> footer\n  header --> nav\n  main --> article\n  main --> aside"
+    },
+    {
+      "title": "Build a Validated Newsletter Signup Form",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 40,
+      "points": 15,
+      "concepts": [
+        "form action and method",
+        "label linked to input via for/id",
+        "input types (text, email, checkbox)",
+        "select and option",
+        "textarea",
+        "HTML5 validation attributes (required, minlength)"
+      ],
+      "prerequisites": [
+        "basic document skeleton",
+        "semantic structure basics"
+      ],
+      "tags": [
+        "html",
+        "forms",
+        "validation",
+        "labels",
+        "accessibility"
+      ],
+      "problemHtml": "<p>A form built without labels, correct input types, or validation attributes can still look fine visually while failing two different kinds of user at once: a screen reader user hears nothing announced when they focus an unlabeled input, and every user loses the browser's free client-side format checking, so obviously bad data (an empty required field, an email with no @) reaches the server that a single HTML attribute would have caught for free.</p><p>Build a newsletter signup form that gets both of these right.</p><ul><li>1. One <code>&lt;form action=\"/subscribe\" method=\"post\"&gt;</code> wrapping every field below.</li><li>2. A text input for full name: a <code>&lt;label&gt;</code> with text <code>Full name</code> whose <code>for</code> matches the input's <code>id=\"name\"</code>; the input is <code>type=\"text\"</code>, <code>name=\"name\"</code>, <code>required</code>, <code>minlength=\"2\"</code>.</li><li>3. An email input: label text <code>Email address</code> for <code>id=\"email\"</code>; input <code>type=\"email\"</code>, <code>name=\"email\"</code>, <code>required</code>.</li><li>4. A <code>&lt;select id=\"source\" name=\"source\"&gt;</code> for \"How did you hear about us?\", correctly labeled, with a disabled selected placeholder option plus at least 3 real options.</li><li>5. A <code>&lt;textarea id=\"comments\" name=\"comments\" rows=\"4\"&gt;</code> for optional comments, labeled <code>Comments (optional)</code>, and NOT required.</li><li>6. A checkbox to opt into the newsletter: label text <code>Subscribe me to the newsletter</code>; <code>input type=\"checkbox\" id=\"subscribe\" name=\"subscribe\"</code>, checked by default.</li><li>7. A submit button, <code>&lt;button type=\"submit\"&gt;</code>, with the visible text <code>Sign Up</code>.</li><li>8. Every input must be reachable by clicking its label &mdash; every <code>for</code> must exactly match a real <code>id</code>. No input may be left unlabeled.</li></ul><p>The scaffold has the form tag already open with the correct action and method, and one TODO comment per field group.</p>",
+      "inputSpec": "A scaffold file index.html with a complete head and a body containing an open <form action=\"/subscribe\" method=\"post\"> with five TODO comments marking the name input, email input, source select, comments textarea, and subscribe checkbox, plus a sixth TODO for the submit button.",
+      "outputSpec": "A complete form with all five labeled fields plus a submit button, exactly matching the ids, types, and validation attributes listed in the requirements, with every label correctly paired to its control via for/id.",
+      "constraints": "Do not use placeholder text as a substitute for a real, visible label — every input needs its own <label>. Do not omit or mismatch a for/id pairing. Do not add extra fields beyond the 5 listed plus the submit button. No inline style, no JavaScript, no CSS — rely only on native HTML5 validation attributes.",
+      "examplesJson": [
+        {
+          "input": "<!-- a labeled username field -->",
+          "output": "<label for=\"username\">Username</label>\n<input type=\"text\" id=\"username\" name=\"username\" required minlength=\"3\">",
+          "explanation": "The label's for=\"username\" matches the input's id=\"username\" exactly, so clicking or tapping the label text moves focus into the input and a screen reader announces \"Username, edit text, required\" the moment the input receives focus."
+        },
+        {
+          "input": "<input type=\"text\" placeholder=\"Your email\">",
+          "output": "Fails accessibility: no announced label, and placeholder text disappears the moment the user starts typing.",
+          "explanation": "Placeholder text is not a label — it is not exposed to assistive technology the same way, and it vanishes as soon as the field has a value, so a user who looks away mid-form loses the only description of what the field is for. A real <label> stays visible and is always announced."
+        }
+      ],
+      "hintsJson": [
+        "Every field follows the same two-part pattern: a <label for=\"...\"> followed immediately by the control whose id matches it exactly.",
+        "The type attribute is not cosmetic — type=\"email\" gives free format validation and the right mobile keyboard; a plain type=\"text\" gives neither.",
+        "required alone blocks empty submission; pair it with minlength on the name field and the browser blocks both an empty name and a one-character name without any JavaScript.",
+        "For the checkbox, the checked attribute needs no value — just the bare word checked inside the input tag — and the select's first option should be disabled selected so it acts as a non-submittable placeholder."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Newsletter Signup</title>\n</head>\n<body>\n  <main>\n    <h1>Join Our Newsletter</h1>\n    <form action=\"/subscribe\" method=\"post\">\n      <!-- TODO: labeled text input for full name (id=\"name\", required, minlength=\"2\") -->\n\n      <!-- TODO: labeled email input (id=\"email\", required) -->\n\n      <!-- TODO: labeled select \"How did you hear about us?\" (id=\"source\") with a disabled selected placeholder plus at least 3 real options -->\n\n      <!-- TODO: labeled optional textarea for comments (id=\"comments\", rows=\"4\") -->\n\n      <!-- TODO: labeled checkbox to subscribe (id=\"subscribe\"), checked by default -->\n\n      <!-- TODO: submit button labeled \"Sign Up\" -->\n    </form>\n  </main>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Newsletter Signup</title>\n</head>\n<body>\n  <main>\n    <h1>Join Our Newsletter</h1>\n    <form action=\"/subscribe\" method=\"post\">\n      <p>\n        <label for=\"name\">Full name</label>\n        <input type=\"text\" id=\"name\" name=\"name\" required minlength=\"2\">\n      </p>\n      <p>\n        <label for=\"email\">Email address</label>\n        <input type=\"email\" id=\"email\" name=\"email\" required>\n      </p>\n      <p>\n        <label for=\"source\">How did you hear about us?</label>\n        <select id=\"source\" name=\"source\">\n          <option value=\"\" disabled selected>Please choose one</option>\n          <option value=\"friend\">Friend</option>\n          <option value=\"social\">Social Media</option>\n          <option value=\"search\">Search Engine</option>\n        </select>\n      </p>\n      <p>\n        <label for=\"comments\">Comments (optional)</label>\n        <textarea id=\"comments\" name=\"comments\" rows=\"4\"></textarea>\n      </p>\n      <p>\n        <input type=\"checkbox\" id=\"subscribe\" name=\"subscribe\" checked>\n        <label for=\"subscribe\">Subscribe me to the newsletter</label>\n      </p>\n      <p>\n        <button type=\"submit\">Sign Up</button>\n      </p>\n    </form>\n  </main>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every field pairs a <code>&lt;label for=\"...\"&gt;</code> with a control carrying the matching <code>id</code>, which is what makes the label clickable and what a screen reader announces the moment focus lands on the field. The <code>required</code> and <code>type=\"email\"</code> attributes do real validation work with zero JavaScript: an empty or malformed submission is blocked by the browser itself before the form ever reaches <code>/subscribe</code>.</p><p>The most common trap is relying on <code>placeholder</code> text instead of a real label &mdash; it looks identical until the field has a value, at which point the placeholder disappears and a screen reader never announced it as a label to begin with. A second trap is forgetting that <code>&lt;textarea&gt;</code> must stay optional here (no <code>required</code>), since comments were explicitly specified as optional, while the checkbox needs the bare <code>checked</code> attribute, not <code>checked=\"true\"</code>, to be checked by default.</p>"
+    },
+    {
+      "title": "Build an Accessible Product Comparison Table",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 50,
+      "points": 20,
+      "concepts": [
+        "table/thead/tbody/tr/th/td structure",
+        "th scope attribute",
+        "the caption element",
+        "table accessibility",
+        "combining a table with correct landmarks and heading order"
+      ],
+      "prerequisites": [
+        "semantic landmarks",
+        "heading hierarchy"
+      ],
+      "tags": [
+        "html",
+        "tables",
+        "accessibility",
+        "data-tables",
+        "scope"
+      ],
+      "problemHtml": "<p>A sighted user scans a comparison table visually, matching a cell to its column header and row label by position on the grid. A screen reader has no grid &mdash; it reads cell by cell in source order, so without <code>&lt;th scope&gt;</code> to declare which header belongs to which cells, every data cell is announced completely anonymously: just the number or word inside it, with no idea whether it is a price, a user count, or a support tier.</p><p>Build an accessible pricing comparison table inside a properly landmarked page.</p><ul><li>1. Wrap everything in a <code>&lt;main&gt;</code> containing a single <code>&lt;h1&gt;</code> with text <code>Pricing Plans</code>.</li><li>2. Inside <code>&lt;main&gt;</code>, a <code>&lt;section&gt;</code> with an <code>&lt;h2&gt;</code> reading <code>Compare Plans</code>, followed by the table.</li><li>3. The <code>&lt;table&gt;</code> must include a <code>&lt;caption&gt;</code> with the exact text <code>Monthly pricing for Basic, Pro, and Team plans</code>.</li><li>4. A <code>&lt;thead&gt;</code> containing one header row of 4 columns, each a <code>&lt;th scope=\"col\"&gt;</code>: <code>Plan</code>, <code>Price</code>, <code>Users</code>, <code>Support</code>.</li><li>5. A <code>&lt;tbody&gt;</code> with exactly 3 rows, one each for Basic, Pro, and Team: the first cell of each row is a <code>&lt;th scope=\"row\"&gt;</code> holding the plan name, and the remaining 3 cells are <code>&lt;td&gt;</code> holding a price, a user count, and a support level.</li><li>6. Keep the given <code>&lt;html lang=\"en\"&gt;</code> attribute intact.</li><li>7. No skipped heading levels: <code>&lt;h1&gt;</code> then <code>&lt;h2&gt;</code>, nothing jumps to <code>&lt;h3&gt;</code> or deeper.</li></ul><p>The scaffold already has <code>lang=\"en\"</code> set and an empty main with TODO comments marking where the heading, section, and table belong.</p>",
+      "inputSpec": "A scaffold file index.html with a complete head, html lang=\"en\" already set, and an empty <main> containing TODO comments for the h1, the section/h2, and the table itself.",
+      "outputSpec": "A main containing one h1 \"Pricing Plans\", a section with an h2 \"Compare Plans\" and a table with a caption, a thead row of 4 th scope=\"col\" headers, and a tbody of 3 rows each led by a th scope=\"row\" plan name followed by 3 td cells.",
+      "constraints": "Use scope=\"col\" for every column header and scope=\"row\" for every row-label cell. Never use td for a header cell. Exactly one caption and exactly one thead row. Do not add a tfoot. No CSS or inline styles — structure only.",
+      "examplesJson": [
+        {
+          "input": "<!-- a 2-column schedule table -->",
+          "output": "<table>\n  <caption>Weekly class schedule</caption>\n  <thead>\n    <tr>\n      <th scope=\"col\">Day</th>\n      <th scope=\"col\">Class</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th scope=\"row\">Monday</th>\n      <td>Yoga</td>\n    </tr>\n  </tbody>\n</table>",
+          "explanation": "The same scope pattern applies at any table size: column headers get scope=\"col\" in thead, and if the first cell of each body row is itself a label (here, the day name), it becomes a th scope=\"row\" rather than a td."
+        },
+        {
+          "input": "<tr><td>Plan</td><td>Price</td></tr>",
+          "output": "A screen reader announces only \"Plan, Price\" with no indication these are column headers at all.",
+          "explanation": "Using td for what is visually a header row removes the header semantics entirely — sighted users can still tell from bold styling, but a screen reader has nothing to distinguish this row from a data row, and none of the data cells below get an announced column association."
+        }
+      ],
+      "hintsJson": [
+        "Build the landmarks first: main, then h1, then a section with its own h2, then the empty table shell.",
+        "A table has two structurally different kinds of header: the column headers in thead, and (optionally) a row-label header as the first cell of each body row.",
+        "scope=\"col\" tells assistive tech \"every cell below me in this column,\" scope=\"row\" tells it \"every cell to my right in this row\" — pick the one that matches what the header actually labels.",
+        "The tbody needs exactly one th scope=\"row\" per row (the plan name) followed by three td cells (price, users, support) — never make the plan-name cell a td."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Pricing Plans</title>\n</head>\n<body>\n  <main>\n    <!-- TODO: add <h1>Pricing Plans</h1> -->\n    <!-- TODO: add a <section> with <h2>Compare Plans</h2> followed by the accessible table -->\n  </main>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Pricing Plans</title>\n</head>\n<body>\n  <main>\n    <h1>Pricing Plans</h1>\n    <section>\n      <h2>Compare Plans</h2>\n      <table>\n        <caption>Monthly pricing for Basic, Pro, and Team plans</caption>\n        <thead>\n          <tr>\n            <th scope=\"col\">Plan</th>\n            <th scope=\"col\">Price</th>\n            <th scope=\"col\">Users</th>\n            <th scope=\"col\">Support</th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr>\n            <th scope=\"row\">Basic</th>\n            <td>$9/mo</td>\n            <td>1 user</td>\n            <td>Email</td>\n          </tr>\n          <tr>\n            <th scope=\"row\">Pro</th>\n            <td>$29/mo</td>\n            <td>5 users</td>\n            <td>Email and chat</td>\n          </tr>\n          <tr>\n            <th scope=\"row\">Team</th>\n            <td>$79/mo</td>\n            <td>20 users</td>\n            <td>Priority phone</td>\n          </tr>\n        </tbody>\n      </table>\n    </section>\n  </main>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The <code>&lt;caption&gt;</code> gives the table a name announced before any cell content, exactly like an alt attribute gives an image one. The <code>&lt;thead&gt;</code> row's four <code>&lt;th scope=\"col\"&gt;</code> cells each label an entire column, so when a screen reader lands on, say, the Pro row's price cell, it can announce \"Price, $29/mo\" by combining the column header with the cell &mdash; that association only exists because of <code>scope</code>.</p><p>The first cell of each body row is a <code>&lt;th scope=\"row\"&gt;</code> rather than a <code>&lt;td&gt;</code>, because it labels the rest of that row the same way a column header labels a column; skipping this and using <code>&lt;td&gt;</code> for the plan name is the most common trap, and it silently breaks the row-level announcement even though the table still looks identical on screen. Landmarks and heading order matter here too: the single <code>&lt;h1&gt;</code>/<code>&lt;h2&gt;</code> pair lets a user jump straight to \"Compare Plans\" without reading unrelated page content first.</p>"
+    },
+    {
+      "title": "Capstone: Build a Semantic, Accessible Recipe Page with a Feedback Form and Nutrition Table",
+      "difficulty": "HARD",
+      "estimatedMinutes": 70,
+      "points": 25,
+      "concepts": [
+        "semantic landmarks end-to-end",
+        "heading hierarchy across a full page",
+        "accessible images and lists",
+        "accessible forms with label/for",
+        "accessible data tables with scope",
+        "combining fundamentals into one coherent page"
+      ],
+      "prerequisites": [
+        "semantic landmarks",
+        "forms with labels",
+        "accessible tables",
+        "headings, lists, links, and images"
+      ],
+      "tags": [
+        "html",
+        "capstone",
+        "semantics",
+        "forms",
+        "tables",
+        "accessibility"
+      ],
+      "problemHtml": "<p>Real pages are never single-topic exercises. A recipe page needs navigation to jump between sections, a hero image with real alt text, an ingredient list, numbered steps, a nutrition table, and a comment form &mdash; all wired together with correct heading order and landmarks so the page works the same for every visitor, sighted or not. This capstone combines everything from the chapter into one page.</p><ul><li>1. <code>&lt;html lang=\"en\"&gt;</code>, a valid skeleton, and <code>&lt;title&gt;Grandma's Tomato Soup Recipe&lt;/title&gt;</code>, exactly as given in the scaffold.</li><li>2. A <code>&lt;header&gt;</code> containing exactly one <code>&lt;h1&gt;</code> with the text <code>Grandma's Tomato Soup Recipe</code>, and a <code>&lt;nav&gt;</code> whose <code>&lt;ul&gt;</code> holds 3 links to <code>#ingredients</code>, <code>#steps</code>, and <code>#nutrition</code> with visible text \"Ingredients\", \"Steps\", and \"Nutrition\".</li><li>3. Exactly one <code>&lt;main&gt;</code> wrapping every section below the header, and exactly one <code>&lt;h1&gt;</code> on the whole page.</li><li>4. An <code>&lt;img&gt;</code> near the top of <code>&lt;main&gt;</code> with <code>src=\"soup.jpg\"</code> and a non-empty <code>alt</code> attribute describing the dish, never the filename or the word \"image\".</li><li>5. A <code>&lt;section id=\"ingredients\"&gt;</code> with <code>&lt;h2&gt;Ingredients&lt;/h2&gt;</code> followed by a <code>&lt;ul&gt;</code> of at least 5 <code>&lt;li&gt;</code> ingredient lines.</li><li>6. A <code>&lt;section id=\"steps\"&gt;</code> with <code>&lt;h2&gt;Steps&lt;/h2&gt;</code> followed by an <code>&lt;ol&gt;</code> of at least 4 <code>&lt;li&gt;</code> steps, each a complete instruction sentence.</li><li>7. A <code>&lt;section id=\"nutrition\"&gt;</code> with <code>&lt;h2&gt;Nutrition&lt;/h2&gt;</code> followed by an accessible <code>&lt;table&gt;</code>: a <code>&lt;caption&gt;</code>, a <code>&lt;thead&gt;</code> row of <code>&lt;th scope=\"col\"&gt;</code> headers, and a <code>&lt;tbody&gt;</code> of at least 3 rows, each with a <code>&lt;th scope=\"row\"&gt;</code> nutrient name and a <code>&lt;td&gt;</code> amount.</li><li>8. A <code>&lt;section id=\"feedback\"&gt;</code> with <code>&lt;h2&gt;Leave a Comment&lt;/h2&gt;</code> followed by a <code>&lt;form&gt;</code> that submits to <code>/comments</code> by <code>post</code>, containing: a required text input labeled exactly \"Your name\" (label's <code>for</code> matched to the input's <code>id</code>), a required <code>&lt;textarea&gt;</code> labeled exactly \"Your comment\" (same for/id rule), and a submit <code>&lt;button&gt;</code> reading \"Post Comment\".</li><li>9. One important note emphasized with <code>&lt;strong&gt;</code> (real importance, such as an allergen warning) and one word emphasized with <code>&lt;em&gt;</code> (real vocal stress, not decoration) somewhere in the recipe content.</li><li>10. A <code>&lt;footer&gt;</code> containing one <code>&lt;p&gt;</code> with a copyright line.</li><li>11. No skipped heading levels anywhere on the page: every heading below the single <code>&lt;h1&gt;</code> must be an <code>&lt;h2&gt;</code>.</li><li>12. All 3 nav links must be working fragment links &mdash; each <code>href=\"#...\"</code> must exactly match the <code>id</code> of a real section on the page.</li></ul><p>The scaffold has the full skeleton, an empty header/nav TODO, four pre-tagged empty sections (with their ids already in place), and a footer TODO.</p>",
+      "inputSpec": "A scaffold file index.html with a complete head (lang=\"en\", meta charset, title), a TODO comment for the header/nav, four <section> stubs already carrying id=\"ingredients\"/\"steps\"/\"nutrition\"/\"feedback\" but empty apart from a TODO comment each, and a TODO comment for the footer.",
+      "outputSpec": "A complete page in landmark order header (h1 + nav) then main (img, section#ingredients, section#steps, section#nutrition, section#feedback) then footer, satisfying every numbered requirement above exactly — matching heading levels, list/table/form structure, and working fragment links.",
+      "constraints": "Exactly one h1 and one main on the page. Every heading inside a section must be h2 — no skipped levels. Every form control needs a real associated label via for/id, never placeholder-only. Every th must carry the correct scope. Nav links must be fragment links to ids that exist on the page. No inline style, no CSS, no JavaScript.",
+      "examplesJson": [
+        {
+          "input": "<!-- a nav link to a different section id -->",
+          "output": "<nav>\n  <ul>\n    <li><a href=\"#hours\">Hours</a></li>\n  </ul>\n</nav>\n...\n<section id=\"hours\">",
+          "explanation": "A fragment link only works if the href after the # is character-for-character identical to a real id somewhere on the page; a typo like #hour instead of #hours produces a link that does nothing when clicked, with no visible error anywhere."
+        },
+        {
+          "input": "<!-- a nutrition row for a different nutrient -->",
+          "output": "<tr>\n  <th scope=\"row\">Sodium</th>\n  <td>480 mg</td>\n</tr>",
+          "explanation": "Every nutrition row follows the same shape regardless of which nutrient it names: a th scope=\"row\" for the nutrient name, then a td for its amount, so a screen reader can always announce \"Sodium, 480 mg\" as one associated pair."
+        }
+      ],
+      "hintsJson": [
+        "Build the page in the order the requirements list it: skeleton and header/nav first, since the nav links must point at ids you are about to create.",
+        "Each section needs exactly one h2 as its first heading — never jump straight to h3, and never add a second h1.",
+        "The form and the table share one accessibility idea in two shapes: a label's for must name the exact id of its control, and a th's scope must say whether it labels a column or a row.",
+        "Check the finished page against the requirements one more time: 3 nav hrefs matching 3 real section ids, one img with real alt text, one strong, one em, one table with scope on every th, and one footer — missing any one of these leaves the page incomplete."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Grandma's Tomato Soup Recipe</title>\n</head>\n<body>\n  <!-- TODO: add <header> with <h1>Grandma's Tomato Soup Recipe</h1> and a <nav> linking to #ingredients, #steps, #nutrition -->\n\n  <main>\n    <!-- TODO: add an <img> near the top, src=\"soup.jpg\", with a descriptive alt attribute -->\n\n    <section id=\"ingredients\">\n      <!-- TODO: add <h2>Ingredients</h2> and a <ul> of at least 5 ingredients -->\n    </section>\n\n    <section id=\"steps\">\n      <!-- TODO: add <h2>Steps</h2> and an <ol> of at least 4 full-sentence steps -->\n    </section>\n\n    <section id=\"nutrition\">\n      <!-- TODO: add <h2>Nutrition</h2> and an accessible <table> (caption, thead th scope=\"col\", tbody rows with th scope=\"row\") -->\n    </section>\n\n    <section id=\"feedback\">\n      <!-- TODO: add <h2>Leave a Comment</h2> and a <form> with a labeled name input, a labeled comment textarea, and a submit button \"Post Comment\" -->\n    </section>\n  </main>\n\n  <!-- TODO: add <footer> with a copyright paragraph -->\n</body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Grandma's Tomato Soup Recipe</title>\n</head>\n<body>\n  <header>\n    <h1>Grandma's Tomato Soup Recipe</h1>\n    <nav>\n      <ul>\n        <li><a href=\"#ingredients\">Ingredients</a></li>\n        <li><a href=\"#steps\">Steps</a></li>\n        <li><a href=\"#nutrition\">Nutrition</a></li>\n      </ul>\n    </nav>\n  </header>\n\n  <main>\n    <img src=\"soup.jpg\" alt=\"A steaming bowl of tomato soup topped with basil and a swirl of cream.\">\n\n    <section id=\"ingredients\">\n      <h2>Ingredients</h2>\n      <ul>\n        <li>2 lbs ripe tomatoes, chopped</li>\n        <li>1 yellow onion, diced</li>\n        <li>3 cloves garlic, minced</li>\n        <li>2 cups vegetable stock</li>\n        <li>1/2 cup heavy cream</li>\n        <li>2 tablespoons olive oil</li>\n      </ul>\n      <p><strong>Contains dairy.</strong></p>\n    </section>\n\n    <section id=\"steps\">\n      <h2>Steps</h2>\n      <ol>\n        <li>Heat the olive oil in a large pot over medium heat and cook the onion until soft.</li>\n        <li>Add the garlic and cook for another minute until fragrant.</li>\n        <li>Add the tomatoes and vegetable stock, then simmer for <em>twenty</em> minutes.</li>\n        <li>Blend the soup until smooth, then stir in the heavy cream before serving.</li>\n      </ol>\n    </section>\n\n    <section id=\"nutrition\">\n      <h2>Nutrition</h2>\n      <table>\n        <caption>Nutrition per serving</caption>\n        <thead>\n          <tr>\n            <th scope=\"col\">Nutrient</th>\n            <th scope=\"col\">Amount</th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr>\n            <th scope=\"row\">Calories</th>\n            <td>210 kcal</td>\n          </tr>\n          <tr>\n            <th scope=\"row\">Fat</th>\n            <td>14 g</td>\n          </tr>\n          <tr>\n            <th scope=\"row\">Carbohydrates</th>\n            <td>17 g</td>\n          </tr>\n        </tbody>\n      </table>\n    </section>\n\n    <section id=\"feedback\">\n      <h2>Leave a Comment</h2>\n      <form action=\"/comments\" method=\"post\">\n        <p>\n          <label for=\"commenter-name\">Your name</label>\n          <input type=\"text\" id=\"commenter-name\" name=\"commenterName\" required>\n        </p>\n        <p>\n          <label for=\"comment-text\">Your comment</label>\n          <textarea id=\"comment-text\" name=\"commentText\" required></textarea>\n        </p>\n        <p>\n          <button type=\"submit\">Post Comment</button>\n        </p>\n      </form>\n    </section>\n  </main>\n\n  <footer>\n    <p>&copy; 2026 Grandma's Kitchen. All rights reserved.</p>\n  </footer>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The page reuses every pattern from the chapter in one place: header/nav/main/footer for the overall skeleton, a ul and an ol chosen by whether order matters, an accessible table with scope on every th, and a form where every control has a real label tied by for/id. The nav's three hrefs (<code>#ingredients</code>, <code>#steps</code>, <code>#nutrition</code>) only work because they are character-for-character identical to the id on each matching section &mdash; the most common trap on a page this size is a typo between the two that silently breaks one link with no visible error.</p><p>The allergen note uses <code>&lt;strong&gt;</code> because it is genuinely important information a reader must not miss, while \"twenty\" in the steps uses <code>&lt;em&gt;</code> because it would be spoken with real vocal stress, not because it needed to look different. Every heading below the single <code>&lt;h1&gt;</code> stays at <code>&lt;h2&gt;</code>, which keeps the page's heading outline flat and predictable for a screen reader user navigating by heading level alone, and the single <code>&lt;main&gt;</code> means assistive technology has exactly one unambiguous place to jump to for the primary content.</p>"
+    }
+  ]
+}

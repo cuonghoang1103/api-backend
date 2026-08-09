@@ -14,6 +14,7 @@ import s05 from './typescript/s05-union-narrowing.mjs';
 import s06 from './typescript/s06-generics.mjs';
 import s07 from './typescript/s07-advanced-types.mjs';
 import s08 from './typescript/s08-utility-types.mjs';
+import s09 from './typescript/s09-tsconfig-compiler.mjs';
 
 export default {
   category: { slug: 'languages', name: 'Ngôn ngữ lập trình', icon: 'Code2', sortOrder: 0 },
@@ -43,5 +44,6 @@ export default {
     s06,
     s07,
     s08,
+    s09,
   ],
 };

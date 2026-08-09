@@ -13,8 +13,8 @@ export default {
   hashtags: ['100NgayJava', 'Java', 'HocLapTrinh'],
   codeLab: {
     track: 'java-core',
-    slug: 'build-an-inverted-index-for-document-search',
-    title: 'Chỉ mục ngược cho tìm kiếm (nền cho tìm bài viết)',
+    slug: 'build-a-word-frequency-analyzer-using-collections',
+    title: 'Phân tích tần suất từ (xử lý chuỗi, nền cho slug)',
   },
 
   content: `🧱 100 NGÀY JAVA — NGÀY 82: MỞ DỰ ÁN CUỐI

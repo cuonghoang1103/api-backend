@@ -10,6 +10,7 @@ import s01 from './typescript/s01-vi-sao.mjs';
 import s02 from './typescript/s02-he-kieu-co-ban.mjs';
 import s03 from './typescript/s03-ham.mjs';
 import s04 from './typescript/s04-object-interface.mjs';
+import s05 from './typescript/s05-union-narrowing.mjs';
 
 export default {
   category: { slug: 'languages', name: 'Ngôn ngữ lập trình', icon: 'Code2', sortOrder: 0 },
@@ -35,5 +36,6 @@ export default {
     s02,
     s03,
     s04,
+    s05,
   ],
 };

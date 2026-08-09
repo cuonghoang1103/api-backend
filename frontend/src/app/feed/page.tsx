@@ -43,6 +43,7 @@ import { playPop } from '@/lib/uiSound';
 const SERIES_BY_CATEGORY: Record<string, { slug: string; icon: string }> = {
   java: { slug: '100-ngay-java', icon: '☕' },
   database: { slug: '100-ngay-database', icon: '🗄️' },
+  'tiếng anh': { slug: '100-ngay-tieng-anh', icon: '🇬🇧' },
 };
 
 export default function SocialPage() {

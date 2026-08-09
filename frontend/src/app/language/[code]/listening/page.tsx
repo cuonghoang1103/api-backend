@@ -223,9 +223,13 @@ function LessonDetail({ item, onBack }: { item: ListeningItem; onBack: () => voi
   const reduced = usePrefersReducedMotion();
 
   const ytId = item.sourceType === 'YOUTUBE' ? getYouTubeId(item.youtubeUrl) : null;
+  // Listening audio is a plain public R2 URL played by a bare <audio> (no
+  // crossOrigin / Web Audio), so use it directly. Do NOT pass item.id as a
+  // trackId to getMediaUrl — that routes through /music/stream/:id (built for
+  // the music player's CORS-gated visualizer) and breaks listening playback.
   const audioSrc =
     item.sourceType === 'UPLOAD' && item.audioUrl
-      ? getMediaUrl(item.audioUrl, null, item.id)
+      ? (item.audioUrl.startsWith('http') ? item.audioUrl : getMediaUrl(item.audioUrl, null))
       : null;
 
   return (

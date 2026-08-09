@@ -436,6 +436,21 @@ ZH_SEED_OUT=$($DC exec -T backend sh -c \
  "npx tsx prisma/seed.zh.ts" 2>&1) || true
 report_seed "ZH seed" "seed-zh" "$ZH_SEED_OUT" "${ZH_SEED_OUT_RC:-0}" || true
 
+# ── Step 3.10b: My Language EN reading + listening (idempotent) ──
+# content/my-language/en-reading.mjs + en-listening.mjs → lang_reading_articles
+# + lang_listening_items (find-before-create theo languageId+title). Audio bài
+# nghe đã dựng + upload R2 từ máy dev (scripts/en-listening-audio.mjs); bước này
+# chỉ ghi row và KIỂM audio đã 200 trên CDN. Bổ sung 3 kỹ năng Đọc/Nghe/Viết cho
+# người mất gốc — xem [[project_100_ngay_english_foundations]].
+info "Running My Language EN reading + listening seed..."
+ML_EN_OUT=$($DC exec -T backend sh -c '
+  node scripts/my-language-en-seed.mjs --apply 2>&1
+  echo "__SEED_RC__=$?"
+') || true
+ML_EN_RC="$(printf '%s\n' "$ML_EN_OUT" | sed -n 's/^__SEED_RC__=//p' | tail -1)"
+ML_EN_OUT="$(printf '%s\n' "$ML_EN_OUT" | grep -v '^__SEED_RC__=')"
+report_seed "My Language EN read/listen" "seed-ml-en" "$ML_EN_OUT" "${ML_EN_RC:-0}" || true
+
 # ── Step 3.11: Interview Simulator starter bank (idempotent) ────
 # Find-before-create questions + upsert taxonomy by slug; safe to re-run.
 # All seeded rubrics are rubricReviewed=false (flagged for human review).
@@ -634,6 +649,26 @@ DB_SERIES_OUT_RC="$(printf '%s\n' "$DB_SERIES_OUT" | sed -n 's/^__SEED_RC__=//p'
 DB_SERIES_OUT="$(printf '%s\n' "$DB_SERIES_OUT" | grep -v '^__SEED_RC__=')"
 report_seed "Database series seed" "seed-database-series" "$DB_SERIES_OUT" "${DB_SERIES_OUT_RC:-0}" || true
 
+# ── Step 3.16e: "100 Ngày Tiếng Anh" feed series (idempotent) ───────
+# Song sinh Step 3.16d: một .mjs mỗi ngày dưới content/feed-series/100-ngay-tieng-anh/
+# → upsert SocialPost + ảnh thẻ, khoá theo hashtag ngày (#100NgayTiengAnh-DayNNN).
+# --skip-card: ảnh thẻ dựng + upload R2 từ máy dev (backend image không có
+# Playwright); bước này chỉ ghi row và KIỂM ảnh đã 200 trên CDN. English series
+# KHÔNG có Code Lab → mỗi ngày trỏ luyện tập sang My Language (day.practice.links).
+info "Running 100 Ngay Tieng Anh feed-series seed..."
+EN_SERIES_OUT=$($DC exec -T backend sh -c '
+  rc=0
+  for f in content/feed-series/100-ngay-tieng-anh/*.mjs; do
+    [ -e "$f" ] || { echo "no english series files"; break; }
+    echo "── $f"
+    node scripts/english-series-seed.mjs --file "$f" --apply --skip-card 2>&1 || rc=1
+  done
+  echo "__SEED_RC__=$rc"
+') || true
+EN_SERIES_RC="$(printf '%s\n' "$EN_SERIES_OUT" | sed -n 's/^__SEED_RC__=//p' | tail -1)"
+EN_SERIES_OUT="$(printf '%s\n' "$EN_SERIES_OUT" | grep -v '^__SEED_RC__=')"
+report_seed "English series seed" "seed-english-series" "$EN_SERIES_OUT" "${EN_SERIES_RC:-0}" || true
+
 # ── Step 3.16b: retire two superseded case-studies (one-shot, idempotent) ──
 # `cuongthaicom` duplicated `cuonghoang-dev-portal` (same site, 18KB stub vs
 # the 105KB case-study), and `esp32aivoice` was an editor test row that still
@@ -792,6 +827,7 @@ for route in \
     admin/content/script-templates \
     social/series/100-ngay-java \
     social/series/100-ngay-database \
+    social/series/100-ngay-tieng-anh \
     cyber/profile; do
     code=$(docker exec cuonghoangdev_backend \
         sh -c "curl -s -o /dev/null -w '%{http_code}' http://localhost:3001/api/v1/${route}" 2>/dev/null)

@@ -100,6 +100,7 @@ f.darkMode = <span class="tok-keyword">false</span>;   <span class="tok-comment"
       title: '7.2 — Mapping modifiers: add & remove ? and readonly|||7.2 — Modifier ánh xạ: thêm & gỡ ? và readonly',
       slug: 'typescript-7-2-mapping-modifiers',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Mapped type không chỉ thêm ?/readonly — nó còn GỠ chúng với -? và -readonly. Đó là cách viết Mutable<T> và Required<T>.',
       content: `
 <div class="ml-en">
@@ -183,6 +184,7 @@ orig.port = <span class="tok-number">2</span>;   <span class="tok-comment">// b�
       title: '7.3 — Conditional types & infer|||7.3 — Conditional types & infer',
       slug: 'typescript-7-3-conditional-infer',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'T extends U ? X : Y là một if…else ở tầng kiểu; infer bắt lấy một kiểu bên trong — cách bạn tự dựng ReturnType<T>.',
       content: `
 <div class="ml-en">
@@ -272,6 +274,7 @@ u.id.<span class="tok-function">toUpperCase</span>();   <span class="tok-comment
       title: '7.4 — Template literal types|||7.4 — Template literal types (kiểu chuỗi mẫu)',
       slug: 'typescript-7-4-template-literal-types',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Kiểu có thể ghép chuỗi: `/${Lang}/home` sinh ra union đường dẫn; ghép với key remapping để tự sinh getName/getAge.',
       content: `
 <div class="ml-en">

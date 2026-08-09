@@ -86,6 +86,7 @@ export default {
       title: '16.2 — any, unknown & never|||16.2 — any, unknown & never',
       slug: 'typescript-16-2-any-unknown-never',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Ba kiểu đặc biệt và khi nào dùng: any tắt kiểm (tránh); unknown giữ giá trị nhưng ép kiểm trước khi dùng (an toàn); never là kiểu rỗng, dùng cho exhaustiveness.',
       content: `
 <div class="ml-en">
@@ -169,6 +170,7 @@ x.foo.bar.<span class="tok-function">baz</span>();   <span class="tok-comment">/
       title: '16.3 — Organizing types|||16.3 — Tổ chức kiểu',
       slug: 'typescript-16-3-organizing-types',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'type so với interface (interface gộp khai báo, type thì không); một nguồn sự thật (suy từ Zod/Prisma thay vì chép tay); kiểu nên ở gần nơi dùng.',
       content: `
 <div class="ml-en">
@@ -232,6 +234,7 @@ x.foo.bar.<span class="tok-function">baz</span>();   <span class="tok-comment">/
       title: '16.4 — The whole picture & where to go next|||16.4 — Bức tranh toàn cảnh & đi tiếp',
       slug: 'typescript-16-4-whole-picture',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Ghép mọi thứ: validate tại biên, tin bên trong. Một ví dụ tích hợp Zod + z.infer + Result union, và hướng đi tiếp sau khoá học.',
       content: `
 <div class="ml-en">

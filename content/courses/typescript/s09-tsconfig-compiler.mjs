@@ -110,6 +110,7 @@ console.log(shout(msg));</div>
       title: '9.2 — strict mode|||9.2 — Chế độ strict',
       slug: 'typescript-9-2-strict-mode',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'strict: true là công tắc quan trọng nhất — nó gộp noImplicitAny, strictNullChecks và các cờ khác. Không có nó, TypeScript chỉ bắt được một nửa số lỗi.',
       content: `
 <div class="ml-en">
@@ -179,6 +180,7 @@ console.log(shout(msg));</div>
       title: '9.3 — Beyond strict: extra safety flags|||9.3 — Vượt strict: các cờ an toàn thêm',
       slug: 'typescript-9-3-extra-safety-flags',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Vài cờ mạnh KHÔNG nằm trong strict, bạn tự bật: noUncheckedIndexedAccess, noImplicitReturns, noUnusedLocals — bắt thêm một lớp lỗi nữa.',
       content: `
 <div class="ml-en">
@@ -270,6 +272,7 @@ x.<span class="tok-function">toFixed</span>(<span class="tok-number">2</span>);<
       title: '9.4 — target, lib, module & noEmit|||9.4 — target, lib, module & noEmit',
       slug: 'typescript-9-4-target-lib-module',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'target hạ cấp cú pháp; lib khai báo API runtime bạn có; module chọn hệ import/export; noEmit biến tsc thành chỉ-kiểm-kiểu — đúng cách repo này chạy CI.',
       content: `
 <div class="ml-en">

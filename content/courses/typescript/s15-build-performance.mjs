@@ -78,6 +78,7 @@ export default {
       title: '15.2 — Incremental & project references|||15.2 — Incremental & project references',
       slug: 'typescript-15-2-incremental-references',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'incremental lưu cache .tsbuildinfo để build sau chỉ kiểm phần đổi; composite + references + tsc -b chia một dự án lớn thành các phần build độc lập.',
       content: `
 <div class="ml-en">
@@ -153,6 +154,7 @@ export default {
       title: '15.3 — Separate checking from transpiling|||15.3 — Tách kiểm kiểu khỏi transpile',
       slug: 'typescript-15-3-isolated-modules',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Bundler (esbuild/swc/Next/Vite) transpile từng file KHÔNG có thông tin kiểu chéo-file, nên cần isolatedModules; type-check riêng bằng tsc --noEmit.',
       content: `
 <div class="ml-en">
@@ -208,6 +210,7 @@ export default {
       title: '15.4 — Trimming the module graph|||15.4 — Cắt gọn đồ thị module',
       slug: 'typescript-15-4-import-type',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'import type / export type nói rõ phụ thuộc chỉ-kiểu để chúng bị xoá, không thành import lúc chạy; verbatimModuleSyntax ép sự rõ ràng đó.',
       content: `
 <div class="ml-en">

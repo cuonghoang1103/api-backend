@@ -102,6 +102,7 @@ export default {
       title: '11.2 — Typed responses & handlers|||11.2 — Response & handler có kiểu',
       slug: 'typescript-11-2-typed-responses',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Response<T> gõ kiểu cho res.json để bạn không thể gửi sai hình dạng; RequestHandler gõ kiểu cả một handler/middleware trong một chữ ký.',
       content: `
 <div class="ml-en">
@@ -185,6 +186,7 @@ export default {
       title: '11.3 — A typed API envelope & errors|||11.3 — Envelope API & lỗi có kiểu',
       slug: 'typescript-11-3-api-envelope-errors',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Một discriminated union ApiResponse<T> = thành công | lỗi ép mọi bên gọi xử lý cả hai nhánh; một lớp AppError mang statusCode có kiểu.',
       content: `
 <div class="ml-en">
@@ -278,6 +280,7 @@ export default {
       title: '11.4 — End-to-end safety: services & config|||11.4 — An toàn đầu-cuối: service & cấu hình',
       slug: 'typescript-11-4-services-and-config',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Lớp service async trả Promise<User | null> ép route xử lý "không tìm thấy"; và process.env là string | undefined, nên phải phân tích cấu hình cẩn thận.',
       content: `
 <div class="ml-en">

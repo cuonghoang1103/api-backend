@@ -88,6 +88,7 @@ export default {
       title: '10.2 — Declaration files (.d.ts)|||10.2 — File khai báo (.d.ts)',
       slug: 'typescript-10-2-declaration-files',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'File .d.ts chỉ chứa kiểu, không code. Cách gõ kiểu cho một package JS không có kiểu bằng declare module, và cho một file JS tương đối bằng .d.ts đặt cạnh.',
       content: `
 <div class="ml-en">
@@ -175,6 +176,7 @@ export default {
       title: '10.3 — Global & module augmentation|||10.3 — Bổ sung toàn cục & bổ sung module',
       slug: 'typescript-10-3-augmentation',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'declare global thêm thành viên vào một kiểu toàn cục (như Window); module augmentation mở rộng kiểu của một thư viện — pattern gắn req.user vào Express Request.',
       content: `
 <div class="ml-en">
@@ -260,6 +262,7 @@ console.<span class="tok-function">log</span>(window.appVresion);   <span class=
       title: '10.4 — Getting types from packages|||10.4 — Lấy kiểu từ package',
       slug: 'typescript-10-4-types-from-packages',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Package hiện đại kèm sẵn kiểu; package cũ cần @types/* từ DefinitelyTyped. Lỗi TS2307 và cách sửa bằng npm i -D @types/x; vai trò của skipLibCheck.',
       content: `
 <div class="ml-en">

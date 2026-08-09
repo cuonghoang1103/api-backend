@@ -86,6 +86,7 @@ export default {
       title: '13.2 — parse vs safeParse|||13.2 — parse so với safeParse',
       slug: 'typescript-13-2-parse-safeparse',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'parse ném lỗi khi sai; safeParse trả một discriminated union { success, data | error } — bạn phải kiểm success trước khi đọc data.',
       content: `
 <div class="ml-en">
@@ -171,6 +172,7 @@ export default {
       title: '13.3 — Schema as the single source of truth|||13.3 — Schema là nguồn sự thật duy nhất',
       slug: 'typescript-13-3-schema-source-of-truth',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'z.infer giữ kiểu luôn đồng bộ với schema; coerce/transform biến đổi giá trị (input khác output); enum cho union literal — validate cấu hình một lần lúc khởi động.',
       content: `
 <div class="ml-en">
@@ -238,6 +240,7 @@ export default {
       title: '13.4 — Types from Prisma|||13.4 — Kiểu từ Prisma',
       slug: 'typescript-13-4-types-from-prisma',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Prisma sinh kiểu TypeScript cho mọi model từ schema.prisma: field String? thành T | null; Prisma.ModelGetPayload<{ select }> cho kiểu đúng theo truy vấn.',
       content: `
 <div class="ml-en">

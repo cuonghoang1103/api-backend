@@ -124,6 +124,7 @@ n.<span class="tok-function">toUpperCase</span>();             <span class="tok-
       title: '6.2 — Constraints, keyof & indexed access|||6.2 — Ràng buộc, keyof & truy cập theo chỉ mục',
       slug: 'typescript-6-2-constraints-keyof',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'extends ràng buộc T phải có gì; keyof + T[K] cho phép viết getProperty an toàn — trả về đúng kiểu của đúng field.',
       content: `
 <div class="ml-en">
@@ -229,6 +230,7 @@ con1.ts(3,23): error TS2339: Property 'length' does not exist on type 'T'.</div>
       title: '6.3 — Generic interfaces, classes & defaults|||6.3 — Interface, class generic & kiểu mặc định',
       slug: 'typescript-6-3-generic-types-classes',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Không chỉ hàm: interface, type và class cũng nhận tham số kiểu. Box<T>, Stack<T>, và tham số kiểu mặc định <T = unknown>.',
       content: `
 <div class="ml-en">
@@ -334,6 +336,7 @@ a.data.<span class="tok-function">toUpperCase</span>();   <span class="tok-comme
       title: '6.4 — Generics in practice: inference & pitfalls|||6.4 — Generics thực chiến: suy kiểu & bẫy thường gặp',
       slug: 'typescript-6-4-generics-in-practice',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Hai tham số kiểu để biến đổi (map T→U), một wrapper fetch có kiểu, và bẫy phổ biến: khi nào <T> là thừa, khi nào phép ép "as T" chỉ là lời hứa suông.',
       content: `
 <div class="ml-en">

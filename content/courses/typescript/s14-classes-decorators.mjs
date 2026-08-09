@@ -100,6 +100,7 @@ acc.owner = <span class="tok-string">'Bob'</span>;   <span class="tok-comment">/
       title: '14.2 — Inheritance, abstract & implements|||14.2 — Kế thừa, abstract & implements',
       slug: 'typescript-14-2-abstract-implements',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'abstract class định nghĩa khung chung nhưng không tạo được thực thể; implements bắt một class phải khớp một interface — thiếu phương thức là lỗi biên dịch.',
       content: `
 <div class="ml-en">
@@ -191,6 +192,7 @@ acc.owner = <span class="tok-string">'Bob'</span>;   <span class="tok-comment">/
       title: '14.3 — Native #private, getters & static|||14.3 — #private thật, getter & static',
       slug: 'typescript-14-3-hash-private-static',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'private của TypeScript chỉ chặn lúc biên dịch; field #private của JavaScript chặn cả lúc chạy. Cộng getter/setter và thành viên static.',
       content: `
 <div class="ml-en">
@@ -272,6 +274,7 @@ console.<span class="tok-function">log</span>(c.#count);   <span class="tok-comm
       title: '14.4 — Decorators|||14.4 — Decorator',
       slug: 'typescript-14-4-decorators',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Decorator (@name) bọc/thay đổi một class hay phương thức. Cú pháp stage-3 hiện đại chạy sẵn trong tsc 5; đây là thứ đứng sau NestJS, TypeORM, Angular.',
       content: `
 <div class="ml-en">

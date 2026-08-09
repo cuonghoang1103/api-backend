@@ -94,6 +94,7 @@ p.x = <span class="tok-number">5</span>;   <span class="tok-comment">// Readonly
       title: '8.2 — Pick & Omit|||8.2 — Pick & Omit',
       slug: 'typescript-8-2-pick-omit',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Chọn ra một tập con key (Pick) hoặc loại bỏ vài key (Omit) từ một kiểu — cách dựng PublicUser không có passwordHash mà không lặp lại các field.',
       content: `
 <div class="ml-en">
@@ -163,6 +164,7 @@ p.x = <span class="tok-number">5</span>;   <span class="tok-comment">// Readonly
       title: '8.3 — Record|||8.3 — Record',
       slug: 'typescript-8-3-record',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Record<K, V> gõ kiểu một object-dạng-từ-điển: mọi key thuộc K, mọi giá trị thuộc V — và với K là union literal, nó ép bạn phủ đủ mọi trường hợp.',
       content: `
 <div class="ml-en">
@@ -238,6 +240,7 @@ scores[<span class="tok-string">'bob'</span>] = <span class="tok-string">'x'</sp
       title: '8.4 — Exclude, NonNullable, ReturnType & Awaited|||8.4 — Exclude, NonNullable, ReturnType & Awaited',
       slug: 'typescript-8-4-exclude-returntype-awaited',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Các utility thao tác trên union và trên hàm: bớt thành viên union (Exclude), bỏ null/undefined (NonNullable), và rút kiểu ra khỏi hàm (ReturnType, Parameters, Awaited).',
       content: `
 <div class="ml-en">

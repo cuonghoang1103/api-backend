@@ -96,6 +96,7 @@ export default {
       title: '12.2 — Typing hooks|||12.2 — Gõ kiểu hooks',
       slug: 'typescript-12-2-hooks',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'useState suy kiểu từ giá trị đầu (và setter được kiểm theo đó); dùng generic tường minh <T | null> khi khởi đầu là null; useRef<HTMLInputElement>.',
       content: `
 <div class="ml-en">
@@ -183,6 +184,7 @@ export default {
       title: '12.3 — Typing events|||12.3 — Gõ kiểu sự kiện',
       slug: 'typescript-12-3-events',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'Sự kiện DOM có kiểu theo cả loại sự kiện lẫn phần tử: ChangeEvent<HTMLInputElement> cho e.target.value (luôn là chuỗi).',
       content: `
 <div class="ml-en">
@@ -248,6 +250,7 @@ export default {
       title: '12.4 — Typed context & generic components|||12.4 — Context có kiểu & component generic',
       slug: 'typescript-12-4-context-generics',
       type: 'LESSON',
+      isFreePreview: true,
       description: 'createContext<Theme | null>(null) ép useContext xử lý trường hợp "ngoài Provider"; component generic <T> để một List dùng lại cho mọi kiểu phần tử.',
       content: `
 <div class="ml-en">

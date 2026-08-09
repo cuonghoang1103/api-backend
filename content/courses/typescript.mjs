@@ -21,6 +21,7 @@ import s12 from './typescript/s12-typing-react.mjs';
 import s13 from './typescript/s13-zod-prisma.mjs';
 import s14 from './typescript/s14-classes-decorators.mjs';
 import s15 from './typescript/s15-build-performance.mjs';
+import s16 from './typescript/s16-architecture.mjs';
 
 export default {
   category: { slug: 'languages', name: 'Ngôn ngữ lập trình', icon: 'Code2', sortOrder: 0 },
@@ -57,5 +58,6 @@ export default {
     s13,
     s14,
     s15,
+    s16,
   ],
 };

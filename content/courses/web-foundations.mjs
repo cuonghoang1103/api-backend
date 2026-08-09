@@ -11,6 +11,7 @@ import s01 from './web-foundations/s01-tools.mjs';
 import s02 from './web-foundations/s02-html.mjs';
 import s03 from './web-foundations/s03-css.mjs';
 import s04 from './web-foundations/s04-js.mjs';
+import s05 from './web-foundations/s05-js-async.mjs';
 
 export default {
   category: { slug: 'frontend', name: 'Frontend', icon: 'Layout', sortOrder: 2 },
@@ -37,5 +38,6 @@ export default {
     s02,
     s03,
     s04,
+    s05,
   ],
 };

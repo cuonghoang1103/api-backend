@@ -13,6 +13,7 @@ import s03 from './postgresql/s03-bang-rang-buoc.mjs';
 import s04 from './postgresql/s04-chen-truy-van.mjs';
 import s05 from './postgresql/s05-join.mjs';
 import s06 from './postgresql/s06-tong-hop.mjs';
+import s07 from './postgresql/s07-subquery-cte.mjs';
 
 export default {
   category: { slug: 'databases', name: 'Cơ sở dữ liệu', icon: 'Database', sortOrder: 3 },
@@ -40,5 +41,6 @@ export default {
     s04,
     s05,
     s06,
+    s07,
   ],
 };

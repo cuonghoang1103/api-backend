@@ -260,8 +260,26 @@ export function stopMusicOn(deviceId: number): boolean {
  * Trả về câu ngắn để robot nói trước khi nhạc nổi lên — người dùng cần
  * biết nó tìm thấy bài gì, nhất là khi tên nghe nhầm.
  */
-export async function playMusicOn(deviceId: number, query: string): Promise<string> {
-  const track = await findTrack(query);
+export async function playMusicOn(
+  deviceId: number,
+  query: string,
+  opts: { allowFetch?: boolean; ownerId?: number } = {},
+): Promise<string> {
+  let track = await findTrack(query);
+
+  // Không có trong thư viện → đi tìm ngoài YouTube, tải về, thêm vào
+  // thư viện rồi phát. Lần sau gọi lại là có sẵn.
+  if (!track && opts.allowFetch !== false && query.trim()) {
+    try {
+      track = await fetchFromYoutube(query, opts.ownerId);
+    } catch (err) {
+      logger.warn('MakerLab tải nhạc ngoài hỏng', {
+        query,
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
+  }
+
   if (!track) return 'Thư viện nhạc đang trống, chưa có bài nào để bật.';
 
   // Đang phát bài khác thì dừng bài cũ trước, đợi nó nhả ra.
@@ -281,7 +299,7 @@ export async function playMusicOn(deviceId: number, query: string): Promise<stri
 
       await streamTrackAsPcm(track.url, async (pcm) => {
         if (session.stop) return false;
-        return gw.speakStreamPushPcm(deviceId, pcm, seq);
+        return await gw.speakStreamPushPcm(deviceId, pcm, seq);
       });
 
       gw.speakStreamEnd(deviceId, seq);
@@ -297,4 +315,93 @@ export async function playMusicOn(deviceId: number, query: string): Promise<stri
   })();
 
   return `Mở "${track.title}" của ${track.artist} đây.`;
+}
+
+// ─── Tìm nhạc ngoài thư viện (YouTube → R2 → thư viện) ─────
+
+/**
+ * Không có trong thư viện thì đi tìm ngoài YouTube, tải về R2, thêm
+ * vào thư viện, rồi phát.
+ *
+ * Lần sau gọi lại bài đó là có sẵn ngay — nên mỗi lần bạn nhờ robot
+ * tìm một bài mới, thư viện trang /music cũng dày thêm một bài. Hai
+ * việc bạn yêu cầu (thêm nhạc vào thư viện, và tìm nhạc ngoài) hoá ra
+ * là cùng một đường.
+ *
+ * ⚠️ Việc này CHẬM — tải và chuyển mã một bài mất 30 giây tới hai
+ * phút, và `extractYoutubeAudioToR2` có khoá toàn cục nên chỉ một bài
+ * được tải tại một thời điểm. Vì thế robot phải nói trước một câu
+ * "đang tải, đợi chút" rồi mới phát; im lặng hai phút thì người ta
+ * tưởng hỏng.
+ */
+export async function fetchFromYoutube(
+  query: string,
+  ownerId?: number,
+): Promise<FoundTrack | null> {
+  const apiKey = process.env.YOUTUBE_API_KEY;
+  if (!apiKey) {
+    logger.warn('MakerLab thiếu YOUTUBE_API_KEY, không tìm nhạc ngoài được');
+    return null;
+  }
+
+  // ── Tìm ──
+  const url = new URL('https://www.googleapis.com/youtube/v3/search');
+  url.searchParams.set('part', 'snippet');
+  url.searchParams.set('q', query);
+  url.searchParams.set('type', 'video');
+  url.searchParams.set('videoCategoryId', '10'); // chuyên mục Âm nhạc
+  url.searchParams.set('maxResults', '1');
+  url.searchParams.set('key', apiKey);
+
+  const res = await fetch(url.toString(), { signal: AbortSignal.timeout(15_000) });
+  if (!res.ok) {
+    logger.warn('MakerLab tìm YouTube hỏng', { status: res.status });
+    return null;
+  }
+  const json = (await res.json()) as {
+    items?: Array<{ id?: { videoId?: string }; snippet?: { title?: string; channelTitle?: string } }>;
+  };
+  const hit = json.items?.[0];
+  const videoId = hit?.id?.videoId;
+  if (!videoId) return null;
+
+  const title = decodeEntities(hit?.snippet?.title ?? query).slice(0, 200);
+  const artist = decodeEntities(hit?.snippet?.channelTitle ?? 'YouTube').slice(0, 200);
+
+  // ── Tải về R2 ──
+  const { extractYoutubeAudioToR2 } = await import('../youtubeAudio.service.js');
+  const t0 = Date.now();
+  const { key, size } = await extractYoutubeAudioToR2(
+    `https://www.youtube.com/watch?v=${videoId}`,
+    { userId: ownerId },
+  );
+  logger.info('MakerLab tải nhạc từ YouTube', {
+    title,
+    kb: Math.round(Number(size) / 1024),
+    ms: Date.now() - t0,
+  });
+
+  // ── Thêm vào thư viện, để lần sau khỏi tải lại ──
+  const row = await prisma.musicTrack.create({
+    data: { title, artist, audioUrl: absolute(key), category: 'NORMAL', active: true },
+    select: { id: true, title: true, artist: true, audioUrl: true, durationSeconds: true },
+  });
+
+  return {
+    id: row.id,
+    title: row.title,
+    artist: row.artist,
+    url: absolute(row.audioUrl ?? key),
+    durationSeconds: row.durationSeconds,
+  };
+}
+
+/** Tiêu đề YouTube trả về có &amp; &#39; … — đọc lên nghe rất buồn cười. */
+function decodeEntities(s: string): string {
+  return s
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
 }

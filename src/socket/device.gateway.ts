@@ -318,7 +318,11 @@ export async function speakStreamPush(
  * nghĩa vừa hỏng. Tách hàm riêng thay vì thêm cờ vào hàm cũ, để không
  * ai lỡ tay truyền nhầm định dạng.
  */
-export function speakStreamPushPcm(deviceId: number, pcm: Buffer, seq: number): boolean {
+export async function speakStreamPushPcm(
+  deviceId: number,
+  pcm: Buffer,
+  seq: number,
+): Promise<boolean> {
   const conn = connections.get(deviceId);
   if (!conn || conn.ws.readyState !== WebSocket.OPEN) return false;
   if (conn.turnSeq !== seq) return false;
@@ -327,10 +331,25 @@ export function speakStreamPushPcm(deviceId: number, pcm: Buffer, seq: number): 
   const CHUNK = 8 * 1024;
   for (let off = 0; off < pcm.length; off += CHUNK) {
     if (conn.turnSeq !== seq || conn.ws.readyState !== WebSocket.OPEN) return false;
-    // Đừng bơm nhanh hơn bo nuốt được: một bài bốn phút là 7,7 MB, dồn
-    // hết vào bộ đệm socket là ngốn RAM của VPS mà bo vẫn phát ở đúng
-    // tốc độ thời gian thực.
-    if (conn.ws.bufferedAmount > 256 * 1024) return true;
+
+    // ⚠️ CHỜ cho bo nuốt bớt, TUYỆT ĐỐI không được bỏ mẩu này.
+    //
+    // Bản đầu viết `if (bufferedAmount > 256KB) return true` — tức là
+    // vứt mẩu nhạc rồi báo thành công. Hậu quả nghe rất rõ: nhạc rơi
+    // từng mảng nên "hát nhanh như tua x5", và vì ffmpeg giải mã hết
+    // tốc lực chứ không theo thời gian thực, cả bài bốn phút bị nuốt
+    // trong mươi giây rồi kết thúc khi người nghe mới nghe được một
+    // đoạn.
+    //
+    // Chờ ở đây là thứ tạo ra sức ghìm ngược lên tận ffmpeg: hàm gọi
+    // đang `await` trong vòng đọc stdout, nên ffmpeg tự chậm lại theo.
+    // Đó mới là cách ghép một nguồn nhanh với một cái loa chạy thời
+    // gian thực.
+    while (conn.ws.bufferedAmount > 256 * 1024) {
+      await new Promise((r) => setTimeout(r, 40));
+      if (conn.turnSeq !== seq || conn.ws.readyState !== WebSocket.OPEN) return false;
+    }
+
     conn.ws.send(pcm.subarray(off, Math.min(off + CHUNK, pcm.length)));
   }
   return true;

@@ -48,16 +48,19 @@ static bool playEnded = false;
 /**
  * Phát khi mới nhận được bấy nhiêu byte, KHÔNG đợi nhận đủ cả câu.
  *
- * 16 KB = nửa giây tiếng. Đây là chỗ cắt được nhiều thời gian chờ
+ * 40 KB = 1,25 giây tiếng. Đây là chỗ cắt được nhiều thời gian chờ
  * nhất trong cả chuỗi: trước đây robot đợi LLM viết xong, đợi TTS đọc
  * xong, đợi truyền xong rồi mới mở miệng — đo được 4,5 giây từ lúc
  * người ta nói xong. Phát sớm thì nó bắt đầu nói ngay khi có đủ nửa
  * giây đầu, phần sau chảy tới trong lúc đang phát.
  *
- * Nửa giây là khoảng đệm chống vấp: cần 32 KB/s để phát liên tục, mà
- * WiFi cho vài trăm KB/s, nên nửa giây dư sức nuốt một cú khựng mạng.
+ * Vì sao 1,25 giây chứ không phải nửa giây như bản đầu: mạng nhanh
+ * hơn loa rất nhiều, nhưng khoảng nghỉ THẬT không nằm ở mạng — nó nằm
+ * ở chỗ server phải đọc câu tiếp theo thành tiếng, mất 300-1000 ms.
+ * Nửa giây đệm không nuốt nổi khoảng đó, nên loa hụt hơi giữa hai câu.
+ * Đổi lại: chờ thêm 0,75 giây trước khi robot mở miệng.
  */
-static const uint32_t PLAY_START_BYTES = 16 * 1024;
+static const uint32_t PLAY_START_BYTES = 40 * 1024;
 
 /**
  * Âm lượng 10-100%, nhân vào mẫu tiếng trước khi đẩy vào I2S.
@@ -356,7 +359,26 @@ static void pumpPlayback() {
     readPos += n * 2;
   }
 
-  if (buffered() == 0 && !playEnded) return;
+  // ⚠️ HỤT ĐỆM: phải bơm IM LẶNG, không được bỏ mặc DMA.
+  //
+  // Đây là tiếng "giật giật" người dùng nghe thấy. DMA của I2S lặp
+  // lại vùng đệm cũ khi không được ghi thêm — nên mỗi lần đợi câu
+  // tiếp theo, loa phát lại 128 ms vừa rồi, lặp đi lặp lại. Nghe như
+  // đĩa xước.
+  //
+  // Và nó xảy ra ở MỌI khoảng nghỉ giữa hai câu, vì server đọc từng
+  // câu một, mỗi câu mất 300-1000 ms tổng hợp.
+  //
+  // Bơm số 0 thì khoảng nghỉ thành im lặng sạch — vẫn là khoảng nghỉ,
+  // nhưng tai người bỏ qua một quãng lặng dễ hơn nhiều so với một mẩu
+  // tiếng lặp lại.
+  if (buffered() == 0 && !playEnded) {
+    memset(stereoBlock, 0, AUDIO_BLOCK_SAMPLES * 2 * sizeof(int16_t));
+    size_t w = 0;
+    i2s_write(I2S_NUM_1, stereoBlock, AUDIO_BLOCK_SAMPLES * 2 * sizeof(int16_t), &w,
+              portMAX_DELAY);
+    return;
+  }
 
   if (buffered() == 0) {
     // ⚠️ Đuôi im lặng, KHÔNG được bỏ.

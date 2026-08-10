@@ -16,6 +16,9 @@
 #define WS_PATH       "/device-ws"
 #define WS_USE_TLS    true
 
+// Phiên bản firmware — server hiện nó trong Live Console
+#define FW_VERSION    "0.2.0-changA"
+
 #define DEVICE_KEY    "mk_xxxxxxxxxxxxxxxxxxxxxxxx"
 #define DEVICE_SECRET "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 

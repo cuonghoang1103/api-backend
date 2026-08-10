@@ -1,118 +1,172 @@
 /**
  * ============================================================
- * Mini-Me Robot — firmware skeleton
+ * Mini-Me Robot — CHẶNG A: robot lên mạng
  * ============================================================
  *
- * This compiles and runs today: it joins WiFi, opens the WebSocket to
- * your server, streams telemetry, and executes every motion/face/LED
- * command the Live Console sends. That is enough to prove the whole
- * chain end to end the day the parts arrive.
+ * Mục tiêu của chặng này: robot xuất hiện ONLINE trên Live Console,
+ * gửi telemetry, nhận và thực thi lệnh. Chưa có âm thanh — cái đó là
+ * chặng B.
  *
- * The audio path (mic → VAD → server → MP3 → speaker) and the eye
- * rendering are marked TODO rather than guessed at, because both need
- * tuning against real hardware — VAD thresholds depend on your room
- * and your microphone's placement inside the shell, and no amount of
- * writing code without the board makes those numbers right.
+ * Chia hai chặng vì mỗi chặng phải tự kiểm chứng được. Nếu gộp cả
+ * audio vào ngay, lúc không chạy thì có tám thứ để nghi ngờ cùng lúc:
+ * WiFi, WebSocket, khoá thiết bị, I2S mic, VAD, mã hoá, I2S loa, và
+ * chính đường truyền. Tách ra thì mỗi lần chỉ còn một.
  *
- * Two FreeRTOS tasks:
- *   core 1 — audio only, real-time, must never block
- *   core 0 — network, sensors, motors, everything else
- * Sharing one core makes the speaker stutter every time a sensor is
- * read. That is the single most common "my robot sounds broken" bug.
+ * Màn 3.5" là công cụ gỡ lỗi tốt nhất ở đây: mọi trạng thái hiện
+ * ngay trên đó, không phải cắm cáp serial để biết robot đang làm gì.
  */
 
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WebSocketsClient.h>
 #include <ArduinoJson.h>
+#include <TFT_eSPI.h>
 
 #include "config.h"
 #include "secrets.h"
 
-// ─── State ─────────────────────────────────────────────────
-WebSocketsClient ws;
+static TFT_eSPI tft = TFT_eSPI();
+static WebSocketsClient ws;
 
-struct MotorState {
-  int16_t  left  = 0;
-  int16_t  right = 0;
-  uint32_t stopAt = 0;   // millis() deadline; 0 = idle
-} motors;
+// ─── Trạng thái ────────────────────────────────────────────
+struct State {
+  bool wifiUp = false;
+  bool wsUp = false;
+  String ip = "-";
+  int rssi = 0;
+  uint32_t uptimeSec = 0;
+  uint32_t lastServerMs = 0;
+  uint32_t cmdCount = 0;
+  String lastCmd = "-";
+  String lastNote = "khởi động...";
+} st;
 
-struct Telemetry {
-  float    battery    = 0;
-  int16_t  rssi       = 0;
-  uint32_t uptime     = 0;
-  uint16_t distanceMm = 9999;
-  float    pitch      = 0;
-  float    roll       = 0;
-} tele;
+static uint32_t lastTelemetryMs = 0;
+static uint32_t lastUiMs = 0;
+static uint32_t reconnectDelayMs = WS_RECONNECT_BASE_MS;
 
-uint32_t lastTelemetry  = 0;
-uint32_t lastServerMsg  = 0;
-uint32_t reconnectDelay = WS_RECONNECT_BASE_MS;
-bool     wsConnected    = false;
+// ─── Màn hình ──────────────────────────────────────────────
+// Vẽ lại TỪNG VÙNG chứ không xoá cả màn rồi vẽ lại: xoá toàn màn ở
+// 20 MHz mất ~90 ms và mắt thấy rõ cái nháy. Mỗi ô chỉ tô lại phần
+// chữ của chính nó.
 
-// ─── Motors ────────────────────────────────────────────────
-// PWM through the LEDC peripheral: four channels, one per DRV8833
-// input, so direction is "which of the pair carries the duty cycle".
+#define C_BG      TFT_BLACK
+#define C_TITLE   TFT_GREEN
+#define C_LABEL   TFT_DARKGREY
+#define C_VALUE   TFT_WHITE
+#define C_OK      TFT_GREEN
+#define C_WARN    TFT_ORANGE
+#define C_BAD     TFT_RED
+#define C_ACCENT  TFT_CYAN
 
-void motorSetup() {
-  const int pins[4] = {PIN_MOTOR_AIN1, PIN_MOTOR_AIN2, PIN_MOTOR_BIN1, PIN_MOTOR_BIN2};
-  for (int i = 0; i < 4; i++) {
-    ledcSetup(i, 20000, 8);      // 20 kHz — above hearing, no motor whine
-    ledcAttachPin(pins[i], i);
-    ledcWrite(i, 0);
-  }
-}
+static void uiFrame() {
+  tft.fillScreen(C_BG);
 
-void motorDrive(int16_t left, int16_t right) {
-  left  = constrain(left,  -MAX_MOTOR_DUTY, MAX_MOTOR_DUTY);
-  right = constrain(right, -MAX_MOTOR_DUTY, MAX_MOTOR_DUTY);
+  tft.setTextColor(C_TITLE, C_BG);
+  tft.setTextSize(2);
+  tft.setCursor(12, 10);
+  tft.print("MINI-ME ROBOT");
 
-  ledcWrite(0, left  > 0 ? left  : 0);
-  ledcWrite(1, left  < 0 ? -left : 0);
-  ledcWrite(2, right > 0 ? right : 0);
-  ledcWrite(3, right < 0 ? -right : 0);
+  tft.setTextSize(1);
+  tft.setTextColor(C_LABEL, C_BG);
+  tft.setCursor(tft.width() - 96, 16);
+  tft.print("chang A");
 
-  motors.left  = left;
-  motors.right = right;
-}
+  tft.drawFastHLine(12, 34, tft.width() - 24, C_LABEL);
 
-void motorStop() {
-  motorDrive(0, 0);
-  motors.stopAt = 0;
-}
-
-/**
- * Safety watchdog. Runs regardless of what the server said, because
- * the server is on the other side of a WiFi link that can vanish
- * mid-command. A robot that keeps driving after losing contact is a
- * robot that drives into a wall.
- */
-void motionWatchdog() {
-  if (motors.stopAt && millis() >= motors.stopAt) motorStop();
-
-  if (tele.distanceMm < OBSTACLE_STOP_MM && (motors.left > 0 || motors.right > 0)) {
-    motorStop();
-    // Report it: a stop with no explanation looks like a crash.
-    StaticJsonDocument<128> doc;
-    doc["t"] = "log";
-    doc["level"] = "warn";
-    doc["msg"] = String("Vật cản ") + tele.distanceMm + " mm — dừng";
-    String out;
-    serializeJson(doc, out);
-    ws.sendTXT(out);
+  // Nhãn cố định — vẽ một lần, sau đó chỉ cập nhật phần giá trị
+  const char* labels[] = {"WiFi", "IP", "Song", "Server", "Uptime", "Lenh"};
+  for (int i = 0; i < 6; i++) {
+    tft.setTextColor(C_LABEL, C_BG);
+    tft.setCursor(12, 48 + i * 22);
+    tft.print(labels[i]);
+    tft.setCursor(76, 48 + i * 22);
+    tft.print(":");
   }
 
-  if (wsConnected && millis() - lastServerMsg > HEARTBEAT_TIMEOUT_MS) {
-    motorStop();
-    ws.disconnect();   // stale link; force a clean reconnect
-  }
+  tft.drawFastHLine(12, 190, tft.width() - 24, C_LABEL);
+  tft.setTextColor(C_LABEL, C_BG);
+  tft.setCursor(12, 200);
+  tft.print("Ghi chu");
 }
 
-// ─── Commands ──────────────────────────────────────────────
+/** Ghi giá trị vào một dòng, tự xoá phần cũ. */
+static void uiValue(int row, const String& text, uint16_t color) {
+  const int x = 88;
+  const int y = 48 + row * 22;
+  tft.fillRect(x, y, tft.width() - x - 12, 10, C_BG);
+  tft.setTextSize(1);
+  tft.setTextColor(color, C_BG);
+  tft.setCursor(x, y);
+  tft.print(text);
+}
 
-void sendAck(uint32_t id, bool ok, const char* err = nullptr) {
+static void uiRefresh() {
+  uiValue(0, st.wifiUp ? String(WIFI_SSID) : String("dang tim..."),
+          st.wifiUp ? C_OK : C_WARN);
+  uiValue(1, st.ip, C_VALUE);
+  uiValue(2, st.wifiUp ? String(st.rssi) + " dBm" : String("-"),
+          st.rssi > -70 ? C_OK : C_WARN);
+  uiValue(3, st.wsUp ? String("ONLINE") : String("dang noi..."),
+          st.wsUp ? C_OK : C_WARN);
+
+  char up[24];
+  snprintf(up, sizeof(up), "%lu:%02lu:%02lu",
+           st.uptimeSec / 3600, (st.uptimeSec / 60) % 60, st.uptimeSec % 60);
+  uiValue(4, String(up), C_VALUE);
+  uiValue(5, String(st.cmdCount) + "  (" + st.lastCmd + ")", C_ACCENT);
+
+  // Ghi chú — dòng dài nên cho riêng một vùng
+  tft.fillRect(12, 214, tft.width() - 24, 12, C_BG);
+  tft.setTextColor(st.wsUp ? C_ACCENT : C_WARN, C_BG);
+  tft.setCursor(12, 214);
+  tft.print(st.lastNote);
+}
+
+/** Chấm tròn báo còn sống — nhấp nháy theo giây. */
+static void uiHeartbeat() {
+  static bool on = false;
+  on = !on;
+  tft.fillCircle(tft.width() - 22, 18, 5,
+                 st.wsUp ? (on ? C_OK : C_BG) : (on ? C_BAD : C_BG));
+}
+
+// ─── WebSocket ─────────────────────────────────────────────
+
+static void sendHello() {
+  StaticJsonDocument<256> doc;
+  doc["t"] = "hello";
+  doc["fw"] = FW_VERSION;
+  doc["ip"] = WiFi.localIP().toString();
+  doc["rssi"] = WiFi.RSSI();
+  String out;
+  serializeJson(doc, out);
+  ws.sendTXT(out);
+}
+
+static void sendLog(const char* level, const String& msg) {
+  StaticJsonDocument<256> doc;
+  doc["t"] = "log";
+  doc["level"] = level;
+  doc["msg"] = msg;
+  String out;
+  serializeJson(doc, out);
+  ws.sendTXT(out);
+}
+
+static void sendTelemetry() {
+  StaticJsonDocument<256> doc;
+  doc["t"] = "telemetry";
+  doc["rssi"] = WiFi.RSSI();
+  doc["uptime"] = millis() / 1000;
+  doc["heapKb"] = ESP.getFreeHeap() / 1024;
+  doc["psramKb"] = ESP.getFreePsram() / 1024;
+  String out;
+  serializeJson(doc, out);
+  ws.sendTXT(out);
+}
+
+static void sendAck(uint32_t id, bool ok, const char* err = nullptr) {
   StaticJsonDocument<192> doc;
   doc["t"] = "ack";
   doc["id"] = id;
@@ -123,109 +177,73 @@ void sendAck(uint32_t id, bool ok, const char* err = nullptr) {
   ws.sendTXT(out);
 }
 
-void handleCommand(JsonDocument& doc) {
-  const uint32_t id   = doc["id"] | 0;
-  const char*    type = doc["type"] | "";
-  JsonObjectConst p   = doc["payload"];
+/**
+ * Chặng A chưa có động cơ nào để quay, nên lệnh chỉ được ghi nhận và
+ * hiện lên màn. Nhưng ack vẫn phải gửi thật — nhờ đó Live Console
+ * hiện đúng trạng thái ACKED và ta biết đường truyền hai chiều đã
+ * thông trước khi đụng tới phần cứng chuyển động.
+ */
+static void handleCommand(JsonDocument& doc) {
+  const uint32_t id = doc["id"] | 0;
+  const char* type = doc["type"] | "";
 
-  if (!strcmp(type, "move")) {
-    motorDrive(p["left"] | 0, p["right"] | 0);
-    motors.stopAt = millis() + (uint32_t)(p["ms"] | 500);
-    sendAck(id, true);
+  st.cmdCount++;
+  st.lastCmd = String(type);
+  st.lastNote = String("nhan lenh: ") + type;
 
-  } else if (!strcmp(type, "stop")) {
-    motorStop();
+  if (!strcmp(type, "reboot")) {
     sendAck(id, true);
-
-  } else if (!strcmp(type, "turn")) {
-    // Open-loop for now. Closing the loop needs the encoder counts
-    // and the IMU heading — see motion.cpp in the firmware roadmap.
-    const int deg   = p["deg"] | 0;
-    const int speed = p["speed"] | 160;
-    motorDrive(deg > 0 ? speed : -speed, deg > 0 ? -speed : speed);
-    motors.stopAt = millis() + (uint32_t)(abs(deg) * 4);
-    sendAck(id, true);
-
-  } else if (!strcmp(type, "face")) {
-    // TODO(face.cpp): render on the two GC9A01 displays.
-    Serial.printf("face → %s\n", p["emotion"] | "neutral");
-    sendAck(id, true);
-
-  } else if (!strcmp(type, "led")) {
-    // TODO(leds): NeoPixel ring.
-    sendAck(id, true);
-
-  } else if (!strcmp(type, "reboot")) {
-    sendAck(id, true);
-    delay(200);
+    sendLog("warn", "Dang khoi dong lai theo yeu cau");
+    delay(300);
     ESP.restart();
-
-  } else {
-    sendAck(id, false, "lệnh chưa hỗ trợ trong bản firmware này");
+    return;
   }
+
+  // Mọi lệnh khác: ghi nhận, báo rõ là chưa có phần cứng
+  sendAck(id, true);
+  sendLog("info", String("chang A: ghi nhan lenh '") + type +
+                      "' (chua co phan cung de thuc thi)");
 }
 
-// ─── WebSocket ─────────────────────────────────────────────
-
-void sendHello() {
-  StaticJsonDocument<256> doc;
-  doc["t"]       = "hello";
-  doc["fw"]      = "0.1.0";
-  doc["ip"]      = WiFi.localIP().toString();
-  doc["rssi"]    = WiFi.RSSI();
-  doc["battery"] = (int)tele.battery;
-  String out;
-  serializeJson(doc, out);
-  ws.sendTXT(out);
-}
-
-void sendTelemetry() {
-  StaticJsonDocument<256> doc;
-  doc["t"]          = "telemetry";
-  doc["battery"]    = tele.battery;
-  doc["rssi"]       = WiFi.RSSI();
-  doc["uptime"]     = millis() / 1000;
-  doc["distanceMm"] = tele.distanceMm;
-  doc["pitch"]      = tele.pitch;
-  doc["roll"]       = tele.roll;
-  String out;
-  serializeJson(doc, out);
-  ws.sendTXT(out);
-}
-
-void onWsEvent(WStype_t type, uint8_t* payload, size_t length) {
+static void onWsEvent(WStype_t type, uint8_t* payload, size_t len) {
   switch (type) {
     case WStype_CONNECTED:
-      wsConnected    = true;
-      reconnectDelay = WS_RECONNECT_BASE_MS;
-      lastServerMsg  = millis();
+      st.wsUp = true;
+      st.lastServerMs = millis();
+      st.lastNote = "da noi server";
+      reconnectDelayMs = WS_RECONNECT_BASE_MS;
       Serial.println("[ws] connected");
       sendHello();
+      sendLog("info", "Mini-Me chang A da len mang");
       break;
 
     case WStype_DISCONNECTED:
-      wsConnected = false;
-      motorStop();          // never coast on unattended
+      st.wsUp = false;
+      st.lastNote = "mat ket noi server";
       Serial.println("[ws] disconnected");
       break;
 
     case WStype_TEXT: {
-      lastServerMsg = millis();
+      st.lastServerMs = millis();
       StaticJsonDocument<512> doc;
-      if (deserializeJson(doc, payload, length)) return;
-
+      if (deserializeJson(doc, payload, len)) return;
       const char* t = doc["t"] | "";
-      if      (!strcmp(t, "cmd"))       handleCommand(doc);
-      else if (!strcmp(t, "ping"))      ws.sendTXT("{\"t\":\"pong\"}");
-      else if (!strcmp(t, "say_start")) { /* TODO(audio_out): open the decoder */ }
-      else if (!strcmp(t, "say_end"))   { /* TODO(audio_out): flush + close */ }
+      if (!strcmp(t, "cmd")) {
+        handleCommand(doc);
+      } else if (!strcmp(t, "ping")) {
+        ws.sendTXT("{\"t\":\"pong\"}");
+      } else if (!strcmp(t, "welcome")) {
+        st.lastNote = String("deviceId=") + (int)(doc["deviceId"] | 0);
+      } else if (!strcmp(t, "say_start")) {
+        // Chặng B mới phát được; giờ chỉ hiện lên màn cho biết server
+        // đã gửi âm thanh xuống.
+        st.lastNote = "server gui am thanh (chang B)";
+      }
       break;
     }
 
     case WStype_BIN:
-      lastServerMsg = millis();
-      // TODO(audio_out): feed into the MP3 decoder ring buffer and on
-      // to I2S. Must not block — this runs on the network task.
+      st.lastServerMs = millis();
       break;
 
     default:
@@ -233,44 +251,53 @@ void onWsEvent(WStype_t type, uint8_t* payload, size_t length) {
   }
 }
 
-// ─── Battery ───────────────────────────────────────────────
-
-void readBattery() {
-  const uint32_t mv = analogReadMilliVolts(PIN_BATTERY_ADC) * BATTERY_DIVIDER;
-  const float pct =
-      100.0f * (float)((int32_t)mv - BATTERY_EMPTY_MV) / (BATTERY_FULL_MV - BATTERY_EMPTY_MV);
-  tele.battery = constrain(pct, 0.0f, 100.0f);
-}
-
 // ─── Setup / loop ──────────────────────────────────────────
 
 void setup() {
   Serial.begin(115200);
   delay(300);
-  Serial.println("\nMini-Me Robot booting…");
+  Serial.println("\nMini-Me Robot — chặng A");
+
+  tft.init();
+  tft.setRotation(1);
+  uiFrame();
+  uiRefresh();
 
   if (!psramFound()) {
-    // Loud, because the fix is buying the right board, not debugging.
-    Serial.println("!! Không thấy PSRAM. Bo này KHÔNG phải bản N16R8 —");
-    Serial.println("!! phần âm thanh sẽ hết RAM ngay lượt nói đầu tiên.");
+    st.lastNote = "CANH BAO: khong thay PSRAM";
+    uiRefresh();
+    Serial.println("!! Không thấy PSRAM — bo này không phải bản N16R8");
   }
 
-  motorSetup();
-  pinMode(PIN_TOUCH_HEAD, INPUT);
-  pinMode(PIN_CLIFF_L, INPUT);
-  pinMode(PIN_CLIFF_R, INPUT);
-  analogReadResolution(12);
-
+  // ── WiFi ──
+  st.lastNote = "dang ket noi WiFi...";
+  uiRefresh();
   WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  Serial.print("WiFi");
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(400);
-    Serial.print('.');
-  }
-  Serial.printf(" ok, ip=%s rssi=%d\n", WiFi.localIP().toString().c_str(), WiFi.RSSI());
 
-  const String path = String(WS_PATH) + "?key=" + DEVICE_KEY + "&secret=" + DEVICE_SECRET;
+  uint32_t t0 = millis();
+  while (WiFi.status() != WL_CONNECTED && millis() - t0 < 20000) {
+    delay(300);
+    Serial.print('.');
+    uiHeartbeat();
+  }
+
+  if (WiFi.status() == WL_CONNECTED) {
+    st.wifiUp = true;
+    st.ip = WiFi.localIP().toString();
+    st.rssi = WiFi.RSSI();
+    st.lastNote = "WiFi OK, dang noi server";
+    Serial.printf("\nWiFi ok, ip=%s rssi=%d\n", st.ip.c_str(), st.rssi);
+  } else {
+    st.lastNote = "KHONG VAO DUOC WiFi - kiem SSID/mat khau";
+    Serial.println("\nWiFi thất bại");
+  }
+  uiRefresh();
+
+  // ── WebSocket ──
+  // Khoá thiết bị đi trong query string. Server bcrypt-compare secret
+  // rồi mới cho kết nối; sai thì đóng ngay với mã 4401.
+  String path = String(WS_PATH) + "?key=" + DEVICE_KEY + "&secret=" + DEVICE_SECRET;
 #if WS_USE_TLS
   ws.beginSSL(WS_HOST, WS_PORT, path.c_str());
 #else
@@ -278,26 +305,31 @@ void setup() {
 #endif
   ws.onEvent(onWsEvent);
   ws.setReconnectInterval(WS_RECONNECT_BASE_MS);
-  // Library-level keepalive on top of the server's own ping, so a
-  // half-open socket after a router reboot is detected either way.
+  // Keepalive của thư viện chồng lên ping của server: một socket
+  // nửa-mở sau khi router khởi động lại sẽ bị phát hiện từ cả hai phía.
   ws.enableHeartbeat(15000, 3000, 2);
-
-  // TODO(audio_in / audio_out): start the I2S task pinned to core 1.
-  //   xTaskCreatePinnedToCore(audioTask, "audio", 8192, nullptr, 5, nullptr, 1);
 }
 
 void loop() {
   ws.loop();
-  motionWatchdog();
 
-  if (millis() - lastTelemetry >= TELEMETRY_INTERVAL_MS) {
-    lastTelemetry = millis();
-    readBattery();
-    // TODO(sensors): read MPU6050 pitch/roll and VL53L0X distance
-    // here. Median-filter the laser over 5 samples — trusting a single
-    // bad reading makes the robot brake in an empty room.
-    if (wsConnected) sendTelemetry();
+  const uint32_t now = millis();
+
+  // Telemetry 1 Hz
+  if (st.wsUp && now - lastTelemetryMs >= TELEMETRY_INTERVAL_MS) {
+    lastTelemetryMs = now;
+    sendTelemetry();
   }
 
-  delay(2);   // yield to the WiFi stack
+  // Cập nhật màn 1 Hz — đủ mượt cho mắt, không tốn SPI vô ích
+  if (now - lastUiMs >= 1000) {
+    lastUiMs = now;
+    st.uptimeSec = now / 1000;
+    st.rssi = WiFi.RSSI();
+    st.wifiUp = WiFi.status() == WL_CONNECTED;
+    uiRefresh();
+    uiHeartbeat();
+  }
+
+  delay(2);  // nhường CPU cho ngăn xếp WiFi
 }

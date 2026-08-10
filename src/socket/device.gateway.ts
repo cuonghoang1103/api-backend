@@ -531,15 +531,55 @@ export function initDeviceGateway(httpServer: HttpServer): WebSocketServer {
     if (url.pathname !== WS_PATH) return; // socket.io or something else: hands off
 
     void (async () => {
-      const auth = await authenticateDevice(url);
-      if (!auth) {
-        socket.write('HTTP/1.1 401 Unauthorized\r\nConnection: close\r\n\r\n');
+      try {
+        // Hạn cứng cho việc xác thực. Prisma cạn pool kết nối thì
+        // truy vấn nằm chờ chứ không lỗi ngay, và một socket treo vô
+        // hạn là thứ tệ nhất để gỡ: bo chỉ thấy "không ai trả lời".
+        const auth = await Promise.race([
+          authenticateDevice(url),
+          new Promise<never>((_, rej) =>
+            setTimeout(() => rej(new Error('auth timeout 8s')), 8_000).unref?.(),
+          ),
+        ]);
+        if (!auth) {
+          socket.write('HTTP/1.1 401 Unauthorized\r\nConnection: close\r\n\r\n');
+          socket.destroy();
+          return;
+        }
+        wss!.handleUpgrade(req, socket, head, (ws) => {
+          acceptDevice(ws, auth);
+        });
+      } catch (err) {
+        // ⚠️ KHÔNG ĐƯỢC BỎ NHÁNH NÀY.
+        //
+        // Trước đây đây là `void (async ...)()` trần. Khoá sai thì hàm
+        // trả null rất ngoan và socket nhận 401; nhưng khoá ĐÚNG mà
+        // truy vấn ném lỗi thì promise reject trong im lặng, không ai
+        // ghi gì vào socket, và thiết bị ngồi chờ tới lúc hết hạn.
+        // Đo trên bo thật: cùng một kết nối TLS, `GET /api/v1/...` trả
+        // 200 tức thì còn `GET /device-ws` im 8 giây. Một lỗi không
+        // bắt trông y hệt một cái mạng hỏng, và đã tốn mấy tiếng đi
+        // nghi mạng.
+        const e = err instanceof Error ? err : new Error(String(err));
+        // Nhãn ngắn, an toàn — thiết bị không có kênh nào khác để biết
+        // vì sao nó bị từ chối, nên nhét vào chính dòng trạng thái.
+        const tag = /timeout/i.test(e.message)
+          ? 'auth-timeout'
+          : e.constructor.name.startsWith('Prisma')
+            ? 'db-error'
+            : 'auth-error';
+        logger.error('MakerLab từ chối nâng cấp WebSocket', {
+          tag,
+          error: e.message,
+          type: e.constructor.name,
+        });
+        try {
+          socket.write(`HTTP/1.1 500 ${tag}\r\nConnection: close\r\n\r\n`);
+        } catch {
+          /* socket đã chết — không còn gì để nói */
+        }
         socket.destroy();
-        return;
       }
-      wss!.handleUpgrade(req, socket, head, (ws) => {
-        acceptDevice(ws, auth);
-      });
     })();
   });
 

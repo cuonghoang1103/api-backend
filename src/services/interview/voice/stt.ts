@@ -69,6 +69,19 @@ export async function buildHintForTurn(sessionId: number, order: number): Promis
 export interface TranscriptResult {
   text: string;
   provider: SttProvider;
+  /**
+   * Whisper's own estimate that the clip contains NO speech (0..1), averaged
+   * over segments. Only present when `detail: true` is requested.
+   *
+   * Worth having because Whisper never returns "I heard nothing" — fed pure
+   * room noise it emits the most common thing in its training data, which for
+   * Vietnamese is YouTube subtitle boilerplate ("đừng quên like share
+   * subscribe", "cảm ơn các bạn đã xem video"). The text looks perfectly
+   * confident; this number is the only place the model admits doubt.
+   */
+  noSpeechProb?: number;
+  /** Mean log-probability of the decoded tokens. Very low = the model guessed. */
+  avgLogprob?: number;
 }
 
 /**
@@ -81,7 +94,7 @@ export async function transcribeWithGroq(
   mimetype: string,
   // `language` is an ISO-639-1 code Whisper understands (vi/en/ja/zh/…). The
   // interview passes vi/en; My Language pronunciation scoring passes ja/zh too.
-  opts: { language: string; hints?: string },
+  opts: { language: string; hints?: string; detail?: boolean },
 ): Promise<TranscriptResult> {
   const key = process.env.GROQ_API_KEY;
   if (!key) throw new Error('GROQ_API_KEY missing');
@@ -91,7 +104,9 @@ export async function transcribeWithGroq(
   form.append('file', new Blob([new Uint8Array(audio)], { type: mimetype || 'audio/webm' }), filename || 'answer.webm');
   form.append('model', groqModel());
   form.append('language', opts.language);
-  form.append('response_format', 'json');
+  // `verbose_json` costs nothing extra but carries the per-segment confidence
+  // numbers. Opt-in so the interview keeps its existing lighter response.
+  form.append('response_format', opts.detail ? 'verbose_json' : 'json');
   form.append('temperature', '0');
   if (opts.hints) form.append('prompt', opts.hints);
 
@@ -108,9 +123,24 @@ export async function transcribeWithGroq(
       const detail = await res.text().catch(() => '');
       throw new Error(`groq stt HTTP ${res.status} ${detail.slice(0, 120)}`);
     }
-    const json = (await res.json()) as { text?: string };
+    const json = (await res.json()) as {
+      text?: string;
+      segments?: Array<{ no_speech_prob?: number; avg_logprob?: number }>;
+    };
     const text = (json.text ?? '').trim();
-    return { text, provider: 'groq' };
+    if (!opts.detail || !json.segments?.length) return { text, provider: 'groq' };
+
+    const segs = json.segments;
+    const mean = (pick: (s: (typeof segs)[number]) => number | undefined) => {
+      const vals = segs.map(pick).filter((v): v is number => typeof v === 'number');
+      return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : undefined;
+    };
+    return {
+      text,
+      provider: 'groq',
+      noSpeechProb: mean((s) => s.no_speech_prob),
+      avgLogprob: mean((s) => s.avg_logprob),
+    };
   } catch (e) {
     if ((e as Error).name === 'AbortError') throw new Error('groq stt timeout');
     throw e;

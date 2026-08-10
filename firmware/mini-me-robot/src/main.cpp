@@ -26,9 +26,11 @@
 
 #include <Arduino.h>
 #include <WiFi.h>
+#include <WiFiClientSecure.h>
 #include <WebSocketsClient.h>
 #include <ArduinoJson.h>
 #include <TFT_eSPI.h>
+#include <esp_heap_caps.h>
 
 #include "audio.h"
 #include "config.h"
@@ -58,6 +60,38 @@ struct State {
 static uint32_t lastTelemetryMs = 0;
 static uint32_t lastUiMs = 0;
 static uint32_t thinkSinceMs = 0;
+
+// ─── Người gác ─────────────────────────────────────────────
+// Một tác vụ RIÊNG, in mỗi giây bất kể loop() đang làm gì.
+//
+// Vì sao cần: khi loop() kẹt trong một lời gọi chặn, mọi thứ in từ
+// bên trong loop() cũng kẹt theo — triệu chứng là serial im hoàn
+// toàn, và im lặng thì không phân biệt được "kẹt ở mạng" với "kẹt ở
+// I2S". Người gác đứng ngoài nên nó vẫn nói được, và nó nói đúng cái
+// cần biết: loop() dừng lại ở CHẶNG NÀO.
+static volatile const char* gStage = "boot";
+static volatile uint32_t gLoops = 0;
+
+static void watchTask(void*) {
+  const char* last = "";
+  uint32_t stuckSec = 0;
+  uint32_t lastLoops = 0;
+  for (;;) {
+    // Đứng yên ở một chặng KHÔNG có nghĩa là kẹt — loop() nằm ở chặng
+    // `audio` phần lớn thời gian là chuyện bình thường (mỗi lượt đọc
+    // mic chờ đúng một khối 16 ms). Thứ phân biệt được là SỐ VÒNG: nó
+    // không tăng thì mới là kẹt thật.
+    const char* s = (const char*)gStage;
+    const uint32_t loops = gLoops;
+    stuckSec = (loops == lastLoops) ? stuckSec + 1 : 0;
+    last = s;
+    lastLoops = loops;
+    if (stuckSec >= 2)
+      Serial.printf("[gac] KET THAT o chang=%s, %lu giay khong quay duoc vong nao\n", s,
+                    (unsigned long)stuckSec);
+    vTaskDelay(pdMS_TO_TICKS(1000));
+  }
+}
 
 // ─── Bỏ dấu tiếng Việt để hiện lên màn ─────────────────────
 // Phông GLCD/Font2 của TFT_eSPI chỉ có ASCII. Đưa thẳng UTF-8 vào thì
@@ -378,21 +412,33 @@ static void sendAck(uint32_t id, bool ok, const char* err = nullptr) {
 
 static uint8_t upBuf[2048];
 static size_t upLen = 0;
+// Số liệu một lượt nghe, gửi kèm log lên server. Không có nó thì lúc
+// robot không nghe ra câu nào ta chỉ đoán được là "mic hỏng" hay
+// "Whisper kém" — mà hai thứ đó sửa theo hai hướng ngược nhau.
+static uint32_t upBytes = 0;
+static int32_t upPeak = 0;
+static uint32_t upStartMs = 0;
 
 static void upFlush() {
   if (!upLen) return;
   if (st.wsUp) ws.sendBIN(upBuf, upLen);
+  upBytes += upLen;
   upLen = 0;
 }
 
 static void onTurnStart() {
   upLen = 0;
+  upBytes = 0;
+  upPeak = 0;
+  upStartMs = millis();
   st.mode = MODE_HEAR;
   st.lastNote = "nghe thay tieng noi";
   if (st.wsUp) ws.sendTXT("{\"t\":\"audio_start\"}");
 }
 
 static void onChunk(const uint8_t* data, size_t len) {
+  const int32_t lv = audio::level();
+  if (lv > upPeak) upPeak = lv;
   while (len) {
     const size_t room = sizeof(upBuf) - upLen;
     const size_t take = len < room ? len : room;
@@ -409,7 +455,12 @@ static void onTurnEnd() {
   st.mode = MODE_THINK;
   thinkSinceMs = millis();
   st.lastNote = "dang cho server tra loi";
-  if (st.wsUp) ws.sendTXT("{\"t\":\"audio_end\"}");
+  if (st.wsUp) {
+    ws.sendTXT("{\"t\":\"audio_end\"}");
+    const uint32_t ms = millis() - upStartMs;
+    sendLog("info", String("nghe: ") + (upBytes / 1024) + " KB / " + (ms / 100) / 10.0 +
+                        " giay, dinh=" + upPeak + " (nguong " + VAD_THRESHOLD + ")");
+  }
 }
 
 // ─── Lệnh từ server ────────────────────────────────────────
@@ -456,7 +507,10 @@ static void handleSayStart(JsonDocument& doc) {
 static void handleSayEnd() {
   audio::playEnd();
   st.turns++;
-  st.lastNote = String("da noi ") + (audio::lastClipBytes() / 1024) + " KB";
+  const uint32_t kb = audio::lastClipBytes() / 1024;
+  st.lastNote = String("da noi ") + kb + " KB";
+  sendLog("info", String("noi: nhan ") + kb + " KB PCM = " +
+                      (audio::lastClipBytes() / 32000) + " giay tieng");
 }
 
 static void onWsEvent(WStype_t type, uint8_t* payload, size_t len) {
@@ -513,6 +567,183 @@ static void onWsEvent(WStype_t type, uint8_t* payload, size_t len) {
   }
 }
 
+/**
+ * Nonce cho cú bắt tay WebSocket: 16 byte ngẫu nhiên, mã base64.
+ *
+ * Sinh tại chỗ chứ không viết sẵn một hằng số. Hai lý do, cả hai đều
+ * thật: RFC 6455 đòi nonce phải NGẪU NHIÊN cho mỗi lần bắt tay; và
+ * một chuỗi base64 24 ký tự nằm trong mã nguồn trông y hệt một khoá
+ * bị lộ — móc pre-commit của repo chặn đúng như vậy, và nó chặn đúng.
+ * Lách bằng cách nối chuỗi cho qua mặt máy quét là dạy sai thói quen.
+ */
+static String wsNonce() {
+  static const char* B64 =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+  uint8_t r[16];
+  for (int i = 0; i < 16; i++) r[i] = (uint8_t)esp_random();
+
+  String out;
+  for (int i = 0; i + 2 < 16; i += 3) {  // 5 nhóm đủ 3 byte
+    const uint32_t v = ((uint32_t)r[i] << 16) | ((uint32_t)r[i + 1] << 8) | r[i + 2];
+    out += B64[(v >> 18) & 63];
+    out += B64[(v >> 12) & 63];
+    out += B64[(v >> 6) & 63];
+    out += B64[v & 63];
+  }
+  // Byte thứ 16 lẻ ra → một nhóm nữa, đệm "=="
+  out += B64[(r[15] >> 2) & 63];
+  out += B64[(r[15] << 4) & 63];
+  out += "==";
+  return out;
+}
+
+// ─── Tự chẩn đoán đường mạng ───────────────────────────────
+/**
+ * Vào được WiFi KHÔNG có nghĩa là ra được internet. Bo vẫn xin được
+ * địa chỉ DHCP, sóng vẫn −45 dBm, màn vẫn báo "WiFi OK" — mà mọi kết
+ * nối ra ngoài đều chết lặng. Lúc đó thư viện WebSocket chỉ nói được
+ * "disconnected", và ta ngồi nghi phần mềm hàng giờ.
+ *
+ * Ba câu hỏi, hỏi theo đúng thứ tự, mỗi câu loại trừ một tầng:
+ *   1. Phân giải được tên miền không?  → hỏng = mạng không có internet/DNS
+ *   2. Mở được TCP tới cổng 443 không? → hỏng = ra được DNS nhưng bị chặn
+ *   3. Cả hai đều xong                 → lỗi nằm ở TLS hoặc khoá thiết bị
+ *
+ * Quan trọng: máy tính của bạn cắm mạng khác thì mọi phép thử từ máy
+ * tính đều VÔ NGHĨA với bo. Chỉ chính bo mới đo được đường của chính nó.
+ */
+static void probeNetwork() {
+  IPAddress ip;
+  uint32_t t0 = millis();
+  if (!WiFi.hostByName(WS_HOST, ip)) {
+    st.lastNote = "DNS HONG - wifi nay khong ra internet";
+    Serial.printf("[net] DNS %s THAT BAI sau %lums\n", WS_HOST, millis() - t0);
+    return;
+  }
+  const uint32_t dnsMs = millis() - t0;
+  Serial.printf("[net] DNS %s -> %s (%lums)\n", WS_HOST, ip.toString().c_str(), dnsMs);
+
+  // Nối TCP NĂM lần chứ không một.
+  //
+  // Một lần thành công không chứng minh đường mạng tốt — nó chỉ chứng
+  // minh lần đó may. Đường chập chờn và đường tốt chỉ phân biệt được
+  // qua ĐỘ TẢN của nhiều lần đo: 5/5 lần dưới 100 ms là tốt; 3 lần
+  // nhanh 2 lần quá hạn là chập chờn, và chập chờn mới đúng là thứ
+  // làm WebSocket rớt liên tục mà nhìn từng lần lại thấy "vẫn nối được".
+  uint32_t okCount = 0, msMin = 0xFFFFFFFF, msMax = 0, msSum = 0;
+  for (int i = 0; i < 5; i++) {
+    WiFiClient c;
+    t0 = millis();
+    const bool ok = c.connect(ip, WS_PORT, 6000);
+    const uint32_t ms = millis() - t0;
+    c.stop();
+    Serial.printf("[net] TCP lan %d: %s %lums\n", i + 1, ok ? "OK" : "QUA HAN", ms);
+    if (ok) {
+      okCount++;
+      if (ms < msMin) msMin = ms;
+      if (ms > msMax) msMax = ms;
+      msSum += ms;
+    }
+    delay(200);
+  }
+  if (!okCount) {
+    st.lastNote = String("TCP ") + ip.toString() + " KHONG NOI DUOC (0/5)";
+    return;
+  }
+  Serial.printf("[net] TCP %lu/5 lan duoc, nhanh nhat %lums, cham nhat %lums, tb %lums\n",
+                (unsigned long)okCount, (unsigned long)msMin, (unsigned long)msMax,
+                (unsigned long)(msSum / okCount));
+  if (okCount < 5 || msMax > 1000) {
+    st.lastNote = String("MANG CHAP CHON ") + okCount + "/5, cham nhat " + msMax + "ms";
+    Serial.println("[net] >>> duong mang nay CHAP CHON — WebSocket se rot lien tuc");
+  }
+
+  // ── Câu hỏi thứ 3: TLS + bắt tay WebSocket ──
+  // Thư viện WebSocket chỉ biết nói "disconnected" — không phân biệt
+  // được "TLS hỏng" với "server từ chối khoá thiết bị". Tự gửi lấy một
+  // yêu cầu nâng cấp rồi đọc dòng đầu tiên thì server nói thẳng:
+  //   101 = xong, khoá đúng
+  //   401 = tới được server nhưng KHOÁ SAI
+  //   404 = sai đường dẫn / bản build cũ chưa gắn gateway
+  WiFiClientSecure tls;
+  tls.setInsecure();  // như thư viện WS vẫn làm; ghim vân tay để sau
+  tls.setTimeout(8);
+  t0 = millis();
+  if (!tls.connect(WS_HOST, WS_PORT)) {
+    st.lastNote = "TLS THAT BAI (TCP thi OK)";
+    Serial.printf("[net] TLS that bai sau %lums\n", millis() - t0);
+    return;
+  }
+  Serial.printf("[net] TLS OK sau %lums\n", millis() - t0);
+
+  // Câu hỏi 3a: một yêu cầu HTTPS THƯỜNG có chạy không?
+  //
+  // Tách bạch hai khả năng mà lần đo trước không phân biệt được: "bo
+  // không gửi được byte nào qua TLS" và "bo gửi được nhưng riêng yêu
+  // cầu nâng cấp WebSocket bị nuốt". Nếu câu thường trả về 200 thì
+  // đường ghi TLS tốt, lỗi nằm đúng ở cú nâng cấp.
+  size_t w = 0;
+  w += tls.print("GET /api/v1/maker-lab/meta HTTP/1.1\r\n");
+  w += tls.print(String("Host: ") + WS_HOST + "\r\n");
+  w += tls.print("Connection: close\r\n\r\n");
+  Serial.printf("[net] da ghi %u byte cho yeu cau thuong\n", (unsigned)w);
+
+  t0 = millis();
+  String first;
+  while (millis() - t0 < 8000 && !first.length()) {
+    if (tls.available()) first = tls.readStringUntil('\n');
+    else delay(10);
+  }
+  first.trim();
+  Serial.printf("[net] HTTPS thuong -> %s\n", first.length() ? first.c_str() : "IM LANG");
+  tls.stop();
+
+  // Câu hỏi 3b: cú nâng cấp WebSocket. Kết nối MỚI, vì vừa gửi
+  // `Connection: close` ở trên.
+  WiFiClientSecure tls2;
+  tls2.setInsecure();
+  tls2.setTimeout(8);
+  if (!tls2.connect(WS_HOST, WS_PORT)) {
+    st.lastNote = "TLS lan 2 that bai";
+    Serial.println("[net] TLS lan 2 that bai");
+    return;
+  }
+
+  // ⚠️ KHÔNG in `path` ra serial — nó cõng cả secret của thiết bị.
+  String path = String(WS_PATH) + "?key=" + DEVICE_KEY + "&secret=" + DEVICE_SECRET;
+  w = 0;
+  w += tls2.print(String("GET ") + path + " HTTP/1.1\r\n");
+  w += tls2.print(String("Host: ") + WS_HOST + "\r\n");
+  w += tls2.print("Upgrade: websocket\r\nConnection: Upgrade\r\n");
+  w += tls2.print(String("Sec-WebSocket-Key: ") + wsNonce() + "\r\n");
+  w += tls2.print("Sec-WebSocket-Version: 13\r\n\r\n");
+  Serial.printf("[net] da ghi %u byte cho yeu cau nang cap (duong dan %u ky tu)\n",
+                (unsigned)w, (unsigned)path.length());
+
+  t0 = millis();
+  String line;
+  while (millis() - t0 < 8000) {
+    if (tls2.available()) {
+      line = tls2.readStringUntil('\n');
+      break;
+    }
+    delay(10);
+  }
+  tls2.stop();
+
+  line.trim();
+  if (!line.length()) {
+    st.lastNote = "TLS OK nhung server IM LANG";
+    Serial.println("[net] gui nang cap xong, server khong tra loi gi");
+    return;
+  }
+  Serial.printf("[net] server tra loi: %s\n", line.c_str());
+  if (line.indexOf("101") >= 0) st.lastNote = "bat tay WS OK (101)";
+  else if (line.indexOf("401") >= 0) st.lastNote = "SAI KHOA THIET BI (401)";
+  else if (line.indexOf("404") >= 0) st.lastNote = "server chua gan /device-ws (404)";
+  else st.lastNote = String("server: ") + line.substring(0, 40);
+}
+
 // ─── Setup / loop ──────────────────────────────────────────
 
 void setup() {
@@ -565,6 +796,11 @@ void setup() {
   }
   uiRefresh();
 
+  if (st.wifiUp) {
+    probeNetwork();
+    uiRefresh();
+  }
+
   // ── WebSocket ──
   String path = String(WS_PATH) + "?key=" + DEVICE_KEY + "&secret=" + DEVICE_SECRET;
 #if WS_USE_TLS
@@ -575,16 +811,25 @@ void setup() {
   ws.onEvent(onWsEvent);
   ws.setReconnectInterval(WS_RECONNECT_BASE_MS);
   ws.enableHeartbeat(15000, 3000, 2);
+
+  // Ưu tiên 1 = thấp hơn loopTask, nên nó không cướp nhịp; nhưng vẫn
+  // được chạy vì mọi lời gọi chặn trong loop() đều nhường CPU.
+  xTaskCreatePinnedToCore(watchTask, "gac", 3072, nullptr, 1, nullptr, 0);
 }
 
 void loop() {
+  gLoops++;
+
+  gStage = "ws";
   ws.loop();
 
   // Bơm cả hai chiều tiếng. Hàm này tự nhịp: lúc nghe thì nó chờ đúng
   // một khối 16 ms, lúc nói thì nó chờ DMA rút bớt — nên loop() không
   // bao giờ quay không tải mà cũng không bao giờ bị giữ quá lâu.
+  gStage = "audio";
   audio::loop();
 
+  gStage = "ui";
   const uint32_t now = millis();
 
   // Server im quá lâu sau khi ta chốt lượt → thoát trạng thái "đang
@@ -618,5 +863,18 @@ void loop() {
     st.wifiUp = WiFi.status() == WL_CONNECTED;
     uiRefresh();
     uiHeartbeat();
+
+    // Nhịp chẩn đoán 1 Hz ra serial.
+    //
+    // `heap` là tổng còn trống, `khoi` là KHỐI LIỀN MẠCH lớn nhất —
+    // và cái thứ hai mới là thứ quyết định. Bắt tay TLS cần một khối
+    // liền ~40 KB; heap còn 100 KB nhưng vỡ vụn thành mảnh 8 KB thì
+    // vẫn không nối lại được, mà triệu chứng nhìn ra ngoài chỉ là
+    // "select timeout" — không hề nói gì tới bộ nhớ.
+    Serial.printf("[st] heap=%uKB khoi=%uKB mic=%ld nen=%ld nguong=%ld che=%d ws=%d\n",
+                  ESP.getFreeHeap() / 1024,
+                  heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL) / 1024,
+                  (long)audio::level(), (long)audio::noise(), (long)audio::gate(),
+                  (int)st.mode, st.wsUp ? 1 : 0);
   }
 }

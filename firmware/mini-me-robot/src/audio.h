@@ -59,6 +59,10 @@ bool speaking();
 bool listening();
 /** Mức mic gần nhất, thang 24 bit — cùng thang với VAD_THRESHOLD. */
 int32_t level();
+/** Nền ồn phòng đang tự học được (cùng thang). */
+int32_t noise();
+/** Ngưỡng VAD hiện tại = nền × 3, đã kẹp. Vượt mức này là mở lượt nghe. */
+int32_t gate();
 /** Số byte của đoạn phát gần nhất, để hiện lên màn. */
 uint32_t lastClipBytes();
 

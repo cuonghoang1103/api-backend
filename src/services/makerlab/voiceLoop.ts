@@ -28,6 +28,7 @@ import { transcribeWithGroq } from '../interview/voice/stt.js';
 import { loadPersona, buildSystemPrompt, buildFewShot, type PersonaConfig } from './persona.js';
 import { validateCommand, type ValidatedCommand } from './commands.js';
 import { synthesizeSpeech } from './tts.js';
+import { checkHeardSpeech } from './hallucination.js';
 
 // ─── Conversation memory ───────────────────────────────────
 // Short-term only, in process memory. Long-term recall (pgvector over
@@ -75,18 +76,64 @@ export function clearHistory(deviceId: number): void {
 // Its own client rather than reusing AIService: the robot wants the
 // fastest small model, not the best one, and it must not inherit the
 // chat product's RAG context or model switching.
-let _groq: OpenAI | null = null;
+/**
+ * Nhà cung cấp model — đổi bằng BIẾN MÔI TRƯỜNG, không sửa code.
+ *
+ *   MAKERLAB_LLM_PROVIDER = groq | openai | custom      (mặc định groq)
+ *   MAKERLAB_LLM_MODEL    = tên model
+ *   MAKERLAB_LLM_BASE_URL = chỉ dùng khi provider = custom
+ *
+ * Khoá đọc theo provider: GROQ_API_KEY · OPENAI_API_KEY ·
+ * MAKERLAB_LLM_API_KEY. Cả ba nhà đều nói giao thức OpenAI nên chỉ
+ * cần đổi baseURL — không có lớp adapter nào phải viết.
+ *
+ * Đánh đổi thực tế, đo trên chính đường này:
+ *   llama-3.3-70b-versatile (Groq)  ~400-600ms  miễn phí  tiếng Việt KHÁ
+ *   llama-3.1-8b-instant    (Groq)  ~200-400ms  miễn phí  tiếng Việt YẾU
+ *   gpt-4o-mini            (OpenAI) ~600-900ms  trả tiền  tiếng Việt tốt
+ *   gpt-4o                 (OpenAI) ~1-2s       trả tiền  tốt nhất, chậm
+ *
+ * Với robot đối thoại, mỗi 100 ms đều nghe ra được — nên mặc định là
+ * model 70B của Groq: đủ khá để không nói ngớ ngẩn mà vẫn dưới 1 giây.
+ */
+interface LlmProvider {
+  baseURL: string;
+  key: string | undefined;
+}
+
+function llmProvider(): LlmProvider {
+  const which = (process.env.MAKERLAB_LLM_PROVIDER || 'groq').toLowerCase();
+  if (which === 'openai')
+    return { baseURL: 'https://api.openai.com/v1', key: process.env.OPENAI_API_KEY };
+  if (which === 'custom')
+    return {
+      baseURL: process.env.MAKERLAB_LLM_BASE_URL || '',
+      key: process.env.MAKERLAB_LLM_API_KEY,
+    };
+  return { baseURL: 'https://api.groq.com/openai/v1', key: process.env.GROQ_API_KEY };
+}
+
+let _llm: OpenAI | null = null;
+let _llmFor = '';
 function groq(): OpenAI {
-  if (!_groq) {
-    const apiKey = process.env.GROQ_API_KEY;
-    if (!apiKey) throw new Error('GROQ_API_KEY missing');
-    _groq = new OpenAI({ baseURL: 'https://api.groq.com/openai/v1', apiKey });
+  const p = llmProvider();
+  // Nhớ theo baseURL: đổi provider lúc chạy thì client cũ phải bỏ đi,
+  // nếu không nó vẫn gọi sang nhà cũ mà không báo gì.
+  if (!_llm || _llmFor !== p.baseURL) {
+    if (!p.key) throw new Error(`Thiếu khoá API cho MAKERLAB_LLM_PROVIDER=${process.env.MAKERLAB_LLM_PROVIDER || 'groq'}`);
+    if (!p.baseURL) throw new Error('Thiếu MAKERLAB_LLM_BASE_URL');
+    _llm = new OpenAI({ baseURL: p.baseURL, apiKey: p.key });
+    _llmFor = p.baseURL;
+    logger.info('MakerLab dùng LLM', { baseURL: p.baseURL, model: robotModel() });
   }
-  return _groq;
+  return _llm;
 }
 
 function robotModel(): string {
-  return process.env.MAKERLAB_LLM_MODEL || 'llama-3.1-8b-instant';
+  if (process.env.MAKERLAB_LLM_MODEL) return process.env.MAKERLAB_LLM_MODEL;
+  return (process.env.MAKERLAB_LLM_PROVIDER || '').toLowerCase() === 'openai'
+    ? 'gpt-4o-mini'
+    : 'llama-3.3-70b-versatile';
 }
 
 // ─── PCM → WAV ─────────────────────────────────────────────
@@ -204,9 +251,29 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
     const wav = pcmToWav(input.pcm16);
     const persona0 = await loadPersona(input.projectId);
     const lang = (persona0.language || 'vi-VN').split('-')[0] || 'vi';
-    const tr = await transcribeWithGroq(wav, 'turn.wav', 'audio/wav', { language: lang });
+    const tr = await transcribeWithGroq(wav, 'turn.wav', 'audio/wav', {
+      language: lang,
+      detail: true,
+    });
     heard = tr.text.trim();
     timing.stt = Date.now() - t0;
+
+    // Whisper luôn trả về CHỮ, kể cả khi chỉ nghe thấy tiếng quạt — và
+    // chữ nó bịa ra là phụ đề YouTube. Không chặn ở đây thì LLM sẽ trả
+    // lời rất nghiêm túc câu "đừng quên đăng ký kênh" mà không ai nói,
+    // và người dùng kết luận là con AI bị ngu.
+    const check = checkHeardSpeech(heard, tr);
+    if (!check.ok) {
+      logger.info('MakerLab bỏ lượt: Whisper bịa', {
+        deviceId: input.deviceId,
+        heard: heard.slice(0, 80),
+        reason: check.reason,
+        noSpeechProb: tr.noSpeechProb,
+        bytes: input.pcm16.length,
+      });
+      timing.total = Date.now() - started;
+      return { heard: '', said: '', actions: [], spoken: false, ms: timing };
+    }
   }
 
   if (!heard) {

@@ -28,6 +28,28 @@ static uint32_t micTurnAt = 0;    // mốc mở lượt (để chặn lượt qu
 static uint32_t micResumeAt = 0;  // trước mốc này thì không nghe
 static int32_t micLevel = 0;
 
+/**
+ * Nền ồn của phòng, tự học.
+ *
+ * Ngưỡng CỐ ĐỊNH là sai cách, và số đo trên chính bo này chứng minh:
+ * hôm đo lần đầu nền phòng ~1200 nên chọn 2800; đo lại buổi tối thì
+ * nền đã lên 700–2600 và robot tự mở lượt nghe suốt dù không ai nói.
+ * Cùng căn phòng, cùng con mic — chỉ khác giờ.
+ *
+ * Nên VAD bám theo nền: ngưỡng = nền × 3, kẹp trong [VAD_THRESHOLD,
+ * 6 × VAD_THRESHOLD]. Sàn dưới để phòng thật yên cũng không nhạy quá;
+ * trần trên để một tiếng ồn kéo dài (quạt, máy hút bụi) không đẩy
+ * ngưỡng lên cao đến mức điếc hẳn.
+ */
+static int32_t noiseFloor = VAD_THRESHOLD / 2;
+
+static int32_t vadGate() {
+  int32_t gate = noiseFloor * 3;
+  if (gate < VAD_THRESHOLD) gate = VAD_THRESHOLD;
+  if (gate > VAD_THRESHOLD * 6) gate = VAD_THRESHOLD * 6;
+  return gate;
+}
+
 static ChunkFn cbChunk = nullptr;
 static EventFn cbStart = nullptr;
 static EventFn cbEnd = nullptr;
@@ -305,9 +327,13 @@ static void pumpMic() {
   }
   micLevel = (int32_t)(sum / n);
 
-  const bool loud = micLevel > VAD_THRESHOLD;
+  const bool loud = micLevel > vadGate();
 
   if (!micOpen) {
+    // Chỉ học nền khi đang IM — học cả lúc có người nói thì giọng nói
+    // tự đẩy ngưỡng lên và câu sau bị bỏ qua.
+    if (!loud) noiseFloor += (micLevel - noiseFloor) / 64;
+
     if (!loud) {
       pushPreroll(pcmBlock);
       return;
@@ -345,6 +371,8 @@ void loop() {
 bool speaking() { return playState != PLAY_IDLE; }
 bool listening() { return micOpen; }
 int32_t level() { return micLevel; }
+int32_t noise() { return noiseFloor; }
+int32_t gate() { return vadGate(); }
 uint32_t lastClipBytes() { return lastClip; }
 
 }  // namespace audio

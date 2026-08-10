@@ -118,13 +118,24 @@ static void drawFace() {
   // Chỉ xoá ba vùng thật sự đổi: hai hốc mắt và vùng miệng. Tổng diện
   // tích còn khoảng một phần tư, và quan trọng hơn là nó chia thành ba
   // lần ghi ngắn thay vì một lần dài.
-  const int clrY = EYE_Y - EYE_H / 2 - 40;
-  const int clrH = EYE_H + 80;
-  tft->fillRect(EYE_LX - EYE_W / 2 - 30, clrY, EYE_W + 60, clrH, C_BG);
-  tft->fillRect(EYE_RX - EYE_W / 2 - 30, clrY, EYE_W + 60, clrH, C_BG);
-  tft->fillRect(0, MOUTH_Y - 40, W, 90, C_BG);
-  // Góc phải trên: chỗ chữ Z của sleepy và dấu ? của thinking.
-  tft->fillRect(W - 120, 0, 120, 110, C_BG);
+  // Hai DẢI NGANG TRỌN CHIỀU RỘNG, không phải bốn ô rời.
+  //
+  // Bản đầu xoá hai ô quanh mắt và một ô quanh miệng — và để lại rác ở
+  // đúng những khe không ai xoá: một vạch dọc 10 px giữa hai mắt, hai
+  // dải hai bên mép, cùng dấu "?" của biểu cảm thinking nằm ngoài
+  // vùng. Nhìn trên màn thì mặt đúng mà nền bẩn.
+  //
+  // Cắt vùng xoá để tiết kiệm thời gian là đúng hướng, nhưng cắt tới
+  // mức không phủ hết những gì mình VẼ RA thì thành lỗi. Dải ngang
+  // trọn chiều rộng vẫn nhanh hơn fillScreen ~40% mà không bỏ sót chỗ
+  // nào.
+  const int eyeTop = EYE_Y - EYE_H / 2 - 46;
+  const int eyeH = EYE_H + 96;
+  tft->fillRect(0, eyeTop, W, eyeH, C_BG);
+  tft->fillRect(0, MOUTH_Y - 44, W, 96, C_BG);
+  // Góc phải trên: chữ Z của sleepy và dấu ? của thinking nằm cao hơn
+  // dải mắt, nên phải xoá riêng.
+  tft->fillRect(W - 130, 0, 130, eyeTop > 0 ? eyeTop : 1, C_BG);
 
   const bool blink = blinking;
   uint16_t col = C_EYE;
@@ -252,6 +263,11 @@ static void drawFace() {
 
 void begin(TFT_eSPI* t) {
   tft = t;
+  // Xoá TOÀN màn đúng MỘT lần lúc khởi động. Sau đó chỉ xoá theo dải.
+  // Không có dòng này thì rác lúc bật nguồn nằm lại vĩnh viễn ở những
+  // chỗ khuôn mặt không đi qua — đúng dải sáng ở mép trên và mép trái
+  // đã nhìn thấy trên màn thật.
+  t->fillScreen(C_BG);
   W = tft->width();
   H = tft->height();
   EYE_LX = W * 29 / 100;

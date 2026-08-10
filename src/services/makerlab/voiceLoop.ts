@@ -35,7 +35,18 @@ import { checkHeardSpeech } from './hallucination.js';
 // past conversations) is a separate feature — see the Overview tab's
 // upgrade list. Keeping this small is deliberate: every extra turn is
 // tokens on the critical path of a real-time reply.
-const MAX_HISTORY_TURNS = 8;
+/**
+ * Nhớ 4 lượt gần nhất, không phải 8.
+ *
+ * Mỗi lượt cũ là token phải trả lại trên đường nóng của MỌI câu sau.
+ * Đo thật: prompt cơ bản 885 token, nhưng lúc dùng thật đã phình lên
+ * 2096 — hơn một nửa là lịch sử. Và thời gian nghĩ tỉ lệ thẳng với số
+ * token vào.
+ *
+ * Bốn lượt vẫn đủ để robot theo được mạch chuyện ("cái đó" trỏ về câu
+ * trước), mà cắt gần một nghìn token khỏi mỗi lần gọi.
+ */
+const MAX_HISTORY_TURNS = 4;
 const HISTORY_TTL_MS = 30 * 60 * 1000;
 
 interface Turn {

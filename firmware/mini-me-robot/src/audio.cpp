@@ -373,6 +373,19 @@ static void pumpPlayback() {
     playState = PLAY_IDLE;
     writePos = readPos = 0;
     micResumeAt = millis() + MIC_RESUME_DELAY_MS;
+
+    // Mở tai lại cho SẠCH sau khi nói xong.
+    //
+    // Người dùng báo: "trả lời xong, hỏi câu tiếp theo phải nói 2-3
+    // lần nó mới nghe". Vì hai thứ còn sót lại từ trước khi nói:
+    //   - `loudRun` giữ nguyên số đếm cũ, có thể đang dở dang
+    //   - đệm trước còn giữ 320 ms cuối của chính giọng robot
+    // Câu hỏi tiếp theo bị dính đuôi giọng robot ở đầu, hoặc VAD mở
+    // lượt nhầm lúc rồi đóng ngay. Xoá sạch cả hai.
+    loudRun = 0;
+    prerollCount = 0;
+    micOpen = false;
+    micQuietAt = 0;
   }
 }
 

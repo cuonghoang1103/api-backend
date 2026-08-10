@@ -428,6 +428,39 @@ adminRouter.delete('/components/:id', async (req, res: Response<ApiResponse>, ne
   }
 });
 
+// ─── Huấn luyện: robot học cách nói của bạn ────────────────
+
+/** Ngân hàng câu hỏi + những gì robot đã học được. */
+router.get('/projects/:id/training', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const t = await import('../services/makerlab/training.js');
+    const projectId = toId(req);
+    const [knowledge, progress] = await Promise.all([
+      t.getKnowledge(projectId),
+      t.progress(projectId),
+    ]);
+    res.json({ success: true, data: { questions: t.QUESTION_BANK, knowledge, progress } });
+  } catch (e) {
+    next(e);
+  }
+});
+
+/** Lưu một câu trả lời. Trả lời rỗng = xoá mục đó. */
+router.post('/projects/:id/training', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { question, answer } = req.body ?? {};
+    if (!question) {
+      res.status(400).json({ success: false, message: 'Cần question' });
+      return;
+    }
+    const t = await import('../services/makerlab/training.js');
+    const knowledge = await t.saveAnswer(toId(req), String(question), String(answer ?? ''));
+    res.json({ success: true, data: { knowledge } });
+  } catch (e) {
+    next(e);
+  }
+});
+
 adminRouter.put('/projects/:id/persona', async (req, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: await svc.upsertPersona(toId(req), req.body ?? {}) });

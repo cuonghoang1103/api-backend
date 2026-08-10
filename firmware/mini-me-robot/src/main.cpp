@@ -33,6 +33,7 @@
 #include <esp_heap_caps.h>
 
 #include "audio.h"
+#include "face.h"
 #include "config.h"
 #include "secrets.h"
 
@@ -436,6 +437,7 @@ static void onTurnStart() {
   upStartMs = millis();
   st.mode = MODE_HEAR;
   st.lastNote = "nghe thay tieng noi";
+  face::set(face::LISTENING);
   if (st.wsUp) ws.sendTXT("{\"t\":\"audio_start\"}");
 }
 
@@ -477,6 +479,7 @@ static void onTurnEnd() {
   st.mode = MODE_THINK;
   thinkSinceMs = millis();
   st.lastNote = "dang cho server tra loi";
+  face::set(face::THINKING);
   if (st.wsUp) {
     ws.sendTXT("{\"t\":\"audio_end\"}");
     const uint32_t ms = millis() - upStartMs;
@@ -493,6 +496,21 @@ static void handleCommand(JsonDocument& doc) {
 
   st.cmdCount++;
   st.lastCmd = String(type);
+
+  if (!strcmp(type, "face")) {
+    const char* emo = doc["payload"]["emotion"] | "neutral";
+    const uint32_t ms = doc["payload"]["ms"] | 3000;
+    face::setByName(emo, ms);
+    st.lastNote = String("bieu cam: ") + emo;
+    sendAck(id, true);
+    return;
+  }
+
+  if (!strcmp(type, "look")) {
+    face::look(doc["payload"]["x"] | 0.0f, doc["payload"]["y"] | 0.0f);
+    sendAck(id, true);
+    return;
+  }
 
   if (!strcmp(type, "volume")) {
     const int lv = doc["payload"]["level"] | 100;
@@ -532,6 +550,7 @@ static void handleSayStart(JsonDocument& doc) {
 
   st.mode = MODE_TALK;
   st.lastNote = "dang nhan tieng noi";
+  face::set(face::SPEAKING);
   audio::playBegin(rate);
 }
 
@@ -836,8 +855,12 @@ void setup() {
 
   tft.init();
   tft.setRotation(1);
-  uiFrame();
-  uiRefresh();
+
+  // Khuôn mặt chiếm trọn màn, thay cho bảng chữ của chặng A. Bảng chữ
+  // hữu ích lúc gỡ lỗi, nhưng một con robot nhìn vào mà thấy bảng
+  // thông số thì nó là thiết bị đo, không phải bạn cùng bàn. Thông tin
+  // trạng thái rút gọn còn hai chấm tròn ở góc.
+  face::begin(&tft);
 
   if (!psramFound()) {
     st.lastNote = "CANH BAO: khong thay PSRAM";
@@ -957,6 +980,7 @@ void loop() {
   }
   if (st.mode == MODE_TALK && !audio::speaking() && now - thinkSinceMs > 1000) {
     st.mode = MODE_IDLE;
+    face::set(face::NEUTRAL);
   }
 
   if (st.wsUp && now - lastTelemetryMs >= TELEMETRY_INTERVAL_MS) {
@@ -964,22 +988,16 @@ void loop() {
     sendTelemetry();
   }
 
-  // Thanh mức mic cần nhịp nhanh mới theo kịp giọng nói; phần còn lại
-  // của bảng thì 1 Hz là đủ. Cả hai đều bỏ qua nếu không có gì đổi.
-  static uint32_t lastBarMs = 0;
-  if (now - lastBarMs >= 80) {
-    lastBarMs = now;
-    uiLevelBar();
-    uiMode();
-  }
+  // Khuôn mặt tự lo chớp mắt, đảo con ngươi và hết hạn biểu cảm.
+  gStage = "face";
+  face::loop();
 
   if (now - lastUiMs >= 1000) {
     lastUiMs = now;
     st.uptimeSec = now / 1000;
     st.rssi = WiFi.RSSI();
     st.wifiUp = WiFi.status() == WL_CONNECTED;
-    uiRefresh();
-    uiHeartbeat();
+    face::setStatus(st.wifiUp, st.wsUp);
 
     // Nhịp chẩn đoán 1 Hz ra serial.
     //

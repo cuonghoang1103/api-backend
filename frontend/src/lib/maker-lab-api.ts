@@ -165,3 +165,33 @@ export async function updatePersona(
   const res = await api.put(`/admin${BASE}/projects/${projectId}/persona`, payload);
   return res.data?.data;
 }
+
+// ─── Huấn luyện ────────────────────────────────────────────
+
+export interface TrainingQuestion {
+  id: string;
+  group: string;
+  q: string;
+  hint: string;
+}
+
+export interface TrainingState {
+  questions: TrainingQuestion[];
+  knowledge: Array<{ q: string; a: string }>;
+  progress: { answered: number; total: number };
+}
+
+export async function getTraining(projectId: number): Promise<TrainingState | null> {
+  const res = await api.get(`${BASE}/projects/${projectId}/training`);
+  return res.data?.data ?? null;
+}
+
+/** Gửi câu trả lời rỗng để xoá một mục đã dạy. */
+export async function saveTrainingAnswer(
+  projectId: number,
+  question: string,
+  answer: string,
+): Promise<Array<{ q: string; a: string }>> {
+  const res = await api.post(`${BASE}/projects/${projectId}/training`, { question, answer });
+  return res.data?.data?.knowledge ?? [];
+}

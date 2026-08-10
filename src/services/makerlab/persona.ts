@@ -34,6 +34,17 @@ export interface PersonaConfig {
   wakeWord: string | null;
   temperature: number;
   maxTokens: number;
+  /**
+   * Những gì robot BIẾT về chủ nó — do chính bạn dạy qua tab Huấn
+   * luyện: từng câu hỏi, từng câu trả lời bằng chính giọng văn bạn.
+   *
+   * Tách khỏi `sampleDialogues` vì hai thứ dạy hai điều khác nhau:
+   * mẫu đối thoại dạy CÁCH NÓI (nhịp, kiểu đùa), còn cái này dạy NỘI
+   * DUNG (bạn là ai, thích gì, ghét gì, hay nói câu gì). Gộp vào một
+   * chỗ thì model sẽ chép nguyên câu trả lời của bạn ra khi gặp câu
+   * hỏi na ná, thay vì hiểu rồi tự nói.
+   */
+  knowledge: Array<{ q: string; a: string }>;
 }
 
 /**
@@ -109,6 +120,7 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
       traits: null,
       sampleDialogues: DEFAULT_SAMPLES,
       wakeWord: null,
+      knowledge: [],
       // 0.9 chứ không 0.8: chém gió cần chỗ để đi chệch. Nhiệt độ thấp
       // cho ra những câu đùa an toàn nhất, tức là những câu nhạt nhất.
       temperature: 0.9,
@@ -130,7 +142,23 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
     wakeWord: row.wakeWord,
     temperature: row.temperature,
     maxTokens: row.maxTokens,
+    knowledge: normalizeKnowledge((row.traits as { knowledge?: unknown } | null)?.knowledge),
   };
+}
+
+/** Kiến thức nằm trong `traits.knowledge` — dùng cột JSON có sẵn, khỏi migration. */
+function normalizeKnowledge(raw: unknown): Array<{ q: string; a: string }> {
+  if (!Array.isArray(raw)) return [];
+  const out: Array<{ q: string; a: string }> = [];
+  for (const item of raw) {
+    if (!item || typeof item !== 'object') continue;
+    const rec = item as Record<string, unknown>;
+    const q = String(rec.q ?? '').trim();
+    const a = String(rec.a ?? '').trim();
+    // 40 mục là trần: mỗi mục là token phải trả trên MỌI câu sau.
+    if (q && a && out.length < 40) out.push({ q: q.slice(0, 200), a: a.slice(0, 600) });
+  }
+  return out;
 }
 
 function normalizeSamples(raw: unknown): Array<{ user: string; bot: string }> {
@@ -162,9 +190,20 @@ export function buildSystemPrompt(
   if (typeof ctx.nearbyMm === 'number')
     state.push(`Cảm biến phía trước báo có vật cách ${ctx.nearbyMm} mm.`);
 
+  // Kiến thức về chủ. Đặt NGAY SAU tính cách và TRƯỚC bảng lệnh: model
+  // chú ý phần đầu prompt hơn phần cuối, mà đây là thứ khiến robot
+  // thành robot của riêng bạn chứ không phải một con chatbot bất kỳ.
+  const known = persona.knowledge.length
+    ? '\nNhững điều bạn BIẾT về Cường — do chính anh ấy kể. Dùng khi liên quan, ' +
+      'nói lại bằng giọng của bạn chứ đừng đọc thuộc lòng, và được phép chém gió ' +
+      'thêm quanh những chi tiết này:\n' +
+      persona.knowledge.map((k) => `- Hỏi "${k.q}" → ${k.a}`).join('\n')
+    : '';
+
   return [
     persona.systemPrompt,
     traitLines ? `\nThang tính cách hiện tại:\n${traitLines}` : '',
+    known,
     state.length ? `\nTrạng thái lúc này:\n${state.map((s) => `- ${s}`).join('\n')}` : '',
     `\nBạn điều khiển được thân thể bằng các lệnh sau:\n${commandCheatSheet()}`,
     `\nTrả lời BẮT BUỘC bằng JSON đúng một dòng, không bọc trong markdown:

@@ -26,6 +26,7 @@ import {
   Cpu,
   FileCode2,
   Gauge,
+  GraduationCap,
   Loader2,
   Mic2,
   NotebookPen,
@@ -45,6 +46,7 @@ import { RobotBlueprint } from '@/components/maker-lab/RobotBlueprint';
 import { ProjectDocs } from '@/components/maker-lab/ProjectDocs';
 import { ProjectNotebook } from '@/components/maker-lab/ProjectNotebook';
 import PersonaEditor from '@/components/maker-lab/PersonaEditor';
+import TrainingPanel from '@/components/maker-lab/TrainingPanel';
 import { listDevices } from '@/lib/maker-lab-api';
 import type { MakerDevice } from '@/types/maker-lab';
 import type { MakerProjectDetail } from '@/types/maker-lab';
@@ -57,6 +59,7 @@ const TABS = [
   { id: 'firmware', label: 'Firmware', icon: FileCode2 },
   { id: 'console', label: 'Điều khiển', icon: Radio },
   { id: 'persona', label: 'Tính cách', icon: Mic2 },
+  { id: 'training', label: 'Huấn luyện', icon: GraduationCap },
   { id: 'notebook', label: 'Sổ tay', icon: NotebookPen },
   { id: 'docs', label: 'Nhật ký', icon: Cpu },
 ] as const;
@@ -240,6 +243,7 @@ export default function MakerProjectPage() {
           accent={accent}
         />
       )}
+      {tab === 'training' && <TrainingPanel projectId={project.id} accent={accent} />}
       {tab === 'notebook' && <ProjectNotebook data={project.notebook} />}
       {tab === 'docs' && <ProjectDocs project={project} />}
     </div>

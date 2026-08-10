@@ -61,9 +61,42 @@ export interface FoundTrack {
  * dò theo cả tên bài lẫn tên ca sĩ, không phân biệt hoa thường, và
  * chấp nhận khớp một phần.
  */
+/**
+ * Người ta nói "bật một bài bất kỳ" thì LLM gửi xuống `query: "random"`
+ * — và đi tìm bài TÊN LÀ "random" thì tất nhiên không có. Đây là lỗi
+ * thật đã gặp: robot bảo "bật rồi" mà loa im.
+ *
+ * Những chữ này nghĩa là "chọn giùm tôi", không phải tên bài.
+ */
+const ANY_SONG = new Set([
+  'random', 'any', 'anything', 'bất kỳ', 'bat ky', 'bất cứ', 'gì cũng được',
+  'gi cung duoc', 'tuỳ', 'tùy', 'tuy', 'gì đó', 'gi do', 'nhạc', 'nhac',
+  'một bài bất kỳ', 'mot bai bat ky', 'ngẫu nhiên', 'ngau nhien',
+]);
+
+/** Bốc một bài bất kỳ trong thư viện. */
+async function anyTrack(): Promise<FoundTrack | null> {
+  const rows = await prisma.$queryRaw<
+    Array<{ id: number; title: string; artist: string; audio_url: string; duration_seconds: number | null }>
+  >`SELECT id, title, artist, audio_url, duration_seconds
+      FROM music_tracks
+     WHERE active = true AND category = 'NORMAL' AND audio_url IS NOT NULL
+     ORDER BY random() LIMIT 1`;
+  const t = rows[0];
+  if (!t) return null;
+  return {
+    id: t.id,
+    title: t.title,
+    artist: t.artist,
+    url: absolute(t.audio_url),
+    durationSeconds: t.duration_seconds,
+  };
+}
+
 export async function findTrack(query: string): Promise<FoundTrack | null> {
   const q = query.trim();
-  if (!q) return null;
+  if (!q) return anyTrack();
+  if (ANY_SONG.has(q.toLowerCase())) return anyTrack();
 
   const rows = await prisma.musicTrack.findMany({
     where: {
@@ -114,7 +147,10 @@ export async function findTrack(query: string): Promise<FoundTrack | null> {
           durationSeconds: hit.durationSeconds,
         };
     }
-    return null;
+    // Không dò ra gì cả — nhưng người ta ĐANG muốn nghe nhạc. Bốc đại
+    // một bài còn hơn im lặng rồi bảo "không tìm thấy": họ nói "bật
+    // nhạc đi" chứ có phải đang tra cứu thư viện đâu.
+    return anyTrack();
   }
 
   const t = rows[0];
@@ -226,7 +262,7 @@ export function stopMusicOn(deviceId: number): boolean {
  */
 export async function playMusicOn(deviceId: number, query: string): Promise<string> {
   const track = await findTrack(query);
-  if (!track) return `Không tìm thấy bài nào giống "${query}" trong thư viện.`;
+  if (!track) return 'Thư viện nhạc đang trống, chưa có bài nào để bật.';
 
   // Đang phát bài khác thì dừng bài cũ trước, đợi nó nhả ra.
   if (sessions.has(deviceId)) {

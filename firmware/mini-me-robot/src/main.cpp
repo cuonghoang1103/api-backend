@@ -615,22 +615,12 @@ static void onWsEvent(WStype_t type, uint8_t* payload, size_t len) {
         // đứng chờ một câu trả lời không bao giờ tới.
         st.mode = MODE_IDLE;
         st.lastNote = "khong nghe ro - noi lai di";
-        // Tiếng này GIỮ LẠI, và nó không gây ồn như tiếng xác nhận đã
-        // tắt ở trên — vì nó chỉ kêu khi robot KHÔNG hiểu, tức là khi
-        // đằng nào cũng chẳng có câu trả lời nào để nghe. Nó lấp vào
-        // chỗ im lặng chứ không chồng thêm lên tiếng nói.
-        //
-        // Vẫn có chốt chặn 6 giây: phòng ồn thì server bắn nak liên
-        // tục, mà lúc đó tiếng báo không còn mang tin gì.
-        static uint32_t lastNakMs = 0;
-        if (millis() - lastNakMs > 6000) {
-          lastNakMs = millis();
-          audio::beep(494, 90, 30);
-        }
+        // KHÔNG phát tiếng gì. Mọi tiếng báo đã bị gỡ bỏ theo yêu cầu
+        // — trong một căn phòng, thứ robot phát ra bằng loa nên chỉ là
+        // NỘI DUNG, không phải trạng thái. Trạng thái đã có màn hình.
       } else if (!strcmp(t, "error")) {
         st.mode = MODE_IDLE;
         st.lastNote = String("loi: ") + (const char*)(doc["msg"] | "?");
-        audio::beep(392, 130, 35);
       }
       break;
     }

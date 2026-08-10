@@ -516,12 +516,20 @@ async function thinkAndSpeak(
     }
 
     if (seq !== null) gw.speakStreamEnd(deviceId, seq, parsed.say);
+    // Ghi luôn ĐUÔI câu và số token ra: đó là hai thứ phân biệt được
+    // "model bị cắt ở trần token" với "tiếng bị cắt lúc phát". Không có
+    // hai con số này thì cả hai trông giống hệt nhau từ phía người nghe.
+    const tailChar = parsed.say.slice(-1);
     logger.info('MakerLab nghĩ-và-nói', {
       deviceId,
       provider: p.label,
       model,
       firstAudioMs,
       totalMs: Date.now() - started,
+      chuCuoi: tailChar,
+      tronCau: /[.!?…"')\]]/.test(tailChar),
+      soChu: parsed.say.length,
+      daDoc: emitted,
     });
     return { reply: parsed, spoken, llmMs: Date.now() - started };
   } catch (err) {

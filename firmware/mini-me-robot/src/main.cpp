@@ -989,8 +989,19 @@ void loop() {
   }
 
   // Khuôn mặt tự lo chớp mắt, đảo con ngươi và hết hạn biểu cảm.
-  gStage = "face";
-  face::loop();
+  //
+  // ⚠️ NHƯNG KHÔNG VẼ KHI ĐANG PHÁT TIẾNG. Vẽ màn hình đi qua SPI và
+  // giữ CPU vài chục mili giây; trong lúc đó không ai bơm dữ liệu vào
+  // I2S, mà đệm DMA chỉ đủ 128 ms. Kết quả nghe được ngay: tiếng nói
+  // giật một nhịp đúng mỗi lần robot chớp mắt.
+  //
+  // Nói xong thì mặt vẽ lại ngay ở vòng sau — mắt người không nhận ra
+  // vài trăm mili giây đứng hình, còn tai thì nhận ra ngay một nhịp
+  // vấp.
+  if (!audio::speaking()) {
+    gStage = "face";
+    face::loop();
+  }
 
   if (now - lastUiMs >= 1000) {
     lastUiMs = now;

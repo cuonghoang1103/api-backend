@@ -108,7 +108,23 @@ static void brow(int cx, int tiltPx, uint16_t color) {
 // ─── Vẽ cả mặt ─────────────────────────────────────────────
 
 static void drawFace() {
-  tft->fillScreen(C_BG);
+  // ⚠️ KHÔNG dùng fillScreen().
+  //
+  // Xoá cả màn 480x320 ở 20 MHz mất ~90 ms, mà đệm DMA của I2S chỉ
+  // giữ được 128 ms tiếng. Nên mỗi lần chớp mắt là loa bị bỏ đói gần
+  // cạn đệm — người dùng nghe thành tiếng "giật giật" đều đặn 3-6
+  // giây một lần, đúng bằng nhịp chớp mắt.
+  //
+  // Chỉ xoá ba vùng thật sự đổi: hai hốc mắt và vùng miệng. Tổng diện
+  // tích còn khoảng một phần tư, và quan trọng hơn là nó chia thành ba
+  // lần ghi ngắn thay vì một lần dài.
+  const int clrY = EYE_Y - EYE_H / 2 - 40;
+  const int clrH = EYE_H + 80;
+  tft->fillRect(EYE_LX - EYE_W / 2 - 30, clrY, EYE_W + 60, clrH, C_BG);
+  tft->fillRect(EYE_RX - EYE_W / 2 - 30, clrY, EYE_W + 60, clrH, C_BG);
+  tft->fillRect(0, MOUTH_Y - 40, W, 90, C_BG);
+  // Góc phải trên: chỗ chữ Z của sleepy và dấu ? của thinking.
+  tft->fillRect(W - 120, 0, 120, 110, C_BG);
 
   const bool blink = blinking;
   uint16_t col = C_EYE;

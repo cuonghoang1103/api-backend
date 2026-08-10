@@ -15,8 +15,22 @@ enum PlayState : uint8_t {
 
 static PlayState playState = PLAY_IDLE;
 static uint8_t* playBuf = nullptr;  // trong PSRAM
-static uint32_t playLen = 0;        // số byte đã nhận
-static uint32_t playPos = 0;        // con trỏ đọc
+
+/**
+ * ĐỆM VÒNG. Hai con trỏ đếm TỔNG số byte từ đầu đoạn, không phải vị
+ * trí trong mảng — vị trí thật là `% AUDIO_PLAY_BUF_BYTES`.
+ *
+ * ⚠️ Trước đây đây là đệm THẲNG: `playLen` chỉ tăng, và phần nằm sau
+ * con trỏ đọc không bao giờ được dùng lại. Hậu quả: mọi đoạn tiếng dài
+ * quá 512 KB (16 giây) bị cắt cụt, dù robot đã phát xong quá nửa và
+ * chỗ trống thì thừa mứa. Người dùng nghe robot nói dở câu rồi im, kèm
+ * dòng "đã đọc 512 KB" — vừa hụt hẫng vừa khó hiểu.
+ *
+ * Với nhạc thì đệm thẳng là bất khả thi luôn: một bài bốn phút là
+ * 7,7 MB, gấp mười lăm lần cả vùng đệm.
+ */
+static uint32_t writePos = 0;  // tổng byte đã nhận
+static uint32_t readPos = 0;   // tổng byte đã phát
 static uint32_t playRate = 16000;
 static uint32_t lastClip = 0;
 static bool playOverflow = false;
@@ -233,14 +247,19 @@ void onTurnEnd(EventFn fn) { cbEnd = fn; }
 
 static uint32_t playCapacity() { return playBuf ? AUDIO_PLAY_BUF_BYTES : 0; }
 
+/** Byte đang chờ phát. */
+static inline uint32_t buffered() { return writePos - readPos; }
+/** Chỗ trống còn lại — chính là thứ đệm thẳng không bao giờ đòi lại được. */
+static inline uint32_t freeSpace() { return playCapacity() - buffered(); }
+
 void playBegin(uint32_t sampleRate) {
   if (!ampReady || !playBuf) return;
   if (sampleRate >= 8000 && sampleRate <= 48000 && sampleRate != playRate) {
     playRate = sampleRate;
     i2s_set_clk(I2S_NUM_1, playRate, I2S_BITS_PER_SAMPLE_16BIT, I2S_CHANNEL_STEREO);
   }
-  playLen = 0;
-  playPos = 0;
+  writePos = 0;
+  readPos = 0;
   playOverflow = false;
   playEnded = false;
   playState = PLAY_FILLING;
@@ -258,39 +277,43 @@ bool playPush(const uint8_t* data, size_t len) {
   // thái sang PHÁT ở mốc 16 KB, mà dòng gác này vẫn chỉ cho qua khi
   // đang GOM — nên mọi mẩu tiếng gửi tới sau đó bị vứt thẳng, im lặng,
   // không một dòng log. Robot phát đúng 16 KB đầu rồi tắt: nửa giây,
-  // một hai chữ. Người dùng thấy "nói được 1-2 từ là loa tự ngắt".
+  // một hai chữ.
   //
   // Bài học: đổi máy trạng thái thì phải rà LẠI mọi chỗ đang so sánh
   // với trạng thái cũ, không chỉ chỗ mình vừa sửa.
   if ((playState != PLAY_FILLING && playState != PLAY_DRAINING) || !playBuf) return false;
-  // Đã chốt `say_end` rồi mà còn byte tới thì đó là của lượt sau —
-  // nối vào đây sẽ dính hai câu vào nhau.
-  if (playEnded) return false;
+  if (playEnded) return false;  // byte tới sau say_end là của lượt sau
+
   const uint32_t cap = playCapacity();
-  if (playLen + len > cap) {
+  if (len > freeSpace()) {
+    // Đệm đầy THẬT — nghĩa là mạng đổ vào nhanh hơn loa phát ra suốt
+    // 16 giây liền. Với giọng nói thì gần như không xảy ra; với nhạc
+    // thì server đã tự ghìm ở mốc 256 KB nên cũng hiếm. Bỏ mẩu này
+    // còn hơn ghi đè lên phần chưa phát.
     playOverflow = true;
-    const uint32_t room = cap > playLen ? cap - playLen : 0;
-    if (room) {
-      memcpy(playBuf + playLen, data, room);
-      playLen += room;
-    }
     return false;
   }
-  memcpy(playBuf + playLen, data, len);
-  playLen += len;
+
+  // Chép vòng: có thể phải cắt làm hai đoạn ở chỗ nối cuối-đầu mảng.
+  const uint32_t at = writePos % cap;
+  const uint32_t first = (at + len > cap) ? (cap - at) : (uint32_t)len;
+  memcpy(playBuf + at, data, first);
+  if (first < len) memcpy(playBuf, data + first, len - first);
+  writePos += len;
 
   // Đủ đệm rồi thì phát NGAY, đừng đợi `say_end`. Phần còn lại chảy
   // tới trong lúc đang phát.
-  if (playState == PLAY_FILLING && playLen >= PLAY_START_BYTES) playState = PLAY_DRAINING;
+  if (playState == PLAY_FILLING && buffered() >= PLAY_START_BYTES) playState = PLAY_DRAINING;
   return true;
 }
 
 void playEnd() {
   if (playState == PLAY_IDLE) return;
   playEnded = true;
-  lastClip = playLen;
-  if (playOverflow) Serial.printf("[audio] doan noi bi cat bot (%lu byte)\n", playLen);
-  if (playLen < 2) {
+  lastClip = writePos;
+  if (playOverflow)
+    Serial.printf("[audio] mang do vao nhanh hon loa phat ra, bi bo bot (%lu byte)\n", writePos);
+  if (writePos < 2) {
     playState = PLAY_IDLE;
     micResumeAt = millis() + MIC_RESUME_DELAY_MS;
     return;
@@ -302,7 +325,7 @@ void playEnd() {
 void playStop() {
   if (playState == PLAY_IDLE) return;
   playState = PLAY_IDLE;
-  playLen = playPos = 0;
+  writePos = readPos = 0;
   playEnded = false;
   i2s_zero_dma_buffer(I2S_NUM_1);
   micResumeAt = millis() + MIC_RESUME_DELAY_MS;
@@ -312,30 +335,30 @@ void playStop() {
 static void pumpPlayback() {
   if (playState != PLAY_DRAINING) return;
 
-  const uint32_t left = playLen - playPos;
-  const uint32_t take = left < AUDIO_BLOCK_SAMPLES * 2 ? left : AUDIO_BLOCK_SAMPLES * 2;
+  const uint32_t cap = playCapacity();
+  const uint32_t have = buffered();
+  const uint32_t take = have < AUDIO_BLOCK_SAMPLES * 2 ? have : AUDIO_BLOCK_SAMPLES * 2;
   const uint32_t n = take / 2;  // số mẫu 16 bit
 
   if (n) {
-    const int16_t* src = (const int16_t*)(playBuf + playPos);
-    // Nhân đôi mẫu một kênh thành khung hai kênh. MAX98357A để chân SD
-    // thả nổi sẽ tự lấy trung bình (L+R)/2 — hai kênh giống nhau nên
-    // trung bình bằng chính nó, âm lượng không đổi.
+    // Đọc vòng: gom ra khối phẳng trước, vì mẩu cần đọc có thể vắt qua
+    // chỗ nối cuối-đầu của mảng.
+    const uint32_t at = readPos % cap;
     for (uint32_t i = 0; i < n; i++) {
-      const int16_t v = applyVolume(src[i]);
+      const uint32_t o = (at + i * 2) % cap;
+      const int16_t raw = (int16_t)((uint16_t)playBuf[o] | ((uint16_t)playBuf[(o + 1) % cap] << 8));
+      const int16_t v = applyVolume(raw);
       stereoBlock[i * 2] = v;
       stereoBlock[i * 2 + 1] = v;
     }
     size_t wrote = 0;
     i2s_write(I2S_NUM_1, stereoBlock, n * 2 * sizeof(int16_t), &wrote, portMAX_DELAY);
-    playPos += n * 2;
+    readPos += n * 2;
   }
 
-  // Đọc đuổi kịp ghi mà server CHƯA gửi xong: đây là hụt đệm, không
-  // phải hết câu. Chờ thêm — kết thúc ở đây là cắt cụt câu nói.
-  if (playPos >= playLen && !playEnded) return;
+  if (buffered() == 0 && !playEnded) return;
 
-  if (playPos >= playLen) {
+  if (buffered() == 0) {
     // ⚠️ Đuôi im lặng, KHÔNG được bỏ.
     //
     // DMA của I2S cứ lặp lại vùng đệm khi không được ghi thêm. Dừng
@@ -348,7 +371,7 @@ static void pumpPlayback() {
       i2s_write(I2S_NUM_1, stereoBlock, sizeof(stereoBlock), &w, portMAX_DELAY);
     }
     playState = PLAY_IDLE;
-    playLen = playPos = 0;
+    writePos = readPos = 0;
     micResumeAt = millis() + MIC_RESUME_DELAY_MS;
   }
 }

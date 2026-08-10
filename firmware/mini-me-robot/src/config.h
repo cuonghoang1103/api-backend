@@ -128,6 +128,17 @@
 // gấp đôi nền nên quạt/gõ bàn không kích, thấp hơn tiếng nói nhiều
 // lần nên không sót câu.
 #define VAD_THRESHOLD        2800   // thang 24 bit (raw >> 8), đo thật
+
+// Ngưỡng = nền × hệ số này. ×3 vẫn để lọt tiếng phòng (đo trên server
+// 10/08: 30 lượt/phút toàn tiếng động), ×4 thì tiếng nói bình thường
+// vẫn vượt thoải mái vì giọng cách 30 cm cao gấp 6-8 lần nền.
+#define VAD_GATE_MULT        4
+
+// Phải to LIÊN TỤC bấy nhiêu khối (×16 ms) mới mở lượt nghe. 8 khối =
+// 128 ms. Một âm tiết tiếng Việt đã dài hơn thế, còn tiếng gõ bàn hay
+// đóng cửa thì chỉ to một hai khối rồi tắt. Đây mới là thứ phân biệt
+// tiếng nói với tiếng động — quan trọng hơn cả cái ngưỡng biên độ.
+#define VAD_OPEN_BLOCKS      8
 #define VAD_SILENCE_MS       800    // im lặng bấy nhiêu = hết lượt nói
 #define VAD_MAX_TURN_MS      15000
 #define VAD_COOLDOWN_MS      300    // vừa dứt lượt, đừng kích lại ngay

@@ -44,11 +44,28 @@ static int32_t micLevel = 0;
 static int32_t noiseFloor = VAD_THRESHOLD / 2;
 
 static int32_t vadGate() {
-  int32_t gate = noiseFloor * 3;
+  int32_t gate = noiseFloor * VAD_GATE_MULT;
   if (gate < VAD_THRESHOLD) gate = VAD_THRESHOLD;
   if (gate > VAD_THRESHOLD * 6) gate = VAD_THRESHOLD * 6;
   return gate;
 }
+
+/**
+ * Đếm số khối to LIÊN TIẾP — phải đủ dài mới mở lượt nghe.
+ *
+ * Đây là thứ phân biệt tiếng nói với tiếng phòng, và nó quan trọng hơn
+ * cả cái ngưỡng. Đo trên server ngày 10/08: chỉ dựa vào biên độ thì
+ * robot mở 30 lượt mỗi phút — tiếng gõ bàn, đóng cửa, ho, xe ngoài
+ * đường, cái nào cũng vượt ngưỡng trong một hai khối rồi tắt. Mỗi lượt
+ * như vậy là một lần gọi Whisper tốn tiền, và Whisper nghe tiếng ồn
+ * thì bịa ra phụ đề YouTube.
+ *
+ * Tiếng nói thì khác: một âm tiết tiếng Việt đã dài hơn 100 ms. Bắt
+ * phải to liên tục 128 ms mới mở lượt là loại sạch tiếng thoáng qua
+ * mà không cắt mất chữ nào — phần âm đầu vẫn nằm nguyên trong đệm
+ * trước, nên chữ đầu tiên không mất.
+ */
+static uint8_t loudRun = 0;
 
 static ChunkFn cbChunk = nullptr;
 static EventFn cbStart = nullptr;
@@ -289,6 +306,7 @@ static void flushPreroll() {
 }
 
 static void endTurn() {
+  loudRun = 0;
   micOpen = false;
   prerollCount = 0;
   micResumeAt = millis() + VAD_COOLDOWN_MS;
@@ -334,7 +352,11 @@ static void pumpMic() {
     // tự đẩy ngưỡng lên và câu sau bị bỏ qua.
     if (!loud) noiseFloor += (micLevel - noiseFloor) / 64;
 
-    if (!loud) {
+    // Đếm chuỗi khối to liên tiếp. To một hai khối rồi tắt = tiếng
+    // động, không phải người nói.
+    loudRun = loud ? (uint8_t)(loudRun + 1) : 0;
+
+    if (loudRun < VAD_OPEN_BLOCKS) {
       pushPreroll(pcmBlock);
       return;
     }

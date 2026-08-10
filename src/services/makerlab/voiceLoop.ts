@@ -72,6 +72,37 @@ export function clearHistory(deviceId: number): void {
   histories.delete(deviceId);
 }
 
+// ─── Chốt chặn chi phí ─────────────────────────────────────
+/**
+ * Trần số lượt nói mỗi ngày, mỗi thiết bị.
+ *
+ * Không phải lo xa. Đúng hôm nay, VAD đặt ngưỡng cố định đã bắt nhầm
+ * tiếng phòng và tự mở lượt liên tục — mỗi lượt là một lần gọi LLM
+ * cộng một lần gọi TTS. Bộ lọc câu bịa chặn được phần lớn, nhưng nó
+ * chặn SAU khi Whisper đã chạy, và một con robot cắm điện 24/7 cạnh
+ * cái quạt là thứ có thể tiêu tiền cả đêm mà không ai biết.
+ *
+ * 2000 lượt/ngày rộng hơn nhiều so với mức dùng thật của một con
+ * robot để bàn (nói cả ngày cũng khó quá 300), nên nó không bao giờ
+ * chặn nhầm việc dùng bình thường — nó chỉ chặn lúc có gì đó hỏng.
+ */
+const DAILY_TURN_CAP = Number(process.env.MAKERLAB_DAILY_TURN_CAP) || 2000;
+const turnCounts = new Map<number, { day: string; n: number }>();
+
+function overDailyCap(deviceId: number): boolean {
+  if (DAILY_TURN_CAP <= 0) return false; // 0 = tắt trần
+  const day = new Date().toISOString().slice(0, 10);
+  const c = turnCounts.get(deviceId);
+  if (!c || c.day !== day) {
+    turnCounts.set(deviceId, { day, n: 1 });
+    return false;
+  }
+  c.n += 1;
+  if (c.n === DAILY_TURN_CAP + 1)
+    logger.warn('MakerLab chạm trần lượt nói trong ngày', { deviceId, cap: DAILY_TURN_CAP });
+  return c.n > DAILY_TURN_CAP;
+}
+
 // ─── LLM client ────────────────────────────────────────────
 // Its own client rather than reusing AIService: the robot wants the
 // fastest small model, not the best one, and it must not inherit the
@@ -79,61 +110,97 @@ export function clearHistory(deviceId: number): void {
 /**
  * Nhà cung cấp model — đổi bằng BIẾN MÔI TRƯỜNG, không sửa code.
  *
- *   MAKERLAB_LLM_PROVIDER = groq | openai | custom      (mặc định groq)
+ *   MAKERLAB_LLM_PROVIDER = compat | groq | openai | custom
  *   MAKERLAB_LLM_MODEL    = tên model
- *   MAKERLAB_LLM_BASE_URL = chỉ dùng khi provider = custom
  *
- * Khoá đọc theo provider: GROQ_API_KEY · OPENAI_API_KEY ·
- * MAKERLAB_LLM_API_KEY. Cả ba nhà đều nói giao thức OpenAI nên chỉ
- * cần đổi baseURL — không có lớp adapter nào phải viết.
+ * Mặc định là `compat`: dùng lại đúng cổng modelapi.vn mà CV Builder
+ * và Jobs AI đã cấu hình sẵn (`OPENAI_COMPAT_BASE_URL` +
+ * `OPENAI_COMPAT_API_KEY`). Không thêm khoá mới, không thêm hoá đơn
+ * mới — robot tiêu chung một ví với phần còn lại của web.
  *
- * Đánh đổi thực tế, đo trên chính đường này:
- *   llama-3.3-70b-versatile (Groq)  ~400-600ms  miễn phí  tiếng Việt KHÁ
- *   llama-3.1-8b-instant    (Groq)  ~200-400ms  miễn phí  tiếng Việt YẾU
- *   gpt-4o-mini            (OpenAI) ~600-900ms  trả tiền  tiếng Việt tốt
- *   gpt-4o                 (OpenAI) ~1-2s       trả tiền  tốt nhất, chậm
+ * ⚠️ Cổng Rambo (`LLM_BASE_URL` + các model `rb-*`) ĐÃ HẾT HẠN, đừng
+ * trỏ về đó nữa dù mã cũ vẫn còn nhắc tới nó.
  *
- * Với robot đối thoại, mỗi 100 ms đều nghe ra được — nên mặc định là
- * model 70B của Groq: đủ khá để không nói ngớ ngẩn mà vẫn dưới 1 giây.
+ * Model trên modelapi.vn (đọc từ trang Rankings công khai, 10/08/2026):
+ *   gpt-5.6-sol · gpt-5.6-terra · gpt-5.6-luna · gpt-5.5 · gpt-5.4
+ *   gpt-5.4-mini · deepseek-v4-flash · grok-4.5
+ *   claude-opus-5 · claude-sonnet-5 · claude-fable-5 · …
+ *
+ * Với robot đối thoại thì độ trễ quan trọng ngang độ thông minh —
+ * mỗi 100 ms đều nghe ra được. `gpt-5.6-terra` là mức cân bằng, và
+ * nếu thấy chậm thì `gpt-5.4-mini` hoặc `deepseek-v4-flash` rẻ và
+ * nhanh hơn rõ; đổi chỉ là một biến môi trường.
  */
 interface LlmProvider {
   baseURL: string;
   key: string | undefined;
+  label: string;
 }
 
-function llmProvider(): LlmProvider {
-  const which = (process.env.MAKERLAB_LLM_PROVIDER || 'groq').toLowerCase();
-  if (which === 'openai')
-    return { baseURL: 'https://api.openai.com/v1', key: process.env.OPENAI_API_KEY };
-  if (which === 'custom')
-    return {
-      baseURL: process.env.MAKERLAB_LLM_BASE_URL || '',
-      key: process.env.MAKERLAB_LLM_API_KEY,
-    };
-  return { baseURL: 'https://api.groq.com/openai/v1', key: process.env.GROQ_API_KEY };
-}
-
-let _llm: OpenAI | null = null;
-let _llmFor = '';
-function groq(): OpenAI {
-  const p = llmProvider();
-  // Nhớ theo baseURL: đổi provider lúc chạy thì client cũ phải bỏ đi,
-  // nếu không nó vẫn gọi sang nhà cũ mà không báo gì.
-  if (!_llm || _llmFor !== p.baseURL) {
-    if (!p.key) throw new Error(`Thiếu khoá API cho MAKERLAB_LLM_PROVIDER=${process.env.MAKERLAB_LLM_PROVIDER || 'groq'}`);
-    if (!p.baseURL) throw new Error('Thiếu MAKERLAB_LLM_BASE_URL');
-    _llm = new OpenAI({ baseURL: p.baseURL, apiKey: p.key });
-    _llmFor = p.baseURL;
-    logger.info('MakerLab dùng LLM', { baseURL: p.baseURL, model: robotModel() });
+function providerNamed(which: string): LlmProvider {
+  switch (which) {
+    case 'groq':
+      return { baseURL: 'https://api.groq.com/openai/v1', key: process.env.GROQ_API_KEY, label: 'groq' };
+    case 'openai':
+      return { baseURL: 'https://api.openai.com/v1', key: process.env.OPENAI_API_KEY, label: 'openai' };
+    case 'custom':
+      return {
+        baseURL: (process.env.MAKERLAB_LLM_BASE_URL || '').replace(/\/+$/, ''),
+        key: process.env.MAKERLAB_LLM_API_KEY,
+        label: 'custom',
+      };
+    default:
+      return {
+        baseURL: (process.env.OPENAI_COMPAT_BASE_URL || '').replace(/\/+$/, ''),
+        key: process.env.OPENAI_COMPAT_API_KEY,
+        label: 'compat',
+      };
   }
-  return _llm;
 }
 
-function robotModel(): string {
+function usable(p: LlmProvider): boolean {
+  return !!p.key && !!p.baseURL;
+}
+
+/**
+ * Nhà chính, và nhà dự phòng nếu nhà chính chưa cấu hình.
+ *
+ * Một con robot không nên câm chỉ vì hết credit hay sai một biến môi
+ * trường. Groq miễn phí nên nó là cái lưới đỡ phía dưới — chậm hơn,
+ * kém hơn, nhưng còn nói được.
+ */
+function llmChain(): LlmProvider[] {
+  const primary = providerNamed((process.env.MAKERLAB_LLM_PROVIDER || 'compat').toLowerCase());
+  const chain = usable(primary) ? [primary] : [];
+  const groqP = providerNamed('groq');
+  if (primary.label !== 'groq' && usable(groqP)) chain.push(groqP);
+  if (!chain.length) chain.push(primary); // để lỗi nói rõ là thiếu gì
+  return chain;
+}
+
+const _clients = new Map<string, OpenAI>();
+function clientFor(p: LlmProvider): OpenAI {
+  let c = _clients.get(p.baseURL);
+  if (!c) {
+    if (!p.key) throw new Error(`Thiếu khoá API cho nhà cung cấp "${p.label}"`);
+    if (!p.baseURL) throw new Error(`Thiếu base URL cho nhà cung cấp "${p.label}"`);
+    c = new OpenAI({ baseURL: p.baseURL, apiKey: p.key });
+    _clients.set(p.baseURL, c);
+    logger.info('MakerLab dùng LLM', { provider: p.label, baseURL: p.baseURL });
+  }
+  return c;
+}
+
+function robotModel(p: LlmProvider): string {
   if (process.env.MAKERLAB_LLM_MODEL) return process.env.MAKERLAB_LLM_MODEL;
-  return (process.env.MAKERLAB_LLM_PROVIDER || '').toLowerCase() === 'openai'
-    ? 'gpt-4o-mini'
-    : 'llama-3.3-70b-versatile';
+  switch (p.label) {
+    case 'groq':
+      return 'llama-3.3-70b-versatile';
+    case 'openai':
+      return 'gpt-4o-mini';
+    default:
+      return 'gpt-5.6-terra';
+  }
 }
 
 // ─── PCM → WAV ─────────────────────────────────────────────
@@ -283,6 +350,11 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
 
   emitTranscript(input.deviceId, 'user', heard);
 
+  if (overDailyCap(input.deviceId)) {
+    timing.total = Date.now() - started;
+    return { heard, said: '', actions: [], spoken: false, ms: timing };
+  }
+
   // ── 2. Think ──
   const persona = await loadPersona(input.projectId);
   const t1 = Date.now();
@@ -338,6 +410,37 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
   return { heard, said: reply.say, actions: reply.actions, spoken, ms: timing };
 }
 
+/** Model nào không nhận `response_format` thì hỏi lại lần nữa, bỏ trường đó. */
+type ChatArgs = {
+  model: string;
+  messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }>;
+  temperature: number;
+  max_tokens: number;
+};
+
+const noJsonMode = new Set<string>();
+
+async function withJsonFallback(client: OpenAI, args: ChatArgs) {
+  if (!noJsonMode.has(args.model)) {
+    try {
+      return await client.chat.completions.create({
+        ...args,
+        response_format: { type: 'json_object' },
+      });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      const looksUnsupported = /response_format|400|invalid|unsupported/i.test(msg);
+      if (!looksUnsupported) throw err;
+      // Nhớ lại để lượt sau khỏi tốn thêm một vòng gọi hỏng.
+      noJsonMode.add(args.model);
+      logger.info('MakerLab model không nhận json_object, chuyển sang hỏi thường', {
+        model: args.model,
+      });
+    }
+  }
+  return client.chat.completions.create(args);
+}
+
 async function think(
   persona: PersonaConfig,
   heard: string,
@@ -351,22 +454,45 @@ async function think(
     { role: 'user', content: heard },
   ];
 
-  try {
-    const res = await groq().chat.completions.create({
-      model: robotModel(),
-      messages,
-      temperature: persona.temperature,
-      max_tokens: persona.maxTokens,
-      response_format: { type: 'json_object' },
-    });
-    const raw = res.choices[0]?.message?.content ?? '';
-    const parsed = parseRobotReply(raw);
-    if (parsed.say) return parsed;
-  } catch (err) {
-    logger.warn('MakerLab LLM failed', {
-      deviceId,
-      error: err instanceof Error ? err.message : String(err),
-    });
+  // Thử nhà chính, hỏng thì tụt xuống nhà dự phòng. Không lặp lại
+  // trên cùng một nhà: đây là đường thời gian thực, thà trả lời câu
+  // đỡ hay còn hơn để người dùng ngồi chờ thêm hai giây nữa.
+  for (const p of llmChain()) {
+    const model = robotModel(p);
+    try {
+      // `response_format: json_object` là thứ ĐẦU TIÊN vỡ khi đổi model.
+      // Cổng gộp nhiều nhà: model OpenAI hiểu trường này, model Claude
+      // hay DeepSeek đi qua tuyến tương thích thì có nhà trả 400. Đổi
+      // model xong robot câm mà log chỉ nói "HTTP 400" là mất cả buổi.
+      // Nên hỏng vì trường này thì bỏ nó ra hỏi lại — parseRobotReply
+      // vốn đã tự vớt được JSON lẫn trong văn xuôi.
+      const res = await withJsonFallback(clientFor(p), {
+        model,
+        messages,
+        temperature: persona.temperature,
+        max_tokens: persona.maxTokens,
+      });
+      const raw = res.choices[0]?.message?.content ?? '';
+      const parsed = parseRobotReply(raw);
+      if (parsed.say) {
+        const u = res.usage;
+        logger.info('MakerLab LLM ok', {
+          deviceId,
+          provider: p.label,
+          model,
+          inTok: u?.prompt_tokens ?? 0,
+          outTok: u?.completion_tokens ?? 0,
+        });
+        return parsed;
+      }
+    } catch (err) {
+      logger.warn('MakerLab LLM failed', {
+        deviceId,
+        provider: p.label,
+        model,
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
   }
 
   // Fail-soft: say something in character rather than nothing at all.

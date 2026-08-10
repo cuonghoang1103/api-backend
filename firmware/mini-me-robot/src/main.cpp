@@ -60,6 +60,9 @@ struct State {
 static uint32_t lastTelemetryMs = 0;
 static uint32_t lastUiMs = 0;
 static uint32_t thinkSinceMs = 0;
+// Đã chào chưa — chỉ chào một lần mỗi lần khởi động, không phải mỗi
+// lần nối lại WebSocket.
+static bool greeted = false;
 
 // ─── Người gác ─────────────────────────────────────────────
 // Một tác vụ RIÊNG, in mỗi giây bất kể loop() đang làm gì.
@@ -521,6 +524,23 @@ static void onWsEvent(WStype_t type, uint8_t* payload, size_t len) {
       Serial.println("[ws] connected");
       sendHello();
       sendLog("info", "Mini-Me chang B: da co tai va mieng");
+
+      // Chào một câu ngay khi lên mạng — MỘT LẦN mỗi lần khởi động.
+      //
+      // Đây là phép thử toàn tuyến rẻ nhất có thể: một lượt nói đi qua
+      // đúng những mắt xích mà mic không kiểm được — LLM, TTS, đổi
+      // sang PCM, truyền nhị phân, I2S ra loa. Nghe thấy tiếng là cả
+      // chuỗi thông; im lặng là biết ngay hỏng, khỏi phải ngồi nói
+      // chuyện với con robot để dò.
+      //
+      // Chỉ một lần: mất mạng rồi nối lại mà lần nào cũng chào thì
+      // vừa phiền vừa tốn tiền gọi model.
+      if (!greeted) {
+        greeted = true;
+        st.mode = MODE_THINK;
+        thinkSinceMs = millis();
+        ws.sendTXT("{\"t\":\"text\",\"text\":\"Chao Cuong, tu gioi thieu that ngan di\"}");
+      }
       break;
 
     case WStype_DISCONNECTED:

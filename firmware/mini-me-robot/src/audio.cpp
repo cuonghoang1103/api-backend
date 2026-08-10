@@ -21,6 +21,30 @@ static uint32_t playRate = 16000;
 static uint32_t lastClip = 0;
 static bool playOverflow = false;
 
+/**
+ * Server đã gửi hết chưa (`say_end`).
+ *
+ * Cần biết để phân biệt hai tình huống trông giống hệt nhau khi con
+ * trỏ đọc đuổi kịp con trỏ ghi: "phát xong cả câu" và "phát nhanh hơn
+ * mạng, phải chờ thêm". Nhầm cái thứ hai thành cái thứ nhất là cắt cụt
+ * câu nói giữa chừng.
+ */
+static bool playEnded = false;
+
+/**
+ * Phát khi mới nhận được bấy nhiêu byte, KHÔNG đợi nhận đủ cả câu.
+ *
+ * 16 KB = nửa giây tiếng. Đây là chỗ cắt được nhiều thời gian chờ
+ * nhất trong cả chuỗi: trước đây robot đợi LLM viết xong, đợi TTS đọc
+ * xong, đợi truyền xong rồi mới mở miệng — đo được 4,5 giây từ lúc
+ * người ta nói xong. Phát sớm thì nó bắt đầu nói ngay khi có đủ nửa
+ * giây đầu, phần sau chảy tới trong lúc đang phát.
+ *
+ * Nửa giây là khoảng đệm chống vấp: cần 32 KB/s để phát liên tục, mà
+ * WiFi cho vài trăm KB/s, nên nửa giây dư sức nuốt một cú khựng mạng.
+ */
+static const uint32_t PLAY_START_BYTES = 16 * 1024;
+
 // ─── Trạng thái nghe ───────────────────────────────────────
 static bool micOpen = false;      // VAD đang trong một lượt nói
 static uint32_t micQuietAt = 0;   // mốc bắt đầu im lặng
@@ -192,6 +216,7 @@ void playBegin(uint32_t sampleRate) {
   playLen = 0;
   playPos = 0;
   playOverflow = false;
+  playEnded = false;
   playState = PLAY_FILLING;
 
   // Đang nghe dở mà server chen tiếng vào thì bỏ lượt nghe đó — nếu
@@ -214,11 +239,16 @@ bool playPush(const uint8_t* data, size_t len) {
   }
   memcpy(playBuf + playLen, data, len);
   playLen += len;
+
+  // Đủ đệm rồi thì phát NGAY, đừng đợi `say_end`. Phần còn lại chảy
+  // tới trong lúc đang phát.
+  if (playState == PLAY_FILLING && playLen >= PLAY_START_BYTES) playState = PLAY_DRAINING;
   return true;
 }
 
 void playEnd() {
-  if (playState != PLAY_FILLING) return;
+  if (playState == PLAY_IDLE) return;
+  playEnded = true;
   lastClip = playLen;
   if (playOverflow) Serial.printf("[audio] doan noi bi cat bot (%lu byte)\n", playLen);
   if (playLen < 2) {
@@ -226,6 +256,7 @@ void playEnd() {
     micResumeAt = millis() + MIC_RESUME_DELAY_MS;
     return;
   }
+  // Câu ngắn hơn ngưỡng đệm thì chưa kịp chuyển sang phát — chuyển giờ.
   playState = PLAY_DRAINING;
 }
 
@@ -233,6 +264,7 @@ void playStop() {
   if (playState == PLAY_IDLE) return;
   playState = PLAY_IDLE;
   playLen = playPos = 0;
+  playEnded = false;
   i2s_zero_dma_buffer(I2S_NUM_1);
   micResumeAt = millis() + MIC_RESUME_DELAY_MS;
 }
@@ -258,6 +290,10 @@ static void pumpPlayback() {
     i2s_write(I2S_NUM_1, stereoBlock, n * 2 * sizeof(int16_t), &wrote, portMAX_DELAY);
     playPos += n * 2;
   }
+
+  // Đọc đuổi kịp ghi mà server CHƯA gửi xong: đây là hụt đệm, không
+  // phải hết câu. Chờ thêm — kết thúc ở đây là cắt cụt câu nói.
+  if (playPos >= playLen && !playEnded) return;
 
   if (playPos >= playLen) {
     // ⚠️ Đuôi im lặng, KHÔNG được bỏ.

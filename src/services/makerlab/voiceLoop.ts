@@ -357,12 +357,31 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
 
   // ── 2. Think ──
   const persona = await loadPersona(input.projectId);
+  const ctx = { deviceName: device?.name, battery: device?.batteryPct ?? null };
   const t1 = Date.now();
-  const reply = await think(persona, heard, input.deviceId, {
-    deviceName: device?.name,
-    battery: device?.batteryPct ?? null,
-  });
-  timing.llm = Date.now() - t1;
+
+  // ── 2+4. Vừa nghĩ vừa nói ──
+  //
+  // Trước đây hai bước này nối tiếp: đợi model viết XONG cả câu trả
+  // lời, rồi mới đọc thành tiếng, rồi mới gửi. Đo trên robot thật:
+  // người dùng chờ 4,5 giây mới nghe được chữ đầu tiên, mà 3 giây
+  // trong đó chỉ là ngồi đợi model viết nốt những câu chưa ai cần
+  // nghe vội.
+  //
+  // Giờ câu đầu tiên vừa xong là đọc và gửi ngay, phần sau chảy tiếp
+  // trong lúc robot đang nói — giống cách người ta nói chuyện thật.
+  let reply: RobotReply;
+  let spoken = false;
+
+  if (input.speak !== false) {
+    const r = await thinkAndSpeak(persona, heard, input.deviceId, ctx, timing);
+    reply = r.reply;
+    spoken = r.spoken;
+    timing.llm = r.llmMs;
+  } else {
+    reply = await think(persona, heard, input.deviceId, ctx);
+    timing.llm = Date.now() - t1;
+  }
 
   pushHistory(
     input.deviceId,
@@ -370,31 +389,8 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
     { role: 'assistant', content: JSON.stringify({ say: reply.say, actions: reply.actions }) },
   );
 
-  // ── 3. Act — fire the body commands before the audio so the robot
-  //      starts moving as it starts talking, not after. ──
   for (const action of reply.actions) {
     void dispatchAction(input.deviceId, action);
-  }
-
-  // ── 4. Speak ──
-  let spoken = false;
-  if (input.speak !== false && reply.say) {
-    const t2 = Date.now();
-    try {
-      const tts = await synthesizeSpeech(reply.say, {
-        provider: persona.voiceProvider as never,
-        voice: persona.voiceId ?? undefined,
-        language: persona.language,
-      });
-      timing.tts = Date.now() - t2;
-      const { speakOnDevice } = await import('../../socket/device.gateway.js');
-      spoken = await speakOnDevice(input.deviceId, tts.audio, { mime: tts.mime, text: reply.say });
-    } catch (err) {
-      logger.warn('MakerLab TTS failed for turn', {
-        deviceId: input.deviceId,
-        error: err instanceof Error ? err.message : String(err),
-      });
-    }
   }
 
   if (!spoken) emitTranscript(input.deviceId, 'bot', reply.say);
@@ -408,6 +404,181 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
   });
 
   return { heard, said: reply.say, actions: reply.actions, spoken, ms: timing };
+}
+
+/**
+ * Nghĩ và nói cùng lúc: mỗi câu vừa viết xong là đọc thành tiếng và
+ * gửi ngay xuống loa.
+ *
+ * Hỏng ở bất kỳ đâu thì lùi về đường cũ (nghĩ xong hết rồi mới nói).
+ * Một con robot nói chậm vẫn tốt hơn một con robot câm, và đường mới
+ * này có nhiều mắt xích hơn nên phải có chỗ lùi.
+ */
+async function thinkAndSpeak(
+  persona: PersonaConfig,
+  heard: string,
+  deviceId: number,
+  ctx: { deviceName?: string; battery?: number | null },
+  timing: { tts: number },
+): Promise<{ reply: RobotReply; spoken: boolean; llmMs: number }> {
+  const started = Date.now();
+  const gw = await import('../../socket/device.gateway.js');
+  const { PCM_SAMPLE_RATE } = await import('./audio.js');
+
+  const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
+    { role: 'system', content: buildSystemPrompt(persona, ctx) },
+    ...buildFewShot(persona),
+    ...getHistory(deviceId),
+    { role: 'user', content: heard },
+  ];
+
+  const chain = llmChain();
+  const p = chain[0];
+  const model = robotModel(p);
+
+  let seq: number | null = null;
+  let spoken = false;
+  let firstAudioMs = 0;
+
+  const speakPiece = async (piece: string) => {
+    if (seq === null) return;
+    const t = Date.now();
+    const tts = await synthesizeSpeech(piece, {
+      provider: persona.voiceProvider as never,
+      voice: persona.voiceId ?? undefined,
+      language: persona.language,
+    });
+    timing.tts += Date.now() - t;
+    const ok = await gw.speakStreamPush(deviceId, tts.audio, seq);
+    if (ok) {
+      spoken = true;
+      if (!firstAudioMs) firstAudioMs = Date.now() - started;
+    }
+  };
+
+  try {
+    if (noJsonMode.has(model)) throw new Error('model không nhận json_object — dùng đường cũ');
+
+    const stream = await clientFor(p).chat.completions.create({
+      model,
+      messages,
+      temperature: persona.temperature,
+      max_tokens: persona.maxTokens,
+      response_format: { type: 'json_object' },
+      stream: true,
+    });
+
+    let raw = '';
+    let emitted = 0;
+    for await (const chunk of stream) {
+      raw += chunk.choices[0]?.delta?.content ?? '';
+      const say = partialSay(raw);
+      if (say.length <= emitted) continue;
+
+      const { sentences, consumed } = takeSentences(say, emitted);
+      if (!sentences.length) continue;
+
+      if (seq === null) {
+        seq = gw.speakStreamBegin(deviceId, PCM_SAMPLE_RATE);
+        if (seq === null) break; // bo rớt mạng giữa chừng
+      }
+      for (const s of sentences) await speakPiece(s);
+      emitted += consumed;
+    }
+
+    const parsed = parseRobotReply(raw);
+    if (!parsed.say) throw new Error('model trả về rỗng');
+
+    // Đuôi chưa có dấu kết câu — vẫn phải nói nốt.
+    const tail = parsed.say.slice(emitted).trim();
+    if (tail) {
+      if (seq === null) seq = gw.speakStreamBegin(deviceId, PCM_SAMPLE_RATE);
+      if (seq !== null) await speakPiece(tail);
+    }
+
+    if (seq !== null) gw.speakStreamEnd(deviceId, seq, parsed.say);
+    logger.info('MakerLab nghĩ-và-nói', {
+      deviceId,
+      provider: p.label,
+      model,
+      firstAudioMs,
+      totalMs: Date.now() - started,
+    });
+    return { reply: parsed, spoken, llmMs: Date.now() - started };
+  } catch (err) {
+    logger.warn('MakerLab đường nghĩ-và-nói hỏng, lùi về đường cũ', {
+      deviceId,
+      error: err instanceof Error ? err.message : String(err),
+    });
+    if (seq !== null) gw.speakStreamEnd(deviceId, seq);
+
+    const reply = await think(persona, heard, deviceId, ctx);
+    if (reply.say) {
+      try {
+        const t = Date.now();
+        const tts = await synthesizeSpeech(reply.say, {
+          provider: persona.voiceProvider as never,
+          voice: persona.voiceId ?? undefined,
+          language: persona.language,
+        });
+        timing.tts += Date.now() - t;
+        spoken = await gw.speakOnDevice(deviceId, tts.audio, {
+          mime: tts.mime,
+          text: reply.say,
+        });
+      } catch {
+        /* câm nốt thì đành chịu — transcript vẫn lên console */
+      }
+    }
+    return { reply, spoken, llmMs: Date.now() - started };
+  }
+}
+
+// ─── Đọc câu ra khỏi dòng JSON đang chảy ───────────────────
+/**
+ * Model trả về `{"say":"...","actions":[...]}`. Khi đang chảy theo
+ * dòng thì ta chỉ có JSON dở dang, chưa `JSON.parse` được — nhưng
+ * trường `say` đứng đầu nên moi được nó ra sớm.
+ *
+ * Vì sao đáng làm: thời gian sinh chữ tỉ lệ với SỐ CHỮ SINH RA. Đợi
+ * model viết xong cả đoạn rồi mới nói là bắt người dùng chờ luôn cả
+ * những câu họ chưa cần nghe. Đo trên robot thật: 3031 ms cho một câu
+ * trả lời, mà câu ĐẦU TIÊN đã xong sau chưa tới 1 giây.
+ */
+function partialSay(raw: string): string {
+  const m = raw.match(/"say"\s*:\s*"((?:[^"\\]|\\.)*)/);
+  if (!m) return '';
+  // Bỏ dấu gạch chéo lẻ ở cuối — nó là nửa đầu của một chuỗi thoát bị
+  // cắt giữa chừng, để nguyên thì JSON.parse ném lỗi.
+  const body = m[1].replace(/\\$/, '');
+  try {
+    return JSON.parse(`"${body}"`) as string;
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * Cắt phần chữ mới thành câu trọn vẹn.
+ *
+ * Chỉ cắt ở dấu kết câu CÓ khoảng trắng theo sau, để "3.5 giây" hay
+ * "gpt-5.4-mini" không bị xé đôi giữa con số.
+ */
+function takeSentences(text: string, from: number): { sentences: string[]; consumed: number } {
+  const rest = text.slice(from);
+  const out: string[] = [];
+  let consumed = 0;
+  const re = /[.!?…]+["')\]]*(\s+|$)/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(rest))) {
+    const end = m.index + m[0].length;
+    const piece = rest.slice(consumed, end).trim();
+    if (piece.length >= 2) {
+      out.push(piece);
+      consumed = end;
+    }
+  }
+  return { sentences: out, consumed };
 }
 
 /** Model nào không nhận `response_format` thì hỏi lại lần nữa, bỏ trường đó. */

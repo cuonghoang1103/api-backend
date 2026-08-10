@@ -240,6 +240,97 @@ export async function speakOnDevice(
   return true;
 }
 
+// ─── Nói theo dòng ─────────────────────────────────────────
+/**
+ * Gửi tiếng nói THEO TỪNG CÂU thay vì đợi đủ cả đoạn.
+ *
+ * `speakOnDevice` ở trên đợi có đủ toàn bộ câu trả lời rồi mới gửi.
+ * Đo được trên robot thật: người dùng nói xong phải chờ 4,5 giây mới
+ * nghe thấy chữ đầu tiên, mà 3 giây trong đó chỉ là ngồi đợi LLM viết
+ * nốt những câu chưa ai cần nghe vội.
+ *
+ * Ba hàm dưới cho phép gửi ngay câu đầu tiên khi nó vừa xong, phần
+ * sau chảy tiếp trong lúc robot đang nói. Firmware phía kia bắt đầu
+ * phát khi có nửa giây tiếng trong đệm, nên tổng thời gian chờ rơi
+ * xuống khoảng 1,5 giây.
+ *
+ * Vẫn dùng đúng một cặp say_start/say_end như cũ — với bo thì đây chỉ
+ * là một đoạn tiếng dài đến dần, không phải nhiều đoạn rời.
+ */
+export function speakStreamBegin(deviceId: number, sampleRate: number): number | null {
+  const conn = connections.get(deviceId);
+  if (!conn || conn.ws.readyState !== WebSocket.OPEN) return null;
+  conn.speaking = true;
+  sendJson(conn, {
+    t: 'say_start',
+    mime: conn.audioFormat === 'pcm' ? 'audio/L16' : 'audio/mpeg',
+    // Không biết trước tổng độ dài — đó là cái giá của việc gửi sớm.
+    // Firmware không dùng con số này để cấp phát nên bỏ trống được.
+    bytes: 0,
+    ...(conn.audioFormat === 'pcm' ? { sampleRate, bits: 16, channels: 1 } : {}),
+  });
+  return conn.turnSeq;
+}
+
+/**
+ * Đẩy thêm một mẩu tiếng nói. Nhận MP3 từ TTS và tự đổi sang đúng thứ
+ * bo phát được — việc đổi định dạng phải nằm ở đây, nơi duy nhất biết
+ * bo đã khai báo gì trong gói `hello`.
+ *
+ * Trả về false khi lượt đã bị thay bằng lượt mới (người dùng chen lời).
+ */
+export async function speakStreamPush(
+  deviceId: number,
+  mp3: Buffer,
+  seq: number,
+): Promise<boolean> {
+  const conn = connections.get(deviceId);
+  if (!conn || conn.ws.readyState !== WebSocket.OPEN) return false;
+  if (conn.turnSeq !== seq) return false;
+
+  let audio = mp3;
+  if (conn.audioFormat === 'pcm') {
+    try {
+      audio = (await encodeForDevice(mp3, 'pcm')).audio;
+    } catch (err) {
+      logger.warn('MakerLab đổi PCM thất bại giữa dòng', {
+        deviceId,
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return false;
+    }
+  }
+  if (conn.turnSeq !== seq || conn.ws.readyState !== WebSocket.OPEN) return false;
+
+  const CHUNK = 8 * 1024;
+  for (let off = 0; off < audio.length; off += CHUNK) {
+    if (conn.turnSeq !== seq || conn.ws.readyState !== WebSocket.OPEN) return false;
+    conn.ws.send(audio.subarray(off, Math.min(off + CHUNK, audio.length)));
+  }
+  return true;
+}
+
+/** Bo này có nhận PCM thô không — để bên gọi biết cần đổi hay không. */
+export function deviceWantsPcm(deviceId: number): boolean {
+  return connections.get(deviceId)?.audioFormat === 'pcm';
+}
+
+export function speakStreamEnd(deviceId: number, seq: number, text?: string): void {
+  const conn = connections.get(deviceId);
+  if (!conn || conn.ws.readyState !== WebSocket.OPEN) return;
+  if (conn.turnSeq === seq) sendJson(conn, { t: 'say_end' });
+  conn.speaking = false;
+  if (text) {
+    sendJson(conn, { t: 'transcript', role: 'bot', text });
+    emitToConsole(deviceId, 'maker:device:transcript', {
+      deviceId,
+      role: 'bot',
+      text,
+      at: new Date().toISOString(),
+    });
+  }
+}
+
 // ─── Device event handlers ─────────────────────────────────
 
 async function handleHello(conn: DeviceConn, msg: Record<string, unknown>): Promise<void> {

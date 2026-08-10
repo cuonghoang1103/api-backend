@@ -740,23 +740,39 @@ static void probeNetwork() {
   Serial.printf("[net] da ghi %u byte cho yeu cau nang cap (duong dan %u ky tu)\n",
                 (unsigned)w, (unsigned)path.length());
 
+  // Chờ 30 giây chứ không 8.
+  //
+  // "Không trả lời trong 8 giây" và "không bao giờ trả lời" là hai kết
+  // luận khác hẳn nhau, mà cửa sổ chờ 8 giây là do CHÍNH TA đặt ra —
+  // nó không chứng minh được cái thứ hai. Nếu phản hồi về ở giây thứ
+  // 12 thì vấn đề là server CHẬM (bcrypt chặn vòng lặp sự kiện, VPS
+  // đang bận build), hoàn toàn khác với server nuốt yêu cầu.
   t0 = millis();
   String line;
-  while (millis() - t0 < 8000) {
+  uint32_t bytes = 0;
+  while (millis() - t0 < 30000) {
     if (tls2.available()) {
+      bytes = tls2.available();
       line = tls2.readStringUntil('\n');
+      break;
+    }
+    if (!tls2.connected()) {
+      Serial.printf("[net] server DONG ket noi sau %lums, khong gui gi\n", millis() - t0);
       break;
     }
     delay(10);
   }
+  const uint32_t waited = millis() - t0;
   tls2.stop();
 
   line.trim();
   if (!line.length()) {
     st.lastNote = "TLS OK nhung server IM LANG";
-    Serial.println("[net] gui nang cap xong, server khong tra loi gi");
+    Serial.printf("[net] cho %lums, khong nhan duoc byte nao\n", waited);
     return;
   }
+  Serial.printf("[net] tra loi ve sau %lums (%lu byte cho san)\n", waited,
+                (unsigned long)bytes);
   Serial.printf("[net] server tra loi: %s\n", line.c_str());
   if (line.indexOf("101") >= 0) st.lastNote = "bat tay WS OK (101)";
   else if (line.indexOf("401") >= 0) st.lastNote = "SAI KHOA THIET BI (401)";

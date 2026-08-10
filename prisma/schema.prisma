@@ -7367,6 +7367,12 @@ model MakerProject {
   /// [{ date, title, body, mediaUrl }] — build diary.
   buildLog Json? @map("build_log")
 
+  /// { commands[], errors[], snippets[] } — sổ tay tích luỹ trong lúc
+  /// làm: lệnh hay dùng, lỗi đã gặp kèm cách sửa, đoạn code hay copy.
+  /// Ba tháng nữa không ai nhớ vì sao `memory_type` phải là `qio_opi`;
+  /// chỗ này là để nhớ hộ.
+  notebook Json?
+
   /// { reference, dimensions, bays[], parts[], assembly[] } — the
   /// physical shell: how big it is, which printed piece is which, and
   /// crucially WHERE each component sits inside. Separate from

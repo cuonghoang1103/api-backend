@@ -15,6 +15,7 @@
  */
 import { PrismaClient, MakerComponentCategory as C } from '@prisma/client';
 import { PART_DOCS } from './data/maker-parts-docs.js';
+import { NOTEBOOK } from './data/maker-notebook.js';
 
 const prisma = new PrismaClient();
 
@@ -851,6 +852,7 @@ const PROJECT_FIELDS = {
   firmwareModules: FIRMWARE_MODULES,
   buildLog: BUILD_LOG,
   enclosure: ENCLOSURE,
+  notebook: NOTEBOOK,
   featured: true,
   published: true,
   sortOrder: 0,

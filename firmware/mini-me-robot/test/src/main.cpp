@@ -24,8 +24,21 @@
 #include <esp_flash.h>
 #include <esp_heap_caps.h>
 #include <esp_partition.h>
+#include <esp_ota_ops.h>  // esp_ota_get_running_partition()
 #include <driver/i2s.h>
-#include <driver/temperature_sensor.h>
+
+// Cảm biến nhiệt trong chip đổi API giữa hai đời ESP-IDF:
+//   IDF 4.4 (Arduino core 2.x) → driver/temp_sensor.h
+//   IDF 5.x (Arduino core 3.x) → driver/temperature_sensor.h
+// Dò bằng __has_include để cùng một file build được trên cả hai —
+// nếu không, nâng cấp core là hỏng build mà không rõ vì sao.
+#if __has_include(<driver/temperature_sensor.h>)
+#  include <driver/temperature_sensor.h>
+#  define HAS_TEMP_IDF5 1
+#elif __has_include(<driver/temp_sensor.h>)
+#  include <driver/temp_sensor.h>
+#  define HAS_TEMP_IDF4 1
+#endif
 
 // ─── Chân (khớp với README trong thư mục này) ─────────────
 #define PIN_MIC_SCK 4
@@ -136,8 +149,10 @@ static void checkPsram() {
 
   size_t total = ESP.getPsramSize();
   size_t freeNow = ESP.getFreePsram();
-  Serial.printf("  Dung lượng  : %u MB (còn trống %u KB)\n",
-                total / (1024 * 1024), freeNow / 1024);
+  // Tính bằng KB rồi mới đổi ra MB — chia nguyên trực tiếp cho
+  // 1024*1024 làm 8 MB hiện thành "7 MB" vì phần vài KB dành riêng.
+  Serial.printf("  Dung lượng  : %.1f MB (còn trống %u KB)\n",
+                total / 1048576.0f, (unsigned)(freeNow / 1024));
 
   // Thử trên 1 MB — đủ để bắt lỗi bit mà không mất cả phút
   const size_t TEST = 1024 * 1024;
@@ -186,7 +201,10 @@ static void checkPsram() {
 
 static void checkHeap() {
   size_t freeHeap = ESP.getFreeHeap();
-  size_t largest = heap_caps_get_largest_free_block(MALLOC_CAP_8BIT);
+  // MALLOC_CAP_INTERNAL, không phải MALLOC_CAP_8BIT: cái sau tính cả
+  // PSRAM nên báo "khối liền lớn nhất 8 MB" — đúng số nhưng trả lời
+  // sai câu hỏi. Ở đây ta muốn biết RAM TRONG CHIP còn bao nhiêu.
+  size_t largest = heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL);
   size_t minEver = ESP.getMinFreeHeap();
   Serial.printf("  Còn trống   : %u KB\n", freeHeap / 1024);
   Serial.printf("  Khối liền lớn nhất: %u KB\n", largest / 1024);
@@ -209,12 +227,26 @@ static void checkHeap() {
  * Bỏ qua các chân đã bị flash/PSRAM/USB chiếm — đụng vào là treo bo.
  */
 static void checkGpio() {
-  // 26–32 flash · 33–37 PSRAM octal · 19/20 USB · 43/44 UART0
+  // Chân KHÔNG được đụng vào:
+  //   22–25      không tồn tại trên ESP32-S3 (chip có 0–21 và 26–48)
+  //   26–32      SPI flash
+  //   33–37      PSRAM octal (bản R8)
+  //   19/20      USB D−/D+
+  //   43/44      UART0 — đang dùng cho log
   auto skip = [](int p) {
-    return (p >= 26 && p <= 37) || p == 19 || p == 20 || p == 43 || p == 44;
+    return (p >= 22 && p <= 37) || p == 19 || p == 20 || p == 43 || p == 44;
   };
 
-  int ok = 0, stuckLow = 0, stuckHigh = 0;
+  // Chân CÓ trở kéo sẵn trên bo DevKitC-1 — đọc lệch là bình thường,
+  // không phải hỏng. Không cảnh báo, chỉ ghi chú.
+  auto expected = [](int p) {
+    return p == 0     // nút BOOT, kéo lên
+        || p == 45    // strapping, kéo xuống
+        || p == 46    // strapping, chỉ vào
+        || p == 48;   // LED RGB gắn sẵn
+  };
+
+  int ok = 0, stuckLow = 0, stuckHigh = 0, onboard = 0;
   String badPins = "";
 
   for (int p = 0; p <= 48; p++) {
@@ -229,40 +261,55 @@ static void checkGpio() {
 
     if (up && !down) {
       ok++;
+    } else if (expected(p)) {
+      onboard++;  // trở kéo sẵn trên bo — đúng như thiết kế
     } else if (!up && !down) {
       stuckLow++;
-      badPins += String(p) + "(thấp) ";
-    } else if (up && down) {
+      badPins += String(p) + "(kẹt thấp) ";
+    } else {
       stuckHigh++;
-      badPins += String(p) + "(cao) ";
+      badPins += String(p) + "(kẹt cao) ";
     }
   }
 
   Serial.printf("  Chân tốt    : %d\n", ok);
+  Serial.printf("  Có trở sẵn trên bo: %d (GPIO 0/45/46/48 — bình thường)\n", onboard);
   if (stuckLow || stuckHigh) {
-    Serial.printf("  ⚠️  Chân bất thường (%d): %s\n", stuckLow + stuckHigh, badPins.c_str());
+    Serial.printf("  ⚠️  Chân nghi hỏng (%d): %s\n", stuckLow + stuckHigh, badPins.c_str());
     Serial.println("     Nếu đang KHÔNG cắm gì vào bo → chân đó hỏng thật.");
     Serial.println("     Nếu đang cắm mạch → có thể do mạch kéo, rút ra thử lại.");
   } else {
-    Serial.println("  ✅ Toàn bộ chân dùng được đều phản ứng đúng");
+    Serial.println("  ✅ Không có chân nào hỏng");
   }
 }
 
 static void checkTemp() {
+  float t = NAN;
+
+#if defined(HAS_TEMP_IDF5)
   temperature_sensor_handle_t th = NULL;
   temperature_sensor_config_t cfg = TEMPERATURE_SENSOR_CONFIG_DEFAULT(-10, 80);
   if (temperature_sensor_install(&cfg, &th) == ESP_OK) {
     temperature_sensor_enable(th);
-    float t = 0;
     temperature_sensor_get_celsius(th, &t);
     temperature_sensor_disable(th);
     temperature_sensor_uninstall(th);
-    Serial.printf("  Nhiệt độ    : %.1f °C\n", t);
-    if (t > 60) Serial.println("  ⚠️  Nóng bất thường khi chưa tải gì — kiểm nguồn");
-    else Serial.println("  ✅ Bình thường");
-  } else {
-    Serial.println("  (không đọc được cảm biến nhiệt)");
   }
+#elif defined(HAS_TEMP_IDF4)
+  temp_sensor_config_t cfg = TSENS_CONFIG_DEFAULT();
+  temp_sensor_set_config(cfg);
+  temp_sensor_start();
+  temp_sensor_read_celsius(&t);
+  temp_sensor_stop();
+#endif
+
+  if (isnan(t)) {
+    Serial.println("  (bản ESP-IDF này không có cảm biến nhiệt — bỏ qua)");
+    return;
+  }
+  Serial.printf("  Nhiệt độ    : %.1f °C\n", t);
+  if (t > 60) Serial.println("  ⚠️  Nóng bất thường khi chưa tải gì — kiểm nguồn");
+  else Serial.println("  ✅ Bình thường");
 }
 
 static void checkWifiRadio() {

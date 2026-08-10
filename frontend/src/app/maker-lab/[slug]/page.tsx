@@ -3,13 +3,15 @@
 /**
  * Maker Lab — project page.
  *
- * Six tabs, ordered the way you actually build something:
- *   Overview → what and why, plus the system diagram
- *   Linh kiện → what to buy (and what NOT to buy instead)
- *   Nối dây  → where every wire goes
- *   Firmware → what to write, module by module
+ * Tabs ordered the way you actually build something:
+ *   Tổng quan  → what and why, plus the system diagram
+ *   Ngoại hình → the shell, drawn to scale, and where each part sits
+ *   Linh kiện  → what to buy (and what NOT to buy instead)
+ *   Nối dây    → where every wire goes
+ *   Firmware   → what to write, module by module
  *   Điều khiển → the live console for the real board
- *   Nhật ký  → build diary + the personality config
+ *   Sổ tay     → commands, errors hit, snippets — grows as you build
+ *   Nhật ký    → build diary + the personality config
  */
 
 import { useEffect, useState } from 'react';
@@ -25,6 +27,7 @@ import {
   FileCode2,
   Gauge,
   Loader2,
+  NotebookPen,
   Radio,
   Sparkles,
   Wallet,
@@ -39,6 +42,7 @@ import { DeviceConsole } from '@/components/maker-lab/DeviceConsole';
 import { FirmwarePlan } from '@/components/maker-lab/FirmwarePlan';
 import { RobotBlueprint } from '@/components/maker-lab/RobotBlueprint';
 import { ProjectDocs } from '@/components/maker-lab/ProjectDocs';
+import { ProjectNotebook } from '@/components/maker-lab/ProjectNotebook';
 import type { MakerProjectDetail } from '@/types/maker-lab';
 
 const TABS = [
@@ -48,6 +52,7 @@ const TABS = [
   { id: 'wiring', label: 'Nối dây', icon: Zap },
   { id: 'firmware', label: 'Firmware', icon: FileCode2 },
   { id: 'console', label: 'Điều khiển', icon: Radio },
+  { id: 'notebook', label: 'Sổ tay', icon: NotebookPen },
   { id: 'docs', label: 'Nhật ký', icon: Cpu },
 ] as const;
 
@@ -214,6 +219,7 @@ export default function MakerProjectPage() {
       {tab === 'console' && (
         <DeviceConsole projectId={project.id} projectSlug={project.slug} isAuthed={isAuthed} />
       )}
+      {tab === 'notebook' && <ProjectNotebook data={project.notebook} />}
       {tab === 'docs' && <ProjectDocs project={project} />}
     </div>
   );

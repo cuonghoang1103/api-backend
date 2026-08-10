@@ -117,6 +117,20 @@ export interface MakerEnclosure {
   warnings?: string[];
 }
 
+export interface MakerNotebook {
+  commands: Array<{ group: string; cmd: string; what: string; note?: string }>;
+  /** Ba phần bắt buộc: thấy gì → vì sao → làm gì. Thiếu triệu chứng thì
+   *  lần sau gặp lại cũng không tra ra. */
+  errors: Array<{
+    symptom: string;
+    cause: string;
+    fix: string;
+    costMe?: string;
+    tags?: string[];
+  }>;
+  snippets: Array<{ title: string; lang: string; why: string; code: string }>;
+}
+
 export interface MakerBuildLogEntry {
   date: string;
   title: string;
@@ -220,6 +234,7 @@ export interface MakerProjectDetail extends Omit<MakerProjectSummary, 'component
   firmwareModules: MakerFirmwareModule[] | null;
   buildLog: MakerBuildLogEntry[] | null;
   enclosure: MakerEnclosure | null;
+  notebook: MakerNotebook | null;
   components: MakerComponent[];
   persona: MakerPersona | null;
   firmwares: MakerFirmwareBuild[];

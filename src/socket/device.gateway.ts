@@ -55,6 +55,7 @@ import { MakerCommandStatus, MakerDeviceStatus } from '@prisma/client';
 import { prisma } from '../config/database.js';
 import { logger } from '../utils/logger.js';
 import { getIO } from './messaging.socket.js';
+import { encodeForDevice, type DeviceAudioFormat } from '../services/makerlab/audio.js';
 
 // ─── Tunables ──────────────────────────────────────────────
 /** Path we claim on the shared HTTP server. */
@@ -87,6 +88,13 @@ interface DeviceConn {
   speaking: boolean;
   /** Bumped on every new turn; a stale TTS stream checks this and stops. */
   turnSeq: number;
+  /**
+   * What the board can actually play. Declared in `hello`; defaults to
+   * mp3 for anything that doesn't say. A microcontroller that asks for
+   * `pcm` gets raw samples it can push straight into I2S — no decoder,
+   * no ring buffer, nothing to go wrong.
+   */
+  audioFormat: DeviceAudioFormat;
 }
 
 const connections = new Map<number, DeviceConn>();
@@ -166,17 +174,45 @@ export function pushCommand(
  * text frame, so the firmware knows exactly where the clip ends
  * without parsing the audio itself.
  */
-export function speakOnDevice(
+export async function speakOnDevice(
   deviceId: number,
   audio: Buffer,
   opts: { mime?: string; text?: string } = {},
-): boolean {
+): Promise<boolean> {
   const conn = connections.get(deviceId);
   if (!conn || conn.ws.readyState !== WebSocket.OPEN) return false;
 
+  // Chuyển sang đúng thứ bo mạch phát được. Bo khai báo `pcm` nhận
+  // mẫu thô đẩy thẳng vào I2S — không giải mã, không thư viện, không
+  // có gì để hỏng. Chuyển đổi tốn ~80 ms, rẻ hơn nhiều so với một lỗi
+  // giải mã MP3 trên vi điều khiển.
+  let payload = audio;
+  let mime = opts.mime ?? 'audio/mpeg';
+  let sampleRate: number | undefined;
+
+  if (conn.audioFormat === 'pcm') {
+    try {
+      const enc = await encodeForDevice(audio, 'pcm');
+      payload = enc.audio;
+      mime = enc.mime;
+      sampleRate = enc.sampleRate;
+    } catch (err) {
+      logger.warn('MakerLab đổi PCM thất bại, gửi nguyên MP3', {
+        deviceId,
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
+  }
+
   const seq = conn.turnSeq;
   conn.speaking = true;
-  sendJson(conn, { t: 'say_start', mime: opts.mime ?? 'audio/mpeg', bytes: audio.length });
+  sendJson(conn, {
+    t: 'say_start',
+    mime,
+    bytes: payload.length,
+    ...(sampleRate ? { sampleRate, bits: 16, channels: 1 } : {}),
+  });
+  audio = payload;
 
   // 8 KB chunks: comfortably under the firmware's receive buffer and
   // small enough that a barge-in cuts in within ~a quarter second.
@@ -215,6 +251,16 @@ async function handleHello(conn: DeviceConn, msg: Record<string, unknown>): Prom
   if (typeof msg.ip === 'string') data.ipAddress = msg.ip.slice(0, 64);
   if (typeof msg.rssi === 'number') data.rssi = Math.trunc(msg.rssi);
   if (typeof msg.battery === 'number') data.batteryPct = clampPct(msg.battery);
+
+  // Bo tự khai báo nó phát được định dạng nào. Không nói gì thì coi
+  // như mp3 — giữ nguyên hành vi cũ cho mọi thiết bị đã có.
+  if (msg.audio === 'pcm' || msg.audio === 'mp3') {
+    conn.audioFormat = msg.audio;
+    logger.info('MakerLab thiết bị khai báo định dạng âm thanh', {
+      deviceId: conn.deviceId,
+      format: msg.audio,
+    });
+  }
 
   await prisma.makerDevice.update({ where: { id: conn.deviceId }, data }).catch(() => undefined);
   emitToConsole(conn.deviceId, 'maker:device:status', {
@@ -541,6 +587,7 @@ function acceptDevice(ws: WebSocket, auth: AuthResult): void {
     audioBytes: 0,
     lastTelemetryPersistAt: 0,
     speaking: false,
+    audioFormat: 'mp3',
     turnSeq: 0,
   };
   connections.set(auth.deviceId, conn);

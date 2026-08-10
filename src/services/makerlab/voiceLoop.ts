@@ -249,7 +249,7 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
       });
       timing.tts = Date.now() - t2;
       const { speakOnDevice } = await import('../../socket/device.gateway.js');
-      spoken = speakOnDevice(input.deviceId, tts.audio, { mime: tts.mime, text: reply.say });
+      spoken = await speakOnDevice(input.deviceId, tts.audio, { mime: tts.mime, text: reply.say });
     } catch (err) {
       logger.warn('MakerLab TTS failed for turn', {
         deviceId: input.deviceId,

@@ -112,9 +112,43 @@
 #define HEARTBEAT_TIMEOUT_MS  90000  // 3 lần ping của server bị lỡ
 
 // ─── Âm thanh ─────────────────────────────────────────────
-// Ngưỡng VAD: chỉ gửi lên server khi thực sự có người nói. Gửi liên
-// tục tốn 32 KB/s cả ngày và làm cạn pin trong khoảng hai tiếng.
-#define VAD_THRESHOLD        1800
+//
+// ⚠️ MỌI CON SỐ DƯỚI ĐÂY GẮN CHẶT VỚI MỘT PHÉP DỊCH BIT. Đọc kỹ
+// đoạn này trước khi chỉnh, nếu không sẽ chỉnh mò.
+//
+// INMP441 là mic I2S 24 bit. Bo đọc về từ mỗi khe 32 bit, mẫu nằm ở
+// 24 bit CAO (bit 31..8), 8 bit thấp là số 0. Từ đó có hai thang:
+//
+//   raw >> 8   → thang 24 bit, biên độ ±8.388.608   ← VAD dùng thang này
+//   raw >> 13  → thang gửi đi, đã khuếch đại 8 lần  ← gửi lên server
+//
+// Số đo THẬT trên đúng con mic này, 10/08/2026, nói cách ~30 cm
+// (thang 24 bit): nền phòng yên **1200** · nói bình thường **9000** ·
+// đỉnh **539466**. Ngưỡng 2800 nằm gọn giữa nền và tiếng nói — cao
+// gấp đôi nền nên quạt/gõ bàn không kích, thấp hơn tiếng nói nhiều
+// lần nên không sót câu.
+#define VAD_THRESHOLD        2800   // thang 24 bit (raw >> 8), đo thật
 #define VAD_SILENCE_MS       800    // im lặng bấy nhiêu = hết lượt nói
 #define VAD_MAX_TURN_MS      15000
-#define AUDIO_CHUNK_SAMPLES  512
+#define VAD_COOLDOWN_MS      300    // vừa dứt lượt, đừng kích lại ngay
+
+// Khuếch đại lúc chuyển sang int16 gửi đi. Đỉnh 539466 ở thang 24 bit
+// chia 32 còn 16858 — vừa đủ to cho Whisper mà còn thừa chỗ trước khi
+// chạm trần 32767. Để nguyên `raw >> 16` (khuếch đại 1 lần) thì tiếng
+// nói chỉ còn biên độ ~35, Whisper nghe ra im lặng.
+#define MIC_GAIN_SHIFT       13
+#define AUDIO_BLOCK_SAMPLES  256    // 16 ms mỗi khối @16 kHz
+
+// Đệm trước: lúc VAD nhận ra "có người nói" thì âm đầu ĐÃ trôi qua
+// rồi. Giữ sẵn 320 ms gần nhất và gửi kèm khi mở lượt, nếu không
+// Whisper mất chữ đầu tiên của mọi câu.
+#define AUDIO_PREROLL_BLOCKS 20
+
+// Đệm phát trong PSRAM: 512 KB = 16 giây tiếng @16 kHz 16 bit mono.
+// Một câu trả lời thường 3–5 giây, nên đây là mức dư thoải mái.
+#define AUDIO_PLAY_BUF_BYTES (512 * 1024)
+
+// Nói xong thì đợi tiếng vang trong phòng tắt hẳn rồi hãy nghe lại.
+// Không có quãng này thì robot nghe thấy chính nó và tự nói chuyện
+// với mình đến hết pin.
+#define MIC_RESUME_DELAY_MS  250

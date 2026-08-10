@@ -280,6 +280,39 @@ export const NOTEBOOK: Notebook = {
       costMe: 'Servo cháy trong khoảng một phút',
       tags: ['servo'],
     },
+    {
+      symptom:
+        'Màn hình giật một cái mỗi giây, VÀ loa rè "rẹt" đúng cùng nhịp đó — dù chưa hề phát âm thanh nào',
+      cause:
+        'Hai triệu chứng, một gốc. Vòng loop() vẽ lại CẢ BẢY vùng của bảng trạng thái mỗi giây bất kể giá trị có đổi hay không → mắt thấy cái nháy. Cùng lúc đó là một cú xả SPI 20 MHz làm sụt nguồn 3V3; mà MAX98357A khi chưa cài driver I2S thì ba chân BCLK/LRC/DIN đang THẢ NỔI, nên nó khuếch đại đúng cú sụt ấy thành tiếng rè theo nhịp vẽ màn.',
+      fix: 'Hai việc, làm cả hai. (1) Mỗi ô trên màn nhớ chuỗi nó đang hiện, chỉ vẽ lại khi khác — đứng yên thì màn đứng yên thật. (2) Cài driver I2S TX ngay trong setup() rồi gọi i2s_zero_dma_buffer(): phần cứng I2S phát ra dòng số 0 liên tục, không tốn CPU (DMA tự lặp), amp nhận tín hiệu số hợp lệ báo im lặng nên nó im thật thay vì đoán mò từ chân trôi. Nếu sau hai việc này vẫn còn rè thì phần còn lại là sụt nguồn thật — lúc đó mới đến lượt tụ 1000 µF sát chân amp.',
+      costMe: 'Tưởng loa hỏng, suýt tháo ra thay',
+      tags: ['loa', 'màn hình', 'nguồn', 'i2s'],
+    },
+    {
+      symptom:
+        'Robot nghe được, server nghĩ được, transcript hiện đúng — nhưng robot CÂM. Log server sạch, không một dòng lỗi',
+      cause:
+        'Image production là `node:22-alpine`, và alpine KHÔNG kèm bộ giải mã MP3 nào. TTS trả MP3, ESP32 chỉ phát được PCM, nên server phải đổi định dạng — không có công cụ thì nó lặng lẽ lùi về gửi nguyên MP3, bo không giải mã được và bỏ qua. Không bên nào coi đó là lỗi nên không bên nào ghi log.',
+      fix: 'Khai báo thẳng trong Dockerfile: `RUN apk add --no-cache mpg123` (~400 KB, sinh ra đúng để làm mỗi việc MP3→PCM; ffmpeg cũng được nhưng ~80 MB). Kiểm bằng cách CHẠY THẬT chứ đừng đọc code: đổi một câu TTS rồi soi biên độ PCM — toàn số 0 là hỏng, có đỉnh vài nghìn mới là tiếng thật.',
+      costMe: 'Bẫy chưa kịp sập — bắt được lúc đọc Dockerfile trước khi deploy',
+      tags: ['docker', 'âm thanh', 'tts'],
+    },
+    {
+      symptom: 'Phát xong một câu thì ~0,1 giây tiếng cuối cùng lặp đi lặp lại mãi không dứt',
+      cause:
+        'DMA của I2S cứ phát lại vùng đệm khi không được ghi thêm. Ngừng ghi ngay sau mẫu cuối là để nguyên phần đuôi câu nằm trong đệm, và phần cứng vui vẻ phát nó thành vòng lặp vô tận.',
+      fix: 'Ghi thêm đủ MỘT VÒNG đệm toàn số 0 sau khi hết dữ liệu (ở đây là 8 × 256 khung). Vừa đẩy nốt phần đuôi thật ra loa, vừa để lại trạng thái im lặng sạch. Đừng gọi i2s_zero_dma_buffer() ngay sau mẫu cuối — làm thế là CẮT CỤT chữ cuối câu.',
+      tags: ['loa', 'i2s'],
+    },
+    {
+      symptom:
+        'Chép ngưỡng VAD từ chỗ khác về thì mic hoặc không bao giờ kích, hoặc kích liên tục vì tiếng quạt',
+      cause:
+        'INMP441 là mic 24 bit, mẫu nằm ở 24 bit CAO của khe 32 bit. Mỗi người viết code lại dịch bit một kiểu — `raw>>8` cho thang 24 bit, `raw>>16` cho thang 16 bit — và hai thang cách nhau 256 lần. Con số ngưỡng tách khỏi phép dịch bit thì hoàn toàn vô nghĩa.',
+      fix: 'Luôn ghi ngưỡng KÈM phép dịch. Ở dự án này: VAD tính trên `abs(raw >> 8)` (thang 24 bit, ngưỡng 2800), còn mẫu gửi lên server là `raw >> 13` (khuếch đại 8 lần rồi kẹp vào int16). Để nguyên `raw >> 16` mà gửi thì giọng nói chỉ còn biên độ ~35 và Whisper nghe ra im lặng.',
+      tags: ['mic', 'vad', 'i2s'],
+    },
   ],
 
   // ══════════════════════════════════════════════════════════

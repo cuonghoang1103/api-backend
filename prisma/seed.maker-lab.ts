@@ -13,7 +13,7 @@
  * part of this file — it is the difference between a parts list and
  * a design.
  */
-import { PrismaClient, MakerComponentCategory as C } from '@prisma/client';
+import { PrismaClient, Prisma, MakerComponentCategory as C } from '@prisma/client';
 import { PART_DOCS } from './data/maker-parts-docs.js';
 import { NOTEBOOK } from './data/maker-notebook.js';
 
@@ -852,7 +852,12 @@ const PROJECT_FIELDS = {
   firmwareModules: FIRMWARE_MODULES,
   buildLog: BUILD_LOG,
   enclosure: ENCLOSURE,
-  notebook: NOTEBOOK,
+  // Ép kiểu vì Prisma đòi `InputJsonObject` — kiểu này cần chỉ mục
+  // chuỗi, mà `Notebook` là interface có tên trường cụ thể nên không
+  // khớp về mặt cấu trúc. Không ép thì `npm run typecheck:seed` đỏ,
+  // và một lưới an toàn đang đỏ sẵn thì không bắt được gì cả: lần đổi
+  // enum tới sẽ lọt hệt như vụ ContentType.CODE ngày 08/08.
+  notebook: NOTEBOOK as unknown as Prisma.InputJsonObject,
   featured: true,
   published: true,
   sortOrder: 0,

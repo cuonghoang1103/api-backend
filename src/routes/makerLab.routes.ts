@@ -309,7 +309,7 @@ router.post('/devices/:id/say', authenticate, async (req, res: Response<ApiRespo
       voice: persona?.voiceId ?? undefined,
       language: persona?.language ?? 'vi-VN',
     });
-    const ok = speakOnDevice(deviceId, tts.audio, { mime: tts.mime, text });
+    const ok = await speakOnDevice(deviceId, tts.audio, { mime: tts.mime, text });
     res.json({ success: ok, data: { provider: tts.provider, bytes: tts.audio.length } });
   } catch (e) {
     next(e);

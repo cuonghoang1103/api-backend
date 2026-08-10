@@ -48,6 +48,19 @@ FROM node:22-alpine
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nodejs -u 1001
 
+# mpg123 — giải mã MP3 sang PCM thô cho robot Maker Lab.
+#
+# TTS trả MP3; vi điều khiển thì muốn mẫu thô đẩy thẳng vào I2S. Việc
+# đổi phải làm ở đâu đó, và server là chỗ rẻ nhất.
+#
+# ⚠️ ĐỪNG BỎ DÒNG NÀY. Không có nó thì `speakOnDevice` lặng lẽ lùi về
+# gửi MP3, ESP32 không giải mã được, và triệu chứng ngoài đời là robot
+# nghe được, nghĩ được, nhưng câm — không lỗi nào trong log server cả.
+#
+# mpg123 chứ không phải ffmpeg: ~1,5 MB so với ~80 MB, và nó làm đúng
+# một việc này.
+RUN apk add --no-cache mpg123
+
 WORKDIR /app
 
 # Copy production-only node_modules (không có devDependencies)

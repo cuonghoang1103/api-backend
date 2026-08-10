@@ -45,6 +45,13 @@ static bool playOverflow = false;
  */
 static bool playEnded = false;
 
+/**
+ * Mốc bắt đầu GOM. Nếu gom mãi mà không đủ ngưỡng phát thì phải tự gỡ
+ * kẹt — nguồn có thể đã chết giữa chừng (tải nhạc hỏng, mạng đứt), và
+ * ngồi đợi vĩnh viễn nghĩa là robot câm cho tới lúc reset.
+ */
+static uint32_t fillingSince = 0;
+
 // Đếm để BIẾT chứ không đoán: bao nhiêu lần đệm cạn giữa lúc phát, và
 // tổng cộng bao lâu. Suốt mấy vòng sửa vừa rồi tôi toàn suy luận xem
 // tiếng bị lặp ở đâu; hai con số này trả lời thẳng câu đó.
@@ -273,6 +280,20 @@ static inline uint32_t freeSpace() { return playCapacity() - buffered(); }
 
 void playBegin(uint32_t sampleRate) {
   if (!ampReady || !playBuf) return;
+
+  // ⚠️ CÂM DMA NGAY, trước khi xoá đệm.
+  //
+  // Đây là lỗi "lặp hai từ cuối mãi, phải reset mới tắt". Trình tự gây
+  // ra nó: robot đang nói "bật đây" thì lệnh nhạc tới, server gửi
+  // say_start mới, hàm này xoá đệm và về trạng thái GOM — và
+  // pumpPlayback lập tức trả về vì chưa phải trạng thái PHÁT. Không ai
+  // ghi vào I2S nữa, mà DMA thì LẶP LẠI vùng đệm cũ khi không được
+  // ghi. Hai từ cuối cùng của câu vừa rồi kêu mãi.
+  //
+  // Xoá đệm DMA cắt đứt vòng đó ngay: im lặng còn hơn một mẩu tiếng
+  // lặp vô tận, và nếu nhạc không bao giờ tới thì robot chỉ im chứ
+  // không hoá thành cái loa hỏng.
+  i2s_zero_dma_buffer(I2S_NUM_1);
   if (sampleRate >= 8000 && sampleRate <= 48000 && sampleRate != playRate) {
     playRate = sampleRate;
     i2s_set_clk(I2S_NUM_1, playRate, I2S_BITS_PER_SAMPLE_16BIT, I2S_CHANNEL_STEREO);
@@ -284,6 +305,7 @@ void playBegin(uint32_t sampleRate) {
   underruns = 0;
   underrunMs = 0;
   underrunSince = 0;
+  fillingSince = millis();
   playState = PLAY_FILLING;
 
   // Đang nghe dở mà server chen tiếng vào thì bỏ lượt nghe đó — nếu
@@ -325,7 +347,10 @@ bool playPush(const uint8_t* data, size_t len) {
 
   // Đủ đệm rồi thì phát NGAY, đừng đợi `say_end`. Phần còn lại chảy
   // tới trong lúc đang phát.
-  if (playState == PLAY_FILLING && buffered() >= PLAY_START_BYTES) playState = PLAY_DRAINING;
+  if (playState == PLAY_FILLING && buffered() >= PLAY_START_BYTES) {
+    playState = PLAY_DRAINING;
+    fillingSince = 0;
+  }
   return true;
 }
 
@@ -355,6 +380,25 @@ void playStop() {
 
 /** Đẩy một lát nhỏ ra loa. Nhỏ để loop() không bị giữ quá lâu. */
 static void pumpPlayback() {
+  // Kẹt ở trạng thái GOM: nguồn chết giữa chừng. Có gì phát nấy sau 3
+  // giây, còn không có gì thì bỏ hẳn sau 12 giây. Không có hai lối
+  // thoát này thì một lần tải nhạc hỏng là robot câm tới lúc reset.
+  if (playState == PLAY_FILLING && fillingSince) {
+    const uint32_t waited = millis() - fillingSince;
+    if (buffered() > 0 && waited > 3000) {
+      playState = PLAY_DRAINING;
+    } else if (waited > 12000) {
+      playState = PLAY_IDLE;
+      writePos = readPos = 0;
+      playEnded = false;
+      fillingSince = 0;
+      i2s_zero_dma_buffer(I2S_NUM_1);
+      micResumeAt = millis() + MIC_RESUME_DELAY_MS;
+      Serial.println("[audio] cho mai khong thay tieng, bo luot phat");
+      return;
+    }
+  }
+
   if (playState != PLAY_DRAINING) return;
 
   const uint32_t cap = playCapacity();

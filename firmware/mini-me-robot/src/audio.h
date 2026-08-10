@@ -54,6 +54,14 @@ void playEnd();
 /** Cắt ngang (người dùng chen lời). */
 void playStop();
 
+/**
+ * Âm lượng loa 10-100%. Kẹp trong khoảng đó chứ không cho về 0:
+ * "0%" nghe y hệt robot hỏng, mà người ta bảo "nhỏ hết cỡ" là muốn
+ * nhỏ chứ không phải câm.
+ */
+void setVolume(uint8_t pct);
+uint8_t volume();
+
 // ─── Xem trạng thái (cho màn hình) ───────────────────────
 bool speaking();
 bool listening();

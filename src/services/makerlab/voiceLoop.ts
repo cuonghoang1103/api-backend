@@ -673,8 +673,36 @@ async function think(
   };
 }
 
-/** Persist the command (so the console shows it) then push it down. */
+/**
+ * Ghi lệnh vào sổ (để console thấy) rồi đẩy xuống bo.
+ *
+ * Trừ nhạc: `play_music` và `stop_music` do SERVER làm, không đẩy
+ * xuống bo. Bo không biết đường ra Internet lấy file, cũng không có
+ * chỗ chứa một bài bốn phút — server tải, đổi mã, rồi rót xuống theo
+ * đúng đường tiếng đang dùng để nói.
+ */
 async function dispatchAction(deviceId: number, action: ValidatedCommand): Promise<void> {
+  if (action.type === 'play_music' || action.type === 'stop_music') {
+    try {
+      const music = await import('./music.js');
+      if (action.type === 'stop_music') {
+        const had = music.stopMusicOn(deviceId);
+        logger.info('MakerLab tắt nhạc', { deviceId, dangPhat: had });
+      } else {
+        const q = String((action.payload as { query?: unknown }).query ?? '');
+        const note = await music.playMusicOn(deviceId, q);
+        logger.info('MakerLab bật nhạc', { deviceId, query: q, note });
+      }
+    } catch (err) {
+      logger.warn('MakerLab lệnh nhạc hỏng', {
+        deviceId,
+        type: action.type,
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
+    return;
+  }
+
   try {
     const row = await prisma.makerCommand.create({
       data: {

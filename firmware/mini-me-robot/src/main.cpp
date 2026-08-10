@@ -309,7 +309,7 @@ static void uiMode() {
   switch (st.mode) {
     case MODE_HEAR:  s = "DANG NGHE";  c = C_YOU;    break;
     case MODE_THINK: s = "DANG NGHI";  c = C_WARN;   break;
-    case MODE_TALK:  s = "DANG NOI";   c = C_ACCENT; break;
+    case MODE_TALK:  s = String("DANG NOI  ") + audio::volume() + "%"; c = C_ACCENT; break;
     default:         s = "cho...";     c = C_LABEL;  break;
   }
   if (uiModeShown == s) return;
@@ -474,6 +474,15 @@ static void handleCommand(JsonDocument& doc) {
 
   st.cmdCount++;
   st.lastCmd = String(type);
+
+  if (!strcmp(type, "volume")) {
+    const int lv = doc["payload"]["level"] | 100;
+    audio::setVolume((uint8_t)lv);
+    st.lastNote = String("am luong ") + audio::volume() + "%";
+    sendAck(id, true);
+    sendLog("info", String("dat am luong ") + audio::volume() + "%");
+    return;
+  }
 
   if (!strcmp(type, "reboot")) {
     sendAck(id, true);

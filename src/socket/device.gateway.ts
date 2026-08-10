@@ -310,6 +310,32 @@ export async function speakStreamPush(
   return true;
 }
 
+/**
+ * Đẩy PCM ĐÃ SẴN SÀNG, không đổi mã gì thêm.
+ *
+ * Dùng cho nhạc: ffmpeg đã cho ra đúng PCM 16 kHz rồi, chạy lại
+ * `encodeForDevice` là giải mã một thứ vốn không phải MP3 — vừa vô
+ * nghĩa vừa hỏng. Tách hàm riêng thay vì thêm cờ vào hàm cũ, để không
+ * ai lỡ tay truyền nhầm định dạng.
+ */
+export function speakStreamPushPcm(deviceId: number, pcm: Buffer, seq: number): boolean {
+  const conn = connections.get(deviceId);
+  if (!conn || conn.ws.readyState !== WebSocket.OPEN) return false;
+  if (conn.turnSeq !== seq) return false;
+  if (conn.audioFormat !== 'pcm') return false; // bo này cần MP3, nhạc thì chịu
+
+  const CHUNK = 8 * 1024;
+  for (let off = 0; off < pcm.length; off += CHUNK) {
+    if (conn.turnSeq !== seq || conn.ws.readyState !== WebSocket.OPEN) return false;
+    // Đừng bơm nhanh hơn bo nuốt được: một bài bốn phút là 7,7 MB, dồn
+    // hết vào bộ đệm socket là ngốn RAM của VPS mà bo vẫn phát ở đúng
+    // tốc độ thời gian thực.
+    if (conn.ws.bufferedAmount > 256 * 1024) return true;
+    conn.ws.send(pcm.subarray(off, Math.min(off + CHUNK, pcm.length)));
+  }
+  return true;
+}
+
 /** Bo này có nhận PCM thô không — để bên gọi biết cần đổi hay không. */
 export function deviceWantsPcm(deviceId: number): boolean {
   return connections.get(deviceId)?.audioFormat === 'pcm';

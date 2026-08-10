@@ -45,6 +45,32 @@ static bool playEnded = false;
  */
 static const uint32_t PLAY_START_BYTES = 16 * 1024;
 
+/**
+ * Âm lượng 10-100%, nhân vào mẫu tiếng trước khi đẩy vào I2S.
+ *
+ * MAX98357A KHÔNG có chân chỉnh âm lượng — chân GAIN chỉ đặt được bốn
+ * mức cố định bằng điện trở, không đổi lúc chạy được. Nên chỉnh phải
+ * làm bằng phần mềm, ngay tại đây.
+ *
+ * Nhân số nguyên rồi dịch bit chứ không dùng số thực: vòng này chạy
+ * 16.000 lần mỗi giây, và ESP32-S3 không có bộ tính số thực đủ nhanh
+ * để phung phí.
+ */
+static uint8_t volumePct = 100;
+
+void setVolume(uint8_t pct) {
+  if (pct < 10) pct = 10;
+  if (pct > 100) pct = 100;
+  volumePct = pct;
+}
+
+uint8_t volume() { return volumePct; }
+
+static inline int16_t applyVolume(int16_t s) {
+  if (volumePct >= 100) return s;
+  return (int16_t)(((int32_t)s * volumePct) / 100);
+}
+
 // ─── Trạng thái nghe ───────────────────────────────────────
 static bool micOpen = false;      // VAD đang trong một lượt nói
 static uint32_t micQuietAt = 0;   // mốc bắt đầu im lặng
@@ -226,7 +252,20 @@ void playBegin(uint32_t sampleRate) {
 }
 
 bool playPush(const uint8_t* data, size_t len) {
-  if (playState != PLAY_FILLING || !playBuf) return false;
+  // ⚠️ PHẢI nhận cả khi ĐANG PHÁT, không riêng lúc đang gom.
+  //
+  // Đây từng là lỗi: cơ chế "phát sớm khi có nửa giây tiếng" đổi trạng
+  // thái sang PHÁT ở mốc 16 KB, mà dòng gác này vẫn chỉ cho qua khi
+  // đang GOM — nên mọi mẩu tiếng gửi tới sau đó bị vứt thẳng, im lặng,
+  // không một dòng log. Robot phát đúng 16 KB đầu rồi tắt: nửa giây,
+  // một hai chữ. Người dùng thấy "nói được 1-2 từ là loa tự ngắt".
+  //
+  // Bài học: đổi máy trạng thái thì phải rà LẠI mọi chỗ đang so sánh
+  // với trạng thái cũ, không chỉ chỗ mình vừa sửa.
+  if ((playState != PLAY_FILLING && playState != PLAY_DRAINING) || !playBuf) return false;
+  // Đã chốt `say_end` rồi mà còn byte tới thì đó là của lượt sau —
+  // nối vào đây sẽ dính hai câu vào nhau.
+  if (playEnded) return false;
   const uint32_t cap = playCapacity();
   if (playLen + len > cap) {
     playOverflow = true;
@@ -283,8 +322,9 @@ static void pumpPlayback() {
     // thả nổi sẽ tự lấy trung bình (L+R)/2 — hai kênh giống nhau nên
     // trung bình bằng chính nó, âm lượng không đổi.
     for (uint32_t i = 0; i < n; i++) {
-      stereoBlock[i * 2] = src[i];
-      stereoBlock[i * 2 + 1] = src[i];
+      const int16_t v = applyVolume(src[i]);
+      stereoBlock[i * 2] = v;
+      stereoBlock[i * 2 + 1] = v;
     }
     size_t wrote = 0;
     i2s_write(I2S_NUM_1, stereoBlock, n * 2 * sizeof(int16_t), &wrote, portMAX_DELAY);

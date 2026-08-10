@@ -84,6 +84,25 @@ export const commandSchemas = {
   dance: z.object({
     name: z.enum(['spin', 'wiggle', 'nod', 'shake', 'celebrate']),
   }),
+  /**
+   * Âm lượng loa, 10-100%.
+   *
+   * MAX98357A KHÔNG có chân chỉnh âm lượng — chỉnh phải làm bằng phần
+   * mềm, nhân hệ số vào mẫu tiếng trước khi đẩy vào I2S.
+   *
+   * Sàn 10 chứ không phải 0: "0%" nghe như robot hỏng, mà người dùng
+   * bảo "nhỏ hết cỡ" thì ý là nhỏ chứ không phải câm. Muốn câm hẳn thì
+   * dùng lệnh `mute` — một hành động rõ ràng, có thể huỷ.
+   */
+  volume: z.object({
+    level: z.number().int().min(10).max(100),
+  }),
+  /** Bật một bài trong thư viện nhạc của web. */
+  play_music: z.object({
+    /** Tên bài, tên ca sĩ, hoặc cả hai — server tự dò. */
+    query: z.string().min(1).max(120),
+  }),
+  stop_music: z.object({}).default({}),
   /** Speak an arbitrary line (server synthesises, device plays). */
   say: z.object({
     text: z.string().min(1).max(500),
@@ -108,6 +127,14 @@ export const COMMAND_TYPES = Object.keys(commandSchemas) as CommandType[];
  *  turn. Deliberately excludes reboot/ota/config — a conversation
  *  should never be able to brick the robot or flash new firmware. */
 export const LLM_ALLOWED_COMMANDS: CommandType[] = [
+  // ⚠️ Danh sách này TÁCH BIỆT với cờ `llmAllowed` trong COMMAND_CATALOG
+  // bên dưới. Bảng kia chỉ để hiện ra giao diện; đây mới là thứ chặn
+  // thật. Thêm lệnh mới mà quên chỗ này thì LLM phát lệnh xong bị vứt
+  // im lặng, và triệu chứng là "bảo nó làm mà nó không làm" — không
+  // một dòng lỗi nào.
+  'volume',
+  'play_music',
+  'stop_music',
   'move',
   'stop',
   'turn',
@@ -158,6 +185,9 @@ export function commandCheatSheet(): string {
     'head {pan,tilt}       — pan -90..90, tilt -35..35',
     'arm {side,shoulder,elbow,ms} — side: left|right|both · vai -90..90 · khuỷu -120..0 (chỉ gập vào)',
     'dance {name}          — spin|wiggle|nod|shake|celebrate',
+    'volume {level}        — âm lượng loa 10..100 (phần trăm)',
+    'play_music {query}    — bật nhạc trong thư viện; query là tên bài và/hoặc ca sĩ',
+    'stop_music {}         — tắt nhạc đang phát',
   ].join('\n');
 }
 
@@ -177,6 +207,9 @@ export const COMMAND_CATALOG: Array<{
   { type: 'head', label: 'Cổ', description: 'Xoay/gật đầu bằng servo', llmAllowed: true },
   { type: 'arm', label: 'Tay', description: 'Vai + khuỷu, hai khớp mỗi bên — vẫy, chỉ trỏ, ôm', llmAllowed: true },
   { type: 'dance', label: 'Nhảy', description: 'Chuỗi động tác dựng sẵn trong firmware', llmAllowed: true },
+  { type: 'volume', label: 'Âm lượng', description: 'Đặt âm lượng loa 10-100%', llmAllowed: true },
+  { type: 'play_music', label: 'Bật nhạc', description: 'Tìm và phát một bài trong thư viện nhạc của web', llmAllowed: true },
+  { type: 'stop_music', label: 'Tắt nhạc', description: 'Dừng bài đang phát', llmAllowed: true },
   { type: 'say', label: 'Nói', description: 'Đọc một câu bất kỳ qua loa', llmAllowed: false },
   { type: 'config', label: 'Cấu hình', description: 'Chỉnh âm lượng, độ nhạy mic, tốc độ tối đa…', llmAllowed: false },
   { type: 'reboot', label: 'Khởi động lại', description: 'Reset mềm bo mạch', llmAllowed: false },

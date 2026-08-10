@@ -29,7 +29,7 @@ const VERDICT: Record<WritingFeedback['verdict'], { label: string; cls: string }
 };
 
 // ─── Kho bài viết có hướng dẫn (chỉ EN) ───────────────────────────
-const LEVELS = ['A1', 'A2', 'B1'] as const;
+const LEVELS = ['A1', 'A2', 'B1', 'B2'] as const;
 
 function WritingPromptBank({ onUse }: { onUse: (l: WritingLesson) => void }) {
   const [level, setLevel] = useState<'all' | (typeof LEVELS)[number]>('all');

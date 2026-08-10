@@ -71,6 +71,45 @@ export default [
       { question: 'Name one way the speaker uses English daily.', answer: 'Changing the phone to English / writing short notes / talking to themselves in the mirror.' },
     ],
   },
+  {
+    slug: 'en-a1-my-best-friend',
+    level: 'A1',
+    title: 'My Best Friend',
+    transcript: `I want to tell you about my best friend. His name is Long. We have been friends since we were children. Long is tall and funny. He always makes me laugh. He likes playing games and eating pizza, just like me. We go to school together every day. When I have a problem, Long always helps me. He is kind and honest. I am very lucky to have a friend like him. A good friend is a real treasure.`,
+    translation: `Tôi muốn kể cho bạn về người bạn thân nhất của tôi. Tên cậu ấy là Long. Chúng tôi làm bạn từ khi còn nhỏ. Long cao và vui tính. Cậu ấy luôn làm tôi cười. Cậu ấy thích chơi game và ăn pizza, giống hệt tôi. Ngày nào chúng tôi cũng đi học cùng nhau. Khi tôi gặp chuyện, Long luôn giúp tôi. Cậu ấy tốt bụng và trung thực. Tôi rất may mắn khi có một người bạn như vậy. Một người bạn tốt là một kho báu thật sự.`,
+    questions: [
+      { question: 'What is the name of the speaker’s best friend?', answer: 'Long.' },
+      { question: 'How long have they been friends?', answer: 'Since they were children. (Từ khi còn nhỏ.)' },
+      { question: 'What do they both like?', answer: 'Playing games and eating pizza.' },
+      { question: 'Why does the speaker feel lucky?', answer: 'Because Long is kind, honest, and always helps.' },
+    ],
+  },
+  {
+    slug: 'en-a2-ordering-food',
+    level: 'A2',
+    title: 'Ordering Food at a Restaurant',
+    transcript: `Yesterday evening, I went to a small restaurant with my sister. A waiter gave us the menu, and we looked at it for a few minutes. I was very hungry, so I ordered fried chicken with rice and a glass of orange juice. My sister chose a bowl of noodle soup. The food came quickly, and it was delicious. The chicken was hot and crispy. After we finished, I asked the waiter for the bill. It was two hundred thousand dong for both of us. We paid, said thank you, and went home happy.`,
+    translation: `Tối hôm qua, tôi đi một nhà hàng nhỏ cùng em gái. Một người phục vụ đưa chúng tôi thực đơn, và chúng tôi xem trong vài phút. Tôi rất đói, nên gọi gà rán với cơm và một ly nước cam. Em gái tôi chọn một tô phở. Đồ ăn ra nhanh, và rất ngon. Gà nóng và giòn. Sau khi ăn xong, tôi xin người phục vụ tính tiền. Hết hai trăm nghìn đồng cho cả hai. Chúng tôi trả tiền, cảm ơn, và về nhà vui vẻ.`,
+    questions: [
+      { question: 'Who did the speaker go with?', answer: 'Their sister. (Với em gái.)' },
+      { question: 'What did the speaker order?', answer: 'Fried chicken with rice and a glass of orange juice.' },
+      { question: 'How was the food?', answer: 'Delicious — the chicken was hot and crispy.' },
+      { question: 'How much was the bill?', answer: 'Two hundred thousand dong. (200,000 đồng.)' },
+    ],
+  },
+  {
+    slug: 'en-b1-a-day-as-a-developer',
+    level: 'B1',
+    title: 'A Day as a Developer',
+    transcript: `People often ask me what a software developer does all day, so let me describe a typical day. I usually start work at nine in the morning. First, my team has a short meeting where everyone says what they did yesterday and what they will do today. After the meeting, I check my messages and plan my tasks. Most of my day is spent writing and testing code. When I find a bug, I have to read the error carefully and think about why it happens. Sometimes I get stuck for hours, but solving a hard problem feels great. In the afternoon, I often review my teammates' code and help the junior members. Before I finish, I write a short note about what I will do tomorrow. It is not always easy, but I really enjoy my job.`,
+    translation: `Mọi người hay hỏi tôi một lập trình viên làm gì cả ngày, nên để tôi mô tả một ngày điển hình. Tôi thường bắt đầu làm việc lúc chín giờ sáng. Đầu tiên, nhóm tôi họp ngắn, mỗi người nói hôm qua đã làm gì và hôm nay sẽ làm gì. Sau buổi họp, tôi kiểm tra tin nhắn và lên kế hoạch công việc. Phần lớn thời gian trong ngày tôi viết và kiểm thử mã. Khi gặp lỗi, tôi phải đọc kỹ thông báo lỗi và nghĩ xem vì sao nó xảy ra. Đôi khi tôi bí hàng giờ, nhưng giải được một vấn đề khó thì cảm giác tuyệt lắm. Buổi chiều, tôi hay xem lại mã của đồng đội và giúp các bạn mới. Trước khi xong, tôi viết một ghi chú ngắn về việc sẽ làm ngày mai. Không phải lúc nào cũng dễ, nhưng tôi thật sự thích công việc của mình.`,
+    questions: [
+      { question: 'What time does the speaker start work?', answer: 'At nine in the morning. (Chín giờ sáng.)' },
+      { question: 'What happens in the morning meeting?', answer: 'Everyone says what they did yesterday and will do today.' },
+      { question: 'What does the speaker do when they find a bug?', answer: 'Read the error carefully and think about why it happens.' },
+      { question: 'What does the speaker do in the afternoon?', answer: 'Review teammates’ code and help the junior members.' },
+    ],
+  },
 
   // ─── Nghe B1+ giọng thật (YouTube tuyển, đã kiểm oEmbed = BBC Learning English) ───
   // KHÔNG bịa transcript video thật (để null như item Podcast). Câu hỏi là gợi ý

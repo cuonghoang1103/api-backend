@@ -7,7 +7,7 @@
  *      B1 (đoạn ý kiến, email trang trọng, essay ngắn).
  */
 export interface WritingLesson {
-  level: 'A1' | 'A2' | 'B1';
+  level: 'A1' | 'A2' | 'B1' | 'B2';
   title: string;      // tiêu đề tiếng Việt
   prompt: string;     // đề bài tiếng Anh (đưa vào ô "Đề bài")
   guide: string[];    // dàn ý / gợi ý (tiếng Việt)
@@ -151,5 +151,86 @@ Tran Van Minh`,
     ],
     phrases: ['Nowadays, …', 'On the one hand, … On the other hand, …', 'It is true that …, but …', 'For instance, …', 'To sum up, / Overall, …'],
     model: `Nowadays, smartphones are part of our daily lives, and many people worry that they make us less social. In my opinion, the answer is not simple. On the one hand, it is true that some people spend too much time looking at their screens. For instance, at family dinners, everyone may check social media instead of talking to each other. This can weaken real relationships. On the other hand, smartphones also help us stay connected. Thanks to video calls and messages, I can talk to my friends who live far away every day. The problem, therefore, is not the phone itself but how we use it. To sum up, smartphones can make us less social only if we let them. Used wisely, they bring people closer together.`,
+  },
+  // ─────────── A2 (thêm) ───────────
+  {
+    level: 'A2',
+    title: 'Mô tả người bạn thân nhất',
+    prompt: 'Describe your best friend in 6–8 sentences. What is his/her name and appearance? What is his/her personality? What do you do together, and why do you like him/her?',
+    guide: [
+      'Giới thiệu: My best friend is … / His/Her name is …',
+      'Ngoại hình: tall/short, ...',
+      'Tính cách: kind, funny, honest …',
+      'Cùng làm gì + vì sao quý (because …).',
+    ],
+    phrases: ['My best friend is …', 'He/She is … (tall, funny, kind)', 'We often … together', 'He/She always …', 'I like him/her because …'],
+    model: `My best friend is Linh. We have known each other for ten years. She is tall and has long black hair. Linh is very kind and funny, and she always listens to me when I have a problem. We often go shopping and drink milk tea together on weekends. She also helps me study English. I like her because she is honest and I can trust her with anything. I am lucky to have such a good friend.`,
+  },
+  // ─────────── B1 (thêm) ───────────
+  {
+    level: 'B1',
+    title: 'Email phàn nàn (sản phẩm/dịch vụ)',
+    prompt: 'Write a polite complaint email (90–110 words) to an online shop. You bought a product that arrived broken. Explain the problem clearly and say what you want them to do.',
+    guide: [
+      'Chào + nêu lý do viết: I am writing to complain about …',
+      'Mô tả vấn đề rõ ràng (đơn hàng, tình trạng).',
+      'Nêu mong muốn: I would like a refund / replacement.',
+      'Kết lịch sự: I look forward to your reply. Best regards, …',
+    ],
+    phrases: ['I am writing to complain about …', 'Unfortunately, …', 'When it arrived, …', 'I would like a refund / a replacement.', 'I look forward to hearing from you.', 'Best regards, …'],
+    model: `Dear Customer Service,
+
+I am writing to complain about a product I bought from your website on June 3rd (order #A1234). It was a Bluetooth speaker. Unfortunately, when the package arrived, the speaker was broken and it does not turn on.
+
+I have been a customer for a long time, and I was very disappointed. I would like a replacement or a full refund as soon as possible. I have attached photos of the damaged item.
+
+I look forward to hearing from you.
+
+Best regards,
+Pham Thu Ha`,
+  },
+  // ─────────── B2 ───────────
+  {
+    level: 'B2',
+    title: 'Essay: lợi & hại của làm việc từ xa',
+    prompt: 'Write a for-and-against essay (180–220 words) about remote work. Discuss the advantages and disadvantages, and give your own opinion in the conclusion.',
+    guide: [
+      'Mở bài: giới thiệu chủ đề + nói bài sẽ bàn cả hai mặt.',
+      'Đoạn 2: lợi ích (2 ý + ví dụ).',
+      'Đoạn 3: bất lợi (2 ý + ví dụ).',
+      'Kết bài: quan điểm cân bằng của bạn (In my view, …).',
+    ],
+    phrases: ['There are both advantages and disadvantages to …', 'On the positive side, …', 'A major benefit is that …', 'However, there are also drawbacks.', 'Another disadvantage is that …', 'In my view, … / All things considered, …'],
+    model: `Remote work has become common in recent years, and it brings both advantages and disadvantages.
+
+On the positive side, working from home saves a lot of time and money because employees do not have to commute. It also offers flexibility: people can organize their day around their own needs, which often improves their work-life balance. For example, a parent can be at home when their children return from school.
+
+However, there are also drawbacks. Working alone can feel isolating, and some people find it hard to separate work from personal life. Communication may become slower, and new employees can struggle without face-to-face support from their colleagues.
+
+In my view, remote work is a valuable option, but it is not perfect for everyone. A hybrid model — a few days at home and a few in the office — probably offers the best balance between flexibility and teamwork. Companies should let employees choose what suits them, as long as the work gets done well.`,
+  },
+  {
+    level: 'B2',
+    title: 'Thư xin việc ngắn (cover letter)',
+    prompt: 'Write a short cover letter (150–180 words) for a junior developer job. Say why you are interested, mention your main skills, and explain why you would be a good fit.',
+    guide: [
+      'Chào + vị trí ứng tuyển: I am writing to apply for …',
+      'Vì sao quan tâm công ty/vị trí.',
+      'Kỹ năng chính + 1 ví dụ/dự án.',
+      'Vì sao phù hợp + lời cảm ơn + kết trang trọng.',
+    ],
+    phrases: ['I am writing to apply for the position of …', 'I am particularly interested in … because …', 'I have experience in …', 'In my last project, I …', 'I am confident that I would be a good fit …', 'Thank you for considering my application.'],
+    model: `Dear Hiring Manager,
+
+I am writing to apply for the Junior Developer position at your company, which I saw on your website. I have always admired your products, and I am excited about the chance to grow as part of your team.
+
+I recently completed a degree in information technology, and I have solid skills in JavaScript, React, and Node.js. In my final project, I built a small e-commerce website from start to finish, which taught me how to solve real problems and work under deadlines. I also enjoy learning new tools quickly.
+
+I am hard-working, curious, and I communicate well with teammates. I am confident that I would be a good fit for your team, and I am eager to contribute and keep learning.
+
+Thank you for considering my application. I look forward to the opportunity to discuss my qualifications with you.
+
+Best regards,
+Le Van An`,
   },
 ];

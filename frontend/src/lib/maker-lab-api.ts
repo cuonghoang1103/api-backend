@@ -137,3 +137,31 @@ export async function setComponentAcquired(
   const res = await api.patch(`${BASE}/components/${componentId}/acquired`, { acquired });
   return res.data?.data;
 }
+
+// ─── Persona (admin) ───────────────────────────────────────
+
+export interface PersonaPayload {
+  name?: string;
+  systemPrompt?: string;
+  voiceProvider?: string;
+  voiceId?: string | null;
+  language?: string;
+  sampleDialogues?: Array<{ user: string; bot: string }>;
+  wakeWord?: string | null;
+  temperature?: number;
+  maxTokens?: number;
+}
+
+/**
+ * Sửa tính cách + giọng nói của robot.
+ *
+ * Đường admin chứ không phải đường công khai: persona quyết định robot
+ * nói gì ra loa trong nhà bạn, nên nó không phải thứ ai cũng sửa được.
+ */
+export async function updatePersona(
+  projectId: number,
+  payload: PersonaPayload,
+): Promise<unknown> {
+  const res = await api.put(`/admin${BASE}/projects/${projectId}/persona`, payload);
+  return res.data?.data;
+}

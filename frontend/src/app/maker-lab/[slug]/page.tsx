@@ -27,6 +27,7 @@ import {
   FileCode2,
   Gauge,
   Loader2,
+  Mic2,
   NotebookPen,
   Radio,
   Sparkles,
@@ -43,6 +44,9 @@ import { FirmwarePlan } from '@/components/maker-lab/FirmwarePlan';
 import { RobotBlueprint } from '@/components/maker-lab/RobotBlueprint';
 import { ProjectDocs } from '@/components/maker-lab/ProjectDocs';
 import { ProjectNotebook } from '@/components/maker-lab/ProjectNotebook';
+import PersonaEditor from '@/components/maker-lab/PersonaEditor';
+import { listDevices } from '@/lib/maker-lab-api';
+import type { MakerDevice } from '@/types/maker-lab';
 import type { MakerProjectDetail } from '@/types/maker-lab';
 
 const TABS = [
@@ -52,6 +56,7 @@ const TABS = [
   { id: 'wiring', label: 'Nối dây', icon: Zap },
   { id: 'firmware', label: 'Firmware', icon: FileCode2 },
   { id: 'console', label: 'Điều khiển', icon: Radio },
+  { id: 'persona', label: 'Tính cách', icon: Mic2 },
   { id: 'notebook', label: 'Sổ tay', icon: NotebookPen },
   { id: 'docs', label: 'Nhật ký', icon: Cpu },
 ] as const;
@@ -66,6 +71,9 @@ export default function MakerProjectPage() {
 
   const [project, setProject] = useState<MakerProjectDetail | null>(null);
   const [loading, setLoading] = useState(true);
+  // Chỉ dùng cho nút "Nghe thử" ở tab Tính cách. Lỗi thì bỏ qua: chưa
+  // đăng nhập là 401, mà cả trang vẫn phải xem được bình thường.
+  const [devices, setDevices] = useState<MakerDevice[]>([]);
   const [tab, setTab] = useState<TabId>(() => {
     const t = search.get('tab');
     return (TABS.find((x) => x.id === t)?.id ?? 'overview') as TabId;
@@ -79,6 +87,11 @@ export default function MakerProjectPage() {
         setProject(await getProject(slug));
       } finally {
         setLoading(false);
+      }
+      try {
+        setDevices(await listDevices());
+      } catch {
+        /* chưa đăng nhập — nút "Nghe thử" tự vô hiệu hoá */
       }
     })();
   }, [slug]);
@@ -218,6 +231,14 @@ export default function MakerProjectPage() {
       )}
       {tab === 'console' && (
         <DeviceConsole projectId={project.id} projectSlug={project.slug} isAuthed={isAuthed} />
+      )}
+      {tab === 'persona' && (
+        <PersonaEditor
+          projectId={project.id}
+          persona={project.persona}
+          devices={devices}
+          accent={accent}
+        />
       )}
       {tab === 'notebook' && <ProjectNotebook data={project.notebook} />}
       {tab === 'docs' && <ProjectDocs project={project} />}

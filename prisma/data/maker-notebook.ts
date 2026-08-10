@@ -209,6 +209,21 @@ export const NOTEBOOK: Notebook = {
       tags: ['platformio'],
     },
     {
+      symptom: 'Phép kiểm tự động báo "loa không kêu" nhưng tai nghe rõ mồn một',
+      cause:
+        'Phép kiểm phát nốt rồi đo mức micro để tự xác nhận loa. Nhưng micro và loa đặt cách nhau vài chục cm và lệch hướng màng, nên tiếng vọng về không vượt nổi mức nền. Phép đo trả về "không nghe thấy" trong khi mạch hoàn toàn đúng.',
+      fix: 'Phép đo âm thanh gián tiếp chỉ dùng để XÁC NHẬN DƯƠNG TÍNH: nghe thấy → chắc chắn loa kêu. Không nghe thấy thì KHÔNG kết luận được gì — phải nghe bằng tai. Đã sửa firmware để nói đúng điều đó thay vì báo ❌.',
+      costMe: 'Suýt đi tháo lại toàn bộ dây của một mạch vốn đã đúng',
+      tags: ['kiểm thử', 'loa', 'bài học'],
+    },
+    {
+      symptom: 'Micro đọc ra mức nền 39000 trong khi bình thường chỉ 1200',
+      cause:
+        'Đọc I2S ngay sau khi cài driver. Micro MEMS cần vài chục mili giây để ổn định; những khối dữ liệu đầu tiên lệch rất lớn.',
+      fix: 'Sau `i2s_driver_install`, đọc và VỨT khoảng 20 khối đầu rồi mới bắt đầu đo. Cũng đừng dùng timeout ngắn cho `i2s_read` khi đang đo — timeout làm `got` về 0 ở phần lớn vòng lặp và trung bình tính ra sai lệch.',
+      tags: ['i2s', 'inmp441', 'kiểm thử'],
+    },
+    {
       symptom: 'MAX98357A: không biết nối chân GAIN vào đâu, và hay nhầm nó với chân SD',
       cause:
         'Cả hai chân đều theo kiểu "nối vào đâu thì ra kết quả khác", lại nằm cạnh nhau. GAIN có 5 mức: GND qua trở 100k=15dB · GND=12dB · ĐỂ HỞ=9dB · Vin=6dB · Vin qua trở 100k=3dB. Còn SD thì nối GND là TẮT HẲN chip.',

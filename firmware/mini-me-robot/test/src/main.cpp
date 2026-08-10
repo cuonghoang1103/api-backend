@@ -531,6 +531,141 @@ static void testI2c() {
   }
 }
 
+/**
+ * Kiểm loa bằng chính MICRO — không cần tai người.
+ *
+ * Phát một nốt rồi đo mức micro trong lúc phát, so với mức nền đo
+ * trước đó. Loa kêu thật thì micro thấy chênh lệch rõ; loa câm thì hai
+ * con số bằng nhau.
+ *
+ * Cách này trả lời được câu "loa có kêu không" mà không phải hỏi ai —
+ * và nó cũng chính là phép đo cho biết tiếng loa có vọng ngược vào
+ * micro đủ mạnh để gây vòng lặp phản hồi hay không.
+ */
+static void testLoopback() {
+  head("KIỂM LOA BẰNG MICRO — máy tự nghe, không cần tai người");
+  micInit();
+
+  int32_t samples[256];
+  size_t got = 0;
+
+  // Vứt bỏ những khối đầu tiên. Ngay sau khi cài driver I2S, micro
+  // chưa ổn định và trả về giá trị lệch rất lớn — lần chạy trước đo
+  // ra mức nền 39000 trong khi thực tế chỉ 1200, đủ để kết luận sai
+  // là loa hỏng.
+  Serial.println("  Chờ micro ổn định...");
+  for (int i = 0; i < 20; i++) {
+    i2s_read(I2S_NUM_0, samples, sizeof(samples), &got, portMAX_DELAY);
+  }
+
+  // ── Đo nền: im lặng ──
+  Serial.println("  Đang đo mức nền (giữ yên lặng 2 giây)...");
+  int64_t sum = 0;
+  int count = 0;
+  uint32_t t0 = millis();
+  while (millis() - t0 < 2000) {
+    i2s_read(I2S_NUM_0, samples, sizeof(samples), &got, portMAX_DELAY);
+    int n = got / sizeof(int32_t);
+    for (int i = 0; i < n; i++) sum += abs(samples[i] >> 8);
+    count += n;
+  }
+  int32_t baseline = count ? sum / count : 0;
+  Serial.printf("  Mức nền     : %ld\n", baseline);
+
+  // ── Bật loa ──
+  i2s_config_t out = {
+      .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_TX),
+      .sample_rate = 22050,
+      .bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT,
+      .channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT,
+      .communication_format = I2S_COMM_FORMAT_STAND_I2S,
+      .intr_alloc_flags = 0,
+      .dma_buf_count = 8,
+      .dma_buf_len = 256,
+      .use_apll = false,
+  };
+  i2s_pin_config_t opins = {
+      .bck_io_num = PIN_AMP_BCLK,
+      .ws_io_num = PIN_AMP_LRC,
+      .data_out_num = PIN_AMP_DIN,
+      .data_in_num = I2S_PIN_NO_CHANGE,
+  };
+  i2s_driver_install(I2S_NUM_1, &out, 0, NULL);
+  i2s_set_pin(I2S_NUM_1, &opins);
+
+  // ── Phát nốt 880 Hz và đo micro CÙNG LÚC ──
+  // 880 Hz (nốt la cao) vì nó nằm giữa dải nhạy nhất của micro MEMS
+  // và xa hẳn tiếng ồn tần số thấp của quạt/máy tính.
+  Serial.println("  Đang phát nốt và nghe lại...");
+  sum = 0;
+  count = 0;
+  int32_t peak = 0;
+  int16_t frame[2];
+  t0 = millis();
+  uint32_t phase = 0;
+
+  while (millis() - t0 < 2500) {
+    // Đẩy một khối âm thanh ra loa
+    for (int i = 0; i < 220; i++) {
+      int16_t v = (int16_t)(sinf(2 * PI * 880.0f * phase / 22050.0f) * 9000);
+      frame[0] = frame[1] = v;
+      size_t w;
+      i2s_write(I2S_NUM_1, frame, sizeof(frame), &w, portMAX_DELAY);
+      phase++;
+    }
+    // Rồi đọc micro nghe được gì. portMAX_DELAY chứ không phải timeout
+    // ngắn: timeout làm `got` về 0 ở phần lớn vòng lặp và trung bình
+    // tính ra thấp hơn cả mức nền — đúng cái bẫy lần chạy trước dính.
+    i2s_read(I2S_NUM_0, samples, sizeof(samples), &got, portMAX_DELAY);
+    int n = got / sizeof(int32_t);
+    for (int i = 0; i < n; i++) {
+      int32_t a = abs(samples[i] >> 8);
+      sum += a;
+      if (a > peak) peak = a;
+    }
+    count += n;
+  }
+
+  i2s_driver_uninstall(I2S_NUM_1);
+
+  int32_t heard = count ? sum / count : 0;
+  float ratio = baseline > 0 ? (float)heard / baseline : 0;
+
+  line();
+  Serial.printf("  Mức khi phát: %ld  (đỉnh %ld)\n", heard, peak);
+  Serial.printf("  Gấp nền     : %.1f lần\n", ratio);
+  line();
+
+  // ⚠️ Phép đo này KHÔNG kết luận được "loa hỏng".
+  //
+  // Ngày 10/08/2026 nó báo ❌ trong khi loa kêu to rõ — tai người xác
+  // nhận. Lý do: micro và loa đặt cách nhau vài chục cm và lệch hướng
+  // màng, nên tiếng vọng về không đủ vượt nền. Kết quả là suýt đi tháo
+  // lại toàn bộ dây của một mạch vốn đã đúng.
+  //
+  // Vì vậy: chỉ dùng nó để XÁC NHẬN DƯƠNG TÍNH (nghe thấy → chắc chắn
+  // loa kêu). Không nghe thấy thì chưa nói lên điều gì — phải nghe
+  // bằng tai.
+  if (ratio > 2.5f) {
+    Serial.println("  ✅ LOA KÊU THẬT — micro nghe rõ tiếng loa.");
+    Serial.println("     Cả hai linh kiện đều hoạt động.");
+    if (ratio > 25.0f) {
+      Serial.println("  ⚠️  Tiếng vọng vào micro RẤT mạnh. Khi lắp vào vỏ phải");
+      Serial.println("     tách micro xa loa, nếu không robot sẽ tự nghe chính nó.");
+    }
+  } else {
+    Serial.println("  ⚠️  Micro không nghe thấy tiếng loa — NHƯNG CHƯA KẾT LUẬN ĐƯỢC.");
+    Serial.println("     Micro có thể đặt xa loa hoặc lệch hướng màng.");
+    Serial.println("     ➜ Chạy lệnh 2 và NGHE BẰNG TAI. Đó mới là câu trả lời thật.");
+    Serial.println();
+    Serial.println("     Nếu tai cũng không nghe thấy gì thì mới kiểm:");
+    Serial.println("     • Chân SD nối GND là chip TẮT → để trống");
+    Serial.println("     • Vin phải là 5 V (3V3 thì tiếng nhỏ hẳn)");
+    Serial.println("     • Chân − của loa KHÔNG nối đất");
+    Serial.println("     • BCLK=15, LRC=16, DIN=7");
+  }
+}
+
 static void testBattery() {
   head("KIỂM NGUỒN");
   analogReadResolution(12);
@@ -554,6 +689,7 @@ static void menu() {
   Serial.println("  2  Kiểm loa MAX98357A");
   Serial.println("  3  Quét bus I2C (tìm màn OLED, cảm biến)");
   Serial.println("  4  Kiểm nguồn / ADC");
+  Serial.println("  5  Kiểm loa BẰNG MICRO (máy tự nghe, không cần tai)");
   Serial.println("  9  Chạy lại menu");
   line('=');
   Serial.print("  Chọn: ");
@@ -582,6 +718,7 @@ void loop() {
     case '2': testSpeaker(); break;
     case '3': testI2c(); break;
     case '4': testBattery(); break;
+    case '5': testLoopback(); break;
     case '9': break;
     default: return;
   }

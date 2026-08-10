@@ -437,6 +437,22 @@ void beep(uint16_t freq, uint16_t ms, uint8_t loudness) {
     size_t w = 0;
     i2s_write(I2S_NUM_1, stereoBlock, sizeof(stereoBlock), &w, portMAX_DELAY);
   }
+
+  // ⚠️ CÂM MIC sau khi bíp, nếu không robot nghe thấy chính tiếng bíp
+  // của mình.
+  //
+  // Vòng lặp nó tạo ra: khép lượt → bíp → mic nghe tiếng bíp → mở
+  // lượt mới → khép lượt → bíp… Người dùng nghe thành "tịt tịt inh
+  // ỏi liên tục", và mỗi vòng còn tốn một lần gọi Whisper.
+  //
+  // Đây đúng cái bẫy đã dựng hàng rào ở đường phát tiếng nói mà lại
+  // quên ở đường tiếng báo — vì lúc viết chỉ nghĩ nó "ngắn quá, không
+  // sao đâu".
+  loudRun = 0;
+  micOpen = false;
+  micQuietAt = 0;
+  prerollCount = 0;
+  micResumeAt = millis() + MIC_RESUME_DELAY_MS;
 }
 
 // ─── Nghe ──────────────────────────────────────────────────

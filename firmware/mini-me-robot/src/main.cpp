@@ -459,18 +459,21 @@ static void onTurnEnd() {
   // "Nghe rồi." Phát NGAY, trước cả khi gói tin rời ăng-ten — vì thứ
   // cần khẳng định là mic đã bắt được, và bo tự biết điều đó.
   //
-  // MỘT nốt chứ không phải chuỗi nốt: đây là dấu hiệu nghe cả ngày,
-  // càng gọn càng đỡ phiền. 1047 Hz (đô cao) nghe trong và thân thiện,
-  // không chói như tiếng báo lỗi.
+  // ⚠️ TIẾNG BÍP XÁC NHẬN ĐÃ TẮT — người dùng thấy ồn.
   //
-  // Chốt chặn 1,5 giây: VAD kích nhầm mấy lần liền thì cũng chỉ kêu
-  // một tiếng. Tiếng báo dồn dập còn khó chịu hơn là không có.
-  static uint32_t lastBeepMs = 0;
-  const uint32_t nowMs = millis();
-  if (nowMs - lastBeepMs > 1500) {
-    lastBeepMs = nowMs;
-    audio::beep(1047, 55, 35);
-  }
+  // Ý tưởng đúng (báo "nghe rồi" để khỏi phải hỏi lại) nhưng thực tế
+  // sai: VAD kích nhầm bao nhiêu lần thì bíp bấy nhiêu lần, và một
+  // tiếng động lặp đi lặp lại trong phòng khó chịu hơn nhiều so với
+  // vài giây im lặng chờ câu trả lời.
+  //
+  // Tín hiệu "nghe rồi" vẫn còn, chỉ là ở dạng KHÔNG gây ồn: màn hình
+  // 3.5" đổi sang "DANG NGHE" rồi "DANG NGHI". Nhìn là biết, mà không
+  // ai phải nghe thêm cái gì.
+  //
+  // Muốn bật lại thì bỏ chú thích khối dưới:
+  //   static uint32_t lastBeepMs = 0;
+  //   if (millis() - lastBeepMs > 4000) { lastBeepMs = millis(); audio::beep(1047, 55, 35); }
+
   st.mode = MODE_THINK;
   thinkSinceMs = millis();
   st.lastNote = "dang cho server tra loi";
@@ -612,9 +615,18 @@ static void onWsEvent(WStype_t type, uint8_t* payload, size_t len) {
         // đứng chờ một câu trả lời không bao giờ tới.
         st.mode = MODE_IDLE;
         st.lastNote = "khong nghe ro - noi lai di";
-        // Một nốt THẤP — phân biệt với tiếng "nghe rồi" chỉ bằng cao
-        // độ, không cần nghe hết chuỗi mới biết là tin xấu.
-        audio::beep(494, 90, 35);
+        // Tiếng này GIỮ LẠI, và nó không gây ồn như tiếng xác nhận đã
+        // tắt ở trên — vì nó chỉ kêu khi robot KHÔNG hiểu, tức là khi
+        // đằng nào cũng chẳng có câu trả lời nào để nghe. Nó lấp vào
+        // chỗ im lặng chứ không chồng thêm lên tiếng nói.
+        //
+        // Vẫn có chốt chặn 6 giây: phòng ồn thì server bắn nak liên
+        // tục, mà lúc đó tiếng báo không còn mang tin gì.
+        static uint32_t lastNakMs = 0;
+        if (millis() - lastNakMs > 6000) {
+          lastNakMs = millis();
+          audio::beep(494, 90, 30);
+        }
       } else if (!strcmp(t, "error")) {
         st.mode = MODE_IDLE;
         st.lastNote = String("loi: ") + (const char*)(doc["msg"] | "?");

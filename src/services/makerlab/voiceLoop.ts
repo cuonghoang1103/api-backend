@@ -342,6 +342,14 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
     // và người dùng kết luận là con AI bị ngu.
     const check = checkHeardSpeech(heard, tr);
     if (!check.ok) {
+      // Báo cho bo biết là KHÔNG hiểu, để nó bíp hai nốt đi xuống.
+      //
+      // Không có tín hiệu này thì người dùng đứng chờ một câu trả lời
+      // không bao giờ tới, rồi tự hỏi lại — và câu hỏi thứ hai đè lên
+      // lượt đang xử lý. Im lặng là phản hồi tệ nhất có thể.
+      void import('../../socket/device.gateway.js')
+        .then(({ notifyDevice }) => notifyDevice(input.deviceId, { t: 'nak' }))
+        .catch(() => undefined);
       logger.info('MakerLab bỏ lượt: Whisper bịa', {
         deviceId: input.deviceId,
         heard: heard.slice(0, 80),

@@ -389,6 +389,56 @@ static void pumpPlayback() {
   }
 }
 
+// ─── Tiếng báo ─────────────────────────────────────────────
+/**
+ * Một tiếng "bíp" ngắn phát thẳng ra I2S.
+ *
+ * Vì sao cần: người dùng nói xong KHÔNG biết robot đã nghe được hay
+ * chưa. Câu trả lời mất một hai giây mới tới, và trong khoảng im lặng
+ * đó người ta tự động hỏi lại — rồi câu hỏi thứ hai đè lên lượt đang
+ * xử lý, làm hỏng cả hai. Một tiếng bíp ngay lúc khép lượt cắt đứt
+ * vòng đó: "nghe rồi, đang nghĩ".
+ *
+ * Phát TẠI CHỖ chứ không xin server, vì thứ cần khẳng định là "MIC đã
+ * bắt được", và điều đó bo tự biết trước cả khi gói tin rời ăng-ten.
+ * Bíp qua server thì mất luôn ý nghĩa lúc mạng chậm — đúng lúc cần
+ * nhất.
+ *
+ * Có vuốt biên độ hai đầu: cắt cụt sóng sin là nghe thành tiếng "cụp"
+ * chứ không phải tiếng bíp.
+ */
+void beep(uint16_t freq, uint16_t ms, uint8_t loudness) {
+  if (!ampReady || playState != PLAY_IDLE) return;
+
+  const uint32_t total = (uint32_t)playRate * ms / 1000;
+  const uint32_t fade = total / 6;
+  const float amp = 9000.0f * (loudness / 100.0f) * (volumePct / 100.0f);
+
+  uint32_t done = 0;
+  while (done < total) {
+    const uint32_t n = (total - done) < AUDIO_BLOCK_SAMPLES ? (total - done) : AUDIO_BLOCK_SAMPLES;
+    for (uint32_t i = 0; i < n; i++) {
+      const uint32_t k = done + i;
+      float env = 1.0f;
+      if (k < fade) env = (float)k / fade;
+      else if (k > total - fade) env = (float)(total - k) / fade;
+      const int16_t v = (int16_t)(sinf(2.0f * PI * freq * k / playRate) * amp * env);
+      stereoBlock[i * 2] = v;
+      stereoBlock[i * 2 + 1] = v;
+    }
+    size_t w = 0;
+    i2s_write(I2S_NUM_1, stereoBlock, n * 2 * sizeof(int16_t), &w, portMAX_DELAY);
+    done += n;
+  }
+
+  // Đuôi im lặng, nếu không DMA lặp lại tiếng bíp mãi.
+  memset(stereoBlock, 0, sizeof(stereoBlock));
+  for (int i = 0; i < 4; i++) {
+    size_t w = 0;
+    i2s_write(I2S_NUM_1, stereoBlock, sizeof(stereoBlock), &w, portMAX_DELAY);
+  }
+}
+
 // ─── Nghe ──────────────────────────────────────────────────
 
 /** Vứt sạch những gì DMA thu được trong lúc robot đang nói. */

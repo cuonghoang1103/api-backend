@@ -336,6 +336,19 @@ export function speakStreamPushPcm(deviceId: number, pcm: Buffer, seq: number): 
   return true;
 }
 
+/**
+ * Gửi một gói JSON bất kỳ xuống bo.
+ *
+ * Dùng cho tín hiệu ngắn không phải lệnh: "nak" (nghe không ra chữ),
+ * báo lỗi… Những thứ này không nên đi qua bảng lệnh vì chúng không
+ * cần lưu vào sổ, không cần ack, và không được phép chờ.
+ */
+export function notifyDevice(deviceId: number, payload: Record<string, unknown>): boolean {
+  const conn = connections.get(deviceId);
+  if (!conn) return false;
+  return sendJson(conn, payload);
+}
+
 /** Bo này có nhận PCM thô không — để bên gọi biết cần đổi hay không. */
 export function deviceWantsPcm(deviceId: number): boolean {
   return connections.get(deviceId)?.audioFormat === 'pcm';

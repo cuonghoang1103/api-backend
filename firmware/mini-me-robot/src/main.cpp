@@ -455,6 +455,15 @@ static void onChunk(const uint8_t* data, size_t len) {
 
 static void onTurnEnd() {
   upFlush();
+
+  // "Nghe rồi." Phát NGAY, trước cả khi gói tin rời ăng-ten — vì thứ
+  // cần khẳng định là mic đã bắt được, và bo tự biết điều đó.
+  //
+  // Hai nốt đi lên (880 → 1320 Hz) để phân biệt rõ với tiếng báo
+  // KHÔNG hiểu ở dưới, vốn đi xuống. Tai người nhận ra hướng giai
+  // điệu nhanh hơn nhiều so với nhận ra cao độ tuyệt đối.
+  audio::beep(880, 45);
+  audio::beep(1320, 55);
   st.mode = MODE_THINK;
   thinkSinceMs = millis();
   st.lastNote = "dang cho server tra loi";
@@ -590,9 +599,18 @@ static void onWsEvent(WStype_t type, uint8_t* payload, size_t len) {
         const String text = String(doc["text"] | "");
         if (!strcmp(role, "bot")) st.said = deaccent(text, 60);
         else st.heard = deaccent(text, 60);
+      } else if (!strcmp(t, "nak")) {
+        // Server nghe thành tiếng ồn chứ không ra câu nào. Báo bằng
+        // hai nốt ĐI XUỐNG để bạn biết ngay là phải nói lại — thay vì
+        // đứng chờ một câu trả lời không bao giờ tới.
+        st.mode = MODE_IDLE;
+        st.lastNote = "khong nghe ro - noi lai di";
+        audio::beep(660, 60);
+        audio::beep(440, 90);
       } else if (!strcmp(t, "error")) {
         st.mode = MODE_IDLE;
         st.lastNote = String("loi: ") + (const char*)(doc["msg"] | "?");
+        audio::beep(440, 120);
       }
       break;
     }

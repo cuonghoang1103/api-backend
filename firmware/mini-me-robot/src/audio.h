@@ -62,6 +62,13 @@ void playStop();
 void setVolume(uint8_t pct);
 uint8_t volume();
 
+/**
+ * Tiếng bíp báo hiệu, phát ngay tại bo.
+ * `loudness` 0-100 là mức so với âm lượng đang đặt — tiếng báo nên
+ * nhỏ hơn giọng nói, nó là dấu hiệu chứ không phải nội dung.
+ */
+void beep(uint16_t freq, uint16_t ms, uint8_t loudness = 45);
+
 // ─── Xem trạng thái (cho màn hình) ───────────────────────
 bool speaking();
 bool listening();

@@ -459,11 +459,18 @@ static void onTurnEnd() {
   // "Nghe rồi." Phát NGAY, trước cả khi gói tin rời ăng-ten — vì thứ
   // cần khẳng định là mic đã bắt được, và bo tự biết điều đó.
   //
-  // Hai nốt đi lên (880 → 1320 Hz) để phân biệt rõ với tiếng báo
-  // KHÔNG hiểu ở dưới, vốn đi xuống. Tai người nhận ra hướng giai
-  // điệu nhanh hơn nhiều so với nhận ra cao độ tuyệt đối.
-  audio::beep(880, 45);
-  audio::beep(1320, 55);
+  // MỘT nốt chứ không phải chuỗi nốt: đây là dấu hiệu nghe cả ngày,
+  // càng gọn càng đỡ phiền. 1047 Hz (đô cao) nghe trong và thân thiện,
+  // không chói như tiếng báo lỗi.
+  //
+  // Chốt chặn 1,5 giây: VAD kích nhầm mấy lần liền thì cũng chỉ kêu
+  // một tiếng. Tiếng báo dồn dập còn khó chịu hơn là không có.
+  static uint32_t lastBeepMs = 0;
+  const uint32_t nowMs = millis();
+  if (nowMs - lastBeepMs > 1500) {
+    lastBeepMs = nowMs;
+    audio::beep(1047, 55, 35);
+  }
   st.mode = MODE_THINK;
   thinkSinceMs = millis();
   st.lastNote = "dang cho server tra loi";
@@ -605,12 +612,13 @@ static void onWsEvent(WStype_t type, uint8_t* payload, size_t len) {
         // đứng chờ một câu trả lời không bao giờ tới.
         st.mode = MODE_IDLE;
         st.lastNote = "khong nghe ro - noi lai di";
-        audio::beep(660, 60);
-        audio::beep(440, 90);
+        // Một nốt THẤP — phân biệt với tiếng "nghe rồi" chỉ bằng cao
+        // độ, không cần nghe hết chuỗi mới biết là tin xấu.
+        audio::beep(494, 90, 35);
       } else if (!strcmp(t, "error")) {
         st.mode = MODE_IDLE;
         st.lastNote = String("loi: ") + (const char*)(doc["msg"] | "?");
-        audio::beep(440, 120);
+        audio::beep(392, 130, 35);
       }
       break;
     }

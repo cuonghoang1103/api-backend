@@ -24,6 +24,9 @@ import {
   Layers,
   Search,
   GraduationCap,
+  Ear,
+  Scissors,
+  CalendarClock,
 } from 'lucide-react';
 
 import DrillPanel from './DrillPanel';
@@ -33,16 +36,24 @@ import KanjiNumberPanel from './KanjiNumberPanel';
 import LessonPanel from './LessonPanel';
 import FeBankPanel from './FeBankPanel';
 import PersonalQAPanel from './PersonalQAPanel';
+import ListeningPanel from './ListeningPanel';
+import ReadAloudPanel from './ReadAloudPanel';
 import { LESSONS } from './data/lessons';
 
 import {
   PLAN,
+  PHASES,
   DAILY_RITUAL,
   ALL_TASKS,
   TOTAL_MINUTES,
   CORE_MINUTES,
+  RITUAL_MINUTES_PER_DAY,
+  JPD123_TASKS,
   KIND_META,
-  EXAM_DATE,
+  DEFAULT_START,
+  START_STORAGE_KEY,
+  dateForDay,
+  dowForDate,
   EXAM_FE,
   EXAM_READING,
   EXAM_SPEAKING,
@@ -51,6 +62,7 @@ import {
   type StudyTask,
   type StudyDay,
 } from './data/plan';
+import { LISTEN_ITEM_COUNT } from './data/listening';
 import {
   HIRAGANA,
   KATAKANA,
@@ -91,12 +103,22 @@ import {
  *    mount để server render và client render đầu tiên khớp nhau.
  */
 
-const PROGRESS_KEY = 'jpd113:progress:v1';
+/**
+ * v2: lộ trình 5 ngày cũ đã hoàn thành vòng đời của nó (và kỳ thi đó đã trượt).
+ * Giữ nguyên key v1 thì lộ trình 30 ngày mới mở ra đã tích sẵn một mớ việc từ đợt
+ * nhồi tháng 8 — vừa sai sự thật vừa làm hỏng thanh tiến độ. Đổi key = bắt đầu sạch.
+ */
+const PROGRESS_KEY = 'jpd113:progress:v2';
 
-type TabId = 'plan' | 'drill' | 'vocab' | 'cheat' | 'speak' | 'exam';
+/** Khoá tiến độ của một việc LẶP trong một ngày cụ thể: `<id>@2026-08-11` */
+const ritualKey = (id: string, iso: string) => `${id}@${iso}`;
+
+type TabId = 'plan' | 'listen' | 'read' | 'drill' | 'vocab' | 'cheat' | 'speak' | 'exam';
 
 const TABS: { id: TabId; label: string; icon: typeof Target }[] = [
-  { id: 'plan', label: 'Lộ trình 5 ngày', icon: CalendarDays },
+  { id: 'plan', label: 'Lộ trình 30 ngày', icon: CalendarDays },
+  { id: 'listen', label: 'Nghe hiểu', icon: Ear },
+  { id: 'read', label: 'Đọc to', icon: Scissors },
   { id: 'drill', label: 'Luyện gõ chữ', icon: Keyboard },
   { id: 'vocab', label: 'Từ vựng', icon: Layers },
   { id: 'cheat', label: 'Bảng tra cứu', icon: BookOpen },
@@ -112,6 +134,7 @@ export default function OnThiJPD113Client() {
   const [coreOnly, setCoreOnly] = useState(false);
   const [openDay, setOpenDay] = useState<number | null>(null);
   const [today, setToday] = useState<string>('');
+  const [start, setStart] = useState<string>(DEFAULT_START);
 
   /* ── Hydrate: localStorage + ngày hệ thống ─────────────────── */
   useEffect(() => {
@@ -135,9 +158,35 @@ export default function OnThiJPD113Client() {
       /* bỏ qua */
     }
 
-    // Mở sẵn ngày hôm nay; ngày thi qua rồi thì mở ngày cuối
-    const idx = PLAN.findIndex((d) => d.date === iso);
-    setOpenDay(idx >= 0 ? PLAN[idx].n : iso > EXAM_DATE ? PLAN[PLAN.length - 1].n : PLAN[0].n);
+    // Ngày bắt đầu do người học chọn. Chưa chọn thì lấy HÔM NAY — lộ trình đánh số
+    // Ngày 1..30 nên bắt đầu lúc nào cũng chạy được, không có ngày nào "đã lỡ".
+    let startISO = iso;
+    try {
+      const raw = localStorage.getItem(START_STORAGE_KEY);
+      if (raw && /^\d{4}-\d{2}-\d{2}$/.test(raw)) startISO = raw;
+    } catch {
+      /* bỏ qua */
+    }
+    setStart(startISO);
+
+    // Mở sẵn ngày hôm nay trong lộ trình; ngoài khoảng thì mở ngày đầu/cuối
+    const idx = PLAN.findIndex((d) => dateForDay(startISO, d.n) === iso);
+    setOpenDay(
+      idx >= 0
+        ? PLAN[idx].n
+        : iso > dateForDay(startISO, PLAN.length)
+          ? PLAN[PLAN.length - 1].n
+          : PLAN[0].n,
+    );
+  }, []);
+
+  const persistStart = useCallback((iso: string) => {
+    setStart(iso);
+    try {
+      localStorage.setItem(START_STORAGE_KEY, iso);
+    } catch {
+      /* bỏ qua */
+    }
   }, []);
 
   const persistDone = useCallback((next: Record<string, boolean>) => {
@@ -167,7 +216,7 @@ export default function OnThiJPD113Client() {
 
   /* ── Số liệu tiến độ ───────────────────────────────────────── */
   const stats = useMemo(() => {
-    const all = [...ALL_TASKS, ...DAILY_RITUAL];
+    const all = ALL_TASKS;
     const doneCount = all.filter((t) => done[t.id]).length;
     const core = all.filter((t) => t.tier === 'core');
     const coreDone = core.filter((t) => done[t.id]).length;
@@ -183,13 +232,29 @@ export default function OnThiJPD113Client() {
     };
   }, [done]);
 
-  const daysLeft = useMemo(() => {
+  /**
+   * Việc LẶP tính theo TỪNG NGÀY, không dùng chung ô tích với việc một lần.
+   * Nếu dùng chung thì tích xong hôm nay là cả 29 ngày còn lại hiện "đã xong" —
+   * đúng thứ phản lại mục đích của một việc phải lặp lại mỗi ngày.
+   */
+  const ritualStats = useMemo(() => {
+    if (!mounted || !today) return { todayDone: 0, fullDays: 0, grid: [] as boolean[] };
+    const todayDone = DAILY_RITUAL.filter((t) => done[ritualKey(t.id, today)]).length;
+    const grid = PLAN.map((d) => {
+      const iso = dateForDay(start, d.n);
+      return DAILY_RITUAL.every((t) => !!done[ritualKey(t.id, iso)]);
+    });
+    return { todayDone, fullDays: grid.filter(Boolean).length, grid };
+  }, [done, mounted, today, start]);
+
+  /** Hôm nay là Ngày thứ mấy của lộ trình (1..30); ngoài khoảng thì null */
+  const dayNo = useMemo(() => {
     if (!today) return null;
     const diff = Math.round(
-      (new Date(`${EXAM_DATE}T00:00:00`).getTime() - new Date(`${today}T00:00:00`).getTime()) / 86_400_000,
+      (new Date(`${today}T00:00:00`).getTime() - new Date(`${start}T00:00:00`).getTime()) / 86_400_000,
     );
-    return diff;
-  }, [today]);
+    return diff >= 0 && diff < PLAN.length ? diff + 1 : null;
+  }, [today, start]);
 
   const resetProgress = () => {
     if (!confirm('Xoá toàn bộ tiến độ đã tích? Hành động này không hoàn tác được.')) return;
@@ -211,53 +276,63 @@ export default function OnThiJPD113Client() {
         <header className="rounded-3xl border border-white/10 bg-gradient-to-br from-[#151125] via-[#12101c] to-[#0d0b14] p-6 sm:p-9 mb-8">
           <div className="flex flex-wrap items-center gap-2 mb-4">
             <span className="px-3 py-1 rounded-full text-[11px] font-semibold tracking-wide bg-neon-violet/15 text-neon-violet border border-neon-violet/25">
-              JPD113 · ELEMENTARY JAPANESE 1
+              JPD113 · KỲ 3
+            </span>
+            <span className="px-3 py-1 rounded-full text-[11px] font-semibold tracking-wide bg-neon-green/15 text-neon-green border border-neon-green/25">
+              JPD123 · KỲ 4
             </span>
             <span className="px-3 py-1 rounded-full text-[11px] font-semibold tracking-wide bg-neon-orange/15 text-neon-orange border border-neon-orange/25">
-              CẤP TỐC 5 NGÀY
+              30 NGÀY HỌC LẠI TỪ GỐC
             </span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-heading font-bold text-white tracking-tight leading-[1.1] mb-4">
-            Ôn thi JPD113 —{' '}
+            Học lại tiếng Nhật —{' '}
             <span className="bg-gradient-to-r from-neon-violet via-neon-fuchsia to-neon-orange bg-clip-text text-transparent">
-              từ số 0 tới phòng thi
+              một tháng xây lại nền
             </span>
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-300 leading-relaxed max-w-3xl mb-7">
-            Lộ trình từ <b className="text-white">02/08</b> tới ngày thi <b className="text-white">06/08/2026</b>,
-            phủ cả ba phần: <b className="text-white">Đọc hiểu</b>, <b className="text-white">Vấn đáp</b> và{' '}
-            <b className="text-white">Trắc nghiệm FE</b>. Mỗi việc đều tích được để theo dõi tiến độ —
-            tiến độ lưu ngay trên máy bạn.
+          <p className="text-base sm:text-lg text-slate-300 leading-relaxed max-w-3xl mb-4">
+            Lộ trình <b className="text-white">30 ngày</b> chạy TRƯỚC khi vào kỳ, học song song{' '}
+            <b className="text-white">JPD113</b> (học lại cho chắc) và <b className="text-white">JPD123</b>{' '}
+            (đi trước một bước) — để vào lớp là đã học rồi, mỗi buổi trên trường thành một buổi ôn.
+          </p>
+          <p className="text-sm text-slate-400 leading-relaxed max-w-3xl mb-7">
+            Lộ trình được viết lại từ biên bản kỳ thi trượt: <b className="text-slate-300">nghe không hiểu
+            câu hỏi giám thị</b>, <b className="text-slate-300">đọc rời từng chữ và sai chữ Hán</b>,{' '}
+            <b className="text-slate-300">không hiểu câu trắc nghiệm dịch ra gì</b>. Mỗi lỗi có một mạch
+            luyện riêng chạy suốt 30 ngày.
           </p>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             <StatCard
               icon={<Flame className="w-4 h-4" />}
-              label="Còn lại"
-              value={mounted && daysLeft !== null ? (daysLeft > 0 ? `${daysLeft} ngày` : daysLeft === 0 ? 'HÔM NAY' : 'Đã thi') : '—'}
+              label="Hôm nay"
+              value={mounted ? (dayNo ? `Ngày ${dayNo}/30` : 'Ngoài lịch') : '—'}
+              sub={mounted && dayNo ? PHASES.find((p) => p.n === PLAN[dayNo - 1].phase)?.name : 'chọn ngày bắt đầu'}
               accent="#fb923c"
             />
             <StatCard
               icon={<ListChecks className="w-4 h-4" />}
               label="Việc đã xong"
               value={mounted ? `${stats.doneCount}/${stats.total}` : '—'}
+              sub={`${JPD123_TASKS} việc của JPD123`}
               accent="#4ade80"
             />
             <StatCard
               icon={<Clock className="w-4 h-4" />}
               label="Tổng thời lượng"
               value={`${Math.round(TOTAL_MINUTES / 60)}h`}
-              sub={`cốt lõi ${Math.round(CORE_MINUTES / 60)}h`}
+              sub={`+ ${RITUAL_MINUTES_PER_DAY}′ việc lặp mỗi ngày`}
               accent="#22d3ee"
             />
             <StatCard
-              icon={<FileText className="w-4 h-4" />}
-              label="Đề có sẵn"
-              value="35 đề"
-              sub="14 FE · 16 đọc · 5 nói"
-              accent="#8b5cf6"
+              icon={<Ear className="w-4 h-4" />}
+              label="Ngân hàng nghe"
+              value={`${LISTEN_ITEM_COUNT}+`}
+              sub="mục nghe · khu mới"
+              accent="#facc15"
             />
           </div>
 
@@ -326,9 +401,14 @@ export default function OnThiJPD113Client() {
             openDay={openDay}
             setOpenDay={setOpenDay}
             today={today}
+            start={start}
+            onStart={persistStart}
+            ritualStats={ritualStats}
             onReset={resetProgress}
           />
         )}
+        {tab === 'listen' && <ListeningPanel profile={profile} />}
+        {tab === 'read' && <ReadAloudPanel />}
         {tab === 'drill' && <DrillPanel />}
         {tab === 'vocab' && <VocabPanel />}
         {tab === 'cheat' && <CheatTab />}
@@ -352,6 +432,9 @@ function PlanTab({
   openDay,
   setOpenDay,
   today,
+  start,
+  onStart,
+  ritualStats,
   onReset,
 }: {
   mounted: boolean;
@@ -362,67 +445,62 @@ function PlanTab({
   openDay: number | null;
   setOpenDay: (v: number | null) => void;
   today: string;
+  start: string;
+  onStart: (iso: string) => void;
+  ritualStats: { todayDone: number; fullDays: number; grid: boolean[] };
   onReset: () => void;
 }) {
   return (
     <div className="space-y-8">
-      {/* Đánh giá khả thi — nói thẳng */}
+      {/* Vì sao trượt — và lộ trình mới chữa cái gì */}
       <section className="rounded-2xl border border-neon-orange/25 bg-neon-orange/[0.05] p-6">
         <h2 className="flex items-center gap-2 text-lg font-heading font-semibold text-white mb-4">
           <Target className="w-5 h-5 text-neon-orange" />
-          Bốn ngày rưỡi từ con số 0 — thực tế đến đâu?
+          Lần trước hỏng ở đâu — và lộ trình này chữa bằng cách nào
         </h2>
         <div className="space-y-4 text-sm text-slate-300 leading-relaxed">
           <p>
-            <b className="text-white">Câu trả lời thẳng: 7 điểm là khả thi, 9-10 thì khó nhưng không phải không thể</b> —
-            và điều đó phụ thuộc gần như hoàn toàn vào việc bạn có xong được <b className="text-white">kana ngay trong ngày đầu</b> hay không.
+            <b className="text-white">Nói thẳng: trượt không phải vì bạn kém, mà vì học dồn vào 5 ngày cuối.</b>{' '}
+            Kana, nghe hiểu và phản xạ nói là ba thứ <b className="text-white">không nhồi được</b> — chúng cần
+            thời gian ngấm. Nhồi 5 ngày thì đúng ba thứ đó sập, và đó chính xác là những gì đã xảy ra.
           </p>
           <div className="grid sm:grid-cols-3 gap-3">
             <VerdictCard
-              tone="green"
-              title="Thi nói · dễ ăn điểm nhất"
-              body="Ngân hàng đề công khai 100%: 13 bài đọc, 22 câu hỏi, 6 bộ tranh — bạn biết trước mọi thứ giám thị sẽ hỏi. Đây là phần hoàn toàn có thể đạt 9-10 trong 4 ngày vì nó là học thuộc, không phải suy luận."
+              tone="orange"
+              title="Nghe — hỏng nặng nhất"
+              body="Giám thị hỏi 4 câu, không câu nào nghe ra. Đây là dấu hiệu học tiếng Nhật hoàn toàn bằng MẮT. Chữa bằng khu Nghe hiểu mới: 10 phút mỗi ngày × 30 ngày = 5 giờ tai tiếp xúc với tiếng Nhật thật."
             />
             <VerdictCard
               tone="cyan"
-              title="Đọc hiểu · khá dễ"
-              body="16 đề trong Phòng thi đều kèm sẵn romaji, bản dịch và ghi chú kanji. Bài đọc dùng đúng một khung câu lặp lại. Đọc được kana là làm được, 7-8 điểm nằm trong tầm tay."
+              title="Đọc — sai kỹ thuật"
+              body="Ngắt không trôi chảy, chữ Hán không thuộc, đọc rời từng chữ, sai âm ngắt っ và trường âm. Chữa bằng khu Đọc to mới: 13 bài cắt sẵn thành cụm, mỗi cụm có kana đầy đủ và bấm nghe riêng được."
             />
             <VerdictCard
-              tone="orange"
-              title="Trắc nghiệm FE · khó nhất"
-              body="~70% câu là điền chỗ trống kiểm tra từ vựng và trợ từ — cần vốn từ rộng, mà vốn từ thì không nhồi được trong 4 ngày. Đây là phần kéo điểm tổng xuống. Cày đủ 14 đề thật là cách nhanh nhất để bù."
+              tone="green"
+              title="Trắc nghiệm 3,7 — thiếu kỹ năng dịch"
+              body="Khoanh mò vì không hiểu câu dịch ra gì. Đây là kỹ năng RIÊNG, luyện được: quy trình 4 bước khoanh trợ từ → tìm vị ngữ → đọc ngược từ cuối câu → ghép nghĩa. Rải suốt giai đoạn 3 và 4."
             />
           </div>
           <p className="pt-1">
-            <b className="text-white">Chiến lược điểm:</b> đừng chia đều thời gian cho ba phần. Dồn cho thi nói và
-            con số/thời gian trước — đó là chỗ mỗi giờ học sinh ra nhiều điểm nhất. Phần từ vựng FE thì
-            chấp nhận “được bao nhiêu hay bấy nhiêu”, bù bằng việc cày đề để nhận ra mẫu câu lặp lại.
+            <b className="text-white">Vì sao học cả hai môn cùng lúc lại DỄ hơn:</b> JPD123 dùng lại toàn bộ
+            kana, số, giờ và trợ từ của JPD113. Học JPD113 cho chắc trong tháng này thì một nửa JPD123 coi như
+            đã xong. Mỗi ngày từ Ngày 11 có một khối JPD123 ngắn, và 6 ngày cuối dành hẳn cho nó.
           </p>
-          <p className="text-slate-400 text-[13px] italic border-l-2 border-white/15 pl-3">
-            Một điều cần nói thật: mục tiêu 9-10 <b>toàn bộ ba phần</b> trong 4 ngày rưỡi khi bắt đầu từ mức
-            “biết qua qua hiragana” là rất tham vọng — phần FE cần vốn từ tích luỹ cả kỳ. Lộ trình dưới đây
-            được thiết kế để bạn <b>chắc chắn qua môn với 7+</b>, và mở đường tối đa lên 9-10 nếu bạn theo
-            được cả phần &ldquo;nâng điểm&rdquo;.
-          </p>
-
           <div className="rounded-xl border border-white/15 bg-black/25 p-4">
             <div className="text-xs font-bold text-white mb-2">
-              Lộ trình đầy đủ là ~30 giờ (6–8 tiếng/ngày). Nếu bạn chỉ có 3–4 tiếng/ngày thì bỏ theo thứ tự này:
+              Mỗi ngày khoảng 2,5–3,5 giờ. Nếu hôm nào chỉ có 1 giờ thì cắt theo thứ tự này:
             </div>
             <ol className="space-y-1.5 text-[13px] text-slate-300 leading-relaxed">
               <li>
-                <b className="text-neon-green">1. KHÔNG BAO GIỜ BỎ</b> — kana (ngày 1), bảng số/giờ/ngày
-                (ngày 2), 13 bài đọc + 22 câu thi nói (ngày 4). Ba thứ này là phần lớn số điểm bạn có thể
-                lấy được trong 4 ngày.
+                <b className="text-neon-green">1. KHÔNG BAO GIỜ BỎ</b> — 5 việc lặp hằng ngày bên dưới (55
+                phút). Chúng nhỏ nhưng là thứ duy nhất chống rơi kiến thức. Bỏ chúng là quay lại đúng vết xe cũ.
               </li>
               <li>
-                <b className="text-neon-cyan">2. Giữ nếu còn sức</b> — trợ từ và これ/この (ngày 3), 35 kanji,
-                mỗi ngày ít nhất một đề FE.
+                <b className="text-neon-cyan">2. Giữ nếu còn sức</b> — khối 1 của ngày hôm đó (phần lõi), và
+                mọi việc gắn nhãn nghe.
               </li>
               <li>
-                <b className="text-slate-400">3. Bỏ trước tiên</b> — mọi việc gắn nhãn “NÂNG ĐIỂM”, các đề FE
-                thứ hai và thứ ba trong ngày, và phần đọc hiểu mở rộng. Bấm nút{' '}
+                <b className="text-slate-400">3. Bỏ trước tiên</b> — mọi việc gắn nhãn “NÂNG ĐIỂM”. Bấm nút{' '}
                 <b className="text-white">“Chỉ hiện việc CỐT LÕI”</b> bên dưới để ẩn chúng đi.
               </li>
             </ol>
@@ -430,18 +508,111 @@ function PlanTab({
         </div>
       </section>
 
+      {/* Ngày bắt đầu */}
+      <section className="rounded-2xl border border-neon-violet/25 bg-neon-violet/[0.05] p-5">
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <CalendarClock className="w-5 h-5 text-neon-violet" />
+            <span className="text-sm font-bold text-white">Ngày bắt đầu lộ trình</span>
+          </div>
+          <input
+            type="date"
+            value={start}
+            onChange={(e) => e.target.value && onStart(e.target.value)}
+            className="px-3 py-2 rounded-xl bg-black/40 border border-white/15 text-white text-sm focus:outline-none focus:border-neon-violet/60 [color-scheme:dark]"
+          />
+          <span className="text-[13px] text-slate-400">
+            Ngày 30 rơi vào{' '}
+            <b className="text-white">{mounted ? fmtDate(dateForDay(start, PLAN.length)) : '—'}</b>
+          </span>
+        </div>
+        <p className="text-[12px] text-slate-500 mt-2.5 leading-relaxed">
+          Lộ trình đánh số Ngày 1..30 chứ không gắn cứng vào lịch, nên bắt đầu muộn vài hôm cũng không hỏng —
+          chỉ cần đổi lại ngày ở đây. Ngày bắt đầu lưu trên máy bạn.
+        </p>
+      </section>
+
+      {/* 5 giai đoạn */}
+      <section>
+        <h2 className="text-lg font-heading font-semibold text-white mb-4">Năm giai đoạn</h2>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {PHASES.map((p) => (
+            <div
+              key={p.n}
+              className="rounded-2xl border p-4"
+              style={{ borderColor: `${p.color}33`, background: `${p.color}0d` }}
+            >
+              <div className="flex items-baseline gap-2 mb-1.5">
+                <span className="text-[11px] font-bold tracking-wider" style={{ color: p.color }}>
+                  GĐ {p.n} · {p.range}
+                </span>
+              </div>
+              <h3 className="text-base font-bold text-white mb-1.5">{p.name}</h3>
+              <p className="text-[13px] text-slate-400 leading-relaxed mb-2">{p.goal}</p>
+              <p className="text-[12px] leading-relaxed" style={{ color: p.color }}>
+                {p.fixes}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Việc lặp hằng ngày */}
       <section className="rounded-2xl border border-white/10 bg-white/[0.02] p-6">
         <h2 className="flex items-center gap-2 text-lg font-heading font-semibold text-white mb-1">
           <RotateCcw className="w-5 h-5 text-neon-cyan" />
-          Ba việc lặp mỗi ngày
+          Năm việc lặp mỗi ngày ({RITUAL_MINUTES_PER_DAY} phút)
         </h2>
-        <p className="text-sm text-slate-400 mb-5">
-          Làm đủ trong cả 5 ngày, ngoài lịch của từng ngày. Ba việc này là thứ giữ cho kiến thức không rơi.
+        <p className="text-sm text-slate-400 mb-4">
+          Làm đủ cả 30 ngày, ngoài lịch của từng ngày. Đây là phần quan trọng hơn cả lịch: kiến thức rơi vì
+          không lặp, chứ không phải vì học chưa đủ sâu. Ô tích dưới đây tính riêng cho{' '}
+          <b className="text-white">từng ngày</b> — sang ngày mới là tự trống lại.
         </p>
+
+        {/* Lưới 30 ngày — ô sáng là ngày làm TRỌN cả 5 việc lặp */}
+        <div className="rounded-xl border border-white/10 bg-black/25 p-4 mb-5">
+          <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
+            <span className="text-[13px] text-slate-300">
+              Hôm nay:{' '}
+              <b className={ritualStats.todayDone === DAILY_RITUAL.length ? 'text-neon-green' : 'text-white'}>
+                {mounted ? ritualStats.todayDone : 0}/{DAILY_RITUAL.length}
+              </b>
+            </span>
+            <span className="text-[13px] text-slate-400">
+              Trọn vẹn <b className="text-neon-cyan">{mounted ? ritualStats.fullDays : 0}</b>/30 ngày
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {PLAN.map((d, i) => {
+              const full = mounted && ritualStats.grid[i];
+              const isToday = mounted && today === dateForDay(start, d.n);
+              return (
+                <span
+                  key={d.n}
+                  title={`Ngày ${d.n}`}
+                  className={`w-5 h-5 rounded text-[9px] font-bold flex items-center justify-center ${
+                    full
+                      ? 'bg-neon-green text-black'
+                      : isToday
+                        ? 'bg-neon-violet/30 text-white border border-neon-violet'
+                        : 'bg-white/[0.05] text-slate-600'
+                  }`}
+                >
+                  {d.n}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+
         <div className="space-y-2.5">
           {DAILY_RITUAL.map((t) => (
-            <TaskRow key={t.id} task={t} checked={mounted && !!done[t.id]} onToggle={() => toggle(t.id)} />
+            <TaskRow
+              key={t.id}
+              task={t}
+              checked={mounted && !!today && !!done[ritualKey(t.id, today)]}
+              onToggle={() => today && toggle(ritualKey(t.id, today))}
+            />
           ))}
         </div>
       </section>
@@ -468,29 +639,55 @@ function PlanTab({
         </button>
       </div>
 
-      {/* 5 ngày */}
-      <div className="space-y-4">
-        {PLAN.map((day) => (
-          <DayCard
-            key={day.n}
-            day={day}
-            open={openDay === day.n}
-            onToggleOpen={() => setOpenDay(openDay === day.n ? null : day.n)}
-            done={done}
-            toggle={toggle}
-            coreOnly={coreOnly}
-            mounted={mounted}
-            isToday={mounted && today === day.date}
-            isPast={mounted && !!today && today > day.date}
-          />
+      {/* 30 ngày, chia theo giai đoạn */}
+      <div className="space-y-8">
+        {PHASES.map((phase) => (
+          <div key={phase.n}>
+            <div className="flex flex-wrap items-baseline gap-3 mb-3">
+              <h3 className="text-base font-heading font-bold" style={{ color: phase.color }}>
+                GIAI ĐOẠN {phase.n} — {phase.name}
+              </h3>
+              <span className="text-[12px] text-slate-500">{phase.range}</span>
+            </div>
+            <div className="space-y-4">
+              {PLAN.filter((d) => d.phase === phase.n).map((day) => {
+                const date = dateForDay(start, day.n);
+                return (
+                  <DayCard
+                    key={day.n}
+                    day={day}
+                    date={date}
+                    dow={dowForDate(date)}
+                    accent={phase.color}
+                    open={openDay === day.n}
+                    onToggleOpen={() => setOpenDay(openDay === day.n ? null : day.n)}
+                    done={done}
+                    toggle={toggle}
+                    coreOnly={coreOnly}
+                    mounted={mounted}
+                    isToday={mounted && today === date}
+                    isPast={mounted && !!today && today > date}
+                  />
+                );
+              })}
+            </div>
+          </div>
         ))}
       </div>
     </div>
   );
 }
 
+/** 2026-09-09 → 09/09/2026 */
+function fmtDate(iso: string): string {
+  return `${iso.slice(8, 10)}/${iso.slice(5, 7)}/${iso.slice(0, 4)}`;
+}
+
 function DayCard({
   day,
+  date,
+  dow,
+  accent,
   open,
   onToggleOpen,
   done,
@@ -501,6 +698,9 @@ function DayCard({
   isPast,
 }: {
   day: StudyDay;
+  date: string;
+  dow: string;
+  accent: string;
   open: boolean;
   onToggleOpen: () => void;
   done: Record<string, boolean>;
@@ -513,35 +713,42 @@ function DayCard({
   const tasks = day.blocks.flatMap((b) => b.tasks);
   const doneCount = mounted ? tasks.filter((t) => done[t.id]).length : 0;
   const pct = tasks.length ? Math.round((doneCount / tasks.length) * 100) : 0;
-  const [dd, mm] = [day.date.slice(8, 10), day.date.slice(5, 7)];
-  const isExamDay = day.date === EXAM_DATE;
+  const [dd, mm] = [date.slice(8, 10), date.slice(5, 7)];
+  const hasJpd123 = tasks.some((t) => t.course === 'JPD123');
+  const isCheck = day.title.startsWith('KIỂM TRA') || day.title.startsWith('THI THỬ') || day.title.startsWith('TỔNG DUYỆT');
 
   return (
     <section
       className={`rounded-2xl border overflow-hidden transition-colors ${
         isToday
           ? 'border-neon-violet/50 bg-neon-violet/[0.06]'
-          : isExamDay
+          : isCheck
             ? 'border-neon-red/35 bg-neon-red/[0.04]'
             : 'border-white/10 bg-white/[0.02]'
       }`}
     >
       <button onClick={onToggleOpen} className="w-full text-left p-5 sm:p-6 flex items-start gap-4">
-        <ProgressRing pct={pct} label={`${dd}/${mm}`} />
+        <ProgressRing pct={pct} label={mounted ? `${dd}/${mm}` : `${day.n}`} accent={accent} />
 
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-1.5">
             <span className="text-[11px] font-semibold tracking-wider text-slate-500">
-              NGÀY {day.n} · {day.dow.toUpperCase()}
+              NGÀY {day.n}
+              {mounted && dow ? ` · ${dow.toUpperCase()}` : ''}
             </span>
             {isToday && (
               <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-neon-violet text-white">
                 HÔM NAY
               </span>
             )}
-            {isExamDay && (
+            {isCheck && (
               <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-neon-red text-white">
-                NGÀY THI
+                NGÀY ĐO
+              </span>
+            )}
+            {hasJpd123 && (
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-neon-green/15 text-neon-green border border-neon-green/25">
+                + JPD123
               </span>
             )}
             {isPast && !isToday && (
@@ -557,7 +764,7 @@ function DayCard({
           <div className="flex flex-wrap items-center gap-3 mt-3 text-xs text-slate-500">
             <span className="inline-flex items-center gap-1">
               <Clock className="w-3.5 h-3.5" />
-              {Math.round(dayMinutes(day) / 60)} giờ
+              {(dayMinutes(day) / 60).toFixed(1).replace('.', ',')} giờ
             </span>
             <span className="inline-flex items-center gap-1">
               <ListChecks className="w-3.5 h-3.5" />
@@ -658,6 +865,11 @@ function TaskRow({
             >
               {meta.label}
             </span>
+            {task.course === 'JPD123' && (
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-neon-green/15 text-neon-green shrink-0">
+                JPD123
+              </span>
+            )}
             {task.tier === 'plus' && (
               <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-white/[0.06] text-slate-400 shrink-0">
                 NÂNG ĐIỂM
@@ -705,11 +917,14 @@ function TaskRow({
   );
 }
 
-function ProgressRing({ pct, label }: { pct: number; label: string }) {
+function ProgressRing({ pct, label, accent = '#8b5cf6' }: { pct: number; label: string; accent?: string }) {
   const r = 26;
   const c = 2 * Math.PI * r;
   return (
     <div className="relative w-16 h-16 shrink-0">
+      {/* Dùng màu đặc theo giai đoạn thay vì gradient: 30 vòng trên một trang thì
+          một <linearGradient id> dùng chung sẽ trùng id, còn sinh 30 id riêng thì
+          thừa. Màu đặc vừa đúng ý đồ phân giai đoạn vừa nhẹ hơn. */}
       <svg viewBox="0 0 64 64" className="w-16 h-16 -rotate-90">
         <circle cx="32" cy="32" r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="5" />
         <circle
@@ -717,19 +932,13 @@ function ProgressRing({ pct, label }: { pct: number; label: string }) {
           cy="32"
           r={r}
           fill="none"
-          stroke="url(#ringGrad)"
+          stroke={accent}
           strokeWidth="5"
           strokeLinecap="round"
           strokeDasharray={c}
           strokeDashoffset={c - (c * pct) / 100}
           className="transition-all duration-500"
         />
-        <defs>
-          <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#8b5cf6" />
-            <stop offset="100%" stopColor="#d946ef" />
-          </linearGradient>
-        </defs>
       </svg>
       <span className="absolute inset-0 flex items-center justify-center text-[11px] font-bold text-white">
         {label}

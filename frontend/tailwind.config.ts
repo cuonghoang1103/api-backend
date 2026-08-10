@@ -51,6 +51,7 @@ const config: Config = {
   emerald: "#10b981",
   blue: "#3b82f6",
   orange: "#fb923c",
+  yellow: "#facc15",
   red: "#f43f5e",
   pink: "#ec4899",
   },

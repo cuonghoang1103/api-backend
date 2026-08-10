@@ -11,16 +11,16 @@ import OnThiJPD113Client from './OnThiJPD113Client';
  */
 
 export const metadata: Metadata = {
-  title: 'Ôn thi JPD113 — Lộ trình 5 ngày (Đọc · Nói · Trắc nghiệm)',
+  title: 'Học lại JPD113 + JPD123 — Lộ trình 30 ngày (Nghe · Đọc · Nói · Trắc nghiệm)',
   description:
-    'Lộ trình ôn thi JPD113 (Elementary Japanese 1) từ số 0 trong 5 ngày: kana, số & thời gian, ' +
-    'trợ từ, kanji, ngân hàng 13 bài đọc và 22 câu hỏi thi nói, cùng 14 đề trắc nghiệm thật. ' +
-    'Có checklist tích tiến độ và bảng tra cứu đầy đủ.',
+    'Lộ trình 30 ngày học lại tiếng Nhật từ gốc, song song JPD113 (Kỳ 3) và JPD123 (Kỳ 4): kana và ' +
+    'nhịp đọc, số & thời gian, luyện NGHE HIỂU mỗi ngày, 13 bài đọc chia theo cụm có furigana, ' +
+    'ngữ pháp A1.1 + A1.2, kanji, và 35 đề thật. Có checklist tích tiến độ theo từng ngày.',
   openGraph: {
-    title: 'Ôn thi JPD113 — Lộ trình 5 ngày | CuongThai',
+    title: 'Học lại JPD113 + JPD123 — Lộ trình 30 ngày | CuongThai',
     description:
-      'Kana → số & thời gian → ngữ pháp → kanji → thi nói. Checklist tích tiến độ, bảng tra cứu, ' +
-      'ngân hàng đề nói và 14 đề FE thật.',
+      'Năm giai đoạn: đọc ra được chữ → số & lỗ tai → ngữ pháp lõi + kanji → thi nói & FE → đi trước JPD123. ' +
+      'Khu Nghe hiểu, khu Đọc to chia cụm, bảng tra cứu và 35 đề thật.',
     url: 'https://cuongthai.com/tech-trends/on-thi-jpd113',
     type: 'article',
     images: ['/opengraph-image'],

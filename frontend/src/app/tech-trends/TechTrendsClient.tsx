@@ -538,14 +538,15 @@ export default function TechTrendsClient() {
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide bg-neon-violet text-white">
                   CHUYÊN ĐỀ
                 </span>
-                <span className="text-[11px] text-text-muted">Lộ trình ôn thi có checklist</span>
+                <span className="text-[11px] text-text-muted">Lộ trình 30 ngày có checklist từng ngày</span>
               </div>
               <h3 className="text-lg sm:text-xl font-heading font-bold text-text-primary group-hover:text-neon-violet transition-colors">
-                Ôn thi JPD113 — lộ trình 5 ngày từ số 0
+                Học lại JPD113 + JPD123 — lộ trình 30 ngày từ gốc
               </h3>
               <p className="text-sm text-text-secondary mt-1 leading-relaxed">
-                Kana → số &amp; thời gian → trợ từ → kanji → thi nói. Kèm bảng tra cứu đầy đủ,
-                ngân hàng 13 bài đọc + 22 câu hỏi vấn đáp, và 35 đề luyện có sẵn.
+                Năm giai đoạn: đọc ra được chữ → số &amp; lỗ tai → ngữ pháp lõi + kanji → thi nói &amp; FE →
+                đi trước JPD123. Kèm khu Nghe hiểu, khu Đọc to chia theo cụm có furigana, bảng tra cứu và
+                35 đề luyện có sẵn.
               </p>
             </div>
             <span className="hidden sm:block text-neon-violet text-xl shrink-0 group-hover:translate-x-1 transition-transform">

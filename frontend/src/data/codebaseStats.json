@@ -1,14 +1,14 @@
 {
   "_comment": "SINH TỰ ĐỘNG bởi scripts/gen-codebase-stats.mjs — đừng sửa tay.",
-  "commits": 1819,
+  "commits": 1980,
   "firstCommitDate": "2026-06-08",
-  "lastCommitDate": "2026-08-08",
-  "daysBuilding": 61,
+  "lastCommitDate": "2026-08-10",
+  "daysBuilding": 63,
   "pages": 198,
   "apiRouters": 65,
-  "prismaModels": 257,
-  "migrations": 99,
-  "sourceFiles": 1327,
-  "sourceLines": 390573,
-  "generatedAt": "2026-08-08T09:51:38.107Z"
+  "prismaModels": 259,
+  "migrations": 101,
+  "sourceFiles": 1341,
+  "sourceLines": 397938,
+  "generatedAt": "2026-08-10T00:17:20.513Z"
 }

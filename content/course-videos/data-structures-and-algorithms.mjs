@@ -1,0 +1,48 @@
+/**
+ * Curated YouTube track for CSD201 — Data Structures and Algorithms.
+ * Every id verified live+embeddable via YouTube oEmbed.
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/data-structures-and-algorithms.mjs
+ */
+export default {
+  courseSlug: 'data-structures-and-algorithms',
+  defaultVideoTrack: 'YT',
+  lessons: {
+    "csd201-gioi-thieu": { yt: "RBSGKlAvoiM", credit: "freeCodeCamp.org — Data Structures Easy to Advanced Course - Full Tutorial from a Google Engineer" },
+    "csd201-big-o": { yt: "v4cd1O4zkGw", credit: "HackerRank — Big O Notation" },
+    "csd201-mang": { yt: "AT14lCXuMKI", credit: "Jenny's Lectures CS IT — 1.1 Arrays in Data Structure | Declaration, Initialization, Memory representation" },
+    "csd201-linked-list": { yt: "NobHlGUjV3g", credit: "mycodeschool — Introduction to linked list" },
+    "csd201-doubly-sentinel": { yt: "e9NG_a6Z0mg", credit: "Neso Academy — Introduction to Doubly Linked List" },
+    "csd201-stack-queue": { yt: "F1F2imiOJfk", credit: "mycodeschool — Data structures: Introduction to stack" },
+    "csd201-stack-queue-cai-dat": { yt: "okr-XE8yTO8", credit: "mycodeschool — Data structures: Array implementation of Queue" },
+    "csd201-stack-ung-dung": { yt: "QZOLb0xHB_Q", credit: "mycodeschool — Check for balanced parentheses using stack" },
+    "csd201-deque": { yt: "DfljaUwZsOk", credit: "NeetCode — Sliding Window Maximum - Monotonic Queue - Leetcode 239" },
+    "csd201-priority-queue-heap": { yt: "t0Cq6tVNRBA", credit: "HackerRank — Data Structures: Heaps" },
+    "csd201-de-quy": { yt: "KEEKn7Me-ms", credit: "HackerRank — Algorithms: Recursion" },
+    "csd201-de-quy-phan-tich": { yt: "OynWkEj0S-s", credit: "Abdul Bari — 2.4.1 Masters Theorem in Algorithms for Dividing Function #1" },
+    "csd201-cay-duyet": { yt: "qH6yxkw0u78", credit: "mycodeschool — Data structures: Introduction to Trees" },
+    "csd201-cay-nhi-phan": { yt: "H5JubkIy_p8", credit: "mycodeschool — Data structures: Binary Tree" },
+    "csd201-duyet-cay": { yt: "gm8DUJJhmY4", credit: "mycodeschool — Binary tree traversal: Preorder, Inorder, Postorder" },
+    "csd201-bst": { yt: "pYT9F8_LFTM", credit: "mycodeschool — Data structures: Binary Search Tree" },
+    "csd201-bst-chen-xoa": { yt: "gcULXE7ViZw", credit: "mycodeschool — Delete a node from Binary Search Tree" },
+    "csd201-avl": { yt: "jDM6_TnYIqE", credit: "Abdul Bari — 10.1 AVL Tree - Insertion and Rotations" },
+    "csd201-heap-cai-dat": { yt: "MiyLo8adrWw", credit: "Algorithms with Attitude — Linear Time BuildHeap" },
+    "csd201-do-thi": { yt: "09_LlHjoEiY", credit: "freeCodeCamp.org — Algorithms Course - Graph Theory Tutorial from a Google Engineer" },
+    "csd201-do-thi-bieu-dien": { yt: "9C2cpQZVRBA", credit: "mycodeschool — Graph Representation part 02 - Adjacency Matrix" },
+    "csd201-dfs": { yt: "7fujbpJ0LB4", credit: "WilliamFiset — Depth First Search Algorithm | Graph Theory" },
+    "csd201-bfs": { yt: "oDqjPvD54Ss", credit: "WilliamFiset — Breadth First Search Algorithm | Shortest Path | Graph Theory" },
+    "csd201-dijkstra": { yt: "XB4MIexjvY0", credit: "Abdul Bari — 3.6 Dijkstra Algorithm - Single Source Shortest Path - Greedy Method" },
+    "csd201-mst": { yt: "4ZlRH0eK-qQ", credit: "Abdul Bari — 3.5 Prims and Kruskals Algorithms - Greedy Method" },
+    "csd201-euler": { yt: "8MpoO2zA2l4", credit: "WilliamFiset — Eulerian Path/Circuit algorithm (Hierholzer's algorithm) | Graph Theory" },
+    "csd201-sap-xep-co-ban": { yt: "nmhjrI-aW5o", credit: "GeeksforGeeks — Bubble Sort Algorithm | GeeksforGeeks" },
+    "csd201-quicksort": { yt: "7h1s2SojIRw", credit: "Abdul Bari — 2.8.1  QuickSort Algorithm" },
+    "csd201-mergesort": { yt: "mB5HXBb_HY8", credit: "Abdul Bari — 2.7.2.  Merge Sort Algorithm" },
+    "csd201-heapsort": { yt: "HqPJF2L5h9U", credit: "Abdul Bari — 2.6.3 Heap - Heap Sort - Heapify - Priority Queues" },
+    "csd201-sap-xep-tuyen-tinh": { yt: "nu4gDuFabIM", credit: "GeeksforGeeks — Radix Sort | GeeksforGeeks" },
+    "csd201-bam": { yt: "mFY0J5W8Udk", credit: "Abdul Bari — Hashing Technique - Simplified" },
+    "csd201-va-cham": { yt: "T9gct6Dx-jo", credit: "WilliamFiset — Hash table separate chaining" },
+    "csd201-kmp": { yt: "V5-7GzOfADQ", credit: "Abdul Bari — 9.1 Knuth-Morris-Pratt KMP String Matching Algorithm" },
+    "csd201-huffman": { yt: "co4_ahEDCho", credit: "Abdul Bari — 3.4 Huffman Coding - Greedy Method" },
+    "csd201-cay-can-bang": { yt: "qA02XWRTBdw", credit: "Jenny's Lectures CS IT — 5.17 Red Black Tree Insertion | Insertion Algorithm | Data Structure Tutorials" },
+    "csd201-dijkstra-mst": { yt: "ibjEGG7ylHk", credit: "WilliamFiset — Union Find Introduction" },
+  },
+};

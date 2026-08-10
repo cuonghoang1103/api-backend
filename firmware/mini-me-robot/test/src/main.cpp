@@ -19,6 +19,7 @@
 
 #include <Arduino.h>
 #include <WiFi.h>
+#include <Wire.h>
 #include <esp_system.h>
 #include <esp_chip_info.h>
 #include <esp_flash.h>
@@ -48,6 +49,8 @@
 #define PIN_AMP_LRC 16
 #define PIN_AMP_DIN 7
 #define PIN_BATTERY_ADC 3
+#define PIN_I2C_SDA 8
+#define PIN_I2C_SCL 18
 
 static void line(char c = '-') {
   for (int i = 0; i < 62; i++) Serial.print(c);
@@ -467,6 +470,67 @@ static void testSpeaker() {
   Serial.println("     • Chân − của loa KHÔNG được nối đất");
 }
 
+/**
+ * Quét bus I2C — cho biết chính xác thiết bị nào đang ở địa chỉ nào.
+ *
+ * Chạy cái này TRƯỚC KHI viết code cho bất cứ thiết bị I2C nào. Hai
+ * màn OLED cùng địa chỉ 0x3C sẽ hiện y hệt nhau và bạn sẽ tưởng một
+ * cái hỏng; MPU6050 nhái đôi khi nằm ở 0x69 thay vì 0x68. Quét một
+ * lần là hết đoán.
+ */
+static void testI2c() {
+  head("QUÉT BUS I2C — SDA=GPIO8, SCL=GPIO18");
+  Wire.begin(PIN_I2C_SDA, PIN_I2C_SCL);
+  Wire.setClock(100000);
+
+  struct Known { uint8_t addr; const char* name; };
+  static const Known KNOWN[] = {
+      {0x3C, "OLED SSD1306 (địa chỉ mặc định)"},
+      {0x3D, "OLED SSD1306 (đã đổi địa chỉ) ✓"},
+      {0x40, "PCA9685 điều servo"},
+      {0x29, "VL53L0X laser đo xa"},
+      {0x68, "MPU6050 gia tốc/con quay"},
+      {0x69, "MPU6050 (AD0 kéo cao)"},
+      {0x76, "BME280 cảm biến môi trường"},
+      {0x77, "BME280/BMP280"},
+  };
+
+  int found = 0;
+  bool oled3C = false, oled3D = false;
+
+  for (uint8_t a = 1; a < 127; a++) {
+    Wire.beginTransmission(a);
+    if (Wire.endTransmission() != 0) continue;
+    found++;
+    const char* name = "(chưa biết là gì)";
+    for (auto& k : KNOWN)
+      if (k.addr == a) name = k.name;
+    Serial.printf("  0x%02X  %s\n", a, name);
+    if (a == 0x3C) oled3C = true;
+    if (a == 0x3D) oled3D = true;
+  }
+
+  line();
+  if (!found) {
+    Serial.println("  ❌ Không thấy thiết bị I2C nào.");
+    Serial.println("     • SDA vào GPIO8, SCL vào GPIO18?");
+    Serial.println("     • Đã cấp 3V3 và GND cho thiết bị chưa?");
+    Serial.println("     • Vài module cần điện trở kéo lên 4k7 (phần lớn có sẵn)");
+    return;
+  }
+
+  Serial.printf("  Thấy %d thiết bị\n", found);
+
+  if (oled3C && oled3D) {
+    Serial.println("  ✅ HAI màn OLED ở hai địa chỉ khác nhau — dùng được cả hai làm hai mắt");
+  } else if (oled3C && !oled3D) {
+    Serial.println("  ⚠️  Chỉ thấy MỘT màn OLED ở 0x3C.");
+    Serial.println("     Nếu bạn đang cắm HAI màn: chúng cùng địa chỉ nên bus chỉ thấy một.");
+    Serial.println("     Cách sửa: lật mặt sau MỘT màn, tìm hai pad hàn ghi 0x78 / 0x7A,");
+    Serial.println("     di mối hàn sang 0x7A. Xong quét lại sẽ thấy 0x3D.");
+  }
+}
+
 static void testBattery() {
   head("KIỂM NGUỒN");
   analogReadResolution(12);
@@ -488,7 +552,8 @@ static void menu() {
   Serial.println("  0  Khám tổng quát bo mạch  ← chạy cái này trước");
   Serial.println("  1  Kiểm micro INMP441");
   Serial.println("  2  Kiểm loa MAX98357A");
-  Serial.println("  3  Kiểm nguồn / ADC");
+  Serial.println("  3  Quét bus I2C (tìm màn OLED, cảm biến)");
+  Serial.println("  4  Kiểm nguồn / ADC");
   Serial.println("  9  Chạy lại menu");
   line('=');
   Serial.print("  Chọn: ");
@@ -515,7 +580,8 @@ void loop() {
     case '0': healthCheck(); break;
     case '1': testMic(); break;
     case '2': testSpeaker(); break;
-    case '3': testBattery(); break;
+    case '3': testI2c(); break;
+    case '4': testBattery(); break;
     case '9': break;
     default: return;
   }

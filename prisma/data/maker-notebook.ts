@@ -209,6 +209,20 @@ export const NOTEBOOK: Notebook = {
       tags: ['platformio'],
     },
     {
+      symptom: 'Mua nhầm tụ gốm — cầm về mới biết sai trị số',
+      cause:
+        'Tụ gốm không ghi thẳng giá trị mà ghi mã 3 chữ số tính bằng pF: hai số đầu là trị số, số cuối là số chữ số 0 thêm vào. Nên 104 = 10 rồi thêm 4 số 0 = 100000 pF = 100 nF = 0,1 µF. Người mới hay tưởng 104 nghĩa là 104 pF.',
+      fix: 'Cần 100 nF thì chọn mã 104. Bảng nhanh: 101=100pF · 102=1nF · 103=10nF · 104=100nF · 105=1µF.',
+      tags: ['tụ', 'linh kiện'],
+    },
+    {
+      symptom: 'Sạc 18650 loại ra 4,2 V không sạc được cụm pin 2S',
+      cause:
+        'Sạc 4,2 V là loại 1S — chỉ sạc MỘT viên. Cụm 2S nối tiếp cần 8,4 V, sạc 1S không đủ áp để đẩy dòng vào.',
+      fix: 'Sạc riêng từng viên bằng đế 1S (cũng chính là cách bắt buộc trước khi nối SONG SONG: sạc riêng đến đầy, đo chênh dưới 0,05 V rồi mới nối). Muốn sạc nguyên cụm 2S trên robot thì cần TP5100.',
+      tags: ['pin', 'sạc'],
+    },
+    {
       symptom: 'Servo kêu è è rồi nóng, sau đó chết',
       cause: 'Bị chặn cơ khí — góc phần mềm cho phép vượt quá giới hạn vật lý, servo cố đẩy mãi vào vật cản.',
       fix: 'Chặn góc trong phần mềm THẤP HƠN giới hạn cơ khí thật vài độ. Riêng khuỷu tay chỉ gập một chiều: giới hạn −120..0, không bao giờ cho vượt 0.',

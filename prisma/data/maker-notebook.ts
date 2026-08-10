@@ -209,6 +209,27 @@ export const NOTEBOOK: Notebook = {
       tags: ['platformio'],
     },
     {
+      symptom: 'MAX98357A: không biết nối chân GAIN vào đâu, và hay nhầm nó với chân SD',
+      cause:
+        'Cả hai chân đều theo kiểu "nối vào đâu thì ra kết quả khác", lại nằm cạnh nhau. GAIN có 5 mức: GND qua trở 100k=15dB · GND=12dB · ĐỂ HỞ=9dB · Vin=6dB · Vin qua trở 100k=3dB. Còn SD thì nối GND là TẮT HẲN chip.',
+      fix: 'Robot dùng GAIN ĐỂ HỞ (9 dB) — đủ to, ít méo, và tiếng loa không to tới mức micro nghe thấy chính robot. Muốn to hơn thì chỉnh phần mềm trước (out->SetGain). SD để hở hoặc nối 3V3, TUYỆT ĐỐI không nối GND.',
+      tags: ['max98357a', 'loa'],
+    },
+    {
+      symptom: 'Không biết nối pin vào IN hay OUT của LM2596, và dây đỏ có chắc là dương không',
+      cause:
+        'IN = nguồn đi vào (pin), OUT = điện đã hạ đi ra tải. Cắm ngược thì mạch không chạy. Màu dây đỏ=dương/đen=âm là quy ước chuẩn nhưng hàng rẻ đôi khi hàn sai từ xưởng.',
+      fix: 'Pin vào IN, ESP32 lấy từ OUT. Nhận biết khi chữ mờ: chip LM2596 gần phía IN, cuộn cảm gần phía OUT. Về màu dây: ĐỪNG TIN, đo bằng đồng hồ — đồng hồ số hiện dấu TRỪ khi que cắm ngược, đó chính là câu trả lời. Pin 18650 trần: đầu có núm = dương, đầu phẳng = âm (vỏ pin cũng là âm).',
+      tags: ['nguồn', 'lm2596', 'pin'],
+    },
+    {
+      symptom: 'Cấp pin 3,7 V vào LM2596 mà ngõ ra không lên nổi 5 V',
+      cause:
+        'LM2596 chỉ HẠ áp được, và cần điện áp vào cao hơn điện áp ra ít nhất 1,5 V. Với 3,7 V vào thì ra chỉ khoảng 2 V.',
+      fix: '2 pin NỐI TIẾP (7,4 V) → dùng LM2596. 1 pin hoặc 2 pin SONG SONG (3,7 V) → phải dùng XL6009 (mạch tăng áp).',
+      tags: ['nguồn', 'lm2596', 'xl6009'],
+    },
+    {
       symptom: 'Mua nhầm tụ gốm — cầm về mới biết sai trị số',
       cause:
         'Tụ gốm không ghi thẳng giá trị mà ghi mã 3 chữ số tính bằng pF: hai số đầu là trị số, số cuối là số chữ số 0 thêm vào. Nên 104 = 10 rồi thêm 4 số 0 = 100000 pF = 100 nF = 0,1 µF. Người mới hay tưởng 104 nghĩa là 104 pF.',

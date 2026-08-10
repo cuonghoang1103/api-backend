@@ -559,8 +559,9 @@ static void handleSayEnd() {
   st.turns++;
   const uint32_t kb = audio::lastClipBytes() / 1024;
   st.lastNote = String("da noi ") + kb + " KB";
-  sendLog("info", String("noi: nhan ") + kb + " KB PCM = " +
-                      (audio::lastClipBytes() / 32000) + " giay tieng");
+  sendLog("info", String("noi: ") + kb + " KB = " + (audio::lastClipBytes() / 32000) +
+                      "s | hut dem " + audio::lastUnderruns() + " lan / " +
+                      audio::lastUnderrunMs() + " ms");
 }
 
 static void onWsEvent(WStype_t type, uint8_t* payload, size_t len) {

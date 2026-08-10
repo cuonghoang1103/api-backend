@@ -134,12 +134,19 @@
 // vẫn vượt thoải mái vì giọng cách 30 cm cao gấp 6-8 lần nền.
 #define VAD_GATE_MULT        4
 
-// Phải to LIÊN TỤC bấy nhiêu khối (×16 ms) mới mở lượt nghe. 8 khối =
-// 128 ms. Một âm tiết tiếng Việt đã dài hơn thế, còn tiếng gõ bàn hay
-// đóng cửa thì chỉ to một hai khối rồi tắt. Đây mới là thứ phân biệt
-// tiếng nói với tiếng động — quan trọng hơn cả cái ngưỡng biên độ.
-#define VAD_OPEN_BLOCKS      8
-#define VAD_SILENCE_MS       800    // im lặng bấy nhiêu = hết lượt nói
+// Bộ đếm RỈ phải đạt bấy nhiêu mới mở lượt nghe (mỗi khối 16 ms).
+// Tăng khi to, giảm khi nhỏ — xem chú thích trong audio.cpp.
+//
+// 5 chứ không phải 8: bắt 8 thì mic "không nhạy, nói 2-3 lần mới
+// nghe", vì tiếng Việt có khoảng lặng giữa các âm tiết và phụ âm đầu
+// gần như im. 5 khối vẫn loại được tiếng gõ bàn (chỉ to một hai khối
+// rồi tắt hẳn nên bộ đếm rỉ hết trước khi chạm ngưỡng).
+#define VAD_OPEN_BLOCKS      5
+// Im lặng bấy nhiêu = hết lượt nói. 650 chứ không 800: đây là thời
+// gian CHẾT cộng thẳng vào mỗi lượt, người dùng cảm nhận nó y hệt độ
+// trễ của server. Dưới 600 thì bắt đầu cắt ngang lúc người ta ngập
+// ngừng giữa câu.
+#define VAD_SILENCE_MS       650
 #define VAD_MAX_TURN_MS      15000
 #define VAD_COOLDOWN_MS      300    // vừa dứt lượt, đừng kích lại ngay
 

@@ -45,6 +45,13 @@ static bool playOverflow = false;
  */
 static bool playEnded = false;
 
+// Đếm để BIẾT chứ không đoán: bao nhiêu lần đệm cạn giữa lúc phát, và
+// tổng cộng bao lâu. Suốt mấy vòng sửa vừa rồi tôi toàn suy luận xem
+// tiếng bị lặp ở đâu; hai con số này trả lời thẳng câu đó.
+static uint32_t underruns = 0;
+static uint32_t underrunMs = 0;
+static uint32_t underrunSince = 0;
+
 /**
  * Phát khi mới nhận được bấy nhiêu byte, KHÔNG đợi nhận đủ cả câu.
  *
@@ -274,6 +281,9 @@ void playBegin(uint32_t sampleRate) {
   readPos = 0;
   playOverflow = false;
   playEnded = false;
+  underruns = 0;
+  underrunMs = 0;
+  underrunSince = 0;
   playState = PLAY_FILLING;
 
   // Đang nghe dở mà server chen tiếng vào thì bỏ lượt nghe đó — nếu
@@ -405,11 +415,24 @@ static void pumpPlayback() {
   // nhưng tai người bỏ qua một quãng lặng dễ hơn nhiều so với một mẩu
   // tiếng lặp lại.
   if (buffered() == 0 && !playEnded) {
+    if (!underrunSince) {
+      underrunSince = millis();
+      underruns++;
+    }
+    // Bơm im lặng cho tới khi DMA no, KHÔNG phải một khối rồi thôi —
+    // một khối là 16 ms, mà vòng loop() chỉ chạy 60 lần/giây nên vẫn
+    // nạp chậm hơn thời gian thực và DMA vẫn kịp cạn để lặp.
     memset(stereoBlock, 0, AUDIO_BLOCK_SAMPLES * 2 * sizeof(int16_t));
-    size_t w = 0;
-    i2s_write(I2S_NUM_1, stereoBlock, AUDIO_BLOCK_SAMPLES * 2 * sizeof(int16_t), &w,
-              portMAX_DELAY);
+    for (int i = 0; i < 24; i++) {
+      size_t w = 0;
+      i2s_write(I2S_NUM_1, stereoBlock, AUDIO_BLOCK_SAMPLES * 2 * sizeof(int16_t), &w, 0);
+      if (w < AUDIO_BLOCK_SAMPLES * 2 * sizeof(int16_t)) break;
+    }
     return;
+  }
+  if (underrunSince) {
+    underrunMs += millis() - underrunSince;
+    underrunSince = 0;
   }
 
   if (buffered() == 0) {
@@ -584,9 +607,20 @@ static void pumpMic() {
     // tự đẩy ngưỡng lên và câu sau bị bỏ qua.
     if (!loud) noiseFloor += (micLevel - noiseFloor) / 64;
 
-    // Đếm chuỗi khối to liên tiếp. To một hai khối rồi tắt = tiếng
-    // động, không phải người nói.
-    loudRun = loud ? (uint8_t)(loudRun + 1) : 0;
+    // Bộ đếm RỈ, không phải chuỗi liên tiếp.
+    //
+    // Bản trước xoá sạch bộ đếm mỗi khi có một khối nhỏ — và tiếng
+    // Việt thì KHÔNG liên tục: giữa các âm tiết có khoảng lặng, phụ
+    // âm đầu gần như im, "th", "kh", "s" đều tụt xuống dưới ngưỡng.
+    // Chỉ một nhịp hụt là về 0 và không bao giờ đủ 8 khối. Người dùng
+    // thấy đúng như vậy: "mic không nhạy, nói 2-3 lần mới nghe".
+    //
+    // Tăng khi to, GIẢM DẦN khi nhỏ. Một tiếng gõ bàn vẫn bị loại vì
+    // nó chỉ to một hai khối rồi tắt hẳn nên bộ đếm rỉ hết trước khi
+    // chạm ngưỡng; còn một câu nói thì các khoảng lặng ngắn không đủ
+    // xoá công của những khối to trước đó.
+    if (loud) loudRun++;
+    else if (loudRun > 0) loudRun--;
 
     if (loudRun < VAD_OPEN_BLOCKS) {
       pushPreroll(pcmBlock);
@@ -628,5 +662,7 @@ int32_t level() { return micLevel; }
 int32_t noise() { return noiseFloor; }
 int32_t gate() { return vadGate(); }
 uint32_t lastClipBytes() { return lastClip; }
+uint32_t lastUnderruns() { return underruns; }
+uint32_t lastUnderrunMs() { return underrunMs + (underrunSince ? millis() - underrunSince : 0); }
 
 }  // namespace audio

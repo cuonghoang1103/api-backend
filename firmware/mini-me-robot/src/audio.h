@@ -80,5 +80,8 @@ int32_t noise();
 int32_t gate();
 /** Số byte của đoạn phát gần nhất, để hiện lên màn. */
 uint32_t lastClipBytes();
+/** Số lần và tổng thời gian đệm cạn trong đoạn vừa phát. */
+uint32_t lastUnderruns();
+uint32_t lastUnderrunMs();
 
 }  // namespace audio

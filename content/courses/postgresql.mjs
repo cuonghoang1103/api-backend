@@ -15,6 +15,7 @@ import s05 from './postgresql/s05-join.mjs';
 import s06 from './postgresql/s06-tong-hop.mjs';
 import s07 from './postgresql/s07-subquery-cte.mjs';
 import s08 from './postgresql/s08-window.mjs';
+import s09 from './postgresql/s09-chi-muc.mjs';
 
 export default {
   category: { slug: 'databases', name: 'Cơ sở dữ liệu', icon: 'Database', sortOrder: 3 },
@@ -44,5 +45,6 @@ export default {
     s06,
     s07,
     s08,
+    s09,
   ],
 };

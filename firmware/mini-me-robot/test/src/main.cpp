@@ -20,6 +20,10 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <Wire.h>
+#ifdef HAS_TFT
+#  include <TFT_eSPI.h>
+static TFT_eSPI tft = TFT_eSPI();
+#endif
 #include <esp_system.h>
 #include <esp_chip_info.h>
 #include <esp_flash.h>
@@ -666,6 +670,119 @@ static void testLoopback() {
   }
 }
 
+#ifdef HAS_TFT
+/**
+ * Kiểm màn 3.5" SPI — và cho thấy luôn nó sẽ dùng để làm gì.
+ *
+ * Bốn bước, mỗi bước loại trừ một nguyên nhân:
+ *   1. Tô ba màu nguyên  → nếu sai màu thì chip driver chọn sai
+ *   2. Vẽ khung + chữ    → xác nhận toạ độ và font đúng chiều
+ *   3. Vẽ hai con mắt    → xem thử làm mặt robot trông thế nào
+ *   4. Bảng trạng thái   → đúng thứ màn này sẽ hiển thị ở ngực robot
+ */
+static void testTft() {
+  head("KIỂM MÀN HÌNH 3.5\" SPI");
+#ifdef ILI9488_DRIVER
+  Serial.println("  Driver biên dịch: ILI9488");
+#elif defined(ST7796_DRIVER)
+  Serial.println("  Driver biên dịch: ST7796");
+#endif
+  Serial.println("  NHÌN VÀO MÀN HÌNH — sẽ chạy 4 bước, mỗi bước 2 giây");
+
+  tft.init();
+  tft.setRotation(1);  // nằm ngang: 480 rộng × 320 cao
+
+  // ── 1. Ba màu nguyên ──
+  Serial.println("  [1/4] Tô đỏ → lục → lam");
+  const uint16_t colors[3] = {TFT_RED, TFT_GREEN, TFT_BLUE};
+  const char* names[3] = {"ĐỎ", "LỤC", "LAM"};
+  for (int i = 0; i < 3; i++) {
+    tft.fillScreen(colors[i]);
+    tft.setTextColor(TFT_WHITE, colors[i]);
+    tft.setTextSize(3);
+    tft.setCursor(20, 20);
+    tft.print(names[i]);
+    delay(700);
+  }
+
+  // ── 2. Khung + chữ ──
+  Serial.println("  [2/4] Khung viền + chữ");
+  tft.fillScreen(TFT_BLACK);
+  tft.drawRect(0, 0, tft.width(), tft.height(), TFT_WHITE);
+  tft.drawRect(4, 4, tft.width() - 8, tft.height() - 8, TFT_CYAN);
+  tft.setTextColor(TFT_CYAN, TFT_BLACK);
+  tft.setTextSize(2);
+  tft.setCursor(20, 30);
+  tft.printf("%d x %d", tft.width(), tft.height());
+  tft.setTextSize(1);
+  tft.setCursor(20, 60);
+  tft.print("Neu thay khung SAT MEP 4 canh -> toa do dung");
+  delay(2000);
+
+  // ── 3. Hai con mắt ──
+  Serial.println("  [3/4] Vẽ hai con mắt");
+  tft.fillScreen(TFT_BLACK);
+  const int cx[2] = {tft.width() / 2 - 90, tft.width() / 2 + 90};
+  for (int e = 0; e < 2; e++) {
+    tft.fillCircle(cx[e], tft.height() / 2, 70, TFT_BLUE);
+    tft.fillCircle(cx[e], tft.height() / 2, 44, tft.color565(0, 40, 130));
+    tft.fillCircle(cx[e], tft.height() / 2, 24, TFT_BLACK);
+    tft.fillCircle(cx[e] - 18, tft.height() / 2 - 18, 12, TFT_WHITE);
+  }
+  delay(2000);
+
+  // ── 4. Bảng trạng thái — vai trò thật của màn này ──
+  Serial.println("  [4/4] Bảng trạng thái (vai trò thật ở ngực robot)");
+  tft.fillScreen(TFT_BLACK);
+  tft.setTextColor(TFT_GREEN, TFT_BLACK);
+  tft.setTextSize(2);
+  tft.setCursor(12, 12);
+  tft.print("MINI-ME ROBOT");
+  tft.drawFastHLine(12, 36, tft.width() - 24, TFT_DARKGREY);
+
+  tft.setTextSize(1);
+  tft.setTextColor(TFT_WHITE, TFT_BLACK);
+  int y = 52;
+  tft.setCursor(12, y); tft.print("Chip    : ESP32-S3  8MB PSRAM");     y += 18;
+  tft.setCursor(12, y); tft.print("Micro   : INMP441   OK");            y += 18;
+  tft.setCursor(12, y); tft.print("Loa     : MAX98357A OK");            y += 18;
+  tft.setCursor(12, y); tft.printf("Man hinh: %dx%d      OK", tft.width(), tft.height()); y += 24;
+
+  // Thanh mức âm thanh — thứ sẽ chạy thật khi robot nghe
+  tft.setTextColor(TFT_CYAN, TFT_BLACK);
+  tft.setCursor(12, y); tft.print("Muc micro (noi vao mic di):");
+  int barY = y + 16;
+  tft.drawRect(12, barY, tft.width() - 24, 22, TFT_DARKGREY);
+
+  micInit();
+  uint32_t t0 = millis();
+  int32_t samples[256];
+  size_t got = 0;
+  while (millis() - t0 < 8000) {
+    i2s_read(I2S_NUM_0, samples, sizeof(samples), &got, portMAX_DELAY);
+    int n = got / sizeof(int32_t);
+    int64_t sum = 0;
+    for (int i = 0; i < n; i++) sum += abs(samples[i] >> 8);
+    int32_t level = n ? sum / n : 0;
+
+    int w = map(constrain(level, 0, 15000), 0, 15000, 0, tft.width() - 28);
+    tft.fillRect(14, barY + 2, w, 18, level > 2800 ? TFT_GREEN : TFT_BLUE);
+    tft.fillRect(14 + w, barY + 2, tft.width() - 28 - w, 18, TFT_BLACK);
+  }
+
+  line();
+  Serial.println("  Thấy đủ 4 bước → màn hình và driver ĐÚNG.");
+  Serial.println("  Vẫn TRẮNG XOÁ → sai driver, nạp env còn lại:");
+#ifdef ILI9488_DRIVER
+  Serial.println("     pio run -e test-st7796 -t upload");
+#else
+  Serial.println("     pio run -e test-ili9488 -t upload");
+#endif
+  Serial.println("  Có hình nhưng SỌC NHIỄU → hạ SPI_FREQUENCY xuống 20000000");
+  Serial.println("  Màu SAI (đỏ ra xanh) → cũng là sai driver, đổi env");
+}
+#endif  // HAS_TFT
+
 static void testBattery() {
   head("KIỂM NGUỒN");
   analogReadResolution(12);
@@ -690,6 +807,9 @@ static void menu() {
   Serial.println("  3  Quét bus I2C (tìm màn OLED, cảm biến)");
   Serial.println("  4  Kiểm nguồn / ADC");
   Serial.println("  5  Kiểm loa BẰNG MICRO (máy tự nghe, không cần tai)");
+#ifdef HAS_TFT
+  Serial.println("  6  Kiểm màn hình 3.5 inch");
+#endif
   Serial.println("  9  Chạy lại menu");
   line('=');
   Serial.print("  Chọn: ");
@@ -719,6 +839,9 @@ void loop() {
     case '3': testI2c(); break;
     case '4': testBattery(); break;
     case '5': testLoopback(); break;
+#ifdef HAS_TFT
+    case '6': testTft(); break;
+#endif
     case '9': break;
     default: return;
   }

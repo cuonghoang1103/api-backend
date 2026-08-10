@@ -209,6 +209,21 @@ export const NOTEBOOK: Notebook = {
       tags: ['platformio'],
     },
     {
+      symptom: '`tft.init()` TREO CỨNG trên ESP32-S3 — không lỗi, không timeout, chương trình chỉ đứng im giữa chừng',
+      cause:
+        'TFT_eSPI không được chỉ định bus SPI thì tự chọn bus mặc định, mà chân của bus đó trùng GPIO 33–37 — vốn đã bị PSRAM octal chiếm trên bản N16R8. Xung đột chân không sinh ra lỗi nào, chỉ làm hàm init đứng vĩnh viễn.',
+      fix: 'Thêm `-DUSE_HSPI_PORT` vào build_flags. Dấu hiệu nhận ra: log in được dòng ngay TRƯỚC tft.init() rồi im bặt, dòng sau không bao giờ xuất hiện.',
+      costMe: 'Ba lần thử lại mới lần ra, vì không có thông báo lỗi nào để bám',
+      tags: ['esp32-s3', 'tft_espi', 'spi', 'psram'],
+    },
+    {
+      symptom: 'Gửi lệnh qua serial cho ESP32-S3 nhưng bo không phản ứng',
+      cause:
+        'Mở cổng serial làm ESP32-S3 (USB CDC tích hợp) RESET. Ký tự gửi ngay sau khi mở cổng rơi vào lúc bo còn đang boot nên bị bỏ qua hoàn toàn.',
+      fix: 'Sau khi mở cổng, `sleep(4)` hoặc đọc cho tới khi thấy dấu nhắc rồi mới gửi lệnh. Với script tự động thì gửi lặp vài lần cách nhau ~0,3 s.',
+      tags: ['esp32-s3', 'serial', 'usb-cdc'],
+    },
+    {
       symptom: 'Phép kiểm tự động báo "loa không kêu" nhưng tai nghe rõ mồn một',
       cause:
         'Phép kiểm phát nốt rồi đo mức micro để tự xác nhận loa. Nhưng micro và loa đặt cách nhau vài chục cm và lệch hướng màng, nên tiếng vọng về không vượt nổi mức nền. Phép đo trả về "không nghe thấy" trong khi mạch hoàn toàn đúng.',

@@ -34,7 +34,7 @@ import { WebSocket } from 'ws';
 import { randomUUID } from 'crypto';
 import { logger } from '../../utils/logger.js';
 
-export type TtsProvider = 'edge' | 'google' | 'openai' | 'elevenlabs';
+export type TtsProvider = 'edge' | 'google' | 'gcloud' | 'openai' | 'elevenlabs';
 
 export interface TtsOptions {
   provider?: TtsProvider;
@@ -60,6 +60,10 @@ const DEFAULT_VOICE: Record<TtsProvider, string> = {
   google: 'vi',
   openai: 'onyx',
   elevenlabs: '', // no default — a cloned voice id is always explicit
+  // Giọng nam WaveNet tiếng Việt. Chọn WaveNet chứ không phải Chirp3
+  // vì hạn miễn phí gấp BỐN lần (4 triệu ký tự/tháng so với 1 triệu),
+  // mà với robot để bàn thì 4 triệu là không bao giờ chạm tới.
+  gcloud: 'vi-VN-Wavenet-D',
 };
 
 const TTS_TIMEOUT_MS = Number(process.env.MAKERLAB_TTS_TIMEOUT_MS) || 20_000;
@@ -73,7 +77,8 @@ function envProvider(): TtsProvider {
   // handshake on every single reply, which is 60% of the latency
   // budget for a robot that has one second to answer.
   const p = (process.env.MAKERLAB_TTS_PROVIDER || 'google').toLowerCase();
-  if (p === 'google' || p === 'openai' || p === 'elevenlabs' || p === 'edge') return p;
+  if (p === 'google' || p === 'gcloud' || p === 'openai' || p === 'elevenlabs' || p === 'edge')
+    return p;
   return 'google';
 }
 
@@ -111,6 +116,7 @@ export async function synthesizeSpeech(text: string, opts: TtsOptions = {}): Pro
 }
 
 function providerConfigured(p: TtsProvider): boolean {
+  if (p === 'gcloud') return !!process.env.GOOGLE_TTS_API_KEY;
   if (p === 'openai') return !!process.env.OPENAI_API_KEY;
   if (p === 'elevenlabs') return !!process.env.ELEVENLABS_API_KEY;
   // Edge needs its client token supplied; unset means skip it.
@@ -126,6 +132,8 @@ function runProvider(p: TtsProvider, text: string, opts: TtsOptions): Promise<Bu
       return synthesizeEdge(text, voice || DEFAULT_VOICE.edge, lang, opts);
     case 'google':
       return synthesizeGoogle(text, lang.split('-')[0] || 'vi');
+    case 'gcloud':
+      return synthesizeGoogleCloud(text, voice || DEFAULT_VOICE.gcloud, lang);
     case 'openai':
       return synthesizeOpenAI(text, voice || DEFAULT_VOICE.openai);
     case 'elevenlabs':
@@ -407,3 +415,99 @@ export const cloneVoiceHowTo = {
     'Khởi động lại container backend. Không phải build lại, không phải sửa code.',
   ],
 };
+
+// ─── Google Cloud Text-to-Speech ───────────────────────────
+
+/**
+ * Khác hẳn `synthesizeGoogle` ở trên. Cái kia gọi `translate_tts` —
+ * cửa sau miễn phí không cần khoá, đúng MỘT giọng máy móc cho mỗi
+ * ngôn ngữ, và Google có thể chặn bất cứ lúc nào. Cái này là dịch vụ
+ * thật, có khoá, nhiều giọng, chất lượng hơn hẳn.
+ *
+ * Vì sao đáng đổi — con số lấy từ bảng giá chính thức 10/08/2026:
+ *
+ *   WaveNet / Standard   4.000.000 ký tự/tháng miễn phí, sau đó  4 $/1M
+ *   Neural2 / Chirp3-HD  1.000.000 ký tự/tháng miễn phí, sau đó 16-30 $/1M
+ *
+ * Robot mỗi lượt nói ~120 ký tự. 4 triệu ký tự là ~33.000 lượt mỗi
+ * tháng, tức 1.100 lượt mỗi ngày — với một con robot để bàn thì đó là
+ * vô hạn trên thực tế. Để so: ElevenLabs gói 22 $ cho 121.000 ký tự,
+ * tức ~1.000 lượt/tháng. Gấp 33 lần, mà miễn phí.
+ *
+ * Đánh đổi: KHÔNG nhân bản được giọng của bạn. Đó vẫn là chỗ duy nhất
+ * ElevenLabs hơn.
+ */
+async function synthesizeGoogleCloud(
+  text: string,
+  voice: string,
+  lang: string,
+): Promise<Buffer> {
+  const key = process.env.GOOGLE_TTS_API_KEY;
+  if (!key) throw new Error('GOOGLE_TTS_API_KEY missing');
+
+  // Tên giọng đã cõng sẵn mã ngôn ngữ ("vi-VN-Wavenet-D") — lấy từ đó
+  // ra thay vì tin vào `lang` truyền xuống, vì chọn nhầm cặp
+  // ngôn-ngữ/giọng thì API trả 400 chứ không tự sửa.
+  const languageCode = /^[a-z]{2}-[A-Z]{2}/.exec(voice)?.[0] || lang || 'vi-VN';
+
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), TTS_TIMEOUT_MS);
+  try {
+    const res = await fetch(
+      `https://texttospeech.googleapis.com/v1/text:synthesize?key=${encodeURIComponent(key)}`,
+      {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          input: { text },
+          voice: { languageCode, name: voice },
+          // MP3 chứ không phải LINEAR16: gateway đã có sẵn đường đổi
+          // sang PCM cho bo, và MP3 nhẹ hơn ~4 lần khi đi qua mạng tới
+          // VPS. Chỗ này không phải nút thắt — đổi mã chỉ tốn ~120 ms.
+          audioConfig: { audioEncoding: 'MP3' },
+        }),
+        signal: ctrl.signal,
+      },
+    );
+    if (!res.ok) {
+      const detail = await res.text().catch(() => '');
+      throw new Error(`gcloud tts HTTP ${res.status} ${detail.slice(0, 160)}`);
+    }
+    const json = (await res.json()) as { audioContent?: string };
+    if (!json.audioContent) throw new Error('gcloud tts: thiếu audioContent');
+    return Buffer.from(json.audioContent, 'base64');
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/**
+ * Giọng tiếng Việt của Google Cloud, để UI khỏi phải đoán.
+ *
+ * Danh sách này có thể lệch với thực tế theo thời gian — gọi
+ * `listGoogleCloudVoices()` để lấy bản thật từ API khi cần chắc chắn.
+ */
+export const GCLOUD_VI_VOICES = [
+  { id: 'vi-VN-Wavenet-A', label: 'WaveNet A — nữ' },
+  { id: 'vi-VN-Wavenet-B', label: 'WaveNet B — nam' },
+  { id: 'vi-VN-Wavenet-C', label: 'WaveNet C — nữ' },
+  { id: 'vi-VN-Wavenet-D', label: 'WaveNet D — nam' },
+  { id: 'vi-VN-Standard-A', label: 'Standard A — nữ' },
+  { id: 'vi-VN-Standard-B', label: 'Standard B — nam' },
+  { id: 'vi-VN-Standard-C', label: 'Standard C — nữ' },
+  { id: 'vi-VN-Standard-D', label: 'Standard D — nam' },
+  { id: 'vi-VN-Neural2-A', label: 'Neural2 A — nữ (hạn 1M/tháng)' },
+  { id: 'vi-VN-Neural2-D', label: 'Neural2 D — nam (hạn 1M/tháng)' },
+];
+
+/** Hỏi thẳng API xem tài khoản này có những giọng nào. */
+export async function listGoogleCloudVoices(lang = 'vi-VN'): Promise<string[]> {
+  const key = process.env.GOOGLE_TTS_API_KEY;
+  if (!key) throw new Error('GOOGLE_TTS_API_KEY missing');
+  const res = await fetch(
+    `https://texttospeech.googleapis.com/v1/voices?languageCode=${encodeURIComponent(lang)}&key=${encodeURIComponent(key)}`,
+  );
+  if (!res.ok) throw new Error(`gcloud voices HTTP ${res.status}`);
+  const json = (await res.json()) as { voices?: Array<{ name?: string }> };
+  return (json.voices ?? []).map((v) => v.name ?? '').filter(Boolean);
+}

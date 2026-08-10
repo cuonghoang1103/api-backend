@@ -547,7 +547,16 @@ static void onWsEvent(WStype_t type, uint8_t* payload, size_t len) {
       st.wsUp = false;
       st.mode = MODE_IDLE;
       st.lastNote = "mat ket noi server";
-      audio::playStop();
+      // KHÔNG cắt tiếng đang phát.
+      //
+      // Trước đây chỗ này gọi playStop() — mất mạng là im bặt giữa
+      // chừng, và người dùng thấy đúng triệu chứng "robot nói được 1-2
+      // chữ rồi loa tự ngắt". Mà phần tiếng đã nằm sẵn trong đệm PSRAM
+      // rồi, mạng có rớt cũng không lấy lại được gì khi vứt nó đi.
+      //
+      // playEnd() đánh dấu "hết nguồn" để đệm chảy nốt rồi dừng sạch
+      // sẽ. Robot nói hết câu đang dở, rồi mới im.
+      audio::playEnd();
       upLen = 0;
       Serial.println("[ws] disconnected");
       break;

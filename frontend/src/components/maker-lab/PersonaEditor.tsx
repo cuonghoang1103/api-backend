@@ -46,11 +46,27 @@ interface VoiceOption {
  */
 const VOICES: VoiceOption[] = [
   {
+    provider: 'gcloud',
+    label: 'Google Cloud TTS ⭐ khuyên dùng',
+    voices: [
+      { id: 'vi-VN-Wavenet-D', label: 'WaveNet D — nam' },
+      { id: 'vi-VN-Wavenet-B', label: 'WaveNet B — nam' },
+      { id: 'vi-VN-Wavenet-A', label: 'WaveNet A — nữ' },
+      { id: 'vi-VN-Wavenet-C', label: 'WaveNet C — nữ' },
+      { id: 'vi-VN-Standard-D', label: 'Standard D — nam (nhẹ hơn)' },
+      { id: 'vi-VN-Standard-A', label: 'Standard A — nữ (nhẹ hơn)' },
+      { id: 'vi-VN-Neural2-D', label: 'Neural2 D — nam (hạn 1M/tháng)' },
+      { id: 'vi-VN-Neural2-A', label: 'Neural2 A — nữ (hạn 1M/tháng)' },
+    ],
+    status: 'need-key',
+    note: '4 TRIỆU ký tự miễn phí mỗi tháng ≈ 33.000 lượt robot nói ≈ 1.100 lượt/ngày — thực tế là vô hạn. Gấp 33 lần ElevenLabs gói 22 $, mà không mất đồng nào. Bốn giọng Việt nam/nữ. Cần GOOGLE_TTS_API_KEY.',
+  },
+  {
     provider: 'google',
-    label: 'Google (miễn phí)',
+    label: 'Google translate_tts (đang dùng)',
     voices: [{ id: 'vi', label: 'Tiếng Việt — giọng duy nhất' }],
     status: 'ok',
-    note: 'Đang dùng. Miễn phí, không cần khoá, nhưng chỉ có một giọng và không chỉnh được.',
+    note: 'Cửa sau miễn phí, không cần khoá — nhưng đúng một giọng máy móc, không chỉnh được, và Google có thể chặn bất cứ lúc nào.',
   },
   {
     provider: 'edge',

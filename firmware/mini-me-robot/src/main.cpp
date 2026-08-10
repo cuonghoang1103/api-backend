@@ -533,6 +533,7 @@ static void onWsEvent(WStype_t type, uint8_t* payload, size_t len) {
       Serial.println("[ws] connected");
       sendHello();
       sendLog("info", "Mini-Me chang B: da co tai va mieng");
+      ws.enableHeartbeat(15000, 3000, 2);
 
       // Chào một câu ngay khi lên mạng — MỘT LẦN mỗi lần khởi động.
       //
@@ -829,6 +830,24 @@ void setup() {
   st.lastNote = "dang ket noi WiFi...";
   uiRefresh();
   WiFi.mode(WIFI_STA);
+
+  // ⚠️ TẮT CHẾ ĐỘ NGỦ CỦA WIFI. Một dòng, và nó chữa đúng triệu chứng
+  // đã đuổi theo cả ngày.
+  //
+  // ESP32 mặc định bật modem-sleep: chip tắt bộ thu giữa các nhịp
+  // beacon để tiết kiệm điện, và router phải ĐỆM gói tin lại chờ nó
+  // tỉnh. Gói đi RA thì không sao — lúc phát là lúc chip thức. Gói đi
+  // VÀO thì trễ hoặc rơi.
+  //
+  // Khớp chính xác những gì đo được: yêu cầu của bo tới được nginx
+  // (nginx ghi 101 và gửi 73 byte), mà bo đọc được 0 byte trong 30
+  // giây. Gửi được, nhận không được. Và chập chờn — có lúc chạy 77
+  // giây liền, có lúc rớt ngay.
+  //
+  // Giá phải trả: tốn điện hơn. Với robot cắm nguồn thì không đáng kể;
+  // khi nào chạy pin mới cân nhắc bật lại.
+  WiFi.setSleep(false);
+
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
   uint32_t t0 = millis();
@@ -875,7 +894,12 @@ void setup() {
 #endif
   ws.onEvent(onWsEvent);
   ws.setReconnectInterval(WS_RECONNECT_BASE_MS);
-  ws.enableHeartbeat(15000, 3000, 2);
+  // Nhịp tim bật trong WStype_CONNECTED chứ không phải ở đây: đặt
+  // trước khi nối thì mốc `lastPing` tính từ lúc khởi động, nên ngay
+  // giây đầu sau khi nối thư viện đã kêu "pong TIMEOUT!" vì so với
+  // một mốc từ tám nghìn mili giây trước. Nó tự phục hồi, nhưng một
+  // cảnh báo GIẢ trong log là thứ sẽ làm mất thời gian của ai đó về
+  // sau — hôm nay tôi đã mất mấy tiếng vì đúng loại nhiễu như vậy.
 
   // Ưu tiên 1 = thấp hơn loopTask, nên nó không cướp nhịp; nhưng vẫn
   // được chạy vì mọi lời gọi chặn trong loop() đều nhường CPU.

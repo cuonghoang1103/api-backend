@@ -194,8 +194,17 @@ static bool ampInit() {
   cfg.channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT;
   cfg.communication_format = I2S_COMM_FORMAT_STAND_I2S;
   cfg.intr_alloc_flags = 0;
-  cfg.dma_buf_count = 8;
-  cfg.dma_buf_len = 256;
+  // 16 x 512 khung = 512 ms tiếng nằm sẵn trong phần cứng, gấp bốn lần
+  // bản đầu (8 x 256 = 128 ms).
+  //
+  // 128 ms quá mỏng: chỉ cần một cú vẽ màn hình, một khung WebSocket
+  // to, hay một lần thu gom bộ nhớ là đệm cạn và loa lặp lại mẩu vừa
+  // phát. Nửa giây thì nuốt được mọi cú khựng của vòng loop() mà vẫn
+  // chưa đủ dài để tai nhận ra độ trễ.
+  //
+  // Giá: 32 KB RAM trong. Bo còn 190 KB khối liền mạch, thừa sức.
+  cfg.dma_buf_count = 16;
+  cfg.dma_buf_len = 512;
   cfg.use_apll = false;
 
   i2s_pin_config_t pins = {};
@@ -339,24 +348,47 @@ static void pumpPlayback() {
   if (playState != PLAY_DRAINING) return;
 
   const uint32_t cap = playCapacity();
-  const uint32_t have = buffered();
-  const uint32_t take = have < AUDIO_BLOCK_SAMPLES * 2 ? have : AUDIO_BLOCK_SAMPLES * 2;
-  const uint32_t n = take / 2;  // số mẫu 16 bit
 
-  if (n) {
-    // Đọc vòng: gom ra khối phẳng trước, vì mẩu cần đọc có thể vắt qua
-    // chỗ nối cuối-đầu của mảng.
+  // ⚠️ NHỒI ĐẦY DMA MỖI VÒNG, không nhỏ giọt một khối.
+  //
+  // Bản trước ghi đúng MỘT khối 256 mẫu (16 ms) mỗi vòng loop(). Vòng
+  // chạy khoảng 60 lần/giây, tức 960 ms tiếng cho mỗi 1000 ms thực —
+  // nạp CHẬM HƠN thời gian thực 4%. Nghe ra hai kiểu khác nhau:
+  //
+  //   giọng nói : DMA cạn định kỳ rồi lặp lại mẩu vừa phát
+  //               ("tôi tôi tôi tôi tới tới chơi chơi")
+  //   nhạc      : nguồn vẫn chảy đều nên đệm TRÀN, mẩu bị bỏ,
+  //               bài nhảy cóc rồi hết sớm
+  //
+  // Cách đúng là ghi tới khi DMA no: dùng hạn chờ 0 và dừng lại khi
+  // nó không nhận thêm. Nhịp phát khi đó do phần cứng quyết định, chứ
+  // không phụ thuộc vòng loop() chạy nhanh hay chậm — mà vòng loop()
+  // thì luôn co giãn theo mạng và màn hình.
+  for (int round = 0; round < 24; round++) {
+    const uint32_t have = buffered();
+    if (have < 2) break;
+
+    const uint32_t take = have < AUDIO_BLOCK_SAMPLES * 2 ? have : AUDIO_BLOCK_SAMPLES * 2;
+    const uint32_t n = take / 2;
+    if (!n) break;
+
     const uint32_t at = readPos % cap;
     for (uint32_t i = 0; i < n; i++) {
       const uint32_t o = (at + i * 2) % cap;
-      const int16_t raw = (int16_t)((uint16_t)playBuf[o] | ((uint16_t)playBuf[(o + 1) % cap] << 8));
+      const int16_t raw =
+          (int16_t)((uint16_t)playBuf[o] | ((uint16_t)playBuf[(o + 1) % cap] << 8));
       const int16_t v = applyVolume(raw);
       stereoBlock[i * 2] = v;
       stereoBlock[i * 2 + 1] = v;
     }
+
     size_t wrote = 0;
-    i2s_write(I2S_NUM_1, stereoBlock, n * 2 * sizeof(int16_t), &wrote, portMAX_DELAY);
-    readPos += n * 2;
+    i2s_write(I2S_NUM_1, stereoBlock, n * 2 * sizeof(int16_t), &wrote, 0);
+    if (wrote == 0) return;  // DMA đã no — để dành vòng sau
+
+    // `wrote` đếm byte khung STEREO; mỗi mẫu một kênh cõng 4 byte.
+    readPos += (wrote / 4) * 2;
+    if (wrote < n * 2 * sizeof(int16_t)) return;  // ghi dở → DMA sắp no
   }
 
   // ⚠️ HỤT ĐỆM: phải bơm IM LẶNG, không được bỏ mặc DMA.
@@ -388,7 +420,7 @@ static void pumpPlayback() {
     // mãi. Ghi đủ một vòng đệm toàn số 0 vừa đẩy nốt phần đuôi thật ra
     // loa, vừa để lại trạng thái im lặng sạch sẽ.
     memset(stereoBlock, 0, sizeof(stereoBlock));
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < 32; i++) {  // đủ phủ hết vòng đệm DMA mới
       size_t w = 0;
       i2s_write(I2S_NUM_1, stereoBlock, sizeof(stereoBlock), &w, portMAX_DELAY);
     }

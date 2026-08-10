@@ -255,6 +255,37 @@ export const NOTEBOOK: Notebook = {
   // ══════════════════════════════════════════════════════════
   snippets: [
     {
+      title: 'Ngưỡng VAD thật — đo trên phần cứng ngày 10/08/2026',
+      lang: 'cpp',
+      why: 'Số đo THẬT từ INMP441 trong phòng làm việc, không phải số đoán trong datasheet. Nền im lặng ~1200-2000, nói bình thường 4000-9000, đỉnh 539466. Chọn ngưỡng 2800 nằm giữa nền và giọng nói, đủ xa cả hai phía để không kích nhầm vì tiếng quạt mà cũng không bỏ sót câu nói nhỏ.',
+      code: `// Đo được trên bo thật, phòng có tiếng quạt:
+//   im lặng      1200 – 2000
+//   nói thường   4000 – 9000
+//   đỉnh        539466
+#define VAD_THRESHOLD    2800   // giữa nền và giọng nói
+#define VAD_SILENCE_MS    800   // im bấy nhiêu = hết lượt nói
+
+bool speaking = false;
+uint32_t lastLoudMs = 0;
+
+void vadLoop() {
+  int32_t level = micLevel();
+
+  if (level > VAD_THRESHOLD) {
+    if (!speaking) {
+      speaking = true;
+      ws.sendTXT("{\\"t\\":\\"audio_start\\"}");   // báo server: bắt đầu lượt
+    }
+    lastLoudMs = millis();
+  } else if (speaking && millis() - lastLoudMs > VAD_SILENCE_MS) {
+    speaking = false;
+    ws.sendTXT("{\\"t\\":\\"audio_end\\"}");       // hết lượt → server xử lý
+  }
+
+  if (speaking) sendAudioChunk();   // chỉ gửi khi có người nói
+}`,
+    },
+    {
       title: 'Kiểm PSRAM ngay lúc khởi động',
       lang: 'cpp',
       why: 'Biết sớm còn hơn hết RAM giữa lượt nói. Đặt ngay đầu setup().',

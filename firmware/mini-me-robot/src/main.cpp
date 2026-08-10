@@ -632,7 +632,7 @@ static String wsNonce() {
  * Quan trọng: máy tính của bạn cắm mạng khác thì mọi phép thử từ máy
  * tính đều VÔ NGHĨA với bo. Chỉ chính bo mới đo được đường của chính nó.
  */
-static void probeNetwork() {
+__attribute__((unused)) static void probeNetwork() {
   IPAddress ip;
   uint32_t t0 = millis();
   if (!WiFi.hostByName(WS_HOST, ip)) {
@@ -832,10 +832,21 @@ void setup() {
   }
   uiRefresh();
 
+  // ⚠️ Bộ tự chẩn đoán mạng TẮT theo mặc định.
+  //
+  // Nó đã làm xong việc của nó (chứng minh DNS/TCP/TLS/HTTPS đều thông),
+  // nhưng nó mở thêm hai kết nối TLS trong setup() — và tài nguyên TLS
+  // trên ESP32 rất eo hẹp. Nghi nó là thủ phạm khiến WebSocket không
+  // đọc nổi phản hồi 101 và rớt sau đúng 5 giây.
+  //
+  // Bật lại bằng -DPROBE_NETWORK=1 khi cần chẩn đoán mạng, đừng để
+  // chạy thường trực.
+#if defined(PROBE_NETWORK) && PROBE_NETWORK
   if (st.wifiUp) {
     probeNetwork();
     uiRefresh();
   }
+#endif
 
   // ── WebSocket ──
   String path = String(WS_PATH) + "?key=" + DEVICE_KEY + "&secret=" + DEVICE_SECRET;

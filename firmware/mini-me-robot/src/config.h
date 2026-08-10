@@ -106,7 +106,7 @@
 #define MAX_MOTOR_DUTY       255
 
 // ─── Mạng ─────────────────────────────────────────────────
-#define WS_RECONNECT_BASE_MS 1000
+#define WS_RECONNECT_BASE_MS 3000
 #define WS_RECONNECT_MAX_MS  30000
 #define TELEMETRY_INTERVAL_MS 1000
 #define HEARTBEAT_TIMEOUT_MS  90000  // 3 lần ping của server bị lỡ

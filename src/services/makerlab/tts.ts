@@ -34,7 +34,14 @@ import { WebSocket } from 'ws';
 import { randomUUID } from 'crypto';
 import { logger } from '../../utils/logger.js';
 
-export type TtsProvider = 'edge' | 'google' | 'gcloud' | 'fptai' | 'openai' | 'elevenlabs';
+export type TtsProvider =
+  | 'edge'
+  | 'google'
+  | 'gcloud'
+  | 'fptai'
+  | 'openai'
+  | 'elevenlabs'
+  | 'cuongmini';
 
 export interface TtsOptions {
   provider?: TtsProvider;
@@ -69,6 +76,10 @@ const DEFAULT_VOICE: Record<TtsProvider, string> = {
   // vì hạn miễn phí gấp BỐN lần (4 triệu ký tự/tháng so với 1 triệu),
   // mà với robot để bàn thì 4 triệu là không bao giờ chạm tới.
   gcloud: 'vi-VN-Wavenet-D',
+  // Để TRỐNG: giọng của dịch vụ tự dựng luôn phải chọn tên rõ ràng, vì
+  // giọng nhân bản do người dùng tự đặt tên. Đoán bừa một cái tên mặc
+  // định thì lúc tên đó không tồn tại sẽ hỏng ở tận trong dịch vụ.
+  cuongmini: '',
   // Giọng nam miền Bắc. "banmai" (nữ) nổi tiếng hơn nhờ các video
   // review phim, nhưng robot này xưng "tôi" và nói trống không nên
   // giọng nam hợp hơn — đổi một dòng ở tab Tính cách là xong.
@@ -147,6 +158,98 @@ export async function synthesizeSpeech(text: string, opts: TtsOptions = {}): Pro
   );
 }
 
+
+/** Địa chỉ dịch vụ TTS tự dựng. Trong docker network nó là `tts`. */
+function cuongMiniRoot(): string {
+  return (process.env.MAKERLAB_TTS_LOCAL_URL || 'http://tts:8080').replace(/\/+$/, '');
+}
+
+/**
+ * Giọng tự dựng trên chính VPS này — kể cả giọng nhân bản từ mẫu thu.
+ *
+ * ⚠️ ĐẮT VỀ THỜI GIAN, và phải biết trước con số. Dịch vụ chạy VieNeu
+ * trên CPU với RTF ≈ 1,0: sinh mười giây tiếng mất khoảng mười giây.
+ * Mọi nhà cung cấp khác trong file này đều chạy trên GPU của họ và trả
+ * về sau vài trăm mili giây.
+ *
+ * Nghĩa là robot dùng giọng này sẽ CHẬM HẲN — nó không bao giờ chạy
+ * trước được người nghe, mà chỉ vừa kịp. Đổi lại: giọng của chính chủ,
+ * không phụ thuộc ai, không hạn mức, không hoá đơn.
+ *
+ * Vì thế đây là LỰA CHỌN, không phải mặc định. Đổi lại bằng một dòng
+ * `voiceProvider` trong tính cách robot.
+ *
+ * Đường gọi là bất đồng bộ (nhận việc → hỏi lại) chứ không phải chờ
+ * một lần: một câu dài có thể mất hơn ba mươi giây, mà nhiều tầng proxy
+ * cắt kết nối chờ lâu — nhận việc rồi hỏi lại thì không tầng nào phải
+ * giữ một kết nối mở suốt.
+ */
+async function synthesizeCuongMini(
+  text: string,
+  voice: string | undefined,
+  speakingRate?: number,
+): Promise<Buffer> {
+  const goc = cuongMiniRoot();
+
+  const nhan = await fetch(`${goc}/tts`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text, voice: voice || undefined, style: 'tu_nhien' }),
+    signal: AbortSignal.timeout(20_000),
+  });
+  if (!nhan.ok) {
+    throw new Error(`cuongmini nhận việc hỏng HTTP ${nhan.status} ${(await nhan.text()).slice(0, 200)}`);
+  }
+  const { jobId, uocTinhGiay } = (await nhan.json()) as { jobId: string; uocTinhGiay: number };
+
+  // Trần chờ = ước tính × 4, tối thiểu 20 giây. Nhân 4 vì máy có lúc
+  // bận; không để vô hạn vì một việc treo sẽ giữ luôn cả lượt nói của
+  // robot và người dùng chỉ thấy nó im.
+  const tran = Math.max(20_000, Math.round((uocTinhGiay || 10) * 4_000));
+  const hetHan = Date.now() + tran;
+
+  while (Date.now() < hetHan) {
+    await new Promise((r) => setTimeout(r, 400));
+    const hoi = await fetch(`${goc}/tts/${jobId}`, { signal: AbortSignal.timeout(15_000) });
+
+    // 202 = đang chạy. Đây đúng là chỗ mà một API trả 200 cho cả hai
+    // trạng thái sẽ lừa được người gọi — xem chú thích trong app.py.
+    if (hoi.status === 202) continue;
+    if (!hoi.ok) {
+      throw new Error(`cuongmini hỏng HTTP ${hoi.status} ${(await hoi.text()).slice(0, 200)}`);
+    }
+    const wav = Buffer.from(await hoi.arrayBuffer());
+    if (wav.length < 64) throw new Error('cuongmini trả về tiếng rỗng');
+    return speakingRate && speakingRate !== 1 ? await doiTocDo(wav, speakingRate) : wav;
+  }
+  throw new Error(`cuongmini quá ${Math.round(tran / 1000)} giây chưa xong`);
+}
+
+/**
+ * Đổi tốc độ đọc mà KHÔNG đổi cao độ, bằng bộ lọc `atempo` của ffmpeg.
+ *
+ * Dịch vụ tự dựng không có tham số tốc độ, nên phải làm sau khi có tiếng.
+ * `atempo` chỉ nhận 0,5-2,0 mỗi tầng nên kẹp lại — ngoài khoảng đó thì
+ * giọng cũng đã méo tới mức không ai muốn nghe.
+ */
+async function doiTocDo(wav: Buffer, rate: number): Promise<Buffer> {
+  const r = Math.min(2, Math.max(0.5, rate));
+  const { spawn } = await import('child_process');
+  return new Promise((resolve) => {
+    const ff = spawn(process.env.FFMPEG_PATH || 'ffmpeg', [
+      '-hide_banner', '-loglevel', 'error',
+      '-i', 'pipe:0', '-af', `atempo=${r.toFixed(2)}`, '-f', 'wav', 'pipe:1',
+    ]);
+    const ra: Buffer[] = [];
+    ff.stdout.on('data', (c: Buffer) => ra.push(c));
+    ff.on('close', () => {
+      const out = Buffer.concat(ra);
+      resolve(out.length > 64 ? out : wav);   // hỏng thì trả bản gốc
+    });
+    ff.stdin.end(wav);
+  });
+}
+
 function providerConfigured(p: TtsProvider): boolean {
   if (p === 'gcloud') return !!process.env.GOOGLE_TTS_API_KEY;
   if (p === 'fptai') return !!process.env.FPTAI_API_KEY;
@@ -173,6 +276,8 @@ function runProvider(p: TtsProvider, text: string, opts: TtsOptions): Promise<Bu
       return synthesizeOpenAI(text, voice || DEFAULT_VOICE.openai);
     case 'elevenlabs':
       return synthesizeElevenLabs(text, voice);
+    case 'cuongmini':
+      return synthesizeCuongMini(text, voice, opts.speakingRate);
   }
 }
 

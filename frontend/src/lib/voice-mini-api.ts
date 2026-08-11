@@ -33,7 +33,18 @@ export async function cloneVoice(name: string, file: File, description = ''): Pr
   form.append('name', name);
   form.append('description', description);
   form.append('file', file);
-  const res = await api.post(`${BASE}/voices`, form, { timeout: 180_000 });
+  // ⚠️ PHẢI ghi đè Content-Type. Thực thể axios dùng chung đặt sẵn
+  // `application/json` cho mọi yêu cầu (api.ts), và gửi FormData kèm
+  // header đó thì trình duyệt KHÔNG gắn boundary vào — backend nhận
+  // được một thân multipart mà không biết chỗ cắt, multer trả về rỗng,
+  // và người dùng thấy đúng dòng "Chưa chọn file giọng mẫu" trong khi
+  // họ đã chọn file rồi.
+  //
+  // Mọi chỗ tải file khác trong api.ts đều ghi đè; riêng chỗ này quên.
+  const res = await api.post(`${BASE}/voices`, form, {
+    timeout: 180_000,
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
   return res.data?.data?.voice ?? name;
 }
 

@@ -189,6 +189,51 @@ router.get('/tts/:jobId', authenticate, async (req: Request, res: Response) => {
  * nhất bên dịch vụ), nên ai thêm được cũng là ai cũng nghe thấy. Bắt
  * đăng nhập để ít nhất còn biết ai thêm cái gì.
  */
+/**
+ * Đổi file mẫu bất kỳ sang WAV trước khi chuyển tiếp cho dịch vụ TTS.
+ *
+ * Dịch vụ đọc file bằng `libsndfile`, mà thư viện đó chỉ biết wav, flac,
+ * ogg, aiff — KHÔNG biết m4a/AAC. Người dùng ghi âm bằng iPhone hay
+ * Voice Memo thì ra đúng `.m4a`, tức đường phổ biến nhất lại là đường
+ * chết. Lỗi trả về cũng không nói gì về nguyên nhân:
+ *
+ *   Error opening '/tmp/ref-….m4a': Format not recognised.
+ *
+ * Đổi ở ĐÂY chứ không phải trong dịch vụ TTS: container backend có sẵn
+ * ffmpeg (nó vốn dùng để đổi tiếng cho robot), còn container TTS là ảnh
+ * Python gọn, cài thêm ffmpeg vào đó là phình thêm mấy trăm MB cho một
+ * việc mà chỗ này làm được.
+ *
+ * Trộn về MỘT kênh vì bộ rút đặc trưng người nói chỉ nhận đơn kênh; giữ
+ * nguyên tần số lấy mẫu gốc, đừng ép xuống 16 kHz — mẫu càng đủ chi tiết
+ * thì giọng nhân bản càng giống, và dịch vụ tự lấy mẫu lại theo ý nó.
+ */
+async function doiSangWav(buf: Buffer): Promise<Buffer> {
+  const { spawn } = await import('child_process');
+  return new Promise((resolve, reject) => {
+    const ff = spawn(process.env.FFMPEG_PATH || 'ffmpeg', [
+      '-hide_banner', '-loglevel', 'error',
+      '-i', 'pipe:0',
+      '-ac', '1',
+      '-c:a', 'pcm_s16le',
+      '-f', 'wav',
+      'pipe:1',
+    ]);
+    const ra: Buffer[] = [];
+    const loi: Buffer[] = [];
+    ff.stdout.on('data', (c: Buffer) => ra.push(c));
+    ff.stderr.on('data', (c: Buffer) => loi.push(c));
+    ff.on('error', reject);
+    ff.on('close', () => {
+      const out = Buffer.concat(ra);
+      if (out.length > 44) resolve(out);
+      else reject(new Error(`không đọc được file âm thanh: ${Buffer.concat(loi).toString().slice(0, 200)}`));
+    });
+    ff.stdin.on('error', () => undefined);   // ffmpeg đóng sớm thì kệ
+    ff.stdin.end(buf);
+  });
+}
+
 router.post(
   '/voices',
   authenticate,
@@ -210,15 +255,14 @@ router.post(
     try {
       // Dựng lại multipart để chuyển tiếp. Buffer → Blob vì FormData
       // của Node chỉ nhận Blob/File, không nhận Buffer thô.
+      const wav = await doiSangWav(file.buffer);
+
       const form = new FormData();
       form.append('name', name);
       form.append('description', String(req.body?.description ?? '').slice(0, 120));
       form.append('gender', String(req.body?.gender ?? '').slice(0, 20));
-      form.append(
-        'file',
-        new Blob([new Uint8Array(file.buffer)]),
-        file.originalname || 'ref.wav',
-      );
+      // Luôn gửi đi dưới tên .wav — dịch vụ đoán định dạng theo đuôi file.
+      form.append('file', new Blob([new Uint8Array(wav)]), 'ref.wav');
 
       const r = await fetch(`${TTS_BASE}/voices`, {
         method: 'POST',

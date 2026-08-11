@@ -44,6 +44,11 @@ export interface TtsOptions {
   language?: string;
   /** -50..+50 percent, edge only. */
   ratePct?: number;
+  /**
+   * Tốc độ đọc, 0,25–4,0 (1,0 = bình thường). Google Cloud dùng thẳng
+   * con số này; các nhà cung cấp khác bỏ qua.
+   */
+  speakingRate?: number;
   /** -50..+50 Hz, edge only. */
   pitchHz?: number;
 }
@@ -133,7 +138,7 @@ function runProvider(p: TtsProvider, text: string, opts: TtsOptions): Promise<Bu
     case 'google':
       return synthesizeGoogle(text, lang.split('-')[0] || 'vi');
     case 'gcloud':
-      return synthesizeGoogleCloud(text, voice || DEFAULT_VOICE.gcloud, lang);
+      return synthesizeGoogleCloud(text, voice || DEFAULT_VOICE.gcloud, lang, opts.speakingRate);
     case 'openai':
       return synthesizeOpenAI(text, voice || DEFAULT_VOICE.openai);
     case 'elevenlabs':
@@ -154,7 +159,10 @@ export function sanitizeForSpeech(text: string): string {
     .replace(/https?:\/\/\S+/g, '')
     .replace(/\s+/g, ' ')
     .trim()
-    .slice(0, 1200);
+    // Khớp với MAX_SAY_CHARS bên voiceLoop. Để lệch thì cái nhỏ hơn âm
+    // thầm thắng, và câu dài lại cụt ở một chỗ khác — đúng kiểu lỗi
+    // vừa mất công truy ra.
+    .slice(0, 2_000);
 }
 
 function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
@@ -441,6 +449,7 @@ async function synthesizeGoogleCloud(
   text: string,
   voice: string,
   lang: string,
+  speakingRate?: number,
 ): Promise<Buffer> {
   const key = process.env.GOOGLE_TTS_API_KEY;
   if (!key) throw new Error('GOOGLE_TTS_API_KEY missing');
@@ -450,6 +459,31 @@ async function synthesizeGoogleCloud(
   // ngôn-ngữ/giọng thì API trả 400 chứ không tự sửa.
   const languageCode = /^[a-z]{2}-[A-Z]{2}/.exec(voice)?.[0] || lang || 'vi-VN';
 
+  // ⚠️ Google Cloud chặn ở 5.000 BYTE mỗi lần gọi, không phải ký tự.
+  //
+  // Tiếng Việt có dấu tốn 2-3 byte một ký tự trong UTF-8, nên 2.000 ký
+  // tự có thể thành ~4.500 byte — sát trần tới mức chỉ cần một câu dài
+  // hơn thường lệ là API trả 400 và robot câm nguyên lượt. Cắt ở 1.200
+  // ký tự cho chắc chắn dưới trần kể cả trường hợp xấu nhất, rồi nối
+  // các MP3 lại: nối ở ranh giới frame là MP3 hợp lệ, mọi bộ giải mã
+  // kể cả trên ESP32 đều phát liền mạch (đường `google` ở trên đã sống
+  // bằng đúng mẹo này từ đầu).
+  const parts = chunkText(text, 1_200);
+  if (parts.length > 1) {
+    const outs: Buffer[] = [];
+    for (const p of parts) outs.push(await gcloudOnce(p, voice, languageCode, key, speakingRate));
+    return Buffer.concat(outs);
+  }
+  return gcloudOnce(parts[0] ?? text, voice, languageCode, key, speakingRate);
+}
+
+async function gcloudOnce(
+  text: string,
+  voice: string,
+  languageCode: string,
+  key: string,
+  speakingRate?: number,
+): Promise<Buffer> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), TTS_TIMEOUT_MS);
   try {
@@ -464,7 +498,15 @@ async function synthesizeGoogleCloud(
           // MP3 chứ không phải LINEAR16: gateway đã có sẵn đường đổi
           // sang PCM cho bo, và MP3 nhẹ hơn ~4 lần khi đi qua mạng tới
           // VPS. Chỗ này không phải nút thắt — đổi mã chỉ tốn ~120 ms.
-          audioConfig: { audioEncoding: 'MP3' },
+          audioConfig: {
+            audioEncoding: 'MP3',
+            // Ngoài dải 0,25–4,0 thì Google trả 400 chứ không tự kẹp,
+            // nên kẹp ở đây. Bỏ hẳn trường khi bằng 1 để giữ nguyên
+            // hành vi mặc định của API.
+            ...(typeof speakingRate === 'number' && speakingRate !== 1
+              ? { speakingRate: Math.max(0.25, Math.min(4, speakingRate)) }
+              : {}),
+          },
         }),
         signal: ctrl.signal,
       },

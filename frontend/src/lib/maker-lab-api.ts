@@ -150,6 +150,14 @@ export interface PersonaPayload {
   wakeWord?: string | null;
   temperature?: number;
   maxTokens?: number;
+  /**
+   * Tốc độ đọc 0,25–4,0 (1 = bình thường). Chỉ có tác dụng khi giọng
+   * đang dùng là Google Cloud — mấy nhà cung cấp còn lại bỏ qua.
+   *
+   * Gửi riêng chứ đừng nhét vào `traits`: server ghi đè `traits`
+   * nguyên khối, nên gửi kèm sẽ xoá mất phần Huấn luyện.
+   */
+  speechRate?: number;
 }
 
 /**

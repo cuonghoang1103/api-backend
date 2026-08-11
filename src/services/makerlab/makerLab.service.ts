@@ -309,16 +309,41 @@ export async function upsertPersona(
     wakeWord?: string | null;
     temperature?: number;
     maxTokens?: number;
+    /**
+     * Tốc độ đọc 0,25–4,0. Cất trong `traits` nhưng nhận qua trường
+     * RIÊNG, không cho client tự gửi cả cục `traits`.
+     *
+     * Vì `traits` được ghi đè nguyên khối ở dưới: một form chỉ quan tâm
+     * tốc độ mà gửi `traits: {speechRate: 1.2}` sẽ xoá sạch
+     * `traits.knowledge` — tức là bay toàn bộ phần Huấn luyện người
+     * dùng đã ngồi gõ. Nhận riêng rồi tự hoà vào thì không có cách nào
+     * mất dữ liệu.
+     */
+    speechRate?: number;
   },
 ) {
   const { DEFAULT_PERSONA_PROMPT } = await import('./persona.js');
+
+  // Hoà `speechRate` vào traits đang có, giữ nguyên mọi khoá khác.
+  let traitsMerged = (data.traits ?? undefined) as Prisma.InputJsonValue | undefined;
+  if (typeof data.speechRate === 'number' && Number.isFinite(data.speechRate)) {
+    const cur = await prisma.makerPersona.findUnique({
+      where: { projectId },
+      select: { traits: true },
+    });
+    const base = ((data.traits ?? cur?.traits ?? {}) as Record<string, unknown>) ?? {};
+    traitsMerged = {
+      ...base,
+      speechRate: Math.max(0.25, Math.min(4, data.speechRate)),
+    } as Prisma.InputJsonValue;
+  }
   const clean = {
     name: data.name?.slice(0, 80),
     systemPrompt: data.systemPrompt?.slice(0, 8000),
     voiceProvider: data.voiceProvider?.slice(0, 24),
     voiceId: data.voiceId?.slice(0, 120) ?? null,
     language: data.language?.slice(0, 12),
-    traits: (data.traits ?? undefined) as Prisma.InputJsonValue | undefined,
+    traits: traitsMerged,
     sampleDialogues: (data.sampleDialogues ?? undefined) as Prisma.InputJsonValue | undefined,
     wakeWord: data.wakeWord?.slice(0, 60) ?? null,
     temperature:

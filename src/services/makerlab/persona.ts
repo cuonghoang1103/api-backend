@@ -45,6 +45,23 @@ export interface PersonaConfig {
    * hỏi na ná, thay vì hiểu rồi tự nói.
    */
   knowledge: Array<{ q: string; a: string }>;
+  /**
+   * Tốc độ đọc, 0,25–4,0 (1 = bình thường). Chỉ Google Cloud dùng.
+   *
+   * Cất trong `traits` chứ không phải một cột riêng, vì thêm cột nghĩa
+   * là thêm migration — mà `prisma migrate dev` hỏng sẵn trong repo này
+   * (xem CLAUDE.md), nên mỗi cột mới là một file SQL viết tay. Không
+   * đáng cho một con số tuỳ chọn, trong khi `traits` đã là chỗ chứa
+   * JSON sẵn có và đang giữ `knowledge`.
+   */
+  speechRate: number;
+}
+
+/** Kẹp tốc độ đọc về dải Google chấp nhận; ngoài dải là API trả 400. */
+function normalizeSpeechRate(raw: unknown): number {
+  const n = typeof raw === 'number' ? raw : Number(raw);
+  if (!Number.isFinite(n) || n <= 0) return 1;
+  return Math.max(0.25, Math.min(4, n));
 }
 
 /**
@@ -121,6 +138,7 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
       sampleDialogues: DEFAULT_SAMPLES,
       wakeWord: null,
       knowledge: [],
+      speechRate: 1,
       // 0.9 chứ không 0.8: chém gió cần chỗ để đi chệch. Nhiệt độ thấp
       // cho ra những câu đùa an toàn nhất, tức là những câu nhạt nhất.
       temperature: 0.9,
@@ -143,6 +161,7 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
     temperature: row.temperature,
     maxTokens: row.maxTokens,
     knowledge: normalizeKnowledge((row.traits as { knowledge?: unknown } | null)?.knowledge),
+    speechRate: normalizeSpeechRate((row.traits as { speechRate?: unknown } | null)?.speechRate),
   };
 }
 

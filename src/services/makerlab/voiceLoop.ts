@@ -29,6 +29,7 @@ import { loadPersona, buildSystemPrompt, buildFewShot, type PersonaConfig } from
 import { validateCommand, type ValidatedCommand } from './commands.js';
 import { synthesizeSpeech } from './tts.js';
 import { checkHeardSpeech } from './hallucination.js';
+import { PCM_SAMPLE_RATE } from './audio.js';
 
 // ─── Conversation memory ───────────────────────────────────
 // Short-term only, in process memory. Long-term recall (pgvector over
@@ -254,6 +255,21 @@ export interface RobotReply {
  * salvage rather than fail: worst case the whole response becomes the
  * spoken line, which is still a working robot.
  */
+/**
+ * Trần độ dài câu nói, tính bằng ký tự.
+ *
+ * Từng là 500 — và đó là chỗ cắt cụt câu trả lời dài, không phải trần
+ * token. `max_tokens` trong DB là 800, tức model viết thoải mái được
+ * ~1.500 ký tự tiếng Việt, rồi bị dòng `slice(0, 500)` này xén mất quá
+ * nửa. Người nghe thấy robot đang nói ngon lành thì im bặt giữa chừng,
+ * và không có gì trong log nói ra chuyện đó.
+ *
+ * 2.000 để `max_tokens` trở lại làm cái trần thật — muốn robot nói ngắn
+ * hay dài thì chỉnh ở đó, chỗ có tên đúng với việc nó làm, chứ không
+ * phải ở một hằng số giấu trong hàm phân tích JSON.
+ */
+const MAX_SAY_CHARS = 2_000;
+
 export function parseRobotReply(raw: string): RobotReply {
   const text = raw.trim();
   const candidates: string[] = [];
@@ -278,14 +294,17 @@ export function parseRobotReply(raw: string): RobotReply {
           if (cmd) actions.push(cmd);
         }
       }
-      return { say: say.slice(0, 500), actions };
+      return { say: say.slice(0, MAX_SAY_CHARS), actions };
     } catch {
       /* try the next candidate */
     }
   }
 
   // Not JSON at all — strip any braces and speak whatever is left.
-  return { say: text.replace(/[{}[\]"]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 500), actions: [] };
+  return {
+    say: text.replace(/[{}[\]"]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, MAX_SAY_CHARS),
+    actions: [],
+  };
 }
 
 // ─── The turn ──────────────────────────────────────────────
@@ -340,7 +359,10 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
     // chữ nó bịa ra là phụ đề YouTube. Không chặn ở đây thì LLM sẽ trả
     // lời rất nghiêm túc câu "đừng quên đăng ký kênh" mà không ai nói,
     // và người dùng kết luận là con AI bị ngu.
-    const check = checkHeardSpeech(heard, tr);
+    // Độ dài đoạn tiếng là bằng chứng mạnh nhất chống lại chuyện bịa —
+    // xem hallucination.ts. Không truyền xuống thì tầng lọc đó tắt câm.
+    const audioSec = input.pcm16.length / 2 / PCM_SAMPLE_RATE;
+    const check = checkHeardSpeech(heard, { ...tr, audioSec });
     if (!check.ok) {
       // Báo cho bo biết là KHÔNG hiểu, để nó bíp hai nốt đi xuống.
       //
@@ -418,6 +440,10 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
   logger.info('MakerLab voice turn', {
     deviceId: input.deviceId,
     heard: heard.slice(0, 60),
+    // Ghi cả độ dài tiếng của lượt ĐƯỢC NHẬN, không chỉ lượt bị loại.
+    // Chỉ có log của bên được nhận mới cho biết ngưỡng đang cắt nhầm
+    // vào đâu — bên bị loại thì đằng nào cũng đã bị loại.
+    ...(input.pcm16 ? { giay: +(input.pcm16.length / 2 / PCM_SAMPLE_RATE).toFixed(2) } : {}),
     actions: reply.actions.length,
     ...timing,
   });
@@ -466,6 +492,7 @@ async function thinkAndSpeak(
       provider: persona.voiceProvider as never,
       voice: persona.voiceId ?? undefined,
       language: persona.language,
+      speakingRate: persona.speechRate,
     });
     timing.tts += Date.now() - t;
     const ok = await gw.speakStreamPush(deviceId, tts.audio, seq);

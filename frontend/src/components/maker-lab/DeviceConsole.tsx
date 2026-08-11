@@ -53,6 +53,7 @@ import {
   listDevices,
   registerDevice,
   sendCommand,
+  updatePersona,
 } from '@/lib/maker-lab-api';
 import type { MakerDevice, MakerDeviceCredentials } from '@/types/maker-lab';
 
@@ -87,11 +88,36 @@ export function DeviceConsole({
   projectId,
   projectSlug,
   isAuthed,
+  speechRate: speechRate0 = 1,
 }: {
   projectId: number;
   projectSlug: string;
   isAuthed: boolean;
+  /** Tốc độ đọc đang lưu trong persona, để thanh trượt khởi động đúng chỗ. */
+  speechRate?: number;
 }) {
+  const [rate, setRate] = useState(speechRate0);
+  const [savingRate, setSavingRate] = useState(false);
+
+  /**
+   * Chỉ lưu khi NHẢ chuột, không lưu theo từng bước kéo.
+   *
+   * Kéo một lần từ 1,0 sang 1,5 là ~10 bước; lưu theo `onChange` sẽ bắn
+   * mười lệnh PUT chồng lên nhau và lệnh về sau cùng chưa chắc là lệnh
+   * có giá trị mới nhất.
+   */
+  const saveRate = useCallback(async () => {
+    setSavingRate(true);
+    try {
+      await updatePersona(projectId, { speechRate: rate });
+      toast.success(`Tốc độ đọc ${rate.toFixed(2)}×`);
+    } catch {
+      toast.error('Không lưu được tốc độ đọc');
+    } finally {
+      setSavingRate(false);
+    }
+  }, [projectId, rate]);
+
   const [devices, setDevices] = useState<MakerDevice[]>([]);
   const [activeId, setActiveId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
@@ -447,6 +473,47 @@ export function DeviceConsole({
                     </button>
                   ))}
                 </div>
+              </div>
+
+              {/* ── Tốc độ đọc ──
+                  Lưu vào persona chứ không gửi xuống bo: giọng được
+                  tổng hợp trên server, bo chỉ phát ra thứ nó nhận
+                  được. Gửi lệnh xuống bo thì không có gì bên đó chỉnh
+                  được cả. */}
+              <div className="mt-4">
+                <div className="mb-2 flex items-center justify-between">
+                  <p className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
+                    Tốc độ đọc
+                  </p>
+                  <span className="text-xs tabular-nums" style={{ color: 'var(--text-secondary)' }}>
+                    {rate.toFixed(2)}× {savingRate && '…'}
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min={0.5}
+                  max={2}
+                  step={0.05}
+                  value={rate}
+                  onChange={(e) => setRate(Number(e.target.value))}
+                  onMouseUp={() => void saveRate()}
+                  onTouchEnd={() => void saveRate()}
+                  onKeyUp={() => void saveRate()}
+                  className="w-full"
+                  style={{ accentColor: 'var(--accent, #6366f1)' }}
+                />
+                <div
+                  className="mt-1 flex justify-between text-[10px]"
+                  style={{ color: 'var(--text-muted)' }}
+                >
+                  <span>chậm rãi</span>
+                  <span>bình thường</span>
+                  <span>nhanh</span>
+                </div>
+                <p className="mt-1.5 text-[11px]" style={{ color: 'var(--text-muted)' }}>
+                  Chỉ có tác dụng với giọng Google Cloud (WaveNet). Giọng miễn phí
+                  <code> translate_tts </code> không nhận tham số tốc độ.
+                </p>
               </div>
 
               <div className="mt-4 flex flex-wrap gap-1.5">

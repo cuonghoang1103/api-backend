@@ -233,7 +233,12 @@ export default function MakerProjectPage() {
         <FirmwarePlan modules={project.firmwareModules} builds={project.firmwares} slug={project.slug} />
       )}
       {tab === 'console' && (
-        <DeviceConsole projectId={project.id} projectSlug={project.slug} isAuthed={isAuthed} />
+        <DeviceConsole
+          projectId={project.id}
+          projectSlug={project.slug}
+          isAuthed={isAuthed}
+          speechRate={Number(project.persona?.traits?.speechRate) || 1}
+        />
       )}
       {tab === 'persona' && (
         <PersonaEditor

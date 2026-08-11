@@ -95,6 +95,13 @@ interface DeviceConn {
    * no ring buffer, nothing to go wrong.
    */
   audioFormat: DeviceAudioFormat;
+  /**
+   * Đồng hồ ghìm nhịp của luồng tiếng đang chảy — xem `speakStreamPushPcm`.
+   * Đặt lại ở mỗi `speakStreamBegin`.
+   */
+  streamStartedAt: number;
+  streamBytes: number;
+  streamBytesPerSec: number;
 }
 
 const connections = new Map<number, DeviceConn>();
@@ -261,6 +268,10 @@ export function speakStreamBegin(deviceId: number, sampleRate: number): number |
   const conn = connections.get(deviceId);
   if (!conn || conn.ws.readyState !== WebSocket.OPEN) return null;
   conn.speaking = true;
+  // Lên cót đồng hồ ghìm nhịp cho luồng mới.
+  conn.streamStartedAt = Date.now();
+  conn.streamBytes = 0;
+  conn.streamBytesPerSec = Math.max(8_000, sampleRate * 2);
   sendJson(conn, {
     t: 'say_start',
     mime: conn.audioFormat === 'pcm' ? 'audio/L16' : 'audio/mpeg',
@@ -332,28 +343,49 @@ export async function speakStreamPushPcm(
   for (let off = 0; off < pcm.length; off += CHUNK) {
     if (conn.turnSeq !== seq || conn.ws.readyState !== WebSocket.OPEN) return false;
 
-    // ⚠️ CHỜ cho bo nuốt bớt, TUYỆT ĐỐI không được bỏ mẩu này.
+    const mau = pcm.subarray(off, Math.min(off + CHUNK, pcm.length));
+    conn.ws.send(mau);
+    conn.streamBytes += mau.length;
+
+    // ⚠️ GHÌM THEO ĐỒNG HỒ, KHÔNG theo bộ đệm socket.
     //
-    // Bản đầu viết `if (bufferedAmount > 256KB) return true` — tức là
-    // vứt mẩu nhạc rồi báo thành công. Hậu quả nghe rất rõ: nhạc rơi
-    // từng mảng nên "hát nhanh như tua x5", và vì ffmpeg giải mã hết
-    // tốc lực chứ không theo thời gian thực, cả bài bốn phút bị nuốt
-    // trong mươi giây rồi kết thúc khi người nghe mới nghe được một
-    // đoạn.
+    // Bản trước chờ `ws.bufferedAmount > 256 KB`. Nghe thì hợp lý, thực
+    // ra vô dụng: `bufferedAmount` là bộ đệm gửi CỦA SERVER. Kernel và
+    // ngăn xếp WiFi của ESP32 nuốt hàng megabyte trước khi TCP kịp ghìm
+    // ngược, nên con số đó gần như luôn bằng 0 trong lúc vòng đệm 512 KB
+    // (16 giây tiếng) trên bo đang tràn và **vứt mẩu** — audio.cpp nói
+    // thẳng là nó bỏ, và còn ghi chú "server đã tự ghìm ở 256 KB" như
+    // một điều hiển nhiên. Điều hiển nhiên đó sai.
     //
-    // Chờ ở đây là thứ tạo ra sức ghìm ngược lên tận ffmpeg: hàm gọi
-    // đang `await` trong vòng đọc stdout, nên ffmpeg tự chậm lại theo.
-    // Đó mới là cách ghép một nguồn nhanh với một cái loa chạy thời
-    // gian thực.
-    while (conn.ws.bufferedAmount > 256 * 1024) {
-      await new Promise((r) => setTimeout(r, 40));
+    // Hậu quả đúng như user tả: bài bốn phút bị bơm hết trong ~30 giây,
+    // bo phát được 16 giây rồi `say_end` ập tới → nhạc vừa GIẬT (mất
+    // mẩu) vừa CỤT (hết bài sớm). Đoạn nói dài chết y hệt, chỉ là hiếm
+    // hơn vì ít khi vượt 16 giây.
+    //
+    // Loa chạy đúng `streamBytesPerSec` byte mỗi giây, không nhanh hơn
+    // được. Nên cứ bơm trước LEAD_MS rồi ngồi đợi: bo luôn có sẵn vài
+    // giây trong tay mà không bao giờ tràn. `await` ở đây còn ghìm ngược
+    // lên tận ffmpeg, vì bên gọi đang chờ trong vòng đọc stdout.
+    const daPhatMs = (conn.streamBytes / conn.streamBytesPerSec) * 1000;
+    const troiQuaMs = Date.now() - conn.streamStartedAt;
+    const thuaMs = daPhatMs - troiQuaMs - LEAD_MS;
+    if (thuaMs > 0) {
+      await new Promise((r) => setTimeout(r, Math.min(thuaMs, 500)));
       if (conn.turnSeq !== seq || conn.ws.readyState !== WebSocket.OPEN) return false;
     }
-
-    conn.ws.send(pcm.subarray(off, Math.min(off + CHUNK, pcm.length)));
   }
   return true;
 }
+
+/**
+ * Bơm trước bao nhiêu tiếng so với chỗ loa đang phát.
+ *
+ * 4 giây: đủ dày để một cơn khựng mạng hay một nhịp GC không làm đói
+ * DMA, mà vẫn còn xa trần 16 giây của vòng đệm trên bo. Câu trả lời
+ * bình thường ngắn hơn 4 giây nên KHÔNG bị ghìm chút nào — độ trễ lúc
+ * đối đáp không đổi, chỉ nhạc và đoạn dài mới chạm tới nhịp này.
+ */
+const LEAD_MS = 4_000;
 
 /**
  * Gửi một gói JSON bất kỳ xuống bo.
@@ -778,6 +810,9 @@ function acceptDevice(ws: WebSocket, auth: AuthResult): void {
     speaking: false,
     audioFormat: 'mp3',
     turnSeq: 0,
+    streamStartedAt: 0,
+    streamBytes: 0,
+    streamBytesPerSec: 32_000, // 16 kHz × 16 bit × 1 kênh, ghi đè ở say_start
   };
   connections.set(auth.deviceId, conn);
 

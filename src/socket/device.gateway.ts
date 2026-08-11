@@ -56,7 +56,7 @@ import { MakerCommandStatus, MakerDeviceStatus } from '@prisma/client';
 import { prisma } from '../config/database.js';
 import { logger } from '../utils/logger.js';
 import { getIO } from './messaging.socket.js';
-import { encodeForDevice, type DeviceAudioFormat } from '../services/makerlab/audio.js';
+import { encodeForDevice, PCM_SAMPLE_RATE, type DeviceAudioFormat } from '../services/makerlab/audio.js';
 
 // ─── Tunables ──────────────────────────────────────────────
 /** Path we claim on the shared HTTP server. */
@@ -291,6 +291,40 @@ export function speakStreamBegin(deviceId: number, sampleRate: number): number |
  *
  * Trả về false khi lượt đã bị thay bằng lượt mới (người dùng chen lời).
  */
+/**
+ * Cắt khoảng lặng ở HAI ĐẦU một mẩu PCM 16-bit LE.
+ *
+ * Vì sao cần: một câu trả lời dài được đọc thành nhiều mẩu TTS rồi ghép
+ * lại. Mỗi mẩu TTS trả về đều kèm khoảng lặng đệm đầu-cuối — nhà cung
+ * cấp nào cũng vậy, vì họ giả định mẩu đó phát một mình. Ghép năm mẩu
+ * là nhét năm cặp khoảng lặng vào giữa lời nói.
+ *
+ * Đo trên bo thật 11/08: `hut dem 0 lan / 0 ms` ở MỌI lượt, kể cả lượt
+ * 20 giây. Đệm chưa cạn lấy một lần ⇒ tiếng không hề thiếu. Cái người
+ * dùng nghe thấy là mối nối, không phải đói đệm. Đúng như họ tả: "đoạn
+ * đầu rất mượt, đoạn dài sau thì giật và ngắt" — mẩu đầu là một đoạn
+ * liền nên mượt; từ mẩu thứ hai mới bắt đầu có mối nối.
+ *
+ * Chừa lại BIEN_MS ở mỗi đầu chứ không cắt sát: cắt sát thì mất phụ âm
+ * bật hơi ("t", "k", "p" mở đầu từ) — chúng biên độ rất thấp nhưng bỏ
+ * đi là chữ hoá thành chữ khác.
+ */
+function catLangHaiDau(pcm: Buffer): Buffer {
+  const NGUONG = 350;          // ~1% toàn thang 16 bit
+  const BIEN_MS = 25;
+  const bien = Math.floor((PCM_SAMPLE_RATE * BIEN_MS) / 1000) * 2;
+
+  let dau = 0;
+  while (dau + 1 < pcm.length && Math.abs(pcm.readInt16LE(dau)) < NGUONG) dau += 2;
+  let cuoi = pcm.length - (pcm.length % 2);
+  while (cuoi - 2 > dau && Math.abs(pcm.readInt16LE(cuoi - 2)) < NGUONG) cuoi -= 2;
+
+  dau = Math.max(0, dau - bien);
+  cuoi = Math.min(pcm.length, cuoi + bien);
+  if (cuoi - dau < 320) return pcm;   // mẩu quá ngắn — đừng nghịch
+  return pcm.subarray(dau, cuoi);
+}
+
 export async function speakStreamPush(
   deviceId: number,
   mp3: Buffer,
@@ -303,7 +337,7 @@ export async function speakStreamPush(
   let audio = mp3;
   if (conn.audioFormat === 'pcm') {
     try {
-      audio = (await encodeForDevice(mp3, 'pcm')).audio;
+      audio = catLangHaiDau((await encodeForDevice(mp3, 'pcm')).audio);
     } catch (err) {
       logger.warn('MakerLab đổi PCM thất bại giữa dòng', {
         deviceId,

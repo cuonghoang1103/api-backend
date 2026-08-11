@@ -199,6 +199,8 @@ static int32_t micDc = 0;
 static int32_t micTho = 0;
 static int32_t micPeak = 0;
 static uint32_t micClipBlocks = 0;
+// Số mẫu bị XÉN khi đóng gói 16 bit. Tiếng xén thì Whisper đoán bừa.
+static uint32_t xenSamples = 0;
 
 /**
  * Lọc bỏ tiếng ầm hạ tần, hai tầng, cắt quanh 160 Hz.
@@ -235,8 +237,38 @@ static uint32_t micClipBlocks = 0;
  * bỏ được đống ầm là trả lại chỗ cho giọng người trong 16 bit.
  */
 static int32_t hpXa = 0, hpYa = 0, hpXb = 0, hpYb = 0;
+static int32_t hpXg = 0, hpYg = 0;
 
-static inline int32_t locHaTan(int32_t x) {
+/**
+ * ⚠️ HAI bộ lọc KHÁC NHAU, cho hai việc khác nhau. Đừng gộp lại.
+ *
+ * Bản trước dùng CHUNG một bộ lọc mạnh (hai tầng, cắt 160 Hz) cho cả
+ * hai, và cái giá phải trả chỉ lộ ra khi đọc log Whisper:
+ *
+ *   "Được không? Thế em đã tặng em nhé Chúc tệ"
+ *   "Thì đây là năm cháu thì lái, năm cháu thì đổ đi"
+ *
+ * Chữ vô nghĩa. Robot không ngắt lời ai cả — nó đang trả lời tử tế một
+ * câu hỏi khác hẳn, vì thứ nó nghe được đã hỏng.
+ *
+ * TIẾNG VIỆT LÀ NGÔN NGỮ CÓ THANH ĐIỆU, và thanh điệu nằm ở tần số cơ
+ * bản của giọng — khoảng 85-255 Hz. Cắt hai tầng ở 160 Hz là ghìm đúng
+ * dải đó xuống 9-12 dB. "dài" với "dạng", "tặng" với "từng" chỉ khác
+ * nhau ở đường cong cao độ, mà đường cong đó vừa bị bào mòn.
+ *
+ * Nên tách ra:
+ *
+ *   locVad()  hai tầng 160 Hz — chỉ để QUYẾT ĐỊNH có ai đang nói không.
+ *             Ở đây cắt mạnh là đúng: nó chỉ cần một con số năng lượng,
+ *             không cần nghe ra chữ gì.
+ *
+ *   locGui()  MỘT tầng ~80 Hz — cho dòng tiếng GỬI LÊN Whisper. Vừa đủ
+ *             dọn điện áp trôi (nếu để nguyên, biên độ ±1,6 triệu chia
+ *             cho 32 thành 50.000, vượt trần 32.767 ⇒ tiếng bị xén méo,
+ *             và Whisper nghe tiếng méo thì đoán bừa), vừa giữ lại
+ *             78-88% năng lượng ở dải thanh điệu.
+ */
+static inline int32_t locVad(int32_t x) {
   // y[n] = x[n] - x[n-1] + a·y[n-1], a = 1 - 1/16 ⇒ cắt ≈ 160 Hz
   // Chia thay vì dịch bit: dịch phải làm tròn về phía âm vô cực nên nó
   // tự bơm vào một độ lệch một chiều — đúng thứ bộ lọc này sinh ra để
@@ -246,6 +278,13 @@ static inline int32_t locHaTan(int32_t x) {
   const int32_t yb = ya - hpXb + hpYb - (hpYb / 16);
   hpXb = ya; hpYb = yb;
   return yb;
+}
+
+static inline int32_t locGui(int32_t x) {
+  // a = 1 - 1/32 ⇒ cắt ≈ 80 Hz. Ở 20 Hz còn 24%, ở 100 Hz giữ 78%.
+  const int32_t y = x - hpXg + hpYg - (hpYg / 32);
+  hpXg = x; hpYg = y;
+  return y;
 }
 
 static ChunkFn cbChunk = nullptr;
@@ -747,15 +786,19 @@ static void pumpMic() {
   int64_t sum = 0;
   for (int i = 0; i < n; i++) {
     const int32_t raw = rawBlock[i];
-    thoSum += abs(raw >> 8);              // trước lọc, để so sánh
-    const int32_t s24 = locHaTan(raw >> 8);
-    dcSum += s24;
-    if (abs(s24) > peak) peak = abs(s24);
-    sum += abs(s24);       // thang 24 bit — cùng thang với VAD_THRESHOLD
+    const int32_t s0 = raw >> 8;
+    thoSum += abs(s0);                    // trước lọc, để so sánh
 
-    int32_t v = s24 >> (MIC_GAIN_SHIFT - 8);
-    if (v > 32767) v = 32767;
-    else if (v < -32768) v = -32768;
+    // Quyết định "có ai nói không" — lọc mạnh, chỉ cần năng lượng.
+    const int32_t sVad = locVad(s0);
+    dcSum += sVad;
+    if (abs(sVad) > peak) peak = abs(sVad);
+    sum += abs(sVad);      // thang 24 bit — cùng thang với VAD_THRESHOLD
+
+    // Tiếng GỬI ĐI — lọc nhẹ, giữ thanh điệu cho Whisper.
+    int32_t v = locGui(s0) >> (MIC_GAIN_SHIFT - 8);
+    if (v > 32767) { v = 32767; xenSamples++; }
+    else if (v < -32768) { v = -32768; xenSamples++; }
     pcmBlock[i] = (int16_t)v;
   }
   micLevel = (int32_t)(sum / n);
@@ -877,6 +920,7 @@ int32_t dc() { return micDc; }
 int32_t rawLevel() { return micTho; }
 int32_t peakRaw() { return micPeak; }
 uint32_t clipBlocks() { return micClipBlocks; }
+uint32_t clippedSamples() { return xenSamples; }
 int32_t gate() { return vadGate(); }
 uint32_t lastClipBytes() { return lastClip; }
 uint32_t lastUnderruns() { return underruns; }

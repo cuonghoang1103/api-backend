@@ -565,7 +565,8 @@ static void onTurnEnd() {
     ws.sendTXT("{\"t\":\"audio_end\"}");
     const uint32_t ms = millis() - upStartMs;
     sendLog("info", String("nghe: ") + (upBytes / 1024) + " KB / " + (ms / 100) / 10.0 +
-                        " giay, dinh=" + upPeak + " (nguong " + VAD_THRESHOLD + ")");
+                        " giay, dinh=" + upPeak + ", xen=" + audio::clippedSamples() +
+                        " mau (tieng xen thi Whisper doan bua)");
   }
 }
 

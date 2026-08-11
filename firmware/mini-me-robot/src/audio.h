@@ -100,6 +100,8 @@ int32_t dc();
 int32_t rawLevel();
 int32_t peakRaw();
 uint32_t clipBlocks();
+/** Số mẫu bị xén khi đóng gói 16 bit, cộng dồn. Khác 0 là tiếng đã méo. */
+uint32_t clippedSamples();
 /** Ngưỡng VAD hiện tại = nền × 3, đã kẹp. Vượt mức này là mở lượt nghe. */
 int32_t gate();
 /** Số byte của đoạn phát gần nhất, để hiện lên màn. */

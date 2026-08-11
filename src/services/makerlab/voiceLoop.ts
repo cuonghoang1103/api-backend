@@ -523,7 +523,13 @@ async function thinkAndSpeak(
      * 150 ký tự ≈ 10 giây tiếng: đủ dài để mối nối thưa hẳn, mà vẫn đủ
      * ngắn để mẩu tiếp theo kịp về trước khi bo phát hết mẩu trước.
      */
-    const GOM_TOI_THIEU = 150;
+    // 150 → 400. Mỗi mẩu TTS là một mối nối, và đo trên bo thật cho
+    // thấy mối nối MỚI là thứ nghe thành "giật", chứ không phải đói đệm
+    // (`hut dem 0 lan / 0 ms` ở mọi lượt, kể cả lượt 20 giây). Gom dài
+    // hơn ⇒ ít mối nối hơn. Mẩu ĐẦU vẫn gửi ngay khi có một câu nên độ
+    // trễ mở miệng không đổi; chỉ các mẩu sau mới gom, và lúc đó bo
+    // đang bận phát mẩu đầu nên có thừa thời gian.
+    const GOM_TOI_THIEU = 400;
     const cho: string[] = [];
     let daGuiMauDau = false;
 

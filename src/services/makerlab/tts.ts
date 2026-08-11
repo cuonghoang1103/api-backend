@@ -34,7 +34,7 @@ import { WebSocket } from 'ws';
 import { randomUUID } from 'crypto';
 import { logger } from '../../utils/logger.js';
 
-export type TtsProvider = 'edge' | 'google' | 'gcloud' | 'openai' | 'elevenlabs';
+export type TtsProvider = 'edge' | 'google' | 'gcloud' | 'fptai' | 'openai' | 'elevenlabs';
 
 export interface TtsOptions {
   provider?: TtsProvider;
@@ -69,7 +69,23 @@ const DEFAULT_VOICE: Record<TtsProvider, string> = {
   // vì hạn miễn phí gấp BỐN lần (4 triệu ký tự/tháng so với 1 triệu),
   // mà với robot để bàn thì 4 triệu là không bao giờ chạm tới.
   gcloud: 'vi-VN-Wavenet-D',
+  // Giọng nam miền Bắc. "banmai" (nữ) nổi tiếng hơn nhờ các video
+  // review phim, nhưng robot này xưng "tôi" và nói trống không nên
+  // giọng nam hợp hơn — đổi một dòng ở tab Tính cách là xong.
+  fptai: 'leminh',
 };
+
+/** Giọng tiếng Việt của FPT.AI, để UI khỏi phải đoán. */
+export const FPTAI_VOICES = [
+  { id: 'leminh', label: 'Lê Minh — nam, miền Bắc' },
+  { id: 'giahuy', label: 'Gia Huy — nam, miền Trung' },
+  { id: 'minhquang', label: 'Minh Quang — nam, miền Nam' },
+  { id: 'banmai', label: 'Ban Mai — nữ, miền Bắc' },
+  { id: 'thuminh', label: 'Thu Minh — nữ, miền Bắc' },
+  { id: 'myan', label: 'Mỹ An — nữ, miền Trung' },
+  { id: 'lannhi', label: 'Lan Nhi — nữ, miền Nam' },
+  { id: 'linhsan', label: 'Linh San — nữ, miền Nam' },
+];
 
 const TTS_TIMEOUT_MS = Number(process.env.MAKERLAB_TTS_TIMEOUT_MS) || 20_000;
 
@@ -82,7 +98,14 @@ function envProvider(): TtsProvider {
   // handshake on every single reply, which is 60% of the latency
   // budget for a robot that has one second to answer.
   const p = (process.env.MAKERLAB_TTS_PROVIDER || 'google').toLowerCase();
-  if (p === 'google' || p === 'gcloud' || p === 'openai' || p === 'elevenlabs' || p === 'edge')
+  if (
+    p === 'google' ||
+    p === 'gcloud' ||
+    p === 'fptai' ||
+    p === 'openai' ||
+    p === 'elevenlabs' ||
+    p === 'edge'
+  )
     return p;
   return 'google';
 }
@@ -97,7 +120,11 @@ export async function synthesizeSpeech(text: string, opts: TtsOptions = {}): Pro
 
   const first = opts.provider || envProvider();
   // google last: it always works, so it makes a good floor.
-  const chain: TtsProvider[] = [first, 'edge', 'openai', 'elevenlabs', 'google'].filter(
+  // `fptai` đứng trước `google`: khi nhà cung cấp chính hỏng, rơi vào
+  // một giọng Việt tử tế vẫn hơn rơi thẳng xuống translate_tts. Còn
+  // `google` giữ vị trí cuối vì nó không cần khoá — một cái sàn không
+  // bao giờ thủng.
+  const chain: TtsProvider[] = [first, 'edge', 'openai', 'elevenlabs', 'fptai', 'google'].filter(
     (p, i, arr) => arr.indexOf(p) === i,
   ) as TtsProvider[];
 
@@ -122,6 +149,7 @@ export async function synthesizeSpeech(text: string, opts: TtsOptions = {}): Pro
 
 function providerConfigured(p: TtsProvider): boolean {
   if (p === 'gcloud') return !!process.env.GOOGLE_TTS_API_KEY;
+  if (p === 'fptai') return !!process.env.FPTAI_API_KEY;
   if (p === 'openai') return !!process.env.OPENAI_API_KEY;
   if (p === 'elevenlabs') return !!process.env.ELEVENLABS_API_KEY;
   // Edge needs its client token supplied; unset means skip it.
@@ -139,6 +167,8 @@ function runProvider(p: TtsProvider, text: string, opts: TtsOptions): Promise<Bu
       return synthesizeGoogle(text, lang.split('-')[0] || 'vi');
     case 'gcloud':
       return synthesizeGoogleCloud(text, voice || DEFAULT_VOICE.gcloud, lang, opts.speakingRate);
+    case 'fptai':
+      return synthesizeFptAi(text, voice || DEFAULT_VOICE.fptai, opts.speakingRate);
     case 'openai':
       return synthesizeOpenAI(text, voice || DEFAULT_VOICE.openai);
     case 'elevenlabs':
@@ -410,6 +440,80 @@ async function synthesizeElevenLabs(text: string, voiceId: string): Promise<Buff
   if (!res.ok)
     throw new Error(`elevenlabs HTTP ${res.status} ${(await res.text()).slice(0, 120)}`);
   return Buffer.from(await res.arrayBuffer());
+}
+
+// ─── FPT.AI (giọng Việt, đăng ký không cần thẻ) ────────────
+
+/**
+ * Giọng Việt của người Việt làm, và là đường DUY NHẤT trong file này
+ * đăng ký được mà không cần thẻ quốc tế.
+ *
+ * Vì sao có thêm cửa này (11/08/2026): Google Cloud từ chối hồ sơ thanh
+ * toán với mã `OR_BACR2_31`, ElevenLabs cũng đòi thẻ, còn Edge thì trả
+ * 403 kể cả khi đã ký đúng `Sec-MS-GEC` (tôi thử rồi, không phải đoán).
+ * `console.fpt.ai` chỉ cần email + số điện thoại Việt Nam.
+ *
+ * ⚠️ Khác mọi nhà cung cấp còn lại ở một điểm quan trọng: nó KHÔNG trả
+ * về file. Nó trả về một URL rồi sinh file ở đằng sau, nên phải hỏi lại
+ * URL đó tới khi có. Đó là lý do có vòng lặp dưới đây, và cũng là lý do
+ * đường này chậm hơn Google chừng nửa giây mỗi lượt.
+ */
+async function synthesizeFptAi(
+  text: string,
+  voice: string,
+  speakingRate?: number,
+): Promise<Buffer> {
+  const key = process.env.FPTAI_API_KEY;
+  if (!key) throw new Error('FPTAI_API_KEY missing');
+
+  // FPT.AI nhận tốc độ theo thang -3..3, không phải hệ số nhân như
+  // Google. Quy đổi để MỘT thanh trượt trên web điều khiển được cả hai.
+  //
+  // Hai vế phải có hệ số khác nhau, vì thanh trượt không đối xứng quanh
+  // 1: bên chậm chỉ có nửa đơn vị (0,5→1) còn bên nhanh có cả đơn vị
+  // (1→2). Dùng chung một hệ số thì phía nhanh bị bão hoà — 1,5 và 2,0
+  // cùng ra +3, kéo thêm không thấy đổi gì và trông như thanh trượt
+  // hỏng.
+  const speed =
+    typeof speakingRate !== 'number' || speakingRate === 1
+      ? 0
+      : Math.max(
+          -3,
+          Math.min(3, +((speakingRate < 1 ? (speakingRate - 1) * 6 : (speakingRate - 1) * 3).toFixed(1))),
+        );
+
+  const res = await fetch('https://api.fpt.ai/hmi/tts/v5', {
+    method: 'POST',
+    headers: {
+      'api-key': key,
+      voice,
+      speed: String(speed),
+      'Content-Type': 'text/plain; charset=utf-8',
+    },
+    body: text,
+    signal: AbortSignal.timeout(TTS_TIMEOUT_MS),
+  });
+  if (!res.ok)
+    throw new Error(`fptai HTTP ${res.status} ${(await res.text()).slice(0, 140)}`);
+
+  const json = (await res.json()) as { async?: string; error?: number; message?: string };
+  if (!json.async) throw new Error(`fptai không trả URL: ${json.message ?? 'không rõ'}`);
+
+  // Hỏi lại tới khi file sinh xong. Trong lúc chưa xong nó trả 403/404
+  // chứ không phải lỗi thật — đừng nhầm hai thứ đó, nếu không sẽ bỏ
+  // cuộc ngay ở lần hỏi đầu tiên và tưởng khoá hỏng.
+  const deadline = Date.now() + TTS_TIMEOUT_MS;
+  let delay = 250;
+  while (Date.now() < deadline) {
+    await new Promise((r) => setTimeout(r, delay));
+    const file = await fetch(json.async).catch(() => null);
+    if (file?.ok) {
+      const buf = Buffer.from(await file.arrayBuffer());
+      if (buf.length > 0) return buf;
+    }
+    delay = Math.min(delay * 1.5, 1_200);
+  }
+  throw new Error('fptai: hết giờ chờ file');
 }
 
 /** Surfaced in the frontend so the setup steps live next to the switch. */

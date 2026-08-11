@@ -46,6 +46,22 @@ interface VoiceOption {
  */
 const VOICES: VoiceOption[] = [
   {
+    provider: 'fptai',
+    label: 'FPT.AI ⭐ không cần thẻ quốc tế',
+    voices: [
+      { id: 'leminh', label: 'Lê Minh — nam, miền Bắc' },
+      { id: 'giahuy', label: 'Gia Huy — nam, miền Trung' },
+      { id: 'minhquang', label: 'Minh Quang — nam, miền Nam' },
+      { id: 'banmai', label: 'Ban Mai — nữ, miền Bắc' },
+      { id: 'thuminh', label: 'Thu Minh — nữ, miền Bắc' },
+      { id: 'myan', label: 'Mỹ An — nữ, miền Trung' },
+      { id: 'lannhi', label: 'Lan Nhi — nữ, miền Nam' },
+      { id: 'linhsan', label: 'Linh San — nữ, miền Nam' },
+    ],
+    status: 'need-key',
+    note: 'Giọng Việt do người Việt làm, đủ ba miền, nhận cả tốc độ đọc. Đăng ký ở console.fpt.ai chỉ cần email + số điện thoại Việt Nam — KHÔNG cần thẻ quốc tế, khác hẳn Google và ElevenLabs. Chậm hơn Google chừng nửa giây vì nó trả URL rồi mới sinh file. Cần FPTAI_API_KEY.',
+  },
+  {
     provider: 'gcloud',
     label: 'Google Cloud TTS ⭐ khuyên dùng',
     voices: [

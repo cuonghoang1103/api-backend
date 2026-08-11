@@ -191,6 +191,187 @@ Nên đường hầm ngược không phải mẹo vặt mà là **hệ quả tr�
 trước rồi giữ nguyên đường đó. Đường đã mở thì đi được cả hai chiều.
 TeamViewer, Tailscale, ngrok đều làm đúng thế, chỉ gói lại cho đẹp.
 
+### 3c. Chuỗi khởi động Linux — dạy bằng chính lúc nó gãy
+
+Ngày 11/08 hệ thống gãy ở **ba tầng khác nhau** của chuỗi khởi động, mỗi lần
+ra một triệu chứng khác. Đó là giáo trình sẵn: thay vì vẽ sơ đồ rồi bảo học
+thuộc, đi từng tầng và cho xem nó hỏng thì màn hình hiện gì.
+
+```
+Nguồn → UEFI/BIOS → GRUB → nhân Linux → initramfs → switch_root
+      → systemd → target đăng nhập → phiên đồ hoạ
+```
+
+| Tầng | Nó làm gì | Hôm nay hỏng ra sao |
+|---|---|---|
+| **UEFI** | Tìm bộ nạp khởi động trên phân vùng EFI | Vào được, `F11` chọn USB — chứng minh tầng này lành |
+| **GRUB** | Nạp nhân + initramfs, truyền tham số dòng lệnh | Sửa tay làm gãy `root=UUID=…` |
+| **Nhân** | Nhận diện phần cứng, dựng thiết bị | `nvme0n1: p1` — nhân thấy đĩa, nên đĩa không hỏng |
+| **initramfs** | Hệ thống tệp tạm trong RAM, đủ sức tìm và gắn ổ thật | Không tìm ra gốc → `Timed out waiting for /dev/gpt-auto-root` |
+| **switch_root** | Chuyển từ initramfs sang ổ thật | Không tới được bước này |
+| **systemd** | Khởi động dịch vụ theo target | Rơi vào `emergency.target` |
+| **sulogin** | Xin mật khẩu root cho shell khẩn cấp | *"the root account is locked"* — Fedora khoá sẵn root |
+
+**Ba điểm dạy được, không sách nào nói rõ bằng:**
+
+1. **`root=UUID=…` là dây rốn.** Nhân không biết ổ nào là ổ gốc; nó **được
+   bảo**. Mất tham số đó thì systemd quay sang đoán bằng `gpt-auto-root`
+   (dò theo mã loại phân vùng GPT) — và hết giờ. Log nói thẳng ra điều đó,
+   chỉ cần biết đọc.
+
+2. **Vì sao GRUB bẻ dòng lại nguy hiểm.** Dòng `linux` dài hơn màn hình nên
+   GRUB gấp khúc và đánh dấu bằng `\`. UUID bị cắt làm đôi giữa hai dòng
+   hiển thị. Con trỏ lạc vào đó là hỏng. **Cách an toàn: bấm `End` để nhảy
+   tới cuối dòng LOGIC, đừng bao giờ mò bằng mũi tên phải.**
+
+3. **`rd.break` và `init=/bin/bash` khác nhau ở đâu.** `rd.break` dừng
+   *trong initramfs* rồi nhờ **systemd** cấp shell — mà systemd gọi
+   `sulogin`, và `sulogin` đòi mật khẩu root. Fedora khoá root → cụt đường.
+   `init=/bin/bash` thì bảo **nhân** chạy thẳng `bash` làm tiến trình số 1,
+   **không có systemd nên không có ai để mà hỏi**. Hiểu chỗ này là hiểu vì
+   sao cách thứ hai qua được chỗ cách thứ nhất chết.
+
+### 3d. Sáu thứ cản đường — mỗi thứ một bài học riêng
+
+**1. `/home` rỗng — Btrfs subvolume**
+
+`ls /mnt/sys/home` không ra gì, trông như mất dữ liệu. Thực ra Fedora chia ổ
+thành **hai subvolume**: `root` cho `/` và `home` riêng. Gắn `subvol=root` thì
+`/home` chỉ là thư mục rỗng chờ subvolume kia gắn đè.
+
+Dạy được: subvolume khác partition thế nào (không cần chia trước, chung một
+kho dung lượng), vì sao Fedora làm thế (snapshot `/` mà không đụng `/home`),
+và **cách tránh hoảng**: `btrfs subvolume list /mnt/sys` xem có gì trước khi
+kết luận mất dữ liệu.
+
+**2. `chroot` — mượn hệ điều hành khác làm của mình**
+
+```bash
+for d in dev proc sys run; do mount --bind /$d /mnt/sys/$d; done
+chroot /mnt/sys
+```
+
+`chroot` đổi gốc hệ thống tệp cho tiến trình. Nhưng `/dev`, `/proc`, `/sys`
+**không phải file trên đĩa** — chúng là cửa sổ nhìn vào nhân đang chạy. Ổ
+cứng chỉ có thư mục rỗng ở đó. Không bind-mount thì `passwd` chạy được nhưng
+`dnf` và `systemctl` thì không, vì chúng cần hỏi nhân.
+
+Dạy được: hệ thống tệp ảo là gì, vì sao container cũng dùng đúng cơ chế này
+(Docker chính là chroot + namespace + cgroup), và vì sao `chroot` **không
+phải** máy ảo.
+
+**3. `^[[200~` — dán vào shell không hiểu dán**
+
+Dán lệnh vào bash trong chroot thì ra `bash: syntax error near unexpected
+token 'do'`, và đầu dòng có `^[[200~`. Đó là **bracketed paste**: terminal
+bọc nội dung dán giữa hai mã điều khiển để shell biết "đây là dán, không
+phải gõ". Bash trong chroot chưa nạp cấu hình readline nên không hiểu, coi
+mã đó là chữ.
+
+Dạy được: mã escape ANSI, khác nhau giữa terminal và shell, vì sao trong môi
+trường cứu hộ nên **gõ tay** thay vì dán.
+
+**4. KDE Wallet đòi mật khẩu cũ**
+
+Đổi mật khẩu từ ngoài xong, đăng nhập được, nhưng KDE Wallet vẫn hỏi mật khẩu
+— **mật khẩu cũ**. Vì kho đó **mã hoá bằng chính mật khẩu đăng nhập cũ**;
+bình thường lúc đăng nhập hệ thống lấy mật khẩu bạn vừa gõ để mở kho. Đổi từ
+bên ngoài thì hệ thống cho vào mà kho vẫn khoá bằng khoá cũ.
+
+Dạy được — và đây là bài học lớn hơn nhiều so với KDE: **đổi mật khẩu không
+giải mã lại được dữ liệu đã mã hoá bằng mật khẩu cũ**. Đúng cơ chế đó áp
+dụng cho LUKS, cho `ecryptfs`, cho keychain của macOS. Biết nguyên tắc này
+thì hiểu luôn vì sao ổ mã hoá toàn phần mà quên mật khẩu là **mất thật**,
+không có cửa sau nào.
+
+**5. `sudo` chết qua SSH — không có TTY**
+
+```
+sudo: a terminal is required to read the password
+```
+
+`ssh may 'lệnh'` **không cấp thiết bị đầu cuối**, vì nó chạy lệnh rồi thoát
+chứ không mở phiên tương tác. `sudo` cần TTY để hỏi mật khẩu mà không lộ ra
+màn hình. Không có TTY → không hỏi được → chết.
+
+Dạy được: TTY là gì, `ssh -t` ép cấp, vì sao script tự động **không nên** cần
+`sudo`, và **cách viết đúng**: kiểm trước rồi mới gọi `sudo`. Chính script
+`01-dung-moi-truong.sh` trong repo này đã dính rồi phải sửa — dùng làm ví dụ
+trước/sau.
+
+**6. Fedora chặn cổng 22, Ubuntu thì không**
+
+Cài `openssh-server` và `systemctl enable --now sshd` xong vẫn không vào
+được, vì `firewalld` của Fedora chặn sẵn. Phải thêm
+`firewall-cmd --permanent --add-service=ssh`.
+
+Dạy được: tường lửa hoạt động ở đâu trong chồng mạng, khác nhau giữa "dịch
+vụ không chạy" và "dịch vụ chạy nhưng bị chặn" — hai thứ **cùng triệu chứng
+`Connection refused`/timeout** nhưng chữa khác hẳn. Phân biệt bằng
+`ss -tlnp | grep :22` chạy **trên chính máy đó**.
+
+### 3e. Bài học hệ thống từ chính con robot — vàng cho Track B và cho DevOps
+
+Mấy thứ này rút ra từ việc sửa robot cùng ngày, và chúng dạy được những
+nguyên lý mà bài học lý thuyết rất khó truyền đạt:
+
+**1. Ghìm nhịp sai chỗ — `bufferedAmount` là bộ đệm CỦA AI?**
+
+Nhạc phát ra loa robot bị giật và cụt giữa bài. Mã cũ ghìm bằng
+`ws.bufferedAmount > 256KB`. Nghe hợp lý, thực ra vô dụng: đó là bộ đệm gửi
+**của server**, còn chỗ tràn là vòng đệm 512 KB **trên bo mạch**. Kernel và
+ngăn xếp WiFi nuốt hàng megabyte trước khi TCP kịp ghìm ngược, nên con số đó
+gần như luôn bằng 0 trong lúc bo đang vứt dữ liệu.
+
+Cách chữa: **ghìm theo đồng hồ**. Loa chạy đúng 32.000 byte/giây, không nhanh
+hơn được, nên cứ bơm trước 4 giây rồi ngồi đợi.
+
+Dạy được: backpressure là gì, vì sao **đo sai chỗ còn tệ hơn không đo**, và
+nguyên tắc chung — *khi ghép một nguồn nhanh với một cái đích chạy thời gian
+thực, hãy ghìm theo tốc độ của ĐÍCH, đừng ghìm theo trạng thái của mình.*
+
+**2. Đừng tin điểm tự chấm của model**
+
+Whisper có trường `no_speech_prob` — chính model tự chấm khả năng đoạn tiếng
+không có người nói. Nghe như món quà. Log production: **bốn mươi dòng bịa
+liên tiếp, tất cả đều `no_speech_prob: 0.00`**, trong đó có câu mười ba âm
+tiết sinh ra từ **0,42 giây** tiếng quạt.
+
+Thay bằng bằng chứng vật lý: miệng người có trần tốc độ, nên chia số âm tiết
+cho số giây là bắt được ngay.
+
+Dạy được: vì sao điểm tự tin của model không phải xác suất đúng, và nguyên
+tắc — *ưu tiên ràng buộc vật lý hơn lời model tự khai.*
+
+**3. Health check không được làm việc nặng**
+
+`/health` của dịch vụ TTS **cố ý không nạp model** (nạp mất 43 giây). Nạp thì
+healthcheck đỏ suốt nửa phút đầu, Docker tưởng dịch vụ chết và giết đi, rồi
+lặp lại mãi.
+
+Dạy được: liveness và readiness khác nhau, `start_period` để làm gì, vì sao
+health check phải rẻ.
+
+**4. Request HTTP dài quá là chết dọc đường**
+
+5.000 ký tự là ~5,5 phút sinh tiếng. Một request giữ mở suốt sáu phút sẽ bị
+nginx cắt trước khi tới đích. Nên phải tách thành **đặt việc → hỏi lại**.
+
+Dạy được: timeout ở từng tầng (trình duyệt, nginx, ứng dụng), vì sao việc dài
+cần hàng đợi, và mã trạng thái **202 Accepted** — chỗ này đã dính lỗi thật:
+lúc đầu trả 200 cho cả "đang chạy" lẫn "xong", và bên gọi lưu nguyên 37 byte
+JSON ra file `.wav` rồi tưởng đã xong.
+
+**5. Đừng mở cổng ra Internet nếu không bắt buộc**
+
+Container `tts` **không có `ports:`** trong docker-compose. Nó chỉ tồn tại
+trong mạng nội bộ Docker, Node gọi vào bằng tên `http://tts:8080`. Một lượt
+sinh chiếm gần trọn ba nhân CPU — hở ra Internet là tặng người lạ cái nút tắt
+máy chủ.
+
+Dạy được: mạng Docker, phân giải tên theo tên dịch vụ, nguyên tắc bề mặt tấn
+công tối thiểu, và vì sao **proxy qua backend có xác thực** là mẫu đúng.
+
 ---
 
 ## 4. Ba track cần làm
@@ -231,6 +412,68 @@ Mảng trống hoàn toàn, mà Cường sắp train thật với RTX 3060 12 GB
 | 7. Khi hết VRAM | Thang hạ dần: batch → tích luỹ gradient → checkpointing → 4-bit. Mỗi bước đổi gì lấy gì |
 | 8. Đọc số lúc train | Loss, learning rate, warmup. Nhận ra overfit |
 | 9. Đưa model vào chạy thật | Xuất ONNX, lượng tử hoá, **RTF** — vì sao model đẹp mà RTF ≥ 1 là vô dụng cho việc thời gian thực |
+
+#### Chi tiết cần có trong Track B — số thật, không ước lượng
+
+**Chồng phần mềm bốn tầng.** Người mới luôn tưởng chỉ có "PyTorch". Thực ra:
+
+```
+model của bạn  →  PyTorch  →  cuDNN / cuBLAS / cuSPARSE  →  driver NVIDIA  →  card
+                             (2,5 GB thư viện tải về)      (610.43.03)      (3060)
+```
+
+Lệch tầng nào cũng ra `CUDA not available` mà không nói vì sao. Cách chẩn:
+`nvidia-smi` lành → driver ổn; `torch.cuda.is_available()` sai → tầng PyTorch
+lệch driver. Cho học viên xem thật 2,5 GB đó tải về (cuBLAS 567 MB, cuSPARSE
+275 MB, cuSOLVER 255 MB, cuFFT 184 MB, triton 148 MB…).
+
+**Cái bẫy `pip install torch`.** Trên Linux, lệnh trần **kéo về bản CUDA** —
+vài GB thư viện NVIDIA. Đúng trên máy có card, **sai hoàn toàn trên server
+không card**: image Docker phình từ 2 GB lên 6–7 GB. Cách ép bản CPU:
+
+```bash
+pip install --index-url https://download.pytorch.org/whl/cpu torch==2.6.0+cpu
+```
+
+Ví dụ thật trong repo: `services/tts/Dockerfile` ép bản CPU (VPS không card),
+còn `hardware/voice-training/01-dung-moi-truong.sh` dùng `uv sync --group gpu`
+(máy có card). **Cùng một thư viện, hai lựa chọn ngược nhau, vì hai máy khác
+nhau** — đó là bài học.
+
+**Kiểu số: fp32 / fp16 / bf16 / int8 / 4-bit.** Không phải chuyện "nhẹ hơn
+thì kém hơn", mà là đánh đổi giữa dải giá trị và độ chính xác. Điểm mấu chốt:
+**bf16 cần Ampere trở lên** — 3060 là Ampere nên chạy được, card đời cũ hơn
+thì phải quay về fp16 và dễ tràn số khi train. Cấu hình VieNeu để `bf16: True`
+chính vì thế.
+
+**Vì sao 3060 (12 GB) hơn 3060 Ti (8 GB) cho việc này.** Ti mạnh hơn về tính
+toán nhưng ít bộ nhớ hơn. Với train thì **bộ nhớ là trần cứng**: thiếu một
+byte là dừng hẳn, không có chuyện chạy chậm hơn. Đây là chỗ ngược trực giác
+nhất của cả track, và Cường đã suýt mua nhầm hướng vì tưởng máy mình là Ti.
+
+**Audio thành token — vì sao TTS đời mới là LLM.** VieNeu dùng NeuCodec biến
+sóng âm thành chuỗi mã rời rạc, rồi một model kiểu Qwen sinh chuỗi mã đó y
+như sinh chữ, cuối cùng codec dựng ngược lại thành sóng. Hiểu chỗ này thì
+hiểu luôn vì sao họ model đó **nhân bản giọng được** (chỉ cần vài giây làm
+ngữ cảnh) mà lại **chậm** (mỗi 20 ms tiếng là một lượt forward) — trong khi
+họ VITS như Piper nhanh gấp bảy nhưng không nhân bản được.
+
+**RTF — thước đo quyết định dùng được hay không.**
+
+```
+RTF = thời gian sinh ÷ độ dài tiếng sinh ra
+```
+
+Số thật đo trên VPS 4 nhân ngày 11/08:
+
+| | RTF | Kết luận |
+|---|---|---|
+| VieNeu v3 Turbo (ONNX int8) | **0,77 – 1,06** | ❌ robot lặp từ |
+| Piper (VITS) | **0,13 – 0,35** | ✅ dư 7 lần |
+
+Và chỗ phản trực giác: **thêm CPU gần như không cứu được** — 3 nhân lên 4
+nhân (+33%) chỉ nhanh hơn **14%**. Nút thắt nằm ở bản thân phép tính chứ
+không ở số nhân. Dạy được: định luật Amdahl bằng số đo thật thay vì công thức.
 
 ### Track C — `Networking Fundamentals` (ưu tiên 3)
 

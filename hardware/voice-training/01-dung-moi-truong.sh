@@ -58,16 +58,38 @@ say "Gói hệ thống"
 # ffmpeg: đọc/đổi định dạng audio khi chuẩn bị dữ liệu.
 # libsndfile: soundfile đọc wav.
 # nhóm biên dịch + python3-devel: vài gói phải build phần C.
-if [ "$PKG" = dnf ]; then
-  # ffmpeg đầy đủ của Fedora nằm ở RPM Fusion; kho gốc chỉ có
-  # ffmpeg-free thiếu vài bộ giải mã. Cài bản nào có thì cài.
-  sudo dnf install -y -q git curl ffmpeg libsndfile python3-devel gcc gcc-c++ make \
-    || sudo dnf install -y -q git curl ffmpeg-free libsndfile python3-devel gcc gcc-c++ make
+#
+# ⚠️ KIỂM TRƯỚC, chỉ gọi `sudo` khi THẬT SỰ thiếu.
+#
+# Chạy qua SSH thì không có thiết bị đầu cuối, nên `sudo` không hỏi
+# được mật khẩu và script chết ngay cả khi máy đã có đủ gói — đúng
+# chuyện đã xảy ra ngày 11/08. Kiểm trước thì trường hợp thường gặp
+# nhất (đã cài rồi) chạy trót lọt, và chỉ khi thiếu thật mới phải nhờ
+# người dùng gõ một lệnh tận nơi.
+THIEU=""
+for c in git curl ffmpeg gcc make; do command -v "$c" >/dev/null 2>&1 || THIEU="$THIEU $c"; done
+ldconfig -p 2>/dev/null | /usr/bin/grep -q libsndfile || THIEU="$THIEU libsndfile"
+ls /usr/include/python3*/Python.h >/dev/null 2>&1 || THIEU="$THIEU python3-devel"
+
+if [ -z "$THIEU" ]; then
+  ok "Đã có sẵn git, curl, ffmpeg, libsndfile, bộ biên dịch — bỏ qua bước cài"
+elif sudo -n true 2>/dev/null; then
+  if [ "$PKG" = dnf ]; then
+    # ffmpeg đầy đủ nằm ở RPM Fusion; kho gốc chỉ có ffmpeg-free.
+    sudo dnf install -y -q git curl ffmpeg libsndfile python3-devel gcc gcc-c++ make \
+      || sudo dnf install -y -q git curl ffmpeg-free libsndfile python3-devel gcc gcc-c++ make
+  else
+    sudo apt-get update -qq
+    sudo apt-get install -y -qq git curl ffmpeg libsndfile1 build-essential python3-dev
+  fi
+  ok "Đã cài:$THIEU"
 else
-  sudo apt-get update -qq
-  sudo apt-get install -y -qq git curl ffmpeg libsndfile1 build-essential python3-dev
+  die "Còn thiếu:$THIEU
+     `sudo` cần mật khẩu mà chạy qua SSH thì không gõ được.
+     Gõ lệnh này TẬN MÁY rồi chạy lại script:
+
+  ${PKG_CMD:-sudo dnf install -y}$THIEU"
 fi
-ok "Đã cài git, curl, ffmpeg, libsndfile, bộ biên dịch"
 
 say "uv (trình quản lý gói Python mà VieNeu khuyên dùng)"
 if ! command -v uv >/dev/null 2>&1; then

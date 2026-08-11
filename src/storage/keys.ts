@@ -75,7 +75,13 @@ export type StorageCategory =
   | 'video'
   | 'videos/lesson'
   | 'documents/lesson'
-  | 'documents/chat';
+  | 'documents/chat'
+  // Bản build firmware cho Maker Lab. Bo tải về qua HTTPS công khai —
+  // đó là chủ ý: ESP32 không mang theo được khoá bí mật nào để xác
+  // thực, và một bản .bin lộ ra không nguy hiểm (nó là mã, không phải
+  // dữ liệu). Cái phải bảo vệ là tính TOÀN VẸN, và việc đó do SHA-256
+  // trong manifest lo — bo từ chối nạp nếu băm không khớp.
+  | 'firmware';
 
 /** Helper for the audio path — pre-pends `songs/` per the spec. */
 export function buildAudioKey(originalName: string, _options: { userId?: number } = {}): string {

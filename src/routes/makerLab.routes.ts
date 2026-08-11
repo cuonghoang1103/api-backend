@@ -35,6 +35,29 @@ import { prisma } from '../config/database.js';
 import * as svc from '../services/makerlab/makerLab.service.js';
 import { COMMAND_CATALOG, COMMAND_TYPES } from '../services/makerlab/commands.js';
 import { cloneVoiceHowTo } from '../services/makerlab/tts.js';
+import multer from 'multer';
+import { createHash } from 'crypto';
+import { uploadGeneric } from '../storage/uploadService.js';
+import { logger } from '../utils/logger.js';
+
+/**
+ * Bản build firmware tải lên.
+ *
+ * 8 MB: bản hiện tại 975 KB, và khe app trên bo là 6,55 MB — nên trần
+ * này rộng hơn cả thứ bo nạp nổi. Đặt cao hơn nữa cũng vô nghĩa: bo sẽ
+ * từ chối trước khi ghi.
+ *
+ * Giữ trong bộ nhớ chứ không ghi tạm ra đĩa: file đi thẳng lên R2 rồi
+ * bỏ, mà đĩa VPS đang là thứ eo hẹp nhất.
+ */
+const firmwareUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 8 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    if (file.originalname.toLowerCase().endsWith('.bin')) cb(null, true);
+    else cb(new Error('Chỉ nhận file .bin'));
+  },
+});
 
 const router = Router();
 const adminRouter = Router();
@@ -468,6 +491,73 @@ adminRouter.put('/projects/:id/persona', async (req, res: Response<ApiResponse>,
     next(e);
   }
 });
+
+/**
+ * Xuất bản một bản build: nhận .bin → đẩy R2 → ghi bản ghi → xong.
+ *
+ * Vì sao là MỘT route làm cả ba việc, thay vì để script tự đẩy R2 rồi
+ * gọi route cũ: **khoá R2 nằm trên VPS, không có trên máy lập trình**.
+ * Bắt script tự đẩy nghĩa là phải phát tán khoá bucket ra máy cá nhân —
+ * đổi lấy đúng một chút tiện, mà mất hẳn một lớp bảo vệ.
+ *
+ * Và SHA-256 **tính ở server trên đúng byte vừa nhận**, không lấy theo
+ * lời client khai. Băm là thứ bo dùng để quyết định có nạp hay không;
+ * tin theo lời người gửi thì cái băm đó chẳng bảo vệ được gì — nó chỉ
+ * chứng minh "file khớp với thứ người gửi NÓI", chứ không chứng minh
+ * "file nguyên vẹn".
+ */
+adminRouter.post(
+  '/projects/:id/firmware/upload',
+  firmwareUpload.single('file'),
+  async (req: Request, res: Response<ApiResponse>, next) => {
+    try {
+      const file = (req as unknown as { file?: { buffer: Buffer; originalname?: string; size: number } }).file;
+      const version = String(req.body?.version ?? '').trim().slice(0, 40);
+      const releaseNotes = req.body?.releaseNotes ? String(req.body.releaseNotes).slice(0, 2000) : undefined;
+
+      if (!file?.buffer?.length) {
+        res.status(400).json({ success: false, message: 'Chưa chọn file .bin' });
+        return;
+      }
+      if (!version) {
+        res.status(400).json({ success: false, message: 'Thiếu version' });
+        return;
+      }
+
+      const sha256 = createHash('sha256').update(file.buffer).digest('hex');
+
+      const stored = await uploadGeneric(
+        {
+          buffer: file.buffer,
+          originalName: `${version}.bin`,
+          mimetype: 'application/octet-stream',
+          size: file.size,
+        },
+        'firmware',
+        { subPrefix: String(req.params.id), optimize: false },
+      );
+
+      const data = await svc.publishFirmware({
+        projectId: toId(req),
+        version,
+        r2Key: stored.key,
+        sha256,
+        sizeBytes: file.size,
+        releaseNotes,
+      });
+
+      logger.info('MakerLab xuất bản firmware', {
+        projectId: toId(req),
+        version,
+        kb: Math.round(file.size / 1024),
+        sha256: sha256.slice(0, 12),
+      });
+      res.status(201).json({ success: true, data: { ...data, sha256, url: stored.url } });
+    } catch (e) {
+      next(e);
+    }
+  },
+);
 
 adminRouter.post('/projects/:id/firmware', async (req, res: Response<ApiResponse>, next) => {
   try {

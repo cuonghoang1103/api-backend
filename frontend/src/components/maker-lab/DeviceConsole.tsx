@@ -26,6 +26,7 @@ import {
   Loader2,
   Plus,
   Power,
+  DownloadCloud,
   Send,
   Square,
   Terminal,
@@ -527,9 +528,29 @@ export function DeviceConsole({
                     {n}
                   </button>
                 ))}
+                {/* Cập nhật firmware qua WiFi.
+                    Hỏi lại trước khi gửi: bo sẽ câm, tải cả MB rồi tự
+                    khởi động lại — bấm nhầm giữa lúc đang nói chuyện
+                    thì mất mạch. */}
+                <button
+                  onClick={() => {
+                    if (
+                      confirm(
+                        'Cập nhật firmware qua WiFi?\n\n' +
+                          'Robot sẽ ngừng nói, tải bản mới rồi tự khởi động lại (khoảng 1 phút).\n' +
+                          'Bản mới ghi vào khe trống nên hỏng giữa chừng vẫn quay về bản cũ được.',
+                      )
+                    )
+                      cmd('ota');
+                  }}
+                  className="ml-auto flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-xs"
+                  style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
+                >
+                  <DownloadCloud size={12} /> Cập nhật firmware
+                </button>
                 <button
                   onClick={() => cmd('reboot')}
-                  className="ml-auto flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-xs"
+                  className="flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-xs"
                   style={{ borderColor: '#ef444455', color: '#ef4444' }}
                 >
                   <Power size={12} /> Khởi động lại

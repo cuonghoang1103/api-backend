@@ -1,14 +1,20 @@
 #!/usr/bin/env bash
 # ============================================================
-# Đo VRAM thật — 8 GB có đủ để LoRA không?
+# Đo VRAM thật — card này có đủ để LoRA không?
 # ============================================================
 #
 #   ssh maytrain 'bash -s' < hardware/voice-training/02-do-vram.sh
 #
 # Đây là câu hỏi chặn cả dự án, và phải trả lời TRƯỚC khi user bỏ ra
-# 2–4 giờ thu âm. Tài liệu VieNeu khuyên ≥12 GB VRAM và lấy ví dụ
-# "RTX 3060" — nhưng đó là bản 12 GB. Máy này là 3060 **Ti**, mạnh hơn
-# về tính toán mà chỉ có **8 GB**. Dưới mức khuyến nghị, nên phải đo.
+# 2–4 giờ thu âm.
+#
+# KẾT QUẢ 11/08/2026 trên RTX 3060 12GB: ĐẠT NGAY mức đầu (batch 2,
+# bf16, không cần 4-bit). 20 bước hết 18,3 giây → 1,09 bước/giây, suy
+# ra 5000 bước ≈ 76 phút.
+#
+# Vì sao vẫn giữ nguyên thang hạ dần: card khác thì kết quả khác. Tài
+# liệu VieNeu khuyên >=12 GB và lấy ví dụ "RTX 3060" — nhưng đó là bản
+# 12 GB, còn 3060 **Ti** chỉ có 8 GB. Cùng tên, khác nửa bộ nhớ.
 #
 # Cách đo: chạy đúng quy trình thật (dữ liệu mẫu → lọc → mã hoá →
 # train) nhưng chỉ 20 bước thay vì 5000, rồi đọc đỉnh VRAM mà torch
@@ -84,8 +90,8 @@ thu() {
   printf '\n  ── %s ──\n' "$nhan"
   nvidia-smi --query-gpu=memory.used --format=csv,noheader | sed 's/^/     trước khi chạy: /'
 
-  # `PYTORCH_CUDA_ALLOC_CONF=expandable_segments` giảm phân mảnh — với
-  # 8 GB thì phân mảnh đủ để biến "vừa khít" thành "tràn".
+  # `PYTORCH_CUDA_ALLOC_CONF=expandable_segments` giảm phân mảnh — khi
+  # VRAM sát nút thì phân mảnh đủ biến "vừa khít" thành "tràn".
   PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
     uv run python finetune/train.py > /tmp/train-probe.log 2>&1
   local rc=$?
@@ -132,10 +138,10 @@ done
 
 say "KẾT LUẬN"
 if [ -n "$KQ" ]; then
-  echo "  ✅ 8 GB ĐỦ. Cấu hình chạy được: $KQ"
+  echo "  ✅ VRAM ĐỦ. Cấu hình chạy được: $KQ"
   echo "     → Yên tâm bỏ công thu 2–4 giờ giọng thật."
 else
-  echo "  ❌ 8 GB KHÔNG đủ kể cả ở mức nhẹ nhất."
+  echo "  ❌ VRAM KHÔNG đủ kể cả ở mức nhẹ nhất."
   echo "     → Đừng thu âm vội. Còn hai đường: thuê GPU vài giờ (~150k),"
   echo "       hoặc đổi sang model nhỏ hơn. Gửi tôi /tmp/train-probe.log."
 fi

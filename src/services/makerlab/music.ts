@@ -178,19 +178,69 @@ function absolute(u: string): string {
  * "thôi tắt đi" hoặc bo rớt mạng, và một bài bốn phút vẫn chảy tiếp
  * sau khi không ai nghe nữa là vừa tốn băng thông vừa tốn CPU của VPS.
  */
+/**
+ * Đổi link TRANG YouTube thành link LUỒNG TIẾNG thật.
+ *
+ * ffmpeg đọc được luồng âm thanh, không đọc được trang web. Đưa cho nó
+ * `https://www.youtube.com/watch?v=...` thì nó tải về một mớ HTML rồi
+ * báo "Invalid data found when processing input" — đúng lỗi đo được
+ * ngày 11/08 khi robot bảo "mở bài này đây" rồi im bặt.
+ *
+ * Vì sao thư viện lại có link trang: 54 dòng trong `music_tracks` có
+ * `audio_url` trỏ vào youtube.com — chúng vào bằng đường "thêm bài theo
+ * URL" của module Music, nơi link trang là hợp lệ (trình duyệt nhúng
+ * được player YouTube). Chỉ robot mới cần luồng thô.
+ *
+ * `yt-dlp -g` trả về URL googlevideo dùng được ngay, không phải tải bài
+ * về đĩa. Mất 1-2 giây, và chỉ tốn khi bài đó thật sự là link YouTube.
+ */
+async function giaiLinkYoutube(url: string): Promise<string> {
+  if (!/(?:youtube\.com|youtu\.be)/i.test(url)) return url;
+
+  return new Promise((resolve) => {
+    const yt = spawn(process.env.YTDLP_PATH || 'yt-dlp', [
+      '-f', 'bestaudio[ext=m4a]/bestaudio/best',
+      '--no-playlist',
+      '-g',
+      url,
+    ]);
+    let out = '';
+    let err = '';
+    yt.stdout.on('data', (c: Buffer) => (out += c.toString()));
+    yt.stderr.on('data', (c: Buffer) => (err += c.toString()));
+    const hen = setTimeout(() => yt.kill('SIGKILL'), 20_000);
+    yt.on('close', () => {
+      clearTimeout(hen);
+      const truc = out.trim().split('\n')[0]?.trim();
+      if (truc?.startsWith('http')) {
+        resolve(truc);
+      } else {
+        // Trả lại link gốc: để ffmpeg thất bại và báo lỗi thật, còn hơn
+        // ở đây ném ra một lỗi khác che mất nguyên nhân.
+        logger.warn('MakerLab yt-dlp không giải được link', {
+          url,
+          err: err.slice(0, 200),
+        });
+        resolve(url);
+      }
+    });
+  });
+}
+
 export async function streamTrackAsPcm(
   url: string,
   onChunk: (pcm: Buffer) => boolean | Promise<boolean>,
   opts: { sampleRate?: number } = {},
 ): Promise<{ bytes: number; stopped: boolean }> {
   const rate = opts.sampleRate ?? PCM_SAMPLE_RATE;
+  const nguon = await giaiLinkYoutube(url);
 
   // ffmpeg đọc thẳng từ URL — không tải về đĩa VPS. Một bài 4 phút là
   // 7,7 MB PCM; ghi ra rồi đọc lại chỉ để xoá là ba lần chạm đĩa thừa.
   const ff = spawn(process.env.FFMPEG_PATH || 'ffmpeg', [
     '-hide_banner',
     '-loglevel', 'error',
-    '-i', url,
+    '-i', nguon,
     '-f', 's16le',
     '-acodec', 'pcm_s16le',
     '-ac', '1',

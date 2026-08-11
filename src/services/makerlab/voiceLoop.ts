@@ -24,6 +24,7 @@
 import OpenAI from 'openai';
 import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
+import { canTraCuu, tinMoiNhat, timTrenWeb, dungDoanTraCuu } from './web.js';
 import { transcribeWithGroq } from '../interview/voice/stt.js';
 import { loadPersona, buildSystemPrompt, buildFewShot, type PersonaConfig } from './persona.js';
 import { validateCommand, type ValidatedCommand } from './commands.js';
@@ -399,6 +400,29 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
   // ── 2. Think ──
   const persona = await loadPersona(input.projectId);
   const ctx = { deviceName: device?.name, battery: device?.batteryPct ?? null };
+  // ── 1b. Tra internet, NẾU câu hỏi cần ──
+  //
+  // Chạy trước khi gọi model, không phải sau. Xem lý do dài trong
+  // `web.ts`: cách chuẩn của ngành là để model tự gọi công cụ rồi gọi
+  // model LẦN HAI kèm kết quả, mà một lượt gọi ở đây là 1,6 giây tới
+  // chữ đầu tiên — người ta đang đứng chờ nghe tiếng.
+  let doanTraCuu = '';
+  const kieuTra = canTraCuu(heard);
+  if (kieuTra) {
+    const t = Date.now();
+    const muc =
+      kieuTra === 'tim'
+        ? await timTrenWeb(heard, 5)
+        : await tinMoiNhat(8, kieuTra === 'tin-cong-nghe');
+    doanTraCuu = dungDoanTraCuu(muc, kieuTra);
+    logger.info('MakerLab tra internet', {
+      deviceId: input.deviceId,
+      kieu: kieuTra,
+      soMuc: muc.length,
+      ms: Date.now() - t,
+    });
+  }
+
   const t1 = Date.now();
 
   // ── 2+4. Vừa nghĩ vừa nói ──
@@ -415,12 +439,12 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
   let spoken = false;
 
   if (input.speak !== false) {
-    const r = await thinkAndSpeak(persona, heard, input.deviceId, ctx, timing);
+    const r = await thinkAndSpeak(persona, heard, input.deviceId, ctx, timing, doanTraCuu);
     reply = r.reply;
     spoken = r.spoken;
     timing.llm = r.llmMs;
   } else {
-    reply = await think(persona, heard, input.deviceId, ctx);
+    reply = await think(persona, heard, input.deviceId, ctx, doanTraCuu);
     timing.llm = Date.now() - t1;
   }
 
@@ -465,6 +489,7 @@ async function thinkAndSpeak(
   deviceId: number,
   ctx: { deviceName?: string; battery?: number | null },
   timing: { tts: number },
+  doanTraCuu = '',
 ): Promise<{ reply: RobotReply; spoken: boolean; llmMs: number }> {
   const started = Date.now();
   const gw = await import('../../socket/device.gateway.js');
@@ -473,6 +498,11 @@ async function thinkAndSpeak(
   const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
     { role: 'system', content: buildSystemPrompt(persona, ctx) },
     ...buildFewShot(persona),
+    // Kết quả tra internet đứng NGAY TRƯỚC câu người dùng vừa nói, ở vai
+    // system: đặt sau thì model đã đọc câu hỏi rồi mới thấy dữ liệu và
+    // hay bỏ qua; đặt lên đầu cùng tính cách thì nó lẫn với "mày là ai"
+    // và model dễ nhắc lại danh sách như đọc mục lục.
+    ...(doanTraCuu ? [{ role: 'system' as const, content: doanTraCuu }] : []),
     ...getHistory(deviceId),
     { role: 'user', content: heard },
   ];
@@ -726,10 +756,16 @@ async function think(
   heard: string,
   deviceId: number,
   ctx: { deviceName?: string; battery?: number | null },
+  doanTraCuu = '',
 ): Promise<RobotReply> {
   const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
     { role: 'system', content: buildSystemPrompt(persona, ctx) },
     ...buildFewShot(persona),
+    // Kết quả tra internet đứng NGAY TRƯỚC câu người dùng vừa nói, ở vai
+    // system: đặt sau thì model đã đọc câu hỏi rồi mới thấy dữ liệu và
+    // hay bỏ qua; đặt lên đầu cùng tính cách thì nó lẫn với "mày là ai"
+    // và model dễ nhắc lại danh sách như đọc mục lục.
+    ...(doanTraCuu ? [{ role: 'system' as const, content: doanTraCuu }] : []),
     ...getHistory(deviceId),
     { role: 'user', content: heard },
   ];

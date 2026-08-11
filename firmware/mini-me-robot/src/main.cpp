@@ -1156,6 +1156,16 @@ void loop() {
           // Đang nói mà bị chạm = "thôi đủ rồi". Trước đây muốn ngắt
           // lời robot phải mở web bấm nút; giờ vỗ cái vào đầu là im.
           audio::playStop();
+
+          // ⚠️ Tắt loa THÔI thì chưa đủ — và đây đúng là lỗi user gặp:
+          // vỗ đầu cắt lời xong hỏi câu khác, robot không đáp lần nào.
+          //
+          // Server vẫn bơm nốt phần còn lại của câu trả lời (với nhạc
+          // thì là cả bài bốn phút), mỗi khung tiếng tới nơi lại kéo bo
+          // về trạng thái "đang phát", mà đang phát thì mic câm. Tai bị
+          // bịt suốt quãng còn lại của đoạn không ai muốn nghe nữa.
+          if (st.wsUp) ws.sendTXT("{\"t\":\"stop\"}");
+
           face::set(face::NEUTRAL, 800);
           sendLog("info", "cham dau -> ngat loi");
         } else {

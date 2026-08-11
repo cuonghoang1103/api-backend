@@ -117,17 +117,59 @@ static int32_t micLevel = 0;
  * nền đã lên 700–2600 và robot tự mở lượt nghe suốt dù không ai nói.
  * Cùng căn phòng, cùng con mic — chỉ khác giờ.
  *
- * Nên VAD bám theo nền: ngưỡng = nền × 3, kẹp trong [VAD_THRESHOLD,
- * 6 × VAD_THRESHOLD]. Sàn dưới để phòng thật yên cũng không nhạy quá;
- * trần trên để một tiếng ồn kéo dài (quạt, máy hút bụi) không đẩy
- * ngưỡng lên cao đến mức điếc hẳn.
+ * ⚠️ BẢN TRƯỚC CHỈ HỌC KHI KHÔNG "TO", VÀ ĐÓ LÀ MỘT VÒNG LUẨN QUẨN.
+ *
+ * "To" nghĩa là vượt ngưỡng, mà ngưỡng lại tính TỪ nền. Nên nếu nền
+ * thật của phòng cao hơn 4 lần nền đang lưu, mọi khối đều bị coi là to,
+ * không khối nào được dùng để học, và nền đứng nguyên chỗ cũ mãi mãi.
+ * Nền chỉ tụt xuống được chứ không leo lên nổi.
+ *
+ * Đo trên bo thật 11/08, 40 giây liền, có nhạc bật trong phòng:
+ *
+ *     nen=1400  nguong=5600   (cả hai đứng im, đúng giá trị khởi tạo)
+ *     mic = 61.000 … 940.000  (gấp 11 tới 168 lần ngưỡng, không nghỉ)
+ *
+ * Tức là VAD mở toang suốt. Robot mở lượt nghe liên tục vào tiếng ồn,
+ * nên lúc người ta nói thật thì nó đang bận nghĩ hoặc đang nói dở một
+ * lượt rác — và mic thì câm trong lúc loa chạy. Người dùng thấy đúng
+ * như vậy: "lúc nghe được lúc không, nói đi nói lại nó vẫn không đáp".
+ *
+ * Cách sửa: bám nền theo kiểu KHÔNG ĐỐI XỨNG và KHÔNG hỏi "có to
+ * không" nữa — xuống thì nhanh, lên thì chậm. Tiếng nói là những cụm
+ * ngắn nên nó gần như không kéo nền lên được; tiếng ồn kéo dài thì có.
+ * Không còn vòng luẩn quẩn vì phép học không phụ thuộc vào ngưỡng nữa.
  */
 static int32_t noiseFloor = VAD_THRESHOLD / 2;
+
+/**
+ * Đã đo nền lúc khởi động chưa.
+ *
+ * Bám dần từ 1400 lên 250.000 mất khoảng hai chục giây — hai chục giây
+ * robot điếc hoặc mở lượt loạn xạ ngay sau khi bật. Nên giây đầu tiên
+ * dành riêng để ĐO: chưa nghe ai cả, chỉ ghi lại xem phòng này ồn cỡ
+ * nào, rồi mới bắt đầu làm việc.
+ */
+static uint16_t calibBlocks = 0;
+static int64_t calibSum = 0;
+static const uint16_t CALIB_BLOCKS = 60;   // 60 × 16 ms ≈ 1 giây
 
 static int32_t vadGate() {
   int32_t gate = noiseFloor * VAD_GATE_MULT;
   if (gate < VAD_THRESHOLD) gate = VAD_THRESHOLD;
-  if (gate > VAD_THRESHOLD * 6) gate = VAD_THRESHOLD * 6;
+
+  // ⚠️ Trần CŨ là `VAD_THRESHOLD * 6` = 16.800, một con số tuyệt đối.
+  //
+  // Ý định thì đúng — đừng để tiếng quạt kéo ngưỡng cao đến mức điếc —
+  // nhưng một trần tuyệt đối lại hỏng đúng theo chiều ngược lại, và
+  // hỏng nặng hơn: phòng nào ồn hơn 16.800 thì ngưỡng bị ghim dưới nền,
+  // VAD mở vĩnh viễn, robot nghe tiếng ồn cả ngày. Đo được 940.000
+  // trong phòng có nhạc — gấp 56 lần cái trần đó.
+  //
+  // Trần mới tính theo TOÀN THANG (mic 24 bit ⇒ 8.388.608), không theo
+  // một ngưỡng đoán từ trước. Vượt một phần tư toàn thang thì không còn
+  // là "nền phòng" nữa, đó là ai đó đang hét vào mic.
+  const int32_t TRAN = 8388608 / 4;
+  if (gate > TRAN) gate = TRAN;
   return gate;
 }
 
@@ -648,12 +690,34 @@ static void pumpMic() {
   }
   micLevel = (int32_t)(sum / n);
 
+  // ── Giây đầu: ĐO, chưa nghe ai ──
+  //
+  // Đặt trước mọi phép xét khác, kể cả cờ chạm đầu: mở lượt nghe trong
+  // lúc còn chưa biết phòng ồn cỡ nào thì lượt đó chắc chắn hỏng.
+  if (calibBlocks < CALIB_BLOCKS) {
+    calibSum += micLevel;
+    if (++calibBlocks == CALIB_BLOCKS) {
+      noiseFloor = (int32_t)(calibSum / CALIB_BLOCKS);
+      if (noiseFloor < VAD_THRESHOLD / 4) noiseFloor = VAD_THRESHOLD / 4;
+      Serial.printf("[vad] do nen phong: %ld, nguong %ld\n", (long)noiseFloor,
+                    (long)vadGate());
+    }
+    pushPreroll(pcmBlock);
+    return;
+  }
+
   const bool loud = micLevel > vadGate();
 
   if (!micOpen) {
-    // Chỉ học nền khi đang IM — học cả lúc có người nói thì giọng nói
-    // tự đẩy ngưỡng lên và câu sau bị bỏ qua.
-    if (!loud) noiseFloor += (micLevel - noiseFloor) / 64;
+    // Bám nền KHÔNG ĐỐI XỨNG: tụt nhanh, leo chậm.
+    //
+    // Không hỏi `loud` nữa — chính câu hỏi đó tạo ra vòng luẩn quẩn ở
+    // trên. Thay vào đó dựa vào chênh lệch thời gian: một câu nói dài
+    // ba giây cũng chỉ là 187 khối, với nhịp leo 1/512 thì nó nhích nền
+    // lên vài phần trăm rồi thôi; còn tiếng quạt chạy hai chục giây thì
+    // kéo được nền lên hẳn. Hết tiếng ồn, nền tụt lại trong 0,13 giây.
+    if (micLevel < noiseFloor) noiseFloor += (micLevel - noiseFloor) / 8;
+    else noiseFloor += (micLevel - noiseFloor) / 512 + 1;
 
     // Bộ đếm RỈ, không phải chuỗi liên tiếp.
     //

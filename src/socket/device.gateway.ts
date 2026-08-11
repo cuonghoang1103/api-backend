@@ -26,6 +26,7 @@
  *   { t:'ack',       id, ok, error? }
  *   { t:'audio_end' }                  end of one spoken turn
  *   { t:'text',      text }            device did its own STT
+ *   { t:'stop' }                       cắt lời: ngừng bơm tiếng NGAY
  *   { t:'pong' }
  *
  * Device → server, BINARY frames: raw PCM, 16-bit LE, mono, 16 kHz.
@@ -628,6 +629,23 @@ async function onMessage(conn: DeviceConn, raw: RawData, isBinary: boolean): Pro
       conn.turnSeq += 1;
       conn.audioChunks = [];
       conn.audioBytes = 0;
+      break;
+    case 'stop':
+      // Người dùng vỗ đầu robot để cắt lời nó.
+      //
+      // Bo tự tắt loa được ngay, nhưng CHỈ tắt loa thì chưa đủ: server
+      // vẫn bơm nốt phần còn lại của câu trả lời — hoặc cả bài nhạc bốn
+      // phút — và mỗi khung tiếng tới nơi lại kéo bo vào trạng thái
+      // "đang phát". Mà đang phát thì mic câm.
+      //
+      // Hậu quả đo được: vỗ đầu xong hỏi câu khác, robot không đáp lại
+      // lần nào, vì tai nó bị bịt suốt quãng thời gian còn lại của đoạn
+      // tiếng mà không ai còn muốn nghe.
+      //
+      // Tăng turnSeq là đủ để mọi vòng bơm đang chạy tự thấy mình cũ và
+      // dừng — cùng cơ chế `audio_start` đã dùng.
+      conn.turnSeq += 1;
+      conn.speaking = false;
       break;
     case 'text':
       await handleText(conn, msg);

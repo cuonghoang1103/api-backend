@@ -258,6 +258,43 @@ services:
       start_period: 15s
 
   # ─── Nginx Reverse Proxy + Static File Server ───────────
+  # ─── Voice CuongMini — tổng hợp giọng nói (VieNeu, ONNX/CPU) ───
+  #
+  # KHÔNG có `ports:` và đó là điều quan trọng nhất ở khối này: dịch vụ
+  # chỉ tồn tại trong mạng `backend` của Docker, Node gọi vào bằng tên
+  # `http://tts:8080`. Mở ra ngoài thì bất kỳ ai cũng đốt được CPU của
+  # VPS bằng cách bơm chữ vào — mà một lượt sinh đã chiếm gần trọn 3
+  # nhân trong vài giây.
+  tts:
+    build:
+      context: ./services/tts
+      dockerfile: Dockerfile
+    container_name: cuonghoangdev_tts
+    restart: unless-stopped
+    volumes:
+      # Model (~286MB) + giọng nhân bản. Nằm ngoài image nên tải một
+      # lần rồi sống qua mọi lần deploy — và quan trọng hơn: giọng bạn
+      # tự thu KHÔNG mất khi build lại.
+      - tts_models:/models
+    networks:
+      backend:
+        aliases:
+          - tts
+    deploy:
+      resources:
+        limits:
+          # Đo thật lúc chạy: 973 MB. Đặt 2G để có chỗ cho lượt sinh
+          # dài mà vẫn chừa RAM cho phần còn lại của stack.
+          memory: 2G
+    healthcheck:
+      # /health cố ý KHÔNG nạp model, nên trả lời ngay — nếu nó nạp thì
+      # healthcheck đỏ suốt 45 giây đầu và deploy tưởng dịch vụ chết.
+      test: ["CMD-SHELL", "curl -sf http://localhost:8080/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
   nginx:
     image: nginx:1.27-alpine
     container_name: cuonghoangdev_nginx
@@ -320,6 +357,16 @@ volumes:
       type: none
       o: bind
       device: ${DATA_DIR:-/opt/cuonghoangdev}/uploads
+
+  # Model VieNeu + voices.json (giọng nhân bản của bạn). Bind ra host
+  # để `docker compose down -v` hay một lần dọn volume lỡ tay không xoá
+  # mất giọng bạn đã ngồi thu.
+  tts_models:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${DATA_DIR:-/opt/cuonghoangdev}/tts-models
 
 networks:
   backend:

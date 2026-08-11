@@ -123,6 +123,7 @@ const {
 } = (await import(path.join(__dirname, 'routes', 'games.routes.js')));
 const { router: messagesRoutes, adminRouter: adminMessagesRoutes } = (await import(path.join(__dirname, 'routes', 'messages.routes.js')));
 const gifsRoutes = (await import(path.join(__dirname, 'routes', 'gifs.routes.js'))).default;
+const voiceMiniRoutes = (await import(path.join(__dirname, 'routes', 'voiceMini.routes.js'))).default;
 const simulationRoutes = (await import(path.join(__dirname, 'routes', 'simulation.routes.js'))).default;
 const contentRoutes = (await import(path.join(__dirname, 'routes', 'content.routes.js'))).default;
 const notesRoutes = (await import(path.join(__dirname, 'routes', 'notes.routes.js'))).default;
@@ -583,6 +584,8 @@ app.use('/api/v1/maker-lab', makerLabRoutes);
 app.use('/api/v1/admin/maker-lab', makerLabAdminRoutes);
 app.use('/api/v1/messages', messagesRoutes);
 app.use('/api/v1/gifs', gifsRoutes);
+// Voice CuongMini. KHÔNG phải '/api/v1/voice' — chỗ đó là Voice Hub.
+app.use('/api/v1/voice-mini', voiceMiniRoutes);
 app.use('/api/v1/simulation', simulationRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/admin', adminMessagesRoutes);

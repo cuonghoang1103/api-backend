@@ -264,7 +264,7 @@ info "BuildKit enabled (parallel layer builds + cache)"
 
 # ── Step 1: Ensure persistent data directories exist ──────────────
 DATA_DIR="${DATA_DIR:-/opt/cuonghoangdev}"
-for dir in "${DATA_DIR}/postgres" "${DATA_DIR}/redis" "${DATA_DIR}/uploads"; do
+for dir in "${DATA_DIR}/postgres" "${DATA_DIR}/redis" "${DATA_DIR}/uploads" "${DATA_DIR}/tts-models"; do
     [ -d "$dir" ] || { mkdir -p "$dir"; ok "Created $dir"; }
 done
 
@@ -281,6 +281,12 @@ ok "Backend image built"
 info "Building frontend image..."
 $DC build frontend
 ok "Frontend image built"
+# Image thứ ba (11/08/2026). Vẫn tuần tự, cùng lý do OOM ở trên. Lớp
+# `pip install` được cache nên lần deploy sau gần như không tốn giây
+# nào — chỉ lần đầu mất ~60 giây.
+info "Building TTS image..."
+$DC build tts
+ok "TTS image built"
 
 # ── Step 2b: Atomic restart (zero-downtime) ───────────────────────
 # `up -d` atomically swaps the running containers to the images
@@ -787,6 +793,7 @@ info "Smoke-testing core API routes are mounted..."
 smoke_failed=false
 for route in \
     gifs \
+    voice-mini/voices \
     messages/threads \
     messages/unread-count \
     profile \
@@ -940,7 +947,12 @@ $DC exec -T nginx nginx -s reload 2>/dev/null && ok "Nginx reloaded" || true
 # (images ~15.5GB + cache): 8GB is the balance that keeps warm builds AND disk
 # headroom (~72%).
 info "Pruning Docker build cache + unused images..."
-docker builder prune -f --keep-storage=8g &>/dev/null && ok "Build cache pruned (kept ≤8GB hot layers)" || true
+# 8g → 4g (11/08/2026): stack cũ có hai image, giờ có BA — thêm
+# `tts` (~2GB) cộng volume model (~300MB). Với mức giữ 8GB thì đĩa
+# chạm 86% ngay sau lần build đầu tiên của image mới, mà con VPS này
+# từng chết Postgres vì đầy đĩa. Giữ 4GB vẫn đủ ấm cho lớp npm/apt —
+# thứ chiếm phần lớn thời gian build — chỉ lớp ngoài cùng phải làm lại.
+docker builder prune -f --keep-storage=4g &>/dev/null && ok "Build cache pruned (kept ≤4GB hot layers)" || true
 docker image prune -af &>/dev/null && ok "Unused images removed" || true
 df -h / | awk 'NR==2 {print "[disk] / now " $5 " used, " $4 " free"}' || true
 

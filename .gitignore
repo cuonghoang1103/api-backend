@@ -146,3 +146,6 @@ firmware/**/shell/stl/
 # Sơ đồ sinh bằng scripts/gen-diagram.mjs — sinh lại được từ
 # content/diagrams/*.mjs, không cần lưu ảnh vào git.
 .diagrams/
+
+# Token phiên đăng nhập để script xuất bản firmware dùng — KHÔNG commit
+.makerlab-token

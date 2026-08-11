@@ -174,6 +174,32 @@ export async function updatePersona(
   return res.data?.data;
 }
 
+/**
+ * Xuất bản một bản build firmware.
+ *
+ * Không cần token gì cả — trình duyệt đã cầm phiên đăng nhập và tự gửi
+ * kèm. Đó là toàn bộ lý do màn này tồn tại bên cạnh script dòng lệnh:
+ * script phải đi copy token ra terminal, còn ở đây thì không.
+ *
+ * Server tự băm SHA-256 trên đúng byte nhận được rồi mới cất lên R2 —
+ * không lấy theo con số client khai, vì băm chính là thứ bo dùng để
+ * quyết định có nạp hay không.
+ */
+export async function uploadFirmware(
+  projectId: number,
+  input: { file: File; version: string; releaseNotes?: string },
+): Promise<{ version: string; sha256?: string; url?: string }> {
+  const form = new FormData();
+  form.append('version', input.version);
+  if (input.releaseNotes) form.append('releaseNotes', input.releaseNotes);
+  form.append('file', input.file);
+  // 3 phút: bản .bin gần 1 MB, và mạng lên nhà thường chậm hơn mạng về.
+  const res = await api.post(`/admin${BASE}/projects/${projectId}/firmware/upload`, form, {
+    timeout: 180_000,
+  });
+  return res.data?.data;
+}
+
 // ─── Huấn luyện ────────────────────────────────────────────
 
 export interface TrainingQuestion {

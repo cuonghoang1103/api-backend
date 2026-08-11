@@ -29,7 +29,7 @@
  * build. Lệch nhau thì bo nạp xong vẫn tưởng mình là bản cũ và lần sau
  * lại nạp lại — vòng lặp không hồi kết.
  */
-import { existsSync, readFileSync, statSync } from 'fs';
+import { existsSync, readFileSync, statSync, writeFileSync } from 'fs';
 import { createHash } from 'crypto';
 import { execSync } from 'child_process';
 import path from 'path';
@@ -60,8 +60,39 @@ const has = (n) => args.includes(`--${n}`);
  */
 const API_ADMIN =
   process.env.MAKERLAB_ADMIN_API || 'https://cuongthai.com/api/v1/admin/maker-lab';
-const TOKEN = process.env.MAKERLAB_ADMIN_TOKEN;
 const PROJECT_ID = Number(process.env.MAKERLAB_PROJECT_ID || 1);
+
+/**
+ * Token lấy theo thứ tự: biến môi trường → file `.makerlab-token` ở
+ * gốc repo (đã gitignore).
+ *
+ * Vì sao đọc từ file: token sống 24 giờ, nên bắt `export` lại mỗi phiên
+ * terminal là một bước thừa mà ai cũng quên, rồi nhận về một lỗi khó
+ * hiểu. Ghi một lần vào file, script tự đọc.
+ *
+ * Vì sao KHÔNG bỏ luôn token: xuất bản firmware là thao tác nguy hiểm
+ * nhất trong hệ thống — nó bảo server "đặt tệp này vào chỗ robot sẽ tải
+ * về và CHẠY". Không có token thì ai biết địa chỉ cũng đẩy được mã của
+ * họ vào robot trong nhà bạn.
+ */
+const TOKEN_FILE = path.join(ROOT, '.makerlab-token');
+function docToken() {
+  if (process.env.MAKERLAB_ADMIN_TOKEN) return process.env.MAKERLAB_ADMIN_TOKEN.trim();
+  if (existsSync(TOKEN_FILE)) return readFileSync(TOKEN_FILE, 'utf8').trim();
+  return undefined;
+}
+
+/** Token là JWT — đọc được hạn dùng mà không cần gọi server. */
+function tokenConHan(t) {
+  try {
+    const p = JSON.parse(Buffer.from(t.split('.')[1], 'base64').toString());
+    return typeof p.exp === 'number' ? p.exp * 1000 - Date.now() : null;
+  } catch {
+    return null;
+  }
+}
+
+const TOKEN = docToken();
 
 function die(msg) {
   console.error(`\n✗ ${msg}\n`);
@@ -75,21 +106,56 @@ function versionTuSecrets() {
   return m ? m[1] : null;
 }
 
-const vSecrets = versionTuSecrets();
-const version = arg('version') || vSecrets;
-if (!version) die('Thiếu --version, và cũng không đọc được FW_VERSION từ secrets.h');
-
-// Cảnh báo chứ không chặn: có lúc người ta cố ý đặt tên bản khác.
-if (vSecrets && version !== vSecrets) {
-  console.warn(
-    `\n⚠️  --version "${version}" KHÁC FW_VERSION "${vSecrets}" trong secrets.h.\n` +
-      `   Bo nạp xong sẽ tự khai là "${vSecrets}", nên lần sau nó lại thấy\n` +
-      `   server có bản "${version}" và nạp lại — vòng lặp không hồi kết.\n`,
-  );
+/**
+ * Tự tăng số cuối của phiên bản rồi GHI LẠI vào secrets.h.
+ *
+ * Vì sao tự động: bắt người ta nhớ "sửa FW_VERSION trong secrets.h
+ * trước khi chạy" là bắt nhớ một bước vô hình. Quên là bo nạp xong vẫn
+ * tự khai bản cũ, rồi lần sau lại thấy "có bản mới" và nạp lại — vòng
+ * lặp không hồi kết, mà triệu chứng thì mơ hồ ("sao nó cứ cập nhật
+ * hoài?").
+ *
+ * Máy nhớ hộ được thì đừng bắt người nhớ.
+ *
+ * "0.2.3-hdr" → "0.2.4-hdr" · "1.4" → "1.5" · không có số → thêm "-2"
+ */
+function tangVersion(v) {
+  const m = /^(.*?)(\d+)([^0-9]*)$/.exec(v);
+  return m ? `${m[1]}${Number(m[2]) + 1}${m[3]}` : `${v}-2`;
 }
 
-// ── Biên dịch nếu được yêu cầu ──
-if (has('build')) {
+function ghiVersion(v) {
+  const s = readFileSync(SECRETS, 'utf8');
+  const moi = s.replace(/(#define\s+FW_VERSION\s+")[^"]+(")/, `$1${v}$2`);
+  if (moi === s) die(`Không thay được FW_VERSION trong ${SECRETS}`);
+  writeFileSync(SECRETS, moi);
+}
+
+const vSecrets = versionTuSecrets();
+let version;
+
+if (arg('version')) {
+  version = arg('version');
+} else if (has('giu-version')) {
+  version = vSecrets;
+  if (!version) die('Không đọc được FW_VERSION từ secrets.h');
+} else {
+  if (!vSecrets) die('Không đọc được FW_VERSION từ secrets.h — truyền --version');
+  version = tangVersion(vSecrets);
+  console.log(`▶ Tăng phiên bản: ${vSecrets} → ${version}`);
+}
+
+// Ghi vào secrets.h TRƯỚC khi build, để bản .bin mang đúng số nó khai.
+// Ghi sau khi build là bo nạp xong khai một đằng, server ghi một nẻo.
+if (version !== vSecrets && !has('dry')) ghiVersion(version);
+
+// ── Biên dịch: MẶC ĐỊNH có, `--khong-build` để bỏ qua ──
+//
+// Đảo mặc định vì gần như lần nào cũng muốn build: vừa sửa mã xong mới
+// chạy script này. Để `--build` là tuỳ chọn thì quên một lần là đẩy lên
+// đúng bản .bin CŨ, mà tên phiên bản lại mới — sai lệch im lặng, không
+// có gì báo, và bo nạp xong vẫn hành xử y như trước.
+if (!has('khong-build')) {
   console.log('▶ Biên dịch…');
   try {
     execSync('pio run', {

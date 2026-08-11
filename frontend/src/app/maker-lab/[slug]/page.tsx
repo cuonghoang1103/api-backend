@@ -42,6 +42,7 @@ import { WiringDiagram } from '@/components/maker-lab/WiringDiagram';
 import { SystemFlowDiagram } from '@/components/maker-lab/SystemFlowDiagram';
 import { DeviceConsole } from '@/components/maker-lab/DeviceConsole';
 import { FirmwarePlan } from '@/components/maker-lab/FirmwarePlan';
+import { FirmwareUpload } from '@/components/maker-lab/FirmwareUpload';
 import { RobotBlueprint } from '@/components/maker-lab/RobotBlueprint';
 import { ProjectDocs } from '@/components/maker-lab/ProjectDocs';
 import { ProjectNotebook } from '@/components/maker-lab/ProjectNotebook';
@@ -230,7 +231,16 @@ export default function MakerProjectPage() {
       {tab === 'bom' && <BomTable components={project.components} canEdit={isAuthed} />}
       {tab === 'wiring' && <WiringDiagram wiring={project.wiring} />}
       {tab === 'firmware' && (
-        <FirmwarePlan modules={project.firmwareModules} builds={project.firmwares} slug={project.slug} />
+        <>
+          {/* Chỉ hiện cho người đã đăng nhập: route bên dưới đòi quyền
+              admin, nên bày nút cho khách chỉ tổ cho họ bấm rồi ăn 401. */}
+          {isAuthed && <FirmwareUpload projectId={project.id} builds={project.firmwares} />}
+          <FirmwarePlan
+            modules={project.firmwareModules}
+            builds={project.firmwares}
+            slug={project.slug}
+          />
+        </>
       )}
       {tab === 'console' && (
         <DeviceConsole

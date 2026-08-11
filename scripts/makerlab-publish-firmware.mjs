@@ -46,7 +46,20 @@ const arg = (n) => {
 };
 const has = (n) => args.includes(`--${n}`);
 
-const API = process.env.MAKERLAB_API || 'https://cuongthai.com/api/v1/maker-lab';
+/**
+ * ⚠️ Đường ADMIN là `/api/v1/admin/maker-lab`, KHÔNG phải
+ * `/api/v1/maker-lab/admin`.
+ *
+ * Hai router gắn ở hai gốc khác nhau trong index.ts:
+ *     app.use('/api/v1/maker-lab',        makerLabRoutes);
+ *     app.use('/api/v1/admin/maker-lab',  makerLabAdminRoutes);
+ *
+ * Đoán nhầm theo trực giác "admin là nhánh con" thì được 404 — mà 404
+ * ở đây trông y hệt "route chưa deploy", nên rất dễ đi truy nhầm sang
+ * phía hạ tầng. Đúng cái bẫy đã dính ngay lần kiểm đầu tiên 11/08.
+ */
+const API_ADMIN =
+  process.env.MAKERLAB_ADMIN_API || 'https://cuongthai.com/api/v1/admin/maker-lab';
 const TOKEN = process.env.MAKERLAB_ADMIN_TOKEN;
 const PROJECT_ID = Number(process.env.MAKERLAB_PROJECT_ID || 1);
 
@@ -121,8 +134,9 @@ form.append('version', version);
 if (arg('notes')) form.append('releaseNotes', arg('notes'));
 form.append('file', new Blob([buf], { type: 'application/octet-stream' }), `${version}.bin`);
 
-console.log(`▶ Đẩy lên ${API}/admin/projects/${PROJECT_ID}/firmware/upload …`);
-const res = await fetch(`${API}/admin/projects/${PROJECT_ID}/firmware/upload`, {
+const URL_UP = `${API_ADMIN}/projects/${PROJECT_ID}/firmware/upload`;
+console.log(`▶ Đẩy lên ${URL_UP} …`);
+const res = await fetch(URL_UP, {
   method: 'POST',
   headers: { cookie: `backend_token=${TOKEN}`, authorization: `Bearer ${TOKEN}` },
   body: form,

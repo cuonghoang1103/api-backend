@@ -117,6 +117,80 @@ Mọi thứ dưới đây đã xảy ra thật trong một buổi, có ảnh ch�
    4 nhân. Số thật, đo bằng script. Dạy được: RTF là gì, vì sao RTF ≥ 1 làm
    robot lặp từ, vì sao thêm CPU không cứu được (3→4 nhân chỉ nhanh hơn 14%).
 
+### 3b. Bài giảng đắt nhất — "vì sao VPS vào được mà máy nhà thì không"
+
+Đây là câu Cường tự hỏi sau khi mọi thứ đã chạy, và cách trả lời nó là
+**phần hay nhất của cả Track A lẫn Track C**. Dựng nguyên cấu trúc này.
+
+**Câu hỏi mở bài** *(để nguyên, đừng viết lại thành định nghĩa)*:
+
+> VPS cũng là Linux. Sao SSH vào VPS thì từ đâu cũng được, mà SSH vào máy
+> Linux ở nhà lại phải cùng mạng?
+
+**Phép chứng minh — chạy thật trên ba máy, ra số ngay trước mắt:**
+
+```bash
+hostname -I                      # địa chỉ máy tự biết về mình
+curl -s https://api.ipify.org    # địa chỉ thế giới nhìn thấy
+```
+
+Kết quả thật ngày 11/08:
+
+| Máy | IP nội bộ | IP thế giới thấy |
+|---|---|---|
+| Linux ở nhà | `192.168.1.102` | `123.16.55.115` |
+| Mac ở nhà | `192.168.1.101` | **`123.16.55.115`** ← giống hệt |
+| VPS | `160.187.1.208` | **`160.187.1.208`** ← một số duy nhất |
+
+Hai dòng đầu **cùng một IP ngoài** → cả nhà đi chung một cổng, đó là NAT.
+Dòng cuối **hai số trùng nhau** → VPS không đứng sau cổng nào.
+
+**Cái bẫy nhận thức phải phá — quan trọng hơn mọi định nghĩa trong bài:**
+
+Người học (và chính Cường lúc đầu) sẽ kết luận *"tại chưa biết địa chỉ"*.
+**Sai.** Bằng chứng có sẵn: địa chỉ `192.168.1.102` đã được đưa từ trước, đã
+thử, và vẫn hỏng:
+
+```
+192.168.1.102 → khong ping duoc
+192.168.1.102:22 → dong
+```
+
+Biết địa chỉ. Có chìa khoá. Vẫn không vào được. **Vì thiếu con đường.**
+
+Từ đó rút ra mô hình ba phần — nên là xương sống của cả Module 3 Track A:
+
+| | | Máy nhà (trước khi sửa) | VPS |
+|---|---|---|---|
+| 1 | **Địa chỉ** — gõ cửa số mấy | ✅ có | ✅ |
+| 2 | **Đường đi** — có lối tới cửa đó | ❌ **thiếu** | ✅ |
+| 3 | **Chìa khoá** — mở được khi tới | ✅ có | ✅ |
+
+Ba việc Cường làm để sửa, ánh xạ đúng ba dòng trên: chuyển Mac sang cùng
+mạng (đường đi — **cái then chốt**), gửi `hostname -I` (địa chỉ), dán khoá
+vào `authorized_keys` (chìa khoá). **Bỏ việc đầu thì hai việc sau vô nghĩa.**
+
+**Ví von đã kiểm chứng là hiểu được** *(Cường tự đề xuất "hai nhà cùng con
+phố", và chỗ chỉnh lại chính là chỗ sáng ra)*:
+
+> `192.168.1.102` **không phải địa chỉ nhà — nó là số phòng.**
+> Địa chỉ thật là `123.16.55.115`, và cả nhà dùng chung đúng một cái đó.
+> Bên trong có Mac phòng .101, Linux phòng .102, nhưng người ngoài phố chỉ
+> thấy **một cái cổng**. Đứng ngoài gửi thư "cho phòng 102" thì bảo vệ chịu,
+> không biết đưa ai. Đứng trong sân thì gõ cửa phòng nào cũng được.
+> VPS thì không có cổng chung nào — nó **là** căn nhà mặt phố.
+
+**Chốt lại bằng NAT một chiều**, và để nó dẫn thẳng sang bài đường hầm ngược:
+
+- Trong ra ngoài → được. Router nhớ ai gọi để trả lời đúng máy.
+- Ngoài vào trong → không. Gói tin tới `123.16.55.115` thì router biết đưa
+  cho Mac hay Linux? Không có căn cứ nào để quyết, nên nó vứt.
+
+Nên đường hầm ngược không phải mẹo vặt mà là **hệ quả trực tiếp** của điều
+đó: người trong nhà đi ra thì bảo vệ cho qua, vậy bảo máy Linux **tự đi ra**
+trước rồi giữ nguyên đường đó. Đường đã mở thì đi được cả hai chiều.
+TeamViewer, Tailscale, ngrok đều làm đúng thế, chỉ gói lại cho đẹp.
+
 ---
 
 ## 4. Ba track cần làm

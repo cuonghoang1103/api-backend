@@ -569,20 +569,26 @@ async function thinkAndSpeak(
       emitted += consumed;
     }
 
-    // Còn câu nào đang chờ gom thì nói nốt.
-    if (cho.length) {
-      await speakPiece(cho.join(' '));
-      cho.length = 0;
-    }
-
     const parsed = parseRobotReply(raw);
     if (!parsed.say) throw new Error('model trả về rỗng');
 
-    // Đuôi chưa có dấu kết câu — vẫn phải nói nốt.
+    // ⚠️ MỘT mẩu cuối, không phải hai.
+    //
+    // Bản trước gọi TTS hai lần liền nhau ở đây: một lần cho phần đang
+    // chờ gom, rồi ngay sau đó một lần nữa cho phần đuôi chưa có dấu
+    // kết câu. Mỗi lần gọi TTS trả về một đoạn tiếng có khoảng lặng đệm
+    // ở hai đầu, nên hai lần liền nhau là nhét hai mối nối vào đúng vài
+    // giây cuối của câu trả lời.
+    //
+    // User báo đúng chỗ đó: "câu dài vẫn bị vấp ở CUỐI". Càng dài thì
+    // càng dễ còn dư cả hai phần, nên câu ngắn không thấy mà câu dài
+    // thì lần nào cũng thấy.
     const tail = parsed.say.slice(emitted).trim();
-    if (tail) {
+    const conLai = [...cho, tail].filter(Boolean).join(' ');
+    cho.length = 0;
+    if (conLai) {
       if (seq === null) seq = gw.speakStreamBegin(deviceId, PCM_SAMPLE_RATE);
-      if (seq !== null) await speakPiece(tail);
+      if (seq !== null) await speakPiece(conLai);
     }
 
     if (seq !== null) gw.speakStreamEnd(deviceId, seq, parsed.say);

@@ -30,6 +30,7 @@ import { validateCommand, type ValidatedCommand } from './commands.js';
 import { synthesizeSpeech } from './tts.js';
 import { checkHeardSpeech } from './hallucination.js';
 import { PCM_SAMPLE_RATE } from './audio.js';
+import { gatewayKey, gatewayRoot, modelFor } from '../llm/gateway.js';
 
 // ─── Conversation memory ───────────────────────────────────
 // Short-term only, in process memory. Long-term recall (pgvector over
@@ -162,11 +163,8 @@ function providerNamed(which: string): LlmProvider {
         label: 'custom',
       };
     default:
-      return {
-        baseURL: (process.env.OPENAI_COMPAT_BASE_URL || '').replace(/\/+$/, ''),
-        key: process.env.OPENAI_COMPAT_API_KEY,
-        label: 'compat',
-      };
+      // Cùng cổng, cùng khoá với cả web — xem src/services/llm/gateway.ts.
+      return { baseURL: `${gatewayRoot()}/v1`, key: gatewayKey(), label: 'compat' };
   }
 }
 
@@ -211,7 +209,9 @@ function robotModel(p: LlmProvider): string {
     case 'openai':
       return 'gpt-4o-mini';
     default:
-      return 'gpt-5.6-terra';
+      // Cùng bản đồ model với phần còn lại của web (src/services/llm/gateway.ts)
+      // → đổi model robot bằng `LLM_MODEL_ROBOT_VOICE`, không cần sửa mã.
+      return modelFor('robot_voice');
   }
 }
 
@@ -516,6 +516,17 @@ async function thinkAndSpeak(
 
     let raw = '';
     let emitted = 0;
+
+    /**
+     * Gom câu trước khi gọi TTS — xem ghi chú dài ở vòng lặp dưới.
+     *
+     * 150 ký tự ≈ 10 giây tiếng: đủ dài để mối nối thưa hẳn, mà vẫn đủ
+     * ngắn để mẩu tiếp theo kịp về trước khi bo phát hết mẩu trước.
+     */
+    const GOM_TOI_THIEU = 150;
+    const cho: string[] = [];
+    let daGuiMauDau = false;
+
     for await (const chunk of stream) {
       raw += chunk.choices[0]?.delta?.content ?? '';
       const say = partialSay(raw);
@@ -528,8 +539,40 @@ async function thinkAndSpeak(
         seq = gw.speakStreamBegin(deviceId, PCM_SAMPLE_RATE);
         if (seq === null) break; // bo rớt mạng giữa chừng
       }
-      for (const s of sentences) await speakPiece(s);
+
+      // ⚠️ GOM CÂU LẠI, đừng gọi TTS từng câu một.
+      //
+      // Bản trước làm `for (const s of sentences) await speakPiece(s)`
+      // — mỗi câu một lần gọi TTS. Câu trả lời bốn câu thành bốn đoạn
+      // tiếng ghép lại, mà mỗi đoạn TTS trả về đều có khoảng lặng đệm
+      // ở đầu và cuối. Ghép bốn đoạn là có bốn cặp khoảng lặng chen
+      // vào giữa lời nói.
+      //
+      // Người nghe gọi đó là "giật giật", nhưng nó KHÔNG phải đói đệm:
+      // log của bo cho `hut dem 0 lan / 0 ms` ở mọi lượt, kể cả lượt
+      // dài 19 giây. Đo trước rồi mới biết vá đúng chỗ — bản vá ghìm
+      // nhịp sáng nay chữa đúng bệnh khác.
+      //
+      // Cách gom: mẩu ĐẦU gửi ngay khi có một câu, để tiếng ra sớm và
+      // độ trễ đối đáp không đổi. Từ mẩu thứ hai trở đi mới gom cho đủ
+      // dài — lúc đó bo đang phát mẩu đầu nên có thời gian, và ít mối
+      // nối hơn nghĩa là nghe liền mạch hơn.
+      for (const s of sentences) {
+        cho.push(s);
+        const dai = cho.join(' ').length;
+        if (!daGuiMauDau || dai >= GOM_TOI_THIEU) {
+          await speakPiece(cho.join(' '));
+          cho.length = 0;
+          daGuiMauDau = true;
+        }
+      }
       emitted += consumed;
+    }
+
+    // Còn câu nào đang chờ gom thì nói nốt.
+    if (cho.length) {
+      await speakPiece(cho.join(' '));
+      cho.length = 0;
     }
 
     const parsed = parseRobotReply(raw);

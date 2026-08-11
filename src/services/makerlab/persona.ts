@@ -204,6 +204,42 @@ export function buildSystemPrompt(
 ): string {
   const traitLines = describeTraits(persona.traits);
   const state: string[] = [];
+
+  // ── Thời gian thực ──
+  //
+  // Model không có đồng hồ. Không nói cho nó biết thì hỏi "mấy giờ rồi"
+  // nó sẽ BỊA một con số nghe rất tự tin — tệ hơn là nói "tôi không
+  // biết", vì người nghe tin theo.
+  //
+  // ⚠️ Bắt buộc ghi rõ `timeZone`. Container chạy giờ UTC còn người
+  // dùng ở +07, nên để mặc định là robot lệch đúng bảy tiếng — và lệch
+  // bảy tiếng thì buổi sáng thành nửa đêm, lời chào sai hết.
+  const now = new Date();
+  const gio = new Intl.DateTimeFormat('vi-VN', {
+    timeZone: 'Asia/Ho_Chi_Minh',
+    weekday: 'long',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(now);
+  const h = Number(
+    new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Asia/Ho_Chi_Minh',
+      hour: '2-digit',
+      hour12: false,
+    }).format(now),
+  );
+  const buoi =
+    h < 5 ? 'đêm khuya' : h < 11 ? 'buổi sáng' : h < 14 ? 'buổi trưa' : h < 18 ? 'buổi chiều' : 'buổi tối';
+  state.push(
+    `BÂY GIỜ là ${gio} (giờ Việt Nam), đang là ${buoi}. ` +
+      `Hỏi giờ hay ngày thì trả lời theo đúng con số này, đừng đoán. ` +
+      `Chào hỏi cũng nên hợp buổi.`,
+  );
+
   if (ctx.deviceName) state.push(`Bạn đang chạy trên thiết bị "${ctx.deviceName}".`);
   if (typeof ctx.battery === 'number') state.push(`Pin còn ${ctx.battery}%.`);
   if (typeof ctx.nearbyMm === 'number')

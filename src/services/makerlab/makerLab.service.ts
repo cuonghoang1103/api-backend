@@ -350,9 +350,16 @@ export async function upsertPersona(
       typeof data.temperature === 'number'
         ? Math.max(0, Math.min(2, data.temperature))
         : undefined,
+    // Trần 800 → 2000. 800 token là ~1.300 chữ tiếng Việt, và đó chính
+    // là chỗ câu chém gió dài bị cắt ngang — người dùng báo "nói dài là
+    // bị ngắt" mà nhìn log thì `tronCau: false`, tức model bị cụt ở
+    // trần token chứ không phải tiếng bị mất lúc phát.
+    //
+    // 2000 khớp với MAX_SAY_CHARS bên voiceLoop, nên từ giờ hai con số
+    // này chặn ở cùng một chỗ thay vì cái nọ âm thầm cắt trước cái kia.
     maxTokens:
       typeof data.maxTokens === 'number'
-        ? Math.max(40, Math.min(800, Math.round(data.maxTokens)))
+        ? Math.max(40, Math.min(2000, Math.round(data.maxTokens)))
         : undefined,
   };
 

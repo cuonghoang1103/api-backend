@@ -56,6 +56,40 @@ bool moTls(WiFiClientSecure& tls) {
 bool dangChay() { return g_dangChay; }
 uint8_t phanTram() { return g_phanTram; }
 
+namespace {
+
+/** Bản sao tên phiên bản muốn nạp, vì con trỏ của bên gọi có thể chết
+ *  trước khi tác vụ kịp đọc. */
+char g_muon[48] = {0};
+
+void taskOta(void* _) {
+  (void)_;
+  Result r = capNhat(g_muon[0] ? g_muon : nullptr);
+  // Tới đây nghĩa là KHÔNG nạp được — thành công thì đã ESP.restart().
+  Serial.printf("[ota] thất bại: %s\n", moTa(r));
+  g_dangChay = false;
+  vTaskDelete(nullptr);
+}
+
+}  // namespace
+
+void batDauNen(const char* muonVersion) {
+  if (g_dangChay) {
+    Serial.println("[ota] đang có lượt chạy dở, bỏ qua");
+    return;
+  }
+  g_muon[0] = 0;
+  if (muonVersion && *muonVersion) {
+    strncpy(g_muon, muonVersion, sizeof(g_muon) - 1);
+    g_muon[sizeof(g_muon) - 1] = 0;
+  }
+  // 16 KB ngăn xếp, ưu tiên thấp hơn vòng chính, ghim lõi 0 để lõi 1
+  // rảnh cho WiFi và âm thanh. Xem ghi chú trong ota.h về vì sao KHÔNG
+  // được chạy việc này trên ngăn xếp 8 KB của loop().
+  BaseType_t ok = xTaskCreatePinnedToCore(taskOta, "ota", 16384, nullptr, 1, nullptr, 0);
+  if (ok != pdPASS) Serial.println("[ota] không tạo được tác vụ (thiếu heap?)");
+}
+
 const char* moTa(Result r) {
   switch (r) {
     case OTA_DA_MOI_NHAT: return "Đã là bản mới nhất";

@@ -53,12 +53,35 @@ enum Result : uint8_t {
 /**
  * Chạy một lượt cập nhật. Chặn luồng gọi cho tới khi xong hoặc hỏng.
  *
+ * ⚠️ ĐỪNG gọi thẳng từ `loop()` — dùng `batDauNen()`. Xem ghi chú ở đó.
+ *
  * `muonVersion` rỗng nghĩa là "lấy bản mới nhất server có". Truyền tên
  * cụ thể để ép về đúng bản đó — dùng khi cần quay lui bản cũ.
  *
  * Xong tốt đẹp thì hàm này KHÔNG trả về: nó gọi ESP.restart().
  */
 Result capNhat(const char* muonVersion = nullptr);
+
+/**
+ * Khởi động cập nhật trong TÁC VỤ RIÊNG rồi trả về ngay.
+ *
+ * ⚠️ Đây là cách DUY NHẤT đúng để gọi từ trình xử lý lệnh.
+ *
+ * Vì sao — bài học 11/08/2026, tái hiện được hai lần: gọi thẳng
+ * `capNhat()` từ `loop()` thì bo **khởi động lại sau đúng 5 giây**, quay
+ * về bản cũ, và KHÔNG có một dòng lỗi nào dù mã ghi log ở mọi nhánh
+ * thất bại. Cũng không có dòng `[ota]` nào ra cổng nối tiếp — tức là
+ * chết trước cả khi đọc xong manifest, ngay trong lần bắt tay TLS.
+ *
+ * Thủ phạm: tác vụ `loop()` của Arduino chỉ có **8 KB ngăn xếp**. Bắt
+ * tay TLS của mbedtls một mình đã ngốn vài KB, cộng `HTTPClient` và
+ * `JsonDocument` chồng lên là tràn. Tràn ngăn xếp không ném lỗi — nó
+ * đạp lên bộ nhớ kề bên rồi bo chết, nên mọi `catch` đều vô dụng.
+ *
+ * 16 KB dưới đây là để dành riêng cho hai thứ ngốn ngăn xếp nhất: bắt
+ * tay TLS và vòng ghi flash.
+ */
+void batDauNen(const char* muonVersion = nullptr);
 
 /** Chữ tiếng Việt cho từng mã, để hiện lên màn và gửi về web. */
 const char* moTa(Result r);

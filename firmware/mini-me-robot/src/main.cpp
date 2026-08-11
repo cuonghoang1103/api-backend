@@ -545,11 +545,13 @@ static void handleCommand(JsonDocument& doc) {
     sendLog("warn", "Bat dau cap nhat firmware qua WiFi");
     face::set(face::THINKING);
 
-    ota::Result r = ota::capNhat(muon);
-
-    // Tới được đây nghĩa là KHÔNG nạp được — thành công thì đã reboot.
-    sendLog("error", String("OTA that bai: ") + ota::moTa(r));
-    face::set(face::CONFUSED, 4000);
+    // ⚠️ `batDauNen`, KHÔNG phải `capNhat`.
+    //
+    // Gọi thẳng `capNhat()` ở đây thì nó chạy trên ngăn xếp 8 KB của
+    // tác vụ loop(), và bắt tay TLS làm tràn ngăn xếp → bo reset sau 5
+    // giây, quay về bản cũ, không một dòng lỗi. Đã dính đúng hai lần
+    // ngày 11/08 trước khi tìm ra. Xem ghi chú dài trong ota.h.
+    ota::batDauNen(muon);
     return;
   }
 
@@ -992,7 +994,11 @@ void loop() {
   // một khối 16 ms, lúc nói thì nó chờ DMA rút bớt — nên loop() không
   // bao giờ quay không tải mà cũng không bao giờ bị giữ quá lâu.
   gStage = "audio";
-  audio::loop();
+  // Đang nạp firmware thì ngừng đọc mic hẳn. Không chặn thì bo vẫn bơm
+  // 2 KB tiếng mỗi 60 ms lên server suốt lúc tải — tranh băng thông với
+  // chính bản firmware đang về, và tệ hơn: mở được một lượt nói mới
+  // giữa chừng, để rồi bo reboot khi người dùng đang chờ câu trả lời.
+  if (!ota::dangChay()) audio::loop();
 
   gStage = "ui";
   const uint32_t now = millis();

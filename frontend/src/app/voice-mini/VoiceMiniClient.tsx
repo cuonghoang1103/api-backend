@@ -16,8 +16,14 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Loader2, Play, Download, Mic2, AlertCircle } from 'lucide-react';
-import { listVoices, startTts, waitForTts, type MiniVoice } from '@/lib/voice-mini-api';
+import { Loader2, Play, Download, Mic2, AlertCircle, Upload, Sparkles } from 'lucide-react';
+import {
+  cloneVoice,
+  listVoices,
+  startTts,
+  waitForTts,
+  type MiniVoice,
+} from '@/lib/voice-mini-api';
 
 const MAX_CHARS = 5000;
 
@@ -31,6 +37,34 @@ export default function VoiceMiniClient() {
   const [loi, setLoi] = useState<string | null>(null);
   const [ketQua, setKetQua] = useState<{ url: string; giay: number | null; sinhMs: number | null } | null>(null);
   const huy = useRef<AbortController | null>(null);
+
+  // ── Nhân bản giọng ──
+  const [tenGiong, setTenGiong] = useState('');
+  const [fileMau, setFileMau] = useState<File | null>(null);
+  const [dangNhanBan, setDangNhanBan] = useState(false);
+  const [tinNhanBan, setTinNhanBan] = useState<string | null>(null);
+
+  const nhanBan = useCallback(async () => {
+    if (!fileMau || !tenGiong.trim() || dangNhanBan) return;
+    setDangNhanBan(true);
+    setTinNhanBan(null);
+    try {
+      const ten = await cloneVoice(tenGiong.trim(), fileMau);
+      const ds = await listVoices();
+      setVoices(ds);
+      setVoice(ten); // chọn luôn giọng vừa tạo — đó là thứ người ta muốn nghe ngay
+      setTenGiong('');
+      setFileMau(null);
+      setTinNhanBan(`Xong. Đã chọn sẵn giọng "${ten}" ở trên, gõ gì đó rồi bấm tạo để nghe thử.`);
+    } catch (e) {
+      setTinNhanBan(
+        (e as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+          (e instanceof Error ? e.message : 'Không nhân bản được'),
+      );
+    } finally {
+      setDangNhanBan(false);
+    }
+  }, [fileMau, tenGiong, dangNhanBan]);
 
   useEffect(() => {
     void (async () => {
@@ -202,6 +236,82 @@ export default function VoiceMiniClient() {
           </div>
         </div>
       )}
+
+      {/* ── Nhân bản giọng ──
+          Đặt CUỐI trang, và gập lại sẵn: người vào lần đầu chỉ muốn dán
+          chữ nghe thử, bắt họ đi qua một cái form tải file trước là mất
+          họ ngay. Ai cần giọng riêng thì cuộn xuống mở ra. */}
+      <details className="mt-8 rounded-xl border" style={{ borderColor: 'var(--border-color)' }}>
+        <summary
+          className="cursor-pointer p-4 text-sm font-semibold"
+          style={{ color: 'var(--text-primary)' }}
+        >
+          <Sparkles className="mr-2 inline h-4 w-4" />
+          Nhân bản giọng của bạn
+        </summary>
+        <div className="border-t p-4" style={{ borderColor: 'var(--border-color)' }}>
+          <p className="mb-4 text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+            Tải lên <strong>5–15 giây</strong> giọng bạn đọc, máy sẽ đọc mọi thứ khác bằng giọng
+            đó. Dài hơn không giống hơn — máy tự cắt và khử nhiễu. Thứ quyết định là{' '}
+            <strong>phòng yên, một micro, đọc bình thường</strong> như đang nói chuyện, đừng đọc
+            như đọc diễn văn.
+          </p>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label className="mb-1.5 block text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
+                Đặt tên cho giọng
+              </label>
+              <input
+                value={tenGiong}
+                onChange={(e) => setTenGiong(e.target.value)}
+                placeholder="Ví dụ: Cường"
+                maxLength={60}
+                className="w-full rounded-lg border p-2.5 text-sm"
+                style={{
+                  borderColor: 'var(--border-color)',
+                  background: 'var(--bg-secondary)',
+                  color: 'var(--text-primary)',
+                }}
+              />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
+                File giọng mẫu
+              </label>
+              <input
+                type="file"
+                accept="audio/*,.wav,.mp3,.m4a,.ogg,.flac"
+                onChange={(e) => setFileMau(e.target.files?.[0] ?? null)}
+                className="w-full text-xs"
+                style={{ color: 'var(--text-secondary)' }}
+              />
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => void nhanBan()}
+            disabled={!fileMau || !tenGiong.trim() || dangNhanBan}
+            className="mt-4 flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white transition disabled:opacity-40"
+            style={{ background: 'var(--accent, #6366f1)' }}
+          >
+            {dangNhanBan ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+            {dangNhanBan ? 'Đang học giọng…' : 'Nhân bản giọng này'}
+          </button>
+
+          {dangNhanBan && (
+            <p className="mt-2 text-xs" style={{ color: 'var(--text-muted)' }}>
+              Mất khoảng 30–90 giây: máy phải khử nhiễu, cắt gọn rồi rút đặc trưng giọng nói.
+            </p>
+          )}
+          {tinNhanBan && (
+            <p className="mt-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
+              {tinNhanBan}
+            </p>
+          )}
+        </div>
+      </details>
     </div>
   );
 }

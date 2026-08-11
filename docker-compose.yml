@@ -283,9 +283,10 @@ services:
     deploy:
       resources:
         limits:
-          # Đo thật lúc chạy: 973 MB. Đặt 2G để có chỗ cho lượt sinh
-          # dài mà vẫn chừa RAM cho phần còn lại của stack.
-          memory: 2G
+          # Đo thật lúc đọc: 973 MB. Nâng lên 2,5G vì lúc NHÂN BẢN còn
+          # phải nạp thêm torch + torchaudio cho bộ mã hoá người nói —
+          # riêng cái import đã tốn vài trăm MB nữa.
+          memory: 2560M
     healthcheck:
       # /health cố ý KHÔNG nạp model, nên trả lời ngay — nếu nó nạp thì
       # healthcheck đỏ suốt 45 giây đầu và deploy tưởng dịch vụ chết.

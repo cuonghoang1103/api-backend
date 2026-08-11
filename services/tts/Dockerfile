@@ -12,6 +12,23 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends libsndfile1 ffmpeg curl \
  && rm -rf /var/lib/apt/lists/*
 
+# ⚠️⚠️ BẮT BUỘC dùng chỉ mục CPU cho torch.
+#
+# `pip install torch` trần trên Linux kéo về bản CUDA — vài GB thư viện
+# NVIDIA cho một con VPS không có card đồ hoạ nào. Image sẽ phình từ 2 GB
+# lên 6-7 GB và đĩa VPS (49 GB, đã dùng 72%) không còn chỗ thở.
+#
+# Vì sao cần torch trong khi cả file này viết ra để KHỎI cần torch:
+# đọc bằng giọng dựng sẵn thì torch-free thật, nhưng NHÂN BẢN thì
+# không. Tài liệu trong chính gói nói rõ — bộ khử nhiễu torch-free,
+# nhưng bộ mã hoá người nói dùng fbank của torchaudio. Đặt `denoise=False`
+# cũng vô ích vì bộ mã hoá là bắt buộc. Đây là cái giá của việc có giọng
+# riêng, và đã đo: image 2,0 GB → ~3,4 GB.
+RUN pip install --no-cache-dir \
+      --index-url https://download.pytorch.org/whl/cpu \
+      "torch==2.6.0+cpu" \
+      "torchaudio==2.6.0+cpu"
+
 # ⚠️ GHIM ĐÚNG BẢN. app.py gọi `_load_voices_from_file` — hàm riêng tư,
 # vì thư viện không có `load_voices()` công khai (xem ghi chú trong
 # app.py). Thả lỏng bản là một ngày nào đó `pip install` mới sẽ làm mất

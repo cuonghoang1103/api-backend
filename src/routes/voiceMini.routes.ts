@@ -24,11 +24,35 @@
  */
 
 import { Router, type Response, type Request } from 'express';
+import multer from 'multer';
 import { authenticate } from '../middleware/auth.js';
 import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
+
+/**
+ * Giọng mẫu để nhân bản.
+ *
+ * 20 MB là quá đủ: mẫu tốt nhất chỉ dài 5–15 giây. Trần cao hơn không
+ * cho giọng giống hơn — thư viện tự cắt và khử nhiễu — mà chỉ tốn thời
+ * gian tải lên và RAM của tiến trình Python.
+ *
+ * Giữ trong BỘ NHỚ chứ không ghi ra đĩa: file đi thẳng sang dịch vụ
+ * tts rồi bỏ, không có lý do gì để nó chạm vào đĩa VPS (vốn đang là
+ * thứ eo hẹp nhất ở đây).
+ */
+const refUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 20 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    const ext = file.originalname.toLowerCase().match(/\.[^.]+$/)?.[0] || '';
+    const okExt = ['.wav', '.mp3', '.m4a', '.ogg', '.flac', '.aac', '.webm'].includes(ext);
+    const okMime = file.mimetype.startsWith('audio/') || file.mimetype === 'application/octet-stream';
+    if (okExt || okMime) cb(null, true);
+    else cb(new Error(`Chỉ nhận file âm thanh, không nhận ${ext || file.mimetype}`));
+  },
+});
 
 const TTS_BASE = (process.env.TTS_SERVICE_URL || 'http://tts:8080').replace(/\/+$/, '');
 const MAX_CHARS = Number(process.env.VOICE_MINI_MAX_CHARS) || 5000;
@@ -154,6 +178,91 @@ router.get('/tts/:jobId', authenticate, async (req: Request, res: Response) => {
   } catch (e) {
     logger.warn('VoiceMini: lấy kết quả hỏng', { error: e instanceof Error ? e.message : String(e) });
     res.status(503).json({ success: false, message: 'Mất kết nối tới máy đọc' });
+  }
+});
+
+/**
+ * Nhân bản một giọng từ đoạn mẫu.
+ *
+ * Không có `authenticate` ở đây là không được: giọng nhân bản dùng
+ * CHUNG cho mọi người vào trang (thư viện giọng nằm trong một file duy
+ * nhất bên dịch vụ), nên ai thêm được cũng là ai cũng nghe thấy. Bắt
+ * đăng nhập để ít nhất còn biết ai thêm cái gì.
+ */
+router.post(
+  '/voices',
+  authenticate,
+  refUpload.single('file'),
+  async (req: Request, res: Response<ApiResponse>) => {
+    const userId = (req as Request & { user?: { id: number } }).user?.id ?? 0;
+    const file = (req as unknown as { file?: { buffer: Buffer; originalname?: string } }).file;
+    const name = String(req.body?.name ?? '').trim().slice(0, 60);
+
+    if (!file?.buffer?.length) {
+      res.status(400).json({ success: false, message: 'Chưa chọn file giọng mẫu' });
+      return;
+    }
+    if (!name) {
+      res.status(400).json({ success: false, message: 'Chưa đặt tên cho giọng' });
+      return;
+    }
+
+    try {
+      // Dựng lại multipart để chuyển tiếp. Buffer → Blob vì FormData
+      // của Node chỉ nhận Blob/File, không nhận Buffer thô.
+      const form = new FormData();
+      form.append('name', name);
+      form.append('description', String(req.body?.description ?? '').slice(0, 120));
+      form.append('gender', String(req.body?.gender ?? '').slice(0, 20));
+      form.append(
+        'file',
+        new Blob([new Uint8Array(file.buffer)]),
+        file.originalname || 'ref.wav',
+      );
+
+      const r = await fetch(`${TTS_BASE}/voices`, {
+        method: 'POST',
+        body: form,
+        // Nhân bản phải khử nhiễu + rút đặc trưng người nói, nặng hơn
+        // một lượt đọc thường nhiều. 3 phút chứ không phải 30 giây như
+        // các đường khác.
+        signal: AbortSignal.timeout(180_000),
+      });
+
+      const body = (await r.json().catch(() => ({}))) as { ok?: boolean; detail?: string };
+      if (!r.ok || !body.ok) {
+        res.status(400).json({
+          success: false,
+          message: body.detail || `Không nhân bản được (HTTP ${r.status})`,
+        });
+        return;
+      }
+
+      logger.info('VoiceMini nhân bản giọng', { userId, name, kb: Math.round(file.buffer.length / 1024) });
+      res.json({ success: true, data: { voice: name } });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      logger.warn('VoiceMini: nhân bản hỏng', { error: msg });
+      res.status(503).json({
+        success: false,
+        message: msg.includes('timeout')
+          ? 'Nhân bản quá lâu — thử lại với đoạn mẫu ngắn hơn (5–15 giây là đủ).'
+          : 'Máy đọc chưa sẵn sàng, thử lại sau một lát.',
+      });
+    }
+  },
+);
+
+router.delete('/voices/:name', authenticate, async (req: Request, res: Response<ApiResponse>) => {
+  try {
+    const r = await upstream(`/voices/${encodeURIComponent(String(req.params.name))}`, {
+      method: 'DELETE',
+    });
+    if (!r.ok) throw new Error(`tts HTTP ${r.status}`);
+    res.json({ success: true, data: await r.json() });
+  } catch (e) {
+    logger.warn('VoiceMini: xoá giọng hỏng', { error: e instanceof Error ? e.message : String(e) });
+    res.status(503).json({ success: false, message: 'Không xoá được giọng' });
   }
 });
 

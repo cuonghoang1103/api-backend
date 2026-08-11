@@ -20,6 +20,27 @@ export async function listVoices(): Promise<MiniVoice[]> {
   return res.data?.data?.voices ?? [];
 }
 
+/**
+ * Nhân bản một giọng từ đoạn mẫu.
+ *
+ * Chậm hơn hẳn một lượt đọc: máy phải khử nhiễu, cắt gọn rồi rút đặc
+ * trưng người nói. Đặt timeout 3 phút ở đây cho khớp với phía server —
+ * để mặc định của axios (không có) thì trình duyệt tự bỏ cuộc lúc nào
+ * không ai đoán được.
+ */
+export async function cloneVoice(name: string, file: File, description = ''): Promise<string> {
+  const form = new FormData();
+  form.append('name', name);
+  form.append('description', description);
+  form.append('file', file);
+  const res = await api.post(`${BASE}/voices`, form, { timeout: 180_000 });
+  return res.data?.data?.voice ?? name;
+}
+
+export async function deleteVoice(name: string): Promise<void> {
+  await api.delete(`${BASE}/voices/${encodeURIComponent(name)}`);
+}
+
 export async function startTts(text: string, voice?: string): Promise<{ jobId: string; uocTinhGiay: number }> {
   const res = await api.post(`${BASE}/tts`, { text, voice });
   return res.data?.data;

@@ -1226,10 +1226,13 @@ void loop() {
     // liền ~40 KB; heap còn 100 KB nhưng vỡ vụn thành mảnh 8 KB thì
     // vẫn không nối lại được, mà triệu chứng nhìn ra ngoài chỉ là
     // "select timeout" — không hề nói gì tới bộ nhớ.
-    Serial.printf("[st] heap=%uKB khoi=%uKB mic=%ld nen=%ld nguong=%ld che=%d ws=%d\n",
+    Serial.printf("[st] heap=%uKB khoi=%uKB mic=%ld nen=%ld nguong=%ld che=%d ws=%d"
+                  " | tho=%ld dc=%ld dinh=%ld\n",
                   ESP.getFreeHeap() / 1024,
                   heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL) / 1024,
                   (long)audio::level(), (long)audio::noise(), (long)audio::gate(),
-                  (int)st.mode, st.wsUp ? 1 : 0);
+                  (int)st.mode, st.wsUp ? 1 : 0,
+                  (long)audio::rawLevel(), (long)audio::dc(),
+                  (long)audio::peakRaw());
   }
 }

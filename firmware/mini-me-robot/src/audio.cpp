@@ -194,6 +194,60 @@ static uint8_t loudRun = 0;
  *  hàm nghe — nó bỏ qua ngưỡng VAD đúng một lần rồi tự tắt. */
 static volatile bool epMoLuot = false;
 
+// Chẩn đoán mic — xem chỗ tính ở pumpMic().
+static int32_t micDc = 0;
+static int32_t micTho = 0;
+static int32_t micPeak = 0;
+static uint32_t micClipBlocks = 0;
+
+/**
+ * Lọc bỏ tiếng ầm hạ tần, hai tầng, cắt quanh 160 Hz.
+ *
+ * ── Vì sao cần ──
+ *
+ * Đo trên bo thật 11/08, phòng đã tắt nhạc và ngồi im. Byte thô cho
+ * thấy mic gửi hoàn toàn chuẩn (8 bit thấp luôn 00 = đúng khuôn
+ * 24-trong-32), nhưng nội dung thì:
+ *
+ *     e759da00 e76e8000 e7884a00 e78ee800
+ *
+ * Bốn mẫu liền nhau chỉ lệch nhau ~1%, và qua 192 mẫu (12 ms) giá trị
+ * bò từ -1.606.182 lên -915.884. Mượt, liên tục, biên độ ±1,6 triệu
+ * trên toàn thang 8,4 triệu. Đó là một tín hiệu cỡ 20 Hz.
+ *
+ * Con số vạch mặt nó là `dc`: trung bình CÓ DẤU bằng đúng trung bình
+ * TRỊ TUYỆT ĐỐI, tức cả 256 mẫu trong khối cùng một dấu — tín hiệu
+ * không cắt qua vạch 0 lấy một lần trong 16 ms. Âm thanh thật thì cắt
+ * qua 0 hàng trăm lần; kể cả tiếng trầm 100 Hz cũng cắt ba lần.
+ *
+ * Nguồn của nó là quạt, điều hoà, rung mặt bàn, gợn nguồn — thứ tai
+ * người gần như không nghe, mà mic MEMS thì nghe rất rõ. VAD đo tổng
+ * năng lượng nên nó đếm cả đống ầm đó là "có người đang nói".
+ *
+ * ── Vì sao HAI tầng ──
+ *
+ * Một tầng cắt 160 Hz chỉ ghìm tín hiệu 20 Hz xuống còn 13% — vẫn dư
+ * sức vượt ngưỡng. Hai tầng nối tiếp cho 1,7%, đưa 1,6 triệu về ~28
+ * nghìn. Còn tiếng nói ở 500 Hz thì qua hai tầng vẫn giữ 91%.
+ *
+ * Lọc TRƯỚC khi tính mức VAD, và lọc luôn cả tiếng gửi lên server:
+ * cùng một dòng tiếng thì VAD với Whisper mới nói cùng một chuyện, và
+ * bỏ được đống ầm là trả lại chỗ cho giọng người trong 16 bit.
+ */
+static int32_t hpXa = 0, hpYa = 0, hpXb = 0, hpYb = 0;
+
+static inline int32_t locHaTan(int32_t x) {
+  // y[n] = x[n] - x[n-1] + a·y[n-1], a = 1 - 1/16 ⇒ cắt ≈ 160 Hz
+  // Chia thay vì dịch bit: dịch phải làm tròn về phía âm vô cực nên nó
+  // tự bơm vào một độ lệch một chiều — đúng thứ bộ lọc này sinh ra để
+  // dọn đi.
+  const int32_t ya = x - hpXa + hpYa - (hpYa / 16);
+  hpXa = x; hpYa = ya;
+  const int32_t yb = ya - hpXb + hpYb - (hpYb / 16);
+  hpXb = ya; hpYb = yb;
+  return yb;
+}
+
 static ChunkFn cbChunk = nullptr;
 static EventFn cbStart = nullptr;
 static EventFn cbEnd = nullptr;
@@ -678,17 +732,54 @@ static void pumpMic() {
   const int n = got / sizeof(int32_t);
   if (n <= 0) return;
 
+  // ── Thống kê mẫu THÔ, để phân biệt "phòng ồn" với "mic hỏng" ──
+  //
+  // `micLevel` là trung bình trị tuyệt đối — nó cao thì biết là cao,
+  // nhưng KHÔNG cho biết vì sao. Ba con số dưới đây thì cho:
+  //
+  //   lệch một chiều lớn  → mic có điện áp nền, không phải tiếng
+  //   đỉnh sát 8.388.608  → dây dữ liệu chập chờn/thả nổi, đang đọc rác
+  //   đỉnh cao mà lệch ~0 → tiếng thật, phòng ồn thật
+  int64_t dcSum = 0;
+  int64_t thoSum = 0;
+  int32_t peak = 0;
+
   int64_t sum = 0;
   for (int i = 0; i < n; i++) {
     const int32_t raw = rawBlock[i];
-    sum += abs(raw >> 8);  // thang 24 bit — cùng thang với VAD_THRESHOLD
+    thoSum += abs(raw >> 8);              // trước lọc, để so sánh
+    const int32_t s24 = locHaTan(raw >> 8);
+    dcSum += s24;
+    if (abs(s24) > peak) peak = abs(s24);
+    sum += abs(s24);       // thang 24 bit — cùng thang với VAD_THRESHOLD
 
-    int32_t v = raw >> MIC_GAIN_SHIFT;
+    int32_t v = s24 >> (MIC_GAIN_SHIFT - 8);
     if (v > 32767) v = 32767;
     else if (v < -32768) v = -32768;
     pcmBlock[i] = (int16_t)v;
   }
   micLevel = (int32_t)(sum / n);
+  micDc = (int32_t)(dcSum / n);
+  micTho = (int32_t)(thoSum / n);
+
+  // Đổ 8 mẫu THÔ 32 bit mỗi giây. Đây là thứ duy nhất phân biệt được
+  // "mic gửi sai" với "ta đọc sai":
+  //   8 bit thấp toàn 0    → đúng khuôn 24-trong-32, mic gửi chuẩn
+  //   8 bit thấp lung tung → lệch khuôn/lệch bit, ta đang đọc sai chỗ
+  //   toàn 0 hoặc toàn F   → dây dữ liệu không có ai lái
+  {
+    static uint32_t lanCuoi = 0;
+    if (millis() < 20000 && millis() - lanCuoi > 1000) {  // chỉ 20 giây đầu
+      lanCuoi = millis();
+      Serial.printf("[raw] %08lx %08lx %08lx %08lx %08lx %08lx %08lx %08lx\n",
+                    (unsigned long)rawBlock[0], (unsigned long)rawBlock[1],
+                    (unsigned long)rawBlock[2], (unsigned long)rawBlock[3],
+                    (unsigned long)rawBlock[64], (unsigned long)rawBlock[65],
+                    (unsigned long)rawBlock[128], (unsigned long)rawBlock[192]);
+    }
+  }
+  micPeak = peak;
+  if (peak > 8388608 / 2) micClipBlocks++;   // sát trần = nghi rác
 
   // ── Giây đầu: ĐO, chưa nghe ai ──
   //
@@ -782,6 +873,10 @@ bool speaking() { return playState != PLAY_IDLE; }
 bool listening() { return micOpen; }
 int32_t level() { return micLevel; }
 int32_t noise() { return noiseFloor; }
+int32_t dc() { return micDc; }
+int32_t rawLevel() { return micTho; }
+int32_t peakRaw() { return micPeak; }
+uint32_t clipBlocks() { return micClipBlocks; }
 int32_t gate() { return vadGate(); }
 uint32_t lastClipBytes() { return lastClip; }
 uint32_t lastUnderruns() { return underruns; }

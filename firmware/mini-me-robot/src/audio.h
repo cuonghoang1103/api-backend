@@ -87,6 +87,19 @@ void moLuotNgay();
 int32_t level();
 /** Nền ồn phòng đang tự học được (cùng thang). */
 int32_t noise();
+
+/**
+ * Chẩn đoán mic. Ba con số này phân biệt "phòng ồn" với "mic hỏng",
+ * điều mà mức trung bình một mình không làm được:
+ *   dc()         lệch một chiều — mic có điện áp nền chứ không phải tiếng
+ *   peakRaw()    đỉnh khối gần nhất; sát 8.388.608 là đang đọc rác
+ *   clipBlocks() số khối từng chạm nửa trần, cộng dồn từ lúc bật
+ */
+int32_t dc();
+/** Mức TRƯỚC lọc hạ tần — so với level() thì biết bộ lọc gánh bao nhiêu. */
+int32_t rawLevel();
+int32_t peakRaw();
+uint32_t clipBlocks();
 /** Ngưỡng VAD hiện tại = nền × 3, đã kẹp. Vượt mức này là mở lượt nghe. */
 int32_t gate();
 /** Số byte của đoạn phát gần nhất, để hiện lên màn. */

@@ -34,6 +34,7 @@
 
 #include "audio.h"
 #include "face.h"
+#include "ota.h"
 #include "config.h"
 #include "secrets.h"
 
@@ -526,6 +527,29 @@ static void handleCommand(JsonDocument& doc) {
     sendLog("warn", "Dang khoi dong lai theo yeu cau");
     delay(300);
     ESP.restart();
+    return;
+  }
+
+  if (!strcmp(type, "ota")) {
+    // Trả lời TRƯỚC khi bắt đầu. `ota::capNhat` chặn luồng vài chục
+    // giây rồi khởi động lại — không có cơ hội trả lời sau, và web sẽ
+    // ngồi chờ một cái ack không bao giờ tới.
+    sendAck(id, true);
+
+    // Câm mồm trước khi nạp. Đang phát dở mà ghi flash là hai việc
+    // nặng tranh nhau: vòng đệm 512 KB ở PSRAM, hai đường DMA, cộng
+    // TLS tải về — chuốc lỗi ở đúng chỗ khó truy nhất.
+    audio::playStop();
+
+    const char* muon = doc["cmd"]["payload"]["version"] | (const char*)nullptr;
+    sendLog("warn", "Bat dau cap nhat firmware qua WiFi");
+    face::set(face::THINKING);
+
+    ota::Result r = ota::capNhat(muon);
+
+    // Tới được đây nghĩa là KHÔNG nạp được — thành công thì đã reboot.
+    sendLog("error", String("OTA that bai: ") + ota::moTa(r));
+    face::set(face::CONFUSED, 4000);
     return;
   }
 

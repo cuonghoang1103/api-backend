@@ -20,6 +20,12 @@
 // Everything below stays clear of all of that.
 
 // ─── Nghe: I2S0 ← INMP441 ─────────────────────────────────
+// Slug dự án trên web — bo dùng nó để hỏi bản firmware mới:
+//   GET /api/v1/maker-lab/firmware/<slug>/latest
+// Phải khớp CHÍNH XÁC cột `slug` trong bảng maker_projects, sai một ký
+// tự thì server trả 404 và OTA im lặng không làm gì.
+#define MAKERLAB_PROJECT_SLUG "mini-me-robot"
+
 #define PIN_MIC_SCK      4
 #define PIN_MIC_WS       5
 #define PIN_MIC_SD       6

@@ -65,10 +65,41 @@
 // ─── Phụ trợ ──────────────────────────────────────────────
 #define PIN_LED_RING     21
 #define LED_RING_COUNT   16
-#define PIN_TOUCH_HEAD   14
-#define PIN_CLIFF_L      1
+// ⚠️ KHÔNG dùng GPIO 14 cho chân này: đó là chân RESET của màn 3.5"
+// (`-DTFT_RST=14` trong platformio.ini). Hai đầu ra đẩy-kéo đấu chung
+// một dây thì con này kéo lên, con kia kéo xuống, và dòng chạy thẳng
+// từ đầu ra này sang đầu ra kia.
+//
+// GPIO 17 trống thật: 26-37 là flash/PSRAM của bản N16R8, 19/20 là USB,
+// 43/44 là UART gỡ lỗi, 0/45/46 là chân định đoạt kiểu khởi động.
+#define PIN_TOUCH_HEAD   17
+#define PIN_CLIFF_L      38
 #define PIN_CLIFF_R      2
-#define PIN_BATTERY_ADC  3      // qua chia áp 100k/47k
+
+// Đo pin qua chia áp 100k/47k.
+//
+// GPIO 1 chứ KHÔNG phải GPIO 3, dù cả hai đều thuộc ADC1: GPIO 3 là
+// chân định đoạt nguồn JTAG lúc khởi động. Cắm chia áp vào đó nghĩa là
+// mỗi lần bật máy, pack pin quyết định hộ con chip một lựa chọn hệ
+// thống — lỗi kiểu này chỉ hiện ra vào những hôm xui.
+//
+// Phải là ADC1 (GPIO 1-10). ADC2 dùng chung phần cứng với WiFi và trả
+// về lỗi khi WiFi đang chạy.
+#define PIN_BATTERY_ADC  1
+
+/**
+ * Đã hàn bộ chia áp chưa? 0 = chưa.
+ *
+ * Bắt buộc khai bằng tay, không cho firmware "tự nhận ra", vì nó KHÔNG
+ * nhận ra được — đo thật trên bo ngày 11/08: chân ADC thả nổi đọc ra
+ * hơn 1 V, và chốt chặn "dưới 1 V là chưa cắm" của bản trước để lọt,
+ * khiến robot báo "pin 100%" trong khi nó đang cắm cáp USB và trên bo
+ * không có lấy một viên pin.
+ *
+ * Một con số bịa tệ hơn hẳn không có số: người ta sẽ tin nó rồi đi xa
+ * nhà mà tưởng còn đầy pin.
+ */
+#define BAT_DIVIDER_FITTED  0
 // GPIO38 và GPIO45 CÒN TRỐNG — servo đã chuyển hết sang PCA9685.
 
 // ─── Servo qua PCA9685 (I2C 0x40) ─────────────────────────

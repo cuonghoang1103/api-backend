@@ -148,6 +148,10 @@ static int32_t vadGate() {
  */
 static uint8_t loudRun = 0;
 
+/** Cờ "mở lượt ngay lượt sau", do chạm đầu bật lên. Xem chỗ dùng ở
+ *  hàm nghe — nó bỏ qua ngưỡng VAD đúng một lần rồi tự tắt. */
+static volatile bool epMoLuot = false;
+
 static ChunkFn cbChunk = nullptr;
 static EventFn cbStart = nullptr;
 static EventFn cbEnd = nullptr;
@@ -666,10 +670,20 @@ static void pumpMic() {
     if (loud) loudRun++;
     else if (loudRun > 0) loudRun--;
 
-    if (loudRun < VAD_OPEN_BLOCKS) {
+    // Chạm đầu = ÉP MỞ lượt, khỏi cần đủ to.
+    //
+    // Đây là đường vòng qua toàn bộ phép đo độ ồn ở trên. VAD phải đoán
+    // "người này có đang nói với mình không" từ mỗi mức âm lượng, và
+    // đoán thì có lúc sai — user đã báo ba lần "nói hai ba lần nó mới
+    // nghe". Chạm vào đầu robot thì không còn gì phải đoán nữa.
+    //
+    // Giữ nguyên VAD chứ không thay thế: robot vẫn tự nghe như cũ, chạm
+    // chỉ là đường tắt cho lúc nó lơ đễnh hoặc phòng ồn.
+    if (!epMoLuot && loudRun < VAD_OPEN_BLOCKS) {
       pushPreroll(pcmBlock);
       return;
     }
+    epMoLuot = false;
     micOpen = true;
     micTurnAt = now;
     micQuietAt = 0;
@@ -709,4 +723,18 @@ uint32_t lastClipBytes() { return lastClip; }
 uint32_t lastUnderruns() { return underruns; }
 uint32_t lastUnderrunMs() { return underrunMs + (underrunSince ? millis() - underrunSince : 0); }
 
+}  // namespace audio
+
+namespace audio {
+/**
+ * Ép mở một lượt nghe ở khối tiếng kế tiếp, bỏ qua ngưỡng VAD.
+ *
+ * Dùng cho nút chạm: người ta chạm vào robot nghĩa là "tôi đang nói
+ * với mày đây", và đó là tín hiệu chắc chắn hơn mọi phép đo âm lượng.
+ *
+ * Đang nghe rồi thì không làm gì — chạm giữa lượt không nên cắt ngang.
+ */
+void moLuotNgay() {
+  if (!listening()) epMoLuot = true;
+}
 }  // namespace audio

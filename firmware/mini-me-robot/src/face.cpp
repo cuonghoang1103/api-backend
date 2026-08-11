@@ -40,6 +40,10 @@ static uint32_t nextBlinkAt = 0;
 static uint32_t blinkUntil = 0;
 
 static bool wifiOk = false, serverOk = false;
+
+// Đồng hồ góc trên trái. Giữ lại chuỗi đã vẽ để chỉ vẽ khi ĐỔI phút.
+static char clockTxt[6] = "";
+static int batPct = -1;
 static bool dirty = true;
 static Emotion drawnEmo = (Emotion)255;
 static bool drawnBlink = false;
@@ -106,6 +110,76 @@ static void brow(int cx, int tiltPx, uint16_t color) {
 }
 
 // ─── Vẽ cả mặt ─────────────────────────────────────────────
+
+// Đồng hồ góc trên TRÁI — chấm trạng thái ở góc phải nên không đè nhau.
+// Xoá đúng ô chữ rồi vẽ đè, KHÔNG fillScreen: khuôn mặt đang nằm đó và
+// xoá cả màn mỗi phút thì thành nháy đèn.
+static void drawClock() {
+  if (!tft) return;
+  tft->fillRect(8, 6, 64, 20, C_BG);
+  if (!clockTxt[0]) return;
+  tft->setTextColor(C_EYE_DIM, C_BG);
+  tft->setTextSize(2);
+  tft->setCursor(8, 6);
+  tft->print(clockTxt);
+}
+
+// Pin ngay cạnh đồng hồ. Màu mang thông tin chứ không để trang trí —
+// liếc một cái là biết còn nhiều hay sắp chết, khỏi cần đọc số.
+static void drawBattery() {
+  if (!tft) return;
+  tft->fillRect(78, 6, 54, 20, C_BG);
+  if (batPct < 0) return;
+  const uint16_t col = batPct > 50 ? C_DOT_OK : (batPct > 20 ? 0xFD20 : C_DOT_BAD);
+  tft->setTextColor(col, C_BG);
+  tft->setTextSize(2);
+  tft->setCursor(78, 6);
+  tft->printf("%d%%", batPct);
+}
+
+/**
+ * Dải chữ trạng thái ở đáy màn: NGHE → NGHĨ → NÓI.
+ *
+ * ⚠️ Bản trước vẽ chữ "dang nghe" ngay trong nhánh LISTENING và KHÔNG
+ * có ai xoá nó. drawFace() cố ý chỉ xoá hai hốc mắt với vùng miệng (xem
+ * lý do ngay dưới đây), nên dòng chữ nằm ngoài ba vùng ấy đọng lại vĩnh
+ * viễn — robot nghe xong, nghĩ xong, nói xong, màn vẫn ghi "dang nghe".
+ *
+ * Người dùng báo đúng hậu quả của nó: không biết robot đã nghe được hay
+ * chưa nên cứ nói đi nói lại. Một chỉ báo SAI còn hại hơn không có chỉ
+ * báo, vì nó khiến người ta tin nhầm.
+ *
+ * Nên chỗ này XOÁ TRƯỚC rồi mới vẽ, mỗi lần mặt đổi. Dải nằm ở y đáy
+ * màn, dưới miệng, nên không đụng vùng nào drawFace() đang lo.
+ *
+ * Màu chở thông tin chứ không trang trí: vàng = đến lượt bạn nói, cam =
+ * nó đang nghĩ (chờ đi), xanh = nó đang nói. Liếc là biết, khỏi đọc.
+ */
+static void drawStateLabel(Emotion e) {
+  if (!tft) return;
+
+  // Chỉ đụng vào màn khi trạng thái ĐỔI THẬT. drawFace() còn chạy mỗi
+  // lần chớp mắt (2,5-6 giây một lần), mà xoá dải 480x30 tốn ~11 ms
+  // SPI — đúng loại chi phí mà cả hàm này được viết ra để né.
+  static Emotion daVe = (Emotion)255;
+  if (e == daVe) return;
+  daVe = e;
+
+  tft->fillRect(0, H - 30, W, 30, C_BG);
+
+  const char* s;
+  uint16_t col;
+  switch (e) {
+    case LISTENING: s = "DANG NGHE";  col = 0xFFE0; break;  // vàng
+    case THINKING:  s = "DANG NGHI";  col = 0xFD20; break;  // cam
+    case SPEAKING:  s = "DANG NOI";   col = C_DOT_OK; break;
+    default: return;                                        // rảnh thì để trống
+  }
+  tft->setTextColor(col, C_BG);
+  tft->setTextSize(2);
+  tft->setCursor(14, H - 26);
+  tft->print(s);
+}
 
 static void drawFace() {
   // ⚠️ KHÔNG dùng fillScreen().
@@ -203,8 +277,6 @@ static void drawFace() {
       eyeOpen(EYE_RX, ew, eh, col, px, py);
       brow(EYE_RX, -12, col);
       arcThick(W / 2 - 20, MOUTH_Y, 60, 6, 9, false, col);  // miệng lệch
-      tft->setTextColor(col, C_BG); tft->setTextSize(4);
-      tft->setCursor(430, 30); tft->print("?");
       break;
 
     case CONFUSED:
@@ -229,8 +301,6 @@ static void drawFace() {
       eyeOpen(EYE_LX, ew, eh, col, 0, 0);
       eyeOpen(EYE_RX, ew, eh, col, 0, 0);
       arcThick(W / 2, MOUTH_Y, 60, 4, 8, true, col);
-      tft->setTextColor(C_EYE, C_BG); tft->setTextSize(2);
-      tft->setCursor(14, H - 26); tft->print("dang nghe");
       break;
 
     case SPEAKING:
@@ -251,6 +321,9 @@ static void drawFace() {
   // nhưng vẫn cho biết ngay robot có mạng và có server hay không.
   tft->fillCircle(W - 22, 16, 6, wifiOk ? C_DOT_OK : C_DOT_BAD);
   tft->fillCircle(W - 42, 16, 6, serverOk ? C_DOT_OK : C_DOT_BAD);
+  drawClock();
+  drawBattery();
+  drawStateLabel(emo);
 
   drawnEmo = emo;
   drawnBlink = blink;
@@ -310,6 +383,20 @@ void setStatus(bool w, bool s) {
       tft->fillCircle(W - 42, 16, 6, serverOk ? C_DOT_OK : C_DOT_BAD);
     }
   }
+}
+
+void setClock(const char* hhmm) {
+  if (!hhmm) hhmm = "";
+  if (!strcmp(hhmm, clockTxt)) return;   // chưa sang phút mới thì thôi
+  strncpy(clockTxt, hhmm, sizeof(clockTxt) - 1);
+  clockTxt[sizeof(clockTxt) - 1] = 0;
+  drawClock();
+}
+
+void setBattery(int pct) {
+  if (pct == batPct) return;
+  batPct = pct;
+  drawBattery();
 }
 
 Emotion current() { return emo; }

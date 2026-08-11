@@ -355,6 +355,74 @@ static void uiHeartbeat() {
                  st.wsUp ? (on ? C_OK : C_BG) : (on ? C_BAD : C_BG));
 }
 
+// ─── Đo pin ────────────────────────────────────────────────
+//
+// Pack 2S (hai viên 18650 nối tiếp) cho 6,0–8,4 V, mà chân ADC của
+// ESP32 chỉ chịu tới 3,3 V — nên phải chia áp trước khi đo:
+//
+//     PIN+ ──[100k]──┬──[47k]── GND
+//                    └──► GPIO 3 (ADC1_CH2)
+//
+// Tỉ lệ 47/(100+47) = 0,3197 → 8,4 V ngoài kia thành 2,69 V ở chân.
+// Dùng ADC1 chứ không phải ADC2: ADC2 dùng chung phần cứng với WiFi,
+// đọc lúc WiFi đang chạy thì trả về lỗi.
+//
+// analogReadMilliVolts() chứ không phải analogRead(): nó áp đường
+// chuẩn nhà máy nung sẵn trong eFuse của chính con chip này. analogRead
+// thô lệch tới 10%, đủ để "còn 40%" hiện thành "còn 15%".
+
+static const float BAT_CHIA_AP = (100.0f + 47.0f) / 47.0f;  // = 3,128
+
+/**
+ * Đọc điện áp pack, đơn vị volt. Trả 0 nghĩa là CHƯA CẮM bộ chia áp.
+ *
+ * Phân biệt "chưa cắm" với "pin cạn" là việc bắt buộc, không phải cho
+ * đẹp: chân ADC chưa cắm gì thì đọc ra số lung tung, và báo "pin 0%"
+ * lúc robot đang chạy bằng cáp USB thì mỗi lần hỏi nó lại lo hết pin.
+ * Dưới 1 V ở chân = dưới 3,1 V ở pack = pack đó đã chết hẳn rồi, nên
+ * lấy mốc đó làm ranh giới an toàn.
+ */
+static float docPin() {
+#if !BAT_DIVIDER_FITTED
+  return 0.0f;   // chưa hàn chia áp — xem BAT_DIVIDER_FITTED trong config.h
+#else
+  uint32_t tong = 0;
+  for (int i = 0; i < 16; i++) tong += analogReadMilliVolts(PIN_BATTERY_ADC);
+  const float mv = tong / 16.0f;
+  if (mv < 1000.0f) return 0.0f;
+  return (mv / 1000.0f) * BAT_CHIA_AP;
+#endif
+}
+
+/**
+ * Điện áp → phần trăm, theo đường xả THẬT của Li-ion.
+ *
+ * Ánh xạ tuyến tính 6,0-8,4 V là sai và sai theo kiểu khó chịu nhất:
+ * Li-ion nằm lì quanh 3,7 V/viên gần hết quãng đời, nên đồng hồ tuyến
+ * tính sẽ đứng im ở ~50% suốt nhiều giờ rồi rơi tự do trong mười phút
+ * cuối. Bảng dưới là đường cong đo ở dòng tải nhẹ, nội suy tuyến tính
+ * giữa các mốc — vẫn xấp xỉ, nhưng xấp xỉ đúng chỗ.
+ */
+static int phanTramPin(float v) {
+  if (v <= 0) return -1;
+  const float c = v / 2.0f;  // volt mỗi viên
+  static const float moc[][2] = {
+      {4.20f, 100}, {4.10f, 90}, {4.00f, 80}, {3.93f, 70}, {3.87f, 60},
+      {3.80f, 50},  {3.73f, 40}, {3.67f, 30}, {3.60f, 20}, {3.50f, 10},
+      {3.30f, 5},   {3.00f, 0},
+  };
+  const int n = sizeof(moc) / sizeof(moc[0]);
+  if (c >= moc[0][0]) return 100;
+  if (c <= moc[n - 1][0]) return 0;
+  for (int i = 0; i < n - 1; i++) {
+    if (c <= moc[i][0] && c > moc[i + 1][0]) {
+      const float t = (c - moc[i + 1][0]) / (moc[i][0] - moc[i + 1][0]);
+      return (int)(moc[i + 1][1] + t * (moc[i][1] - moc[i + 1][1]) + 0.5f);
+    }
+  }
+  return -1;
+}
+
 // ─── Gửi lên server ────────────────────────────────────────
 
 static void sendHello() {
@@ -367,6 +435,10 @@ static void sendHello() {
   // sang PCM 16 kHz trước khi gửi — bo chỉ việc đẩy byte vào I2S, khỏi
   // cần thư viện giải mã nào.
   doc["audio"] = "pcm";
+  {
+    const int pct = phanTramPin(docPin());
+    if (pct >= 0) doc["battery"] = pct;   // chưa cắm chia áp thì im lặng
+  }
   String out;
   serializeJson(doc, out);
   ws.sendTXT(out);
@@ -391,6 +463,14 @@ static void sendTelemetry() {
   doc["psramKb"] = ESP.getFreePsram() / 1024;
   doc["micLevel"] = audio::level();
   doc["turns"] = st.turns;
+  {
+    const float v = docPin();
+    const int pct = phanTramPin(v);
+    if (pct >= 0) {
+      doc["battery"] = pct;
+      doc["batV"] = roundf(v * 100) / 100.0f;  // volt thật, để hiệu chỉnh
+    }
+  }
   String out;
   serializeJson(doc, out);
   ws.sendTXT(out);
@@ -889,6 +969,11 @@ void setup() {
   // trạng thái rút gọn còn hai chấm tròn ở góc.
   face::begin(&tft);
 
+  // Cảm biến chạm TTP223: ngõ ra push-pull, tự kéo về mức thấp khi
+  // không ai chạm. Vẫn khai INPUT_PULLDOWN để lúc CHƯA cắm dây thì
+  // chân không thả nổi — thả nổi là robot tự "bị vuốt đầu" liên tục.
+  pinMode(PIN_TOUCH_HEAD, INPUT_PULLDOWN);
+
   if (!psramFound()) {
     st.lastNote = "CANH BAO: khong thay PSRAM";
     Serial.println("!! Không thấy PSRAM — bo này không phải bản N16R8");
@@ -941,6 +1026,17 @@ void setup() {
     st.rssi = WiFi.RSSI();
     st.lastNote = "WiFi OK, dang noi server";
     Serial.printf("\nWiFi ok, ip=%s rssi=%d\n", st.ip.c_str(), st.rssi);
+
+    // Lấy giờ từ mạng. ESP32 KHÔNG có đồng hồ chạy pin — mất điện là
+    // quên sạch giờ, nên phải hỏi lại mỗi lần khởi động.
+    //
+    // configTime() chỉ ĐẶT LỊCH hỏi, nó trả về ngay chứ không chờ; gói
+    // NTP đầu tiên thường về sau 1-3 giây. Vòng loop() sẽ tự thấy giờ
+    // hợp lệ rồi vẽ lên màn, nên ở đây không ngồi đợi.
+    //
+    // 7*3600 = múi giờ Việt Nam. Đặt thẳng chứ không dùng chuỗi múi giờ:
+    // VN không có giờ mùa hè, và bảng tzdata thì tốn flash vô ích.
+    configTime(7 * 3600, 0, "pool.ntp.org", "time.google.com");
   } else {
     st.lastNote = "KHONG VAO DUOC WiFi - kiem SSID/mat khau";
     Serial.println("\nWiFi thất bại");
@@ -1011,6 +1107,66 @@ void loop() {
   // chính bản firmware đang về, và tệ hơn: mở được một lượt nói mới
   // giữa chừng, để rồi bo reboot khi người dùng đang chờ câu trả lời.
   if (!ota::dangChay()) audio::loop();
+
+  // ── Đồng hồ trên màn ──
+  //
+  // Mỗi giây kiểm một lần, nhưng face::setClock() tự bỏ qua khi chuỗi
+  // không đổi, nên thực tế màn chỉ vẽ lại mỗi phút. Vẽ SPI lên ILI9488
+  // mất vài mili giây, mà vòng này còn phải bơm I2S 16.000 mẫu/giây —
+  // vẽ dư một nhịp là tiếng nói vấp một cái nghe rõ.
+  {
+    static uint32_t lanCuoi = 0;
+    if (millis() - lanCuoi > 1000) {
+      lanCuoi = millis();
+      struct tm t;
+      if (getLocalTime(&t, 0)) {          // 0 ms: KHÔNG chờ, chờ là kẹt vòng
+        char s[6];
+        snprintf(s, sizeof(s), "%02d:%02d", t.tm_hour, t.tm_min);
+        face::setClock(s);
+      }
+      face::setBattery(phanTramPin(docPin()));
+    }
+  }
+
+  // ── Cảm biến chạm ở đầu ──
+  //
+  // TTP223 giữ chân ở mức CAO suốt thời gian còn chạm, nên phải bắt
+  // SƯỜN LÊN chứ đừng bắt mức — bắt mức thì chạm một cái mà vòng loop
+  // chạy nghìn lần mỗi giây sẽ đếm thành nghìn lần chạm.
+  //
+  // Hai kiểu chạm, hai việc:
+  //   chạm nhanh  → mở lượt nghe ngay, khỏi phải nói to cho VAD nhận ra
+  //   giữ 1,5 giây → vuốt đầu, robot tỏ ra thích
+  {
+    static bool chamTruoc = false;
+    static uint32_t chamTu = 0;
+    static bool daVuot = false;
+    const bool cham = digitalRead(PIN_TOUCH_HEAD) == HIGH;
+
+    if (cham && !chamTruoc) {          // sườn lên
+      chamTu = millis();
+      daVuot = false;
+    } else if (cham && !daVuot && millis() - chamTu > 1500) {
+      daVuot = true;                    // giữ lâu = vuốt đầu
+      face::set(face::LOVE, 3000);
+      sendLog("info", "duoc vuot dau");
+    } else if (!cham && chamTruoc) {    // sườn xuống
+      if (!daVuot && millis() - chamTu < 800) {
+        if (audio::speaking()) {
+          // Đang nói mà bị chạm = "thôi đủ rồi". Trước đây muốn ngắt
+          // lời robot phải mở web bấm nút; giờ vỗ cái vào đầu là im.
+          audio::playStop();
+          face::set(face::NEUTRAL, 800);
+          sendLog("info", "cham dau -> ngat loi");
+        } else {
+          audio::moLuotNgay();
+          face::set(face::LISTENING, 1200);
+          sendLog("info", "cham dau -> mo luot nghe");
+        }
+      }
+    }
+    chamTruoc = cham;
+  }
 
   gStage = "ui";
   const uint32_t now = millis();

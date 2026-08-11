@@ -72,6 +72,17 @@ void beep(uint16_t freq, uint16_t ms, uint8_t loudness = 45);
 // ─── Xem trạng thái (cho màn hình) ───────────────────────
 bool speaking();
 bool listening();
+
+/**
+ * Ép mở một lượt nghe ngay, bỏ qua ngưỡng VAD.
+ *
+ * Dùng cho nút chạm ở đầu robot. VAD phải ĐOÁN xem người ta có đang nói
+ * với mình không, và đoán thì có lúc sai — user đã báo ba lần "nói hai
+ * ba lần nó mới nghe". Chạm vào đầu thì không còn gì phải đoán.
+ *
+ * Không thay VAD, chỉ là đường tắt. Đang nghe dở thì không làm gì.
+ */
+void moLuotNgay();
 /** Mức mic gần nhất, thang 24 bit — cùng thang với VAD_THRESHOLD. */
 int32_t level();
 /** Nền ồn phòng đang tự học được (cùng thang). */

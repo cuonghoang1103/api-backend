@@ -58,6 +58,23 @@ void loop();
 /** Chấm trạng thái nhỏ ở góc — thay cho cả bảng chữ của chặng A. */
 void setStatus(bool wifiOk, bool serverOk);
 
+/**
+ * Đồng hồ ở góc trên trái, dạng "HH:MM".
+ *
+ * Truyền chuỗi rỗng để tắt (lúc chưa đồng bộ được giờ). Vẽ lại chỉ khi
+ * chuỗi ĐỔI — màn ILI9488 nối SPI vẽ chậm, mà vòng loop() còn phải bơm
+ * I2S 16.000 mẫu mỗi giây; vẽ lại mỗi vòng là tiếng bị vấp.
+ */
+void setClock(const char* hhmm);
+
+/**
+ * Phần trăm pin cạnh đồng hồ. Truyền -1 để giấu hẳn.
+ *
+ * Giấu chứ không hiện "0%" khi chưa cắm bộ chia áp: một con số sai còn
+ * tệ hơn không có số, vì người ta sẽ tin nó.
+ */
+void setBattery(int pct);
+
 Emotion current();
 
 }  // namespace face

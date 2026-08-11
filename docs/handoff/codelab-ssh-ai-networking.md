@@ -231,7 +231,7 @@ Nguồn → UEFI/BIOS → GRUB → nhân Linux → initramfs → switch_root
    **không có systemd nên không có ai để mà hỏi**. Hiểu chỗ này là hiểu vì
    sao cách thứ hai qua được chỗ cách thứ nhất chết.
 
-### 3d. Sáu thứ cản đường — mỗi thứ một bài học riêng
+### 3d. Bảy thứ cản đường — mỗi thứ một bài học riêng
 
 **1. `/home` rỗng — Btrfs subvolume**
 
@@ -299,7 +299,52 @@ Dạy được: TTY là gì, `ssh -t` ép cấp, vì sao script tự động **k
 `01-dung-moi-truong.sh` trong repo này đã dính rồi phải sửa — dùng làm ví dụ
 trước/sau.
 
-**6. Fedora chặn cổng 22, Ubuntu thì không**
+**6. Việc chạy dài qua SSH chết theo phiên — bài học đắt nhất về SSH**
+
+Chạy phép đo VRAM bằng `ssh maytrain 'bash -s' < script.sh`. Sau hơn một
+tiếng tải dữ liệu, mạng chớp một cái:
+
+```
+Read from remote host 192.168.1.102: Operation timed out
+client_loop: send disconnect: Broken pipe
+exit=255
+```
+
+Mất sạch. Lý do: lệnh chạy qua SSH là **con của phiên SSH**. Phiên chết thì
+tiến trình nhận `SIGHUP` và chết theo — đúng nghĩa đen của "hang up", cái tên
+có từ thời modem quay số.
+
+Chi tiết hay để dạy: **tiến trình Python con lại SỐNG SÓT** (`pgrep` vẫn thấy
+nó chạy) trong khi script bash bao ngoài đã chết. Vì sao? Nó đang bận trong
+một lời gọi hệ thống và không xử lý tín hiệu ngay. Kết quả tệ nhất có thể:
+việc vẫn chạy nhưng **không còn ai chờ kết quả**.
+
+Cách chữa, và học viên phải làm được cả ba:
+
+| Cách | Dùng khi |
+|---|---|
+| `setsid nohup lệnh > log 2>&1 < /dev/null &` | Việc chạy một lần, không cần xem trực tiếp |
+| `tmux new -d -s ten 'lệnh'` | Cần quay lại xem tiến trình đang chạy tới đâu |
+| systemd service | Việc phải tự chạy lại sau khi máy khởi động |
+
+Điểm mấu chốt của cách đầu: `setsid` tách hẳn khỏi nhóm phiên nên `SIGHUP`
+không tới được, `< /dev/null` để nó không chờ bàn phím, và **ghi log ra file
+TRÊN MÁY ĐÓ** chứ không phải chảy về máy điều khiển — mất mạng thì log vẫn còn
+nguyên.
+
+Bài học chung: **đừng để việc chạy hàng giờ phụ thuộc vào một sợi dây mạng
+phải sống suốt hàng giờ.**
+
+**Đủ là dừng — đừng tải cả bộ chỉ để đo**
+
+Cùng sự cố trên còn lộ ra một lỗi thiết kế nữa: script tải cả **7.000 mẫu**
+(~12 giờ tiếng) chỉ để chạy **20 bước train** — vốn chỉ đụng tới vài chục
+mẫu. CDN của HuggingFace hết giờ liên tục và đó chính là thứ làm đứt phiên.
+
+Sửa: kiểm trước, có sẵn ≥200 mẫu thì bỏ qua bước tải. Nguyên tắc — *phép đo
+dùng lượng dữ liệu tối thiểu đủ để đo, không phải toàn bộ dữ liệu thật.*
+
+**7. Fedora chặn cổng 22, Ubuntu thì không**
 
 Cài `openssh-server` và `systemctl enable --now sshd` xong vẫn không vào
 được, vì `firewalld` của Fedora chặn sẵn. Phải thêm

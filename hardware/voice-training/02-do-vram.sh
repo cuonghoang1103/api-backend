@@ -33,10 +33,30 @@ bad() { printf '\033[1;31m  ✗ %s\033[0m\n' "$1"; }
 cd "$WORK" 2>/dev/null || { bad "Chưa có $WORK — chạy 01-dung-moi-truong.sh trước"; exit 1; }
 
 say "Dữ liệu mẫu"
-if [ ! -f finetune/dataset/metadata.csv ]; then
-  uv run python finetune/data_scripts/get_hf_sample.py || { bad "không tải được dữ liệu mẫu"; exit 1; }
+# ⚠️ ĐỦ LÀ DỪNG — đừng tải cả bộ chỉ để đo.
+#
+# `get_hf_sample.py` của VieNeu hardcode 7000 mẫu ở hàm main (dù mặc
+# định của hàm là 10). Bộ đó ~12 giờ tiếng, tải qua CDN HuggingFace mất
+# hàng giờ và ngày 11/08 đã đứt giữa chừng vì CDN liên tục hết giờ.
+#
+# Mà phép đo này chỉ chạy 20 bước với batch 2 — tức đụng tới vài chục
+# mẫu. Vài trăm mẫu là thừa. Nguyên tắc: phép đo dùng lượng dữ liệu tối
+# thiểu đủ để đo, không phải toàn bộ dữ liệu thật.
+DU=200
+CO=0
+[ -f finetune/dataset/metadata.csv ] && CO=$(wc -l < finetune/dataset/metadata.csv)
+
+if [ "$CO" -ge "$DU" ]; then
+  ok "đã có $CO dòng trong metadata.csv — bỏ qua bước tải"
+else
+  say "Tải $DU mẫu (không tải cả 7000)"
+  uv run python -c "
+import sys; sys.path.insert(0, 'finetune/data_scripts')
+from get_hf_sample import download_sample_data
+download_sample_data(output_dir='finetune/dataset', num_samples=$DU)
+" || { bad "không tải được dữ liệu mẫu"; exit 1; }
+  ok "$(wc -l < finetune/dataset/metadata.csv) dòng trong metadata.csv"
 fi
-ok "$(wc -l < finetune/dataset/metadata.csv) dòng trong metadata.csv"
 
 say "Lọc dữ liệu"
 uv run python finetune/data_scripts/filter_data.py >/dev/null 2>&1 \

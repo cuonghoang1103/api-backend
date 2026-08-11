@@ -34,6 +34,11 @@ static uint32_t readPos = 0;   // tổng byte đã phát
 static uint32_t playRate = 16000;
 static uint32_t lastClip = 0;
 static bool playOverflow = false;
+// Bao nhiêu byte đã bị VỨT vì đệm đầy. Phải đếm và phải BÁO LÊN SERVER:
+// bản trước chỉ in ra Serial, nên suốt một buổi đọc log tôi không hề
+// thấy nó và đi đuổi ba giả thuyết sai. Một lỗi không nhìn thấy được
+// thì không tồn tại — với người sửa nó.
+static uint32_t playDroppedBytes = 0;
 
 /**
  * Server đã gửi hết chưa (`say_end`).
@@ -440,6 +445,7 @@ void playBegin(uint32_t sampleRate) {
   writePos = 0;
   readPos = 0;
   playOverflow = false;
+  playDroppedBytes = 0;
   playEnded = false;
   underruns = 0;
   underrunMs = 0;
@@ -474,6 +480,7 @@ bool playPush(const uint8_t* data, size_t len) {
     // thì server đã tự ghìm ở mốc 256 KB nên cũng hiếm. Bỏ mẩu này
     // còn hơn ghi đè lên phần chưa phát.
     playOverflow = true;
+    playDroppedBytes += len;
     return false;
   }
 
@@ -924,6 +931,7 @@ uint32_t clippedSamples() { return xenSamples; }
 int32_t gate() { return vadGate(); }
 uint32_t lastClipBytes() { return lastClip; }
 uint32_t lastUnderruns() { return underruns; }
+uint32_t droppedBytes() { return playDroppedBytes; }
 uint32_t lastUnderrunMs() { return underrunMs + (underrunSince ? millis() - underrunSince : 0); }
 
 }  // namespace audio

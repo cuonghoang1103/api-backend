@@ -191,7 +191,19 @@
 // chia 32 còn 16858 — vừa đủ to cho Whisper mà còn thừa chỗ trước khi
 // chạm trần 32767. Để nguyên `raw >> 16` (khuếch đại 1 lần) thì tiếng
 // nói chỉ còn biên độ ~35, Whisper nghe ra im lặng.
-#define MIC_GAIN_SHIFT       13
+// 13 → 14, tức giảm một nửa biên độ (-6 dB).
+//
+// Đo trên bo thật 11/08 sau khi tách bộ lọc: mỗi lượt nghe có 25-395
+// mẫu bị XÉN (~0,2-0,9%). Xén xảy ra ở đúng những âm to nhất trong câu
+// — chỗ mang nhiều thông tin nhất — và Whisper nghe tiếng méo thì đoán
+// bừa. Đó là một trong hai nguồn gây sai chữ, bên cạnh chuyện thanh
+// điệu đã sửa ở locGui().
+//
+// Vì sao giảm nửa mà không sợ quá nhỏ: đỉnh đo được ~506.000 trên thang
+// 24 bit, chia 2^14 ra ~7.900 trên thang 16 bit = 24% toàn thang. Đó là
+// mức thu chuẩn (-12 dBFS) mà phòng thu nào cũng nhắm tới; Whisper tự
+// chuẩn hoá biên độ nên nhỏ hơn không hại, còn xén thì hại thật.
+#define MIC_GAIN_SHIFT       14
 #define AUDIO_BLOCK_SAMPLES  256    // 16 ms mỗi khối @16 kHz
 
 // Đệm trước: lúc VAD nhận ra "có người nói" thì âm đầu ĐÃ trôi qua
@@ -201,7 +213,17 @@
 
 // Đệm phát trong PSRAM: 512 KB = 16 giây tiếng @16 kHz 16 bit mono.
 // Một câu trả lời thường 3–5 giây, nên đây là mức dư thoải mái.
-#define AUDIO_PLAY_BUF_BYTES (512 * 1024)
+// 512 KB → 2 MB, tức 16 giây → 64 giây tiếng.
+//
+// 512 KB dựa trên giả định "giọng nói thì không bao giờ dài quá 16
+// giây". Log bo thật 11/08 phá giả định đó ngay: `noi: 637 KB = 20s`,
+// `noi: 608 KB = 19s`. Phần thừa bị playPush() VỨT, nghe thành nhảy
+// cóc giữa câu rồi tắt ngang — đúng thứ user tả là "giật giật rồi tắt".
+//
+// Chỗ này nằm trong PSRAM 8 MB, đang dùng chưa tới một phần mười. 2 MB
+// vẫn còn thừa mứa, mà 64 giây thì dài hơn mọi câu trả lời model có
+// thể sinh ra trong trần token hiện tại.
+#define AUDIO_PLAY_BUF_BYTES (2 * 1024 * 1024)
 
 // Nói xong thì đợi tiếng vang trong phòng tắt hẳn rồi hãy nghe lại.
 // Không có quãng này thì robot nghe thấy chính nó và tự nói chuyện

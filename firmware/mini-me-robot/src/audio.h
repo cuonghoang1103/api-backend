@@ -108,6 +108,8 @@ int32_t gate();
 uint32_t lastClipBytes();
 /** Số lần và tổng thời gian đệm cạn trong đoạn vừa phát. */
 uint32_t lastUnderruns();
+/** Byte tiếng bị VỨT vì đệm phát đầy. Khác 0 = câu nói đã mất một khúc. */
+uint32_t droppedBytes();
 uint32_t lastUnderrunMs();
 
 }  // namespace audio

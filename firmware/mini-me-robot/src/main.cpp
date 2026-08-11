@@ -667,7 +667,8 @@ static void handleSayEnd() {
   const uint32_t kb = audio::lastClipBytes() / 1024;
   st.lastNote = String("da noi ") + kb + " KB";
   sendLog("info", String("noi: ") + kb + " KB = " + (audio::lastClipBytes() / 32000) +
-                      "s | hut dem " + audio::lastUnderruns() + " lan / " +
+                      "s | VUT " + (audio::droppedBytes() / 1024) +
+                      " KB (dem day) | hut dem " + audio::lastUnderruns() + " lan / " +
                       audio::lastUnderrunMs() + " ms");
 }
 

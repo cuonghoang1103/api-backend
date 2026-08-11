@@ -351,8 +351,31 @@ export async function speakStreamPush(
   const CHUNK = 8 * 1024;
   for (let off = 0; off < audio.length; off += CHUNK) {
     if (conn.turnSeq !== seq || conn.ws.readyState !== WebSocket.OPEN) return false;
+
+    // ⚠️ GHÌM NHỊP. Đường nhạc đã có từ lâu; đường GIỌNG NÓI thì không,
+    // và cái thiếu đó là nguyên nhân thật của "đoạn cuối giật rồi tắt".
+    //
+    // Không ghìm thì mỗi mẩu TTS được bơm hết tốc lực, trong khi loa
+    // phát theo thời gian thực. Đệm vòng của bo đầy dần, và playPush()
+    // gặp đệm đầy thì VỨT mẩu — nghe thành nhảy cóc giữa câu rồi hết
+    // sớm. Log bo: `noi: 637 KB = 20s` với đệm chỉ 512 KB = 16 giây.
+    //
+    // Chú thích cũ trong firmware đoán rằng "với giọng nói thì gần như
+    // không xảy ra". Đoán sai, vì nó ngầm giả định đường này có ghìm
+    // nhịp như đường nhạc.
+    //
+    // Lead 20 giây (không phải 4 như nhạc): mỗi lần ngủ ở đây là một
+    // lần vòng đọc luồng LLM đứng lại, nên giữ khoảng đệm rộng để chỉ
+    // phải ngủ ở những câu thật dài.
+    const daPhatMs = ((conn.streamBytes + off) / conn.streamBytesPerSec) * 1000;
+    const troiQuaMs = Date.now() - conn.streamStartedAt;
+    const thuaMs = daPhatMs - troiQuaMs - TTS_LEAD_MS;
+    if (thuaMs > 0) await new Promise((r) => setTimeout(r, Math.min(thuaMs, 500)));
+    if (conn.turnSeq !== seq || conn.ws.readyState !== WebSocket.OPEN) return false;
+
     conn.ws.send(audio.subarray(off, Math.min(off + CHUNK, audio.length)));
   }
+  conn.streamBytes += audio.length;
   return true;
 }
 
@@ -421,6 +444,18 @@ export async function speakStreamPushPcm(
  * đối đáp không đổi, chỉ nhạc và đoạn dài mới chạm tới nhịp này.
  */
 const LEAD_MS = 4_000;
+
+/**
+ * Cho phép bo chạy trước bao nhiêu ở đường GIỌNG NÓI.
+ *
+ * Rộng hơn nhạc (20 s so với 4 s) vì hai đường ngủ ở hai chỗ khác nhau:
+ * nhạc bơm từ một tác vụ riêng, còn giọng nói bơm từ bên trong vòng đọc
+ * luồng LLM — ngủ ở đó là luồng LLM đứng lại theo. Đệm rộng nghĩa là chỉ
+ * những câu thật dài mới phải ngủ.
+ *
+ * 20 giây = 640 KB, vẫn thoải mái trong đệm 2 MB của bo.
+ */
+const TTS_LEAD_MS = 20_000;
 
 /**
  * Gửi một gói JSON bất kỳ xuống bo.

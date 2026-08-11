@@ -20,6 +20,7 @@
  * - The caller ALWAYS shows the transcript back editable before grading.
  */
 import { prisma } from '../../../config/database.js';
+import { logger } from '../../../utils/logger.js';
 import { BadRequestError, ForbiddenError, NotFoundError } from '../../../middleware/errorHandler.js';
 
 export type SttProvider = 'browser' | 'groq';
@@ -36,6 +37,27 @@ export function serverSttEnabled(): boolean {
 
 function groqModel(): string {
   return process.env.GROQ_STT_MODEL || 'whisper-large-v3-turbo';
+}
+
+/**
+ * Model dự phòng khi model chính hết hạn mức.
+ *
+ * Groq đếm hạn mức RIÊNG cho từng model, nên hết ngăn này vẫn còn ngăn
+ * kia — và đó là khác biệt giữa "robot câm cả ngày" với "robot chậm hơn
+ * một chút". Đo trên tài khoản này ngày 11/08:
+ *
+ *   whisper-large-v3-turbo  429  Limit 2000, Used 2000, reset 24h0m0s
+ *   whisper-large-v3        200  remaining-requests 1999
+ *
+ * Vì sao ngăn kia cạn: một lỗi VAD khiến robot mở lượt nghe liên tục
+ * vào tiếng ầm hạ tần suốt mấy tiếng, mỗi lượt một lời gọi. Lỗi đó đã
+ * sửa, nhưng bài học thì ở lại — hạn mức của cả web KHÔNG nên treo vào
+ * một cái tên model duy nhất.
+ */
+function groqFallbackModel(): string {
+  const primary = groqModel();
+  const alt = process.env.GROQ_STT_MODEL_FALLBACK || 'whisper-large-v3';
+  return alt === primary ? '' : alt;
 }
 
 /**
@@ -99,29 +121,51 @@ export async function transcribeWithGroq(
   const key = process.env.GROQ_API_KEY;
   if (!key) throw new Error('GROQ_API_KEY missing');
 
-  const form = new FormData();
-  // Blob keeps the audio in memory only — never touches disk.
-  form.append('file', new Blob([new Uint8Array(audio)], { type: mimetype || 'audio/webm' }), filename || 'answer.webm');
-  form.append('model', groqModel());
-  form.append('language', opts.language);
-  // `verbose_json` costs nothing extra but carries the per-segment confidence
-  // numbers. Opt-in so the interview keeps its existing lighter response.
-  form.append('response_format', opts.detail ? 'verbose_json' : 'json');
-  form.append('temperature', '0');
-  if (opts.hints) form.append('prompt', opts.hints);
+  // Dựng lại form cho MỖI lần gọi: FormData mang một Blob đã bị đọc hết
+  // sau lần gửi đầu, dùng lại là gửi đi một thân rỗng.
+  const buildForm = (model: string) => {
+    const form = new FormData();
+    // Blob keeps the audio in memory only — never touches disk.
+    form.append('file', new Blob([new Uint8Array(audio)], { type: mimetype || 'audio/webm' }), filename || 'answer.webm');
+    form.append('model', model);
+    form.append('language', opts.language);
+    // `verbose_json` costs nothing extra but carries the per-segment confidence
+    // numbers. Opt-in so the interview keeps its existing lighter response.
+    form.append('response_format', opts.detail ? 'verbose_json' : 'json');
+    form.append('temperature', '0');
+    if (opts.hints) form.append('prompt', opts.hints);
+    return form;
+  };
 
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), Number(process.env.STT_TIMEOUT_MS) || 30_000);
   try {
-    const res = await fetch('https://api.groq.com/openai/v1/audio/transcriptions', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${key}` },
-      body: form,
-      signal: ctrl.signal,
-    });
+    const goi = (model: string) =>
+      fetch('https://api.groq.com/openai/v1/audio/transcriptions', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${key}` },
+        body: buildForm(model),
+        signal: ctrl.signal,
+      });
+
+    let res = await goi(groqModel());
+
+    // 429 = hết hạn mức của RIÊNG model đó. Đổi sang model khác là xong,
+    // không phải đợi hết ngày.
+    const duPhong = groqFallbackModel();
+    if (res.status === 429 && duPhong) {
+      logger.warn(
+        `groq stt het han muc ${groqModel()} (reset ${res.headers.get('x-ratelimit-reset-requests')}), doi sang ${duPhong}`,
+      );
+      res = await goi(duPhong);
+    }
+
     if (!res.ok) {
       const detail = await res.text().catch(() => '');
-      throw new Error(`groq stt HTTP ${res.status} ${detail.slice(0, 120)}`);
+      // Cắt ở 400 chứ không phải 120: đúng chỗ Groq ghi "Limit …, Used …,
+      // Please try again in …" nằm sau ký tự thứ 120, nên bản trước log
+      // ra một dòng lỗi không đủ để biết phải làm gì.
+      throw new Error(`groq stt HTTP ${res.status} ${detail.slice(0, 400)}`);
     }
     const json = (await res.json()) as {
       text?: string;

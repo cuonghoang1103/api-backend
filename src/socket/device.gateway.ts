@@ -648,9 +648,38 @@ interface AuthResult {
   deviceKey: string;
 }
 
-async function authenticateDevice(url: URL): Promise<AuthResult | null> {
-  const key = url.searchParams.get('key');
-  const secret = url.searchParams.get('secret');
+/**
+ * Xác thực thiết bị — ưu tiên HTTP header, chấp nhận query string.
+ *
+ * ⚠️ Query string là chỗ TỆ NHẤT để đặt bí mật, và đây là lỗi thiết kế
+ * của bản đầu. Đường dẫn đầy đủ bị ghi lại ở khắp nơi mà không ai để ý:
+ *
+ *   - nhật ký truy cập của nginx, giữ hàng tháng
+ *   - log gỡ lỗi trên cổng nối tiếp của bo — đã thấy nguyên
+ *     `?key=mk_…&secret=EEUq…` in ra màn hình ngày 11/08/2026
+ *   - lịch sử trình duyệt, tiêu đề Referer, mọi proxy trên đường
+ *
+ * Header thì không nằm trong đường dẫn nên không bị ghi vào các chỗ đó.
+ *
+ * Vì sao VẪN nhận query string: bo đang chạy ngoài đời có thể còn dùng
+ * cách cũ. Cắt phăng là bo mất kết nối, mà mất kết nối thì không OTA
+ * được — tự khoá mình ra ngoài, phải bò ra cắm cáp. Nhận cả hai, ghi
+ * cảnh báo, rồi bỏ hẳn sau khi mọi bo đã lên bản mới.
+ */
+async function authenticateDevice(url: URL, headers?: NodeJS.Dict<string>): Promise<AuthResult | null> {
+  const h = (n: string): string | undefined => {
+    const v = headers?.[n];
+    return Array.isArray(v) ? v[0] : v;
+  };
+
+  const key = h('x-device-key') || url.searchParams.get('key');
+  const secret = h('x-device-secret') || url.searchParams.get('secret');
+
+  if (!h('x-device-key') && url.searchParams.get('key')) {
+    logger.warn('MakerLab: thiết bị còn xác thực qua query string — nâng firmware để chuyển sang header', {
+      key: url.searchParams.get('key'),
+    });
+  }
   if (!key || !secret) return null;
 
   const device = await prisma.makerDevice.findUnique({
@@ -717,7 +746,7 @@ export function initDeviceGateway(httpServer: HttpServer): WebSocketServer {
         // truy vấn nằm chờ chứ không lỗi ngay, và một socket treo vô
         // hạn là thứ tệ nhất để gỡ: bo chỉ thấy "không ai trả lời".
         const auth = await Promise.race([
-          authenticateDevice(url),
+          authenticateDevice(url, req.headers as NodeJS.Dict<string>),
           new Promise<never>((_, rej) =>
             setTimeout(() => rej(new Error('auth timeout 8s')), 8_000).unref?.(),
           ),

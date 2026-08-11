@@ -964,11 +964,23 @@ void setup() {
 #endif
 
   // ── WebSocket ──
-  String path = String(WS_PATH) + "?key=" + DEVICE_KEY + "&secret=" + DEVICE_SECRET;
+  //
+  // Khoá đi trong HEADER, KHÔNG đi trong đường dẫn.
+  //
+  // Bản đầu ghép `?key=…&secret=…` vào đường dẫn, và bí mật đó lộ ra ở
+  // ba chỗ cùng lúc mà không ai để ý: nhật ký nginx (giữ hàng tháng),
+  // log gỡ lỗi trên cổng nối tiếp — ngày 11/08/2026 đã thấy nguyên
+  // `?key=mk_…&secret=EEUq…` in ra màn hình — và mọi proxy trên đường.
+  //
+  // Header thì không nằm trong đường dẫn nên không rơi vào các chỗ đó.
+  // Server vẫn nhận cả hai cách một thời gian, để bo chưa kịp nâng cấp
+  // không bị khoá ra ngoài (mất kết nối = mất luôn đường OTA).
+  ws.setExtraHeaders(
+      (String("X-Device-Key: ") + DEVICE_KEY + "\r\nX-Device-Secret: " + DEVICE_SECRET).c_str());
 #if WS_USE_TLS
-  ws.beginSSL(WS_HOST, WS_PORT, path.c_str());
+  ws.beginSSL(WS_HOST, WS_PORT, WS_PATH);
 #else
-  ws.begin(WS_HOST, WS_PORT, path.c_str());
+  ws.begin(WS_HOST, WS_PORT, WS_PATH);
 #endif
   ws.onEvent(onWsEvent);
   ws.setReconnectInterval(WS_RECONNECT_BASE_MS);

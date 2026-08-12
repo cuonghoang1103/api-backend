@@ -213,28 +213,56 @@ router.get('/tts/:jobId', authenticate, async (req: Request, res: Response) => {
  */
 async function doiSangWav(buf: Buffer): Promise<Buffer> {
   const { spawn } = await import('child_process');
-  return new Promise((resolve, reject) => {
-    const ff = spawn(process.env.FFMPEG_PATH || 'ffmpeg', [
-      '-hide_banner', '-loglevel', 'error',
-      '-i', 'pipe:0',
-      '-ac', '1',
-      '-c:a', 'pcm_s16le',
-      '-f', 'wav',
-      'pipe:1',
-    ]);
-    const ra: Buffer[] = [];
-    const loi: Buffer[] = [];
-    ff.stdout.on('data', (c: Buffer) => ra.push(c));
-    ff.stderr.on('data', (c: Buffer) => loi.push(c));
-    ff.on('error', reject);
-    ff.on('close', () => {
-      const out = Buffer.concat(ra);
-      if (out.length > 44) resolve(out);
-      else reject(new Error(`không đọc được file âm thanh: ${Buffer.concat(loi).toString().slice(0, 200)}`));
+  const { writeFile, readFile, unlink } = await import('fs/promises');
+  const { randomUUID } = await import('crypto');
+
+  // ⚠️ Ghi ra FILE TẠM, KHÔNG ghi ra ống (pipe).
+  //
+  // Khuôn WAV để kích thước RIFF ở byte thứ 4, tức ngay đầu file — mà
+  // ffmpeg chỉ biết kích thước đó sau khi ghi xong. Ghi ra file thì nó
+  // quay lại điền; ghi ra ống thì không quay lại được nên nó điền
+  // 0xFFFFFFFF nghĩa là "chưa biết".
+  //
+  // Đo thật 12/08/2026, cùng một nguồn:
+  //   ghi ra ống   RIFF size = 4294967295
+  //   ghi ra file  RIFF size = 530502
+  //
+  // `libsndfile` bỏ qua được cờ đó — nên bản trước chạy tốt trên VPS.
+  // `torchcodec` (torchaudio 2.11 trở lên, đang chạy ở máy nhà) thì
+  // không: nó giải mã ra ĐÚNG 0 khung và báo "No audio frames were
+  // decoded", một câu không hề nhắc tới header.
+  //
+  // Bài học nằm ở chỗ khác: phép kiểm trước đó của tôi cho ffmpeg ghi
+  // ra FILE, trong khi mã thật ghi ra ỐNG. Kiểm một đường, chạy một
+  // đường — nên nó báo xanh trong khi người dùng vẫn hỏng.
+  const tmp = `/tmp/ref-in-${randomUUID()}`;
+  const ra = `/tmp/ref-out-${randomUUID()}.wav`;
+
+  try {
+    await writeFile(tmp, buf);
+    await new Promise<void>((resolve, reject) => {
+      const ff = spawn(process.env.FFMPEG_PATH || 'ffmpeg', [
+        '-hide_banner', '-loglevel', 'error',
+        '-i', tmp,
+        '-ac', '1',
+        '-c:a', 'pcm_s16le',
+        '-y', ra,
+      ]);
+      const loi: Buffer[] = [];
+      ff.stderr.on('data', (c: Buffer) => loi.push(c));
+      ff.on('error', reject);
+      ff.on('close', (ma) => {
+        if (ma === 0) resolve();
+        else reject(new Error(`không đọc được file âm thanh: ${Buffer.concat(loi).toString().slice(0, 200)}`));
+      });
     });
-    ff.stdin.on('error', () => undefined);   // ffmpeg đóng sớm thì kệ
-    ff.stdin.end(buf);
-  });
+    const wav = await readFile(ra);
+    if (wav.length <= 44) throw new Error('file âm thanh rỗng sau khi đổi định dạng');
+    return wav;
+  } finally {
+    await unlink(tmp).catch(() => undefined);
+    await unlink(ra).catch(() => undefined);
+  }
 }
 
 router.post(

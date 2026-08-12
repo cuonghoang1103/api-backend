@@ -59,6 +59,15 @@ MAX_JOBS_CHO = int(os.environ.get("TTS_MAX_JOBS", "3"))
 
 app = FastAPI(title="Voice CuongMini")
 
+# Bộ điều khiển máy nhà. MẶC ĐỊNH TẮT — không có `MAY_NHA_TOKEN` thì mọi
+# endpoint của nó trả 503. Xem đầu file `dieukhien.py`.
+try:
+    from dieukhien import router as _dk_router
+
+    app.include_router(_dk_router)
+except Exception as _e:  # noqa: BLE001
+    print(f"[tts] khong nap duoc bo dieu khien: {_e}", flush=True)
+
 _tts: Any = None
 _lock = threading.Lock()          # model KHÔNG an toàn đa luồng
 
@@ -225,6 +234,14 @@ def reap_jobs() -> None:
     now = time.time()
     for jid in [k for k, v in _jobs.items() if now - v["at"] > JOB_TTL_SEC]:
         _jobs.pop(jid, None)
+
+
+@app.get("/may/lich-su")
+def may_lich_su():
+    """Chuỗi số liệu 24 giờ cho biểu đồ."""
+    from may import lich_su
+
+    return {"diem": lich_su()}
 
 
 @app.get("/may")

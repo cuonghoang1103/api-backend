@@ -619,25 +619,101 @@ adminRouter.get('/ha-tang', async (_req, res: Response<ApiResponse>, next) => {
 });
 
 /**
- * Khởi động lại một dịch vụ trên máy nhà.
+ * Cầu nối điều khiển máy nhà.
  *
- * CỐ Ý chỉ cho phép ba dịch vụ đã biết tên, không nhận tên tuỳ ý từ
- * client. Nhận tên tự do nghĩa là mở một đường chạy lệnh trên máy CÁ
- * NHÂN của người dùng qua web — không đáng đổi lấy chút tiện.
+ * ⚠️ Đây là đường từ trang admin vào MÁY CÁ NHÂN của người dùng, nên nó
+ * chỉ chuyển tiếp — mọi luật nằm ở phía máy nhà (`dieukhien.py`): danh
+ * sách trắng, không nhận lệnh tự do, mặc định TẮT khi thiếu khoá.
  *
- * ⚠️ CHƯA nối. Đường hầm hiện chỉ chở cổng HTTP của dịch vụ TTS và khoá
- * của nó đặt `command="/bin/false"`, nên từ VPS KHÔNG chạy được lệnh
- * trên máy nhà. Muốn có nút này thật thì phải thêm một endpoint có xác
- * thực ở phía máy nhà — việc riêng, làm sau, và phải bàn kỹ vì nó mở
- * đường điều khiển vào máy cá nhân.
+ * Đặt luật ở đó chứ không ở đây là có chủ ý: máy nhà là bên chịu hậu quả,
+ * nên nó phải tự bảo vệ được kể cả khi VPS bị chiếm. Kiểm ở VPS rồi tin
+ * tưởng là mô hình sai — kẻ chiếm được VPS sẽ bỏ qua đúng chỗ kiểm đó.
  */
-adminRouter.post('/ha-tang/dich-vu/:ten/restart', async (req, res: Response<ApiResponse>) => {
-  res.status(501).json({
-    success: false,
-    message:
-      'Chưa nối. Đường hầm chỉ chở cổng HTTP và khoá đặt command="/bin/false" — ' +
-      'từ VPS không chạy được lệnh trên máy nhà. Cần thêm endpoint có xác thực ở máy nhà.',
+async function goiMayNha(
+  duong: string,
+  init?: RequestInit,
+): Promise<{ ma: number; du: unknown }> {
+  const goc = (process.env.TTS_SERVICE_URL || 'http://tts:8080').replace(/\/+$/, '');
+  const khoa = process.env.MAY_NHA_TOKEN || '';
+  if (!khoa) {
+    return {
+      ma: 503,
+      du: {
+        message:
+          'Chưa bật điều khiển. Cần đặt MAY_NHA_TOKEN giống nhau ở CẢ HAI nơi: ' +
+          '/opt/cuonghoangdev/.env trên VPS và unit tts-vieneu trên máy nhà.',
+      },
+    };
+  }
+  const r = await fetch(`${goc}${duong}`, {
+    ...init,
+    // Khoá đi trong HEADER. URL bị ghi vào log truy cập, log proxy và
+    // lịch sử trình duyệt — khoá nằm trong đó là khoá đã lộ.
+    headers: { ...(init?.headers ?? {}), 'X-Token': khoa },
+    signal: AbortSignal.timeout(30_000),
   });
+  return { ma: r.status, du: await r.json().catch(() => ({})) };
+}
+
+adminRouter.get('/ha-tang/lich-su', async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    const goc = (process.env.TTS_SERVICE_URL || 'http://tts:8080').replace(/\/+$/, '');
+    const r = await fetch(`${goc}/may/lich-su`, { signal: AbortSignal.timeout(10_000) });
+    res.json({ success: true, data: await r.json() });
+  } catch {
+    res.json({ success: true, data: { diem: [] } });
+  }
+});
+
+adminRouter.get('/ha-tang/dk/menu', async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    const { ma, du } = await goiMayNha('/dk/menu');
+    res.status(ma === 200 ? 200 : ma).json({ success: ma === 200, data: du, message: (du as { message?: string; detail?: string })?.message ?? (du as { detail?: string })?.detail });
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.get('/ha-tang/dk/xem/:ten', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { ma, du } = await goiMayNha(`/dk/xem/${encodeURIComponent(String(req.params.ten))}`);
+    res.status(ma === 200 ? 200 : ma).json({ success: ma === 200, data: du, message: (du as { detail?: string })?.detail });
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.get('/ha-tang/dk/log/:ten', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const n = Math.max(20, Math.min(1000, Number(req.query.dong) || 200));
+    const { ma, du } = await goiMayNha(`/dk/log/${encodeURIComponent(String(req.params.ten))}?dong=${n}`);
+    res.status(ma === 200 ? 200 : ma).json({ success: ma === 200, data: du, message: (du as { detail?: string })?.detail });
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.post('/ha-tang/dk/restart/:ten', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const { ma, du } = await goiMayNha(`/dk/restart/${encodeURIComponent(String(req.params.ten))}`, {
+      method: 'POST',
+    });
+    logger.warn('Admin khởi động lại dịch vụ máy nhà', { ten: req.params.ten, ma });
+    res.status(ma === 200 ? 200 : ma).json({ success: ma === 200, data: du, message: (du as { detail?: string })?.detail });
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.post('/ha-tang/dk/reboot', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const xn = encodeURIComponent(String(req.body?.xacNhan ?? ''));
+    const { ma, du } = await goiMayNha(`/dk/reboot?xac_nhan=${xn}`, { method: 'POST' });
+    logger.warn('Admin KHỞI ĐỘNG LẠI máy nhà', { ma });
+    res.status(ma === 200 ? 200 : ma).json({ success: ma === 200, data: du, message: (du as { detail?: string })?.detail });
+  } catch (e) {
+    next(e);
+  }
 });
 
 export { adminRouter };

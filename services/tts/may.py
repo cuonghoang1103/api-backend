@@ -276,6 +276,86 @@ def lich_su_bat_tat() -> Dict[str, Any]:
     return {"tatGanNhat": lan_tat}
 
 
+def mang() -> Dict[str, Any]:
+    """Card mạng, địa chỉ, tổng byte vào/ra.
+
+    Đọc `/proc/net/dev` chứ không gọi `ifconfig`: file này luôn có, còn
+    `ifconfig` thì nhiều bản Linux hiện đại đã bỏ.
+    """
+    ra: Dict[str, Any] = {"ip": [], "card": []}
+    out = _chay(["sh", "-c", "ip -o -4 addr show | awk '{print $2, $4}'"])
+    if out:
+        for d in out.splitlines():
+            p = d.split()
+            if len(p) >= 2 and p[0] != "lo":
+                ra["ip"].append({"card": p[0], "diaChi": p[1]})
+    nd = _doc("/proc/net/dev") or ""
+    for d in nd.splitlines()[2:]:
+        ten, _, so = d.partition(":")
+        ten = ten.strip()
+        if ten == "lo" or not so:
+            continue
+        c = so.split()
+        try:
+            ra["card"].append({"ten": ten, "nhanByte": int(c[0]), "guiByte": int(c[8])})
+        except Exception:
+            pass
+    return ra
+
+
+def o_dia() -> List[Dict[str, Any]]:
+    """Từng phân vùng thật, bỏ các hệ thống file ảo."""
+    out = _chay(["sh", "-c", "df -B1 --output=source,target,size,used,avail -x tmpfs -x devtmpfs -x overlay 2>/dev/null | tail -n +2"])
+    ds = []
+    if out:
+        for d in out.splitlines():
+            p = d.split()
+            if len(p) >= 5 and p[0].startswith("/"):
+                try:
+                    ds.append({
+                        "thietBi": p[0], "gan": p[1],
+                        "tong": int(p[2]), "daDung": int(p[3]), "conTrong": int(p[4]),
+                    })
+                except Exception:
+                    pass
+    return ds
+
+
+# ─── Lịch sử cho biểu đồ ───────────────────────────────────────
+#
+# Giữ trên máy nhà chứ không đẩy về VPS: dữ liệu sinh ở đây, và đẩy đi
+# nghĩa là mất luôn lịch sử mỗi khi mạng nhà rớt. Vòng 24 giờ ở mức 30
+# giây là 2.880 điểm — vài trăm KB, không đáng bận tâm.
+FILE_LS = os.path.expanduser(os.environ.get("FILE_LICH_SU", "~/voice-training/lichsu.json"))
+GIU_GIAY = 24 * 3600
+
+
+def ghi_lich_su(diem: Dict[str, Any]) -> None:
+    import json
+
+    try:
+        ds = json.load(open(FILE_LS)) if os.path.exists(FILE_LS) else []
+    except Exception:
+        ds = []
+    ds.append(diem)
+    moc = time.time() - GIU_GIAY
+    ds = [x for x in ds if x.get("t", 0) > moc]
+    try:
+        with open(FILE_LS, "w") as f:
+            json.dump(ds, f)
+    except Exception:
+        pass
+
+
+def lich_su() -> List[Dict[str, Any]]:
+    import json
+
+    try:
+        return json.load(open(FILE_LS)) if os.path.exists(FILE_LS) else []
+    except Exception:
+        return []
+
+
 def dichVu(ten: List[str]) -> Dict[str, str]:
     """Trạng thái các dịch vụ systemd mức người dùng."""
     ra = {}
@@ -301,6 +381,8 @@ def tat_ca() -> Dict[str, Any]:
         "dien": _cong_suat_hien_tai(c.get("phanTram"), gs[0]["dien"] if gs else None),
         "dienThang": dien_thang(),
         "lichSu": lich_su_bat_tat(),
+        "mang": mang(),
+        "oDia": o_dia(),
         "dichVu": dichVu(["tts-vieneu", "tts-chatterbox", "tunnel-vps"]),
         "luc": time.time(),
     }
@@ -326,6 +408,16 @@ def _vong_do_dien() -> None:
             gs = gpu()
             ct = _cong_suat_hien_tai(cpu().get("phanTram"), gs[0]["dien"] if gs else None)
             gop_dien(ct["tongW"], 30.0)
+            r = ram()
+            ghi_lich_su({
+                "t": round(time.time()),
+                "cpu": cpu().get("phanTram"),
+                "ram": round(100 * r["daDung"] / r["tong"], 1) if r.get("tong") and r.get("daDung") else None,
+                "gpu": gs[0]["phanTram"] if gs else None,
+                "nhietCpu": nhiet().get("cpu"),
+                "nhietGpu": gs[0]["nhiet"] if gs else None,
+                "dienW": ct["tongW"],
+            })
         except Exception:
             pass
         time.sleep(30)

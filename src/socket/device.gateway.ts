@@ -501,7 +501,18 @@ async function handleHello(conn: DeviceConn, msg: Record<string, unknown>): Prom
   if (typeof msg.fw === 'string') data.firmwareVersion = msg.fw.slice(0, 40);
   if (typeof msg.ip === 'string') data.ipAddress = msg.ip.slice(0, 64);
   if (typeof msg.rssi === 'number') data.rssi = Math.trunc(msg.rssi);
+  // Bo KHÔNG khai `battery` ⇒ XOÁ số cũ, đừng giữ lại.
+  //
+  // Đúng lỗi đo được 12/08/2026: firmware 0.2.5 có một bug báo "pin 100%"
+  // trong khi bo đang cắm cáp USB và không có lấy một viên pin. Bug đã
+  // sửa và bo thôi gửi trường đó — nhưng con số 100 vẫn nằm lại trong
+  // cơ sở dữ liệu, và robot vẫn dõng dạc "pin em còn đầy 100 phần trăm"
+  // mỗi khi ai hỏi.
+  //
+  // Một con số cũ trông y hệt một con số mới. Không giữ lại số mà thiết
+  // bị đã thôi báo cáo — thà không biết còn hơn biết sai.
   if (typeof msg.battery === 'number') data.batteryPct = clampPct(msg.battery);
+  else data.batteryPct = null;
 
   // Bo tự khai báo nó phát được định dạng nào. Không nói gì thì coi
   // như mp3 — giữ nguyên hành vi cũ cho mọi thiết bị đã có.

@@ -248,6 +248,7 @@ export default function MakerProjectPage() {
           projectSlug={project.slug}
           isAuthed={isAuthed}
           speechRate={Number(project.persona?.traits?.speechRate) || 1}
+          cheDo={String(project.persona?.traits?.cheDo || 'vi')}
         />
       )}
       {tab === 'persona' && (

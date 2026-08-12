@@ -33,6 +33,7 @@ import { checkHeardSpeech } from './hallucination.js';
 import { PCM_SAMPLE_RATE } from './audio.js';
 import { gatewayKey, gatewayRoot, modelFor } from '../llm/gateway.js';
 import { khopLenhNhanh } from './phanXa.js';
+import { CHE_DO, khopDoiCheDo, type CheDo } from './cheDo.js';
 
 // ─── Conversation memory ───────────────────────────────────
 // Short-term only, in process memory. Long-term recall (pgvector over
@@ -81,6 +82,26 @@ function pushHistory(deviceId: number, ...turns: Turn[]): void {
   }
   h.touchedAt = Date.now();
   histories.set(deviceId, h);
+}
+
+/**
+ * Lưu chế độ tiếng vào `traits.cheDo`.
+ *
+ * Đọc-sửa-ghi thay vì ghi đè cả `traits`: cột đó còn giữ kiến thức huấn
+ * luyện và tốc độ đọc. Ghi đè nguyên khối là xoá sạch phần Huấn luyện —
+ * đúng cái bẫy đã ghi trong `makerLab.service.ts`.
+ */
+async function luuCheDo(projectId: number, cheDo: CheDo): Promise<void> {
+  const row = await prisma.makerPersona.findFirst({
+    where: { projectId },
+    select: { id: true, traits: true },
+  });
+  if (!row) return;
+  const cu = (row.traits as Record<string, unknown> | null) ?? {};
+  await prisma.makerPersona.update({
+    where: { id: row.id },
+    data: { traits: { ...cu, cheDo } },
+  });
 }
 
 export function clearHistory(deviceId: number): void {
@@ -361,7 +382,12 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
     const t0 = Date.now();
     const wav = pcmToWav(input.pcm16);
     const persona0 = await loadPersona(input.projectId);
-    const lang = (persona0.language || 'vi-VN').split('-')[0] || 'vi';
+    // Ngôn ngữ nghe lấy theo CHẾ ĐỘ đang bật, không lấy theo `persona.language`.
+    // Hai thứ đó khác nhau: `language` là cấu hình gốc của persona, còn chế độ
+    // là thứ người dùng vừa đổi bằng giọng nói. Lấy nhầm thì robot nghe tiếng
+    // Anh bằng bộ nhận tiếng Việt — và triệu chứng là "nó nghe không ra", chứ
+    // không phải "sai ngôn ngữ", nên rất khó lần ra.
+    const lang = CHE_DO[persona0.cheDo].stt;
     const tr = await transcribeWithGroq(wav, 'turn.wav', 'audio/wav', {
       language: lang,
       detail: true,
@@ -412,6 +438,35 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
 
   // ── 2. Think ──
   const persona = await loadPersona(input.projectId);
+
+  // ── Đổi chế độ tiếng: xử lý TRƯỚC mọi thứ khác ──
+  //
+  // Phải đứng trước cả lệnh nhanh lẫn LLM, vì câu "nói tiếng Anh đi" mà
+  // rơi vào LLM thì model sẽ TRẢ LỜI về việc nói tiếng Anh thay vì ĐỔI
+  // sang tiếng Anh — nghe rất giống nhau nhưng không có gì thay đổi cả.
+  if (input.speak !== false) {
+    const moi = khopDoiCheDo(heard);
+    if (moi && moi !== persona.cheDo) {
+      await luuCheDo(input.projectId, moi);
+      const cf = CHE_DO[moi];
+      // Đọc câu chào bằng ĐÚNG giọng của chế độ mới — đó là cách người
+      // dùng biết lệnh đã ăn, không cần nhìn màn hình.
+      const spokenDoi = await speakOnce(
+        { ...persona, cheDo: moi, voiceId: cf.giong ?? persona.voiceId },
+        cf.chaoDoi,
+        input.deviceId,
+      );
+      timing.total = Date.now() - started;
+      emitTranscript(input.deviceId, 'bot', cf.chaoDoi);
+      logger.info('MakerLab đổi chế độ tiếng', {
+        deviceId: input.deviceId,
+        tu: persona.cheDo,
+        sang: moi,
+        heard,
+      });
+      return { heard, said: cf.chaoDoi, actions: [], spoken: spokenDoi, ms: timing };
+    }
+  }
 
   // ⚠️ LỆNH ĐƠN GIẢN THÌ ĐỪNG GỌI LLM.
   //
@@ -626,6 +681,11 @@ async function thinkAndSpeak(
   let spoken = false;
   let firstAudioMs = 0;
 
+  // TẦNG MIỆNG: chế độ tiếng Anh dùng giọng riêng của nó. Giọng nhân bản
+  // của chủ là giọng VIỆT — bắt nó đọc tiếng Anh là quay lại đúng lỗi
+  // "file → phi lê" vừa chữa xong, chỉ khác là cả câu đều sai.
+  const giongCheDo = CHE_DO[persona.cheDo].giong ?? persona.voiceId;
+
   const speakPiece = async (piece: string) => {
     if (seq === null) return;
     const t = Date.now();
@@ -644,7 +704,14 @@ async function thinkAndSpeak(
         const { streamCuongMini } = await import('./tts.js');
         const byte = await streamCuongMini(
           piece,
-          { voice: persona.voiceId ?? undefined, speakingRate: persona.speechRate },
+          {
+            voice: giongCheDo ?? undefined,
+            speakingRate: persona.speechRate,
+            // Chế độ tiếng Anh KHÔNG phiên âm: ở đó chính tả gốc mới
+            // đúng, đổi "deploy" thành "đi-pờ-loi" là biến nó thành từ vô
+            // nghĩa với máy đọc tiếng Anh.
+            phienAm: CHE_DO[persona.cheDo].phienAm,
+          },
           async (pcm) => {
             const ok = await gw.speakStreamPushPcm(deviceId, pcm, seq as number);
             if (ok && !firstAudioMs) firstAudioMs = Date.now() - started;

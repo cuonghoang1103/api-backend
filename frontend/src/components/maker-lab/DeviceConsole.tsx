@@ -106,15 +106,47 @@ export function DeviceConsole({
   projectSlug,
   isAuthed,
   speechRate: speechRate0 = 1,
+  cheDo: cheDo0 = 'vi',
 }: {
   projectId: number;
   projectSlug: string;
   isAuthed: boolean;
+  /** Chế độ tiếng đang lưu trong persona. */
+  cheDo?: string;
   /** Tốc độ đọc đang lưu trong persona, để thanh trượt khởi động đúng chỗ. */
   speechRate?: number;
 }) {
   const [rate, setRate] = useState(speechRate0);
   const [savingRate, setSavingRate] = useState(false);
+
+  // ── Chế độ tiếng ──
+  const [cheDo, setCheDo] = useState(cheDo0);
+  const [savingCheDo, setSavingCheDo] = useState(false);
+
+  /**
+   * Đổi chế độ tiếng. Đổi CẢ BA tầng ở phía server (tai nghe, đầu nghĩ,
+   * miệng nói) — ở đây chỉ gửi một chữ.
+   */
+  const doiCheDo = useCallback(
+    async (moi: string) => {
+      if (moi === cheDo || savingCheDo) return;
+      setSavingCheDo(true);
+      const cu = cheDo;
+      setCheDo(moi);
+      try {
+        await updatePersona(projectId, { cheDo: moi });
+        toast.success(
+          moi === 'vi' ? 'Robot nói tiếng Việt' : moi === 'en' ? 'Robot speaks English' : 'Giọng robot',
+        );
+      } catch {
+        setCheDo(cu); // trả lại trạng thái cũ, đừng để nút nói dối
+        toast.error('Không đổi được chế độ tiếng');
+      } finally {
+        setSavingCheDo(false);
+      }
+    },
+    [cheDo, projectId, savingCheDo],
+  );
 
   /**
    * Chỉ lưu khi NHẢ chuột, không lưu theo từng bước kéo.
@@ -516,6 +548,46 @@ export function DeviceConsole({
                   tổng hợp trên server, bo chỉ phát ra thứ nó nhận
                   được. Gửi lệnh xuống bo thì không có gì bên đó chỉnh
                   được cả. */}
+              <div className="mt-4">
+                <label
+                  className="mb-1.5 block text-sm font-medium"
+                  style={{ color: 'var(--text-primary)' }}
+                >
+                  Chế độ tiếng
+                </label>
+                <div className="flex gap-1.5">
+                  {[
+                    { id: 'vi', nhan: '🇻🇳 Tiếng Việt' },
+                    { id: 'en', nhan: '🇬🇧 English' },
+                    { id: 'robot', nhan: '🤖 Robot' },
+                  ].map((c) => (
+                    <button
+                      key={c.id}
+                      type="button"
+                      onClick={() => void doiCheDo(c.id)}
+                      disabled={savingCheDo}
+                      className="flex-1 rounded-lg border px-2 py-2 text-xs font-medium transition disabled:opacity-50"
+                      style={{
+                        borderColor:
+                          cheDo === c.id ? 'var(--accent, #6366f1)' : 'var(--border-color)',
+                        background:
+                          cheDo === c.id
+                            ? 'color-mix(in srgb, var(--accent, #6366f1) 14%, transparent)'
+                            : 'var(--bg-secondary)',
+                        color: cheDo === c.id ? 'var(--accent, #6366f1)' : 'var(--text-secondary)',
+                      }}
+                    >
+                      {c.nhan}
+                    </button>
+                  ))}
+                </div>
+                <p className="mt-1.5 text-[11px]" style={{ color: 'var(--text-muted)' }}>
+                  Đổi được cả bằng giọng nói: &ldquo;nói tiếng Anh đi&rdquo;, &ldquo;nói giọng
+                  robot&rdquo;, &ldquo;nói tiếng Việt&rdquo;. Robot đáp lại ngay bằng thứ tiếng mới
+                  để bạn biết lệnh đã ăn.
+                </p>
+              </div>
+
               <div className="mt-4">
                 <div className="mb-2 flex items-center justify-between">
                   <p className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>

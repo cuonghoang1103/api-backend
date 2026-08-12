@@ -121,7 +121,8 @@ const TTS_TTFB_MS = Number(process.env.MAKERLAB_TTS_TTFB_MS) || 8_000;
  * Tắt được bằng `MAKERLAB_PHIEN_AM=false` — nếu một ngày mô hình tự đọc
  * chữ Latin đúng thì đây là thứ nên tắt trước, chứ không phải gỡ mã.
  */
-function doiChuNgoaiLai(text: string): string {
+function doiChuNgoaiLai(text: string, bat = true): string {
+  if (!bat) return text;
   if (process.env.MAKERLAB_PHIEN_AM === 'false') return text;
   const ra = phienAmSangViet(text);
   if (ra !== text) logger.debug('MakerLab phiên âm', { truoc: text.slice(0, 90), sau: ra.slice(0, 90) });
@@ -317,7 +318,7 @@ const TTS_SR = 16_000;
 
 export async function streamCuongMini(
   text: string,
-  opts: { voice?: string; speakingRate?: number },
+  opts: { voice?: string; speakingRate?: number; phienAm?: boolean },
   onChunk: (pcm: Buffer) => Promise<boolean>,
 ): Promise<number> {
   // ⚠️ CANH BYTE ĐẦU TIÊN, đừng canh tổng thời gian.
@@ -344,7 +345,11 @@ export async function streamCuongMini(
     res = await fetch(`${cuongMiniRoot()}/tts-stream`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: doiChuNgoaiLai(text), voice: opts.voice || undefined, style: 'tu_nhien' }),
+      body: JSON.stringify({
+        text: doiChuNgoaiLai(text, opts.phienAm !== false),
+        voice: opts.voice || undefined,
+        style: 'tu_nhien',
+      }),
       signal: huy.signal,
     });
   } catch (e) {

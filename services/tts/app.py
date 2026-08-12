@@ -172,6 +172,49 @@ def engine():
     return _tts
 
 
+# ─── Máy đọc TIẾNG ANH — chuyển tiếp sang tiến trình riêng ─────
+#
+# Chatterbox chạy ở `chatterbox_en.py`, cổng 8091, venv RIÊNG. Ở đây chỉ
+# chuyển tiếp qua loopback.
+#
+# Vì sao không `import chatterbox` thẳng vào đây cho gọn: hai thư viện
+# ghim hai bộ phụ thuộc khác nhau (Chatterbox đòi transformers 5.2.0,
+# VieNeu ghim bản riêng, cả hai cùng kéo torch). Gộp venv là đánh cược
+# rằng pip hoà giải được — hoà giải hỏng thì mất luôn GIỌNG TIẾNG VIỆT
+# đang chạy tốt, để đổi lấy một giọng mới. Tách ra thì hỏng bên nào chỉ
+# mất bên đó.
+#
+# Vì sao vẫn nằm sau cổng 8090: đường hầm về VPS chỉ chở những cổng ghi
+# trong `permitlisten`, sửa nó cần người dùng chạy tay. Chuyển tiếp qua
+# loopback thì thêm máy đọc mà không đụng gì tới mạng.
+CHATTERBOX_URL = os.environ.get("CHATTERBOX_URL", "http://127.0.0.1:8091")
+CHATTERBOX_BAT = os.environ.get("CHATTERBOX_ENABLED", "true").lower() == "true"
+
+GIONG_ANH = {
+    "en-default": "English — giọng mặc định",
+    "en-cham": "English — nói chậm, rõ",
+    "en-bieu-cam": "English — nhiều biểu cảm",
+}
+
+
+def la_giong_anh(voice: Optional[str]) -> bool:
+    return bool(voice) and str(voice) in GIONG_ANH
+
+
+def doc_tieng_anh(text: str, voice: str) -> bytes:
+    """Gọi sang tiến trình Chatterbox. Trả PCM 16 kHz."""
+    import urllib.request
+    import json as _json
+
+    yc = urllib.request.Request(
+        f"{CHATTERBOX_URL}/en",
+        data=_json.dumps({"text": text, "voice": voice}).encode(),
+        headers={"Content-Type": "application/json"},
+    )
+    with urllib.request.urlopen(yc, timeout=180) as r:
+        return r.read()
+
+
 def to_wav(audio: np.ndarray, sr: int) -> bytes:
     buf = io.BytesIO()
     sf.write(buf, np.asarray(audio, dtype=np.float32), sr, format="WAV", subtype="PCM_16")
@@ -213,12 +256,19 @@ GIONG_GOC = frozenset({
 @app.get("/voices")
 def voices():
     t = engine()
-    return {
-        "voices": [
-            {"id": vid, "label": label, "custom": vid not in GIONG_GOC}
-            for label, vid in t.list_preset_voices()
+    ds = [
+        {"id": vid, "label": label, "custom": vid not in GIONG_GOC, "lang": "vi"}
+        for label, vid in t.list_preset_voices()
+    ]
+    # Giọng tiếng Anh gộp vào CÙNG danh sách, có nhãn `lang` để phía web
+    # tách nhóm. Trả về hai danh sách riêng thì mọi chỗ gọi đều phải nhớ
+    # hỏi cả hai — và chỗ nào quên thì im lặng thiếu giọng.
+    if CHATTERBOX_BAT:
+        ds += [
+            {"id": k, "label": v, "custom": False, "lang": "en"}
+            for k, v in GIONG_ANH.items()
         ]
-    }
+    return {"voices": ds}
 
 
 def run_job(jid: str, text: str, voice: Optional[str], style: str) -> None:
@@ -527,16 +577,27 @@ def remove_voice(name: str):
 BO_SR = 16_000
 
 
-def _ve_16k(x: np.ndarray) -> bytes:
-    """float [-1,1] ở _sr → PCM 16-bit LE mono 16 kHz."""
+def _ve_16k_tu(x: np.ndarray, sr: int) -> bytes:
+    """float [-1,1] ở `sr` bất kỳ → PCM 16-bit LE mono 16 kHz.
+
+    ⚠️ PHẢI truyền `sr` thật của máy đọc, đừng dùng biến `_sr` toàn cục.
+    VieNeu chạy 48 kHz còn Chatterbox chạy tần số khác; lấy nhầm thì
+    KHÔNG có lỗi nào cả — chỉ có giọng ra sai tốc độ và sai cao độ, và
+    người nghe tưởng model hỏng chứ không nghĩ tới phép đổi mẫu.
+    """
     x = np.asarray(x, dtype=np.float32).squeeze()
     if x.ndim > 1:
         x = x.mean(axis=1)
-    if _sr != BO_SR:
+    if sr != BO_SR:
         import librosa
-        x = librosa.resample(x, orig_sr=_sr, target_sr=BO_SR, res_type="soxr_hq")
+        x = librosa.resample(x, orig_sr=sr, target_sr=BO_SR, res_type="soxr_hq")
     x = np.clip(x, -1.0, 1.0)
     return (x * 32767.0).astype("<i2").tobytes()
+
+
+def _ve_16k(x: np.ndarray) -> bytes:
+    """Bản tiện dụng cho VieNeu — dùng `_sr` toàn cục của nó."""
+    return _ve_16k_tu(x, _sr)
 
 
 @app.post("/tts-stream")
@@ -549,6 +610,30 @@ def tts_stream(payload: Dict[str, Any]):
 
     voice = payload.get("voice") or None
     style = str(payload.get("style") or "tu_nhien")
+
+    if la_giong_anh(voice):
+        if not CHATTERBOX_BAT:
+            raise HTTPException(503, "Máy đọc tiếng Anh đang tắt (CHATTERBOX_ENABLED=false)")
+
+        def sinh_anh():
+            t0 = time.time()
+            try:
+                b = doc_tieng_anh(text, str(voice))
+            except Exception as e:
+                print(f"[tts] máy đọc tiếng Anh hỏng: {e}", flush=True)
+                return
+            print(f"[tts] Anh: {len(b)/2/BO_SR:.2f}s tiếng trong {time.time()-t0:.2f}s", flush=True)
+            # Chatterbox KHÔNG sinh theo luồng — nó trả cả đoạn một lúc.
+            # Vẫn cắt nhỏ khi gửi để phía Node bơm xuống bo đều đặn thay vì
+            # dội một khối lớn làm tràn vòng đệm.
+            for i in range(0, len(b), 8192):
+                yield b[i : i + 8192]
+
+        return StreamingResponse(
+            sinh_anh(),
+            media_type="application/octet-stream",
+            headers={"X-Sample-Rate": str(BO_SR), "X-Format": "pcm_s16le_mono", "X-Engine": "chatterbox"},
+        )
 
     def sinh():
         t = engine()

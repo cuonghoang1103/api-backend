@@ -1,3 +1,4 @@
+import { CHE_DO, laCheDo, type CheDo } from './cheDo.js';
 /**
  * ============================================================
  * Maker Lab — Persona
@@ -55,6 +56,8 @@ export interface PersonaConfig {
    * JSON sẵn có và đang giữ `knowledge`.
    */
   speechRate: number;
+  /** Chế độ tiếng đang bật: vi | en | robot. */
+  cheDo: CheDo;
 }
 
 /** Kẹp tốc độ đọc về dải Google chấp nhận; ngoài dải là API trả 400. */
@@ -139,6 +142,7 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
       wakeWord: null,
       knowledge: [],
       speechRate: 1,
+      cheDo: 'vi',
       // 0.9 chứ không 0.8: chém gió cần chỗ để đi chệch. Nhiệt độ thấp
       // cho ra những câu đùa an toàn nhất, tức là những câu nhạt nhất.
       temperature: 0.9,
@@ -162,6 +166,12 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
     maxTokens: row.maxTokens,
     knowledge: normalizeKnowledge((row.traits as { knowledge?: unknown } | null)?.knowledge),
     speechRate: normalizeSpeechRate((row.traits as { speechRate?: unknown } | null)?.speechRate),
+    // Chế độ tiếng nằm cùng chỗ với tốc độ đọc — cột JSON có sẵn, khỏi
+    // migration, và sống sót qua restart. Để trong bộ nhớ tiến trình thì
+    // mỗi lần deploy robot lại quay về tiếng Việt mà không ai hiểu vì sao.
+    cheDo: laCheDo((row.traits as { cheDo?: unknown } | null)?.cheDo)
+      ? ((row.traits as { cheDo: CheDo }).cheDo)
+      : 'vi',
   };
 }
 
@@ -301,6 +311,13 @@ export function buildSystemPrompt(
 
   return [
     persona.systemPrompt,
+    // ⚠️ NHẮC NGÔN NGỮ ĐẶT NGAY SAU tính cách, TRƯỚC mọi thứ khác.
+    //
+    // Đặt ở cuối prompt thì model đã đọc xong cả đoạn tiếng Việt mô tả
+    // tính cách rồi mới gặp lệnh "reply in English" — và nó hay bỏ qua,
+    // trả lời tiếng Việt như thường. Triệu chứng khó chịu ở chỗ nó KHÔNG
+    // sai hẳn: robot nghe tiếng Anh, hiểu đúng, rồi đáp bằng tiếng Việt.
+    `\n${CHE_DO[persona.cheDo].nhacLlm}`,
     traitLines ? `\nThang tính cách hiện tại:\n${traitLines}` : '',
     known,
     state.length ? `\nTrạng thái lúc này:\n${state.map((s) => `- ${s}`).join('\n')}` : '',

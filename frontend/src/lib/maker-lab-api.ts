@@ -161,6 +161,8 @@ export interface PersonaPayload {
    * nguyên khối, nên gửi kèm sẽ xoá mất phần Huấn luyện.
    */
   speechRate?: number;
+  /** Chế độ tiếng: 'vi' | 'en' | 'robot'. Đổi được cả từ web lẫn bằng giọng nói. */
+  cheDo?: string;
 }
 
 /**

@@ -320,13 +320,19 @@ export async function upsertPersona(
      * mất dữ liệu.
      */
     speechRate?: number;
+    cheDo?: string;
   },
 ) {
   const { DEFAULT_PERSONA_PROMPT } = await import('./persona.js');
 
-  // Hoà `speechRate` vào traits đang có, giữ nguyên mọi khoá khác.
+  // Hoà `speechRate` và `cheDo` vào traits đang có, giữ nguyên mọi khoá
+  // khác — cột này còn chứa phần Huấn luyện, ghi đè nguyên khối là xoá sạch.
+  const coRate = typeof data.speechRate === 'number' && Number.isFinite(data.speechRate);
+  const { laCheDo } = await import('./cheDo.js');
+  const coCheDo = laCheDo(data.cheDo);
+
   let traitsMerged = (data.traits ?? undefined) as Prisma.InputJsonValue | undefined;
-  if (typeof data.speechRate === 'number' && Number.isFinite(data.speechRate)) {
+  if (coRate || coCheDo) {
     const cur = await prisma.makerPersona.findUnique({
       where: { projectId },
       select: { traits: true },
@@ -334,7 +340,8 @@ export async function upsertPersona(
     const base = ((data.traits ?? cur?.traits ?? {}) as Record<string, unknown>) ?? {};
     traitsMerged = {
       ...base,
-      speechRate: Math.max(0.25, Math.min(4, data.speechRate)),
+      ...(coRate ? { speechRate: Math.max(0.25, Math.min(4, data.speechRate as number)) } : {}),
+      ...(coCheDo ? { cheDo: data.cheDo } : {}),
     } as Prisma.InputJsonValue;
   }
   const clean = {

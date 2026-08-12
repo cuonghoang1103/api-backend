@@ -406,12 +406,20 @@ def _vong_do_dien() -> None:
     while True:
         try:
             gs = gpu()
-            ct = _cong_suat_hien_tai(cpu().get("phanTram"), gs[0]["dien"] if gs else None)
+            # ⚠️ GỌI `cpu()` ĐÚNG MỘT LẦN rồi dùng lại.
+            #
+            # Hàm đó tính %% bằng HIỆU giữa hai lần đọc `/proc/stat`. Gọi
+            # hai lần liên tiếp thì lần thứ hai cách lần đầu vài micro
+            # giây, hiệu bằng 0, và nó trả `None`. Bản đầu gọi hai lần nên
+            # MỌI điểm trong biểu đồ đều rỗng cột CPU — biểu đồ vẫn vẽ,
+            # vẫn có đường khác, nên nhìn qua tưởng chạy tốt.
+            c = cpu()
+            ct = _cong_suat_hien_tai(c.get("phanTram"), gs[0]["dien"] if gs else None)
             gop_dien(ct["tongW"], 30.0)
             r = ram()
             ghi_lich_su({
                 "t": round(time.time()),
-                "cpu": cpu().get("phanTram"),
+                "cpu": c.get("phanTram"),
                 "ram": round(100 * r["daDung"] / r["tong"], 1) if r.get("tong") and r.get("daDung") else None,
                 "gpu": gs[0]["phanTram"] if gs else None,
                 "nhietCpu": nhiet().get("cpu"),

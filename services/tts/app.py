@@ -74,9 +74,23 @@ def engine():
                 from vieneu import Vieneu
 
                 t0 = time.time()
-                # backend="onnx" là đường CPU int8 — đúng bản đã đo.
-                # Bản PyTorch chỉ nhanh hơn khi có GPU, mà VPS không có.
-                _tts = Vieneu(backend="onnx")
+                # Mặc định "onnx" = đường CPU int8, đúng bản đã đo trên
+                # VPS (RTF 2,11). VPS không có GPU nên đây là lựa chọn duy
+                # nhất ở đó.
+                #
+                # Nhưng cùng file này còn chạy trên máy để bàn ở nhà, nơi
+                # có RTX 3060. Đo ngày 12/08/2026 trên đúng máy đó:
+                #
+                #   ONNX/CPU     RTF 0,251
+                #   PyTorch/GPU  RTF 0,188
+                #
+                # Nên mở ra bằng biến môi trường thay vì chốt cứng — cùng
+                # một mã chạy được cả hai chỗ, và chỗ nào nhanh thì nói ra
+                # bằng cấu hình chứ không phải bằng một nhánh mã riêng.
+                _tts = Vieneu(
+                    backend=os.environ.get("VIENEU_BACKEND", "onnx"),
+                    device=os.environ.get("VIENEU_DEVICE", "auto"),
+                )
                 _sr = int(getattr(_tts, "sample_rate", 48_000) or 48_000)
                 if VOICES_FILE.exists():
                     try:

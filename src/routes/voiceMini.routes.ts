@@ -54,6 +54,9 @@ const refUpload = multer({
   },
 });
 
+// Cùng một địa chỉ với nhà cung cấp `cuongmini` của robot — xem ghi chú
+// ở `cuongMiniRoot()` trong makerlab/tts.ts. Giọng nhân bản phải nằm ở
+// ĐÚNG MỘT chỗ, nếu không web và robot sẽ nhìn thấy hai danh sách khác nhau.
 const TTS_BASE = (process.env.TTS_SERVICE_URL || 'http://tts:8080').replace(/\/+$/, '');
 const MAX_CHARS = Number(process.env.VOICE_MINI_MAX_CHARS) || 5000;
 

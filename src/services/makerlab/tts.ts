@@ -115,7 +115,8 @@ function envProvider(): TtsProvider {
     p === 'fptai' ||
     p === 'openai' ||
     p === 'elevenlabs' ||
-    p === 'edge'
+    p === 'edge' ||
+    p === 'cuongmini'
   )
     return p;
   return 'google';
@@ -144,7 +145,14 @@ export async function synthesizeSpeech(text: string, opts: TtsOptions = {}): Pro
     if (!providerConfigured(provider)) continue;
     try {
       const audio = await withTimeout(runProvider(provider, clean, opts), TTS_TIMEOUT_MS);
-      if (audio.length > 0) return { audio, mime: 'audio/mpeg', provider };
+      if (audio.length > 0) {
+        // Ghi ĐÚNG kiểu: dịch vụ tự dựng trả WAV, mọi nhà cung cấp còn
+        // lại trả MP3. Hiện ffmpeg vẫn tự ngửi ra định dạng nên sai nhãn
+        // cũng chạy, nhưng nhãn sai là quả mìn hẹn giờ cho bất kỳ chỗ
+        // nào sau này tin vào nó thay vì tự ngửi.
+        const mime = provider === 'cuongmini' ? 'audio/wav' : 'audio/mpeg';
+        return { audio, mime, provider };
+      }
     } catch (err) {
       lastErr = err;
       logger.warn('MakerLab TTS provider failed, trying next', {
@@ -161,7 +169,13 @@ export async function synthesizeSpeech(text: string, opts: TtsOptions = {}): Pro
 
 /** Địa chỉ dịch vụ TTS tự dựng. Trong docker network nó là `tts`. */
 function cuongMiniRoot(): string {
-  return (process.env.MAKERLAB_TTS_LOCAL_URL || 'http://tts:8080').replace(/\/+$/, '');
+  // ⚠️ DÙNG CHUNG biến với trang /voice-mini (`TTS_SERVICE_URL` trong
+  // voiceMini.routes.ts). Hai chỗ trỏ vào hai dịch vụ khác nhau là một
+  // cái bẫy im lặng: người dùng nhân bản giọng trên web, giọng đó nằm ở
+  // dịch vụ A, còn robot đọc bằng dịch vụ B — nên robot báo "không có
+  // giọng đó" trong khi web hiện nó rành rành.
+  return (process.env.TTS_SERVICE_URL || process.env.MAKERLAB_TTS_LOCAL_URL || 'http://tts:8080')
+    .replace(/\/+$/, '');
 }
 
 /**
@@ -195,7 +209,15 @@ async function synthesizeCuongMini(
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ text, voice: voice || undefined, style: 'tu_nhien' }),
-    signal: AbortSignal.timeout(20_000),
+    // 4 giây, không phải 20. Đây là chốt PHÁT HIỆN HỎNG, không phải
+    // chốt chờ việc: nếu máy ở nhà tắt hoặc đường hầm đứt thì cổng bên
+    // VPS biến mất và lời gọi này bị từ chối tức thì. Nhưng nếu máy còn
+    // sống mà treo, không có trần ngắn thì cả lượt nói của robot đứng
+    // im 20 giây rồi mới rơi về Google — người dùng đọc cái đó thành
+    // "robot hỏng", chứ không đọc thành "máy ở nhà đang tắt".
+    //
+    // Trần chờ SINH TIẾNG nằm ở vòng hỏi lại phía dưới, dài hơn nhiều.
+    signal: AbortSignal.timeout(4_000),
   });
   if (!nhan.ok) {
     throw new Error(`cuongmini nhận việc hỏng HTTP ${nhan.status} ${(await nhan.text()).slice(0, 200)}`);
@@ -257,6 +279,11 @@ function providerConfigured(p: TtsProvider): boolean {
   if (p === 'elevenlabs') return !!process.env.ELEVENLABS_API_KEY;
   // Edge needs its client token supplied; unset means skip it.
   if (p === 'edge') return !!edgeToken();
+  // cuongmini: luôn coi là "có cấu hình" — địa chỉ mặc định trỏ vào
+  // dịch vụ TTS trên chính VPS, nên nó không bao giờ là chỗ chết. Có
+  // đường hầm thì biến môi trường trỏ về máy nhà; không có thì vẫn chạy
+  // được, chỉ chậm hơn.
+  if (p === 'cuongmini') return true;
   return true; // google needs no credentials
 }
 

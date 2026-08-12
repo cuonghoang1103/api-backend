@@ -622,6 +622,25 @@ static void pumpPlayback() {
     // lặp chữ lấy lỗi nuốt chữ, tệ ngang nhau. Ghi dần thì im lặng chỉ
     // thế chỗ những khối đã phát xong.
     if (have < 2) {
+      // ⚠️⚠️ MỘT BYTE LẺ LÀ KẸT VĨNH VIỄN, VÀ KHÔNG BỘ ĐẾM NÀO THẤY.
+      //
+      // Mẫu tiếng là 16-bit nên `readPos` chỉ tăng theo bội số 2. Đệm
+      // còn lẻ đúng 1 byte thì: vòng này thoát ngay (`have < 2`), mà
+      // chỗ đổ đầy vòng DMA ở cuối hàm lại đòi `buffered() == 0` — nên
+      // KHÔNG chỗ nào chạy, và byte lẻ đó không bao giờ tiêu được.
+      // DMA hết dữ liệu, quay vòng phát lại 512 ms cũ: đúng tiếng "lặp
+      // một hai ba từ".
+      //
+      // Tệ nhất là bộ đếm `underruns` cũng gác ở `buffered() == 0` nên
+      // nó ghi `hut dem 0 lan` — log sạch bong trong khi tai nghe rõ
+      // tiếng lặp. Suốt mấy vòng sửa tôi đọc đúng cái log đó rồi kết
+      // luận "không đói đệm". Xem [[feedback_error_counter_must_reach_the_log_you_read]].
+      //
+      // Mẩu tiếng đi qua mạng bị cắt ở đâu là chuyện của tầng dưới, nên
+      // đừng mong nó luôn chẵn — vứt nửa mẫu lẻ đi. 1/32000 giây, không
+      // tai nào nghe ra.
+      if (have == 1) readPos++;
+
       if (!playEnded) {
         memset(stereoBlock, 0, AUDIO_BLOCK_SAMPLES * 2 * sizeof(int16_t));
         for (int k = 0; k < SPK_DMA_COUNT + 2; k++) {
@@ -670,7 +689,11 @@ static void pumpPlayback() {
   // Bơm số 0 thì khoảng nghỉ thành im lặng sạch — vẫn là khoảng nghỉ,
   // nhưng tai người bỏ qua một quãng lặng dễ hơn nhiều so với một mẩu
   // tiếng lặp lại.
-  if (buffered() == 0 && !playEnded) {
+  // `< 2` chứ KHÔNG phải `== 0`: còn lẻ 1 byte thì cũng là hết tiếng để
+  // phát (mẫu 16-bit cần 2 byte), nhưng `== 0` bỏ sót đúng ca đó — và
+  // đó là ca gây tiếng lặp mà log vẫn báo sạch. Bộ đếm phải thấy được
+  // thứ người dùng nghe thấy, nếu không nó chỉ làm mình yên tâm nhầm.
+  if (buffered() < 2 && !playEnded) {
     if (!underrunSince) {
       underrunSince = millis();
       underruns++;

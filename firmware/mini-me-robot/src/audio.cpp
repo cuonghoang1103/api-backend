@@ -51,6 +51,15 @@ static uint32_t playDroppedBytes = 0;
 static bool playEnded = false;
 
 /**
+ * Số khối trong vòng đệm DMA của loa.
+ *
+ * Đặt tên thay vì viết 16 ở hai chỗ: đoạn đổ im lặng lúc đói đệm PHẢI
+ * ghi đủ cả vòng, nên nó cần đúng con số này. Hai chỗ lệch nhau thì lỗi
+ * quay lại y hệt mà nhìn mã vẫn thấy "đã vá rồi".
+ */
+static constexpr int SPK_DMA_COUNT = 16;
+
+/**
  * Mốc bắt đầu GOM. Nếu gom mãi mà không đủ ngưỡng phát thì phải tự gỡ
  * kẹt — nguồn có thể đã chết giữa chừng (tải nhạc hỏng, mạng đứt), và
  * ngồi đợi vĩnh viễn nghĩa là robot câm cho tới lúc reset.
@@ -376,7 +385,7 @@ static bool ampInit() {
   // chưa đủ dài để tai nhận ra độ trễ.
   //
   // Giá: 32 KB RAM trong. Bo còn 190 KB khối liền mạch, thừa sức.
-  cfg.dma_buf_count = 16;
+  cfg.dma_buf_count = SPK_DMA_COUNT;
   cfg.dma_buf_len = 512;
   cfg.use_apll = false;
 
@@ -595,11 +604,32 @@ static void pumpPlayback() {
     //
     // Không chữa được nguyên nhân (mẩu tiếng sau chưa kịp về), nhưng
     // nguyên nhân thì nằm ở tốc độ máy chủ, còn cái này nằm ở đây.
+    // ⚠️⚠️ PHẢI ĐỔ ĐẦY CẢ VÒNG DMA, KHÔNG PHẢI MỘT KHỐI.
+    //
+    // Bản vá đầu (12/08, `0.5.0-imlang`) ghi đúng MỘT khối im lặng rồi
+    // `break` — và người dùng vẫn nghe lặp y như cũ. Lý do: đệm DMA của
+    // I2S là một VÒNG `SPK_DMA_COUNT` khối. Ghi một khối chỉ thay được
+    // 1 trong 16 chỗ; 15 khối kia vẫn giữ tiếng cũ, và DMA quay vòng
+    // phát lại chúng. 16 × 512 mẫu ở 16 kHz = 512 ms — đúng bằng "một
+    // hai ba từ" lặp đi lặp lại mà tai nghe thấy.
+    //
+    // Nên phải ghi tới khi phần cứng không nhận nữa (`w == 0`), giống
+    // hệt cách vòng chính ở trên đẩy tiếng thật.
+    //
+    // KHÔNG dùng `i2s_zero_dma_buffer()` ở đây dù nó xoá sạch vòng chỉ
+    // bằng một lệnh: lúc này DMA vẫn đang giữ tới 512 ms tiếng THẬT
+    // chưa kịp phát ra loa. Xoá sạch là cắt cụt giữa chừng — đổi lỗi
+    // lặp chữ lấy lỗi nuốt chữ, tệ ngang nhau. Ghi dần thì im lặng chỉ
+    // thế chỗ những khối đã phát xong.
     if (have < 2) {
       if (!playEnded) {
         memset(stereoBlock, 0, AUDIO_BLOCK_SAMPLES * 2 * sizeof(int16_t));
-        size_t w = 0;
-        i2s_write(I2S_NUM_1, stereoBlock, AUDIO_BLOCK_SAMPLES * 2 * sizeof(int16_t), &w, 0);
+        for (int k = 0; k < SPK_DMA_COUNT + 2; k++) {
+          size_t w = 0;
+          i2s_write(I2S_NUM_1, stereoBlock,
+                    AUDIO_BLOCK_SAMPLES * 2 * sizeof(int16_t), &w, 0);
+          if (w == 0) break;   // vòng DMA đã no — để phần cứng phát nốt
+        }
       }
       break;
     }

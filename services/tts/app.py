@@ -43,7 +43,7 @@ from typing import Any, Dict, Optional
 import numpy as np
 import soundfile as sf
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import JSONResponse, Response, StreamingResponse
 
 VOICES_FILE = Path(os.environ.get("VIENEU_VOICES_FILE", "/models/voices.json"))
 MAX_CHARS = int(os.environ.get("TTS_MAX_CHARS", "5000"))
@@ -242,3 +242,73 @@ def remove_voice(name: str):
         t.remove_voice(name)
         t.save_voices(str(VOICES_FILE))
     return {"ok": True}
+
+# ─── Đường LUỒNG: đọc tới đâu gửi tới đó ──────────────────────
+#
+# Đường `/tts` cũ là "nhận việc → hỏi lại": bên gọi phải đợi sinh XONG cả
+# đoạn rồi mới nhận được byte đầu tiên. Với robot đang nói thì đó là một
+# khoảng trống chết người — đo ngày 12/08/2026: sinh một mẩu 14 giây tiếng
+# mất 3,5 giây, và suốt 3,5 giây ấy bo không nhận thêm gì. Đệm của bo cạn,
+# DMA lặp lại mẩu cũ, người nghe thành "nói lắp lặp hai từ".
+#
+# Mọi cách vá quanh nó — tăng đệm, gom câu ngắn hơn, đổ im lặng — chỉ nới
+# rộng chỗ đệm quanh cái khoảng trống, không xoá được nó.
+#
+# `infer_stream()` sinh từng mẩu nhỏ và trả ra ngay. Tiếng bắt đầu chảy
+# sau ~0,3 giây và chảy liên tục tới hết. Khoảng trống biến mất hẳn, vì
+# RTF 0,19 nghĩa là sinh nhanh gấp năm lần nghe — chỉ cần đừng bắt nó đợi.
+#
+# ⚠️ Trả về PCM THÔ 16 kHz, KHÔNG phải WAV.
+#   - không header ⇒ không cần biết trước độ dài (chính thứ khiến khuôn
+#     WAV không stream được, xem chuyện RIFF size 0xFFFFFFFF hôm qua)
+#   - đổi mẫu ngay tại đây ⇒ phía Node chuyển tiếp byte thẳng xuống bo,
+#     không phải gọi ffmpeg trong đường nóng nữa
+
+BO_SR = 16_000
+
+
+def _ve_16k(x: np.ndarray) -> bytes:
+    """float [-1,1] ở _sr → PCM 16-bit LE mono 16 kHz."""
+    x = np.asarray(x, dtype=np.float32).squeeze()
+    if x.ndim > 1:
+        x = x.mean(axis=1)
+    if _sr != BO_SR:
+        import librosa
+        x = librosa.resample(x, orig_sr=_sr, target_sr=BO_SR, res_type="soxr_hq")
+    x = np.clip(x, -1.0, 1.0)
+    return (x * 32767.0).astype("<i2").tobytes()
+
+
+@app.post("/tts-stream")
+def tts_stream(payload: Dict[str, Any]):
+    text = str(payload.get("text") or "").strip()
+    if not text:
+        raise HTTPException(400, "Thiếu văn bản")
+    if len(text) > MAX_CHARS:
+        raise HTTPException(400, f"Quá {MAX_CHARS} ký tự (đang {len(text)})")
+
+    voice = payload.get("voice") or None
+    style = str(payload.get("style") or "tu_nhien")
+
+    def sinh():
+        t = engine()
+        # ⚠️ Giữ khoá suốt cả luồng. Model này KHÔNG chạy song song được,
+        # và hai lượt chồng nhau thì cả hai ra tiếng lẫn lộn — tệ hơn hẳn
+        # so với lượt sau phải đợi.
+        with _lock:
+            t0 = time.time()
+            tong = 0
+            for mau in t.infer_stream(text=text, voice=voice, style=style):
+                b = _ve_16k(mau)
+                tong += len(b)
+                yield b
+            giay = tong / 2 / BO_SR
+            ms = (time.time() - t0) * 1000
+            print(f"[stream] {giay:.2f}s tieng trong {ms:.0f}ms (RTF {ms/1000/max(giay,0.01):.3f})",
+                  flush=True)
+
+    return StreamingResponse(
+        sinh(),
+        media_type="application/octet-stream",
+        headers={"X-Sample-Rate": str(BO_SR), "X-Format": "pcm_s16le_mono"},
+    )

@@ -32,7 +32,7 @@ import { synthesizeSpeech } from './tts.js';
 import { checkHeardSpeech } from './hallucination.js';
 import { PCM_SAMPLE_RATE } from './audio.js';
 import { gatewayKey, gatewayRoot, modelFor } from '../llm/gateway.js';
-import { khopLenhNhanh, layTiengDemNgay } from './phanXa.js';
+import { khopLenhNhanh } from './phanXa.js';
 
 // ─── Conversation memory ───────────────────────────────────
 // Short-term only, in process memory. Long-term recall (pgvector over
@@ -606,30 +606,6 @@ async function thinkAndSpeak(
   const gw = await import('../../socket/device.gateway.js');
   const { PCM_SAMPLE_RATE } = await import('./audio.js');
 
-  // ⚠️ TIẾNG ĐỆM: phát TRƯỚC khi gọi model, không phải sau.
-  //
-  // Đo 12/08/2026: từ lúc người dùng nói xong tới lúc robot mở miệng là
-  // ~2,4 giây, và cả ba chặng đều đã chạm sàn (STT 500 ms bản turbo,
-  // LLM 1500 ms — model nhanh nhất trong bốn model ở cổng, TTS 250 ms
-  // đã chảy theo luồng). Không siết thêm được nữa.
-  //
-  // Nên đổi cách nghĩ: 2,4 giây IM LẶNG và 2,4 giây có tiếng "Ừmmm" ở
-  // giây thứ 0,6 là hai trải nghiệm khác hẳn nhau, dù đồng hồ y hệt.
-  // Cái đầu khiến người ta hỏi lại "alo?" rồi nói chồng lên câu trả lời
-  // đang tới; cái sau thì không.
-  //
-  // Dùng CHUNG một luồng với câu trả lời thật: mở luồng riêng rồi đóng
-  // lại nghĩa là bo phải gom đủ ngưỡng đệm HAI lần, và lần thứ hai rơi
-  // đúng vào lúc người ta đang chờ nghe nội dung.
-  let seqDem: number | null = null;
-  const dem = layTiengDemNgay(persona);
-  if (dem) {
-    seqDem = gw.speakStreamBegin(deviceId, PCM_SAMPLE_RATE);
-    if (seqDem !== null && !(await gw.speakStreamPushPcm(deviceId, dem, seqDem))) {
-      seqDem = null; // bo rớt mạng hoặc người dùng chen lời — bỏ, đi tiếp
-    }
-  }
-
   const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
     { role: 'system', content: buildSystemPrompt(persona, ctx) },
     ...buildFewShot(persona),
@@ -646,9 +622,7 @@ async function thinkAndSpeak(
   const p = chain[0];
   const model = robotModel(p);
 
-  // Dùng lại luồng đã mở cho tiếng đệm, đừng mở luồng thứ hai — xem ghi
-  // chú ở `seqDem`. `null` nghĩa là chưa có đệm, và chỗ dưới sẽ tự mở.
-  let seq: number | null = seqDem;
+  let seq: number | null = null;
   let spoken = false;
   let firstAudioMs = 0;
 

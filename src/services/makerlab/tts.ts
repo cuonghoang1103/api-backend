@@ -100,6 +100,16 @@ export const FPTAI_VOICES = [
 
 const TTS_TIMEOUT_MS = Number(process.env.MAKERLAB_TTS_TIMEOUT_MS) || 20_000;
 
+/**
+ * Hạn chờ BYTE ĐẦU TIÊN của đường luồng.
+ *
+ * Máy đọc khoẻ trả byte đầu sau ~165 ms (đo 12/08/2026 qua đường hầm về
+ * máy nhà). 8 giây là rộng gấp năm chục lần mức bình thường, nên nó chỉ
+ * nổ khi có gì đó thật sự kẹt — mà kẹt thì phải chuyển giọng khác NGAY,
+ * đừng bắt người dùng đứng nghe im lặng.
+ */
+const TTS_TTFB_MS = Number(process.env.MAKERLAB_TTS_TTFB_MS) || 8_000;
+
 function envProvider(): TtsProvider {
   // Default is `google`, not `edge`, as of 2026-08-07: Microsoft's
   // read-aloud endpoint now answers 403 to this handshake (it wants a
@@ -292,17 +302,64 @@ export async function streamCuongMini(
   opts: { voice?: string; speakingRate?: number },
   onChunk: (pcm: Buffer) => Promise<boolean>,
 ): Promise<number> {
-  const res = await fetch(`${cuongMiniRoot()}/tts-stream`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text, voice: opts.voice || undefined, style: 'tu_nhien' }),
-    signal: AbortSignal.timeout(120_000),
-  });
+  // ⚠️ CANH BYTE ĐẦU TIÊN, đừng canh tổng thời gian.
+  //
+  // Trước đây đặt một hạn chờ 120 giây cho cả lượt. Nghe thì rộng rãi,
+  // thực ra là hai lỗi cùng lúc:
+  //
+  //   - Máy đọc KẸT (12/08/2026: khoá mô hình bị một việc treo giữ, chỉ
+  //     `/health` còn trả lời) ⇒ robot ngồi đợi tới hai phút thay vì
+  //     chuyển sang giọng khác. Người dùng thấy "nó nghĩ mãi không trả
+  //     lời", log ghi `firstAudioMs: 0`, `totalMs: 42039`.
+  //   - Mà một câu trả lời DÀI thì chảy lâu là chuyện bình thường, nên
+  //     hạ tổng thời gian xuống lại cắt cụt câu đang đọc dở.
+  //
+  // Hai chuyện đó cần hai con số khác nhau. Thứ phân biệt "kẹt" với
+  // "đang chảy" là byte ĐẦU TIÊN: máy đọc khoẻ trả byte đầu sau ~165 ms
+  // (đo thật), nên quá 8 giây mà chưa có gì thì nó không sắp có.
+  const huy = new AbortController();
+  const tong = setTimeout(() => huy.abort(), 120_000);
+  let dauTien = setTimeout(() => huy.abort(), TTS_TTFB_MS);
+
+  let res: Awaited<ReturnType<typeof fetch>>;
+  try {
+    res = await fetch(`${cuongMiniRoot()}/tts-stream`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, voice: opts.voice || undefined, style: 'tu_nhien' }),
+      signal: huy.signal,
+    });
+  } catch (e) {
+    clearTimeout(tong);
+    clearTimeout(dauTien);
+    throw new Error(
+      huy.signal.aborted
+        ? `cuongmini không trả byte nào trong ${TTS_TTFB_MS} ms — máy đọc đang kẹt`
+        : `cuongmini stream: ${e instanceof Error ? e.message : String(e)}`,
+    );
+  }
   if (!res.ok || !res.body) {
+    clearTimeout(tong);
+    clearTimeout(dauTien);
     throw new Error(`cuongmini stream HTTP ${res.status}`);
   }
 
-  const nguon = res.body as unknown as AsyncIterable<Uint8Array>;
+  // Byte đầu đã về ⇒ tháo canh, để câu dài chảy thoải mái tới trần tổng.
+  const goc = res.body as unknown as AsyncIterable<Uint8Array>;
+  const nguon = (async function* () {
+    try {
+      for await (const m of goc) {
+        if (dauTien) {
+          clearTimeout(dauTien);
+          dauTien = null as unknown as NodeJS.Timeout;
+        }
+        yield m;
+      }
+    } finally {
+      clearTimeout(tong);
+      clearTimeout(dauTien);
+    }
+  })();
   const r = Number(opts.speakingRate);
   // Tốc độ 1 là đường nóng: KHÔNG đẻ tiến trình, không thêm một mili giây
   // nào. Chỉ khi người dùng thật sự kéo thanh trượt mới dựng ffmpeg.

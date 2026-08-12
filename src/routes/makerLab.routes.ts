@@ -600,5 +600,45 @@ adminRouter.post('/maintenance', async (req, res: Response<ApiResponse>, next) =
   }
 });
 
+/**
+ * Số liệu hai máy: VPS và máy GPU ở nhà.
+ *
+ * Gộp một lời gọi thay vì hai: trang hiện cả hai cạnh nhau, và hai lời
+ * gọi rời thì lúc máy nhà chậm sẽ khiến VPS cũng hiện chậm theo.
+ * `Promise.all` cho phép máy nhà tự chịu trách nhiệm phần của nó — nó
+ * tắt thì trả `online: false`, KHÔNG kéo cả trang xuống.
+ */
+adminRouter.get('/ha-tang', async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    const { soLieuVps, soLieuMayNha } = await import('../services/makerlab/haTang.js');
+    const [vps, nha] = await Promise.all([soLieuVps(), soLieuMayNha()]);
+    res.json({ success: true, data: { vps, nha, luc: Date.now() } });
+  } catch (e) {
+    next(e);
+  }
+});
+
+/**
+ * Khởi động lại một dịch vụ trên máy nhà.
+ *
+ * CỐ Ý chỉ cho phép ba dịch vụ đã biết tên, không nhận tên tuỳ ý từ
+ * client. Nhận tên tự do nghĩa là mở một đường chạy lệnh trên máy CÁ
+ * NHÂN của người dùng qua web — không đáng đổi lấy chút tiện.
+ *
+ * ⚠️ CHƯA nối. Đường hầm hiện chỉ chở cổng HTTP của dịch vụ TTS và khoá
+ * của nó đặt `command="/bin/false"`, nên từ VPS KHÔNG chạy được lệnh
+ * trên máy nhà. Muốn có nút này thật thì phải thêm một endpoint có xác
+ * thực ở phía máy nhà — việc riêng, làm sau, và phải bàn kỹ vì nó mở
+ * đường điều khiển vào máy cá nhân.
+ */
+adminRouter.post('/ha-tang/dich-vu/:ten/restart', async (req, res: Response<ApiResponse>) => {
+  res.status(501).json({
+    success: false,
+    message:
+      'Chưa nối. Đường hầm chỉ chở cổng HTTP và khoá đặt command="/bin/false" — ' +
+      'từ VPS không chạy được lệnh trên máy nhà. Cần thêm endpoint có xác thực ở máy nhà.',
+  });
+});
+
 export { adminRouter };
 export default router;

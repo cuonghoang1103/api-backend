@@ -227,6 +227,18 @@ def reap_jobs() -> None:
         _jobs.pop(jid, None)
 
 
+@app.get("/may")
+def may():
+    """Số liệu phần cứng của máy này — cho trang quản trị trên web.
+
+    Đi ké cổng 8090 thay vì dựng cổng riêng: đường hầm về VPS chỉ chở
+    những cổng ghi trong `permitlisten`, sửa nó cần người dùng chạy tay.
+    """
+    from may import tat_ca
+
+    return tat_ca()
+
+
 @app.get("/health")
 def health():
     # KHÔNG gọi engine() ở đây — xem ghi chú trong engine().

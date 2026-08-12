@@ -542,6 +542,42 @@ async function thinkAndSpeak(
   const speakPiece = async (piece: string) => {
     if (seq === null) return;
     const t = Date.now();
+
+    // ── Đường LUỒNG, chỉ cho giọng tự dựng ──
+    //
+    // Chuyển tiếp từng mẩu PCM xuống bo NGAY khi máy nhà sinh ra, thay vì
+    // đợi cả đoạn xong. Đo 12/08: byte đầu tiên về sau 105 ms thay vì
+    // 3.500 ms, và tiếng chảy nhanh gấp 3,5 lần tốc độ phát — đệm của bo
+    // không còn lý do gì để cạn.
+    //
+    // Hỏng thì rơi xuống đường thường ngay dưới: máy ở nhà có thể đang
+    // tắt, và robot mất giọng riêng vẫn hơn robot câm.
+    if (persona.voiceProvider === 'cuongmini') {
+      try {
+        const { streamCuongMini } = await import('./tts.js');
+        const byte = await streamCuongMini(
+          piece,
+          { voice: persona.voiceId ?? undefined, speakingRate: persona.speechRate },
+          async (pcm) => {
+            const ok = await gw.speakStreamPushPcm(deviceId, pcm, seq as number);
+            if (ok && !firstAudioMs) firstAudioMs = Date.now() - started;
+            if (ok) spoken = true;
+            return ok;
+          },
+        );
+        if (byte > 0) {
+          timing.tts += Date.now() - t;
+          return;
+        }
+      } catch (err) {
+        logger.warn(
+          `MakerLab luồng tiếng hỏng, rơi về đường thường: ${
+            err instanceof Error ? err.message : String(err)
+          }`,
+        );
+      }
+    }
+
     const tts = await synthesizeSpeech(piece, {
       provider: persona.voiceProvider as never,
       voice: persona.voiceId ?? undefined,

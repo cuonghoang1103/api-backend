@@ -261,6 +261,132 @@ async function synthesizeCuongMini(
  * `atempo` chỉ nhận 0,5-2,0 mỗi tầng nên kẹp lại — ngoài khoảng đó thì
  * giọng cũng đã méo tới mức không ai muốn nghe.
  */
+/**
+ * Đọc theo LUỒNG: gọi `onChunk` với từng mẩu PCM ngay khi máy nhà sinh ra.
+ *
+ * Đây là thứ xoá GỐC chuyện đói đệm, chứ không vá quanh nó. Đường
+ * `synthesizeCuongMini` cũ phải đợi sinh xong cả đoạn rồi mới nhận được
+ * byte đầu tiên — đo 12/08/2026: một mẩu 14 giây tiếng mất 3,5 giây, và
+ * suốt 3,5 giây ấy bo không nhận thêm gì nên đệm cạn.
+ *
+ * Đo đường này, lúc model đã ấm:
+ *   byte đầu tiên   105 ms   (đường cũ: 3.500 ms)
+ *   9,4 giây tiếng về hết trong 2,7 giây  ⇒ nhanh gấp 3,5 lần tốc độ phát
+ *
+ * Trả về PCM THÔ 16 kHz mono — đúng thứ bo đẩy thẳng vào I2S. Không WAV
+ * (khuôn WAV cần biết độ dài trước, mà đang stream thì chưa biết — chính
+ * cái bẫy `RIFF size 0xFFFFFFFF` đã gặp), không ffmpeg trong đường nóng.
+ *
+ * Trả về tổng số byte đã gửi. 0 nghĩa là không dùng được — bên gọi rơi
+ * về đường thường.
+ */
+/**
+ * Tần số lấy mẫu của đường luồng — phải khớp `BO_SR` trong
+ * `services/tts/app.py`. Lệch số này thì ffmpeg vẫn chạy trơn tru và
+ * không báo gì cả, chỉ có giọng ra là sai tốc độ lẫn cao độ.
+ */
+const TTS_SR = 16_000;
+
+export async function streamCuongMini(
+  text: string,
+  opts: { voice?: string; speakingRate?: number },
+  onChunk: (pcm: Buffer) => Promise<boolean>,
+): Promise<number> {
+  const res = await fetch(`${cuongMiniRoot()}/tts-stream`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text, voice: opts.voice || undefined, style: 'tu_nhien' }),
+    signal: AbortSignal.timeout(120_000),
+  });
+  if (!res.ok || !res.body) {
+    throw new Error(`cuongmini stream HTTP ${res.status}`);
+  }
+
+  const nguon = res.body as unknown as AsyncIterable<Uint8Array>;
+  const r = Number(opts.speakingRate);
+  // Tốc độ 1 là đường nóng: KHÔNG đẻ tiến trình, không thêm một mili giây
+  // nào. Chỉ khi người dùng thật sự kéo thanh trượt mới dựng ffmpeg.
+  if (!Number.isFinite(r) || r === 1) return bomThang(nguon, onChunk);
+  return bomQuaTocDo(nguon, r, onChunk);
+}
+
+async function bomThang(
+  nguon: AsyncIterable<Uint8Array>,
+  onChunk: (pcm: Buffer) => Promise<boolean>,
+): Promise<number> {
+  let tong = 0;
+  for await (const mau of nguon) {
+    const b = Buffer.from(mau);
+    tong += b.length;
+    // Bên gọi trả false khi bo rớt mạng hoặc người dùng chen lời — dừng
+    // NGAY, đừng đọc nốt cả đoạn rồi mới biết không ai nghe nữa.
+    if (!(await onChunk(b))) break;
+  }
+  return tong;
+}
+
+/**
+ * Đổi tốc độ NGAY TRÊN DÒNG CHẢY, không đợi đủ bài rồi mới xử lý.
+ *
+ * Vì sao không dùng lại `doiTocDo()`: hàm đó nhận một Buffer WAV hoàn
+ * chỉnh và trả về một Buffer hoàn chỉnh. Ghép nó vào đây là vứt bỏ đúng
+ * cái thứ khiến đường luồng tồn tại — byte đầu tiên tới tai sau ~105 ms
+ * thay vì sau khi sinh xong cả câu. Đổi tốc độ mà mất luôn tính "chảy"
+ * thì thà đừng chảy.
+ *
+ * `atempo` giữ nguyên cao độ. Kéo tốc độ bằng cách đổi tần số lấy mẫu thì
+ * nhanh hơn nhưng giọng biến thành giọng chuột — đây là giọng nhân bản
+ * của chính người dùng, méo cao độ là hỏng hết ý nghĩa.
+ */
+async function bomQuaTocDo(
+  nguon: AsyncIterable<Uint8Array>,
+  rate: number,
+  onChunk: (pcm: Buffer) => Promise<boolean>,
+): Promise<number> {
+  const r = Math.min(2, Math.max(0.5, rate));
+  const { spawn } = await import('child_process');
+  const ff = spawn(process.env.FFMPEG_PATH || 'ffmpeg', [
+    '-hide_banner', '-loglevel', 'error',
+    '-f', 's16le', '-ar', String(TTS_SR), '-ac', '1', '-i', 'pipe:0',
+    '-af', `atempo=${r.toFixed(2)}`,
+    '-f', 's16le', '-ar', String(TTS_SR), '-ac', '1', 'pipe:1',
+  ]);
+  // Người dùng chen lời ⇒ ta giết ffmpeg ⇒ lệnh ghi đang dở bắn EPIPE.
+  // Không bắt ở đây thì lỗi đó nổi lên thành uncaught và hạ cả tiến trình
+  // Node — mất luôn mọi lượt nói của mọi thiết bị vì một lần chen lời.
+  ff.stdin.on('error', () => {});
+
+  const bom = (async () => {
+    try {
+      for await (const mau of nguon) {
+        if (!ff.stdin.writable) break;
+        if (!ff.stdin.write(Buffer.from(mau))) {
+          await new Promise((ok) => ff.stdin.once('drain', ok));
+        }
+      }
+    } catch {
+      /* nguồn đứt giữa chừng — cứ đóng đầu vào, ffmpeg xả nốt phần đã nhận */
+    } finally {
+      ff.stdin.end();
+    }
+  })();
+
+  let tong = 0;
+  try {
+    for await (const mau of ff.stdout as unknown as AsyncIterable<Buffer>) {
+      const b = Buffer.from(mau);
+      tong += b.length;
+      if (!(await onChunk(b))) {
+        ff.kill('SIGKILL');
+        break;
+      }
+    }
+  } finally {
+    await bom.catch(() => {});
+  }
+  return tong;
+}
+
 async function doiTocDo(wav: Buffer, rate: number): Promise<Buffer> {
   const r = Math.min(2, Math.max(0.5, rate));
   const { spawn } = await import('child_process');

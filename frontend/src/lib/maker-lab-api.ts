@@ -151,8 +151,11 @@ export interface PersonaPayload {
   temperature?: number;
   maxTokens?: number;
   /**
-   * Tốc độ đọc 0,25–4,0 (1 = bình thường). Chỉ có tác dụng khi giọng
-   * đang dùng là Google Cloud — mấy nhà cung cấp còn lại bỏ qua.
+   * Tốc độ đọc 0,25–4,0 (1 = bình thường, dưới 1 là chậm lại).
+   *
+   * Có tác dụng với **CuongMini** (giọng nhân bản — đổi bằng bộ lọc
+   * `atempo` của ffmpeg, giữ nguyên cao độ) và **Google Cloud**. Giọng
+   * miễn phí `translate_tts` không có tham số này nên bỏ qua.
    *
    * Gửi riêng chứ đừng nhét vào `traits`: server ghi đè `traits`
    * nguyên khối, nên gửi kèm sẽ xoá mất phần Huấn luyện.

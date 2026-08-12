@@ -547,8 +547,9 @@ export function DeviceConsole({
                   <span>nhanh</span>
                 </div>
                 <p className="mt-1.5 text-[11px]" style={{ color: 'var(--text-muted)' }}>
-                  Chỉ có tác dụng với giọng Google Cloud (WaveNet). Giọng miễn phí
-                  <code> translate_tts </code> không nhận tham số tốc độ.
+                  Dưới 1,0 là chậm lại, trên 1,0 là nhanh lên — cao độ giữ nguyên.
+                  Có tác dụng với giọng nhân bản CuongMini và Google Cloud (WaveNet).
+                  Riêng giọng miễn phí <code>translate_tts</code> không nhận tham số tốc độ.
                 </p>
               </div>
 

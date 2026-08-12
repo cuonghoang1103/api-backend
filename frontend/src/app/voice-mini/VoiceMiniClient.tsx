@@ -344,13 +344,24 @@ export default function VoiceMiniClient() {
           )}
         </summary>
         <div className="border-t p-4" style={{ borderColor: 'var(--border-color)' }}>
-          <p className="mb-4 text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-            Tải lên <strong>30–60 giây</strong> giọng bạn đọc, máy sẽ đọc mọi thứ khác bằng giọng
-            đó. Càng nhiều chữ khác nhau càng tốt — đọc một đoạn có đủ dấu hỏi, ngã, nặng, có cả
-            câu hỏi lẫn câu kể, chứ đừng lặp một câu. Máy dùng TRỌN đoạn bạn tải lên, chỉ tự xén
-            khoảng lặng ở hai đầu và khử nhiễu. Thứ quyết định vẫn là{' '}
-            <strong>phòng yên, một micro, đọc bình thường</strong> như đang nói chuyện, đừng đọc
-            như đọc diễn văn.
+          <p className="mb-3 text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+            Tải lên <strong>15–60 giây</strong> giọng bạn đọc, máy sẽ đọc mọi thứ khác bằng giọng
+            đó. Đọc bình thường như đang nói chuyện, đừng đọc như đọc diễn văn — và quan trọng
+            nhất vẫn là <strong>phòng yên, một micro</strong>.
+          </p>
+          <p
+            className="mb-4 rounded-lg border p-3 text-xs leading-relaxed"
+            style={{ borderColor: 'var(--border-color)', color: 'var(--text-muted)' }}
+          >
+            <strong>Máy chỉ nghe được 8 giây.</strong> Mô hình VieNeu rút đặc trưng giọng từ tối
+            đa 8 giây, dù bạn tải lên bao nhiêu — nên thu 5 phút cũng không giống hơn thu 30 giây.
+            Việc web làm giúp bạn là <em>tự tìm 8 giây rõ tiếng nhất</em> trong đoạn bạn tải lên
+            (to, đều, không lẫn khoảng lặng) thay vì lấy đại 8 giây đầu. Vì thế cứ thu thoải mái
+            rồi để máy chọn; chỉ cần trong đó có ít nhất một quãng bạn nói liền mạch, rõ ràng.
+            <br />
+            <br />
+            Cách này chỉ chép được <em>chất giọng</em>. Ngữ điệu, cách nhấn nhá, giọng vùng miền
+            và cảm xúc thì phải huấn luyện riêng — đang làm.
           </p>
 
           <div className="grid gap-3 sm:grid-cols-2">

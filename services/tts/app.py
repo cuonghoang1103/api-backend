@@ -226,6 +226,70 @@ def tts_result(jid: str):
     )
 
 
+# VieNeu chỉ nghe 8 giây của đoạn mẫu — `_MAX_REF_SECONDS = 8.0` trong
+# `_v3_turbo_engine`, và nó cắt bằng `wav[: 8*sr]`, tức 8 giây ĐẦU.
+REF_GIAY = 8.0
+
+
+def chon_doan_tot_nhat(duong: str, giay: float = REF_GIAY) -> str:
+    """Tìm cửa sổ `giay` giây NGHE RÕ NHẤT trong đoạn mẫu, ghi ra file mới.
+
+    Vì sao cần: thư viện lấy 8 giây đầu tiên. Người ta thu 60 giây rồi
+    tưởng máy nghe cả 60 — thật ra 52 giây bị vứt, và 8 giây được giữ
+    lại là 8 giây tình cờ nằm ở đầu: tiếng hắng giọng, câu nói nhỏ lúc
+    chưa vào giọng, hay khoảng lặng. Cả bản sao giọng dựng trên đó.
+    Đây là lý do lớn nhất khiến giọng nhân bản "nghe chưa giống".
+
+    Chấm điểm mỗi cửa sổ bằng TÍCH của hai thứ, không phải tổng:
+      - tỉ lệ khung có tiếng nói (không phải khoảng lặng)
+      - độ lớn trung bình của những khung có tiếng đó
+    Dùng tích vì hai thứ này phải cùng đạt: một cửa sổ toàn tiếng nói
+    nhưng thì thầm thì vô dụng, mà một cửa sổ có một tiếng hét giữa
+    khoảng lặng dài cũng vô dụng. Lấy tổng thì một cái bù cho cái kia
+    và chọn ra đúng hai loại tệ đó.
+
+    Trả về đường dẫn file mới; hỏng thì trả lại chính đường dẫn cũ —
+    chọn sai đoạn còn hơn là không nhân bản được.
+    """
+    try:
+        import librosa
+        import soundfile as sf
+
+        y, sr = librosa.load(duong, sr=None, mono=True)
+        can = int(giay * sr)
+        if y.size <= can:
+            return duong  # ngắn hơn 8 giây thì không có gì để chọn
+
+        hop = max(1, sr // 100)  # khung 10 ms
+        rms = librosa.feature.rms(y=y, frame_length=hop * 4, hop_length=hop)[0]
+        nguong = max(float(np.percentile(rms, 60)) * 0.5, float(rms.max()) * 0.06)
+        khung_can = max(1, can // hop)
+
+        diem_tot, dau_tot = -1.0, 0
+        buoc = max(1, khung_can // 32)  # trượt ~1/4 giây một lần
+        for i in range(0, len(rms) - khung_can, buoc):
+            cua = rms[i : i + khung_can]
+            co_tieng = cua >= nguong
+            ti_le = float(co_tieng.mean())
+            if ti_le <= 0:
+                continue
+            do_lon = float(cua[co_tieng].mean())
+            diem = ti_le * do_lon
+            if diem > diem_tot:
+                diem_tot, dau_tot = diem, i * hop
+
+        if diem_tot < 0:
+            return duong
+        ra = str(Path(duong).with_suffix("")) + "-best.wav"
+        sf.write(ra, y[dau_tot : dau_tot + can], sr)
+        print(f"[ref] chon {dau_tot/sr:.1f}s→{(dau_tot+can)/sr:.1f}s "
+              f"trong {y.size/sr:.1f}s (diem {diem_tot:.4f})", flush=True)
+        return ra
+    except Exception as e:  # noqa: BLE001
+        print(f"[ref] khong chon duoc doan tot nhat: {e}", flush=True)
+        return duong
+
+
 @app.post("/voices")
 async def add_voice(
     name: str = Form(...),
@@ -248,16 +312,24 @@ async def add_voice(
         raise HTTPException(400, "File quá 50MB")
     tmp = Path(f"/tmp/ref-{uuid.uuid4().hex}{Path(file.filename or 'a.wav').suffix or '.wav'}")
     tmp.write_bytes(raw)
+    chon = None
     try:
         t = engine()
+        chon = chon_doan_tot_nhat(str(tmp))
         with _lock:
-            t.add_voice(name.strip(), str(tmp), description=description, gender=gender, save=False)
+            t.add_voice(name.strip(), chon, description=description, gender=gender, save=False)
             t.save_voices(str(VOICES_FILE))
         return {"ok": True, "voice": name.strip()}
     except Exception as e:
         raise HTTPException(400, f"Không nhân bản được: {str(e)[:300]}")
     finally:
         tmp.unlink(missing_ok=True)
+        # File 8 giây vừa cắt ra cũng phải dọn — /tmp không tự dọn, và
+        # mỗi lần nhân bản để lại một file thì đĩa cạn dần một cách âm
+        # thầm. `chon` bằng `tmp` khi đoạn mẫu ngắn hơn 8 giây (lúc đó
+        # không cắt gì), nên phải so trước khi xoá.
+        if chon and chon != str(tmp):
+            Path(chon).unlink(missing_ok=True)
 
 
 @app.delete("/voices/{name}")
@@ -273,29 +345,22 @@ def remove_voice(name: str):
         raise HTTPException(403, f"'{name}' là giọng gốc của VieNeu, không xoá được")
     t = engine()
     with _lock:
-        kho = getattr(t, "_preset_voices", None)
-        if kho is None:
-            raise HTTPException(500, "Bản vieneu này không có _preset_voices")
-        if name not in kho:
+        if not any(vid == name for _, vid in t.list_preset_voices()):
             raise HTTPException(404, f"Không có giọng '{name}'")
 
-        # Tự xoá thay vì gọi `t.remove_voice(name)`: **thư viện vieneu
-        # KHÔNG có hàm đó**. Gọi nó chỉ ném AttributeError → 500, và đó
-        # đúng là thứ đã khiến đường xoá này nằm chết từ đầu — route có,
-        # hàm phía dưới thì không. `save_voices()` ghi lại nguyên
-        # `_preset_voices`, nên xoá khỏi dict rồi lưu là đủ.
-        del kho[name]
-
-        # Xoá trúng giọng mặc định thì phải chỉ lại chỗ khác. Không thì
-        # `default_voice` trong file trỏ vào một cái tên không còn tồn
-        # tại, và lần khởi động sau mọi lượt đọc không nêu tên giọng đều
-        # hỏng — một quả mìn chỉ nổ sau khi restart, tức là rất lâu sau
-        # khi người ta quên mất mình đã xoá gì.
-        if getattr(t, "_default_voice", None) == name:
-            t._default_voice = next(iter(kho), None)
-
+        # `remove_voice(save=False)` gỡ khỏi bộ nhớ VÀ tự chỉ lại
+        # `_default_voice` sang giọng khác nếu vừa xoá trúng giọng mặc
+        # định. Bỏ qua chuyện đó thì file lưu ra có `default_voice` trỏ
+        # vào một cái tên không còn tồn tại — quả mìn chỉ nổ sau lần khởi
+        # động kế tiếp, rất lâu sau khi người ta quên đã xoá gì.
+        #
+        # Lưu bằng `save_voices(VOICES_FILE)` chứ không dùng `save=True`:
+        # mặc định của thư viện ghi vào file assets nằm trong site-packages,
+        # tức là mất sạch sau mỗi lần cài lại thư viện. VOICES_FILE nằm
+        # trong volume nên sống lâu dài.
+        t.remove_voice(name, save=False)
         t.save_voices(str(VOICES_FILE))
-    return {"ok": True, "removed": name, "remaining": len(kho)}
+    return {"ok": True, "removed": name, "remaining": len(t.list_preset_voices())}
 
 # ─── Đường LUỒNG: đọc tới đâu gửi tới đó ──────────────────────
 #

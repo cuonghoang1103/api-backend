@@ -630,6 +630,14 @@ static void handleCommand(JsonDocument& doc) {
     return;
   }
 
+  if (!strcmp(type, "wifi_portal")) {
+    net::moCongNgay();
+    sendLog("info", String("da mo cong cai dat WiFi: noi vao '") + net::tenCong() +
+                        "', mat khau " + net::matKhauCong());
+    sendAck(id, true);
+    return;
+  }
+
   if (!strcmp(type, "wifi_add")) {
     const char* ssid = doc["payload"]["ssid"] | "";
     const char* pass = doc["payload"]["pass"] | "";
@@ -1217,6 +1225,46 @@ void loop() {
   }
 
   net::loop();   // rẻ khi không mở cổng; bơm web+DNS khi đang mở
+
+  // ── Màn hình lúc cổng cài WiFi đang mở ──
+  //
+  // Vẽ ĐÈ lên khuôn mặt, chữ to hết cỡ. Đây là lúc duy nhất người dùng
+  // không tra cứu được gì từ web (họ sắp phải rời WiFi hiện tại để nối
+  // vào robot), nên mọi thứ họ cần phải nằm trên chính cái màn trước mặt.
+  {
+    static bool daVe = false;
+    const bool dangMo = net::dangMoCong();
+    if (dangMo && !daVe) {
+      tft.fillScreen(TFT_BLACK);
+      tft.setTextColor(TFT_CYAN, TFT_BLACK);
+      tft.setTextSize(3);
+      tft.setCursor(20, 40);
+      tft.print("CAI WIFI");
+      tft.setTextColor(TFT_WHITE, TFT_BLACK);
+      tft.setTextSize(2);
+      tft.setCursor(20, 110); tft.print("1. Dien thoai > WiFi");
+      tft.setCursor(20, 145); tft.print("2. Chon:");
+      tft.setTextColor(TFT_YELLOW, TFT_BLACK);
+      tft.setTextSize(3);
+      tft.setCursor(20, 178); tft.print(net::tenCong());
+      tft.setTextColor(TFT_WHITE, TFT_BLACK);
+      tft.setTextSize(2);
+      tft.setCursor(20, 222); tft.print("3. Mat khau:");
+      tft.setTextColor(TFT_YELLOW, TFT_BLACK);
+      tft.setTextSize(3);
+      tft.setCursor(200, 218); tft.print(net::matKhauCong());
+      tft.setTextColor(TFT_DARKGREY, TFT_BLACK);
+      tft.setTextSize(2);
+      tft.setCursor(20, 268); tft.print("Trang cai dat tu hien len");
+      daVe = true;
+    } else if (!dangMo && daVe) {
+      // Cổng đóng — trả màn về khuôn mặt.
+      face::begin(&tft);
+      uiInvalidate();
+      daVe = false;
+    }
+    if (dangMo) { gLoops++; delay(20); return; }   // cổng mở thì bỏ qua phần còn lại
+  }
 
   gStage = "ui";
   const uint32_t now = millis();

@@ -259,6 +259,8 @@ TrangThai vaoMang(void (*veUi)()) {
   return tt;
 }
 
+void moCongNgay() { moCong(); }
+
 void loop() {
   if (!congDangMo) return;
   dns->processNextRequest();
@@ -266,9 +268,11 @@ void loop() {
 
   if (millis() - congMoLuc > CONG_HAN_GIAY * 1000UL) {
     dongCong();
-    // Thử lại ngay một vòng. Không có `veUi` ở đây vì đang trong loop()
-    // — màn hình tự vẽ ở vòng sau.
-    if (!vaoMang(nullptr).online) moCong();
+    // Chỉ thử lại vòng mạng khi đang MẤT mạng. Nếu cổng được mở theo
+    // yêu cầu trong lúc vẫn online thì đóng cổng là xong — gọi vaoMang()
+    // lúc đó sẽ ngắt kết nối đang chạy để thử lại từ đầu, tức tự tay
+    // làm rớt mạng đúng lúc mọi thứ đang chạy tốt.
+    if (WiFi.status() != WL_CONNECTED && !vaoMang(nullptr).online) moCong();
   }
 }
 

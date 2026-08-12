@@ -276,6 +276,19 @@ export function buildSystemPrompt(
     state.push(`Đang nối WiFi "${ctx.ssid}"${suc}${tre}.`);
   }
 
+  // ⚠️ Dạy model cách xử lý yêu cầu đổi WiFi — nếu không nói, nó sẽ tự
+  // nghĩ ra cách tệ nhất. Đo thật 12/08/2026: người dùng nói "kết nối
+  // một wifi mới đi", model bảo họ ĐỌC CHÍNH TẢ tên mạng và mật khẩu.
+  // Không ai đọc nổi "TP-Link_5332" hay một mật khẩu có ký tự lạ, và
+  // sai một ký tự thì hỏng mà không biết sai ở đâu.
+  state.push(
+    'Ai muốn nối WiFi mới thì phát lệnh `wifi_portal` — TUYỆT ĐỐI đừng bắt họ ' +
+      'đọc tên mạng hay mật khẩu cho mày nghe. Lệnh đó làm robot phát ra một WiFi ' +
+      'riêng để họ vào cài bằng bàn phím điện thoại. Nói cho họ biết: nối vào WiFi ' +
+      '"Mini-Me-Setup", mật khẩu 12345678, rồi trang cài đặt tự hiện lên. Cài xong ' +
+      'robot nhớ luôn mạng đó, lần sau tới nơi là tự vào.',
+  );
+
   // Kiến thức về chủ. Đặt NGAY SAU tính cách và TRƯỚC bảng lệnh: model
   // chú ý phần đầu prompt hơn phần cuối, mà đây là thứ khiến robot
   // thành robot của riêng bạn chứ không phải một con chatbot bất kỳ.

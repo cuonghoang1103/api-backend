@@ -112,6 +112,19 @@ export const commandSchemas = {
    * nghĩa là bất kỳ ai đứng trước robot cũng ra lệnh được — chỉ cần nói
    * đúng câu. Lệnh này chỉ đi từ giao diện web, sau khi đã đăng nhập.
    */
+  /**
+   * Mở cổng cài đặt WiFi ngay trên robot. LLM ĐƯỢC phép gọi.
+   *
+   * Đây là lệnh thay thế cho một hành vi tệ mà model tự nghĩ ra: khi
+   * người dùng nói "kết nối wifi mới đi", model không có công cụ nào nên
+   * nó bảo họ ĐỌC CHÍNH TẢ tên WiFi và mật khẩu. Bất khả thi — tên WiFi
+   * đầy chữ tiếng Anh, dấu gạch, ký tự lạ; sai một ký tự là hỏng mà
+   * không ai biết sai ở đâu.
+   *
+   * Mở cổng thì người dùng gõ trên bàn phím điện thoại và CHỌN mạng từ
+   * danh sách robot quét được — không phải nhớ, không phải đọc.
+   */
+  wifi_portal: z.object({}).default({}),
   wifi_add: z.object({
     ssid: z.string().min(1).max(32),
     pass: z.string().max(63).default(''),
@@ -149,6 +162,7 @@ export const LLM_ALLOWED_COMMANDS: CommandType[] = [
   'play_music',
   'stop_music',
   'wifi_add',
+  'wifi_portal',
   'move',
   'stop',
   'turn',
@@ -224,6 +238,12 @@ export const COMMAND_CATALOG: Array<{
   { type: 'volume', label: 'Âm lượng', description: 'Đặt âm lượng loa 10-100%', llmAllowed: true },
   { type: 'play_music', label: 'Bật nhạc', description: 'Tìm và phát một bài trong thư viện nhạc của web', llmAllowed: true },
   { type: 'stop_music', label: 'Tắt nhạc', description: 'Dừng bài đang phát', llmAllowed: true },
+  {
+    type: 'wifi_portal',
+    label: 'Mở cài đặt WiFi',
+    description: 'Robot phát ra WiFi riêng để bạn vào cài mạng bằng điện thoại',
+    llmAllowed: true,
+  },
   {
     type: 'wifi_add',
     label: 'Thêm WiFi',

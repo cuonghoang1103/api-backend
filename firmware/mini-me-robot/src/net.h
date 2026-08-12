@@ -58,6 +58,22 @@ void loop();
 /** Đang mở cổng cấu hình không — main dùng để đổi những gì hiện lên màn. */
 bool dangMoCong();
 
+/**
+ * Mở cổng cấu hình NGAY, kể cả khi đang có mạng.
+ *
+ * Vì sao cần: người dùng đứng ở quán cà phê, muốn dạy robot WiFi chỗ đó.
+ * Bảo họ ĐỌC tên WiFi và mật khẩu cho robot nghe là bất khả thi — tên
+ * WiFi hay có chữ tiếng Anh, dấu gạch, số, ký tự lạ; mật khẩu còn tệ
+ * hơn. Nói sai một ký tự là hỏng, mà không ai biết đã sai ở đâu.
+ *
+ * Mở cổng thì họ gõ trên bàn phím điện thoại, nhìn thấy từng ký tự, và
+ * chọn mạng từ danh sách robot quét được thay vì phải nhớ tên.
+ *
+ * Dùng chế độ AP_STA nên mạng đang dùng KHÔNG bị ngắt — robot vẫn nói
+ * chuyện được trong lúc cổng mở.
+ */
+void moCongNgay();
+
 /** Tên WiFi và mật khẩu của cổng cấu hình, để hiện lên màn 3.5". */
 const char* tenCong();
 const char* matKhauCong();

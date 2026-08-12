@@ -675,6 +675,31 @@ export function DeviceConsole({
             >
               <Wifi size={14} /> Dạy robot một WiFi mới
             </h3>
+            {/* Nút mở cổng đặt LÊN TRÊN ô nhập tay: đây là đường dùng
+                được ở mọi tình huống, còn nhập tay chỉ dùng khi bạn biết
+                trước tên mạng. Và tuyệt đối không nên bắt người dùng phải
+                NÓI câu này cho robot nghe — đo thật 12/08: Whisper nghe
+                "kết nối wifi mới" thành phụ đề YouTube. */}
+            <button
+              type="button"
+              disabled={!active.connected}
+              onClick={() => void cmd('wifi_portal')}
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition disabled:opacity-40"
+              style={{ background: 'var(--accent, #6366f1)' }}
+            >
+              <Wifi size={15} /> Mở cổng cài WiFi trên robot
+            </button>
+            <p className="mt-2 text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+              Robot sẽ phát ra WiFi{' '}
+              <strong style={{ color: 'var(--text-secondary)' }}>Mini-Me-Setup</strong> (mật khẩu{' '}
+              <strong style={{ color: 'var(--text-secondary)' }}>12345678</strong>) và hiện hướng
+              dẫn lên màn hình của nó. Nối điện thoại vào là trang cài đặt tự hiện lên — chọn mạng
+              từ danh sách, gõ mật khẩu, robot thử ngay rồi báo đúng/sai. Cổng tự đóng sau 3 phút.
+            </p>
+
+            <p className="mt-4 text-xs font-semibold" style={{ color: 'var(--text-secondary)' }}>
+              Hoặc thêm sẵn bằng tay, nếu bạn biết trước tên mạng:
+            </p>
             <p className="mt-1.5 text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
               Thêm sẵn WiFi nơi bạn sắp mang robot tới — tới nơi bật lên là nó tự vào, khỏi cài
               đặt gì. Robot nhớ được 6 mạng.

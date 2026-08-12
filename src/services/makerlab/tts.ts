@@ -33,6 +33,7 @@
 import { WebSocket } from 'ws';
 import { randomUUID } from 'crypto';
 import { logger } from '../../utils/logger.js';
+import { phienAmSangViet } from './phienAm.js';
 
 export type TtsProvider =
   | 'edge'
@@ -109,6 +110,23 @@ const TTS_TIMEOUT_MS = Number(process.env.MAKERLAB_TTS_TIMEOUT_MS) || 20_000;
  * đừng bắt người dùng đứng nghe im lặng.
  */
 const TTS_TTFB_MS = Number(process.env.MAKERLAB_TTS_TTFB_MS) || 8_000;
+
+/**
+ * Phiên âm từ tiếng Anh sang chính tả tiếng Việt trước khi đưa cho máy
+ * đọc. CHỈ cho `cuongmini` — đó là giọng nhân bản tiếng Việt.
+ *
+ * Không áp cho giọng tiếng Anh: ở đó chính tả GỐC mới là thứ đúng, và
+ * phiên âm vào là biến "deploy" thành một từ vô nghĩa.
+ *
+ * Tắt được bằng `MAKERLAB_PHIEN_AM=false` — nếu một ngày mô hình tự đọc
+ * chữ Latin đúng thì đây là thứ nên tắt trước, chứ không phải gỡ mã.
+ */
+function doiChuNgoaiLai(text: string): string {
+  if (process.env.MAKERLAB_PHIEN_AM === 'false') return text;
+  const ra = phienAmSangViet(text);
+  if (ra !== text) logger.debug('MakerLab phiên âm', { truoc: text.slice(0, 90), sau: ra.slice(0, 90) });
+  return ra;
+}
 
 function envProvider(): TtsProvider {
   // Default is `google`, not `edge`, as of 2026-08-07: Microsoft's
@@ -218,7 +236,7 @@ async function synthesizeCuongMini(
   const nhan = await fetch(`${goc}/tts`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text, voice: voice || undefined, style: 'tu_nhien' }),
+    body: JSON.stringify({ text: doiChuNgoaiLai(text), voice: voice || undefined, style: 'tu_nhien' }),
     // 4 giây, không phải 20. Đây là chốt PHÁT HIỆN HỎNG, không phải
     // chốt chờ việc: nếu máy ở nhà tắt hoặc đường hầm đứt thì cổng bên
     // VPS biến mất và lời gọi này bị từ chối tức thì. Nhưng nếu máy còn
@@ -326,7 +344,7 @@ export async function streamCuongMini(
     res = await fetch(`${cuongMiniRoot()}/tts-stream`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text, voice: opts.voice || undefined, style: 'tu_nhien' }),
+      body: JSON.stringify({ text: doiChuNgoaiLai(text), voice: opts.voice || undefined, style: 'tu_nhien' }),
       signal: huy.signal,
     });
   } catch (e) {

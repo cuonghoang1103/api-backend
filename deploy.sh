@@ -281,12 +281,50 @@ ok "Backend image built"
 info "Building frontend image..."
 $DC build frontend
 ok "Frontend image built"
-# Image thứ ba (11/08/2026). Vẫn tuần tự, cùng lý do OOM ở trên. Lớp
-# `pip install` được cache nên lần deploy sau gần như không tốn giây
-# nào — chỉ lần đầu mất ~60 giây.
-info "Building TTS image..."
-$DC build tts
-ok "TTS image built"
+# ── Image thứ ba: TTS. CHỈ dựng lại khi services/tts/ thật sự đổi ──
+#
+# ⚠️ Chú thích cũ ở đây nói "lớp pip install được cache nên lần deploy
+# sau gần như không tốn giây nào". Đúng lý thuyết, SAI thực tế — và nó
+# nằm ngay cạnh dòng lệnh nên không ai kiểm lại.
+#
+# Cuối chính file này có `docker builder prune --keep-storage=4g`. Lớp
+# pip của TTS (torch CPU + gradio + librosa) nặng hơn 2GB, mà 4GB là
+# trần dùng chung cho cả ba image — nên nó bị dọn sau MỖI lần deploy và
+# lần sau luôn phải cài lại từ đầu. Đo ngày 12/08/2026: ~10 phút mỗi
+# deploy, năm lần liên tiếp, cho một dịch vụ không đổi một dòng nào.
+#
+# Nghịch lý hơn nữa: từ 12/08 robot đọc bằng máy để bàn ở nhà qua đường
+# hầm SSH ngược, nên container TTS trên VPS chỉ còn là đường lui cuối.
+# Ta đang trả 10 phút mỗi lần cho thứ hiếm khi chạy tới.
+#
+# HAI điều kiện, không phải một:
+#   - băm khớp  → nội dung không đổi
+#   - image còn → chưa bị `docker image prune -af` cuối file dọn mất
+# Chỉ xét băm thì lúc ai xoá image bằng tay sẽ hỏng; chỉ xét image thì
+# sửa app.py xong sẽ không được dựng lại — im lặng và rất khó tìm.
+#
+# In ra dòng "bỏ qua" chứ KHÔNG im lặng: một tối ưu âm thầm trông y hệt
+# một bước bị hỏng, và người đọc log tháng sau sẽ ngồi đoán tại sao sửa
+# app.py mà không thấy gì đổi.
+TTS_HASH=$(cat services/tts/Dockerfile services/tts/app.py 2>/dev/null | sha256sum | cut -c1-16)
+# Đặt dấu băm trong DATA_DIR (/opt/cuonghoangdev), KHÔNG đặt trong repo:
+# repo bị rsync ghi đè mỗi lần deploy, còn DATA_DIR thì rsync không đụng
+# tới — chính chỗ `.env` production đang sống.
+TTS_STAMP="${DATA_DIR}/.tts-image-hash"
+TTS_IMG_CO=$(docker image inspect "${COMPOSE_PROJECT}-tts" >/dev/null 2>&1 && echo yes || echo no)
+
+if [ "$TTS_IMG_CO" = "yes" ] && [ -f "$TTS_STAMP" ] && [ "$(cat "$TTS_STAMP")" = "$TTS_HASH" ]; then
+  ok "TTS image: BỎ QUA (services/tts/ không đổi, băm $TTS_HASH) — tiết kiệm ~10 phút"
+else
+  if [ "$TTS_IMG_CO" = "no" ]; then
+    info "Building TTS image (chưa có image)..."
+  else
+    info "Building TTS image (services/tts/ đã đổi)..."
+  fi
+  $DC build tts
+  echo "$TTS_HASH" > "$TTS_STAMP"
+  ok "TTS image built (băm $TTS_HASH)"
+fi
 
 # ── Step 2b: Atomic restart (zero-downtime) ───────────────────────
 # `up -d` atomically swaps the running containers to the images

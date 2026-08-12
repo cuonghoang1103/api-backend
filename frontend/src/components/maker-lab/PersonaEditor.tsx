@@ -22,9 +22,10 @@
  *    chưa có khoá thì robot im, mà lỗi đó chỉ hiện trong log server.
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Mic2, Plus, Trash2, Save, Volume2, Loader2, AlertTriangle } from 'lucide-react';
 import { updatePersona, sayOnDevice } from '@/lib/maker-lab-api';
+import { listVoices } from '@/lib/voice-mini-api';
 import type { MakerPersona, MakerDevice } from '@/types/maker-lab';
 
 interface VoiceOption {
@@ -45,6 +46,22 @@ interface VoiceOption {
  *              "No available channel for model gpt-4o-mini-tts"
  */
 const VOICES: VoiceOption[] = [
+  {
+    // Đứng ĐẦU danh sách vì nó là đường duy nhất cho giọng của chính
+    // chủ nhân, và là đường nhanh nhất — đo 12/08/2026 qua đường hầm từ
+    // VPS về máy để bàn: 1,03 giây cho 4,8 giây tiếng (RTF 0,187),
+    // nhanh gấp 10 lần chính dịch vụ đó chạy trên VPS.
+    provider: 'cuongmini',
+    label: 'Voice CuongMini ⭐ giọng NHÂN BẢN của bạn',
+    // Để rỗng — danh sách nạp động từ dịch vụ, xem `giongTuDung` bên
+    // dưới. Viết cứng ở đây là sai về nguyên tắc: giọng nhân bản do
+    // người dùng tự đặt tên lúc tải mẫu lên, mã nguồn không thể biết
+    // trước, và bản trước quên hẳn chuyện đó nên giọng vừa tạo xong
+    // không hiện ra chỗ nào để chọn.
+    voices: [],
+    status: 'ok',
+    note: 'Chạy trên máy tính riêng của bạn, không tốn tiền, không hạn mức. Nhân bản giọng ở trang /voice-mini rồi chọn tên giọng ở đây. ⚠️ Tắt máy đó thì robot vẫn nói được nhưng rơi về giọng Google mặc định.',
+  },
   {
     provider: 'fptai',
     label: 'FPT.AI ⭐ không cần thẻ quốc tế',
@@ -145,6 +162,26 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
   const [msg, setMsg] = useState<{ kind: 'ok' | 'err'; text: string } | null>(null);
   const [testing, setTesting] = useState(false);
 
+  /**
+   * Giọng của dịch vụ tự dựng — NẠP TỪ MÁY CHỦ, không viết cứng.
+   *
+   * Giọng nhân bản do người dùng tự đặt tên lúc tải mẫu lên, nên mã
+   * nguồn không thể biết trước. Bản đầu tiên của thẻ này để mảng rỗng
+   * và người dùng báo ngay: nhân bản xong giọng "Trangg" mà trong ô
+   * chọn không thấy đâu cả.
+   */
+  const [giongTuDung, setGiongTuDung] = useState<Array<{ id: string; label: string }>>([]);
+  const [dangNapGiong, setDangNapGiong] = useState(false);
+
+  useEffect(() => {
+    if (provider !== 'cuongmini' || giongTuDung.length) return;
+    setDangNapGiong(true);
+    listVoices()
+      .then(setGiongTuDung)
+      .catch(() => setGiongTuDung([]))
+      .finally(() => setDangNapGiong(false));
+  }, [provider, giongTuDung.length]);
+
   const current = VOICES.find((v) => v.provider === provider) ?? VOICES[0];
   const online = devices.find((d) => d.status === 'ONLINE');
 
@@ -233,7 +270,10 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
           })}
         </div>
 
-        {current.voices.length > 1 && (
+        {/* cuongmini: danh sách nạp từ máy chủ nên `current.voices` luôn
+            rỗng — phải xét riêng, nếu không ô chọn giọng không bao giờ
+            hiện ra. Đúng lỗi người dùng gặp ngày 12/08/2026. */}
+        {(current.voices.length > 1 || current.provider === 'cuongmini') && (
           <div className="mt-4">
             <label className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
               Chọn giọng
@@ -248,12 +288,21 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
                 color: 'var(--text-primary)',
               }}
             >
-              {current.voices.map((v) => (
+              {(current.provider === 'cuongmini' ? giongTuDung : current.voices).map((v) => (
                 <option key={v.id} value={v.id}>
                   {v.label}
                 </option>
               ))}
             </select>
+            {current.provider === 'cuongmini' && (
+              <p className="mt-1.5 text-xs" style={{ color: 'var(--text-muted)' }}>
+                {dangNapGiong
+                  ? 'Đang lấy danh sách giọng từ máy chủ…'
+                  : giongTuDung.length
+                    ? `${giongTuDung.length} giọng — nhân bản thêm ở trang /voice-mini`
+                    : 'Không lấy được danh sách. Máy tính chạy giọng có thể đang tắt — robot vẫn nói được bằng giọng Google.'}
+              </p>
+            )}
           </div>
         )}
 

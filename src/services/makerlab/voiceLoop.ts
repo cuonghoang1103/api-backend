@@ -32,6 +32,7 @@ import { synthesizeSpeech } from './tts.js';
 import { checkHeardSpeech } from './hallucination.js';
 import { PCM_SAMPLE_RATE } from './audio.js';
 import { gatewayKey, gatewayRoot, modelFor } from '../llm/gateway.js';
+import { khopLenhNhanh, layTiengDemNgay } from './phanXa.js';
 
 // ─── Conversation memory ───────────────────────────────────
 // Short-term only, in process memory. Long-term recall (pgvector over
@@ -411,6 +412,47 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
 
   // ── 2. Think ──
   const persona = await loadPersona(input.projectId);
+
+  // ⚠️ LỆNH ĐƠN GIẢN THÌ ĐỪNG GỌI LLM.
+  //
+  // "Tăng âm lượng" đi trọn vòng STT → LLM → TTS mất 2,4 giây cho một
+  // việc chỉ cần khớp chuỗi. Đo 12/08/2026: LLM chiếm ~1,5 giây trong đó
+  // và không siết thêm được (model đã nhanh nhất trong bốn model ở cổng).
+  // Bỏ hẳn nó cho nhóm lệnh này là cắt được đúng 1,5 giây, không phải
+  // tối ưu vài phần trăm.
+  //
+  // Đặt SAU `loadPersona` để lời đáp vẫn đọc bằng giọng riêng, và SAU bộ
+  // lọc "Whisper bịa" ở trên — nếu không thì một câu bịa có chứa "dừng
+  // lại" sẽ thành lệnh thật.
+  if (input.speak !== false) {
+    const nhanh = khopLenhNhanh(heard);
+    if (nhanh) {
+      const t = Date.now();
+      const spokenNhanh = await speakOnce(persona, nhanh.say, input.deviceId);
+      timing.tts = Date.now() - t;
+      timing.total = Date.now() - started;
+      emitTranscript(input.deviceId, 'bot', nhanh.say);
+      pushHistory(
+        input.deviceId,
+        { role: 'user', content: heard },
+        { role: 'assistant', content: JSON.stringify({ say: nhanh.say, actions: nhanh.actions }) },
+      );
+      for (const a of nhanh.actions) await dispatchAction(input.deviceId, a);
+      logger.info('MakerLab lệnh nhanh (bỏ qua LLM)', {
+        deviceId: input.deviceId,
+        heard,
+        lenh: nhanh.actions[0]?.type,
+        ms: timing.total,
+      });
+      return {
+        heard,
+        said: nhanh.say,
+        actions: nhanh.actions,
+        spoken: spokenNhanh,
+        ms: timing,
+      };
+    }
+  }
   // Số liệu mạng lấy từ gói telemetry gần nhất của bo. Không hỏi lại
   // thiết bị ở đây: người dùng đang chờ nghe tiếng, mà một lần hỏi-đáp
   // qua WebSocket rồi chờ trả lời là thêm cả giây vào độ trễ — trong khi
@@ -507,6 +549,51 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
  * Một con robot nói chậm vẫn tốt hơn một con robot câm, và đường mới
  * này có nhiều mắt xích hơn nên phải có chỗ lùi.
  */
+/**
+ * Đọc MỘT câu ngắn rồi đóng luồng. Dùng cho lệnh nhanh và tiếng đệm.
+ *
+ * Không gọi lại `thinkAndSpeak`: ở đây đã biết trước nguyên văn câu nói,
+ * nên mọi thứ liên quan tới model — cắt câu, gom mẩu, chờ JSON — đều
+ * thừa, mà mỗi thứ thừa là một chỗ chờ.
+ */
+async function speakOnce(
+  persona: Awaited<ReturnType<typeof loadPersona>>,
+  text: string,
+  deviceId: number,
+): Promise<boolean> {
+  const gw = await import('../../socket/device.gateway.js');
+  const seq = gw.speakStreamBegin(deviceId, PCM_SAMPLE_RATE);
+  if (seq === null) return false;
+  let spoken = false;
+  try {
+    if (persona.voiceProvider === 'cuongmini') {
+      const { streamCuongMini } = await import('./tts.js');
+      const byte = await streamCuongMini(
+        text,
+        { voice: persona.voiceId ?? undefined, speakingRate: persona.speechRate },
+        async (pcm) => {
+          const ok = await gw.speakStreamPushPcm(deviceId, pcm, seq);
+          if (ok) spoken = true;
+          return ok;
+        },
+      );
+      if (byte > 0) return spoken;
+    }
+    const tts = await synthesizeSpeech(text, {
+      provider: persona.voiceProvider as never,
+      voice: persona.voiceId ?? undefined,
+      language: persona.language,
+      speakingRate: persona.speechRate,
+    });
+    spoken = await gw.speakStreamPush(deviceId, tts.audio, seq);
+  } catch (e) {
+    logger.warn('MakerLab speakOnce hỏng', { error: e instanceof Error ? e.message : String(e) });
+  } finally {
+    gw.speakStreamEnd(deviceId, seq, text);
+  }
+  return spoken;
+}
+
 async function thinkAndSpeak(
   persona: PersonaConfig,
   heard: string,
@@ -518,6 +605,30 @@ async function thinkAndSpeak(
   const started = Date.now();
   const gw = await import('../../socket/device.gateway.js');
   const { PCM_SAMPLE_RATE } = await import('./audio.js');
+
+  // ⚠️ TIẾNG ĐỆM: phát TRƯỚC khi gọi model, không phải sau.
+  //
+  // Đo 12/08/2026: từ lúc người dùng nói xong tới lúc robot mở miệng là
+  // ~2,4 giây, và cả ba chặng đều đã chạm sàn (STT 500 ms bản turbo,
+  // LLM 1500 ms — model nhanh nhất trong bốn model ở cổng, TTS 250 ms
+  // đã chảy theo luồng). Không siết thêm được nữa.
+  //
+  // Nên đổi cách nghĩ: 2,4 giây IM LẶNG và 2,4 giây có tiếng "Ừmmm" ở
+  // giây thứ 0,6 là hai trải nghiệm khác hẳn nhau, dù đồng hồ y hệt.
+  // Cái đầu khiến người ta hỏi lại "alo?" rồi nói chồng lên câu trả lời
+  // đang tới; cái sau thì không.
+  //
+  // Dùng CHUNG một luồng với câu trả lời thật: mở luồng riêng rồi đóng
+  // lại nghĩa là bo phải gom đủ ngưỡng đệm HAI lần, và lần thứ hai rơi
+  // đúng vào lúc người ta đang chờ nghe nội dung.
+  let seqDem: number | null = null;
+  const dem = layTiengDemNgay(persona);
+  if (dem) {
+    seqDem = gw.speakStreamBegin(deviceId, PCM_SAMPLE_RATE);
+    if (seqDem !== null && !(await gw.speakStreamPushPcm(deviceId, dem, seqDem))) {
+      seqDem = null; // bo rớt mạng hoặc người dùng chen lời — bỏ, đi tiếp
+    }
+  }
 
   const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
     { role: 'system', content: buildSystemPrompt(persona, ctx) },
@@ -535,7 +646,9 @@ async function thinkAndSpeak(
   const p = chain[0];
   const model = robotModel(p);
 
-  let seq: number | null = null;
+  // Dùng lại luồng đã mở cho tiếng đệm, đừng mở luồng thứ hai — xem ghi
+  // chú ở `seqDem`. `null` nghĩa là chưa có đệm, và chỗ dưới sẽ tự mở.
+  let seq: number | null = seqDem;
   let spoken = false;
   let firstAudioMs = 0;
 

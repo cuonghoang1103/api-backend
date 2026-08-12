@@ -103,7 +103,26 @@ static uint32_t underrunSince = 0;
 // Cái giá: robot mở miệng chậm hơn 0,75 giây. Đó là đánh đổi CÓ CHỦ Ý —
 // một khoảng lặng ở đầu câu nghe như "nó đang nghĩ", còn một khoảng lặng
 // GIỮA câu nghe như hỏng.
-static const uint32_t PLAY_START_BYTES = 64 * 1024;
+//
+// ── 64 KB → 16 KB (12/08/2026, tối) ──
+//
+// Hai điều kiện khiến đánh đổi trên không còn đúng nữa:
+//
+// 1. Lý do gom 2 giây là đói đệm giữa câu. Từ khi máy chủ đọc theo LUỒNG
+//    (gửi tới đâu sinh tới đó thay vì đợi xong cả mẩu), log của bo cho
+//    `hut dem 0 lan / 0 ms` ở MỌI lượt — kể cả một lượt 77 giây. Không
+//    còn cái để phòng, mà vẫn trả đủ giá.
+//
+// 2. Máy chủ giờ phát một tiếng đệm "Ừmmm" (~0,7 giây = 22 KB) ngay khi
+//    nghe xong, trong lúc model đang nghĩ. Với ngưỡng 64 KB thì tiếng đó
+//    NẰM IM trong đệm chờ câu trả lời thật — tức là thứ sinh ra để lấp
+//    khoảng lặng lại bị chính khoảng lặng nuốt mất.
+//
+// 16 KB = 0,5 giây, nhỏ hơn tiếng đệm nên nó phát được ngay. Và nếu có
+// đói thật thì hậu quả cũng đã nhẹ đi: bản vá cùng ngày đổ IM LẶNG đầy
+// vòng DMA, nên đói nghe thành một quãng lặng ngắn chứ không còn là
+// tiếng lặp chữ.
+static const uint32_t PLAY_START_BYTES = 16 * 1024;
 
 /**
  * Âm lượng 10-100%, nhân vào mẫu tiếng trước khi đẩy vào I2S.

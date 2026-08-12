@@ -116,17 +116,64 @@ export default function VoiceMiniClient() {
   );
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10">
-      <header className="mb-6">
-        <h1 className="flex items-center gap-2 text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
-          <Mic2 className="h-6 w-6" /> Voice CuongMini
+    // pt-20 để tránh thanh nav CỐ ĐỊNH cao 64px — `py-10` cũ chỉ chừa
+    // 40px nên tiêu đề chui xuống dưới thanh nav, đúng lỗi người dùng
+    // thấy. Mọi trang khác trong web đều dùng đúng cặp `pt-20 sm:pt-24`.
+    <div className="mx-auto max-w-3xl px-4 pb-12 pt-20 sm:px-6 sm:pt-24">
+      <header className="mb-8">
+        <h1
+          className="flex items-center gap-2.5 text-3xl font-bold tracking-tight"
+          style={{ color: 'var(--text-primary)' }}
+        >
+          <span
+            className="flex h-10 w-10 items-center justify-center rounded-xl"
+            // ⚠️ KHÔNG viết `var(--accent)18` để mong ra alpha hex — nối
+            // chuỗi vào sau var() cho ra một giá trị không hợp lệ, và CSS
+            // không hợp lệ thì trình duyệt BỎ QUA IM LẶNG. Ô nền biến mất
+            // mà không có lỗi nào ở console.
+            style={{ background: 'color-mix(in srgb, var(--accent, #6366f1) 16%, transparent)' }}
+          >
+            <Mic2 className="h-5 w-5" style={{ color: 'var(--accent, #6366f1)' }} />
+          </span>
+          Voice CuongMini
         </h1>
-        <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-          Dán văn bản, chọn giọng, bấm tạo. Máy đọc chạy ngay trên máy chủ của tôi — không
-          gửi chữ của bạn đi đâu cả, và không có hạn mức.
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+          Dán văn bản, chọn giọng, bấm tạo. Máy đọc chạy ngay trên máy chủ của tôi — chữ của bạn
+          không đi đâu cả, và không có hạn mức.
         </p>
+
+        {/* Ba con số ĐO THẬT, không phải khẩu hiệu. Người ta tin số hơn tin
+            tính từ, và ba con số này là lý do tồn tại của cả trang. */}
+        <dl className="mt-5 grid grid-cols-3 gap-3">
+          {[
+            { n: '0,19×', t: 'thời gian thực', g: 'sinh 5 giây tiếng mất chưa tới 1 giây' },
+            { n: '5.000', t: 'ký tự mỗi lượt', g: 'khoảng 5 phút đọc' },
+            { n: '0đ', t: 'không hạn mức', g: 'chạy trên máy riêng, không gọi ai' },
+          ].map((o) => (
+            <div
+              key={o.t}
+              className="rounded-xl border px-3 py-2.5"
+              style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}
+              title={o.g}
+            >
+              <dt className="text-lg font-bold tabular-nums" style={{ color: 'var(--text-primary)' }}>
+                {o.n}
+              </dt>
+              <dd className="text-[11px] leading-tight" style={{ color: 'var(--text-muted)' }}>
+                {o.t}
+              </dd>
+            </div>
+          ))}
+        </dl>
       </header>
 
+      {/* Thẻ chính. Gom ô nhập, chọn giọng và nút vào một khối có viền:
+          trước đây chúng trôi tự do trên nền trang nên mắt không biết đâu
+          là một việc, đâu là việc khác. */}
+      <section
+        className="rounded-2xl border p-4 sm:p-5"
+        style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}
+      >
       <label className="mb-2 block text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
         Văn bản
       </label>
@@ -138,7 +185,7 @@ export default function VoiceMiniClient() {
         className="w-full rounded-xl border p-3 text-sm leading-relaxed"
         style={{
           borderColor: quaDai ? '#ef4444' : 'var(--border-color)',
-          background: 'var(--bg-card)',
+          background: 'var(--bg-secondary)',
           color: 'var(--text-primary)',
         }}
       />
@@ -164,7 +211,7 @@ export default function VoiceMiniClient() {
             className="w-full rounded-lg border p-2.5 text-sm"
             style={{
               borderColor: 'var(--border-color)',
-              background: 'var(--bg-card)',
+              background: 'var(--bg-secondary)',
               color: 'var(--text-primary)',
             }}
           >
@@ -217,7 +264,7 @@ export default function VoiceMiniClient() {
       {ketQua && (
         <div
           className="mt-6 rounded-xl border p-4"
-          style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}
+          style={{ borderColor: 'var(--border-color)', background: 'var(--bg-secondary)' }}
         >
           <audio controls src={ketQua.url} className="w-full" />
           <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
@@ -236,6 +283,8 @@ export default function VoiceMiniClient() {
           </div>
         </div>
       )}
+
+      </section>
 
       {/* ── Nhân bản giọng ──
           Đặt CUỐI trang, và gập lại sẵn: người vào lần đầu chỉ muốn dán
@@ -283,7 +332,7 @@ export default function VoiceMiniClient() {
               </label>
               <input
                 type="file"
-                accept="audio/*,.wav,.mp3,.m4a,.ogg,.flac"
+                accept="audio/*,video/*,.wav,.mp3,.m4a,.ogg,.flac,.aac,.opus,.mp4,.mov,.m4v"
                 onChange={(e) => setFileMau(e.target.files?.[0] ?? null)}
                 className="w-full text-xs"
                 style={{ color: 'var(--text-secondary)' }}

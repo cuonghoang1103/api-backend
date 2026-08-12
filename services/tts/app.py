@@ -35,6 +35,7 @@ from __future__ import annotations
 import io
 import os
 import threading
+from contextlib import contextmanager
 import time
 import uuid
 from pathlib import Path
@@ -51,10 +52,71 @@ MAX_CHARS = int(os.environ.get("TTS_MAX_CHARS", "5000"))
 # không để tiến trình phình mãi. Mỗi phút tiếng 24 kHz float32 ~ 5,7 MB.
 JOB_TTL_SEC = 30 * 60
 
+# Trần số việc /tts đang chạy. Model chỉ sinh MỘT lượt tại một thời điểm
+# nên việc thứ tư trở đi chỉ đứng đợi chứ không nhanh hơn — nhận thêm chỉ
+# tổ dài hàng và tốn luồng.
+MAX_JOBS_CHO = int(os.environ.get("TTS_MAX_JOBS", "3"))
+
 app = FastAPI(title="Voice CuongMini")
 
 _tts: Any = None
 _lock = threading.Lock()          # model KHÔNG an toàn đa luồng
+
+# ─── Ưu tiên: robot đi trước, web xếp sau ──────────────────────
+#
+# Chỉ có MỘT khoá mô hình cho cả nhà, và trước 12/08/2026 nó cấp theo kiểu
+# ai giành được thì lấy. Hậu quả đo thật trong 30 phút: 23 việc từ trang
+# `/voice-mini` và 47 lượt của robot cùng tranh nhau, tiến trình phình lên
+# **103 luồng**, và robot chờ quá 20 giây rồi tụt xuống giọng Google. Người
+# dùng thấy đúng một câu: "robot mất giọng nhân bản rồi".
+#
+# Hai loại việc này KHÔNG ngang nhau, và đó mới là điều mã cũ bỏ sót:
+#
+#   robot  — có người đang đứng im chờ nghe. Chậm 10 giây là hỏng cuộc
+#            nói chuyện, không cứu lại được.
+#   web    — người ta bấm nút rồi đi làm việc khác. Chậm 10 giây thì
+#            thanh tiến độ chạy lâu hơn một chút, thế thôi.
+#
+# Nên việc web phải NHƯỜNG ĐƯỜNG khi có robot đang chờ. Không phải hàng
+# đợi công bằng — công bằng ở đây chính là cái làm hỏng việc.
+_cho_uu_tien = 0                  # số lượt robot đang chờ hoặc đang chạy
+_dem_lock = threading.Lock()
+
+
+@contextmanager
+def khoa_mo_hinh(uu_tien: bool = False):
+    """Xin khoá mô hình. `uu_tien=True` cho đường robot.
+
+    Việc thường quay vòng chờ trong lúc còn robot xếp hàng. Ngủ 50 ms mỗi
+    vòng chứ không bận-đợi: giữ CPU rảnh cho chính cái model đang sinh
+    tiếng, và 50 ms thì tai không nhận ra.
+    """
+    global _cho_uu_tien
+    if uu_tien:
+        with _dem_lock:
+            _cho_uu_tien += 1
+    try:
+        while True:
+            if not uu_tien and _cho_uu_tien > 0:
+                time.sleep(0.05)          # có robot đang chờ → nhường
+                continue
+            if _lock.acquire(timeout=0.2):
+                break
+        try:
+            yield
+        finally:
+            _lock.release()
+    finally:
+        if uu_tien:
+            with _dem_lock:
+                _cho_uu_tien -= 1
+
+
+def dang_ban() -> int:
+    """Số lượt robot đang chờ/đang chạy — để chỗ khác biết mà nhường."""
+    return _cho_uu_tien
+
+
 _jobs: Dict[str, Dict[str, Any]] = {}
 _sr = 48_000
 
@@ -163,7 +225,9 @@ def run_job(jid: str, text: str, voice: Optional[str], style: str) -> None:
     try:
         t = engine()
         t0 = time.time()
-        with _lock:  # một lượt sinh tại một thời điểm; model không reentrant
+        # KHÔNG ưu tiên: người bấm nút trên web đã đi làm việc khác, còn
+        # robot thì có người đang đứng chờ nghe.
+        with khoa_mo_hinh():
             audio = t.infer(text=text, voice=voice or None, style=style)
         dur = len(audio) / _sr
         _jobs[jid].update(
@@ -186,6 +250,22 @@ def tts(payload: Dict[str, Any]):
         raise HTTPException(400, f"Quá {MAX_CHARS} ký tự (đang {len(text)})")
 
     reap_jobs()
+
+    # ⚠️ TRẦN HÀNG ĐỢI — nhận vô hạn là tự bóp cổ.
+    #
+    # Mỗi việc đẻ một luồng, tất cả xếp hàng trên cùng khoá mô hình. Đo
+    # 12/08/2026: 23 việc dồn lại, tiến trình lên 103 luồng, và người dùng
+    # ngồi nhìn thanh tiến trình chạy cho một việc còn cả chục việc đứng
+    # trước. Nhận rồi bắt chờ mười phút TỆ HƠN từ chối ngay — từ chối thì
+    # người ta biết mà thử lại, còn chờ thì chỉ biết ngồi đoán.
+    dang_cho = sum(1 for v in _jobs.values() if v.get("state") == "running")
+    if dang_cho >= MAX_JOBS_CHO:
+        raise HTTPException(
+            429,
+            f"Máy đọc đang bận {dang_cho} việc. Chờ xong bớt rồi tạo tiếp "
+            f"(mỗi việc mất khoảng số ký tự chia 15 giây).",
+        )
+
     jid = uuid.uuid4().hex
     _jobs[jid] = {"state": "running", "at": time.time(), "chars": len(text)}
     threading.Thread(
@@ -475,7 +555,7 @@ def tts_stream(payload: Dict[str, Any]):
         # ⚠️ Giữ khoá suốt cả luồng. Model này KHÔNG chạy song song được,
         # và hai lượt chồng nhau thì cả hai ra tiếng lẫn lộn — tệ hơn hẳn
         # so với lượt sau phải đợi.
-        with _lock:
+        with khoa_mo_hinh(uu_tien=True):
             t0 = time.time()
             tong = 0
             for mau in t.infer_stream(text=text, voice=voice, style=style):

@@ -290,6 +290,66 @@ def chon_doan_tot_nhat(duong: str, giay: float = REF_GIAY) -> str:
         return duong
 
 
+# Trần cho đoạn dùng rút đặc trưng. Rút mất ~6 giây cho 35 giây tiếng và
+# tăng tuyến tính, nên 60 giây là chỗ cân bằng: đủ dài để ổn định, mà
+# người dùng vẫn không phải ngồi chờ quá lâu cho một việc làm một lần.
+REF_TRAN_GIAY = 60.0
+
+
+def ghi_giong(t, ten: str, duong_day_du: str, duong_8s: str,
+              description: str = "", gender: str = "", style: str = "tu_nhien") -> None:
+    """Đăng ký một giọng, lấy đặc trưng từ TRỌN đoạn nhưng mồi từ 8 giây.
+
+    Không dùng `t.add_voice()` vì nó rút CẢ HAI thứ từ cùng một file với
+    trần 8 giây cứng, mà hai thứ đó muốn hai độ dài khác nhau:
+
+    **Vector đặc trưng người nói** — càng nhiều tiếng càng ổn định. Đo
+    thật ngày 12/08/2026 trên đoạn 40,8 giây (cosine sau khi trừ tâm; hai
+    người khác nhau ≈ 0,00):
+        hai cửa sổ 8 giây bất kỳ của CÙNG giọng :  0,88 – 0,95
+        một cửa sổ 8 giây  ↔ đồng thuận 6 cửa sổ:  0,969
+        cả đoạn 40,8 giây  ↔ đồng thuận 6 cửa sổ:  0,993
+    Tức bộ mã hoá tự gộp cả đoạn tốt hơn bất kỳ cửa sổ đơn lẻ nào. Đây là
+    lý do "nhân bản nghe chưa giống": cửa sổ 8 giây mặc định là một mẫu
+    ngẫu nhiên lệch 5-12% so với đồng thuận, và lệch theo hướng nào thì
+    tuỳ đoạn thu mở đầu bằng gì.
+
+    **Mã tham chiếu** (mồi âm thanh cho phần sinh) — giữ ở 8 giây. Nó dài
+    tuyến tính theo đoạn (8 giây = 1.600 phần tử, 35 giây = 7.072), và mô
+    hình được huấn luyện với mồi cỡ 8 giây. Đo thì tốc độ sinh KHÔNG đổi
+    (0,83 giây cả hai), nên đây không phải chuyện tốc độ — chỉ là không
+    có lý do đưa cho mô hình một thứ khác kích cỡ nó quen, khi ta đã biết
+    8 giây kia là 8 giây tốt.
+    """
+    import numpy as _np
+
+    lam_sach = getattr(t, "_preclean_reference_audio", None)
+    day_du = duong_day_du
+    if lam_sach:
+        try:
+            day_du = lam_sach(duong_day_du)
+        except Exception:
+            day_du = duong_day_du
+
+    dac_trung, _ = t.engine.prepare_reference(
+        str(day_du), denoise=True, use_ref_codes=False, max_seconds=REF_TRAN_GIAY)
+    _, ma = t.engine.prepare_reference(
+        str(duong_8s), denoise=True, use_ref_codes=True)
+
+    t._preset_voices[ten] = {
+        "description": description,
+        "gender": gender,
+        "style": style,
+        "speaker_emb": _np.asarray(dac_trung, dtype=_np.float32),
+        "codes": None if ma is None else _np.asarray(ma, dtype=_np.int64),
+    }
+    if not getattr(t, "_default_voice", None):
+        t._default_voice = ten
+
+    if lam_sach and str(day_du) != str(duong_day_du):
+        Path(str(day_du)).unlink(missing_ok=True)
+
+
 @app.post("/voices")
 async def add_voice(
     name: str = Form(...),
@@ -317,7 +377,8 @@ async def add_voice(
         t = engine()
         chon = chon_doan_tot_nhat(str(tmp))
         with _lock:
-            t.add_voice(name.strip(), chon, description=description, gender=gender, save=False)
+            ghi_giong(t, name.strip(), str(tmp), chon,
+                      description=description, gender=gender)
             t.save_voices(str(VOICES_FILE))
         return {"ok": True, "voice": name.strip()}
     except Exception as e:

@@ -200,7 +200,14 @@ function normalizeSamples(raw: unknown): Array<{ user: string; bot: string }> {
  */
 export function buildSystemPrompt(
   persona: PersonaConfig,
-  ctx: { deviceName?: string; battery?: number | null; nearbyMm?: number | null } = {},
+  ctx: {
+    deviceName?: string;
+    battery?: number | null;
+    nearbyMm?: number | null;
+    ssid?: string | null;
+    rssi?: number | null;
+    pingMs?: number | null;
+  } = {},
 ): string {
   const traitLines = describeTraits(persona.traits);
   const state: string[] = [];
@@ -244,6 +251,30 @@ export function buildSystemPrompt(
   if (typeof ctx.battery === 'number') state.push(`Pin còn ${ctx.battery}%.`);
   if (typeof ctx.nearbyMm === 'number')
     state.push(`Cảm biến phía trước báo có vật cách ${ctx.nearbyMm} mm.`);
+
+  // Mạng. Đổi dBm sang chữ NGƯỜI hiểu ngay tại đây, đừng đưa con số thô
+  // cho model rồi mong nó tự diễn giải — model sẽ nói "âm bốn mươi hai
+  // dBm" và người nghe không rút ra được gì. Mốc lấy theo thang quen
+  // dùng của WiFi: trên -50 rất mạnh, dưới -80 gần như không dùng được.
+  if (ctx.ssid) {
+    const suc =
+      typeof ctx.rssi !== 'number'
+        ? ''
+        : ctx.rssi > -50
+          ? ', sóng rất mạnh'
+          : ctx.rssi > -60
+            ? ', sóng mạnh'
+            : ctx.rssi > -70
+              ? ', sóng khá'
+              : ctx.rssi > -80
+                ? ', sóng yếu'
+                : ', sóng rất yếu, hay rớt';
+    const tre =
+      typeof ctx.pingMs === 'number'
+        ? `, tới server mất ${ctx.pingMs} mili giây${ctx.pingMs < 50 ? ' (nhanh)' : ctx.pingMs < 200 ? '' : ' (chậm)'}`
+        : '';
+    state.push(`Đang nối WiFi "${ctx.ssid}"${suc}${tre}.`);
+  }
 
   // Kiến thức về chủ. Đặt NGAY SAU tính cách và TRƯỚC bảng lệnh: model
   // chú ý phần đầu prompt hơn phần cuối, mà đây là thứ khiến robot

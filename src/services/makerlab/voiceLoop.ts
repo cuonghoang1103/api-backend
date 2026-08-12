@@ -339,7 +339,19 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
 
   const device = await prisma.makerDevice.findUnique({
     where: { id: input.deviceId },
-    select: { id: true, name: true, batteryPct: true },
+    select: {
+      id: true,
+      name: true,
+      batteryPct: true,
+      // Bản ghi telemetry MỚI NHẤT. `MakerDevice` không giữ số liệu mạng
+      // (chỉ có batteryPct), còn số liệu thô thì nằm ở bảng riêng —
+      // dùng chính bảng đó thay vì thêm cột mới và một migration.
+      telemetry: {
+        orderBy: { recordedAt: 'desc' as const },
+        take: 1,
+        select: { payload: true },
+      },
+    },
   });
 
   // ── 1. Hear ──
@@ -399,7 +411,19 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
 
   // ── 2. Think ──
   const persona = await loadPersona(input.projectId);
-  const ctx = { deviceName: device?.name, battery: device?.batteryPct ?? null };
+  // Số liệu mạng lấy từ gói telemetry gần nhất của bo. Không hỏi lại
+  // thiết bị ở đây: người dùng đang chờ nghe tiếng, mà một lần hỏi-đáp
+  // qua WebSocket rồi chờ trả lời là thêm cả giây vào độ trễ — trong khi
+  // bo vẫn tự gửi số liệu mỗi giây.
+  const tele = (device?.telemetry?.[0]?.payload ?? {}) as Record<string, unknown>;
+  const soOrNull = (v: unknown) => (typeof v === 'number' ? v : null);
+  const ctx = {
+    deviceName: device?.name,
+    battery: device?.batteryPct ?? null,
+    ssid: typeof tele.ssid === 'string' ? tele.ssid : null,
+    rssi: soOrNull(tele.rssi),
+    pingMs: soOrNull(tele.pingMs),
+  };
   // ── 1b. Tra internet, NẾU câu hỏi cần ──
   //
   // Chạy trước khi gọi model, không phải sau. Xem lý do dài trong

@@ -34,6 +34,7 @@
 
 #include "audio.h"
 #include "face.h"
+#include "net.h"
 #include "ota.h"
 #include "config.h"
 #include "secrets.h"
@@ -48,6 +49,7 @@ struct State {
   bool wifiUp = false;
   bool wsUp = false;
   String ip = "-";
+  String ssid = "-";
   int rssi = 0;
   uint32_t uptimeSec = 0;
   uint32_t cmdCount = 0;
@@ -325,7 +327,7 @@ static void uiMode() {
 }
 
 static void uiRefresh() {
-  uiValue(0, st.wifiUp ? String(WIFI_SSID) : String("dang tim..."),
+  uiValue(0, st.wifiUp ? st.ssid : String("dang tim..."),
           st.wifiUp ? C_OK : C_WARN);
   uiValue(1, st.ip, C_VALUE);
   uiValue(2, st.wifiUp ? String(st.rssi) + " dBm" : String("-"),
@@ -463,6 +465,23 @@ static void sendTelemetry() {
   doc["psramKb"] = ESP.getFreePsram() / 1024;
   doc["micLevel"] = audio::level();
   doc["turns"] = st.turns;
+
+  // Số liệu MẠNG, để robot trả lời được câu "kiểm tra kết nối đi".
+  //
+  // Đo độ trễ mỗi 30 giây chứ không phải mỗi lượt telemetry (1 Hz): mỗi
+  // lần đo là một lần bắt tay TLS thật tới server, làm 60 lần/phút thì
+  // chính phép đo trở thành thứ làm chậm mạng.
+  doc["ssid"] = st.ssid;
+  {
+    static uint32_t lanDo = 0;
+    static int32_t treMs = -1;
+    if (millis() - lanDo > 30000) {
+      lanDo = millis();
+      treMs = net::doDoTre();
+    }
+    if (treMs >= 0) doc["pingMs"] = treMs;
+  }
+
   {
     const float v = docPin();
     const int pct = phanTramPin(v);
@@ -608,6 +627,17 @@ static void handleCommand(JsonDocument& doc) {
     sendLog("warn", "Dang khoi dong lai theo yeu cau");
     delay(300);
     ESP.restart();
+    return;
+  }
+
+  if (!strcmp(type, "wifi_add")) {
+    const char* ssid = doc["payload"]["ssid"] | "";
+    const char* pass = doc["payload"]["pass"] | "";
+    const bool ok = net::luuMang(String(ssid), String(pass));
+    sendLog(ok ? "info" : "warn",
+            ok ? String("da nho WiFi '") + ssid + "', lan sau toi noi la tu vao"
+               : String("khong luu duoc WiFi '") + ssid + "'");
+    sendAck(id, ok, ok ? nullptr : "ten mang khong hop le");
     return;
   }
 
@@ -1013,21 +1043,27 @@ void setup() {
   // khi nào chạy pin mới cân nhắc bật lại.
   WiFi.setSleep(false);
 
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  // Ba tầng: mạng đã nhớ → mạng trong secrets.h → tự mở cổng cấu hình.
+  // Xem net.h. `uiHeartbeat` để màn hình không đứng hình trong lúc chờ —
+  // thử hết sáu mạng có thể mất gần một phút.
+  const net::TrangThai mang = net::vaoMang(uiHeartbeat);
 
-  uint32_t t0 = millis();
-  while (WiFi.status() != WL_CONNECTED && millis() - t0 < 20000) {
-    delay(300);
-    Serial.print('.');
-    uiHeartbeat();
+  if (mang.dangMoCong) {
+    // Không mạng nào vào được. Hiện thẳng lên màn 3.5" cách nối vào —
+    // đây là lúc DUY NHẤT người dùng không thể tra cứu gì từ web, nên
+    // mọi thứ họ cần phải nằm trên chính cái màn hình trước mặt.
+    st.lastNote = String("Noi WiFi '") + net::tenCong() + "' de cai dat";
+    Serial.printf("[net] dang cho cai dat qua cong '%s'\n", net::tenCong());
   }
 
-  if (WiFi.status() == WL_CONNECTED) {
+  if (mang.online) {
     st.wifiUp = true;
-    st.ip = WiFi.localIP().toString();
-    st.rssi = WiFi.RSSI();
+    st.ip = mang.ip;
+    st.rssi = mang.rssi;
+    st.ssid = mang.ssid;
     st.lastNote = "WiFi OK, dang noi server";
-    Serial.printf("\nWiFi ok, ip=%s rssi=%d\n", st.ip.c_str(), st.rssi);
+    Serial.printf("\nWiFi ok, ssid=%s ip=%s rssi=%d\n", mang.ssid.c_str(), st.ip.c_str(),
+                  st.rssi);
 
     // Lấy giờ từ mạng. ESP32 KHÔNG có đồng hồ chạy pin — mất điện là
     // quên sạch giờ, nên phải hỏi lại mỗi lần khởi động.
@@ -1179,6 +1215,8 @@ void loop() {
     }
     chamTruoc = cham;
   }
+
+  net::loop();   // rẻ khi không mở cổng; bơm web+DNS khi đang mở
 
   gStage = "ui";
   const uint32_t now = millis();

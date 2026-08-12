@@ -85,6 +85,22 @@ const ARM_POSES: Array<{ label: string; hint: string; payload: Record<string, un
   { label: '⬇️ Hạ', hint: 'Về tư thế nghỉ, tay duỗi xuống', payload: { side: 'both', shoulder: 0, elbow: 0 } },
 ];
 
+/**
+ * Đổi cường độ sóng WiFi (dBm) sang chữ người đọc hiểu.
+ *
+ * Thang quen dùng của WiFi: trên -50 là rất mạnh, dưới -80 thì gần như
+ * không dùng được. Số âm càng lớn càng yếu — điều này ngược trực giác
+ * với hầu hết mọi người, nên đừng bắt họ tự suy.
+ */
+function sucSong(dbm: unknown): string {
+  if (typeof dbm !== 'number') return '—';
+  if (dbm > -50) return 'rất mạnh';
+  if (dbm > -60) return 'mạnh';
+  if (dbm > -70) return 'khá';
+  if (dbm > -80) return 'yếu';
+  return 'rất yếu';
+}
+
 export function DeviceConsole({
   projectId,
   projectSlug,
@@ -127,6 +143,8 @@ export function DeviceConsole({
   const [creds, setCreds] = useState<MakerDeviceCredentials | null>(null);
 
   const [logs, setLogs] = useState<MakerLogEvent[]>([]);
+  const [wifiSsid, setWifiSsid] = useState('');
+  const [wifiPass, setWifiPass] = useState('');
   const [telemetry, setTelemetry] = useState<Record<string, number | string | boolean>>({});
   const [chat, setChat] = useState<MakerTranscriptEvent[]>([]);
   const [chatInput, setChatInput] = useState('');
@@ -399,7 +417,24 @@ export function DeviceConsole({
               value={num(telemetry.battery ?? active.batteryPct, '%')}
               accent="#fbbf24"
             />
-            <Metric label="Sóng WiFi" value={num(telemetry.rssi ?? active.rssi, ' dBm')} accent="#38bdf8" />
+            {/* Hiện TÊN MẠNG + sức sóng bằng chữ, không phải con số dBm
+                trần. "-42 dBm" không nói được gì với người không làm
+                mạng; "rất mạnh" thì ai cũng hiểu ngay. Số dBm vẫn giữ
+                trong tooltip cho ai cần. */}
+            <Metric
+              label="WiFi"
+              value={
+                typeof telemetry.ssid === 'string' && telemetry.ssid
+                  ? `${telemetry.ssid} · ${sucSong(telemetry.rssi ?? active.rssi)}`
+                  : sucSong(telemetry.rssi ?? active.rssi)
+              }
+              accent="#38bdf8"
+            />
+            <Metric
+              label="Tới server"
+              value={typeof telemetry.pingMs === 'number' ? `${telemetry.pingMs} ms` : '—'}
+              accent="#22d3ee"
+            />
             <Metric
               label="Firmware"
               value={active.firmwareVersion ?? '—'}
@@ -627,6 +662,78 @@ export function DeviceConsole({
           </div>
 
           {/* ── Serial monitor ── */}
+          {/* ── Dạy robot một WiFi mới ──
+              Đặt TRƯỚC nhật ký vì đây là việc người ta chủ động làm, còn
+              nhật ký là thứ để đọc khi có chuyện. */}
+          <section
+            className="rounded-xl border p-4"
+            style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}
+          >
+            <h3
+              className="flex items-center gap-2 text-sm font-semibold"
+              style={{ color: 'var(--text-primary)' }}
+            >
+              <Wifi size={14} /> Dạy robot một WiFi mới
+            </h3>
+            <p className="mt-1.5 text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+              Thêm sẵn WiFi nơi bạn sắp mang robot tới — tới nơi bật lên là nó tự vào, khỏi cài
+              đặt gì. Robot nhớ được 6 mạng.
+              <br />
+              Còn nếu tới nơi mà chưa thêm sẵn: robot sẽ tự phát ra WiFi{' '}
+              <strong style={{ color: 'var(--text-secondary)' }}>Mini-Me-Setup</strong> (mật khẩu{' '}
+              <strong style={{ color: 'var(--text-secondary)' }}>12345678</strong>) — nối điện
+              thoại vào là trang cài đặt tự hiện lên.
+            </p>
+            <div className="mt-3 grid gap-2 sm:grid-cols-[1fr_1fr_auto]">
+              <input
+                value={wifiSsid}
+                onChange={(e) => setWifiSsid(e.target.value)}
+                placeholder="Tên WiFi"
+                maxLength={32}
+                className="rounded-lg border px-3 py-2 text-sm"
+                style={{
+                  borderColor: 'var(--border-color)',
+                  background: 'var(--bg-secondary)',
+                  color: 'var(--text-primary)',
+                }}
+              />
+              <input
+                value={wifiPass}
+                onChange={(e) => setWifiPass(e.target.value)}
+                placeholder="Mật khẩu"
+                type="password"
+                maxLength={63}
+                autoComplete="off"
+                className="rounded-lg border px-3 py-2 text-sm"
+                style={{
+                  borderColor: 'var(--border-color)',
+                  background: 'var(--bg-secondary)',
+                  color: 'var(--text-primary)',
+                }}
+              />
+              <button
+                type="button"
+                disabled={!wifiSsid.trim() || !active.connected}
+                onClick={() => {
+                  void cmd('wifi_add', { ssid: wifiSsid.trim(), pass: wifiPass });
+                  setWifiSsid('');
+                  setWifiPass('');
+                }}
+                className="rounded-lg px-4 py-2 text-sm font-semibold text-white transition disabled:opacity-40"
+                style={{ background: 'var(--accent, #6366f1)' }}
+              >
+                Dạy
+              </button>
+            </div>
+            {!active.connected && (
+              <p className="mt-2 text-xs" style={{ color: 'var(--text-muted)' }}>
+                Robot đang offline — phải nối được mạng thì mới dạy được mạng mới. Dùng cổng{' '}
+                <strong style={{ color: 'var(--text-secondary)' }}>Mini-Me-Setup</strong> ngay trên
+                robot thay cho chỗ này.
+              </p>
+            )}
+          </section>
+
           <section
             className="overflow-hidden rounded-xl border"
             style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}

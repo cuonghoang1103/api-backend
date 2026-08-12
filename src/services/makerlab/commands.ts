@@ -103,6 +103,19 @@ export const commandSchemas = {
     query: z.string().min(1).max(120),
   }),
   stop_music: z.object({}).default({}),
+  /**
+   * Thêm một mạng WiFi vào bộ nhớ của robot, để lần sau tới nơi đó nó
+   * tự vào. Dùng lúc còn ở nhà, trước khi mang robot đi.
+   *
+   * ⚠️ `llmAllowed: false` bên dưới, và đó KHÔNG phải chuyện thẩm mỹ:
+   * model đọc mọi thứ người ta nói với robot. Cho nó quyền đổi WiFi
+   * nghĩa là bất kỳ ai đứng trước robot cũng ra lệnh được — chỉ cần nói
+   * đúng câu. Lệnh này chỉ đi từ giao diện web, sau khi đã đăng nhập.
+   */
+  wifi_add: z.object({
+    ssid: z.string().min(1).max(32),
+    pass: z.string().max(63).default(''),
+  }),
   /** Speak an arbitrary line (server synthesises, device plays). */
   say: z.object({
     text: z.string().min(1).max(500),
@@ -135,6 +148,7 @@ export const LLM_ALLOWED_COMMANDS: CommandType[] = [
   'volume',
   'play_music',
   'stop_music',
+  'wifi_add',
   'move',
   'stop',
   'turn',
@@ -210,6 +224,12 @@ export const COMMAND_CATALOG: Array<{
   { type: 'volume', label: 'Âm lượng', description: 'Đặt âm lượng loa 10-100%', llmAllowed: true },
   { type: 'play_music', label: 'Bật nhạc', description: 'Tìm và phát một bài trong thư viện nhạc của web', llmAllowed: true },
   { type: 'stop_music', label: 'Tắt nhạc', description: 'Dừng bài đang phát', llmAllowed: true },
+  {
+    type: 'wifi_add',
+    label: 'Thêm WiFi',
+    description: 'Dạy robot một mạng WiFi mới, để mang đi chỗ khác là tự vào',
+    llmAllowed: false,
+  },
   { type: 'say', label: 'Nói', description: 'Đọc một câu bất kỳ qua loa', llmAllowed: false },
   { type: 'config', label: 'Cấu hình', description: 'Chỉnh âm lượng, độ nhạy mic, tốc độ tối đa…', llmAllowed: false },
   { type: 'reboot', label: 'Khởi động lại', description: 'Reset mềm bo mạch', llmAllowed: false },

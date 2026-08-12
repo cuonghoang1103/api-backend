@@ -106,10 +106,46 @@ static DNSServer* dns = nullptr;
 static bool congDangMo = false;
 static uint32_t congMoLuc = 0;
 static String dsMangQuet;
+/** Loa kêu một tiếng báo cài xong — loop() đọc rồi tự xoá. */
+static bool keuMotTieng = false;
+/** Mốc khởi động lại sau khi cài xong; 0 = chưa hẹn. */
+static uint32_t khoiDongLucNao = 0;
+/** Mật khẩu đang chờ thử — đặt bởi handler, xử ở loop(). */
+static String choSsid, choPass;
+static bool dangThu = false;
+/** Kết quả lần thử gần nhất, để main vẽ lên màn: 0 chưa có, 1 xong, 2 hỏng. */
+static uint8_t ketQua = 0;
+static String ketQuaChu;
 
 const char* tenCong() { return CONG_SSID; }
 const char* matKhauCong() { return CONG_PASS; }
 bool dangMoCong() { return congDangMo; }
+
+/**
+ * Trang báo kết quả. Xanh có dấu tích, đỏ có dấu X — và nói rõ phải làm
+ * gì tiếp, chứ không chỉ báo "thất bại".
+ */
+static String trangKetQua(bool ok, const String& loi) {
+  const String mau = ok ? "#22c55e" : "#ef4444";
+  const String bieu = ok ? "&#10004;" : "&#10005;";
+  const String tieu = ok ? "Xong" : "Chua duoc";
+  String h =
+      "<!doctype html><html><head><meta charset=utf-8>"
+      "<meta name=viewport content='width=device-width,initial-scale=1'>"
+      "<title>Mini-Me</title><style>"
+      "body{font-family:-apple-system,system-ui,sans-serif;background:#0f172a;color:#f8fafc;"
+      "margin:0;padding:40px 24px;text-align:center;line-height:1.6}"
+      ".v{width:76px;height:76px;border-radius:50%;margin:0 auto 20px;display:flex;"
+      "align-items:center;justify-content:center;font-size:40px;color:#fff;background:" + mau + "}"
+      "h1{font-size:22px;margin:0 0 8px}p{color:#94a3b8;font-size:15px;margin:0 0 24px}"
+      "a{display:inline-block;padding:12px 24px;border-radius:10px;background:#334155;"
+      "color:#f8fafc;text-decoration:none;font-size:15px}"
+      "</style></head><body>"
+      "<div class=v>" + bieu + "</div><h1>" + tieu + "</h1><p>" + loi + "</p>";
+  if (!ok) h += "<a href=/>Thu lai</a>";
+  h += "</body></html>";
+  return h;
+}
 
 static String trangHtml() {
   String h =
@@ -172,16 +208,35 @@ static void moCong() {
     const String ssid = web->arg("ssid");
     const String pass = web->arg("pass");
     if (!ssid.length()) {
-      web->send(400, "text/html", "<meta charset=utf-8><p>Chua chon mang nao.");
+      web->send(400, "text/html", trangKetQua(false, "Chua chon mang nao."));
       return;
     }
-    luuMang(ssid, pass);
+
+    // ⚠️ TRẢ LỜI NGAY, THỬ SAU — và báo kết quả lên MÀN HÌNH ROBOT.
+    //
+    // Bản trước thử ngay trong hàm này rồi mới trả lời, để người dùng
+    // ngồi nhìn kết quả trên điện thoại. Không chạy được, vì lý do phần
+    // cứng: ESP32 chỉ có MỘT bộ thu phát. Muốn thử nối vào mạng khác,
+    // nó phải nhảy sang kênh của mạng đó — và cái WiFi nó đang phát cho
+    // điện thoại NHẢY THEO. Điện thoại rớt ngay giữa chừng, trang web
+    // ngồi chờ một câu trả lời không bao giờ tới.
+    //
+    // Người dùng gặp đúng vậy: "đơ ở chỗ nhập mật khẩu mãi", rồi thoát
+    // ra cũng không vào lại được.
+    //
+    // Nên: trả lời trong một phần nghìn giây, dặn họ NHÌN MÀN HÌNH
+    // ROBOT, rồi mới thử ở vòng loop(). Màn hình là kênh báo tin duy
+    // nhất không bị chính phép thử làm đứt.
+    choSsid = ssid;
+    choPass = pass;
+    dangThu = true;
     web->send(200, "text/html",
-              "<meta charset=utf-8><body style='font-family:sans-serif;padding:24px'>"
-              "<h2>Da luu</h2><p>Robot dang khoi dong lai de vao mang nay.");
-    delay(800);
-    ESP.restart();
+              trangKetQua(true, String("Dang thu vao mang \"") + ssid +
+                                    "\". NHIN MAN HINH ROBOT de biet ket qua — "
+                                    "khoang 15 giay. WiFi cua robot se tam mat trong luc thu, "
+                                    "do la binh thuong."));
   });
+
   // Mọi đường dẫn lạ đều trả về trang chính — điện thoại thăm dò cổng
   // bằng những URL riêng của hãng (`/generate_204`, `/hotspot-detect.html`),
   // trả 404 cho chúng là trang cấu hình không tự bật lên.
@@ -261,7 +316,54 @@ TrangThai vaoMang(void (*veUi)()) {
 
 void moCongNgay() { moCong(); }
 
+uint8_t ketQuaThu() { return ketQua; }
+String chuKetQua() { return ketQuaChu; }
+void xoaKetQua() { ketQua = 0; }
+
+bool canKeu() {
+  if (!keuMotTieng) return false;
+  keuMotTieng = false;
+  return true;
+}
+
 void loop() {
+  if (khoiDongLucNao && millis() > khoiDongLucNao) ESP.restart();
+
+  // Thử mật khẩu Ở ĐÂY chứ không trong handler HTTP — xem lý do dài ở
+  // `/luu`. Chặn vài giây trong loop() là chấp nhận được: lúc này robot
+  // chưa có mạng, không có gì khác để làm.
+  if (dangThu) {
+    dangThu = false;
+    Serial.printf("[net] thu mat khau cho '%s' ...\n", choSsid.c_str());
+    ketQua = 0;
+
+    WiFi.begin(choSsid.c_str(), choPass.c_str());
+    const uint32_t t0 = millis();
+    while (WiFi.status() != WL_CONNECTED && millis() - t0 < 14000) delay(200);
+
+    if (WiFi.status() == WL_CONNECTED) {
+      luuMang(choSsid, choPass);
+      ketQua = 1;
+      ketQuaChu = choSsid;
+      keuMotTieng = true;
+      khoiDongLucNao = millis() + 5000;
+      Serial.printf("[net] OK, da nho '%s', ip=%s\n", choSsid.c_str(),
+                    WiFi.localIP().toString().c_str());
+    } else {
+      const wl_status_t st = (wl_status_t)WiFi.status();
+      ketQua = 2;
+      ketQuaChu = (st == WL_NO_SSID_AVAIL) ? "Khong thay mang" : "Sai mat khau";
+      Serial.printf("[net] that bai (status=%d): %s\n", (int)st, ketQuaChu.c_str());
+      WiFi.disconnect(true);
+      // Mở LẠI cổng để họ thử tiếp — sau khi thử, kênh đã đổi nên cổng
+      // cũ coi như chết dù cờ vẫn báo đang mở.
+      congDangMo = false;
+      moCong();
+    }
+    return;
+  }
+
+  if (!congDangMo) return;
   if (!congDangMo) return;
   dns->processNextRequest();
   web->handleClient();

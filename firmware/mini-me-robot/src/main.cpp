@@ -1226,6 +1226,42 @@ void loop() {
 
   net::loop();   // rẻ khi không mở cổng; bơm web+DNS khi đang mở
 
+  // Cài WiFi xong thì kêu một tiếng. Lúc đó người dùng đang nhìn điện
+  // thoại, không nhìn robot — một tiếng bíp là cách duy nhất báo cho họ
+  // biết mà không bắt họ ngẩng lên.
+  if (net::canKeu()) audio::beep(1568, 120, 60);
+
+  // Kết quả thử mật khẩu — vẽ TO lên màn. Lúc này điện thoại người dùng
+  // đã rớt khỏi WiFi của robot (một ăng-ten, đổi kênh là đứt), nên đây
+  // là chỗ duy nhất họ còn đọc được.
+  {
+    const uint8_t kq = net::ketQuaThu();
+    if (kq) {
+      const bool ok = kq == 1;
+      tft.fillScreen(TFT_BLACK);
+      tft.setTextColor(ok ? TFT_GREEN : TFT_RED, TFT_BLACK);
+      tft.setTextSize(6);
+      tft.setCursor(200, 70);
+      tft.print(ok ? "OK" : "X");
+      tft.setTextColor(TFT_WHITE, TFT_BLACK);
+      tft.setTextSize(2);
+      tft.setCursor(20, 165);
+      tft.print(ok ? "Da vao mang:" : "Khong vao duoc:");
+      tft.setTextColor(ok ? TFT_GREEN : TFT_RED, TFT_BLACK);
+      tft.setTextSize(3);
+      tft.setCursor(20, 198);
+      tft.print(deaccent(net::chuKetQua(), 22));
+      tft.setTextColor(TFT_DARKGREY, TFT_BLACK);
+      tft.setTextSize(2);
+      tft.setCursor(20, 255);
+      tft.print(ok ? "Nho roi. Dang khoi dong lai..." : "Noi lai WiFi robot de thu tiep");
+      if (!ok) audio::beep(330, 220, 55);   // nốt trầm = hỏng, khác hẳn nốt cao lúc xong
+      net::xoaKetQua();
+      delay(ok ? 100 : 3000);
+    }
+  }
+
+
   // ── Màn hình lúc cổng cài WiFi đang mở ──
   //
   // Vẽ ĐÈ lên khuôn mặt, chữ to hết cỡ. Đây là lúc duy nhất người dùng

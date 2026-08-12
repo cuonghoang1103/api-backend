@@ -74,6 +74,28 @@ bool dangMoCong();
  */
 void moCongNgay();
 
+/**
+ * Có cần kêu một tiếng báo cài WiFi xong không. Đọc một lần rồi tự xoá.
+ *
+ * Để main gọi audio::beep() chứ net.cpp không tự gọi: module mạng không
+ * nên biết gì về loa, và ngược lại. Nối hai thứ đó vào nhau nghĩa là
+ * muốn thử phần mạng cũng phải kéo theo cả đường tiếng.
+ */
+bool canKeu();
+
+/**
+ * Kết quả lần thử mật khẩu gần nhất — main vẽ lên màn 3.5".
+ *
+ * 0 = chưa thử gì, 1 = vào được, 2 = hỏng. `chuKetQua()` cho tên mạng
+ * (khi 1) hoặc lý do hỏng (khi 2). Gọi `xoaKetQua()` sau khi vẽ xong.
+ *
+ * Màn hình là kênh báo tin DUY NHẤT không bị chính phép thử làm đứt —
+ * xem ghi chú ở `/luu` trong net.cpp.
+ */
+uint8_t ketQuaThu();
+String chuKetQua();
+void xoaKetQua();
+
 /** Tên WiFi và mật khẩu của cổng cấu hình, để hiện lên màn 3.5". */
 const char* tenCong();
 const char* matKhauCong();

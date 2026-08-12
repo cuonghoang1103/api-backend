@@ -1259,18 +1259,44 @@ void loop() {
       tft.setTextColor(TFT_DARKGREY, TFT_BLACK);
       tft.setTextSize(2);
       tft.setCursor(20, 255);
-      tft.print(ok ? "Nho roi. Dang khoi dong lai..." : "Noi lai WiFi robot de thu tiep");
-      if (!ok) audio::beep(330, 220, 55);   // nốt trầm = hỏng, khác hẳn nốt cao lúc xong
+      // Nói rõ PHẢI NỐI LẠI. Điện thoại rớt khỏi WiFi robot lúc nó đổi
+      // kênh để thử — không tránh được với một ăng-ten. Người dùng ngồi
+      // chờ trang tự tải lại thì chờ mãi, vì máy họ đã không còn nối với
+      // robot nữa. Phải bảo họ mở lại Cài đặt WiFi.
+      if (ok) {
+        tft.print("Nho roi. Dang khoi dong lai...");
+      } else {
+        tft.print("Vao Cai dat > WiFi tren dien thoai,");
+        tft.setCursor(20, 285);
+        tft.print("chon lai Mini-Me-Setup roi go lai");
+      }
+      // Nốt trầm = hỏng, khác hẳn nốt cao lúc xong. Dài 500 ms và to
+      // hơn: bản trước 220 ms ở mức 55 — người dùng đang cúi nhìn điện
+      // thoại nên "chưa kịp nghe thấy tiếng".
+      if (!ok) { audio::beep(392, 260, 85); delay(90); audio::beep(294, 400, 85); }
       net::xoaKetQua();
       // Bắt vẽ lại hướng dẫn cổng ở vòng sau. Thiếu dòng này thì màn
       // đứng nguyên ở "sai mật khẩu" mãi mãi: cổng đã mở lại nhưng cờ
       // "đã vẽ" vẫn bật từ lần trước nên không có nhánh nào vẽ lại.
       epVeLaiCong = true;
-      // Nghỉ ngắn thôi, và vẫn bơm tiếng — delay dài ở đây là bỏ đói
-      // DMA đúng cái lỗi vừa sửa.
-      for (int i = 0; i < (ok ? 5 : 100); i++) {
-        if (!ota::dangChay()) audio::loop();
-        delay(20);
+      // GIỮ thông báo lỗi cho tới khi người dùng nối lại WiFi robot —
+      // hoặc tối đa 45 giây.
+      //
+      // Bản trước giữ đúng 2 giây rồi vẽ đè hướng dẫn lên. Người dùng
+      // báo "chỉ hiện đúng 1 giây, chưa kịp đọc". Mà đây là lúc họ đang
+      // cầm điện thoại loay hoay nối lại — 2 giây là vô nghĩa.
+      //
+      // Mốc thoát đúng KHÔNG phải một khoảng thời gian, mà là "họ đã
+      // quay lại chưa". Nối lại được rồi thì thông báo hết việc.
+      if (ok) {
+        delay(100);
+      } else {
+        const uint32_t han = millis() + 45000;
+        while (millis() < han && net::soDienThoaiNoi() == 0) {
+          if (!ota::dangChay()) audio::loop();
+          net::loop([]() { if (!ota::dangChay()) audio::loop(); });
+          delay(20);
+        }
       }
     }
   }

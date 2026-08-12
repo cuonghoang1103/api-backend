@@ -103,6 +103,7 @@ bool canKeu();
  * Màn hình là kênh báo tin DUY NHẤT không bị chính phép thử làm đứt —
  * xem ghi chú ở `/luu` trong net.cpp.
  */
+uint8_t soDienThoaiNoi();
 uint8_t ketQuaThu();
 String chuKetQua();
 void xoaKetQua();

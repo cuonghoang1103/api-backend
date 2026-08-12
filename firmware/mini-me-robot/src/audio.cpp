@@ -714,11 +714,17 @@ void beep(uint16_t freq, uint16_t ms, uint8_t loudness) {
   }
 
   // Đuôi im lặng, nếu không DMA lặp lại tiếng bíp mãi.
-  memset(stereoBlock, 0, sizeof(stereoBlock));
-  for (int i = 0; i < 4; i++) {
-    size_t w = 0;
-    i2s_write(I2S_NUM_1, stereoBlock, sizeof(stereoBlock), &w, portMAX_DELAY);
-  }
+  //
+  // ⚠️ BỐN KHỐI LÀ KHÔNG ĐỦ, và tôi đã tính sai đúng tám lần. Đệm DMA
+  // của amp là 16 × 512 = 8.192 mẫu (xem ampInit), còn bốn khối ở đây
+  // mới 4 × 256 = 1.024 mẫu. Bảy phần tám vùng đệm vẫn giữ nguyên tiếng
+  // bíp, và phần cứng cứ quay vòng phát lại — người dùng nghe thành
+  // "tụt tụt" đều đặn không bao giờ dứt.
+  //
+  // Chú thích cũ nhận đúng nguyên nhân nhưng đổ thiếu. Nên giờ dùng
+  // `i2s_zero_dma_buffer()` — hàm của driver, xoá TOÀN BỘ vùng đệm bất
+  // kể nó to bao nhiêu. Không còn con số nào để tính sai.
+  i2s_zero_dma_buffer(I2S_NUM_1);
 
   // ⚠️ CÂM MIC sau khi bíp, nếu không robot nghe thấy chính tiếng bíp
   // của mình.

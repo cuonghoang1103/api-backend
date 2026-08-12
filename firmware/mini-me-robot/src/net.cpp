@@ -207,7 +207,10 @@ static void moCong() {
   dns->start(53, "*", WiFi.softAPIP());
 
   web = new WebServer(80);
-  web->on("/", HTTP_GET, []() { web->send(200, "text/html", trangHtml()); });
+  web->on("/", HTTP_GET, []() {
+    Serial.println("[net] dien thoai mo trang cai dat");
+    web->send(200, "text/html", trangHtml());
+  });
   web->on("/luu", HTTP_POST, []() {
     const String ssid = web->arg("ssid");
     const String pass = web->arg("pass");
@@ -231,14 +234,18 @@ static void moCong() {
     // Nên: trả lời trong một phần nghìn giây, dặn họ NHÌN MÀN HÌNH
     // ROBOT, rồi mới thử ở vòng loop(). Màn hình là kênh báo tin duy
     // nhất không bị chính phép thử làm đứt.
+    Serial.printf("[net] nhan yeu cau noi '%s' (mat khau %u ky tu)\n", ssid.c_str(),
+                  (unsigned)pass.length());
     choSsid = ssid;
     choPass = pass;
     dangThu = true;
     web->send(200, "text/html",
               trangKetQua(true, String("Dang thu vao mang \"") + ssid +
-                                    "\". NHIN MAN HINH ROBOT de biet ket qua — "
-                                    "khoang 15 giay. WiFi cua robot se tam mat trong luc thu, "
-                                    "do la binh thuong."));
+                                    "\". NHIN MAN HINH ROBOT de biet ket qua — khoang 15 giay."
+                                    "<br><br>WiFi cua robot SE TAT trong luc thu (no chi co mot "
+                                    "ang-ten). Trang nay se khong tu tai lai — do la binh thuong, "
+                                    "khong phai loi. Neu sai mat khau, vao Cai dat &gt; WiFi chon "
+                                    "lai Mini-Me-Setup de go lai."));
   });
 
   // Mọi đường dẫn lạ đều trả về trang chính — điện thoại thăm dò cổng
@@ -320,6 +327,10 @@ TrangThai vaoMang(void (*veUi)()) {
 
 void moCongNgay() { moCong(); }
 
+/** Số điện thoại đang nối vào WiFi của robot. Main dùng để biết khi nào
+ *  người dùng đã quay lại, rồi mới thôi hiện thông báo lỗi. */
+uint8_t soDienThoaiNoi() { return congDangMo ? WiFi.softAPgetStationNum() : 0; }
+
 uint8_t ketQuaThu() { return ketQua; }
 String chuKetQua() { return ketQuaChu; }
 void xoaKetQua() { ketQua = 0; }
@@ -365,7 +376,14 @@ void loop(void (*bomTay)()) {
       WiFi.disconnect(true);
       // Mở LẠI cổng để họ thử tiếp — sau khi thử, kênh đã đổi nên cổng
       // cũ coi như chết dù cờ vẫn báo đang mở.
-      congDangMo = false;
+      //
+      // ⚠️ PHẢI gọi dongCong() chứ KHÔNG được chỉ hạ cờ rồi gọi moCong().
+      // Bản trước làm thế: `congDangMo = false; moCong();`. Hậu quả là
+      // WebServer cũ chưa hề `stop()`, nó vẫn ôm cổng 80 — nên WebServer
+      // MỚI không bám được vào đó và không phục vụ trang nào cả. Người
+      // dùng nối lại WiFi của robot thành công, nhưng phía sau không còn
+      // ai trả lời. Kèm theo là rò bộ nhớ vì con trỏ cũ bị ghi đè.
+      dongCong();
       moCong();
     }
     return;
@@ -373,6 +391,20 @@ void loop(void (*bomTay)()) {
 
   if (!congDangMo) return;
   if (!congDangMo) return;
+
+  // Nhịp tim mỗi 5 giây. Không có nó thì cổng mở = cổng Serial IM HOÀN
+  // TOÀN, và im lặng không phân biệt được "bo treo" với "bo đang chờ
+  // người ta cài đặt" — tôi đã mất một vòng chẩn đoán vì chuyện đó.
+  {
+    static uint32_t nhip = 0;
+    if (millis() - nhip > 5000) {
+      nhip = millis();
+      Serial.printf("[net] cong dang mo, %lu giay nua tu dong, %d dien thoai dang noi\n",
+                    (unsigned long)(CONG_HAN_GIAY - (millis() - congMoLuc) / 1000),
+                    WiFi.softAPgetStationNum());
+    }
+  }
+
   dns->processNextRequest();
   web->handleClient();
 

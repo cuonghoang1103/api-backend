@@ -128,10 +128,35 @@ def health():
     return {"ok": True, "loaded": _tts is not None}
 
 
+# 14 giọng VieNeu phát kèm mô hình. Giọng người dùng tự nhân bản được ghi
+# vào CÙNG một `presets` dict với y hệt cấu trúc (description, gender,
+# style, speaker_emb, codes) — không có cờ nào phân biệt, nên nhìn vào
+# file là không thể biết cái nào xoá được.
+#
+# Vì sao chốt danh sách ở đây thay vì ghi thêm một file "giọng của tôi":
+# file phụ đó phải đúng với voices.json ở MỌI lúc, mà hai file thì có lúc
+# lệch — nhân bản lỗi giữa chừng, khôi phục thủ công, sửa tay. Lúc lệch
+# thì hậu quả không cân xứng: coi nhầm giọng tự tạo thành giọng gốc chỉ
+# là không xoá được (bực mình); coi nhầm giọng gốc thành giọng tự tạo là
+# MẤT nó, và lấy lại phải cài lại mô hình.
+#
+# Danh sách này chỉ dùng để KHOÁ nút xoá, không đụng vào chuyện đọc.
+GIONG_GOC = frozenset({
+    "Minh Đức", "Phạm Tuyên", "Thái Sơn", "Xuân Vĩnh", "Thanh Bình",
+    "Trúc Ly", "Ngọc Linh", "Đoan Trang", "Mai Anh", "Thục Đoan",
+    "Minh Triết", "Thùy Dung", "Quang Sơn", "Ngọc Trân",
+})
+
+
 @app.get("/voices")
 def voices():
     t = engine()
-    return {"voices": [{"id": vid, "label": label} for label, vid in t.list_preset_voices()]}
+    return {
+        "voices": [
+            {"id": vid, "label": label, "custom": vid not in GIONG_GOC}
+            for label, vid in t.list_preset_voices()
+        ]
+    }
 
 
 def run_job(jid: str, text: str, voice: Optional[str], style: str) -> None:
@@ -237,11 +262,40 @@ async def add_voice(
 
 @app.delete("/voices/{name}")
 def remove_voice(name: str):
+    """Xoá một giọng ĐÃ NHÂN BẢN. Giọng gốc của VieNeu thì từ chối.
+
+    Chặn ở ĐÂY chứ không chỉ ẩn nút trên web: đây là chỗ duy nhất mọi
+    đường đều phải đi qua. Ẩn nút chỉ giấu được một lối vào, còn `curl`,
+    lần gọi lặp lại, hay một bản web cũ đang mở trong tab khác thì vẫn
+    tới thẳng đây được — và xoá xong thì phải cài lại mô hình mới có lại.
+    """
+    if name in GIONG_GOC:
+        raise HTTPException(403, f"'{name}' là giọng gốc của VieNeu, không xoá được")
     t = engine()
     with _lock:
-        t.remove_voice(name)
+        kho = getattr(t, "_preset_voices", None)
+        if kho is None:
+            raise HTTPException(500, "Bản vieneu này không có _preset_voices")
+        if name not in kho:
+            raise HTTPException(404, f"Không có giọng '{name}'")
+
+        # Tự xoá thay vì gọi `t.remove_voice(name)`: **thư viện vieneu
+        # KHÔNG có hàm đó**. Gọi nó chỉ ném AttributeError → 500, và đó
+        # đúng là thứ đã khiến đường xoá này nằm chết từ đầu — route có,
+        # hàm phía dưới thì không. `save_voices()` ghi lại nguyên
+        # `_preset_voices`, nên xoá khỏi dict rồi lưu là đủ.
+        del kho[name]
+
+        # Xoá trúng giọng mặc định thì phải chỉ lại chỗ khác. Không thì
+        # `default_voice` trong file trỏ vào một cái tên không còn tồn
+        # tại, và lần khởi động sau mọi lượt đọc không nêu tên giọng đều
+        # hỏng — một quả mìn chỉ nổ sau khi restart, tức là rất lâu sau
+        # khi người ta quên mất mình đã xoá gì.
+        if getattr(t, "_default_voice", None) == name:
+            t._default_voice = next(iter(kho), None)
+
         t.save_voices(str(VOICES_FILE))
-    return {"ok": True}
+    return {"ok": True, "removed": name, "remaining": len(kho)}
 
 # ─── Đường LUỒNG: đọc tới đâu gửi tới đó ──────────────────────
 #

@@ -13,6 +13,16 @@ const BASE = '/voice-mini';
 export interface MiniVoice {
   id: string;
   label: string;
+  /**
+   * Giọng do người dùng nhân bản (xoá được) hay giọng gốc của VieNeu
+   * (không xoá được).
+   *
+   * Máy chủ cũ chưa gửi trường này nên nó có thể thiếu — khi thiếu thì
+   * coi như KHÔNG xoá được. Mặc định phải nghiêng về phía an toàn: đoán
+   * sai kiểu "khoá nhầm giọng của mình" chỉ làm bực; đoán sai kiểu "mở
+   * nút xoá cho giọng gốc" là mất giọng và phải cài lại mô hình.
+   */
+  custom?: boolean;
 }
 
 export async function listVoices(): Promise<MiniVoice[]> {

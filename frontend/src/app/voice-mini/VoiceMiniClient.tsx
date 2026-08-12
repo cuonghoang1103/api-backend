@@ -16,9 +16,10 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Loader2, Play, Download, Mic2, AlertCircle, Upload, Sparkles } from 'lucide-react';
+import { Loader2, Play, Download, Mic2, AlertCircle, Upload, Sparkles, Trash2, X } from 'lucide-react';
 import {
   cloneVoice,
+  deleteVoice,
   listVoices,
   startTts,
   waitForTts,
@@ -43,6 +44,45 @@ export default function VoiceMiniClient() {
   const [fileMau, setFileMau] = useState<File | null>(null);
   const [dangNhanBan, setDangNhanBan] = useState(false);
   const [tinNhanBan, setTinNhanBan] = useState<string | null>(null);
+
+  // ── Xoá giọng ──
+  const [dangXoa, setDangXoa] = useState<string | null>(null);
+  const [hoiXoa, setHoiXoa] = useState<string | null>(null);
+
+  const giongCuaToi = useMemo(() => voices.filter((v) => v.custom), [voices]);
+
+  /**
+   * Xoá thật, sau khi người dùng bấm xác nhận.
+   *
+   * Xoá giọng là KHÔNG lấy lại được: đặc trưng người nói rút từ đoạn thu
+   * gốc, mà đoạn thu đó không được giữ lại. Muốn có lại phải tìm đúng
+   * file cũ và nhân bản lần nữa. Nên có một bước hỏi, và nút xác nhận
+   * ghi rõ tên giọng chứ không phải chỉ "Xoá".
+   */
+  const xoa = useCallback(
+    async (ten: string) => {
+      setDangXoa(ten);
+      setTinNhanBan(null);
+      try {
+        await deleteVoice(ten);
+        const ds = await listVoices();
+        setVoices(ds);
+        // Đang chọn đúng giọng vừa xoá thì phải nhảy sang giọng khác,
+        // không thì ô chọn trỏ vào chỗ trống và nút tạo báo lỗi khó hiểu.
+        setVoice((dang) => (dang === ten ? (ds[0]?.id ?? '') : dang));
+        setTinNhanBan(`Đã xoá giọng "${ten}".`);
+      } catch (e) {
+        setTinNhanBan(
+          (e as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+            (e instanceof Error ? e.message : 'Không xoá được giọng'),
+        );
+      } finally {
+        setDangXoa(null);
+        setHoiXoa(null);
+      }
+    },
+    [],
+  );
 
   const nhanBan = useCallback(async () => {
     if (!fileMau || !tenGiong.trim() || dangNhanBan) return;
@@ -296,7 +336,12 @@ export default function VoiceMiniClient() {
           style={{ color: 'var(--text-primary)' }}
         >
           <Sparkles className="mr-2 inline h-4 w-4" />
-          Nhân bản giọng của bạn
+          Nhân bản &amp; quản lý giọng của bạn
+          {giongCuaToi.length > 0 && (
+            <span className="ml-2 font-normal" style={{ color: 'var(--text-muted)' }}>
+              — đang có {giongCuaToi.length} giọng, mở ra để xoá bớt
+            </span>
+          )}
         </summary>
         <div className="border-t p-4" style={{ borderColor: 'var(--border-color)' }}>
           <p className="mb-4 text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
@@ -360,6 +405,96 @@ export default function VoiceMiniClient() {
             <p className="mt-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
               {tinNhanBan}
             </p>
+          )}
+
+          {giongCuaToi.length > 0 && (
+            <div
+              className="mt-6 border-t pt-4"
+              style={{ borderColor: 'var(--border-color)' }}
+            >
+              <h3
+                className="mb-1 text-sm font-semibold"
+                style={{ color: 'var(--text-primary)' }}
+              >
+                Giọng bạn đã nhân bản ({giongCuaToi.length})
+              </h3>
+              <p className="mb-3 text-xs" style={{ color: 'var(--text-muted)' }}>
+                Xoá là mất hẳn — đoạn thu gốc không được giữ lại, muốn có lại phải
+                nhân bản từ đầu. {voices.length - giongCuaToi.length} giọng gốc của
+                VieNeu không nằm ở đây vì không xoá được.
+              </p>
+
+              <ul className="flex flex-col gap-1.5">
+                {giongCuaToi.map((v) => (
+                  <li
+                    key={v.id}
+                    className="flex items-center justify-between gap-3 rounded-lg border px-3 py-2"
+                    style={{
+                      borderColor: 'var(--border-color)',
+                      background: 'var(--bg-secondary)',
+                    }}
+                  >
+                    <span
+                      className="min-w-0 flex-1 truncate text-sm"
+                      style={{ color: 'var(--text-primary)' }}
+                      title={v.label}
+                    >
+                      {v.id}
+                      {voice === v.id && (
+                        <span className="ml-2 text-[11px]" style={{ color: 'var(--text-muted)' }}>
+                          đang chọn
+                        </span>
+                      )}
+                    </span>
+
+                    {hoiXoa === v.id ? (
+                      <span className="flex shrink-0 items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => void xoa(v.id)}
+                          disabled={dangXoa === v.id}
+                          className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-semibold text-white transition disabled:opacity-50"
+                          style={{ background: '#dc2626' }}
+                        >
+                          {dangXoa === v.id ? (
+                            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                          ) : (
+                            <Trash2 className="h-3.5 w-3.5" />
+                          )}
+                          Xoá &ldquo;{v.id}&rdquo;
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setHoiXoa(null)}
+                          disabled={dangXoa === v.id}
+                          aria-label={`Không xoá giọng ${v.id}`}
+                          className="rounded-md border p-1.5 transition disabled:opacity-50"
+                          style={{
+                            borderColor: 'var(--border-color)',
+                            color: 'var(--text-secondary)',
+                          }}
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setHoiXoa(v.id)}
+                        aria-label={`Xoá giọng ${v.id}`}
+                        className="shrink-0 rounded-md border p-1.5 transition hover:opacity-80"
+                        style={{
+                          borderColor: 'var(--border-color)',
+                          color: '#dc2626',
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
         </div>
       </details>

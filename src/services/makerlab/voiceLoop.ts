@@ -570,10 +570,25 @@ async function thinkAndSpeak(
           return;
         }
       } catch (err) {
-        logger.warn(
-          `MakerLab luồng tiếng hỏng, rơi về đường thường: ${
-            err instanceof Error ? err.message : String(err)
-          }`,
+        // ⚠️ TỤT HẠNG THÌ PHẢI KÊU TO, không được lặng lẽ.
+        //
+        // 12/08/2026: người dùng xoá giọng nhân bản mà robot đang dùng
+        // (`Linh Linh 123`). VieNeu ném `Voice not found`, dòng này ghi
+        // `warn`, rồi cả chuỗi lặng lẽ rơi xuống giọng Google miễn phí —
+        // thứ cắt văn bản thành mẩu ~200 ký tự rồi dán lại, nghe vấp
+        // liên tục. Người dùng báo "robot nói lắp", và tôi đi đo đệm,
+        // đo DMA, đo chỗ nối mẩu — ba vòng, đều sai chỗ, vì mọi số đo
+        // đều lấy trên đường VieNeu mà đường đó không còn ai đi qua.
+        //
+        // Một lần tụt hạng âm thầm tốn nhiều giờ hơn hẳn một lỗi ồn ào.
+        const li = err instanceof Error ? err.message : String(err);
+        const mat = /not found|404|500/i.test(li);
+        logger[mat ? 'error' : 'warn'](
+          mat
+            ? `MakerLab GIỌNG RIÊNG KHÔNG DÙNG ĐƯỢC — persona đang trỏ vào "${
+                persona.voiceId ?? '(trống)'
+              }" mà máy đọc không có giọng đó. Robot sẽ nói bằng giọng dự phòng (nghe vấp, cắt khúc). Vào Maker Lab → Tính cách để chọn lại giọng. Chi tiết: ${li}`
+            : `MakerLab luồng tiếng hỏng, rơi về đường thường: ${li}`,
         );
       }
     }

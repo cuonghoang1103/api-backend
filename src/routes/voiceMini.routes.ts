@@ -26,6 +26,7 @@
 import { Router, type Response, type Request, type NextFunction } from 'express';
 import multer from 'multer';
 import { authenticate } from '../middleware/auth.js';
+import { prisma } from '../config/database.js';
 import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
 
@@ -369,7 +370,34 @@ router.post(
 
 router.delete('/voices/:name', authenticate, async (req: Request, res: Response<ApiResponse>) => {
   try {
-    const r = await upstream(`/voices/${encodeURIComponent(String(req.params.name))}`, {
+    const ten = String(req.params.name);
+
+    // ⚠️ CHẶN XOÁ GIỌNG MÀ ROBOT ĐANG DÙNG.
+    //
+    // 12/08/2026: người dùng dọn bớt giọng nhân bản, xoá trúng cái mà
+    // persona của robot đang trỏ tới. Không gì báo cả — robot cứ thế
+    // tụt xuống giọng Google miễn phí (cắt mẩu ~200 ký tự rồi dán lại,
+    // nghe vấp liên tục). Người dùng tưởng robot hỏng, tôi đi đo đệm và
+    // DMA suốt ba vòng, trong khi nguyên nhân chỉ là một con trỏ trỏ vào
+    // chỗ trống.
+    //
+    // Chặn ở đây thay vì chỉ cảnh báo trên giao diện: giao diện là MỘT
+    // lối vào, còn cái hỏng thì hỏng ở mọi lối.
+    const dungBoi = await prisma.makerPersona.findFirst({
+      where: { voiceProvider: 'cuongmini', voiceId: ten },
+      select: { id: true, name: true },
+    });
+    if (dungBoi) {
+      res.status(409).json({
+        success: false,
+        message:
+          `Không xoá được: robot "${dungBoi.name ?? 'Mini-Me'}" đang dùng giọng này. ` +
+          `Vào Maker Lab → Tính cách đổi sang giọng khác trước, rồi quay lại xoá.`,
+      });
+      return;
+    }
+
+    const r = await upstream(`/voices/${encodeURIComponent(ten)}`, {
       method: 'DELETE',
     });
     if (!r.ok) throw new Error(`tts HTTP ${r.status}`);

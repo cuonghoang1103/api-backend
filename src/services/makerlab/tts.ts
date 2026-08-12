@@ -231,7 +231,14 @@ async function synthesizeCuongMini(
   const hetHan = Date.now() + tran;
 
   while (Date.now() < hetHan) {
-    await new Promise((r) => setTimeout(r, 400));
+    // 150 ms chứ không phải 400. Mỗi vòng hỏi lại là một lần CHỜ THỪA:
+    // việc xong ở mili giây thứ 610 mà nhịp hỏi 400 ms thì mãi 800 ms mới
+    // biết — mất trắng 190 ms mỗi mẩu tiếng. Với robot đang nói dở thì
+    // 190 ms đó là chỗ đệm cạn.
+    //
+    // Rẻ: mỗi lần hỏi là một GET rỗng qua mạng nội bộ Docker + đường hầm,
+    // vài trăm byte. Đổi lấy độ trễ thì đáng.
+    await new Promise((r) => setTimeout(r, 150));
     const hoi = await fetch(`${goc}/tts/${jobId}`, { signal: AbortSignal.timeout(15_000) });
 
     // 202 = đang chạy. Đây đúng là chỗ mà một API trả 200 cho cả hai

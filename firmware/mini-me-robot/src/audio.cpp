@@ -79,7 +79,22 @@ static uint32_t underrunSince = 0;
  * Nửa giây đệm không nuốt nổi khoảng đó, nên loa hụt hơi giữa hai câu.
  * Đổi lại: chờ thêm 0,75 giây trước khi robot mở miệng.
  */
-static const uint32_t PLAY_START_BYTES = 40 * 1024;
+// 40 KB → 64 KB, tức 1,25 giây → 2 giây tiếng gom trước khi mở miệng.
+//
+// Đo trên bo thật 12/08/2026, sau khi robot chuyển sang đọc bằng máy ở
+// nhà qua đường hầm: `hut dem 1 lan / 974 ms` và `/ 1092 ms` — đệm CẠN
+// giữa chừng, tức ngược hẳn lỗi tràn đệm hôm qua.
+//
+// Vì sao đổi: giọng máy nhà sinh tiếng chậm hơn Google trong ngữ cảnh
+// phát trực tiếp, không phải vì máy yếu mà vì mỗi mẩu phải nhận việc →
+// hỏi lại → truyền qua đường hầm. Bo phát hết mẩu đầu trước khi mẩu sau
+// kịp về. Gom 2 giây cho bo thêm 0,75 giây đường lùi — đúng cỡ khoảng
+// hụt đo được, cộng với 190 ms cắt được ở nhịp hỏi phía server.
+//
+// Cái giá: robot mở miệng chậm hơn 0,75 giây. Đó là đánh đổi CÓ CHỦ Ý —
+// một khoảng lặng ở đầu câu nghe như "nó đang nghĩ", còn một khoảng lặng
+// GIỮA câu nghe như hỏng.
+static const uint32_t PLAY_START_BYTES = 64 * 1024;
 
 /**
  * Âm lượng 10-100%, nhân vào mẫu tiếng trước khi đẩy vào I2S.

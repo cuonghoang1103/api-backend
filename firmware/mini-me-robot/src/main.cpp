@@ -67,6 +67,8 @@ static uint32_t thinkSinceMs = 0;
 // Đã chào chưa — chỉ chào một lần mỗi lần khởi động, không phải mỗi
 // lần nối lại WebSocket.
 static bool greeted = false;
+/** Buộc vẽ lại hướng dẫn cổng sau khi màn bị chiếm để báo kết quả. */
+static bool epVeLaiCong = false;
 
 // ─── Người gác ─────────────────────────────────────────────
 // Một tác vụ RIÊNG, in mỗi giây bất kể loop() đang làm gì.
@@ -1224,7 +1226,10 @@ void loop() {
     chamTruoc = cham;
   }
 
-  net::loop();   // rẻ khi không mở cổng; bơm web+DNS khi đang mở
+  // Truyền hàm bơm tiếng vào: net::loop() có những đoạn chặn dài (thử
+  // mật khẩu 14 giây, quét mạng), và bỏ đói audio::loop() trong lúc đó
+  // là loa kêu liên tục — xem ghi chú ở net.h.
+  net::loop([]() { if (!ota::dangChay()) audio::loop(); });
 
   // Cài WiFi xong thì kêu một tiếng. Lúc đó người dùng đang nhìn điện
   // thoại, không nhìn robot — một tiếng bíp là cách duy nhất báo cho họ
@@ -1257,7 +1262,16 @@ void loop() {
       tft.print(ok ? "Nho roi. Dang khoi dong lai..." : "Noi lai WiFi robot de thu tiep");
       if (!ok) audio::beep(330, 220, 55);   // nốt trầm = hỏng, khác hẳn nốt cao lúc xong
       net::xoaKetQua();
-      delay(ok ? 100 : 3000);
+      // Bắt vẽ lại hướng dẫn cổng ở vòng sau. Thiếu dòng này thì màn
+      // đứng nguyên ở "sai mật khẩu" mãi mãi: cổng đã mở lại nhưng cờ
+      // "đã vẽ" vẫn bật từ lần trước nên không có nhánh nào vẽ lại.
+      epVeLaiCong = true;
+      // Nghỉ ngắn thôi, và vẫn bơm tiếng — delay dài ở đây là bỏ đói
+      // DMA đúng cái lỗi vừa sửa.
+      for (int i = 0; i < (ok ? 5 : 100); i++) {
+        if (!ota::dangChay()) audio::loop();
+        delay(20);
+      }
     }
   }
 
@@ -1269,6 +1283,7 @@ void loop() {
   // vào robot), nên mọi thứ họ cần phải nằm trên chính cái màn trước mặt.
   {
     static bool daVe = false;
+    if (epVeLaiCong) { daVe = false; epVeLaiCong = false; }
     const bool dangMo = net::dangMoCong();
     if (dangMo && !daVe) {
       tft.fillScreen(TFT_BLACK);

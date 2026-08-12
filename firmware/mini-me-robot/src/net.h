@@ -52,8 +52,19 @@ struct TrangThai {
  */
 TrangThai vaoMang(void (*veUi)() = nullptr);
 
-/** Gọi mỗi vòng loop(). Bơm cổng cấu hình khi nó đang mở; ngoài ra rẻ. */
-void loop();
+/**
+ * Gọi mỗi vòng loop(). Bơm cổng cấu hình khi nó đang mở; ngoài ra rẻ.
+ *
+ * `bomTay` được gọi liên tục trong những đoạn CHẶN DÀI (thử mật khẩu 14
+ * giây, quét mạng vài giây). Bắt buộc phải truyền, và phải là hàm bơm
+ * đường tiếng:
+ *
+ * DMA của I2S không ghi gì thì KHÔNG im lặng — nó lặp lại đoạn đệm cũ.
+ * Bỏ đói `audio::loop()` 20 giây là loa kêu "tụt tụt" liên tục suốt 20
+ * giây đó, và người dùng nghe thành robot hỏng. Đúng bẫy đã ghi sẵn
+ * trong audio.cpp mà tôi vẫn dẫm phải.
+ */
+void loop(void (*bomTay)() = nullptr);
 
 /** Đang mở cổng cấu hình không — main dùng để đổi những gì hiện lên màn. */
 bool dangMoCong();

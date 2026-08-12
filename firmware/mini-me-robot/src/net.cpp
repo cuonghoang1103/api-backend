@@ -106,6 +106,8 @@ static DNSServer* dns = nullptr;
 static bool congDangMo = false;
 static uint32_t congMoLuc = 0;
 static String dsMangQuet;
+/** Hàm bơm đường tiếng trong lúc chờ — main truyền vào qua loop(). */
+static void (*bomKhiCho)() = nullptr;
 /** Loa kêu một tiếng báo cài xong — loop() đọc rồi tự xoá. */
 static bool keuMotTieng = false;
 /** Mốc khởi động lại sau khi cài xong; 0 = chưa hẹn. */
@@ -174,7 +176,9 @@ static String trangHtml() {
 }
 
 static void quetMang() {
+  if (bomKhiCho) bomKhiCho();
   const int n = WiFi.scanNetworks();
+  if (bomKhiCho) bomKhiCho();
   dsMangQuet = "";
   for (int i = 0; i < n && i < 20; i++) {
     String s = WiFi.SSID(i);
@@ -326,7 +330,8 @@ bool canKeu() {
   return true;
 }
 
-void loop() {
+void loop(void (*bomTay)()) {
+  bomKhiCho = bomTay;
   if (khoiDongLucNao && millis() > khoiDongLucNao) ESP.restart();
 
   // Thử mật khẩu Ở ĐÂY chứ không trong handler HTTP — xem lý do dài ở
@@ -339,7 +344,10 @@ void loop() {
 
     WiFi.begin(choSsid.c_str(), choPass.c_str());
     const uint32_t t0 = millis();
-    while (WiFi.status() != WL_CONNECTED && millis() - t0 < 14000) delay(200);
+    while (WiFi.status() != WL_CONNECTED && millis() - t0 < 14000) {
+      if (bomTay) bomTay();   // giữ đường tiếng sống — xem net.h
+      delay(20);
+    }
 
     if (WiFi.status() == WL_CONNECTED) {
       luuMang(choSsid, choPass);

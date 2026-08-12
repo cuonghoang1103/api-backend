@@ -251,8 +251,10 @@ export default function VoiceMiniClient() {
         </summary>
         <div className="border-t p-4" style={{ borderColor: 'var(--border-color)' }}>
           <p className="mb-4 text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-            Tải lên <strong>5–15 giây</strong> giọng bạn đọc, máy sẽ đọc mọi thứ khác bằng giọng
-            đó. Dài hơn không giống hơn — máy tự cắt và khử nhiễu. Thứ quyết định là{' '}
+            Tải lên <strong>30–60 giây</strong> giọng bạn đọc, máy sẽ đọc mọi thứ khác bằng giọng
+            đó. Càng nhiều chữ khác nhau càng tốt — đọc một đoạn có đủ dấu hỏi, ngã, nặng, có cả
+            câu hỏi lẫn câu kể, chứ đừng lặp một câu. Máy dùng TRỌN đoạn bạn tải lên, chỉ tự xén
+            khoảng lặng ở hai đầu và khử nhiễu. Thứ quyết định vẫn là{' '}
             <strong>phòng yên, một micro, đọc bình thường</strong> như đang nói chuyện, đừng đọc
             như đọc diễn văn.
           </p>

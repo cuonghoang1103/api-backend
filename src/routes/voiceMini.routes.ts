@@ -298,7 +298,7 @@ const nhanFile = (req: Request, res: Response, next: NextFunction): void => {
     const m = err as { code?: string; message?: string };
     const msg =
       m.code === 'LIMIT_FILE_SIZE'
-        ? 'File quá 20MB — cắt ngắn đoạn mẫu lại, 15-30 giây là đủ'
+        ? 'File quá 20MB — cắt ngắn đoạn mẫu lại, 30-60 giây là đủ'
         : m.message || 'Không đọc được file tải lên';
     res.status(400).json({ success: false, message: msg });
   });

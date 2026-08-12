@@ -23,7 +23,7 @@
  * ⚠️ Không đặt ở `/api/v1/voice` — chỗ đó đã là Voice Hub.
  */
 
-import { Router, type Response, type Request } from 'express';
+import { Router, type Response, type Request, type NextFunction } from 'express';
 import multer from 'multer';
 import { authenticate } from '../middleware/auth.js';
 import { logger } from '../utils/logger.js';
@@ -47,10 +47,24 @@ const refUpload = multer({
   limits: { fileSize: 20 * 1024 * 1024 },
   fileFilter: (_req, file, cb) => {
     const ext = file.originalname.toLowerCase().match(/\.[^.]+$/)?.[0] || '';
-    const okExt = ['.wav', '.mp3', '.m4a', '.ogg', '.flac', '.aac', '.webm'].includes(ext);
-    const okMime = file.mimetype.startsWith('audio/') || file.mimetype === 'application/octet-stream';
+    // Nhận cả VIDEO. Người ta quay một đoạn rồi lấy tiếng trong đó làm
+    // mẫu là chuyện rất thường — iPhone quay ra `.mov`, Android ra
+    // `.mp4`. Bản trước chỉ nhận âm thanh thuần, mà `video/mp4` thì
+    // không bắt đầu bằng `audio/` nên trượt cả hai phép xét.
+    //
+    // Không sợ nhận nhầm: `doiSangWav()` ngay sau đây bắt ffmpeg rút
+    // tiếng ra, và file nào không có tiếng thì chính nó báo lỗi rõ ràng.
+    // Chặn ở đây chỉ để khỏi tải lên một file 20MB rồi mới biết là ảnh.
+    const okExt = [
+      '.wav', '.mp3', '.m4a', '.ogg', '.flac', '.aac', '.webm', '.opus', '.aiff', '.aif', '.wma',
+      '.mp4', '.mov', '.m4v', '.3gp', '.mkv', '.avi',
+    ].includes(ext);
+    const okMime =
+      file.mimetype.startsWith('audio/') ||
+      file.mimetype.startsWith('video/') ||
+      file.mimetype === 'application/octet-stream';
     if (okExt || okMime) cb(null, true);
-    else cb(new Error(`Chỉ nhận file âm thanh, không nhận ${ext || file.mimetype}`));
+    else cb(new Error(`Chỉ nhận file âm thanh hoặc video, không nhận ${ext || file.mimetype}`));
   },
 });
 
@@ -244,6 +258,10 @@ async function doiSangWav(buf: Buffer): Promise<Buffer> {
       const ff = spawn(process.env.FFMPEG_PATH || 'ffmpeg', [
         '-hide_banner', '-loglevel', 'error',
         '-i', tmp,
+        // -vn: VỨT luồng hình. Khuôn WAV không chứa nổi video, và nếu
+        // không bỏ thì ffmpeg dừng với "Could not find tag for codec"
+        // — một câu lỗi không hề gợi ý rằng vấn đề là cái file có hình.
+        '-vn',
         '-ac', '1',
         '-c:a', 'pcm_s16le',
         '-y', ra,
@@ -265,10 +283,31 @@ async function doiSangWav(buf: Buffer): Promise<Buffer> {
   }
 }
 
+/**
+ * Bọc multer để lỗi của nó thành 400 CÓ CHỮ, không phải 500 trống trơn.
+ *
+ * Multer gọi `cb(new Error(...))` khi bộ lọc từ chối file, hoặc ném
+ * `MulterError` khi quá cỡ. Không có ai bắt thì Express trả "Internal
+ * Server Error" — người dùng đọc câu đó không thể biết là do đuôi file
+ * không được nhận hay do máy chủ hỏng thật. Đúng là chuyện đã xảy ra
+ * với một file .mp4 ngày 12/08/2026.
+ */
+const nhanFile = (req: Request, res: Response, next: NextFunction): void => {
+  refUpload.single('file')(req, res, (err: unknown) => {
+    if (!err) return next();
+    const m = err as { code?: string; message?: string };
+    const msg =
+      m.code === 'LIMIT_FILE_SIZE'
+        ? 'File quá 20MB — cắt ngắn đoạn mẫu lại, 15-30 giây là đủ'
+        : m.message || 'Không đọc được file tải lên';
+    res.status(400).json({ success: false, message: msg });
+  });
+};
+
 router.post(
   '/voices',
   authenticate,
-  refUpload.single('file'),
+  nhanFile,
   async (req: Request, res: Response<ApiResponse>) => {
     const userId = (req as Request & { user?: { id: number } }).user?.id ?? 0;
     const file = (req as unknown as { file?: { buffer: Buffer; originalname?: string } }).file;

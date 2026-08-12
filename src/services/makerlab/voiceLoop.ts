@@ -583,7 +583,20 @@ async function thinkAndSpeak(
     // hơn ⇒ ít mối nối hơn. Mẩu ĐẦU vẫn gửi ngay khi có một câu nên độ
     // trễ mở miệng không đổi; chỉ các mẩu sau mới gom, và lúc đó bo
     // đang bận phát mẩu đầu nên có thừa thời gian.
-    const GOM_TOI_THIEU = 400;
+    // 400 → 220. Con số này phải cân hai thứ NGƯỢC NHAU, và cán cân đã
+    // đổi khi robot chuyển sang đọc bằng máy ở nhà:
+    //
+    //   gom DÀI  → ít mối nối, nghe liền mạch — nhưng mẩu sau về muộn
+    //   gom NGẮN → mẩu về đều, không đói đệm — nhưng nhiều mối nối
+    //
+    // Hồi dùng Google, TTS mất ~1,2 giây mỗi mẩu nên gom dài là đúng:
+    // mối nối là vấn đề duy nhất. Giờ qua đường hầm về máy nhà, TTS mất
+    // 3,2-3,7 giây, và bo phát hết mẩu trước khi mẩu sau về — đo được
+    // `hut dem 2 lan / 2052 ms` trong một lượt 10 giây.
+    //
+    // 220 ký tự ≈ 14 giây tiếng, vẫn đủ dài để mối nối thưa, mà mẩu về
+    // sớm hơn gần một giây so với 400.
+    const GOM_TOI_THIEU = 220;
     const cho: string[] = [];
     let daGuiMauDau = false;
 

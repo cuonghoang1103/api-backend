@@ -581,7 +581,28 @@ static void pumpPlayback() {
   // thì luôn co giãn theo mạng và màn hình.
   for (int round = 0; round < 24; round++) {
     const uint32_t have = buffered();
-    if (have < 2) break;
+
+    // ⚠️ HẾT TIẾNG THÌ ĐỔ IM LẶNG, đừng chỉ ngừng ghi.
+    //
+    // Ngừng ghi thì DMA lặp lại mẩu vừa phát — người nghe thành "tôi tôi
+    // tôi tới tới chơi chơi". Đổ im lặng thì thành một khoảng lặng ngắn.
+    //
+    // Cùng một sự cố, hai cảm nhận khác hẳn: khoảng lặng nghe như robot
+    // đang NGHĨ, còn lặp chữ nghe như robot HỎNG. Đo hôm nay: `hut dem
+    // 2 lan / 2052 ms` trong một lượt 10 giây — hai giây đó có thể là
+    // hai lần ngập ngừng, hoặc hai lần lắp bắp. Cách xử lý quyết định
+    // người ta nghe ra cái nào.
+    //
+    // Không chữa được nguyên nhân (mẩu tiếng sau chưa kịp về), nhưng
+    // nguyên nhân thì nằm ở tốc độ máy chủ, còn cái này nằm ở đây.
+    if (have < 2) {
+      if (!playEnded) {
+        memset(stereoBlock, 0, AUDIO_BLOCK_SAMPLES * 2 * sizeof(int16_t));
+        size_t w = 0;
+        i2s_write(I2S_NUM_1, stereoBlock, AUDIO_BLOCK_SAMPLES * 2 * sizeof(int16_t), &w, 0);
+      }
+      break;
+    }
 
     const uint32_t take = have < AUDIO_BLOCK_SAMPLES * 2 ? have : AUDIO_BLOCK_SAMPLES * 2;
     const uint32_t n = take / 2;

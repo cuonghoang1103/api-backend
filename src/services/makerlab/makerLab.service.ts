@@ -348,7 +348,20 @@ export async function upsertPersona(
     name: data.name?.slice(0, 80),
     systemPrompt: data.systemPrompt?.slice(0, 8000),
     voiceProvider: data.voiceProvider?.slice(0, 24),
-    voiceId: data.voiceId?.slice(0, 120) ?? null,
+    // ⚠️ KHÔNG cho `voiceId` RỖNG đè lên giọng đang dùng.
+    //
+    // 13/08/2026: `voice_id` của robot bị xoá trắng, và hậu quả nhìn
+    // không giống nguyên nhân chút nào — máy đọc không biết đọc bằng
+    // giọng nào ⇒ hỏng ⇒ cả chuỗi tụt xuống giọng Google cắt khúc.
+    // Người dùng báo BA triệu chứng rời rạc: "giọng đổi sang Google",
+    // "đoạn đầu giật giật", "không nói được dài" — cùng một gốc.
+    //
+    // Nghi phạm: trang Tính cách gửi `voiceId: voiceId || null` khi
+    // người dùng bấm Lưu lúc danh sách giọng chưa tải xong. Một cú bấm
+    // vô hại làm robot mất giọng riêng.
+    //
+    // Muốn xoá giọng thì gửi đúng chữ `null`; chuỗi rỗng là "không đổi".
+    voiceId: data.voiceId === undefined ? undefined : (data.voiceId?.slice(0, 120) || undefined),
     language: data.language?.slice(0, 12),
     traits: traitsMerged,
     sampleDialogues: (data.sampleDialogues ?? undefined) as Prisma.InputJsonValue | undefined,

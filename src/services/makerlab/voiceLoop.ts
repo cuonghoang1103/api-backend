@@ -549,7 +549,9 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
     // là thứ người dùng vừa đổi bằng giọng nói. Lấy nhầm thì robot nghe tiếng
     // Anh bằng bộ nhận tiếng Việt — và triệu chứng là "nó nghe không ra", chứ
     // không phải "sai ngôn ngữ", nên rất khó lần ra.
-    const lang = CHE_DO[persona0.cheDo].stt;
+    // `null` = để Whisper tự nhận. Groq nhận `language` rỗng nghĩa là
+    // tự dò, nên chỉ truyền khi chế độ thật sự muốn ép.
+    const lang = CHE_DO[persona0.cheDo].stt ?? '';
     const tr = await transcribeWithGroq(wav, 'turn.wav', 'audio/wav', {
       language: lang,
       detail: true,
@@ -858,6 +860,22 @@ async function thinkAndSpeak(
   // của chủ là giọng VIỆT — bắt nó đọc tiếng Anh là quay lại đúng lỗi
   // "file → phi lê" vừa chữa xong, chỉ khác là cả câu đều sai.
   const giongCheDo = CHE_DO[persona.cheDo].giong ?? persona.voiceId;
+
+  // ⚠️ GIỌNG RỖNG PHẢI KÊU NGAY, đừng đợi máy đọc báo lỗi.
+  //
+  // Hôm qua tôi đã thêm cảnh báo cho ca "voice not found", nhưng ca
+  // "voiceId rỗng" lọt lưới — và nó chính là ca xảy ra hôm nay. Máy đọc
+  // nhận `voice: undefined`, không có tên nào để tra, hỏng, rồi cả chuỗi
+  // lặng lẽ rơi xuống giọng Google. Người dùng thấy ba triệu chứng rời
+  // rạc mà không thấy nguyên nhân.
+  if (persona.voiceProvider === 'cuongmini' && !giongCheDo) {
+    logger.error(
+      'MakerLab CHƯA CHỌN GIỌNG — persona dùng nhà cung cấp "cuongmini" nhưng voiceId trống. ' +
+        'Robot sẽ nói bằng giọng dự phòng (nghe vấp, cắt khúc). ' +
+        'Vào Maker Lab → Tính cách chọn lại giọng.',
+      { deviceId, cheDo: persona.cheDo },
+    );
+  }
 
   const speakPiece = async (piece: string) => {
     if (seq === null) return;

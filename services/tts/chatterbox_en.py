@@ -30,11 +30,13 @@ from __future__ import annotations
 
 import os
 import threading
+from pathlib import Path
 import time
 from typing import Any, Dict, Optional
 
+import json
 import numpy as np
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import Response
 
 app = FastAPI(title="Chatterbox EN")
@@ -59,6 +61,38 @@ GIONG: Dict[str, Dict[str, float]] = {
     "en-cham": {"exaggeration": 0.5, "cfg_weight": 0.3},
     "en-bieu-cam": {"exaggeration": 0.8, "cfg_weight": 0.3},
 }
+
+
+# ─── Giọng nhân bản ────────────────────────────────────────────
+#
+# ⚠️ NHÂN BẢN PHẢI DÙNG MÔ HÌNH ĐANG CHẠY, KHÔNG NẠP BẢN THỨ HAI.
+#
+# Chatterbox chiếm ~3,5 GB VRAM. Card 12 GB này còn phải nuôi LLM cục bộ
+# (5,7 GB) và máy đọc tiếng Việt (0,8 GB) — nạp thêm một bản nữa là tràn.
+# Đã tràn thật ngày 13/08/2026: một script nạp bản thứ hai để nhân bản và
+# ăn ngay `CUDA out of memory`.
+#
+# Nên việc nhân bản phải đi qua ĐÂY, nơi mô hình đã nằm sẵn.
+THU_MUC_GIONG = Path(os.environ.get("CB_VOICES_DIR", "~/chatterbox/giong")).expanduser()
+THU_MUC_GIONG.mkdir(parents=True, exist_ok=True)
+FILE_GIONG = THU_MUC_GIONG / "danh-sach.json"
+
+
+def _nap_giong_nhan_ban() -> Dict[str, str]:
+    try:
+        return json.loads(FILE_GIONG.read_text()) if FILE_GIONG.exists() else {}
+    except Exception:
+        return {}
+
+
+def _luu_giong_nhan_ban(d: Dict[str, str]) -> None:
+    try:
+        FILE_GIONG.write_text(json.dumps(d, ensure_ascii=False))
+    except Exception as e:  # noqa: BLE001
+        print(f"[cb] khong luu duoc danh sach giong: {e}", flush=True)
+
+
+NHAN_BAN: Dict[str, str] = _nap_giong_nhan_ban()
 
 
 def may():
@@ -103,7 +137,67 @@ def health():
 
 @app.get("/voices")
 def voices():
-    return {"voices": list(GIONG)}
+    return {"voices": list(GIONG) + list(NHAN_BAN)}
+
+
+@app.post("/clone")
+async def clone(name: str = Form(...), file: UploadFile = File(...)):
+    """Nhân bản một giọng tiếng Anh từ đoạn mẫu.
+
+    Chatterbox chỉ cần ~10 giây. Đoạn dài hơn thì cắt lấy 10 giây ở giữa —
+    mẫu dài không cho kết quả tốt hơn, mà lại tốn thời gian xử lý.
+    """
+    ten = name.strip()
+    if not ten:
+        raise HTTPException(400, "Thiếu tên giọng")
+    if ten in GIONG:
+        raise HTTPException(409, f"'{ten}' trùng tên giọng dựng sẵn")
+
+    raw = await file.read()
+    if len(raw) > 50 * 1024 * 1024:
+        raise HTTPException(400, "File quá 50MB")
+
+    tam = THU_MUC_GIONG / f"_tam_{os.getpid()}"
+    tam.write_bytes(raw)
+    ra = THU_MUC_GIONG / f"{ten}.wav"
+    try:
+        import subprocess
+
+        # Lấy 10 giây từ giữa file: đầu và cuối hay dính nhạc hiệu, tiếng
+        # động, hoặc người nói chưa vào giọng.
+        r = subprocess.run(
+            ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+             "-of", "default=nw=1:nk=1", str(tam)],
+            capture_output=True, text=True, timeout=30,
+        )
+        dai = float(r.stdout.strip() or 0)
+        bat_dau = max(0.0, dai / 2 - 5.0) if dai > 12 else 0.0
+        subprocess.run(
+            ["ffmpeg", "-hide_banner", "-loglevel", "error", "-ss", str(bat_dau),
+             "-t", "10", "-i", str(tam), "-vn", "-ac", "1", "-ar", "24000",
+             str(ra), "-y"],
+            check=True, timeout=90,
+        )
+    except Exception as e:  # noqa: BLE001
+        raise HTTPException(400, f"Không tách được tiếng: {str(e)[:200]}")
+    finally:
+        tam.unlink(missing_ok=True)
+
+    NHAN_BAN[ten] = str(ra)
+    _luu_giong_nhan_ban(NHAN_BAN)
+    print(f"[cb] da nhan ban giong '{ten}' tu {dai:.1f}s (lay tu giay {bat_dau:.0f})", flush=True)
+    return {"ok": True, "voice": ten, "mauGiay": round(min(10.0, dai), 1)}
+
+
+@app.delete("/voices/{ten}")
+def xoa(ten: str):
+    if ten in GIONG:
+        raise HTTPException(403, f"'{ten}' là giọng dựng sẵn, không xoá được")
+    if ten not in NHAN_BAN:
+        raise HTTPException(404, f"Không có giọng '{ten}'")
+    Path(NHAN_BAN.pop(ten)).unlink(missing_ok=True)
+    _luu_giong_nhan_ban(NHAN_BAN)
+    return {"ok": True, "removed": ten}
 
 
 @app.post("/en")
@@ -115,13 +209,21 @@ def doc(payload: Dict[str, Any]):
         raise HTTPException(400, f"Quá 3000 ký tự (đang {len(text)})")
 
     ten: Optional[str] = payload.get("voice") or "en-default"
-    if ten not in GIONG:
-        raise HTTPException(404, f"Không có giọng '{ten}'. Có: {list(GIONG)}")
+    tham: Dict[str, Any] = {}
+    if ten in GIONG:
+        tham = dict(GIONG[ten])
+    elif ten in NHAN_BAN:
+        # Giọng nhân bản: dùng tham số của `en-cham` (người dùng đã chọn
+        # nhịp này) rồi thêm mẫu tham chiếu.
+        tham = dict(GIONG["en-cham"])
+        tham["audio_prompt_path"] = NHAN_BAN[ten]
+    else:
+        raise HTTPException(404, f"Không có giọng '{ten}'. Có: {list(GIONG) + list(NHAN_BAN)}")
 
     m = may()
     t0 = time.time()
     with _chay_lock:
-        wav = m.generate(text, **GIONG[ten])
+        wav = m.generate(text, **tham)
     b = ve_16k(wav.squeeze().detach().cpu().numpy(), int(m.sr))
     giay = len(b) / 2 / BO_SR
     print(f"[cb] {ten}: {giay:.2f}s tiếng trong {time.time()-t0:.2f}s", flush=True)

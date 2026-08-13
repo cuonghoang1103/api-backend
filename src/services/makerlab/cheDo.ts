@@ -28,8 +28,25 @@
 export type CheDo = 'vi' | 'en' | 'robot';
 
 export interface CauHinhCheDo {
-  /** Mã ISO-639-1 cho Whisper. */
-  stt: string;
+  /**
+   * Mã ISO-639-1 cho Whisper, hoặc `null` = ĐỂ NÓ TỰ NHẬN.
+   *
+   * ⚠️ ÉP NGÔN NGỮ Ở CHẾ ĐỘ NGOẠI NGỮ LÀ TỰ NHỐT NGƯỜI DÙNG.
+   *
+   * Bản đầu ép `en` cho chế độ tiếng Anh. Hậu quả đo thật 13/08/2026:
+   * người dùng nói tiếng Việt thì Whisper ép thành từ tiếng Anh gần
+   * giống nhất — log ghi `"Thank you."` sáu lần liền, `"Go."`,
+   * `"What's your name?"` cho những câu tiếng Việt hoàn toàn.
+   *
+   * Và không có đường ra: muốn về tiếng Việt phải nói "nói tiếng Việt
+   * đi", mà chính câu đó cũng bị chép sai. Chỉ nút trên web mới cứu
+   * được — tức tính năng "đổi bằng giọng nói" chết một chiều.
+   *
+   * Nên chế độ ngoại ngữ để `null`: Whisper tự nhận, nghe được cả hai
+   * thứ tiếng, và lệnh đổi về luôn có đường. Chế độ `vi` vẫn ép `vi` vì
+   * đó là đường dùng chính và ép giúp chính xác hơn với câu ngắn.
+   */
+  stt: string | null;
   /** Câu lệnh chèn vào prompt hệ thống. */
   nhacLlm: string;
   /** Tên giọng gửi cho máy đọc. `null` = giữ giọng đang cấu hình. */
@@ -52,7 +69,7 @@ export const CHE_DO: Record<CheDo, CauHinhCheDo> = {
     nhan: 'Tiếng Việt',
   },
   en: {
-    stt: 'en',
+    stt: null, // tự nhận — xem ghi chú ở `stt`
     nhacLlm:
       'Reply ENTIRELY in English, in a natural conversational tone. ' +
       'Keep it short — 3 or 4 sentences at most, because your words are read aloud.',
@@ -65,7 +82,7 @@ export const CHE_DO: Record<CheDo, CauHinhCheDo> = {
     nhan: 'English',
   },
   robot: {
-    stt: 'en',
+    stt: null, // tự nhận — xem ghi chú ở `stt`
     nhacLlm:
       'Reply ENTIRELY in English, short and playful, like a small cartoon robot. ' +
       'Keep it to 2 or 3 short sentences.',

@@ -1250,7 +1250,63 @@ async function thinkAndSpeak(
      * 120 ký tự cho ~7,3 giây tiếng trong 3,7 giây sinh, tức bo phát
      * gần gấp đôi thời gian máy cần cho mẩu sau. Thừa chỗ.
      */
-    const GOM_TOI_THIEU = persona.cheDo === 'vi' ? 220 : 120;
+    /**
+     * Cỡ mẩu TĂNG DẦN, không phải một con số cố định.
+     *
+     * ⚠️ MẨU ĐẦU NHỎ LÀM MIỆNG MỞ SỚM, NHƯNG ĐỂ LẠI MỘT CÁI HỐ NGAY SAU NÓ.
+     *
+     * Đo trên bo thật 13/08/2026, chế độ tiếng Anh:
+     *
+     *   mẩu 60 ký tự   → sinh 2,3 s, ra 3,6 s tiếng
+     *   mẩu 120 ký tự  → sinh 3,7 s, ra 7,3 s tiếng
+     *
+     * Bo phát ngay khi có mẩu đầu. Nó phát hết 3,6 giây, mà mẩu thứ hai
+     * phải 3,7 giây mới sinh xong ⇒ đệm CẠN trước khi mẩu sau về. Bộ đếm
+     * trên bo báo `1 lần / 10.677 ms` — nằm cạn suốt mười giây, tai nghe
+     * thành "giật giật và nhỏ đi ngay giữa câu".
+     *
+     * Bản sáng nay làm mẩu đầu nhỏ lại để mở miệng sớm hơn, và đã đổi
+     * một lỗi lấy một lỗi khác.
+     *
+     * Luật đúng: mỗi mẩu phải sinh xong TRƯỚC KHI bo phát hết mẩu trước
+     * nó. Mẩu đầu nhỏ thì mẩu thứ hai cũng phải nhỏ theo, rồi mới nới
+     * dần khi đệm đã dày.
+     *
+     *   mẩu 2  ~90 ký tự  → sinh 2,9 s < 3,6 s bo đang phát  ✓
+     *   mẩu 3+ nới dần    → ít mối nối hơn, mà đệm đã đủ dày để chịu
+     *
+     * Chế độ tiếng Việt KHÔNG cần chuyện này: VieNeu sinh theo luồng,
+     * byte đầu về sau ~165 ms bất kể mẩu dài bao nhiêu, nên gom to chỉ
+     * có lợi.
+     */
+    /**
+     * Luật rút từ số đo, không phải một bảng số đoán sẵn.
+     *
+     * Gọi a1 = thời lượng tiếng của mẩu trước, g2 = thời gian sinh mẩu
+     * sau. Bo bắt đầu phát mẩu trước ĐÚNG LÚC máy chủ bắt đầu sinh mẩu
+     * sau (vì mẩu sau chỉ được gửi đi sau khi mẩu trước sinh xong). Nên
+     * điều kiện không đói đệm là:
+     *
+     *     a1 ≥ g2
+     *
+     * Chatterbox đo được sinh ở ~0,5× thời gian thực (2,3 s cho 3,6 s
+     * tiếng; 3,7 s cho 7,3 s tiếng), tức g2 ≈ 0,5 × a2. Thay vào:
+     *
+     *     a1 ≥ 0,5 × a2   ⟺   a2 ≤ 2 × a1
+     *
+     * Mẩu sau được phép DÀI GẤP ĐÔI mẩu trước, không hơn. Tính theo ký
+     * tự vì thời lượng tỉ lệ với số ký tự.
+     *
+     * Một bảng số cố định thì không chịu được mẩu đầu ngắn: mẩu đầu cắt
+     * ở mệnh đề nên có khi chỉ 22 ký tự, và lúc đó 90 đã là gấp bốn.
+     * Luật nhân đôi tự co theo.
+     *
+     * Trần 260: quá đó thì mối nối thưa tới mức không còn cải thiện gì,
+     * mà một mẩu hỏng lại mất nhiều tiếng hơn.
+     */
+    const TRAN_MAU = 260;
+    let mauTruoc = 0;
+    const gomToiThieu = () => (mauTruoc ? Math.min(mauTruoc * 2, TRAN_MAU) : TRAN_MAU);
     const cho: string[] = [];
     let daGuiMauDau = false;
 
@@ -1287,10 +1343,14 @@ async function thinkAndSpeak(
       for (const s of sentences) {
         cho.push(s);
         const dai = cho.join(' ').length;
-        if (!daGuiMauDau || dai >= GOM_TOI_THIEU) {
-          await speakPiece(cho.join(' '));
+        if (!daGuiMauDau || dai >= gomToiThieu()) {
+          const mau = cho.join(' ');
+          await speakPiece(mau);
           cho.length = 0;
           daGuiMauDau = true;
+          // Chế độ Việt sinh theo luồng nên không có ràng buộc này —
+          // giữ nguyên cách gom to như cũ.
+          mauTruoc = persona.cheDo === 'vi' ? TRAN_MAU : mau.length;
         }
       }
       emitted += consumed;

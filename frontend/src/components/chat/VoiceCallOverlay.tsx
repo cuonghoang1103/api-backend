@@ -273,7 +273,12 @@ export default function VoiceCallOverlay({
             animate={reduceMotion ? undefined : { scale: active ? [1, 1.04, 1] : 1 }}
             transition={{ duration: 2.4, repeat: active ? Infinity : 0, ease: 'easeInOut' }}
           >
-            {phase === 'thinking' || uploading ? <Loader2 className="h-7 w-7 animate-spin" /> : 'C'}
+            {phase === 'thinking' || uploading
+              ? <Loader2 className="h-7 w-7 animate-spin" />
+              : (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src="/favicon.png" alt="" className="h-3/5 w-3/5 object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]" />
+              )}
           </motion.span>
         </button>
 

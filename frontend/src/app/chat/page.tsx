@@ -37,20 +37,20 @@ function RobotAvatar({ isStreaming, robotData }: { isStreaming: boolean; robotDa
 }
 
 // ── Dấu hiệu nhận diện của bản Studio ───────────────────────────────
-// Ô vuông bo tròn, gradient chàm→tím, chữ "C" của cuongthai.com. Dùng ở
-// thanh đầu trang và màn hình chào, thay cho robot Lottie nền tối (robot
-// được dựng cho nền #0d1117 nên trên theme sáng nó lạc quẻ).
+// Con gấu trúc ngủ — đúng favicon của web (`/favicon.png`), để avatar trong
+// chat và cái tab trình duyệt là MỘT khuôn mặt. Ảnh có nền trong suốt và nét
+// viền đen, nên đặt trên nền panel sáng dịu là đọc được ở cả hai theme (đặt
+// thẳng lên gradient tím thì phần thân trắng của gấu bị chìm).
 function StudioMark({ size = 'sm' }: { size?: 'sm' | 'lg' }) {
   const isLg = size === 'lg';
   return (
     <div
-      className={`flex shrink-0 items-center justify-center bg-gradient-to-br from-[#6366f1] to-[#8b5cf6] font-bold text-white ${
-        isLg
-          ? 'h-14 w-14 rounded-2xl text-xl shadow-[0_8px_24px_rgba(99,102,241,0.32)]'
-          : 'h-9 w-9 rounded-xl text-[15px] shadow-[0_2px_10px_rgba(99,102,241,0.28)]'
+      className={`flex shrink-0 items-center justify-center overflow-hidden border border-[color:var(--studio-border)] bg-[var(--studio-panel-soft)] ${
+        isLg ? 'h-14 w-14 rounded-2xl p-1' : 'h-9 w-9 rounded-xl p-0.5'
       }`}
     >
-      C
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/favicon.png" alt="CuongMini" className="h-full w-full object-contain" />
     </div>
   );
 }
@@ -978,7 +978,7 @@ export default function ChatPage() {
             <StudioMark />
             <div className="min-w-0 flex-1">
               <h1 className="flex items-center gap-2 text-[15px] font-semibold leading-tight text-[color:var(--studio-text)]">
-                CuongThai AI
+                CuongMini AI
                 {limitedMode && (
                   <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-medium text-amber-600">
                     <AlertCircle className="h-3 w-3" />

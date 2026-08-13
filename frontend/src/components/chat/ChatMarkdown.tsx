@@ -13,7 +13,7 @@
  *    highlighting, lazy-loaded so it stays out of initial JS (same pattern as
  *    social/CodeBlock).
  */
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -127,6 +127,36 @@ const MATH_DELIMS = [
 ];
 
 /**
+ * Dồn công thức KHỐI về MỘT dòng trước khi đưa cho react-markdown.
+ *
+ * Model viết công thức đứng riêng theo kiểu chuẩn của LaTeX:
+ *
+ *     $$
+ *     AB \perp AC.
+ *     $$
+ *
+ * `remark-breaks` (bật để câu trả lời xuống dòng đúng ý model) biến MỖI dấu
+ * xuống dòng thành một thẻ `<br>`. Thế là ba mảnh `$$`, `AB \perp AC.`, `$$`
+ * nằm ở BA nút văn bản khác nhau trong DOM — mà `renderMathInElement` của
+ * KaTeX chỉ ghép được cặp dấu nằm TRONG CÙNG một nút. Kết quả: công thức
+ * trong dòng (`$...$`) dựng đẹp, còn công thức khối trơ ra thành chữ
+ * `$$ \boxed{...} $$` — đúng thứ người dùng gặp trên production 13/08.
+ *
+ * Xuống dòng trong LaTeX chỉ là khoảng trắng, nên gộp lại KHÔNG đổi ý nghĩa.
+ * Chỉ gộp phần NGOÀI khối ```code``` — trong đó `$$` là ký tự thật của shell,
+ * PHP, awk… đụng vào là hỏng mã người ta dán.
+ */
+function inlineBlockMath(src: string): string {
+  const parts = (src || '').split(/(```[\s\S]*?```|~~~[\s\S]*?~~~)/g);
+  for (let i = 0; i < parts.length; i += 2) {
+    parts[i] = parts[i]
+      .replace(/\$\$([\s\S]*?)\$\$/g, (_m, inner: string) => `$$${inner.replace(/\s*\n\s*/g, ' ').trim()}$$`)
+      .replace(/\\\[([\s\S]*?)\\\]/g, (_m, inner: string) => `\\[${inner.replace(/\s*\n\s*/g, ' ').trim()}\\]`);
+  }
+  return parts.join('');
+}
+
+/**
  * `renderMath = false` khi câu trả lời ĐANG chảy về: mỗi token là một lần
  * react-markdown vẽ lại, mà KaTeX thì thay hẳn nút chữ bằng cây <span> của
  * nó — hai bên giẫm chân nhau sẽ ra công thức nhấp nháy rồi biến mất. Dựng
@@ -138,10 +168,11 @@ const MATH_DELIMS = [
  */
 function ChatMarkdown({ content, renderMath = true }: { content: string; renderMath?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
+  const source = useMemo(() => inlineBlockMath(content), [content]);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || !renderMath || !MATH_RE.test(content)) return;
+    if (!el || !renderMath || !MATH_RE.test(source)) return;
     let cancelled = false;
     (async () => {
       try {
@@ -160,7 +191,7 @@ function ChatMarkdown({ content, renderMath = true }: { content: string; renderM
       } catch { /* nạp lỗi thì để nguyên chữ LaTeX thô, không làm hỏng câu trả lời */ }
     })();
     return () => { cancelled = true; };
-  }, [content, renderMath]);
+  }, [source, renderMath]);
 
   return (
     <div ref={ref} className="chat-markdown break-words">
@@ -244,7 +275,7 @@ function ChatMarkdown({ content, renderMath = true }: { content: string; renderM
           },
         }}
       >
-        {content}
+        {source}
       </ReactMarkdown>
     </div>
   );

@@ -77,8 +77,9 @@ function StudioThinkingIndicator() {
 /** Dấu hiệu nhận diện của trợ lý trong giao diện studio (thay avatar robot). */
 function StudioAssistantMark() {
   return (
-    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#6366f1] to-[#8b5cf6] text-[13px] font-bold text-white shadow-[0_2px_8px_rgba(99,102,241,0.32)]">
-      C
+    <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[color:var(--studio-border)] bg-[var(--studio-panel-soft)] p-0.5">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/favicon.png" alt="CuongMini" className="h-full w-full object-contain" />
     </div>
   );
 }

@@ -211,7 +211,29 @@ export function canTraCuu(cauHoi: string): 'tin' | 'tin-cong-nghe' | 'tim' | nul
   const moiTinh = /\b(h[ôo]m nay|h[ôo]m qua|tu[ầa]n n[àa]y|n[ăa]m nay|hi[ệe]n t[ạa]i|b[âa]y gi[ờo]|m[ớo]i nh[ấa]t|v[ừu]a r[ồo]i|g[ầa]n đ[âa]y|gi[áa] (v[àa]ng|[đd][ôo] la|bitcoin|xăng)|t[ỉi] gi[áa]|th[ờo]i ti[ếe]t|k[ếe]t qu[ảa] (tr[ậa]n|b[óo]ng đ[áa]))\b/.test(s);
   const hoiTraCuu = /\b(t[ìi]m (gi[úu]p|h[ộo]|xem)|tra c[ứu]u|search|google|tra gi[úu]p)\b/.test(s);
 
-  if (moiTinh || hoiTraCuu) return 'tim';
+  // Tục ngữ / thành ngữ / ca dao.
+  //
+  // Không phải thứ "thay đổi theo thời gian" nên nó không lọt vào phép xét
+  // trên, nhưng model 9B chạy ở máy nhà KHÔNG thuộc kho này và nó không im
+  // lặng — nó bịa. Đo 13/08/2026: "Ăn cỗ đi trước, ..." → nó điền "ăn trước
+  // đi sau" (đúng là "lội nước theo sau"), 2/6 lần đúng so với 4/6 của model
+  // cổng. Bịa một câu tục ngữ nghe rất trôi chảy và người nghe tin ngay.
+  //
+  // Prompt không nhồi được kiến thức vào model, chỉ chặn được nó nói bừa.
+  // Muốn TRẢ LỜI ĐÚNG thì phải đưa dữ liệu vào — nên tra web, đúng đường đã
+  // dùng cho tin tức.
+  // ⚠️ KHÔNG DÙNG `\b` QUANH CHỮ TIẾNG VIỆT CÓ DẤU.
+  //    `\b` của JavaScript dựa trên `\w` = [A-Za-z0-9_], mà `ữ` không nằm
+  //    trong đó. Nên `/\btục ngữ\b/` chỉ khớp khi ngay sau "ngữ" là một chữ
+  //    cái ASCII — tức gần như không bao giờ. Đo 13/08/2026: câu "Điền nốt
+  //    câu tục ngữ giúp tao" cho ra `canTraCuu → KHÔNG tra`, im lặng, không
+  //    lỗi. Mấy regex cũ ở trên thoát nạn nhờ may: "tin tức" kết thúc bằng
+  //    "c", một ký tự ASCII.
+  //    Mấy cụm này đủ đặc trưng nên khớp chuỗi con là đủ, không cần biên.
+  const hoiTucNgu =
+    /(t[ụu]c ng[ữu]|th[àa]nh ng[ữu]|ca dao|c[âa]u n[óo]i d[âa]n gian|[đd]i[ềe]n n[ốo]t|[đd]i[ềe]n ti[ếe]p|[đd]i[ềe]n gi[úu]p|v[ếe] sau|c[âa]u [đd][ầa]y [đd][ủu])/.test(s);
+
+  if (moiTinh || hoiTraCuu || hoiTucNgu) return 'tim';
   return null;
 }
 
@@ -233,8 +255,22 @@ export function dungDoanTraCuu(muc: MucTin[], kieu: string): string {
     dong,
     '',
     'Dùng mấy dòng trên để trả lời. Nói theo giọng của mày, chọn ra vài cái',
-    'đáng chú ý nhất chứ đừng đọc hết cả danh sách như đọc mục lục. KHÔNG',
-    'được bịa thêm chi tiết nào không có ở trên. Nếu danh sách không dính',
-    'gì tới câu hỏi thì nói thẳng là không tra được.',
+    'đáng chú ý nhất chứ đừng đọc hết cả danh sách như đọc mục lục.',
+    '',
+    // ⚠️ Câu "KHÔNG được bịa" trừu tượng KHÔNG đủ — nó từng nằm ở đây và
+    //    model 9B vẫn vượt rào. Đo 13/08/2026: danh sách chỉ có TIÊU ĐỀ
+    //    trang giá vàng, không con số nào, mà model vẫn phán "vàng SJC và
+    //    9999 đang biến động khá mạnh". Nó không bịa con số — nó bịa một
+    //    NHẬN ĐỊNH, thứ nghe vô hại nên lọt qua mọi luật chung chung.
+    //    Model nhỏ theo được ví dụ cụ thể, không theo được nguyên tắc.
+    'LUẬT SẮT — chỉ được nói lại thứ CÓ CHỮ ở trên. Không suy ra, không',
+    'đoán xu hướng, không thêm nhận định:',
+    '- Trên chỉ có tiêu đề "Giá vàng SJC hôm nay" mà KHÔNG có con số ⇒ nói',
+    '  "tra được mấy trang giá vàng mà không trang nào ghi con số".',
+    '  TUYỆT ĐỐI không nói "đang tăng", "biến động mạnh", "giảm nhẹ" —',
+    '  không dòng nào ở trên nói thế.',
+    '- Không chắc thứ gì có ở trên hay không ⇒ bỏ, đừng nói.',
+    'Danh sách không dính gì tới câu hỏi thì nói thẳng là không tra được.',
+    'Thà cụt hứng còn hơn nói sai — người ta nghe rồi tin theo.',
   ].join('\n');
 }

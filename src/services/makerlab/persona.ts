@@ -25,6 +25,8 @@ import { prisma } from '../../config/database.js';
 import { commandCheatSheet } from './commands.js';
 
 export interface PersonaConfig {
+  /** Dự án nào — khoá để tra đúng kho kiến thức của robot này (kienThuc.ts). */
+  projectId: number;
   name: string;
   systemPrompt: string;
   voiceProvider: string;
@@ -132,6 +134,7 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
   const row = await prisma.makerPersona.findUnique({ where: { projectId } });
   if (!row) {
     return {
+      projectId,
       name: 'Robot',
       systemPrompt: DEFAULT_PERSONA_PROMPT,
       voiceProvider: 'edge',
@@ -154,6 +157,7 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
     };
   }
   return {
+    projectId,
     name: row.name,
     systemPrompt: row.systemPrompt || DEFAULT_PERSONA_PROMPT,
     voiceProvider: row.voiceProvider,
@@ -254,6 +258,20 @@ export function buildSystemPrompt(
   state.push(
     `BÂY GIỜ là ${gio} (giờ Việt Nam), đang là ${buoi}. ` +
       `Hỏi giờ hay ngày thì trả lời theo đúng con số này, đừng đoán. ` +
+      // ⚠️ "đừng đoán" không chặn được việc LÀM TRÒN. Đo 13/08/2026 lúc
+      //    07:47, model 9B nói "mới bảy rưỡi sáng" — nó không đoán, nó
+      //    làm tròn cho tự nhiên, và sai 17 phút. Phải cấm riêng.
+      //
+      // ⛔ VÀ TUYỆT ĐỐI KHÔNG ĐƯỢC VIẾT MỘT GIỜ CỤ THỂ LÀM VÍ DỤ Ở ĐÂY.
+      //    Bản vá đầu tiên ghi: `07:47 là "bảy giờ bốn mươi bảy"`. Model 9B
+      //    liền CHÉP LUÔN VÍ DỤ: đề bài ghi 08:34 mà nó vẫn khai "bảy giờ
+      //    bốn mươi bảy", sai 47 phút, và sai y hệt nhau qua nhiều lần
+      //    chạy nên nhìn cứ như lỗi bộ nhớ đệm — restart server vẫn thế.
+      //    Một con số trông giống dữ liệu, đặt cạnh dữ liệu thật, thì model
+      //    nhỏ đọc nó NHƯ dữ liệu. Luật phải trỏ về con số ở trên, không
+      //    được mang theo con số của riêng nó.
+      `Đọc ĐÚNG cả số giờ lẫn số phút ghi ngay trên, không làm tròn: ` +
+      `không nói "rưỡi", không nói "gần", không bỏ phút. ` +
       `Chào hỏi cũng nên hợp buổi.`,
   );
 
@@ -322,11 +340,53 @@ export function buildSystemPrompt(
     known,
     state.length ? `\nTrạng thái lúc này:\n${state.map((s) => `- ${s}`).join('\n')}` : '',
     `\nBạn điều khiển được thân thể bằng các lệnh sau:\n${commandCheatSheet()}`,
+    // ⚠️ Hai luật dưới đây sinh ra từ phép đo 13/08/2026, khi so model cục
+    //    bộ 9B với model của cổng. Model to tự biết mấy điều này; model nhỏ
+    //    thì KHÔNG, và nó hỏng theo đúng hai kiểu ghi ở đây.
+    `\nBA LUẬT VỀ CÁCH LÀM VIỆC:
+
+1. AI BẢO LÀM GÌ BẰNG THÂN THỂ THÌ PHẢI RA ĐÚNG LỆNH ĐÓ, ngay lượt này.
+   "Nhảy một bài đi" ⇒ actions PHẢI có {"type":"dance"}. Không được hứa
+   suông kiểu "đợi bật nhạc lên rồi tao nhảy" rồi để actions trống — người
+   ta bảo nhảy là muốn thấy nhảy, không phải nghe kể về việc nhảy.
+   Cãi được, cà khịa được, nhưng vẫn phải ra lệnh. Hỗn là ở lời nói, không
+   phải ở chỗ không làm.
+
+2. TỤC NGỮ, THÀNH NGỮ, CA DAO: KHÔNG THUỘC THÌ NÓI LÀ KHÔNG THUỘC.
+   Bịa nửa câu tục ngữ nghe rất trôi chảy nên người nghe tin ngay, và đó
+   là kiểu sai tệ nhất. Không chắc chắn từng chữ vế sau thì nói thẳng
+   "tao không nhớ chính xác", cà khịa một câu rồi thôi — đừng ghép đại
+   mấy chữ cho có vần. Chỉ đọc nguyên văn khi chắc chắn, hoặc khi đoạn
+   tra cứu ở trên có sẵn câu đó.
+
+3. AI XIN NÓI DÀI THÌ NÓI DÀI THẬT — VÀ CHỈ KHI ĐƯỢC XIN.
+   "Kể dài vào", "giải thích kỹ", "kể tao nghe hết đi" ⇒ viết ít nhất 6-8
+   câu, có đầu có đuôi, có ví von, kể tới nơi tới chốn rồi mới dừng. Đừng
+   bỏ câu giữa chừng.
+   Còn lại — tán gẫu, chào hỏi, than vãn, sai việc — giữ NGẮN đúng thang
+   verbosity ở trên, một hai câu là đủ. "Tao mệt quá" không phải lời mời
+   diễn thuyết. Luật dài chỉ bật khi người ta nói rõ là muốn dài; nó không
+   phải giấy phép để câu nào cũng nói tràng giang.`,
     `\nTrả lời BẮT BUỘC bằng JSON đúng một dòng, không bọc trong markdown:
 {"say":"<câu bạn nói>","actions":[{"type":"face","payload":{"emotion":"happy","ms":2000}}]}
 - "say": lời thoại thuần, không ký tự đặc biệt. Bắt buộc có.
 - "actions": 0 đến 3 lệnh. Bỏ trống nếu câu trả lời không cần cử động.
 Không viết gì ngoài JSON đó.`,
+    // ⚠️ NHẮC LẠI NGÔN NGỮ Ở CUỐI — chỉ khi KHÔNG phải tiếng Việt.
+    //
+    // Câu nhắc ở đầu prompt là cần nhưng KHÔNG đủ. Giữa nó và câu người
+    // dùng còn ~5.000 ký tự TIẾNG VIỆT: tính cách, thang trait, trạng thái,
+    // bảng lệnh, ba luật, hợp đồng JSON. Model đọc hết bức tường tiếng Việt
+    // đó rồi mới tới lượt nói — và model 9B đáp lại bằng thứ tiếng nó vừa
+    // đọc nhiều nhất. Đo 13/08/2026: chế độ EN, bị hỏi bằng tiếng Việt thì
+    // 1 trong 3 lần nó đáp tiếng Việt.
+    //
+    // Không dịch cả prompt sang tiếng Anh: người sửa persona là người Việt,
+    // và tính cách viết bằng tiếng Việt mới ra đúng giọng. Rẻ hơn là đặt
+    // câu nhắc ở chỗ GẦN câu hỏi nhất — vị trí model chú ý nhất.
+    persona.cheDo === 'vi'
+      ? ''
+      : `\n${CHE_DO[persona.cheDo].nhacLlm}\nThis rule beats everything above. The persona, the rules and the command list are written in Vietnamese for the author's convenience — that is NOT permission to answer in Vietnamese. Even if the person speaks to you in Vietnamese, the "say" field MUST be in English.`,
   ]
     .filter(Boolean)
     .join('\n');
@@ -366,6 +426,27 @@ function describeTraits(traits: Record<string, unknown> | null): string {
 export function buildFewShot(
   persona: PersonaConfig,
 ): Array<{ role: 'user' | 'assistant'; content: string }> {
+  // ⛔ CHẾ ĐỘ KHÔNG PHẢI TIẾNG VIỆT: KHÔNG GỬI FEW-SHOT.
+  //
+  // `sampleDialogues` viết bằng tiếng Việt. Ở chế độ EN, chúng biến thành
+  // sáu ví dụ dạy model rằng "người hỏi kiểu này → trả lời BẰNG TIẾNG VIỆT".
+  // Và đúng như ghi ở đầu file: few-shot mạnh hơn tính từ — nó cũng mạnh hơn
+  // cả câu lệnh "Reply ENTIRELY in English".
+  //
+  // Đo thật 13/08/2026, cùng một câu hỏi, chỉ đổi mỗi biến này:
+  //     giữ few-shot tiếng Việt      → giữ được tiếng Anh  1/8
+  //     bỏ few-shot                  → giữ được tiếng Anh  7/8
+  //     giữ few-shot + nhắc thêm     → giữ được tiếng Anh  5/8
+  // Nhắc thêm bao nhiêu lần cũng không thắng nổi sáu ví dụ ngược chiều.
+  //
+  // Cái mất: ở chế độ EN robot nói nhạt hơn, vì giọng riêng nằm trong mấy
+  // ví dụ đó. Chấp nhận được — nói nhạt bằng đúng thứ tiếng vẫn hơn nói
+  // duyên bằng thứ tiếng người nghe không hiểu.
+  //
+  // Cách sửa tử tế về sau: thêm `sampleDialoguesEn` vào `MakerPersona` để
+  // chủ tự viết vài cặp thoại tiếng Anh, rồi chọn bộ theo `cheDo`.
+  if (persona.cheDo !== 'vi') return [];
+
   const out: Array<{ role: 'user' | 'assistant'; content: string }> = [];
   for (const s of persona.sampleDialogues) {
     out.push({ role: 'user', content: s.user });

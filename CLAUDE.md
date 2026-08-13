@@ -186,7 +186,7 @@ gh run list --limit 8 --branch main   # what really fired on the last pushes
 
 What that costs: nothing watches for the AI inventing metrics in CV critiques any more (feed a metric-less CV, fail if a `suggestedFix` asserts a number without `needsUserInput`). Run it by hand with `npm run eval:cv-fabrication` — needs an AI key in the local `.env`, which is currently absent, so today it just prints SKIPPED.
 
-To re-arm it later: create a repo secret named exactly `ANTHROPIC_API_KEY`. No code or workflow edit — `ci-lint.yml` still references it and GitHub substitutes an empty string while it's missing. The gate is `keyForProvider()` in `src/services/cv/llm/index.ts`, which reads only `ANTHROPIC_API_KEY` (or `OPENAI_COMPAT_API_KEY`, which CI never passes) — so that one secret is the whole switch; the leftover `LLM_BASE_URL` / `LLM_MODEL_REPORT` secrets are inert on their own.
+To re-arm it later: create a repo secret named exactly `ANTHROPIC_API_KEY` (put the **modelapi.vn** key in it — since 11/08/2026 that variable is just one of three names the gateway reads). No code or workflow edit — `ci-lint.yml` still references it and GitHub substitutes an empty string while it's missing. The gate is `keyForProvider()` in `src/services/cv/llm/index.ts` → `gatewayKey()` in `src/services/llm/gateway.ts`, which reads `LLM_GATEWAY_API_KEY` → `OPENAI_COMPAT_API_KEY` → `ANTHROPIC_API_KEY`; CI passes none of them, so the step still SKIPs and CI stays green.
 
 ⛔ **Never delete `VPS_HOST` / `VPS_USER` / `VPS_SSH_PRIVATE_KEY`** — 10 workflows use them, and `vps-cleanup-weekly.yml` runs on a **weekly cron** to reclaim VPS disk (the guard against the disk-full outage that killed Postgres once). Deleting them kills that job silently.
 
@@ -226,6 +226,80 @@ git revert <bad_commit_sha>
 ```
 - NEVER `git push --force` to roll back
 - If the bad deploy included a migration, discuss with the user before reverting — reverting code does not revert the database
+
+---
+
+## Cổng LLM — modelapi.vn (11/08/2026)
+
+**MỘT khoá, MỘT base URL, MỘT bảng model cho cả web.** Nguồn sự thật:
+`src/services/llm/gateway.ts`. Cổng chạy phần mềm **New API**, mở đồng thời
+`/v1/chat/completions` (tuyến OpenAI — ĐƯỜNG MẶC ĐỊNH) và `/v1/messages`
+(tuyến Anthropic — chỉ AI Chat Pro/Max dùng, vì đó là chỗ duy nhất gửi **ảnh
++ PDF**; tuyến OpenAI không có khối `document`, đổi sang đó là âm thầm vứt
+file người dùng vừa đính kèm).
+
+```bash
+LLM_GATEWAY_BASE_URL=https://modelapi.vn/v1
+LLM_GATEWAY_API_KEY=sk-...      # cũng đọc OPENAI_COMPAT_API_KEY / ANTHROPIC_API_KEY
+```
+
+⚠️ **Cổng Rambo (`LLM_BASE_URL`, model `rb-*`) ĐÃ CHẾT.** Thấy `rb-` ở đâu là
+chỗ đó đang trỏ vào đường chết.
+
+⚠️⚠️ **TRANG `/rankings` NÓI DỐI VỀ CÁI KHOÁ NÀY MUA ĐƯỢC.** Nó liệt kê model
+của toàn cổng. Khoá của web, đo thật 11/08/2026 bằng `GET /v1/models`, chỉ có
+**8**: `gpt-5.6-sol` · `gpt-5.6-terra` · `gpt-5.5` · `gpt-5.4` ·
+`gpt-5.4-mini` · `codex-auto-review` · `gpt-image-2` · `gpt-image-1.5`.
+**KHÔNG có model Claude nào** — gọi `claude-sonnet-5` trả
+`HTTP 503 "No available channel … under group default"`, nghe như cổng bận
+nhưng nó vĩnh viễn cho tới khi có người mở kênh Anthropic trong Console.
+
+**Phân model theo VIỆC, không theo module** — `PURPOSE_MODEL` trong
+`gateway.ts`, đổi bằng `LLM_MODEL_<TÊN VIỆC>` chứ không sửa mã. Việc người
+dùng đọc từng chữ (báo cáo phỏng vấn, mổ CV, sinh câu hỏi) → `gpt-5.6-sol`.
+Việc tương tác cần nhanh (chấm bài, gia sư, kèm code, chat Pro) → `gpt-5.5`
+(2s so với 5,5s của sol). Việc máy đọc (tách JSON) → `gpt-5.4-mini`. Việc
+chạy nền → `gpt-5.6-terra`.
+
+**Ảnh: CHỈ `gpt-5.6-sol` nhìn được thật.** Đo bằng ảnh 1×1 px: sol trả lời
+đúng; `gpt-5.5` / `gpt-5.6-terra` / `gpt-5.4-mini` nhận ảnh, không báo lỗi, và
+bịa ("16×16", lần sau "48×48"). Vì thế mọi lượt chat có ảnh bị ép lên
+`chat_vision` = sol, bất kể người dùng chọn bậc nào.
+
+**PDF: KHÔNG model nào của khoá này đọc được file gốc** — cả khối `document`
+(tuyến Anthropic) lẫn khối `file` (tuyến OpenAI) đều trả về "Vui lòng tải lên
+file PDF". Trước 11/08 PDF đi thẳng vào Claude dạng gốc; đường đó không còn.
+Thay thế: `buildUserContent()` trong `ai.service.ts` **rút chữ ở backend**
+bằng `extractPdf()` của CV Builder (dựng lại dòng từ toạ độ chữ, nhận ra bản
+scan) rồi gửi dạng văn bản, trần 60k ký tự cả lượt. Mất bố cục/bảng/ảnh trong
+file, nhưng đọc được — đã kiểm end-to-end: PDF chứa "MA SO: 4242" +
+"1.750.000.000", `gpt-5.6-sol` trả lời đúng cả hai. Cờ bật/tắt là
+`isAnthropicModel(model)`: cắm kênh Claude vào là đường gốc tự quay lại.
+
+**BA chốt chặn chi phí:**
+
+0. **Việc chạy nền mặc định TẮT** (11/08/2026). `LLM_BACKGROUND_ENABLED`
+   (mọi lời gọi `feature: 'bulk_gen' | 'news'`) và `TECH_NEWS_AUTOPOST` (bản
+   tin 07:30) đều mặc định `false`. Trước đó bản tin mặc định BẬT — một biến
+   bị quên là mỗi sáng tự sinh một bài báo và tự tính tiền. Chạy một đợt sinh
+   nội dung: `docker exec -e LLM_BACKGROUND_ENABLED=true … node scripts/…`.
+   Việc người dùng bấm (chat, chấm bài, gia sư, CV) KHÔNG bị ảnh hưởng.
+
+1. `checkTokenQuota` — 300k token/người/ngày, Pro 1 triệu. **Không đặt env
+   cũng có trần** (trước 11/08 để trống nghĩa là vô hạn, và đó là chốt chặn
+   duy nhất của cả web).
+2. `src/services/llm/budget.ts` — trần TIỀN theo ngày, hai mức: **mềm 15 $**
+   cắt việc chạy nền (`feature: 'bulk_gen' | 'news'`), **cứng 40 $** cắt tất.
+   Chi phí là ƯỚC LƯỢNG (cổng không công khai giá) → chỉ để bắt bất thường;
+   có số thật thì đặt `LLM_PRICE_OVERRIDES`.
+
+**Kiểm tra thật, đừng đọc mã mà đoán** — một model đổi tên hay một tuyến bị
+đóng không hiện ra lúc build, nó hiện ra khi người dùng nhận câu trả lời trống:
+```bash
+npm run llm:check          # gọi thật mọi model đang phân cho các tính năng
+npm run llm:check -- --models   # cổng đang bán những gì
+```
+Xem cấu hình đang chạy trên prod: `GET /api/v1/ai/admin/llm-config` (admin).
 
 ---
 

@@ -385,7 +385,11 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
       // Không tính vào tokenCount/accumulated: hai cái đó là chốt chặn ĐỘ DÀI
       // CÂU TRẢ LỜI, tính lẫn suy luận vào là cắt ngang câu trả lời thật.
       if (typeof part !== 'string') {
-        if (part.text) {
+        if (part.type === 'figure_fix') {
+          // Hình thứ `thuTu` vừa được kiểm bằng toạ độ, thấy sai và vẽ lại.
+          // Client thay đúng khối svg đó tại chỗ, không đụng phần chữ.
+          res.write(`data: ${JSON.stringify({ type: 'figure_fix', index: part.thuTu, svg: part.svg })}\n\n`);
+        } else if (part.text) {
           res.write(`data: ${JSON.stringify({ type: 'reasoning', step: part.text })}\n\n`);
         }
         continue;

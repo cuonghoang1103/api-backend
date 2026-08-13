@@ -536,6 +536,20 @@ export default function ChatPage() {
               if (data.step) appendAssistantReasoning(sessionId, data.step);
               continue;
             }
+            // Backend kiểm hình bằng toạ độ, thấy sai và đã vẽ lại. Thay đúng
+            // khối ```svg thứ `index`, giữ nguyên toàn bộ phần chữ.
+            if (data.type === 'figure_fix') {
+              if (typeof data.index === 'number' && data.svg) {
+                let n = 0;
+                assistantContent = assistantContent.replace(/```svg\s*\n[\s\S]*?```/g, (khoi: string) => {
+                  const doi = n === data.index;
+                  n++;
+                  return doi ? '```svg\n' + String(data.svg).trim() + '\n```' : khoi;
+                });
+                updateLastAssistantMessage(sessionId, assistantContent);
+              }
+              continue;
+            }
             if (data.type === 'done') {
               if (typeof data.messageId === 'number') resolvedMessageId = data.messageId;
               continue;

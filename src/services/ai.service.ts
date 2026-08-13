@@ -43,6 +43,7 @@ import {
   cosineSimilarity,
 } from './aiProviders.js';
 import { claudeChatAvailable, completeClaudeChat, completeViaOpenAiRoute, hasDocument, hasImage, streamClaudeChat, streamViaOpenAiRoute, proModel, maxModel, proMaxTokens, maxMaxTokens, visionModel, type ClaudeMessage, type ClaudeContentBlock, type ChatStreamPart } from './claudeChat.js';
+import { goKhoiCheck, kiemHinh, tachHinh, thayHinh, type HinhTrongCauTraLoi } from './figureCheck.js';
 import { isProEffective } from './pro.service.js';
 import { isAnthropicModel } from './llm/gateway.js';
 import { logger } from '../utils/logger.js';
@@ -83,6 +84,58 @@ export const CHAT_MODELS: Record<string, ChatModelDef> = {
 };
 function resolveChatModel(id?: string): ChatModelDef {
   return (id && CHAT_MODELS[id]) || CHAT_MODELS[DEFAULT_CHAT_MODEL_ID];
+}
+
+/**
+ * Bộ lọc dòng chảy: nuốt khối ```check trên đường ra màn hình.
+ *
+ * Khối đó là dữ liệu cho máy kiểm hình, không phải cho người đọc. Không lọc
+ * thì người dùng thấy một khối `on-circle B O ...` nhảy ra giữa lời giải.
+ *
+ * Phải lọc theo DÒNG CHẢY chứ không cắt ở cuối: chữ đến từng mẩu vài ký tự,
+ * mẩu có thể cắt ngang giữa chuỗi "```check". Vì thế bộ lọc giữ lại phần đuôi
+ * nào còn có thể là tiền tố của dấu mở, rồi mới phát phần chắc chắn an toàn.
+ */
+function taoBoLocCheck(): { day: (c: string) => string; xong: () => string } {
+  const MO = '```check';
+  let giu = '';
+  let trongKhoi = false;
+
+  return {
+    day(chunk: string): string {
+      giu += chunk;
+      let ra = '';
+      for (;;) {
+        if (!trongKhoi) {
+          const i = giu.indexOf(MO);
+          if (i >= 0) {
+            ra += giu.slice(0, i);
+            giu = giu.slice(i + MO.length);
+            trongKhoi = true;
+            continue;
+          }
+          // Giữ lại đuôi còn có thể nở ra thành dấu mở ở mẩu sau.
+          let du = 0;
+          for (let n = Math.min(giu.length, MO.length - 1); n > 0; n--) {
+            if (MO.startsWith(giu.slice(giu.length - n))) { du = n; break; }
+          }
+          ra += giu.slice(0, giu.length - du);
+          giu = giu.slice(giu.length - du);
+          return ra;
+        }
+        const j = giu.indexOf('```');
+        if (j >= 0) {
+          giu = giu.slice(j + 3);
+          trongKhoi = false;
+          continue;
+        }
+        giu = giu.slice(Math.max(0, giu.length - 2)); // đuôi có thể là "``"
+        return ra;
+      }
+    },
+    // Kết thúc mà vẫn kẹt trong khối ⇒ model quên đóng; bỏ luôn phần dở.
+    xong(): string { return trongKhoi ? '' : giu; },
+  };
 }
 
 /**
@@ -185,6 +238,11 @@ const MATH_CODE_RULES =
   + '- Hai nhãn bất kỳ phải cách nhau ≥ 14 đơn vị. Điểm nào nằm sát nhau thì đẩy nhãn ra hai phía đối nhau.\n'
   + '- **Hình phải có ĐỦ mọi điểm mà lời giải câu đó nhắc tới.** Chứng minh có nói tới $N$ mà hình không có $N$ thì người học không lần theo được — hình thiếu điểm còn tệ hơn không vẽ. Dựng xong hãy đọc lại lời giải, đối chiếu từng tên điểm.\n'
   + '- Dưới hình ghi một dòng chú thích ngắn về những gì đã dựng.\n'
+  + '- **NGAY SAU mỗi khối ```svg, thêm một khối ```check khai các ràng buộc hình học của hình đó** — mỗi dòng một ràng buộc, dùng đúng tên đỉnh đã ghi trên hình. Máy sẽ kiểm lại bằng toạ độ và bắt bạn vẽ lại nếu sai, nên hãy khai ĐỦ mọi điều kiện của đề. Cú pháp:\n'
+  + '  `on-circle P O` (P nằm trên đường tròn tâm O) · `perp A B C D` (AB ⊥ CD) · `collinear A B C` (A, B, C thẳng hàng) · `midpoint M A B` (M là trung điểm AB) · `eq-dist A B C D` (AB = CD).\n'
+  + '  Ví dụ cho tam giác $ABC$ vuông tại $A$ nội tiếp đường tròn tâm $O$ đường kính $BC$, có $H$ là chân đường cao từ $A$:\n'
+  + '  ```check\n  on-circle A O\n  on-circle B O\n  on-circle C O\n  midpoint O B C\n  perp A B A C\n  perp A H B C\n  collinear B H C\n  ```\n'
+  + '  Khối ```check là dữ liệu cho máy, người dùng sẽ không nhìn thấy nó — đừng nhắc tới nó trong lời văn.\n'
   + '\n## Code:\n'
   + '- Code phải chạy được: đủ import/khai báo, đúng cú pháp, đặt tên rõ ràng. Ghi rõ ngôn ngữ + phiên bản khi nó ảnh hưởng tới kết quả.\n'
   + '- Mỗi khối code mở bằng ```<tên ngôn ngữ> để tô màu đúng.\n'
@@ -773,6 +831,7 @@ export class AIService {
         //    PDF, xem ghi chú trong claudeChat.ts.
         const pdfTurn = hasDocument(claudeMessages);
         let streamed = '';
+        const loc = taoBoLocCheck();
         try {
           const stream = pdfTurn
             ? streamClaudeChat({ model: gwModel, system: systemPrompt, messages: claudeMessages, maxTokens: outTokens })
@@ -786,13 +845,27 @@ export class AIService {
           for await (const part of stream) {
             // Bước suy luận đi thẳng ra client, KHÔNG cộng vào câu trả lời —
             // cộng vào là nó vừa lọt vào bong bóng chat vừa được lưu xuống DB.
-            if (typeof part === 'string') streamed += part;
-            yield part;
+            if (typeof part !== 'string') { yield part; continue; }
+            streamed += part;               // BẢN THÔ: còn khối ```check để kiểm hình
+            const hien = loc.day(part);     // BẢN HIỆN: đã nuốt khối ```check
+            if (hien) yield hien;
           }
+          const conLai = loc.xong();
+          if (conLai) yield conLai;
           // Empty stream (no error but zero tokens) → treat as failure so we
           // try the non-stream path rather than returning a blank answer.
           if (!streamed.trim()) throw new Error('empty claude stream');
-          if (sessionId) await this.saveAssistantAndTrack(sessionId, streamed, meta);
+
+          // ── Kiểm hình bằng SỐ, sai thì bắt vẽ lại ──────────────
+          // Chạy SAU khi chữ đã chảy hết: người dùng đọc lời giải ngay, hình
+          // tự sửa vài giây sau. Kiểm trước rồi mới cho chảy thì họ ngồi nhìn
+          // màn hình trống thêm cả chục giây cho một hình vốn thường đã đúng.
+          let ketQua = goKhoiCheck(streamed);
+          for await (const p of this.kiemVaSuaHinh(streamed, gwModel, systemPrompt)) {
+            if (p.loai === 'xong') ketQua = p.text;
+            else yield p.phan;
+          }
+          if (sessionId) await this.saveAssistantAndTrack(sessionId, ketQua, meta);
           return;
         } catch (err) {
           if (streamed) {
@@ -944,6 +1017,109 @@ export class AIService {
       logger.error('AIService All providers failed', { error: errMsg });
       throw err;
     }
+  }
+
+  // ─── Vòng kiểm hình ───────────────────────────────────────
+  /**
+   * Kiểm từng hình trong câu trả lời bằng SỐ; hình nào sai thì bắt model vẽ
+   * lại đúng một lần, kèm số đo chỗ sai.
+   *
+   * Vì sao kiểm bằng số chứ không "render ra ảnh rồi cho model nhìn": xem đầu
+   * `figureCheck.ts`. Tóm tắt: sai lệch vài đơn vị là thứ nhìn không ra mà
+   * tính thì ra ngay, lại nhanh hơn và không tốn token.
+   *
+   * Ba chốt để vòng này không tự gây hại:
+   *  • Tối đa `TOI_DA_SUA` hình mỗi lượt — bài ba câu vẽ hỏng cả ba không được
+   *    phép kéo dài lượt trả lời thành ba lượt gọi nữa.
+   *  • Mỗi hình sửa ĐÚNG MỘT LẦN, không lặp cho tới khi sạch lỗi.
+   *  • Chỉ thay khi bản mới THẬT SỰ ít lỗi hơn bản cũ. Model sửa hỏng thêm là
+   *    chuyện có thật, và một hình hỏng nặng hơn thì tệ hơn là để nguyên.
+   */
+  private async *kiemVaSuaHinh(
+    thoText: string,
+    model: string,
+    systemPrompt: string,
+  ): AsyncGenerator<{ loai: 'phan'; phan: ChatStreamPart } | { loai: 'xong'; text: string }, void, unknown> {
+    const TOI_DA_SUA = 3;
+    let text = thoText;
+
+    let hinhs: HinhTrongCauTraLoi[] = [];
+    try {
+      hinhs = tachHinh(thoText);
+    } catch (err) {
+      logger.warn('tachHinh lỗi — bỏ qua vòng kiểm hình', { error: err instanceof Error ? err.message : String(err) });
+    }
+    if (!hinhs.length) { yield { loai: 'xong', text: goKhoiCheck(text) }; return; }
+
+    let daSua = 0;
+    for (const h of hinhs) {
+      if (daSua >= TOI_DA_SUA) break;
+
+      let loi: string[] = [];
+      try {
+        loi = kiemHinh(h.svg, h.diemTrongLoiGiai, h.rangBuoc).loi;
+      } catch (err) {
+        // Bộ kiểm hỏng thì để hình nguyên. Không bao giờ để việc kiểm làm
+        // chết một câu trả lời vốn đã xong.
+        logger.warn('kiemHinh lỗi', { thuTu: h.thuTu, error: err instanceof Error ? err.message : String(err) });
+        continue;
+      }
+      if (!loi.length) continue;
+
+      logger.info('kiểm hình: phát hiện sai', { thuTu: h.thuTu, soLoi: loi.length, loi });
+      yield {
+        loai: 'phan',
+        phan: { type: 'reasoning', text: `**Kiểm hình ${h.thuTu + 1} bằng toạ độ: thấy ${loi.length} chỗ sai, đang vẽ lại**` },
+      };
+
+      try {
+        const svgMoi = await this.veLaiHinh(h.svg, loi, model, systemPrompt);
+        if (!svgMoi) continue;
+        const conLai = kiemHinh(svgMoi, h.diemTrongLoiGiai, h.rangBuoc).loi;
+        if (conLai.length >= loi.length) {
+          logger.info('kiểm hình: bản vẽ lại không khá hơn, giữ bản cũ', { thuTu: h.thuTu, cu: loi.length, moi: conLai.length });
+          continue;
+        }
+        text = thayHinh(text, h.thuTu, svgMoi);
+        daSua++;
+        logger.info('kiểm hình: đã thay hình', { thuTu: h.thuTu, cu: loi.length, moi: conLai.length });
+        yield { loai: 'phan', phan: { type: 'figure_fix', thuTu: h.thuTu, svg: svgMoi } };
+      } catch (err) {
+        logger.warn('vẽ lại hình thất bại — giữ hình cũ', { thuTu: h.thuTu, error: err instanceof Error ? err.message : String(err) });
+      }
+    }
+
+    yield { loai: 'xong', text: goKhoiCheck(text) };
+  }
+
+  /** Một lượt gọi ngắn: đưa hình sai + số đo chỗ sai, đòi lại đúng một thẻ `<svg>`. */
+  private async veLaiHinh(
+    svgCu: string,
+    loi: string[],
+    model: string,
+    systemPrompt: string,
+  ): Promise<string | null> {
+    const yeuCau =
+      'Hình SVG dưới đây đã được kiểm lại bằng toạ độ và SAI. Các lỗi đo được:\n\n'
+      + loi.map((l, i) => `${i + 1}. ${l}`).join('\n')
+      + '\n\nHãy TÍNH LẠI TOẠ ĐỘ cho đúng rồi vẽ lại hình này.\n'
+      + '- Trả lời CHỈ gồm đúng một thẻ `<svg>...</svg>`, không giải thích, không khối ```, không khối ```check.\n'
+      + '- Giữ nguyên các đỉnh và ý nghĩa hình học; chỉ sửa cho đúng số.\n'
+      + '- Nhớ: viewBox phải chứa TRỌN hình kể cả vành đường tròn; nhãn cách nhau ≥ 14 đơn vị.\n\n'
+      + '```svg\n' + svgCu + '\n```';
+
+    const traVe = await completeViaOpenAiRoute({
+      model,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: yeuCau }],
+      maxTokens: 4000,
+      // Vẽ lại là việc tính toạ độ — cần nghĩ, nhưng đây là lượt phụ nên
+      // không đẩy lên `high` để khỏi kéo dài thêm thời gian chờ.
+      reasoningEffort: 'medium',
+    });
+
+    const m = /<svg[\s\S]*<\/svg>/.exec(traVe);
+    return m ? m[0] : null;
   }
 
   // ─── Get full stream result (for advanced use) ────────────

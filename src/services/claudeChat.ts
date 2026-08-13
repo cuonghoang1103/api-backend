@@ -92,12 +92,25 @@ export function claudeMaxTokens(): number {
  *  answer can use up to this; short answers cost/stream the same as before. */
 export function proMaxTokens(): number {
   const n = Number(process.env.AI_CHAT_MAX_TOKENS_PRO);
-  return Number.isFinite(n) && n > 0 ? n : 10_000;
+  return Number.isFinite(n) && n > 0 ? n : 20_000;
 }
-/** Max output tokens for the "Max" (Opus) tier. */
+/**
+ * Trần token RA cho bậc Max.
+ *
+ * ⚠️ TOKEN SUY LUẬN ĂN CHUNG TRẦN NÀY. Từ 13/08/2026 mọi lượt trả phí gửi
+ * `reasoning_effort`, và cổng tính token suy luận vào `completion_tokens`.
+ * Đo thật: một câu hỏi hình học NGẮN đã tốn 4.142 token chỉ để suy luận, còn
+ * lại 3.611 cho lời giải. Với đề dài (hai bài + ảnh) suy luận ăn gần hết
+ * 15.000 cũ và lời giải bị cắt ngang giữa công thức — người dùng gặp thật
+ * ngay tối hôm bật tính năng, câu trả lời dừng ở `E\left(0,-\frac{bh`.
+ *
+ * Nâng trần KHÔNG làm model nghĩ nhiều hơn (mức nghĩ do `reasoning_effort`
+ * quyết định) và KHÔNG tự khắc tốn thêm tiền — chỉ trả tiền cho token thật sự
+ * sinh ra. Nó chỉ mở đủ chỗ để phần lời giải được viết trọn.
+ */
 export function maxMaxTokens(): number {
   const n = Number(process.env.AI_CHAT_MAX_TOKENS_MAX);
-  return Number.isFinite(n) && n > 0 ? n : 15_000;
+  return Number.isFinite(n) && n > 0 ? n : 32_000;
 }
 
 function claudeTimeoutMs(): number {
@@ -133,7 +146,11 @@ interface ClaudeCallParams {
  * chuỗi không phải sửa). Đối tượng = một bước suy luận, KHÔNG phải câu trả
  * lời — đừng cộng nó vào nội dung tin nhắn.
  */
-export type ChatStreamPart = string | { type: 'reasoning'; text: string };
+export type ChatStreamPart =
+  | string
+  | { type: 'reasoning'; text: string }
+  /** Hình thứ `thuTu` đã được kiểm bằng số, thấy sai và vẽ lại — client thay tại chỗ. */
+  | { type: 'figure_fix'; thuTu: number; svg: string };
 
 /** Bỏ lượt rỗng và giữ đúng thứ tự lượt mà API đòi. */
 function usableMessages(messages: ClaudeMessage[]): ClaudeMessage[] {
@@ -311,6 +328,10 @@ export async function* streamViaOpenAiRoute(p: ClaudeCallParams): AsyncGenerator
   const key = requireKey();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), p.timeoutMs ?? claudeTimeoutMs());
+  // Cổng báo vì sao nó dừng. `length` = chạm trần token — phải NÓI RA, vì lúc
+  // đó câu trả lời đứt ngang giữa công thức và người đọc không có cách nào
+  // biết là mình đang đọc một lời giải chưa xong.
+  let lyDoDung: string | null = null;
   try {
     const res = await fetch(chatCompletionsUrl(), {
       method: 'POST',
@@ -337,10 +358,14 @@ export async function* streamViaOpenAiRoute(p: ClaudeCallParams): AsyncGenerator
         if (!raw || raw === '[DONE]') continue;
         try {
           const evt = JSON.parse(raw) as {
-            choices?: Array<{ delta?: { content?: string; reasoning_content?: string; reasoning?: string } }>;
+            choices?: Array<{
+              delta?: { content?: string; reasoning_content?: string; reasoning?: string };
+              finish_reason?: string | null;
+            }>;
             error?: { message?: string };
           };
           if (evt.error) throw new Error(`openai route stream error: ${evt.error.message ?? 'unknown'}`);
+          if (evt.choices?.[0]?.finish_reason) lyDoDung = evt.choices[0].finish_reason;
           const d = evt.choices?.[0]?.delta;
           // Suy luận về TRƯỚC câu trả lời. Hai tên vì các cổng gộp đặt khác
           // nhau; modelapi.vn dùng `reasoning_content` (đo 13/08).
@@ -351,6 +376,9 @@ export async function* streamViaOpenAiRoute(p: ClaudeCallParams): AsyncGenerator
           if (e instanceof Error && e.message.startsWith('openai route stream error')) throw e;
         }
       }
+    }
+    if (lyDoDung === 'length') {
+      yield '\n\n> ⚠️ **Câu trả lời bị cắt vì chạm trần độ dài.** Nhắn "viết tiếp" để tôi làm nốt phần còn lại.\n';
     }
   } catch (e) {
     if ((e as Error).name === 'AbortError') throw new Error('openai route stream timeout');

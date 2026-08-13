@@ -2,6 +2,7 @@ import OpenAI from 'openai';
 import { AppError } from '../middleware/errorHandler.js';
 import { config } from '../config/env.js';
 import { logger } from '../utils/logger.js';
+import { gatewayKey, gatewayRoot } from './llm/gateway.js';
 
 /**
  * AI Provider abstraction.
@@ -35,6 +36,10 @@ export interface AIProviderConfig {
   priority: number;
   /** Bật/tắt provider này */
   enabled: boolean;
+  /** Khoá/địa chỉ lấy từ hàm thay vì một biến env duy nhất — cổng modelapi.vn
+   *  chấp nhận vài tên biến khác nhau (xem `llm/gateway.ts`) nên nó cần cái này. */
+  resolveKey?: () => string | undefined;
+  resolveBaseURL?: () => string;
 }
 
 export interface ChatRequest {
@@ -73,12 +78,27 @@ const PROVIDERS: AIProviderConfig[] = [
     enabled: true,
   },
   {
+    // Cổng trả phí của web (modelapi.vn). Đứng NGAY SAU Groq: bậc chat miễn
+    // phí không nên tiêu tiền khi Groq còn sống, nhưng cũng không được câm khi
+    // Groq chết — trước đây nó rơi sang OpenRouter/OpenAI, hai khoá mà không
+    // ai còn nạp tiền. Model rẻ nhất của cổng là đủ cho bậc miễn phí.
+    name: 'modelapi',
+    apiKeyEnv: 'LLM_GATEWAY_API_KEY',
+    modelEnv: 'LLM_MODEL_CHAT_FREE_FALLBACK',
+    defaultModel: 'gpt-5.4-mini',
+    baseURL: null,
+    resolveKey: gatewayKey,
+    resolveBaseURL: () => `${gatewayRoot()}/v1`,
+    priority: 2,
+    enabled: true,
+  },
+  {
     name: 'openrouter',
     apiKeyEnv: 'OPENROUTER_API_KEY',
     modelEnv: 'OPENROUTER_CHAT_MODEL',
     defaultModel: 'meta-llama/llama-3.1-8b-instruct:free',
     baseURL: 'https://openrouter.ai/api/v1',
-    priority: 2,
+    priority: 3,
     enabled: true,
   },
   {
@@ -87,7 +107,7 @@ const PROVIDERS: AIProviderConfig[] = [
     modelEnv: 'OPENAI_CHAT_MODEL',
     defaultModel: 'gpt-4o-mini',
     baseURL: null,
-    priority: 3,
+    priority: 4,
     enabled: true,
   },
 ];
@@ -97,10 +117,18 @@ const PROVIDERS: AIProviderConfig[] = [
  */
 const _clients: Record<string, OpenAI> = {};
 
+function providerKey(provider: AIProviderConfig): string | undefined {
+  return provider.resolveKey ? provider.resolveKey() : process.env[provider.apiKeyEnv];
+}
+
+function providerBaseURL(provider: AIProviderConfig): string | null {
+  return provider.resolveBaseURL ? provider.resolveBaseURL() : provider.baseURL;
+}
+
 function getClient(provider: AIProviderConfig): OpenAI {
   if (_clients[provider.name]) return _clients[provider.name];
 
-  const apiKey = process.env[provider.apiKeyEnv];
+  const apiKey = providerKey(provider);
   if (!apiKey) {
     throw new AppError(
       `${provider.apiKeyEnv} is not configured`,
@@ -116,10 +144,11 @@ function getClient(provider: AIProviderConfig): OpenAI {
     timeout: 8_000,
     maxRetries: 0,
   };
-  if (provider.baseURL) clientConfig.baseURL = provider.baseURL;
+  const baseURL = providerBaseURL(provider);
+  if (baseURL) clientConfig.baseURL = baseURL;
 
  _clients[provider.name] = new OpenAI(clientConfig);
- logger.info('AIProviders initialized client', { provider: provider.name, baseURL: provider.baseURL ?? 'api.openai.com' });
+ logger.info('AIProviders initialized client', { provider: provider.name, baseURL: baseURL ?? 'api.openai.com' });
  return _clients[provider.name];
 }
 
@@ -133,7 +162,7 @@ function getModel(provider: AIProviderConfig): string {
 function getAvailableProviders(): AIProviderConfig[] {
   return PROVIDERS.filter((p) => {
     if (!p.enabled) return false;
-    return !!process.env[p.apiKeyEnv];
+    return !!providerKey(p);
   }).sort((a, b) => a.priority - b.priority);
 }
 
@@ -462,7 +491,7 @@ export function listActiveProviders(): Array<{
   return getAvailableProviders().map((p) => ({
     name: p.name,
     model: getModel(p),
-    baseURL: p.baseURL,
+    baseURL: providerBaseURL(p),
     priority: p.priority,
   }));
 }
@@ -479,7 +508,7 @@ export function getAllCircuitStates(): Record<string, {
   status: 'closed' | 'open' | 'half-open';
 }> {
   const out: Record<string, ReturnType<typeof getAllCircuitStates>[string]> = {};
-  const providers = ['groq', 'openrouter', 'openai'];
+  const providers = PROVIDERS.map((p) => p.name);
   for (const name of providers) {
     const c = getCircuit(name);
     const now = Date.now();

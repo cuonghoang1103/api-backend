@@ -106,6 +106,8 @@ export async function generateMeta(opts: {
   const userMsg = `Tiêu đề: ${title.slice(0, 300)}\n\n${wrap('notes', opts.notes ?? '')}`;
   const result = await llmComplete({
     step: 'interview',
+    purpose: 'exphub_doc',
+    feature: 'voice',
     system,
     messages: [{ role: 'user', content: userMsg }],
     maxTokens: 900,
@@ -152,6 +154,8 @@ export async function summarizePost(opts: {
   const userMsg = `Tiêu đề: ${String(opts.title ?? '').slice(0, 300)}\n\n${wrap('body', body)}`;
   const result = await llmComplete({
     step: 'interview',
+    purpose: 'exphub_doc',
+    feature: 'voice',
     system,
     messages: [{ role: 'user', content: userMsg }],
     maxTokens: 500,

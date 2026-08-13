@@ -230,7 +230,7 @@ export async function generateQuestions(params: GenerateParams): Promise<Generat
 
   let questions: GeneratedQuestion[];
   const first = await llmComplete({
-    step: 'generation', feature: 'bulk_gen',
+    step: 'generation', purpose: 'interview_generate', feature: 'bulk_gen',
     system,
     messages: [{ role: 'user', content: user }],
     maxTokens: genMaxTokens,
@@ -244,7 +244,7 @@ export async function generateQuestions(params: GenerateParams): Promise<Generat
     if (!questions.length) throw new Error('salvage yielded zero questions');
   } catch {
     const retry = await llmComplete({
-      step: 'generation', feature: 'bulk_gen',
+      step: 'generation', purpose: 'interview_generate', feature: 'bulk_gen',
       system,
       messages: [
         { role: 'user', content: user },

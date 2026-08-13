@@ -4,7 +4,7 @@
  * Reuses the Interview LLM gateway (provider-agnostic, retry/backoff, circuit
  * breaker, cost logging to InterviewLLMCallLog, per-user daily token quota,
  * kill-switch, STATIC degrade). NO new env / vendor / key — same
- * ANTHROPIC_API_KEY / LLM_BASE_URL / LLM_MODEL_INTERVIEW as the interview.
+ * cổng LLM dùng chung (src/services/llm/gateway.ts) như Interview.
  *
  * All features here are gated to Pro/Max (isProEffective) + AI availability.
  *

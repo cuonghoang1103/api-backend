@@ -131,7 +131,7 @@ function Overview({ topicName }: { topicName: (id: number) => string }) {
               ))}
             </div>
           )}
-          <p className="text-[11px] text-slate-500 mt-3">Thêm ANTHROPIC_API_KEY vào VPS + đặt DEFAULT_ENGINE_MODE=HYBRID để bật AI chấm. FORCE_STATIC_MODE=true là kill switch tắt toàn bộ LLM.</p>
+          <p className="text-[11px] text-slate-500 mt-3">Thêm LLM_GATEWAY_API_KEY (khoá modelapi.vn) vào VPS + đặt DEFAULT_ENGINE_MODE=HYBRID để bật AI chấm. FORCE_STATIC_MODE=true là kill switch tắt toàn bộ LLM.</p>
         </div>
       )}
 

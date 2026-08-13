@@ -13,6 +13,7 @@
  */
 import { prisma } from '../config/database.js';
 import { isAiAvailable, isForceStatic, hasKey } from './interview/llm/index.js';
+import { vendorOf } from './llm/gateway.js';
 
 // ── Per-user Pro AI usage ────────────────────────────────────────
 export interface FeatureUserRow {
@@ -169,8 +170,9 @@ export interface GenStats {
 /** A model id only tells us which upstream served it; that is what a quota
  *  follows, so it is also how the throttle counts. Same mapping here. */
 function providerOf(model: string): GenModelStat['provider'] {
-  if (model.startsWith('claude') || model.startsWith('rb-')) return 'claude';
-  if (model.startsWith('gpt')) return 'openai_compat';
+  const vendor = vendorOf(model);
+  if (vendor === 'anthropic') return 'claude';
+  if (vendor === 'openai') return 'openai_compat';
   return 'other';
 }
 

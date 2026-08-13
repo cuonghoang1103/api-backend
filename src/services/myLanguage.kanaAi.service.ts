@@ -118,6 +118,7 @@ export async function kanaTip(userId: number, body: { char?: string; romaji?: st
   try {
     const res = await llmComplete({
       step: 'generation',
+      purpose: 'language_tutor',
       // 'language', not a new value: this IS language AI, and the admin's
       // Ngôn ngữ analytics counts that feature — a bespoke tag would hide it.
       feature: 'language',

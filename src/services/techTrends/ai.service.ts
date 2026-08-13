@@ -11,7 +11,7 @@
  * ZERO new infra: this REUSES the Interview module's already-configured,
  * battle-tested LLM gateway (`src/services/interview/llm`) — retry/backoff,
  * circuit breaker, per-user token quota, cost logging. That means the moment
- * ANTHROPIC_API_KEY + LLM_BASE_URL are set (they already are on prod) these
+ * khoá cổng LLM đã đặt (LLM_GATEWAY_API_KEY — prod đã có) thì các
  * features light up with no env/dep/migration change. Calls are logged under
  * the interview gateway's cost log (step 'generation'/'interview'); this is a
  * deliberate trade to avoid a new migration for a separate log table.
@@ -105,7 +105,7 @@ export async function generateDraft(
     'Hãy viết bài blog hoàn chỉnh theo schema JSON ở trên.';
 
   const messages: LLMMessage[] = [{ role: 'user', content: userMsg }];
-  const result = await llmComplete({ step: 'generation', system, messages, maxTokens: 3200, userId: opts.userId });
+  const result = await llmComplete({ step: 'generation', purpose: 'news_bulletin', feature: 'news', system, messages, maxTokens: 3200, userId: opts.userId });
   const json = extractJson<Partial<GeneratedArticle>>(result.text);
 
   const title = String(json.title ?? '').trim();
@@ -147,7 +147,7 @@ export async function structureFixBug(
     'Hãy viết bài post-mortem #FixBug theo schema JSON ở trên.';
 
   const messages: LLMMessage[] = [{ role: 'user', content: userMsg }];
-  const result = await llmComplete({ step: 'generation', system, messages, maxTokens: 3000, userId: opts.userId });
+  const result = await llmComplete({ step: 'generation', purpose: 'news_bulletin', feature: 'news', system, messages, maxTokens: 3000, userId: opts.userId });
   const json = extractJson<Partial<GeneratedArticle>>(result.text);
 
   const title = String(json.title ?? '').trim();
@@ -205,7 +205,7 @@ export async function enrichMeta(
 
   const userMsg = `Tiêu đề: ${String(opts.title ?? '').slice(0, 300)}\n\n${wrap('body', opts.bodyMdx)}`;
   const messages: LLMMessage[] = [{ role: 'user', content: userMsg }];
-  const result = await llmComplete({ step: 'interview', system, messages, maxTokens: 700, userId: opts.userId });
+  const result = await llmComplete({ step: 'interview', purpose: 'news_bulletin', feature: 'news', system, messages, maxTokens: 700, userId: opts.userId });
   const json = extractJson<Partial<EnrichResult>>(result.text);
 
   return {
@@ -236,7 +236,7 @@ export async function rewriteBody(
     `Hướng dẫn viết lại: ${String(opts.instruction ?? 'làm rõ ràng, mạch lạc hơn').slice(0, 500)}\n\n` +
     wrap('body', opts.bodyMdx);
   const messages: LLMMessage[] = [{ role: 'user', content: userMsg }];
-  const result = await llmComplete({ step: 'generation', system, messages, maxTokens: 3200, userId: opts.userId });
+  const result = await llmComplete({ step: 'generation', purpose: 'news_bulletin', feature: 'news', system, messages, maxTokens: 3200, userId: opts.userId });
   const json = extractJson<{ bodyMdx?: string }>(result.text);
 
   const bodyMdx = String(json.bodyMdx ?? '').trim();
@@ -279,7 +279,7 @@ export async function summarizeArticle(
   ].join('\n');
 
   const userMsg = `Tiêu đề: ${String(opts.title ?? '').slice(0, 300)}\n\n${wrap('body', body)}`;
-  const result = await llmComplete({ step: 'interview', system, messages: [{ role: 'user', content: userMsg }], maxTokens: 500, userId: opts.userId });
+  const result = await llmComplete({ step: 'interview', purpose: 'news_bulletin', feature: 'news', system, messages: [{ role: 'user', content: userMsg }], maxTokens: 500, userId: opts.userId });
   const json = extractJson<{ tldr?: unknown }>(result.text);
   const tldr = Array.isArray(json.tldr) ? json.tldr.map((x) => String(x).trim()).filter(Boolean).slice(0, 6) : [];
   if (tldr.length === 0) throw new AppError('Không tạo được tóm tắt, thử lại.', 502, 'AI_BAD_OUTPUT');
@@ -301,7 +301,7 @@ export async function explainCode(
   ].join('\n');
 
   const userMsg = `Ngôn ngữ: ${String(opts.lang ?? 'unknown')}\n${wrap('code', opts.code)}`;
-  const result = await llmComplete({ step: 'interview', system, messages: [{ role: 'user', content: userMsg }], maxTokens: 700, userId: opts.userId });
+  const result = await llmComplete({ step: 'interview', purpose: 'news_bulletin', feature: 'news', system, messages: [{ role: 'user', content: userMsg }], maxTokens: 700, userId: opts.userId });
   const json = extractJson<{ explanation?: string }>(result.text);
   const explanation = String(json.explanation ?? '').trim();
   if (!explanation) throw new AppError('Không giải thích được, thử lại.', 502, 'AI_BAD_OUTPUT');
@@ -333,7 +333,7 @@ export async function answerQuestion(
   ].join('\n');
 
   const userMsg = `Câu hỏi: ${opts.question.slice(0, 500)}\n\nCác bài viết:\n${wrap('articles', context)}`;
-  const result = await llmComplete({ step: 'interview', system, messages: [{ role: 'user', content: userMsg }], maxTokens: 900, userId: opts.userId });
+  const result = await llmComplete({ step: 'interview', purpose: 'news_bulletin', feature: 'news', system, messages: [{ role: 'user', content: userMsg }], maxTokens: 900, userId: opts.userId });
   const json = extractJson<{ answer?: string }>(result.text);
   const answer = String(json.answer ?? '').trim();
   if (!answer) throw new AppError('Không trả lời được, thử lại.', 502, 'AI_BAD_OUTPUT');

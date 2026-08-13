@@ -517,6 +517,47 @@ router.get('/analytics/generation', authenticate, requireAdmin(), async (_req: a
 });
 
 // ════════════════════════════════════════════════════════════════
+// ADMIN: GET /api/v1/ai/admin/llm-config
+// Cổng nào, khoá có chưa, tính năng nào ăn model nào, hôm nay tiêu bao nhiêu
+// và còn cách trần bao xa. Đây là câu trả lời cho "tại sao tính năng X im" mà
+// không phải SSH vào VPS đọc biến môi trường.
+// KHÔNG trả về khoá — chỉ nói có hay không.
+// ════════════════════════════════════════════════════════════════
+router.get('/admin/llm-config', authenticate, requireAdmin(), async (_req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const [{ allPurposeModels, gatewayConfigured, gatewayRoot }, { todaySpendUsd, softCapUsd, hardCapUsd }, { isForceStatic, backgroundLlmEnabled }] = await Promise.all([
+      import('../services/llm/gateway.js'),
+      import('../services/llm/budget.js'),
+      import('../services/interview/llm/index.js'),
+    ]);
+    const spentUsd = await todaySpendUsd(true);
+    const soft = softCapUsd();
+    const hard = hardCapUsd();
+    res.json({
+      success: true,
+      data: {
+        gateway: { baseUrl: gatewayRoot(), hasKey: gatewayConfigured(), forceStatic: isForceStatic() },
+        // Việc chạy nền: hai công tắc, cả hai mặc định TẮT.
+        backgroundJobs: {
+          llmEnabled: backgroundLlmEnabled(),
+          newsAutopost: String(process.env.TECH_NEWS_AUTOPOST ?? 'false').toLowerCase() === 'true',
+          note: 'Tắt = không có gì gọi AI khi không có người bấm. Bật bằng LLM_BACKGROUND_ENABLED / TECH_NEWS_AUTOPOST.',
+        },
+        budget: {
+          spentUsdToday: Number(spentUsd.toFixed(4)),
+          softCapUsd: soft,
+          hardCapUsd: hard,
+          backgroundBlocked: soft > 0 && spentUsd >= soft,
+          allBlocked: hard > 0 && spentUsd >= hard,
+          note: 'Chi phí là ƯỚC LƯỢNG theo giá niêm yết của nhà cung cấp gốc — cổng gộp không công khai giá.',
+        },
+        models: allPurposeModels(),
+      },
+    });
+  } catch (err) { next(err); }
+});
+
+// ════════════════════════════════════════════════════════════════
 // ADMIN: GET /api/v1/ai/analytics/feature-users?feature=interview|language|cv
 // Who is spending Pro AI on what: per user, per feature — calls, tokens in/out,
 // cost, first/last use, and a breakdown by task. Read-only.

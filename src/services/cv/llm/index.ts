@@ -23,6 +23,15 @@
  */
 import { prisma } from '../../../config/database.js';
 import { logger } from '../../../utils/logger.js';
+import { budgetMessage, checkBudget } from '../../llm/budget.js';
+import {
+  chatCompletionsUrl,
+  costUsd as gatewayCostUsd,
+  gatewayConfigured,
+  gatewayKey,
+  messagesUrl,
+  modelFor,
+} from '../../llm/gateway.js';
 
 export interface LLMMessage { role: 'user' | 'assistant'; content: string }
 export interface LLMResult { text: string; inputTokens: number; outputTokens: number; model: string; provider: string }
@@ -54,35 +63,23 @@ class LLMError extends Error {
   constructor(message: string, public retryable: boolean) { super(message); }
 }
 
-// ── Pricing ($/1M tokens) for cost logging. Unknown → mid estimate (never $0). ──
-const PRICING: Record<string, { in: number; out: number }> = {
-  'claude-haiku-4-5': { in: 1, out: 5 },
-  'claude-sonnet-5': { in: 3, out: 15 },
-  'claude-opus-4-8': { in: 5, out: 25 },
-  'llama-3.3-70b-versatile': { in: 0.59, out: 0.79 },
-  'llama-3.1-8b-instant': { in: 0.05, out: 0.08 },
-  'deepseek-chat': { in: 0.27, out: 1.1 },
-};
-function costUsd(model: string, inTok: number, outTok: number): number {
-  const p = PRICING[model] ?? { in: 1, out: 4 };
-  return (inTok * p.in + outTok * p.out) / 1_000_000;
-}
+// ── Giá: một bảng duy nhất cho cả web, ở `src/services/llm/gateway.ts`. ──
+const costUsd = gatewayCostUsd;
 
 // ── Anthropic adapter (raw fetch, x-api-key, /v1/messages) ────────────────
 const anthropicProvider: LLMProvider = {
   name: 'anthropic',
   trainsOnInput: false, // Anthropic API does not train on business API inputs
   async complete(model, system, messages, opts) {
-    const key = process.env.ANTHROPIC_API_KEY;
-    if (!key) throw new LLMError('ANTHROPIC_API_KEY missing', false);
+    const key = gatewayKey();
+    if (!key) throw new LLMError('Thiếu khoá cổng LLM (LLM_GATEWAY_API_KEY / OPENAI_COMPAT_API_KEY)', false);
     const timeoutMs = opts.timeoutMs ?? (Number(process.env.LLM_TIMEOUT_MS) || 60_000);
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), timeoutMs);
-    const base = (process.env.CV_ANTHROPIC_BASE_URL || process.env.LLM_BASE_URL || 'https://api.anthropic.com').replace(/\/+$/, '');
     try {
-      const res = await fetch(`${base}/v1/messages`, {
+      const res = await fetch(messagesUrl(), {
         method: 'POST',
-        headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+        headers: { 'x-api-key': key, authorization: `Bearer ${key}`, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
         body: JSON.stringify({ model, max_tokens: opts.maxTokens ?? 1500, system, messages }),
         signal: ctrl.signal,
       });
@@ -115,17 +112,15 @@ const openAiCompatProvider: LLMProvider = {
   name: 'openai_compatible',
   trainsOnInput: false, // informational; the enforced gate uses providerTrainsOnInput()
   async complete(model, system, messages, opts) {
-    const key = process.env.OPENAI_COMPAT_API_KEY;
-    const base = (process.env.OPENAI_COMPAT_BASE_URL || '').replace(/\/+$/, '');
-    if (!key) throw new LLMError('OPENAI_COMPAT_API_KEY missing', false);
-    if (!base) throw new LLMError('OPENAI_COMPAT_BASE_URL missing', false);
+    const key = gatewayKey();
+    if (!key) throw new LLMError('Thiếu khoá cổng LLM (LLM_GATEWAY_API_KEY / OPENAI_COMPAT_API_KEY)', false);
     const timeoutMs = opts.timeoutMs ?? (Number(process.env.LLM_TIMEOUT_MS) || 60_000);
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), timeoutMs);
     try {
       // OpenAI-compatible: system is the first message; response shape differs
       // (choices[0].message.content) — normalized HERE, never in business logic.
-      const res = await fetch(`${base}/chat/completions`, {
+      const res = await fetch(chatCompletionsUrl(), {
         method: 'POST',
         headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
         body: JSON.stringify({ model, max_tokens: opts.maxTokens ?? 1500, messages: [{ role: 'system', content: system }, ...messages] }),
@@ -154,26 +149,28 @@ const PROVIDERS: Record<string, LLMProvider> = {
 
 // ── Per-task provider + model routing (env, not hardcoded) ────────────────
 function providerNameForTask(task: CvLLMTask): string {
+  // Một cổng, một tuyến: tất cả đi đường OpenAI của modelapi.vn, đường duy
+  // nhất đã chạy thật ở production. `LLM_PROVIDER_<TASK>=anthropic` ép sang
+  // tuyến /v1/messages của CÙNG cổng đó khi cần.
   const key = `LLM_PROVIDER_${task.toUpperCase()}`;
-  // Critique is the high-value call → default Anthropic. Everything else defaults
-  // to the cheap OpenAI-compatible endpoint if configured, else Anthropic.
-  const fallback = task === 'critique' ? 'anthropic' : (process.env.OPENAI_COMPAT_BASE_URL ? 'openai_compatible' : 'anthropic');
-  return (process.env[key] || fallback).toLowerCase();
+  return (process.env[key] || 'openai_compatible').toLowerCase();
 }
+
+/**
+ * Model cho từng việc của CV Builder.
+ *
+ * Chia theo việc chứ không theo nhà: mổ CV là câu người dùng đọc từng chữ và
+ * là thứ tính năng này được đánh giá qua → model mạnh nhất. Tách JSON từ một
+ * bản mô tả công việc thì máy đọc, ai cũng làm được → model rẻ nhất. Ở giữa
+ * là thư xin việc / viết lại gạch đầu dòng / dịch CV: có người đọc, nhưng
+ * không cần suy luận sâu.
+ */
 export function modelForTask(task: CvLLMTask): string {
   const key = `LLM_MODEL_${task.toUpperCase()}`;
   if (process.env[key]) return process.env[key]!;
-  const provider = providerNameForTask(task);
-  // REUSE the Interview module's already-configured gateway models so the CV AI
-  // works with zero new env: critique (the high-value call) borrows the strong
-  // report/generation model; the cheaper tasks borrow the interview model. This
-  // is why the module goes live the moment ANTHROPIC_API_KEY + LLM_BASE_URL are
-  // set (they already are on prod), without any CV-specific model vars.
-  if (provider === 'anthropic') {
-    if (task === 'critique') return process.env.LLM_MODEL_REPORT || process.env.LLM_MODEL_GENERATION || 'claude-opus-4-8';
-    return process.env.LLM_MODEL_INTERVIEW || process.env.LLM_MODEL_REPORT || 'claude-haiku-4-5';
-  }
-  return task === 'critique' ? 'llama-3.3-70b-versatile' : 'llama-3.1-8b-instant';
+  if (task === 'critique') return modelFor('cv_critique');
+  if (task === 'intake' || task === 'jd_parse' || task === 'parse_fallback') return modelFor('cv_parse');
+  return modelFor('cv_writing');
 }
 
 /** Resolve the provider for a task, enforcing PII eligibility. */
@@ -189,8 +186,9 @@ function resolveProvider(task: CvLLMTask): LLMProvider {
 export function isForceStatic(): boolean {
   return String(process.env.FORCE_STATIC_MODE ?? '').toLowerCase() === 'true';
 }
-function keyForProvider(name: string): boolean {
-  return name === 'anthropic' ? !!process.env.ANTHROPIC_API_KEY : !!process.env.OPENAI_COMPAT_API_KEY;
+function keyForProvider(_name: string): boolean {
+  // Hai tuyến, MỘT khoá — cả hai đều là modelapi.vn.
+  return gatewayConfigured();
 }
 
 // ── Per-provider circuit breaker (in-memory, per instance) ─────────────────
@@ -242,6 +240,14 @@ export async function cvLlmComplete(opts: {
   const model = modelForTask(opts.task);
   const maxRetries = opts.maxRetries ?? (Number(process.env.LLM_MAX_RETRIES) || 3);
   let lastErr: unknown;
+
+  // Cùng cầu dao ngân sách với phần còn lại của web (hai sổ chi phí, một trần).
+  // CV luôn là việc người dùng đang ngồi chờ → chỉ mức trần cứng chặn nó.
+  const verdict = await checkBudget('interactive');
+  if (!verdict.allowed) {
+    logger.warn('cv-llm budget chặn lời gọi', { task: opts.task, model, reason: verdict.reason });
+    throw new LLMError(budgetMessage(verdict), false);
+  }
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {

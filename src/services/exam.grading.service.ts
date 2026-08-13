@@ -89,7 +89,7 @@ function normalizeGrade(raw: RawGrade, points: number): Omit<PeGradeResult, 'tra
 
 async function callGrader(userId: number, system: string, user: string): Promise<RawGrade> {
   const first = await llmComplete({
-    step: 'interview', feature: 'interview', system,
+    step: 'interview', purpose: 'exam_grade', feature: 'exam', system,
     messages: [{ role: 'user', content: user }],
     maxTokens: 2200, userId, maxRetries: 1, timeoutMs: 45_000,
   });
@@ -97,7 +97,7 @@ async function callGrader(userId: number, system: string, user: string): Promise
     return extractJson<RawGrade>(first.text);
   } catch {
     const retry = await llmComplete({
-      step: 'interview', feature: 'interview', system,
+      step: 'interview', purpose: 'exam_grade', feature: 'exam', system,
       messages: [
         { role: 'user', content: user },
         { role: 'assistant', content: first.text },
@@ -241,7 +241,7 @@ export async function generateSpeakingQuestions(userId: number, prompt: string, 
     'You generate speaking-exam questions for an English oral test. Given a topic/problem, produce natural, escalating questions (warm-up → opinion → deeper follow-up) a student answers aloud in English. ' +
     'Return ONLY a JSON array of objects: [{"text": "English question|||Câu hỏi tiếng Việt"}]. Each "text" MUST be bilingual "English|||Tiếng Việt".';
   const user = `TOPIC / PROBLEM:\n${prompt}\n\nGenerate exactly ${count} questions.`;
-  const res = await llmComplete({ step: 'interview', feature: 'interview', system, messages: [{ role: 'user', content: user }], maxTokens: 900, userId, maxRetries: 1, timeoutMs: 30_000 });
+  const res = await llmComplete({ step: 'interview', purpose: 'exam_grade', feature: 'exam', system, messages: [{ role: 'user', content: user }], maxTokens: 900, userId, maxRetries: 1, timeoutMs: 30_000 });
   try {
     const arr = extractJson<Array<{ text?: string }>>(res.text);
     return (Array.isArray(arr) ? arr : []).slice(0, count).map((q) => ({ text: String(q.text ?? '') })).filter((q) => q.text);

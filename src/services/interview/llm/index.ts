@@ -17,6 +17,17 @@
  * the product works with the AI turned off (see isAiAvailable()).
  */
 import { prisma } from '../../../config/database.js';
+import { logger } from '../../../utils/logger.js';
+import { budgetMessage, checkBudget } from '../../llm/budget.js';
+import {
+  chatCompletionsUrl,
+  costUsd as gatewayCostUsd,
+  gatewayConfigured,
+  gatewayKey,
+  messagesUrl,
+  modelFor,
+  type LlmPurpose,
+} from '../../llm/gateway.js';
 
 export interface LLMMessage {
   role: 'user' | 'assistant';
@@ -36,28 +47,10 @@ export interface LLMProvider {
   complete(model: string, system: string, messages: LLMMessage[], opts: { maxTokens?: number; timeoutMs?: number }): Promise<LLMResult>;
 }
 
-// ── Pricing ($ per 1M tokens) — used for cost logging. Keep in sync with the
-//    models actually configured via LLM_MODEL_* env. Unknown models fall back
-//    to a mid estimate so cost is never silently zero.
-const PRICING: Record<string, { in: number; out: number }> = {
-  'claude-haiku-4-5': { in: 1, out: 5 },
-  'claude-sonnet-5': { in: 3, out: 15 },
-  'claude-opus-4-8': { in: 5, out: 25 },
-  'claude-opus-4-7': { in: 5, out: 25 },
-  // Rambo-AI gateway model ids (Anthropic-compatible). Costs are ESTIMATES at
-  // Anthropic list prices — the reseller bills by its own plan, so treat
-  // cost_usd as informational only.
-  'rb-haiku-4-5': { in: 1, out: 5 },
-  'rb-sonnet-4-6': { in: 3, out: 15 },
-  'rb-sonnet-5': { in: 3, out: 15 },
-  'rb-opus-4-6': { in: 5, out: 25 },
-  'rb-opus-4-7': { in: 5, out: 25 },
-  'rb-opus-4-8': { in: 5, out: 25 },
-};
-function costUsd(model: string, inTok: number, outTok: number): number {
-  const p = PRICING[model] ?? { in: 3, out: 15 };
-  return (inTok * p.in + outTok * p.out) / 1_000_000;
-}
+// ── Pricing lives in ONE place now: src/services/llm/gateway.ts. The table
+//    used to be copied here and in cv/llm, and the two had already drifted
+//    apart (this one still priced `rb-*`, a gateway that no longer exists).
+const costUsd = gatewayCostUsd;
 
 class LLMError extends Error {
   constructor(message: string, public retryable: boolean) {
@@ -66,18 +59,19 @@ class LLMError extends Error {
 }
 
 // ── Anthropic adapter (raw fetch — no SDK dep) ────────────────────
+//
+// Tuyến `/v1/messages` của cổng. Lõi này chỉ gửi văn bản nên tuyến OpenAI bên
+// dưới phục vụ được hết; giữ tuyến này để ép bằng `LLM_PROVIDER=anthropic` khi
+// cần so sánh hai đường, và vì AI Chat (ảnh + PDF) vẫn phải đi lối này.
 const anthropicProvider: LLMProvider = {
   name: 'anthropic',
   async complete(model, system, messages, opts) {
-    const key = process.env.ANTHROPIC_API_KEY;
-    if (!key) throw new LLMError('ANTHROPIC_API_KEY missing', false);
+    const key = gatewayKey();
+    if (!key) throw new LLMError('Thiếu khoá cổng LLM (LLM_GATEWAY_API_KEY / OPENAI_COMPAT_API_KEY)', false);
     const timeoutMs = opts.timeoutMs ?? (Number(process.env.LLM_TIMEOUT_MS) || 60_000);
     const ctrl = new AbortController();
     let timer = setTimeout(() => ctrl.abort(), timeoutMs);
-    // Base URL is configurable → works with the official Anthropic API OR any
-    // Anthropic-compatible gateway (e.g. a self-hosted proxy). Endpoint is
-    // always `<base>/v1/messages`, auth is `x-api-key`.
-    const base = (process.env.LLM_BASE_URL || 'https://api.anthropic.com').replace(/\/+$/, '');
+    const url = messagesUrl();
 
     // A big answer has to STREAM, or it never arrives.
     //
@@ -95,10 +89,13 @@ const anthropicProvider: LLMProvider = {
     const useStream = maxTokens > 4000;
 
     try {
-      const res = await fetch(`${base}/v1/messages`, {
+      const res = await fetch(url, {
         method: 'POST',
         headers: {
           'x-api-key': key,
+          // Cổng New API nhận cả hai kiểu xác thực; gửi cả hai để một cấu hình
+          // upstream chỉ đọc Bearer vẫn qua được.
+          authorization: `Bearer ${key}`,
           'anthropic-version': '2023-06-01',
           'content-type': 'application/json',
         },
@@ -140,6 +137,132 @@ const anthropicProvider: LLMProvider = {
     }
   },
 };
+
+// ── Tuyến OpenAI của cổng — ĐƯỜNG MẶC ĐỊNH ────────────────────────
+//
+// Đây là đường đã chạy thật trên production (CV Builder, Jobs AI, robot Maker
+// Lab), nên nó là đường mặc định cho toàn bộ phần còn lại của web. Nó nhận
+// được MỌI model của cổng, kể cả họ Claude — cổng tự dịch sang giao thức của
+// nhà cung cấp gốc.
+//
+// KHÔNG gửi `response_format: {type:'json_object'}`: đi qua cổng gộp nhiều
+// nhà, trường đó là thứ vỡ đầu tiên (có nhà trả 400, tính năng câm, log chỉ
+// có "HTTP 400"). Các lời gọi ở đây yêu cầu JSON bằng prompt rồi vớt bằng
+// `extractJson`, cách đó chạy được với mọi model.
+const openAiCompatProvider: LLMProvider = {
+  name: 'openai_compat',
+  async complete(model, system, messages, opts) {
+    const key = gatewayKey();
+    if (!key) throw new LLMError('Thiếu khoá cổng LLM (LLM_GATEWAY_API_KEY / OPENAI_COMPAT_API_KEY)', false);
+    const timeoutMs = opts.timeoutMs ?? (Number(process.env.LLM_TIMEOUT_MS) || 60_000);
+    const ctrl = new AbortController();
+    let timer = setTimeout(() => ctrl.abort(), timeoutMs);
+
+    // Cùng lý do với tuyến Anthropic: câu trả lời dài mà không stream thì
+    // proxy nào đó trên đường đi sẽ bỏ cuộc trước khi model viết xong.
+    const maxTokens = opts.maxTokens ?? 1500;
+    const useStream = maxTokens > 4000;
+
+    try {
+      const res = await fetch(chatCompletionsUrl(), {
+        method: 'POST',
+        headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
+        body: JSON.stringify({
+          model,
+          max_tokens: maxTokens,
+          messages: [{ role: 'system', content: system }, ...messages],
+          ...(useStream ? { stream: true, stream_options: { include_usage: true } } : {}),
+        }),
+        signal: ctrl.signal,
+      });
+      if (!res.ok) {
+        const retryable = res.status === 429 || res.status === 529 || res.status >= 500;
+        throw new LLMError(`openai_compat HTTP ${res.status}`, retryable);
+      }
+
+      if (useStream) {
+        return await readOpenAiStream(res, model, () => {
+          clearTimeout(timer);
+          timer = setTimeout(() => ctrl.abort(), timeoutMs);
+        });
+      }
+
+      const json = (await res.json()) as {
+        choices?: Array<{ message?: { content?: string } }>;
+        usage?: { prompt_tokens?: number; completion_tokens?: number };
+      };
+      const text = json.choices?.[0]?.message?.content ?? '';
+      const u = json.usage ?? {};
+      return { text, inputTokens: u.prompt_tokens ?? 0, outputTokens: u.completion_tokens ?? 0, model };
+    } catch (e) {
+      if ((e as Error).name === 'AbortError') throw new LLMError('LLM timeout', true);
+      throw e;
+    } finally {
+      clearTimeout(timer);
+    }
+  },
+};
+
+/**
+ * Gom một luồng SSE kiểu OpenAI thành một kết quả.
+ *
+ * Khác Anthropic ở hai chỗ đáng nhớ: khung kết thúc là chuỗi `[DONE]` chứ
+ * không phải một sự kiện JSON, và `usage` chỉ có ở khung áp chót — và chỉ khi
+ * đã xin `stream_options.include_usage`. Thiếu nó thì mọi lượt stream đều ghi
+ * 0 token vào sổ chi phí, tức là bảng tiền lặng lẽ sai chứ không báo lỗi.
+ */
+async function readOpenAiStream(
+  res: Response,
+  model: string,
+  onChunk: () => void,
+): Promise<LLMResult> {
+  const body = res.body;
+  if (!body) throw new LLMError('openai_compat stream had no body', true);
+
+  const reader = body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  let text = '';
+  let inputTokens = 0;
+  let outputTokens = 0;
+
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    onChunk();
+    buffer += decoder.decode(value, { stream: true });
+    const frames = buffer.split('\n\n');
+    buffer = frames.pop() ?? '';
+
+    for (const frame of frames) {
+      for (const line of frame.split('\n')) {
+        if (!line.startsWith('data:')) continue;
+        const payload = line.slice(5).trim();
+        if (!payload || payload === '[DONE]') continue;
+        let evt: {
+          choices?: Array<{ delta?: { content?: string } }>;
+          usage?: { prompt_tokens?: number; completion_tokens?: number };
+          error?: { message?: string };
+        };
+        try {
+          evt = JSON.parse(payload);
+        } catch {
+          continue;
+        }
+        if (evt.error) throw new LLMError(`openai_compat stream error: ${evt.error.message ?? 'unknown'}`, true);
+        const delta = evt.choices?.[0]?.delta?.content;
+        if (delta) text += delta;
+        if (evt.usage) {
+          inputTokens = evt.usage.prompt_tokens ?? inputTokens;
+          outputTokens = evt.usage.completion_tokens ?? outputTokens;
+        }
+      }
+    }
+  }
+
+  if (!text.trim()) throw new LLMError('openai_compat stream produced no text', true);
+  return { text, inputTokens, outputTokens, model };
+}
 
 
 /**
@@ -214,22 +337,55 @@ async function readStream(
   return { text, inputTokens, outputTokens, model };
 }
 
+/**
+ * Đường ra Internet. Mặc định là tuyến OpenAI của cổng — đường duy nhất đã
+ * chạy thật ở production. Đặt `LLM_PROVIDER=anthropic` để ép tuyến
+ * `/v1/messages` (hữu ích khi cần so hai đường trên cùng một model).
+ */
 function getProvider(): LLMProvider {
-  // Only Anthropic implemented in Phase 4. Add adapters here keyed by LLM_PROVIDER.
-  return anthropicProvider;
+  return String(process.env.LLM_PROVIDER ?? '').toLowerCase() === 'anthropic'
+    ? anthropicProvider
+    : openAiCompatProvider;
 }
 
-// ── Model selection per step (configurable via env, not hardcoded in logic) ──
-export function modelForStep(step: LLMStep): string {
-  if (step === 'report') return process.env.LLM_MODEL_REPORT || 'claude-opus-4-8';
-  // Question generation uses the STRONGEST model (Opus 4.8) — deep, professional
-  // questions + accurate model answers. Grading stays on the interview step model.
-  if (step === 'generation') return process.env.LLM_MODEL_GENERATION || 'claude-opus-4-8';
-  // Per-answer grading (Pass C). Default to Sonnet, not Haiku: if LLM_MODEL_INTERVIEW
-  // is ever unset (fresh env / forgotten var), grading must NOT silently drop to the
-  // weakest model — Sonnet is the floor we're willing to grade a candidate on.
-  return process.env.LLM_MODEL_INTERVIEW || 'rb-sonnet-5';
+// ── Chọn model ───────────────────────────────────────────────────
+//
+// Bản đồ thật nằm ở `src/services/llm/gateway.ts` (`modelFor(purpose)`), nơi
+// mọi tính năng của web cùng tra một bảng. Ở đây chỉ là chuyện dịch cặp
+// (step, feature) của module này sang cái tên công việc bên đó.
+//
+// Các biến `LLM_MODEL_INTERVIEW / _REPORT / _GENERATION` cũ vẫn được tôn
+// trọng nếu VPS còn đặt chúng — nhưng đừng đặt mới; chúng chỉ biết ba mức
+// trong khi bản đồ mới biết từng tính năng một.
+function purposeFor(step: LLMStep, feature?: LLMFeature | null): LlmPurpose {
+  if (step === 'report') return 'interview_report';
+  if (step === 'generation') {
+    switch (feature) {
+      case 'language': return 'language_bulk';
+      case 'codelab': return 'codelab_bulk';
+      case 'exphub': return 'exphub_doc';
+      case 'bulk_gen': return 'codelab_bulk';
+      default: return 'interview_generate';
+    }
+  }
+  switch (feature) {
+    case 'language': return 'language_tutor';
+    case 'codelab': return 'codelab_coach';
+    case 'cv': return 'cv_writing';
+    case 'chat': return 'chat_pro';
+    case 'exphub': return 'exphub_doc';
+    default: return 'interview_grade';
+  }
+}
 
+export function modelForStep(step: LLMStep, feature?: LLMFeature | null, purpose?: LlmPurpose): string {
+  if (purpose) return modelFor(purpose);
+  // Biến cũ (chỉ khi VPS còn đặt) — giữ để một máy chưa cập nhật env không đổi
+  // hành vi đột ngột.
+  if (step === 'report' && process.env.LLM_MODEL_REPORT) return process.env.LLM_MODEL_REPORT;
+  if (step === 'generation' && process.env.LLM_MODEL_GENERATION) return process.env.LLM_MODEL_GENERATION;
+  if (step === 'interview' && process.env.LLM_MODEL_INTERVIEW) return process.env.LLM_MODEL_INTERVIEW;
+  return modelFor(purposeFor(step, feature));
 }
 
 // ── Kill switch + availability ────────────────────────────────────
@@ -237,7 +393,7 @@ export function isForceStatic(): boolean {
   return String(process.env.FORCE_STATIC_MODE ?? '').toLowerCase() === 'true';
 }
 export function hasKey(): boolean {
-  return !!process.env.ANTHROPIC_API_KEY;
+  return gatewayConfigured();
 }
 
 // ── Circuit breaker (in-memory; per backend instance, PER FEATURE) ─
@@ -322,7 +478,39 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 /** Which product spent the tokens. `step` only picks a model tier, so without
  *  this the Interview grader and the My Language tutor were the same row. */
-export type LLMFeature = 'interview' | 'language' | 'cv' | 'chat' | 'bulk_gen' | 'exphub' | 'codelab';
+export type LLMFeature = 'interview' | 'language' | 'cv' | 'chat' | 'bulk_gen' | 'exphub' | 'codelab' | 'news' | 'voice' | 'exam';
+
+/**
+ * Không ai ngồi chờ những lời gọi này: chúng chạy theo cron hoặc theo một
+ * lệnh sinh hàng loạt của admin rồi tự chạy tiếp hàng giờ. Đó cũng chính là
+ * lý do chúng là thứ đầu tiên bị cắt khi tiền chạm trần mềm.
+ */
+const BACKGROUND_FEATURES = new Set<LLMFeature>(['bulk_gen', 'news']);
+function isBackgroundFeature(feature?: LLMFeature | null): boolean {
+  return !!feature && BACKGROUND_FEATURES.has(feature);
+}
+
+/**
+ * CÔNG TẮC TỔNG cho mọi lời gọi AI không có người ngồi chờ. MẶC ĐỊNH TẮT.
+ *
+ * Trần token chặn một người tiêu nhiều; trần tiền chặn một ngày tiêu nhiều.
+ * Cái này chặn thứ khác hẳn: một tiến trình chạy hàng giờ mà chủ web không
+ * nhớ là mình đã khởi động. Các script sinh nội dung hàng loạt chạy tách rời
+ * (`docker exec … node scripts/*-bulk-gen.mjs`) sống lâu hơn cả phiên làm việc
+ * dựng ra chúng, và chúng đi đúng con đường này.
+ *
+ * Tắt mặc định nghĩa là: muốn tiêu tiền cho việc chạy nền thì phải nói ra.
+ *   • Chạy một đợt sinh nội dung:
+ *       docker exec -e LLM_BACKGROUND_ENABLED=true cuonghoangdev_backend node scripts/…
+ *     (biến chỉ sống trong tiến trình đó, đợt sau lại phải khai báo lại)
+ *   • Bật lâu dài: LLM_BACKGROUND_ENABLED=true trong /opt/cuonghoangdev/.env
+ *
+ * KHÔNG chạm tới thứ người dùng đang bấm: chat, chấm bài, gia sư, kèm code,
+ * mổ CV đều không nằm trong `BACKGROUND_FEATURES`.
+ */
+export function backgroundLlmEnabled(): boolean {
+  return String(process.env.LLM_BACKGROUND_ENABLED ?? 'false').toLowerCase() === 'true';
+}
 
 async function logLlmCall(d: {
   userId?: number | null;
@@ -365,13 +553,36 @@ export async function llmComplete(opts: {
    *  compiling; unlabelled calls simply report as "không rõ" in the admin view
    *  rather than being attributed to the wrong feature. */
   feature?: LLMFeature | null;
+  /** Tên công việc trong bản đồ model (`src/services/llm/gateway.ts`). Đây là
+   *  cách CHÍNH để chọn model; `step`+`feature` chỉ là đường suy ra khi caller
+   *  chưa khai báo. */
+  purpose?: LlmPurpose;
   maxRetries?: number; // override — latency-sensitive callers use fewer
   timeoutMs?: number; // override per-call timeout
 }): Promise<LLMResult> {
   const provider = getProvider();
-  const model = modelForStep(opts.step);
+  const model = modelForStep(opts.step, opts.feature, opts.purpose);
   const maxRetries = opts.maxRetries ?? (Number(process.env.LLM_MAX_RETRIES) || 3);
   let lastErr: unknown;
+
+  const isBackground = isBackgroundFeature(opts.feature);
+
+  // Công tắc tổng: việc chạy nền phải được bật ra mặt mới đi tiếp.
+  if (isBackground && !backgroundLlmEnabled()) {
+    logger.warn('llm: chặn lời gọi chạy nền (LLM_BACKGROUND_ENABLED chưa bật)', { feature: opts.feature, step: opts.step, model });
+    throw new LLMError(
+      'Việc AI chạy nền đang TẮT (mặc định, để khỏi âm thầm tốn tiền). Bật bằng LLM_BACKGROUND_ENABLED=true — cho cả máy trong /opt/cuonghoangdev/.env, hoặc chỉ cho một đợt: docker exec -e LLM_BACKGROUND_ENABLED=true …',
+      false,
+    );
+  }
+
+  // Cầu dao ngân sách. Việc chạy nền bị cắt trước, ở mức thấp hơn — nó là thứ
+  // duy nhất có thể tiêu tiền cả đêm mà không ai biết.
+  const verdict = await checkBudget(isBackground ? 'background' : 'interactive');
+  if (!verdict.allowed) {
+    logger.warn('llm budget chặn lời gọi', { feature: opts.feature ?? null, step: opts.step, model, reason: verdict.reason, spentUsd: Number(verdict.spentUsd.toFixed(4)) });
+    throw new LLMError(budgetMessage(verdict), false);
+  }
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
@@ -391,10 +602,35 @@ export async function llmComplete(opts: {
   throw lastErr;
 }
 
-/** Per-user daily token cap. Returns true if the user is under cap (or no cap set). */
+/**
+ * Trần token mỗi người mỗi ngày.
+ *
+ * ⚠️ Biến `INTERVIEW_DAILY_TOKEN_CAP` để trống từng có nghĩa là KHÔNG GIỚI HẠN,
+ * và mọi tính năng dùng chung lõi này (Language, Code Lab, Exp Hub, phòng thi,
+ * Voice Hub) đều gọi qua đây. Tức là chốt chặn chi phí duy nhất của cả web phụ
+ * thuộc vào việc có ai đó nhớ đặt một biến môi trường hay không. Giờ thì
+ * KHÔNG: không đặt gì cũng có trần.
+ *
+ * Người dùng Pro được trần rộng gấp hơn ba lần — họ trả tiền, và một buổi học
+ * hay một buổi phỏng vấn thử dài hơi không được phép chạm trần. Muốn tắt hẳn
+ * thì đặt `INTERVIEW_DAILY_TOKEN_CAP=0`.
+ */
+const DEFAULT_DAILY_TOKEN_CAP = 300_000;
+const DEFAULT_DAILY_TOKEN_CAP_PRO = 1_000_000;
+
 export async function checkTokenQuota(userId: number): Promise<boolean> {
-  const cap = Number(process.env.INTERVIEW_DAILY_TOKEN_CAP);
-  if (!Number.isFinite(cap) || cap <= 0) return true;
+  const raw = process.env.INTERVIEW_DAILY_TOKEN_CAP;
+  const explicit = raw !== undefined && raw !== '' ? Number(raw) : NaN;
+  if (Number.isFinite(explicit) && explicit <= 0) return true;   // 0 = tắt trần, có chủ ý
+
+  let cap = Number.isFinite(explicit) ? explicit : DEFAULT_DAILY_TOKEN_CAP;
+  if (!Number.isFinite(explicit)) {
+    // Chỉ hỏi trạng thái Pro khi đang dùng mức mặc định — một biến env đặt tay
+    // thì người đặt đã biết mình muốn gì.
+    const { isProEffective } = await import('../../pro.service.js');
+    if (await isProEffective(userId).catch(() => false)) cap = DEFAULT_DAILY_TOKEN_CAP_PRO;
+  }
+
   const start = new Date();
   start.setHours(0, 0, 0, 0);
   const agg = await prisma.interviewLLMCallLog.aggregate({

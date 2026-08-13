@@ -121,6 +121,7 @@ export async function enrichChars(userId: number, items: CharFacts[]): Promise<M
   try {
     const res = await llmComplete({
       step: 'generation',
+      purpose: 'language_bulk',
       feature: 'bulk_gen',
       system,
       messages: [{ role: 'user', content: user }],

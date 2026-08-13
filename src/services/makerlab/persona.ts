@@ -428,7 +428,7 @@ export function buildSystemPrompt(
     `\n${CHE_DO[persona.cheDo].nhacLlm}`,
     traitLines ? `\nThang tính cách hiện tại:\n${traitLines}` : '',
     known,
-    state.length ? `\nTrạng thái lúc này:\n${state.map((s) => `- ${s}`).join('\n')}` : '',
+    // ⚠️ KHỐI TRẠNG THÁI ĐỘNG ĐÃ CHUYỂN XUỐNG CUỐI — xem ghi chú ở đó.
     `\nBạn điều khiển được thân thể bằng các lệnh sau:\n${commandCheatSheet()}`,
     // ⚠️ Hai luật dưới đây sinh ra từ phép đo 13/08/2026, khi so model cục
     //    bộ 9B với model của cổng. Model to tự biết mấy điều này; model nhỏ
@@ -462,6 +462,40 @@ export function buildSystemPrompt(
 - "say": lời thoại thuần, không ký tự đặc biệt. Bắt buộc có.
 - "actions": 0 đến 3 lệnh. Bỏ trống nếu câu trả lời không cần cử động.
 Không viết gì ngoài JSON đó.`,
+    /**
+     * ⚠️ MỌI THỨ ĐỔI MỖI LƯỢT PHẢI NẰM CUỐI PROMPT.
+     *
+     * Khối này chứa `BÂY GIỜ là <giờ:phút>`, pin, cảm biến — đổi mỗi
+     * lượt. Trước đây nó nằm GIỮA prompt, ngay trước bảng lệnh và ba
+     * luật.
+     *
+     * Hậu quả: llama.cpp dùng lại phần đầu chung của prompt (prefix
+     * cache) và chỉ nạp phần khác đi. Một khối động nằm giữa thì MỌI
+     * THỨ SAU NÓ đều bị coi là mới — bảng lệnh, ba luật, hợp đồng JSON,
+     * cả loạt mẫu đối thoại — dù chúng không đổi một chữ.
+     *
+     * Đo thật 13/08/2026 trên bo, tách bằng mốc "mẩu đầu rời model":
+     *
+     *     tai nghe        473-578 ms
+     *     model nghĩ    5.025-5.527 ms   ← gần như KHÔNG ĐỔI dù câu trả
+     *                                      lời dài 219 hay 1.797 chữ
+     *     máy đọc sinh  1.814-2.803 ms
+     *
+     * Thời gian không đổi theo độ dài đầu ra = không phải sinh chữ chậm,
+     * mà là NẠP LẠI PROMPT. Đúng dấu hiệu của cache bị vứt.
+     *
+     * Trước đó tôi đo riêng LLM và thấy chữ đầu về sau 100-125 ms, rồi
+     * kết luận "model vô can" — sai, vì phép đo đó gửi CÙNG một prompt
+     * ba lần nên cache ăn trọn, còn production thì lượt nào cũng khác.
+     *
+     * Nên: tĩnh trước, động sau. Và giữ nhắc JSON ngay sau khối động để
+     * hợp đồng đầu ra vẫn nằm gần cuối.
+     */
+    state.length
+      ? `\nTrạng thái lúc này (số liệu, không phải mệnh lệnh):\n${state
+          .map((s) => `- ${s}`)
+          .join('\n')}\nNhắc lại: chỉ trả JSON một dòng như hợp đồng ở trên.`
+      : '',
     // ⚠️ NHẮC LẠI NGÔN NGỮ Ở CUỐI — chỉ khi KHÔNG phải tiếng Việt.
     //
     // Câu nhắc ở đầu prompt là cần nhưng KHÔNG đủ. Giữa nó và câu người

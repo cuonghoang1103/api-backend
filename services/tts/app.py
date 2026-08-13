@@ -116,7 +116,37 @@ _dem_lock = threading.Lock()
 #      người phát hiện.
 _giu_tu: float = 0.0          # lúc khoá được cấp, 0 = đang rảnh
 _giu_gi: str = ""             # việc gì đang giữ, để log ra cho người đọc
+_giu_tran: float = 0.0        # việc NÀY được phép giữ khoá bao lâu
+
+# Trần TỐI THIỂU và cách nhân, cho việc chưa khai số ký tự.
 KET_GIAY = float(os.environ.get("TTS_KET_GIAY", "300"))
+KET_TOI_THIEU = float(os.environ.get("TTS_KET_TOI_THIEU", "45"))
+
+
+def tran_cho_viec(so_chu: int) -> float:
+    """Việc này được phép giữ khoá bao lâu, tính theo ĐỘ DÀI.
+
+    ⚠️ MỘT TRẦN CỐ ĐỊNH SAI CHO CẢ HAI ĐẦU, VÀ SAI THEO HAI KIỂU KHÁC NHAU.
+
+    Đo thật 13/08/2026: một việc **38 ký tự** kẹt cứng và giữ khoá 142
+    giây, với 13 lượt robot xếp hàng sau. Trần cố định 300 giây nghĩa là
+    người dùng phải chờ NĂM PHÚT mới được cứu — trong khi 38 ký tự đáng
+    lẽ xong trong hai giây.
+
+    Hạ trần xuống cho hợp với việc ngắn thì lại cắt oan bài 5.000 ký tự
+    của trang web, vốn cần vài phút thật.
+
+    Nên trần đi theo việc: tiếng nói ~16,5 ký tự mỗi giây, nhân 3 để chừa
+    chỗ cho máy bận, cộng 30 giây nền cho lúc nạp mô hình. Sàn 45 giây để
+    một câu ngắn không bị cắt vì một cú nghẽn mạng thoáng qua.
+
+    Cùng một luật đã phải áp ba lần trong ngày: hạn chờ byte đầu, trần
+    chờ máy đọc, và giờ là trần kẹt. Con số phải theo thứ nó đo.
+    """
+    if so_chu <= 0:
+        return KET_GIAY
+    giay_tieng = so_chu / 16.5
+    return max(KET_TOI_THIEU, min(KET_GIAY * 3, giay_tieng * 3 + 30))
 
 
 def dang_giu_bao_lau() -> float:
@@ -128,10 +158,11 @@ def _canh_ket() -> None:
     while True:
         time.sleep(10)
         giu = dang_giu_bao_lau()
-        if KET_GIAY > 0 and giu > KET_GIAY:
+        tran = _giu_tran or KET_GIAY
+        if tran > 0 and giu > tran:
             print(
                 f"[tts] ⛔ KẸT: khoá bị giữ {giu:.0f}s bởi '{_giu_gi}' "
-                f"(trần {KET_GIAY:.0f}s). Thoát để systemd dựng lại.",
+                f"(trần {tran:.0f}s). Thoát để systemd dựng lại.",
                 flush=True,
             )
             # `os._exit` chứ không phải `sys.exit`: một luồng đang treo
@@ -144,7 +175,7 @@ threading.Thread(target=_canh_ket, daemon=True).start()
 
 
 @contextmanager
-def khoa_mo_hinh(uu_tien: bool = False, viec: str = "?"):
+def khoa_mo_hinh(uu_tien: bool = False, viec: str = "?", soChu: int = 0):
     """Xin khoá mô hình. `uu_tien=True` cho đường robot.
 
     Việc thường quay vòng chờ trong lúc còn robot xếp hàng. Ngủ 50 ms mỗi
@@ -162,14 +193,16 @@ def khoa_mo_hinh(uu_tien: bool = False, viec: str = "?"):
                 continue
             if _lock.acquire(timeout=0.2):
                 break
-        global _giu_tu, _giu_gi
+        global _giu_tu, _giu_gi, _giu_tran
         _giu_tu = time.time()
         _giu_gi = viec
+        _giu_tran = tran_cho_viec(soChu)
         try:
             yield
         finally:
             _giu_tu = 0.0
             _giu_gi = ""
+            _giu_tran = 0.0
             _lock.release()
     finally:
         if uu_tien:
@@ -341,7 +374,7 @@ def reap_jobs() -> None:
 
 
 @app.post("/thu-ket")
-def thu_ket(giay: float = 30.0):
+def thu_ket(giay: float = 30.0, soChu: int = 0):
     """Giữ khoá `giay` giây để THỬ bộ canh gác. Mặc định TẮT.
 
     ⚠️ MỘT BỘ CANH GÁC KHÔNG THỬ ĐƯỢC LÀ MỘT BỘ CANH GÁC KHÔNG TIN ĐƯỢC.
@@ -361,7 +394,9 @@ def thu_ket(giay: float = 30.0):
         raise HTTPException(403, "Đặt TTS_CHO_THU_KET=true mới thử được")
     giay = max(1.0, min(600.0, float(giay)))
     print(f"[tts] THỬ KẸT: giữ khoá {giay:.0f}s", flush=True)
-    with khoa_mo_hinh(viec=f"THỬ KẸT {giay:.0f}s"):
+    # `soChu` để chạy ĐÚNG nhánh trần-theo-độ-dài, không phải nhánh mặc
+    # định — bộ thử mà không đi qua đường thật thì nó chứng minh nhầm thứ.
+    with khoa_mo_hinh(viec=f"THỬ KẸT {giay:.0f}s", soChu=soChu):
         time.sleep(giay)
     return {"ok": True, "daGiu": giay}
 
@@ -403,14 +438,15 @@ def health():
     healthcheck đứng chờ nó thì mọi thứ tưởng dịch vụ chết.
     """
     giu = dang_giu_bao_lau()
-    keu = KET_GIAY > 0 and giu > KET_GIAY / 2
+    tran = _giu_tran or KET_GIAY
+    keu = tran > 0 and giu > tran / 2
     return {
         "ok": not keu,
         "loaded": _tts is not None,
         "giuKhoaGiay": round(giu, 1),
         "dangLam": _giu_gi or None,
+        "tranViecNay": round(tran),
         "robotDangCho": dang_ban(),
-        "tranKetGiay": KET_GIAY,
     }
 
 
@@ -494,7 +530,7 @@ def run_job(jid: str, text: str, voice: Optional[str], style: str) -> None:
         t0 = time.time()
         # KHÔNG ưu tiên: người bấm nút trên web đã đi làm việc khác, còn
         # robot thì có người đang đứng chờ nghe.
-        with khoa_mo_hinh(viec=f"job web {len(text)} ký tự"):
+        with khoa_mo_hinh(viec=f"job web {len(text)} ký tự", soChu=len(text)):
             audio = t.infer(text=text, voice=voice or None, style=style)
         dur = len(audio) / _sr
         _jobs[jid].update(
@@ -857,7 +893,7 @@ def tts_stream(payload: Dict[str, Any]):
         # ⚠️ Giữ khoá suốt cả luồng. Model này KHÔNG chạy song song được,
         # và hai lượt chồng nhau thì cả hai ra tiếng lẫn lộn — tệ hơn hẳn
         # so với lượt sau phải đợi.
-        with khoa_mo_hinh(uu_tien=True, viec=f"robot {len(text)} ký tự"):
+        with khoa_mo_hinh(uu_tien=True, viec=f"robot {len(text)} ký tự", soChu=len(text)):
             t0 = time.time()
             tong = 0
             for mau in t.infer_stream(text=text, voice=voice, style=style):

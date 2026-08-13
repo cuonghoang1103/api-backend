@@ -483,6 +483,22 @@ static void sendTelemetry() {
   doc["hutDem"] = audio::lastUnderruns();
   doc["hutMs"] = audio::lastUnderrunMs();
 
+  /**
+   * Byte tiếng bị VỨT vì đệm phát đầy.
+   *
+   * ⚠️ ĐÂY LÀ MẶT KIA CỦA ĐÓI ĐỆM, VÀ NÓ TIẾN TRIỂN DẦN.
+   *
+   * Máy đọc tiếng Việt chạy trên GPU sinh nhanh gấp ~4 lần thời gian
+   * thực. Đệm phát của bo thì hữu hạn: đoạn đầu còn chỗ nên nhận đủ,
+   * đoạn sau đầy nên byte tới bị vứt. Tai nghe thành "đầu to, đoạn sau
+   * nhỏ dần và vấp" — đúng lời người dùng mô tả.
+   *
+   * `playDroppedBytes` đã được đếm từ lâu và `droppedBytes()` có sẵn để
+   * đọc, nhưng KHÔNG chỗ nào gửi nó đi. Đây là bộ đếm thứ BA trong ngày
+   * rơi vào cùng một cái bẫy — đếm đúng, không ai đọc được.
+   */
+  doc["roiByte"] = audio::droppedBytes();
+
   // Số liệu MẠNG, để robot trả lời được câu "kiểm tra kết nối đi".
   //
   // Đo độ trễ mỗi 30 giây chứ không phải mỗi lượt telemetry (1 Hz): mỗi

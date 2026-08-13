@@ -41,6 +41,20 @@ const VI_DU_GHI_CHU = `Ví dụ:
 - Bỏ qua phần chữ viết tay màu đỏ ở lề.`;
 
 /**
+ * Có phải ảnh không.
+ *
+ * KHÔNG dựa mỗi vào `file.type`: ảnh .HEIC chụp bằng iPhone rất hay có
+ * `type` RỖNG trên Chrome/Windows. Lọc theo mỗi mimetype thì ảnh của người
+ * dùng bị vứt lặng lẽ, đúng loại lỗi khó hiểu nhất — họ chọn ảnh xong không
+ * thấy gì và không biết vì sao. Nên khi mimetype trống thì xét đuôi file.
+ */
+const DUOI_ANH = /\.(jpe?g|png|webp|heic|heif|bmp|tiff?|gif|avif)$/i;
+function laAnh(f: File): boolean {
+  if (f.type) return f.type.startsWith('image/');
+  return DUOI_ANH.test(f.name);
+}
+
+/**
  * Lỗi trần trụi của axios ("Request failed with status code 401") không nói
  * cho người dùng biết phải làm gì. Dịch những mã hay gặp sang việc cần làm.
  */
@@ -78,25 +92,55 @@ export default function ImageToDocPage() {
       .catch(() => setDanhSachPreset([]));
   }, []);
 
-  // Ảnh preview là object URL — không thu hồi thì mỗi lần chọn lại là một mảng
-  // bộ nhớ nữa không ai trả.
-  useEffect(() => () => anhs.forEach((a) => URL.revokeObjectURL(a.url)), [anhs]);
+  // Thu hồi object URL khi RỜI trang. Cố tình KHÔNG để `anhs` vào mảng phụ
+  // thuộc: làm thế thì mỗi lần thêm ảnh, bản dọn dẹp của lần trước sẽ thu hồi
+  // URL của những ảnh VẪN ĐANG hiển thị → ảnh nhỏ vỡ hết. Thu hồi từng cái
+  // nằm ở `xoaAnh` và ở chỗ cắt quá 10 ảnh.
+  const anhsRef = useRef<AnhChon[]>([]);
+  anhsRef.current = anhs;
+  useEffect(() => () => anhsRef.current.forEach((a) => URL.revokeObjectURL(a.url)), []);
 
   const themAnh = useCallback((files: FileList | null) => {
-    if (!files?.length) return;
+    // ⚠️ PHẢI chụp lại thành mảng NGAY tại đây.
+    // `e.target.files` là FileList SỐNG, trỏ thẳng vào ô nhập. Người gọi xoá ô
+    // nhập (`e.target.value = ''`) ngay dòng sau để lần sau chọn lại đúng file
+    // đó vẫn nổ sự kiện — mà React 18 chạy hàm cập nhật state SAU đó, lúc ấy
+    // FileList đã rỗng. Kết quả: chọn ảnh xong danh sách trống trơn, không một
+    // lời báo lỗi. Trên máy dev thì lọt (React tính sớm khi hàng đợi trống),
+    // trên prod thì dính mọi lần. Đã trả giá 13/08/2026.
+    const chon = Array.from(files ?? []);
+    if (!chon.length) return;
     setLoi(null);
-    setAnhs((truoc) => {
-      const them = Array.from(files)
-        .filter((f) => f.type.startsWith('image/'))
-        .map((f) => ({ file: f, url: URL.createObjectURL(f), id: `${f.name}-${f.size}-${f.lastModified}` }))
-        .filter((a) => !truoc.some((t) => t.id === a.id));
-      const gop = [...truoc, ...them];
-      if (gop.length > 10) setLoi('Tối đa 10 ảnh mỗi lần — những ảnh vượt quá đã bị bỏ.');
-      return gop.slice(0, 10);
-    });
-  }, []);
 
-  const xoaAnh = (id: string) => setAnhs((t) => t.filter((a) => a.id !== id));
+    const hopLe = chon.filter(laAnh);
+    const bBo = chon.filter((f) => !laAnh(f));
+
+    // Dựng danh sách mới NGOÀI hàm cập nhật state: `URL.createObjectURL` là
+    // tác dụng phụ, mà React có thể gọi hàm cập nhật hai lần (StrictMode) →
+    // tạo thừa URL không ai thu hồi. Chỉ tạo URL cho ảnh THẬT SỰ được giữ.
+    const moi: AnhChon[] = [];
+    let quaTai = 0;
+    for (const f of hopLe) {
+      const id = `${f.name}-${f.size}-${f.lastModified}`;
+      if (anhs.some((t) => t.id === id) || moi.some((t) => t.id === id)) continue;
+      if (anhs.length + moi.length >= 10) { quaTai++; continue; }
+      moi.push({ file: f, url: URL.createObjectURL(f), id });
+    }
+    if (moi.length) setAnhs((truoc) => [...truoc, ...moi]);
+
+    // Không bao giờ im lặng nuốt một file người dùng vừa chọn.
+    const canh: string[] = [];
+    if (bBo.length) canh.push(`Đã bỏ ${bBo.length} file không phải ảnh: ${bBo.map((f) => f.name).slice(0, 3).join(', ')}`);
+    if (quaTai) canh.push(`Tối đa 10 ảnh mỗi lần — đã bỏ ${quaTai} ảnh cuối.`);
+    if (canh.length) setLoi(canh.join(' · '));
+  }, [anhs]);
+
+  const xoaAnh = (id: string) =>
+    setAnhs((t) => {
+      const bo = t.find((a) => a.id === id);
+      if (bo) URL.revokeObjectURL(bo.url);
+      return t.filter((a) => a.id !== id);
+    });
 
   const doiCho = (i: number, huong: -1 | 1) => {
     setAnhs((t) => {
@@ -260,8 +304,26 @@ export default function ImageToDocPage() {
               <ul className="mt-3 space-y-2">
                 {anhs.map((a, i) => (
                   <li key={a.id} className="flex items-center gap-3 rounded-lg p-2" style={{ background: 'var(--bg-surface)' }}>
+                    {/* Chrome KHÔNG vẽ được .HEIC, nên ảnh nhỏ sẽ vỡ. Thay bằng
+                        ô chữ HEIC để người dùng khỏi tưởng ảnh hỏng — backend
+                        vẫn đọc được nhờ sharp. */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={a.url} alt="" className="w-12 h-12 object-cover rounded" />
+                    <img
+                      src={a.url}
+                      alt=""
+                      className="w-12 h-12 object-cover rounded"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const the = e.currentTarget.nextElementSibling as HTMLElement | null;
+                        if (the) the.style.display = 'flex';
+                      }}
+                    />
+                    <span
+                      className="w-12 h-12 rounded items-center justify-center text-[10px] font-semibold shrink-0"
+                      style={{ display: 'none', background: 'var(--bg-surface-active)', color: 'var(--text-muted)' }}
+                    >
+                      {(a.file.name.split('.').pop() || 'ảnh').toUpperCase().slice(0, 4)}
+                    </span>
                     <div className="flex-1 min-w-0">
                       <div className="text-sm truncate">{i + 1}. {a.file.name}</div>
                       <div className="text-xs" style={{ color: 'var(--text-muted)' }}>

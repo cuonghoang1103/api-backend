@@ -72,6 +72,42 @@ const HUONG_DAN_HINH: Record<CheDoHinh, string> = {
   ].join('\n'),
 };
 
+/** Bề ngang tối đa gửi lên model. Ảnh điện thoại 12MP (4032px) không giúp đọc
+ *  chữ tốt hơn trang A4 ở 2200px, nhưng làm token và thời gian đội lên nhiều. */
+const RONG_TOI_DA = 2200;
+
+/**
+ * Chuẩn hoá ảnh trước khi gửi model. Ba việc, việc nào cũng từng là lỗi thật
+ * ở đâu đó:
+ *
+ *  1. **Xoay theo EXIF.** Ảnh iPhone/Android hay nằm ngang trong file và chỉ
+ *     "đứng" nhờ cờ EXIF. Model nhìn pixel thô, nên không xoay là nó đọc một
+ *     trang giấy nằm ngang.
+ *  2. **HEIC → JPEG.** iPhone mặc định chụp .HEIC; cổng LLM không nhận định
+ *     dạng đó. `sharp` trong image production đọc được HEIF (đã kiểm trong
+ *     container thật), nên đổi ở đây là xong.
+ *  3. **Thu nhỏ.** Tiết kiệm token và thời gian chờ.
+ *
+ * Hỏng thì trả lại ảnh gốc chứ không chặn: thà để model tự từ chối còn hơn
+ * mất luôn một trang vì khâu phụ.
+ */
+async function chuanHoaAnh(anh: AnhVao): Promise<VisionImage> {
+  try {
+    const goc = Buffer.from(anh.data, 'base64');
+    let img = sharp(goc, { failOn: 'none' }).rotate();
+    const meta = await img.metadata();
+    if ((meta.width ?? 0) > RONG_TOI_DA) img = img.resize({ width: RONG_TOI_DA, withoutEnlargement: true });
+    const ra = await img.jpeg({ quality: 85 }).toBuffer();
+    return { data: ra.toString('base64'), mediaType: 'image/jpeg' };
+  } catch (e) {
+    logger.warn('docTools: không chuẩn hoá được ảnh, gửi nguyên bản', {
+      mediaType: anh.mediaType,
+      error: (e as Error).message,
+    });
+    return { data: anh.data, mediaType: anh.mediaType };
+  }
+}
+
 /** Chép MỘT ảnh. Không ném ra ngoài — lỗi được gói vào kết quả của trang đó. */
 export async function chepMotAnh(anh: AnhVao, chiSo: number, tuyChon: TuyChonChep): Promise<TrangKetQua> {
   const cheDo = tuyChon.cheDoHinh ?? 'bo-qua';
@@ -82,10 +118,11 @@ export async function chepMotAnh(anh: AnhVao, chiSo: number, tuyChon: TuyChonChe
   });
 
   try {
+    const anhGui = await chuanHoaAnh(anh);
     const kq = await visionComplete({
       system,
       userText: 'Chép lại toàn bộ nội dung trong ảnh.',
-      images: [{ data: anh.data, mediaType: anh.mediaType }],
+      images: [anhGui],
       maxTokens: cheDo === 've-lai' ? 6000 : 4000,
       userId: tuyChon.userId,
     });
@@ -147,8 +184,12 @@ export function kiemTraAnh(anhs: AnhVao[]): void {
   if (!anhs.length) throw new BadRequestError('Chưa chọn ảnh nào.');
   if (anhs.length > TOI_DA_ANH) throw new BadRequestError(`Tối đa ${TOI_DA_ANH} ảnh mỗi lần.`);
   for (const a of anhs) {
-    if (!/^image\/(png|jpe?g|webp|heic|heif)$/i.test(a.mediaType)) {
-      throw new BadRequestError(`Định dạng ảnh không hỗ trợ: ${a.mediaType}`);
+    // Ảnh .HEIC từ iPhone hay có mimetype RỖNG hoặc `application/octet-stream`
+    // khi trình duyệt không nhận ra. Đừng chặn ở đây — `chuanHoaAnh()` để
+    // `sharp` tự quyết, nó đọc được thì chạy tiếp, không đọc được thì mới báo.
+    const loai = (a.mediaType || '').toLowerCase();
+    if (loai && !loai.startsWith('image/') && loai !== 'application/octet-stream') {
+      throw new BadRequestError(`Định dạng không phải ảnh: ${a.mediaType}`);
     }
     // base64 phình ~4/3 so với byte thật.
     if ((a.data.length * 3) / 4 > TOI_DA_BYTE_MOI_ANH) throw new BadRequestError('Ảnh quá nặng (giới hạn 12MB mỗi ảnh).');

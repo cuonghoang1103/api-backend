@@ -47,7 +47,7 @@ const h = (fn: Handler) =>
     }
   };
 
-const CHE_DO_HINH: CheDoHinh[] = ['bo-qua', 'mo-ta', 've-lai'];
+const CHE_DO_HINH: CheDoHinh[] = ['cat-anh', 'bo-qua', 'mo-ta', 've-lai'];
 
 // ─── Công khai: mô tả khả năng của công cụ ────────────────────────────────
 // Cũng là route được `deploy.sh` gọi để chắc chắn module này đã lên thật.
@@ -58,9 +58,10 @@ router.get(
     toiDaMoiAnhMb: 12,
     presets: SYMBOL_PRESETS.map((p) => ({ id: p.id, label: p.label, hint: p.hint })),
     cheDoHinh: [
-      { id: 'bo-qua', label: 'Không xử lý hình', hint: 'Chỉ lấy chữ; chỗ có hình ghi [HÌNH]' },
+      { id: 'cat-anh', label: 'Cắt hình từ ảnh gốc (giống 100%)', hint: 'Lấy đúng pixel của tờ giấy, chèn vào đúng chỗ — không sợ máy đọc nhầm số đo' },
+      { id: 'bo-qua', label: 'Không xử lý hình', hint: 'Chỉ lấy chữ; chỗ có hình để trống một dòng đánh dấu' },
       { id: 'mo-ta', label: 'Mô tả hình bằng lời', hint: 'Ghi lại điểm, nét đứt, ký hiệu góc vuông, số đo' },
-      { id: 've-lai', label: 'Vẽ lại hình', hint: 'Dựng lại hình nét — chậm hơn nhiều và cần soi kỹ' },
+      { id: 've-lai', label: 'Vẽ lại hình thành hình nét', hint: 'Đẹp nhưng là hình MỚI — máy từng đọc 124° thành 120° rồi vẽ theo số sai' },
     ],
   })),
 );

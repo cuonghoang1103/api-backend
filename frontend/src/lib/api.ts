@@ -4571,7 +4571,7 @@ export interface VoiceUpsertPayload {
 // mỗi lượt 15–80 giây, nên gộp 10 ảnh vào một request sẽ đụng trần 300 giây
 // của nginx và mất luôn cả tập. Gọi lẻ thì hỏng trang nào biết trang đó.
 
-export type CheDoHinh = 'bo-qua' | 'mo-ta' | 've-lai';
+export type CheDoHinh = 'cat-anh' | 'bo-qua' | 'mo-ta' | 've-lai';
 
 export interface HinhVeLai {
   pngBase64: string;

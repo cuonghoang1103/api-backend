@@ -62,13 +62,11 @@ async function main(): Promise<void> {
     tienTong += trang.costUsd ?? 0;
     vanBanGop += (vanBanGop ? '\n\n' : '') + trang.vanBan;
     for (const [k, hv] of trang.hinhVeLai.entries()) {
-      hinhGop.push({
-        buffer: Buffer.from(hv.pngBase64, 'base64'),
-        loai: 'png',
-        chuThich: `Hình ${i + 1}.${k + 1} — máy vẽ lại, cần đối chiếu ảnh gốc`,
-        rong: hv.rong,
-        cao: hv.cao,
-      });
+      // KHÔNG gắn chú thích — giống hệt cách giao diện gọi. Hình được chèn
+      // đúng chỗ dấu [HÌNH], thêm dòng chữ dưới hình là làm lệch trang so với
+      // bản gốc.
+      void k;
+      hinhGop.push({ buffer: Buffer.from(hv.pngBase64, 'base64'), loai: 'png', rong: hv.rong, cao: hv.cao });
     }
   }
 

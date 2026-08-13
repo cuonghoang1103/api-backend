@@ -23,8 +23,11 @@ function escapeHtml(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-/** Markdown rất hẹp: # / ## / - / **đậm**. Mọi thứ khác giữ nguyên. */
-function toHtml(vanBan: string): string {
+/** Markdown rất hẹp: # / ## / - / **đậm**. Mọi thứ khác giữ nguyên.
+ *  Hình được chèn ĐÚNG VỊ TRÍ dấu [HÌNH] xuất hiện trong bài — không dồn
+ *  xuống cuối, vì đề bài mà mất hình tại chỗ thì không đọc được. */
+function toHtml(vanBan: string, hinh: { pngBase64: string; chuThich?: string }[]): string {
+  let iHinh = 0;
   // Gộp khối $$…$$ nhiều dòng lại trước khi tách dòng — nếu không, bước tách
   // dòng sẽ xé đôi công thức và KaTeX chỉ thấy một nửa.
   const gop = vanBan.replace(/\$\$([\s\S]*?)\$\$/g, (_, t: string) => `$$${t.replace(/\s*\n\s*/g, ' ').trim()}$$`);
@@ -35,8 +38,19 @@ function toHtml(vanBan: string): string {
       const d = dong.trim();
       if (!d) return '<div class="h-3"></div>';
       const esc = escapeHtml(d).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-      const hinh = esc.match(/^\[HÌNH\]\s*(.*)$/i);
-      if (hinh) return `<p class="mp-hinh"><em>Hình vẽ:</em> ${hinh[1]}</p>`;
+      const dauHinh = esc.match(/^\[HÌNH\]\s*(.*)$/i);
+      if (dauHinh) {
+        const anh = hinh[iHinh];
+        if (anh) {
+          iHinh++;
+          return `<figure class="mp-anh"><img src="data:image/png;base64,${anh.pngBase64}" alt="hình vẽ" />${
+            anh.chuThich ? `<figcaption>${escapeHtml(anh.chuThich)}</figcaption>` : ''
+          }</figure>`;
+        }
+        const moTa = dauHinh[1].replace(/^\(giữ hình gốc\)\s*/i, '').trim();
+        if (!moTa) return '<p class="mp-cho-hinh">[Hình vẽ — dán ảnh gốc vào đây]</p>';
+        return `<p class="mp-hinh"><em>Hình vẽ:</em> ${moTa}</p>`;
+      }
       if (/^#\s+/.test(esc)) return `<h2>${esc.replace(/^#\s+/, '')}</h2>`;
       if (/^##\s+/.test(esc)) return `<h3>${esc.replace(/^##\s+/, '')}</h3>`;
       if (/^[-*]\s+/.test(esc)) return `<p class="mp-gach">• ${esc.replace(/^[-*]\s+/, '')}</p>`;
@@ -82,15 +96,19 @@ function MathPreview({ vanBan, hinh = [], className = '' }: Props) {
     return () => { huy = true; };
   }, [vanBan]);
 
+  // Hình thừa (nhiều hình hơn số dấu [HÌNH]) mới xếp xuống cuối.
+  const soDauHinh = (vanBan.match(/^\s*\[HÌNH\]/gim) ?? []).length;
+  const conThua = hinh.slice(soDauHinh);
+
   return (
-    <div ref={ref} className={`mp-giay ${className}`} dangerouslySetInnerHTML={{ __html: `${toHtml(vanBan)}${hinh
-      .map(
-        (h) =>
-          `<figure class="mp-anh"><img src="data:image/png;base64,${h.pngBase64}" alt="hình vẽ" />${
-            h.chuThich ? `<figcaption>${escapeHtml(h.chuThich)}</figcaption>` : ''
-          }</figure>`,
-      )
-      .join('')}` }}
+    <div
+      ref={ref}
+      className={`mp-giay ${className}`}
+      dangerouslySetInnerHTML={{
+        __html: `${toHtml(vanBan, hinh)}${conThua
+          .map((h) => `<figure class="mp-anh"><img src="data:image/png;base64,${h.pngBase64}" alt="hình vẽ" /></figure>`)
+          .join('')}`,
+      }}
     />
   );
 }

@@ -19,7 +19,6 @@ import {
   AlignmentType,
   BorderStyle,
   Document,
-  HeadingLevel,
   ImageRun,
   ImportedXmlComponent,
   Packer,
@@ -50,29 +49,33 @@ export interface KetQuaDocx {
   soCongThuc: number;
 }
 
+/** Kiểu chữ mặc định của một dòng (tiêu đề thì đậm và to hơn một chút). */
+interface KieuChu { bold?: boolean; size?: number }
+
 /** `**đậm**` → các mẩu chữ, giữ nguyên phần còn lại. */
-function chiaDam(chu: string): TextRun[] {
+function chiaDam(chu: string, kieu: KieuChu = {}): TextRun[] {
+  const co = kieu.size ?? CO_CHU;
   const ra: TextRun[] = [];
   const re = /\*\*(.+?)\*\*/g;
   let cuoi = 0;
   let m: RegExpExecArray | null;
   while ((m = re.exec(chu))) {
-    if (m.index > cuoi) ra.push(new TextRun({ text: chu.slice(cuoi, m.index), size: CO_CHU, font: FONT }));
-    ra.push(new TextRun({ text: m[1], bold: true, size: CO_CHU, font: FONT }));
+    if (m.index > cuoi) ra.push(new TextRun({ text: chu.slice(cuoi, m.index), bold: kieu.bold, size: co, font: FONT }));
+    ra.push(new TextRun({ text: m[1], bold: true, size: co, font: FONT }));
     cuoi = re.lastIndex;
   }
-  if (cuoi < chu.length) ra.push(new TextRun({ text: chu.slice(cuoi), size: CO_CHU, font: FONT }));
+  if (cuoi < chu.length) ra.push(new TextRun({ text: chu.slice(cuoi), bold: kieu.bold, size: co, font: FONT }));
   return ra;
 }
 
 interface DemHong { hong: number; tong: number }
 
 /** Một dòng → các con của một Paragraph (chữ + OMML xen kẽ). */
-function noiDungDong(dong: string, dem: DemHong): (TextRun | ImportedXmlComponent)[] {
+function noiDungDong(dong: string, dem: DemHong, kieu: KieuChu = {}): (TextRun | ImportedXmlComponent)[] {
   const con: (TextRun | ImportedXmlComponent)[] = [];
   for (const manh of tachCongThuc(dong)) {
     if (manh.loai === 'chu') {
-      if (manh.noiDung) con.push(...chiaDam(manh.noiDung));
+      if (manh.noiDung) con.push(...chiaDam(manh.noiDung, kieu));
       continue;
     }
     dem.tong++;
@@ -97,14 +100,15 @@ export async function renderDocx(opts: {
 }): Promise<KetQuaDocx> {
   const dem: DemHong = { hong: 0, tong: 0 };
   const than: Paragraph[] = [];
+  /** Hình được phát theo THỨ TỰ các dấu [HÌNH] gặp trong bài. */
+  let iHinh = 0;
 
   if (opts.tieuDe?.trim()) {
     than.push(
       new Paragraph({
-        heading: HeadingLevel.HEADING_1,
         alignment: AlignmentType.CENTER,
-        spacing: { after: 200 },
-        children: [new TextRun({ text: opts.tieuDe.trim(), bold: true, size: 32, font: FONT })],
+        spacing: { after: 120 },
+        children: [new TextRun({ text: opts.tieuDe.trim(), bold: true, size: CO_CHU + 4, font: FONT })],
       }),
     );
   }
@@ -116,33 +120,59 @@ export async function renderDocx(opts: {
       continue;
     }
 
-    // Mô tả hình: cho vào khung xám nhạt để người đọc phân biệt ngay đâu là
-    // chữ của đề, đâu là phần máy mô tả lại hình.
+    // ─── Chỗ có hình ───────────────────────────────────────────────────
+    // Hình phải nằm ĐÚNG CHỖ nó xuất hiện trong trang, không phải dồn hết
+    // xuống cuối file. Dồn xuống cuối thì đề bài mất hình, người đọc phải
+    // cuộn đi cuộn lại để ghép — đúng lỗi bản đầu mắc phải.
+    //
+    // Có ảnh cho vị trí này → chèn ảnh, KHÔNG kèm chú thích và KHÔNG kèm
+    // đoạn mô tả (mô tả chỉ để đọc khi không có hình; có hình rồi thì nó
+    // thành chữ thừa chen giữa đề).
     const hinh = dong.match(/^\s*\[HÌNH\]\s*(.*)$/i);
     if (hinh) {
+      const anh = opts.hinh?.[iHinh];
+      if (anh) {
+        iHinh++;
+        than.push(await doanAnh(anh));
+        continue;
+      }
+      const moTa = hinh[1].replace(/^\(giữ hình gốc\)\s*/i, '').trim();
+      if (!moTa) {
+        // Chế độ "không xử lý hình": để lại một dấu mờ cho người dùng biết
+        // chỗ này cần dán ảnh gốc vào.
+        than.push(
+          new Paragraph({
+            spacing: { before: 60, after: 60 },
+            children: [new TextRun({ text: '[Hình vẽ — dán ảnh gốc vào đây]', italics: true, size: CO_CHU - 4, font: FONT, color: '888888' })],
+          }),
+        );
+        continue;
+      }
       than.push(
         new Paragraph({
-          spacing: { before: 80, after: 120 },
+          spacing: { before: 60, after: 80 },
           indent: { left: 360 },
           border: { left: { style: BorderStyle.SINGLE, size: 12, color: 'BBBBBB', space: 8 } },
           children: [
             new TextRun({ text: 'Hình vẽ: ', bold: true, italics: true, size: CO_CHU - 2, font: FONT, color: '555555' }),
-            ...noiDungDong(hinh[1], dem).map((c) => c),
+            ...noiDungDong(moTa, dem),
           ],
         }),
       );
       continue;
     }
 
+    // Tiêu đề: giữ CỠ CHỮ gần với trang gốc. Bản đầu dùng HeadingLevel của
+    // Word (16pt xanh, cách dòng rộng) nên file ra trông như bài blog chứ
+    // không như tờ đề — đậm + căn giữa là đủ.
     const h1 = dong.match(/^#\s+(.*)$/);
     const h2 = dong.match(/^##\s+(.*)$/);
     if (h1 || h2) {
       than.push(
         new Paragraph({
-          heading: h1 ? HeadingLevel.HEADING_1 : HeadingLevel.HEADING_2,
           alignment: h1 ? AlignmentType.CENTER : AlignmentType.LEFT,
-          spacing: { before: 200, after: 120 },
-          children: noiDungDong((h1 ?? h2)![1], dem),
+          spacing: { before: 120, after: 80 },
+          children: noiDungDong((h1 ?? h2)![1], dem, { bold: true, size: h1 ? CO_CHU + 2 : CO_CHU }),
         }),
       );
       continue;
@@ -150,7 +180,7 @@ export async function renderDocx(opts: {
 
     const gach = dong.match(/^\s*[-*]\s+(.*)$/);
     if (gach) {
-      than.push(new Paragraph({ bullet: { level: 0 }, spacing: { after: 60 }, children: noiDungDong(gach[1], dem) }));
+      than.push(new Paragraph({ bullet: { level: 0 }, spacing: { after: 40 }, children: noiDungDong(gach[1], dem) }));
       continue;
     }
 
@@ -160,34 +190,20 @@ export async function renderDocx(opts: {
       than.push(
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          spacing: { before: 120, after: 120 },
+          spacing: { before: 80, after: 80 },
           children: noiDungDong(dong.trim(), dem),
         }),
       );
       continue;
     }
 
-    than.push(new Paragraph({ spacing: { after: 100 }, children: noiDungDong(dong, dem) }));
+    than.push(new Paragraph({ spacing: { after: 60 }, children: noiDungDong(dong, dem) }));
   }
 
-  for (const h of opts.hinh ?? []) {
-    const kt = await kichThuoc(h);
-    than.push(
-      new Paragraph({
-        alignment: AlignmentType.CENTER,
-        spacing: { before: 160, after: 60 },
-        children: [new ImageRun({ type: h.loai, data: h.buffer, transformation: { width: kt.rong, height: kt.cao } })],
-      }),
-    );
-    if (h.chuThich) {
-      than.push(
-        new Paragraph({
-          alignment: AlignmentType.CENTER,
-          spacing: { after: 160 },
-          children: [new TextRun({ text: h.chuThich, italics: true, size: CO_CHU - 4, font: FONT, color: '555555' })],
-        }),
-      );
-    }
+  // Hình còn thừa (nhiều hình hơn số dấu [HÌNH]) mới xếp xuống cuối — chứ
+  // KHÔNG phải mặc định dồn hết xuống dưới như bản đầu.
+  for (const h of (opts.hinh ?? []).slice(iHinh)) {
+    than.push(await doanAnh(h));
   }
 
   const doc = new Document({
@@ -202,6 +218,23 @@ export async function renderDocx(opts: {
 
   const buffer = (await Packer.toBuffer(doc)) as unknown as Buffer;
   return { buffer, congThucHong: dem.hong, soCongThuc: dem.tong };
+}
+
+/** Một đoạn chỉ chứa ảnh, căn giữa. Chú thích CHỈ hiện khi người gọi đưa vào —
+ *  mặc định không có, vì hình nằm đúng chỗ rồi thì thêm dòng chữ dưới hình chỉ
+ *  làm trang khác đi so với bản gốc. */
+async function doanAnh(h: HinhKemTheo): Promise<Paragraph> {
+  const kt = await kichThuoc(h);
+  return new Paragraph({
+    alignment: AlignmentType.CENTER,
+    spacing: { before: 80, after: 80 },
+    children: [
+      new ImageRun({ type: h.loai, data: h.buffer, transformation: { width: kt.rong, height: kt.cao } }),
+      ...(h.chuThich
+        ? [new TextRun({ break: 1, text: h.chuThich, italics: true, size: CO_CHU - 4, font: FONT, color: '777777' })]
+        : []),
+    ],
+  });
 }
 
 /** Co ảnh cho vừa bề ngang trang in (A4 trừ lề ≈ 450pt), giữ tỉ lệ. */

@@ -14,11 +14,12 @@
  */
 import sharp from 'sharp';
 import { buildSystemPrompt } from './prompt.js';
+import { catCacHinh, timKhungHinh } from './cropFigure.js';
 import { visionComplete, type VisionImage } from './vision.js';
 import { logger } from '../../utils/logger.js';
 import { BadRequestError } from '../../middleware/errorHandler.js';
 
-export type CheDoHinh = 'bo-qua' | 'mo-ta' | 've-lai';
+export type CheDoHinh = 'bo-qua' | 'mo-ta' | 've-lai' | 'cat-anh';
 
 export interface AnhVao extends VisionImage {
   ten?: string;
@@ -56,6 +57,10 @@ export const TOI_DA_ANH = 10;
 const TOI_DA_BYTE_MOI_ANH = 12 * 1024 * 1024;
 
 const HUONG_DAN_HINH: Record<CheDoHinh, string> = {
+  // Cắt ảnh gốc: chỉ cần ĐÁNH DẤU chỗ có hình, không mô tả gì — phần hình do
+  // `cropFigure.ts` cắt thẳng từ ảnh rồi chèn đúng vào dấu này.
+  'cat-anh':
+    'Trang có thể có hình vẽ. Tại đúng vị trí mỗi hình, viết đúng một dòng "[HÌNH] (giữ hình gốc)" — KHÔNG mô tả hình, và tuyệt đối KHÔNG chép các chữ cái/số nằm rải rác trong hình thành dòng văn bản.',
   'bo-qua':
     'Trang có thể có hình vẽ. BỎ QUA hình: chỉ cần viết đúng một dòng "[HÌNH] (giữ hình gốc)" tại đúng vị trí hình xuất hiện, KHÔNG mô tả, và tuyệt đối KHÔNG chép các chữ cái/số nằm rải rác trong hình thành dòng văn bản.',
   'mo-ta':
@@ -137,6 +142,12 @@ export async function chepMotAnh(anh: AnhVao, chiSo: number, tuyChon: TuyChonChe
         });
         if (png) hinhVeLai.push(png);
       }
+    } else if (cheDo === 'cat-anh' && /\[HÌNH\]/i.test(vanBan)) {
+      // Lời gọi THỨ HAI, chỉ để định vị hình. Tách riêng chứ không nhồi vào
+      // lượt chép: một lời dặn ôm hai việc thì việc nào cũng kém đi, mà lượt
+      // chép là thứ không được phép kém.
+      const khungs = await timKhungHinh(anhGui, tuyChon.userId);
+      hinhVeLai.push(...(await catCacHinh(anhGui, khungs)));
     }
 
     return {

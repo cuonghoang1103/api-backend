@@ -73,7 +73,7 @@ export default function ImageToDocPage() {
   const [anhs, setAnhs] = useState<AnhChon[]>([]);
   const [presets, setPresets] = useState<string[]>(['math']);
   const [danhSachPreset, setDanhSachPreset] = useState<{ id: string; label: string; hint: string }[]>([]);
-  const [cheDoHinh, setCheDoHinh] = useState<CheDoHinh>('bo-qua');
+  const [cheDoHinh, setCheDoHinh] = useState<CheDoHinh>('cat-anh');
   const [note, setNote] = useState('');
   const [tieuDe, setTieuDe] = useState('');
   const [dangChay, setDangChay] = useState(false);
@@ -192,14 +192,11 @@ export default function ImageToDocPage() {
     if (hong.length) setLoi(`${hong.length}/${ketQua.length} trang không chép được: ${hong[0].loi}`);
   };
 
+  // Không gắn chú thích: hình được chèn ĐÚNG CHỖ dấu [HÌNH] trong bài, nên
+  // thêm một dòng chữ dưới mỗi hình chỉ làm trang lệch đi so với bản gốc.
+  // Lời nhắc "máy vẽ lại, cần đối chiếu" đã nằm ở phần chọn chế độ.
   const hinhTatCa = useMemo(
-    () =>
-      trangs.flatMap((t, i) =>
-        t.hinhVeLai.map((h, k) => ({
-          pngBase64: h.pngBase64,
-          chuThich: `Hình ${i + 1}.${k + 1} — máy vẽ lại, cần đối chiếu ảnh gốc`,
-        })),
-      ),
+    () => trangs.flatMap((t) => t.hinhVeLai.map((h) => ({ pngBase64: h.pngBase64 }))),
     [trangs],
   );
 
@@ -381,9 +378,10 @@ export default function ImageToDocPage() {
             <h2 className="font-semibold mb-3">3. Trang có hình vẽ?</h2>
             {(
               [
-                ['bo-qua', 'Không xử lý hình', 'Nhanh nhất. Chỗ có hình chỉ ghi [HÌNH]; bạn tự chèn ảnh gốc vào file sau.'],
-                ['mo-ta', 'Mô tả hình bằng lời', 'Ghi lại điểm, nét đứt, ký hiệu góc vuông, số đo trên cạnh.'],
-                ['ve-lai', 'Vẽ lại hình', 'Dựng lại hình nét chèn vào file. Chậm hơn ~4 lần và PHẢI đối chiếu ảnh gốc — máy có thể thêm ký hiệu nó suy ra từ lời đề chứ không có trong hình.'],
+                ['cat-anh', 'Cắt hình từ ảnh gốc — giống 100% ✅', 'Lấy đúng pixel của tờ giấy rồi chèn vào đúng chỗ trong bài. Hình y hệt bản gốc, không có chuyện máy đọc nhầm số đo.'],
+                ['bo-qua', 'Không xử lý hình', 'Nhanh nhất. Chỗ có hình để lại một dòng đánh dấu; bạn tự dán ảnh vào sau.'],
+                ['mo-ta', 'Mô tả hình bằng lời', 'Ghi lại điểm, nét đứt, ký hiệu góc vuông, số đo trên cạnh. Không có hình.'],
+                ['ve-lai', 'Vẽ lại thành hình nét', '⚠️ Đẹp nhưng là hình MỚI do máy vẽ: đã đo được nó đọc 124° thành 120°, 141° thành 140° rồi vẽ theo số sai. Chỉ dùng khi ảnh gốc quá mờ.'],
               ] as const
             ).map(([id, label, hint]) => (
               <label key={id} className="flex gap-2.5 items-start cursor-pointer mb-2">
@@ -492,20 +490,24 @@ export default function ImageToDocPage() {
       {/* Trang giấy + CSS in. Nền trắng chữ đen CỐ ĐỊNH, không theo theme —
           in bản theme tối ra giấy thì chữ xám trên nền trắng, gần như mất chữ. */}
       <style jsx global>{`
+        /* Bám sát tờ đề photo: chữ dày, cách dòng vừa, tiêu đề chỉ đậm chứ
+           không phóng to. Bản đầu để line-height 1.9 + tiêu đề 19px nên nhìn
+           như bài blog, không giống trang gốc. */
         .mp-giay {
           background: #ffffff;
           color: #111111;
           font-family: 'Times New Roman', Times, serif;
           font-size: 15px;
-          line-height: 1.9;
-          padding: 28px 32px;
+          line-height: 1.55;
+          padding: 24px 28px;
         }
-        .mp-giay h2 { font-size: 19px; font-weight: 700; text-align: center; margin: 4px 0 14px; }
-        .mp-giay h3 { font-size: 16px; font-weight: 700; margin: 12px 0 6px; }
-        .mp-giay p { margin: 0 0 8px; }
+        .mp-giay h2 { font-size: 16px; font-weight: 700; text-align: center; margin: 2px 0 10px; }
+        .mp-giay h3 { font-size: 15px; font-weight: 700; margin: 10px 0 4px; }
+        .mp-giay p { margin: 0 0 6px; }
         .mp-giay .mp-gach { padding-left: 14px; }
-        .mp-giay .mp-hinh { color: #555; border-left: 3px solid #ccc; padding-left: 10px; margin: 8px 0; }
-        .mp-giay .mp-anh { margin: 14px 0; text-align: center; }
+        .mp-giay .mp-hinh { color: #555; border-left: 3px solid #ccc; padding-left: 10px; margin: 6px 0; }
+        .mp-giay .mp-cho-hinh { color: #999; font-style: italic; margin: 6px 0; }
+        .mp-giay .mp-anh { margin: 10px 0; text-align: center; }
         .mp-giay .mp-anh img { max-width: 100%; height: auto; }
         .mp-giay .mp-anh figcaption { font-size: 12px; color: #666; font-style: italic; margin-top: 4px; }
         .mp-giay .katex { font-size: 1.05em; }

@@ -36,6 +36,15 @@ import { PCM_SAMPLE_RATE } from './audio.js';
 import { gatewayKey, gatewayRoot, modelFor, endpointFor } from '../llm/gateway.js';
 import { khopLenhNhanh } from './phanXa.js';
 import { CHE_DO, khopDoiCheDo, type CheDo } from './cheDo.js';
+import {
+  CAU,
+  NHAC_MOI,
+  conHan,
+  doTieng,
+  khopCoKhong,
+  tiengCuaCheDo,
+  type ChoXacNhan,
+} from './lechTieng.js';
 import { khopDoiNao, CHAO_DOI_NAO, type Nao } from './nao.js';
 
 // ─── Conversation memory ───────────────────────────────────
@@ -200,6 +209,20 @@ async function luuCheDo(projectId: number, cheDo: CheDo): Promise<void> {
     where: { id: row.id },
     data: { traits: { ...cu, cheDo } },
   });
+}
+
+/** Ghi/xoá trạng thái "đang chờ trả lời có-không cho việc đổi tiếng". */
+async function luuChoXacNhan(projectId: number, c: ChoXacNhan | null): Promise<void> {
+  const row = await prisma.makerPersona.findFirst({
+    where: { projectId },
+    select: { id: true, traits: true },
+  });
+  if (!row) return;
+  const cu = (row.traits as Record<string, unknown> | null) ?? {};
+  const moi: Record<string, unknown> = { ...cu };
+  if (c) moi.choXacNhan = c;
+  else delete moi.choXacNhan;
+  await prisma.makerPersona.update({ where: { id: row.id }, data: { traits: moi as never } });
 }
 
 /**
@@ -594,6 +617,9 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
 
   // ── 1. Hear ──
   let heard = (input.text ?? '').trim();
+  // Ngôn ngữ Whisper tự nhận — dùng lại ở bước dò nói-lệch-tiếng bên
+  // dưới. Rỗng khi gõ chữ từ web, hoặc khi chế độ ép sẵn ngôn ngữ.
+  let tiengWhisper: string | null = null;
   if (!heard && input.pcm16?.length) {
     const t0 = Date.now();
     const wav = pcmToWav(input.pcm16);
@@ -631,6 +657,7 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
      * nghe được — bỏ qua, đừng bắt LLM trả lời một câu tiếng Nga bịa ra.
      */
     const tiengNhanRa = String(tr.language || '').toLowerCase();
+    tiengWhisper = tiengNhanRa || null;
     const CHO_PHEP = new Set(['vi', 'vietnamese', 'en', 'english', '']);
     if (heard && tiengNhanRa && !CHO_PHEP.has(tiengNhanRa)) {
       logger.info('MakerLab bỏ qua — Whisper nhận ra ngôn ngữ lạ', {
@@ -721,6 +748,116 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
       });
       return { heard, said: cf.chaoDoi, actions: [], spoken: spokenDoi, ms: timing };
     }
+
+    /**
+     * ── Nói LỆCH TIẾNG: hỏi lại thay vì đọc bừa ──
+     *
+     * Đang ở chế độ tiếng Anh mà người ta nói tiếng Việt (hoặc ngược
+     * lại). Bản trước cứ thế trả lời và đọc lên, tức là bắt GIỌNG TIẾNG
+     * ANH phát âm chữ tiếng Việt — nghe không ra chữ nào.
+     *
+     * Đứng ở đây, sau lệnh đổi tiếng và trước LLM, vì hai lý do:
+     *   · sau lệnh đổi → "nói tiếng Việt đi" vẫn là LỆNH, không bị hiểu
+     *     nhầm thành "đang nói lệch tiếng"
+     *   · trước LLM   → không tốn một lượt gọi model cho câu mà ta biết
+     *     trước là sẽ đọc không nghe được
+     */
+    const tiengDangBat = tiengCuaCheDo(persona.cheDo);
+    const cho = (persona.traits as { choXacNhan?: ChoXacNhan } | null)?.choXacNhan ?? null;
+    const dangCho = conHan(cho, Date.now()) ? cho : null;
+
+    // Vừa hỏi xong mà người ta trả lời gọn "có"/"không" thì xử ngay,
+    // đừng đưa vào LLM — model sẽ bàn luận về chữ "có" thay vì làm.
+    if (dangCho) {
+      const tl = khopCoKhong(heard);
+      if (tl === 'co') {
+        const sangCheDo: CheDo = dangCho.sang === 'vi' ? 'vi' : 'en';
+        await luuCheDo(input.projectId, sangCheDo);
+        await luuChoXacNhan(input.projectId, null);
+        const cfMoi = CHE_DO[sangCheDo];
+        const noiDuoc = await speakOnce(
+          {
+            ...persona,
+            cheDo: sangCheDo,
+            voiceId: cfMoi.giong ?? persona.voiceId,
+            voiceProvider: cfMoi.nhaCungCap ?? persona.voiceProvider,
+            language: cfMoi.ngonNgu ?? persona.language,
+          },
+          cfMoi.chaoDoi,
+          input.deviceId,
+        );
+        emitTranscript(input.deviceId, 'bot', cfMoi.chaoDoi);
+        logger.info('MakerLab đổi tiếng sau khi người dùng đồng ý', {
+          deviceId: input.deviceId,
+          sang: sangCheDo,
+        });
+        timing.total = Date.now() - started;
+        return { heard, said: cfMoi.chaoDoi, actions: [], spoken: noiDuoc, ms: timing };
+      }
+      if (tl === 'khong') {
+        await luuChoXacNhan(input.projectId, null);
+        const cau = CAU.oLai[tiengDangBat];
+        const noiDuoc = await speakOnce(persona, cau, input.deviceId);
+        emitTranscript(input.deviceId, 'bot', cau);
+        timing.total = Date.now() - started;
+        return { heard, said: cau, actions: [], spoken: noiDuoc, ms: timing };
+      }
+    }
+
+    const doDuoc = doTieng(heard, tiengWhisper);
+    if (doDuoc.tieng && doDuoc.tieng !== tiengDangBat) {
+      const lanThu = (dangCho?.nhac ?? 0) + 1;
+      await luuChoXacNhan(input.projectId, {
+        sang: doDuoc.tieng,
+        luc: Date.now(),
+        nhac: lanThu,
+      });
+
+      /**
+       * Lần đầu thì HỎI. Những lần sau chỉ nhắc, và nhắc thưa.
+       *
+       * Nhắc mỗi lượt thì robot thành cái máy cằn nhằn — mà người bị cằn
+       * nhằn nhiều nhất lại chính là người đang TẬP nói thứ tiếng đó,
+       * tức đối tượng cần được để yên nhất.
+       */
+      const cau =
+        lanThu === 1
+          ? CAU.hoiDoi[tiengDangBat]
+          : lanThu % NHAC_MOI === 0
+            ? CAU.nhacNoiLai[tiengDangBat]
+            : null;
+
+      if (cau) {
+        const noiDuoc = await speakOnce(persona, cau, input.deviceId);
+        emitTranscript(input.deviceId, 'bot', cau);
+        logger.info('MakerLab người dùng nói lệch tiếng', {
+          deviceId: input.deviceId,
+          dangBat: tiengDangBat,
+          nghe: doDuoc.tieng,
+          tiLe: Number(doDuoc.tiLe.toFixed(2)),
+          soTu: doDuoc.soTu,
+          lanThu,
+        });
+        timing.total = Date.now() - started;
+        return { heard, said: cau, actions: [], spoken: noiDuoc, ms: timing };
+      }
+
+      // Lượt im lặng giữa hai lần nhắc: vẫn KHÔNG đưa vào LLM, vì câu
+      // trả lời sẽ lại bị đọc bằng giọng sai tiếng. Báo cho web biết là
+      // đã nghe, rồi thôi.
+      logger.info('MakerLab bỏ lượt: nói lệch tiếng, chưa tới lượt nhắc', {
+        deviceId: input.deviceId,
+        dangBat: tiengDangBat,
+        nghe: doDuoc.tieng,
+        lanThu,
+      });
+      timing.total = Date.now() - started;
+      return { heard, said: '', actions: [], spoken: false, ms: timing };
+    }
+
+    // Nói đúng tiếng rồi thì xoá lời hỏi còn treo — nếu không, một tiếng
+    // "có" cho câu hỏi KHÁC ở lượt sau sẽ bị hiểu là đồng ý đổi tiếng.
+    if (dangCho) await luuChoXacNhan(input.projectId, null);
 
     // ── Đổi NÃO: cũng phải đứng trước LLM, và vì đúng lý do như trên ──
     //

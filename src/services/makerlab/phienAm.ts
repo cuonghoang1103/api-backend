@@ -177,7 +177,7 @@ const NGUYEN_AM = new Set(['a', 'e', 'i', 'o', 'u', 'y']);
  * Trả `true` thì để yên, kể cả khi nó thật sự là tiếng Anh: xem ghi chú
  * "thà bỏ sót còn hơn bắt nhầm" ở đầu file.
  */
-function coTheLaTiengViet(w: string): boolean {
+export function coTheLaTiengViet(w: string): boolean {
   const s = w.toLowerCase();
 
   // Chữ không có trong bảng chữ cái tiếng Việt.

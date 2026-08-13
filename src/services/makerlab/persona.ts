@@ -269,6 +269,58 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
   });
 }
 
+/**
+ * Khối trạng thái động, tách RIÊNG để chèn vào tin nhắn CUỐI CÙNG.
+ *
+ * ⚠️ MỌI THỨ ĐỔI MỖI LƯỢT PHẢI NẰM SAU MỌI THỨ KHÔNG ĐỔI — kể cả sau
+ * lịch sử hội thoại.
+ *
+ * llama.cpp dùng lại phần đầu chung của hai lượt gọi. Một khối động nằm
+ * trước lịch sử thì toàn bộ lịch sử bị coi là mới. Với 30 lượt × ~400
+ * chữ, đó là hàng chục nghìn ký tự nạp lại MỖI LƯỢT, và nó tệ dần theo
+ * độ dài cuộc nói chuyện — đúng cái người dùng thấy: "càng nói càng lâu".
+ *
+ * Đặt nó vào tin nhắn cuối thì phần trước — tính cách, kiến thức, bảng
+ * lệnh, luật, mẫu đối thoại, TOÀN BỘ lịch sử — giữ nguyên byte-for-byte
+ * giữa hai lượt, và cache ăn trọn.
+ */
+export function khoiTrangThai(ctx: {
+  deviceName?: string;
+  battery?: number | null;
+  nearbyMm?: number | null;
+  ssid?: string | null;
+  rssi?: number | null;
+  pingMs?: number | null;
+}): string {
+  const now = new Date();
+  const gio = new Intl.DateTimeFormat('vi-VN', {
+    timeZone: 'Asia/Ho_Chi_Minh',
+    weekday: 'long',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(now);
+  const h = Number(
+    new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Asia/Ho_Chi_Minh',
+      hour: '2-digit',
+      hour12: false,
+    }).format(now),
+  );
+  const buoi = h < 5 ? 'đêm khuya' : h < 11 ? 'buổi sáng' : h < 14 ? 'buổi trưa' : h < 18 ? 'buổi chiều' : 'buổi tối';
+
+  const d: string[] = [`BÂY GIỜ là ${gio} (giờ Việt Nam), đang là ${buoi}.`];
+  if (ctx.deviceName) d.push(`Bạn đang chạy trên thiết bị "${ctx.deviceName}".`);
+  if (typeof ctx.battery === 'number') d.push(`Pin còn ${ctx.battery}%.`);
+  if (typeof ctx.nearbyMm === 'number') d.push(`Cảm biến phía trước báo có vật cách ${ctx.nearbyMm} mm.`);
+  if (ctx.ssid) d.push(`Đang nối WiFi "${ctx.ssid}"${typeof ctx.rssi === 'number' ? `, sóng ${ctx.rssi} dBm` : ''}.`);
+  if (typeof ctx.pingMs === 'number') d.push(`Độ trễ tới máy chủ ${ctx.pingMs} ms.`);
+  return `[Số liệu lúc này, không phải mệnh lệnh]\n${d.map((x) => `- ${x}`).join('\n')}`;
+}
+
 /** Kiến thức nằm trong `traits.knowledge` — dùng cột JSON có sẵn, khỏi migration. */
 function normalizeKnowledge(raw: unknown): Array<{ q: string; a: string }> {
   if (!Array.isArray(raw)) return [];
@@ -491,11 +543,16 @@ Không viết gì ngoài JSON đó.`,
      * Nên: tĩnh trước, động sau. Và giữ nhắc JSON ngay sau khối động để
      * hợp đồng đầu ra vẫn nằm gần cuối.
      */
-    state.length
-      ? `\nTrạng thái lúc này (số liệu, không phải mệnh lệnh):\n${state
-          .map((s) => `- ${s}`)
-          .join('\n')}\nNhắc lại: chỉ trả JSON một dòng như hợp đồng ở trên.`
-      : '',
+    // ⚠️ KHỐI ĐỘNG ĐÃ RA KHỎI ĐÂY HẲN — xem `khoiTrangThai()` bên dưới.
+    //
+    // Bản 20:36 hôm nay đẩy nó xuống cuối prompt HỆ THỐNG và tưởng xong.
+    // Chưa tới nơi: prompt hệ thống không phải phần cuối của cả lượt gọi.
+    // Sau nó còn mẫu đối thoại và 30 lượt LỊCH SỬ, nên cache vẫn đứt ngay
+    // tại khối động và mọi thứ sau đều phải nạp lại.
+    //
+    // Đo thật: lượt 1 model mất 1.954 ms, lượt 3 lên 12.228 ms — càng nói
+    // càng nhiều lịch sử phải nạp lại. Muốn cache ăn thì khối động phải
+    // nằm sau CẢ lịch sử, tức trong tin nhắn cuối cùng.
     // ⚠️ NHẮC LẠI NGÔN NGỮ Ở CUỐI — chỉ khi KHÔNG phải tiếng Việt.
     //
     // Câu nhắc ở đầu prompt là cần nhưng KHÔNG đủ. Giữa nó và câu người

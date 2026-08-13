@@ -28,7 +28,7 @@ import { logger } from '../../utils/logger.js';
 import { canTraCuu, tinMoiNhat, timTrenWeb, dungDoanTraCuu } from './web.js';
 import { timKienThuc, dungDoanKienThuc } from './kienThuc.js';
 import { transcribeWithGroq } from '../interview/voice/stt.js';
-import { loadPersona, buildSystemPrompt, buildFewShot, type PersonaConfig } from './persona.js';
+import { loadPersona, buildSystemPrompt, buildFewShot, khoiTrangThai, type PersonaConfig } from './persona.js';
 import { validateCommand, type ValidatedCommand } from './commands.js';
 import { synthesizeSpeech } from './tts.js';
 import { checkHeardSpeech } from './hallucination.js';
@@ -188,7 +188,15 @@ async function dungMessages(
     // và vai `user` vì template Qwen3.5 chỉ cho một system message ở đầu.
     ...(doanKienThuc ? [{ role: 'user' as const, content: doanKienThuc }] : []),
     ...(doanTraCuu ? [{ role: 'user' as const, content: doanTraCuu }] : []),
-    { role: 'user', content: heard },
+    // ⚠️ KHỐI ĐỘNG ĐI CÙNG CÂU MỚI, SAU MỌI THỨ KHÔNG ĐỔI.
+    //
+    // Giờ/pin/cảm biến đổi mỗi lượt. Đặt chúng ở system prompt thì cache
+    // đứt ngay đó và cả 30 lượt lịch sử phía sau phải nạp lại — đo được
+    // model đi từ 1.954 ms (lượt 1) lên 12.228 ms (lượt 3).
+    //
+    // Gộp vào chính câu người dùng vừa nói: câu đó vốn đã mới, nên khối
+    // động đi nhờ mà không tốn thêm gì.
+    { role: 'user', content: `${khoiTrangThai(ctx)}\n\n${heard}` },
   ];
 }
 

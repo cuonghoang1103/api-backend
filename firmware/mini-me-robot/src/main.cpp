@@ -468,6 +468,21 @@ static void sendTelemetry() {
   doc["micLevel"] = audio::level();
   doc["turns"] = st.turns;
 
+  /**
+   * ⚠️ BỘ ĐẾM PHẢI TỚI ĐƯỢC ĐÚNG CÁI LOG MÌNH ĐANG ĐỌC.
+   *
+   * `underruns` (đói đệm — thứ tai nghe thành "nói lắp") đã được đếm
+   * trong `audio.cpp` từ lâu, và `lastUnderruns()` đã có sẵn để đọc.
+   * Nhưng KHÔNG chỗ nào gửi nó đi cả. Nên suốt cả buổi chẩn đoán hôm
+   * nay, mỗi lần người dùng báo "vẫn nói lắp" thì tôi chỉ có log của
+   * SERVER — vốn sạch, vì server có hỏng đâu — và phải đi ĐOÁN.
+   *
+   * Đoán sai hai lần trước khi nghĩ ra chuyện này. Một con số gửi lên
+   * đây rẻ hơn nhiều so với một vòng chẩn đoán sai.
+   */
+  doc["hutDem"] = audio::lastUnderruns();
+  doc["hutMs"] = audio::lastUnderrunMs();
+
   // Số liệu MẠNG, để robot trả lời được câu "kiểm tra kết nối đi".
   //
   // Đo độ trễ mỗi 30 giây chứ không phải mỗi lượt telemetry (1 Hz): mỗi

@@ -20,6 +20,7 @@
     "db:seed:lang": "tsx prisma/seed.my-language.ts",
     "db:seed:ja-kana": "tsx prisma/seed.ja-kana.ts",
     "db:seed:interview": "tsx prisma/seed.interview.ts",
+    "llm:check": "tsx scripts/llm-check.ts",
     "eval:grader": "tsx eval/runEval.ts",
     "eval:grader:ai": "tsx eval/runEval.ts --ai",
     "lint": "eslint src --ext .ts",

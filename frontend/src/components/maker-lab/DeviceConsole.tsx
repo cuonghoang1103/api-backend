@@ -147,7 +147,11 @@ export function DeviceConsole({
       await updatePersona(projectId, { speechRate: rate, cheDo, amLuong });
       if (activeIdRef.current) {
         try {
-          await sendCommand(activeIdRef.current, 'volume', { percent: amLuong });
+          // `level`, KHÔNG phải `percent`: firmware đọc
+          // `payload["level"] | 100` nên tên sai = âm lượng nhảy về hết
+          // cỡ mà không báo gì. Nguồn sự thật là schema Zod `volume`
+          // trong `src/services/makerlab/commands.ts`.
+          await sendCommand(activeIdRef.current, 'volume', { level: amLuong });
         } catch {
           /* bo có thể đang tắt — cài đặt vẫn lưu, áp dụng ở lần bật sau */
         }

@@ -493,6 +493,50 @@ export function speakStreamEnd(deviceId: number, seq: number, text?: string): vo
 
 // ─── Device event handlers ─────────────────────────────────
 
+/**
+ * Gửi lại những cài đặt bo KHÔNG tự nhớ, ngay khi nó vừa nối lại.
+ *
+ * ⚠️ "LƯU" MÀ BO KHÔNG NHẬN LẠI SAU KHI KHỞI ĐỘNG THÌ KHÔNG PHẢI LÀ LƯU.
+ *
+ * `volumePct` trong `audio.cpp` là biến tĩnh, khởi tạo 100 mỗi lần bo
+ * chạy — rút điện cắm lại là quên sạch. Người dùng kéo âm lượng xuống
+ * 40%, bấm Lưu, tắt bật robot, và nó gào lại 100% như chưa có gì xảy ra.
+ *
+ * Trước bản này KHÔNG có chỗ nào gửi lại: `handleHello` chỉ ghi trạng
+ * thái vào DB rồi xả hàng đợi lệnh cũ. Cài đặt nằm yên trong persona,
+ * đúng và đầy đủ, mà không ai đọc ra gửi xuống.
+ *
+ * Gửi ở `hello` chứ không phải lúc bấm Lưu, vì đây là lúc DUY NHẤT biết
+ * chắc bo vừa mất trí nhớ.
+ */
+async function guiLaiCaiDat(conn: DeviceConn): Promise<void> {
+  try {
+    const dev = await prisma.makerDevice.findUnique({
+      where: { id: conn.deviceId },
+      select: { projectId: true },
+    });
+    if (!dev?.projectId) return;
+    const p = await prisma.makerPersona.findUnique({
+      where: { projectId: dev.projectId },
+      select: { traits: true },
+    });
+    const v = Number((p?.traits as { amLuong?: unknown } | null)?.amLuong);
+    if (!Number.isFinite(v) || v <= 0) return;
+    const pct = Math.max(10, Math.min(100, Math.trunc(v)));
+    // Trường là `level`, KHÔNG phải `percent` — firmware đọc
+    // `payload["level"] | 100`, nên gõ sai tên thì nó lặng lẽ lấy 100
+    // và âm lượng nhảy về hết cỡ. Nguồn sự thật: `commands.ts`.
+    sendJson(conn, { t: 'cmd', type: 'volume', payload: { level: pct } });
+    logger.info('MakerLab gửi lại âm lượng đã lưu', { deviceId: conn.deviceId, pct });
+  } catch (e) {
+    // Không chặn `hello` vì việc này — bo vẫn phải lên ONLINE.
+    logger.warn('MakerLab không gửi lại được cài đặt', {
+      deviceId: conn.deviceId,
+      error: e instanceof Error ? e.message : String(e),
+    });
+  }
+}
+
 async function handleHello(conn: DeviceConn, msg: Record<string, unknown>): Promise<void> {
   const data: Record<string, unknown> = {
     status: MakerDeviceStatus.ONLINE,
@@ -530,6 +574,8 @@ async function handleHello(conn: DeviceConn, msg: Record<string, unknown>): Prom
     status: 'ONLINE',
     ...data,
   });
+
+  await guiLaiCaiDat(conn);
 
   // Flush anything queued while the board was away.
   const pending = await prisma.makerCommand.findMany({

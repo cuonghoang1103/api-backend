@@ -896,7 +896,36 @@ def tts_stream(payload: Dict[str, Any]):
         with khoa_mo_hinh(uu_tien=True, viec=f"robot {len(text)} ký tự", soChu=len(text)):
             t0 = time.time()
             tong = 0
+            # ⚠️ HẠN CỨNG BÊN TRONG BỘ SINH — khoá phải được nhả dù khách
+            #    còn hay đã bỏ đi.
+            #
+            # Bộ sinh giữ khoá suốt cả luồng (đúng: model không chạy song
+            # song được). Nhưng khi Node hết hạn chờ và HUỶ yêu cầu, bộ
+            # sinh KHÔNG biết: nó đang nằm trong `infer_stream`, chưa tới
+            # được `yield` để nhận tín hiệu đóng. Khoá bị giữ tiếp, lượt
+            # sau xếp hàng, và cả chuỗi tụt xuống Google.
+            #
+            # Đo thật 13/08/2026, ghép ba nguồn log:
+            #   Node    : "tts timeout after 21636ms"        ← huỷ ở 21,6s
+            #   máy đọc : "giữ khoá 55s bởi 'robot 27 ký tự'"
+            #   systemd : "14,3s CPU trong 2 phút 15 giây"   ← KHÔNG tính,
+            #                                                  chỉ nằm chờ
+            #
+            # Bộ canh gác có cắt được, nhưng nó giết cả tiến trình: mất
+            # mọi việc đang xếp hàng cộng ~10 giây nạp lại. Hạn ở đây rẻ
+            # hơn nhiều — chỉ hỏng đúng một lượt.
+            #
+            # Cắt giữa chừng thì câu bị cụt. Cụt vẫn hơn kẹt: cụt là một
+            # lượt hỏng, kẹt là mọi lượt sau đều hỏng.
+            han = tran_cho_viec(len(text))
             for mau in t.infer_stream(text=text, voice=voice, style=style):
+                if time.time() - t0 > han:
+                    print(
+                        f"[tts] ⛔ cắt luồng: quá {han:.0f}s cho {len(text)} ký tự "
+                        f"(đã ra {tong/2/BO_SR:.1f}s tiếng). Nhả khoá.",
+                        flush=True,
+                    )
+                    break
                 b = _ve_16k(mau)
                 tong += len(b)
                 yield b

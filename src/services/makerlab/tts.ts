@@ -184,6 +184,33 @@ function envProvider(): TtsProvider {
  * Synthesize speech. Tries the requested provider, then falls back
  * through the chain; only throws when every provider failed.
  */
+/**
+ * Trần chờ cho CẢ lời gọi, tính theo ĐỘ DÀI văn bản.
+ *
+ * ⚠️ MỘT CON SỐ CỐ ĐỊNH KHÔNG BAO GIỜ ĐÚNG CHO CẢ CÂU NGẮN LẪN BÀI DÀI.
+ *
+ * 20 giây được chọn hồi mọi lời gọi đều là hai bốn câu. Từ khi đường
+ * không-luồng của robot chuyển sang GOM qua cửa luồng (13/08/2026), lời
+ * gọi này không còn là "xin một mẩu" mà là "nhận trọn đoạn tiếng" — và
+ * một câu trả lời 1.126 ký tự là ~68 giây tiếng. Gom 68 giây trong ngân
+ * sách 20 giây thì không bao giờ xong:
+ *
+ *     cuongmini: tts timeout after 20000ms
+ *     → openai 429 hết credit → Google
+ *
+ * Người dùng lại nghe thấy đúng một chuyện: "giọng về Google". Bản vá
+ * hôm nay chữa được vòng luẩn quẩn hàng đợi nhưng đẻ ra cái này.
+ *
+ * Tiếng nói ~16,5 ký tự mỗi giây; máy đọc chạy nhanh hơn thời gian thực
+ * nên trần bằng ĐÚNG thời lượng tiếng đã là rộng rãi. Cộng 20 giây nền
+ * cho lúc nạp mô hình, và chặn trần trên 180 giây để một lời gọi treo
+ * không giữ cả lượt nói mãi mãi.
+ */
+function tranTheoDoDai(text: string): number {
+  const giayTieng = text.length / 16.5;
+  return Math.min(180_000, Math.max(TTS_TIMEOUT_MS, Math.round(giayTieng * 1000) + 20_000));
+}
+
 export async function synthesizeSpeech(text: string, opts: TtsOptions = {}): Promise<TtsResult> {
   const clean = sanitizeForSpeech(text);
   if (!clean) throw new Error('nothing to speak');
@@ -202,7 +229,7 @@ export async function synthesizeSpeech(text: string, opts: TtsOptions = {}): Pro
   for (const provider of chain) {
     if (!providerConfigured(provider)) continue;
     try {
-      const audio = await withTimeout(runProvider(provider, clean, opts), TTS_TIMEOUT_MS);
+      const audio = await withTimeout(runProvider(provider, clean, opts), tranTheoDoDai(clean));
       if (audio.length > 0) {
         // Ghi ĐÚNG kiểu: dịch vụ tự dựng trả WAV, mọi nhà cung cấp còn
         // lại trả MP3. Hiện ffmpeg vẫn tự ngửi ra định dạng nên sai nhãn

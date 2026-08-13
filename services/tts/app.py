@@ -92,8 +92,59 @@ _cho_uu_tien = 0                  # số lượt robot đang chờ hoặc đang 
 _dem_lock = threading.Lock()
 
 
+# ─── Canh gác KẸT KHOÁ ──────────────────────────────────────────
+#
+# ⚠️ MÁY ĐỌC KẸT KHÔNG BAO GIỜ TỰ BÁO. NÓ CHỈ IM.
+#
+# Xảy ra thật 13/08/2026: một việc cũ giữ khoá mô hình, mọi lời gọi sau
+# xếp hàng vô hạn. `/health` vẫn trả `{"ok":true,"loaded":true}` suốt —
+# vì nó KHÔNG cần khoá — nên mọi phép kiểm tự động đều báo xanh trong khi
+# robot của người dùng lặng lẽ rơi xuống giọng Google.
+#
+# Mất mấy giờ mới lần ra, và chỉ lần ra được vì bắt nó SINH TIẾNG THẬT
+# thay vì tin `/health`.
+#
+# Hai việc ở đây, và việc thứ nhất mới là việc chính:
+#
+#   1. `/health` NÓI THẬT — báo luôn khoá đang bị giữ bao lâu, và tự
+#      chuyển `ok: false` khi quá ngưỡng. Một phép kiểm chỉ có giá trị
+#      nếu nó biết hỏng.
+#   2. Quá hạn thì THOÁT HẲN tiến trình. Không cứu được một phép tính
+#      CUDA đang treo từ bên trong Python — nhưng systemd có
+#      `Restart=always`, nên thoát là cách sạch nhất để có lại một tiến
+#      trình lành. Mất ~10 giây nạp lại, đổi lấy việc không phải chờ
+#      người phát hiện.
+_giu_tu: float = 0.0          # lúc khoá được cấp, 0 = đang rảnh
+_giu_gi: str = ""             # việc gì đang giữ, để log ra cho người đọc
+KET_GIAY = float(os.environ.get("TTS_KET_GIAY", "300"))
+
+
+def dang_giu_bao_lau() -> float:
+    """Khoá đang bị giữ bao nhiêu giây. 0 = rảnh."""
+    return (time.time() - _giu_tu) if _giu_tu else 0.0
+
+
+def _canh_ket() -> None:
+    while True:
+        time.sleep(10)
+        giu = dang_giu_bao_lau()
+        if KET_GIAY > 0 and giu > KET_GIAY:
+            print(
+                f"[tts] ⛔ KẸT: khoá bị giữ {giu:.0f}s bởi '{_giu_gi}' "
+                f"(trần {KET_GIAY:.0f}s). Thoát để systemd dựng lại.",
+                flush=True,
+            )
+            # `os._exit` chứ không phải `sys.exit`: một luồng đang treo
+            # trong CUDA sẽ nuốt mọi ngoại lệ, và tiến trình không bao giờ
+            # đóng được đàng hoàng. Đây đúng là ca cần cắt phăng.
+            os._exit(1)
+
+
+threading.Thread(target=_canh_ket, daemon=True).start()
+
+
 @contextmanager
-def khoa_mo_hinh(uu_tien: bool = False):
+def khoa_mo_hinh(uu_tien: bool = False, viec: str = "?"):
     """Xin khoá mô hình. `uu_tien=True` cho đường robot.
 
     Việc thường quay vòng chờ trong lúc còn robot xếp hàng. Ngủ 50 ms mỗi
@@ -111,9 +162,14 @@ def khoa_mo_hinh(uu_tien: bool = False):
                 continue
             if _lock.acquire(timeout=0.2):
                 break
+        global _giu_tu, _giu_gi
+        _giu_tu = time.time()
+        _giu_gi = viec
         try:
             yield
         finally:
+            _giu_tu = 0.0
+            _giu_gi = ""
             _lock.release()
     finally:
         if uu_tien:
@@ -284,6 +340,32 @@ def reap_jobs() -> None:
         _jobs.pop(jid, None)
 
 
+@app.post("/thu-ket")
+def thu_ket(giay: float = 30.0):
+    """Giữ khoá `giay` giây để THỬ bộ canh gác. Mặc định TẮT.
+
+    ⚠️ MỘT BỘ CANH GÁC KHÔNG THỬ ĐƯỢC LÀ MỘT BỘ CANH GÁC KHÔNG TIN ĐƯỢC.
+    
+    Đường cắt chỉ chạy khi hệ thống đã hỏng — tức đúng lúc không ai muốn
+    phát hiện ra là nó cũng hỏng nốt. Không có cách ép nó chạy thì mọi
+    niềm tin vào nó chỉ là suy luận.
+
+    Thử thật 13/08/2026 bằng một việc dài: việc xong trước ngưỡng nên bộ
+    canh gác KHÔNG cắt — đúng, nhưng cũng nghĩa là đường cắt vẫn chưa
+    được chứng minh. Đây là chỗ chứng minh nó.
+
+    Khoá sau `TTS_CHO_THU_KET=true`: nó cố tình làm dịch vụ đứng im, và
+    một endpoint như thế mà mở sẵn thì chỉ chờ ngày ai đó gọi nhầm.
+    """
+    if os.environ.get("TTS_CHO_THU_KET", "").lower() != "true":
+        raise HTTPException(403, "Đặt TTS_CHO_THU_KET=true mới thử được")
+    giay = max(1.0, min(600.0, float(giay)))
+    print(f"[tts] THỬ KẸT: giữ khoá {giay:.0f}s", flush=True)
+    with khoa_mo_hinh(viec=f"THỬ KẸT {giay:.0f}s"):
+        time.sleep(giay)
+    return {"ok": True, "daGiu": giay}
+
+
 @app.get("/may/lich-su")
 def may_lich_su():
     """Chuỗi số liệu 24 giờ cho biểu đồ."""
@@ -306,8 +388,30 @@ def may():
 
 @app.get("/health")
 def health():
-    # KHÔNG gọi engine() ở đây — xem ghi chú trong engine().
-    return {"ok": True, "loaded": _tts is not None}
+    """⚠️ `/health` PHẢI BIẾT HỎNG, KHÔNG THÌ NÓ CHỈ LÀ MỘT LỜI TRẤN AN.
+
+    Bản trước luôn trả `{"ok": true}` vì nó không đụng tới khoá mô hình.
+    Ngày 13/08/2026 máy đọc kẹt cứng: mọi lời gọi xếp hàng vô hạn, robot
+    rơi xuống giọng Google — và `/health` vẫn xanh suốt. Mọi phép kiểm
+    tự động đều báo ổn trong lúc thứ duy nhất người dùng quan tâm đã
+    chết.
+
+    Nay nó báo luôn khoá đang bị giữ bao lâu, và tự lật `ok: false` khi
+    quá nửa ngưỡng kẹt — tức KÊU TRƯỚC khi bộ canh gác phải cắt.
+
+    Vẫn KHÔNG gọi `engine()` ở đây: nạp model mất ~38 giây và một
+    healthcheck đứng chờ nó thì mọi thứ tưởng dịch vụ chết.
+    """
+    giu = dang_giu_bao_lau()
+    keu = KET_GIAY > 0 and giu > KET_GIAY / 2
+    return {
+        "ok": not keu,
+        "loaded": _tts is not None,
+        "giuKhoaGiay": round(giu, 1),
+        "dangLam": _giu_gi or None,
+        "robotDangCho": dang_ban(),
+        "tranKetGiay": KET_GIAY,
+    }
 
 
 # 14 giọng VieNeu phát kèm mô hình. Giọng người dùng tự nhân bản được ghi
@@ -390,7 +494,7 @@ def run_job(jid: str, text: str, voice: Optional[str], style: str) -> None:
         t0 = time.time()
         # KHÔNG ưu tiên: người bấm nút trên web đã đi làm việc khác, còn
         # robot thì có người đang đứng chờ nghe.
-        with khoa_mo_hinh():
+        with khoa_mo_hinh(viec=f"job web {len(text)} ký tự"):
             audio = t.infer(text=text, voice=voice or None, style=style)
         dur = len(audio) / _sr
         _jobs[jid].update(
@@ -753,7 +857,7 @@ def tts_stream(payload: Dict[str, Any]):
         # ⚠️ Giữ khoá suốt cả luồng. Model này KHÔNG chạy song song được,
         # và hai lượt chồng nhau thì cả hai ra tiếng lẫn lộn — tệ hơn hẳn
         # so với lượt sau phải đợi.
-        with khoa_mo_hinh(uu_tien=True):
+        with khoa_mo_hinh(uu_tien=True, viec=f"robot {len(text)} ký tự"):
             t0 = time.time()
             tong = 0
             for mau in t.infer_stream(text=text, voice=voice, style=style):

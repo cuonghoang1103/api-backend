@@ -285,6 +285,36 @@ def ve_16k(x: np.ndarray, sr: int) -> bytes:
     return (x * 32767.0).astype("<i2").tobytes()
 
 
+# ─── Canh gác KẸT KHOÁ — cùng lý do như bên `app.py` ────────────
+#
+# Máy đọc kẹt thì không tự báo, nó chỉ im. Và `/health` ở đây cũng KHÔNG
+# đụng tới khoá nên nó xanh y nguyên trong lúc mọi lời gọi xếp hàng vô
+# hạn. Xem ghi chú dài ở `app.py::_canh_ket`.
+_giu_tu: float = 0.0
+_giu_gi: str = ""
+KET_GIAY = float(os.environ.get("CB_KET_GIAY", "300"))
+
+
+def _giu_bao_lau() -> float:
+    return (time.time() - _giu_tu) if _giu_tu else 0.0
+
+
+def _canh_ket() -> None:
+    while True:
+        time.sleep(10)
+        giu = _giu_bao_lau()
+        if KET_GIAY > 0 and giu > KET_GIAY:
+            print(
+                f"[cb] ⛔ KẸT: khoá bị giữ {giu:.0f}s bởi '{_giu_gi}' "
+                f"(trần {KET_GIAY:.0f}s). Thoát để systemd dựng lại.",
+                flush=True,
+            )
+            os._exit(1)
+
+
+threading.Thread(target=_canh_ket, daemon=True).start()
+
+
 @app.get("/vram")
 def vram():
     """Bóc tách VRAM: trọng số bao nhiêu, bộ đệm bao nhiêu.
@@ -332,7 +362,17 @@ def _kieu_so() -> str:
 def health():
     # KHÔNG gọi `may()` ở đây: nạp model mất vài chục giây, và một
     # healthcheck đứng chờ nó thì mọi thứ tưởng dịch vụ chết.
-    return {"ok": True, "loaded": _m is not None}
+    #
+    # Nhưng PHẢI báo được lúc kẹt — xem `app.py::health`.
+    giu = _giu_bao_lau()
+    keu = KET_GIAY > 0 and giu > KET_GIAY / 2
+    return {
+        "ok": not keu,
+        "loaded": _m is not None,
+        "giuKhoaGiay": round(giu, 1),
+        "dangLam": _giu_gi or None,
+        "tranKetGiay": KET_GIAY,
+    }
 
 
 @app.get("/voices")
@@ -423,6 +463,9 @@ def doc(payload: Dict[str, Any]):
     m = may()
     t0 = time.time()
     with _chay_lock:
+        global _giu_tu, _giu_gi
+        _giu_tu = time.time()
+        _giu_gi = f"{ten} {len(text)} ký tự"
         # Giọng DỰNG SẴN phải trả đặc trưng về bản gốc trước khi sinh.
         # Không trả thì nó nói bằng giọng nhân bản của lượt trước — xem
         # ghi chú dài ở `may()`.
@@ -430,7 +473,11 @@ def doc(payload: Dict[str, Any]):
             import copy as _copy
 
             m.conds = _copy.deepcopy(_conds_goc)
-        wav = m.generate(text, **tham)
+        try:
+            wav = m.generate(text, **tham)
+        finally:
+            _giu_tu = 0.0
+            _giu_gi = ""
         _tra_bo_dem()
     b = ve_16k(wav.squeeze().detach().cpu().numpy(), int(m.sr))
     giay = len(b) / 2 / BO_SR

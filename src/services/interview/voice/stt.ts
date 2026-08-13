@@ -104,6 +104,20 @@ export interface TranscriptResult {
   noSpeechProb?: number;
   /** Mean log-probability of the decoded tokens. Very low = the model guessed. */
   avgLogprob?: number;
+  /**
+   * Ngôn ngữ Whisper TỰ NHẬN ra (chỉ có khi không ép `language`).
+   *
+   * ⚠️ Đây là thứ duy nhất phân biệt "nghe được" với "đoán bừa".
+   *
+   * Cho tự dò rồi đưa tiếng ồn phòng vào, Whisper không bao giờ nói
+   * "tôi không nghe thấy gì" — nó chọn thứ hay gặp nhất trong dữ liệu
+   * huấn luyện, và ở chế độ tự dò thì nó chọn cả NGÔN NGỮ luôn. Đo thật
+   * 13/08/2026 trên robot: `"ว่า อี ซอ น ิ ม"` (Thái) và
+   * `"Продолжение следует..."` (Nga, "còn tiếp" — phụ đề YouTube).
+   *
+   * Chữ trông tự tin y như thật. Trường này mới là chỗ lộ ra.
+   */
+  language?: string;
 }
 
 /**
@@ -179,10 +193,12 @@ export async function transcribeWithGroq(
     }
     const json = (await res.json()) as {
       text?: string;
+      language?: string;
       segments?: Array<{ no_speech_prob?: number; avg_logprob?: number }>;
     };
     const text = (json.text ?? '').trim();
-    if (!opts.detail || !json.segments?.length) return { text, provider: 'groq' };
+    if (!opts.detail || !json.segments?.length)
+      return { text, provider: 'groq', language: json.language };
 
     const segs = json.segments;
     const mean = (pick: (s: (typeof segs)[number]) => number | undefined) => {
@@ -192,6 +208,7 @@ export async function transcribeWithGroq(
     return {
       text,
       provider: 'groq',
+      language: json.language,
       noSpeechProb: mean((s) => s.no_speech_prob),
       avgLogprob: mean((s) => s.avg_logprob),
     };

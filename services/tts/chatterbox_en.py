@@ -42,6 +42,8 @@ from fastapi.responses import Response
 app = FastAPI(title="Chatterbox EN")
 
 _m: Any = None
+# Đặc trưng giọng DỰNG SẴN, cất lúc nạp mô hình — xem ghi chú ở `may()`.
+_conds_goc: Any = None
 _nap_lock = threading.Lock()
 # Model KHÔNG chạy song song được — giống VieNeu. Hai lượt chồng nhau thì
 # cả hai ra tiếng lẫn lộn.
@@ -236,6 +238,30 @@ def may():
                     device=os.environ.get("CHATTERBOX_DEVICE", "cuda")
                 )
                 _ha_do_chinh_xac(_m)
+                # ⚠️ CẤT ĐẶC TRƯNG GỐC LẠI NGAY, TRƯỚC KHI CÓ AI NHÂN BẢN.
+                #
+                # `generate()` chỉ nạp đặc trưng khi ĐƯỢC TRUYỀN
+                # `audio_prompt_path`; không truyền thì nó dùng lại
+                # `self.conds` của lần trước:
+                #
+                #     if audio_prompt_path:
+                #         self.prepare_conditionals(...)
+                #     else:
+                #         assert self.conds is not None
+                #
+                # Nghĩa là sau MỘT lượt giọng nhân bản, mọi lượt giọng dựng
+                # sẵn sau đó đều nói bằng giọng nhân bản đó. Người dùng báo
+                # 13/08/2026: "ấn tiếng Anh nó ra giọng robot, ấn robot cũng
+                # ra giọng robot, hai cái giống nhau".
+                #
+                # Không có lỗi nào, không có cảnh báo nào — chỉ có sai giọng.
+                global _conds_goc
+                try:
+                    import copy as _copy
+
+                    _conds_goc = _copy.deepcopy(_m.conds)
+                except Exception as e:  # noqa: BLE001
+                    print(f"[cb] khong cat duoc dac trung goc: {e}", flush=True)
                 _tra_bo_dem()  # bản fp32 vừa bỏ đi còn nằm trong bộ đệm
                 print(f"[cb] sẵn sàng sau {time.time() - t0:.1f}s", flush=True)
     return _m
@@ -397,6 +423,13 @@ def doc(payload: Dict[str, Any]):
     m = may()
     t0 = time.time()
     with _chay_lock:
+        # Giọng DỰNG SẴN phải trả đặc trưng về bản gốc trước khi sinh.
+        # Không trả thì nó nói bằng giọng nhân bản của lượt trước — xem
+        # ghi chú dài ở `may()`.
+        if ten in GIONG and _conds_goc is not None:
+            import copy as _copy
+
+            m.conds = _copy.deepcopy(_conds_goc)
         wav = m.generate(text, **tham)
         _tra_bo_dem()
     b = ve_16k(wav.squeeze().detach().cpu().numpy(), int(m.sr))

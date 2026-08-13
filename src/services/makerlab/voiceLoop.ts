@@ -613,6 +613,34 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
     heard = tr.text.trim();
     timing.stt = Date.now() - t0;
 
+    /**
+     * ⚠️ TỰ DÒ NGÔN NGỮ THÌ WHISPER ĐOÁN CẢ NGÔN NGỮ, VÀ NÓ ĐOÁN BỪA.
+     *
+     * Chế độ ngoại ngữ để Whisper tự nhận (`stt: null`) — cần thiết, vì
+     * ép ngôn ngữ là nhốt người dùng trong chế độ đó. Nhưng cái giá đo
+     * được ngay trong giờ đầu dùng thật 13/08/2026:
+     *
+     *   "ว่า อี ซอ น ิ ม"           ← tiếng Thái
+     *   "Продолжение следует..."   ← tiếng Nga, "còn tiếp"
+     *
+     * Cả hai là tiếng ồn phòng bị dựng thành chữ. Whisper không bao giờ
+     * nói "tôi không nghe thấy gì"; ở chế độ tự dò nó chọn luôn một ngôn
+     * ngữ để đoán cho khớp.
+     *
+     * Robot này chỉ nói hai thứ tiếng. Nghe ra thứ ba nghĩa là KHÔNG
+     * nghe được — bỏ qua, đừng bắt LLM trả lời một câu tiếng Nga bịa ra.
+     */
+    const tiengNhanRa = String(tr.language || '').toLowerCase();
+    const CHO_PHEP = new Set(['vi', 'vietnamese', 'en', 'english', '']);
+    if (heard && tiengNhanRa && !CHO_PHEP.has(tiengNhanRa)) {
+      logger.info('MakerLab bỏ qua — Whisper nhận ra ngôn ngữ lạ', {
+        deviceId: input.deviceId,
+        tieng: tiengNhanRa,
+        heard: heard.slice(0, 60),
+      });
+      heard = '';
+    }
+
     // Whisper luôn trả về CHỮ, kể cả khi chỉ nghe thấy tiếng quạt — và
     // chữ nó bịa ra là phụ đề YouTube. Không chặn ở đây thì LLM sẽ trả
     // lời rất nghiêm túc câu "đừng quên đăng ký kênh" mà không ai nói,
@@ -1015,6 +1043,12 @@ async function thinkAndSpeak(
     }
   };
 
+  // Để NGOÀI `try`: chỗ lùi bên dưới cần biết model đã nói tới đâu, nếu
+  // không nó sẽ hỏi lại model từ đầu và đọc một câu trả lời KHÁC chồng
+  // lên phần đã nói.
+  let raw = '';
+  let emitted = 0;
+
   try {
     if (noJsonMode.has(model)) throw new Error('model không nhận json_object — dùng đường cũ');
 
@@ -1026,9 +1060,6 @@ async function thinkAndSpeak(
       response_format: { type: 'json_object' },
       stream: true,
     });
-
-    let raw = '';
-    let emitted = 0;
 
     /**
      * Gom câu trước khi gọi TTS — xem ghi chú dài ở vòng lặp dưới.
@@ -1168,6 +1199,45 @@ async function thinkAndSpeak(
       error: err instanceof Error ? err.message : String(err),
     });
     if (seq !== null) gw.speakStreamEnd(deviceId, seq);
+
+    /**
+     * ⚠️ ĐÃ NÓI ĐƯỢC MỘT PHẦN THÌ TUYỆT ĐỐI KHÔNG HỎI LẠI MODEL.
+     *
+     * Bản trước rơi thẳng vào `think()` — một lượt gọi LLM MỚI, ra một
+     * câu trả lời KHÁC — rồi đọc TOÀN BỘ câu mới đó. Người nghe nhận
+     * được: hai câu đầu của câu trả lời A, rồi nguyên một câu trả lời B
+     * bằng giọng khác. Người dùng mô tả đúng như thế: "nghe được 2 câu
+     * đầu, mấy câu sau nó tự chuyển giọng".
+     *
+     * Và nó còn tự làm mình chậm thêm: cùng một nội dung bị sinh tiếng
+     * HAI LẦN trên một mô hình chỉ chạy được một lượt tại một thời điểm.
+     * Log máy đọc ghi rõ cặp `job Anh: 12.96s` / `Anh: 12.96s` cách nhau
+     * bảy giây, và lượt nào cũng leo lên 45-49 giây.
+     *
+     * Đúng việc phải làm: đọc NỐT phần còn lại của chính câu trả lời
+     * đang dở. Không còn gì để đọc thì dừng — nói cụt vẫn hơn nói sang
+     * chuyện khác.
+     */
+    if (spoken) {
+      const daCo = parseRobotReply(raw);
+      const conLai = (daCo.say || '').slice(emitted).trim();
+      if (conLai) {
+        try {
+          const t = Date.now();
+          const tts = await synthesizeSpeech(conLai, {
+            provider: persona.voiceProvider as never,
+            voice: persona.voiceId ?? undefined,
+            language: persona.language,
+            speakingRate: persona.speechRate,
+          });
+          timing.tts += Date.now() - t;
+          await gw.speakOnDevice(deviceId, tts.audio, { mime: tts.mime, text: conLai });
+        } catch {
+          /* nói cụt còn hơn nói sang chuyện khác */
+        }
+      }
+      return { reply: daCo, spoken, llmMs: Date.now() - started };
+    }
 
     const reply = await think(persona, heard, deviceId, ctx);
     if (reply.say) {

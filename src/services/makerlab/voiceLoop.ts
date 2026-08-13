@@ -1387,6 +1387,16 @@ async function thinkAndSpeak(
         const dai = cho.join(' ').length;
         if (!daGuiMauDau || dai >= gomToiThieu()) {
           const mau = cho.join(' ');
+          // Mốc đo: MẨU ĐẦU rời khỏi model lúc nào. Không có mốc này thì
+          // `firstAudioMs` là một cục 3,8-9,0 giây không tách được — phần
+          // nào của nó là model nghĩ, phần nào là máy đọc sinh.
+          if (!daGuiMauDau) {
+            logger.info('MakerLab mẩu đầu rời model', {
+              deviceId,
+              ms: Date.now() - started,
+              soChu: mau.length,
+            });
+          }
           await speakPiece(mau);
           cho.length = 0;
           daGuiMauDau = true;

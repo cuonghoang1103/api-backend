@@ -163,6 +163,28 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
   const [testing, setTesting] = useState(false);
 
   /**
+   * Ảnh chụp lúc "vừa khớp máy chủ" — so với nó ra `coThayDoi`.
+   *
+   * Dùng MỘT mốc tự dời sau mỗi lần lưu, thay vì so thẳng với `persona`
+   * của props: props chỉ mới lại khi trang tải lại, nên so với nó thì
+   * lưu xong dấu "chưa lưu" vẫn sáng — báo động giả, và báo động giả thì
+   * lần sau người ta không tin nữa.
+   */
+  const [moc, setMoc] = useState(() =>
+    JSON.stringify({
+      prompt: persona?.systemPrompt ?? '',
+      provider: persona?.voiceProvider ?? 'google',
+      voiceId: persona?.voiceId ?? '',
+      temperature: persona?.temperature ?? 0.9,
+      maxTokens: persona?.maxTokens ?? 420,
+      samples:
+        Array.isArray(persona?.sampleDialogues) && persona.sampleDialogues.length
+          ? (persona.sampleDialogues as Array<{ user: string; bot: string }>)
+          : [{ user: '', bot: '' }],
+    }),
+  );
+
+  /**
    * Giọng của dịch vụ tự dựng — NẠP TỪ MÁY CHỦ, không viết cứng.
    *
    * Giọng nhân bản do người dùng tự đặt tên lúc tải mẫu lên, nên mã
@@ -185,6 +207,18 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
   const current = VOICES.find((v) => v.provider === provider) ?? VOICES[0];
   const online = devices.find((d) => d.status === 'ONLINE');
 
+  /**
+   * Cái đang nhìn có khớp cái đã lưu không?
+   *
+   * Trang này dài, nút Lưu nằm tận cuối. Chỉnh xong cuộn lên đọc lại rồi
+   * rời tab là mất trắng mà KHÔNG có gì báo — người dùng chỉ phát hiện
+   * lúc robot vẫn nói y như cũ, và khi đó nó nhìn giống "lưu không ăn"
+   * chứ không giống "chưa bấm lưu". Một dấu chấm đủ để phân biệt hai
+   * chuyện đó.
+   */
+  const dangCo = JSON.stringify({ prompt, provider, voiceId, temperature, maxTokens, samples });
+  const coThayDoi = moc !== dangCo;
+
   async function save() {
     setSaving(true);
     setMsg(null);
@@ -192,11 +226,17 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
       await updatePersona(projectId, {
         systemPrompt: prompt,
         voiceProvider: provider,
-        voiceId: voiceId || null,
+        // ⚠️ Chuỗi rỗng KHÔNG được gửi xuống. Danh sách giọng nạp qua
+        // mạng; bấm Lưu trước lúc nó về thì `voiceId` còn rỗng, và bản
+        // trước gửi thẳng `null` — tức là XOÁ giọng đang chạy. Đúng lỗi
+        // đã xảy ra 13/08: robot mất giọng nhân bản, tụt xuống Google.
+        // Máy chủ nay cũng chặn, nhưng chặn hai đầu thì rẻ.
+        ...(voiceId ? { voiceId } : {}),
         temperature,
         maxTokens,
         sampleDialogues: samples.filter((s) => s.user.trim() && s.bot.trim()),
       });
+      setMoc(dangCo);
       setMsg({ kind: 'ok', text: 'Đã lưu. Lượt nói tiếp theo dùng ngay bản này — không cần deploy.' });
     } catch (e) {
       setMsg({
@@ -489,8 +529,18 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
           style={{ background: accent }}
         >
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-          Lưu
+          {coThayDoi ? 'Lưu thay đổi' : 'Lưu'}
         </button>
+
+        {coThayDoi && (
+          <span
+            className="flex items-center gap-1.5 text-sm"
+            style={{ color: '#f59e0b' }}
+          >
+            <span className="h-2 w-2 rounded-full" style={{ background: '#f59e0b' }} />
+            Có thay đổi chưa lưu
+          </span>
+        )}
 
         <button
           type="button"

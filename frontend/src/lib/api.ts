@@ -4622,6 +4622,21 @@ export const docToolsApi = {
   exportDocx(data: { tieuDe?: string; vanBan: string; hinh?: { pngBase64: string; chuThich?: string }[] }) {
     return api.post('/doc-tools/export/docx', data, { responseType: 'blob', timeout: 120000 });
   },
+
+  /** Ảnh gốc → PDF "y hệt": mỗi ảnh một trang, đã nắn thẳng + làm sạch nền.
+   *  Khác PDF in từ bản chép — cái này KHÔNG sửa được chữ nhưng giống bản gốc
+   *  từng nét, kể cả chữ viết tay ở lề. */
+  exportPdfAnh(files: File[], opts: { tieuDe?: string; lamSach?: boolean } = {}) {
+    const fd = new FormData();
+    files.forEach((f) => fd.append('images', f));
+    if (opts.tieuDe) fd.append('tieuDe', opts.tieuDe);
+    if (opts.lamSach === false) fd.append('lamSach', 'false');
+    return api.post('/doc-tools/export/pdf-anh', fd, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      responseType: 'blob',
+      timeout: 180000,
+    });
+  },
 };
 
 export const voiceApi = {

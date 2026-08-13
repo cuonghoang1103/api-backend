@@ -15,6 +15,8 @@
 import sharp from 'sharp';
 import { buildSystemPrompt } from './prompt.js';
 import { catCacHinh, timKhungHinh } from './cropFigure.js';
+import { dungHinh, kiemMoTa } from './geometry.js';
+import { lamSachAnh } from './lamSachAnh.js';
 import { visionComplete, type VisionImage } from './vision.js';
 import { logger } from '../../utils/logger.js';
 import { BadRequestError } from '../../middleware/errorHandler.js';
@@ -65,15 +67,29 @@ const HUONG_DAN_HINH: Record<CheDoHinh, string> = {
     'Trang có thể có hình vẽ. BỎ QUA hình: chỉ cần viết đúng một dòng "[HÌNH] (giữ hình gốc)" tại đúng vị trí hình xuất hiện, KHÔNG mô tả, và tuyệt đối KHÔNG chép các chữ cái/số nằm rải rác trong hình thành dòng văn bản.',
   'mo-ta':
     'Trang có hình vẽ. Tại đúng vị trí mỗi hình, viết một dòng bắt đầu bằng "[HÌNH] " rồi mô tả hình: các điểm, cách nối, nét nào là nét đứt (cạnh khuất), ký hiệu góc vuông ở đâu, số đo ghi trên cạnh nào. Chỉ mô tả thứ NHÌN THẤY trong hình; KHÔNG suy ra từ lời đề. KHÔNG chép các nhãn trong hình thành dòng văn bản rời rạc.',
+  // ⚠️ KHÔNG bảo model tự vẽ SVG. Đo 13-14/08/2026: nó đặt toạ độ bằng mắt
+  // nên chấm điểm lệch khỏi giao điểm, cung góc treo lơ lửng, nhãn đè lên
+  // nét — và dặn kỹ tới đâu cũng vẫn sai, vì mỗi ảnh là một lần đoán mới.
+  // Nó chỉ mô tả CẤU TRÚC; toạ độ do `geometry.ts` TÍNH.
   've-lai': [
-    'Trang có hình vẽ. Với MỖI hình, làm hai việc:',
-    '1) Tại đúng vị trí của hình, viết một dòng bắt đầu bằng "[HÌNH] " mô tả hình (điểm, cách nối, nét đứt, ký hiệu góc vuông, số đo trên cạnh). Chỉ mô tả thứ NHÌN THẤY.',
-    '2) Sau toàn bộ phần chữ, vẽ lại từng hình bằng SVG thuần, mỗi hình đặt trong một khối:',
-    '```svg',
-    '<svg xmlns="http://www.w3.org/2000/svg" width="..." height="..." viewBox="...">…</svg>',
+    'Trang có hình vẽ. Với MỖI hình:',
+    '1) Tại đúng vị trí của hình, viết đúng một dòng "[HÌNH] (giữ hình gốc)".',
+    '2) Sau toàn bộ phần chữ, mô tả CẤU TRÚC của từng hình trong một khối, đúng thứ tự các hình:',
+    '```hinh',
+    '{"rong":620,"cao":420,',
+    ' "diem":[{"ten":"A","x":0.34,"y":0.30},{"ten":"B","x":0.72,"y":0.70}],',
+    ' "duong":[{"qua":["A","B"],"nhanDau":"r","nhanCuoi":"y"},',
+    '          {"qua":["A"],"huongDo":22,"nhanDau":"z","nhanCuoi":"t"},',
+    '          {"qua":["B"],"huongDo":6,"nhanDau":"m","nhanCuoi":"n"}],',
+    ' "goc":[{"dinh":"A","tia":["z","y"],"do":124}]}',
     '```',
-    'Nét đen trên nền trắng, nhãn điểm bằng <text>, cạnh khuất dùng stroke-dasharray. KHÔNG dùng <script>, <foreignObject>, <image>, KHÔNG tải font hay ảnh từ ngoài.',
-    'KHÔNG chép các nhãn trong hình thành dòng văn bản rời rạc.',
+    'Luật:',
+    '- "x","y" chỉ là vị trí GẦN ĐÚNG (0..1) để bố cục. Điểm nằm trên hai đường trở lên sẽ được TÍNH lại đúng giao điểm, nên không cần chính xác.',
+    '- "qua" ghi tên các điểm mà đường đi qua. Đường chỉ qua MỘT điểm thì thêm "huongDo" (0 = sang phải, 90 = thẳng lên, tăng ngược chiều kim đồng hồ).',
+    '- "nhanDau"/"nhanCuoi" là chữ ghi ở hai đầu đường (x, y, m, n…).',
+    '- "goc": "dinh" là tên điểm, "tia" là HAI nhãn đầu tia tạo nên góc, "do" là số đo ghi trên hình. Chép đúng con số nhìn thấy.',
+    '- CHỈ mô tả hình phẳng gồm đường thẳng/tia/góc/điểm. Hình KHÔNG GIAN (chóp, lăng trụ, hộp), đường tròn, đồ thị hàm số thì ĐỪNG mô tả — bỏ khối đó đi, hệ thống sẽ tự cắt ảnh gốc.',
+    '- KHÔNG chép các nhãn trong hình thành dòng văn bản rời rạc.',
   ].join('\n'),
 };
 
@@ -99,7 +115,15 @@ const RONG_TOI_DA = 2200;
 async function chuanHoaAnh(anh: AnhVao): Promise<VisionImage> {
   try {
     const goc = Buffer.from(anh.data, 'base64');
-    let img = sharp(goc, { failOn: 'none' }).rotate();
+    // `.rotate()` không tham số = áp cờ xoay EXIF (ảnh điện thoại).
+    const theoExif = await sharp(goc, { failOn: 'none' }).rotate().toBuffer();
+
+    // NẮN THẲNG cả trang, trước khi cắt hình. Làm ở đây chứ không làm trên
+    // mẩu hình: đo độ nghiêng cần các DÒNG CHỮ, mà mẩu hình thì không có.
+    // Nắn ở đây được cả hai: model đọc chữ dễ hơn, và hình cắt ra cũng thẳng.
+    const daNan = await lamSachAnh(theoExif, { nanThang: true, langNen: false });
+
+    let img = sharp(daNan, { failOn: 'none' });
     const meta = await img.metadata();
     if ((meta.width ?? 0) > RONG_TOI_DA) img = img.resize({ width: RONG_TOI_DA, withoutEnlargement: true });
     const ra = await img.jpeg({ quality: 85 }).toBuffer();
@@ -132,15 +156,33 @@ export async function chepMotAnh(anh: AnhVao, chiSo: number, tuyChon: TuyChonChe
       userId: tuyChon.userId,
     });
 
-    const { vanBan, svgs } = tachSvg(kq.text);
+    const { vanBan, svgs, moTaHinh } = tachSvg(kq.text);
     const hinhVeLai: HinhVeLai[] = [];
     if (cheDo === 've-lai') {
-      for (const svg of svgs.slice(0, 4)) {
-        const png = await svgSangPng(svg).catch((e) => {
-          logger.warn('docTools: không dựng được hình từ SVG', { error: (e as Error).message });
-          return null;
-        });
-        if (png) hinhVeLai.push(png);
+      // Dựng từ MÔ TẢ CẤU TRÚC — toạ độ do `geometry.ts` tính, không lấy của
+      // model. Xem đầu file đó để biết vì sao.
+      for (const mo of moTaHinh.slice(0, 4)) {
+        try {
+          if (!kiemMoTa(mo)) throw new Error('mô tả thiếu điểm hoặc đường');
+          const png = await svgSangPng(dungHinh(mo));
+          hinhVeLai.push(png);
+        } catch (e) {
+          logger.warn('docTools: mô tả hình không dựng được', { error: (e as Error).message });
+        }
+      }
+      // Model tự vẽ SVG (không nghe lời dặn) thì vẫn nhận, nhưng chỉ khi
+      // KHÔNG có mô tả cấu trúc nào dựng được — đây là đường lùi, không phải
+      // đường chính.
+      if (!hinhVeLai.length) {
+        for (const svg of svgs.slice(0, 4)) {
+          const png = await svgSangPng(svg).catch(() => null);
+          if (png) hinhVeLai.push(png);
+        }
+      }
+      // Vẫn không có gì (hình không gian, đường tròn, đồ thị…) → cắt ảnh gốc.
+      if (!hinhVeLai.length && /\[HÌNH\]/i.test(vanBan)) {
+        const khungs = await timKhungHinh(anhGui, tuyChon.userId);
+        hinhVeLai.push(...(await catCacHinh(anhGui, khungs)));
       }
     } else if (cheDo === 'cat-anh' && /\[HÌNH\]/i.test(vanBan)) {
       // Lời gọi THỨ HAI, chỉ để định vị hình. Tách riêng chứ không nhồi vào
@@ -207,9 +249,20 @@ export function kiemTraAnh(anhs: AnhVao[]): void {
   }
 }
 
-/** Cắt các khối ```svg ... ``` ra khỏi phần văn bản. */
-function tachSvg(raw: string): { vanBan: string; svgs: string[] } {
+/** Cắt các khối ```hinh (mô tả cấu trúc) và ```svg ra khỏi phần văn bản. */
+function tachSvg(raw: string): { vanBan: string; svgs: string[]; moTaHinh: unknown[] } {
   const svgs: string[] = [];
+  const moTaHinh: unknown[] = [];
+
+  raw = raw.replace(/```(?:hinh|hình|json)\s*([\s\S]*?)```/gi, (_, than: string) => {
+    try {
+      moTaHinh.push(JSON.parse(than.trim()));
+    } catch (e) {
+      logger.warn('docTools: khối mô tả hình không phải JSON hợp lệ', { error: (e as Error).message });
+    }
+    return '';
+  });
+
   const vanBan = raw
     .replace(/```(?:svg|xml|html)?\s*(<svg[\s\S]*?<\/svg>)\s*```/gi, (_, svg: string) => {
       svgs.push(svg);
@@ -219,7 +272,7 @@ function tachSvg(raw: string): { vanBan: string; svgs: string[] } {
       svgs.push(svg);
       return dau;
     });
-  return { vanBan, svgs };
+  return { vanBan, svgs, moTaHinh };
 }
 
 function donDep(s: string): string {

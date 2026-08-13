@@ -13,6 +13,7 @@
 import sharp from 'sharp';
 import { logger } from '../../utils/logger.js';
 import { visionComplete, type VisionImage } from './vision.js';
+import { lamSachAnh } from './lamSachAnh.js';
 
 export interface KhungHinh {
   top: number;
@@ -96,8 +97,14 @@ export async function catCacHinh(anh: VisionImage, khungs: KhungHinh[]): Promise
       const width = Math.min(W - left, Math.round((k.width + LE * 2) * W));
       const height = Math.min(H - top, Math.round((k.height + LE * 2) * H));
       if (width < 20 || height < 20) continue;
-      const png = await sharp(goc).extract({ left, top, width, height }).png().toBuffer();
-      ra.push({ pngBase64: png.toString('base64'), rong: width, cao: height });
+      const thoAnh = await sharp(goc).extract({ left, top, width, height }).png().toBuffer();
+      // Mẩu cắt mang theo nền xám, vệt sáng và nhiễu JPEG của tấm chụp; dán
+      // cạnh chữ Times đen trong file Word thì nhìn bẩn. Đưa nền về trắng và
+      // phóng nét cho đủ dày. KHÔNG nắn thẳng ở đây — cả trang đã được nắn
+      // trước khi cắt, mà mẩu hình thì không có dòng chữ nào để đo nghiêng.
+      const png = await lamSachAnh(thoAnh, { nanThang: false, rongToiThieu: 700 });
+      const meta = await sharp(png).metadata();
+      ra.push({ pngBase64: png.toString('base64'), rong: meta.width ?? width, cao: meta.height ?? height });
     } catch (e) {
       logger.warn('docTools: cắt hình thất bại', { error: (e as Error).message });
     }

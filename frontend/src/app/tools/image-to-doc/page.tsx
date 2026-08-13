@@ -82,6 +82,7 @@ export default function ImageToDocPage() {
   const [banSua, setBanSua] = useState<string>('');
   const [loi, setLoi] = useState<string | null>(null);
   const [dangTai, setDangTai] = useState(false);
+  const [dangTaiPdf, setDangTaiPdf] = useState(false);
   const [thongBaoTai, setThongBaoTai] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -202,6 +203,30 @@ export default function ImageToDocPage() {
 
   const tongTien = useMemo(() => trangs.reduce((s, t) => s + (t.costUsd ?? 0), 0), [trangs]);
   const tongChoNgo = useMemo(() => trangs.reduce((s, t) => s + t.soChoNgo, 0), [trangs]);
+
+  /** Ảnh gốc → PDF "y hệt". Dùng chính các File đang chọn, không gửi lại
+   *  bản chép — đây là hai đường khác nhau, có chủ ý. */
+  const taiPdfAnh = async () => {
+    if (!anhs.length || dangTaiPdf) return;
+    setDangTaiPdf(true);
+    setThongBaoTai(null);
+    try {
+      const r = await docToolsApi.exportPdfAnh(anhs.map((a) => a.file), { tieuDe });
+      const url = URL.createObjectURL(r.data as Blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${tieuDe.trim() || 'ban-goc'}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+      setThongBaoTai(`Đã tải PDF ảnh gốc (${anhs.length} trang) — giống bản gốc từng nét, nhưng KHÔNG sửa được chữ.`);
+    } catch (e) {
+      setThongBaoTai(`Không tải được PDF ảnh: ${docLoi(e)}`);
+    } finally {
+      setDangTaiPdf(false);
+    }
+  };
 
   const taiWord = async () => {
     if (!banSua.trim() || dangTai) return;
@@ -381,7 +406,7 @@ export default function ImageToDocPage() {
                 ['cat-anh', 'Cắt hình từ ảnh gốc — giống 100% ✅', 'Lấy đúng pixel của tờ giấy rồi chèn vào đúng chỗ trong bài. Hình y hệt bản gốc, không có chuyện máy đọc nhầm số đo.'],
                 ['bo-qua', 'Không xử lý hình', 'Nhanh nhất. Chỗ có hình để lại một dòng đánh dấu; bạn tự dán ảnh vào sau.'],
                 ['mo-ta', 'Mô tả hình bằng lời', 'Ghi lại điểm, nét đứt, ký hiệu góc vuông, số đo trên cạnh. Không có hình.'],
-                ['ve-lai', 'Vẽ lại thành hình nét', '⚠️ Đẹp nhưng là hình MỚI do máy vẽ: đã đo được nó đọc 124° thành 120°, 141° thành 140° rồi vẽ theo số sai. Chỉ dùng khi ảnh gốc quá mờ.'],
+                ['ve-lai', 'Vẽ lại thành hình nét (hình phẳng)', 'Cho tờ đề chụp mờ. Máy chỉ MÔ TẢ cấu trúc (đường nào qua điểm nào, góc bao nhiêu độ), còn toạ độ do hệ thống TÍNH — nên chấm điểm luôn nằm đúng giao điểm và nhãn không đè lên nét. Hình không gian, đường tròn, đồ thị thì tự động quay về cắt ảnh gốc.'],
               ] as const
             ).map(([id, label, hint]) => (
               <label key={id} className="flex gap-2.5 items-start cursor-pointer mb-2">
@@ -442,9 +467,18 @@ export default function ImageToDocPage() {
                     onClick={() => window.print()}
                     className="px-4 py-2 rounded-lg font-medium text-sm"
                     style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}
-                    title="Hộp thoại in → chọn “Lưu thành PDF”"
+                    title="Hộp thoại in → chọn “Lưu thành PDF”. Bản này là chữ gõ lại: sửa được, copy được."
                   >
-                    🖨 Xuất PDF
+                    🖨 PDF chữ (gõ lại)
+                  </button>
+                  <button
+                    onClick={taiPdfAnh}
+                    disabled={dangTaiPdf || !anhs.length}
+                    className="px-4 py-2 rounded-lg font-medium text-sm disabled:opacity-50"
+                    style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}
+                    title="Đóng chính ảnh anh chụp thành PDF — giống bản gốc từng nét, đã nắn thẳng và làm sạch nền. Đổi lại: không sửa được chữ."
+                  >
+                    {dangTaiPdf ? 'Đang đóng…' : '📄 PDF ảnh gốc (y hệt)'}
                   </button>
                 </div>
 

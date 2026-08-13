@@ -28,6 +28,7 @@ import {
   type CheDoHinh,
 } from '../services/docTools/transcribe.service.js';
 import { renderDocx, type HinhKemTheo } from '../services/docTools/docx.js';
+import { anhSangPdf } from '../services/docTools/pdfAnh.js';
 
 const router = Router();
 
@@ -61,7 +62,7 @@ router.get(
       { id: 'cat-anh', label: 'Cắt hình từ ảnh gốc (giống 100%)', hint: 'Lấy đúng pixel của tờ giấy, chèn vào đúng chỗ — không sợ máy đọc nhầm số đo' },
       { id: 'bo-qua', label: 'Không xử lý hình', hint: 'Chỉ lấy chữ; chỗ có hình để trống một dòng đánh dấu' },
       { id: 'mo-ta', label: 'Mô tả hình bằng lời', hint: 'Ghi lại điểm, nét đứt, ký hiệu góc vuông, số đo' },
-      { id: 've-lai', label: 'Vẽ lại hình thành hình nét', hint: 'Đẹp nhưng là hình MỚI — máy từng đọc 124° thành 120° rồi vẽ theo số sai' },
+      { id: 've-lai', label: 'Vẽ lại thành hình nét (hình phẳng)', hint: 'Máy chỉ mô tả cấu trúc, toạ độ do hệ thống TÍNH — chấm điểm đúng giao điểm, nhãn không đè nét. Hình không gian tự động cắt từ ảnh gốc' },
     ],
   })),
 );
@@ -102,6 +103,33 @@ router.post(
 );
 
 // ─── Bản chép (đã được người dùng sửa) → file Word ────────────────────────
+// ─── Ảnh gốc → PDF "y hệt" (mỗi ảnh một trang, đã nắn thẳng + làm sạch) ───
+// Khác hẳn PDF in ra từ bản chép: cái này KHÔNG sửa được chữ, nhưng giống bản
+// gốc từng nét — kể cả chữ viết tay ở lề. Hai thứ phục vụ hai việc.
+router.post(
+  '/export/pdf-anh',
+  authenticate,
+  upload.array('images', TOI_DA_ANH),
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const files = (req.files as Express.Multer.File[] | undefined) ?? [];
+      if (!files.length) throw new AppError('Chưa chọn ảnh nào (trường "images").', 400, 'NO_IMAGES');
+
+      const pdf = await anhSangPdf(
+        files.map((f) => ({ buffer: f.buffer, ten: f.originalname })),
+        { lamSach: req.body?.lamSach !== 'false' },
+      );
+
+      const ten = `${khongDau(typeof req.body?.tieuDe === 'string' ? req.body.tieuDe : '') || 'ban-goc'}.pdf`;
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="${ten}"`);
+      res.send(pdf);
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
 // Trả về BYTES chứ không phải JSON, nên viết tay thay vì dùng `h()` — cái đó
 // gói mọi thứ vào `{ success, data }`.
 router.post(

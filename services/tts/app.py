@@ -357,6 +357,35 @@ def voices():
 
 def run_job(jid: str, text: str, voice: Optional[str], style: str) -> None:
     try:
+        # ⚠️ ĐƯỜNG KHÔNG-LUỒNG CŨNG PHẢI BIẾT GIỌNG TIẾNG ANH.
+        #
+        # 13/08/2026 tôi vá `la_giong_anh` cho `/tts-stream` và tưởng xong.
+        # Nhưng đây là đường THỨ HAI, và nó là đường LƯỚI ĐỠ — chạy đúng
+        # lúc đường luồng đã hỏng. Bỏ sót thì máy đọc tiếng Việt nhận tên
+        # `robot-walle`, trả `HTTP 500 Voice not found`, cả chuỗi rơi tiếp
+        # xuống Google, và Google đọc tiếng Anh bằng âm tiếng Việt.
+        #
+        # Người dùng nghe ra: "nói được một hai câu rồi nhảy về giọng
+        # Google tiếng Việt nói tiếng Anh, rất khó hiểu". Log của đường
+        # luồng thì SẠCH, vì đường luồng có hỏng đâu — nó chỉ không được
+        # gọi tới ở những lượt đó.
+        if la_giong_anh(voice):
+            if not CHATTERBOX_BAT:
+                raise RuntimeError("Máy đọc tiếng Anh đang tắt (CHATTERBOX_ENABLED=false)")
+            t0 = time.time()
+            b = doc_tieng_anh(text, str(voice))
+            x = np.frombuffer(b, dtype="<i2").astype(np.float32) / 32768.0
+            dur = len(x) / BO_SR
+            _jobs[jid].update(
+                state="done",
+                wav=to_wav(x, BO_SR),
+                seconds=round(dur, 2),
+                ms=int((time.time() - t0) * 1000),
+                rtf=round((time.time() - t0) / dur, 3) if dur else None,
+            )
+            print(f"[tts] job Anh: {dur:.2f}s tiếng trong {time.time()-t0:.2f}s", flush=True)
+            return
+
         t = engine()
         t0 = time.time()
         # KHÔNG ưu tiên: người bấm nút trên web đã đi làm việc khác, còn

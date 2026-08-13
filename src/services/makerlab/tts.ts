@@ -256,12 +256,81 @@ function cuongMiniRoot(): string {
  * cắt kết nối chờ lâu — nhận việc rồi hỏi lại thì không tầng nào phải
  * giữ một kết nối mở suốt.
  */
+/**
+ * Bọc PCM 16-bit mono thành WAV.
+ *
+ * Viết tại chỗ chứ không mượn `pcmToWav` của `voiceLoop.ts`: file đó đã
+ * import `tts.ts`, mượn ngược lại là vòng import — và vòng import trong
+ * ESM không nổ lúc build, nó nổ lúc chạy bằng một `undefined` giữa
+ * chừng, tức đúng kiểu hỏng khó lần nhất.
+ */
+function bocWav(pcm: Buffer, sr: number): Buffer {
+  const h = Buffer.alloc(44);
+  h.write('RIFF', 0);
+  h.writeUInt32LE(36 + pcm.length, 4);
+  h.write('WAVE', 8);
+  h.write('fmt ', 12);
+  h.writeUInt32LE(16, 16);
+  h.writeUInt16LE(1, 20);
+  h.writeUInt16LE(1, 22);
+  h.writeUInt32LE(sr, 24);
+  h.writeUInt32LE(sr * 2, 28);
+  h.writeUInt16LE(2, 32);
+  h.writeUInt16LE(16, 34);
+  h.write('data', 36);
+  h.writeUInt32LE(pcm.length, 40);
+  return Buffer.concat([h, pcm]);
+}
+
 async function synthesizeCuongMini(
   text: string,
   voice: string | undefined,
   speakingRate?: number,
 ): Promise<Buffer> {
   const goc = cuongMiniRoot();
+
+  /**
+   * ⚠️ ROBOT PHẢI ĐI ĐƯỜNG LUỒNG, KHÔNG ĐƯỢC NỘP VIỆC VÀO HÀNG ĐỢI.
+   *
+   * Hàng đợi `/tts` có trần ba việc và nó dành cho TRANG WEB — người ta
+   * dán chữ, bấm nút, rồi đi làm việc khác. Robot thì có người đang đứng
+   * chờ nghe.
+   *
+   * Chuyện xảy ra 13/08/2026 khi bỏ sót điều này — một vòng luẩn quẩn:
+   *
+   *   câu trả lời dài  → đường luồng chờ quá hạn vì máy đọc đang bận
+   *                    → tụt xuống ĐƯỜNG JOB
+   *                    → nộp thêm việc vào ĐÚNG hàng đợi đang tắc
+   *                    → đầy 3 việc → 429
+   *                    → openai hết credit → **Google**
+   *
+   * Log ghi bốn lần 429 liên tiếp trong hai chục giây, và người dùng chỉ
+   * nghe thấy một chuyện: "giọng tiếng Việt về giọng mặc định Google".
+   *
+   * Chỗ lùi mà đổ thêm tải vào chính thứ đang quá tải thì nó không phải
+   * lưới đỡ, nó là cái đẩy thêm. Cùng họ với lỗi sáng nay: chỗ lùi hỏi
+   * lại model rồi sinh tiếng HAI LẦN cho cùng một nội dung.
+   *
+   * Nên đường không-luồng của robot nay cũng gọi `/tts-stream` rồi gom
+   * lại — cùng MỘT cửa vào máy đọc, cửa có quyền ưu tiên cho robot, và
+   * không có trần hàng đợi.
+   */
+  {
+    const mau: Buffer[] = [];
+    try {
+      await streamCuongMini(text, { voice, speakingRate }, async (pcm) => {
+        mau.push(pcm);
+        return true;
+      });
+      if (mau.length) return bocWav(Buffer.concat(mau), TTS_SR);
+    } catch (e) {
+      // Luồng hỏng thật (máy đọc tắt, đường hầm đứt) thì mới xuống dưới.
+      // Bận thì đã được xử ở trong `streamCuongMini` bằng quyền ưu tiên.
+      logger.warn('MakerLab luồng cuongmini hỏng, thử đường việc', {
+        error: e instanceof Error ? e.message : String(e),
+      });
+    }
+  }
 
   const nhan = await fetch(`${goc}/tts`, {
     method: 'POST',

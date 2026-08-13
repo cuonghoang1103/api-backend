@@ -640,10 +640,11 @@ router.get('/analytics/generation', authenticate, requireAdmin(), async (_req: a
 // ════════════════════════════════════════════════════════════════
 router.get('/admin/llm-config', authenticate, requireAdmin(), async (_req: any, res: Response<ApiResponse>, next) => {
   try {
-    const [{ allPurposeModels, gatewayConfigured, gatewayRoot }, { todaySpendUsd, softCapUsd, hardCapUsd }, { isForceStatic, backgroundLlmEnabled }] = await Promise.all([
+    const [{ allPurposeModels, gatewayConfigured, gatewayRoot }, { todaySpendUsd, softCapUsd, hardCapUsd }, { isForceStatic, backgroundLlmEnabled }, { thongKe: hangDoiThongKe }] = await Promise.all([
       import('../services/llm/gateway.js'),
       import('../services/llm/budget.js'),
       import('../services/interview/llm/index.js'),
+      import('../services/llm/hangDoi.js'),
     ]);
     const spentUsd = await todaySpendUsd(true);
     const soft = softCapUsd();
@@ -666,6 +667,9 @@ router.get('/admin/llm-config', authenticate, requireAdmin(), async (_req: any, 
           allBlocked: hard > 0 && spentUsd >= hard,
           note: 'Chi phí là ƯỚC LƯỢNG theo giá niêm yết của nhà cung cấp gốc — cổng gộp không công khai giá.',
         },
+        // Máy nhà có ĐÚNG MỘT luồng — không có bảng này thì "web chậm" và
+        // "máy nhà đang bận" trông giống hệt nhau từ phía ngoài.
+        hangDoiMayNha: hangDoiThongKe(),
         models: allPurposeModels(),
       },
     });

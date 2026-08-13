@@ -34,6 +34,7 @@ import { synthesizeSpeech } from './tts.js';
 import { checkHeardSpeech } from './hallucination.js';
 import { PCM_SAMPLE_RATE } from './audio.js';
 import { gatewayKey, gatewayRoot, modelFor, endpointFor } from '../llm/gateway.js';
+import { xinSlot } from '../llm/hangDoi.js';
 import { khopLenhNhanh } from './phanXa.js';
 import { CHE_DO, khopDoiCheDo, type CheDo } from './cheDo.js';
 import { goiYNghe } from './goiYNghe.js';
@@ -410,7 +411,7 @@ export function trangThaiNao(): { mayNhaChet: boolean; conNghiGiay: number } {
  * trường. Groq miễn phí nên nó là cái lưới đỡ phía dưới — chậm hơn,
  * kém hơn, nhưng còn nói được.
  */
-function llmChain(nao: Nao | null = null): LlmProvider[] {
+function llmChain(nao: Nao | null = null, boQuaMayNha = false): LlmProvider[] {
   const chain: LlmProvider[] = [];
 
   // ── Người dùng GHIM não nào thì nghe người dùng ──
@@ -434,8 +435,14 @@ function llmChain(nao: Nao | null = null): LlmProvider[] {
   // Đo 13/08/2026 trên đúng đề bài production: chữ đầu 96–333 ms so với
   // 2.119–4.575 ms của cổng. Với robot thì đó là khác biệt giữa "nói chuyện
   // được" và "chờ đèn đỏ".
+  //
+  // `boQuaMayNha` = hàng đợi máy nhà đã từ chối lượt này (xem `hangDoi.ts`).
+  // Bỏ nó khỏi chuỗi chứ đừng để nó đứng đầu rồi hỏng: đứng đầu mà không có
+  // vé thì lượt nào cũng cõng thêm một phép thử thất bại trước khi tụt xuống
+  // cổng — đúng cái bệnh "robot chậm hẳn" mà bộ ngắt mạch ở trên sinh ra để
+  // chữa.
   const ep = nao === 'may-nha' ? { ...endpointFor('robot_voice'), local: true } : endpointFor('robot_voice');
-  if (ep.local && ep.key && !dangChet('may-nha')) {
+  if (ep.local && ep.key && !dangChet('may-nha') && !boQuaMayNha) {
     chain.push({ baseURL: `${ep.root}/v1`, key: ep.key, label: 'may-nha' });
   }
 
@@ -1080,6 +1087,20 @@ async function speakOnce(
   return spoken;
 }
 
+/**
+ * Vỏ xếp hàng cho đường nghĩ-và-nói.
+ *
+ * Robot là hạng ưu tiên cao nhất trên máy nhà (`hangDoi.ts`) nên gần như nó
+ * luôn lấy được vé ngay. Hai chuyện vé này lo giúp:
+ *
+ *  1. Nó CHIẾM slot suốt lượt nói, nên một khách bấm chat giữa chừng bị đẩy
+ *     ra cổng thay vì chen vào làm robot nghẹn.
+ *  2. Lúc `tra()`, nó mở cửa sổ giữ chỗ 20 giây cho robot — đủ cho nhịp
+ *     nghe → nghĩ → nói → nghe tiếp mà không ai cướp máy giữa hai lượt.
+ *
+ * Hết giờ chờ mà vẫn không có vé (máy nhà đang kẹt thật) thì `boQuaMayNha`
+ * bỏ nó khỏi chuỗi và robot nói bằng cổng. Chậm hơn, nhưng nói được.
+ */
 async function thinkAndSpeak(
   persona: PersonaConfig,
   heard: string,
@@ -1088,13 +1109,42 @@ async function thinkAndSpeak(
   timing: { tts: number },
   doanTraCuu = '',
 ): Promise<{ reply: RobotReply; spoken: boolean; llmMs: number }> {
+  // Chỉ xin vé khi máy nhà thật sự là đích đến — hỏi hàng đợi trong lúc
+  // robot đang ghim 'cong' là tự bịa ra một phép chờ vô nghĩa.
+  const diMayNha = llmChain(persona.nao)[0]?.label === 'may-nha';
+  const ve = diMayNha ? await xinSlot('robot') : null;
+  if (ve && !ve.duoc) {
+    logger.warn('MakerLab máy nhà kẹt, robot nói bằng cổng lượt này', {
+      deviceId,
+      lyDo: ve.lyDo,
+      choMs: ve.choMs,
+    });
+  }
+  try {
+    return await thinkAndSpeakLoi(persona, heard, deviceId, ctx, timing, doanTraCuu, !!ve && !ve.duoc);
+  } finally {
+    // ⚠️ `finally`, không phải cuối thân hàm: đường này có `return` ở cả
+    // nhánh thành công lẫn nhánh `catch`, bỏ sót một nhánh là rò slot.
+    ve?.tra();
+  }
+}
+
+async function thinkAndSpeakLoi(
+  persona: PersonaConfig,
+  heard: string,
+  deviceId: number,
+  ctx: { deviceName?: string; battery?: number | null },
+  timing: { tts: number },
+  doanTraCuu = '',
+  boQuaMayNha = false,
+): Promise<{ reply: RobotReply; spoken: boolean; llmMs: number }> {
   const started = Date.now();
   const gw = await import('../../socket/device.gateway.js');
   const { PCM_SAMPLE_RATE } = await import('./audio.js');
 
   const messages = await dungMessages(persona, ctx, deviceId, heard, doanTraCuu);
 
-  const chain = llmChain(persona.nao);
+  const chain = llmChain(persona.nao, boQuaMayNha);
   const p = chain[0];
   const model = robotModel(p);
 
@@ -1678,6 +1728,10 @@ async function think(
   // đỡ hay còn hơn để người dùng ngồi chờ thêm hai giây nữa.
   for (const p of llmChain(persona.nao)) {
     const model = robotModel(p);
+    // Máy nhà chỉ có MỘT luồng. Xin vé trước; không có vé thì bỏ qua nó và
+    // đi thẳng nhà kế tiếp trong chuỗi, chứ đừng ngồi chờ (xem `hangDoi.ts`).
+    const ve = p.label === 'may-nha' ? await xinSlot('robot') : null;
+    if (ve && !ve.duoc) continue;
     try {
       // `response_format: json_object` là thứ ĐẦU TIÊN vỡ khi đổi model.
       // Cổng gộp nhiều nhà: model OpenAI hiểu trường này, model Claude
@@ -1712,6 +1766,8 @@ async function think(
         model,
         error: err instanceof Error ? err.message : String(err),
       });
+    } finally {
+      ve?.tra();
     }
   }
 

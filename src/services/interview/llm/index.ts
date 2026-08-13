@@ -21,11 +21,15 @@ import { logger } from '../../../utils/logger.js';
 import { budgetMessage, checkBudget } from '../../llm/budget.js';
 import {
   chatCompletionsUrl,
+  chatUrlOf,
   costUsd as gatewayCostUsd,
+  fallbackEndpoint,
   gatewayConfigured,
   gatewayKey,
   messagesUrl,
   modelFor,
+  xinDiemCuoi,
+  type LlmEndpoint,
   type LlmPurpose,
 } from '../../llm/gateway.js';
 
@@ -41,10 +45,18 @@ export interface LLMResult {
 }
 export type LLMStep = 'interview' | 'report' | 'generation';
 
-/** Interface every provider implements. */
+/**
+ * Interface every provider implements.
+ *
+ * `opts.ep` là ĐIỂM CUỐI đã được chọn cho lượt gọi này — máy nhà hay cổng.
+ * Bỏ trống = cổng, giữ nguyên hành vi cũ cho những chỗ gọi thẳng provider.
+ * Có nó thì địa chỉ + khoá lấy từ đó, chứ KHÔNG lấy từ `gatewayKey()` nữa:
+ * đó chính là cái làm 5 việc trong `LLM_LOCAL_PURPOSES` âm thầm đi cổng suốt
+ * từ 13/08 dù env đã khai báo đúng.
+ */
 export interface LLMProvider {
   name: string;
-  complete(model: string, system: string, messages: LLMMessage[], opts: { maxTokens?: number; timeoutMs?: number }): Promise<LLMResult>;
+  complete(model: string, system: string, messages: LLMMessage[], opts: { maxTokens?: number; timeoutMs?: number; ep?: LlmEndpoint }): Promise<LLMResult>;
 }
 
 // ── Pricing lives in ONE place now: src/services/llm/gateway.ts. The table
@@ -152,8 +164,9 @@ const anthropicProvider: LLMProvider = {
 const openAiCompatProvider: LLMProvider = {
   name: 'openai_compat',
   async complete(model, system, messages, opts) {
-    const key = gatewayKey();
+    const key = opts.ep?.key ?? gatewayKey();
     if (!key) throw new LLMError('Thiếu khoá cổng LLM (LLM_GATEWAY_API_KEY / OPENAI_COMPAT_API_KEY)', false);
+    const url = opts.ep ? chatUrlOf(opts.ep) : chatCompletionsUrl();
     const timeoutMs = opts.timeoutMs ?? (Number(process.env.LLM_TIMEOUT_MS) || 60_000);
     const ctrl = new AbortController();
     let timer = setTimeout(() => ctrl.abort(), timeoutMs);
@@ -164,7 +177,7 @@ const openAiCompatProvider: LLMProvider = {
     const useStream = maxTokens > 4000;
 
     try {
-      const res = await fetch(chatCompletionsUrl(), {
+      const res = await fetch(url, {
         method: 'POST',
         headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
         body: JSON.stringify({
@@ -378,14 +391,19 @@ function purposeFor(step: LLMStep, feature?: LLMFeature | null): LlmPurpose {
   }
 }
 
-export function modelForStep(step: LLMStep, feature?: LLMFeature | null, purpose?: LlmPurpose): string {
-  if (purpose) return modelFor(purpose);
+export function modelForStep(step: LLMStep, feature?: LLMFeature | null, purpose?: LlmPurpose, ep?: LlmEndpoint): string {
+  if (purpose) return modelFor(purpose, ep);
   // Biến cũ (chỉ khi VPS còn đặt) — giữ để một máy chưa cập nhật env không đổi
   // hành vi đột ngột.
-  if (step === 'report' && process.env.LLM_MODEL_REPORT) return process.env.LLM_MODEL_REPORT;
-  if (step === 'generation' && process.env.LLM_MODEL_GENERATION) return process.env.LLM_MODEL_GENERATION;
-  if (step === 'interview' && process.env.LLM_MODEL_INTERVIEW) return process.env.LLM_MODEL_INTERVIEW;
-  return modelFor(purposeFor(step, feature));
+  //
+  // ⚠️ Nhưng chúng chỉ biết tên model của CỔNG. Đi máy nhà mà vẫn đọc chúng
+  // là gửi `gpt-5.6-terra` sang llama-server, một cái tên nó không phục vụ.
+  if (!ep?.local) {
+    if (step === 'report' && process.env.LLM_MODEL_REPORT) return process.env.LLM_MODEL_REPORT;
+    if (step === 'generation' && process.env.LLM_MODEL_GENERATION) return process.env.LLM_MODEL_GENERATION;
+    if (step === 'interview' && process.env.LLM_MODEL_INTERVIEW) return process.env.LLM_MODEL_INTERVIEW;
+  }
+  return modelFor(purposeFor(step, feature), ep);
 }
 
 // ── Kill switch + availability ────────────────────────────────────
@@ -560,46 +578,100 @@ export async function llmComplete(opts: {
   maxRetries?: number; // override — latency-sensitive callers use fewer
   timeoutMs?: number; // override per-call timeout
 }): Promise<LLMResult> {
-  const provider = getProvider();
-  const model = modelForStep(opts.step, opts.feature, opts.purpose);
   const maxRetries = opts.maxRetries ?? (Number(process.env.LLM_MAX_RETRIES) || 3);
   let lastErr: unknown;
 
   const isBackground = isBackgroundFeature(opts.feature);
+  const purpose = opts.purpose ?? purposeFor(opts.step, opts.feature);
 
   // Công tắc tổng: việc chạy nền phải được bật ra mặt mới đi tiếp.
+  //
+  // Phép này đứng TRƯỚC lúc xin slot máy nhà, có chủ ý: một lời gọi sắp bị
+  // chặn thì không được phép chiếm chỗ của ai cả.
   if (isBackground && !backgroundLlmEnabled()) {
-    logger.warn('llm: chặn lời gọi chạy nền (LLM_BACKGROUND_ENABLED chưa bật)', { feature: opts.feature, step: opts.step, model });
+    logger.warn('llm: chặn lời gọi chạy nền (LLM_BACKGROUND_ENABLED chưa bật)', { feature: opts.feature, step: opts.step, purpose });
     throw new LLMError(
       'Việc AI chạy nền đang TẮT (mặc định, để khỏi âm thầm tốn tiền). Bật bằng LLM_BACKGROUND_ENABLED=true — cho cả máy trong /opt/cuonghoangdev/.env, hoặc chỉ cho một đợt: docker exec -e LLM_BACKGROUND_ENABLED=true …',
       false,
     );
   }
 
-  // Cầu dao ngân sách. Việc chạy nền bị cắt trước, ở mức thấp hơn — nó là thứ
-  // duy nhất có thể tiêu tiền cả đêm mà không ai biết.
-  const verdict = await checkBudget(isBackground ? 'background' : 'interactive');
-  if (!verdict.allowed) {
-    logger.warn('llm budget chặn lời gọi', { feature: opts.feature ?? null, step: opts.step, model, reason: verdict.reason, spentUsd: Number(verdict.spentUsd.toFixed(4)) });
-    throw new LLMError(budgetMessage(verdict), false);
-  }
+  // ── Máy nhà hay cổng? ────────────────────────────────────────────
+  //
+  // `xinDiemCuoi` vừa chọn nơi vừa xếp hàng: việc nào có tên trong
+  // `LLM_LOCAL_PURPOSES` thì xin một slot trên máy nhà, và nếu robot đang giữ
+  // máy hay hàng đã dài thì nó tự đổi sang cổng thay vì bắt người dùng chờ.
+  // Xem `src/services/llm/hangDoi.ts`.
+  const xin = await xinDiemCuoi(purpose);
+  let ep = xin.ep;
+  let model = modelForStep(opts.step, opts.feature, opts.purpose, ep);
 
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
-    try {
-      const result = await provider.complete(model, opts.system, opts.messages, { maxTokens: opts.maxTokens, timeoutMs: opts.timeoutMs });
-      recordSuccess(opts.feature);
-      await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, feature: opts.feature, step: opts.step, model, inputTokens: result.inputTokens, outputTokens: result.outputTokens, success: true }).catch(() => {});
-      return result;
-    } catch (e) {
-      lastErr = e;
-      if (e instanceof LLMError && !e.retryable) break; // 4xx / no-key → don't retry
-      if (attempt < maxRetries) await sleep(Math.min(8000, 500 * 2 ** attempt)); // exp backoff
+  try {
+    // Cầu dao ngân sách. Việc chạy nền bị cắt trước, ở mức thấp hơn — nó là thứ
+    // duy nhất có thể tiêu tiền cả đêm mà không ai biết.
+    //
+    // ⚠️ Máy nhà KHÔNG qua cầu dao này: nó chạy bằng điện nhà, không có hoá
+    // đơn nào để mà chặn. Chặn nó nghĩa là hết hạn mức tiền thì cả những việc
+    // MIỄN PHÍ cũng ngừng — đúng ngược với lý do dựng máy nhà.
+    if (!ep.local) {
+      const verdict = await checkBudget(isBackground ? 'background' : 'interactive');
+      if (!verdict.allowed) {
+        logger.warn('llm budget chặn lời gọi', { feature: opts.feature ?? null, step: opts.step, model, reason: verdict.reason, spentUsd: Number(verdict.spentUsd.toFixed(4)) });
+        throw new LLMError(budgetMessage(verdict), false);
+      }
     }
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        // Tuyến Anthropic (`/v1/messages`) KHÔNG tồn tại trên máy nhà —
+        // llama.cpp chỉ mở tuyến OpenAI. Ép đúng adapter, nếu không thì đặt
+        // `LLM_PROVIDER=anthropic` một lần là mọi việc cục bộ chết 404.
+        const provider = ep.local ? openAiCompatProvider : getProvider();
+        const result = await provider.complete(model, opts.system, opts.messages, { maxTokens: opts.maxTokens, timeoutMs: opts.timeoutMs, ep });
+        recordSuccess(opts.feature);
+        await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, feature: opts.feature, step: opts.step, model, inputTokens: result.inputTokens, outputTokens: result.outputTokens, success: true }).catch(() => {});
+        return result;
+      } catch (e) {
+        lastErr = e;
+
+        // ⭐ MÁY NHÀ HỎNG THÌ TỤT XUỐNG CỔNG NGAY, ĐỪNG THỬ LẠI NÓ.
+        //
+        // Máy nhà mất điện / mất mạng / đang bận train giọng là chuyện thường,
+        // và nó KHÔNG được phép làm chết tính năng. Thử lại cùng một máy đã
+        // chết chỉ tốn thêm ba nhịp chờ rồi vẫn hỏng. Đổi đích rồi đi tiếp:
+        // lượt này vẫn ra kết quả, người dùng không thấy gì cả.
+        if (ep.local) {
+          logger.warn('llm: máy nhà hỏng, lượt này chuyển sang cổng', {
+            purpose, feature: opts.feature ?? null, model,
+            error: e instanceof Error ? e.message : String(e),
+          });
+          xin.tra();                 // trả slot NGAY, đừng giữ chỗ trên một máy đã chết
+          xin.tra = () => {};        // `finally` bên dưới không được trả lần hai
+          ep = fallbackEndpoint();
+          model = modelForStep(opts.step, opts.feature, opts.purpose, ep);
+          // ⚠️ `attempt--` RỒI mới `continue`: `continue` trong vòng `for` VẪN
+          // chạy phép tăng, nên nếu không lùi lại thì việc đổi đích tự ăn mất
+          // một lượt thử. Với caller đặt `maxRetries: 0` (những chỗ nhạy độ
+          // trễ) thì vòng lặp kết thúc LUÔN và cổng không bao giờ được gọi —
+          // máy nhà cúp điện là tính năng chết hẳn, đúng thứ nhánh này sinh ra
+          // để chống. Đo thật 14/08 mới lộ: đường chính xanh, đường lùi hỏng.
+          // Không sợ lặp vô hạn: `ep` giờ không còn local nên nhánh này không
+          // vào lại được nữa.
+          attempt--;
+          continue;
+        }
+
+        if (e instanceof LLMError && !e.retryable) break; // 4xx / no-key → don't retry
+        if (attempt < maxRetries) await sleep(Math.min(8000, 500 * 2 ** attempt)); // exp backoff
+      }
+    }
+    recordFailure(opts.feature);
+    // Never charge quota for a failed call → log with zero tokens.
+    await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, feature: opts.feature, step: opts.step, model, inputTokens: 0, outputTokens: 0, success: false }).catch(() => {});
+    throw lastErr;
+  } finally {
+    xin.tra();
   }
-  recordFailure(opts.feature);
-  // Never charge quota for a failed call → log with zero tokens.
-  await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, feature: opts.feature, step: opts.step, model, inputTokens: 0, outputTokens: 0, success: false }).catch(() => {});
-  throw lastErr;
 }
 
 /**

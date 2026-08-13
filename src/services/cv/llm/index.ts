@@ -26,11 +26,16 @@ import { logger } from '../../../utils/logger.js';
 import { budgetMessage, checkBudget } from '../../llm/budget.js';
 import {
   chatCompletionsUrl,
+  chatUrlOf,
   costUsd as gatewayCostUsd,
+  fallbackEndpoint,
   gatewayConfigured,
   gatewayKey,
   messagesUrl,
   modelFor,
+  xinDiemCuoi,
+  type LlmEndpoint,
+  type LlmPurpose,
 } from '../../llm/gateway.js';
 
 export interface LLMMessage { role: 'user' | 'assistant'; content: string }
@@ -56,7 +61,8 @@ export interface LLMProvider {
   /** Does this provider's terms permit training on API inputs? If so it's
    *  disqualified for CV-content tasks. */
   trainsOnInput: boolean;
-  complete(model: string, system: string, messages: LLMMessage[], opts: { maxTokens?: number; timeoutMs?: number }): Promise<LLMResult>;
+  /** `opts.ep` = điểm cuối đã chọn cho lượt này (máy nhà / cổng). Bỏ trống = cổng. */
+  complete(model: string, system: string, messages: LLMMessage[], opts: { maxTokens?: number; timeoutMs?: number; ep?: LlmEndpoint }): Promise<LLMResult>;
 }
 
 class LLMError extends Error {
@@ -112,7 +118,7 @@ const openAiCompatProvider: LLMProvider = {
   name: 'openai_compatible',
   trainsOnInput: false, // informational; the enforced gate uses providerTrainsOnInput()
   async complete(model, system, messages, opts) {
-    const key = gatewayKey();
+    const key = opts.ep?.key ?? gatewayKey();
     if (!key) throw new LLMError('Thiếu khoá cổng LLM (LLM_GATEWAY_API_KEY / OPENAI_COMPAT_API_KEY)', false);
     const timeoutMs = opts.timeoutMs ?? (Number(process.env.LLM_TIMEOUT_MS) || 60_000);
     const ctrl = new AbortController();
@@ -120,7 +126,7 @@ const openAiCompatProvider: LLMProvider = {
     try {
       // OpenAI-compatible: system is the first message; response shape differs
       // (choices[0].message.content) — normalized HERE, never in business logic.
-      const res = await fetch(chatCompletionsUrl(), {
+      const res = await fetch(opts.ep ? chatUrlOf(opts.ep) : chatCompletionsUrl(), {
         method: 'POST',
         headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
         body: JSON.stringify({ model, max_tokens: opts.maxTokens ?? 1500, messages: [{ role: 'system', content: system }, ...messages] }),
@@ -165,12 +171,18 @@ function providerNameForTask(task: CvLLMTask): string {
  * là thư xin việc / viết lại gạch đầu dòng / dịch CV: có người đọc, nhưng
  * không cần suy luận sâu.
  */
-export function modelForTask(task: CvLLMTask): string {
+export function purposeForTask(task: CvLLMTask): LlmPurpose {
+  if (task === 'critique') return 'cv_critique';
+  if (task === 'intake' || task === 'jd_parse' || task === 'parse_fallback') return 'cv_parse';
+  return 'cv_writing';
+}
+
+export function modelForTask(task: CvLLMTask, ep?: LlmEndpoint): string {
+  // ⚠️ Biến ghim tay chỉ biết tên model của CỔNG — đi máy nhà thì bỏ qua nó,
+  // nếu không là gửi `gpt-5.4-mini` sang llama-server, cái tên nó không phục vụ.
   const key = `LLM_MODEL_${task.toUpperCase()}`;
-  if (process.env[key]) return process.env[key]!;
-  if (task === 'critique') return modelFor('cv_critique');
-  if (task === 'intake' || task === 'jd_parse' || task === 'parse_fallback') return modelFor('cv_parse');
-  return modelFor('cv_writing');
+  if (!ep?.local && process.env[key]) return process.env[key]!;
+  return modelFor(purposeForTask(task), ep);
 }
 
 /** Resolve the provider for a task, enforcing PII eligibility. */
@@ -236,40 +248,85 @@ export async function cvLlmComplete(opts: {
   maxRetries?: number;
   timeoutMs?: number;
 }): Promise<LLMResult> {
-  const provider = resolveProvider(opts.task); // throws (non-retryable) if PII-ineligible
-  const model = modelForTask(opts.task);
+  const congProvider = resolveProvider(opts.task); // throws (non-retryable) if PII-ineligible
   const maxRetries = opts.maxRetries ?? (Number(process.env.LLM_MAX_RETRIES) || 3);
   let lastErr: unknown;
 
-  // Cùng cầu dao ngân sách với phần còn lại của web (hai sổ chi phí, một trần).
-  // CV luôn là việc người dùng đang ngồi chờ → chỉ mức trần cứng chặn nó.
-  const verdict = await checkBudget('interactive');
-  if (!verdict.allowed) {
-    logger.warn('cv-llm budget chặn lời gọi', { task: opts.task, model, reason: verdict.reason });
-    throw new LLMError(budgetMessage(verdict), false);
-  }
+  // ── Máy nhà hay cổng? ────────────────────────────────────────────
+  //
+  // Với CV thì máy nhà không chỉ rẻ hơn — nó AN TOÀN HƠN. `TASK_TOUCHES_CV_CONTENT`
+  // ở trên tồn tại vì tên, số điện thoại và lịch sử việc làm thật của người
+  // dùng nằm trong prompt; chạy cục bộ thì đống đó không hề rời khỏi nhà, nên
+  // câu hỏi "nhà cung cấp có train trên dữ liệu vào không" biến mất luôn.
+  const xin = await xinDiemCuoi(purposeForTask(opts.task));
+  let ep = xin.ep;
+  let provider = ep.local ? openAiCompatProvider : congProvider;
+  let model = modelForTask(opts.task, ep);
 
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
-    try {
-      const result = await provider.complete(model, opts.system, opts.messages, { maxTokens: opts.maxTokens, timeoutMs: opts.timeoutMs });
-      recordSuccess(provider.name);
-      await logCall({ userId: opts.userId, documentId: opts.documentId, task: opts.task, provider: provider.name, model, inputTokens: result.inputTokens, outputTokens: result.outputTokens, success: true });
-      return result;
-    } catch (e) {
-      lastErr = e;
-      if (e instanceof LLMError && !e.retryable) break;
-      if (attempt < maxRetries) await sleep(Math.min(8000, 400 * 2 ** attempt) + Math.floor(deterministicJitter(attempt) * 250));
+  try {
+    // Cùng cầu dao ngân sách với phần còn lại của web (hai sổ chi phí, một trần).
+    // CV luôn là việc người dùng đang ngồi chờ → chỉ mức trần cứng chặn nó.
+    // Máy nhà không qua cầu dao: nó không sinh ra hoá đơn nào để mà chặn.
+    if (!ep.local) {
+      const verdict = await checkBudget('interactive');
+      if (!verdict.allowed) {
+        logger.warn('cv-llm budget chặn lời gọi', { task: opts.task, model, reason: verdict.reason });
+        throw new LLMError(budgetMessage(verdict), false);
+      }
     }
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        const result = await provider.complete(model, opts.system, opts.messages, { maxTokens: opts.maxTokens, timeoutMs: opts.timeoutMs, ep });
+        recordSuccess(provider.name);
+        await logCall({ userId: opts.userId, documentId: opts.documentId, task: opts.task, provider: provider.name, model, inputTokens: result.inputTokens, outputTokens: result.outputTokens, success: true });
+        return result;
+      } catch (e) {
+        lastErr = e;
+
+        // Máy nhà hỏng ⇒ đổi sang cổng ngay, không thử lại máy đã chết.
+        // CV Builder không được phép ngừng chạy chỉ vì ở nhà cúp điện.
+        if (ep.local) {
+          logger.warn('cv-llm: máy nhà hỏng, lượt này chuyển sang cổng', {
+            task: opts.task, model,
+            error: e instanceof Error ? e.message : String(e),
+          });
+          xin.tra();
+          xin.tra = () => {};
+          ep = fallbackEndpoint();
+          provider = congProvider;
+          model = modelForTask(opts.task, ep);
+          // Cổng thì phải qua cầu dao ngân sách, máy nhà thì không — bỏ qua
+          // bước này lúc đổi đích là mở một đường lách trần tiền.
+          const verdict = await checkBudget('interactive');
+          if (!verdict.allowed) {
+            logger.warn('cv-llm budget chặn lời gọi', { task: opts.task, model, reason: verdict.reason });
+            throw new LLMError(budgetMessage(verdict), false);
+          }
+          // ⚠️ Lùi `attempt` TRƯỚC khi `continue` — xem ghi chú cùng chỗ trong
+          // `interview/llm/index.ts`. `continue` vẫn chạy phép tăng, nên không
+          // lùi thì việc đổi đích ăn mất một lượt thử, và caller đặt
+          // `maxRetries: 0` sẽ hỏng hẳn thay vì tụt xuống cổng.
+          attempt--;
+          continue;
+        }
+
+        if (e instanceof LLMError && !e.retryable) break;
+        if (attempt < maxRetries) await sleep(Math.min(8000, 400 * 2 ** attempt) + Math.floor(deterministicJitter(attempt) * 250));
+      }
+    }
+    recordFailure(provider.name);
+    // Ops visibility (W6): failures were previously silent except the call log.
+    // NEVER log prompt/CV content — provider/model/task/error class only.
+    logger.error('cv-llm call failed after retries', {
+      task: opts.task, provider: provider.name, model,
+      error: lastErr instanceof Error ? lastErr.message : String(lastErr),
+    });
+    await logCall({ userId: opts.userId, documentId: opts.documentId, task: opts.task, provider: provider.name, model, inputTokens: 0, outputTokens: 0, success: false });
+    throw lastErr;
+  } finally {
+    xin.tra();
   }
-  recordFailure(provider.name);
-  // Ops visibility (W6): failures were previously silent except the call log.
-  // NEVER log prompt/CV content — provider/model/task/error class only.
-  logger.error('cv-llm call failed after retries', {
-    task: opts.task, provider: provider.name, model,
-    error: lastErr instanceof Error ? lastErr.message : String(lastErr),
-  });
-  await logCall({ userId: opts.userId, documentId: opts.documentId, task: opts.task, provider: provider.name, model, inputTokens: 0, outputTokens: 0, success: false });
-  throw lastErr;
 }
 
 // Deterministic jitter (Math.random is unavailable in some sandboxes and adds

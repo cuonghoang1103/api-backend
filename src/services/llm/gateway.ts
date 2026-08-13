@@ -24,6 +24,8 @@
  * chúng còn đúng. Thấy model tên `rb-*` là biết đang nhìn vào đường đã chết.
  */
 
+import { xinSlot, type MucUuTien } from './hangDoi.js';
+
 // ─── Địa chỉ + khoá ────────────────────────────────────────────────
 
 /**
@@ -152,8 +154,20 @@ export function priceOf(model: string): { in: number; out: number } {
   }
   const hit = MODEL_CATALOG[model];
   if (hit) return { in: hit.in, out: hit.out };
+  // ⚠️ MÁY NHÀ LÀ MIỄN PHÍ — điện của chính mình, không có hoá đơn nào.
+  //
+  // Không có nhánh này thì `qwen3.5-9b-local` rơi vào mức mặc định $3/$15 bên
+  // dưới, và mọi lượt chạy cục bộ lại cộng tiền ẢO vào sổ chi tiêu ngày. Đủ
+  // nhiều thì nó chạm trần cứng 40 $ và cắt SẠCH cả web — vì một việc không
+  // tốn xu nào. Đúng loại lỗi không bao giờ báo, chỉ làm mọi thứ tắt dần.
+  if (isLocalModel(model)) return { in: 0, out: 0 };
   // Model cũ của cổng Rambo hoặc model mới chưa kịp vào bảng.
   return { in: 3, out: 15 };
+}
+
+/** Tên model mà máy nhà đang phục vụ. Dùng để biết một lượt gọi có tốn tiền không. */
+export function isLocalModel(model: string): boolean {
+  return model === (process.env.LLM_LOCAL_MODEL?.trim() || 'qwen3.5-9b-local');
 }
 
 export function costUsd(model: string, inTok: number, outTok: number): number {
@@ -327,6 +341,70 @@ export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
 /** Cổng dự phòng khi máy nhà không trả lời. Luôn là cổng, không bao giờ ngược lại. */
 export function fallbackEndpoint(): LlmEndpoint {
   return { root: gatewayRoot(), key: gatewayKey(), local: false, label: 'cong' };
+}
+
+// ─── Xếp hàng trên máy nhà ─────────────────────────────────────────
+
+/**
+ * Việc nào được chen trước việc nào khi máy nhà bận.
+ *
+ * Máy nhà có ĐÚNG MỘT luồng (`--parallel 1`, đo 14/08/2026). Bốn lượt cùng
+ * lúc xếp thành 3,36 · 6,72 · 10,11 · 13,48 giây — nên thứ tự ở đây không
+ * phải chuyện thẩm mỹ, nó là chênh lệch 10 giây giữa robot đáp ngay và robot
+ * đứng câm. Chi tiết trong `hangDoi.ts`.
+ */
+const UU_TIEN: Partial<Record<LlmPurpose, MucUuTien>> = {
+  // Có người đang đứng trước mặt con robot và chờ nó trả lời.
+  robot_voice: 'robot',
+  // Chạy nền, không ai ngồi xem ⇒ nhường mọi thứ khác.
+  language_bulk: 'nen',
+  codelab_bulk: 'nen',
+  exphub_doc: 'nen',
+  news_bulletin: 'nen',
+};
+
+export function uuTienCua(purpose: LlmPurpose): MucUuTien {
+  return UU_TIEN[purpose] ?? 'nguoi';
+}
+
+export interface DiemCuoiDaXep {
+  ep: LlmEndpoint;
+  /** BẮT BUỘC gọi khi xong, luôn đặt trong `finally`. An toàn khi gọi lại. */
+  tra: () => void;
+  choMs: number;
+  /** Có giá trị khi bị đẩy sang cổng thay vì chờ — cho log và trang quản trị. */
+  lyDo?: string;
+}
+
+/**
+ * ⭐ ĐÂY LÀ HÀM MỌI CHỖ NÊN GỌI, thay cho `endpointFor()` trần.
+ *
+ * Nó làm đúng hai việc mà `endpointFor()` không làm:
+ *   1. Xếp hàng theo ưu tiên khi đích đến là máy nhà (robot chen đầu).
+ *   2. Khi hàng đầy hoặc robot đang giữ máy, nó **đổi luôn đích sang cổng**
+ *      thay vì bắt người dùng chờ. Người gọi không cần biết chuyện đó xảy ra.
+ *
+ * Đích đến là cổng thì hàm trả về ngay lập tức, không đụng gì tới hàng đợi —
+ * cổng lo phần chịu tải của nó, không phải việc của ta.
+ *
+ * ```ts
+ * const { ep, tra } = await xinDiemCuoi('cv_parse');
+ * try {
+ *   await fetch(chatUrlOf(ep), { ... });
+ * } finally {
+ *   tra();               // ⚠️ quên dòng này là mất một slot vĩnh viễn
+ * }
+ * ```
+ */
+export async function xinDiemCuoi(purpose: LlmPurpose): Promise<DiemCuoiDaXep> {
+  const ep = endpointFor(purpose);
+  if (!ep.local) return { ep, tra: () => {}, choMs: 0 };
+
+  const ve = await xinSlot(uuTienCua(purpose));
+  if (ve.duoc) return { ep, tra: ve.tra, choMs: ve.choMs };
+
+  // Bị đẩy ra cổng. KHÔNG phải lỗi — đây chính là việc lớp 2 sinh ra để làm.
+  return { ep: fallbackEndpoint(), tra: () => {}, choMs: ve.choMs, lyDo: ve.lyDo };
 }
 
 /** `POST` cho một điểm cuối bất kỳ. */
